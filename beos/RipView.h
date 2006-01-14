@@ -1,4 +1,4 @@
-/* $Id: RipView.h,v 1.3 2003/11/07 21:52:56 titer Exp $
+/* $Id: RipView.h,v 1.4 2003/11/09 21:35:06 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -22,7 +22,6 @@ class BTextControl;
 #include "HandBrake.h"
 
 #define RIP_TITLE_POPUP       'rtip'
-#define RIP_VIDEO_CODEC_POPUP 'rvcp'
 #define RIP_BITRATE_RADIO     'rbir'
 #define RIP_TARGET_CONTROL    'rtac'
 #define RIP_CROP_BUTTON       'rcrb'

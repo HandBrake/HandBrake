@@ -1,4 +1,4 @@
-/* $Id: RipView.cpp,v 1.3 2003/11/07 21:52:56 titer Exp $
+/* $Id: RipView.cpp,v 1.4 2003/11/09 21:35:06 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -171,10 +171,8 @@ RipView::RipView( HBHandle * handle )
     AddChild( fStartButton );
 
     /* Fill popups */
-    fVideoCodecPopUp->AddItem( new BMenuItem( "MPEG-4 (Ffmpeg)",
-        new BMessage( RIP_VIDEO_CODEC_POPUP ) ) );
-    fVideoCodecPopUp->AddItem( new BMenuItem( "MPEG-4 (XviD)",
-        new BMessage( RIP_VIDEO_CODEC_POPUP ) ) );
+    fVideoCodecPopUp->AddItem( new BMenuItem( "MPEG-4 (Ffmpeg)", NULL ) );
+    fVideoCodecPopUp->AddItem( new BMenuItem( "MPEG-4 (XviD)", NULL ) );
     fVideoCodecPopUp->ItemAt( 0 )->SetMarked( true );
     fAudioCodecPopUp->AddItem( new BMenuItem( "MP3", NULL ) );
     fAudioCodecPopUp->ItemAt( 0 )->SetMarked( true );
@@ -245,20 +243,6 @@ void RipView::MessageReceived( BMessage * message )
             fSecondaryLanguageField->SetEnabled(
                 ( HBListCountItems( title->audioList ) > 1 ) );
             
-            break;
-        }
-
-        case RIP_VIDEO_CODEC_POPUP:
-        {
-            if( fVideoCodecPopUp->IndexOf( fVideoCodecPopUp->FindMarked() ) )
-            {
-                fTwoPassCheck->SetValue( 0 );
-                fTwoPassCheck->SetEnabled( false );
-            }
-            else
-            {
-                fTwoPassCheck->SetEnabled( true );
-            }
             break;
         }
 
@@ -431,7 +415,7 @@ void RipView::UpdateIntf( HBStatus status, int modeChanged )
             {
                 title = (HBTitle*) HBListItemAt( fTitleList, i );
                 char string[1024]; memset( string, 0, 1024 );
-                sprintf( string, "%d (%02d:%02d:%02d)",
+                sprintf( string, "%d - %02dh%02dm%02ds",
                          title->index, title->length / 3600,
                          ( title->length % 3600 ) / 60,
                          title->length % 60 );
@@ -477,7 +461,7 @@ void RipView::UpdateIntf( HBStatus status, int modeChanged )
             {
                 char string[1024]; memset( string, 0, 1024 );
                 sprintf( string, "Encoding: %.2f %% (%.2f fps, "
-                         "%02d:%02d:%02d remaining)",
+                         "%02dh%02dm%02ds remaining)",
                          100 * status.position,
                          status.frameRate,
                          status.remainingTime / 3600,
@@ -576,7 +560,6 @@ void RipView::UpdateIntf( HBStatus status, int modeChanged )
                 fSuspendButton->SetEnabled( false );
                 fStartButton->SetLabel( "Rip !" );
                 fStartButton->SetEnabled( true );
-                MessageReceived( new BMessage( RIP_VIDEO_CODEC_POPUP ) );
             }
 
             fStatusBar->Update( 100.0 - fStatusBar->CurrentValue(),
@@ -609,7 +592,6 @@ void RipView::UpdateIntf( HBStatus status, int modeChanged )
                 fSuspendButton->SetEnabled( false );
                 fStartButton->SetLabel( "Rip !" );
                 fStartButton->SetEnabled( true );
-                MessageReceived( new BMessage( RIP_VIDEO_CODEC_POPUP ) );
             }
 
             fStatusBar->Update( - fStatusBar->CurrentValue(),
@@ -642,7 +624,6 @@ void RipView::UpdateIntf( HBStatus status, int modeChanged )
                 fSuspendButton->SetEnabled( false );
                 fStartButton->SetLabel( "Rip !" );
                 fStartButton->SetEnabled( true );
-                MessageReceived( new BMessage( RIP_VIDEO_CODEC_POPUP ) );
             }
 
             fStatusBar->Update( - fStatusBar->CurrentValue(),

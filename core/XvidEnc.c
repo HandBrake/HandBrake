@@ -1,12 +1,13 @@
-/* $Id: XvidEnc.c,v 1.5 2003/11/05 19:14:37 titer Exp $
+/* $Id: XvidEnc.c,v 1.7 2003/11/09 21:26:52 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
-#include "XvidEnc.h"
 #include "Fifo.h"
 #include "Work.h"
+#include "XvidEnc.h"
+#include "XvidVbr.h"
 
 #include <xvid.h>
 
@@ -20,9 +21,11 @@ struct HBXvidEnc
     HBHandle * handle;
     HBTitle  * title;
 
-    void     * xvid;
-    HBBuffer * mpeg4Buffer;
-    int        pass;
+    void           * xvid;
+    vbr_control_t    xvidVbr;
+    XVID_ENC_FRAME   frame;
+    HBBuffer       * mpeg4Buffer;
+    int              pass;
 };
 
 HBXvidEnc * HBXvidEncInit( HBHandle * handle, HBTitle * title )
@@ -41,6 +44,18 @@ HBXvidEnc * HBXvidEncInit( HBHandle * handle, HBTitle * title )
     x->title = title;
 
     x->xvid        = NULL;
+
+    x->frame.general   = XVID_H263QUANT | XVID_HALFPEL | XVID_INTER4V;
+    x->frame.motion    = PMV_EARLYSTOP16 | PMV_HALFPELREFINE16 |
+                         PMV_EXTSEARCH16 | PMV_EARLYSTOP8 |
+                         PMV_HALFPELREFINE8 | PMV_HALFPELDIAMOND8 |
+                         PMV_USESQUARES16;
+
+    x->frame.colorspace = XVID_CSP_I420;
+
+    x->frame.quant_intra_matrix = NULL;
+    x->frame.quant_inter_matrix = NULL;
+
     x->mpeg4Buffer = NULL;
     x->pass        = 42;
 
@@ -50,7 +65,18 @@ HBXvidEnc * HBXvidEncInit( HBHandle * handle, HBTitle * title )
 void HBXvidEncClose( HBXvidEnc ** _x )
 {
     HBXvidEnc * x = *_x;
+
+    if( x->xvid )
+    {
+        HBLog( "HBXvidEnc: closing libxvidcore (pass %d)",
+                x->pass );
+
+        xvid_encore( x->xvid, XVID_ENC_DESTROY, NULL, NULL);
+        vbrFinish( &x->xvidVbr );
+    }
+    
     free( x );
+
     *_x = NULL;
 }
 
@@ -60,7 +86,7 @@ static int XvidEncWork( HBWork * w )
     HBTitle        * title = x->title;
     HBBuffer       * scaledBuffer;
     HBBuffer       * mpeg4Buffer;
-    XVID_ENC_FRAME   xframe;
+    XVID_ENC_STATS   stats;
 
     int didSomething = 0;
 
@@ -91,6 +117,15 @@ static int XvidEncWork( HBWork * w )
         XVID_INIT_PARAM xinit;
         XVID_ENC_PARAM xparam;
 
+        if( x->xvid )
+        {
+            HBLog( "HBXvidEnc: closing libxvidcore (pass %d)",
+                    x->pass );
+
+            xvid_encore( x->xvid, XVID_ENC_DESTROY, NULL, NULL);
+            vbrFinish( &x->xvidVbr );
+        }
+
         x->pass = scaledBuffer->pass;;
 
         HBLog( "HBXvidEnc: opening libxvidcore (pass %d)", x->pass );
@@ -100,11 +135,11 @@ static int XvidEncWork( HBWork * w )
 
         xparam.width  = title->outWidth;
         xparam.height = title->outHeight;
-        
+
         xparam.fincr  = title->rateBase;
         xparam.fbase  = title->rate;
 
-        xparam.rc_bitrate = title->bitrate * 1000;
+        xparam.rc_bitrate = title->bitrate * 1024;
 
         /* Default values should be ok */
         xparam.rc_reaction_delay_factor = -1;
@@ -120,51 +155,70 @@ static int XvidEncWork( HBWork * w )
         }
 
         x->xvid = xparam.handle;
-    }
 
-    /* TODO implement 2-pass encoding */
-    if( x->pass == 1 )
-    {
-        HBPosition( x->handle, scaledBuffer->position );
-        HBBufferClose( &scaledBuffer );
-        return didSomething;
+        /* Init VBR engine */
+        vbrSetDefaults( &x->xvidVbr );
+        if( !x->pass )
+        {
+            x->xvidVbr.mode = VBR_MODE_1PASS;
+        }
+        else if( x->pass == 1 )
+        {
+            x->xvidVbr.mode = VBR_MODE_2PASS_1;
+        }
+        else
+        {
+            x->xvidVbr.mode = VBR_MODE_2PASS_2;
+        }
+        x->xvidVbr.fps = (double) title->rate / title->rateBase;
+        x->xvidVbr.debug = 0;
+        x->xvidVbr.filename = malloc( 1024 );
+        memset( x->xvidVbr.filename, 0, 1024 );
+        snprintf( x->xvidVbr.filename, 1023, "/tmp/HB.%d.xvid.log",
+                  HBGetPid( x->handle ) );
+        x->xvidVbr.desired_bitrate = title->bitrate * 1024;
+        x->xvidVbr.max_key_interval = 10 * title->rate / title->rateBase;
+
+        vbrInit( &x->xvidVbr );
     }
 
     mpeg4Buffer = HBBufferInit( title->outWidth *
                                 title->outHeight * 3 / 2 );
     mpeg4Buffer->position = scaledBuffer->position;
 
-    xframe.general   = XVID_H263QUANT | XVID_HALFPEL | XVID_INTER4V;
-    xframe.motion    = PMV_EARLYSTOP16 | PMV_HALFPELREFINE16 |
-                       PMV_EXTSEARCH16 | PMV_EARLYSTOP8 |
-                       PMV_HALFPELREFINE8 | PMV_HALFPELDIAMOND8 |
-                       PMV_USESQUARES16;
-    xframe.bitstream = mpeg4Buffer->data;
+    x->frame.bitstream = mpeg4Buffer->data;
+    x->frame.length    = -1;
 
-    xframe.image      = scaledBuffer->data;
-    xframe.colorspace = XVID_CSP_I420;
+    x->frame.image = scaledBuffer->data;
 
-    xframe.quant_intra_matrix = NULL;
-    xframe.quant_inter_matrix = NULL;
-    xframe.quant              = 0;
-    xframe.intra              = -1;
+    x->frame.quant = vbrGetQuant( &x->xvidVbr );
+    x->frame.intra = vbrGetIntra( &x->xvidVbr );
 
-    xframe.hint.hintstream = NULL;
+    x->frame.hint.hintstream = NULL;
 
-    if( xvid_encore( x->xvid, XVID_ENC_ENCODE, &xframe, NULL ) )
+    if( xvid_encore( x->xvid, XVID_ENC_ENCODE, &x->frame, &stats ) )
     {
         HBLog( "HBXvidEnc: xvid_encore() failed" );
     }
 
-    mpeg4Buffer->size     = xframe.length;
-    mpeg4Buffer->keyFrame = xframe.intra;
+    vbrUpdate( &x->xvidVbr, stats.quant, x->frame.intra, stats.hlength,
+               x->frame.length, stats.kblks, stats.mblks, stats.ublks );
+
+    mpeg4Buffer->size     = x->frame.length;
+    mpeg4Buffer->keyFrame = x->frame.intra;
 
     /* Inform the GUI about the current position */
     HBPosition( x->handle, scaledBuffer->position );
 
     HBBufferClose( &scaledBuffer );
-    x->mpeg4Buffer = mpeg4Buffer;
 
+    if( x->pass == 1 )
+    {
+        HBBufferClose( &mpeg4Buffer );
+        return didSomething;
+    }
+
+    x->mpeg4Buffer = mpeg4Buffer;
     return didSomething;
 }
 

@@ -18,7 +18,6 @@
                 Suspend = id; 
                 TitlePopUpChanged = id; 
                 UpdatePicture = id; 
-                VideoCodecPopUpChanged = id; 
                 VideoMatrixChanged = id; 
             }; 
             CLASS = HBController; 

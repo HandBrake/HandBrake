@@ -1,10 +1,10 @@
-# $Id: Jamfile,v 1.5 2003/11/07 22:28:30 titer Exp $
+# $Id: Jamfile,v 1.8 2003/11/09 22:11:06 titer Exp $
 #
 # This file is part of the HandBrake source code.
 # Homepage: <http://handbrake.m0k.org/>.
 # It may be used under the terms of the GNU General Public License.
 
-HB_VERSION = 0.5 ;
+HB_VERSION = 0.5.1 ;
 
 # Compilers
 CC   = gcc ;
@@ -82,7 +82,7 @@ Library core/libhb : core/Ac3Dec.c core/AviMux.c
                      core/Mpeg2Dec.c core/FfmpegEnc.c
                      core/MadDec.c core/Scale.c
 		     core/Scan.c core/Thread.c core/Work.c
-		     core/XvidEnc.c ;
+		     core/XvidEnc.c core/XvidVbr.c ;
 
 LinkLibraries HBTest : core/libhb.a ;
 Main HBTest : test/test.c ;

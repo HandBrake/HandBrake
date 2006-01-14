@@ -1,4 +1,4 @@
-/* $Id: Controller.h,v 1.4 2003/11/07 21:22:17 titer Exp $
+/* $Id: Controller.h,v 1.5 2003/11/09 19:43:06 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -93,7 +93,6 @@
 - (IBAction) Scan: (id) sender;
 
 - (IBAction) TitlePopUpChanged: (id) sender;
-- (IBAction) VideoCodecPopUpChanged: (id) sender;
 - (IBAction) VideoMatrixChanged: (id) sender;
 - (IBAction) AudioPopUpChanged: (id) sender;
 - (IBAction) BrowseFile: (id) sender;

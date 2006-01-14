@@ -1,4 +1,4 @@
-/* $Id: Controller.mm,v 1.7 2003/11/07 21:22:17 titer Exp $
+/* $Id: Controller.mm,v 1.9 2003/11/09 22:06:15 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -535,6 +535,7 @@
                 [fAudioCodecPopUp        setEnabled: NO];
                 [fAudioBitratePopUp      setEnabled: NO];
                 [fFileFormatPopUp        setEnabled: NO];
+                [fFileField              setEnabled: NO];
                 [fFileBrowseButton       setEnabled: NO];
                 [fSuspendButton          setEnabled: YES];
                 [fSuspendButton          setTitle: @"Suspend"];
@@ -678,13 +679,13 @@
             [fAudioCodecPopUp        setEnabled: YES];
             [fAudioBitratePopUp      setEnabled: YES];
             [fFileFormatPopUp        setEnabled: YES];
+            [fFileField              setEnabled: YES];
             [fFileBrowseButton       setEnabled: YES];
             [fSuspendButton          setEnabled: NO];
             [fSuspendButton          setTitle: @"Suspend"];
             [fRipButton              setTitle: @"Rip"];
 
             [self VideoMatrixChanged: self];
-            [self VideoCodecPopUpChanged: self];
 
             break;
 
@@ -827,20 +828,6 @@
     if( [fVideoMatrix selectedRow] )
     {
         [fTargetSizeField UpdateBitrate];
-    }
-}
-
-- (IBAction) VideoCodecPopUpChanged: (id) sender
-{
-    if( [[fVideoCodecPopUp titleOfSelectedItem]
-            compare: @"MPEG-4 (Ffmpeg)"] == NSOrderedSame )
-    {
-        [fTwoPassCheck setEnabled: YES];
-    }
-    else
-    {
-        [fTwoPassCheck setState: NSOffState];
-        [fTwoPassCheck setEnabled: NO];
     }
 }
 

@@ -1,4 +1,8 @@
-$Id: NEWS,v 1.3 2003/11/07 21:52:56 titer Exp $
+$Id: NEWS,v 1.4 2003/11/09 22:11:06 titer Exp $
+
+Changes between 0.5 and 0.5.1
+ - 2-pass XviD encoding
+ - Bugfixes
 
 Changes between 0.4 and 0.5
  - Bugfixes, rewrite of large parts of the core

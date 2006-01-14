@@ -19,13 +19,13 @@
 	<string>349.0</string>
 	<key>IBOpenObjects</key>
 	<array>
-		<integer>556</integer>
-		<integer>434</integer>
-		<integer>29</integer>
-		<integer>589</integer>
-		<integer>21</integer>
 		<integer>583</integer>
 		<integer>365</integer>
+		<integer>434</integer>
+		<integer>29</integer>
+		<integer>556</integer>
+		<integer>21</integer>
+		<integer>589</integer>
 	</array>
 	<key>IBSystem Version</key>
 	<string>7B85</string>

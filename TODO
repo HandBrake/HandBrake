@@ -9,9 +9,13 @@
   + Allow the user to split the file in x parts
   + AAC & vorbis encoding support
   + mp4 & mkv muxing support
+  + manual aspect ratio
 
 - All interfaces
   + Use the DVD name in popup and for the name of the created file
 
 - BeOS interface
   + Redo the picture panel
+
+- OS X interface
+  + Make the 'destination' field editable

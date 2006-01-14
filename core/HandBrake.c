@@ -1,4 +1,4 @@
-/* $Id: HandBrake.c,v 1.15 2003/11/07 21:52:57 titer Exp $
+/* $Id: HandBrake.c,v 1.16 2003/11/09 21:26:52 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -501,16 +501,16 @@ void HBPosition( HBHandle * h, float position )
     h->framesSinceFpsUpdate++;
     
     HBLockLock( h->lock );
-    if( position - h->status.position > 0.0001 || h->frames == 2 )
+    h->status.position = position;
+    if( h->curTitle->twoPass )
     {
-        HBLog( "Progress: %.2f %%", 100.0 * position );
-        h->status.position = position;
-
-        if( h->curTitle->twoPass )
-            h->status.pass = ( position < 0.5 ) ? 1 : 2;
-        else
-            h->status.pass = 1;
+        h->status.pass = ( position < 0.5 ) ? 1 : 2;
     }
+    else
+    {
+        h->status.pass = 1;
+    }
+
     if( HBGetDate() - h->lastFpsUpdate > 1000000 )
     {
         h->status.frameRate = 1000000.0 * h->framesSinceFpsUpdate /
@@ -521,6 +521,7 @@ void HBPosition( HBHandle * h, float position )
                                   ( HBGetDate() - h->beginDate ) /
                                   h->status.position / 1000000;
         
+        HBLog( "Progress: %.2f %%", position * 100 );
         HBLog( "Speed: %.2f fps (average: %.2f fps, "
                "remaining: %02d:%02d:%02d)",
                h->status.frameRate, h->status.avFrameRate,

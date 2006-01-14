@@ -1,4 +1,4 @@
-/* $Id: Scan.c,v 1.4 2003/11/06 13:03:19 titer Exp $
+/* $Id: Scan.c,v 1.5 2003/11/09 21:28:22 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -154,7 +154,7 @@ static HBTitle * ScanTitle( HBScan * s, dvdplay_ptr vmg, int index )
             continue;
         }
 
-        if( ( id & 0xFF ) != 0xBD )
+        if( ( id & 0xF0FF ) != 0x80BD )
         {
             HBLog( "HBScan: non-AC3 audio track detected, ignoring" );
             continue;

@@ -1,4 +1,4 @@
-/* $Id: MainWindow.cpp,v 1.3 2003/11/07 21:52:56 titer Exp $
+/* $Id: MainWindow.cpp,v 1.4 2003/11/09 21:35:06 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -78,7 +78,6 @@ void MainWindow::MessageReceived( BMessage * message )
 
         case B_SAVE_REQUESTED:
         case RIP_TITLE_POPUP:
-        case RIP_VIDEO_CODEC_POPUP:
         case RIP_BITRATE_RADIO:
         case RIP_TARGET_CONTROL:
         case RIP_CROP_BUTTON:

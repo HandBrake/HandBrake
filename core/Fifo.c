@@ -1,4 +1,4 @@
-/* $Id: Fifo.c,v 1.2 2003/11/05 19:14:37 titer Exp $
+/* $Id: Fifo.c,v 1.3 2003/11/09 14:27:56 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -46,10 +46,14 @@ void HBBufferReAlloc( HBBuffer * b, int size )
     }
 }
 
-void HBBufferClose( HBBuffer ** b )
+void HBBufferClose( HBBuffer ** _b )
 {
-    free( (*b)->data );
-    (*b) = NULL;
+    HBBuffer * b = *_b;
+    
+    free( b->data );
+    free( b );
+
+    *_b = NULL;
 }
 
 HBFifo * HBFifoInit( int capacity )
@@ -100,6 +104,7 @@ void HBFifoClose( HBFifo ** _f )
     HBLockClose( &f->lock );
     free( f->buffers );
     free( f );
-    (*_f) = NULL;
+
+    *_f = NULL;
 }
 

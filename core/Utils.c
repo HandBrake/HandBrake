@@ -1,4 +1,4 @@
-/* $Id: Utils.c,v 1.6 2003/11/06 15:51:36 titer Exp $
+/* $Id: Utils.c,v 1.7 2003/11/09 14:27:56 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -86,8 +86,7 @@ int HBPStoES( HBBuffer ** _psBuffer, HBList * esBufferList )
         d[pos+2] != 0x1 || d[pos+3] != 0xBA )
     {
         HBLog( "HBPStoES: not a PS packet (%02x%02x%02x%02x)",
-             d[pos] << 24, d[pos+1] << 16,
-             d[pos+2] << 8, d[pos+3] );
+             d[pos], d[pos+1], d[pos+2], d[pos+3] );
         HBBufferClose( _psBuffer );
         return 0;
     }
