@@ -1,4 +1,4 @@
-/* $Id: Controller.mm,v 1.78 2005/11/04 13:09:41 titer Exp $
+/* $Id: Controller.mm,v 1.79 2005/11/04 19:41:32 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -884,17 +884,15 @@ static int FormatSettings[3][4] =
     int format = [fDstFormatPopUp indexOfSelectedItem];
     int codecs = [fDstCodecsPopUp indexOfSelectedItem];
 
-    /* Update the encoder popup if necessary */
-    if( ( FormatSettings[format][codecs] & HB_VCODEC_X264 ) &&
-        [fVidEncoderPopUp numberOfItems] > 1 )
+    /* Update the encoder popup */
+    if( ( FormatSettings[format][codecs] & HB_VCODEC_X264 ) )
     {
         /* MPEG-4 -> H.264 */
         [fVidEncoderPopUp removeAllItems];
         [fVidEncoderPopUp addItemWithTitle: @"x264 (Main profile)"];
         [fVidEncoderPopUp addItemWithTitle: @"x264 (Baseline profile)"];
     }
-    else if( ( FormatSettings[format][codecs] & HB_VCODEC_FFMPEG ) &&
-             [fVidEncoderPopUp numberOfItems] < 2 )
+    else if( ( FormatSettings[format][codecs] & HB_VCODEC_FFMPEG ) )
     {
         /* H.264 -> MPEG-4 */
         [fVidEncoderPopUp removeAllItems];

@@ -1,4 +1,4 @@
-/* $Id: test.c,v 1.81 2005/10/15 18:05:03 titer Exp $
+/* $Id: test.c,v 1.82 2005/11/19 08:25:54 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -20,6 +20,7 @@ static int    twoPass     = 0;
 static int    deinterlace = 0;
 static int    grayscale   = 0;
 static int    vcodec      = HB_VCODEC_FFMPEG;
+static int    h264_13     = 0;
 static char * audios      = NULL;
 static int    sub         = 0;
 static int    width       = 0;
@@ -338,6 +339,10 @@ static int HandleEvents( hb_handle_t * h )
             {
                 job->vcodec = vcodec;
             }
+            if( h264_13 ) 
+            { 
+                job->h264_13 = h264_13; 
+            } 
             if( vrate )
             {
                 job->vrate = 27000000;
@@ -499,8 +504,8 @@ static void ShowHelp()
     "                            audio, default: first one)\n"
     "\n"
     "    -s, --subtitle <number> Select subtitle (default: none)\n"
-    "    -e, --encoder <string>  Set video library encoder (ffmpeg/xvid/x264,\n"
-    "                            default: ffmpeg)\n"
+    "    -e, --encoder <string>  Set video library encoder (ffmpeg,xvid,\n"
+    "                            x264,x264b13, default: ffmpeg)\n"
     "    -E, --aencoder <string> Set audio encoder (faac/lame/vorbis/ac3, ac3\n"
     "                            meaning passthrough, default: guessed)\n"
     "    -2, --two-pass          Use two-pass mode\n"
@@ -662,6 +667,11 @@ static int ParseOptions( int argc, char ** argv )
                 else if( !strcasecmp( optarg, "x264" ) )
                 {
                     vcodec = HB_VCODEC_X264;
+                }
+                else if( !strcasecmp( optarg, "x264b13" ) )
+                {
+                    vcodec = HB_VCODEC_X264;
+                    h264_13 = 1;
                 }
                 else
                 {

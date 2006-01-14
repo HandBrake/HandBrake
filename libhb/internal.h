@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.40 2005/04/27 10:14:02 titer Exp $
+/* $Id: internal.h,v 1.41 2005/11/25 15:05:25 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -104,6 +104,7 @@ hb_dvd_t *   hb_dvd_init( char * path );
 int          hb_dvd_title_count( hb_dvd_t * );
 hb_title_t * hb_dvd_title_scan( hb_dvd_t *, int title );
 int          hb_dvd_start( hb_dvd_t *, int title, int chapter );
+void         hb_dvd_stop( hb_dvd_t * );
 int          hb_dvd_seek( hb_dvd_t *, float );
 int          hb_dvd_read( hb_dvd_t *, hb_buffer_t * );
 int          hb_dvd_chapter( hb_dvd_t * );
