@@ -1,19 +1,14 @@
-/* $Id: Mpeg2Dec.c,v 1.4 2003/11/12 21:46:59 titer Exp $
+/* $Id: Mpeg2Dec.c,v 1.12 2004/01/16 19:04:04 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
-#include "Fifo.h"
-#include "Mpeg2Dec.h"
-#include "Work.h"
+#include "HBInternal.h"
 
-#include <mpeg2dec/mpeg2.h>
+#include "mpeg2dec/mpeg2.h"
 
-/* Local prototypes */
-static int Mpeg2DecWork( HBWork * );
-
-struct HBMpeg2Dec
+typedef struct HBMpeg2Dec
 {
     HB_WORK_COMMON_MEMBERS
 
@@ -24,9 +19,12 @@ struct HBMpeg2Dec
     mpeg2dec_t         * libmpeg2;
     const mpeg2_info_t * info;
     int                  lateField;
-};
+} HBMpeg2Dec;
 
-HBMpeg2Dec * HBMpeg2DecInit( HBHandle * handle, HBTitle * title )
+/* Local prototypes */
+static int Mpeg2DecWork( HBWork * );
+
+HBWork * HBMpeg2DecInit( HBHandle * handle, HBTitle * title )
 {
     HBMpeg2Dec * m ;
     if( !( m = malloc( sizeof( HBMpeg2Dec ) ) ) )
@@ -47,15 +45,15 @@ HBMpeg2Dec * HBMpeg2DecInit( HBHandle * handle, HBTitle * title )
     m->info          = NULL;
     m->lateField     = 0;
 
-    return m;
+    return (HBWork*) m;
 }
 
-void HBMpeg2DecClose( HBMpeg2Dec ** _m )
+void HBMpeg2DecClose( HBWork ** _m )
 {
     HBBuffer * buffer;
-    
-    HBMpeg2Dec * m = *_m;
-    
+
+    HBMpeg2Dec * m = (HBMpeg2Dec*) *_m;
+
     if( m->libmpeg2 )
     {
         HBLog( "HBMpeg2Dec: closing libmpeg2 (pass %d)", m->pass );
@@ -69,7 +67,7 @@ void HBMpeg2DecClose( HBMpeg2Dec ** _m )
     HBListClose( &m->rawBufferList );
     free( m->name );
     free( m );
-    
+
     *_m = NULL;
 }
 
@@ -81,7 +79,7 @@ static int Mpeg2DecWork( HBWork * w )
     HBBuffer    * rawBuffer;
     HBBuffer    * tmpBuffer;
     mpeg2_state_t state;
-    
+
     int didSomething = 0;
 
     /* Push decoded buffers */
@@ -101,7 +99,7 @@ static int Mpeg2DecWork( HBWork * w )
     }
 
     /* Get a new buffer to decode */
-    if( ( mpeg2Buffer = HBFifoPop( title->mpeg2Fifo ) ) )
+    if( ( mpeg2Buffer = HBFifoPop( title->inFifo ) ) )
     {
         didSomething = 1;
     }
@@ -122,6 +120,9 @@ static int Mpeg2DecWork( HBWork * w )
         m->pass = mpeg2Buffer->pass;
 
         HBLog( "HBMpeg2Dec: opening libmpeg2 (pass %d)", m->pass );
+#ifdef HB_NOMMX
+        mpeg2_accel( 0 );
+#endif
         m->libmpeg2  = mpeg2_init();
         m->info      = mpeg2_info( m->libmpeg2 );
         m->lateField = 0;
@@ -143,7 +144,7 @@ static int Mpeg2DecWork( HBWork * w )
                  m->info->display_fbuf )
         {
             rawBuffer = HBBufferInit( 3 * title->inWidth *
-                                      title->outWidth );
+                                      title->inHeight );
 
             /* TODO: make libmpeg2 write directly in our buffer */
             memcpy( rawBuffer->data, m->info->display_fbuf->buf[0],
@@ -164,16 +165,12 @@ static int Mpeg2DecWork( HBWork * w )
             /* NTSC pulldown kludge */
             if( m->info->display_picture->nb_fields == 3 )
             {
-                if( m->lateField )
-                {
-                    tmpBuffer           = HBBufferInit( rawBuffer->size );
-                    tmpBuffer->position = rawBuffer->position;
-                    tmpBuffer->pass     = rawBuffer->pass;
-                    memcpy( tmpBuffer->data, rawBuffer->data,
-                            tmpBuffer->size );
-                    HBListAdd( m->rawBufferList, tmpBuffer );
-                }
-                m->lateField = !m->lateField;
+                rawBuffer->repeat = m->lateField;
+                m->lateField      = !m->lateField;
+            }
+            else
+            {
+                rawBuffer->repeat = 0;
             }
         }
         else if( state == STATE_INVALID )
@@ -181,11 +178,6 @@ static int Mpeg2DecWork( HBWork * w )
             /* Shouldn't happen on a DVD */
             HBLog( "HBMpeg2Dec: STATE_INVALID" );
         }
-    }
-
-    if( mpeg2Buffer->last )
-    {
-        HBDone( m->handle );
     }
 
     HBBufferClose( &mpeg2Buffer );

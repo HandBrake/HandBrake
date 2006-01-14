@@ -1,20 +1,15 @@
-/* $Id: Mp3Enc.c,v 1.5 2003/11/07 21:52:57 titer Exp $
+/* $Id: Mp3Enc.c,v 1.13 2004/01/21 17:59:33 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
-#include "Fifo.h"
-#include "Mp3Enc.h"
-#include "Work.h"
+#include "HBInternal.h"
 
-#include <lame/lame.h>
+/* libmp3lame */
+#include "lame/lame.h"
 
-/* Local prototypes */
-static int Mp3EncWork( HBWork * );
-static int GetBytes( HBMp3Enc * );
-
-struct HBMp3Enc
+typedef struct HBMp3Enc
 {
     HB_WORK_COMMON_MEMBERS
 
@@ -24,17 +19,25 @@ struct HBMp3Enc
     HBBuffer          * rawBuffer;
     int                 rawBufferPos;
     float               position;
-    int                 samplesNeeded;
+    int                 inputSamples;
     int                 samplesGot;
     float             * left;
     float             * right;
     HBBuffer          * mp3Buffer;
-};
 
-HBMp3Enc * HBMp3EncInit( HBHandle * handle, HBAudio * audio )
+    /* Stats */
+    int64_t             samples;
+    int64_t             bytes;
+} HBMp3Enc;
+
+/* Local prototypes */
+static int Mp3EncWork( HBWork * );
+static int GetSamples( HBMp3Enc * );
+
+HBWork * HBMp3EncInit( HBHandle * handle, HBAudio * audio )
 {
     HBMp3Enc * m;
-    if( !( m = malloc( sizeof( HBMp3Enc ) ) ) )
+    if( !( m = calloc( sizeof( HBMp3Enc ), 1 ) ) )
     {
         HBLog( "HBMp3EncInit: malloc() failed, gonna crash" );
         return NULL;
@@ -42,31 +45,35 @@ HBMp3Enc * HBMp3EncInit( HBHandle * handle, HBAudio * audio )
 
     m->name          = strdup( "Mp3Enc" );
     m->work          = Mp3EncWork;
-    
+
     m->handle        = handle;
     m->audio         = audio;
-    m->globalFlags   = NULL;
-    m->rawBuffer     = NULL;
-    m->rawBufferPos  = 0;
-    m->position      = 0.0;
-    m->samplesNeeded = 0;
-    m->samplesGot    = 0;
-    m->left          = NULL;
-    m->right         = NULL;
-    m->mp3Buffer     = NULL;
 
-    return m;
+    return (HBWork*) m;
 }
 
-void HBMp3EncClose( HBMp3Enc ** _m )
+void HBMp3EncClose( HBWork ** _m )
 {
-    HBMp3Enc * m = *_m;
-    
+    HBMp3Enc * m = (HBMp3Enc*) *_m;
+
     if( m->globalFlags ) lame_close( m->globalFlags );
     if( m->rawBuffer )   HBBufferClose( &m->rawBuffer );
     if( m->left )        free( m->left );
     if( m->right )       free( m->right );
     if( m->mp3Buffer )   HBBufferClose( &m->mp3Buffer );
+
+    if( m->samples )
+    {
+        int64_t bytes = 128 * m->audio->outBitrate * m->samples /
+            m->audio->inSampleRate;
+        float bitrate = (float) m->bytes * m->audio->inSampleRate /
+            m->samples / 128;
+
+        HBLog( "HBMp3Enc: %lld samples encoded (%lld bytes), %.2f kbps",
+                m->samples, m->bytes, bitrate );
+        HBLog( "HBFaacEnc: error is %lld bytes", m->bytes - bytes );
+    }
+    
     free( m->name );
     free( m );
 
@@ -86,7 +93,7 @@ static int Mp3EncWork( HBWork * w )
     if( !m->globalFlags )
     {
         int i;
-        
+
         /* Get a first buffer so we know that audio->inSampleRate is
            correct */
         if( ( m->rawBuffer = HBFifoPop( audio->rawFifo ) ) )
@@ -105,7 +112,8 @@ static int Mp3EncWork( HBWork * w )
            outSampleRate, we will give ( 1152 * inSampleRate ) /
            ( 2 * outSampleRate ) samples to libmp3lame so we are sure we
            will never get more than 1 frame at a time */
-        m->samplesNeeded =  1152 * audio->inSampleRate /
+        audio->outSampleRate = 44100;
+        m->inputSamples =  1152 * audio->inSampleRate /
                             audio->outSampleRate / 2;
 
         HBLog( "HBMp3Enc: opening lame (%d->%d Hz, %d kbps)",
@@ -123,15 +131,15 @@ static int Mp3EncWork( HBWork * w )
             return didSomething;
         }
 
-        m->left  = malloc( m->samplesNeeded * sizeof( float ) );
-        m->right = malloc( m->samplesNeeded * sizeof( float ) );
+        m->left  = malloc( m->inputSamples * sizeof( float ) );
+        m->right = malloc( m->inputSamples * sizeof( float ) );
 
         if( !m->left || !m->right )
         {
             HBLog( "HBMp3Enc: malloc() failed, gonna crash" );
         }
 
-        for( i = 0; i < m->samplesNeeded; i++ )
+        for( i = 0; i < m->inputSamples; i++ )
         {
             m->left[i]  = 0.0;
             m->right[i] = 0.0;
@@ -141,7 +149,7 @@ static int Mp3EncWork( HBWork * w )
     /* Push encoded buffer */
     if( m->mp3Buffer )
     {
-        if( HBFifoPush( audio->mp3Fifo, &m->mp3Buffer ) )
+        if( HBFifoPush( audio->outFifo, &m->mp3Buffer ) )
         {
             didSomething = 1;
         }
@@ -156,12 +164,12 @@ static int Mp3EncWork( HBWork * w )
     if( audio->delay > 0 )
     {
         /* Audio starts later - insert some silence */
-        int length = m->samplesNeeded * 1000 / audio->inSampleRate;
-        
+        int length = m->inputSamples * 1000 / audio->inSampleRate;
+
         if( audio->delay > length )
         {
             HBLog( "HBMp3Enc: adding %d ms of silence", length );
-            m->samplesGot  = m->samplesNeeded;
+            m->samplesGot  = m->inputSamples;
             audio->delay  -= length;
         }
         else
@@ -172,11 +180,11 @@ static int Mp3EncWork( HBWork * w )
     else if( audio->delay < 0 )
     {
         /* Audio starts sooner - trash some */
-        int length = m->samplesNeeded * 1000 / audio->inSampleRate;
+        int length = m->inputSamples * 1000 / audio->inSampleRate;
 
         if( - audio->delay > length )
         {
-            if( GetBytes( m ) )
+            if( GetSamples( m ) )
             {
                 didSomething = 1;
                 HBLog( "HBMp3Enc: trashing %d ms", length );
@@ -196,7 +204,7 @@ static int Mp3EncWork( HBWork * w )
     }
 
     /* Get new samples */
-    if( GetBytes( m ) )
+    if( GetSamples( m ) )
     {
         didSomething = 1;
     }
@@ -209,9 +217,11 @@ static int Mp3EncWork( HBWork * w )
 
     mp3Buffer = HBBufferInit( LAME_MAXMP3BUFFER );
     ret       = lame_encode_buffer_float( m->globalFlags, m->left,
-                                          m->right, m->samplesNeeded,
+                                          m->right, m->inputSamples,
                                           mp3Buffer->data,
                                           mp3Buffer->size );
+    /* Stats */
+    m->samples += m->inputSamples;
 
     if( ret < 0 )
     {
@@ -232,19 +242,21 @@ static int Mp3EncWork( HBWork * w )
         mp3Buffer->size     = ret;
         mp3Buffer->keyFrame = 1;
         mp3Buffer->position = m->position;
-
         m->mp3Buffer = mp3Buffer;
+
+        /* Stats */
+        m->bytes   += ret;
     }
 
     return didSomething;
 }
 
-static int GetBytes( HBMp3Enc * m )
+static int GetSamples( HBMp3Enc * m )
 {
-    while( m->samplesGot < m->samplesNeeded )
+    while( m->samplesGot < m->inputSamples )
     {
         int i;
-        
+
         if( !m->rawBuffer )
         {
             if( !( m->rawBuffer = HBFifoPop( m->audio->rawFifo ) ) )
@@ -256,22 +268,20 @@ static int GetBytes( HBMp3Enc * m )
             m->position     = m->rawBuffer->position;
         }
 
-        i = MIN( m->samplesNeeded - m->samplesGot,
-                 ( m->rawBuffer->size / 2 -
-                   m->rawBufferPos ) / sizeof( float ) );
+        i = MIN( m->inputSamples - m->samplesGot,
+                 m->rawBuffer->samples - m->rawBufferPos );
 
         memcpy( m->left + m->samplesGot,
-                m->rawBuffer->data + m->rawBufferPos,
+                m->rawBuffer->left + m->rawBufferPos,
                 i * sizeof( float ) );
         memcpy( m->right + m->samplesGot,
-                m->rawBuffer->data + m->rawBuffer->size / 2 +
-                    m->rawBufferPos,
+                m->rawBuffer->right + m->rawBufferPos,
                 i * sizeof( float ) );
 
         m->samplesGot   += i;
-        m->rawBufferPos += i * sizeof( float );
+        m->rawBufferPos += i;
 
-        if( m->rawBufferPos == m->rawBuffer->size / 2 )
+        if( m->rawBufferPos == m->rawBuffer->samples )
         {
             HBBufferClose( &m->rawBuffer );
         }

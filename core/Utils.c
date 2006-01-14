@@ -1,4 +1,4 @@
-/* $Id: Utils.c,v 1.8 2003/11/12 16:09:34 titer Exp $
+/* $Id: Utils.c,v 1.14 2004/01/16 19:04:04 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -7,7 +7,7 @@
 #include <stdarg.h>
 #include <time.h>
 #include <sys/time.h>
-#ifdef SYS_CYGWIN
+#ifdef HB_CYGWIN
 #  include <windows.h>
 #endif
 
@@ -23,22 +23,22 @@ struct HBList
 
 void HBSnooze( int time )
 {
-#if defined( SYS_BEOS )
+#if defined( HB_BEOS )
     snooze( time );
-#elif defined( SYS_MACOSX ) || defined( SYS_LINUX )
+#elif defined( HB_MACOSX ) || defined( HB_LINUX )
     usleep( time );
-#elif defined( SYS_CYGWIN )
+#elif defined( HB_CYGWIN )
     Sleep( time / 1000 );
 #endif
 }
 
 void HBLog( char * log, ... )
 {
-    char string[81];
-    time_t _now;
+    char        string[80];
+    time_t      _now;
     struct tm * now;
-    va_list args;
-    int ret;
+    va_list     args;
+    int         ret;
 
     if( !getenv( "HB_DEBUG" ) )
     {
@@ -47,13 +47,13 @@ void HBLog( char * log, ... )
 
     /* Show the time */
     _now = time( NULL );
-    now = localtime( &_now );
+    now  = localtime( &_now );
     sprintf( string, "[%02d:%02d:%02d] ",
              now->tm_hour, now->tm_min, now->tm_sec );
 
     /* Convert the message to a string */
     va_start( args, log );
-    ret = vsnprintf( string + 11, 68, log, args );
+    ret = vsnprintf( string + 11, 67, log, args );
     va_end( args );
 
     /* Add the end of line */
@@ -66,7 +66,7 @@ void HBLog( char * log, ... )
 
 uint64_t HBGetDate()
 {
-#ifndef SYS_CYGWIN
+#ifndef HB_CYGWIN
     struct timeval tv;
     gettimeofday( &tv, NULL );
     return( (uint64_t) tv.tv_sec * 1000000 + (uint64_t) tv.tv_usec );
@@ -112,11 +112,11 @@ int HBPStoES( HBBuffer ** _psBuffer, HBList * esBufferList )
     while( pos + 6 < psBuffer->size &&
            d[pos] == 0 && d[pos+1] == 0 && d[pos+2] == 0x1 )
     {
-        uint32_t streamId;
-        uint32_t PES_packet_length;
-        uint32_t PES_packet_end;
-        uint32_t PES_header_d_length;
-        uint32_t PES_header_end;
+        int      streamId;
+        int      PES_packet_length;
+        int      PES_packet_end;
+        int      PES_header_d_length;
+        int      PES_header_end;
         int      hasPTS;
         uint64_t PTS = 0;
 
@@ -163,11 +163,10 @@ int HBPStoES( HBBuffer ** _psBuffer, HBList * esBufferList )
         /* Sanity check */
         if( pos >= PES_packet_end )
         {
-            HBLog( "HBPStoES: pos >= PES_packet_end" );
             pos = PES_packet_end;
             continue;
         }
-     
+
         /* Here we hit we ES payload */
         esBuffer = HBBufferInit( PES_packet_end - pos );
 
@@ -182,6 +181,8 @@ int HBPStoES( HBBuffer ** _psBuffer, HBList * esBufferList )
 
         pos = PES_packet_end;
     }
+
+#undef d
 
     HBBufferClose( _psBuffer );
 
@@ -204,14 +205,14 @@ HBList * HBListInit()
         free( l );
         return NULL;
     }
-    
+
     l->allocItems = HBLIST_DEFAULT_SIZE;
     l->nbItems    = 0;
-    
+
     return l;
 }
 
-int HBListCountItems( HBList * l )
+int HBListCount( HBList * l )
 {
     return l->nbItems;
 }
@@ -278,7 +279,7 @@ void * HBListItemAt( HBList * l, int index )
 void HBListClose( HBList ** _l )
 {
     HBList * l = *_l;
-    
+
     free( l->items );
     free( l );
 
@@ -287,23 +288,32 @@ void HBListClose( HBList ** _l )
 
 HBTitle * HBTitleInit( char * device, int index )
 {
-    HBTitle * t = calloc( sizeof( HBTitle ), 1 );
+    HBTitle * t;
 
-    t->device    = strdup( device );
-    t->index     = index;
+    if( !( t = calloc( sizeof( HBTitle ), 1 ) ) )
+    {
+        HBLog( "HBTitleInit: calloc() failed, gonna crash" );
+        return NULL;
+    }
 
-    t->codec     = HB_CODEC_FFMPEG;
-    t->bitrate   = 1024;
-    
-    t->audioList = HBListInit();
-    
+    t->device       = strdup( device );
+    t->index        = index;
+
+    t->codec        = HB_CODEC_FFMPEG;
+    t->mux          = HB_MUX_MP4;
+
+    t->audioList    = HBListInit();
+    t->ripAudioList = HBListInit();
+
+    t->start        = -1;
+
     return t;
 }
 
 void HBTitleClose( HBTitle ** _t )
 {
     HBTitle * t = *_t;
-    
+
     HBAudio * audio;
     while( ( audio = HBListItemAt( t->audioList, 0 ) ) )
     {
@@ -311,7 +321,8 @@ void HBTitleClose( HBTitle ** _t )
         HBAudioClose( &audio );
     }
     HBListClose( &t->audioList );
-    
+    HBListClose( &t->ripAudioList );
+
     if( t->file ) free( t->file );
     free( t->device );
     free( t );
@@ -322,30 +333,23 @@ void HBTitleClose( HBTitle ** _t )
 HBAudio * HBAudioInit( int id, char * language )
 {
     HBAudio * a;
-    if( !( a = malloc( sizeof( HBAudio ) ) ) )
+    if( !( a = calloc( sizeof( HBAudio ), 1 ) ) )
     {
-        HBLog( "HBAudioInit: malloc() failed, gonna crash" );
+        HBLog( "HBAudioInit: calloc() failed, gonna crash" );
         return NULL;
     }
 
     a->id            = id;
     a->language      = strdup( language );
-    a->inSampleRate  = 0;
-    a->outSampleRate = 44100;
-    a->delay         = 0;
-    a->ac3Fifo       = NULL;
-    a->rawFifo       = NULL;
-    a->mp3Fifo       = NULL;
-    a->ac3Dec        = NULL;
-    a->mp3Enc        = NULL;
-    
+    a->start         = -1;
+
     return a;
 }
 
 void HBAudioClose( HBAudio ** _a )
 {
     HBAudio * a = *_a;
-    
+
     free( a->language );
     free( a );
 

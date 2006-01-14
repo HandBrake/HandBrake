@@ -1,104 +1,71 @@
-# $Id: Jamfile,v 1.10 2003/11/13 02:09:14 titer Exp $
+# $Id: Jamfile,v 1.39 2004/02/18 17:21:00 titer Exp $
 #
 # This file is part of the HandBrake source code.
 # Homepage: <http://handbrake.m0k.org/>.
 # It may be used under the terms of the GNU General Public License.
 
-HB_VERSION = 0.5.2 ;
+SubDir TOP ;
 
-# Compilers
-CC   = gcc ;
-C++  = g++ ;
-LINK = gcc ;
+HB_PACKAGES = ;
 
-# Flags
-CCFLAGS   = $(CFLAGS) ;
-CCFLAGS  += -g -Wall -Werror ;
-CCFLAGS  += -DVERSION=\\\"$(HB_VERSION)\\\" -DSYS_$(OS) ;
-C++FLAGS  = $(CPPFLAGS) ;
-C++FLAGS += -g -Wall -Werror ;
-C++FLAGS += -DVERSION=\\\"$(HB_VERSION)\\\" -DSYS_$(OS) ;
-LINKFLAGS = $(LDFLAGS) ;
-HDRS      = core ;
-
-# Optims
-CCFLAGS  += -funroll-loops ;
-C++FLAGS += -funroll-loops ;
-OPTIM     = -O3 ;
-
-# Libs
-LINKLIBS = -ldvdplay -ldvdread -ldvdcss -lmpeg2 -lavcodec -la52
-           -lmp3lame -lxvidcore ;
-
-# OS specific
-if $(OS) = BEOS
-{
-    CCFLAGS  += -Wno-multichar ;
-    C++FLAGS += -Wno-multichar ;
-    LINKLIBS += -lbe -ltracker ;
-}
-else if $(OS) = LINUX
-{
-    LINKLIBS += -lpthread ;
-}
-else if $(OS) = MACOSX
-{
-    CCFLAGS   += -no-cpp-precomp ;
-    C++FLAGS  += -no-cpp-precomp ;
-    LINKFLAGS += -multiply_defined suppress ;
-
-    # needed to clean HandBrake.app
-    RM = rm -rf ;
-}
-else if $(OS) = CYGWIN
-{
-    CCFLAGS   += -mno-cygwin ;
-    C++FLAGS  += -mno-cygwin ;
-    LINKFLAGS += -mno-cygwin ;
-}
-
-# Do not remove temporary object files
-# There MUST be a cleaner way to do this
-actions quietly updated piecemeal together RmTemps
-{
-}
-
-# Build HandBrake.app using Xcode
-rule OSXApp
-{
-    Clean clean : $(1) macosx/build ;
-    BuildOSXApp $(1) ;
-}
-
-actions BuildOSXApp
-{
-    $(RM) HandBrake.app ;
-    ( cd macosx && xcodebuild ) && cp -r macosx/build/HandBrake.app . ;
-}
-
-Library core/libhb : core/Ac3Dec.c core/AviMux.c
-                     core/Utils.c core/DVDRead.c core/Fifo.c
-                     core/HandBrake.c core/Mp3Enc.c
-                     core/Mpeg2Dec.c core/FfmpegEnc.c
-                     core/MadDec.c core/Scale.c
-		     core/Scan.c core/Thread.c core/Work.c
-		     core/XvidEnc.c core/XvidVbr.c ;
-
-LinkLibraries HBTest : core/libhb.a ;
+# CLI app
+ObjectCcFlags test/test.c : -I$(TOP)/core -g -Wall ;
+LinkLibraries HBTest :
+    libhb.a liba52.a libavcodec.a libdvdplay.a libdvdread.a libdvdcss.a
+    libfaac.a libmp3lame.a libmp4v2.a libmpeg2.a libvorbis.a
+    libvorbisenc.a libogg.a libx264.a libxvidcore.a ;
 Main HBTest : test/test.c ;
 
+# BeOS
 if $(OS) = BEOS
 {
-    LinkLibraries HandBrake : core/libhb.a ;
-    Main HandBrake : beos/HBApp.cpp beos/MainWindow.cpp
-                     beos/PictureWin.cpp beos/ScanView.cpp
-                     beos/RipView.cpp ;
+    SOURCES_BEOS = beos/HBApp.cpp beos/HBWindow.cpp ;
+    ObjectC++Flags $(SOURCES_BEOS) :
+        -I$(TOP)/core -I$(TOP)/beos/liblayout -g -Wall ;
+    LINKLIBS on HandBrake = $(LINKLIBS) -L$(TOP)/lib -llayout -lbe ;
+    LinkLibraries HandBrake :
+        libhb.a liba52.a libavcodec.a libdvdplay.a libdvdread.a libdvdcss.a
+        libfaac.a libmp3lame.a libmp4v2.a libmpeg2.a libvorbis.a
+        libvorbisenc.a libogg.a libx264.a libxvidcore.a ;
+    Main HandBrake : $(SOURCES_BEOS) ;
 }
 
+# OS X
 if $(OS) = MACOSX
 {
+    # Build the app
     OSXApp HandBrake.app ;
-    Depends HandBrake.app : core/libhb.a ;
+    Depends HandBrake.app :
+        libhb.a liba52.a libavcodec.a libdvdplay.a libdvdread.a
+        libdvdcss.a libfaac.a libmp3lame.a libmp4v2.a libmpeg2.a
+        libvorbis.a libvorbisenc.a libogg.a libx264.a libxvidcore.a ;
     Depends all : HandBrake.app ;
+    
+    # Package
+    OSXPackage HandBrake-$(HB_VERSION)-OSX.zip ;
+    Depends HandBrake-$(HB_VERSION)-OSX.zip : HandBrake.app ;
+    HB_PACKAGES += HandBrake-$(HB_VERSION)-OSX.zip ;
 }
+
+# GTK2
+if $(OS) = LINUX
+{
+    SOURCES_GTK2 = gtk2/main.c gtk2/callbacks.c gtk2/interface.c
+                   gtk2/support.c ;
+    ObjectCcFlags $(SOURCES_GTK2) :
+        -I$(TOP)/core `pkg-config gtk+-2.0 --cflags` ;
+    LINKLIBS on gtk2HB = $(LINKLIBS) `pkg-config gtk+-2.0 --libs` ;
+    LinkLibraries gtk2HB :
+        libhb.a liba52.a libavcodec.a libdvdplay.a libdvdread.a libdvdcss.a
+        libfaac.a libmp3lame.a libmp4v2.a libmpeg2.a libvorbis.a
+        libvorbisenc.a libogg.a libx264.a libxvidcore.a ;
+    Main gtk2HB : $(SOURCES_GTK2) ;
+}
+
+# Packages
+NotFile package ;
+Depends package : $(HB_PACKAGES) ;
+
+SubInclude TOP contrib ;
+SubInclude TOP core ;
 

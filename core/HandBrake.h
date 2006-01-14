@@ -1,4 +1,4 @@
-/* $Id: HandBrake.h,v 1.3 2003/11/06 13:03:19 titer Exp $
+/* $Id: HandBrake.h,v 1.10 2004/01/21 18:40:36 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -13,36 +13,56 @@ extern "C" {
 
 #include "Utils.h"
 
+/* Interface callbacks */
+typedef struct HBCallbacks
+{
+    void * data;
+
+    void (*scanning) ( void * data, int title, int titleCount );
+    void (*scanDone) ( void * data, HBList * titleList );
+    void (*encoding) ( void * data, float position, int pass,
+                       int passCount, float curFrameRate,
+                       float avgFrameRate, int remainingTime );
+    void (*ripDone)  ( void * data, int result );
+
+} HBCallbacks;
+
 /* Init libhb. Set debug to 0 to see no output, 1 to see all libhb logs.
    Set cpuCount to 0 if you want libhb to autodetect */
 HBHandle * HBInit( int debug, int cpuCount );
 
-/* Fills the HBStatus * argument with infos about the current status.
-   Returns 1 if mode has changed, 0 otherwise */
-int        HBGetStatus( HBHandle *, HBStatus * );
+/* Tell libhb what functions should be called when a GUI should be
+   updated. */
+void       HBSetCallbacks( HBHandle *, HBCallbacks callbacks );
 
-/* Launch a thread which scans the specified device and title. Use
+/* Launch a thread which scans the specified DVD and title. Use
    title = 0 to scan all titles. Returns immediately */
-void       HBScanDevice( HBHandle *, char * device, int title );
+void       HBScanDVD( HBHandle *, const char * dvd, int title );
 
-/* Start ripping the specified title with specified audio tracks.
-   Returns immediatly */
-void       HBStartRip( HBHandle *, HBTitle *, HBAudio *, HBAudio * );
+/* Calculate bitrate so the output file fits in X MB */
+int        HBGetBitrateForSize( HBTitle * title, int size, int muxer,
+                                int audioCount, int audioBitrate );
 
-/* Suspend rip. Returns immediatly */
+/* Start ripping the specified title. Returns immediatly */
+void       HBStartRip( HBHandle *, HBTitle * );
+
+/* Suspend rip */
 void       HBPauseRip( HBHandle * );
 
-/* Resume rip. Returns immediatly */
+/* Resume rip */
 void       HBResumeRip( HBHandle * );
 
-/* Cancel rip. Returns immediatly */
+/* Cancel rip. Returns immediatly - you'll be noticed by the ripDone
+   callback when it's really stopped.
+   If the rip was paused, you _must_ call HBResumeRip() first. */
 void       HBStopRip( HBHandle * );
 
 /* Calculate preview for the specified picture of the specified title,
    taking care of the current cropping & scaling settings. Returns a
-   pointer to raw RGBA data. It includes the white border around the
-   picture, so the size of the picture is ( maxWidth + 2 ) x
-   ( maxHeight + 2 ) */
+   pointer to raw RGBA data that _has_ to be freed by the calling
+   function. The picture includes the white border around the picture,
+   so its size is ( maxWidth + 2 ) x ( maxHeight + 2 ).
+   The data belongs to the caller, who must free it. */
 uint8_t  * HBGetPreview( HBHandle *, HBTitle *, int picture );
 
 /* Clean up things */

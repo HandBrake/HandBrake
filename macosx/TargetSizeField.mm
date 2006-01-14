@@ -1,4 +1,4 @@
-/* $Id: TargetSizeField.mm,v 1.1.1.1 2003/11/03 12:03:51 titer Exp $
+/* $Id: TargetSizeField.mm,v 1.4 2004/01/28 14:41:31 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -33,32 +33,16 @@
 
 - (void) UpdateBitrate
 {
-    int64_t available;
-    available  = (int64_t) [self intValue] * 1024 * 1024;
+    int size   = [self intValue];
+    int format = [fRipFormatPopUp indexOfSelectedItem];
+    int muxer  = ( format == 0 ) ? HB_MUX_MP4 : ( ( format == 1 ) ?
+            HB_MUX_OGM : HB_MUX_AVI );
+    int audioCount = ( [fRipLang2PopUp selectedItem] ==
+            [fRipLang2PopUp lastItem] ) ? 1 : 2;
+    int audioBitrate = [[fRipAudBitPopUp titleOfSelectedItem] intValue];
 
-    /* AVI headers */
-    available -= 2048;
-
-    /* Video chunk headers (8 bytes / frame)
-       and index (16 bytes / frame) */
-    available -= 24 * fTitle->length * fTitle->rate / fTitle->rateBase;
-
-    /* Audio tracks */
-    available -= ( ( [[fSecondaryLanguagePopUp titleOfSelectedItem]
-                       compare: @"None"] == NSOrderedSame ) ? 1 : 2 ) *
-                 ( fTitle->length *
-                   [[fAudioBitratePopUp titleOfSelectedItem] intValue] *
-                   128 + 24 * fTitle->length * 44100 / 1152 );
-    
-    if( available < 0 )
-    {
-        [fBitrateField setIntValue: 0];
-    }
-    else
-    {
-        [fBitrateField setIntValue:
-            available / ( 128 * fTitle->length )];
-    }
+    [fRipCustomField setIntValue: HBGetBitrateForSize( fTitle, size,
+            muxer, audioCount, audioBitrate )];
 }
 
 @end

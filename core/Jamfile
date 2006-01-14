@@ -1,0 +1,47 @@
+# $Id: Jamfile,v 1.5 2004/01/16 19:04:04 titer Exp $
+#
+# This file is part of the HandBrake source code.
+# Homepage: <http://handbrake.m0k.org/>.
+# It may be used under the terms of the GNU General Public License.
+
+SubDir TOP core ;
+
+SOURCES_HBCORE =
+Ac3Dec.c
+AviMux.c
+DVDRead.c
+FaacEnc.c
+FfmpegEnc.c
+Fifo.c
+HandBrake.c
+MadDec.c
+Mp3Enc.c
+Mp4Mux.c
+Mpeg2Dec.c
+OgmMux.c
+Scale.c
+Scan.c
+Thread.c
+Utils.c
+VorbisEnc.c
+Work.c
+X264Enc.c
+XvidEnc.c ;
+
+ObjectCcFlags $(SOURCES_HBCORE) : 
+    -I$(TOP)/contrib/liba52
+    -I$(TOP)/contrib/libavcodec
+    -I$(TOP)/contrib/libdvdplay
+    -I$(TOP)/contrib/libdvdread
+    -I$(TOP)/contrib/libfaac
+    -I$(TOP)/contrib/libmp3lame
+    -I$(TOP)/contrib/libmp4v2
+    -I$(TOP)/contrib/libmpeg2
+    -I$(TOP)/contrib/libogg
+    -I$(TOP)/contrib/libvorbis
+    -I$(TOP)/contrib/libx264
+    -I$(TOP)/contrib/libxvidcore
+    -g -Wall ;
+
+Library libhb.a : $(SOURCES_HBCORE) ;
+

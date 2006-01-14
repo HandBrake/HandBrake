@@ -1,4 +1,4 @@
-/* $Id: Fifo.c,v 1.3 2003/11/09 14:27:56 titer Exp $
+/* $Id: Fifo.c,v 1.8 2004/01/16 19:04:03 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -9,7 +9,7 @@
 HBBuffer * HBBufferInit( int size )
 {
     HBBuffer * b;
-    if( !( b = malloc( sizeof( HBBuffer ) ) ) )
+    if( !( b = calloc( sizeof( HBBuffer ), 1 ) ) )
     {
         HBLog( "HBBufferInit: malloc() failed, gonna crash" );
         return NULL;
@@ -26,11 +26,6 @@ HBBuffer * HBBufferInit( int size )
     }
 
     b->position = 0.0;
-    b->streamId = 0;
-    b->keyFrame = 0;
-    b->pts      = 0;
-    b->pass     = 0;
-    b->last     = 0;
 
     return b;
 }
@@ -49,7 +44,7 @@ void HBBufferReAlloc( HBBuffer * b, int size )
 void HBBufferClose( HBBuffer ** _b )
 {
     HBBuffer * b = *_b;
-    
+
     free( b->data );
     free( b );
 
@@ -65,6 +60,7 @@ HBFifo * HBFifoInit( int capacity )
         return NULL;
     }
 
+    f->die         = 0;
     f->capacity    = capacity;
     f->whereToPush = 0;
     f->whereToPop  = 0;
@@ -75,22 +71,23 @@ HBFifo * HBFifoInit( int capacity )
         free( f );
         return NULL;
     }
-    
+
     f->lock = HBLockInit();
+    f->cond = HBCondInit();
 
     return f;
 }
 
-int HBFifoSize( HBFifo * f )
+void HBFifoDie( HBFifo * f )
 {
-    return ( f->capacity + 1 + f->whereToPush - f->whereToPop ) %
-                 ( f->capacity + 1 );
+    f->die = 1;
+    HBCondSignal( f->cond );
 }
 
 void HBFifoClose( HBFifo ** _f )
 {
     HBFifo * f = (*_f);
-    
+
     HBLog( "HBFifoClose: trashing %d buffer%s",
            HBFifoSize( f ), ( HBFifoSize( f ) > 1 ) ? "s" : "" );
 
@@ -102,6 +99,7 @@ void HBFifoClose( HBFifo ** _f )
     }
 
     HBLockClose( &f->lock );
+    HBCondClose( &f->cond );
     free( f->buffers );
     free( f );
 

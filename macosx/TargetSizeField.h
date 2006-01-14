@@ -1,4 +1,4 @@
-/* $Id: TargetSizeField.h,v 1.1.1.1 2003/11/03 12:03:51 titer Exp $
+/* $Id: TargetSizeField.h,v 1.3 2004/01/28 14:41:31 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -12,9 +12,10 @@
 
 {
     HBTitle                * fTitle;
-    IBOutlet NSTextField   * fBitrateField;
-    IBOutlet NSPopUpButton * fSecondaryLanguagePopUp;
-    IBOutlet NSPopUpButton * fAudioBitratePopUp;
+    IBOutlet NSPopUpButton * fRipFormatPopUp;
+    IBOutlet NSTextField   * fRipCustomField;
+    IBOutlet NSPopUpButton * fRipLang2PopUp;
+    IBOutlet NSPopUpButton * fRipAudBitPopUp;
 }
 
 - (void) SetHBTitle: (HBTitle *) title;

@@ -1,0 +1,126 @@
+# Compilers & flags
+CC       = gcc ;
+C++      = g++ ;
+CCFLAGS  = $(CFLAGS) ;
+C++FLAGS = $(CFLAGS) ;
+AS       = nasm -f elf ;
+LINK     = g++ ;
+OPTIM    = -O3 -funroll-loops ;
+
+# HandBrake defines
+HB_VERSION = 0.6.0-test1 ;
+DEFINES    = HB_$(OS) HB_VERSION=\\\"$(HB_VERSION)\\\" ;
+#DEFINES   += HB_NOMMX ;
+
+# OS-specific
+if $(OS) = BEOS
+{
+    CCFLAGS  += -Wno-multichar ;
+    C++FLAGS += -Wno-multichar ;
+}
+else if $(OS) = LINUX
+{
+    LINKLIBS = -lpthread ;
+}
+else if $(OS) = MACOSX
+{
+    RM = rm -rf ;
+}
+
+# Contrib* rules: mostly the same than Jambase rules, except
+#  * Targets aren't cleaned by jam clean (to prevent from deleting
+#    every contrib library by accident)
+#  * ContribObject handles *.asm files
+#  * Temporary *.o files aren't removed
+rule ContribObject
+{
+    MakeLocate $(<) : $(LOCATE_TARGET) ;
+    SEARCH on $(>) = $(SEARCH_SOURCE) ;
+    HDRS on $(<) = $(SEARCH_SOURCE) $(SUBDIRHDRS) $(HDRS) ;
+    HDRRULE on $(>) = HdrRule ;
+    HDRSCAN on $(>) = $(HDRPATTERN) ;
+    HDRSEARCH on $(>) =
+            $(SEARCH_SOURCE:E) $(SUBDIRHDRS) $(HDRS) $(STDHDRS) ;
+    HDRGRIST on $(>) = $(HDRGRIST) ;
+    DEFINES on $(<) += $(DEFINES) ;
+    switch $(>:S)
+    {   
+        case .asm : As $(<) : $(>) ;
+        case .nas : As $(<) : $(>) ;
+        case .c :   Cc $(<) : $(>) ;
+        case .C :   C++ $(<) : $(>) ;
+        case .cc :  C++ $(<) : $(>) ;
+        case .cpp : C++ $(<) : $(>) ;
+        case .f :   Fortran $(<) : $(>) ;
+        case .l :   Cc $(<) : $(<:S=.c) ;
+                    Lex $(<:S=.c) : $(>) ;
+        case .s :   As $(<) : $(>) ;
+        case .y :   Cc $(<) : $(<:S=$(YACCGEN)) ; 
+                    Yacc $(<:S=$(YACCGEN)) : $(>) ;
+        case * :    UserObject $(<) : $(>) ;
+    }
+}
+rule ContribObjects
+{
+    local _i ;
+    for _i in [ FGristFiles $(<) ]
+    {
+        ContribObject $(_i:S=$(SUFOBJ)) : $(_i) ;
+        Depends obj : $(_i:S=$(SUFOBJ)) ;
+    }
+}
+rule ContribLibrary
+{
+    local _l _s ;
+    _s = [ FGristFiles $(>:S=$(SUFOBJ)) ] ;
+    _l = $(<:S=$(SUFLIB)) ;
+    ContribObjects $(>) ;
+    Depends obj : $(_s) ;
+    MakeLocate $(_l) $(_l)($(_s:BS)) : $(LOCATE_TARGET) ;
+    Depends $(_l) : $(_s) ;
+    Archive $(_l) : $(_s) ;
+    if $(RANLIB) { Ranlib $(_l) ; }
+    Depends lib : $(_l) ;
+}
+
+# Custom Library rule: same as ContribLibrary, except 'jam clean'
+# removes built objects
+rule Library
+{
+    ContribLibrary $(<) : $(>) ;
+    Clean clean : [ FGristFiles $(>:S=$(SUFOBJ)) ] ;
+    Clean clean : $(<:S=$(SUFLIB)) ;
+}
+
+# Build HandBrake.app using Xcode
+rule OSXApp
+{   
+    Clean clean : $(1) macosx/build ;
+    BuildOSXApp $(1) ;
+}
+actions BuildOSXApp
+{
+    $(RM) $(1) ;
+    ( cd macosx && xcodebuild ) && \
+      cp -r macosx/build/HandBrake.app $(1) && \
+      for i in French German; do \
+        ( cd $(1)/Contents/Resources && \
+          cp -r English.lproj $i.lproj && \
+          cp ../../../macosx/i18n/$i.strings \
+            $i.lproj/Localizable.strings ) \
+      done ;
+}
+rule OSXPackage 
+{   
+    BuildOSXPackage $(1) ;
+}   
+actions BuildOSXPackage
+{                 
+    rm -rf $(1) "HandBrake $(HB_VERSION)" && \
+      mkdir "HandBrake $(HB_VERSION)" && \
+      cp -r AUTHORS COPYING CREDITS HandBrake.app \
+        "HandBrake $(HB_VERSION)" && \
+      zip -9 -r $(1) "HandBrake $(HB_VERSION)" && \
+      rm -rf "HandBrake $(HB_VERSION)"
+}
+

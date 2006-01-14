@@ -1,0 +1,18 @@
+$Id: AUTHORS,v 1.1 2003/12/26 20:19:38 titer Exp $
+
+Eric Petit <titer@m0k.org>
+ + Core (construct, multithreading, BeOS/OS X/Linux ports)
+ + MPEG demuxer
+ + MPEG-2 and AC3 decoders (w/ libmpeg2/liba52)
+ + MPEG-4, MP3 and AAC encoders (w/ libavcodec/libxvidcore/libmp3lame/
+   libfaac)
+ + AVI muxer
+ + MP4 muxer (w/ libmp4v2)
+ + BeOS interface
+ + OS X interface
+
+Laurent Aimar <fenrir@via.ecp.fr>
+ + H264 and Vorbis encoders (w/ libx264/libvorbis)
+ + OGG/OGM muxer (w/ libogg)
+ + Gtk2 interface
+

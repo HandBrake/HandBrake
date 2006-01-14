@@ -1,21 +1,44 @@
+$Id: TODO,v 1.22 2004/02/13 13:45:50 titer Exp $
+
+This is the TODO list for HandBrake <http://handbrake.m0k.org/>
+Features to be added are written in no particular order.
+
 - Core
-  + Should be able to boost the audio volume
+  + Remove some duplicate code here and here
+  + Should be able to boost or normalize the audio volume
   + Allow the intf to preview the latest encoded picture
   + Finish and test the MPEG audio decoder
   + More encoding options: B-frames, type of estimation etc etc
   + Subtitle support
   + Allow the user to split the file in x parts
   + AC3 pass-through
-  + AAC & vorbis encoding support
-  + mp4 & mkv muxing support
+  + mkv muxing support
   + manual aspect ratio
   + rotate the movie
   + rip only a few chapters
-  + network shared processing (using RendezVous)
+  + network shared processing (using RendezVous?)
+  + do some DVD buffering so the drive can rest most of the time
+  + custom framerate
+  + homemade resampler
+  + VCD output
 
 - All interfaces
   + Use the DVD name in popup and for the name of the created file
   + nice 'About...' box with link to homepage & faq
+  + Add a 'Cancel' button in the crop & scale panel
+  + nicer, more user-friendly "Open" intf
 
 - BeOS interface
-  + Redo the picture panel
+  + Redo the picture panel (liblayout?)
+  + Add warnings (invalid bitrate, file already exists etc)
+  + i18n
+
+- Mac OS X interface
+  + Allow to quit HandBrake when the crop & scale sheet is opened
+  + Warning when the user quit the app while encoding
+  + Progress bar in the dock icon
+  + Send a mail when rip is done
+
+- Bugs
+  + OSX - crash when trying to encode a DVD from mounted toast image
+  + OSX - opengl effects somtimes mess up the picture's brightness

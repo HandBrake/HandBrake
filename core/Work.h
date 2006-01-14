@@ -1,4 +1,4 @@
-/* $Id: Work.h,v 1.1 2003/11/03 12:08:01 titer Exp $
+/* $Id: Work.h,v 1.4 2003/12/26 20:03:27 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -7,8 +7,6 @@
 #ifndef HB_WORK_H
 #define HB_WORK_H
 
-#include "HandBrakeInternal.h"
-
 #define HB_WORK_COMMON_MEMBERS \
     char   * name; \
     HBLock * lock; \
@@ -16,12 +14,8 @@
     uint64_t time; \
     int      (*work) ( HBWork * );
 
-void HBWorkLock( HBWork * );
-void HBWorkWork( HBWork * );
-void HBWorkUnlock( HBWork * );
-
-HBWorkThread * HBWorkThreadInit( HBHandle *, HBTitle *, HBAudio *,
-                                 HBAudio *, int firstThread );
+HBWorkThread * HBWorkThreadInit( HBHandle *, HBTitle *,
+                                 int firstThread );
 void           HBWorkThreadClose( HBWorkThread ** );
 
 #endif

@@ -1,4 +1,4 @@
-/* $Id: Controller.mm,v 1.10 2003/11/13 01:40:44 titer Exp $
+/* $Id: Controller.mm,v 1.27 2004/02/18 17:07:20 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -12,19 +12,34 @@
 
 #include "Controller.h"
 
+#define _(a) NSLocalizedString(a,nil)
+
+static void _Scanning( void * data, int title, int titleCount );
+static void _ScanDone( void * data, HBList * titleList );
+static void _Encoding( void * data, float position, int pass,
+                      int passCount, float curFrameRate,
+                      float avgFrameRate, int remainingTime );
+static void _RipDone( void * data, int result );
+
+/*******************************
+ * HBController implementation *
+ *******************************/
 @implementation HBController
 
 - (void) applicationDidFinishLaunching: (NSNotification *) notification
 {
     /* Init libhb */
-    fHandle = HBInit( 1, 0 );
-    [fPictureGLView SetHandle: fHandle];
+    HBCallbacks callbacks;
+    callbacks.data     = self;
+    callbacks.scanning = _Scanning;
+    callbacks.scanDone = _ScanDone;
+    callbacks.encoding = _Encoding;
+    callbacks.ripDone  = _RipDone;
 
-    /* Update the GUI every 1/10 sec */
-    fDie = false;
-    [NSTimer scheduledTimerWithTimeInterval: 0.1
-        target: self selector: @selector( UpdateIntf: )
-        userInfo: nil repeats: YES];
+    fHandle = HBInit( 1, 0 );
+    HBSetCallbacks( fHandle, callbacks );
+
+    [fPictureGLView SetHandle: fHandle];
 
     /* Detect drives mounted after the app is started */
     [[[NSWorkspace sharedWorkspace] notificationCenter]
@@ -36,7 +51,6 @@
     (NSApplication *) app
 {
     /* Clean up */
-    fDie = true;
     HBClose( &fHandle );
 
     return NSTerminateNow;
@@ -44,33 +58,99 @@
 
 - (void) awakeFromNib
 {
-    [fDVDPopUp removeAllItems];
-    [fScanProgress setStyle: NSProgressIndicatorSpinningStyle];
-    [fScanProgress setDisplayedWhenStopped: NO];
-    [fVideoCodecPopUp removeAllItems];
-    [fVideoCodecPopUp addItemWithTitle: @"MPEG-4 (Ffmpeg)"];
-    [fVideoCodecPopUp addItemWithTitle: @"MPEG-4 (XviD)"];
-    [fVideoCodecPopUp selectItemWithTitle: @"MPEG-4 (Ffmpeg)"];
-    [fAudioBitratePopUp removeAllItems];
-    [fAudioBitratePopUp addItemWithTitle: @"32"];
-    [fAudioBitratePopUp addItemWithTitle: @"64"];
-    [fAudioBitratePopUp addItemWithTitle: @"96"];
-    [fAudioBitratePopUp addItemWithTitle: @"128"];
-    [fAudioBitratePopUp addItemWithTitle: @"160"];
-    [fAudioBitratePopUp addItemWithTitle: @"192"];
-    [fAudioBitratePopUp addItemWithTitle: @"224"];
-    [fAudioBitratePopUp addItemWithTitle: @"256"];
-    [fAudioBitratePopUp addItemWithTitle: @"288"];
-    [fAudioBitratePopUp addItemWithTitle: @"320"];
-    [fAudioBitratePopUp selectItemWithTitle: @"128"];
+    /* Strings for the Scan view */
+    [fScWelcomeField  setStringValue: _( @"Welcome to HandBrake" )];
+    [fScSelectField   setStringValue: _( @"Select a DVD:" )];
+    [fScDetectedCell  setTitle: _( @"Detected volume" )];
+    [fScDetectedPopUp removeAllItems];
+    [fScFolderCell    setTitle: _( @"DVD Folder" )];
+    [fScBrowseButton  setTitle: _( @"Browse" )];
+    [fScStatusField   setStringValue: @""];
+    [fScOpenButton    setTitle: _( @"Open" )];
 
-    char string[1024]; memset( string, 0, 1024 );
-    snprintf( string, 1024, "%s/Desktop/Movie.avi", getenv( "HOME" ) );
-    [fFileField setStringValue: [NSString stringWithCString: string]];
+    /* Strings for the Rip view */
+    /* General box */
+    [fRipGeneralField setStringValue: _( @"General" )];
+    [fRipTitleField   setStringValue: _( @"DVD title" )];
+    [fRipTitlePopUp   removeAllItems];
+    [fRipFormatField  setStringValue: _( @"Output format" )];
+    [fRipFormatPopUp  removeAllItems];
+    [fRipFormatPopUp  addItemWithTitle:
+        _( @"MP4 file / MPEG-4 video / AAC audio" )];
+    [fRipFormatPopUp  addItemWithTitle:
+        _( @"AVI file / MPEG-4 video / MP3 audio" )];
+    [fRipFormatPopUp  addItemWithTitle:
+        _( @"AVI file / H264 video / MP3 audio" )];
+    [fRipFormatPopUp  addItemWithTitle:
+        _( @"OGM file / MPEG-4 video / Vorbis audio" )];
+    [fRipFileField1   setStringValue: _( @"File" )];
+    [fRipFileField2   setStringValue: [NSString stringWithFormat:
+        @"%@/Desktop/Movie.mp4", NSHomeDirectory()]];
+    [fRipBrowseButton setTitle: _( @"Browse" )];
+
+    /* Video box */
+    [fRipVideoField   setStringValue: _( @"Video" )];
+    [fRipEncoderField setStringValue: _( @"MPEG-4 encoder" )];
+    [fRipEncoderPopUp removeAllItems];
+    [fRipEncoderPopUp addItemWithTitle: @"FFmpeg"];
+    [fRipEncoderPopUp addItemWithTitle: @"XviD"];
+    [fRipBitrateField setStringValue: _( @"Bitrate" )];
+    [fRipCustomCell   setTitle: _( @"Custom (kbps)" )];
+    [fRipCustomField  setIntValue: 1024];
+    [fRipTargetCell   setTitle: _( @"Target size (MB)" )];
+    [fRipTargetField  setIntValue: 700];
+    [fRipTwoPassCheck setTitle: _( @"2-pass encoding" )];
+    [fRipCropButton   setTitle: _( @"Crop & Scale..." )];
+
+    /* Audio box */
+    [fRipAudioField  setStringValue: _( @"Audio" )];
+    [fRipLang1Field  setStringValue: _( @"Language 1" )];
+    [fRipLang1PopUp  removeAllItems];
+    [fRipLang2Field  setStringValue: _( @"Language 2 (optional)" )];
+    [fRipLang2PopUp  removeAllItems];
+    [fRipAudBitField setStringValue: _( @"Bitrate (kbps)" )];
+    [fRipAudBitPopUp removeAllItems];
+    [fRipAudBitPopUp addItemWithTitle: @"32"];
+    [fRipAudBitPopUp addItemWithTitle: @"40"];
+    [fRipAudBitPopUp addItemWithTitle: @"48"];
+    [fRipAudBitPopUp addItemWithTitle: @"56"];
+    [fRipAudBitPopUp addItemWithTitle: @"64"];
+    [fRipAudBitPopUp addItemWithTitle: @"80"];
+    [fRipAudBitPopUp addItemWithTitle: @"96"];
+    [fRipAudBitPopUp addItemWithTitle: @"112"];
+    [fRipAudBitPopUp addItemWithTitle: @"128"];
+    [fRipAudBitPopUp addItemWithTitle: @"160"];
+    [fRipAudBitPopUp addItemWithTitle: @"192"];
+    [fRipAudBitPopUp addItemWithTitle: @"224"];
+    [fRipAudBitPopUp addItemWithTitle: @"256"];
+    [fRipAudBitPopUp addItemWithTitle: @"320"];
+    [fRipAudBitPopUp selectItemWithTitle: @"128"];
+
+    /* Bottom */
+    [fRipStatusField setStringValue: @""];
+    [fRipInfoField   setStringValue: @""];
+    [fRipPauseButton setTitle: _( @"Pause" )];
+    [fRipRipButton   setTitle: _( @"Rip" )];
+
+    /* Strings for the crop panel */
+    [fWidthField1      setStringValue: _( @"Picture width" )];
+    [fDeinterlaceCheck setTitle: _( @"Deinterlace picture" )];
+    [fTopField1        setStringValue: _( @"Top cropping" )];
+    [fBottomField1     setStringValue: _( @"Bottom cropping" )];
+    [fLeftField1       setStringValue: _( @"Left cropping" )];
+    [fRightField1      setStringValue: _( @"Right cropping" )];
+    [fPreviousButton   setTitle: _( @"Previous" )];
+    [fNextButton       setTitle: _( @"Next" )];
+    [fAutocropButton   setTitle: _( @"Autocrop" )];
+    [fOpenGLCheck      setTitle: _( @"Useless OpenGL effects" )];
+    [fInfoField        setStringValue: @""];
+    [fCloseButton      setTitle: _( @"Close" )];
+
+    [self VideoMatrixChanged: self];
 
     /* Show the scan view */
-    [fWindow setContentSize: [fScanView frame].size];
-    [fWindow setContentView: fScanView];
+    [fWindow setContentSize: [fScView frame].size];
+    [fWindow setContentView: fScView];
     [fWindow center];
 
     /* Detect DVD drives */
@@ -105,23 +185,30 @@
 {
     if( returnCode == NSOKButton )
     {
-        [fDVDFolderField setStringValue:
+        [fScFolderField setStringValue:
             [[sheet filenames] objectAtIndex: 0]];
     }
 }
 
 - (IBAction) VideoMatrixChanged: (id) sender;
 {
-    if( ![fVideoMatrix selectedRow] )
+    if( ![fRipVideoMatrix isEnabled] )
     {
-        [fCustomBitrateField setEnabled: YES];
-        [fTargetSizeField setEnabled: NO];
+        [fRipCustomField setEnabled: NO];
+        [fRipTargetField setEnabled: NO];
+        return;
+    }
+    
+    if( ![fRipVideoMatrix selectedRow] )
+    {
+        [fRipCustomField setEnabled: YES];
+        [fRipTargetField setEnabled: NO];
     }
     else
     {
-        [fCustomBitrateField setEnabled: NO];
-        [fTargetSizeField setEnabled: YES];
-        [fTargetSizeField UpdateBitrate];
+        [fRipCustomField setEnabled: NO];
+        [fRipTargetField setEnabled: YES];
+        [fRipTargetField UpdateBitrate];
     }
 }
 
@@ -141,35 +228,42 @@
 {
     if( returnCode == NSOKButton )
     {
-        [fFileField setStringValue: [sheet filename]];
+        [fRipFileField2 setStringValue: [sheet filename]];
+        [self FormatPopUpChanged: self];
     }
 }
 
 - (IBAction) Scan: (id) sender
 {
+    [fScMatrix       setEnabled: NO];
+    [fScDetectedPopUp         setEnabled: NO];
+    [fScFolderField   setEnabled: NO];
+    [fScBrowseButton setEnabled: NO];
+    [fScProgress     setIndeterminate: YES];
+    [fScProgress     startAnimation: self];
+    [fScOpenButton       setEnabled: NO];
+    [fScStatusField setStringValue: _( @"Opening device..." )];
+
     /* Ask libhb to start scanning the specified volume */
-    
-    if( ![fScanMatrix selectedRow] )
+    if( ![fScMatrix selectedRow] )
     {
         /* DVD drive */
-        HBScanDevice( fHandle,
-                      (char*) [[fDVDPopUp titleOfSelectedItem] cString],
-                      0 );
+        HBScanDVD( fHandle,
+                   [[fScDetectedPopUp titleOfSelectedItem] cString], 0 );
     }
     else
     {
         /* DVD folder */
-        HBScanDevice( fHandle,
-                      (char*) [[fDVDFolderField stringValue] cString],
-                      0 );
+        HBScanDVD( fHandle,
+                   [[fScFolderField stringValue] cString], 0 );
     }
 }
 
 - (IBAction) ShowPicturePanel: (id) sender
 {
     HBTitle * title = (HBTitle*)
-        HBListItemAt( fTitleList, [fTitlePopUp indexOfSelectedItem] );
-    
+        HBListItemAt( fTitleList, [fRipTitlePopUp indexOfSelectedItem] );
+
     [fPictureGLView SetTitle: title];
 
     fPicture = 0;
@@ -180,7 +274,7 @@
     [fWidthStepper  setMinValue: 16];
     [fWidthStepper  setMaxValue: title->outWidthMax];
     [fWidthStepper  setIntValue: title->outWidth];
-    [fWidthField    setIntValue: title->outWidth];
+    [fWidthField2   setIntValue: title->outWidth];
     [fDeinterlaceCheck setState:
         title->deinterlace ? NSOnState : NSOffState];
     [fTopStepper    setValueWraps: NO];
@@ -188,40 +282,38 @@
     [fTopStepper    setMinValue: 0];
     [fTopStepper    setMaxValue: title->inHeight / 4];
     [fTopStepper    setIntValue: title->topCrop];
-    [fTopField      setIntValue: title->topCrop];
+    [fTopField2     setIntValue: title->topCrop];
     [fBottomStepper setValueWraps: NO];
     [fBottomStepper setIncrement: 2];
     [fBottomStepper setMinValue: 0];
     [fBottomStepper setMaxValue: title->inHeight / 4];
     [fBottomStepper setIntValue: title->bottomCrop];
-    [fBottomField   setIntValue: title->bottomCrop];
+    [fBottomField2  setIntValue: title->bottomCrop];
     [fLeftStepper   setValueWraps: NO];
     [fLeftStepper   setIncrement: 2];
     [fLeftStepper   setMinValue: 0];
     [fLeftStepper   setMaxValue: title->inWidth / 4];
     [fLeftStepper   setIntValue: title->leftCrop];
-    [fLeftField     setIntValue: title->leftCrop];
+    [fLeftField2    setIntValue: title->leftCrop];
     [fRightStepper  setValueWraps: NO];
     [fRightStepper  setIncrement: 2];
     [fRightStepper  setMinValue: 0];
     [fRightStepper  setMaxValue: title->inWidth / 4];
     [fRightStepper  setIntValue: title->rightCrop];
-    [fRightField    setIntValue: title->rightCrop];
+    [fRightField2   setIntValue: title->rightCrop];
 
     [fPreviousButton setEnabled: NO];
     [fNextButton     setEnabled: YES];
 
-    char string[1024]; memset( string, 0, 1024 );
-    sprintf( string, "Final size: %dx%d",
-             title->outWidth, title->outHeight );
-    [fInfoField setStringValue: [NSString stringWithCString: string]];
+    [fInfoField setStringValue: [NSString stringWithFormat:
+        _( @"Final size: %dx%d" ), title->outWidth, title->outHeight] ];
 
     /* Resize the panel */
     NSSize newSize;
     /* XXX */
     newSize.width  = 762 /*fPicturePanelSize.width*/ +
         title->outWidthMax - 720;
-    newSize.height = 740 /*fPicturePanelSize.height*/ +
+    newSize.height = 755 /*fPicturePanelSize.height*/ +
         title->outHeightMax - 576;
     [fPicturePanel setContentSize: newSize];
 
@@ -240,45 +332,45 @@
 - (IBAction) Rip: (id) sender
 {
     /* Rip or Cancel ? */
-    if( [[fRipButton title] compare: @"Cancel" ] == NSOrderedSame )
+    if( [[fRipRipButton title] compare: _( @"Cancel" ) ]
+            == NSOrderedSame )
     {
         [self Cancel: self];
         return;
     }
-    
-    if( [fCustomBitrateField intValue] < 256 )
+
+    if( [fRipCustomField intValue] < 64 )
     {
-        NSBeginCriticalAlertSheet( @"Invalid video bitrate", @"Ooops",
-            nil, nil, fWindow, self, nil, nil, nil,
-            @"Video bitrate is too low !" );
+        NSBeginCriticalAlertSheet( _( @"Invalid video bitrate" ),
+            _( @"Ooops" ), nil, nil, fWindow, self, nil, nil, nil,
+            _( @"Video bitrate is too low." ) );
         return;
     }
-    if( [fCustomBitrateField intValue] > 8192 )
+    if( [fRipCustomField intValue] > 8192 )
     {
-        NSBeginCriticalAlertSheet( @"Invalid video bitrate", @"Ooops",
-            nil, nil, fWindow, self, nil, nil, nil,
-            @"Video bitrate is too high !" );
+        NSBeginCriticalAlertSheet( _( @"Invalid video bitrate" ),
+            _( @"Ooops" ), nil, nil, fWindow, self, nil, nil, nil,
+            _( @"Video bitrate is too high." ) );
         return;
     }
-    if( [fLanguagePopUp indexOfSelectedItem] ==
-            [fSecondaryLanguagePopUp indexOfSelectedItem] )
+    if( [fRipLang1PopUp indexOfSelectedItem] ==
+            [fRipLang2PopUp indexOfSelectedItem] )
     {
-        NSBeginCriticalAlertSheet( @"Invalid secondary language",
-            @"Ooops", nil, nil, fWindow, self, nil, nil, nil,
-            @"Do you _really_ want to encode the same audio track twice?" );
+        NSBeginCriticalAlertSheet( _( @"Invalid secondary language" ),
+            _( @"Ooops" ), nil, nil, fWindow, self, nil, nil, nil,
+            _( @"You can't encode the same audio track twice." ) );
         return;
     }
 
-    FILE * file;
-    if( ( file = fopen( [[fFileField stringValue] cString], "r" ) ) )
+    if( [[NSFileManager defaultManager] fileExistsAtPath:
+            [fRipFileField2 stringValue]] )
     {
-        fclose( file );
-        NSBeginCriticalAlertSheet( @"File already exists",
-            @"Nooo!", @"Yes, go ahead", nil, fWindow, self,
+        NSBeginCriticalAlertSheet( _( @"File already exists" ),
+            _( @"No" ), _( @"Yes" ), nil, fWindow, self,
             @selector( OverwriteAlertDone:returnCode:contextInfo: ),
-            nil, nil,
-            [NSString stringWithFormat: @"Do you want to overwrite %s?",
-                [[fFileField stringValue] cString]] );
+            nil, nil, [NSString stringWithFormat:
+            _( @"Do you want to overwrite %@?" ),
+            [fRipFileField2 stringValue]] );
         return;
     }
 
@@ -297,40 +389,68 @@
 - (void) _Rip
 {
     /* Get the specified title & audio track(s) */
-    HBTitle * title = (HBTitle*)
-        HBListItemAt( fTitleList, [fTitlePopUp indexOfSelectedItem] );
-    HBAudio * audio1 = (HBAudio*)
-        HBListItemAt( title->audioList,
-                      [fLanguagePopUp indexOfSelectedItem] );
-    HBAudio * audio2 = (HBAudio*)
-        HBListItemAt( title->audioList,
-                      [fSecondaryLanguagePopUp indexOfSelectedItem] );
+    HBTitle * title = (HBTitle*) HBListItemAt( fTitleList,
+            [fRipTitlePopUp indexOfSelectedItem] );
+    HBAudio * audio1 = (HBAudio*) HBListItemAt( title->audioList,
+            [fRipLang1PopUp indexOfSelectedItem] );
+    HBAudio * audio2 = (HBAudio*) HBListItemAt( title->audioList,
+            [fRipLang2PopUp indexOfSelectedItem] );
 
     /* Use user settings */
-    title->file    = strdup( [[fFileField stringValue] cString] );
-    title->bitrate = [fCustomBitrateField intValue];
-    title->twoPass = ( [fTwoPassCheck state] == NSOnState );
-    title->codec   = ( [[fVideoCodecPopUp titleOfSelectedItem] compare:
-                         @"MPEG-4 (Ffmpeg)"] == NSOrderedSame ) ?
-                         HB_CODEC_FFMPEG : HB_CODEC_XVID;
-    audio1->outBitrate = [[fAudioBitratePopUp titleOfSelectedItem]
+    title->file    = strdup( [[fRipFileField2 stringValue] cString] );
+    title->bitrate = [fRipCustomField intValue];
+    title->twoPass = ( [fRipTwoPassCheck state] == NSOnState );
+
+    int format = [fRipFormatPopUp indexOfSelectedItem];
+    int codec  = [fRipEncoderPopUp indexOfSelectedItem];
+    title->mux = ( !format ) ? HB_MUX_MP4 : ( ( format == 3 ) ?
+            HB_MUX_OGM : HB_MUX_AVI );
+    title->codec = ( format == 2 ) ? HB_CODEC_X264 : ( ( !codec ) ?
+            HB_CODEC_FFMPEG : HB_CODEC_XVID );
+
+    audio1->outBitrate = [[fRipAudBitPopUp titleOfSelectedItem]
                               intValue];
+    audio1->codec = ( !format ) ? HB_CODEC_AAC : ( ( format == 3 ) ?
+            HB_CODEC_VORBIS : HB_CODEC_MP3 );;
+    HBListAdd( title->ripAudioList, audio1 );
     if( audio2 )
     {
-        audio2->outBitrate =
-            [[fAudioBitratePopUp titleOfSelectedItem] intValue];
+        audio2->outBitrate = [[fRipAudBitPopUp
+            titleOfSelectedItem] intValue];
+        audio2->codec = ( !format ) ? HB_CODEC_AAC : ( ( format == 3 ) ?
+                HB_CODEC_VORBIS : HB_CODEC_MP3 );
+        HBListAdd( title->ripAudioList, audio2 );
     }
 
+    /* Disable interface */
+    [fRipTitlePopUp   setEnabled: NO];
+    [fRipFormatPopUp  setEnabled: NO];
+    [fRipVideoMatrix  setEnabled: NO];
+    [fRipCustomField  setEnabled: NO];
+    [fRipTargetField  setEnabled: NO];
+    [fRipTwoPassCheck setEnabled: NO];
+    [fRipCropButton   setEnabled: NO];
+    [fRipLang1PopUp   setEnabled: NO];
+    [fRipLang2PopUp   setEnabled: NO];
+    [fRipAudBitPopUp  setEnabled: NO];
+    [fRipFileField2   setEnabled: NO];
+    [fRipEncoderPopUp setEnabled: NO];
+    [fRipBrowseButton setEnabled: NO];
+    [fRipPauseButton  setEnabled: YES];
+    [fRipRipButton    setTitle: _( @"Cancel" )];
+    [fRipProgress     setIndeterminate: YES];
+    [fRipProgress     startAnimation: self];;
+
     /* Let libhb do the job */
-    HBStartRip( fHandle, title, audio1, audio2 );
+    HBStartRip( fHandle, title );
 }
 
 - (IBAction) Cancel: (id) sender
 {
-    NSBeginCriticalAlertSheet( @"Cancel - Are you sure?",
-        @"Nooo, keep going!", @"Yep, stop it", nil, fWindow, self,
-        @selector( _Cancel:returnCode:contextInfo: ),
-        nil, nil, @"Encoding won't be recoverable." );
+    NSBeginCriticalAlertSheet( _( @"Cancel - Are you sure?" ),
+        _( @"No" ), _( @"Yes" ), nil, fWindow, self,
+        @selector( _Cancel:returnCode:contextInfo: ), nil, nil,
+        _( @"Encoding won't be recoverable." ) );
 }
 
 - (void) _Cancel: (NSWindow *) sheet
@@ -338,23 +458,31 @@
 {
     if( returnCode == NSAlertAlternateReturn )
     {
+        if( [[fRipPauseButton title] compare: _( @"Resume" ) ]
+                == NSOrderedSame )
+        {
+            HBResumeRip( fHandle );
+        }
         HBStopRip( fHandle );
     }
 }
 
 - (IBAction) Pause: (id) sender
 {
-    if( [[fPauseButton title] compare: @"Resume" ] == NSOrderedSame )
+    if( [[fRipPauseButton title] compare: _( @"Resume" ) ]
+            == NSOrderedSame )
     {
         [self Resume: self];
         return;
     }
 
+    [fRipPauseButton setTitle: _( @"Resume" )];
     HBPauseRip( fHandle );
 }
 
 - (IBAction) Resume: (id) sender
 {
+    [fRipPauseButton setTitle: _( @"Pause" )];
     HBResumeRip( fHandle );
 }
 
@@ -397,7 +525,7 @@
 - (IBAction) UpdatePicture: (id) sender
 {
     HBTitle * title = (HBTitle*)
-        HBListItemAt( fTitleList, [fTitlePopUp indexOfSelectedItem] );
+        HBListItemAt( fTitleList, [fRipTitlePopUp indexOfSelectedItem] );
     title->outWidth    = [fWidthStepper intValue];
     title->deinterlace = ( [fDeinterlaceCheck state] == NSOnState );
     title->topCrop     = [fTopStepper intValue];
@@ -412,298 +540,40 @@
     [fBottomStepper setIntValue: title->bottomCrop];
     [fLeftStepper   setIntValue: title->leftCrop];
     [fRightStepper  setIntValue: title->rightCrop];
-    [fWidthField    setIntValue: [fWidthStepper intValue]];
-    [fTopField      setIntValue: [fTopStepper intValue]];
-    [fBottomField   setIntValue: [fBottomStepper intValue]];
-    [fLeftField     setIntValue: [fLeftStepper intValue]];
-    [fRightField    setIntValue: [fRightStepper intValue]];
+    [fWidthField2   setIntValue: [fWidthStepper intValue]];
+    [fTopField2     setIntValue: [fTopStepper intValue]];
+    [fBottomField2  setIntValue: [fBottomStepper intValue]];
+    [fLeftField2    setIntValue: [fLeftStepper intValue]];
+    [fRightField2   setIntValue: [fRightStepper intValue]];
 
-    char string[1024]; memset( string, 0, 1024 );
-    sprintf( string, "Final size: %dx%d",
-             title->outWidth, title->outHeight );
-    [fInfoField setStringValue: [NSString stringWithCString: string]];
+    [fInfoField setStringValue: [NSString stringWithFormat:
+        _( @"Final size: %dx%d" ), title->outWidth, title->outHeight]];
 }
 
-- (void) UpdateIntf: (NSTimer *) timer
+- (IBAction) AutoCrop: (id) sender
 {
-    if( fDie )
-    {
-        [timer invalidate];
-        return;
-    }
+    HBTitle * title = (HBTitle*)
+        HBListItemAt( fTitleList, [fRipTitlePopUp indexOfSelectedItem] );
+    title->topCrop     = title->autoTopCrop;
+    title->bottomCrop  = title->autoBottomCrop;
+    title->leftCrop    = title->autoLeftCrop;
+    title->rightCrop   = title->autoRightCrop;
 
-    int      modeChanged;
-    HBStatus status;
+    [fPictureGLView ShowPicture: fPicture animate: HB_ANIMATE_NONE];
 
-    modeChanged = HBGetStatus( fHandle, &status );
+    [fWidthStepper  setIntValue: title->outWidth];
+    [fTopStepper    setIntValue: title->topCrop];
+    [fBottomStepper setIntValue: title->bottomCrop];
+    [fLeftStepper   setIntValue: title->leftCrop];
+    [fRightStepper  setIntValue: title->rightCrop];
+    [fWidthField2   setIntValue: [fWidthStepper intValue]];
+    [fTopField2     setIntValue: [fTopStepper intValue]];
+    [fBottomField2  setIntValue: [fBottomStepper intValue]];
+    [fLeftField2    setIntValue: [fLeftStepper intValue]];
+    [fRightField2   setIntValue: [fRightStepper intValue]];
 
-    switch( status.mode )
-    {
-        case HB_MODE_NEED_DEVICE:
-            break;
-
-        case HB_MODE_SCANNING:
-        {
-            if( modeChanged )
-            {
-                [fScanMatrix setEnabled: NO];
-                [fDVDPopUp setEnabled: NO];
-                [fDVDFolderField setEnabled: NO];
-                [fScanBrowseButton setEnabled: NO];
-                [fScanProgress startAnimation: self];
-                [fScanButton setEnabled: NO];
-            }
-
-            char string[1024]; memset( string, 0, 1024 );
-            if( status.scannedTitle )
-            {
-                sprintf( string, "Scanning title %d...",
-                         status.scannedTitle );
-            }
-            else
-            {
-                sprintf( string, "Opening device..." );
-            }
-            [fScanStatusField setStringValue:
-                [NSString stringWithCString: string]];
-
-            break;
-        }
-
-        case HB_MODE_INVALID_DEVICE:
-        {
-            if( !modeChanged )
-                break;
-            
-            [fScanMatrix setEnabled: YES];
-            [self ScanMatrixChanged: self];
-            [fScanProgress stopAnimation: self];
-            [fScanButton setEnabled: YES];
-
-            [fScanStatusField setStringValue:
-                @"Invalid volume, try again" ];
-            break;
-        }
-
-        case HB_MODE_READY_TO_RIP:
-        {
-            if( !modeChanged )
-                break;
-            
-            fTitleList = status.titleList;
-            
-            /* Show a temporary empty view while the window
-               resizing animation */
-            [fWindow setContentView: fTempView ];
-
-            /* Actually resize it */
-            NSRect newFrame;
-            newFrame = [NSWindow contentRectForFrameRect: [fWindow frame]
-                         styleMask: [fWindow styleMask]];
-            newFrame.origin.y    += newFrame.size.height -
-                                        [fRipView frame].size.height;
-            newFrame.size.height  = [fRipView frame].size.height;
-            newFrame.size.width   = [fRipView frame].size.width;
-            newFrame = [NSWindow frameRectForContentRect: newFrame
-                         styleMask: [fWindow styleMask]];
-            [fWindow setFrame: newFrame display: YES animate: YES];
-
-            /* Show the new GUI */
-            [fWindow setContentView: fRipView ];
-            [fPauseButton setEnabled: NO];
-            
-            [fTitlePopUp removeAllItems];
-            HBTitle * title;
-            for( int i = 0; i < HBListCountItems( fTitleList ); i++ )
-            {
-                title = (HBTitle*) HBListItemAt( fTitleList, i );
-                char string[1024]; memset( string, 0, 1024 );
-                sprintf( string, "%d - %02dh%02dm%02ds",
-                         title->index, title->length / 3600,
-                         ( title->length % 3600 ) / 60,
-                         title->length % 60 );
-                [[fTitlePopUp menu] addItemWithTitle:
-                    [NSString stringWithCString: string]
-                    action: nil keyEquivalent: @""];
-            }
-            [self TitlePopUpChanged: self];
-            
-            break;
-        }
-
-        case HB_MODE_ENCODING:
-        {
-            if( modeChanged )
-            {
-                [fTitlePopUp             setEnabled: NO];
-                [fVideoCodecPopUp        setEnabled: NO];
-                [fVideoMatrix            setEnabled: NO];
-                [fCustomBitrateField     setEnabled: NO];
-                [fTargetSizeField        setEnabled: NO];
-                [fTwoPassCheck           setEnabled: NO];
-                [fCropButton             setEnabled: NO];
-                [fLanguagePopUp          setEnabled: NO];
-                [fSecondaryLanguagePopUp setEnabled: NO];
-                [fAudioCodecPopUp        setEnabled: NO];
-                [fAudioBitratePopUp      setEnabled: NO];
-                [fFileFormatPopUp        setEnabled: NO];
-                [fFileField              setEnabled: NO];
-                [fFileBrowseButton       setEnabled: NO];
-                [fPauseButton            setEnabled: YES];
-                [fPauseButton            setTitle: @"Pause"];
-                [fRipButton              setTitle: @"Cancel"];
-            }
-        
-            if( !status.position )
-            {
-                [fRipStatusField setStringValue: @"Starting..."];
-                [fRipProgress setIndeterminate: YES];
-                [fRipProgress startAnimation: self];;
-            }
-            else
-            {
-                char string[1024];
-                memset( string, 0, 1024 );
-                sprintf( string, "Encoding: %.2f %% (pass %d of %d)",
-                         100 * status.position, status.pass,
-                         status.passCount );
-                [fRipStatusField setStringValue:
-                    [NSString stringWithCString: string]];
-                memset( string, 0, 1024 );
-                sprintf( string, "Speed: %.2f fps (avg %.2f fps, "
-                         "%02dh%02dm%02ds remaining)",
-                         status.frameRate, status.avFrameRate,
-                         status.remainingTime / 3600,
-                         ( status.remainingTime / 60 ) % 60,
-                         status.remainingTime % 60 );
-                [fRipInfoField setStringValue:
-                    [NSString stringWithCString: string]];
-
-                [fRipProgress setIndeterminate: NO];
-                [fRipProgress setDoubleValue: 100 * status.position];
-            }
-            
-            break;
-        }
-
-        case HB_MODE_PAUSED:
-        {
-            if( !modeChanged )
-                break;
-            
-            char string[1024]; memset( string, 0, 1024 );
-            sprintf( string, "Encoding: %.2f %% (PAUSED)",
-                     100 * status.position ) ;
-            [fRipStatusField setStringValue:
-                [NSString stringWithCString: string]];
-            [fRipInfoField setStringValue: @""];
-            
-            [fRipProgress setDoubleValue: 100 * status.position];
-
-            [fPauseButton setTitle: @"Resume"];
-            break;
-        }
-
-        case HB_MODE_STOPPING:
-            if( !modeChanged )
-                break;
-
-            [fRipStatusField setStringValue: @"Stopping..."];
-            [fRipInfoField setStringValue: @""];
-            [fRipProgress setIndeterminate: YES];
-            [fRipProgress startAnimation: self];;
-            break;
-
-        case HB_MODE_DONE:
-        case HB_MODE_CANCELED:
-        case HB_MODE_ERROR:
-            if( !modeChanged )
-                break;
-
-            /* Warn the finder to update itself */
-            [[NSWorkspace sharedWorkspace] noteFileSystemChanged:
-                [fFileField stringValue]];
-            
-            [fRipProgress setIndeterminate: NO];
-            [fRipInfoField setStringValue: @""];
-
-            if( status.mode == HB_MODE_DONE )
-            {
-                [fRipProgress setDoubleValue: 100];
-                [fRipStatusField setStringValue: @"Done." ];
-                NSBeep();
-                [NSApp requestUserAttention: NSInformationalRequest];
-                [NSApp beginSheet: fDonePanel
-                    modalForWindow: fWindow modalDelegate: nil
-                    didEndSelector: nil contextInfo: nil];
-                [NSApp runModalForWindow: fDonePanel];
-                [NSApp endSheet: fDonePanel];
-                [fDonePanel orderOut: self];
-            }
-            else if( status.mode == HB_MODE_CANCELED )
-            {
-                [fRipProgress setDoubleValue: 0];
-                [fRipStatusField setStringValue: @"Canceled." ];
-            }
-            else
-            {
-                [fRipProgress setDoubleValue: 0];
-                switch( status.error )
-                {
-                    case HB_ERROR_A52_SYNC:
-                        [fRipStatusField setStringValue:
-                        @"An error occured (corrupted AC3 data)." ];
-                        break;
-                    case HB_ERROR_AVI_WRITE:
-                        [fRipStatusField setStringValue:
-                        @"An error occured (could not write to file)." ];
-                        break;
-                    case HB_ERROR_DVD_OPEN:
-                        [fRipStatusField setStringValue:
-                        @"An error occured (could not open device)." ];
-                        break;
-                    case HB_ERROR_DVD_READ:
-                        [fRipStatusField setStringValue:
-                        @"An error occured (DVD read failed)." ];
-                        break;
-                    case HB_ERROR_MP3_INIT:
-                        [fRipStatusField setStringValue:
-                        @"An error occured (could not init MP3 encoder)." ];
-                        break;
-                    case HB_ERROR_MP3_ENCODE:
-                        [fRipStatusField setStringValue:
-                        @"An error occured (MP3 encoder failed)." ];
-                        break;
-                    case HB_ERROR_MPEG4_INIT:
-                        [fRipStatusField setStringValue:
-                        @"An error occured (could not init MPEG4 encoder)." ];
-                        break;
-                }
-            }
-
-            [fTitlePopUp             setEnabled: YES];
-            [fVideoCodecPopUp        setEnabled: YES];
-            [fVideoMatrix            setEnabled: YES];
-            [fTwoPassCheck           setEnabled: YES];
-            [fCropButton             setEnabled: YES];
-            [fLanguagePopUp          setEnabled: YES];
-            [fSecondaryLanguagePopUp setEnabled: YES];
-            [fAudioCodecPopUp        setEnabled: YES];
-            [fAudioBitratePopUp      setEnabled: YES];
-            [fFileFormatPopUp        setEnabled: YES];
-            [fFileField              setEnabled: YES];
-            [fFileBrowseButton       setEnabled: YES];
-            [fPauseButton            setEnabled: NO];
-            [fPauseButton            setTitle: @"Pause"];
-            [fRipButton              setTitle: @"Rip"];
-
-            [self VideoMatrixChanged: self];
-
-            break;
-
-        default:
-            break;
-    }
+    [fInfoField setStringValue: [NSString stringWithFormat:
+        _( @"Final size: %dx%d" ), title->outWidth, title->outHeight]];
 }
 
 - (void) DetectDrives: (NSNotification *) notification
@@ -781,10 +651,10 @@
 
     IOObjectRelease( media_iterator );
 
-    [fDVDPopUp removeAllItems];
+    [fScDetectedPopUp removeAllItems];
     for( unsigned i = 0; i < [drivesList count]; i++ )
     {
-        [[fDVDPopUp menu] addItemWithTitle:
+        [[fScDetectedPopUp menu] addItemWithTitle:
             [drivesList objectAtIndex: i] action: nil
             keyEquivalent: @""];
     }
@@ -793,61 +663,297 @@
 
 - (IBAction) ScanMatrixChanged: (id) sender
 {
-    if( ![fScanMatrix selectedRow] )
+    if( ![fScMatrix selectedRow] )
     {
-        [fDVDPopUp setEnabled: YES];
-        [fDVDFolderField setEnabled: NO];
-        [fScanBrowseButton setEnabled: NO];
-        [fScanButton setEnabled: ( [fDVDPopUp selectedItem] != nil )];
+        [fScDetectedPopUp setEnabled: YES];
+        [fScFolderField setEnabled: NO];
+        [fScBrowseButton setEnabled: NO];
+        [fScOpenButton setEnabled: ( [fScDetectedPopUp selectedItem] != nil )];
     }
     else
     {
-        [fDVDPopUp setEnabled: NO];
-        [fDVDFolderField setEnabled: YES];
-        [fScanBrowseButton setEnabled: YES];
-        [fScanButton setEnabled: YES];
+        [fScDetectedPopUp setEnabled: NO];
+        [fScFolderField setEnabled: YES];
+        [fScBrowseButton setEnabled: YES];
+        [fScOpenButton setEnabled: YES];
     }
 }
 
 - (IBAction) TitlePopUpChanged: (id) sender
 {
     HBTitle * title = (HBTitle*)
-        HBListItemAt( fTitleList, [fTitlePopUp indexOfSelectedItem] );
+        HBListItemAt( fTitleList, [fRipTitlePopUp indexOfSelectedItem] );
 
-    [fLanguagePopUp removeAllItems];
-    [fSecondaryLanguagePopUp removeAllItems];
-    
+    [fRipLang1PopUp removeAllItems];
+    [fRipLang2PopUp removeAllItems];
+
     HBAudio * audio;
-    for( int i = 0; i < HBListCountItems( title->audioList ); i++ )
+    for( int i = 0; i < HBListCount( title->audioList ); i++ )
     {
         audio = (HBAudio*) HBListItemAt( title->audioList, i );
 
         /* We cannot use NSPopUpButton's addItemWithTitle because
            it checks for duplicate entries */
-        [[fLanguagePopUp menu] addItemWithTitle:
+        [[fRipLang1PopUp menu] addItemWithTitle:
             [NSString stringWithCString: audio->language]
             action: nil keyEquivalent: @""];
-        [[fSecondaryLanguagePopUp menu] addItemWithTitle:
+        [[fRipLang2PopUp menu] addItemWithTitle:
             [NSString stringWithCString: audio->language]
             action: nil keyEquivalent: @""];
     }
-    [fSecondaryLanguagePopUp addItemWithTitle: @"None"];
-    [fSecondaryLanguagePopUp selectItemWithTitle: @"None"];
-    [fSecondaryLanguagePopUp setEnabled:
-        ( HBListCountItems( title->audioList ) > 1 )];
+    [fRipLang2PopUp addItemWithTitle: _( @"None" )];
+    [fRipLang2PopUp selectItemWithTitle: _( @"None" )];
+    [fRipLang2PopUp setEnabled:
+        ( HBListCount( title->audioList ) > 1 )];
 
-    [fTargetSizeField SetHBTitle: title];
-    if( [fVideoMatrix selectedRow] )
+    [fRipTargetField SetHBTitle: title];
+    if( [fRipVideoMatrix selectedRow] )
     {
-        [fTargetSizeField UpdateBitrate];
+        [fRipTargetField UpdateBitrate];
     }
+}
+
+- (IBAction) FormatPopUpChanged: (id) sender
+{
+    /* Headers size changes depending on the format, so let's
+       recalculate the bitrate if necessary */
+    if( [fRipVideoMatrix selectedRow] )
+    {
+        [fRipTargetField UpdateBitrate];
+    }
+
+    /* Add/replace to the correct extension */
+    NSString * string = [fRipFileField2 stringValue];
+    int format = [fRipFormatPopUp indexOfSelectedItem];
+    if( [string characterAtIndex: [string length] - 4] == '.' )
+    {
+        [fRipFileField2 setStringValue: [NSString stringWithFormat:
+            @"%@.%s", [string substringToIndex: [string length] - 4],
+            ( !format ) ? "mp4" : ( ( format == 3 ) ?
+            "ogm" : "avi" )]];
+    }
+    else
+    {
+        [fRipFileField2 setStringValue: [NSString stringWithFormat:
+            @"%@.%s", string, ( !format ) ? "mp4" :
+            ( ( format == 3 ) ? "ogm" : "avi" )]];
+    }
+
+    if( format == 2 )
+    {
+        /* Can't set X264 bitrate */
+        [fRipEncoderPopUp setEnabled: NO];
+        [fRipVideoMatrix  setEnabled: NO];
+        [fRipTwoPassCheck setEnabled: NO];
+        
+        [fRipAudBitPopUp  setEnabled: YES];
+    }
+    else if( format == 3 )
+    {
+        [fRipEncoderPopUp setEnabled: YES];
+        [fRipVideoMatrix  setEnabled: YES];
+        [fRipTwoPassCheck setEnabled: YES];
+        
+        /* Can't set Vorbis bitrate */
+        [fRipAudBitPopUp  setEnabled: NO];
+    }
+    else
+    {
+        [fRipEncoderPopUp setEnabled: YES];
+        [fRipVideoMatrix  setEnabled: YES];
+        [fRipTwoPassCheck setEnabled: YES];
+        [fRipAudBitPopUp  setEnabled: YES];
+    }
+    [self VideoMatrixChanged: self];
 }
 
 - (IBAction) AudioPopUpChanged: (id) sender
 {
-    if( [fVideoMatrix selectedRow] )
+    /* Recalculate the bitrate */
+    if( [fRipVideoMatrix selectedRow] )
     {
-        [fTargetSizeField UpdateBitrate];
+        [fRipTargetField UpdateBitrate];
+    }
+}
+
+/*******************
+ * libhb callbacks *
+ *******************/
+static void _Scanning( void * data, int title, int titleCount )
+{
+    HBController * controller = (HBController*) data;
+    controller->fTitle        = title;
+    controller->fTitleCount   = titleCount;
+    [controller performSelectorOnMainThread: @selector(Scanning:)
+        withObject: nil waitUntilDone: YES];
+}
+- (void) Scanning: (id) sender
+{
+    [fScProgress stopAnimation: self];
+    [fScProgress setIndeterminate: NO];
+    [fScProgress setDoubleValue: 100.0 * fTitle / fTitleCount];
+
+    [fScStatusField setStringValue: [NSString stringWithFormat:
+        _( @"Scanning title %d of %d..." ), fTitle, fTitleCount]];
+}
+
+static void _ScanDone( void * data, HBList * titleList )
+{
+    HBController * controller = (HBController*) data;
+    controller->fTitleList    = titleList;
+    [controller performSelectorOnMainThread: @selector(ScanDone:)
+        withObject: nil waitUntilDone: YES];
+}
+- (void) ScanDone: (id) sender
+{
+    if( !fTitleList )
+    {
+        [fScMatrix setEnabled: YES];
+        [self ScanMatrixChanged: self];
+        [fScProgress stopAnimation: self];
+        [fScProgress setIndeterminate: NO];
+        [fScOpenButton setEnabled: YES];
+        [fScStatusField setStringValue:
+            _( @"Invalid volume, try again" ) ];
+        return;
+    }
+
+    /* Show a temporary empty view while the window
+       resizing animation */
+    [fWindow setContentView: fTempView ];
+
+    /* Actually resize it */
+    NSRect newFrame;
+    newFrame = [NSWindow contentRectForFrameRect: [fWindow frame]
+                 styleMask: [fWindow styleMask]];
+    newFrame.origin.y    += newFrame.size.height -
+                                [fRipView frame].size.height;
+    newFrame.size.height  = [fRipView frame].size.height;
+    newFrame.size.width   = [fRipView frame].size.width;
+    newFrame = [NSWindow frameRectForContentRect: newFrame
+                 styleMask: [fWindow styleMask]];
+    [fWindow setFrame: newFrame display: YES animate: YES];
+
+    /* Show the new GUI */
+    [fWindow setContentView: fRipView ];
+    [fRipPauseButton setEnabled: NO];
+
+    [fRipTitlePopUp removeAllItems];
+    HBTitle * title;
+    for( int i = 0; i < HBListCount( fTitleList ); i++ )
+    {
+        title = (HBTitle*) HBListItemAt( fTitleList, i );
+        [[fRipTitlePopUp menu] addItemWithTitle:
+            [NSString stringWithFormat: @"%d - %02dh%02dm%02ds",
+            title->index, title->length / 3600, ( title->length % 3600 )
+            / 60, title->length % 60] action: nil keyEquivalent: @""];
+    }
+    [self TitlePopUpChanged: self];
+}
+
+static void _Encoding( void * data, float position, int pass,
+                      int passCount, float curFrameRate,
+                      float avgFrameRate, int remainingTime )
+{
+    HBController * controller  = (HBController*) data;
+    controller->fPosition      = position;
+    controller->fPass          = pass;
+    controller->fPassCount     = passCount;
+    controller->fCurFrameRate  = curFrameRate;
+    controller->fAvgFrameRate  = avgFrameRate;
+    controller->fRemainingTime = remainingTime;
+    [controller performSelectorOnMainThread: @selector(Encoding:)
+        withObject: nil waitUntilDone: YES];
+}
+- (void) Encoding: (id) sender
+{
+    [fRipStatusField setStringValue: [NSString stringWithFormat:
+        _( @"Encoding: %.2f %% (pass %d of %d)" ),
+        100.0 * fPosition, fPass, fPassCount]];
+    [fRipInfoField setStringValue: [NSString stringWithFormat:
+        _( @"Speed: %.2f fps (avg %.2f fps), %02dh%02dm%02ds remaining" ),
+        fCurFrameRate, fAvgFrameRate, fRemainingTime / 3600,
+        ( fRemainingTime / 60 ) % 60, fRemainingTime % 60]];
+
+    [fRipProgress setIndeterminate: NO];
+    [fRipProgress setDoubleValue: 100.0 * fPosition];
+}
+
+static void _RipDone( void * data, int result )
+{
+    HBController * controller = (HBController*) data;
+    controller->fResult       = result;
+    [controller performSelectorOnMainThread: @selector(RipDone:)
+        withObject: nil waitUntilDone: YES];
+}
+- (void) RipDone: (id) sender
+{
+    [fRipTitlePopUp   setEnabled: YES];
+    [fRipFormatPopUp  setEnabled: YES];
+    [fRipVideoMatrix  setEnabled: YES];
+    [fRipTwoPassCheck setEnabled: YES];
+    [fRipCropButton   setEnabled: YES];
+    [fRipLang1PopUp   setEnabled: YES];
+    [fRipLang2PopUp   setEnabled: YES];
+    [fRipAudBitPopUp  setEnabled: YES];
+    [fRipFileField2   setEnabled: YES];
+    [fRipBrowseButton setEnabled: YES];
+    [fRipEncoderPopUp setEnabled: YES];
+    [fRipPauseButton  setEnabled: NO];
+    [fRipPauseButton  setTitle: _( @"Pause" )];
+    [fRipRipButton    setTitle: _( @"Rip" )];
+    [fRipProgress     setIndeterminate: NO];
+    [fRipProgress     setDoubleValue: 0.0];
+    [self VideoMatrixChanged: self];
+
+    switch( fResult )
+    {
+        case HB_SUCCESS:
+            [fRipStatusField setStringValue: _( @"Rip completed." )];
+            [fRipInfoField   setStringValue: @""];
+            NSBeep();
+            [NSApp requestUserAttention: NSInformationalRequest];
+            [NSApp beginSheet: fDonePanel
+                modalForWindow: fWindow modalDelegate: nil
+                didEndSelector: nil contextInfo: nil];
+            [NSApp runModalForWindow: fDonePanel];
+            [NSApp endSheet: fDonePanel];
+            [fDonePanel orderOut: self];
+            break;
+        case HB_CANCELED:
+            [fRipStatusField setStringValue: _( @"Canceled." )];
+            [fRipInfoField   setStringValue: @""];
+            break;
+        case HB_ERROR_A52_SYNC:
+            [fRipStatusField setStringValue: @"Error."];
+            [fRipInfoField   setStringValue: @"Corrupted AC3 data"];
+            break;
+        case HB_ERROR_AVI_WRITE:
+            [fRipStatusField setStringValue: @"Error."];
+            [fRipInfoField   setStringValue: @"Write error"];
+            break;
+        case HB_ERROR_DVD_OPEN:
+            [fRipStatusField setStringValue: @"Error."];
+            [fRipInfoField   setStringValue: @"Could not open the DVD"];
+            break;
+        case HB_ERROR_DVD_READ:
+            [fRipStatusField setStringValue: @"Error."];
+            [fRipInfoField   setStringValue: @"DVD read error"];
+            break;
+        case HB_ERROR_MP3_INIT:
+            [fRipStatusField setStringValue: @"Error."];
+            [fRipInfoField   setStringValue:
+                @"MP3 encoder initialization failed"];
+            break;
+        case HB_ERROR_MP3_ENCODE:
+            [fRipStatusField setStringValue: @"Error."];
+            [fRipInfoField   setStringValue: @"MP3 encoder failed"];
+            break;
+        case HB_ERROR_MPEG4_INIT:
+            [fRipStatusField setStringValue: @"Error."];
+            [fRipInfoField   setStringValue:
+                @"MPEG4 encoder initialization failed"];
+            break;
     }
 }
 

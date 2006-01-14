@@ -1,11 +1,10 @@
-/* $Id: Work.c,v 1.4 2003/11/06 12:33:11 titer Exp $
+/* $Id: Work.c,v 1.12 2004/01/05 16:50:25 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
-#include "Thread.h"
-#include "Work.h"
+#include "HBInternal.h"
 
 /* Local prototypes */
 static void WorkThread( void * t );
@@ -17,22 +16,22 @@ struct HBWork
 
 struct HBWorkThread
 {
-    HBHandle * handle;
+    HBHandle     * handle;
 
-    HBList   * workList;
-    int        firstThread;
+    HBList       * workList;
+    int            firstThread;
 
-    int        die;
-    HBThread * thread;
+    volatile int   die;
+    HBThread     * thread;
 };
 
 HBWorkThread * HBWorkThreadInit( HBHandle * handle, HBTitle * title,
-                                 HBAudio * audio, HBAudio * optAudio,
                                  int firstThread )
 {
     int i;
-    HBWork * w;
-    
+    HBWork  * w;
+    HBAudio * audio;
+
     HBWorkThread * t;
     if( !( t = malloc( sizeof( HBWorkThread ) ) ) )
     {
@@ -44,22 +43,17 @@ HBWorkThread * HBWorkThreadInit( HBHandle * handle, HBTitle * title,
 
     /* Build a list of work objects. They all include
        HB_WORK_COMMON_MEMBERS, so we'll be able to do the job without
-       knowing what each one actually do */
+       knowing what each one actually does */
     t->workList = HBListInit();
-    HBListAdd( t->workList, title->mpeg2Dec );
+    HBListAdd( t->workList, title->decoder );
     HBListAdd( t->workList, title->scale );
+    HBListAdd( t->workList, title->encoder );
 
-    if( title->codec == HB_CODEC_FFMPEG )
-        HBListAdd( t->workList, title->ffmpegEnc );
-    else if( title->codec == HB_CODEC_XVID )
-        HBListAdd( t->workList, title->xvidEnc );
-
-    HBListAdd( t->workList, audio->ac3Dec );
-    HBListAdd( t->workList, audio->mp3Enc );
-    if( optAudio )
+    for( i = 0; i < HBListCount( title->ripAudioList ); i++ )
     {
-        HBListAdd( t->workList, optAudio->ac3Dec );
-        HBListAdd( t->workList, optAudio->mp3Enc );
+        audio = HBListItemAt( title->ripAudioList, i );
+        HBListAdd( t->workList, audio->decoder );
+        HBListAdd( t->workList, audio->encoder );
     }
 
     t->firstThread = firstThread;
@@ -69,7 +63,7 @@ HBWorkThread * HBWorkThreadInit( HBHandle * handle, HBTitle * title,
        is done by the first worker thread (see HBStartRip) */
     if( t->firstThread )
     {
-        for( i = 0; i < HBListCountItems( t->workList ); i++ )
+        for( i = 0; i < HBListCount( t->workList ); i++ )
         {
             w = (HBWork*) HBListItemAt( t->workList, i );
             w->lock = HBLockInit();
@@ -100,15 +94,15 @@ void HBWorkThreadClose( HBWorkThread ** _t )
     {
         int i;
         uint64_t total = 0;
-        
-        for( i = 0; i < HBListCountItems( t->workList ); i++ )
+
+        for( i = 0; i < HBListCount( t->workList ); i++ )
         {
             w = (HBWork*) HBListItemAt( t->workList, i );
             HBLockClose( &w->lock );
             total += w->time;
         }
 
-        for( i = 0; i < HBListCountItems( t->workList ); i++ )
+        for( i = 0; i < HBListCount( t->workList ); i++ )
         {
             w = (HBWork*) HBListItemAt( t->workList, i );
             HBLog( "HBWorkThreadClose: %- 9s = %05.2f %%", w->name,
@@ -116,12 +110,12 @@ void HBWorkThreadClose( HBWorkThread ** _t )
         }
 
     }
-    
+
     /* Free memory */
     HBListClose( &t->workList );
     free( t );
 
-    (*_t) = NULL;
+    *_t = NULL;
 }
 
 static void WorkThread( void * _t )
@@ -131,57 +125,51 @@ static void WorkThread( void * _t )
     int            didSomething, i;
     uint64_t       date;
 
-    for( ;; )
+    didSomething = 0;
+    
+    for( i = 0; !t->die; i++ )
     {
         HBCheckPaused( t->handle );
-        
-        didSomething = 0;
 
-        for( i = 0; i < HBListCountItems( t->workList ); i++ )
+        if( i == HBListCount( t->workList ) )
         {
-            if( t->die )
+            /* If nothing could be done, wait a bit to prevent a useless
+               CPU-consuming loop */
+            if( !didSomething )
             {
-                break;
+                HBSnooze( 5000 );
             }
-            
-            w = (HBWork*) HBListItemAt( t->workList, i );
+            didSomething = 0;
+            i            = 0;
+        }
 
-            /* Check if another thread isn't using this work object.
-               If not, lock it */
-            HBLockLock( w->lock );
-            if( w->used )
-            {
-                HBLockUnlock( w->lock );
-                continue;
-            }
-            w->used = 1;
+        w = (HBWork*) HBListItemAt( t->workList, i );
+
+        /* Check if another thread isn't using this work object */
+        HBLockLock( w->lock );
+        if( w->used )
+        {
+            /* It's in use. Forget about this one and try the next
+               one */
             HBLockUnlock( w->lock );
-            
-            /* Actually do the job */
-            date = HBGetDate();
-            if( w->work( w ) )
-            {
-                w->time += HBGetDate() - date;
-                didSomething = 1;
-            }
-
-            /* Unlock */
-            HBLockLock( w->lock );
-            w->used = 0;
-            HBLockUnlock( w->lock );
+            continue;
         }
+        /* It's unused, lock it */
+        w->used = 1;
+        HBLockUnlock( w->lock );
 
-        if( t->die )
+        /* Do the job */
+        date = HBGetDate();
+        if( w->work( w ) )
         {
-            break;
+            w->time += HBGetDate() - date;
+            didSomething = 1;
         }
 
-        /* If nothing could be done, wait a bit to prevent a useless
-           CPU-consuming loop */
-        if( !didSomething )
-        {
-            HBSnooze( 10000 );
-        }
+        /* Unlock it */
+        HBLockLock( w->lock );
+        w->used = 0;
+        HBLockUnlock( w->lock );
     }
 }
 

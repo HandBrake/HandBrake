@@ -1,19 +1,14 @@
-/* $Id: Scale.c,v 1.4 2003/11/06 13:03:19 titer Exp $
+/* $Id: Scale.c,v 1.9 2004/01/16 19:39:23 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
-#include "Fifo.h"
-#include "Scale.h"
-#include "Work.h"
+#include "HBInternal.h"
 
-#include <ffmpeg/avcodec.h>
+#include "ffmpeg/avcodec.h"
 
-/* Local prototypes */
-static int ScaleWork( HBWork * );
-
-struct HBScale
+typedef struct HBScale
 {
     HB_WORK_COMMON_MEMBERS
 
@@ -24,11 +19,14 @@ struct HBScale
     AVPicture            rawPicture;
     HBBuffer           * deintBuffer;
     AVPicture            deintPicture;
-    HBBuffer           * scaledBuffer;
+    HBList             * scaledBufferList;
     AVPicture            scaledPicture;
-};
+} HBScale;
 
-HBScale * HBScaleInit( HBHandle * handle, HBTitle * title )
+/* Local prototypes */
+static int ScaleWork( HBWork * );
+
+HBWork * HBScaleInit( HBHandle * handle, HBTitle * title )
 {
     HBScale * s;
     if( !( s = malloc( sizeof( HBScale ) ) ) )
@@ -51,25 +49,26 @@ HBScale * HBScaleInit( HBHandle * handle, HBTitle * title )
                                 title->leftCrop, title->rightCrop );
 
     /* Allocate a constant buffer used for deinterlacing */
-    s->deintBuffer = HBBufferInit( 3 * title->inWidth * 
+    s->deintBuffer = HBBufferInit( 3 * title->inWidth *
                                     title->inHeight / 2 );
     avpicture_fill( &s->deintPicture, s->deintBuffer->data,
                     PIX_FMT_YUV420P, title->inWidth, title->inHeight );
 
-    s->scaledBuffer = NULL;
+    s->scaledBufferList = HBListInit();
 
-    return s;
+    return (HBWork*) s;
 }
 
-void HBScaleClose( HBScale ** _s )
+void HBScaleClose( HBWork ** _s )
 {
-    HBScale * s = *_s;
-    
+    HBScale * s = (HBScale*) *_s;
+
     img_resample_close( s->context );
+    HBListClose( &s->scaledBufferList );
     HBBufferClose( &s->deintBuffer );
     free( s->name );
     free( s );
-    
+
     *_s = NULL;
 }
 
@@ -78,15 +77,20 @@ static int ScaleWork( HBWork * w )
     HBScale  * s     = (HBScale*) w;
     HBTitle  * title = s->title;
     HBBuffer * rawBuffer;
+    HBBuffer * scaledBuffer;
+    HBBuffer * tmpBuffer;
 
     int didSomething = 0;
 
-    /* Push scaled buffer */
-    if( s->scaledBuffer )
+    /* Push scaled buffer(s) */
+    while( ( scaledBuffer = (HBBuffer*)
+                HBListItemAt( s->scaledBufferList, 0 ) ) )
     {
-        if( HBFifoPush( title->scaledFifo, &s->scaledBuffer ) )
+        tmpBuffer = scaledBuffer;
+        if( HBFifoPush( title->scaledFifo, &scaledBuffer ) )
         {
             didSomething = 1;
+            HBListRemove( s->scaledBufferList, tmpBuffer );
         }
         else
         {
@@ -105,15 +109,15 @@ static int ScaleWork( HBWork * w )
     }
 
     /* Allocate new buffer for the scaled picture */
-    s->scaledBuffer = HBBufferInit( 3 * title->outWidth *
-                                    title->outHeight / 2 );
-    s->scaledBuffer->position = rawBuffer->position;
-    s->scaledBuffer->pass     = rawBuffer->pass;
+    scaledBuffer = HBBufferInit( 3 * title->outWidth *
+                                 title->outHeight / 2 );
+    scaledBuffer->position = rawBuffer->position;
+    scaledBuffer->pass     = rawBuffer->pass;
 
     /* libavcodec stuff */
     avpicture_fill( &s->rawPicture, rawBuffer->data, PIX_FMT_YUV420P,
                     title->inWidth, title->inHeight );
-    avpicture_fill( &s->scaledPicture, s->scaledBuffer->data,
+    avpicture_fill( &s->scaledPicture, scaledBuffer->data,
                     PIX_FMT_YUV420P, title->outWidth,
                     title->outHeight );
 
@@ -131,9 +135,22 @@ static int ScaleWork( HBWork * w )
         img_resample( s->context, &s->scaledPicture, &s->rawPicture );
     }
 
+    HBListAdd( s->scaledBufferList, scaledBuffer );
+
+    if( rawBuffer->repeat )
+    {
+        tmpBuffer = HBBufferInit( scaledBuffer->size );
+        tmpBuffer->position = scaledBuffer->position;
+        tmpBuffer->pass     = scaledBuffer->pass;
+        memcpy( tmpBuffer->data, scaledBuffer->data,
+                scaledBuffer->size );
+
+        HBListAdd( s->scaledBufferList, tmpBuffer );
+    }
+
     /* Free memory */
     HBBufferClose( &rawBuffer );
-    
+
     return didSomething;
 }
 

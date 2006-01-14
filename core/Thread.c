@@ -1,13 +1,10 @@
-/* $Id: Thread.c,v 1.5 2003/11/12 16:09:34 titer Exp $
+/* $Id: Thread.c,v 1.10 2004/01/14 21:37:25 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
 #include "Thread.h"
-#ifdef SYS_CYGWIN
-#  include <windows.h>
-#endif
 
 struct HBThread
 {
@@ -15,12 +12,12 @@ struct HBThread
     int       priority;
     void      (*function) ( void * );
     void    * arg;
-    
-#if defined( SYS_BEOS )
+
+#if defined( HB_BEOS )
     int       thread;
-#elif defined( SYS_MACOSX ) || defined( SYS_LINUX )
+#elif defined( HB_MACOSX ) || defined( HB_LINUX )
     pthread_t thread;
-#elif defined( SYS_CYGWIN )
+#elif defined( HB_CYGWIN )
     HANDLE    thread;
 #endif
 };
@@ -42,14 +39,14 @@ HBThread * HBThreadInit( char * name, void (* function)(void *),
     t->function = function;
     t->arg      = arg;
 
-#if defined( SYS_BEOS )
+#if defined( HB_BEOS )
     t->thread = spawn_thread( (int32 (*)( void * )) ThreadFunc,
                               name, priority, t );
     resume_thread( t->thread );
-#elif defined( SYS_MACOSX ) || defined( SYS_LINUX )
+#elif defined( HB_MACOSX ) || defined( HB_LINUX )
     pthread_create( &t->thread, NULL,
                     (void * (*)( void * )) ThreadFunc, t );
-#elif defined( SYS_CYGWIN )
+#elif defined( HB_CYGWIN )
     t->thread = CreateThread( NULL, 0,
         (LPTHREAD_START_ROUTINE) ThreadFunc, t, 0, NULL );
 #endif
@@ -64,7 +61,7 @@ static void ThreadFunc( void * _t )
 {
     HBThread * t = (HBThread*) _t;
 
-#if defined( SYS_MACOSX )
+#if defined( HB_MACOSX )
     struct sched_param param;
     memset( &param, 0, sizeof( struct sched_param ) );
     param.sched_priority = t->priority;
@@ -80,13 +77,13 @@ static void ThreadFunc( void * _t )
 void HBThreadClose( HBThread ** _t )
 {
     HBThread * t = *_t;
-    
-#if defined( SYS_BEOS )
+
+#if defined( HB_BEOS )
     long exitValue;
     wait_for_thread( t->thread, &exitValue );
-#elif defined( SYS_MACOSX ) || defined( SYS_LINUX )
+#elif defined( HB_MACOSX ) || defined( HB_LINUX )
     pthread_join( t->thread, NULL );
-#elif defined( SYS_CYGWIN )
+#elif defined( HB_CYGWIN )
     WaitForSingleObject( t->thread, INFINITE );
 #endif
 
@@ -107,12 +104,12 @@ HBLock * HBLockInit()
         return NULL;
     }
 
-#if defined( SYS_BEOS )
+#if defined( HB_BEOS )
     l->sem = create_sem( 1, "sem" );
-#elif defined( SYS_MACOSX ) || defined( SYS_LINUX )
+#elif defined( HB_MACOSX ) || defined( HB_LINUX )
     pthread_mutex_init( &l->mutex, NULL );
-#elif defined( SYS_CYGWIN )
-    /* TODO */
+#elif defined( HB_CYGWIN )
+    l->mutex = CreateMutex( 0, FALSE, 0 );
 #endif
 
     return l;
@@ -121,16 +118,46 @@ HBLock * HBLockInit()
 void HBLockClose( HBLock ** _l )
 {
     HBLock * l = *_l;
-    
-#if defined( SYS_BEOS )
+
+#if defined( HB_BEOS )
     delete_sem( l->sem );
-#elif defined( SYS_MACOSX ) || defined( SYS_LINUX )
+#elif defined( HB_MACOSX ) || defined( HB_LINUX )
     pthread_mutex_destroy( &l->mutex );
-#elif defined( SYS_CYGWIN )
-    /* TODO */
+#elif defined( HB_CYGWIN )
+    CloseHandle( l->mutex );
 #endif
     free( l );
 
     *_l = NULL;
+}
+
+HBCond * HBCondInit()
+{
+    HBCond * c = malloc( sizeof( HBCond ) );
+
+#if defined( HB_BEOS )
+    c->thread = -1;
+#elif defined( HB_MACOSX ) || defined( HB_LINUX )
+    pthread_cond_init( &c->cond, NULL );
+#elif defined( HB_CYGWIN )
+    /* TODO */
+#endif
+
+    return c;
+}
+
+void HBCondClose( HBCond ** _c )
+{
+    HBCond * c = *_c;
+
+#if defined( HB_BEOS )
+#elif defined( HB_MACOSX ) || defined( HB_LINUX )
+    pthread_cond_destroy( &c->cond );
+#elif defined( HB_CYGWIN )
+    /* TODO */
+#endif
+    free( c );
+
+    *_c = NULL;
 }
 

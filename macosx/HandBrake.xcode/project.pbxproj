@@ -1,0 +1,795 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 39;
+	objects = {
+		080E96DCFE201CFB7F000001 = {
+			fileRef = 29B97318FDCFA39411CA2CEA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		080E96DDFE201D6D7F000001 = {
+			children = (
+				4DF3C8CB052889CD00A80101,
+				4DF3C8CC052889CD00A80101,
+				4D85758E052B78E300C39CA9,
+				4D85758F052B78E300C39CA9,
+				4D358C000534A91300D654EB,
+				4D358C010534A91300D654EB,
+			);
+			isa = PBXGroup;
+			name = Classes;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C165CFE840E0CC02AAC07 = {
+			children = (
+				089C165DFE840E0CC02AAC07,
+			);
+			isa = PBXVariantGroup;
+			name = InfoPlist.strings;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C165DFE840E0CC02AAC07 = {
+			fileEncoding = 10;
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
+			name = English;
+			path = English.lproj/InfoPlist.strings;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C165EFE840E0CC02AAC07 = {
+			fileRef = 089C165CFE840E0CC02AAC07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//080
+//081
+//082
+//083
+//084
+//100
+//101
+//102
+//103
+//104
+		1058C7A0FEA54F0111CA2CBB = {
+			children = (
+				1058C7A1FEA54F0111CA2CBB,
+				4DEB2024052B055F00C39CA9,
+				4DDE9724052B7B2B00C39CA9,
+			);
+			isa = PBXGroup;
+			name = "Linked Frameworks";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		1058C7A1FEA54F0111CA2CBB = {
+			fallbackIsa = PBXFileReference;
+			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
+			name = Cocoa.framework;
+			path = /System/Library/Frameworks/Cocoa.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		1058C7A2FEA54F0111CA2CBB = {
+			children = (
+				29B97325FDCFA39411CA2CEA,
+				29B97324FDCFA39411CA2CEA,
+			);
+			isa = PBXGroup;
+			name = "Other Frameworks";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		1058C7A3FEA54F0111CA2CBB = {
+			fileRef = 1058C7A1FEA54F0111CA2CBB;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//100
+//101
+//102
+//103
+//104
+//170
+//171
+//172
+//173
+//174
+		17587328FF379C6511CA2CBB = {
+			explicitFileType = wrapper.application;
+			fallbackIsa = PBXFileReference;
+			isa = PBXApplicationReference;
+			path = HandBrake.app;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+//170
+//171
+//172
+//173
+//174
+//190
+//191
+//192
+//193
+//194
+		19C28FACFE9D520D11CA2CBB = {
+			children = (
+				17587328FF379C6511CA2CBB,
+			);
+			isa = PBXGroup;
+			name = Products;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+//190
+//191
+//192
+//193
+//194
+//290
+//291
+//292
+//293
+//294
+		29B97313FDCFA39411CA2CEA = {
+			buildSettings = {
+				MACOSX_DEPLOYMENT_TARGET = 10.2;
+				SDKROOT = /Developer/SDKs/MacOSX10.2.7.sdk;
+			};
+			buildStyles = (
+				4A9504CCFFE6A4B311CA0CBA,
+				4A9504CDFFE6A4B311CA0CBA,
+			);
+			hasScannedForEncodings = 1;
+			isa = PBXProject;
+			mainGroup = 29B97314FDCFA39411CA2CEA;
+			projectDirPath = "";
+			targets = (
+				29B97326FDCFA39411CA2CEA,
+			);
+		};
+		29B97314FDCFA39411CA2CEA = {
+			children = (
+				080E96DDFE201D6D7F000001,
+				29B97315FDCFA39411CA2CEA,
+				29B97317FDCFA39411CA2CEA,
+				29B97323FDCFA39411CA2CEA,
+				19C28FACFE9D520D11CA2CBB,
+			);
+			isa = PBXGroup;
+			name = HandBrake;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA = {
+			children = (
+				29B97316FDCFA39411CA2CEA,
+				4DFDC318054AC84C00151618,
+			);
+			isa = PBXGroup;
+			name = "Other Sources";
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		29B97316FDCFA39411CA2CEA = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.objcpp;
+			path = main.mm;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA = {
+			children = (
+				4D194F36059E0FBC004A33A1,
+				4D548205059E100C00AD5E02,
+				4D194F37059E0FBC004A33A1,
+				4D194F38059E0FBC004A33A1,
+				29B97318FDCFA39411CA2CEA,
+				4D929FED0527907200A80101,
+				4D69F5C80527944A00A80101,
+				4D69F5C90527944A00A80101,
+				4D69F5CA0527944A00A80101,
+				4D69F5CB0527944A00A80101,
+				4D69F5CC0527944A00A80101,
+				4D69F5CD0527944A00A80101,
+				4D69F5CE0527944A00A80101,
+				4DDEF3B905474DCC002904DE,
+				4D118405053054CD00C39CA9,
+				089C165CFE840E0CC02AAC07,
+				4D0AEC1805747B7A00FAB0FD,
+				4D0AEC1C05747B8C00FAB0FD,
+			);
+			isa = PBXGroup;
+			name = Resources;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		29B97318FDCFA39411CA2CEA = {
+			children = (
+				29B97319FDCFA39411CA2CEA,
+			);
+			isa = PBXVariantGroup;
+			name = MainMenu.nib;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		29B97319FDCFA39411CA2CEA = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = English;
+			path = English.lproj/MainMenu.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA = {
+			children = (
+				1058C7A0FEA54F0111CA2CBB,
+				1058C7A2FEA54F0111CA2CBB,
+			);
+			isa = PBXGroup;
+			name = Frameworks;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		29B97324FDCFA39411CA2CEA = {
+			fallbackIsa = PBXFileReference;
+			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
+			name = AppKit.framework;
+			path = /System/Library/Frameworks/AppKit.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		29B97325FDCFA39411CA2CEA = {
+			fallbackIsa = PBXFileReference;
+			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
+			name = Foundation.framework;
+			path = /System/Library/Frameworks/Foundation.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		29B97326FDCFA39411CA2CEA = {
+			buildPhases = (
+				29B97327FDCFA39411CA2CEA,
+				29B97328FDCFA39411CA2CEA,
+				29B9732BFDCFA39411CA2CEA,
+				29B9732DFDCFA39411CA2CEA,
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				HEADER_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "../core ../contrib/liba52 ../contrib/libavcodec ../contrib/libdvdcss ../contrib/libdvdplay ../contrib/libdvdread ../contrib/libfaac ../contrib/libmp3lame ../contrib/libmp4v2 ../contrib/libmpeg2 ../contrib/libogg ../contrib/libvorbis ../contrib/libx264 ../contrib/libxvidcore";
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "-DHB_MACOSX";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = HandBrake;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = app;
+			};
+			dependencies = (
+			);
+			isa = PBXApplicationTarget;
+			name = HandBrake;
+			productName = HandBrake;
+			productReference = 17587328FF379C6511CA2CBB;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>HandBrake</string>
+	<key>CFBundleGetInfoString</key>
+	<string>HandBrake 0.5.2+ - By Eric Petit &lt;titer@m0k.org&gt;</string>
+	<key>CFBundleIconFile</key>
+	<string>HandBrake.icns</string>
+	<key>CFBundleIdentifier</key>
+	<string>org.m0k.handbrake</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>HandBrake</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>0.5.2+</string>
+	<key>CFBundleSignature</key>
+	<string>HB##</string>
+	<key>CFBundleVersion</key>
+	<string>0.5.2+</string>
+	<key>NSMainNibFile</key>
+	<string>MainMenu</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+</dict>
+</plist>
+";
+		};
+		29B97327FDCFA39411CA2CEA = {
+			buildActionMask = 2147483647;
+			files = (
+				4D6615EA05288C2300A80101,
+				4D857591052B78E300C39CA9,
+				4D358C020534A91300D654EB,
+				4DFDC319054AC84C00151618,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29B97328FDCFA39411CA2CEA = {
+			buildActionMask = 2147483647;
+			files = (
+				080E96DCFE201CFB7F000001,
+				089C165EFE840E0CC02AAC07,
+				4D118406053054CD00C39CA9,
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29B9732BFDCFA39411CA2CEA = {
+			buildActionMask = 2147483647;
+			files = (
+				29B9732CFDCFA39411CA2CEA,
+				4DF3C8CE052889CD00A80101,
+				4D857590052B78E300C39CA9,
+				4D358C030534A91300D654EB,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29B9732CFDCFA39411CA2CEA = {
+			fileRef = 29B97316FDCFA39411CA2CEA;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+				);
+			};
+		};
+		29B9732DFDCFA39411CA2CEA = {
+			buildActionMask = 2147483647;
+			files = (
+				1058C7A3FEA54F0111CA2CBB,
+				4D929FEE0527907200A80101,
+				4D69F5CF0527944A00A80101,
+				4D69F5D00527944A00A80101,
+				4D69F5D10527944A00A80101,
+				4D69F5D20527944A00A80101,
+				4D69F5D30527944A00A80101,
+				4D69F5D40527944A00A80101,
+				4D69F5D50527944A00A80101,
+				4DEB2025052B055F00C39CA9,
+				4DDE9725052B7B2B00C39CA9,
+				4DDEF3BA05474DCC002904DE,
+				4D0AEC1905747B7A00FAB0FD,
+				4D0AEC1D05747B8C00FAB0FD,
+				4D194F39059E0FBC004A33A1,
+				4D194F3A059E0FBC004A33A1,
+				4D194F3B059E0FBC004A33A1,
+				4D548206059E100C00AD5E02,
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+//290
+//291
+//292
+//293
+//294
+//4A0
+//4A1
+//4A2
+//4A3
+//4A4
+		4A9504CCFFE6A4B311CA0CBA = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				LIBRARY_SEARCH_PATHS = "../core ../contrib/lib";
+				OPTIMIZATION_CFLAGS = "-O3";
+				ZERO_LINK = YES;
+			};
+			isa = PBXBuildStyle;
+			name = Development;
+		};
+		4A9504CDFFE6A4B311CA0CBA = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ZERO_LINK = NO;
+			};
+			isa = PBXBuildStyle;
+			name = Deployment;
+		};
+//4A0
+//4A1
+//4A2
+//4A3
+//4A4
+//4D0
+//4D1
+//4D2
+//4D3
+//4D4
+		4D0AEC1805747B7A00FAB0FD = {
+			isa = PBXFileReference;
+			lastKnownFileType = archive.ar;
+			name = libfaac.a;
+			path = ../contrib/libfaac/libfaac.a;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4D0AEC1905747B7A00FAB0FD = {
+			fileRef = 4D0AEC1805747B7A00FAB0FD;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4D0AEC1C05747B8C00FAB0FD = {
+			isa = PBXFileReference;
+			lastKnownFileType = archive.ar;
+			name = libmp4v2.a;
+			path = ../contrib/libmp4v2/libmp4v2.a;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4D0AEC1D05747B8C00FAB0FD = {
+			fileRef = 4D0AEC1C05747B8C00FAB0FD;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4D118405053054CD00C39CA9 = {
+			isa = PBXFileReference;
+			lastKnownFileType = image.icns;
+			path = HandBrake.icns;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4D118406053054CD00C39CA9 = {
+			fileRef = 4D118405053054CD00C39CA9;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4D194F36059E0FBC004A33A1 = {
+			isa = PBXFileReference;
+			lastKnownFileType = archive.ar;
+			name = libvorbis.a;
+			path = ../contrib/libvorbis/libvorbis.a;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4D194F37059E0FBC004A33A1 = {
+			isa = PBXFileReference;
+			lastKnownFileType = archive.ar;
+			name = libvorbisenc.a;
+			path = ../contrib/libvorbis/libvorbisenc.a;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4D194F38059E0FBC004A33A1 = {
+			isa = PBXFileReference;
+			lastKnownFileType = archive.ar;
+			name = libx264.a;
+			path = ../contrib/libx264/libx264.a;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4D194F39059E0FBC004A33A1 = {
+			fileRef = 4D194F36059E0FBC004A33A1;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4D194F3A059E0FBC004A33A1 = {
+			fileRef = 4D194F37059E0FBC004A33A1;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4D194F3B059E0FBC004A33A1 = {
+			fileRef = 4D194F38059E0FBC004A33A1;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4D358C000534A91300D654EB = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = TargetSizeField.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4D358C010534A91300D654EB = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.objcpp;
+			path = TargetSizeField.mm;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4D358C020534A91300D654EB = {
+			fileRef = 4D358C000534A91300D654EB;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4D358C030534A91300D654EB = {
+			fileRef = 4D358C010534A91300D654EB;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4D548205059E100C00AD5E02 = {
+			isa = PBXFileReference;
+			lastKnownFileType = archive.ar;
+			name = libogg.a;
+			path = ../contrib/libogg/libogg.a;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4D548206059E100C00AD5E02 = {
+			fileRef = 4D548205059E100C00AD5E02;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4D6615EA05288C2300A80101 = {
+			fileRef = 4DF3C8CB052889CD00A80101;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4D69F5C80527944A00A80101 = {
+			isa = PBXFileReference;
+			lastKnownFileType = archive.ar;
+			name = liba52.a;
+			path = ../contrib/liba52/liba52.a;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4D69F5C90527944A00A80101 = {
+			isa = PBXFileReference;
+			lastKnownFileType = archive.ar;
+			name = libavcodec.a;
+			path = ../contrib/libavcodec/libavcodec.a;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4D69F5CA0527944A00A80101 = {
+			isa = PBXFileReference;
+			lastKnownFileType = archive.ar;
+			name = libdvdcss.a;
+			path = ../contrib/libdvdcss/libdvdcss.a;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4D69F5CB0527944A00A80101 = {
+			isa = PBXFileReference;
+			lastKnownFileType = archive.ar;
+			name = libdvdplay.a;
+			path = ../contrib/libdvdplay/libdvdplay.a;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4D69F5CC0527944A00A80101 = {
+			isa = PBXFileReference;
+			lastKnownFileType = archive.ar;
+			name = libdvdread.a;
+			path = ../contrib/libdvdread/libdvdread.a;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4D69F5CD0527944A00A80101 = {
+			isa = PBXFileReference;
+			lastKnownFileType = archive.ar;
+			name = libmp3lame.a;
+			path = ../contrib/libmp3lame/libmp3lame.a;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4D69F5CE0527944A00A80101 = {
+			isa = PBXFileReference;
+			lastKnownFileType = archive.ar;
+			name = libmpeg2.a;
+			path = ../contrib/libmpeg2/libmpeg2.a;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4D69F5CF0527944A00A80101 = {
+			fileRef = 4D69F5C80527944A00A80101;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4D69F5D00527944A00A80101 = {
+			fileRef = 4D69F5C90527944A00A80101;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4D69F5D10527944A00A80101 = {
+			fileRef = 4D69F5CA0527944A00A80101;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4D69F5D20527944A00A80101 = {
+			fileRef = 4D69F5CB0527944A00A80101;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4D69F5D30527944A00A80101 = {
+			fileRef = 4D69F5CC0527944A00A80101;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4D69F5D40527944A00A80101 = {
+			fileRef = 4D69F5CD0527944A00A80101;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4D69F5D50527944A00A80101 = {
+			fileRef = 4D69F5CE0527944A00A80101;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4D85758E052B78E300C39CA9 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.objcpp;
+			path = PictureGLView.mm;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4D85758F052B78E300C39CA9 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = PictureGLView.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4D857590052B78E300C39CA9 = {
+			fileRef = 4D85758E052B78E300C39CA9;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4D857591052B78E300C39CA9 = {
+			fileRef = 4D85758F052B78E300C39CA9;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4D929FED0527907200A80101 = {
+			isa = PBXFileReference;
+			lastKnownFileType = archive.ar;
+			name = libhb.a;
+			path = ../core/libhb.a;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4D929FEE0527907200A80101 = {
+			fileRef = 4D929FED0527907200A80101;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4DDE9724052B7B2B00C39CA9 = {
+			fallbackIsa = PBXFileReference;
+			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
+			name = OpenGL.framework;
+			path = /System/Library/Frameworks/OpenGL.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		4DDE9725052B7B2B00C39CA9 = {
+			fileRef = 4DDE9724052B7B2B00C39CA9;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4DDEF3B905474DCC002904DE = {
+			isa = PBXFileReference;
+			lastKnownFileType = archive.ar;
+			name = libxvidcore.a;
+			path = ../contrib/libxvidcore/libxvidcore.a;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4DDEF3BA05474DCC002904DE = {
+			fileRef = 4DDEF3B905474DCC002904DE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4DEB2024052B055F00C39CA9 = {
+			fallbackIsa = PBXFileReference;
+			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
+			name = IOKit.framework;
+			path = /System/Library/Frameworks/IOKit.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		4DEB2025052B055F00C39CA9 = {
+			fileRef = 4DEB2024052B055F00C39CA9;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4DF3C8CB052889CD00A80101 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = Controller.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4DF3C8CC052889CD00A80101 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.objcpp;
+			path = Controller.mm;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4DF3C8CE052889CD00A80101 = {
+			fileRef = 4DF3C8CC052889CD00A80101;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4DFDC318054AC84C00151618 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = HandBrake.h;
+			path = ../core/HandBrake.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4DFDC319054AC84C00151618 = {
+			fileRef = 4DFDC318054AC84C00151618;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA;
+}

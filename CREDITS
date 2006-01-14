@@ -1,5 +1,5 @@
 HandBrake uses a lot of cool libraries from the GNU/Linux world. Thank
-their authors !
+their authors!
 
 liba52 authors:
   Aaron Holtzman
@@ -59,6 +59,14 @@ libdvdplay authors:
   Martin Norbäck
   Stéphane Borel
 
+libfaac authors:
+  M. Bakker
+  Tony Lenox
+  RageOMatic
+  thebard
+  Ivan Dimkovic
+  Krzysztof Nikiel
+
 libmp3lame authors:
   Mike Cheng
   Robert Hegemann
@@ -86,6 +94,22 @@ libmp3lame authors:
   Acy Stapp
   Roel VdB
 
+libmp4v2 authors:
+  Dave Mackie
+  Alix Marchandise-Franquet
+  Bill May
+  Massimo Villari
+  Waqar Mohsin
+  Richard Chen
+  Rob Arnold
+  Howdy Pierce
+  Steven Schultz
+  sergent@io.com
+  Sean Gilligan
+  Michael Rossberg
+  Luis F. Ramirez
+  Petter Reinholdtsen
+
 libmpeg2 authors:
   Aaron Holtzman
   Michel Lespinasse
@@ -108,6 +132,15 @@ libmpeg2 authors:
   Brion Vibber
   Martin Vogt
   Fredrik Vraalsen
+
+libogg authors:
+  Christopher Montgomery
+
+libvorbis authors:
+  Christopher Montgomery
+
+libx264 authors:
+  Laurent Aimar
 
 libxvidcore authors:
   Christoph Lampert

@@ -1,25 +1,13 @@
-/* $Id: HandBrake.c,v 1.18 2003/11/13 01:17:33 titer Exp $
+/* $Id: HandBrake.c,v 1.42 2004/02/18 17:07:20 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
-#include "HandBrakeInternal.h"
+#include "HBInternal.h"
 
-#include <ffmpeg/avcodec.h>
-
-#include "Ac3Dec.h"
-#include "AviMux.h"
-#include "DVDRead.h"
-#include "FfmpegEnc.h"
-#include "Fifo.h"
-#include "Mp3Enc.h"
-#include "Mpeg2Dec.h"
-#include "Scale.h"
-#include "Scan.h"
-#include "Thread.h"
-#include "Work.h"
-#include "XvidEnc.h"
+/* libavcodec */
+#include "ffmpeg/avcodec.h"
 
 /* Local prototypes */
 static void HandBrakeThread( void * );
@@ -29,39 +17,37 @@ static int  GetCPUCount();
 
 struct HBHandle
 {
-    HBThread * thread;
-    int        die;
-    int        pid;
+    int            cpuCount;
+    HBCallbacks    cb;
 
-    int        cpuCount;
+    int            stopScan;
+    int            stopRip;
+    int            ripDone;
+    int            error;
 
-    int        stopScan;
-    int        stopRip;
-    int        ripDone;
-    int        error;
+    HBScan       * scan;
+    HBList       * titleList;
+    HBTitle      * curTitle;
+    uint64_t       beginDate;
+    uint64_t       pauseDate;
+    uint64_t       lastPosUpdate;
+    uint64_t       lastFpsUpdate;
+    int            framesSinceBegin;
+    int            framesSinceFps;
+    float          curFrameRate;
+    float          avgFrameRate;
+    int            remainingTime;
 
-    HBScan   * scan;
-
-    HBLock   * lock;
-    HBStatus   status;
-    int        modeChanged;
-    HBTitle  * curTitle;
-    HBAudio  * curAudio;
-    HBAudio  * curOptAudio;
-
-    int        frames;
-    uint64_t   beginDate;
-    int        framesSinceFpsUpdate;
-    uint64_t   lastFpsUpdate;
-    uint64_t   pauseDate;
-
-    HBLock   * pauseLock;
+    HBLock       * pauseLock;
+    volatile int   die;
+    HBThread     * thread;
+    int            pid;
 };
 
 HBHandle * HBInit( int debug, int cpuCount )
 {
     HBHandle * h;
-    if( !( h = malloc( sizeof( HBHandle ) ) ) )
+    if( !( h = calloc( sizeof( HBHandle ), 1 ) ) )
     {
         HBLog( "HBInit: malloc() failed, gonna crash" );
         return NULL;
@@ -105,190 +91,105 @@ HBHandle * HBInit( int debug, int cpuCount )
             h->cpuCount = cpuCount;
         }
     }
-    
-    /* Initializations */
-    h->stopScan = 0;
-    h->stopRip  = 0;
-    h->ripDone  = 0;
-    h->error    = 0;
-
-    h->scan = NULL;
-
-    h->lock        = HBLockInit();
-    h->modeChanged = 1;
-    h->status.mode = HB_MODE_NEED_DEVICE;
-    h->status.titleList = NULL;
-    h->curTitle    = NULL;
-    h->curAudio    = NULL;
-    h->curOptAudio = NULL;
 
     h->pauseLock = HBLockInit();
-
-    h->die    = 0;
-    h->thread = HBThreadInit( "libhb", HandBrakeThread, h,
-                              HB_NORMAL_PRIORITY );
-
+    h->thread    = HBThreadInit( "libhb", HandBrakeThread, h,
+                                 HB_NORMAL_PRIORITY );
     return h;
 }
 
-int HBGetStatus( HBHandle * h, HBStatus * status )
+void HBSetCallbacks( HBHandle * h, HBCallbacks callbacks )
 {
-    HBLockLock( h->lock );
-    memcpy( status, &h->status, sizeof( HBStatus ) );
-
-    if( !h->modeChanged )
-    {
-        HBLockUnlock( h->lock );
-        return 0;
-    }
-
-    h->modeChanged = 0;
-    HBLockUnlock( h->lock );
-    return 1;
+    h->cb = callbacks;
 }
 
-void HBScanDevice( HBHandle * h, char * device, int title )
+void HBScanDVD( HBHandle * h, const char * dvd, int title )
 {
-    if( !( h->status.mode & ( HB_MODE_NEED_DEVICE |
-                              HB_MODE_INVALID_DEVICE ) ) )
-    {
-        HBLog( "HBScanDevice: current mode is %d, aborting",
-               h->status.mode );
-        return;
-    }
-    
-    HBLockLock( h->lock );
-    h->modeChanged         = 1;
-    h->status.mode         = HB_MODE_SCANNING;
-    h->status.scannedTitle = 0;
-    HBLockUnlock( h->lock );
-
-    h->scan = HBScanInit( h, device, title );
+    h->scan = HBScanInit( h, dvd, title );
 }
 
-void HBStartRip( HBHandle * h, HBTitle * t,
-                 HBAudio * a1, HBAudio * a2 )
+void HBStartRip( HBHandle * h, HBTitle * title )
 {
     int i;
+    HBAudio * audio;
 
-    if( !( h->status.mode & ( HB_MODE_READY_TO_RIP | HB_MODE_DONE |
-                              HB_MODE_CANCELED | HB_MODE_ERROR ) ) )
+    h->beginDate        = HBGetDate();
+    h->lastPosUpdate    = 0;
+    h->lastFpsUpdate    = 0;
+    h->framesSinceBegin = 0;
+    h->framesSinceFps   = 0;
+
+    FixPictureSettings( title );
+
+    /* Video fifos */
+    title->inFifo     = HBFifoInit( 1024 );
+    title->rawFifo    = HBFifoInit( 1 );
+    title->scaledFifo = HBFifoInit( 1 );
+    title->outFifo    = HBFifoInit( 1 );
+
+    /* Video work objects */
+    title->decoder    = HBMpeg2DecInit( h, title );
+    title->scale      = HBScaleInit( h, title );
+    if( title->codec == HB_CODEC_FFMPEG )
+        title->encoder = HBFfmpegEncInit( h, title );
+    else if( title->codec == HB_CODEC_XVID )
+        title->encoder = HBXvidEncInit( h, title );
+    else if( title->codec == HB_CODEC_X264 )
+        title->encoder = HBX264EncInit( h, title );
+
+    for( i = 0; i < HBListCount( title->ripAudioList ); i++ )
     {
-        HBLog( "HBStartRip: current mode is %d, aborting",
-               h->status.mode );
-        return;
+        audio = HBListItemAt( title->ripAudioList, i );
+
+        /* Audio fifos */
+        audio->inFifo  = HBFifoInit( 1024 );
+        audio->rawFifo = HBFifoInit( 1 );
+        audio->outFifo = HBFifoInit( 4 ); /* At least 4 for Vorbis */
+
+        /* Audio work objects */
+        audio->decoder = HBAc3DecInit( h, audio );
+        if( audio->codec == HB_CODEC_MP3 )
+            audio->encoder = HBMp3EncInit( h, audio );
+        else if( audio->codec == HB_CODEC_AAC )
+            audio->encoder = HBFaacEncInit( h, audio );
+        else if( audio->codec == HB_CODEC_VORBIS )
+            audio->encoder = HBVorbisEncInit( h, audio );
     }
 
-    HBLockLock( h->lock );
-    h->modeChanged          = 1;
-    h->status.mode          = HB_MODE_ENCODING;
-    h->status.position      = 0.0;
-    h->status.pass          = 1;
-    h->status.passCount     = t->twoPass ? 2 : 1;
-    h->frames               = 0;
-    h->framesSinceFpsUpdate = 0;
-    HBLockUnlock( h->lock );
-    
-    FixPictureSettings( t );
-
-    /* Create fifos */
-    t->mpeg2Fifo  = HBFifoInit( 1024 );
-    t->rawFifo    = HBFifoInit( 1 );
-    t->scaledFifo = HBFifoInit( 1 );
-    t->mpeg4Fifo  = HBFifoInit( 1 );
-    a1->ac3Fifo   = HBFifoInit( 1024 );
-    a1->rawFifo   = HBFifoInit( 1 );
-    a1->mp3Fifo   = HBFifoInit( 1 );
-    if( a2 )
-    {
-        a2->ac3Fifo = HBFifoInit( 1024 );
-        a2->rawFifo = HBFifoInit( 1 );
-        a2->mp3Fifo = HBFifoInit( 1 );
-    }
-
-    /* Create work objects */
-    t->mpeg2Dec  = HBMpeg2DecInit( h, t );
-    t->scale     = HBScaleInit( h, t );
-    
-    if( t->codec == HB_CODEC_FFMPEG )
-        t->ffmpegEnc = HBFfmpegEncInit( h, t );
-    else if( t->codec == HB_CODEC_XVID )
-        t->xvidEnc = HBXvidEncInit( h, t );
-
-    a1->ac3Dec   = HBAc3DecInit( h, a1 );
-    a1->mp3Enc   = HBMp3EncInit( h, a1 );
-    if( a2 )
-    {
-        a2->ac3Dec = HBAc3DecInit( h, a2 );
-        a2->mp3Enc = HBMp3EncInit( h, a2 );
-    }
-   
     /* Create threads */
-    t->dvdRead = HBDVDReadInit( h, t, a1, a2 );
-    t->aviMux  = HBAviMuxInit( h, t, a1, a2 );
+    title->dvdRead = HBDVDReadInit( h, title );
+
+    if( title->mux == HB_MUX_AVI )
+        title->aviMux  = HBAviMuxInit( h, title );
+    else if( title->mux == HB_MUX_MP4 )
+        title->mp4Mux  = HBMp4MuxInit( h, title );
+    else if( title->mux == HB_MUX_OGM )
+        title->ogmMux  = HBOgmMuxInit( h, title );
+
     for( i = 0; i < h->cpuCount; i++ )
     {
-        t->workThreads[i] = HBWorkThreadInit( h, t, a1, a2, i ? 0 : 1 );
+        title->workThreads[i] = HBWorkThreadInit( h, title, i ? 0 : 1 );
     }
 
-    h->curTitle    = t;
-    h->curAudio    = a1;
-    h->curOptAudio = a2;
+    h->curTitle = title;
 }
 
 void HBPauseRip( HBHandle * h )
 {
-    if( h->status.mode != HB_MODE_ENCODING )
-    {
-        HBLog( "HBPauseRip: current mode is %d, aborting",
-               h->status.mode );
-        return;
-    }
-    
     h->pauseDate = HBGetDate();
     HBLockLock( h->pauseLock );
-    HBLockLock( h->lock );
-    h->status.mode = HB_MODE_PAUSED;
-    h->modeChanged = 1;
-    HBLockUnlock( h->lock );
 }
 
 void HBResumeRip( HBHandle * h )
 {
-    if( h->status.mode != HB_MODE_PAUSED )
-    {
-        HBLog( "HBResumeRip: current mode is %d, aborting",
-               h->status.mode );
-        return;
-    }
-
     h->beginDate     += HBGetDate() - h->pauseDate;
+    h->lastPosUpdate += HBGetDate() - h->pauseDate;
     h->lastFpsUpdate += HBGetDate() - h->pauseDate;
     HBLockUnlock( h->pauseLock );
-    HBLockLock( h->lock );
-    h->modeChanged = 1;
-    h->status.mode = HB_MODE_ENCODING;
-    HBLockUnlock( h->lock );
 }
 
 void HBStopRip( HBHandle * h )
 {
-    if( !( h->status.mode & ( HB_MODE_ENCODING | HB_MODE_PAUSED ) ) )
-    {
-        HBLog( "HBStopRip: current mode is %d, aborting",
-               h->status.mode );
-        return;
-    }
-    
-    if( h->status.mode & HB_MODE_PAUSED )
-    {
-        HBLockUnlock( h->pauseLock );
-    }
-
-    HBLockLock( h->lock );
-    h->modeChanged = 1;
-    h->status.mode = HB_MODE_STOPPING;
-    HBLockUnlock( h->lock );
     h->stopRip = 1;
 }
 
@@ -314,7 +215,7 @@ uint8_t * HBGetPreview( HBHandle * h, HBTitle * t, int picture )
         HBLog( "HBGetPreview: malloc() failed, gonna crash" );
         return NULL;
     }
-    
+
     /* Original YUV picture */
     avpicture_fill( &pic1, buf1, PIX_FMT_YUV420P, t->inWidth,
                     t->inHeight );
@@ -393,7 +294,7 @@ uint8_t * HBGetPreview( HBHandle * h, HBTitle * t, int picture )
     for( i = 0; i < t->outHeight; i++ )
     {
         uint8_t * nextLine = pen + 4 * ( t->outWidthMax + 2 );
-        
+
         memset( pen, 0xFF, 4 );
         pen += 4;
         memcpy( pen, buf4 + 4 * t->outWidth * i, 4 * t->outWidth );
@@ -415,48 +316,90 @@ uint8_t * HBGetPreview( HBHandle * h, HBTitle * t, int picture )
     return NULL;
 }
 
+int HBGetBitrateForSize( HBTitle * title, int size, int muxer,
+                         int audioCount, int audioBitrate )
+{
+    int64_t available;
+    int     overheadPerFrame;
+    int     sampleRate;
+    int     samplesPerFrame;
+
+    switch( muxer )
+    {
+        case HB_MUX_MP4:
+            overheadPerFrame = 5;     /* hopefully */
+            sampleRate       = 48000; /* No resampling */
+            samplesPerFrame  = 1024;  /* AAC */
+            break;
+        case HB_MUX_AVI:
+            overheadPerFrame = 24;
+            sampleRate       = 44100; /* Resampling */
+            samplesPerFrame  = 1152;  /* MP3 */
+            break;
+        case HB_MUX_OGM:
+            overheadPerFrame = 0;     /* XXX */
+            sampleRate       = 48000; /* No resampling */
+            samplesPerFrame  = 1024;  /* Vorbis */
+            break;
+        default:
+            return 0;
+    }
+
+    /* Actually target 1 MB less */
+    available  = (int64_t) ( size - 1 ) * 1024 * 1024;
+
+    /* Audio data */
+    available -= audioCount * title->length * audioBitrate * 128;
+
+    /* Video headers */
+    available -= (int64_t) title->length * title->rate *
+        overheadPerFrame / title->rateBase;
+
+    /* Audio headers */
+    available -= (int64_t) audioCount * title->length * sampleRate *
+        overheadPerFrame / samplesPerFrame;
+
+    if( available < 0 )
+    {
+        return 0;
+    }
+    return( available / ( 128 * title->length ) );
+}
+
 void HBClose( HBHandle ** _h )
 {
     char command[1024];
-    
+
     HBHandle * h = *_h;
-    
+
     h->die = 1;
     HBThreadClose( &h->thread );
 
-    if( h->status.mode == HB_MODE_SCANNING )
+    if( h->scan )
     {
         HBScanClose( &h->scan );
     }
-    else if( h->status.mode == HB_MODE_PAUSED )
+    if( h->curTitle )
     {
-        HBLockUnlock( h->pauseLock );
         _StopRip( h );
     }
-    else if( h->status.mode == HB_MODE_ENCODING )
+    if( h->titleList )
     {
-        _StopRip( h );
+        HBTitle * title;
+        while( ( title = (HBTitle*) HBListItemAt( h->titleList, 0 ) ) )
+        {
+            HBListRemove( h->titleList, title );
+            HBTitleClose( &title );
+        }
     }
 
     memset( command, 0, 1024 );
     sprintf( command, "rm -f /tmp/HB.%d.*", h->pid );
     system( command );
 
-    if( h->status.titleList )
-    {
-        HBTitle * title;
-        while( ( title = HBListItemAt( h->status.titleList, 0 ) ) )
-        {
-            HBListRemove( h->status.titleList, title );
-            HBTitleClose( &title );
-        }
-        HBListClose( &h->status.titleList );
-    }
-    
-    HBLockClose( &h->lock );
     HBLockClose( &h->pauseLock );
     free( h );
-    
+
     *_h = NULL;
 }
 
@@ -467,17 +410,16 @@ void HBCheckPaused( HBHandle * h )
     HBLockUnlock( h->pauseLock );
 }
 
-void HBScanning( HBHandle * h, int title )
+void HBScanning( HBHandle * h, int title, int titleCount )
 {
-    HBLockLock( h->lock );
-    h->status.scannedTitle = title;
-    HBLockUnlock( h->lock );
+    h->cb.scanning( h->cb.data, title, titleCount );
 }
 
 void HBScanDone( HBHandle * h, HBList * titleList )
 {
-    h->status.titleList = titleList;
-    h->stopScan         = 1;
+    h->stopScan  = 1;
+    h->titleList = titleList;
+    h->cb.scanDone( h->cb.data, titleList );
 }
 
 int HBGetPid( HBHandle * h )
@@ -492,59 +434,47 @@ void HBDone( HBHandle * h )
 
 void HBPosition( HBHandle * h, float position )
 {
-    if( !h->frames )
-    {
-        h->beginDate     = HBGetDate();
-        h->lastFpsUpdate = h->beginDate;
-    }
-    
-    h->frames++;
-    h->framesSinceFpsUpdate++;
-    
-    HBLockLock( h->lock );
-    h->status.position = position;
+    int pass, passCount;
+
+    h->framesSinceBegin++;
+    h->framesSinceFps++;
+
     if( h->curTitle->twoPass )
     {
-        h->status.pass = ( position < 0.5 ) ? 1 : 2;
+        pass      = ( position < 0.5 ) ? 1 : 2;
+        passCount = 2;
     }
     else
     {
-        h->status.pass = 1;
+        passCount = pass = 1;
     }
+
+    if( HBGetDate() - h->lastPosUpdate < 200000 )
+        return;
+
+    h->lastPosUpdate  = HBGetDate();
 
     if( HBGetDate() - h->lastFpsUpdate > 1000000 )
     {
-        h->status.frameRate = 1000000.0 * h->framesSinceFpsUpdate /
-                                  ( HBGetDate() - h->lastFpsUpdate );
-        h->status.avFrameRate = 1000000.0 * h->frames /
-                                  ( HBGetDate() - h->beginDate );
-        h->status.remainingTime = ( 1.0 - h->status.position ) *
-                                  ( HBGetDate() - h->beginDate ) /
-                                  h->status.position / 1000000;
-        
-        HBLog( "Progress: %.2f %%", position * 100 );
-        HBLog( "Speed: %.2f fps (average: %.2f fps, "
-               "remaining: %02d:%02d:%02d)",
-               h->status.frameRate, h->status.avFrameRate,
-               h->status.remainingTime / 3600,
-               ( h->status.remainingTime / 60 ) % 60,
-               h->status.remainingTime % 60 );
-        
-        h->lastFpsUpdate        = HBGetDate();
-        h->framesSinceFpsUpdate = 0;
+        h->curFrameRate = 1000000.0 * h->framesSinceFps /
+            ( HBGetDate() - h->lastFpsUpdate );
+        h->avgFrameRate = 1000000.0 * h->framesSinceBegin /
+            ( HBGetDate() - h->beginDate );
+        h->remainingTime = ( 1.0 - position ) *
+            ( HBGetDate() - h->beginDate ) / position / 1000000;
+
+        h->lastFpsUpdate  = HBGetDate();
+        h->framesSinceFps = 0;
     }
-    HBLockUnlock( h->lock );
+
+    h->cb.encoding( h->cb.data, position, pass, passCount,
+                           h->curFrameRate, h->avgFrameRate,
+                           h->remainingTime );
 }
 
-void HBErrorOccured( HBHandle * h, HBError error )
+void HBErrorOccured( HBHandle * h, int error )
 {
-    if( !( h->status.mode & ( HB_MODE_ENCODING | HB_MODE_PAUSED ) ) )
-    {
-        return;
-    }
-
-    h->status.error = error;
-    h->error         = 1;
+    h->error = error;
 }
 
 /* Local functions */
@@ -559,49 +489,55 @@ static void HandBrakeThread( void * _h )
         if( h->stopScan )
         {
             HBScanClose( &h->scan );
-            HBLockLock( h->lock );
-            h->modeChanged = 1;
-            h->status.mode = HBListCountItems( h->status.titleList ) ?
-                HB_MODE_READY_TO_RIP : HB_MODE_INVALID_DEVICE;
-            HBLockUnlock( h->lock );
             h->stopScan = 0;
         }
 
         if( h->stopRip )
         {
             _StopRip( h );
-            
-            HBLockLock( h->lock );
-            h->modeChanged = 1;
-            h->status.mode = HB_MODE_CANCELED;
-            HBLockUnlock( h->lock );
-            
+            h->cb.ripDone( h->cb.data, HB_CANCELED );
             h->stopRip = 0;
         }
 
         if( h->ripDone )
         {
-            /* Wait a bit */
-            HBSnooze( 500000 );
+            HBTitle * title = h->curTitle;
+            HBAudio * audio;
+            int       i, ok = 0;
 
+            /* Wait until we're done with the decoding of one track */
+            for( ;; )
+            {
+                if( !HBFifoSize( title->inFifo ) &&
+                    !HBFifoSize( title->rawFifo ) &&
+                    !HBFifoSize( title->scaledFifo ) )
+                {
+                    break;
+                }
+                for( i = 0; i < HBListCount( title->ripAudioList ); i++ )
+                {
+                    audio = (HBAudio*) HBListItemAt( title->ripAudioList, i );
+                    if( !HBFifoSize( title->inFifo ) &&
+                        !HBFifoSize( title->rawFifo ) )
+                    {
+                        ok = 1;
+                        break;
+                    }
+                }
+                HBSnooze( 5000 );
+            }
+
+            HBSnooze( 500000 );
             _StopRip( h );
-            HBLockLock( h->lock );
-            h->modeChanged = 1;
-            h->status.mode = HB_MODE_DONE;
-            HBLockUnlock( h->lock );
-            
+            h->cb.ripDone( h->cb.data, HB_SUCCESS );
+
             h->ripDone = 0;
         }
 
         if( h->error )
         {
             _StopRip( h );
-            
-            HBLockLock( h->lock );
-            h->modeChanged = 1;
-            h->status.mode = HB_MODE_ERROR;
-            HBLockUnlock( h->lock );
-            
+            h->cb.ripDone( h->cb.data, h->error );
             h->error = 0;
         }
 
@@ -611,52 +547,77 @@ static void HandBrakeThread( void * _h )
 
 static void _StopRip( HBHandle * h )
 {
+    HBTitle * title = h->curTitle;
+    HBAudio * audio;
     int i;
 
+    /* Invalidate fifos */
+    HBFifoDie( title->outFifo );
+    for( i = 0; i < HBListCount( title->ripAudioList ); i++ )
+    {
+        audio = HBListItemAt( title->ripAudioList, i );
+        HBFifoDie( audio->outFifo );
+    }
+
     /* Stop threads */
-    HBDVDReadClose( &h->curTitle->dvdRead );
-    HBAviMuxClose( &h->curTitle->aviMux );
+    HBDVDReadClose( &title->dvdRead );
+
+    if( title->mux == HB_MUX_AVI )
+        HBAviMuxClose( &title->aviMux );
+    else if( title->mux == HB_MUX_MP4 )
+        HBMp4MuxClose( &title->mp4Mux );
+    else if( title->mux == HB_MUX_OGM )
+        HBOgmMuxClose( &title->ogmMux );
+
     for( i = 0; i < h->cpuCount; i++ )
     {
-        HBWorkThreadClose( &h->curTitle->workThreads[h->cpuCount-i-1] );
+        HBWorkThreadClose( &title->workThreads[h->cpuCount-i-1] );
     }
 
     /* Clean up */
-    HBMpeg2DecClose( &h->curTitle->mpeg2Dec );
-    HBScaleClose( &h->curTitle->scale );
+    HBMpeg2DecClose( &title->decoder );
+    HBScaleClose( &title->scale );
 
-    if( h->curTitle->codec == HB_CODEC_FFMPEG )
-        HBFfmpegEncClose( &h->curTitle->ffmpegEnc );
-    else if( h->curTitle->codec == HB_CODEC_XVID )
-        HBXvidEncClose( &h->curTitle->xvidEnc );
-    
-    HBAc3DecClose( &h->curAudio->ac3Dec );
-    HBMp3EncClose( &h->curAudio->mp3Enc );
-    if( h->curOptAudio )
+    if( title->codec == HB_CODEC_FFMPEG )
+        HBFfmpegEncClose( &title->encoder );
+    else if( title->codec == HB_CODEC_XVID )
+        HBXvidEncClose( &title->encoder );
+    else if( title->codec == HB_CODEC_X264 )
+        HBX264EncClose( &title->encoder );
+
+    HBFifoClose( &title->inFifo );
+    HBFifoClose( &title->rawFifo );
+    HBFifoClose( &title->scaledFifo );
+    HBFifoClose( &title->outFifo );
+
+    for( i = 0; i < HBListCount( title->ripAudioList ); i++ )
     {
-        HBAc3DecClose( &h->curOptAudio->ac3Dec );
-        HBMp3EncClose( &h->curOptAudio->mp3Enc );
+        audio = HBListItemAt( title->ripAudioList, i );
+
+        /* Audio work objects */
+        HBAc3DecClose( &audio->decoder );
+        if( audio->codec == HB_CODEC_MP3 )
+            HBMp3EncClose( &audio->encoder );
+        else if( audio->codec == HB_CODEC_AAC )
+            HBFaacEncClose( &audio->encoder );
+        else if( audio->codec == HB_CODEC_VORBIS )
+            HBVorbisEncClose( &audio->encoder );
+
+        /* Audio fifos */
+        HBFifoClose( &audio->inFifo );
+        HBFifoClose( &audio->rawFifo );
+        HBFifoClose( &audio->outFifo );
+
+        HBListRemove( title->ripAudioList, audio );
     }
 
-    /* Destroy fifos */
-    HBFifoClose( &h->curTitle->mpeg2Fifo );
-    HBFifoClose( &h->curTitle->rawFifo );
-    HBFifoClose( &h->curTitle->scaledFifo );
-    HBFifoClose( &h->curTitle->mpeg4Fifo );
-    HBFifoClose( &h->curAudio->ac3Fifo );
-    HBFifoClose( &h->curAudio->rawFifo );
-    HBFifoClose( &h->curAudio->mp3Fifo );
-    if( h->curOptAudio )
-    {
-        HBFifoClose( &h->curOptAudio->ac3Fifo );
-        HBFifoClose( &h->curOptAudio->rawFifo );
-        HBFifoClose( &h->curOptAudio->mp3Fifo );
-    }
+    h->curTitle = NULL;
 }
 
 static void FixPictureSettings( HBTitle * t )
 {
     /* Sanity checks */
+    t->outWidth   = MULTIPLE_16( t->outWidth );
     t->topCrop    = EVEN( t->topCrop );
     t->bottomCrop = EVEN( t->bottomCrop );
     t->leftCrop   = EVEN( t->leftCrop );
@@ -693,12 +654,12 @@ static int GetCPUCount()
 {
     int CPUCount = 1;
 
-#if defined( SYS_BEOS )
+#if defined( HB_BEOS )
     system_info info;
     get_system_info( &info );
     CPUCount = info.cpu_count;
 
-#elif defined( SYS_MACOSX )
+#elif defined( HB_MACOSX )
     FILE * info;
     char   buffer[256];
 
@@ -726,8 +687,8 @@ static int GetCPUCount()
     {
         HBLog( "GetCPUCount: popen() failed" );
     }
-   
-#elif defined( SYS_LINUX )
+
+#elif defined( HB_LINUX )
     FILE * info;
     char   buffer[256];
 
@@ -755,11 +716,11 @@ static int GetCPUCount()
     {
         HBLog( "GetCPUCount: fopen() failed" );
     }
-   
-#elif defined( SYS_CYGWIN )
+
+#elif defined( HB_CYGWIN )
     /* TODO */
     CPUCount = 1;
- 
+
 #endif
     CPUCount = MAX( 1, CPUCount );
     CPUCount = MIN( CPUCount, 8 );
