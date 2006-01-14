@@ -1,4 +1,4 @@
-/* $Id: LpcmDec.c,v 1.3 2004/03/29 00:29:41 titer Exp $
+/* $Id: LpcmDec.c,v 1.10 2004/05/10 16:50:32 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -6,7 +6,7 @@
 
 #include "HBInternal.h"
 
-typedef struct HBLpcmDec
+struct HBWork
 {
     HB_WORK_COMMON_MEMBERS
 
@@ -14,102 +14,60 @@ typedef struct HBLpcmDec
     HBAudio     * audio;
 
     int           initDone;
-    int           channels;
-    float         sampleLevel;
-    HBBuffer    * rawBuffer;
-} HBLpcmDec;
+};
 
 /* Local prototypes */
 static int LpcmDecWork( HBWork * );
 
 HBWork * HBLpcmDecInit( HBHandle * handle, HBAudio * audio )
 {
-    HBLpcmDec * l;
-    if( !( l = calloc( sizeof( HBLpcmDec ), 1 ) ) )
+    HBWork * w;
+    if( !( w = calloc( sizeof( HBWork ), 1 ) ) )
     {
         HBLog( "HBLpcmDecInit: malloc() failed, gonna crash" );
         return NULL;
     }
 
-    l->name = strdup( "LpcmDec" );
-    l->work = LpcmDecWork;
+    w->name = strdup( "LpcmDec" );
+    w->work = LpcmDecWork;
 
-    l->handle = handle;
-    l->audio  = audio;
+    w->handle = handle;
+    w->audio  = audio;
 
-    if( audio->outCodec & ( HB_CODEC_MP3 | HB_CODEC_VORBIS ) )
-    {
-        /* 16 bits samples */
-        l->sampleLevel = 1.0;
-    }
-    else if( audio->outCodec & HB_CODEC_AAC )
-    {
-        /* 24 bits samples */
-        l->sampleLevel = 256.0;
-    }
-
-    return (HBWork*) l;
+    return w;
 }
 
-void HBLpcmDecClose( HBWork ** _l )
+void HBLpcmDecClose( HBWork ** _w )
 {
-    HBLpcmDec * l = (HBLpcmDec*) *_l;
-
-    /* Clean up */
-    if( l->rawBuffer )
-    {
-        HBBufferClose( &l->rawBuffer );
-    }
-    free( l->name );
-    free( l );
-
-    *_l = NULL;
+    HBWork * w = *_w;
+    free( w->name );
+    free( w );
+    *_w = NULL;
 }
-
-#ifndef HB_MACOSX
-static int16_t Swap16( int16_t * p )
-{
-    uint8_t tmp[2];
-
-    tmp[0] = ((uint8_t*)p)[1];
-    tmp[1] = ((uint8_t*)p)[0];
-
-    return *(int16_t*)tmp;
-}
-#endif
 
 static int LpcmDecWork( HBWork * w )
 {
-    HBLpcmDec * l          = (HBLpcmDec*) w;
-    HBAudio   * audio      = l->audio;
+    HBAudio   * audio  = w->audio;
+
     HBBuffer  * lpcmBuffer;
-    int16_t   * int16data;
+    HBBuffer  * rawBuffer;
+    uint8_t   * samples_u8;
+    float     * samples_f;
+    int         samples_nr, i;
 
-    int i;
-    int samples;
-    int didSomething = 0;
-
-    /* Push decoded buffer */
-    if( l->rawBuffer )
+    if( HBFifoIsHalfFull( audio->rawFifo ) )
     {
-        if( HBFifoPush( audio->rawFifo, &l->rawBuffer ) )
-        {
-            didSomething = 1;
-        }
-        else
-        {
-            return 0;
-        }
+        return 0;
     }
 
     /* Get a new LPCM buffer */
     lpcmBuffer = HBFifoPop( audio->inFifo );
     if( !lpcmBuffer )
     {
-        return didSomething;
+        return 0;
     }
 
-    if( !l->initDone )
+    if( !w->initDone )
     {
         /* SampleRate */
         switch( ( lpcmBuffer->data[4] >> 4 ) & 0x3 )
@@ -121,44 +79,45 @@ static int LpcmDecWork( HBWork * w )
                 audio->inSampleRate = 32000;
                 break;
             default:
-                HBLog( "LpcmDec: unknown samplerate (%d)",
+                HBLog( "HBLpcmDec: unknown samplerate (%d)",
                        ( lpcmBuffer->data[4] >> 4 ) & 0x3 );
         }
-        HBLog( "LpcmDec: samplerate = %d Hz", audio->inSampleRate );
 
-        /* Channels */
-        HBLog( "LpcmDec: %d channels",
-               ( lpcmBuffer->data[4] & 0x7 ) + 1 );
+        /* We hope there are 2 channels */
+        HBLog( "HBLpcmDec: samplerate: %d Hz, channels: %d",
+               audio->inSampleRate, ( lpcmBuffer->data[4] & 0x7 ) + 1 );
 
-        l->initDone = 1;
+        w->initDone = 1;
     }
 
     if( lpcmBuffer->data[5] != 0x80 )
     {
-        HBLog( "LpcmDec: no frame synx (%02xà", lpcmBuffer->data[5] );
+        HBLog( "HBLpcmDec: no frame sync (%02x)", lpcmBuffer->data[5] );
     }
 
-    samples   = ( lpcmBuffer->size - 6 ) / sizeof( int16_t ) / 2;
-    int16data = (int16_t*) ( lpcmBuffer->data + 6 );
+    /* Allocate raw buffer */
+    samples_nr          = ( lpcmBuffer->size - 6 ) / sizeof( int16_t );
+    rawBuffer           = HBBufferInit( samples_nr * sizeof( float ) );
+    rawBuffer->position = lpcmBuffer->position;
 
-    l->rawBuffer           = HBBufferInit( samples * sizeof( float ) * 2 );
-    l->rawBuffer->left     = (float*) l->rawBuffer->data;
-    l->rawBuffer->right    = l->rawBuffer->left + samples;
-    l->rawBuffer->position = lpcmBuffer->position;
-    l->rawBuffer->samples  = samples;
-
-    for( i = 0; i < samples; i++ )
+    /* Big endian int16 -> float conversion (happy casting) */
+    samples_u8 = lpcmBuffer->data + 6;
+    samples_f  = rawBuffer->dataf;
+    for( i = 0; i < samples_nr; i++ )
     {
-#ifdef HB_MACOSX
-        l->rawBuffer->left[i]  = (float) int16data[2*i]   * l->sampleLevel;
-        l->rawBuffer->right[i] = (float) int16data[2*i+1] * l->sampleLevel;
-#else
-        l->rawBuffer->left[i]  = (float) Swap16(&int16data[2*i])   * l->sampleLevel;
-        l->rawBuffer->right[i] = (float) Swap16(&int16data[2*i+1]) * l->sampleLevel;
-#endif
+        samples_f[0] = (float) (int16_t)
+            ( ( ( (uint16_t) samples_u8[0] ) << 8 ) +
+                  (uint16_t) samples_u8[1] );
+        samples_u8 += 2;
+        samples_f  += 1;
     }
 
     HBBufferClose( &lpcmBuffer );
+
+    if( !HBFifoPush( audio->rawFifo, &rawBuffer ) )
+    {
+        HBLog( "HBLpcmDec: HBFifoPush failed" );
+    }
 
     return 1;
 }

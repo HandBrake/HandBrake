@@ -1,4 +1,4 @@
-/* $Id: Scan.c,v 1.15 2004/03/08 11:32:48 titer Exp $
+/* $Id: Scan.c,v 1.26 2004/05/12 18:02:35 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -7,18 +7,15 @@
 #include "HBInternal.h"
 #include "Languages.h"
 
-#include "dvdread/ifo_types.h"
-#include "dvdplay/dvdplay.h"
-#include "dvdplay/info.h"
-#include "dvdplay/state.h"
-#include "dvdplay/nav.h"
+#include "dvdread/ifo_read.h"
 
 #include "mpeg2dec/mpeg2.h"
 
 /* Local prototypes */
 static void      ScanThread( void * );
-static HBTitle * ScanTitle( HBScan *, dvdplay_ptr vmg, int index );
-static int       DecodeFrame( HBScan * s, dvdplay_ptr vmg,
+static HBTitle * ScanTitle( HBScan *, dvd_reader_t * reader,
+                            ifo_handle_t * vmg, int index );
+static int       DecodeFrame( HBScan * s, dvd_file_t * dvdFile,
                               HBTitle * title, int which );
 static char    * LanguageForCode( int code );
 
@@ -29,6 +26,7 @@ struct HBScan
     int            title;
     volatile int   die;
     HBThread     * thread;
+    HBList       * titleList;
 };
 
 HBScan * HBScanInit( HBHandle * handle, const char * device, int title )
@@ -64,40 +62,47 @@ void HBScanClose( HBScan ** _s )
 
 static void ScanThread( void * _s )
 {
-    HBScan      * s = (HBScan*) _s;
-    dvdplay_ptr   vmg;
-    HBList      * titleList = HBListInit();
-    HBTitle     * title;
-    int           i;
+    int            i;
+    HBScan       * s = (HBScan*) _s;
+    HBList       * titleList = HBListInit();
+    HBTitle      * title;
+    dvd_reader_t * reader;
+    ifo_handle_t * vmg;
+
+    s->titleList = titleList;
 
     HBLog( "HBScan: opening device %s", s->device );
 
-    vmg = dvdplay_open( s->device, NULL, NULL );
-    if( !vmg )
+    reader = DVDOpen( s->device );
+    if( !reader )
     {
-        HBLog( "HBScan: dvdplay_open() failed (%s)", s->device );
+        HBLog( "HBScan: DVDOpen() failed (%s)", s->device );
         HBListClose( &titleList );
         HBScanDone( s->handle, NULL );
         return;
     }
 
+    vmg = ifoOpen( reader, 0 );
+
     /* Detect titles */
     i = s->title ? ( s->title - 1 ) : 0;
     while( !s->die )
     {
-        if( ( title = ScanTitle( s, vmg, i + 1 ) ) )
+        if( ( title = ScanTitle( s, reader, vmg, i + 1 ) ) )
         {
             HBListAdd( titleList, title );
         }
-        if( s->title || i == dvdplay_title_nr( vmg ) - 1 )
+        if( s->title || i == vmg->tt_srpt->nr_of_srpts - 1 )
         {
             break;
         }
         i++;
     }
 
+    ifoClose( vmg );
+
     HBLog( "HBScan: closing device %s", s->device );
-    dvdplay_close( vmg );
+    DVDClose( reader );
 
     if( s->die )
     {
@@ -117,27 +122,102 @@ static void ScanThread( void * _s )
     HBScanDone( s->handle, titleList );
 }
 
-static HBTitle * ScanTitle( HBScan * s, dvdplay_ptr vmg, int index )
+
+static unsigned int convert_bcd( unsigned int i_x )
+{
+    int y = 0, z = 1;
+
+    for( ; i_x ; )
+    {
+        y += z * ( i_x & 0xf );
+        i_x = i_x >> 4;
+        z = z * 10;
+    }
+
+    return y;
+}
+
+static HBTitle * ScanTitle( HBScan * s, dvd_reader_t * reader,
+                            ifo_handle_t * vmg, int index )
 {
     HBTitle      * title;
-    int            audio_nr, foo;
-    audio_attr_t * attr;
+    HBTitle      * title2;
     HBAudio      * audio;
-    int            i;
-    uint8_t        dummy[DVD_VIDEO_LB_LEN];
+    int            i, audio_nr;
+    int ttn;
+    ifo_handle_t * vts;
+    int pgc_id, pgn, cell;
+    pgc_t * pgc;
+    dvd_file_t * dvdFile;
 
-    HBScanning( s->handle, index, dvdplay_title_nr( vmg ) );
+    HBScanning( s->handle, index, vmg->tt_srpt->nr_of_srpts );
 
     title = HBTitleInit( s->device, index );
-    dvdplay_start( vmg, index );
 
-    /* Length */
-    title->length = dvdplay_title_time( vmg );
-    HBLog( "HBScan: title %d: length is %d seconds", index,
-           title->length );
+    /* VTS in which our title is */
+    title->vts_id = vmg->tt_srpt->title[index-1].title_set_nr;
+
+    vts = ifoOpen( reader, title->vts_id );
+    if( !vts )
+    {
+        HBLog( "HBScan: ifoOpen failed (vts %d)", title->vts_id );
+        HBTitleClose( &title );
+        return NULL;
+    }
+
+    /* Position of the title in the VTS */
+    ttn = vmg->tt_srpt->title[index-1].vts_ttn;
+
+    /* Get pgc */
+    pgc_id = vts->vts_ptt_srpt->title[ttn-1].ptt[0].pgcn;
+    pgn    = vts->vts_ptt_srpt->title[ttn-1].ptt[0].pgn;
+    pgc    = vts->vts_pgcit->pgci_srp[pgc_id-1].pgc;
+
+    /* Start block */
+    cell = pgc->program_map[pgn-1] - 1;
+    title->startBlock = pgc->cell_playback[cell].first_sector;
+
+    /* End block */
+    cell = pgc->nr_of_cells - 1;
+    title->endBlock = pgc->cell_playback[cell].last_sector;
+
+    HBLog( "HBScan: vts=%d, ttn=%d, blocks %d to %d", title->vts_id,
+           ttn, title->startBlock, title->endBlock );
+
+    /* I've seen a DVD with strictly identical titles. Check this here,
+       and ignore it if redundant */
+    title2 = NULL;
+    for( i = 0; i < HBListCount( s->titleList ); i++ )
+    {
+        title2 = (HBTitle*) HBListItemAt( s->titleList, i );
+        if( title->vts_id == title2->vts_id &&
+            title->startBlock == title2->startBlock &&
+            title->endBlock == title2->endBlock )
+        {
+            break;
+        }
+        else
+        {
+            title2 = NULL;
+        }
+    }
+    if( title2 )
+    {
+        HBLog( "HBScan: title %d is duplicate with title %d",
+               index, title2->title );
+        HBTitleClose( &title );
+        return NULL;
+    }
+
+    /* Get time */
+    title->hours   = convert_bcd( pgc->playback_time.hour );
+    title->minutes = convert_bcd( pgc->playback_time.minute );
+    title->seconds = convert_bcd( pgc->playback_time.second );
+    HBLog( "HBScan: title %d: length is %02d:%02d:%02d", index,
+           title->hours, title->minutes, title->seconds );
 
     /* Discard titles under 10 seconds */
-    if( title->length < 10 )
+    if( !title->hours && !title->minutes && title->seconds < 10 )
     {
         HBLog( "HBScan: ignoring title %d (too short)", index );
         HBTitleClose( &title );
@@ -145,36 +225,57 @@ static HBTitle * ScanTitle( HBScan * s, dvdplay_ptr vmg, int index )
     }
 
     /* Detect languages */
-    dvdplay_audio_info( vmg, &audio_nr, &foo );
+    audio_nr = vts->vtsi_mat->nr_of_vts_audio_streams;
 
     for( i = 0; i < audio_nr; i++ )
     {
-        int id, j, codec;
+        uint32_t id = 0;
+        int j, codec;
+        int audio_format = vts->vtsi_mat->vts_audio_attr[i].audio_format;
+        int lang_code = vts->vtsi_mat->vts_audio_attr[i].lang_code;
+        int audio_control = vts->vts_pgcit->pgci_srp[pgc_id-1].pgc->audio_control[i];
+        int i_position;
 
         if( s->die )
         {
             break;
         }
 
-        id = dvdplay_audio_id( vmg, i );
-
-        if( id < 1 )
+        if( !( audio_control & 0x8000 ) )
         {
             continue;
         }
 
-        if( ( id & 0xF0FF ) == 0x80BD )
+        i_position = ( audio_control & 0x7F00 ) >> 8;
+
+        switch( audio_format )
         {
-            codec = HB_CODEC_AC3;
+            case 0x00: /* A52 */
+                codec = HB_CODEC_AC3;
+                id    = ( ( 0x80 + i_position ) << 8 ) | 0xbd;
+                break;
+
+            case 0x02:
+            case 0x03:
+                codec = HB_CODEC_MPGA;
+                id    = 0xc0 + i_position;
+                break;
+
+            case 0x04: /* LPCM */
+                codec = HB_CODEC_LPCM;
+                id    = ( ( 0xa0 + i_position ) << 8 ) | 0xbd;
+                break;
+
+            default:
+                codec = 0;
+                id    = 0;
+                HBLog( "HBScan: title %d: unknown audio codec (%x), "
+                       "ignoring", index, audio_format );
+                break;
         }
-        else if( ( id & 0xF0FF ) == 0xA0BD )
+
+        if( !id )
         {
-            codec = HB_CODEC_LPCM;
-        }
-        else
-        {
-            HBLog( "HBScan: title %d: unknown audio codec (%x), "
-                   "ignoring", index, id );
             continue;
         }
 
@@ -200,8 +301,7 @@ static HBTitle * ScanTitle( HBScan * s, dvdplay_ptr vmg, int index )
             continue;
         }
 
-        attr  = dvdplay_audio_attr( vmg, j );
-        audio = HBAudioInit( id, LanguageForCode( attr->lang_code ) );
+        audio = HBAudioInit( id, LanguageForCode( lang_code ), codec );
         audio->inCodec = codec;
         HBLog( "HBScan: title %d: new language (%x, %s)", index, id,
                audio->language );
@@ -216,8 +316,15 @@ static HBTitle * ScanTitle( HBScan * s, dvdplay_ptr vmg, int index )
         return NULL;
     }
 
-    /* Kludge : libdvdplay wants us to read a first block before seeking */
-    dvdplay_read( vmg, dummy, 1 );
+    ifoClose( vts );
+
+    dvdFile = DVDOpenFile( reader, title->vts_id, DVD_READ_TITLE_VOBS );
+    if( !dvdFile )
+    {
+        HBLog( "HBScan: DVDOpenFile failed" );
+        HBTitleClose( &title );
+        return NULL;
+    }
 
     for( i = 0; i < 10; i++ )
     {
@@ -226,7 +333,7 @@ static HBTitle * ScanTitle( HBScan * s, dvdplay_ptr vmg, int index )
             break;
         }
 
-        if( !DecodeFrame( s, vmg, title, i ) )
+        if( !DecodeFrame( s, dvdFile, title, i ) )
         {
             HBLog( "HBScan: ignoring title %d (could not decode)",
                    index );
@@ -234,6 +341,8 @@ static HBTitle * ScanTitle( HBScan * s, dvdplay_ptr vmg, int index )
             return NULL;
         }
     }
+
+    DVDCloseFile( dvdFile );
 
     /* Handle ratio */
     if( title->inHeight * title->aspect >
@@ -257,41 +366,88 @@ static HBTitle * ScanTitle( HBScan * s, dvdplay_ptr vmg, int index )
     return title;
 }
 
-static int DecodeFrame( HBScan * s, dvdplay_ptr vmg,
+static HBBuffer * GetBuffer( HBList * esBufferList,
+                             dvd_file_t * dvdFile,
+                             int * pictureStart, int pictureEnd )
+{
+    HBBuffer * esBuffer = NULL;
+    HBBuffer * psBuffer = NULL;
+
+    while( !esBuffer )
+    {
+        while( !HBListCount( esBufferList ) )
+        {
+            psBuffer = HBBufferInit( DVD_VIDEO_LB_LEN );
+            if( DVDReadBlocks( dvdFile, (*pictureStart)++, 1,
+                               psBuffer->data ) != 1 )
+            {
+                HBLog( "HBScan: DVDReadBlocks() failed" );
+                HBBufferClose( &psBuffer );
+                return NULL;
+            }
+            if( !HBPStoES( &psBuffer, esBufferList ) )
+            {
+                HBLog( "HBScan: HBPStoES() failed" );
+                return NULL;
+            }
+            if( *pictureStart >= pictureEnd )
+            {
+                HBLog( "HBScan: gone too far, aborting" );
+                return NULL;
+            }
+        }
+
+        esBuffer = (HBBuffer*) HBListItemAt( esBufferList, 0 );
+        HBListRemove( esBufferList, esBuffer );
+
+        if( esBuffer->streamId != 0xE0 )
+        {
+            HBBufferClose( &esBuffer );
+        }
+    }
+
+    return esBuffer;
+}
+
+static int DecodeFrame( HBScan * s, dvd_file_t * dvdFile,
                         HBTitle * title, int which )
 {
-    int titleFirst   = dvdplay_title_first( vmg );
-    int titleEnd     = dvdplay_title_end( vmg );
-    int pictureStart = ( which + 1 ) * ( titleEnd - titleFirst ) / 11;
-    int pictureEnd   = titleFirst + ( which + 2 ) *
-                       ( titleEnd - titleFirst ) / 11;
+    int pictureStart = title->startBlock + ( which + 1 ) *
+        ( title->endBlock - title->startBlock ) / 11;
+    int pictureEnd   = title->startBlock + ( which + 2 ) *
+        ( title->endBlock - title->startBlock ) / 11;
 
     mpeg2dec_t         * handle;
     const mpeg2_info_t * info;
     mpeg2_state_t        state;
     char                 fileName[1024];
     FILE               * file;
-    int                  ret = 1;
+    int                  ret = 0;
 
     HBList   * esBufferList = HBListInit();
-    HBBuffer * psBuffer     = NULL;
     HBBuffer * esBuffer     = NULL;
 
-    /* Seek to the right place */
-    dvdplay_seek( vmg, pictureStart );
 
     /* Init libmpeg2 */
-#ifdef HB_NOMMX
-    mpeg2_accel( 0 );
-#endif
     handle = mpeg2_init();
     info   = mpeg2_info( handle );
 
     /* Init the destination file */
     memset( fileName, 0, 1024 );
+#ifndef HB_CYGWIN
     sprintf( fileName, "/tmp/HB.%d.%d.%d", HBGetPid( s->handle ),
-             title->index, which );
-    file = fopen( fileName, "w" );
+             title->title, which );
+#else
+    sprintf( fileName, "C:\\HB.%d.%d.%d", HBGetPid( s->handle ),
+             title->title, which );
+#endif
+    file = fopen( fileName, "wb" );
+    if( !file )
+    {
+        HBLog( "HBScan: fopen failed" );
+        HBListClose( &esBufferList );
+        return 0;
+    }
 
     for( ;; )
     {
@@ -306,43 +462,10 @@ static int DecodeFrame( HBScan * s, dvdplay_ptr vmg,
             }
 
             /* Get a new one */
-            while( !esBuffer )
-            {
-                while( !HBListCount( esBufferList ) )
-                {
-                    psBuffer = HBBufferInit( DVD_VIDEO_LB_LEN );
-                    if( dvdplay_read( vmg, psBuffer->data, 1 ) != 1 ||
-                            !HBPStoES( &psBuffer, esBufferList ) )
-                    {
-                        HBLog( "HBScan: failed to get a valid PS "
-                               "packet" );
-                        break;
-                    }
-
-                    if( dvdplay_position( vmg ) >= pictureEnd )
-                    {
-                        HBLog( "HBScan: gone too far, aborting" );
-                        break;
-                    }
-                }
-
-                if( !HBListCount( esBufferList ) )
-                {
-                    break;
-                }
-
-                esBuffer = (HBBuffer*) HBListItemAt( esBufferList, 0 );
-                HBListRemove( esBufferList, esBuffer );
-
-                if( esBuffer->streamId != 0xE0 )
-                {
-                    HBBufferClose( &esBuffer );
-                }
-            }
-
+            esBuffer = GetBuffer( esBufferList, dvdFile, &pictureStart,
+                                  pictureEnd );
             if( !esBuffer )
             {
-                ret = 0;
                 break;
             }
 
@@ -413,7 +536,7 @@ static int DecodeFrame( HBScan * s, dvdplay_ptr vmg,
             }
 #undef Y
 #undef DARK
-            
+
             /* Write the raw picture to a file */
             fwrite( info->display_fbuf->buf[0],
                     title->inWidth * title->inHeight, 1, file );
@@ -421,6 +544,7 @@ static int DecodeFrame( HBScan * s, dvdplay_ptr vmg,
                     title->inWidth * title->inHeight / 4, 1, file );
             fwrite( info->display_fbuf->buf[2],
                     title->inWidth * title->inHeight / 4, 1, file );
+            ret = 1;
             break;
         }
         else if( state == STATE_INVALID )
@@ -440,7 +564,6 @@ static int DecodeFrame( HBScan * s, dvdplay_ptr vmg,
         HBBufferClose( &esBuffer );
     }
     HBListClose( &esBufferList );
-    if( psBuffer ) HBBufferClose( &psBuffer );
     if( esBuffer ) HBBufferClose( &esBuffer );
     mpeg2_close( handle );
     fclose( file );

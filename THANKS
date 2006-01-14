@@ -1,4 +1,4 @@
-$Id: THANKS,v 1.11 2004/03/22 19:54:04 titer Exp $
+$Id: THANKS,v 1.13 2004/04/22 22:49:07 titer Exp $
 
 THANKS file for HandBrake <http://handbrake.m0k.org/>
 
@@ -6,14 +6,13 @@ Several people noticeably contributed to HandBrake development without
 writing code (submitting/checking translations, DVD samples, etc).
 Let's thank them here!
 
-Sorted by chronological order:
-
 Omar Ahmad Bhatti
  + Intensive beta testing, suggestions. Convinced me to port HandBrake
    to OS X, which finally was a pretty good idea.
 
 Hanna Bauer
 Adrien Marquette
+Norbert Rittel
  + German translation
 
 Paul Bénéchet
@@ -39,4 +38,7 @@ migol Superkid
 
 pgjw
  + Portuguese translation
+
+cygma
+ + Japanese translation
 

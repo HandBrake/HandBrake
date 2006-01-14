@@ -1,4 +1,4 @@
-/* $Id: FaacEnc.c,v 1.15 2004/02/18 17:07:20 titer Exp $
+/* $Id: FaacEnc.c,v 1.20 2004/05/02 16:25:00 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -9,7 +9,7 @@
 /* libfaac */
 #include "faac.h"
 
-typedef struct HBFaacEnc
+struct HBWork
 {
     HB_WORK_COMMON_MEMBERS
 
@@ -19,193 +19,119 @@ typedef struct HBFaacEnc
     faacEncHandle     * faac;
     unsigned long       inputSamples;
     unsigned long       maxOutputBytes;
-    int32_t           * inputBuffer;
-    unsigned long       samplesGot;
-    HBBuffer          * rawBuffer;
-    int                 rawBufferPos; /* in bytes */
-    float               position;
-    HBBuffer          * aacBuffer;
-
-    /* Stats */
-    int64_t             samples;
-    int64_t             bytes;
-} HBFaacEnc;
+    float             * inputBuffer;
+};
 
 /* Local prototypes */
 static int FaacEncWork( HBWork * );
-static int GetSamples( HBFaacEnc * );
 
 HBWork * HBFaacEncInit( HBHandle * handle, HBAudio * audio )
 {
-    HBFaacEnc * f;
-    if( !( f = calloc( sizeof( HBFaacEnc ), 1 ) ) )
+    HBWork * w;
+    if( !( w = calloc( sizeof( HBWork ), 1 ) ) )
     {
         HBLog( "HBFaacEncInit: malloc() failed, gonna crash" );
         return NULL;
     }
 
-    f->name          = strdup( "FaacEnc" );
-    f->work          = FaacEncWork;
+    w->name   = strdup( "FaacEnc" );
+    w->work   = FaacEncWork;
 
-    f->handle        = handle;
-    f->audio         = audio;
+    w->handle = handle;
+    w->audio  = audio;
 
-    return (HBWork*) f;
+    return w;
 }
 
-void HBFaacEncClose( HBWork ** _f )
+void HBFaacEncClose( HBWork ** _w )
 {
-    HBFaacEnc * f = (HBFaacEnc*) *_f;
+    HBWork * w = *_w;
 
-    if( f->faac )
+    if( w->faac )
     {
-        faacEncClose( f->faac );
-        free( f->inputBuffer );
+        faacEncClose( w->faac );
+        free( w->inputBuffer );
     }
 
-    if( f->samples )
-    {
-        int64_t bytes   = 128 * f->audio->outBitrate * f->samples /
-            f->audio->outSampleRate;
-        float   bitrate = (float) f->bytes * f->audio->inSampleRate /
-            f->samples / 128;
+    free( w->name );
+    free( w );
 
-        HBLog( "HBFaacEnc: %lld samples encoded (%lld bytes), %.2f kbps",
-                f->samples, f->bytes, bitrate );
-        HBLog( "HBFaacEnc: error is %lld bytes", f->bytes - bytes );
-    }
-    
-    free( f->name );
-    free( f );
-
-    *_f = NULL;
+    *_w = NULL;
 }
 
 static int FaacEncWork( HBWork * w )
 {
-    HBFaacEnc * f     = (HBFaacEnc*) w;
-    HBAudio   * audio = f->audio;
+    HBAudio   * audio = w->audio;
 
-    int didSomething = 0;
+    HBBuffer * aacBuffer;
+    float      position;
 
-    if( !f->faac )
+    if( !w->faac )
     {
         faacEncConfigurationPtr config;
 
-        /* Get a first buffer so we know that audio->inSampleRate is
-           correct */
-        if( ( f->rawBuffer = HBFifoPop( audio->rawFifo ) ) )
+        if( !HBFifoSize( audio->resampleFifo ) )
         {
-            didSomething = 1;
+            return 0;
         }
-        else
-        {
-            return didSomething;
-        }
-        f->rawBufferPos = 0;
-        f->position     = f->rawBuffer->position;
 
         HBLog( "HBFaacEnc: opening libfaac (%x)", audio->id );
 
-        /* No resampling */
-        audio->outSampleRate = audio->inSampleRate;
-
-        f->faac = faacEncOpen( audio->outSampleRate, 2,
-                               &f->inputSamples, &f->maxOutputBytes );
-        f->inputBuffer = malloc( f->inputSamples * sizeof( int32_t ) );
-        config = faacEncGetCurrentConfiguration( f->faac );
+        w->faac = faacEncOpen( audio->outSampleRate, 2,
+                               &w->inputSamples, &w->maxOutputBytes );
+        w->inputBuffer = malloc( w->inputSamples * sizeof( float ) );
+        config = faacEncGetCurrentConfiguration( w->faac );
         config->mpegVersion   = MPEG4;
         config->aacObjectType = LOW;
         config->allowMidside  = 1;
         config->useLfe        = 0;
         config->useTns        = 0;
-        config->bitRate       = audio->outBitrate * 512;
+        config->bitRate       = audio->outBitrate * 500; /* per channel */
         config->bandWidth     = 0;
         config->outputFormat  = 0;
-        faacEncSetConfiguration( f->faac, config );
-        faacEncGetDecoderSpecificInfo( f->faac, &audio->esConfig,
-                                       &audio->esConfigLength );
-    }
-
-    /* Push encoded buffer */
-    if( f->aacBuffer )
-    {
-        if( HBFifoPush( audio->outFifo, &f->aacBuffer ) )
+        config->inputFormat   = FAAC_INPUT_FLOAT;
+        if( !faacEncSetConfiguration( w->faac, config ) )
         {
-            didSomething = 1;
+            HBLog( "HBFaacEnc: faacEncSetConfiguration failed" );
         }
-        else
+        if( faacEncGetDecoderSpecificInfo( w->faac, &audio->esConfig,
+                    &audio->esConfigLength ) < 0 )
         {
-            return didSomething;
+            HBLog( "HBFaacEnc: faacEncGetDecoderSpecificInfo failed" );
         }
     }
 
-    if( GetSamples( f ) )
+    if( HBFifoIsHalfFull( audio->outFifo ) )
     {
-        didSomething = 1;
-    }
-    else
-    {
-        return didSomething;
+        return 0;
     }
 
-    f->samplesGot = 0;
-
-    f->aacBuffer = HBBufferInit( f->maxOutputBytes );
-    f->aacBuffer->position = f->position;
-    f->aacBuffer->size = faacEncEncode( f->faac, f->inputBuffer,
-            f->inputSamples, f->aacBuffer->data, f->maxOutputBytes );
-
-    f->samples += f->inputSamples / 2;
-
-    if( !f->aacBuffer->size )
+    if( !HBFifoGetBytes( audio->resampleFifo,
+                         (uint8_t *) w->inputBuffer,
+                         w->inputSamples * sizeof( float ),
+                         &position ) )
     {
-        HBBufferClose( &f->aacBuffer );
+        return 0;
     }
-    else if( f->aacBuffer->size < 0 )
+
+    aacBuffer = HBBufferInit( w->maxOutputBytes );
+    aacBuffer->position = position;
+    aacBuffer->size = faacEncEncode( w->faac, (int32_t*)w->inputBuffer,
+        w->inputSamples, aacBuffer->data, w->maxOutputBytes );
+
+    if( !aacBuffer->size )
+    {
+        HBBufferClose( &aacBuffer );
+    }
+    else if( aacBuffer->size < 0 )
     {
         HBLog( "HBFaacEnc: faacEncEncode() failed" );
     }
     else
     {
-        f->bytes += f->aacBuffer->size;
-    }
-
-    return didSomething;
-}
-
-static int GetSamples( HBFaacEnc * f )
-{
-    while( f->samplesGot < f->inputSamples )
-    {
-        int i, copy;
-
-        if( !f->rawBuffer )
+        if( !HBFifoPush( audio->outFifo, &aacBuffer ) )
         {
-            if( !( f->rawBuffer = HBFifoPop( f->audio->rawFifo ) ) )
-            {
-                return 0;
-            }
-
-            f->rawBufferPos = 0;
-            f->position     = f->rawBuffer->position;
-        }
-
-        copy = MIN( f->inputSamples - f->samplesGot,
-                    ( f->rawBuffer->samples - f->rawBufferPos ) * 2 );
-
-        for( i = 0; i < copy; i += 2 )
-        {
-            f->inputBuffer[f->samplesGot++] =
-                f->rawBuffer->left[f->rawBufferPos];
-            f->inputBuffer[f->samplesGot++] =
-                f->rawBuffer->right[f->rawBufferPos];
-            f->rawBufferPos++;
-        }
-
-        if( f->rawBufferPos == f->rawBuffer->samples )
-        {
-            HBBufferClose( &f->rawBuffer );
+            HBLog( "HBFaacEnc: HBFifoPush failed" );
         }
     }
 

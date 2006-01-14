@@ -1,4 +1,4 @@
-/* $Id: XvidEnc.c,v 1.20 2004/03/01 21:36:36 titer Exp $
+/* $Id: XvidEnc.c,v 1.26 2004/05/12 17:21:24 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -8,7 +8,7 @@
 
 #include "xvid.h"
 
-typedef struct HBXvidEnc
+struct HBWork
 {
     HB_WORK_COMMON_MEMBERS
 
@@ -18,120 +18,82 @@ typedef struct HBXvidEnc
     char             file[1024];
     void           * xvid;
     xvid_enc_frame_t frame;
-    HBBuffer       * mpeg4Buffer;
     int              pass;
-    int              frames;
-    int64_t          bytes;
-} HBXvidEnc;
+};
 
 /* Local prototypes */
 static int XvidEncWork( HBWork * );
 
 HBWork * HBXvidEncInit( HBHandle * handle, HBTitle * title )
 {
-    HBXvidEnc * x;
-    if( !( x = malloc( sizeof( HBXvidEnc ) ) ) )
+    HBWork * w;
+    if( !( w = malloc( sizeof( HBWork ) ) ) )
     {
         HBLog( "HBXvidEncInit: malloc() failed, gonna crash" );
         return NULL;
     }
 
-    x->name = strdup( "XvidEnc" );
-    x->work = XvidEncWork;
+    w->name = strdup( "XvidEnc" );
+    w->work = XvidEncWork;
 
-    x->handle = handle;
-    x->title = title;
+    w->handle = handle;
+    w->title  = title;
 
-    memset( x->file, 0, 1024 );
-    snprintf( x->file, 1023, "/tmp/HB.%d.xvid.log",
-              HBGetPid( x->handle ) );
+    memset( w->file, 0, 1024 );
+#ifndef HB_CYGWIN
+    snprintf( w->file, 1023, "/tmp/HB.%d.xvid.log",
+              HBGetPid( w->handle ) );
+#else
+    snprintf( w->file, 1023, "C:\\HB.%d.xvid.log",
+              HBGetPid( w->handle ) );
+#endif
 
-    x->xvid        = NULL;
-    x->mpeg4Buffer = NULL;
-    x->pass        = 42;
-    x->frames      = 0;
-    x->bytes       = 0;
+    w->xvid        = NULL;
+    w->pass        = 42;
 
-    return (HBWork*) x;
+    return w;
 }
 
-void HBXvidEncClose( HBWork ** _x )
+void HBXvidEncClose( HBWork ** _w )
 {
-    HBXvidEnc * x = (HBXvidEnc*) *_x;
+    HBWork * w = *_w;
 
-    if( x->xvid )
+    if( w->xvid )
     {
         HBLog( "HBXvidEnc: closing libxvidcore (pass %d)",
-                x->pass );
-        xvid_encore( x->xvid, XVID_ENC_DESTROY, NULL, NULL);
+                w->pass );
+        xvid_encore( w->xvid, XVID_ENC_DESTROY, NULL, NULL);
     }
-    if( x->title->esConfig )
+    if( w->title->esConfig )
     {
-        free( x->title->esConfig );
-        x->title->esConfig       = NULL;
-        x->title->esConfigLength = 0;
+        free( w->title->esConfig );
+        w->title->esConfig       = NULL;
+        w->title->esConfigLength = 0;
     }
-    if( x->frames )
-    {
-        float bitrate = (float) x->bytes * x->title->rate / x->frames /
-            x->title->rateBase / 128;
-        int64_t bytes = (int64_t) x->frames * x->title->bitrate * 128 *
-            x->title->rateBase / x->title->rate;
 
-        HBLog( "HBXvidEnc: %d frames encoded (%lld bytes), %.2f kbps",
-               x->frames, x->bytes, bitrate );
-
-        if( x->bytes > bytes )
-        {
-            HBLog( "HBXvidEnc: %lld more bytes than expected "
-                   "(error=%.2f %%)", x->bytes - bytes,
-                   100.0 * ( x->bytes - bytes ) / bytes );
-        }
-        else if( x->bytes < bytes )
-        {
-            HBLog( "HBXvidEnc: %lld less bytes than expected "
-                   "(error=%.2f %%)", bytes - x->bytes,
-                   100.0 * ( bytes - x->bytes ) / bytes );
-        }
-    }
-    free( x->name );
-    free( x );
-
-    *_x = NULL;
+    free( w->name );
+    free( w );
+    *_w = NULL;
 }
 
 static int XvidEncWork( HBWork * w )
 {
-    HBXvidEnc      * x = (HBXvidEnc*) w;
-    HBTitle        * title = x->title;
+    HBTitle        * title = w->title;
     HBBuffer       * scaledBuffer;
     HBBuffer       * mpeg4Buffer;
 
-    int didSomething = 0;
-
-    if( x->mpeg4Buffer )
+    if( HBFifoIsHalfFull( title->outFifo ) )
     {
-        if( HBFifoPush( title->outFifo, &x->mpeg4Buffer ) )
-        {
-            didSomething = 1;
-        }
-        else
-        {
-            return didSomething;
-        }
+        return 0;
     }
 
-    if( ( scaledBuffer = HBFifoPop( title->scaledFifo ) ) )
+    if( !( scaledBuffer = HBFifoPop( title->scaledFifo ) ) )
     {
-        didSomething = 1;
-    }
-    else
-    {
-        return didSomething;
+        return 0;
     }
 
     /* Init or re-init if needed */
-    if( scaledBuffer->pass != x->pass )
+    if( scaledBuffer->pass != w->pass )
     {
         xvid_gbl_init_t xvid_gbl_init;
         xvid_enc_create_t xvid_enc_create;
@@ -140,15 +102,15 @@ static int XvidEncWork( HBWork * w )
         xvid_plugin_2pass2_t rc2pass2;
         xvid_enc_plugin_t plugins[7];
 
-        if( x->xvid )
+        if( w->xvid )
         {
             HBLog( "HBXvidEnc: closing libxvidcore (pass %d)",
-                    x->pass );
-            xvid_encore( x->xvid, XVID_ENC_DESTROY, NULL, NULL);
+                    w->pass );
+            xvid_encore( w->xvid, XVID_ENC_DESTROY, NULL, NULL);
         }
 
-        x->pass = scaledBuffer->pass;
-        HBLog( "HBXvidEnc: opening libxvidcore (pass %d)", x->pass );
+        w->pass = scaledBuffer->pass;
+        HBLog( "HBXvidEnc: opening libxvidcore (pass %d)", w->pass );
 
         memset( &xvid_gbl_init, 0, sizeof( xvid_gbl_init ) );
         xvid_gbl_init.version = XVID_VERSION;
@@ -163,7 +125,7 @@ static int XvidEncWork( HBWork * w )
         xvid_enc_create.plugins = plugins;
         xvid_enc_create.num_plugins = 0;
 
-        if( !x->pass )
+        if( !w->pass )
         {
             memset( &single, 0, sizeof( single ) );
             single.version = XVID_VERSION;
@@ -172,20 +134,20 @@ static int XvidEncWork( HBWork * w )
             plugins[xvid_enc_create.num_plugins].param = &single;
             xvid_enc_create.num_plugins++;
         }
-        else if( x->pass == 1 )
+        else if( w->pass == 1 )
         {
             memset( &rc2pass1, 0, sizeof( rc2pass1 ) );
             rc2pass1.version = XVID_VERSION;
-            rc2pass1.filename = x->file;
+            rc2pass1.filename = w->file;
             plugins[xvid_enc_create.num_plugins].func = xvid_plugin_2pass1;
             plugins[xvid_enc_create.num_plugins].param = &rc2pass1;
             xvid_enc_create.num_plugins++;
         }
-        else if( x->pass == 2 )
+        else if( w->pass == 2 )
         {
             memset(&rc2pass2, 0, sizeof(xvid_plugin_2pass2_t));
             rc2pass2.version = XVID_VERSION;
-            rc2pass2.filename = x->file;
+            rc2pass2.filename = w->file;
             rc2pass2.bitrate = 1024 * title->bitrate;
             plugins[xvid_enc_create.num_plugins].func = xvid_plugin_2pass2;
             plugins[xvid_enc_create.num_plugins].param = &rc2pass2;
@@ -203,83 +165,83 @@ static int XvidEncWork( HBWork * w )
         xvid_enc_create.global = 0;
 
         xvid_encore( NULL, XVID_ENC_CREATE, &xvid_enc_create, NULL );
-        x->xvid = xvid_enc_create.handle;
+        w->xvid = xvid_enc_create.handle;
     }
 
     mpeg4Buffer = HBBufferInit( title->outWidth *
                                 title->outHeight * 3 / 2 );
     mpeg4Buffer->position = scaledBuffer->position;
 
-    memset( &x->frame, 0, sizeof( x->frame ) );
-    x->frame.version = XVID_VERSION;
-    x->frame.bitstream = mpeg4Buffer->data;
-    x->frame.length = -1;
-    x->frame.input.plane[0] = scaledBuffer->data;
-    x->frame.input.csp = XVID_CSP_I420;
-    x->frame.input.stride[0] = title->outWidth;
-    x->frame.vol_flags = 0;
-    x->frame.vop_flags = XVID_VOP_HALFPEL | XVID_VOP_INTER4V |
+    memset( &w->frame, 0, sizeof( w->frame ) );
+    w->frame.version = XVID_VERSION;
+    w->frame.bitstream = mpeg4Buffer->data;
+    w->frame.length = -1;
+    w->frame.input.plane[0] = scaledBuffer->data;
+    w->frame.input.csp = XVID_CSP_I420;
+    w->frame.input.stride[0] = title->outWidth;
+    w->frame.vol_flags = 0;
+    w->frame.vop_flags = XVID_VOP_HALFPEL | XVID_VOP_INTER4V |
                          XVID_VOP_TRELLISQUANT | XVID_VOP_HQACPRED;
-    x->frame.type = XVID_TYPE_AUTO;
-    x->frame.quant = 0;
-    x->frame.motion = XVID_ME_ADVANCEDDIAMOND16 | XVID_ME_HALFPELREFINE16 |
+    w->frame.type = XVID_TYPE_AUTO;
+    w->frame.quant = 0;
+    w->frame.motion = XVID_ME_ADVANCEDDIAMOND16 | XVID_ME_HALFPELREFINE16 |
                       XVID_ME_EXTSEARCH16 | XVID_ME_ADVANCEDDIAMOND8 |
                       XVID_ME_HALFPELREFINE8 | XVID_ME_EXTSEARCH8 |
                       XVID_ME_CHROMA_PVOP | XVID_ME_CHROMA_BVOP;
-    x->frame.quant_intra_matrix = NULL;
-    x->frame.quant_inter_matrix = NULL;
+    w->frame.quant_intra_matrix = NULL;
+    w->frame.quant_inter_matrix = NULL;
 
-    mpeg4Buffer->size = xvid_encore( x->xvid, XVID_ENC_ENCODE,
-                                     &x->frame, NULL );
-    mpeg4Buffer->keyFrame = ( x->frame.out_flags & XVID_KEYFRAME );
+    mpeg4Buffer->size = xvid_encore( w->xvid, XVID_ENC_ENCODE,
+                                     &w->frame, NULL );
+    mpeg4Buffer->keyFrame = ( w->frame.out_flags & XVID_KEYFRAME );
 
     /* Inform the GUI about the current position */
-    HBPosition( x->handle, scaledBuffer->position );
+    HBPosition( w->handle, scaledBuffer->position );
 
     HBBufferClose( &scaledBuffer );
 
-    if( x->pass == 1 )
+    if( w->pass == 1 )
     {
         HBBufferClose( &mpeg4Buffer );
-        return didSomething;
+        return 1;
     }
-    else
+
+    if( !title->esConfig )
     {
-        if( !title->esConfig )
+        int volStart, vopStart;
+        for( volStart = 0; ; volStart++ )
         {
-            int volStart, vopStart;
-            for( volStart = 0; ; volStart++ )
+            if( mpeg4Buffer->data[volStart]   == 0x0 &&
+                mpeg4Buffer->data[volStart+1] == 0x0 &&
+                mpeg4Buffer->data[volStart+2] == 0x1 &&
+                mpeg4Buffer->data[volStart+3] == 0x20 )
             {
-                if( mpeg4Buffer->data[volStart]   == 0x0 &&
-                    mpeg4Buffer->data[volStart+1] == 0x0 &&
-                    mpeg4Buffer->data[volStart+2] == 0x1 &&
-                    mpeg4Buffer->data[volStart+3] == 0x20 )
-                {
-                    break;
-                }
+                break;
             }
-            for( vopStart = volStart + 4; ; vopStart++ )
-            {
-                if( mpeg4Buffer->data[vopStart]   == 0x0 &&
-                    mpeg4Buffer->data[vopStart+1] == 0x0 &&
-                    mpeg4Buffer->data[vopStart+2] == 0x1 &&
-                    mpeg4Buffer->data[vopStart+3] == 0xB6 )
-                {
-                    break;
-                }
-            }
-
-            HBLog( "XvidEnc: VOL size is %d bytes", vopStart - volStart );
-            title->esConfig = malloc( vopStart - volStart );
-            title->esConfigLength = vopStart - volStart;
-            memcpy( title->esConfig, mpeg4Buffer->data + volStart,
-                    vopStart - volStart );
         }
-        x->frames++;
-        x->bytes       += mpeg4Buffer->size;
-        x->mpeg4Buffer  = mpeg4Buffer;
+        for( vopStart = volStart + 4; ; vopStart++ )
+        {
+            if( mpeg4Buffer->data[vopStart]   == 0x0 &&
+                mpeg4Buffer->data[vopStart+1] == 0x0 &&
+                mpeg4Buffer->data[vopStart+2] == 0x1 &&
+                mpeg4Buffer->data[vopStart+3] == 0xB6 )
+            {
+                break;
+            }
+        }
+
+        HBLog( "XvidEnc: VOL size is %d bytes", vopStart - volStart );
+        title->esConfig = malloc( vopStart - volStart );
+        title->esConfigLength = vopStart - volStart;
+        memcpy( title->esConfig, mpeg4Buffer->data + volStart,
+                vopStart - volStart );
     }
 
-    return didSomething;
+    if( !HBFifoPush( title->outFifo, &mpeg4Buffer ) )
+    {
+        HBLog( "HBXvidEnc: HBFifoPush failed" );
+    }
+
+    return 1;
 }
 

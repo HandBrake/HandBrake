@@ -1,4 +1,4 @@
-/* $Id: DVDRead.c,v 1.10 2004/02/29 11:21:34 titer Exp $
+/* $Id: DVDRead.c,v 1.13 2004/05/02 16:25:00 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -6,12 +6,7 @@
 
 #include "HBInternal.h"
 
-/* libdvdplay */
-#include "dvdread/ifo_types.h"
-#include "dvdplay/dvdplay.h"
-#include "dvdplay/info.h"
-#include "dvdplay/state.h"
-#include "dvdplay/nav.h"
+#include "dvdread/dvd_reader.h"
 
 /* Local prototypes */
 static void DVDReadThread( void * );
@@ -23,7 +18,8 @@ struct HBDVDRead
 {
     HBHandle     * handle;
 
-    dvdplay_ptr    vmg;
+    dvd_reader_t * reader;
+    dvd_file_t   * file;
     HBTitle      * title;
     int            beginPosition;
     int            endPosition;
@@ -46,7 +42,8 @@ HBDVDRead * HBDVDReadInit( HBHandle * handle, HBTitle * title )
 
     /* Initializations */
     d->handle        = handle;
-    d->vmg           = NULL;
+    d->reader        = NULL;
+    d->file          = NULL;
     d->title         = title;
     d->beginPosition = 0;
     d->endPosition   = 0;
@@ -92,27 +89,20 @@ static void DVDReadThread( void * _d )
     int i;
 
     /* Open the device */
-    d->vmg = dvdplay_open( title->device, NULL, NULL );
-    if( !d->vmg )
+    d->reader = DVDOpen( title->device );
+    if( !d->reader )
     {
-        HBLog( "HBDVDRead: dvdplay_open() failed" );
+        HBLog( "HBDVDRead: DVDOpen() failed" );
         HBErrorOccured( d->handle, HB_ERROR_DVD_OPEN );
         return;
     }
 
     /* Open the title */
-    dvdplay_start( d->vmg, title->index );
-    d->beginPosition = dvdplay_title_first( d->vmg );
-    d->endPosition   = dvdplay_title_end( d->vmg );
-
-    HBLog( "HBDVDRead: starting, blocks: %d to %d",
-           d->beginPosition, d->endPosition );
+    d->file = DVDOpenFile( d->reader, title->vts_id, DVD_READ_TITLE_VOBS );
 
     /* Do the job */
     for( i = 0; i < ( title->twoPass ? 2 : 1 ); i++ )
     {
-        dvdplay_start( d->vmg, title->index );
-
         HBLog( "HBDVDRead: starting pass %d of %d", i + 1,
                title->twoPass ? 2 : 1 );
 
@@ -131,7 +121,8 @@ static void DVDReadThread( void * _d )
     }
 
     /* Clean up */
-    dvdplay_close( d->vmg );
+    DVDCloseFile( d->file );
+    DVDClose( d->reader );
 }
 
 
@@ -139,11 +130,11 @@ static int DoPass( HBDVDRead * d )
 {
     int i;
 
-    for( i = 0; i < d->endPosition - d->beginPosition; i++ )
+    for( i = d->title->startBlock; i < d->title->endBlock; i++ )
     {
         d->psBuffer = HBBufferInit( DVD_VIDEO_LB_LEN );
-        d->psBuffer->position =
-            (float) i / ( d->endPosition - d->beginPosition );
+        d->psBuffer->position = (float) ( i - d->title->startBlock ) /
+            ( d->title->endBlock - d->title->startBlock );
 
         if( d->pass )
         {
@@ -156,9 +147,9 @@ static int DoPass( HBDVDRead * d )
         }
         d->psBuffer->pass = d->pass;
 
-        if( dvdplay_read( d->vmg, d->psBuffer->data, 1 ) < 0 )
+        if( DVDReadBlocks( d->file, i, 1, d->psBuffer->data ) < 0 )
         {
-            HBLog( "HBDVDRead: dvdplay_read() failed" );
+            HBLog( "HBDVDRead: DVDReadBlocks() failed" );
             HBErrorOccured( d->handle, HB_ERROR_DVD_READ );
             HBBufferClose( &d->psBuffer );
             return 0;
@@ -195,6 +186,7 @@ static int Demux( HBDVDRead * d )
             continue;
         }
 
+        /* Video */
         if( esBuffer->streamId == 0xE0 )
         {
             if( title->start < 0 )
@@ -212,6 +204,7 @@ static int Demux( HBDVDRead * d )
             continue;
         }
 
+        /* Audio or whatever */
         for( i = 0; i < HBListCount( title->ripAudioList ); i++ )
         {
             audio = (HBAudio*) HBListItemAt( title->ripAudioList, i );

@@ -1,4 +1,4 @@
-/* $Id: HandBrake.c,v 1.47 2004/03/21 22:58:41 titer Exp $
+/* $Id: HandBrake.c,v 1.58 2004/05/12 18:02:35 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -48,11 +48,6 @@ struct HBHandle
 HBHandle * HBInit( int debug, int cpuCount )
 {
     HBHandle * h;
-    if( !( h = calloc( sizeof( HBHandle ), 1 ) ) )
-    {
-        HBLog( "HBInit: malloc() failed, gonna crash" );
-        return NULL;
-    }
 
     /* See HBLog() in Utils.cpp */
     if( debug )
@@ -60,9 +55,18 @@ HBHandle * HBInit( int debug, int cpuCount )
         putenv( "HB_DEBUG=1" );
     }
 
+    HBLog( "HBInit: starting HandBrake " HB_VERSION );
+
+    if( !( h = calloc( sizeof( HBHandle ), 1 ) ) )
+    {
+        HBLog( "HBInit: malloc() failed, gonna crash" );
+        return NULL;
+    }
+
     /* Init libavcodec */
     avcodec_init();
     register_avcodec( &mpeg4_encoder );
+    register_avcodec( &mp2_decoder );
 
     /* Check CPU count */
     if( !cpuCount )
@@ -131,9 +135,9 @@ void HBStartRip( HBHandle * h, HBTitle * title )
 
     /* Video fifos */
     title->inFifo     = HBFifoInit( 2048 );
-    title->rawFifo    = HBFifoInit( 1 );
-    title->scaledFifo = HBFifoInit( 1 );
-    title->outFifo    = HBFifoInit( 1 );
+    title->rawFifo    = HBFifoInit( 32 );
+    title->scaledFifo = HBFifoInit( 32 );
+    title->outFifo    = HBFifoInit( 32 );
 
     /* Video work objects */
     title->decoder    = HBMpeg2DecInit( h, title );
@@ -150,15 +154,20 @@ void HBStartRip( HBHandle * h, HBTitle * title )
         audio = HBListItemAt( title->ripAudioList, i );
 
         /* Audio fifos */
-        audio->inFifo  = HBFifoInit( 2048 );
-        audio->rawFifo = HBFifoInit( 1 );
-        audio->outFifo = HBFifoInit( 4 ); /* At least 4 for Vorbis */
+        audio->inFifo       = HBFifoInit( 2048 );
+        audio->rawFifo      = HBFifoInit( 32 );
+        audio->resampleFifo = HBFifoInit( 32 );
+        audio->outFifo      = HBFifoInit( 32 );
 
         /* Audio work objects */
         if( audio->inCodec == HB_CODEC_AC3 )
             audio->decoder = HBAc3DecInit( h, audio );
         else if( audio->inCodec == HB_CODEC_LPCM )
             audio->decoder = HBLpcmDecInit( h, audio );
+        else if( audio->inCodec == HB_CODEC_MPGA )
+            audio->decoder = HBMpgaDecInit( h, audio );
+
+        audio->resample = HBResampleInit( h, audio );
 
         if( audio->outCodec == HB_CODEC_MP3 )
             audio->encoder = HBMp3EncInit( h, audio );
@@ -171,12 +180,7 @@ void HBStartRip( HBHandle * h, HBTitle * title )
     /* Create threads */
     title->dvdRead = HBDVDReadInit( h, title );
 
-    if( title->mux == HB_MUX_AVI )
-        title->aviMux  = HBAviMuxInit( h, title );
-    else if( title->mux == HB_MUX_MP4 )
-        title->mp4Mux  = HBMp4MuxInit( h, title );
-    else if( title->mux == HB_MUX_OGM )
-        title->ogmMux  = HBOgmMuxInit( h, title );
+    title->muxThread = HBMuxThreadInit( h, title );
 
     for( i = 0; i < h->cpuCount; i++ )
     {
@@ -254,9 +258,9 @@ uint8_t * HBGetPreview( HBHandle * h, HBTitle * t, int picture )
 
     /* Get the original image from the temp file */
     memset( fileName, 0, 1024 );
-    sprintf( fileName, "/tmp/HB.%d.%d.%d", h->pid, t->index,
+    sprintf( fileName, "/tmp/HB.%d.%d.%d", h->pid, t->title,
              picture );
-    file = fopen( fileName, "r" );
+    file = fopen( fileName, "rb" );
     if( file )
     {
         fread( buf1, 3 * t->inWidth * t->inHeight / 2, 1, file );
@@ -341,49 +345,49 @@ int HBGetBitrateForSize( HBTitle * title, int size, int muxer,
 {
     int64_t available;
     int     overheadPerFrame;
-    int     sampleRate;
     int     samplesPerFrame;
+    int length;
 
     switch( muxer )
     {
+        /* Overhead are max seen values */
         case HB_MUX_MP4:
-            overheadPerFrame = 5;     /* hopefully */
-            sampleRate       = 48000; /* No resampling */
+            overheadPerFrame = 6;
             samplesPerFrame  = 1024;  /* AAC */
             break;
         case HB_MUX_AVI:
-            overheadPerFrame = 24;
-            sampleRate       = 44100; /* Resampling */
+            overheadPerFrame = 26;
             samplesPerFrame  = 1152;  /* MP3 */
             break;
         case HB_MUX_OGM:
             overheadPerFrame = 0;     /* XXX */
-            sampleRate       = 48000; /* No resampling */
             samplesPerFrame  = 1024;  /* Vorbis */
             break;
         default:
             return 0;
     }
 
-    /* Actually target 1 MB less */
-    available  = (int64_t) ( size - 1 ) * 1024 * 1024;
+    length = 3600 * title->hours + 60 * title->minutes +
+             title->seconds + 1;
+
+    available  = (int64_t) size * 1024 * 1024;
 
     /* Audio data */
-    available -= audioCount * title->length * audioBitrate * 128;
+    available -= audioCount * length * audioBitrate * 1000 / 8;
 
     /* Video headers */
-    available -= (int64_t) title->length * title->rate *
+    available -= (int64_t) length * title->rate *
         overheadPerFrame / title->rateBase;
 
     /* Audio headers */
-    available -= (int64_t) audioCount * title->length * sampleRate *
+    available -= (int64_t) audioCount * length * 44100 *
         overheadPerFrame / samplesPerFrame;
 
     if( available < 0 )
     {
         return 0;
     }
-    return( available / ( 128 * title->length ) );
+    return( available / ( 128 * length ) );
 }
 
 void HBClose( HBHandle ** _h )
@@ -413,9 +417,11 @@ void HBClose( HBHandle ** _h )
         }
     }
 
+#ifndef HB_CYGWIN
     memset( command, 0, 1024 );
     sprintf( command, "rm -f /tmp/HB.%d.*", h->pid );
     system( command );
+#endif
 
     HBLockClose( &h->lock );
     HBLockClose( &h->pauseLock );
@@ -442,7 +448,6 @@ void HBScanDone( HBHandle * h, HBList * titleList )
     h->stopScan  = 1;
     h->titleList = titleList;
     HBLockUnlock( h->lock );
-    h->cb.scanDone( h->cb.data, titleList );
 }
 
 int HBGetPid( HBHandle * h )
@@ -522,6 +527,7 @@ static void HandBrakeThread( void * _h )
             HBScanClose( &h->scan );
             h->stopScan = 0;
             HBLockUnlock( h->lock );
+            h->cb.scanDone( h->cb.data, h->titleList );
             continue;
         }
 
@@ -537,10 +543,9 @@ static void HandBrakeThread( void * _h )
         if( h->ripDone )
         {
             HBTitle * title = h->curTitle;
-            HBAudio * audio;
-            int       i, ok = 0;
 
-            /* Wait until we're done with the decoding of one track */
+            /* Wait until we're done with the video track */
+            uint64_t  waitStart = HBGetDate();
             for( ;; )
             {
                 if( !HBFifoSize( title->inFifo ) &&
@@ -549,26 +554,21 @@ static void HandBrakeThread( void * _h )
                 {
                     break;
                 }
-                for( i = 0; i < HBListCount( title->ripAudioList ); i++ )
+
+                /* XXX Deadlock workaround */
+                if( HBGetDate() - waitStart > 30000000 )
                 {
-                    audio = (HBAudio*) HBListItemAt( title->ripAudioList, i );
-                    if( !HBFifoSize( title->inFifo ) &&
-                        !HBFifoSize( title->rawFifo ) )
-                    {
-                        ok = 1;
-                        break;
-                    }
-                }
-                if( ok )
-                {
+                    HBLog( "Waited too long, stopping now" );
                     break;
                 }
+
                 HBSnooze( 5000 );
             }
 
             HBSnooze( 500000 );
             _StopRip( h );
             h->ripDone = 0;
+            h->error   = 0;
             HBLockUnlock( h->lock );
             h->cb.ripDone( h->cb.data, HB_SUCCESS );
             continue;
@@ -577,9 +577,9 @@ static void HandBrakeThread( void * _h )
         if( h->error )
         {
             _StopRip( h );
-            h->error = 0;
             HBLockUnlock( h->lock );
             h->cb.ripDone( h->cb.data, h->error );
+            h->error = 0;
             continue;
         }
 
@@ -615,12 +615,7 @@ static void _StopRip( HBHandle * h )
     }
 
     /* Stop mux thread */
-    if( title->mux == HB_MUX_AVI )
-        HBAviMuxClose( &title->aviMux );
-    else if( title->mux == HB_MUX_MP4 )
-        HBMp4MuxClose( &title->mp4Mux );
-    else if( title->mux == HB_MUX_OGM )
-        HBOgmMuxClose( &title->ogmMux );
+    HBMuxThreadClose( &title->muxThread );
 
     /* Clean up */
     HBMpeg2DecClose( &title->decoder );
@@ -645,6 +640,10 @@ static void _StopRip( HBHandle * h )
             HBAc3DecClose( &audio->decoder );
         else if( audio->inCodec == HB_CODEC_LPCM )
             HBLpcmDecClose( &audio->decoder );
+        else if( audio->inCodec == HB_CODEC_MPGA )
+            HBMpgaDecClose( &audio->decoder );
+
+        HBResampleClose( &audio->resample );
 
         if( audio->outCodec == HB_CODEC_MP3 )
             HBMp3EncClose( &audio->encoder );
@@ -656,6 +655,7 @@ static void _StopRip( HBHandle * h )
         /* Audio fifos */
         HBFifoClose( &audio->inFifo );
         HBFifoClose( &audio->rawFifo );
+        HBFifoClose( &audio->resampleFifo );
         HBFifoClose( &audio->outFifo );
 
         HBListRemove( title->ripAudioList, audio );

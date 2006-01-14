@@ -1,4 +1,4 @@
-$Id: TODO,v 1.33 2004/03/12 14:22:19 titer Exp $
+$Id: TODO,v 1.36 2004/05/25 17:48:52 titer Exp $
 
 TODO file for HandBrake <http://handbrake.m0k.org/>
 
@@ -9,28 +9,25 @@ as an indication, as it may change as any time.
  + Up-to-date BeOS GUI
 
 0.7.x
- + Homemade resampler
  + Audio volume normalizing
  + AC3 pass-through
  + Subtitle support
  + Rip only a few chapters or rip X seconds from a given starting point
  + Allow to launch rips of several titles
- + Drop libdvdplay
 
 Maybe in 0.7.x
- + MPEG audio decoding [if I have a DVD to test it]
  + B-frames, bla bla
  + MKV muxing support
  + Manual aspect ratio
  + Better remaining time calculation
  + Nice 'About...' box with link to homepage & faq
  + [OSX] Progress bar in the dock icon
+ + Custom framerate
 
 After 0.7.0
  + Preview the latest encoded picture in GUI
  + Split output file in x parts
  + Picture rotation
- + Custom framerate
  + Network shared processing (using RendezVous?)
  + VCD/DVD-R output
  + Theora encoding
@@ -40,6 +37,7 @@ After 0.7.0
  + Send a mail when rip is done
  + Turn the computer off when done
  + Collapse interface when rip starts
+ + MJPEG output, or something
 
 Misc known bugs:
  + [OSX] crash when trying to encode a DVD from mounted toast image

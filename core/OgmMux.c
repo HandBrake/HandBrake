@@ -1,4 +1,4 @@
-/* $Id: OgmMux.c,v 1.7 2004/03/08 11:32:48 titer Exp $
+/* $Id: OgmMux.c,v 1.13 2004/05/13 21:10:56 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -8,209 +8,26 @@
 
 #include <ogg/ogg.h>
 
-static void OgmMuxThread( void * );
-static int  OgmStart( HBOgmMux * );
-static int  OgmFlush( HBOgmMux *, int );
-static int  OgmEnd( HBOgmMux * );
+static int OgmStart( HBMux * );
+static int OgmMux( HBMux *, void *, HBBuffer * );
+static int OgmEnd( HBMux * );
 
-struct HBOgmMux
+struct HBMux
 {
-    HBHandle        *handle;
-    HBTitle         *title;
+    HB_MUX_COMMON_MEMBERS
 
-    volatile int    die;
-    HBThread        *thread;
-
-    FILE            *file;
-
-    int             i_tk;
-    struct
-    {
-        HBFifo           *fifo;
-
-        int               codec;
-
-        ogg_stream_state os;
-        int              i_packet_no;
-
-    } tk[100];  /* The first who set more than 100 stream !! */
+    HBHandle * handle;
+    HBTitle  * title;
+    FILE     * file;
 };
 
-HBOgmMux * HBOgmMuxInit( HBHandle * handle, HBTitle * title )
+typedef struct
 {
-    HBOgmMux *ogm = malloc( sizeof( HBOgmMux ) );
+    int              codec;
+    ogg_stream_state os;
+    int              i_packet_no;
 
-    ogm->handle = handle;
-    ogm->title  = title;
-
-    ogm->file   = NULL;
-    ogm->i_tk   = 0;
-
-    ogm->die    = 0;
-    ogm->thread = HBThreadInit( "ogm muxer", OgmMuxThread, ogm, HB_NORMAL_PRIORITY );
-    return ogm;
-}
-
-void HBOgmMuxClose( HBOgmMux ** _ogm )
-{
-    HBOgmMux *ogm = *_ogm;
-
-    ogm->die = 1;
-    HBThreadClose( &ogm->thread );
-
-    free( ogm );
-
-    *_ogm = NULL;
-}
-
-static int OgmDataWait( HBOgmMux *ogm )
-{
-    int i;
-
-    for( i = 0; i < ogm->i_tk; i++ )
-    {
-        while( !ogm->die && HBFifoSize( ogm->tk[i].fifo ) <= 0 )
-        {
-            HBSnooze( 10000 );
-        }
-    }
-    return ogm->die ? -1 : 0;
-}
-
-static void OgmMuxThread( void * _this )
-{
-    HBOgmMux *ogm = _this;
-
-    HBTitle  *title = ogm->title;
-
-    int i;
-
-    /* Open output file */
-    if( ( ogm->file = fopen( title->file, "w" ) ) == NULL )
-    {
-        HBLog( "HBOgmMux: failed to open `%s'", title->file );
-        /* FIXME */
-        HBErrorOccured( ogm->handle, HB_ERROR_AVI_WRITE );
-        return;
-    }
-    HBLog( "HBOgmMux: `%s' opened", title->file );
-
-
-    /* Wait for data in each fifo */
-    HBLog( "HBOgmMux: waiting video/audio data" );
-    if( OgmDataWait( ogm ) < 0 )
-    {
-        HBLog( "HBOgmMux: exiting" );
-        fclose( ogm->file );
-        unlink( title->file );
-        return;
-    }
-
-    if( OgmStart( ogm ) < 0 )
-    {
-        HBLog( "HBOgmMux: failed to write headers" );
-        fclose( ogm->file );
-        unlink( title->file );
-        return;
-    }
-
-    HBLog( "HBOgmMux: headers written" );
-
-    for( ;; )
-    {
-        HBBuffer    *buffer;
-        ogg_packet  op;
-        int         i_tk;
-
-        /* Wait data */
-        if( OgmDataWait( ogm ) < 0 )
-        {
-            break;
-        }
-
-        /* Choose the right track to write (interleaved data) */
-        for( i = 0, i_tk = -1; i < ogm->i_tk; i++ )
-        {
-            if( i_tk < 0 ||
-                HBFifoPosition( ogm->tk[i].fifo ) < HBFifoPosition( ogm->tk[i_tk].fifo ) )
-            {
-                i_tk = i;
-            }
-        }
-
-        buffer = HBFifoPop( ogm->tk[i_tk].fifo );
-
-        switch( ( ogm->tk[i_tk].codec ) )
-        {
-            case HB_CODEC_FFMPEG:
-            case HB_CODEC_XVID:
-            case HB_CODEC_X264:
-                op.bytes  = buffer->size + 1;
-                op.packet = malloc( op.bytes );
-                op.packet[0] = buffer->keyFrame ? 0x08 : 0x00;
-                memcpy( &op.packet[1], buffer->data, buffer->size );
-                op.b_o_s       = 0;
-                op.e_o_s       = 0;
-                op.granulepos  = ogm->tk[i_tk].i_packet_no;
-                op.packetno    = ogm->tk[i_tk].i_packet_no++;
-                break;
-            case HB_CODEC_MP3:
-                op.bytes  = buffer->size + 1;
-                op.packet = malloc( op.bytes );
-                op.packet[0] = 0x08;
-                memcpy( &op.packet[1], buffer->data, buffer->size );
-                op.b_o_s       = 0;
-                op.e_o_s       = 0;
-                op.granulepos  = ogm->tk[i_tk].i_packet_no * 1152;
-                op.packetno    = ogm->tk[i_tk].i_packet_no++;
-                break;
-            case HB_CODEC_VORBIS:
-                memcpy( &op, buffer->data, sizeof( ogg_packet ) );
-
-                op.packet = malloc( op.bytes );
-                memcpy( op.packet, buffer->data + sizeof( ogg_packet ), op.bytes );
-                break;
-
-            default:
-                HBLog( "HBOgmMux: unhandled codec" );
-                op.bytes = 0;
-                op.packet = NULL;
-                break;
-        }
-
-        if( op.packet )
-        {
-            ogg_stream_packetin( &ogm->tk[i_tk].os, &op );
-
-            for( ;; )
-            {
-                ogg_page og;
-                if( ogg_stream_pageout( &ogm->tk[i_tk].os, &og ) == 0 )
-                {
-                    break;
-                }
-
-                if( fwrite( og.header, og.header_len, 1, ogm->file ) <= 0 ||
-                    fwrite( og.body, og.body_len, 1, ogm->file ) <= 0 )
-                {
-                    HBLog( "HBOgmMux: write failed" );
-                    break;
-                }
-            }
-            free( op.packet );
-        }
-
-        HBBufferClose( &buffer );
-    }
-
-    if( OgmEnd( ogm ) < 0 )
-    {
-        HBLog( "HBOgmMux: flush failed" );
-    }
-
-    fclose( ogm->file );
-    HBLog( "HBOgmMux: `%s' closed", title->file );
-}
+} OgmMuxData;
 
 typedef struct __attribute__((__packed__))
 {
@@ -268,17 +85,66 @@ static void _SetQWLE( uint8_t *p, uint64_t i_qw )
     SetDWLE( p+4, ( i_qw >> 32)&0xffffffff );
 }
 
-static int  OgmFlush( HBOgmMux *ogm, int i_tk )
+HBMux * HBOgmMuxInit( HBHandle * handle, HBTitle * title )
+{
+    HBMux   * m;
+    HBAudio * audio;
+    int       i;
+
+    if( !( m = calloc( sizeof( HBMux ), 1 ) ) )
+    {
+        HBLog( "HBOgmMux: malloc failed, gonna crash" );
+        return NULL;
+    }
+    m->start    = OgmStart;
+    m->muxVideo = OgmMux;
+    m->muxAudio = OgmMux;
+    m->end      = OgmEnd;
+
+    m->handle   = handle;
+    m->title    = title;
+
+    /* Alloc muxer data */
+    title->muxData = calloc( sizeof( OgmMuxData ), 1 );
+    for( i = 0; i < HBListCount( title->ripAudioList ); i++ )
+    {
+        audio = (HBAudio *) HBListItemAt( title->ripAudioList, i );
+        audio->muxData = calloc( sizeof( OgmMuxData ), 1 );
+    }
+
+    return m;
+}
+
+void HBOgmMuxClose( HBMux ** _m )
+{
+    HBMux   * m     = *_m;
+    HBTitle * title = m->title;
+    HBAudio * audio;
+    int       i;
+
+    /* Free muxer data */
+    free( title->muxData );
+    for( i = 0; i < HBListCount( title->ripAudioList ); i++ )
+    {
+        audio = (HBAudio *) HBListItemAt( title->ripAudioList, i );
+        free( audio->muxData );
+    }
+
+    free( m );
+    *_m = NULL;
+}
+
+static int OgmFlush( HBMux * m, OgmMuxData * muxData )
 {
     for( ;; )
     {
         ogg_page og;
-        if( ogg_stream_flush( &ogm->tk[i_tk].os, &og ) == 0 )
+        if( ogg_stream_flush( &muxData->os, &og ) == 0 )
         {
             break;
         }
-        if( fwrite( og.header, og.header_len, 1, ogm->file ) <= 0 ||
-            fwrite( og.body, og.body_len, 1, ogm->file ) <= 0 )
+        if( fwrite( og.header, og.header_len, 1, m->file ) <= 0 ||
+            fwrite( og.body, og.body_len, 1, m->file ) <= 0 )
         {
             return -1;
         }
@@ -286,92 +152,87 @@ static int  OgmFlush( HBOgmMux *ogm, int i_tk )
     return 0;
 }
 
-static int  OgmStart( HBOgmMux *ogm )
+static int OgmStart( HBMux * m )
 {
-    HBTitle  *title = ogm->title;
-    int      i;
+    HBTitle           * title = m->title;
+    HBAudio           * audio;
+    OgmMuxData        * muxData;
+    ogg_packet          op;
+    ogg_stream_header_t h;
+    int                 i;
 
-    ogg_packet      op;
-
-    /* Init track */
-    ogm->tk[0].codec    = title->codec;
-    ogm->tk[0].fifo     = title->outFifo;
-    ogm->tk[0].i_packet_no = 0;
-    ogg_stream_init (&ogm->tk[0].os, 0 );
-
-    for( i = 1; i < HBListCount( title->ripAudioList ) + 1; i++ )
+    /* Open output file */
+    if( ( m->file = fopen( title->file, "wb" ) ) == NULL )
     {
-        HBAudio *audio = HBListItemAt( title->ripAudioList, i - 1 );
-
-        ogm->tk[i].codec   = audio->outCodec;
-        ogm->tk[i].fifo    = audio->outFifo;
-        ogm->tk[i].i_packet_no = 0;
-        ogg_stream_init (&ogm->tk[i].os, i );
-
-    }
-    ogm->i_tk = 1 + HBListCount( title->ripAudioList );
-
-    /* Wait data for each track */
-    for( i = 0; i < ogm->i_tk; i++ )
-    {
-        while( !ogm->die &&
-               ( ( ogm->tk[i].codec == HB_CODEC_VORBIS && HBFifoSize( ogm->tk[i].fifo ) <= 3 ) ||
-                 HBFifoSize( ogm->tk[i].fifo ) <= 0 ) )
-        {
-            HBSnooze( 10000 );
-        }
-    }
-
-    if( ogm->die )
-    {
+        HBLog( "HBOgmMux: failed to open `%s'", title->file );
+        /* FIXME */
+        HBErrorOccured( m->handle, HB_ERROR_AVI_WRITE );
         return -1;
+    }
+    HBLog( "HBOgmMux: `%s' opened", title->file );
+
+    /* Init tracks */
+
+    /* Video */
+    muxData              = (OgmMuxData *) title->muxData;
+    muxData->codec       = title->codec;
+    muxData->i_packet_no = 0;
+    ogg_stream_init( &muxData->os, 0 );
+
+    /* Audio */
+    for( i = 0; i < HBListCount( title->ripAudioList ); i++ )
+    {
+        HBAudio * audio = (HBAudio *) HBListItemAt( title->ripAudioList, i );
+        muxData = (OgmMuxData *) audio->muxData;
+
+        muxData->codec = audio->outCodec;
+        muxData->i_packet_no = 0;
+        ogg_stream_init( &muxData->os, i + 1 );
+
     }
 
     /* First pass: all b_o_s packets */
-    for( i = 0; i < ogm->i_tk; i++ )
+
+    /* Video */
+    muxData = (OgmMuxData *) title->muxData;
+    memset( &h, 0, sizeof( ogg_stream_header_t ) );
+    h.i_packet_type = 0x01;
+    memcpy( h.stream_type, "video    ", 8 );
+    if( muxData->codec == HB_CODEC_X264 )
     {
-        ogg_stream_header_t h;
+        memcpy( h.sub_type, "H264", 4 );
+    }
+    else
+    {
+        memcpy( h.sub_type, "XVID", 4 );
+    }
+    SetDWLE( &h.i_size, sizeof( ogg_stream_header_t ) - 1);
+    SetQWLE( &h.i_time_unit, (int64_t)10*1000*1000*(int64_t)title->rateBase/(int64_t)title->rate );
+    SetQWLE( &h.i_samples_per_unit, 1 );
+    SetDWLE( &h.i_default_len, 0 );
+    SetDWLE( &h.i_buffer_size, 1024*1024 );
+    SetWLE ( &h.i_bits_per_sample, 0 );
+    SetDWLE( &h.header.video.i_width,  title->outWidth );
+    SetDWLE( &h.header.video.i_height, title->outHeight );
+    op.packet   = (char*)&h;
+    op.bytes    = sizeof( ogg_stream_header_t );
+    op.b_o_s    = 1;
+    op.e_o_s    = 0;
+    op.granulepos = 0;
+    op.packetno = muxData->i_packet_no++;
+    ogg_stream_packetin( &muxData->os, &op );
+    OgmFlush( m, muxData );
 
+    /* Audio */
+    for( i = 0; i < HBListCount( title->ripAudioList ); i++ )
+    {
+        audio   = (HBAudio *) HBListItemAt( title->ripAudioList, i );
+        muxData = (OgmMuxData *) audio->muxData;
         memset( &h, 0, sizeof( ogg_stream_header_t ) );
-
-        switch( ogm->tk[i].codec )
+        switch( muxData->codec )
         {
-            case HB_CODEC_FFMPEG:
-            case HB_CODEC_XVID:
-            case HB_CODEC_X264:
-                h.i_packet_type = 0x01;
-                memcpy( h.stream_type, "video    ", 8 );
-                if( ogm->tk[i].codec == HB_CODEC_X264 )
-                {
-                    memcpy( h.sub_type, "H264", 4 );
-                }
-                else
-                {
-                    memcpy( h.sub_type, "XVID", 4 );
-                }
-
-                SetDWLE( &h.i_size, sizeof( ogg_stream_header_t ) - 1);
-                SetQWLE( &h.i_time_unit, (int64_t)10*1000*1000*(int64_t)title->rateBase/(int64_t)title->rate );
-                SetQWLE( &h.i_samples_per_unit, 1 );
-                SetDWLE( &h.i_default_len, 0 );
-                SetDWLE( &h.i_buffer_size, 1024*1024 );
-                SetWLE ( &h.i_bits_per_sample, 0 );
-                SetDWLE( &h.header.video.i_width,  title->outWidth );
-                SetDWLE( &h.header.video.i_height, title->outHeight );
-
-                op.packet   = (char*)&h;
-                op.bytes    = sizeof( ogg_stream_header_t );
-                op.b_o_s    = 1;
-                op.e_o_s    = 0;
-                op.granulepos = 0;
-                op.packetno = ogm->tk[i].i_packet_no++;
-                ogg_stream_packetin( &ogm->tk[i].os, &op );
-                break;
-
             case HB_CODEC_MP3:
             {
-                HBAudio *audio = HBListItemAt( title->ripAudioList, i - 1 );
-
                 h.i_packet_type = 0x01;
                 memcpy( h.stream_type, "audio    ", 8 );
                 memcpy( h.sub_type, "55  ", 4 );
@@ -385,87 +246,151 @@ static int  OgmStart( HBOgmMux *ogm )
 
                 SetDWLE( &h.header.audio.i_channels, 2 );
                 SetDWLE( &h.header.audio.i_block_align, 0 );
-                SetDWLE( &h.header.audio.i_avgbytespersec, audio->outBitrate / 8 );
-
+                SetDWLE( &h.header.audio.i_avgbytespersec,
+                         audio->outBitrate / 8 );
 
                 op.packet   = (char*)&h;
                 op.bytes    = sizeof( ogg_stream_header_t );
                 op.b_o_s    = 1;
                 op.e_o_s    = 0;
                 op.granulepos = 0;
-                op.packetno = ogm->tk[i].i_packet_no++;
-                ogg_stream_packetin( &ogm->tk[i].os, &op );
+                op.packetno = muxData->i_packet_no++;
+                ogg_stream_packetin( &muxData->os, &op );
                 break;
             }
             case HB_CODEC_VORBIS:
             {
-                HBBuffer *h = HBFifoPop( ogm->tk[i].fifo );
+                HBBuffer *h = HBFifoPop( audio->outFifo );
 
                 memcpy( &op, h->data, sizeof( ogg_packet ) );
                 op.packet = h->data + sizeof( ogg_packet );
-                ogg_stream_packetin( &ogm->tk[i].os, &op );
+                ogg_stream_packetin( &muxData->os, &op );
                 break;
             }
-            case HB_CODEC_AAC:
-                break;
             default:
-                HBLog( "unhandled codec" );
+                HBLog( "HBOgmMux: unhandled codec" );
                 break;
         }
-        OgmFlush( ogm, i );
+        OgmFlush( m, muxData );
     }
 
     /* second pass: all non b_o_s packets */
-    for( i = 0; i < ogm->i_tk; i++ )
+    for( i = 0; i < HBListCount( title->ripAudioList ); i++ )
     {
-        if( ogm->tk[i].codec == HB_CODEC_VORBIS )
+        audio = (HBAudio *) HBListItemAt( title->ripAudioList, i );
+        if( audio->outCodec == HB_CODEC_VORBIS )
         {
             HBBuffer *h;
             int       j;
+            muxData = (OgmMuxData *) audio->muxData;
 
             for( j = 0; j < 2; j++ )
             {
-                HBFifoWait( ogm->tk[i].fifo );
-                h = HBFifoPop( ogm->tk[i].fifo );
+                h = HBFifoPop( audio->outFifo );
 
                 memcpy( &op, h->data, sizeof( ogg_packet ) );
                 op.packet = h->data + sizeof( ogg_packet );
-                ogg_stream_packetin( &ogm->tk[i].os, &op );
+                ogg_stream_packetin( &muxData->os, &op );
 
-                OgmFlush( ogm, i );
+                OgmFlush( m, muxData );
             }
         }
-#if 0
-        else
-        {
-            /* Home made commentary */
-            op.packet     = "\003Handbrake";
-            op.bytes      = strlen( "\003Handbrake" );;
-            op.b_o_s      = 0;
-            op.e_o_s      = 0;
-            op.granulepos = 0;
-            op.packetno   = ogm->tk[i].i_packet_no++;
-
-            ogg_stream_packetin( &ogm->tk[i].os, &op );
-            OgmFlush( ogm, i );
-        }
-#endif
     }
 
+    HBLog( "HBOgmMux: headers written" );
     return 0;
 }
 
-static int  OgmEnd( HBOgmMux *ogm )
+static int OgmMux( HBMux * m, void * _muxData, HBBuffer * buffer )
 {
-    int i;
+    OgmMuxData * muxData = (OgmMuxData *) _muxData;
+    ogg_packet   op;
 
-    for( i = 0; i < ogm->i_tk; i++ )
+    switch( muxData->codec )
     {
-        if( OgmFlush( ogm, i ) < 0 )
+        case HB_CODEC_FFMPEG:
+        case HB_CODEC_XVID:
+        case HB_CODEC_X264:
+            op.bytes  = buffer->size + 1;
+            op.packet = malloc( op.bytes );
+            op.packet[0] = buffer->keyFrame ? 0x08 : 0x00;
+            memcpy( &op.packet[1], buffer->data, buffer->size );
+            op.b_o_s       = 0;
+            op.e_o_s       = 0;
+            op.granulepos  = muxData->i_packet_no;
+            op.packetno    = muxData->i_packet_no++;
+            break;
+        case HB_CODEC_MP3:
+            op.bytes  = buffer->size + 1;
+            op.packet = malloc( op.bytes );
+            op.packet[0] = 0x08;
+            memcpy( &op.packet[1], buffer->data, buffer->size );
+            op.b_o_s       = 0;
+            op.e_o_s       = 0;
+            op.granulepos  = muxData->i_packet_no * 1152;
+            op.packetno    = muxData->i_packet_no++;
+            break;
+        case HB_CODEC_VORBIS:
+            memcpy( &op, buffer->data, sizeof( ogg_packet ) );
+            op.packet = malloc( op.bytes );
+            memcpy( op.packet, buffer->data + sizeof( ogg_packet ), op.bytes );
+            break;
+
+        default:
+            HBLog( "HBOgmMux: unhandled codec" );
+            op.bytes = 0;
+            op.packet = NULL;
+            break;
+    }
+
+    if( op.packet )
+    {
+        ogg_stream_packetin( &muxData->os, &op );
+
+        for( ;; )
+        {
+            ogg_page og;
+            if( ogg_stream_pageout( &muxData->os, &og ) == 0 )
+            {
+                break;
+            }
+
+            if( fwrite( og.header, og.header_len, 1, m->file ) <= 0 ||
+                fwrite( og.body, og.body_len, 1, m->file ) <= 0 )
+            {
+                HBLog( "HBOgmMux: write failed" );
+                break;
+            }
+        }
+        free( op.packet );
+    }
+    return 0;
+}
+
+static int OgmEnd( HBMux * m )
+{
+    HBTitle    * title = m->title;
+    HBAudio    * audio;
+    OgmMuxData * muxData;
+    int          i;
+
+    muxData = (OgmMuxData *) title->muxData;
+    if( OgmFlush( m, muxData ) < 0 )
+    {
+        return -1;
+    }
+    for( i = 0; i < HBListCount( title->ripAudioList ); i++ )
+    {
+        audio = (HBAudio *) HBListItemAt( title->ripAudioList, i );
+        muxData = (OgmMuxData *) audio->muxData;
+        if( OgmFlush( m, muxData ) < 0 )
         {
             return -1;
         }
     }
+
+    fclose( m->file );
+    HBLog( "HBOgmMux: `%s' closed", title->file );
     return 0;
 }
 

@@ -1,4 +1,4 @@
-/* $Id: Utils.c,v 1.16 2004/03/08 11:32:48 titer Exp $
+/* $Id: Utils.c,v 1.20 2004/05/12 17:21:24 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -13,6 +13,19 @@
 
 #include "Utils.h"
 #include "Fifo.h"
+
+#ifdef HB_CYGWIN
+int gettimeofday( struct timeval * tv, struct timezone * tz )
+{
+    tv->tv_sec  = 0;
+    tv->tv_usec = 0;
+    return 0;
+}
+void bcopy( const void * src, void * dest, size_t n )
+{
+    memcpy( dest, src, n );
+}
+#endif
 
 struct HBList
 {
@@ -126,7 +139,8 @@ int HBPStoES( HBBuffer ** _psBuffer, HBList * esBufferList )
         pos               += 2;               /* PES_packet_length */
         PES_packet_end     = pos + PES_packet_length;
 
-        if( streamId != 0xE0 && streamId != 0xBD )
+        if( streamId != 0xE0 && streamId != 0xBD &&
+            ( streamId & 0xC0 ) != 0xC0  )
         {
             /* Not interesting */
             pos = PES_packet_end;
@@ -303,7 +317,7 @@ HBTitle * HBTitleInit( char * device, int index )
     }
 
     t->device       = strdup( device );
-    t->index        = index;
+    t->title        = index;
 
     t->codec        = HB_CODEC_FFMPEG;
     t->mux          = HB_MUX_MP4;
@@ -336,7 +350,7 @@ void HBTitleClose( HBTitle ** _t )
     *_t = NULL;
 }
 
-HBAudio * HBAudioInit( int id, char * language )
+HBAudio * HBAudioInit( int id, char * language, int codec )
 {
     HBAudio * a;
     if( !( a = calloc( sizeof( HBAudio ), 1 ) ) )
@@ -346,19 +360,20 @@ HBAudio * HBAudioInit( int id, char * language )
     }
 
     a->id            = id;
-    a->language      = strdup( language );
     a->start         = -1;
+    a->inCodec       = codec;
 
+    memset( a->language, 0, 512 );
+    snprintf( a->language, 511, "%s (%s)", language,
+              ( codec == HB_CODEC_AC3 ) ? "AC3" : ( ( codec ==
+              HB_CODEC_LPCM ? "LPCM" : "MPEG" ) ) );
     return a;
 }
 
 void HBAudioClose( HBAudio ** _a )
 {
     HBAudio * a = *_a;
-
-    free( a->language );
     free( a );
-
     *_a = NULL;
 }
 

@@ -1,4 +1,4 @@
-/* $Id: Mpeg2Dec.c,v 1.12 2004/01/16 19:04:04 titer Exp $
+/* $Id: Mpeg2Dec.c,v 1.15 2004/05/02 16:25:00 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -8,169 +8,143 @@
 
 #include "mpeg2dec/mpeg2.h"
 
-typedef struct HBMpeg2Dec
+struct HBWork
 {
     HB_WORK_COMMON_MEMBERS
 
     HBHandle           * handle;
     HBTitle            * title;
-    HBList             * rawBufferList;
     int                  pass;
     mpeg2dec_t         * libmpeg2;
     const mpeg2_info_t * info;
     int                  lateField;
-} HBMpeg2Dec;
+};
 
 /* Local prototypes */
 static int Mpeg2DecWork( HBWork * );
 
 HBWork * HBMpeg2DecInit( HBHandle * handle, HBTitle * title )
 {
-    HBMpeg2Dec * m ;
-    if( !( m = malloc( sizeof( HBMpeg2Dec ) ) ) )
+    HBWork * w ;
+    if( !( w = malloc( sizeof( HBWork ) ) ) )
     {
         HBLog( "HBMpeg2Dec: malloc() failed, gonna crash" );
         return NULL;
     }
 
-    m->name  = strdup( "Mpeg2Dec" );
-    m->work  = Mpeg2DecWork;
+    w->name   = strdup( "Mpeg2Dec" );
+    w->work   = Mpeg2DecWork;
 
-    m->handle = handle;
-    m->title  = title;
+    w->handle = handle;
+    w->title  = title;
 
-    m->rawBufferList = HBListInit();
-    m->pass          = 42;
-    m->libmpeg2      = NULL;
-    m->info          = NULL;
-    m->lateField     = 0;
+    w->pass          = 42;
+    w->libmpeg2      = NULL;
+    w->info          = NULL;
+    w->lateField     = 0;
 
-    return (HBWork*) m;
+    return w;
 }
 
-void HBMpeg2DecClose( HBWork ** _m )
+void HBMpeg2DecClose( HBWork ** _w )
 {
-    HBBuffer * buffer;
+    HBWork * w = *_w;
 
-    HBMpeg2Dec * m = (HBMpeg2Dec*) *_m;
-
-    if( m->libmpeg2 )
+    if( w->libmpeg2 )
     {
-        HBLog( "HBMpeg2Dec: closing libmpeg2 (pass %d)", m->pass );
-        mpeg2_close( m->libmpeg2 );
+        HBLog( "HBMpeg2Dec: closing libmpeg2 (pass %d)", w->pass );
+        mpeg2_close( w->libmpeg2 );
     }
-    while( ( buffer = HBListItemAt( m->rawBufferList, 0 ) ) )
-    {
-        HBListRemove( m->rawBufferList, buffer );
-        HBBufferClose( &buffer );
-    }
-    HBListClose( &m->rawBufferList );
-    free( m->name );
-    free( m );
+    free( w->name );
+    free( w );
 
-    *_m = NULL;
+    *_w = NULL;
 }
 
 static int Mpeg2DecWork( HBWork * w )
 {
-    HBMpeg2Dec  * m     = (HBMpeg2Dec*) w;
-    HBTitle     * title = m->title;
+    HBTitle     * title = w->title;
     HBBuffer    * mpeg2Buffer;
     HBBuffer    * rawBuffer;
-    HBBuffer    * tmpBuffer;
     mpeg2_state_t state;
 
-    int didSomething = 0;
-
-    /* Push decoded buffers */
-    while( ( rawBuffer = (HBBuffer*)
-                HBListItemAt( m->rawBufferList, 0 ) ) )
+    if( HBFifoIsHalfFull( title->rawFifo ) )
     {
-        tmpBuffer = rawBuffer;
-        if( HBFifoPush( title->rawFifo, &rawBuffer ) )
-        {
-            didSomething = 1;
-            HBListRemove( m->rawBufferList, tmpBuffer );
-        }
-        else
-        {
-            return didSomething;
-        }
+        return 0;
     }
 
     /* Get a new buffer to decode */
-    if( ( mpeg2Buffer = HBFifoPop( title->inFifo ) ) )
+    if( !( mpeg2Buffer = HBFifoPop( title->inFifo ) ) )
     {
-        didSomething = 1;
-    }
-    else
-    {
-        return didSomething;
+        return 0;
     }
 
     /* Init or re-init if needed */
-    if( mpeg2Buffer->pass != m->pass )
+    if( mpeg2Buffer->pass != w->pass )
     {
-        if( m->libmpeg2 )
+        if( w->libmpeg2 )
         {
-            HBLog( "HBMpeg2Dec: closing libmpeg2 (pass %d)", m->pass );
-            mpeg2_close( m->libmpeg2 );
+            HBLog( "HBMpeg2Dec: closing libmpeg2 (pass %d)", w->pass );
+            mpeg2_close( w->libmpeg2 );
         }
 
-        m->pass = mpeg2Buffer->pass;
+        w->pass = mpeg2Buffer->pass;
 
-        HBLog( "HBMpeg2Dec: opening libmpeg2 (pass %d)", m->pass );
+        HBLog( "HBMpeg2Dec: opening libmpeg2 (pass %d)", w->pass );
 #ifdef HB_NOMMX
         mpeg2_accel( 0 );
 #endif
-        m->libmpeg2  = mpeg2_init();
-        m->info      = mpeg2_info( m->libmpeg2 );
-        m->lateField = 0;
+        w->libmpeg2  = mpeg2_init();
+        w->info      = mpeg2_info( w->libmpeg2 );
+        w->lateField = 0;
     }
 
     /* Decode */
-    mpeg2_buffer( m->libmpeg2, mpeg2Buffer->data,
+    mpeg2_buffer( w->libmpeg2, mpeg2Buffer->data,
                   mpeg2Buffer->data + mpeg2Buffer->size );
 
     for( ;; )
     {
-        state = mpeg2_parse( m->libmpeg2 );
+        state = mpeg2_parse( w->libmpeg2 );
 
         if( state == STATE_BUFFER )
         {
             break;
         }
         else if( ( state == STATE_SLICE || state == STATE_END ) &&
-                 m->info->display_fbuf )
+                 w->info->display_fbuf )
         {
             rawBuffer = HBBufferInit( 3 * title->inWidth *
                                       title->inHeight );
 
             /* TODO: make libmpeg2 write directly in our buffer */
-            memcpy( rawBuffer->data, m->info->display_fbuf->buf[0],
+            memcpy( rawBuffer->data, w->info->display_fbuf->buf[0],
                     title->inWidth * title->inHeight );
             memcpy( rawBuffer->data + title->inWidth * title->inHeight,
-                    m->info->display_fbuf->buf[1],
+                    w->info->display_fbuf->buf[1],
                     title->inWidth * title->inHeight / 4 );
             memcpy( rawBuffer->data + title->inWidth * title->inHeight +
                         title->inWidth * title->inHeight / 4,
-                    m->info->display_fbuf->buf[2],
+                    w->info->display_fbuf->buf[2],
                     title->inWidth * title->inHeight / 4 );
 
             rawBuffer->position = mpeg2Buffer->position;
             rawBuffer->pass     = mpeg2Buffer->pass;
 
-            HBListAdd( m->rawBufferList, rawBuffer );
-
             /* NTSC pulldown kludge */
-            if( m->info->display_picture->nb_fields == 3 )
+            if( w->info->display_picture->nb_fields == 3 )
             {
-                rawBuffer->repeat = m->lateField;
-                m->lateField      = !m->lateField;
+                rawBuffer->repeat = w->lateField;
+                w->lateField      = !w->lateField;
             }
             else
             {
                 rawBuffer->repeat = 0;
+            }
+
+            if( !HBFifoPush( title->rawFifo, &rawBuffer ) )
+            {
+                HBLog( "HBMpeg2Dec: HBFifoPush failed" );
             }
         }
         else if( state == STATE_INVALID )
@@ -182,5 +156,5 @@ static int Mpeg2DecWork( HBWork * w )
 
     HBBufferClose( &mpeg2Buffer );
 
-    return didSomething;
+    return 1;
 }

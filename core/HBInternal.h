@@ -1,4 +1,4 @@
-/* $Id: HBInternal.h,v 1.5 2004/03/08 11:32:48 titer Exp $
+/* $Id: HBInternal.h,v 1.10 2004/05/12 17:21:24 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -9,8 +9,15 @@
 
 #include "HandBrake.h"
 #include "Fifo.h"
+#include "Mux.h"
 #include "Thread.h"
 #include "Work.h"
+
+#ifndef HB_CYGWIN
+#define LLD "%lld"
+#else
+#define LLD "%I64d"
+#endif
 
 /* Demuxer */
 HBDVDRead * HBDVDReadInit( HBHandle *, HBTitle * );
@@ -23,12 +30,16 @@ HBWork * HBAc3DecInit( HBHandle *, HBAudio * );
 void     HBAc3DecClose( HBWork ** );
 HBWork * HBLpcmDecInit( HBHandle *, HBAudio * );
 void     HBLpcmDecClose( HBWork ** );
-HBWork * HBMadDecInit( HBHandle *, HBAudio * );
-void     HBMadDecClose( HBWork ** );
+HBWork * HBMpgaDecInit( HBHandle *, HBAudio * );
+void     HBMpgaDecClose( HBWork ** );
 
 /* Scaler */
 HBWork * HBScaleInit( HBHandle *, HBTitle * );
 void     HBScaleClose( HBWork ** );
+
+/* Resampler */
+HBWork * HBResampleInit( HBHandle *, HBAudio * );
+void     HBResampleClose( HBWork ** );
 
 /* Encoders */
 HBWork * HBFfmpegEncInit( HBHandle *, HBTitle * );
@@ -43,14 +54,6 @@ HBWork * HBFaacEncInit( HBHandle *, HBAudio * );
 void     HBFaacEncClose( HBWork ** );
 HBWork * HBVorbisEncInit ( HBHandle *, HBAudio * );
 void     HBVorbisEncClose( HBWork ** );
-
-/* Muxers */
-HBAviMux * HBAviMuxInit( HBHandle *, HBTitle * );
-void       HBAviMuxClose( HBAviMux ** );
-HBMp4Mux * HBMp4MuxInit( HBHandle *, HBTitle * );
-void       HBMp4MuxClose( HBMp4Mux ** );
-HBOgmMux * HBOgmMuxInit( HBHandle *, HBTitle * );
-void       HBOgmMuxClose( HBOgmMux ** );
 
 /* Scanner */
 HBScan * HBScanInit( HBHandle *, const char * device, int title );

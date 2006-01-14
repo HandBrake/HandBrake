@@ -1,4 +1,4 @@
-/* $Id: Utils.h,v 1.23 2004/03/08 11:32:48 titer Exp $
+/* $Id: Utils.h,v 1.30 2004/05/04 12:50:52 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -48,20 +48,12 @@ typedef struct HBTitle      HBTitle;
 typedef struct HBThread     HBThread;
 
 /* (De)Muxers */
-typedef struct HBAviMux     HBAviMux;
-typedef struct HBOgmMux     HBOgmMux;
 typedef struct HBDVDRead    HBDVDRead;
-typedef struct HBMp4Mux     HBMp4Mux;
 typedef struct HBScan       HBScan;
 
 typedef struct HBWork       HBWork;
+typedef struct HBMuxThread  HBMuxThread;
 typedef struct HBWorkThread HBWorkThread;
-
-/* AVI stuff */
-typedef struct HBAviMainHeader   HBAviMainHeader;
-typedef struct HBAviStreamHeader HBAviStreamHeader;
-typedef struct HBBitmapInfo      HBBitmapInfo;
-typedef struct HBWaveFormatEx    HBWaveFormatEx;
 
 /* Misc functions which may be used from anywhere */
 void     HBSnooze( int time );
@@ -82,7 +74,7 @@ HBTitle * HBTitleInit();
 void      HBTitleClose( HBTitle ** );
 
 /* HBAudio functions */
-HBAudio * HBAudioInit( int id, char * language );
+HBAudio * HBAudioInit( int id, char * language, int codec );
 void      HBAudioClose( HBAudio ** );
 
 #define HB_SUCCESS          0x00
@@ -96,15 +88,16 @@ void      HBAudioClose( HBAudio ** );
 #define HB_ERROR_MPEG4_INIT 0x80
 
 /* Possible codecs */
-#define HB_CODEC_MPEG2  0x00
-#define HB_CODEC_FFMPEG 0x01
-#define HB_CODEC_XVID   0x02
-#define HB_CODEC_AC3    0x04
-#define HB_CODEC_LPCM   0x08
-#define HB_CODEC_MP3    0x10
-#define HB_CODEC_AAC    0x20
-#define HB_CODEC_X264   0x40
-#define HB_CODEC_VORBIS 0x80
+#define HB_CODEC_MPEG2  0x000
+#define HB_CODEC_FFMPEG 0x001
+#define HB_CODEC_XVID   0x002
+#define HB_CODEC_AC3    0x004
+#define HB_CODEC_LPCM   0x008
+#define HB_CODEC_MP3    0x010
+#define HB_CODEC_AAC    0x020
+#define HB_CODEC_X264   0x040
+#define HB_CODEC_VORBIS 0x080
+#define HB_CODEC_MPGA   0x100
 
 /* Possible muxers */
 #define HB_MUX_AVI 0x00
@@ -115,8 +108,13 @@ struct HBTitle
 {
     /* DVD info */
     char * device;
-    int    index;
-    int    length;
+    int    title;
+    int    vts_id;
+    int    startBlock;
+    int    endBlock;
+    int    hours;
+    int    minutes;
+    int    seconds;
 
     /* Audio infos */
     HBList * audioList;
@@ -156,15 +154,12 @@ struct HBTitle
     char * file;
     int    mux;
 
+    /* Muxer data */
+    void * muxData;
+
     /* MP4 muxer specific */
-    int       track;
     uint8_t * esConfig;
     int       esConfigLength;
-
-    /* AVI muxer specific */
-    HBAviMainHeader   * aviMainHeader;
-    HBAviStreamHeader * aviVideoHeader;
-    HBBitmapInfo      * aviVideoFormat;
 
     /* Fifos */
     HBFifo  * inFifo;
@@ -174,10 +169,8 @@ struct HBTitle
 
     /* Threads */
     HBDVDRead    * dvdRead;
-    HBAviMux     * aviMux;
-    HBMp4Mux     * mp4Mux;
-    HBOgmMux     * ogmMux;
     HBWorkThread * workThreads[8];
+    HBMuxThread  * muxThread;
 
     /* Work objects */
     HBWork * decoder;
@@ -189,7 +182,7 @@ struct HBAudio
 {
     /* Ident */
     uint32_t    id;
-    char      * language;
+    char        language[512];
 
     /* Settings */
     int         inCodec;
@@ -208,22 +201,19 @@ struct HBAudio
     uint8_t       * esConfig;
     unsigned long   esConfigLength;
 
-    /* MP4 track id */
-    int         track;
-
-    /* AVI stuff */
-    uint32_t            aviFourCC;
-    HBAviStreamHeader * aviAudioHeader;
-    HBWaveFormatEx    * aviAudioFormat;
+    /* Muxer data */
+    void * muxData;
 
     /* Fifos */
     HBFifo    * inFifo;
     HBFifo    * rawFifo;
+    HBFifo    * resampleFifo;
     HBFifo    * outFifo;
 
     /* Work objects */
     HBWork    * decoder;
-    HBWork    * encoder;;
+    HBWork    * resample;
+    HBWork    * encoder;
 };
 
 #endif

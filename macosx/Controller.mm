@@ -1,4 +1,4 @@
-/* $Id: Controller.mm,v 1.30 2004/03/12 14:22:19 titer Exp $
+/* $Id: Controller.mm,v 1.31 2004/04/21 21:21:17 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -850,8 +850,8 @@ static void _ScanDone( void * data, HBList * titleList )
         title = (HBTitle*) HBListItemAt( fTitleList, i );
         [[fRipTitlePopUp menu] addItemWithTitle:
             [NSString stringWithFormat: @"%d - %02dh%02dm%02ds",
-            title->index, title->length / 3600, ( title->length % 3600 )
-            / 60, title->length % 60] action: nil keyEquivalent: @""];
+            title->title, title->hours, title->minutes,
+            title->seconds] action: nil keyEquivalent: @""];
     }
     [self TitlePopUpChanged: self];
 }

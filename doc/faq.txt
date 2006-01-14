@@ -1,4 +1,4 @@
-$Id: faq.txt,v 1.12 2004/03/16 15:57:03 titer Exp $
+$Id: faq.txt,v 1.14 2004/04/22 22:22:07 titer Exp $
 
 <h2>HandBrake FAQ</h2>
 
@@ -9,7 +9,6 @@ get any sound</a></p>
 HandBrake</a></p>
 <p><a href="#A001003">1.3. Rip exits after a while with a AC3 error.
 What does that mean?</a></p>
-<p><a href="#A001004">1.4. Why does HandBrake get stuck at 100%?</a></p>
 
 <h4>2. Features</h4>
 <p><a href="#A002001">2.1 I want to convert a movie so I can burn it on
@@ -58,18 +57,9 @@ mean?</h4>
 happens when your DVD drive is over-heating after a X-hours long rip.
 Though it is handy to directly rip from the DVD, I recommend that you
 copy it first to the hard drive whenever possible (for example with
-OSEx, using the "DVD Folders" fmt) then you can open the folder with
-HandBrake. You have to keep the DVD folder organization (multiple VOB
-and IFO files), HandBrake won't open single VOB files.</p>
-
-<a name="A001004"></a>
-<h4>1.4. Why does HandBrake get stuck at 100%?</h4>
-<p>When ripping to an mp4 file, HandBrake (actually libmp4v2) optimizes
-the file and makes it compliant at the end of the rip. This might take
-some time with big files (usually, a few minutes for a 700 MB file).
-Also, make sure you have enough space available on your hard drive
-before you start (twice the asked size) or you might end with an
-unreadable file.</p>
+MacTheRipper, using "Extract Complete Disc") then you can open the
+folder with HandBrake. You have to keep the DVD folder organization
+(multiple VOB and IFO files), HandBrake won't open single VOB files.</p>
 
 <h3>2. Features</h3>
 
@@ -103,8 +93,12 @@ it to the list.</p>
 
 <a name="A002004"></a>
 <h4>2.4 Any plan to include 3ivx / DivX 5 encoding?</h4>
-<p>No. 3ivx/DivX aren't free software and have no multi-platform
-API.</p>
+
+<p>No. 3ivx/DivX aren't free software and have no multi-platform API.
+Moreover, they don't bring any noticeable quality improvement to XviD
+or FFmpeg. Though, you might consider using the 3ivX decoder to play
+the created files as its post-processing engine is known to be pretty
+good.</p>
 
 <h3>3. Technical</h3>
 

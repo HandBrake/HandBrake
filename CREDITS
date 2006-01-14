@@ -1,4 +1,4 @@
-$Id: CREDITS,v 1.5 2004/03/01 19:09:38 titer Exp $
+$Id: CREDITS,v 1.7 2004/04/24 10:49:56 titer Exp $
 
 CREDITS file for HandBrake <http://handbrake.m0k.org/>
 
@@ -57,11 +57,6 @@ libdvdread authors:
   Håkan Hjort
   Billy Biggs
   Christian Wolff
-
-libdvdplay authors:
-  Håkan Hjort
-  Martin Norbäck
-  Stéphane Borel
 
 libfaac authors:
   M. Bakker
@@ -139,6 +134,9 @@ libmpeg2 authors:
 
 libogg authors:
   Christopher Montgomery
+
+libsamplerate authors:
+  Erik de Castro Lopo
 
 libvorbis authors:
   Christopher Montgomery

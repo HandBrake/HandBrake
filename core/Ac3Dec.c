@@ -1,4 +1,4 @@
-/* $Id: Ac3Dec.c,v 1.13 2004/03/08 11:32:48 titer Exp $
+/* $Id: Ac3Dec.c,v 1.17 2004/05/02 16:25:00 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -9,7 +9,7 @@
 /* liba52 */
 #include "a52dec/a52.h"
 
-typedef struct HBAc3Dec
+struct HBWork
 {
     HB_WORK_COMMON_MEMBERS
 
@@ -24,195 +24,131 @@ typedef struct HBAc3Dec
 
     /* Buffers */
     uint8_t       ac3Frame[3840]; /* Max size of a A52 frame */
-    int           ac3FrameSize;   /* In bytes */
-    HBBuffer    * ac3Buffer;
-    int           ac3BufferPos;   /* In bytes */
-    int           nextFrameSize;  /* In bytes */
-    float         position;
-    HBBuffer    * rawBuffer;
-} HBAc3Dec;
+    int           hasSync;
+    int           nextFrameSize;
+};
 
 /* Local prototypes */
 static int Ac3DecWork( HBWork * );
-static int GetBytes( HBAc3Dec *, int );
 
 HBWork * HBAc3DecInit( HBHandle * handle, HBAudio * audio )
 {
-    HBAc3Dec * a;
-    if( !( a = malloc( sizeof( HBAc3Dec ) ) ) )
+    HBWork * w;
+    if( !( w = calloc( sizeof( HBWork ), 1 ) ) )
     {
         HBLog( "HBAc3DecInit: malloc() failed, gonna crash" );
         return NULL;
     }
 
-    a->name = strdup( "Ac3Dec" );
-    a->work = Ac3DecWork;
+    w->name = strdup( "Ac3Dec" );
+    w->work = Ac3DecWork;
 
-    a->handle = handle;
-    a->audio  = audio;
+    w->handle = handle;
+    w->audio  = audio;
 
     /* Init liba52 */
-    a->state   = a52_init( 0 );
-    a->inFlags = 0;
+    w->state = a52_init( 0 );
 
     /* Let it do the downmixing */
-    a->outFlags = A52_STEREO;
+    w->outFlags = A52_STEREO;
 
-    if( audio->outCodec == HB_CODEC_MP3 )
-        /* Lame wants 16 bits samples */
-        a->sampleLevel = 32768.0;
-    else if( audio->outCodec == HB_CODEC_AAC )
-        /* Faac wants 24 bits samples */
-        a->sampleLevel = 8388608.0;
-    else if( audio->outCodec == HB_CODEC_VORBIS )
-        /* Vorbis wants FIXME bits samples */
-        a->sampleLevel = 32768.0;
+    /* 16 bits samples */
+    w->sampleLevel = 32768.0;
 
-    a->ac3FrameSize  = 0;
-    a->ac3Buffer     = NULL;
-    a->ac3BufferPos  = 0;
-    a->nextFrameSize = 0;
-    a->position      = 0.0;
-    a->rawBuffer     = NULL;
-
-    return (HBWork*) a;
+    return w;
 }
 
-void HBAc3DecClose( HBWork ** _a )
+void HBAc3DecClose( HBWork ** _w )
 {
-    HBAc3Dec * a = (HBAc3Dec*) *_a;
+    HBWork * w = *_w;
 
-    if( a->ac3Buffer ) HBBufferClose( &a->ac3Buffer );
-    if( a->rawBuffer ) HBBufferClose( &a->rawBuffer );
-    a52_free( a->state );
-    free( a->name );
-    free( a );
+    a52_free( w->state );
+    free( w->name );
+    free( w );
 
-    *_a = NULL;
+    *_w = NULL;
 }
 
 static int Ac3DecWork( HBWork * w )
 {
-    HBAc3Dec * a     = (HBAc3Dec*) w;
-    HBAudio  * audio = a->audio;
+    HBAudio  * audio = w->audio;
 
-    int didSomething = 0;
+    float      position;
 
-    /* Push decoded buffer */
-    if( a->rawBuffer )
+    if( HBFifoIsHalfFull( audio->rawFifo ) )
     {
-        if( HBFifoPush( audio->rawFifo, &a->rawBuffer ) )
-        {
-            didSomething = 1;
-        }
-        else
-        {
-            return didSomething;
-        }
+        return 0;
     }
 
     /* Get a frame header (7 bytes) */
-    if( a->ac3FrameSize < 7 )
+    if( !w->hasSync )
     {
-        if( GetBytes( a, 7 ) )
+        if( !HBFifoGetBytes( audio->inFifo, w->ac3Frame, 7,
+                             &position ) )
         {
-            didSomething = 1;
-        }
-        else
-        {
-            return didSomething;
+            return 0;
         }
 
-        a->nextFrameSize = a52_syncinfo( a->ac3Frame, &a->inFlags,
+        /* Check the header */
+        w->nextFrameSize = a52_syncinfo( w->ac3Frame, &w->inFlags,
                                          &audio->inSampleRate,
                                          &audio->inBitrate );
 
-        if( !a->nextFrameSize )
+        if( !w->nextFrameSize )
         {
             HBLog( "HBAc3Dec: a52_syncinfo() failed" );
-            HBErrorOccured( a->handle, HB_ERROR_A52_SYNC );
-            return didSomething;
+            HBErrorOccured( w->handle, HB_ERROR_A52_SYNC );
+            return 0;
         }
+
+        w->hasSync = 1;
     }
 
     /* Get the whole frame */
-    if( a->ac3FrameSize >= 7 )
+    if( w->hasSync )
     {
         sample_t * samples;
         HBBuffer * rawBuffer;
         int        i;
 
-        if( GetBytes( a, a->nextFrameSize ) )
+        if( !HBFifoGetBytes( audio->inFifo, w->ac3Frame + 7,
+                             w->nextFrameSize - 7, &position ) )
         {
-            didSomething = 1;
+            return 0;
         }
-        else
-        {
-            return didSomething;
-        }
+
+        w->hasSync = 0;
 
         /* Feed liba52 */
-        a52_frame( a->state, a->ac3Frame, &a->outFlags,
-                   &a->sampleLevel, 0 );
-        a->ac3FrameSize = 0;
+        a52_frame( w->state, w->ac3Frame, &w->outFlags,
+                   &w->sampleLevel, 0 );
 
         /* 6 blocks per frame, 256 samples per block, 2 channels */
-        rawBuffer           = HBBufferInit( 12 * 256 * sizeof( float ) );
-        rawBuffer->position = a->position;
-        rawBuffer->samples  = 6 * 256;
-        rawBuffer->left     = (float*) rawBuffer->data;
-        rawBuffer->right    = rawBuffer->left + 6 * 256;
+        rawBuffer           = HBBufferInit( 3072 * sizeof( float ) );
+        rawBuffer->position = position;
 
         for( i = 0; i < 6; i++ )
         {
+            int j;
+
             /* Decode a block */
-            a52_block( a->state );
+            a52_block( w->state );
 
-            /* Get a pointer to the raw data */
-            samples = a52_samples( a->state );
+            /* Get a pointer to the float samples */
+            samples = a52_samples( w->state );
 
-            /* Copy left channel data */
-            memcpy( rawBuffer->left + i * 256, samples,
-                    256 * sizeof( float ) );
-
-            /* Copy right channel data */
-            memcpy( rawBuffer->right + i * 256, samples + 256,
-                    256 * sizeof( float ) );
-        }
-
-        a->rawBuffer = rawBuffer;
-    }
-
-    return didSomething;
-}
-
-static int GetBytes( HBAc3Dec * a, int size )
-{
-    int i;
-
-    while( a->ac3FrameSize < size )
-    {
-        if( !a->ac3Buffer )
-        {
-            if( !( a->ac3Buffer = HBFifoPop( a->audio->inFifo ) ) )
+            /* Interleave samples */
+            for( j = 0; j < 256; j++ )
             {
-                return 0;
+                rawBuffer->dataf[512*i+2*j]   = samples[j];
+                rawBuffer->dataf[512*i+2*j+1] = samples[256+j];
             }
-            a->ac3BufferPos = 0;
-            a->position     = a->ac3Buffer->position;
         }
 
-        i = MIN( size - a->ac3FrameSize,
-                 a->ac3Buffer->size - a->ac3BufferPos );
-        memcpy( a->ac3Frame + a->ac3FrameSize,
-                a->ac3Buffer->data + a->ac3BufferPos,
-                i );
-        a->ac3FrameSize += i;
-        a->ac3BufferPos += i;
-
-        if( a->ac3BufferPos == a->ac3Buffer->size )
+        /* Send decoded data to the resampler */
+        if( !HBFifoPush( audio->rawFifo, &rawBuffer ) )
         {
-            HBBufferClose( &a->ac3Buffer );
+            HBLog( "HBAc3Dec: HBFifoPush failed" );
         }
     }
 

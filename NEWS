@@ -1,6 +1,15 @@
-$Id: NEWS,v 1.13 2004/03/29 00:28:39 titer Exp $
+$Id: NEWS,v 1.15 2004/05/25 17:48:52 titer Exp $
 
 NEWS file for HandBrake <http://handbrake.m0k.org/>
+
+Changes between 0.6.1 and 0.6.2
+ + Support for DVDs with MPEG audio tracks
+ + Rewrote the DVD navigation code
+ + High quality resampler included
+ + Better AVI compliance
+ + Updated encoders
+ + Internal improvements
+ + Bugfixes
 
 Changes between 0.6.0 and 0.6.1
  + Fixed LPCM endianness issue

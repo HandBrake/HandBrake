@@ -1,4 +1,4 @@
-/* $Id: Thread.c,v 1.13 2004/03/16 16:14:03 titer Exp $
+/* $Id: Thread.c,v 1.14 2004/04/27 19:30:00 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -46,7 +46,7 @@ static void ThreadFunc( void * _t )
     param.sched_priority = t->priority;
     if( pthread_setschedparam( pthread_self(), SCHED_OTHER, &param ) )
     {
-        HBLog( "HBThreadInit: couldn't set thread priority" );
+        HBLog( "HBThread: couldn't set thread priority" );
     }
 #endif
 
@@ -61,7 +61,7 @@ HBThread * HBThreadInit( char * name, void (* function)(void *),
     HBThread * t;
     if( !( t = malloc( sizeof( HBThread ) ) ) )
     {
-        HBLog( "HBThreadInit: malloc() failed, gonna crash" );
+        HBLog( "HBThread: malloc() failed, gonna crash" );
         return NULL;
     }
     t->name     = strdup( name );
@@ -82,7 +82,7 @@ HBThread * HBThreadInit( char * name, void (* function)(void *),
         (LPTHREAD_START_ROUTINE) ThreadFunc, t, 0, NULL );
 #endif
 
-    HBLog( "HBThreadInit: thread %d started (\"%s\")",
+    HBLog( "HBThread: thread %d started (\"%s\")",
            t->thread, t->name );
 
     return t;
@@ -102,7 +102,7 @@ void HBThreadClose( HBThread ** _t )
     WaitForSingleObject( t->thread, INFINITE );
 #endif
 
-    HBLog( "HBThreadClose: thread %d stopped (\"%s\")",
+    HBLog( "HBThread: thread %d stopped (\"%s\")",
            t->thread, t->name );
 
     /* Clean up */
@@ -120,7 +120,7 @@ HBLock * HBLockInit()
     HBLock * l;
     if( !( l = malloc( sizeof( HBLock ) ) ) )
     {
-        HBLog( "HBLockInit: malloc() failed, gonna crash" );
+        HBLog( "HBLock: malloc() failed, gonna crash" );
         return NULL;
     }
 

@@ -1,4 +1,4 @@
-/* $Id: Fifo.c,v 1.14 2004/03/17 10:35:06 titer Exp $
+/* $Id: Fifo.c,v 1.17 2004/04/27 19:30:00 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -14,7 +14,7 @@ HBBuffer * HBBufferInit( int size )
     HBBuffer * b;
     if( !( b = calloc( sizeof( HBBuffer ), 1 ) ) )
     {
-        HBLog( "HBBufferInit: malloc() failed, gonna crash" );
+        HBLog( "HBBuffer: malloc() failed, gonna crash" );
         return NULL;
     }
 
@@ -31,10 +31,11 @@ HBBuffer * HBBufferInit( int size )
     b->data      = b->dataOrig + 15;
     b->data     -= (long) b->data & 15;
 #endif
+    b->dataf     = (float*) b->data;
 
     if( !b->data )
     {
-        HBLog( "HBBufferInit: malloc() failed, gonna crash" );
+        HBLog( "HBBuffer: malloc() failed, gonna crash" );
         free( b );
         return NULL;
     }
@@ -57,7 +58,7 @@ void HBBufferReAlloc( HBBuffer * b, int size )
 
     if( !b->data )
     {
-        HBLog( "HBBufferReAlloc: realloc() failed, gonna crash soon" );
+        HBLog( "HBBuffer: realloc() failed, gonna crash soon" );
     }
 }
 
@@ -80,7 +81,7 @@ HBFifo * HBFifoInit( int capacity )
     HBFifo * f;
     if( !( f = malloc( sizeof( HBFifo ) ) ) )
     {
-        HBLog( "HBFifoInit: malloc() failed, gonna crash" );
+        HBLog( "HBFifo: malloc() failed, gonna crash" );
         return NULL;
     }
 
@@ -91,7 +92,7 @@ HBFifo * HBFifoInit( int capacity )
 
     if( !( f->buffers = malloc( ( capacity + 1 ) * sizeof( void* ) ) ) )
     {
-        HBLog( "HBFifoInit: malloc() failed, gonna crash" );
+        HBLog( "HBFifo: malloc() failed, gonna crash" );
         free( f );
         return NULL;
     }
@@ -114,7 +115,7 @@ void HBFifoClose( HBFifo ** _f )
 {
     HBFifo * f = (*_f);
 
-    HBLog( "HBFifoClose: trashing %d buffer%s",
+    HBLog( "HBFifo: trashing %d buffer%s",
            HBFifoSize( f ), ( HBFifoSize( f ) > 1 ) ? "s" : "" );
 
     while( f->whereToPush != f->whereToPop )

@@ -205,9 +205,8 @@ static int HBMain( void *data )
                     char string[1024];
 
                     sprintf( string, "%d - %02dh%02dm%02ds",
-                             title->index, title->length / 3600,
-                             ( title->length % 3600 ) / 60,
-                             title->length % 60 );
+                             title->title, title->hours, title->minutes,
+                             title->seconds );
 
                     item = gtk_menu_item_new_with_mnemonic( string );
                     gtk_widget_show( item );

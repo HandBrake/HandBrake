@@ -1,13 +1,46 @@
-# Compilers & flags
-CC    = gcc ;
-C++   = g++ ;
-AS    = nasm -f elf ;
-LINK  = g++ ;
-OPTIM = -O3 -funroll-loops ;
+# $Id: Jamrules,v 1.38 2004/05/25 17:50:12 titer Exp $
+#
+# This file is part of the HandBrake source code.
+# Homepage: <http://handbrake.m0k.org/>.
+# It may be used under the terms of the GNU General Public License.
 
-HB_VERSION = 0.6.1 ;
-DEFINES    = HB_$(OS) HB_VERSION=\\\"$(HB_VERSION)\\\" ;
-LANGUAGES  = fr de it pl ru nl es pt ;
+HB_VERSION = 0.6.2 ;
+LANGUAGES  = fr de it pl ru nl es pt ja ;
+
+# Compilers & flags
+CC      = gcc ;
+C++     = g++ ;
+AS      = nasm ;
+LINK    = g++ ;
+OPTIM   = -O3 -funroll-loops ;
+DEFINES = HB_$(OS) HB_VERSION=\\\"$(HB_VERSION)\\\" ;
+
+if $(OS) = BEOS
+{
+    # Avoid multichar warnings caused by BeOS system headers
+    CCFLAGS   = -Wno-multichar ;
+    C++FLAGS  = -Wno-multichar ;
+    # BeOS' gcc tends to crash with -funroll-loops
+    OPTIM     = -O3 ;
+    ASFLAGS   = -f elf ;
+}
+if $(OS) = MACOSX
+{
+    # For libdvdread
+    DEFINES  += WORDS_BIGENDIAN ;
+}
+if $(OS) = LINUX
+{
+    ASFLAGS   = -f elf ;
+}
+if $(OS) = CYGWIN
+{
+    # Build under cygwin but without the emulation layer
+    CCFLAGS   = -mno-cygwin ;
+    C++FLAGS  = -mno-cygwin ;
+    LINKFLAGS = -mno-cygwin ;
+    ASFLAGS   = -f win32 ;
+}
 
 NotFile clean-contrib clean-all ;
 Always  clean-contrib ;
@@ -89,7 +122,7 @@ rule OSXApp
 }
 actions BuildOSXApp
 {
-    $(RM) $(<) && \
+    $(RM) $(<) macosx/build/HandBrake.app && \
       ( cd macosx && xcodebuild ) && \
       cp -r macosx/build/HandBrake.app $(<) && \
       for i in $(LANGUAGES) ; do \

@@ -1,4 +1,4 @@
-# $Id: Jamfile,v 1.42 2004/03/29 00:28:39 titer Exp $
+# $Id: Jamfile,v 1.46 2004/04/26 09:02:07 titer Exp $
 #
 # This file is part of the HandBrake source code.
 # Homepage: <http://handbrake.m0k.org/>.
@@ -7,9 +7,10 @@
 SubDir TOP ;
 
 # libhb + contrib libraries
-HB_LIBS = libhb.a liba52.a libavcodec.a libdvdplay.a libdvdread.a
+HB_LIBS = libhb.a liba52.a libavcodec.a libdvdread.a
           libdvdcss.a libfaac.a libmp3lame.a libmp4v2.a libmpeg2.a
-          libvorbis.a libvorbisenc.a libogg.a libx264.a libxvidcore.a ;
+          libvorbis.a libvorbisenc.a libogg.a libsamplerate.a
+	  libx264.a libxvidcore.a ;
 
 # Interfaces
 TEST_BIN = HBTest ;
@@ -26,15 +27,10 @@ Main $(TEST_BIN) : $(TEST_SRC) ;
 
 if $(OS) = BEOS
 {
-    # Avoid multichar warnings caused by BeOS system headers
-    CCFLAGS  = -Wno-multichar ;
-    C++FLAGS = -Wno-multichar ;
-
     SystemLibraries HandBrake : -lbe ;
     # BeOS GUI is broken at the moment
     # Main            HandBrake : $(SRC_BEOS) ;
 }
-
 if $(OS) = MACOSX
 {
     # Needed to clean HandBrake.app
@@ -49,15 +45,18 @@ if $(OS) = MACOSX
     
     # Package
     OSXPackage HandBrake-$(HB_VERSION)-OSX.zip : HandBrake.app ;
-    PACKAGES += HandBrake-$(HB_VERSION)-OSX.zip ;
+    HB_PACKAGES += HandBrake-$(HB_VERSION)-OSX.zip ;
 }
-
 if $(OS) = LINUX
 {
     SystemLibraries $(TEST_BIN) : -lpthread ;
     SystemLibraries $(GTK2_BIN) : -lpthread `pkg-config gtk+-2.0 --libs` ;
     ObjectCcFlags   $(GTK2_SRC) : `pkg-config gtk+-2.0 --cflags` ;
     Main            $(GTK2_BIN) : $(GTK2_SRC) ;
+}
+if $(OS) = CYGWIN
+{
+    SystemLibraries $(TEST_BIN) : -lws2_32 ;
 }
 
 ObjectHdrs     $(GUI_SRC) : $(TOP)/core ;

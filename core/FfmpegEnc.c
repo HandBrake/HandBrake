@@ -1,4 +1,4 @@
-/* $Id: FfmpegEnc.c,v 1.19 2004/03/01 21:36:36 titer Exp $
+/* $Id: FfmpegEnc.c,v 1.26 2004/05/12 18:02:35 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -9,120 +9,89 @@
 /* libavcodec */
 #include "ffmpeg/avcodec.h"
 
-typedef struct HBFfmpegEnc
+struct HBWork
 {
     HB_WORK_COMMON_MEMBERS
 
     HBHandle       * handle;
     HBTitle        * title;
 
-    HBBuffer       * mpeg4Buffer;
     int              pass;
     AVCodecContext * context;
     FILE           * file;
-
-    /* Stats */
-    int              frames;
-    int64_t          bytes;
-} HBFfmpegEnc;
+};
 
 /* Local prototypes */
 static int  FfmpegEncWork( HBWork * );
-static int  InitAvcodec( HBFfmpegEnc * );
-static void CloseAvcodec( HBFfmpegEnc * );
+static int  InitAvcodec( HBWork * );
+static void CloseAvcodec( HBWork * );
 
 HBWork * HBFfmpegEncInit( HBHandle * handle, HBTitle * title )
 {
-    HBFfmpegEnc * f;
-    if( !( f = calloc( sizeof( HBFfmpegEnc ), 1 ) ) )
+    HBWork * w;
+    if( !( w = calloc( sizeof( HBWork ), 1 ) ) )
     {
         HBLog( "HBFfmpegEncInit: malloc() failed, gonna crash" );
         return NULL;
     }
 
-    f->name = strdup( "FfmpegEnc" );
-    f->work = FfmpegEncWork;
+    w->name = strdup( "FfmpegEnc" );
+    w->work = FfmpegEncWork;
 
-    f->handle = handle;
-    f->title  = title;
-    f->pass   = 42;
+    w->handle = handle;
+    w->title  = title;
+    w->pass   = 42;
 
-    return (HBWork*) f;
+    return w;
 }
 
-void HBFfmpegEncClose( HBWork ** _f )
+void HBFfmpegEncClose( HBWork ** _w )
 {
-    HBFfmpegEnc * f = (HBFfmpegEnc*) *_f;
+    HBWork * w = *_w;
 
-    if( f->context )
+    if( w->context )
     {
-        CloseAvcodec( f );
+        CloseAvcodec( w );
     }
 
-    /* Stats */
-    if( f->frames )
-    {
-        float   bitrate = (float) f->bytes * f->title->rate /
-            f->frames / f->title->rateBase / 128;
-        int64_t bytes = (int64_t) f->frames * f->title->bitrate * 128 *
-            f->title->rateBase / f->title->rate;
+    free( w->name );
+    free( w );
 
-        HBLog( "HBFfmpegEnc: %d frames encoded (%lld bytes), %.2f kbps",
-               f->frames, f->bytes, bitrate );
-        HBLog( "HBFfmpegEnc: error is %lld bytes", f->bytes - bytes );
-    }
-    free( f->name );
-    free( f );
-
-    *_f = NULL;
+    *_w = NULL;
 }
 
 static int FfmpegEncWork( HBWork * w )
 {
-    HBFfmpegEnc * f     = (HBFfmpegEnc*) w;
-    HBTitle     * title = f->title;
+    HBTitle  * title = w->title;
 
     HBBuffer * scaledBuffer;
     HBBuffer * mpeg4Buffer;
     AVFrame  * frame;
 
-    int didSomething = 0;
-
-    if( f->mpeg4Buffer )
+    if( HBFifoIsHalfFull( title->outFifo ) )
     {
-        if( HBFifoPush( title->outFifo, &f->mpeg4Buffer ) )
-        {
-            didSomething = 1;
-        }
-        else
-        {
-            return didSomething;
-        }
+        return 0;
     }
 
-    if( ( scaledBuffer = HBFifoPop( title->scaledFifo ) ) )
+    if( !( scaledBuffer = HBFifoPop( title->scaledFifo ) ) )
     {
-        didSomething = 1;
-    }
-    else
-    {
-        return didSomething;
+        return 0;
     }
 
     /* Init or re-init if needed */
-    if( scaledBuffer->pass != f->pass )
+    if( scaledBuffer->pass != w->pass )
     {
-        if( f->context )
+        if( w->context )
         {
-            CloseAvcodec( f );
+            CloseAvcodec( w );
         }
-        
-        f->pass = scaledBuffer->pass;
-        
-        if( !InitAvcodec( f ) )
+
+        w->pass = scaledBuffer->pass;
+
+        if( !InitAvcodec( w ) )
         {
-            HBErrorOccured( f->handle, HB_ERROR_MPEG4_INIT );
-            return didSomething;
+            HBErrorOccured( w->handle, HB_ERROR_MPEG4_INIT );
+            return 0;
         }
     }
 
@@ -139,49 +108,48 @@ static int FfmpegEncWork( HBWork * w )
     mpeg4Buffer = HBBufferInit( 3 * title->outWidth *
                                 title->outHeight / 2 );
     mpeg4Buffer->position = scaledBuffer->position;
-    mpeg4Buffer->size     = avcodec_encode_video( f->context,
+    mpeg4Buffer->size     = avcodec_encode_video( w->context,
             mpeg4Buffer->data, mpeg4Buffer->alloc, frame );
-    mpeg4Buffer->keyFrame = f->context->coded_frame->key_frame;
+    mpeg4Buffer->keyFrame = w->context->coded_frame->key_frame;
 
     /* Inform the GUI about the current position */
-    HBPosition( f->handle, scaledBuffer->position );
+    HBPosition( w->handle, scaledBuffer->position );
 
-    if( f->pass == 1 )
+    if( w->pass == 1 )
     {
-        if( f->context->stats_out )
+        if( w->context->stats_out )
         {
-            fprintf( f->file, "%s", f->context->stats_out );
+            fprintf( w->file, "%s", w->context->stats_out );
         }
         HBBufferClose( &mpeg4Buffer );
     }
     else
     {
-        f->mpeg4Buffer = mpeg4Buffer;
-
-        /* Stats */
-        f->frames++;
-        f->bytes += mpeg4Buffer->size;
+        if( !HBFifoPush( title->outFifo, &mpeg4Buffer ) )
+        {
+            HBLog( "HBFfmpegEnc: HBFifoPush failed" );
+        }
     }
 
     HBBufferClose( &scaledBuffer );
     free( frame );
 
-    return didSomething;
+    return 1;
 }
 
-static int InitAvcodec( HBFfmpegEnc * f )
+static int InitAvcodec( HBWork * w )
 {
     AVCodec        * codec;
     AVCodecContext * context;
-    HBTitle        * title = f->title;
+    HBTitle        * title = w->title;
 
-    HBLog( "HBFfmpegEnc: opening libavcodec (pass %d)", f->pass );
+    HBLog( "HBFfmpegEnc: opening libavcodec (pass %d)", w->pass );
 
     codec = avcodec_find_encoder( CODEC_ID_MPEG4 );
     if( !codec )
     {
         HBLog( "HBFfmpegEnc: avcodec_find_encoder() failed" );
-        HBErrorOccured( f->handle, HB_ERROR_MPEG4_INIT );
+        HBErrorOccured( w->handle, HB_ERROR_MPEG4_INIT );
         return 0;
     }
 
@@ -194,20 +162,25 @@ static int InitAvcodec( HBFfmpegEnc * f )
     context->frame_rate_base    = title->rateBase;
     context->gop_size           = 10 * title->rate / title->rateBase;
 
-    if( title->mux == HB_MUX_MP4 && f->pass != 1 )
+    if( title->mux == HB_MUX_MP4 && w->pass != 1 )
     {
         context->flags |= CODEC_FLAG_GLOBAL_HEADER;
     }
 
-    if( f->pass )
+    if( w->pass )
     {
         char fileName[1024]; memset( fileName, 0, 1024 );
+#ifndef HB_CYGWIN
         sprintf( fileName, "/tmp/HB.%d.ffmpeg.log",
-                 HBGetPid( f->handle ) );
+                 HBGetPid( w->handle ) );
+#else
+        sprintf( fileName, "C:\\HB.%d.ffmpeg.log",
+                 HBGetPid( w->handle ) );
+#endif
 
-        if( f->pass == 1 )
+        if( w->pass == 1 )
         {
-            f->file = fopen( fileName, "w" );
+            w->file = fopen( fileName, "wb" );
             context->flags |= CODEC_FLAG_PASS1;
         }
         else
@@ -216,7 +189,7 @@ static int InitAvcodec( HBFfmpegEnc * f )
             int    size;
             char * log;
 
-            file = fopen( fileName, "r" );
+            file = fopen( fileName, "rb" );
             fseek( file, 0, SEEK_END );
             size = ftell( file );
             fseek( file, 0, SEEK_SET );
@@ -245,7 +218,7 @@ static int InitAvcodec( HBFfmpegEnc * f )
         return 0;
     }
 
-    if( title->mux == HB_MUX_MP4 && f->pass != 1 )
+    if( title->mux == HB_MUX_MP4 && w->pass != 1 )
     {
         /* UGLY */
         title->esConfig = malloc( 15 );
@@ -253,30 +226,30 @@ static int InitAvcodec( HBFfmpegEnc * f )
         memcpy( title->esConfig, context->extradata + 15, 15 );
     }
 
-    f->context = context;
+    w->context = context;
     return 1;
 }
 
-static void CloseAvcodec( HBFfmpegEnc * f )
+static void CloseAvcodec( HBWork * w )
 {
     HBLog( "HBFfmpegEnc: closing libavcodec (pass %d)",
-           f->pass );
+           w->pass );
 
-    if( f->context->stats_in )
+    if( w->context->stats_in )
     {
-        free( f->context->stats_in );
+        free( w->context->stats_in );
     }
-    avcodec_close( f->context );
-    if( f->file )
+    avcodec_close( w->context );
+    if( w->file )
     {
-        fclose( f->file );
-        f->file = NULL;
+        fclose( w->file );
+        w->file = NULL;
     }
-    if( f->title->esConfig )
+    if( w->title->esConfig )
     {
-        free( f->title->esConfig );
-        f->title->esConfig       = NULL;
-        f->title->esConfigLength = 0;
+        free( w->title->esConfig );
+        w->title->esConfig       = NULL;
+        w->title->esConfigLength = 0;
     }
 }
 

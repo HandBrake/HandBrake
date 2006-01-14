@@ -1,4 +1,4 @@
-/* $Id: AviMux.c,v 1.17 2004/03/16 16:11:29 titer Exp $
+/* $Id: AviMux.c,v 1.24 2004/05/12 18:02:35 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -6,33 +6,12 @@
 
 #include "HBInternal.h"
 
-int64_t videoFrames;
-int64_t videoBytes;
-int64_t audioFrames;
-int64_t audioBytes;
-
-/* Local prototypes */
-static void       AviMuxThread( void * );
-static void       InitAviHeaders( HBAviMux * );
-static void       AddChunk( HBAviMux *, HBBuffer *, uint32_t,
-                            HBAviStreamHeader * );
-static void       AddIndex( HBAviMux * );
-static void       WriteInt8( FILE *, uint8_t );
-static void       WriteInt16( FILE *, uint16_t );
-static void       WriteInt32( FILE *, uint32_t );
-static void       WriteBuffer( FILE *, HBBuffer * );
-static void       WriteMainHeader( FILE *, HBAviMainHeader * );
-static void       WriteStreamHeader( FILE *, HBAviStreamHeader * );
-static void       WriteHBBitmapInfo( FILE *, HBBitmapInfo * );
-static void       WriteHBWaveFormatEx( FILE *, HBWaveFormatEx * );
-static void       IndexAddInt32( HBBuffer * buffer, uint32_t );
-
 #define AVIF_HASINDEX  0x10
 #define AVIIF_KEYFRAME 0x10
 #define FOURCC(a)      ((a[3]<<24)|(a[2]<<16)|(a[1]<<8)|a[0])
 
 /* Structures definitions */
-struct __attribute__((__packed__)) HBAviMainHeader
+typedef struct __attribute__((__packed__))
 {
     uint32_t FourCC;
     uint32_t BytesCount;
@@ -47,9 +26,10 @@ struct __attribute__((__packed__)) HBAviMainHeader
     uint32_t Width;
     uint32_t Height;
     uint32_t Reserved[4];
-};
 
-struct __attribute__((__packed__)) HBAviStreamHeader
+} HBAviMainHeader;
+
+typedef struct __attribute__((__packed__))
 {
     uint32_t FourCC;
     uint32_t BytesCount;
@@ -70,9 +50,10 @@ struct __attribute__((__packed__)) HBAviStreamHeader
     int16_t  Top;
     int16_t  Right;
     int16_t  Bottom;
-};
 
-struct __attribute__((__packed__)) HBBitmapInfo
+} HBAviStreamHeader;
+
+typedef struct __attribute__((__packed__))
 {
     uint32_t FourCC;
     uint32_t BytesCount;
@@ -87,9 +68,10 @@ struct __attribute__((__packed__)) HBBitmapInfo
     uint32_t YPelsPerMeter;
     uint32_t ClrUsed;
     uint32_t ClrImportant;
-};
 
-struct __attribute__((__packed__)) HBWaveFormatEx
+} HBBitmapInfo;
+
+typedef struct __attribute__((__packed__))
 {
     uint32_t FourCC;
     uint32_t BytesCount;
@@ -107,10 +89,13 @@ struct __attribute__((__packed__)) HBWaveFormatEx
     uint16_t BlockSize;
     uint16_t FramesPerBlock;
     uint16_t CodecDelay;
-};
 
-struct HBAviMux
+} HBWaveFormatEx;
+
+struct HBMux
 {
+    HB_MUX_COMMON_MEMBERS
+
     HBHandle      * handle;
     HBTitle       * title;
 
@@ -119,284 +104,191 @@ struct HBAviMux
 
     FILE          * file;
     HBBuffer      * index;
-
-    volatile int    die;
-    HBThread      * thread;
 };
 
-HBAviMux * HBAviMuxInit( HBHandle * handle, HBTitle * title )
+typedef struct
 {
-    HBAviMux * a;
-    if( !( a = malloc( sizeof( HBAviMux ) ) ) )
+    HBAviMainHeader   mainHeader;
+    HBAviStreamHeader videoHeader;
+    HBBitmapInfo      videoFormat;
+
+} AviVideoMuxData;
+
+typedef struct
+{
+    uint32_t          fourCC;
+    HBAviStreamHeader audioHeader;
+    HBWaveFormatEx    audioFormat;
+
+} AviAudioMuxData;
+
+/* Local prototypes */
+static int  AviStart( HBMux * );
+static int  AviMuxVideo( HBMux *, void *, HBBuffer *);
+static int  AviMuxAudio( HBMux *, void *, HBBuffer *);
+static int  AviEnd( HBMux * );
+
+static void AddChunk( HBMux *, HBBuffer *, uint32_t,
+                      HBAviStreamHeader * );
+static void AddIndex( HBMux * );
+static void WriteInt8( FILE *, uint8_t );
+static void WriteInt16( FILE *, uint16_t );
+static void WriteInt32( FILE *, uint32_t );
+static void WriteBuffer( FILE *, HBBuffer * );
+static void WriteMainHeader( FILE *, HBAviMainHeader * );
+static void WriteStreamHeader( FILE *, HBAviStreamHeader * );
+static void WriteHBBitmapInfo( FILE *, HBBitmapInfo * );
+static void WriteHBWaveFormatEx( FILE *, HBWaveFormatEx * );
+static void IndexAddInt32( HBBuffer * buffer, uint32_t );
+
+HBMux * HBAviMuxInit( HBHandle * handle, HBTitle * title )
+{
+    HBMux   * m;
+    HBAudio * audio;
+    int i;
+
+    if( !( m = calloc( sizeof( HBMux ), 1 ) ) )
     {
-        HBLog( "HBAviMuxInit: malloc() failed, gonna crash" );
+        HBLog( "HBAviMux: malloc() failed, gonna crash" );
         return NULL;
     }
+    m->start    = AviStart;
+    m->muxVideo = AviMuxVideo;
+    m->muxAudio = AviMuxAudio;
+    m->end      = AviEnd;
+    m->handle   = handle;
+    m->title    = title;
 
-    a->handle   = handle;
-    a->title    = title;
+    m->file  = NULL;
+    m->index = HBBufferInit( 1024 * 1024 );
+    m->index->size = 0;
 
-    videoFrames = 0;
-    videoBytes  = 0;
-    audioFrames = 0;
-    audioBytes  = 0;
-
-    a->size  = 0;
-    a->file  = NULL;
-    a->index = HBBufferInit( 1024 * 1024 );
-    a->index->size = 0;
-
-    a->die    = 0;
-    a->thread = HBThreadInit( "avi muxer", AviMuxThread, a,
-                              HB_NORMAL_PRIORITY );
-    return a;
-}
-
-void HBAviMuxClose( HBAviMux ** _a )
-{
-    HBAviMux * a = *_a;
-    FILE * file;
-    long   size;
-
-    a->die = 1;
-    HBThreadClose( &a->thread );
-
-#ifndef HB_CYGWIN
-    file = fopen( a->title->file, "r" );
-#else
-    file = fopen( a->title->file, "rb" );
-#endif
-    if( file )
+    /* Alloc muxer data */
+    title->muxData = calloc( sizeof( AviVideoMuxData ), 1 );
+    for( i = 0; i < HBListCount( title->ripAudioList ); i++ )
     {
-        fseek( file, 0, SEEK_END );
-        size = ftell( file );
-        fclose( file );
-
-        HBLog( "HBAviMux: videoFrames=%lld, %lld bytes",
-               videoFrames, videoBytes );
-        HBLog( "HBAviMux: audioFrames=%lld, %lld bytes",
-               audioFrames, audioBytes );
-        HBLog( "HBAviMux: overhead=%.2f bytes / frame",
-               ( (float) size - videoBytes - audioBytes ) /
-               ( videoFrames + audioFrames ) );
+        audio = (HBAudio *) HBListItemAt( title->ripAudioList, i );
+        audio->muxData = calloc( sizeof( AviAudioMuxData ), 1 );
     }
 
-    free( a );
-
-    *_a = NULL;
+    return m;
 }
 
-static void AviMuxThread( void * _a )
+void HBAviMuxClose( HBMux ** _m )
 {
-    HBAviMux * a          = (HBAviMux*) _a;
-    HBTitle  * title      = a->title;
-    int        audioCount = HBListCount( title->ripAudioList );
+    HBMux   * m     = *_m;
+    HBTitle * title = m->title;
+    HBAudio * audio;
+    int       i;
 
-    HBAudio  * audio;
-    HBBuffer * buffer;
-    int i;
+    /* Free muxer data */
+    free( title->muxData );
+    for( i = 0; i < HBListCount( title->ripAudioList ); i++ )
+    {
+        audio = (HBAudio *) HBListItemAt( title->ripAudioList, i );
+        free( audio->muxData );
+    }
+
+    HBBufferClose( &m->index );
+
+    free( m );
+
+    *_m = NULL;
+}
+
+#define mh videoMuxData->mainHeader
+#define vh videoMuxData->videoHeader
+#define vf videoMuxData->videoFormat
+#define ah audioMuxData->audioHeader
+#define af audioMuxData->audioFormat
+static int AviStart( HBMux * m )
+{
+    HBTitle         * title        = m->title;
+    int               audioCount   = HBListCount( title->ripAudioList );
+    AviVideoMuxData * videoMuxData = (AviVideoMuxData *) title->muxData;
+    AviAudioMuxData * audioMuxData;
+    HBAudio         * audio;
+    int               hdrlBytes;
+    int               i;
 
     /* Open destination file */
     HBLog( "HBAviMux: opening %s", title->file );
-#ifndef HB_CYGWIN
-    if( !( a->file = fopen( title->file, "w" ) ) )
-#else
-    if( !( a->file = fopen( title->file, "wb" ) ) )
-#endif
+    if( !( m->file = fopen( title->file, "wb" ) ) )
     {
         HBLog( "HBAviMux: fopen() failed" );
-        HBErrorOccured( a->handle, HB_ERROR_AVI_WRITE );
-        return;
+        HBErrorOccured( m->handle, HB_ERROR_AVI_WRITE );
+        return 1;
     }
-
-    /* Wait until we have one encoded frame for each track */
-    while( !a->die && !HBFifoSize( title->outFifo ) )
-    {
-        HBSnooze( 10000 );
-    }
-    for( i = 0; i < audioCount; i++ )
-    {
-        audio = HBListItemAt( title->ripAudioList, i );
-        while( !a->die && !HBFifoSize( audio->outFifo ) )
-        {
-            HBSnooze( 10000 );
-        }
-    }
-
-    if( a->die )
-    {
-        fclose( a->file );
-        a->file = NULL;
-
-        HBLog( "HBAviMux: deleting %s", title->file );
-        unlink( title->file );
-        return;
-    }
-
-    InitAviHeaders( a );
-
-    for( ;; )
-    {
-        /* Wait until we have one encoded frame for each track */
-        if( !HBFifoWait( title->outFifo ) )
-        {
-            a->die = 1;
-        }
-        for( i = 0; i < audioCount; i++ )
-        {
-            audio = HBListItemAt( title->ripAudioList, i );
-            if( !HBFifoWait( audio->outFifo ) )
-            {
-                a->die = 1;
-                break;
-            }
-        }
-
-        if( a->die )
-        {
-            break;
-        }
-
-        /* Interleave frames in the same order than they were in the
-           original MPEG stream */
-        audio = NULL;
-        for( i = 0; i < audioCount; i++ )
-        {
-            HBAudio * otherAudio;
-            otherAudio = HBListItemAt( title->ripAudioList, i );
-            if( !audio || HBFifoPosition( otherAudio->outFifo ) <
-                          HBFifoPosition( audio->outFifo ) )
-            {
-                audio = otherAudio;
-            }
-        }
-
-        if( audio == NULL ||
-            HBFifoPosition( title->outFifo ) <  HBFifoPosition( audio->outFifo ) )
-        {
-            buffer = HBFifoPop( title->outFifo );
-            AddChunk( a, buffer, FOURCC( "00dc" ), title->aviVideoHeader );
-            videoFrames++;
-            videoBytes += buffer->size;
-            HBBufferClose( &buffer );
-        }
-        else
-        {
-            buffer = HBFifoPop( audio->outFifo );
-            AddChunk( a, buffer, audio->aviFourCC, audio->aviAudioHeader );
-            audioFrames++;
-            audioBytes += buffer->size;
-            HBBufferClose( &buffer );
-        }
-    }
-
-    AddIndex( a );
-
-    HBLog( "HBAviMux: closing %s", title->file );
-    fclose( a->file );
-}
-
-static void InitAviHeaders( HBAviMux * a )
-{
-    HBTitle           * title      = a->title;
-    FILE              * file       = a->file;
-    int                 audioCount = HBListCount( title->ripAudioList );
-
-    HBAudio           * audio;
-    HBAviMainHeader   * mainHeader;
-    HBAviStreamHeader * videoHeader;
-    HBBitmapInfo      * videoFormat;
-    HBAviStreamHeader * audioHeader;
-    HBWaveFormatEx    * audioFormat;
-    int                 hdrlBytes;
-    int                 i;
 
     /* AVI main header */
-    mainHeader = calloc( sizeof( HBAviMainHeader ), 1 );
-
-    mainHeader->FourCC           = FOURCC( "avih" );
-    mainHeader->BytesCount       = sizeof( HBAviMainHeader ) - 8;
-    mainHeader->MicroSecPerFrame = (uint64_t) 1000000 *
-                                  title->rateBase / title->rate;
-    mainHeader->Streams          = 1 + audioCount;
-    mainHeader->Width            = title->outWidth;
-    mainHeader->Height           = title->outHeight;
-
-    title->aviMainHeader = mainHeader;
+    mh.FourCC           = FOURCC( "avih" );
+    mh.BytesCount       = sizeof( HBAviMainHeader ) - 8;
+    mh.MicroSecPerFrame = (uint64_t) 1000000 * title->rateBase /
+                              title->rate;
+    mh.Streams          = 1 + audioCount;
+    mh.Width            = title->outWidth;
+    mh.Height           = title->outHeight;
 
     /* Video stream header */
-    videoHeader = calloc( sizeof( HBAviStreamHeader ), 1 );
-
-    videoHeader->FourCC     = FOURCC( "strh" );
-    videoHeader->BytesCount = sizeof( HBAviStreamHeader ) - 8;
-    videoHeader->Type       = FOURCC( "vids" );
+    vh.FourCC     = FOURCC( "strh" );
+    vh.BytesCount = sizeof( HBAviStreamHeader ) - 8;
+    vh.Type       = FOURCC( "vids" );
 
     if( title->codec == HB_CODEC_FFMPEG )
-        videoHeader->Handler    = FOURCC( "divx" );
+        vh.Handler = FOURCC( "divx" );
     else if( title->codec == HB_CODEC_XVID )
-        videoHeader->Handler    = FOURCC( "xvid" );
+        vh.Handler = FOURCC( "xvid" );
     else if( title->codec == HB_CODEC_X264 )
-        videoHeader->Handler    = FOURCC( "H264" );
+        vh.Handler = FOURCC( "h264" );
 
-    videoHeader->Scale      = title->rateBase;
-    videoHeader->Rate       = title->rate;
-
-    title->aviVideoHeader = videoHeader;
+    vh.Scale      = title->rateBase;
+    vh.Rate       = title->rate;
 
     /* Video stream format */
-    videoFormat = calloc( sizeof( HBBitmapInfo ), 1 );
-
-    videoFormat->FourCC      = FOURCC( "strf" );
-    videoFormat->BytesCount  = sizeof( HBBitmapInfo ) - 8;
-    videoFormat->Size        = sizeof( HBBitmapInfo ) - 8;
-    videoFormat->Width       = title->outWidth;
-    videoFormat->Height      = title->outHeight;
-    videoFormat->Planes      = 1;
-    videoFormat->BitCount    = 24;
+    vf.FourCC      = FOURCC( "strf" );
+    vf.BytesCount  = sizeof( HBBitmapInfo ) - 8;
+    vf.Size        = sizeof( HBBitmapInfo ) - 8;
+    vf.Width       = title->outWidth;
+    vf.Height      = title->outHeight;
+    vf.Planes      = 1;
+    vf.BitCount    = 24;
     if( title->codec == HB_CODEC_FFMPEG )
-        videoFormat->Compression = FOURCC( "DX50" );
+        vf.Compression = FOURCC( "DX50" );
     else if( title->codec == HB_CODEC_XVID )
-        videoFormat->Compression = FOURCC( "XVID" );
+        vf.Compression = FOURCC( "XVID" );
     else if( title->codec == HB_CODEC_X264 )
-        videoFormat->Compression = FOURCC( "H264" );
-
-    title->aviVideoFormat = videoFormat;
+        vf.Compression = FOURCC( "H264" );
 
     for( i = 0; i < audioCount; i++ )
     {
-        audio = HBListItemAt( title->ripAudioList, i );
+        audio        = HBListItemAt( title->ripAudioList, i );
+        audioMuxData = (AviAudioMuxData *) audio->muxData;
 
         /* Audio stream header */
-        audioHeader = calloc( sizeof( HBAviStreamHeader ), 1 );
-
-        audioHeader->FourCC        = FOURCC( "strh" );
-        audioHeader->BytesCount    = sizeof( HBAviStreamHeader ) - 8;
-        audioHeader->Type          = FOURCC( "auds" );
-        audioHeader->InitialFrames = 1;
-        audioHeader->Scale         = 1152;
-        audioHeader->Rate          = audio->outSampleRate;
-        audioHeader->Quality       = 0xFFFFFFFF;
-
-        audio->aviAudioHeader = audioHeader;
+        ah.FourCC        = FOURCC( "strh" );
+        ah.BytesCount    = sizeof( HBAviStreamHeader ) - 8;
+        ah.Type          = FOURCC( "auds" );
+        ah.InitialFrames = 1;
+        ah.Scale         = 1;
+        ah.Rate          = audio->outBitrate * 1000 / 8;
+        ah.SampleSize    = 1;
+        ah.Quality       = 0xFFFFFFFF;
 
         /* Audio stream format */
-        audioFormat = calloc( sizeof( HBWaveFormatEx ), 1 );
-
-        audioFormat->FourCC         = FOURCC( "strf" );
-        audioFormat->BytesCount     = sizeof( HBWaveFormatEx ) - 8;
-        audioFormat->FormatTag      = 0x55;
-        audioFormat->Channels       = 2;
-        audioFormat->SamplesPerSec  = audio->outSampleRate;
-        audioFormat->AvgBytesPerSec = audio->outBitrate * 1024 / 8;
-        audioFormat->BlockAlign     = 1152;
-        audioFormat->Size           = 12;
-        audioFormat->Id             = 1;
-        audioFormat->Flags          = 2;
-        audioFormat->BlockSize      = 1152;
-        audioFormat->FramesPerBlock = 1;
-        audioFormat->CodecDelay     = 1393;
-
-        audio->aviAudioFormat = audioFormat;
+        af.FourCC         = FOURCC( "strf" );
+        af.BytesCount     = sizeof( HBWaveFormatEx ) - 8;
+        af.FormatTag      = 0x55;
+        af.Channels       = 2;
+        af.SamplesPerSec  = audio->outSampleRate;
+        af.AvgBytesPerSec = audio->outBitrate * 1000 / 8;
+        af.BlockAlign     = 1;
+        af.Size           = 12;
+        af.Id             = 1;
+        af.Flags          = 2;
+        af.BlockSize      = 1152 * af.AvgBytesPerSec /
+                                audio->outSampleRate;
+        af.FramesPerBlock = 1;
+        af.CodecDelay     = 1393;
     }
 
     hdrlBytes = 4 + sizeof( HBAviMainHeader ) + ( 1 + audioCount ) *
@@ -405,114 +297,147 @@ static void InitAviHeaders( HBAviMux * a )
 
     /* Here we really start to write into the file */
 
-    WriteInt32( file, FOURCC( "RIFF" ) );
-    WriteInt32( file, 2040 );
-    WriteInt32( file, FOURCC( "AVI " ) );
-    WriteInt32( file, FOURCC( "LIST" ) );
-    WriteInt32( file, hdrlBytes );
-    WriteInt32( file, FOURCC( "hdrl" ) );
-    WriteMainHeader( file, title->aviMainHeader );
-    WriteInt32( file, FOURCC( "LIST" ) );
-    WriteInt32( file, 4 + sizeof( HBAviStreamHeader ) +
-                      sizeof( HBBitmapInfo ) );
-    WriteInt32( file, FOURCC( "strl" ) );
-    WriteStreamHeader( file, title->aviVideoHeader );
-    WriteHBBitmapInfo( file, title->aviVideoFormat );
+    WriteInt32( m->file, FOURCC( "RIFF" ) );
+    WriteInt32( m->file, 2040 );
+    WriteInt32( m->file, FOURCC( "AVI " ) );
+    WriteInt32( m->file, FOURCC( "LIST" ) );
+    WriteInt32( m->file, hdrlBytes );
+    WriteInt32( m->file, FOURCC( "hdrl" ) );
+    WriteMainHeader( m->file, &mh );
+    WriteInt32( m->file, FOURCC( "LIST" ) );
+    WriteInt32( m->file, 4 + sizeof( HBAviStreamHeader ) +
+                sizeof( HBBitmapInfo ) );
+    WriteInt32( m->file, FOURCC( "strl" ) );
+    WriteStreamHeader( m->file, &vh );
+    WriteHBBitmapInfo( m->file, &vf );
 
     for( i = 0; i < audioCount; i++ )
     {
         char fourCC[5];
 
         audio = HBListItemAt( title->ripAudioList, i );
+        audioMuxData = (AviAudioMuxData *) audio->muxData;
 
         snprintf( fourCC, 5, "%02dwb", i + 1 );
-        audio->aviFourCC = FOURCC( fourCC );
+        audioMuxData->fourCC = FOURCC( fourCC );
 
-        WriteInt32( file, FOURCC( "LIST" ) );
-        WriteInt32( file, 4 + sizeof( HBAviStreamHeader ) +
+        WriteInt32( m->file, FOURCC( "LIST" ) );
+        WriteInt32( m->file, 4 + sizeof( HBAviStreamHeader ) +
                           sizeof( HBWaveFormatEx ) );
-        WriteInt32( file, FOURCC( "strl" ) );
-        WriteStreamHeader( file, audio->aviAudioHeader );
-        WriteHBWaveFormatEx( file, audio->aviAudioFormat );
+        WriteInt32( m->file, FOURCC( "strl" ) );
+        WriteStreamHeader( m->file, &ah );
+        WriteHBWaveFormatEx( m->file, &af );
     }
 
-    WriteInt32( file, FOURCC( "JUNK" ) );
-    WriteInt32( file, 2008 - hdrlBytes );
+    WriteInt32( m->file, FOURCC( "JUNK" ) );
+    WriteInt32( m->file, 2008 - hdrlBytes );
     for( i = 0; i < 2008 - hdrlBytes; i++ )
     {
-        WriteInt8( file, 0 );
+        WriteInt8( m->file, 0 );
     }
-    WriteInt32( file, FOURCC( "LIST" ) );
-    WriteInt32( file, 4 );
-    WriteInt32( file, FOURCC( "movi" ) );
+    WriteInt32( m->file, FOURCC( "LIST" ) );
+    WriteInt32( m->file, 4 );
+    WriteInt32( m->file, FOURCC( "movi" ) );
+
+    return 0;
 }
 
-static void AddChunk( HBAviMux * a, HBBuffer * buffer,
+static int AviMuxVideo( HBMux * m, void * _muxData, HBBuffer * buffer )
+{
+    AviVideoMuxData * muxData = (AviVideoMuxData *) _muxData;
+    AddChunk( m, buffer, FOURCC( "00dc" ), &muxData->videoHeader );
+    return 0;
+}
+
+static int AviMuxAudio( HBMux * m, void * _muxData, HBBuffer * buffer )
+{
+    AviAudioMuxData * muxData = (AviAudioMuxData *) _muxData;
+    AddChunk( m, buffer, muxData->fourCC, &muxData->audioHeader );
+    return 0;
+}
+
+static int AviEnd( HBMux * m )
+{
+    AddIndex( m );
+    fclose( m->file );
+    return 0;
+}
+#undef mh
+#undef vh
+#undef vf
+#undef ah
+#undef af
+
+static void AddChunk( HBMux * m, HBBuffer * buffer,
                       uint32_t fourCC, HBAviStreamHeader * header )
 {
-    HBTitle * title = a->title;
+    HBTitle * title = m->title;
+    AviVideoMuxData * videoMuxData = (AviVideoMuxData *) title->muxData;
+    AviAudioMuxData * audioMuxData;
 
     HBAudio * audio;
     int i;
 
     /* Update index */
-    IndexAddInt32( a->index, fourCC );
-    IndexAddInt32( a->index, buffer->keyFrame ? AVIIF_KEYFRAME : 0 );
-    IndexAddInt32( a->index, 4 + a->size );
-    IndexAddInt32( a->index, buffer->size );
+    IndexAddInt32( m->index, fourCC );
+    IndexAddInt32( m->index, buffer->keyFrame ? AVIIF_KEYFRAME : 0 );
+    IndexAddInt32( m->index, 4 + m->size );
+    IndexAddInt32( m->index, buffer->size );
 
     /* Write the chunk to the file */
-    fseek( a->file, 0, SEEK_END );
-    WriteInt32( a->file, fourCC );
-    WriteInt32( a->file, buffer->size );
-    WriteBuffer( a->file, buffer );
+    fseek( m->file, 0, SEEK_END );
+    WriteInt32( m->file, fourCC );
+    WriteInt32( m->file, buffer->size );
+    WriteBuffer( m->file, buffer );
 
     /* Chunks must be 2-bytes aligned */
     if( buffer->size & 1 )
     {
-        WriteInt8( a->file, 0 );
+        WriteInt8( m->file, 0 );
     }
 
     /* Update headers */
-    a->size += 8 + EVEN( buffer->size );
+    m->size += 8 + EVEN( buffer->size );
     header->Length++;
 
     /* RIFF size */
-    fseek( a->file, 4, SEEK_SET );
-    WriteInt32( a->file, 2040 + a->size );
+    fseek( m->file, 4, SEEK_SET );
+    WriteInt32( m->file, 2040 + m->size );
 
     /* HBAviStreamHeader's lengths */
-    fseek( a->file, 140, SEEK_SET );
-    WriteInt32( a->file, title->aviVideoHeader->Length );
+    fseek( m->file, 140, SEEK_SET );
+    WriteInt32( m->file, videoMuxData->videoHeader.Length );
 
     for( i = 0; i < HBListCount( title->ripAudioList ); i++ )
     {
         audio = (HBAudio*) HBListItemAt( title->ripAudioList, i );
-        fseek( a->file, 268 + i * 114, SEEK_SET );
-        WriteInt32( a->file, audio->aviAudioHeader->Length );
+        audioMuxData = (AviAudioMuxData *) audio->muxData;
+        fseek( m->file, 268 + i * 114, SEEK_SET );
+        WriteInt32( m->file, audioMuxData->audioHeader.Length );
     }
 
     /* movi size */
-    fseek( a->file, 2040, SEEK_SET );
-    WriteInt32( a->file, 4 + a->size );
+    fseek( m->file, 2040, SEEK_SET );
+    WriteInt32( m->file, 4 + m->size );
 }
 
-static void AddIndex( HBAviMux * a )
+static void AddIndex( HBMux * m )
 {
-    HBTitle * title = a->title;
+    HBTitle * title = m->title;
+    AviVideoMuxData * videoMuxData = (AviVideoMuxData *) title->muxData;
 
-    fseek( a->file, 0, SEEK_END );
+    fseek( m->file, 0, SEEK_END );
 
-    WriteInt32( a->file, FOURCC( "idx1" ) );
-    WriteInt32( a->file, a->index->size );
-    WriteBuffer( a->file, a->index );
+    WriteInt32( m->file, FOURCC( "idx1" ) );
+    WriteInt32( m->file, m->index->size );
+    WriteBuffer( m->file, m->index );
 
-    a->size += 8 + a->index->size;
-    fseek( a->file, 4, SEEK_SET );
-    WriteInt32( a->file, 2040 + a->size );
-    title->aviMainHeader->Flags |= AVIF_HASINDEX;
-    fseek( a->file, 24, SEEK_SET );
-    WriteMainHeader( a->file, title->aviMainHeader );
+    m->size += 8 + m->index->size;
+    fseek( m->file, 4, SEEK_SET );
+    WriteInt32( m->file, 2040 + m->size );
+    videoMuxData->mainHeader.Flags |= AVIF_HASINDEX;
+    fseek( m->file, 24, SEEK_SET );
+    WriteMainHeader( m->file, &videoMuxData->mainHeader );
 }
 
 static void WriteInt8( FILE * file, uint8_t val )
@@ -554,12 +479,6 @@ static void WriteHBBitmapInfo( FILE * file, HBBitmapInfo * bitmapInfo )
     WriteInt32( file, bitmapInfo->YPelsPerMeter );
     WriteInt32( file, bitmapInfo->ClrUsed );
     WriteInt32( file, bitmapInfo->ClrImportant );
-#if 0
-    WriteInt8( file, bitmapInfo->Blue );
-    WriteInt8( file, bitmapInfo->Green );
-    WriteInt8( file, bitmapInfo->Red );
-    WriteInt8( file, bitmapInfo->Reserved );
-#endif
 }
 
 static void WriteHBWaveFormatEx( FILE * file, HBWaveFormatEx * waveFormatEx )

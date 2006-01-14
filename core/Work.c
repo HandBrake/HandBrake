@@ -1,4 +1,4 @@
-/* $Id: Work.c,v 1.12 2004/01/05 16:50:25 titer Exp $
+/* $Id: Work.c,v 1.14 2004/04/27 19:30:00 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -53,6 +53,7 @@ HBWorkThread * HBWorkThreadInit( HBHandle * handle, HBTitle * title,
     {
         audio = HBListItemAt( title->ripAudioList, i );
         HBListAdd( t->workList, audio->decoder );
+        HBListAdd( t->workList, audio->resample );
         HBListAdd( t->workList, audio->encoder );
     }
 
@@ -105,7 +106,7 @@ void HBWorkThreadClose( HBWorkThread ** _t )
         for( i = 0; i < HBListCount( t->workList ); i++ )
         {
             w = (HBWork*) HBListItemAt( t->workList, i );
-            HBLog( "HBWorkThreadClose: %- 9s = %05.2f %%", w->name,
+            HBLog( "HBWorkThread: %- 9s = %05.2f %%", w->name,
                    100.0 * w->time / total );
         }
 
@@ -126,7 +127,7 @@ static void WorkThread( void * _t )
     uint64_t       date;
 
     didSomething = 0;
-    
+
     for( i = 0; !t->die; i++ )
     {
         HBCheckPaused( t->handle );

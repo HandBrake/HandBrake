@@ -194,24 +194,9 @@
 		};
 		29B97317FDCFA39411CA2CEA = {
 			children = (
-				4D194F36059E0FBC004A33A1,
-				4D548205059E100C00AD5E02,
-				4D194F37059E0FBC004A33A1,
-				4D194F38059E0FBC004A33A1,
 				29B97318FDCFA39411CA2CEA,
-				4D929FED0527907200A80101,
-				4D69F5C80527944A00A80101,
-				4D69F5C90527944A00A80101,
-				4D69F5CA0527944A00A80101,
-				4D69F5CB0527944A00A80101,
-				4D69F5CC0527944A00A80101,
-				4D69F5CD0527944A00A80101,
-				4D69F5CE0527944A00A80101,
-				4DDEF3B905474DCC002904DE,
 				4D118405053054CD00C39CA9,
 				089C165CFE840E0CC02AAC07,
-				4D0AEC1805747B7A00FAB0FD,
-				4D0AEC1C05747B8C00FAB0FD,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -277,10 +262,10 @@
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				HEADER_SEARCH_PATHS = "";
-				LIBRARY_SEARCH_PATHS = "../core ../contrib/liba52 ../contrib/libavcodec ../contrib/libdvdcss ../contrib/libdvdplay ../contrib/libdvdread ../contrib/libfaac ../contrib/libmp3lame ../contrib/libmp4v2 ../contrib/libmpeg2 ../contrib/libogg ../contrib/libvorbis ../contrib/libx264 ../contrib/libxvidcore";
+				LIBRARY_SEARCH_PATHS = "";
 				OPTIMIZATION_CFLAGS = "-O3";
 				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "../core/libhb.a ../contrib/liba52/liba52.a ../contrib/libavcodec/libavcodec.a ../contrib/libdvdread/libdvdread.a ../contrib/libdvdcss/libdvdcss.a ../contrib/libfaac/libfaac.a ../contrib/libmp3lame/libmp3lame.a ../contrib/libmp4v2/libmp4v2.a ../contrib/libmpeg2/libmpeg2.a ../contrib/libvorbis/libvorbis.a ../contrib/libvorbis/libvorbisenc.a ../contrib/libogg/libogg.a ../contrib/libsamplerate/libsamplerate.a ../contrib/libx264/libx264.a ../contrib/libxvidcore/libxvidcore.a";
 				PRODUCT_NAME = HandBrake;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
@@ -302,6 +287,8 @@
 	<string>HandBrake</string>
 	<key>CFBundleExecutable</key>
 	<string>HandBrake</string>
+	<key>CFBundleGetInfoString</key>
+	<string>0.6.2</string>
 	<key>CFBundleIconFile</key>
 	<string>HandBrake.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -313,11 +300,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.6.1</string>
+	<string>0.6.2</string>
 	<key>CFBundleSignature</key>
 	<string>HB##</string>
 	<key>CFBundleVersion</key>
-	<string>0.6.1</string>
+	<string>0.6.2</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>By Eric Petit &lt;titer@m0k.org&gt;</string>
 	<key>NSMainNibFile</key>
@@ -372,23 +359,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				1058C7A3FEA54F0111CA2CBB,
-				4D929FEE0527907200A80101,
-				4D69F5CF0527944A00A80101,
-				4D69F5D00527944A00A80101,
-				4D69F5D10527944A00A80101,
-				4D69F5D20527944A00A80101,
-				4D69F5D30527944A00A80101,
-				4D69F5D40527944A00A80101,
-				4D69F5D50527944A00A80101,
 				4DEB2025052B055F00C39CA9,
 				4DDE9725052B7B2B00C39CA9,
-				4DDEF3BA05474DCC002904DE,
-				4D0AEC1905747B7A00FAB0FD,
-				4D0AEC1D05747B8C00FAB0FD,
-				4D194F39059E0FBC004A33A1,
-				4D194F3A059E0FBC004A33A1,
-				4D194F3B059E0FBC004A33A1,
-				4D548206059E100C00AD5E02,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -408,7 +380,7 @@
 			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = "0.6.1";
+				CURRENT_PROJECT_VERSION = "0.6.2";
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
@@ -441,34 +413,6 @@
 //4D2
 //4D3
 //4D4
-		4D0AEC1805747B7A00FAB0FD = {
-			isa = PBXFileReference;
-			lastKnownFileType = archive.ar;
-			name = libfaac.a;
-			path = ../contrib/libfaac/libfaac.a;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
-		4D0AEC1905747B7A00FAB0FD = {
-			fileRef = 4D0AEC1805747B7A00FAB0FD;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		4D0AEC1C05747B8C00FAB0FD = {
-			isa = PBXFileReference;
-			lastKnownFileType = archive.ar;
-			name = libmp4v2.a;
-			path = ../contrib/libmp4v2/libmp4v2.a;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
-		4D0AEC1D05747B8C00FAB0FD = {
-			fileRef = 4D0AEC1C05747B8C00FAB0FD;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		4D118405053054CD00C39CA9 = {
 			isa = PBXFileReference;
 			lastKnownFileType = image.icns;
@@ -478,48 +422,6 @@
 		};
 		4D118406053054CD00C39CA9 = {
 			fileRef = 4D118405053054CD00C39CA9;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		4D194F36059E0FBC004A33A1 = {
-			isa = PBXFileReference;
-			lastKnownFileType = archive.ar;
-			name = libvorbis.a;
-			path = ../contrib/libvorbis/libvorbis.a;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
-		4D194F37059E0FBC004A33A1 = {
-			isa = PBXFileReference;
-			lastKnownFileType = archive.ar;
-			name = libvorbisenc.a;
-			path = ../contrib/libvorbis/libvorbisenc.a;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
-		4D194F38059E0FBC004A33A1 = {
-			isa = PBXFileReference;
-			lastKnownFileType = archive.ar;
-			name = libx264.a;
-			path = ../contrib/libx264/libx264.a;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
-		4D194F39059E0FBC004A33A1 = {
-			fileRef = 4D194F36059E0FBC004A33A1;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		4D194F3A059E0FBC004A33A1 = {
-			fileRef = 4D194F37059E0FBC004A33A1;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		4D194F3B059E0FBC004A33A1 = {
-			fileRef = 4D194F38059E0FBC004A33A1;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -552,120 +454,8 @@
 			settings = {
 			};
 		};
-		4D548205059E100C00AD5E02 = {
-			isa = PBXFileReference;
-			lastKnownFileType = archive.ar;
-			name = libogg.a;
-			path = ../contrib/libogg/libogg.a;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
-		4D548206059E100C00AD5E02 = {
-			fileRef = 4D548205059E100C00AD5E02;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		4D6615EA05288C2300A80101 = {
 			fileRef = 4DF3C8CB052889CD00A80101;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		4D69F5C80527944A00A80101 = {
-			isa = PBXFileReference;
-			lastKnownFileType = archive.ar;
-			name = liba52.a;
-			path = ../contrib/liba52/liba52.a;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
-		4D69F5C90527944A00A80101 = {
-			isa = PBXFileReference;
-			lastKnownFileType = archive.ar;
-			name = libavcodec.a;
-			path = ../contrib/libavcodec/libavcodec.a;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
-		4D69F5CA0527944A00A80101 = {
-			isa = PBXFileReference;
-			lastKnownFileType = archive.ar;
-			name = libdvdcss.a;
-			path = ../contrib/libdvdcss/libdvdcss.a;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
-		4D69F5CB0527944A00A80101 = {
-			isa = PBXFileReference;
-			lastKnownFileType = archive.ar;
-			name = libdvdplay.a;
-			path = ../contrib/libdvdplay/libdvdplay.a;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
-		4D69F5CC0527944A00A80101 = {
-			isa = PBXFileReference;
-			lastKnownFileType = archive.ar;
-			name = libdvdread.a;
-			path = ../contrib/libdvdread/libdvdread.a;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
-		4D69F5CD0527944A00A80101 = {
-			isa = PBXFileReference;
-			lastKnownFileType = archive.ar;
-			name = libmp3lame.a;
-			path = ../contrib/libmp3lame/libmp3lame.a;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
-		4D69F5CE0527944A00A80101 = {
-			isa = PBXFileReference;
-			lastKnownFileType = archive.ar;
-			name = libmpeg2.a;
-			path = ../contrib/libmpeg2/libmpeg2.a;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
-		4D69F5CF0527944A00A80101 = {
-			fileRef = 4D69F5C80527944A00A80101;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		4D69F5D00527944A00A80101 = {
-			fileRef = 4D69F5C90527944A00A80101;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		4D69F5D10527944A00A80101 = {
-			fileRef = 4D69F5CA0527944A00A80101;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		4D69F5D20527944A00A80101 = {
-			fileRef = 4D69F5CB0527944A00A80101;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		4D69F5D30527944A00A80101 = {
-			fileRef = 4D69F5CC0527944A00A80101;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		4D69F5D40527944A00A80101 = {
-			fileRef = 4D69F5CD0527944A00A80101;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		4D69F5D50527944A00A80101 = {
-			fileRef = 4D69F5CE0527944A00A80101;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -698,20 +488,6 @@
 			settings = {
 			};
 		};
-		4D929FED0527907200A80101 = {
-			isa = PBXFileReference;
-			lastKnownFileType = archive.ar;
-			name = libhb.a;
-			path = ../core/libhb.a;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
-		4D929FEE0527907200A80101 = {
-			fileRef = 4D929FED0527907200A80101;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		4DDE9724052B7B2B00C39CA9 = {
 			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
@@ -723,20 +499,6 @@
 		};
 		4DDE9725052B7B2B00C39CA9 = {
 			fileRef = 4DDE9724052B7B2B00C39CA9;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		4DDEF3B905474DCC002904DE = {
-			isa = PBXFileReference;
-			lastKnownFileType = archive.ar;
-			name = libxvidcore.a;
-			path = ../contrib/libxvidcore/libxvidcore.a;
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
-		};
-		4DDEF3BA05474DCC002904DE = {
-			fileRef = 4DDEF3B905474DCC002904DE;
 			isa = PBXBuildFile;
 			settings = {
 			};

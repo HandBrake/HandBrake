@@ -1,4 +1,4 @@
-/* $Id: Fifo.h,v 1.13 2004/03/17 10:35:06 titer Exp $
+/* $Id: Fifo.h,v 1.16 2004/04/27 22:02:59 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -19,23 +19,22 @@ struct HBBuffer
 #if defined( HB_CYGWIN )
     uint8_t * dataOrig;
 #endif
+    float   * dataf;
     float     position;
     int       pass;
 
     /* Only used for PStoES */
-    int       streamId;
+    uint32_t  streamId;
     uint64_t  pts;
 
     /* NTSC suxx */
     int       repeat;
 
-    /* Only used for raw audio buffers */
-    int       samples; /* Number of samples for each track */
-    float   * left;
-    float   * right;
-
     /* Only used for MPEG-4, MP3 and AAC buffers */
     int       keyFrame;
+
+    /* Use for bitstreams */
+    int       _pos;
 };
 
 HBBuffer * HBBufferInit( int size );
@@ -55,10 +54,13 @@ struct HBFifo
 
 HBFifo                 * HBFifoInit( int capacity );
 static inline int        HBFifoSize( HBFifo * );
+static inline int        HBFifoIsHalfFull( HBFifo * );
 static inline int        HBFifoPush( HBFifo *, HBBuffer ** );
 static inline HBBuffer * HBFifoPop( HBFifo * );
 static inline int        HBFifoWait( HBFifo * );
 static inline float      HBFifoPosition( HBFifo * );
+static inline int        HBFifoGetBytes( HBFifo * f, uint8_t *, int,
+                                         float * position );
 void                     HBFifoDie( HBFifo * );
 void                     HBFifoClose( HBFifo ** );
 
@@ -70,6 +72,16 @@ static inline int HBFifoSize( HBFifo * f )
                  ( f->capacity + 1 );
     HBLockUnlock( f->lock );
     return size;
+}
+
+static inline int HBFifoIsHalfFull( HBFifo * f )
+{
+    int size;
+    HBLockLock( f->lock );
+    size = ( f->capacity + 1 + f->whereToPush - f->whereToPop ) %
+                 ( f->capacity + 1 );
+    HBLockUnlock( f->lock );
+    return ( 2 * size > f->capacity );
 }
 
 static inline int HBFifoPush( HBFifo * f, HBBuffer ** b )
@@ -142,6 +154,64 @@ static inline float HBFifoPosition( HBFifo * f )
     }
     HBLockUnlock( f->lock );
     return pos;
+}
+
+static inline int HBFifoGetBytes( HBFifo * f, uint8_t * data, int nb,
+                                  float * position )
+{
+    int whereToPop, bytes = 0;
+    HBBuffer * buffer;
+    HBLockLock( f->lock );
+
+    /* Do we have enough? */
+    for( whereToPop = f->whereToPop; ; whereToPop++ )
+    {
+        whereToPop %= ( f->capacity + 1 );
+        if( f->whereToPush == whereToPop )
+        {
+            /* We hit the end of the fifo */
+            break;
+        }
+
+        bytes += f->buffers[whereToPop]->size -
+                    f->buffers[whereToPop]->_pos;
+
+        if( bytes >= nb )
+        {
+            break;
+        }
+    }
+
+    if( bytes < nb )
+    {
+        /* Not enough data */
+        HBLockUnlock( f->lock );
+        return 0;
+    }
+
+    for( bytes = 0; bytes < nb; )
+    {
+        int copy;
+
+        buffer = f->buffers[f->whereToPop];
+        copy   = MIN( nb - bytes, buffer->size - buffer->_pos );
+
+        memcpy( data + bytes, buffer->data + buffer->_pos, copy );
+        (*position) = buffer->position;
+
+        buffer->_pos += copy;
+        bytes        += copy;
+
+        if( buffer->_pos == buffer->size )
+        {
+            HBBufferClose( &buffer );
+            f->whereToPop++;
+            f->whereToPop %= ( f->capacity + 1 );
+        }
+    }
+
+    HBLockUnlock( f->lock );
+    return 1;
 }
 
 #endif
