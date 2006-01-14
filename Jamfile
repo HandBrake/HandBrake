@@ -1,14 +1,86 @@
-# $Id: Jamfile,v 1.17 2003/08/26 18:54:06 titer Exp $
+# $Id: Jamfile,v 1.33 2003/10/06 21:21:27 titer Exp $
+#
+# This file is part of the HandBrake source code.
+# Homepage: <http://beos.titer.org/handbrake/>.
+# It may be used under the terms of the GNU General Public License.
 
-HB_VERSION = 0.2 ;
+HB_VERSION = 0.3 ;
 
-C++FLAGS = $(CPPFLAGS) ;
-C++FLAGS += -g -Wall -Werror -Wno-multichar -O3 -funroll-loops ;
-C++FLAGS += -DVERSION=\\\"$(HB_VERSION)\\\" ;
-LINKFLAGS =  $(LDFLAGS) ;
-LINKLIBS = -lbe -ldvdplay -ldvdread -ldvdcss -lmpeg2 -lavcodec -la52 -lmp3lame ;
+# Compilers
+C++  = g++ ;
+LINK = g++ ;
 
-Main HandBrake :
-	HandBrake.cpp HBAc3Decoder.cpp HBApp.cpp HBAviMuxer.cpp HBCommon.cpp
-	HBDVDReader.cpp HBFifo.cpp HBManager.cpp HBMp3Encoder.cpp HBMpeg2Decoder.cpp
-	HBMpeg4Encoder.cpp HBMpegDemux.cpp HBPictureWin.cpp HBThread.cpp HBWindow.cpp ;
+# Flags
+C++FLAGS  = $(CPPFLAGS) ;
+C++FLAGS += -g -Wall -Werror ;
+C++FLAGS += -DVERSION=\\\"$(HB_VERSION)\\\" -DSYS_$(OS) ;
+LINKFLAGS = $(LDFLAGS) ;
+HDRS      = core ;
+
+# Optims
+C++FLAGS += -funroll-loops ;
+OPTIM     = -O3 ;
+
+# Libs
+LINKLIBS = -ldvdplay -ldvdread -ldvdcss -lmpeg2 -lavcodec -la52 -lmp3lame ;
+
+# OS specific
+if $(OS) = BEOS
+{
+    C++FLAGS += -Wno-multichar ;
+    LINKLIBS += -lbe ;
+}
+else if $(OS) = LINUX
+{
+    LINKLIBS += -lpthread ;
+}
+else if $(OS) = MACOSX
+{
+    # needed to clean HandBrake.app
+    RM = rm -rf ;
+}
+
+# Do not remove temporary object files
+# There MUST be a cleaner way to do this
+actions quietly updated piecemeal together RmTemps
+{
+}
+
+# Build HandBrake.app using ProjectBuilder
+rule OSXApp
+{
+    Clean clean : $(1) ;
+    BuildOSXApp $(1) ;
+}
+
+actions BuildOSXApp
+{
+    $(RM) HandBrake.app ;
+    ( cd macosx && pbxbuild ) && mv macosx/build/HandBrake.app . ;
+    $(RM) macosx/build ;
+}
+
+Library core/libhb : core/Ac3Decoder.cpp core/AviMuxer.cpp
+                     core/Common.cpp core/DVDReader.cpp core/Fifo.cpp
+                     core/Manager.cpp core/Mp3Encoder.cpp
+                     core/Mpeg2Decoder.cpp core/Mpeg4Encoder.cpp
+		     core/MpegDemux.cpp core/Resizer.cpp
+		     core/Scanner.cpp core/Thread.cpp ;
+
+LinkLibraries HBTest : core/libhb.a ;
+Main HBTest : test/Test.cpp ;
+
+if $(OS) = BEOS
+{
+    LinkLibraries HandBrake : core/libhb.a ;
+    Main HandBrake : beos/HandBrake.cpp beos/MainWindow.cpp
+                     beos/PictureWin.cpp ;
+}
+
+if $(OS) = MACOSX
+{
+    OSXApp HandBrake.app ;
+    Depends HandBrake.app : core/libhb.a ;
+    Depends all : HandBrake.app ;
+}
+

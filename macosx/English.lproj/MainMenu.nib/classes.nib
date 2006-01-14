@@ -1,0 +1,70 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {
+                BrowseDVD = id; 
+                BrowseFile = id; 
+                Cancel = id; 
+                ClosePanel = id; 
+                NextPicture = id; 
+                PreviousPicture = id; 
+                Resume = id; 
+                Rip = id; 
+                Scan = id; 
+                ScanEnableIntf = id; 
+                ShowPicturePanel = id; 
+                Suspend = id; 
+                UpdatePicture = id; 
+                UpdatePopUp = id; 
+            }; 
+            CLASS = HBController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                fAudioField = NSTextField; 
+                fAudioPopUp = NSPopUpButton; 
+                fAudioStepper = NSStepper; 
+                fBlankView = NSView; 
+                fBottomField = NSTextField; 
+                fBottomStepper = NSStepper; 
+                fCropButton = NSButton; 
+                fDVDFolderField = NSTextField; 
+                fDVDPopUp = NSPopUpButton; 
+                fDeinterlaceCheck = NSButton; 
+                fDonePanel = NSPanel; 
+                fFileField = NSTextField; 
+                fInfoField = NSTextField; 
+                fLeftField = NSTextField; 
+                fLeftStepper = NSStepper; 
+                fPictureGLView = PictureGLView; 
+                fPicturePanel = NSPanel; 
+                fRightField = NSTextField; 
+                fRightStepper = NSStepper; 
+                fRipBrowseButton = NSButton; 
+                fRipButton = NSButton; 
+                fRipProgress = NSProgressIndicator; 
+                fRipStatusField = NSTextField; 
+                fRipView = NSView; 
+                fScanBrowseButton = NSButton; 
+                fScanButton = NSButton; 
+                fScanMatrix = NSMatrix; 
+                fScanProgress = NSProgressIndicator; 
+                fScanStatusField = NSTextField; 
+                fScanView = NSView; 
+                fSuspendButton = NSButton; 
+                fTitlePopUp = NSPopUpButton; 
+                fTopField = NSTextField; 
+                fTopStepper = NSStepper; 
+                fTwoPassCheck = NSButton; 
+                fVideoField = NSTextField; 
+                fVideoStepper = NSStepper; 
+                fWidthField = NSTextField; 
+                fWidthStepper = NSStepper; 
+                fWindow = NSWindow; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = PictureGLView; LANGUAGE = ObjC; SUPERCLASS = NSOpenGLView; }
+    ); 
+    IBVersion = 1; 
+}

@@ -1,7 +1,13 @@
-$Id: NEWS,v 1.6 2003/08/26 18:54:06 titer Exp $
+$Id: NEWS,v 1.9 2003/10/06 21:21:27 titer Exp $
+
+Changes between 0.2 and 0.3
+ - OSX & Linux ports
+ - Allow 2-pass encoding
+ - Many internal changes & fixes
 
 Changes between 0.1.1 and 0.2
- - Fixed a major bug that made HandBrake probably crash after ~ 15 minutes encoded
+ - Fixed a major bug that made HandBrake probably crash after ~ 15
+   minutes encoded
  - Fixed a few minor memory leaks
 
 Changes between 0.1 and 0.1.1
