@@ -2,20 +2,20 @@
   + Should be able to boost the audio volume
   + Allow the intf to preview the latest encoded picture
   + Finish and test the MPEG audio decoder
-  + More encoding options: B-frames, type of estimation,
-    type of scaling, etc
+  + More encoding options: B-frames, type of estimation etc etc
   + Subtitle support
-  + Finish xvid encoding support (2-pass, more tests)
   + Allow the user to split the file in x parts
+  + AC3 pass-through
   + AAC & vorbis encoding support
   + mp4 & mkv muxing support
   + manual aspect ratio
+  + rotate the movie
+  + rip only a few chapters
+  + network shared processing (using RendezVous)
 
 - All interfaces
   + Use the DVD name in popup and for the name of the created file
+  + nice 'About...' box with link to homepage & faq
 
 - BeOS interface
   + Redo the picture panel
-
-- OS X interface
-  + Make the 'destination' field editable

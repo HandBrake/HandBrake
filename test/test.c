@@ -1,4 +1,4 @@
-/* $Id: test.c,v 1.5 2003/11/06 13:28:07 titer Exp $
+/* $Id: test.c,v 1.7 2003/11/13 01:18:52 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -45,8 +45,11 @@ int main( int argc, char ** argv )
     /* Exit ASAP on Ctrl-C */
     signal( SIGINT,  SigHandler );
 
+    fprintf( stderr, "Welcome to HandBrake " VERSION "\n" );
+
     /* Parse command line */
-    while( ( c = getopt( argc, argv, "qd:o:t:a:b:piw:j:k:l:m:c:e:f:x" ) ) != -1 )
+    while( ( c = getopt( argc, argv,
+                         "qd:o:t:a:b:piw:j:k:l:m:c:e:f:x" ) ) != -1 )
     {
         switch( c )
         {
@@ -127,27 +130,27 @@ int main( int argc, char ** argv )
     if( !device || !file )
     {
         fprintf( stderr,
-                 "Syntax: HBTest [options] -d <device> -o <file>\n"
-                 "Possible options are :\n"
-                 "    -q           quiet output\n"
-                 "    -t <value>   select a title (default is 1)\n"
-                 "    -a <value>   primary audio channel (default is 1)\n"
-                 "    -b <value>   secondary audio channel (default is none)\n"
-                 "    -p           2-pass encoding\n"
-                 "    -i           deinterlace picture\n"
-                 "    -w           output width\n"
-                 "    -j <value>   top cropping\n"
-                 "    -k <value>   bottom cropping\n"
-                 "    -l <value>   left cropping\n"
-                 "    -m <value>   right cropping\n"
-                 "    -c <value>   CPU count (default: autodetected)\n"
-                 "    -e <value>   Video bitrate (default is 1024)\n"
-                 "    -f <value>   Audio bitrate (default is 128)\n"
-                 "    -x           Use XviD instead of Ffmpeg\n" );
+            "Syntax: HBTest [options] -d <device> -o <file>\n"
+            "Possible options are :\n"
+            "    -q           quiet output\n"
+            "    -t <value>   select a title (default is 1)\n"
+            "    -a <value>   primary audio channel (default is 1)\n"
+            "    -b <value>   secondary audio channel (default is none)\n"
+            "    -p           2-pass encoding\n"
+            "    -i           deinterlace picture\n"
+            "    -w           output width\n"
+            "    -j <value>   top cropping\n"
+            "    -k <value>   bottom cropping\n"
+            "    -l <value>   left cropping\n"
+            "    -m <value>   right cropping\n"
+            "    -c <value>   CPU count (default: autodetected)\n"
+            "    -e <value>   Video bitrate (default is 1024)\n"
+            "    -f <value>   Audio bitrate (default is 128)\n"
+            "    -x           Use XviD instead of Ffmpeg\n" );
         return 1;
     }
 
-    /* Create the manager thread */
+    /* Create the lihb thread & init things */
     h = HBInit( debug, cpuCount );
 
     while( !die )

@@ -1,4 +1,4 @@
-/* $Id: Mpeg2Dec.c,v 1.3 2003/11/06 12:33:11 titer Exp $
+/* $Id: Mpeg2Dec.c,v 1.4 2003/11/12 21:46:59 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -169,7 +169,6 @@ static int Mpeg2DecWork( HBWork * w )
                     tmpBuffer           = HBBufferInit( rawBuffer->size );
                     tmpBuffer->position = rawBuffer->position;
                     tmpBuffer->pass     = rawBuffer->pass;
-                    tmpBuffer->last     = rawBuffer->last;
                     memcpy( tmpBuffer->data, rawBuffer->data,
                             tmpBuffer->size );
                     HBListAdd( m->rawBufferList, tmpBuffer );

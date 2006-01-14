@@ -1,4 +1,4 @@
-/* $Id: Utils.c,v 1.7 2003/11/09 14:27:56 titer Exp $
+/* $Id: Utils.c,v 1.8 2003/11/12 16:09:34 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -7,6 +7,9 @@
 #include <stdarg.h>
 #include <time.h>
 #include <sys/time.h>
+#ifdef SYS_CYGWIN
+#  include <windows.h>
+#endif
 
 #include "Utils.h"
 #include "Fifo.h"
@@ -25,7 +28,7 @@ void HBSnooze( int time )
 #elif defined( SYS_MACOSX ) || defined( SYS_LINUX )
     usleep( time );
 #elif defined( SYS_CYGWIN )
-    /* TODO */
+    Sleep( time / 1000 );
 #endif
 }
 
@@ -68,7 +71,7 @@ uint64_t HBGetDate()
     gettimeofday( &tv, NULL );
     return( (uint64_t) tv.tv_sec * 1000000 + (uint64_t) tv.tv_usec );
 #else
-    return 0;
+    return( 1000 * GetTickCount() );
 #endif
 }
 

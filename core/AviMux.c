@@ -1,4 +1,4 @@
-/* $Id: AviMux.c,v 1.5 2003/11/06 18:35:53 titer Exp $
+/* $Id: AviMux.c,v 1.6 2003/11/13 01:18:52 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -605,7 +605,7 @@ static void IndexAddInt32( HBBuffer * b, uint32_t val )
     {
         HBLog( "HBAviMux: reallocing index (%d MB)",
                1 + b->alloc / 1024 / 1024 );
-        HBBufferReAlloc( b, b->alloc + 1024 + 1024 );
+        HBBufferReAlloc( b, b->alloc + 1024 * 1024 );
     }
 
     b->data[b->size++] = val & 0xFF;

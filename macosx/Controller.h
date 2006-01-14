@@ -1,4 +1,4 @@
-/* $Id: Controller.h,v 1.5 2003/11/09 19:43:06 titer Exp $
+/* $Id: Controller.h,v 1.6 2003/11/13 01:40:44 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -56,7 +56,7 @@
     IBOutlet NSTextField         * fRipStatusField;
     IBOutlet NSTextField         * fRipInfoField;
     IBOutlet NSProgressIndicator * fRipProgress;
-    IBOutlet NSButton            * fSuspendButton;
+    IBOutlet NSButton            * fPauseButton;
     IBOutlet NSButton            * fRipButton;
 
     /* "Done" alert panel */
@@ -105,7 +105,9 @@
     returnCode: (int) returnCode contextInfo: (void *) contextInfo;
 - (void)     _Rip;
 - (IBAction) Cancel: (id) sender;
-- (IBAction) Suspend: (id) sender;
+- (void)     _Cancel: (NSWindow *) sheet returnCode: (int) returnCode
+    contextInfo: (void *) contextInfo;
+- (IBAction) Pause: (id) sender;
 - (IBAction) Resume: (id) sender;
 
 - (IBAction) PreviousPicture: (id) sender;

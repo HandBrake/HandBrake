@@ -9,13 +9,13 @@
                 Cancel = id; 
                 ClosePanel = id; 
                 NextPicture = id; 
+                Pause = id; 
                 PreviousPicture = id; 
                 Resume = id; 
                 Rip = id; 
                 Scan = id; 
                 ScanMatrixChanged = id; 
                 ShowPicturePanel = id; 
-                Suspend = id; 
                 TitlePopUpChanged = id; 
                 UpdatePicture = id; 
                 VideoMatrixChanged = id; 
@@ -42,6 +42,7 @@
                 fLeftStepper = NSStepper; 
                 fNextButton = NSButton; 
                 fOpenGLCheck = NSButton; 
+                fPauseButton = NSButton; 
                 fPictureGLView = HBPictureGLView; 
                 fPicturePanel = NSPanel; 
                 fPreviousButton = NSButton; 
@@ -59,7 +60,6 @@
                 fScanStatusField = NSTextField; 
                 fScanView = NSView; 
                 fSecondaryLanguagePopUp = NSPopUpButton; 
-                fSuspendButton = NSButton; 
                 fTargetSizeField = HBTargetSizeField; 
                 fTempView = NSView; 
                 fTitlePopUp = NSPopUpButton; 

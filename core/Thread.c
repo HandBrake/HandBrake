@@ -1,10 +1,13 @@
-/* $Id: Thread.c,v 1.4 2003/11/06 15:51:36 titer Exp $
+/* $Id: Thread.c,v 1.5 2003/11/12 16:09:34 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
 #include "Thread.h"
+#ifdef SYS_CYGWIN
+#  include <windows.h>
+#endif
 
 struct HBThread
 {
@@ -18,14 +21,11 @@ struct HBThread
 #elif defined( SYS_MACOSX ) || defined( SYS_LINUX )
     pthread_t thread;
 #elif defined( SYS_CYGWIN )
-    /* TODO */
-    int       thread;
+    HANDLE    thread;
 #endif
 };
 
-#ifndef SYS_CYGWIN
 static void ThreadFunc( void * t );
-#endif
 
 HBThread * HBThreadInit( char * name, void (* function)(void *),
                          void * arg, int priority )
@@ -50,8 +50,8 @@ HBThread * HBThreadInit( char * name, void (* function)(void *),
     pthread_create( &t->thread, NULL,
                     (void * (*)( void * )) ThreadFunc, t );
 #elif defined( SYS_CYGWIN )
-    /* TODO */
-    t->thread = 0;
+    t->thread = CreateThread( NULL, 0,
+        (LPTHREAD_START_ROUTINE) ThreadFunc, t, 0, NULL );
 #endif
 
     HBLog( "HBThreadInit: thread %d started (\"%s\")",
@@ -60,7 +60,6 @@ HBThread * HBThreadInit( char * name, void (* function)(void *),
     return t;
 }
 
-#ifndef SYS_CYGWIN
 static void ThreadFunc( void * _t )
 {
     HBThread * t = (HBThread*) _t;
@@ -77,7 +76,6 @@ static void ThreadFunc( void * _t )
 
     t->function( t->arg );
 }
-#endif
 
 void HBThreadClose( HBThread ** _t )
 {
@@ -89,7 +87,7 @@ void HBThreadClose( HBThread ** _t )
 #elif defined( SYS_MACOSX ) || defined( SYS_LINUX )
     pthread_join( t->thread, NULL );
 #elif defined( SYS_CYGWIN )
-    /* TODO */
+    WaitForSingleObject( t->thread, INFINITE );
 #endif
 
     HBLog( "HBThreadClose: thread %d stopped (\"%s\")",

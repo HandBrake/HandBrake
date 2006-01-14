@@ -1,4 +1,4 @@
-/* $Id: HandBrake.c,v 1.16 2003/11/09 21:26:52 titer Exp $
+/* $Id: HandBrake.c,v 1.18 2003/11/13 01:17:33 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -117,6 +117,7 @@ HBHandle * HBInit( int debug, int cpuCount )
     h->lock        = HBLockInit();
     h->modeChanged = 1;
     h->status.mode = HB_MODE_NEED_DEVICE;
+    h->status.titleList = NULL;
     h->curTitle    = NULL;
     h->curAudio    = NULL;
     h->curOptAudio = NULL;
@@ -191,16 +192,16 @@ void HBStartRip( HBHandle * h, HBTitle * t,
     FixPictureSettings( t );
 
     /* Create fifos */
-    t->mpeg2Fifo  = HBFifoInit( 512 );
+    t->mpeg2Fifo  = HBFifoInit( 1024 );
     t->rawFifo    = HBFifoInit( 1 );
     t->scaledFifo = HBFifoInit( 1 );
     t->mpeg4Fifo  = HBFifoInit( 1 );
-    a1->ac3Fifo   = HBFifoInit( 512 );
+    a1->ac3Fifo   = HBFifoInit( 1024 );
     a1->rawFifo   = HBFifoInit( 1 );
     a1->mp3Fifo   = HBFifoInit( 1 );
     if( a2 )
     {
-        a2->ac3Fifo = HBFifoInit( 512 );
+        a2->ac3Fifo = HBFifoInit( 1024 );
         a2->rawFifo = HBFifoInit( 1 );
         a2->mp3Fifo = HBFifoInit( 1 );
     }

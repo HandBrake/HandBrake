@@ -1,4 +1,4 @@
-/* $Id: Controller.mm,v 1.9 2003/11/09 22:06:15 titer Exp $
+/* $Id: Controller.mm,v 1.10 2003/11/13 01:40:44 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -327,12 +327,24 @@
 
 - (IBAction) Cancel: (id) sender
 {
-    HBStopRip( fHandle );
+    NSBeginCriticalAlertSheet( @"Cancel - Are you sure?",
+        @"Nooo, keep going!", @"Yep, stop it", nil, fWindow, self,
+        @selector( _Cancel:returnCode:contextInfo: ),
+        nil, nil, @"Encoding won't be recoverable." );
 }
 
-- (IBAction) Suspend: (id) sender
+- (void) _Cancel: (NSWindow *) sheet
+    returnCode: (int) returnCode contextInfo: (void *) contextInfo
 {
-    if( [[fSuspendButton title] compare: @"Resume" ] == NSOrderedSame )
+    if( returnCode == NSAlertAlternateReturn )
+    {
+        HBStopRip( fHandle );
+    }
+}
+
+- (IBAction) Pause: (id) sender
+{
+    if( [[fPauseButton title] compare: @"Resume" ] == NSOrderedSame )
     {
         [self Resume: self];
         return;
@@ -498,7 +510,7 @@
 
             /* Show the new GUI */
             [fWindow setContentView: fRipView ];
-            [fSuspendButton setEnabled: NO];
+            [fPauseButton setEnabled: NO];
             
             [fTitlePopUp removeAllItems];
             HBTitle * title;
@@ -537,8 +549,8 @@
                 [fFileFormatPopUp        setEnabled: NO];
                 [fFileField              setEnabled: NO];
                 [fFileBrowseButton       setEnabled: NO];
-                [fSuspendButton          setEnabled: YES];
-                [fSuspendButton          setTitle: @"Suspend"];
+                [fPauseButton            setEnabled: YES];
+                [fPauseButton            setTitle: @"Pause"];
                 [fRipButton              setTitle: @"Cancel"];
             }
         
@@ -588,7 +600,7 @@
             
             [fRipProgress setDoubleValue: 100 * status.position];
 
-            [fSuspendButton setTitle: @"Resume"];
+            [fPauseButton setTitle: @"Resume"];
             break;
         }
 
@@ -681,8 +693,8 @@
             [fFileFormatPopUp        setEnabled: YES];
             [fFileField              setEnabled: YES];
             [fFileBrowseButton       setEnabled: YES];
-            [fSuspendButton          setEnabled: NO];
-            [fSuspendButton          setTitle: @"Suspend"];
+            [fPauseButton            setEnabled: NO];
+            [fPauseButton            setTitle: @"Pause"];
             [fRipButton              setTitle: @"Rip"];
 
             [self VideoMatrixChanged: self];
