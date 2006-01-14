@@ -1,7 +1,7 @@
-/* $Id: PictureWin.cpp,v 1.5 2003/09/30 14:38:15 titer Exp $
+/* $Id: PictureWin.cpp,v 1.2 2003/11/06 14:36:54 titer Exp $
 
    This file is part of the HandBrake source code.
-   Homepage: <http://beos.titer.org/handbrake/>.
+   Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
 #include <Bitmap.h>
@@ -12,24 +12,23 @@
 #include <Slider.h>
 
 #include "PictureWin.h"
-#include "Manager.h"
 
 #define UPDATE_BITMAP 'upbi'
 
 /* Handy way to access HBTitle members */
-#define fInWidth      fTitle->fInWidth
-#define fInHeight     fTitle->fInHeight
-#define fPixelWidth   fTitle->fPixelWidth
-#define fPixelHeight  fTitle->fPixelHeight
-#define fDeinterlace  fTitle->fDeinterlace
-#define fOutWidth     fTitle->fOutWidth
-#define fOutHeight    fTitle->fOutHeight
-#define fOutWidthMax  fTitle->fOutWidthMax
-#define fOutHeightMax fTitle->fOutHeightMax
-#define fTopCrop      fTitle->fTopCrop
-#define fBottomCrop   fTitle->fBottomCrop
-#define fLeftCrop     fTitle->fLeftCrop
-#define fRightCrop    fTitle->fRightCrop
+#define fInWidth      fTitle->inWidth
+#define fInHeight     fTitle->inHeight
+#define fPixelWidth   fTitle->pixelWidth
+#define fPixelHeight  fTitle->pixelHeight
+#define fDeinterlace  fTitle->deinterlace
+#define fOutWidth     fTitle->outWidth
+#define fOutHeight    fTitle->outHeight
+#define fOutWidthMax  fTitle->outWidthMax
+#define fOutHeightMax fTitle->outHeightMax
+#define fTopCrop      fTitle->topCrop
+#define fBottomCrop   fTitle->bottomCrop
+#define fLeftCrop     fTitle->leftCrop
+#define fRightCrop    fTitle->rightCrop
 
 HBPictureView::HBPictureView( BRect rect, BBitmap * bitmap )
     : BView( rect, NULL, B_FOLLOW_ALL, B_WILL_DRAW )
@@ -46,7 +45,7 @@ void HBPictureView::Draw( BRect rect )
     }
     else
     {
-        Log( "HBPictureView::Draw() : LockLooper() failed" );
+        fprintf( stderr, "LockLooper() failed\n" );
     }
 
     BView::Draw( rect );
@@ -54,12 +53,12 @@ void HBPictureView::Draw( BRect rect )
 
 
 /* Constructor */
-HBPictureWin::HBPictureWin( HBManager * manager, HBTitle * title )
+HBPictureWin::HBPictureWin( HBHandle * handle, HBTitle * title )
     : BWindow( BRect( 0, 0, 0, 0 ), "Picture settings",
                B_FLOATING_WINDOW_LOOK, B_MODAL_APP_WINDOW_FEEL,
                B_NOT_RESIZABLE | B_NOT_ZOOMABLE | B_NOT_CLOSABLE )
 {
-    fManager = manager;
+    fHandle  = handle;
     fTitle   = title;
 
     /* Resize & center */
@@ -101,7 +100,7 @@ HBPictureWin::HBPictureWin( HBManager * manager, HBTitle * title )
 
     view->AddChild( pictureBox );
 
-    /* Second box : resize & crop settings */
+    /* Second box : scale & crop settings */
     r = BRect( 10, fOutHeightMax + 75, fOutWidthMax + 31,
                fOutHeightMax + 235 );
     BBox * settingsBox;
@@ -189,8 +188,8 @@ void HBPictureWin::UpdateBitmap( int image )
     fRightCrop   = 2 * fRightCropSlider->Value();
     fDeinterlace = ( fDeinterlaceCheck->Value() != 0 );
 
-    uint8_t * preview = fManager->GetPreview( fTitle, image );
-    for( uint32_t i = 0; i < fOutHeightMax + 2; i++ )
+    uint8_t * preview = HBGetPreview( fHandle, fTitle, image );
+    for( int i = 0; i < fOutHeightMax + 2; i++ )
     {
         memcpy( ((uint8_t*) fBitmap->Bits()) +
                     i * fBitmap->BytesPerRow(),
@@ -201,7 +200,7 @@ void HBPictureWin::UpdateBitmap( int image )
 
     if( !Lock() )
     {
-        Log( "HBPictureWin::UpdateBitmap() : cannot Lock()" );
+        fprintf( stderr, "Lock() failed\n" );
         return;
     }
 

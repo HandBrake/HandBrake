@@ -1,7 +1,7 @@
-/* $Id: ScanView.cpp,v 1.4 2003/10/13 23:42:03 titer Exp $
+/* $Id: ScanView.cpp,v 1.2 2003/11/06 14:36:54 titer Exp $
 
    This file is part of the HandBrake source code.
-   Homepage: <http://beos.titer.org/handbrake/>.
+   Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
 #include <fs_info.h>
@@ -21,13 +21,12 @@
 #include <TextControl.h>
 #include <VolumeRoster.h>
 
-#include "Manager.h"
 #include "ScanView.h"
 
-ScanView::ScanView( HBManager * manager )
+ScanView::ScanView( HBHandle * handle )
     : BView( BRect( 0,0,400,190 ), NULL, B_FOLLOW_ALL, B_WILL_DRAW )
 {
-    fManager = manager;
+    fHandle = handle;
     
     BRect r;
     SetViewColor( ui_color( B_PANEL_BACKGROUND_COLOR ) );
@@ -125,12 +124,14 @@ void ScanView::MessageReceived( BMessage * message )
         {
             if( fRadioDetected->Value() )
             {
-                fManager->ScanVolumes( (char*)
-                                       fPopUp->FindMarked()->Label() );
+                HBScanDevice( fHandle,
+                              (char*) fPopUp->FindMarked()->Label(),
+                              0 );
             }
             else
             {
-                fManager->ScanVolumes( (char*) fFolderControl->Text() );
+                HBScanDevice( fHandle,
+                              (char*) fFolderControl->Text(), 0 );
             }
             break;
         }
@@ -140,36 +141,41 @@ void ScanView::MessageReceived( BMessage * message )
     }
 }
 
-void ScanView::UpdateIntf( HBStatus status )
+void ScanView::UpdateIntf( HBStatus status, int modeChanged )
 {
-    switch( status.fMode )
+    switch( status.mode )
     {
         case HB_MODE_SCANNING:
         {
-            fRadioDetected->SetEnabled( false );
-            fRadioFolder->SetEnabled( false );
-            fField->SetEnabled( false );
-            fFolderControl->SetEnabled( false );
-            fBrowseButton->SetEnabled( false );
-            fOpenButton->SetEnabled( false );
+            if( modeChanged )
+            {
+                fRadioDetected->SetEnabled( false );
+                fRadioFolder->SetEnabled( false );
+                fField->SetEnabled( false );
+                fFolderControl->SetEnabled( false );
+                fBrowseButton->SetEnabled( false );
+                fOpenButton->SetEnabled( false );
+            }
 
             char string[1024]; memset( string, 0, 1024 );
-            if( !status.fScannedTitle )
+            if( !status.scannedTitle )
             {
-                sprintf( string, "Opening %s...",
-                         status.fScannedVolume );
+                sprintf( string, "Opening device..." );
             }
             else
             {
-                sprintf( string, "Scanning %s, title %d...",
-                         status.fScannedVolume, status.fScannedTitle );
+                sprintf( string, "Scanning title %d...",
+                         status.scannedTitle );
             }
             fStatusString->SetText( string );
             break;
         }
 
-        case HB_MODE_INVALID_VOLUME:
+        case HB_MODE_INVALID_DEVICE:
         {
+            if( !modeChanged )
+                break;
+            
             fRadioDetected->SetEnabled( true );
             fRadioFolder->SetEnabled( true );
 

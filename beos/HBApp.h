@@ -1,11 +1,11 @@
-/* $Id: HandBrake.h,v 1.7 2003/10/13 22:23:02 titer Exp $
+/* $Id: HBApp.h,v 1.1.1.1 2003/11/03 12:03:51 titer Exp $
 
    This file is part of the HandBrake source code.
-   Homepage: <http://beos.titer.org/handbrake/>.
+   Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
-#ifndef HB_HANDBRAKE_H
-#define HB_HANDBRAKE_H
+#ifndef HB_HB_APP_H
+#define HB_HB_APP_H
 
 #include <Application.h>
 

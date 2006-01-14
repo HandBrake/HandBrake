@@ -1,16 +1,20 @@
-# $Id: Jamfile,v 1.41 2003/10/16 13:46:32 titer Exp $
+# $Id: Jamfile,v 1.5 2003/11/07 22:28:30 titer Exp $
 #
 # This file is part of the HandBrake source code.
-# Homepage: <http://beos.titer.org/handbrake/>.
+# Homepage: <http://handbrake.m0k.org/>.
 # It may be used under the terms of the GNU General Public License.
 
-HB_VERSION = 0.4.1 ;
+HB_VERSION = 0.5 ;
 
 # Compilers
+CC   = gcc ;
 C++  = g++ ;
-LINK = g++ ;
+LINK = gcc ;
 
 # Flags
+CCFLAGS   = $(CFLAGS) ;
+CCFLAGS  += -g -Wall -Werror ;
+CCFLAGS  += -DVERSION=\\\"$(HB_VERSION)\\\" -DSYS_$(OS) ;
 C++FLAGS  = $(CPPFLAGS) ;
 C++FLAGS += -g -Wall -Werror ;
 C++FLAGS += -DVERSION=\\\"$(HB_VERSION)\\\" -DSYS_$(OS) ;
@@ -18,15 +22,18 @@ LINKFLAGS = $(LDFLAGS) ;
 HDRS      = core ;
 
 # Optims
+CCFLAGS  += -funroll-loops ;
 C++FLAGS += -funroll-loops ;
 OPTIM     = -O3 ;
 
 # Libs
-LINKLIBS = -ldvdplay -ldvdread -ldvdcss -lmpeg2 -lavcodec -la52 -lmp3lame ;
+LINKLIBS = -ldvdplay -ldvdread -ldvdcss -lmpeg2 -lavcodec -la52
+           -lmp3lame -lxvidcore ;
 
 # OS specific
 if $(OS) = BEOS
 {
+    CCFLAGS  += -Wno-multichar ;
     C++FLAGS += -Wno-multichar ;
     LINKLIBS += -lbe -ltracker ;
 }
@@ -36,8 +43,18 @@ else if $(OS) = LINUX
 }
 else if $(OS) = MACOSX
 {
+    CCFLAGS   += -no-cpp-precomp ;
+    C++FLAGS  += -no-cpp-precomp ;
+    LINKFLAGS += -multiply_defined suppress ;
+
     # needed to clean HandBrake.app
     RM = rm -rf ;
+}
+else if $(OS) = CYGWIN
+{
+    CCFLAGS   += -mno-cygwin ;
+    C++FLAGS  += -mno-cygwin ;
+    LINKFLAGS += -mno-cygwin ;
 }
 
 # Do not remove temporary object files
@@ -46,36 +63,36 @@ actions quietly updated piecemeal together RmTemps
 {
 }
 
-# Build HandBrake.app using ProjectBuilder
+# Build HandBrake.app using Xcode
 rule OSXApp
 {
-    Clean clean : $(1) ;
+    Clean clean : $(1) macosx/build ;
     BuildOSXApp $(1) ;
 }
 
 actions BuildOSXApp
 {
     $(RM) HandBrake.app ;
-    ( cd macosx && pbxbuild ) && mv macosx/build/HandBrake.app . ;
-    $(RM) macosx/build ;
+    ( cd macosx && xcodebuild ) && cp -r macosx/build/HandBrake.app . ;
 }
 
-Library core/libhb : core/Ac3Decoder.cpp core/AviMuxer.cpp
-                     core/Common.cpp core/DVDReader.cpp core/Fifo.cpp
-                     core/Manager.cpp core/Mp3Encoder.cpp
-                     core/Mpeg2Decoder.cpp core/Mpeg4Encoder.cpp
-		     core/MpegDemux.cpp core/Resizer.cpp
-		     core/Scanner.cpp core/Thread.cpp core/Worker.cpp ;
+Library core/libhb : core/Ac3Dec.c core/AviMux.c
+                     core/Utils.c core/DVDRead.c core/Fifo.c
+                     core/HandBrake.c core/Mp3Enc.c
+                     core/Mpeg2Dec.c core/FfmpegEnc.c
+                     core/MadDec.c core/Scale.c
+		     core/Scan.c core/Thread.c core/Work.c
+		     core/XvidEnc.c ;
 
 LinkLibraries HBTest : core/libhb.a ;
-Main HBTest : test/Test.cpp ;
+Main HBTest : test/test.c ;
 
 if $(OS) = BEOS
 {
     LinkLibraries HandBrake : core/libhb.a ;
-    Main HandBrake : beos/HandBrake.cpp beos/MainWindow.cpp
+    Main HandBrake : beos/HBApp.cpp beos/MainWindow.cpp
                      beos/PictureWin.cpp beos/ScanView.cpp
-		     beos/RipView.cpp ;
+                     beos/RipView.cpp ;
 }
 
 if $(OS) = MACOSX

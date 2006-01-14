@@ -1,7 +1,7 @@
-/* $Id: RipView.cpp,v 1.6 2003/10/13 23:42:03 titer Exp $
+/* $Id: RipView.cpp,v 1.3 2003/11/07 21:52:56 titer Exp $
 
    This file is part of the HandBrake source code.
-   Homepage: <http://beos.titer.org/handbrake/>.
+   Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
 #include <Box.h>
@@ -19,14 +19,13 @@
 
 #include "RipView.h"
 #include "PictureWin.h"
-#include "Manager.h"
 
 #define DEFAULT_FILE "/boot/home/Desktop/Movie.avi"
 
-RipView::RipView( HBManager * manager )
+RipView::RipView( HBHandle * handle )
     : BView( BRect( 0,0,400,480 ), NULL, B_FOLLOW_ALL, B_WILL_DRAW )
 {
-    fManager = manager;
+    fHandle = handle;
     
     BRect r;
     SetViewColor( ui_color( B_PANEL_BACKGROUND_COLOR ) );
@@ -85,7 +84,7 @@ RipView::RipView( HBManager * manager )
     /* Crop */
     r = BRect( fVideoBox->Bounds().Width() - 120, 120,
                fVideoBox->Bounds().Width() - 10, 140 );
-    fCropButton = new BButton( r, NULL, "Crop & Resize...",
+    fCropButton = new BButton( r, NULL, "Crop & Scale...",
                                new BMessage( RIP_CROP_BUTTON ) );
     fVideoBox->AddChild( fCropButton );
 
@@ -172,7 +171,10 @@ RipView::RipView( HBManager * manager )
     AddChild( fStartButton );
 
     /* Fill popups */
-    fVideoCodecPopUp->AddItem( new BMenuItem( "MPEG-4", NULL ) );
+    fVideoCodecPopUp->AddItem( new BMenuItem( "MPEG-4 (Ffmpeg)",
+        new BMessage( RIP_VIDEO_CODEC_POPUP ) ) );
+    fVideoCodecPopUp->AddItem( new BMenuItem( "MPEG-4 (XviD)",
+        new BMessage( RIP_VIDEO_CODEC_POPUP ) ) );
     fVideoCodecPopUp->ItemAt( 0 )->SetMarked( true );
     fAudioCodecPopUp->AddItem( new BMenuItem( "MP3", NULL ) );
     fAudioCodecPopUp->ItemAt( 0 )->SetMarked( true );
@@ -208,7 +210,7 @@ void RipView::MessageReceived( BMessage * message )
         case RIP_TITLE_POPUP:
         {
             int index = fTitlePopUp->IndexOf( fTitlePopUp->FindMarked() );
-            HBTitle * title = (HBTitle*) fTitleList->ItemAt( index );
+            HBTitle * title = (HBTitle*) HBListItemAt( fTitleList, index );
 
             /* Empty current popups */
             BMenuItem * item;
@@ -225,13 +227,13 @@ void RipView::MessageReceived( BMessage * message )
 
             /* Show new languages */
             HBAudio * audio;
-            for( uint32_t i = 0; i < title->fAudioList->CountItems(); i++ )
+            for( int i = 0; i < HBListCountItems( title->audioList ); i++ )
             {
-                audio = (HBAudio*) title->fAudioList->ItemAt( i );
+                audio = (HBAudio*) HBListItemAt( title->audioList, i );
                 fLanguagePopUp->AddItem(
-                    new BMenuItem( audio->fDescription, NULL ) );
+                    new BMenuItem( audio->language, NULL ) );
                 fSecondaryLanguagePopUp->AddItem(
-                    new BMenuItem( audio->fDescription,
+                    new BMenuItem( audio->language,
                                    new BMessage( RIP_TARGET_CONTROL ) ) );
             }
             fLanguagePopUp->ItemAt( 0 )->SetMarked( true );
@@ -241,8 +243,22 @@ void RipView::MessageReceived( BMessage * message )
                 fSecondaryLanguagePopUp->CountItems() - 1 )->SetMarked( true );
             
             fSecondaryLanguageField->SetEnabled(
-                ( title->fAudioList->CountItems() > 1 ) );
+                ( HBListCountItems( title->audioList ) > 1 ) );
             
+            break;
+        }
+
+        case RIP_VIDEO_CODEC_POPUP:
+        {
+            if( fVideoCodecPopUp->IndexOf( fVideoCodecPopUp->FindMarked() ) )
+            {
+                fTwoPassCheck->SetValue( 0 );
+                fTwoPassCheck->SetEnabled( false );
+            }
+            else
+            {
+                fTwoPassCheck->SetEnabled( true );
+            }
             break;
         }
 
@@ -271,7 +287,7 @@ void RipView::MessageReceived( BMessage * message )
             
             int64_t available;
             int index = fTitlePopUp->IndexOf( fTitlePopUp->FindMarked() );
-            HBTitle * title = (HBTitle*) fTitleList->ItemAt( index );
+            HBTitle * title = (HBTitle*) HBListItemAt( fTitleList, index );
             
             available  = (int64_t) 1024 * 1024 *
                              atoi( fTargetSizeControl->Text() );
@@ -281,16 +297,16 @@ void RipView::MessageReceived( BMessage * message )
 
             /* Video chunk headers (8 bytes / frame) and
                and index (16 bytes / frame) */
-            available -= 24 * title->fLength * title->fRate /
-                             title->fScale;
+            available -= 24 * title->length * title->rate /
+                             title->rateBase;
             
             /* Audio tracks */
             available -=
                 ( strcmp( fSecondaryLanguagePopUp->FindMarked()->Label(),
                           "None" ) ? 2 : 1 ) *
-                ( title->fLength *
+                ( title->length *
                   atoi( fAudioBitratePopUp->FindMarked()->Label() ) * 128 +
-                  24 * title->fLength * 44100 / 1152 );
+                  24 * title->length * 44100 / 1152 );
             
             char string[1024]; memset( string, 0, 1024 );
             if( available < 0 )
@@ -300,7 +316,7 @@ void RipView::MessageReceived( BMessage * message )
             else
             {
                 sprintf( string, "%lld", available /
-                         ( 128 * title->fLength ) );
+                         ( 128 * title->length ) );
             }
             fCustomBitrateControl->SetText( string );
             break;
@@ -309,10 +325,10 @@ void RipView::MessageReceived( BMessage * message )
         case RIP_CROP_BUTTON:
         {
             int index = fTitlePopUp->IndexOf( fTitlePopUp->FindMarked() );
-            HBTitle * title = (HBTitle*) fTitleList->ItemAt( index );
+            HBTitle * title = (HBTitle*) HBListItemAt( fTitleList, index );
 
             HBPictureWin * win;
-            win = new HBPictureWin( fManager, title );
+            win = new HBPictureWin( fHandle, title );
             win->Show();
             break;
         }
@@ -341,11 +357,11 @@ void RipView::MessageReceived( BMessage * message )
         {
             if( strcmp( fSuspendButton->Label(), "Suspend" ) )
             {
-                fManager->ResumeRip();
+                HBResumeRip( fHandle );
             }
             else
             {
-                fManager->SuspendRip();
+                HBPauseRip( fHandle );
             }
             
             break;
@@ -355,7 +371,7 @@ void RipView::MessageReceived( BMessage * message )
         {
             if( strcmp( fStartButton->Label(), "Rip !" ) )
             {
-                fManager->StopRip();
+                HBStopRip( fHandle );
             }
             else
             {
@@ -363,29 +379,32 @@ void RipView::MessageReceived( BMessage * message )
                 
                 /* Get asked title & languages */
                 index = fTitlePopUp->IndexOf( fTitlePopUp->FindMarked() );
-                HBTitle * title = (HBTitle*) fTitleList->ItemAt( index );
+                HBTitle * title = (HBTitle*) HBListItemAt( fTitleList, index );
                 index = fLanguagePopUp->IndexOf( fLanguagePopUp->FindMarked() );
                 HBAudio * audio1 =
-                    (HBAudio*) title->fAudioList->ItemAt( index );
+                    (HBAudio*) HBListItemAt( title->audioList, index );
                 index = fSecondaryLanguagePopUp->IndexOf(
                     fSecondaryLanguagePopUp->FindMarked() );
                 HBAudio * audio2 =
-                    (HBAudio*) title->fAudioList->ItemAt( index );
+                    (HBAudio*) HBListItemAt( title->audioList, index );
 
                 /* Use user settings */
-                title->fBitrate = atoi( fCustomBitrateControl->Text() );
-                title->fTwoPass = ( fTwoPassCheck->Value() != 0 );
-                audio1->fOutBitrate =
+                title->file = strdup( fFileControl->Text() );
+                title->bitrate = atoi( fCustomBitrateControl->Text() );
+                title->twoPass = ( fTwoPassCheck->Value() != 0 );
+                title->codec = fVideoCodecPopUp->IndexOf(
+                    fVideoCodecPopUp->FindMarked() ) ? HB_CODEC_XVID :
+                    HB_CODEC_FFMPEG;
+                audio1->outBitrate =
                     atoi( fAudioBitratePopUp->FindMarked()->Label() );
                 if( audio2 )
                 {
-                    audio2->fOutBitrate =
+                    audio2->outBitrate =
                         atoi( fAudioBitratePopUp->FindMarked()->Label() );
                 }
 
                 /* Let libhb do the job */
-                fManager->StartRip( title, audio1, audio2,
-                                    (char*) fFileControl->Text() );
+                HBStartRip( fHandle, title, audio1, audio2 );
             }
             break;
         }
@@ -396,23 +415,26 @@ void RipView::MessageReceived( BMessage * message )
     }
 }
 
-void RipView::UpdateIntf( HBStatus status )
+void RipView::UpdateIntf( HBStatus status, int modeChanged )
 {
-    switch( status.fMode )
+    switch( status.mode )
     {
         case HB_MODE_READY_TO_RIP:
         {
-            fTitleList = status.fTitleList;
+            if( !modeChanged )
+                break;
+            
+            fTitleList = status.titleList;
             
             HBTitle * title;
-            for( uint32_t i = 0; i < fTitleList->CountItems(); i++ )
+            for( int i = 0; i < HBListCountItems( fTitleList ); i++ )
             {
-                title = (HBTitle*) fTitleList->ItemAt( i );
+                title = (HBTitle*) HBListItemAt( fTitleList, i );
                 char string[1024]; memset( string, 0, 1024 );
-                sprintf( string, "%d (%02lld:%02lld:%02lld)",
-                         title->fIndex, title->fLength / 3600,
-                         ( title->fLength % 3600 ) / 60,
-                         title->fLength % 60 );
+                sprintf( string, "%d (%02d:%02d:%02d)",
+                         title->index, title->length / 3600,
+                         ( title->length % 3600 ) / 60,
+                         title->length % 60 );
                 fTitlePopUp->AddItem(
                     new BMenuItem( string, new BMessage( RIP_TITLE_POPUP ) ) );
             }
@@ -423,23 +445,30 @@ void RipView::UpdateIntf( HBStatus status )
 
         case HB_MODE_ENCODING:
         {
-            fTitleField->SetEnabled( false );
-            fVideoCodecField->SetEnabled( false );
-            fCustomBitrateRadio->SetEnabled( false );
-            fCustomBitrateControl->SetEnabled( false );
-            fTargetSizeRadio->SetEnabled( false );
-            fTargetSizeControl->SetEnabled( false );
-            fTwoPassCheck->SetEnabled( false );
-            fCropButton->SetEnabled( false );
-            fLanguageField->SetEnabled( false );
-            fSecondaryLanguageField->SetEnabled( false );
-            fAudioCodecField->SetEnabled( false );
-            fAudioBitrateField->SetEnabled( false );
-            fFileFormatField->SetEnabled( false );
-            fFileControl->SetEnabled( false );
-            fFileButton->SetEnabled( false );
+            if( modeChanged )
+            {
+                fTitleField->SetEnabled( false );
+                fVideoCodecField->SetEnabled( false );
+                fCustomBitrateRadio->SetEnabled( false );
+                fCustomBitrateControl->SetEnabled( false );
+                fTargetSizeRadio->SetEnabled( false );
+                fTargetSizeControl->SetEnabled( false );
+                fTwoPassCheck->SetEnabled( false );
+                fCropButton->SetEnabled( false );
+                fLanguageField->SetEnabled( false );
+                fSecondaryLanguageField->SetEnabled( false );
+                fAudioCodecField->SetEnabled( false );
+                fAudioBitrateField->SetEnabled( false );
+                fFileFormatField->SetEnabled( false );
+                fFileControl->SetEnabled( false );
+                fFileButton->SetEnabled( false );
+                fSuspendButton->SetLabel( "Suspend" );
+                fSuspendButton->SetEnabled( true );
+                fStartButton->SetLabel( "Cancel" );
+                fStartButton->SetEnabled( true );
+           }
 
-            if( !status.fPosition )
+            if( !status.position )
             {
                 fStatusBar->Update( - fStatusBar->CurrentValue(),
                                     "Starting..." );
@@ -449,163 +478,175 @@ void RipView::UpdateIntf( HBStatus status )
                 char string[1024]; memset( string, 0, 1024 );
                 sprintf( string, "Encoding: %.2f %% (%.2f fps, "
                          "%02d:%02d:%02d remaining)",
-                         100 * status.fPosition,
-                         status.fFrameRate,
-                         status.fRemainingTime / 3600,
-                         ( status.fRemainingTime % 3600 ) / 60,
-                         status.fRemainingTime % 60 );
-                fStatusBar->Update( 100 * status.fPosition -
+                         100 * status.position,
+                         status.frameRate,
+                         status.remainingTime / 3600,
+                         ( status.remainingTime % 3600 ) / 60,
+                         status.remainingTime % 60 );
+                fStatusBar->Update( 100 * status.position -
                                     fStatusBar->CurrentValue(),
                                     string );
             }
-            
-            fSuspendButton->SetLabel( "Suspend" );
-            fSuspendButton->SetEnabled( true );
-            fStartButton->SetLabel( "Cancel" );
-            fStartButton->SetEnabled( true );
             break;
         }
 
-        case HB_MODE_SUSPENDED:
+        case HB_MODE_PAUSED:
         {
-            fTitleField->SetEnabled( false );
-            fVideoCodecField->SetEnabled( false );
-            fCustomBitrateRadio->SetEnabled( false );
-            fCustomBitrateControl->SetEnabled( false );
-            fTargetSizeRadio->SetEnabled( false );
-            fTargetSizeControl->SetEnabled( false );
-            fTwoPassCheck->SetEnabled( false );
-            fCropButton->SetEnabled( false );
-            fLanguageField->SetEnabled( false );
-            fSecondaryLanguageField->SetEnabled( false );
-            fAudioCodecField->SetEnabled( false );
-            fAudioBitrateField->SetEnabled( false );
-            fFileFormatField->SetEnabled( false );
-            fFileControl->SetEnabled( false );
-            fFileButton->SetEnabled( false );
-
-            fStatusBar->Update( 100 * status.fPosition -
-                                fStatusBar->CurrentValue(), "Suspended" );
+            if( modeChanged )
+            {
+                fTitleField->SetEnabled( false );
+                fVideoCodecField->SetEnabled( false );
+                fCustomBitrateRadio->SetEnabled( false );
+                fCustomBitrateControl->SetEnabled( false );
+                fTargetSizeRadio->SetEnabled( false );
+                fTargetSizeControl->SetEnabled( false );
+                fTwoPassCheck->SetEnabled( false );
+                fCropButton->SetEnabled( false );
+                fLanguageField->SetEnabled( false );
+                fSecondaryLanguageField->SetEnabled( false );
+                fAudioCodecField->SetEnabled( false );
+                fAudioBitrateField->SetEnabled( false );
+                fFileFormatField->SetEnabled( false );
+                fFileControl->SetEnabled( false );
+                fFileButton->SetEnabled( false );
+                fSuspendButton->SetLabel( "Resume" );
+                fSuspendButton->SetEnabled( true );
+                fStartButton->SetLabel( "Cancel" );
+                fStartButton->SetEnabled( true );
+            }
             
-            fSuspendButton->SetLabel( "Resume" );
-            fSuspendButton->SetEnabled( true );
-            fStartButton->SetLabel( "Cancel" );
-            fStartButton->SetEnabled( true );
+            fStatusBar->Update( 100 * status.position -
+                                fStatusBar->CurrentValue(), "Suspended" );
             break;
         }
 
         case HB_MODE_STOPPING:
         {
-            fTitleField->SetEnabled( false );
-            fVideoCodecField->SetEnabled( false );
-            fCustomBitrateRadio->SetEnabled( false );
-            fCustomBitrateControl->SetEnabled( false );
-            fTargetSizeRadio->SetEnabled( false );
-            fTargetSizeControl->SetEnabled( false );
-            fTwoPassCheck->SetEnabled( false );
-            fCropButton->SetEnabled( false );
-            fLanguageField->SetEnabled( false );
-            fSecondaryLanguageField->SetEnabled( false );
-            fAudioCodecField->SetEnabled( false );
-            fAudioBitrateField->SetEnabled( false );
-            fFileFormatField->SetEnabled( false );
-            fFileControl->SetEnabled( false );
-            fFileButton->SetEnabled( false );
+            if( modeChanged )
+            {
+                fTitleField->SetEnabled( false );
+                fVideoCodecField->SetEnabled( false );
+                fCustomBitrateRadio->SetEnabled( false );
+                fCustomBitrateControl->SetEnabled( false );
+                fTargetSizeRadio->SetEnabled( false );
+                fTargetSizeControl->SetEnabled( false );
+                fTwoPassCheck->SetEnabled( false );
+                fCropButton->SetEnabled( false );
+                fLanguageField->SetEnabled( false );
+                fSecondaryLanguageField->SetEnabled( false );
+                fAudioCodecField->SetEnabled( false );
+                fAudioBitrateField->SetEnabled( false );
+                fFileFormatField->SetEnabled( false );
+                fFileControl->SetEnabled( false );
+                fFileButton->SetEnabled( false );
+                fSuspendButton->SetLabel( "Suspend" );
+                fSuspendButton->SetEnabled( false );
+                fStartButton->SetLabel( "Cancel" );
+                fStartButton->SetEnabled( false );
+            }
 
             fStatusBar->Update( - fStatusBar->CurrentValue(),
                                 "Stopping..." );
-            
-            fSuspendButton->SetLabel( "Suspend" );
-            fSuspendButton->SetEnabled( false );
-            fStartButton->SetLabel( "Cancel" );
-            fStartButton->SetEnabled( false );
             break;
         }
 
         case HB_MODE_DONE:
         {
-            fTitleField->SetEnabled( true );
-            fVideoCodecField->SetEnabled( true );
-            fCustomBitrateRadio->SetEnabled( true );
-            fCustomBitrateControl->SetEnabled( fCustomBitrateRadio->Value() );
-            fTargetSizeRadio->SetEnabled( true );
-            fTargetSizeControl->SetEnabled( fTargetSizeRadio->Value() );
-            fTwoPassCheck->SetEnabled( true );
-            fCropButton->SetEnabled( true );
-            fLanguageField->SetEnabled( true );
-            fSecondaryLanguageField->SetEnabled(
-                ( fSecondaryLanguagePopUp->CountItems() > 2 ) );
-            fAudioCodecField->SetEnabled( true );
-            fAudioBitrateField->SetEnabled( true );
-            fFileFormatField->SetEnabled( true );
-            fFileControl->SetEnabled( true );
-            fFileButton->SetEnabled( true );
+            if( modeChanged )
+            {
+                fTitleField->SetEnabled( true );
+                fVideoCodecField->SetEnabled( true );
+                fCustomBitrateRadio->SetEnabled( true );
+                fCustomBitrateControl->SetEnabled(
+                        fCustomBitrateRadio->Value() );
+                fTargetSizeRadio->SetEnabled( true );
+                fTargetSizeControl->SetEnabled( fTargetSizeRadio->Value() );
+                fTwoPassCheck->SetEnabled( true );
+                fCropButton->SetEnabled( true );
+                fLanguageField->SetEnabled( true );
+                fSecondaryLanguageField->SetEnabled(
+                    ( fSecondaryLanguagePopUp->CountItems() > 2 ) );
+                fAudioCodecField->SetEnabled( true );
+                fAudioBitrateField->SetEnabled( true );
+                fFileFormatField->SetEnabled( true );
+                fFileControl->SetEnabled( true );
+                fFileButton->SetEnabled( true );
+                
+                fSuspendButton->SetLabel( "Suspend" );
+                fSuspendButton->SetEnabled( false );
+                fStartButton->SetLabel( "Rip !" );
+                fStartButton->SetEnabled( true );
+                MessageReceived( new BMessage( RIP_VIDEO_CODEC_POPUP ) );
+            }
 
             fStatusBar->Update( 100.0 - fStatusBar->CurrentValue(),
                                 "Done." );
-            
-            fSuspendButton->SetLabel( "Suspend" );
-            fSuspendButton->SetEnabled( false );
-            fStartButton->SetLabel( "Rip !" );
-            fStartButton->SetEnabled( true );
             break;
         }
 
         case HB_MODE_CANCELED:
         {
-            fTitleField->SetEnabled( true );
-            fVideoCodecField->SetEnabled( true );
-            fCustomBitrateRadio->SetEnabled( true );
-            fCustomBitrateControl->SetEnabled( fCustomBitrateRadio->Value() );
-            fTargetSizeRadio->SetEnabled( true );
-            fTargetSizeControl->SetEnabled( fTargetSizeRadio->Value() );
-            fTwoPassCheck->SetEnabled( true );
-            fCropButton->SetEnabled( true );
-            fLanguageField->SetEnabled( true );
-            fSecondaryLanguageField->SetEnabled(
-                ( fSecondaryLanguagePopUp->CountItems() > 2 ) );
-            fAudioCodecField->SetEnabled( true );
-            fAudioBitrateField->SetEnabled( true );
-            fFileFormatField->SetEnabled( true );
-            fFileControl->SetEnabled( true );
-            fFileButton->SetEnabled( true );
+            if( modeChanged )
+            {
+                fTitleField->SetEnabled( true );
+                fVideoCodecField->SetEnabled( true );
+                fCustomBitrateRadio->SetEnabled( true );
+                fCustomBitrateControl->SetEnabled(
+                        fCustomBitrateRadio->Value() );
+                fTargetSizeRadio->SetEnabled( true );
+                fTargetSizeControl->SetEnabled( fTargetSizeRadio->Value() );
+                fTwoPassCheck->SetEnabled( true );
+                fCropButton->SetEnabled( true );
+                fLanguageField->SetEnabled( true );
+                fSecondaryLanguageField->SetEnabled(
+                    ( fSecondaryLanguagePopUp->CountItems() > 2 ) );
+                fAudioCodecField->SetEnabled( true );
+                fAudioBitrateField->SetEnabled( true );
+                fFileFormatField->SetEnabled( true );
+                fFileControl->SetEnabled( true );
+                fFileButton->SetEnabled( true );
+                fSuspendButton->SetLabel( "Suspend" );
+                fSuspendButton->SetEnabled( false );
+                fStartButton->SetLabel( "Rip !" );
+                fStartButton->SetEnabled( true );
+                MessageReceived( new BMessage( RIP_VIDEO_CODEC_POPUP ) );
+            }
 
             fStatusBar->Update( - fStatusBar->CurrentValue(),
                                 "Canceled." );
-            
-            fSuspendButton->SetLabel( "Suspend" );
-            fSuspendButton->SetEnabled( false );
-            fStartButton->SetLabel( "Rip !" );
-            fStartButton->SetEnabled( true );
             break;
         }
 
         case HB_MODE_ERROR:
         {
-            fTitleField->SetEnabled( true );
-            fVideoCodecField->SetEnabled( true );
-            fCustomBitrateRadio->SetEnabled( true );
-            fCustomBitrateControl->SetEnabled( fCustomBitrateRadio->Value() );
-            fTargetSizeRadio->SetEnabled( true );
-            fTargetSizeControl->SetEnabled( fTargetSizeRadio->Value() );
-            fTwoPassCheck->SetEnabled( true );
-            fCropButton->SetEnabled( true );
-            fLanguageField->SetEnabled( true );
-            fSecondaryLanguageField->SetEnabled(
-                ( fSecondaryLanguagePopUp->CountItems() > 2 ) );
-            fAudioCodecField->SetEnabled( true );
-            fAudioBitrateField->SetEnabled( true );
-            fFileFormatField->SetEnabled( true );
-            fFileControl->SetEnabled( true );
-            fFileButton->SetEnabled( true );
+            if( modeChanged )
+            {
+                fTitleField->SetEnabled( true );
+                fVideoCodecField->SetEnabled( true );
+                fCustomBitrateRadio->SetEnabled( true );
+                fCustomBitrateControl->SetEnabled(
+                        fCustomBitrateRadio->Value() );
+                fTargetSizeRadio->SetEnabled( true );
+                fTargetSizeControl->SetEnabled( fTargetSizeRadio->Value() );
+                fTwoPassCheck->SetEnabled( true );
+                fCropButton->SetEnabled( true );
+                fLanguageField->SetEnabled( true );
+                fSecondaryLanguageField->SetEnabled(
+                    ( fSecondaryLanguagePopUp->CountItems() > 2 ) );
+                fAudioCodecField->SetEnabled( true );
+                fAudioBitrateField->SetEnabled( true );
+                fFileFormatField->SetEnabled( true );
+                fFileControl->SetEnabled( true );
+                fFileButton->SetEnabled( true );
+                fSuspendButton->SetLabel( "Suspend" );
+                fSuspendButton->SetEnabled( false );
+                fStartButton->SetLabel( "Rip !" );
+                fStartButton->SetEnabled( true );
+                MessageReceived( new BMessage( RIP_VIDEO_CODEC_POPUP ) );
+            }
 
             fStatusBar->Update( - fStatusBar->CurrentValue(),
                                 "Error." );
-            
-            fSuspendButton->SetLabel( "Suspend" );
-            fSuspendButton->SetEnabled( false );
-            fStartButton->SetLabel( "Rip !" );
-            fStartButton->SetEnabled( true );
             break;
         }
 

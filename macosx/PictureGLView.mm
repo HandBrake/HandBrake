@@ -1,68 +1,153 @@
+/* $Id: PictureGLView.mm,v 1.3 2003/11/03 22:01:13 titer Exp $
+
+   This file is part of the HandBrake source code.
+   Homepage: <http://handbrake.m0k.org/>.
+   It may be used under the terms of the GNU General Public License. */
+
 #include <OpenGL/gl.h>
+#include <math.h>
 
 #include "PictureGLView.h"
 
+#define PROUT 2.5
+
+/* XXX This file needs some serious cleaning XXX */
+
+GLuint    texture[2];
+float     rotation;
+float     translation;
+uint8_t * truc;
+
 @implementation HBPictureGLView
 
-- (void) SetManager: (HBManager*) manager
+- (void) SetHandle: (HBHandle*) handle
 {
-    fManager = manager;
+    fHandle = handle;
 }
 
 - (void) SetTitle: (HBTitle*) title
 {
     fTitle = title;
- 
+
     /* This is needed as the view's size may have changed */
     [self clearGLContext];
     [self openGLContext];
 }
 
-- (void) ShowPicture: (int) index
+- (void) ShowPicture: (int) index animate: (int) how
 {
+    if( fOldPicture ) free( fOldPicture );
+    fOldPicture = fPicture;
+
     /* Get the picture */
-    uint8_t * tmp = fManager->GetPreview( fTitle, index );
+    uint8_t * tmp = HBGetPreview( fHandle, fTitle, index );
 
     /* Make it be upside-down */
-    if( fPicture ) free( fPicture );
-    fPicture = (uint8_t*) malloc( 4 * ( fTitle->fOutWidthMax + 2 ) *
-                                  ( fTitle->fOutHeightMax + 2 ) );
-    for( uint32_t i = 0; i < fTitle->fOutHeightMax + 2; i++ )
+    fPicture = (uint8_t*) malloc( 4 * ( fTitle->outWidthMax + 2 ) *
+                                  ( fTitle->outHeightMax + 2 ) );
+    uint8_t * in  = tmp;
+    uint8_t * out = fPicture +
+        4 * ( fTitle->outWidthMax + 2 ) * ( fTitle->outHeightMax + 1 );
+    for( int i = 0; i < fTitle->outHeightMax + 2; i++ )
     {
-        memcpy( fPicture + 4 * ( fTitle->fOutWidthMax + 2 ) * i,
-                tmp + 4 * ( fTitle->fOutWidthMax + 2 ) *
-                    ( fTitle->fOutHeightMax + 1 - i ),
-                4 * ( fTitle->fOutWidthMax + 2 ) );
+        memcpy( out, in, 4 * ( fTitle->outWidthMax + 2 ) );
+        in  += 4 * ( fTitle->outWidthMax + 2 );
+        out -= 4 * ( fTitle->outWidthMax + 2 );
     }
     free( tmp );
 
-    /* Grrr - should find a way to give ARGB to OpenGL */
-    uint8_t r, g, b, a;
-    for( uint32_t i = 0; i < fTitle->fOutHeightMax + 2; i++ )
+    /* ARGB -> RGBA */
+    uint32_t * p = (uint32_t*) fPicture;
+    for( int i = 0;
+         i < ( fTitle->outHeightMax + 2 ) * ( fTitle->outWidthMax + 2 );
+         i++ )
     {
-        for( uint32_t j = 0; j < fTitle->fOutWidthMax + 2; j++ )
-        {
-            a = fPicture[4*(i*(fTitle->fOutWidthMax+2)+j)];
-            r = fPicture[4*(i*(fTitle->fOutWidthMax+2)+j)+1];
-            g = fPicture[4*(i*(fTitle->fOutWidthMax+2)+j)+2];
-            b = fPicture[4*(i*(fTitle->fOutWidthMax+2)+j)+3];
+        *(p++) = ( ( (*p) & 0xff000000 ) >> 24 ) |
+                 ( ( (*p) & 0x00ff0000 ) <<  8 ) |
+                 ( ( (*p) & 0x0000ff00 ) <<  8 ) |
+                 ( ( (*p) & 0x000000ff ) <<  8 );
+    }
 
-            fPicture[4*(i*(fTitle->fOutWidthMax+2)+j)]   = r;
-            fPicture[4*(i*(fTitle->fOutWidthMax+2)+j)+1] = g;
-            fPicture[4*(i*(fTitle->fOutWidthMax+2)+j)+2] = b;
-            fPicture[4*(i*(fTitle->fOutWidthMax+2)+j)+3] = a;
+    if( how == HB_ANIMATE_NONE )
+    {
+        [self drawRect: [self bounds]];
+        return;
+    }
+
+    in  = fOldPicture;
+    out = truc;
+    for( int i = 0; i < fTitle->outHeightMax + 2; i++ )
+    {
+        memcpy( out, in, ( fTitle->outWidthMax + 2 ) * 4 );
+        in  += ( fTitle->outWidthMax + 2 ) * 4;
+        out += 1024 * 4;
+    }
+    glBindTexture( GL_TEXTURE_2D, texture[0] );
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, 1024,
+                  1024, 0, GL_RGBA,
+                  GL_UNSIGNED_BYTE, truc );
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+
+    in  = fPicture;
+    out = truc;
+    for( int i = 0; i < fTitle->outHeightMax + 2; i++ )
+    {
+        memcpy( out, in, ( fTitle->outWidthMax + 2 ) * 4 );
+        in  += ( fTitle->outWidthMax + 2 ) * 4;
+        out += 1024 * 4;
+    }
+    glBindTexture( GL_TEXTURE_2D, texture[1] );
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, 1024,
+                 1024, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, truc );
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+
+    glEnable( GL_TEXTURE_2D );
+    glShadeModel( GL_SMOOTH );
+    glClearColor( 0.0f, 0.0f, 0.0f, 0.5f );
+    glClearDepth( 1.0f );
+    glEnable( GL_DEPTH_TEST );
+    glDepthFunc( GL_LEQUAL );
+    glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
+
+#define ANIMATION_TIME  500000
+
+    rotation = 0.0;
+    float w = ( how == HB_ANIMATE_LEFT ) ? 1.0 : -1.0;
+    uint64_t date;
+    int64_t  wait;
+    for( ;; )
+    {
+        date = HBGetDate();
+        translation = - PROUT - cos( rotation * M_PI / 180 ) *
+                             ( 1 + w * tan( rotation * M_PI / 180 ) );
+
+        [self drawAnimation: how];
+
+        rotation += w;
+        if( w * rotation >= 90.0 )
+        {
+            break;
+        }
+
+        wait = ANIMATION_TIME / 90 - ( HBGetDate() - date );
+        if( wait > 0 )
+        {
+            HBSnooze( wait );
         }
     }
 
-    [self setNeedsDisplay: YES];
+    [self drawRect: [self bounds]];
 }
 
-/* Override NSView's initWithFrame: to specify our pixel format */
 - (id) initWithFrame: (NSRect) frame
 {
-    fManager = NULL;
-    fTitle   = NULL;
-    fPicture = NULL;
+    fHandle    = NULL;
+    fTitle      = NULL;
+    fPicture    = NULL;
+    fOldPicture = NULL;
 
     GLuint attribs[] =
     {
@@ -81,34 +166,109 @@
     NSOpenGLPixelFormat * fmt = [[NSOpenGLPixelFormat alloc]
         initWithAttributes: (NSOpenGLPixelFormatAttribute*) attribs];
 
-    if( !fmt )
+    self = [super initWithFrame:frame pixelFormat: [fmt autorelease]];
+
+    if( !self )
     {
-        fprintf( stderr, "Sarass\n" );
+        return NULL;
     }
 
-    return self = [super initWithFrame:frame pixelFormat:
-                      [fmt autorelease]];
+    [[self openGLContext] makeCurrentContext];
+    [self reshape];
+
+    glGenTextures( 2, texture );
+    truc = (uint8_t*) malloc( 1024*1024*4 );
+
+    return self;
 }
 
-/* Override the view's drawRect: to draw our GL content */
+/*
+ * Resize ourself
+ */
+- (void) reshape
+{
+   NSRect bounds;
+
+   [[self openGLContext] update];
+   bounds = [self bounds];
+   glViewport( 0, 0, (GLsizei) bounds.size.width,
+               (GLsizei) bounds.size.height );
+}
+
+- (void) drawAnimation: (int) how
+{
+   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+   glMatrixMode( GL_PROJECTION );
+   glLoadIdentity();
+   glFrustum( -1.0, 1.0, -1.0, 1.0, PROUT, 20.0 );
+   glMatrixMode( GL_MODELVIEW );
+   glLoadIdentity();
+   glTranslatef( 0.0, 0.0, translation );
+   glRotatef( rotation, 0.0, 1.0, 0.0 );
+
+   glEnable( GL_POLYGON_SMOOTH );
+   glHint( GL_POLYGON_SMOOTH_HINT, GL_NICEST );
+
+   glBindTexture( GL_TEXTURE_2D, texture[0] );
+
+   glBegin( GL_QUADS );
+   glTexCoord2f( 0.0, 0.0 );
+   glVertex3f( -1.0, -1.0,  1.0 );
+   glTexCoord2f( ( 2.0 + fTitle->outWidthMax ) / 1024, 0.0 );
+   glVertex3f(  1.0, -1.0,  1.0 );
+   glTexCoord2f( ( 2.0 + fTitle->outWidthMax ) / 1024,
+                 ( 2.0 + fTitle->outHeightMax ) / 1024 );
+   glVertex3f(  1.0,  1.0,  1.0 );
+   glTexCoord2f( 0.0, ( 2.0 + fTitle->outHeightMax ) / 1024 );
+   glVertex3f( -1.0,  1.0,  1.0 );
+   glEnd();
+
+   glBindTexture( GL_TEXTURE_2D, texture[1] );
+
+   glBegin( GL_QUADS );
+   if( how == HB_ANIMATE_RIGHT )
+   {
+       glTexCoord2f( 0.0, 0.0 );
+       glVertex3f(  1.0, -1.0,  1.0 );
+       glTexCoord2f( ( 2.0 + fTitle->outWidthMax ) / 1024, 0.0 );
+       glVertex3f(  1.0, -1.0,  -1.0 );
+       glTexCoord2f( ( 2.0 + fTitle->outWidthMax ) / 1024,
+                     ( 2.0 + fTitle->outHeightMax ) / 1024 );
+       glVertex3f(  1.0,  1.0,  -1.0 );
+       glTexCoord2f( 0.0, ( 2.0 + fTitle->outHeightMax ) / 1024 );
+       glVertex3f(  1.0,  1.0,  1.0 );
+   }
+   else
+   {
+       glTexCoord2f( 0.0, 0.0 );
+       glVertex3f(  -1.0, -1.0, -1.0 );
+       glTexCoord2f( ( 2.0 + fTitle->outWidthMax ) / 1024, 0.0 );
+       glVertex3f(  -1.0, -1.0, 1.0 );
+       glTexCoord2f( ( 2.0 + fTitle->outWidthMax ) / 1024,
+                     ( 2.0 + fTitle->outHeightMax ) / 1024 );
+       glVertex3f(  -1.0,  1.0, 1.0 );
+       glTexCoord2f( 0.0, ( 2.0 + fTitle->outHeightMax ) / 1024 );
+       glVertex3f(  -1.0,  1.0, -1.0 );
+   }
+   glEnd();
+
+   [[self openGLContext] flushBuffer];
+}
+
 - (void) drawRect: (NSRect) rect
 {
-    glViewport( 0, 0, (GLsizei) rect.size.width,
-                (GLsizei) rect.size.height );
+   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-    /* Black background */
-    glClearColor( 0, 0, 0, 0 );
-    glClear( GL_COLOR_BUFFER_BIT );
+   if( !fPicture )
+   {
+       return;
+   }
 
-    /* Show it */
-    if( fPicture )
-    {
-        glDrawPixels( fTitle->fOutWidthMax + 2,
-                      fTitle->fOutHeightMax + 2, GL_RGBA,
-                      GL_UNSIGNED_BYTE, fPicture );
-    }
+   glDrawPixels( fTitle->outWidthMax + 2,
+                 fTitle->outHeightMax + 2, GL_RGBA,
+                 GL_UNSIGNED_BYTE, fPicture );
 
-    [[self openGLContext] flushBuffer];
+   [[self openGLContext] flushBuffer];
 }
 
 @end

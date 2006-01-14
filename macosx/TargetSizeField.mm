@@ -1,7 +1,7 @@
-/* $Id: TargetSizeField.mm,v 1.4 2003/10/09 23:33:36 titer Exp $
+/* $Id: TargetSizeField.mm,v 1.1.1.1 2003/11/03 12:03:51 titer Exp $
 
    This file is part of the HandBrake source code.
-   Homepage: <http://beos.titer.org/handbrake/>.
+   Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
 #include "TargetSizeField.h"
@@ -41,14 +41,14 @@
 
     /* Video chunk headers (8 bytes / frame)
        and index (16 bytes / frame) */
-    available -= 24 * fTitle->fLength * fTitle->fRate / fTitle->fScale;
+    available -= 24 * fTitle->length * fTitle->rate / fTitle->rateBase;
 
     /* Audio tracks */
     available -= ( ( [[fSecondaryLanguagePopUp titleOfSelectedItem]
                        compare: @"None"] == NSOrderedSame ) ? 1 : 2 ) *
-                 ( fTitle->fLength *
+                 ( fTitle->length *
                    [[fAudioBitratePopUp titleOfSelectedItem] intValue] *
-                   128 + 24 * fTitle->fLength * 44100 / 1152 );
+                   128 + 24 * fTitle->length * 44100 / 1152 );
     
     if( available < 0 )
     {
@@ -57,7 +57,7 @@
     else
     {
         [fBitrateField setIntValue:
-            available / ( 128 * fTitle->fLength )];
+            available / ( 128 * fTitle->length )];
     }
 }
 

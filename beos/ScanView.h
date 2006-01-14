@@ -1,7 +1,7 @@
-/* $Id: ScanView.h,v 1.2 2003/10/13 22:23:02 titer Exp $
+/* $Id: ScanView.h,v 1.2 2003/11/06 14:36:54 titer Exp $
 
    This file is part of the HandBrake source code.
-   Homepage: <http://beos.titer.org/handbrake/>.
+   Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
 #ifndef HB_SCAN_VIEW_H
@@ -16,7 +16,7 @@ class BRadioButton;
 class BStringView;
 class BTextControl;
 
-#include "Common.h"
+#include "HandBrake.h"
 
 #define SCAN_RADIO         'scra'
 #define SCAN_BROWSE_BUTTON 'sbrb'
@@ -25,14 +25,14 @@ class BTextControl;
 class ScanView : public BView
 {
     public:
-                       ScanView( HBManager * manager );
+                       ScanView( HBHandle * handle );
         void           MessageReceived( BMessage * message );
-        void           UpdateIntf( HBStatus status );
+        void           UpdateIntf( HBStatus status, int modeChanged );
 
     private:
         void           DetectVolumes();
 
-        HBManager    * fManager;
+        HBHandle     * fHandle;
         
         BRadioButton * fRadioDetected;
         BRadioButton * fRadioFolder;

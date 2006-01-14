@@ -1,14 +1,13 @@
-/* $Id: MainWindow.cpp,v 1.19 2003/10/13 22:23:02 titer Exp $
+/* $Id: MainWindow.cpp,v 1.3 2003/11/07 21:52:56 titer Exp $
 
    This file is part of the HandBrake source code.
-   Homepage: <http://beos.titer.org/handbrake/>.
+   Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
 #include <Alert.h>
 #include <Application.h>
 #include <Screen.h>
 
-#include "Manager.h"
 #include "MainWindow.h"
 #include "ScanView.h"
 #include "RipView.h"
@@ -17,17 +16,16 @@ MainWindow::MainWindow()
     : BWindow( BRect( 0,0,10,10 ), "HandBrake " VERSION, B_TITLED_WINDOW,
                B_NOT_RESIZABLE | B_NOT_ZOOMABLE )
 {
-    /* Init libhb & launch the manager thread */
-    fManager = new HBManager( true );
+    fHandle = HBInit( 1, 0 );
 
     /* Add the scan view */
-    fScanView = new ScanView( fManager );
-    fRipView  = new RipView( fManager );
+    fScanView = new ScanView( fHandle );
+    fRipView  = new RipView( fHandle );
     AddChild( fScanView );
 
     /* Resize to fit */
     ResizeTo( fScanView->Bounds().Width(), fScanView->Bounds().Height() );
-    
+
     BScreen screen;
     MoveTo( ( screen.Frame().Width() - fRipView->Bounds().Width() ) / 2,
             ( screen.Frame().Height() - fRipView->Bounds().Height() ) / 2 );
@@ -45,7 +43,7 @@ bool MainWindow::QuitRequested()
     fDie = true;
     long exit_value;
     wait_for_thread( fUpdateThread, &exit_value );
-    delete fManager;
+    HBClose( &fHandle );
 
     /* Stop the application */
     be_app->PostMessage( B_QUIT_REQUESTED );
@@ -62,7 +60,7 @@ void MainWindow::MessageReceived( BMessage * message )
             alert = new BAlert( "About HandBrake",
                 "HandBrake " VERSION "\n\n"
                 "by Eric Petit <titer@videolan.org>\n"
-                "Homepage : <http://beos.titer.org/handbrake/>\n\n"
+                "Homepage : <http://handbrake.m0k.org/>\n\n"
                 "No, you don't want to know where this stupid app "
                 "name comes from.\n\n"
                 "Thanks to BGA for pointing out very cool bugs ;)",
@@ -80,6 +78,7 @@ void MainWindow::MessageReceived( BMessage * message )
 
         case B_SAVE_REQUESTED:
         case RIP_TITLE_POPUP:
+        case RIP_VIDEO_CODEC_POPUP:
         case RIP_BITRATE_RADIO:
         case RIP_TARGET_CONTROL:
         case RIP_CROP_BUTTON:
@@ -88,7 +87,7 @@ void MainWindow::MessageReceived( BMessage * message )
         case RIP_RIP_BUTTON:
             fRipView->MessageReceived( message );
             break;
-            
+
         default:
             BWindow::MessageReceived( message );
             break;
@@ -98,56 +97,64 @@ void MainWindow::MessageReceived( BMessage * message )
 void MainWindow::UpdateInterface( MainWindow * _this )
 {
     uint64_t time;
+    int64_t  wait;
 
     while( !_this->fDie )
     {
         /* Update every 0.1 sec */
         time = system_time();
+
         _this->_UpdateInterface();
-        snooze( 100000 - ( system_time() - time ) );
+
+        wait = 100000 - ( system_time() - time );
+        if( wait > 0 )
+        {
+            snooze( wait );
+        }
     }
 }
 
 void MainWindow::_UpdateInterface()
 {
-    if( !fManager->NeedUpdate() )
-    {
-        return;
-    }
-
-    HBStatus status = fManager->GetStatus();
-
     if( !Lock() )
     {
         fprintf( stderr, "Lock() failed\n" );
         return;
     }
+    
+    int      modeChanged;
+    HBStatus status;
+    
+    modeChanged = HBGetStatus( fHandle, &status );
 
-    switch( status.fMode )
+    switch( status.mode )
     {
         case HB_MODE_UNDEF:
-        case HB_MODE_NEED_VOLUME:
+        case HB_MODE_NEED_DEVICE:
             break;
-        
+
         case HB_MODE_SCANNING:
-        case HB_MODE_INVALID_VOLUME:
-            fScanView->UpdateIntf( status );
+        case HB_MODE_INVALID_DEVICE:
+            fScanView->UpdateIntf( status, modeChanged );
             break;
 
         case HB_MODE_READY_TO_RIP:
+            if( !modeChanged )
+                break;
+            
             RemoveChild( fScanView );
             ResizeTo( fRipView->Bounds().Width(),
                       fRipView->Bounds().Height() );
             AddChild( fRipView );
-            fRipView->UpdateIntf( status );
+            fRipView->UpdateIntf( status, modeChanged );
             break;
 
         case HB_MODE_ENCODING:
-        case HB_MODE_SUSPENDED:
+        case HB_MODE_PAUSED:
         case HB_MODE_DONE:
         case HB_MODE_CANCELED:
         case HB_MODE_ERROR:
-            fRipView->UpdateIntf( status );
+            fRipView->UpdateIntf( status, modeChanged );
             break;
 
         default:

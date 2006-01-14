@@ -18,6 +18,7 @@
                 Suspend = id; 
                 TitlePopUpChanged = id; 
                 UpdatePicture = id; 
+                VideoCodecPopUpChanged = id; 
                 VideoMatrixChanged = id; 
             }; 
             CLASS = HBController; 
@@ -40,8 +41,11 @@
                 fLanguagePopUp = NSPopUpButton; 
                 fLeftField = NSTextField; 
                 fLeftStepper = NSStepper; 
+                fNextButton = NSButton; 
+                fOpenGLCheck = NSButton; 
                 fPictureGLView = HBPictureGLView; 
                 fPicturePanel = NSPanel; 
+                fPreviousButton = NSButton; 
                 fRightField = NSTextField; 
                 fRightStepper = NSStepper; 
                 fRipButton = NSButton; 

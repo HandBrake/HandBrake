@@ -1,12 +1,12 @@
-/* $Id: TargetSizeField.h,v 1.2 2003/10/09 23:33:36 titer Exp $
+/* $Id: TargetSizeField.h,v 1.1.1.1 2003/11/03 12:03:51 titer Exp $
 
    This file is part of the HandBrake source code.
-   Homepage: <http://beos.titer.org/handbrake/>.
+   Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
 #include <Cocoa/Cocoa.h>
 
-#include "Common.h"
+#include "HandBrake.h"
 
 @interface HBTargetSizeField : NSTextField
 

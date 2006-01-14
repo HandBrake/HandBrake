@@ -1,8 +1,17 @@
-- General
-  + Use the DVD name in popup and for the name of the created file
-  + Show the current pass
+- Core
   + Should be able to boost the audio volume
+  + Allow the intf to preview the latest encoded picture
+  + Finish and test the MPEG audio decoder
+  + More encoding options: B-frames, type of estimation,
+    type of scaling, etc
+  + Subtitle support
+  + Finish xvid encoding support (2-pass, more tests)
+  + Allow the user to split the file in x parts
+  + AAC & vorbis encoding support
+  + mp4 & mkv muxing support
 
-- OSX port
-  + Preview in a drawer
-  + Prompt before overwriting a file
+- All interfaces
+  + Use the DVD name in popup and for the name of the created file
+
+- BeOS interface
+  + Redo the picture panel

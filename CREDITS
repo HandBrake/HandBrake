@@ -1,117 +1,123 @@
 HandBrake uses a lot of cool libraries from the GNU/Linux world. Thank
 their authors !
 
-libdvdcss authors :
+liba52 authors:
+  Aaron Holtzman
+  Michel Lespinasse
+  Gildas Bazin
+  Billy Biggs
+  Eduard Hasenleithner
+  Håkan Hjort
+  Charles M. Hannum
+  Chris Hodges
+  Michael Holzt
+  Angelos Keromytis
+  David I. Lehn
+  Don Mahurin
+  Jim Miller
+  Takefumi Sayo
+  Shoji Tokunaga
 
-Billy Biggs
-Stéphane Borel
-Håkan Hjort
-Samuel Hocevar
-Eugenio Jarosiewicz
-Jon Lech Johansen
-Markus Kuespert
-Pascal Levesque
-Steven M. Schultz
-David Siebörger
-Alex Strelnikov
-German Tischler
-Gildas Bazin
+libavcodec authors:
+  Fabrice Bellard
+  Alex Beregszaszi
+  Brian Foley
+  Arpad Gereoffy
+  Philip Gladstone
+  Falk Hueffner
+  Zdenek Kabelac
+  Nick Kurshev
+  Michael Niedermayer
+  François Revol
+  Dieter Shirley
+  Juan J. Sierralta
+  Lionel Ulmer
 
-libdvdread authors :
+libdvdcss authors:
+  Billy Biggs
+  Stéphane Borel
+  Håkan Hjort
+  Samuel Hocevar
+  Eugenio Jarosiewicz
+  Jon Lech Johansen
+  Markus Kuespert
+  Pascal Levesque
+  Steven M. Schultz
+  David Siebörger
+  Alex Strelnikov
+  German Tischler
+  Gildas Bazin
 
-Björn Englund
-Håkan Hjort
-Billy Biggs
-Christian Wolff
+libdvdread authors:
+  Björn Englund
+  Håkan Hjort
+  Billy Biggs
+  Christian Wolff
 
-libdvdplay authors :
+libdvdplay authors:
+  Håkan Hjort
+  Martin Norbäck
+  Stéphane Borel
 
-Håkan Hjort
-Martin Norbäck
-Stéphane Borel
+libmp3lame authors:
+  Mike Cheng
+  Robert Hegemann
+  Frank Klemm
+  Alexander Leidinger
+  Naoki Shibata
+  Mark Taylor
+  Takehiro Tominiga
+  Iván Cavero Belaunde
+  Gabriel Bouvigne
+  Florian Bomers
+  CISC
+  John Dahlstrom
+  John Dee
+  Albert Faber
+  Peter Gubanov
+  Lars Magne Ingebrigtsen 	
+  Yosi Markovich
+  Zdenek Kabelac
+  Iwasa Kazmi
+  Guillaume Lessard
+  Steve Lhomme
+  Don Melton
+  Viral Shah
+  Acy Stapp
+  Roel VdB
 
-mpeg2dec authors :
+libmpeg2 authors:
+  Aaron Holtzman
+  Michel Lespinasse
+  Bruno Barreyra
+  Gildas Bazin
+  Alexander W. Chin
+  Stephen Crowley
+  Didier Gautheron
+  Ryan C. Gordon
+  Peter Gubanov
+  Håkan Hjort
+  Nicolas Joly
+  Gerd Knorr
+  David I. Lehn
+  Olie Lho
+  Rick Niles
+  Real Ouellet
+  Bajusz Peter
+  Franck Sicard
+  Brion Vibber
+  Martin Vogt
+  Fredrik Vraalsen
 
-Aaron Holtzman
-Michel Lespinasse
-Bruno Barreyra
-Gildas Bazin
-Alexander W. Chin
-Stephen Crowley
-Didier Gautheron
-Ryan C. Gordon
-Peter Gubanov
-Håkan Hjort
-Nicolas Joly
-Gerd Knorr
-David I. Lehn
-Olie Lho
-Rick Niles
-Real Ouellet
-Bajusz Peter
-Franck Sicard
-Brion Vibber
-Martin Vogt
-Fredrik Vraalsen
-
-Ffmpeg authors :
-
-Fabrice Bellard
-Alex Beregszaszi
-Brian Foley
-Arpad Gereoffy
-Philip Gladstone
-Falk Hueffner
-Zdenek Kabelac
-Nick Kurshev
-Michael Niedermayer
-François Revol
-Dieter Shirley
-Juan J. Sierralta
-Lionel Ulmer
-
-a52dec authors :
-
-Aaron Holtzman
-Michel Lespinasse
-Gildas Bazin
-Billy Biggs
-Eduard Hasenleithner
-Håkan Hjort
-Charles M. Hannum
-Chris Hodges
-Michael Holzt
-Angelos Keromytis
-David I. Lehn
-Don Mahurin
-Jim Miller
-Takefumi Sayo
-Shoji Tokunaga
-
-lame authors :
-
-Mike Cheng
-Robert Hegemann
-Frank Klemm
-Alexander Leidinger
-Naoki Shibata
-Mark Taylor
-Takehiro Tominiga
-Iván Cavero Belaunde
-Gabriel Bouvigne
-Florian Bomers
-CISC
-John Dahlstrom
-John Dee
-Albert Faber
-Peter Gubanov
-Lars Magne Ingebrigtsen 	
-Yosi Markovich
-Zdenek Kabelac
-Iwasa Kazmi
-Guillaume Lessard
-Steve Lhomme
-Don Melton
-Viral Shah
-Acy Stapp
-Roel VdB
+libxvidcore authors:
+  Christoph Lampert
+  Michael Militzer
+  Peter Ross
+  Benjamin Herrenschmidt
+  Daniel Smith
+  Dirk Knop
+  Edouard Gomez
+  Guillaume Morin
+  MinChen
+  Pascal Massimino
+  Radoslaw Czyz

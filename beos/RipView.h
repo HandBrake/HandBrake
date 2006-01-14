@@ -1,7 +1,7 @@
-/* $Id: RipView.h,v 1.5 2003/10/13 22:23:02 titer Exp $
+/* $Id: RipView.h,v 1.3 2003/11/07 21:52:56 titer Exp $
 
    This file is part of the HandBrake source code.
-   Homepage: <http://beos.titer.org/handbrake/>.
+   Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
 
@@ -19,25 +19,26 @@ class BRadioButton;
 class BStatusBar;
 class BTextControl;
 
-#include "Common.h"
+#include "HandBrake.h"
 
-#define RIP_TITLE_POPUP    'rtip'
-#define RIP_BITRATE_RADIO  'rbir'
-#define RIP_TARGET_CONTROL 'rtac'
-#define RIP_CROP_BUTTON    'rcrb'
-#define RIP_BROWSE_BUTTON  'rbrb'
-#define RIP_SUSPEND_BUTTON 'rsub'
-#define RIP_RIP_BUTTON     'rrib'
+#define RIP_TITLE_POPUP       'rtip'
+#define RIP_VIDEO_CODEC_POPUP 'rvcp'
+#define RIP_BITRATE_RADIO     'rbir'
+#define RIP_TARGET_CONTROL    'rtac'
+#define RIP_CROP_BUTTON       'rcrb'
+#define RIP_BROWSE_BUTTON     'rbrb'
+#define RIP_SUSPEND_BUTTON    'rsub'
+#define RIP_RIP_BUTTON        'rrib'
 
 class RipView : public BView
 {
     public:
-                       RipView( HBManager * manager );
+                       RipView( HBHandle * handle );
         void           MessageReceived( BMessage * message );
-        void           UpdateIntf( HBStatus status );
+        void           UpdateIntf( HBStatus status, int modeChanged );
 
     private:
-        HBManager    * fManager;
+        HBHandle     * fHandle;
         HBList       * fTitleList;
         
         BBox         * fVideoBox;

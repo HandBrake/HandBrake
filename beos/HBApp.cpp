@@ -1,12 +1,12 @@
-/* $Id: HandBrake.cpp,v 1.8 2003/10/13 22:23:02 titer Exp $
+/* $Id: HBApp.cpp,v 1.1.1.1 2003/11/03 12:03:51 titer Exp $
 
    This file is part of the HandBrake source code.
-   Homepage: <http://beos.titer.org/handbrake/>.
+   Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
 #include <signal.h>
 
-#include "HandBrake.h"
+#include "HBApp.h"
 #include "MainWindow.h"
 
 void SigHandler( int signal )

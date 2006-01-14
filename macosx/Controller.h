@@ -1,12 +1,12 @@
-/* $Id: Controller.h,v 1.6 2003/10/13 23:09:56 titer Exp $
+/* $Id: Controller.h,v 1.4 2003/11/07 21:22:17 titer Exp $
 
    This file is part of the HandBrake source code.
-   Homepage: <http://beos.titer.org/handbrake/>.
+   Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
 #include <Cocoa/Cocoa.h>
 
-#include "Common.h"
+#include "HandBrake.h"
 #include "PictureGLView.h"
 #include "TargetSizeField.h"
 
@@ -18,7 +18,6 @@
     IBOutlet NSWindow            * fWindow;
 
     /* Scan view */
-    uint64_t                       fLastDVDDetection;
     IBOutlet NSView              * fScanView;
     IBOutlet NSMatrix            * fScanMatrix;
     IBOutlet NSPopUpButton       * fDVDPopUp;
@@ -63,7 +62,7 @@
     /* "Done" alert panel */
     IBOutlet NSPanel             * fDonePanel;
 
-    /* Crop & resize panel */
+    /* Crop & scale panel */
     IBOutlet NSPanel             * fPicturePanel;
     IBOutlet HBPictureGLView     * fPictureGLView;
     IBOutlet NSTextField         * fWidthField;
@@ -78,9 +77,12 @@
     IBOutlet NSTextField         * fRightField;
     IBOutlet NSStepper           * fRightStepper;
     IBOutlet NSTextField         * fInfoField;
+    IBOutlet NSButton            * fOpenGLCheck;
+    IBOutlet NSButton            * fPreviousButton;
+    IBOutlet NSButton            * fNextButton;
     int                            fPicture;
 
-    HBManager                    * fManager;
+    HBHandle                     * fHandle;
     HBList                       * fTitleList;
 }
 
@@ -91,6 +93,7 @@
 - (IBAction) Scan: (id) sender;
 
 - (IBAction) TitlePopUpChanged: (id) sender;
+- (IBAction) VideoCodecPopUpChanged: (id) sender;
 - (IBAction) VideoMatrixChanged: (id) sender;
 - (IBAction) AudioPopUpChanged: (id) sender;
 - (IBAction) BrowseFile: (id) sender;
@@ -111,6 +114,6 @@
 - (IBAction) UpdatePicture: (id) sender;
 
 - (void)     UpdateIntf: (NSTimer *) timer;
-- (void)     DetectDrives;
+- (void)     DetectDrives: (NSNotification *) notification;
 
 @end

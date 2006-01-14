@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 38;
+	objectVersion = 39;
 	objects = {
 		080E96DCFE201CFB7F000001 = {
 			fileRef = 29B97318FDCFA39411CA2CEA;
@@ -23,6 +23,7 @@
 			isa = PBXGroup;
 			name = Classes;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		089C165CFE840E0CC02AAC07 = {
 			children = (
@@ -31,13 +32,16 @@
 			isa = PBXVariantGroup;
 			name = InfoPlist.strings;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		089C165DFE840E0CC02AAC07 = {
+			expectedFileType = text.plist.strings;
 			fileEncoding = 10;
 			isa = PBXFileReference;
 			name = English;
 			path = English.lproj/InfoPlist.strings;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		089C165EFE840E0CC02AAC07 = {
 			fileRef = 089C165CFE840E0CC02AAC07;
@@ -64,12 +68,16 @@
 			isa = PBXGroup;
 			name = "Linked Frameworks";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		1058C7A1FEA54F0111CA2CBB = {
+			expectedFileType = wrapper.framework;
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
 			name = Cocoa.framework;
 			path = /System/Library/Frameworks/Cocoa.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		1058C7A2FEA54F0111CA2CBB = {
 			children = (
@@ -79,6 +87,7 @@
 			isa = PBXGroup;
 			name = "Other Frameworks";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		1058C7A3FEA54F0111CA2CBB = {
 			fileRef = 1058C7A1FEA54F0111CA2CBB;
@@ -97,9 +106,12 @@
 //173
 //174
 		17587328FF379C6511CA2CBB = {
+			expectedFileType = wrapper.application;
+			fallbackIsa = PBXFileReference;
 			isa = PBXApplicationReference;
 			path = HandBrake.app;
 			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 //170
 //171
@@ -118,6 +130,7 @@
 			isa = PBXGroup;
 			name = Products;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 //190
 //191
@@ -130,6 +143,10 @@
 //293
 //294
 		29B97313FDCFA39411CA2CEA = {
+			buildSettings = {
+				MACOSX_DEPLOYMENT_TARGET = 10.2;
+				SDKROOT = /Developer/SDKs/MacOSX10.2.7.sdk;
+			};
 			buildStyles = (
 				4A9504CCFFE6A4B311CA0CBA,
 				4A9504CDFFE6A4B311CA0CBA,
@@ -154,23 +171,26 @@
 			name = HandBrake;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		29B97315FDCFA39411CA2CEA = {
 			children = (
 				29B97316FDCFA39411CA2CEA,
-				4D358C040534AB8100D654EB,
-				4D929FEB0527903D00A80101,
+				4DFDC318054AC84C00151618,
 			);
 			isa = PBXGroup;
 			name = "Other Sources";
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		29B97316FDCFA39411CA2CEA = {
+			expectedFileType = sourcecode.cpp.objcpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = main.mm;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		29B97317FDCFA39411CA2CEA = {
 			children = (
@@ -183,6 +203,7 @@
 				4D69F5CC0527944A00A80101,
 				4D69F5CD0527944A00A80101,
 				4D69F5CE0527944A00A80101,
+				4DDEF3B905474DCC002904DE,
 				4D118405053054CD00C39CA9,
 				089C165CFE840E0CC02AAC07,
 			);
@@ -190,6 +211,7 @@
 			name = Resources;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		29B97318FDCFA39411CA2CEA = {
 			children = (
@@ -199,12 +221,15 @@
 			name = MainMenu.nib;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		29B97319FDCFA39411CA2CEA = {
+			expectedFileType = wrapper.nib;
 			isa = PBXFileReference;
 			name = English;
 			path = English.lproj/MainMenu.nib;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		29B97323FDCFA39411CA2CEA = {
 			children = (
@@ -215,18 +240,25 @@
 			name = Frameworks;
 			path = "";
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		29B97324FDCFA39411CA2CEA = {
+			expectedFileType = wrapper.framework;
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
 			name = AppKit.framework;
 			path = /System/Library/Frameworks/AppKit.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		29B97325FDCFA39411CA2CEA = {
+			expectedFileType = wrapper.framework;
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
 			name = Foundation.framework;
 			path = /System/Library/Frameworks/Foundation.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		29B97326FDCFA39411CA2CEA = {
 			buildPhases = (
@@ -263,7 +295,7 @@
 	<key>CFBundleExecutable</key>
 	<string>HandBrake</string>
 	<key>CFBundleGetInfoString</key>
-	<string>HandBrake 0.4.1 - By Eric Petit &lt;titer@m0k.org&gt;</string>
+	<string>HandBrake 0.5 - By Eric Petit &lt;titer@m0k.org&gt;</string>
 	<key>CFBundleIconFile</key>
 	<string>HandBrake.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -275,11 +307,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.4.1</string>
+	<string>0.5</string>
 	<key>CFBundleSignature</key>
 	<string>HB##</string>
 	<key>CFBundleVersion</key>
-	<string>0.4.1</string>
+	<string>0.5</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
@@ -291,11 +323,10 @@
 		29B97327FDCFA39411CA2CEA = {
 			buildActionMask = 2147483647;
 			files = (
-				4D929FEC0527903D00A80101,
 				4D6615EA05288C2300A80101,
 				4D857591052B78E300C39CA9,
 				4D358C020534A91300D654EB,
-				4D358C050534AB8100D654EB,
+				4DFDC319054AC84C00151618,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -343,6 +374,7 @@
 				4D69F5D50527944A00A80101,
 				4DEB2025052B055F00C39CA9,
 				4DDE9725052B7B2B00C39CA9,
+				4DDEF3BA05474DCC002904DE,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -362,7 +394,12 @@
 			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				OPTIMIZATION_CFLAGS = "-O0";
+				ZERO_LINK = YES;
 			};
 			isa = PBXBuildStyle;
 			name = Development;
@@ -372,6 +409,8 @@
 			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ZERO_LINK = NO;
 			};
 			isa = PBXBuildStyle;
 			name = Deployment;
@@ -387,9 +426,11 @@
 //4D3
 //4D4
 		4D118405053054CD00C39CA9 = {
+			expectedFileType = image.icns;
 			isa = PBXFileReference;
 			path = HandBrake.icns;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4D118406053054CD00C39CA9 = {
 			fileRef = 4D118405053054CD00C39CA9;
@@ -398,16 +439,20 @@
 			};
 		};
 		4D358C000534A91300D654EB = {
+			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TargetSizeField.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4D358C010534A91300D654EB = {
+			expectedFileType = sourcecode.cpp.objcpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TargetSizeField.mm;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4D358C020534A91300D654EB = {
 			fileRef = 4D358C000534A91300D654EB;
@@ -421,19 +466,6 @@
 			settings = {
 			};
 		};
-		4D358C040534AB8100D654EB = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			name = Common.h;
-			path = /Users/titer/HandBrake/core/Common.h;
-			refType = 0;
-		};
-		4D358C050534AB8100D654EB = {
-			fileRef = 4D358C040534AB8100D654EB;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		4D6615EA05288C2300A80101 = {
 			fileRef = 4DF3C8CB052889CD00A80101;
 			isa = PBXBuildFile;
@@ -441,46 +473,60 @@
 			};
 		};
 		4D69F5C80527944A00A80101 = {
+			expectedFileType = archive.ar;
 			isa = PBXFileReference;
 			name = liba52.a;
 			path = /usr/local/lib/liba52.a;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		4D69F5C90527944A00A80101 = {
+			expectedFileType = archive.ar;
 			isa = PBXFileReference;
 			name = libavcodec.a;
 			path = /usr/local/lib/libavcodec.a;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		4D69F5CA0527944A00A80101 = {
+			expectedFileType = archive.ar;
 			isa = PBXFileReference;
 			name = libdvdcss.a;
 			path = /usr/local/lib/libdvdcss.a;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		4D69F5CB0527944A00A80101 = {
+			expectedFileType = archive.ar;
 			isa = PBXFileReference;
 			name = libdvdplay.a;
 			path = /usr/local/lib/libdvdplay.a;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		4D69F5CC0527944A00A80101 = {
+			expectedFileType = archive.ar;
 			isa = PBXFileReference;
 			name = libdvdread.a;
 			path = /usr/local/lib/libdvdread.a;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		4D69F5CD0527944A00A80101 = {
+			expectedFileType = archive.ar;
 			isa = PBXFileReference;
 			name = libmp3lame.a;
 			path = /usr/local/lib/libmp3lame.a;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		4D69F5CE0527944A00A80101 = {
+			expectedFileType = archive.ar;
 			isa = PBXFileReference;
 			name = libmpeg2.a;
 			path = /usr/local/lib/libmpeg2.a;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		4D69F5CF0527944A00A80101 = {
 			fileRef = 4D69F5C80527944A00A80101;
@@ -525,16 +571,20 @@
 			};
 		};
 		4D85758E052B78E300C39CA9 = {
+			expectedFileType = sourcecode.cpp.objcpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = PictureGLView.mm;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4D85758F052B78E300C39CA9 = {
+			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = PictureGLView.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4D857590052B78E300C39CA9 = {
 			fileRef = 4D85758E052B78E300C39CA9;
@@ -548,24 +598,13 @@
 			settings = {
 			};
 		};
-		4D929FEB0527903D00A80101 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			name = Manager.h;
-			path = ../core/Manager.h;
-			refType = 4;
-		};
-		4D929FEC0527903D00A80101 = {
-			fileRef = 4D929FEB0527903D00A80101;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		4D929FED0527907200A80101 = {
+			expectedFileType = archive.ar;
 			isa = PBXFileReference;
 			name = libhb.a;
 			path = ../core/libhb.a;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4D929FEE0527907200A80101 = {
 			fileRef = 4D929FED0527907200A80101;
@@ -574,10 +613,13 @@
 			};
 		};
 		4DDE9724052B7B2B00C39CA9 = {
+			expectedFileType = wrapper.framework;
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
 			name = OpenGL.framework;
 			path = /System/Library/Frameworks/OpenGL.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		4DDE9725052B7B2B00C39CA9 = {
 			fileRef = 4DDE9724052B7B2B00C39CA9;
@@ -585,11 +627,28 @@
 			settings = {
 			};
 		};
+		4DDEF3B905474DCC002904DE = {
+			expectedFileType = archive.ar;
+			isa = PBXFileReference;
+			name = libxvidcore.a;
+			path = /usr/local/lib/libxvidcore.a;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		4DDEF3BA05474DCC002904DE = {
+			fileRef = 4DDEF3B905474DCC002904DE;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		4DEB2024052B055F00C39CA9 = {
+			expectedFileType = wrapper.framework;
+			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
 			name = IOKit.framework;
 			path = /System/Library/Frameworks/IOKit.framework;
 			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		4DEB2025052B055F00C39CA9 = {
 			fileRef = 4DEB2024052B055F00C39CA9;
@@ -598,19 +657,38 @@
 			};
 		};
 		4DF3C8CB052889CD00A80101 = {
+			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Controller.h;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4DF3C8CC052889CD00A80101 = {
+			expectedFileType = sourcecode.cpp.objcpp;
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Controller.mm;
 			refType = 4;
+			sourceTree = "<group>";
 		};
 		4DF3C8CE052889CD00A80101 = {
 			fileRef = 4DF3C8CC052889CD00A80101;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4DFDC318054AC84C00151618 = {
+			expectedFileType = sourcecode.c.h;
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = HandBrake.h;
+			path = ../core/HandBrake.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4DFDC319054AC84C00151618 = {
+			fileRef = 4DFDC318054AC84C00151618;
 			isa = PBXBuildFile;
 			settings = {
 			};
