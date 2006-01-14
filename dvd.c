@@ -1,4 +1,4 @@
-/* $Id: dvd.c,v 1.11 2005/11/04 15:30:47 titer Exp $
+/* $Id: dvd.c,v 1.12 2005/11/25 15:05:25 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -511,6 +511,25 @@ int hb_dvd_start( hb_dvd_t * d, int title, int chapter )
 }
 
 /***********************************************************************
+ * hb_dvd_stop
+ ***********************************************************************
+ *
+ **********************************************************************/
+void hb_dvd_stop( hb_dvd_t * d )
+{
+    if( d->ifo )
+    {
+        ifoClose( d->ifo );
+        d->ifo = NULL;
+    }
+    if( d->file )
+    {
+        DVDCloseFile( d->file );
+        d->file = NULL;
+    }
+}
+
+/***********************************************************************
  * hb_dvd_seek
  ***********************************************************************
  *
@@ -675,10 +694,14 @@ void hb_dvd_close( hb_dvd_t ** _d )
 {
     hb_dvd_t * d = *_d;
 
-    if( d->ifo )    ifoClose( d->ifo );
-    if( d->vmg )    ifoClose( d->vmg );
-    if( d->file )   DVDCloseFile( d->file );
-    if( d->reader ) DVDClose( d->reader );
+    if( d->vmg )
+    {
+        ifoClose( d->vmg );
+    }
+    if( d->reader )
+    {
+        DVDClose( d->reader );
+    }
 
     free( d );
     *_d = NULL;

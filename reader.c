@@ -1,4 +1,4 @@
-/* $Id: reader.c,v 1.20 2005/04/29 19:55:54 titer Exp $
+/* $Id: reader.c,v 1.21 2005/11/25 15:05:25 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -113,6 +113,7 @@ static void ReaderFunc( void * _r )
 
     hb_list_empty( &list );
     hb_buffer_close( &r->ps );
+    hb_dvd_stop( r->dvd );
     hb_dvd_close( &r->dvd );
 
     hb_log( "reader: done" );

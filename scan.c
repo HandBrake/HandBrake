@@ -1,4 +1,4 @@
-/* $Id: scan.c,v 1.51 2005/04/27 21:05:24 titer Exp $
+/* $Id: scan.c,v 1.52 2005/11/25 15:05:25 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -397,6 +397,7 @@ cleanup:
         hb_buffer_close( &buf_raw );
     }
     hb_list_close( &list_raw );
+    hb_dvd_stop( data->dvd );
     return ret;
 }
 
