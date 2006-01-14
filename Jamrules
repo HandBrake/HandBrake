@@ -8,9 +8,11 @@ LINK     = g++ ;
 OPTIM    = -O3 -funroll-loops ;
 
 # HandBrake defines
-HB_VERSION = 0.6.0-test3 ;
+HB_VERSION = 0.6.0 ;
 DEFINES    = HB_$(OS) HB_VERSION=\\\"$(HB_VERSION)\\\" ;
 #DEFINES   += HB_NOMMX ;
+
+LANGUAGES = fr de it pl ru nl es pt ;
 
 # OS-specific
 if $(OS) = BEOS
@@ -104,7 +106,7 @@ actions BuildOSXApp
     $(RM) $(1) && \
       ( cd macosx && xcodebuild ) && \
       cp -r macosx/build/HandBrake.app $(1) && \
-      for i in French German it pl ru nl; do \
+      for i in $(LANGUAGES) ; do \
         ( cd $(1)/Contents/Resources && \
           cp -r English.lproj $i.lproj && \
           cp ../../../macosx/i18n/$i.strings \

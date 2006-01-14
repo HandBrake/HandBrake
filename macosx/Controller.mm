@@ -1,4 +1,4 @@
-/* $Id: Controller.mm,v 1.29 2004/03/08 12:39:49 titer Exp $
+/* $Id: Controller.mm,v 1.30 2004/03/12 14:22:19 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -756,26 +756,18 @@ static void _RipDone( void * data, int result );
         [fRipEncoderPopUp setEnabled: NO];
         [fRipVideoMatrix  setEnabled: NO];
         [fRipTwoPassCheck setEnabled: NO];
-        
-        [fRipAudBitPopUp  setEnabled: YES];
     }
     else if( format == 3 )
     {
         [fRipEncoderPopUp setEnabled: YES];
         [fRipVideoMatrix  setEnabled: YES];
         [fRipTwoPassCheck setEnabled: YES];
-        
-#if 0
-        /* Can't set Vorbis bitrate */
-        [fRipAudBitPopUp  setEnabled: NO];
-#endif
     }
     else
     {
         [fRipEncoderPopUp setEnabled: YES];
         [fRipVideoMatrix  setEnabled: YES];
         [fRipTwoPassCheck setEnabled: YES];
-        [fRipAudBitPopUp  setEnabled: YES];
     }
     [self VideoMatrixChanged: self];
 }

@@ -1,4 +1,4 @@
-$Id: TRANSLATIONS,v 1.1 2004/03/08 12:22:46 titer Exp $
+$Id: TRANSLATIONS,v 1.2 2004/03/22 18:20:30 titer Exp $
 
 TRANSLATIONS file for HandBrake <http://handbrake.m0k.org/>
 
@@ -16,5 +16,5 @@ your language. You can get it (for the latest release) at
 
 Edit it with Xcode, save it to HandBrake/macosx/i18n/xx.strings (where
 'xx' are the two letters representing your language), then add 'xx' to
-the language list in the Jamrules file (in the 'BuildOSXApp' action).
+the language list in the Jamrules file.
 

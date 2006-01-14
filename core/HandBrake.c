@@ -1,4 +1,4 @@
-/* $Id: HandBrake.c,v 1.44 2004/03/08 11:32:48 titer Exp $
+/* $Id: HandBrake.c,v 1.47 2004/03/21 22:58:41 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -38,6 +38,7 @@ struct HBHandle
     float          avgFrameRate;
     int            remainingTime;
 
+    HBLock       * lock;
     HBLock       * pauseLock;
     volatile int   die;
     HBThread     * thread;
@@ -92,6 +93,7 @@ HBHandle * HBInit( int debug, int cpuCount )
         }
     }
 
+    h->lock      = HBLockInit();
     h->pauseLock = HBLockInit();
     h->thread    = HBThreadInit( "libhb", HandBrakeThread, h,
                                  HB_NORMAL_PRIORITY );
@@ -100,18 +102,24 @@ HBHandle * HBInit( int debug, int cpuCount )
 
 void HBSetCallbacks( HBHandle * h, HBCallbacks callbacks )
 {
+    HBLockLock( h->lock );
     h->cb = callbacks;
+    HBLockUnlock( h->lock );
 }
 
 void HBScanDVD( HBHandle * h, const char * dvd, int title )
 {
+    HBLockLock( h->lock );
     h->scan = HBScanInit( h, dvd, title );
+    HBLockUnlock( h->lock );
 }
 
 void HBStartRip( HBHandle * h, HBTitle * title )
 {
     int i;
     HBAudio * audio;
+
+    HBLockLock( h->lock );
 
     h->beginDate        = HBGetDate();
     h->lastPosUpdate    = 0;
@@ -122,7 +130,7 @@ void HBStartRip( HBHandle * h, HBTitle * title )
     FixPictureSettings( title );
 
     /* Video fifos */
-    title->inFifo     = HBFifoInit( 1024 );
+    title->inFifo     = HBFifoInit( 2048 );
     title->rawFifo    = HBFifoInit( 1 );
     title->scaledFifo = HBFifoInit( 1 );
     title->outFifo    = HBFifoInit( 1 );
@@ -142,7 +150,7 @@ void HBStartRip( HBHandle * h, HBTitle * title )
         audio = HBListItemAt( title->ripAudioList, i );
 
         /* Audio fifos */
-        audio->inFifo  = HBFifoInit( 1024 );
+        audio->inFifo  = HBFifoInit( 2048 );
         audio->rawFifo = HBFifoInit( 1 );
         audio->outFifo = HBFifoInit( 4 ); /* At least 4 for Vorbis */
 
@@ -176,25 +184,33 @@ void HBStartRip( HBHandle * h, HBTitle * title )
     }
 
     h->curTitle = title;
+
+    HBLockUnlock( h->lock );
 }
 
 void HBPauseRip( HBHandle * h )
 {
+    HBLockLock( h->lock );
     h->pauseDate = HBGetDate();
     HBLockLock( h->pauseLock );
+    HBLockUnlock( h->lock );
 }
 
 void HBResumeRip( HBHandle * h )
 {
+    HBLockLock( h->lock );
     h->beginDate     += HBGetDate() - h->pauseDate;
     h->lastPosUpdate += HBGetDate() - h->pauseDate;
     h->lastFpsUpdate += HBGetDate() - h->pauseDate;
     HBLockUnlock( h->pauseLock );
+    HBLockUnlock( h->lock );
 }
 
 void HBStopRip( HBHandle * h )
 {
+    HBLockLock( h->lock );
     h->stopRip = 1;
+    HBLockUnlock( h->lock );
 }
 
 uint8_t * HBGetPreview( HBHandle * h, HBTitle * t, int picture )
@@ -401,6 +417,7 @@ void HBClose( HBHandle ** _h )
     sprintf( command, "rm -f /tmp/HB.%d.*", h->pid );
     system( command );
 
+    HBLockClose( &h->lock );
     HBLockClose( &h->pauseLock );
     free( h );
 
@@ -421,8 +438,10 @@ void HBScanning( HBHandle * h, int title, int titleCount )
 
 void HBScanDone( HBHandle * h, HBList * titleList )
 {
+    HBLockLock( h->lock );
     h->stopScan  = 1;
     h->titleList = titleList;
+    HBLockUnlock( h->lock );
     h->cb.scanDone( h->cb.data, titleList );
 }
 
@@ -433,7 +452,9 @@ int HBGetPid( HBHandle * h )
 
 void HBDone( HBHandle * h )
 {
+    HBLockLock( h->lock );
     h->ripDone = 1;
+    HBLockUnlock( h->lock );
 }
 
 void HBPosition( HBHandle * h, float position )
@@ -454,7 +475,9 @@ void HBPosition( HBHandle * h, float position )
     }
 
     if( HBGetDate() - h->lastPosUpdate < 200000 )
+    {
         return;
+    }
 
     h->lastPosUpdate  = HBGetDate();
 
@@ -478,7 +501,9 @@ void HBPosition( HBHandle * h, float position )
 
 void HBErrorOccured( HBHandle * h, int error )
 {
+    HBLockLock( h->lock );
     h->error = error;
+    HBLockUnlock( h->lock );
 }
 
 /* Local functions */
@@ -490,17 +515,23 @@ static void HandBrakeThread( void * _h )
 
     while( !h->die )
     {
+        HBLockLock( h->lock );
+
         if( h->stopScan )
         {
             HBScanClose( &h->scan );
             h->stopScan = 0;
+            HBLockUnlock( h->lock );
+            continue;
         }
 
         if( h->stopRip )
         {
             _StopRip( h );
-            h->cb.ripDone( h->cb.data, HB_CANCELED );
             h->stopRip = 0;
+            HBLockUnlock( h->lock );
+            h->cb.ripDone( h->cb.data, HB_CANCELED );
+            continue;
         }
 
         if( h->ripDone )
@@ -528,23 +559,31 @@ static void HandBrakeThread( void * _h )
                         break;
                     }
                 }
+                if( ok )
+                {
+                    break;
+                }
                 HBSnooze( 5000 );
             }
 
             HBSnooze( 500000 );
             _StopRip( h );
-            h->cb.ripDone( h->cb.data, HB_SUCCESS );
-
             h->ripDone = 0;
+            HBLockUnlock( h->lock );
+            h->cb.ripDone( h->cb.data, HB_SUCCESS );
+            continue;
         }
 
         if( h->error )
         {
             _StopRip( h );
-            h->cb.ripDone( h->cb.data, h->error );
             h->error = 0;
+            HBLockUnlock( h->lock );
+            h->cb.ripDone( h->cb.data, h->error );
+            continue;
         }
 
+        HBLockUnlock( h->lock );
         HBSnooze( 10000 );
     }
 }
@@ -554,6 +593,11 @@ static void _StopRip( HBHandle * h )
     HBTitle * title = h->curTitle;
     HBAudio * audio;
     int i;
+
+    if( !title )
+    {
+        return;
+    }
 
     /* Stop input and work threads */
     HBDVDReadClose( &title->dvdRead );
@@ -594,10 +638,8 @@ static void _StopRip( HBHandle * h )
     HBFifoClose( &title->scaledFifo );
     HBFifoClose( &title->outFifo );
 
-    for( i = 0; i < HBListCount( title->ripAudioList ); i++ )
+    while( ( audio = HBListItemAt( title->ripAudioList, 0 ) ) )
     {
-        audio = HBListItemAt( title->ripAudioList, i );
-
         /* Audio work objects */
         if( audio->inCodec == HB_CODEC_AC3 )
             HBAc3DecClose( &audio->decoder );

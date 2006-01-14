@@ -1,4 +1,4 @@
-/* $Id: Fifo.h,v 1.11 2004/02/24 21:55:53 titer Exp $
+/* $Id: Fifo.h,v 1.13 2004/03/17 10:35:06 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -16,7 +16,7 @@ struct HBBuffer
     int       alloc;
     int       size;
     uint8_t * data;
-#if defined( HB_MACOSX )
+#if defined( HB_CYGWIN )
     uint8_t * dataOrig;
 #endif
     float     position;

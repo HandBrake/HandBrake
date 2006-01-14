@@ -478,15 +478,15 @@ void on_button_start_clicked( GtkButton       *button,
             audio->outBitrate = i_ab;
             if( title->mux == HB_MUX_AVI )
             {
-                audio->codec = HB_CODEC_MP3;
+                audio->outCodec = HB_CODEC_MP3;
             }
             else if( title->mux == HB_MUX_MP4 )
             {
-                audio->codec = HB_CODEC_AAC;
+                audio->outCodec = HB_CODEC_AAC;
             }
             else if( title->mux == HB_MUX_OGM )
             {
-                audio->codec = HB_CODEC_VORBIS;
+                audio->outCodec = HB_CODEC_VORBIS;
             }
             HBListAdd( title->ripAudioList, audio );
         }
@@ -499,15 +499,15 @@ void on_button_start_clicked( GtkButton       *button,
             audio->outBitrate = i_ab;
             if( title->mux == HB_MUX_AVI )
             {
-                audio->codec = HB_CODEC_MP3;
+                audio->outCodec = HB_CODEC_MP3;
             }
             else if( title->mux == HB_MUX_MP4 )
             {
-                audio->codec = HB_CODEC_AAC;
+                audio->outCodec = HB_CODEC_AAC;
             }
             else if( title->mux == HB_MUX_OGM )
             {
-                audio->codec = HB_CODEC_VORBIS;
+                audio->outCodec = HB_CODEC_VORBIS;
             }
             HBListAdd( title->ripAudioList, audio );
         }

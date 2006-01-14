@@ -1,4 +1,4 @@
-/* $Id: Thread.c,v 1.12 2004/03/04 17:57:17 titer Exp $
+/* $Id: Thread.c,v 1.13 2004/03/16 16:14:03 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -164,7 +164,7 @@ HBCond * HBCondInit()
 #elif defined( HB_MACOSX ) || defined( HB_LINUX )
     pthread_cond_init( &c->cond, NULL );
 #elif defined( HB_CYGWIN )
-    /* TODO */
+    c->event = CreateEvent( NULL, FALSE, FALSE, NULL );
 #endif
 
     return c;
@@ -178,7 +178,7 @@ void HBCondClose( HBCond ** _c )
 #elif defined( HB_MACOSX ) || defined( HB_LINUX )
     pthread_cond_destroy( &c->cond );
 #elif defined( HB_CYGWIN )
-    /* TODO */
+    CloseHandle( c->event );
 #endif
     free( c );
 

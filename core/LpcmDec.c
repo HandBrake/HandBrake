@@ -1,4 +1,4 @@
-/* $Id: LpcmDec.c,v 1.1 2004/03/08 11:32:48 titer Exp $
+/* $Id: LpcmDec.c,v 1.2 2004/03/08 15:04:40 fenrir Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -64,6 +64,16 @@ void HBLpcmDecClose( HBWork ** _l )
     free( l );
 
     *_l = NULL;
+}
+
+static int16_t Swap16( int16_t * p )
+{
+    uint8_t tmp[2];
+
+    tmp[0] = ((uint8_t*)p)[1];
+    tmp[1] = ((uint8_t*)p)[0];
+
+    return *(int16_t*)tmp;
 }
 
 static int LpcmDecWork( HBWork * w )
@@ -137,8 +147,13 @@ static int LpcmDecWork( HBWork * w )
 
     for( i = 0; i < samples; i++ )
     {
+#ifdef SYS_MACOSX
         l->rawBuffer->left[i]  = (float) int16data[2*i]   * l->sampleLevel;
         l->rawBuffer->right[i] = (float) int16data[2*i+1] * l->sampleLevel;
+#else
+        l->rawBuffer->left[i]  = (float) Swap16(&int16data[2*i])   * l->sampleLevel;
+        l->rawBuffer->right[i] = (float) Swap16(&int16data[2*i+1]) * l->sampleLevel;
+#endif
     }
 
     HBBufferClose( &lpcmBuffer );

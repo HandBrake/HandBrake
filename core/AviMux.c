@@ -1,4 +1,4 @@
-/* $Id: AviMux.c,v 1.16 2004/02/18 19:36:35 titer Exp $
+/* $Id: AviMux.c,v 1.17 2004/03/16 16:11:29 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -161,7 +161,11 @@ void HBAviMuxClose( HBAviMux ** _a )
     a->die = 1;
     HBThreadClose( &a->thread );
 
+#ifndef HB_CYGWIN
     file = fopen( a->title->file, "r" );
+#else
+    file = fopen( a->title->file, "rb" );
+#endif
     if( file )
     {
         fseek( file, 0, SEEK_END );
@@ -194,7 +198,11 @@ static void AviMuxThread( void * _a )
 
     /* Open destination file */
     HBLog( "HBAviMux: opening %s", title->file );
+#ifndef HB_CYGWIN
     if( !( a->file = fopen( title->file, "w" ) ) )
+#else
+    if( !( a->file = fopen( title->file, "wb" ) ) )
+#endif
     {
         HBLog( "HBAviMux: fopen() failed" );
         HBErrorOccured( a->handle, HB_ERROR_AVI_WRITE );

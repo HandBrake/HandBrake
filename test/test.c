@@ -1,4 +1,4 @@
-/* $Id: test.c,v 1.27 2004/03/08 11:32:50 titer Exp $
+/* $Id: test.c,v 1.28 2004/03/22 19:18:57 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -473,8 +473,6 @@ static void ScanDone( void * data, HBList * titleList )
             audio->outBitrate = abitrate;
             audio->outCodec = acodec;
             HBListAdd( title->ripAudioList, audio );
-
-            tmp++;
         }
     }
     if( size )

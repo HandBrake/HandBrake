@@ -1,4 +1,4 @@
-# $Id: Jamfile,v 1.40 2004/03/08 11:32:48 titer Exp $
+# $Id: Jamfile,v 1.41 2004/03/15 17:08:37 titer Exp $
 #
 # This file is part of the HandBrake source code.
 # Homepage: <http://handbrake.m0k.org/>.
@@ -25,7 +25,7 @@ if $(OS) = BEOS
         -I$(TOP)/core -I$(TOP)/beos/liblayout -g -Wall ;
     LINKLIBS on HandBrake = $(LINKLIBS) -L$(TOP)/lib -llayout -lbe ;
     LinkLibraries HandBrake : $(HB_LIBS) ;
-    Main HandBrake : $(SOURCES_BEOS) ;
+#    Main HandBrake : $(SOURCES_BEOS) ;
 }
 
 # OS X

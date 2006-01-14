@@ -1,4 +1,4 @@
-/* $Id: Fifo.c,v 1.12 2004/03/04 17:35:52 titer Exp $
+/* $Id: Fifo.c,v 1.14 2004/03/17 10:35:06 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -22,43 +22,36 @@ HBBuffer * HBBufferInit( int size )
     b->size  = size;
 
 #if defined( HB_BEOS ) || defined( HB_LINUX )
-    if( !( b->data = memalign( 16, size ) ) )
-    {
-        HBLog( "HBBufferInit: malloc() failed, gonna crash" );
-        free( b );
-        return NULL;
-    }
+    b->data = memalign( 16, size );
 #elif defined( HB_MACOSX )
-    if( !( b->dataOrig = malloc( size + 15 ) ) )
-    {
-        HBLog( "HBBufferInit: malloc() failed, gonna crash" );
-        free( b );
-        return NULL;
-    }
-    b->data  = b->dataOrig + 15;
-    b->data -= (long) b->data & 15;
+    /* OS X's malloc returns 16-bytes aligned memory */
+    b->data = malloc( size );
 #elif defined( HB_CYGWIN )
-    /* TODO */
+    b->dataOrig  = malloc( size + 15 );
+    b->data      = b->dataOrig + 15;
+    b->data     -= (long) b->data & 15;
 #endif
 
-    b->position = 0.0;
+    if( !b->data )
+    {
+        HBLog( "HBBufferInit: malloc() failed, gonna crash" );
+        free( b );
+        return NULL;
+    }
 
     return b;
 }
 
 void HBBufferReAlloc( HBBuffer * b, int size )
 {
-#if defined( HB_BEOS ) || defined( HB_LINUX )
-    b->data  = realloc( b->data, size );
-#elif defined( HB_MACOSX )
-    /* Ugly */
-    uint8_t * new = malloc( size );
-    memcpy( new, b->data, b->size );
-    free( b->dataOrig );
-    b->dataOrig = new;
-    b->data     = new;
+    /* We don't care about alignment here, realloc is only used in the
+       AVI muxer anyway */
+#if defined( HB_BEOS ) || defined( HB_LINUX ) || defined( HB_MACOSX )
+    b->data = realloc( b->data, size );
 #elif defined( HB_CYGWIN )
-    /* TODO */
+    int alignment = b->data - b->dataOrig;
+    b->dataOrig   = realloc( b->dataOrig, size + alignment );
+    b->data       = b->dataOrig + alignment;
 #endif
     b->alloc = size;
 
@@ -72,12 +65,10 @@ void HBBufferClose( HBBuffer ** _b )
 {
     HBBuffer * b = *_b;
 
-#if defined( HB_BEOS ) || defined( HB_LINUX )
+#if defined( HB_BEOS ) || defined( HB_LINUX ) || defined( HB_MACOSX )
     free( b->data );
-#elif defined( HB_MACOSX )
-    free( b->dataOrig );
 #elif defined( HB_CYGWIN )
-    /* TODO */
+    free( b->dataOrig );
 #endif
     free( b );
 

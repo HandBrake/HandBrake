@@ -1,4 +1,4 @@
-/* $Id: Thread.h,v 1.9 2004/02/19 17:59:13 titer Exp $
+/* $Id: Thread.h,v 1.10 2004/03/16 16:14:03 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -93,11 +93,11 @@ static inline void HBLockUnlock( HBLock * l )
 struct HBCond
 {
 #if defined( HB_BEOS )
-    int             thread;
+    int                 thread;
 #elif defined( HB_MACOSX ) || defined( HB_LINUX )
-    pthread_cond_t  cond;
+    pthread_cond_t      cond;
 #elif defined( HB_CYGWIN )
-    /* TODO */
+    HANDLE              event;
 #endif
 
 };
@@ -113,7 +113,8 @@ static inline void HBCondWait( HBCond * c, HBLock * lock )
 #elif defined( HB_MACOSX ) || defined( HB_LINUX )
     pthread_cond_wait( &c->cond, &lock->mutex );
 #elif defined( HB_CYGWIN )
-    /* TODO */
+    SignalObjectAndWait( lock->mutex, c->event, INFINITE, FALSE );
+    WaitForSingleObject( lock->mutex, INFINITE );
 #endif
 }
 
@@ -136,7 +137,7 @@ static inline void HBCondSignal( HBCond * c )
 #elif defined( HB_MACOSX ) || defined( HB_LINUX )
     pthread_cond_signal( &c->cond );
 #elif defined( HB_CYGWIN )
-    /* TODO */
+    PulseEvent( c->event );
 #endif
 }
 

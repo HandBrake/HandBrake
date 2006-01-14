@@ -1,15 +1,12 @@
-$Id: TODO,v 1.32 2004/03/08 11:32:48 titer Exp $
+$Id: TODO,v 1.33 2004/03/12 14:22:19 titer Exp $
 
 TODO file for HandBrake <http://handbrake.m0k.org/>
 
 This is a roadmap for future releases of HandBrake. It has to be taken
 as an indication, as it may change as any time.
 
-0.6.0
- + Make sure the deadlock at the end of the rip is gone
-
-Maybe in 0.6.0
- + New, up-to-date BeOS GUI [if I get some help]
+0.6.x
+ + Up-to-date BeOS GUI
 
 0.7.x
  + Homemade resampler
@@ -18,6 +15,7 @@ Maybe in 0.6.0
  + Subtitle support
  + Rip only a few chapters or rip X seconds from a given starting point
  + Allow to launch rips of several titles
+ + Drop libdvdplay
 
 Maybe in 0.7.x
  + MPEG audio decoding [if I have a DVD to test it]
