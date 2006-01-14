@@ -1,4 +1,8 @@
-$Id: NEWS,v 1.5 2003/08/24 22:25:21 titer Exp $
+$Id: NEWS,v 1.6 2003/08/26 18:54:06 titer Exp $
+
+Changes between 0.1.1 and 0.2
+ - Fixed a major bug that made HandBrake probably crash after ~ 15 minutes encoded
+ - Fixed a few minor memory leaks
 
 Changes between 0.1 and 0.1.1
  - Fixed a stupid bug that prevented to scan volumes correctly if

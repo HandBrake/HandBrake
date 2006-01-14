@@ -1,4 +1,4 @@
-/* $Id: HBMp3Encoder.h,v 1.3 2003/08/23 19:22:59 titer Exp $ */
+/* $Id: HBMp3Encoder.h,v 1.4 2003/08/25 20:41:51 titer Exp $ */
 
 #ifndef HB_MP3_ENCODER_H
 #define HB_MP3_ENCODER_H
@@ -18,13 +18,13 @@ class HBMp3Encoder : public HBThread
         void DoWork();
         bool GetSamples( uint32_t count );
         
-        HBManager         * fManager;
-        HBAudioInfo       * fAudioInfo;
+        HBManager   * fManager;
+        HBAudioInfo * fAudioInfo;
         
-        HBBuffer          * fRawBuffer;
-        uint32_t            fPosInBuffer;  /* in samples */
-        float             * fLeftSamples;
-        float             * fRightSamples;
+        HBBuffer    * fRawBuffer;
+        uint32_t      fPosInBuffer;  /* in samples */
+        float       * fLeftSamples;
+        float       * fRightSamples;
 };
 
 #endif

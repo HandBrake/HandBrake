@@ -1,4 +1,4 @@
-/* $Id: HBWindow.cpp,v 1.20 2003/08/24 20:50:49 titer Exp $ */
+/* $Id: HBWindow.cpp,v 1.21 2003/08/25 22:04:22 titer Exp $ */
 
 #include "HBCommon.h"
 #include "HBWindow.h"
@@ -399,6 +399,9 @@ void HBWindow::MessageReceived( BMessage * message )
             fStatusBar->Update( pos - fStatusBar->CurrentValue(), text );
             Enable( mode );
             Unlock();
+            
+            free( text );
+            
             break;
         }
     

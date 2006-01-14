@@ -1,4 +1,4 @@
-/* $Id: HBAc3Decoder.cpp,v 1.6 2003/08/24 15:03:41 titer Exp $ */
+/* $Id: HBAc3Decoder.cpp,v 1.7 2003/08/25 19:47:14 titer Exp $ */
 
 #include "HBCommon.h"
 #include "HBAc3Decoder.h"
@@ -12,12 +12,12 @@ extern "C" {
 HBAc3Decoder::HBAc3Decoder( HBManager * manager, HBAudioInfo * audioInfo )
     : HBThread( "ac3decoder" )
 {
-    fManager        = manager;
-    fAudioInfo      = audioInfo;
+    fManager     = manager;
+    fAudioInfo   = audioInfo;
     
-    fAc3Buffer      = NULL;
-    fAc3Frame       = NULL;
-    fPosInAc3Buffer = 0;
+    fAc3Buffer   = NULL;
+    fAc3Frame    = NULL;
+    fPosInBuffer = 0;
 }
 
 void HBAc3Decoder::DoWork()
@@ -108,18 +108,18 @@ bool HBAc3Decoder::GetBytes( uint32_t size )
             {
                 return false;
             }
-            fPosInAc3Buffer = 0;
+            fPosInBuffer = 0;
         }
         
         int willCopy = MIN( size - fAc3Frame->fSize,
-                            fAc3Buffer->fSize - fPosInAc3Buffer );
+                            fAc3Buffer->fSize - fPosInBuffer );
         memcpy( fAc3Frame->fData + fAc3Frame->fSize,
-                fAc3Buffer->fData + fPosInAc3Buffer,
+                fAc3Buffer->fData + fPosInBuffer,
                 willCopy );
         fAc3Frame->fSize += willCopy;
-        fPosInAc3Buffer  += willCopy;
+        fPosInBuffer     += willCopy;
         
-        if( fAc3Buffer->fSize == fPosInAc3Buffer )
+        if( fAc3Buffer->fSize == fPosInBuffer )
         {
             delete fAc3Buffer;
             fAc3Buffer = NULL;

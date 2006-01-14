@@ -1,4 +1,4 @@
-/* $Id: HBAc3Decoder.h,v 1.5 2003/08/24 15:03:41 titer Exp $ */
+/* $Id: HBAc3Decoder.h,v 1.6 2003/08/25 19:47:14 titer Exp $ */
 
 #ifndef HB_AC3_DECODER_H
 #define HB_AC3_DECODER_H
@@ -21,9 +21,9 @@ class HBAc3Decoder : public HBThread
         HBManager         * fManager;
         HBAudioInfo       * fAudioInfo;
         
-        HBBuffer          * fAc3Buffer;
         HBBuffer          * fAc3Frame;
-        uint32_t            fPosInAc3Buffer;
+        HBBuffer          * fAc3Buffer;
+        uint32_t            fPosInBuffer;
 };
 
 #endif

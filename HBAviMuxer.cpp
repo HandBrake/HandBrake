@@ -1,4 +1,4 @@
-/* $Id: HBAviMuxer.cpp,v 1.21 2003/08/24 13:34:18 titer Exp $ */
+/* $Id: HBAviMuxer.cpp,v 1.24 2003/08/26 18:44:06 titer Exp $ */
 
 #include "HBCommon.h"
 #include "HBAviMuxer.h"
@@ -136,7 +136,10 @@ bool HBAviMuxer::AddVideoChunk()
     if( fIndex->fSize + 16 > fIndex->fAllocSize )
     {
         /* Realloc if needed */
-        fIndex->ReAlloc( fIndex->fSize + 1024 * 1024 );
+        Log( "HBAviMuxer::AddVideoChunk() : reallocing index (%d -> %d MB)",
+             fIndex->fAllocSize / ( 1024 * 1024 ),
+             1 + fIndex->fAllocSize / ( 1024 * 1024 ) );
+        fIndex->ReAlloc( fIndex->fAllocSize + 1024 * 1024 );
     }
     
     uint32_t flags  = buffer->fKeyFrame ? AVIIF_KEYFRAME : 0;
@@ -226,7 +229,10 @@ bool HBAviMuxer::AddAudioChunk( int which )
     if( fIndex->fSize + 16 > fIndex->fAllocSize )
     {
         /* Realloc if needed */
-        fIndex->ReAlloc( fIndex->fSize + 1024 * 1024 );
+        Log( "HBAviMuxer::AddAudioChunk() : reallocing index (%d -> %d MB)",
+             fIndex->fAllocSize / ( 1024 * 1024 ),
+             1 + fIndex->fAllocSize / ( 1024 * 1024 ) );
+        fIndex->ReAlloc( fIndex->fAllocSize + 1024 * 1024 );
     }
     
     uint32_t flags  = buffer->fKeyFrame ? AVIIF_KEYFRAME : 0;

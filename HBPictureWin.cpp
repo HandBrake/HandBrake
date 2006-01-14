@@ -1,4 +1,4 @@
-/* $Id: HBPictureWin.cpp,v 1.14 2003/08/24 20:50:49 titer Exp $ */
+/* $Id: HBPictureWin.cpp,v 1.15 2003/08/25 21:50:48 titer Exp $ */
 
 #include "HBCommon.h"
 #include "HBPictureWin.h"
@@ -12,6 +12,20 @@
 #include <ffmpeg/avcodec.h>
 
 #define UPDATE_BITMAP 'upbi'
+
+/* Handy way to access HBTitleInfo members */
+#define fInWidth     fTitleInfo->fInWidth
+#define fInHeight    fTitleInfo->fInHeight
+#define fPixelWidth  fTitleInfo->fPixelWidth
+#define fPixelHeight fTitleInfo->fPixelHeight
+#define fDeinterlace fTitleInfo->fDeinterlace
+#define fOutWidth    fTitleInfo->fOutWidth
+#define fOutHeight   fTitleInfo->fOutHeight
+#define fTopCrop     fTitleInfo->fTopCrop
+#define fBottomCrop  fTitleInfo->fBottomCrop
+#define fLeftCrop    fTitleInfo->fLeftCrop
+#define fRightCrop   fTitleInfo->fRightCrop
+#define fPictures    fTitleInfo->fPictures
 
 HBPictureView::HBPictureView( BRect rect, BBitmap * bitmap )
     : BView( rect, NULL, B_FOLLOW_ALL, B_WILL_DRAW )
@@ -28,7 +42,7 @@ void HBPictureView::Draw( BRect rect )
     }
     else
     {
-        Log( "HBPictureView::Draw : LockLooper() failed" );
+        Log( "HBPictureView::Draw() : LockLooper() failed" );
     }
     
     BView::Draw( rect );
@@ -42,13 +56,14 @@ HBPictureWin::HBPictureWin( HBTitleInfo * titleInfo )
 {
     fTitleInfo    = titleInfo;
     
-    fMaxOutWidth  = fTitleInfo->fInWidth;
-    fMaxOutHeight = MULTIPLE_16( fTitleInfo->fInHeight * fTitleInfo->fPixelHeight /
-                                 fTitleInfo->fPixelWidth );
-    fBitmap       = new BBitmap( BRect( 0, 0, fMaxOutWidth, fMaxOutHeight ),
+    fMaxOutWidth  = MULTIPLE_16( fInWidth );
+    fMaxOutHeight = MULTIPLE_16( fInHeight * fPixelHeight / fPixelWidth );
+    
+    /* Leave a one-pixel margin to draw the white line around the picture */
+    fBitmap       = new BBitmap( BRect( 0, 0, fMaxOutWidth + 1, fMaxOutHeight + 1 ),
                                  0, B_RGB32 );
 
-    ResizeTo( fMaxOutWidth + 40, fMaxOutHeight + 330 );
+    ResizeTo( fMaxOutWidth + 40, fMaxOutHeight + 331 );
 
     BRect r;
 
@@ -59,25 +74,25 @@ HBPictureWin::HBPictureWin( HBTitleInfo * titleInfo )
     AddChild( view );
     
     /* First box : picture + slider */
-    r = BRect( 10, 10, fMaxOutWidth + 30, fMaxOutHeight + 65 );
+    r = BRect( 10, 10, fMaxOutWidth + 31, fMaxOutHeight + 68 );
     BBox * pictureBox;
     pictureBox = new BBox( r, NULL );
     pictureBox->SetLabel( "Preview" );
     
     /* Picture view */
-    r = BRect( 10, 15, fMaxOutWidth + 10, fMaxOutHeight + 15 );
+    r = BRect( 10, 15, fMaxOutWidth + 11, fMaxOutHeight + 16 );
     fPictureView = new HBPictureView( r, fBitmap );
     pictureBox->AddChild( fPictureView );
     
     /* Slider */
-    r = BRect( 10, fMaxOutHeight + 25, fMaxOutWidth + 10, fMaxOutHeight + 55 );
+    r = BRect( 10, fMaxOutHeight + 26, fMaxOutWidth + 10, fMaxOutHeight + 56 );
     fPictureSlider = new BSlider( r, NULL, NULL, new BMessage( UPDATE_BITMAP ), 0, 9 );
     pictureBox->AddChild( fPictureSlider );
     
     view->AddChild( pictureBox );
     
     /* Second box : resize & crop settings */
-    r = BRect( 10, fMaxOutHeight + 75, fMaxOutWidth + 30, fMaxOutHeight + 320 );
+    r = BRect( 10, fMaxOutHeight + 76, fMaxOutWidth + 30, fMaxOutHeight + 321 );
     BBox * settingsBox;
     settingsBox = new BBox( r, NULL );
     settingsBox->SetLabel( "Settings" );
@@ -93,28 +108,28 @@ HBPictureWin::HBPictureWin( HBTitleInfo * titleInfo )
     r = BRect( 10, 55, fMaxOutWidth + 10, 85 );
     fTopCropSlider = new BSlider( r, NULL, "Top cropping",
                                   new BMessage( UPDATE_BITMAP ),
-                                  0, fTitleInfo->fInHeight / 4,
+                                  0, fInHeight / 4,
                                   B_TRIANGLE_THUMB );
     settingsBox->AddChild( fTopCropSlider );
 
     r = BRect( 10, 95, fMaxOutWidth + 10, 125 );
     fBottomCropSlider = new BSlider( r, NULL, "Bottom cropping",
                                      new BMessage( UPDATE_BITMAP ),
-                                     0, fTitleInfo->fInHeight / 4,
+                                     0, fInHeight / 4,
                                      B_TRIANGLE_THUMB );
     settingsBox->AddChild( fBottomCropSlider );
 
     r = BRect( 10, 135, fMaxOutWidth + 10, 165 );
     fLeftCropSlider = new BSlider( r, NULL, "Left cropping",
                                    new BMessage( UPDATE_BITMAP ),
-                                   0, fTitleInfo->fInWidth / 4,
+                                   0, fInWidth / 4,
                                    B_TRIANGLE_THUMB );
     settingsBox->AddChild( fLeftCropSlider );
 
     r = BRect( 10, 175, fMaxOutWidth + 10, 205 );
     fRightCropSlider = new BSlider( r, NULL, "Right cropping",
                                     new BMessage( UPDATE_BITMAP ),
-                                    0, fTitleInfo->fInWidth / 4,
+                                    0, fInWidth / 4,
                                     B_TRIANGLE_THUMB );
     settingsBox->AddChild( fRightCropSlider );
     
@@ -164,19 +179,6 @@ void HBPictureWin::MessageReceived( BMessage * message )
 
 void HBPictureWin::UpdateBitmap( int which )
 {
-#define fInWidth     fTitleInfo->fInWidth
-#define fInHeight    fTitleInfo->fInHeight
-#define fPixelWidth  fTitleInfo->fPixelWidth
-#define fPixelHeight fTitleInfo->fPixelHeight
-#define fDeinterlace fTitleInfo->fDeinterlace
-#define fOutWidth    fTitleInfo->fOutWidth
-#define fOutHeight   fTitleInfo->fOutHeight
-#define fTopCrop     fTitleInfo->fTopCrop
-#define fBottomCrop  fTitleInfo->fBottomCrop
-#define fLeftCrop    fTitleInfo->fLeftCrop
-#define fRightCrop   fTitleInfo->fRightCrop
-#define fPictures    fTitleInfo->fPictures
-
     fTopCrop     = 2 * fTopCropSlider->Value();
     fBottomCrop  = 2 * fBottomCropSlider->Value();
     fLeftCrop    = 2 * fLeftCropSlider->Value();
@@ -222,15 +224,15 @@ void HBPictureWin::UpdateBitmap( int which )
     img_convert( &pic4, PIX_FMT_RGBA32, &pic3, PIX_FMT_YUV420P, fOutWidth, fOutHeight );
 
     /* Blank the bitmap */
-    for( uint32_t i = 0; i < fMaxOutHeight; i++ )
+    for( uint32_t i = 0; i < fMaxOutHeight + 2; i++ )
     {
         memset( (uint8_t*) fBitmap->Bits() + i * fBitmap->BytesPerRow(),
-                0, fMaxOutWidth * 4 );
+                0, ( fMaxOutWidth + 2 ) * 4 );
     }
         
     /* Draw the picture (centered) */
-    uint32_t leftOffset = ( fMaxOutWidth - fOutWidth ) / 2;
-    uint32_t topOffset  = ( fMaxOutHeight - fOutHeight ) / 2;
+    uint32_t leftOffset = 1 + ( fMaxOutWidth - fOutWidth ) / 2;
+    uint32_t topOffset  = 1 + ( fMaxOutHeight - fOutHeight ) / 2;
     for( uint32_t i = 0; i < fOutHeight; i++ )
     {
         memcpy( (uint8_t*) fBitmap->Bits() +
@@ -242,30 +244,30 @@ void HBPictureWin::UpdateBitmap( int which )
 
     /* Draw the cropping zone */
     memset( (uint8_t*) fBitmap->Bits() +
-                topOffset * fBitmap->BytesPerRow() +
-                leftOffset * 4,
+                ( topOffset - 1 ) * fBitmap->BytesPerRow() +
+                ( leftOffset - 1 ) * 4,
             0xFF,
-            fOutWidth * 4 );
+            ( fOutWidth + 2 ) * 4 );
     
-    for( uint32_t i = 0; i < fOutHeight; i++ )
+    for( uint32_t i = 0; i < fOutHeight + 2; i++ )
     {
         memset( (uint8_t*) fBitmap->Bits() +
-                    ( i + topOffset ) * fBitmap->BytesPerRow() +
-                    leftOffset * 4,
+                    ( i + ( topOffset - 1 ) ) * fBitmap->BytesPerRow() +
+                    ( leftOffset - 1 ) * 4,
                 0xFF,
                 4 );
         memset( (uint8_t*) fBitmap->Bits() +
-                   ( i + topOffset ) * fBitmap->BytesPerRow() +
-                   ( leftOffset + fOutWidth - 1 ) * 4,
+                   ( i + ( topOffset - 1 ) ) * fBitmap->BytesPerRow() +
+                   ( leftOffset + fOutWidth ) * 4,
                 0xFF,
                 4 );
     }
 
     memset( (uint8_t*) fBitmap->Bits() +
-                ( topOffset + fOutHeight - 1 ) * fBitmap->BytesPerRow() +
-                leftOffset * 4,
+                ( topOffset + fOutHeight ) * fBitmap->BytesPerRow() +
+                ( leftOffset - 1 ) * 4,
             0xFF,
-            fOutWidth * 4 );
+            ( fOutWidth + 2 ) * 4 );
 
     /* Clean up */
     free( buf2 );

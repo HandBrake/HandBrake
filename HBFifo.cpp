@@ -1,4 +1,4 @@
-/* $Id: HBFifo.cpp,v 1.10 2003/08/24 13:27:41 titer Exp $ */
+/* $Id: HBFifo.cpp,v 1.11 2003/08/26 07:48:36 titer Exp $ */
 
 #include "HBCommon.h"
 #include "HBFifo.h"
@@ -25,7 +25,7 @@ HBBuffer::~HBBuffer()
 
 void HBBuffer::ReAlloc( int size )
 {
-    realloc( fData, size );
+    fData = (uint8_t*) realloc( fData, size );
 
     if( !fData )
     {
