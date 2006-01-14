@@ -1,4 +1,4 @@
-/* $Id: HBCommon.cpp,v 1.5 2003/08/24 20:25:49 titer Exp $ */
+/* $Id: HBCommon.cpp,v 1.6 2003/08/24 21:56:03 titer Exp $ */
 
 #include "HBCommon.h"
 #include "HBFifo.h"
@@ -262,7 +262,8 @@ HBVolumeInfo::HBVolumeInfo( char * name, char * device )
     vmg = dvdplay_open( device, NULL, NULL );
     if( !vmg )
     {
-        Log( "VolumeInfo::DetectTitles: dvdplay_open() failed" );
+        Log( "VolumeInfo::DetectTitles: dvdplay_open() failed (%s)",
+             device );
         return;
     }
     

@@ -1,6 +1,6 @@
-# $Id: Jamfile,v 1.13 2003/08/24 21:04:14 titer Exp $
+# $Id: Jamfile,v 1.15 2003/08/24 22:25:21 titer Exp $
 
-HB_VERSION = 0.1 ;
+HB_VERSION = 0.1.1 ;
 
 C++FLAGS = $(CPPFLAGS) ;
 C++FLAGS += -g -Wall -Werror -Wno-multichar -O3 -funroll-loops ;

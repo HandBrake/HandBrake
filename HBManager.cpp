@@ -1,4 +1,4 @@
-/* $Id: HBManager.cpp,v 1.27 2003/08/24 20:25:49 titer Exp $ */
+/* $Id: HBManager.cpp,v 1.28 2003/08/24 21:56:03 titer Exp $ */
 
 #include "HBCommon.h"
 #include "HBManager.h"
@@ -289,7 +289,7 @@ void HBManager::DetectVolumes()
             
             BEntry entry, parentEntry;
             BPath  path;
-            while( query->GetNextEntry( &entry ) != B_ENTRY_NOT_FOUND )
+            while( query->GetNextEntry( &entry ) == B_OK )
             {
                 entry.GetParent( &parentEntry );
                 parentEntry.GetPath( &path );

@@ -1,10 +1,15 @@
-$Id: NEWS,v 1.4 2003/08/24 20:25:49 titer Exp $
+$Id: NEWS,v 1.5 2003/08/24 22:25:21 titer Exp $
+
+Changes between 0.1 and 0.1.1
+ - Fixed a stupid bug that prevented to scan volumes correctly if
+   FAT/NTFS/etc volumes were mounted
 
 Changes between 0.1-alpha2 and 0.1 :
  - Automatically detect ripped DVDs on BFS volumes
  - Allow picture cropping and resizing
  - Allow dual-audio encoding
- - Created files are quite compliant now (tested with OSX/Quicktime and BSPlayer)
+ - Created files are quite compliant now (tested with OSX/Quicktime
+   and BSPlayer)
  - Better A/V sync with some DVDs
 
 Changes between 0.1-alpha and 0.1-alpha2 :
