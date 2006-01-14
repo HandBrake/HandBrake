@@ -1,6 +1,9 @@
-$Id: NEWS,v 1.12 2004/03/08 11:32:48 titer Exp $
+$Id: NEWS,v 1.13 2004/03/29 00:28:39 titer Exp $
 
 NEWS file for HandBrake <http://handbrake.m0k.org/>
+
+Changes between 0.6.0 and 0.6.1
+ + Fixed LPCM endianness issue
 
 Changes between 0.5.2 and 0.6.0
  + MP4 and OGM output

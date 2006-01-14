@@ -1,41 +1,23 @@
 # Compilers & flags
-CC       = gcc ;
-C++      = g++ ;
-CCFLAGS  = $(CFLAGS) ;
-C++FLAGS = $(CFLAGS) ;
-AS       = nasm -f elf ;
-LINK     = g++ ;
-OPTIM    = -O3 -funroll-loops ;
+CC    = gcc ;
+C++   = g++ ;
+AS    = nasm -f elf ;
+LINK  = g++ ;
+OPTIM = -O3 -funroll-loops ;
 
-# HandBrake defines
-HB_VERSION = 0.6.0 ;
+HB_VERSION = 0.6.1 ;
 DEFINES    = HB_$(OS) HB_VERSION=\\\"$(HB_VERSION)\\\" ;
-#DEFINES   += HB_NOMMX ;
+LANGUAGES  = fr de it pl ru nl es pt ;
 
-LANGUAGES = fr de it pl ru nl es pt ;
+NotFile clean-contrib clean-all ;
+Always  clean-contrib ;
+Depends clean-all : clean clean-contrib ;
 
-# OS-specific
-if $(OS) = BEOS
-{
-    CCFLAGS  += -Wno-multichar ;
-    C++FLAGS += -Wno-multichar ;
-}
-else if $(OS) = LINUX
-{
-    LINKLIBS = -lpthread ;
-}
-else if $(OS) = MACOSX
-{
-    # To clean HandBrake.app
-    RM = rm -rf ;
-}
-
-# Contrib* rules: mostly the same than Jambase rules, except
-#  * Targets aren't cleaned by jam clean (to prevent from deleting
+# _Object: same as Jambase's Object, except
+#  * those aren't cleaned by 'jam clean' (to prevent from deleting
 #    every contrib library by accident)
-#  * ContribObject handles *.asm files
-#  * Temporary *.o files aren't removed
-rule ContribObject
+#  * it handles *.asm files
+rule _Object
 {
     MakeLocate $(<) : $(LOCATE_TARGET) ;
     SEARCH on $(>) = $(SEARCH_SOURCE) ;
@@ -51,33 +33,28 @@ rule ContribObject
         case .asm : As $(<) : $(>) ;
         case .nas : As $(<) : $(>) ;
         case .c :   Cc $(<) : $(>) ;
-        case .C :   C++ $(<) : $(>) ;
-        case .cc :  C++ $(<) : $(>) ;
         case .cpp : C++ $(<) : $(>) ;
-        case .f :   Fortran $(<) : $(>) ;
-        case .l :   Cc $(<) : $(<:S=.c) ;
-                    Lex $(<:S=.c) : $(>) ;
-        case .s :   As $(<) : $(>) ;
-        case .y :   Cc $(<) : $(<:S=$(YACCGEN)) ; 
-                    Yacc $(<:S=$(YACCGEN)) : $(>) ;
-        case * :    UserObject $(<) : $(>) ;
     }
 }
-rule ContribObjects
+# _Objects: use _Object
+rule _Objects
 {
     local _i ;
     for _i in [ FGristFiles $(<) ]
     {
-        ContribObject $(_i:S=$(SUFOBJ)) : $(_i) ;
+        _Object $(_i:S=$(SUFOBJ)) : $(_i) ;
         Depends obj : $(_i:S=$(SUFOBJ)) ;
     }
 }
-rule ContribLibrary
+
+# Simplified LibraryFromObjects which doesn't clean the target library
+# nor the temporary .o files
+rule _Library
 {
     local _l _s ;
     _s = [ FGristFiles $(>:S=$(SUFOBJ)) ] ;
     _l = $(<:S=$(SUFLIB)) ;
-    ContribObjects $(>) ;
+    _Objects $(>) ;
     Depends obj : $(_s) ;
     MakeLocate $(_l) $(_l)($(_s:BS)) : $(LOCATE_TARGET) ;
     Depends $(_l) : $(_s) ;
@@ -86,40 +63,50 @@ rule ContribLibrary
     Depends lib : $(_l) ;
 }
 
-# Custom Library rule: same as ContribLibrary, except 'jam clean'
-# removes built objects
+# ContribLibrary: library cleaned by 'jam clean-contrib'
+rule ContribLibrary
+{
+    _Library $(<) : $(>) ;
+    Clean clean-contrib : [ FGristFiles $(>:S=$(SUFOBJ)) ] ;
+    Clean clean-contrib : $(<:S=$(SUFLIB)) ;
+}
+
+# Library: library cleaned by 'jam clean'
 rule Library
 {
-    ContribLibrary $(<) : $(>) ;
+    _Library $(<) : $(>) ;
     Clean clean : [ FGristFiles $(>:S=$(SUFOBJ)) ] ;
     Clean clean : $(<:S=$(SUFLIB)) ;
 }
 
 # Build HandBrake.app using Xcode
 rule OSXApp
-{   
-    Clean clean : $(1) macosx/build ;
-    BuildOSXApp $(1) ;
+{
+    Depends     exe   : $(<) ;
+    Depends     $(<)  : $(>) ;
+    Clean       clean : $(1) macosx/build ;
+    BuildOSXApp $(<) ;
 }
 actions BuildOSXApp
 {
-    $(RM) $(1) && \
+    $(RM) $(<) && \
       ( cd macosx && xcodebuild ) && \
-      cp -r macosx/build/HandBrake.app $(1) && \
+      cp -r macosx/build/HandBrake.app $(<) && \
       for i in $(LANGUAGES) ; do \
-        ( cd $(1)/Contents/Resources && \
+        ( cd $(<)/Contents/Resources && \
           cp -r English.lproj $i.lproj && \
           cp ../../../macosx/i18n/$i.strings \
             $i.lproj/Localizable.strings ) \
       done ;
 }
 rule OSXPackage 
-{   
-    BuildOSXPackage $(1) ;
+{
+    Depends         $(<) : $(>) ;
+    BuildOSXPackage $(<) ;
 }   
 actions BuildOSXPackage
 {                 
-    rm -rf $(1) "HandBrake $(HB_VERSION)" && \
+    rm -rf $(<) "HandBrake $(HB_VERSION)" && \
       mkdir "HandBrake $(HB_VERSION)" && \
       cp AUTHORS "HandBrake $(HB_VERSION)/AUTHORS.txt" && \
       cp COPYING "HandBrake $(HB_VERSION)/COPYING.txt" && \
@@ -128,7 +115,23 @@ actions BuildOSXPackage
       ( cd doc && ./genhtml.sh ) && \
       cp doc/faq.html "HandBrake $(HB_VERSION)/FAQ.html" && \
       cp -r HandBrake.app "HandBrake $(HB_VERSION)" && \
-      zip -9 -r $(1) "HandBrake $(HB_VERSION)" && \
+      zip -9 -r $(<) "HandBrake $(HB_VERSION)" && \
       rm -rf "HandBrake $(HB_VERSION)"
+}
+
+rule SystemLibraries
+{
+    LINKLIBS on [ FAppendSuffix $(<) : $(SUFEXE) ] +=  $(>) ;
+}
+
+# Jambase's ObjectHdrs doesn't seem to work when ObjectHdrs is called
+# several times on a file, and it doesn't works for asm files. Fixed
+# here.
+rule ObjectHdrs
+{
+    local s = [ FGristFiles $(<:S=$(SUFOBJ)) ] ;
+    HDRS   on $(s) += $(>) ;
+    ASHDRS on $(s) += [ FIncludes $(>) ] ;
+    CCHDRS on $(s) += [ FIncludes $(>) ] ;
 }
 

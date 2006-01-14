@@ -298,10 +298,10 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
+	<key>CFBundleDisplayName</key>
+	<string>HandBrake</string>
 	<key>CFBundleExecutable</key>
 	<string>HandBrake</string>
-	<key>CFBundleGetInfoString</key>
-	<string>HandBrake 0.6.0 - By Eric Petit &lt;titer@m0k.org&gt;</string>
 	<key>CFBundleIconFile</key>
 	<string>HandBrake.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -313,11 +313,13 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.6.0</string>
+	<string>0.6.1</string>
 	<key>CFBundleSignature</key>
 	<string>HB##</string>
 	<key>CFBundleVersion</key>
-	<string>0.6.0</string>
+	<string>0.6.1</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>By Eric Petit &lt;titer@m0k.org&gt;</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
@@ -406,13 +408,14 @@
 			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = "0.6.1";
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
-				LIBRARY_SEARCH_PATHS = "../core ../contrib/lib";
-				OPTIMIZATION_CFLAGS = "-O3";
-				ZERO_LINK = YES;
+				LIBRARY_SEARCH_PATHS = ../core;
+				OPTIMIZATION_CFLAGS = "-O0";
+				ZERO_LINK = NO;
 			};
 			isa = PBXBuildStyle;
 			name = Development;

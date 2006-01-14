@@ -1,4 +1,4 @@
-# $Id: Jamfile,v 1.41 2004/03/15 17:08:37 titer Exp $
+# $Id: Jamfile,v 1.42 2004/03/29 00:28:39 titer Exp $
 #
 # This file is part of the HandBrake source code.
 # Homepage: <http://handbrake.m0k.org/>.
@@ -6,55 +6,64 @@
 
 SubDir TOP ;
 
-HB_PACKAGES = ;
-HB_LIBS     =  libhb.a liba52.a libavcodec.a libdvdplay.a libdvdread.a
-               libdvdcss.a libfaac.a libmp3lame.a libmp4v2.a libmpeg2.a
-	       libvorbis.a libvorbisenc.a libogg.a libx264.a
-	       libxvidcore.a ;
+# libhb + contrib libraries
+HB_LIBS = libhb.a liba52.a libavcodec.a libdvdplay.a libdvdread.a
+          libdvdcss.a libfaac.a libmp3lame.a libmp4v2.a libmpeg2.a
+          libvorbis.a libvorbisenc.a libogg.a libx264.a libxvidcore.a ;
+
+# Interfaces
+TEST_BIN = HBTest ;
+TEST_SRC = test/test.c ;
+BEOS_BIN = HandBrake ;
+BEOS_SRC = beos/HBApp.cpp beos/HBWindow.cpp ;
+GTK2_BIN = gtk2HB ;
+GTK2_SRC = gtk2/main.c gtk2/callbacks.c gtk2/interface.c gtk2/support.c ;
+GUI_BIN  = $(TEST_BIN) $(BEOS_BIN) $(GTK2_BIN) ;
+GUI_SRC  = $(TEST_SRC) $(BEOS_SRC) $(GTK2_SRC) ;
 
 # CLI app
-ObjectCcFlags test/test.c : -I$(TOP)/core -g -Wall ;
-LinkLibraries HBTest : $(HB_LIBS) ;
-Main HBTest : test/test.c ;
+Main $(TEST_BIN) : $(TEST_SRC) ;
 
-# BeOS
 if $(OS) = BEOS
 {
-    SOURCES_BEOS = beos/HBApp.cpp beos/HBWindow.cpp ;
-    ObjectC++Flags $(SOURCES_BEOS) :
-        -I$(TOP)/core -I$(TOP)/beos/liblayout -g -Wall ;
-    LINKLIBS on HandBrake = $(LINKLIBS) -L$(TOP)/lib -llayout -lbe ;
-    LinkLibraries HandBrake : $(HB_LIBS) ;
-#    Main HandBrake : $(SOURCES_BEOS) ;
+    # Avoid multichar warnings caused by BeOS system headers
+    CCFLAGS  = -Wno-multichar ;
+    C++FLAGS = -Wno-multichar ;
+
+    SystemLibraries HandBrake : -lbe ;
+    # BeOS GUI is broken at the moment
+    # Main            HandBrake : $(SRC_BEOS) ;
 }
 
-# OS X
 if $(OS) = MACOSX
 {
-    # Build the app
-    OSXApp HandBrake.app ;
-    Depends HandBrake.app : $(HB_LIBS) macosx/Controller.h
-        macosx/Controller.mm macosx/PictureGLView.h
-	macosx/PictureGLView.mm ;
-    Depends all : HandBrake.app ;
+    # Needed to clean HandBrake.app
+    RM = rm -rf ;
+
+    OSX_SRC = macosx/Controller.h macosx/Controller.mm
+              macosx/PictureGLView.h macosx/PictureGLView.mm
+              macosx/TargetSizeField.h macosx/TargetSizeField.mm
+              macosx/main.mm ;
+
+    OSXApp HandBrake.app : $(OSX_SRC) $(HB_LIBS) ;
     
     # Package
-    OSXPackage HandBrake-$(HB_VERSION)-OSX.zip ;
-    Depends HandBrake-$(HB_VERSION)-OSX.zip : HandBrake.app ;
-    HB_PACKAGES += HandBrake-$(HB_VERSION)-OSX.zip ;
+    OSXPackage HandBrake-$(HB_VERSION)-OSX.zip : HandBrake.app ;
+    PACKAGES += HandBrake-$(HB_VERSION)-OSX.zip ;
 }
 
-# GTK2
 if $(OS) = LINUX
 {
-    SOURCES_GTK2 = gtk2/main.c gtk2/callbacks.c gtk2/interface.c
-                   gtk2/support.c ;
-    ObjectCcFlags $(SOURCES_GTK2) :
-        -I$(TOP)/core `pkg-config gtk+-2.0 --cflags` ;
-    LINKLIBS on gtk2HB = $(LINKLIBS) `pkg-config gtk+-2.0 --libs` ;
-    LinkLibraries gtk2HB : $(HB_LIBS) ;
-    Main gtk2HB : $(SOURCES_GTK2) ;
+    SystemLibraries $(TEST_BIN) : -lpthread ;
+    SystemLibraries $(GTK2_BIN) : -lpthread `pkg-config gtk+-2.0 --libs` ;
+    ObjectCcFlags   $(GTK2_SRC) : `pkg-config gtk+-2.0 --cflags` ;
+    Main            $(GTK2_BIN) : $(GTK2_SRC) ;
 }
+
+ObjectHdrs     $(GUI_SRC) : $(TOP)/core ;
+ObjectCcFlags  $(GUI_SRC) : -g -Wall ;
+ObjectC++Flags $(GUI_SRC) : -g -Wall ;
+LinkLibraries  $(GUI_BIN) : $(HB_LIBS) ;
 
 # Packages
 NotFile package ;

@@ -1,9 +1,12 @@
-$Id: BUILD,v 1.4 2004/03/16 15:57:03 titer Exp $
+$Id: BUILD,v 1.5 2004/03/29 00:28:39 titer Exp $
 
 BUILD file for HandBrake <http://handbrake.m0k.org/>
 
 Building HandBrake
 ==================
+
+You can build HandBrake on BeOS, MacOS X and Linux. If you'd like to
+port it to another OS, email me (titer@m0k.org).
 
 Step 1: get jam
 ===============
@@ -23,12 +26,14 @@ Step 2 (optional): set custom compiler flags
 
 If you want to optimize the build for a specific CPU, edit the Jamrules
 file and modify the "OPTIM = ..." line by adding the needed flags.
-In case you modify this line later, make sure you run `jam -a' in order
-to force jam to rebuild everything with the new flags.
+
+In case you modify this line later: `jam clean' does not remove the
+compiled contrib librairies. Therefore, make sure you run
+`jam clean-all; jam' or `jam -a' in order to force jam to rebuild
+everything with the new flags.
 
 Step 3: build
 =============
 
 Run `jam'. This will build every library HandBrake requires, then
 HandBrake itself.
-
