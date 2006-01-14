@@ -1,0 +1,14 @@
+# $Id: Jamfile,v 1.13 2003/08/24 21:04:14 titer Exp $
+
+HB_VERSION = 0.1 ;
+
+C++FLAGS = $(CPPFLAGS) ;
+C++FLAGS += -g -Wall -Werror -Wno-multichar -O3 -funroll-loops ;
+C++FLAGS += -DVERSION=\\\"$(HB_VERSION)\\\" ;
+LINKFLAGS =  $(LDFLAGS) ;
+LINKLIBS = -lbe -ldvdplay -ldvdread -ldvdcss -lmpeg2 -lavcodec -la52 -lmp3lame ;
+
+Main HandBrake :
+	HandBrake.cpp HBAc3Decoder.cpp HBApp.cpp HBAviMuxer.cpp HBCommon.cpp
+	HBDVDReader.cpp HBFifo.cpp HBManager.cpp HBMp3Encoder.cpp HBMpeg2Decoder.cpp
+	HBMpeg4Encoder.cpp HBMpegDemux.cpp HBPictureWin.cpp HBThread.cpp HBWindow.cpp ;

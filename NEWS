@@ -1,0 +1,15 @@
+$Id: NEWS,v 1.4 2003/08/24 20:25:49 titer Exp $
+
+Changes between 0.1-alpha2 and 0.1 :
+ - Automatically detect ripped DVDs on BFS volumes
+ - Allow picture cropping and resizing
+ - Allow dual-audio encoding
+ - Created files are quite compliant now (tested with OSX/Quicktime and BSPlayer)
+ - Better A/V sync with some DVDs
+
+Changes between 0.1-alpha and 0.1-alpha2 :
+ - Show length for each title
+ - Fixed the screwed-audio bug
+ - Many bugfixes...
+
+First version is 0.1-alpha.
