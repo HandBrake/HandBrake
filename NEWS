@@ -1,4 +1,10 @@
-$Id: NEWS,v 1.9 2003/10/06 21:21:27 titer Exp $
+$Id: NEWS,v 1.11 2003/10/13 15:35:38 titer Exp $
+
+Changes between 0.3 and 0.4
+ - Better multithreading
+ - Allow the user to specify a target size instead of bitrate
+ - Misc GUI enhancements
+ - Use low-priority threads on OS X
 
 Changes between 0.2 and 0.3
  - OSX & Linux ports

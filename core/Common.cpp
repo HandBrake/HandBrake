@@ -1,4 +1,4 @@
-/* $Id: Common.cpp,v 1.29 2003/09/30 21:21:32 titer Exp $
+/* $Id: Common.cpp,v 1.31 2003/10/07 22:48:31 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -90,6 +90,74 @@ uint64_t GetDate()
     struct timeval tv;
     gettimeofday( &tv, NULL );
     return( (uint64_t) tv.tv_sec * 1000000 + (uint64_t) tv.tv_usec );
+}
+
+int GetCPUCount()
+{
+    int CPUCount = 1;
+
+#if defined( SYS_BEOS )
+    system_info info;
+    get_system_info( &info );
+    CPUCount = info.cpu_count;
+
+#elif defined( SYS_MACOSX )
+    FILE * info;
+    char   buffer[256];
+
+    if( ( info = popen( "/usr/sbin/sysctl hw.ncpu", "r" ) ) )
+    {
+        if( fgets( buffer, 256, info ) )
+        {
+            int count;
+            if( sscanf( buffer, "hw.ncpu: %d", &count ) == 1 )
+            {
+                CPUCount = count;
+            }
+            else
+            {
+                Log( "GetCPUCount: sscanf() failed" );
+            }
+        }
+        else
+        {
+            Log( "GetCPUCount: fgets() failed" );
+        }
+        fclose( info );
+    }
+    else
+    {
+        Log( "GetCPUCount: popen() failed" );
+    }
+   
+#elif defined( SYS_LINUX )
+    FILE * info;
+    char   buffer[256];
+
+    if( ( info = fopen( "/proc/cpuinfo", "r" ) ) )
+    {
+        int count = 0;
+        while( fgets( buffer, 256, info ) )
+        {
+            if( !memcmp( buffer, "processor",
+                         sizeof( "processor" ) - 1 ) )
+            {
+                count++;
+            }
+        }
+        CPUCount = count;
+        fclose( info );
+    }
+    else
+    {
+        Log( "GetCPUCount: fopen() failed" );
+    }
+    
+#endif
+    CPUCount = MAX( 1, CPUCount );
+    CPUCount = MIN( CPUCount, 8 );
+
+    return CPUCount;
 }
 
 #define HBLIST_DEFAULT_SIZE 20

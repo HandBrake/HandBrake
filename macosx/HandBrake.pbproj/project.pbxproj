@@ -17,6 +17,8 @@
 				4DF3C8CC052889CD00A80101,
 				4D85758E052B78E300C39CA9,
 				4D85758F052B78E300C39CA9,
+				4D358C000534A91300D654EB,
+				4D358C010534A91300D654EB,
 			);
 			isa = PBXGroup;
 			name = Classes;
@@ -156,6 +158,7 @@
 		29B97315FDCFA39411CA2CEA = {
 			children = (
 				29B97316FDCFA39411CA2CEA,
+				4D358C040534AB8100D654EB,
 				4D929FEB0527903D00A80101,
 			);
 			isa = PBXGroup;
@@ -260,7 +263,7 @@
 	<key>CFBundleExecutable</key>
 	<string>HandBrake</string>
 	<key>CFBundleGetInfoString</key>
-	<string>HandBrake 0.3 - By Eric Petit &lt;titer@m0k.org&gt;</string>
+	<string>HandBrake 0.4 - By Eric Petit &lt;titer@m0k.org&gt;</string>
 	<key>CFBundleIconFile</key>
 	<string>HandBrake.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -272,11 +275,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.3</string>
+	<string>0.4</string>
 	<key>CFBundleSignature</key>
 	<string>HB##</string>
 	<key>CFBundleVersion</key>
-	<string>0.3</string>
+	<string>0.4</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
@@ -291,6 +294,8 @@
 				4D929FEC0527903D00A80101,
 				4D6615EA05288C2300A80101,
 				4D857591052B78E300C39CA9,
+				4D358C020534A91300D654EB,
+				4D358C050534AB8100D654EB,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -311,6 +316,7 @@
 				29B9732CFDCFA39411CA2CEA,
 				4DF3C8CE052889CD00A80101,
 				4D857590052B78E300C39CA9,
+				4D358C030534A91300D654EB,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -387,6 +393,43 @@
 		};
 		4D118406053054CD00C39CA9 = {
 			fileRef = 4D118405053054CD00C39CA9;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4D358C000534A91300D654EB = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = TargetSizeField.h;
+			refType = 4;
+		};
+		4D358C010534A91300D654EB = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			path = TargetSizeField.mm;
+			refType = 4;
+		};
+		4D358C020534A91300D654EB = {
+			fileRef = 4D358C000534A91300D654EB;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4D358C030534A91300D654EB = {
+			fileRef = 4D358C010534A91300D654EB;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4D358C040534AB8100D654EB = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = Common.h;
+			path = /Users/titer/HandBrake/core/Common.h;
+			refType = 0;
+		};
+		4D358C050534AB8100D654EB = {
+			fileRef = 4D358C040534AB8100D654EB;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -557,13 +600,13 @@
 		4DF3C8CB052889CD00A80101 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = HBController.h;
+			path = Controller.h;
 			refType = 4;
 		};
 		4DF3C8CC052889CD00A80101 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = HBController.mm;
+			path = Controller.mm;
 			refType = 4;
 		};
 		4DF3C8CE052889CD00A80101 = {

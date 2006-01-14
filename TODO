@@ -1,10 +1,8 @@
 - General
-  + Keep detecting DVDs after launching
-  + Possible to specify a target size
   + Use the DVD name in popup and for the name of the created file
   + Show the current pass
+  + Should be able to boost the audio volume
 
 - OSX port
-  + Check thread priorities
-  + "Ding" when done + window + "Ahuh"
   + Preview in a drawer
+  + Prompt before overwriting a file

@@ -2,7 +2,7 @@
 
 #include "PictureGLView.h"
 
-@implementation PictureGLView
+@implementation HBPictureGLView
 
 - (void) SetManager: (HBManager*) manager
 {

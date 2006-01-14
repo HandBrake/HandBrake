@@ -1,4 +1,4 @@
-/* $Id: Common.h,v 1.28 2003/10/03 16:18:08 titer Exp $
+/* $Id: Common.h,v 1.34 2003/10/13 17:49:58 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -16,6 +16,8 @@
 typedef uint8_t byte_t;
 
 /* Misc structures */
+typedef struct a52_state_s a52_state_t;
+typedef struct lame_global_struct lame_global_flags;
 typedef struct dvdplay_s * dvdplay_ptr;
 typedef struct mpeg2dec_s mpeg2dec_t;
 typedef struct AVPicture AVPicture;
@@ -43,6 +45,7 @@ class HBScanner;
 class HBStatus;
 class HBThread;
 class HBTitle;
+class HBWorker;
 
 /* Handy macros */
 #ifndef MIN
@@ -61,21 +64,35 @@ void     Snooze( uint64_t time );
 void     Log( char * log, ... );
 char   * LanguageForCode( int code );
 uint64_t GetDate();
+int      GetCPUCount();
 
 /* Possible states */
 typedef enum
 {
-    HB_MODE_UNDEF          = 0000,
-    HB_MODE_NEED_VOLUME    = 0001,
-    HB_MODE_SCANNING       = 0002,
-    HB_MODE_INVALID_VOLUME = 0004,
-    HB_MODE_READY_TO_RIP   = 0010,
-    HB_MODE_ENCODING       = 0020,
-    HB_MODE_SUSPENDED      = 0040,
-    HB_MODE_DONE           = 0100,
-    HB_MODE_CANCELED       = 0200,
-    HB_MODE_ERROR          = 0400
+    HB_MODE_UNDEF          = 00000,
+    HB_MODE_NEED_VOLUME    = 00001,
+    HB_MODE_SCANNING       = 00002,
+    HB_MODE_INVALID_VOLUME = 00004,
+    HB_MODE_READY_TO_RIP   = 00010,
+    HB_MODE_ENCODING       = 00020,
+    HB_MODE_SUSPENDED      = 00040,
+    HB_MODE_STOPPING       = 00100,
+    HB_MODE_DONE           = 00200,
+    HB_MODE_CANCELED       = 00400,
+    HB_MODE_ERROR          = 01000
 } HBMode;
+
+/* Possible errors */
+typedef enum
+{
+    HB_ERROR_A52_SYNC = 0,
+    HB_ERROR_AVI_WRITE,
+    HB_ERROR_DVD_OPEN,
+    HB_ERROR_DVD_READ,
+    HB_ERROR_MP3_INIT,
+    HB_ERROR_MP3_ENCODE,
+    HB_ERROR_MPEG4_INIT
+} HBError;
 
 class HBStatus
 {
@@ -96,6 +113,9 @@ class HBStatus
         uint64_t fStartDate;
         uint32_t fRemainingTime; /* in seconds */
         uint64_t fSuspendDate;
+
+        /* HB_MODE_ERROR */
+        HBError  fError;
 };
 
 class HBList
@@ -129,6 +149,8 @@ class HBAudio
         int            fOutSampleRate;
         int            fInBitrate;
         int            fOutBitrate;
+
+        int64_t        fDelay; /* in ms */
 
         /* Fifos */
         HBFifo       * fAc3Fifo;
@@ -187,6 +209,7 @@ class HBTitle
         HBResizer      * fResizer;
         HBMpeg4Encoder * fMpeg4Encoder;
         HBAviMuxer     * fAviMuxer;
+        HBWorker       * fWorkers[4];
 };
 
 #endif

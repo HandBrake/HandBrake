@@ -1,4 +1,4 @@
-/* $Id: Mpeg4Encoder.h,v 1.8 2003/09/30 14:38:15 titer Exp $
+/* $Id: Mpeg4Encoder.h,v 1.11 2003/10/08 11:56:40 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -8,22 +8,26 @@
 #define HB_MPEG4_ENCODER_H
 
 #include "Common.h"
-#include "Thread.h"
 
-class HBMpeg4Encoder : public HBThread
+class HBMpeg4Encoder
 {
     public:
                     HBMpeg4Encoder( HBManager * manager,
                                     HBTitle * title );
+        bool        Work();
 
     private:
-        void        DoWork();
+        bool        Lock();
+        void        Unlock();
+
         void        Init();
-        void        Close();
         void        EncodeBuffer();
 
         HBManager * fManager;
         HBTitle   * fTitle;
+
+        HBLock    * fLock;
+        bool        fUsed;
 
         uint32_t    fPass;
         HBBuffer  * fResizedBuffer;
@@ -31,6 +35,7 @@ class HBMpeg4Encoder : public HBThread
         AVFrame   * fFrame;
         FILE      * fFile;
         char      * fLog;
+        HBBuffer * fMpeg4Buffer;
 };
 
 #endif

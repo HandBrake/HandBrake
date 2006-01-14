@@ -1,4 +1,4 @@
-/* $Id: Resizer.cpp,v 1.3 2003/09/30 14:38:15 titer Exp $
+/* $Id: Resizer.cpp,v 1.8 2003/10/09 13:24:48 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -11,79 +11,131 @@
 #include <ffmpeg/avcodec.h>
 
 HBResizer::HBResizer( HBManager * manager, HBTitle * title )
-    : HBThread( "resizer" )
 {
-    fManager     = manager;
-    fTitle       = title;
-}
+    fManager = manager;
+    fTitle   = title;
 
-void HBResizer::DoWork()
-{
+    /* Lock */
+    fLock = new HBLock();
+    fUsed = false;
+
     /* Init libavcodec */
-    ImgReSampleContext * resampleContext =
+    fResampleContext =
         img_resample_full_init( fTitle->fOutWidth, fTitle->fOutHeight,
                                 fTitle->fInWidth, fTitle->fInHeight,
                                 fTitle->fTopCrop, fTitle->fBottomCrop,
                                 fTitle->fLeftCrop, fTitle->fRightCrop );
 
     /* Buffers & pictures */
-    HBBuffer * rawBuffer, * deinterlacedBuffer, * resizedBuffer;
-    AVPicture rawPicture, deinterlacedPicture, resizedPicture;
+    fRawBuffer           = NULL;
+    fDeinterlacedBuffer  = new HBBuffer( 3 * fTitle->fInWidth *
+                                        fTitle->fInHeight / 2 );
+    fResizedBuffer       = NULL;
+    fRawPicture          = (AVPicture*) malloc( sizeof( AVPicture ) );
+    fDeinterlacedPicture = (AVPicture*) malloc( sizeof( AVPicture ) );
+    fResizedPicture      = (AVPicture*) malloc( sizeof( AVPicture ) );
 
-    deinterlacedBuffer = new HBBuffer( 3 * fTitle->fInWidth *
-                                       fTitle->fInHeight / 2 );
-    avpicture_fill( &deinterlacedPicture, deinterlacedBuffer->fData,
+    avpicture_fill( fDeinterlacedPicture, fDeinterlacedBuffer->fData,
                     PIX_FMT_YUV420P, fTitle->fInWidth,
                     fTitle->fInHeight );
+}
 
+HBResizer::~HBResizer()
+{
+    /* Free memory */
+    free( fResizedPicture );
+    free( fDeinterlacedPicture );
+    free( fRawPicture );
+    if( fResizedBuffer ) delete fResizedBuffer;
+    delete fDeinterlacedBuffer;
+    img_resample_close( fResampleContext );
+    delete fLock;
+}
+
+bool HBResizer::Work()
+{
+    if( !Lock() )
+    {
+        return false;
+    }
+
+    bool didSomething = false;
+    
     for( ;; )
     {
-        while( fSuspend )
+        /* Push the latest resized buffer */
+        if( fResizedBuffer )
         {
-            Snooze( 10000 );
+            if( fTitle->fResizedFifo->Push( fResizedBuffer ) )
+            {
+                fResizedBuffer = NULL;
+            }
+            else
+            {
+                break;
+            }
         }
-
-        if( !( rawBuffer = Pop( fTitle->fRawFifo ) ) )
+        
+        /* Get a new raw picture */
+        if( !( fRawBuffer = fTitle->fRawFifo->Pop() ) )
         {
             break;
         }
 
-        avpicture_fill( &rawPicture, rawBuffer->fData,
+        /* Do the job */
+        avpicture_fill( fRawPicture, fRawBuffer->fData,
                         PIX_FMT_YUV420P, fTitle->fInWidth,
                         fTitle->fInHeight );
 
-        resizedBuffer = new HBBuffer( 3 * fTitle->fOutWidth *
+        fResizedBuffer = new HBBuffer( 3 * fTitle->fOutWidth *
                                       fTitle->fOutHeight / 2 );
-        resizedBuffer->fPosition = rawBuffer->fPosition;
-        resizedBuffer->fPass     = rawBuffer->fPass;
-        avpicture_fill( &resizedPicture, resizedBuffer->fData,
+        fResizedBuffer->fPosition = fRawBuffer->fPosition;
+        fResizedBuffer->fPass     = fRawBuffer->fPass;
+        avpicture_fill( fResizedPicture, fResizedBuffer->fData,
                         PIX_FMT_YUV420P, fTitle->fOutWidth,
                         fTitle->fOutHeight );
 
-
         if( fTitle->fDeinterlace )
         {
-            avpicture_deinterlace( &deinterlacedPicture, &rawPicture,
+            avpicture_deinterlace( fDeinterlacedPicture, fRawPicture,
                                    PIX_FMT_YUV420P,
                                    fTitle->fInWidth,
                                    fTitle->fInHeight );
-            img_resample( resampleContext, &resizedPicture,
-                          &deinterlacedPicture );
+            img_resample( fResampleContext, fResizedPicture,
+                          fDeinterlacedPicture );
         }
         else
         {
-            img_resample( resampleContext, &resizedPicture,
-                          &rawPicture );
+            img_resample( fResampleContext, fResizedPicture,
+                          fRawPicture );
         }
+        delete fRawBuffer;
+        fRawBuffer = NULL;
 
-        Push( fTitle->fResizedFifo, resizedBuffer );
-        delete rawBuffer;
+        didSomething = true;
     }
 
-    /* Free memory */
-    delete deinterlacedBuffer;
+    Unlock();
+    return didSomething;
+}
 
-    /* Close libavcodec */
-    img_resample_close( resampleContext );
+bool HBResizer::Lock()
+{
+    fLock->Lock();
+    if( fUsed )
+    {
+        fLock->Unlock();
+        return false;
+    }
+    fUsed = true;
+    fLock->Unlock();
+    return true;
+}
+
+void HBResizer::Unlock()
+{
+    fLock->Lock();
+    fUsed = false;
+    fLock->Unlock();
 }
 

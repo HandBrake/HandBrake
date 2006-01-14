@@ -1,4 +1,4 @@
-/* $Id: Ac3Decoder.cpp,v 1.12 2003/09/30 14:38:15 titer Exp $
+/* $Id: Ac3Decoder.cpp,v 1.20 2003/10/13 10:58:24 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -13,101 +13,160 @@ extern "C" {
 }
 
 HBAc3Decoder::HBAc3Decoder( HBManager * manager, HBAudio * audio )
-    : HBThread( "ac3decoder" )
 {
-    fManager     = manager;
-    fAudio       = audio;
+    fManager = manager;
+    fAudio   = audio;
 
+    fLock = new HBLock();
+    fUsed = false;
+
+    /* Init liba52 */
+    fState    = a52_init( 0 );
+    fInFlags  = 0;
+    fOutFlags = A52_STEREO;
+
+    /* Lame wants samples from -32768 to 32768 */
+    fSampleLevel = 32768.0;
+    
     /* Max size for a A52 frame is 3840 bytes */
-    fAc3Frame    = new HBBuffer( 3840 );
-    fAc3Buffer   = NULL;
-    fPosInBuffer = 0;
-    fPosition    = 0;
+    fAc3Frame        = new HBBuffer( 3840 );
+    fAc3Frame->fSize = 0;
+    fAc3Buffer       = NULL;
+    fPosInBuffer     = 0;
+    fRawBuffer       = NULL;
 }
 
 HBAc3Decoder::~HBAc3Decoder()
 {
+    if( fRawBuffer ) delete fRawBuffer;
+    if( fAc3Buffer ) delete fAc3Buffer;
     delete fAc3Frame;
+    a52_free( fState );
+    delete fLock;
 }
 
-void HBAc3Decoder::DoWork()
+bool HBAc3Decoder::Work()
 {
-    /* Init liba52 */
-    a52_state_t * state       = a52_init( 0 );
-    int           inFlags     = 0;
-    int           outFlags    = A52_STEREO;
-
-    /* Lame wants samples from -32768 to 32768 */
-    float         sampleLevel = 32768;
-
-    int           frameSize;
-    HBBuffer    * rawBuffer;
-    sample_t    * samples;
-
-    /* Main loop */
+    if( !Lock() )
+    {
+        return false;
+    }
+   
+    bool didSomething = false;
+    
+    sample_t * samples;
     for( ;; )
     {
-        while( fSuspend )
+        /* Try to push the latest decoded buffer */
+        if( fRawBuffer )
         {
-            Snooze( 10000 );
+            if( fAudio->fRawFifo->Push( fRawBuffer ) )
+            {
+                fRawBuffer = NULL;
+            }
+            else
+            {
+                break;
+            }
         }
 
-        fAc3Frame->fSize = 0;
-
-        /* Get a frame header (7 bytes) */
-        if( !( GetBytes( 7 ) ) )
+        /* Get a new frame */
+        if( fAc3Frame->fSize < 7 )
         {
-            break;
+            /* Get a frame header (7 bytes) */
+            if( !( GetBytes( 7 ) ) )
+            {
+                break;
+            }
+
+            /* Get the size of the current frame */
+            fFrameSize = a52_syncinfo( fAc3Frame->fData, &fInFlags,
+                                       &fAudio->fInSampleRate,
+                                       &fAudio->fInBitrate );
+            if( !fFrameSize )
+            {
+                Log( "HBAc3Decoder : a52_syncinfo failed" );
+                fManager->Error( HB_ERROR_A52_SYNC );
+                return false;
+            }
         }
 
-        /* Get the size of the current frame */
-        frameSize = a52_syncinfo( fAc3Frame->fData, &inFlags,
-                                  &fAudio->fInSampleRate,
-                                  &fAudio->fInBitrate );
-
-        if( !frameSize )
+        /* In case the audio should start later than the video,
+           insert some silence */
+        if( fAudio->fDelay > 3 * 256 * 1000 / fAudio->fInSampleRate  )
         {
-            Log( "HBAc3Decoder : a52_syncinfo failed" );
-            fManager->Error();
-            break;
+            fRawBuffer = new HBBuffer( 12 * 256 * sizeof( float ) );
+            for( uint32_t i = 0; i < 12 * 256; i++ )
+            {
+                ((float*)fRawBuffer->fData)[i] = 0;
+            }
+            fAudio->fDelay -= 6 * 256 * 1000 / fAudio->fInSampleRate;
+            continue;
         }
-
-        /* Get the whole frame */
-        if( !( GetBytes( (uint32_t) frameSize ) ) )
+ 
+        if( fAc3Frame->fSize >= 7 )
         {
-            break;
-        }
+            /* Get the whole frame */
+            if( !( GetBytes( (uint32_t) fFrameSize ) ) )
+            {
+                break;
+            }
 
-        /* Feed liba52 */
-        a52_frame( state, fAc3Frame->fData, &outFlags, &sampleLevel, 0 );
+            /* Feed liba52 */
+            a52_frame( fState, fAc3Frame->fData, &fOutFlags,
+                       &fSampleLevel, 0 );
 
-        /* 6 blocks per frame, 256 samples per block */
-        rawBuffer = new HBBuffer( 12 * 256 * sizeof( float ) );
-        rawBuffer->fPosition = fPosition;
-        for( int i = 0; i < 6; i++ )
-        {
-            /* Decode a block */
-            a52_block( state );
+            /* 6 blocks per frame, 256 samples per block */
+            fRawBuffer = new HBBuffer( 12 * 256 * sizeof( float ) );
+            fRawBuffer->fPosition = fPosition;
+            for( int i = 0; i < 6; i++ )
+            {
+                /* Decode a block */
+                a52_block( fState );
 
-            /* Get a pointer to the raw data */
-            samples = a52_samples( state );
+                /* Get a pointer to the raw data */
+                samples = a52_samples( fState );
 
-            /* Copy left channel data */
-            memcpy( (float*) rawBuffer->fData + i * 256,
-                    samples,
-                    256 * sizeof( float ) );
+                /* Copy left channel data */
+                memcpy( (float*) fRawBuffer->fData + i * 256,
+                        samples,
+                        256 * sizeof( float ) );
 
-            /* Copy right channel data */
-            memcpy( (float*) rawBuffer->fData + ( 6 + i ) * 256,
-                    samples + 256,
-                    256 * sizeof( float ) );
-        }
+                /* Copy right channel data */
+                memcpy( (float*) fRawBuffer->fData + ( 6 + i ) * 256,
+                        samples + 256,
+                        256 * sizeof( float ) );
+            }
 
-        if( !Push( fAudio->fRawFifo, rawBuffer ) )
-        {
-            break;
+            fAc3Frame->fSize = 0;
+
+            didSomething = true;
         }
     }
+
+    Unlock();
+
+    return didSomething;
+}
+
+bool HBAc3Decoder::Lock()
+{
+    fLock->Lock();
+    if( fUsed )
+    {
+        fLock->Unlock();
+        return false;
+    }
+    fUsed = true;
+    fLock->Unlock();
+    return true;
+}
+
+void HBAc3Decoder::Unlock()
+{
+    fLock->Lock();
+    fUsed = false;
+    fLock->Unlock();
 }
 
 /* GetBytes() : pops buffers from the AC3 fifo until fAc3Frame
@@ -118,7 +177,7 @@ bool HBAc3Decoder::GetBytes( uint32_t size )
     {
         if( !fAc3Buffer )
         {
-            if( !( fAc3Buffer = Pop( fAudio->fAc3Fifo ) ) )
+            if( !( fAc3Buffer = fAudio->fAc3Fifo->Pop() ) )
             {
                 return false;
             }

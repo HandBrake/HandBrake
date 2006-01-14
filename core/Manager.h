@@ -1,4 +1,4 @@
-/* $Id: Manager.h,v 1.27 2003/09/30 21:21:32 titer Exp $
+/* $Id: Manager.h,v 1.32 2003/10/08 22:20:36 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -13,7 +13,8 @@
 class HBManager : public HBThread
 {
     public:
-                      HBManager( bool debug = false );
+                      HBManager( bool debug = false,
+                                 int cpuCount = 0 );
                       ~HBManager();
         void          DoWork();
 
@@ -29,17 +30,17 @@ class HBManager : public HBThread
         uint8_t     * GetPreview( HBTitle * title, uint32_t image );
 
         /* Methods called by the working threads */
-        int           GetPid();
         void          Scanning( char * volume, int title );
         void          ScanDone( HBList * titleList );
         void          Done();
-        void          Error();
+        void          Error( HBError error );
         void          SetPosition( float pos );
 
     private:
         void          FixPictureSettings( HBTitle * title );
 
         int           fPid;
+        int           fCPUCount;
 
         /* Booleans used in DoWork() */
         bool          fStopScan;
@@ -51,8 +52,10 @@ class HBManager : public HBThread
         HBScanner   * fScanner;
 
         /* Status infos */
+        HBLock      * fStatusLock;
         bool          fNeedUpdate;
         HBStatus      fStatus;
+
         HBTitle     * fCurTitle;
         HBAudio     * fCurAudio1;
         HBAudio     * fCurAudio2;

@@ -1,4 +1,4 @@
-/* $Id: Mpeg2Decoder.h,v 1.10 2003/09/30 14:38:15 titer Exp $
+/* $Id: Mpeg2Decoder.h,v 1.15 2003/10/09 14:21:21 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -8,25 +8,28 @@
 #define HB_MPEG2_DECODER_H
 
 #include "Common.h"
-#include "Thread.h"
 
-class HBMpeg2Decoder : public HBThread
+class HBMpeg2Decoder
 {
     public:
                      HBMpeg2Decoder( HBManager * manager,
                                      HBTitle * title );
+        bool         Work();
 
     private:
-        void         DoWork();
         void         Init();
-        void         Close();
         void         DecodeBuffer();
 
         HBManager  * fManager;
         HBTitle    * fTitle;
 
+        HBLock     * fLock;
+        bool         fUsed;
+
         uint32_t     fPass;
         HBBuffer   * fMpeg2Buffer;
+        HBBuffer   * fRawBuffer;
+        HBList     * fRawBufferList;
         mpeg2dec_t * fHandle;
         bool         fLateField;
 };

@@ -3,6 +3,7 @@
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
             ACTIONS = {
+                AudioPopUpChanged = id; 
                 BrowseDVD = id; 
                 BrowseFile = id; 
                 Cancel = id; 
@@ -12,36 +13,39 @@
                 Resume = id; 
                 Rip = id; 
                 Scan = id; 
-                ScanEnableIntf = id; 
+                ScanMatrixChanged = id; 
                 ShowPicturePanel = id; 
                 Suspend = id; 
+                TitlePopUpChanged = id; 
                 UpdatePicture = id; 
-                UpdatePopUp = id; 
+                VideoMatrixChanged = id; 
             }; 
             CLASS = HBController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
-                fAudioField = NSTextField; 
-                fAudioPopUp = NSPopUpButton; 
-                fAudioStepper = NSStepper; 
-                fBlankView = NSView; 
+                fAudioBitratePopUp = NSPopUpButton; 
+                fAudioCodecPopUp = NSPopUpButton; 
                 fBottomField = NSTextField; 
                 fBottomStepper = NSStepper; 
                 fCropButton = NSButton; 
+                fCustomBitrateField = NSTextField; 
                 fDVDFolderField = NSTextField; 
                 fDVDPopUp = NSPopUpButton; 
                 fDeinterlaceCheck = NSButton; 
                 fDonePanel = NSPanel; 
+                fFileBrowseButton = NSButton; 
                 fFileField = NSTextField; 
+                fFileFormatPopUp = NSPopUpButton; 
                 fInfoField = NSTextField; 
+                fLanguagePopUp = NSPopUpButton; 
                 fLeftField = NSTextField; 
                 fLeftStepper = NSStepper; 
-                fPictureGLView = PictureGLView; 
+                fPictureGLView = HBPictureGLView; 
                 fPicturePanel = NSPanel; 
                 fRightField = NSTextField; 
                 fRightStepper = NSStepper; 
-                fRipBrowseButton = NSButton; 
                 fRipButton = NSButton; 
+                fRipInfoField = NSTextField; 
                 fRipProgress = NSProgressIndicator; 
                 fRipStatusField = NSTextField; 
                 fRipView = NSView; 
@@ -51,18 +55,32 @@
                 fScanProgress = NSProgressIndicator; 
                 fScanStatusField = NSTextField; 
                 fScanView = NSView; 
+                fSecondaryLanguagePopUp = NSPopUpButton; 
                 fSuspendButton = NSButton; 
+                fTargetSizeField = HBTargetSizeField; 
+                fTempView = NSView; 
                 fTitlePopUp = NSPopUpButton; 
                 fTopField = NSTextField; 
                 fTopStepper = NSStepper; 
                 fTwoPassCheck = NSButton; 
-                fVideoField = NSTextField; 
-                fVideoStepper = NSStepper; 
+                fVideoCodecPopUp = NSPopUpButton; 
+                fVideoMatrix = NSMatrix; 
                 fWidthField = NSTextField; 
                 fWidthStepper = NSStepper; 
                 fWindow = NSWindow; 
             }; 
             SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = HBPictureGLView; LANGUAGE = ObjC; SUPERCLASS = NSOpenGLView; }, 
+        {
+            CLASS = HBTargetSizeField; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                fAudioBitratePopUp = NSPopUpButton; 
+                fBitrateField = NSTextField; 
+                fSecondaryLanguagePopUp = NSPopUpButton; 
+            }; 
+            SUPERCLASS = NSTextField; 
         }, 
         {CLASS = PictureGLView; LANGUAGE = ObjC; SUPERCLASS = NSOpenGLView; }
     ); 

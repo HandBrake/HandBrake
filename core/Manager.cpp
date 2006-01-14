@@ -1,58 +1,81 @@
-/* $Id: Manager.cpp,v 1.47 2003/10/05 14:28:40 titer Exp $
+/* $Id: Manager.cpp,v 1.68 2003/10/13 23:42:03 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
    It may be used under the terms of the GNU General Public License. */
 
-#include "Manager.h"
-#include "Fifo.h"
-#include "Scanner.h"
+#include "Ac3Decoder.h"
+#include "AviMuxer.h"
 #include "DVDReader.h"
-#include "MpegDemux.h"
+#include "Fifo.h"
+#include "Manager.h"
+#include "Mp3Encoder.h"
 #include "Mpeg2Decoder.h"
 #include "Mpeg4Encoder.h"
-#include "Ac3Decoder.h"
-#include "Mp3Encoder.h"
-#include "AviMuxer.h"
+#include "MpegDemux.h"
 #include "Resizer.h"
+#include "Scanner.h"
+#include "Worker.h"
 
 #include <ffmpeg/avcodec.h>
 
 /* Public methods */
 
-HBManager::HBManager( bool debug )
-    : HBThread( "manager" )
+HBManager::HBManager( bool debug, int cpuCount )
+    : HBThread( "manager", HB_NORMAL_PRIORITY )
 {
-    fPid         = 0;
-
-    fStopScan    = false;
-    fStopRip     = false;
-    fRipDone     = false;
-    fError       = false;
-
-    fScanner     = NULL;
-
-    fStatus.fMode = HB_MODE_NEED_VOLUME;
-    fNeedUpdate   = true;
-
     /* See Log() in Common.cpp */
     if( debug )
     {
-        setenv( "HB_DEBUG", "1", 1 );
+        putenv( "HB_DEBUG=1" );
+    }
+
+    /* Check CPU count */
+    if( !cpuCount )
+    {
+        fCPUCount = GetCPUCount();
+        Log( "HBManager::HBManager: %d CPU%s detected", fCPUCount,
+             ( fCPUCount > 1 ) ? "s" : "" );
     }
     else
     {
-        unsetenv( "HB_DEBUG" );
+        fCPUCount = cpuCount;
+        if( fCPUCount < 1 )
+        {
+            Log( "HBManager::HBManager: invalid CPU count (%d), "
+                 "using 1", fCPUCount );
+            fCPUCount = 1;
+        }
+        else if( fCPUCount > 8 )
+        {
+            Log( "HBManager::HBManager: invalid CPU count (%d), "
+                 "using 8", fCPUCount );
+            fCPUCount = 8;
+        }
+        Log( "HBManager::HBManager: user specified %d CPU%s",
+             fCPUCount, ( fCPUCount > 1 ) ? "s" : "" );
     }
-
-    fCurTitle    = NULL;
-    fCurAudio1   = NULL;
-    fCurAudio2   = NULL;
 
     /* Init ffmpeg's libavcodec */
     avcodec_init();
 //    register_avcodec( &mpeg4_encoder );
     avcodec_register_all();
+
+    /* Initialization */
+    fStopScan = false;
+    fStopRip  = false;
+    fRipDone  = false;
+    fError    = false;
+
+    fScanner = NULL;
+
+    fStatusLock   = new HBLock();
+    fStatus.fMode = HB_MODE_NEED_VOLUME;
+    fNeedUpdate   = true;
+
+    fCurTitle  = NULL;
+    fCurAudio1 = NULL;
+    fCurAudio2 = NULL;
 
     Run();
 }
@@ -60,13 +83,21 @@ HBManager::HBManager( bool debug )
 HBManager::~HBManager()
 {
     /* Stop ripping if needed */
-    StopRip();
-    while( fStopRip )
+    fStatusLock->Lock();
+    if( fStatus.fMode == HB_MODE_ENCODING )
     {
-        Snooze( 10000 );
-    }
+        fStatusLock->Unlock();
 
-    Stop();
+        StopRip();
+        while( fStopRip )
+        {
+            Snooze( 10000 );
+        }
+    }
+    else
+    {
+        fStatusLock->Unlock();
+    }
 
     /* Stop scanning if needed */
     if( fScanner )
@@ -76,24 +107,24 @@ HBManager::~HBManager()
 
     /* Remove temp files */
     char command[1024]; memset( command, 0, 1024 );
-    sprintf( command, "rm -f /tmp/HB.%d.*", fPid );
+    sprintf( command, "rm -f /tmp/HB.%d.*", GetPid() );
     system( command );
+
+    delete fStatusLock;
 }
 
 void HBManager::DoWork()
 {
-    fPid = (int) getpid();
-
     while( !fDie )
     {
-        /* Terminate dying threads */
         if( fStopScan )
         {
-            fStopScan = false;
-
+            /* Destroy the thread */
             delete fScanner;
             fScanner = NULL;
 
+            /* Update interface */
+            fStatusLock->Lock();
             if( fStatus.fTitleList && fStatus.fTitleList->CountItems() )
             {
                 fStatus.fMode = HB_MODE_READY_TO_RIP;
@@ -103,16 +134,47 @@ void HBManager::DoWork()
                 fStatus.fMode = HB_MODE_INVALID_VOLUME;
             }
             fNeedUpdate = true;
+            fStatusLock->Unlock();
+
+            fStopScan = false;
         }
 
-        if( fStopRip || fError )
+        if( fStopRip || fError || fRipDone )
         {
+            if( fRipDone )
+            {
+                /* Wait a bit to avoid trashing frames in fifos -
+                   That's kinda ugly */
+                while( fCurTitle->fPSFifo->Size() ||
+                       ( fCurTitle->fMpeg2Fifo->Size() &&
+                         ( !fCurAudio1 || fCurAudio1->fAc3Fifo->Size() ) &&
+                         ( !fCurAudio2 || fCurAudio2->fAc3Fifo->Size() ) ) )
+                {
+                    Snooze( 10000 );
+                }
+                Snooze( 500000 );
+            }
+            else
+            {
+                fStatusLock->Lock();
+                fStatus.fMode = HB_MODE_STOPPING;
+                fNeedUpdate = true;
+                fStatusLock->Unlock();
+            }
+            
+            /* Stop threads */
             delete fCurTitle->fDVDReader;
+            delete fCurTitle->fAviMuxer;
+            for( int i = 0; i < fCPUCount; i++ )
+            {
+                delete fCurTitle->fWorkers[i];
+            }
+
+            /* Clean up */
             delete fCurTitle->fMpegDemux;
             delete fCurTitle->fMpeg2Decoder;
             delete fCurTitle->fResizer;
             delete fCurTitle->fMpeg4Encoder;
-            delete fCurTitle->fAviMuxer;
 
             if( fCurAudio1 )
             {
@@ -126,6 +188,7 @@ void HBManager::DoWork()
                 delete fCurAudio2->fMp3Encoder;
             }
 
+            /* Destroy fifos */
             delete fCurTitle->fPSFifo;
             delete fCurTitle->fMpeg2Fifo;
             delete fCurTitle->fRawFifo;
@@ -146,76 +209,16 @@ void HBManager::DoWork()
                 delete fCurAudio2->fMp3Fifo;
             }
 
-            fStatus.fMode = fError ? HB_MODE_ERROR : HB_MODE_CANCELED;
+            /* Update interface */
+            fStatusLock->Lock();
+            fStatus.fMode = fStopRip ? HB_MODE_CANCELED :
+                ( fError ? HB_MODE_ERROR : HB_MODE_DONE );
+            fNeedUpdate = true;
+            fStatusLock->Unlock();
+
             fStopRip = false;
-            fError = false;
-            fNeedUpdate = true;
-        }
-
-        if( fRipDone )
-        {
-            /* This is UGLY ! */
-            while( fCurTitle->fPSFifo->Size() ||
-                   fCurTitle->fMpeg2Fifo->Size() ||
-                   fCurTitle->fRawFifo->Size() ||
-                   fCurTitle->fResizedFifo->Size() ||
-                   ( fCurAudio1 && fCurAudio1->fAc3Fifo->Size() ) ||
-                   ( fCurAudio1 && fCurAudio1->fRawFifo->Size() ) ||
-                   ( fCurAudio2 && fCurAudio2->fAc3Fifo->Size() ) ||
-                   ( fCurAudio2 && fCurAudio2->fRawFifo->Size() ) )
-            {
-                Snooze( 10000 );
-            }
-
-            while( fCurTitle->fMpeg4Fifo->Size() &&
-                   ( !fCurAudio1 || fCurAudio1->fMp3Fifo->Size() ) &&
-                   ( !fCurAudio2 || fCurAudio2->fMp3Fifo->Size() ) )
-            {
-                Snooze( 10000 );
-            }
-
-            delete fCurTitle->fDVDReader;
-            delete fCurTitle->fMpegDemux;
-            delete fCurTitle->fMpeg2Decoder;
-            delete fCurTitle->fResizer;
-            delete fCurTitle->fMpeg4Encoder;
-            delete fCurTitle->fAviMuxer;
-
-            if( fCurAudio1 )
-            {
-                delete fCurAudio1->fAc3Decoder;
-                delete fCurAudio1->fMp3Encoder;
-            }
-
-            if( fCurAudio2 )
-            {
-                delete fCurAudio2->fAc3Decoder;
-                delete fCurAudio2->fMp3Encoder;
-            }
-
-            delete fCurTitle->fPSFifo;
-            delete fCurTitle->fMpeg2Fifo;
-            delete fCurTitle->fRawFifo;
-            delete fCurTitle->fResizedFifo;
-            delete fCurTitle->fMpeg4Fifo;
-
-            if( fCurAudio1 )
-            {
-                delete fCurAudio1->fAc3Fifo;
-                delete fCurAudio1->fRawFifo;
-                delete fCurAudio1->fMp3Fifo;
-            }
-
-            if( fCurAudio2 )
-            {
-                delete fCurAudio2->fAc3Fifo;
-                delete fCurAudio2->fRawFifo;
-                delete fCurAudio2->fMp3Fifo;
-            }
-
-            fStatus.fMode = HB_MODE_DONE;
+            fError   = false;
             fRipDone = false;
-            fNeedUpdate = true;
         }
 
         Snooze( 10000 );
@@ -224,23 +227,25 @@ void HBManager::DoWork()
 
 bool HBManager::NeedUpdate()
 {
+    fStatusLock->Lock();
     if( fNeedUpdate )
     {
         fNeedUpdate = false;
+        fStatusLock->Unlock();
         return true;
     }
-
+    fStatusLock->Unlock();
+    
     return false;
 }
 
 HBStatus HBManager::GetStatus()
 {
-    return fStatus;
-}
-
-int HBManager::GetPid()
-{
-    return fPid;
+    fStatusLock->Lock();
+    HBStatus status = fStatus;
+    fStatusLock->Unlock();
+    
+    return status;
 }
 
 void HBManager::ScanVolumes( char * device )
@@ -254,12 +259,13 @@ void HBManager::ScanVolumes( char * device )
     }
     
     fScanner = new HBScanner( this, device );
-    fScanner->Run();
 
+    fStatusLock->Lock();
     fStatus.fMode          = HB_MODE_SCANNING;
     fStatus.fScannedVolume = strdup( device );
     fStatus.fScannedTitle  = 0;
     fNeedUpdate            = true;
+    fStatusLock->Unlock();
 }
 
 void HBManager::StartRip( HBTitle * title, HBAudio * audio1,
@@ -282,86 +288,77 @@ void HBManager::StartRip( HBTitle * title, HBAudio * audio1,
 
     FixPictureSettings( title );
 
-    Log( "HBManager::StartRip : device: %s, title: %d",
-         title->fDevice, title->fIndex );
-    Log( "    - video : %dx%d -> %dx%d, bitrate = %d, 2-pass = %s",
+    Log( "HBManager::StartRip:" );
+    Log( "- device: %s, title: %d", title->fDevice, title->fIndex );
+    Log( "- video: %dx%d->%dx%d, bitrate=%d, 2-pass=%s, deinterlace=%s",
          title->fInWidth, title->fInHeight,
          title->fOutWidth, title->fOutHeight,
-         title->fBitrate, title->fTwoPass ? "yes" : "no" );
-    Log( "    - cropping: top=%d, bottom=%d, left=%d, right=%d",
+         title->fBitrate, title->fTwoPass ? "yes" : "no",
+         title->fDeinterlace ? "yes" : "no" );
+    Log( "- cropping: top=%d, bottom=%d, left=%d, right=%d",
          title->fTopCrop, title->fBottomCrop,
          title->fLeftCrop, title->fRightCrop );
     if( audio1 )
     {
-        Log( "    - audio 1: lang = %s (%x), bitrate = %d",
-             audio1->fDescription, audio1->fId, audio1->fOutBitrate );
+    Log( "- audio 1: lang = %s (%x), bitrate = %d",
+         audio1->fDescription, audio1->fId, audio1->fOutBitrate );
     }
     if( audio2 )
     {
-        Log( "    - audio 2: lang = %s (%x), bitrate = %d",
-             audio2->fDescription, audio1->fId, audio2->fOutBitrate );
+    Log( "- audio 2: lang = %s (%x), bitrate = %d",
+         audio2->fDescription, audio2->fId, audio2->fOutBitrate );
     }
 
-    /* Create fifos & threads */
+    /* Create fifos */
+    title->fPSFifo       = new HBFifo( 256 );
+    title->fMpeg2Fifo    = new HBFifo( 256 );
+    title->fRawFifo      = new HBFifo( 4 );
+    title->fResizedFifo  = new HBFifo( 4 );
+    title->fMpeg4Fifo    = new HBFifo( 4 );
+    if( audio1 )
+    {
+        audio1->fAc3Fifo    = new HBFifo( 256 );
+        audio1->fRawFifo    = new HBFifo( 4 );
+        audio1->fMp3Fifo    = new HBFifo( 4 );
+    }
+    if( audio2 )
+    {
+        audio2->fAc3Fifo    = new HBFifo( 256 );
+        audio2->fRawFifo    = new HBFifo( 4 );
+        audio2->fMp3Fifo    = new HBFifo( 4 );
+    }
 
-    title->fPSFifo       = new HBFifo();
-    title->fMpeg2Fifo    = new HBFifo();
-    title->fRawFifo      = new HBFifo();
-    title->fResizedFifo  = new HBFifo();
-    title->fMpeg4Fifo    = new HBFifo();
-
-    title->fDVDReader    = new HBDVDReader( this, title );
+    /* Create decoders & encoders objects */
     title->fMpegDemux    = new HBMpegDemux( this, title, audio1,
                                             audio2 );
     title->fMpeg2Decoder = new HBMpeg2Decoder( this, title );
     title->fResizer      = new HBResizer( this, title );
     title->fMpeg4Encoder = new HBMpeg4Encoder( this, title );
-    title->fAviMuxer     = new HBAviMuxer( this, title, audio1, audio2,
-                                           file );
-
     if( audio1 )
     {
-        audio1->fAc3Fifo    = new HBFifo();
-        audio1->fRawFifo    = new HBFifo();
-        audio1->fMp3Fifo    = new HBFifo();
         audio1->fAc3Decoder = new HBAc3Decoder( this, audio1 );
         audio1->fMp3Encoder = new HBMp3Encoder( this, audio1 );
     }
-
     if( audio2 )
     {
-        audio2->fAc3Fifo    = new HBFifo();
-        audio2->fRawFifo    = new HBFifo();
-        audio2->fMp3Fifo    = new HBFifo();
         audio2->fAc3Decoder = new HBAc3Decoder( this, audio2 );
         audio2->fMp3Encoder = new HBMp3Encoder( this, audio2 );
     }
 
-    /* Launch the threads */
-
-    title->fDVDReader->Run();
-    title->fMpegDemux->Run();
-    title->fMpeg2Decoder->Run();
-    title->fResizer->Run();
-    title->fMpeg4Encoder->Run();
-    title->fAviMuxer->Run();
-
-    if( audio1 )
+    /* Create and launch the threads */
+    title->fDVDReader    = new HBDVDReader( this, title );
+    title->fAviMuxer     = new HBAviMuxer( this, title, audio1, audio2,
+                                           file );
+    for( int i = 0; i < fCPUCount; i++ )
     {
-        audio1->fAc3Decoder->Run();
-        audio1->fMp3Encoder->Run();
+        title->fWorkers[i] = new HBWorker( title, audio1, audio2 );
     }
-
-    if( audio2 )
-    {
-        audio2->fAc3Decoder->Run();
-        audio2->fMp3Encoder->Run();
-    }
-
+    
     fCurTitle  = title;
     fCurAudio1 = audio1;
     fCurAudio2 = audio2;
 
+    fStatusLock->Lock();
     fStatus.fMode          = HB_MODE_ENCODING;
     fStatus.fPosition      = 0;
     fStatus.fFrameRate     = 0;
@@ -370,6 +367,7 @@ void HBManager::StartRip( HBTitle * title, HBAudio * audio1,
     fStatus.fRemainingTime = 0;
     fStatus.fSuspendDate   = 0;
     fNeedUpdate = true;
+    fStatusLock->Unlock();
 }
 
 void HBManager::SuspendRip()
@@ -382,27 +380,17 @@ void HBManager::SuspendRip()
     }
 
     fCurTitle->fDVDReader->Suspend();
-    fCurTitle->fMpegDemux->Suspend();
-    fCurTitle->fMpeg2Decoder->Suspend();
-    fCurTitle->fResizer->Suspend();
-    fCurTitle->fMpeg4Encoder->Suspend();
     fCurTitle->fAviMuxer->Suspend();
-
-    if( fCurAudio1 )
+    for( int i = 0; i < fCPUCount; i++ )
     {
-        fCurAudio1->fAc3Decoder->Suspend();
-        fCurAudio1->fMp3Encoder->Suspend();
+        fCurTitle->fWorkers[i]->Suspend();
     }
 
-    if( fCurAudio2 )
-    {
-        fCurAudio2->fAc3Decoder->Suspend();
-        fCurAudio2->fMp3Encoder->Suspend();
-    }
-
+    fStatusLock->Lock();
     fStatus.fMode        = HB_MODE_SUSPENDED;
     fStatus.fSuspendDate = GetDate();
     fNeedUpdate = true;
+    fStatusLock->Unlock();
 }
 
 void HBManager::ResumeRip()
@@ -415,27 +403,17 @@ void HBManager::ResumeRip()
     }
 
     fCurTitle->fDVDReader->Resume();
-    fCurTitle->fMpegDemux->Resume();
-    fCurTitle->fMpeg2Decoder->Resume();
-    fCurTitle->fResizer->Resume();
-    fCurTitle->fMpeg4Encoder->Resume();
     fCurTitle->fAviMuxer->Resume();
-
-    if( fCurAudio1 )
+    for( int i = 0; i < fCPUCount; i++ )
     {
-        fCurAudio1->fAc3Decoder->Resume();
-        fCurAudio1->fMp3Encoder->Resume();
+        fCurTitle->fWorkers[i]->Resume();
     }
 
-    if( fCurAudio2 )
-    {
-        fCurAudio2->fAc3Decoder->Resume();
-        fCurAudio2->fMp3Encoder->Resume();
-    }
-
+    fStatusLock->Lock();
     fStatus.fMode       = HB_MODE_ENCODING;
     fStatus.fStartDate += GetDate() - fStatus.fSuspendDate;
     fNeedUpdate = true;
+    fStatusLock->Unlock();
 }
 
 void HBManager::StopRip()
@@ -448,25 +426,6 @@ void HBManager::StopRip()
     }
 
     /* Stop the threads */
-
-    fCurTitle->fDVDReader->Stop();
-    fCurTitle->fMpegDemux->Stop();
-    fCurTitle->fMpeg2Decoder->Stop();
-    fCurTitle->fMpeg4Encoder->Stop();
-    fCurTitle->fAviMuxer->Stop();
-
-    if( fCurAudio1 )
-    {
-        fCurAudio1->fAc3Decoder->Stop();
-        fCurAudio1->fMp3Encoder->Stop();
-    }
-
-    if( fCurAudio2 )
-    {
-        fCurAudio2->fAc3Decoder->Stop();
-        fCurAudio2->fMp3Encoder->Stop();
-    }
-
     fStopRip = true;
 }
 
@@ -545,7 +504,7 @@ uint8_t * HBManager::GetPreview( HBTitle * title, uint32_t image )
 
     /* Get the original image from the temp file */
     char fileName[1024]; memset( fileName, 0, 1024 );
-    sprintf( fileName, "/tmp/HB.%d.%x.%d", fPid, (uint32_t) title,
+    sprintf( fileName, "/tmp/HB.%d.%x.%d", GetPid(), (uint32_t) title,
              image);
     FILE * file = fopen( fileName, "r" );
     fread( buf1, 3 * fInWidth * fInHeight / 2, 1, file );
@@ -632,10 +591,12 @@ uint8_t * HBManager::GetPreview( HBTitle * title, uint32_t image )
 
 void HBManager::Scanning( char * volume, int title )
 {
+    fStatusLock->Lock();
     fStatus.fMode       = HB_MODE_SCANNING;
     fStatus.fScannedVolume = volume;
     fStatus.fScannedTitle = title;
     fNeedUpdate = true;
+    fStatusLock->Unlock();
 }
 
 void HBManager::ScanDone( HBList * titleList )
@@ -650,34 +611,14 @@ void HBManager::Done()
     fRipDone = true;
 }
 
-void HBManager::Error()
+void HBManager::Error( HBError error )
 {
     if( fStatus.fMode != HB_MODE_ENCODING )
     {
         return;
     }
 
-    /* Stop the threads */
-
-    fCurTitle->fDVDReader->Stop();
-    fCurTitle->fMpegDemux->Stop();
-    fCurTitle->fMpeg2Decoder->Stop();
-    fCurTitle->fResizer->Stop();
-    fCurTitle->fMpeg4Encoder->Stop();
-    fCurTitle->fAviMuxer->Stop();
-
-    if( fCurAudio1 )
-    {
-        fCurAudio1->fAc3Decoder->Stop();
-        fCurAudio1->fMp3Encoder->Stop();
-    }
-
-    if( fCurAudio2 )
-    {
-        fCurAudio2->fAc3Decoder->Stop();
-        fCurAudio2->fMp3Encoder->Stop();
-    }
-
+    fStatus.fError = error;
     fError = true;
 }
 
@@ -695,6 +636,7 @@ void HBManager::SetPosition( float pos )
         return;
     }
 
+    fStatusLock->Lock();
     fStatus.fPosition = pos;
     fStatus.fFrameRate = (float) fStatus.fFrames /
         ( ( (float) ( GetDate() - fStatus.fStartDate ) ) / 1000000 ) ;
@@ -703,5 +645,6 @@ void HBManager::SetPosition( float pos )
                              ( 1 - fStatus.fPosition ) /
                              ( 1000000 * fStatus.fPosition ) );
     fNeedUpdate = true;
+    fStatusLock->Unlock();
 }
 

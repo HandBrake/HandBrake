@@ -1,4 +1,4 @@
-/* $Id: Resizer.h,v 1.2 2003/09/30 14:38:15 titer Exp $
+/* $Id: Resizer.h,v 1.5 2003/10/07 22:48:31 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -8,18 +8,31 @@
 #define HB_RESIZER_H
 
 #include "Common.h"
-#include "Thread.h"
 
-class HBResizer : public HBThread
+class HBResizer
 {
     public:
                      HBResizer( HBManager * manager, HBTitle * title );
+                     ~HBResizer();
+        bool         Work();
 
     private:
-        void         DoWork();
-
+        bool         Lock();
+        void         Unlock();
+        
         HBManager  * fManager;
         HBTitle    * fTitle;
+
+        HBLock     * fLock;
+        bool         fUsed;
+
+        ImgReSampleContext * fResampleContext;
+        HBBuffer * fRawBuffer;
+        HBBuffer * fDeinterlacedBuffer;
+        HBBuffer * fResizedBuffer;
+        AVPicture * fRawPicture;
+        AVPicture * fDeinterlacedPicture;
+        AVPicture * fResizedPicture;
 };
 
 #endif

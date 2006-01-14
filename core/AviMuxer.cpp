@@ -1,4 +1,4 @@
-/* $Id: AviMuxer.cpp,v 1.14 2003/09/30 14:38:15 titer Exp $
+/* $Id: AviMuxer.cpp,v 1.17 2003/10/09 23:33:36 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -149,7 +149,7 @@ void HBAviIndex::WriteInt32( uint32_t val )
 HBAviMuxer::HBAviMuxer( HBManager * manager, HBTitle * title,
                         HBAudio * audio1, HBAudio * audio2,
                         char * fileName )
-    : HBThread( "avimuxer" )
+    : HBThread( "avimuxer", HB_NORMAL_PRIORITY )
 {
     fManager        = manager;
     fTitle          = title;
@@ -163,6 +163,8 @@ HBAviMuxer::HBAviMuxer( HBManager * manager, HBTitle * title,
 
     fRiffBytesCount = 2040;
     fMoviBytesCount = 4;
+
+    Run();
 }
 
 void HBAviMuxer::DoWork()
@@ -171,7 +173,7 @@ void HBAviMuxer::DoWork()
     if( !( fFile = fopen( fFileName, "w" ) ) )
     {
         Log( "HBAviMuxer: fopen failed" );
-        fManager->Error();
+        fManager->Error( HB_ERROR_AVI_WRITE );
         return;
     }
 

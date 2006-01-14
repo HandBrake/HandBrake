@@ -1,10 +1,10 @@
-# $Id: Jamfile,v 1.33 2003/10/06 21:21:27 titer Exp $
+# $Id: Jamfile,v 1.38 2003/10/13 23:46:41 titer Exp $
 #
 # This file is part of the HandBrake source code.
 # Homepage: <http://beos.titer.org/handbrake/>.
 # It may be used under the terms of the GNU General Public License.
 
-HB_VERSION = 0.3 ;
+HB_VERSION = 0.4 ;
 
 # Compilers
 C++  = g++ ;
@@ -28,7 +28,7 @@ LINKLIBS = -ldvdplay -ldvdread -ldvdcss -lmpeg2 -lavcodec -la52 -lmp3lame ;
 if $(OS) = BEOS
 {
     C++FLAGS += -Wno-multichar ;
-    LINKLIBS += -lbe ;
+    LINKLIBS += -lbe -ltracker ;
 }
 else if $(OS) = LINUX
 {
@@ -65,7 +65,7 @@ Library core/libhb : core/Ac3Decoder.cpp core/AviMuxer.cpp
                      core/Manager.cpp core/Mp3Encoder.cpp
                      core/Mpeg2Decoder.cpp core/Mpeg4Encoder.cpp
 		     core/MpegDemux.cpp core/Resizer.cpp
-		     core/Scanner.cpp core/Thread.cpp ;
+		     core/Scanner.cpp core/Thread.cpp core/Worker.cpp ;
 
 LinkLibraries HBTest : core/libhb.a ;
 Main HBTest : test/Test.cpp ;
@@ -74,7 +74,8 @@ if $(OS) = BEOS
 {
     LinkLibraries HandBrake : core/libhb.a ;
     Main HandBrake : beos/HandBrake.cpp beos/MainWindow.cpp
-                     beos/PictureWin.cpp ;
+                     beos/PictureWin.cpp beos/ScanView.cpp
+		     beos/RipView.cpp ;
 }
 
 if $(OS) = MACOSX

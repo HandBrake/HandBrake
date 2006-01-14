@@ -1,4 +1,4 @@
-/* $Id: HandBrake.h,v 1.5 2003/09/30 14:38:15 titer Exp $
+/* $Id: HandBrake.h,v 1.7 2003/10/13 22:23:02 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -9,14 +9,16 @@
 
 #include <Application.h>
 
-class HBWindow;
+class MainWindow;
 
 class HBApp : public BApplication
 {
     public:
-                   HBApp( bool debug );
+                     HBApp();
+        void         MessageReceived( BMessage * message );
+        void         RefsReceived( BMessage * message );
 
-        HBWindow * fWindow;
+        MainWindow * fWindow;
 };
 
 #endif

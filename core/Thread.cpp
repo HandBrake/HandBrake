@@ -1,4 +1,4 @@
-/* $Id: Thread.cpp,v 1.19 2003/10/01 21:17:17 titer Exp $
+/* $Id: Thread.cpp,v 1.23 2003/10/09 23:33:36 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -34,8 +34,23 @@ HBThread::~HBThread()
     pthread_join( fThread, NULL );
 #endif
 
-    Log( "Thread %d stopped (\"%s\")", fThread, fName );
+    Log( "HBThread: thread %d stopped (\"%s\")", fThread, fName );
     free( fName );
+}
+
+void HBThread::Suspend()
+{
+    fSuspend = true;
+}
+
+void HBThread::Resume()
+{
+    fSuspend = false;
+}
+
+int HBThread::GetPid()
+{
+    return fPid;
 }
 
 void HBThread::Run()
@@ -47,48 +62,7 @@ void HBThread::Run()
 #elif defined( SYS_MACOSX ) || defined( SYS_LINUX )
     pthread_create( &fThread, NULL,
                     (void * (*)(void *)) ThreadFunc, this );
-#if 0
-#if defined( SYS_MACOSX )
-    int    policy;
-    struct sched_param param;
-    memset( &param, 0, sizeof( struct sched_param ) );
-    if( fPriority < 0 )
-    {
-        param.sched_priority = (-1) * fPriority;
-        policy = SCHED_OTHER;
-    }
-    else
-    {
-        param.sched_priority = fPriority;
-        policy = SCHED_RR;
-    }
-    if ( pthread_setschedparam( fThread, policy, &param ) )
-    {
-        Log( "HBThread::Run : couldn't set thread priority" );
-    }
 #endif
-#endif
-#endif
-
-    Log( "Thread %d started (\"%s\")", fThread, fName );
-}
-
-void HBThread::Stop()
-{
-    Log( "Stopping thread %d (\"%s\")", fThread, fName );
-
-    fDie     = true;
-    fSuspend = false;
-}
-
-void HBThread::Suspend()
-{
-    fSuspend = true;
-}
-
-void HBThread::Resume()
-{
-    fSuspend = false;
 }
 
 bool HBThread::Push( HBFifo * fifo, HBBuffer * buffer )
@@ -126,6 +100,21 @@ HBBuffer * HBThread::Pop( HBFifo * fifo )
 
 void HBThread::ThreadFunc( HBThread * _this )
 {
+#if defined( SYS_MACOSX )
+    struct sched_param param;
+    memset( &param, 0, sizeof( struct sched_param ) );
+    param.sched_priority = _this->fPriority;
+    if ( pthread_setschedparam( _this->fThread, SCHED_OTHER, &param ) )
+    {
+        Log( "HBThread: couldn't set thread priority" );
+    }
+#endif
+    
+    _this->fPid = (int) getpid();
+
+    Log( "HBThread: thread %d started (\"%s\")",
+         _this->fThread, _this->fName );
+
     _this->DoWork();
 }
 

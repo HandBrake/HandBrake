@@ -1,4 +1,4 @@
-/* $Id: Fifo.cpp,v 1.14 2003/10/02 15:44:52 titer Exp $
+/* $Id: Fifo.cpp,v 1.15 2003/10/13 14:12:18 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -51,7 +51,8 @@ HBFifo::HBFifo( int capacity )
 
 HBFifo::~HBFifo()
 {
-    Log( "HBFifo::~HBFifo : trashing %d buffers", Size() );
+    Log( "HBFifo::~HBFifo: trashing %d buffer%s",
+         Size(), Size() ? "s" : "" );
     
     /* Empty the fifo */
     while( fWhereToPush != fWhereToPop )

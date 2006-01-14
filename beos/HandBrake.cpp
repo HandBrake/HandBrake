@@ -1,4 +1,4 @@
-/* $Id: HandBrake.cpp,v 1.6 2003/09/30 14:38:15 titer Exp $
+/* $Id: HandBrake.cpp,v 1.8 2003/10/13 22:23:02 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -11,42 +11,47 @@
 
 void SigHandler( int signal )
 {
+    /* Ugly way to exit cleanly when hitting Ctrl-C */
     ((HBApp*) be_app)->fWindow->PostMessage( B_QUIT_REQUESTED );
 }
 
-int main( int argc, char ** argv )
+int main()
 {
     signal( SIGINT,  SigHandler );
     signal( SIGHUP,  SigHandler );
     signal( SIGQUIT, SigHandler );
 
-    int c;
-    bool debug = false;
-    while( ( c = getopt( argc, argv, "v" ) ) != -1 )
-    {
-        switch( c )
-        {
-            case 'v':
-                debug = true;
-                break;
-
-            default:
-                break;
-        }
-    }
-
     /* Run the BApplication */
-    HBApp * app = new HBApp( debug );
+    HBApp * app = new HBApp();
     app->Run();
     delete app;
     return 0;
 }
 
 /* Constructor */
-HBApp::HBApp( bool debug )
-    : BApplication( "application/x-vnd.titer-handbrake" )
+HBApp::HBApp()
+    : BApplication("application/x-vnd.titer-handbrake" )
 {
-    fWindow = new HBWindow( debug );
+    fWindow = new MainWindow();
     fWindow->Show();
+}
+
+void HBApp::MessageReceived( BMessage * message )
+{
+    switch( message->what )
+    {
+        case B_SAVE_REQUESTED:
+            fWindow->PostMessage( message );
+            break;
+
+        default:
+            BApplication::MessageReceived( message );
+            break;
+    }
+}
+
+void HBApp::RefsReceived( BMessage * message )
+{
+    fWindow->PostMessage( message );
 }
 

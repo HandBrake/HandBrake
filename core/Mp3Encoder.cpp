@@ -1,4 +1,4 @@
-/* $Id: Mp3Encoder.cpp,v 1.7 2003/09/30 14:38:15 titer Exp $
+/* $Id: Mp3Encoder.cpp,v 1.13 2003/10/08 15:00:20 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -11,113 +11,153 @@
 #include <lame/lame.h>
 
 HBMp3Encoder::HBMp3Encoder( HBManager * manager, HBAudio * audio )
-    : HBThread( "mp3encoder" )
 {
-    fManager      = manager;
-    fAudio        = audio;
+    fManager = manager;
+    fAudio   = audio;
+
+    fLock = new HBLock();
+    fUsed = false;
 
     fRawBuffer    = NULL;
     fPosInBuffer  = 0;
+    fSamplesNb    = 0;
     fLeftSamples  = NULL;
     fRightSamples = NULL;
 
     fPosition     = 0;
+    fInitDone = false;
+    fMp3Buffer = NULL;
 }
 
-void HBMp3Encoder::DoWork()
+bool HBMp3Encoder::Work()
 {
-    /* Wait a first buffer so we are sure that
-       fAudio->fInSampleRate (set the AC3 decoder) is not garbage */
-    while( !fDie && !fAudio->fRawFifo->Size() )
+    if( !Lock() )
     {
-        Snooze( 5000 );
+        return false;
     }
-
-    if( fDie )
+    
+    if( !fInitDone )
     {
-        return;
-    }
-
-    /* The idea is to have exactly one mp3 frame (i.e. 1152 samples) by
-       output buffer. As we are resampling from fInSampleRate to
-       fOutSampleRate, we will give ( 1152 * fInSampleRate ) /
-       ( 2 * fOutSampleRate ) to libmp3lame so we are sure we will
-       never get more than 1 frame at a time */
-    uint32_t count = ( 1152 * fAudio->fInSampleRate ) /
-                         ( 2 * fAudio->fOutSampleRate );
-
-    /* Init libmp3lame */
-    lame_global_flags * globalFlags = lame_init();
-    lame_set_in_samplerate( globalFlags, fAudio->fInSampleRate );
-    lame_set_out_samplerate( globalFlags, fAudio->fOutSampleRate );
-    lame_set_brate( globalFlags, fAudio->fOutBitrate );
-
-    if( lame_init_params( globalFlags ) == -1 )
-    {
-        Log( "HBMp3Encoder::DoWork() : lame_init_params() failed" );
-        fManager->Error();
-        return;
-    }
-
-    fLeftSamples  = (float*) malloc( count * sizeof( float ) );
-    fRightSamples = (float*) malloc( count * sizeof( float ) );
-
-    HBBuffer * mp3Buffer = new HBBuffer( LAME_MAXMP3BUFFER );
-
-    int ret;
-    for( ;; )
-    {
-        while( fSuspend )
+        /* Wait for a first buffer so we know fAudio->fInSampleRate
+           is correct */
+        if( !fAudio->fRawFifo->Size() )
         {
-            Snooze( 10000 );
+            Unlock();
+            return false;
+        }
+        
+        /* The idea is to have exactly one mp3 frame (i.e. 1152 samples) by
+           output buffer. As we are resampling from fInSampleRate to
+           fOutSampleRate, we will give ( 1152 * fInSampleRate ) /
+           ( 2 * fOutSampleRate ) to libmp3lame so we are sure we will
+           never get more than 1 frame at a time */
+        fCount = ( 1152 * fAudio->fInSampleRate ) /
+                    ( 2 * fAudio->fOutSampleRate );
+
+        /* Init libmp3lame */
+        fGlobalFlags = lame_init();
+        lame_set_in_samplerate( fGlobalFlags, fAudio->fInSampleRate );
+        lame_set_out_samplerate( fGlobalFlags, fAudio->fOutSampleRate );
+        lame_set_brate( fGlobalFlags, fAudio->fOutBitrate );
+
+        if( lame_init_params( fGlobalFlags ) == -1 )
+        {
+            Log( "HBMp3Encoder: lame_init_params() failed" );
+            fManager->Error( HB_ERROR_MP3_INIT );
+            return false;
         }
 
+        fLeftSamples  = (float*) malloc( fCount * sizeof( float ) );
+        fRightSamples = (float*) malloc( fCount * sizeof( float ) );
+
+        fInitDone = true;
+    }
+
+    bool didSomething = false;
+
+    for( ;; )
+    {
+        if( fMp3Buffer )
+        {
+            if( fAudio->fMp3Fifo->Push( fMp3Buffer ) )
+            {
+                fMp3Buffer = NULL;
+            }
+            else
+            {
+                break;
+            }
+        }
+        
         /* Get new samples */
-        if( !GetSamples( count ) )
+        if( !GetSamples() )
         {
             break;
         }
 
-        ret = lame_encode_buffer_float( globalFlags,
-                                        fLeftSamples, fRightSamples,
-                                        count, mp3Buffer->fData,
-                                        mp3Buffer->fSize );
+        int ret;
+        fMp3Buffer = new HBBuffer( LAME_MAXMP3BUFFER );
+        ret = lame_encode_buffer_float( fGlobalFlags, fLeftSamples,
+                                        fRightSamples, fCount,
+                                        fMp3Buffer->fData,
+                                        fMp3Buffer->fSize );
 
         if( ret < 0 )
         {
             /* Something wrong happened */
-            Log( "HBMp3Encoder : lame_encode_buffer_float() failed (%d)", ret );
-            fManager->Error();
-            break;
+            Log( "HBMp3Encoder : lame_encode_buffer_float() failed "
+                 "(%d)", ret );
+            fManager->Error( HB_ERROR_MP3_ENCODE );
+            return false;
         }
         else if( ret > 0 )
         {
             /* We got something, send it to the muxer */
-            mp3Buffer->fSize     = ret;
-            mp3Buffer->fKeyFrame = true;
-            mp3Buffer->fPosition = fPosition;
-            Push( fAudio->fMp3Fifo, mp3Buffer );
-            mp3Buffer = new HBBuffer( LAME_MAXMP3BUFFER );
+            fMp3Buffer->fSize     = ret;
+            fMp3Buffer->fKeyFrame = true;
+            fMp3Buffer->fPosition = fPosition;
         }
+        else
+        {
+            delete fMp3Buffer;
+            fMp3Buffer = NULL;
+        }
+        fSamplesNb = 0;
+
+        didSomething = true;
     }
 
-    /* Clean up */
-    delete mp3Buffer;
-    free( fLeftSamples );
-    free( fRightSamples );
-
-    lame_close( globalFlags );
+    Unlock();
+    return didSomething;
 }
 
-bool HBMp3Encoder::GetSamples( uint32_t count )
+bool HBMp3Encoder::Lock()
 {
-    uint32_t samplesNb = 0;
+    fLock->Lock();
+    if( fUsed )
+    {
+        fLock->Unlock();
+        return false;
+    }
+    fUsed = true;
+    fLock->Unlock();
+    return true;
+}
 
-    while( samplesNb < count )
+void HBMp3Encoder::Unlock()
+{
+    fLock->Lock();
+    fUsed = false;
+    fLock->Unlock();
+}
+
+bool HBMp3Encoder::GetSamples()
+{
+    while( fSamplesNb < fCount )
     {
         if( !fRawBuffer )
         {
-            if( !( fRawBuffer = Pop( fAudio->fRawFifo ) ) )
+            if( !( fRawBuffer = fAudio->fRawFifo->Pop() ) )
             {
                 return false;
             }
@@ -126,16 +166,16 @@ bool HBMp3Encoder::GetSamples( uint32_t count )
             fPosition    = fRawBuffer->fPosition;
         }
 
-        int willCopy = MIN( count - samplesNb, 6 * 256 - fPosInBuffer );
+        int willCopy = MIN( fCount - fSamplesNb, 6 * 256 - fPosInBuffer );
 
-        memcpy( fLeftSamples + samplesNb,
+        memcpy( fLeftSamples + fSamplesNb,
                 (float*) fRawBuffer->fData + fPosInBuffer,
                 willCopy * sizeof( float ) );
-        memcpy( fRightSamples + samplesNb,
+        memcpy( fRightSamples + fSamplesNb,
                 (float*) fRawBuffer->fData + 6 * 256 + fPosInBuffer,
                 willCopy * sizeof( float ) );
 
-        samplesNb    += willCopy;
+        fSamplesNb    += willCopy;
         fPosInBuffer += willCopy;
 
         if( fPosInBuffer == 6 * 256 )

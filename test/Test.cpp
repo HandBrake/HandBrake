@@ -1,4 +1,4 @@
-/* $Id: Test.cpp,v 1.5 2003/10/05 14:28:40 titer Exp $
+/* $Id: Test.cpp,v 1.8 2003/10/13 10:58:24 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -27,6 +27,8 @@ int main( int argc, char ** argv )
     char * device      = NULL;
     char * outputFile  = NULL;
     int    titleIdx    = 1;
+    int    audio1Idx   = 1;
+    int    audio2Idx   = 0;
     bool   twoPass     = false;
     bool   deinterlace = false;
     int    width       = 0;
@@ -34,10 +36,13 @@ int main( int argc, char ** argv )
     int    bottomCrop  = 0;
     int    leftCrop    = 0;
     int    rightCrop   = 0;
+    int    cpuCount    = 0;
+    int    vBitrate    = 1024;
+    int    aBitrate    = 128;
 
     /* Parse command line */
     int c;
-    while( ( c = getopt( argc, argv, "vd:o:t:piw:j:k:l:m:" ) ) != -1 )
+    while( ( c = getopt( argc, argv, "vd:o:t:a:b:piw:j:k:l:m:c:e:f:" ) ) != -1 )
     {
         switch( c )
         {
@@ -55,6 +60,14 @@ int main( int argc, char ** argv )
 
             case 't':
                 titleIdx = atoi( optarg );
+                break;
+
+            case 'a':
+                audio1Idx = atoi( optarg );
+                break;
+
+            case 'b':
+                audio2Idx = atoi( optarg );
                 break;
 
             case 'p':
@@ -85,6 +98,18 @@ int main( int argc, char ** argv )
                 rightCrop = atoi( optarg );
                 break;
 
+            case 'c':
+                cpuCount = atoi( optarg );
+                break;
+
+            case 'e':
+                vBitrate = atoi( optarg );
+                break;
+
+            case 'f':
+                aBitrate = atoi( optarg );
+                break;
+
             default:
                 break;
         }
@@ -96,20 +121,25 @@ int main( int argc, char ** argv )
         fprintf( stderr,
                  "Syntax: HBTest [options] -d <device> -o <file>\n"
                  "Possible options are :\n"
-                 "    -v                   verbose output\n"
-                 "    -t <value>           select a title (default is 1)\n"
-                 "    -p                   2-pass encoding\n"
-                 "    -i                   deinterlace picture\n"
-                 "    -w                   output width\n"
-                 "    -j <value>           top cropping\n"
-                 "    -k <value>           bottom cropping\n"
-                 "    -l <value>           left cropping\n"
-                 "    -m <value>           right cropping\n" );
+                 "    -v           verbose output\n"
+                 "    -t <value>   select a title (default is 1)\n"
+                 "    -a <value>   primary audio channel (default is 1)\n"
+                 "    -b <value>   secondary audio channel (default is none)\n"
+                 "    -p           2-pass encoding\n"
+                 "    -i           deinterlace picture\n"
+                 "    -w           output width\n"
+                 "    -j <value>   top cropping\n"
+                 "    -k <value>   bottom cropping\n"
+                 "    -l <value>   left cropping\n"
+                 "    -m <value>   right cropping\n"
+                 "    -c <value>   CPU count\n"
+                 "    -e <value>   Video bitrate (default is 1024)\n"
+                 "    -f <value>   Audio bitrate (default is 128)\n" );
         return 1;
     }
 
     /* Create the manager thread */
-    HBManager * manager = new HBManager( debug );
+    HBManager * manager = new HBManager( debug, cpuCount );
 
     /* Tell the manager to scan the specified volume */
     manager->ScanVolumes( device );
@@ -183,10 +213,16 @@ int main( int argc, char ** argv )
                 title->fBottomCrop = bottomCrop;
                 title->fLeftCrop = leftCrop;
                 title->fRightCrop = rightCrop;
+                title->fBitrate = vBitrate;
 
-                HBAudio * audio = (HBAudio*) title->fAudioList->ItemAt( 0 );
+                HBAudio * audio1 =
+                    (HBAudio*) title->fAudioList->ItemAt( audio1Idx - 1 );
+                HBAudio * audio2 =
+                    (HBAudio*) title->fAudioList->ItemAt( audio2Idx - 1 );
+                if( audio1 ) audio1->fOutBitrate = aBitrate;
+                if( audio2 ) audio2->fOutBitrate = aBitrate;
 
-                manager->StartRip( title, audio, NULL, outputFile );
+                manager->StartRip( title, audio1, audio2, outputFile );
                 break;
             }
 

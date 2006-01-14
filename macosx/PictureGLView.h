@@ -4,7 +4,7 @@
 
 #include "Manager.h"
 
-@interface PictureGLView : NSOpenGLView
+@interface HBPictureGLView : NSOpenGLView
 
 {
     HBManager        * fManager;

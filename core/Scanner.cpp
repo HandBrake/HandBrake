@@ -1,4 +1,4 @@
-/* $Id: Scanner.cpp,v 1.18 2003/10/04 12:12:48 titer Exp $
+/* $Id: Scanner.cpp,v 1.23 2003/10/13 14:12:18 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -20,21 +20,23 @@ extern "C" {
 }
 
 HBScanner::HBScanner( HBManager * manager, char * device )
-    : HBThread( "scanner" )
+    : HBThread( "scanner", HB_NORMAL_PRIORITY )
 {
     fManager    = manager;
     fDevice     = strdup( device );
+
+    Run();
 }
 
 void HBScanner::DoWork()
 {
-    Log( "HBScanner::DoWork() : opening device %s", fDevice );
+    Log( "HBScanner: opening device %s", fDevice );
 
     dvdplay_ptr vmg;
     vmg = dvdplay_open( fDevice, NULL, NULL );
     if( !vmg )
     {
-        Log( "HBScanner::DoWork() : dvdplay_open() failed (%s)",
+        Log( "HBScanner: dvdplay_open() failed (%s)",
              fDevice );
         fManager->ScanDone( NULL );
         return;
@@ -50,7 +52,7 @@ void HBScanner::DoWork()
             break;
         }
 
-        Log( "HBScanner::DoWork() : scanning title %d", i + 1 );
+        Log( "HBScanner: scanning title %d", i + 1 );
         fManager->Scanning( fDevice, i + 1 );
 
         title = new HBTitle( fDevice, i + 1 );
@@ -61,12 +63,12 @@ void HBScanner::DoWork()
         }
         else
         {
-            Log( "HBScanner::DoWork() : ignoring title %d", i + 1 );
+            Log( "HBScanner: ignoring title %d", i + 1 );
             delete title;
         }
     }
 
-    Log( "HBScanner::DoWork() : closing device %s", fDevice );
+    Log( "HBScanner: closing device %s", fDevice );
     dvdplay_close( vmg );
 
     fManager->ScanDone( titleList );
@@ -78,7 +80,7 @@ bool HBScanner::ScanTitle( HBTitle * title, dvdplay_ptr vmg )
 
     /* Length */
     title->fLength = dvdplay_title_time( vmg );
-    Log( "HBScanner::ScanTitle() : title length is %lld seconds",
+    Log( "HBScanner::ScanTitle: title length is %lld seconds",
          title->fLength );
 
     /* Discard titles under 10 seconds */
@@ -101,20 +103,46 @@ bool HBScanner::ScanTitle( HBTitle * title, dvdplay_ptr vmg )
         }
 
         int id = dvdplay_audio_id( vmg, i );
-        if( id > 0 )
+
+        if( id < 1 )
         {
-            if( ( id & 0xFF ) != 0xBD )
-            {
-                Log( "HBScanner::ScanTitle() : non-AC3 audio track "
-                     "detected, ignoring" );
-                continue;
-            }
-            attr = dvdplay_audio_attr( vmg, i );
-            audio = new HBAudio( id, LanguageForCode( attr->lang_code ) );
-            Log( "HBScanner::ScanTitle() : new language (%x, %s)",
-                 id, audio->fDescription );
-            title->fAudioList->AddItem( audio );
+            continue;
         }
+
+        if( ( id & 0xFF ) != 0xBD )
+        {
+            Log( "HBScanner::ScanTitle: non-AC3 audio track "
+                 "detected, ignoring" );
+            continue;
+        }
+
+        /* Check if we don't already found an track with the same id */
+        audio = NULL;
+        for( uint32_t j = 0; j < title->fAudioList->CountItems(); j++ )
+        {
+            audio = (HBAudio*) title->fAudioList->ItemAt( j );
+            if( (uint32_t) id == audio->fId )
+            {
+                break;
+            }
+            else
+            {
+                audio = NULL;
+            }
+        }
+
+        if( audio )
+        {
+            Log( "HBScanner::ScanTitle: discarding duplicate track %x",
+                  id );
+            continue;
+        }
+        
+        attr = dvdplay_audio_attr( vmg, i );
+        audio = new HBAudio( id, LanguageForCode( attr->lang_code ) );
+        Log( "HBScanner::ScanTitle: new language (%x, %s)",
+             id, audio->fDescription );
+        title->fAudioList->AddItem( audio );
     }
 
     /* Discard titles with no audio tracks */
@@ -206,7 +234,7 @@ bool HBScanner::DecodeFrame( HBTitle * title, dvdplay_ptr vmg, int i )
                     if( dvdplay_read( vmg, psBuffer->fData, 1 ) != 1 ||
                             !PStoES( psBuffer, &esBufferList ) )
                     {
-                        Log( "HBScanner::DecodeFrame : failed to get "
+                        Log( "HBScanner::DecodeFrame: failed to get "
                              "a valid PS packet" );
                         mpeg2_close( handle );
                         fclose( file );

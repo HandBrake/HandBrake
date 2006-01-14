@@ -1,4 +1,4 @@
-/* $Id: Thread.h,v 1.16 2003/10/01 21:17:17 titer Exp $
+/* $Id: Thread.h,v 1.19 2003/10/09 16:03:51 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -13,8 +13,8 @@
 #  define HB_LOW_PRIORITY    5
 #  define HB_NORMAL_PRIORITY 10
 #elif defined( SYS_MACOSX )
-#  define HB_LOW_PRIORITY    (-47)
-#  define HB_NORMAL_PRIORITY (-47) /* FIXME */
+#  define HB_LOW_PRIORITY    0
+#  define HB_NORMAL_PRIORITY 31
 #elif defined( SYS_LINUX )
 /* Actually unused */
 #  define HB_LOW_PRIORITY    0
@@ -27,12 +27,12 @@ class HBThread
                       HBThread( char * name,
                                 int priority = HB_LOW_PRIORITY );
         virtual       ~HBThread();
-        void          Run();
-        void          Stop();
         void          Suspend();
         void          Resume();
+        int           GetPid();
 
     protected:
+        void          Run();
         bool          Push( HBFifo * fifo, HBBuffer * buffer );
         HBBuffer *    Pop( HBFifo * fifo );
 
@@ -51,6 +51,7 @@ class HBThread
 #elif defined( SYS_MACOSX ) || defined( SYS_LINUX )
         pthread_t     fThread;
 #endif
+        int           fPid;
 };
 
 #if defined( SYS_BEOS )

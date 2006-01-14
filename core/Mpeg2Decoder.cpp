@@ -1,4 +1,4 @@
-/* $Id: Mpeg2Decoder.cpp,v 1.14 2003/09/30 14:38:15 titer Exp $
+/* $Id: Mpeg2Decoder.cpp,v 1.21 2003/10/09 14:21:21 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -14,53 +14,89 @@ extern "C" {
 #include <ffmpeg/avcodec.h>
 
 HBMpeg2Decoder::HBMpeg2Decoder( HBManager * manager, HBTitle * title )
-    : HBThread( "mpeg2decoder" )
 {
-    fManager     = manager;
-    fTitle       = title;
+    fManager = manager;
+    fTitle   = title;
+
+    fLock = new HBLock();
+    fUsed = false;
+    
+    fPass = 42;
+    fRawBuffer = NULL;
+    fRawBufferList = new HBList();
+    fHandle = NULL;
 }
 
-void HBMpeg2Decoder::DoWork()
+bool HBMpeg2Decoder::Work()
 {
-    if( !( fMpeg2Buffer = Pop( fTitle->fMpeg2Fifo ) ) )
+    fLock->Lock();
+    if( fUsed )
     {
-        return;
+        fLock->Unlock();
+        return true;
     }
+    fUsed = true;
+    fLock->Unlock();
 
-    fPass = fMpeg2Buffer->fPass;
-    Init();
-
-    do
+    bool didSomething = false;
+    
+    for( ;; )
     {
-        while( fSuspend )
+        /* Push decoded buffers */
+        while( ( fRawBuffer =
+                    (HBBuffer*) fRawBufferList->ItemAt( 0 ) ) )
         {
-            Snooze( 10000 );
+            if( fTitle->fRawFifo->Push( fRawBuffer ) )
+            {
+                fRawBufferList->RemoveItem( fRawBuffer );
+            }
+            else
+            {
+                break;
+            }
         }
 
+        if( fRawBufferList->CountItems() )
+        {
+            break;
+        }
+       
+        /* Get a new buffer to decode */
+        if( !( fMpeg2Buffer = fTitle->fMpeg2Fifo->Pop() ) )
+        {
+            break;
+        }
+
+        /* (Re)init if needed */
         if( fMpeg2Buffer->fPass != fPass )
         {
-            Close();
             fPass = fMpeg2Buffer->fPass;
             Init();
         }
 
+        /* Do the job */
         DecodeBuffer();
+
+        didSomething = true;
     }
-    while( ( fMpeg2Buffer = Pop( fTitle->fMpeg2Fifo ) ) );
+
+    fLock->Lock();
+    fUsed = false;
+    fLock->Unlock();
+
+    return didSomething;
 }
 
 void HBMpeg2Decoder::Init()
 {
+    if( fHandle )
+    {
+        mpeg2_close( fHandle );
+    }
+
     fLateField = false;
 
-    /* Init libmpeg2 */
     fHandle = mpeg2_init();
-}
-
-void HBMpeg2Decoder::Close()
-{
-    /* Close libmpeg2 */
-    mpeg2_close( fHandle );
 }
 
 void HBMpeg2Decoder::DecodeBuffer()
@@ -83,55 +119,52 @@ void HBMpeg2Decoder::DecodeBuffer()
         else if( ( state == STATE_SLICE || state == STATE_END ) &&
                    info->display_fbuf )
         {
-            HBBuffer * rawBuffer = new HBBuffer( 3 * fTitle->fInWidth *
-                                                 fTitle->fInHeight / 2 );
+            fRawBuffer = new HBBuffer( 3 * fTitle->fInWidth *
+                                       fTitle->fInHeight / 2 );
 
             /* TODO : make libmpeg2 write directly in our buffer */
-            memcpy( rawBuffer->fData,
+            memcpy( fRawBuffer->fData,
                     info->display_fbuf->buf[0],
                     fTitle->fInWidth * fTitle->fInHeight );
-            memcpy( rawBuffer->fData + fTitle->fInWidth *
+            memcpy( fRawBuffer->fData + fTitle->fInWidth *
                         fTitle->fInHeight,
                     info->display_fbuf->buf[1],
                     fTitle->fInWidth * fTitle->fInHeight / 4 );
-            memcpy( rawBuffer->fData + fTitle->fInWidth *
+            memcpy( fRawBuffer->fData + fTitle->fInWidth *
                         fTitle->fInHeight + fTitle->fInWidth *
                         fTitle->fInHeight / 4,
                     info->display_fbuf->buf[2],
                     fTitle->fInWidth * fTitle->fInHeight / 4 );
 
-            rawBuffer->fPosition = fMpeg2Buffer->fPosition;
-            rawBuffer->fPass     = fPass;
+            fRawBuffer->fPosition = fMpeg2Buffer->fPosition;
+            fRawBuffer->fPass     = fMpeg2Buffer->fPass;
+
+            fRawBufferList->AddItem( fRawBuffer );
 
             /* NTSC pulldown kludge */
             if( info->display_picture->nb_fields == 3 )
             {
                 if( fLateField )
                 {
-                    HBBuffer * buffer =
-                        new HBBuffer( rawBuffer->fSize );
-                    buffer->fPosition = rawBuffer->fPosition;
-                    buffer->fPass     = rawBuffer->fPass;
-                    memcpy( buffer->fData, rawBuffer->fData,
-                            buffer->fSize );
-                    Push( fTitle->fRawFifo, buffer );
+                    HBBuffer * pulldownBuffer;
+                    pulldownBuffer = new HBBuffer( fRawBuffer->fSize );
+                    pulldownBuffer->fPosition = fRawBuffer->fPosition;
+                    pulldownBuffer->fPass     = fRawBuffer->fPass;
+                    memcpy( pulldownBuffer->fData, fRawBuffer->fData,
+                            pulldownBuffer->fSize );
+                    fRawBufferList->AddItem( pulldownBuffer );
                 }
                 fLateField = !fLateField;
-            }
-
-            /* Send it to the encoder */
-            if( !( Push( fTitle->fRawFifo, rawBuffer ) ) )
-            {
-                break;
             }
         }
         else if( state == STATE_INVALID )
         {
             /* Shouldn't happen on a DVD */
-            Log( "HBMpeg2Decoder : STATE_INVALID" );
+            Log( "HBMpeg2Decoder: STATE_INVALID" );
         }
     }
 
     delete fMpeg2Buffer;
+    fMpeg2Buffer = NULL;
 }
 

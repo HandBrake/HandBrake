@@ -1,4 +1,4 @@
-/* $Id: MainWindow.h,v 1.9 2003/09/30 14:38:15 titer Exp $
+/* $Id: MainWindow.h,v 1.10 2003/10/10 01:08:42 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -8,93 +8,29 @@
 #ifndef HB_MAIN_WINDOW_H
 #define HB_MAIN_WINDOW_H
 
-/* BeOS headers */
-#include <Box.h>
-#include <MenuItem.h>
 #include <Window.h>
-class BButton;
-class BMenuField;
-class BPopUpMenu;
-class BSlider;
-class BStatusBar;
-class BStringView;
-class BTextControl;
+class ScanView;
+class RipView;
 
-/* libhb headers */
-#include "Manager.h"
+#include "Common.h"
 
-class HBVolumeItem : public BMenuItem
+class MainWindow : public BWindow
 {
     public:
-                   HBVolumeItem( HBVolume * volume );
-
-        HBVolume * fVolume;
-};
-
-class HBTitleItem : public BMenuItem
-{
-    public:
-                  HBTitleItem( HBTitle * title );
-
-        HBTitle * fTitle;
-};
-
-class HBAudioItem : public BMenuItem
-{
-    public:
-                  HBAudioItem( HBAudio * audio );
-
-        HBAudio * fAudio;
-};
-
-class HBBox : public BBox
-{
-    public:
-             HBBox( BRect );
-        void Draw( BRect );
-};
-
-class HBWindow : public BWindow
-{
-    public:
-                        HBWindow( bool debug );
+                        MainWindow();
         virtual bool    QuitRequested();
         virtual void    MessageReceived( BMessage * message );
 
-        void            ScanVolumes();
-
     private:
-        static void     UpdateInterface( HBWindow * _this );
+        static void     UpdateInterface( MainWindow * _this );
         void            _UpdateInterface();
-        void            EnableInterface( HBMode mode );
 
         HBManager     * fManager;
-
-        /* GUI */
-        HBBox         * fBox;
-        BButton       * fAdvancedButton;
-        BButton       * fFileButton;
-        BButton       * fPictureButton;
-        BButton       * fStartButton;
-        BButton       * fSuspendButton;
-        BMenuField    * fAudio1Field;
-        BMenuField    * fAudio2Field;
-        BMenuField    * fTitleField;
-        BMenuField    * fVolumeField;
-        BPopUpMenu    * fAudio1PopUp;
-        BPopUpMenu    * fAudio2PopUp;
-        BPopUpMenu    * fTitlePopUp;
-        BPopUpMenu    * fVolumePopUp;
-        BSlider       * fAudioSlider;
-        BSlider       * fVideoSlider;
-        BStatusBar    * fStatusBar;
-        BStringView   * fFileString;
-        BTextControl  * fFileControl;
-
         int             fUpdateThread;
+        volatile bool   fDie;
 
-        /* Used to SetEnabled() GUI items only if needed */
-        HBMode          fOldMode;
+        ScanView      * fScanView;
+        RipView       * fRipView;
 };
 
 #endif

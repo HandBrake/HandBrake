@@ -1,4 +1,4 @@
-/* $Id: MpegDemux.cpp,v 1.10 2003/10/04 12:12:48 titer Exp $
+/* $Id: MpegDemux.cpp,v 1.18 2003/10/13 15:14:01 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -14,33 +14,144 @@ extern "C" {
 
 HBMpegDemux::HBMpegDemux( HBManager * manager, HBTitle * title,
                           HBAudio * audio1, HBAudio * audio2 )
-    : HBThread( "mpegdemux" )
 {
-    fManager        = manager;
-    fTitle          = title;
-    fAudio1         = audio1;
-    fAudio2         = audio2;
+    fManager = manager;
+    fTitle   = title;
+    fAudio1  = audio1;
+    fAudio2  = audio2;
 
-    fPSBuffer       = NULL;
-    fESBuffer       = NULL;
-    fESBufferList   = NULL;
+    fLock = new HBLock();
+    fUsed = false;
+
+    fPSBuffer      = NULL;
+    fESBuffer      = NULL;
+    fESBufferList  = NULL;
 
     fFirstVideoPTS  = -1;
     fFirstAudio1PTS = -1;
     fFirstAudio2PTS = -1;
 }
 
-void HBMpegDemux::DoWork()
+HBMpegDemux::~HBMpegDemux()
 {
+    /* Free memory */
+    if( fESBufferList )
+    {
+        while( ( fESBuffer = (HBBuffer*) fESBufferList->ItemAt( 0 ) ) )
+        {
+            fESBufferList->RemoveItem( fESBuffer );
+            delete fESBuffer;
+        }
+    }
+    delete fLock;
+}
+
+bool HBMpegDemux::Work()
+{
+    if( !Lock() )
+    {
+        return false;
+    }
+    
+    bool didSomething = false;
+
     for( ;; )
     {
-        while( fSuspend )
+        /* If we have buffers waiting, try to push them */
+        if( fESBufferList )
         {
-            Snooze( 10000 );
+            for( uint32_t i = 0; i < fESBufferList->CountItems(); )
+            {
+                fESBuffer = (HBBuffer*) fESBufferList->ItemAt( i );
+                
+                if( fESBuffer->fPass == 1 && fESBuffer->fStreamId != 0xE0 )
+                {
+                    fESBufferList->RemoveItem( fESBuffer );
+                    delete fESBuffer;
+                    continue;
+                }
+
+                /* Look for a decoder for this ES */
+
+                if( fESBuffer->fStreamId == 0xE0 )
+                {
+                    if( fFirstVideoPTS < 0 )
+                    {
+                        fFirstVideoPTS = fESBuffer->fPTS;
+                        Log( "HBMpegDemux: got first 0xE0 packet (%lld)",
+                             fFirstVideoPTS );
+                    }
+                    if( fTitle->fMpeg2Fifo->Push( fESBuffer ) )
+                    {
+                        fESBufferList->RemoveItem( fESBuffer );
+                    }
+                    else
+                    {
+                        i++;
+                    }
+                }
+                else if( fAudio1 &&
+                         fESBuffer->fStreamId == fAudio1->fId )
+                {
+                    if( fFirstAudio1PTS < 0 )
+                    {
+                        fFirstAudio1PTS = fESBuffer->fPTS;
+                        Log( "HBMpegDemux: got first 0x%x packet (%lld)",
+                             fAudio1->fId, fFirstAudio1PTS );
+
+                        fAudio1->fDelay =
+                            ( fFirstAudio1PTS - fFirstVideoPTS ) / 90;
+                    }
+                    if( fAudio1->fAc3Fifo->Push( fESBuffer ) )
+                    {
+                        fESBufferList->RemoveItem( fESBuffer );
+                    }
+                    else
+                    {
+                        i++;
+                    }
+                }
+                else if( fAudio2 &&
+                         fESBuffer->fStreamId == fAudio2->fId )
+                {
+                    if( fFirstAudio2PTS < 0 )
+                    {
+                        fFirstAudio2PTS = fESBuffer->fPTS;
+                        Log( "HBMpegDemux: got first 0x%x packet (%lld)",
+                             fAudio2->fId, fFirstAudio2PTS );
+
+                        fAudio2->fDelay =
+                            ( fFirstAudio2PTS - fFirstVideoPTS ) / 90;
+                    }
+                    if( fAudio2->fAc3Fifo->Push( fESBuffer ) )
+                    {
+                        fESBufferList->RemoveItem( fESBuffer );
+                    }
+                    else
+                    {
+                        i++;
+                    }
+                }
+                else
+                {
+                    fESBufferList->RemoveItem( fESBuffer );
+                    delete fESBuffer;
+                }
+            }
+
+            if( !fESBufferList->CountItems() )
+            {
+                delete fESBufferList;
+                fESBufferList = NULL;
+            }
+            else
+            {
+                break;
+            }
         }
 
         /* Get a PS packet */
-        if( !( fPSBuffer = Pop( fTitle->fPSFifo ) ) )
+        if( !( fPSBuffer = fTitle->fPSFifo->Pop() ) )
         {
             break;
         }
@@ -48,112 +159,31 @@ void HBMpegDemux::DoWork()
         /* Get the ES data in it */
         PStoES( fPSBuffer, &fESBufferList );
 
-        if( !fESBufferList )
-        {
-            continue;
-        }
-
-        while( ( fESBuffer = (HBBuffer*) fESBufferList->ItemAt( 0 ) ) )
-        {
-            fESBufferList->RemoveItem( fESBuffer );
-
-            if( fESBuffer->fPass == 1 && fESBuffer->fStreamId != 0xE0 )
-            {
-                delete fESBuffer;
-                continue;
-            }
-
-            /* Look for a decoder for this ES */
-            if( fESBuffer->fStreamId == 0xE0 )
-            {
-                if( fFirstVideoPTS < 0 )
-                {
-                    fFirstVideoPTS = fESBuffer->fPTS;
-                }
-                Push( fTitle->fMpeg2Fifo, fESBuffer );
-            }
-            else if( fAudio1 &&
-                     fESBuffer->fStreamId == fAudio1->fId )
-            {
-                /* If the audio track starts later than the video,
-                   repeat the first frame as long as needed  */
-                if( fFirstAudio1PTS < 0 )
-                {
-                    fFirstAudio1PTS = fESBuffer->fPTS;
-
-                    if( fFirstAudio1PTS > fFirstVideoPTS )
-                    {
-                        Log( "HBMpegDemux::DoWork() : audio track %x "
-                             "is late (%lld)", fAudio1->fId,
-                             fFirstAudio1PTS - fFirstVideoPTS );
-                        InsertSilence( fFirstAudio1PTS - fFirstVideoPTS,
-                                       fAudio1->fAc3Fifo,
-                                       fESBuffer );
-                    }
-                }
-                Push( fAudio1->fAc3Fifo, fESBuffer );
-            }
-            else if( fAudio2 &&
-                     fESBuffer->fStreamId == fAudio2->fId )
-            {
-                if( fFirstAudio2PTS < 0 )
-                {
-                    fFirstAudio2PTS = fESBuffer->fPTS;
-
-                    if( fFirstAudio2PTS > fFirstVideoPTS )
-                    {
-                        Log( "HBMpegDemux::DoWork() : audio track %x "
-                             "is late (%lld)", fAudio2->fId,
-                             fFirstAudio2PTS - fFirstVideoPTS );
-                        InsertSilence( fFirstAudio2PTS - fFirstVideoPTS,
-                                       fAudio2->fAc3Fifo,
-                                       fESBuffer );
-                    }
-                }
-                Push( fAudio2->fAc3Fifo, fESBuffer );
-            }
-            else
-            {
-                delete fESBuffer;
-            }
-        }
-        delete fESBufferList;
+        didSomething = true;
     }
+
+    Unlock();
+    return didSomething;
 }
 
-void HBMpegDemux::InsertSilence( int64_t time, HBFifo * fifo,
-                                 HBBuffer * buffer )
+bool HBMpegDemux::Lock()
 {
-    int        flags      = 0;
-    int        sampleRate = 0;
-    int        bitrate    = 0;
-    int        frameSize  = a52_syncinfo( buffer->fData, &flags,
-                                          &sampleRate, &bitrate );
-
-    if( !frameSize )
+    fLock->Lock();
+    if( fUsed )
     {
-        Log( "HBMpegDemux::InsertSilence() : a52_syncinfo() failed" );
-        return;
-    }
+        fLock->Unlock();
+        return false;
+    }   
+    fUsed = true;
+    fLock->Unlock();
+    return true;
+}
 
-    uint32_t frames = ( ( sampleRate * time / 90000 ) + ( 3 * 256 ) )
-                          / ( 6 * 256 );
-
-    if( !frames )
-    {
-        return;
-    }
-
-    Log( "HBMpegDemux::InsertSilence() : adding %d frames", frames );
-
-    HBBuffer * buffer2;
-    for( uint32_t i = 0; i < frames; i++ )
-    {
-        buffer2 = new HBBuffer( frameSize );
-        buffer2->fPosition = buffer->fPosition;
-        memcpy( buffer2->fData, buffer->fData, frameSize );
-        Push( fifo, buffer2 );
-    }
+void HBMpegDemux::Unlock()
+{
+    fLock->Lock();
+    fUsed = false;
+    fLock->Unlock();
 }
 
 bool PStoES( HBBuffer * psBuffer, HBList ** _esBufferList )

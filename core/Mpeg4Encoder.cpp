@@ -1,4 +1,4 @@
-/* $Id: Mpeg4Encoder.cpp,v 1.15 2003/09/30 14:38:15 titer Exp $
+/* $Id: Mpeg4Encoder.cpp,v 1.23 2003/10/09 13:24:48 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -11,49 +11,97 @@
 #include <ffmpeg/avcodec.h>
 
 HBMpeg4Encoder::HBMpeg4Encoder( HBManager * manager, HBTitle * title )
-    : HBThread( "mpeg4encoder" )
 {
     fManager = manager;
     fTitle   = title;
+
+    fLock = new HBLock();
+    fUsed = false;
+
+    fPass = 42;
+    fMpeg4Buffer = NULL;
+    fFile = NULL;
+    fFrame = avcodec_alloc_frame();
+    fLog = NULL;
 }
 
-void HBMpeg4Encoder::DoWork()
+bool HBMpeg4Encoder::Work()
 {
-    if( !( fResizedBuffer = Pop( fTitle->fResizedFifo ) ) )
+    if( !Lock() )
     {
-        return;
+        return false;
     }
 
-    fPass = fResizedBuffer->fPass;
-    Init();
+    bool didSomething = false;
 
-    do
+    for( ;; )
     {
-        while( fSuspend )
+        if( fMpeg4Buffer )
         {
-            Snooze( 10000 );
+            if( fTitle->fMpeg4Fifo->Push( fMpeg4Buffer ) )
+            {
+                fMpeg4Buffer = NULL;
+            }
+            else
+            {
+                break;
+            }
+        }
+    
+        if( !( fResizedBuffer = fTitle->fResizedFifo->Pop() ) )
+        {
+            break;
         }
 
         if( fResizedBuffer->fPass != fPass )
         {
-            Close();
             fPass = fResizedBuffer->fPass;
             Init();
         }
 
         fManager->SetPosition( fResizedBuffer->fPosition );
         EncodeBuffer();
+
+        didSomething = true;
     }
-    while( ( fResizedBuffer = Pop( fTitle->fResizedFifo ) ) );
+
+    Unlock();
+    return didSomething;
+}
+
+bool HBMpeg4Encoder::Lock()
+{
+    fLock->Lock();
+    if( fUsed )
+    {
+        fLock->Unlock();
+        return false;
+    }
+    fUsed = true;
+    fLock->Unlock();
+    return true;
+}
+
+void HBMpeg4Encoder::Unlock()
+{
+    fLock->Lock();
+    fUsed = false;
+    fLock->Unlock();
 }
 
 void HBMpeg4Encoder::Init()
 {
+    /* Clean up if needed */
+    if( fFile )
+    {
+        fclose( fFile );
+    }
+    
     AVCodec * codec = avcodec_find_encoder( CODEC_ID_MPEG4 );
     if( !codec )
     {
         Log( "HBMpeg4Encoder: avcodec_find_encoder() failed" );
-        fManager->Error();
+        fManager->Error( HB_ERROR_MPEG4_INIT );
         return;
     }
 
@@ -94,18 +142,8 @@ void HBMpeg4Encoder::Init()
     if( avcodec_open( fContext, codec ) < 0 )
     {
         Log( "HBMpeg4Encoder: avcodec_open() failed" );
-        fManager->Error();
+        fManager->Error( HB_ERROR_MPEG4_INIT );
         return;
-    }
-
-    fFrame = avcodec_alloc_frame();
-}
-
-void HBMpeg4Encoder::Close()
-{
-    if( fPass == 1 )
-    {
-        fclose( fFile );
     }
 }
 
@@ -120,31 +158,27 @@ void HBMpeg4Encoder::EncodeBuffer()
     fFrame->linesize[1] = fTitle->fOutWidth / 2;
     fFrame->linesize[2] = fTitle->fOutWidth / 2;
 
-    HBBuffer * mpeg4Buffer;
-    mpeg4Buffer = new HBBuffer( 3 * fTitle->fOutWidth *
+    fMpeg4Buffer = new HBBuffer( 3 * fTitle->fOutWidth *
                                 fTitle->fOutHeight / 2 );
         /* Should be really too much... */
 
-    mpeg4Buffer->fPosition = fResizedBuffer->fPosition;
-    mpeg4Buffer->fSize =
-        avcodec_encode_video( fContext, mpeg4Buffer->fData,
-                              mpeg4Buffer->fAllocSize, fFrame );
-    mpeg4Buffer->fKeyFrame = ( fContext->coded_frame->key_frame != 0 );
+    fMpeg4Buffer->fPosition = fResizedBuffer->fPosition;
+    fMpeg4Buffer->fSize =
+        avcodec_encode_video( fContext, fMpeg4Buffer->fData,
+                              fMpeg4Buffer->fAllocSize, fFrame );
+    fMpeg4Buffer->fKeyFrame = ( fContext->coded_frame->key_frame != 0 );
 
-    delete fResizedBuffer;
-
-    if( fPass == 1 )
+    if( fResizedBuffer->fPass == 1 )
     {
         if( fContext->stats_out )
         {
             fprintf( fFile, "%s", fContext->stats_out );
         }
-        delete mpeg4Buffer;
+        delete fMpeg4Buffer;
+        fMpeg4Buffer = NULL;
     }
-    else
-    {
-        /* Mux it */
-        Push( fTitle->fMpeg4Fifo, mpeg4Buffer );
-    }
+
+    delete fResizedBuffer;
+    fResizedBuffer = NULL;
 }
 
