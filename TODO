@@ -1,50 +1,49 @@
-$Id: TODO,v 1.29 2004/03/01 21:36:36 titer Exp $
+$Id: TODO,v 1.32 2004/03/08 11:32:48 titer Exp $
 
 TODO file for HandBrake <http://handbrake.m0k.org/>
 
-Features to be added are written in no particular order.
+This is a roadmap for future releases of HandBrake. It has to be taken
+as an indication, as it may change as any time.
 
-- Core
-  + Remove some duplicate code here and here
-  + Should be able to boost or normalize the audio volume
-  + Allow the intf to preview the latest encoded picture
-  + Finish and test the MPEG audio decoder
-  + PCM
-  + More encoding options: B-frames, type of estimation etc etc
-  + Subtitle support
-  + Allow the user to split the file in x parts
-  + AC3 pass-through
-  + MKV muxing support
-  + Manual aspect ratio
-  + Rotate the movie
-  + Rip only a few chapters, or rip X seconds from a given starting
-    point
-  + Network shared processing (using RendezVous?)
-  + Do some DVD buffering so the drive can rest most of the time
-  + Custom framerate
-  + Homemade resampler
-  + VCD/DVD-R output
-  + Better remaining time calculation
-  + Theora encoding
+0.6.0
+ + Make sure the deadlock at the end of the rip is gone
 
-- All interfaces
-  + Use the DVD name in popup and for the name of the created file
-  + Nice 'About...' box with link to homepage & faq
-  + Add a 'Cancel' button in the crop & scale panel
-  + Allow to launch rips of several titles
+Maybe in 0.6.0
+ + New, up-to-date BeOS GUI [if I get some help]
 
-- BeOS interface
-  + Redo the picture panel (liblayout?)
-  + Add warnings (invalid bitrate, file already exists etc)
-  + i18n
+0.7.x
+ + Homemade resampler
+ + Audio volume normalizing
+ + AC3 pass-through
+ + Subtitle support
+ + Rip only a few chapters or rip X seconds from a given starting point
+ + Allow to launch rips of several titles
 
-- Mac OS X interface
-  + Warning when the user quit the app while encoding
-  + Progress bar in the dock icon
-  + Send a mail when rip is done
-  + Turn the computer off when done
-  + Collapse interface when rip starts
+Maybe in 0.7.x
+ + MPEG audio decoding [if I have a DVD to test it]
+ + B-frames, bla bla
+ + MKV muxing support
+ + Manual aspect ratio
+ + Better remaining time calculation
+ + Nice 'About...' box with link to homepage & faq
+ + [OSX] Progress bar in the dock icon
 
-- Bugs
-  + OSX - crash when trying to encode a DVD from mounted toast image
-  + OSX - opengl effects somtimes mess up the picture's brightness
+After 0.7.0
+ + Preview the latest encoded picture in GUI
+ + Split output file in x parts
+ + Picture rotation
+ + Custom framerate
+ + Network shared processing (using RendezVous?)
+ + VCD/DVD-R output
+ + Theora encoding
+ + Raw MPEG/AC3 output
+ + DVD folder output
+ + Use the DVD name in popup and for the name of the created file
+ + Send a mail when rip is done
+ + Turn the computer off when done
+ + Collapse interface when rip starts
+
+Misc known bugs:
+ + [OSX] crash when trying to encode a DVD from mounted toast image
+ + [OSX] opengl effects somtimes mess up the picture's brightness
+

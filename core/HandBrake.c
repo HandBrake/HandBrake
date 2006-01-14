@@ -1,4 +1,4 @@
-/* $Id: HandBrake.c,v 1.42 2004/02/18 17:07:20 titer Exp $
+/* $Id: HandBrake.c,v 1.44 2004/03/08 11:32:48 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -147,12 +147,16 @@ void HBStartRip( HBHandle * h, HBTitle * title )
         audio->outFifo = HBFifoInit( 4 ); /* At least 4 for Vorbis */
 
         /* Audio work objects */
-        audio->decoder = HBAc3DecInit( h, audio );
-        if( audio->codec == HB_CODEC_MP3 )
+        if( audio->inCodec == HB_CODEC_AC3 )
+            audio->decoder = HBAc3DecInit( h, audio );
+        else if( audio->inCodec == HB_CODEC_LPCM )
+            audio->decoder = HBLpcmDecInit( h, audio );
+
+        if( audio->outCodec == HB_CODEC_MP3 )
             audio->encoder = HBMp3EncInit( h, audio );
-        else if( audio->codec == HB_CODEC_AAC )
+        else if( audio->outCodec == HB_CODEC_AAC )
             audio->encoder = HBFaacEncInit( h, audio );
-        else if( audio->codec == HB_CODEC_VORBIS )
+        else if( audio->outCodec == HB_CODEC_VORBIS )
             audio->encoder = HBVorbisEncInit( h, audio );
     }
 
@@ -551,6 +555,13 @@ static void _StopRip( HBHandle * h )
     HBAudio * audio;
     int i;
 
+    /* Stop input and work threads */
+    HBDVDReadClose( &title->dvdRead );
+    for( i = 0; i < h->cpuCount; i++ )
+    {
+        HBWorkThreadClose( &title->workThreads[h->cpuCount-i-1] );
+    }
+
     /* Invalidate fifos */
     HBFifoDie( title->outFifo );
     for( i = 0; i < HBListCount( title->ripAudioList ); i++ )
@@ -559,20 +570,13 @@ static void _StopRip( HBHandle * h )
         HBFifoDie( audio->outFifo );
     }
 
-    /* Stop threads */
-    HBDVDReadClose( &title->dvdRead );
-
+    /* Stop mux thread */
     if( title->mux == HB_MUX_AVI )
         HBAviMuxClose( &title->aviMux );
     else if( title->mux == HB_MUX_MP4 )
         HBMp4MuxClose( &title->mp4Mux );
     else if( title->mux == HB_MUX_OGM )
         HBOgmMuxClose( &title->ogmMux );
-
-    for( i = 0; i < h->cpuCount; i++ )
-    {
-        HBWorkThreadClose( &title->workThreads[h->cpuCount-i-1] );
-    }
 
     /* Clean up */
     HBMpeg2DecClose( &title->decoder );
@@ -595,12 +599,16 @@ static void _StopRip( HBHandle * h )
         audio = HBListItemAt( title->ripAudioList, i );
 
         /* Audio work objects */
-        HBAc3DecClose( &audio->decoder );
-        if( audio->codec == HB_CODEC_MP3 )
+        if( audio->inCodec == HB_CODEC_AC3 )
+            HBAc3DecClose( &audio->decoder );
+        else if( audio->inCodec == HB_CODEC_LPCM )
+            HBLpcmDecClose( &audio->decoder );
+
+        if( audio->outCodec == HB_CODEC_MP3 )
             HBMp3EncClose( &audio->encoder );
-        else if( audio->codec == HB_CODEC_AAC )
+        else if( audio->outCodec == HB_CODEC_AAC )
             HBFaacEncClose( &audio->encoder );
-        else if( audio->codec == HB_CODEC_VORBIS )
+        else if( audio->outCodec == HB_CODEC_VORBIS )
             HBVorbisEncClose( &audio->encoder );
 
         /* Audio fifos */

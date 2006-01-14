@@ -1,4 +1,4 @@
-/* $Id: test.c,v 1.26 2004/01/22 19:36:55 titer Exp $
+/* $Id: test.c,v 1.27 2004/03/08 11:32:50 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -450,7 +450,7 @@ static void ScanDone( void * data, HBList * titleList )
     {
         audio = HBListItemAt( title->audioList, 0 );
         audio->outBitrate = abitrate;
-        audio->codec = acodec;
+        audio->outCodec = acodec;
         HBListAdd( title->ripAudioList, audio );
     }
     else if( strcasecmp( audios, "none" ) )
@@ -471,7 +471,7 @@ static void ScanDone( void * data, HBList * titleList )
             i = strtol( tmp, &tmp, 0 );
             audio = HBListItemAt( title->audioList, i - 1 );
             audio->outBitrate = abitrate;
-            audio->codec = acodec;
+            audio->outCodec = acodec;
             HBListAdd( title->ripAudioList, audio );
 
             tmp++;

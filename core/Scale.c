@@ -1,4 +1,4 @@
-/* $Id: Scale.c,v 1.9 2004/01/16 19:39:23 titer Exp $
+/* $Id: Scale.c,v 1.10 2004/03/08 11:32:48 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -6,7 +6,11 @@
 
 #include "HBInternal.h"
 
+#define USE_FFMPEG
+
+#ifdef USE_FFMPEG
 #include "ffmpeg/avcodec.h"
+#endif
 
 typedef struct HBScale
 {
@@ -15,16 +19,25 @@ typedef struct HBScale
     HBHandle           * handle;
     HBTitle            * title;
 
+    HBBuffer           * deintBuffer;
+    HBList             * scaledBufferList;
+#ifdef USE_FFMPEG
     ImgReSampleContext * context;
     AVPicture            rawPicture;
-    HBBuffer           * deintBuffer;
     AVPicture            deintPicture;
-    HBList             * scaledBufferList;
     AVPicture            scaledPicture;
+#endif
 } HBScale;
 
 /* Local prototypes */
 static int ScaleWork( HBWork * );
+#ifndef USE_FFMPEG
+static void Deinterlace( uint8_t * in, uint8_t * out, int w, int h,
+                         int tcrop, int bcrop, int lcrop, int rcrop );
+static void Resample( uint8_t * in, uint8_t * out, int oldw, int oldh,
+                      int neww, int newh, int tcrop, int bcrop,
+                      int lcrop, int rcrop );
+#endif
 
 HBWork * HBScaleInit( HBHandle * handle, HBTitle * title )
 {
@@ -41,18 +54,21 @@ HBWork * HBScaleInit( HBHandle * handle, HBTitle * title )
     s->handle = handle;
     s->title  = title;
 
+    /* Allocate a constant buffer used for deinterlacing */
+    s->deintBuffer = HBBufferInit( 3 * title->inWidth *
+                                    title->inHeight / 2 );
+
+#ifdef USE_FFMPEG
+    avpicture_fill( &s->deintPicture, s->deintBuffer->data,
+                    PIX_FMT_YUV420P, title->inWidth, title->inHeight );
+
     /* Init libavcodec */
     s->context =
         img_resample_full_init( title->outWidth, title->outHeight,
                                 title->inWidth,  title->inHeight,
                                 title->topCrop,  title->bottomCrop,
                                 title->leftCrop, title->rightCrop );
-
-    /* Allocate a constant buffer used for deinterlacing */
-    s->deintBuffer = HBBufferInit( 3 * title->inWidth *
-                                    title->inHeight / 2 );
-    avpicture_fill( &s->deintPicture, s->deintBuffer->data,
-                    PIX_FMT_YUV420P, title->inWidth, title->inHeight );
+#endif
 
     s->scaledBufferList = HBListInit();
 
@@ -63,7 +79,9 @@ void HBScaleClose( HBWork ** _s )
 {
     HBScale * s = (HBScale*) *_s;
 
+#ifdef USE_FFMPEG
     img_resample_close( s->context );
+#endif
     HBListClose( &s->scaledBufferList );
     HBBufferClose( &s->deintBuffer );
     free( s->name );
@@ -79,6 +97,10 @@ static int ScaleWork( HBWork * w )
     HBBuffer * rawBuffer;
     HBBuffer * scaledBuffer;
     HBBuffer * tmpBuffer;
+#ifndef USE_FFMPEG
+    uint8_t  * in, * out;
+    int        plane, shift;
+#endif
 
     int didSomething = 0;
 
@@ -114,6 +136,7 @@ static int ScaleWork( HBWork * w )
     scaledBuffer->position = rawBuffer->position;
     scaledBuffer->pass     = rawBuffer->pass;
 
+#ifdef USE_FFMPEG
     /* libavcodec stuff */
     avpicture_fill( &s->rawPicture, rawBuffer->data, PIX_FMT_YUV420P,
                     title->inWidth, title->inHeight );
@@ -134,6 +157,39 @@ static int ScaleWork( HBWork * w )
     {
         img_resample( s->context, &s->scaledPicture, &s->rawPicture );
     }
+#else
+    if( title->deinterlace )
+    {
+        in  = rawBuffer->data;
+        out = s->deintBuffer->data;
+        for( plane = 0; plane < 3; plane++ )
+        {
+            shift = plane ? 1 : 0;
+            Deinterlace( in, out, title->inWidth >> shift,
+                         title->inHeight >> shift,
+                         title->topCrop >> shift,
+                         title->bottomCrop >> shift,
+                         title->leftCrop >> shift,
+                         title->rightCrop >> shift  );
+            in  += title->inWidth * title->inHeight >> ( 2 * shift );
+            out += title->inWidth * title->inHeight >> ( 2 * shift );
+        }
+    }
+
+    in  = title->deinterlace ? s->deintBuffer->data : rawBuffer->data;
+    out = scaledBuffer->data;
+    for( plane = 0; plane < 3; plane++ )
+    {
+        shift = plane ? 1 : 0;
+        Resample( in, out, title->inWidth >> shift,
+                  title->inHeight >> shift, title->outWidth >> shift,
+                  title->outHeight >> shift, title->topCrop >> shift,
+                  title->bottomCrop >> shift, title->leftCrop >> shift,
+                  title->rightCrop >> shift );
+        in  += title->inWidth * title->inHeight >> ( 2 * shift );
+        out += title->outWidth * title->outHeight >> ( 2 * shift );;
+    }
+#endif
 
     HBListAdd( s->scaledBufferList, scaledBuffer );
 
@@ -153,4 +209,44 @@ static int ScaleWork( HBWork * w )
 
     return didSomething;
 }
+
+#ifndef USE_FFMPEG
+static void Deinterlace( uint8_t * in, uint8_t * out, int w, int h,
+                         int tcrop, int bcrop, int lcrop, int rcrop )
+{
+    int i, j;
+    
+    /* First line */
+    if( !tcrop )
+    {
+        memcpy( out, in + lcrop, w - lcrop - rcrop );
+    }
+
+    /* Merge lines */
+    for( i = MAX( 1, tcrop ); i < h - bcrop; i++ )
+    {
+        for( j = lcrop; j < w - rcrop; j++ )
+        {
+            out[i*w+j] = ( in[(i-1)*w+j] + in[i*w+j] ) / 2;
+        }
+    }
+}
+
+static void Resample( uint8_t * in, uint8_t * out, int oldw, int oldh,
+                      int neww, int newh, int tcrop, int bcrop,
+                      int lcrop, int rcrop )
+{
+    int i, j;
+    int cropw = oldw - lcrop - rcrop;
+    int croph = oldh - tcrop - bcrop;
+    for( i = 0; i < newh; i++ )
+    {
+        for( j = 0; j < neww; j++ )
+        {
+            out[i*neww+j] = in[(tcrop+i*croph/newh)*oldw +
+                               lcrop+j*cropw/neww];
+        }
+    }
+}
+#endif
 

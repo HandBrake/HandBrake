@@ -1,4 +1,4 @@
-/* $Id: Utils.c,v 1.14 2004/01/16 19:04:04 titer Exp $
+/* $Id: Utils.c,v 1.16 2004/03/08 11:32:48 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -38,7 +38,6 @@ void HBLog( char * log, ... )
     time_t      _now;
     struct tm * now;
     va_list     args;
-    int         ret;
 
     if( !getenv( "HB_DEBUG" ) )
     {
@@ -53,12 +52,11 @@ void HBLog( char * log, ... )
 
     /* Convert the message to a string */
     va_start( args, log );
-    ret = vsnprintf( string + 11, 67, log, args );
+    vsnprintf( string + 11, 67, log, args );
     va_end( args );
 
     /* Add the end of line */
-    string[ret+11] = '\n';
-    string[ret+12] = '\0';
+    strcat( string, "\n" );
 
     /* Print it */
     fprintf( stderr, "%s", string );
@@ -155,9 +153,17 @@ int HBPStoES( HBBuffer ** _psBuffer, HBList * esBufferList )
 
         if( streamId == 0xBD )
         {
-            /* A52: don't ask */
             streamId |= ( d[pos] << 8 );
-            pos += 4;
+            if( ( streamId & 0xF0FF ) == 0x80BD )
+            {
+                /* A52 */
+                pos += 4;
+            }
+            else if( ( streamId & 0xF0FF ) == 0xA0BD )
+            {
+                /* LPCM */
+                pos += 1;
+            }
         }
 
         /* Sanity check */

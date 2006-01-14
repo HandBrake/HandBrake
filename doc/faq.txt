@@ -1,4 +1,4 @@
-$Id: faq.txt,v 1.10 2004/03/01 19:09:38 titer Exp $
+$Id: faq.txt,v 1.11 2004/03/03 16:53:44 titer Exp $
 
 <h2>HandBrake FAQ</h2>
 
@@ -9,8 +9,7 @@ get any sound</a></p>
 HandBrake</a></p>
 <p><a href="#A001003">1.3. Rip exits after a while with a AC3 error.
 What does that mean?</a></p>
-<p><a href="#A001004">1.4. Why does HandBrake get stucked at
-100%?</a></p>
+<p><a href="#A001004">1.4. Why does HandBrake get stuck at 100%?</a></p>
 
 <h4>2. Features</h4>
 <p><a href="#A002001">2.1 I want to convert a movie so I can burn it on
@@ -29,7 +28,7 @@ XviD?</a></p>
 
 <h4>4. Misc</h4>
 <p><a href="#A004001">4.1. How do I donate for HandBrake?</a></p>
-<p><a href="#A004002">4.2. Where do this stupid name / icon come
+<p><a href="#A004002">4.2. Where does this stupid name / icon come
 from?</a></p>
 
 <hr>
@@ -64,7 +63,7 @@ HandBrake. You have to keep the DVD folder organization (multiple VOB
 and IFO files), HandBrake won't open single VOB files.</p>
 
 <a name="A001004"></a>
-<h4>1.4. Why does HandBrake get stucked at 100%?</h4>
+<h4>1.4. Why does HandBrake get stuck at 100%?</h4>
 <p>When ripping to an mp4 file, HandBrake (actually libmp4v2) optimizes
 the file and makes it compliant at the end of the rip. This might take
 some time with big files. Also, make sure you have enough space
@@ -148,6 +147,6 @@ France<br>
 </ul>
 
 <a name="A004002"></a>
-<h4>4.2 Where do this stupid name / icon come from?</h4>
+<h4>4.2 Where does this stupid name / icon come from?</h4>
 <p>Don't ask.</p>
 

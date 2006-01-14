@@ -1,4 +1,4 @@
-/* $Id: PictureGLView.mm,v 1.4 2004/02/23 18:08:41 titer Exp $
+/* $Id: PictureGLView.mm,v 1.6 2004/03/08 12:39:49 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -49,7 +49,7 @@ uint8_t * truc;
     uint8_t * in  = tmp;
     uint8_t * out = fPicture +
         4 * ( fTitle->outWidthMax + 2 ) * ( fTitle->outHeightMax + 1 );
-    for( int i = 0; i < fTitle->outHeightMax + 2; i++ )
+    for( int i = fTitle->outHeightMax + 2; i--; )
     {
         memcpy( out, in, 4 * ( fTitle->outWidthMax + 2 ) );
         in  += 4 * ( fTitle->outWidthMax + 2 );
@@ -59,14 +59,10 @@ uint8_t * truc;
 
     /* ARGB -> RGBA */
     uint32_t * p = (uint32_t*) fPicture;
-    for( int i = 0;
-         i < ( fTitle->outHeightMax + 2 ) * ( fTitle->outWidthMax + 2 );
-         i++ )
+    for( int i = ( fTitle->outHeightMax + 2 ) *
+            ( fTitle->outWidthMax + 2 ); i--; )
     {
-        *(p++) = ( ( (*p) & 0xff000000 ) >> 24 ) |
-                 ( ( (*p) & 0x00ff0000 ) <<  8 ) |
-                 ( ( (*p) & 0x0000ff00 ) <<  8 ) |
-                 ( ( (*p) & 0x000000ff ) <<  8 );
+        *(p++) = ( ( (*p) & 0x00FFFFFF ) << 8 ) | 0xFF;
     }
 
     if( how == HB_ANIMATE_NONE )
@@ -77,7 +73,7 @@ uint8_t * truc;
 
     in  = fOldPicture;
     out = truc;
-    for( int i = 0; i < fTitle->outHeightMax + 2; i++ )
+    for( int i = fTitle->outHeightMax + 2; i--;  )
     {
         memcpy( out, in, ( fTitle->outWidthMax + 2 ) * 4 );
         in  += ( fTitle->outWidthMax + 2 ) * 4;
@@ -92,7 +88,7 @@ uint8_t * truc;
 
     in  = fPicture;
     out = truc;
-    for( int i = 0; i < fTitle->outHeightMax + 2; i++ )
+    for( int i = fTitle->outHeightMax + 2; i--; )
     {
         memcpy( out, in, ( fTitle->outWidthMax + 2 ) * 4 );
         in  += ( fTitle->outWidthMax + 2 ) * 4;
@@ -113,8 +109,8 @@ uint8_t * truc;
     glDepthFunc( GL_LEQUAL );
     glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
 
-#define ANIMATION_TIME 1000000
-#define FRAME_PER_SEC  30
+#define ANIMATION_TIME 500000
+#define FRAME_PER_SEC  50
 
     rotation = 0.0;
     float w = ( how == HB_ANIMATE_LEFT ) ? 1.0 : -1.0;
@@ -125,7 +121,6 @@ uint8_t * truc;
         date = HBGetDate();
         translation = - PROUT - cos( rotation * M_PI / 180 ) *
                              ( 1 + w * tan( rotation * M_PI / 180 ) );
-
         [self drawAnimation: how];
 
         rotation += w * 90 * 1000000 / ANIMATION_TIME / FRAME_PER_SEC;
@@ -134,7 +129,7 @@ uint8_t * truc;
             break;
         }
 
-        wait = ANIMATION_TIME / 90 - ( HBGetDate() - date );
+        wait = 1000000 / FRAME_PER_SEC - ( HBGetDate() - date );
         if( wait > 0 )
         {
             HBSnooze( wait );
@@ -194,8 +189,11 @@ uint8_t * truc;
 
    [[self openGLContext] update];
    bounds = [self bounds];
-   glViewport( 0, 0, (GLsizei) bounds.size.width,
-               (GLsizei) bounds.size.height );
+   if( fTitle )
+   {
+       glViewport( 0, 0, fTitle->outWidthMax + 2,
+                   fTitle->outHeightMax + 2 );
+   }
 }
 
 - (void) drawAnimation: (int) how

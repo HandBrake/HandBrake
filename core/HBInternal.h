@@ -1,4 +1,4 @@
-/* $Id: HBInternal.h,v 1.4 2004/01/16 20:55:21 titer Exp $
+/* $Id: HBInternal.h,v 1.5 2004/03/08 11:32:48 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -21,6 +21,8 @@ HBWork * HBMpeg2DecInit( HBHandle *, HBTitle * );
 void     HBMpeg2DecClose( HBWork ** );
 HBWork * HBAc3DecInit( HBHandle *, HBAudio * );
 void     HBAc3DecClose( HBWork ** );
+HBWork * HBLpcmDecInit( HBHandle *, HBAudio * );
+void     HBLpcmDecClose( HBWork ** );
 HBWork * HBMadDecInit( HBHandle *, HBAudio * );
 void     HBMadDecClose( HBWork ** );
 

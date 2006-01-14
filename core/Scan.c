@@ -1,4 +1,4 @@
-/* $Id: Scan.c,v 1.14 2004/01/18 13:21:12 titer Exp $
+/* $Id: Scan.c,v 1.15 2004/03/08 11:32:48 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -149,7 +149,7 @@ static HBTitle * ScanTitle( HBScan * s, dvdplay_ptr vmg, int index )
 
     for( i = 0; i < audio_nr; i++ )
     {
-        int id, j;
+        int id, j, codec;
 
         if( s->die )
         {
@@ -163,10 +163,18 @@ static HBTitle * ScanTitle( HBScan * s, dvdplay_ptr vmg, int index )
             continue;
         }
 
-        if( ( id & 0xF0FF ) != 0x80BD )
+        if( ( id & 0xF0FF ) == 0x80BD )
         {
-            HBLog( "HBScan: title %d: non-AC3 audio track detected, "
-                   "ignoring", index );
+            codec = HB_CODEC_AC3;
+        }
+        else if( ( id & 0xF0FF ) == 0xA0BD )
+        {
+            codec = HB_CODEC_LPCM;
+        }
+        else
+        {
+            HBLog( "HBScan: title %d: unknown audio codec (%x), "
+                   "ignoring", index, id );
             continue;
         }
 
@@ -194,6 +202,7 @@ static HBTitle * ScanTitle( HBScan * s, dvdplay_ptr vmg, int index )
 
         attr  = dvdplay_audio_attr( vmg, j );
         audio = HBAudioInit( id, LanguageForCode( attr->lang_code ) );
+        audio->inCodec = codec;
         HBLog( "HBScan: title %d: new language (%x, %s)", index, id,
                audio->language );
         HBListAdd( title->audioList, audio );

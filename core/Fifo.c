@@ -1,10 +1,13 @@
-/* $Id: Fifo.c,v 1.9 2004/02/24 21:55:53 titer Exp $
+/* $Id: Fifo.c,v 1.12 2004/03/04 17:35:52 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
 #include "Fifo.h"
+#if defined( HB_BEOS ) || defined( HB_LINUX )
+#include <malloc.h>
+#endif
 
 HBBuffer * HBBufferInit( int size )
 {
@@ -45,15 +48,19 @@ HBBuffer * HBBufferInit( int size )
 
 void HBBufferReAlloc( HBBuffer * b, int size )
 {
-    b->alloc = size;
 #if defined( HB_BEOS ) || defined( HB_LINUX )
     b->data  = realloc( b->data, size );
 #elif defined( HB_MACOSX )
-    b->dataOrig = realloc( b->dataOrig, size );
-    b->data     = b->dataOrig;
+    /* Ugly */
+    uint8_t * new = malloc( size );
+    memcpy( new, b->data, b->size );
+    free( b->dataOrig );
+    b->dataOrig = new;
+    b->data     = new;
 #elif defined( HB_CYGWIN )
     /* TODO */
 #endif
+    b->alloc = size;
 
     if( !b->data )
     {
@@ -106,8 +113,10 @@ HBFifo * HBFifoInit( int capacity )
 
 void HBFifoDie( HBFifo * f )
 {
+    HBLockLock( f->lock );
     f->die = 1;
     HBCondSignal( f->cond );
+    HBLockUnlock( f->lock );
 }
 
 void HBFifoClose( HBFifo ** _f )

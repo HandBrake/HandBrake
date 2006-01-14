@@ -1,4 +1,4 @@
-/* $Id: Mp4Mux.c,v 1.23 2004/02/18 19:36:35 titer Exp $
+/* $Id: Mp4Mux.c,v 1.24 2004/03/08 13:42:29 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -195,11 +195,13 @@ static void Mp4MuxThread( void * _m )
 
     MP4Close( file );
 
+    HBLog( "HBMp4Mux: making the file ISMA compliant" );
     if( !MP4MakeIsmaCompliant( title->file, 0 /*MP4_DETAILS_ALL*/, 1 ) )
     {
         HBLog( "HBMp4Mux: MP4MakeIsmaCompliant() failed" );
     }
 
+    HBLog( "HBMp4Mux: optimizing" );
     sprintf( tmpFile, "%s.tmp", title->file );
     tmpFile[strlen( title->file ) + 4] = '\0';
     if( !MP4Optimize( title->file, tmpFile, 0 /*MP4_DETAILS_ALL*/ ) )

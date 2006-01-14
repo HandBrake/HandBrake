@@ -1,0 +1,20 @@
+$Id: TRANSLATIONS,v 1.1 2004/03/08 12:22:46 titer Exp $
+
+TRANSLATIONS file for HandBrake <http://handbrake.m0k.org/>
+
+Translating HandBrake
+=====================
+
+Only the OS X interface of HandBrake can be translated at the moment.
+Localization is not implemented in BeOS and GTK GUIs.
+
+HandBrake uses the NSLocalizedString() OS X function to translate every
+item in the interface. Therefore, you don't need (and mustn't) modify
+the nib files. All you have to do is to write a Localizable.strings for
+your language. You can get it (for the latest release) at
+<http://handbrake.m0k.org/Localizable.strings>.
+
+Edit it with Xcode, save it to HandBrake/macosx/i18n/xx.strings (where
+'xx' are the two letters representing your language), then add 'xx' to
+the language list in the Jamrules file (in the 'BuildOSXApp' action).
+

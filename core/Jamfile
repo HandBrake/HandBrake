@@ -1,4 +1,4 @@
-# $Id: Jamfile,v 1.5 2004/01/16 19:04:04 titer Exp $
+# $Id: Jamfile,v 1.6 2004/03/08 11:32:48 titer Exp $
 #
 # This file is part of the HandBrake source code.
 # Homepage: <http://handbrake.m0k.org/>.
@@ -14,6 +14,7 @@ FaacEnc.c
 FfmpegEnc.c
 Fifo.c
 HandBrake.c
+LpcmDec.c
 MadDec.c
 Mp3Enc.c
 Mp4Mux.c

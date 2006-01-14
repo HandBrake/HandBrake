@@ -1,4 +1,4 @@
-/* $Id: Utils.h,v 1.22 2004/01/21 18:40:36 titer Exp $
+/* $Id: Utils.h,v 1.23 2004/03/08 11:32:48 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -100,10 +100,11 @@ void      HBAudioClose( HBAudio ** );
 #define HB_CODEC_FFMPEG 0x01
 #define HB_CODEC_XVID   0x02
 #define HB_CODEC_AC3    0x04
-#define HB_CODEC_MP3    0x08
-#define HB_CODEC_AAC    0x10
-#define HB_CODEC_X264   0x20
-#define HB_CODEC_VORBIS 0x40
+#define HB_CODEC_LPCM   0x08
+#define HB_CODEC_MP3    0x10
+#define HB_CODEC_AAC    0x20
+#define HB_CODEC_X264   0x40
+#define HB_CODEC_VORBIS 0x80
 
 /* Possible muxers */
 #define HB_MUX_AVI 0x00
@@ -191,7 +192,8 @@ struct HBAudio
     char      * language;
 
     /* Settings */
-    int         codec;
+    int         inCodec;
+    int         outCodec;
     int         inSampleRate;
     int         outSampleRate;
     int         inBitrate;

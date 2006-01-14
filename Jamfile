@@ -1,4 +1,4 @@
-# $Id: Jamfile,v 1.39 2004/02/18 17:21:00 titer Exp $
+# $Id: Jamfile,v 1.40 2004/03/08 11:32:48 titer Exp $
 #
 # This file is part of the HandBrake source code.
 # Homepage: <http://handbrake.m0k.org/>.
@@ -7,13 +7,14 @@
 SubDir TOP ;
 
 HB_PACKAGES = ;
+HB_LIBS     =  libhb.a liba52.a libavcodec.a libdvdplay.a libdvdread.a
+               libdvdcss.a libfaac.a libmp3lame.a libmp4v2.a libmpeg2.a
+	       libvorbis.a libvorbisenc.a libogg.a libx264.a
+	       libxvidcore.a ;
 
 # CLI app
 ObjectCcFlags test/test.c : -I$(TOP)/core -g -Wall ;
-LinkLibraries HBTest :
-    libhb.a liba52.a libavcodec.a libdvdplay.a libdvdread.a libdvdcss.a
-    libfaac.a libmp3lame.a libmp4v2.a libmpeg2.a libvorbis.a
-    libvorbisenc.a libogg.a libx264.a libxvidcore.a ;
+LinkLibraries HBTest : $(HB_LIBS) ;
 Main HBTest : test/test.c ;
 
 # BeOS
@@ -23,10 +24,7 @@ if $(OS) = BEOS
     ObjectC++Flags $(SOURCES_BEOS) :
         -I$(TOP)/core -I$(TOP)/beos/liblayout -g -Wall ;
     LINKLIBS on HandBrake = $(LINKLIBS) -L$(TOP)/lib -llayout -lbe ;
-    LinkLibraries HandBrake :
-        libhb.a liba52.a libavcodec.a libdvdplay.a libdvdread.a libdvdcss.a
-        libfaac.a libmp3lame.a libmp4v2.a libmpeg2.a libvorbis.a
-        libvorbisenc.a libogg.a libx264.a libxvidcore.a ;
+    LinkLibraries HandBrake : $(HB_LIBS) ;
     Main HandBrake : $(SOURCES_BEOS) ;
 }
 
@@ -35,10 +33,9 @@ if $(OS) = MACOSX
 {
     # Build the app
     OSXApp HandBrake.app ;
-    Depends HandBrake.app :
-        libhb.a liba52.a libavcodec.a libdvdplay.a libdvdread.a
-        libdvdcss.a libfaac.a libmp3lame.a libmp4v2.a libmpeg2.a
-        libvorbis.a libvorbisenc.a libogg.a libx264.a libxvidcore.a ;
+    Depends HandBrake.app : $(HB_LIBS) macosx/Controller.h
+        macosx/Controller.mm macosx/PictureGLView.h
+	macosx/PictureGLView.mm ;
     Depends all : HandBrake.app ;
     
     # Package
@@ -55,10 +52,7 @@ if $(OS) = LINUX
     ObjectCcFlags $(SOURCES_GTK2) :
         -I$(TOP)/core `pkg-config gtk+-2.0 --cflags` ;
     LINKLIBS on gtk2HB = $(LINKLIBS) `pkg-config gtk+-2.0 --libs` ;
-    LinkLibraries gtk2HB :
-        libhb.a liba52.a libavcodec.a libdvdplay.a libdvdread.a libdvdcss.a
-        libfaac.a libmp3lame.a libmp4v2.a libmpeg2.a libvorbis.a
-        libvorbisenc.a libogg.a libx264.a libxvidcore.a ;
+    LinkLibraries gtk2HB : $(HB_LIBS) ;
     Main gtk2HB : $(SOURCES_GTK2) ;
 }
 

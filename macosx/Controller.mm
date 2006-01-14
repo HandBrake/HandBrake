@@ -1,4 +1,4 @@
-/* $Id: Controller.mm,v 1.27 2004/02/18 17:07:20 titer Exp $
+/* $Id: Controller.mm,v 1.29 2004/03/08 12:39:49 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -50,6 +50,13 @@ static void _RipDone( void * data, int result );
 - (NSApplicationTerminateReply) applicationShouldTerminate:
     (NSApplication *) app
 {
+    if( [[fRipRipButton title] compare: _( @"Cancel" ) ]
+            == NSOrderedSame )
+    {
+        [self Cancel: self];
+        return NSTerminateCancel;
+    }
+    
     /* Clean up */
     HBClose( &fHandle );
 
@@ -160,6 +167,13 @@ static void _RipDone( void * data, int result );
 
 - (BOOL) windowShouldClose: (id) sender
 {
+    if( [[fRipRipButton title] compare: _( @"Cancel" ) ]
+            == NSOrderedSame )
+    {
+        [self Cancel: self];
+        return NO;
+    }
+
     /* Stop the application when the user closes the window */
     [NSApp terminate: self];
     return YES;
@@ -310,11 +324,8 @@ static void _RipDone( void * data, int result );
 
     /* Resize the panel */
     NSSize newSize;
-    /* XXX */
-    newSize.width  = 762 /*fPicturePanelSize.width*/ +
-        title->outWidthMax - 720;
-    newSize.height = 755 /*fPicturePanelSize.height*/ +
-        title->outHeightMax - 576;
+    newSize.width  = 42 +  MAX( 720, title->outWidthMax );
+    newSize.height = 165 + title->outHeightMax;
     [fPicturePanel setContentSize: newSize];
 
     [NSApp beginSheet: fPicturePanel modalForWindow: fWindow
@@ -410,14 +421,14 @@ static void _RipDone( void * data, int result );
 
     audio1->outBitrate = [[fRipAudBitPopUp titleOfSelectedItem]
                               intValue];
-    audio1->codec = ( !format ) ? HB_CODEC_AAC : ( ( format == 3 ) ?
+    audio1->outCodec = ( !format ) ? HB_CODEC_AAC : ( ( format == 3 ) ?
             HB_CODEC_VORBIS : HB_CODEC_MP3 );;
     HBListAdd( title->ripAudioList, audio1 );
     if( audio2 )
     {
         audio2->outBitrate = [[fRipAudBitPopUp
             titleOfSelectedItem] intValue];
-        audio2->codec = ( !format ) ? HB_CODEC_AAC : ( ( format == 3 ) ?
+        audio2->outCodec = ( !format ) ? HB_CODEC_AAC : ( ( format == 3 ) ?
                 HB_CODEC_VORBIS : HB_CODEC_MP3 );
         HBListAdd( title->ripAudioList, audio2 );
     }
@@ -754,8 +765,10 @@ static void _RipDone( void * data, int result );
         [fRipVideoMatrix  setEnabled: YES];
         [fRipTwoPassCheck setEnabled: YES];
         
+#if 0
         /* Can't set Vorbis bitrate */
         [fRipAudBitPopUp  setEnabled: NO];
+#endif
     }
     else
     {
@@ -954,6 +967,9 @@ static void _RipDone( void * data, int result )
             [fRipInfoField   setStringValue:
                 @"MPEG4 encoder initialization failed"];
             break;
+        default:
+            [fRipStatusField setStringValue: @"Error."];
+            [fRipInfoField   setStringValue: @"Unknown error"];
     }
 }
 

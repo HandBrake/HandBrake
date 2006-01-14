@@ -1,4 +1,4 @@
-/* $Id: Ac3Dec.c,v 1.12 2004/01/16 19:04:03 titer Exp $
+/* $Id: Ac3Dec.c,v 1.13 2004/03/08 11:32:48 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -58,13 +58,13 @@ HBWork * HBAc3DecInit( HBHandle * handle, HBAudio * audio )
     /* Let it do the downmixing */
     a->outFlags = A52_STEREO;
 
-    if( audio->codec == HB_CODEC_MP3 )
+    if( audio->outCodec == HB_CODEC_MP3 )
         /* Lame wants 16 bits samples */
         a->sampleLevel = 32768.0;
-    else if( audio->codec == HB_CODEC_AAC )
+    else if( audio->outCodec == HB_CODEC_AAC )
         /* Faac wants 24 bits samples */
         a->sampleLevel = 8388608.0;
-    else if( audio->codec == HB_CODEC_VORBIS )
+    else if( audio->outCodec == HB_CODEC_VORBIS )
         /* Vorbis wants FIXME bits samples */
         a->sampleLevel = 32768.0;
 

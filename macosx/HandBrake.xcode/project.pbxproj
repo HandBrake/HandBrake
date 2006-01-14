@@ -279,7 +279,7 @@
 				HEADER_SEARCH_PATHS = "";
 				LIBRARY_SEARCH_PATHS = "../core ../contrib/liba52 ../contrib/libavcodec ../contrib/libdvdcss ../contrib/libdvdplay ../contrib/libdvdread ../contrib/libfaac ../contrib/libmp3lame ../contrib/libmp4v2 ../contrib/libmpeg2 ../contrib/libogg ../contrib/libvorbis ../contrib/libx264 ../contrib/libxvidcore";
 				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "-DHB_MACOSX";
+				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = HandBrake;
 				SECTORDER_FLAGS = "";
@@ -301,7 +301,7 @@
 	<key>CFBundleExecutable</key>
 	<string>HandBrake</string>
 	<key>CFBundleGetInfoString</key>
-	<string>HandBrake 0.6.0-test1+ - By Eric Petit &lt;titer@m0k.org&gt;</string>
+	<string>HandBrake 0.6.0-test3 - By Eric Petit &lt;titer@m0k.org&gt;</string>
 	<key>CFBundleIconFile</key>
 	<string>HandBrake.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -313,11 +313,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.6.0-test1+</string>
+	<string>0.6.0-test3</string>
 	<key>CFBundleSignature</key>
 	<string>HB##</string>
 	<key>CFBundleVersion</key>
-	<string>0.6.0-test1+</string>
+	<string>0.6.0-test3</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>

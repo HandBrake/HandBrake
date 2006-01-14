@@ -1,4 +1,4 @@
-/* $Id: VorbisEnc.c,v 1.4 2003/12/26 20:03:27 titer Exp $
+/* $Id: VorbisEnc.c,v 1.5 2004/03/08 11:32:49 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -119,16 +119,17 @@ static int VorbisEncWork( HBWork *w )
 
         /* init */
         vorbis_info_init( &enc->vi );
-        if( vorbis_encode_setup_vbr( &enc->vi, 2 /* channel */, audio->inSampleRate, 1.0/* quality 0.0 -> 1.0*/ ) )
+        if( vorbis_encode_setup_managed( &enc->vi, 2,
+              audio->inSampleRate, -1, 1000 * audio->outBitrate, -1 ) ||
+            vorbis_encode_ctl( &enc->vi, OV_ECTL_RATEMANAGE_AVG, NULL ) ||
+              vorbis_encode_setup_init( &enc->vi ) )
         {
-            HBLog( "VorbisEnc: vorbis_encode_setup_vbr failed" );
+            HBLog( "VorbisEnc: vorbis_encode_setup_managed failed" );
             return 0;
         }
-        vorbis_encode_setup_init( &enc->vi );
-
         /* add a comment */
         vorbis_comment_init( &enc->vc );
-        vorbis_comment_add_tag( &enc->vc, "ENCODER", "Handbrake");
+        vorbis_comment_add_tag( &enc->vc, "ENCODER", "HandBrake");
 
         /* set up the analysis state and auxiliary encoding storage */
         vorbis_analysis_init( &enc->vd, &enc->vi);
@@ -197,13 +198,13 @@ static int VorbisEncWork( HBWork *w )
         }
     }
 
-    didSomething = 1;
-
     /* FUCK -Werror ! */
     if( !GetSamples( enc ) )
     {
         return didSomething;
     }
+
+    didSomething = 1;
 
     buffer = vorbis_analysis_buffer( &enc->vd, OGGVORBIS_FRAME_SIZE );
     for( i = 0; i < OGGVORBIS_FRAME_SIZE; i++ )

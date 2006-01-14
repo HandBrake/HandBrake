@@ -1,4 +1,4 @@
-/* $Id: Thread.c,v 1.11 2004/02/19 17:59:13 titer Exp $
+/* $Id: Thread.c,v 1.12 2004/03/04 17:57:17 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -33,7 +33,7 @@ struct HBThread
 
 /* HBThreadInit actually starts this routine because
    pthread_setschedparam() might fail if called from an external
-   thread (typically, because the thread exited immediatly. This isn't
+   thread (typically, because the thread exited immediatly). This isn't
    really necessary, but I find it nicer that way */
 static void ThreadFunc( void * _t )
 {

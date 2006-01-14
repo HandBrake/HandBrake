@@ -1,4 +1,4 @@
-/* $Id: OgmMux.c,v 1.6 2004/02/13 15:12:09 titer Exp $
+/* $Id: OgmMux.c,v 1.7 2004/03/08 11:32:48 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -303,7 +303,7 @@ static int  OgmStart( HBOgmMux *ogm )
     {
         HBAudio *audio = HBListItemAt( title->ripAudioList, i - 1 );
 
-        ogm->tk[i].codec   = audio->codec;
+        ogm->tk[i].codec   = audio->outCodec;
         ogm->tk[i].fifo    = audio->outFifo;
         ogm->tk[i].i_packet_no = 0;
         ogg_stream_init (&ogm->tk[i].os, i );
