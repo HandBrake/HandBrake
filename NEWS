@@ -1,6 +1,29 @@
-$Id: NEWS,v 1.15 2004/05/25 17:48:52 titer Exp $
+$Id: NEWS,v 1.28 2005/11/04 16:01:19 titer Exp $
 
 NEWS file for HandBrake <http://handbrake.m0k.org/>
+
+Changed between 0.7.0-beta3 and 0.7.0
+ + Multithreaded H.264 encoding with x264
+ + Added option for H.264 Baseline (suitable for iPods)
+ + (Very) experimental queue support
+ + Fixes for some DVD titles HandBrake would not recognize
+ + Fixes audio gliches when encoding from LPCM tracks
+
+Changed between 0.6.2 and 0.7.0-beta3
+ + Chapters selection
+ + Custom framerate
+ + Subtitle support
+ + Check for updates
+ + Custom aspect ratio
+ + Audio samplerate selection
+ + mp4/H.264 output
+ + Proper NTSC support
+ + AC3 pass-through
+ + Progress bar in the dock icon (OS X)
+ + 2-pass H.264 encoding
+ + Constant quality encoding
+ + Grayscale encoding
+ + Up-to-date BeOS UI
 
 Changes between 0.6.1 and 0.6.2
  + Support for DVDs with MPEG audio tracks

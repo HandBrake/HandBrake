@@ -1,4 +1,4 @@
-# $Id: Jamfile,v 1.46 2004/04/26 09:02:07 titer Exp $
+# $Id: Jamfile,v 1.86 2005/11/04 13:09:40 titer Exp $
 #
 # This file is part of the HandBrake source code.
 # Homepage: <http://handbrake.m0k.org/>.
@@ -7,40 +7,49 @@
 SubDir TOP ;
 
 # libhb + contrib libraries
-HB_LIBS = libhb.a liba52.a libavcodec.a libdvdread.a
-          libdvdcss.a libfaac.a libmp3lame.a libmp4v2.a libmpeg2.a
-          libvorbis.a libvorbisenc.a libogg.a libsamplerate.a
-	  libx264.a libxvidcore.a ;
+HB_LIBS = libhb.a
+          contrib/lib/liba52.a        contrib/lib/libavcodec.a
+          contrib/lib/libavutil.a     contrib/lib/libdvdread.a
+          contrib/lib/libdvdcss.a     contrib/lib/libfaac.a
+          contrib/lib/libmp3lame.a    contrib/lib/libmp4v2.a
+          contrib/lib/libmpeg2.a      contrib/lib/libvorbis.a
+          contrib/lib/libvorbisenc.a  contrib/lib/libogg.a
+          contrib/lib/libsamplerate.a contrib/lib/libx264.a
+          contrib/lib/libxvidcore.a ;
 
 # Interfaces
 TEST_BIN = HBTest ;
 TEST_SRC = test/test.c ;
 BEOS_BIN = HandBrake ;
-BEOS_SRC = beos/HBApp.cpp beos/HBWindow.cpp ;
-GTK2_BIN = gtk2HB ;
-GTK2_SRC = gtk2/main.c gtk2/callbacks.c gtk2/interface.c gtk2/support.c ;
-GUI_BIN  = $(TEST_BIN) $(BEOS_BIN) $(GTK2_BIN) ;
-GUI_SRC  = $(TEST_SRC) $(BEOS_SRC) $(GTK2_SRC) ;
+BEOS_SRC = beos/HBApp.cpp beos/MainWindow.cpp beos/ScanWindow.cpp
+           beos/PicWindow.cpp beos/Stepper.cpp beos/QueueWindow.cpp ;
+WX_BIN   = wxHB ;
+WX_SRC   = wx/hbWizard.cpp wx/wxHB.cpp ;
+UI_BIN   = $(TEST_BIN) $(BEOS_BIN) $(WX_BIN) ;
+UI_SRC   = $(TEST_SRC) $(BEOS_SRC) $(WX_SRC) ;
 
 # CLI app
 Main $(TEST_BIN) : $(TEST_SRC) ;
 
 if $(OS) = BEOS
 {
-    SystemLibraries HandBrake : -lbe ;
-    # BeOS GUI is broken at the moment
-    # Main            HandBrake : $(SRC_BEOS) ;
+    Main HandBrake : $(BEOS_SRC) ;
+
+    BeOSPackage HandBrake-$(HB_VERSION)-BeOS.zip : HandBrake ;
+    HB_PACKAGES += HandBrake-$(HB_VERSION)-BeOS.zip ;
 }
 if $(OS) = MACOSX
 {
-    # Needed to clean HandBrake.app
-    RM = rm -rf ;
-
-    OSX_SRC = macosx/Controller.h macosx/Controller.mm
+    OSX_SRC = macosx/main.mm macosx/Controller.h macosx/Controller.mm
+              macosx/ScanController.h macosx/ScanController.mm
+              macosx/PictureController.h macosx/PictureController.mm
               macosx/PictureGLView.h macosx/PictureGLView.mm
-              macosx/TargetSizeField.h macosx/TargetSizeField.mm
-              macosx/main.mm ;
-
+              macosx/QueueController.h macosx/QueueController.mm
+              macosx/PrefsController.h macosx/PrefsController.m
+              macosx/English.lproj/InfoPlist.strings
+              macosx/English.lproj/MainMenu.nib/classes.nib
+              macosx/English.lproj/MainMenu.nib/info.nib
+              macosx/English.lproj/MainMenu.nib/keyedobjects.nib ;
     OSXApp HandBrake.app : $(OSX_SRC) $(HB_LIBS) ;
     
     # Package
@@ -49,25 +58,19 @@ if $(OS) = MACOSX
 }
 if $(OS) = LINUX
 {
-    SystemLibraries $(TEST_BIN) : -lpthread ;
-    SystemLibraries $(GTK2_BIN) : -lpthread `pkg-config gtk+-2.0 --libs` ;
-    ObjectCcFlags   $(GTK2_SRC) : `pkg-config gtk+-2.0 --cflags` ;
-    Main            $(GTK2_BIN) : $(GTK2_SRC) ;
-}
-if $(OS) = CYGWIN
-{
-    SystemLibraries $(TEST_BIN) : -lws2_32 ;
+    # WX UI outdated
+    #SystemLibraries $(WX_BIN) : -lpthread `wx-config --libs` ;
+    #ObjectC++Flags  $(WX_SRC) : `wx-config --cflags` ;
+    #Main            $(WX_BIN) : $(WX_SRC) ;
 }
 
-ObjectHdrs     $(GUI_SRC) : $(TOP)/core ;
-ObjectCcFlags  $(GUI_SRC) : -g -Wall ;
-ObjectC++Flags $(GUI_SRC) : -g -Wall ;
-LinkLibraries  $(GUI_BIN) : $(HB_LIBS) ;
+ObjectHdrs     $(UI_SRC) : $(TOP)/libhb ;
+LinkLibraries  $(UI_BIN) : $(HB_LIBS) ;
 
 # Packages
 NotFile package ;
 Depends package : $(HB_PACKAGES) ;
 
 SubInclude TOP contrib ;
-SubInclude TOP core ;
+SubInclude TOP libhb ;
 

@@ -1,4 +1,4 @@
-$Id: THANKS,v 1.13 2004/04/22 22:49:07 titer Exp $
+$Id: THANKS,v 1.16 2004/08/05 17:03:05 titer Exp $
 
 THANKS file for HandBrake <http://handbrake.m0k.org/>
 
@@ -31,7 +31,7 @@ Leendert
  + Dutch translation
 
 Eric Kornblum
- + Sent me a sample DVD with LPCM tracks so I could add support for it
+ + Sent me a sample DVD with LPCM tracks
 
 migol Superkid
  + Spanish translation
@@ -41,4 +41,15 @@ pgjw
 
 cygma
  + Japanese translation
+
+Michelle De Sio
+ + Sent me a sample DVD with MPEG audio tracks
+
+Ian Rickard
+ + Enhanced icon
+
+Sébastien Noël
+ + Debian packages (http://www.twolife.org/debian/repository.php)
+
+People who sent me an iTunes gift certificate: a BIG thanks!
 

@@ -1,14 +1,15 @@
-$Id: AUTHORS,v 1.3 2004/03/08 11:32:48 titer Exp $
+$Id: AUTHORS,v 1.5 2005/03/23 13:14:50 titer Exp $
 
 AUTHORS file for HandBrake <http://handbrake.m0k.org/>
 
 Eric Petit <titer@m0k.org>
  + Core (construct, multithreading, BeOS/OS X/Linux ports)
  + MPEG demuxer
- + MPEG-2 and AC3 decoders (w/ libmpeg2/liba52)
+ + MPEG-2, AC3 and MPGA decoders (w/ libmpeg2/liba52/libavcodec)
  + LPCM "decoder"
  + MPEG-4, MP3 and AAC encoders (w/ libavcodec/libxvidcore/libmp3lame/
    libfaac)
+ + AC-3 pass-through
  + AVI muxer
  + MP4 muxer (w/ libmp4v2)
  + BeOS interface
@@ -19,4 +20,5 @@ Laurent Aimar <fenrir@via.ecp.fr>
  + H264 and Vorbis encoders (w/ libx264/libvorbis)
  + OGG/OGM muxer (w/ libogg)
  + Gtk2 interface
+ + wxWidgets interface
 

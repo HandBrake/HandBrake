@@ -1,19 +1,27 @@
-#ifndef HB_HB_APP_H
-#define HB_HB_APP_H
+#ifndef HB_APP_H
+#define HB_APP_H
 
-#include "layout-all.h"
+#include <Application.h>
 
-class HBWindow;
+#include "hb.h"
 
-class HBApp : public MApplication
+class MainWindow;
+class ScanWindow;
+
+class HBApp : public BApplication
 {
     public:
-             HBApp();
-        void MessageReceived( BMessage * message );
-        void RefsReceived( BMessage * message );
+                     HBApp();
+        void         MessageReceived( BMessage * message );
+        void         RefsReceived( BMessage * message );
+        void         Pulse();
+        bool         QuitRequested();
 
     private:
-        HBWindow * fWindow;
+        MainWindow * fMainWin;
+        ScanWindow * fScanWin;
+        
+        hb_handle_t * fHandle;
 };
 
 #endif

@@ -1,4 +1,4 @@
-/* $Id: Controller.h,v 1.14 2004/02/13 13:45:51 titer Exp $
+/* $Id: Controller.h,v 1.35 2005/08/01 14:29:50 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -6,153 +6,138 @@
 
 #include <Cocoa/Cocoa.h>
 
-#include "HandBrake.h"
-#include "PictureGLView.h"
-#include "TargetSizeField.h"
+#include "hb.h"
+
+#include "ScanController.h"
+#include "PictureController.h"
+#include "QueueController.h"
 
 @interface HBController : NSObject
 
 {
     IBOutlet NSWindow            * fWindow;
 
-    /* Scan view */
-    IBOutlet NSView              * fScView;
-    IBOutlet NSTextField         * fScWelcomeField;
-    IBOutlet NSTextField         * fScSelectField;
-    IBOutlet NSMatrix            * fScMatrix;
-    IBOutlet NSButtonCell        * fScDetectedCell;
-    IBOutlet NSPopUpButton       * fScDetectedPopUp;
-    IBOutlet NSButtonCell        * fScFolderCell;
-    IBOutlet NSTextField         * fScFolderField;
-    IBOutlet NSButton            * fScBrowseButton;
-    IBOutlet NSTextField         * fScStatusField;
-    IBOutlet NSProgressIndicator * fScProgress;
-    IBOutlet NSButton            * fScOpenButton;
+    /* Scan panel */
+    IBOutlet ScanController      * fScanController;
+    IBOutlet NSPanel             * fScanPanel;
 
-    IBOutlet NSView              * fTempView;
+    /* Picture panel */
+    IBOutlet PictureController   * fPictureController;
+    IBOutlet NSPanel             * fPicturePanel;
 
-    /* Rip view */
-    IBOutlet NSView              * fRipView;
+    /* Queue panel */
+    IBOutlet QueueController     * fQueueController;
+    IBOutlet NSPanel             * fQueuePanel;
+    IBOutlet NSButton            * fQueueCheck;
+    IBOutlet NSButton            * fQueueAddButton;
+    IBOutlet NSButton            * fQueueShowButton;
 
-    /* General box */
-    IBOutlet NSTextField         * fRipGeneralField;
-    IBOutlet NSTextField         * fRipTitleField;
-    IBOutlet NSPopUpButton       * fRipTitlePopUp;
-    IBOutlet NSTextField         * fRipFormatField;
-    IBOutlet NSPopUpButton       * fRipFormatPopUp;
-    IBOutlet NSTextField         * fRipFileField1;
-    IBOutlet NSTextField         * fRipFileField2;
-    IBOutlet NSButton            * fRipBrowseButton;
+    /* Source box */
+    IBOutlet NSTextField         * fSrcDVD1Field;
+    IBOutlet NSTextField         * fSrcDVD2Field;
+    IBOutlet NSTextField         * fSrcTitleField;
+    IBOutlet NSPopUpButton       * fSrcTitlePopUp;
+    IBOutlet NSTextField         * fSrcChapterField;
+    IBOutlet NSPopUpButton       * fSrcChapterStartPopUp;
+    IBOutlet NSTextField         * fSrcChapterToField;
+    IBOutlet NSPopUpButton       * fSrcChapterEndPopUp;
+    IBOutlet NSTextField         * fSrcDuration1Field;
+    IBOutlet NSTextField         * fSrcDuration2Field;
+
+    /* Destination box */
+    IBOutlet NSTextField         * fDstFormatField;
+    IBOutlet NSPopUpButton       * fDstFormatPopUp;
+    IBOutlet NSTextField         * fDstCodecsField;
+    IBOutlet NSPopUpButton       * fDstCodecsPopUp;
+    IBOutlet NSTextField         * fDstFile1Field;
+    IBOutlet NSTextField         * fDstFile2Field;
+    IBOutlet NSButton            * fDstBrowseButton;
 
     /* Video box */
-    IBOutlet NSTextField         * fRipVideoField;
-    IBOutlet NSTextField         * fRipEncoderField;
-    IBOutlet NSPopUpButton       * fRipEncoderPopUp;
-    IBOutlet NSTextField         * fRipBitrateField;
-    IBOutlet NSMatrix            * fRipVideoMatrix;
-    IBOutlet NSButtonCell        * fRipCustomCell;
-    IBOutlet NSTextField         * fRipCustomField;
-    IBOutlet NSButtonCell        * fRipTargetCell;
-    IBOutlet HBTargetSizeField   * fRipTargetField;
-    IBOutlet NSButton            * fRipTwoPassCheck;
-    IBOutlet NSButton            * fRipCropButton;
+    IBOutlet NSTextField         * fVidRateField;
+    IBOutlet NSPopUpButton       * fVidRatePopUp;
+    IBOutlet NSTextField         * fVidEncoderField;
+    IBOutlet NSPopUpButton       * fVidEncoderPopUp;
+    IBOutlet NSTextField         * fVidQualityField;
+    IBOutlet NSMatrix            * fVidQualityMatrix;
+    IBOutlet NSButtonCell        * fVidTargetCell;
+    IBOutlet NSTextField         * fVidTargetSizeField;
+    IBOutlet NSButtonCell        * fVidBitrateCell;
+    IBOutlet NSTextField         * fVidBitrateField;
+    IBOutlet NSButtonCell        * fVidConstantCell;
+    IBOutlet NSSlider            * fVidQualitySlider;
+    IBOutlet NSButton            * fVidGrayscaleCheck;
+    IBOutlet NSButton            * fVidTwoPassCheck;
+
+    /* Subtitles box */
+    IBOutlet NSTextField         * fSubField;
+    IBOutlet NSPopUpButton       * fSubPopUp;
 
     /* Audio box */
-    IBOutlet NSTextField         * fRipAudioField;
-    IBOutlet NSTextField         * fRipLang1Field;
-    IBOutlet NSPopUpButton       * fRipLang1PopUp;
-    IBOutlet NSTextField         * fRipLang2Field;
-    IBOutlet NSPopUpButton       * fRipLang2PopUp;
-    IBOutlet NSTextField         * fRipAudBitField;
-    IBOutlet NSPopUpButton       * fRipAudBitPopUp;
+    IBOutlet NSTextField         * fAudLang1Field;
+    IBOutlet NSPopUpButton       * fAudLang1PopUp;
+    IBOutlet NSTextField         * fAudLang2Field;
+    IBOutlet NSPopUpButton       * fAudLang2PopUp;
+    IBOutlet NSTextField         * fAudRateField;
+    IBOutlet NSPopUpButton       * fAudRatePopUp;
+    IBOutlet NSTextField         * fAudBitrateField;
+    IBOutlet NSPopUpButton       * fAudBitratePopUp;
 
     /* Bottom */
-    IBOutlet NSTextField         * fRipStatusField;
-    IBOutlet NSTextField         * fRipInfoField;
-    IBOutlet NSProgressIndicator * fRipProgress;
-    IBOutlet NSButton            * fRipPauseButton;
-    IBOutlet NSButton            * fRipRipButton;
+    IBOutlet NSButton            * fPictureButton;
+    IBOutlet NSTextField         * fStatusField;
+    IBOutlet NSProgressIndicator * fRipIndicator;
+    IBOutlet NSButton            * fShowQuButton;
+    IBOutlet NSButton            * fAddToQuButton;
+    IBOutlet NSButton            * fPauseButton;
+    IBOutlet NSButton            * fRipButton;
 
-    /* "Done" alert panel */
-    IBOutlet NSPanel             * fDonePanel;
-
-    /* Crop & scale panel */
-    IBOutlet NSPanel             * fPicturePanel;
-    IBOutlet HBPictureGLView     * fPictureGLView;
-    IBOutlet NSTextField         * fWidthField1;
-    IBOutlet NSTextField         * fWidthField2;
-    IBOutlet NSStepper           * fWidthStepper;
-    IBOutlet NSButton            * fDeinterlaceCheck;
-    IBOutlet NSTextField         * fTopField1;
-    IBOutlet NSTextField         * fTopField2;
-    IBOutlet NSStepper           * fTopStepper;
-    IBOutlet NSTextField         * fBottomField1;
-    IBOutlet NSTextField         * fBottomField2;
-    IBOutlet NSStepper           * fBottomStepper;
-    IBOutlet NSTextField         * fLeftField1;
-    IBOutlet NSTextField         * fLeftField2;
-    IBOutlet NSStepper           * fLeftStepper;
-    IBOutlet NSTextField         * fRightField1;
-    IBOutlet NSTextField         * fRightField2;
-    IBOutlet NSStepper           * fRightStepper;
-    IBOutlet NSButton            * fPreviousButton;
-    IBOutlet NSButton            * fNextButton;
-    IBOutlet NSButton            * fAutocropButton;
-    IBOutlet NSButton            * fOpenGLCheck;
-    IBOutlet NSTextField         * fInfoField;
-    IBOutlet NSButton            * fCloseButton;
-    int                            fPicture;
-
-    HBHandle                     * fHandle;
-    int                            fTitle;
-    int                            fTitleCount;
-    HBList                       * fTitleList;
-    float                          fPosition;
-    int                            fPass;
-    int                            fPassCount;
-    float                          fCurFrameRate;
-    float                          fAvgFrameRate;
-    int                            fRemainingTime;
-    int                            fResult;
+    hb_handle_t                  * fHandle;
 }
 
-- (IBAction) ScanMatrixChanged: (id) sender;
-- (IBAction) BrowseDVD: (id) sender;
-- (void)     BrowseDVDDone: (NSOpenPanel *) sheet
-    returnCode: (int) returnCode contextInfo: (void *) contextInfo;
-- (IBAction) Scan: (id) sender;
+- (void)     TranslateStrings;
+
+- (void)     UpdateUI: (NSTimer *) timer;
+- (void)     EnableUI: (bool) enable;
+
+- (IBAction) ShowScanPanel: (id) sender;
 
 - (IBAction) TitlePopUpChanged: (id) sender;
+- (IBAction) ChapterPopUpChanged: (id) sender;
+
 - (IBAction) FormatPopUpChanged: (id) sender;
-- (IBAction) VideoMatrixChanged: (id) sender;
-- (IBAction) AudioPopUpChanged: (id) sender;
+- (IBAction) CodecsPopUpChanged: (id) sender;
 - (IBAction) BrowseFile: (id) sender;
 - (void)     BrowseFileDone: (NSSavePanel *) sheet
     returnCode: (int) returnCode contextInfo: (void *) contextInfo;
+
+- (IBAction) VideoMatrixChanged: (id) sender;
+- (IBAction) QualitySliderChanged: (id) sender;
+
 - (IBAction) ShowPicturePanel: (id) sender;
-- (IBAction) ClosePanel: (id) sender;
+
+- (IBAction) EnableQueue: (id) sender;
+- (IBAction) AddToQueue: (id) sender;
+- (IBAction) ShowQueuePanel: (id) sender;
+
 - (IBAction) Rip: (id) sender;
 - (void)     OverwriteAlertDone: (NSWindow *) sheet
+    returnCode: (int) returnCode contextInfo: (void *) contextInfo;
+- (void)     UpdateAlertDone: (NSWindow *) sheet
     returnCode: (int) returnCode contextInfo: (void *) contextInfo;
 - (void)     _Rip;
 - (IBAction) Cancel: (id) sender;
 - (void)     _Cancel: (NSWindow *) sheet returnCode: (int) returnCode
     contextInfo: (void *) contextInfo;
 - (IBAction) Pause: (id) sender;
-- (IBAction) Resume: (id) sender;
 
-- (IBAction) PreviousPicture: (id) sender;
-- (IBAction) NextPicture: (id) sender;
-- (IBAction) UpdatePicture: (id) sender;
-- (IBAction) AutoCrop: (id) sender;
+- (IBAction) CalculateBitrate: (id) sender;
+- (void) controlTextDidBeginEditing: (NSNotification *) notification;
+- (void) controlTextDidEndEditing: (NSNotification *) notification;
+- (void) controlTextDidChange: (NSNotification *) notification;
 
-- (void)     DetectDrives: (NSNotification *) notification;
-
-/* libhb callbacks */
-- (void) Scanning: (id) sender;
-- (void) ScanDone: (id) sender;
-- (void) Encoding: (id) sender;
-- (void) RipDone:  (id) sender;
+- (IBAction) OpenHomepage: (id) sender;
+- (IBAction) OpenForums:   (id) sender;
 
 @end
 

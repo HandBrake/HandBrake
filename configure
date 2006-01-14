@@ -1,0 +1,90 @@
+#! /bin/sh
+
+CC="gcc"
+CXX="g++"
+CCFLAGS="$CCFLAGS -Wall -g"
+OPTIM="$OPTIM -O3 -funroll-loops"
+
+# System-specific flags
+SYSTEM=`uname -s`
+case $SYSTEM in
+  BeOS)
+    CCFLAGS="$CCFLAGS -Wno-multichar"
+    DEFINES="$DEFINES SYS_BEOS"
+    LINKLIBS="$LINKLIBS -lbe -ltracker"
+
+    RELEASE=`uname -r`
+    case $RELEASE in
+      6.0|5.0.4) # Zeta or R5 / BONE beta 7
+        SYSTEM="$SYSTEM / BONE"
+        LINKLIBS="$LINKLIBS -lbind -lsocket"
+        ;;
+      5.0*)      # R5 / net_server
+        SYSTEM="$SYSTEM / net_server"
+        DEFINES="$DEFINES BEOS_NETSERVER"
+        LINKLIBS="$LINKLIBS -lnet"
+        ;;
+      *)
+        echo "Unsupported BeOS version"
+        exit 1 ;;
+    esac
+    ;;
+
+  Darwin)
+    DEFINES="$DEFINES SYS_DARWIN"
+    LINKLIBS="$LINKLIBS -lpthread"
+    ;;
+
+  FreeBSD)
+    DEFINES="$DEFINES SYS_FREEBSD"
+    LINKLIBS="$LINKLIBS -pthread"
+    ;;
+
+  NetBSD)
+    DEFINES="$DEFINES SYS_NETBSD"
+    LINKLIBS="$LINKLIBS -lpthread"
+    ;;
+
+  Linux)
+    DEFINES="$DEFINES SYS_LINUX"
+    LINKLIBS="$LINKLIBS -lpthread"
+    ;;
+
+  *)
+    echo "Unsupported operating system"
+    exit 1 ;;
+esac
+echo "System: $SYSTEM"
+
+# Check for endianness (we need to define WORDS_BIGENDIAN for libdvdread)
+cat > testconf.c << EOF
+int main()
+{
+    int i = 1;
+    return *( (char *) &i );
+}
+EOF
+if ( cc -o testconf testconf.c && ./testconf ) > /dev/null 2>&1
+then
+  echo "Endian: big"
+  DEFINES="$DEFINES WORDS_BIGENDIAN"
+else
+  echo "Endian: little"
+fi
+rm -f testconf.c testconf
+
+# Generate config.jam
+rm -f config.jam
+cat << EOF > config.jam
+CC       = $CC ;
+C++      = $CXX ;
+LINK     = $CXX ;
+CCFLAGS  = $CCFLAGS ;
+C++FLAGS = $CCFLAGS ;
+OPTIM    = $OPTIM ;
+DEFINES  = $DEFINES ;
+LINKLIBS = $LINKLIBS ;
+EOF
+
+echo
+echo "To build HandBrake, run 'jam'."

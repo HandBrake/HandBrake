@@ -1,0 +1,270 @@
+SubDir TOP contrib ;
+
+# Use curl on Mac OS X since it's always installed, and assume wget
+# is installed for all other systems
+if $(OS) = MACOSX
+{
+    WGET = curl -o ;
+}
+else
+{
+    WGET = wget -O ;
+}
+
+# Wget rule: downloads $(<) from the link in $(>)
+rule Wget
+{
+    Depends $(<) : $(>) ;
+}
+actions Wget
+{
+    $(RM) $(<) &&
+    $(WGET) $(<) `cat $(>)` &&
+    ( touch $(<) || true )
+}
+
+# liba52
+rule LibA52
+{
+    Depends $(<) : $(>) ;
+    Depends lib  : $(<) ;
+}
+actions LibA52
+{
+    cd `dirname $(>)` && CONTRIB=`pwd` &&
+    rm -rf a52dec && tar xzf a52dec.tar.gz && cd a52dec &&
+    ./configure --prefix=$CONTRIB && make && make install &&
+    strip -S $CONTRIB/lib/liba52.a
+}
+Wget   $(SUBDIR)/a52dec.tar.gz : $(SUBDIR)/version_a52dec.txt ;
+LibA52 $(SUBDIR)/lib/liba52.a  : $(SUBDIR)/a52dec.tar.gz ;
+
+# libavcodec
+rule LibAvCodec
+{
+    Depends $(<) : $(>) ;
+    Depends lib  : $(<) ;
+}
+actions LibAvCodec
+{
+    cd `dirname $(>)` && CONTRIB=`pwd` &&
+    rm -rf ffmpeg && tar xzf ffmpeg.tar.gz && cd ffmpeg &&
+    ./configure --prefix=$CONTRIB --enable-gpl &&
+    make -C libavcodec && make -C libavutil &&
+    make -C libavcodec installlib && make -C libavutil installlib &&
+    strip -S $CONTRIB/lib/libavcodec.a
+}
+Wget       $(SUBDIR)/ffmpeg.tar.gz    : $(SUBDIR)/version_ffmpeg.txt ;
+LibAvCodec $(SUBDIR)/lib/libavcodec.a : $(SUBDIR)/ffmpeg.tar.gz ;
+
+rule LibAvUtil
+{
+    Depends $(<) : $(>) ;
+    Depends lib  : $(<) ;
+}
+actions LibAvUtil
+{
+    strip -S $(<)
+}
+LibAvUtil $(SUBDIR)/lib/libavutil.a : $(SUBDIR)/lib/libavcodec.a ;
+
+# libdvdcss
+# We need libdvdcss.so for libdvdread's configure to work...
+rule LibDvdCss
+{
+    Depends $(<) : $(>) ;
+    Depends lib  : $(<) ;
+}
+actions LibDvdCss
+{
+    cd `dirname $(>)` && CONTRIB=`pwd` &&
+    rm -rf libdvdcss && tar xzf libdvdcss.tar.gz && cd libdvdcss &&
+    ./configure --prefix=$CONTRIB && make && make install &&
+    strip -S $CONTRIB/lib/libdvdcss.a
+}
+Wget      $(SUBDIR)/libdvdcss.tar.gz : $(SUBDIR)/version_libdvdcss.txt ;
+LibDvdCss $(SUBDIR)/lib/libdvdcss.a  : $(SUBDIR)/libdvdcss.tar.gz ;
+
+# libdvdread
+rule LibDvdRead
+{
+    Depends $(<) : $(>) ;
+    Depends lib  : $(<) ;
+}
+actions LibDvdRead
+{
+    cd `dirname $(>)` && CONTRIB=`pwd` &&
+    rm -rf libdvdread && tar xzf libdvdread.tar.gz && cd libdvdread &&
+    ./configure --prefix=$CONTRIB --disable-shared --with-libdvdcss=$CONTRIB &&
+    make && make install &&
+    strip -S $CONTRIB/lib/libdvdread.a
+}
+Wget       $(SUBDIR)/libdvdread.tar.gz : $(SUBDIR)/version_libdvdread.txt ;
+LibDvdRead $(SUBDIR)/lib/libdvdread.a  : $(SUBDIR)/libdvdread.tar.gz ;
+
+# libfaac
+rule LibFaac
+{
+    Depends $(<) : $(>) ;
+    Depends lib  : $(<) ;
+}
+actions LibFaac
+{
+    cd `dirname $(>)` && CONTRIB=`pwd` &&
+    rm -rf faac && tar xzf faac.tar.gz && cd faac &&
+    ./configure --prefix=$CONTRIB --disable-shared &&
+    make && make install &&
+    strip -S $CONTRIB/lib/libfaac.a
+}
+Wget    $(SUBDIR)/faac.tar.gz   : $(SUBDIR)/version_faac.txt ;
+LibFaac $(SUBDIR)/lib/libfaac.a : $(SUBDIR)/faac.tar.gz ;
+
+# libmp3lame
+rule LibMp3Lame
+{
+    Depends $(<) : $(>) ;
+    Depends lib  : $(<) ;
+}
+actions LibMp3Lame
+{
+    cd `dirname $(>)` && CONTRIB=`pwd` &&
+    rm -rf lame && tar xzf lame.tar.gz && cd lame &&
+    ./configure --prefix=$CONTRIB --disable-shared &&
+    make && make install &&
+    strip -S $CONTRIB/lib/libmp3lame.a
+}
+Wget       $(SUBDIR)/lame.tar.gz      : $(SUBDIR)/version_lame.txt ;
+LibMp3Lame $(SUBDIR)/lib/libmp3lame.a : $(SUBDIR)/lame.tar.gz ;
+
+# libmp4v2
+rule LibMp4v2
+{
+    Depends $(<) : $(>) ;
+    Depends lib  : $(<) ;
+}
+actions LibMp4v2
+{
+    cd `dirname $(>)` && CONTRIB=`pwd` &&
+    rm -rf mpeg4ip && tar xzf mpeg4ip.tar.gz && cd mpeg4ip &&
+    ./bootstrap && make -C lib/mp4v2 libmp4v2.la &&
+    cp lib/mp4v2/.libs/libmp4v2.a $CONTRIB/lib &&
+    cp mpeg4ip_config.h include/mpeg4ip.h include/mpeg4ip_version.h \
+      include/mpeg4ip_win32.h lib/mp4v2/mp4.h $CONTRIB/include &&
+    strip -S $CONTRIB/lib/libmp4v2.a
+}
+Wget     $(SUBDIR)/mpeg4ip.tar.gz : $(SUBDIR)/version_mpeg4ip.txt ;
+LibMp4v2 $(SUBDIR)/lib/libmp4v2.a : $(SUBDIR)/mpeg4ip.tar.gz ;
+
+# libmpeg2
+rule LibMpeg2
+{
+    Depends $(<) : $(>) ;
+    Depends lib  : $(<) ;
+}
+actions LibMpeg2
+{
+    cd `dirname $(>)` && CONTRIB=`pwd` &&
+    rm -rf mpeg2dec && tar xzf mpeg2dec.tar.gz && cd mpeg2dec &&
+    ./configure --prefix=$CONTRIB --disable-shared &&
+    make && make install &&
+    strip -S $CONTRIB/lib/libmpeg2.a
+}
+Wget     $(SUBDIR)/mpeg2dec.tar.gz : $(SUBDIR)/version_mpeg2dec.txt ;
+LibMpeg2 $(SUBDIR)/lib/libmpeg2.a  : $(SUBDIR)/mpeg2dec.tar.gz ;
+
+# libogg
+rule LibOgg
+{
+    Depends $(<) : $(>) ;
+    Depends lib  : $(<) ;
+}
+actions LibOgg
+{
+    cd `dirname $(>)` && CONTRIB=`pwd` &&
+    rm -rf libogg && tar xzf libogg.tar.gz && cd libogg &&
+    ./configure --prefix=$CONTRIB --disable-shared &&
+    make && make install &&
+    strip -S $CONTRIB/lib/libogg.a
+}
+Wget   $(SUBDIR)/libogg.tar.gz : $(SUBDIR)/version_libogg.txt ;
+LibOgg $(SUBDIR)/lib/libogg.a  : $(SUBDIR)/libogg.tar.gz ;
+
+# libsamplerate
+rule LibSampleRate
+{
+    Depends $(<) : $(>) ;
+    Depends lib  : $(<) ;
+}
+actions LibSampleRate
+{
+    cd `dirname $(>)` && CONTRIB=`pwd` &&
+    rm -rf libsamplerate && tar xzf libsamplerate.tar.gz && cd libsamplerate &&
+    ./configure --prefix=$CONTRIB --disable-shared &&
+    make && make install &&
+    strip -S $CONTRIB/lib/libsamplerate.a
+}
+Wget          $(SUBDIR)/libsamplerate.tar.gz : $(SUBDIR)/version_libsamplerate.txt ;
+LibSampleRate $(SUBDIR)/lib/libsamplerate.a  : $(SUBDIR)/libsamplerate.tar.gz ;
+
+# libvorbis
+rule LibVorbis
+{
+    Depends $(<) : $(>) ;
+    Depends lib  : $(<) ;
+}
+actions LibVorbis
+{
+    cd `dirname $(>)` && CONTRIB=`pwd` &&
+    rm -rf libvorbis && tar xzf libvorbis.tar.gz && cd libvorbis &&
+    ./configure --prefix=$CONTRIB --with-ogg=$CONTRIB --disable-shared &&
+    make && make install &&
+    strip -S $CONTRIB/lib/libvorbis.a
+}
+Wget      $(SUBDIR)/libvorbis.tar.gz : $(SUBDIR)/version_libvorbis.txt ;
+LibVorbis $(SUBDIR)/lib/libvorbis.a  : $(SUBDIR)/libvorbis.tar.gz ;
+
+rule LibVorbisEnc
+{
+    Depends $(<) : $(>) ;
+    Depends lib  : $(<) ;
+}
+actions LibVorbisEnc
+{
+    strip -S $(<)
+}
+LibVorbisEnc $(SUBDIR)/lib/libvorbisenc.a : $(SUBDIR)/lib/libvorbis.a ;
+
+# libx264
+rule LibX264
+{
+    Depends $(<) : $(>) ;
+    Depends lib  : $(<) ;
+}
+actions LibX264
+{
+    cd `dirname $(>)` && CONTRIB=`pwd` &&
+    rm -rf x264 && tar xzf x264.tar.gz && cd x264 &&
+    ./configure --prefix=$CONTRIB --enable-pthread && make &&
+    make install &&
+    strip -S $CONTRIB/lib/libx264.a
+}
+Wget    $(SUBDIR)/x264.tar.gz   : $(SUBDIR)/version_x264.txt ;
+LibX264 $(SUBDIR)/lib/libx264.a : $(SUBDIR)/x264.tar.gz ;
+
+# libxvidcore
+rule LibXvidCore
+{
+    Depends $(<) : $(>) ;
+    Depends lib  : $(<) ;
+}
+actions LibXvidCore
+{
+    cd `dirname $(>)` && CONTRIB=`pwd` &&
+    rm -rf xvidcore && tar xzf xvidcore.tar.gz &&
+    cd xvidcore/build/generic/ && ./configure && make libxvidcore.a &&
+    cp ./=build/libxvidcore.a $CONTRIB/lib/ &&
+    cp ../../src/xvid.h $CONTRIB/include/ &&
+    strip -S $CONTRIB/lib/libxvidcore.a
+}
+Wget        $(SUBDIR)/xvidcore.tar.gz   : $(SUBDIR)/version_xvidcore.txt ;
+LibXvidCore $(SUBDIR)/lib/libxvidcore.a : $(SUBDIR)/xvidcore.tar.gz ;

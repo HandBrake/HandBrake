@@ -1,116 +1,21 @@
-# $Id: Jamrules,v 1.38 2004/05/25 17:50:12 titer Exp $
+# $Id: Jamrules,v 1.59 2005/11/04 16:06:21 titer Exp $
 #
 # This file is part of the HandBrake source code.
 # Homepage: <http://handbrake.m0k.org/>.
 # It may be used under the terms of the GNU General Public License.
 
-HB_VERSION = 0.6.2 ;
-LANGUAGES  = fr de it pl ru nl es pt ja ;
+include config.jam ;
 
-# Compilers & flags
-CC      = gcc ;
-C++     = g++ ;
-AS      = nasm ;
-LINK    = g++ ;
-OPTIM   = -O3 -funroll-loops ;
-DEFINES = HB_$(OS) HB_VERSION=\\\"$(HB_VERSION)\\\" ;
-
-if $(OS) = BEOS
+if ! $(DEFINES)
 {
-    # Avoid multichar warnings caused by BeOS system headers
-    CCFLAGS   = -Wno-multichar ;
-    C++FLAGS  = -Wno-multichar ;
-    # BeOS' gcc tends to crash with -funroll-loops
-    OPTIM     = -O3 ;
-    ASFLAGS   = -f elf ;
-}
-if $(OS) = MACOSX
-{
-    # For libdvdread
-    DEFINES  += WORDS_BIGENDIAN ;
-}
-if $(OS) = LINUX
-{
-    ASFLAGS   = -f elf ;
-}
-if $(OS) = CYGWIN
-{
-    # Build under cygwin but without the emulation layer
-    CCFLAGS   = -mno-cygwin ;
-    C++FLAGS  = -mno-cygwin ;
-    LINKFLAGS = -mno-cygwin ;
-    ASFLAGS   = -f win32 ;
+    Exit "Please run ./configure first." ;
 }
 
-NotFile clean-contrib clean-all ;
-Always  clean-contrib ;
-Depends clean-all : clean clean-contrib ;
-
-# _Object: same as Jambase's Object, except
-#  * those aren't cleaned by 'jam clean' (to prevent from deleting
-#    every contrib library by accident)
-#  * it handles *.asm files
-rule _Object
-{
-    MakeLocate $(<) : $(LOCATE_TARGET) ;
-    SEARCH on $(>) = $(SEARCH_SOURCE) ;
-    HDRS on $(<) = $(SEARCH_SOURCE) $(SUBDIRHDRS) $(HDRS) ;
-    HDRRULE on $(>) = HdrRule ;
-    HDRSCAN on $(>) = $(HDRPATTERN) ;
-    HDRSEARCH on $(>) =
-            $(SEARCH_SOURCE:E) $(SUBDIRHDRS) $(HDRS) $(STDHDRS) ;
-    HDRGRIST on $(>) = $(HDRGRIST) ;
-    DEFINES on $(<) += $(DEFINES) ;
-    switch $(>:S)
-    {   
-        case .asm : As $(<) : $(>) ;
-        case .nas : As $(<) : $(>) ;
-        case .c :   Cc $(<) : $(>) ;
-        case .cpp : C++ $(<) : $(>) ;
-    }
-}
-# _Objects: use _Object
-rule _Objects
-{
-    local _i ;
-    for _i in [ FGristFiles $(<) ]
-    {
-        _Object $(_i:S=$(SUFOBJ)) : $(_i) ;
-        Depends obj : $(_i:S=$(SUFOBJ)) ;
-    }
-}
-
-# Simplified LibraryFromObjects which doesn't clean the target library
-# nor the temporary .o files
-rule _Library
-{
-    local _l _s ;
-    _s = [ FGristFiles $(>:S=$(SUFOBJ)) ] ;
-    _l = $(<:S=$(SUFLIB)) ;
-    _Objects $(>) ;
-    Depends obj : $(_s) ;
-    MakeLocate $(_l) $(_l)($(_s:BS)) : $(LOCATE_TARGET) ;
-    Depends $(_l) : $(_s) ;
-    Archive $(_l) : $(_s) ;
-    if $(RANLIB) { Ranlib $(_l) ; }
-    Depends lib : $(_l) ;
-}
-
-# ContribLibrary: library cleaned by 'jam clean-contrib'
-rule ContribLibrary
-{
-    _Library $(<) : $(>) ;
-    Clean clean-contrib : [ FGristFiles $(>:S=$(SUFOBJ)) ] ;
-    Clean clean-contrib : $(<:S=$(SUFLIB)) ;
-}
-
-# Library: library cleaned by 'jam clean'
-rule Library
-{
-    _Library $(<) : $(>) ;
-    Clean clean : [ FGristFiles $(>:S=$(SUFOBJ)) ] ;
-    Clean clean : $(<:S=$(SUFLIB)) ;
-}
+HB_VERSION  = 0.7.0 ;
+HB_BUILD    = 2005110400 ;
+DEFINES    += HB_VERSION=\\\"$(HB_VERSION)\\\" HB_BUILD=$(HB_BUILD) ;
+LANGUAGES   = fr de it pl ru nl es pt ja ;
+RM          = rm -rf ;
 
 # Build HandBrake.app using Xcode
 rule OSXApp
@@ -118,13 +23,12 @@ rule OSXApp
     Depends     exe   : $(<) ;
     Depends     $(<)  : $(>) ;
     Clean       clean : $(1) macosx/build ;
-    BuildOSXApp $(<) ;
 }
-actions BuildOSXApp
+actions OSXApp
 {
     $(RM) $(<) macosx/build/HandBrake.app && \
       ( cd macosx && xcodebuild ) && \
-      cp -r macosx/build/HandBrake.app $(<) && \
+      mv macosx/build/Default/HandBrake.app $(<) && \
       for i in $(LANGUAGES) ; do \
         ( cd $(<)/Contents/Resources && \
           cp -r English.lproj $i.lproj && \
@@ -134,10 +38,9 @@ actions BuildOSXApp
 }
 rule OSXPackage 
 {
-    Depends         $(<) : $(>) ;
-    BuildOSXPackage $(<) ;
+    Depends $(<) : $(>) ;
 }   
-actions BuildOSXPackage
+actions OSXPackage
 {                 
     rm -rf $(<) "HandBrake $(HB_VERSION)" && \
       mkdir "HandBrake $(HB_VERSION)" && \
@@ -145,26 +48,35 @@ actions BuildOSXPackage
       cp COPYING "HandBrake $(HB_VERSION)/COPYING.txt" && \
       cp CREDITS "HandBrake $(HB_VERSION)/CREDITS.txt" && \
       cp THANKS "HandBrake $(HB_VERSION)/THANKS.txt" && \
-      ( cd doc && ./genhtml.sh ) && \
-      cp doc/faq.html "HandBrake $(HB_VERSION)/FAQ.html" && \
+      ( echo "[InternetShortcut]" && \
+        echo "URL=http://handbrake.m0k.org/" ) > \
+        "HandBrake $(HB_VERSION)/HandBrake Homepage.url" && \
+      ( echo "[InternetShortcut]" && \
+        echo "URL=http://handbrake.m0k.org/forum/" ) > \
+        "HandBrake $(HB_VERSION)/HandBrake Forums.url" && \
+      ( echo "[InternetShortcut]" && \
+        echo "URL=http://handbrake.m0k.org/contribute.php" ) > \
+        "HandBrake $(HB_VERSION)/Contribute.url" && \
       cp -r HandBrake.app "HandBrake $(HB_VERSION)" && \
       zip -9 -r $(<) "HandBrake $(HB_VERSION)" && \
       rm -rf "HandBrake $(HB_VERSION)"
 }
 
-rule SystemLibraries
+rule BeOSPackage 
 {
-    LINKLIBS on [ FAppendSuffix $(<) : $(SUFEXE) ] +=  $(>) ;
+    Depends         $(<) : $(>) ;
+    BuildBeOSPackage $(<) ;
+}   
+actions BuildBeOSPackage
+{                 
+    rm -rf $(<) "HandBrake $(HB_VERSION)" && \
+      mkdir "HandBrake $(HB_VERSION)" && \
+      cp AUTHORS "HandBrake $(HB_VERSION)/AUTHORS.txt" && \
+      cp COPYING "HandBrake $(HB_VERSION)/COPYING.txt" && \
+      cp CREDITS "HandBrake $(HB_VERSION)/CREDITS.txt" && \
+      cp THANKS "HandBrake $(HB_VERSION)/THANKS.txt" && \
+      xres -o HandBrake beos/HandBrake.rsrc && \
+      cp HandBrake "HandBrake $(HB_VERSION)" && \
+      zip -9 -r $(<) "HandBrake $(HB_VERSION)" && \
+      rm -rf "HandBrake $(HB_VERSION)"
 }
-
-# Jambase's ObjectHdrs doesn't seem to work when ObjectHdrs is called
-# several times on a file, and it doesn't works for asm files. Fixed
-# here.
-rule ObjectHdrs
-{
-    local s = [ FGristFiles $(<:S=$(SUFOBJ)) ] ;
-    HDRS   on $(s) += $(>) ;
-    ASHDRS on $(s) += [ FIncludes $(>) ] ;
-    CCHDRS on $(s) += [ FIncludes $(>) ] ;
-}
-
