@@ -1,0 +1,349 @@
+/* $Id: common.h,v 1.51 2005/11/04 13:09:40 titer Exp $
+
+   This file is part of the HandBrake source code.
+   Homepage: <http://handbrake.m0k.org/>.
+   It may be used under the terms of the GNU General Public License. */
+
+#ifndef HB_COMMON_H
+#define HB_COMMON_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include <string.h>
+#include <unistd.h>
+#include <inttypes.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <dirent.h>
+
+#ifndef MIN
+#define MIN( a, b ) ( (a) > (b) ? (b) : (a) )
+#endif
+#ifndef MAX
+#define MAX( a, b ) ( (a) > (b) ? (a) : (b) )
+#endif
+
+#define EVEN( a )        ( (a) + ( (a) & 1 ) )
+#define MULTIPLE_16( a ) ( 16 * ( ( (a) + 8 ) / 16 ) )
+
+typedef struct hb_handle_s hb_handle_t;
+typedef struct hb_list_s hb_list_t;
+typedef struct hb_rate_s hb_rate_t;
+typedef struct hb_job_s  hb_job_t;
+typedef struct hb_title_s hb_title_t;
+typedef struct hb_chapter_s hb_chapter_t;
+typedef struct hb_audio_s hb_audio_t;
+typedef struct hb_subtitle_s hb_subtitle_t;
+typedef struct hb_state_s hb_state_t;
+
+#include "ports.h"
+#ifdef __LIBHB__
+#include "internal.h"
+#endif
+
+hb_list_t * hb_list_init();
+int         hb_list_count( hb_list_t * );
+void        hb_list_add( hb_list_t *, void * );
+void        hb_list_rem( hb_list_t *, void * );
+void      * hb_list_item( hb_list_t *, int );
+void        hb_list_close( hb_list_t ** );
+
+#define HB_KEEP_WIDTH  0
+#define HB_KEEP_HEIGHT 1
+void hb_fix_aspect( hb_job_t * job, int keep );
+
+int hb_calc_bitrate( hb_job_t *, int size );
+
+struct hb_rate_s
+{
+    char * string;
+    int    rate;
+};
+
+#define HB_ASPECT_BASE 9
+#define HB_VIDEO_RATE_BASE   27000000
+
+extern hb_rate_t hb_video_rates[];
+extern int       hb_video_rates_count;
+extern hb_rate_t hb_audio_rates[];
+extern int       hb_audio_rates_count;
+extern int       hb_audio_rates_default;
+extern hb_rate_t hb_audio_bitrates[];
+extern int       hb_audio_bitrates_count;
+extern int       hb_audio_bitrates_default;
+
+/******************************************************************************
+ * hb_job_t: settings to be filled by the UI
+ *****************************************************************************/
+struct hb_job_s
+{
+    /* Pointer to the title to be ripped */
+    hb_title_t    * title;
+    
+    /* Chapter selection */
+    int             chapter_start;
+    int             chapter_end;
+
+    /* Picture settings:
+         crop:        must be multiples of 2 (top/bottom/left/right)
+         deinterlace: 0 or 1
+         width:       must be a multiple of 16
+         height:      must be a multiple of 16
+         keep_ratio:  used by UIs */
+    int             crop[4];
+    int             deinterlace;
+    int             width;
+    int             height;
+    int             keep_ratio;
+    int             grayscale;
+
+    /* Video settings:
+         vcodec:            output codec
+         vquality:          output quality (0.0..1.0)
+                            if < 0.0 or > 1.0, bitrate is used instead
+         vbitrate:          output bitrate (kbps)
+         pass:              0, 1 or 2
+         vrate, vrate_base: output framerate is vrate / vrate_base */
+#define HB_VCODEC_MASK   0x0000FF
+#define HB_VCODEC_FFMPEG 0x000001
+#define HB_VCODEC_XVID   0x000002
+#define HB_VCODEC_X264   0x000004
+    int             vcodec;
+    float           vquality;
+    int             vbitrate;
+    int             vrate;
+    int             vrate_base;
+    int             pass;
+    int             h264_13;
+
+    /* Audio tracks:
+         Indexes in hb_title_t's audios list, starting from 0.
+         -1 indicates the end of the list */
+    int             audios[8];
+
+    /* Audio settings:
+         acodec:   output codec
+         abitrate: output bitrate (kbps)
+         arate:    output samplerate (Hz)
+       HB_ACODEC_AC3 means pass-through, then abitrate and arate are
+       ignored */
+#define HB_ACODEC_MASK   0x00FF00
+#define HB_ACODEC_FAAC   0x000100
+#define HB_ACODEC_LAME   0x000200
+#define HB_ACODEC_VORBIS 0x000400
+#define HB_ACODEC_AC3    0x000800
+#define HB_ACODEC_MPGA   0x001000
+#define HB_ACODEC_LPCM   0x002000
+    int             acodec;
+    int             abitrate;
+    int             arate;
+
+    /* Subtitle settings:
+         subtitle: index in hb_title_t's subtitles list, starting
+         from 0. -1 means no subtitle */
+    int             subtitle;
+
+    /* Muxer settings
+         mux:  output file format
+         file: file path */
+#define HB_MUX_MASK 0xFF0000
+#define HB_MUX_MP4  0x010000
+#define HB_MUX_AVI  0x020000
+#define HB_MUX_OGM  0x040000
+    int             mux;
+    char          * file;
+
+#ifdef __LIBHB__
+    /* Internal data */
+    hb_handle_t   * h;
+    hb_lock_t     * pause;
+    volatile int  * die;
+    volatile int    done;
+
+    hb_fifo_t     * fifo_mpeg2;   /* MPEG-2 video ES */
+    hb_fifo_t     * fifo_raw;     /* Raw pictures */
+    hb_fifo_t     * fifo_sync;    /* Raw pictures, framerate corrected */
+    hb_fifo_t     * fifo_render;  /* Raw pictures, scaled */
+    hb_fifo_t     * fifo_mpeg4;   /* MPEG-4 video ES */
+
+    hb_thread_t   * reader;
+    hb_thread_t   * muxer;
+
+    hb_list_t     * list_work;
+
+    union
+    {
+        struct
+        {
+            uint8_t * config;
+            int       config_length;
+        } mpeg4;
+
+        struct
+        {
+            uint8_t * sps;
+            int       sps_length;
+            uint8_t * pps;
+            int       pps_length;
+        } h264;
+
+    } config;
+
+    /* MPEG-4 / AVC */
+    uint8_t       * es_config;
+    int             es_config_length;
+
+    hb_mux_data_t * mux_data;
+#endif
+};
+
+struct hb_audio_s
+{
+    int  id;
+    char lang[1024];
+    int  codec;
+    int  rate;
+    int  bitrate;
+    int  channels;
+
+#ifdef __LIBHB__
+    /* Internal data */
+    hb_fifo_t * fifo_in;   /* AC3/MPEG/LPCM ES */
+    hb_fifo_t * fifo_raw;  /* Raw audio */
+    hb_fifo_t * fifo_sync; /* Resampled, synced raw audio */
+    hb_fifo_t * fifo_out;  /* MP3/AAC/Vorbis ES */
+
+    union
+    {
+        struct
+        {
+            uint8_t       * decinfo;
+            unsigned long   size;
+        } faac;
+
+        struct
+        {
+            uint8_t * headers[3];
+            int       sizes[3];
+        } vorbis;
+
+    } config;
+
+    hb_mux_data_t * mux_data;
+#endif
+};
+
+struct hb_chapter_s
+{
+    int      index;
+    int      cell_start;
+    int      cell_end;
+    int      block_start;
+    int      block_end;
+    int      block_count;
+
+    /* Visual-friendly duration */
+    int      hours;
+    int      minutes;
+    int      seconds;
+
+    /* Exact duration (in 1/90000s) */
+    uint64_t duration;
+};
+
+struct hb_subtitle_s
+{
+    int  id;
+    char lang[1024];
+
+#ifdef __LIBHB__
+    /* Internal data */
+    hb_fifo_t * fifo_in;  /* SPU ES */
+    hb_fifo_t * fifo_raw; /* Decodec SPU */
+#endif
+};
+
+struct hb_title_s
+{
+    char        dvd[1024];
+    int         index;
+    int         vts;
+    int         ttn;
+    int         cell_start;
+    int         cell_end;
+    int         block_start;
+    int         block_end;
+    int         block_count;
+
+    /* Visual-friendly duration */
+    int         hours;
+    int         minutes;
+    int         seconds;
+
+    /* Exact duration (in 1/90000s) */
+    uint64_t    duration;
+
+    int         width;
+    int         height;
+    int         aspect;
+    int         rate;
+    int         rate_base;
+    int         crop[4];
+
+    uint32_t    palette[16];
+
+    hb_list_t * list_chapter;
+    hb_list_t * list_audio;
+    hb_list_t * list_subtitle;
+
+    /* Job template for this title */
+    hb_job_t  * job;
+};
+
+
+struct hb_state_s
+{
+#define HB_STATE_IDLE     1
+#define HB_STATE_SCANNING 2
+#define HB_STATE_SCANDONE 4
+#define HB_STATE_WORKING  8
+#define HB_STATE_PAUSED   16
+#define HB_STATE_WORKDONE 32
+    int state;
+
+    union
+    {
+        struct
+        {
+            /* HB_STATE_SCANNING */
+            int title_cur;
+            int title_count;
+        } scanning;
+
+        struct
+        {
+            /* HB_STATE_WORKING */
+            float progress;
+            int   job_cur;
+            int   job_count;
+            float rate_cur;
+            float rate_avg;
+            int   hours;
+            int   minutes;
+            int   seconds;
+        } working;
+
+        struct
+        {
+            /* HB_STATE_WORKDONE */
+#define HB_ERROR_NONE     0
+#define HB_ERROR_CANCELED 1
+#define HB_ERROR_UNKNOWN  2
+            int error;
+        } workdone;
+
+    } param;
+};
+
+#endif
