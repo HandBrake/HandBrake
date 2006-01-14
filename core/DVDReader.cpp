@@ -1,4 +1,4 @@
-/* $Id: DVDReader.cpp,v 1.17 2003/10/09 23:33:36 titer Exp $
+/* $Id: DVDReader.cpp,v 1.18 2003/10/16 13:39:13 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -69,9 +69,10 @@ void HBDVDReader::DoWork()
 
             if( dvdplay_read( vmg, dvdBuffer->fData, 1 ) < 0 )
             {
-                Log( "HBDVDReader: could not dvdplay_read()" );
+                Log( "HBDVDReader: dvdplay_read() failed" );
                 delete dvdBuffer;
                 fManager->Error( HB_ERROR_DVD_READ );
+                die = true;
                 break;
             }
 

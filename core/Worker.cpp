@@ -1,4 +1,4 @@
-/* $Id: Worker.cpp,v 1.9 2003/10/13 17:59:40 titer Exp $
+/* $Id: Worker.cpp,v 1.11 2003/10/16 13:36:17 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -16,9 +16,9 @@ HBWorker::HBWorker( HBTitle * title, HBAudio * audio1,
                     HBAudio * audio2 )
    : HBThread( "worker")
 {
-    fTitle  = title;
-    fAudio1 = audio1;
-    fAudio2 = audio2;
+    fTitle         = title;
+    fAudio1        = audio1;
+    fAudio2        = audio2;
 
     Run();
 }
@@ -36,8 +36,13 @@ void HBWorker::DoWork()
     uint64_t mp3Encoder2  = 0;
     uint64_t tmpDate;
     
-    while( !fDie )
+    for( ;; )
     {
+        while( fSuspend )
+        {
+            Snooze( 10000 );
+        }
+
         didSomething = false;
 
         tmpDate = GetDate();
@@ -122,29 +127,24 @@ void HBWorker::DoWork()
         {
             Snooze( 10000 );
         }
-
-        while( fSuspend )
-        {
-            Snooze( 10000 );
-        }
     }
 
     tmpDate = mpegDemux + mpeg2Decoder + resizer + mpeg4Encoder +
         ac3Decoder1 + mp3Encoder1 + ac3Decoder2 + mp3Encoder2;
     Log( "HBWorker stopped. CPU utilization:" );
-    Log( "- MPEG demuxer:   %.2f %%", 100 * (float) mpegDemux / tmpDate );
-    Log( "- MPEG-2 decoder: %.2f %%", 100 * (float) mpeg2Decoder / tmpDate );
-    Log( "- Resizer:        %.2f %%", 100 * (float) resizer / tmpDate );
-    Log( "- MPEG-4 encoder: %.2f %%", 100 * (float) mpeg4Encoder / tmpDate );
+    Log( "- MPEG demuxer:   %.2f %%", 100.0 * mpegDemux / tmpDate );
+    Log( "- MPEG-2 decoder: %.2f %%", 100.0 * mpeg2Decoder / tmpDate );
+    Log( "- Resizer:        %.2f %%", 100.0 * resizer / tmpDate );
+    Log( "- MPEG-4 encoder: %.2f %%", 100.0 * mpeg4Encoder / tmpDate );
     if( fAudio1 )
     {
-    Log( "- AC3 decoder 1:  %.2f %%", 100 * (float) ac3Decoder1 / tmpDate );
-    Log( "- MP3 encoder 1:  %.2f %%", 100 * (float) mp3Encoder1 / tmpDate );
+    Log( "- AC3 decoder 1:  %.2f %%", 100.0 * ac3Decoder1 / tmpDate );
+    Log( "- MP3 encoder 1:  %.2f %%", 100.0 * mp3Encoder1 / tmpDate );
     }
     if( fAudio2 )
     {
-    Log( "- AC3 decoder 2:  %.2f %%", 100 * (float) ac3Decoder2 / tmpDate );
-    Log( "- MP3 encoder 2:  %.2f %%", 100 * (float) mp3Encoder2 / tmpDate );
+    Log( "- AC3 decoder 2:  %.2f %%", 100.0 * ac3Decoder2 / tmpDate );
+    Log( "- MP3 encoder 2:  %.2f %%", 100.0 * mp3Encoder2 / tmpDate );
     }
 }
 

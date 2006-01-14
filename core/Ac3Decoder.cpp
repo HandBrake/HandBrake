@@ -1,4 +1,4 @@
-/* $Id: Ac3Decoder.cpp,v 1.20 2003/10/13 10:58:24 titer Exp $
+/* $Id: Ac3Decoder.cpp,v 1.21 2003/10/14 14:35:20 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -32,7 +32,7 @@ HBAc3Decoder::HBAc3Decoder( HBManager * manager, HBAudio * audio )
     fAc3Frame        = new HBBuffer( 3840 );
     fAc3Frame->fSize = 0;
     fAc3Buffer       = NULL;
-    fPosInBuffer     = 0;
+    fPosInAc3Buffer  = 0;
     fRawBuffer       = NULL;
 }
 
@@ -51,74 +51,74 @@ bool HBAc3Decoder::Work()
     {
         return false;
     }
-   
-    bool didSomething = false;
-    
-    sample_t * samples;
-    for( ;; )
+
+    /* Push the latest decoded buffer */
+    if( fRawBuffer )
     {
-        /* Try to push the latest decoded buffer */
-        if( fRawBuffer )
+        if( fAudio->fRawFifo->Push( fRawBuffer ) )
         {
-            if( fAudio->fRawFifo->Push( fRawBuffer ) )
-            {
-                fRawBuffer = NULL;
-            }
-            else
-            {
-                break;
-            }
+            fRawBuffer = NULL;
         }
-
-        /* Get a new frame */
-        if( fAc3Frame->fSize < 7 )
+        else
         {
-            /* Get a frame header (7 bytes) */
-            if( !( GetBytes( 7 ) ) )
-            {
-                break;
-            }
+            Unlock();
+            return false;
+        }
+    }
 
-            /* Get the size of the current frame */
+    /* Get a frame header (7 bytes) */
+    if( fAc3Frame->fSize < 7 )
+    {
+        if( GetBytes( 7 ) )
+        {
+            /* Get the size of the coming frame */
             fFrameSize = a52_syncinfo( fAc3Frame->fData, &fInFlags,
                                        &fAudio->fInSampleRate,
                                        &fAudio->fInBitrate );
             if( !fFrameSize )
             {
-                Log( "HBAc3Decoder : a52_syncinfo failed" );
+                Log( "HBAc3Decoder: a52_syncinfo failed" );
                 fManager->Error( HB_ERROR_A52_SYNC );
                 return false;
             }
         }
-
-        /* In case the audio should start later than the video,
-           insert some silence */
-        if( fAudio->fDelay > 3 * 256 * 1000 / fAudio->fInSampleRate  )
+        else
         {
-            fRawBuffer = new HBBuffer( 12 * 256 * sizeof( float ) );
-            for( uint32_t i = 0; i < 12 * 256; i++ )
-            {
-                ((float*)fRawBuffer->fData)[i] = 0;
-            }
-            fAudio->fDelay -= 6 * 256 * 1000 / fAudio->fInSampleRate;
-            continue;
+            Unlock();
+            return false;
         }
- 
-        if( fAc3Frame->fSize >= 7 )
-        {
-            /* Get the whole frame */
-            if( !( GetBytes( (uint32_t) fFrameSize ) ) )
-            {
-                break;
-            }
+    }
 
+    /* In case the audio should start later than the video,
+       insert some silence */
+    if( fAudio->fDelay > 3 * 256 * 1000 / fAudio->fInSampleRate  )
+    {
+        fRawBuffer = new HBBuffer( 12 * 256 * sizeof( float ) );
+        for( uint32_t i = 0; i < 12 * 256; i++ )
+        {
+            ((float*)fRawBuffer->fData)[i] = 0;
+        }
+        fAudio->fDelay -= 6 * 256 * 1000 / fAudio->fInSampleRate;
+
+        Unlock();
+        return true;
+    }
+
+    if( fAc3Frame->fSize >= 7 )
+    {
+        /* Get the whole frame */
+        if( GetBytes( (uint32_t) fFrameSize ) )
+        {
             /* Feed liba52 */
             a52_frame( fState, fAc3Frame->fData, &fOutFlags,
                        &fSampleLevel, 0 );
+            fAc3Frame->fSize = 0;
 
             /* 6 blocks per frame, 256 samples per block */
             fRawBuffer = new HBBuffer( 12 * 256 * sizeof( float ) );
             fRawBuffer->fPosition = fPosition;
+
+            sample_t * samples;
             for( int i = 0; i < 6; i++ )
             {
                 /* Decode a block */
@@ -137,16 +137,16 @@ bool HBAc3Decoder::Work()
                         samples + 256,
                         256 * sizeof( float ) );
             }
-
-            fAc3Frame->fSize = 0;
-
-            didSomething = true;
+        }
+        else
+        {
+            Unlock();
+            return false;
         }
     }
 
     Unlock();
-
-    return didSomething;
+    return true;
 }
 
 bool HBAc3Decoder::Lock()
@@ -181,19 +181,19 @@ bool HBAc3Decoder::GetBytes( uint32_t size )
             {
                 return false;
             }
-            fPosInBuffer = 0;
-            fPosition    = fAc3Buffer->fPosition;
+            fPosInAc3Buffer = 0;
+            fPosition       = fAc3Buffer->fPosition;
         }
 
         int willCopy = MIN( size - fAc3Frame->fSize,
-                            fAc3Buffer->fSize - fPosInBuffer );
+                            fAc3Buffer->fSize - fPosInAc3Buffer );
         memcpy( fAc3Frame->fData + fAc3Frame->fSize,
-                fAc3Buffer->fData + fPosInBuffer,
+                fAc3Buffer->fData + fPosInAc3Buffer,
                 willCopy );
         fAc3Frame->fSize += willCopy;
-        fPosInBuffer     += willCopy;
+        fPosInAc3Buffer  += willCopy;
 
-        if( fAc3Buffer->fSize == fPosInBuffer )
+        if( fAc3Buffer->fSize == fPosInAc3Buffer )
         {
             delete fAc3Buffer;
             fAc3Buffer = NULL;

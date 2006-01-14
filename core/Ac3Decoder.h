@@ -1,4 +1,4 @@
-/* $Id: Ac3Decoder.h,v 1.10 2003/10/07 20:58:12 titer Exp $
+/* $Id: Ac3Decoder.h,v 1.11 2003/10/14 14:35:20 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -37,7 +37,7 @@ class HBAc3Decoder
         /* buffers */
         HBBuffer    * fAc3Frame;
         HBBuffer    * fAc3Buffer;
-        uint32_t      fPosInBuffer;
+        uint32_t      fPosInAc3Buffer;
         HBBuffer    * fRawBuffer;
 
         float         fPosition;

@@ -1,4 +1,4 @@
-/* $Id: Mpeg4Encoder.cpp,v 1.23 2003/10/09 13:24:48 titer Exp $
+/* $Id: Mpeg4Encoder.cpp,v 1.25 2003/10/14 15:23:56 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -32,27 +32,21 @@ bool HBMpeg4Encoder::Work()
         return false;
     }
 
-    bool didSomething = false;
-
-    for( ;; )
+    if( fMpeg4Buffer )
     {
-        if( fMpeg4Buffer )
+        if( fTitle->fMpeg4Fifo->Push( fMpeg4Buffer ) )
         {
-            if( fTitle->fMpeg4Fifo->Push( fMpeg4Buffer ) )
-            {
-                fMpeg4Buffer = NULL;
-            }
-            else
-            {
-                break;
-            }
+            fMpeg4Buffer = NULL;
         }
-    
-        if( !( fResizedBuffer = fTitle->fResizedFifo->Pop() ) )
+        else
         {
-            break;
+            Unlock();
+            return false;
         }
+    }
 
+    if( ( fResizedBuffer = fTitle->fResizedFifo->Pop() ) )
+    {
         if( fResizedBuffer->fPass != fPass )
         {
             fPass = fResizedBuffer->fPass;
@@ -61,12 +55,15 @@ bool HBMpeg4Encoder::Work()
 
         fManager->SetPosition( fResizedBuffer->fPosition );
         EncodeBuffer();
-
-        didSomething = true;
+    }
+    else
+    {
+        Unlock();
+        return false;
     }
 
     Unlock();
-    return didSomething;
+    return true;
 }
 
 bool HBMpeg4Encoder::Lock()
@@ -107,7 +104,7 @@ void HBMpeg4Encoder::Init()
 
     fContext                      = avcodec_alloc_context();
     fContext->bit_rate            = 1024 * fTitle->fBitrate;
-    fContext->bit_rate_tolerance  = 1024 * fTitle->fBitrate;
+    fContext->bit_rate_tolerance  = 10240 * fTitle->fBitrate;
     fContext->width               = fTitle->fOutWidth;
     fContext->height              = fTitle->fOutHeight;
     fContext->frame_rate          = fTitle->fRate;

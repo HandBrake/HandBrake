@@ -1,4 +1,4 @@
-/* $Id: Manager.cpp,v 1.68 2003/10/13 23:42:03 titer Exp $
+/* $Id: Manager.cpp,v 1.70 2003/10/16 13:36:17 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -143,12 +143,14 @@ void HBManager::DoWork()
         {
             if( fRipDone )
             {
-                /* Wait a bit to avoid trashing frames in fifos -
-                   That's kinda ugly */
-                while( fCurTitle->fPSFifo->Size() ||
-                       ( fCurTitle->fMpeg2Fifo->Size() &&
-                         ( !fCurAudio1 || fCurAudio1->fAc3Fifo->Size() ) &&
-                         ( !fCurAudio2 || fCurAudio2->fAc3Fifo->Size() ) ) )
+                /* Wait a bit */
+                while( fCurTitle->fPSFifo->Size() )
+                {
+                    Snooze( 10000 );
+                }
+                while( fCurTitle->fMpeg2Fifo->Size() &&
+                       ( !fCurAudio1 || fCurAudio1->fAc3Fifo->Size() ) &&
+                       ( !fCurAudio2 || fCurAudio2->fAc3Fifo->Size() ) )
                 {
                     Snooze( 10000 );
                 }

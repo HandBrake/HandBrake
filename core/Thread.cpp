@@ -1,4 +1,4 @@
-/* $Id: Thread.cpp,v 1.23 2003/10/09 23:33:36 titer Exp $
+/* $Id: Thread.cpp,v 1.24 2003/10/14 14:35:20 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -63,6 +63,9 @@ void HBThread::Run()
     pthread_create( &fThread, NULL,
                     (void * (*)(void *)) ThreadFunc, this );
 #endif
+
+    Log( "HBThread: thread %d started (\"%s\")",
+         fThread, fName );
 }
 
 bool HBThread::Push( HBFifo * fifo, HBBuffer * buffer )
@@ -104,16 +107,13 @@ void HBThread::ThreadFunc( HBThread * _this )
     struct sched_param param;
     memset( &param, 0, sizeof( struct sched_param ) );
     param.sched_priority = _this->fPriority;
-    if ( pthread_setschedparam( _this->fThread, SCHED_OTHER, &param ) )
+    if ( pthread_setschedparam( pthread_self(), SCHED_OTHER, &param ) )
     {
         Log( "HBThread: couldn't set thread priority" );
     }
 #endif
     
     _this->fPid = (int) getpid();
-
-    Log( "HBThread: thread %d started (\"%s\")",
-         _this->fThread, _this->fName );
 
     _this->DoWork();
 }

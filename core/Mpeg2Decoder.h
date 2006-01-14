@@ -1,4 +1,4 @@
-/* $Id: Mpeg2Decoder.h,v 1.15 2003/10/09 14:21:21 titer Exp $
+/* $Id: Mpeg2Decoder.h,v 1.16 2003/10/14 14:35:20 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -17,6 +17,9 @@ class HBMpeg2Decoder
         bool         Work();
 
     private:
+        bool         Lock();
+        void         Unlock();
+        
         void         Init();
         void         DecodeBuffer();
 

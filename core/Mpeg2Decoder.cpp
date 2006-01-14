@@ -1,4 +1,4 @@
-/* $Id: Mpeg2Decoder.cpp,v 1.21 2003/10/09 14:21:21 titer Exp $
+/* $Id: Mpeg2Decoder.cpp,v 1.22 2003/10/14 14:35:20 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -29,44 +29,29 @@ HBMpeg2Decoder::HBMpeg2Decoder( HBManager * manager, HBTitle * title )
 
 bool HBMpeg2Decoder::Work()
 {
-    fLock->Lock();
-    if( fUsed )
+    if( !Lock() )
     {
-        fLock->Unlock();
-        return true;
+        return false;
     }
-    fUsed = true;
-    fLock->Unlock();
-
-    bool didSomething = false;
     
-    for( ;; )
+    /* Push decoded buffers */
+    while( ( fRawBuffer =
+                (HBBuffer*) fRawBufferList->ItemAt( 0 ) ) )
     {
-        /* Push decoded buffers */
-        while( ( fRawBuffer =
-                    (HBBuffer*) fRawBufferList->ItemAt( 0 ) ) )
+        if( fTitle->fRawFifo->Push( fRawBuffer ) )
         {
-            if( fTitle->fRawFifo->Push( fRawBuffer ) )
-            {
-                fRawBufferList->RemoveItem( fRawBuffer );
-            }
-            else
-            {
-                break;
-            }
+            fRawBufferList->RemoveItem( fRawBuffer );
         }
+        else
+        {
+            Unlock();
+            return false;
+        }
+    }
 
-        if( fRawBufferList->CountItems() )
-        {
-            break;
-        }
-       
-        /* Get a new buffer to decode */
-        if( !( fMpeg2Buffer = fTitle->fMpeg2Fifo->Pop() ) )
-        {
-            break;
-        }
-
+    /* Get a new buffer to decode */
+    if( ( fMpeg2Buffer = fTitle->fMpeg2Fifo->Pop() ) )
+    {
         /* (Re)init if needed */
         if( fMpeg2Buffer->fPass != fPass )
         {
@@ -76,15 +61,35 @@ bool HBMpeg2Decoder::Work()
 
         /* Do the job */
         DecodeBuffer();
-
-        didSomething = true;
+    }
+    else
+    {
+        Unlock();
+        return false;
     }
 
+    Unlock();
+    return true;
+}
+
+bool HBMpeg2Decoder::Lock()
+{
+    fLock->Lock();
+    if( fUsed )
+    {
+        fLock->Unlock();
+        return false;
+    }
+    fUsed = true;
+    fLock->Unlock();
+    return true;
+}
+
+void HBMpeg2Decoder::Unlock()
+{
     fLock->Lock();
     fUsed = false;
     fLock->Unlock();
-
-    return didSomething;
 }
 
 void HBMpeg2Decoder::Init()

@@ -1,4 +1,4 @@
-/* $Id: Mp3Encoder.cpp,v 1.13 2003/10/08 15:00:20 titer Exp $
+/* $Id: Mp3Encoder.cpp,v 1.14 2003/10/14 14:35:20 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -73,39 +73,33 @@ bool HBMp3Encoder::Work()
         fInitDone = true;
     }
 
-    bool didSomething = false;
-
-    for( ;; )
+    if( fMp3Buffer )
     {
-        if( fMp3Buffer )
+        if( fAudio->fMp3Fifo->Push( fMp3Buffer ) )
         {
-            if( fAudio->fMp3Fifo->Push( fMp3Buffer ) )
-            {
-                fMp3Buffer = NULL;
-            }
-            else
-            {
-                break;
-            }
+            fMp3Buffer = NULL;
         }
-        
-        /* Get new samples */
-        if( !GetSamples() )
+        else
         {
-            break;
+            Unlock();
+            return false;
         }
+    }
+    
+    /* Get new samples */
+    if( GetSamples() )
+    {
+        fSamplesNb = 0;
 
-        int ret;
         fMp3Buffer = new HBBuffer( LAME_MAXMP3BUFFER );
-        ret = lame_encode_buffer_float( fGlobalFlags, fLeftSamples,
-                                        fRightSamples, fCount,
-                                        fMp3Buffer->fData,
-                                        fMp3Buffer->fSize );
+        int ret = lame_encode_buffer_float( fGlobalFlags, fLeftSamples,
+                                            fRightSamples, fCount,
+                                            fMp3Buffer->fData,
+                                            fMp3Buffer->fSize );
 
         if( ret < 0 )
         {
-            /* Something wrong happened */
-            Log( "HBMp3Encoder : lame_encode_buffer_float() failed "
+            Log( "HBMp3Encoder: lame_encode_buffer_float() failed "
                  "(%d)", ret );
             fManager->Error( HB_ERROR_MP3_ENCODE );
             return false;
@@ -122,13 +116,15 @@ bool HBMp3Encoder::Work()
             delete fMp3Buffer;
             fMp3Buffer = NULL;
         }
-        fSamplesNb = 0;
-
-        didSomething = true;
+    }
+    else
+    {
+        Unlock();
+        return false;
     }
 
     Unlock();
-    return didSomething;
+    return true;
 }
 
 bool HBMp3Encoder::Lock()

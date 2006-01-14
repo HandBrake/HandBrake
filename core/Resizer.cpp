@@ -1,4 +1,4 @@
-/* $Id: Resizer.cpp,v 1.8 2003/10/09 13:24:48 titer Exp $
+/* $Id: Resizer.cpp,v 1.9 2003/10/14 14:35:20 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -59,29 +59,23 @@ bool HBResizer::Work()
         return false;
     }
 
-    bool didSomething = false;
-    
-    for( ;; )
+    /* Push the latest resized buffer */
+    if( fResizedBuffer )
     {
-        /* Push the latest resized buffer */
-        if( fResizedBuffer )
+        if( fTitle->fResizedFifo->Push( fResizedBuffer ) )
         {
-            if( fTitle->fResizedFifo->Push( fResizedBuffer ) )
-            {
-                fResizedBuffer = NULL;
-            }
-            else
-            {
-                break;
-            }
+            fResizedBuffer = NULL;
         }
-        
-        /* Get a new raw picture */
-        if( !( fRawBuffer = fTitle->fRawFifo->Pop() ) )
+        else
         {
-            break;
+            Unlock();
+            return false;
         }
-
+    }
+    
+    /* Get a new raw picture */
+    if( ( fRawBuffer = fTitle->fRawFifo->Pop() ) )
+    {
         /* Do the job */
         avpicture_fill( fRawPicture, fRawBuffer->fData,
                         PIX_FMT_YUV420P, fTitle->fInWidth,
@@ -111,12 +105,15 @@ bool HBResizer::Work()
         }
         delete fRawBuffer;
         fRawBuffer = NULL;
-
-        didSomething = true;
+    }
+    else
+    {
+        Unlock();
+        return false;
     }
 
     Unlock();
-    return didSomething;
+    return true;
 }
 
 bool HBResizer::Lock()

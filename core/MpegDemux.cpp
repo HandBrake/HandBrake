@@ -1,4 +1,4 @@
-/* $Id: MpegDemux.cpp,v 1.18 2003/10/13 15:14:01 titer Exp $
+/* $Id: MpegDemux.cpp,v 1.20 2003/10/16 13:36:17 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://beos.titer.org/handbrake/>.
@@ -53,117 +53,114 @@ bool HBMpegDemux::Work()
         return false;
     }
     
-    bool didSomething = false;
-
-    for( ;; )
+    /* Push waiting buffers */
+    if( fESBufferList )
     {
-        /* If we have buffers waiting, try to push them */
-        if( fESBufferList )
+        for( uint32_t i = 0; i < fESBufferList->CountItems(); )
         {
-            for( uint32_t i = 0; i < fESBufferList->CountItems(); )
+            fESBuffer = (HBBuffer*) fESBufferList->ItemAt( i );
+            
+            if( fESBuffer->fPass == 1 && fESBuffer->fStreamId != 0xE0 )
             {
-                fESBuffer = (HBBuffer*) fESBufferList->ItemAt( i );
-                
-                if( fESBuffer->fPass == 1 && fESBuffer->fStreamId != 0xE0 )
+                fESBufferList->RemoveItem( fESBuffer );
+                delete fESBuffer;
+                continue;
+            }
+
+            /* Look for a decoder for this ES */
+
+            if( fESBuffer->fStreamId == 0xE0 )
+            {
+                if( fFirstVideoPTS < 0 )
+                {
+                    fFirstVideoPTS = fESBuffer->fPTS;
+                    Log( "HBMpegDemux: got first 0xE0 packet (%lld)",
+                         fFirstVideoPTS );
+                }
+                if( fTitle->fMpeg2Fifo->Push( fESBuffer ) )
                 {
                     fESBufferList->RemoveItem( fESBuffer );
-                    delete fESBuffer;
-                    continue;
-                }
-
-                /* Look for a decoder for this ES */
-
-                if( fESBuffer->fStreamId == 0xE0 )
-                {
-                    if( fFirstVideoPTS < 0 )
-                    {
-                        fFirstVideoPTS = fESBuffer->fPTS;
-                        Log( "HBMpegDemux: got first 0xE0 packet (%lld)",
-                             fFirstVideoPTS );
-                    }
-                    if( fTitle->fMpeg2Fifo->Push( fESBuffer ) )
-                    {
-                        fESBufferList->RemoveItem( fESBuffer );
-                    }
-                    else
-                    {
-                        i++;
-                    }
-                }
-                else if( fAudio1 &&
-                         fESBuffer->fStreamId == fAudio1->fId )
-                {
-                    if( fFirstAudio1PTS < 0 )
-                    {
-                        fFirstAudio1PTS = fESBuffer->fPTS;
-                        Log( "HBMpegDemux: got first 0x%x packet (%lld)",
-                             fAudio1->fId, fFirstAudio1PTS );
-
-                        fAudio1->fDelay =
-                            ( fFirstAudio1PTS - fFirstVideoPTS ) / 90;
-                    }
-                    if( fAudio1->fAc3Fifo->Push( fESBuffer ) )
-                    {
-                        fESBufferList->RemoveItem( fESBuffer );
-                    }
-                    else
-                    {
-                        i++;
-                    }
-                }
-                else if( fAudio2 &&
-                         fESBuffer->fStreamId == fAudio2->fId )
-                {
-                    if( fFirstAudio2PTS < 0 )
-                    {
-                        fFirstAudio2PTS = fESBuffer->fPTS;
-                        Log( "HBMpegDemux: got first 0x%x packet (%lld)",
-                             fAudio2->fId, fFirstAudio2PTS );
-
-                        fAudio2->fDelay =
-                            ( fFirstAudio2PTS - fFirstVideoPTS ) / 90;
-                    }
-                    if( fAudio2->fAc3Fifo->Push( fESBuffer ) )
-                    {
-                        fESBufferList->RemoveItem( fESBuffer );
-                    }
-                    else
-                    {
-                        i++;
-                    }
                 }
                 else
                 {
-                    fESBufferList->RemoveItem( fESBuffer );
-                    delete fESBuffer;
+                    i++;
                 }
             }
-
-            if( !fESBufferList->CountItems() )
+            else if( fAudio1 &&
+                     fESBuffer->fStreamId == fAudio1->fId )
             {
-                delete fESBufferList;
-                fESBufferList = NULL;
+                if( fFirstAudio1PTS < 0 )
+                {
+                    fFirstAudio1PTS = fESBuffer->fPTS;
+                    Log( "HBMpegDemux: got first 0x%x packet (%lld)",
+                         fAudio1->fId, fFirstAudio1PTS );
+
+                    fAudio1->fDelay =
+                        ( fFirstAudio1PTS - fFirstVideoPTS ) / 90;
+                }
+                if( fAudio1->fAc3Fifo->Push( fESBuffer ) )
+                {
+                    fESBufferList->RemoveItem( fESBuffer );
+                }
+                else
+                {
+                    i++;
+                }
+            }
+            else if( fAudio2 &&
+                     fESBuffer->fStreamId == fAudio2->fId )
+            {
+                if( fFirstAudio2PTS < 0 )
+                {
+                    fFirstAudio2PTS = fESBuffer->fPTS;
+                    Log( "HBMpegDemux: got first 0x%x packet (%lld)",
+                         fAudio2->fId, fFirstAudio2PTS );
+
+                    fAudio2->fDelay =
+                        ( fFirstAudio2PTS - fFirstVideoPTS ) / 90;
+                }
+                if( fAudio2->fAc3Fifo->Push( fESBuffer ) )
+                {
+                    fESBufferList->RemoveItem( fESBuffer );
+                }
+                else
+                {
+                    i++;
+                }
             }
             else
             {
-                break;
+                fESBufferList->RemoveItem( fESBuffer );
+                delete fESBuffer;
             }
         }
 
-        /* Get a PS packet */
-        if( !( fPSBuffer = fTitle->fPSFifo->Pop() ) )
+        if( !fESBufferList->CountItems() )
         {
-            break;
+            delete fESBufferList;
+            fESBufferList = NULL;
         }
+        else
+        {
+            Unlock();
+            return false;
+        }
+    }
 
+    /* Get a PS packet */
+    if( ( fPSBuffer = fTitle->fPSFifo->Pop() ) )
+    {
         /* Get the ES data in it */
         PStoES( fPSBuffer, &fESBufferList );
-
-        didSomething = true;
+    }
+    else
+    {
+        Unlock();
+        return false;
     }
 
     Unlock();
-    return didSomething;
+    return true;
 }
 
 bool HBMpegDemux::Lock()
@@ -190,15 +187,13 @@ bool PStoES( HBBuffer * psBuffer, HBList ** _esBufferList )
 {
 #define psData (psBuffer->fData)
 
-    HBList   * esBufferList = new HBList();
-    HBBuffer * esBuffer;
-    uint32_t   pos = 0;
+    uint32_t pos = 0;
 
     /* pack_header */
     if( psData[pos] != 0 || psData[pos+1] != 0 ||
         psData[pos+2] != 0x1 || psData[pos+3] != 0xBA )
     {
-        Log( "PStoES : not a PS packet (%02x%02x%02x%02x)",
+        Log( "PStoES: not a PS packet (%02x%02x%02x%02x)",
              psData[pos] << 24, psData[pos+1] << 16,
              psData[pos+2] << 8, psData[pos+3] );
         delete psBuffer;
@@ -220,8 +215,11 @@ bool PStoES( HBBuffer * psBuffer, HBList ** _esBufferList )
         pos           += 2 + header_length;
     }
 
+    HBList   * esBufferList = new HBList();
+    HBBuffer * esBuffer;
+
     /* PES */
-    while( pos + 2 < psBuffer->fSize &&
+    while( pos + 6 < psBuffer->fSize &&
            psData[pos] == 0 && psData[pos+1] == 0 && psData[pos+2] == 0x1 )
     {
         uint32_t streamId;
@@ -233,11 +231,19 @@ bool PStoES( HBBuffer * psBuffer, HBList ** _esBufferList )
         uint64_t PTS = 0;
 
         pos               += 3;               /* packet_start_code_prefix */
-        streamId           = psData[pos++];
+        streamId           = psData[pos];
+        pos               += 1;
 
         PES_packet_length  = ( psData[pos] << 8 ) + psData[pos+1];
         pos               += 2;               /* PES_packet_length */
         PES_packet_end     = pos + PES_packet_length;
+
+        if( streamId != 0xE0 && streamId != 0xBD )
+        {
+            /* Not interesting */
+            pos = PES_packet_end;
+            continue;
+        }
 
         hasPTS             = ( ( psData[pos+1] >> 6 ) & 0x2 );
         pos               += 2;               /* Required headers */
@@ -248,7 +254,7 @@ bool PStoES( HBBuffer * psBuffer, HBList ** _esBufferList )
 
         if( hasPTS )
         {
-            PTS = ( ( ( psData[pos] >> 1 ) & 0x7 ) << 30 ) +
+            PTS = ( ( ( (uint64_t) psData[pos] >> 1 ) & 0x7 ) << 30 ) +
                   ( psData[pos+1] << 22 ) +
                   ( ( psData[pos+2] >> 1 ) << 15 ) +
                   ( psData[pos+3] << 7 ) +
@@ -257,19 +263,21 @@ bool PStoES( HBBuffer * psBuffer, HBList ** _esBufferList )
 
         pos = PES_header_end;
 
-        if( streamId != 0xE0 && streamId != 0xBD )
-        {
-            /* Not interesting */
-            continue;
-        }
-
         if( streamId == 0xBD )
         {
-            /* A52 : don't ask */
+            /* A52: don't ask */
             streamId |= ( psData[pos] << 8 );
             pos += 4;
         }
 
+        /* Sanity check */
+        if( pos >= PES_packet_end )
+        {
+            Log( "PStoES: pos >= PES_packet_end" );
+            pos = PES_packet_end;
+            continue;
+        }
+        
         /* Here we hit we ES payload */
         esBuffer = new HBBuffer( PES_packet_end - pos );
 
@@ -287,7 +295,7 @@ bool PStoES( HBBuffer * psBuffer, HBList ** _esBufferList )
 
     delete psBuffer;
 
-    if( esBufferList && !esBufferList->CountItems() )
+    if( !esBufferList->CountItems() )
     {
         delete esBufferList;
         esBufferList = NULL;
