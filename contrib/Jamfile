@@ -42,6 +42,10 @@ LibA52 $(SUBDIR)/lib/liba52.a  : $(SUBDIR)/a52dec.tar.gz ;
 # libavcodec
 rule LibAvCodec
 {
+    if $(OS) = MACOSX && $(OSPLAT) = X86
+    {
+       FFMPEG_OPTIONS = --disable-mmx ;
+    }
     Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
 }
@@ -49,7 +53,7 @@ actions LibAvCodec
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf ffmpeg && tar xzf ffmpeg.tar.gz && cd ffmpeg &&
-    ./configure --prefix=$CONTRIB --enable-gpl &&
+    ./configure --prefix=$CONTRIB $(FFMPEG_OPTIONS) --enable-gpl &&
     make -C libavcodec && make -C libavutil &&
     make -C libavcodec installlib && make -C libavutil installlib &&
     strip -S $CONTRIB/lib/libavcodec.a
