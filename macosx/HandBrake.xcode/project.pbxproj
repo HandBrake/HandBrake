@@ -301,7 +301,7 @@
 	<key>CFBundleExecutable</key>
 	<string>HandBrake</string>
 	<key>CFBundleGetInfoString</key>
-	<string>HandBrake 0.5.2+ - By Eric Petit &lt;titer@m0k.org&gt;</string>
+	<string>HandBrake 0.6.0-test1+ - By Eric Petit &lt;titer@m0k.org&gt;</string>
 	<key>CFBundleIconFile</key>
 	<string>HandBrake.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -313,11 +313,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.5.2+</string>
+	<string>0.6.0-test1+</string>
 	<key>CFBundleSignature</key>
 	<string>HB##</string>
 	<key>CFBundleVersion</key>
-	<string>0.5.2+</string>
+	<string>0.6.0-test1+</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>

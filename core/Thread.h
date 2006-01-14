@@ -1,4 +1,4 @@
-/* $Id: Thread.h,v 1.8 2004/01/14 21:37:25 titer Exp $
+/* $Id: Thread.h,v 1.9 2004/02/19 17:59:13 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -31,10 +31,13 @@
 #  define HB_NORMAL_PRIORITY 0
 #endif
 
-/* Functions declarations */
-HBThread * HBThreadInit( char * name, void (* function)(void *),
-                         void * arg, int priority );
-void       HBThreadClose( HBThread ** );
+/**********************************************************************
+ * HBThread/HBLock/HBCond declarations
+ **********************************************************************/
+HBThread *           HBThreadInit( char * name,
+                                   void (* function)(void *),
+                                   void * arg, int priority );
+void                 HBThreadClose( HBThread ** );
 
 HBLock             * HBLockInit();
 static inline void   HBLockLock( HBLock * );
@@ -46,7 +49,10 @@ static inline void   HBCondWait( HBCond *, HBLock * );
 static inline void   HBCondSignal( HBCond * );
 void                 HBCondClose( HBCond ** );
 
-/* Inlined stuff */
+
+/**********************************************************************
+ * HBLock implementation (inline functions)
+ **********************************************************************/
 struct HBLock
 {
 #if defined( HB_BEOS )
@@ -80,6 +86,10 @@ static inline void HBLockUnlock( HBLock * l )
 #endif
 }
 
+
+/**********************************************************************
+ * HBCond implementation (inline functions)
+ **********************************************************************/
 struct HBCond
 {
 #if defined( HB_BEOS )

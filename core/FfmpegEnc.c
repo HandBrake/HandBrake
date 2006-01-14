@@ -1,4 +1,4 @@
-/* $Id: FfmpegEnc.c,v 1.18 2004/01/21 17:59:33 titer Exp $
+/* $Id: FfmpegEnc.c,v 1.19 2004/03/01 21:36:36 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -275,6 +275,7 @@ static void CloseAvcodec( HBFfmpegEnc * f )
     if( f->title->esConfig )
     {
         free( f->title->esConfig );
+        f->title->esConfig       = NULL;
         f->title->esConfigLength = 0;
     }
 }

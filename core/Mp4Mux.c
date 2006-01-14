@@ -1,4 +1,4 @@
-/* $Id: Mp4Mux.c,v 1.22 2004/02/18 17:07:20 titer Exp $
+/* $Id: Mp4Mux.c,v 1.23 2004/02/18 19:36:35 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -59,15 +59,20 @@ void HBMp4MuxClose( HBMp4Mux ** _m )
     HBThreadClose( &m->thread );
 
     file = fopen( m->title->file, "r" );
-    fseek( file, 0, SEEK_END );
-    size = ftell( file );
-    fclose( file );
+    if( file )
+    {
+        fseek( file, 0, SEEK_END );
+        size = ftell( file );
+        fclose( file );
 
-    HBLog( "HBMp4Mux: videoFrames=%lld, %lld bytes", videoFrames, videoBytes );
-    HBLog( "HBMp4Mux: audioFrames=%lld, %lld bytes", audioFrames, audioBytes );
-    HBLog( "HBMp4Mux: overhead=%.2f bytes / frame",
-            ( (float) size - videoBytes - audioBytes ) /
-            ( videoFrames + audioFrames ) );
+        HBLog( "HBMp4Mux: videoFrames=%lld, %lld bytes",
+               videoFrames, videoBytes );
+        HBLog( "HBMp4Mux: audioFrames=%lld, %lld bytes",
+               audioFrames, audioBytes );
+        HBLog( "HBMp4Mux: overhead=%.2f bytes / frame",
+                ( (float) size - videoBytes - audioBytes ) /
+                ( videoFrames + audioFrames ) );
+    }
 
     free( m );
 

@@ -1,13 +1,14 @@
-$Id: NEWS,v 1.9 2004/02/18 17:21:00 titer Exp $
+$Id: NEWS,v 1.11 2004/03/01 21:36:36 titer Exp $
 
-This is the NEWS file for HandBrake <http://handbrake.m0k.org/>
+NEWS file for HandBrake <http://handbrake.m0k.org/>
 
 Changes between 0.5.2 and 0.6.0
- + .mp4 and .ogm output
- + aac and vorbis encoding
- + experimental h264 encoding
- + gtk2 linux interface
- + autocrop
+ + MP4 and OGM output
+ + AAC and Vorbis encoding
+ + Experimental H264 encoding
+ + Autocrop
+ + GTK2 linux interface
+ + OS X interface localization
 
 Changes between 0.5.1 and 0.5.2
  + Bugfixes

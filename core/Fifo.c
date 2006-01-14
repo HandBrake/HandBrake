@@ -1,4 +1,4 @@
-/* $Id: Fifo.c,v 1.8 2004/01/16 19:04:03 titer Exp $
+/* $Id: Fifo.c,v 1.9 2004/02/24 21:55:53 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -18,12 +18,25 @@ HBBuffer * HBBufferInit( int size )
     b->alloc = size;
     b->size  = size;
 
-    if( !( b->data = malloc( size ) ) )
+#if defined( HB_BEOS ) || defined( HB_LINUX )
+    if( !( b->data = memalign( 16, size ) ) )
     {
         HBLog( "HBBufferInit: malloc() failed, gonna crash" );
         free( b );
         return NULL;
     }
+#elif defined( HB_MACOSX )
+    if( !( b->dataOrig = malloc( size + 15 ) ) )
+    {
+        HBLog( "HBBufferInit: malloc() failed, gonna crash" );
+        free( b );
+        return NULL;
+    }
+    b->data  = b->dataOrig + 15;
+    b->data -= (long) b->data & 15;
+#elif defined( HB_CYGWIN )
+    /* TODO */
+#endif
 
     b->position = 0.0;
 
@@ -33,7 +46,14 @@ HBBuffer * HBBufferInit( int size )
 void HBBufferReAlloc( HBBuffer * b, int size )
 {
     b->alloc = size;
+#if defined( HB_BEOS ) || defined( HB_LINUX )
     b->data  = realloc( b->data, size );
+#elif defined( HB_MACOSX )
+    b->dataOrig = realloc( b->dataOrig, size );
+    b->data     = b->dataOrig;
+#elif defined( HB_CYGWIN )
+    /* TODO */
+#endif
 
     if( !b->data )
     {
@@ -45,7 +65,13 @@ void HBBufferClose( HBBuffer ** _b )
 {
     HBBuffer * b = *_b;
 
+#if defined( HB_BEOS ) || defined( HB_LINUX )
     free( b->data );
+#elif defined( HB_MACOSX )
+    free( b->dataOrig );
+#elif defined( HB_CYGWIN )
+    /* TODO */
+#endif
     free( b );
 
     *_b = NULL;

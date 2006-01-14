@@ -1,4 +1,4 @@
-/* $Id: Thread.c,v 1.10 2004/01/14 21:37:25 titer Exp $
+/* $Id: Thread.c,v 1.11 2004/02/19 17:59:13 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -6,13 +6,22 @@
 
 #include "Thread.h"
 
+/**********************************************************************
+ * HBThread implementation
+ **********************************************************************/
 struct HBThread
 {
+    /* User-friendly name */
     char    * name;
+
+    /* HB_(LOW|NORMAL)_PRIORITY */
     int       priority;
+
+    /* Thread function and argument */
     void      (*function) ( void * );
     void    * arg;
 
+    /* OS-specific thread id */
 #if defined( HB_BEOS )
     int       thread;
 #elif defined( HB_MACOSX ) || defined( HB_LINUX )
@@ -22,23 +31,45 @@ struct HBThread
 #endif
 };
 
-static void ThreadFunc( void * t );
+/* HBThreadInit actually starts this routine because
+   pthread_setschedparam() might fail if called from an external
+   thread (typically, because the thread exited immediatly. This isn't
+   really necessary, but I find it nicer that way */
+static void ThreadFunc( void * _t )
+{
+    HBThread * t = (HBThread*) _t;
+
+#if defined( HB_MACOSX )
+    /* Set the thread priority */
+    struct sched_param param;
+    memset( &param, 0, sizeof( struct sched_param ) );
+    param.sched_priority = t->priority;
+    if( pthread_setschedparam( pthread_self(), SCHED_OTHER, &param ) )
+    {
+        HBLog( "HBThreadInit: couldn't set thread priority" );
+    }
+#endif
+
+    /* Start the real routine */
+    t->function( t->arg );
+}
 
 HBThread * HBThreadInit( char * name, void (* function)(void *),
                          void * arg, int priority )
 {
+    /* Initializations */
     HBThread * t;
     if( !( t = malloc( sizeof( HBThread ) ) ) )
     {
         HBLog( "HBThreadInit: malloc() failed, gonna crash" );
         return NULL;
     }
-
     t->name     = strdup( name );
     t->priority = priority;
     t->function = function;
     t->arg      = arg;
 
+    /* Create and start the thread */
 #if defined( HB_BEOS )
     t->thread = spawn_thread( (int32 (*)( void * )) ThreadFunc,
                               name, priority, t );
@@ -57,27 +88,11 @@ HBThread * HBThreadInit( char * name, void (* function)(void *),
     return t;
 }
 
-static void ThreadFunc( void * _t )
-{
-    HBThread * t = (HBThread*) _t;
-
-#if defined( HB_MACOSX )
-    struct sched_param param;
-    memset( &param, 0, sizeof( struct sched_param ) );
-    param.sched_priority = t->priority;
-    if( pthread_setschedparam( pthread_self(), SCHED_OTHER, &param ) )
-    {
-        HBLog( "HBThreadInit: couldn't set thread priority" );
-    }
-#endif
-
-    t->function( t->arg );
-}
-
 void HBThreadClose( HBThread ** _t )
 {
     HBThread * t = *_t;
 
+    /* Join the thread */
 #if defined( HB_BEOS )
     long exitValue;
     wait_for_thread( t->thread, &exitValue );
@@ -90,11 +105,16 @@ void HBThreadClose( HBThread ** _t )
     HBLog( "HBThreadClose: thread %d stopped (\"%s\")",
            t->thread, t->name );
 
+    /* Clean up */
     free( t->name );
     free( t );
     *_t = NULL;
 }
 
+
+/**********************************************************************
+ * HBLock implementation
+ **********************************************************************/
 HBLock * HBLockInit()
 {
     HBLock * l;
@@ -131,6 +151,10 @@ void HBLockClose( HBLock ** _l )
     *_l = NULL;
 }
 
+
+/**********************************************************************
+ * HBCond implementation
+ **********************************************************************/
 HBCond * HBCondInit()
 {
     HBCond * c = malloc( sizeof( HBCond ) );

@@ -1,4 +1,4 @@
-/* $Id: AviMux.c,v 1.15 2004/02/18 17:07:20 titer Exp $
+/* $Id: AviMux.c,v 1.16 2004/02/18 19:36:35 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -162,15 +162,20 @@ void HBAviMuxClose( HBAviMux ** _a )
     HBThreadClose( &a->thread );
 
     file = fopen( a->title->file, "r" );
-    fseek( file, 0, SEEK_END );
-    size = ftell( file );
-    fclose( file );
+    if( file )
+    {
+        fseek( file, 0, SEEK_END );
+        size = ftell( file );
+        fclose( file );
 
-    HBLog( "HBAviMux: videoFrames=%lld, %lld bytes", videoFrames, videoBytes );
-    HBLog( "HBAviMux: audioFrames=%lld, %lld bytes", audioFrames, audioBytes );
-    HBLog( "HBAviMux: overhead=%.2f bytes / frame",
-            ( (float) size - videoBytes - audioBytes ) /
-            ( videoFrames + audioFrames ) );
+        HBLog( "HBAviMux: videoFrames=%lld, %lld bytes",
+               videoFrames, videoBytes );
+        HBLog( "HBAviMux: audioFrames=%lld, %lld bytes",
+               audioFrames, audioBytes );
+        HBLog( "HBAviMux: overhead=%.2f bytes / frame",
+               ( (float) size - videoBytes - audioBytes ) /
+               ( videoFrames + audioFrames ) );
+    }
 
     free( a );
 

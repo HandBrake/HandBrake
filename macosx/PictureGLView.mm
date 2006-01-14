@@ -1,9 +1,10 @@
-/* $Id: PictureGLView.mm,v 1.3 2003/11/03 22:01:13 titer Exp $
+/* $Id: PictureGLView.mm,v 1.4 2004/02/23 18:08:41 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
+#include <OpenGL/OpenGL.h>
 #include <OpenGL/gl.h>
 #include <math.h>
 
@@ -112,7 +113,8 @@ uint8_t * truc;
     glDepthFunc( GL_LEQUAL );
     glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
 
-#define ANIMATION_TIME  500000
+#define ANIMATION_TIME 1000000
+#define FRAME_PER_SEC  30
 
     rotation = 0.0;
     float w = ( how == HB_ANIMATE_LEFT ) ? 1.0 : -1.0;
@@ -126,7 +128,7 @@ uint8_t * truc;
 
         [self drawAnimation: how];
 
-        rotation += w;
+        rotation += w * 90 * 1000000 / ANIMATION_TIME / FRAME_PER_SEC;
         if( w * rotation >= 90.0 )
         {
             break;
@@ -176,6 +178,7 @@ uint8_t * truc;
     [[self openGLContext] makeCurrentContext];
     [self reshape];
 
+
     glGenTextures( 2, texture );
     truc = (uint8_t*) malloc( 1024*1024*4 );
 
@@ -197,62 +200,69 @@ uint8_t * truc;
 
 - (void) drawAnimation: (int) how
 {
-   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-   glMatrixMode( GL_PROJECTION );
-   glLoadIdentity();
-   glFrustum( -1.0, 1.0, -1.0, 1.0, PROUT, 20.0 );
-   glMatrixMode( GL_MODELVIEW );
-   glLoadIdentity();
-   glTranslatef( 0.0, 0.0, translation );
-   glRotatef( rotation, 0.0, 1.0, 0.0 );
+    /* Swap buffers only during the vertical retrace of the monitor.
+       http://developer.apple.com/documentation/GraphicsImaging/
+       Conceptual/OpenGL/chap5/chapter_5_section_44.html */
+    long params[] = { 1 };
+    CGLSetParameter( CGLGetCurrentContext(), kCGLCPSwapInterval,
+                     params );
 
-   glEnable( GL_POLYGON_SMOOTH );
-   glHint( GL_POLYGON_SMOOTH_HINT, GL_NICEST );
-
-   glBindTexture( GL_TEXTURE_2D, texture[0] );
-
-   glBegin( GL_QUADS );
-   glTexCoord2f( 0.0, 0.0 );
-   glVertex3f( -1.0, -1.0,  1.0 );
-   glTexCoord2f( ( 2.0 + fTitle->outWidthMax ) / 1024, 0.0 );
-   glVertex3f(  1.0, -1.0,  1.0 );
-   glTexCoord2f( ( 2.0 + fTitle->outWidthMax ) / 1024,
-                 ( 2.0 + fTitle->outHeightMax ) / 1024 );
-   glVertex3f(  1.0,  1.0,  1.0 );
-   glTexCoord2f( 0.0, ( 2.0 + fTitle->outHeightMax ) / 1024 );
-   glVertex3f( -1.0,  1.0,  1.0 );
-   glEnd();
-
-   glBindTexture( GL_TEXTURE_2D, texture[1] );
-
-   glBegin( GL_QUADS );
-   if( how == HB_ANIMATE_RIGHT )
-   {
-       glTexCoord2f( 0.0, 0.0 );
-       glVertex3f(  1.0, -1.0,  1.0 );
-       glTexCoord2f( ( 2.0 + fTitle->outWidthMax ) / 1024, 0.0 );
-       glVertex3f(  1.0, -1.0,  -1.0 );
-       glTexCoord2f( ( 2.0 + fTitle->outWidthMax ) / 1024,
-                     ( 2.0 + fTitle->outHeightMax ) / 1024 );
-       glVertex3f(  1.0,  1.0,  -1.0 );
-       glTexCoord2f( 0.0, ( 2.0 + fTitle->outHeightMax ) / 1024 );
-       glVertex3f(  1.0,  1.0,  1.0 );
-   }
-   else
-   {
-       glTexCoord2f( 0.0, 0.0 );
-       glVertex3f(  -1.0, -1.0, -1.0 );
-       glTexCoord2f( ( 2.0 + fTitle->outWidthMax ) / 1024, 0.0 );
-       glVertex3f(  -1.0, -1.0, 1.0 );
-       glTexCoord2f( ( 2.0 + fTitle->outWidthMax ) / 1024,
-                     ( 2.0 + fTitle->outHeightMax ) / 1024 );
-       glVertex3f(  -1.0,  1.0, 1.0 );
-       glTexCoord2f( 0.0, ( 2.0 + fTitle->outHeightMax ) / 1024 );
-       glVertex3f(  -1.0,  1.0, -1.0 );
-   }
-   glEnd();
-
-   [[self openGLContext] flushBuffer];
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    glMatrixMode( GL_PROJECTION );
+    glLoadIdentity();
+    glFrustum( -1.0, 1.0, -1.0, 1.0, PROUT, 20.0 );
+    glMatrixMode( GL_MODELVIEW );
+    glLoadIdentity();
+    glTranslatef( 0.0, 0.0, translation );
+    glRotatef( rotation, 0.0, 1.0, 0.0 );
+ 
+    glEnable( GL_POLYGON_SMOOTH );
+    glHint( GL_POLYGON_SMOOTH_HINT, GL_NICEST );
+ 
+    glBindTexture( GL_TEXTURE_2D, texture[0] );
+ 
+    glBegin( GL_QUADS );
+    glTexCoord2f( 0.0, 0.0 );
+    glVertex3f( -1.0, -1.0,  1.0 );
+    glTexCoord2f( ( 2.0 + fTitle->outWidthMax ) / 1024, 0.0 );
+    glVertex3f(  1.0, -1.0,  1.0 );
+    glTexCoord2f( ( 2.0 + fTitle->outWidthMax ) / 1024,
+                  ( 2.0 + fTitle->outHeightMax ) / 1024 );
+    glVertex3f(  1.0,  1.0,  1.0 );
+    glTexCoord2f( 0.0, ( 2.0 + fTitle->outHeightMax ) / 1024 );
+    glVertex3f( -1.0,  1.0,  1.0 );
+    glEnd();
+ 
+    glBindTexture( GL_TEXTURE_2D, texture[1] );
+ 
+    glBegin( GL_QUADS );
+    if( how == HB_ANIMATE_RIGHT )
+    {
+        glTexCoord2f( 0.0, 0.0 );
+        glVertex3f(  1.0, -1.0,  1.0 );
+        glTexCoord2f( ( 2.0 + fTitle->outWidthMax ) / 1024, 0.0 );
+        glVertex3f(  1.0, -1.0,  -1.0 );
+        glTexCoord2f( ( 2.0 + fTitle->outWidthMax ) / 1024,
+                      ( 2.0 + fTitle->outHeightMax ) / 1024 );
+        glVertex3f(  1.0,  1.0,  -1.0 );
+        glTexCoord2f( 0.0, ( 2.0 + fTitle->outHeightMax ) / 1024 );
+        glVertex3f(  1.0,  1.0,  1.0 );
+    }
+    else
+    {
+        glTexCoord2f( 0.0, 0.0 );
+        glVertex3f(  -1.0, -1.0, -1.0 );
+        glTexCoord2f( ( 2.0 + fTitle->outWidthMax ) / 1024, 0.0 );
+        glVertex3f(  -1.0, -1.0, 1.0 );
+        glTexCoord2f( ( 2.0 + fTitle->outWidthMax ) / 1024,
+                      ( 2.0 + fTitle->outHeightMax ) / 1024 );
+        glVertex3f(  -1.0,  1.0, 1.0 );
+        glTexCoord2f( 0.0, ( 2.0 + fTitle->outHeightMax ) / 1024 );
+        glVertex3f(  -1.0,  1.0, -1.0 );
+    }
+    glEnd();
+ 
+    [[self openGLContext] flushBuffer];
 }
 
 - (void) drawRect: (NSRect) rect

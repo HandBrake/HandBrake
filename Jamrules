@@ -8,7 +8,7 @@ LINK     = g++ ;
 OPTIM    = -O3 -funroll-loops ;
 
 # HandBrake defines
-HB_VERSION = 0.6.0-test1 ;
+HB_VERSION = 0.6.0-test2 ;
 DEFINES    = HB_$(OS) HB_VERSION=\\\"$(HB_VERSION)\\\" ;
 #DEFINES   += HB_NOMMX ;
 
@@ -100,10 +100,10 @@ rule OSXApp
 }
 actions BuildOSXApp
 {
-    $(RM) $(1) ;
-    ( cd macosx && xcodebuild ) && \
+    $(RM) $(1) && \
+      ( cd macosx && xcodebuild ) && \
       cp -r macosx/build/HandBrake.app $(1) && \
-      for i in French German; do \
+      for i in French German it pl ru; do \
         ( cd $(1)/Contents/Resources && \
           cp -r English.lproj $i.lproj && \
           cp ../../../macosx/i18n/$i.strings \
@@ -118,8 +118,13 @@ actions BuildOSXPackage
 {                 
     rm -rf $(1) "HandBrake $(HB_VERSION)" && \
       mkdir "HandBrake $(HB_VERSION)" && \
-      cp -r AUTHORS COPYING CREDITS HandBrake.app \
-        "HandBrake $(HB_VERSION)" && \
+      cp AUTHORS "HandBrake $(HB_VERSION)/AUTHORS.txt" && \
+      cp COPYING "HandBrake $(HB_VERSION)/COPYING.txt" && \
+      cp CREDITS "HandBrake $(HB_VERSION)/CREDITS.txt" && \
+      cp THANKS "HandBrake $(HB_VERSION)/THANKS.txt" && \
+      ( cd doc && ./genhtml.sh ) && \
+      cp doc/faq.html "HandBrake $(HB_VERSION)/FAQ.html" && \
+      cp -r HandBrake.app "HandBrake $(HB_VERSION)" && \
       zip -9 -r $(1) "HandBrake $(HB_VERSION)" && \
       rm -rf "HandBrake $(HB_VERSION)"
 }

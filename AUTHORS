@@ -1,4 +1,6 @@
-$Id: AUTHORS,v 1.1 2003/12/26 20:19:38 titer Exp $
+$Id: AUTHORS,v 1.2 2004/03/01 19:09:38 titer Exp $
+
+AUTHORS file for HandBrake <http://handbrake.m0k.org/>
 
 Eric Petit <titer@m0k.org>
  + Core (construct, multithreading, BeOS/OS X/Linux ports)
@@ -10,6 +12,7 @@ Eric Petit <titer@m0k.org>
  + MP4 muxer (w/ libmp4v2)
  + BeOS interface
  + OS X interface
+ + French translation
 
 Laurent Aimar <fenrir@via.ecp.fr>
  + H264 and Vorbis encoders (w/ libx264/libvorbis)

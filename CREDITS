@@ -1,5 +1,9 @@
-HandBrake uses a lot of cool libraries from the GNU/Linux world. Thank
-their authors!
+$Id: CREDITS,v 1.5 2004/03/01 19:09:38 titer Exp $
+
+CREDITS file for HandBrake <http://handbrake.m0k.org/>
+
+HandBrake uses many cool libraries from the GNU/Linux world.
+Thank their authors!
 
 liba52 authors:
   Aaron Holtzman

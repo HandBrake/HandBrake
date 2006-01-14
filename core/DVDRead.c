@@ -1,4 +1,4 @@
-/* $Id: DVDRead.c,v 1.9 2004/01/16 19:04:03 titer Exp $
+/* $Id: DVDRead.c,v 1.10 2004/02/29 11:21:34 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -89,7 +89,6 @@ static void DVDReadThread( void * _d )
     HBDVDRead * d     = (HBDVDRead*) _d;
     HBTitle   * title = d->title;
 
-    uint8_t dummy[DVD_VIDEO_LB_LEN];
     int i;
 
     /* Open the device */
@@ -107,15 +106,12 @@ static void DVDReadThread( void * _d )
     d->endPosition   = dvdplay_title_end( d->vmg );
 
     HBLog( "HBDVDRead: starting, blocks: %d to %d",
-         d->beginPosition, d->endPosition );
-
-    /* Lalala */
-    dvdplay_read( d->vmg, dummy, 1 );
+           d->beginPosition, d->endPosition );
 
     /* Do the job */
     for( i = 0; i < ( title->twoPass ? 2 : 1 ); i++ )
     {
-        dvdplay_seek( d->vmg, 0 );
+        dvdplay_start( d->vmg, title->index );
 
         HBLog( "HBDVDRead: starting pass %d of %d", i + 1,
                title->twoPass ? 2 : 1 );

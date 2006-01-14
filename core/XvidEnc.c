@@ -1,4 +1,4 @@
-/* $Id: XvidEnc.c,v 1.18 2004/01/08 22:02:29 titer Exp $
+/* $Id: XvidEnc.c,v 1.20 2004/03/01 21:36:36 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -64,6 +64,12 @@ void HBXvidEncClose( HBWork ** _x )
         HBLog( "HBXvidEnc: closing libxvidcore (pass %d)",
                 x->pass );
         xvid_encore( x->xvid, XVID_ENC_DESTROY, NULL, NULL);
+    }
+    if( x->title->esConfig )
+    {
+        free( x->title->esConfig );
+        x->title->esConfig       = NULL;
+        x->title->esConfigLength = 0;
     }
     if( x->frames )
     {
@@ -138,11 +144,10 @@ static int XvidEncWork( HBWork * w )
         {
             HBLog( "HBXvidEnc: closing libxvidcore (pass %d)",
                     x->pass );
-
             xvid_encore( x->xvid, XVID_ENC_DESTROY, NULL, NULL);
         }
 
-        x->pass = scaledBuffer->pass;;
+        x->pass = scaledBuffer->pass;
         HBLog( "HBXvidEnc: opening libxvidcore (pass %d)", x->pass );
 
         memset( &xvid_gbl_init, 0, sizeof( xvid_gbl_init ) );
@@ -242,10 +247,33 @@ static int XvidEncWork( HBWork * w )
     {
         if( !title->esConfig )
         {
-            /* KLUDGE */
-            title->esConfig = malloc( 15 );
-            title->esConfigLength = 15;
-            memcpy( title->esConfig, mpeg4Buffer->data + 4, 15 );
+            int volStart, vopStart;
+            for( volStart = 0; ; volStart++ )
+            {
+                if( mpeg4Buffer->data[volStart]   == 0x0 &&
+                    mpeg4Buffer->data[volStart+1] == 0x0 &&
+                    mpeg4Buffer->data[volStart+2] == 0x1 &&
+                    mpeg4Buffer->data[volStart+3] == 0x20 )
+                {
+                    break;
+                }
+            }
+            for( vopStart = volStart + 4; ; vopStart++ )
+            {
+                if( mpeg4Buffer->data[vopStart]   == 0x0 &&
+                    mpeg4Buffer->data[vopStart+1] == 0x0 &&
+                    mpeg4Buffer->data[vopStart+2] == 0x1 &&
+                    mpeg4Buffer->data[vopStart+3] == 0xB6 )
+                {
+                    break;
+                }
+            }
+
+            HBLog( "XvidEnc: VOL size is %d bytes", vopStart - volStart );
+            title->esConfig = malloc( vopStart - volStart );
+            title->esConfigLength = vopStart - volStart;
+            memcpy( title->esConfig, mpeg4Buffer->data + volStart,
+                    vopStart - volStart );
         }
         x->frames++;
         x->bytes       += mpeg4Buffer->size;

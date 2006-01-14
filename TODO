@@ -1,6 +1,7 @@
-$Id: TODO,v 1.22 2004/02/13 13:45:50 titer Exp $
+$Id: TODO,v 1.29 2004/03/01 21:36:36 titer Exp $
 
-This is the TODO list for HandBrake <http://handbrake.m0k.org/>
+TODO file for HandBrake <http://handbrake.m0k.org/>
+
 Features to be added are written in no particular order.
 
 - Core
@@ -8,25 +9,29 @@ Features to be added are written in no particular order.
   + Should be able to boost or normalize the audio volume
   + Allow the intf to preview the latest encoded picture
   + Finish and test the MPEG audio decoder
+  + PCM
   + More encoding options: B-frames, type of estimation etc etc
   + Subtitle support
   + Allow the user to split the file in x parts
   + AC3 pass-through
-  + mkv muxing support
-  + manual aspect ratio
-  + rotate the movie
-  + rip only a few chapters
-  + network shared processing (using RendezVous?)
-  + do some DVD buffering so the drive can rest most of the time
-  + custom framerate
-  + homemade resampler
-  + VCD output
+  + MKV muxing support
+  + Manual aspect ratio
+  + Rotate the movie
+  + Rip only a few chapters, or rip X seconds from a given starting
+    point
+  + Network shared processing (using RendezVous?)
+  + Do some DVD buffering so the drive can rest most of the time
+  + Custom framerate
+  + Homemade resampler
+  + VCD/DVD-R output
+  + Better remaining time calculation
+  + Theora encoding
 
 - All interfaces
   + Use the DVD name in popup and for the name of the created file
-  + nice 'About...' box with link to homepage & faq
+  + Nice 'About...' box with link to homepage & faq
   + Add a 'Cancel' button in the crop & scale panel
-  + nicer, more user-friendly "Open" intf
+  + Allow to launch rips of several titles
 
 - BeOS interface
   + Redo the picture panel (liblayout?)
@@ -34,10 +39,11 @@ Features to be added are written in no particular order.
   + i18n
 
 - Mac OS X interface
-  + Allow to quit HandBrake when the crop & scale sheet is opened
   + Warning when the user quit the app while encoding
   + Progress bar in the dock icon
   + Send a mail when rip is done
+  + Turn the computer off when done
+  + Collapse interface when rip starts
 
 - Bugs
   + OSX - crash when trying to encode a DVD from mounted toast image
