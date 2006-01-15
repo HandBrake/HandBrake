@@ -239,7 +239,10 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         FILE * file_preview;
         char   filename[1024];
 
-        hb_dvd_seek( data->dvd, (float) ( i + 1 ) / 11.0 );
+        if( !hb_dvd_seek( data->dvd, (float) ( i + 1 ) / 11.0 ) )
+        {
+            goto error;
+        }
 
         hb_log( "scan: preview %d", i + 1 );
 

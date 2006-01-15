@@ -536,26 +536,34 @@ void hb_dvd_stop( hb_dvd_t * d )
  **********************************************************************/
 int hb_dvd_seek( hb_dvd_t * d, float f )
 {
-    int target;
+    int count, sizeCell;
+    int i;
 
-    target = d->title_start + (int) ( f * d->title_block_count );
+    count = f * d->title_block_count;
 
-    /* Find the cell we shall start in */
-    d->cell_cur = d->cell_start;
-    FindNextCell( d );
-    for( ;; )
+    for( i = d->cell_start; i <= d->cell_end; i++ )
     {
-        if( target < d->pgc->cell_playback[d->cell_cur].last_sector )
+        sizeCell = d->pgc->cell_playback[i].last_sector + 1 -
+            d->pgc->cell_playback[i].first_sector;
+
+        if( count < sizeCell )
         {
+            d->cell_cur = i;
+            FindNextCell( d );
+
+            /* Now let hb_dvd_read find the next VOBU */
+            d->next_vobu = d->pgc->cell_playback[i].first_sector + count;
+            d->pack_len  = 0;
             break;
         }
-        d->cell_cur = d->cell_next;
-        FindNextCell( d );
+
+        count -= sizeCell;
     }
 
-    /* Now let hb_dvd_read find the next VOBU */
-    d->next_vobu = target;
-    d->pack_len  = 0;
+    if( i > d->cell_end )
+    {
+        return 0;
+    }
 
     return 1;
 }
