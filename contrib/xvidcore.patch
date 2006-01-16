@@ -1,0 +1,31 @@
+diff -ru xvidcore-1.1.0/build/generic/configure xvidcore-1.1.0-patched/build/generic/configure
+--- xvidcore-1.1.0/build/generic/configure	2005-12-30 15:45:30.000000000 +0100
++++ xvidcore-1.1.0-patched/build/generic/configure	2006-01-16 22:06:10.000000000 +0100
+@@ -4052,6 +4071,12 @@
+ 	       PREFIX="-DPREFIX"
+ 	       MARK_FUNCS=""
+                ;;
++           *darwin*)
++               echo "$as_me:$LINENO: result: macho" >&5
++echo "${ECHO_T}macho" >&6
++               NASM_FORMAT="macho"
++               PREFIX="-DPREFIX"
++               MARK_FUNCS=""
+        esac
+ 
+        AS="$chosen_asm_prog"
+diff -ru xvidcore-1.1.0/build/generic/configure.in xvidcore-1.1.0-patched/build/generic/configure.in
+--- xvidcore-1.1.0/build/generic/configure.in	2005-12-30 15:45:30.000000000 +0100
++++ xvidcore-1.1.0-patched/build/generic/configure.in	2006-01-16 22:06:04.000000000 +0100
+@@ -397,6 +397,11 @@
+ 	       PREFIX="-DPREFIX"
+ 	       MARK_FUNCS=""
+                ;;
++           *darwin*)
++               AC_MSG_RESULT([macho])
++               NASM_FORMAT="macho"
++               PREFIX="-DPREFIX"
++               MARK_FUNCS=""
+        esac
+ 
+        AS="$chosen_asm_prog"

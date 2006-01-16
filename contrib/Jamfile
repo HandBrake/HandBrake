@@ -258,10 +258,6 @@ LibX264 $(SUBDIR)/lib/libx264.a : $(SUBDIR)/x264.tar.gz ;
 # libxvidcore
 rule LibXvidCore
 {
-    if $(OS) = MACOSX && $(OSPLAT) = X86
-    {
-       XVID_OPTIONS = --disable-assembly ;
-    }
     Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
 }
@@ -269,8 +265,8 @@ actions LibXvidCore
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf xvidcore && tar xzf xvidcore.tar.gz &&
-    cd xvidcore/build/generic/ && ./configure $(XVID_OPTIONS) &&
-    make libxvidcore.a &&
+    cd xvidcore && patch -p1 < ../xvidcore.patch &&
+    cd build/generic/ && ./configure && make libxvidcore.a &&
     cp ./=build/libxvidcore.a $CONTRIB/lib/ &&
     cp ../../src/xvid.h $CONTRIB/include/ &&
     strip -S $CONTRIB/lib/libxvidcore.a
