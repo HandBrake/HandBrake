@@ -44,7 +44,12 @@ rule LibAvCodec
 {
     if $(OS) = MACOSX && $(OSPLAT) = X86
     {
-       FFMPEG_OPTIONS = --disable-mmx ;
+       FFMPEG_OPTIONS = --enable-memalign-hack ;
+       FFMPEG_PATCH   = "patch -p1 < ../ffmpeg.patch" ;
+    }
+    else
+    {
+        FFMPEG_PATCH = true ;
     }
     Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
@@ -53,6 +58,7 @@ actions LibAvCodec
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf ffmpeg && tar xzf ffmpeg.tar.gz && cd ffmpeg &&
+    $(FFMPEG_PATCH) &&
     ./configure --prefix=$CONTRIB $(FFMPEG_OPTIONS) --enable-gpl &&
     make -C libavcodec && make -C libavutil &&
     make -C libavcodec installlib && make -C libavutil installlib &&
