@@ -1,0 +1,40 @@
+/* PortableController */
+
+#import <Cocoa/Cocoa.h>
+#import "hb.h"
+
+@interface PortableController : NSObject
+
+{
+    hb_handle_t                  * fHandle;
+    hb_list_t                    * fList;
+
+    IBOutlet NSWindow            * fWindow;
+    IBOutlet NSView              * fEmptyView;
+
+    IBOutlet NSView              * fOpenView;
+    IBOutlet NSMatrix            * fOpenMatrix;
+    IBOutlet NSPopUpButton       * fOpenPopUp;
+    IBOutlet NSTextField         * fOpenFolderField;
+    IBOutlet NSButton            * fOpenBrowseButton;
+    IBOutlet NSProgressIndicator * fOpenIndicator;
+    IBOutlet NSButton            * fOpenGoButton;
+    NSString                     * fOpenFolderString;
+
+    IBOutlet NSView              * fConvertView;
+    IBOutlet NSTableView         * fConvertTableView;
+    IBOutlet NSPopUpButton       * fConvertFolderPopUp;
+    IBOutlet NSProgressIndicator * fConvertIndicator;
+    NSMutableArray               * fConvertCheckArray;
+    NSString                     * fConvertFolderString;
+}
+
+- (void) openShow: (id) sender;
+- (void) openMatrixChanged: (id) sender;
+- (void) openBrowse: (id) sender;
+- (void) openGo: (id) sender;
+
+- (void) convertGo: (id) sender;
+
+@end
+

@@ -1,0 +1,93 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {
+                convertGo = id; 
+                openBrowse = id; 
+                openGo = id; 
+                openMatrixChanged = id; 
+                openShow = id; 
+            }; 
+            CLASS = EmbeddedController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                fConvertFolderPopUp = NSPopUpButton; 
+                fConvertIndicator = NSProgressIndicator; 
+                fConvertTableView = NSTableView; 
+                fConvertView = NSView; 
+                fEmptyView = NSView; 
+                fOpenBrowseButton = NSButton; 
+                fOpenFolderField = NSTextField; 
+                fOpenGoButton = NSButton; 
+                fOpenIndicator = NSProgressIndicator; 
+                fOpenMatrix = NSMatrix; 
+                fOpenPopUp = NSPopUpButton; 
+                fOpenView = NSView; 
+                fWindow = NSWindow; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {
+                ClosePanel = id; 
+                NextPicture = id; 
+                PreviousPicture = id; 
+                SettingsChanged = id; 
+            }; 
+            CLASS = PictureController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                fCropBottomField = NSTextField; 
+                fCropBottomStepper = NSStepper; 
+                fCropLeftField = NSTextField; 
+                fCropLeftStepper = NSStepper; 
+                fCropMatrix = NSMatrix; 
+                fCropRightField = NSTextField; 
+                fCropRightStepper = NSStepper; 
+                fCropTopField = NSTextField; 
+                fCropTopStepper = NSStepper; 
+                fDeinterlaceCheck = NSButton; 
+                fEffectsCheck = NSButton; 
+                fHeightField = NSTextField; 
+                fHeightStepper = NSStepper; 
+                fInfoField = NSTextField; 
+                fNextButton = NSButton; 
+                fPictureGLView = HBPictureGLView; 
+                fPrevButton = NSButton; 
+                fRatioCheck = NSButton; 
+                fWidthField = NSTextField; 
+                fWidthStepper = NSStepper; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {
+                convertGo = id; 
+                openBrowse = id; 
+                openGo = id; 
+                openMatrixChanged = id; 
+                openShow = id; 
+            }; 
+            CLASS = PortableController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                fConvertFolderPopUp = NSPopUpButton; 
+                fConvertIndicator = NSProgressIndicator; 
+                fConvertTableView = NSTableView; 
+                fConvertView = NSView; 
+                fEmptyView = NSView; 
+                fOpenBrowseButton = NSButton; 
+                fOpenFolderField = NSTextField; 
+                fOpenGoButton = NSButton; 
+                fOpenIndicator = NSProgressIndicator; 
+                fOpenMatrix = NSMatrix; 
+                fOpenPopUp = NSPopUpButton; 
+                fOpenView = NSView; 
+                fWindow = NSWindow; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

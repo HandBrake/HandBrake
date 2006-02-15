@@ -27,7 +27,7 @@ rule OSXApp
 actions OSXApp
 {
     $(RM) $(<) macosx/build/HandBrake.app && \
-      ( cd macosx && xcodebuild ) && \
+      ( cd macosx && xcodebuild -alltargets ) && \
       mv macosx/build/Default/HandBrake.app $(<) && \
       for i in $(LANGUAGES) ; do \
         ( cd $(<)/Contents/Resources && \

@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D1EA2EA0993B09A00FDC1A2 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.mm */; };
+		4D1EA2F60993B0CA00FDC1A2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		4D1EA3010993B13700FDC1A2 /* Portable.nib in Resources */ = {isa = PBXBuildFile; fileRef = 4D1EA3000993B13700FDC1A2 /* Portable.nib */; };
+		4D1EA31C0993B24700FDC1A2 /* PortableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D1EA31B0993B24700FDC1A2 /* PortableController.m */; };
 		4DD93F8F082036E8008E1322 /* Controller.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DF3C8CB052889CD00A80101 /* Controller.h */; };
 		4DD93F90082036E8008E1322 /* PictureGLView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D85758F052B78E300C39CA9 /* PictureGLView.h */; };
 		4DD93F91082036E8008E1322 /* ScanController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D86C74F07281F4E007BA979 /* ScanController.h */; };
@@ -26,7 +30,7 @@
 		4DD93FA2082036E8008E1322 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		4DD93FA3082036E8008E1322 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DEB2024052B055F00C39CA9 /* IOKit.framework */; };
 		4DD93FA4082036E8008E1322 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DDE9724052B7B2B00C39CA9 /* OpenGL.framework */; };
-		4DE09E63082038A400FB751F /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4DE09E62082038A400FB751F /* Info.plist */; };
+		4DE09E63082038A400FB751F /* HandBrake.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4DE09E62082038A400FB751F /* HandBrake.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildStyle section */
@@ -34,7 +38,7 @@
 			isa = PBXBuildStyle;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = "0.7.0";
+				CURRENT_PROJECT_VERSION = 0.7.0;
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
@@ -65,6 +69,11 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		4D118405053054CD00C39CA9 /* HandBrake.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = HandBrake.icns; sourceTree = "<group>"; };
+		4D1EA2DA0993B01000FDC1A2 /* HandBrake Portable.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HandBrake Portable.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D1EA2DC0993B01000FDC1A2 /* Portable.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Portable.plist; sourceTree = "<group>"; };
+		4D1EA3000993B13700FDC1A2 /* Portable.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Portable.nib; path = English.lproj/Portable.nib; sourceTree = "<group>"; };
+		4D1EA31A0993B24700FDC1A2 /* PortableController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PortableController.h; sourceTree = "<group>"; };
+		4D1EA31B0993B24700FDC1A2 /* PortableController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PortableController.m; sourceTree = "<group>"; };
 		4D1FD381073D19CE00E46515 /* PictureController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PictureController.h; sourceTree = "<group>"; };
 		4D1FD382073D19CE00E46515 /* PictureController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = PictureController.mm; sourceTree = "<group>"; };
 		4D85758E052B78E300C39CA9 /* PictureGLView.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = PictureGLView.mm; sourceTree = "<group>"; };
@@ -75,7 +84,7 @@
 		4DD27BA607C0065C0023D231 /* QueueController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = QueueController.mm; sourceTree = SOURCE_ROOT; };
 		4DD93FA6082036E8008E1322 /* HandBrake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HandBrake.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DDE9724052B7B2B00C39CA9 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
-		4DE09E62082038A400FB751F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
+		4DE09E62082038A400FB751F /* HandBrake.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = HandBrake.plist; sourceTree = "<group>"; };
 		4DE93A3507F5A2C900F3C78F /* PrefsController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PrefsController.h; sourceTree = "<group>"; };
 		4DE93A3607F5A2C900F3C78F /* PrefsController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PrefsController.m; sourceTree = "<group>"; };
 		4DEB2024052B055F00C39CA9 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
@@ -84,6 +93,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		4D1EA2D80993B01000FDC1A2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D1EA2F60993B0CA00FDC1A2 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4DD93FA1082036E8008E1322 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -100,6 +117,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				4D1EA31A0993B24700FDC1A2 /* PortableController.h */,
+				4D1EA31B0993B24700FDC1A2 /* PortableController.m */,
 				4D1FD381073D19CE00E46515 /* PictureController.h */,
 				4D1FD382073D19CE00E46515 /* PictureController.mm */,
 				4DF3C8CB052889CD00A80101 /* Controller.h */,
@@ -139,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				4DD93FA6082036E8008E1322 /* HandBrake.app */,
+				4D1EA2DA0993B01000FDC1A2 /* HandBrake Portable.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -151,7 +171,8 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
-				4DE09E62082038A400FB751F /* Info.plist */,
+				4DE09E62082038A400FB751F /* HandBrake.plist */,
+				4D1EA2DC0993B01000FDC1A2 /* Portable.plist */,
 			);
 			name = HandBrake;
 			sourceTree = "<group>";
@@ -169,6 +190,7 @@
 			children = (
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
 				4D118405053054CD00C39CA9 /* HandBrake.icns */,
+				4D1EA3000993B13700FDC1A2 /* Portable.nib */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 			);
 			name = Resources;
@@ -202,6 +224,66 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		4D1EA2D90993B01000FDC1A2 /* HandBrake Portable */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4D1EA2DD0993B01100FDC1A2 /* Build configuration list for PBXNativeTarget "HandBrake Portable" */;
+			buildPhases = (
+				4D1EA2D60993B01000FDC1A2 /* Resources */,
+				4D1EA2D70993B01000FDC1A2 /* Sources */,
+				4D1EA2D80993B01000FDC1A2 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				INFOPLIST_FILE = "HandBrake Portable.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = "HandBrake Portable";
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			dependencies = (
+			);
+			name = "HandBrake Portable";
+			productName = "HandBrake Portable";
+			productReference = 4D1EA2DA0993B01000FDC1A2 /* HandBrake Portable.app */;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>${EXECUTABLE_NAME}</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.yourcompany.HandBrake Portable</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.0</string>
+	<key>NSMainNibFile</key>
+	<string>MainMenu</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+</dict>
+</plist>
+";
+			productType = "com.apple.product-type.application";
+		};
 		4DD93F8D082036E8008E1322 /* HandBrake */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4D4E7BC0087804870051572B /* Build configuration list for PBXNativeTarget "HandBrake" */;
@@ -274,11 +356,20 @@
 			projectDirPath = "";
 			targets = (
 				4DD93F8D082036E8008E1322 /* HandBrake */,
+				4D1EA2D90993B01000FDC1A2 /* HandBrake Portable */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		4D1EA2D60993B01000FDC1A2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D1EA3010993B13700FDC1A2 /* Portable.nib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4DD93F95082036E8008E1322 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -286,13 +377,22 @@
 				4DD93F96082036E8008E1322 /* MainMenu.nib in Resources */,
 				4DD93F97082036E8008E1322 /* InfoPlist.strings in Resources */,
 				4DD93F98082036E8008E1322 /* HandBrake.icns in Resources */,
-				4DE09E63082038A400FB751F /* Info.plist in Resources */,
+				4DE09E63082038A400FB751F /* HandBrake.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		4D1EA2D70993B01000FDC1A2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D1EA2EA0993B09A00FDC1A2 /* main.mm in Sources */,
+				4D1EA31C0993B24700FDC1A2 /* PortableController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4DD93F99082036E8008E1322 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -329,11 +429,122 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		4D1EA2DE0993B01100FDC1A2 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				HEADER_SEARCH_PATHS = ../libhb;
+				INFOPLIST_FILE = Portable.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					../libhb/libhb.a,
+					../contrib/lib/liba52.a,
+					../contrib/lib/libavcodec.a,
+					../contrib/lib/libavutil.a,
+					../contrib/lib/libdvdread.a,
+					../contrib/lib/libdvdcss.a,
+					../contrib/lib/libfaac.a,
+					../contrib/lib/libmp3lame.a,
+					../contrib/lib/libmp4v2.a,
+					../contrib/lib/libmpeg2.a,
+					../contrib/lib/libvorbis.a,
+					../contrib/lib/libvorbisenc.a,
+					../contrib/lib/libogg.a,
+					../contrib/lib/libsamplerate.a,
+					../contrib/lib/libx264.a,
+					../contrib/lib/libxvidcore.a,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = "HandBrake Portable";
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Development;
+		};
+		4D1EA2DF0993B01100FDC1A2 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				HEADER_SEARCH_PATHS = ../libhb;
+				INFOPLIST_FILE = Portable.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					../libhb/libhb.a,
+					../contrib/lib/liba52.a,
+					../contrib/lib/libavcodec.a,
+					../contrib/lib/libavutil.a,
+					../contrib/lib/libdvdread.a,
+					../contrib/lib/libdvdcss.a,
+					../contrib/lib/libfaac.a,
+					../contrib/lib/libmp3lame.a,
+					../contrib/lib/libmp4v2.a,
+					../contrib/lib/libmpeg2.a,
+					../contrib/lib/libvorbis.a,
+					../contrib/lib/libvorbisenc.a,
+					../contrib/lib/libogg.a,
+					../contrib/lib/libsamplerate.a,
+					../contrib/lib/libx264.a,
+					../contrib/lib/libxvidcore.a,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = "HandBrake Portable";
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		4D1EA2E00993B01100FDC1A2 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				HEADER_SEARCH_PATHS = ../libhb;
+				INFOPLIST_FILE = Portable.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					../libhb/libhb.a,
+					../contrib/lib/liba52.a,
+					../contrib/lib/libavcodec.a,
+					../contrib/lib/libavutil.a,
+					../contrib/lib/libdvdread.a,
+					../contrib/lib/libdvdcss.a,
+					../contrib/lib/libfaac.a,
+					../contrib/lib/libmp3lame.a,
+					../contrib/lib/libmp4v2.a,
+					../contrib/lib/libmpeg2.a,
+					../contrib/lib/libvorbis.a,
+					../contrib/lib/libvorbisenc.a,
+					../contrib/lib/libogg.a,
+					../contrib/lib/libsamplerate.a,
+					../contrib/lib/libx264.a,
+					../contrib/lib/libxvidcore.a,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = "HandBrake Portable";
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Default;
+		};
 		4D4E7BC1087804870051572B /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = "0.7.0";
+				CURRENT_PROJECT_VERSION = 0.7.0;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -341,7 +552,7 @@
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				HEADER_SEARCH_PATHS = ../libhb;
-				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_FILE = HandBrake.plist;
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
@@ -383,7 +594,7 @@
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				HEADER_SEARCH_PATHS = ../libhb;
-				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_FILE = HandBrake.plist;
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
@@ -423,7 +634,7 @@
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				HEADER_SEARCH_PATHS = ../libhb;
-				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_FILE = HandBrake.plist;
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
@@ -476,6 +687,16 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		4D1EA2DD0993B01100FDC1A2 /* Build configuration list for PBXNativeTarget "HandBrake Portable" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4D1EA2DE0993B01100FDC1A2 /* Development */,
+				4D1EA2DF0993B01100FDC1A2 /* Deployment */,
+				4D1EA2E00993B01100FDC1A2 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
 		4D4E7BC0087804870051572B /* Build configuration list for PBXNativeTarget "HandBrake" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
