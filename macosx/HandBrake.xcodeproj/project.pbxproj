@@ -11,6 +11,7 @@
 		4D1EA2F60993B0CA00FDC1A2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		4D1EA3010993B13700FDC1A2 /* Portable.nib in Resources */ = {isa = PBXBuildFile; fileRef = 4D1EA3000993B13700FDC1A2 /* Portable.nib */; };
 		4D1EA31C0993B24700FDC1A2 /* PortableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D1EA31B0993B24700FDC1A2 /* PortableController.m */; };
+		4D3ECC2709A4917000B2E45F /* WhiteBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D3ECC2609A4917000B2E45F /* WhiteBox.m */; };
 		4DD93F8F082036E8008E1322 /* Controller.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DF3C8CB052889CD00A80101 /* Controller.h */; };
 		4DD93F90082036E8008E1322 /* PictureGLView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D85758F052B78E300C39CA9 /* PictureGLView.h */; };
 		4DD93F91082036E8008E1322 /* ScanController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D86C74F07281F4E007BA979 /* ScanController.h */; };
@@ -76,6 +77,8 @@
 		4D1EA31B0993B24700FDC1A2 /* PortableController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PortableController.m; sourceTree = "<group>"; };
 		4D1FD381073D19CE00E46515 /* PictureController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PictureController.h; sourceTree = "<group>"; };
 		4D1FD382073D19CE00E46515 /* PictureController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = PictureController.mm; sourceTree = "<group>"; };
+		4D3ECC2509A4917000B2E45F /* WhiteBox.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = WhiteBox.h; sourceTree = "<group>"; };
+		4D3ECC2609A4917000B2E45F /* WhiteBox.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = WhiteBox.m; sourceTree = "<group>"; };
 		4D85758E052B78E300C39CA9 /* PictureGLView.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = PictureGLView.mm; sourceTree = "<group>"; };
 		4D85758F052B78E300C39CA9 /* PictureGLView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PictureGLView.h; sourceTree = "<group>"; };
 		4D86C74E07281F4E007BA979 /* ScanController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = ScanController.mm; sourceTree = "<group>"; };
@@ -131,6 +134,8 @@
 				4DD27BA607C0065C0023D231 /* QueueController.mm */,
 				4DE93A3507F5A2C900F3C78F /* PrefsController.h */,
 				4DE93A3607F5A2C900F3C78F /* PrefsController.m */,
+				4D3ECC2509A4917000B2E45F /* WhiteBox.h */,
+				4D3ECC2609A4917000B2E45F /* WhiteBox.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -390,6 +395,7 @@
 			files = (
 				4D1EA2EA0993B09A00FDC1A2 /* main.mm in Sources */,
 				4D1EA31C0993B24700FDC1A2 /* PortableController.m in Sources */,
+				4D3ECC2709A4917000B2E45F /* WhiteBox.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

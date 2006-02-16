@@ -87,7 +87,8 @@
                 fWindow = NSWindow; 
             }; 
             SUPERCLASS = NSObject; 
-        }
+        }, 
+        {CLASS = WhiteBox; LANGUAGE = ObjC; SUPERCLASS = NSBox; }
     ); 
     IBVersion = 1; 
 }
