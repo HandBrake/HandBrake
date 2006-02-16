@@ -17,6 +17,7 @@
     IBOutlet NSPopUpButton       * fOpenPopUp;
     IBOutlet NSTextField         * fOpenFolderField;
     IBOutlet NSButton            * fOpenBrowseButton;
+    IBOutlet NSTextField         * fOpenProgressField;
     IBOutlet NSProgressIndicator * fOpenIndicator;
     IBOutlet NSButton            * fOpenGoButton;
     NSString                     * fOpenFolderString;

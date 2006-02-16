@@ -65,14 +65,40 @@
 - (id) tableView:(NSTableView *) t objectValueForTableColumn:
     (NSTableColumn *) col row: (int) row
 {
-    if( [[col identifier] isEqualToString: @"Title"] )
-    {
-        hb_title_t * title = hb_list_item( fList, row );
-        return [@"Title " stringByAppendingFormat: @"%d", title->index];
-    }
-    else if( [[col identifier] isEqualToString: @"Check"] )
+    if( [[col identifier] isEqualToString: @"Check"] )
     {
         return [fConvertCheckArray objectAtIndex: row];
+    }
+    else
+    {
+        hb_title_t * title = hb_list_item( fList, row );
+        if( [[col identifier] isEqualToString: @"Title"] )
+        {
+            return [@"Title " stringByAppendingFormat: @"%d",
+                    title->index];
+        }
+        else if( [[col identifier] isEqualToString: @"Length"] )
+        {
+            if( title->hours > 0 )
+            {
+                return [NSString stringWithFormat:
+                    @"%d hour%s %d min%s", title->hours,
+                    title->hours > 1 ? "s" : "", title->minutes,
+                    title->minutes > 1 ? "s": ""];
+            }
+            else if( title->minutes > 0 )
+            {
+                return [NSString stringWithFormat:
+                    @"%d min%s %d sec%s", title->minutes,
+                    title->minutes > 1 ? "s" : "", title->seconds,
+                    title->seconds > 1 ? "s": ""];
+            }
+            else
+            {
+                return [NSString stringWithFormat: @"%d seconds",
+                        title->seconds];
+            }
+        }
     }
     return nil;
 }
@@ -169,8 +195,8 @@
         job->vcodec   = HB_VCODEC_X264;
         job->h264_13  = 1;
         job->file     = strdup( [[NSString stringWithFormat:
-            @"%@/%p - Title %d.mp4", fConvertFolderString, self, i]
-            UTF8String] );
+            @"%@/%p - Title %d.mp4", fConvertFolderString, self,
+            title->index] UTF8String] );
         hb_add( fHandle, job );
     }
 
@@ -234,6 +260,9 @@
             [fOpenIndicator setIndeterminate: NO];
             [fOpenIndicator setDoubleValue: 100.0 *
                 ( (float) p.title_cur - 0.5 ) / p.title_count];
+            [fOpenProgressField setStringValue: [NSString
+                stringWithFormat: @"Scanning title %d of %d...",
+                p.title_cur, p.title_count]];
             break;
 #undef p
 

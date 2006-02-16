@@ -83,6 +83,7 @@
                 fOpenIndicator = NSProgressIndicator; 
                 fOpenMatrix = NSMatrix; 
                 fOpenPopUp = NSPopUpButton; 
+                fOpenProgressField = NSTextField; 
                 fOpenView = NSView; 
                 fWindow = NSWindow; 
             }; 
