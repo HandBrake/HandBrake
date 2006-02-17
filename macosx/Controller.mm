@@ -182,6 +182,9 @@ static int FormatSettings[3][4] =
     NSData * tiff;
     NSBitmapImageRep * bmp;
     uint32_t * pen;
+    uint32_t black = htonl( 0x000000FF );
+    uint32_t red   = htonl( 0xFF0000FF );
+    uint32_t white = htonl( 0xFFFFFFFF );
     int row_start, row_end;
     int i, j;
 
@@ -210,34 +213,34 @@ static int FormatSettings[3][4] =
         pen = (uint32_t *) ( [bmp bitmapData] + i * [bmp bytesPerRow] );
         for( j = 0; j < (int) [bmp size].width; j++ )
         {
-            pen[j] = 0x000000FF; /* Black */
+            pen[j] = black;
         }
     }
     for( i = row_start + 2; i < row_end - 2; i++ )
     {
         pen = (uint32_t *) ( [bmp bitmapData] + i * [bmp bytesPerRow] );
-        pen[0] = 0x000000FF;
-        pen[1] = 0x000000FF;
+        pen[0] = black;
+        pen[1] = black;
         for( j = 2; j < (int) [bmp size].width - 2; j++ )
         {
             if( j < 2 + (int) ( ( [bmp size].width - 4.0 ) * progress ) )
             {
-                pen[j] = 0xFF0000FF; /* Red */
+                pen[j] = red;
             }
             else
             {
-                pen[j] = 0xFFFFFFFF; /* White */
+                pen[j] = white;
             }
         }
-        pen[j]   = 0x000000FF;
-        pen[j+1] = 0x000000FF;
+        pen[j]   = black;
+        pen[j+1] = black;
     }
     for( i = row_end - 2; i < row_end; i++ )
     {
         pen = (uint32_t *) ( [bmp bitmapData] + i * [bmp bytesPerRow] );
         for( j = 0; j < (int) [bmp size].width; j++ )
         {
-            pen[j] = 0x000000FF; /* Black */
+            pen[j] = black;
         }
     }
 
