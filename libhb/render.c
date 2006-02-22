@@ -34,24 +34,29 @@ static void ApplySub( hb_job_t * job, hb_buffer_t * buf,
         return;
     }
 
-    if( sub->width > title->width - job->crop[0] - job->crop[1] - 40 ||
-        sub->height > title->height - job->crop[2] - job->crop[3] - 40 )
-    {
-        /* The subtitle won't fit */
-        hb_buffer_close( _sub );
-        return;
-    }
+    /* If necessary, move the subtitle so it is not in a cropped zone.
+       When it won't fit, we center it so we loose as much on both ends.
+       Otherwise we try to leave a 20px margin around it. */
 
-    /* If necessary, move the subtitle so it is 20 pixels far from each
-       border of the cropped picture */
-    offset_top = sub->y;
-    offset_top = MAX( offset_top, job->crop[0] + 20 );
-    offset_top = MIN( offset_top,
-            title->height - job->crop[1] - 20 - sub->height );
-    offset_left = sub->x;
-    offset_left = MAX( offset_left, job->crop[2] + 20 );
-    offset_left = MIN( offset_left,
-            title->width - job->crop[3] - 20 - sub->width );
+    if( sub->height > title->height - job->crop[0] - job->crop[1] - 40 )
+        offset_top = job->crop[0] + ( title->height - job->crop[0] -
+                job->crop[1] - sub->height ) / 2;
+    else if( sub->y < job->crop[0] + 20 )
+        offset_top = job->crop[0] + 20;
+    else if( sub->y > title->height - job->crop[1] - 20 - sub->height )
+        offset_top = title->height - job->crop[1] - 20 - sub->height;
+    else
+        offset_top = sub->y;
+
+    if( sub->width > title->width - job->crop[2] - job->crop[3] - 40 )
+        offset_left = job->crop[2] + ( title->width - job->crop[2] -
+                job->crop[3] - sub->width ) / 2;
+    else if( sub->x < job->crop[2] + 20 )
+        offset_left = job->crop[2] + 20;
+    else if( sub->x > title->width - job->crop[3] - 20 - sub->width )
+        offset_left = title->width - job->crop[3] - 20 - sub->width;
+    else
+        offset_left = sub->x;
 
     lum   = sub->data;
     alpha = lum + sub->width * sub->height;
@@ -59,11 +64,18 @@ static void ApplySub( hb_job_t * job, hb_buffer_t * buf,
 
     for( i = 0; i < sub->height; i++ )
     {
-        for( j = 0; j < sub->width; j++ )
+        if( offset_top + i >= 0 && offset_top + i < title->height )
         {
-            out[j] = ( (uint16_t) out[j] * ( 16 - (uint16_t) alpha[j] ) +
-                       (uint16_t) lum[j] * (uint16_t) alpha[j] ) >> 4;
+            for( j = 0; j < sub->width; j++ )
+            {
+                if( offset_left + j >= 0 && offset_left + j < title->width )
+                {
+                    out[j] = ( (uint16_t) out[j] * ( 16 - (uint16_t) alpha[j] ) +
+                               (uint16_t) lum[j] * (uint16_t) alpha[j] ) >> 4;
+                }
+            }
         }
+
         lum   += sub->width;
         alpha += sub->width;
         out   += title->width;
