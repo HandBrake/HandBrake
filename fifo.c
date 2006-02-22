@@ -136,6 +136,22 @@ hb_buffer_t * hb_fifo_see( hb_fifo_t * f )
     return b;
 }
 
+hb_buffer_t * hb_fifo_see2( hb_fifo_t * f )
+{
+    hb_buffer_t * b;
+
+    hb_lock( f->lock );
+    if( f->size < 2 )
+    {
+        hb_unlock( f->lock );
+        return NULL;
+    }
+    b = f->first->next;
+    hb_unlock( f->lock );
+
+    return b;
+}
+
 void hb_fifo_push( hb_fifo_t * f, hb_buffer_t * b )
 {
     if( !b )

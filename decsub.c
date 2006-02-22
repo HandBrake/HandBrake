@@ -222,6 +222,9 @@ static void ParseControls( hb_work_object_t * w )
     int command;
     int date, next;
 
+    w->pts_start = 0;
+    w->pts_stop  = 0;
+
     for( i = w->size_rle; ; )
     {
         date = ( w->buf[i] << 8 ) | w->buf[i+1]; i += 2;
@@ -299,6 +302,12 @@ static void ParseControls( hb_work_object_t * w )
             break;
         }
         i = next;
+    }
+
+    if( !w->pts_stop )
+    {
+        /* Show it for 3 seconds */
+        w->pts_stop = w->pts_start + 3 * 90000;
     }
 }
 

@@ -307,10 +307,19 @@ static int SyncVideo( hb_work_object_t * w )
         /* Look for a subtitle for this frame */
         if( w->subtitle )
         {
-            /* Trash subtitles older than this picture */
-            while( ( sub = hb_fifo_see( w->subtitle->fifo_raw ) ) &&
-                    sub->stop < cur->start )
+            hb_buffer_t * sub2;
+            while( ( sub = hb_fifo_see( w->subtitle->fifo_raw ) ) )
             {
+                /* If two subtitles overlap, make the first one stop
+                   when the second one starts */
+                sub2 = hb_fifo_see2( w->subtitle->fifo_raw );
+                if( sub2 && sub->stop > sub2->start )
+                    sub->stop = sub2->start;
+
+                if( sub->stop > cur->start )
+                    break;
+
+                /* The subtitle is older than this picture, trash it */
                 sub = hb_fifo_get( w->subtitle->fifo_raw );
                 hb_buffer_close( &sub );
             }
