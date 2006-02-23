@@ -465,17 +465,18 @@ static void SyncAudio( hb_work_object_t * w, int i )
             start = pts_expected - w->pts_offset;
         }
 
-        if( ( buf->start + buf->stop ) / 2 < pts_expected )
+        /* Tolerance: 100 ms */
+        if( buf->start < pts_expected - 9000 )
         {
             /* Late audio, trash it */
+            hb_log( "sync: trashing late audio" );
             buf = hb_fifo_get( audio->fifo_raw );
             hb_buffer_close( &buf );
             continue;
         }
-
-        if( buf->start > pts_expected + ( buf->stop - buf->start ) / 2 )
+        else if( buf->start > pts_expected + 9000 )
         {
-            /* Audio push, send a frame of silence */
+            /* Missing audio, send a frame of silence */
             InsertSilence( w, i );
             continue;
         }
@@ -495,24 +496,16 @@ static void SyncAudio( hb_work_object_t * w, int i )
             int count_in, count_out;
 
             count_in  = buf_raw->size / 2 / sizeof( float );
-            count_out = ( buf->stop - pts_expected ) * job->arate / 90000;
+            count_out = ( buf_raw->stop - buf_raw->start ) * job->arate / 90000;
+            if( buf->start < pts_expected - 1500 )
+                count_out--;
+            else if( buf->start > pts_expected + 1500 )
+                count_out++;
 
             sync->data.data_in      = (float *) buf_raw->data;
             sync->data.input_frames = count_in;
-
-            if( buf->start < pts_expected - ( buf->stop - buf->start ) / 5 )
-            {
-                /* Avoid too heavy downsampling, trash the beginning of
-                   the buffer instead */
-                int drop;
-                drop = count_in * ( pts_expected - buf->start ) /
-                           ( buf->stop - buf->start );
-                sync->data.data_in      += 2 * drop;
-                sync->data.input_frames -= drop;
-                hb_log( "dropping %d of %d samples", drop, count_in );
-            }
-
             sync->data.output_frames = count_out;
+
             sync->data.src_ratio = (double) sync->data.output_frames /
                                    (double) sync->data.input_frames;
 
