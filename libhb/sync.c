@@ -226,6 +226,8 @@ static int Work( hb_work_object_t * w, hb_buffer_t ** unused1,
     return SyncVideo( w );
 }
 
+#define PTS_DISCONTINUITY_TOLERANCE 90000
+
 /***********************************************************************
  * SyncVideo
  ***********************************************************************
@@ -278,8 +280,8 @@ static int SyncVideo( hb_work_object_t * w )
         }
 
         /* Check for PTS jumps over 0.5 second */
-        if( next->start < cur->start - 45000 ||
-            next->start > cur->start + 45000 )
+        if( next->start < cur->start - PTS_DISCONTINUITY_TOLERANCE ||
+            next->start > cur->start + PTS_DISCONTINUITY_TOLERANCE )
         {
             hb_log( "PTS discontinuity (%lld, %lld)",
                     cur->start, next->start );
@@ -437,8 +439,8 @@ static void SyncAudio( hb_work_object_t * w, int i )
         /* The PTS of the samples we are expecting now */
         pts_expected = w->pts_offset + sync->count_frames * 90000 / rate;
 
-        if( ( buf->start > pts_expected + 45000 ||
-              buf->start < pts_expected - 45000 ) &&
+        if( ( buf->start > pts_expected + PTS_DISCONTINUITY_TOLERANCE ||
+              buf->start < pts_expected - PTS_DISCONTINUITY_TOLERANCE ) &&
             w->pts_offset_old > INT64_MIN )
         {
             /* There has been a PTS discontinuity, and this frame might
@@ -446,8 +448,8 @@ static void SyncAudio( hb_work_object_t * w, int i )
             pts_expected = w->pts_offset_old + sync->count_frames *
                 90000 / rate;
 
-            if( buf->start > pts_expected + 45000 ||
-                buf->start < pts_expected - 45000 )
+            if( buf->start > pts_expected + PTS_DISCONTINUITY_TOLERANCE ||
+                buf->start < pts_expected - PTS_DISCONTINUITY_TOLERANCE )
             {
                 /* There is really nothing we can do with it */
                 buf = hb_fifo_get( audio->fifo_raw );
