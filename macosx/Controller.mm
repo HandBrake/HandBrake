@@ -40,7 +40,7 @@ static int FormatSettings[3][4] =
     char * version;
 
     /* Init libhb */
-    fHandle = hb_init( HB_DEBUG_ALL, [[NSUserDefaults
+    fHandle = hb_init( HB_DEBUG_NONE, [[NSUserDefaults
         standardUserDefaults] boolForKey:@"CheckForUpdates"] );
 
     /* Init others controllers */

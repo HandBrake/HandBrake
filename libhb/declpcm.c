@@ -12,8 +12,6 @@ struct hb_work_object_s
 
     hb_job_t    * job;
     hb_audio_t  * audio;
-
-    int64_t       pts_last;
 };
 
 static int Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
@@ -51,22 +49,11 @@ static int Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
             break;
     }
 
-    count      = ( in->size - 6 ) / 2;
-    out        = hb_buffer_init( count * sizeof( float ) );
-    duration   = count * 90000 / samplerate / 2;
-    if( w->pts_last > 0 &&
-        in->start < w->pts_last + duration / 6 &&
-        in->start > w->pts_last - duration / 6 )
-    {
-        /* Workaround for DVDs where dates aren't exact */
-        out->start = w->pts_last;
-    }
-    else
-    {
-        out->start = in->start;
-    }
+    count       = ( in->size - 6 ) / 2;
+    out         = hb_buffer_init( count * sizeof( float ) );
+    duration    = count * 90000 / samplerate / 2;
+    out->start  = in->start;
     out->stop   = out->start + duration;
-    w->pts_last = out->stop;
 
     samples_u8   = in->data + 6;
     samples_fl32 = (float *) out->data;
@@ -105,8 +92,6 @@ hb_work_object_t * hb_work_declpcm_init( hb_job_t * job, hb_audio_t * audio )
 
     w->job   = job;
     w->audio = audio;
-
-    w->pts_last = -1;
 
     return w;
 }
