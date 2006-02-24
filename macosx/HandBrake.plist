@@ -9,7 +9,7 @@
 	<key>CFBundleExecutable</key>
 	<string>HandBrake</string>
 	<key>CFBundleGetInfoString</key>
-	<string>0.7.1-cvs</string>
+	<string>0.7.1</string>
 	<key>CFBundleIconFile</key>
 	<string>HandBrake.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -21,11 +21,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.7.1-cvs</string>
+	<string>0.7.1</string>
 	<key>CFBundleSignature</key>
 	<string>HB##</string>
 	<key>CFBundleVersion</key>
-	<string>2005110400</string>
+	<string>2006022400</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>By Eric Petit &lt;titer@m0k.org&gt;</string>
 	<key>NSMainNibFile</key>

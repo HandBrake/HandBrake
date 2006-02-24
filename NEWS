@@ -2,14 +2,18 @@ $Id: NEWS,v 1.28 2005/11/04 16:01:19 titer Exp $
 
 NEWS file for HandBrake <http://handbrake.m0k.org/>
 
-Changed between 0.7.0-beta3 and 0.7.0
+Changes between 0.7.0 and 0.7.1
+ + Universal Binary for PPC and Intel
+ + Bugfixes
+
+Changes between 0.7.0-beta3 and 0.7.0
  + Multithreaded H.264 encoding with x264
  + Added option for H.264 Baseline (suitable for iPods)
  + (Very) experimental queue support
  + Fixes for some DVD titles HandBrake would not recognize
  + Fixes audio gliches when encoding from LPCM tracks
 
-Changed between 0.6.2 and 0.7.0-beta3
+Changes between 0.6.2 and 0.7.0-beta3
  + Chapters selection
  + Custom framerate
  + Subtitle support
