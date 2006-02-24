@@ -132,7 +132,9 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
 
 static int MP4End( hb_mux_object_t * m )
 {
+#if 0
     hb_job_t * job = m->job;
+#endif
     char filename[1024]; memset( filename, 0, 1024 );
 
     MP4Close( m->file );
