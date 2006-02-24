@@ -4,7 +4,7 @@ NEWS file for HandBrake <http://handbrake.m0k.org/>
 
 Changes between 0.7.0 and 0.7.1
  + Universal Binary for PPC and Intel
- + Bugfixes
+ + Bugfixes for missing subtitles, audio glitches with LPCM tracks and more
 
 Changes between 0.7.0-beta3 and 0.7.0
  + Multithreaded H.264 encoding with x264
