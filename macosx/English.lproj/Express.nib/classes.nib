@@ -27,6 +27,34 @@
             }; 
             SUPERCLASS = NSObject; 
         }, 
+        {
+            ACTIONS = {
+                convertGo = id; 
+                openBrowse = id; 
+                openGo = id; 
+                openMatrixChanged = id; 
+                openShow = id; 
+            }; 
+            CLASS = ExpressController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                fConvertFolderPopUp = NSPopUpButton; 
+                fConvertIndicator = NSProgressIndicator; 
+                fConvertTableView = NSTableView; 
+                fConvertView = NSView; 
+                fEmptyView = NSView; 
+                fOpenBrowseButton = NSButton; 
+                fOpenFolderField = NSTextField; 
+                fOpenGoButton = NSButton; 
+                fOpenIndicator = NSProgressIndicator; 
+                fOpenMatrix = NSMatrix; 
+                fOpenPopUp = NSPopUpButton; 
+                fOpenProgressField = NSTextField; 
+                fOpenView = NSView; 
+                fWindow = NSWindow; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
             ACTIONS = {

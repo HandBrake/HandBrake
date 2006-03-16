@@ -1,6 +1,6 @@
-#import "PortableController.h"
+#import "ExpressController.h"
 
-@interface PortableController (Private)
+@interface ExpressController (Private)
 
 - (void) openBrowseDidEnd: (NSOpenPanel *) sheet returnCode: (int)
     returnCode contextInfo: (void *) contextInfo;
@@ -12,7 +12,7 @@
 
 @end
 
-@implementation PortableController
+@implementation ExpressController
 
 /***********************************************************************
  * Application delegate methods
@@ -213,7 +213,7 @@
  * Private methods
  **********************************************************************/
 
-@implementation PortableController (Private)
+@implementation ExpressController (Private)
 
 - (void) openBrowseDidEnd: (NSOpenPanel *) sheet returnCode: (int)
     returnCode contextInfo: (void *) contextInfo

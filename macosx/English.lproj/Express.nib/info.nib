@@ -9,7 +9,7 @@
 		<key>248</key>
 		<string>483 424 408 321 0 0 1440 878 </string>
 		<key>259</key>
-		<string>484 331 408 508 0 0 1440 878 </string>
+		<string>417 300 408 508 0 0 1280 832 </string>
 		<key>29</key>
 		<string>33 298 338 44 0 0 1280 832 </string>
 		<key>303</key>
@@ -17,11 +17,7 @@
 	</dict>
 	<key>IBFramework Version</key>
 	<string>443.0</string>
-	<key>IBOpenObjects</key>
-	<array>
-		<integer>259</integer>
-	</array>
 	<key>IBSystem Version</key>
-	<string>8F1111g</string>
+	<string>8H14</string>
 </dict>
 </plist>

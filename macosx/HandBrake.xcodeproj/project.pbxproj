@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		4D1EA2EA0993B09A00FDC1A2 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.mm */; };
 		4D1EA2F60993B0CA00FDC1A2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		4D1EA3010993B13700FDC1A2 /* Portable.nib in Resources */ = {isa = PBXBuildFile; fileRef = 4D1EA3000993B13700FDC1A2 /* Portable.nib */; };
-		4D1EA31C0993B24700FDC1A2 /* PortableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D1EA31B0993B24700FDC1A2 /* PortableController.m */; };
+		4D1EA3010993B13700FDC1A2 /* Express.nib in Resources */ = {isa = PBXBuildFile; fileRef = 4D1EA3000993B13700FDC1A2 /* Express.nib */; };
+		4D1EA31C0993B24700FDC1A2 /* ExpressController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D1EA31B0993B24700FDC1A2 /* ExpressController.m */; };
 		4D3ECC2709A4917000B2E45F /* WhiteBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D3ECC2609A4917000B2E45F /* WhiteBox.m */; };
 		4DD93F8F082036E8008E1322 /* Controller.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DF3C8CB052889CD00A80101 /* Controller.h */; };
 		4DD93F90082036E8008E1322 /* PictureGLView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D85758F052B78E300C39CA9 /* PictureGLView.h */; };
@@ -70,11 +70,11 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		4D118405053054CD00C39CA9 /* HandBrake.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = HandBrake.icns; sourceTree = "<group>"; };
-		4D1EA2DA0993B01000FDC1A2 /* HandBrake Portable.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HandBrake Portable.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4D1EA2DC0993B01000FDC1A2 /* Portable.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Portable.plist; sourceTree = "<group>"; };
-		4D1EA3000993B13700FDC1A2 /* Portable.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Portable.nib; path = English.lproj/Portable.nib; sourceTree = "<group>"; };
-		4D1EA31A0993B24700FDC1A2 /* PortableController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PortableController.h; sourceTree = "<group>"; };
-		4D1EA31B0993B24700FDC1A2 /* PortableController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PortableController.m; sourceTree = "<group>"; };
+		4D1EA2DA0993B01000FDC1A2 /* HandBrake Express.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HandBrake Express.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D1EA2DC0993B01000FDC1A2 /* Express.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Express.plist; sourceTree = "<group>"; };
+		4D1EA3000993B13700FDC1A2 /* Express.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Express.nib; path = English.lproj/Express.nib; sourceTree = "<group>"; };
+		4D1EA31A0993B24700FDC1A2 /* ExpressController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ExpressController.h; sourceTree = "<group>"; };
+		4D1EA31B0993B24700FDC1A2 /* ExpressController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ExpressController.m; sourceTree = "<group>"; };
 		4D1FD381073D19CE00E46515 /* PictureController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PictureController.h; sourceTree = "<group>"; };
 		4D1FD382073D19CE00E46515 /* PictureController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = PictureController.mm; sourceTree = "<group>"; };
 		4D3ECC2509A4917000B2E45F /* WhiteBox.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = WhiteBox.h; sourceTree = "<group>"; };
@@ -120,8 +120,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				4D1EA31A0993B24700FDC1A2 /* PortableController.h */,
-				4D1EA31B0993B24700FDC1A2 /* PortableController.m */,
+				4D1EA31A0993B24700FDC1A2 /* ExpressController.h */,
+				4D1EA31B0993B24700FDC1A2 /* ExpressController.m */,
 				4D1FD381073D19CE00E46515 /* PictureController.h */,
 				4D1FD382073D19CE00E46515 /* PictureController.mm */,
 				4DF3C8CB052889CD00A80101 /* Controller.h */,
@@ -163,7 +163,7 @@
 			isa = PBXGroup;
 			children = (
 				4DD93FA6082036E8008E1322 /* HandBrake.app */,
-				4D1EA2DA0993B01000FDC1A2 /* HandBrake Portable.app */,
+				4D1EA2DA0993B01000FDC1A2 /* HandBrake Express.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -177,7 +177,7 @@
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				4DE09E62082038A400FB751F /* HandBrake.plist */,
-				4D1EA2DC0993B01000FDC1A2 /* Portable.plist */,
+				4D1EA2DC0993B01000FDC1A2 /* Express.plist */,
 			);
 			name = HandBrake;
 			sourceTree = "<group>";
@@ -195,7 +195,7 @@
 			children = (
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
 				4D118405053054CD00C39CA9 /* HandBrake.icns */,
-				4D1EA3000993B13700FDC1A2 /* Portable.nib */,
+				4D1EA3000993B13700FDC1A2 /* Express.nib */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 			);
 			name = Resources;
@@ -229,9 +229,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		4D1EA2D90993B01000FDC1A2 /* HandBrake Portable */ = {
+		4D1EA2D90993B01000FDC1A2 /* HandBrake Express */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4D1EA2DD0993B01100FDC1A2 /* Build configuration list for PBXNativeTarget "HandBrake Portable" */;
+			buildConfigurationList = 4D1EA2DD0993B01100FDC1A2 /* Build configuration list for PBXNativeTarget "HandBrake Express" */;
 			buildPhases = (
 				4D1EA2D60993B01000FDC1A2 /* Resources */,
 				4D1EA2D70993B01000FDC1A2 /* Sources */,
@@ -244,7 +244,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				INFOPLIST_FILE = "HandBrake Portable.plist";
+				INFOPLIST_FILE = "HandBrake Express.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -253,15 +253,15 @@
 					AppKit,
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = "HandBrake Portable";
+				PRODUCT_NAME = "HandBrake Express";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
 			dependencies = (
 			);
-			name = "HandBrake Portable";
-			productName = "HandBrake Portable";
-			productReference = 4D1EA2DA0993B01000FDC1A2 /* HandBrake Portable.app */;
+			name = "HandBrake Express";
+			productName = "HandBrake Express";
+			productReference = 4D1EA2DA0993B01000FDC1A2 /* HandBrake Express.app */;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
 <plist version=\"1.0\">
@@ -271,7 +271,7 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.yourcompany.HandBrake Portable</string>
+	<string>com.yourcompany.HandBrake Express</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
@@ -361,7 +361,7 @@
 			projectDirPath = "";
 			targets = (
 				4DD93F8D082036E8008E1322 /* HandBrake */,
-				4D1EA2D90993B01000FDC1A2 /* HandBrake Portable */,
+				4D1EA2D90993B01000FDC1A2 /* HandBrake Express */,
 			);
 		};
 /* End PBXProject section */
@@ -371,7 +371,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4D1EA3010993B13700FDC1A2 /* Portable.nib in Resources */,
+				4D1EA3010993B13700FDC1A2 /* Express.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -394,7 +394,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D1EA2EA0993B09A00FDC1A2 /* main.mm in Sources */,
-				4D1EA31C0993B24700FDC1A2 /* PortableController.m in Sources */,
+				4D1EA31C0993B24700FDC1A2 /* ExpressController.m in Sources */,
 				4D3ECC2709A4917000B2E45F /* WhiteBox.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -447,7 +447,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				HEADER_SEARCH_PATHS = ../libhb;
-				INFOPLIST_FILE = Portable.plist;
+				INFOPLIST_FILE = Express.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				OTHER_LDFLAGS = (
 					../libhb/libhb.a,
@@ -468,7 +468,7 @@
 					../contrib/lib/libxvidcore.a,
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = "HandBrake Portable";
+				PRODUCT_NAME = "HandBrake Express";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
@@ -484,7 +484,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				HEADER_SEARCH_PATHS = ../libhb;
-				INFOPLIST_FILE = Portable.plist;
+				INFOPLIST_FILE = Express.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				OTHER_LDFLAGS = (
 					../libhb/libhb.a,
@@ -505,7 +505,7 @@
 					../contrib/lib/libxvidcore.a,
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = "HandBrake Portable";
+				PRODUCT_NAME = "HandBrake Express";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
@@ -519,7 +519,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				HEADER_SEARCH_PATHS = ../libhb;
-				INFOPLIST_FILE = Portable.plist;
+				INFOPLIST_FILE = Express.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				OTHER_LDFLAGS = (
 					../libhb/libhb.a,
@@ -540,7 +540,7 @@
 					../contrib/lib/libxvidcore.a,
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = "HandBrake Portable";
+				PRODUCT_NAME = "HandBrake Express";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
@@ -693,7 +693,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4D1EA2DD0993B01100FDC1A2 /* Build configuration list for PBXNativeTarget "HandBrake Portable" */ = {
+		4D1EA2DD0993B01100FDC1A2 /* Build configuration list for PBXNativeTarget "HandBrake Express" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4D1EA2DE0993B01100FDC1A2 /* Development */,

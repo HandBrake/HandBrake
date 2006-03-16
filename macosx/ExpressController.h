@@ -1,9 +1,9 @@
-/* PortableController */
+/* ExpressController */
 
 #import <Cocoa/Cocoa.h>
 #import "hb.h"
 
-@interface PortableController : NSObject
+@interface ExpressController : NSObject
 
 {
     hb_handle_t                  * fHandle;
