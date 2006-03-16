@@ -53,21 +53,13 @@ static void work_func( void * _work )
 
 static hb_work_object_t * getWork( int id )
 {
-    switch( id )
+    hb_work_object_t * w;
+    for( w = hb_objects; w; w = w->next )
     {
-        case WORK_SYNC:       return &hb_sync;
-        case WORK_DECMPEG2:   return &hb_decmpeg2;
-        case WORK_DECSUB:     return &hb_decsub;
-        case WORK_RENDER:     return &hb_render;
-        case WORK_ENCAVCODEC: return &hb_encavcodec;
-        case WORK_ENCXVID:    return &hb_encxvid;
-        case WORK_ENCX264:    return &hb_encx264;
-        case WORK_DECA52:     return &hb_deca52;
-        case WORK_DECAVCODEC: return &hb_decavcodec;
-        case WORK_DECLPCM:    return &hb_declpcm;
-        case WORK_ENCFAAC:    return &hb_encfaac;
-        case WORK_ENCLAME:    return &hb_enclame;
-        case WORK_ENCVORBIS:  return &hb_encvorbis;
+        if( w->id == id )
+        {
+            return w;
+        }
     }
     return NULL;
 }

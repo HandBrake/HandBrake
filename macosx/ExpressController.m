@@ -42,7 +42,7 @@
 
 - (void) applicationWillFinishLaunching: (NSNotification *) n
 {
-    fHandle = hb_init( HB_DEBUG_NONE, 0 );
+    fHandle = hb_init_express( HB_DEBUG_NONE, 0 );
     fList   = hb_get_titles( fHandle );
 }
 

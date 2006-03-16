@@ -53,7 +53,6 @@ int           hb_thread_has_exited( hb_thread_t * );
 /************************************************************************
  * Mutexes
  ***********************************************************************/
-typedef struct hb_lock_s hb_lock_t;
 
 hb_lock_t * hb_lock_init();
 void        hb_lock_close( hb_lock_t ** );

@@ -42,9 +42,17 @@ struct hb_handle_s
     hb_lock_t    * pause_lock;
 };
 
+hb_work_object_t * hb_objects = NULL;
+
 static void thread_func( void * );
 
-hb_handle_t * hb_init( int verbose, int update_check )
+void hb_register( hb_work_object_t * w )
+{
+    w->next    = hb_objects;
+    hb_objects = w;
+}
+
+hb_handle_t * hb_init_real( int verbose, int update_check )
 {
     hb_handle_t * h = calloc( sizeof( hb_handle_t ), 1 );
     uint64_t      date;
