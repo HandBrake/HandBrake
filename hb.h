@@ -18,7 +18,37 @@ extern "C" {
    etc) */
 #define HB_DEBUG_NONE 0
 #define HB_DEBUG_ALL  1
-hb_handle_t * hb_init( int verbose, int update_check );
+void          hb_register( hb_work_object_t * );
+hb_handle_t * hb_init_real( int verbose, int update_check );
+
+#define hb_init(v,u) \
+hb_init_real( v, u ); \
+hb_register( &hb_sync ); \
+hb_register( &hb_decmpeg2 ); \
+hb_register( &hb_decsub ); \
+hb_register( &hb_render ); \
+hb_register( &hb_encavcodec ); \
+hb_register( &hb_encxvid ); \
+hb_register( &hb_encx264 ); \
+hb_register( &hb_deca52 ); \
+hb_register( &hb_decavcodec ); \
+hb_register( &hb_declpcm ); \
+hb_register( &hb_encfaac ); \
+hb_register( &hb_enclame ); \
+hb_register( &hb_encvorbis ); \
+
+#define hb_init_express(v,u) \
+hb_init_real( v, u ); \
+hb_register( &hb_sync ); \
+hb_register( &hb_decmpeg2 ); \
+hb_register( &hb_decsub ); \
+hb_register( &hb_render ); \
+hb_register( &hb_encavcodec ); \
+hb_register( &hb_encx264 ); \
+hb_register( &hb_deca52 ); \
+hb_register( &hb_decavcodec ); \
+hb_register( &hb_declpcm ); \
+hb_register( &hb_encfaac ); \
 
 /* hb_get_version() */
 char        * hb_get_version( hb_handle_t * );

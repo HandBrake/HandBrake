@@ -27,7 +27,6 @@ void hb_set_state( hb_handle_t *, hb_state_t * );
 /***********************************************************************
  * fifo.c
  **********************************************************************/
-typedef struct hb_buffer_s hb_buffer_t;
 struct hb_buffer_s
 {
     int           size;
@@ -54,7 +53,6 @@ hb_buffer_t * hb_buffer_init( int size );
 void          hb_buffer_realloc( hb_buffer_t *, int size );
 void          hb_buffer_close( hb_buffer_t ** );
 
-typedef struct hb_fifo_s hb_fifo_t;
 
 hb_fifo_t   * hb_fifo_init();
 int           hb_fifo_size( hb_fifo_t * );
@@ -115,7 +113,7 @@ void         hb_dvd_close( hb_dvd_t ** );
  * Work objects
  **********************************************************************/
 #define HB_CONFIG_MAX_SIZE 8192
-typedef union hb_esconfig_u
+union hb_esconfig_u
 {
     struct
     {
@@ -141,29 +139,6 @@ typedef union hb_esconfig_u
     {
         uint8_t headers[3][HB_CONFIG_MAX_SIZE];
     } vorbis;
-} hb_esconfig_t;
-
-typedef struct hb_work_private_s hb_work_private_t;
-typedef struct hb_work_object_s  hb_work_object_t;
-struct hb_work_object_s
-{
-    int                 id;
-    char              * name;
-
-    int              (* init)  ( hb_work_object_t *, hb_job_t * );
-    int              (* work)  ( hb_work_object_t *, hb_buffer_t **,
-                                 hb_buffer_t ** );
-    void             (* close) ( hb_work_object_t * );
-
-    hb_fifo_t         * fifo_in;
-    hb_fifo_t         * fifo_out;
-    hb_esconfig_t     * config;
-
-    hb_work_private_t * private_data;
-
-    hb_lock_t         * lock;
-    int                 used;
-    uint64_t            time;
 };
 
 enum
@@ -183,19 +158,7 @@ enum
     WORK_ENCVORBIS
 };
 
-extern hb_work_object_t hb_sync;
-extern hb_work_object_t hb_decmpeg2;
-extern hb_work_object_t hb_decsub;
-extern hb_work_object_t hb_render;
-extern hb_work_object_t hb_encavcodec;
-extern hb_work_object_t hb_encxvid;
-extern hb_work_object_t hb_encx264;
-extern hb_work_object_t hb_deca52;
-extern hb_work_object_t hb_decavcodec;
-extern hb_work_object_t hb_declpcm;
-extern hb_work_object_t hb_encfaac;
-extern hb_work_object_t hb_enclame;
-extern hb_work_object_t hb_encvorbis;
+extern hb_work_object_t * hb_objects;
 
 #define HB_WORK_IDLE     0
 #define HB_WORK_OK       1

@@ -21,7 +21,7 @@ void encavcodecClose( hb_work_object_t * );
 
 hb_work_object_t hb_encavcodec =
 {   
-    WORK_DECSUB,
+    WORK_ENCAVCODEC,
     "MPEG-4 encoder (libavcodec)",
     encavcodecInit,
     encavcodecWork,

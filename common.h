@@ -36,6 +36,12 @@ typedef struct hb_chapter_s hb_chapter_t;
 typedef struct hb_audio_s hb_audio_t;
 typedef struct hb_subtitle_s hb_subtitle_t;
 typedef struct hb_state_s hb_state_t;
+typedef union  hb_esconfig_u     hb_esconfig_t;
+typedef struct hb_work_private_s hb_work_private_t;
+typedef struct hb_work_object_s  hb_work_object_t;
+typedef struct hb_buffer_s hb_buffer_t;
+typedef struct hb_fifo_s hb_fifo_t;
+typedef struct hb_lock_s hb_lock_t;
 
 #include "ports.h"
 #ifdef __LIBHB__
@@ -310,5 +316,42 @@ struct hb_state_s
 
     } param;
 };
+
+struct hb_work_object_s
+{
+    int                 id;
+    char              * name;
+
+    int              (* init)  ( hb_work_object_t *, hb_job_t * );
+    int              (* work)  ( hb_work_object_t *, hb_buffer_t **,
+                                 hb_buffer_t ** );
+    void             (* close) ( hb_work_object_t * );
+
+    hb_fifo_t         * fifo_in;
+    hb_fifo_t         * fifo_out;
+    hb_esconfig_t     * config;
+
+    hb_work_private_t * private_data;
+
+    hb_lock_t         * lock;
+    int                 used;
+    uint64_t            time;
+
+    hb_work_object_t  * next;
+};
+
+extern hb_work_object_t hb_sync;
+extern hb_work_object_t hb_decmpeg2;
+extern hb_work_object_t hb_decsub;
+extern hb_work_object_t hb_render;
+extern hb_work_object_t hb_encavcodec;
+extern hb_work_object_t hb_encxvid;
+extern hb_work_object_t hb_encx264;
+extern hb_work_object_t hb_deca52;
+extern hb_work_object_t hb_decavcodec;
+extern hb_work_object_t hb_declpcm;
+extern hb_work_object_t hb_encfaac;
+extern hb_work_object_t hb_enclame;
+extern hb_work_object_t hb_encvorbis;
 
 #endif
