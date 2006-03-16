@@ -10,10 +10,21 @@
 
 #include "x264.h"
 
-struct hb_work_object_s
-{
-    HB_WORK_COMMON;
+int  encx264Init( hb_work_object_t *, hb_job_t * );
+int  encx264Work( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
+void encx264Close( hb_work_object_t * );
 
+hb_work_object_t hb_encx264 =
+{
+    WORK_ENCX264,
+    "H.264/AVC encoder (libx264)",
+    encx264Init,
+    encx264Work,
+    encx264Close
+};
+
+struct hb_work_private_s
+{
     hb_job_t       * job;
     x264_t         * x264;
     x264_picture_t   pic_in;
@@ -23,33 +34,23 @@ struct hb_work_object_s
 };
 
 /***********************************************************************
- * Local prototypes
- **********************************************************************/
-static int  Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
-                  hb_buffer_t ** buf_out );
-static void Close( hb_work_object_t ** _w );
-
-/***********************************************************************
  * hb_work_encx264_init
  ***********************************************************************
  *
  **********************************************************************/
-hb_work_object_t * hb_work_encx264_init( hb_job_t * job )
+int encx264Init( hb_work_object_t * w, hb_job_t * job )
 {
-    hb_work_object_t * w;
     x264_param_t       param;
     x264_nal_t       * nal;
     int                nal_count;
 
-    w        = calloc( sizeof( hb_work_object_t ), 1 );
-    w->name  = strdup( "AVC encoder (libx264)" );
-    w->work  = Work;
-    w->close = Close;
+    hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
+    w->private_data = pv;
 
-    w->job = job;
+    pv->job = job;
 
-    memset( w->filename, 0, 1024 );
-    hb_get_tempory_filename( job->h, w->filename, "x264.log" );
+    memset( pv->filename, 0, 1024 );
+    hb_get_tempory_filename( job->h, pv->filename, "x264.log" );
 
     x264_param_default( &param );
 
@@ -85,83 +86,75 @@ hb_work_object_t * hb_work_encx264_init( hb_job_t * job )
         {
             case 1:
                 param.rc.b_stat_write  = 1;
-                param.rc.psz_stat_out = w->filename;
+                param.rc.psz_stat_out = pv->filename;
                 break;
             case 2:
                 param.rc.b_stat_read = 1;
-                param.rc.psz_stat_in = w->filename;
+                param.rc.psz_stat_in = pv->filename;
                 break;
         }
     }
 
     hb_log( "encx264: opening libx264 (pass %d)", job->pass );
-    w->x264 = x264_encoder_open( &param );
+    pv->x264 = x264_encoder_open( &param );
 
-#define c job->config.h264
-    x264_encoder_headers( w->x264, &nal, &nal_count );
+    x264_encoder_headers( pv->x264, &nal, &nal_count );
 
     /* Sequence Parameter Set */
-    c.sps_length = 1 + nal[1].i_payload;
-    c.sps        = malloc( c.sps_length);
-    c.sps[0]     = 0x67;
-    memcpy( &c.sps[1], nal[1].p_payload, nal[1].i_payload );
+    w->config->h264.sps_length = 1 + nal[1].i_payload;
+    w->config->h264.sps[0] = 0x67;
+    memcpy( &w->config->h264.sps[1], nal[1].p_payload, nal[1].i_payload );
 
     /* Picture Parameter Set */
-    c.pps_length = 1 + nal[2].i_payload;
-    c.pps        = malloc( c.pps_length );
-    c.pps[0]     = 0x68;
-    memcpy( &c.pps[1], nal[2].p_payload, nal[2].i_payload );
-#undef c
+    w->config->h264.pps_length = 1 + nal[2].i_payload;
+    w->config->h264.pps[0] = 0x68;
+    memcpy( &w->config->h264.pps[1], nal[2].p_payload, nal[2].i_payload );
 
-    x264_picture_alloc( &w->pic_in, X264_CSP_I420,
+    x264_picture_alloc( &pv->pic_in, X264_CSP_I420,
                         job->width, job->height );
 
-    return w;
+    return 0;
 }
 
-static void Close( hb_work_object_t ** _w )
+void encx264Close( hb_work_object_t * w )
 {
-    hb_work_object_t * w = *_w;
-
-    x264_encoder_close( w->x264 );
+    hb_work_private_t * pv = w->private_data;
+    x264_encoder_close( pv->x264 );
 
     /* TODO */
-
-    free( w->name );
-    free( w );
-    *_w = NULL;
 }
 
-static int Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
-                 hb_buffer_t ** buf_out )
+int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
+                  hb_buffer_t ** buf_out )
 {
-    hb_job_t    * job = w->job;
+    hb_work_private_t * pv = w->private_data;
+    hb_job_t    * job = pv->job;
     hb_buffer_t * in = *buf_in, * buf;
     int           i_nal;
     x264_nal_t  * nal;
     int i;
 
     /* XXX avoid this memcpy ? */
-    memcpy( w->pic_in.img.plane[0], in->data, job->width * job->height );
+    memcpy( pv->pic_in.img.plane[0], in->data, job->width * job->height );
     if( job->grayscale )
     {
         /* XXX x264 has currently no option for grayscale encoding */
-        memset( w->pic_in.img.plane[1], 0x80, job->width * job->height / 4 );
-        memset( w->pic_in.img.plane[2], 0x80, job->width * job->height / 4 );
+        memset( pv->pic_in.img.plane[1], 0x80, job->width * job->height / 4 );
+        memset( pv->pic_in.img.plane[2], 0x80, job->width * job->height / 4 );
     }
     else
     {
-        memcpy( w->pic_in.img.plane[1], in->data + job->width * job->height,
+        memcpy( pv->pic_in.img.plane[1], in->data + job->width * job->height,
                 job->width * job->height / 4 );
-        memcpy( w->pic_in.img.plane[2], in->data + 5 * job->width *
+        memcpy( pv->pic_in.img.plane[2], in->data + 5 * job->width *
                 job->height / 4, job->width * job->height / 4 );
     }
 
-    w->pic_in.i_type    = X264_TYPE_AUTO;
-    w->pic_in.i_qpplus1 = 0;
+    pv->pic_in.i_type    = X264_TYPE_AUTO;
+    pv->pic_in.i_qpplus1 = 0;
 
-    x264_encoder_encode( w->x264, &nal, &i_nal,
-                         &w->pic_in, &w->pic_out );
+    x264_encoder_encode( pv->x264, &nal, &i_nal,
+                         &pv->pic_in, &pv->pic_out );
 
     /* Should be way too large */
     buf        = hb_buffer_init( 3 * job->width * job->height / 2 );

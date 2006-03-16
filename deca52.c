@@ -8,12 +8,9 @@
 
 #include "a52dec/a52.h"
 
-struct hb_work_object_s
+struct hb_work_private_s
 {
-    HB_WORK_COMMON;
-
     hb_job_t    * job;
-    hb_audio_t  * audio;
 
     /* liba52 handle */
     a52_state_t * state;
@@ -33,12 +30,22 @@ struct hb_work_object_s
     hb_list_t   * list;
 };
 
+int  deca52Init( hb_work_object_t *, hb_job_t * );
+int  deca52Work( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
+void deca52Close( hb_work_object_t * );
+
+hb_work_object_t hb_deca52 =
+{
+    WORK_DECA52,
+    "AC3 decoder",
+    deca52Init,
+    deca52Work,
+    deca52Close
+};
+
 /***********************************************************************
  * Local prototypes
  **********************************************************************/
-static void          Close( hb_work_object_t ** _w );
-static int           Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
-                           hb_buffer_t ** buf_out );
 static hb_buffer_t * Decode( hb_work_object_t * w );
 
 /***********************************************************************
@@ -46,22 +53,19 @@ static hb_buffer_t * Decode( hb_work_object_t * w );
  ***********************************************************************
  * Allocate the work object, initialize liba52
  **********************************************************************/
-hb_work_object_t * hb_work_deca52_init( hb_job_t * job, hb_audio_t * audio )
+int deca52Init( hb_work_object_t * w, hb_job_t * job )
 {
-    hb_work_object_t * w = calloc( sizeof( hb_work_object_t ), 1 );
-    w->name  = strdup( "AC3 decoder" );
-    w->work  = Work;
-    w->close = Close;
+    hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
+    w->private_data = pv;
 
-    w->job   = job;
-    w->audio = audio;
+    pv->job   = job;
 
-    w->list      = hb_list_init();
-    w->state     = a52_init( 0 );
-    w->flags_out = A52_STEREO;
-    w->level     = 32768.0;
+    pv->list      = hb_list_init();
+    pv->state     = a52_init( 0 );
+    pv->flags_out = A52_STEREO;
+    pv->level     = 32768.0;
 
-    return w;
+    return 0;
 }
 
 /***********************************************************************
@@ -69,13 +73,10 @@ hb_work_object_t * hb_work_deca52_init( hb_job_t * job, hb_audio_t * audio )
  ***********************************************************************
  * Free memory
  **********************************************************************/
-static void Close( hb_work_object_t ** _w )
+void deca52Close( hb_work_object_t * w )
 {
-    hb_work_object_t * w = *_w;
-    a52_free( w->state );
-    free( w->name );
-    free( w );
-    *_w = NULL;
+    hb_work_private_t * pv = w->private_data;
+    a52_free( pv->state );
 }
 
 /***********************************************************************
@@ -84,12 +85,13 @@ static void Close( hb_work_object_t ** _w )
  * Add the given buffer to the data we already have, and decode as much
  * as we can
  **********************************************************************/
-static int Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
-                 hb_buffer_t ** buf_out )
+int deca52Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
+                hb_buffer_t ** buf_out )
 {
+    hb_work_private_t * pv = w->private_data;
     hb_buffer_t * buf;
 
-    hb_list_add( w->list, *buf_in );
+    hb_list_add( pv->list, *buf_in );
     *buf_in = NULL;
 
     /* If we got more than a frame, chain raw buffers */
@@ -110,80 +112,81 @@ static int Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
  **********************************************************************/
 static hb_buffer_t * Decode( hb_work_object_t * w )
 {
+    hb_work_private_t * pv = w->private_data;
     hb_buffer_t * buf;
     int           i, j;
     uint64_t      pts;
     int           pos;
 
     /* Get a frame header if don't have one yet */
-    if( !w->sync )
+    if( !pv->sync )
     {
-        while( hb_list_bytes( w->list ) >= 7 )
+        while( hb_list_bytes( pv->list ) >= 7 )
         {
             /* We have 7 bytes, check if this is a correct header */
-            hb_list_seebytes( w->list, w->frame, 7 );
-            w->size = a52_syncinfo( w->frame, &w->flags_in, &w->rate,
-                                    &w->bitrate );
-            if( w->size )
+            hb_list_seebytes( pv->list, pv->frame, 7 );
+            pv->size = a52_syncinfo( pv->frame, &pv->flags_in, &pv->rate,
+                                    &pv->bitrate );
+            if( pv->size )
             {
                 /* It is. W00t. */
-                if( w->error )
+                if( pv->error )
                 {
                     hb_log( "a52_syncinfo ok" );
                 }
-                w->error = 0;
-                w->sync  = 1;
+                pv->error = 0;
+                pv->sync  = 1;
                 break;
             }
 
             /* It is not */
-            if( !w->error )
+            if( !pv->error )
             {
                 hb_log( "a52_syncinfo failed" );
-                w->error = 1;
+                pv->error = 1;
             }
 
             /* Try one byte later */
-            hb_list_getbytes( w->list, w->frame, 1, NULL, NULL );
+            hb_list_getbytes( pv->list, pv->frame, 1, NULL, NULL );
         }
     }
 
-    if( !w->sync ||
-        hb_list_bytes( w->list ) < w->size )
+    if( !pv->sync ||
+        hb_list_bytes( pv->list ) < pv->size )
     {
         /* Need more data */
         return NULL;
     }
 
     /* Get the whole frame */
-    hb_list_getbytes( w->list, w->frame, w->size, &pts, &pos );
+    hb_list_getbytes( pv->list, pv->frame, pv->size, &pts, &pos );
 
     /* AC3 passthrough: don't decode the AC3 frame */
-    if( w->job->acodec & HB_ACODEC_AC3 )
+    if( pv->job->acodec & HB_ACODEC_AC3 )
     {
-        buf = hb_buffer_init( w->size );
-        memcpy( buf->data, w->frame, w->size );
-        buf->start = pts + ( pos / w->size ) * 6 * 256 * 90000 / w->rate;
-        buf->stop  = buf->start + 6 * 256 * 90000 / w->rate;
-        w->sync = 0;
+        buf = hb_buffer_init( pv->size );
+        memcpy( buf->data, pv->frame, pv->size );
+        buf->start = pts + ( pos / pv->size ) * 6 * 256 * 90000 / pv->rate;
+        buf->stop  = buf->start + 6 * 256 * 90000 / pv->rate;
+        pv->sync = 0;
         return buf;
     }
 
     /* Feed liba52 */
-    a52_frame( w->state, w->frame, &w->flags_out, &w->level, 0 );
+    a52_frame( pv->state, pv->frame, &pv->flags_out, &pv->level, 0 );
 
     /* 6 blocks per frame, 256 samples per block, 2 channels */
     buf        = hb_buffer_init( 3072 * sizeof( float ) );
-    buf->start = pts + ( pos / w->size ) * 6 * 256 * 90000 / w->rate;
-    buf->stop  = buf->start + 6 * 256 * 90000 / w->rate;
+    buf->start = pts + ( pos / pv->size ) * 6 * 256 * 90000 / pv->rate;
+    buf->stop  = buf->start + 6 * 256 * 90000 / pv->rate;
 
     for( i = 0; i < 6; i++ )
     {
         sample_t * samples_in;
         float    * samples_out;
 
-        a52_block( w->state );
-        samples_in  = a52_samples( w->state );
+        a52_block( pv->state );
+        samples_in  = a52_samples( pv->state );
         samples_out = ((float *) buf->data) + 512 * i;
 
         /* Interleave */
@@ -194,7 +197,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
         }
     }
 
-    w->sync = 0;
+    pv->sync = 0;
     return buf;
 }
 

@@ -56,26 +56,23 @@ static int MP4Init( hb_mux_object_t * m )
 
     if( job->vcodec == HB_VCODEC_X264 )
     {
-#define c job->config.h264
         /* Stolen from mp4creator */
         MP4SetVideoProfileLevel( m->file, 0x7F );
 
         mux_data->track = MP4AddH264VideoTrack( m->file, job->arate,
                 MP4_INVALID_DURATION, job->width, job->height,
-                c.sps[1], /* AVCProfileIndication */
-                c.sps[2], /* profile_compat */
-                c.sps[3], /* AVCLevelIndication */
+                job->config.h264.sps[1], /* AVCProfileIndication */
+                job->config.h264.sps[2], /* profile_compat */
+                job->config.h264.sps[3], /* AVCLevelIndication */
                 3 );      /* 4 bytes length before each NAL unit */
 
         MP4AddH264SequenceParameterSet( m->file, mux_data->track,
-                c.sps, c.sps_length );
+                job->config.h264.sps, job->config.h264.sps_length );
         MP4AddH264PictureParameterSet( m->file, mux_data->track,
-                c.pps, c.pps_length );
-#undef c
+                job->config.h264.pps, job->config.h264.pps_length );
     }
     else /* FFmpeg or XviD */
     {
-#define c job->config.mpeg4
         MP4SetVideoProfileLevel( m->file, MPEG4_SP_L3 );
         mux_data->track = MP4AddVideoTrack( m->file, job->arate,
                 MP4_INVALID_DURATION, job->width, job->height,
@@ -83,8 +80,7 @@ static int MP4Init( hb_mux_object_t * m )
 
         /* VOL from FFmpeg or XviD */
         MP4SetTrackESConfiguration( m->file, mux_data->track,
-                c.config, c.config_length );
-#undef c
+                job->config.mpeg4.bytes, job->config.mpeg4.length );
     }
 
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
@@ -97,7 +93,7 @@ static int MP4Init( hb_mux_object_t * m )
                 job->arate, 1024, MP4_MPEG4_AUDIO_TYPE );
         MP4SetAudioProfileLevel( m->file, 0x0F );
         MP4SetTrackESConfiguration( m->file, mux_data->track,
-                audio->config.faac.decinfo, audio->config.faac.size );
+                audio->config.aac.bytes, audio->config.aac.length );
     }
 
     return 0;

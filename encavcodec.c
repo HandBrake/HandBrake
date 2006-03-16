@@ -8,38 +8,35 @@
 
 #include "ffmpeg/avcodec.h"
 
-struct hb_work_object_s
+struct hb_work_private_s
 {
-    HB_WORK_COMMON;
-
     hb_job_t * job;
     AVCodecContext * context;
     FILE * file;
 };
 
-/***********************************************************************
- * Local prototypes
- **********************************************************************/
-static void Close( hb_work_object_t ** _w );
-static int  Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
-                  hb_buffer_t ** buf_out );
+int  encavcodecInit( hb_work_object_t *, hb_job_t * );
+int  encavcodecWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
+void encavcodecClose( hb_work_object_t * );
 
-/***********************************************************************
- * hb_work_encavcodec_init
- ***********************************************************************
- *
- **********************************************************************/
-hb_work_object_t * hb_work_encavcodec_init( hb_job_t * job )
+hb_work_object_t hb_encavcodec =
+{   
+    WORK_DECSUB,
+    "MPEG-4 encoder (libavcodec)",
+    encavcodecInit,
+    encavcodecWork,
+    encavcodecClose
+}; 
+
+int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 {
     AVCodec * codec;
     AVCodecContext * context;
     
-    hb_work_object_t * w = calloc( sizeof( hb_work_object_t ), 1 );
-    w->name  = strdup( "MPEG-4 encoder (libavcodec)" );
-    w->work  = Work;
-    w->close = Close;
+    hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
+    w->private_data = pv;
 
-    w->job = job;
+    pv->job = job;
 
     codec = avcodec_find_encoder( CODEC_ID_MPEG4 );
     if( !codec )
@@ -84,7 +81,7 @@ hb_work_object_t * hb_work_encavcodec_init( hb_job_t * job )
 
         if( job->pass == 1 )
         {
-            w->file = fopen( filename, "wb" );
+            pv->file = fopen( filename, "wb" );
             context->flags |= CODEC_FLAG_PASS1;
         }
         else
@@ -92,15 +89,15 @@ hb_work_object_t * hb_work_encavcodec_init( hb_job_t * job )
             int    size;
             char * log;
 
-            w->file = fopen( filename, "rb" );
-            fseek( w->file, 0, SEEK_END );
-            size = ftell( w->file );
-            fseek( w->file, 0, SEEK_SET );
+            pv->file = fopen( filename, "rb" );
+            fseek( pv->file, 0, SEEK_END );
+            size = ftell( pv->file );
+            fseek( pv->file, 0, SEEK_SET );
             log = malloc( size + 1 );
             log[size] = '\0';
-            fread( log, size, 1, w->file );
-            fclose( w->file );
-            w->file = NULL;
+            fread( log, size, 1, pv->file );
+            fclose( pv->file );
+            pv->file = NULL;
 
             context->flags    |= CODEC_FLAG_PASS2;
             context->stats_in  = log;
@@ -111,19 +108,16 @@ hb_work_object_t * hb_work_encavcodec_init( hb_job_t * job )
     {
         hb_log( "hb_work_encavcodec_init: avcodec_open failed" );
     }
-    w->context = context;
+    pv->context = context;
 
     if( ( job->mux & HB_MUX_MP4 ) && job->pass != 1 )
     {
-#define c job->config.mpeg4
         /* Hem hem */
-        c.config        = malloc( 15 );
-        c.config_length = 15;
-        memcpy( c.config, context->extradata + 15, 15 );
-#undef c
+        w->config->mpeg4.length = 15;
+        memcpy( w->config->mpeg4.bytes, context->extradata + 15, 15 );
     }
     
-    return w;
+    return 0;
 }
 
 /***********************************************************************
@@ -131,30 +125,19 @@ hb_work_object_t * hb_work_encavcodec_init( hb_job_t * job )
  ***********************************************************************
  *
  **********************************************************************/
-static void Close( hb_work_object_t ** _w )
+void encavcodecClose( hb_work_object_t * w )
 {
-    hb_work_object_t * w = *_w;
-    hb_job_t * job = w->job;
+    hb_work_private_t * pv = w->private_data;
 
-    if( w->context )
+    if( pv->context )
     {
         hb_log( "encavcodec: closing libavcodec" );
-        avcodec_close( w->context );
+        avcodec_close( pv->context );
     }
-    if( w->file )
+    if( pv->file )
     {
-        fclose( w->file );
+        fclose( pv->file );
     }
-    if( job->es_config )
-    {
-        free( job->es_config );
-        job->es_config = NULL;
-        job->es_config_length = 0;
-    }
-
-    free( w->name );
-    free( w );
-    *_w = NULL;
 }
 
 /***********************************************************************
@@ -162,10 +145,11 @@ static void Close( hb_work_object_t ** _w )
  ***********************************************************************
  *
  **********************************************************************/
-static int Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
-                 hb_buffer_t ** buf_out )
+int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
+                    hb_buffer_t ** buf_out )
 {
-    hb_job_t * job = w->job;
+    hb_work_private_t * pv = w->private_data;
+    hb_job_t * job = pv->job;
     AVFrame  * frame;
     hb_buffer_t * in = *buf_in, * buf;
 
@@ -179,18 +163,18 @@ static int Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     /* Should be way too large */
     buf = hb_buffer_init( 3 * job->width * job->height / 2 );
-    buf->size = avcodec_encode_video( w->context, buf->data, buf->alloc,
+    buf->size = avcodec_encode_video( pv->context, buf->data, buf->alloc,
                                       frame );
     buf->start = in->start;
     buf->stop  = in->stop;
-    buf->key   = w->context->coded_frame->key_frame;
+    buf->key   = pv->context->coded_frame->key_frame;
 
     av_free( frame );
 
     if( job->pass == 1 )
     {
         /* Write stats */
-        fprintf( w->file, "%s", w->context->stats_out );
+        fprintf( pv->file, "%s", pv->context->stats_out );
     }
 
     *buf_out = buf;

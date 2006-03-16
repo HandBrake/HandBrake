@@ -6,11 +6,6 @@
 
 #include "hb.h"
 
-struct hb_work_object_s
-{
-    HB_WORK_COMMON;
-};
-
 typedef struct
 {
     hb_list_t * jobs;
@@ -56,6 +51,27 @@ static void work_func( void * _work )
     free( work );
 }
 
+static hb_work_object_t * getWork( int id )
+{
+    switch( id )
+    {
+        case WORK_SYNC:       return &hb_sync;
+        case WORK_DECMPEG2:   return &hb_decmpeg2;
+        case WORK_DECSUB:     return &hb_decsub;
+        case WORK_RENDER:     return &hb_render;
+        case WORK_ENCAVCODEC: return &hb_encavcodec;
+        case WORK_ENCXVID:    return &hb_encxvid;
+        case WORK_ENCX264:    return &hb_encx264;
+        case WORK_DECA52:     return &hb_deca52;
+        case WORK_DECAVCODEC: return &hb_decavcodec;
+        case WORK_DECLPCM:    return &hb_declpcm;
+        case WORK_ENCFAAC:    return &hb_encfaac;
+        case WORK_ENCLAME:    return &hb_enclame;
+        case WORK_ENCVORBIS:  return &hb_encvorbis;
+    }
+    return NULL;
+}
+
 static void do_job( hb_job_t * job, int cpu_count )
 {
     hb_title_t    * title;
@@ -98,41 +114,39 @@ static void do_job( hb_job_t * job, int cpu_count )
     job->fifo_mpeg4  = hb_fifo_init( 8 );
 
     /* Synchronization */
-    w           = hb_work_sync_init( job );
+    hb_list_add( job->list_work, ( w = getWork( WORK_SYNC ) ) );
     w->fifo_in  = NULL;
     w->fifo_out = NULL;
-    hb_list_add( job->list_work, w );
 
     /* Video decoder */
-    w           = hb_work_decmpeg2_init( job );
+    hb_list_add( job->list_work, ( w = getWork( WORK_DECMPEG2 ) ) );
     w->fifo_in  = job->fifo_mpeg2;
     w->fifo_out = job->fifo_raw;
-    hb_list_add( job->list_work, w );
 
     /* Video renderer */
-    w           = hb_work_render_init( job );
+    hb_list_add( job->list_work, ( w = getWork( WORK_RENDER ) ) );
     w->fifo_in  = job->fifo_sync;
     w->fifo_out = job->fifo_render;
-    hb_list_add( job->list_work, w );
 
     /* Video encoder */
     switch( job->vcodec )
     {
         case HB_VCODEC_FFMPEG:
             hb_log( " + encoder FFmpeg" );
-            w = hb_work_encavcodec_init( job );
+            w = getWork( WORK_ENCAVCODEC );
             break;
         case HB_VCODEC_XVID:
             hb_log( " + encoder XviD" );
-            w = hb_work_encxvid_init( job );
+            w = getWork( WORK_ENCXVID );
             break;
         case HB_VCODEC_X264:
             hb_log( " + encoder x264" );
-            w = hb_work_encx264_init( job );
+            w = getWork( WORK_ENCX264 );
             break;
     }
     w->fifo_in  = job->fifo_render;
     w->fifo_out = job->fifo_mpeg4;
+    w->config   = &job->config;
     hb_list_add( job->list_work, w );
 
     subtitle = hb_list_item( title->list_subtitle, 0 );
@@ -143,10 +157,9 @@ static void do_job( hb_job_t * job, int cpu_count )
         subtitle->fifo_in  = hb_fifo_init( 8 );
         subtitle->fifo_raw = hb_fifo_init( 8 );
 
-        w           = hb_work_decsub_init( job );
+        hb_list_add( job->list_work, ( w = getWork( WORK_DECSUB ) ) );
         w->fifo_in  = subtitle->fifo_in;
         w->fifo_out = subtitle->fifo_raw;
-        hb_list_add( job->list_work, w );
     }
 
     if( job->acodec & HB_ACODEC_AC3 )
@@ -174,13 +187,13 @@ static void do_job( hb_job_t * job, int cpu_count )
         switch( audio->codec )
         {
             case HB_ACODEC_AC3:
-                w = hb_work_deca52_init( job, audio );
+                w = getWork( WORK_DECA52 );
                 break;
             case HB_ACODEC_MPGA:
-                w = hb_work_decavcodec_init( job, audio );
+                w = getWork( WORK_DECAVCODEC );
                 break;
             case HB_ACODEC_LPCM:
-                w = hb_work_declpcm_init( job, audio );
+                w = getWork( WORK_DECLPCM );
                 break;
         }
         w->fifo_in  = audio->fifo_in;
@@ -190,19 +203,20 @@ static void do_job( hb_job_t * job, int cpu_count )
         switch( job->acodec )
         {
             case HB_ACODEC_FAAC:
-                w = hb_work_encfaac_init( job, audio );
+                w = getWork( WORK_ENCFAAC );
                 break;
             case HB_ACODEC_LAME:
-                w = hb_work_enclame_init( job, audio );
+                w = getWork( WORK_ENCLAME );
                 break;
             case HB_ACODEC_VORBIS:
-                w = hb_work_encvorbis_init( job, audio );
+                w = getWork( WORK_ENCVORBIS );
                 break;
         }
         if( job->acodec != HB_ACODEC_AC3 )
         {
             w->fifo_in  = audio->fifo_sync;
             w->fifo_out = audio->fifo_out;
+            w->config   = &audio->config;
             hb_list_add( job->list_work, w );
         }
     }
@@ -219,6 +233,7 @@ static void do_job( hb_job_t * job, int cpu_count )
         w->lock = hb_lock_init();
         w->used = 0;
         w->time = 0;
+        w->init( w, job );
     }
 
     job->done = 0;
@@ -272,7 +287,7 @@ static void do_job( hb_job_t * job, int cpu_count )
     {
         hb_list_rem( job->list_work, w );
         hb_lock_close( &w->lock );
-        w->close( &w );
+        w->close( w );
     }
 
     /* Close fifos */

@@ -114,44 +114,93 @@ void         hb_dvd_close( hb_dvd_t ** );
 /***********************************************************************
  * Work objects
  **********************************************************************/
-typedef struct hb_work_object_s hb_work_object_t;
+#define HB_CONFIG_MAX_SIZE 8192
+typedef union hb_esconfig_u
+{
+    struct
+    {
+        uint8_t bytes[HB_CONFIG_MAX_SIZE];
+        int     length;
+    } mpeg4;
 
-#define HB_WORK_COMMON \
-    hb_lock_t  * lock; \
-    int          used; \
-    uint64_t     time; \
-    char       * name; \
-    hb_fifo_t  * fifo_in; \
-    hb_fifo_t  * fifo_out; \
-    int       (* work)  ( hb_work_object_t *, hb_buffer_t **, \
-                          hb_buffer_t ** ); \
-    void      (* close) ( hb_work_object_t ** )
+    struct
+    {
+        uint8_t sps[HB_CONFIG_MAX_SIZE];
+        int     sps_length;
+        uint8_t pps[HB_CONFIG_MAX_SIZE];
+        int     pps_length;
+    } h264;
+
+    struct
+    {
+        uint8_t bytes[HB_CONFIG_MAX_SIZE];
+        int     length;
+    } aac;
+
+    struct
+    {
+        uint8_t headers[3][HB_CONFIG_MAX_SIZE];
+    } vorbis;
+} hb_esconfig_t;
+
+typedef struct hb_work_private_s hb_work_private_t;
+typedef struct hb_work_object_s  hb_work_object_t;
+struct hb_work_object_s
+{
+    int                 id;
+    char              * name;
+
+    int              (* init)  ( hb_work_object_t *, hb_job_t * );
+    int              (* work)  ( hb_work_object_t *, hb_buffer_t **,
+                                 hb_buffer_t ** );
+    void             (* close) ( hb_work_object_t * );
+
+    hb_fifo_t         * fifo_in;
+    hb_fifo_t         * fifo_out;
+    hb_esconfig_t     * config;
+
+    hb_work_private_t * private_data;
+
+    hb_lock_t         * lock;
+    int                 used;
+    uint64_t            time;
+};
+
+enum
+{
+    WORK_SYNC = 1,
+    WORK_DECMPEG2,
+    WORK_DECSUB,
+    WORK_RENDER,
+    WORK_ENCAVCODEC,
+    WORK_ENCXVID,
+    WORK_ENCX264,
+    WORK_DECA52,
+    WORK_DECAVCODEC,
+    WORK_DECLPCM,
+    WORK_ENCFAAC,
+    WORK_ENCLAME,
+    WORK_ENCVORBIS
+};
+
+extern hb_work_object_t hb_sync;
+extern hb_work_object_t hb_decmpeg2;
+extern hb_work_object_t hb_decsub;
+extern hb_work_object_t hb_render;
+extern hb_work_object_t hb_encavcodec;
+extern hb_work_object_t hb_encxvid;
+extern hb_work_object_t hb_encx264;
+extern hb_work_object_t hb_deca52;
+extern hb_work_object_t hb_decavcodec;
+extern hb_work_object_t hb_declpcm;
+extern hb_work_object_t hb_encfaac;
+extern hb_work_object_t hb_enclame;
+extern hb_work_object_t hb_encvorbis;
 
 #define HB_WORK_IDLE     0
 #define HB_WORK_OK       1
 #define HB_WORK_ERROR    2
 #define HB_WORK_DONE     3
-
-
-#define DECLARE_WORK_NORMAL( a ) \
-    hb_work_object_t * hb_work_##a##_init( hb_job_t * );
-
-#define DECLARE_WORK_AUDIO( a ) \
-    hb_work_object_t * hb_work_##a##_init( hb_job_t *, hb_audio_t * );
-
-DECLARE_WORK_NORMAL( sync );
-DECLARE_WORK_NORMAL( decmpeg2 );
-DECLARE_WORK_NORMAL( decsub );
-DECLARE_WORK_NORMAL( render );
-DECLARE_WORK_NORMAL( encavcodec );
-DECLARE_WORK_NORMAL( encxvid );
-DECLARE_WORK_NORMAL( encx264 );
-DECLARE_WORK_AUDIO( deca52 );
-DECLARE_WORK_AUDIO( decavcodec );
-DECLARE_WORK_AUDIO( declpcm );
-DECLARE_WORK_AUDIO( encfaac );
-DECLARE_WORK_AUDIO( enclame );
-DECLARE_WORK_AUDIO( encvorbis );
 
 /***********************************************************************
  * Muxers

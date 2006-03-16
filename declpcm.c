@@ -6,15 +6,25 @@
 
 #include "hb.h"
 
-struct hb_work_object_s
-{
-    HB_WORK_COMMON;
+int  declpcmInit( hb_work_object_t *, hb_job_t * );
+int  declpcmWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
+void declpcmClose( hb_work_object_t * );
 
-    hb_job_t    * job;
-    hb_audio_t  * audio;
+hb_work_object_t hb_declpcm =
+{   
+    WORK_DECLPCM,
+    "LPCM decoder",
+    declpcmInit,
+    declpcmWork,
+    declpcmClose
 };
 
-static int Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
+int declpcmInit( hb_work_object_t * w, hb_job_t * job )
+{
+    return 0;
+}
+
+int declpcmWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                  hb_buffer_t ** buf_out )
 {
     hb_buffer_t * in = *buf_in, * out;
@@ -75,24 +85,6 @@ static int Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     return HB_WORK_OK;
 }
 
-static void Close( hb_work_object_t ** _w )
+void declpcmClose( hb_work_object_t * w )
 {
-    hb_work_object_t * w = *_w;
-    free( w->name );
-    free( w );
-    *_w = NULL;
 }
-
-hb_work_object_t * hb_work_declpcm_init( hb_job_t * job, hb_audio_t * audio )
-{
-    hb_work_object_t * w = calloc( sizeof( hb_work_object_t ), 1 );
-    w->name  = strdup( "LPCM decoder" );
-    w->work  = Work;
-    w->close = Close;
-
-    w->job   = job;
-    w->audio = audio;
-
-    return w;
-}
-

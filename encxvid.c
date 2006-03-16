@@ -8,29 +8,29 @@
 
 #include "xvid.h"
 
-struct hb_work_object_s
-{
-    HB_WORK_COMMON;
+int  encxvidInit( hb_work_object_t *, hb_job_t * );
+int  encxvidWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
+void encxvidClose( hb_work_object_t * );
 
+hb_work_object_t hb_encxvid =
+{
+    WORK_ENCXVID,
+    "MPEG-4 encoder (libxvidcore)",
+    encxvidInit,
+    encxvidWork,
+    encxvidClose
+};
+
+struct hb_work_private_s
+{
     hb_job_t * job;
     void     * xvid;
     char       filename[1024];
     int        quant;
+    int        configDone;
 };
 
-/***********************************************************************
- * Local prototypes
- **********************************************************************/
-static void Close( hb_work_object_t ** _w );
-static int  Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
-                  hb_buffer_t ** buf_out );
-
-/***********************************************************************
- * hb_work_encxvid_init
- ***********************************************************************
- *
- **********************************************************************/
-hb_work_object_t * hb_work_encxvid_init( hb_job_t * job )
+int encxvidInit( hb_work_object_t * w, hb_job_t * job )
 {
     xvid_gbl_init_t xvid_gbl_init;
     xvid_enc_create_t create;
@@ -39,15 +39,13 @@ hb_work_object_t * hb_work_encxvid_init( hb_job_t * job )
     xvid_plugin_2pass2_t rc2pass2;
     xvid_enc_plugin_t plugins[1];
 
-    hb_work_object_t * w = calloc( sizeof( hb_work_object_t ), 1 );
-    w->name  = strdup( "MPEG-4 encoder (libxvidcore)" );
-    w->work  = Work;
-    w->close = Close;
+    hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
+    w->private_data = pv;
 
-    w->job = job;
+    pv->job = job;
 
-    memset( w->filename, 0, 1024 );
-    hb_get_tempory_filename( job->h, w->filename, "xvid.log" );
+    memset( pv->filename, 0, 1024 );
+    hb_get_tempory_filename( job->h, pv->filename, "xvid.log" );
 
     memset( &xvid_gbl_init, 0, sizeof( xvid_gbl_init ) );
     xvid_gbl_init.version = XVID_VERSION;
@@ -69,14 +67,14 @@ hb_work_object_t * hb_work_encxvid_init( hb_job_t * job )
             {
                 /* Rate control */
                 single.bitrate = 1000 * job->vbitrate;
-                w->quant = 0;
+                pv->quant = 0;
             }
             else
             {
                 /* Constant quantizer */
-                w->quant = 31 - job->vquality * 30;
+                pv->quant = 31 - job->vquality * 30;
                 hb_log( "encxvid: encoding at constant quantizer %d",
-                        w->quant );
+                        pv->quant );
             }
             plugins[0].func  = xvid_plugin_single;
             plugins[0].param = &single;
@@ -85,7 +83,7 @@ hb_work_object_t * hb_work_encxvid_init( hb_job_t * job )
         case 1:
             memset( &rc2pass1, 0, sizeof( rc2pass1 ) );
             rc2pass1.version  = XVID_VERSION;
-            rc2pass1.filename = w->filename;
+            rc2pass1.filename = pv->filename;
             plugins[0].func   = xvid_plugin_2pass1;
             plugins[0].param  = &rc2pass1;
             break;
@@ -93,7 +91,7 @@ hb_work_object_t * hb_work_encxvid_init( hb_job_t * job )
         case 2:
             memset( &rc2pass2, 0, sizeof( rc2pass2 ) );
             rc2pass2.version  = XVID_VERSION;
-            rc2pass2.filename = w->filename;
+            rc2pass2.filename = pv->filename;
             rc2pass2.bitrate  = 1000 * job->vbitrate;
             plugins[0].func   = xvid_plugin_2pass2;
             plugins[0].param  = &rc2pass2;
@@ -114,9 +112,9 @@ hb_work_object_t * hb_work_encxvid_init( hb_job_t * job )
     create.global           = 0;
 
     xvid_encore( NULL, XVID_ENC_CREATE, &create, NULL );
-    w->xvid = create.handle;
+    pv->xvid = create.handle;
 
-    return w;
+    return 0;
 }
 
 /***********************************************************************
@@ -124,19 +122,15 @@ hb_work_object_t * hb_work_encxvid_init( hb_job_t * job )
  ***********************************************************************
  *
  **********************************************************************/
-static void Close( hb_work_object_t ** _w )
+void encxvidClose( hb_work_object_t * w )
 {
-    hb_work_object_t * w = *_w;
+    hb_work_private_t * pv = w->private_data;
 
-    if( w->xvid )
+    if( pv->xvid )
     {
         hb_log( "encxvid: closing libxvidcore" );
-        xvid_encore( w->xvid, XVID_ENC_DESTROY, NULL, NULL);
+        xvid_encore( pv->xvid, XVID_ENC_DESTROY, NULL, NULL);
     }
-
-    free( w->name );
-    free( w );
-    *_w = NULL;
 }
 
 /***********************************************************************
@@ -144,10 +138,11 @@ static void Close( hb_work_object_t ** _w )
  ***********************************************************************
  *
  **********************************************************************/
-static int Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
+int encxvidWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                  hb_buffer_t ** buf_out )
 {
-    hb_job_t * job = w->job;
+    hb_work_private_t * pv = w->private_data;
+    hb_job_t * job = pv->job;
     xvid_enc_frame_t frame;
     hb_buffer_t * in = *buf_in, * buf;
 
@@ -172,7 +167,7 @@ static int Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
         frame.vop_flags |= XVID_VOP_GREYSCALE;
     }
     frame.type = XVID_TYPE_AUTO;
-    frame.quant = w->quant;
+    frame.quant = pv->quant;
     frame.motion = XVID_ME_ADVANCEDDIAMOND16 | XVID_ME_HALFPELREFINE16 |
                    XVID_ME_EXTSEARCH16 | XVID_ME_ADVANCEDDIAMOND8 |
                    XVID_ME_HALFPELREFINE8 | XVID_ME_EXTSEARCH8 |
@@ -180,11 +175,10 @@ static int Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     frame.quant_intra_matrix = NULL;
     frame.quant_inter_matrix = NULL;
 
-    buf->size = xvid_encore( w->xvid, XVID_ENC_ENCODE, &frame, NULL );
+    buf->size = xvid_encore( pv->xvid, XVID_ENC_ENCODE, &frame, NULL );
     buf->key = ( frame.out_flags & XVID_KEYFRAME );
 
-#define c job->config.mpeg4
-    if( !c.config )
+    if( !pv->configDone )
     {
         int vol_start, vop_start;
         for( vol_start = 0; ; vol_start++ )
@@ -209,11 +203,11 @@ static int Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
         }
 
         hb_log( "encxvid: VOL size is %d bytes", vop_start - vol_start );
-        c.config        = malloc( vop_start - vol_start );
-        c.config_length = vop_start - vol_start;
-        memcpy( c.config, &buf->data[vol_start], c.config_length );
+        job->config.mpeg4.length = vop_start - vol_start;
+        memcpy( job->config.mpeg4.bytes, &buf->data[vol_start],
+                job->config.mpeg4.length );
+        pv->configDone = 1;
     }
-#undef c
 
     *buf_out = buf;
 
