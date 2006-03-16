@@ -173,36 +173,28 @@ void hb_libmpeg2_close( hb_libmpeg2_t ** _m )
  **********************************************************************
  * 
  *********************************************************************/
-struct hb_work_object_s
+struct hb_work_private_s
 {
-    HB_WORK_COMMON;
-
     hb_libmpeg2_t * libmpeg2;
     hb_list_t     * list;
 };
-
-/***********************************************************************
- * Local prototypes
- **********************************************************************/
-static int Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
-                 hb_buffer_t ** buf_out );
-static void Close( hb_work_object_t ** _w );
 
 /**********************************************************************
  * hb_work_decmpeg2_init
  **********************************************************************
  * 
  *********************************************************************/
-hb_work_object_t * hb_work_decmpeg2_init( hb_job_t * job )
+int decmpeg2Init( hb_work_object_t * w, hb_job_t * job )
 {
-    hb_work_object_t * w = calloc( sizeof( hb_work_object_t ), 1 );
-    w->name  = strdup( "MPEG-2 decoder (libmpeg2)" );
-    w->work  = Work;
-    w->close = Close;
+    hb_work_private_t * pv;
+    
+    pv              = calloc( 1, sizeof( hb_work_private_t ) );
+    w->private_data = pv;
+    
+    pv->libmpeg2 = hb_libmpeg2_init();
+    pv->list     = hb_list_init();
 
-    w->libmpeg2 = hb_libmpeg2_init();
-    w->list     = hb_list_init();
-    return w;
+    return 0;
 }
 
 /**********************************************************************
@@ -210,18 +202,18 @@ hb_work_object_t * hb_work_decmpeg2_init( hb_job_t * job )
  **********************************************************************
  * 
  *********************************************************************/
-static int Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
-                 hb_buffer_t ** buf_out )
+int decmpeg2Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
+                   hb_buffer_t ** buf_out )
 {
+    hb_work_private_t * pv = w->private_data;
     hb_buffer_t * buf, * last = NULL;
 
-    hb_libmpeg2_decode( w->libmpeg2, *buf_in, w->list );
+    hb_libmpeg2_decode( pv->libmpeg2, *buf_in, pv->list );
 
     *buf_out = NULL;
-
-    while( ( buf = hb_list_item( w->list, 0 ) ) )
+    while( ( buf = hb_list_item( pv->list, 0 ) ) )
     {
-        hb_list_rem( w->list, buf );
+        hb_list_rem( pv->list, buf );
         if( last )
         {
             last->next = buf;
@@ -242,12 +234,20 @@ static int Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
  **********************************************************************
  * 
  *********************************************************************/
-static void Close( hb_work_object_t ** _w )
+void decmpeg2Close( hb_work_object_t * w )
 {
-    hb_work_object_t * w = *_w;
-    hb_list_close( &w->list );
-    hb_libmpeg2_close( &w->libmpeg2 );
-    free( w->name );
-    free( w );
-    *_w = NULL;
+    hb_work_private_t * pv = w->private_data;
+    hb_list_close( &pv->list );
+    hb_libmpeg2_close( &pv->libmpeg2 );
+    free( pv );
 }
+
+hb_work_object_t hb_decmpeg2 =
+{
+    WORK_DECMPEG2,
+    "MPEG-2 decoder (libmpeg2)",
+    decmpeg2Init,
+    decmpeg2Work,
+    decmpeg2Close
+};
+

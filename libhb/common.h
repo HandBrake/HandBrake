@@ -172,27 +172,7 @@ struct hb_job_s
 
     hb_list_t     * list_work;
 
-    union
-    {
-        struct
-        {
-            uint8_t * config;
-            int       config_length;
-        } mpeg4;
-
-        struct
-        {
-            uint8_t * sps;
-            int       sps_length;
-            uint8_t * pps;
-            int       pps_length;
-        } h264;
-
-    } config;
-
-    /* MPEG-4 / AVC */
-    uint8_t       * es_config;
-    int             es_config_length;
+    hb_esconfig_t config;
 
     hb_mux_data_t * mux_data;
 #endif
@@ -214,22 +194,7 @@ struct hb_audio_s
     hb_fifo_t * fifo_sync; /* Resampled, synced raw audio */
     hb_fifo_t * fifo_out;  /* MP3/AAC/Vorbis ES */
 
-    union
-    {
-        struct
-        {
-            uint8_t       * decinfo;
-            unsigned long   size;
-        } faac;
-
-        struct
-        {
-            uint8_t * headers[3];
-            int       sizes[3];
-        } vorbis;
-
-    } config;
-
+    hb_esconfig_t config;
     hb_mux_data_t * mux_data;
 #endif
 };

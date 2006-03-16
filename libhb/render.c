@@ -8,10 +8,8 @@
 
 #include "ffmpeg/avcodec.h"
 
-struct hb_work_object_s
+struct hb_work_private_s
 {
-    HB_WORK_COMMON;
-
     hb_job_t * job;
 
     ImgReSampleContext * context;
@@ -19,6 +17,19 @@ struct hb_work_object_s
     AVPicture            pic_deint;
     AVPicture            pic_render;
     hb_buffer_t        * buf_deint;
+};
+
+int  renderInit( hb_work_object_t *, hb_job_t * );
+int  renderWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
+void renderClose( hb_work_object_t * );
+
+hb_work_object_t hb_render =
+{   
+    WORK_RENDER,
+    "Renderer",
+    renderInit,
+    renderWork,
+    renderClose
 };
 
 static void ApplySub( hb_job_t * job, hb_buffer_t * buf,
@@ -84,45 +95,46 @@ static void ApplySub( hb_job_t * job, hb_buffer_t * buf,
     hb_buffer_close( _sub );
 }
 
-static int Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
-                 hb_buffer_t ** buf_out )
+int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
+                hb_buffer_t ** buf_out )
 {
-    hb_job_t   * job   = w->job;
+    hb_work_private_t * pv = w->private_data;
+    hb_job_t   * job   = pv->job;
     hb_title_t * title = job->title;
     hb_buffer_t * in = *buf_in, * buf;
 
-    avpicture_fill( &w->pic_raw, in->data, PIX_FMT_YUV420P,
+    avpicture_fill( &pv->pic_raw, in->data, PIX_FMT_YUV420P,
                     title->width, title->height );
 
     buf        = hb_buffer_init( 3 * job->width * job->height / 2 );
     buf->start = in->start;
     buf->stop  = in->stop;
 
-    if( job->deinterlace && w->context )
+    if( job->deinterlace && pv->context )
     {
-        avpicture_fill( &w->pic_render, buf->data, PIX_FMT_YUV420P,
+        avpicture_fill( &pv->pic_render, buf->data, PIX_FMT_YUV420P,
                         job->width, job->height );
-        avpicture_deinterlace( &w->pic_deint, &w->pic_raw,
+        avpicture_deinterlace( &pv->pic_deint, &pv->pic_raw,
                                PIX_FMT_YUV420P, title->width,
                                title->height );
-        ApplySub( job, w->buf_deint, &in->sub );
-        img_resample( w->context, &w->pic_render, &w->pic_deint );
+        ApplySub( job, pv->buf_deint, &in->sub );
+        img_resample( pv->context, &pv->pic_render, &pv->pic_deint );
     }
     else if( job->deinterlace )
     {
-        avpicture_fill( &w->pic_deint, buf->data, PIX_FMT_YUV420P,
+        avpicture_fill( &pv->pic_deint, buf->data, PIX_FMT_YUV420P,
                         job->width, job->height );
-        avpicture_deinterlace( &w->pic_deint, &w->pic_raw,
+        avpicture_deinterlace( &pv->pic_deint, &pv->pic_raw,
                                PIX_FMT_YUV420P, title->width,
                                title->height );
         ApplySub( job, buf, &in->sub );
     }
-    else if( w->context )
+    else if( pv->context )
     {
         ApplySub( job, in, &in->sub );
-        avpicture_fill( &w->pic_render, buf->data, PIX_FMT_YUV420P,
+        avpicture_fill( &pv->pic_render, buf->data, PIX_FMT_YUV420P,
                         job->width, job->height );
-        img_resample( w->context, &w->pic_render, &w->pic_raw );
+        img_resample( pv->context, &pv->pic_render, &pv->pic_raw );
     }
     else
     {
@@ -137,31 +149,25 @@ static int Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     return HB_WORK_OK;
 }
 
-static void Close( hb_work_object_t ** _w )
+void renderClose( hb_work_object_t * w )
 {
-    hb_work_object_t * w = *_w;
-    free( w->name );
-    free( w );
-    *_w = NULL;
 }
 
-hb_work_object_t * hb_work_render_init( hb_job_t * job )
+int renderInit( hb_work_object_t * w, hb_job_t * job )
 {
     hb_title_t * title;
     
-    hb_work_object_t * w = calloc( sizeof( hb_work_object_t ), 1 );
-    w->name  = strdup( "Renderer" );
-    w->work  = Work;
-    w->close = Close;
+    hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
+    w->private_data = pv;
 
     title = job->title;
 
-    w->job = job;
+    pv->job = job;
 
     if( job->crop[0] || job->crop[1] || job->crop[2] || job->crop[3] ||
         job->width != title->width || job->height != title->height )
     {
-        w->context = img_resample_full_init(
+        pv->context = img_resample_full_init(
             job->width, job->height, title->width, title->height,
             job->crop[0], job->crop[1], job->crop[2], job->crop[3],
             0, 0, 0, 0 );
@@ -170,10 +176,11 @@ hb_work_object_t * hb_work_render_init( hb_job_t * job )
     if( job->deinterlace )
     {
         /* Allocate a constant buffer used for deinterlacing */
-        w->buf_deint = hb_buffer_init( 3 * title->width *
+        pv->buf_deint = hb_buffer_init( 3 * title->width *
                                        title->height / 2 );
-        avpicture_fill( &w->pic_deint, w->buf_deint->data,
+        avpicture_fill( &pv->pic_deint, pv->buf_deint->data,
                         PIX_FMT_YUV420P, title->width, title->height );
     }
-    return w;
+
+    return 0;
 }

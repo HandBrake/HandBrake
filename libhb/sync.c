@@ -31,10 +31,8 @@ typedef struct
 
 } hb_sync_audio_t;
 
-struct hb_work_object_s
+struct hb_work_private_s
 {
-    HB_WORK_COMMON;
-
     hb_job_t * job;
     int        done;
 
@@ -59,9 +57,6 @@ struct hb_work_object_s
  * Local prototypes
  **********************************************************************/
 static void InitAudio( hb_work_object_t * w, int i );
-static void Close( hb_work_object_t ** _w );
-static int  Work( hb_work_object_t * w, hb_buffer_t ** unused1,
-                  hb_buffer_t ** unused2 );
 static int  SyncVideo( hb_work_object_t * w );
 static void SyncAudio( hb_work_object_t * w, int i );
 static int  NeedSilence( hb_work_object_t * w, hb_audio_t * );
@@ -73,23 +68,21 @@ static void UpdateState( hb_work_object_t * w );
  ***********************************************************************
  * Initialize the work object
  **********************************************************************/
-hb_work_object_t * hb_work_sync_init( hb_job_t * job )
+int syncInit( hb_work_object_t * w, hb_job_t * job )
 {
-    hb_work_object_t * w;
     hb_title_t       * title = job->title;
     hb_chapter_t     * chapter;
     int                i;
     uint64_t           duration;
+    hb_work_private_t * pv;
 
-    w        = calloc( sizeof( hb_work_object_t ), 1 );
-    w->name  = strdup( "Synchronization" );
-    w->work  = Work;
-    w->close = Close;
+    pv = calloc( 1, sizeof( hb_work_private_t ) );
+    w->private_data = pv;
 
-    w->job            = job;
-    w->pts_offset     = INT64_MIN;
-    w->pts_offset_old = INT64_MIN;
-    w->count_frames   = 0;
+    pv->job            = job;
+    pv->pts_offset     = INT64_MIN;
+    pv->pts_offset_old = INT64_MIN;
+    pv->count_frames   = 0;
 
     /* Calculate how many video frames we are expecting */
     duration = 0;
@@ -100,9 +93,9 @@ hb_work_object_t * hb_work_sync_init( hb_job_t * job )
     }                                                                           
     duration += 90000;
         /* 1 second safety so we're sure we won't miss anything */
-    w->count_frames_max = duration * job->vrate / job->vrate_base / 90000;
+    pv->count_frames_max = duration * job->vrate / job->vrate_base / 90000;
 
-    hb_log( "sync: expecting %lld video frames", w->count_frames_max );
+    hb_log( "sync: expecting %lld video frames", pv->count_frames_max );
 
     /* Initialize libsamplerate for every audio track we have */
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
@@ -111,18 +104,80 @@ hb_work_object_t * hb_work_sync_init( hb_job_t * job )
     }
 
     /* Get subtitle info, if any */
-    w->subtitle = hb_list_item( title->list_subtitle, 0 );
+    pv->subtitle = hb_list_item( title->list_subtitle, 0 );
 
-    return w;
+    return 0;
 }
+
+/***********************************************************************
+ * Close
+ ***********************************************************************
+ *
+ **********************************************************************/
+void syncClose( hb_work_object_t * w )
+{
+    hb_work_private_t * pv = w->private_data;
+    hb_job_t          * job   = pv->job;
+    hb_title_t        * title = job->title;
+    
+    int i;
+
+    if( pv->cur ) hb_buffer_close( &pv->cur );
+
+    for( i = 0; i < hb_list_count( title->list_audio ); i++ )
+    {
+        if( job->acodec & HB_ACODEC_AC3 )
+        {
+            free( pv->sync_audio[i].ac3_buf );
+        }
+        else
+        {
+            src_delete( pv->sync_audio[i].state );
+        }
+    }
+}
+
+/***********************************************************************
+ * Work
+ ***********************************************************************
+ * The root routine of this work abject
+ **********************************************************************/
+int syncWork( hb_work_object_t * w, hb_buffer_t ** unused1,
+                 hb_buffer_t ** unused2 )
+{
+    hb_work_private_t * pv = w->private_data;
+    int i;
+
+    /* If we ever got a video frame, handle audio now */
+    if( pv->pts_offset != INT64_MIN )
+    {
+        for( i = 0; i < hb_list_count( pv->job->title->list_audio ); i++ )
+        {
+            SyncAudio( w, i );
+        }
+    }
+
+    /* Handle video */
+    return SyncVideo( w );
+}
+
+hb_work_object_t hb_sync =
+{
+    WORK_SYNC,
+    "Synchronization",
+    syncInit,
+    syncWork,
+    syncClose
+};
 
 static void InitAudio( hb_work_object_t * w, int i )
 {
-    hb_job_t        * job   = w->job;
+    hb_work_private_t * pv = w->private_data;
+    hb_job_t        * job   = pv->job;
     hb_title_t      * title = job->title;
     hb_sync_audio_t * sync;
 
-    sync        = &w->sync_audio[i];
+    sync        = &pv->sync_audio[i];
     sync->audio = hb_list_item( title->list_audio, i );
 
     if( job->acodec & HB_ACODEC_AC3 )
@@ -171,60 +226,7 @@ static void InitAudio( hb_work_object_t * w, int i )
     }
 }
 
-/***********************************************************************
- * Close
- ***********************************************************************
- *
- **********************************************************************/
-static void Close( hb_work_object_t ** _w )
-{
-    hb_work_object_t * w     = *_w;
-    hb_job_t         * job   = w->job;
-    hb_title_t       * title = job->title;
-    
-    int i;
 
-    if( w->cur ) hb_buffer_close( &w->cur );
-
-    for( i = 0; i < hb_list_count( title->list_audio ); i++ )
-    {
-        if( job->acodec & HB_ACODEC_AC3 )
-        {
-            free( w->sync_audio[i].ac3_buf );
-        }
-        else
-        {
-            src_delete( w->sync_audio[i].state );
-        }
-    }
-
-    free( w->name );    
-    free( w );
-    *_w = NULL;
-}
-
-/***********************************************************************
- * Work
- ***********************************************************************
- * The root routine of this work abject
- **********************************************************************/
-static int Work( hb_work_object_t * w, hb_buffer_t ** unused1,
-                 hb_buffer_t ** unused2 )
-{
-    int i;
-
-    /* If we ever got a video frame, handle audio now */
-    if( w->pts_offset != INT64_MIN )
-    {
-        for( i = 0; i < hb_list_count( w->job->title->list_audio ); i++ )
-        {
-            SyncAudio( w, i );
-        }
-    }
-
-    /* Handle video */
-    return SyncVideo( w );
-}
 
 #define PTS_DISCONTINUITY_TOLERANCE 90000
 
@@ -235,11 +237,12 @@ static int Work( hb_work_object_t * w, hb_buffer_t ** unused1,
  **********************************************************************/
 static int SyncVideo( hb_work_object_t * w )
 {
+    hb_work_private_t * pv = w->private_data;
     hb_buffer_t * cur, * next, * sub = NULL;
-    hb_job_t * job = w->job;
+    hb_job_t * job = pv->job;
     int64_t pts_expected;
 
-    if( w->done )
+    if( pv->done )
     {
         return HB_WORK_DONE;
     }
@@ -251,17 +254,17 @@ static int SyncVideo( hb_work_object_t * w )
         /* All video data has been processed already, we won't get
            more */
         hb_log( "sync: got %lld frames, %lld expected",
-                w->count_frames, w->count_frames_max );
-        w->done = 1;
+                pv->count_frames, pv->count_frames_max );
+        pv->done = 1;
         return HB_WORK_DONE;
     }
 
-    if( !w->cur && !( w->cur = hb_fifo_get( job->fifo_raw ) ) )
+    if( !pv->cur && !( pv->cur = hb_fifo_get( job->fifo_raw ) ) )
     {
         /* We haven't even got a frame yet */
         return HB_WORK_OK;
     }
-    cur = w->cur;
+    cur = pv->cur;
 
     /* At this point we have a frame to process. Let's check
         1) if we will be able to push into the fifo ahead
@@ -272,11 +275,11 @@ static int SyncVideo( hb_work_object_t * w )
     {
         hb_buffer_t * buf_tmp;
 
-        if( w->pts_offset == INT64_MIN )
+        if( pv->pts_offset == INT64_MIN )
         {
             /* This is our first frame */
             hb_log( "sync: first pts is %lld", cur->start );
-            w->pts_offset = cur->start;
+            pv->pts_offset = cur->start;
         }
 
         /* Check for PTS jumps over 0.5 second */
@@ -287,9 +290,9 @@ static int SyncVideo( hb_work_object_t * w )
                     cur->start, next->start );
             
             /* Trash all subtitles */
-            if( w->subtitle )
+            if( pv->subtitle )
             {
-                while( ( sub = hb_fifo_get( w->subtitle->fifo_raw ) ) )
+                while( ( sub = hb_fifo_get( pv->subtitle->fifo_raw ) ) )
                 {
                     hb_buffer_close( &sub );
                 }
@@ -297,24 +300,24 @@ static int SyncVideo( hb_work_object_t * w )
 
             /* Trash current picture */
             hb_buffer_close( &cur );
-            w->cur = cur = hb_fifo_get( job->fifo_raw );
+            pv->cur = cur = hb_fifo_get( job->fifo_raw );
 
             /* Calculate new offset */
-            w->pts_offset_old = w->pts_offset;
-            w->pts_offset     = cur->start -
-                w->count_frames * w->job->vrate_base / 300;
+            pv->pts_offset_old = pv->pts_offset;
+            pv->pts_offset     = cur->start -
+                pv->count_frames * pv->job->vrate_base / 300;
             continue;
         }
 
         /* Look for a subtitle for this frame */
-        if( w->subtitle )
+        if( pv->subtitle )
         {
             hb_buffer_t * sub2;
-            while( ( sub = hb_fifo_see( w->subtitle->fifo_raw ) ) )
+            while( ( sub = hb_fifo_see( pv->subtitle->fifo_raw ) ) )
             {
                 /* If two subtitles overlap, make the first one stop
                    when the second one starts */
-                sub2 = hb_fifo_see2( w->subtitle->fifo_raw );
+                sub2 = hb_fifo_see2( pv->subtitle->fifo_raw );
                 if( sub2 && sub->stop > sub2->start )
                     sub->stop = sub2->start;
 
@@ -322,7 +325,7 @@ static int SyncVideo( hb_work_object_t * w )
                     break;
 
                 /* The subtitle is older than this picture, trash it */
-                sub = hb_fifo_get( w->subtitle->fifo_raw );
+                sub = hb_fifo_get( pv->subtitle->fifo_raw );
                 hb_buffer_close( &sub );
             }
 
@@ -336,20 +339,20 @@ static int SyncVideo( hb_work_object_t * w )
         }
 
         /* The PTS of the frame we are expecting now */
-        pts_expected = w->pts_offset +
-            w->count_frames * w->job->vrate_base / 300;
+        pts_expected = pv->pts_offset +
+            pv->count_frames * pv->job->vrate_base / 300;
 
-        if( cur->start < pts_expected - w->job->vrate_base / 300 / 2 &&
-            next->start < pts_expected + w->job->vrate_base / 300 / 2 )
+        if( cur->start < pts_expected - pv->job->vrate_base / 300 / 2 &&
+            next->start < pts_expected + pv->job->vrate_base / 300 / 2 )
         {
             /* The current frame is too old but the next one matches,
                let's trash */
             hb_buffer_close( &cur );
-            w->cur = cur = hb_fifo_get( job->fifo_raw );
+            pv->cur = cur = hb_fifo_get( job->fifo_raw );
             continue;
         }
 
-        if( next->start > pts_expected + 3 * w->job->vrate_base / 300 / 2 )
+        if( next->start > pts_expected + 3 * pv->job->vrate_base / 300 / 2 )
         {
             /* We'll need the current frame more than one time. Make a
                copy of it and keep it */
@@ -361,14 +364,14 @@ static int SyncVideo( hb_work_object_t * w )
             /* The frame has the expected date and won't have to be
                duplicated, just put it through */
             buf_tmp = cur;
-            w->cur = cur = hb_fifo_get( job->fifo_raw );
+            pv->cur = cur = hb_fifo_get( job->fifo_raw );
         }
 
         /* Replace those MPEG-2 dates with our dates */
-        buf_tmp->start = (uint64_t) w->count_frames *
-            w->job->vrate_base / 300;
-        buf_tmp->stop  = (uint64_t) ( w->count_frames + 1 ) *
-            w->job->vrate_base / 300;
+        buf_tmp->start = (uint64_t) pv->count_frames *
+            pv->job->vrate_base / 300;
+        buf_tmp->stop  = (uint64_t) ( pv->count_frames + 1 ) *
+            pv->job->vrate_base / 300;
 
         /* If we have a subtitle for this picture, copy it */
         /* FIXME: we should avoid this memcpy */
@@ -389,10 +392,10 @@ static int SyncVideo( hb_work_object_t * w )
         UpdateState( w );
 
         /* Make sure we won't get more frames then expected */
-        if( w->count_frames >= w->count_frames_max )
+        if( pv->count_frames >= pv->count_frames_max )
         {
-            hb_log( "sync: got %lld frames", w->count_frames );
-            w->done = 1;
+            hb_log( "sync: got %lld frames", pv->count_frames );
+            pv->done = 1;
             break;
         }
     }
@@ -407,6 +410,7 @@ static int SyncVideo( hb_work_object_t * w )
  **********************************************************************/
 static void SyncAudio( hb_work_object_t * w, int i )
 {
+    hb_work_private_t * pv = w->private_data;
     hb_job_t        * job;
     hb_audio_t      * audio;
     hb_buffer_t     * buf;
@@ -418,8 +422,8 @@ static void SyncAudio( hb_work_object_t * w, int i )
     int64_t           pts_expected;
     int64_t           start;
 
-    job    = w->job;
-    sync   = &w->sync_audio[i];
+    job    = pv->job;
+    sync   = &pv->sync_audio[i];
     audio  = sync->audio;
 
     if( job->acodec & HB_ACODEC_AC3 )
@@ -437,15 +441,15 @@ static void SyncAudio( hb_work_object_t * w, int i )
            ( buf = hb_fifo_see( audio->fifo_raw ) ) )
     {
         /* The PTS of the samples we are expecting now */
-        pts_expected = w->pts_offset + sync->count_frames * 90000 / rate;
+        pts_expected = pv->pts_offset + sync->count_frames * 90000 / rate;
 
         if( ( buf->start > pts_expected + PTS_DISCONTINUITY_TOLERANCE ||
               buf->start < pts_expected - PTS_DISCONTINUITY_TOLERANCE ) &&
-            w->pts_offset_old > INT64_MIN )
+            pv->pts_offset_old > INT64_MIN )
         {
             /* There has been a PTS discontinuity, and this frame might
                be from before the discontinuity */
-            pts_expected = w->pts_offset_old + sync->count_frames *
+            pts_expected = pv->pts_offset_old + sync->count_frames *
                 90000 / rate;
 
             if( buf->start > pts_expected + PTS_DISCONTINUITY_TOLERANCE ||
@@ -458,11 +462,11 @@ static void SyncAudio( hb_work_object_t * w, int i )
             }
 
             /* Use the older offset */
-            start = pts_expected - w->pts_offset_old;
+            start = pts_expected - pv->pts_offset_old;
         }
         else
         {
-            start = pts_expected - w->pts_offset;
+            start = pts_expected - pv->pts_offset;
         }
 
         /* Tolerance: 100 ms */
@@ -541,7 +545,8 @@ static void SyncAudio( hb_work_object_t * w, int i )
 
 static int NeedSilence( hb_work_object_t * w, hb_audio_t * audio )
 {
-    hb_job_t * job = w->job;
+    hb_work_private_t * pv = w->private_data;
+    hb_job_t * job = pv->job;
 
     if( hb_fifo_size( audio->fifo_in ) ||
         hb_fifo_size( audio->fifo_raw ) ||
@@ -576,12 +581,13 @@ static int NeedSilence( hb_work_object_t * w, hb_audio_t * audio )
 
 static void InsertSilence( hb_work_object_t * w, int i )
 {
+    hb_work_private_t * pv = w->private_data;
     hb_job_t        * job;
     hb_sync_audio_t * sync;
     hb_buffer_t     * buf;
 
-    job    = w->job;
-    sync   = &w->sync_audio[i];
+    job    = pv->job;
+    sync   = &pv->sync_audio[i];
 
     if( job->acodec & HB_ACODEC_AC3 )
     {
@@ -616,40 +622,41 @@ static void InsertSilence( hb_work_object_t * w, int i )
 
 static void UpdateState( hb_work_object_t * w )
 {
+    hb_work_private_t * pv = w->private_data;
     hb_state_t state;
 
-    if( !w->count_frames )
+    if( !pv->count_frames )
     {
-        w->st_first = hb_get_date();
+        pv->st_first = hb_get_date();
     }
-    w->count_frames++;
+    pv->count_frames++;
 
-    if( hb_get_date() > w->st_dates[3] + 1000 )
+    if( hb_get_date() > pv->st_dates[3] + 1000 )
     {
-        memmove( &w->st_dates[0], &w->st_dates[1],
+        memmove( &pv->st_dates[0], &pv->st_dates[1],
                  3 * sizeof( uint64_t ) );
-        memmove( &w->st_counts[0], &w->st_counts[1],
+        memmove( &pv->st_counts[0], &pv->st_counts[1],
                  3 * sizeof( uint64_t ) );
-        w->st_dates[3]  = hb_get_date();
-        w->st_counts[3] = w->count_frames;
+        pv->st_dates[3]  = hb_get_date();
+        pv->st_counts[3] = pv->count_frames;
     } 
 
 #define p state.param.working
     state.state = HB_STATE_WORKING;
-    p.progress  = (float) w->count_frames / (float) w->count_frames_max;
+    p.progress  = (float) pv->count_frames / (float) pv->count_frames_max;
     if( p.progress > 1.0 )
     {
         p.progress = 1.0; 
     }
     p.rate_cur   = 1000.0 *
-        (float) ( w->st_counts[3] - w->st_counts[0] ) /
-        (float) ( w->st_dates[3] - w->st_dates[0] );
-    if( hb_get_date() > w->st_first + 4000 )
+        (float) ( pv->st_counts[3] - pv->st_counts[0] ) /
+        (float) ( pv->st_dates[3] - pv->st_dates[0] );
+    if( hb_get_date() > pv->st_first + 4000 )
     {
         int eta;
-        p.rate_avg = 1000.0 * (float) w->st_counts[3] /
-            (float) ( w->st_dates[3] - w->st_first );
-        eta = (float) ( w->count_frames_max - w->st_counts[3] ) /
+        p.rate_avg = 1000.0 * (float) pv->st_counts[3] /
+            (float) ( pv->st_dates[3] - pv->st_first );
+        eta = (float) ( pv->count_frames_max - pv->st_counts[3] ) /
             p.rate_avg;
         p.hours   = eta / 3600;
         p.minutes = ( eta % 3600 ) / 60;
@@ -664,5 +671,5 @@ static void UpdateState( hb_work_object_t * w )
     }
 #undef p
 
-    hb_set_state( w->job->h, &state );
+    hb_set_state( pv->job->h, &state );
 }

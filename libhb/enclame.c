@@ -8,12 +8,22 @@
 
 #include "lame/lame.h"
 
-struct hb_work_object_s
-{
-    HB_WORK_COMMON;
+int  enclameInit( hb_work_object_t *, hb_job_t * );
+int  enclameWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
+void enclameClose( hb_work_object_t * );
 
+hb_work_object_t hb_enclame =
+{
+    WORK_ENCLAME,
+    "MP3 encoder (libmp3lame)",
+    enclameInit,
+    enclameWork,
+    enclameClose
+};
+
+struct hb_work_private_s
+{
     hb_job_t   * job;
-    hb_audio_t * audio;
 
     /* LAME handle */
     lame_global_flags * lame;
@@ -26,44 +36,29 @@ struct hb_work_object_s
     int64_t         pts;
 };
 
-/***********************************************************************
- * Local prototypes
- **********************************************************************/
-static void Close( hb_work_object_t ** _w );
-static int  Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
-                  hb_buffer_t ** buf_out );
-
-/***********************************************************************
- * hb_work_enclame_init
- ***********************************************************************
- *
- **********************************************************************/
-hb_work_object_t * hb_work_enclame_init( hb_job_t * job, hb_audio_t * audio )
+int enclameInit( hb_work_object_t * w, hb_job_t * job )
 {
-    hb_work_object_t * w = calloc( sizeof( hb_work_object_t ), 1 );
-    w->name  = strdup( "MP3 encoder (libmp3lame)" );
-    w->work  = Work;
-    w->close = Close;
+    hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
+    w->private_data = pv;
 
-    w->job   = job;
-    w->audio = audio;
+    pv->job   = job;
 
     hb_log( "enclame: opening libmp3lame" );
 
-    w->lame = lame_init();
-    lame_set_brate( w->lame, job->abitrate );
-    lame_set_in_samplerate( w->lame, job->arate );
-    lame_set_out_samplerate( w->lame, job->arate );
-    lame_init_params( w->lame );
+    pv->lame = lame_init();
+    lame_set_brate( pv->lame, job->abitrate );
+    lame_set_in_samplerate( pv->lame, job->arate );
+    lame_set_out_samplerate( pv->lame, job->arate );
+    lame_init_params( pv->lame );
     
-    w->input_samples = 1152 * 2;
-    w->output_bytes = LAME_MAXMP3BUFFER;
-    w->buf  = malloc( w->input_samples * sizeof( float ) );
+    pv->input_samples = 1152 * 2;
+    pv->output_bytes = LAME_MAXMP3BUFFER;
+    pv->buf  = malloc( pv->input_samples * sizeof( float ) );
 
-    w->list = hb_list_init();
-    w->pts  = -1;
+    pv->list = hb_list_init();
+    pv->pts  = -1;
 
-    return w;
+    return 0;
 }
 
 /***********************************************************************
@@ -71,12 +66,8 @@ hb_work_object_t * hb_work_enclame_init( hb_job_t * job, hb_audio_t * audio )
  ***********************************************************************
  *
  **********************************************************************/
-static void Close( hb_work_object_t ** _w )
+void enclameClose( hb_work_object_t * w )
 {
-    hb_work_object_t * w = *_w;
-    free( w->name );
-    free( w );
-    *_w = NULL;
 }
 
 /***********************************************************************
@@ -86,28 +77,29 @@ static void Close( hb_work_object_t ** _w )
  **********************************************************************/
 static hb_buffer_t * Encode( hb_work_object_t * w )
 {
+    hb_work_private_t * pv = w->private_data;
     hb_buffer_t * buf;
     int16_t samples_s16[1152 * 2];
     uint64_t pts;
     int      pos, i;
 
-    if( hb_list_bytes( w->list ) < w->input_samples * sizeof( float ) )
+    if( hb_list_bytes( pv->list ) < pv->input_samples * sizeof( float ) )
     {
         return NULL;
     }
 
-    hb_list_getbytes( w->list, w->buf, w->input_samples * sizeof( float ),
+    hb_list_getbytes( pv->list, pv->buf, pv->input_samples * sizeof( float ),
                       &pts, &pos);
 
     for( i = 0; i < 1152 * 2; i++ )
     {
-        samples_s16[i] = ((float*) w->buf)[i];
+        samples_s16[i] = ((float*) pv->buf)[i];
     }
 
-    buf        = hb_buffer_init( w->output_bytes );
-    buf->start = pts + 90000 * pos / 2 / sizeof( float ) / w->job->arate;
-    buf->stop  = buf->start + 90000 * 1152 / w->job->arate;
-    buf->size  = lame_encode_buffer_interleaved( w->lame, samples_s16,
+    buf        = hb_buffer_init( pv->output_bytes );
+    buf->start = pts + 90000 * pos / 2 / sizeof( float ) / pv->job->arate;
+    buf->stop  = buf->start + 90000 * 1152 / pv->job->arate;
+    buf->size  = lame_encode_buffer_interleaved( pv->lame, samples_s16,
             1152, buf->data, LAME_MAXMP3BUFFER );
     buf->key   = 1;
 
@@ -133,12 +125,13 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
  ***********************************************************************
  *
  **********************************************************************/
-static int Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
+int enclameWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                  hb_buffer_t ** buf_out )
 {
+    hb_work_private_t * pv = w->private_data;
     hb_buffer_t * buf;
 
-    hb_list_add( w->list, *buf_in );
+    hb_list_add( pv->list, *buf_in );
     *buf_in = NULL;
 
     *buf_out = buf = Encode( w );
