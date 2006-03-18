@@ -158,7 +158,15 @@
     [fOpenIndicator setIndeterminate: YES];
     [fOpenIndicator startAnimation: nil];
 
-    hb_scan( fHandle, [fOpenFolderString UTF8String], 0 );
+    if( [fOpenMatrix selectedRow] )
+    {
+        hb_scan( fHandle, [fOpenFolderString UTF8String], 0 );
+    }
+    else
+    {
+        hb_scan( fHandle, [[fOpenPopUp titleOfSelectedItem]
+                    UTF8String], 0 );
+    }
 
     NSTimer * timer = [NSTimer scheduledTimerWithTimeInterval: 0.5
         target: self selector: @selector( openTimer: ) userInfo: nil
@@ -230,6 +238,10 @@
     {
         [fOpenPopUp selectItemAtIndex: 0];
     }
+    if( [fOpenMatrix isEnabled] )
+    {
+        [self openEnable: YES];
+    }
 }
 
 - (void) openBrowseDidEnd: (NSOpenPanel *) sheet returnCode: (int)
@@ -262,6 +274,10 @@
         {
             [fOpenFolderField  setEnabled: NO];
             [fOpenBrowseButton setEnabled: NO];
+            if( ![fOpenPopUp numberOfItems] )
+            {
+                [fOpenGoButton setEnabled: NO];
+            }
         }
     }
 }
