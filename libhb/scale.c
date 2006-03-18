@@ -36,7 +36,7 @@ hb_scale_t * hb_scale_init( int inWidth, int inHeight, int outWidth,
 
     s->inOffsets[0] = crop[0] * inWidth + crop[2];
     s->inOffsets[1] = inWidth * inHeight +
-                      ( crop[0] * inWidth + crop[2] ) / 2;
+                      crop[0] * inWidth / 4 + crop[2] / 2;
     s->inOffsets[2] = s->inOffsets[1] + inWidth * inHeight / 4;
 
     s->outY.width      = outWidth;
