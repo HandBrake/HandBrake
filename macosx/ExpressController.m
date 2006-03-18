@@ -1,6 +1,8 @@
 #import "ExpressController.h"
 #import "DriveDetector.h"
 
+#define INSERT_STRING @"Insert a DVD"
+
 @interface ExpressController (Private)
 
 - (void) openUpdateDrives: (NSArray *) drives;
@@ -234,10 +236,11 @@
 {
     [fOpenPopUp removeAllItems];
     [fOpenPopUp addItemsWithTitles: drives];
-    if( [fOpenPopUp numberOfItems] )
+    if( ![fOpenPopUp numberOfItems] )
     {
-        [fOpenPopUp selectItemAtIndex: 0];
+        [fOpenPopUp addItemWithTitle: INSERT_STRING];
     }
+    [fOpenPopUp selectItemAtIndex: 0];
     if( [fOpenMatrix isEnabled] )
     {
         [self openEnable: YES];
@@ -274,7 +277,8 @@
         {
             [fOpenFolderField  setEnabled: NO];
             [fOpenBrowseButton setEnabled: NO];
-            if( ![fOpenPopUp numberOfItems] )
+            if( [[fOpenPopUp titleOfSelectedItem]
+                    isEqualToString: INSERT_STRING] )
             {
                 [fOpenGoButton setEnabled: NO];
             }
