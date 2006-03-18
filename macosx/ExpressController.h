@@ -3,6 +3,8 @@
 #import <Cocoa/Cocoa.h>
 #import "hb.h"
 
+@class DriveDetector;
+
 @interface ExpressController : NSObject
 
 {
@@ -28,6 +30,8 @@
     IBOutlet NSProgressIndicator * fConvertIndicator;
     NSMutableArray               * fConvertCheckArray;
     NSString                     * fConvertFolderString;
+
+    DriveDetector                * fDriveDetector;
 }
 
 - (void) openShow: (id) sender;

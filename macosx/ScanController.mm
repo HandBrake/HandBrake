@@ -11,6 +11,7 @@
 #include <IOKit/storage/IODVDMedia.h>
 
 #include "ScanController.h"
+#include "DriveDetector.h"
 
 #define _(a) NSLocalizedString(a,nil)
 
@@ -29,106 +30,31 @@
 - (void) SetHandle: (hb_handle_t *) handle
 {
     fHandle    = handle;
-    fLastCheck = 0;
 
     [self TranslateStrings];
 
     [fStatusField setStringValue: @""];
 }
 
-- (void) DetectDrives: (NSNotification *) notification
+- (void) Show
 {
-    if( [fMatrix isEnabled] == NO )
-    {
-        /* We're scanning */
-        return;
-    }
-    if( hb_get_date() < fLastCheck + 1000 )
-    {
-        /* Don't check more than every second */
-        return;
-    }
-    fLastCheck = hb_get_date();
+    DriveDetector * driveDetector;
+    driveDetector = [[DriveDetector alloc] initWithCallback: self
+        selector: @selector( UpdatePopup: )];
+    
+    [NSApp beginSheet: fPanel modalForWindow: fWindow
+        modalDelegate: nil didEndSelector: nil contextInfo: nil];
+    [NSApp runModalForWindow: fPanel];
+    [NSApp endSheet: fPanel];
+    [fPanel orderOut: self];
 
-    /* Scan DVD drives (stolen from VLC) */
-    io_object_t            next_media;
-    mach_port_t            master_port;
-    kern_return_t          kern_result;
-    io_iterator_t          media_iterator;
-    CFMutableDictionaryRef classes_to_match;
+    [driveDetector release];
+}
 
-    kern_result = IOMasterPort( MACH_PORT_NULL, &master_port );
-    if( kern_result != KERN_SUCCESS )
-    {
-        return;
-    }
-
-    classes_to_match = IOServiceMatching( kIODVDMediaClass );
-    if( classes_to_match == NULL )
-    {
-        return;
-    }
-
-    CFDictionarySetValue( classes_to_match, CFSTR( kIOMediaEjectableKey ),
-                          kCFBooleanTrue );
-
-    kern_result = IOServiceGetMatchingServices( master_port,
-            classes_to_match, &media_iterator );
-    if( kern_result != KERN_SUCCESS )
-    {
-        return;
-    }
-
-    NSMutableArray * drivesList; 
-    drivesList = [NSMutableArray arrayWithCapacity: 1];
-
-    next_media = IOIteratorNext( media_iterator );
-    if( next_media )
-    {
-        char psz_buf[0x32];
-        size_t dev_path_length;
-        CFTypeRef str_bsd_path;
-        do
-        {
-            str_bsd_path =
-                IORegistryEntryCreateCFProperty( next_media,
-                                                 CFSTR( kIOBSDNameKey ),
-                                                 kCFAllocatorDefault,
-                                                 0 );
-            if( str_bsd_path == NULL )
-            {
-                IOObjectRelease( next_media );
-                continue;
-            }
-
-            snprintf( psz_buf, sizeof(psz_buf), "%s%c", _PATH_DEV, 'r' );
-            dev_path_length = strlen( psz_buf );
-
-            if( CFStringGetCString( (CFStringRef) str_bsd_path,
-                                    (char*)&psz_buf + dev_path_length,
-                                    sizeof(psz_buf) - dev_path_length,
-                                    kCFStringEncodingASCII ) )
-            {
-                [drivesList addObject:
-                    [NSString stringWithCString: psz_buf]];
-            }
-
-            CFRelease( str_bsd_path );
-
-            IOObjectRelease( next_media );
-
-        } while( ( next_media = IOIteratorNext( media_iterator ) ) );
-    }
-
-    IOObjectRelease( media_iterator );
-
+- (void) UpdatePopup: (NSArray *) drives
+{
     [fDetectedPopUp removeAllItems];
-    for( unsigned i = 0; i < [drivesList count]; i++ )
-    {
-        [[fDetectedPopUp menu] addItemWithTitle:
-            [drivesList objectAtIndex: i] action: nil
-            keyEquivalent: @""];
-    }
+    [fDetectedPopUp addItemsWithTitles: drives];
     [self MatrixChanged: self];
 }
 

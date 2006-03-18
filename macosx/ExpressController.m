@@ -1,7 +1,9 @@
 #import "ExpressController.h"
+#import "DriveDetector.h"
 
 @interface ExpressController (Private)
 
+- (void) openUpdateDrives: (NSArray *) drives;
 - (void) openBrowseDidEnd: (NSOpenPanel *) sheet returnCode: (int)
     returnCode contextInfo: (void *) contextInfo;
 - (void) openEnable: (BOOL) b;
@@ -20,6 +22,8 @@
 - (void) awakeFromNib
 {
     /* Show the "Open DVD" interface */
+    fDriveDetector = [[DriveDetector alloc] initWithCallback: self
+        selector: @selector( openUpdateDrives: )];
     [self openEnable: YES];
     [fWindow setContentSize: [fOpenView frame].size];
     [fWindow setContentView: fOpenView];
@@ -126,6 +130,9 @@
     [fWindow setContentView: fEmptyView];
     [fWindow setFrame: frame display: YES animate: YES];
     [fWindow setContentView: fOpenView];
+
+    fDriveDetector = [[DriveDetector alloc] initWithCallback: self
+        selector: @selector( openUpdateDrives: )];
 }
 
 - (void) openMatrixChanged: (id) sender
@@ -215,6 +222,16 @@
 
 @implementation ExpressController (Private)
 
+- (void) openUpdateDrives: (NSArray *) drives
+{
+    [fOpenPopUp removeAllItems];
+    [fOpenPopUp addItemsWithTitles: drives];
+    if( [fOpenPopUp numberOfItems] )
+    {
+        [fOpenPopUp selectItemAtIndex: 0];
+    }
+}
+
 - (void) openBrowseDidEnd: (NSOpenPanel *) sheet returnCode: (int)
     returnCode contextInfo: (void *) contextInfo
 {
@@ -275,6 +292,7 @@
 
             if( hb_list_count( fList ) )
             {
+                [fDriveDetector release];
                 [self convertShow];
             }
             break;

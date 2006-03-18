@@ -260,14 +260,6 @@ static int FormatSettings[3][4] =
     switch( s.state )
     {
         case HB_STATE_IDLE:
-            /* If the scan panel is currently showing, recheck for DVD
-               drives. The clean way would be to use
-               NSWorkspaceDidMountNotification, but for some reason the
-               notifications don't work when having the sheet attached */
-            if( [fWindow attachedSheet] == fScanPanel )
-            {
-                [fScanController DetectDrives: NULL];
-            }
             break;
 
         case HB_STATE_SCANNING:
@@ -433,11 +425,7 @@ static int FormatSettings[3][4] =
 
 - (IBAction) ShowScanPanel: (id) sender
 {
-    [NSApp beginSheet: fScanPanel modalForWindow: fWindow
-        modalDelegate: NULL didEndSelector: NULL contextInfo: NULL];
-    [NSApp runModalForWindow: fScanPanel];
-    [NSApp endSheet: fScanPanel];
-    [fScanPanel orderOut: self];
+    [fScanController Show];
 }
 
 - (BOOL) windowShouldClose: (id) sender

@@ -25,13 +25,11 @@
     IBOutlet NSProgressIndicator * fIndicator;
     IBOutlet NSButton            * fCancelButton;
     IBOutlet NSButton            * fOpenButton;
-
-    uint64_t                       fLastCheck;
 }
 
 - (void)     TranslateStrings;
 - (void)     SetHandle:     (hb_handle_t *) handle;
-- (void)     DetectDrives:  (NSNotification *) notification;
+- (void)     Show;
 - (void)     UpdateUI:      (hb_state_t *) state;
 
 - (IBAction) MatrixChanged: (id) sender;
