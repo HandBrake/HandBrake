@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #ifdef SYS_DARWIN
 #  include <Accelerate/Accelerate.h>
 #else
