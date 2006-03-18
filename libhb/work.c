@@ -17,7 +17,7 @@ typedef struct
 
 static void work_func();
 static void do_job( hb_job_t *, int cpu_count );
-static void job_loop( void * );
+static void work_loop( void * );
 
 hb_thread_t * hb_work_init( hb_list_t * jobs, int cpu_count,
                             volatile int * die, int * error )
@@ -68,9 +68,7 @@ static void do_job( hb_job_t * job, int cpu_count )
 {
     hb_title_t    * title;
     int             i;
-    hb_thread_t   * threads[8];
     hb_work_object_t * w;
-    uint64_t time_total;
     hb_audio_t   * audio;
     hb_subtitle_t * subtitle;
 
@@ -219,68 +217,51 @@ static void do_job( hb_job_t * job, int cpu_count )
     hb_log( " + output: %s", job->file );
     job->muxer = hb_muxer_init( job );
 
-    for( i = 0; i < hb_list_count( job->list_work ); i++ )
-    {
-        w       = hb_list_item( job->list_work, i );
-        w->lock = hb_lock_init();
-        w->used = 0;
-        w->time = 0;
-        w->init( w, job );
-    }
-
     job->done = 0;
 
     /* Launch processing threads */
-    for( i = 0; i < cpu_count; i++ )
-    {
-        char thread_name[16];
-        if( cpu_count - 1 )
-        {
-            snprintf( thread_name, 16, "cpu killer %d", i + 1 );
-        }
-        else
-        {
-            snprintf( thread_name, 16, "cpu killer" );
-        }
-        threads[i] = hb_thread_init( thread_name, job_loop, job,
-                                     HB_LOW_PRIORITY );
-    }
-
-    while( !*job->die && !job->done )
-    {
-        hb_snooze( 500 );
-    }
-
-    for( i = 0; i < cpu_count; i++ )
-    {
-        hb_thread_close( &threads[i] );
-    }
-
-    /* Stop read & write threads */
-    hb_thread_close( &job->reader );
-    hb_thread_close( &job->muxer );
-
-    /* Stats */
-    time_total = 0;
-    for( i = 0; i < hb_list_count( job->list_work ); i++ )
+    for( i = 1; i < hb_list_count( job->list_work ); i++ )
     {
         w = hb_list_item( job->list_work, i );
-        time_total += w->time;
+        w->done = &job->done;
+        w->init( w, job );
+        w->thread = hb_thread_init( w->name, work_loop, w,
+                                    HB_LOW_PRIORITY );
     }
-    for( i = 0; i < hb_list_count( job->list_work ); i++ )
+
+    int done = 0;
+    w = hb_list_item( job->list_work, 0 );
+    w->init( w, job );
+    while( !*job->die )
     {
-        w = hb_list_item( job->list_work, i );
-        hb_log( "%s: %.2f %%", w->name,
-                100.0 * (float) w->time / (float) time_total );
+        if( w->work( w, NULL, NULL ) == HB_WORK_DONE )
+        {
+            done = 1;
+        }
+        if( done &&
+            !hb_fifo_size( job->fifo_sync ) &&
+            !hb_fifo_size( job->fifo_render ) &&
+            hb_fifo_size( job->fifo_mpeg4 ) < 2 )
+        {
+            break;
+        }
+        hb_snooze( 50 );
     }
+    hb_list_rem( job->list_work, w );
+    w->close( w );
+    job->done = 1;
 
     /* Close work objects */
     while( ( w = hb_list_item( job->list_work, 0 ) ) )
     {
         hb_list_rem( job->list_work, w );
-        hb_lock_close( &w->lock );
+        hb_thread_close( &w->thread );
         w->close( w );
     }
+
+    /* Stop read & write threads */
+    hb_thread_close( &job->reader );
+    hb_thread_close( &job->muxer );
 
     /* Close fifos */
     hb_fifo_close( &job->fifo_mpeg2 );
@@ -303,105 +284,32 @@ static void do_job( hb_job_t * job, int cpu_count )
     }
 }
 
-static int lock( hb_work_object_t * w )
+static void work_loop( void * _w )
 {
-    hb_lock( w->lock );
-    if( w->used )
-    {
-        hb_unlock( w->lock );
-        return 0;
-    }
-    w->used = 1;
-    hb_unlock( w->lock );
-    return 1;
-}
-
-static void unlock( hb_work_object_t * w )
-{
-    hb_lock( w->lock );
-    w->used = 0;
-    hb_unlock( w->lock );
-}
-
-static void job_loop( void * _job )
-{
-    hb_job_t         * job = _job;
+    hb_work_object_t * w = _w;
     hb_buffer_t      * buf_in, * buf_out;
-    hb_work_object_t * w;
-    int                work_count;
-    int                act;
-    int                i;
-    uint64_t           date;
-    int                done;
 
-    work_count = hb_list_count( job->list_work );
-    act        = 0;
-    done       = 0;
-
-    while( !*job->die && !job->done )
+    while( !*w->done )
     {
-        /* Handle synchronization, resampling, framerate change,
-           etc */
-        w = hb_list_item( job->list_work, 0 );
-        if( lock( w ) )
-        {
-            date = hb_get_date();
-            if( w->work( w, NULL, NULL ) == HB_WORK_DONE )
-            {
-                done = 1;
-            }
-            w->time += hb_get_date() - date;
-            unlock( w );
-        }
-
-        for( i = 1; !*job->die && !job->done && i < work_count; i++ )
-        {
-            w = hb_list_item( job->list_work, i );
-            if( !lock( w ) )
-                continue;
-
-            for( ;; )
-            {
-                hb_lock( job->pause );
-                hb_unlock( job->pause );
-
-                if( hb_fifo_is_full( w->fifo_out ) ||
-                    !( buf_in = hb_fifo_get( w->fifo_in ) ) )
-                {
-                    break;
-                }
-
-                date = hb_get_date();
-                w->work( w, &buf_in, &buf_out );
-                w->time += hb_get_date() - date;
-                if( buf_in )
-                {
-                    hb_buffer_close( &buf_in );
-                }
-                if( buf_out )
-                {
-                    act = 1;
-                    hb_fifo_push( w->fifo_out, buf_out );
-                }
-            }
-
-            unlock( w );
-        }
-
-        if( done &&
-            !hb_fifo_size( job->fifo_sync ) &&
-            !hb_fifo_size( job->fifo_render ) &&
-            hb_fifo_size( job->fifo_mpeg4 ) < 2 )
-        {
-            job->done = 1;
-            break;
-        }
-
-        /* If we did nothing, wait a bit before trying again */
-        if( !act )
+#if 0
+        hb_lock( job->pause );
+        hb_unlock( job->pause );
+#endif
+        if( hb_fifo_is_full( w->fifo_out ) ||
+            !( buf_in = hb_fifo_get( w->fifo_in ) ) )
         {
             hb_snooze( 50 );
+            continue;
         }
-        act = 0;
+
+        w->work( w, &buf_in, &buf_out );
+        if( buf_in )
+        {
+            hb_buffer_close( &buf_in );
+        }
+        if( buf_out )
+        {
+            hb_fifo_push( w->fifo_out, buf_out );
+        }
     }
 }

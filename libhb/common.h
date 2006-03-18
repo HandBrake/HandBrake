@@ -322,6 +322,7 @@ struct hb_work_object_s
     int                 id;
     char              * name;
 
+#ifdef __LIBHB__
     int              (* init)  ( hb_work_object_t *, hb_job_t * );
     int              (* work)  ( hb_work_object_t *, hb_buffer_t **,
                                  hb_buffer_t ** );
@@ -333,11 +334,11 @@ struct hb_work_object_s
 
     hb_work_private_t * private_data;
 
-    hb_lock_t         * lock;
-    int                 used;
-    uint64_t            time;
+    hb_thread_t       * thread;
+    volatile int      * done;
 
     hb_work_object_t  * next;
+#endif
 };
 
 extern hb_work_object_t hb_sync;
