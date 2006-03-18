@@ -32,7 +32,7 @@ case $SYSTEM in
 
   Darwin)
     DEFINES="$DEFINES SYS_DARWIN"
-    LINKLIBS="$LINKLIBS -lpthread"
+    LINKLIBS="$LINKLIBS -lpthread -framework Accelerate"
     ;;
 
   FreeBSD)

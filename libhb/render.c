@@ -7,16 +7,17 @@
 #include "hb.h"
 
 #include "ffmpeg/avcodec.h"
+#include "scale.h"
 
 struct hb_work_private_s
 {
     hb_job_t * job;
 
-    ImgReSampleContext * context;
-    AVPicture            pic_raw;
-    AVPicture            pic_deint;
-    AVPicture            pic_render;
-    hb_buffer_t        * buf_deint;
+    hb_scale_t  * scale;
+    AVPicture     pic_raw;
+    AVPicture     pic_deint;
+    AVPicture     pic_render;
+    hb_buffer_t * buf_deint;
 };
 
 int  renderInit( hb_work_object_t *, hb_job_t * );
@@ -103,15 +104,19 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_title_t * title = job->title;
     hb_buffer_t * in = *buf_in, * buf;
 
+#if 0
     avpicture_fill( &pv->pic_raw, in->data, PIX_FMT_YUV420P,
                     title->width, title->height );
+#endif
 
     buf        = hb_buffer_init( 3 * job->width * job->height / 2 );
     buf->start = in->start;
     buf->stop  = in->stop;
 
-    if( job->deinterlace && pv->context )
+    if( job->deinterlace && pv->scale )
     {
+#if 0
+        /* Deinterlace then scale */
         avpicture_fill( &pv->pic_render, buf->data, PIX_FMT_YUV420P,
                         job->width, job->height );
         avpicture_deinterlace( &pv->pic_deint, &pv->pic_raw,
@@ -119,25 +124,29 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                                title->height );
         ApplySub( job, pv->buf_deint, &in->sub );
         img_resample( pv->context, &pv->pic_render, &pv->pic_deint );
+#endif
     }
     else if( job->deinterlace )
     {
+#if 0
+        /* Only deinterlace */
         avpicture_fill( &pv->pic_deint, buf->data, PIX_FMT_YUV420P,
                         job->width, job->height );
         avpicture_deinterlace( &pv->pic_deint, &pv->pic_raw,
                                PIX_FMT_YUV420P, title->width,
                                title->height );
         ApplySub( job, buf, &in->sub );
+#endif
     }
-    else if( pv->context )
+    else if( pv->scale )
     {
+        /* Only scale */
         ApplySub( job, in, &in->sub );
-        avpicture_fill( &pv->pic_render, buf->data, PIX_FMT_YUV420P,
-                        job->width, job->height );
-        img_resample( pv->context, &pv->pic_render, &pv->pic_raw );
+        hb_scale_process( pv->scale, in->data, buf->data );
     }
     else
     {
+        /* Nothing to do, just pass the buffer through */
         hb_buffer_close( &buf );
         ApplySub( job, in, &in->sub );
         buf      = in;
@@ -167,10 +176,8 @@ int renderInit( hb_work_object_t * w, hb_job_t * job )
     if( job->crop[0] || job->crop[1] || job->crop[2] || job->crop[3] ||
         job->width != title->width || job->height != title->height )
     {
-        pv->context = img_resample_full_init(
-            job->width, job->height, title->width, title->height,
-            job->crop[0], job->crop[1], job->crop[2], job->crop[3],
-            0, 0, 0, 0 );
+        pv->scale = hb_scale_init( title->width, title->height,
+                job->width, job->height, job->crop );
     }
 
     if( job->deinterlace )
