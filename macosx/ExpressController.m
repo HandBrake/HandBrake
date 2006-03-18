@@ -83,7 +83,7 @@
             return [@"Title " stringByAppendingFormat: @"%d",
                     title->index];
         }
-        else if( [[col identifier] isEqualToString: @"Length"] )
+        else if( [[col identifier] isEqualToString: @"Duration"] )
         {
             if( title->hours > 0 )
             {
@@ -159,6 +159,7 @@
     [self openEnable: NO];
     [fOpenIndicator setIndeterminate: YES];
     [fOpenIndicator startAnimation: nil];
+    [fOpenProgressField setStringValue: @"Opening..."];
 
     if( [fOpenMatrix selectedRow] )
     {
