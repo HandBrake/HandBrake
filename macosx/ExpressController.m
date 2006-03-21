@@ -23,6 +23,8 @@
  **********************************************************************/
 - (void) awakeFromNib
 {
+    NSEnumerator * enumerator;
+
     /* Show the "Open DVD" interface */
     fDriveDetector = [[DriveDetector alloc] initWithCallback: self
         selector: @selector( openUpdateDrives: )];
@@ -33,10 +35,15 @@
     [fWindow makeKeyAndOrderFront: nil];
 
     /* NSTableView initializations */
-    NSTableColumn * tableColumn = [fConvertTableView
-        tableColumnWithIdentifier: @"Check"];
-    NSButtonCell * buttonCell = [[[NSButtonCell alloc]
-        initTextCell: @""] autorelease];
+     NSButtonCell * buttonCell;
+     NSTableColumn * tableColumn;
+     enumerator = [[fConvertTableView tableColumns] objectEnumerator];
+     while( ( tableColumn = [enumerator nextObject] ) )
+     {
+         [tableColumn setEditable: NO];
+     }
+     tableColumn = [fConvertTableView tableColumnWithIdentifier: @"Check"];
+     buttonCell = [[[NSButtonCell alloc] initTextCell: @""] autorelease];
     [buttonCell setEditable: YES];
     [buttonCell setButtonType: NSSwitchButton];
     [tableColumn setDataCell: buttonCell];
@@ -188,30 +195,32 @@
         hb_title_t * title = hb_list_item( fList, i );
         hb_job_t   * job   = title->job;
 
-        job->width = 320;
-        for( ;; )
+        int pixels, aspect;
+        if( [fConvertFormatPopUp indexOfSelectedItem] )
         {
-            /* XXX */
-            hb_fix_aspect( job, HB_KEEP_WIDTH );
-            if( job->height == 240 )
-            {
-                break;
-            }
-            else if( job->height < 240 )
-            {
-                job->crop[2] += 2;
-                job->crop[3] += 2;
-            }
-            else
-            {
-                job->crop[0] += 2;
-                job->crop[1] += 2;
-            }
+            job->vcodec   = HB_VCODEC_FFMPEG;
+            job->vbitrate = 1200;
+            pixels        = 230400;
         }
+        else
+        {
+            job->vcodec   = HB_VCODEC_X264;
+            job->h264_13  = 1;
+            job->vbitrate = 600;
+            pixels        = 76800;
+        }
+        if( [fConvertAspectPopUp indexOfSelectedItem] )
+        {
+            aspect = -1;
+        }
+        else
+        {
+            aspect = 4 * HB_ASPECT_BASE / 3;
+        }
+
+        hb_set_size( job, aspect, pixels );
+
         job->vquality = -1.0;
-        job->vbitrate = 600;
-        job->vcodec   = HB_VCODEC_X264;
-        job->h264_13  = 1;
         job->file     = strdup( [[NSString stringWithFormat:
             @"%@/%p - Title %d.mp4", fConvertFolderString, self,
             title->index] UTF8String] );
@@ -258,6 +267,7 @@
         [fOpenFolderString release];
     fOpenFolderString = [[[sheet filenames] objectAtIndex: 0] retain];
     [fOpenFolderField setStringValue: [fOpenFolderString lastPathComponent]];
+    [self openGo: self];
 }
 
 - (void) openEnable: (BOOL) b
@@ -373,13 +383,35 @@
     {
 #define p s.param.working
         case HB_STATE_WORKING:
+        {
+            NSMutableString * string = [NSMutableString
+                stringWithFormat: @"Converting: %.1f %%, %.1f fps",
+                100.0 * p.progress, p.rate_avg];
+            if( p.hours > 0 )
+            {
+                [string appendFormat: @" (%d hours %d mins left)",
+                    p.hours, p.minutes];
+            }
+            else if( p.minutes > 0 )
+            {
+                [string appendFormat: @" (%d mins %d secs left)",
+                    p.minutes, p.seconds];
+            }
+            else if( p.seconds > -1 )
+            {
+                [string appendFormat: @" (%d seconds left)",
+                    p.seconds];
+            }
+            [fConvertInfoString setStringValue: string];
             [fConvertIndicator setIndeterminate: NO];
             [fConvertIndicator setDoubleValue: 100.0 * p.progress];
             break;
+        }
 #undef p
 
         case HB_STATE_WORKDONE:
             [timer invalidate];
+            [fConvertInfoString setStringValue: @"Done."];
             [fConvertIndicator setIndeterminate: NO];
             [fConvertIndicator setDoubleValue: 0.0];
             break;

@@ -251,6 +251,70 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
     free( buf4 );
 }
 
+void hb_set_size( hb_job_t * job, int aspect, int pixels )
+{
+    hb_title_t * title = job->title;
+
+    int croppedWidth  = title->width - title->crop[2] - title->crop[3];
+    int croppedHeight = title->height - title->crop[0] - title->crop[1];
+    int croppedAspect = title->aspect * title->height * croppedWidth /
+                            croppedHeight / title->width;
+    int addCrop;
+
+    if( aspect <= 0 )
+    {
+        /* Keep the best possible aspect ratio */
+        aspect = croppedAspect;
+    }
+
+    /* Crop if necessary to obtain the desired ratio */
+    memcpy( job->crop, title->crop, 4 * sizeof( int ) );
+    if( aspect < croppedAspect )
+    {
+        /* Need to crop on the left and right */
+        addCrop = croppedWidth - aspect * croppedHeight * title->width /
+                    title->aspect / title->height;
+        if( addCrop & 3 )
+        {
+            addCrop = ( addCrop + 1 ) / 2;
+            job->crop[2] += addCrop;
+            job->crop[3] += addCrop;
+        }
+        else if( addCrop & 2 )
+        {
+            addCrop /= 2;
+            job->crop[2] += addCrop - 1;
+            job->crop[3] += addCrop + 1;
+        }
+        else
+        {
+            addCrop /= 2;
+            job->crop[2] += addCrop;
+            job->crop[3] += addCrop;
+        }
+    }
+    else if( aspect > croppedAspect )
+    {
+        /* Need to crop on the top and bottom */
+        /* TODO */
+    }
+
+    /* Compute a resolution from the number of pixels and aspect */
+    int i, w, h;
+    for( i = 0;; i++ )
+    {
+        w = 16 * i;
+        h = MULTIPLE_16( w * HB_ASPECT_BASE / aspect );
+        if( w * h > pixels )
+        {
+            break;
+        }
+    }
+    i--;
+    job->width  = 16 * i;
+    job->height = MULTIPLE_16( 16 * i * HB_ASPECT_BASE / aspect );
+}
+
 int hb_count( hb_handle_t * h )
 {
     return hb_list_count( h->jobs );

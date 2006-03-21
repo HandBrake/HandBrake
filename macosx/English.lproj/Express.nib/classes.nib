@@ -38,8 +38,11 @@
             CLASS = ExpressController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
+                fConvertAspectPopUp = NSPopUpButton; 
                 fConvertFolderPopUp = NSPopUpButton; 
+                fConvertFormatPopUp = NSPopUpButton; 
                 fConvertIndicator = NSProgressIndicator; 
+                fConvertInfoString = NSTextField; 
                 fConvertTableView = NSTableView; 
                 fConvertView = NSView; 
                 fEmptyView = NSView; 
