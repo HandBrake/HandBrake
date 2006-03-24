@@ -65,7 +65,7 @@
 }
 
 /***********************************************************************
- * Tableview delegate methods
+ * Tableview datasource methods
  **********************************************************************/
 - (int) numberOfRowsInTableView: (NSTableView *) t
 {
@@ -147,6 +147,10 @@
 - (void) openMatrixChanged: (id) sender
 {
     [self openEnable: YES];
+    if( [fOpenMatrix selectedRow] )
+    {
+        [self openBrowse: self];
+    }
 }
 
 - (void) openBrowse: (id) sender
@@ -385,22 +389,29 @@
         case HB_STATE_WORKING:
         {
             NSMutableString * string = [NSMutableString
-                stringWithFormat: @"Converting: %.1f %%, %.1f fps",
-                100.0 * p.progress, p.rate_avg];
-            if( p.hours > 0 )
+                stringWithFormat: @"Converting: %.1f %%",
+                100.0 * p.progress];
+            if( p.seconds > -1 )
             {
-                [string appendFormat: @" (%d hours %d mins left)",
-                    p.hours, p.minutes];
-            }
-            else if( p.minutes > 0 )
-            {
-                [string appendFormat: @" (%d mins %d secs left)",
-                    p.minutes, p.seconds];
-            }
-            else if( p.seconds > -1 )
-            {
-                [string appendFormat: @" (%d seconds left)",
-                    p.seconds];
+                [string appendFormat: @" (%.1f fps, ", p.rate_avg];
+                if( p.hours > 0 )
+                {
+                    [string appendFormat: @"%d hour%s %d min%s",
+                        p.hours, p.hours == 1 ? "" : "s",
+                        p.minutes, p.minutes == 1 ? "" : "s"];
+                }
+                else if( p.minutes > 0 )
+                {
+                    [string appendFormat: @"%d min%s %d sec%s",
+                        p.minutes, p.minutes == 1 ? "" : "s",
+                        p.seconds, p.seconds == 1 ? "" : "s"];
+                }
+                else
+                {
+                    [string appendFormat: @"%d second%s",
+                        p.seconds, p.seconds == 1 ? "" : "s"];
+                }
+                [string appendString: @" left)"];
             }
             [fConvertInfoString setStringValue: string];
             [fConvertIndicator setIndeterminate: NO];
