@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D1125D809D72FD200E0657B /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D1125D709D72FD200E0657B /* libz.dylib */; };
+		4D1125D909D72FD200E0657B /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D1125D709D72FD200E0657B /* libz.dylib */; };
 		4D1EA2EA0993B09A00FDC1A2 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.mm */; };
 		4D1EA2F60993B0CA00FDC1A2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		4D1EA3010993B13700FDC1A2 /* Express.nib in Resources */ = {isa = PBXBuildFile; fileRef = 4D1EA3000993B13700FDC1A2 /* Express.nib */; };
@@ -73,6 +75,7 @@
 		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		4D1125D709D72FD200E0657B /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
 		4D118405053054CD00C39CA9 /* HandBrake.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = HandBrake.icns; sourceTree = "<group>"; };
 		4D1EA2DA0993B01000FDC1A2 /* HandBrake Express.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HandBrake Express.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D1EA2DC0993B01000FDC1A2 /* Express.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Express.plist; sourceTree = "<group>"; };
@@ -108,6 +111,7 @@
 			files = (
 				4D1EA2F60993B0CA00FDC1A2 /* Cocoa.framework in Frameworks */,
 				4D2AEA1A09CCB332007E18F6 /* IOKit.framework in Frameworks */,
+				4D1125D909D72FD200E0657B /* libz.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,6 +122,7 @@
 				4DD93FA2082036E8008E1322 /* Cocoa.framework in Frameworks */,
 				4DD93FA3082036E8008E1322 /* IOKit.framework in Frameworks */,
 				4DD93FA4082036E8008E1322 /* OpenGL.framework in Frameworks */,
+				4D1125D809D72FD200E0657B /* libz.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,6 +199,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4D1125D709D72FD200E0657B /* libz.dylib */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 				4DEB2024052B055F00C39CA9 /* IOKit.framework */,
 				4DDE9724052B7B2B00C39CA9 /* OpenGL.framework */,
@@ -305,13 +311,13 @@
 				OTHER_LDFLAGS = (
 					../libhb/libhb.a,
 					../contrib/lib/liba52.a,
+					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
 					../contrib/lib/libavutil.a,
 					../contrib/lib/libdvdread.a,
 					../contrib/lib/libdvdcss.a,
 					../contrib/lib/libfaac.a,
 					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmp4v2.a,
 					../contrib/lib/libmpeg2.a,
 					../contrib/lib/libvorbis.a,
 					../contrib/lib/libvorbisenc.a,
@@ -448,13 +454,13 @@
 				OTHER_LDFLAGS = (
 					../libhb/libhb.a,
 					../contrib/lib/liba52.a,
+					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
 					../contrib/lib/libavutil.a,
 					../contrib/lib/libdvdread.a,
 					../contrib/lib/libdvdcss.a,
 					../contrib/lib/libfaac.a,
 					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmp4v2.a,
 					../contrib/lib/libmpeg2.a,
 					../contrib/lib/libvorbis.a,
 					../contrib/lib/libvorbisenc.a,
@@ -485,13 +491,13 @@
 				OTHER_LDFLAGS = (
 					../libhb/libhb.a,
 					../contrib/lib/liba52.a,
+					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
 					../contrib/lib/libavutil.a,
 					../contrib/lib/libdvdread.a,
 					../contrib/lib/libdvdcss.a,
 					../contrib/lib/libfaac.a,
 					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmp4v2.a,
 					../contrib/lib/libmpeg2.a,
 					../contrib/lib/libvorbis.a,
 					../contrib/lib/libvorbisenc.a,
@@ -520,13 +526,13 @@
 				OTHER_LDFLAGS = (
 					../libhb/libhb.a,
 					../contrib/lib/liba52.a,
+					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
 					../contrib/lib/libavutil.a,
 					../contrib/lib/libdvdread.a,
 					../contrib/lib/libdvdcss.a,
 					../contrib/lib/libfaac.a,
 					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmp4v2.a,
 					../contrib/lib/libmpeg2.a,
 					../contrib/lib/libvorbis.a,
 					../contrib/lib/libvorbisenc.a,
@@ -560,13 +566,13 @@
 				OTHER_LDFLAGS = (
 					../libhb/libhb.a,
 					../contrib/lib/liba52.a,
+					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
 					../contrib/lib/libavutil.a,
 					../contrib/lib/libdvdread.a,
 					../contrib/lib/libdvdcss.a,
 					../contrib/lib/libfaac.a,
 					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmp4v2.a,
 					../contrib/lib/libmpeg2.a,
 					../contrib/lib/libvorbis.a,
 					../contrib/lib/libvorbisenc.a,
@@ -602,13 +608,13 @@
 				OTHER_LDFLAGS = (
 					../libhb/libhb.a,
 					../contrib/lib/liba52.a,
+					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
 					../contrib/lib/libavutil.a,
 					../contrib/lib/libdvdread.a,
 					../contrib/lib/libdvdcss.a,
 					../contrib/lib/libfaac.a,
 					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmp4v2.a,
 					../contrib/lib/libmpeg2.a,
 					../contrib/lib/libvorbis.a,
 					../contrib/lib/libvorbisenc.a,
@@ -642,13 +648,13 @@
 				OTHER_LDFLAGS = (
 					../libhb/libhb.a,
 					../contrib/lib/liba52.a,
+					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
 					../contrib/lib/libavutil.a,
 					../contrib/lib/libdvdread.a,
 					../contrib/lib/libdvdcss.a,
 					../contrib/lib/libfaac.a,
 					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmp4v2.a,
 					../contrib/lib/libmpeg2.a,
 					../contrib/lib/libvorbis.a,
 					../contrib/lib/libvorbisenc.a,
