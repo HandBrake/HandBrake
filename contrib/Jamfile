@@ -60,8 +60,9 @@ actions LibAvCodec
     rm -rf ffmpeg && tar xzf ffmpeg.tar.gz && cd ffmpeg &&
     $(FFMPEG_PATCH) &&
     ./configure --prefix=$CONTRIB $(FFMPEG_OPTIONS) --enable-gpl &&
-    make -C libavcodec && make -C libavutil &&
+    make -C libavcodec && make -C libavutil && make -C libavformat &&
     make -C libavcodec installlib && make -C libavutil installlib &&
+    make -C libavformat installlib
     strip -S $CONTRIB/lib/libavcodec.a
 }
 Wget       $(SUBDIR)/ffmpeg.tar.gz    : $(SUBDIR)/version_ffmpeg.txt ;
@@ -77,6 +78,17 @@ actions LibAvUtil
     strip -S $(<)
 }
 LibAvUtil $(SUBDIR)/lib/libavutil.a : $(SUBDIR)/lib/libavcodec.a ;
+
+rule LibAvFormat
+{
+    Depends $(<) : $(>) ;
+    Depends lib  : $(<) ;
+}
+actions LibAvFormat
+{
+    strip -S $(<)
+}
+LibAvUtil $(SUBDIR)/lib/libavformat.a : $(SUBDIR)/lib/libavcodec.a ;
 
 # libdvdcss
 # We need libdvdcss.so for libdvdread's configure to work...
