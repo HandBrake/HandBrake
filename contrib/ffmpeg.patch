@@ -1,6 +1,6 @@
-diff -ru ffmpeg.orig/libavcodec/i386/dsputil_mmx.c ffmpeg/libavcodec/i386/dsputil_mmx.c
---- ffmpeg.orig/libavcodec/i386/dsputil_mmx.c	2006-01-12 23:43:17.000000000 +0100
-+++ ffmpeg/libavcodec/i386/dsputil_mmx.c	2006-02-01 06:10:53.000000000 +0100
+diff -ru ffmpeg-20060326-bak/libavcodec/i386/dsputil_mmx.c ffmpeg-20060326/libavcodec/i386/dsputil_mmx.c
+--- ffmpeg-20060326-bak/libavcodec/i386/dsputil_mmx.c	2006-03-26 22:04:53.000000000 +0200
++++ ffmpeg-20060326/libavcodec/i386/dsputil_mmx.c	2006-03-26 22:13:32.000000000 +0200
 @@ -52,7 +52,7 @@
  static const uint64_t ff_pb_3F attribute_used __attribute__ ((aligned(8))) = 0x3F3F3F3F3F3F3F3FULL;
  static const uint64_t ff_pb_FC attribute_used __attribute__ ((aligned(8))) = 0xFCFCFCFCFCFCFCFCULL;
@@ -55,9 +55,9 @@ diff -ru ffmpeg.orig/libavcodec/i386/dsputil_mmx.c ffmpeg/libavcodec/i386/dsputi
           "1:                            \n\t"
           "movq (%1), %%mm0              \n\t"
           "movq 8(%1), %%mm4             \n\t"
-diff -ru ffmpeg.orig/libavcodec/i386/dsputil_mmx_avg.h ffmpeg/libavcodec/i386/dsputil_mmx_avg.h
---- ffmpeg.orig/libavcodec/i386/dsputil_mmx_avg.h	2006-01-12 23:43:17.000000000 +0100
-+++ ffmpeg/libavcodec/i386/dsputil_mmx_avg.h	2006-02-01 06:10:53.000000000 +0100
+diff -ru ffmpeg-20060326-bak/libavcodec/i386/dsputil_mmx_avg.h ffmpeg-20060326/libavcodec/i386/dsputil_mmx_avg.h
+--- ffmpeg-20060326-bak/libavcodec/i386/dsputil_mmx_avg.h	2006-03-26 22:04:53.000000000 +0200
++++ ffmpeg-20060326/libavcodec/i386/dsputil_mmx_avg.h	2006-03-26 22:13:51.000000000 +0200
 @@ -754,7 +754,7 @@
          "lea (%3, %3), %%"REG_a"        \n\t"
          "movq (%1), %%mm0               \n\t"
@@ -67,9 +67,9 @@ diff -ru ffmpeg.orig/libavcodec/i386/dsputil_mmx_avg.h ffmpeg/libavcodec/i386/ds
          "1:                             \n\t"
          "movq (%1, %%"REG_a"), %%mm2    \n\t"
          "movq (%1, %3), %%mm1           \n\t"
-diff -ru ffmpeg.orig/libavcodec/i386/dsputil_mmx_rnd.h ffmpeg/libavcodec/i386/dsputil_mmx_rnd.h
---- ffmpeg.orig/libavcodec/i386/dsputil_mmx_rnd.h	2006-01-12 23:43:17.000000000 +0100
-+++ ffmpeg/libavcodec/i386/dsputil_mmx_rnd.h	2006-02-01 06:10:53.000000000 +0100
+diff -ru ffmpeg-20060326-bak/libavcodec/i386/dsputil_mmx_rnd.h ffmpeg-20060326/libavcodec/i386/dsputil_mmx_rnd.h
+--- ffmpeg-20060326-bak/libavcodec/i386/dsputil_mmx_rnd.h	2006-03-26 22:04:53.000000000 +0200
++++ ffmpeg-20060326/libavcodec/i386/dsputil_mmx_rnd.h	2006-03-26 22:15:09.000000000 +0200
 @@ -28,7 +28,7 @@
      MOVQ_BFE(mm6);
      __asm __volatile(
@@ -142,10 +142,10 @@ diff -ru ffmpeg.orig/libavcodec/i386/dsputil_mmx_rnd.h ffmpeg/libavcodec/i386/ds
          "1:                             \n\t"
          "movq   (%1, %%"REG_a"), %%mm0  \n\t"
          "movq   1(%1, %%"REG_a"), %%mm2 \n\t"
-diff -ru ffmpeg.orig/libavcodec/i386/fdct_mmx.c ffmpeg/libavcodec/i386/fdct_mmx.c
---- ffmpeg.orig/libavcodec/i386/fdct_mmx.c	2005-12-22 02:10:09.000000000 +0100
-+++ ffmpeg/libavcodec/i386/fdct_mmx.c	2006-02-01 06:10:53.000000000 +0100
-@@ -350,61 +350,67 @@
+diff -ru ffmpeg-20060326-bak/libavcodec/i386/fdct_mmx.c ffmpeg-20060326/libavcodec/i386/fdct_mmx.c
+--- ffmpeg-20060326-bak/libavcodec/i386/fdct_mmx.c	2006-03-26 22:04:53.000000000 +0200
++++ ffmpeg-20060326/libavcodec/i386/fdct_mmx.c	2006-03-26 22:19:01.000000000 +0200
+@@ -350,61 +350,61 @@
  
  static always_inline void fdct_row_sse2(const int16_t *in, int16_t *out)
  {
@@ -218,12 +218,6 @@ diff -ru ffmpeg.orig/libavcodec/i386/fdct_mmx.c ffmpeg/libavcodec/i386/fdct_mmx.
 -        "packssdw  %%xmm3, %%xmm1       \n\t"
 -        "movdqa    %%xmm1, \\i(%4)      \n\t"
 -        ".endm                          \n\t"
-+//        ".macro FDCT_ROW_SSE2_H1 i t    \n\t"
-+//        ".endm                          \n\t"
-+//        ".macro FDCT_ROW_SSE2_H2 i t    \n\t"
-+//        ".endm                          \n\t"
-+//        ".macro FDCT_ROW_SSE2 i         \n\t"
-+//        ".endm                          \n\t"
          "movdqa    (%2), %%xmm6         \n\t"
 -        "FDCT_ROW_SSE2_H1 0 0           \n\t"
 -        "FDCT_ROW_SSE2 0                \n\t"
@@ -266,9 +260,9 @@ diff -ru ffmpeg.orig/libavcodec/i386/fdct_mmx.c ffmpeg/libavcodec/i386/fdct_mmx.
          :
          : "r" (in), "r" (tab_frw_01234567_sse2.tab_frw_01234567_sse2), "r" (fdct_r_row_sse2.fdct_r_row_sse2), "i" (SHIFT_FRW_ROW), "r" (out)
      );
-diff -ru ffmpeg.orig/libavcodec/i386/idct_mmx_xvid.c ffmpeg/libavcodec/i386/idct_mmx_xvid.c
---- ffmpeg.orig/libavcodec/i386/idct_mmx_xvid.c	2006-01-12 23:43:18.000000000 +0100
-+++ ffmpeg/libavcodec/i386/idct_mmx_xvid.c	2006-02-01 06:10:53.000000000 +0100
+diff -ru ffmpeg-20060326-bak/libavcodec/i386/idct_mmx_xvid.c ffmpeg-20060326/libavcodec/i386/idct_mmx_xvid.c
+--- ffmpeg-20060326-bak/libavcodec/i386/idct_mmx_xvid.c	2006-03-26 22:04:53.000000000 +0200
++++ ffmpeg-20060326/libavcodec/i386/idct_mmx_xvid.c	2006-03-26 22:20:28.000000000 +0200
 @@ -295,17 +295,17 @@
    "movq 8+" #A1 ",%%mm1                \n\t"/* 1     ; x7 x6 x5 x4*/\
    "movq %%mm0,%%mm2                \n\t"/* 2     ; x3 x2 x1 x0*/\
@@ -300,9 +294,9 @@ diff -ru ffmpeg.orig/libavcodec/i386/idct_mmx_xvid.c ffmpeg/libavcodec/i386/idct
    "movq %%mm7,8                +" #A2 "\n\t"/* 7     ; save y7 y6 y5 y4*/\
  
  
-diff -ru ffmpeg.orig/libavcodec/i386/motion_est_mmx.c ffmpeg/libavcodec/i386/motion_est_mmx.c
---- ffmpeg.orig/libavcodec/i386/motion_est_mmx.c	2006-01-12 23:43:18.000000000 +0100
-+++ ffmpeg/libavcodec/i386/motion_est_mmx.c	2006-02-01 06:10:53.000000000 +0100
+diff -ru ffmpeg-20060326-bak/libavcodec/i386/motion_est_mmx.c ffmpeg-20060326/libavcodec/i386/motion_est_mmx.c
+--- ffmpeg-20060326-bak/libavcodec/i386/motion_est_mmx.c	2006-03-26 22:04:53.000000000 +0200
++++ ffmpeg-20060326/libavcodec/i386/motion_est_mmx.c	2006-03-26 22:24:48.000000000 +0200
 @@ -34,7 +34,7 @@
  {
      long len= -(stride*h);
@@ -357,9 +351,9 @@ diff -ru ffmpeg.orig/libavcodec/i386/motion_est_mmx.c ffmpeg/libavcodec/i386/mot
          "1:                             \n\t"
          "movq (%1, %%"REG_a"), %%mm0    \n\t"
          "movq (%2, %%"REG_a"), %%mm1    \n\t"
-diff -ru ffmpeg.orig/libavcodec/i386/mpegvideo_mmx.c ffmpeg/libavcodec/i386/mpegvideo_mmx.c
---- ffmpeg.orig/libavcodec/i386/mpegvideo_mmx.c	2006-01-12 23:43:18.000000000 +0100
-+++ ffmpeg/libavcodec/i386/mpegvideo_mmx.c	2006-02-01 06:10:53.000000000 +0100
+diff -ru ffmpeg-20060326-bak/libavcodec/i386/mpegvideo_mmx.c ffmpeg-20060326/libavcodec/i386/mpegvideo_mmx.c
+--- ffmpeg-20060326-bak/libavcodec/i386/mpegvideo_mmx.c	2006-03-26 22:04:53.000000000 +0200
++++ ffmpeg-20060326/libavcodec/i386/mpegvideo_mmx.c	2006-03-26 22:25:09.000000000 +0200
 @@ -66,7 +66,7 @@
                  "packssdw %%mm5, %%mm5          \n\t"
                  "psubw %%mm5, %%mm7             \n\t"
@@ -414,9 +408,9 @@ diff -ru ffmpeg.orig/libavcodec/i386/mpegvideo_mmx.c ffmpeg/libavcodec/i386/mpeg
                  "1:                             \n\t"
                  "movq (%0, %%"REG_a"), %%mm0    \n\t"
                  "movq 8(%0, %%"REG_a"), %%mm1   \n\t"
-diff -ru ffmpeg.orig/libavcodec/i386/mpegvideo_mmx_template.c ffmpeg/libavcodec/i386/mpegvideo_mmx_template.c
---- ffmpeg.orig/libavcodec/i386/mpegvideo_mmx_template.c	2006-01-12 23:43:18.000000000 +0100
-+++ ffmpeg/libavcodec/i386/mpegvideo_mmx_template.c	2006-02-01 06:10:53.000000000 +0100
+diff -ru ffmpeg-20060326-bak/libavcodec/i386/mpegvideo_mmx_template.c ffmpeg-20060326/libavcodec/i386/mpegvideo_mmx_template.c
+--- ffmpeg-20060326-bak/libavcodec/i386/mpegvideo_mmx_template.c	2006-03-26 22:04:53.000000000 +0200
++++ ffmpeg-20060326/libavcodec/i386/mpegvideo_mmx_template.c	2006-03-26 22:25:33.000000000 +0200
 @@ -111,7 +111,7 @@
              "pxor %%mm6, %%mm6                  \n\t"
              "psubw (%3), %%mm6                  \n\t" // -bias[0]
@@ -435,10 +429,10 @@ diff -ru ffmpeg.orig/libavcodec/i386/mpegvideo_mmx_template.c ffmpeg/libavcodec/
              "1:                                 \n\t"
              "pxor %%mm1, %%mm1                  \n\t" // 0
              "movq (%1, %%"REG_a"), %%mm0        \n\t" // block[i]
-diff -ru ffmpeg.orig/libavcodec/i386/simple_idct_mmx.c ffmpeg/libavcodec/i386/simple_idct_mmx.c
---- ffmpeg.orig/libavcodec/i386/simple_idct_mmx.c	2006-01-12 23:43:18.000000000 +0100
-+++ ffmpeg/libavcodec/i386/simple_idct_mmx.c	2006-02-01 06:10:53.000000000 +0100
-@@ -459,13 +459,12 @@
+diff -ru ffmpeg-20060326-bak/libavcodec/i386/simple_idct_mmx.c ffmpeg-20060326/libavcodec/i386/simple_idct_mmx.c
+--- ffmpeg-20060326-bak/libavcodec/i386/simple_idct_mmx.c	2006-03-26 22:04:53.000000000 +0200
++++ ffmpeg-20060326/libavcodec/i386/simple_idct_mmx.c	2006-03-26 22:39:09.000000000 +0200
+@@ -459,10 +459,10 @@
  
  
  //IDCT(      src0,   src4,   src1,    src5,    dst, rounder, shift)
@@ -452,11 +446,8 @@ diff -ru ffmpeg.orig/libavcodec/i386/simple_idct_mmx.c ffmpeg/libavcodec/i386/si
 +COL_IDCT(  24(%1), 88(%1), 56(%1), 120(%1), 12(%0), "nop", 20)
  
  #else
--
- #define DC_COND_IDCT(src0, src4, src1, src5, dst, rounder, shift) \
-         "movq " #src0 ", %%mm0          \n\t" /* R4     R0      r4      r0 */\
-         "movq " #src4 ", %%mm1          \n\t" /* R6     R2      r6      r2 */\
-@@ -783,10 +782,10 @@
+ 
+@@ -783,10 +783,10 @@
  
  
  //IDCT(  src0,   src4,   src1,    src5,    dst, rounder, shift)
@@ -471,7 +462,7 @@ diff -ru ffmpeg.orig/libavcodec/i386/simple_idct_mmx.c ffmpeg/libavcodec/i386/si
          "jmp 9f                         \n\t"
  
          "#.balign 16                    \n\t"\
-@@ -860,10 +859,10 @@
+@@ -860,10 +860,10 @@
          "movd %%mm5, 80+" #dst "        \n\t"
  
  //IDCT(  src0,   src4,   src1,    src5,    dst, rounder, shift)
@@ -486,7 +477,7 @@ diff -ru ffmpeg.orig/libavcodec/i386/simple_idct_mmx.c ffmpeg/libavcodec/i386/si
          "jmp 9f                         \n\t"
  
          "#.balign 16                    \n\t"\
-@@ -928,10 +927,10 @@
+@@ -928,10 +928,10 @@
  
  
  //IDCT(  src0,   src4,   src1,    src5,    dst, rounder, shift)
@@ -501,7 +492,7 @@ diff -ru ffmpeg.orig/libavcodec/i386/simple_idct_mmx.c ffmpeg/libavcodec/i386/si
          "jmp 9f                         \n\t"
  
          "#.balign 16                    \n\t"\
-@@ -1007,10 +1006,10 @@
+@@ -1007,10 +1007,10 @@
          "movd %%mm5, 80+" #dst "        \n\t"
  
  //IDCT(  src0,   src4,   src1,    src5,    dst, rounder, shift)
@@ -516,7 +507,7 @@ diff -ru ffmpeg.orig/libavcodec/i386/simple_idct_mmx.c ffmpeg/libavcodec/i386/si
          "jmp 9f                         \n\t"
  
          "#.balign 16                    \n\t"\
-@@ -1073,10 +1072,10 @@
+@@ -1073,10 +1073,10 @@
  
  
  //IDCT(  src0,   src4,   src1,    src5,    dst, rounder, shift)
@@ -531,22 +522,19 @@ diff -ru ffmpeg.orig/libavcodec/i386/simple_idct_mmx.c ffmpeg/libavcodec/i386/si
          "jmp 9f                         \n\t"
  
          "#.balign 16                    \n\t"\
-@@ -1141,10 +1140,10 @@
+@@ -1141,9 +1141,9 @@
  
  
  //IDCT(  src0,   src4,   src1,    src5,    dst, rounder, shift)
 -IDCT(    0(%1), 64(%1), 32(%1),  96(%1),  0(%0),/nop, 20)
--//IDCT(   8(%1), 72(%1), 40(%1), 104(%1),  4(%0),/nop, 20)
--IDCT(  16(%1), 80(%1), 48(%1), 112(%1),  8(%0),/nop, 20)
--//IDCT(  24(%1), 88(%1), 56(%1), 120(%1), 12(%0),/nop, 20)
 +IDCT(    0(%1), 64(%1), 32(%1),  96(%1),  0(%0), "nop", 20)
-+//IDCT(   8(%1), 72(%1), 40(%1), 104(%1),  4(%0), "nop", 20)
+ //IDCT(   8(%1), 72(%1), 40(%1), 104(%1),  4(%0),/nop, 20)
+-IDCT(  16(%1), 80(%1), 48(%1), 112(%1),  8(%0),/nop, 20)
 +IDCT(  16(%1), 80(%1), 48(%1), 112(%1),  8(%0), "nop", 20)
-+//IDCT(  24(%1), 88(%1), 56(%1), 120(%1), 12(%0), "nop", 20)
+ //IDCT(  24(%1), 88(%1), 56(%1), 120(%1), 12(%0),/nop, 20)
          "jmp 9f                         \n\t"
  
- 
-@@ -1217,10 +1216,10 @@
+@@ -1217,10 +1217,10 @@
  
  
  //IDCT(  src0,   src4,   src1,    src5,    dst, rounder, shift)
@@ -561,42 +549,15 @@ diff -ru ffmpeg.orig/libavcodec/i386/simple_idct_mmx.c ffmpeg/libavcodec/i386/si
          "jmp 9f                         \n\t"
  
  
-@@ -1259,10 +1258,10 @@
+@@ -1259,9 +1259,9 @@
          "movq %%mm0, 80+" #dst "        \n\t"
  
  //IDCT(  src0,   src4,   src1,    src5,    dst, rounder, shift)
 -IDCT(   0(%1), 64(%1), 32(%1),  96(%1),  0(%0),/nop, 20)
--//IDCT(   8(%1), 72(%1), 40(%1), 104(%1),  4(%0),/nop, 20)
--IDCT(  16(%1), 80(%1), 48(%1), 112(%1),  8(%0),/nop, 20)
--//IDCT(  24(%1), 88(%1), 56(%1), 120(%1), 12(%0),/nop, 20)
 +IDCT(   0(%1), 64(%1), 32(%1),  96(%1),  0(%0), "nop", 20)
-+//IDCT(   8(%1), 72(%1), 40(%1), 104(%1),  4(%0), "nop", 20)
+ //IDCT(   8(%1), 72(%1), 40(%1), 104(%1),  4(%0),/nop, 20)
+-IDCT(  16(%1), 80(%1), 48(%1), 112(%1),  8(%0),/nop, 20)
 +IDCT(  16(%1), 80(%1), 48(%1), 112(%1),  8(%0), "nop", 20)
-+//IDCT(  24(%1), 88(%1), 56(%1), 120(%1), 12(%0), "nop", 20)
+ //IDCT(  24(%1), 88(%1), 56(%1), 120(%1), 12(%0),/nop, 20)
  
  
- #endif
-diff -ru ffmpeg.orig/libavcodec/libpostproc/mangle.h ffmpeg/libavcodec/libpostproc/mangle.h
---- ffmpeg.orig/libavcodec/libpostproc/mangle.h	2004-12-18 04:07:15.000000000 +0100
-+++ ffmpeg/libavcodec/libpostproc/mangle.h	2006-02-01 06:10:53.000000000 +0100
-@@ -19,6 +19,8 @@
- #else
- #if defined(ARCH_X86_64) && defined(PIC)
- #define MANGLE(a) #a"(%%rip)"
-+#elif defined(CONFIG_DARWIN)
-+#define MANGLE(a) "_" #a
- #else
- #define MANGLE(a) #a
- #endif
-diff -ru ffmpeg.orig/libavutil/common.h ffmpeg/libavutil/common.h
---- ffmpeg.orig/libavutil/common.h	2006-01-30 01:22:41.000000000 +0100
-+++ ffmpeg/libavutil/common.h	2006-02-01 06:10:53.000000000 +0100
-@@ -267,6 +267,8 @@
- #    else
- #        if defined(ARCH_X86_64) && defined(PIC)
- #            define MANGLE(a) #a"(%%rip)"
-+#        elif defined(CONFIG_DARWIN)
-+#            define MANGLE(a) "_" #a
- #        else
- #            define MANGLE(a) #a
- #        endif

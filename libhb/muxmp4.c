@@ -8,7 +8,7 @@
 
 #include "hb.h"
 
-
+int64_t ff_gcd(int64_t a, int64_t b);
 static inline int ff_get_fourcc(const char *s)
 {
     return (s[0]) + (s[1]<<8) + (s[2]<<16) + (s[3]<<24);
@@ -39,7 +39,6 @@ static int MP4Init( hb_mux_object_t * m )
     hb_title_t * title = job->title;
     
     hb_audio_t    * audio;
-    hb_mux_data_t * mux_data;
     int i;
 
     register_protocol(&file_protocol);
@@ -71,7 +70,8 @@ static int MP4Init( hb_mux_object_t * m )
     st->codec->bit_rate = 1000 * job->vbitrate;
     st->codec->extradata= job->config.mpeg4.bytes;
     st->codec->extradata_size= job->config.mpeg4.length;
-    st->codec->time_base = (AVRational){ job->vrate_base, job->vrate };
+    i = ff_gcd( job->vrate_base, job->vrate );
+    st->codec->time_base = (AVRational){ job->vrate_base / i, job->vrate / i };
 
     st->codec->pix_fmt = PIX_FMT_YUV420P;
     st->codec->width = job->width;
