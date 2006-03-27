@@ -46,7 +46,14 @@ static int MP4Init( hb_mux_object_t * m )
 
     AVFormatContext * oc = av_alloc_format_context();
 
-    oc->oformat = guess_format( "mp4", NULL, NULL );
+    if( job->mux & HB_MUX_PSP )
+    {
+        oc->oformat = guess_format( "psp", NULL, NULL );
+    }
+    else
+    {
+        oc->oformat = guess_format( "mp4", NULL, NULL );
+    }
     if( !oc->oformat )
     {
         hb_log( "guess_format failed" );

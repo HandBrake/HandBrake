@@ -155,8 +155,9 @@ struct hb_job_s
          file: file path */
 #define HB_MUX_MASK 0xFF0000
 #define HB_MUX_MP4  0x010000
-#define HB_MUX_AVI  0x020000
-#define HB_MUX_OGM  0x040000
+#define HB_MUX_PSP  0x020000
+#define HB_MUX_AVI  0x040000
+#define HB_MUX_OGM  0x080000
     int             mux;
     char          * file;
 

@@ -65,9 +65,13 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     context->gop_size  = 10 * job->vrate / job->vrate_base;
     context->pix_fmt   = PIX_FMT_YUV420P;
 
-    if( job->mux & HB_MUX_MP4 )
+    if( job->mux & ( HB_MUX_MP4 | HB_MUX_PSP ) )
     {
         context->flags |= CODEC_FLAG_GLOBAL_HEADER;
+    }
+    if( job->mux & HB_MUX_PSP )
+    {
+        context->flags |= CODEC_FLAG_BITEXACT;
     }
     if( job->grayscale )
     {
@@ -110,11 +114,17 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     }
     pv->context = context;
 
-    if( ( job->mux & HB_MUX_MP4 ) && job->pass != 1 )
+    if( ( job->mux & ( HB_MUX_MP4 | HB_MUX_PSP ) ) && job->pass != 1 )
     {
+#if 0
         /* Hem hem */
         w->config->mpeg4.length = 15;
         memcpy( w->config->mpeg4.bytes, context->extradata + 15, 15 );
+#else
+        w->config->mpeg4.length = context->extradata_size;
+        memcpy( w->config->mpeg4.bytes, context->extradata,
+                context->extradata_size );
+#endif
     }
     
     return 0;
