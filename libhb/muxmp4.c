@@ -73,10 +73,11 @@ static int MP4Init( hb_mux_object_t * m )
     st->stream_copy = 1;
     st->codec->flags |= CODEC_FLAG_GLOBAL_HEADER;
     st->codec->codec_type = CODEC_TYPE_VIDEO;
-    st->codec->codec_id = CODEC_ID_MPEG4;
-    st->codec->bit_rate = 1000 * job->vbitrate;
+    st->codec->codec_id = ( job->vcodec == HB_VCODEC_X264 ) ?
+                            CODEC_ID_H264 : CODEC_ID_MPEG4;
     st->codec->extradata= job->config.mpeg4.bytes;
     st->codec->extradata_size= job->config.mpeg4.length;
+    st->codec->bit_rate = 1000 * job->vbitrate;
     i = ff_gcd( job->vrate_base, job->vrate );
     st->codec->time_base = (AVRational){ job->vrate_base / i, job->vrate / i };
 
