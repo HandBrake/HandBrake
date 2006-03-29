@@ -40,11 +40,14 @@ static int MP4Init( hb_mux_object_t * m )
     
     hb_audio_t    * audio;
     int i;
+    AVFormatContext * oc;
+    AVStream *st;
+    AVFormatParameters params;
 
     register_protocol(&file_protocol);
     movenc_init();
 
-    AVFormatContext * oc = av_alloc_format_context();
+    oc = av_alloc_format_context();
 
     if( job->mux & HB_MUX_PSP )
     {
@@ -61,8 +64,6 @@ static int MP4Init( hb_mux_object_t * m )
     }
     snprintf( oc->filename, sizeof( oc->filename ),
               "%s", job->file );
-
-    AVStream *st;
 
     st = av_new_stream( oc, oc->nb_streams );
     if( !st )
@@ -123,7 +124,6 @@ static int MP4Init( hb_mux_object_t * m )
         return 1;
     }
 
-    AVFormatParameters params;
     memset( &params, 0, sizeof( params ) );
     if( av_set_parameters( oc, &params ) < 0 )
     {

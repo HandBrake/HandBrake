@@ -43,6 +43,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     x264_param_t       param;
     x264_nal_t       * nal;
     int                nal_count;
+    int i, size;
 
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
@@ -98,7 +99,6 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     hb_log( "encx264: opening libx264 (pass %d)", job->pass );
     pv->x264 = x264_encoder_open( &param );
 
-    int i, size;
     w->config->mpeg4.length = 0;
 
     x264_encoder_headers( pv->x264, &nal, &nal_count );

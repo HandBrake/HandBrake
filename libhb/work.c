@@ -71,6 +71,7 @@ static void do_job( hb_job_t * job, int cpu_count )
     hb_work_object_t * w;
     hb_audio_t   * audio;
     hb_subtitle_t * subtitle;
+    int done;
 
     title = job->title;
 
@@ -229,7 +230,7 @@ static void do_job( hb_job_t * job, int cpu_count )
                                     HB_LOW_PRIORITY );
     }
 
-    int done = 0;
+    done = 0;
     w = hb_list_item( job->list_work, 0 );
     w->init( w, job );
     while( !*job->die )

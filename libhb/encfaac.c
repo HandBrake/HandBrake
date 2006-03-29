@@ -42,9 +42,11 @@ hb_work_object_t hb_encfaac =
 int encfaacInit( hb_work_object_t * w, hb_job_t * job )
 {
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
-    w->private_data = pv;
-
     faacEncConfigurationPtr cfg;
+    uint8_t * bytes;
+    unsigned long length;
+
+    w->private_data = pv;
 
     pv->job   = job;
 
@@ -67,8 +69,6 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
         hb_log( "faacEncSetConfiguration failed" );
     }
 
-    uint8_t * bytes;
-    unsigned long length;
     if( faacEncGetDecoderSpecificInfo( pv->faac, &bytes, &length ) < 0 )
     {
         hb_log( "faacEncGetDecoderSpecificInfo failed" );
