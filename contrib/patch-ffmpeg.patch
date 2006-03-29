@@ -1,0 +1,43 @@
+diff -ru ffmpeg-20060326-bak/configure ffmpeg-20060326/configure
+--- ffmpeg-20060326-bak/configure	Wed Mar 29 16:49:54 2006
++++ ffmpeg-20060326/configure	Wed Mar 29 16:50:52 2006
+@@ -272,7 +272,7 @@
+ 2.9-beos-991026*|2.9-beos-000224*) echo "R5/GG gcc"
+ mmx="no"
+ ;;
+-*20010315*) echo "BeBits gcc"
++*20010315*|2.95.3*) echo "BeBits gcc"
+ CFLAGS="$CFLAGS -fno-expensive-optimizations"
+ ;;
+ esac
+diff -ru ffmpeg-20060326-bak/libavformat/movenc.c ffmpeg-20060326/libavformat/movenc.c
+--- ffmpeg-20060326-bak/libavformat/movenc.c	Wed Mar 29 16:50:12 2006
++++ ffmpeg-20060326/libavformat/movenc.c	Wed Mar 29 17:17:58 2006
+@@ -22,6 +22,10 @@
+ #include "avio.h"
+ #include "mov.h"
+ 
++#ifndef UINT32_MAX
++#define UINT32_MAX (4294967295U)
++#endif
++
+ #undef NDEBUG
+ #include <assert.h>
+ 
+diff -ru ffmpeg-20060326-bak/libavformat/tcp.c ffmpeg-20060326/libavformat/tcp.c
+--- ffmpeg-20060326-bak/libavformat/tcp.c	Wed Mar 29 16:50:14 2006
++++ ffmpeg-20060326/libavformat/tcp.c	Wed Mar 29 17:33:57 2006
+@@ -112,11 +112,13 @@
+                 break;
+         }
+ 
++#ifndef __BEOS__
+         /* test error */
+         optlen = sizeof(ret);
+         getsockopt (fd, SOL_SOCKET, SO_ERROR, &ret, &optlen);
+         if (ret != 0)
+             goto fail;
++#endif
+     }
+     s->fd = fd;
+     return 0;

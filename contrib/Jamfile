@@ -42,14 +42,11 @@ LibA52 $(SUBDIR)/lib/liba52.a  : $(SUBDIR)/a52dec.tar.gz ;
 # libavcodec
 rule LibAvCodec
 {
+    FFMPEG_PATCH = "patch -p1 < ../patch-ffmpeg.patch" ;
     if $(OS) = MACOSX && $(OSPLAT) = X86
     {
-       FFMPEG_OPTIONS = --enable-memalign-hack ;
-       FFMPEG_PATCH   = "patch -p1 < ../ffmpeg.patch" ;
-    }
-    else
-    {
-        FFMPEG_PATCH = true ;
+       FFMPEG_OPTIONS  = --enable-memalign-hack ;
+       FFMPEG_PATCH   += " && patch -p1 < ../ffmpeg.patch" ;
     }
     Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
@@ -59,7 +56,7 @@ actions LibAvCodec
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf ffmpeg-20060326 && tar xzf ffmpeg.tar.gz &&
     cd ffmpeg-20060326 && $(FFMPEG_PATCH) &&
-    ./configure --prefix=$CONTRIB $(FFMPEG_OPTIONS) --enable-gpl &&
+    ./configure --prefix=$CONTRIB $(FFMPEG_OPTIONS) --enable-gpl --disable-audio-beos &&
     make lib && make install-libs install-headers &&
     strip -S $CONTRIB/lib/libavcodec.a
 }
