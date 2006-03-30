@@ -64,6 +64,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     param.i_log_level  = X264_LOG_NONE;
     if( job->h264_13 )
     {
+        param.i_threads   = 1;
         param.b_cabac     = 0;
         param.i_level_idc = 13;
     }
