@@ -46,7 +46,7 @@ rule LibAvCodec
     if $(OS) = MACOSX && $(OSPLAT) = X86
     {
        FFMPEG_OPTIONS  = --enable-memalign-hack ;
-       FFMPEG_PATCH   += " && patch -p1 < ../ffmpeg.patch" ;
+       FFMPEG_PATCH   += " && patch -p1 < ../patch-ffmpeg-macintel.patch" ;
     }
     Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
