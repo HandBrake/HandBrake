@@ -42,14 +42,11 @@ LibA52 $(SUBDIR)/lib/liba52.a  : $(SUBDIR)/a52dec.tar.gz ;
 # libavcodec
 rule LibAvCodec
 {
+    FFMPEG_PATCH = "patch -p1 < ../patch-ffmpeg.patch" ;
     if $(OS) = MACOSX && $(OSPLAT) = X86
     {
-       FFMPEG_OPTIONS = --enable-memalign-hack ;
-       FFMPEG_PATCH   = "patch -p1 < ../ffmpeg.patch" ;
-    }
-    else
-    {
-        FFMPEG_PATCH = true ;
+       FFMPEG_OPTIONS  = --enable-memalign-hack ;
+       FFMPEG_PATCH   += " && patch -p1 < ../patch-ffmpeg-macintel.patch" ;
     }
     Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
@@ -57,11 +54,10 @@ rule LibAvCodec
 actions LibAvCodec
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
-    rm -rf ffmpeg && tar xzf ffmpeg.tar.gz && cd ffmpeg &&
-    $(FFMPEG_PATCH) &&
-    ./configure --prefix=$CONTRIB $(FFMPEG_OPTIONS) --enable-gpl &&
-    make -C libavcodec && make -C libavutil &&
-    make -C libavcodec installlib && make -C libavutil installlib &&
+    rm -rf ffmpeg-20060326 && tar xzf ffmpeg.tar.gz &&
+    cd ffmpeg-20060326 && $(FFMPEG_PATCH) &&
+    ./configure --prefix=$CONTRIB $(FFMPEG_OPTIONS) --enable-gpl --disable-audio-beos &&
+    make lib && make install-libs install-headers &&
     strip -S $CONTRIB/lib/libavcodec.a
 }
 Wget       $(SUBDIR)/ffmpeg.tar.gz    : $(SUBDIR)/version_ffmpeg.txt ;
@@ -77,6 +73,17 @@ actions LibAvUtil
     strip -S $(<)
 }
 LibAvUtil $(SUBDIR)/lib/libavutil.a : $(SUBDIR)/lib/libavcodec.a ;
+
+rule LibAvFormat
+{
+    Depends $(<) : $(>) ;
+    Depends lib  : $(<) ;
+}
+actions LibAvFormat
+{
+    strip -S $(<)
+}
+LibAvUtil $(SUBDIR)/lib/libavformat.a : $(SUBDIR)/lib/libavcodec.a ;
 
 # libdvdcss
 # We need libdvdcss.so for libdvdread's configure to work...
@@ -145,25 +152,6 @@ actions LibMp3Lame
 }
 Wget       $(SUBDIR)/lame.tar.gz      : $(SUBDIR)/version_lame.txt ;
 LibMp3Lame $(SUBDIR)/lib/libmp3lame.a : $(SUBDIR)/lame.tar.gz ;
-
-# libmp4v2
-rule LibMp4v2
-{
-    Depends $(<) : $(>) ;
-    Depends lib  : $(<) ;
-}
-actions LibMp4v2
-{
-    cd `dirname $(>)` && CONTRIB=`pwd` &&
-    rm -rf mpeg4ip && tar xzf mpeg4ip.tar.gz && cd mpeg4ip &&
-    ./bootstrap && make -C lib/mp4v2 libmp4v2.la &&
-    cp lib/mp4v2/.libs/libmp4v2.a $CONTRIB/lib &&
-    cp mpeg4ip_config.h include/mpeg4ip.h include/mpeg4ip_version.h \
-      include/mpeg4ip_win32.h lib/mp4v2/mp4.h $CONTRIB/include &&
-    strip -S $CONTRIB/lib/libmp4v2.a
-}
-Wget     $(SUBDIR)/mpeg4ip.tar.gz : $(SUBDIR)/version_mpeg4ip.txt ;
-LibMp4v2 $(SUBDIR)/lib/libmp4v2.a : $(SUBDIR)/mpeg4ip.tar.gz ;
 
 # libmpeg2
 rule LibMpeg2

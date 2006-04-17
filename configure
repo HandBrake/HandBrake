@@ -4,6 +4,7 @@ CC="gcc"
 CXX="g++"
 CCFLAGS="$CCFLAGS -Wall -g"
 OPTIM="$OPTIM -O3 -funroll-loops"
+LINKLIBS="-lz"
 
 # System-specific flags
 SYSTEM=`uname -s`

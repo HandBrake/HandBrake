@@ -43,6 +43,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     x264_param_t       param;
     x264_nal_t       * nal;
     int                nal_count;
+    int i, size;
 
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
@@ -63,6 +64,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     param.i_log_level  = X264_LOG_NONE;
     if( job->h264_13 )
     {
+        param.i_threads   = 1;
         param.b_cabac     = 0;
         param.i_level_idc = 13;
     }
@@ -98,17 +100,17 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     hb_log( "encx264: opening libx264 (pass %d)", job->pass );
     pv->x264 = x264_encoder_open( &param );
 
+    w->config->mpeg4.length = 0;
+
     x264_encoder_headers( pv->x264, &nal, &nal_count );
 
-    /* Sequence Parameter Set */
-    w->config->h264.sps_length = 1 + nal[1].i_payload;
-    w->config->h264.sps[0] = 0x67;
-    memcpy( &w->config->h264.sps[1], nal[1].p_payload, nal[1].i_payload );
-
-    /* Picture Parameter Set */
-    w->config->h264.pps_length = 1 + nal[2].i_payload;
-    w->config->h264.pps[0] = 0x68;
-    memcpy( &w->config->h264.pps[1], nal[2].p_payload, nal[2].i_payload );
+    for( i = 0; i < nal_count; i++ )
+    {
+        size = sizeof( w->config->mpeg4.bytes ) - w->config->mpeg4.length;
+        x264_nal_encode( &w->config->mpeg4.bytes[w->config->mpeg4.length],
+                         &size, 1, &nal[i] );
+        w->config->mpeg4.length += size;
+    }
 
     x264_picture_alloc( &pv->pic_in, X264_CSP_I420,
                         job->width, job->height );
@@ -158,51 +160,19 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     /* Should be way too large */
     buf        = hb_buffer_init( 3 * job->width * job->height / 2 );
-    buf->size  = 0;
     buf->start = in->start;
     buf->stop  = in->stop;
-    buf->key   = 0;
+    buf->key   = ( pv->pic_out.i_type == X264_TYPE_IDR );
 
+    buf->size  = 0;
     for( i = 0; i < i_nal; i++ )
     {
         int size, data;
-
         data = buf->alloc - buf->size;
-        if( ( size = x264_nal_encode( buf->data + buf->size, &data,
-                                      1, &nal[i] ) ) < 1 )
+        if( ( size = x264_nal_encode( &buf->data[buf->size], &data,
+                                      1, &nal[i] ) ) > 0 )
         {
-            continue;
-        }
-
-        if( job->mux & HB_MUX_AVI )
-        {
-            if( nal[i].i_ref_idc == NAL_PRIORITY_HIGHEST )
-            {
-                buf->key = 1;
-            }
             buf->size += size;
-            continue;
-        }
-
-        /* H.264 in .mp4 */
-        switch( buf->data[buf->size+4] & 0x1f )
-        {
-            case 0x7:
-            case 0x8:
-                /* SPS, PPS */
-                break;
-
-            default:
-                /* H.264 in mp4 (stolen from mp4creator) */
-                buf->data[buf->size+0] = ( ( size - 4 ) >> 24 ) & 0xFF;
-                buf->data[buf->size+1] = ( ( size - 4 ) >> 16 ) & 0xFF;
-                buf->data[buf->size+2] = ( ( size - 4 ) >>  8 ) & 0xFF;
-                buf->data[buf->size+3] = ( ( size - 4 ) >>  0 ) & 0xFF;
-                if( nal[i].i_ref_idc == NAL_PRIORITY_HIGHEST )
-                {
-                    buf->key = 1;
-                }
-                buf->size += size;
         }
     }
 

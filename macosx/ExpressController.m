@@ -200,26 +200,42 @@
         hb_job_t   * job   = title->job;
 
         int pixels, aspect;
-        if( [fConvertFormatPopUp indexOfSelectedItem] )
+        if( [fConvertFormatPopUp indexOfSelectedItem] == 0 )
         {
-            job->vcodec   = HB_VCODEC_FFMPEG;
-            job->vbitrate = 1200;
-            pixels        = 230400;
-        }
-        else
-        {
+            /* iPod / H.264 */
+            job->mux      = HB_MUX_MP4;
             job->vcodec   = HB_VCODEC_X264;
             job->h264_13  = 1;
             job->vbitrate = 600;
             pixels        = 76800;
+            aspect        = 4 * HB_ASPECT_BASE / 3;
+        }
+        else if( [fConvertFormatPopUp indexOfSelectedItem] == 1 )
+        {
+            /* iPod / MPEG-4 */
+            job->mux      = HB_MUX_MP4;
+            job->vcodec   = HB_VCODEC_FFMPEG;
+            job->vbitrate = 1200;
+            pixels        = 230400;
+            aspect        = 4 * HB_ASPECT_BASE / 3;
+        }
+        else
+        {
+            /* PSP / MPEG-4 */
+            job->mux        = HB_MUX_PSP;
+            job->vrate      = 27000000;
+            job->vrate_base = 900900;   /* 29.97 fps */
+            job->vcodec     = HB_VCODEC_FFMPEG;
+            job->vbitrate   = 600;
+            pixels          = 76800;
+            job->arate      = 24000;
+            job->abitrate   = 96;
+            aspect          = 16 * HB_ASPECT_BASE / 9;
+
         }
         if( [fConvertAspectPopUp indexOfSelectedItem] )
         {
             aspect = -1;
-        }
-        else
-        {
-            aspect = 4 * HB_ASPECT_BASE / 3;
         }
 
         hb_set_size( job, aspect, pixels );

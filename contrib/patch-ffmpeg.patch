@@ -1,0 +1,68 @@
+diff -ru ffmpeg-20060326-bak/configure ffmpeg-20060326/configure
+--- ffmpeg-20060326-bak/configure	2006-03-26 22:04:53.000000000 +0200
++++ ffmpeg-20060326/configure	2006-03-30 13:29:36.000000000 +0200
+@@ -272,7 +272,7 @@
+ 2.9-beos-991026*|2.9-beos-000224*) echo "R5/GG gcc"
+ mmx="no"
+ ;;
+-*20010315*) echo "BeBits gcc"
++*20010315*|2.95.3*) echo "BeBits gcc"
+ CFLAGS="$CFLAGS -fno-expensive-optimizations"
+ ;;
+ esac
+diff -ru ffmpeg-20060326-bak/libavformat/movenc.c ffmpeg-20060326/libavformat/movenc.c
+--- ffmpeg-20060326-bak/libavformat/movenc.c	2006-03-26 22:04:53.000000000 +0200
++++ ffmpeg-20060326/libavformat/movenc.c	2006-03-30 13:31:03.000000000 +0200
+@@ -22,6 +22,10 @@
+ #include "avio.h"
+ #include "mov.h"
+ 
++#ifndef UINT32_MAX
++#define UINT32_MAX (4294967295U)
++#endif
++
+ #undef NDEBUG
+ #include <assert.h>
+ 
+@@ -435,11 +439,6 @@
+             end = track->vosData + track->vosLen;
+ 
+             put_byte(pb, 1); /* version */
+-            put_byte(pb, 77); /* profile */
+-            put_byte(pb, 64); /* profile compat */
+-            put_byte(pb, 30); /* level */
+-            put_byte(pb, 0xff); /* 6 bits reserved (111111) + 2 bits nal size length - 1 (11) */
+-            put_byte(pb, 0xe1); /* 3 bits reserved (111) + 5 bits number of sps (00001) */
+ 
+             /* look for sps and pps */
+             while (buf < end) {
+@@ -458,6 +457,12 @@
+             }
+             assert(sps);
+             assert(pps);
++
++            put_byte(pb, sps[1]); /* profile */
++            put_byte(pb, sps[2]); /* profile compat */
++            put_byte(pb, sps[3]); /* level */
++            put_byte(pb, 0xff); /* 6 bits reserved (111111) + 2 bits nal size length - 1 (11) */
++            put_byte(pb, 0xe1); /* 3 bits reserved (111) + 5 bits number of sps (00001) */
+             put_be16(pb, sps_size);
+             put_buffer(pb, sps, sps_size);
+             put_byte(pb, 1); /* number of pps */
+diff -ru ffmpeg-20060326-bak/libavformat/tcp.c ffmpeg-20060326/libavformat/tcp.c
+--- ffmpeg-20060326-bak/libavformat/tcp.c	2006-03-26 22:04:53.000000000 +0200
++++ ffmpeg-20060326/libavformat/tcp.c	2006-03-30 13:29:36.000000000 +0200
+@@ -112,11 +112,13 @@
+                 break;
+         }
+ 
++#ifndef __BEOS__
+         /* test error */
+         optlen = sizeof(ret);
+         getsockopt (fd, SOL_SOCKET, SO_ERROR, &ret, &optlen);
+         if (ret != 0)
+             goto fail;
++#endif
+     }
+     s->fd = fd;
+     return 0;

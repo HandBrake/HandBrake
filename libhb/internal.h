@@ -123,14 +123,6 @@ union hb_esconfig_u
 
     struct
     {
-        uint8_t sps[HB_CONFIG_MAX_SIZE];
-        int     sps_length;
-        uint8_t pps[HB_CONFIG_MAX_SIZE];
-        int     pps_length;
-    } h264;
-
-    struct
-    {
         uint8_t bytes[HB_CONFIG_MAX_SIZE];
         int     length;
     } aac;

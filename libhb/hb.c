@@ -260,6 +260,7 @@ void hb_set_size( hb_job_t * job, int aspect, int pixels )
     int croppedAspect = title->aspect * title->height * croppedWidth /
                             croppedHeight / title->width;
     int addCrop;
+    int i, w, h;
 
     if( aspect <= 0 )
     {
@@ -296,11 +297,29 @@ void hb_set_size( hb_job_t * job, int aspect, int pixels )
     else if( aspect > croppedAspect )
     {
         /* Need to crop on the top and bottom */
-        /* TODO */
+        addCrop = croppedHeight - croppedWidth * title->aspect *
+            title->height / aspect / title->width;
+        if( addCrop & 3 )
+        {
+            addCrop = ( addCrop + 1 ) / 2;
+            job->crop[0] += addCrop;
+            job->crop[1] += addCrop;
+        }
+        else if( addCrop & 2 )
+        {
+            addCrop /= 2;
+            job->crop[0] += addCrop - 1;
+            job->crop[1] += addCrop + 1;
+        }
+        else
+        {
+            addCrop /= 2;
+            job->crop[0] += addCrop;
+            job->crop[1] += addCrop;
+        }
     }
 
     /* Compute a resolution from the number of pixels and aspect */
-    int i, w, h;
     for( i = 0;; i++ )
     {
         w = 16 * i;
