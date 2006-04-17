@@ -29,6 +29,7 @@
         }, 
         {
             ACTIONS = {
+                convertCancel = id; 
                 convertGo = id; 
                 openBrowse = id; 
                 openGo = id; 
@@ -42,8 +43,10 @@
                 fConvertAudioPopUp = NSPopUpButton; 
                 fConvertFolderPopUp = NSPopUpButton; 
                 fConvertFormatPopUp = NSPopUpButton; 
+                fConvertGoButton = NSButton; 
                 fConvertIndicator = NSProgressIndicator; 
                 fConvertInfoString = NSTextField; 
+                fConvertOpenButton = NSButton; 
                 fConvertSubtitlePopUp = NSPopUpButton; 
                 fConvertTableView = NSTableView; 
                 fConvertView = NSView; 

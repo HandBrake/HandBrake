@@ -33,6 +33,8 @@
     IBOutlet NSPopUpButton       * fConvertSubtitlePopUp;
     IBOutlet NSTextField         * fConvertInfoString;
     IBOutlet NSProgressIndicator * fConvertIndicator;
+    IBOutlet NSButton            * fConvertOpenButton;
+    IBOutlet NSButton            * fConvertGoButton;
     NSMutableArray               * fConvertCheckArray;
     NSString                     * fConvertFolderString;
 
@@ -45,6 +47,7 @@
 - (void) openGo: (id) sender;
 
 - (void) convertGo: (id) sender;
+- (void) convertCancel: (id) sender;
 
 @end
 

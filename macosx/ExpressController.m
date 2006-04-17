@@ -12,6 +12,7 @@
 - (void) openTimer: (NSTimer *) timer;
 
 - (void) convertShow;
+- (void) convertEnable: (BOOL) b;
 - (void) convertTimer: (NSTimer *) timer;
 
 @end
@@ -292,6 +293,14 @@
     NSTimer * timer = [NSTimer scheduledTimerWithTimeInterval: 0.5
         target: self selector: @selector( convertTimer: ) userInfo: nil
         repeats: YES];
+
+    [self convertEnable: NO];
+}
+
+- (void) convertCancel: (id) sender
+{
+    hb_stop( fHandle );
+    [fConvertGoButton setEnabled: NO];
 }
 
 @end
@@ -454,6 +463,29 @@
     [image16 unlockFocus];                                                      
     [item setImage: image16];
     [image16 release];
+
+    [self convertEnable: YES];
+}
+
+- (void) convertEnable: (BOOL) b
+{
+    [fConvertTableView setEnabled: b];
+    [fConvertFolderPopUp setEnabled: b];
+    [fConvertFormatPopUp setEnabled: b];
+    [fConvertAspectPopUp setEnabled: b];
+    [fConvertAudioPopUp setEnabled: b];
+    [fConvertSubtitlePopUp setEnabled: b];
+    [fConvertOpenButton setEnabled: b];
+    if( b )
+    {
+        [fConvertGoButton setTitle: @"Convert"];
+        [fConvertGoButton setAction: @selector(convertGo:)];
+    }
+    else
+    {
+        [fConvertGoButton setTitle: @"Cancel"];
+        [fConvertGoButton setAction: @selector(convertCancel:)];
+    }
 }
 
 - (void) convertTimer: (NSTimer *) timer
@@ -502,6 +534,13 @@
             [fConvertInfoString setStringValue: @"Done."];
             [fConvertIndicator setIndeterminate: NO];
             [fConvertIndicator setDoubleValue: 0.0];
+            [self convertEnable: YES];
+
+            hb_job_t * job;
+            while( ( job = hb_job( fHandle, 0 ) ) )
+            {
+                hb_rem( fHandle, job );
+            }
             break;
 
         default:
