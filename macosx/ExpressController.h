@@ -29,6 +29,8 @@
     IBOutlet NSPopUpButton       * fConvertFolderPopUp;
     IBOutlet NSPopUpButton       * fConvertFormatPopUp;
     IBOutlet NSPopUpButton       * fConvertAspectPopUp;
+    IBOutlet NSPopUpButton       * fConvertAudioPopUp;
+    IBOutlet NSPopUpButton       * fConvertSubtitlePopUp;
     IBOutlet NSTextField         * fConvertInfoString;
     IBOutlet NSProgressIndicator * fConvertIndicator;
     NSMutableArray               * fConvertCheckArray;

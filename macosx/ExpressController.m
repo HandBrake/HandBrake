@@ -189,7 +189,7 @@
 
 - (void) convertGo: (id) sender
 {
-    int i;
+    int i, j;
 
     for( i = 0; i < hb_list_count( fList ); i++ )
     {
@@ -241,7 +241,47 @@
         hb_set_size( job, aspect, pixels );
 
         job->vquality = -1.0;
-        job->file     = strdup( [[NSString stringWithFormat:
+
+        const char * lang;
+
+        /* Audio selection */
+        hb_audio_t * audio;
+        lang = [[fConvertAudioPopUp titleOfSelectedItem] UTF8String];
+        job->audios[0] = -1;
+        for( j = 0; j < hb_list_count( title->list_audio ); j++ )
+        {
+            /* Choose the first track that matches the language */
+            audio = hb_list_item( title->list_audio, j );
+            if( !strcmp( lang, audio->lang_simple ) )
+            {
+                job->audios[0] = j;
+                break;
+            }
+        }
+        if( job->audios[0] == -1 )
+        {
+            /* If the language isn't available in this title, choose
+               the first track */
+            job->audios[0] = 0;
+        }
+        job->audios[1] = -1;
+
+        /* Subtitle selection */
+        hb_subtitle_t * subtitle;
+        lang = [[fConvertSubtitlePopUp titleOfSelectedItem] UTF8String];
+        job->subtitle = -1;
+        for( j = 0; j < hb_list_count( title->list_subtitle ); j++ )
+        {
+            /* Choose the first track that matches the language */
+            subtitle = hb_list_item( title->list_subtitle, j );
+            if( !strcmp( lang, subtitle->lang ) )
+            {
+                job->subtitle = j;
+                break;
+            }
+        }
+        
+        job->file = strdup( [[NSString stringWithFormat:
             @"%@/%p - Title %d.mp4", fConvertFolderString, self,
             title->index] UTF8String] );
         hb_add( fHandle, job );
@@ -355,16 +395,37 @@
 
 - (void) convertShow
 {
-    int i;
+    int i, j;
 
     fConvertCheckArray = [[NSMutableArray alloc] initWithCapacity:
         hb_list_count( fList )];
+    [fConvertAudioPopUp removeAllItems];
+    [fConvertSubtitlePopUp removeAllItems];
+    [fConvertSubtitlePopUp addItemWithTitle: @"None"];
     for( i = 0; i < hb_list_count( fList ); i++ )
     {
         /* Default is to convert titles longer than 30 minutes. */
         hb_title_t * title = hb_list_item( fList, i );
         [fConvertCheckArray addObject: [NSNumber numberWithBool:
             ( 60 * title->hours + title->minutes > 30 )]];
+
+        /* Update audio popup */
+        hb_audio_t * audio;
+        for( j = 0; j < hb_list_count( title->list_audio ); j++ )
+        {
+            audio = hb_list_item( title->list_audio, j );
+            [fConvertAudioPopUp addItemWithTitle:
+                [NSString stringWithUTF8String: audio->lang_simple]];
+        }
+
+        /* Update subtitle popup */
+        hb_subtitle_t * subtitle;
+        for( j = 0; j < hb_list_count( title->list_subtitle ); j++ )
+        {
+            subtitle = hb_list_item( title->list_subtitle, j );
+            [fConvertSubtitlePopUp addItemWithTitle:
+                [NSString stringWithUTF8String: subtitle->lang]];
+        }
     }
     [fConvertTableView reloadData];
 

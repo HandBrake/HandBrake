@@ -49,7 +49,12 @@ if $(OS) = MACOSX
               macosx/English.lproj/InfoPlist.strings
               macosx/English.lproj/MainMenu.nib/classes.nib
               macosx/English.lproj/MainMenu.nib/info.nib
-              macosx/English.lproj/MainMenu.nib/keyedobjects.nib ;
+              macosx/English.lproj/MainMenu.nib/keyedobjects.nib
+              macosx/ExpressController.h macosx/ExpressController.m
+              macosx/English.lproj/Express.nib/classes.nib
+              macosx/English.lproj/Express.nib/info.nib
+              macosx/English.lproj/Express.nib/keyedobjects.nib ;
+              
     OSXApp HandBrake.app : $(OSX_SRC) $(HB_LIBS) ;
     
     # Package

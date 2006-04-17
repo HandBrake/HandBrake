@@ -247,6 +247,8 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
             lang_for_code( vts->vtsi_mat->vts_audio_attr[i].lang_code ),
             audio->codec == HB_ACODEC_AC3 ? "AC3" : ( audio->codec ==
                 HB_ACODEC_MPGA ? "MPEG" : "LPCM" ) );
+        snprintf( audio->lang_simple, sizeof( audio->lang_simple ), "%s",
+                  lang_for_code( vts->vtsi_mat->vts_audio_attr[i].lang_code ) );
 
         hb_log( "scan: id=%x, lang=%s", audio->id,
                 audio->lang );

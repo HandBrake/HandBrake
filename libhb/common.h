@@ -189,6 +189,7 @@ struct hb_audio_s
 {
     int  id;
     char lang[1024];
+    char lang_simple[1024];
     int  codec;
     int  rate;
     int  bitrate;
