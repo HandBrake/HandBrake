@@ -8,14 +8,16 @@
 
 @interface DriveDetector : NSObject
 {
-    id             fTarget;
-    SEL            fSelector;
+    id                  fTarget;
+    SEL                 fSelector;
     
-    int            fCount;
-    NSMutableArray * fDrives;
-    NSTimer        * fTimer;
+    int                 fCount;
+    NSMutableDictionary * fDrives;
+    NSTimer             * fTimer;
 }
 
-- (id) initWithCallback: (id) target selector: (SEL) selector;
+- (id)   initWithCallback: (id) target selector: (SEL) selector;
+- (void) run;
+- (void) stop;
 
 @end

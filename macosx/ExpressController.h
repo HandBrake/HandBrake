@@ -39,6 +39,7 @@
     NSString                     * fConvertFolderString;
 
     DriveDetector                * fDriveDetector;
+    NSDictionary                 * fDrives;
 }
 
 - (void) openShow: (id) sender;

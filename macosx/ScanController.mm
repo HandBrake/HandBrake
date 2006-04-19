@@ -41,6 +41,7 @@
     DriveDetector * driveDetector;
     driveDetector = [[DriveDetector alloc] initWithCallback: self
         selector: @selector( UpdatePopup: )];
+    [driveDetector run];
     
     [NSApp beginSheet: fPanel modalForWindow: fWindow
         modalDelegate: nil didEndSelector: nil contextInfo: nil];
@@ -48,6 +49,7 @@
     [NSApp endSheet: fPanel];
     [fPanel orderOut: self];
 
+    [driveDetector stop];
     [driveDetector release];
 }
 

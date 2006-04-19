@@ -5,7 +5,7 @@
 
 @interface ExpressController (Private)
 
-- (void) openUpdateDrives: (NSArray *) drives;
+- (void) openUpdateDrives: (NSDictionary *) drives;
 - (void) openBrowseDidEnd: (NSOpenPanel *) sheet returnCode: (int)
     returnCode contextInfo: (void *) contextInfo;
 - (void) openEnable: (BOOL) b;
@@ -29,6 +29,7 @@
     /* Show the "Open DVD" interface */
     fDriveDetector = [[DriveDetector alloc] initWithCallback: self
         selector: @selector( openUpdateDrives: )];
+    [fDriveDetector run];
     [self openEnable: YES];
     [fWindow setContentSize: [fOpenView frame].size];
     [fWindow setContentView: fOpenView];
@@ -141,8 +142,7 @@
     [fWindow setFrame: frame display: YES animate: YES];
     [fWindow setContentView: fOpenView];
 
-    fDriveDetector = [[DriveDetector alloc] initWithCallback: self
-        selector: @selector( openUpdateDrives: )];
+    [fDriveDetector run];
 }
 
 - (void) openMatrixChanged: (id) sender
@@ -172,6 +172,7 @@
     [fOpenIndicator setIndeterminate: YES];
     [fOpenIndicator startAnimation: nil];
     [fOpenProgressField setStringValue: @"Opening..."];
+    [fDriveDetector stop];
 
     if( [fOpenMatrix selectedRow] )
     {
@@ -179,8 +180,8 @@
     }
     else
     {
-        hb_scan( fHandle, [[fOpenPopUp titleOfSelectedItem]
-                    UTF8String], 0 );
+        hb_scan( fHandle, [[fDrives objectForKey: [fOpenPopUp
+                 titleOfSelectedItem]] UTF8String], 0 );
     }
 
     NSTimer * timer = [NSTimer scheduledTimerWithTimeInterval: 0.5
@@ -311,10 +312,22 @@
 
 @implementation ExpressController (Private)
 
-- (void) openUpdateDrives: (NSArray *) drives
+- (void) openUpdateDrives: (NSDictionary *) drives
 {
+    if( fDrives )
+    {
+        [fDrives release];
+    }
+    fDrives = [[NSDictionary alloc] initWithDictionary: drives];
+
+    NSString * device;
+    NSEnumerator * enumerator = [fDrives keyEnumerator];
     [fOpenPopUp removeAllItems];
-    [fOpenPopUp addItemsWithTitles: drives];
+    while( ( device = [enumerator nextObject] ) )
+    {
+        [fOpenPopUp addItemWithTitle: device];
+    }
+
     if( ![fOpenPopUp numberOfItems] )
     {
         [fOpenPopUp addItemWithTitle: INSERT_STRING];
@@ -392,8 +405,11 @@
 
             if( hb_list_count( fList ) )
             {
-                [fDriveDetector release];
                 [self convertShow];
+            }
+            else
+            {
+                [fDriveDetector run];
             }
             break;
 

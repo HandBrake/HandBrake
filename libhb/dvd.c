@@ -41,6 +41,29 @@ struct hb_dvd_s
 static void FindNextCell( hb_dvd_t * );
 static int  dvdtime2msec( dvd_time_t * );
 
+char * hb_dvd_name( char * path )
+{
+    static char name[1024];
+    unsigned char unused[1024];
+    dvd_reader_t * reader;
+
+    reader = DVDOpen( path );
+    if( !reader )
+    {
+        return NULL;
+    }
+
+    if( DVDUDFVolumeInfo( reader, name, sizeof( name ),
+                          unused, sizeof( unused ) ) )
+    {
+        DVDClose( reader );
+        return NULL;
+    }
+
+    DVDClose( reader );
+    return name;
+}
+
 /***********************************************************************
  * hb_dvd_init
  ***********************************************************************

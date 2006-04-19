@@ -11,6 +11,7 @@
 #include <IOKit/storage/IODVDMedia.h>
 
 #include "DriveDetector.h"
+#include "hb.h"
 
 @interface DriveDetector (Private)
 
@@ -22,7 +23,7 @@
 
 - (void) dealloc
 {
-    [fTimer invalidate];
+    [fDrives release];
     [super dealloc];
 }
 
@@ -32,8 +33,13 @@
     fSelector = selector;
     
     fCount  = -1;
-    fDrives = [[NSMutableArray alloc] initWithCapacity: 1];
+    fDrives = [[NSMutableDictionary alloc] initWithCapacity: 1];
     
+    return self;
+}
+
+- (void) run
+{
     /* Set up a timer to check devices every second */
     fTimer = [NSTimer scheduledTimerWithTimeInterval: 1.0 target: self
         selector: @selector( detectTimer: ) userInfo: nil repeats: YES];
@@ -42,8 +48,11 @@
 
     /* Do a first update right away */
     [fTimer fire];
+}
 
-    return self;
+- (void) stop
+{
+    [fTimer invalidate];
 }
 
 - (void) detectTimer: (NSTimer *) timer
@@ -82,6 +91,7 @@
     next_media = IOIteratorNext( media_iterator );
     if( next_media )
     {
+        char * name;
         char psz_buf[0x32];
         size_t dev_path_length;
         CFTypeRef str_bsd_path;
@@ -106,7 +116,11 @@
                                     sizeof(psz_buf) - dev_path_length,
                                     kCFStringEncodingASCII ) )
             {
-                [fDrives addObject: [NSString stringWithCString: psz_buf]];
+                if( ( name = hb_dvd_name( psz_buf ) ) )
+                {
+                    [fDrives setObject: [NSString stringWithCString: psz_buf]
+                        forKey: [NSString stringWithCString: name]];
+                }
             }
 
             CFRelease( str_bsd_path );
