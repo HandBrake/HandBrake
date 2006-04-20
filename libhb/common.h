@@ -240,6 +240,7 @@ struct hb_subtitle_s
 struct hb_title_s
 {
     char        dvd[1024];
+    char        name[1024];
     int         index;
     int         vts;
     int         ttn;

@@ -284,8 +284,9 @@
         }
         
         job->file = strdup( [[NSString stringWithFormat:
-            @"%@/%p - Title %d.mp4", fConvertFolderString, self,
-            title->index] UTF8String] );
+                @"%@/%s - Title %d - %@.mp4", fConvertFolderString,
+                title->name, title->index, [fConvertFormatPopUp
+                titleOfSelectedItem]] UTF8String] );
         hb_add( fHandle, job );
     }
 

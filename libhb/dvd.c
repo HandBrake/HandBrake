@@ -121,8 +121,14 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
     int            c;
     uint64_t       duration;
     float          duration_correction;
+    unsigned char  unused[1024];
 
     title = hb_title_init( d->path, t );
+    if( DVDUDFVolumeInfo( d->reader, title->name, sizeof( title->name ),
+                          unused, sizeof( unused ) ) )
+    {
+        goto fail;
+    }
 
     hb_log( "scan: scanning title %d", t );
 
