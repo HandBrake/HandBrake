@@ -123,14 +123,22 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
     float          duration_correction;
     unsigned char  unused[1024];
 
+    hb_log( "scan: scanning title %d", t );
+
     title = hb_title_init( d->path, t );
     if( DVDUDFVolumeInfo( d->reader, title->name, sizeof( title->name ),
                           unused, sizeof( unused ) ) )
     {
-        goto fail;
+        char * p_cur, * p_last = d->path;
+        for( p_cur = d->path; *p_cur; p_cur++ )
+        {
+            if( p_cur[0] == '/' && p_cur[1] )
+            {
+                p_last = &p_cur[1];
+            }
+        }
+        snprintf( title->name, sizeof( title->name ), "%s", p_last );
     }
-
-    hb_log( "scan: scanning title %d", t );
 
     /* VTS which our title is in */
     title->vts = d->vmg->tt_srpt->title[t-1].title_set_nr;
