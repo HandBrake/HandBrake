@@ -77,7 +77,7 @@
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		4D1125D709D72FD200E0657B /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
 		4D118405053054CD00C39CA9 /* HandBrake.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = HandBrake.icns; sourceTree = "<group>"; };
-		4D1EA2DA0993B01000FDC1A2 /* HandBrake Express.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HandBrake Express.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D1EA2DA0993B01000FDC1A2 /* Instant HandBrake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Instant HandBrake.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D1EA2DC0993B01000FDC1A2 /* Express.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Express.plist; sourceTree = "<group>"; };
 		4D1EA3000993B13700FDC1A2 /* Express.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Express.nib; path = English.lproj/Express.nib; sourceTree = "<group>"; };
 		4D1EA31A0993B24700FDC1A2 /* ExpressController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ExpressController.h; sourceTree = "<group>"; };
@@ -158,7 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				4DD93FA6082036E8008E1322 /* HandBrake.app */,
-				4D1EA2DA0993B01000FDC1A2 /* HandBrake Express.app */,
+				4D1EA2DA0993B01000FDC1A2 /* Instant HandBrake.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -229,9 +229,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		4D1EA2D90993B01000FDC1A2 /* HandBrake Express */ = {
+		4D1EA2D90993B01000FDC1A2 /* Instant HandBrake */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4D1EA2DD0993B01100FDC1A2 /* Build configuration list for PBXNativeTarget "HandBrake Express" */;
+			buildConfigurationList = 4D1EA2DD0993B01100FDC1A2 /* Build configuration list for PBXNativeTarget "Instant HandBrake" */;
 			buildPhases = (
 				4D1EA2D60993B01000FDC1A2 /* Resources */,
 				4D1EA2D70993B01000FDC1A2 /* Sources */,
@@ -244,7 +244,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				INFOPLIST_FILE = "HandBrake Express.plist";
+				INFOPLIST_FILE = "Instant HandBrake.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -253,15 +253,15 @@
 					AppKit,
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = "HandBrake Express";
+				PRODUCT_NAME = "Instant HandBrake";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
 			dependencies = (
 			);
-			name = "HandBrake Express";
-			productName = "HandBrake Express";
-			productReference = 4D1EA2DA0993B01000FDC1A2 /* HandBrake Express.app */;
+			name = "Instant HandBrake";
+			productName = "Instant HandBrake";
+			productReference = 4D1EA2DA0993B01000FDC1A2 /* Instant HandBrake.app */;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
 <plist version=\"1.0\">
@@ -271,7 +271,7 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.yourcompany.HandBrake Express</string>
+	<string>com.yourcompany.Instant HandBrake</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
@@ -361,7 +361,7 @@
 			projectDirPath = "";
 			targets = (
 				4DD93F8D082036E8008E1322 /* HandBrake */,
-				4D1EA2D90993B01000FDC1A2 /* HandBrake Express */,
+				4D1EA2D90993B01000FDC1A2 /* Instant HandBrake */,
 			);
 		};
 /* End PBXProject section */
@@ -470,7 +470,7 @@
 					../contrib/lib/libxvidcore.a,
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = "HandBrake Express";
+				PRODUCT_NAME = "Instant HandBrake";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
@@ -507,7 +507,7 @@
 					../contrib/lib/libxvidcore.a,
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = "HandBrake Express";
+				PRODUCT_NAME = "Instant HandBrake";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
@@ -542,7 +542,7 @@
 					../contrib/lib/libxvidcore.a,
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = "HandBrake Express";
+				PRODUCT_NAME = "Instant HandBrake";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
@@ -695,7 +695,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4D1EA2DD0993B01100FDC1A2 /* Build configuration list for PBXNativeTarget "HandBrake Express" */ = {
+		4D1EA2DD0993B01100FDC1A2 /* Build configuration list for PBXNativeTarget "Instant HandBrake" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4D1EA2DE0993B01100FDC1A2 /* Development */,
