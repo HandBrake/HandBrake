@@ -73,16 +73,6 @@ actions LibAvUtil
     strip -S $(<)
 }
 LibAvUtil $(SUBDIR)/lib/libavutil.a : $(SUBDIR)/lib/libavcodec.a ;
-
-rule LibAvFormat
-{
-    Depends $(<) : $(>) ;
-    Depends lib  : $(<) ;
-}
-actions LibAvFormat
-{
-    strip -S $(<)
-}
 LibAvUtil $(SUBDIR)/lib/libavformat.a : $(SUBDIR)/lib/libavcodec.a ;
 
 # libdvdcss

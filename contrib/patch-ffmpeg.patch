@@ -1,6 +1,6 @@
 diff -ru ffmpeg-20060326-bak/configure ffmpeg-20060326/configure
 --- ffmpeg-20060326-bak/configure	2006-03-26 22:04:53.000000000 +0200
-+++ ffmpeg-20060326/configure	2006-03-30 13:29:36.000000000 +0200
++++ ffmpeg-20060326/configure	2006-04-26 16:48:00.000000000 +0200
 @@ -272,7 +272,7 @@
  2.9-beos-991026*|2.9-beos-000224*) echo "R5/GG gcc"
  mmx="no"
@@ -12,7 +12,7 @@ diff -ru ffmpeg-20060326-bak/configure ffmpeg-20060326/configure
  esac
 diff -ru ffmpeg-20060326-bak/libavformat/movenc.c ffmpeg-20060326/libavformat/movenc.c
 --- ffmpeg-20060326-bak/libavformat/movenc.c	2006-03-26 22:04:53.000000000 +0200
-+++ ffmpeg-20060326/libavformat/movenc.c	2006-03-30 13:31:03.000000000 +0200
++++ ffmpeg-20060326/libavformat/movenc.c	2006-04-26 16:48:54.000000000 +0200
 @@ -22,6 +22,10 @@
  #include "avio.h"
  #include "mov.h"
@@ -49,9 +49,37 @@ diff -ru ffmpeg-20060326-bak/libavformat/movenc.c ffmpeg-20060326/libavformat/mo
              put_be16(pb, sps_size);
              put_buffer(pb, sps, sps_size);
              put_byte(pb, 1); /* number of pps */
+@@ -621,6 +626,18 @@
+     return tag;
+ }
+ 
++static int mov_write_colr_tag(ByteIOContext *pb)
++{
++    put_be32( pb, 0x12 );
++    put_tag( pb, "colr" );
++    put_tag( pb, "nclc" );
++    put_be16( pb, 6 );
++    put_be16( pb, 1 );
++    put_be16( pb, 6 );
++    put_be32( pb, 0 );
++    return 0x12;
++}
++
+ static int mov_write_video_tag(ByteIOContext *pb, MOVTrack* track)
+ {
+     offset_t pos = url_ftell(pb);
+@@ -670,6 +687,8 @@
+     else if(track->enc->codec_id == CODEC_ID_H264)
+         mov_write_avcc_tag(pb, track);
+ 
++    mov_write_colr_tag(pb);
++
+     return updateSize (pb, pos);
+ }
+ 
 diff -ru ffmpeg-20060326-bak/libavformat/tcp.c ffmpeg-20060326/libavformat/tcp.c
 --- ffmpeg-20060326-bak/libavformat/tcp.c	2006-03-26 22:04:53.000000000 +0200
-+++ ffmpeg-20060326/libavformat/tcp.c	2006-03-30 13:29:36.000000000 +0200
++++ ffmpeg-20060326/libavformat/tcp.c	2006-04-26 16:48:00.000000000 +0200
 @@ -112,11 +112,13 @@
                  break;
          }
