@@ -19,11 +19,11 @@ Step 1: get needed tools
     On BeOS, you can download it at <http://www.haiku-os.org/develop.php>.
     On OS X, you cannot use the modified jam shipped with the developer
     tools, use this one instead:
-    <http://handbrake.m0k.org/files/jam-2.5rc3-OSX.zip>.
-+ nasm (except for OS X)
+    <http://download.m0k.org/handbrake/jam-2.5rc3-OSX.zip>.
++ nasm (Only for x86. On Mac OS X Intel, Nasm CVS is required)
 
 Step 2: build
 =============
 
-Run `jam'. This will build every library HandBrake requires, then
-HandBrake itself.
+Run `./configure && jam'. This will build every library HandBrake
+requires, then HandBrake itself.

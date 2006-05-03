@@ -527,7 +527,7 @@ static void ShowHelp()
         if( i != hb_audio_rates_count - 1 )
             fprintf( stderr, "/" );
     }
-    fprintf( stderr, ")\n"
+    fprintf( stderr, " kHz)\n"
     "    -b, --vb <kb/s>         Set video bitrate (default: 1000)\n"
     "    -q, --quality <float>   Set video quality (0.0..1.0)\n"
     "    -S, --size <MB>         Set target size\n"

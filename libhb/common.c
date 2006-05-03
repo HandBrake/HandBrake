@@ -21,11 +21,11 @@ int hb_video_rates_count = sizeof( hb_video_rates ) /
                            sizeof( hb_rate_t );
 
 hb_rate_t hb_audio_rates[] =
-{ { "22050", 22050 }, { "24000", 24000 },
-  { "44100", 44100 }, { "48000", 48000 } };
+{ { "22.05", 22050 }, { "24", 24000 }, { "32", 32000 },
+  { "44.1",  44100 }, { "48", 48000 } };
 int hb_audio_rates_count   = sizeof( hb_audio_rates ) /
                              sizeof( hb_rate_t );
-int hb_audio_rates_default = 2; /* 44100 Hz */
+int hb_audio_rates_default = 3; /* 44100 Hz */
 
 hb_rate_t hb_audio_bitrates[] =
 { {  "32",  32 }, {  "40",  40 }, {  "48",  48 }, {  "56",  56 },
