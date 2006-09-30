@@ -71,6 +71,7 @@ static void MuxerFunc( void * _mux )
         {
             case HB_MUX_MP4:
             case HB_MUX_PSP:
+			case HB_MUX_IPOD:
                 m = hb_mux_mp4_init( job );
                 break;
             case HB_MUX_AVI:

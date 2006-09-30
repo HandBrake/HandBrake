@@ -1,25 +1,21 @@
 /* $Id: muxmp4.c,v 1.24 2005/11/04 13:09:41 titer Exp $
 
-   This file is part of the HandBrake source code.
-   Homepage: <http://handbrake.m0k.org/>.
-   It may be used under the terms of the GNU General Public License. */
+This file is part of the HandBrake source code.
+Homepage: <http://handbrake.m0k.org/>.
+It may be used under the terms of the GNU General Public License. */
 
 #include <ffmpeg/avformat.h>
 
 #include "hb.h"
 
 int64_t ff_gcd(int64_t a, int64_t b);
-static inline int ff_get_fourcc(const char *s)
-{
-    return (s[0]) + (s[1]<<8) + (s[2]<<16) + (s[3]<<24);
-}
 
 struct hb_mux_object_s
 {
     HB_MUX_COMMON;
-
+	
     hb_job_t * job;
-
+	
     AVFormatContext * format;
 };
 
@@ -29,10 +25,10 @@ struct hb_mux_data_s
 };
 
 /**********************************************************************
- * MP4Init
- **********************************************************************
- * Allocates hb_mux_data_t structures, create file and write headers
- *********************************************************************/
+* MP4Init
+**********************************************************************
+* Allocates hb_mux_data_t structures, create file and write headers
+*********************************************************************/
 static int MP4Init( hb_mux_object_t * m )
 {
     hb_job_t   * job   = m->job;
@@ -43,28 +39,40 @@ static int MP4Init( hb_mux_object_t * m )
     AVFormatContext * oc;
     AVStream *st;
     AVFormatParameters params;
-
+	
     register_protocol(&file_protocol);
-    movenc_init();
-
+    //movenc_init();
+	av_register_all();
+	
     oc = av_alloc_format_context();
-
+	
     if( job->mux & HB_MUX_PSP )
     {
         oc->oformat = guess_format( "psp", NULL, NULL );
+		hb_log( "using format psp" );
+    }
+	else if( job->mux & HB_MUX_IPOD )
+    {
+		/* added this format to ffmpeg source */
+        oc->oformat = guess_format( "ipod", NULL, NULL );
+		hb_log( "using format ipod" );
     }
     else
     {
         oc->oformat = guess_format( "mp4", NULL, NULL );
+		hb_log( "using format mp4" );
     }
     if( !oc->oformat )
     {
         hb_log( "guess_format failed" );
         return 1;
     }
+	
+	hb_log( "using oformat: %s", oc->oformat->name );
+	
     snprintf( oc->filename, sizeof( oc->filename ),
               "%s", job->file );
-
+	
     st = av_new_stream( oc, oc->nb_streams );
     if( !st )
     {
@@ -75,28 +83,28 @@ static int MP4Init( hb_mux_object_t * m )
     st->codec->flags |= CODEC_FLAG_GLOBAL_HEADER;
     st->codec->codec_type = CODEC_TYPE_VIDEO;
     st->codec->codec_id = ( job->vcodec == HB_VCODEC_X264 ) ?
-                            CODEC_ID_H264 : CODEC_ID_MPEG4;
+CODEC_ID_H264 : CODEC_ID_MPEG4;
     st->codec->extradata= job->config.mpeg4.bytes;
     st->codec->extradata_size= job->config.mpeg4.length;
     st->codec->bit_rate = 1000 * job->vbitrate;
     i = ff_gcd( job->vrate_base, job->vrate );
     st->codec->time_base = (AVRational){ job->vrate_base / i, job->vrate / i };
-
+	
     st->codec->pix_fmt = PIX_FMT_YUV420P;
     st->codec->width = job->width;
     st->codec->height = job->height;
     st->codec->has_b_frames = 0;
-
+	
     job->mux_data = malloc( sizeof( hb_mux_data_t ) );
     job->mux_data->track = 0;
-
+	
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = hb_list_item( title->list_audio, i );
-
+		
         audio->mux_data = malloc( sizeof( hb_mux_data_t ) );
         audio->mux_data->track = i + 1;
-
+		
         st = av_new_stream( oc, oc->nb_streams );
         if( !st )
         {
@@ -116,35 +124,35 @@ static int MP4Init( hb_mux_object_t * m )
         st->codec->frame_size = 1024;
         st->codec->block_align = 0;
     }
-
+	
     oc->timestamp = 0;
     if( url_fopen( &oc->pb, job->file, URL_WRONLY ) < 0 )
     {
         hb_log( "url_fopen failed (%s)", job->file );
         return 1;
     }
-
+	
     memset( &params, 0, sizeof( params ) );
     if( av_set_parameters( oc, &params ) < 0 )
     {
         hb_log( "av_set_parameters failed" );
         return 1;
     }
-
+	
     oc->packet_size= 0;
     oc->mux_rate= 0;
     oc->preload= (int)(0.5*AV_TIME_BASE);
     oc->max_delay= (int)(0.7*AV_TIME_BASE);
     oc->loop_output = AVFMT_NOOUTPUTLOOP;
-
+	
     if( av_write_header( oc ) < 0 )
     {
         hb_log( "av_write_header failed" );
         return 1;
     }
-
+	
     m->format = oc;
-
+	
     return 0;
 }
 
@@ -153,19 +161,19 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
 {
     AVPacket pkt;
     av_init_packet(&pkt);
-
+	
     pkt.stream_index = mux_data->track;
     pkt.data         = buf->data;
     pkt.size         = buf->size;
     pkt.pts          = buf->start;
-
+	
     if( buf->key )
     {
         pkt.flags |= PKT_FLAG_KEY;
     }
-
+	
     av_interleaved_write_frame( m->format, &pkt );
-
+	
     return 0;
 }
 
@@ -174,7 +182,7 @@ static int MP4End( hb_mux_object_t * m )
     av_write_trailer( m->format );
     url_fclose( &m->format->pb );
     av_free( m->format );
-
+	
     return 0;
 }
 

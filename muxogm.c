@@ -170,7 +170,7 @@ static int OGMInit( hb_mux_object_t * m )
     SetWLE ( &h.i_bits_per_sample, 0 );
     SetDWLE( &h.header.video.i_width,  job->width );
     SetDWLE( &h.header.video.i_height, job->height );
-    op.packet   = (char*)&h;
+    op.packet   = (unsigned char*)&h;
     op.bytes    = sizeof( ogg_stream_header_t );
     op.b_o_s    = 1;
     op.e_o_s    = 0;

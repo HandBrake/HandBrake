@@ -183,7 +183,7 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
             title->cell_end, title->block_start, title->block_end,
             title->block_count );
 
-    if( title->block_count < 2048 )
+    if( title->block_count < 2048  )
     {
         hb_log( "scan: title too short (%d blocks), ignoring",
                 title->block_count );

@@ -248,7 +248,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
 
         mpeg2 = hb_libmpeg2_init();
 
-        for( j = 0; j < 10240; j++ )
+        for( j = 0; j < 10240 ; j++ )
         {
             if( !hb_dvd_read( data->dvd, buf_ps ) )
             {
