@@ -1,85 +1,130 @@
-diff -ru ffmpeg-20060326-bak/configure ffmpeg-20060326/configure
---- ffmpeg-20060326-bak/configure	2006-03-26 22:04:53.000000000 +0200
-+++ ffmpeg-20060326/configure	2006-04-26 16:48:00.000000000 +0200
-@@ -272,7 +272,7 @@
+--- ffmpeg/configure	2006-09-23 14:22:08.000000000 -0400
++++ ffmpeg-patched/configure	2006-09-23 14:37:49.000000000 -0400
+@@ -493,7 +493,7 @@
  2.9-beos-991026*|2.9-beos-000224*) echo "R5/GG gcc"
  mmx="no"
  ;;
 -*20010315*) echo "BeBits gcc"
 +*20010315*|2.95.3*) echo "BeBits gcc"
- CFLAGS="$CFLAGS -fno-expensive-optimizations"
+ add_cflags "-fno-expensive-optimizations"
  ;;
  esac
-diff -ru ffmpeg-20060326-bak/libavformat/movenc.c ffmpeg-20060326/libavformat/movenc.c
---- ffmpeg-20060326-bak/libavformat/movenc.c	2006-03-26 22:04:53.000000000 +0200
-+++ ffmpeg-20060326/libavformat/movenc.c	2006-04-26 16:48:54.000000000 +0200
-@@ -22,6 +22,10 @@
- #include "avio.h"
- #include "mov.h"
+--- ffmpeg/libavformat/movenc.c	2006-09-23 14:22:08.000000000 -0400
++++ ffmpeg-patched/libavformat/movenc.c	2006-09-23 14:49:42.000000000 -0400
+@@ -34,6 +34,7 @@
+ #define MODE_PSP 3 // example working PSP command line:
+ // ffmpeg -i testinput.avi  -f psp -r 14.985 -s 320x240 -b 768 -ar 24000 -ab 32 M4V00001.MP4
+ #define MODE_3G2 4
++#define MODE_IPOD 5
  
-+#ifndef UINT32_MAX
-+#define UINT32_MAX (4294967295U)
-+#endif
-+
- #undef NDEBUG
- #include <assert.h>
- 
-@@ -435,11 +439,6 @@
-             end = track->vosData + track->vosLen;
- 
-             put_byte(pb, 1); /* version */
--            put_byte(pb, 77); /* profile */
--            put_byte(pb, 64); /* profile compat */
--            put_byte(pb, 30); /* level */
--            put_byte(pb, 0xff); /* 6 bits reserved (111111) + 2 bits nal size length - 1 (11) */
--            put_byte(pb, 0xe1); /* 3 bits reserved (111) + 5 bits number of sps (00001) */
- 
-             /* look for sps and pps */
-             while (buf < end) {
-@@ -458,6 +457,12 @@
-             }
-             assert(sps);
-             assert(pps);
-+
-+            put_byte(pb, sps[1]); /* profile */
-+            put_byte(pb, sps[2]); /* profile compat */
-+            put_byte(pb, sps[3]); /* level */
-+            put_byte(pb, 0xff); /* 6 bits reserved (111111) + 2 bits nal size length - 1 (11) */
-+            put_byte(pb, 0xe1); /* 3 bits reserved (111) + 5 bits number of sps (00001) */
-             put_be16(pb, sps_size);
-             put_buffer(pb, sps, sps_size);
-             put_byte(pb, 1); /* number of pps */
-@@ -621,6 +626,18 @@
+ typedef struct MOVIentry {
+     unsigned int flags, size;
+@@ -600,6 +601,18 @@
      return tag;
  }
  
 +static int mov_write_colr_tag(ByteIOContext *pb)
 +{
-+    put_be32( pb, 0x12 );
-+    put_tag( pb, "colr" );
-+    put_tag( pb, "nclc" );
-+    put_be16( pb, 6 );
-+    put_be16( pb, 1 );
-+    put_be16( pb, 6 );
-+    put_be32( pb, 0 );
-+    return 0x12;
++	put_be32( pb, 0x12 );
++	put_tag( pb, "colr" );
++	put_tag( pb, "nclc" );
++	put_be16( pb, 6 );
++	put_be16( pb, 1 );
++	put_be16( pb, 6 );
++	put_be32( pb, 0 );
++	return 0x12;
 +}
 +
  static int mov_write_video_tag(ByteIOContext *pb, MOVTrack* track)
  {
      offset_t pos = url_ftell(pb);
-@@ -670,6 +687,8 @@
-     else if(track->enc->codec_id == CODEC_ID_H264)
-         mov_write_avcc_tag(pb, track);
- 
-+    mov_write_colr_tag(pb);
+@@ -649,8 +662,21 @@
+         mov_write_d263_tag(pb);
+     else if(track->enc->codec_id == CODEC_ID_SVQ3)
+         mov_write_svq3_tag(pb);
+-    else if(track->enc->codec_id == CODEC_ID_H264)
+-        mov_write_avcc_tag(pb, track);
++	else if(track->enc->codec_id == CODEC_ID_H264) {
++		mov_write_avcc_tag(pb, track);
++		if (track->mode == MODE_IPOD) {
++			put_be32(pb, 0x1C); /* size ... reports as 28 in mp4box! */
++			put_tag(pb, "uuid");
++			put_be32(pb, 0x6B6840F2);
++			put_be32(pb, 0x5F244FC5);
++			put_be32(pb, 0xBA39A51B);
++			put_be32(pb, 0xCF0323F3);
++			put_be32(pb, 0x00000001);
++			put_be32(pb, 0x0000039C); 
++		}
++	}
 +
++	mov_write_colr_tag(pb);
+ 
      return updateSize (pb, pos);
  }
+@@ -903,6 +929,10 @@
+     /* Track width and height, for visual only */
+     if(track->enc->codec_type == CODEC_TYPE_VIDEO) {
+         double sample_aspect_ratio = av_q2d(track->enc->sample_aspect_ratio);
++		if (track->mode == MODE_IPOD) {
++			/* FIXME , I do not believe this is needed, bad assumption */
++			sample_aspect_ratio = 1;
++		}
+         if( !sample_aspect_ratio ) sample_aspect_ratio = 1;
+         put_be32(pb, sample_aspect_ratio * track->enc->width*0x10000);
+         put_be32(pb, track->enc->height*0x10000);
+@@ -1348,6 +1378,8 @@
+         put_tag(pb, "MSNV");
+     else if ( mov->mode == MODE_MP4 )
+         put_tag(pb, "isom");
++	else if ( mov->mode == MODE_IPOD )
++        put_tag(pb, "isom");
+     else
+         put_tag(pb, "qt  ");
  
-diff -ru ffmpeg-20060326-bak/libavformat/tcp.c ffmpeg-20060326/libavformat/tcp.c
---- ffmpeg-20060326-bak/libavformat/tcp.c	2006-03-26 22:04:53.000000000 +0200
-+++ ffmpeg-20060326/libavformat/tcp.c	2006-04-26 16:48:00.000000000 +0200
+@@ -1359,6 +1391,8 @@
+         put_tag(pb, "3g2a");
+     else if ( mov->mode == MODE_PSP )
+         put_tag(pb, "MSNV");
++	else if ( mov->mode == MODE_IPOD )
++        put_tag(pb, "mp41");
+     else if ( mov->mode == MODE_MP4 )
+         put_tag(pb, "mp41");
+     else
+@@ -1440,7 +1474,8 @@
+         else if (!strcmp("3g2", s->oformat->name)) mov->mode = MODE_3G2;
+         else if (!strcmp("mov", s->oformat->name)) mov->mode = MODE_MOV;
+         else if (!strcmp("psp", s->oformat->name)) mov->mode = MODE_PSP;
+-
++		else if (!strcmp("ipod", s->oformat->name)) mov->mode = MODE_IPOD;
++		
+         mov_write_ftyp_tag(pb,s);
+         if ( mov->mode == MODE_PSP ) {
+             if ( s->nb_streams != 2 ) {
+@@ -1640,6 +1675,21 @@
+     .flags = AVFMT_GLOBALHEADER,
+ };
+ #endif
++#ifdef CONFIG_IPOD_MUXER
++AVOutputFormat ipod_muxer = {
++    "ipod",
++    "ipod mp4 format",
++    "application/mp4",
++    "mp4,m4v,ipod",
++    sizeof(MOVContext),
++    CODEC_ID_AAC,
++    CODEC_ID_MPEG4,
++    mov_write_header,
++    mov_write_packet,
++    mov_write_trailer,
++    .flags = AVFMT_GLOBALHEADER,
++};
++#endif
+ #ifdef CONFIG_PSP_MUXER
+ AVOutputFormat psp_muxer = {
+     "psp",
+--- ffmpeg/libavformat/tcp.c	2006-09-23 14:22:08.000000000 -0400
++++ ffmpeg-patched/libavformat/tcp.c	2006-09-23 14:34:32.000000000 -0400
 @@ -112,11 +112,13 @@
                  break;
          }
@@ -94,3 +139,35 @@ diff -ru ffmpeg-20060326-bak/libavformat/tcp.c ffmpeg-20060326/libavformat/tcp.c
      }
      s->fd = fd;
      return 0;
+--- ffmpeg/libavformat/allformats.h	2006-09-23 14:22:08.000000000 -0400
++++ ffmpeg-patched/libavformat/allformats.h	2006-09-23 15:02:41.000000000 -0400
+@@ -74,6 +74,7 @@
+ extern AVOutputFormat mov_muxer;
+ extern AVOutputFormat tgp_muxer;
+ extern AVOutputFormat mp4_muxer;
++extern AVOutputFormat ipod_muxer;
+ extern AVOutputFormat psp_muxer;
+ extern AVOutputFormat tg2_muxer;
+ extern AVInputFormat mp3_demuxer;
+--- ffmpeg/libavformat/allformats.c	2006-09-23 14:22:08.000000000 -0400
++++ ffmpeg-patched/libavformat/allformats.c	2006-09-23 14:26:11.000000000 -0400
+@@ -204,6 +204,9 @@
+ #ifdef CONFIG_PSP_MUXER
+     av_register_output_format(&psp_muxer);
+ #endif
++#ifdef CONFIG_IPOD_MUXER
++    av_register_output_format(&ipod_muxer);
++#endif
+ #ifdef CONFIG_TG2_MUXER
+     av_register_output_format(&tg2_muxer);
+ #endif
+--- ffmpeg/libavformat/Makefile	2006-09-23 14:22:08.000000000 -0400
++++ ffmpeg-patched/libavformat/Makefile	2006-09-23 20:15:09.000000000 -0400
+@@ -62,6 +62,7 @@
+ OBJS-$(CONFIG_TGP_MUXER)                 += movenc.o riff.o isom.o
+ OBJS-$(CONFIG_MP4_MUXER)                 += movenc.o riff.o isom.o
+ OBJS-$(CONFIG_PSP_MUXER)                 += movenc.o riff.o isom.o
++OBJS-$(CONFIG_IPOD_MUXER)                 += movenc.o riff.o isom.o
+ OBJS-$(CONFIG_TG2_MUXER)                 += movenc.o riff.o isom.o
+ OBJS-$(CONFIG_MP3_DEMUXER)               += mp3.o
+ OBJS-$(CONFIG_MP2_MUXER)                 += mp3.o

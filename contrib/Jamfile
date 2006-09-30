@@ -54,8 +54,8 @@ rule LibAvCodec
 actions LibAvCodec
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
-    rm -rf ffmpeg-20060326 && tar xzf ffmpeg.tar.gz &&
-    cd ffmpeg-20060326 && $(FFMPEG_PATCH) &&
+    rm -rf ffmpeg && tar xzf ffmpeg.tar.gz &&
+    cd ffmpeg && $(FFMPEG_PATCH) &&
     ./configure --prefix=$CONTRIB $(FFMPEG_OPTIONS) --enable-gpl --disable-audio-beos &&
     make lib && make install-libs install-headers &&
     strip -S $CONTRIB/lib/libavcodec.a
@@ -95,6 +95,7 @@ LibDvdCss $(SUBDIR)/lib/libdvdcss.a  : $(SUBDIR)/libdvdcss.tar.gz ;
 # libdvdread
 rule LibDvdRead
 {
+    LIBDVDREAD_PATCH = "patch -p1 < ../patch-libdvdread.patch" ;
     Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
 }
@@ -102,6 +103,7 @@ actions LibDvdRead
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf libdvdread && tar xzf libdvdread.tar.gz && cd libdvdread &&
+    $(LIBDVDREAD_PATCH) &&
     ./configure --prefix=$CONTRIB --disable-shared --with-libdvdcss=$CONTRIB &&
     make && make install &&
     strip -S $CONTRIB/lib/libdvdread.a
@@ -225,13 +227,18 @@ LibVorbisEnc $(SUBDIR)/lib/libvorbisenc.a : $(SUBDIR)/lib/libvorbis.a ;
 # libx264
 rule LibX264
 {
+    LIBX264_PATCH = "" ;
+    if $(OS) = MACOSX && $(OSPLAT) = X86
+    {
+        LIBX264_PATCH = " patch -p1 < ../patch-x264-macintel.patch && " ;
+    }
     Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
 }
 actions LibX264
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
-    rm -rf x264 && tar xzf x264.tar.gz && cd x264 &&
+    rm -rf x264 && tar xzf x264.tar.gz && cd x264 && $(LIBX264_PATCH)
     ./configure --prefix=$CONTRIB --enable-pthread && make &&
     make install &&
     strip -S $CONTRIB/lib/libx264.a
@@ -249,7 +256,7 @@ actions LibXvidCore
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf xvidcore && tar xzf xvidcore.tar.gz &&
-    cd xvidcore && patch -p1 < ../xvidcore.patch &&
+    cd xvidcore && patch -p1 < ../patch-xvidcore.patch &&
     cd build/generic/ && ./configure && make libxvidcore.a &&
     cp ./=build/libxvidcore.a $CONTRIB/lib/ &&
     cp ../../src/xvid.h $CONTRIB/include/ &&

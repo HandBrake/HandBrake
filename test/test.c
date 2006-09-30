@@ -21,6 +21,7 @@ static int    deinterlace = 0;
 static int    grayscale   = 0;
 static int    vcodec      = HB_VCODEC_FFMPEG;
 static int    h264_13     = 0;
+static int    h264_30     = 0;
 static char * audios      = NULL;
 static int    sub         = 0;
 static int    width       = 0;
@@ -341,8 +342,12 @@ static int HandleEvents( hb_handle_t * h )
             }
             if( h264_13 ) 
             { 
-                job->h264_13 = h264_13; 
-            } 
+                job->h264_level = 13; 
+            }
+	    if( h264_30 )
+	    {
+	        job->h264_level = 30;
+            }
             if( vrate )
             {
                 job->vrate = 27000000;
@@ -505,7 +510,7 @@ static void ShowHelp()
     "\n"
     "    -s, --subtitle <number> Select subtitle (default: none)\n"
     "    -e, --encoder <string>  Set video library encoder (ffmpeg,xvid,\n"
-    "                            x264,x264b13, default: ffmpeg)\n"
+    "                            x264,x264b13,x264b30 default: ffmpeg)\n"
     "    -E, --aencoder <string> Set audio encoder (faac/lame/vorbis/ac3, ac3\n"
     "                            meaning passthrough, default: guessed)\n"
     "    -2, --two-pass          Use two-pass mode\n"
@@ -673,6 +678,11 @@ static int ParseOptions( int argc, char ** argv )
                     vcodec = HB_VCODEC_X264;
                     h264_13 = 1;
                 }
+		else if( !strcasecmp( optarg, "x264b30" ) )
+		{
+		    vcodec = HB_VCODEC_X264;
+		    h264_30 = 1;
+		}
                 else
                 {
                     fprintf( stderr, "invalid codec (%s)\n", optarg );
@@ -801,7 +811,10 @@ static int CheckOptions( int argc, char ** argv )
             }
             else if( p && !strcasecmp( p, ".mp4" ) )
             {
-                mux = HB_MUX_MP4;
+	    	if ( h264_30 == 1 )
+                    mux = HB_MUX_IPOD;
+		else
+		    mux = HB_MUX_MP4;
             }
             else if( p && ( !strcasecmp( p, ".ogm" ) ||
                             !strcasecmp( p, ".ogg" ) ) )
@@ -821,7 +834,10 @@ static int CheckOptions( int argc, char ** argv )
         }
         else if( !strcasecmp( format, "mp4" ) )
         {
-            mux = HB_MUX_MP4;
+	    if ( h264_30 == 1)
+	        mux = HB_MUX_IPOD;
+            else
+	        mux = HB_MUX_MP4;
         }
         else if( !strcasecmp( format, "ogm" ) ||
                  !strcasecmp( format, "ogg" ) )
@@ -837,7 +853,7 @@ static int CheckOptions( int argc, char ** argv )
 
         if( !acodec )
         {
-            if( mux == HB_MUX_MP4 )
+            if( mux == HB_MUX_MP4 || mux == HB_MUX_IPOD )
             {
                 acodec = HB_ACODEC_FAAC;
             }

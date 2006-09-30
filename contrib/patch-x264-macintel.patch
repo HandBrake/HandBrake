@@ -1,0 +1,48 @@
+--- x264/common/i386/i386inc.asm	2006-09-23 14:01:05.000000000 -0400
++++ x264-patched/common/i386/i386inc.asm	2006-09-24 09:21:27.000000000 -0400
+@@ -40,12 +40,12 @@
+ ; is unable to compute address offsets outside of .text so we use the .text
+ ; section instead until NASM is fixed.
+ %macro SECTION_RODATA 0
+-    %ifidn __OUTPUT_FORMAT__,macho
+-        SECTION .text
+-        fakegot:
+-    %else
++;    %ifidn __OUTPUT_FORMAT__,macho
++;        SECTION .text
++;        fakegot:
++;    %else
+         SECTION .rodata data align=16
+-    %endif
++;    %endif
+ %endmacro
+ 
+ ; PIC support macros. All these macros are totally harmless when __PIC__ is
+--- x264/common/i386/predict-a.asm	2006-09-23 14:01:05.000000000 -0400
++++ x264-patched/common/i386/predict-a.asm	2006-09-24 09:21:27.000000000 -0400
+@@ -191,7 +191,6 @@
+ %assign Y (Y-1)
+     movq        [edx + Y*FDEC_STRIDE], mm1
+ 
+-    picpop      ebx
+     ret
+ 
+ ;-----------------------------------------------------------------------------
+@@ -228,7 +227,6 @@
+ %assign Y (Y-1)
+     movq        [edx + Y*FDEC_STRIDE], mm0
+ 
+-    picpop      ebx
+     ret
+ 
+ ;-----------------------------------------------------------------------------
+@@ -269,8 +267,7 @@
+ %endrep
+     movq        [edx +  Y   *FDEC_STRIDE], mm3
+     movq        [edx + (Y+1)*FDEC_STRIDE], mm0
+-
+-    picpop      ebx
++    
+     ret
+ 
+ ;-----------------------------------------------------------------------------

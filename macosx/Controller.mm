@@ -556,6 +556,19 @@ static int FormatSettings[3][4] =
     }
     if( job->vcodec & HB_VCODEC_X264 )
     {
+		switch([fVidEncoderPopUp indexOfSelectedItem]) {
+			case 1:
+				/* Baseline Level 1.3
+				   For iPods pre firmware 1.2 */
+				job->h264_level = 13;
+				break;
+			case 2:
+				/* Baseline Level 3.0
+				   For iPods w/ fimware 1.2 */
+				job->h264_level = 30;
+				job->mux = HB_MUX_IPOD;
+				break;
+		}
         job->h264_13 = [fVidEncoderPopUp indexOfSelectedItem];
     }
 
@@ -881,7 +894,8 @@ static int FormatSettings[3][4] =
         /* MPEG-4 -> H.264 */
         [fVidEncoderPopUp removeAllItems];
         [fVidEncoderPopUp addItemWithTitle: @"x264 (Main profile)"];
-        [fVidEncoderPopUp addItemWithTitle: @"x264 (Baseline profile)"];
+        [fVidEncoderPopUp addItemWithTitle: @"x264 (Baseline profile level 1.3)"];
+		[fVidEncoderPopUp addItemWithTitle: @"x264 (Baseline profile level 3.0)"];
     }
     else if( ( FormatSettings[format][codecs] & HB_VCODEC_FFMPEG ) )
     {

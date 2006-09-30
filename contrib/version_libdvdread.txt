@@ -1,1 +1,1 @@
-http://download.m0k.org/handbrake/contrib/libdvdread-20050928.tar.gz
+http://multics.dynalias.com/handbrake/contrib/libdvdread-20050928.tar.gz

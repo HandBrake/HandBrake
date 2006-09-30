@@ -115,6 +115,7 @@ struct hb_job_s
 #define HB_VCODEC_FFMPEG 0x000001
 #define HB_VCODEC_XVID   0x000002
 #define HB_VCODEC_X264   0x000004
+
     int             vcodec;
     float           vquality;
     int             vbitrate;
@@ -122,6 +123,7 @@ struct hb_job_s
     int             vrate_base;
     int             pass;
     int             h264_13;
+	int				h264_level;
 
     /* Audio tracks:
          Indexes in hb_title_t's audios list, starting from 0.
@@ -158,6 +160,8 @@ struct hb_job_s
 #define HB_MUX_PSP  0x020000
 #define HB_MUX_AVI  0x040000
 #define HB_MUX_OGM  0x080000
+#define HB_MUX_IPOD 0x100000
+	
     int             mux;
     char          * file;
 
