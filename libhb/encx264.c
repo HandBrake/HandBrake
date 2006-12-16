@@ -78,33 +78,23 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     if( job->vquality >= 0.0 && job->vquality <= 1.0 )
     {
         /* Constant QP */
+        param.rc.i_rc_method = X264_RC_CQP;
         param.rc.i_qp_constant = 51 - job->vquality * 51;
         hb_log( "encx264: encoding at constant QP %d",
                 param.rc.i_qp_constant );
     }
     else
     {
-
-		/* Rate control */
-		/* no longer in x264 - see rc.i_rc_method in x264.h */
-        /* param.rc.b_cbr     = 1; */
-		
-		/* these were the only settings I could use to get accurate ending video bitrate */
-		param.rc.i_rc_method    =  X264_RC_CRF;
-		param.rc.i_vbv_max_bitrate = job->vbitrate;
-        param.rc.i_vbv_buffer_size = 224;
-		param.rc.i_rf_constant = 1;
-		
+	/* Rate control */
+        param.rc.i_rc_method = X264_RC_ABR;
         param.rc.i_bitrate = job->vbitrate;
         switch( job->pass )
         {
             case 1:
-				param.rc.i_rc_method    =  X264_RC_ABR;
                 param.rc.b_stat_write  = 1;
                 param.rc.psz_stat_out = pv->filename;
                 break;
             case 2:
-				param.rc.i_rc_method    =  X264_RC_ABR;
                 param.rc.b_stat_read = 1;
                 param.rc.psz_stat_in = pv->filename;
                 break;

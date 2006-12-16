@@ -5,11 +5,11 @@
  ; section instead until NASM is fixed.
  %macro SECTION_RODATA 0
 -    %ifidn __OUTPUT_FORMAT__,macho
--        SECTION .text
+-        SECTION .text align=16
 -        fakegot:
 -    %else
 +;    %ifidn __OUTPUT_FORMAT__,macho
-+;        SECTION .text
++;        SECTION .text align=16
 +;        fakegot:
 +;    %else
          SECTION .rodata data align=16
