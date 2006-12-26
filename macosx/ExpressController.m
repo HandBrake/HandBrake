@@ -205,11 +205,12 @@
         if( [fConvertFormatPopUp indexOfSelectedItem] == 0 )
         {
             /* iPod / H.264 */
-            job->mux      = HB_MUX_MP4;
+            job->mux      = HB_MUX_IPOD;
             job->vcodec   = HB_VCODEC_X264;
-            job->h264_13  = 1;
-            job->vbitrate = 600;
-            pixels        = 76800;
+			job->h264_level = 30;
+			job->vbitrate = 1000;
+			job->deinterlace = 1;
+            pixels        = 307200;
             aspect        = 4 * HB_ASPECT_BASE / 3;
         }
         else if( [fConvertFormatPopUp indexOfSelectedItem] == 1 )
