@@ -7,10 +7,11 @@
 #include <Cocoa/Cocoa.h>
 
 #include "hb.h"
-
+@class DriveDetector;
 @interface ScanController : NSObject
 {
     hb_handle_t                  * fHandle;
+	hb_list_t                    * fList;
     
     IBOutlet NSWindow            * fWindow;
     IBOutlet NSPanel             * fPanel;
@@ -25,6 +26,9 @@
     IBOutlet NSProgressIndicator * fIndicator;
     IBOutlet NSButton            * fCancelButton;
     IBOutlet NSButton            * fOpenButton;
+	
+    DriveDetector                * fDriveDetector;
+    NSDictionary                 * fDrives;	
 }
 
 - (void)     TranslateStrings;

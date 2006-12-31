@@ -3,17 +3,19 @@
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
-
+/* These are now called in DriveDetector.h
 #include <paths.h>
 #include <IOKit/IOKitLib.h>
 #include <IOKit/IOBSD.h>
 #include <IOKit/storage/IOMedia.h>
 #include <IOKit/storage/IODVDMedia.h>
+*/
 
 #include "ScanController.h"
 #include "DriveDetector.h"
 
 #define _(a) NSLocalizedString(a,nil)
+#define INSERT_STRING @"Insert a DVD"
 
 @implementation ScanController
 
@@ -38,28 +40,70 @@
 
 - (void) Show
 {
+ 
+	/* rev63 Drive Detector
     DriveDetector * driveDetector;
     driveDetector = [[DriveDetector alloc] initWithCallback: self
         selector: @selector( UpdatePopup: )];
     [driveDetector run];
-    
+    */
+	// Taken From IHB for Post rev 63 drive detector
+	fDriveDetector = [[DriveDetector alloc] initWithCallback: self
+        selector: @selector( openUpdateDrives: )];
+    [fDriveDetector run];
+	
+	// Here down continue with existing HB
     [NSApp beginSheet: fPanel modalForWindow: fWindow
         modalDelegate: nil didEndSelector: nil contextInfo: nil];
     [NSApp runModalForWindow: fPanel];
     [NSApp endSheet: fPanel];
     [fPanel orderOut: self];
 
-    [driveDetector stop];
-    [driveDetector release];
+    //driveDetector stop/release not needed
+	//[driveDetector stop];
+    //[driveDetector release];
 }
 
+- (void) openUpdateDrives: (NSDictionary *) drives
+{
+    if( fDrives )
+    {
+        [fDrives release];
+    }
+    fDrives = [[NSDictionary alloc] initWithDictionary: drives];
+
+    NSString * device;
+    NSEnumerator * enumerator = [fDrives keyEnumerator];
+    [fDetectedPopUp removeAllItems];
+    while( ( device = [enumerator nextObject] ) )
+    {
+        [fDetectedPopUp addItemWithTitle: device];
+    }
+
+    if( ![fDetectedPopUp numberOfItems] )
+    {
+        [fDetectedPopUp addItemWithTitle: INSERT_STRING];
+    }
+    [fDetectedPopUp selectItemAtIndex: 0];
+    /* May not have any bearing on anything
+	here as this is from IHB. Need to test
+	
+	if( [fMatrix isEnabled] )
+    {
+        [self openEnable: YES];
+    */
+}
+
+
+// UpdatePopup Not used for post rev 63 dd
+/*
 - (void) UpdatePopup: (NSArray *) drives
 {
     [fDetectedPopUp removeAllItems];
     [fDetectedPopUp addItemsWithTitles: drives];
     [self MatrixChanged: self];
 }
-
+*/
 - (void) EnableUI: (bool) b
 {
     [fMatrix        setEnabled: b];
@@ -182,14 +226,26 @@
 
 - (IBAction) Open: (id) sender
 {
-    NSString * path;
+  //  NSString * path;
     
     [self         EnableUI: NO];
     [fStatusField setStringValue: _( @"Opening..." )];
 
-    path = [fMatrix selectedRow] ? [fFolderField stringValue] :
-               [fDetectedPopUp titleOfSelectedItem];
-    hb_scan( fHandle, [path UTF8String], 0 );
+	// From IHB
+	[fDriveDetector stop];
+
+    if( [fMatrix selectedRow] )
+    {
+    	hb_scan( fHandle, [[fFolderField stringValue] UTF8String], 0 );
+    }
+    else
+    {
+	    hb_scan( fHandle, [[fDrives objectForKey: [fDetectedPopUp
+                 titleOfSelectedItem]] UTF8String], 0 );
+    }
+	
+	
+	
 }
 
 - (IBAction) Cancel: (id) sender
