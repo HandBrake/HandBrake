@@ -184,7 +184,7 @@
                  titleOfSelectedItem]] UTF8String], 0 );
     }
 
-    NSTimer * timer = [NSTimer scheduledTimerWithTimeInterval: 0.5
+    NSTimer * timer = [NSTimer scheduledTimerWithTimeInterval: 2.0
         target: self selector: @selector( openTimer: ) userInfo: nil
         repeats: YES];
 }
@@ -202,6 +202,22 @@
         hb_job_t   * job   = title->job;
 
         int pixels, aspect;
+		pixels = 307200;
+		if( [fConvertAspectPopUp indexOfSelectedItem] == 0)
+		{
+			aspect = -1;
+		}
+		else
+		{
+            aspect = 4 * HB_ASPECT_BASE / 3;
+		}
+
+		do
+		{
+			hb_set_size( job, aspect, pixels );
+			pixels -= 10;
+		} while(job->width > 640);
+		
         if( [fConvertFormatPopUp indexOfSelectedItem] == 0 )
         {
             /* iPod / H.264 */
@@ -210,17 +226,14 @@
 			job->h264_level = 30;
 			job->vbitrate = 1000;
 			job->deinterlace = 1;
-            pixels        = 307200;
-            aspect        = 4 * HB_ASPECT_BASE / 3;
         }
         else if( [fConvertFormatPopUp indexOfSelectedItem] == 1 )
         {
             /* iPod / MPEG-4 */
             job->mux      = HB_MUX_MP4;
             job->vcodec   = HB_VCODEC_FFMPEG;
-            job->vbitrate = 1200;
-            pixels        = 230400;
-            aspect        = 4 * HB_ASPECT_BASE / 3;
+            job->vbitrate = 1500;
+			job->deinterlace = 1;
         }
         else
         {
@@ -235,13 +248,13 @@
             job->abitrate   = 96;
             aspect          = 16 * HB_ASPECT_BASE / 9;
 
-        }
-        if( [fConvertAspectPopUp indexOfSelectedItem] )
-        {
-            aspect = -1;
-        }
+			if( [fConvertAspectPopUp indexOfSelectedItem] )
+			{
+				aspect = -1;
+			}
 
-        hb_set_size( job, aspect, pixels );
+			hb_set_size( job, aspect, pixels );
+        }
 
         job->vquality = -1.0;
 
@@ -284,16 +297,18 @@
             }
         }
         
+//        job->file = strdup( [[NSString stringWithFormat:
+//                @"%@/%s - Title %d - %@.m4v", fConvertFolderString,
+//                title->name, title->index, [fConvertFormatPopUp
+//                titleOfSelectedItem]] UTF8String] );
         job->file = strdup( [[NSString stringWithFormat:
-                @"%@/%s - Title %d - %@.mp4", fConvertFolderString,
-                title->name, title->index, [fConvertFormatPopUp
-                titleOfSelectedItem]] UTF8String] );
+                @"%@/%s.m4v", fConvertFolderString, title->name] UTF8String]);
         hb_add( fHandle, job );
     }
 
     hb_start( fHandle );
 
-    NSTimer * timer = [NSTimer scheduledTimerWithTimeInterval: 0.5
+    NSTimer * timer = [NSTimer scheduledTimerWithTimeInterval: 2.0
         target: self selector: @selector( convertTimer: ) userInfo: nil
         repeats: YES];
 
@@ -303,7 +318,7 @@
 - (void) convertCancel: (id) sender
 {
     hb_stop( fHandle );
-    [fConvertGoButton setEnabled: NO];
+    [self convertEnable: YES];
 }
 
 @end
@@ -444,6 +459,7 @@
             [fConvertAudioPopUp addItemWithTitle:
                 [NSString stringWithUTF8String: audio->lang_simple]];
         }
+		[fConvertAudioPopUp selectItemWithTitle: @"English"];
 
         /* Update subtitle popup */
         hb_subtitle_t * subtitle;
@@ -515,9 +531,10 @@
 #define p s.param.working
         case HB_STATE_WORKING:
         {
+            float progress_total = ( p.progress + p.job_cur - 1 ) / p.job_count;
             NSMutableString * string = [NSMutableString
                 stringWithFormat: @"Converting: %.1f %%",
-                100.0 * p.progress];
+                100.0 * progress_total];
             if( p.seconds > -1 )
             {
                 [string appendFormat: @" (%.1f fps, ", p.rate_avg];
