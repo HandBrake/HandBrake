@@ -201,22 +201,27 @@
         hb_title_t * title = hb_list_item( fList, i );
         hb_job_t   * job   = title->job;
 
-        int pixels, aspect;
-		pixels = 307200;
-		if( [fConvertAspectPopUp indexOfSelectedItem] == 0)
-		{
-			aspect = -1;
-		}
-		else
+        int pixels = 307200;
+		int aspect = title->aspect;
+		if( [fConvertAspectPopUp indexOfSelectedItem] == 1)
 		{
             aspect = 4 * HB_ASPECT_BASE / 3;
 		}
 
+		int maxwidth = 640;
+		job->vbitrate = 1000;
+		if( [fConvertMaxWidthPopUp indexOfSelectedItem] == 1)
+		{
+            maxwidth = 320;
+			job->vbitrate = 500;
+		}
+		job->deinterlace = 1;
+		
 		do
 		{
 			hb_set_size( job, aspect, pixels );
 			pixels -= 10;
-		} while(job->width > 640);
+		} while(job->width > maxwidth);
 		
         if( [fConvertFormatPopUp indexOfSelectedItem] == 0 )
         {
@@ -224,16 +229,12 @@
             job->mux      = HB_MUX_IPOD;
             job->vcodec   = HB_VCODEC_X264;
 			job->h264_level = 30;
-			job->vbitrate = 1000;
-			job->deinterlace = 1;
         }
         else if( [fConvertFormatPopUp indexOfSelectedItem] == 1 )
         {
             /* iPod / MPEG-4 */
             job->mux      = HB_MUX_MP4;
             job->vcodec   = HB_VCODEC_FFMPEG;
-            job->vbitrate = 1500;
-			job->deinterlace = 1;
         }
         else
         {
@@ -507,6 +508,7 @@
     [fConvertFolderPopUp setEnabled: b];
     [fConvertFormatPopUp setEnabled: b];
     [fConvertAspectPopUp setEnabled: b];
+    [fConvertMaxWidthPopUp setEnabled: b];
     [fConvertAudioPopUp setEnabled: b];
     [fConvertSubtitlePopUp setEnabled: b];
     [fConvertOpenButton setEnabled: b];
@@ -565,19 +567,34 @@
 #undef p
 
         case HB_STATE_WORKDONE:
-            [timer invalidate];
-            [fConvertInfoString setStringValue: @"Done."];
+		{
+			[timer invalidate];
             [fConvertIndicator setIndeterminate: NO];
             [fConvertIndicator setDoubleValue: 0.0];
             [self convertEnable: YES];
+			
+#define p s.param.workdone
+			switch(p.error)
+			{
+				case HB_ERROR_NONE:
+					[fConvertInfoString setStringValue: @"Done."];
+					break;
+				case HB_ERROR_CANCELED:
+					[fConvertInfoString setStringValue: @"Canceled."];
+					break;
+				case HB_ERROR_UNKNOWN:
+					[fConvertInfoString setStringValue: @"Unknown Error."];
+					break;
+			}
+#undef p
 
-            hb_job_t * job;
+			hb_job_t * job;
             while( ( job = hb_job( fHandle, 0 ) ) )
             {
                 hb_rem( fHandle, job );
             }
-            break;
-
+			break;
+		}
         default:
             break;
     }

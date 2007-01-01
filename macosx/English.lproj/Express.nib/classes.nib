@@ -46,6 +46,7 @@
                 fConvertGoButton = NSButton; 
                 fConvertIndicator = NSProgressIndicator; 
                 fConvertInfoString = NSTextField; 
+                fConvertMaxWidthPopUp = NSPopUpButton; 
                 fConvertOpenButton = NSButton; 
                 fConvertSubtitlePopUp = NSPopUpButton; 
                 fConvertTableView = NSTableView; 

@@ -28,6 +28,7 @@
     IBOutlet NSTableView         * fConvertTableView;
     IBOutlet NSPopUpButton       * fConvertFolderPopUp;
     IBOutlet NSPopUpButton       * fConvertFormatPopUp;
+    IBOutlet NSPopUpButton       * fConvertMaxWidthPopUp;
     IBOutlet NSPopUpButton       * fConvertAspectPopUp;
     IBOutlet NSPopUpButton       * fConvertAudioPopUp;
     IBOutlet NSPopUpButton       * fConvertSubtitlePopUp;
