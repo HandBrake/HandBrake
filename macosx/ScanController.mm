@@ -41,13 +41,7 @@
 - (void) Show
 {
  
-	/* rev63 Drive Detector
-    DriveDetector * driveDetector;
-    driveDetector = [[DriveDetector alloc] initWithCallback: self
-        selector: @selector( UpdatePopup: )];
-    [driveDetector run];
-    */
-	// Taken From IHB for Post rev 63 drive detector
+
 	fDriveDetector = [[DriveDetector alloc] initWithCallback: self
         selector: @selector( openUpdateDrives: )];
     [fDriveDetector run];
@@ -59,9 +53,6 @@
     [NSApp endSheet: fPanel];
     [fPanel orderOut: self];
 
-    //driveDetector stop/release not needed
-	//[driveDetector stop];
-    //[driveDetector release];
 }
 
 - (void) openUpdateDrives: (NSDictionary *) drives
@@ -79,31 +70,40 @@
     {
         [fDetectedPopUp addItemWithTitle: device];
     }
+    
+	
 
     if( ![fDetectedPopUp numberOfItems] )
     {
-        [fDetectedPopUp addItemWithTitle: INSERT_STRING];
+	[fDetectedPopUp addItemWithTitle: INSERT_STRING];
+	[fDetectedPopUp setEnabled: 0];
+    [fFolderField   setEnabled: 1];
+    [fBrowseButton  setEnabled: 1];
+	[fOpenButton    setEnabled: 0];
+	[fBrowseButton  setEnabled: 0];
+	//fOpenButton
+
+
     }
-    [fDetectedPopUp selectItemAtIndex: 0];
-    /* May not have any bearing on anything
-	here as this is from IHB. Need to test
-	
+	else
+	{
+	[fDetectedPopUp setEnabled: 1];
+    [fFolderField   setEnabled: 0];
+    [fBrowseButton  setEnabled: 0];
+	[fOpenButton    setEnabled: 1];
+	[fBrowseButton  setEnabled: 0];
+	}
+
+	[fDetectedPopUp selectItemAtIndex: 0];
+
+    /*
 	if( [fMatrix isEnabled] )
     {
-        [self openEnable: YES];
+        [self EnableUI: YES];
+    }
     */
 }
 
-
-// UpdatePopup Not used for post rev 63 dd
-/*
-- (void) UpdatePopup: (NSArray *) drives
-{
-    [fDetectedPopUp removeAllItems];
-    [fDetectedPopUp addItemsWithTitles: drives];
-    [self MatrixChanged: self];
-}
-*/
 - (void) EnableUI: (bool) b
 {
     [fMatrix        setEnabled: b];
@@ -156,6 +156,7 @@
 - (IBAction) MatrixChanged: (id) sender
 {
     /* Do we have detected drives */
+
     if( [fDetectedPopUp numberOfItems] > 0 )
     {
         [fDetectedCell setEnabled: YES];
@@ -165,13 +166,14 @@
         [fMatrix       selectCell: fFolderCell];
         [fDetectedCell setEnabled: NO];
     }
-    
+
     /* Enable controls related to the current choice */
     bool foo;
     foo = ( [fMatrix selectedRow] == 0 );
     [fDetectedPopUp setEnabled:  foo];
     [fFolderField   setEnabled: !foo];
     [fBrowseButton  setEnabled: !foo];
+
 }
 
 /* Browse:

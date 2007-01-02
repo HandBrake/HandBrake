@@ -57,6 +57,8 @@ static int FormatSettings[3][4] =
     if( ( build = hb_check_update( fHandle, &version ) ) > -1 )
     {
         /* Update available - tell the user */
+		/* TEMPORARILY COMMENT OUT AS UPDATE CHECK IS NOT ACCURATE */
+		 /*
         NSBeginInformationalAlertSheet( _( @"Update is available" ),
             _( @"Go get it!" ), _( @"Discard" ), NULL, fWindow, self,
             @selector( UpdateAlertDone:returnCode:contextInfo: ),
@@ -64,6 +66,7 @@ static int FormatSettings[3][4] =
             _( @"HandBrake %s (build %d) is now available for download." ),
             version, build] );
         return;
+		*/
     }
 
     /* Show scan panel ASAP */
@@ -286,14 +289,25 @@ static int FormatSettings[3][4] =
             for( int i = 0; i < hb_list_count( list ); i++ )
             {
                 title = (hb_title_t *) hb_list_item( list, i );
-                [fSrcDVD2Field setStringValue: [NSString
+                /*Set DVD Name at top of window*/
+				[fSrcDVD2Field setStringValue: [NSString
                   stringWithUTF8String: title->name]];	
-					
-                [fSrcTitlePopUp addItemWithTitle: [NSString
+				
+				/* Use the dvd name in the default output field here 
+				May want to add code to remove blank spaces for some dvd names*/
+				[fDstFile2Field setStringValue: [NSString stringWithFormat:
+                @"%@/Desktop/%@.mp4", NSHomeDirectory(),[NSString
+                  stringWithUTF8String: title->name]]];
+				
+			    [fSrcTitlePopUp addItemWithTitle: [NSString
                     stringWithFormat: @"%d - %02dh%02dm%02ds",
                     title->index, title->hours, title->minutes,
                     title->seconds]];
-            }
+					
+					
+            
+			
+			}
 
             [self TitlePopUpChanged: NULL];
             [self EnableUI: YES];
