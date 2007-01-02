@@ -136,7 +136,7 @@
             ACTIONS = {CheckChanged = id; ClosePanel = id; OpenPanel = id; }; 
             CLASS = PrefsController; 
             LANGUAGE = ObjC; 
-            OUTLETS = {fPanel = NSPanel; fUpdateCheck = NSButton; }; 
+            OUTLETS = {fPanel = NSPanel; fUpdateCheck = NSButton; fdefaultlanguage = NSComboBox; }; 
             SUPERCLASS = NSObject; 
         }, 
         {
