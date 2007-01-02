@@ -6,6 +6,7 @@
 {
     IBOutlet NSPanel  * fPanel;
     IBOutlet NSButton * fUpdateCheck;
+	IBOutlet NSComboBox * fdefaultlanguage;
 }
 
 - (IBAction) OpenPanel:    (id) sender;
