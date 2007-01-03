@@ -48,6 +48,10 @@ rule LibAvCodec
        FFMPEG_OPTIONS  = --enable-memalign-hack ;
        FFMPEG_PATCH   += " && patch -p1 < ../patch-ffmpeg-macintel.patch" ;
     }
+    else if $(OS) = CYGWIN
+    {
+        FFMPEG_PATCH += " && patch -p1 < ../patch-ffmpeg-cygwin.patch " ;
+    }
     Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
 }
@@ -75,22 +79,26 @@ actions LibAvUtil
 LibAvUtil $(SUBDIR)/lib/libavutil.a : $(SUBDIR)/lib/libavcodec.a ;
 LibAvUtil $(SUBDIR)/lib/libavformat.a : $(SUBDIR)/lib/libavcodec.a ;
 
-# libdvdcss
-# We need libdvdcss.so for libdvdread's configure to work...
-rule LibDvdCss
+# CSS doesn't work on Cygwin/Windows as of now, so don't use it.
+if $(OS) != CYGWIN
 {
-    Depends $(<) : $(>) ;
-    Depends lib  : $(<) ;
+    # libdvdcss
+    # We need libdvdcss.so for libdvdread's configure to work...
+    rule LibDvdCss
+    {
+        Depends $(<) : $(>) ;
+        Depends lib  : $(<) ;
+    }
+    actions LibDvdCss
+    {
+        cd `dirname $(>)` && CONTRIB=`pwd` &&
+            rm -rf libdvdcss && tar xzf libdvdcss.tar.gz && cd libdvdcss &&
+            ./configure --prefix=$CONTRIB && make && make install &&
+            strip -S $CONTRIB/lib/libdvdcss.a
+    }
+    Wget      $(SUBDIR)/libdvdcss.tar.gz : $(SUBDIR)/version_libdvdcss.txt ;
+    LibDvdCss $(SUBDIR)/lib/libdvdcss.a  : $(SUBDIR)/libdvdcss.tar.gz ;
 }
-actions LibDvdCss
-{
-    cd `dirname $(>)` && CONTRIB=`pwd` &&
-    rm -rf libdvdcss && tar xzf libdvdcss.tar.gz && cd libdvdcss &&
-    ./configure --prefix=$CONTRIB && make && make install &&
-    strip -S $CONTRIB/lib/libdvdcss.a
-}
-Wget      $(SUBDIR)/libdvdcss.tar.gz : $(SUBDIR)/version_libdvdcss.txt ;
-LibDvdCss $(SUBDIR)/lib/libdvdcss.a  : $(SUBDIR)/libdvdcss.tar.gz ;
 
 # libdvdread
 rule LibDvdRead
@@ -99,14 +107,30 @@ rule LibDvdRead
     Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
 }
-actions LibDvdRead
+if $(OS) != CYGWIN
 {
-    cd `dirname $(>)` && CONTRIB=`pwd` &&
-    rm -rf libdvdread && tar xzf libdvdread.tar.gz && cd libdvdread &&
-    $(LIBDVDREAD_PATCH) &&
-    ./configure --prefix=$CONTRIB --disable-shared --with-libdvdcss=$CONTRIB &&
-    make && make install &&
-    strip -S $CONTRIB/lib/libdvdread.a
+    actions LibDvdRead
+    {
+        cd `dirname $(>)` && CONTRIB=`pwd` &&
+            rm -rf libdvdread && tar xzf libdvdread.tar.gz && cd libdvdread &&
+            $(LIBDVDREAD_PATCH) &&
+            ./configure --prefix=$CONTRIB --disable-shared --with-libdvdcss=$CONTRIB &&
+            make && make install &&
+            strip -S $CONTRIB/lib/libdvdread.a
+    }
+}
+else {
+    # Cygwin/Windows doesn't use CSS as of now, so don't include it on the
+    # configure line.
+    actions LibDvdRead
+    {
+        cd `dirname $(>)` && CONTRIB=`pwd` &&
+            rm -rf libdvdread && tar xzf libdvdread.tar.gz && cd libdvdread &&
+            $(LIBDVDREAD_PATCH) &&
+            ./configure --prefix=$CONTRIB --disable-shared &&
+            make && make install &&
+            strip -S $CONTRIB/lib/libdvdread.a
+    }
 }
 Wget       $(SUBDIR)/libdvdread.tar.gz : $(SUBDIR)/version_libdvdread.txt ;
 LibDvdRead $(SUBDIR)/lib/libdvdread.a  : $(SUBDIR)/libdvdread.tar.gz ;
@@ -232,6 +256,10 @@ rule LibX264
     {
         LIBX264_PATCH = " patch -p1 < ../patch-x264-macintel.patch && " ;
     }
+    else if $(OS) = CYGWIN
+    {
+        LIBX264_PATCH = " patch -p1 < ../patch-x264-cygwin.patch && " ;
+    }
     Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
 }
@@ -249,6 +277,15 @@ LibX264 $(SUBDIR)/lib/libx264.a : $(SUBDIR)/x264.tar.gz ;
 # libxvidcore
 rule LibXvidCore
 {
+    LIBXVIDCORE_PATCH = "" ;
+    if $(OS) = MACOSX
+    {
+        LIBXVIDCORE_PATCH = " patch -p1 < ../patch-xvidcore-macosx.patch && " ;
+    }
+    else if $(OS) = CYGWIN
+    {
+        LIBXVIDCORE_PATCH = " patch -p1 < ../patch-xvidcore-cygwin.patch && " ;
+    }
     Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
 }
@@ -256,7 +293,7 @@ actions LibXvidCore
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf xvidcore && tar xzf xvidcore.tar.gz &&
-    cd xvidcore && patch -p1 < ../patch-xvidcore.patch &&
+    cd xvidcore && $(LIBXVIDCORE_PATCH)
     cd build/generic/ && ./configure && make libxvidcore.a &&
     cp ./=build/libxvidcore.a $CONTRIB/lib/ &&
     cp ../../src/xvid.h $CONTRIB/include/ &&

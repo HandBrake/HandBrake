@@ -6,6 +6,9 @@
 
 #include <signal.h>
 #include <getopt.h>
+#include <sys/time.h>
+#include <time.h>
+#include <unistd.h>
 
 #include "hb.h"
 
