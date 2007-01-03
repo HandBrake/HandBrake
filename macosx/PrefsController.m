@@ -54,6 +54,7 @@
 	[fdefaultlanguage addItemWithObjectValue: @"Croatian"];
 	[fdefaultlanguage addItemWithObjectValue: @"Czech"];
 	[fdefaultlanguage addItemWithObjectValue: @"Dansk"];
+	[fdefaultlanguage addItemWithObjectValue: @"Deutsch"];
 	[fdefaultlanguage addItemWithObjectValue: @"Dzongkha"];
 	[fdefaultlanguage addItemWithObjectValue: @"English"];
 	[fdefaultlanguage addItemWithObjectValue: @"Espanol"];
@@ -64,11 +65,8 @@
 	[fdefaultlanguage addItemWithObjectValue: @"Francais"];
 	[fdefaultlanguage addItemWithObjectValue: @"Frisian"];
 	[fdefaultlanguage addItemWithObjectValue: @"Georgian"];
-	[fdefaultlanguage addItemWithObjectValue: @"Deutsch"];
 	[fdefaultlanguage addItemWithObjectValue: @"Gaelic (Scots)"];
-	[fdefaultlanguage addItemWithObjectValue: @"Irish"];
 	[fdefaultlanguage addItemWithObjectValue: @"Gallegan"];
-	[fdefaultlanguage addItemWithObjectValue: @"Manx"];
 	[fdefaultlanguage addItemWithObjectValue: @"Greek, Modern ()"];
 	[fdefaultlanguage addItemWithObjectValue: @"Guarani"];
 	[fdefaultlanguage addItemWithObjectValue: @"Gujarati"];
@@ -76,12 +74,13 @@
 	[fdefaultlanguage addItemWithObjectValue: @"Herero"];
 	[fdefaultlanguage addItemWithObjectValue: @"Hindi"];
 	[fdefaultlanguage addItemWithObjectValue: @"Hiri Motu"];
-	[fdefaultlanguage addItemWithObjectValue: @"Islenska"];
 	[fdefaultlanguage addItemWithObjectValue: @"Inuktitut"];
 	[fdefaultlanguage addItemWithObjectValue: @"Interlingue"];
 	[fdefaultlanguage addItemWithObjectValue: @"Interlingua"];
 	[fdefaultlanguage addItemWithObjectValue: @"Indonesian"];
 	[fdefaultlanguage addItemWithObjectValue: @"Inupiaq"];
+	[fdefaultlanguage addItemWithObjectValue: @"Irish"];
+	[fdefaultlanguage addItemWithObjectValue: @"Islenska"];
 	[fdefaultlanguage addItemWithObjectValue: @"Italian"];
 	[fdefaultlanguage addItemWithObjectValue: @"Javanese"];
 	[fdefaultlanguage addItemWithObjectValue: @"Japanese"];
@@ -109,6 +108,7 @@
 	[fdefaultlanguage addItemWithObjectValue: @"Malayalam"];
 	[fdefaultlanguage addItemWithObjectValue: @"Malagasy"];
 	[fdefaultlanguage addItemWithObjectValue: @"Maltese"];
+	[fdefaultlanguage addItemWithObjectValue: @"Manx"];
 	[fdefaultlanguage addItemWithObjectValue: @"Maori"];
 	[fdefaultlanguage addItemWithObjectValue: @"Marathi"];
 	[fdefaultlanguage addItemWithObjectValue: @"Marshall"];
