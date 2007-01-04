@@ -124,7 +124,8 @@ struct hb_job_s
     int             pass;
     int             h264_13;
 	int				h264_level;
-
+	int				crf;
+	
     /* Audio tracks:
          Indexes in hb_title_t's audios list, starting from 0.
          -1 indicates the end of the list */
