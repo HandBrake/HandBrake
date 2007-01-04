@@ -298,12 +298,9 @@
             }
         }
         
-//        job->file = strdup( [[NSString stringWithFormat:
-//                @"%@/%s - Title %d - %@.m4v", fConvertFolderString,
-//                title->name, title->index, [fConvertFormatPopUp
-//                titleOfSelectedItem]] UTF8String] );
-        job->file = strdup( [[NSString stringWithFormat:
-                @"%@/%s.m4v", fConvertFolderString, title->name] UTF8String]);
+        job->file = strdup( [[NSString stringWithFormat:                 
+                @"%@/%s - Title %d.m4v", fConvertFolderString,      
+                title->name, title->index] UTF8String] );
         hb_add( fHandle, job );
     }
 
