@@ -41,6 +41,7 @@ static int    mux         = 0;
 static int    acodec      = 0;
 static int    chapter_start = 0;
 static int    chapter_end   = 0;
+static int	  crf			= 0;
 
 /* Exit cleanly on Ctrl-C */
 static volatile int die = 0;
@@ -412,6 +413,11 @@ static int HandleEvents( hb_handle_t * h )
             }
             job->file = strdup( output );
 
+			if( crf )
+			{
+				job->crf = 1;
+			}
+
             if( twoPass )
             {
                 job->pass = 1;
@@ -538,6 +544,7 @@ static void ShowHelp()
     fprintf( stderr, " kHz)\n"
     "    -b, --vb <kb/s>         Set video bitrate (default: 1000)\n"
     "    -q, --quality <float>   Set video quality (0.0..1.0)\n"
+	"    -Q, --crf               Use with -q for CRF instead of CQP\n"
     "    -S, --size <MB>         Set target size\n"
     "    -B, --ab <kb/s>         Set audio bitrate (default: 128)\n"
     "    -w, --width <number>    Set picture width\n"
@@ -583,7 +590,8 @@ static int ParseOptions( int argc, char ** argv )
             { "ab",          required_argument, NULL,    'B' },
             { "rate",        required_argument, NULL,    'r' },
             { "arate",       required_argument, NULL,    'R' },
-
+			{ "crf",		 no_argument,		NULL,	 'Q' },
+			
             { 0, 0, 0, 0 }
           };
 
@@ -591,7 +599,7 @@ static int ParseOptions( int argc, char ** argv )
         int c;
 
         c = getopt_long( argc, argv,
-                         "hvuC:f:i:o:t:c:a:s:e:E:2dgw:l:n:b:q:S:B:r:R:",
+                         "hvuC:f:i:o:t:c:a:s:e:E:2dgw:l:n:b:q:S:B:r:R:Q",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -769,6 +777,9 @@ static int ParseOptions( int argc, char ** argv )
             case 'B':
                 abitrate = atoi( optarg );
                 break;
+			case 'Q':
+				crf = 1;
+				break;
 
             default:
                 fprintf( stderr, "unknown option (%s)\n", argv[optind] );
