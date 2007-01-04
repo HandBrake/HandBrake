@@ -1,1 +1,1 @@
-http://multics.dynalias.com/handbrake/contrib/libsamplerate-0.1.2.tar.gz
+http://download.handbrake.dynalias.com/contrib/libsamplerate-0.1.2.tar.gz

@@ -1,1 +1,1 @@
-http://multics.dynalias.com/handbrake/contrib/x264-r604.tar.gz
+http://download.handbrake.dynalias.com/contrib/x264-r604.tar.gz

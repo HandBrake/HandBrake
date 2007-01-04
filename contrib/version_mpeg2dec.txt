@@ -1,1 +1,1 @@
-http://multics.dynalias.com/handbrake/contrib/mpeg2dec-20051112.tar.gz
+http://download.handbrake.dynalias.com/contrib/mpeg2dec-20051112.tar.gz

@@ -1,1 +1,1 @@
-http://multics.dynalias.com/handbrake/contrib/libvorbis-1.1.1.tar.gz
+http://download.handbrake.dynalias.com/contrib/libvorbis-1.1.1.tar.gz

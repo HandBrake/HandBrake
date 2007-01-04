@@ -1,1 +1,1 @@
-http://multics.dynalias.com/handbrake/contrib/faac-1.24.tar.gz
+http://download.handbrake.dynalias.com/contrib/faac-1.24.tar.gz

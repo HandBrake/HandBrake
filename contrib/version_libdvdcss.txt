@@ -1,1 +1,1 @@
-http://multics.dynalias.com/handbrake/contrib/libdvdcss-1.2.9.tar.gz
+http://download.handbrake.dynalias.com/contrib/libdvdcss-1.2.9.tar.gz

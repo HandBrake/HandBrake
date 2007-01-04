@@ -1,1 +1,1 @@
-http://multics.dynalias.com/handbrake/contrib/lame-3.96.1.tar.gz
+http://download.handbrake.dynalias.com/contrib/lame-3.96.1.tar.gz
