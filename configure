@@ -93,4 +93,7 @@ LINKLIBS = $LINKLIBS ;
 EOF
 
 echo
-echo "To build HandBrake, run 'jam'."
+echo "To build HandBrake, run:"
+echo " './jamintel' on a Mac Intel,"
+echo " './jam' on a PPC Mac,"
+echo " 'jam' on Linux or Windows."
