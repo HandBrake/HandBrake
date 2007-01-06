@@ -179,10 +179,15 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
 
 static int MP4End( hb_mux_object_t * m )
 {
+	hb_log("MP4End: enter");
     av_write_trailer( m->format );
+	hb_log("av_write_trailer: complete");
+
     url_fclose( &m->format->pb );
+	hb_log("url_fclose: complete");
     av_free( m->format );
 	
+	hb_log("MP4End: exit");
     return 0;
 }
 

@@ -121,7 +121,7 @@ hb_handle_t * hb_init_real( int verbose, int update_check )
 
 char * hb_get_version( hb_handle_t * h )
 {
-    return HB_VERSION;
+    return "0.7.1a2";//HB_VERSION;
 }
 
 int hb_get_build( hb_handle_t * h )

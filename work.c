@@ -238,12 +238,14 @@ static void do_job( hb_job_t * job, int cpu_count )
         if( w->work( w, NULL, NULL ) == HB_WORK_DONE )
         {
             done = 1;
+			hb_log("Work is done.");
         }
         if( done &&
             !hb_fifo_size( job->fifo_sync ) &&
             !hb_fifo_size( job->fifo_render ) &&
             hb_fifo_size( job->fifo_mpeg4 ) < 2 )
         {
+			hb_log("Work is done and fifos are done.");
             break;
         }
         hb_snooze( 50 );
@@ -260,29 +262,42 @@ static void do_job( hb_job_t * job, int cpu_count )
         w->close( w );
     }
 
+	hb_log("Closing threads.");
     /* Stop read & write threads */
     hb_thread_close( &job->reader );
     hb_thread_close( &job->muxer );
 
     /* Close fifos */
     hb_fifo_close( &job->fifo_mpeg2 );
+	hb_log("fifo_mpeg2 closed.");
     hb_fifo_close( &job->fifo_raw );
+		   hb_log("fifo_raw closed.");
     hb_fifo_close( &job->fifo_sync );
+				  hb_log("fifo_sync closed.");
     hb_fifo_close( &job->fifo_render );
+						 hb_log("fifo_render closed.");
     hb_fifo_close( &job->fifo_mpeg4 );
+								hb_log("fifo_mpeg4 closed.");
     if( subtitle )
     {
         hb_fifo_close( &subtitle->fifo_in );
+		hb_log("fifo_in closed.");
         hb_fifo_close( &subtitle->fifo_raw );
+			   hb_log("fifo_raw closed.");
     }
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = hb_list_item( title->list_audio, i );
         hb_fifo_close( &audio->fifo_in );
+		hb_log("fifo_in closed.");
         hb_fifo_close( &audio->fifo_raw );
+			   hb_log("fifo_raw closed.");
         hb_fifo_close( &audio->fifo_sync );
+					  hb_log("fifo_sync closed.");
         hb_fifo_close( &audio->fifo_out );
+							 hb_log("fifo_out closed.");
     }
+	hb_log("do_job complete.");
 }
 
 static void work_loop( void * _w )
