@@ -46,6 +46,7 @@ static hb_track_t * GetTrack( hb_list_t * list )
         {
             track = track2;
             pts   = buf->start;
+			//hb_log("track: #%d, frame count %ld, fifo size %d", i, track->frames, hb_fifo_size( track->fifo));
         }
     }
     return track;
@@ -119,12 +120,14 @@ static void MuxerFunc( void * _mux )
 
     /* Build list of fifos we're interested in */
     list = hb_list_init();
+	hb_log( "mux: audio list count %d", hb_list_count( title->list_audio ));
 
     track           = calloc( sizeof( hb_track_t ), 1 );
     track->fifo     = job->fifo_mpeg4;
     track->mux_data = job->mux_data;
     hb_list_add( list, track );
 
+	hb_log( "mux: 1");
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio           = hb_list_item( title->list_audio, i );
@@ -133,6 +136,7 @@ static void MuxerFunc( void * _mux )
         track->mux_data = audio->mux_data;
         hb_list_add( list, track );
     }
+	hb_log( "mux: 2");
 
     while( !*job->die && !job->done )
     {
@@ -152,6 +156,7 @@ static void MuxerFunc( void * _mux )
         }
         hb_buffer_close( &buf );
     }
+	hb_log( "mux: 3");
 
     if( job->pass != 1 )
     {
@@ -159,6 +164,7 @@ static void MuxerFunc( void * _mux )
         uint64_t bytes_total, frames_total;
 
         m->end( m );
+		hb_log( "mux: 4");
 
         if( !stat( job->file, &sb ) )
         {
