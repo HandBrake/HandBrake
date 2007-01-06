@@ -57,7 +57,7 @@
 
 - (void) applicationWillFinishLaunching: (NSNotification *) n
 {
-    fHandle = hb_init_express( HB_DEBUG_ALL, 0);//HB_DEBUG_NONE, 0 );
+    fHandle = hb_init_express( HB_DEBUG_NONE, 0 );
     fList   = hb_get_titles( fHandle );
 }
 
@@ -534,7 +534,6 @@
             NSMutableString * string = [NSMutableString
                 stringWithFormat: @"Converting: %.1f %%",
                 100.0 * progress_total];
-			hb_log("Progress %.1f", progress_total * 100.0);
             if( p.seconds > -1 )
             {
                 [string appendFormat: @" (%.1f fps, ", p.rate_avg];
