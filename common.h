@@ -289,6 +289,7 @@ struct hb_state_s
 #define HB_STATE_WORKING  8
 #define HB_STATE_PAUSED   16
 #define HB_STATE_WORKDONE 32
+#define HB_STATE_MUXING   64
     int state;
 
     union
@@ -322,6 +323,11 @@ struct hb_state_s
             int error;
         } workdone;
 
+        struct
+        {
+            /* HB_STATE_MUXING */
+            float progress;
+        } muxing;
     } param;
 };
 
