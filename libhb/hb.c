@@ -46,12 +46,22 @@ hb_work_object_t * hb_objects = NULL;
 
 static void thread_func( void * );
 
+/**
+ * Registers work objects, by adding the work object to a liked list.
+ * @param w Handle to hb_work_object_t to register.
+ */
 void hb_register( hb_work_object_t * w )
 {
     w->next    = hb_objects;
     hb_objects = w;
 }
 
+/**
+ * libhb initialization routine.
+ * @param verbose HB_DEBUG_NONE or HB_DEBUG_ALL.
+ * @param update_check signals libhb to check for updated version from HandBrake website.
+ * @return Handle to hb_handle_t for use on all subsequent calls to libhb.
+ */
 hb_handle_t * hb_init_real( int verbose, int update_check )
 {
     hb_handle_t * h = calloc( sizeof( hb_handle_t ), 1 );
@@ -119,22 +129,43 @@ hb_handle_t * hb_init_real( int verbose, int update_check )
     return h;
 }
 
+/**
+ * Returns current version of libhb.
+ * @param h Handle to hb_handle_t.
+ * @return character array of version number.
+ */
 char * hb_get_version( hb_handle_t * h )
 {
     return HB_VERSION;
 }
 
+/**
+ * Returns current build of libhb.
+ * @param h Handle to hb_handle_t.
+ * @return character array of build number.
+ */
 int hb_get_build( hb_handle_t * h )
 {
     return HB_BUILD;
 }
 
+/**
+ * Checks for needed update.
+ * @param h Handle to hb_handle_t.
+ * @param version Pointer to handle where version will be copied.
+ * @return update indicator.
+ */
 int hb_check_update( hb_handle_t * h, char ** version )
 {
     *version = ( h->build < 0 ) ? NULL : h->version;
     return h->build;
 }
 
+/**
+ * Sets the cpu count to the desired value.
+ * @param h Handle to hb_handle_t
+ * @param cpu_count Number of CPUs to use.
+ */
 void hb_set_cpu_count( hb_handle_t * h, int cpu_count )
 {
     cpu_count    = MAX( 1, cpu_count );
@@ -142,6 +173,12 @@ void hb_set_cpu_count( hb_handle_t * h, int cpu_count )
     h->cpu_count = cpu_count;
 }
 
+/**
+ * Initializes a scan of the by calling hb_scan_init
+ * @param h Handle to hb_handle_t
+ * @param path location of VIDEO_TS folder.
+ * @param title_index Desired title to scan.  0 for all titles.
+ */
 void hb_scan( hb_handle_t * h, const char * path, int title_index )
 {
     hb_title_t * title;
@@ -157,11 +194,23 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index )
     h->scan_thread = hb_scan_init( h, path, title_index, h->list_title );
 }
 
+/**
+ * Returns the list of titles found.
+ * @param h Handle to hb_handle_t
+ * @return Handle to hb_list_t of the title list.
+ */
 hb_list_t * hb_get_titles( hb_handle_t * h )
 {
     return h->list_title;
 }
 
+/**
+ * Create preview image of desired title a index of picture.
+ * @param h Handle to hb_handle_t.
+ * @param title Handle to hb_title_t of desired title.
+ * @param picture Index in title.
+ * @param buffer Handle to buufer were inage will be drawn.
+ */
 void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
                      uint8_t * buffer )
 {
@@ -251,6 +300,12 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
     free( buf4 );
 }
 
+/**
+ * Calculates job width, height, and cropping parameters.
+ * @param job Handle to hb_job_t.
+ * @param aspect Desired aspect ratio. Value of -1 uses title aspect.
+ * @param pixels Maximum desired pixel count.
+ */
 void hb_set_size( hb_job_t * job, int aspect, int pixels )
 {
     hb_title_t * title = job->title;
@@ -334,18 +389,32 @@ void hb_set_size( hb_job_t * job, int aspect, int pixels )
     job->height = MULTIPLE_16( 16 * i * HB_ASPECT_BASE / aspect );
 }
 
+/**
+ * Returns the number of jobs in the queue.
+ * @param h Handle to hb_handle_t.
+ * @return Number of jobs.
+ */
 int hb_count( hb_handle_t * h )
 {
     return hb_list_count( h->jobs );
 }
 
+/**
+ * Returns handle to job at index i within the job list.
+ * @param h Handle to hb_handle_t.
+ * @param i Index of job.
+ * @returns Handle to hb_job_t of desired job.
+ */
 hb_job_t * hb_job( hb_handle_t * h, int i )
 {
     return hb_list_item( h->jobs, i );
 }
 
-/* hb_add: memcpy() party. That's ugly, for if someone has a better
-   idea... */
+/**
+ * Adds a job to the job list.
+ * @param h Handle to hb_handle_t.
+ * @param job Handle to hb_job_t.
+ */
 void hb_add( hb_handle_t * h, hb_job_t * job )
 {
     hb_job_t      * job_copy;
@@ -411,6 +480,11 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
     hb_list_add( h->jobs, job_copy );
 }
 
+/**
+ * Removes a job from the job list.
+ * @param h Handle to hb_handle_t.
+ * @param job Handle to hb_job_t.
+ */
 void hb_rem( hb_handle_t * h, hb_job_t * job )
 {
     hb_list_rem( h->jobs, job );
@@ -418,6 +492,12 @@ void hb_rem( hb_handle_t * h, hb_job_t * job )
     /* XXX free everything XXX */
 }
 
+/**
+ * Starts the conversion process.
+ * Sets state to HB_STATE_WORKING.
+ * calls hb_work_init, to launch work thread. Stores handle to work thread.
+ * @param h Handle to hb_handle_t.
+ */
 void hb_start( hb_handle_t * h )
 {
     /* XXX Hack */
@@ -444,6 +524,10 @@ void hb_start( hb_handle_t * h )
                                    &h->work_die, &h->work_error );
 }
 
+/**
+ * Pauses the conversion process.
+ * @param h Handle to hb_handle_t.
+ */
 void hb_pause( hb_handle_t * h )
 {
     if( !h->paused )
@@ -457,6 +541,10 @@ void hb_pause( hb_handle_t * h )
     }
 }
 
+/**
+ * Resumes the conversion process.
+ * @param h Handle to hb_handle_t.
+ */
 void hb_resume( hb_handle_t * h )
 {
     if( h->paused )
@@ -466,6 +554,10 @@ void hb_resume( hb_handle_t * h )
     }
 }
 
+/**
+ * Stops the conversion process.
+ * @param h Handle to hb_handle_t.
+ */
 void hb_stop( hb_handle_t * h )
 {
     h->work_die = 1;
@@ -473,6 +565,11 @@ void hb_stop( hb_handle_t * h )
     hb_resume( h );
 }
 
+/**
+ * Returns the state of the conversion process.
+ * @param h Handle to hb_handle_t.
+ * @param s Handle to hb_state_t which to copy the state data.
+ */
 void hb_get_state( hb_handle_t * h, hb_state_t * s )
 {
     hb_lock( h->state_lock );
@@ -483,6 +580,10 @@ void hb_get_state( hb_handle_t * h, hb_state_t * s )
     hb_unlock( h->state_lock );
 }
 
+/**
+ * Closes access to libhb by freeing the hb_handle_t handle ontained in hb_init_real.
+ * @param _h Pointer to handle to hb_handle_t.
+ */
 void hb_close( hb_handle_t ** _h )
 {
     hb_handle_t * h = *_h;
@@ -505,6 +606,12 @@ void hb_close( hb_handle_t ** _h )
     *_h = NULL;
 }
 
+/**
+ * Monitors the state of the update, scan, and work threads.
+ * Sets scan done state when scan thread exits.
+ * Sets work done state when work thread exits.
+ * @param _h Handle to hb_handle_t
+ */
 static void thread_func( void * _h )
 {
     hb_handle_t * h = (hb_handle_t *) _h;
@@ -583,11 +690,20 @@ static void thread_func( void * _h )
     rmdir( dirname );
 }
 
+/**
+ * Returns the PID.
+ * @param h Handle to hb_handle_t
+ */
 int hb_get_pid( hb_handle_t * h )
 {
     return h->pid;
 }
 
+/**
+ * Sets the current state.
+ * @param h Handle to hb_handle_t
+ * @param s Handle to new hb_state_t
+ */
 void hb_set_state( hb_handle_t * h, hb_state_t * s )
 {
     hb_lock( h->pause_lock );

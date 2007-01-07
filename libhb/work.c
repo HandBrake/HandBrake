@@ -19,6 +19,13 @@ static void work_func();
 static void do_job( hb_job_t *, int cpu_count );
 static void work_loop( void * );
 
+/**
+ * Allocates work object and launches work thread with work_func.
+ * @param jobs Handle to hb_list_t.
+ * @param cpu_count Humber of CPUs found in system.
+ * @param die Handle to user inititated exit indicator.
+ * @param error Handle to error indicator.
+ */
 hb_thread_t * hb_work_init( hb_list_t * jobs, int cpu_count,
                             volatile int * die, int * error )
 {
@@ -32,6 +39,10 @@ hb_thread_t * hb_work_init( hb_list_t * jobs, int cpu_count,
     return hb_thread_init( "work", work_func, work, HB_LOW_PRIORITY );
 }
 
+/**
+ * Interates through job list and calls do_job for each job.
+ * @param _work Handle work object.
+ */
 static void work_func( void * _work )
 {
     hb_work_t  * work = _work;
@@ -64,6 +75,17 @@ static hb_work_object_t * getWork( int id )
     return NULL;
 }
 
+/**
+ * Job initialization rountine.
+ * Initializes fifos.
+ * Creates work objects for synchronizer, video decoder, video renderer, video decoder, audio decoder, audio encoder, reader, muxer.
+ * Launches thread for each work object with work_loop.
+ * Loops while monitoring status of work threads and fifos.
+ * Exits loop when conversion is done and fifos are empty.
+ * Closes threads and frees fifos.
+ * @param job Handle work hb_job_t.
+ * @param cpu_count number of CPUs found in system.
+ */
 static void do_job( hb_job_t * job, int cpu_count )
 {
     hb_title_t    * title;
@@ -285,6 +307,13 @@ static void do_job( hb_job_t * job, int cpu_count )
     }
 }
 
+/**
+ * Performs the work objects specific work function.
+ * Loops calling work function for associated work object. Sleeps when fifo is full.
+ * Monitors work done indicator.
+ * Exits loop when work indiactor is set.
+ * @param _w Handle to work object.
+ */
 static void work_loop( void * _w )
 {
     hb_work_object_t * w = _w;

@@ -160,6 +160,7 @@ int main( int argc, char ** argv )
         }
 #else
         hb_snooze( 200 );
+		//hb_log("sleep: HBTest");
 #endif
 
         HandleEvents( h );
