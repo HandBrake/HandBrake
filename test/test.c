@@ -447,6 +447,14 @@ static int HandleEvents( hb_handle_t * h )
             break;
 #undef p
 
+#define p s.param.muxing
+        case HB_STATE_MUXING:
+        {
+            fprintf( stderr, "\rMuxing: %.2f %%", 100.0 * p.progress );
+            break;
+        }
+#undef p
+
 #define p s.param.workdone
         case HB_STATE_WORKDONE:
             /* Print error if any, then exit */

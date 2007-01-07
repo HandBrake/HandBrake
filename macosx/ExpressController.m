@@ -558,6 +558,19 @@
             }
             [fConvertInfoString setStringValue: string];
             [fConvertIndicator setIndeterminate: NO];
+            [fConvertIndicator setDoubleValue: 100.0 * progress_total];
+            break;
+        }
+#undef p
+
+#define p s.param.muxing
+        case HB_STATE_MUXING:
+        {
+            NSMutableString * string = [NSMutableString
+                stringWithFormat: @"Muxing: %.1f %%",
+                100.0 * p.progress];
+            [fConvertInfoString setStringValue: string];
+            [fConvertIndicator setIndeterminate: NO];
             [fConvertIndicator setDoubleValue: 100.0 * p.progress];
             break;
         }

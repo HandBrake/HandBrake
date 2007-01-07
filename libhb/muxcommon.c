@@ -158,6 +158,13 @@ static void MuxerFunc( void * _mux )
         struct stat sb;
         uint64_t bytes_total, frames_total;
 
+#define p state.param.muxing
+        /* Update the UI */
+        hb_state_t state;
+        state.state   = HB_STATE_MUXING;
+		p.progress = 0;
+        hb_set_state( job->h, &state );
+#undef p
         m->end( m );
 
         if( !stat( job->file, &sb ) )

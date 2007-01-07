@@ -350,6 +350,31 @@ static int FormatSettings[3][4] =
         }
 #undef p
 
+#define p s.param.muxing
+        case HB_STATE_MUXING:
+        {
+            float progress_total;
+            NSMutableString * string;
+			
+            /* Update text field */
+            string = [NSMutableString stringWithFormat:
+                _( @"Muxing: %.2f %%" ), 100.0 * p.progress];
+            [fStatusField setStringValue: string];
+			
+            /* Update slider */
+            [fRipIndicator setDoubleValue: 100.0 * p.progress];
+			
+            /* Update dock icon */
+            [self UpdateDockIcon: 100.0 * p.progress];
+			
+            [fPauseButton setEnabled: YES];
+            [fPauseButton setTitle: _( @"Pause" )];
+            [fRipButton setEnabled: YES];
+            [fRipButton setTitle: _( @"Cancel" )];
+            break;
+        }
+#undef p
+			
         case HB_STATE_PAUSED:
             [fStatusField setStringValue: _( @"Paused" )];
             [fPauseButton setEnabled: YES];
