@@ -100,7 +100,8 @@ static void ReaderFunc( void * _r )
                 while( !*r->die && !r->job->done &&
                        hb_fifo_is_full( fifo ) )
                 {
-                    hb_snooze( 50 );
+                    hb_snooze( 1 );
+					//hb_log("sleep: ReaderFunc");
                 }
                 hb_fifo_push( fifo, buf );
             }
