@@ -108,7 +108,7 @@ static void MuxerFunc( void * _mux )
             break;
         }
 
-        hb_snooze( 50 );
+        hb_snooze( 200 );
     }
 
     /* Create file, write headers */
@@ -134,13 +134,21 @@ static void MuxerFunc( void * _mux )
         hb_list_add( list, track );
     }
 
-    while( !*job->die && !job->done )
+	int thread_sleep_interval = 50;
+	while( !*job->die && !job->done )
     {
         if( !( track = GetTrack( list ) ) )
         {
-            hb_snooze( 50 );
+            hb_snooze( thread_sleep_interval );
+			thread_sleep_interval += 1;
             continue;
         }
+		thread_sleep_interval = MAX(1, (thread_sleep_interval - 1));
+#if 0
+		if ((thread_sleep_interval <= 1) || (thread_sleep_interval > 100)) {
+			hb_log("%s: %d", "Muxer", thread_sleep_interval);
+		}
+#endif
 
         buf = hb_fifo_get( track->fifo );
         if( job->pass != 1 )

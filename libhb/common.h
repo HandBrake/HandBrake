@@ -352,6 +352,7 @@ struct hb_work_object_s
     volatile int      * done;
 
     hb_work_object_t  * next;
+	int				  thread_sleep_interval;
 #endif
 };
 

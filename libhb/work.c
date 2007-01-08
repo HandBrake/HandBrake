@@ -40,7 +40,7 @@ hb_thread_t * hb_work_init( hb_list_t * jobs, int cpu_count,
 }
 
 /**
- * Interates through job list and calls do_job for each job.
+ * Iterates through job list and calls do_job for each job.
  * @param _work Handle work object.
  */
 static void work_func( void * _work )
@@ -247,6 +247,7 @@ static void do_job( hb_job_t * job, int cpu_count )
     {
         w = hb_list_item( job->list_work, i );
         w->done = &job->done;
+		w->thread_sleep_interval = 10;
         w->init( w, job );
         w->thread = hb_thread_init( w->name, work_loop, w,
                                     HB_LOW_PRIORITY );
@@ -254,6 +255,7 @@ static void do_job( hb_job_t * job, int cpu_count )
 
     done = 0;
     w = hb_list_item( job->list_work, 0 );
+	w->thread_sleep_interval = 50;
     w->init( w, job );
     while( !*job->die )
     {
@@ -268,7 +270,7 @@ static void do_job( hb_job_t * job, int cpu_count )
         {
             break;
         }
-        hb_snooze( 50 );
+        hb_snooze( w->thread_sleep_interval );
     }
     hb_list_rem( job->list_work, w );
     w->close( w );
@@ -325,13 +327,20 @@ static void work_loop( void * _w )
         hb_lock( job->pause );
         hb_unlock( job->pause );
 #endif
-        if( hb_fifo_is_full( w->fifo_out ) ||
+        //if( hb_fifo_is_full( w->fifo_out ) ||
+        if( (hb_fifo_percent_full( w->fifo_out ) > 0.8) ||
             !( buf_in = hb_fifo_get( w->fifo_in ) ) )
         {
-            hb_snooze( 50 );
+            hb_snooze( w->thread_sleep_interval );
+			w->thread_sleep_interval += 1;
             continue;
         }
-
+		w->thread_sleep_interval = MAX(1, (w->thread_sleep_interval - 1));
+#if 0
+		if ((w->thread_sleep_interval <= 1) || (w->thread_sleep_interval > 100)) {
+			hb_log("%s: %d", w->name, w->thread_sleep_interval);
+		}
+#endif
         w->work( w, &buf_in, &buf_out );
         if( buf_in )
         {

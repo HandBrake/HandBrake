@@ -158,9 +158,9 @@ int main( int argc, char ** argv )
                 }
             }
         }
+        hb_snooze( 200 );
 #else
         hb_snooze( 200 );
-		//hb_log("sleep: HBTest");
 #endif
 
         HandleEvents( h );
