@@ -101,6 +101,17 @@ int hb_fifo_is_full( hb_fifo_t * f )
     return ret;
 }
 
+float hb_fifo_percent_full( hb_fifo_t * f )
+{
+    float ret;
+
+    hb_lock( f->lock );
+    ret = f->size / f->capacity;
+    hb_unlock( f->lock );
+
+    return ret;
+}
+
 hb_buffer_t * hb_fifo_get( hb_fifo_t * f )
 {
     hb_buffer_t * b;

@@ -57,6 +57,7 @@ void          hb_buffer_close( hb_buffer_t ** );
 hb_fifo_t   * hb_fifo_init();
 int           hb_fifo_size( hb_fifo_t * );
 int           hb_fifo_is_full( hb_fifo_t * );
+float         hb_fifo_percent_full( hb_fifo_t * f );
 hb_buffer_t * hb_fifo_get( hb_fifo_t * );
 hb_buffer_t * hb_fifo_see( hb_fifo_t * );
 hb_buffer_t * hb_fifo_see2( hb_fifo_t * );

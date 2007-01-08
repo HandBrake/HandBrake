@@ -98,7 +98,7 @@ hb_handle_t * hb_init_real( int verbose, int update_check )
                         "update_thread" );
                 break;
             }
-            hb_snooze( 50 );
+            hb_snooze( 500 );
         }
     }
 
@@ -664,7 +664,7 @@ static void thread_func( void * _h )
             hb_unlock( h->state_lock );
         }
 
-        hb_snooze( 50 );
+        hb_snooze( 1000 );
     }
 
     if( h->work_thread )
