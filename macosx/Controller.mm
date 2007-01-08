@@ -303,11 +303,8 @@ static int FormatSettings[3][4] =
                     stringWithFormat: @"%d - %02dh%02dm%02ds",
                     title->index, title->hours, title->minutes,
                     title->seconds]];
-					
-					
-            
 			
-			}
+            }
 
             [self TitlePopUpChanged: NULL];
             [self EnableUI: YES];
@@ -597,13 +594,17 @@ static int FormatSettings[3][4] =
     }
     if( job->vcodec & HB_VCODEC_X264 )
     {
-	 if ([fVidEncoderPopUp indexOfSelectedItem] < 1 )
+	 if ([fVidEncoderPopUp indexOfSelectedItem] > 0 )
 	    {
 		/* Just use new Baseline Level 3.0 
 		Lets Deprecate Baseline Level 1.3*/
 		job->h264_level = 30;
 		job->mux = HB_MUX_IPOD;
 		}
+		
+		/* Set this flag to switch from Constant Quantizer(default) to Constant Rate Factor */
+		// job->crf = 1;
+		
         job->h264_13 = [fVidEncoderPopUp indexOfSelectedItem];
     }
 
@@ -944,8 +945,9 @@ static int FormatSettings[3][4] =
     {
         /* MPEG-4 -> H.264 */
         [fVidEncoderPopUp removeAllItems];
-		[fVidEncoderPopUp addItemWithTitle: @"x264 (h.264 Baseline iPod)"];
-        [fVidEncoderPopUp addItemWithTitle: @"x264 (h.264 Main)"];
+		[fVidEncoderPopUp addItemWithTitle: @"x264 (h.264 Main)"];
+		[fVidEncoderPopUp addItemWithTitle: @"x264 (h.264 iPod)"];
+        
         
     }
     else if( ( FormatSettings[format][codecs] & HB_VCODEC_FFMPEG ) )

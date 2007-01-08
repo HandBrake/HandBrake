@@ -1,5 +1,6 @@
 {
     IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
             ACTIONS = {
                 AddToQueue = id; 
@@ -135,7 +136,7 @@
             ACTIONS = {CheckChanged = id; ClosePanel = id; OpenPanel = id; }; 
             CLASS = PrefsController; 
             LANGUAGE = ObjC; 
-            OUTLETS = {fPanel = NSPanel; fUpdateCheck = NSButton; fdefaultlanguage = NSComboBox; }; 
+            OUTLETS = {fPanel = NSPanel; fUpdateCheck = NSButton; }; 
             SUPERCLASS = NSObject; 
         }, 
         {
