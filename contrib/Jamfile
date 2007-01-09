@@ -4,7 +4,7 @@ SubDir TOP contrib ;
 # is installed for all other systems
 if $(OS) = MACOSX
 {
-    WGET = curl -o ;
+    WGET = curl -L -o ;
 }
 else
 {
