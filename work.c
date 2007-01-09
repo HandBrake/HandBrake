@@ -327,20 +327,16 @@ static void work_loop( void * _w )
         hb_lock( job->pause );
         hb_unlock( job->pause );
 #endif
-        //if( hb_fifo_is_full( w->fifo_out ) ||
-        if( (hb_fifo_percent_full( w->fifo_out ) > 0.8) ||
+        if( hb_fifo_is_full( w->fifo_out ) ||
+//        if( (hb_fifo_percent_full( w->fifo_out ) > 0.8) ||
             !( buf_in = hb_fifo_get( w->fifo_in ) ) )
         {
             hb_snooze( w->thread_sleep_interval );
-			w->thread_sleep_interval += 1;
+//			w->thread_sleep_interval += 1;
             continue;
         }
-		w->thread_sleep_interval = MAX(1, (w->thread_sleep_interval - 1));
-#if 0
-		if ((w->thread_sleep_interval <= 1) || (w->thread_sleep_interval > 100)) {
-			hb_log("%s: %d", w->name, w->thread_sleep_interval);
-		}
-#endif
+//		w->thread_sleep_interval = MAX(1, (w->thread_sleep_interval - 1));
+
         w->work( w, &buf_in, &buf_out );
         if( buf_in )
         {
