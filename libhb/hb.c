@@ -664,7 +664,7 @@ static void thread_func( void * _h )
             hb_unlock( h->state_lock );
         }
 
-        hb_snooze( 1000 );
+        hb_snooze( 50 );
     }
 
     if( h->work_thread )
