@@ -440,7 +440,7 @@ static int FormatSettings[3][4] =
         fVidQualityMatrix, fVidGrayscaleCheck, fSubField, fSubPopUp,
         fAudLang1Field, fAudLang1PopUp, fAudLang2Field, fAudLang2PopUp,
         fAudRateField, fAudRatePopUp, fAudBitrateField,
-        fAudBitratePopUp, fPictureButton };
+        fAudBitratePopUp, fPictureButton, fQueueCheck };
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
