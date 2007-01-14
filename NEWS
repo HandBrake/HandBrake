@@ -1,0 +1,97 @@
+$Id: NEWS,v 1.28 2005/11/04 16:01:19 titer Exp $
+
+NEWS file for HandBrake <http://handbrake.m0k.org/>
+
+Changes between 0.7.0 and 0.7.1
+ + Universal Binary for PPC and Intel
+ + Bugfixes for missing subtitles, audio glitches with LPCM tracks and more
+
+Changes between 0.7.0-beta3 and 0.7.0
+ + Multithreaded H.264 encoding with x264
+ + Added option for H.264 Baseline (suitable for iPods)
+ + (Very) experimental queue support
+ + Fixes for some DVD titles HandBrake would not recognize
+ + Fixes audio gliches when encoding from LPCM tracks
+
+Changes between 0.6.2 and 0.7.0-beta3
+ + Chapters selection
+ + Custom framerate
+ + Subtitle support
+ + Check for updates
+ + Custom aspect ratio
+ + Audio samplerate selection
+ + mp4/H.264 output
+ + Proper NTSC support
+ + AC3 pass-through
+ + Progress bar in the dock icon (OS X)
+ + 2-pass H.264 encoding
+ + Constant quality encoding
+ + Grayscale encoding
+ + Up-to-date BeOS UI
+
+Changes between 0.6.1 and 0.6.2
+ + Support for DVDs with MPEG audio tracks
+ + Rewrote the DVD navigation code
+ + High quality resampler included
+ + Better AVI compliance
+ + Updated encoders
+ + Internal improvements
+ + Bugfixes
+
+Changes between 0.6.0 and 0.6.1
+ + Fixed LPCM endianness issue
+
+Changes between 0.5.2 and 0.6.0
+ + MP4 and OGM output
+ + AAC and Vorbis encoding
+ + Experimental H264 encoding
+ + LPCM DVDs support
+ + Autocrop
+ + GTK2 linux interface
+ + OS X interface localization
+
+Changes between 0.5.1 and 0.5.2
+ + Bugfixes
+
+Changes between 0.5 and 0.5.1
+ + 2-pass XviD encoding
+ + Bugfixes
+
+Changes between 0.4 and 0.5
+ + Bugfixes, rewrite of large parts of the core
+ + XviD encoding (1-pass only)
+
+Changes between 0.3 and 0.4
+ + Better multithreading
+ + Allow the user to specify a target size instead of bitrate
+ + Misc GUI enhancements
+ + Use low-priority threads on OS X
+
+Changes between 0.2 and 0.3
+ + OSX & Linux ports
+ + Allow 2-pass encoding
+ + Many internal changes & fixes
+
+Changes between 0.1.1 and 0.2
+ + Fixed a major bug that made HandBrake probably crash after ~ 15
+   minutes encoded
+ + Fixed a few minor memory leaks
+
+Changes between 0.1 and 0.1.1
+ + Fixed a stupid bug that prevented to scan volumes correctly if
+   FAT/NTFS/etc volumes were mounted
+
+Changes between 0.1-alpha2 and 0.1 :
+ + Automatically detect ripped DVDs on BFS volumes
+ + Allow picture cropping and resizing
+ + Allow dual-audio encoding
+ + Created files are quite compliant now (tested with OSX/Quicktime
+   and BSPlayer)
+ + Better A/V sync with some DVDs
+
+Changes between 0.1-alpha and 0.1-alpha2 :
+ + Show length for each title
+ + Fixed the screwed-audio bug
+ + Many bugfixes...
+
+First version is 0.1-alpha.
