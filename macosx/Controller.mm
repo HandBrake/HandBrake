@@ -334,6 +334,7 @@ static int FormatSettings[3][4] =
 
             /* Update slider */
             progress_total = ( p.progress + p.job_cur - 1 ) / p.job_count;
+            [fRipIndicator setIndeterminate: NO];
             [fRipIndicator setDoubleValue: 100.0 * progress_total];
 
             /* Update dock icon */
@@ -350,19 +351,19 @@ static int FormatSettings[3][4] =
 #define p s.param.muxing
         case HB_STATE_MUXING:
         {
-            float progress_total;
             NSMutableString * string;
 			
             /* Update text field */
             string = [NSMutableString stringWithFormat:
-                _( @"Muxing: %.2f %%" ), 100.0 * p.progress];
+                _( @"Muxing..." )];
             [fStatusField setStringValue: string];
 			
             /* Update slider */
-            [fRipIndicator setDoubleValue: 100.0 * p.progress];
+            [fRipIndicator setIndeterminate: YES];
+            [fRipIndicator startAnimation: nil];
 			
             /* Update dock icon */
-            [self UpdateDockIcon: 100.0 * p.progress];
+            [self UpdateDockIcon: 1.0];
 			
             [fPauseButton setEnabled: YES];
             [fPauseButton setTitle: _( @"Pause" )];
@@ -384,6 +385,7 @@ static int FormatSettings[3][4] =
         {
             [self EnableUI: YES];
             [fStatusField setStringValue: _( @"Done." )];
+            [fRipIndicator setIndeterminate: NO];
             [fRipIndicator setDoubleValue: 0.0];
             [fRipButton setTitle: _( @"Rip" )];
 

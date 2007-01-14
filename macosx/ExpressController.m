@@ -521,6 +521,90 @@
     }
 }
 
+/***********************************************************************
+* UpdateDockIcon
+***********************************************************************
+* Shows a progression bar on the dock icon, filled according to
+* 'progress' (0.0 <= progress <= 1.0).
+* Called with progress < 0.0 or progress > 1.0, restores the original
+* icon.
+**********************************************************************/
+- (void) UpdateDockIcon: (float) progress
+{
+    NSImage * icon;
+    NSData * tiff;
+    NSBitmapImageRep * bmp;
+    uint32_t * pen;
+    uint32_t black = htonl( 0x000000FF );
+    uint32_t red   = htonl( 0xFF0000FF );
+    uint32_t white = htonl( 0xFFFFFFFF );
+    int row_start, row_end;
+    int i, j;
+	
+    /* Get application original icon */
+    icon = [NSImage imageNamed: @"NSApplicationIcon"];
+	
+    if( progress < 0.0 || progress > 1.0 )
+    {
+        [NSApp setApplicationIconImage: icon];
+        return;
+    }
+	
+    /* Get it in a raw bitmap form */
+    tiff = [icon TIFFRepresentationUsingCompression:
+					   NSTIFFCompressionNone factor: 1.0];
+    bmp = [NSBitmapImageRep imageRepWithData: tiff];
+    
+    /* Draw the progression bar */
+    /* It's pretty simple (ugly?) now, but I'm no designer */
+	
+    row_start = 3 * (int) [bmp size].height / 4;
+    row_end   = 7 * (int) [bmp size].height / 8;
+	
+    for( i = row_start; i < row_start + 2; i++ )
+    {
+        pen = (uint32_t *) ( [bmp bitmapData] + i * [bmp bytesPerRow] );
+        for( j = 0; j < (int) [bmp size].width; j++ )
+        {
+            pen[j] = black;
+        }
+    }
+    for( i = row_start + 2; i < row_end - 2; i++ )
+    {
+        pen = (uint32_t *) ( [bmp bitmapData] + i * [bmp bytesPerRow] );
+        pen[0] = black;
+        pen[1] = black;
+        for( j = 2; j < (int) [bmp size].width - 2; j++ )
+        {
+            if( j < 2 + (int) ( ( [bmp size].width - 4.0 ) * progress ) )
+            {
+                pen[j] = red;
+            }
+            else
+            {
+                pen[j] = white;
+            }
+        }
+        pen[j]   = black;
+        pen[j+1] = black;
+    }
+    for( i = row_end - 2; i < row_end; i++ )
+    {
+        pen = (uint32_t *) ( [bmp bitmapData] + i * [bmp bytesPerRow] );
+        for( j = 0; j < (int) [bmp size].width; j++ )
+        {
+            pen[j] = black;
+        }
+    }
+	
+    /* Now update the dock icon */
+    tiff = [bmp TIFFRepresentationUsingCompression:
+					  NSTIFFCompressionNone factor: 1.0];
+    icon = [[NSImage alloc] initWithData: tiff];
+    [NSApp setApplicationIconImage: icon];
+    [icon release];
+}
+
 - (void) convertTimer: (NSTimer *) timer
 {
     hb_state_t s;
@@ -559,7 +643,8 @@
             [fConvertInfoString setStringValue: string];
             [fConvertIndicator setIndeterminate: NO];
             [fConvertIndicator setDoubleValue: 100.0 * progress_total];
-            break;
+            [self UpdateDockIcon: progress_total];
+			break;
         }
 #undef p
 
@@ -567,11 +652,11 @@
         case HB_STATE_MUXING:
         {
             NSMutableString * string = [NSMutableString
-                stringWithFormat: @"Muxing: %.1f %%",
-                100.0 * p.progress];
+                stringWithFormat: @"Muxing..."];
             [fConvertInfoString setStringValue: string];
-            [fConvertIndicator setIndeterminate: NO];
-            [fConvertIndicator setDoubleValue: 100.0 * p.progress];
+            [fConvertIndicator setIndeterminate: YES];
+            [fConvertIndicator startAnimation: nil];
+            [self UpdateDockIcon: 1.0];
             break;
         }
 #undef p
@@ -581,6 +666,7 @@
 			[timer invalidate];
             [fConvertIndicator setIndeterminate: NO];
             [fConvertIndicator setDoubleValue: 0.0];
+            [self UpdateDockIcon: -1.0];
             [self convertEnable: YES];
 			
 #define p s.param.workdone
