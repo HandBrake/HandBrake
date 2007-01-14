@@ -54,6 +54,7 @@ static void ReaderFunc( void * _r )
     hb_buffer_t  * buf;
     hb_list_t    * list;
     int            chapter;
+	time_t last_debug_print = time( NULL );
 
     if( !( r->dvd = hb_dvd_init( r->title->dvd ) ) )
     {
@@ -91,7 +92,8 @@ static void ReaderFunc( void * _r )
 
         hb_demux_ps( r->ps, list );
 
-        while( ( buf = hb_list_item( list, 0 ) ) )
+		int thread_sleep_interval = 50;
+		while( ( buf = hb_list_item( list, 0 ) ) )
         {
             hb_list_rem( list, buf );
             fifo = GetFifoForId( r->job, buf->id );
@@ -100,8 +102,18 @@ static void ReaderFunc( void * _r )
                 while( !*r->die && !r->job->done &&
                        hb_fifo_is_full( fifo ) )
                 {
-                    hb_snooze( 50 );
+					hb_snooze( thread_sleep_interval );
+					thread_sleep_interval += 1;
+					if(getenv( "HB_DEBUG" ))
+					{
+						if(time(NULL) >= (last_debug_print +5))
+						{
+							last_debug_print = time(NULL);
+							hb_log("%s, thread sleep interval: %d", "reader", thread_sleep_interval);
+						}
+					}
                 }
+				thread_sleep_interval = MAX(0, (thread_sleep_interval - 1));
                 hb_fifo_push( fifo, buf );
             }
             else

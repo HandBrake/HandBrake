@@ -68,14 +68,16 @@ struct hb_fifo_s
     int            size;
     hb_buffer_t  * first;
     hb_buffer_t  * last;
+	char           name[80];
 };
 
-hb_fifo_t * hb_fifo_init( int capacity )
+hb_fifo_t * hb_fifo_init( int capacity, char *name )
 {
     hb_fifo_t * f;
     f           = calloc( sizeof( hb_fifo_t ), 1 );
     f->lock     = hb_lock_init();
     f->capacity = capacity;
+	strcat(f->name, name);
     return f;
 }
 
@@ -127,7 +129,11 @@ hb_buffer_t * hb_fifo_get( hb_fifo_t * f )
     b->next   = NULL;
     f->size  -= 1;
     hb_unlock( f->lock );
-
+	if(f->size > (f->capacity + 5))
+	{
+		hb_log( "hb_fifo_get: %s, capacity %d, size %d", f->name, f->capacity, f->size );
+    }
+	
     return b;
 }
 
@@ -194,7 +200,7 @@ void hb_fifo_close( hb_fifo_t ** _f )
     hb_fifo_t   * f = *_f;
     hb_buffer_t * b;
     
-    hb_log( "fifo_close: trashing %d buffer(s)", hb_fifo_size( f ) );
+    hb_log( "fifo_close: %s, trashing %d buffer(s)", f->name, hb_fifo_size( f ) );
     while( ( b = hb_fifo_get( f ) ) )
     {
         hb_buffer_close( &b );

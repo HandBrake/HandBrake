@@ -135,15 +135,24 @@ static void MuxerFunc( void * _mux )
     }
 
 	int thread_sleep_interval = 50;
+	time_t last_debug_print = time( NULL );
 	while( !*job->die && !job->done )
     {
         if( !( track = GetTrack( list ) ) )
         {
             hb_snooze( thread_sleep_interval );
-//			thread_sleep_interval += 1;
+			thread_sleep_interval += 1;
+			if(getenv( "HB_DEBUG" ))
+			{
+				if(time(NULL) >= (last_debug_print + 5))
+				{
+					last_debug_print = time(NULL);
+					hb_log("%s, thread sleep interval: %d", "muxer", thread_sleep_interval);
+				}
+			}
             continue;
         }
-//		thread_sleep_interval = MAX(1, (thread_sleep_interval - 1));
+		thread_sleep_interval = MAX(0, (thread_sleep_interval - 1));
 
         buf = hb_fifo_get( track->fifo );
         if( job->pass != 1 )

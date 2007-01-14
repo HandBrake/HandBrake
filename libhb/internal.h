@@ -54,7 +54,7 @@ void          hb_buffer_realloc( hb_buffer_t *, int size );
 void          hb_buffer_close( hb_buffer_t ** );
 
 
-hb_fifo_t   * hb_fifo_init();
+hb_fifo_t * hb_fifo_init( int, char * );
 int           hb_fifo_size( hb_fifo_t * );
 int           hb_fifo_is_full( hb_fifo_t * );
 float         hb_fifo_percent_full( hb_fifo_t * f );
