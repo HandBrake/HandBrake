@@ -71,6 +71,7 @@ hb_handle_t * hb_init_real( int verbose, int update_check )
     if( verbose > HB_DEBUG_NONE )
     {
         putenv( "HB_DEBUG=1" );
+		av_log_set_level(AV_LOG_DEBUG);
     }
 
     /* Check for an update on the website if asked to */
