@@ -120,11 +120,11 @@ static void do_job( hb_job_t * job, int cpu_count )
                 job->vbitrate, job->pass );
     }
 
-    job->fifo_mpeg2  = hb_fifo_init( 2048 );
-    job->fifo_raw    = hb_fifo_init( 8 );
-    job->fifo_sync   = hb_fifo_init( 8 );
-    job->fifo_render = hb_fifo_init( 8 );
-    job->fifo_mpeg4  = hb_fifo_init( 8 );
+    job->fifo_mpeg2  = hb_fifo_init( 2048, "mpeg2" );
+    job->fifo_raw    = hb_fifo_init( 8, "raw"  );
+    job->fifo_sync   = hb_fifo_init( 8, "sync"  );
+    job->fifo_render = hb_fifo_init( 8, "render"  );
+    job->fifo_mpeg4  = hb_fifo_init( 8, "mpeg4"  );
 
     /* Synchronization */
     hb_list_add( job->list_work, ( w = getWork( WORK_SYNC ) ) );
@@ -167,8 +167,8 @@ static void do_job( hb_job_t * job, int cpu_count )
     {
         hb_log( " + subtitle %x, %s", subtitle->id, subtitle->lang );
 
-        subtitle->fifo_in  = hb_fifo_init( 8 );
-        subtitle->fifo_raw = hb_fifo_init( 8 );
+        subtitle->fifo_in  = hb_fifo_init( 8, "subtitle in"  );
+        subtitle->fifo_raw = hb_fifo_init( 8, "subtitle raw"  );
 
         hb_list_add( job->list_work, ( w = getWork( WORK_DECSUB ) ) );
         w->fifo_in  = subtitle->fifo_in;
@@ -192,10 +192,10 @@ static void do_job( hb_job_t * job, int cpu_count )
         audio = hb_list_item( title->list_audio, i );
         hb_log( "   + %x, %s", audio->id, audio->lang );
 
-        audio->fifo_in   = hb_fifo_init( 2048 );
-        audio->fifo_raw  = hb_fifo_init( 8 );
-        audio->fifo_sync = hb_fifo_init( 8 );
-        audio->fifo_out  = hb_fifo_init( 8 );
+        audio->fifo_in   = hb_fifo_init( 2048, "audio in"  );
+        audio->fifo_raw  = hb_fifo_init( 8, "audio raw"  );
+        audio->fifo_sync = hb_fifo_init( 8 , "audio sync" );
+        audio->fifo_out  = hb_fifo_init( 8, "audio out"  );
 
         switch( audio->codec )
         {
@@ -247,15 +247,15 @@ static void do_job( hb_job_t * job, int cpu_count )
     {
         w = hb_list_item( job->list_work, i );
         w->done = &job->done;
-		w->thread_sleep_interval = 10;
+		w->thread_sleep_interval = 1000;
         w->init( w, job );
-        w->thread = hb_thread_init( w->name, work_loop, w,
-                                    HB_LOW_PRIORITY );
+        w->thread = hb_thread_init( w->name, work_loop, w, HB_LOW_PRIORITY );
     }
 
     done = 0;
     w = hb_list_item( job->list_work, 0 );
-	w->thread_sleep_interval = 50;
+	w->thread_sleep_interval = 1;
+	time_t last_debug_print = time( NULL );
     w->init( w, job );
     while( !*job->die )
     {
@@ -271,6 +271,21 @@ static void do_job( hb_job_t * job, int cpu_count )
             break;
         }
         hb_snooze( w->thread_sleep_interval );
+
+		if(getenv( "HB_DEBUG" ))
+		{
+			if(time(NULL) >= (last_debug_print + 5))
+			{
+				int i;
+				hb_work_object_t * w;
+				last_debug_print = time(NULL);
+				for( i = 0; i < hb_list_count( job->list_work ); i++ )
+				{
+					w = hb_list_item( job->list_work, i );
+					hb_log("%s, thread sleep interval: %d", w->name, w->thread_sleep_interval);
+				}
+			}
+		}
     }
     hb_list_rem( job->list_work, w );
     w->close( w );
@@ -327,24 +342,26 @@ static void work_loop( void * _w )
         hb_lock( job->pause );
         hb_unlock( job->pause );
 #endif
-        if( hb_fifo_is_full( w->fifo_out ) ||
-//        if( (hb_fifo_percent_full( w->fifo_out ) > 0.8) ||
-            !( buf_in = hb_fifo_get( w->fifo_in ) ) )
-        {
+        if( hb_fifo_is_full( w->fifo_out ))
+		{
+			w->thread_sleep_interval += 1;
             hb_snooze( w->thread_sleep_interval );
-//			w->thread_sleep_interval += 1;
             continue;
-        }
-//		w->thread_sleep_interval = MAX(1, (w->thread_sleep_interval - 1));
+		}
+		w->thread_sleep_interval = MAX(0, (w->thread_sleep_interval - 1));
 
-        w->work( w, &buf_in, &buf_out );
-        if( buf_in )
-        {
-            hb_buffer_close( &buf_in );
-        }
-        if( buf_out )
-        {
-            hb_fifo_push( w->fifo_out, buf_out );
-        }
+		buf_in = hb_fifo_get( w->fifo_in );
+		if(buf_in)
+		{
+			w->work( w, &buf_in, &buf_out );
+			if( buf_in )
+			{
+				hb_buffer_close( &buf_in );
+			}
+			if( buf_out )
+			{
+				hb_fifo_push( w->fifo_out, buf_out );
+			}
+		}
     }
 }
