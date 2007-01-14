@@ -253,14 +253,14 @@ LibVorbisEnc $(SUBDIR)/lib/libvorbisenc.a : $(SUBDIR)/lib/libvorbis.a ;
 rule LibX264
 {
     LIBX264_PATCH = "" ;
-    if $(OS) = MACOSX && $(OSPLAT) = X86
-    {
-        LIBX264_PATCH = " patch -p1 < ../patch-x264-macintel.patch && " ;
-    }
-    else if $(OS) = CYGWIN
-    {
-        LIBX264_PATCH = " patch -p1 < ../patch-x264-cygwin.patch && " ;
-    }
+#    if $(OS) = MACOSX && $(OSPLAT) = X86
+#    {
+#        LIBX264_PATCH = " patch -p1 < ../patch-x264-macintel.patch && " ;
+#    }
+#    else if $(OS) = CYGWIN
+#    {
+#        LIBX264_PATCH = " patch -p1 < ../patch-x264-cygwin.patch && " ;
+#    }
     Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
 }
