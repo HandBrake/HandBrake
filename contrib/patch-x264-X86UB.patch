@@ -1,0 +1,10 @@
+diff -Naur x264/config.guess x264_UB/config.guess
+--- x264/config.guess	2007-01-14 18:30:22.000000000 +0100
++++ x264_UB/config.guess	2007-01-14 20:01:35.000000000 +0100
+@@ -1,4 +1,6 @@
+ #! /bin/sh
++echo powerpc-apple-darwin8.8.1
++exit
+ # Attempt to guess a canonical system name.
+ #   Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
+ #   2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software Foundation,
