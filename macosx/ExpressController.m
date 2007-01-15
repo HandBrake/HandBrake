@@ -203,6 +203,7 @@
 
         int pixels = 307200;
 		int aspect = title->aspect;
+		job->pixel_ratio = 0 ;
 		if( [fConvertAspectPopUp indexOfSelectedItem] == 1)
 		{
             aspect = 4 * HB_ASPECT_BASE / 3;

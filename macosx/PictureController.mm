@@ -168,10 +168,17 @@ static int GetAlignedSize( int size )
             sender == fCropTopStepper || sender == fCropBottomStepper )
         {
             hb_fix_aspect( job, HB_KEEP_WIDTH );
-            if( job->height > fTitle->height )
-            {
-                job->height = fTitle->height;
-                hb_fix_aspect( job, HB_KEEP_HEIGHT );
+            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PixelRatio"])
+    		{
+    		
+    		}
+    		else
+    		{
+            	if( job->height > fTitle->height )
+            	{
+              		job->height = fTitle->height;
+              	  	hb_fix_aspect( job, HB_KEEP_HEIGHT );
+            	}
             }
         }
         else

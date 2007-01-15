@@ -640,7 +640,26 @@ static int FormatSettings[3][4] =
     }
 
     job->grayscale = ( [fVidGrayscaleCheck state] == NSOnState );
-
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PixelRatio"])
+    {
+    	if ( job->mux & HB_MUX_MP4 )
+    	{
+			job->pixel_ratio = 0 ;
+			hb_fix_aspect( job, HB_KEEP_WIDTH );
+    	}
+    	else
+    	{
+			job->pixel_ratio = 1 ;
+			// job->height = title->height;
+			// job->width = title->width;
+			// hb_fix_aspect( job, HB_KEEP_WIDTH );
+		}
+	}
+	else
+	{
+		job->pixel_ratio = 0 ;
+		hb_fix_aspect( job, HB_KEEP_WIDTH );
+	}
     /* Subtitle settings */
     job->subtitle = [fSubPopUp indexOfSelectedItem] - 1;
 
