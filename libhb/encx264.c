@@ -75,6 +75,16 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     /* Slightly faster with minimal quality lost */
     param.analyse.i_subpel_refine = 4;
 	
+    if( job->pixel_ratio )
+    {
+        param.vui.i_sar_width = job->pixel_aspect_width;
+        param.vui.i_sar_height = job->pixel_aspect_height;
+
+        hb_log( "encx264: encoding with stored aspect %d/%d",
+                param.vui.i_sar_width, param.vui.i_sar_height );
+    }
+ 
+
     if( job->vquality >= 0.0 && job->vquality <= 1.0 )
     {
         switch(job->crf)

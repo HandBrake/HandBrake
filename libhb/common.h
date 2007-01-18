@@ -7,6 +7,7 @@
 #ifndef HB_COMMON_H
 #define HB_COMMON_H
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -55,6 +56,8 @@ void        hb_list_rem( hb_list_t *, void * );
 void      * hb_list_item( hb_list_t *, int );
 void        hb_list_close( hb_list_t ** );
 
+void hb_reduce( int *x, int *y, int num, int den );
+
 #define HB_KEEP_WIDTH  0
 #define HB_KEEP_HEIGHT 1
 void hb_fix_aspect( hb_job_t * job, int keep );
@@ -92,17 +95,24 @@ struct hb_job_s
     int             chapter_end;
 
     /* Picture settings:
-         crop:        must be multiples of 2 (top/bottom/left/right)
-         deinterlace: 0 or 1
-         width:       must be a multiple of 16
-         height:      must be a multiple of 16
-         keep_ratio:  used by UIs */
+         crop:                must be multiples of 2 (top/bottom/left/right)
+         deinterlace:         0 or 1
+         width:               must be a multiple of 16
+         height:              must be a multiple of 16
+         keep_ratio:          used by UIs 
+         pixel_ratio:         store pixel aspect ratio in the video
+         pixel_aspect_width:  numerator for pixel aspect ratio
+         pixel_aspect_height: denominator for pixel aspect ratio */
+
     int             crop[4];
     int             deinterlace;
     int             width;
     int             height;
     int             keep_ratio;
     int             grayscale;
+    int             pixel_ratio;
+    int             pixel_aspect_width;
+    int             pixel_aspect_height;
 
     /* Video settings:
          vcodec:            output codec

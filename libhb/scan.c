@@ -177,13 +177,20 @@ static void ScanFunc( void * _data )
         /* Autocrop by default. Gnark gnark */
         memcpy( job->crop, title->crop, 4 * sizeof( int ) );
 
-        job->width = title->width - job->crop[2] - job->crop[3];
-        hb_fix_aspect( job, HB_KEEP_WIDTH );
-        if( job->height > title->height - job->crop[0] - job->crop[1] )
+        if( title->aspect == 16 )
         {
-            job->height = title->height - job->crop[0] - job->crop[1];
-            hb_fix_aspect( job, HB_KEEP_HEIGHT );
+            hb_reduce( &job->pixel_aspect_width, &job->pixel_aspect_height,
+                       16 * title->height, 9 * title->width );
         }
+        else
+        {
+            hb_reduce( &job->pixel_aspect_width, &job->pixel_aspect_height,
+                       4 * title->height, 3 * title->width );
+        }
+
+        job->width = title->width - job->crop[2] - job->crop[3];
+        job->height = title->height - job->crop[0] - job->crop[1];
+
         job->keep_ratio = 1;
 
         job->vcodec     = HB_VCODEC_FFMPEG;

@@ -37,6 +37,29 @@ int hb_audio_bitrates_count = sizeof( hb_audio_bitrates ) /
 int hb_audio_bitrates_default = 8; /* 128 kbps */
 
 /**********************************************************************
+ * hb_reduce
+ **********************************************************************
+ * Given a numerator (num) and a denominator (den), reduce them to an
+ * equivalent fraction and store the result in x and y.
+ *********************************************************************/
+void hb_reduce( int *x, int *y, int num, int den )
+{
+    int lower = MIN( num, den );
+    int i;
+    *x = num;
+    *y = den;
+    for( i = lower - 1; i > 1; --i )
+    {
+        if( ( num % i == 0 ) && ( den % i == 0 ) )
+        {
+            *x = num / i;
+            *y = den / i;
+            break;
+        }
+    }
+}
+
+/**********************************************************************
  * hb_fix_aspect
  **********************************************************************
  * Given the output width (if HB_KEEP_WIDTH) or height
