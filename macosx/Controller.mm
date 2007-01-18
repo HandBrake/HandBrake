@@ -115,7 +115,7 @@ static int FormatSettings[3][4] =
     [fVidTargetSizeField setIntValue: 700];
   	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PixelRatio"])
     {
-    	[fVidBitrateField    setIntValue: 1200];
+    	[fVidBitrateField    setIntValue: 1350];
     	[fVidTwoPassCheck    setState: NSOnState];
     }
 	else
@@ -283,7 +283,8 @@ static int FormatSettings[3][4] =
         {
             hb_list_t  * list;
             hb_title_t * title;
-
+			int indxpri=0; 	  // Used to search the longuest title (default in combobox)
+			int longuestpri=0; // Used to search the longuest title (default in combobox)
             [fScanController UpdateUI: &s];
 
             list = hb_get_titles( fHandle );
@@ -303,9 +304,16 @@ static int FormatSettings[3][4] =
 				
 				/* Use the dvd name in the default output field here 
 				May want to add code to remove blank spaces for some dvd names*/
+				
 				[fDstFile2Field setStringValue: [NSString stringWithFormat:
                 @"%@/Desktop/%@.mp4", NSHomeDirectory(),[NSString
                   stringWithUTF8String: title->name]]];
+                  
+                if (longuestpri < title->hours*60*60 + title->minutes *60 + title->seconds)
+                {
+                	longuestpri=title->hours*60*60 + title->minutes *60 + title->seconds;
+                	indxpri=i;
+                }
 				
 			    [fSrcTitlePopUp addItemWithTitle: [NSString
                     stringWithFormat: @"%d - %02dh%02dm%02ds",
@@ -313,8 +321,10 @@ static int FormatSettings[3][4] =
                     title->seconds]];
 			
             }
-
+            // Select the longuest title
+			[fSrcTitlePopUp selectItemAtIndex: indxpri];
             [self TitlePopUpChanged: NULL];
+			[self FormatPopUpChanged: NULL];            
             [self EnableUI: YES];
             [fPauseButton setEnabled: NO];
             [fRipButton   setEnabled: YES];
