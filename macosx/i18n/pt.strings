@@ -1,0 +1,183 @@
+/* No comment provided by engineer. */
+"2-pass encoding" = "Codificar em 2 passagens";
+
+/* No comment provided by engineer. */
+"Audio" = "Audio";
+
+/* No comment provided by engineer. */
+"Autocrop" = "Cortado";
+
+/* No comment provided by engineer. */
+"AVI file / H264 video / MP3 audio" = "AVI file / H264 video / MP3 audio";
+
+/* No comment provided by engineer. */
+"AVI file / MPEG-4 video / MP3 audio" = "AVI file / MPEG-4 video / MP3 audio";
+
+/* No comment provided by engineer. */
+"Bitrate" = "Bitrate";
+
+/* No comment provided by engineer. */
+"Bitrate (kbps)" = "Bitrate (kbps)";
+
+/* No comment provided by engineer. */
+"Bottom cropping" = "Cortado do final";
+
+/* No comment provided by engineer. */
+"Browse" = "Visualizar";
+
+/* No comment provided by engineer. */
+"Cancel" = "Cancelar";
+
+/* No comment provided by engineer. */
+"Cancel - Are you sure?" = "Cancelar - Tem a certeza?";
+
+/* No comment provided by engineer. */
+"Canceled." = "Cancelado.";
+
+/* No comment provided by engineer. */
+"Close" = "Fechar";
+
+/* No comment provided by engineer. */
+"Crop & Scale..." = "Cortar e Redimensionar...";
+
+/* No comment provided by engineer. */
+"Custom (kbps)" = " Normal em (kbps)";
+
+/* No comment provided by engineer. */
+"Deinterlace picture" = "Deinterlace imagem";
+
+/* No comment provided by engineer. */
+"Detected volume" = "Volume detectado";
+
+/* No comment provided by engineer. */
+"Do you want to overwrite %@?" = "Quer reescrever %@?";
+
+/* No comment provided by engineer. */
+"DVD Folder" = "Pasta do DVD";
+
+/* No comment provided by engineer. */
+"DVD title" = "Titulo do DVD";
+
+/* No comment provided by engineer. */
+"Encoding won't be recoverable." = "A codificacao nao pode ser recuperada.";
+
+/* No comment provided by engineer. */
+"Encoding: %.2f %% (pass %d of %d)" = "Codificao em progresso: %.2f %% (passagem %d of %d)";
+
+/* No comment provided by engineer. */
+"File" = "Ficheiro";
+
+/* No comment provided by engineer. */
+"File already exists" = "O ficheiro ja existe";
+
+/* No comment provided by engineer. */
+"Final size: %dx%d" = "Tamanho do ficheiro: %dx%d";
+
+/* No comment provided by engineer. */
+"General" = "Geral";
+
+/* No comment provided by engineer. */
+"Invalid secondary language" = "Secunda lingua invalida";
+
+/* No comment provided by engineer. */
+"Invalid video bitrate" = "Video bitrate invalido";
+
+/* No comment provided by engineer. */
+"Invalid volume, try again" = "volume invalido, tente novamente";
+
+/* No comment provided by engineer. */
+"Language 1" = "Lingua 1";
+
+/* No comment provided by engineer. */
+"Language 2 (optional)" = "Lingua 2 (optional)";
+
+/* No comment provided by engineer. */
+"Left cropping" = "Cortado a esquerda";
+
+/* No comment provided by engineer. */
+"MP4 file / MPEG-4 video / AAC audio" = "MP4 file / MPEG-4 video / AAC audio";
+
+/* No comment provided by engineer. */
+"MPEG-4 encoder" = "MPEG-4 encoder";
+
+/* No comment provided by engineer. */
+"Next" = "Proximo";
+
+/* No comment provided by engineer. */
+"No" = "Nao";
+
+/* No comment provided by engineer. */
+"None" = "Nao existente";
+
+/* No comment provided by engineer. */
+"OGM file / MPEG-4 video / Vorbis audio" = "OGM file / MPEG-4 video / Vorbis audio";
+
+/* No comment provided by engineer. */
+"Ooops" = "Bolas";
+
+/* No comment provided by engineer. */
+"Open" = "Aberto";
+
+/* No comment provided by engineer. */
+"Opening device..." = "Abertura em curso...";
+
+/* No comment provided by engineer. */
+"Output format" = "Formato de Output";
+
+/* No comment provided by engineer. */
+"Pause" = "Pausa";
+
+/* No comment provided by engineer. */
+"Picture width" = "Tamanho da figura";
+
+/* No comment provided by engineer. */
+"Previous" = "Anterior";
+
+/* No comment provided by engineer. */
+"Resume" = "Resumo";
+
+/* No comment provided by engineer. */
+"Right cropping" = "Cortado a direita";
+
+/* No comment provided by engineer. */
+"Rip" = "Rip";
+
+/* No comment provided by engineer. */
+"Rip completed." = "Rip completado.";
+
+/* No comment provided by engineer. */
+"Scanning title %d of %d..." = "Exminar o titulo %d of %d...";
+
+/* No comment provided by engineer. */
+"Select a DVD:" = "Selecione o DVD:";
+
+/* No comment provided by engineer. */
+"Speed: %.2f fps (avg %.2f fps), %02dh%02dm%02ds remaining" = "Velocidade: %.2f fps (avg %.2f fps), %02dh%02dm%02ds restante";
+
+/* No comment provided by engineer. */
+"Target size (MB)" = "Tamanho a atingir (MB)";
+
+/* No comment provided by engineer. */
+"Top cropping" = "Cortado ao topo";
+
+/* No comment provided by engineer. */
+"Useless OpenGL effects" = "Efeitos inuteis do OpenGL";
+
+/* No comment provided by engineer. */
+"Video" = "Video";
+
+/* No comment provided by engineer. */
+"Video bitrate is too high." = "Video bitrate e muito alto";
+
+/* No comment provided by engineer. */
+"Video bitrate is too low." = "Video bitrate e muito baixo.";
+
+/* No comment provided by engineer. */
+"Welcome to HandBrake" = "Bemvindo ao HandBrake";
+
+/* No comment provided by engineer. */
+"Yes" = "Sim";
+
+/* No comment provided by engineer. */
+"You can't encode the same audio track twice." = "Nao se pode codificar a mesma facha de audio duas vezes.";
+
