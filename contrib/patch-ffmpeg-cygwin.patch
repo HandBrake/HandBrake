@@ -1,0 +1,15 @@
+diff -Naur ffmpeg/libavcodec/mpegaudiodec.c ffmpeg-patched/libavcodec/mpegaudiodec.c
+--- ffmpeg/libavcodec/mpegaudiodec.c	2006-09-23 14:22:06.000000000 -0400
++++ ffmpeg-patched/libavcodec/mpegaudiodec.c	2007-01-01 18:31:51.156250000 -0500
+@@ -401,9 +401,9 @@
+         for(i=0; i<512*16; i++){
+             int exponent= (i>>4);
+             double f= pow(i&15, 4.0 / 3.0) * pow(2, (exponent-400)*0.25 + FRAC_BITS + 5);
+-            expval_table[exponent][i&15]= llrint(f);
++            expval_table[exponent][i&15]= lrint(f);
+             if((i&15)==1)
+-                exp_table[exponent]= llrint(f);
++                exp_table[exponent]= lrint(f);
+         }
+ 
+         for(i=0;i<7;i++) {

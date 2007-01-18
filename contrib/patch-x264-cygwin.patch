@@ -1,0 +1,14 @@
+diff -Naur x264/configure x264-patched/configure
+--- x264/configure	2007-01-01 17:01:36.609375000 -0500
++++ x264-patched/configure	2007-01-01 17:02:36.468750000 -0500
+@@ -96,8 +96,8 @@
+     ;;
+   cygwin*)
+     SYS="CYGWIN"
+-    CFLAGS="$CFLAGS -mno-cygwin"
+-    LDFLAGS="$LDFLAGS -mno-cygwin"
++    #CFLAGS="$CFLAGS -mno-cygwin"
++    #LDFLAGS="$LDFLAGS -mno-cygwin"
+     EXE=".exe"
+     DEVNULL="NUL"
+     ;;
