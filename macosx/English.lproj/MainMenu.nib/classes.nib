@@ -1,0 +1,179 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {
+                AddToQueue = id; 
+                BrowseFile = id; 
+                CalculateBitrate = id; 
+                Cancel = id; 
+                ChapterPopUpChanged = id; 
+                CodecsPopUpChanged = id; 
+                EnableQueue = id; 
+                FormatPopUpChanged = id; 
+                OpenForums = id; 
+                OpenHomepage = id; 
+                Pause = id; 
+                QualitySliderChanged = id; 
+                Rip = id; 
+                ShowPicturePanel = id; 
+                ShowQueuePanel = id; 
+                ShowScanPanel = id; 
+                TitlePopUpChanged = id; 
+                VideoMatrixChanged = id; 
+            }; 
+            CLASS = HBController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                fAddToQuButton = NSButton; 
+                fAudBitrateField = NSTextField; 
+                fAudBitratePopUp = NSPopUpButton; 
+                fAudLang1Field = NSTextField; 
+                fAudLang1PopUp = NSPopUpButton; 
+                fAudLang2Field = NSTextField; 
+                fAudLang2PopUp = NSPopUpButton; 
+                fAudRateField = NSTextField; 
+                fAudRatePopUp = NSPopUpButton; 
+                fDstBrowseButton = NSButton; 
+                fDstCodecsField = NSTextField; 
+                fDstCodecsPopUp = NSPopUpButton; 
+                fDstFile1Field = NSTextField; 
+                fDstFile2Field = NSTextField; 
+                fDstFormatField = NSTextField; 
+                fDstFormatPopUp = NSPopUpButton; 
+                fPauseButton = NSButton; 
+                fPictureButton = NSButton; 
+                fPictureController = PictureController; 
+                fPicturePanel = NSPanel; 
+                fQueueAddButton = NSButton; 
+                fQueueCheck = NSButton; 
+                fQueueController = QueueController; 
+                fQueuePanel = NSPanel; 
+                fQueueShowButton = NSButton; 
+                fRipButton = NSButton; 
+                fRipIndicator = NSProgressIndicator; 
+                fScanController = ScanController; 
+                fScanPanel = NSPanel; 
+                fShowQuButton = NSButton; 
+                fSrcChapterEndPopUp = NSPopUpButton; 
+                fSrcChapterField = NSTextField; 
+                fSrcChapterStartPopUp = NSPopUpButton; 
+                fSrcChapterToField = NSTextField; 
+                fSrcDVD1Field = NSTextField; 
+                fSrcDVD2Field = NSTextField; 
+                fSrcDuration1Field = NSTextField; 
+                fSrcDuration2Field = NSTextField; 
+                fSrcTitleField = NSTextField; 
+                fSrcTitlePopUp = NSPopUpButton; 
+                fStatusField = NSTextField; 
+                fSubField = NSTextField; 
+                fSubPopUp = NSPopUpButton; 
+                fVidBitrateCell = NSButtonCell; 
+                fVidBitrateField = NSTextField; 
+                fVidConstantCell = NSButtonCell; 
+                fVidEncoderField = NSTextField; 
+                fVidEncoderPopUp = NSPopUpButton; 
+                fVidGrayscaleCheck = NSButton; 
+                fVidQualityField = NSTextField; 
+                fVidQualityMatrix = NSMatrix; 
+                fVidQualitySlider = NSSlider; 
+                fVidRateField = NSTextField; 
+                fVidRatePopUp = NSPopUpButton; 
+                fVidTargetCell = NSButtonCell; 
+                fVidTargetSizeField = NSTextField; 
+                fVidTwoPassCheck = NSButton; 
+                fWindow = NSWindow; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = HBPictureGLView; LANGUAGE = ObjC; SUPERCLASS = NSOpenGLView; }, 
+        {
+            CLASS = HBTargetSizeField; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                fRipAudBitPopUp = NSPopUpButton; 
+                fRipCustomField = NSTextField; 
+                fRipFormatPopUp = NSPopUpButton; 
+                fRipLang2PopUp = NSPopUpButton; 
+            }; 
+            SUPERCLASS = NSTextField; 
+        }, 
+        {
+            ACTIONS = {
+                ClosePanel = id; 
+                NextPicture = id; 
+                PreviousPicture = id; 
+                SettingsChanged = id; 
+            }; 
+            CLASS = PictureController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                fCropBottomField = NSTextField; 
+                fCropBottomStepper = NSStepper; 
+                fCropLeftField = NSTextField; 
+                fCropLeftStepper = NSStepper; 
+                fCropMatrix = NSMatrix; 
+                fCropRightField = NSTextField; 
+                fCropRightStepper = NSStepper; 
+                fCropTopField = NSTextField; 
+                fCropTopStepper = NSStepper; 
+                fDeinterlaceCheck = NSButton; 
+                fEffectsCheck = NSButton; 
+                fHeightField = NSTextField; 
+                fHeightStepper = NSStepper; 
+                fInfoField = NSTextField; 
+                fNextButton = NSButton; 
+                fPictureGLView = HBPictureGLView; 
+                fPrevButton = NSButton; 
+                fRatioCheck = NSButton; 
+                fWidthField = NSTextField; 
+                fWidthStepper = NSStepper; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = PictureGLView; LANGUAGE = ObjC; SUPERCLASS = NSOpenGLView; }, 
+        {
+            ACTIONS = {CheckChanged = id; ClosePanel = id; OpenPanel = id; }; 
+            CLASS = PrefsController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {fPanel = NSPanel; fUpdateCheck = NSButton; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {ClosePanel = id; Remove = id; Update = id; }; 
+            CLASS = QueueController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {fScrollView = NSScrollView; fTaskView = NSView; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {
+                Browse = id; 
+                Browse2 = id; 
+                BrowseDone2 = id; 
+                Cancel = id; 
+                MatrixChanged = id; 
+                Open = id; 
+            }; 
+            CLASS = ScanController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                fBrowseButton = NSButton; 
+                fCancelButton = NSButton; 
+                fDetectedCell = NSButtonCell; 
+                fDetectedPopUp = NSPopUpButton; 
+                fFolderCell = NSButtonCell; 
+                fFolderField = NSTextField; 
+                fIndicator = NSProgressIndicator; 
+                fMatrix = NSMatrix; 
+                fOpenButton = NSButton; 
+                fPanel = NSPanel; 
+                fSelectString = NSTextField; 
+                fStatusField = NSTextField; 
+                fWindow = NSWindow; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}
