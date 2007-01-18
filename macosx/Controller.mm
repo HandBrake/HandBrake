@@ -113,7 +113,15 @@ static int FormatSettings[3][4] =
 
     /* Video quality */
     [fVidTargetSizeField setIntValue: 700];
-    [fVidBitrateField    setIntValue: 1000];
+  	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PixelRatio"])
+    {
+    	[fVidBitrateField    setIntValue: 1200];
+    	[fVidTwoPassCheck    setState: NSOnState];
+    }
+	else
+	{
+    	[fVidBitrateField    setIntValue: 1000];
+    }
     [fVidQualityMatrix   selectCell: fVidBitrateCell];
     [self VideoMatrixChanged: NULL];
 
@@ -640,6 +648,23 @@ static int FormatSettings[3][4] =
     }
 
     job->grayscale = ( [fVidGrayscaleCheck state] == NSOnState );
+
+	/* Pixel Ratio Setting */
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PixelRatio"])
+    {
+    	if ( job->mux & HB_MUX_MP4 )
+    	{
+			job->pixel_ratio = 0 ;
+    	}
+    	else
+    	{
+			job->pixel_ratio = 1 ;
+		}
+	}
+	else
+	{
+		job->pixel_ratio = 0 ;
+	}
 
     /* Subtitle settings */
     job->subtitle = [fSubPopUp indexOfSelectedItem] - 1;

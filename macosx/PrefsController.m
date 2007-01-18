@@ -12,12 +12,16 @@
     defaults    = [NSUserDefaults standardUserDefaults];
     appDefaults = [NSDictionary dictionaryWithObject:@"YES"
                    forKey:@"CheckForUpdates"];
+    appDefaults = [NSDictionary dictionaryWithObject:@"NO"
+                   forKey:@"PixelRatio"];
 	appDefaults = [NSDictionary dictionaryWithObject:@"English"
                    forKey:@"DefaultLanguage"];
     [defaults registerDefaults: appDefaults];
 
     /* Check or uncheck according to the preferences */
     [fUpdateCheck setState: [defaults boolForKey:@"CheckForUpdates"] ?
+        NSOnState : NSOffState];
+    [fPixelRatio setState: [defaults boolForKey:@"PixelRatio"] ?
         NSOnState : NSOffState];
 	// Fill the languages combobox
     [fdefaultlanguage removeAllItems];
@@ -215,9 +219,17 @@
     {
         [defaults setObject:@"NO" forKey:@"CheckForUpdates"];
     }
+    
+	if( [fPixelRatio state] == NSOnState )
+    {
+        [defaults setObject:@"YES" forKey:@"PixelRatio"];
+    }
+    else
+    {
+        [defaults setObject:@"NO" forKey:@"PixelRatio"];
+    }
 	
 	[defaults setObject:[fdefaultlanguage objectValueOfSelectedItem]  forKey:@"DefaultLanguage"];
-
 }
 
 @end

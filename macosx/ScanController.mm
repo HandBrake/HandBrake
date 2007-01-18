@@ -79,11 +79,10 @@
 	[fDetectedPopUp setEnabled: 0];
     [fFolderField   setEnabled: 1];
     [fBrowseButton  setEnabled: 1];
+    [fFolderCell    setState: NSOnState];
+    [fDetectedCell  setState: NSOffState];
 	[fOpenButton    setEnabled: 0];
-	[fBrowseButton  setEnabled: 0];
-	//fOpenButton
-
-
+	[fMatrix        selectCell: fFolderCell];
     }
 	else
 	{
@@ -92,6 +91,9 @@
     [fBrowseButton  setEnabled: 0];
 	[fOpenButton    setEnabled: 1];
 	[fBrowseButton  setEnabled: 0];
+    [fFolderCell    setState: NSOffState];
+    [fDetectedCell  setState: NSOnState];
+    [fMatrix       selectCell: fDetectedCell];
 	}
 
 	[fDetectedPopUp selectItemAtIndex: 0];

@@ -6,6 +6,7 @@
 {
     IBOutlet NSPanel  * fPanel;
     IBOutlet NSButton * fUpdateCheck;
+    IBOutlet NSButton * fPixelRatio;
 	IBOutlet NSComboBox * fdefaultlanguage;
 }
 
