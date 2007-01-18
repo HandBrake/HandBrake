@@ -1,0 +1,82 @@
+# $Id: Jamrules,v 1.59 2005/11/04 16:06:21 titer Exp $
+#
+# This file is part of the HandBrake source code.
+# Homepage: <http://handbrake.m0k.org/>.
+# It may be used under the terms of the GNU General Public License.
+
+include config.jam ;
+
+if ! $(DEFINES)
+{
+    Exit "Please run ./configure first." ;
+}
+
+HB_VERSION  = 0.7.1a2 ;
+HB_BUILD    = 20060923 ;
+DEFINES    += HB_VERSION=\\\"$(HB_VERSION)\\\" HB_BUILD=$(HB_BUILD) ;
+LANGUAGES   = fr de it pl ru nl es pt ja ;
+RM          = rm -rf ;
+
+# Build HandBrake.app using Xcode
+rule OSXApp
+{
+    Depends     exe   : $(<) ;
+    Depends     $(<)  : $(>) ;
+    Clean       clean : $(1) macosx/build ;
+}
+actions OSXApp
+{
+    $(RM) $(<) macosx/build/HandBrake.app && \
+      ( cd macosx && xcodebuild -alltargets ) && \
+      mv macosx/build/Default/HandBrake.app $(<) && \
+      for i in $(LANGUAGES) ; do \
+        ( cd $(<)/Contents/Resources && \
+          cp -r English.lproj $i.lproj && \
+          cp ../../../macosx/i18n/$i.strings \
+            $i.lproj/Localizable.strings ) \
+      done ;
+}
+rule OSXPackage 
+{
+    Depends $(<) : $(>) ;
+}   
+actions OSXPackage
+{                 
+    rm -rf $(<) "HandBrake $(HB_VERSION)" && \
+      mkdir "HandBrake $(HB_VERSION)" && \
+      cp AUTHORS "HandBrake $(HB_VERSION)/AUTHORS.txt" && \
+      cp COPYING "HandBrake $(HB_VERSION)/COPYING.txt" && \
+      cp CREDITS "HandBrake $(HB_VERSION)/CREDITS.txt" && \
+      cp THANKS "HandBrake $(HB_VERSION)/THANKS.txt" && \
+      ( echo "[InternetShortcut]" && \
+        echo "URL=http://handbrake.m0k.org/" ) > \
+        "HandBrake $(HB_VERSION)/HandBrake Homepage.url" && \
+      ( echo "[InternetShortcut]" && \
+        echo "URL=http://handbrake.m0k.org/forum/" ) > \
+        "HandBrake $(HB_VERSION)/HandBrake Forums.url" && \
+      ( echo "[InternetShortcut]" && \
+        echo "URL=http://handbrake.m0k.org/contribute.php" ) > \
+        "HandBrake $(HB_VERSION)/Contribute.url" && \
+      cp -r HandBrake.app "HandBrake $(HB_VERSION)" && \
+      zip -9 -r $(<) "HandBrake $(HB_VERSION)" && \
+      rm -rf "HandBrake $(HB_VERSION)"
+}
+
+rule BeOSPackage 
+{
+    Depends         $(<) : $(>) ;
+    BuildBeOSPackage $(<) ;
+}   
+actions BuildBeOSPackage
+{                 
+    rm -rf $(<) "HandBrake $(HB_VERSION)" && \
+      mkdir "HandBrake $(HB_VERSION)" && \
+      cp AUTHORS "HandBrake $(HB_VERSION)/AUTHORS.txt" && \
+      cp COPYING "HandBrake $(HB_VERSION)/COPYING.txt" && \
+      cp CREDITS "HandBrake $(HB_VERSION)/CREDITS.txt" && \
+      cp THANKS "HandBrake $(HB_VERSION)/THANKS.txt" && \
+      xres -o HandBrake beos/HandBrake.rsrc && \
+      cp HandBrake "HandBrake $(HB_VERSION)" && \
+      zip -9 -r $(<) "HandBrake $(HB_VERSION)" && \
+      rm -rf "HandBrake $(HB_VERSION)"
+}
