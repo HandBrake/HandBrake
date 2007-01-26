@@ -7,6 +7,8 @@
     IBOutlet NSPanel  * fPanel;
     IBOutlet NSButton * fUpdateCheck;
 	IBOutlet NSComboBox * fdefaultlanguage;
+	IBOutlet NSButton * fFileExtItunes;
+	IBOutlet NSButton * fDefCrf;
 }
 
 - (IBAction) OpenPanel:    (id) sender;

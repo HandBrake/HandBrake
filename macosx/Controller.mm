@@ -298,6 +298,45 @@ static int FormatSettings[3][4] =
 				[fDstFile2Field setStringValue: [NSString stringWithFormat:
                 @"%@/Desktop/%@.mp4", NSHomeDirectory(),[NSString
                   stringWithUTF8String: title->name]]];
+
+                int format = [fDstFormatPopUp indexOfSelectedItem];
+				char * ext = NULL;
+				switch( format )
+                {
+                 case 0:
+					 /* if Format is mpeg4 Change extension to proper for mpeg4 output */
+					 
+					 /*Get Default MP4 File Extension for mpeg4 (.mp4 or .m4v) from prefs*/
+					 if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultMpegName"] > 0)
+					 {
+					 ext = "m4v";
+					 }
+				     else
+				     {
+					 ext = "mp4";
+					 }
+					break;
+				case 1: 
+                     ext = "avi";
+				case 2:
+				   break;
+                     ext = "ogm";
+			       break;
+				   }
+				NSString * string = [fDstFile2Field stringValue];
+				/* Add/replace File Output name to the correct extension*/
+				if( [string characterAtIndex: [string length] - 4] == '.' )
+				{
+					[fDstFile2Field setStringValue: [NSString stringWithFormat:
+						@"%@.%s", [string substringToIndex: [string length] - 4],
+						ext]];
+				}
+				else
+				{
+					[fDstFile2Field setStringValue: [NSString stringWithFormat:
+						@"%@.%s", string, ext]];
+				}
+
 				
 			    [fSrcTitlePopUp addItemWithTitle: [NSString
                     stringWithFormat: @"%d - %02dh%02dm%02ds",
@@ -604,8 +643,13 @@ static int FormatSettings[3][4] =
 		job->mux = HB_MUX_IPOD;
 		}
 		
-		/* Set this flag to switch from Constant Quantizer(default) to Constant Rate Factor */
-		// job->crf = 1;
+		/* Set this flag to switch from Constant Quantizer(default) to Constant Rate Factor Thanks jbrjake
+		Currently only used with Constant Quality setting*/
+			if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultCrf"] > 0 && [fVidQualityMatrix selectedRow] == 2)
+	        {
+	        /* Can only be used with svn rev >= 89 */
+			job->crf = 1;
+	        }
 		
         job->h264_13 = [fVidEncoderPopUp indexOfSelectedItem];
     }
@@ -896,7 +940,15 @@ static int FormatSettings[3][4] =
     switch( format )
     {
         case 0:
-            ext = "mp4";
+				/*Get Default MP4 File Extension*/
+				if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultMpegName"] > 0)
+				{
+				ext = "m4v";
+				}
+				else
+				{
+				ext = "mp4";
+				}
             [fDstCodecsPopUp addItemWithTitle:
                 _( @"MPEG-4 Video / AAC Audio" )];
             [fDstCodecsPopUp addItemWithTitle:

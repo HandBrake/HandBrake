@@ -8,17 +8,30 @@
     NSDictionary   * appDefaults;
     
     /* Unless the user specified otherwise, default is to check
-       for update */
+       for update  */
     defaults    = [NSUserDefaults standardUserDefaults];
     appDefaults = [NSDictionary dictionaryWithObject:@"YES"
                    forKey:@"CheckForUpdates"];
 	appDefaults = [NSDictionary dictionaryWithObject:@"English"
                    forKey:@"DefaultLanguage"];
+    appDefaults = [NSDictionary dictionaryWithObject:@"NO"
+                   forKey:@"DefaultMpegName"];
+	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
+                   forKey:@"DefaultCrf"];
     [defaults registerDefaults: appDefaults];
 
-    /* Check or uncheck according to the preferences */
+    /* fUpdateCheck Check or uncheck according to the preferences */
     [fUpdateCheck setState: [defaults boolForKey:@"CheckForUpdates"] ?
         NSOnState : NSOffState];
+	/* fFileExtItunes Check or uncheck according to the preferences */
+    [fFileExtItunes setState: [defaults boolForKey:@"DefaultMpegName"] ?
+        NSOnState : NSOffState];
+		
+		/* fDefCrf Check or uncheck according to the preferences */
+    [fDefCrf setState: [defaults boolForKey:@"DefaultCrf"] ?
+        NSOnState : NSOffState];
+	
+	
 	// Fill the languages combobox
     [fdefaultlanguage removeAllItems];
 	[fdefaultlanguage addItemWithObjectValue: @"Afar"];
@@ -207,7 +220,8 @@
 {
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     
-    if( [fUpdateCheck state] == NSOnState )
+    /* Check Update Itunes Set */
+	if( [fUpdateCheck state] == NSOnState )
     {
         [defaults setObject:@"YES" forKey:@"CheckForUpdates"];
     }
@@ -215,7 +229,29 @@
     {
         [defaults setObject:@"NO" forKey:@"CheckForUpdates"];
     }
+	/* File Extension Itunes Set */
 	
+	if( [fFileExtItunes state] == NSOnState )
+    {
+        [defaults setObject:@"YES" forKey:@"DefaultMpegName"];
+    }
+    else
+    {
+        [defaults setObject:@"NO" forKey:@"DefaultMpegName"];
+    }
+	
+	/* Use CRF for constant mode */
+	
+	if( [fDefCrf state] == NSOnState )
+    {
+        [defaults setObject:@"YES" forKey:@"DefaultCrf"];
+    }
+    else
+    {
+        [defaults setObject:@"NO" forKey:@"DefaultCrf"];
+    }
+	
+	/* Preferred Language Combobox Set */
 	[defaults setObject:[fdefaultlanguage objectValueOfSelectedItem]  forKey:@"DefaultLanguage"];
 
 }
