@@ -1,1 +1,1 @@
-http://download.handbrake.dynalias.com/contrib/xvidcore-1.1.0.tar.gz
+http://download.mediafork.dynalias.com/contrib/xvidcore-1.1.0.tar.gz
