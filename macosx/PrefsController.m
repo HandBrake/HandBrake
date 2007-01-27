@@ -14,7 +14,7 @@
                    forKey:@"CheckForUpdates"];
 	appDefaults = [NSDictionary dictionaryWithObject:@"English"
                    forKey:@"DefaultLanguage"];
-appDefaults = [NSDictionary dictionaryWithObject:@"NO"
+	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
                    forKey:@"DefaultMpegName"];
 	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
                    forKey:@"DefaultCrf"];
@@ -191,9 +191,15 @@ appDefaults = [NSDictionary dictionaryWithObject:@"NO"
 	[fdefaultlanguage addItemWithObjectValue: @"Yoruba"];
 	[fdefaultlanguage addItemWithObjectValue: @"Zhuang"];
 	[fdefaultlanguage addItemWithObjectValue: @"Zulu"];
+	[fdefaultlanguage setStringValue:@"English"];
 	
-	//[fdefaultlanguage setStringValue:[defaults stringForKey:@"DefaultLanguage"]];
-    [fdefaultlanguage selectItemWithObjectValue:[defaults stringForKey:@"DefaultLanguage"]];
+	/* If a Default Language is selected then write it otherwise let English as default */
+	
+	if ([defaults stringForKey:@"DefaultLanguage"]!=NULL)
+	{
+		[fdefaultlanguage setStringValue:[defaults stringForKey:@"DefaultLanguage"]];
+    }
+	[fdefaultlanguage selectItemWithObjectValue:[defaults stringForKey:@"DefaultLanguage"]];
 
 
 

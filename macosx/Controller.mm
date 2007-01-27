@@ -890,6 +890,7 @@ static int FormatSettings[3][4] =
 
     /* Update lang popups */
 	/* START Legacy */
+	/*
 	 hb_audio_t * audio;
     [fAudLang1PopUp removeAllItems];
     [fAudLang2PopUp removeAllItems];
@@ -908,10 +909,11 @@ static int FormatSettings[3][4] =
     }
     [fAudLang1PopUp selectItemAtIndex: 1];
     [fAudLang2PopUp selectItemAtIndex: 0];
+	*/
 	/* END Legacy */
 	/* START pri */
-	/*
-    hb_audio_t * audio;
+	hb_audio_t * audio;
+
 	// PRI CHANGES 02/12/06
 	NSString * audiotmppri;
 	NSString * audiosearchpri=[[NSUserDefaults standardUserDefaults] stringForKey:@"DefaultLanguage"];
@@ -925,11 +927,14 @@ static int FormatSettings[3][4] =
     {
         audio = (hb_audio_t *) hb_list_item( title->list_audio, i );
 	// PRI CHANGES 02/12/06
-		audiotmppri=(NSString *) [NSString stringWithCString: audio->lang];
-		// Try to find the desired default language
-	   if ([audiotmppri hasPrefix:audiosearchpri] && indxpri==0)
+		if (audiosearchpri!= NULL) 
 		{
-			indxpri=i+1;
+			audiotmppri=(NSString *) [NSString stringWithCString: audio->lang];
+			// Try to find the desired default language
+			if ([audiotmppri hasPrefix:audiosearchpri] && indxpri==0)
+			{
+				indxpri=i+1;
+			}
 		}
 	// End of pri changes 02/12/06
 
@@ -945,7 +950,7 @@ static int FormatSettings[3][4] =
 	  [fAudLang1PopUp selectItemAtIndex: indxpri];
 	// End of pri changes 02/12/06
     [fAudLang2PopUp selectItemAtIndex: 0];
-	*/
+	
 	/* END pri */
 }
 
