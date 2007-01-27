@@ -76,7 +76,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 0DFF0B710B6BC6E600549488 /* libmediafork */;
+			remoteGlobalIDString = 0DFF0B710B6BC6E600549488;
 			remoteInfo = libmediafork;
 		};
 		0DFF0BF10B6BCCB400549488 /* PBXContainerItemProxy */ = {
@@ -97,7 +97,7 @@
 
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		0D6E35760B6BD4F0005AABB3 /* MediaForkCLI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MediaForkCLI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0D6E35760B6BD4F0005AABB3 /* MediaFork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MediaFork.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DFF0B720B6BC6E600549488 /* libmediafork.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libmediafork.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DFF0C0A0B6BCEC200549488 /* MediaForkCLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MediaForkCLI; sourceTree = BUILT_PRODUCTS_DIR; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
@@ -206,7 +206,7 @@
 				4D1EA2DA0993B01000FDC1A2 /* Instant MediaFork.app */,
 				0DFF0B720B6BC6E600549488 /* libmediafork.a */,
 				0DFF0C0A0B6BCEC200549488 /* MediaForkCLI */,
-				0D6E35760B6BD4F0005AABB3 /* MediaForkCLI.app */,
+				0D6E35760B6BD4F0005AABB3 /* MediaFork.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -429,7 +429,7 @@
 			);
 			name = MediaFork;
 			productName = HandBrake;
-			productReference = 0D6E35760B6BD4F0005AABB3 /* MediaForkCLI.app */;
+			productReference = 0D6E35760B6BD4F0005AABB3 /* MediaFork.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -437,7 +437,7 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = 4D4E7BC4087804870051572B /* Build configuration list for PBXProject "HandBrake" */;
+			buildConfigurationList = 4D4E7BC4087804870051572B /* Build configuration list for PBXProject "MediaFork" */;
 			hasScannedForEncodings = 1;
 			mainGroup = 29B97314FDCFA39411CA2CEA /* HandBrake */;
 			projectDirPath = "";
@@ -677,6 +677,7 @@
 		0DFF0C0D0B6BCEE000549488 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CONFIGURATION_BUILD_DIR = ..;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -716,6 +717,7 @@
 		0DFF0C0E0B6BCEE000549488 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CONFIGURATION_BUILD_DIR = ..;
 				COPY_PHASE_STRIP = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
@@ -754,6 +756,7 @@
 		0DFF0C0F0B6BCEE000549488 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CONFIGURATION_BUILD_DIR = ..;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = s;
@@ -951,7 +954,7 @@
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
 				);
-				PRODUCT_NAME = MediaForkCLI;
+				PRODUCT_NAME = MediaFork;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -967,6 +970,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 0.7.1a2;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_OPTIMIZATION_LEVEL = s;
@@ -993,7 +997,7 @@
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
 				);
-				PRODUCT_NAME = MediaForkCLI;
+				PRODUCT_NAME = MediaFork;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -1008,6 +1012,7 @@
 		4D4E7BC3087804870051572B /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CURRENT_PROJECT_VERSION = 0.7.1a2;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
@@ -1033,7 +1038,7 @@
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
 				);
-				PRODUCT_NAME = MediaForkCLI;
+				PRODUCT_NAME = MediaFork;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -1105,7 +1110,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
 		};
-		4D4E7BC4087804870051572B /* Build configuration list for PBXProject "HandBrake" */ = {
+		4D4E7BC4087804870051572B /* Build configuration list for PBXProject "MediaFork" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4D4E7BC5087804870051572B /* Development */,
