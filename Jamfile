@@ -28,7 +28,7 @@ if $(OS) != CYGWIN
 }
 
 # Interfaces
-CLI_BIN = MediaForkCli ;
+CLI_BIN = MediaForkCLI ;
 CLI_SRC = test/test.c ;
 BEOS_BIN = HandBrake ;
 BEOS_SRC = beos/HBApp.cpp beos/MainWindow.cpp beos/ScanWindow.cpp
