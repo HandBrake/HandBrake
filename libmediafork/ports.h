@@ -14,7 +14,7 @@ uint64_t hb_get_date();
 void     hb_snooze( int delay );
 int      hb_get_cpu_count();
 
-#ifdef __LIBHB__
+#ifdef __LIBMEDIAFORK__
 
 /* Everything from now is only used internally and hidden to the UI */
 
@@ -79,7 +79,7 @@ int        hb_net_send( hb_net_t *, char * );
 int        hb_net_recv( hb_net_t *, char *, int );
 void       hb_net_close( hb_net_t ** );
 
-#endif /* __LIBHB__ */
+#endif /* __LIBMEDIAFORK__ */
 
 #endif
 
