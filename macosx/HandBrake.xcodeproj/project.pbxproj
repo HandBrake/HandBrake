@@ -72,24 +72,32 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		0DFF0BF10B6BCCB400549488 /* PBXContainerItemProxy */ = {
+		0D6E35900B6BD5FA005AABB3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 0DFF0B710B6BC6E600549488 /* libmediafork */;
+			remoteInfo = libmediafork;
+		};
+		0DFF0BF10B6BCCB400549488 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0DFF0B710B6BC6E600549488;
 			remoteInfo = libmediafork;
 		};
 		0DFF0BF30B6BCCB900549488 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 0DFF0B710B6BC6E600549488 /* libmediafork */;
+			remoteGlobalIDString = 0DFF0B710B6BC6E600549488;
 			remoteInfo = libmediafork;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		0D6E35760B6BD4F0005AABB3 /* MediaForkCLI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MediaForkCLI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DFF0B720B6BC6E600549488 /* libmediafork.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libmediafork.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DFF0C0A0B6BCEC200549488 /* MediaForkCLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MediaForkCLI; sourceTree = BUILT_PRODUCTS_DIR; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
@@ -116,7 +124,6 @@
 		4D86C74F07281F4E007BA979 /* ScanController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ScanController.h; sourceTree = "<group>"; };
 		4DD27BA507C0065C0023D231 /* QueueController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = QueueController.h; sourceTree = "<group>"; };
 		4DD27BA607C0065C0023D231 /* QueueController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = QueueController.mm; sourceTree = "<group>"; };
-		4DD93FA6082036E8008E1322 /* MediaForkCLI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = MediaForkCLI.app; path = /Users/pri/Desktop/mf080f/macosx/build/Development/MediaForkCLI.app; sourceTree = "<absolute>"; };
 		4DDE9724052B7B2B00C39CA9 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		4DE09E62082038A400FB751F /* MediaFork.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = MediaFork.plist; sourceTree = "<group>"; };
 		4DE93A3507F5A2C900F3C78F /* PrefsController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PrefsController.h; sourceTree = "<group>"; };
@@ -199,6 +206,7 @@
 				4D1EA2DA0993B01000FDC1A2 /* Instant MediaFork.app */,
 				0DFF0B720B6BC6E600549488 /* libmediafork.a */,
 				0DFF0C0A0B6BCEC200549488 /* MediaForkCLI */,
+				0D6E35760B6BD4F0005AABB3 /* MediaForkCLI.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -380,6 +388,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				0D6E35910B6BD5FA005AABB3 /* PBXTargetDependency */,
 			);
 			name = MediaForkCLI;
 			productName = MediaForkCLI;
@@ -420,7 +429,7 @@
 			);
 			name = MediaFork;
 			productName = HandBrake;
-			productReference = 4DD93FA6082036E8008E1322 /* MediaForkCLI.app */;
+			productReference = 0D6E35760B6BD4F0005AABB3 /* MediaForkCLI.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -538,6 +547,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		0D6E35910B6BD5FA005AABB3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0DFF0B710B6BC6E600549488 /* libmediafork */;
+			targetProxy = 0D6E35900B6BD5FA005AABB3 /* PBXContainerItemProxy */;
+		};
 		0DFF0BF20B6BCCB400549488 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 0DFF0B710B6BC6E600549488 /* libmediafork */;
@@ -837,7 +851,7 @@
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
 				OTHER_LDFLAGS = (
-					../libhb/libhb.a,
+					../libmediafork/libmediafork.a,
 					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
@@ -879,7 +893,7 @@
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
 				OTHER_LDFLAGS = (
-					../libhb/libhb.a,
+					../libmediafork/libmediafork.a,
 					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
