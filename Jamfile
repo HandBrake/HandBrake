@@ -28,18 +28,18 @@ if $(OS) != CYGWIN
 }
 
 # Interfaces
-TEST_BIN = HBTest ;
-TEST_SRC = test/test.c ;
+CLI_BIN = MediaForkCli ;
+CLI_SRC = test/test.c ;
 BEOS_BIN = HandBrake ;
 BEOS_SRC = beos/HBApp.cpp beos/MainWindow.cpp beos/ScanWindow.cpp
            beos/PicWindow.cpp beos/Stepper.cpp beos/QueueWindow.cpp ;
 WX_BIN   = wxHB ;
 WX_SRC   = wx/hbWizard.cpp wx/wxHB.cpp ;
-UI_BIN   = $(TEST_BIN) $(BEOS_BIN) $(WX_BIN) ;
-UI_SRC   = $(TEST_SRC) $(BEOS_SRC) $(WX_SRC) ;
+UI_BIN   = $(CLI_BIN) $(BEOS_BIN) $(WX_BIN) ;
+UI_SRC   = $(CLI_SRC) $(BEOS_SRC) $(WX_SRC) ;
 
 # CLI app
-Main $(TEST_BIN) : $(TEST_SRC) ;
+Main $(CLI_BIN) : $(CLI_SRC) ;
 
 if $(OS) = BEOS
 {
