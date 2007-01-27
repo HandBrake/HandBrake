@@ -10,7 +10,7 @@
 #include <time.h>
 #include <unistd.h>
 
-#include "hb.h"
+#include "mediafork.h"
 
 /* Options */
 static int    debug       = HB_DEBUG_NONE;
@@ -71,7 +71,7 @@ int main( int argc, char ** argv )
     h = hb_init( debug, update );
 
     /* Show version */
-    fprintf( stderr, "HandBrake %s (%d) - http://handbrake.m0k.org/\n",
+    fprintf( stderr, "MediaFork %s (%d) - http://mediafork.dynalias.com/\n",
              hb_get_version( h ), hb_get_build( h ) );
 
     /* Check for update */
@@ -80,12 +80,12 @@ int main( int argc, char ** argv )
         if( ( build = hb_check_update( h, &version ) ) > -1 )
         {
             fprintf( stderr, "You are using an old version of "
-                     "HandBrake.\nLatest is %s (build %d).\n", version,
+                     "MediaFork.\nLatest is %s (build %d).\n", version,
                      build );
         }
         else
         {
-            fprintf( stderr, "Your version of HandBrake is up to "
+            fprintf( stderr, "Your version of MediaFork is up to "
                      "date.\n" );
         }
         hb_close( &h );
@@ -173,7 +173,7 @@ int main( int argc, char ** argv )
     if( format ) free( format );
     if( audios ) free( audios );
 
-    fprintf( stderr, "HandBrake has exited.\n" );
+    fprintf( stderr, "MediaFork has exited.\n" );
 
     return 0;
 }
