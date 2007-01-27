@@ -6,7 +6,7 @@
 
 #include <Cocoa/Cocoa.h>
 
-#include "hb.h"
+#include "mediafork.h"
 @class DriveDetector;
 @interface ScanController : NSObject
 {

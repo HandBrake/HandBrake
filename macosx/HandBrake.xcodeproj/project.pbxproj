@@ -37,7 +37,7 @@
 		4DD93FA2082036E8008E1322 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		4DD93FA3082036E8008E1322 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DEB2024052B055F00C39CA9 /* IOKit.framework */; };
 		4DD93FA4082036E8008E1322 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DDE9724052B7B2B00C39CA9 /* OpenGL.framework */; };
-		4DE09E63082038A400FB751F /* HandBrake.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4DE09E62082038A400FB751F /* HandBrake.plist */; };
+		4DE09E63082038A400FB751F /* MediaFork.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4DE09E62082038A400FB751F /* MediaFork.plist */; };
 		52AFF8690B59BCFB000DA7C4 /* HandBrake.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4D118405053054CD00C39CA9 /* HandBrake.icns */; };
 		52AFF86A0B59BD07000DA7C4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		52AFF86B0B59BD14000DA7C4 /* Express.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4D1EA2DC0993B01000FDC1A2 /* Express.plist */; };
@@ -52,7 +52,7 @@
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		4D1125D709D72FD200E0657B /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
 		4D118405053054CD00C39CA9 /* HandBrake.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = HandBrake.icns; sourceTree = "<group>"; };
-		4D1EA2DA0993B01000FDC1A2 /* Instant HandBrake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Instant HandBrake.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D1EA2DA0993B01000FDC1A2 /* Instant MediaFork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Instant MediaFork.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D1EA2DC0993B01000FDC1A2 /* Express.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Express.plist; sourceTree = "<group>"; };
 		4D1EA3000993B13700FDC1A2 /* Express.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Express.nib; path = English.lproj/Express.nib; sourceTree = "<group>"; };
 		4D1EA31A0993B24700FDC1A2 /* ExpressController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ExpressController.h; sourceTree = "<group>"; };
@@ -71,7 +71,7 @@
 		4DD27BA607C0065C0023D231 /* QueueController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = QueueController.mm; sourceTree = "<group>"; };
 		4DD93FA6082036E8008E1322 /* MediaFork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MediaFork.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DDE9724052B7B2B00C39CA9 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
-		4DE09E62082038A400FB751F /* HandBrake.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = HandBrake.plist; sourceTree = "<group>"; };
+		4DE09E62082038A400FB751F /* MediaFork.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = MediaFork.plist; sourceTree = "<group>"; };
 		4DE93A3507F5A2C900F3C78F /* PrefsController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PrefsController.h; sourceTree = "<group>"; };
 		4DE93A3607F5A2C900F3C78F /* PrefsController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PrefsController.m; sourceTree = "<group>"; };
 		4DEB2024052B055F00C39CA9 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
@@ -142,7 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				4DD93FA6082036E8008E1322 /* MediaFork.app */,
-				4D1EA2DA0993B01000FDC1A2 /* Instant HandBrake.app */,
+				4D1EA2DA0993B01000FDC1A2 /* Instant MediaFork.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -150,8 +150,8 @@
 		29B97314FDCFA39411CA2CEA /* HandBrake */ = {
 			isa = PBXGroup;
 			children = (
-				526FBC940B4CAA310064E04C /* Instant HandBrake Sources */,
-				526FBC930B4CAA260064E04C /* HandBrake Sources */,
+				526FBC940B4CAA310064E04C /* Instant MediaFork Sources */,
+				526FBC930B4CAA260064E04C /* MediaFork Sources */,
 				526FBC920B4CAA120064E04C /* HBTest Sources */,
 				526FBC8D0B4CA9F90064E04C /* libhb Sources */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -241,10 +241,10 @@
 			name = "HBTest Sources";
 			sourceTree = "<group>";
 		};
-		526FBC930B4CAA260064E04C /* HandBrake Sources */ = {
+		526FBC930B4CAA260064E04C /* MediaFork Sources */ = {
 			isa = PBXGroup;
 			children = (
-				4DE09E62082038A400FB751F /* HandBrake.plist */,
+				4DE09E62082038A400FB751F /* MediaFork.plist */,
 				4D1FD381073D19CE00E46515 /* PictureController.h */,
 				4D1FD382073D19CE00E46515 /* PictureController.mm */,
 				4DF3C8CB052889CD00A80101 /* Controller.h */,
@@ -263,17 +263,17 @@
 				4D2AE78A09CCB24C007E18F6 /* DriveDetector.h */,
 				A2B7C42F0B6AF519005C3519 /* HandBrake copy.plist */,
 			);
-			name = "HandBrake Sources";
+			name = "MediaFork Sources";
 			sourceTree = "<group>";
 		};
-		526FBC940B4CAA310064E04C /* Instant HandBrake Sources */ = {
+		526FBC940B4CAA310064E04C /* Instant MediaFork Sources */ = {
 			isa = PBXGroup;
 			children = (
 				4D1EA31A0993B24700FDC1A2 /* ExpressController.h */,
 				4D1EA31B0993B24700FDC1A2 /* ExpressController.m */,
 				4D1EA2DC0993B01000FDC1A2 /* Express.plist */,
 			);
-			name = "Instant HandBrake Sources";
+			name = "Instant MediaFork Sources";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -296,9 +296,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		4D1EA2D90993B01000FDC1A2 /* Instant HandBrake */ = {
+		4D1EA2D90993B01000FDC1A2 /* Instant MediaFork */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4D1EA2DD0993B01100FDC1A2 /* Build configuration list for PBXNativeTarget "Instant HandBrake" */;
+			buildConfigurationList = 4D1EA2DD0993B01100FDC1A2 /* Build configuration list for PBXNativeTarget "Instant MediaFork" */;
 			buildPhases = (
 				4D1EA2D60993B01000FDC1A2 /* Resources */,
 				4D1EA2D70993B01000FDC1A2 /* Sources */,
@@ -308,9 +308,9 @@
 			);
 			dependencies = (
 			);
-			name = "Instant HandBrake";
+			name = "Instant MediaFork";
 			productName = "Instant HandBrake";
-			productReference = 4D1EA2DA0993B01000FDC1A2 /* Instant HandBrake.app */;
+			productReference = 4D1EA2DA0993B01000FDC1A2 /* Instant MediaFork.app */;
 			productType = "com.apple.product-type.application";
 		};
 		4DD93F8D082036E8008E1322 /* MediaFork */ = {
@@ -342,7 +342,7 @@
 			projectDirPath = "";
 			targets = (
 				4DD93F8D082036E8008E1322 /* MediaFork */,
-				4D1EA2D90993B01000FDC1A2 /* Instant HandBrake */,
+				4D1EA2D90993B01000FDC1A2 /* Instant MediaFork */,
 			);
 		};
 /* End PBXProject section */
@@ -366,7 +366,7 @@
 				4DD93F96082036E8008E1322 /* MainMenu.nib in Resources */,
 				4DD93F97082036E8008E1322 /* InfoPlist.strings in Resources */,
 				4DD93F98082036E8008E1322 /* HandBrake.icns in Resources */,
-				4DE09E63082038A400FB751F /* HandBrake.plist in Resources */,
+				4DE09E63082038A400FB751F /* MediaFork.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -504,11 +504,11 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				HEADER_SEARCH_PATHS = ../libhb;
+				HEADER_SEARCH_PATHS = ../libmediafork;
 				INFOPLIST_FILE = Express.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				OTHER_LDFLAGS = (
-					../libhb/libhb.a,
+					../libmediafork/libmediafork.a,
 					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
@@ -526,7 +526,7 @@
 					../contrib/lib/libxvidcore.a,
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = "Instant HandBrake";
+				PRODUCT_NAME = "Instant MediaFork";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
@@ -543,12 +543,12 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
-				HEADER_SEARCH_PATHS = ../libhb;
-				INFOPLIST_FILE = HandBrake.plist;
+				HEADER_SEARCH_PATHS = ../libmediafork;
+				INFOPLIST_FILE = MediaFork.plist;
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
-					../libhb/libhb.a,
+					../libmediafork/libmediafork.a,
 					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
@@ -565,7 +565,7 @@
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
 				);
-				PRODUCT_NAME = HandBrake;
+				PRODUCT_NAME = MediaFork;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -586,7 +586,7 @@
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				HEADER_SEARCH_PATHS = ../libhb;
-				INFOPLIST_FILE = HandBrake.plist;
+				INFOPLIST_FILE = MediaFork.plist;
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
@@ -625,12 +625,12 @@
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
-				HEADER_SEARCH_PATHS = ../libhb;
-				INFOPLIST_FILE = HandBrake.plist;
+				HEADER_SEARCH_PATHS = ../libmediafork;
+				INFOPLIST_FILE = MediaFork.plist;
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
-					../libhb/libhb.a,
+					../libmediafork/libmediafork.a,
 					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
@@ -679,7 +679,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4D1EA2DD0993B01100FDC1A2 /* Build configuration list for PBXNativeTarget "Instant HandBrake" */ = {
+		4D1EA2DD0993B01100FDC1A2 /* Build configuration list for PBXNativeTarget "Instant MediaFork" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4D1EA2DE0993B01100FDC1A2 /* Development */,

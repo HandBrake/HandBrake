@@ -1,7 +1,7 @@
 /* ExpressController */
 
 #import <Cocoa/Cocoa.h>
-#import "hb.h"
+#import "mediafork.h"
 
 @class DriveDetector;
 
