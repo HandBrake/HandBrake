@@ -26,7 +26,7 @@
 		4DD93F94082036E8008E1322 /* PrefsController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DE93A3507F5A2C900F3C78F /* PrefsController.h */; };
 		4DD93F96082036E8008E1322 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		4DD93F97082036E8008E1322 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
-		4DD93F98082036E8008E1322 /* HandBrake.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4D118405053054CD00C39CA9 /* HandBrake.icns */; };
+		4DD93F98082036E8008E1322 /* MediaFork.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4D118405053054CD00C39CA9 /* MediaFork.icns */; };
 		4DD93F9A082036E8008E1322 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.mm */; settings = {ATTRIBUTES = (); }; };
 		4DD93F9B082036E8008E1322 /* Controller.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4DF3C8CC052889CD00A80101 /* Controller.mm */; };
 		4DD93F9C082036E8008E1322 /* PictureGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4D85758E052B78E300C39CA9 /* PictureGLView.mm */; };
@@ -38,7 +38,7 @@
 		4DD93FA3082036E8008E1322 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DEB2024052B055F00C39CA9 /* IOKit.framework */; };
 		4DD93FA4082036E8008E1322 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DDE9724052B7B2B00C39CA9 /* OpenGL.framework */; };
 		4DE09E63082038A400FB751F /* MediaFork.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4DE09E62082038A400FB751F /* MediaFork.plist */; };
-		52AFF8690B59BCFB000DA7C4 /* HandBrake.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4D118405053054CD00C39CA9 /* HandBrake.icns */; };
+		52AFF8690B59BCFB000DA7C4 /* MediaFork.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4D118405053054CD00C39CA9 /* MediaFork.icns */; };
 		52AFF86A0B59BD07000DA7C4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		52AFF86B0B59BD14000DA7C4 /* Express.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4D1EA2DC0993B01000FDC1A2 /* Express.plist */; };
 /* End PBXBuildFile section */
@@ -51,7 +51,7 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		4D1125D709D72FD200E0657B /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
-		4D118405053054CD00C39CA9 /* HandBrake.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = HandBrake.icns; sourceTree = "<group>"; };
+		4D118405053054CD00C39CA9 /* MediaFork.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = MediaFork.icns; sourceTree = "<group>"; };
 		4D1EA2DA0993B01000FDC1A2 /* Instant MediaFork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Instant MediaFork.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D1EA2DC0993B01000FDC1A2 /* Express.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Express.plist; sourceTree = "<group>"; };
 		4D1EA3000993B13700FDC1A2 /* Express.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Express.nib; path = English.lproj/Express.nib; sourceTree = "<group>"; };
@@ -174,7 +174,7 @@
 			isa = PBXGroup;
 			children = (
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
-				4D118405053054CD00C39CA9 /* HandBrake.icns */,
+				4D118405053054CD00C39CA9 /* MediaFork.icns */,
 				4D1EA3000993B13700FDC1A2 /* Express.nib */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 			);
@@ -354,7 +354,7 @@
 			files = (
 				52AFF86B0B59BD14000DA7C4 /* Express.plist in Resources */,
 				52AFF86A0B59BD07000DA7C4 /* InfoPlist.strings in Resources */,
-				52AFF8690B59BCFB000DA7C4 /* HandBrake.icns in Resources */,
+				52AFF8690B59BCFB000DA7C4 /* MediaFork.icns in Resources */,
 				4D1EA3010993B13700FDC1A2 /* Express.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -365,7 +365,7 @@
 			files = (
 				4DD93F96082036E8008E1322 /* MainMenu.nib in Resources */,
 				4DD93F97082036E8008E1322 /* InfoPlist.strings in Resources */,
-				4DD93F98082036E8008E1322 /* HandBrake.icns in Resources */,
+				4DD93F98082036E8008E1322 /* MediaFork.icns in Resources */,
 				4DE09E63082038A400FB751F /* MediaFork.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
