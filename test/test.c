@@ -182,7 +182,7 @@ static void ShowCommands()
 {
     fprintf( stderr, "Commands:\n" );
     fprintf( stderr, " [h]elp    Show this message\n" );
-    fprintf( stderr, " [q]uit    Exit HBTest\n" );
+    fprintf( stderr, " [q]uit    Exit MediaForkCLI\n" );
     fprintf( stderr, " [p]ause   Pause encoding\n" );
     fprintf( stderr, " [r]esume  Resume encoding\n" );
 }
@@ -506,7 +506,7 @@ static void ShowHelp()
     int i;
     
     fprintf( stderr,
-    "Syntax: HBTest [options] -i <device> -o <file>\n"
+    "Syntax: MediaFork [options] -i <device> -o <file>\n"
     "\n"
     "    -h, --help              Print help\n"
     "    -u, --update            Check for updates and exit\n"
