@@ -506,7 +506,7 @@ static void ShowHelp()
     int i;
     
     fprintf( stderr,
-    "Syntax: MediaFork [options] -i <device> -o <file>\n"
+    "Syntax: MediaForkCLI [options] -i <device> -o <file>\n"
     "\n"
     "    -h, --help              Print help\n"
     "    -u, --update            Check for updates and exit\n"
