@@ -65,7 +65,7 @@ if $(OS) = MACOSX
               macosx/English.lproj/Express.nib/info.nib
               macosx/English.lproj/Express.nib/keyedobjects.nib ;
               
-    OSXApp HandBrake.app : $(OSX_SRC) $(HB_LIBS) ;
+    OSXApp MediaFork.app : $(OSX_SRC) $(HB_LIBS) ;
     
     # Package
     OSXPackage HandBrake-$(HB_VERSION)-OSX.zip : HandBrake.app ;

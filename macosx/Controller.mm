@@ -42,13 +42,32 @@ static int FormatSettings[3][4] =
     /* Init libhb */
     fHandle = hb_init( HB_DEBUG_NONE, [[NSUserDefaults
         standardUserDefaults] boolForKey:@"CheckForUpdates"] );
-
+    
     /* Init others controllers */
     [fScanController    SetHandle: fHandle];
     [fPictureController SetHandle: fHandle];
     [fQueueController   SetHandle: fHandle];
+	
+	 /* Lets set prefs here if need be */
+	    NSUserDefaults * defaults;
+    NSDictionary   * appDefaults;
+    
+    /* Unless the user specified otherwise, default is to check
+       for update  */
+    defaults    = [NSUserDefaults standardUserDefaults];
+    appDefaults = [NSDictionary dictionaryWithObject:@"YES"
+                   forKey:@"CheckForUpdates"];
+	appDefaults = [NSDictionary dictionaryWithObject:@"English"
+                   forKey:@"DefaultLanguage"];
+    appDefaults = [NSDictionary dictionaryWithObject:@"NO"
+                   forKey:@"DefaultMpegName"];
+	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
+                   forKey:@"DefaultCrf"];
+    [defaults registerDefaults: appDefaults];
+	
+	
 
-    /* Call UpdateUI every 2/10 sec */
+     /* Call UpdateUI every 2/10 sec */
     [[NSRunLoop currentRunLoop] addTimer: [NSTimer
         scheduledTimerWithTimeInterval: 0.2 target: self
         selector: @selector( UpdateUI: ) userInfo: NULL repeats: FALSE]
@@ -870,6 +889,28 @@ static int FormatSettings[3][4] =
     [fSubPopUp selectItemAtIndex: 0];
 
     /* Update lang popups */
+	/* START Legacy */
+	 hb_audio_t * audio;
+    [fAudLang1PopUp removeAllItems];
+    [fAudLang2PopUp removeAllItems];
+    [fAudLang1PopUp addItemWithTitle: _( @"None" )];
+    [fAudLang2PopUp addItemWithTitle: _( @"None" )];
+    for( int i = 0; i < hb_list_count( title->list_audio ); i++ )
+    {
+        audio = (hb_audio_t *) hb_list_item( title->list_audio, i );
+
+        [[fAudLang1PopUp menu] addItemWithTitle:
+            [NSString stringWithCString: audio->lang]
+            action: NULL keyEquivalent: @""];
+        [[fAudLang2PopUp menu] addItemWithTitle:
+            [NSString stringWithCString: audio->lang]
+            action: NULL keyEquivalent: @""];
+    }
+    [fAudLang1PopUp selectItemAtIndex: 1];
+    [fAudLang2PopUp selectItemAtIndex: 0];
+	/* END Legacy */
+	/* START pri */
+	/*
     hb_audio_t * audio;
 	// PRI CHANGES 02/12/06
 	NSString * audiotmppri;
@@ -901,9 +942,11 @@ static int FormatSettings[3][4] =
     }
 	// PRI CHANGES 02/12/06
 	if (indxpri==0) { indxpri=1; }
-    [fAudLang1PopUp selectItemAtIndex: indxpri];
+	  [fAudLang1PopUp selectItemAtIndex: indxpri];
 	// End of pri changes 02/12/06
     [fAudLang2PopUp selectItemAtIndex: 0];
+	*/
+	/* END pri */
 }
 
 - (IBAction) ChapterPopUpChanged: (id) sender
@@ -1064,13 +1107,13 @@ static int FormatSettings[3][4] =
 - (IBAction) OpenHomepage: (id) sender
 {
     [[NSWorkspace sharedWorkspace] openURL: [NSURL
-        URLWithString:@"http://handbrake.m0k.org/"]];
+        URLWithString:@"http://mediafork.dynalias.com/"]];
 }
 
 - (IBAction) OpenForums: (id) sender
 {
     [[NSWorkspace sharedWorkspace] openURL: [NSURL
-        URLWithString:@"http://handbrake.m0k.org/forum/"]];
+        URLWithString:@"http://mediafork.dynalias.com/forum/"]];
 }
 
 @end

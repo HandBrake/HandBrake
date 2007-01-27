@@ -5,29 +5,27 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleDisplayName</key>
-	<string>HandBrake</string>
+	<string>MediaFork</string>
 	<key>CFBundleExecutable</key>
-	<string>HandBrake</string>
+	<string>MediaFork</string>
 	<key>CFBundleGetInfoString</key>
-	<string>0.7.1a5</string>
-	<key>CFBundleIconFile</key>
-	<string>HandBrake.icns</string>
+	<string>0.8.0b1</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.m0k.handbrake</string>
+	<string>org.mediafork.dynalias</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>HandBrake</string>
+	<string>MediaFork</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.7.1a5</string>
+	<string>0.8.0b1</string>
 	<key>CFBundleSignature</key>
 	<string>HB##</string>
 	<key>CFBundleVersion</key>
 	<string>2006022400</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>By Eric Petit &lt;titer@m0k.org&gt;</string>
+	<string>MediaFork Devs</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>

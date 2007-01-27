@@ -69,7 +69,7 @@
 		4D86C74F07281F4E007BA979 /* ScanController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ScanController.h; sourceTree = "<group>"; };
 		4DD27BA507C0065C0023D231 /* QueueController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = QueueController.h; sourceTree = "<group>"; };
 		4DD27BA607C0065C0023D231 /* QueueController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = QueueController.mm; sourceTree = "<group>"; };
-		4DD93FA6082036E8008E1322 /* HandBrake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HandBrake.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4DD93FA6082036E8008E1322 /* MediaFork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MediaFork.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DDE9724052B7B2B00C39CA9 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		4DE09E62082038A400FB751F /* HandBrake.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = HandBrake.plist; sourceTree = "<group>"; };
 		4DE93A3507F5A2C900F3C78F /* PrefsController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PrefsController.h; sourceTree = "<group>"; };
@@ -110,6 +110,7 @@
 		526FBCB70B4CAB100064E04C /* sync.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = sync.c; path = ../libhb/sync.c; sourceTree = SOURCE_ROOT; };
 		526FBCB80B4CAB100064E04C /* update.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = update.c; path = ../libhb/update.c; sourceTree = SOURCE_ROOT; };
 		526FBCB90B4CAB100064E04C /* work.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = work.c; path = ../libhb/work.c; sourceTree = SOURCE_ROOT; };
+		A2B7C42F0B6AF519005C3519 /* HandBrake copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "HandBrake copy.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,7 +141,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4DD93FA6082036E8008E1322 /* HandBrake.app */,
+				4DD93FA6082036E8008E1322 /* MediaFork.app */,
 				4D1EA2DA0993B01000FDC1A2 /* Instant HandBrake.app */,
 			);
 			name = Products;
@@ -260,6 +261,7 @@
 				4D3ECC2609A4917000B2E45F /* WhiteBox.m */,
 				4D2AE78909CCB24C007E18F6 /* DriveDetector.m */,
 				4D2AE78A09CCB24C007E18F6 /* DriveDetector.h */,
+				A2B7C42F0B6AF519005C3519 /* HandBrake copy.plist */,
 			);
 			name = "HandBrake Sources";
 			sourceTree = "<group>";
@@ -311,9 +313,9 @@
 			productReference = 4D1EA2DA0993B01000FDC1A2 /* Instant HandBrake.app */;
 			productType = "com.apple.product-type.application";
 		};
-		4DD93F8D082036E8008E1322 /* HandBrake */ = {
+		4DD93F8D082036E8008E1322 /* MediaFork */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4D4E7BC0087804870051572B /* Build configuration list for PBXNativeTarget "HandBrake" */;
+			buildConfigurationList = 4D4E7BC0087804870051572B /* Build configuration list for PBXNativeTarget "MediaFork" */;
 			buildPhases = (
 				4DD93F8E082036E8008E1322 /* Headers */,
 				4DD93F95082036E8008E1322 /* Resources */,
@@ -324,9 +326,9 @@
 			);
 			dependencies = (
 			);
-			name = HandBrake;
+			name = MediaFork;
 			productName = HandBrake;
-			productReference = 4DD93FA6082036E8008E1322 /* HandBrake.app */;
+			productReference = 4DD93FA6082036E8008E1322 /* MediaFork.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -339,7 +341,7 @@
 			mainGroup = 29B97314FDCFA39411CA2CEA /* HandBrake */;
 			projectDirPath = "";
 			targets = (
-				4DD93F8D082036E8008E1322 /* HandBrake */,
+				4DD93F8D082036E8008E1322 /* MediaFork */,
 				4D1EA2D90993B01000FDC1A2 /* Instant HandBrake */,
 			);
 		};
@@ -645,7 +647,7 @@
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
 				);
-				PRODUCT_NAME = HandBrake;
+				PRODUCT_NAME = MediaFork;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -687,7 +689,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
 		};
-		4D4E7BC0087804870051572B /* Build configuration list for PBXNativeTarget "HandBrake" */ = {
+		4D4E7BC0087804870051572B /* Build configuration list for PBXNativeTarget "MediaFork" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4D4E7BC1087804870051572B /* Development */,

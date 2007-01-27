@@ -14,7 +14,7 @@
                    forKey:@"CheckForUpdates"];
 	appDefaults = [NSDictionary dictionaryWithObject:@"English"
                    forKey:@"DefaultLanguage"];
-    appDefaults = [NSDictionary dictionaryWithObject:@"NO"
+appDefaults = [NSDictionary dictionaryWithObject:@"NO"
                    forKey:@"DefaultMpegName"];
 	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
                    forKey:@"DefaultCrf"];
@@ -23,15 +23,8 @@
     /* fUpdateCheck Check or uncheck according to the preferences */
     [fUpdateCheck setState: [defaults boolForKey:@"CheckForUpdates"] ?
         NSOnState : NSOffState];
-	/* fFileExtItunes Check or uncheck according to the preferences */
-    [fFileExtItunes setState: [defaults boolForKey:@"DefaultMpegName"] ?
-        NSOnState : NSOffState];
-		
-		/* fDefCrf Check or uncheck according to the preferences */
-    [fDefCrf setState: [defaults boolForKey:@"DefaultCrf"] ?
-        NSOnState : NSOffState];
 	
-	
+
 	// Fill the languages combobox
     [fdefaultlanguage removeAllItems];
 	[fdefaultlanguage addItemWithObjectValue: @"Afar"];
@@ -199,8 +192,19 @@
 	[fdefaultlanguage addItemWithObjectValue: @"Zhuang"];
 	[fdefaultlanguage addItemWithObjectValue: @"Zulu"];
 	
-	[fdefaultlanguage setStringValue:[defaults stringForKey:@"DefaultLanguage"]];
+	//[fdefaultlanguage setStringValue:[defaults stringForKey:@"DefaultLanguage"]];
     [fdefaultlanguage selectItemWithObjectValue:[defaults stringForKey:@"DefaultLanguage"]];
+
+
+
+	/* fFileExtItunes Check or uncheck according to the preferences */
+    [fFileExtItunes setState: [defaults boolForKey:@"DefaultMpegName"] ?
+        NSOnState : NSOffState];
+		
+		/* fDefCrf Check or uncheck according to the preferences */
+    [fDefCrf setState: [defaults boolForKey:@"DefaultCrf"] ?
+        NSOnState : NSOffState];
+
 
 }
 
@@ -220,7 +224,7 @@
 {
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     
-    /* Check Update Itunes Set */
+    /* Check Update CheckForUpdates Set */
 	if( [fUpdateCheck state] == NSOnState )
     {
         [defaults setObject:@"YES" forKey:@"CheckForUpdates"];
@@ -229,6 +233,11 @@
     {
         [defaults setObject:@"NO" forKey:@"CheckForUpdates"];
     }
+	
+	/* Preferred Language Combobox Set */
+
+	[defaults setObject:[fdefaultlanguage objectValueOfSelectedItem]  forKey:@"DefaultLanguage"];
+
 	/* File Extension Itunes Set */
 	
 	if( [fFileExtItunes state] == NSOnState )
@@ -250,9 +259,7 @@
     {
         [defaults setObject:@"NO" forKey:@"DefaultCrf"];
     }
-	
-	/* Preferred Language Combobox Set */
-	[defaults setObject:[fdefaultlanguage objectValueOfSelectedItem]  forKey:@"DefaultLanguage"];
+
 
 }
 
