@@ -7,6 +7,34 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0DFF0B770B6BC72A00549488 /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC9B0B4CAB100064E04C /* common.c */; };
+		0DFF0B790B6BC72A00549488 /* deca52.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC9D0B4CAB100064E04C /* deca52.c */; };
+		0DFF0B7A0B6BC72A00549488 /* decavcodec.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC9E0B4CAB100064E04C /* decavcodec.c */; };
+		0DFF0B7B0B6BC72A00549488 /* declpcm.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC9F0B4CAB100064E04C /* declpcm.c */; };
+		0DFF0B7C0B6BC72A00549488 /* decmpeg2.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCA00B4CAB100064E04C /* decmpeg2.c */; };
+		0DFF0B7D0B6BC72A00549488 /* decsub.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCA10B4CAB100064E04C /* decsub.c */; };
+		0DFF0B7E0B6BC72A00549488 /* demuxmpeg.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCA20B4CAB100064E04C /* demuxmpeg.c */; };
+		0DFF0B7F0B6BC72A00549488 /* dvd.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCA30B4CAB100064E04C /* dvd.c */; };
+		0DFF0B800B6BC72A00549488 /* encavcodec.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCA40B4CAB100064E04C /* encavcodec.c */; };
+		0DFF0B810B6BC72A00549488 /* encfaac.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCA50B4CAB100064E04C /* encfaac.c */; };
+		0DFF0B820B6BC72A00549488 /* enclame.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCA60B4CAB100064E04C /* enclame.c */; };
+		0DFF0B830B6BC72A00549488 /* encvorbis.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCA70B4CAB100064E04C /* encvorbis.c */; };
+		0DFF0B840B6BC72A00549488 /* encx264.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCA80B4CAB100064E04C /* encx264.c */; };
+		0DFF0B850B6BC72A00549488 /* encxvid.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCA90B4CAB100064E04C /* encxvid.c */; };
+		0DFF0B860B6BC72A00549488 /* fifo.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCAA0B4CAB100064E04C /* fifo.c */; };
+		0DFF0B870B6BC72A00549488 /* hb.c in Sources */ = {isa = PBXBuildFile; fileRef = 5260EDCB0B4CACBE00C096C5 /* hb.c */; };
+		0DFF0B8B0B6BC72A00549488 /* muxavi.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCAE0B4CAB100064E04C /* muxavi.c */; };
+		0DFF0B8C0B6BC72A00549488 /* muxcommon.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCAF0B4CAB100064E04C /* muxcommon.c */; };
+		0DFF0B8D0B6BC72A00549488 /* muxmp4.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCB00B4CAB100064E04C /* muxmp4.c */; };
+		0DFF0B8E0B6BC72A00549488 /* muxogm.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCB10B4CAB100064E04C /* muxogm.c */; };
+		0DFF0B8F0B6BC72A00549488 /* ports.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCB20B4CAB100064E04C /* ports.c */; };
+		0DFF0B910B6BC72A00549488 /* reader.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCB40B4CAB100064E04C /* reader.c */; };
+		0DFF0B920B6BC72A00549488 /* render.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCB50B4CAB100064E04C /* render.c */; };
+		0DFF0B930B6BC72A00549488 /* scan.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCB60B4CAB100064E04C /* scan.c */; };
+		0DFF0B940B6BC72A00549488 /* sync.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCB70B4CAB100064E04C /* sync.c */; };
+		0DFF0B950B6BC72A00549488 /* update.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCB80B4CAB100064E04C /* update.c */; };
+		0DFF0B960B6BC72A00549488 /* work.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCB90B4CAB100064E04C /* work.c */; };
+		0DFF0C100B6BCEE800549488 /* test.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC760B4CA8F40064E04C /* test.c */; };
 		4D1125D809D72FD200E0657B /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D1125D709D72FD200E0657B /* libz.dylib */; };
 		4D1125D909D72FD200E0657B /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D1125D709D72FD200E0657B /* libz.dylib */; };
 		4D1EA2EA0993B09A00FDC1A2 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.mm */; };
@@ -43,8 +71,27 @@
 		52AFF86B0B59BD14000DA7C4 /* Express.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4D1EA2DC0993B01000FDC1A2 /* Express.plist */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		0DFF0BF10B6BCCB400549488 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0DFF0B710B6BC6E600549488 /* libmediafork */;
+			remoteInfo = libmediafork;
+		};
+		0DFF0BF30B6BCCB900549488 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0DFF0B710B6BC6E600549488 /* libmediafork */;
+			remoteInfo = libmediafork;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		0DFF0B720B6BC6E600549488 /* libmediafork.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libmediafork.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		0DFF0C0A0B6BCEC200549488 /* MediaForkCLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MediaForkCLI; sourceTree = BUILT_PRODUCTS_DIR; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		29B97316FDCFA39411CA2CEA /* main.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
@@ -69,7 +116,7 @@
 		4D86C74F07281F4E007BA979 /* ScanController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ScanController.h; sourceTree = "<group>"; };
 		4DD27BA507C0065C0023D231 /* QueueController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = QueueController.h; sourceTree = "<group>"; };
 		4DD27BA607C0065C0023D231 /* QueueController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = QueueController.mm; sourceTree = "<group>"; };
-		4DD93FA6082036E8008E1322 /* MediaFork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MediaFork.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4DD93FA6082036E8008E1322 /* MediaForkCLI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = MediaForkCLI.app; path = /Users/pri/Desktop/mf080f/macosx/build/Development/MediaForkCLI.app; sourceTree = "<absolute>"; };
 		4DDE9724052B7B2B00C39CA9 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		4DE09E62082038A400FB751F /* MediaFork.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = MediaFork.plist; sourceTree = "<group>"; };
 		4DE93A3507F5A2C900F3C78F /* PrefsController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PrefsController.h; sourceTree = "<group>"; };
@@ -77,43 +124,51 @@
 		4DEB2024052B055F00C39CA9 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		4DF3C8CB052889CD00A80101 /* Controller.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Controller.h; sourceTree = "<group>"; };
 		4DF3C8CC052889CD00A80101 /* Controller.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = Controller.mm; sourceTree = "<group>"; };
-		5260EDCB0B4CACBE00C096C5 /* hb.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = hb.c; path = ../libhb/hb.c; sourceTree = SOURCE_ROOT; };
+		5260EDCB0B4CACBE00C096C5 /* hb.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = hb.c; path = ../libmediafork/hb.c; sourceTree = SOURCE_ROOT; };
 		526FBC760B4CA8F40064E04C /* test.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = test.c; path = ../test/test.c; sourceTree = SOURCE_ROOT; };
-		526FBC9B0B4CAB100064E04C /* common.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = common.c; path = ../libhb/common.c; sourceTree = SOURCE_ROOT; };
-		526FBC9C0B4CAB100064E04C /* common.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = common.h; path = ../libhb/common.h; sourceTree = SOURCE_ROOT; };
-		526FBC9D0B4CAB100064E04C /* deca52.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = deca52.c; path = ../libhb/deca52.c; sourceTree = SOURCE_ROOT; };
-		526FBC9E0B4CAB100064E04C /* decavcodec.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = decavcodec.c; path = ../libhb/decavcodec.c; sourceTree = SOURCE_ROOT; };
-		526FBC9F0B4CAB100064E04C /* declpcm.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = declpcm.c; path = ../libhb/declpcm.c; sourceTree = SOURCE_ROOT; };
-		526FBCA00B4CAB100064E04C /* decmpeg2.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = decmpeg2.c; path = ../libhb/decmpeg2.c; sourceTree = SOURCE_ROOT; };
-		526FBCA10B4CAB100064E04C /* decsub.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = decsub.c; path = ../libhb/decsub.c; sourceTree = SOURCE_ROOT; };
-		526FBCA20B4CAB100064E04C /* demuxmpeg.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = demuxmpeg.c; path = ../libhb/demuxmpeg.c; sourceTree = SOURCE_ROOT; };
-		526FBCA30B4CAB100064E04C /* dvd.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = dvd.c; path = ../libhb/dvd.c; sourceTree = SOURCE_ROOT; };
-		526FBCA40B4CAB100064E04C /* encavcodec.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = encavcodec.c; path = ../libhb/encavcodec.c; sourceTree = SOURCE_ROOT; };
-		526FBCA50B4CAB100064E04C /* encfaac.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = encfaac.c; path = ../libhb/encfaac.c; sourceTree = SOURCE_ROOT; };
-		526FBCA60B4CAB100064E04C /* enclame.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = enclame.c; path = ../libhb/enclame.c; sourceTree = SOURCE_ROOT; };
-		526FBCA70B4CAB100064E04C /* encvorbis.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = encvorbis.c; path = ../libhb/encvorbis.c; sourceTree = SOURCE_ROOT; };
-		526FBCA80B4CAB100064E04C /* encx264.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = encx264.c; path = ../libhb/encx264.c; sourceTree = SOURCE_ROOT; };
-		526FBCA90B4CAB100064E04C /* encxvid.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = encxvid.c; path = ../libhb/encxvid.c; sourceTree = SOURCE_ROOT; };
-		526FBCAA0B4CAB100064E04C /* fifo.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = fifo.c; path = ../libhb/fifo.c; sourceTree = SOURCE_ROOT; };
-		526FBCAB0B4CAB100064E04C /* hb.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = hb.h; path = ../libhb/hb.h; sourceTree = SOURCE_ROOT; };
-		526FBCAC0B4CAB100064E04C /* internal.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = internal.h; path = ../libhb/internal.h; sourceTree = SOURCE_ROOT; };
-		526FBCAD0B4CAB100064E04C /* lang.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = lang.h; path = ../libhb/lang.h; sourceTree = SOURCE_ROOT; };
-		526FBCAE0B4CAB100064E04C /* muxavi.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = muxavi.c; path = ../libhb/muxavi.c; sourceTree = SOURCE_ROOT; };
-		526FBCAF0B4CAB100064E04C /* muxcommon.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = muxcommon.c; path = ../libhb/muxcommon.c; sourceTree = SOURCE_ROOT; };
-		526FBCB00B4CAB100064E04C /* muxmp4.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = muxmp4.c; path = ../libhb/muxmp4.c; sourceTree = SOURCE_ROOT; };
-		526FBCB10B4CAB100064E04C /* muxogm.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = muxogm.c; path = ../libhb/muxogm.c; sourceTree = SOURCE_ROOT; };
-		526FBCB20B4CAB100064E04C /* ports.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = ports.c; path = ../libhb/ports.c; sourceTree = SOURCE_ROOT; };
-		526FBCB30B4CAB100064E04C /* ports.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ports.h; path = ../libhb/ports.h; sourceTree = SOURCE_ROOT; };
-		526FBCB40B4CAB100064E04C /* reader.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = reader.c; path = ../libhb/reader.c; sourceTree = SOURCE_ROOT; };
-		526FBCB50B4CAB100064E04C /* render.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = render.c; path = ../libhb/render.c; sourceTree = SOURCE_ROOT; };
-		526FBCB60B4CAB100064E04C /* scan.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = scan.c; path = ../libhb/scan.c; sourceTree = SOURCE_ROOT; };
-		526FBCB70B4CAB100064E04C /* sync.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = sync.c; path = ../libhb/sync.c; sourceTree = SOURCE_ROOT; };
-		526FBCB80B4CAB100064E04C /* update.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = update.c; path = ../libhb/update.c; sourceTree = SOURCE_ROOT; };
-		526FBCB90B4CAB100064E04C /* work.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = work.c; path = ../libhb/work.c; sourceTree = SOURCE_ROOT; };
-		A2B7C42F0B6AF519005C3519 /* HandBrake copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "HandBrake copy.plist"; sourceTree = "<group>"; };
+		526FBC9B0B4CAB100064E04C /* common.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = common.c; path = ../libmediafork/common.c; sourceTree = SOURCE_ROOT; };
+		526FBC9D0B4CAB100064E04C /* deca52.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = deca52.c; path = ../libmediafork/deca52.c; sourceTree = SOURCE_ROOT; };
+		526FBC9E0B4CAB100064E04C /* decavcodec.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = decavcodec.c; path = ../libmediafork/decavcodec.c; sourceTree = SOURCE_ROOT; };
+		526FBC9F0B4CAB100064E04C /* declpcm.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = declpcm.c; path = ../libmediafork/declpcm.c; sourceTree = SOURCE_ROOT; };
+		526FBCA00B4CAB100064E04C /* decmpeg2.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = decmpeg2.c; path = ../libmediafork/decmpeg2.c; sourceTree = SOURCE_ROOT; };
+		526FBCA10B4CAB100064E04C /* decsub.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = decsub.c; path = ../libmediafork/decsub.c; sourceTree = SOURCE_ROOT; };
+		526FBCA20B4CAB100064E04C /* demuxmpeg.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = demuxmpeg.c; path = ../libmediafork/demuxmpeg.c; sourceTree = SOURCE_ROOT; };
+		526FBCA30B4CAB100064E04C /* dvd.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = dvd.c; path = ../libmediafork/dvd.c; sourceTree = SOURCE_ROOT; };
+		526FBCA40B4CAB100064E04C /* encavcodec.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = encavcodec.c; path = ../libmediafork/encavcodec.c; sourceTree = SOURCE_ROOT; };
+		526FBCA50B4CAB100064E04C /* encfaac.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = encfaac.c; path = ../libmediafork/encfaac.c; sourceTree = SOURCE_ROOT; };
+		526FBCA60B4CAB100064E04C /* enclame.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = enclame.c; path = ../libmediafork/enclame.c; sourceTree = SOURCE_ROOT; };
+		526FBCA70B4CAB100064E04C /* encvorbis.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = encvorbis.c; path = ../libmediafork/encvorbis.c; sourceTree = SOURCE_ROOT; };
+		526FBCA80B4CAB100064E04C /* encx264.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = encx264.c; path = ../libmediafork/encx264.c; sourceTree = SOURCE_ROOT; };
+		526FBCA90B4CAB100064E04C /* encxvid.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = encxvid.c; path = ../libmediafork/encxvid.c; sourceTree = SOURCE_ROOT; };
+		526FBCAA0B4CAB100064E04C /* fifo.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = fifo.c; path = ../libmediafork/fifo.c; sourceTree = SOURCE_ROOT; };
+		526FBCAE0B4CAB100064E04C /* muxavi.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = muxavi.c; path = ../libmediafork/muxavi.c; sourceTree = SOURCE_ROOT; };
+		526FBCAF0B4CAB100064E04C /* muxcommon.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = muxcommon.c; path = ../libmediafork/muxcommon.c; sourceTree = SOURCE_ROOT; };
+		526FBCB00B4CAB100064E04C /* muxmp4.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = muxmp4.c; path = ../libmediafork/muxmp4.c; sourceTree = SOURCE_ROOT; };
+		526FBCB10B4CAB100064E04C /* muxogm.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = muxogm.c; path = ../libmediafork/muxogm.c; sourceTree = SOURCE_ROOT; };
+		526FBCB20B4CAB100064E04C /* ports.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = ports.c; path = ../libmediafork/ports.c; sourceTree = SOURCE_ROOT; };
+		526FBCB40B4CAB100064E04C /* reader.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = reader.c; path = ../libmediafork/reader.c; sourceTree = SOURCE_ROOT; };
+		526FBCB50B4CAB100064E04C /* render.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = render.c; path = ../libmediafork/render.c; sourceTree = SOURCE_ROOT; };
+		526FBCB60B4CAB100064E04C /* scan.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = scan.c; path = ../libmediafork/scan.c; sourceTree = SOURCE_ROOT; };
+		526FBCB70B4CAB100064E04C /* sync.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = sync.c; path = ../libmediafork/sync.c; sourceTree = SOURCE_ROOT; };
+		526FBCB80B4CAB100064E04C /* update.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = update.c; path = ../libmediafork/update.c; sourceTree = SOURCE_ROOT; };
+		526FBCB90B4CAB100064E04C /* work.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = work.c; path = ../libmediafork/work.c; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		0DFF0B700B6BC6E600549488 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0DFF0C080B6BCEC200549488 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4D1EA2D80993B01000FDC1A2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -141,8 +196,9 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4DD93FA6082036E8008E1322 /* MediaFork.app */,
 				4D1EA2DA0993B01000FDC1A2 /* Instant MediaFork.app */,
+				0DFF0B720B6BC6E600549488 /* libmediafork.a */,
+				0DFF0C0A0B6BCEC200549488 /* MediaForkCLI */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -152,8 +208,8 @@
 			children = (
 				526FBC940B4CAA310064E04C /* Instant MediaFork Sources */,
 				526FBC930B4CAA260064E04C /* MediaFork Sources */,
-				526FBC920B4CAA120064E04C /* HBTest Sources */,
-				526FBC8D0B4CA9F90064E04C /* libhb Sources */,
+				526FBC920B4CAA120064E04C /* MediaForkCLI Sources */,
+				526FBC8D0B4CA9F90064E04C /* libmediafork Sources */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
@@ -194,12 +250,11 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		526FBC8D0B4CA9F90064E04C /* libhb Sources */ = {
+		526FBC8D0B4CA9F90064E04C /* libmediafork Sources */ = {
 			isa = PBXGroup;
 			children = (
 				5260EDCB0B4CACBE00C096C5 /* hb.c */,
 				526FBC9B0B4CAB100064E04C /* common.c */,
-				526FBC9C0B4CAB100064E04C /* common.h */,
 				526FBC9D0B4CAB100064E04C /* deca52.c */,
 				526FBC9E0B4CAB100064E04C /* decavcodec.c */,
 				526FBC9F0B4CAB100064E04C /* declpcm.c */,
@@ -214,15 +269,11 @@
 				526FBCA80B4CAB100064E04C /* encx264.c */,
 				526FBCA90B4CAB100064E04C /* encxvid.c */,
 				526FBCAA0B4CAB100064E04C /* fifo.c */,
-				526FBCAB0B4CAB100064E04C /* hb.h */,
-				526FBCAC0B4CAB100064E04C /* internal.h */,
-				526FBCAD0B4CAB100064E04C /* lang.h */,
 				526FBCAE0B4CAB100064E04C /* muxavi.c */,
 				526FBCAF0B4CAB100064E04C /* muxcommon.c */,
 				526FBCB00B4CAB100064E04C /* muxmp4.c */,
 				526FBCB10B4CAB100064E04C /* muxogm.c */,
 				526FBCB20B4CAB100064E04C /* ports.c */,
-				526FBCB30B4CAB100064E04C /* ports.h */,
 				526FBCB40B4CAB100064E04C /* reader.c */,
 				526FBCB50B4CAB100064E04C /* render.c */,
 				526FBCB60B4CAB100064E04C /* scan.c */,
@@ -230,15 +281,15 @@
 				526FBCB80B4CAB100064E04C /* update.c */,
 				526FBCB90B4CAB100064E04C /* work.c */,
 			);
-			name = "libhb Sources";
+			name = "libmediafork Sources";
 			sourceTree = "<group>";
 		};
-		526FBC920B4CAA120064E04C /* HBTest Sources */ = {
+		526FBC920B4CAA120064E04C /* MediaForkCLI Sources */ = {
 			isa = PBXGroup;
 			children = (
 				526FBC760B4CA8F40064E04C /* test.c */,
 			);
-			name = "HBTest Sources";
+			name = "MediaForkCLI Sources";
 			sourceTree = "<group>";
 		};
 		526FBC930B4CAA260064E04C /* MediaFork Sources */ = {
@@ -261,7 +312,6 @@
 				4D3ECC2609A4917000B2E45F /* WhiteBox.m */,
 				4D2AE78909CCB24C007E18F6 /* DriveDetector.m */,
 				4D2AE78A09CCB24C007E18F6 /* DriveDetector.h */,
-				A2B7C42F0B6AF519005C3519 /* HandBrake copy.plist */,
 			);
 			name = "MediaFork Sources";
 			sourceTree = "<group>";
@@ -279,6 +329,13 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		0DFF0B6E0B6BC6E600549488 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4DD93F8E082036E8008E1322 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -296,6 +353,39 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		0DFF0B710B6BC6E600549488 /* libmediafork */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0DFF0B730B6BC70400549488 /* Build configuration list for PBXNativeTarget "libmediafork" */;
+			buildPhases = (
+				0DFF0B6E0B6BC6E600549488 /* Headers */,
+				0DFF0B6F0B6BC6E600549488 /* Sources */,
+				0DFF0B700B6BC6E600549488 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = libmediafork;
+			productName = libmediafork;
+			productReference = 0DFF0B720B6BC6E600549488 /* libmediafork.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		0DFF0C090B6BCEC200549488 /* MediaForkCLI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0DFF0C0C0B6BCEE000549488 /* Build configuration list for PBXNativeTarget "MediaForkCLI" */;
+			buildPhases = (
+				0DFF0C070B6BCEC200549488 /* Sources */,
+				0DFF0C080B6BCEC200549488 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MediaForkCLI;
+			productName = MediaForkCLI;
+			productReference = 0DFF0C0A0B6BCEC200549488 /* MediaForkCLI */;
+			productType = "com.apple.product-type.tool";
+		};
 		4D1EA2D90993B01000FDC1A2 /* Instant MediaFork */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4D1EA2DD0993B01100FDC1A2 /* Build configuration list for PBXNativeTarget "Instant MediaFork" */;
@@ -307,6 +397,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				0DFF0BF20B6BCCB400549488 /* PBXTargetDependency */,
 			);
 			name = "Instant MediaFork";
 			productName = "Instant HandBrake";
@@ -325,10 +416,11 @@
 			buildRules = (
 			);
 			dependencies = (
+				0DFF0BF40B6BCCB900549488 /* PBXTargetDependency */,
 			);
 			name = MediaFork;
 			productName = HandBrake;
-			productReference = 4DD93FA6082036E8008E1322 /* MediaFork.app */;
+			productReference = 4DD93FA6082036E8008E1322 /* MediaForkCLI.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -343,6 +435,8 @@
 			targets = (
 				4DD93F8D082036E8008E1322 /* MediaFork */,
 				4D1EA2D90993B01000FDC1A2 /* Instant MediaFork */,
+				0DFF0B710B6BC6E600549488 /* libmediafork */,
+				0DFF0C090B6BCEC200549488 /* MediaForkCLI */,
 			);
 		};
 /* End PBXProject section */
@@ -373,6 +467,48 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		0DFF0B6F0B6BC6E600549488 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0DFF0B770B6BC72A00549488 /* common.c in Sources */,
+				0DFF0B790B6BC72A00549488 /* deca52.c in Sources */,
+				0DFF0B7A0B6BC72A00549488 /* decavcodec.c in Sources */,
+				0DFF0B7B0B6BC72A00549488 /* declpcm.c in Sources */,
+				0DFF0B7C0B6BC72A00549488 /* decmpeg2.c in Sources */,
+				0DFF0B7D0B6BC72A00549488 /* decsub.c in Sources */,
+				0DFF0B7E0B6BC72A00549488 /* demuxmpeg.c in Sources */,
+				0DFF0B7F0B6BC72A00549488 /* dvd.c in Sources */,
+				0DFF0B800B6BC72A00549488 /* encavcodec.c in Sources */,
+				0DFF0B810B6BC72A00549488 /* encfaac.c in Sources */,
+				0DFF0B820B6BC72A00549488 /* enclame.c in Sources */,
+				0DFF0B830B6BC72A00549488 /* encvorbis.c in Sources */,
+				0DFF0B840B6BC72A00549488 /* encx264.c in Sources */,
+				0DFF0B850B6BC72A00549488 /* encxvid.c in Sources */,
+				0DFF0B860B6BC72A00549488 /* fifo.c in Sources */,
+				0DFF0B870B6BC72A00549488 /* hb.c in Sources */,
+				0DFF0B8B0B6BC72A00549488 /* muxavi.c in Sources */,
+				0DFF0B8C0B6BC72A00549488 /* muxcommon.c in Sources */,
+				0DFF0B8D0B6BC72A00549488 /* muxmp4.c in Sources */,
+				0DFF0B8E0B6BC72A00549488 /* muxogm.c in Sources */,
+				0DFF0B8F0B6BC72A00549488 /* ports.c in Sources */,
+				0DFF0B910B6BC72A00549488 /* reader.c in Sources */,
+				0DFF0B920B6BC72A00549488 /* render.c in Sources */,
+				0DFF0B930B6BC72A00549488 /* scan.c in Sources */,
+				0DFF0B940B6BC72A00549488 /* sync.c in Sources */,
+				0DFF0B950B6BC72A00549488 /* update.c in Sources */,
+				0DFF0B960B6BC72A00549488 /* work.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0DFF0C070B6BCEC200549488 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0DFF0C100B6BCEE800549488 /* test.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4D1EA2D70993B01000FDC1A2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -401,6 +537,19 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		0DFF0BF20B6BCCB400549488 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0DFF0B710B6BC6E600549488 /* libmediafork */;
+			targetProxy = 0DFF0BF10B6BCCB400549488 /* PBXContainerItemProxy */;
+		};
+		0DFF0BF40B6BCCB900549488 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0DFF0B710B6BC6E600549488 /* libmediafork */;
+			targetProxy = 0DFF0BF30B6BCCB900549488 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
@@ -421,6 +570,209 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		0DFF0B740B6BC70400549488 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../libmediafork";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
+				INSTALL_PATH = /usr/local/lib;
+				OTHER_CFLAGS = (
+					"-D__LIBMEDIAFORK__",
+					"-DSYS_DARWIN",
+					"$(OTHER_CFLAGS_QUOTED_1)",
+					"-DHB_BUILD=2006022400",
+					"-DUSE_PTHREAD",
+				);
+				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.7.1\\\"";
+				OTHER_LDFLAGS = "";
+				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
+				PREBINDING = NO;
+				PRODUCT_NAME = mediafork;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				ZERO_LINK = NO;
+			};
+			name = Development;
+		};
+		0DFF0B750B6BC70400549488 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../libmediafork";
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
+				INSTALL_PATH = /usr/local/lib;
+				OTHER_CFLAGS = (
+					"-D__LIBMEDIAFORK__",
+					"-DSYS_DARWIN",
+					"$(OTHER_CFLAGS_QUOTED_1)",
+					"-DHB_BUILD=2006022400",
+					"-DUSE_PTHREAD",
+				);
+				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.7.1\\\"";
+				OTHER_LDFLAGS = "";
+				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
+				PREBINDING = NO;
+				PRODUCT_NAME = mediafork;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		0DFF0B760B6BC70400549488 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../libmediafork";
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
+				INSTALL_PATH = /usr/local/lib;
+				OTHER_CFLAGS = (
+					"-D__LIBMEDIAFORK__",
+					"-DSYS_DARWIN",
+					"$(OTHER_CFLAGS_QUOTED_1)",
+					"-DHB_BUILD=2006022400",
+					"-DUSE_PTHREAD",
+				);
+				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.7.1\\\"";
+				OTHER_LDFLAGS = "";
+				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
+				PREBINDING = NO;
+				PRODUCT_NAME = mediafork;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				ZERO_LINK = NO;
+			};
+			name = Default;
+		};
+		0DFF0C0D0B6BCEE000549488 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = s;
+				HEADER_SEARCH_PATHS = ../libmediafork;
+				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					../libmediafork/libmediafork.a,
+					../contrib/lib/liba52.a,
+					../contrib/lib/libavformat.a,
+					../contrib/lib/libavcodec.a,
+					../contrib/lib/libavutil.a,
+					../contrib/lib/libdvdread.a,
+					../contrib/lib/libdvdcss.a,
+					../contrib/lib/libfaac.a,
+					../contrib/lib/libmp3lame.a,
+					../contrib/lib/libmpeg2.a,
+					../contrib/lib/libvorbis.a,
+					../contrib/lib/libvorbisenc.a,
+					../contrib/lib/libogg.a,
+					../contrib/lib/libsamplerate.a,
+					../contrib/lib/libx264.a,
+					../contrib/lib/libxvidcore.a,
+					"-lz",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = MediaForkCLI;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				ZERO_LINK = NO;
+			};
+			name = Development;
+		};
+		0DFF0C0E0B6BCEE000549488 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = s;
+				HEADER_SEARCH_PATHS = ../libmediafork;
+				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					../libmediafork/libmediafork.a,
+					../contrib/lib/liba52.a,
+					../contrib/lib/libavformat.a,
+					../contrib/lib/libavcodec.a,
+					../contrib/lib/libavutil.a,
+					../contrib/lib/libdvdread.a,
+					../contrib/lib/libdvdcss.a,
+					../contrib/lib/libfaac.a,
+					../contrib/lib/libmp3lame.a,
+					../contrib/lib/libmpeg2.a,
+					../contrib/lib/libvorbis.a,
+					../contrib/lib/libvorbisenc.a,
+					../contrib/lib/libogg.a,
+					../contrib/lib/libsamplerate.a,
+					../contrib/lib/libx264.a,
+					../contrib/lib/libxvidcore.a,
+					"-lz",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = MediaForkCLI;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		0DFF0C0F0B6BCEE000549488 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = s;
+				HEADER_SEARCH_PATHS = ../libmediafork;
+				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					../libmediafork/libmediafork.a,
+					../contrib/lib/liba52.a,
+					../contrib/lib/libavformat.a,
+					../contrib/lib/libavcodec.a,
+					../contrib/lib/libavutil.a,
+					../contrib/lib/libdvdread.a,
+					../contrib/lib/libdvdcss.a,
+					../contrib/lib/libfaac.a,
+					../contrib/lib/libmp3lame.a,
+					../contrib/lib/libmpeg2.a,
+					../contrib/lib/libvorbis.a,
+					../contrib/lib/libvorbisenc.a,
+					../contrib/lib/libogg.a,
+					../contrib/lib/libsamplerate.a,
+					../contrib/lib/libx264.a,
+					../contrib/lib/libxvidcore.a,
+					"-lz",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = MediaForkCLI;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				ZERO_LINK = NO;
+			};
+			name = Default;
+		};
 		4D1EA2DE0993B01100FDC1A2 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -429,84 +781,17 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				HEADER_SEARCH_PATHS = ../libhb;
-				INFOPLIST_FILE = Express.plist;
-				INSTALL_PATH = "$(HOME)/Applications";
-				OTHER_LDFLAGS = (
-					../libhb/libhb.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libdvdcss.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = "Instant HandBrake";
-				WRAPPER_EXTENSION = app;
-				ZERO_LINK = NO;
-			};
-			name = Development;
-		};
-		4D1EA2DF0993B01100FDC1A2 /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				HEADER_SEARCH_PATHS = ../libhb;
-				INFOPLIST_FILE = Express.plist;
-				INSTALL_PATH = "$(HOME)/Applications";
-				OTHER_LDFLAGS = (
-					../libhb/libhb.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libdvdcss.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = "Instant HandBrake";
-				WRAPPER_EXTENSION = app;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-		4D1EA2E00993B01100FDC1A2 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				HEADER_SEARCH_PATHS = ../libmediafork;
 				INFOPLIST_FILE = Express.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
 				OTHER_LDFLAGS = (
 					../libmediafork/libmediafork.a,
 					../contrib/lib/liba52.a,
@@ -527,68 +812,30 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "Instant MediaFork";
-				WRAPPER_EXTENSION = app;
-				ZERO_LINK = NO;
-			};
-			name = Default;
-		};
-		4D4E7BC1087804870051572B /* Development */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 0.7.1a2;
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_DYNAMIC_NO_PIC = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
-				HEADER_SEARCH_PATHS = ../libmediafork;
-				INFOPLIST_FILE = MediaFork.plist;
-				LIBRARY_SEARCH_PATHS = "";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = (
-					../libmediafork/libmediafork.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libdvdcss.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-				);
-				PRODUCT_NAME = MediaFork;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
 			name = Development;
 		};
-		4D4E7BC2087804870051572B /* Deployment */ = {
+		4D1EA2DF0993B01100FDC1A2 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
-				HEADER_SEARCH_PATHS = ../libhb;
-				INFOPLIST_FILE = MediaFork.plist;
-				LIBRARY_SEARCH_PATHS = "";
-				OTHER_CFLAGS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				HEADER_SEARCH_PATHS = ../libmediafork;
+				INFOPLIST_FILE = Express.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
 				OTHER_LDFLAGS = (
 					../libhb/libhb.a,
 					../contrib/lib/liba52.a,
@@ -607,23 +854,66 @@
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
 				);
-				PRODUCT_NAME = HandBrake;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
+				PREBINDING = NO;
+				PRODUCT_NAME = "Instant MediaFork";
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
 			name = Deployment;
 		};
-		4D4E7BC3087804870051572B /* Default */ = {
+		4D1EA2E00993B01100FDC1A2 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				HEADER_SEARCH_PATHS = ../libmediafork;
+				INFOPLIST_FILE = Express.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
+				OTHER_LDFLAGS = (
+					../libhb/libhb.a,
+					../contrib/lib/liba52.a,
+					../contrib/lib/libavformat.a,
+					../contrib/lib/libavcodec.a,
+					../contrib/lib/libavutil.a,
+					../contrib/lib/libdvdread.a,
+					../contrib/lib/libdvdcss.a,
+					../contrib/lib/libfaac.a,
+					../contrib/lib/libmp3lame.a,
+					../contrib/lib/libmpeg2.a,
+					../contrib/lib/libvorbis.a,
+					../contrib/lib/libvorbisenc.a,
+					../contrib/lib/libogg.a,
+					../contrib/lib/libsamplerate.a,
+					../contrib/lib/libx264.a,
+					../contrib/lib/libxvidcore.a,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = "Instant MediaFork";
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Default;
+		};
+		4D4E7BC1087804870051572B /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 0.7.1a2;
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_DYNAMIC_NO_PIC = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				HEADER_SEARCH_PATHS = ../libmediafork;
 				INFOPLIST_FILE = MediaFork.plist;
@@ -647,7 +937,89 @@
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
 				);
-				PRODUCT_NAME = MediaFork;
+				PRODUCT_NAME = MediaForkCLI;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Development;
+		};
+		4D4E7BC2087804870051572B /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				HEADER_SEARCH_PATHS = ../libmediafork;
+				INFOPLIST_FILE = MediaFork.plist;
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					../libmediafork/libmediafork.a,
+					../contrib/lib/liba52.a,
+					../contrib/lib/libavformat.a,
+					../contrib/lib/libavcodec.a,
+					../contrib/lib/libavutil.a,
+					../contrib/lib/libdvdread.a,
+					../contrib/lib/libdvdcss.a,
+					../contrib/lib/libfaac.a,
+					../contrib/lib/libmp3lame.a,
+					../contrib/lib/libmpeg2.a,
+					../contrib/lib/libvorbis.a,
+					../contrib/lib/libvorbisenc.a,
+					../contrib/lib/libogg.a,
+					../contrib/lib/libsamplerate.a,
+					../contrib/lib/libx264.a,
+					../contrib/lib/libxvidcore.a,
+				);
+				PRODUCT_NAME = MediaForkCLI;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		4D4E7BC3087804870051572B /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				HEADER_SEARCH_PATHS = ../libmediafork;
+				INFOPLIST_FILE = MediaFork.plist;
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					../libmediafork/libmediafork.a,
+					../contrib/lib/liba52.a,
+					../contrib/lib/libavformat.a,
+					../contrib/lib/libavcodec.a,
+					../contrib/lib/libavutil.a,
+					../contrib/lib/libdvdread.a,
+					../contrib/lib/libdvdcss.a,
+					../contrib/lib/libfaac.a,
+					../contrib/lib/libmp3lame.a,
+					../contrib/lib/libmpeg2.a,
+					../contrib/lib/libvorbis.a,
+					../contrib/lib/libvorbisenc.a,
+					../contrib/lib/libogg.a,
+					../contrib/lib/libsamplerate.a,
+					../contrib/lib/libx264.a,
+					../contrib/lib/libxvidcore.a,
+				);
+				PRODUCT_NAME = MediaForkCLI;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -679,6 +1051,26 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		0DFF0B730B6BC70400549488 /* Build configuration list for PBXNativeTarget "libmediafork" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0DFF0B740B6BC70400549488 /* Development */,
+				0DFF0B750B6BC70400549488 /* Deployment */,
+				0DFF0B760B6BC70400549488 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		0DFF0C0C0B6BCEE000549488 /* Build configuration list for PBXNativeTarget "MediaForkCLI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0DFF0C0D0B6BCEE000549488 /* Development */,
+				0DFF0C0E0B6BCEE000549488 /* Deployment */,
+				0DFF0C0F0B6BCEE000549488 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
 		4D1EA2DD0993B01100FDC1A2 /* Build configuration list for PBXNativeTarget "Instant MediaFork" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
