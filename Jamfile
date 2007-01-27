@@ -6,8 +6,8 @@
 
 SubDir TOP ;
 
-# libhb + contrib libraries
-HB_LIBS = libhb.a
+# libmediafork + contrib libraries
+MEDIAFORK_LIBS = libmediafork.a
           contrib/lib/liba52.a        contrib/lib/libavformat.a
           contrib/lib/libavcodec.a    contrib/lib/libavutil.a
           contrib/lib/libdvdread.a
@@ -24,7 +24,7 @@ if $(OS) = UNKNOWN
 
 if $(OS) != CYGWIN
 {
-    HB_LIBS = $(HB_LIBS) contrib/lib/libdvdcss.a ;
+    MEDIAFORK_LIBS = $(MEDIAFORK_LIBS) contrib/lib/libdvdcss.a ;
 }
 
 # Interfaces
@@ -65,7 +65,7 @@ if $(OS) = MACOSX
               macosx/English.lproj/Express.nib/info.nib
               macosx/English.lproj/Express.nib/keyedobjects.nib ;
               
-    OSXApp MediaFork.app : $(OSX_SRC) $(HB_LIBS) ;
+    OSXApp MediaFork.app : $(OSX_SRC) $(MEDIAFORK_LIBS) ;
     
     # Package
     OSXPackage HandBrake-$(HB_VERSION)-OSX.zip : HandBrake.app ;
@@ -79,13 +79,13 @@ if $(OS) = LINUX
     #Main            $(WX_BIN) : $(WX_SRC) ;
 }
 
-ObjectHdrs     $(UI_SRC) : $(TOP)/libhb ;
-LinkLibraries  $(UI_BIN) : $(HB_LIBS) ;
+ObjectHdrs     $(UI_SRC) : $(TOP)/libmediafork ;
+LinkLibraries  $(UI_BIN) : $(MEDIAFORK_LIBS) ;
 
 # Packages
 NotFile package ;
 Depends package : $(HB_PACKAGES) ;
 
 SubInclude TOP contrib ;
-SubInclude TOP libhb ;
+SubInclude TOP libmediafork ;
 
