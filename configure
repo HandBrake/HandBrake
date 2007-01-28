@@ -94,5 +94,5 @@ EOF
 
 echo
 echo "To build MediaFork, run:"
-echo " './jamUB' on a Mac (or 'make' to try the UB build method),"
+echo " './jam' on a Mac (or 'make' to try the UB build method),"
 echo " 'jam' on Linux or Windows."
