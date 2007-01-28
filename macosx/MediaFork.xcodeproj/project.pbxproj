@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0DB9963D0B6D108C0027E0DB /* mediafork.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DB9963C0B6D108C0027E0DB /* mediafork.c */; };
 		0DFF0B770B6BC72A00549488 /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC9B0B4CAB100064E04C /* common.c */; };
 		0DFF0B790B6BC72A00549488 /* deca52.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC9D0B4CAB100064E04C /* deca52.c */; };
 		0DFF0B7A0B6BC72A00549488 /* decavcodec.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC9E0B4CAB100064E04C /* decavcodec.c */; };
@@ -22,7 +23,6 @@
 		0DFF0B840B6BC72A00549488 /* encx264.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCA80B4CAB100064E04C /* encx264.c */; };
 		0DFF0B850B6BC72A00549488 /* encxvid.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCA90B4CAB100064E04C /* encxvid.c */; };
 		0DFF0B860B6BC72A00549488 /* fifo.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCAA0B4CAB100064E04C /* fifo.c */; };
-		0DFF0B870B6BC72A00549488 /* hb.c in Sources */ = {isa = PBXBuildFile; fileRef = 5260EDCB0B4CACBE00C096C5 /* hb.c */; };
 		0DFF0B8B0B6BC72A00549488 /* muxavi.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCAE0B4CAB100064E04C /* muxavi.c */; };
 		0DFF0B8C0B6BC72A00549488 /* muxcommon.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCAF0B4CAB100064E04C /* muxcommon.c */; };
 		0DFF0B8D0B6BC72A00549488 /* muxmp4.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBCB00B4CAB100064E04C /* muxmp4.c */; };
@@ -97,7 +97,8 @@
 
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		0D6E35760B6BD4F0005AABB3 /* MediaFork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MediaFork.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0D6E35760B6BD4F0005AABB3 /* MediaFork.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MediaFork.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0DB9963C0B6D108C0027E0DB /* mediafork.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = mediafork.c; path = ../libmediafork/mediafork.c; sourceTree = SOURCE_ROOT; };
 		0DFF0B720B6BC6E600549488 /* libmediafork.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libmediafork.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DFF0C0A0B6BCEC200549488 /* MediaForkCLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MediaForkCLI; sourceTree = BUILT_PRODUCTS_DIR; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
@@ -131,7 +132,6 @@
 		4DEB2024052B055F00C39CA9 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		4DF3C8CB052889CD00A80101 /* Controller.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Controller.h; sourceTree = "<group>"; };
 		4DF3C8CC052889CD00A80101 /* Controller.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = Controller.mm; sourceTree = "<group>"; };
-		5260EDCB0B4CACBE00C096C5 /* hb.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = hb.c; path = ../libmediafork/hb.c; sourceTree = SOURCE_ROOT; };
 		526FBC760B4CA8F40064E04C /* test.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = test.c; path = ../test/test.c; sourceTree = SOURCE_ROOT; };
 		526FBC9B0B4CAB100064E04C /* common.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = common.c; path = ../libmediafork/common.c; sourceTree = SOURCE_ROOT; };
 		526FBC9D0B4CAB100064E04C /* deca52.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = deca52.c; path = ../libmediafork/deca52.c; sourceTree = SOURCE_ROOT; };
@@ -261,7 +261,6 @@
 		526FBC8D0B4CA9F90064E04C /* libmediafork Sources */ = {
 			isa = PBXGroup;
 			children = (
-				5260EDCB0B4CACBE00C096C5 /* hb.c */,
 				526FBC9B0B4CAB100064E04C /* common.c */,
 				526FBC9D0B4CAB100064E04C /* deca52.c */,
 				526FBC9E0B4CAB100064E04C /* decavcodec.c */,
@@ -275,6 +274,7 @@
 				526FBCA60B4CAB100064E04C /* enclame.c */,
 				526FBCA70B4CAB100064E04C /* encvorbis.c */,
 				526FBCA80B4CAB100064E04C /* encx264.c */,
+				0DB9963C0B6D108C0027E0DB /* mediafork.c */,
 				526FBCA90B4CAB100064E04C /* encxvid.c */,
 				526FBCAA0B4CAB100064E04C /* fifo.c */,
 				526FBCAE0B4CAB100064E04C /* muxavi.c */,
@@ -495,7 +495,6 @@
 				0DFF0B840B6BC72A00549488 /* encx264.c in Sources */,
 				0DFF0B850B6BC72A00549488 /* encxvid.c in Sources */,
 				0DFF0B860B6BC72A00549488 /* fifo.c in Sources */,
-				0DFF0B870B6BC72A00549488 /* hb.c in Sources */,
 				0DFF0B8B0B6BC72A00549488 /* muxavi.c in Sources */,
 				0DFF0B8C0B6BC72A00549488 /* muxcommon.c in Sources */,
 				0DFF0B8D0B6BC72A00549488 /* muxmp4.c in Sources */,
@@ -507,6 +506,7 @@
 				0DFF0B940B6BC72A00549488 /* sync.c in Sources */,
 				0DFF0B950B6BC72A00549488 /* update.c in Sources */,
 				0DFF0B960B6BC72A00549488 /* work.c in Sources */,
+				0DB9963D0B6D108C0027E0DB /* mediafork.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
