@@ -6,7 +6,7 @@ It may be used under the terms of the GNU General Public License. */
 
 #include <ffmpeg/avformat.h>
 
-#include "hb.h"
+#include "mediafork.h"
 
 int64_t ff_gcd(int64_t a, int64_t b);
 

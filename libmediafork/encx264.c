@@ -6,7 +6,7 @@ It may be used under the terms of the GNU General Public License. */
 
 #include <stdarg.h>
 
-#include "hb.h"
+#include "mediafork.h"
 
 #include "x264.h"
 

@@ -4,7 +4,7 @@
    Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
-#include "hb.h"
+#include "mediafork.h"
 
 #define AVIF_HASINDEX  0x10
 #define AVIIF_KEYFRAME 0x10

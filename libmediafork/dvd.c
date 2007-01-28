@@ -4,7 +4,7 @@
    Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
-#include "hb.h"
+#include "mediafork.h"
 #include "lang.h"
 
 #include "dvdread/ifo_read.h"

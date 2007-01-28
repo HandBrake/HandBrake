@@ -45,7 +45,7 @@ typedef struct hb_fifo_s hb_fifo_t;
 typedef struct hb_lock_s hb_lock_t;
 
 #include "ports.h"
-#ifdef __LIBHB__
+#ifdef __LIBMEDIAFORK__
 #include "internal.h"
 #endif
 
@@ -176,7 +176,7 @@ struct hb_job_s
     int             mux;
     char          * file;
 
-#ifdef __LIBHB__
+#ifdef __LIBMEDIAFORK__
     /* Internal data */
     hb_handle_t   * h;
     hb_lock_t     * pause;
@@ -210,7 +210,7 @@ struct hb_audio_s
     int  bitrate;
     int  channels;
 
-#ifdef __LIBHB__
+#ifdef __LIBMEDIAFORK__
     /* Internal data */
     hb_fifo_t * fifo_in;   /* AC3/MPEG/LPCM ES */
     hb_fifo_t * fifo_raw;  /* Raw audio */
@@ -245,7 +245,7 @@ struct hb_subtitle_s
     int  id;
     char lang[1024];
 
-#ifdef __LIBHB__
+#ifdef __LIBMEDIAFORK__
     /* Internal data */
     hb_fifo_t * fifo_in;  /* SPU ES */
     hb_fifo_t * fifo_raw; /* Decodec SPU */
@@ -346,7 +346,7 @@ struct hb_work_object_s
     int                 id;
     char              * name;
 
-#ifdef __LIBHB__
+#ifdef __LIBMEDIAFORK__
     int              (* init)  ( hb_work_object_t *, hb_job_t * );
     int              (* work)  ( hb_work_object_t *, hb_buffer_t **,
                                  hb_buffer_t ** );

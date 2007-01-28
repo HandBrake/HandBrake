@@ -4,7 +4,7 @@
    Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
-#include "hb.h"
+#include "mediafork.h"
 
 #define HB_URL   "handbrake.m0k.org"
 #define HB_QUERY "GET /LATEST HTTP/1.0\r\nHost: " HB_URL "\r\n\r\n"

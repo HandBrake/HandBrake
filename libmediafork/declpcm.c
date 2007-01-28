@@ -4,7 +4,7 @@
    Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
-#include "hb.h"
+#include "mediafork.h"
 
 int  declpcmInit( hb_work_object_t *, hb_job_t * );
 int  declpcmWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
