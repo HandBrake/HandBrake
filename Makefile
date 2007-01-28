@@ -4,9 +4,12 @@ SYSTEM = $(shell uname -s)
 ifeq ($(SYSTEM),Darwin)
 
 all:
-	(cd macosx ; xcodebuild -alltargets -configuration UB build | sed '/^$$/d' )
+	(./DownloadMacOsXContribBinaries.sh ; cd macosx ; xcodebuild -alltargets -configuration UB build | sed '/^$$/d' )
 
 clean:
 	(cd macosx ; xcodebuild -alltargets -configuration UB clean | sed '/^$$/d' )
+
+mrproper:
+	(rm -rf contrib/*tar.gz contrib/include contrib/lib contrib/DarwinContribVersion.txt ; cd macosx ; xcodebuild -alltargets -configuration UB clean | sed '/^$$/d' )
 
 endif
