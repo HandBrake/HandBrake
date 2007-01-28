@@ -10,7 +10,7 @@
 #include <time.h>
 #include <unistd.h>
 
-#include "hb.h"
+#include "mediafork.h"
 
 /* Options */
 static int    debug       = HB_DEBUG_NONE;
