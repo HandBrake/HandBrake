@@ -115,7 +115,7 @@ static int FormatSettings[3][4] =
     [fVidTargetSizeField setIntValue: 700];
   	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PixelRatio"])
     {
-    	[fVidBitrateField    setIntValue: 1350];
+    	[fVidBitrateField    setIntValue: 1500];
     	[fVidTwoPassCheck    setState: NSOnState];
     }
 	else
