@@ -37,13 +37,13 @@ export REPOS=svn://multics.dynalias.com/HandBrake/branches/MediaFork_0.8.0
 # ##########################################################################
 # Launch the build on the foreign system
 # ##########################################################################
-ssh $USERNAME@$IP "rm -rf MFBUILDTMP ; mkdir MFBUILDTMP ; svn co $REPOS MFBUILDTMP ; cd MFBUILDTMP ; ./configure ; cd contrib ; cp ../config.jam . ; ../jamUB ; touch BUILDTERMINATED" &
+ssh $USERNAME@$IP "rm -rf MFBUILDTMP ; mkdir MFBUILDTMP ; svn co $REPOS MFBUILDTMP ; cd MFBUILDTMP ; ./configure ; cd contrib ; cp ../config.jam . ; ../jam ; touch BUILDTERMINATED" &
 ./configure
 cd contrib
 rm -rf lib include *tar.gz bin share man native foreign
 cp ../config.jam .
 # Use the new UB jam to be shure to use the correct version to build libraries (native on each system)
-../jamUB
+../jam
 mkdir native
 mv lib native
 mkdir lib
