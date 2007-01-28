@@ -94,6 +94,5 @@ EOF
 
 echo
 echo "To build HandBrake, run:"
-echo " './jamintel' on a Mac Intel,"
-echo " './jam' on a PPC Mac,"
+echo " './jamUB' on a Mac,"
 echo " 'jam' on Linux or Windows."
