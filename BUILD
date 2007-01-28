@@ -24,7 +24,7 @@ Step 1: get needed tools
     http://public.perforce.com/public/jam/index.html,
     compile it with gcc in Cygwin, and put the jam executable somewhere on
     your path.
-+ nasm (Only for x86. On Mac OS X Intel, Nasm CVS is required)
++ nasm (Only for x86. On Mac OS X Intel, Xcode 2.4.1 include it)
 
 Cygwin setup:
     There are a couple extra things required to make the code build for Cygwin.
@@ -44,3 +44,14 @@ Step 2: build
 
 Run `./configure && jam'. This will build every library HandBrake
 requires, then HandBrake itself.
+
+
+Experimental UB build on MacOsX
+===============================
+
+Run `make'. This will build libmediafork, MediaFork and MediaForkCLI as Universal Binary.
+This build method use precompiled contrib libraries. Script to build those binaries are provided too.
+All the build is handled by Xcode 2.4.1, should work on powerPC and Intel Macs.
+
+
+
