@@ -3,8 +3,8 @@
 # Incremented every time a new contrib package is available
 VERSION=`cat MacOsXContribBinariesVersion.txt`
 
-if [ -f contrib/version ]; then
-  if [ "`cat contrib/version`" = $VERSION ]; then
+if [ -f contrib/DarwinContribVersion.txt ]; then
+  if [ "`cat contrib/DarwinContribVersion.txt`" = $VERSION ]; then
     echo "Contribs are up to date."
     exit 0
   fi
