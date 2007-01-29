@@ -4,7 +4,7 @@ SYSTEM = $(shell uname -s)
 ifeq ($(SYSTEM),Darwin)
 
 all:
-	(./DownloadMacOsXContribBinaries.sh ; cd macosx ; xcodebuild -alltargets -configuration UB build | sed '/^$$/d' )
+	(./DownloadMacOsXContribBinaries.sh ; cd macosx ; xcodebuild -alltargets -configuration UB build | sed '/^$$/d' ; cd .. ; ./macosx/localize.sh MediaFork.app)
 
 clean:
 	(cd macosx ; xcodebuild -alltargets -configuration UB clean | sed '/^$$/d' )
