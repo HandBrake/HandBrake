@@ -10,6 +10,8 @@
 	<string>MediaFork</string>
 	<key>CFBundleGetInfoString</key>
 	<string>0.8.0b1</string>
+	<key>CFBundleIconFile</key>
+	<string>MediaFork</string>
 	<key>CFBundleIdentifier</key>
 	<string>org.mediafork.dynalias</string>
 	<key>CFBundleInfoDictionaryVersion</key>
