@@ -9,6 +9,9 @@
 	IBOutlet NSComboBox * fdefaultlanguage;
 	IBOutlet NSButton * fFileExtItunes;
 	IBOutlet NSButton * fDefCrf;
+	IBOutlet NSButton * fDefDeinterlace;
+	IBOutlet NSButton * fDefPicSizeAutoSetipod;
+	
 }
 
 - (IBAction) OpenPanel:    (id) sender;

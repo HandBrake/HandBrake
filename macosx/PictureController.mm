@@ -145,6 +145,51 @@ static int GetAlignedSize( int size )
     job->keep_ratio  = ( [fRatioCheck state] == NSOnState );
     job->deinterlace = ( [fDeinterlaceCheck state] == NSOnState );
 
+	/*
+	[fPicSrcWidth setStringValue: [NSString stringWithFormat:
+						 @"%d", fTitle->width]];
+				[fPicSrcHeight setStringValue: [NSString stringWithFormat:
+						 @"%d", fTitle->height]];
+				[fPicSettingWidth setStringValue: [NSString stringWithFormat:
+						 @"%d", fTitle->job->width]];
+				[fPicSettingHeight setStringValue: [NSString stringWithFormat:
+						 @"%d", fTitle->job->height]];
+				[fPicSettingARkeep setStringValue: [NSString stringWithFormat:
+						 @"%d", job->keep_ratio]];		 
+				[fPicSettingDeinterlace setStringValue: [NSString stringWithFormat:
+						 @"%d", job->deinterlace]];
+	if (job->keep_ratio)
+	{
+		if (job->deinterlace)
+		{
+		[fPicSettingsDisplay setStringValue: [NSString stringWithFormat:
+		 @"Source %dx%d, Output %dx%d, Aspect Ratio On, Deinterlace On", fTitle->width, fTitle->height,
+		 fTitle->job->width, fTitle->job->height]];
+		 }
+		 else
+		 {
+			[fPicSettingsDisplay setStringValue: [NSString stringWithFormat:
+		 @"Source %dx%d, Output %dx%d, Aspect Ratio On, Deinterlace Off", fTitle->width, fTitle->height,
+		 fTitle->job->width, fTitle->job->height]];
+		 }
+	}
+	else
+	{
+		if (job->deinterlace)
+		{
+		[fPicSettingsDisplay setStringValue: [NSString stringWithFormat:
+		 @"Source %dx%d, Output %dx%d, Aspect Ratio Off, Deinterlace On", fTitle->width, fTitle->height,
+		 fTitle->job->width, fTitle->job->height]];
+		 }
+		 else
+		 {
+			[fPicSettingsDisplay setStringValue: [NSString stringWithFormat:
+		 @"Source %dx%d, Output %dx%d, Aspect Ratio Off, Deinterlace Off", fTitle->width, fTitle->height,
+		 fTitle->job->width, fTitle->job->height]];
+		 }
+	}
+
+    */
     bool autocrop = ( [fCropMatrix selectedRow] == 0 );
     [fCropTopStepper    setEnabled: !autocrop];
     [fCropBottomStepper setEnabled: !autocrop];
@@ -222,7 +267,8 @@ static int GetAlignedSize( int size )
 
 - (IBAction) ClosePanel: (id) sender
 {
-    [NSApp stopModal];
+
+	[NSApp stopModal];
 }
 
 @end

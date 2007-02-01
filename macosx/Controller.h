@@ -69,6 +69,25 @@
     IBOutlet NSButton            * fVidGrayscaleCheck;
     IBOutlet NSButton            * fVidTwoPassCheck;
 
+	
+	/* Picture Settings box */
+	IBOutlet NSTextField         * fPicLabelSettings;
+	IBOutlet NSTextField         * fPicLabelSrc;
+	IBOutlet NSTextField         * fPicLabelOutp;
+	IBOutlet NSTextField         * fPicLabelAr;
+	IBOutlet NSTextField         * fPicLabelDeinter;
+	IBOutlet NSTextField         * fPicLabelSrcX;
+	IBOutlet NSTextField         * fPicLabelOutputX;
+	
+	IBOutlet NSTextField         * fPicSrcWidth;
+	IBOutlet NSTextField         * fPicSrcHeight;
+	IBOutlet NSTextField         * fPicSettingWidth;
+	IBOutlet NSTextField         * fPicSettingHeight;
+	IBOutlet NSTextField         * fPicSettingARkeep;
+	IBOutlet NSTextField         * fPicSettingDeinterlace;
+	IBOutlet NSTextField         * fPicSettingARkeepDsply;
+	IBOutlet NSTextField         * fPicSettingDeinterlaceDsply;
+	
     /* Subtitles box */
     IBOutlet NSTextField         * fSubField;
     IBOutlet NSPopUpButton       * fSubPopUp;
@@ -93,6 +112,7 @@
     IBOutlet NSButton            * fRipButton;
 
     hb_handle_t                  * fHandle;
+	hb_title_t               * fTitle;
 }
 
 - (void)     TranslateStrings;
@@ -107,6 +127,7 @@
 
 - (IBAction) FormatPopUpChanged: (id) sender;
 - (IBAction) CodecsPopUpChanged: (id) sender;
+- (IBAction) EncoderPopUpChanged: (id) sender;
 - (IBAction) BrowseFile: (id) sender;
 - (void)     BrowseFileDone: (NSSavePanel *) sheet
     returnCode: (int) returnCode contextInfo: (void *) contextInfo;
@@ -115,6 +136,7 @@
 - (IBAction) QualitySliderChanged: (id) sender;
 
 - (IBAction) ShowPicturePanel: (id) sender;
+- (IBAction) CalculatePictureSizing: (id) sender;
 
 - (IBAction) EnableQueue: (id) sender;
 - (IBAction) AddToQueue: (id) sender;

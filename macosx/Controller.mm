@@ -304,6 +304,7 @@ static int FormatSettings[3][4] =
                 break;
             }
 
+
             [fSrcTitlePopUp removeAllItems];
             for( int i = 0; i < hb_list_count( list ); i++ )
             {
@@ -317,13 +318,47 @@ static int FormatSettings[3][4] =
 				[fDstFile2Field setStringValue: [NSString stringWithFormat:
                 @"%@/Desktop/%@.mp4", NSHomeDirectory(),[NSString
                   stringWithUTF8String: title->name]]];
+				
+				/* Start Get and set the initial pic size for display */
+			    hb_job_t * job = title->job;
+			    fTitle = title; 
+                //hb_job_t * job = fTitle->job;
+								/* New Split Picture Panel */
+				[fPicSrcWidth setStringValue: [NSString stringWithFormat:
+						 @"%d", fTitle->width]];
+				[fPicSrcHeight setStringValue: [NSString stringWithFormat:
+						 @"%d", fTitle->height]];
+				[fPicSettingWidth setStringValue: [NSString stringWithFormat:
+						 @"%d", fTitle->job->width]];
+				[fPicSettingHeight setStringValue: [NSString stringWithFormat:
+						 @"%d", fTitle->job->height]];
+				[fPicSettingARkeep setStringValue: [NSString stringWithFormat:
+						 @"%d", fTitle->job->keep_ratio]];		 
+				[fPicSettingDeinterlace setStringValue: [NSString stringWithFormat:
+						 @"%d", fTitle->job->deinterlace]];
+				
+				
+                 /* Set initial job pic values in case PictureController is never called */
+				 job->width = [fPicSettingWidth  intValue];
+                 job->height = [fPicSettingHeight intValue];
+                 job->keep_ratio = [fPicSettingARkeep intValue];
+				 /* Turn Deinterlace on/off depending on the preference */
+			     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultDeinterlaceOn"] > 0)
+	             {
+	              job->deinterlace = 1;
+	             }
+			     else
+			     {
+			     job->deinterlace = 0;
+			     }
+                 /* END Get and set the initial pic size for display */  
+
 
                 int format = [fDstFormatPopUp indexOfSelectedItem];
 				char * ext = NULL;
 				switch( format )
                 {
                  case 0:
-					 /* if Format is mpeg4 Change extension to proper for mpeg4 output */
 					 
 					 /*Get Default MP4 File Extension for mpeg4 (.mp4 or .m4v) from prefs*/
 					 if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultMpegName"] > 0)
@@ -342,6 +377,8 @@ static int FormatSettings[3][4] =
                      ext = "ogm";
 			       break;
 				   }
+				
+				
 				NSString * string = [fDstFile2Field stringValue];
 				/* Add/replace File Output name to the correct extension*/
 				if( [string characterAtIndex: [string length] - 4] == '.' )
@@ -361,6 +398,13 @@ static int FormatSettings[3][4] =
                     stringWithFormat: @"%d - %02dh%02dm%02ds",
                     title->index, title->hours, title->minutes,
                     title->seconds]];
+					
+					
+					
+					
+			/* Run Through EncoderPopUpChanged to see if there
+			needs to be any pic value modifications based on encoder settings */
+			[self EncoderPopUpChanged: NULL];
 			
             }
 
@@ -500,7 +544,11 @@ static int FormatSettings[3][4] =
         fVidQualityMatrix, fVidGrayscaleCheck, fSubField, fSubPopUp,
         fAudLang1Field, fAudLang1PopUp, fAudLang2Field, fAudLang2PopUp,
         fAudRateField, fAudRatePopUp, fAudBitrateField,
-        fAudBitratePopUp, fPictureButton, fQueueCheck };
+        fAudBitratePopUp, fPictureButton, fQueueCheck, 
+		fPicSrcWidth,fPicSrcHeight,fPicSettingWidth,fPicSettingHeight,
+		fPicSettingARkeep,fPicSettingDeinterlace,fPicSettingARkeepDsply,
+		fPicSettingDeinterlaceDsply,fPicLabelSettings,fPicLabelSrc,fPicLabelOutp,
+		fPicLabelAr,fPicLabelDeinter,fPicLabelSrcX,fPicLabelOutputX};
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -614,6 +662,7 @@ static int FormatSettings[3][4] =
     [NSApp runModalForWindow: fPicturePanel];
     [NSApp endSheet: fPicturePanel];
     [fPicturePanel orderOut: self];
+	[self CalculatePictureSizing: sender];
 }
 
 - (IBAction) ShowQueuePanel: (id) sender
@@ -639,6 +688,8 @@ static int FormatSettings[3][4] =
     /* Chapter selection */
     job->chapter_start = [fSrcChapterStartPopUp indexOfSelectedItem] + 1;
     job->chapter_end   = [fSrcChapterEndPopUp   indexOfSelectedItem] + 1;
+	
+
 
     /* Format and codecs */
     int format = [fDstFormatPopUp indexOfSelectedItem];
@@ -660,6 +711,8 @@ static int FormatSettings[3][4] =
 		Lets Deprecate Baseline Level 1.3*/
 		job->h264_level = 30;
 		job->mux = HB_MUX_IPOD;
+
+
 		}
 		
 		/* Set this flag to switch from Constant Quantizer(default) to Constant Rate Factor Thanks jbrjake
@@ -703,8 +756,11 @@ static int FormatSettings[3][4] =
     }
 
     job->grayscale = ( [fVidGrayscaleCheck state] == NSOnState );
+    
 
-    /* Subtitle settings */
+	
+	
+	/* Subtitle settings */
     job->subtitle = [fSubPopUp indexOfSelectedItem] - 1;
 
     /* Audio tracks */
@@ -888,30 +944,7 @@ static int FormatSettings[3][4] =
     }
     [fSubPopUp selectItemAtIndex: 0];
 
-    /* Update lang popups */
-	/* START Legacy */
-	/*
-	 hb_audio_t * audio;
-    [fAudLang1PopUp removeAllItems];
-    [fAudLang2PopUp removeAllItems];
-    [fAudLang1PopUp addItemWithTitle: _( @"None" )];
-    [fAudLang2PopUp addItemWithTitle: _( @"None" )];
-    for( int i = 0; i < hb_list_count( title->list_audio ); i++ )
-    {
-        audio = (hb_audio_t *) hb_list_item( title->list_audio, i );
-
-        [[fAudLang1PopUp menu] addItemWithTitle:
-            [NSString stringWithCString: audio->lang]
-            action: NULL keyEquivalent: @""];
-        [[fAudLang2PopUp menu] addItemWithTitle:
-            [NSString stringWithCString: audio->lang]
-            action: NULL keyEquivalent: @""];
-    }
-    [fAudLang1PopUp selectItemAtIndex: 1];
-    [fAudLang2PopUp selectItemAtIndex: 0];
-	*/
-	/* END Legacy */
-	/* START pri */
+    /* START pri */
 	hb_audio_t * audio;
 
 	// PRI CHANGES 02/12/06
@@ -1074,6 +1107,64 @@ static int FormatSettings[3][4] =
     }
 
     [self CalculateBitrate: sender];
+}
+
+- (IBAction) EncoderPopUpChanged: (id) sender
+{
+    
+	// Check to see if we need to modify the job pic values based on ipod //
+    if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fVidEncoderPopUp indexOfSelectedItem] == 1)
+    {
+		 if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPicSizeAutoiPod"] > 0)
+		 {
+		 hb_job_t * job = fTitle->job;
+		 if (fTitle->job->width > 640)
+				{
+				fTitle->job->width = 640;
+				}
+		 fTitle->job->keep_ratio = 1;
+		 hb_fix_aspect( job, HB_KEEP_WIDTH );
+		 
+		 }
+	}
+    
+[self CalculatePictureSizing: sender];    
+  
+}
+
+/* Get and Display Current Pic Settings in main window */
+- (IBAction) CalculatePictureSizing: (id) sender
+{
+
+	hb_job_t * job = fTitle->job;		
+
+	[fPicSettingWidth setStringValue: [NSString stringWithFormat:
+		@"%d", fTitle->job->width]];
+	[fPicSettingHeight setStringValue: [NSString stringWithFormat:
+		@"%d", fTitle->job->height]];
+	[fPicSettingARkeep setStringValue: [NSString stringWithFormat:
+		@"%d", fTitle->job->keep_ratio]];		 
+	[fPicSettingDeinterlace setStringValue: [NSString stringWithFormat:
+		@"%d", fTitle->job->deinterlace]];
+	/* Set ON/Off values for the deinterlace/keep aspect ratio according to boolean */	
+	if (fTitle->job->keep_ratio > 0)
+		{
+		[fPicSettingARkeepDsply setStringValue: @"On"];
+        }
+		else
+		{
+		[fPicSettingARkeepDsply setStringValue: @"Off"];
+		}	
+	if (fTitle->job->deinterlace > 0)
+		{
+		[fPicSettingDeinterlaceDsply setStringValue: @"On"];
+        }
+		else
+		{
+		[fPicSettingDeinterlaceDsply setStringValue: @"Off"];
+		}	
+		
+	
 }
 
 - (IBAction) CalculateBitrate: (id) sender
