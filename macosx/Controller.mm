@@ -319,41 +319,7 @@ static int FormatSettings[3][4] =
                 @"%@/Desktop/%@.mp4", NSHomeDirectory(),[NSString
                   stringWithUTF8String: title->name]]];
 				
-				/* Start Get and set the initial pic size for display */
-			    hb_job_t * job = title->job;
-			    fTitle = title; 
-                //hb_job_t * job = fTitle->job;
-								/* New Split Picture Panel */
-				[fPicSrcWidth setStringValue: [NSString stringWithFormat:
-						 @"%d", fTitle->width]];
-				[fPicSrcHeight setStringValue: [NSString stringWithFormat:
-						 @"%d", fTitle->height]];
-				[fPicSettingWidth setStringValue: [NSString stringWithFormat:
-						 @"%d", fTitle->job->width]];
-				[fPicSettingHeight setStringValue: [NSString stringWithFormat:
-						 @"%d", fTitle->job->height]];
-				[fPicSettingARkeep setStringValue: [NSString stringWithFormat:
-						 @"%d", fTitle->job->keep_ratio]];		 
-				[fPicSettingDeinterlace setStringValue: [NSString stringWithFormat:
-						 @"%d", fTitle->job->deinterlace]];
 				
-				
-                 /* Set initial job pic values in case PictureController is never called */
-				 job->width = [fPicSettingWidth  intValue];
-                 job->height = [fPicSettingHeight intValue];
-                 job->keep_ratio = [fPicSettingARkeep intValue];
-				 /* Turn Deinterlace on/off depending on the preference */
-			     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultDeinterlaceOn"] > 0)
-	             {
-	              job->deinterlace = 1;
-	             }
-			     else
-			     {
-			     job->deinterlace = 0;
-			     }
-                 /* END Get and set the initial pic size for display */  
-
-
                 int format = [fDstFormatPopUp indexOfSelectedItem];
 				char * ext = NULL;
 				switch( format )
@@ -402,9 +368,7 @@ static int FormatSettings[3][4] =
 					
 					
 					
-			/* Run Through EncoderPopUpChanged to see if there
-			needs to be any pic value modifications based on encoder settings */
-			[self EncoderPopUpChanged: NULL];
+			
 			
             }
 
@@ -914,6 +878,7 @@ static int FormatSettings[3][4] =
     hb_title_t * title = (hb_title_t*)
         hb_list_item( list, [fSrcTitlePopUp indexOfSelectedItem] );
 
+
     /* Update chapter popups */
     [fSrcChapterStartPopUp removeAllItems];
     [fSrcChapterEndPopUp   removeAllItems];
@@ -928,6 +893,38 @@ static int FormatSettings[3][4] =
     [fSrcChapterEndPopUp   selectItemAtIndex:
         hb_list_count( title->list_chapter ) - 1];
     [self ChapterPopUpChanged: NULL];
+
+/* Start Get and set the initial pic size for display */
+	hb_job_t * job = title->job;
+	fTitle = title; 
+	/*Set Source Size Fields Here */
+	[fPicSrcWidth setStringValue: [NSString stringWithFormat:
+							 @"%d", fTitle->width]];
+	[fPicSrcHeight setStringValue: [NSString stringWithFormat:
+							 @"%d", fTitle->height]];
+	/* Set job values here */
+	[fPicSettingWidth setStringValue: [NSString stringWithFormat:
+							 @"%d", title->job->width]];
+	[fPicSettingHeight setStringValue: [NSString stringWithFormat:
+							 @"%d", title->job->height]];
+	[fPicSettingARkeep setStringValue: [NSString stringWithFormat:
+							 @"%d", title->job->keep_ratio]];		 
+	[fPicSettingDeinterlace setStringValue: [NSString stringWithFormat:
+							 @"%d", title->job->deinterlace]];
+	/* Turn Deinterlace on/off depending on the preference */
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultDeinterlaceOn"] > 0)
+	{
+		job->deinterlace = 1;
+	}
+	else
+	{
+		job->deinterlace = 0;
+	}
+	/* Run Through EncoderPopUpChanged to see if there
+		needs to be any pic value modifications based on encoder settings */
+	[self EncoderPopUpChanged: NULL];
+	/* END Get and set the initial pic size for display */ 
+
 
     /* Update subtitle popups */
     hb_subtitle_t * subtitle;
@@ -1112,7 +1109,7 @@ static int FormatSettings[3][4] =
 - (IBAction) EncoderPopUpChanged: (id) sender
 {
     
-	// Check to see if we need to modify the job pic values based on ipod //
+	/* Check to see if we need to modify the job pic values based on x264 (iPod) encoder selection */
     if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fVidEncoderPopUp indexOfSelectedItem] == 1)
     {
 		 if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPicSizeAutoiPod"] > 0)
