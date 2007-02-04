@@ -68,6 +68,15 @@ static int MP4Init( hb_mux_object_t * m )
         return 1;
     }
 	
+	if( (job->vcodec == HB_VCODEC_FFMPEG) || (job->vcodec == HB_VCODEC_XVID) )
+	{
+		hb_log("Forcing non-interleaved frame writing to avoid a memory leak.");
+	}
+	else
+	{
+		hb_log("Warning: MediaFork may use more memory than it should. Sorry.");
+	}
+	
 	hb_log( "using oformat: %s", oc->oformat->name );
 	
     snprintf( oc->filename, sizeof( oc->filename ),
@@ -172,7 +181,32 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         pkt.flags |= PKT_FLAG_KEY;
     }
 	
-    av_interleaved_write_frame( m->format, &pkt );
+    // av_interleaved_write_frame( m->format, &pkt );
+	
+	//XXX DIRTY HACK
+	//As a temporary measure until we solve the memory leak/libavformat
+	//caching issue, this conditional limits it to x264 encoding.
+	//How? By using av_write_frame() for everything else  
+	//instead of av_interleaved_write_frame().
+	//
+	//This works by assuming the packets sent to ffmpeg are in the
+	//correct order. This is probably bad. Reasoning: if packets were in
+	//the correct order, libavformat wouldn't have to cache so many of them.
+	//Video and audio seem to stay in sync, though, without obvious dropped
+	//or out-of-place packets or anything.
+	//
+	//Using it with x264 causes weird double free() malloc errors.
+	
+	hb_job_t   * job   = m->job;
+
+	if( (job->vcodec == HB_VCODEC_FFMPEG) || (job->vcodec == HB_VCODEC_XVID) )
+	{
+		av_write_frame( m->format, &pkt );
+	}
+	else
+	{
+		av_interleaved_write_frame( m->format, &pkt );
+	}
 	
     return 0;
 }
