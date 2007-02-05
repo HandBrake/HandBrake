@@ -39,6 +39,7 @@ static int    size        = 0;
 static int    abitrate    = 0;
 static int    mux         = 0;
 static int    acodec      = 0;
+static int    pixelratio  = 0;
 static int    chapter_start = 0;
 static int    chapter_end   = 0;
 static int	  crf			= 0;
@@ -310,6 +311,7 @@ static int HandleEvents( hb_handle_t * h )
 
             job->deinterlace = deinterlace;
             job->grayscale   = grayscale;
+            job->pixel_ratio = pixelratio;
 
             if( width && height )
             {
@@ -326,7 +328,7 @@ static int HandleEvents( hb_handle_t * h )
                 job->height = height;
                 hb_fix_aspect( job, HB_KEEP_HEIGHT );
             }
-            else
+            else if( !pixelratio )
             {
                 hb_fix_aspect( job, HB_KEEP_WIDTH );
             }
@@ -402,7 +404,7 @@ static int HandleEvents( hb_handle_t * h )
                 fprintf( stderr, "Calculated bitrate: %d kbps\n",
                          job->vbitrate );
             }
-            
+
             if( sub )
             {
                 job->subtitle = sub - 1;
@@ -534,6 +536,7 @@ static void ShowHelp()
     "    -2, --two-pass          Use two-pass mode\n"
     "    -d, --deinterlace       Deinterlace video\n"
     "    -g, --grayscale         Grayscale encoding\n"
+    "    -p, --pixelratio        Store pixel aspect ratio in video stream\n"
     "\n"
     "    -r, --rate              Set video framerate (" );
     for( i = 0; i < hb_video_rates_count; i++ )
@@ -589,6 +592,7 @@ static int ParseOptions( int argc, char ** argv )
             { "two-pass",    no_argument,       NULL,    '2' },
             { "deinterlace", no_argument,       NULL,    'd' },
             { "grayscale",   no_argument,       NULL,    'g' },
+            { "pixelratio",  no_argument,       NULL,    'p' },
             { "width",       required_argument, NULL,    'w' },
             { "height",      required_argument, NULL,    'l' },
             { "crop",        required_argument, NULL,    'n' },
@@ -608,7 +612,7 @@ static int ParseOptions( int argc, char ** argv )
         int c;
 
         c = getopt_long( argc, argv,
-                         "hvuC:f:i:o:t:c:a:s:e:E:2dgw:l:n:b:q:S:B:r:R:Q",
+                         "hvuC:f:i:o:t:c:a:s:e:E:2dgpw:l:n:b:q:S:B:r:R:Q",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -679,6 +683,9 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case 'g':
                 grayscale = 1;
+                break;
+            case 'p':
+                pixelratio = 1;
                 break;
             case 'e':
                 if( !strcasecmp( optarg, "ffmpeg" ) )

@@ -65,6 +65,15 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     context->gop_size  = 10 * job->vrate / job->vrate_base;
     context->pix_fmt   = PIX_FMT_YUV420P;
 
+    if( job->pixel_ratio )
+    {
+        context->sample_aspect_ratio.num = job->pixel_aspect_width;
+        context->sample_aspect_ratio.den = job->pixel_aspect_height;
+
+        hb_log( "encavcodec: encoding with stored aspect %d/%d", 
+                job->pixel_aspect_width, job->pixel_aspect_height );
+    }
+
     if( job->mux & ( HB_MUX_MP4 | HB_MUX_PSP ) )
     {
         context->flags |= CODEC_FLAG_GLOBAL_HEADER;

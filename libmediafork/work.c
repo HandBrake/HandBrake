@@ -103,6 +103,16 @@ static void do_job( hb_job_t * job, int cpu_count )
     hb_log( " + device %s", title->dvd );
     hb_log( " + title %d, chapter(s) %d to %d", title->index,
             job->chapter_start, job->chapter_end );
+    if ( job->pixel_ratio == 1 )
+    {
+    	/* Correct the geometry of the output movie when using PixelRatio */
+    	job->height=title->height-job->crop[0]-job->crop[1];
+    	job->width=title->width-job->crop[2]-job->crop[3];
+    }
+    else
+    {
+    	hb_fix_aspect( job, HB_KEEP_WIDTH );
+    }
     hb_log( " + %dx%d -> %dx%d, crop %d/%d/%d/%d",
             title->width, title->height, job->width, job->height,
             job->crop[0], job->crop[1], job->crop[2], job->crop[3] );
@@ -119,7 +129,7 @@ static void do_job( hb_job_t * job, int cpu_count )
                 (float) job->vrate / (float) job->vrate_base,
                 job->vbitrate, job->pass );
     }
-
+	hb_log (" + PixelRatio: %d, width:%d, height: %d",job->pixel_ratio,job->width, job->height);
     job->fifo_mpeg2  = hb_fifo_init( 2048 );
     job->fifo_raw    = hb_fifo_init( 8 );
     job->fifo_sync   = hb_fifo_init( 8 );

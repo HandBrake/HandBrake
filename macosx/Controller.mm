@@ -132,7 +132,15 @@ static int FormatSettings[3][4] =
 
     /* Video quality */
     [fVidTargetSizeField setIntValue: 700];
-    [fVidBitrateField    setIntValue: 1000];
+  	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PixelRatio"])
+    {
+    	[fVidBitrateField    setIntValue: 1500];
+    	[fVidTwoPassCheck    setState: NSOnState];
+    }
+	else
+	{
+    	[fVidBitrateField    setIntValue: 1000];
+    }
     [fVidQualityMatrix   selectCell: fVidBitrateCell];
     [self VideoMatrixChanged: NULL];
 
@@ -294,6 +302,8 @@ static int FormatSettings[3][4] =
         {
             hb_list_t  * list;
             hb_title_t * title;
+			int indxpri=0; 	  // Used to search the longuest title (default in combobox)
+			int longuestpri=0; // Used to search the longuest title (default in combobox)
 
             [fScanController UpdateUI: &s];
 
@@ -315,10 +325,17 @@ static int FormatSettings[3][4] =
 				
 				/* Use the dvd name in the default output field here 
 				May want to add code to remove blank spaces for some dvd names*/
+				
 				[fDstFile2Field setStringValue: [NSString stringWithFormat:
                 @"%@/Desktop/%@.mp4", NSHomeDirectory(),[NSString
                   stringWithUTF8String: title->name]]];
-				
+                  
+                if (longuestpri < title->hours*60*60 + title->minutes *60 + title->seconds)
+                {
+                	longuestpri=title->hours*60*60 + title->minutes *60 + title->seconds;
+                	indxpri=i;
+                }
+
 				
                 int format = [fDstFormatPopUp indexOfSelectedItem];
 				char * ext = NULL;
@@ -364,14 +381,10 @@ static int FormatSettings[3][4] =
                     stringWithFormat: @"%d - %02dh%02dm%02ds",
                     title->index, title->hours, title->minutes,
                     title->seconds]];
-					
-					
-					
-					
-			
 			
             }
-
+            // Select the longuest title
+			[fSrcTitlePopUp selectItemAtIndex: indxpri];
             [self TitlePopUpChanged: NULL];
             [self EnableUI: YES];
             [fPauseButton setEnabled: NO];
@@ -722,9 +735,24 @@ static int FormatSettings[3][4] =
     job->grayscale = ( [fVidGrayscaleCheck state] == NSOnState );
     
 
-	
-	
-	/* Subtitle settings */
+	/* Pixel Ratio Setting */
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PixelRatio"])
+    {
+    	if ( job->mux & HB_MUX_MP4 )
+    	{
+			job->pixel_ratio = 0 ;
+    	}
+    	else
+    	{
+			job->pixel_ratio = 1 ;
+		}
+	}
+	else
+	{
+		job->pixel_ratio = 0 ;
+	}
+
+    /* Subtitle settings */
     job->subtitle = [fSubPopUp indexOfSelectedItem] - 1;
 
     /* Audio tracks */
