@@ -125,6 +125,96 @@ hb_handle_t * hb_init_real( int verbose, int update_check )
 }
 
 /**
+ * libhb initialization routine.
+ * This version is to use when calling the dylib, the macro hb_init isn't available from a dylib call!
+ * @param verbose HB_DEBUG_NONE or HB_DEBUG_ALL.
+ * @param update_check signals libhb to check for updated version from HandBrake website.
+ * @return Handle to hb_handle_t for use on all subsequent calls to libhb.
+ */
+hb_handle_t * hb_init_dl( int verbose, int update_check )
+{
+    hb_handle_t * h = calloc( sizeof( hb_handle_t ), 1 );
+    uint64_t      date;
+
+    /* See hb_log() in common.c */
+    if( verbose > HB_DEBUG_NONE )
+    {
+        putenv( "HB_DEBUG=1" );
+		av_log_set_level(AV_LOG_DEBUG);
+    }
+
+    /* Check for an update on the website if asked to */
+    h->build = -1;
+
+    if( update_check )
+    {
+        hb_log( "hb_init: checking for updates" );
+        date             = hb_get_date();
+        h->update_thread = hb_update_init( &h->build, h->version );
+
+        for( ;; )
+        {
+            if( hb_thread_has_exited( h->update_thread ) )
+            {
+                /* Immediate success or failure */
+                hb_thread_close( &h->update_thread );
+                break;
+            }
+            if( hb_get_date() > date + 1000 )
+            {
+                /* Still nothing after one second. Connection problem,
+                   let the thread die */
+                hb_log( "hb_init: connection problem, not waiting for "
+                        "update_thread" );
+                break;
+            }
+            hb_snooze( 500 );
+        }
+    }
+
+    /* CPU count detection */
+    hb_log( "hb_init: checking cpu count" );
+    h->cpu_count = hb_get_cpu_count();
+
+    h->list_title = hb_list_init();
+    h->jobs       = hb_list_init();
+
+    h->state_lock  = hb_lock_init();
+    h->state.state = HB_STATE_IDLE;
+
+    h->pause_lock = hb_lock_init();
+
+    /* libavcodec */
+    avcodec_init();
+    register_avcodec( &mpeg4_encoder );
+    register_avcodec( &mp2_decoder );
+    register_avcodec( &ac3_encoder );
+
+    /* Start library thread */
+    hb_log( "hb_init: starting libhb thread" );
+    h->die         = 0;
+    h->main_thread = hb_thread_init( "libhb", thread_func, h,
+                                     HB_NORMAL_PRIORITY );
+
+    hb_register( &hb_sync ); 
+	hb_register( &hb_decmpeg2 ); 
+	hb_register( &hb_decsub ); 
+	hb_register( &hb_render ); 
+	hb_register( &hb_encavcodec ); 
+	hb_register( &hb_encxvid ); 
+	hb_register( &hb_encx264 ); 
+	hb_register( &hb_deca52 ); 
+	hb_register( &hb_decavcodec ); 
+	hb_register( &hb_declpcm ); 
+	hb_register( &hb_encfaac ); 
+	hb_register( &hb_enclame ); 
+	hb_register( &hb_encvorbis ); 
+	
+	return h;
+}
+
+
+/**
  * Returns current version of libhb.
  * @param h Handle to hb_handle_t.
  * @return character array of version number.

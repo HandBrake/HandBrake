@@ -14,6 +14,7 @@ extern "C" {
 #define HB_DEBUG_ALL  1
 void          hb_register( hb_work_object_t * );
 hb_handle_t * hb_init_real( int verbose, int update_check );
+hb_handle_t * hb_init_dl ( int verbose, int update_check ); // hb_init for use with dylib 
 
 #define hb_init(v,u) \
 hb_init_real( v, u ); \
