@@ -1,0 +1,12 @@
+To test the MediaFork dylib on MacOs X issue the following commands:
+===================================================================
+
+cp ../libmediafork/libmediafork.dylib .
+gcc -I../libmediafork -L. -lmediafork test.c -o test -arch i386 -arch ppc
+install_name_tool -change /usr/local/lib/libmediafork.dylib @executable_path/libmediafork.dylib test
+
+Validate that the test Binary is really using the shared library
+
+otool -L test
+
+
