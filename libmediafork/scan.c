@@ -189,7 +189,16 @@ static void ScanFunc( void * _data )
         }
 
         job->width = title->width - job->crop[2] - job->crop[3];
-        job->height = title->height - job->crop[0] - job->crop[1];
+//        job->height = title->height - job->crop[0] - job->crop[1];
+        hb_fix_aspect( job, HB_KEEP_WIDTH );
+        if( job->height > title->height - job->crop[0] - job->crop[1] )
+        {
+            job->height = title->height - job->crop[0] - job->crop[1];
+            hb_fix_aspect( job, HB_KEEP_HEIGHT );
+        }
+
+    hb_log( "scan: title (%d) job->width:%d, job->height:%d",
+            i,job->width, job->height );
 
         job->keep_ratio = 1;
 
