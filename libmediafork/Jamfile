@@ -7,7 +7,7 @@
 SubDir TOP libmediafork ;
 
 LIBMEDIAFORK_SRC =
-common.c mediafork.c ports.c scan.c work.c decmpeg2.c encavcodec.c update.c
+ipodutil.cpp common.c mediafork.c ports.c scan.c work.c decmpeg2.c encavcodec.c update.c
 demuxmpeg.c fifo.c render.c reader.c muxcommon.c muxmp4.c sync.c
 decsub.c deca52.c encfaac.c declpcm.c encx264.c decavcodec.c encxvid.c
 muxavi.c enclame.c muxogm.c encvorbis.c dvd.c ;
@@ -16,3 +16,4 @@ Library libmediafork : $(LIBMEDIAFORK_SRC) ;
 
 ObjectCcFlags $(LIBMEDIAFORK_SRC) : -I$(TOP)/contrib/include ;
 ObjectDefines $(LIBMEDIAFORK_SRC) : __LIBMEDIAFORK__ ;
+ObjectC++Flags $(LIBMEDIAFORK_SRC) : -I$(TOP)/contrib/include ;

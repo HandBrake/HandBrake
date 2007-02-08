@@ -10,7 +10,7 @@ SubDir TOP ;
 MEDIAFORK_LIBS = libmediafork.a
           contrib/lib/liba52.a        contrib/lib/libavformat.a
           contrib/lib/libavcodec.a    contrib/lib/libavutil.a
-          contrib/lib/libdvdread.a
+          contrib/lib/libdvdread.a    contrib/lib/libmp4v2.a
           contrib/lib/libfaac.a       contrib/lib/libmp3lame.a
           contrib/lib/libmpeg2.a      contrib/lib/libvorbis.a
           contrib/lib/libvorbisenc.a  contrib/lib/libogg.a
@@ -40,7 +40,7 @@ UI_SRC   = $(CLI_SRC) $(BEOS_SRC) $(WX_SRC) ;
 
 # CLI app
 # Don't build the CLI from here if MACOSX, let xcode build it :)
-if $(OS) != MACOSX
+#if $(OS) != MACOSX
 {
 	Main $(CLI_BIN) : $(CLI_SRC) ;
 }
@@ -52,7 +52,7 @@ if $(OS) = BEOS
     BeOSPackage HandBrake-$(HB_VERSION)-BeOS.zip : HandBrake ;
     HB_PACKAGES += HandBrake-$(HB_VERSION)-BeOS.zip ;
 }
-if $(OS) = MACOSX
+if $(OS) = MACOSXbroken
 {
     OSX_SRC = macosx/main.mm macosx/Controller.h macosx/Controller.mm
               macosx/ScanController.h macosx/ScanController.mm
@@ -83,7 +83,7 @@ if $(OS) = LINUX
     #Main            $(WX_BIN) : $(WX_SRC) ;
 }
 
-if $(OS) != MACOSX
+#if $(OS) != MACOSX
 {
 	ObjectHdrs     $(UI_SRC) : $(TOP)/libmediafork ;
 	LinkLibraries  $(UI_BIN) : $(MEDIAFORK_LIBS) ;
