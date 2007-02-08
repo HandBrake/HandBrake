@@ -48,24 +48,6 @@ static int FormatSettings[3][4] =
     [fPictureController SetHandle: fHandle];
     [fQueueController   SetHandle: fHandle];
 	
-	 /* Lets set prefs here if need be */
-	    NSUserDefaults * defaults;
-    NSDictionary   * appDefaults;
-    
-    /* Unless the user specified otherwise, default is to check
-       for update  */
-    defaults    = [NSUserDefaults standardUserDefaults];
-    appDefaults = [NSDictionary dictionaryWithObject:@"YES"
-                   forKey:@"CheckForUpdates"];
-	appDefaults = [NSDictionary dictionaryWithObject:@"English"
-                   forKey:@"DefaultLanguage"];
-    appDefaults = [NSDictionary dictionaryWithObject:@"NO"
-                   forKey:@"DefaultMpegName"];
-	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
-                   forKey:@"DefaultCrf"];
-    [defaults registerDefaults: appDefaults];
-	
-	
 
      /* Call UpdateUI every 2/10 sec */
     [[NSRunLoop currentRunLoop] addTimer: [NSTimer
@@ -132,6 +114,7 @@ static int FormatSettings[3][4] =
 
     /* Video quality */
     [fVidTargetSizeField setIntValue: 700];
+	/* Do we want to force the quality settings if PAR is on ? */
   	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PixelRatio"])
     {
     	[fVidBitrateField    setIntValue: 1500];
@@ -153,7 +136,13 @@ static int FormatSettings[3][4] =
             [NSString stringWithCString: hb_video_rates[i].string]];
     }
     [fVidRatePopUp selectItemAtIndex: 0];
-
+	
+	/* Picture Settings */
+	[fPicLabelPAROutp setStringValue: @""];
+	[fPicLabelPAROutputX setStringValue: @""];
+	[fPicSettingPARWidth setStringValue: @""];
+	[fPicSettingPARHeight setStringValue:  @""];
+	
     /* Audio bitrate */
     [fAudBitratePopUp removeAllItems];
     for( int i = 0; i < hb_audio_bitrates_count; i++ )
@@ -329,13 +318,13 @@ static int FormatSettings[3][4] =
 				[fDstFile2Field setStringValue: [NSString stringWithFormat:
                 @"%@/Desktop/%@.mp4", NSHomeDirectory(),[NSString
                   stringWithUTF8String: title->name]]];
-                  
+                /* Temporarily comment out to fix title selection*/   
                 if (longuestpri < title->hours*60*60 + title->minutes *60 + title->seconds)
                 {
                 	longuestpri=title->hours*60*60 + title->minutes *60 + title->seconds;
                 	indxpri=i;
                 }
-
+                
 				
                 int format = [fDstFormatPopUp indexOfSelectedItem];
 				char * ext = NULL;
@@ -385,6 +374,7 @@ static int FormatSettings[3][4] =
             }
             // Select the longuest title
 			[fSrcTitlePopUp selectItemAtIndex: indxpri];
+			
             [self TitlePopUpChanged: NULL];
             [self EnableUI: YES];
             [fPauseButton setEnabled: NO];
@@ -525,7 +515,9 @@ static int FormatSettings[3][4] =
 		fPicSrcWidth,fPicSrcHeight,fPicSettingWidth,fPicSettingHeight,
 		fPicSettingARkeep,fPicSettingDeinterlace,fPicSettingARkeepDsply,
 		fPicSettingDeinterlaceDsply,fPicLabelSettings,fPicLabelSrc,fPicLabelOutp,
-		fPicLabelAr,fPicLabelDeinter,fPicLabelSrcX,fPicLabelOutputX};
+		fPicLabelAr,fPicLabelDeinter,fPicLabelSrcX,fPicLabelOutputX,
+		fPicLabelPAROutp,fPicLabelPAROutputX,fPicSettingPARWidth,fPicSettingPARHeight,
+		fPicSettingPARDsply,fPicLabelAnamorphic};
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -688,7 +680,8 @@ static int FormatSettings[3][4] =
 		Lets Deprecate Baseline Level 1.3*/
 		job->h264_level = 30;
 		job->mux = HB_MUX_IPOD;
-
+        /* move sanity check for iPod Encoding here */
+		job->pixel_ratio = 0 ;
 
 		}
 		
@@ -735,22 +728,6 @@ static int FormatSettings[3][4] =
     job->grayscale = ( [fVidGrayscaleCheck state] == NSOnState );
     
 
-	/* Pixel Ratio Setting */
-	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PixelRatio"])
-    {
-    	if ( job->mux & HB_MUX_MP4 )
-    	{
-			job->pixel_ratio = 0 ;
-    	}
-    	else
-    	{
-			job->pixel_ratio = 1 ;
-		}
-	}
-	else
-	{
-		job->pixel_ratio = 0 ;
-	}
 
     /* Subtitle settings */
     job->subtitle = [fSubPopUp indexOfSelectedItem] - 1;
@@ -930,15 +907,16 @@ static int FormatSettings[3][4] =
 							 @"%d", fTitle->width]];
 	[fPicSrcHeight setStringValue: [NSString stringWithFormat:
 							 @"%d", fTitle->height]];
-	/* Set job values here */
+	/* Set job values here 
 	[fPicSettingWidth setStringValue: [NSString stringWithFormat:
-							 @"%d", title->job->width]];
+							 @"%d", fTitle->job->width]];
 	[fPicSettingHeight setStringValue: [NSString stringWithFormat:
-							 @"%d", title->job->height]];
+							 @"%d", fTitle->job->height]];
 	[fPicSettingARkeep setStringValue: [NSString stringWithFormat:
-							 @"%d", title->job->keep_ratio]];		 
+							 @"%d", fTitle->job->keep_ratio]];		 
 	[fPicSettingDeinterlace setStringValue: [NSString stringWithFormat:
-							 @"%d", title->job->deinterlace]];
+							 @"%d", fTitle->job->deinterlace]];
+	*/
 	/* Turn Deinterlace on/off depending on the preference */
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultDeinterlaceOn"] > 0)
 	{
@@ -947,6 +925,17 @@ static int FormatSettings[3][4] =
 	else
 	{
 		job->deinterlace = 0;
+	}
+	
+	/* Pixel Ratio Setting */
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PixelRatio"])
+    {
+
+		job->pixel_ratio = 1 ;
+	}
+	else
+	{
+		job->pixel_ratio = 0 ;
 	}
 	/* Run Through EncoderPopUpChanged to see if there
 		needs to be any pic value modifications based on encoder settings */
@@ -1140,9 +1129,12 @@ static int FormatSettings[3][4] =
 	/* Check to see if we need to modify the job pic values based on x264 (iPod) encoder selection */
     if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fVidEncoderPopUp indexOfSelectedItem] == 1)
     {
+	hb_job_t * job = fTitle->job;
+	job->pixel_ratio = 0 ;
+	
 		 if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPicSizeAutoiPod"] > 0)
 		 {
-		 hb_job_t * job = fTitle->job;
+		 
 		 if (fTitle->job->width > 640)
 				{
 				fTitle->job->width = 640;
@@ -1171,6 +1163,31 @@ static int FormatSettings[3][4] =
 		@"%d", fTitle->job->keep_ratio]];		 
 	[fPicSettingDeinterlace setStringValue: [NSString stringWithFormat:
 		@"%d", fTitle->job->deinterlace]];
+	[fPicSettingPAR setStringValue: [NSString stringWithFormat:
+		@"%d", fTitle->job->pixel_ratio]];
+		
+	if (fTitle->job->pixel_ratio == 1)
+	{
+	int Displaytitlewidth = fTitle->width;
+	int Displayparwidth;
+	int DisplayPARwidth = fTitle->job->pixel_aspect_width;
+	int DisplayPARheight = fTitle->job->pixel_aspect_height;
+	Displayparwidth = Displaytitlewidth * DisplayPARwidth / DisplayPARheight; 
+	[fPicLabelPAROutp setStringValue: @":"];
+	[fPicLabelPAROutputX setStringValue: @"x"];
+    [fPicSettingPARWidth setStringValue: [NSString stringWithFormat:
+        @"%d", Displayparwidth]];
+	[fPicSettingPARHeight setStringValue: [NSString stringWithFormat:
+        @"%d", fTitle->job->height]];
+	}
+	else
+	{
+	[fPicLabelPAROutp setStringValue: @""];
+	[fPicLabelPAROutputX setStringValue: @""];
+	[fPicSettingPARWidth setStringValue: @""];
+	[fPicSettingPARHeight setStringValue:  @""];
+	}
+		
 	/* Set ON/Off values for the deinterlace/keep aspect ratio according to boolean */	
 	if (fTitle->job->keep_ratio > 0)
 		{
@@ -1187,6 +1204,14 @@ static int FormatSettings[3][4] =
 		else
 		{
 		[fPicSettingDeinterlaceDsply setStringValue: @"Off"];
+		}
+	if (fTitle->job->pixel_ratio > 0)
+		{
+		[fPicSettingPARDsply setStringValue: @"On"];
+        }
+		else
+		{
+		[fPicSettingPARDsply setStringValue: @"Off"];
 		}	
 		
 	

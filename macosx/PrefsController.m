@@ -22,6 +22,9 @@
                    forKey:@"DefaultDeinterlaceOn"];
 	appDefaults = [NSDictionary dictionaryWithObject:@"YES"
                    forKey:@"DefaultPicSizeAutoiPod"];
+	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
+                   forKey:@"PixelRatio"];
+
 	
     [defaults registerDefaults: appDefaults];
 
@@ -225,7 +228,9 @@
 /* fDefPicSizeAutoSetipod Check or uncheck according to the preferences*/
     [fDefPicSizeAutoSetipod setState: [defaults boolForKey:@"DefaultPicSizeAutoiPod"] ?
         NSOnState : NSOffState];
-
+		/* fDefPixelRatio */
+    [fDefPixelRatio setState: [defaults boolForKey:@"PixelRatio"] ?
+        NSOnState : NSOffState];
 }
 
 
@@ -302,6 +307,20 @@
     {
         [defaults setObject:@"NO" forKey:@"DefaultPicSizeAutoiPod"];
     }
+	
+	  /* Use Pixel Ratio*/
+	
+	if( [fDefPixelRatio state] == NSOnState )
+    {
+        [defaults setObject:@"YES" forKey:@"PixelRatio"];
+    }
+    else
+    {
+        [defaults setObject:@"NO" forKey:@"PixelRatio"];
+    }
+
+	
+	
 }
 
 @end

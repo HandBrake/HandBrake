@@ -84,9 +84,17 @@
 	IBOutlet NSTextField         * fPicSettingWidth;
 	IBOutlet NSTextField         * fPicSettingHeight;
 	IBOutlet NSTextField         * fPicSettingARkeep;
+	IBOutlet NSTextField         * fPicSettingPAR;
 	IBOutlet NSTextField         * fPicSettingDeinterlace;
 	IBOutlet NSTextField         * fPicSettingARkeepDsply;
+	IBOutlet NSTextField         * fPicSettingPARDsply;
 	IBOutlet NSTextField         * fPicSettingDeinterlaceDsply;
+	IBOutlet NSTextField         * fPicLabelAnamorphic;
+	IBOutlet NSTextField         * fPicLabelPAROutp;
+	IBOutlet NSTextField         * fPicLabelPAROutputX;
+	IBOutlet NSTextField         * fPicSettingPARWidth;
+	IBOutlet NSTextField         * fPicSettingPARHeight;
+	
 	
     /* Subtitles box */
     IBOutlet NSTextField         * fSubField;
