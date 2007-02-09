@@ -114,7 +114,8 @@ static int FormatSettings[3][4] =
 
     /* Video quality */
     [fVidTargetSizeField setIntValue: 700];
-	/* Do we want to force the quality settings if PAR is on ? */
+	[fVidBitrateField    setIntValue: 1000];
+	/* Do we want to force the quality settings if PAR is on ?
   	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PixelRatio"])
     {
     	[fVidBitrateField    setIntValue: 1500];
@@ -124,6 +125,7 @@ static int FormatSettings[3][4] =
 	{
     	[fVidBitrateField    setIntValue: 1000];
     }
+	*/
     [fVidQualityMatrix   selectCell: fVidBitrateCell];
     [self VideoMatrixChanged: NULL];
 
@@ -533,6 +535,10 @@ static int FormatSettings[3][4] =
             }
         }
         [controls[i] setEnabled: b];
+		/* Temporarily disable Lang2 until crash is fixed */
+		[fAudLang2PopUp setEnabled: NO];
+		[fAudLang2Field setEnabled: NO];
+	
     }
 
     [self VideoMatrixChanged: NULL];
@@ -958,10 +964,13 @@ static int FormatSettings[3][4] =
 	// End of pri changes 02/12/06
     [fAudLang1PopUp removeAllItems];
 	/* Disable second audio language until crashing is resolved*/
+	[fAudLang2Field setEnabled: NO];
 	[fAudLang2PopUp setEnabled: NO];
     [fAudLang2PopUp removeAllItems];
     [fAudLang1PopUp addItemWithTitle: _( @"None" )];
-    [fAudLang2PopUp addItemWithTitle: _( @"None" )];
+	/* Display Currently Unavailable until crash is fixed */
+    [fAudLang2PopUp addItemWithTitle: _( @"Currently Unavailable" )];
+	//[fAudLang2PopUp addItemWithTitle: _( @"None" )];
     for( int i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = (hb_audio_t *) hb_list_item( title->list_audio, i );
@@ -980,9 +989,11 @@ static int FormatSettings[3][4] =
         [[fAudLang1PopUp menu] addItemWithTitle:
             [NSString stringWithCString: audio->lang]
             action: NULL keyEquivalent: @""];
-        [[fAudLang2PopUp menu] addItemWithTitle:
+       /*
+	   [[fAudLang2PopUp menu] addItemWithTitle:
             [NSString stringWithCString: audio->lang]
             action: NULL keyEquivalent: @""];
+			*/
     }
 	// PRI CHANGES 02/12/06
 	if (indxpri==0) { indxpri=1; }
