@@ -88,8 +88,8 @@ static int GetAlignedSize( int size )
     [fDeinterlaceCheck  setState:    job->deinterlace ? NSOnState : NSOffState];
 	[fPARCheck  setState:    job->pixel_ratio ? NSOnState : NSOffState];
 
-    MaxOutputWidth = job->width;
-	MaxOutputHeight = job->height;
+    MaxOutputWidth = title->width;
+	MaxOutputHeight = title->height;
     fPicture = 0;
     [self SettingsChanged: nil];
 }
@@ -131,17 +131,24 @@ static int GetAlignedSize( int size )
     [fPictureGLView Display: anim buffer1: fTexBuf[0]
         buffer2: fTexBuf[1] width: ( fTitle->width + 2 )
         height: ( fTitle->height + 2 )];
+	
+	/* Set the Output Display below the Preview Picture*/
 	if (fTitle->job->pixel_ratio == 1)
 	{
-	int titlewidth = fTitle->width;
-	int displayparwidth;
+	int titlewidth = fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3];
 	int arpwidth = fTitle->job->pixel_aspect_width;
 	int arpheight = fTitle->job->pixel_aspect_height;
-	displayparwidth = titlewidth * arpwidth / arpheight; 
+	int displayparwidth = titlewidth * arpwidth / arpheight;
+	int displayparheight = fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1];
+	[fInfoField setStringValue: [NSString stringWithFormat:
+	@"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d", fTitle->width, fTitle->height,
+	titlewidth, fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1], displayparwidth,
+	fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1]]];
 	
-    [fInfoField setStringValue: [NSString stringWithFormat:
-        @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d", fTitle->width, fTitle->height,
-        fTitle->job->width, fTitle->job->height, displayparwidth,fTitle->job->height]];
+	/* reset the height stepper field here we now have FTitle->job->crop values
+	for Anamorphic height. Dont reset the stepper height as you cant use it anyway
+	 with par and when par is turned off, it can reset to pre-par values*/
+	[fHeightField       setIntValue: displayparheight];
 	}
 	else
 	{
@@ -162,14 +169,13 @@ static int GetAlignedSize( int size )
 	{
 	[fWidthStepper      setIntValue: MaxOutputWidth];
 	[fWidthField        setIntValue: MaxOutputWidth];
-	[fHeightStepper     setIntValue: MaxOutputHeight];
-    [fHeightField       setIntValue: MaxOutputHeight];
-    [fRatioCheck        setState: 1];
+	/* for height field settins for Anamorphic see -Display: */
+	[fRatioCheck        setState: 0];
 
 	[fWidthStepper setEnabled: NO];
-	//[fWidthField setEnabled: NO];
+	[fWidthField setEnabled: NO];
 	[fHeightStepper setEnabled: NO];
-	//[fHeightField setEnabled: NO];
+	[fHeightField setEnabled: NO];
 	[fRatioCheck setEnabled: NO];
 	
 	

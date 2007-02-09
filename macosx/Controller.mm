@@ -907,16 +907,6 @@ static int FormatSettings[3][4] =
 							 @"%d", fTitle->width]];
 	[fPicSrcHeight setStringValue: [NSString stringWithFormat:
 							 @"%d", fTitle->height]];
-	/* Set job values here 
-	[fPicSettingWidth setStringValue: [NSString stringWithFormat:
-							 @"%d", fTitle->job->width]];
-	[fPicSettingHeight setStringValue: [NSString stringWithFormat:
-							 @"%d", fTitle->job->height]];
-	[fPicSettingARkeep setStringValue: [NSString stringWithFormat:
-							 @"%d", fTitle->job->keep_ratio]];		 
-	[fPicSettingDeinterlace setStringValue: [NSString stringWithFormat:
-							 @"%d", fTitle->job->deinterlace]];
-	*/
 	/* Turn Deinterlace on/off depending on the preference */
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultDeinterlaceOn"] > 0)
 	{
@@ -967,6 +957,8 @@ static int FormatSettings[3][4] =
 	int indxpri=0;
 	// End of pri changes 02/12/06
     [fAudLang1PopUp removeAllItems];
+	/* Disable second audio language until crashing is resolved*/
+	[fAudLang2PopUp setEnabled: NO];
     [fAudLang2PopUp removeAllItems];
     [fAudLang1PopUp addItemWithTitle: _( @"None" )];
     [fAudLang2PopUp addItemWithTitle: _( @"None" )];
@@ -1168,17 +1160,20 @@ static int FormatSettings[3][4] =
 		
 	if (fTitle->job->pixel_ratio == 1)
 	{
-	int Displaytitlewidth = fTitle->width;
-	int Displayparwidth;
-	int DisplayPARwidth = fTitle->job->pixel_aspect_width;
-	int DisplayPARheight = fTitle->job->pixel_aspect_height;
-	Displayparwidth = Displaytitlewidth * DisplayPARwidth / DisplayPARheight; 
-	[fPicLabelPAROutp setStringValue: @":"];
+	int titlewidth = fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3];
+	int arpwidth = fTitle->job->pixel_aspect_width;
+	int arpheight = fTitle->job->pixel_aspect_height;
+	int displayparwidth = titlewidth * arpwidth / arpheight;
+	int displayparheight = fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1];
+	[fPicLabelPAROutp setStringValue: @"Anamorphic Output:"];
 	[fPicLabelPAROutputX setStringValue: @"x"];
     [fPicSettingPARWidth setStringValue: [NSString stringWithFormat:
-        @"%d", Displayparwidth]];
+        @"%d", displayparwidth]];
 	[fPicSettingPARHeight setStringValue: [NSString stringWithFormat:
-        @"%d", fTitle->job->height]];
+        @"%d", displayparheight]];
+	[fPicSettingHeight setStringValue: [NSString stringWithFormat:
+		@"%d", displayparheight]];
+	fTitle->job->keep_ratio = 0;
 	}
 	else
 	{

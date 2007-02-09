@@ -129,7 +129,7 @@
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0D096DFF0B707D1200A845D4 /* libmediafork.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libmediafork.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
-		0D6E35760B6BD4F0005AABB3 /* MediaFork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MediaFork.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0D6E35760B6BD4F0005AABB3 /* MediaFork.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MediaFork.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D9C5CE40B77E85B00828855 /* mediafork.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = mediafork.c; path = ../libmediafork/mediafork.c; sourceTree = SOURCE_ROOT; };
 		0DF377420B7BEACA00115CB0 /* ipodutil.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = ipodutil.cpp; path = ../libmediafork/ipodutil.cpp; sourceTree = SOURCE_ROOT; };
 		0DF377970B7BF99A00115CB0 /* fakexcode.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = fakexcode.cpp; path = ../test/fakexcode.cpp; sourceTree = SOURCE_ROOT; };
