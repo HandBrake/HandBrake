@@ -37,6 +37,9 @@
 		0D75EDC00B6FF9DA0090EA86 /* MediaFork.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4D118405053054CD00C39CA9 /* MediaFork.icns */; };
 		0D9C5CE50B77E85B00828855 /* mediafork.c in Sources */ = {isa = PBXBuildFile; fileRef = 0D9C5CE40B77E85B00828855 /* mediafork.c */; };
 		0D9C5CE60B77E85B00828855 /* mediafork.c in Sources */ = {isa = PBXBuildFile; fileRef = 0D9C5CE40B77E85B00828855 /* mediafork.c */; };
+		0DF377430B7BEACA00115CB0 /* ipodutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DF377420B7BEACA00115CB0 /* ipodutil.cpp */; };
+		0DF377440B7BEACA00115CB0 /* ipodutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DF377420B7BEACA00115CB0 /* ipodutil.cpp */; };
+		0DF377980B7BF99A00115CB0 /* fakexcode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DF377970B7BF99A00115CB0 /* fakexcode.cpp */; };
 		0DFF0B770B6BC72A00549488 /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC9B0B4CAB100064E04C /* common.c */; };
 		0DFF0B790B6BC72A00549488 /* deca52.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC9D0B4CAB100064E04C /* deca52.c */; };
 		0DFF0B7A0B6BC72A00549488 /* decavcodec.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC9E0B4CAB100064E04C /* decavcodec.c */; };
@@ -128,6 +131,8 @@
 		0D096DFF0B707D1200A845D4 /* libmediafork.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libmediafork.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D6E35760B6BD4F0005AABB3 /* MediaFork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MediaFork.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D9C5CE40B77E85B00828855 /* mediafork.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = mediafork.c; path = ../libmediafork/mediafork.c; sourceTree = SOURCE_ROOT; };
+		0DF377420B7BEACA00115CB0 /* ipodutil.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = ipodutil.cpp; path = ../libmediafork/ipodutil.cpp; sourceTree = SOURCE_ROOT; };
+		0DF377970B7BF99A00115CB0 /* fakexcode.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = fakexcode.cpp; path = ../test/fakexcode.cpp; sourceTree = SOURCE_ROOT; };
 		0DFF0B720B6BC6E600549488 /* libmediafork.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libmediafork.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DFF0C0A0B6BCEC200549488 /* MediaForkCLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MediaForkCLI; sourceTree = BUILT_PRODUCTS_DIR; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
@@ -161,7 +166,7 @@
 		4DEB2024052B055F00C39CA9 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		4DF3C8CB052889CD00A80101 /* Controller.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Controller.h; sourceTree = "<group>"; };
 		4DF3C8CC052889CD00A80101 /* Controller.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = Controller.mm; sourceTree = "<group>"; };
-		526FBC760B4CA8F40064E04C /* test.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = test.c; path = ../test/test.c; sourceTree = SOURCE_ROOT; };
+		526FBC760B4CA8F40064E04C /* test.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = test.c; path = ../test/test.c; sourceTree = SOURCE_ROOT; };
 		526FBC9B0B4CAB100064E04C /* common.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = common.c; path = ../libmediafork/common.c; sourceTree = SOURCE_ROOT; };
 		526FBC9D0B4CAB100064E04C /* deca52.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = deca52.c; path = ../libmediafork/deca52.c; sourceTree = SOURCE_ROOT; };
 		526FBC9E0B4CAB100064E04C /* decavcodec.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = decavcodec.c; path = ../libmediafork/decavcodec.c; sourceTree = SOURCE_ROOT; };
@@ -305,6 +310,7 @@
 				526FBC9F0B4CAB100064E04C /* declpcm.c */,
 				526FBCA00B4CAB100064E04C /* decmpeg2.c */,
 				526FBCA10B4CAB100064E04C /* decsub.c */,
+				0DF377420B7BEACA00115CB0 /* ipodutil.cpp */,
 				526FBCA20B4CAB100064E04C /* demuxmpeg.c */,
 				526FBCA30B4CAB100064E04C /* dvd.c */,
 				526FBCA40B4CAB100064E04C /* encavcodec.c */,
@@ -333,6 +339,7 @@
 		526FBC920B4CAA120064E04C /* MediaForkCLI Sources */ = {
 			isa = PBXGroup;
 			children = (
+				0DF377970B7BF99A00115CB0 /* fakexcode.cpp */,
 				526FBC760B4CA8F40064E04C /* test.c */,
 			);
 			name = "MediaForkCLI Sources";
@@ -570,6 +577,7 @@
 				0D096E190B707D3400A845D4 /* update.c in Sources */,
 				0D096E1A0B707D3400A845D4 /* work.c in Sources */,
 				0D9C5CE60B77E85B00828855 /* mediafork.c in Sources */,
+				0DF377430B7BEACA00115CB0 /* ipodutil.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -604,6 +612,7 @@
 				0DFF0B950B6BC72A00549488 /* update.c in Sources */,
 				0DFF0B960B6BC72A00549488 /* work.c in Sources */,
 				0D9C5CE50B77E85B00828855 /* mediafork.c in Sources */,
+				0DF377440B7BEACA00115CB0 /* ipodutil.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -612,6 +621,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0DFF0C100B6BCEE800549488 /* test.c in Sources */,
+				0DF377980B7BF99A00115CB0 /* fakexcode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -710,6 +720,7 @@
 				);
 				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.7.1\\\"";
 				OTHER_LDFLAGS = (
+					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
@@ -766,6 +777,7 @@
 				);
 				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.7.1\\\"";
 				OTHER_LDFLAGS = (
+					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
@@ -820,6 +832,7 @@
 				);
 				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.7.1\\\"";
 				OTHER_LDFLAGS = (
+					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
@@ -874,6 +887,7 @@
 				);
 				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.7.1\\\"";
 				OTHER_LDFLAGS = (
+					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
@@ -945,6 +959,7 @@
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					../libmediafork/libmediafork.a,
+					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
@@ -991,6 +1006,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
 				OTHER_LDFLAGS = (
 					../libmediafork/libmediafork.a,
+					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
@@ -1028,6 +1044,7 @@
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					../libmediafork/libmediafork.a,
+					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
@@ -1170,6 +1187,7 @@
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					../libmediafork/libmediafork.a,
+					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
@@ -1209,6 +1227,7 @@
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					../libmediafork/libmediafork.a,
+					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
@@ -1246,6 +1265,7 @@
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					../libmediafork/libmediafork.a,
+					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
@@ -1291,6 +1311,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
 				OTHER_LDFLAGS = (
 					../libmediafork/libmediafork.a,
+					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
@@ -1335,6 +1356,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
 				OTHER_LDFLAGS = (
 					../libmediafork/libmediafork.a,
+					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
@@ -1377,6 +1399,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
 				OTHER_LDFLAGS = (
 					../libmediafork/libmediafork.a,
+					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
@@ -1418,6 +1441,7 @@
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					../libmediafork/libmediafork.a,
+					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
@@ -1461,6 +1485,7 @@
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					../libmediafork/libmediafork.a,
+					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
@@ -1502,6 +1527,7 @@
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					../libmediafork/libmediafork.a,
+					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
