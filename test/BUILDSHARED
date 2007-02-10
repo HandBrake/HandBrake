@@ -23,3 +23,14 @@ ldd test
 
 ------------------------------------------------------------------------
 
+To test the MediaFork .dll on cygwin issue the following commands:
+==================================================================
+
+cp ../libmediafork/libmediafork.dll .
+gcc -I../libmediafork -L. -lmediafork test.c -o test -lz -lpthread
+
+The resulting binary test should depend on the cygwin dll and the mediafork dll.
+
+I works like that but wasn't tested yet outside of cygwin.
+
+------------------------------------------------------------------------
