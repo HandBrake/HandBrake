@@ -9,4 +9,12 @@ Validate that the test Binary is really using the shared library
 
 otool -L test
 
+To test the Mediafork .so on Linux issue the following commands:
+================================================================
+
+gcc -I../libmediafork -L../libmediafork -lmediafork test.c -o test -lz -lpthread
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/[folder containing the .so]
+
+ldd test
 
