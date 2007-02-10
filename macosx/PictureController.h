@@ -45,7 +45,7 @@
 	
 	int                        MaxOutputWidth;
 	int                        MaxOutputHeight;
-	
+
 }
 
 - (void) SetHandle: (hb_handle_t *) handle;

@@ -145,10 +145,7 @@ static int GetAlignedSize( int size )
 	titlewidth, fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1], displayparwidth,
 	fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1]]];
 	
-	/* reset the height stepper field here we now have FTitle->job->crop values
-	for Anamorphic height. Dont reset the stepper height as you cant use it anyway
-	 with par and when par is turned off, it can reset to pre-par values*/
-	[fHeightField       setIntValue: displayparheight];
+	
 	}
 	else
 	{
@@ -169,7 +166,9 @@ static int GetAlignedSize( int size )
 	{
 	[fWidthStepper      setIntValue: MaxOutputWidth];
 	[fWidthField        setIntValue: MaxOutputWidth];
-	/* for height field settins for Anamorphic see -Display: */
+	
+	[fHeightStepper      setIntValue: fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1]];
+	[fHeightField        setIntValue: fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1]];
 	[fRatioCheck        setState: 0];
 
 	[fWidthStepper setEnabled: NO];
