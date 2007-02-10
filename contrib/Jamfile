@@ -11,6 +11,11 @@ else
     WGET = wget -O ;
 }
 
+if $(OS) = UNKNOWN
+{
+    OS = CYGWIN ;
+}
+
 # Wget rule: downloads $(<) from the link in $(>)
 rule Wget
 {
