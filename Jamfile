@@ -40,7 +40,7 @@ UI_SRC   = $(CLI_SRC) $(BEOS_SRC) $(WX_SRC) ;
 
 # CLI app
 # Don't build the CLI from here if MACOSX, let xcode build it :)
-#if $(OS) != MACOSX
+if $(OS) != MACOSX
 {
 	Main $(CLI_BIN) : $(CLI_SRC) ;
 }
