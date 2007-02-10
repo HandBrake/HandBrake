@@ -31,3 +31,4 @@ extern "C" void AddIPodUUID(MP4FileHandle hFile, MP4TrackId trackId)
  MP4Atom* avc1 = track->GetTrakAtom()->FindChildAtom("mdia.minf.stbl.stsd.avc1");
  avc1->AddChildAtom(new IPodUUIDAtom());
 }
+
