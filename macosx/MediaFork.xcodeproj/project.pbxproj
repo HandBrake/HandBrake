@@ -882,7 +882,7 @@
 					"-D__LIBMEDIAFORK__",
 					"-DSYS_DARWIN",
 					"$(OTHER_CFLAGS_QUOTED_1)",
-					"-DHB_BUILD=20070211",
+					"-DHB_BUILD=2007021100",
 					"-DUSE_PTHREAD",
 				);
 				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.8.0b1\\\"";
@@ -932,7 +932,7 @@
 					"-D__LIBMEDIAFORK__",
 					"-DSYS_DARWIN",
 					"$(OTHER_CFLAGS_QUOTED_1)",
-					"-DHB_BUILD=20070211",
+					"-DHB_BUILD=2007021100",
 					"-DUSE_PTHREAD",
 				);
 				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.8.0b1\\\"";
