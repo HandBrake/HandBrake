@@ -142,7 +142,7 @@
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		4D1125D709D72FD200E0657B /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
 		4D118405053054CD00C39CA9 /* MediaFork.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = MediaFork.icns; sourceTree = "<group>"; };
-		4D1EA2DA0993B01000FDC1A2 /* Instant MediaFork.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "Instant MediaFork.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D1EA2DA0993B01000FDC1A2 /* Instant MediaFork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Instant MediaFork.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D1EA2DC0993B01000FDC1A2 /* Express.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Express.plist; sourceTree = "<group>"; };
 		4D1EA3000993B13700FDC1A2 /* Express.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Express.nib; path = English.lproj/Express.nib; sourceTree = "<group>"; };
 		4D1EA31A0993B24700FDC1A2 /* ExpressController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ExpressController.h; sourceTree = "<group>"; };
@@ -885,7 +885,7 @@
 					"-DHB_BUILD=20070211",
 					"-DUSE_PTHREAD",
 				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.8.0\\\"";
+				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.8.0b1\\\"";
 				OTHER_LDFLAGS = (
 					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
@@ -935,7 +935,7 @@
 					"-DHB_BUILD=20070211",
 					"-DUSE_PTHREAD",
 				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.8.0\\\"";
+				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.8.0b1\\\"";
 				OTHER_LDFLAGS = "";
 				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
 				PREBINDING = NO;
@@ -949,7 +949,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = ..;
-				CURRENT_PROJECT_VERSION = 0.8.0;
+				CURRENT_PROJECT_VERSION = 0.8.0b1;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
