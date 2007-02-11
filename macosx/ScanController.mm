@@ -1,4 +1,4 @@
-/* $Id: ScanController.mm,v 1.10 2005/04/27 21:05:24 titer Exp $
+/*  $Id: ScanController.mm,v 1.10 2005/04/27 21:05:24 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -80,8 +80,8 @@
     [fFolderField   setEnabled: 1];
     [fBrowseButton  setEnabled: 1];
 	[fOpenButton    setEnabled: 0];
-	[fBrowseButton  setEnabled: 0];
-	//fOpenButton
+	[fBrowseButton  setEnabled: 1];
+	[fMatrix selectCell: fFolderCell];
 
 
     }
@@ -163,8 +163,9 @@
     }
     else
     {
-        [fMatrix       selectCell: fFolderCell];
+       [fMatrix selectCell: fFolderCell];
         [fDetectedCell setEnabled: NO];
+		[fMatrix selectCellAtRow:1 column:0];
     }
 
     /* Enable controls related to the current choice */

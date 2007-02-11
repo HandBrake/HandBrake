@@ -2,7 +2,7 @@
 
 #include <Cocoa/Cocoa.h>
 
-#include "hb.h"
+#include "mediafork.h"
 
 @interface QueueController : NSObject
 {

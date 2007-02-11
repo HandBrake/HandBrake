@@ -8,17 +8,32 @@
     NSDictionary   * appDefaults;
     
     /* Unless the user specified otherwise, default is to check
-       for update */
+       for update  fDefPicSizeAutoSetipod*/
     defaults    = [NSUserDefaults standardUserDefaults];
     appDefaults = [NSDictionary dictionaryWithObject:@"YES"
                    forKey:@"CheckForUpdates"];
 	appDefaults = [NSDictionary dictionaryWithObject:@"English"
                    forKey:@"DefaultLanguage"];
+	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
+                   forKey:@"DefaultMpegName"];
+	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
+                   forKey:@"DefaultCrf"];
+	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
+                   forKey:@"DefaultDeinterlaceOn"];
+	appDefaults = [NSDictionary dictionaryWithObject:@"YES"
+                   forKey:@"DefaultPicSizeAutoiPod"];
+	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
+                   forKey:@"PixelRatio"];
+
+	
     [defaults registerDefaults: appDefaults];
 
-    /* Check or uncheck according to the preferences */
+	/* fUpdateCheck Check or uncheck according to the preferences */
     [fUpdateCheck setState: [defaults boolForKey:@"CheckForUpdates"] ?
         NSOnState : NSOffState];
+	
+	
+
 	// Fill the languages combobox
     [fdefaultlanguage removeAllItems];
 	[fdefaultlanguage addItemWithObjectValue: @"Afar"];
@@ -185,10 +200,37 @@
 	[fdefaultlanguage addItemWithObjectValue: @"Yoruba"];
 	[fdefaultlanguage addItemWithObjectValue: @"Zhuang"];
 	[fdefaultlanguage addItemWithObjectValue: @"Zulu"];
+	[fdefaultlanguage setStringValue:@"English"];
 	
-	[fdefaultlanguage setStringValue:[defaults stringForKey:@"DefaultLanguage"]];
-    [fdefaultlanguage selectItemWithObjectValue:[defaults stringForKey:@"DefaultLanguage"]];
+	/* If a Default Language is selected then write it otherwise let English as default */
+	
+	if ([defaults stringForKey:@"DefaultLanguage"]!=NULL)
+	{
+		[fdefaultlanguage setStringValue:[defaults stringForKey:@"DefaultLanguage"]];
+    }
+	[fdefaultlanguage selectItemWithObjectValue:[defaults stringForKey:@"DefaultLanguage"]];
 
+    
+
+
+	/* fFileExtItunes Check or uncheck according to the preferences */
+    [fFileExtItunes setState: [defaults boolForKey:@"DefaultMpegName"] ?
+        NSOnState : NSOffState];
+		
+		/* fDefCrf Check or uncheck according to the preferences*/
+    [fDefCrf setState: [defaults boolForKey:@"DefaultCrf"] ?
+        NSOnState : NSOffState];
+
+	/* fDefDeinterlace Check or uncheck according to the preferences*/
+    [fDefDeinterlace setState: [defaults boolForKey:@"DefaultDeinterlaceOn"] ?
+        NSOnState : NSOffState];
+
+/* fDefPicSizeAutoSetipod Check or uncheck according to the preferences*/
+    [fDefPicSizeAutoSetipod setState: [defaults boolForKey:@"DefaultPicSizeAutoiPod"] ?
+        NSOnState : NSOffState];
+		/* fDefPixelRatio */
+    [fDefPixelRatio setState: [defaults boolForKey:@"PixelRatio"] ?
+        NSOnState : NSOffState];
 }
 
 
@@ -207,7 +249,8 @@
 {
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     
-    if( [fUpdateCheck state] == NSOnState )
+    /* Check Update CheckForUpdates Set */
+	if( [fUpdateCheck state] == NSOnState )
     {
         [defaults setObject:@"YES" forKey:@"CheckForUpdates"];
     }
@@ -216,8 +259,68 @@
         [defaults setObject:@"NO" forKey:@"CheckForUpdates"];
     }
 	
+	/* Preferred Language Combobox Set */
+
 	[defaults setObject:[fdefaultlanguage objectValueOfSelectedItem]  forKey:@"DefaultLanguage"];
 
+
+	/* File Extension Itunes Set */
+	
+	if( [fFileExtItunes state] == NSOnState )
+    {
+        [defaults setObject:@"YES" forKey:@"DefaultMpegName"];
+    }
+    else
+    {
+        [defaults setObject:@"NO" forKey:@"DefaultMpegName"];
+    }
+	
+	/* Use CRF for constant mode */
+	
+	if( [fDefCrf state] == NSOnState )
+    {
+        [defaults setObject:@"YES" forKey:@"DefaultCrf"];
+    }
+    else
+    {
+        [defaults setObject:@"NO" forKey:@"DefaultCrf"];
+    }
+
+  /* Use Deinterlace on as a default*/
+	
+	if( [fDefDeinterlace state] == NSOnState )
+    {
+        [defaults setObject:@"YES" forKey:@"DefaultDeinterlaceOn"];
+    }
+    else
+    {
+        [defaults setObject:@"NO" forKey:@"DefaultDeinterlaceOn"];
+    }
+	
+	  /* Use Picture size set to 640 upon x264 (iPod) Selection as a default*/
+	
+	if( [fDefPicSizeAutoSetipod state] == NSOnState )
+    {
+        [defaults setObject:@"YES" forKey:@"DefaultPicSizeAutoiPod"];
+    }
+    else
+    {
+        [defaults setObject:@"NO" forKey:@"DefaultPicSizeAutoiPod"];
+    }
+	
+	  /* Use Pixel Ratio*/
+	
+	if( [fDefPixelRatio state] == NSOnState )
+    {
+        [defaults setObject:@"YES" forKey:@"PixelRatio"];
+    }
+    else
+    {
+        [defaults setObject:@"NO" forKey:@"PixelRatio"];
+    }
+
+	
+	
 }
 
 @end

@@ -6,11 +6,11 @@
 
 SubDir TOP ;
 
-# libhb + contrib libraries
-HB_LIBS = libhb.a
+# libmediafork + contrib libraries
+MEDIAFORK_LIBS = libmediafork.a
           contrib/lib/liba52.a        contrib/lib/libavformat.a
           contrib/lib/libavcodec.a    contrib/lib/libavutil.a
-          contrib/lib/libdvdread.a
+          contrib/lib/libdvdread.a    contrib/lib/libmp4v2.a
           contrib/lib/libfaac.a       contrib/lib/libmp3lame.a
           contrib/lib/libmpeg2.a      contrib/lib/libvorbis.a
           contrib/lib/libvorbisenc.a  contrib/lib/libogg.a
@@ -24,22 +24,26 @@ if $(OS) = UNKNOWN
 
 if $(OS) != CYGWIN
 {
-    HB_LIBS = $(HB_LIBS) contrib/lib/libdvdcss.a ;
+    MEDIAFORK_LIBS = $(MEDIAFORK_LIBS) contrib/lib/libdvdcss.a ;
 }
 
 # Interfaces
-TEST_BIN = HBTest ;
-TEST_SRC = test/test.c ;
+CLI_BIN = MediaForkCLI ;
+CLI_SRC = test/test.c ;
 BEOS_BIN = HandBrake ;
 BEOS_SRC = beos/HBApp.cpp beos/MainWindow.cpp beos/ScanWindow.cpp
            beos/PicWindow.cpp beos/Stepper.cpp beos/QueueWindow.cpp ;
 WX_BIN   = wxHB ;
 WX_SRC   = wx/hbWizard.cpp wx/wxHB.cpp ;
-UI_BIN   = $(TEST_BIN) $(BEOS_BIN) $(WX_BIN) ;
-UI_SRC   = $(TEST_SRC) $(BEOS_SRC) $(WX_SRC) ;
+UI_BIN   = $(CLI_BIN) $(BEOS_BIN) $(WX_BIN) ;
+UI_SRC   = $(CLI_SRC) $(BEOS_SRC) $(WX_SRC) ;
 
 # CLI app
-Main $(TEST_BIN) : $(TEST_SRC) ;
+# Don't build the CLI from here if MACOSX, let xcode build it :)
+if $(OS) != MACOSX
+{
+	Main $(CLI_BIN) : $(CLI_SRC) ;
+}
 
 if $(OS) = BEOS
 {
@@ -65,7 +69,7 @@ if $(OS) = MACOSX
               macosx/English.lproj/Express.nib/info.nib
               macosx/English.lproj/Express.nib/keyedobjects.nib ;
               
-    OSXApp HandBrake.app : $(OSX_SRC) $(HB_LIBS) ;
+    OSXApp MediaFork.app : $(OSX_SRC) $(MEDIAFORK_LIBS) ;
     
     # Package
     OSXPackage HandBrake-$(HB_VERSION)-OSX.zip : HandBrake.app ;
@@ -79,13 +83,14 @@ if $(OS) = LINUX
     #Main            $(WX_BIN) : $(WX_SRC) ;
 }
 
-ObjectHdrs     $(UI_SRC) : $(TOP)/libhb ;
-LinkLibraries  $(UI_BIN) : $(HB_LIBS) ;
-
+if $(OS) != MACOSX
+{
+	ObjectHdrs     $(UI_SRC) : $(TOP)/libmediafork ;
+	LinkLibraries  $(UI_BIN) : $(MEDIAFORK_LIBS) ;
+}
 # Packages
 NotFile package ;
 Depends package : $(HB_PACKAGES) ;
 
 SubInclude TOP contrib ;
-SubInclude TOP libhb ;
-
+SubInclude TOP libmediafork ;

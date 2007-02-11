@@ -1,0 +1,36 @@
+To test the MediaFork dylib on MacOs X issue the following commands:
+===================================================================
+
+cp ../libmediafork/libmediafork.dylib .
+gcc -I../libmediafork -L. -lmediafork test.c -o test -arch i386 -arch ppc
+install_name_tool -change /usr/local/lib/libmediafork.dylib @executable_path/libmediafork.dylib test
+
+Validate that the test Binary is really using the shared library
+
+otool -L test
+
+------------------------------------------------------------------------
+
+To test the Mediafork .so on Linux issue the following commands:
+================================================================
+
+cp ../libmediafork/libmediafork.so .
+gcc -I../libmediafork -L. -lmediafork test.c -o test -lz -lpthread
+
+Validate that the test Binary is really using the shared library
+
+ldd test
+
+------------------------------------------------------------------------
+
+To test the MediaFork .dll on cygwin issue the following commands:
+==================================================================
+
+cp ../libmediafork/libmediafork.dll .
+gcc -I../libmediafork -L. -lmediafork test.c -o test -lz -lpthread
+
+The resulting binary test should depend on the cygwin dll and the mediafork dll.
+
+I works like that but wasn't tested yet outside of cygwin.
+
+------------------------------------------------------------------------

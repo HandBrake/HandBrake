@@ -73,6 +73,7 @@ static int GetAlignedSize( int size )
         fTexBuf[1]  = (uint8_t *) realloc( fTexBuf[1], fTexBufSize );
     }
 
+
     [fWidthStepper      setMaxValue: title->width];
     [fWidthStepper      setIntValue: job->width];
     [fWidthField        setIntValue: job->width];
@@ -85,7 +86,10 @@ static int GetAlignedSize( int size )
     [fCropLeftStepper   setMaxValue: title->width/2-2];
     [fCropRightStepper  setMaxValue: title->width/2-2];
     [fDeinterlaceCheck  setState:    job->deinterlace ? NSOnState : NSOffState];
+	[fPARCheck  setState:    job->pixel_ratio ? NSOnState : NSOffState];
 
+    MaxOutputWidth = title->width;
+	MaxOutputHeight = title->height;
     fPicture = 0;
     [self SettingsChanged: nil];
 }
@@ -127,10 +131,28 @@ static int GetAlignedSize( int size )
     [fPictureGLView Display: anim buffer1: fTexBuf[0]
         buffer2: fTexBuf[1] width: ( fTitle->width + 2 )
         height: ( fTitle->height + 2 )];
-
-    [fInfoField setStringValue: [NSString stringWithFormat:
-        @"Source %dx%d, output %dx%d", fTitle->width, fTitle->height,
-        fTitle->job->width, fTitle->job->height]];
+	
+	/* Set the Output Display below the Preview Picture*/
+	if (fTitle->job->pixel_ratio == 1)
+	{
+	int titlewidth = fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3];
+	int arpwidth = fTitle->job->pixel_aspect_width;
+	int arpheight = fTitle->job->pixel_aspect_height;
+	int displayparwidth = titlewidth * arpwidth / arpheight;
+	int displayparheight = fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1];
+	[fInfoField setStringValue: [NSString stringWithFormat:
+	@"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d", fTitle->width, fTitle->height,
+	titlewidth, fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1], displayparwidth,
+	fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1]]];
+	
+	
+	}
+	else
+	{
+	[fInfoField setStringValue: [NSString stringWithFormat:
+        @"Source: %dx%d, Output: %dx%d", fTitle->width, fTitle->height,
+        fTitle->job->width, fTitle->job->height]];	
+	}
 
     [fPrevButton setEnabled: ( fPicture > 0 )];
     [fNextButton setEnabled: ( fPicture < 9 )];
@@ -139,11 +161,42 @@ static int GetAlignedSize( int size )
 - (IBAction) SettingsChanged: (id) sender
 {
     hb_job_t * job = fTitle->job;
+    
+	if ([fPARCheck state] == 1 )
+	{
+	[fWidthStepper      setIntValue: MaxOutputWidth];
+	[fWidthField        setIntValue: MaxOutputWidth];
+	
+	[fHeightStepper      setIntValue: fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1]];
+	[fHeightField        setIntValue: fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1]];
+	[fRatioCheck        setState: 0];
 
+	[fWidthStepper setEnabled: NO];
+	[fWidthField setEnabled: NO];
+	[fHeightStepper setEnabled: NO];
+	[fHeightField setEnabled: NO];
+	[fRatioCheck setEnabled: NO];
+	
+	
+	}
+	else
+	{
+	[fWidthStepper setEnabled: YES];
+	[fWidthField setEnabled: YES];
+	[fHeightStepper setEnabled: YES];
+	[fHeightField setEnabled: YES];
+	[fRatioCheck setEnabled: YES];
+	}
+	
+	
+	
     job->width       = [fWidthStepper  intValue];
     job->height      = [fHeightStepper intValue];
     job->keep_ratio  = ( [fRatioCheck state] == NSOnState );
     job->deinterlace = ( [fDeinterlaceCheck state] == NSOnState );
+	job->pixel_ratio = ( [fPARCheck state] == NSOnState );
+
+
 
     bool autocrop = ( [fCropMatrix selectedRow] == 0 );
     [fCropTopStepper    setEnabled: !autocrop];
@@ -222,7 +275,8 @@ static int GetAlignedSize( int size )
 
 - (IBAction) ClosePanel: (id) sender
 {
-    [NSApp stopModal];
+
+	[NSApp stopModal];
 }
 
 @end

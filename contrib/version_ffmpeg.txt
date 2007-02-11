@@ -1,1 +1,1 @@
-http://download.handbrake.dynalias.com/contrib/ffmpeg-7444.tar.gz
+http://download.mediafork.dynalias.com/contrib/ffmpeg-7444.tar.gz

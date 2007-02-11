@@ -1,6 +1,5 @@
 {
     IBClasses = (
-        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
             ACTIONS = {
                 AddToQueue = id; 
@@ -10,6 +9,7 @@
                 ChapterPopUpChanged = id; 
                 CodecsPopUpChanged = id; 
                 EnableQueue = id; 
+                EncoderPopUpChanged = id; 
                 FormatPopUpChanged = id; 
                 OpenForums = id; 
                 OpenHomepage = id; 
@@ -42,6 +42,28 @@
                 fDstFormatField = NSTextField; 
                 fDstFormatPopUp = NSPopUpButton; 
                 fPauseButton = NSButton; 
+                fPicLabelAnamorphic = NSTextField; 
+                fPicLabelAr = NSTextField; 
+                fPicLabelDeinter = NSTextField; 
+                fPicLabelOutp = NSTextField; 
+                fPicLabelOutputX = NSTextField; 
+                fPicLabelPAROutp = NSTextField; 
+                fPicLabelPAROutputX = NSTextField; 
+                fPicLabelSettings = NSTextField; 
+                fPicLabelSrc = NSTextField; 
+                fPicLabelSrcX = NSTextField; 
+                fPicSettingARkeep = NSTextField; 
+                fPicSettingARkeepDsply = NSTextField; 
+                fPicSettingDeinterlace = NSTextField; 
+                fPicSettingDeinterlaceDsply = NSTextField; 
+                fPicSettingHeight = NSTextField; 
+                fPicSettingPAR = NSTextField; 
+                fPicSettingPARDsply = NSTextField; 
+                fPicSettingPARHeight = NSTextField; 
+                fPicSettingPARWidth = NSTextField; 
+                fPicSettingWidth = NSTextField; 
+                fPicSrcHeight = NSTextField; 
+                fPicSrcWidth = NSTextField; 
                 fPictureButton = NSButton; 
                 fPictureController = PictureController; 
                 fPicturePanel = NSPanel; 
@@ -123,6 +145,14 @@
                 fHeightStepper = NSStepper; 
                 fInfoField = NSTextField; 
                 fNextButton = NSButton; 
+                fPARCheck = NSButton; 
+                fPicSettingARkeep = NSTextField; 
+                fPicSettingDeinterlace = NSTextField; 
+                fPicSettingHeight = NSTextField; 
+                fPicSettingWidth = NSTextField; 
+                fPicSettingsDisplay = NSTextField; 
+                fPicSrcHeight = NSTextField; 
+                fPicSrcWidth = NSTextField; 
                 fPictureGLView = HBPictureGLView; 
                 fPrevButton = NSButton; 
                 fRatioCheck = NSButton; 
@@ -136,7 +166,16 @@
             ACTIONS = {CheckChanged = id; ClosePanel = id; OpenPanel = id; }; 
             CLASS = PrefsController; 
             LANGUAGE = ObjC; 
-            OUTLETS = {fPanel = NSPanel; fUpdateCheck = NSButton; }; 
+            OUTLETS = {
+                fDefCrf = NSButton; 
+                fDefDeinterlace = NSButton; 
+                fDefPicSizeAutoSetipod = NSButton; 
+                fDefPixelRatio = NSButton; 
+                fFileExtItunes = NSButton; 
+                fPanel = NSPanel; 
+                fUpdateCheck = NSButton; 
+                fdefaultlanguage = NSComboBox; 
+            }; 
             SUPERCLASS = NSObject; 
         }, 
         {

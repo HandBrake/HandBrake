@@ -11,6 +11,11 @@ else
     WGET = wget -O ;
 }
 
+if $(OS) = UNKNOWN
+{
+    OS = CYGWIN ;
+}
+
 # Wget rule: downloads $(<) from the link in $(>)
 rule Wget
 {
@@ -169,6 +174,42 @@ actions LibMp3Lame
 }
 Wget       $(SUBDIR)/lame.tar.gz      : $(SUBDIR)/version_lame.txt ;
 LibMp3Lame $(SUBDIR)/lib/libmp3lame.a : $(SUBDIR)/lame.tar.gz ;
+
+# libmp4v2
+rule LibMp4v2
+{
+    Depends $(<) : $(>) ;
+    Depends lib  : $(<) ;
+}
+if $(OS) != CYGWIN
+{
+	actions LibMp4v2
+	{
+    	cd `dirname $(>)` && CONTRIB=`pwd` &&
+    	rm -rf mpeg4ip && tar xzf mpeg4ip.tar.gz && cd mpeg4ip &&
+    	./bootstrap && make -C lib/mp4v2 libmp4v2.la &&
+    	cp lib/mp4v2/.libs/libmp4v2.a $CONTRIB/lib &&
+    	cp mpeg4ip_config.h include/mpeg4ip.h include/mpeg4ip_version.h \
+      	include/mpeg4ip_win32.h lib/mp4v2/*.h $CONTRIB/include &&
+    	strip -S $CONTRIB/lib/libmp4v2.a
+	}
+}
+else
+{
+	actions LibMp4v2
+	{
+    	cd `dirname $(>)` && CONTRIB=`pwd` &&
+    	rm -rf mpeg4ip && tar xzf mpeg4ip.tar.gz && cd mpeg4ip &&
+    	patch -p1 < ../patch_mpeg4ip_cygwin.patch && ./bootstrap && make -C lib/mp4v2 libmp4v2.la &&
+    	cp lib/mp4v2/.libs/libmp4v2.a $CONTRIB/lib &&
+    	cp mpeg4ip_config.h include/mpeg4ip.h include/mpeg4ip_version.h \
+      	include/mpeg4ip_win32.h lib/mp4v2/*.h $CONTRIB/include &&
+    	strip -S $CONTRIB/lib/libmp4v2.a
+	}
+}
+
+Wget     $(SUBDIR)/mpeg4ip.tar.gz : $(SUBDIR)/version_mpeg4ip.txt ;
+LibMp4v2 $(SUBDIR)/lib/libmp4v2.a : $(SUBDIR)/mpeg4ip.tar.gz ;
 
 # libmpeg2
 rule LibMpeg2

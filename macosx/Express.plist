@@ -6,6 +6,8 @@
 	<string>English</string>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
+	<key>CFBundleIconFile</key>
+	<string>MediaFork</string>
 	<key>CFBundleIdentifier</key>
 	<string>org.m0k.handbrake.instant</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -16,8 +18,6 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1.0a2</string>
-	<key>CFBundleIconFile</key>
-	<string>HandBrake.icns</string>
 	<key>NSMainNibFile</key>
 	<string>Express</string>
 	<key>NSPrincipalClass</key>

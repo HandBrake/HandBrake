@@ -7,6 +7,13 @@
     IBOutlet NSPanel  * fPanel;
     IBOutlet NSButton * fUpdateCheck;
 	IBOutlet NSComboBox * fdefaultlanguage;
+	IBOutlet NSButton * fFileExtItunes;
+	IBOutlet NSButton * fDefCrf;
+	IBOutlet NSButton * fDefDeinterlace;
+	IBOutlet NSButton * fDefPicSizeAutoSetipod;
+	IBOutlet NSButton * fDefPixelRatio;
+
+	
 }
 
 - (IBAction) OpenPanel:    (id) sender;

@@ -1,4 +1,4 @@
-/* $Id: ScanController.h,v 1.4 2005/03/21 12:37:32 titer Exp $
+/*   $Id: ScanController.h,v 1.4 2005/03/21 12:37:32 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
@@ -6,7 +6,7 @@
 
 #include <Cocoa/Cocoa.h>
 
-#include "hb.h"
+#include "mediafork.h"
 @class DriveDetector;
 @interface ScanController : NSObject
 {

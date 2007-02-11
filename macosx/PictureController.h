@@ -6,7 +6,7 @@
 
 #include <Cocoa/Cocoa.h>
 
-#include "hb.h"
+#include "mediafork.h"
 #include "PictureGLView.h"
 
 @interface PictureController : NSObject
@@ -37,10 +37,15 @@
     IBOutlet NSTextField     * fCropRightField;
     IBOutlet NSStepper       * fCropRightStepper;
     IBOutlet NSButton        * fDeinterlaceCheck;
+	IBOutlet NSButton        * fPARCheck;
     IBOutlet NSButton        * fEffectsCheck;
     IBOutlet NSButton        * fPrevButton;
     IBOutlet NSButton        * fNextButton;
     IBOutlet NSTextField     * fInfoField;
+	
+	int                        MaxOutputWidth;
+	int                        MaxOutputHeight;
+
 }
 
 - (void) SetHandle: (hb_handle_t *) handle;
