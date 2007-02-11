@@ -10,7 +10,7 @@
     /* Unless the user specified otherwise, default is to check
        for update  fDefPicSizeAutoSetipod*/
     defaults    = [NSUserDefaults standardUserDefaults];
-    appDefaults = [NSDictionary dictionaryWithObject:@"YES"
+    appDefaults = [NSDictionary dictionaryWithObject:@"NO"
                    forKey:@"CheckForUpdates"];
 	appDefaults = [NSDictionary dictionaryWithObject:@"English"
                    forKey:@"DefaultLanguage"];
@@ -29,9 +29,9 @@
     [defaults registerDefaults: appDefaults];
 
 	/* fUpdateCheck Check or uncheck according to the preferences */
-    [fUpdateCheck setState: [defaults boolForKey:@"CheckForUpdates"] ?
-        NSOnState : NSOffState];
-	
+    
+    [fUpdateCheck setState: 0];
+    [fUpdateCheck setEnabled: NO];	
 	
 
 	// Fill the languages combobox
