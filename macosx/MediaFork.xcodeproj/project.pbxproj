@@ -129,7 +129,7 @@
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0D096DFF0B707D1200A845D4 /* libmediafork.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libmediafork.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
-		0D6E35760B6BD4F0005AABB3 /* MediaFork.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MediaFork.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0D6E35760B6BD4F0005AABB3 /* MediaFork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MediaFork.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D9C5CE40B77E85B00828855 /* mediafork.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = mediafork.c; path = ../libmediafork/mediafork.c; sourceTree = SOURCE_ROOT; };
 		0DF377420B7BEACA00115CB0 /* ipodutil.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = ipodutil.cpp; path = ../libmediafork/ipodutil.cpp; sourceTree = SOURCE_ROOT; };
 		0DF377970B7BF99A00115CB0 /* fakexcode.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = fakexcode.cpp; path = ../test/fakexcode.cpp; sourceTree = SOURCE_ROOT; };
@@ -142,7 +142,7 @@
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		4D1125D709D72FD200E0657B /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
 		4D118405053054CD00C39CA9 /* MediaFork.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = MediaFork.icns; sourceTree = "<group>"; };
-		4D1EA2DA0993B01000FDC1A2 /* Instant MediaFork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Instant MediaFork.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D1EA2DA0993B01000FDC1A2 /* Instant MediaFork.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "Instant MediaFork.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D1EA2DC0993B01000FDC1A2 /* Express.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Express.plist; sourceTree = "<group>"; };
 		4D1EA3000993B13700FDC1A2 /* Express.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Express.nib; path = English.lproj/Express.nib; sourceTree = "<group>"; };
 		4D1EA31A0993B24700FDC1A2 /* ExpressController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ExpressController.h; sourceTree = "<group>"; };
@@ -715,10 +715,10 @@
 					"-D__LIBMEDIAFORK__",
 					"-DSYS_DARWIN",
 					"$(OTHER_CFLAGS_QUOTED_1)",
-					"-DHB_BUILD=2006022400",
+					"-DHB_BUILD=20070211",
 					"-DUSE_PTHREAD",
 				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.7.1\\\"";
+				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.8.0\\\"";
 				OTHER_LDFLAGS = (
 					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
@@ -772,10 +772,10 @@
 					"-D__LIBMEDIAFORK__",
 					"-DSYS_DARWIN",
 					"$(OTHER_CFLAGS_QUOTED_1)",
-					"-DHB_BUILD=2006022400",
+					"-DHB_BUILD=20070211",
 					"-DUSE_PTHREAD",
 				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.7.1\\\"";
+				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.8.0\\\"";
 				OTHER_LDFLAGS = (
 					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
@@ -827,10 +827,10 @@
 					"-D__LIBMEDIAFORK__",
 					"-DSYS_DARWIN",
 					"$(OTHER_CFLAGS_QUOTED_1)",
-					"-DHB_BUILD=2006022400",
+					"-DHB_BUILD=20070211",
 					"-DUSE_PTHREAD",
 				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.7.1\\\"";
+				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.8.0\\\"";
 				OTHER_LDFLAGS = (
 					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
@@ -882,10 +882,10 @@
 					"-D__LIBMEDIAFORK__",
 					"-DSYS_DARWIN",
 					"$(OTHER_CFLAGS_QUOTED_1)",
-					"-DHB_BUILD=2006022400",
+					"-DHB_BUILD=20070211",
 					"-DUSE_PTHREAD",
 				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.7.1\\\"";
+				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.8.0\\\"";
 				OTHER_LDFLAGS = (
 					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
@@ -932,10 +932,10 @@
 					"-D__LIBMEDIAFORK__",
 					"-DSYS_DARWIN",
 					"$(OTHER_CFLAGS_QUOTED_1)",
-					"-DHB_BUILD=2006022400",
+					"-DHB_BUILD=20070211",
 					"-DUSE_PTHREAD",
 				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.7.1\\\"";
+				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.8.0\\\"";
 				OTHER_LDFLAGS = "";
 				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
 				PREBINDING = NO;
@@ -949,7 +949,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = ..;
-				CURRENT_PROJECT_VERSION = 0.7.1a2;
+				CURRENT_PROJECT_VERSION = 0.8.0;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
@@ -1099,10 +1099,10 @@
 					"-D__LIBMEDIAFORK__",
 					"-DSYS_DARWIN",
 					"$(OTHER_CFLAGS_QUOTED_1)",
-					"-DHB_BUILD=2006022400",
+					"-DHB_BUILD=20070211",
 					"-DUSE_PTHREAD",
 				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.7.1\\\"";
+				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.8.0\\\"";
 				OTHER_LDFLAGS = "";
 				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
 				PREBINDING = NO;
@@ -1129,10 +1129,10 @@
 					"-D__LIBMEDIAFORK__",
 					"-DSYS_DARWIN",
 					"$(OTHER_CFLAGS_QUOTED_1)",
-					"-DHB_BUILD=2006022400",
+					"-DHB_BUILD=20070211",
 					"-DUSE_PTHREAD",
 				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.7.1\\\"";
+				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.8.0\\\"";
 				OTHER_LDFLAGS = "";
 				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
 				PREBINDING = NO;
@@ -1158,10 +1158,10 @@
 					"-D__LIBMEDIAFORK__",
 					"-DSYS_DARWIN",
 					"$(OTHER_CFLAGS_QUOTED_1)",
-					"-DHB_BUILD=2006022400",
+					"-DHB_BUILD=20070211",
 					"-DUSE_PTHREAD",
 				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.7.1\\\"";
+				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.8.0\\\"";
 				OTHER_LDFLAGS = "";
 				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
 				PREBINDING = NO;
@@ -1428,7 +1428,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 0.7.1a2;
+				CURRENT_PROJECT_VERSION = 0.8.0;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -1474,7 +1474,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 0.7.1a2;
+				CURRENT_PROJECT_VERSION = 0.8.0;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_OPTIMIZATION_LEVEL = s;
@@ -1517,7 +1517,7 @@
 		4D4E7BC3087804870051572B /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 0.7.1a2;
+				CURRENT_PROJECT_VERSION = 0.8.0;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
