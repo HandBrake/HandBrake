@@ -1,6 +1,19 @@
-$Id: NEWS,v 1.28 2005/11/04 16:01:19 titer Exp $
+NEWS file for MediaFork <http://mediafork.dynalias.com/>
 
-NEWS file for HandBrake <http://handbrake.m0k.org/>
+Changes between 0.7.1 and 0.8.0
+ + MediaFork project forked from HandBrake source <http://handbrake.m0k.org/>
+ + Updated libraries (meaning better quality, hopefully fewer bugs, and increased speeds)
+ + iPod 5.5G support
+ + Revamped graphical interface (Mac OS X)
+ + Anamorphic encoding with pixel aspect ratio
+ + Brighter color reproduction in QuickTime
+ + Lists disks by DVD name instead of by drive name (Mac OS X)
+ + Titles output movies based on the DVD name (Mac OS X)
+ + 32Khz audio output
+ + Constant rate factor encoding with x264
+ + New preference item to turn deinterlacing on by default (Mac OS X)
+ + New preference item to select the default audio language (Mac OS X)
+ + Bugfix for reading straight from a DVD
 
 Changes between 0.7.0 and 0.7.1
  + Universal Binary for PPC and Intel

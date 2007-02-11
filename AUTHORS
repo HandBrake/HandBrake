@@ -1,6 +1,6 @@
-$Id: AUTHORS,v 1.5 2005/03/23 13:14:50 titer Exp $
+AUTHORS file for MediaFork <http://mediafork.dynalias.com/>
 
-AUTHORS file for HandBrake <http://handbrake.m0k.org/>
+Originally forked from HandBrake <http://handbrake.m0k.org/>
 
 Eric Petit <titer@m0k.org>
  + Core (construct, multithreading, BeOS/OS X/Linux ports)
@@ -22,3 +22,40 @@ Laurent Aimar <fenrir@via.ecp.fr>
  + Gtk2 interface
  + wxWidgets interface
 
+John Allen (?) <johnallenemail@gmail.com> (johnallen)
+ + Core enhancements
+ + Threading enhancements
+ + Simplified Mac OS X GUI
+
+Joe Crain <joe@dynaflashtech.net> (dynaflash)
+ + Mac OS X GUI enhancements/rewrite
+
+Rodney Hester <rhester@multics.dynalias.com> (rhester)
+ + iPod firmware 1.2+ 640x480 MPEG-4/H.264 support
+
+Benjamin Lake <me@benlake.org> (benlake)
+ + Mac OS X GUI enhancements/rewrite
+
+Chris Long <chris.long@mac.com> (chrislong)
+ + iPod firmware 1.2+ 640x480 MPEG-4/H.264 support
+
+Philippe Rigaux <pri@nopapers.org> (prigaux)
+ + 3rd party library integration
+ + Mac OS X GUI enhancements
+ + PAR/anamorphic support
+ + Universal binary build process
+ + Conversion from jam to make for compiles
+
+Jonathon Rubin <jb.rubin@gmail.com> (jbrjake)
+ + Massive core enhancements
+ + Significant improvements to H.264 support
+
+Scott <srae88@gmail.com> (sr55)
+ + Windows GUI
+ + mpeg4ip patches for cygwin compile
+
+Unknown <handbrake@addey.com> (maurj)
+ + AAC audio improvements
+
+Unknown <mirkwood07@gmail.com> (mirkwood)
+ + Windows CLI port

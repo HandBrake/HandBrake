@@ -1,10 +1,13 @@
-$Id: THANKS,v 1.16 2004/08/05 17:03:05 titer Exp $
+THANKS file for MediaFork <http://mediafork.dynalias.com/>
 
-THANKS file for HandBrake <http://handbrake.m0k.org/>
+Originally forked from HandBrake <http://handbrake.m0k.org/>
 
-Several people noticeably contributed to HandBrake development without
-writing code (submitting/checking translations, DVD samples, etc).
+Several people noticeably contributed to MediaFork and HandBrake development
+without writing code (submitting/checking translations, DVD samples, etc).
 Let's thank them here!
+
+Chris (audley)
+ + Inspiration and example of patching mpeg4ip for iPod atom support
 
 Omar Ahmad Bhatti
  + Intensive beta testing, suggestions. Convinced me to port HandBrake

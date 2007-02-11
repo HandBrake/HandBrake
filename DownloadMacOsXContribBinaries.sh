@@ -10,9 +10,9 @@ if [ -f contrib/DarwinContribVersion.txt ]; then
   fi
 fi
 
-HOST=download.m0k.org
+HOST=download.mediafork.dynalias.com
 FILE=contribbin-darwin-$VERSION.tar.gz
-URL=http://download.mediafork.dynalias.com/contrib/$FILE
+URL=http://$HOST/contrib/$FILE
 
 # Check for internet connectivity
 if ! host $HOST > /dev/null 2>&1; then
