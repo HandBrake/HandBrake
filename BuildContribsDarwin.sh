@@ -33,7 +33,7 @@
 export VERSION=$1
 export IP=$2
 export USERNAME=$3
-export REPOS=svn://multics.dynalias.com/HandBrake/branches/MediaFork_0.8.0_mpeg4ip
+export REPOS=svn://multics.dynalias.com/HandBrake/trunk/MediaFork_0.8.0_mpeg4ip
 # ##########################################################################
 # Launch the build on the foreign system
 # ##########################################################################
