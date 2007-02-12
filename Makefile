@@ -1,5 +1,4 @@
-MF_BUILD = $(shell date "+%Y%m%d")00
-MF_VERSION = "0.8.0b2"
+include Makefile.config
 
 SYSTEM = $(shell uname -s)
 

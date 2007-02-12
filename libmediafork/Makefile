@@ -1,3 +1,5 @@
+include ../Makefile.config
+
 SYSTEM = $(shell uname -s)
 
 ifeq ($(SYSTEM),CYGWIN_NT-5.1)
