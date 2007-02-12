@@ -58,8 +58,7 @@ static int FormatSettings[3][4] =
     if( ( build = hb_check_update( fHandle, &version ) ) > -1 )
     {
         /* Update available - tell the user */
-		/* TEMPORARILY COMMENT OUT AS UPDATE CHECK IS NOT ACCURATE */
-		 /*
+	
         NSBeginInformationalAlertSheet( _( @"Update is available" ),
             _( @"Go get it!" ), _( @"Discard" ), NULL, fWindow, self,
             @selector( UpdateAlertDone:returnCode:contextInfo: ),
@@ -67,7 +66,7 @@ static int FormatSettings[3][4] =
             _( @"HandBrake %s (build %d) is now available for download." ),
             version, build] );
         return;
-		*/
+
     }
 
     /* Show scan panel ASAP */
