@@ -24,9 +24,9 @@ endif
 
 ifeq ($(SYSTEM),Linux)
 
-all:	contrib/lib libmediafork/libmediafork.a MediaForkCLI
+all:	contrib/.contrib libmediafork/libmediafork.a MediaForkCLI
 
-contrib/lib:
+contrib/.contrib:
 	@$(MAKE) --no-print-directory -C contrib all
 
 libmediafork/libmediafork.a:
@@ -46,9 +46,9 @@ endif
 
 ifeq ($(SYSTEM),CYGWIN_NT-5.1)
 
-all:    contrib libmediafork/libmediafork.a MediaForkCLI
+all:    contrib/.contrib libmediafork/libmediafork.a MediaForkCLI
 
-contrib:
+contrib/.contrib:
 	@$(MAKE) --no-print-directory -C contrib all
 
 libmediafork/libmediafork.a:

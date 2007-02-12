@@ -339,7 +339,7 @@ actions LibXvidCore
     cd build/generic/ && ./configure && make libxvidcore.a &&
     cp ./=build/libxvidcore.a $CONTRIB/lib/ &&
     cp ../../src/xvid.h $CONTRIB/include/ &&
-    strip -S $CONTRIB/lib/libxvidcore.a
+    strip -S $CONTRIB/lib/libxvidcore.a && touch $CONTRIB/.contrib
 }
 Wget        $(SUBDIR)/xvidcore.tar.gz   : $(SUBDIR)/version_xvidcore.txt ;
 LibXvidCore $(SUBDIR)/lib/libxvidcore.a : $(SUBDIR)/xvidcore.tar.gz ;

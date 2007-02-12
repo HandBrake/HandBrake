@@ -12,7 +12,9 @@ endif
 
 ifeq ($(SYSTEM),Linux)
 
-all:
+all:	.contrib
+
+.contrib:
 	( cd .. ; ./configure ; cd contrib ; cp -f ../config.jam . ; jam )
 
 clean:	
@@ -25,7 +27,9 @@ endif
 
 ifeq ($(SYSTEM),CYGWIN_NT-5.1)
 
-all:    
+all:	.contrib
+
+.contrib:    
 	( cd .. ; ./configure ; cd contrib ; cp -f ../config.jam . ; jam.exe )
 
 clean:
