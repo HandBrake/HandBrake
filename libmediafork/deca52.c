@@ -62,6 +62,8 @@ int deca52Init( hb_work_object_t * w, hb_job_t * job )
 
     pv->list      = hb_list_init();
     pv->state     = a52_init( 0 );
+	// we're either extracting 5.1 from AC3 for AAC,
+	// or mixing up/down to stereo otherwise
     pv->flags_out = A52_STEREO;
     pv->level     = 32768.0;
 
