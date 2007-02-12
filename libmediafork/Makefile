@@ -1,25 +1,21 @@
 SYSTEM = $(shell uname -s)
 
-ifeq ($(SYSTEM),Linux)
-	SYSDEF=-DSYS_LINUX
-endif
-
 ifeq ($(SYSTEM),CYGWIN_NT-5.1)
 	SYSDEF=-DSYS_CYGWIN
 endif
 
 ifeq ($(SYSTEM),FreeBSD)
-	CFLAGS += -DSYS_FREEBSD
+	SYSDEF = -DSYS_FREEBSD
 	LDFLAGS += -pthread -lm
 endif
  	
 ifeq ($(SYSTEM),NetBSD)
-	CFLAGS += -DSYS_NETBSD
+	SYSDEF = -DSYS_NETBSD
 	LDFLAGS += -lpthread -lm
 endif
  	
 ifeq ($(SYSTEM),Linux)
-	CFLAGS += -DSYS_LINUX
+	SYSDEF = -DSYS_LINUX
 	LDFLAGS += -lpthread -lm
 endif
 
@@ -52,11 +48,10 @@ CONTRIBS = ../contrib/lib/liba52.a ../contrib/lib/libavformat.a \
            ../contrib/lib/libsamplerate.a ../contrib/lib/libx264.a \
            ../contrib/lib/libxvidcore.a  ../contrib/lib/libmp4v2.a
 endif
-BUILD = $(shell date "+%Y%m%d")00
 
-CFLAGS += -I../contrib/include -D__LIBMEDIAFORK__ -DUSE_PTHREAD -DHB_VERSION=\"0.8.0b1\" -DHB_BUILD=$(BUILD) $(SYSDEF)
+CFLAGS += -I../contrib/include -D__LIBMEDIAFORK__ -DUSE_PTHREAD -DHB_VERSION=\"$(MF_VERSION)\" -DHB_BUILD=$(MF_BUILD) $(SYSDEF)
 
-CXXFLAGS += -I../contrib/include -D__LIBMEDIAFORK__ -DUSE_PTHREAD -DHB_VERSION=\"0.8.0b1\" -DHB_BUILD=$(BUILD) $(SYSDEF)
+CXXFLAGS += -I../contrib/include -D__LIBMEDIAFORK__ -DUSE_PTHREAD -DHB_VERSION=\"$(MF_VERSION)\" -DHB_BUILD=$(BUILD) $(SYSDEF)
 
 ifeq ($(SYSTEM),CYGWIN_NT-5.1)
 all: libmediafork.a libmediafork.dll
