@@ -26,6 +26,7 @@ static int    vcodec      = HB_VCODEC_FFMPEG;
 static int    h264_13     = 0;
 static int    h264_30     = 0;
 static char * audios      = NULL;
+static int    surround    = 0;
 static int    sub         = 0;
 static int    width       = 0;
 static int    height      = 0;
@@ -351,9 +352,9 @@ static int HandleEvents( hb_handle_t * h )
             { 
                 job->h264_level = 13; 
             }
-	    if( h264_30 )
-	    {
-	        job->h264_level = 30;
+	        if( h264_30 )
+	        {
+	            job->h264_level = 30;
             }
             if( vrate )
             {
@@ -389,6 +390,10 @@ static int HandleEvents( hb_handle_t * h )
                     job->audios[0] = -1;
                 }
             }
+			if( surround )
+			{
+				job->surround = 1;
+			}
             if( abitrate )
             {
                 job->abitrate = abitrate;
@@ -527,6 +532,7 @@ static void ShowHelp()
     "                            default: all chapters)\n"
     "    -a, --audio <string>    Select audio channel(s) (\"none\" for no \n"
     "                            audio, default: first one)\n"
+    "    -6, --surround          Export 5.1 surround as 6-channel AAC\n"
     "\n"
     "    -s, --subtitle <number> Select subtitle (default: none)\n"
     "    -e, --encoder <string>  Set video library encoder (ffmpeg,xvid,\n"
@@ -585,6 +591,7 @@ static int ParseOptions( int argc, char ** argv )
             { "title",       required_argument, NULL,    't' },
             { "chapters",    required_argument, NULL,    'c' },
             { "audio",       required_argument, NULL,    'a' },
+            { "surround",    no_argument,       NULL,    '6' },
             { "subtitle",    required_argument, NULL,    's' },
 
             { "encoder",     required_argument, NULL,    'e' },
@@ -612,7 +619,7 @@ static int ParseOptions( int argc, char ** argv )
         int c;
 
         c = getopt_long( argc, argv,
-                         "hvuC:f:i:o:t:c:a:s:e:E:2dgpw:l:n:b:q:S:B:r:R:Q",
+                         "hvuC:f:i:o:t:c:a:6s:e:E:2dgpw:l:n:b:q:S:B:r:R:Q",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -670,6 +677,9 @@ static int ParseOptions( int argc, char ** argv )
             }
             case 'a':
                 audios = strdup( optarg );
+                break;
+            case '6':
+                surround = 1;
                 break;
             case 's':
                 sub = atoi( optarg );
@@ -896,6 +906,13 @@ static int CheckOptions( int argc, char ** argv )
                 acodec = HB_ACODEC_VORBIS;
             }
         }
+		
+		if (acodec != HB_ACODEC_FAAC)
+		{
+			/* only attempt 5.1 export if exporting to AAC */
+			surround = 0;
+		}
+		
     }
 
     return 0;

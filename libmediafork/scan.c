@@ -484,9 +484,16 @@ static void LookForAC3( hb_title_t * title, hb_buffer_t * b )
                     audio->channels = 5;
                     break;
             }
+
+			if (flags & A52_LFE) {
+				audio->lfechannels = 1;
+			} else {
+				audio->lfechannels = 0;
+			}
+
             /* XXX */
             sprintf( audio->lang + strlen( audio->lang ),
-                     " (%d ch)", audio->channels );
+                     " (%d.%d ch)", audio->channels, audio->lfechannels );
             break;
         }
     }

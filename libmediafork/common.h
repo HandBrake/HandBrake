@@ -137,9 +137,19 @@ struct hb_job_s
 	int				crf;
 	
     /* Audio tracks:
-         Indexes in hb_title_t's audios list, starting from 0.
-         -1 indicates the end of the list */
+         audios:         Indexes in hb_title_t's audios list, starting from 0.
+                         -1 indicates the end of the list
+		 channels:       The # of normal channels in the last used audio
+		 lfechannels:    The # of lfe channels in the last used audio
+		 channelsused:   The # of channels we will actually use for this job -
+		                 calculated based on surround, channels and lfechannels
+						 in work.c
+	     surround:       1 if 5.1 should be preserved for AAC, 0 otherwise */
     int             audios[8];
+    int             channels;
+    int             lfechannels;
+    int             channelsused;
+	int             surround;
 
     /* Audio settings:
          acodec:   output codec
@@ -208,7 +218,10 @@ struct hb_audio_s
     int  codec;
     int  rate;
     int  bitrate;
+	/* indicates the number of normal channels the source audio has */
     int  channels;
+	/* indicates the number of lfe channels the source audio has */
+	int  lfechannels;
 
 #ifdef __LIBMEDIAFORK__
     /* Internal data */

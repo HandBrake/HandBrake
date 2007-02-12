@@ -242,6 +242,33 @@ static void do_job( hb_job_t * job, int cpu_count )
             w->config   = &audio->config;
             hb_list_add( job->list_work, w );
         }
+		
+		/* store this audio's channel counts with the job */
+		/* this should be an array -
+		we just use the last channel count for now */
+		if (audio->channels == 5 && audio->lfechannels == 1) {
+			/* we have a 5.1 AC-3 source soundtrack */
+			if (job->acodec == HB_ACODEC_FAAC && job->surround) {
+				/* we're going to be encoding to AAC,
+				and have turned on the "preserve 5.1" flag */
+				job->channelsused = 6;
+			} else {
+				/* mix 5.1 down to Dolby Digital (2-channel) */
+				job->channelsused = 2;
+			}
+		} else if (audio->channels == 1 && audio->lfechannels == 0) {
+			/* keep the mono-ness of the source audio */
+			job->channelsused = 1;
+		} else {
+			/* mix everything else down to stereo */
+			job->channelsused = 2;
+		}
+		
+		/* remember the actual number of channels and lfe channels */
+		/* again, we are using the last channel's count for now */
+		job->channels = audio->channels;
+		job->lfechannels = audio->lfechannels;
+		
     }
 
     /* Init read & write threads */

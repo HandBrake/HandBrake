@@ -28,6 +28,9 @@ struct hb_work_private_s
     uint8_t       frame[3840];
 
     hb_list_t   * list;
+	
+	int           channelsused;
+	
 };
 
 int  deca52Init( hb_work_object_t *, hb_job_t * );
@@ -62,9 +65,25 @@ int deca52Init( hb_work_object_t * w, hb_job_t * job )
 
     pv->list      = hb_list_init();
     pv->state     = a52_init( 0 );
-	// we're either extracting 5.1 from AC3 for AAC,
-	// or mixing up/down to stereo otherwise
-    pv->flags_out = A52_STEREO;
+
+	if (job->channelsused == 6) {
+		/* we're going to be encoding to AAC,
+		and have turned on the "preserve 5.1" flag */
+		pv->flags_out = A52_3F2R | A52_LFE;
+	} else if (job->channelsused == 1) {
+		/* keep the mono-ness of the source audio */
+		pv->flags_out = A52_MONO;
+	} else if (job->channelsused == 2 && job->channels == 5 && job->lfechannels == 1) {
+		/* we are mixing a 5.1 source down to stereo, so use dolby surround */
+		pv->flags_out = A52_DOLBY;
+	} else {
+		/* mix everything else down to stereo */
+		pv->flags_out = A52_STEREO;
+	}
+
+	/* pass the number of channels used into the private work data */
+	pv->channelsused = job->channelsused;
+
     pv->level     = 32768.0;
 
     return 0;
@@ -116,7 +135,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * buf;
-    int           i, j;
+    int           i, j, k;
     uint64_t      pts;
     int           pos;
 
@@ -177,8 +196,8 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     /* Feed liba52 */
     a52_frame( pv->state, pv->frame, &pv->flags_out, &pv->level, 0 );
 
-    /* 6 blocks per frame, 256 samples per block, 2 channels */
-    buf        = hb_buffer_init( 3072 * sizeof( float ) );
+    /* 6 blocks per frame, 256 samples per block, channelsused channels */
+    buf        = hb_buffer_init( 6 * 256 * pv->channelsused * sizeof( float ) );
     buf->start = pts + ( pos / pv->size ) * 6 * 256 * 90000 / pv->rate;
     buf->stop  = buf->start + 6 * 256 * 90000 / pv->rate;
 
@@ -189,13 +208,15 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
 
         a52_block( pv->state );
         samples_in  = a52_samples( pv->state );
-        samples_out = ((float *) buf->data) + 512 * i;
+        samples_out = ((float *) buf->data) + 256 * pv->channelsused * i;
 
         /* Interleave */
         for( j = 0; j < 256; j++ )
         {
-            samples_out[2*j]   = samples_in[j];
-            samples_out[2*j+1] = samples_in[256+j];
+			for ( k = 0; k < pv->channelsused; k++ )
+			{
+				samples_out[(pv->channelsused*j)+k]   = samples_in[(256*k)+j]; // DJA
+			}
         }
     }
 
