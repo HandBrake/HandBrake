@@ -246,6 +246,11 @@ static void do_job( hb_job_t * job, int cpu_count )
 		/* store this audio's channel counts with the job */
 		/* this should be an array -
 		we just use the last channel count for now */
+		
+		/* we will only end up with a channelsused value other than 2
+		if we are encoding to AAC.  All other audio encodings will get
+		a stereo mix. */
+		
 		if (audio->channels == 5 && audio->lfechannels == 1) {
 			/* we have a 5.1 AC-3 source soundtrack */
 			if (job->acodec == HB_ACODEC_FAAC && job->surround) {
@@ -253,14 +258,24 @@ static void do_job( hb_job_t * job, int cpu_count )
 				and have turned on the "preserve 5.1" flag */
 				job->channelsused = 6;
 			} else {
-				/* mix 5.1 down to Dolby Digital (2-channel) */
+				/* mix 5.1 down to Dolby Digital (2-channel) for
+				non-AAC audio, or for AAC without 5.1 preservation */
 				job->channelsused = 2;
 			}
 		} else if (audio->channels == 1 && audio->lfechannels == 0) {
-			/* keep the mono-ness of the source audio */
-			job->channelsused = 1;
+			/* we have a 1.0 mono AC-3 source soundtrack */
+			if (job->acodec == HB_ACODEC_FAAC) {
+				/* we're going to be encoding to AAC,
+				so mix down to a mono AAC track */
+				job->channelsused = 1;
+			} else {
+				/* mix up the mono track to stereo for non-AAC formats */
+				job->channelsused = 2;
+			}
 		} else {
 			/* mix everything else down to stereo */
+			/* dolby pro-logic will be preserved in deca52.c if necessary
+			by referring to the value of job->ac3flags stored below */
 			job->channelsused = 2;
 		}
 		
@@ -268,6 +283,10 @@ static void do_job( hb_job_t * job, int cpu_count )
 		/* again, we are using the last channel's count for now */
 		job->channels = audio->channels;
 		job->lfechannels = audio->lfechannels;
+		
+		/* remember the AC3 flags for future reference */
+		/* again, we are using the last channel's flags for now */
+		job->ac3flags = audio->ac3flags;
 		
     }
 

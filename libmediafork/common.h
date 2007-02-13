@@ -144,11 +144,13 @@ struct hb_job_s
 		 channelsused:   The # of channels we will actually use for this job -
 		                 calculated based on surround, channels and lfechannels
 						 in work.c
+         ac3flags:       stores the flags from the AC3 source, as found in scan.c
 	     surround:       1 if 5.1 should be preserved for AAC, 0 otherwise */
     int             audios[8];
     int             channels;
     int             lfechannels;
     int             channelsused;
+	int             ac3flags;
 	int             surround;
 
     /* Audio settings:
@@ -222,6 +224,8 @@ struct hb_audio_s
     int  channels;
 	/* indicates the number of lfe channels the source audio has */
 	int  lfechannels;
+	/* stores the flags from the AC3 source, as found in scan.c */
+	int  ac3flags;
 
 #ifdef __LIBMEDIAFORK__
     /* Internal data */
