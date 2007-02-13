@@ -33,7 +33,7 @@
 export VERSION=$1
 export IP=$2
 export USERNAME=$3
-export REPOS=svn://multics.dynalias.com/HandBrake/branches/0.8.0_beta2
+export REPOS=svn://multics.dynalias.com/HandBrake/branches/0.8.0_beta2_5.1
 # ##########################################################################
 # Launch the build on the foreign system
 # ##########################################################################
