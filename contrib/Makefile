@@ -36,6 +36,6 @@ clean:
 	( echo "Do a make mrproper to remove the contrib libraries )
 
 mrproper: clean
-	(rm -rf lib ; rm -rf include )
+	(rm -rf lib ; rm -rf include ; rm -f .contrib)
 
 endif
