@@ -1159,7 +1159,7 @@ static int FormatSettings[3][4] =
 {
     
 	/* Check to see if we need to modify the job pic values based on x264 (iPod) encoder selection */
-    if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fVidEncoderPopUp indexOfSelectedItem] == 1)
+    if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fDstCodecsPopUp indexOfSelectedItem] == 1 && [fVidEncoderPopUp indexOfSelectedItem] == 1)
     {
 	hb_job_t * job = fTitle->job;
 	job->pixel_ratio = 0 ;
@@ -1175,6 +1175,10 @@ static int FormatSettings[3][4] =
 		 hb_fix_aspect( job, HB_KEEP_WIDTH );
 		 
 		 }
+
+		/* uncheck the "export 5.1 as 6-channel AAC" checkbox if it is checked */
+		[fAudLang1SurroundCheck setState: NSOffState];
+
 	}
     
 	[self CalculatePictureSizing: sender];    
@@ -1234,6 +1238,8 @@ static int FormatSettings[3][4] =
 		[fAudLang1SurroundCheck setEnabled: YES];
 	} else {
 		[fAudLang1SurroundCheck setEnabled: NO];
+		/* as well as disabling the checkbox, let's uncheck it if it is checked */
+		[fAudLang1SurroundCheck setState: NSOffState];
 	}
 
 }
