@@ -31,7 +31,7 @@
                 fAudBitratePopUp = NSPopUpButton; 
                 fAudLang1Field = NSTextField; 
                 fAudLang1PopUp = NSPopUpButton; 
-                fAudLang1Surround = NSButton; 
+                fAudLang1SurroundCheck = NSButton; 
                 fAudLang2Field = NSTextField; 
                 fAudLang2PopUp = NSPopUpButton; 
                 fAudRateField = NSTextField; 

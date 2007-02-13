@@ -534,11 +534,20 @@ static int FormatSettings[3][4] =
             }
         }
         [controls[i] setEnabled: b];
-		/* Temporarily disable Lang2 until crash is fixed */
-		[fAudLang2PopUp setEnabled: NO];
-		[fAudLang2Field setEnabled: NO];
-	
+
     }
+
+	/* Temporarily disable Lang2 until crash is fixed */
+	[fAudLang2PopUp setEnabled: NO];
+	[fAudLang2Field setEnabled: NO];
+	
+	if (b) {
+		/* if we're enabling the interface, check if we should / should't offer 6-channel AAC extraction */
+		[self Check6ChannelAACExtraction: NULL];
+	} else {
+		/* if we're disabling the interface, turn it off */
+		[fAudLang1SurroundCheck setEnabled: NO];
+	}
 
     [self VideoMatrixChanged: NULL];
 }
@@ -747,6 +756,13 @@ static int FormatSettings[3][4] =
                      indexOfSelectedItem]].rate;
     job->abitrate = hb_audio_bitrates[[fAudBitratePopUp
                         indexOfSelectedItem]].rate;
+	/* have we selected that 5.1 should be extracted as AAC? */
+	if (job->acodec == HB_ACODEC_FAAC && [fAudLang1SurroundCheck isEnabled] && [fAudLang1SurroundCheck state] == NSOnState) {
+		job->surround = 1;
+	} else {
+		job->surround = 0;
+	}
+
 }
 
 - (IBAction) EnableQueue: (id) sender
@@ -1001,6 +1017,11 @@ static int FormatSettings[3][4] =
     [fAudLang2PopUp selectItemAtIndex: 0];
 	
 	/* END pri */
+
+	/* changing the title may have changed the audio channels on offer, so */
+	/* check if this change means we should / should't offer 6-channel AAC extraction */
+	[self Check6ChannelAACExtraction: sender];
+
 }
 
 - (IBAction) ChapterPopUpChanged: (id) sender
@@ -1084,6 +1105,11 @@ static int FormatSettings[3][4] =
         [fDstFile2Field setStringValue: [NSString stringWithFormat:
             @"%@.%s", string, ext]];
     }
+
+	/* changing the codecs on offer may mean that we are/aren't now offering AAC, so */
+	/* check if this change means we should / should't offer 6-channel AAC extraction */
+	[self Check6ChannelAACExtraction: sender];
+
 }
 
 - (IBAction) CodecsPopUpChanged: (id) sender
@@ -1122,7 +1148,11 @@ static int FormatSettings[3][4] =
         [fAudBitratePopUp setEnabled: YES];
     }
 
+	/* check if this change means we should / should't offer 6-channel AAC extraction */
+	[self Check6ChannelAACExtraction: sender];
+
     [self CalculateBitrate: sender];
+
 }
 
 - (IBAction) EncoderPopUpChanged: (id) sender
@@ -1147,28 +1177,78 @@ static int FormatSettings[3][4] =
 		 }
 	}
     
-[self CalculatePictureSizing: sender];    
+	[self CalculatePictureSizing: sender];    
   
+}
+
+- (IBAction) Check6ChannelAACExtraction: (id) sender
+{
+
+	/* make sure we have a selected title before continuing */
+	if (fTitle == NULL) return;
+
+	/* get the current title's job into a convenience variable */
+	hb_job_t * job = fTitle->job;
+	
+    /* get the current audio tracks */
+	/* this is done in PrepareJob too, but we want them here to check against below */
+    job->audios[0] = [fAudLang1PopUp indexOfSelectedItem] - 1;
+    job->audios[1] = [fAudLang2PopUp indexOfSelectedItem] - 1;
+    job->audios[2] = -1;
+
+	/* now, let's check if any selected audio track has 5.1 sound */
+	hb_audio_t * audio;
+	bool foundfiveoneaudio = false;
+
+	/* find out what the currently-selected audio codec is */
+    int format = [fDstFormatPopUp indexOfSelectedItem];
+    int codecs = [fDstCodecsPopUp indexOfSelectedItem];
+	int acodec = FormatSettings[format][codecs] & HB_ACODEC_MASK;
+
+	/* we only offer the option to extract 5.1 to 6-channel if the selected audio codec is AAC */
+	if (acodec == HB_ACODEC_FAAC) {
+
+		bool doneaudios = false;
+		int thisaudio = 0;
+		
+		while (!doneaudios) {
+
+			if (job->audios[thisaudio] == -1) {
+				doneaudios = true;
+			} else {
+				audio = (hb_audio_t *) hb_list_item( fTitle->list_audio, job->audios[thisaudio] );
+				if (audio != NULL) {
+					if (audio->channels == 5 && audio->lfechannels == 1) {
+						foundfiveoneaudio = true;
+						doneaudios = true; /* as it doesn't matter if we find any more! */
+					}
+				}
+			}
+
+			thisaudio++;
+		}
+	}
+
+    /* If we are extracting to AAC, and any of our soundtracks were 5.1, then enable the checkbox  */
+	if (foundfiveoneaudio) {
+		[fAudLang1SurroundCheck setEnabled: YES];
+	} else {
+		[fAudLang1SurroundCheck setEnabled: NO];
+	}
+
 }
 
 
 - (IBAction) LanguagePopUpChanged: (id) sender
 {
-     /* Original Call from langpopups which then called prepare job*/
-	 /*Note: fAudLang2PopUp is still connected to original action */
-     /* [self CalculateBitrate: sender]; */
-     /* Set Audio tracks based on language selected (taken from prepare job)*/
-	hb_job_t * job = fTitle->job;
-    job->audios[0] = [fAudLang1PopUp indexOfSelectedItem] - 1;
-    job->audios[1] = [fAudLang2PopUp indexOfSelectedItem] - 1;
-    job->audios[2] = -1;	
+	
+	/* selecting a different language may mean we have a different number of channels, so */
+	/* check if this change means we should / should't offer 6-channel AAC extraction */
+	[self Check6ChannelAACExtraction: sender];
+	
+	/* see if the new language setting will change the bitrate we need */
+    [self CalculateBitrate:     sender];	
 
-    /* We set the checkbox "fAudLang1Surround" here using: */
-    /* [fAudLang1Surround        setState: 0] Depending on variables */	
-	
-	
-	
-  
 }
 
 

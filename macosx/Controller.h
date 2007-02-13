@@ -103,7 +103,7 @@
     /* Audio box */
     IBOutlet NSTextField         * fAudLang1Field;
     IBOutlet NSPopUpButton       * fAudLang1PopUp;
-    IBOutlet NSButton       * fAudLang1Surround;
+    IBOutlet NSButton		     * fAudLang1SurroundCheck;
     IBOutlet NSTextField         * fAudLang2Field;
     IBOutlet NSPopUpButton       * fAudLang2PopUp;
     IBOutlet NSTextField         * fAudRateField;
@@ -121,7 +121,7 @@
     IBOutlet NSButton            * fRipButton;
 
     hb_handle_t                  * fHandle;
-	hb_title_t               * fTitle;
+	hb_title_t                   * fTitle;
 }
 
 - (void)     TranslateStrings;
@@ -137,6 +137,7 @@
 - (IBAction) FormatPopUpChanged: (id) sender;
 - (IBAction) CodecsPopUpChanged: (id) sender;
 - (IBAction) EncoderPopUpChanged: (id) sender;
+- (IBAction) Check6ChannelAACExtraction: (id) sender;
 - (IBAction) LanguagePopUpChanged: (id) sender;
 
 - (IBAction) BrowseFile: (id) sender;
