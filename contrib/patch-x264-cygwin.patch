@@ -8,7 +8,7 @@ diff -Naur x264/configure x264-patched/configure
 -    CFLAGS="$CFLAGS -mno-cygwin"
 -    LDFLAGS="$LDFLAGS -mno-cygwin"
 +    #CFLAGS="$CFLAGS -mno-cygwin"
-+    #LDFLAGS="$LDFLAGS -mno-cygwin"
++    #LDFLAGS="$LDFLAGS -mno-cygwin" 
      EXE=".exe"
      DEVNULL="NUL"
      ;;
