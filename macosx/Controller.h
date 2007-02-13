@@ -103,6 +103,7 @@
     /* Audio box */
     IBOutlet NSTextField         * fAudLang1Field;
     IBOutlet NSPopUpButton       * fAudLang1PopUp;
+    IBOutlet NSButton       * fAudLang1Surround;
     IBOutlet NSTextField         * fAudLang2Field;
     IBOutlet NSPopUpButton       * fAudLang2PopUp;
     IBOutlet NSTextField         * fAudRateField;
@@ -136,6 +137,8 @@
 - (IBAction) FormatPopUpChanged: (id) sender;
 - (IBAction) CodecsPopUpChanged: (id) sender;
 - (IBAction) EncoderPopUpChanged: (id) sender;
+- (IBAction) LanguagePopUpChanged: (id) sender;
+
 - (IBAction) BrowseFile: (id) sender;
 - (void)     BrowseFileDone: (NSSavePanel *) sheet
     returnCode: (int) returnCode contextInfo: (void *) contextInfo;

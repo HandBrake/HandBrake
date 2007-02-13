@@ -685,7 +685,7 @@ static int FormatSettings[3][4] =
 		Lets Deprecate Baseline Level 1.3*/
 		job->h264_level = 30;
 		job->mux = HB_MUX_IPOD;
-        /* move sanity check for iPod Encoding here */
+                    /* move sanity check for iPod Encoding here */
 		job->pixel_ratio = 0 ;
 
 		}
@@ -1150,6 +1150,27 @@ static int FormatSettings[3][4] =
 [self CalculatePictureSizing: sender];    
   
 }
+
+
+- (IBAction) LanguagePopUpChanged: (id) sender
+{
+     /* Original Call from langpopups which then called prepare job*/
+	 /*Note: fAudLang2PopUp is still connected to original action */
+     /* [self CalculateBitrate: sender]; */
+     /* Set Audio tracks based on language selected (taken from prepare job)*/
+	hb_job_t * job = fTitle->job;
+    job->audios[0] = [fAudLang1PopUp indexOfSelectedItem] - 1;
+    job->audios[1] = [fAudLang2PopUp indexOfSelectedItem] - 1;
+    job->audios[2] = -1;	
+
+    /* We set the checkbox "fAudLang1Surround" here using: */
+    /* [fAudLang1Surround        setState: 0] Depending on variables */	
+	
+	
+	
+  
+}
+
 
 /* Get and Display Current Pic Settings in main window */
 - (IBAction) CalculatePictureSizing: (id) sender
