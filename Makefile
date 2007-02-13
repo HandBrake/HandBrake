@@ -5,7 +5,7 @@ SYSTEM = $(shell uname -s)
 # Special case for Mac OS X: everything is handled from the Xcode project
 ifeq ($(SYSTEM),Darwin)
 
-all:    clean app release
+all:    clean app
 
 app:
 	(./DownloadMacOsXContribBinaries.sh ; cd macosx ; xcodebuild -alltargets -configuration UB build | sed '/^$$/d' ; cd .. ; ./macosx/localize.sh MediaFork.app)
