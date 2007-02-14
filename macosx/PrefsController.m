@@ -8,7 +8,7 @@
     NSDictionary   * appDefaults;
     
     /* Unless the user specified otherwise, default is to check
-       for update  fDefPicSizeAutoSetipod*/
+       for update  fDefAudioSurround*/
     defaults    = [NSUserDefaults standardUserDefaults];
     appDefaults = [NSDictionary dictionaryWithObject:@"YES"
                    forKey:@"CheckForUpdates"];
@@ -24,14 +24,14 @@
                    forKey:@"DefaultPicSizeAutoiPod"];
 	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
                    forKey:@"PixelRatio"];
-
+          appDefaults = [NSDictionary dictionaryWithObject:@"NO"
+                   forKey:@"DefaultSurroundSound"];
 	
     [defaults registerDefaults: appDefaults];
 
 	/* fUpdateCheck Check or uncheck according to the preferences */
     [fUpdateCheck setState: [defaults boolForKey:@"CheckForUpdates"] ?
         NSOnState : NSOffState];
-	
 	
 
 	// Fill the languages combobox
@@ -231,6 +231,10 @@
 		/* fDefPixelRatio */
     [fDefPixelRatio setState: [defaults boolForKey:@"PixelRatio"] ?
         NSOnState : NSOffState];
+		
+     /* fDefAudioSurround Check or uncheck according to the preferences */
+    [fDefAudioSurround setState: [defaults boolForKey:@"DefaultSurroundSound"] ?
+        NSOnState : NSOffState];
 }
 
 
@@ -318,8 +322,18 @@
     {
         [defaults setObject:@"NO" forKey:@"PixelRatio"];
     }
-
+ 
+  
+        /* Use Surround Sound if available*/
 	
+	if( [fDefAudioSurround state] == NSOnState )
+    {
+        [defaults setObject:@"YES" forKey:@"DefaultSurroundSound"];
+    }
+    else
+    {
+        [defaults setObject:@"NO" forKey:@"DefaultSurroundSound"];
+    }	
 	
 }
 

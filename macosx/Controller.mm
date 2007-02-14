@@ -1236,6 +1236,11 @@ static int FormatSettings[3][4] =
     /* If we are extracting to AAC, and any of our soundtracks were 5.1, then enable the checkbox  */
 	if (foundfiveoneaudio) {
 		[fAudLang1SurroundCheck setEnabled: YES];
+		/* Check default surround sound pref and if it is YES, lets also check the checkbox */
+		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultSurroundSound"] > 0)
+		{
+			[fAudLang1SurroundCheck setState: NSOnState];
+		}
 	} else {
 		[fAudLang1SurroundCheck setEnabled: NO];
 		/* as well as disabling the checkbox, let's uncheck it if it is checked */

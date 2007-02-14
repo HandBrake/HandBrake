@@ -12,6 +12,7 @@
 	IBOutlet NSButton * fDefDeinterlace;
 	IBOutlet NSButton * fDefPicSizeAutoSetipod;
 	IBOutlet NSButton * fDefPixelRatio;
+	IBOutlet NSButton * fDefAudioSurround;
 
 	
 }
