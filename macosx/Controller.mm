@@ -707,6 +707,10 @@ static int FormatSettings[3][4] =
 			job->crf = 1;
 	        }
 		
+		/* Sends x264 options to the core library*/
+		job->x264opts = [[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] cString];
+		
+		
         job->h264_13 = [fVidEncoderPopUp indexOfSelectedItem];
     }
 
