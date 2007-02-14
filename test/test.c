@@ -44,6 +44,7 @@ static int    pixelratio  = 0;
 static int    chapter_start = 0;
 static int    chapter_end   = 0;
 static int	  crf			= 0;
+static char	  *x264opts		= NULL;
 
 /* Exit cleanly on Ctrl-C */
 static volatile int die = 0;
@@ -174,7 +175,8 @@ int main( int argc, char ** argv )
     if( output ) free( output );
     if( format ) free( format );
     if( audios ) free( audios );
-
+	if( x264opts ) free (x264opts );
+	
     fprintf( stderr, "MediaFork has exited.\n" );
 
     return 0;
@@ -426,6 +428,16 @@ static int HandleEvents( hb_handle_t * h )
 				job->crf = 1;
 			}
 
+			if (x264opts != NULL && *x264opts != '\0' )
+			{
+				hb_log("Applying the following x264 options: %s", x264opts);
+				job->x264opts = x264opts;
+			}
+			else /*avoids a bus error crash when options aren't specified*/
+			{
+				job->x264opts =  NULL;
+			}
+
             if( twoPass )
             {
                 job->pass = 1;
@@ -567,7 +579,11 @@ static void ShowHelp()
     "    -B, --ab <kb/s>         Set audio bitrate (default: 128)\n"
     "    -w, --width <number>    Set picture width\n"
     "    -l, --height <number>   Set picture height\n"
-    "        --crop <T:B:L:R>    Set cropping values (default: autocrop)\n" );
+    "        --crop <T:B:L:R>    Set cropping values (default: autocrop)\n"
+	"\n"
+	"    -x, --x264opts <string> Specify advanced x264 options in the\n"
+	"                            same style as mencoder:\n"
+	"                            option1=value1:option2=value2\n" );
 }
 
 /****************************************************************************
@@ -611,6 +627,7 @@ static int ParseOptions( int argc, char ** argv )
             { "rate",        required_argument, NULL,    'r' },
             { "arate",       required_argument, NULL,    'R' },
 			{ "crf",		 no_argument,		NULL,	 'Q' },
+			{ "x264opts",    required_argument, NULL,    'x' },
 			
             { 0, 0, 0, 0 }
           };
@@ -619,7 +636,7 @@ static int ParseOptions( int argc, char ** argv )
         int c;
 
         c = getopt_long( argc, argv,
-                         "hvuC:f:i:o:t:c:a:6s:e:E:2dgpw:l:n:b:q:S:B:r:R:Q",
+                         "hvuC:f:i:o:t:c:a:s:e:E:2dgpw:l:n:b:q:S:B:r:R:Qx:",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -806,6 +823,9 @@ static int ParseOptions( int argc, char ** argv )
 			case 'Q':
 				crf = 1;
 				break;
+			case 'x':
+			   	x264opts = strdup( optarg );
+			    break;
 
             default:
                 fprintf( stderr, "unknown option (%s)\n", argv[optind] );
