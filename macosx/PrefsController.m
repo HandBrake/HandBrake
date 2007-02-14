@@ -8,7 +8,7 @@
     NSDictionary   * appDefaults;
     
     /* Unless the user specified otherwise, default is to check
-       for update  fDefAudioSurround*/
+       for update  DefAdvancedx264Flags*/
     defaults    = [NSUserDefaults standardUserDefaults];
     appDefaults = [NSDictionary dictionaryWithObject:@"YES"
                    forKey:@"CheckForUpdates"];
@@ -26,6 +26,8 @@
                    forKey:@"PixelRatio"];
           appDefaults = [NSDictionary dictionaryWithObject:@"NO"
                    forKey:@"DefaultSurroundSound"];
+	appDefaults = [NSDictionary dictionaryWithObject:@""
+                   forKey:@"DefAdvancedx264Flags"];
 	
     [defaults registerDefaults: appDefaults];
 
@@ -215,26 +217,29 @@
 
 	/* fFileExtItunes Check or uncheck according to the preferences */
     [fFileExtItunes setState: [defaults boolForKey:@"DefaultMpegName"] ?
-        NSOnState : NSOffState];
-		
-		/* fDefCrf Check or uncheck according to the preferences*/
+				  NSOnState : NSOffState];
+	
+	/* fDefCrf Check or uncheck according to the preferences*/
     [fDefCrf setState: [defaults boolForKey:@"DefaultCrf"] ?
-        NSOnState : NSOffState];
-
+		   NSOnState : NSOffState];
+	
 	/* fDefDeinterlace Check or uncheck according to the preferences*/
     [fDefDeinterlace setState: [defaults boolForKey:@"DefaultDeinterlaceOn"] ?
-        NSOnState : NSOffState];
-
-/* fDefPicSizeAutoSetipod Check or uncheck according to the preferences*/
+				   NSOnState : NSOffState];
+	
+	/* fDefPicSizeAutoSetipod Check or uncheck according to the preferences*/
     [fDefPicSizeAutoSetipod setState: [defaults boolForKey:@"DefaultPicSizeAutoiPod"] ?
-        NSOnState : NSOffState];
-		/* fDefPixelRatio */
+						  NSOnState : NSOffState];
+	/* fDefPixelRatio */
     [fDefPixelRatio setState: [defaults boolForKey:@"PixelRatio"] ?
-        NSOnState : NSOffState];
-		
-     /* fDefAudioSurround Check or uncheck according to the preferences */
+				  NSOnState : NSOffState];
+	
+	/* fDefAudioSurround Check or uncheck according to the preferences */
     [fDefAudioSurround setState: [defaults boolForKey:@"DefaultSurroundSound"] ?
-        NSOnState : NSOffState];
+					 NSOnState : NSOffState];
+		
+	/* Insert default DefAdvanced x264 Flag here */
+	[fDefAdvancedx264FlagsView setString:[defaults stringForKey:@"DefAdvancedx264Flags"]];
 }
 
 
@@ -245,6 +250,7 @@
 
 - (IBAction) ClosePanel: (id) sender;
 {
+    [self CheckChanged: sender]; 
     [NSApp stopModal];
     [fPanel orderOut: sender];
 }
@@ -334,7 +340,10 @@
     {
         [defaults setObject:@"NO" forKey:@"DefaultSurroundSound"];
     }	
-	
+    
+		
+	/*Advanced x264 Flag string into */
+      [defaults setObject:[fDefAdvancedx264FlagsView string]  forKey:@"DefAdvancedx264Flags"];	
 }
 
 @end

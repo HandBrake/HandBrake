@@ -169,6 +169,7 @@
             CLASS = PrefsController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
+                fDefAdvancedx264FlagsView = NSTextView; 
                 fDefAudioSurround = NSButton; 
                 fDefCrf = NSButton; 
                 fDefDeinterlace = NSButton; 

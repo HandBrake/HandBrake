@@ -14,7 +14,7 @@
 	IBOutlet NSButton * fDefPixelRatio;
 	IBOutlet NSButton * fDefAudioSurround;
 
-	
+	IBOutlet NSTextView * fDefAdvancedx264FlagsView;
 }
 
 - (IBAction) OpenPanel:    (id) sender;
