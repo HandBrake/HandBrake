@@ -135,6 +135,8 @@ struct hb_job_s
     int             h264_13;
 	int				h264_level;
 	int				crf;
+	const char			*x264opts;
+	int				areBframes;
 	
     /* Audio tracks:
          audios:         Indexes in hb_title_t's audios list, starting from 0.

@@ -60,7 +60,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     param.i_fps_num    = job->vrate;
     param.i_fps_den    = job->vrate_base;
     param.i_keyint_max = 20 * job->vrate / job->vrate_base;
-    param.i_log_level  = X264_LOG_NONE;
+    param.i_log_level  = X264_LOG_INFO;
 	if( job->h264_level )
 	{
 	param.i_threads   = 1;
@@ -72,6 +72,69 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
 	/* Slightly faster with minimal quality lost */
 	param.analyse.i_subpel_refine = 4;
+
+	/* 	This section passes the string x264opts to libx264 for parsing into parameter names and values.
+
+	The string is set up like this:
+	option1=value1:option2=value 2
+
+	So, you have to iterate through based on the colons, and then put the left side of the equals sign in "name"
+	and the right side into "value." Then you hand those strings off to x264 for interpretation.
+
+	This is all based on the universal x264 option handling Loren Merritt implemented in the Mplayer/Mencoder project.
+	*/
+ 
+	char *x264opts = job->x264opts;
+	if(x264opts != NULL && *x264opts != '\0')
+	{
+		while(*x264opts)
+		{
+	    	char *name = x264opts;
+	    	char *value;
+	    	int ret;
+
+	    	x264opts += strcspn(x264opts, ":");
+	    	if(*x264opts)
+	   		{
+	       		*x264opts = 0;
+	       		x264opts++;
+	   		}
+
+	    	value = strchr( name, '=' );
+	    	if(value)
+	   		{
+	        	*value = 0;
+	        	value++;
+	   		}
+		
+			/*
+				When B-frames are enabled, the max frame count increments by 1 (regardless of the number of B-frames).
+				If you don't change the duration of the video track when you mux, libmp4 barfs.
+				So, check if the x264opts are using B-frames, and when they are, set the boolean job->areBframes as true.
+			*/
+
+			if (!(strcmp(name, "bframes")))
+			{
+				if (atoi(value) > 0)
+				{
+					job->areBframes = 1;
+				}
+			}
+
+			/* 	Here's where the strings are passed to libx264 for parsing. */
+	    	ret = x264_param_parse(&param, name, value);
+	
+			/* 	Let x264 sanity check the options for us*/
+	    	if(ret == X264_PARAM_BAD_NAME)
+	         	hb_log("Option x264encopts: Unknown suboption %s\n", name);
+	    	if(ret == X264_PARAM_BAD_VALUE)
+	       		hb_log("Option x264encopts: Bad argument %s=%s\n", name, value ? value : "(null)");
+	    	if(ret)
+	        	return 0;
+
+			}
+		}
+
 
 	if( job->pixel_ratio )
 	{

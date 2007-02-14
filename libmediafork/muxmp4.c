@@ -62,12 +62,26 @@ static int MP4Init( hb_mux_object_t * m )
         /* Stolen from mp4creator */
         MP4SetVideoProfileLevel( m->file, 0x7F );
 
-        mux_data->track = MP4AddH264VideoTrack( m->file, job->arate,
-                MP4_INVALID_DURATION, job->width, job->height,
-                job->config.h264.sps[1], /* AVCProfileIndication */
-                job->config.h264.sps[2], /* profile_compat */
-                job->config.h264.sps[3], /* AVCLevelIndication */
-                3 );      /* 4 bytes length before each NAL unit */
+		if (job->areBframes == 1)
+		{
+			hb_log("muxmp4: Adjusting duration for B-frames");
+		    mux_data->track = MP4AddH264VideoTrack( m->file, job->arate,
+		            MP4_INVALID_DURATION+1, job->width, job->height,
+		            job->config.h264.sps[1], /* AVCProfileIndication */
+		            job->config.h264.sps[2], /* profile_compat */
+		            job->config.h264.sps[3], /* AVCLevelIndication */
+		            3 );      /* 4 bytes length before each NAL unit */			
+		}
+		else
+		{
+			hb_log("muxmp4: Using default duration as there are no B-frames");
+		mux_data->track = MP4AddH264VideoTrack( m->file, job->arate,
+		        MP4_INVALID_DURATION, job->width, job->height,
+		        job->config.h264.sps[1], /* AVCProfileIndication */
+		        job->config.h264.sps[2], /* profile_compat */
+		        job->config.h264.sps[3], /* AVCLevelIndication */
+		        3 );      /* 4 bytes length before each NAL unit */
+		}
 
         MP4AddH264SequenceParameterSet( m->file, mux_data->track,
                 job->config.h264.sps, job->config.h264.sps_length );
