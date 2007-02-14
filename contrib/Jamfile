@@ -339,7 +339,27 @@ actions LibXvidCore
     cd build/generic/ && ./configure && make libxvidcore.a &&
     cp ./=build/libxvidcore.a $CONTRIB/lib/ &&
     cp ../../src/xvid.h $CONTRIB/include/ &&
-    strip -S $CONTRIB/lib/libxvidcore.a && touch $CONTRIB/.contrib
+    strip -S $CONTRIB/lib/libxvidcore.a
 }
 Wget        $(SUBDIR)/xvidcore.tar.gz   : $(SUBDIR)/version_xvidcore.txt ;
 LibXvidCore $(SUBDIR)/lib/libxvidcore.a : $(SUBDIR)/xvidcore.tar.gz ;
+
+# zlib
+if $(OS) = CYGWIN
+{
+rule Zlib
+{
+    Depends $(<) : $(>) ;
+    Depends lib  : $(<) ;
+}
+actions Zlib
+{
+    cd `dirname $(>)` && CONTRIB=`pwd` &&
+    rm -rf zlib && tar xzf zlib.tar.gz &&
+    cd zlib && 
+    ./configure --prefix=$CONTRIB && make && make install &&
+    strip -S $CONTRIB/lib/libz.a && touch $CONTRIB/.contrib
+}
+Wget        $(SUBDIR)/zlib.tar.gz   : $(SUBDIR)/version_zlib.txt ;
+Zlib $(SUBDIR)/lib/libz.a : $(SUBDIR)/zlib.tar.gz ;
+}
