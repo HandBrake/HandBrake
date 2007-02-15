@@ -1,1 +1,1 @@
-http://download.handbrake.dynalias.com/contrib/xvidcore-1.1.2.tar.gz
+http://sr55.ashosted.com/contrib/xvidcore-1.1.2.tar.gz

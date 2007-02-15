@@ -1,1 +1,1 @@
-http://download.handbrake.dynalias.com/contrib/libdvdread-0.9.7.tar.gz
+http://sr55.ashosted.com/contrib/libdvdread-0.9.7.tar.gz
