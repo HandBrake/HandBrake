@@ -88,11 +88,12 @@ static int MP4Init( hb_mux_object_t * m )
         MP4AddH264PictureParameterSet( m->file, mux_data->track,
                 job->config.h264.pps, job->config.h264.pps_length );
 
-			if( job->h264_level == 30)
-			{
-				hb_log("About to add iPod atom");
-			 	AddIPodUUID(m->file, mux_data->track);
-			}
+		if( job->h264_level == 30)
+		{
+			hb_log("About to add iPod atom");
+			AddIPodUUID(m->file, mux_data->track);
+		}
+
     }
     else /* FFmpeg or XviD */
     {
@@ -105,6 +106,48 @@ static int MP4Init( hb_mux_object_t * m )
         MP4SetTrackESConfiguration( m->file, mux_data->track,
                 job->config.mpeg4.bytes, job->config.mpeg4.length );
     }
+
+	/* apply the anamorphic transformation matrix if needed */
+
+	if( job->pixel_ratio ) {
+
+		uint8_t* val;
+		uint8_t nval[38];
+		uint32_t *ptr32 = (uint32_t*) (nval + 2);
+		uint32_t size;
+
+		MP4GetBytesProperty(m->file, "moov.trak.tkhd.reserved3", &val, &size);
+
+		if (size == 38) {
+
+			memcpy(nval, val, size);
+
+			float width, height;
+			float widthRatio;
+			width = job->pixel_aspect_width;
+			height = job->pixel_aspect_height;
+			widthRatio = (width / height) * 0x10000;
+
+			uint32_t widthRatioInt;
+			widthRatioInt = (uint32_t)widthRatio;
+
+#ifdef WORDS_BIGENDIAN
+			ptr32[0] = widthRatioInt;
+#else
+			/* we need to switch the endianness, as the file format expects big endian */
+			ptr32[0] = ((widthRatioInt & 0x000000FF) << 24) + ((widthRatioInt & 0x0000FF00) << 8) + ((widthRatioInt & 0x00FF0000) >> 8) + ((widthRatioInt & 0xFF000000) >> 24);
+#endif
+
+			if(!MP4SetBytesProperty(m->file, "moov.trak.tkhd.reserved3", nval, size)) {
+				hb_log("Problem setting transform matrix");
+			}
+
+		}
+
+	}
+
+	/* end of transformation matrix */
+
 
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {

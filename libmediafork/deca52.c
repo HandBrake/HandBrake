@@ -74,7 +74,7 @@ int deca52Init( hb_work_object_t * w, hb_job_t * job )
 		and have turned on the "preserve 5.1" flag */
 		pv->flags_out = A52_3F2R | A52_LFE;
 	} else if (job->channelsused == 1) {
-		/* we're going to be encoding to AAC,
+		/* we're going to be encoding to AAC, */
 		/* and want to keep the mono-ness of the source audio */
 		pv->flags_out = A52_MONO;
 	} else if (job->channelsused == 2 && job->channels == 5 && job->lfechannels == 1) {
