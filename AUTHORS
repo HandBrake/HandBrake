@@ -36,6 +36,11 @@ Rodney Hester <rhester@multics.dynalias.com> (rhester)
 Benjamin Lake <me@benlake.org> (benlake)
  + Mac OS X GUI enhancements/rewrite
 
+Chris Lee <clee@kde.org>
+ + PAR/anamorphic support
+ + dvdread enhancements
+ + Linux GUI
+
 Chris Long <chris.long@mac.com> (chrislong)
  + iPod firmware 1.2+ 640x480 MPEG-4/H.264 support
 
