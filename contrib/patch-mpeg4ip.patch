@@ -1,14 +1,13 @@
 diff -Naur mpeg4ip/lib/mp4v2/atom_tkhd.cpp mpeg4ip_patched/lib/mp4v2/atom_tkhd.cpp
 --- mpeg4ip/lib/mp4v2/atom_tkhd.cpp	2003-11-20 00:46:11.000000000 +0100
-+++ mpeg4ip_patched/lib/mp4v2/atom_tkhd.cpp	2007-02-15 14:47:43.000000000 +0100
-@@ -61,8 +61,9 @@
++++ mpeg4ip_patched/lib/mp4v2/atom_tkhd.cpp	2007-02-15 15:23:51.000000000 +0100
+@@ -61,7 +61,8 @@
  	pProp->SetFixed16Format();
  	AddProperty(pProp); /* 8 */
  
-+	/* maurj patch to allow PAR to work in QT
- 	AddReserved("reserved3", 38); /* 9 */
--
-+	*/
+-	AddReserved("reserved3", 38); /* 9 */
++	// maurj patch to allow PAR to work in QT
++	// AddReserved("reserved3", 38); /* 9 */
+ 
  	pProp = new MP4Float32Property("width");
  	pProp->SetFixed32Format();
- 	AddProperty(pProp); /* 10 */
