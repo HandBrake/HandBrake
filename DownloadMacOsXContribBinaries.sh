@@ -10,7 +10,8 @@ if [ -f contrib/DarwinContribVersion.txt ]; then
   fi
 fi
 
-HOST=download.mediafork.dynalias.com
+#HOST=download.mediafork.dynalias.com
+HOST=sr55.ashosted.com
 FILE=contribbin-darwin-$VERSION.tar.gz
 URL=http://$HOST/contrib/$FILE
 
