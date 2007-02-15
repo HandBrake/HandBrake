@@ -607,6 +607,18 @@ int hb_dvd_seek( hb_dvd_t * d, float f )
     return 1;
 }
 
+
+/***********************************************************************
+ * is_nav_pack
+ ***********************************************************************
+ * Pretty much directly lifted from libdvdread's play_title function.
+ **********************************************************************/
+int is_nav_pack( unsigned char *buf )
+{
+    return ( buf[41] == 0xbf && buf[1027] == 0xbf );
+}
+
+
 /***********************************************************************
  * hb_dvd_read
  ***********************************************************************
@@ -630,6 +642,11 @@ int hb_dvd_read( hb_dvd_t * d, hb_buffer_t * b )
             {
                 hb_log( "dvd: DVDReadBlocks failed (%d)", d->next_vobu );
                 return 0;
+            }
+
+            if ( !is_nav_pack( b->data ) ) { 
+                (d->next_vobu)++;
+                continue;
             }
 
             navRead_DSI( &dsi_pack, &b->data[DSI_START_BYTE] );
