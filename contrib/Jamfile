@@ -187,7 +187,7 @@ if $(OS) != CYGWIN
 	{
     	cd `dirname $(>)` && CONTRIB=`pwd` &&
     	rm -rf mpeg4ip && tar xzf mpeg4ip.tar.gz && cd mpeg4ip &&
-    	./bootstrap && make -C lib/mp4v2 libmp4v2.la &&
+    	./bootstrap  --disable-mp3lame --disable-faac --disable-x264 --disable-server --disable-player && make -C lib/mp4v2 libmp4v2.la &&
     	cp lib/mp4v2/.libs/libmp4v2.a $CONTRIB/lib &&
     	cp mpeg4ip_config.h include/mpeg4ip.h include/mpeg4ip_version.h \
       	include/mpeg4ip_win32.h lib/mp4v2/*.h $CONTRIB/include &&
@@ -302,6 +302,10 @@ rule LibX264
     {
         LIBX264_PATCH = " patch -p1 < ../patch-x264-cygwin.patch && " ;
     }
+    else if $(OS) = LINUX
+    {
+        LIBX264_PATCH = " patch -p1 < ../patch-x264-linux.patch && " ;
+    }
     Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
 }
@@ -339,7 +343,27 @@ actions LibXvidCore
     cd build/generic/ && ./configure && make libxvidcore.a &&
     cp ./=build/libxvidcore.a $CONTRIB/lib/ &&
     cp ../../src/xvid.h $CONTRIB/include/ &&
-    strip -S $CONTRIB/lib/libxvidcore.a && touch $CONTRIB/.contrib
+    strip -S $CONTRIB/lib/libxvidcore.a
 }
 Wget        $(SUBDIR)/xvidcore.tar.gz   : $(SUBDIR)/version_xvidcore.txt ;
 LibXvidCore $(SUBDIR)/lib/libxvidcore.a : $(SUBDIR)/xvidcore.tar.gz ;
+
+# zlib
+if $(OS) = CYGWIN
+{
+rule Zlib
+{
+    Depends $(<) : $(>) ;
+    Depends lib  : $(<) ;
+}
+actions Zlib
+{
+    cd `dirname $(>)` && CONTRIB=`pwd` &&
+    rm -rf zlib && tar xzf zlib.tar.gz &&
+    cd zlib && 
+    ./configure --prefix=$CONTRIB && make && make install &&
+    strip -S $CONTRIB/lib/libz.a && touch $CONTRIB/.contrib
+}
+Wget        $(SUBDIR)/zlib.tar.gz   : $(SUBDIR)/version_zlib.txt ;
+Zlib $(SUBDIR)/lib/libz.a : $(SUBDIR)/zlib.tar.gz ;
+}
