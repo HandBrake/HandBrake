@@ -1,7 +1,7 @@
-Index: /trunk/common/ppc/quant.c
+Index: /common/ppc/quant.c
 ===================================================================
---- /trunk/common/ppc/quant.c (revision 601)
-+++ /trunk/common/ppc/quant.c (revision 621)
+--- /common/ppc/quant.c (revision 601)
++++ /common/ppc/quant.c (revision 621)
 @@ -18,8 +18,4 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
  *****************************************************************************/
@@ -117,10 +117,10 @@ Index: /trunk/common/ppc/quant.c
 +    vect_int_u f_u;
      f_u.s[0]=f;
      fV = vec_splat(f_u.v, 0);
-Index: /trunk/common/ppc/dct.c
+Index: /common/ppc/dct.c
 ===================================================================
---- /trunk/common/ppc/dct.c (revision 604)
-+++ /trunk/common/ppc/dct.c (revision 621)
+--- /common/ppc/dct.c (revision 604)
++++ /common/ppc/dct.c (revision 621)
 @@ -61,6 +61,6 @@
      VEC_DCT( dct0v, dct1v, dct2v, dct3v, tmp0v, tmp1v, tmp2v, tmp3v );
  
@@ -167,10 +167,10 @@ Index: /trunk/common/ppc/dct.c
 +    vec_u16_t sixv = vec_splat_s16(6);
      const vec_u8_t sel = (vec_u8_t) CV(0,0,0,0,0,0,0,0,-1,-1,-1,-1,-1,-1,-1,-1);
      LOAD_ZERO;
-Index: /trunk/common/ppc/quant.h
+Index: /common/ppc/quant.h
 ===================================================================
---- /trunk/common/ppc/quant.h (revision 601)
-+++ /trunk/common/ppc/quant.h (revision 621)
+--- /common/ppc/quant.h (revision 601)
++++ /common/ppc/quant.h (revision 621)
 @@ -19,4 +19,8 @@
  *****************************************************************************/
  
