@@ -652,7 +652,7 @@ static int ParseOptions( int argc, char ** argv )
                 update = 1;
                 break;
             case 'v':
-                debug = HB_DEBUG_NONE;
+                debug = HB_DEBUG_ALL;
                 break;
             case 'C':
                 cpu = atoi( optarg );
