@@ -45,6 +45,7 @@ static int    chapter_start = 0;
 static int    chapter_end   = 0;
 static int	  crf			= 0;
 static char	  *x264opts		= NULL;
+static char	  *x264opts2 	= NULL;
 
 /* Exit cleanly on Ctrl-C */
 static volatile int die = 0;
@@ -176,6 +177,7 @@ int main( int argc, char ** argv )
     if( format ) free( format );
     if( audios ) free( audios );
 	if( x264opts ) free (x264opts );
+	if( x264opts2 ) free (x264opts2 );
 	
     fprintf( stderr, "MediaFork has exited.\n" );
 
@@ -443,6 +445,7 @@ static int HandleEvents( hb_handle_t * h )
                 job->pass = 1;
                 hb_add( h, job );
                 job->pass = 2;
+				job->x264opts = x264opts2;
                 hb_add( h, job );
             }
             else
@@ -825,6 +828,7 @@ static int ParseOptions( int argc, char ** argv )
 				break;
 			case 'x':
 			   	x264opts = strdup( optarg );
+				x264opts2 = strdup( optarg );
 			    break;
 
             default:
