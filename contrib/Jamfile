@@ -109,7 +109,8 @@ if $(OS) != CYGWIN
 # libdvdread
 rule LibDvdRead
 {
-    LIBDVDREAD_PATCH = "patch -p1 < ../patch-libdvdread.patch" ;
+    # Not needed anymore since Clee fixed the problem in dvd.c
+    # LIBDVDREAD_PATCH = "patch -p1 < ../patch-libdvdread.patch" ;
     Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
 }
@@ -119,7 +120,7 @@ if $(OS) != CYGWIN
     {
         cd `dirname $(>)` && CONTRIB=`pwd` &&
             rm -rf libdvdread && tar xzf libdvdread.tar.gz && cd libdvdread &&
-            $(LIBDVDREAD_PATCH) &&
+            # $(LIBDVDREAD_PATCH) &&
             ./configure --prefix=$CONTRIB --disable-shared --with-libdvdcss=$CONTRIB &&
             make && make install &&
             strip -S $CONTRIB/lib/libdvdread.a
@@ -132,7 +133,7 @@ else {
     {
         cd `dirname $(>)` && CONTRIB=`pwd` &&
             rm -rf libdvdread && tar xzf libdvdread.tar.gz && cd libdvdread &&
-            $(LIBDVDREAD_PATCH) &&
+            # $(LIBDVDREAD_PATCH) &&
             ./configure --prefix=$CONTRIB --disable-shared &&
             make && make install &&
             strip -S $CONTRIB/lib/libdvdread.a
