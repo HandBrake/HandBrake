@@ -333,7 +333,7 @@ static int HandleEvents( hb_handle_t * h )
                 job->height = height;
                 hb_fix_aspect( job, HB_KEEP_HEIGHT );
             }
-            else if( !pixelratio )
+            else if( !width && !height && !pixelratio )
             {
                 hb_fix_aspect( job, HB_KEEP_WIDTH );
             }
