@@ -66,8 +66,8 @@ actions LibAvCodec
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf ffmpeg && tar xzf ffmpeg.tar.gz &&
     cd ffmpeg && $(FFMPEG_PATCH) &&
-    ./configure --prefix=$CONTRIB $(FFMPEG_OPTIONS) --enable-gpl --disable-audio-beos &&
-    make lib && make install-libs install-headers &&
+    ./configure --prefix=$CONTRIB $(FFMPEG_OPTIONS) --enable-gpl --disable-audio-beos --enable-shared --enable-static&&
+    make && make install &&
     strip -S $CONTRIB/lib/libavcodec.a
 }
 Wget       $(SUBDIR)/ffmpeg.tar.gz    : $(SUBDIR)/version_ffmpeg.txt ;
@@ -152,7 +152,7 @@ actions LibFaac
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf faac && tar xzf faac.tar.gz && cd faac &&
-    ./configure --prefix=$CONTRIB --disable-shared &&
+    ./configure --prefix=$CONTRIB --enable-shared --enable-static &&
     make && make install &&
     strip -S $CONTRIB/lib/libfaac.a
 }
@@ -381,8 +381,9 @@ actions LibQT
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf libquicktime && tar xzf libquicktime.tar.gz &&
-    cd libquicktime && 
-     ./configure --prefix=$CONTRIB --enable-static --disable-shared && make && make install &&
+    export LDFLAGS="$LDFLAGS -L$CONTRIB/lib -I$CONTRIB/include" && export CPPFLAGS="$CPPFLAGS -I$CONTRIB/include"
+    cd libquicktime &&  patch -p1 < ../patch-libquicktime.patch &&
+     ./configure --prefix=$CONTRIB --enable-static --disable-shared --enable-gpl --with-faac=$CONTRIB --with-x264=$CONTRIB --with-avcodec=$CONTRIB && make && make install &&
     strip -S $CONTRIB/lib/libquicktime.a && touch $CONTRIB/.contrib
 }
 Wget        $(SUBDIR)/libquicktime.tar.gz   : $(SUBDIR)/version_qt.txt ;
