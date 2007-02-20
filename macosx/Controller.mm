@@ -708,7 +708,7 @@ static int FormatSettings[3][4] =
 	        }
 		
 		/* Sends x264 options to the core library*/
-		job->x264opts = [[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] cString];
+		job->x264opts = strdup([[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] cString]);
 		
 		
         job->h264_13 = [fVidEncoderPopUp indexOfSelectedItem];
@@ -794,6 +794,7 @@ static int FormatSettings[3][4] =
         job->pass = 1;
         hb_add( fHandle, job );
         job->pass = 2;
+		job->x264opts = strdup([[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] cString]);
         hb_add( fHandle, job );
     }
     else
