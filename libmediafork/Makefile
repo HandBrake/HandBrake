@@ -18,7 +18,7 @@ endif
  	
 ifeq ($(SYSTEM),Linux)
 	SYSDEF = -DSYS_LINUX
-	LDFLAGS += -lpthread -lm
+	LDFLAGS += -lpthread -lm -ldl
 endif
 
 SRCS = common.c mediafork.c ports.c scan.c work.c decmpeg2.c encavcodec.c \
@@ -32,7 +32,7 @@ OBJS = $(OTMP:%.cpp=%.o)
 ifeq ($(SYSTEM),CYGWIN_NT-5.1)
 CONTRIBS = ../contrib/lib/liba52.a ../contrib/lib/libavformat.a \
            ../contrib/lib/libavcodec.a ../contrib/lib/libavutil.a \
-           ../contrib/lib/libdvdread.a ../contrib/lib/libdquicktime.a \
+           ../contrib/lib/libdvdread.a ../contrib/lib/libquicktime.a \
            ../contrib/lib/libfaac.a ../contrib/lib/libmp3lame.a \
            ../contrib/lib/libmpeg2.a ../contrib/lib/libmpeg2convert.a \
            ../contrib/lib/libvorbis.a ../contrib/lib/libvorbisenc.a \
@@ -43,7 +43,7 @@ else
 CONTRIBS = ../contrib/lib/liba52.a ../contrib/lib/libavformat.a \
            ../contrib/lib/libavcodec.a ../contrib/lib/libavutil.a \
            ../contrib/lib/libdvdread.a ../contrib/lib/libdvdcss.a \
-           ../contrib/lib/libdquicktime.a \
+           ../contrib/lib/libquicktime.a \
            ../contrib/lib/libfaac.a ../contrib/lib/libmp3lame.a \
            ../contrib/lib/libmpeg2.a ../contrib/lib/libmpeg2convert.a \
            ../contrib/lib/libvorbis.a ../contrib/lib/libvorbisenc.a \
