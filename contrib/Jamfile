@@ -383,7 +383,7 @@ actions LibQT
     rm -rf libquicktime && tar xzf libquicktime.tar.gz &&
     export LDFLAGS="$LDFLAGS -L$CONTRIB/lib -I$CONTRIB/include" && export CPPFLAGS="$CPPFLAGS -I$CONTRIB/include"
     cd libquicktime &&  patch -p1 < ../patch-libquicktime.patch &&
-     ./configure --prefix=$CONTRIB --enable-static --disable-shared --enable-gpl --with-faac=$CONTRIB --with-x264=$CONTRIB --with-avcodec=$CONTRIB && make && make install &&
+     ./configure --prefix=$CONTRIB --enable-static --enable-shared --enable-gpl --with-faac=$CONTRIB --with-x264=$CONTRIB --with-avcodec=$CONTRIB && make && make install &&
     strip -S $CONTRIB/lib/libquicktime.a && touch $CONTRIB/.contrib
 }
 Wget        $(SUBDIR)/libquicktime.tar.gz   : $(SUBDIR)/version_qt.txt ;
