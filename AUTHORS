@@ -1,6 +1,4 @@
-AUTHORS file for MediaFork <http://mediafork.dynalias.com/>
-
-Originally forked from HandBrake <http://handbrake.m0k.org/>
+AUTHORS file for HandBrake <http://handbrake.m0k.org/>
 
 Eric Petit <titer@m0k.org>
  + Core (construct, multithreading, BeOS/OS X/Linux ports)
