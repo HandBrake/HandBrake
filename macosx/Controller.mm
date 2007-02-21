@@ -94,7 +94,60 @@ static int FormatSettings[3][4] =
 
     [self TranslateStrings];
 
-    /* Destination box */
+	/* Init User Presets .plist */
+	/* We declare the default NSFileManager into fileManager */
+	NSFileManager * fileManager = [NSFileManager defaultManager];
+	//presetPrefs = [[NSUserDefaults standardUserDefaults] retain];
+	/* we set the files and support paths here */
+	AppSupportDirectory = @"~/Library/Application Support/MediaFork";
+    AppSupportDirectory = [AppSupportDirectory stringByExpandingTildeInPath];
+    
+	UserPresetsFile = @"~/Library/Application Support/MediaFork/presets.plist";
+    UserPresetsFile = [UserPresetsFile stringByExpandingTildeInPath];
+	
+	x264ProfilesFile = @"~/Library/Application Support/MediaFork/x264profiles.plist";
+    x264ProfilesFile = [x264ProfilesFile stringByExpandingTildeInPath];
+	/* We check for the app support directory for media fork */
+	if ([fileManager fileExistsAtPath:AppSupportDirectory] == 0) 
+	{
+		// If it doesnt exist yet, we create it here 
+		[fileManager createDirectoryAtPath:AppSupportDirectory attributes:nil];
+	}
+	// We check for the presets.plist here
+	
+	if ([fileManager fileExistsAtPath:UserPresetsFile] == 0) 
+	{
+
+		[fileManager createFileAtPath:UserPresetsFile contents:nil attributes:nil];
+		
+	}
+	// We check for the x264profiles.plist here
+	 
+	if ([fileManager fileExistsAtPath:x264ProfilesFile] == 0) 
+	{
+        
+		[fileManager createFileAtPath:x264ProfilesFile contents:nil attributes:nil];
+	}
+    
+	
+  UserPresetsFile = @"~/Library/Application Support/MediaFork/presets.plist";
+  UserPresetsFile = [[UserPresetsFile stringByExpandingTildeInPath]retain];
+
+  UserPresets = [[NSMutableArray alloc] initWithContentsOfFile:UserPresetsFile];
+  if (nil == UserPresets) 
+  {
+    UserPresets = [[NSMutableArray alloc] init];
+  }
+  /* Show/Dont Show Presets drawer upon launch based
+  on user preference DefaultPresetsDrawerShow*/
+if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow"] > 0)
+		{
+			[fPresetDrawer open];
+		}
+
+
+
+    /* Destination box*/
     [fDstFormatPopUp removeAllItems];
     [fDstFormatPopUp addItemWithTitle: _( @"MP4 file" )];
     [fDstFormatPopUp addItemWithTitle: _( @"AVI file" )];
@@ -168,7 +221,11 @@ static int FormatSettings[3][4] =
     [self EnableUI: NO];
     [fPauseButton setEnabled: NO];
     [fRipButton setEnabled: NO];
+
+
+
 }
+
 
 - (void) TranslateStrings
 {
@@ -315,11 +372,13 @@ static int FormatSettings[3][4] =
 				
 				/* Use the dvd name in the default output field here 
 				May want to add code to remove blank spaces for some dvd names*/
-				
 				[fDstFile2Field setStringValue: [NSString stringWithFormat:
                 @"%@/Desktop/%@.mp4", NSHomeDirectory(),[NSString
                   stringWithUTF8String: title->name]]];
-                /* Temporarily comment out to fix title selection*/   
+				[fDstFile2Field setStringValue: [NSString stringWithFormat:
+                @"%@/Desktop/%@.mp4", NSHomeDirectory(),[NSString
+                  stringWithUTF8String: title->name]]];
+                  
                 if (longuestpri < title->hours*60*60 + title->minutes *60 + title->seconds)
                 {
                 	longuestpri=title->hours*60*60 + title->minutes *60 + title->seconds;
@@ -794,7 +853,7 @@ static int FormatSettings[3][4] =
         job->pass = 1;
         hb_add( fHandle, job );
         job->pass = 2;
-		job->x264opts = strdup([[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] cString]);
+		  job->x264opts = strdup([[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] cString]);
         hb_add( fHandle, job );
     }
     else
@@ -1357,6 +1416,207 @@ static int FormatSettings[3][4] =
             [fVidTargetSizeField intValue] )];
 }
 
+- (IBAction) ShowAddPresetPanel: (id) sender
+{
+    /* Update the OutlineView */
+    //[fQueueController Update: sender];
+
+    /* Show the panel */
+    [NSApp beginSheet: fAddPresetPanel modalForWindow: fWindow
+        modalDelegate: NULL didEndSelector: NULL contextInfo: NULL];
+    [NSApp runModalForWindow: fAddPresetPanel];
+    [NSApp endSheet: fAddPresetPanel];
+    [fAddPresetPanel orderOut: self];
+}
+- (IBAction) CloseAddPresetPanel: (id) sender
+{
+    [NSApp stopModal];
+}
+
+- (IBAction)addPreset:(id)sender
+{
+    [UserPresets addObject:[self CreatePreset]];
+	
+	/* We stop the modal window for the new preset */
+	[fPresetNewName    setStringValue: @""];
+	[NSApp stopModal];
+	/* We Reload the New Table data for presets */
+    [tableView reloadData];
+   /* We save all of the preset data here */
+    [self savePreset];
+}
+- (NSDictionary *)CreatePreset
+{
+    NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
+	/* Get the New Preset Name from the field in the AddPresetPanel */
+    [preset setObject:[fPresetNewName stringValue] forKey:@"PresetName"];
+	/* File Format */
+    [preset setObject:[fDstFormatPopUp titleOfSelectedItem] forKey:@"FileFormat"];
+	/* Codecs */
+	[preset setObject:[fDstCodecsPopUp titleOfSelectedItem] forKey:@"FileCodecs"];
+	/* Video encoder */
+	[preset setObject:[fVidEncoderPopUp titleOfSelectedItem] forKey:@"VideoEncoder"];
+	/* Video quality */
+	[preset setObject:[NSNumber numberWithInt:[fVidQualityMatrix selectedRow]] forKey:@"VideoQualityType"];
+	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
+	[preset setObject:[fVidBitrateField stringValue] forKey:@"VideoAvgBitrate"];
+	[preset setObject:[NSNumber numberWithFloat:[fVidQualitySlider floatValue]] forKey:@"VideoQualitySlider"];
+	
+	/* Video framerate */
+	[preset setObject:[fVidRatePopUp titleOfSelectedItem] forKey:@"VideoFramerate"];
+	/* GrayScale */
+	[preset setObject:[NSNumber numberWithInt:[fVidGrayscaleCheck state]] forKey:@"VideoGrayScale"];
+	/* 2 Pass Encoding */
+	[preset setObject:[NSNumber numberWithInt:[fVidTwoPassCheck state]] forKey:@"VideoTwoPass"];
+	
+	/*Audio*/
+	/* Audio Language One*/
+	[preset setObject:[fAudLang1PopUp titleOfSelectedItem] forKey:@"AudioLang1"];
+	/* Audio Language One Surround Sound Checkbox*/
+	[preset setObject:[NSNumber numberWithInt:[fAudLang1SurroundCheck state]] forKey:@"AudioLang1Surround"];
+	/* Audio Sample Rate*/
+	[preset setObject:[fAudRatePopUp titleOfSelectedItem] forKey:@"AudioSampleRate"];
+	/* Audio Bitrate Rate*/
+	[preset setObject:[fAudBitratePopUp titleOfSelectedItem] forKey:@"AudioBitRate"];
+	/* Subtitles*/
+	[preset setObject:[fSubPopUp titleOfSelectedItem] forKey:@"Subtitles"];
+	
+
+    [preset autorelease];
+    return preset;
+
+}
+
+- (IBAction)deletePreset:(id)sender
+{
+    int status;
+    NSEnumerator *enumerator;
+    NSNumber *index;
+    NSMutableArray *tempArray;
+    id tempObject;
+    
+    if ( [tableView numberOfSelectedRows] == 0 )
+        return;
+    /* Alert user before deleting preset */
+	/* Comment out for now, tie to user pref eventually */
+    NSBeep();
+    status = NSRunAlertPanel(@"Warning!", @"Are you sure that you want to delete the selected preset?", @"OK", @"Cancel", nil);
+    
+    if ( status == NSAlertDefaultReturn ) {
+        enumerator = [tableView selectedRowEnumerator];
+        tempArray = [NSMutableArray array];
+        
+        while ( (index = [enumerator nextObject]) ) {
+            tempObject = [UserPresets objectAtIndex:[index intValue]];
+            [tempArray addObject:tempObject];
+        }
+        
+        [UserPresets removeObjectsInArray:tempArray];
+        [tableView reloadData];
+        [self savePreset];   
+    }
+}
+- (IBAction)tableViewSelected:(id)sender
+{
+
+    /* we get the chosen preset from the UserPresets array */
+	chosenPreset = [UserPresets objectAtIndex:[sender selectedRow]];
+	/* we set the preset display field in main window here */
+	[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@", [chosenPreset valueForKey:@"PresetName"]]];
+	/* File Format */
+	[fDstFormatPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileFormat"]]];
+	[self FormatPopUpChanged: NULL];
+    /* Codecs */
+	[fDstCodecsPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]]];
+	[self CodecsPopUpChanged: NULL];
+	/* Video encoder */
+	[fVidEncoderPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]]];
+	/* Lets run through the following functions to get variables set there */
+	[self EncoderPopUpChanged: sender];
+	[self Check6ChannelAACExtraction: sender];
+	[self CalculateBitrate: sender];
+	
+	/* Video quality */
+	[fVidQualityMatrix selectCellAtRow:[[chosenPreset objectForKey:@"VideoQualityType"] intValue] column:0];
+	
+	[fVidTargetSizeField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoTargetSize"]]];
+	//[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
+	[fVidBitrateField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoAvgBitrate"]]];
+	       //[preset setObject:[fVidBitrateField stringValue] forKey:@"VideoAvgBitrate"];
+	// TO DO: NEED TO SET THE QUALITY SLIDER WITH FLOAT VALUE, I THINK
+	[fVidQualitySlider setFloatValue: [[chosenPreset valueForKey:@"VideoQualitySlider"] floatValue]];
+		          //[preset setObject:[NSNumber numberWithInt:[fVidQualitySlider floatValue]] forKey:@"VideoQualitySlider"];
+	[self VideoMatrixChanged: sender];
+	
+	/* Video framerate */
+	[fVidRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoFramerate"]]];
+	
+	/* GrayScale */
+	[fVidGrayscaleCheck setState:[[chosenPreset objectForKey:@"VideoGrayScale"] intValue]];
+	//[preset setObject:[NSNumber numberWithInt:[fVidGrayscaleCheck state]] forKey:@"VideoGrayScale"];
+	/* 2 Pass Encoding */
+	[fVidTwoPassCheck setState:[[chosenPreset objectForKey:@"VideoTwoPass"] intValue]];
+	//[preset setObject:[NSNumber numberWithInt:[fVidTwoPassCheck state]] forKey:@"VideoTwoPass"];
+	
+	/*Audio*/
+	/* Audio Language One*/
+	[fAudLang1PopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioLang1"]]];
+	/* Audio Language One Surround Sound Checkbox*/
+	[fAudLang1SurroundCheck setState:[[chosenPreset objectForKey:@"AudioLang1Surround"] intValue]];
+	[self Check6ChannelAACExtraction: sender];
+	/* Audio Sample Rate*/
+	[fAudRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioSampleRate"]]];
+	/* Audio Bitrate Rate*/
+	[fAudBitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioBitRate"]]];
+	/*Subtitles*/
+	[fSubPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Subtitles"]]];
+	
+}
+
+- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+{
+    return [UserPresets count];
+}
+
+- (id)tableView:(NSTableView *)aTableView
+      objectValueForTableColumn:(NSTableColumn *)aTableColumn
+      row:(int)rowIndex
+{
+    
+	//Lets sort UserPresets here if we can
+	
+	
+	id theRecord, theValue;
+    
+    theRecord = [UserPresets objectAtIndex:rowIndex];
+    theValue = [theRecord objectForKey:[aTableColumn identifier]];
+    
+    return theValue;
+}
+
+// NSTableDataSource method that we implement to edit values directly in the table...
+- (void)tableView:(NSTableView *)aTableView
+        setObjectValue:(id)anObject
+        forTableColumn:(NSTableColumn *)aTableColumn
+        row:(int)rowIndex
+{
+    id theRecord;
+    
+    theRecord = [UserPresets objectAtIndex:rowIndex];
+    [theRecord setObject:anObject forKey:[aTableColumn identifier]];
+    
+    // Don't forget to save the changes
+    //[self savePreset];
+}
+
+
+- (void)savePreset
+{
+    [UserPresets writeToFile:UserPresetsFile atomically:YES];
+
+}
+
+
 - (void) controlTextDidBeginEditing: (NSNotification *) notification
 {
     [self CalculateBitrate: NULL];
@@ -1383,5 +1643,7 @@ static int FormatSettings[3][4] =
     [[NSWorkspace sharedWorkspace] openURL: [NSURL
         URLWithString:@"http://mediafork.dynalias.com/forum/"]];
 }
+
+
 
 @end

@@ -120,6 +120,25 @@
     IBOutlet NSButton            * fPauseButton;
     IBOutlet NSButton            * fRipButton;
 
+	/* User Preset variables here*/
+	
+	IBOutlet NSDrawer            * fPresetDrawer;
+	IBOutlet NSTextField         * fPresetNewName;
+	IBOutlet NSTextField         * fPresetSelectedDisplay;
+	
+	NSString * AppSupportDirectory;
+	NSString * UserPresetsFile;
+	NSString * x264ProfilesFile;
+	NSMutableArray * UserPresets;
+	NSMutableArray * x264Profiles;
+	NSMutableArray *UserPresetssortedArray;
+	NSMutableDictionary * chosenPreset;
+
+	
+    IBOutlet NSPanel            * fAddPresetPanel;
+	IBOutlet NSTableView         * tableView;
+	IBOutlet NSButton            * fPresetsAdd;
+	IBOutlet NSButton            * fPresetsDelete;
     hb_handle_t                  * fHandle;
 	hb_title_t                   * fTitle;
 }
@@ -172,6 +191,26 @@
 
 - (IBAction) OpenHomepage: (id) sender;
 - (IBAction) OpenForums:   (id) sender;
+
+// Preset Methods Here
+
+- (IBAction) ShowAddPresetPanel: (id) sender;
+- (IBAction) CloseAddPresetPanel: (id) sender;
+- (NSDictionary *)CreatePreset;  
+
+- (void) savePreset;
+- (IBAction)addPreset:(id)sender;
+- (IBAction)deletePreset:(id)sender;
+- (IBAction)tableViewSelected:(id)sender;
+// NSTableDataSource methods
+- (int)numberOfRowsInTableView:(NSTableView *)aTableView;
+- (id)tableView:(NSTableView *)aTableView
+      objectValueForTableColumn:(NSTableColumn *)aTableColumn
+      row:(int)rowIndex;
+- (void)tableView:(NSTableView *)aTableView
+        setObjectValue:(id)anObject
+        forTableColumn:(NSTableColumn *)aTableColumn
+        row:(int)rowIndex;
 
 @end
 

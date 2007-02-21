@@ -28,13 +28,14 @@
                    forKey:@"DefaultSurroundSound"];
 	appDefaults = [NSDictionary dictionaryWithObject:@""
                    forKey:@"DefAdvancedx264Flags"];
+	appDefaults = [NSDictionary dictionaryWithObject:@"YES"
+                   forKey:@"DefaultPresetsDrawerShow"];
 	
     [defaults registerDefaults: appDefaults];
 
 	/* fUpdateCheck Check or uncheck according to the preferences */
     [fUpdateCheck setState: [defaults boolForKey:@"CheckForUpdates"] ?
         NSOnState : NSOffState];
-	
 
 	// Fill the languages combobox
     [fdefaultlanguage removeAllItems];
@@ -240,6 +241,9 @@
 		
 	/* Insert default DefAdvanced x264 Flag here */
 	[fDefAdvancedx264FlagsView setString:[defaults stringForKey:@"DefAdvancedx264Flags"]];
+	
+	
+	
 }
 
 
@@ -344,6 +348,18 @@
 		
 	/*Advanced x264 Flag string into */
       [defaults setObject:[fDefAdvancedx264FlagsView string]  forKey:@"DefAdvancedx264Flags"];	
+	  
+	    /* Show Presets Drawer upon launch*/
+	
+	if( [fDefPresetDrawerShow state] == NSOnState )
+    {
+        [defaults setObject:@"YES" forKey:@"DefaultPresetsDrawerShow"];
+    }
+    else
+    {
+        [defaults setObject:@"NO" forKey:@"DefaultPresetsDrawerShow"];
+    }
+
 }
 
 @end

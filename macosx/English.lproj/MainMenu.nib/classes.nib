@@ -7,26 +7,33 @@
                 CalculateBitrate = id; 
                 Cancel = id; 
                 ChapterPopUpChanged = id; 
+                CloseAddPresetPanel = id; 
                 CodecsPopUpChanged = id; 
                 EnableQueue = id; 
                 EncoderPopUpChanged = id; 
                 FormatPopUpChanged = id; 
+                InsertPreset = id; 
                 LanguagePopUpChanged = id; 
                 OpenForums = id; 
                 OpenHomepage = id; 
                 Pause = id; 
                 QualitySliderChanged = id; 
                 Rip = id; 
+                ShowAddPresetPanel = id; 
                 ShowPicturePanel = id; 
                 ShowQueuePanel = id; 
                 ShowScanPanel = id; 
                 TitlePopUpChanged = id; 
                 VideoMatrixChanged = id; 
+                addPreset = id; 
+                deletePreset = id; 
+                tableViewSelected = id; 
             }; 
             CLASS = HBController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
-                fAddToQuButton = NSButton; 
+                fAddPresetPanel = NSPanel; 
+                fAddToQuButton = NSTableView; 
                 fAudBitrateField = NSTextField; 
                 fAudBitratePopUp = NSPopUpButton; 
                 fAudLang1Field = NSTextField; 
@@ -69,6 +76,11 @@
                 fPictureButton = NSButton; 
                 fPictureController = PictureController; 
                 fPicturePanel = NSPanel; 
+                fPresetDrawer = NSDrawer; 
+                fPresetNewName = NSTextField; 
+                fPresetSelectedDisplay = NSTextField; 
+                fPresetsAdd = NSButton; 
+                fPresetsDelete = NSButton; 
                 fQueueAddButton = NSButton; 
                 fQueueCheck = NSButton; 
                 fQueueController = QueueController; 
@@ -107,6 +119,7 @@
                 fVidTargetSizeField = NSTextField; 
                 fVidTwoPassCheck = NSButton; 
                 fWindow = NSWindow; 
+                tableView = NSTableView; 
             }; 
             SUPERCLASS = NSObject; 
         }, 
@@ -169,12 +182,13 @@
             CLASS = PrefsController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
-                fDefAdvancedx264FlagsView = NSTextView; 
+                fDefAdvancedx264FlagsView = NSButton; 
                 fDefAudioSurround = NSButton; 
                 fDefCrf = NSButton; 
                 fDefDeinterlace = NSButton; 
                 fDefPicSizeAutoSetipod = NSButton; 
                 fDefPixelRatio = NSButton; 
+                fDefPresetDrawerShow = id; 
                 fFileExtItunes = NSButton; 
                 fPanel = NSPanel; 
                 fUpdateCheck = NSButton; 
