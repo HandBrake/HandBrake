@@ -1432,6 +1432,12 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 - (IBAction)addPreset:(id)sender
 {
     [UserPresets addObject:[self CreatePreset]];
+	/* We Sort the Presets Alphabetically by name */
+	NSSortDescriptor * lastNameDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"PresetName" 
+                                                    ascending:YES] autorelease];
+	NSArray *sortDescriptors=[NSArray arrayWithObject:lastNameDescriptor];
+	NSArray *sortedArray=[UserPresets sortedArrayUsingDescriptors:sortDescriptors];
+	[UserPresets setArray:sortedArray];
 	
 	/* We stop the modal window for the new preset */
 	[fPresetNewName    setStringValue: @""];
