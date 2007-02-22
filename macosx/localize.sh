@@ -26,7 +26,7 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
         <key>CFBundleIconFile</key>
         <string>HandBrake</string>
         <key>CFBundleIdentifier</key>
-        <string>org.mediafork.dynalias</string>
+        <string>org.m0k.handbrake</string>
         <key>CFBundleInfoDictionaryVersion</key>
         <string>6.0</string>
         <key>CFBundleName</key>
