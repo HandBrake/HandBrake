@@ -6,7 +6,7 @@
 
 #include <Cocoa/Cocoa.h>
 
-#include "mediafork.h"
+#include "hb.h"
 
 #define HB_ANIMATE_NONE     1
 #define HB_ANIMATE_BACKWARD 2

@@ -6,7 +6,7 @@
 
 #include <Cocoa/Cocoa.h>
 
-#include "mediafork.h"
+#include "hb.h"
 #include "PictureGLView.h"
 
 @interface PictureController : NSObject

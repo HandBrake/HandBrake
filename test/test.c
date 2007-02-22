@@ -10,7 +10,7 @@
 #include <time.h>
 #include <unistd.h>
 
-#include "mediafork.h"
+#include "hb.h"
 
 /* Options */
 static int    debug       = HB_DEBUG_NONE;
@@ -75,7 +75,7 @@ int main( int argc, char ** argv )
     h = hb_init( debug, update );
 
     /* Show version */
-    fprintf( stderr, "MediaFork %s (%d) - http://mediafork.dynalias.com/\n",
+    fprintf( stderr, "HandBrake %s (%d) - http://mediafork.dynalias.com/\n",
              hb_get_version( h ), hb_get_build( h ) );
 
     /* Check for update */
@@ -84,12 +84,12 @@ int main( int argc, char ** argv )
         if( ( build = hb_check_update( h, &version ) ) > -1 )
         {
             fprintf( stderr, "You are using an old version of "
-                     "MediaFork.\nLatest is %s (build %d).\n", version,
+                     "HandBrake.\nLatest is %s (build %d).\n", version,
                      build );
         }
         else
         {
-            fprintf( stderr, "Your version of MediaFork is up to "
+            fprintf( stderr, "Your version of HandBrake is up to "
                      "date.\n" );
         }
         hb_close( &h );
@@ -179,7 +179,7 @@ int main( int argc, char ** argv )
 	if( x264opts ) free (x264opts );
 	if( x264opts2 ) free (x264opts2 );
 	
-    fprintf( stderr, "MediaFork has exited.\n" );
+    fprintf( stderr, "HandBrake has exited.\n" );
 
     return 0;
 }
@@ -188,7 +188,7 @@ static void ShowCommands()
 {
     fprintf( stderr, "Commands:\n" );
     fprintf( stderr, " [h]elp    Show this message\n" );
-    fprintf( stderr, " [q]uit    Exit MediaForkCLI\n" );
+    fprintf( stderr, " [q]uit    Exit HandBrakeCLI\n" );
     fprintf( stderr, " [p]ause   Pause encoding\n" );
     fprintf( stderr, " [r]esume  Resume encoding\n" );
 }
@@ -528,7 +528,7 @@ static void ShowHelp()
     int i;
     
     fprintf( stderr,
-    "Syntax: MediaForkCLI [options] -i <device> -o <file>\n"
+    "Syntax: HandBrakeCLI [options] -i <device> -o <file>\n"
     "\n"
     "    -h, --help              Print help\n"
     "    -u, --update            Check for updates and exit\n"
