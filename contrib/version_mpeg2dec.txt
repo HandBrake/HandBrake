@@ -1,1 +1,1 @@
-http://sr55.ashosted.com/contrib/mpeg2dec-0.4.1.tar.gz
+http://download.mediafork.dynalias.com/contrib/mpeg2dec-0.4.1.tar.gz

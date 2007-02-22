@@ -1,1 +1,1 @@
-http://sr55.ashosted.com/contrib/libdvdcss-1.2.9.tar.gz
+http://download.mediafork.dynalias.com/contrib/libdvdcss-1.2.9.tar.gz

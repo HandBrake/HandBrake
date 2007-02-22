@@ -1,1 +1,1 @@
-http://sr55.ashosted.com/contrib/faac-1.24.tar.gz
+http://download.mediafork.dynalias.com/contrib/faac-1.24.tar.gz

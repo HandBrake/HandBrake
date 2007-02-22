@@ -1,1 +1,1 @@
-http://sr55.ashosted.com/contrib/libogg-1.1.2.tar.gz
+http://download.mediafork.dynalias.com/contrib/libogg-1.1.2.tar.gz
