@@ -20,7 +20,7 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
         <key>CFBundleDisplayName</key>
         <string>HandBrake</string>
         <key>CFBundleExecutable</key>
-        <string>HandBrake</string>
+        <string>MediaFork</string>
         <key>CFBundleGetInfoString</key>
         <string>0.8.0b1</string>
         <key>CFBundleIconFile</key>
