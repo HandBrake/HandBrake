@@ -129,7 +129,7 @@
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0D096DFF0B707D1200A845D4 /* libhb.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libhb.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
-		0D6E35760B6BD4F0005AABB3 /* HandBrake.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = HandBrake.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0D6E35760B6BD4F0005AABB3 /* HandBrake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HandBrake.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DF377970B7BF99A00115CB0 /* fakexcode.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = fakexcode.cpp; path = ../test/fakexcode.cpp; sourceTree = SOURCE_ROOT; };
 		0DFA5C7A0B8DD1E90020BC09 /* HandBrake.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = HandBrake.icns; sourceTree = "<group>"; };
 		0DFA5C7E0B8DD3B60020BC09 /* declpcm.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = declpcm.c; path = ../libhb/declpcm.c; sourceTree = SOURCE_ROOT; };

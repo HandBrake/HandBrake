@@ -99,13 +99,13 @@ static int FormatSettings[3][4] =
 	NSFileManager * fileManager = [NSFileManager defaultManager];
 	//presetPrefs = [[NSUserDefaults standardUserDefaults] retain];
 	/* we set the files and support paths here */
-	AppSupportDirectory = @"~/Library/Application Support/MediaFork";
+	AppSupportDirectory = @"~/Library/Application Support/HandBrake";
     AppSupportDirectory = [AppSupportDirectory stringByExpandingTildeInPath];
     
-	UserPresetsFile = @"~/Library/Application Support/MediaFork/presets.plist";
+	UserPresetsFile = @"~/Library/Application Support/HandBrake/UserPresets.plist";
     UserPresetsFile = [UserPresetsFile stringByExpandingTildeInPath];
 	
-	x264ProfilesFile = @"~/Library/Application Support/MediaFork/x264profiles.plist";
+	x264ProfilesFile = @"~/Library/Application Support/HandBrake/x264Profiles.plist";
     x264ProfilesFile = [x264ProfilesFile stringByExpandingTildeInPath];
 	/* We check for the app support directory for media fork */
 	if ([fileManager fileExistsAtPath:AppSupportDirectory] == 0) 
@@ -130,7 +130,7 @@ static int FormatSettings[3][4] =
 	}
     
 	
-  UserPresetsFile = @"~/Library/Application Support/MediaFork/presets.plist";
+  UserPresetsFile = @"~/Library/Application Support/HandBrake/UserPresets.plist";
   UserPresetsFile = [[UserPresetsFile stringByExpandingTildeInPath]retain];
 
   UserPresets = [[NSMutableArray alloc] initWithContentsOfFile:UserPresetsFile];
