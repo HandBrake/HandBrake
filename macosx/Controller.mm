@@ -372,12 +372,11 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 				
 				/* Use the dvd name in the default output field here 
 				May want to add code to remove blank spaces for some dvd names*/
+				
 				[fDstFile2Field setStringValue: [NSString stringWithFormat:
                 @"%@/Desktop/%@.mp4", NSHomeDirectory(),[NSString
                   stringWithUTF8String: title->name]]];
-				[fDstFile2Field setStringValue: [NSString stringWithFormat:
-                @"%@/Desktop/%@.mp4", NSHomeDirectory(),[NSString
-                  stringWithUTF8String: title->name]]];
+				
                   
                 if (longuestpri < title->hours*60*60 + title->minutes *60 + title->seconds)
                 {
@@ -681,7 +680,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
     if( returnCode == NSOKButton )
     {
         [fDstFile2Field setStringValue: [sheet filename]];
-        [self FormatPopUpChanged: NULL];
+		[self FormatPopUpChanged: NULL];
     }
 }
 
@@ -1418,9 +1417,6 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 
 - (IBAction) ShowAddPresetPanel: (id) sender
 {
-    /* Update the OutlineView */
-    //[fQueueController Update: sender];
-
     /* Show the panel */
     [NSApp beginSheet: fAddPresetPanel modalForWindow: fWindow
         modalDelegate: NULL didEndSelector: NULL contextInfo: NULL];
@@ -1522,7 +1518,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
     /* we get the chosen preset from the UserPresets array */
 	chosenPreset = [UserPresets objectAtIndex:[sender selectedRow]];
 	/* we set the preset display field in main window here */
-	[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@", [chosenPreset valueForKey:@"PresetName"]]];
+	//[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@", [chosenPreset valueForKey:@"PresetName"]]];
 	/* File Format */
 	[fDstFormatPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileFormat"]]];
 	[self FormatPopUpChanged: NULL];
