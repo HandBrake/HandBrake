@@ -17,7 +17,7 @@ mrproper:
 	(rm -rf contrib/*tar.gz contrib/include contrib/lib contrib/DarwinContribVersion.txt ; cd macosx ; xcodebuild -alltargets -configuration UB clean | sed '/^$$/d' )
 
 release:
-	(rm -rf MediaFork MediaFork.dmg ; mkdir -p MediaFork/api MediaFork/doc; cp test/BUILDSHARED AUTHORS BUILD COPYING CREDITS NEWS THANKS TRANSLATIONS MediaFork/doc ; cp -rp MediaFork.app MediaFork ; cp -rp libmediafork/libmediafork.dylib MediaFork/api ; cp -rp libmediafork/mediafork.h libmediafork/common.h libmediafork/ports.h MediaFork/api ; cp -rp MediaForkCLI MediaFork ; cp -r plugins Mediafork ; hdiutil create -srcfolder MediaFork  -format UDBZ MediaFork.dmg ; rm -rf MediaFork )
+	(rm -rf MediaFork MediaFork.dmg ; mkdir -p MediaFork/api MediaFork/doc; cp test/BUILDSHARED AUTHORS BUILD COPYING CREDITS NEWS THANKS TRANSLATIONS MediaFork/doc ; cp -rp MediaFork.app MediaFork ; cp -rp libmediafork/libmediafork.dylib MediaFork/api ; cp -rp libmediafork/mediafork.h libmediafork/common.h libmediafork/ports.h MediaFork/api ; cp -rp MediaForkCLI MediaFork ; cd Mediafork ; mkdir plugins ; cd plugins ; ln ../MediaFork.app/Contents/Resources/plugins/lqt_audiocodec.so ; ln ../MediaFork.app/Contents/Resources/plugins/lqt_faac.so ; ln ../MediaFork.app/Contents/Resources/plugins/lqt_ffmpeg.so; ln ../MediaFork.app/Contents/Resources/plugins/lqt_lame.so; ln ../MediaFork.app/Contents/Resources/plugins/lqt_rtjpeg.so ; ln ../MediaFork.app/Contents/Resources/plugins/lqt_videocodec.so ; ln ../MediaFork.app/Contents/Resources/plugins/lqt_x264.so; cd ../.. ; hdiutil create -srcfolder MediaFork  -format UDBZ MediaFork.dmg ; rm -rf MediaFork )
    
 endif
 
