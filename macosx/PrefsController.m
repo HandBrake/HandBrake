@@ -240,7 +240,10 @@
 					 NSOnState : NSOffState];
 		
 	/* Insert default DefAdvanced x264 Flag here */
+	if ([defaults stringForKey:@"DefAdvancedx264Flags"]!=NULL)
+	{
 	[fDefAdvancedx264FlagsView setString:[defaults stringForKey:@"DefAdvancedx264Flags"]];
+	}
 	
 	
 	

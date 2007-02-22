@@ -1631,13 +1631,13 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 - (IBAction) OpenHomepage: (id) sender
 {
     [[NSWorkspace sharedWorkspace] openURL: [NSURL
-        URLWithString:@"http://mediafork.dynalias.com/"]];
+        URLWithString:@"http://handbrake.m0k.org/"]];
 }
 
 - (IBAction) OpenForums: (id) sender
 {
     [[NSWorkspace sharedWorkspace] openURL: [NSURL
-        URLWithString:@"http://mediafork.dynalias.com/forum/"]];
+        URLWithString:@"http://handbrake.m0k.org/forum/"]];
 }
 
 
