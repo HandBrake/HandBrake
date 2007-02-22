@@ -17,7 +17,7 @@ ifeq ($(SYSTEM),NetBSD)
 endif
  	
 ifeq ($(SYSTEM),Linux)
-	SYSDEF = -DSYS_LINUX
+	SYSDEF = -DSYS_LINUX $(HB_DEFPPC)
 	LDFLAGS += -lpthread -lm -ldl
 endif
 
@@ -60,6 +60,7 @@ ifeq ($(SYSTEM),CYGWIN_NT-5.1)
 all: libhb.a libhb.dll
 else
 all: libhb.a libhb.so
+
 endif
 
 libhb.a: $(OBJS)
