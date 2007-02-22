@@ -18,19 +18,19 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
         <key>CFBundleDevelopmentRegion</key>
         <string>English</string>
         <key>CFBundleDisplayName</key>
-        <string>MediaFork</string>
+        <string>HandBrake</string>
         <key>CFBundleExecutable</key>
-        <string>MediaFork</string>
+        <string>HandBrake</string>
         <key>CFBundleGetInfoString</key>
         <string>0.8.0b1</string>
         <key>CFBundleIconFile</key>
-        <string>MediaFork</string>
+        <string>HandBrake</string>
         <key>CFBundleIdentifier</key>
         <string>org.mediafork.dynalias</string>
         <key>CFBundleInfoDictionaryVersion</key>
         <string>6.0</string>
         <key>CFBundleName</key>
-        <string>MediaFork</string>
+        <string>HandBrake</string>
         <key>CFBundlePackageType</key>
         <string>APPL</string>
         <key>CFBundleShortVersionString</key>
@@ -40,11 +40,17 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
         <key>CFBundleVersion</key>
         <string>$3</string>
         <key>NSHumanReadableCopyright</key>
-        <string>MediaFork Devs</string>
+        <string>HandBrake Devs</string>
         <key>NSMainNibFile</key>
         <string>MainMenu</string>
         <key>NSPrincipalClass</key>
         <string>NSApplication</string>
 </dict>
 </plist>" > Info.plist
+
+echo Installing libquicktime Plugins in the $1 Bundle
+cd Resources
+mkdir plugins
+cd plugins
+cp ../../../../contrib/lib/libquicktime/* .
 

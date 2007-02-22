@@ -19,6 +19,7 @@ LDFLAGS += $(LIBS2)
 	@echo "Link MediaForkCLI"
 	@CMD="g++ $(CXXFLAGS) -o ../MediaForkCLI test.o $(LDFLAGS) -lz -lpthread"; $$CMD || \
 	( echo "Compile line for $@ was:"; echo $$CMD; false )
+        @CMD="rm -rf ../plugins ; mkdir ../plugins ; cp ../contrib/lib/libquicktime/* ../plugins"; $$CMD
 
 
 clean:

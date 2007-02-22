@@ -8,7 +8,7 @@ ifeq ($(SYSTEM),Darwin)
 all:    clean app
 
 app:
-	(./DownloadMacOsXContribBinaries.sh ; cd macosx ; xcodebuild -alltargets -configuration UB  OTHER_CFLAGS_QUOTED_1="-DHB_VERSION=\\\"$(MF_VERSION)\\\" -DHB_BUILD=$(MF_BUILD) " build | sed '/^$$/d' ; cd .. ; ./macosx/localize.sh MediaFork.app $(MF_VERSION) $(MF_BUILD))
+	(./DownloadMacOsXContribBinaries.sh ; cd macosx ; xcodebuild -alltargets -configuration UB  OTHER_CFLAGS_QUOTED_1="-DHB_VERSION=\\\"$(MF_VERSION)\\\" -DHB_BUILD=$(MF_BUILD) " build | sed '/^$$/d' ; cd .. ; ./macosx/localize.sh MediaFork.app $(MF_VERSION) $(MF_BUILD)) ; rm -rf plugins ; mkdir plugins ; cp contrib/lib/libquicktime/* plugins
 
 clean:
 	(cd macosx ; xcodebuild -alltargets -configuration UB clean | sed '/^$$/d' )
