@@ -75,7 +75,7 @@ int main( int argc, char ** argv )
     h = hb_init( debug, update );
 
     /* Show version */
-    fprintf( stderr, "HandBrake %s (%d) - http://mediafork.dynalias.com/\n",
+    fprintf( stderr, "HandBrake %s (%d) - http://handbrake.m0k.org/\n",
              hb_get_version( h ), hb_get_build( h ) );
 
     /* Check for update */
