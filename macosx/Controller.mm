@@ -1434,7 +1434,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
     [UserPresets addObject:[self CreatePreset]];
 	/* We Sort the Presets Alphabetically by name */
 	NSSortDescriptor * lastNameDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"PresetName" 
-                                                    ascending:YES] autorelease];
+                                                    ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease];
 	NSArray *sortDescriptors=[NSArray arrayWithObject:lastNameDescriptor];
 	NSArray *sortedArray=[UserPresets sortedArrayUsingDescriptors:sortDescriptors];
 	[UserPresets setArray:sortedArray];
@@ -1447,6 +1447,15 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
    /* We save all of the preset data here */
     [self savePreset];
 }
+
+- (IBAction)insertPreset:(id)sender
+{
+    int index = [tableView selectedRow];
+    [UserPresets insertObject:[self CreatePreset] atIndex:index];
+    [tableView reloadData];
+    [self savePreset];
+}
+
 - (NSDictionary *)CreatePreset
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
@@ -1573,6 +1582,8 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 	/*Subtitles*/
 	[fSubPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Subtitles"]]];
 	
+	// Deselect the currently selected table //
+	//[tableView deselectRow:[tableView selectedRow]];
 }
 
 - (int)numberOfRowsInTableView:(NSTableView *)aTableView
@@ -1584,8 +1595,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
       objectValueForTableColumn:(NSTableColumn *)aTableColumn
       row:(int)rowIndex
 {
-    
-	//Lets sort UserPresets here if we can
+
 	
 	
 	id theRecord, theValue;
@@ -1607,8 +1617,16 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
     theRecord = [UserPresets objectAtIndex:rowIndex];
     [theRecord setObject:anObject forKey:[aTableColumn identifier]];
     
-    // Don't forget to save the changes
-    //[self savePreset];
+		/* We Sort the Presets Alphabetically by name */
+	NSSortDescriptor * lastNameDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"PresetName" 
+                                                    ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease];
+	NSArray *sortDescriptors=[NSArray arrayWithObject:lastNameDescriptor];
+	NSArray *sortedArray=[UserPresets sortedArrayUsingDescriptors:sortDescriptors];
+	[UserPresets setArray:sortedArray];
+	/* We Reload the New Table data for presets */
+    [tableView reloadData];
+   /* We save all of the preset data here */
+    [self savePreset];
 }
 
 
@@ -1617,6 +1635,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
     [UserPresets writeToFile:UserPresetsFile atomically:YES];
 
 }
+
 
 
 - (void) controlTextDidBeginEditing: (NSNotification *) notification

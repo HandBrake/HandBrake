@@ -200,6 +200,7 @@
 
 - (void) savePreset;
 - (IBAction)addPreset:(id)sender;
+- (IBAction)insertPreset:(id)sender;
 - (IBAction)deletePreset:(id)sender;
 - (IBAction)tableViewSelected:(id)sender;
 // NSTableDataSource methods
@@ -211,6 +212,8 @@
         setObjectValue:(id)anObject
         forTableColumn:(NSTableColumn *)aTableColumn
         row:(int)rowIndex;
+
+
 
 @end
 
