@@ -245,7 +245,9 @@
 	[fDefAdvancedx264FlagsView setString:[defaults stringForKey:@"DefAdvancedx264Flags"]];
 	}
 	
-	
+	/* fDefPresetDrawerShow Check or uncheck according to the preferences*/
+    [fDefPresetDrawerShow setState: [defaults boolForKey:@"DefaultPresetsDrawerShow"] ?
+		   NSOnState : NSOffState];
 	
 }
 
