@@ -7,8 +7,13 @@ ifeq ($(SYSTEM),Darwin)
 
 all:    clean app
 
+dev:	clean internal
+
 app:
-	(./DownloadMacOsXContribBinaries.sh ; cd macosx ; xcodebuild -alltargets -configuration UB  OTHER_CFLAGS_QUOTED_1="-DHB_VERSION=\\\"$(HB_VERSION)\\\" -DHB_BUILD=$(HB_BUILD) " build | sed '/^$$/d' ; cd .. ; ./macosx/localize.sh HandBrake.app $(HB_VERSION) $(HB_BUILD)) ; rm -rf plugins ; mkdir plugins ; cp contrib/lib/libquicktime/* plugins
+	(./DownloadMacOsXContribBinaries.sh ; cd macosx ; xcodebuild -alltargets -configuration UB  OTHER_CFLAGS_QUOTED_1="-DHB_VERSION=\\\"$(HB_VERSION)\\\" -DHB_BUILD=$(HB_BUILD) " build | sed '/^$$/d' ; cd .. ; ./macosx/localize.sh HandBrake.app $(HB_VERSION) $(HB_BUILD) UB )
+
+internal:
+	(./DownloadMacOsXContribBinaries.sh ; cd macosx ; xcodebuild -alltargets -configuration Development  OTHER_CFLAGS_QUOTED_1="-DHB_VERSION=\\\"$(HB_VERSION)\\\" -DHB_BUILD=$(HB_BUILD) " build | sed '/^$$/d' ; cd .. ; ./macosx/localize.sh HandBrake.app $(HB_VERSION) $(HB_BUILD) DEV ) ; rm -rf plugins ; mkdir plugins ; cp contrib/lib/libquicktime/* plugins
 
 clean:
 	(cd macosx ; xcodebuild -alltargets -configuration UB clean | sed '/^$$/d' )
@@ -17,6 +22,9 @@ mrproper:
 	(rm -rf contrib/*tar.gz contrib/include contrib/lib contrib/DarwinContribVersion.txt ; cd macosx ; xcodebuild -alltargets -configuration UB clean | sed '/^$$/d' )
 
 release:
+	(rm -rf Handbrake Handbrake.dmg ; mkdir -p Handbrake/api Handbrake/doc; cp test/BUILDSHARED AUTHORS BUILD COPYING CREDITS NEWS THANKS TRANSLATIONS Handbrake/doc ; cp -rp HandBrake.app Handbrake ; cp -rp libhb/libhb.dylib Handbrake/api ; cp -rp libhb/hb.h libhb/common.h libhb/ports.h Handbrake/api ; cp -rp HandbrakeCLI Handbrake ; hdiutil create -srcfolder Handbrake  -format UDBZ Handbrake.dmg ; rm -rf Handbrake )
+
+releaseint:
 	(rm -rf Handbrake Handbrake.dmg ; mkdir -p Handbrake/api Handbrake/doc; cp test/BUILDSHARED AUTHORS BUILD COPYING CREDITS NEWS THANKS TRANSLATIONS Handbrake/doc ; cp -rp HandBrake.app Handbrake ; cp -rp libhb/libhb.dylib Handbrake/api ; cp -rp libhb/hb.h libhb/common.h libhb/ports.h Handbrake/api ; cp -rp HandbrakeCLI Handbrake ; cd HandBrake ; mkdir plugins ; cd plugins ; ln ../HandBrake.app/Contents/Resources/plugins/lqt_audiocodec.so ; ln ../HandBrake.app/Contents/Resources/plugins/lqt_faac.so ; ln ../HandBrake.app/Contents/Resources/plugins/lqt_ffmpeg.so; ln ../HandBrake.app/Contents/Resources/plugins/lqt_lame.so; ln ../HandBrake.app/Contents/Resources/plugins/lqt_rtjpeg.so ; ln ../HandBrake.app/Contents/Resources/plugins/lqt_videocodec.so ; ln ../HandBrake.app/Contents/Resources/plugins/lqt_x264.so; cd ../.. ; hdiutil create -srcfolder Handbrake  -format UDBZ Handbrake.dmg ; rm -rf Handbrake )
    
 endif

@@ -48,9 +48,11 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 </dict>
 </plist>" > Info.plist
 
+if [ $4 == "DEV" ]; then
 echo Installing libquicktime Plugins in the $1 Bundle
 cd Resources
 mkdir plugins
 cd plugins
 cp ../../../../contrib/lib/libquicktime/* .
+fi
 

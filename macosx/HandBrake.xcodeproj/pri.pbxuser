@@ -92,191 +92,11 @@
 			sepNavVisRect = "{{0, 0}, {962, 387}}";
 		};
 	};
-	0DFA5D090B8DD9300020BC09 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		comments = "error: mediafork.h: No such file or directory";
-		fRef = 4DF3C8CB052889CD00A80101 /* Controller.h */;
-		rLen = 1;
-		rLoc = 8;
-		rType = 1;
-	};
-	0DFA5D0A0B8DD9300020BC09 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 4DF3C8CB052889CD00A80101 /* Controller.h */;
-		name = "#include \"mediafork.h\"";
-		rLen = 23;
-		rLoc = 253;
-		rType = 0;
-		vrLen = 366;
-		vrLoc = 0;
-	};
 	0DFA5D0E0B8DD9FB0020BC09 /* XCBreakpointsBucket */ = {
 		isa = XCBreakpointsBucket;
 		name = "Project Breakpoints";
 		objects = (
 		);
-	};
-	0DFA5D110B8DDA190020BC09 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 4DF3C8CB052889CD00A80101 /* Controller.h */;
-		name = "Controller.h: 217";
-		rLen = 0;
-		rLoc = 7915;
-		rType = 0;
-		vrLen = 359;
-		vrLoc = 0;
-	};
-	0DFA5D120B8DDA190020BC09 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		comments = "warning: (near initialization for 'hb_declpcm')";
-		fRef = 0DFA5C7E0B8DD3B60020BC09 /* declpcm.c */;
-		rLen = 1;
-		rLoc = 19;
-		rType = 1;
-	};
-	0DFA5D130B8DDA190020BC09 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 4DF3C8CB052889CD00A80101 /* Controller.h */;
-		name = "Controller.h: 217";
-		rLen = 0;
-		rLoc = 7915;
-		rType = 0;
-		vrLen = 359;
-		vrLoc = 0;
-	};
-	0DFA5D140B8DDA190020BC09 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 0DFA5C7E0B8DD3B60020BC09 /* declpcm.c */;
-		name = "};";
-		rLen = 3;
-		rLoc = 530;
-		rType = 0;
-		vrLen = 715;
-		vrLoc = 0;
-	};
-	0DFA5D200B8DDAED0020BC09 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 0DFA5C7E0B8DD3B60020BC09 /* declpcm.c */;
-		name = "};";
-		rLen = 3;
-		rLoc = 530;
-		rType = 0;
-		vrLen = 715;
-		vrLoc = 0;
-	};
-	0DFA5D210B8DDAED0020BC09 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		comments = "error: mediafork.h: No such file or directory";
-		fRef = 526FBC760B4CA8F40064E04C /* test.c */;
-		rLen = 1;
-		rLoc = 12;
-		rType = 1;
-	};
-	0DFA5D220B8DDAED0020BC09 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 0DFA5C7E0B8DD3B60020BC09 /* declpcm.c */;
-		name = "};";
-		rLen = 3;
-		rLoc = 530;
-		rType = 0;
-		vrLen = 715;
-		vrLoc = 0;
-	};
-	0DFA5D230B8DDAED0020BC09 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 526FBC760B4CA8F40064E04C /* test.c */;
-		name = "#include \"hb.h\"";
-		rLen = 16;
-		rLoc = 322;
-		rType = 0;
-		vrLen = 795;
-		vrLoc = 0;
-	};
-	0DFA5D250B8DDB010020BC09 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 526FBC760B4CA8F40064E04C /* test.c */;
-		name = "#include \"hb.h\"";
-		rLen = 16;
-		rLoc = 322;
-		rType = 0;
-		vrLen = 795;
-		vrLoc = 0;
-	};
-	0DFA5D260B8DDB010020BC09 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		comments = "error: hb.h: No such file or directory";
-		fRef = 4D1EA31A0993B24700FDC1A2 /* ExpressController.h */;
-		rLen = 1;
-		rLoc = 3;
-		rType = 1;
-	};
-	0DFA5D270B8DDB010020BC09 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 526FBC760B4CA8F40064E04C /* test.c */;
-		name = "#include \"hb.h\"";
-		rLen = 16;
-		rLoc = 322;
-		rType = 0;
-		vrLen = 795;
-		vrLoc = 0;
-	};
-	0DFA5D280B8DDB010020BC09 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 4D1EA31A0993B24700FDC1A2 /* ExpressController.h */;
-		name = "#import \"hb.h\"";
-		rLen = 15;
-		rLoc = 49;
-		rType = 0;
-		vrLen = 872;
-		vrLoc = 0;
-	};
-	0DFA5D2A0B8DDB220020BC09 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 4D1EA31A0993B24700FDC1A2 /* ExpressController.h */;
-		name = "#import \"hb.h\"";
-		rLen = 15;
-		rLoc = 49;
-		rType = 0;
-		vrLen = 872;
-		vrLoc = 0;
-	};
-	0DFA5D2E0B8DDC180020BC09 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 4D1EA31A0993B24700FDC1A2 /* ExpressController.h */;
-		name = "#import \"hb.h\"";
-		rLen = 15;
-		rLoc = 49;
-		rType = 0;
-		vrLen = 872;
-		vrLoc = 0;
-	};
-	0DFA5D2F0B8DDC180020BC09 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		comments = "error: 'WORK_DECLPCM' undeclared here (not in a function)";
-		fRef = 0DFA5C7E0B8DD3B60020BC09 /* declpcm.c */;
-		rLen = 1;
-		rLoc = 14;
-		rType = 1;
-	};
-	0DFA5D300B8DDC180020BC09 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 4D1EA31A0993B24700FDC1A2 /* ExpressController.h */;
-		name = "#import \"hb.h\"";
-		rLen = 15;
-		rLoc = 49;
-		rType = 0;
-		vrLen = 872;
-		vrLoc = 0;
-	};
-	0DFA5D310B8DDC180020BC09 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 0DFA5C7E0B8DD3B60020BC09 /* declpcm.c */;
-		name = "WORK_DECLPCM,";
-		rLen = 18;
-		rLoc = 441;
-		rType = 0;
-		vrLen = 713;
-		vrLoc = 0;
 	};
 	0DFF0B710B6BC6E600549488 /* libhb */ = {
 		activeExec = 0;
@@ -289,8 +109,8 @@
 	};
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
 		activeBuildConfigurationName = UB;
-		activeExecutable = 0DFA5C560B8DD1760020BC09 /* HandBrake */;
-		activeTarget = 4DD93F8D082036E8008E1322 /* HandBrake */;
+		activeExecutable = 0DFA5C570B8DD1760020BC09 /* Instant HandBrake */;
+		activeTarget = 0D096DFE0B707D1200A845D4 /* libhb dlib */;
 		addToTargets = (
 			4DD93F8D082036E8008E1322 /* HandBrake */,
 		);
@@ -346,29 +166,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 193843598;
-			PBXWorkspaceStateSaveDate = 193843598;
-		};
-		perUserProjectItems = {
-			0DFA5D090B8DD9300020BC09 /* PBXTextBookmark */ = 0DFA5D090B8DD9300020BC09 /* PBXTextBookmark */;
-			0DFA5D0A0B8DD9300020BC09 /* PBXTextBookmark */ = 0DFA5D0A0B8DD9300020BC09 /* PBXTextBookmark */;
-			0DFA5D110B8DDA190020BC09 /* PBXTextBookmark */ = 0DFA5D110B8DDA190020BC09 /* PBXTextBookmark */;
-			0DFA5D120B8DDA190020BC09 /* PBXTextBookmark */ = 0DFA5D120B8DDA190020BC09 /* PBXTextBookmark */;
-			0DFA5D130B8DDA190020BC09 /* PBXTextBookmark */ = 0DFA5D130B8DDA190020BC09 /* PBXTextBookmark */;
-			0DFA5D140B8DDA190020BC09 /* PBXTextBookmark */ = 0DFA5D140B8DDA190020BC09 /* PBXTextBookmark */;
-			0DFA5D200B8DDAED0020BC09 /* PBXTextBookmark */ = 0DFA5D200B8DDAED0020BC09 /* PBXTextBookmark */;
-			0DFA5D210B8DDAED0020BC09 /* PBXTextBookmark */ = 0DFA5D210B8DDAED0020BC09 /* PBXTextBookmark */;
-			0DFA5D220B8DDAED0020BC09 /* PBXTextBookmark */ = 0DFA5D220B8DDAED0020BC09 /* PBXTextBookmark */;
-			0DFA5D230B8DDAED0020BC09 /* PBXTextBookmark */ = 0DFA5D230B8DDAED0020BC09 /* PBXTextBookmark */;
-			0DFA5D250B8DDB010020BC09 /* PBXTextBookmark */ = 0DFA5D250B8DDB010020BC09 /* PBXTextBookmark */;
-			0DFA5D260B8DDB010020BC09 /* PBXTextBookmark */ = 0DFA5D260B8DDB010020BC09 /* PBXTextBookmark */;
-			0DFA5D270B8DDB010020BC09 /* PBXTextBookmark */ = 0DFA5D270B8DDB010020BC09 /* PBXTextBookmark */;
-			0DFA5D280B8DDB010020BC09 /* PBXTextBookmark */ = 0DFA5D280B8DDB010020BC09 /* PBXTextBookmark */;
-			0DFA5D2A0B8DDB220020BC09 /* PBXTextBookmark */ = 0DFA5D2A0B8DDB220020BC09 /* PBXTextBookmark */;
-			0DFA5D2E0B8DDC180020BC09 /* PBXTextBookmark */ = 0DFA5D2E0B8DDC180020BC09 /* PBXTextBookmark */;
-			0DFA5D2F0B8DDC180020BC09 /* PBXTextBookmark */ = 0DFA5D2F0B8DDC180020BC09 /* PBXTextBookmark */;
-			0DFA5D300B8DDC180020BC09 /* PBXTextBookmark */ = 0DFA5D300B8DDC180020BC09 /* PBXTextBookmark */;
-			0DFA5D310B8DDC180020BC09 /* PBXTextBookmark */ = 0DFA5D310B8DDC180020BC09 /* PBXTextBookmark */;
+			PBXPerProjectTemplateStateSaveDate = 193999038;
+			PBXWorkspaceStateSaveDate = 193999038;
 		};
 		sourceControlManager = 0DFA5C680B8DD17A0020BC09 /* Source Control */;
 		userBuildSettings = {

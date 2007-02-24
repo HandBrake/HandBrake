@@ -887,7 +887,6 @@
 				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.8.0b1\\\" -DHB_BUILD=2007021100 ";
 				OTHER_LDFLAGS = (
 					../contrib/lib/libmp4v2.a,
-					../contrib/lib/libquicktime.a,
 					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,
 					../contrib/lib/libavcodec.a,
@@ -958,7 +957,6 @@
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					../libhb/libhb.a,
-					../contrib/lib/libquicktime.a,
 					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,
@@ -1006,7 +1004,6 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
 				OTHER_LDFLAGS = (
 					../libhb/libhb.a,
-					../contrib/lib/libquicktime.a,
 					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,
@@ -1045,7 +1042,6 @@
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					../libhb/libhb.a,
-					../contrib/lib/libquicktime.a,
 					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
 					../contrib/lib/libavformat.a,

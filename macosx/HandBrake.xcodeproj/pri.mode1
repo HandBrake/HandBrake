@@ -219,6 +219,8 @@
 			<key>Layout</key>
 			<array>
 				<dict>
+					<key>BecomeActive</key>
+					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -256,27 +258,18 @@
 							<array>
 								<string>29B97314FDCFA39411CA2CEA</string>
 								<string>526FBC940B4CAA310064E04C</string>
+								<string>526FBC8D0B4CA9F90064E04C</string>
 								<string>1C37FBAC04509CD000000102</string>
-								<string>0DFA5D330B8DDC6F0020BC09</string>
-								<string>0DFA5D340B8DDC6F0020BC09</string>
-								<string>0DFA5D350B8DDC6F0020BC09</string>
-								<string>0DFA5D360B8DDC6F0020BC09</string>
-								<string>0DFA5D370B8DDC6F0020BC09</string>
-								<string>0DFA5D380B8DDC6F0020BC09</string>
-								<string>0DFA5D390B8DDC6F0020BC09</string>
-								<string>0DFA5D3A0B8DDC6F0020BC09</string>
 								<string>1C37FABC05509CD000000102</string>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>28</integer>
-									<integer>13</integer>
-									<integer>12</integer>
+									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 185}, {186, 802}}</string>
+							<string>{{0, 0}, {186, 802}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -295,7 +288,7 @@
 							<real>186</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>479 138 1118 861 0 0 1680 1028 </string>
+						<string>273 167 1118 861 0 0 1680 1028 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -332,7 +325,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {910, 0}}</string>
 								<key>RubberWindowFrame</key>
-								<string>479 138 1118 861 0 0 1680 1028 </string>
+								<string>273 167 1118 861 0 0 1680 1028 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -340,8 +333,6 @@
 							<string>0pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -354,7 +345,7 @@
 								<key>Frame</key>
 								<string>{{0, 5}, {910, 815}}</string>
 								<key>RubberWindowFrame</key>
-								<string>479 138 1118 861 0 0 1680 1028 </string>
+								<string>273 167 1118 861 0 0 1680 1028 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -378,9 +369,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>0DFA5D010B8DD7D20020BC09</string>
+				<string>0D3065750B9030CE0049CCA4</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>0DFA5D020B8DD7D20020BC09</string>
+				<string>0D3065760B9030CE0049CCA4</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -514,11 +505,10 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>0DFA5CFA0B8DD7CF0020BC09</string>
-		<string>/Users/pri/Desktop/mf8beta25.1/macosx/HandBrake.xcodeproj</string>
+		<string>/Users/pri/Desktop/HB/macosx/HandBrake.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>479 138 1118 861 0 0 1680 1028 </string>
+	<string>273 167 1118 861 0 0 1680 1028 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
