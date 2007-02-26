@@ -78,6 +78,7 @@
                 fPicturePanel = NSPanel; 
                 fPresetDrawer = NSDrawer; 
                 fPresetNewName = NSTextField; 
+                fPresetNewPicSettingsApply = NSButton; 
                 fPresetSelectedDisplay = NSTextField; 
                 fPresetsAdd = NSButton; 
                 fPresetsDelete = NSButton; 

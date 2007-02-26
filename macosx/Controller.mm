@@ -1461,6 +1461,8 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
     [preset setObject:[fPresetNewName stringValue] forKey:@"PresetName"];
+	/*Get the whether or not to apply pic settings in the AddPresetPanel*/
+	[preset setObject:[NSNumber numberWithInt:[fPresetNewPicSettingsApply state]] forKey:@"UsesPictureSettings"];
 	/* File Format */
     [preset setObject:[fDstFormatPopUp titleOfSelectedItem] forKey:@"FileFormat"];
 	/* Codecs */
@@ -1479,6 +1481,21 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 	[preset setObject:[NSNumber numberWithInt:[fVidGrayscaleCheck state]] forKey:@"VideoGrayScale"];
 	/* 2 Pass Encoding */
 	[preset setObject:[NSNumber numberWithInt:[fVidTwoPassCheck state]] forKey:@"VideoTwoPass"];
+	
+	/*Picture Settings*/
+	hb_job_t * job = fTitle->job;
+	/* Basic Picture Settings */
+	[preset setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PictureWidth"];
+	[preset setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PictureHeight"];
+	[preset setObject:[NSNumber numberWithInt:fTitle->job->keep_ratio] forKey:@"PictureKeepRatio"];
+	[preset setObject:[NSNumber numberWithInt:fTitle->job->deinterlace] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:fTitle->job->pixel_ratio] forKey:@"PicturePAR"];
+	/* Set crop settings here */
+	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
+	[preset setObject:[NSNumber numberWithInt:job->crop[0]] forKey:@"PictureTopCrop"];
+    [preset setObject:[NSNumber numberWithInt:job->crop[1]] forKey:@"PictureBottomCrop"];
+	[preset setObject:[NSNumber numberWithInt:job->crop[2]] forKey:@"PictureLeftCrop"];
+	[preset setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
 	
 	/*Audio*/
 	/* Audio Language One*/
@@ -1510,7 +1527,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
         return;
     /* Alert user before deleting preset */
 	/* Comment out for now, tie to user pref eventually */
-    NSBeep();
+    //NSBeep();
     status = NSRunAlertPanel(@"Warning!", @"Are you sure that you want to delete the selected preset?", @"OK", @"Cancel", nil);
     
     if ( status == NSAlertDefaultReturn ) {
@@ -1551,12 +1568,9 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 	[fVidQualityMatrix selectCellAtRow:[[chosenPreset objectForKey:@"VideoQualityType"] intValue] column:0];
 	
 	[fVidTargetSizeField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoTargetSize"]]];
-	//[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
 	[fVidBitrateField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoAvgBitrate"]]];
-	       //[preset setObject:[fVidBitrateField stringValue] forKey:@"VideoAvgBitrate"];
-	// TO DO: NEED TO SET THE QUALITY SLIDER WITH FLOAT VALUE, I THINK
+	
 	[fVidQualitySlider setFloatValue: [[chosenPreset valueForKey:@"VideoQualitySlider"] floatValue]];
-		          //[preset setObject:[NSNumber numberWithInt:[fVidQualitySlider floatValue]] forKey:@"VideoQualitySlider"];
 	[self VideoMatrixChanged: sender];
 	
 	/* Video framerate */
@@ -1564,10 +1578,10 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 	
 	/* GrayScale */
 	[fVidGrayscaleCheck setState:[[chosenPreset objectForKey:@"VideoGrayScale"] intValue]];
-	//[preset setObject:[NSNumber numberWithInt:[fVidGrayscaleCheck state]] forKey:@"VideoGrayScale"];
+
 	/* 2 Pass Encoding */
 	[fVidTwoPassCheck setState:[[chosenPreset objectForKey:@"VideoTwoPass"] intValue]];
-	//[preset setObject:[NSNumber numberWithInt:[fVidTwoPassCheck state]] forKey:@"VideoTwoPass"];
+    
 	
 	/*Audio*/
 	/* Audio Language One*/
@@ -1581,6 +1595,26 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 	[fAudBitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioBitRate"]]];
 	/*Subtitles*/
 	[fSubPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Subtitles"]]];
+	
+	/* Picture Settings */
+	/* Look to see if we apply these here in objectForKey:@"UsesPictureSettings"] */
+	if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] == 1)
+	{
+		hb_job_t * job = fTitle->job;
+		job->width = [[chosenPreset objectForKey:@"PictureWidth"]  intValue];
+		job->height = [[chosenPreset objectForKey:@"PictureHeight"]  intValue];
+		job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
+		if (job->keep_ratio == 1)
+		{
+			hb_fix_aspect( job, HB_KEEP_WIDTH );
+		}
+		job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
+		job->crop[0] = [[chosenPreset objectForKey:@"PictureTopCrop"]  intValue];
+		job->crop[1] = [[chosenPreset objectForKey:@"PictureBottomCrop"]  intValue];
+		job->crop[2] = [[chosenPreset objectForKey:@"PictureLeftCrop"]  intValue];
+		job->crop[3] = [[chosenPreset objectForKey:@"PictureRightCrop"]  intValue];
+		[self CalculatePictureSizing: sender]; 
+	}
 	
 	// Deselect the currently selected table //
 	//[tableView deselectRow:[tableView selectedRow]];

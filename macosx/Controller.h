@@ -120,10 +120,11 @@
     IBOutlet NSButton            * fPauseButton;
     IBOutlet NSButton            * fRipButton;
 
-	/* User Preset variables here*/
+	/* User Preset variables here fPresetNewPicSettingsApply*/
 	
 	IBOutlet NSDrawer            * fPresetDrawer;
 	IBOutlet NSTextField         * fPresetNewName;
+	IBOutlet NSButton            * fPresetNewPicSettingsApply;
 	IBOutlet NSTextField         * fPresetSelectedDisplay;
 	
 	NSString * AppSupportDirectory;
