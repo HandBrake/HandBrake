@@ -79,8 +79,10 @@ libhb.dll: $(OBJS)
 
 %.o: %.c
 	@echo "Cc $@"
+	echo $(CC) $(CFLAGS)
 	@CMD="$(CC) $(CFLAGS) -o $@ -c $<"; $$CMD || \
 	  ( echo "Compile line for $@ was:"; echo $$CMD; false )
+
 %.o: %.cpp
 	@echo "Cc $@"
 	@CMD="$(CC) $(CFLAGS) -o $@ -c $<"; $$CMD || \
