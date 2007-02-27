@@ -44,7 +44,7 @@ contrib/.contrib:
 libhb/libhb.a:
 	@$(MAKE) --no-print-directory -C libhb all
 
-HandBrakerakeCLI:
+HandBrakeCLI:
 	@$(MAKE) --no-print-directory -C test all
 
 clean:
