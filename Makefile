@@ -23,6 +23,9 @@ mrproper:
 
 release:
 	(rm -rf Handbrake Handbrake.dmg ; mkdir -p Handbrake/api Handbrake/doc; cp test/BUILDSHARED AUTHORS BUILD COPYING CREDITS NEWS THANKS TRANSLATIONS Handbrake/doc ; cp -rp HandBrake.app Handbrake ; cp -rp libhb/libhb.dylib Handbrake/api ; cp -rp libhb/hb.h libhb/common.h libhb/ports.h Handbrake/api ; cp -rp HandbrakeCLI Handbrake ; hdiutil create -srcfolder Handbrake  -format UDBZ Handbrake.dmg ; rm -rf Handbrake )
+ifeq ($(SNAP), 1)
+	( mv Handbrake.dmg MediaFork-$(HB_VERSION)-MacOS_UB.dmg )
+endif
 
 releaseint:
 	(rm -rf Handbrake Handbrake.dmg ; mkdir -p Handbrake/api Handbrake/doc; cp test/BUILDSHARED AUTHORS BUILD COPYING CREDITS NEWS THANKS TRANSLATIONS Handbrake/doc ; cp -rp HandBrake.app Handbrake ; cp -rp libhb/libhb.dylib Handbrake/api ; cp -rp libhb/hb.h libhb/common.h libhb/ports.h Handbrake/api ; cp -rp HandbrakeCLI Handbrake ; cd HandBrake ; mkdir plugins ; cd plugins ; ln ../HandBrake.app/Contents/Resources/plugins/lqt_audiocodec.so ; ln ../HandBrake.app/Contents/Resources/plugins/lqt_faac.so ; ln ../HandBrake.app/Contents/Resources/plugins/lqt_ffmpeg.so; ln ../HandBrake.app/Contents/Resources/plugins/lqt_lame.so; ln ../HandBrake.app/Contents/Resources/plugins/lqt_rtjpeg.so ; ln ../HandBrake.app/Contents/Resources/plugins/lqt_videocodec.so ; ln ../HandBrake.app/Contents/Resources/plugins/lqt_x264.so; cd ../.. ; hdiutil create -srcfolder Handbrake  -format UDBZ Handbrake.dmg ; rm -rf Handbrake )
@@ -31,7 +34,9 @@ endif
 
 ifeq ($(SYSTEM),Linux)
 
-all:	contrib/.contrib libhb/libhb.a HandbrakeCLI
+all:	contrib/.contrib libhb/libhb.a HandBrakeCLI
+	(rm -rf HandBrake HandBrake*.tar.gz ; mkdir -p HandBrake/api HandBrake/doc; cp test/BUILDSHARED AUTHORS BUILD COPYING CREDITS NEWS THANKS TRANSLATIONS HandBrake/doc ;  cp -rp libhb/libhb.so HandBrake/api ; cp -rp libhb/hb.h libhb/common.h libhb/ports.h HandBrake/api ; cp -rp HandBrakeCLI HandBrake ; tar zcvf HandBrake-$(HB_VERSION)_i386.tar.gz HandBrake ; rm -rf HandBrake )
+
 
 contrib/.contrib:
 	@$(MAKE) --no-print-directory -C contrib all
@@ -39,7 +44,7 @@ contrib/.contrib:
 libhb/libhb.a:
 	@$(MAKE) --no-print-directory -C libhb all
 
-HandbrakeCLI:
+HandBrakerakeCLI:
 	@$(MAKE) --no-print-directory -C test all
 
 clean:
