@@ -126,14 +126,11 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 	
 			/* 	Let x264 sanity check the options for us*/
 	    	if(ret == X264_PARAM_BAD_NAME)
-	         	hb_log("Option x264encopts: Unknown suboption %s\n", name);
+	         	printf("x264 options: Unknown suboption %s\n", name);
 	    	if(ret == X264_PARAM_BAD_VALUE)
-	       		hb_log("Option x264encopts: Bad argument %s=%s\n", name, value ? value : "(null)");
-	    	if(ret)
-	        	return 0;
-
-			}
+	       		printf("x264 options: Bad argument %s=%s\n", name, value ? value : "(null)");
 		}
+	}
 
 
 	if( job->pixel_ratio )
