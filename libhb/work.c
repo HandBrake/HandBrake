@@ -110,6 +110,22 @@ static void do_job( hb_job_t * job, int cpu_count )
     	job->width=title->width-job->crop[2]-job->crop[3];
     }
 
+	/* Keep width and height within these boundaries */
+	if (job->maxHeight && (job->height > job->maxHeight) )
+	{
+		job->height = job->maxHeight;
+		hb_fix_aspect( job, HB_KEEP_HEIGHT );
+		hb_log("Height out of bounds, scaling down to %i", job->maxHeight);
+		hb_log("New dimensions %i * %i", job->width, job->height);
+	}
+	if (job->maxWidth && (job->width > job->maxWidth) )
+	{
+		job->width = job->maxWidth;
+		hb_fix_aspect( job, HB_KEEP_WIDTH );   
+		hb_log("Width out of bounds, scaling down to %i", job->maxWidth);
+		hb_log("New dimensions %i * %i", job->width, job->height);
+	}
+
     hb_log( " + %dx%d -> %dx%d, crop %d/%d/%d/%d",
             title->width, title->height, job->width, job->height,
             job->crop[0], job->crop[1], job->crop[2], job->crop[3] );

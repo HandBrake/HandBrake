@@ -102,7 +102,9 @@ struct hb_job_s
          keep_ratio:          used by UIs 
          pixel_ratio:         store pixel aspect ratio in the video
          pixel_aspect_width:  numerator for pixel aspect ratio
-         pixel_aspect_height: denominator for pixel aspect ratio */
+         pixel_aspect_height: denominator for pixel aspect ratio
+		 maxWidth:			  keep width below this
+		 maxHeight:			  keep height below this */
 
     int             crop[4];
     int             deinterlace;
@@ -113,6 +115,9 @@ struct hb_job_s
     int             pixel_ratio;
     int             pixel_aspect_width;
     int             pixel_aspect_height;
+	int				maxWidth;
+	int				maxHeight;
+
 
     /* Video settings:
          vcodec:            output codec
@@ -120,7 +125,11 @@ struct hb_job_s
                             if < 0.0 or > 1.0, bitrate is used instead
          vbitrate:          output bitrate (kbps)
          pass:              0, 1 or 2
-         vrate, vrate_base: output framerate is vrate / vrate_base */
+         vrate, vrate_base: output framerate is vrate / vrate_base
+		 h264_level:		boolean for whether or not we're encoding for iPod
+		 crf:				boolean for whether to use constant rate factor with x264
+		 x264opts:			string of extra x264 options 
+		 areBframes:		boolean to note if b-frames are included in x264opts */
 #define HB_VCODEC_MASK   0x0000FF
 #define HB_VCODEC_FFMPEG 0x000001
 #define HB_VCODEC_XVID   0x000002
@@ -135,7 +144,7 @@ struct hb_job_s
     int             h264_13;
 	int				h264_level;
 	int				crf;
-	const char			*x264opts;
+	const char		*x264opts;
 	int				areBframes;
 	
     /* Audio tracks:
