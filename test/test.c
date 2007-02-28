@@ -46,6 +46,8 @@ static int    chapter_end   = 0;
 static int	  crf			= 0;
 static char	  *x264opts		= NULL;
 static char	  *x264opts2 	= NULL;
+static int	  maxHeight		= 0;
+static int	  maxWidth		= 0;
 
 /* Exit cleanly on Ctrl-C */
 static volatile int die = 0;
@@ -439,7 +441,11 @@ static int HandleEvents( hb_handle_t * h )
 			{
 				job->x264opts =  NULL;
 			}
-
+			if (maxWidth)
+				job->maxWidth = maxWidth;
+			if (maxHeight)
+				job->maxHeight = maxHeight;
+				
             if( twoPass )
             {
                 job->pass = 1;
@@ -583,6 +589,8 @@ static void ShowHelp()
     "    -w, --width <number>    Set picture width\n"
     "    -l, --height <number>   Set picture height\n"
     "        --crop <T:B:L:R>    Set cropping values (default: autocrop)\n"
+	"    -Y, --maxHeight <#>     Set maximum height\n"
+	"    -X, --maxWidth <#>      Set maximum width\n"
 	"\n"
 	"    -x, --x264opts <string> Specify advanced x264 options in the\n"
 	"                            same style as mencoder:\n"
@@ -631,6 +639,8 @@ static int ParseOptions( int argc, char ** argv )
             { "arate",       required_argument, NULL,    'R' },
 			{ "crf",		 no_argument,		NULL,	 'Q' },
 			{ "x264opts",    required_argument, NULL,    'x' },
+			{ "maxHeight",	 required_argument, NULL, 	 'Y' },
+			{ "maxWidth",	 required_argument, NULL,	 'X' },
 			
             { 0, 0, 0, 0 }
           };
@@ -639,7 +649,7 @@ static int ParseOptions( int argc, char ** argv )
         int c;
 
         c = getopt_long( argc, argv,
-                         "hvuC:f:i:o:t:c:a:s:e:E:2dgpw:l:n:b:q:S:B:r:R:Qx:",
+                         "hvuC:f:i:o:t:c:a:s:e:E:2dgpw:l:n:b:q:S:B:r:R:Qx:Y:X:",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -830,7 +840,13 @@ static int ParseOptions( int argc, char ** argv )
 			   	x264opts = strdup( optarg );
 				x264opts2 = strdup( optarg );
 			    break;
-
+			case 'Y':
+				maxHeight = atoi( optarg );
+				break;
+			case 'X':
+				maxWidth = atoi (optarg );
+				break;
+				
             default:
                 fprintf( stderr, "unknown option (%s)\n", argv[optind] );
                 return -1;
