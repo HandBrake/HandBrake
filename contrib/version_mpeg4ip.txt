@@ -1,1 +1,1 @@
-http://download.mediafork.dynalias.com/contrib/mpeg4ip-1.3.tar.gz
+http://download.m0k.org/handbrake/contrib/mpeg4ip-1.3.tar.gz
