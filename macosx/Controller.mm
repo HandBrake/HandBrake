@@ -837,33 +837,46 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 
 - (IBAction) AddToQueue: (id) sender
 {
-    hb_list_t  * list  = hb_get_titles( fHandle );
-    hb_title_t * title = (hb_title_t *) hb_list_item( list,
-            [fSrcTitlePopUp indexOfSelectedItem] );
-    hb_job_t * job = title->job;
-
-    [self PrepareJob];
-
-    /* Destination file */
-    job->file = strdup( [[fDstFile2Field stringValue] UTF8String] );
-
-    if( [fVidTwoPassCheck state] == NSOnState )
-    {
-        job->pass = 1;
-        hb_add( fHandle, job );
-        job->pass = 2;
-		  job->x264opts = strdup([[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] cString]);
-        hb_add( fHandle, job );
-    }
-    else
-    {
-        job->pass = 0;
-        hb_add( fHandle, job );
-    }
+/* We get the destination directory from the destingation field here */
+	NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
+	/* We check for a valid destination here */
+	if ([[NSFileManager defaultManager] fileExistsAtPath:destinationDirectory] == 0) 
+	{
+		NSRunAlertPanel(@"Warning!", @"This is not a valid destination directory!", @"OK", nil, nil);
+	}
+	else
+	{
+		
+		hb_list_t  * list  = hb_get_titles( fHandle );
+		hb_title_t * title = (hb_title_t *) hb_list_item( list,
+														  [fSrcTitlePopUp indexOfSelectedItem] );
+		hb_job_t * job = title->job;
+		
+		[self PrepareJob];
+		
+		/* Destination file */
+		job->file = strdup( [[fDstFile2Field stringValue] UTF8String] );
+		
+		if( [fVidTwoPassCheck state] == NSOnState )
+		{
+			job->pass = 1;
+			hb_add( fHandle, job );
+			job->pass = 2;
+			job->x264opts = strdup([[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] cString]);
+			hb_add( fHandle, job );
+		}
+		else
+		{
+			job->pass = 0;
+			hb_add( fHandle, job );
+		}
+	}
 }
 
 - (IBAction) Rip: (id) sender
 {
+   
+    
     /* Rip or Cancel ? */
     if( [[fRipButton title] isEqualToString: _( @"Cancel" )] )
     {
@@ -873,10 +886,15 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 
     if( [fQueueCheck state] == NSOffState )
     {
-        [self AddToQueue: sender];
+
+			[self AddToQueue: sender];
+
+		
+
     }
 
-    if( [[NSFileManager defaultManager] fileExistsAtPath:
+    /* We check for duplicate name here */
+	if( [[NSFileManager defaultManager] fileExistsAtPath:
             [fDstFile2Field stringValue]] )
     {
         NSBeginCriticalAlertSheet( _( @"File already exists" ),
@@ -887,8 +905,20 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
             [fDstFile2Field stringValue]] );
         return;
     }
+	/* We get the destination directory from the destingation field here */
+	NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
+	/* We check for a valid destination here */
+	if ([[NSFileManager defaultManager] fileExistsAtPath:destinationDirectory] == 0) 
+	{
+		NSRunAlertPanel(@"Warning!", @"This is not a valid destination directory!", @"OK", nil, nil);
+	}
+	else
+	{
+		[self _Rip];
+	}
+	
 
-    [self _Rip];
+
 }
 
 - (void) OverwriteAlertDone: (NSWindow *) sheet
@@ -922,7 +952,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
     hb_start( fHandle );
 
     /* Disable interface */
-    [self EnableUI: NO];
+    //[self EnableUI: NO];
     [fPauseButton setEnabled: NO];
     [fRipButton   setEnabled: NO];
 }
