@@ -372,11 +372,20 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 				
 				/* Use the dvd name in the default output field here 
 				May want to add code to remove blank spaces for some dvd names*/
-				
+				/* Check to see if the last destination has been set,use if so, if not, use Desktop */
+				if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"])
+				{
+				[fDstFile2Field setStringValue: [NSString stringWithFormat:
+                @"%@/%@.mp4", [[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"],[NSString
+                  stringWithUTF8String: title->name]]];
+				}
+				else
+				{
 				[fDstFile2Field setStringValue: [NSString stringWithFormat:
                 @"%@/Desktop/%@.mp4", NSHomeDirectory(),[NSString
                   stringWithUTF8String: title->name]]];
-				
+				}
+
                   
                 if (longuestpri < title->hours*60*60 + title->minutes *60 + title->seconds)
                 {
@@ -870,6 +879,8 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 			job->pass = 0;
 			hb_add( fHandle, job );
 		}
+	
+	[[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];
 	}
 }
 
@@ -914,6 +925,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 	}
 	else
 	{
+	[[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];
 		[self _Rip];
 	}
 	

@@ -30,6 +30,9 @@
                    forKey:@"DefAdvancedx264Flags"];
 	appDefaults = [NSDictionary dictionaryWithObject:@"YES"
                    forKey:@"DefaultPresetsDrawerShow"];
+	NSString *defDestDirectory =  @"~/Desktop";
+	defDestDirectory = [defDestDirectory stringByExpandingTildeInPath];
+	appDefaults = [NSDictionary dictionaryWithObject:defDestDirectory forKey:@"LastDestinationDirectory"];
 	
     [defaults registerDefaults: appDefaults];
 
