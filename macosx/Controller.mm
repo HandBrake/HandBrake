@@ -58,8 +58,7 @@ static int FormatSettings[3][4] =
     if( ( build = hb_check_update( fHandle, &version ) ) > -1 )
     {
         /* Update available - tell the user */
-		/* TEMPORARILY COMMENT OUT AS UPDATE CHECK IS NOT ACCURATE */
-		 /*
+	
         NSBeginInformationalAlertSheet( _( @"Update is available" ),
             _( @"Go get it!" ), _( @"Discard" ), NULL, fWindow, self,
             @selector( UpdateAlertDone:returnCode:contextInfo: ),
@@ -67,7 +66,7 @@ static int FormatSettings[3][4] =
             _( @"HandBrake %s (build %d) is now available for download." ),
             version, build] );
         return;
-		*/
+
     }
 
     /* Show scan panel ASAP */
@@ -95,7 +94,60 @@ static int FormatSettings[3][4] =
 
     [self TranslateStrings];
 
-    /* Destination box */
+	/* Init User Presets .plist */
+	/* We declare the default NSFileManager into fileManager */
+	NSFileManager * fileManager = [NSFileManager defaultManager];
+	//presetPrefs = [[NSUserDefaults standardUserDefaults] retain];
+	/* we set the files and support paths here */
+	AppSupportDirectory = @"~/Library/Application Support/HandBrake";
+    AppSupportDirectory = [AppSupportDirectory stringByExpandingTildeInPath];
+    
+	UserPresetsFile = @"~/Library/Application Support/HandBrake/UserPresets.plist";
+    UserPresetsFile = [UserPresetsFile stringByExpandingTildeInPath];
+	
+	x264ProfilesFile = @"~/Library/Application Support/HandBrake/x264Profiles.plist";
+    x264ProfilesFile = [x264ProfilesFile stringByExpandingTildeInPath];
+	/* We check for the app support directory for media fork */
+	if ([fileManager fileExistsAtPath:AppSupportDirectory] == 0) 
+	{
+		// If it doesnt exist yet, we create it here 
+		[fileManager createDirectoryAtPath:AppSupportDirectory attributes:nil];
+	}
+	// We check for the presets.plist here
+	
+	if ([fileManager fileExistsAtPath:UserPresetsFile] == 0) 
+	{
+
+		[fileManager createFileAtPath:UserPresetsFile contents:nil attributes:nil];
+		
+	}
+	// We check for the x264profiles.plist here
+	 
+	if ([fileManager fileExistsAtPath:x264ProfilesFile] == 0) 
+	{
+        
+		[fileManager createFileAtPath:x264ProfilesFile contents:nil attributes:nil];
+	}
+    
+	
+  UserPresetsFile = @"~/Library/Application Support/HandBrake/UserPresets.plist";
+  UserPresetsFile = [[UserPresetsFile stringByExpandingTildeInPath]retain];
+
+  UserPresets = [[NSMutableArray alloc] initWithContentsOfFile:UserPresetsFile];
+  if (nil == UserPresets) 
+  {
+    UserPresets = [[NSMutableArray alloc] init];
+  }
+  /* Show/Dont Show Presets drawer upon launch based
+  on user preference DefaultPresetsDrawerShow*/
+if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow"] > 0)
+		{
+			[fPresetDrawer open];
+		}
+
+
+
+    /* Destination box*/
     [fDstFormatPopUp removeAllItems];
     [fDstFormatPopUp addItemWithTitle: _( @"MP4 file" )];
     [fDstFormatPopUp addItemWithTitle: _( @"AVI file" )];
@@ -169,7 +221,11 @@ static int FormatSettings[3][4] =
     [self EnableUI: NO];
     [fPauseButton setEnabled: NO];
     [fRipButton setEnabled: NO];
+
+
+
 }
+
 
 - (void) TranslateStrings
 {
@@ -316,11 +372,21 @@ static int FormatSettings[3][4] =
 				
 				/* Use the dvd name in the default output field here 
 				May want to add code to remove blank spaces for some dvd names*/
-				
+				/* Check to see if the last destination has been set,use if so, if not, use Desktop */
+				if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"])
+				{
+				[fDstFile2Field setStringValue: [NSString stringWithFormat:
+                @"%@/%@.mp4", [[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"],[NSString
+                  stringWithUTF8String: title->name]]];
+				}
+				else
+				{
 				[fDstFile2Field setStringValue: [NSString stringWithFormat:
                 @"%@/Desktop/%@.mp4", NSHomeDirectory(),[NSString
                   stringWithUTF8String: title->name]]];
-                /* Temporarily comment out to fix title selection*/   
+				}
+
+                  
                 if (longuestpri < title->hours*60*60 + title->minutes *60 + title->seconds)
                 {
                 	longuestpri=title->hours*60*60 + title->minutes *60 + title->seconds;
@@ -519,7 +585,7 @@ static int FormatSettings[3][4] =
 		fPicSettingDeinterlaceDsply,fPicLabelSettings,fPicLabelSrc,fPicLabelOutp,
 		fPicLabelAr,fPicLabelDeinter,fPicLabelSrcX,fPicLabelOutputX,
 		fPicLabelPAROutp,fPicLabelPAROutputX,fPicSettingPARWidth,fPicSettingPARHeight,
-		fPicSettingPARDsply,fPicLabelAnamorphic};
+		fPicSettingPARDsply,fPicLabelAnamorphic,tableView,fPresetsAdd,fPresetsDelete};
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -535,11 +601,20 @@ static int FormatSettings[3][4] =
             }
         }
         [controls[i] setEnabled: b];
-		/* Temporarily disable Lang2 until crash is fixed */
-		[fAudLang2PopUp setEnabled: NO];
-		[fAudLang2Field setEnabled: NO];
-	
+
     }
+
+	/* Temporarily disable Lang2 until crash is fixed */
+	[fAudLang2PopUp setEnabled: NO];
+	[fAudLang2Field setEnabled: NO];
+	
+	if (b) {
+		/* if we're enabling the interface, check if we should / should't offer 6-channel AAC extraction */
+		[self Check6ChannelAACExtraction: NULL];
+	} else {
+		/* if we're disabling the interface, turn it off */
+		[fAudLang1SurroundCheck setEnabled: NO];
+	}
 
     [self VideoMatrixChanged: NULL];
 }
@@ -614,7 +689,7 @@ static int FormatSettings[3][4] =
     if( returnCode == NSOKButton )
     {
         [fDstFile2Field setStringValue: [sheet filename]];
-        [self FormatPopUpChanged: NULL];
+		[self FormatPopUpChanged: NULL];
     }
 }
 
@@ -686,7 +761,7 @@ static int FormatSettings[3][4] =
 		Lets Deprecate Baseline Level 1.3*/
 		job->h264_level = 30;
 		job->mux = HB_MUX_IPOD;
-        /* move sanity check for iPod Encoding here */
+                    /* move sanity check for iPod Encoding here */
 		job->pixel_ratio = 0 ;
 
 		}
@@ -698,6 +773,10 @@ static int FormatSettings[3][4] =
 	        /* Can only be used with svn rev >= 89 */
 			job->crf = 1;
 	        }
+		
+		/* Sends x264 options to the core library*/
+		job->x264opts = strdup([[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] cString]);
+		
 		
         job->h264_13 = [fVidEncoderPopUp indexOfSelectedItem];
     }
@@ -748,6 +827,13 @@ static int FormatSettings[3][4] =
                      indexOfSelectedItem]].rate;
     job->abitrate = hb_audio_bitrates[[fAudBitratePopUp
                         indexOfSelectedItem]].rate;
+	/* have we selected that 5.1 should be extracted as AAC? */
+	if (job->acodec == HB_ACODEC_FAAC && [fAudLang1SurroundCheck isEnabled] && [fAudLang1SurroundCheck state] == NSOnState) {
+		job->surround = 1;
+	} else {
+		job->surround = 0;
+	}
+
 }
 
 - (IBAction) EnableQueue: (id) sender
@@ -760,32 +846,48 @@ static int FormatSettings[3][4] =
 
 - (IBAction) AddToQueue: (id) sender
 {
-    hb_list_t  * list  = hb_get_titles( fHandle );
-    hb_title_t * title = (hb_title_t *) hb_list_item( list,
-            [fSrcTitlePopUp indexOfSelectedItem] );
-    hb_job_t * job = title->job;
-
-    [self PrepareJob];
-
-    /* Destination file */
-    job->file = strdup( [[fDstFile2Field stringValue] UTF8String] );
-
-    if( [fVidTwoPassCheck state] == NSOnState )
-    {
-        job->pass = 1;
-        hb_add( fHandle, job );
-        job->pass = 2;
-        hb_add( fHandle, job );
-    }
-    else
-    {
-        job->pass = 0;
-        hb_add( fHandle, job );
-    }
+/* We get the destination directory from the destingation field here */
+	NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
+	/* We check for a valid destination here */
+	if ([[NSFileManager defaultManager] fileExistsAtPath:destinationDirectory] == 0) 
+	{
+		NSRunAlertPanel(@"Warning!", @"This is not a valid destination directory!", @"OK", nil, nil);
+	}
+	else
+	{
+		
+		hb_list_t  * list  = hb_get_titles( fHandle );
+		hb_title_t * title = (hb_title_t *) hb_list_item( list,
+														  [fSrcTitlePopUp indexOfSelectedItem] );
+		hb_job_t * job = title->job;
+		
+		[self PrepareJob];
+		
+		/* Destination file */
+		job->file = strdup( [[fDstFile2Field stringValue] UTF8String] );
+		
+		if( [fVidTwoPassCheck state] == NSOnState )
+		{
+			job->pass = 1;
+			hb_add( fHandle, job );
+			job->pass = 2;
+			job->x264opts = strdup([[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] cString]);
+			hb_add( fHandle, job );
+		}
+		else
+		{
+			job->pass = 0;
+			hb_add( fHandle, job );
+		}
+	
+	[[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];
+	}
 }
 
 - (IBAction) Rip: (id) sender
 {
+   
+    
     /* Rip or Cancel ? */
     if( [[fRipButton title] isEqualToString: _( @"Cancel" )] )
     {
@@ -795,10 +897,15 @@ static int FormatSettings[3][4] =
 
     if( [fQueueCheck state] == NSOffState )
     {
-        [self AddToQueue: sender];
+
+			[self AddToQueue: sender];
+
+		
+
     }
 
-    if( [[NSFileManager defaultManager] fileExistsAtPath:
+    /* We check for duplicate name here */
+	if( [[NSFileManager defaultManager] fileExistsAtPath:
             [fDstFile2Field stringValue]] )
     {
         NSBeginCriticalAlertSheet( _( @"File already exists" ),
@@ -809,8 +916,21 @@ static int FormatSettings[3][4] =
             [fDstFile2Field stringValue]] );
         return;
     }
+	/* We get the destination directory from the destingation field here */
+	NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
+	/* We check for a valid destination here */
+	if ([[NSFileManager defaultManager] fileExistsAtPath:destinationDirectory] == 0) 
+	{
+		NSRunAlertPanel(@"Warning!", @"This is not a valid destination directory!", @"OK", nil, nil);
+	}
+	else
+	{
+	[[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];
+		[self _Rip];
+	}
+	
 
-    [self _Rip];
+
 }
 
 - (void) OverwriteAlertDone: (NSWindow *) sheet
@@ -844,7 +964,7 @@ static int FormatSettings[3][4] =
     hb_start( fHandle );
 
     /* Disable interface */
-    [self EnableUI: NO];
+   [self EnableUI: NO];
     [fPauseButton setEnabled: NO];
     [fRipButton   setEnabled: NO];
 }
@@ -1002,6 +1122,11 @@ static int FormatSettings[3][4] =
     [fAudLang2PopUp selectItemAtIndex: 0];
 	
 	/* END pri */
+
+	/* changing the title may have changed the audio channels on offer, so */
+	/* check if this change means we should / should't offer 6-channel AAC extraction */
+	[self Check6ChannelAACExtraction: sender];
+
 }
 
 - (IBAction) ChapterPopUpChanged: (id) sender
@@ -1085,6 +1210,11 @@ static int FormatSettings[3][4] =
         [fDstFile2Field setStringValue: [NSString stringWithFormat:
             @"%@.%s", string, ext]];
     }
+
+	/* changing the codecs on offer may mean that we are/aren't now offering AAC, so */
+	/* check if this change means we should / should't offer 6-channel AAC extraction */
+	[self Check6ChannelAACExtraction: sender];
+
 }
 
 - (IBAction) CodecsPopUpChanged: (id) sender
@@ -1123,14 +1253,18 @@ static int FormatSettings[3][4] =
         [fAudBitratePopUp setEnabled: YES];
     }
 
+	/* check if this change means we should / should't offer 6-channel AAC extraction */
+	[self Check6ChannelAACExtraction: sender];
+
     [self CalculateBitrate: sender];
+
 }
 
 - (IBAction) EncoderPopUpChanged: (id) sender
 {
     
 	/* Check to see if we need to modify the job pic values based on x264 (iPod) encoder selection */
-    if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fVidEncoderPopUp indexOfSelectedItem] == 1)
+    if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fDstCodecsPopUp indexOfSelectedItem] == 1 && [fVidEncoderPopUp indexOfSelectedItem] == 1)
     {
 	hb_job_t * job = fTitle->job;
 	job->pixel_ratio = 0 ;
@@ -1146,11 +1280,93 @@ static int FormatSettings[3][4] =
 		 hb_fix_aspect( job, HB_KEEP_WIDTH );
 		 
 		 }
+
+		/* uncheck the "export 5.1 as 6-channel AAC" checkbox if it is checked */
+		[fAudLang1SurroundCheck setState: NSOffState];
+
 	}
     
-[self CalculatePictureSizing: sender];    
+	[self CalculatePictureSizing: sender];    
   
 }
+
+- (IBAction) Check6ChannelAACExtraction: (id) sender
+{
+
+	/* make sure we have a selected title before continuing */
+	if (fTitle == NULL) return;
+
+	/* get the current title's job into a convenience variable */
+	hb_job_t * job = fTitle->job;
+	
+    /* get the current audio tracks */
+	/* this is done in PrepareJob too, but we want them here to check against below */
+    job->audios[0] = [fAudLang1PopUp indexOfSelectedItem] - 1;
+    job->audios[1] = [fAudLang2PopUp indexOfSelectedItem] - 1;
+    job->audios[2] = -1;
+
+	/* now, let's check if any selected audio track has 5.1 sound */
+	hb_audio_t * audio;
+	bool foundfiveoneaudio = false;
+
+	/* find out what the currently-selected audio codec is */
+    int format = [fDstFormatPopUp indexOfSelectedItem];
+    int codecs = [fDstCodecsPopUp indexOfSelectedItem];
+	int acodec = FormatSettings[format][codecs] & HB_ACODEC_MASK;
+
+	/* we only offer the option to extract 5.1 to 6-channel if the selected audio codec is AAC */
+	if (acodec == HB_ACODEC_FAAC) {
+
+		bool doneaudios = false;
+		int thisaudio = 0;
+		
+		while (!doneaudios) {
+
+			if (job->audios[thisaudio] == -1) {
+				doneaudios = true;
+			} else {
+				audio = (hb_audio_t *) hb_list_item( fTitle->list_audio, job->audios[thisaudio] );
+				if (audio != NULL) {
+					if (audio->channels == 5 && audio->lfechannels == 1) {
+						foundfiveoneaudio = true;
+						doneaudios = true; /* as it doesn't matter if we find any more! */
+					}
+				}
+			}
+
+			thisaudio++;
+		}
+	}
+
+    /* If we are extracting to AAC, and any of our soundtracks were 5.1, then enable the checkbox  */
+	if (foundfiveoneaudio) {
+		[fAudLang1SurroundCheck setEnabled: YES];
+		/* Check default surround sound pref and if it is YES, lets also check the checkbox */
+		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultSurroundSound"] > 0)
+		{
+			[fAudLang1SurroundCheck setState: NSOnState];
+		}
+	} else {
+		[fAudLang1SurroundCheck setEnabled: NO];
+		/* as well as disabling the checkbox, let's uncheck it if it is checked */
+		[fAudLang1SurroundCheck setState: NSOffState];
+	}
+
+}
+
+
+- (IBAction) LanguagePopUpChanged: (id) sender
+{
+	
+	/* selecting a different language may mean we have a different number of channels, so */
+	/* check if this change means we should / should't offer 6-channel AAC extraction */
+	[self Check6ChannelAACExtraction: sender];
+	
+	/* see if the new language setting will change the bitrate we need */
+    [self CalculateBitrate:     sender];	
+
+}
+
 
 /* Get and Display Current Pic Settings in main window */
 - (IBAction) CalculatePictureSizing: (id) sender
@@ -1241,6 +1457,263 @@ static int FormatSettings[3][4] =
             [fVidTargetSizeField intValue] )];
 }
 
+- (IBAction) ShowAddPresetPanel: (id) sender
+{
+    /* Show the panel */
+    [NSApp beginSheet: fAddPresetPanel modalForWindow: fWindow
+        modalDelegate: NULL didEndSelector: NULL contextInfo: NULL];
+    [NSApp runModalForWindow: fAddPresetPanel];
+    [NSApp endSheet: fAddPresetPanel];
+    [fAddPresetPanel orderOut: self];
+}
+- (IBAction) CloseAddPresetPanel: (id) sender
+{
+    [NSApp stopModal];
+}
+
+- (IBAction)addPreset:(id)sender
+{
+    [UserPresets addObject:[self CreatePreset]];
+	/* We Sort the Presets Alphabetically by name */
+	NSSortDescriptor * lastNameDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"PresetName" 
+                                                    ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease];
+	NSArray *sortDescriptors=[NSArray arrayWithObject:lastNameDescriptor];
+	NSArray *sortedArray=[UserPresets sortedArrayUsingDescriptors:sortDescriptors];
+	[UserPresets setArray:sortedArray];
+	
+	/* We stop the modal window for the new preset */
+	[fPresetNewName    setStringValue: @""];
+	[NSApp stopModal];
+	/* We Reload the New Table data for presets */
+    [tableView reloadData];
+   /* We save all of the preset data here */
+    [self savePreset];
+}
+
+- (IBAction)insertPreset:(id)sender
+{
+    int index = [tableView selectedRow];
+    [UserPresets insertObject:[self CreatePreset] atIndex:index];
+    [tableView reloadData];
+    [self savePreset];
+}
+
+- (NSDictionary *)CreatePreset
+{
+    NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
+	/* Get the New Preset Name from the field in the AddPresetPanel */
+    [preset setObject:[fPresetNewName stringValue] forKey:@"PresetName"];
+	/*Get the whether or not to apply pic settings in the AddPresetPanel*/
+	[preset setObject:[NSNumber numberWithInt:[fPresetNewPicSettingsApply state]] forKey:@"UsesPictureSettings"];
+	/* File Format */
+    [preset setObject:[fDstFormatPopUp titleOfSelectedItem] forKey:@"FileFormat"];
+	/* Codecs */
+	[preset setObject:[fDstCodecsPopUp titleOfSelectedItem] forKey:@"FileCodecs"];
+	/* Video encoder */
+	[preset setObject:[fVidEncoderPopUp titleOfSelectedItem] forKey:@"VideoEncoder"];
+	/* Video quality */
+	[preset setObject:[NSNumber numberWithInt:[fVidQualityMatrix selectedRow]] forKey:@"VideoQualityType"];
+	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
+	[preset setObject:[fVidBitrateField stringValue] forKey:@"VideoAvgBitrate"];
+	[preset setObject:[NSNumber numberWithFloat:[fVidQualitySlider floatValue]] forKey:@"VideoQualitySlider"];
+	
+	/* Video framerate */
+	[preset setObject:[fVidRatePopUp titleOfSelectedItem] forKey:@"VideoFramerate"];
+	/* GrayScale */
+	[preset setObject:[NSNumber numberWithInt:[fVidGrayscaleCheck state]] forKey:@"VideoGrayScale"];
+	/* 2 Pass Encoding */
+	[preset setObject:[NSNumber numberWithInt:[fVidTwoPassCheck state]] forKey:@"VideoTwoPass"];
+	
+	/*Picture Settings*/
+	hb_job_t * job = fTitle->job;
+	/* Basic Picture Settings */
+	[preset setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PictureWidth"];
+	[preset setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PictureHeight"];
+	[preset setObject:[NSNumber numberWithInt:fTitle->job->keep_ratio] forKey:@"PictureKeepRatio"];
+	[preset setObject:[NSNumber numberWithInt:fTitle->job->deinterlace] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:fTitle->job->pixel_ratio] forKey:@"PicturePAR"];
+	/* Set crop settings here */
+	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
+	[preset setObject:[NSNumber numberWithInt:job->crop[0]] forKey:@"PictureTopCrop"];
+    [preset setObject:[NSNumber numberWithInt:job->crop[1]] forKey:@"PictureBottomCrop"];
+	[preset setObject:[NSNumber numberWithInt:job->crop[2]] forKey:@"PictureLeftCrop"];
+	[preset setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
+	
+	/*Audio*/
+	/* Audio Language One*/
+	[preset setObject:[fAudLang1PopUp titleOfSelectedItem] forKey:@"AudioLang1"];
+	/* Audio Language One Surround Sound Checkbox*/
+	[preset setObject:[NSNumber numberWithInt:[fAudLang1SurroundCheck state]] forKey:@"AudioLang1Surround"];
+	/* Audio Sample Rate*/
+	[preset setObject:[fAudRatePopUp titleOfSelectedItem] forKey:@"AudioSampleRate"];
+	/* Audio Bitrate Rate*/
+	[preset setObject:[fAudBitratePopUp titleOfSelectedItem] forKey:@"AudioBitRate"];
+	/* Subtitles*/
+	[preset setObject:[fSubPopUp titleOfSelectedItem] forKey:@"Subtitles"];
+	
+
+    [preset autorelease];
+    return preset;
+
+}
+
+- (IBAction)deletePreset:(id)sender
+{
+    int status;
+    NSEnumerator *enumerator;
+    NSNumber *index;
+    NSMutableArray *tempArray;
+    id tempObject;
+    
+    if ( [tableView numberOfSelectedRows] == 0 )
+        return;
+    /* Alert user before deleting preset */
+	/* Comment out for now, tie to user pref eventually */
+    //NSBeep();
+    status = NSRunAlertPanel(@"Warning!", @"Are you sure that you want to delete the selected preset?", @"OK", @"Cancel", nil);
+    
+    if ( status == NSAlertDefaultReturn ) {
+        enumerator = [tableView selectedRowEnumerator];
+        tempArray = [NSMutableArray array];
+        
+        while ( (index = [enumerator nextObject]) ) {
+            tempObject = [UserPresets objectAtIndex:[index intValue]];
+            [tempArray addObject:tempObject];
+        }
+        
+        [UserPresets removeObjectsInArray:tempArray];
+        [tableView reloadData];
+        [self savePreset];   
+    }
+}
+- (IBAction)tableViewSelected:(id)sender
+{
+
+    /* we get the chosen preset from the UserPresets array */
+	chosenPreset = [UserPresets objectAtIndex:[sender selectedRow]];
+	/* we set the preset display field in main window here */
+	//[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@", [chosenPreset valueForKey:@"PresetName"]]];
+	/* File Format */
+	[fDstFormatPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileFormat"]]];
+	[self FormatPopUpChanged: NULL];
+    /* Codecs */
+	[fDstCodecsPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]]];
+	[self CodecsPopUpChanged: NULL];
+	/* Video encoder */
+	[fVidEncoderPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]]];
+	/* Lets run through the following functions to get variables set there */
+	[self EncoderPopUpChanged: sender];
+	[self Check6ChannelAACExtraction: sender];
+	[self CalculateBitrate: sender];
+	
+	/* Video quality */
+	[fVidQualityMatrix selectCellAtRow:[[chosenPreset objectForKey:@"VideoQualityType"] intValue] column:0];
+	
+	[fVidTargetSizeField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoTargetSize"]]];
+	[fVidBitrateField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoAvgBitrate"]]];
+	
+	[fVidQualitySlider setFloatValue: [[chosenPreset valueForKey:@"VideoQualitySlider"] floatValue]];
+	[self VideoMatrixChanged: sender];
+	
+	/* Video framerate */
+	[fVidRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoFramerate"]]];
+	
+	/* GrayScale */
+	[fVidGrayscaleCheck setState:[[chosenPreset objectForKey:@"VideoGrayScale"] intValue]];
+
+	/* 2 Pass Encoding */
+	[fVidTwoPassCheck setState:[[chosenPreset objectForKey:@"VideoTwoPass"] intValue]];
+    
+	
+	/*Audio*/
+	/* Audio Language One*/
+	[fAudLang1PopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioLang1"]]];
+	/* Audio Language One Surround Sound Checkbox*/
+	[fAudLang1SurroundCheck setState:[[chosenPreset objectForKey:@"AudioLang1Surround"] intValue]];
+	[self Check6ChannelAACExtraction: sender];
+	/* Audio Sample Rate*/
+	[fAudRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioSampleRate"]]];
+	/* Audio Bitrate Rate*/
+	[fAudBitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioBitRate"]]];
+	/*Subtitles*/
+	[fSubPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Subtitles"]]];
+	
+	/* Picture Settings */
+	/* Look to see if we apply these here in objectForKey:@"UsesPictureSettings"] */
+	if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] == 1)
+	{
+		hb_job_t * job = fTitle->job;
+		job->width = [[chosenPreset objectForKey:@"PictureWidth"]  intValue];
+		job->height = [[chosenPreset objectForKey:@"PictureHeight"]  intValue];
+		job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
+		if (job->keep_ratio == 1)
+		{
+			hb_fix_aspect( job, HB_KEEP_WIDTH );
+		}
+		job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
+		job->crop[0] = [[chosenPreset objectForKey:@"PictureTopCrop"]  intValue];
+		job->crop[1] = [[chosenPreset objectForKey:@"PictureBottomCrop"]  intValue];
+		job->crop[2] = [[chosenPreset objectForKey:@"PictureLeftCrop"]  intValue];
+		job->crop[3] = [[chosenPreset objectForKey:@"PictureRightCrop"]  intValue];
+		[self CalculatePictureSizing: sender]; 
+	}
+	
+	// Deselect the currently selected table //
+	//[tableView deselectRow:[tableView selectedRow]];
+}
+
+- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+{
+    return [UserPresets count];
+}
+
+- (id)tableView:(NSTableView *)aTableView
+      objectValueForTableColumn:(NSTableColumn *)aTableColumn
+      row:(int)rowIndex
+{
+
+	
+	
+	id theRecord, theValue;
+    
+    theRecord = [UserPresets objectAtIndex:rowIndex];
+    theValue = [theRecord objectForKey:[aTableColumn identifier]];
+    
+    return theValue;
+}
+
+// NSTableDataSource method that we implement to edit values directly in the table...
+- (void)tableView:(NSTableView *)aTableView
+        setObjectValue:(id)anObject
+        forTableColumn:(NSTableColumn *)aTableColumn
+        row:(int)rowIndex
+{
+    id theRecord;
+    
+    theRecord = [UserPresets objectAtIndex:rowIndex];
+    [theRecord setObject:anObject forKey:[aTableColumn identifier]];
+    
+		/* We Sort the Presets Alphabetically by name */
+	NSSortDescriptor * lastNameDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"PresetName" 
+                                                    ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease];
+	NSArray *sortDescriptors=[NSArray arrayWithObject:lastNameDescriptor];
+	NSArray *sortedArray=[UserPresets sortedArrayUsingDescriptors:sortDescriptors];
+	[UserPresets setArray:sortedArray];
+	/* We Reload the New Table data for presets */
+    [tableView reloadData];
+   /* We save all of the preset data here */
+    [self savePreset];
+}
+
+
+- (void)savePreset
+{
+    [UserPresets writeToFile:UserPresetsFile atomically:YES];
+
+}
+
+
+
 - (void) controlTextDidBeginEditing: (NSNotification *) notification
 {
     [self CalculateBitrate: NULL];
@@ -1259,13 +1732,15 @@ static int FormatSettings[3][4] =
 - (IBAction) OpenHomepage: (id) sender
 {
     [[NSWorkspace sharedWorkspace] openURL: [NSURL
-        URLWithString:@"http://mediafork.dynalias.com/"]];
+        URLWithString:@"http://handbrake.m0k.org/"]];
 }
 
 - (IBAction) OpenForums: (id) sender
 {
     [[NSWorkspace sharedWorkspace] openURL: [NSURL
-        URLWithString:@"http://mediafork.dynalias.com/forum/"]];
+        URLWithString:@"http://handbrake.m0k.org/forum/"]];
 }
+
+
 
 @end

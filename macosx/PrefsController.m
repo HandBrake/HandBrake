@@ -8,9 +8,9 @@
     NSDictionary   * appDefaults;
     
     /* Unless the user specified otherwise, default is to check
-       for update  fDefPicSizeAutoSetipod*/
+       for update  DefAdvancedx264Flags*/
     defaults    = [NSUserDefaults standardUserDefaults];
-    appDefaults = [NSDictionary dictionaryWithObject:@"NO"
+    appDefaults = [NSDictionary dictionaryWithObject:@"YES"
                    forKey:@"CheckForUpdates"];
 	appDefaults = [NSDictionary dictionaryWithObject:@"English"
                    forKey:@"DefaultLanguage"];
@@ -24,15 +24,21 @@
                    forKey:@"DefaultPicSizeAutoiPod"];
 	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
                    forKey:@"PixelRatio"];
-
+          appDefaults = [NSDictionary dictionaryWithObject:@"NO"
+                   forKey:@"DefaultSurroundSound"];
+	appDefaults = [NSDictionary dictionaryWithObject:@""
+                   forKey:@"DefAdvancedx264Flags"];
+	appDefaults = [NSDictionary dictionaryWithObject:@"YES"
+                   forKey:@"DefaultPresetsDrawerShow"];
+	NSString *defDestDirectory =  @"~/Desktop";
+	defDestDirectory = [defDestDirectory stringByExpandingTildeInPath];
+	appDefaults = [NSDictionary dictionaryWithObject:defDestDirectory forKey:@"LastDestinationDirectory"];
 	
     [defaults registerDefaults: appDefaults];
 
 	/* fUpdateCheck Check or uncheck according to the preferences */
-    
-    [fUpdateCheck setState: 0];
-    [fUpdateCheck setEnabled: NO];	
-	
+    [fUpdateCheck setState: [defaults boolForKey:@"CheckForUpdates"] ?
+        NSOnState : NSOffState];
 
 	// Fill the languages combobox
     [fdefaultlanguage removeAllItems];
@@ -215,22 +221,37 @@
 
 	/* fFileExtItunes Check or uncheck according to the preferences */
     [fFileExtItunes setState: [defaults boolForKey:@"DefaultMpegName"] ?
-        NSOnState : NSOffState];
-		
-		/* fDefCrf Check or uncheck according to the preferences*/
+				  NSOnState : NSOffState];
+	
+	/* fDefCrf Check or uncheck according to the preferences*/
     [fDefCrf setState: [defaults boolForKey:@"DefaultCrf"] ?
-        NSOnState : NSOffState];
-
+		   NSOnState : NSOffState];
+	
 	/* fDefDeinterlace Check or uncheck according to the preferences*/
     [fDefDeinterlace setState: [defaults boolForKey:@"DefaultDeinterlaceOn"] ?
-        NSOnState : NSOffState];
-
-/* fDefPicSizeAutoSetipod Check or uncheck according to the preferences*/
+				   NSOnState : NSOffState];
+	
+	/* fDefPicSizeAutoSetipod Check or uncheck according to the preferences*/
     [fDefPicSizeAutoSetipod setState: [defaults boolForKey:@"DefaultPicSizeAutoiPod"] ?
-        NSOnState : NSOffState];
-		/* fDefPixelRatio */
+						  NSOnState : NSOffState];
+	/* fDefPixelRatio */
     [fDefPixelRatio setState: [defaults boolForKey:@"PixelRatio"] ?
-        NSOnState : NSOffState];
+				  NSOnState : NSOffState];
+	
+	/* fDefAudioSurround Check or uncheck according to the preferences */
+    [fDefAudioSurround setState: [defaults boolForKey:@"DefaultSurroundSound"] ?
+					 NSOnState : NSOffState];
+		
+	/* Insert default DefAdvanced x264 Flag here */
+	if ([defaults stringForKey:@"DefAdvancedx264Flags"]!=NULL)
+	{
+	[fDefAdvancedx264FlagsView setString:[defaults stringForKey:@"DefAdvancedx264Flags"]];
+	}
+	
+	/* fDefPresetDrawerShow Check or uncheck according to the preferences*/
+    [fDefPresetDrawerShow setState: [defaults boolForKey:@"DefaultPresetsDrawerShow"] ?
+		   NSOnState : NSOffState];
+	
 }
 
 
@@ -241,6 +262,7 @@
 
 - (IBAction) ClosePanel: (id) sender;
 {
+    [self CheckChanged: sender]; 
     [NSApp stopModal];
     [fPanel orderOut: sender];
 }
@@ -318,9 +340,34 @@
     {
         [defaults setObject:@"NO" forKey:@"PixelRatio"];
     }
+ 
+  
+        /* Use Surround Sound if available*/
+	
+	if( [fDefAudioSurround state] == NSOnState )
+    {
+        [defaults setObject:@"YES" forKey:@"DefaultSurroundSound"];
+    }
+    else
+    {
+        [defaults setObject:@"NO" forKey:@"DefaultSurroundSound"];
+    }	
+    
+		
+	/*Advanced x264 Flag string into */
+      [defaults setObject:[fDefAdvancedx264FlagsView string]  forKey:@"DefAdvancedx264Flags"];	
+	  
+	    /* Show Presets Drawer upon launch*/
+	
+	if( [fDefPresetDrawerShow state] == NSOnState )
+    {
+        [defaults setObject:@"YES" forKey:@"DefaultPresetsDrawerShow"];
+    }
+    else
+    {
+        [defaults setObject:@"NO" forKey:@"DefaultPresetsDrawerShow"];
+    }
 
-	
-	
 }
 
 @end

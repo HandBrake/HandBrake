@@ -1,0 +1,23 @@
+diff -Naur mpeg4ip/lib/mp4v2/atom_tkhd.cpp mpeg4ip_patched/lib/mp4v2/atom_tkhd.cpp
+--- mpeg4ip/lib/mp4v2/atom_tkhd.cpp	2003-11-19 23:46:11.000000000 +0000
++++ mpeg4ip_patched/lib/mp4v2/atom_tkhd.cpp	2007-02-15 15:58:06.000000000 +0000
+@@ -61,7 +61,8 @@
+ 	pProp->SetFixed16Format();
+ 	AddProperty(pProp); /* 8 */
+ 
+-	AddReserved("reserved3", 38); /* 9 */
++	/* patched by maurj to enable us to set the matrix for anamorphic display */
++	AddProperty(new MP4BytesProperty("reserved3", 38)); /* 9 */
+ 
+ 	pProp = new MP4Float32Property("width");
+ 	pProp->SetFixed32Format();
+@@ -106,7 +107,8 @@
+ 	m_pProperties[9]->SetReadOnly(false);
+ 	((MP4BytesProperty*)m_pProperties[9])->
+ 		SetValue(reserved3, sizeof(reserved3));
+-	m_pProperties[9]->SetReadOnly(true);
++	/* patched by maurj to enable us to set the matrix for anamorphic display */
++	/* m_pProperties[9]->SetReadOnly(true);*/
+ }
+ 
+ void MP4TkhdAtom::Read() 

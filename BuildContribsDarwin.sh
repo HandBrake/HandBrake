@@ -33,7 +33,7 @@
 export VERSION=$1
 export IP=$2
 export USERNAME=$3
-export REPOS=svn://multics.dynalias.com/HandBrake/trunk/
+export REPOS=svn://svn.m0k.org/HandBrake/branches/0.8.0_beta2_5.1
 # ##########################################################################
 # Launch the build on the foreign system
 # ##########################################################################
@@ -55,13 +55,22 @@ cd foreign
 mkdir lib
 cd lib
 scp $USERNAME@$IP:/Users/$USERNAME/MFBUILDTMP/contrib/lib/*a .
+scp -rp $USERNAME@$IP:/Users/$USERNAME/MFBUILDTMP/contrib/lib/libquicktime .
 for lib in `ls *.a`
 do	
-	echo ... lipo: $lib
+	echo ... lipo contrib libraries: $lib
 	lipo -create $lib ../../native/lib/$lib -output ../../lib/$lib
 done;
+mkdir ../../lib/libquicktime
+cd libquicktime
+for lib in `ls *.so`
+do
+	echo ... lipo libquicktime plugins: $lib
+        lipo -create $lib ../../../native/lib/libquicktime/$lib -output ../../../lib/libquicktime/$lib
+done;
+ 
 
-cd ../..
+cd ../../..
 echo $VERSION > DarwinContribVersion.txt
 echo Creating contribbin-darwin-$VERSION.tar.gz
 tar zcvf contribbin-darwin-$VERSION.tar.gz lib include  DarwinContribVersion.txt

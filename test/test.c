@@ -10,7 +10,7 @@
 #include <time.h>
 #include <unistd.h>
 
-#include "mediafork.h"
+#include "hb.h"
 
 /* Options */
 static int    debug       = HB_DEBUG_NONE;
@@ -26,6 +26,7 @@ static int    vcodec      = HB_VCODEC_FFMPEG;
 static int    h264_13     = 0;
 static int    h264_30     = 0;
 static char * audios      = NULL;
+static int    surround    = 0;
 static int    sub         = 0;
 static int    width       = 0;
 static int    height      = 0;
@@ -43,6 +44,10 @@ static int    pixelratio  = 0;
 static int    chapter_start = 0;
 static int    chapter_end   = 0;
 static int	  crf			= 0;
+static char	  *x264opts		= NULL;
+static char	  *x264opts2 	= NULL;
+static int	  maxHeight		= 0;
+static int	  maxWidth		= 0;
 
 /* Exit cleanly on Ctrl-C */
 static volatile int die = 0;
@@ -72,7 +77,7 @@ int main( int argc, char ** argv )
     h = hb_init( debug, update );
 
     /* Show version */
-    fprintf( stderr, "MediaFork %s (%d) - http://mediafork.dynalias.com/\n",
+    fprintf( stderr, "HandBrake %s (%d) - http://handbrake.m0k.org/\n",
              hb_get_version( h ), hb_get_build( h ) );
 
     /* Check for update */
@@ -81,12 +86,12 @@ int main( int argc, char ** argv )
         if( ( build = hb_check_update( h, &version ) ) > -1 )
         {
             fprintf( stderr, "You are using an old version of "
-                     "MediaFork.\nLatest is %s (build %d).\n", version,
+                     "HandBrake.\nLatest is %s (build %d).\n", version,
                      build );
         }
         else
         {
-            fprintf( stderr, "Your version of MediaFork is up to "
+            fprintf( stderr, "Your version of HandBrake is up to "
                      "date.\n" );
         }
         hb_close( &h );
@@ -173,8 +178,10 @@ int main( int argc, char ** argv )
     if( output ) free( output );
     if( format ) free( format );
     if( audios ) free( audios );
-
-    fprintf( stderr, "MediaFork has exited.\n" );
+	if( x264opts ) free (x264opts );
+	if( x264opts2 ) free (x264opts2 );
+	
+    fprintf( stderr, "HandBrake has exited.\n" );
 
     return 0;
 }
@@ -183,7 +190,7 @@ static void ShowCommands()
 {
     fprintf( stderr, "Commands:\n" );
     fprintf( stderr, " [h]elp    Show this message\n" );
-    fprintf( stderr, " [q]uit    Exit MediaForkCLI\n" );
+    fprintf( stderr, " [q]uit    Exit HandBrakeCLI\n" );
     fprintf( stderr, " [p]ause   Pause encoding\n" );
     fprintf( stderr, " [r]esume  Resume encoding\n" );
 }
@@ -328,7 +335,7 @@ static int HandleEvents( hb_handle_t * h )
                 job->height = height;
                 hb_fix_aspect( job, HB_KEEP_HEIGHT );
             }
-            else if( !pixelratio )
+            else if( !width && !height && !pixelratio )
             {
                 hb_fix_aspect( job, HB_KEEP_WIDTH );
             }
@@ -351,9 +358,9 @@ static int HandleEvents( hb_handle_t * h )
             { 
                 job->h264_level = 13; 
             }
-	    if( h264_30 )
-	    {
-	        job->h264_level = 30;
+	        if( h264_30 )
+	        {
+	            job->h264_level = 30;
             }
             if( vrate )
             {
@@ -389,6 +396,10 @@ static int HandleEvents( hb_handle_t * h )
                     job->audios[0] = -1;
                 }
             }
+			if( surround )
+			{
+				job->surround = 1;
+			}
             if( abitrate )
             {
                 job->abitrate = abitrate;
@@ -421,11 +432,26 @@ static int HandleEvents( hb_handle_t * h )
 				job->crf = 1;
 			}
 
+			if (x264opts != NULL && *x264opts != '\0' )
+			{
+				hb_log("Applying the following x264 options: %s", x264opts);
+				job->x264opts = x264opts;
+			}
+			else /*avoids a bus error crash when options aren't specified*/
+			{
+				job->x264opts =  NULL;
+			}
+			if (maxWidth)
+				job->maxWidth = maxWidth;
+			if (maxHeight)
+				job->maxHeight = maxHeight;
+				
             if( twoPass )
             {
                 job->pass = 1;
                 hb_add( h, job );
                 job->pass = 2;
+				job->x264opts = x264opts2;
                 hb_add( h, job );
             }
             else
@@ -508,7 +534,7 @@ static void ShowHelp()
     int i;
     
     fprintf( stderr,
-    "Syntax: MediaForkCLI [options] -i <device> -o <file>\n"
+    "Syntax: HandBrakeCLI [options] -i <device> -o <file>\n"
     "\n"
     "    -h, --help              Print help\n"
     "    -u, --update            Check for updates and exit\n"
@@ -527,6 +553,7 @@ static void ShowHelp()
     "                            default: all chapters)\n"
     "    -a, --audio <string>    Select audio channel(s) (\"none\" for no \n"
     "                            audio, default: first one)\n"
+    "    -6, --surround          Export 5.1 surround as 6-channel AAC\n"
     "\n"
     "    -s, --subtitle <number> Select subtitle (default: none)\n"
     "    -e, --encoder <string>  Set video library encoder (ffmpeg,xvid,\n"
@@ -561,7 +588,13 @@ static void ShowHelp()
     "    -B, --ab <kb/s>         Set audio bitrate (default: 128)\n"
     "    -w, --width <number>    Set picture width\n"
     "    -l, --height <number>   Set picture height\n"
-    "        --crop <T:B:L:R>    Set cropping values (default: autocrop)\n" );
+    "        --crop <T:B:L:R>    Set cropping values (default: autocrop)\n"
+	"    -Y, --maxHeight <#>     Set maximum height\n"
+	"    -X, --maxWidth <#>      Set maximum width\n"
+	"\n"
+	"    -x, --x264opts <string> Specify advanced x264 options in the\n"
+	"                            same style as mencoder:\n"
+	"                            option1=value1:option2=value2\n" );
 }
 
 /****************************************************************************
@@ -585,6 +618,7 @@ static int ParseOptions( int argc, char ** argv )
             { "title",       required_argument, NULL,    't' },
             { "chapters",    required_argument, NULL,    'c' },
             { "audio",       required_argument, NULL,    'a' },
+            { "surround",    no_argument,       NULL,    '6' },
             { "subtitle",    required_argument, NULL,    's' },
 
             { "encoder",     required_argument, NULL,    'e' },
@@ -604,6 +638,9 @@ static int ParseOptions( int argc, char ** argv )
             { "rate",        required_argument, NULL,    'r' },
             { "arate",       required_argument, NULL,    'R' },
 			{ "crf",		 no_argument,		NULL,	 'Q' },
+			{ "x264opts",    required_argument, NULL,    'x' },
+			{ "maxHeight",	 required_argument, NULL, 	 'Y' },
+			{ "maxWidth",	 required_argument, NULL,	 'X' },
 			
             { 0, 0, 0, 0 }
           };
@@ -612,7 +649,7 @@ static int ParseOptions( int argc, char ** argv )
         int c;
 
         c = getopt_long( argc, argv,
-                         "hvuC:f:i:o:t:c:a:s:e:E:2dgpw:l:n:b:q:S:B:r:R:Q",
+                         "hvuC:f:i:o:t:c:a:s:e:E:2dgpw:l:n:b:q:S:B:r:R:Qx:Y:X:",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -670,6 +707,9 @@ static int ParseOptions( int argc, char ** argv )
             }
             case 'a':
                 audios = strdup( optarg );
+                break;
+            case '6':
+                surround = 1;
                 break;
             case 's':
                 sub = atoi( optarg );
@@ -796,7 +836,17 @@ static int ParseOptions( int argc, char ** argv )
 			case 'Q':
 				crf = 1;
 				break;
-
+			case 'x':
+			   	x264opts = strdup( optarg );
+				x264opts2 = strdup( optarg );
+			    break;
+			case 'Y':
+				maxHeight = atoi( optarg );
+				break;
+			case 'X':
+				maxWidth = atoi (optarg );
+				break;
+				
             default:
                 fprintf( stderr, "unknown option (%s)\n", argv[optind] );
                 return -1;
@@ -896,6 +946,13 @@ static int CheckOptions( int argc, char ** argv )
                 acodec = HB_ACODEC_VORBIS;
             }
         }
+		
+		if (acodec != HB_ACODEC_FAAC)
+		{
+			/* only attempt 5.1 export if exporting to AAC */
+			surround = 0;
+		}
+		
     }
 
     return 0;

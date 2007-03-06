@@ -1,4 +1,6 @@
-AUTHORS file for HandBrake <http://handbrake.m0k.org/>
+AUTHORS file for MediaFork <http://mediafork.dynalias.com/>
+
+Originally forked from HandBrake <http://handbrake.m0k.org/>
 
 Eric Petit <titer@m0k.org>
  + Core (construct, multithreading, BeOS/OS X/Linux ports)
@@ -34,6 +36,11 @@ Rodney Hester <rhester@multics.dynalias.com> (rhester)
 Benjamin Lake <me@benlake.org> (benlake)
  + Mac OS X GUI enhancements/rewrite
 
+Chris Lee <clee@kde.org>
+ + PAR/anamorphic support
+ + dvdread enhancements
+ + Linux GUI
+
 Chris Long <chris.long@mac.com> (chrislong)
  + iPod firmware 1.2+ 640x480 MPEG-4/H.264 support
 
@@ -48,12 +55,14 @@ Jonathon Rubin <jb.rubin@gmail.com> (jbrjake)
  + Massive core enhancements
  + Significant improvements to H.264 support
 
-Scott <srae88@gmail.com> (sr55)
+Scott <sr55ww@googlemail.com> (sr55)
  + Windows GUI
  + mpeg4ip patches for cygwin compile
 
-Unknown <handbrake@addey.com> (maurj)
- + AAC audio improvements
+Maurj <mediafork@maurj.com> (maurj)
+ + 6-channel AAC audio from 5.1 source
+ + mono AAC audio from mono source
+ + PAR/anamorphic support in mp4 file format
 
 Unknown <mirkwood07@gmail.com> (mirkwood)
  + Windows CLI port

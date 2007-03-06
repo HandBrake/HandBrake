@@ -1,1 +1,1 @@
-http://download.mediafork.dynalias.com/contrib/libdvdread-20050928.tar.gz
+http://download.m0k.org/handbrake/contrib/libdvdread-0.9.7.tar.gz

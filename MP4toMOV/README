@@ -1,0 +1,10 @@
+MP4toMOV
+--------
+
+This small application will convert a MediaFork .mp4 file into a .mov file which can be read by iTunes and FrontRow.  You only really need to do this if you are using 6-channel AAC in your mp4 files, as iTunes and FrontRow can already read stereo mp4 files.
+
+To use MP4toMOV, drag one or more mp4 files onto the application's icon.  MP4toMOV will convert the files to QuickTime .mov format.  New files will be created in the same directory as the .mp4 files, with the .mov extension added to the end.  These .mov files can then be dragged to iTunes for use in iTunes and FrontRow, even if they have 6-channel AAC soundtracks.  MP4toMOV will quit once all files have been converted.
+
+Alternatively, double-click on MP4toMOV, and select "File > Open" to open a single file for conversion.
+
+MP4toMOV is created with REALbasic, and the MP4toMOV.rbp file is a project file for REALbasic 2007r1.  REALbasic is available from http://www.realbasic.com/ .

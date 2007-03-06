@@ -11,7 +11,7 @@
 #include <IOKit/storage/IODVDMedia.h>
 
 #include "DriveDetector.h"
-#include "mediafork.h"
+#include "hb.h"
 
 @interface DriveDetector (Private)
 

@@ -10,10 +10,12 @@ if [ -f contrib/DarwinContribVersion.txt ]; then
   fi
 fi
 
-HOST=download.mediafork.dynalias.com
+HOST=download.m0k.org
+#HOST=download.mediafork.dynalias.com
+#HOST=sr55.ashosted.com
 FILE=contribbin-darwin-$VERSION.tar.gz
-URL=http://$HOST/contrib/$FILE
-
+#URL=http://$HOST/contrib/$FILE
+URL=http://$HOST/handbrake/contrib/$FILE
 # Check for internet connectivity
 if ! host $HOST > /dev/null 2>&1; then
   echo "Please connect to the Internet (could not resolve $HOST)."

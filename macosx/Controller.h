@@ -6,7 +6,7 @@
 
 #include <Cocoa/Cocoa.h>
 
-#include "mediafork.h"
+#include "hb.h"
 
 #include "ScanController.h"
 #include "PictureController.h"
@@ -103,6 +103,7 @@
     /* Audio box */
     IBOutlet NSTextField         * fAudLang1Field;
     IBOutlet NSPopUpButton       * fAudLang1PopUp;
+    IBOutlet NSButton		     * fAudLang1SurroundCheck;
     IBOutlet NSTextField         * fAudLang2Field;
     IBOutlet NSPopUpButton       * fAudLang2PopUp;
     IBOutlet NSTextField         * fAudRateField;
@@ -119,8 +120,28 @@
     IBOutlet NSButton            * fPauseButton;
     IBOutlet NSButton            * fRipButton;
 
+	/* User Preset variables here fPresetNewPicSettingsApply*/
+	
+	IBOutlet NSDrawer            * fPresetDrawer;
+	IBOutlet NSTextField         * fPresetNewName;
+	IBOutlet NSButton            * fPresetNewPicSettingsApply;
+	IBOutlet NSTextField         * fPresetSelectedDisplay;
+	
+	NSString * AppSupportDirectory;
+	NSString * UserPresetsFile;
+	NSString * x264ProfilesFile;
+	NSMutableArray * UserPresets;
+	NSMutableArray * x264Profiles;
+	NSMutableArray *UserPresetssortedArray;
+	NSMutableDictionary * chosenPreset;
+
+	
+    IBOutlet NSPanel            * fAddPresetPanel;
+	IBOutlet NSTableView         * tableView;
+	IBOutlet NSButton            * fPresetsAdd;
+	IBOutlet NSButton            * fPresetsDelete;
     hb_handle_t                  * fHandle;
-	hb_title_t               * fTitle;
+	hb_title_t                   * fTitle;
 }
 
 - (void)     TranslateStrings;
@@ -136,6 +157,9 @@
 - (IBAction) FormatPopUpChanged: (id) sender;
 - (IBAction) CodecsPopUpChanged: (id) sender;
 - (IBAction) EncoderPopUpChanged: (id) sender;
+- (IBAction) Check6ChannelAACExtraction: (id) sender;
+- (IBAction) LanguagePopUpChanged: (id) sender;
+
 - (IBAction) BrowseFile: (id) sender;
 - (void)     BrowseFileDone: (NSSavePanel *) sheet
     returnCode: (int) returnCode contextInfo: (void *) contextInfo;
@@ -168,6 +192,29 @@
 
 - (IBAction) OpenHomepage: (id) sender;
 - (IBAction) OpenForums:   (id) sender;
+
+// Preset Methods Here
+
+- (IBAction) ShowAddPresetPanel: (id) sender;
+- (IBAction) CloseAddPresetPanel: (id) sender;
+- (NSDictionary *)CreatePreset;  
+
+- (void) savePreset;
+- (IBAction)addPreset:(id)sender;
+- (IBAction)insertPreset:(id)sender;
+- (IBAction)deletePreset:(id)sender;
+- (IBAction)tableViewSelected:(id)sender;
+// NSTableDataSource methods
+- (int)numberOfRowsInTableView:(NSTableView *)aTableView;
+- (id)tableView:(NSTableView *)aTableView
+      objectValueForTableColumn:(NSTableColumn *)aTableColumn
+      row:(int)rowIndex;
+- (void)tableView:(NSTableView *)aTableView
+        setObjectValue:(id)anObject
+        forTableColumn:(NSTableColumn *)aTableColumn
+        row:(int)rowIndex;
+
+
 
 @end
 

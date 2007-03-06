@@ -12,8 +12,10 @@
 	IBOutlet NSButton * fDefDeinterlace;
 	IBOutlet NSButton * fDefPicSizeAutoSetipod;
 	IBOutlet NSButton * fDefPixelRatio;
+	IBOutlet NSButton * fDefAudioSurround;
+	IBOutlet NSButton * fDefPresetDrawerShow;
 
-	
+	IBOutlet NSTextView * fDefAdvancedx264FlagsView;
 }
 
 - (IBAction) OpenPanel:    (id) sender;
