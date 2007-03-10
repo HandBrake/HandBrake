@@ -460,7 +460,7 @@
 				0D6E35910B6BD5FA005AABB3 /* PBXTargetDependency */,
 			);
 			name = HandBrakeCLI;
-			productName = MediaForkCLI;
+			productName = HandBrakeCLI;
 			productReference = 0DFF0C0A0B6BCEC200549488 /* HandBrakeCLI */;
 			productType = "com.apple.product-type.tool";
 		};
