@@ -17,7 +17,7 @@ DEFINES    += HB_VERSION=\\\"$(HB_VERSION)\\\" HB_BUILD=$(HB_BUILD) ;
 LANGUAGES   = fr de it pl ru nl es pt ja ;
 RM          = rm -rf ;
 
-# Build MediaFork.app using Xcode
+# Build HandBrake.app using Xcode
 rule OSXApp
 {
     Depends     exe   : $(<) ;
@@ -26,9 +26,8 @@ rule OSXApp
 }
 actions OSXApp
 {
-    $(RM) $(<) macosx/build/MediaFork.app && \
+    $(RM) $(<) macosx/build/HandBrake.app && \
       ( cd macosx && xcodebuild -alltargets ) && \
-      mv macosx/build/Default/MediaFork.app $(<) && \
       for i in $(LANGUAGES) ; do \
         ( cd $(<)/Contents/Resources && \
           cp -r English.lproj $i.lproj && \
@@ -42,24 +41,24 @@ rule OSXPackage
 }   
 actions OSXPackage
 {                 
-    rm -rf $(<) "MediaFork $(HB_VERSION)" && \
-      mkdir "MediaFork $(HB_VERSION)" && \
-      cp AUTHORS "MediaFork $(HB_VERSION)/AUTHORS.txt" && \
-      cp COPYING "MediaFork $(HB_VERSION)/COPYING.txt" && \
-      cp CREDITS "MediaFork $(HB_VERSION)/CREDITS.txt" && \
-      cp THANKS "MediaFork $(HB_VERSION)/THANKS.txt" && \
+    rm -rf $(<) "HandBrake $(HB_VERSION)" && \
+      mkdir "HandBrake $(HB_VERSION)" && \
+      cp AUTHORS "HandBrake $(HB_VERSION)/AUTHORS.txt" && \
+      cp COPYING "HandBrake $(HB_VERSION)/COPYING.txt" && \
+      cp CREDITS "HandBrake $(HB_VERSION)/CREDITS.txt" && \
+      cp THANKS "HandBrake $(HB_VERSION)/THANKS.txt" && \
       ( echo "[InternetShortcut]" && \
         echo "URL=http://handbrake.m0k.org/" ) > \
-        "MediaFork $(HB_VERSION)/MediaFork Homepage.url" && \
+        "HandBrake $(HB_VERSION)/HandBrake Homepage.url" && \
       ( echo "[InternetShortcut]" && \
         echo "URL=http://handbrake.m0k.org/forum/" ) > \
-        "MediaFork $(HB_VERSION)/MediaFork Forums.url" && \
+        "HandBrake $(HB_VERSION)/HandBrake Forums.url" && \
       ( echo "[InternetShortcut]" && \
         echo "URL=http://handbrake.m0k.org/contribute.php" ) > \
-        "MediaFork $(HB_VERSION)/Contribute.url" && \
-      cp -r MediaFork.app "MediaFork $(HB_VERSION)" && \
-      zip -9 -r $(<) "MediaFork $(HB_VERSION)" && \
-      rm -rf "MediaFork $(HB_VERSION)"
+        "HandBrake $(HB_VERSION)/Contribute.url" && \
+      cp -r HandBrake.app "HandBrake $(HB_VERSION)" && \
+      zip -9 -r $(<) "HandBrake $(HB_VERSION)" && \
+      rm -rf "HandBrake $(HB_VERSION)"
 }
 
 rule BeOSPackage 
