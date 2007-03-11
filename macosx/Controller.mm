@@ -775,7 +775,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 	        }
 		
 		/* Sends x264 options to the core library*/
-		job->x264opts = strdup([[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] cString]);
+		job->x264opts = [[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] UTF8String];
 		
 		
         job->h264_13 = [fVidEncoderPopUp indexOfSelectedItem];
@@ -871,7 +871,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 			job->pass = 1;
 			hb_add( fHandle, job );
 			job->pass = 2;
-			job->x264opts = strdup([[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] cString]);
+			job->x264opts = [[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] UTF8String];
 			hb_add( fHandle, job );
 		}
 		else
