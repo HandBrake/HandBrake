@@ -676,11 +676,11 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 {
     /* Open a panel to let the user choose and update the text field */
     NSSavePanel * panel = [NSSavePanel savePanel];
-
-    [panel beginSheetForDirectory: NULL file: NULL
-        modalForWindow: fWindow modalDelegate: self
-        didEndSelector: @selector( BrowseFileDone:returnCode:contextInfo: )
-        contextInfo: NULL];
+	/* We get the current file name and path from the destination field here */
+	[panel beginSheetForDirectory: [[fDstFile2Field stringValue] stringByDeletingLastPathComponent] file: [[fDstFile2Field stringValue] lastPathComponent]
+				   modalForWindow: fWindow modalDelegate: self
+				   didEndSelector: @selector( BrowseFileDone:returnCode:contextInfo: )
+					  contextInfo: NULL];
 }
 
 - (void) BrowseFileDone: (NSSavePanel *) sheet
