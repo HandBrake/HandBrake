@@ -864,7 +864,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 		[self PrepareJob];
 		
 		/* Destination file */
-		job->file = strdup( [[fDstFile2Field stringValue] UTF8String] );
+		job->file = [[fDstFile2Field stringValue] UTF8String];
 		
 		if( [fVidTwoPassCheck state] == NSOnState )
 		{

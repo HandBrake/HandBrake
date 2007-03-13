@@ -197,7 +197,7 @@ struct hb_job_s
 #define HB_MUX_IPOD 0x100000
 	
     int             mux;
-    char          * file;
+    const char          * file;
 
 #ifdef __LIBHB__
     /* Internal data */
