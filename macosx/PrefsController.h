@@ -14,6 +14,7 @@
 	IBOutlet NSButton * fDefPixelRatio;
 	IBOutlet NSButton * fDefAudioSurround;
 	IBOutlet NSButton * fDefPresetDrawerShow;
+	IBOutlet NSButton * fDefAutoNaming;
 
 	IBOutlet NSTextView * fDefAdvancedx264FlagsView;
 }

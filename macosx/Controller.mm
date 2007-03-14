@@ -432,6 +432,8 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
             }
             // Select the longuest title
 			[fSrcTitlePopUp selectItemAtIndex: indxpri];
+
+			
 			
             [self TitlePopUpChanged: NULL];
             [self EnableUI: YES];
@@ -1001,7 +1003,15 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
     hb_list_t  * list  = hb_get_titles( fHandle );
     hb_title_t * title = (hb_title_t*)
         hb_list_item( list, [fSrcTitlePopUp indexOfSelectedItem] );
-
+    /* If Auto Naming is on. We create an output filename of dvd name - title number */
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"] > 0)
+	{
+		[fDstFile2Field setStringValue: [NSString stringWithFormat:
+			@"%@/%@-%d.%@", [[fDstFile2Field stringValue] stringByDeletingLastPathComponent],
+			[NSString stringWithUTF8String: title->name],
+			[fSrcTitlePopUp indexOfSelectedItem] + 1,
+			[[fDstFile2Field stringValue] pathExtension]]];	
+	}
 
     /* Update chapter popups */
     [fSrcChapterStartPopUp removeAllItems];

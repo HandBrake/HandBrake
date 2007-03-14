@@ -185,6 +185,7 @@
             OUTLETS = {
                 fDefAdvancedx264FlagsView = NSButton; 
                 fDefAudioSurround = NSButton; 
+                fDefAutoNaming = NSButton; 
                 fDefCrf = NSButton; 
                 fDefDeinterlace = NSButton; 
                 fDefPicSizeAutoSetipod = NSButton; 

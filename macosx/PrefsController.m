@@ -33,7 +33,8 @@
 	NSString *defDestDirectory =  @"~/Desktop";
 	defDestDirectory = [defDestDirectory stringByExpandingTildeInPath];
 	appDefaults = [NSDictionary dictionaryWithObject:defDestDirectory forKey:@"LastDestinationDirectory"];
-	
+	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
+                   forKey:@"DefaultAutoNaming"];
     [defaults registerDefaults: appDefaults];
 
 	/* fUpdateCheck Check or uncheck according to the preferences */
@@ -251,7 +252,9 @@
 	/* fDefPresetDrawerShow Check or uncheck according to the preferences*/
     [fDefPresetDrawerShow setState: [defaults boolForKey:@"DefaultPresetsDrawerShow"] ?
 		   NSOnState : NSOffState];
-	
+	/* fDefAutoNaming Check or uncheck according to the preferences*/
+    [fDefAutoNaming setState: [defaults boolForKey:@"DefaultAutoNaming"] ?
+		   NSOnState : NSOffState];
 }
 
 
@@ -366,6 +369,17 @@
     else
     {
         [defaults setObject:@"NO" forKey:@"DefaultPresetsDrawerShow"];
+    }
+
+    /* Use Auto Naming */
+	
+	if( [fDefAutoNaming state] == NSOnState )
+    {
+        [defaults setObject:@"YES" forKey:@"DefaultAutoNaming"];
+    }
+    else
+    {
+        [defaults setObject:@"NO" forKey:@"DefaultAutoNaming"];
     }
 
 }
