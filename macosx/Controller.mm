@@ -167,17 +167,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
     /* Video quality */
     [fVidTargetSizeField setIntValue: 700];
 	[fVidBitrateField    setIntValue: 1000];
-	/* Do we want to force the quality settings if PAR is on ?
-  	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PixelRatio"])
-    {
-    	[fVidBitrateField    setIntValue: 1500];
-    	[fVidTwoPassCheck    setState: NSOnState];
-    }
-	else
-	{
-    	[fVidBitrateField    setIntValue: 1000];
-    }
-	*/
+
     [fVidQualityMatrix   selectCell: fVidBitrateCell];
     [self VideoMatrixChanged: NULL];
 
@@ -611,9 +601,12 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 	if (b) {
 		/* if we're enabling the interface, check if we should / should't offer 6-channel AAC extraction */
 		[self Check6ChannelAACExtraction: NULL];
+	
 	} else {
 		/* if we're disabling the interface, turn it off */
 		[fAudLang1SurroundCheck setEnabled: NO];
+		[tableView setEnabled: NO];
+	
 	}
 
     [self VideoMatrixChanged: NULL];
@@ -1588,78 +1581,84 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 }
 - (IBAction)tableViewSelected:(id)sender
 {
-
-    /* we get the chosen preset from the UserPresets array */
-	chosenPreset = [UserPresets objectAtIndex:[sender selectedRow]];
-	/* we set the preset display field in main window here */
-	//[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@", [chosenPreset valueForKey:@"PresetName"]]];
-	/* File Format */
-	[fDstFormatPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileFormat"]]];
-	[self FormatPopUpChanged: NULL];
-    /* Codecs */
-	[fDstCodecsPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]]];
-	[self CodecsPopUpChanged: NULL];
-	/* Video encoder */
-	[fVidEncoderPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]]];
-	/* Lets run through the following functions to get variables set there */
-	[self EncoderPopUpChanged: sender];
-	[self Check6ChannelAACExtraction: sender];
-	[self CalculateBitrate: sender];
-	
-	/* Video quality */
-	[fVidQualityMatrix selectCellAtRow:[[chosenPreset objectForKey:@"VideoQualityType"] intValue] column:0];
-	
-	[fVidTargetSizeField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoTargetSize"]]];
-	[fVidBitrateField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoAvgBitrate"]]];
-	
-	[fVidQualitySlider setFloatValue: [[chosenPreset valueForKey:@"VideoQualitySlider"] floatValue]];
-	[self VideoMatrixChanged: sender];
-	
-	/* Video framerate */
-	[fVidRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoFramerate"]]];
-	
-	/* GrayScale */
-	[fVidGrayscaleCheck setState:[[chosenPreset objectForKey:@"VideoGrayScale"] intValue]];
-
-	/* 2 Pass Encoding */
-	[fVidTwoPassCheck setState:[[chosenPreset objectForKey:@"VideoTwoPass"] intValue]];
-    
-	
-	/*Audio*/
-	/* Audio Language One*/
-	[fAudLang1PopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioLang1"]]];
-	/* Audio Language One Surround Sound Checkbox*/
-	[fAudLang1SurroundCheck setState:[[chosenPreset objectForKey:@"AudioLang1Surround"] intValue]];
-	[self Check6ChannelAACExtraction: sender];
-	/* Audio Sample Rate*/
-	[fAudRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioSampleRate"]]];
-	/* Audio Bitrate Rate*/
-	[fAudBitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioBitRate"]]];
-	/*Subtitles*/
-	[fSubPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Subtitles"]]];
-	
-	/* Picture Settings */
-	/* Look to see if we apply these here in objectForKey:@"UsesPictureSettings"] */
-	if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] == 1)
+    /* Since we cannot disable the presets tableView in terms of clickability
+	   we will use the enabled state of the add presets button to determine whether
+	   or not clicking on a preset will do anything */
+	if ([fPresetsAdd isEnabled])
 	{
-		hb_job_t * job = fTitle->job;
-		job->width = [[chosenPreset objectForKey:@"PictureWidth"]  intValue];
-		job->height = [[chosenPreset objectForKey:@"PictureHeight"]  intValue];
-		job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
-		if (job->keep_ratio == 1)
+		
+		/* we get the chosen preset from the UserPresets array */
+		chosenPreset = [UserPresets objectAtIndex:[sender selectedRow]];
+		/* we set the preset display field in main window here */
+		//[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@", [chosenPreset valueForKey:@"PresetName"]]];
+		/* File Format */
+		[fDstFormatPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileFormat"]]];
+		[self FormatPopUpChanged: NULL];
+		/* Codecs */
+		[fDstCodecsPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]]];
+		[self CodecsPopUpChanged: NULL];
+		/* Video encoder */
+		[fVidEncoderPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]]];
+		/* Lets run through the following functions to get variables set there */
+		[self EncoderPopUpChanged: sender];
+		[self Check6ChannelAACExtraction: sender];
+		[self CalculateBitrate: sender];
+		
+		/* Video quality */
+		[fVidQualityMatrix selectCellAtRow:[[chosenPreset objectForKey:@"VideoQualityType"] intValue] column:0];
+		
+		[fVidTargetSizeField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoTargetSize"]]];
+		[fVidBitrateField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoAvgBitrate"]]];
+		
+		[fVidQualitySlider setFloatValue: [[chosenPreset valueForKey:@"VideoQualitySlider"] floatValue]];
+		[self VideoMatrixChanged: sender];
+		
+		/* Video framerate */
+		[fVidRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoFramerate"]]];
+		
+		/* GrayScale */
+		[fVidGrayscaleCheck setState:[[chosenPreset objectForKey:@"VideoGrayScale"] intValue]];
+		
+		/* 2 Pass Encoding */
+		[fVidTwoPassCheck setState:[[chosenPreset objectForKey:@"VideoTwoPass"] intValue]];
+		
+		
+		/*Audio*/
+		/* Audio Language One*/
+		[fAudLang1PopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioLang1"]]];
+		/* Audio Language One Surround Sound Checkbox*/
+		[fAudLang1SurroundCheck setState:[[chosenPreset objectForKey:@"AudioLang1Surround"] intValue]];
+		[self Check6ChannelAACExtraction: sender];
+		/* Audio Sample Rate*/
+		[fAudRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioSampleRate"]]];
+		/* Audio Bitrate Rate*/
+		[fAudBitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioBitRate"]]];
+		/*Subtitles*/
+		[fSubPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Subtitles"]]];
+		
+		/* Picture Settings */
+		/* Look to see if we apply these here in objectForKey:@"UsesPictureSettings"] */
+		if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] == 1)
 		{
-			hb_fix_aspect( job, HB_KEEP_WIDTH );
+			hb_job_t * job = fTitle->job;
+			job->width = [[chosenPreset objectForKey:@"PictureWidth"]  intValue];
+			job->height = [[chosenPreset objectForKey:@"PictureHeight"]  intValue];
+			job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
+			if (job->keep_ratio == 1)
+			{
+				hb_fix_aspect( job, HB_KEEP_WIDTH );
+			}
+			job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
+			job->crop[0] = [[chosenPreset objectForKey:@"PictureTopCrop"]  intValue];
+			job->crop[1] = [[chosenPreset objectForKey:@"PictureBottomCrop"]  intValue];
+			job->crop[2] = [[chosenPreset objectForKey:@"PictureLeftCrop"]  intValue];
+			job->crop[3] = [[chosenPreset objectForKey:@"PictureRightCrop"]  intValue];
+			[self CalculatePictureSizing: sender]; 
 		}
-		job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
-		job->crop[0] = [[chosenPreset objectForKey:@"PictureTopCrop"]  intValue];
-		job->crop[1] = [[chosenPreset objectForKey:@"PictureBottomCrop"]  intValue];
-		job->crop[2] = [[chosenPreset objectForKey:@"PictureLeftCrop"]  intValue];
-		job->crop[3] = [[chosenPreset objectForKey:@"PictureRightCrop"]  intValue];
-		[self CalculatePictureSizing: sender]; 
-	}
-	
-	// Deselect the currently selected table //
-	//[tableView deselectRow:[tableView selectedRow]];
+		
+		// Deselect the currently selected table //
+		//[tableView deselectRow:[tableView selectedRow]];
+}
 }
 
 - (int)numberOfRowsInTableView:(NSTableView *)aTableView
