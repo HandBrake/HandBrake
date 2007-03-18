@@ -143,8 +143,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * buf;
     int           i, j, k;
-    uint64_t      pts;
-    int           pos;
+    uint64_t      pts, pos;
 
     /* Get a frame header if don't have one yet */
     if( !pv->sync )

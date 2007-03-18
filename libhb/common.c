@@ -377,7 +377,7 @@ void hb_list_seebytes( hb_list_t * l, uint8_t * dst, int size )
  * in that buffer.
  *********************************************************************/
 void hb_list_getbytes( hb_list_t * l, uint8_t * dst, int size,
-                       uint64_t * pts, int * pos )
+                       uint64_t * pts, uint64_t * pos )
 {
     hb_buffer_t * buf;
     int           copied;
@@ -385,8 +385,8 @@ void hb_list_getbytes( hb_list_t * l, uint8_t * dst, int size,
     uint8_t       has_pts;
     
     /* So we won't have to deal with NULL pointers */
-    uint64_t dummy1;
-    int      dummy2;
+     uint64_t dummy1, dummy2;
+
     if( !pts ) pts = &dummy1;
     if( !pos ) pos = &dummy2;
 

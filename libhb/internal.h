@@ -12,7 +12,7 @@ void hb_log( char * log, ... );
 int  hb_list_bytes( hb_list_t * );
 void hb_list_seebytes( hb_list_t * l, uint8_t * dst, int size );
 void hb_list_getbytes( hb_list_t * l, uint8_t * dst, int size,
-                       uint64_t * pts, int * pos );
+                       uint64_t * pts, uint64_t * pos );
 void hb_list_empty( hb_list_t ** );
 
 hb_title_t * hb_title_init( char * dvd, int index );

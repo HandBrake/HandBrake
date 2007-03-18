@@ -80,8 +80,8 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * buf;
     int16_t samples_s16[1152 * 2];
-    uint64_t pts;
-    int      pos, i;
+    uint64_t pts, pos;
+	int      i;
 
     if( hb_list_bytes( pv->list ) < pv->input_samples * sizeof( float ) )
     {
