@@ -108,7 +108,7 @@ static void MuxerFunc( void * _mux )
             break;
         }
 
-        hb_snooze( 200 );
+        hb_snooze( 50 );
     }
 
     /* Create file, write headers */
