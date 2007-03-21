@@ -493,7 +493,7 @@ static void LookForAC3( hb_title_t * title, hb_buffer_t * b )
 			
 			/* store the AC3 tags for future reference
 			This enables us to find out if we had a stereo or Dolby source later on */
-			audio->ac3flags = flags;
+			audio->config.a52.ac3flags = flags;
 
             /* XXX */
             sprintf( audio->lang + strlen( audio->lang ),

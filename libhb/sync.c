@@ -56,11 +56,11 @@ struct hb_work_private_s
 /***********************************************************************
  * Local prototypes
  **********************************************************************/
-static void InitAudio( hb_work_object_t * w, int i, int channelsused );
+static void InitAudio( hb_work_object_t * w, int i );
 static int  SyncVideo( hb_work_object_t * w );
-static void SyncAudio( hb_work_object_t * w, int i, int channelsused );
+static void SyncAudio( hb_work_object_t * w, int i );
 static int  NeedSilence( hb_work_object_t * w, hb_audio_t * );
-static void InsertSilence( hb_work_object_t * w, int i, int channelsused );
+static void InsertSilence( hb_work_object_t * w, int i );
 static void UpdateState( hb_work_object_t * w );
 
 /***********************************************************************
@@ -100,9 +100,7 @@ int syncInit( hb_work_object_t * w, hb_job_t * job )
     /* Initialize libsamplerate for every audio track we have */
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
-		/* this should really pass in a channelsused value for this audio
-		but for now, it uses the global job value of channelsused */
-        InitAudio( w, i, job->channelsused );
+        InitAudio( w, i );
     }
 
     /* Get subtitle info, if any */
@@ -155,9 +153,7 @@ int syncWork( hb_work_object_t * w, hb_buffer_t ** unused1,
     {
         for( i = 0; i < hb_list_count( pv->job->title->list_audio ); i++ )
         {
-			/* this should really pass in a channelsused value for this audio
-			but for now, it uses the global job value of channelsused */
-            SyncAudio( w, i, pv->job->channelsused );
+            SyncAudio( w, i );
         }
     }
 
@@ -174,7 +170,7 @@ hb_work_object_t hb_sync =
     syncClose
 };
 
-static void InitAudio( hb_work_object_t * w, int i, int channelsused )
+static void InitAudio( hb_work_object_t * w, int i )
 {
     hb_work_private_t * pv = w->private_data;
     hb_job_t        * job   = pv->job;
@@ -225,7 +221,7 @@ static void InitAudio( hb_work_object_t * w, int i, int channelsused )
     {
         /* Initialize libsamplerate */
         int error;
-        sync->state             = src_new( SRC_LINEAR, channelsused, &error );
+        sync->state             = src_new( SRC_LINEAR, sync->audio->channelsused, &error );
         sync->data.end_of_input = 0;
     }
 }
@@ -412,7 +408,7 @@ static int SyncVideo( hb_work_object_t * w )
  ***********************************************************************
  * 
  **********************************************************************/
-static void SyncAudio( hb_work_object_t * w, int i, int channelsused )
+static void SyncAudio( hb_work_object_t * w, int i )
 {
     hb_work_private_t * pv = w->private_data;
     hb_job_t        * job;
@@ -485,7 +481,7 @@ static void SyncAudio( hb_work_object_t * w, int i, int channelsused )
         else if( buf->start > pts_expected + 9000 )
         {
             /* Missing audio, send a frame of silence */
-            InsertSilence( w, i, channelsused );
+            InsertSilence( w, i );
             continue;
         }
 
@@ -503,7 +499,7 @@ static void SyncAudio( hb_work_object_t * w, int i, int channelsused )
 
             int count_in, count_out;
 
-            count_in  = buf_raw->size / channelsused / sizeof( float );
+            count_in  = buf_raw->size / audio->channelsused / sizeof( float );
             count_out = ( buf_raw->stop - buf_raw->start ) * job->arate / 90000;
             if( buf->start < pts_expected - 1500 )
                 count_out--;
@@ -517,7 +513,7 @@ static void SyncAudio( hb_work_object_t * w, int i, int channelsused )
             sync->data.src_ratio = (double) sync->data.output_frames /
                                    (double) sync->data.input_frames;
 
-            buf = hb_buffer_init( sync->data.output_frames * channelsused *
+            buf = hb_buffer_init( sync->data.output_frames * audio->channelsused *
                                   sizeof( float ) );
             sync->data.data_out = (float *) buf->data;
             if( src_process( sync->state, &sync->data ) )
@@ -527,7 +523,7 @@ static void SyncAudio( hb_work_object_t * w, int i, int channelsused )
             }
             hb_buffer_close( &buf_raw );
 
-            buf->size = sync->data.output_frames_gen * channelsused * sizeof( float );
+            buf->size = sync->data.output_frames_gen * audio->channelsused * sizeof( float );
 
             /* Set dates for resampled data */
             buf->start = start;
@@ -543,7 +539,7 @@ static void SyncAudio( hb_work_object_t * w, int i, int channelsused )
 
     if( NeedSilence( w, audio ) )
     {
-        InsertSilence( w, i, channelsused );
+        InsertSilence( w, i );
     }
 }
 
@@ -583,7 +579,7 @@ static int NeedSilence( hb_work_object_t * w, hb_audio_t * audio )
     return 0;
 }
 
-static void InsertSilence( hb_work_object_t * w, int i, int channelsused )
+static void InsertSilence( hb_work_object_t * w, int i )
 {
     hb_work_private_t * pv = w->private_data;
     hb_job_t        * job;
@@ -610,7 +606,7 @@ static void InsertSilence( hb_work_object_t * w, int i, int channelsused )
     }
     else
     {
-        buf        = hb_buffer_init( channelsused * job->arate / 20 *
+        buf        = hb_buffer_init( sync->audio->channelsused * job->arate / 20 *
                                      sizeof( float ) );
         buf->start = sync->count_frames * 90000 / job->arate;
         buf->stop  = buf->start + 90000 / 20;

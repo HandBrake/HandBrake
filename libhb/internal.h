@@ -134,12 +134,26 @@ union hb_esconfig_u
     {
         uint8_t bytes[HB_CONFIG_MAX_SIZE];
         int     length;
+    	/* Total channels actually used for this audio track */
+    	int channelsused;
     } aac;
 
     struct
     {
         uint8_t headers[3][HB_CONFIG_MAX_SIZE];
     } vorbis;
+    
+    struct
+    {
+    	/* indicates the number of normal channels the source audio has */
+        int  channels;
+    	/* indicates the number of lfe channels the source audio has */
+    	int  lfechannels;
+    	/* ac3flags:       stores the flags from the AC3 source, as found in scan.c */
+    	int  ac3flags;
+    	/* Total channels actually used for this audio track */
+    	int channelsused;
+    } a52;
 };
 
 enum

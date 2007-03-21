@@ -91,6 +91,10 @@ static void do_job( hb_job_t * job, int cpu_count )
     hb_title_t    * title;
     int             i;
     hb_work_object_t * w;
+    
+    /* FIXME: This feels really hackish, anything better? */
+    hb_work_object_t * audio_w = NULL;
+
     hb_audio_t   * audio;
     hb_subtitle_t * subtitle;
     int done;
@@ -234,7 +238,13 @@ static void do_job( hb_job_t * job, int cpu_count )
         }
         w->fifo_in  = audio->fifo_in;
         w->fifo_out = audio->fifo_raw;
-        hb_list_add( job->list_work, w );
+        w->config   = &audio->config;
+        
+        /* FIXME: This feels really hackish, anything better? */
+        audio_w = calloc( sizeof( hb_work_object_t ), 1 );
+        audio_w = memcpy( audio_w, w, sizeof( hb_work_object_t ));
+        
+        hb_list_add( job->list_work, audio_w );
 
         switch( job->acodec )
         {
@@ -253,12 +263,15 @@ static void do_job( hb_job_t * job, int cpu_count )
             w->fifo_in  = audio->fifo_sync;
             w->fifo_out = audio->fifo_out;
             w->config   = &audio->config;
-            hb_list_add( job->list_work, w );
+            
+            /* FIXME: This feels really hackish, anything better? */
+            audio_w = calloc( sizeof( hb_work_object_t ), 1 );
+            audio_w = memcpy( audio_w, w, sizeof( hb_work_object_t ));
+        
+            hb_list_add( job->list_work, audio_w );
         }
 		
-		/* store this audio's channel counts with the job */
-		/* this should be an array -
-		we just use the last channel count for now */
+		/* store this audio's channel counts in the audio struct */
 		
 		/* we will only end up with a channelsused value other than 2
 		if we are encoding to AAC.  All other audio encodings will get
@@ -269,37 +282,30 @@ static void do_job( hb_job_t * job, int cpu_count )
 			if (job->acodec == HB_ACODEC_FAAC && job->surround) {
 				/* we're going to be encoding to AAC,
 				and have turned on the "preserve 5.1" flag */
-				job->channelsused = 6;
+				audio->channelsused = 6;
 			} else {
 				/* mix 5.1 down to Dolby Digital (2-channel) for
 				non-AAC audio, or for AAC without 5.1 preservation */
-				job->channelsused = 2;
+				audio->channelsused = 2;
 			}
 		} else if (audio->channels == 1 && audio->lfechannels == 0) {
 			/* we have a 1.0 mono AC-3 source soundtrack */
 			if (job->acodec == HB_ACODEC_FAAC) {
 				/* we're going to be encoding to AAC,
 				so mix down to a mono AAC track */
-				job->channelsused = 1;
+				audio->channelsused = 1;
 			} else {
 				/* mix up the mono track to stereo for non-AAC formats */
-				job->channelsused = 2;
+				audio->channelsused = 2;
 			}
 		} else {
 			/* mix everything else down to stereo */
 			/* dolby pro-logic will be preserved in deca52.c if necessary
-			by referring to the value of job->ac3flags stored below */
-			job->channelsused = 2;
+			by referring to the value of audio->config->a52.ac3flags */
+			audio->channelsused = 2;
 		}
 		
-		/* remember the actual number of channels and lfe channels */
-		/* again, we are using the last channel's count for now */
-		job->channels = audio->channels;
-		job->lfechannels = audio->lfechannels;
-		
-		/* remember the AC3 flags for future reference */
-		/* again, we are using the last channel's flags for now */
-		job->ac3flags = audio->ac3flags;
+        audio->config.aac.channelsused = audio->config.a52.channelsused = audio->channelsused;
 		
     }
 
@@ -351,6 +357,17 @@ static void do_job( hb_job_t * job, int cpu_count )
         hb_list_rem( job->list_work, w );
         hb_thread_close( &w->thread );
         w->close( w );
+        
+        /* FIXME: This feels really hackish, anything better? */
+        if ( w->id == WORK_DECA52 ||
+             w->id == WORK_DECLPCM ||
+             w->id == WORK_ENCFAAC ||
+             w->id == WORK_ENCLAME ||
+             w->id == WORK_ENCVORBIS )
+        {
+            free( w );
+            w = NULL;
+        }
     }
 
     /* Stop read & write threads */

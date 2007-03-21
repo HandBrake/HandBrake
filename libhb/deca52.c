@@ -69,18 +69,18 @@ int deca52Init( hb_work_object_t * w, hb_job_t * job )
 	/* Decide what format we want out of a52dec
 	work.c has already done some of this deduction for us in do_job() */
 	
-	if (job->channelsused == 6) {
+	if (w->config->a52.channelsused == 6) {
 		/* we're going to be encoding to AAC,
 		and have turned on the "preserve 5.1" flag */
 		pv->flags_out = A52_3F2R | A52_LFE;
-	} else if (job->channelsused == 1) {
+	} else if (w->config->a52.channelsused == 1) {
 		/* we're going to be encoding to AAC, */
 		/* and want to keep the mono-ness of the source audio */
 		pv->flags_out = A52_MONO;
-	} else if (job->channelsused == 2 && job->channels == 5 && job->lfechannels == 1) {
+	} else if (w->config->a52.channelsused == 2 && w->config->a52.channels == 5 && w->config->a52.lfechannels == 1) {
 		/* we are mixing a 5.1 source down to stereo, so use dolby surround */
 		pv->flags_out = A52_DOLBY;
-	} else if (job->channelsused == 2 && ((job->ac3flags & A52_CHANNEL_MASK) == A52_DOLBY)) {
+	} else if (w->config->a52.channelsused == 2 && ((w->config->a52.ac3flags & A52_CHANNEL_MASK) == A52_DOLBY)) {
 		/* we have a dolby stereo surround source, so preserve it */
 		pv->flags_out = A52_DOLBY;
 	} else {
@@ -89,7 +89,7 @@ int deca52Init( hb_work_object_t * w, hb_job_t * job )
 	}
 
 	/* pass the number of channels used into the private work data */
-	pv->channelsused = job->channelsused;
+	pv->channelsused = w->config->a52.channelsused;
 
     pv->level     = 32768.0;
 

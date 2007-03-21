@@ -150,18 +150,8 @@ struct hb_job_s
     /* Audio tracks:
          audios:         Indexes in hb_title_t's audios list, starting from 0.
                          -1 indicates the end of the list
-		 channels:       The # of normal channels in the last used audio
-		 lfechannels:    The # of lfe channels in the last used audio
-		 channelsused:   The # of channels we will actually use for this job -
-		                 calculated based on surround, channels and lfechannels
-						 in work.c
-         ac3flags:       stores the flags from the AC3 source, as found in scan.c
 	     surround:       1 if 5.1 should be preserved for AAC, 0 otherwise */
     int             audios[8];
-    int             channels;
-    int             lfechannels;
-    int             channelsused;
-	int             ac3flags;
 	int             surround;
 
     /* Audio settings:
@@ -231,12 +221,14 @@ struct hb_audio_s
     int  codec;
     int  rate;
     int  bitrate;
-	/* indicates the number of normal channels the source audio has */
+	/* channels:       The # of normal channels in the last used audio
+	   lfechannels:    The # of lfe channels in the last used audio
+	   channelsused:   The # of channels we will actually use for this job -
+	                   calculated based on surround, channels and lfechannels
+	                   in work.c */
     int  channels;
-	/* indicates the number of lfe channels the source audio has */
 	int  lfechannels;
-	/* stores the flags from the AC3 source, as found in scan.c */
-	int  ac3flags;
+	int channelsused;
 
 #ifdef __LIBHB__
     /* Internal data */
