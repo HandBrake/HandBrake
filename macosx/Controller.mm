@@ -503,7 +503,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 #undef p
 			
         case HB_STATE_PAUSED:
-            [fStatusField setStringValue: _( @"Paused" )];
+		    [fStatusField setStringValue: _( @"Paused" )];
             [fPauseButton setEnabled: YES];
             [fPauseButton setTitle: _( @"Resume" )];
             [fRipButton setEnabled: YES];
@@ -595,10 +595,6 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
         [controls[i] setEnabled: b];
 
     }
-
-	/* Temporarily disable Lang2 until crash is fixed */
-	[fAudLang2PopUp setEnabled: NO];
-	[fAudLang2Field setEnabled: NO];
 	
 	if (b) {
 		/* if we're enabling the interface, check if we should / should't offer 6-channel AAC extraction */
@@ -756,7 +752,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 		Lets Deprecate Baseline Level 1.3*/
 		job->h264_level = 30;
 		job->mux = HB_MUX_IPOD;
-                    /* move sanity check for iPod Encoding here */
+        /* move sanity check for iPod Encoding here */
 		job->pixel_ratio = 0 ;
 
 		}
@@ -1086,14 +1082,9 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 	int indxpri=0;
 	// End of pri changes 02/12/06
     [fAudLang1PopUp removeAllItems];
-	/* Disable second audio language until crashing is resolved*/
-	[fAudLang2Field setEnabled: NO];
-	[fAudLang2PopUp setEnabled: NO];
-    [fAudLang2PopUp removeAllItems];
+	[fAudLang2PopUp removeAllItems];
     [fAudLang1PopUp addItemWithTitle: _( @"None" )];
-	/* Display Currently Unavailable until crash is fixed */
-    [fAudLang2PopUp addItemWithTitle: _( @"Currently Unavailable" )];
-	//[fAudLang2PopUp addItemWithTitle: _( @"None" )];
+	[fAudLang2PopUp addItemWithTitle: _( @"None" )];
     for( int i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = (hb_audio_t *) hb_list_item( title->list_audio, i );
@@ -1112,11 +1103,11 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
         [[fAudLang1PopUp menu] addItemWithTitle:
             [NSString stringWithCString: audio->lang]
             action: NULL keyEquivalent: @""];
-       /*
+       
 	   [[fAudLang2PopUp menu] addItemWithTitle:
             [NSString stringWithCString: audio->lang]
             action: NULL keyEquivalent: @""];
-			*/
+		
     }
 	// PRI CHANGES 02/12/06
 	if (indxpri==0) { indxpri=1; }
@@ -1353,6 +1344,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 		[fAudLang1SurroundCheck setEnabled: NO];
 		/* as well as disabling the checkbox, let's uncheck it if it is checked */
 		[fAudLang1SurroundCheck setState: NSOffState];
+		
 	}
 
 }
@@ -1366,7 +1358,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 	[self Check6ChannelAACExtraction: sender];
 	
 	/* see if the new language setting will change the bitrate we need */
-    [self CalculateBitrate:     sender];	
+    [self CalculateBitrate: sender];	
 
 }
 
