@@ -2,13 +2,17 @@
     IBClasses = (
         {
             ACTIONS = {
+                AddFactoryPresets = id; 
+                AddPreset = id; 
                 AddToQueue = id; 
+                AddUserPreset = id; 
                 BrowseFile = id; 
                 CalculateBitrate = id; 
                 Cancel = id; 
                 ChapterPopUpChanged = id; 
                 CloseAddPresetPanel = id; 
                 CodecsPopUpChanged = id; 
+                DeletePreset = id; 
                 EnableQueue = id; 
                 EncoderPopUpChanged = id; 
                 FormatPopUpChanged = id; 
@@ -25,8 +29,7 @@
                 ShowScanPanel = id; 
                 TitlePopUpChanged = id; 
                 VideoMatrixChanged = id; 
-                addPreset = id; 
-                deletePreset = id; 
+                myAction = id; 
                 tableViewSelected = id; 
             }; 
             CLASS = HBController; 
@@ -43,6 +46,7 @@
                 fAudLang2PopUp = NSPopUpButton; 
                 fAudRateField = NSTextField; 
                 fAudRatePopUp = NSPopUpButton; 
+                fCreateChapterMarkers = NSButton; 
                 fDstBrowseButton = NSButton; 
                 fDstCodecsField = NSTextField; 
                 fDstCodecsPopUp = NSPopUpButton; 
@@ -79,6 +83,7 @@
                 fPresetDrawer = NSDrawer; 
                 fPresetNewName = NSTextField; 
                 fPresetNewPicSettingsApply = NSButton; 
+                fPresetSaveButton = NSButton; 
                 fPresetSelectedDisplay = NSTextField; 
                 fPresetsAdd = NSButton; 
                 fPresetsDelete = NSButton; 

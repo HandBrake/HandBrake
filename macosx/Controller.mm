@@ -137,6 +137,7 @@ static int FormatSettings[3][4] =
   if (nil == UserPresets) 
   {
     UserPresets = [[NSMutableArray alloc] init];
+	[self AddFactoryPresets:NULL];
   }
   /* Show/Dont Show Presets drawer upon launch based
   on user preference DefaultPresetsDrawerShow*/
@@ -577,7 +578,8 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 		fPicSettingDeinterlaceDsply,fPicLabelSettings,fPicLabelSrc,fPicLabelOutp,
 		fPicLabelAr,fPicLabelDeinter,fPicLabelSrcX,fPicLabelOutputX,
 		fPicLabelPAROutp,fPicLabelPAROutputX,fPicSettingPARWidth,fPicSettingPARHeight,
-		fPicSettingPARDsply,fPicLabelAnamorphic,tableView,fPresetsAdd,fPresetsDelete};
+		fPicSettingPARDsply,fPicLabelAnamorphic,tableView,fPresetsAdd,fPresetsDelete,
+		fCreateChapterMarkers};
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -738,7 +740,12 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
     job->mux    = FormatSettings[format][codecs] & HB_MUX_MASK;
     job->vcodec = FormatSettings[format][codecs] & HB_VCODEC_MASK;
     job->acodec = FormatSettings[format][codecs] & HB_ACODEC_MASK;
-
+    /* We set the chapter marker extraction here based on the format being
+	mpeg4 and the checkbox being checked */
+	if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fCreateChapterMarkers state] == NSOnState)
+	{
+	job->chapter_markers = 1;
+	}
     if( ( job->vcodec & HB_VCODEC_FFMPEG ) &&
         [fVidEncoderPopUp indexOfSelectedItem] > 0 )
     {
@@ -1120,6 +1127,8 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 	/* changing the title may have changed the audio channels on offer, so */
 	/* check if this change means we should / should't offer 6-channel AAC extraction */
 	[self Check6ChannelAACExtraction: sender];
+    
+	
 
 }
 
@@ -1170,7 +1179,9 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
                 _( @"MPEG-4 Video / AAC Audio" )];
             [fDstCodecsPopUp addItemWithTitle:
                 _( @"AVC/H.264 Video / AAC Audio" )];
-            break;
+			/* We enable the create chapters checkbox here since we are .mp4 */	
+		    [fCreateChapterMarkers setEnabled: YES];
+			break;
         case 1: 
             ext = "avi";
             [fDstCodecsPopUp addItemWithTitle:
@@ -1181,6 +1192,10 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
                 _( @"AVC/H.264 Video / MP3 Audio" )];
             [fDstCodecsPopUp addItemWithTitle:
                 _( @"AVC/H.264 Video / AC-3 Audio" )];
+			/* We disable the create chapters checkbox here since we are NOT .mp4 
+			and make sure it is unchecked*/
+			[fCreateChapterMarkers setEnabled: NO];
+			[fCreateChapterMarkers setState: NSOffState];
             break;
         case 2:
             ext = "ogm";
@@ -1188,7 +1203,11 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
                 _( @"MPEG-4 Video / Vorbis Audio" )];
             [fDstCodecsPopUp addItemWithTitle:
                 _( @"MPEG-4 Video / MP3 Audio" )];
-            break;
+            /* We disable the create chapters checkbox here since we are NOT .mp4 
+			and make sure it is unchecked*/
+			[fCreateChapterMarkers setEnabled: NO];
+			[fCreateChapterMarkers setState: NSOffState];
+			break;
     }
     [self CodecsPopUpChanged: NULL];
 
@@ -1455,24 +1474,44 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 - (IBAction) ShowAddPresetPanel: (id) sender
 {
     /* Show the panel */
+	/* Temporarily disable until window hang bug is fixed */
+	/*
     [NSApp beginSheet: fAddPresetPanel modalForWindow: fWindow
         modalDelegate: NULL didEndSelector: NULL contextInfo: NULL];
     [NSApp runModalForWindow: fAddPresetPanel];
     [NSApp endSheet: fAddPresetPanel];
-    [fAddPresetPanel orderOut: self];
+    [fAddPresetPanel orderOut: self]
+	*/
 }
 - (IBAction) CloseAddPresetPanel: (id) sender
 {
     [NSApp stopModal];
 }
 
-- (IBAction)addPreset:(id)sender
+- (IBAction)AddFactoryPresets:(id)sender
 {
-    [UserPresets addObject:[self CreatePreset]];
-	/* We Sort the Presets Alphabetically by name */
-	NSSortDescriptor * lastNameDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"PresetName" 
+    /* Here we create each shipped preset */
+	[UserPresets addObject:[self CreateIpodPreset]];
+	[UserPresets addObject:[self CreateAppleTVPreset]];
+    [self AddPreset: sender];
+}
+- (IBAction)AddUserPreset:(id)sender
+{
+    /* Here we create a custom user preset */
+	[UserPresets addObject:[self CreatePreset]];
+    [self AddPreset: sender];
+}
+- (IBAction)AddPreset:(id)sender
+{
+
+	
+	/* We Sort the Presets By Factory or Custom */
+	NSSortDescriptor * presetTypeDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"Type" 
                                                     ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease];
-	NSArray *sortDescriptors=[NSArray arrayWithObject:lastNameDescriptor];
+	/* We Sort the Presets Alphabetically by name */
+	NSSortDescriptor * presetNameDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"PresetName" 
+                                                    ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease];
+	NSArray *sortDescriptors=[NSArray arrayWithObjects:presetTypeDescriptor,presetNameDescriptor,nil];
 	NSArray *sortedArray=[UserPresets sortedArrayUsingDescriptors:sortDescriptors];
 	[UserPresets setArray:sortedArray];
 	
@@ -1485,7 +1524,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
     [self savePreset];
 }
 
-- (IBAction)insertPreset:(id)sender
+- (IBAction)InsertPreset:(id)sender
 {
     int index = [tableView selectedRow];
     [UserPresets insertObject:[self CreatePreset] atIndex:index];
@@ -1498,6 +1537,10 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
     [preset setObject:[fPresetNewName stringValue] forKey:@"PresetName"];
+	/*Set whether or not this is a user preset or factory 0 is factory, 1 is user*/
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"Type"];
+	/*Set whether or not this is default, at creation set to 0*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
 	/*Get the whether or not to apply pic settings in the AddPresetPanel*/
 	[preset setObject:[NSNumber numberWithInt:[fPresetNewPicSettingsApply state]] forKey:@"UsesPictureSettings"];
 	/* File Format */
@@ -1552,7 +1595,134 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 
 }
 
-- (IBAction)deletePreset:(id)sender
+- (NSDictionary *)CreateIpodPreset
+{
+    NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
+	/* Get the New Preset Name from the field in the AddPresetPanel */
+    [preset setObject:@"HB-iPod" forKey:@"PresetName"];
+	/*Set whether or not this is a user preset or factory 0 is factory, 1 is user*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
+	/*Set whether or not this is default, at creation set to 0*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
+	/*Get the whether or not to apply pic settings in the AddPresetPanel*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesPictureSettings"];
+	/* File Format */
+    [preset setObject:@"MP4 file" forKey:@"FileFormat"];
+	/* Codecs */
+	[preset setObject:@"AVC/H.264 Video / AAC Audio" forKey:@"FileCodecs"];
+	/* Video encoder */
+	[preset setObject:@"x264 (h.264 iPod)" forKey:@"VideoEncoder"];
+	/* Video quality */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
+	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
+	[preset setObject:@"1400" forKey:@"VideoAvgBitrate"];
+	[preset setObject:[NSNumber numberWithFloat:[fVidQualitySlider floatValue]] forKey:@"VideoQualitySlider"];
+	
+	/* Video framerate */
+	[preset setObject:@"Same as source" forKey:@"VideoFramerate"];
+	/* GrayScale */
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
+	/* 2 Pass Encoding */
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoTwoPass"];
+	
+	/*Picture Settings*/
+	//hb_job_t * job = fTitle->job;
+	/* Basic Picture Settings */
+	//[preset setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PictureWidth"];
+	//[preset setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PictureHeight"];
+	//[preset setObject:[NSNumber numberWithInt:fTitle->job->keep_ratio] forKey:@"PictureKeepRatio"];
+	//[preset setObject:[NSNumber numberWithInt:fTitle->job->deinterlace] forKey:@"PictureDeinterlace"];
+	//[preset setObject:[NSNumber numberWithInt:fTitle->job->pixel_ratio] forKey:@"PicturePAR"];
+	/* Set crop settings here */
+	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
+	//[preset setObject:[NSNumber numberWithInt:job->crop[0]] forKey:@"PictureTopCrop"];
+    //[preset setObject:[NSNumber numberWithInt:job->crop[1]] forKey:@"PictureBottomCrop"];
+	//[preset setObject:[NSNumber numberWithInt:job->crop[2]] forKey:@"PictureLeftCrop"];
+	//[preset setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
+	
+	/*Audio*/
+	/* Audio Language One*/
+	[preset setObject:[fAudLang1PopUp titleOfSelectedItem] forKey:@"AudioLang1"];
+	/* Audio Language One Surround Sound Checkbox*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"AudioLang1Surround"];
+	/* Audio Sample Rate*/
+	[preset setObject:@"44.1" forKey:@"AudioSampleRate"];
+	/* Audio Bitrate Rate*/
+	[preset setObject:@"128" forKey:@"AudioBitRate"];
+	/* Subtitles*/
+	[preset setObject:@"None" forKey:@"Subtitles"];
+	
+
+    [preset autorelease];
+    return preset;
+
+}
+
+- (NSDictionary *)CreateAppleTVPreset
+{
+    NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
+	/* Get the New Preset Name from the field in the AddPresetPanel */
+    [preset setObject:@"HB-AppleTV" forKey:@"PresetName"];
+	/*Set whether or not this is a user preset or factory 0 is factory, 1 is user*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
+	/*Set whether or not this is default, at creation set to 0*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
+	/*Get the whether or not to apply pic settings in the AddPresetPanel*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesPictureSettings"];
+	/* File Format */
+    [preset setObject:@"MP4 file" forKey:@"FileFormat"];
+	/* Codecs */
+	[preset setObject:@"AVC/H.264 Video / AAC Audio" forKey:@"FileCodecs"];
+	/* Video encoder */
+	[preset setObject:@"x264 (h.264 Main)" forKey:@"VideoEncoder"];
+	/* Video quality */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
+	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
+	[preset setObject:@"3000" forKey:@"VideoAvgBitrate"];
+	[preset setObject:[NSNumber numberWithFloat:[fVidQualitySlider floatValue]] forKey:@"VideoQualitySlider"];
+	
+	/* Video framerate */
+	[preset setObject:@"Same as source" forKey:@"VideoFramerate"];
+	/* GrayScale */
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
+	/* 2 Pass Encoding */
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoTwoPass"];
+	
+	/*Picture Settings*/
+	//hb_job_t * job = fTitle->job;
+	/* Basic Picture Settings */
+	//[preset setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PictureWidth"];
+	//[preset setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PictureHeight"];
+	//[preset setObject:[NSNumber numberWithInt:fTitle->job->keep_ratio] forKey:@"PictureKeepRatio"];
+	//[preset setObject:[NSNumber numberWithInt:fTitle->job->deinterlace] forKey:@"PictureDeinterlace"];
+	//[preset setObject:[NSNumber numberWithInt:fTitle->job->pixel_ratio] forKey:@"PicturePAR"];
+	/* Set crop settings here */
+	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
+	//[preset setObject:[NSNumber numberWithInt:job->crop[0]] forKey:@"PictureTopCrop"];
+    //[preset setObject:[NSNumber numberWithInt:job->crop[1]] forKey:@"PictureBottomCrop"];
+	//[preset setObject:[NSNumber numberWithInt:job->crop[2]] forKey:@"PictureLeftCrop"];
+	//[preset setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
+	
+	/*Audio*/
+	/* Audio Language One*/
+	[preset setObject:[fAudLang1PopUp titleOfSelectedItem] forKey:@"AudioLang1"];
+	/* Audio Language One Surround Sound Checkbox*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"AudioLang1Surround"];
+	/* Audio Sample Rate*/
+	[preset setObject:@"44.1" forKey:@"AudioSampleRate"];
+	/* Audio Bitrate Rate*/
+	[preset setObject:@"320" forKey:@"AudioBitRate"];
+	/* Subtitles*/
+	[preset setObject:@"None" forKey:@"Subtitles"];
+	
+
+    [preset autorelease];
+    return preset;
+
+}
+
+
+- (IBAction)DeletePreset:(id)sender
 {
     int status;
     NSEnumerator *enumerator;

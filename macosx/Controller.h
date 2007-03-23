@@ -52,6 +52,7 @@
     IBOutlet NSTextField         * fDstFile1Field;
     IBOutlet NSTextField         * fDstFile2Field;
     IBOutlet NSButton            * fDstBrowseButton;
+	IBOutlet NSButton            * fCreateChapterMarkers;
 
     /* Video box */
     IBOutlet NSTextField         * fVidRateField;
@@ -197,12 +198,16 @@
 
 - (IBAction) ShowAddPresetPanel: (id) sender;
 - (IBAction) CloseAddPresetPanel: (id) sender;
-- (NSDictionary *)CreatePreset;  
+- (NSDictionary *)CreatePreset;
+- (NSDictionary *)CreateIpodPreset;
+- (NSDictionary *)CreateAppleTVPreset;  
 
 - (void) savePreset;
-- (IBAction)addPreset:(id)sender;
-- (IBAction)insertPreset:(id)sender;
-- (IBAction)deletePreset:(id)sender;
+- (IBAction)AddFactoryPresets:(id)sender;
+- (IBAction)AddUserPreset:(id)sender;
+- (IBAction)AddPreset:(id)sender;
+- (IBAction)InsertPreset:(id)sender;
+- (IBAction)DeletePreset:(id)sender;
 - (IBAction)tableViewSelected:(id)sender;
 // NSTableDataSource methods
 - (int)numberOfRowsInTableView:(NSTableView *)aTableView;
