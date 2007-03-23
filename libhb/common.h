@@ -94,6 +94,9 @@ struct hb_job_s
     int             chapter_start;
     int             chapter_end;
 
+	/* Include chapter marker track in mp4? */
+    int             chapter_markers;
+
     /* Picture settings:
          crop:                must be multiples of 2 (top/bottom/left/right)
          deinterlace:         0 or 1

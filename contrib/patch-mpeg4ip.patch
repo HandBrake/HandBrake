@@ -1,6 +1,317 @@
-diff -Naur mpeg4ip/lib/mp4v2/atom_tkhd.cpp mpeg4ip_patched/lib/mp4v2/atom_tkhd.cpp
---- mpeg4ip/lib/mp4v2/atom_tkhd.cpp	2003-11-19 23:46:11.000000000 +0000
-+++ mpeg4ip_patched/lib/mp4v2/atom_tkhd.cpp	2007-02-15 15:58:06.000000000 +0000
+diff -Naur mpeg4ip.orig/lib/mp4v2/Makefile.am mpeg4ip.patched/lib/mp4v2/Makefile.am
+--- mpeg4ip.orig/lib/mp4v2/Makefile.am	2005-03-10 18:31:34.000000000 +0000
++++ mpeg4ip.patched/lib/mp4v2/Makefile.am	2007-03-21 17:55:46.000000000 +0000
+@@ -21,6 +21,7 @@
+ 	atom_encv.cpp \
+ 	atom_free.cpp \
+ 	atom_ftyp.cpp \
++	atom_gmin.cpp \
+ 	atom_hdlr.cpp \
+ 	atom_hinf.cpp \
+ 	atom_hnti.cpp \
+@@ -45,6 +46,7 @@
+ 	atom_stsc.cpp \
+ 	atom_stsd.cpp \
+ 	atom_stsz.cpp \
++	atom_text.cpp \
+ 	atom_tfhd.cpp \
+ 	atom_tkhd.cpp \
+ 	atom_treftype.cpp \
+diff -Naur mpeg4ip.orig/lib/mp4v2/Makefile.in mpeg4ip.patched/lib/mp4v2/Makefile.in
+--- mpeg4ip.orig/lib/mp4v2/Makefile.in	2005-05-18 23:03:05.000000000 +0100
++++ mpeg4ip.patched/lib/mp4v2/Makefile.in	2007-03-21 17:56:20.000000000 +0000
+@@ -55,6 +55,7 @@
+ am_libmp4v2_la_OBJECTS = 3gp.lo atom_amr.lo atom_avc1.lo atom_avcC.lo \
+ 	atom_d263.lo atom_damr.lo atom_dref.lo atom_elst.lo \
+ 	atom_enca.lo atom_encv.lo atom_free.lo atom_ftyp.lo \
++	atom_gmin.lo atom_text.lo \
+ 	atom_hdlr.lo atom_hinf.lo atom_hnti.lo atom_href.lo \
+ 	atom_mdat.lo atom_mdhd.lo atom_meta.lo atom_mp4a.lo \
+ 	atom_mp4s.lo atom_mp4v.lo atom_mvhd.lo atom_root.lo \
+@@ -82,6 +83,7 @@
+ @AMDEP_TRUE@	./$(DEPDIR)/atom_encv.Plo \
+ @AMDEP_TRUE@	./$(DEPDIR)/atom_free.Plo \
+ @AMDEP_TRUE@	./$(DEPDIR)/atom_ftyp.Plo \
++@AMDEP_TRUE@	./$(DEPDIR)/atom_gmin.Plo \
+ @AMDEP_TRUE@	./$(DEPDIR)/atom_hdlr.Plo \
+ @AMDEP_TRUE@	./$(DEPDIR)/atom_hinf.Plo \
+ @AMDEP_TRUE@	./$(DEPDIR)/atom_hnti.Plo \
+@@ -103,6 +105,7 @@
+ @AMDEP_TRUE@	./$(DEPDIR)/atom_stsc.Plo \
+ @AMDEP_TRUE@	./$(DEPDIR)/atom_stsd.Plo \
+ @AMDEP_TRUE@	./$(DEPDIR)/atom_stsz.Plo \
++@AMDEP_TRUE@	./$(DEPDIR)/atom_text.Plo \
+ @AMDEP_TRUE@	./$(DEPDIR)/atom_tfhd.Plo \
+ @AMDEP_TRUE@	./$(DEPDIR)/atom_tkhd.Plo \
+ @AMDEP_TRUE@	./$(DEPDIR)/atom_treftype.Plo \
+@@ -349,6 +352,7 @@
+ 	atom_encv.cpp \
+ 	atom_free.cpp \
+ 	atom_ftyp.cpp \
++	atom_gmin.cpp \
+ 	atom_hdlr.cpp \
+ 	atom_hinf.cpp \
+ 	atom_hnti.cpp \
+@@ -373,6 +377,7 @@
+ 	atom_stsc.cpp \
+ 	atom_stsd.cpp \
+ 	atom_stsz.cpp \
++	atom_text.cpp \
+ 	atom_tfhd.cpp \
+ 	atom_tkhd.cpp \
+ 	atom_treftype.cpp \
+@@ -501,6 +506,7 @@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom_encv.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom_free.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom_ftyp.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom_gmin.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom_hdlr.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom_hinf.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom_hnti.Plo@am__quote@
+@@ -524,6 +530,7 @@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom_stsc.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom_stsd.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom_stsz.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom_text.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom_tfhd.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom_tkhd.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom_treftype.Plo@am__quote@
+diff -Naur mpeg4ip.orig/lib/mp4v2/atom_gmin.cpp mpeg4ip.patched/lib/mp4v2/atom_gmin.cpp
+--- mpeg4ip.orig/lib/mp4v2/atom_gmin.cpp	1970-01-01 01:00:00.000000000 +0100
++++ mpeg4ip.patched/lib/mp4v2/atom_gmin.cpp	2007-03-21 14:41:32.000000000 +0000
+@@ -0,0 +1,51 @@
++/*
++ * The contents of this file are subject to the Mozilla Public
++ * License Version 1.1 (the "License"); you may not use this file
++ * except in compliance with the License. You may obtain a copy of
++ * the License at http://www.mozilla.org/MPL/
++ * 
++ * Software distributed under the License is distributed on an "AS
++ * IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
++ * implied. See the License for the specific language governing
++ * rights and limitations under the License.
++ * 
++ * The Original Code is MPEG4IP.
++ * 
++ * The Initial Developer of the Original Code is Cisco Systems Inc.
++ * Portions created by Cisco Systems Inc. are
++ * Copyright (C) Cisco Systems Inc. 2001.  All Rights Reserved.
++ * 
++ * Contributor(s): 
++ *		Dave Mackie		dmackie@cisco.com
++ */
++
++#include "mp4common.h"
++
++MP4GminAtom::MP4GminAtom() 
++	: MP4Atom("gmin") 
++{
++
++	AddVersionAndFlags(); /* 0, 1 */
++
++	AddProperty(new MP4Integer16Property("graphicsMode")); /* 2 */
++	AddProperty(new MP4Integer16Property("opColorRed")); /* 3 */
++	AddProperty(new MP4Integer16Property("opColorGreen")); /* 4 */
++	AddProperty(new MP4Integer16Property("opColorBlue")); /* 5 */
++	AddProperty(new MP4Integer16Property("balance")); /* 6 */
++	AddReserved("reserved", 2); /* 7 */
++
++}
++
++void MP4GminAtom::Generate()
++{
++
++	MP4Atom::Generate();
++
++	((MP4Integer16Property*)m_pProperties[2])->SetValue(0x0040);
++	((MP4Integer16Property*)m_pProperties[3])->SetValue(0x8000);
++	((MP4Integer16Property*)m_pProperties[4])->SetValue(0x8000);
++	((MP4Integer16Property*)m_pProperties[5])->SetValue(0x8000);
++	((MP4Integer16Property*)m_pProperties[6])->SetValue(0x0000);
++
++}
++
+diff -Naur mpeg4ip.orig/lib/mp4v2/atom_standard.cpp mpeg4ip.patched/lib/mp4v2/atom_standard.cpp
+--- mpeg4ip.orig/lib/mp4v2/atom_standard.cpp	2004-12-14 21:35:35.000000000 +0000
++++ mpeg4ip.patched/lib/mp4v2/atom_standard.cpp	2007-03-21 23:14:04.000000000 +0000
+@@ -138,6 +138,11 @@
+   /*
+    * g???
+    */
++  } else if (ATOMID(type) == ATOMID("gmhd")) { 
++    ExpectChildAtom("gmin", Required, OnlyOne);
++    ExpectChildAtom("tmcd", Optional, OnlyOne);
++    ExpectChildAtom("text", Optional, OnlyOne);
++
+   } else if (ATOMID(type) == ATOMID("gnre")) { // Apple iTunes 
+     ExpectChildAtom("data", Optional, OnlyOne);
+ 
+@@ -221,6 +226,7 @@
+     ExpectChildAtom("smhd", Optional, OnlyOne);
+     ExpectChildAtom("hmhd", Optional, OnlyOne);
+     ExpectChildAtom("nmhd", Optional, OnlyOne);
++    ExpectChildAtom("gmhd", Optional, OnlyOne);
+     ExpectChildAtom("dinf", Required, OnlyOne);
+     ExpectChildAtom("stbl", Required, OnlyOne);
+ 
+@@ -366,6 +372,7 @@
+     ExpectChildAtom("ipir", Optional, OnlyOne);
+     ExpectChildAtom("mpod", Optional, OnlyOne);
+     ExpectChildAtom("sync", Optional, OnlyOne);
++    ExpectChildAtom("chap", Optional, OnlyOne);
+ 
+   } else if (ATOMID(type) == ATOMID("trex")) {
+     AddVersionAndFlags();	/* 0, 1 */
+diff -Naur mpeg4ip.orig/lib/mp4v2/atom_stsd.cpp mpeg4ip.patched/lib/mp4v2/atom_stsd.cpp
+--- mpeg4ip.orig/lib/mp4v2/atom_stsd.cpp	2004-07-13 22:07:50.000000000 +0100
++++ mpeg4ip.patched/lib/mp4v2/atom_stsd.cpp	2007-03-21 17:20:24.000000000 +0000
+@@ -49,6 +49,7 @@
+  	ExpectChildAtom("sawb", Optional, Many); // For AMR-WB
+  	ExpectChildAtom("s263", Optional, Many); // For H.263
+ 	ExpectChildAtom("avc1", Optional, Many);
++	ExpectChildAtom("text", Optional, Many);
+ }
+ 
+ void MP4StsdAtom::Read() 
+diff -Naur mpeg4ip.orig/lib/mp4v2/atom_text.cpp mpeg4ip.patched/lib/mp4v2/atom_text.cpp
+--- mpeg4ip.orig/lib/mp4v2/atom_text.cpp	1970-01-01 01:00:00.000000000 +0100
++++ mpeg4ip.patched/lib/mp4v2/atom_text.cpp	2007-03-22 00:35:53.000000000 +0000
+@@ -0,0 +1,132 @@
++/*
++ * The contents of this file are subject to the Mozilla Public
++ * License Version 1.1 (the "License"); you may not use this file
++ * except in compliance with the License. You may obtain a copy of
++ * the License at http://www.mozilla.org/MPL/
++ * 
++ * Software distributed under the License is distributed on an "AS
++ * IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
++ * implied. See the License for the specific language governing
++ * rights and limitations under the License.
++ * 
++ * The Original Code is MPEG4IP.
++ * 
++ * The Initial Developer of the Original Code is Cisco Systems Inc.
++ * Portions created by Cisco Systems Inc. are
++ * Copyright (C) Cisco Systems Inc. 2001.  All Rights Reserved.
++ * 
++ * Contributor(s): 
++ *		Dave Mackie		dmackie@cisco.com
++ */
++
++#include "mp4common.h"
++
++MP4TextAtom::MP4TextAtom() 
++	: MP4Atom("text") 
++{
++	// The atom type "text" is used in two complete unrelated ways
++	// i.e. it's real two atoms with the same name
++	// To handle that we need to postpone property creation until
++	// we know who our parent atom is (stsd or gmhd) which gives us
++	// the context info we need to know who we are
++}
++
++void MP4TextAtom::AddPropertiesStsdType()
++{
++
++	AddReserved("reserved1", 6); /* 0 */
++
++	AddProperty(new MP4Integer16Property("dataReferenceIndex"));/* 1 */
++
++	AddProperty(new MP4Integer32Property("displayFlags")); /* 2 */
++	AddProperty(new MP4Integer32Property("textJustification")); /* 3 */
++
++	AddProperty(new MP4Integer16Property("bgColorRed")); /* 4 */
++	AddProperty(new MP4Integer16Property("bgColorGreen")); /* 5 */
++	AddProperty(new MP4Integer16Property("bgColorBlue")); /* 6 */
++
++	AddProperty(new MP4Integer16Property("defTextBoxTop")); /* 7 */
++	AddProperty(new MP4Integer16Property("defTextBoxLeft")); /* 8 */
++	AddProperty(new MP4Integer16Property("defTextBoxBottom")); /* 9 */
++	AddProperty(new MP4Integer16Property("defTextBoxRight")); /* 10 */
++
++	AddReserved("reserved2", 8); /* 11 */
++
++	AddProperty(new MP4Integer16Property("fontNumber")); /* 12 */
++	AddProperty(new MP4Integer16Property("fontFace")); /* 13 */
++
++	AddReserved("reserved3", 1); /* 14 */
++	AddReserved("reserved4", 2); /* 15 */
++
++	AddProperty(new MP4Integer16Property("foreColorRed")); /* 16 */
++	AddProperty(new MP4Integer16Property("foreColorGreen")); /* 17 */
++	AddProperty(new MP4Integer16Property("foreColorBlue")); /* 18 */
++
++}
++
++void MP4TextAtom::AddPropertiesGmhdType()
++{
++
++	AddProperty(new MP4BytesProperty("textData", 36)); /* 0 */
++
++}
++
++
++void MP4TextAtom::Generate()
++{
++
++	if (!strcmp(m_pParentAtom->GetType(), "stsd")) {
++		AddPropertiesStsdType();
++		GenerateStsdType();
++	} else if (!strcmp(m_pParentAtom->GetType(), "gmhd")) {
++		AddPropertiesGmhdType();
++		GenerateGmhdType();
++	} else {
++		VERBOSE_WARNING(m_pFile->GetVerbosity(),
++			printf("Warning: text atom in unexpected context, can not generate"));
++	}
++
++}
++
++void MP4TextAtom::GenerateStsdType() 
++{
++	// generate children
++	MP4Atom::Generate();
++
++	((MP4Integer16Property*)m_pProperties[1])->SetValue(1);
++
++	((MP4Integer32Property*)m_pProperties[2])->SetValue(1);
++	((MP4Integer32Property*)m_pProperties[3])->SetValue(1);
++
++}
++
++void MP4TextAtom::GenerateGmhdType() 
++{
++	MP4Atom::Generate();
++
++	// property 0 has non-zero fixed values
++	static u_int8_t textData[36] = {
++		0x00, 0x01, 
++		0x00, 0x00,
++		0x00, 0x00,
++		0x00, 0x00,
++		0x00, 0x00, 
++		0x00, 0x00,
++		0x00, 0x00, 
++		0x00, 0x00,
++		0x00, 0x01, 
++		0x00, 0x00,
++		0x00, 0x00, 
++		0x00, 0x00,
++		0x00, 0x00, 
++		0x00, 0x00,
++		0x00, 0x00, 
++		0x00, 0x00,
++		0x40, 0x00, 
++		0x00, 0x00, 
++	};
++	((MP4BytesProperty*)m_pProperties[0])->SetValue(textData, sizeof(textData));
++	
++}
++
++
+diff -Naur mpeg4ip.orig/lib/mp4v2/atom_tkhd.cpp mpeg4ip.patched/lib/mp4v2/atom_tkhd.cpp
+--- mpeg4ip.orig/lib/mp4v2/atom_tkhd.cpp	2003-11-19 23:46:11.000000000 +0000
++++ mpeg4ip.patched/lib/mp4v2/atom_tkhd.cpp	2007-03-22 00:42:40.000000000 +0000
 @@ -61,7 +61,8 @@
  	pProp->SetFixed16Format();
  	AddProperty(pProp); /* 8 */
@@ -21,3 +332,271 @@ diff -Naur mpeg4ip/lib/mp4v2/atom_tkhd.cpp mpeg4ip_patched/lib/mp4v2/atom_tkhd.c
  }
  
  void MP4TkhdAtom::Read() 
+diff -Naur mpeg4ip.orig/lib/mp4v2/atoms.h mpeg4ip.patched/lib/mp4v2/atoms.h
+--- mpeg4ip.orig/lib/mp4v2/atoms.h	2005-03-10 18:31:34.000000000 +0000
++++ mpeg4ip.patched/lib/mp4v2/atoms.h	2007-03-22 00:41:38.000000000 +0000
+@@ -206,6 +206,12 @@
+ 	void Read();
+ };
+ 
++class MP4GminAtom : public MP4Atom {
++public:
++	MP4GminAtom();
++	void Generate();
++};
++
+ class MP4HdlrAtom : public MP4Atom {
+ public:
+ 	MP4HdlrAtom();
+@@ -327,6 +333,19 @@
+ 	void Write();
+ };
+ 
++class MP4TextAtom : public MP4Atom {
++public:
++	MP4TextAtom();
++	void Generate();
++
++protected:
++	void AddPropertiesStsdType();
++	void AddPropertiesGmhdType();
++
++	void GenerateStsdType();
++	void GenerateGmhdType();
++};
++
+ class MP4TfhdAtom : public MP4Atom {
+ public:
+ 	MP4TfhdAtom();
+diff -Naur mpeg4ip.orig/lib/mp4v2/libmp4v260.dsp mpeg4ip.patched/lib/mp4v2/libmp4v260.dsp
+--- mpeg4ip.orig/lib/mp4v2/libmp4v260.dsp	2005-03-24 22:14:52.000000000 +0000
++++ mpeg4ip.patched/lib/mp4v2/libmp4v260.dsp	2007-03-21 17:28:47.000000000 +0000
+@@ -134,6 +134,10 @@
+ # End Source File
+ # Begin Source File
+ 
++SOURCE=.\atom_gmin.cpp
++# End Source File
++# Begin Source File
++
+ SOURCE=.\atom_hdlr.cpp
+ # End Source File
+ # Begin Source File
+@@ -242,6 +246,10 @@
+ # End Source File
+ # Begin Source File
+ 
++SOURCE=.\atom_text.cpp
++# End Source File
++# Begin Source File
++
+ SOURCE=.\atom_udta.cpp
+ # End Source File
+ # Begin Source File
+diff -Naur mpeg4ip.orig/lib/mp4v2/libmp4v2_st60.dsp mpeg4ip.patched/lib/mp4v2/libmp4v2_st60.dsp
+--- mpeg4ip.orig/lib/mp4v2/libmp4v2_st60.dsp	2005-03-24 22:14:52.000000000 +0000
++++ mpeg4ip.patched/lib/mp4v2/libmp4v2_st60.dsp	2007-03-21 17:29:12.000000000 +0000
+@@ -133,6 +133,10 @@
+ # End Source File
+ # Begin Source File
+ 
++SOURCE=.\atom_gmin.cpp
++# End Source File
++# Begin Source File
++
+ SOURCE=.\atom_hdlr.cpp
+ # End Source File
+ # Begin Source File
+@@ -241,6 +245,10 @@
+ # End Source File
+ # Begin Source File
+ 
++SOURCE=.\atom_text.cpp
++# End Source File
++# Begin Source File
++
+ SOURCE=.\atom_udta.cpp
+ # End Source File
+ # Begin Source File
+diff -Naur mpeg4ip.orig/lib/mp4v2/mp4.cpp mpeg4ip.patched/lib/mp4v2/mp4.cpp
+--- mpeg4ip.orig/lib/mp4v2/mp4.cpp	2005-03-30 19:41:58.000000000 +0100
++++ mpeg4ip.patched/lib/mp4v2/mp4.cpp	2007-03-21 23:40:06.000000000 +0000
+@@ -939,6 +939,37 @@
+ 	return MP4_INVALID_TRACK_ID;
+ }
+ 
++extern "C" MP4TrackId MP4AddTextTrack(
++	MP4FileHandle hFile, MP4TrackId refTrackId)
++{
++	if (MP4_IS_VALID_FILE_HANDLE(hFile)) {
++		try {
++			return ((MP4File*)hFile)->AddTextTrack(refTrackId);
++		}
++		catch (MP4Error* e) {
++			PRINT_ERROR(e);
++			delete e;
++		}
++	}
++	return MP4_INVALID_TRACK_ID;
++}
++
++extern "C" MP4TrackId MP4AddChapterTextTrack(
++	MP4FileHandle hFile, MP4TrackId refTrackId)
++{
++	if (MP4_IS_VALID_FILE_HANDLE(hFile)) {
++		try {
++			return ((MP4File*)hFile)->AddChapterTextTrack(refTrackId);
++		}
++		catch (MP4Error* e) {
++			PRINT_ERROR(e);
++			delete e;
++		}
++	}
++	return MP4_INVALID_TRACK_ID;
++}
++
++
+ extern "C" MP4TrackId MP4CloneTrack(
+ 	MP4FileHandle srcFile, 
+ 	MP4TrackId srcTrackId,
+diff -Naur mpeg4ip.orig/lib/mp4v2/mp4.h mpeg4ip.patched/lib/mp4v2/mp4.h
+--- mpeg4ip.orig/lib/mp4v2/mp4.h	2005-03-30 19:41:58.000000000 +0100
++++ mpeg4ip.patched/lib/mp4v2/mp4.h	2007-03-21 23:32:28.000000000 +0000
+@@ -100,6 +100,7 @@
+ #define MP4_VIDEO_TRACK_TYPE	"vide"
+ #define MP4_HINT_TRACK_TYPE		"hint"
+ #define MP4_CNTL_TRACK_TYPE     "cntl"
++#define MP4_TEXT_TRACK_TYPE		"text"
+ /*
+  * This second set of track types should be created 
+  * via MP4AddSystemsTrack(type)
+@@ -538,6 +539,14 @@
+ 	MP4FileHandle hFile, 
+ 	MP4TrackId refTrackId);
+ 
++MP4TrackId MP4AddTextTrack(
++	MP4FileHandle hFile, 
++	MP4TrackId refTrackId);
++
++MP4TrackId MP4AddChapterTextTrack(
++	MP4FileHandle hFile, 
++	MP4TrackId refTrackId);
++
+ MP4TrackId MP4CloneTrack(
+ 	MP4FileHandle srcFile, 
+ 	MP4TrackId srcTrackId,
+diff -Naur mpeg4ip.orig/lib/mp4v2/mp4atom.cpp mpeg4ip.patched/lib/mp4v2/mp4atom.cpp
+--- mpeg4ip.orig/lib/mp4v2/mp4atom.cpp	2005-03-10 18:31:34.000000000 +0000
++++ mpeg4ip.patched/lib/mp4v2/mp4atom.cpp	2007-03-21 23:18:57.000000000 +0000
+@@ -84,6 +84,13 @@
+ 	pAtom = new MP4SoundAtom("alaw");
+       }
+       break;
++
++    case 'c':
++      if (ATOMID(type) == ATOMID("chap")) {
++	pAtom = new MP4TrefTypeAtom(type);
++	  }
++	  break;
++
+     case 'd':
+       if (ATOMID(type) == ATOMID("d263")) {
+ 	pAtom = new MP4D263Atom();
+@@ -113,6 +120,11 @@
+ 	pAtom = new MP4FtypAtom();
+       }
+       break;
++    case 'g':
++      if (ATOMID(type) == ATOMID("gmin")) {
++	pAtom = new MP4GminAtom();
++      }
++      break;
+     case 'h':
+       if (ATOMID(type) == ATOMID("hdlr")) {
+ 	pAtom = new MP4HdlrAtom();
+@@ -200,7 +212,9 @@
+       }
+       break;
+     case 't':
+-      if (ATOMID(type) == ATOMID("tkhd")) {
++      if (ATOMID(type) == ATOMID("text")) {
++	pAtom = new MP4TextAtom();
++      } else if (ATOMID(type) == ATOMID("tkhd")) {
+ 	pAtom = new MP4TkhdAtom();
+       } else if (ATOMID(type) == ATOMID("tfhd")) {
+ 	pAtom = new MP4TfhdAtom();
+diff -Naur mpeg4ip.orig/lib/mp4v2/mp4file.cpp mpeg4ip.patched/lib/mp4v2/mp4file.cpp
+--- mpeg4ip.orig/lib/mp4v2/mp4file.cpp	2005-03-30 19:41:58.000000000 +0100
++++ mpeg4ip.patched/lib/mp4v2/mp4file.cpp	2007-03-22 00:28:42.000000000 +0000
+@@ -1869,6 +1869,59 @@
+ 	return trackId;
+ }
+ 
++MP4TrackId MP4File::AddTextTrack(MP4TrackId refTrackId)
++{
++	// validate reference track id
++	FindTrackIndex(refTrackId);
++
++	MP4TrackId trackId = 
++		AddTrack(MP4_TEXT_TRACK_TYPE, GetTrackTimeScale(refTrackId));
++
++	InsertChildAtom(MakeTrackName(trackId, "mdia.minf"), "gmhd", 0);
++
++	AddChildAtom(MakeTrackName(trackId, "mdia.minf.stbl.stsd"), "text");
++
++	// stsd is a unique beast in that it has a count of the number 
++	// of child atoms that needs to be incremented after we add the text atom
++	MP4Integer32Property* pStsdCountProperty;
++	FindIntegerProperty(
++		MakeTrackName(trackId, "mdia.minf.stbl.stsd.entryCount"),
++		(MP4Property**)&pStsdCountProperty);
++	pStsdCountProperty->IncrementValue();
++
++	return trackId;
++}
++
++MP4TrackId MP4File::AddChapterTextTrack(MP4TrackId refTrackId)
++{
++	// validate reference track id
++	FindTrackIndex(refTrackId);
++
++	MP4TrackId trackId = 
++		AddTrack(MP4_TEXT_TRACK_TYPE, GetTrackTimeScale(refTrackId));
++
++	InsertChildAtom(MakeTrackName(trackId, "mdia.minf"), "gmhd", 0);
++
++	AddChildAtom(MakeTrackName(trackId, "mdia.minf.stbl.stsd"), "text");
++
++	// stsd is a unique beast in that it has a count of the number 
++	// of child atoms that needs to be incremented after we add the text atom
++	MP4Integer32Property* pStsdCountProperty;
++	FindIntegerProperty(
++		MakeTrackName(trackId, "mdia.minf.stbl.stsd.entryCount"),
++		(MP4Property**)&pStsdCountProperty);
++	pStsdCountProperty->IncrementValue();
++
++	/* add the magic "text" atom to the generic media header */
++	AddChildAtom(MakeTrackName(trackId, "mdia.minf.gmhd"), "text");
++
++	AddDescendantAtoms(MakeTrackName(refTrackId, NULL), "tref.chap");
++
++	AddTrackReference(MakeTrackName(refTrackId, "tref.chap"), trackId);
++
++	return trackId;
++}
++
+ void MP4File::DeleteTrack(MP4TrackId trackId)
+ {
+ 	ProtectWriteOperation("MP4DeleteTrack");
+diff -Naur mpeg4ip.orig/lib/mp4v2/mp4file.h mpeg4ip.patched/lib/mp4v2/mp4file.h
+--- mpeg4ip.orig/lib/mp4v2/mp4file.h	2005-03-30 19:41:58.000000000 +0100
++++ mpeg4ip.patched/lib/mp4v2/mp4file.h	2007-03-21 23:33:12.000000000 +0000
+@@ -296,6 +296,8 @@
+ 					const uint8_t *pPicture,
+ 					uint16_t pictureLen);
+ 	MP4TrackId AddHintTrack(MP4TrackId refTrackId);
++	MP4TrackId AddTextTrack(MP4TrackId refTrackId);
++	MP4TrackId AddChapterTextTrack(MP4TrackId refTrackId);
+ 
+ 	MP4SampleId GetTrackNumberOfSamples(MP4TrackId trackId);
+ 

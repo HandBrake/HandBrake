@@ -23,6 +23,7 @@ struct hb_mux_object_s
 
     /* Cumulated durations so far, in timescale units (see MP4Mux) */
     uint64_t sum_dur;
+	
 };
 
 struct hb_mux_data_s
@@ -141,14 +142,17 @@ static int MP4Init( hb_mux_object_t * m )
 			if(!MP4SetBytesProperty(m->file, "moov.trak.tkhd.reserved3", nval, size)) {
 				hb_log("Problem setting transform matrix");
 			}
-
+			
 		}
 
 	}
 
 	/* end of transformation matrix */
 
+	/* firstAudioTrack will be used to reference the first audio track when we add a chapter track */
+	MP4TrackId firstAudioTrack;
 
+	/* add the audio tracks */
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = hb_list_item( title->list_audio, i );
@@ -160,8 +164,47 @@ static int MP4Init( hb_mux_object_t * m )
         MP4SetAudioProfileLevel( m->file, 0x0F );
         MP4SetTrackESConfiguration( m->file, mux_data->track,
                 audio->config.aac.bytes, audio->config.aac.length );
+				
+		/* store a reference to the first audio track,
+		so we can use it to feed the chapter text track's sample rate */
+		if (i == 0) {
+			firstAudioTrack = mux_data->track;
+		}
+		
     }
 
+	if (job->chapter_markers) {
+
+		/* add a text track for the chapters */
+		MP4TrackId textTrack;
+
+		textTrack = MP4AddChapterTextTrack(m->file, firstAudioTrack);
+
+		/* write the chapter markers for each selected chapter */
+		char markerBuf[13];
+		hb_chapter_t  * chapter;
+		MP4Duration chapterDuration;
+		float fOrigDuration, fTimescale;
+		float fTSDuration;
+
+		for( i = job->chapter_start - 1; i <= job->chapter_end - 1; i++ )
+		{
+			chapter = hb_list_item( title->list_chapter, i );
+
+			fOrigDuration = chapter->duration;
+			fTimescale = job->arate;
+			fTSDuration = (fOrigDuration / 90000) * fTimescale;
+			chapterDuration = (MP4Duration)fTSDuration;
+			
+			sprintf(markerBuf, "  Chapter %03i", i + 1);
+			markerBuf[0] = 0;
+			markerBuf[1] = 11; // "Chapter xxx"
+			MP4WriteSample(m->file, textTrack, (u_int8_t*)markerBuf, 13, chapterDuration, 0, true);
+
+		}
+		
+	}
+	
     return 0;
 }
 
@@ -196,8 +239,8 @@ static int MP4End( hb_mux_object_t * m )
 {
 #if 0
     hb_job_t * job = m->job;
-#endif
     char filename[1024]; memset( filename, 0, 1024 );
+#endif
 
     MP4Close( m->file );
 

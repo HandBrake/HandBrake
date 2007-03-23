@@ -43,6 +43,7 @@ static int    acodec      = 0;
 static int    pixelratio  = 0;
 static int    chapter_start = 0;
 static int    chapter_end   = 0;
+static int    chapter_markers = 0;
 static int	  crf			= 0;
 static char	  *x264opts		= NULL;
 static char	  *x264opts2 	= NULL;
@@ -310,6 +311,11 @@ static int HandleEvents( hb_handle_t * h )
                                           job->chapter_end );
             }
 
+			if ( chapter_markers )
+			{
+				job->chapter_markers = chapter_markers;
+			}
+
             if( crop[0] >= 0 && crop[1] >= 0 &&
                 crop[2] >= 0 && crop[3] >= 0 )
             {
@@ -551,6 +557,7 @@ static void ShowHelp()
     "    -c, --chapters <string> Select chapters (e.g. \"1-3\" for chapters\n"
     "                            1 to 3, or \"3\" for chapter 3 only,\n"
     "                            default: all chapters)\n"
+    "    -m, --markers           Add chapter markers (mp4 output format only)\n"
     "    -a, --audio <string>    Select audio channel(s) (\"none\" for no \n"
     "                            audio, default: first one)\n"
     "    -6, --surround          Export 5.1 surround as 6-channel AAC\n"
@@ -617,6 +624,7 @@ static int ParseOptions( int argc, char ** argv )
 
             { "title",       required_argument, NULL,    't' },
             { "chapters",    required_argument, NULL,    'c' },
+            { "markers",     no_argument,       NULL,    'm' },
             { "audio",       required_argument, NULL,    'a' },
             { "surround",    no_argument,       NULL,    '6' },
             { "subtitle",    required_argument, NULL,    's' },
@@ -649,7 +657,7 @@ static int ParseOptions( int argc, char ** argv )
         int c;
 
         c = getopt_long( argc, argv,
-                         "hvuC:f:i:o:t:c:a:6s:e:E:2dgpw:l:n:b:q:S:B:r:R:Qx:Y:X:",
+                         "hvuC:f:i:o:t:c:ma:6s:e:E:2dgpw:l:n:b:q:S:B:r:R:Qx:Y:X:",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -705,6 +713,9 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 break;
             }
+            case 'm':
+                chapter_markers = 1;
+                break;
             case 'a':
                 audios = strdup( optarg );
                 break;
@@ -889,7 +900,8 @@ static int CheckOptions( int argc, char ** argv )
             {
                 mux = HB_MUX_AVI;
             }
-            else if( p && !strcasecmp( p, ".mp4" ) )
+            else if( p && ( !strcasecmp( p, ".mp4" )  ||
+							!strcasecmp( p, ".m4v" ) ) )
             {
 	    	if ( h264_30 == 1 )
                     mux = HB_MUX_IPOD;
