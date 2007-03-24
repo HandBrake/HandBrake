@@ -24,6 +24,8 @@ ifeq ($(SNAP), 1)
 	( mv Handbrake.dmg Handbrake-$(HB_VERSION)-MacOS_UB.dmg )
 endif
 
+endif
+
 ifeq ($(SYSTEM),Linux)
 
 all:	contrib/.contrib libhb/libhb.a HandBrakeCLI
