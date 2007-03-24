@@ -1,8 +1,8 @@
 #!/bin/sh
 # This script build the contrib libs
 # This used on MaxOs X to generate a universal version of the contrib libraries
-# The new building process for MediaFork is to download a precompiled universal contrib folder
-# and use them to build universal binaries of MediaFork
+# The new building process for HandBrake is to download a precompiled universal contrib folder
+# and use them to build universal binaries of HandBrake
 # pri: 01/28/07
 # ########################################################################
 # Parameters:
@@ -21,7 +21,7 @@
 # to assemble both versions and put a universal binary version of the library in contrib/lib folder
 #
 # Once all of the contrib libraries are builded, a contribbin-darwin-${version}.tar.gz file is created, this file must
-# be uploaded to the ftp server so Xcode will be able to build universal binaries of the MediaFork, MediaForkCLI and libmediafork
+# be uploaded to the ftp server so Xcode will be able to build universal binaries of the HandBrake, HandBrakeCLI and libhb
 #
 # ##########################################################################
 # SSH passwordless setup instructions
@@ -37,7 +37,7 @@ export REPOS=svn://svn.m0k.org/HandBrake/trunk
 # ##########################################################################
 # Launch the build on the foreign system
 # ##########################################################################
-ssh $USERNAME@$IP "rm -rf MFBUILDTMP ; mkdir MFBUILDTMP ; svn co $REPOS MFBUILDTMP ; cd MFBUILDTMP ; ./configure ; cd contrib ; cp ../config.jam . ; ../jam ; touch BUILDTERMINATED" &
+ssh $USERNAME@$IP "rm -rf HBBUILDTMP ; mkdir HBBUILDTMP ; svn co $REPOS HBBUILDTMP ; cd HBBUILDTMP ; ./configure ; cd contrib ; cp ../config.jam . ; ../jam ; touch BUILDTERMINATED" &
 ./configure
 cd contrib
 rm -rf lib include *tar.gz bin share man native foreign
@@ -54,23 +54,15 @@ echo the foreign build is done, transferring files to native computer:
 cd foreign
 mkdir lib
 cd lib
-scp $USERNAME@$IP:/Users/$USERNAME/MFBUILDTMP/contrib/lib/*a .
-scp -rp $USERNAME@$IP:/Users/$USERNAME/MFBUILDTMP/contrib/lib/libquicktime .
+scp $USERNAME@$IP:/Users/$USERNAME/HBBUILDTMP/contrib/lib/*a .
 for lib in `ls *.a`
 do	
 	echo ... lipo contrib libraries: $lib
 	lipo -create $lib ../../native/lib/$lib -output ../../lib/$lib
 done;
-mkdir ../../lib/libquicktime
-cd libquicktime
-for lib in `ls *.so`
-do
-	echo ... lipo libquicktime plugins: $lib
-        lipo -create $lib ../../../native/lib/libquicktime/$lib -output ../../../lib/libquicktime/$lib
-done;
  
 
-cd ../../..
+cd ../..
 echo $VERSION > DarwinContribVersion.txt
 echo Creating contribbin-darwin-$VERSION.tar.gz
 tar zcvf contribbin-darwin-$VERSION.tar.gz lib include  DarwinContribVersion.txt
