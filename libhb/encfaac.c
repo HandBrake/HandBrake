@@ -74,7 +74,7 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
 	}
 
     cfg->useTns        = 0;
-    cfg->bitRate       = job->abitrate * 500; /* Per channel */
+    cfg->bitRate       = job->abitrate * 1000 / w->config->aac.channelsused; /* Per channel */
     cfg->bandWidth     = 0;
     cfg->outputFormat  = 0;
     cfg->inputFormat   =  FAAC_INPUT_FLOAT;
