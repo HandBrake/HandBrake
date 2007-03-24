@@ -17,7 +17,7 @@ ifeq ($(SYSTEM),NetBSD)
 endif
  	
 ifeq ($(SYSTEM),Linux)
-	SYSDEF = -DSYS_LINUX $(HB_DEFPPC)
+	SYSDEF = -DSYS_LINUX $(HB_DEFPPC) -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
 	LDFLAGS += -lpthread -lm -ldl
 endif
 

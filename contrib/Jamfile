@@ -364,77 +364,10 @@ actions Zlib
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf zlib && tar xzf zlib.tar.gz &&
     cd zlib && 
-    ./configure --prefix=$CONTRIB && make && make install &&
+    ./configure --prefix=$CONTRIB && make && make install && touch $CONTRIB/.contrib
     strip -S $CONTRIB/lib/libz.a
 }
 Wget        $(SUBDIR)/zlib.tar.gz   : $(SUBDIR)/version_zlib.txt ;
 Zlib $(SUBDIR)/lib/libz.a : $(SUBDIR)/zlib.tar.gz ;
 }
 
-#libquicktime don't build on Cygwin! Do we really need it?
-if $(OS) != CYGWIN
-{
-	# libquicktime
-	rule LibQT
-	{
-
-	    if $(OS) = MACOSX
-	    {
-	    POST_LibQT = "cd plugins/faac && " ; 
-	    POST_LibQT += "gcc -flat_namespace -undefined suppress -o .libs/lqt_faac.so -bundle  .libs/faac.o .libs/lqt_faac.o $CONTRIB/lib/libfaac.a ../../src/.libs/libquicktime.a -L$CONTRIB/lib -L$CONTRIB/libquicktime/src/.libs  -lm -lz -ldl && " ; 
-	    POST_LibQT += "cp .libs/lqt_faac.so $CONTRIB/lib/libquicktime && " ;
-	    POST_LibQT += "cd ../audiocodec && gcc -flat_namespace -undefined suppress -o .libs/lqt_audiocodec.so -bundle  .libs/ima4.o .libs/pcm.o .libs/lqt_audiocodec.o  ../../src/.libs/libquicktime.a  -L$CONTRIB/lib -L$CONTRIB/libquicktime/src/.libs -lm -lz -ldl && " ; 
-	    POST_LibQT += "cp .libs/lqt_audiocodec.so $CONTRIB/lib/libquicktime && " ; 
-	    POST_LibQT += "cd ../rtjpeg && " ;
-	    POST_LibQT += "gcc -flat_namespace -undefined suppress -o .libs/lqt_rtjpeg.so -bundle  .libs/rtjpeg_codec.o .libs/lqt_rtjpeg.o .libs/RTjpeg.o ../../src/.libs/libquicktime.a -L$CONTRIB/lib -L$CONTRIB/libquicktime/src/.libs  -lm -lz -ldl  && " ;
-	    POST_LibQT += "cp .libs/lqt_rtjpeg.so $CONTRIB/lib/libquicktime && " ;
-	    POST_LibQT += "cd ../videocodec && " ;
-	    POST_LibQT += "gcc -flat_namespace -undefined suppress -o .libs/lqt_videocodec.so -bundle  .libs/raw.o .libs/v210.o .libs/v308.o .libs/v408.o .libs/v410.o .libs/yuv2.o .libs/yuv4.o .libs/yv12.o .libs/lqt_videocodec.o   ../../src/.libs/libquicktime.a -L$CONTRIB/lib -L$CONTRIB/libquicktime/src/.libs  -lm -lz -ldl  && " ;
-	    POST_LibQT += "cp  .libs/lqt_videocodec.so $CONTRIB/lib/libquicktime && " ; 
-	    POST_LibQT += "cd ../lame && " ;
-	    POST_LibQT += "gcc -flat_namespace -undefined suppress -o .libs/lqt_lame.so -bundle  .libs/lame_codec.o .libs/lqt_lame.o  ../../src/.libs/libquicktime.a  -all_load  $CONTRIB/lib/libmp3lame.a  -L$CONTRIB/lib -L$CONTRIB/libquicktime/src/.libs  -lm -lz -ldl && " ;
-	    POST_LibQT += "cp .libs/lqt_lame.so $CONTRIB/lib/libquicktime && cd ../x264 && " ;
-	    POST_LibQT += "gcc -flat_namespace -undefined suppress -read_only_relocs suppress -o .libs/lqt_x264.so -bundle  .libs/x264.o .libs/lqt_x264.o  ../../src/.libs/libquicktime.a $CONTRIB/lib/libx264.a -L$CONTRIB/lib -L$CONTRIB/libquicktime/src/.libs -lm -lz -ldl && " ;
-	    POST_LibQT += "cp .libs/lqt_x264.so $CONTRIB/lib/libquicktime && cd ../ffmpeg && " ; 
-	    POST_LibQT += "gcc -flat_namespace -undefined suppress -read_only_relocs suppress -o .libs/lqt_ffmpeg.so  -bundle  .libs/lqt_ffmpeg.o .libs/audio.o .libs/video.o .libs/params.o  ../../src/.libs/libquicktime.a  $CONTRIB/lib/libavcodec.a $CONTRIB/lib/libavutil.a $CONTRIB/lib/libavformat.a -L$CONTRIB/lib -L$CONTRIB/libquicktime/src/.libs  -lm -lz -ldl  && " ;
-	    POST_LibQT += "cp .libs/lqt_ffmpeg.so $CONTRIB/lib/libquicktime && cd ../.. && " ;
-	    }
-	    else
-	    {
-	    # Rebuild plugins using static libraries to reduice dependencies at runtime.
-	    POST_LibQT = "cd plugins/faac && " ; 
-	    POST_LibQT += "gcc -shared  .libs/faac.o .libs/lqt_faac.o  $CONTRIB/libquicktime/src/.libs/libquicktime.a -Wl,--rpath -Wl,$CONTRIB/libquicktime/src/.libs -Wl,--rpath -Wl,$CONTRIB/lib -L$CONTRIB/lib -lpthread -lm -lz -ldl -Wl,-soname -Wl,lqt_faac.so -o .libs/lqt_faac.so && " ; 
-	    POST_LibQT += "cp .libs/lqt_faac.so $CONTRIB/lib/libquicktime && " ;
-	    POST_LibQT += "cd ../audiocodec && gcc -shared  .libs/ima4.o .libs/pcm.o .libs/lqt_audiocodec.o ../../src/.libs/libquicktime.a -Wl,--rpath -Wl,$CONTRIB//libquicktime/src/.libs -Wl,--rpath -Wl,$CONTRIB//lib -L$CONTRIB//lib -L$CONTRIB//libquicktime/src/.libs -lpthread -lm -lz -ldl  -Wl,-soname -Wl,lqt_audiocodec.so -o .libs/lqt_audiocodec.so && " ; 
-	    POST_LibQT += "cp .libs/lqt_audiocodec.so $CONTRIB/lib/libquicktime && " ; 
-	    POST_LibQT += "cd ../rtjpeg && " ;
-	    POST_LibQT += "gcc -shared  .libs/rtjpeg_codec.o .libs/lqt_rtjpeg.o .libs/RTjpeg.o ../../src/.libs/libquicktime.a  -Wl,--rpath -Wl,$CONTRIB/libquicktime/src/.libs -Wl,--rpath -Wl,$CONTRIB/lib -L$CONTRIB/lib -L$CONTRIB/libquicktime/src/.libs -lpthread -lm -lz -ldl  -Wl,-soname -Wl,lqt_rtjpeg.so -o .libs/lqt_rtjpeg.so && " ;
-	    POST_LibQT += "cp .libs/lqt_rtjpeg.so $CONTRIB/lib/libquicktime && " ;
-	    POST_LibQT += "cd ../videocodec && " ;
-	    POST_LibQT += "gcc -shared  .libs/raw.o .libs/v210.o .libs/v308.o .libs/v408.o .libs/v410.o .libs/yuv2.o .libs/yuv4.o .libs/yv12.o .libs/lqt_videocodec.o ../../src/.libs/libquicktime.a -Wl,--rpath -Wl,$CONTRIB/libquicktime/src/.libs -Wl,--rpath -Wl,$CONTRIB/lib -L$CONTRIB/lib -L$CONTRIB/libquicktime/src/.libs -lpthread -lm -lz -ldl  -Wl,-soname -Wl,lqt_videocodec.so -o .libs/lqt_videocodec.so && " ;
-	    POST_LibQT += "cp  .libs/lqt_videocodec.so $CONTRIB/lib/libquicktime && " ; 
-	    POST_LibQT += "cd ../lame && " ;
-	    POST_LibQT += "gcc -shared  .libs/lame_codec.o .libs/lqt_lame.o $CONTRIB/libquicktime/src/.libs/libquicktime.a -Wl,--whole-archive $CONTRIB/lib/libmp3lame.a -Wl,--no-whole-archive  -Wl,--rpath -Wl,$CONTRIB/libquicktime/src/.libs -Wl,--rpath -Wl,$CONTRIB/lib -L/home/pri/Desktop/0.8.0b2_5.1_383/contrib/lib -lpthread -lm -lz -ldl -Wl,-soname -Wl,lqt_lame.so -o .libs/lqt_lame.so && " ;
-	    POST_LibQT += "cp .libs/lqt_lame.so $CONTRIB/lib/libquicktime && cd ../x264 && " ;
-	    POST_LibQT += "gcc -shared  .libs/x264.o .libs/lqt_x264.o $CONTRIB/libquicktime/src/.libs/libquicktime.a $CONTRIB/lib/libx264.a -Wl,--rpath -Wl,$CONTRIB/libquicktime/src/.libs -Wl,--rpath -Wl,$CONTRIB/lib -L$CONTRIB/lib -lpthread -lm -lz -ldl -Wl,-soname -Wl,lqt_x264.so -o .libs/lqt_x264.so && " ;
-	    POST_LibQT += "cp .libs/lqt_x264.so $CONTRIB/lib/libquicktime && cd ../ffmpeg && " ; 
-	    POST_LibQT += "gcc -shared  .libs/lqt_ffmpeg.o .libs/audio.o .libs/video.o .libs/params.o $CONTRIB/lib/libavcodec.a $CONTRIB/lib/libavutil.a $CONTRIB/lib/libavformat.a $CONTRIB/libquicktime/src/.libs/libquicktime.a -Wl,--rpath -Wl,$CONTRIB/libquicktime/src/.libs -Wl,--rpath -Wl,$CONTRIB/lib -L$CONTRIB/lib -lpthread -lm -lz -ldl -Wl,-soname -Wl,lqt_ffmpeg.so -o .libs/lqt_ffmpeg.so && " ;
-	    POST_LibQT += "cp .libs/lqt_ffmpeg.so $CONTRIB/lib/libquicktime && cd ../.. && " ;
-	    }
-
-	    Depends $(<) : $(>) ;
-	    Depends lib  : $(<) ;
-	}
-	actions LibQT
-	{
-	    cd `dirname $(>)` && CONTRIB=`pwd` &&
-	    rm -rf libquicktime && tar xzf libquicktime.tar.gz &&
-	    export LDFLAGS="$LDFLAGS -L$CONTRIB/lib -L$CONTRIB/libquicktime/src/.libs -I$CONTRIB/include" && export CPPFLAGS="$CPPFLAGS -I$CONTRIB/include"
-	    cd libquicktime &&  patch -p1 < ../patch-libquicktime.patch &&
-	     ./configure --prefix=$CONTRIB --enable-shared --enable-static --enable-gpl --with-faac=$CONTRIB --with-x264=$CONTRIB --with-avcodec=$CONTRIB && make && make install && $(POST_LibQT) 
-	    strip -S $CONTRIB/lib/libquicktime.a && touch $CONTRIB/.contrib
-	}
-	Wget        $(SUBDIR)/libquicktime.tar.gz   : $(SUBDIR)/version_qt.txt ;
-	LibQT $(SUBDIR)/lib/libquicktime.a : $(SUBDIR)/libquicktime.tar.gz ;
-
-}
