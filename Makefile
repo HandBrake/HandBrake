@@ -19,10 +19,7 @@ mrproper:
 	(rm -rf contrib/*tar.gz contrib/include contrib/lib contrib/DarwinContribVersion.txt ; cd macosx ; xcodebuild -alltargets -configuration UB clean | sed '/^$$/d' )
 
 release:
-	(rm -rf Handbrake Handbrake.dmg ; mkdir -p Handbrake/api Handbrake/doc; cp test/BUILDSHARED AUTHORS BUILD COPYING CREDITS NEWS THANKS TRANSLATIONS Handbrake/doc ; cp -rp HandBrake.app Handbrake ; cp -rp libhb/libhb.dylib Handbrake/api ; cp -rp libhb/hb.h libhb/common.h libhb/ports.h Handbrake/api ; cp -rp HandbrakeCLI Handbrake ; hdiutil create -srcfolder Handbrake  -format UDZO Handbrake.dmg ; rm -rf Handbrake )
-ifeq ($(SNAP), 1)
-	( mv Handbrake.dmg Handbrake-$(HB_VERSION)-MacOS_UB.dmg )
-endif
+	(rm -rf Handbrake Handbrake*dmg ; mkdir -p Handbrake/api Handbrake/doc; cp test/BUILDSHARED AUTHORS BUILD COPYING CREDITS NEWS THANKS TRANSLATIONS Handbrake/doc ; cp -rp HandBrake.app Handbrake ; cp -rp libhb/libhb.dylib Handbrake/api ; cp -rp libhb/hb.h libhb/common.h libhb/ports.h Handbrake/api ; cp -rp HandbrakeCLI Handbrake ; hdiutil create -srcfolder Handbrake  -format UDZO Handbrake-$(HB_VERSION)-MacOS_UB.dmg ; rm -rf Handbrake )
 
 endif
 
