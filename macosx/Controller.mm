@@ -1615,7 +1615,9 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesPictureSettings"];
 	/* File Format */
     [preset setObject:@"MP4 file" forKey:@"FileFormat"];
-	/* Codecs */
+	/* Chapter Markers*/
+	 [preset setObject:[NSNumber numberWithInt:1] forKey:@"ChapterMarkers"];
+    /* Codecs */
 	[preset setObject:@"AVC/H.264 Video / AAC Audio" forKey:@"FileCodecs"];
 	/* Video encoder */
 	[preset setObject:@"x264 (h.264 iPod)" forKey:@"VideoEncoder"];
@@ -1678,6 +1680,8 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesPictureSettings"];
 	/* File Format */
     [preset setObject:@"MP4 file" forKey:@"FileFormat"];
+	/* Chapter Markers*/
+	 [preset setObject:[NSNumber numberWithInt:1] forKey:@"ChapterMarkers"];
 	/* Codecs */
 	[preset setObject:@"AVC/H.264 Video / AAC Audio" forKey:@"FileCodecs"];
 	/* Video encoder */
