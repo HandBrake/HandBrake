@@ -1550,6 +1550,8 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 	[preset setObject:[NSNumber numberWithInt:[fPresetNewPicSettingsApply state]] forKey:@"UsesPictureSettings"];
 	/* File Format */
     [preset setObject:[fDstFormatPopUp titleOfSelectedItem] forKey:@"FileFormat"];
+	/* Chapter Markers fCreateChapterMarkers*/
+	[preset setObject:[NSNumber numberWithInt:[fCreateChapterMarkers state]] forKey:@"ChapterMarkers"];
 	/* Codecs */
 	[preset setObject:[fDstCodecsPopUp titleOfSelectedItem] forKey:@"FileCodecs"];
 	/* Video encoder */
@@ -1771,7 +1773,9 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 		/* File Format */
 		[fDstFormatPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileFormat"]]];
 		[self FormatPopUpChanged: NULL];
-		/* Codecs */
+		/* Chapter Markers*/
+		[fCreateChapterMarkers setState:[[chosenPreset objectForKey:@"ChapterMarkers"] intValue]];
+	    /* Codecs */
 		[fDstCodecsPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]]];
 		[self CodecsPopUpChanged: NULL];
 		/* Video encoder */
