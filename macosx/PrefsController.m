@@ -35,6 +35,8 @@
 	appDefaults = [NSDictionary dictionaryWithObject:defDestDirectory forKey:@"LastDestinationDirectory"];
 	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
                    forKey:@"DefaultAutoNaming"];
+	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
+                   forKey:@"DefaultChapterMarkers"];
     [defaults registerDefaults: appDefaults];
 
 	/* fUpdateCheck Check or uncheck according to the preferences */
@@ -255,6 +257,9 @@
 	/* fDefAutoNaming Check or uncheck according to the preferences*/
     [fDefAutoNaming setState: [defaults boolForKey:@"DefaultAutoNaming"] ?
 		   NSOnState : NSOffState];
+	/* fDefChapterMarkers Check or uncheck according to the preferences*/
+    [fDefChapterMarkers setState: [defaults boolForKey:@"DefaultChapterMarkers"] ?
+		   NSOnState : NSOffState];
 }
 
 
@@ -380,6 +385,15 @@
     else
     {
         [defaults setObject:@"NO" forKey:@"DefaultAutoNaming"];
+    }
+	/* Chapter Markers */
+	if( [fDefChapterMarkers state] == NSOnState )
+    {
+        [defaults setObject:@"YES" forKey:@"DefaultChapterMarkers"];
+    }
+    else
+    {
+        [defaults setObject:@"NO" forKey:@"DefaultChapterMarkers"];
     }
 
 }

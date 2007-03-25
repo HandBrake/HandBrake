@@ -1181,6 +1181,10 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
                 _( @"AVC/H.264 Video / AAC Audio" )];
 			/* We enable the create chapters checkbox here since we are .mp4 */	
 		    [fCreateChapterMarkers setEnabled: YES];
+			if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultChapterMarkers"] > 0)
+	        {
+		    [fCreateChapterMarkers setState: NSOnState];
+	        }
 			break;
         case 1: 
             ext = "avi";
