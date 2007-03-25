@@ -1475,13 +1475,13 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 {
     /* Show the panel */
 	/* Temporarily disable until window hang bug is fixed */
-	/*
+	
     [NSApp beginSheet: fAddPresetPanel modalForWindow: fWindow
         modalDelegate: NULL didEndSelector: NULL contextInfo: NULL];
     [NSApp runModalForWindow: fAddPresetPanel];
     [NSApp endSheet: fAddPresetPanel];
-    [fAddPresetPanel orderOut: self]
-	*/
+    [fAddPresetPanel orderOut: self];
+	
 }
 - (IBAction) CloseAddPresetPanel: (id) sender
 {
@@ -1493,21 +1493,22 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
     /* Here we create each shipped preset */
 	[UserPresets addObject:[self CreateIpodPreset]];
 	[UserPresets addObject:[self CreateAppleTVPreset]];
-    [self AddPreset: sender];
+    [self AddPreset];
 }
 - (IBAction)AddUserPreset:(id)sender
 {
     /* Here we create a custom user preset */
 	[UserPresets addObject:[self CreatePreset]];
-    [self AddPreset: sender];
+    [self AddPreset];
+
 }
-- (IBAction)AddPreset:(id)sender
+- (void)AddPreset
 {
 
 	
 	/* We Sort the Presets By Factory or Custom */
 	NSSortDescriptor * presetTypeDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"Type" 
-                                                    ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease];
+                                                    ascending:YES] autorelease];
 	/* We Sort the Presets Alphabetically by name */
 	NSSortDescriptor * presetNameDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"PresetName" 
                                                     ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease];
@@ -1516,7 +1517,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 	[UserPresets setArray:sortedArray];
 	
 	/* We stop the modal window for the new preset */
-	[fPresetNewName    setStringValue: @""];
+	[fPresetNewName setStringValue: @""];
 	[NSApp stopModal];
 	/* We Reload the New Table data for presets */
     [tableView reloadData];

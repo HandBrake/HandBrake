@@ -205,7 +205,7 @@
 - (void) savePreset;
 - (IBAction)AddFactoryPresets:(id)sender;
 - (IBAction)AddUserPreset:(id)sender;
-- (IBAction)AddPreset:(id)sender;
+- (void)AddPreset;
 - (IBAction)InsertPreset:(id)sender;
 - (IBAction)DeletePreset:(id)sender;
 - (IBAction)tableViewSelected:(id)sender;
