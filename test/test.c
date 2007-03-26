@@ -231,19 +231,19 @@ static void PrintTitleInfo( hb_title_t * title )
         audio = hb_list_item( title->list_audio, i );
         if( audio->codec & HB_ACODEC_AC3 )
         {
-            fprintf( stderr, "    + %x, %s, %dHz, %dbps\n", audio->id,
+            fprintf( stderr, "    + %d, %s, %dHz, %dbps\n", i + 1,
                      audio->lang, audio->rate, audio->bitrate );
         }
         else
         {
-            fprintf( stderr, "    + %x, %s\n", audio->id, audio->lang );
+            fprintf( stderr, "    + %d, %s\n", i, audio->lang );
         }
     }
     fprintf( stderr, "  + subtitle tracks:\n" );
     for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
     {
         subtitle = hb_list_item( title->list_subtitle, i );
-        fprintf( stderr, "    + %x, %s\n", subtitle->id, subtitle->lang );
+        fprintf( stderr, "    + %d, %s\n", i + 1, subtitle->lang );
     }
 }
 
