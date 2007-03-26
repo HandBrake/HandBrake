@@ -542,37 +542,46 @@ static void ShowHelp()
     fprintf( stderr,
     "Syntax: HandBrakeCLI [options] -i <device> -o <file>\n"
     "\n"
+	"### General Handbrake Options------------------------------------------------\n\n"
     "    -h, --help              Print help\n"
     "    -u, --update            Check for updates and exit\n"
     "    -v, --verbose           Be verbose\n"
     "    -C, --cpu               Set CPU count (default: autodetected)\n"
     "\n"
-    "    -f, --format <string>   Set output format (avi/mp4/ogm, default:\n"
-    "                            autodetected from file name)\n"
-    "    -i, --input <string>    Set input device\n"
-    "    -o, --output <string>   Set output file name\n"
-    "\n"
-    "    -t, --title <number>    Select a title to encode (0 to scan only,\n"
+	
+	"### Source Options-----------------------------------------------------------\n\n"
+	"    -i, --input <string>    Set input device\n"
+	"    -t, --title <number>    Select a title to encode (0 to scan only,\n"
     "                            default: 1)\n"
     "    -c, --chapters <string> Select chapters (e.g. \"1-3\" for chapters\n"
     "                            1 to 3, or \"3\" for chapter 3 only,\n"
     "                            default: all chapters)\n"
-    "    -m, --markers           Add chapter markers (mp4 output format only)\n"
-    "    -a, --audio <string>    Select audio channel(s) (\"none\" for no \n"
-    "                            audio, default: first one)\n"
-    "    -6, --surround          Export 5.1 surround as 6-channel AAC\n"
+	"\n"
+	
+	"### Destination Options------------------------------------------------------\n\n"
+    "    -o, --output <string>   Set output file name\n"
+	"    -f, --format <string>   Set output format (avi/mp4/ogm, default:\n"
+    "                            autodetected from file name)\n"
     "\n"
-    "    -s, --subtitle <number> Select subtitle (default: none)\n"
-    "    -e, --encoder <string>  Set video library encoder (ffmpeg,xvid,\n"
+	
+	"### Picture Settings---------------------------------------------------------\n\n"
+    "    -w, --width <number>    Set picture width\n"
+    "    -l, --height <number>   Set picture height\n"
+    "        --crop <T:B:L:R>    Set cropping values (default: autocrop)\n"
+	"    -Y, --maxHeight <#>     Set maximum height\n"
+	"    -X, --maxWidth <#>      Set maximum width\n"
+	"    -s, --subtitle <number> Select subtitle (default: none)\n"
+	"    -m, --markers           Add chapter markers (mp4 output format only)\n"
+	"\n"
+	
+	"### Video Options------------------------------------------------------------\n\n"
+	"    -e, --encoder <string>  Set video library encoder (ffmpeg,xvid,\n"
     "                            x264,x264b13,x264b30 default: ffmpeg)\n"
-    "    -E, --aencoder <string> Set audio encoder (faac/lame/vorbis/ac3, ac3\n"
-    "                            meaning passthrough, default: guessed)\n"
-    "    -2, --two-pass          Use two-pass mode\n"
-    "    -d, --deinterlace       Deinterlace video\n"
-    "    -g, --grayscale         Grayscale encoding\n"
-    "    -p, --pixelratio        Store pixel aspect ratio in video stream\n"
-    "\n"
-    "    -r, --rate              Set video framerate (" );
+	"    -q, --quality <float>   Set video quality (0.0..1.0)\n"
+	"    -Q, --crf               Use with -q for CRF instead of CQP\n"
+    "    -S, --size <MB>         Set target size\n"
+	"    -b, --vb <kb/s>         Set video bitrate (default: 1000)\n"
+	"    -r, --rate              Set video framerate (" );
     for( i = 0; i < hb_video_rates_count; i++ )
     {
         fprintf( stderr, hb_video_rates[i].string );
@@ -580,6 +589,22 @@ static void ShowHelp()
             fprintf( stderr, "/" );
     }
     fprintf( stderr, ")\n"
+	"\n"
+	"    -2, --two-pass          Use two-pass mode\n"
+    "    -d, --deinterlace       Deinterlace video\n"
+    "    -g, --grayscale         Grayscale encoding\n"
+    "    -p, --pixelratio        Store pixel aspect ratio in video stream\n"
+	
+	"\n"
+	
+	
+	"### Audio Options-----------------------------------------------------------\n\n"
+	"    -E, --aencoder <string> Set audio encoder (faac/lame/vorbis/ac3, ac3\n"
+    "                            meaning passthrough, default: guessed)\n"
+	"    -B, --ab <kb/s>         Set audio bitrate (default: 128)\n"
+	"    -a, --audio <string>    Select audio channel(s) (\"none\" for no \n"
+    "                            audio, default: first one)\n"
+    "    -6, --surround          Export 5.1 surround as 6-channel AAC\n"
     "    -R, --arate             Set audio samplerate (" );
     for( i = 0; i < hb_audio_rates_count; i++ )
     {
@@ -588,17 +613,13 @@ static void ShowHelp()
             fprintf( stderr, "/" );
     }
     fprintf( stderr, " kHz)\n"
-    "    -b, --vb <kb/s>         Set video bitrate (default: 1000)\n"
-    "    -q, --quality <float>   Set video quality (0.0..1.0)\n"
-	"    -Q, --crf               Use with -q for CRF instead of CQP\n"
-    "    -S, --size <MB>         Set target size\n"
-    "    -B, --ab <kb/s>         Set audio bitrate (default: 128)\n"
-    "    -w, --width <number>    Set picture width\n"
-    "    -l, --height <number>   Set picture height\n"
-    "        --crop <T:B:L:R>    Set cropping values (default: autocrop)\n"
-	"    -Y, --maxHeight <#>     Set maximum height\n"
-	"    -X, --maxWidth <#>      Set maximum width\n"
+   
+    
+	
 	"\n"
+	
+	
+	"### Advanced H264 Options----------------------------------------------------\n\n"
 	"    -x, --x264opts <string> Specify advanced x264 options in the\n"
 	"                            same style as mencoder:\n"
 	"                            option1=value1:option2=value2\n" );
