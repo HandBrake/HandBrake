@@ -44,6 +44,7 @@ static int MP4Init( hb_mux_object_t * m )
     hb_audio_t    * audio;
     hb_mux_data_t * mux_data;
     int i;
+    u_int16_t language_code;
 
     /* Create an empty mp4 file */
     m->file = MP4Create( job->file, MP4_DETAILS_ERROR, 0 );
@@ -164,6 +165,13 @@ static int MP4Init( hb_mux_object_t * m )
         MP4SetAudioProfileLevel( m->file, 0x0F );
         MP4SetTrackESConfiguration( m->file, mux_data->track,
                 audio->config.aac.bytes, audio->config.aac.length );
+                
+        /* Set the language for this track */
+        /* The language is stored as 5-bit text - 0x60 */
+        language_code = audio->iso639_2[0] - 0x60;   language_code <<= 5;
+        language_code |= audio->iso639_2[1] - 0x60;  language_code <<= 5;
+        language_code |= audio->iso639_2[2] - 0x60;
+        MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.mdhd.language", language_code);
 				
 		/* store a reference to the first audio track,
 		so we can use it to feed the chapter text track's sample rate */

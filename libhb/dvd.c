@@ -213,6 +213,7 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
         hb_audio_t * audio, * audio_tmp;
         int          audio_format, lang_code, audio_control,
                      position, j;
+        iso639_lang_t * lang;
 
         hb_log( "scan: checking audio %d", i + 1 );
 
@@ -280,15 +281,19 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
             continue;
         }
 
+        lang = lang_for_code( vts->vtsi_mat->vts_audio_attr[i].lang_code );
+
         snprintf( audio->lang, sizeof( audio->lang ), "%s (%s)",
-            lang_for_code( vts->vtsi_mat->vts_audio_attr[i].lang_code ),
+            strlen(lang->native_name) ? lang->native_name : lang->eng_name,
             audio->codec == HB_ACODEC_AC3 ? "AC3" : ( audio->codec ==
                 HB_ACODEC_MPGA ? "MPEG" : "LPCM" ) );
         snprintf( audio->lang_simple, sizeof( audio->lang_simple ), "%s",
-                  lang_for_code( vts->vtsi_mat->vts_audio_attr[i].lang_code ) );
+                  strlen(lang->native_name) ? lang->native_name : lang->eng_name );
+        snprintf( audio->iso639_2, sizeof( audio->iso639_2 ), "%s",
+                  lang->iso639_2);
 
-        hb_log( "scan: id=%x, lang=%s", audio->id,
-                audio->lang );
+        hb_log( "scan: id=%x, lang=%s, 3cc=%s", audio->id,
+                audio->lang, audio->iso639_2 );
 
         hb_list_add( title->list_audio, audio );
     }
@@ -309,6 +314,7 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
         hb_subtitle_t * subtitle;
         int spu_control;
         int position;
+        iso639_lang_t * lang;
 
         hb_log( "scan: checking subtitle %d", i + 1 );
 
@@ -340,13 +346,17 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
             position = ( spu_control >> 24 ) & 0x7F;
         }
 
+        lang = lang_for_code( vts->vtsi_mat->vts_subp_attr[i].lang_code );
+
         subtitle = calloc( sizeof( hb_subtitle_t ), 1 );
         subtitle->id = ( ( 0x20 + position ) << 8 ) | 0xbd;
         snprintf( subtitle->lang, sizeof( subtitle->lang ), "%s",
-            lang_for_code( vts->vtsi_mat->vts_subp_attr[i].lang_code ) );
+             strlen(lang->native_name) ? lang->native_name : lang->eng_name);
+       snprintf( subtitle->iso639_2, sizeof( subtitle->iso639_2 ), "%s",
+                 lang->iso639_2);
 
-        hb_log( "scan: id=%x, lang=%s", subtitle->id,
-                subtitle->lang );
+        hb_log( "scan: id=%x, lang=%s, 3cc=%s", subtitle->id,
+                subtitle->lang, subtitle->iso639_2 );
 
         hb_list_add( title->list_subtitle, subtitle );
     }

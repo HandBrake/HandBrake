@@ -221,6 +221,7 @@ struct hb_audio_s
     int  id;
     char lang[1024];
     char lang_simple[1024];
+    char iso639_2[4];
     int  codec;
     int  rate;
     int  bitrate;
@@ -267,6 +268,7 @@ struct hb_subtitle_s
 {
     int  id;
     char lang[1024];
+    char iso639_2[4];
 
 #ifdef __LIBHB__
     /* Internal data */
