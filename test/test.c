@@ -236,7 +236,7 @@ static void PrintTitleInfo( hb_title_t * title )
         }
         else
         {
-            fprintf( stderr, "    + %d, %s\n", i, audio->lang );
+            fprintf( stderr, "    + %d, %s\n", i + 1, audio->lang );
         }
     }
     fprintf( stderr, "  + subtitle tracks:\n" );
@@ -980,9 +980,9 @@ static int CheckOptions( int argc, char ** argv )
             }
         }
 		
-		if (acodec != HB_ACODEC_FAAC)
+		if (acodec != HB_ACODEC_FAAC && acodec != HB_ACODEC_VORBIS)
 		{
-			/* only attempt 5.1 export if exporting to AAC */
+			/* only attempt 5.1 export if exporting to AAC or Vorbis */
 			surround = 0;
 		} else {
 		    if (!abitrate && surround)

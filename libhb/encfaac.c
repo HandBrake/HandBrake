@@ -56,7 +56,7 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
 	/* pass the number of channels used into the private work data */
 	pv->channelsused = w->config->aac.channelsused;
 
-    pv->faac = faacEncOpen( job->arate, w->config->aac.channelsused, &pv->input_samples,
+    pv->faac = faacEncOpen( job->arate, pv->channelsused, &pv->input_samples,
                            &pv->output_bytes );
     pv->buf  = malloc( pv->input_samples * sizeof( float ) );
     
@@ -65,7 +65,7 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
     cfg->aacObjectType = LOW;
     cfg->allowMidside  = 1;
 	
-	if (w->config->aac.channelsused == 6) {
+	if (pv->channelsused == 6) {
 		/* we are preserving 5.1 audio into 6-channel AAC,
 		so indicate that we have an lfe channel */
 		cfg->useLfe    = 1;
@@ -74,12 +74,12 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
 	}
 
     cfg->useTns        = 0;
-    cfg->bitRate       = job->abitrate * 1000 / w->config->aac.channelsused; /* Per channel */
+    cfg->bitRate       = job->abitrate * 1000 / pv->channelsused; /* Per channel */
     cfg->bandWidth     = 0;
     cfg->outputFormat  = 0;
     cfg->inputFormat   =  FAAC_INPUT_FLOAT;
 	
-	if (w->config->aac.channelsused == 6) {
+	if (pv->channelsused == 6) {
 		/* we are preserving 5.1 audio into 6-channel AAC, and need to
 		re-map the output of deca52 into our own mapping - the mapping
 		below is the default mapping expected by QuickTime */

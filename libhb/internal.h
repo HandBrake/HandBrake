@@ -136,11 +136,14 @@ union hb_esconfig_u
         int     length;
     	/* Total channels actually used for this audio track */
     	int channelsused;
+        int lfechannels;
     } aac;
 
     struct
     {
         uint8_t headers[3][HB_CONFIG_MAX_SIZE];
+        int channelsused;
+        char *language;
     } vorbis;
     
     struct

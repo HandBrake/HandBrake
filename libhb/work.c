@@ -279,7 +279,7 @@ static void do_job( hb_job_t * job, int cpu_count )
 		
 		if (audio->channels == 5 && audio->lfechannels == 1) {
 			/* we have a 5.1 AC-3 source soundtrack */
-			if (job->acodec == HB_ACODEC_FAAC && job->surround) {
+			if ((job->acodec == HB_ACODEC_FAAC || job->acodec == HB_ACODEC_VORBIS) && job->surround) {
 				/* we're going to be encoding to AAC,
 				and have turned on the "preserve 5.1" flag */
 				audio->channelsused = 6;
@@ -290,7 +290,7 @@ static void do_job( hb_job_t * job, int cpu_count )
 			}
 		} else if (audio->channels == 1 && audio->lfechannels == 0) {
 			/* we have a 1.0 mono AC-3 source soundtrack */
-			if (job->acodec == HB_ACODEC_FAAC) {
+			if (job->acodec == HB_ACODEC_FAAC || job->acodec == HB_ACODEC_VORBIS) {
 				/* we're going to be encoding to AAC,
 				so mix down to a mono AAC track */
 				audio->channelsused = 1;
@@ -305,7 +305,8 @@ static void do_job( hb_job_t * job, int cpu_count )
 			audio->channelsused = 2;
 		}
 		
-        audio->config.aac.channelsused = audio->config.a52.channelsused = audio->channelsused;
+        audio->config.aac.channelsused = audio->config.a52.channelsused = audio->config.vorbis.channelsused = audio->channelsused;
+        audio->config.vorbis.language = audio->lang_simple;
 		
     }
 

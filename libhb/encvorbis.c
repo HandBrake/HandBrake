@@ -37,6 +37,8 @@ struct hb_work_private_s
     uint64_t        pts;
 
     hb_list_t     * list;
+    int           channelsused;
+    int           channel_map[6];
 };
 
 int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
@@ -46,6 +48,7 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
 
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
+    pv->channelsused = w->config->vorbis.channelsused;
 
     pv->job   = job;
 
@@ -53,7 +56,7 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
 
     /* init */
     vorbis_info_init( &pv->vi );
-    if( vorbis_encode_setup_managed( &pv->vi, 2,
+    if( vorbis_encode_setup_managed( &pv->vi, pv->channelsused,
           job->arate, -1, 1000 * job->abitrate, -1 ) ||
         vorbis_encode_ctl( &pv->vi, OV_ECTL_RATEMANAGE_AVG, NULL ) ||
           vorbis_encode_setup_init( &pv->vi ) )
@@ -64,6 +67,7 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
     /* add a comment */
     vorbis_comment_init( &pv->vc );
     vorbis_comment_add_tag( &pv->vc, "Encoder", "HandBrake");
+    vorbis_comment_add_tag( &pv->vc, "LANGUAGE", w->config->vorbis.language);
 
     /* set up the analysis state and auxiliary encoding storage */
     vorbis_analysis_init( &pv->vd, &pv->vi);
@@ -80,10 +84,31 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
                 header[i].packet, header[i].bytes );
     }
 
-    pv->input_samples = 2 * OGGVORBIS_FRAME_SIZE;
+    pv->input_samples = pv->channelsused * OGGVORBIS_FRAME_SIZE;
     pv->buf = malloc( pv->input_samples * sizeof( float ) );
 
     pv->list = hb_list_init();
+
+    switch (pv->channelsused) {
+        case 1:
+            pv->channel_map[0] = 0;
+            break;
+        case 6:
+            pv->channel_map[0] = 0;
+            pv->channel_map[1] = 2;
+            pv->channel_map[2] = 1;
+            pv->channel_map[3] = 4;
+            pv->channel_map[4] = 5;
+            pv->channel_map[5] = 3;
+            break;
+        default:
+            hb_log("encvorbis.c: Unable to correctly proccess %d channels, assuming stereo.", pv->channelsused);
+        case 2:
+            // Assume stereo
+            pv->channel_map[0] = 0;
+            pv->channel_map[1] = 1;
+            break;
+    }
 
     return 0;
 }
@@ -143,7 +168,7 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * buf;
     float ** buffer;
-    int i;
+    int i, j;
 
     /* Try to extract more data */
     if( ( buf = Flush( w ) ) )
@@ -162,8 +187,10 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
     buffer = vorbis_analysis_buffer( &pv->vd, OGGVORBIS_FRAME_SIZE );
     for( i = 0; i < OGGVORBIS_FRAME_SIZE; i++ )
     {
-        buffer[0][i] = ((float *) pv->buf)[2*i]   / 32768.f;
-        buffer[1][i] = ((float *) pv->buf)[2*i+1] / 32768.f;
+        for( j = 0; j < pv->channelsused; j++)
+        {
+            buffer[j][i] = ((float *) pv->buf)[(pv->channelsused * i + pv->channel_map[j])] / 32768.f;
+        }
     }
     vorbis_analysis_wrote( &pv->vd, OGGVORBIS_FRAME_SIZE );
 
