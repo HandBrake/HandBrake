@@ -682,7 +682,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
     if( returnCode == NSOKButton )
     {
         [fDstFile2Field setStringValue: [sheet filename]];
-		[self FormatPopUpChanged: NULL];
+		
     }
 }
 
