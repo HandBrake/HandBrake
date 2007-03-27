@@ -984,13 +984,6 @@ static int CheckOptions( int argc, char ** argv )
 		{
 			/* only attempt 5.1 export if exporting to AAC or Vorbis */
 			surround = 0;
-		} else {
-		    if (!abitrate && surround)
-		    {
-		        /* If we don't get a audio bitrate on the command line, and
-		           surround is being used, default to 384 */
-		        abitrate = 384;
-	        }
         }
 		
     }
