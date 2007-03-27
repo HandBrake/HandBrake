@@ -274,28 +274,27 @@ static void do_job( hb_job_t * job, int cpu_count )
 		/* store this audio's channel counts in the audio struct */
 		
 		/* we will only end up with a channelsused value other than 2
-		if we are encoding to AAC.  All other audio encodings will get
+		if we are encoding to AAC or OGM.  All other audio encodings will get
 		a stereo mix. */
 		
 		if (audio->channels == 5 && audio->lfechannels == 1) {
 			/* we have a 5.1 AC-3 source soundtrack */
 			if ((job->acodec == HB_ACODEC_FAAC || job->acodec == HB_ACODEC_VORBIS) && job->surround) {
-				/* we're going to be encoding to AAC,
+				/* we're going to be encoding to a 6ch-supporting format,
 				and have turned on the "preserve 5.1" flag */
 				audio->channelsused = 6;
 			} else {
-				/* mix 5.1 down to Dolby Digital (2-channel) for
-				non-AAC audio, or for AAC without 5.1 preservation */
+				/* mix 5.1 down to Dolby Digital (2-channel) */
 				audio->channelsused = 2;
 			}
 		} else if (audio->channels == 1 && audio->lfechannels == 0) {
 			/* we have a 1.0 mono AC-3 source soundtrack */
 			if (job->acodec == HB_ACODEC_FAAC || job->acodec == HB_ACODEC_VORBIS) {
-				/* we're going to be encoding to AAC,
-				so mix down to a mono AAC track */
+				/* we're going to be encoding to a 1ch-supporting format,
+				so mix down to a mono track */
 				audio->channelsused = 1;
 			} else {
-				/* mix up the mono track to stereo for non-AAC formats */
+				/* mix up the mono track to stereo */
 				audio->channelsused = 2;
 			}
 		} else {
