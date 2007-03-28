@@ -433,8 +433,9 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
             }
             // Select the longuest title
 			[fSrcTitlePopUp selectItemAtIndex: indxpri];
-
-			
+            /* We set the Settings Display to "Default" here
+			until we get default presets implemented */
+			[fPresetSelectedDisplay setStringValue: @"Default"];
 			
             [self TitlePopUpChanged: NULL];
             [self EnableUI: YES];
@@ -656,6 +657,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 
     [self QualitySliderChanged: sender];
     [self CalculateBitrate:     sender];
+	[self CustomSettingUsed: sender];
 }
 
 - (IBAction) QualitySliderChanged: (id) sender
@@ -663,6 +665,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
     [fVidConstantCell setTitle: [NSString stringWithFormat:
         _( @"Constant quality: %.0f %%" ), 100.0 *
         [fVidQualitySlider floatValue]]];
+		[self CustomSettingUsed: sender];
 }
 
 - (IBAction) BrowseFile: (id) sender
@@ -1231,7 +1234,9 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 	/* changing the codecs on offer may mean that we are/aren't now offering AAC, so */
 	/* check if this change means we should / should't offer 6-channel AAC extraction */
 	[self Check6ChannelAACExtraction: sender];
-
+	/* We call method method to change UI to reflect whether a preset is used or not*/
+	[self CustomSettingUsed: sender];	
+	
 }
 
 - (IBAction) CodecsPopUpChanged: (id) sender
@@ -1274,7 +1279,8 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 	[self Check6ChannelAACExtraction: sender];
 
     [self CalculateBitrate: sender];
-
+    /* We call method method to change UI to reflect whether a preset is used or not*/
+	[self CustomSettingUsed: sender];
 }
 
 - (IBAction) EncoderPopUpChanged: (id) sender
@@ -1303,8 +1309,9 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 
 	}
     
-	[self CalculatePictureSizing: sender];    
-  
+	[self CalculatePictureSizing: sender];
+	/* We call method method to change UI to reflect whether a preset is used or not*/    
+    [self CustomSettingUsed: sender];
 }
 
 - (IBAction) Check6ChannelAACExtraction: (id) sender
@@ -1473,7 +1480,24 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 
     [fVidBitrateField setIntValue: hb_calc_bitrate( job,
             [fVidTargetSizeField intValue] )];
+			
+			
 }
+
+/* Method to determine if we should change the UI
+To reflect whether or not a Preset is being used or if
+the user is using "Custom" settings by determining the sender*/
+- (IBAction) CustomSettingUsed: (id) sender
+{
+	if ([sender stringValue] != NULL)
+	{
+		/* Deselect the currently selected Preset if there is one*/
+		[tableView deselectRow:[tableView selectedRow]];
+		/* Change UI to show "Custom" settings are being used */
+		[fPresetSelectedDisplay setStringValue: @"Custom"];
+	}
+}
+
 
 - (IBAction) ShowAddPresetPanel: (id) sender
 {
@@ -1773,7 +1797,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 		/* we get the chosen preset from the UserPresets array */
 		chosenPreset = [UserPresets objectAtIndex:[sender selectedRow]];
 		/* we set the preset display field in main window here */
-		//[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@", [chosenPreset valueForKey:@"PresetName"]]];
+		[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@", [chosenPreset valueForKey:@"PresetName"]]];
 		/* File Format */
 		[fDstFormatPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileFormat"]]];
 		[self FormatPopUpChanged: NULL];
@@ -1785,9 +1809,9 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 		/* Video encoder */
 		[fVidEncoderPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]]];
 		/* Lets run through the following functions to get variables set there */
-		[self EncoderPopUpChanged: sender];
-		[self Check6ChannelAACExtraction: sender];
-		[self CalculateBitrate: sender];
+		[self EncoderPopUpChanged: NULL];
+		[self Check6ChannelAACExtraction: NULL];
+		[self CalculateBitrate: NULL];
 		
 		/* Video quality */
 		[fVidQualityMatrix selectCellAtRow:[[chosenPreset objectForKey:@"VideoQualityType"] intValue] column:0];
@@ -1796,7 +1820,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 		[fVidBitrateField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoAvgBitrate"]]];
 		
 		[fVidQualitySlider setFloatValue: [[chosenPreset valueForKey:@"VideoQualitySlider"] floatValue]];
-		[self VideoMatrixChanged: sender];
+		[self VideoMatrixChanged: NULL];
 		
 		/* Video framerate */
 		[fVidRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoFramerate"]]];
@@ -1813,7 +1837,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 		[fAudLang1PopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioLang1"]]];
 		/* Audio Language One Surround Sound Checkbox*/
 		[fAudLang1SurroundCheck setState:[[chosenPreset objectForKey:@"AudioLang1Surround"] intValue]];
-		[self Check6ChannelAACExtraction: sender];
+		[self Check6ChannelAACExtraction: NULL];
 		/* Audio Sample Rate*/
 		[fAudRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioSampleRate"]]];
 		/* Audio Bitrate Rate*/
@@ -1838,11 +1862,9 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 			job->crop[1] = [[chosenPreset objectForKey:@"PictureBottomCrop"]  intValue];
 			job->crop[2] = [[chosenPreset objectForKey:@"PictureLeftCrop"]  intValue];
 			job->crop[3] = [[chosenPreset objectForKey:@"PictureRightCrop"]  intValue];
-			[self CalculatePictureSizing: sender]; 
+			[self CalculatePictureSizing: NULL]; 
 		}
-		
-		// Deselect the currently selected table //
-		//[tableView deselectRow:[tableView selectedRow]];
+
 }
 }
 

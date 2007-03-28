@@ -12,6 +12,7 @@
                 ChapterPopUpChanged = id; 
                 CloseAddPresetPanel = id; 
                 CodecsPopUpChanged = id; 
+                CustomSettingUsed = id; 
                 DeletePreset = id; 
                 EnableQueue = id; 
                 EncoderPopUpChanged = id; 
@@ -29,7 +30,6 @@
                 ShowScanPanel = id; 
                 TitlePopUpChanged = id; 
                 VideoMatrixChanged = id; 
-                myAction = id; 
                 tableViewSelected = id; 
             }; 
             CLASS = HBController; 

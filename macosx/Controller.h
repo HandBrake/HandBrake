@@ -195,7 +195,7 @@
 - (IBAction) OpenForums:   (id) sender;
 
 // Preset Methods Here
-
+- (IBAction) CustomSettingUsed: (id) sender;
 - (IBAction) ShowAddPresetPanel: (id) sender;
 - (IBAction) CloseAddPresetPanel: (id) sender;
 - (NSDictionary *)CreatePreset;
