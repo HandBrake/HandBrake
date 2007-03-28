@@ -829,7 +829,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
     job->abitrate = hb_audio_bitrates[[fAudBitratePopUp
                         indexOfSelectedItem]].rate;
 	/* have we selected that 5.1 should be extracted as AAC? */
-	if (job->acodec == HB_ACODEC_FAAC && [fAudLang1SurroundCheck isEnabled] && [fAudLang1SurroundCheck state] == NSOnState) {
+	if ((job->acodec == HB_ACODEC_FAAC || job->acodec == HB_ACODEC_VORBIS) && [fAudLang1SurroundCheck isEnabled] && [fAudLang1SurroundCheck state] == NSOnState) {
 		job->surround = 1;
 	} else {
 		job->surround = 0;
@@ -1009,6 +1009,8 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
     hb_list_t  * list  = hb_get_titles( fHandle );
     hb_title_t * title = (hb_title_t*)
         hb_list_item( list, [fSrcTitlePopUp indexOfSelectedItem] );
+		
+		
     /* If Auto Naming is on. We create an output filename of dvd name - title number */
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"] > 0)
 	{
@@ -1042,6 +1044,10 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 							 @"%d", fTitle->width]];
 	[fPicSrcHeight setStringValue: [NSString stringWithFormat:
 							 @"%d", fTitle->height]];
+	/* We get the originial output picture width and height and put them
+	in variables for use with some presets later on */
+	PicOrigOutputWidth = title->job->width;
+	PicOrigOutputHeight = title->job->height;
 	/* Turn Deinterlace on/off depending on the preference */
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultDeinterlaceOn"] > 0)
 	{
@@ -1338,8 +1344,8 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
     int codecs = [fDstCodecsPopUp indexOfSelectedItem];
 	int acodec = FormatSettings[format][codecs] & HB_ACODEC_MASK;
 
-	/* we only offer the option to extract 5.1 to 6-channel if the selected audio codec is AAC */
-	if (acodec == HB_ACODEC_FAAC) {
+	/* we only offer the option to extract 5.1 to 6-channel if the selected audio codec is AAC or Vorbis*/
+	if (acodec == HB_ACODEC_FAAC || acodec == HB_ACODEC_VORBIS) {
 
 		bool doneaudios = false;
 		int thisaudio = 0;
@@ -1362,7 +1368,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 		}
 	}
 
-    /* If we are extracting to AAC, and any of our soundtracks were 5.1, then enable the checkbox  */
+    /* If we are extracting to AAC or Vorbis, and any of our soundtracks were 5.1, then enable the checkbox  */
 	if (foundfiveoneaudio) {
 		[fAudLang1SurroundCheck setEnabled: YES];
 		/* Check default surround sound pref and if it is YES, lets also check the checkbox */
@@ -1701,7 +1707,7 @@ the user is using "Custom" settings by determining the sender*/
 	/*Set whether or not this is default, at creation set to 0*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
 	/*Get the whether or not to apply pic settings in the AddPresetPanel*/
-	[preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesPictureSettings"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
 	/* File Format */
     [preset setObject:@"MP4 file" forKey:@"FileFormat"];
 	/* Chapter Markers*/
@@ -1724,13 +1730,15 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoTwoPass"];
 	
 	/*Picture Settings*/
-	//hb_job_t * job = fTitle->job;
+	hb_job_t * job = fTitle->job;
+	//hb_job_t * job = title->job;
 	/* Basic Picture Settings */
-	//[preset setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PictureWidth"];
-	//[preset setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PictureHeight"];
-	//[preset setObject:[NSNumber numberWithInt:fTitle->job->keep_ratio] forKey:@"PictureKeepRatio"];
-	//[preset setObject:[NSNumber numberWithInt:fTitle->job->deinterlace] forKey:@"PictureDeinterlace"];
-	//[preset setObject:[NSNumber numberWithInt:fTitle->job->pixel_ratio] forKey:@"PicturePAR"];
+	
+	//[preset setObject:[NSNumber numberWithInt:PicOrigOutputWidth] forKey:@"PictureWidth"];
+	//[preset setObject:[NSNumber numberWithInt:PicOrigOutputHeight] forKey:@"PictureHeight"];
+	//[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureKeepRatio"];
+	//[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+	//[preset setObject:[NSNumber numberWithInt:1] forKey:@"PicturePAR"];
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
 	//[preset setObject:[NSNumber numberWithInt:job->crop[0]] forKey:@"PictureTopCrop"];

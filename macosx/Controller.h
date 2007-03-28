@@ -95,7 +95,9 @@
 	IBOutlet NSTextField         * fPicLabelPAROutputX;
 	IBOutlet NSTextField         * fPicSettingPARWidth;
 	IBOutlet NSTextField         * fPicSettingPARHeight;
-	
+    /* Picture variables */
+	int                        PicOrigOutputWidth;
+	int                        PicOrigOutputHeight;
 	
     /* Subtitles box */
     IBOutlet NSTextField         * fSubField;
