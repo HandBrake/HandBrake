@@ -88,8 +88,8 @@ static int GetAlignedSize( int size )
     [fDeinterlaceCheck  setState:    job->deinterlace ? NSOnState : NSOffState];
 	[fPARCheck  setState:    job->pixel_ratio ? NSOnState : NSOffState];
 
-    MaxOutputWidth = title->width;
-	MaxOutputHeight = title->height;
+    MaxOutputWidth = job->width;
+	MaxOutputHeight = job->height;
     fPicture = 0;
     [self SettingsChanged: nil];
 }
@@ -111,12 +111,14 @@ static int GetAlignedSize( int size )
         /* Copy line by line */
         uint8_t * in  = fBuffer;
         uint8_t * out = fTexBuf[0];
+		
         for( int i = fTitle->height + 2; i--; )
         {
             memcpy( out, in, 4 * ( fTitle->width + 2 ) );
             in  += 4 * ( fTitle->width + 2 );
             out += 4 * GetAlignedSize( fTitle->width + 2 );
         }
+	
     }
 
     if( [fEffectsCheck state] == NSOffState )
@@ -133,17 +135,18 @@ static int GetAlignedSize( int size )
         height: ( fTitle->height + 2 )];
 	
 	/* Set the Output Display below the Preview Picture*/
-	if (fTitle->job->pixel_ratio == 1)
-	{
 	int titlewidth = fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3];
 	int arpwidth = fTitle->job->pixel_aspect_width;
 	int arpheight = fTitle->job->pixel_aspect_height;
 	int displayparwidth = titlewidth * arpwidth / arpheight;
 	int displayparheight = fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1];
+	if (fTitle->job->pixel_ratio == 1)
+	{
+	
 	[fInfoField setStringValue: [NSString stringWithFormat:
 	@"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d", fTitle->width, fTitle->height,
-	titlewidth, fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1], displayparwidth,
-	fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1]]];
+	MaxOutputWidth, MaxOutputHeight, displayparwidth,
+	displayparheight]];
 	
 	
 	}
@@ -153,6 +156,7 @@ static int GetAlignedSize( int size )
         @"Source: %dx%d, Output: %dx%d", fTitle->width, fTitle->height,
         fTitle->job->width, fTitle->job->height]];	
 	}
+
 
     [fPrevButton setEnabled: ( fPicture > 0 )];
     [fNextButton setEnabled: ( fPicture < 9 )];
@@ -167,8 +171,8 @@ static int GetAlignedSize( int size )
 	[fWidthStepper      setIntValue: MaxOutputWidth];
 	[fWidthField        setIntValue: MaxOutputWidth];
 	
-	[fHeightStepper      setIntValue: fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1]];
-	[fHeightField        setIntValue: fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1]];
+	[fHeightStepper      setIntValue: MaxOutputHeight];
+	[fHeightField        setIntValue: MaxOutputHeight];
 	[fRatioCheck        setState: 0];
 
 	[fWidthStepper setEnabled: NO];

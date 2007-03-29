@@ -204,6 +204,9 @@
 - (NSDictionary *)CreateIpodPreset;
 - (NSDictionary *)CreateAppleTVPreset;  
 
+- (IBAction) RevertPictureSizeToMax:(id)sender;
+
+
 - (void) savePreset;
 - (IBAction)AddFactoryPresets:(id)sender;
 - (IBAction)AddUserPreset:(id)sender;

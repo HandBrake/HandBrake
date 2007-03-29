@@ -1046,8 +1046,13 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 							 @"%d", fTitle->height]];
 	/* We get the originial output picture width and height and put them
 	in variables for use with some presets later on */
-	PicOrigOutputWidth = title->job->width;
-	PicOrigOutputHeight = title->job->height;
+	PicOrigOutputWidth = job->width;
+	PicOrigOutputHeight = job->height;
+	/* we test getting the max output value for pic sizing here to be used later*/
+	[fPicSettingWidth setStringValue: [NSString stringWithFormat:
+		@"%d", PicOrigOutputWidth]];
+	[fPicSettingHeight setStringValue: [NSString stringWithFormat:
+		@"%d", PicOrigOutputHeight]];
 	/* Turn Deinterlace on/off depending on the preference */
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultDeinterlaceOn"] > 0)
 	{
@@ -1070,7 +1075,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 	}
 	/* Run Through EncoderPopUpChanged to see if there
 		needs to be any pic value modifications based on encoder settings */
-	[self EncoderPopUpChanged: NULL];
+	//[self EncoderPopUpChanged: NULL];
 	/* END Get and set the initial pic size for display */ 
 
 
@@ -1301,11 +1306,11 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 		 if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPicSizeAutoiPod"] > 0)
 		 {
 		 
-		 if (fTitle->job->width > 640)
+		 if (job->width > 640)
 				{
-				fTitle->job->width = 640;
+				job->width = 640;
 				}
-		 fTitle->job->keep_ratio = 1;
+		 job->keep_ratio = 1;
 		 hb_fix_aspect( job, HB_KEEP_WIDTH );
 		 
 		 }
@@ -1398,6 +1403,26 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 
 }
 
+/* lets set the picture size back to the max from right after title scan
+   Lets use an IBAction here as down the road we could always use a checkbox
+   in the gui to easily take the user back to max. Remember, the compiler
+   resolves IBActions down to -(void) during compile anyway */
+- (IBAction) RevertPictureSizeToMax: (id) sender
+{
+	 hb_job_t * job = fTitle->job;
+	/* We use the output picture width and height
+	as calculated from libhb right after title is set
+	in TitlePopUpChanged */
+	job->width = PicOrigOutputWidth;
+	job->height = PicOrigOutputHeight;
+
+
+    
+	[self CalculatePictureSizing: sender];
+	/* We call method method to change UI to reflect whether a preset is used or not*/    
+    [self CustomSettingUsed: sender];
+}
+
 
 /* Get and Display Current Pic Settings in main window */
 - (IBAction) CalculatePictureSizing: (id) sender
@@ -1429,8 +1454,7 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
         @"%d", displayparwidth]];
 	[fPicSettingPARHeight setStringValue: [NSString stringWithFormat:
         @"%d", displayparheight]];
-	[fPicSettingHeight setStringValue: [NSString stringWithFormat:
-		@"%d", displayparheight]];
+
 	fTitle->job->keep_ratio = 0;
 	}
 	else
@@ -1602,6 +1626,8 @@ the user is using "Custom" settings by determining the sender*/
 	/*Picture Settings*/
 	hb_job_t * job = fTitle->job;
 	/* Basic Picture Settings */
+	/* Use Max Picture settings for whatever the dvd is.*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesMaxPictureSettings"];
 	[preset setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PictureWidth"];
 	[preset setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PictureHeight"];
 	[preset setObject:[NSNumber numberWithInt:fTitle->job->keep_ratio] forKey:@"PictureKeepRatio"];
@@ -1667,6 +1693,8 @@ the user is using "Custom" settings by determining the sender*/
 	/*Picture Settings*/
 	//hb_job_t * job = fTitle->job;
 	/* Basic Picture Settings */
+	/* Use Max Picture settings for whatever the dvd is.*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesMaxPictureSettings"];
 	//[preset setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PictureWidth"];
 	//[preset setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PictureHeight"];
 	//[preset setObject:[NSNumber numberWithInt:fTitle->job->keep_ratio] forKey:@"PictureKeepRatio"];
@@ -1730,15 +1758,20 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoTwoPass"];
 	
 	/*Picture Settings*/
-	hb_job_t * job = fTitle->job;
+	/* For AppleTV we only want to retain UsesMaxPictureSettings
+	which depend on the source dvd picture settings, so we don't
+	record the current dvd's picture info since it will vary from
+	source to source*/
+	//hb_job_t * job = fTitle->job;
 	//hb_job_t * job = title->job;
 	/* Basic Picture Settings */
-	
+	/* Use Max Picture settings for whatever the dvd is.*/
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesMaxPictureSettings"];
 	//[preset setObject:[NSNumber numberWithInt:PicOrigOutputWidth] forKey:@"PictureWidth"];
 	//[preset setObject:[NSNumber numberWithInt:PicOrigOutputHeight] forKey:@"PictureHeight"];
 	//[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureKeepRatio"];
 	//[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
-	//[preset setObject:[NSNumber numberWithInt:1] forKey:@"PicturePAR"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PicturePAR"];
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
 	//[preset setObject:[NSNumber numberWithInt:job->crop[0]] forKey:@"PictureTopCrop"];
@@ -1858,23 +1891,43 @@ the user is using "Custom" settings by determining the sender*/
 		if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] == 1)
 		{
 			hb_job_t * job = fTitle->job;
-			job->width = [[chosenPreset objectForKey:@"PictureWidth"]  intValue];
-			job->height = [[chosenPreset objectForKey:@"PictureHeight"]  intValue];
-			job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
-			if (job->keep_ratio == 1)
+			/* Check to see if we should use the max picture setting for the current title*/
+			if ([[chosenPreset objectForKey:@"UsesMaxPictureSettings"]  intValue] == 1)
 			{
-				hb_fix_aspect( job, HB_KEEP_WIDTH );
+				/* Use Max Picture settings for whatever the dvd is.*/
+				[self RevertPictureSizeToMax: NULL];
+				job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
+				if (job->keep_ratio == 1)
+				{
+					hb_fix_aspect( job, HB_KEEP_WIDTH );
+				}
+				job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
 			}
-			job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
-			job->crop[0] = [[chosenPreset objectForKey:@"PictureTopCrop"]  intValue];
-			job->crop[1] = [[chosenPreset objectForKey:@"PictureBottomCrop"]  intValue];
-			job->crop[2] = [[chosenPreset objectForKey:@"PictureLeftCrop"]  intValue];
-			job->crop[3] = [[chosenPreset objectForKey:@"PictureRightCrop"]  intValue];
+			else
+			{
+				job->width = [[chosenPreset objectForKey:@"PictureWidth"]  intValue];
+				job->height = [[chosenPreset objectForKey:@"PictureHeight"]  intValue];
+				job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
+				if (job->keep_ratio == 1)
+				{
+					hb_fix_aspect( job, HB_KEEP_WIDTH );
+				}
+				job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
+				job->crop[0] = [[chosenPreset objectForKey:@"PictureTopCrop"]  intValue];
+				job->crop[1] = [[chosenPreset objectForKey:@"PictureBottomCrop"]  intValue];
+				job->crop[2] = [[chosenPreset objectForKey:@"PictureLeftCrop"]  intValue];
+				job->crop[3] = [[chosenPreset objectForKey:@"PictureRightCrop"]  intValue];
+			}
 			[self CalculatePictureSizing: NULL]; 
 		}
+		
+
+
 
 }
 }
+
+
 
 - (int)numberOfRowsInTableView:(NSTableView *)aTableView
 {
