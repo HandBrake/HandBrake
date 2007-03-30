@@ -3,6 +3,7 @@ include Makefile.config
 SYSTEM = $(shell uname -s)
 
 # Special case for Mac OS X: everything is handled from the Xcode project
+
 ifeq ($(SYSTEM),Darwin)
 
 all:    clean app
@@ -49,7 +50,13 @@ endif
 
 ifeq ($(SYSTEM),CYGWIN_NT-5.1)
 
-all:    contrib/.contrib libhb/libhb.a HandbrakeCLI
+all:    contrib/.contrib libhb/libhb.a 
+
+
+app:
+	(./DownloadCygWinContribBinaries.sh)
+HandbrakeCLI: app libhb/libhb.a
+
 
 contrib/.contrib:
 	@$(MAKE) --no-print-directory -C contrib all
@@ -59,7 +66,9 @@ libhb/libhb.a:
 
 HandbrakeCLI:
 	@$(MAKE) --no-print-directory -C test all
+	
 
+	
 clean:
 	@$(MAKE) --no-print-directory -C libhb clean
 	@$(MAKE) --no-print-directory -C test clean
