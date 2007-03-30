@@ -223,7 +223,10 @@
         setObjectValue:(id)anObject
         forTableColumn:(NSTableColumn *)aTableColumn
         row:(int)rowIndex;
-
+// To determine user presets cell display properties
+- (void)tableView:(NSTableView *)aTableView
+		willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn
+		 row:(int)rowIndex;
 
 
 @end

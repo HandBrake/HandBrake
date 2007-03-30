@@ -1735,7 +1735,7 @@ the user is using "Custom" settings by determining the sender*/
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
     [preset setObject:@"HB-AppleTV" forKey:@"PresetName"];
-	/*Set whether or not this is a user preset or factory 0 is factory, 1 is user*/
+	/*Set whether or not this is a user preset where 0 is factory, 1 is user*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
 	/*Set whether or not this is default, at creation set to 0*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
@@ -1939,18 +1939,33 @@ the user is using "Custom" settings by determining the sender*/
     return [UserPresets count];
 }
 
+/* we use this to determine display characteristics for
+each table cell based on content currently only used to
+show the built in presets in a blue font. */
+- (void)tableView:(NSTableView *)aTableView
+ willDisplayCell:(id)aCell 
+ forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+{
+    NSDictionary *userPresetDict = [UserPresets objectAtIndex:rowIndex];
+   if ([[userPresetDict objectForKey:@"Type"] intValue] == 0)
+	{
+		[aCell setTextColor:[NSColor blueColor]];
+	}
+	else
+	{
+		[aCell setTextColor:[NSColor blackColor]];
+	}
+
+}
+
 - (id)tableView:(NSTableView *)aTableView
       objectValueForTableColumn:(NSTableColumn *)aTableColumn
       row:(int)rowIndex
 {
-
-	
-	
-	id theRecord, theValue;
+id theRecord, theValue;
     
     theRecord = [UserPresets objectAtIndex:rowIndex];
     theValue = [theRecord objectForKey:[aTableColumn identifier]];
-    
     return theValue;
 }
 
