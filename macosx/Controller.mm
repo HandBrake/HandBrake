@@ -141,9 +141,9 @@ static int FormatSettings[3][4] =
   }
   /* Show/Dont Show Presets drawer upon launch based
   on user preference DefaultPresetsDrawerShow*/
-if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow"] > 0)
+  if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow"] > 0)
 		{
-			[fPresetDrawer open];
+	  [fPresetDrawer open];
 		}
 
 
@@ -156,7 +156,12 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
     [fDstFormatPopUp selectItemAtIndex: 0];
 
     [self FormatPopUpChanged: NULL];
-
+    /* We enable the create chapters checkbox here since we are .mp4 */	
+	[fCreateChapterMarkers setEnabled: YES];
+	if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultChapterMarkers"] > 0)
+	{
+		[fCreateChapterMarkers setState: NSOnState];
+	}
     [fDstFile2Field setStringValue: [NSString stringWithFormat:
         @"%@/Desktop/Movie.mp4", NSHomeDirectory()]];
 
@@ -749,6 +754,10 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
 	{
 	job->chapter_markers = 1;
 	}
+	else
+	{
+	job->chapter_markers = 0;
+	}
     if( ( job->vcodec & HB_VCODEC_FFMPEG ) &&
         [fVidEncoderPopUp indexOfSelectedItem] > 0 )
     {
@@ -1193,12 +1202,8 @@ if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow
                 _( @"MPEG-4 Video / AAC Audio" )];
             [fDstCodecsPopUp addItemWithTitle:
                 _( @"AVC/H.264 Video / AAC Audio" )];
-			/* We enable the create chapters checkbox here since we are .mp4 */	
-		    [fCreateChapterMarkers setEnabled: YES];
-			if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultChapterMarkers"] > 0)
-	        {
-		    [fCreateChapterMarkers setState: NSOnState];
-	        }
+			/* We enable the create chapters checkbox here since we are .mp4*/
+			[fCreateChapterMarkers setEnabled: YES];
 			break;
         case 1: 
             ext = "avi";
