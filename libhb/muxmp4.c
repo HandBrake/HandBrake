@@ -11,6 +11,9 @@
 
 void AddIPodUUID(MP4FileHandle, MP4TrackId);
 
+/* B-frame muxing variables */
+MP4SampleId thisSample = 0;
+uint64_t initDelay;
 
 struct hb_mux_object_s
 {
@@ -64,7 +67,7 @@ static int MP4Init( hb_mux_object_t * m )
         /* Stolen from mp4creator */
         MP4SetVideoProfileLevel( m->file, 0x7F );
 
-		if (job->areBframes == 1)
+		if (job->areBframes >= 1)
 		{
 			hb_log("muxmp4: Adjusting duration for B-frames");
 		    mux_data->track = MP4AddH264VideoTrack( m->file, job->arate,
@@ -238,8 +241,37 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         duration = MP4_INVALID_DURATION;
     }
 
-    MP4WriteSample( m->file, mux_data->track, buf->data, buf->size,
-                    duration, 0, buf->key );
+    /* If for some reason the first frame muxmp4 gets isn't a key-frame,
+       drop frames until we get one. (Yes, very bad. Quick and dirty.)
+       This is for QuickTime--when it sees a non-IDR frame first, it
+       displays a white box instead of video until the second GOP.
+       Also, you've got to save the skipped duration to keep from
+       throwing off the offset values. */
+    if((mux_data->track == 1) && (thisSample == 0) && (buf->key != 1))
+    {
+	    initDelay +=duration;
+	    return 0;
+    }
+    /* When we do get the first keyframe, use its duration as the
+       initial delay added to the frame order offset for b-frames.
+       Because of b-pyramid, double this duration when there are
+       b-pyramids, as denoted by job->areBframes equalling 2. */
+    if ((mux_data->track == 1) && (thisSample == 0) && (buf->key == 1))
+    {
+        initDelay += duration * job->areBframes;
+        thisSample++;
+    }
+
+    /* Here's where the sample actually gets muxed. 
+       If it's an audio sample, don't offset the sample's playback.
+       If it's a video sample and there are no b-frames, ditto.
+       If there are b-frames, offset by the initDelay plus the
+       difference between the presentation time stamp x264 gives
+       and the decoding time stamp from the buffer data. */
+       MP4WriteSample( m->file, mux_data->track, buf->data, buf->size,
+            duration, ((mux_data->track != 1) || (job->areBframes==0)) ? 0 : ( initDelay + ((buf->encodedPTS - buf->start) * job->arate / 90000)),
+            (buf->key == 1) );
+                                
     return 0;
 }
 

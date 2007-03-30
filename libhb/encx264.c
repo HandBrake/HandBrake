@@ -121,7 +121,16 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 				}
 			}
 
-			/* 	Here's where the strings are passed to libx264 for parsing. */
+            /* Note b-pyramid here, so the initial delay can be doubled */
+            if (!(strcmp(name, "b-pyramid")))
+            {
+	            if (atoi(value) > 0)
+	            {
+		            job->areBframes = 2;
+	            }
+            }
+			
+            /* Here's where the strings are passed to libx264 for parsing. */
 	    	ret = x264_param_parse(&param, name, value);
 	
 			/* 	Let x264 sanity check the options for us*/
@@ -240,6 +249,9 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     pv->pic_in.i_type    = X264_TYPE_AUTO;
     pv->pic_in.i_qpplus1 = 0;
 
+    /* Feed the input DTS to x264 so it can figure out proper output PTS */
+    pv->pic_in.i_pts = in->start;
+
     x264_encoder_encode( pv->x264, &nal, &i_nal,
                          &pv->pic_in, &pv->pic_out );
 
@@ -285,10 +297,37 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 buf->data[buf->size+1] = ( ( size - 4 ) >> 16 ) & 0xFF;
                 buf->data[buf->size+2] = ( ( size - 4 ) >>  8 ) & 0xFF;
                 buf->data[buf->size+3] = ( ( size - 4 ) >>  0 ) & 0xFF;
-                if( nal[i].i_ref_idc == NAL_PRIORITY_HIGHEST )
-                {
-                    buf->key = 1;
-                }
+
+        /* For IDR (key frames), buf->key = 1,
+           and the same for regular I-frames. */
+        if( (pv->pic_out.i_type == X264_TYPE_IDR) || (pv->pic_out.i_type == X264_TYPE_I) )
+        {
+        buf->key = 1;
+        }
+        /* For B-frames, buf->key = 2 */
+        else if( (pv->pic_out.i_type == X264_TYPE_B) )
+        {
+        buf->key = 2;
+        }                
+        /* This is for b-pyramid, which has reference b-frames
+           However, it doesn't seem to ever be used...
+           They just show up as buf->key == 2 like
+           regular b-frames. */
+        else if( (pv->pic_out.i_type == X264_TYPE_BREF) )
+        {
+            buf->key = 3;
+        }
+        /* For P-frames, buf->key = 0 */
+        else
+        {
+            buf->key = 0;
+        }
+
+        /* Store the output presentation time stamp
+           from x264 for use by muxmp4 in off-setting
+           b-frames with the CTTS atom. */
+        buf->encodedPTS = pv->pic_out.i_pts;
+
                 buf->size += size;
         }
     }
