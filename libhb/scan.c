@@ -114,7 +114,7 @@ static void ScanFunc( void * _data )
             hb_log( "scan: title %d is duplicate with title %d",
                     title->index, title_tmp->index );
             hb_list_rem( data->list_title, title );
-            free( title );
+            free( title );      /* This _will_ leak! */
             continue;
         }
 
@@ -225,6 +225,9 @@ static void ScanFunc( void * _data )
     {
         hb_dvd_close( &data->dvd );
     }
+    free( data->path );
+    free( data );
+    _data = NULL;
 }
 
 /***********************************************************************

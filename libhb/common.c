@@ -515,11 +515,30 @@ hb_title_t * hb_title_init( char * dvd, int index )
 void hb_title_close( hb_title_t ** _t )
 {
     hb_title_t * t = *_t;
+    hb_audio_t * audio;
+    hb_chapter_t * chapter;
+    hb_subtitle_t * subtitle;
 
+    while( ( audio = hb_list_item( t->list_audio, 0 ) ) )
+    {
+        hb_list_rem( t->list_audio, audio );
+        free( audio );
+    }
     hb_list_close( &t->list_audio );
+    
+    while( ( chapter = hb_list_item( t->list_chapter, 0 ) ) )
+    {
+        hb_list_rem( t->list_chapter, chapter );
+        free( chapter );
+    }
     hb_list_close( &t->list_chapter );
+    
+    while( ( subtitle = hb_list_item( t->list_subtitle, 0 ) ) )
+    {
+        hb_list_rem( t->list_subtitle, subtitle );
+        free( subtitle );
+    }
     hb_list_close( &t->list_subtitle );
-    free( t->job );
 
     free( t );
     *_t = NULL;

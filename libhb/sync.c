@@ -135,6 +135,9 @@ void syncClose( hb_work_object_t * w )
             src_delete( pv->sync_audio[i].state );
         }
     }
+    
+    free( pv );
+    w->private_data = NULL;
 }
 
 /***********************************************************************

@@ -369,6 +369,8 @@ static void do_job( hb_job_t * job, int cpu_count )
             w = NULL;
         }
     }
+    
+    hb_list_close( &job->list_work );
 
     /* Stop read & write threads */
     hb_thread_close( &job->reader );
@@ -393,6 +395,9 @@ static void do_job( hb_job_t * job, int cpu_count )
         hb_fifo_close( &audio->fifo_sync );
         hb_fifo_close( &audio->fifo_out );
     }
+    
+    hb_title_close( &job->title );
+    free( job );
 }
 
 /**

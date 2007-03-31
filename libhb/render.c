@@ -151,6 +151,11 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
 void renderClose( hb_work_object_t * w )
 {
+    hb_work_private_t * pv = w->private_data;
+    
+    img_resample_close( pv->context );
+    free( pv );
+    w->private_data = NULL;
 }
 
 int renderInit( hb_work_object_t * w, hb_job_t * job )

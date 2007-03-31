@@ -556,6 +556,7 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
     /* Copy the job */
     job_copy        = calloc( sizeof( hb_job_t ), 1 );
     memcpy( job_copy, job, sizeof( hb_job_t ) );
+    title_copy->job = job_copy;
     job_copy->title = title_copy;
     job_copy->file  = strdup( job->file );
     job_copy->h     = h;
@@ -680,6 +681,7 @@ void hb_close( hb_handle_t ** _h )
     while( ( title = hb_list_item( h->list_title, 0 ) ) )
     {
         hb_list_rem( h->list_title, title );
+        free( title->job );
         hb_title_close( &title );
     }
     hb_list_close( &h->list_title );

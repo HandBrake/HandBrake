@@ -122,6 +122,8 @@ void encfaacClose( hb_work_object_t * w )
     faacEncClose( pv->faac );
     free( pv->buf );
     hb_list_empty( &pv->list );
+    free( pv );
+    w->private_data = NULL;
 }
 
 /***********************************************************************

@@ -115,6 +115,8 @@ static void ReaderFunc( void * _r )
     hb_buffer_close( &r->ps );
     hb_dvd_stop( r->dvd );
     hb_dvd_close( &r->dvd );
+    free( r );
+    _r = NULL;
 
     hb_log( "reader: done" );
 }

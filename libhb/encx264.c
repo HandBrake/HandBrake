@@ -28,7 +28,6 @@ struct hb_work_private_s
     hb_job_t       * job;
     x264_t         * x264;
     x264_picture_t   pic_in;
-    x264_picture_t   pic_out;
 
     char             filename[1024];
 };
@@ -215,7 +214,10 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 void encx264Close( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
+    x264_picture_clean( &pv->pic_in );
     x264_encoder_close( pv->x264 );
+    free( pv );
+    w->private_data = NULL;
 
     /* TODO */
 }
@@ -226,6 +228,7 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_work_private_t * pv = w->private_data;
     hb_job_t    * job = pv->job;
     hb_buffer_t * in = *buf_in, * buf;
+    x264_picture_t   pic_out;
     int           i_nal;
     x264_nal_t  * nal;
     int i;
@@ -253,7 +256,7 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     pv->pic_in.i_pts = in->start;
 
     x264_encoder_encode( pv->x264, &nal, &i_nal,
-                         &pv->pic_in, &pv->pic_out );
+                         &pv->pic_in, &pic_out );
 
     /* Should be way too large */
     buf        = hb_buffer_init( 3 * job->width * job->height / 2 );
@@ -300,12 +303,12 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
         /* For IDR (key frames), buf->key = 1,
            and the same for regular I-frames. */
-        if( (pv->pic_out.i_type == X264_TYPE_IDR) || (pv->pic_out.i_type == X264_TYPE_I) )
+        if( (pic_out.i_type == X264_TYPE_IDR) || (pic_out.i_type == X264_TYPE_I) )
         {
         buf->key = 1;
         }
         /* For B-frames, buf->key = 2 */
-        else if( (pv->pic_out.i_type == X264_TYPE_B) )
+        else if( (pic_out.i_type == X264_TYPE_B) )
         {
         buf->key = 2;
         }                
@@ -313,7 +316,7 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
            However, it doesn't seem to ever be used...
            They just show up as buf->key == 2 like
            regular b-frames. */
-        else if( (pv->pic_out.i_type == X264_TYPE_BREF) )
+        else if( (pic_out.i_type == X264_TYPE_BREF) )
         {
             buf->key = 3;
         }
@@ -326,7 +329,7 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
         /* Store the output presentation time stamp
            from x264 for use by muxmp4 in off-setting
            b-frames with the CTTS atom. */
-        buf->encodedPTS = pv->pic_out.i_pts;
+        buf->encodedPTS = pic_out.i_pts;
 
                 buf->size += size;
         }
