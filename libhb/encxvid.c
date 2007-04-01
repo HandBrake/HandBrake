@@ -131,6 +131,9 @@ void encxvidClose( hb_work_object_t * w )
         hb_log( "encxvid: closing libxvidcore" );
         xvid_encore( pv->xvid, XVID_ENC_DESTROY, NULL, NULL);
     }
+    
+    free( pv );
+    w->private_data = NULL;
 }
 
 /***********************************************************************

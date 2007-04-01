@@ -120,6 +120,18 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
  **********************************************************************/
 void encvorbisClose( hb_work_object_t * w )
 {
+    hb_work_private_t * pv = w->private_data;
+    
+    vorbis_block_clear( &pv->vb );
+    vorbis_dsp_clear( &pv->vd );
+    vorbis_comment_clear( &pv->vc );
+    vorbis_info_clear( &pv->vi );
+    
+    hb_list_empty( &pv->list );
+    
+    free( pv->buf );
+    free( pv );
+    w->private_data = NULL;
 }
 
 /***********************************************************************

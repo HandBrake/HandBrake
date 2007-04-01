@@ -68,6 +68,13 @@ int enclameInit( hb_work_object_t * w, hb_job_t * job )
  **********************************************************************/
 void enclameClose( hb_work_object_t * w )
 {
+    hb_work_private_t * pv = w->private_data;
+    
+    lame_close( pv->lame );
+    hb_list_empty( &pv->list );
+    free( pv->buf );
+    free( pv );
+    w->private_data = NULL;
 }
 
 /***********************************************************************

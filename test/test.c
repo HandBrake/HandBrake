@@ -980,9 +980,10 @@ static int CheckOptions( int argc, char ** argv )
             }
         }
 		
-		if (acodec != HB_ACODEC_FAAC && acodec != HB_ACODEC_VORBIS)
+		if (acodec != HB_ACODEC_FAAC)
 		{
 			/* only attempt 5.1 export if exporting to AAC or Vorbis */
+			/* Vorbis doesn't seem to be quite ready yet */
 			surround = 0;
         }
 		

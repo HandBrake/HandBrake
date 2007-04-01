@@ -336,6 +336,8 @@ static int OGMEnd( hb_mux_object_t * m )
     {
         return -1;
     }
+    ogg_stream_clear( &mux_data->os );
+    
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = hb_list_item( title->list_audio, i );
@@ -344,6 +346,7 @@ static int OGMEnd( hb_mux_object_t * m )
         {
             return -1;
         }
+        ogg_stream_clear( &mux_data->os );
     }
 
     fclose( m->file );
