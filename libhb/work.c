@@ -304,6 +304,11 @@ static void do_job( hb_job_t * job, int cpu_count )
 			audio->channelsused = 2;
 		}
 		
+		/* remember the number of source channels, so that deca52.c knows what source we had */
+		audio->config.a52.channels = audio->channels;
+		audio->config.a52.lfechannels = audio->lfechannels;
+		
+		/* pass round the number of channels we actually used */
         audio->config.aac.channelsused = audio->config.a52.channelsused = audio->config.vorbis.channelsused = audio->channelsused;
         audio->config.vorbis.language = audio->lang_simple;
 		
