@@ -153,7 +153,6 @@ void renderClose( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
     
-    img_resample_close( pv->context );
     free( pv );
     w->private_data = NULL;
 }
