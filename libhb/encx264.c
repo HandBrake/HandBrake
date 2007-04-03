@@ -123,12 +123,19 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
             /* Note b-pyramid here, so the initial delay can be doubled */
             if (!(strcmp(name, "b-pyramid")))
             {
-	            if (atoi(value) > 0)
-	            {
-		            job->areBframes = 2;
-	            }
-            }
-			
+                if (value != NULL)
+                {
+	                if (atoi(value) > 0)
+	                {
+		                job->areBframes = 2;
+	                }
+                }
+                else
+                {
+                    job->areBframes = 2;
+                }
+			}
+
             /* Here's where the strings are passed to libx264 for parsing. */
 	    	ret = x264_param_parse(&param, name, value);
 	
