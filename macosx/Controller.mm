@@ -851,7 +851,7 @@ static int FormatSettings[3][4] =
     job->abitrate = hb_audio_bitrates[[fAudBitratePopUp
                         indexOfSelectedItem]].rate;
 	/* have we selected that 5.1 should be extracted as AAC? */
-	if ((job->acodec == HB_ACODEC_FAAC || job->acodec == HB_ACODEC_VORBIS) && [fAudLang1SurroundCheck isEnabled] && [fAudLang1SurroundCheck state] == NSOnState) {
+	if (job->acodec == HB_ACODEC_FAAC && [fAudLang1SurroundCheck isEnabled] && [fAudLang1SurroundCheck state] == NSOnState) {
 		job->surround = 1;
 	} else {
 		job->surround = 0;
@@ -1367,8 +1367,8 @@ static int FormatSettings[3][4] =
     int codecs = [fDstCodecsPopUp indexOfSelectedItem];
 	int acodec = FormatSettings[format][codecs] & HB_ACODEC_MASK;
 
-	/* we only offer the option to extract 5.1 to 6-channel if the selected audio codec is AAC or Vorbis*/
-	if (acodec == HB_ACODEC_FAAC || acodec == HB_ACODEC_VORBIS) {
+	/* we only offer the option to extract 5.1 to 6-channel if the selected audio codec is AAC*/
+	if (acodec == HB_ACODEC_FAAC) {
 
 		bool doneaudios = false;
 		int thisaudio = 0;
@@ -1391,7 +1391,7 @@ static int FormatSettings[3][4] =
 		}
 	}
 
-    /* If we are extracting to AAC or Vorbis, and any of our soundtracks were 5.1, then enable the checkbox  */
+    /* If we are extracting to AAC, and any of our soundtracks were 5.1, then enable the checkbox  */
 	if (foundfiveoneaudio) {
 		[fAudLang1SurroundCheck setEnabled: YES];
 		/* Check default surround sound pref and if it is YES, lets also check the checkbox */
