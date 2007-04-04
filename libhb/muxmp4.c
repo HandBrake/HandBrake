@@ -247,7 +247,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
        displays a white box instead of video until the second GOP.
        Also, you've got to save the skipped duration to keep from
        throwing off the offset values. */
-    if((mux_data->track == 1) && (thisSample == 0) && (buf->key != 1))
+    if((mux_data->track == 1) && (thisSample == 0) && (buf->key != 1) && (job->vcodec == HB_VCODEC_X264))
     {
 	    initDelay +=duration;
 	    return 0;
@@ -256,7 +256,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
        initial delay added to the frame order offset for b-frames.
        Because of b-pyramid, double this duration when there are
        b-pyramids, as denoted by job->areBframes equalling 2. */
-    if ((mux_data->track == 1) && (thisSample == 0) && (buf->key == 1))
+    if ((mux_data->track == 1) && (thisSample == 0) && (buf->key == 1) && (job->vcodec == HB_VCODEC_X264))
     {
         initDelay += duration * job->areBframes;
         thisSample++;
@@ -269,7 +269,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
        difference between the presentation time stamp x264 gives
        and the decoding time stamp from the buffer data. */
        MP4WriteSample( m->file, mux_data->track, buf->data, buf->size,
-            duration, ((mux_data->track != 1) || (job->areBframes==0)) ? 0 : ( initDelay + ((buf->encodedPTS - buf->start) * job->arate / 90000)),
+            duration, ((mux_data->track != 1) || (job->areBframes==0) || (job->vcodec != HB_VCODEC_X264)) ? 0 : ( initDelay + ((buf->encodedPTS - buf->start) * job->arate / 90000)),
             (buf->key == 1) );
                                 
     return 0;
