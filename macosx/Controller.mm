@@ -585,7 +585,7 @@ static int FormatSettings[3][4] =
 		fPicLabelAr,fPicLabelDeinter,fPicLabelSrcX,fPicLabelOutputX,
 		fPicLabelPAROutp,fPicLabelPAROutputX,fPicSettingPARWidth,fPicSettingPARHeight,
 		fPicSettingPARDsply,fPicLabelAnamorphic,tableView,fPresetsAdd,fPresetsDelete,
-		fCreateChapterMarkers};
+		fCreateChapterMarkers,fPresetNewX264OptLabel};
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -784,8 +784,21 @@ static int FormatSettings[3][4] =
 			job->crf = 1;
 	        }
 		
-		/* Sends x264 options to the core library*/
-		job->x264opts = [[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] UTF8String];
+		/* Below Sends x264 options to the core library if x264 is selected*/
+		/* First we look to see if a user preset has been selected that contains a x264 optional string CurUserPresetChosenNum = nil */
+		if (curUserPresetChosenNum != nil)
+		{
+			/* Lets use this to see if the proper string is being passed in the gui. We can comment out if need be.
+			for public use we have the field hidden in the nib */
+			[fDisplayX264Options setStringValue: [NSString stringWithFormat:@"%@",[chosenPreset valueForKey:@"x264Option"]]];
+			job->x264opts = [[chosenPreset valueForKey:@"x264Option"] cString];
+		}
+		else
+		{
+		    /* if not, then we check to see if there is a x264 opt in the preferences and use that if we want */
+			job->x264opts = [[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] UTF8String];
+		} 
+		
 		
 		
         job->h264_13 = [fVidEncoderPopUp indexOfSelectedItem];
@@ -1433,7 +1446,7 @@ static int FormatSettings[3][4] =
 - (IBAction) CalculatePictureSizing: (id) sender
 {
 
-	hb_job_t * job = fTitle->job;		
+	//hb_job_t * job = fTitle->job;		
 
 	[fPicSettingWidth setStringValue: [NSString stringWithFormat:
 		@"%d", fTitle->job->width]];
@@ -1496,7 +1509,7 @@ static int FormatSettings[3][4] =
 		[fPicSettingPARDsply setStringValue: @"Off"];
 		}	
 		
-	
+	[self CustomSettingUsed: sender];
 }
 
 - (IBAction) CalculateBitrate: (id) sender
@@ -1530,20 +1543,37 @@ the user is using "Custom" settings by determining the sender*/
 		[tableView deselectRow:[tableView selectedRow]];
 		/* Change UI to show "Custom" settings are being used */
 		[fPresetSelectedDisplay setStringValue: @"Custom"];
+		/* Empty the field to display custom x264 preset options*/
+		[fDisplayX264Options setStringValue: @""];
+		curUserPresetChosenNum = nil;
+		
 	}
 }
 
 
 - (IBAction) ShowAddPresetPanel: (id) sender
 {
-    /* Show the panel */
-	/* Temporarily disable until window hang bug is fixed */
+    /* If we have MP4, AVC H.264 and x264 Main then we enable the x264 Options field for the
+	 Add Preset window we are about to open. We do this before we actually open the panel,
+	 as doing it after causes it to stick from the last selection for some reason. */
+	if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fDstCodecsPopUp indexOfSelectedItem] == 1 && [fVidEncoderPopUp indexOfSelectedItem] == 0)
+	{
+		[fPresetNewX264Opt setEditable: YES];
+		[fPresetNewX264OptLabel setEnabled: YES];
+	}
+	else
+	{
+		[fPresetNewX264Opt setEditable: NO];
+		[fPresetNewX264OptLabel setEnabled: NO];
+	}
 	
-    [NSApp beginSheet: fAddPresetPanel modalForWindow: fWindow
+	/* Show the panel */
+	[NSApp beginSheet: fAddPresetPanel modalForWindow: fWindow
         modalDelegate: NULL didEndSelector: NULL contextInfo: NULL];
     [NSApp runModalForWindow: fAddPresetPanel];
     [NSApp endSheet: fAddPresetPanel];
     [fAddPresetPanel orderOut: self];
+	
 	
 }
 - (IBAction) CloseAddPresetPanel: (id) sender
@@ -1581,6 +1611,7 @@ the user is using "Custom" settings by determining the sender*/
 	
 	/* We stop the modal window for the new preset */
 	[fPresetNewName setStringValue: @""];
+	//[fPresetNewX264Opt setStringValue: @""];
 	[NSApp stopModal];
 	/* We Reload the New Table data for presets */
     [tableView reloadData];
@@ -1615,6 +1646,9 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[fDstCodecsPopUp titleOfSelectedItem] forKey:@"FileCodecs"];
 	/* Video encoder */
 	[preset setObject:[fVidEncoderPopUp titleOfSelectedItem] forKey:@"VideoEncoder"];
+	/* x264 Option String */
+	[preset setObject:[fPresetNewX264Opt string] forKey:@"x264Option"];
+	//[fDisplayX264Options setStringValue: [NSString stringWithFormat: @"Using Option: %@",CurUserPresetx264Opt]];
 	/* Video quality */
 	[preset setObject:[NSNumber numberWithInt:[fVidQualityMatrix selectedRow]] forKey:@"VideoQualityType"];
 	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
@@ -1682,6 +1716,8 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:@"AVC/H.264 Video / AAC Audio" forKey:@"FileCodecs"];
 	/* Video encoder */
 	[preset setObject:@"x264 (h.264 iPod)" forKey:@"VideoEncoder"];
+	/* x264 Option String */
+	[preset setObject:@"" forKey:@"x264Option"];
 	/* Video quality */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
 	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
@@ -1749,6 +1785,8 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:@"AVC/H.264 Video / AAC Audio" forKey:@"FileCodecs"];
 	/* Video encoder */
 	[preset setObject:@"x264 (h.264 Main)" forKey:@"VideoEncoder"];
+	/* x264 Option String (We can use this to tweak the appleTV output)*/
+	[preset setObject:@"" forKey:@"x264Option"];
 	/* Video quality */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
 	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
@@ -1842,8 +1880,9 @@ the user is using "Custom" settings by determining the sender*/
 		
 		/* we get the chosen preset from the UserPresets array */
 		chosenPreset = [UserPresets objectAtIndex:[sender selectedRow]];
+		curUserPresetChosenNum = [sender selectedRow];
 		/* we set the preset display field in main window here */
-		[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@", [chosenPreset valueForKey:@"PresetName"]]];
+		[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@",[chosenPreset valueForKey:@"PresetName"]]];
 		/* File Format */
 		[fDstFormatPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileFormat"]]];
 		[self FormatPopUpChanged: NULL];
@@ -1854,6 +1893,10 @@ the user is using "Custom" settings by determining the sender*/
 		[self CodecsPopUpChanged: NULL];
 		/* Video encoder */
 		[fVidEncoderPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]]];
+		
+		/* We can show the preset options here in the gui if we want to
+		Field is currently hidden from user, unhide it if we need to test */
+		[fDisplayX264Options setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"x264Option"]]];
 		/* Lets run through the following functions to get variables set there */
 		[self EncoderPopUpChanged: NULL];
 		[self Check6ChannelAACExtraction: NULL];

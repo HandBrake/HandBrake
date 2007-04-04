@@ -127,19 +127,22 @@
 	
 	IBOutlet NSDrawer            * fPresetDrawer;
 	IBOutlet NSTextField         * fPresetNewName;
+	IBOutlet NSTextView          * fPresetNewX264Opt;
+	IBOutlet NSTextField         * fPresetNewX264OptLabel;
 	IBOutlet NSButton            * fPresetNewPicSettingsApply;
 	IBOutlet NSTextField         * fPresetSelectedDisplay;
+	IBOutlet NSTextField         * fDisplayX264Options;
 	
-	NSString * AppSupportDirectory;
-	NSString * UserPresetsFile;
-	NSString * x264ProfilesFile;
-	NSMutableArray * UserPresets;
-	NSMutableArray * x264Profiles;
-	NSMutableArray *UserPresetssortedArray;
-	NSMutableDictionary * chosenPreset;
-
+	NSString                     * AppSupportDirectory;
+	NSString                     * UserPresetsFile;
+	NSString                     * x264ProfilesFile;
+	NSMutableArray               * UserPresets;
+	NSMutableArray               * x264Profiles;
+	NSMutableArray               * UserPresetssortedArray;
+	NSMutableDictionary          * chosenPreset;
+    int                            curUserPresetChosenNum;
 	
-    IBOutlet NSPanel            * fAddPresetPanel;
+    IBOutlet NSPanel             * fAddPresetPanel;
 	IBOutlet NSTableView         * tableView;
 	IBOutlet NSButton            * fPresetsAdd;
 	IBOutlet NSButton            * fPresetsDelete;

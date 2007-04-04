@@ -47,6 +47,7 @@
                 fAudRateField = NSTextField; 
                 fAudRatePopUp = NSPopUpButton; 
                 fCreateChapterMarkers = NSButton; 
+                fDisplayX264Options = NSTextField; 
                 fDstBrowseButton = NSButton; 
                 fDstCodecsField = NSTextField; 
                 fDstCodecsPopUp = NSPopUpButton; 
@@ -83,6 +84,8 @@
                 fPresetDrawer = NSDrawer; 
                 fPresetNewName = NSTextField; 
                 fPresetNewPicSettingsApply = NSButton; 
+                fPresetNewX264Opt = NSTextView; 
+                fPresetNewX264OptLabel = NSTextField; 
                 fPresetSaveButton = NSButton; 
                 fPresetSelectedDisplay = NSTextField; 
                 fPresetsAdd = NSButton; 
