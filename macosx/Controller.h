@@ -212,6 +212,7 @@
 
 - (void) savePreset;
 - (IBAction)AddFactoryPresets:(id)sender;
+- (IBAction)DeleteFactoryPresets:(id)sender;
 - (IBAction)AddUserPreset:(id)sender;
 - (void)AddPreset;
 - (IBAction)InsertPreset:(id)sender;

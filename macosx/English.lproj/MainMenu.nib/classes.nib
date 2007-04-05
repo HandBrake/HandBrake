@@ -13,6 +13,7 @@
                 CloseAddPresetPanel = id; 
                 CodecsPopUpChanged = id; 
                 CustomSettingUsed = id; 
+                DeleteFactoryPresets = id; 
                 DeletePreset = id; 
                 EnableQueue = id; 
                 EncoderPopUpChanged = id; 

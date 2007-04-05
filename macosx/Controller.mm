@@ -1580,14 +1580,45 @@ the user is using "Custom" settings by determining the sender*/
 {
     [NSApp stopModal];
 }
-
+   /* We use this method to recreate new, updated factory
+   presets */
 - (IBAction)AddFactoryPresets:(id)sender
 {
-    /* Here we create each shipped preset */
+    /* First, we delete any existing built in presets */
+    [self DeleteFactoryPresets: sender];
+    /* Then, we re-create new built in presets programmatically */
 	[UserPresets addObject:[self CreateIpodPreset]];
 	[UserPresets addObject:[self CreateAppleTVPreset]];
     [self AddPreset];
 }
+- (IBAction)DeleteFactoryPresets:(id)sender
+{
+    //int status;
+    NSEnumerator *enumerator = [UserPresets objectEnumerator];
+	id tempObject;
+    
+	//NSNumber *index;
+    NSMutableArray *tempArray;
+
+
+        tempArray = [NSMutableArray array];
+        /* we look here to see if the preset is we move on to the next one */
+        while ( tempObject = [enumerator nextObject] )  
+		{
+			/* if the preset is "Factory" then we put it in the array of
+			presets to delete */
+			if ([[tempObject objectForKey:@"Type"] intValue] == 0)
+			{
+				[tempArray addObject:tempObject];
+			}
+        }
+        
+        [UserPresets removeObjectsInArray:tempArray];
+        [tableView reloadData];
+        [self savePreset];   
+
+}
+
 - (IBAction)AddUserPreset:(id)sender
 {
     /* Here we create a custom user preset */
@@ -2022,12 +2053,14 @@ id theRecord, theValue;
     
     theRecord = [UserPresets objectAtIndex:rowIndex];
     [theRecord setObject:anObject forKey:[aTableColumn identifier]];
-    
+    /* We Sort the Presets By Factory or Custom */
+	NSSortDescriptor * presetTypeDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"Type" 
+                                                    ascending:YES] autorelease];
 		/* We Sort the Presets Alphabetically by name */
-	NSSortDescriptor * lastNameDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"PresetName" 
+	NSSortDescriptor * presetNameDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"PresetName" 
                                                     ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease];
-	NSArray *sortDescriptors=[NSArray arrayWithObject:lastNameDescriptor];
-	NSArray *sortedArray=[UserPresets sortedArrayUsingDescriptors:sortDescriptors];
+	NSArray *sortDescriptors=[NSArray arrayWithObjects:presetTypeDescriptor,presetNameDescriptor,nil];
+    NSArray *sortedArray=[UserPresets sortedArrayUsingDescriptors:sortDescriptors];
 	[UserPresets setArray:sortedArray];
 	/* We Reload the New Table data for presets */
     [tableView reloadData];
