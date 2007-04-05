@@ -33,6 +33,11 @@
 	NSString *defDestDirectory =  @"~/Desktop";
 	defDestDirectory = [defDestDirectory stringByExpandingTildeInPath];
 	appDefaults = [NSDictionary dictionaryWithObject:defDestDirectory forKey:@"LastDestinationDirectory"];
+	
+	NSString *defSrcDirectory =  @"~/Desktop";
+	defSrcDirectory = [defSrcDirectory stringByExpandingTildeInPath];
+	appDefaults = [NSDictionary dictionaryWithObject:defSrcDirectory forKey:@"LastSourceDirectory"];
+	
 	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
                    forKey:@"DefaultAutoNaming"];
 	appDefaults = [NSDictionary dictionaryWithObject:@"NO"

@@ -939,7 +939,7 @@ static int FormatSettings[3][4] =
             [fDstFile2Field stringValue]] );
         return;
     }
-	/* We get the destination directory from the destingation field here */
+	/* We get the destination directory from the destination field here */
 	NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
 	/* We check for a valid destination here */
 	if ([[NSFileManager defaultManager] fileExistsAtPath:destinationDirectory] == 0) 

@@ -196,8 +196,17 @@
     [panel setAllowsMultipleSelection: NO];
     [panel setCanChooseFiles: YES];
     [panel setCanChooseDirectories: YES ];
-
-    [panel beginSheetForDirectory: nil file: nil types: nil
+    NSString * sourceDirectory;
+	if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastSourceDirectory"])
+	{
+	sourceDirectory = [[NSUserDefaults standardUserDefaults] stringForKey:@"LastSourceDirectory"];
+	}
+	else
+	{
+	sourceDirectory = @"~/Desktop";
+	sourceDirectory = [sourceDirectory stringByExpandingTildeInPath];
+	}
+    [panel beginSheetForDirectory: sourceDirectory file: nil types: nil
         modalForWindow: [NSApp mainWindow] modalDelegate: self
         didEndSelector: @selector( BrowseDone:returnCode:contextInfo: )
         contextInfo: nil];
@@ -239,6 +248,9 @@
 
     if( [fMatrix selectedRow] )
     {
+	/* we set the last source directory in the prefs here */
+	NSString *sourceDirectory = [[fFolderField stringValue] stringByDeletingLastPathComponent];
+	[[NSUserDefaults standardUserDefaults] setObject:sourceDirectory forKey:@"LastSourceDirectory"];
     	hb_scan( fHandle, [[fFolderField stringValue] UTF8String], 0 );
     }
     else
