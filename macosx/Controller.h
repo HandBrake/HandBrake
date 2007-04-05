@@ -205,7 +205,8 @@
 - (IBAction) CloseAddPresetPanel: (id) sender;
 - (NSDictionary *)CreatePreset;
 - (NSDictionary *)CreateIpodPreset;
-- (NSDictionary *)CreateAppleTVPreset;  
+- (NSDictionary *)CreateAppleTVPreset;
+- (NSDictionary *)CreatePSThreePreset;  
 
 - (IBAction) RevertPictureSizeToMax:(id)sender;
 

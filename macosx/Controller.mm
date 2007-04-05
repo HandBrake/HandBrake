@@ -1586,9 +1586,10 @@ the user is using "Custom" settings by determining the sender*/
 {
     /* First, we delete any existing built in presets */
     [self DeleteFactoryPresets: sender];
-    /* Then, we re-create new built in presets programmatically */
+    /* Then, we re-create new built in presets programmatically CreatePS3Preset*/
 	[UserPresets addObject:[self CreateIpodPreset]];
 	[UserPresets addObject:[self CreateAppleTVPreset]];
+	[UserPresets addObject:[self CreatePSThreePreset]];
     [self AddPreset];
 }
 - (IBAction)DeleteFactoryPresets:(id)sender
@@ -1862,6 +1863,77 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:@"44.1" forKey:@"AudioSampleRate"];
 	/* Audio Bitrate Rate*/
 	[preset setObject:@"320" forKey:@"AudioBitRate"];
+	/* Subtitles*/
+	[preset setObject:@"None" forKey:@"Subtitles"];
+	
+
+    [preset autorelease];
+    return preset;
+
+}
+
+- (NSDictionary *)CreatePSThreePreset
+{
+    NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
+	/* Get the New Preset Name from the field in the AddPresetPanel */
+    [preset setObject:@"HB-PS3" forKey:@"PresetName"];
+	/*Set whether or not this is a user preset where 0 is factory, 1 is user*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
+	/*Set whether or not this is default, at creation set to 0*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
+	/*Get the whether or not to apply pic settings in the AddPresetPanel*/
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
+	/* File Format */
+    [preset setObject:@"MP4 file" forKey:@"FileFormat"];
+	/* Chapter Markers*/
+	 [preset setObject:[NSNumber numberWithInt:1] forKey:@"ChapterMarkers"];
+	/* Codecs */
+	[preset setObject:@"AVC/H.264 Video / AAC Audio" forKey:@"FileCodecs"];
+	/* Video encoder */
+	[preset setObject:@"x264 (h.264 Main)" forKey:@"VideoEncoder"];
+	/* x264 Option String (We can use this to tweak the appleTV output)*/
+	[preset setObject:@"level=30:cabac=1:me=1" forKey:@"x264Option"];
+	/* Video quality */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
+	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
+	[preset setObject:@"3000" forKey:@"VideoAvgBitrate"];
+	[preset setObject:[NSNumber numberWithFloat:[fVidQualitySlider floatValue]] forKey:@"VideoQualitySlider"];
+	
+	/* Video framerate */
+	[preset setObject:@"Same as source" forKey:@"VideoFramerate"];
+	/* GrayScale */
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
+	/* 2 Pass Encoding */
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoTwoPass"];
+	
+	/*Picture Settings*/
+	/* For PS3 we only want to retain UsesMaxPictureSettings
+	which depend on the source dvd picture settings, so we don't
+	record the current dvd's picture info since it will vary from
+	source to source*/
+	/* Use Max Picture settings for whatever the dvd is.*/
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesMaxPictureSettings"];
+	//[preset setObject:[NSNumber numberWithInt:PicOrigOutputWidth] forKey:@"PictureWidth"];
+	//[preset setObject:[NSNumber numberWithInt:PicOrigOutputHeight] forKey:@"PictureHeight"];
+	//[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureKeepRatio"];
+	//[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PicturePAR"];
+	/* Set crop settings here */
+	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
+	//[preset setObject:[NSNumber numberWithInt:job->crop[0]] forKey:@"PictureTopCrop"];
+    //[preset setObject:[NSNumber numberWithInt:job->crop[1]] forKey:@"PictureBottomCrop"];
+	//[preset setObject:[NSNumber numberWithInt:job->crop[2]] forKey:@"PictureLeftCrop"];
+	//[preset setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
+	
+	/*Audio*/
+	/* Audio Language One*/
+	[preset setObject:[fAudLang1PopUp titleOfSelectedItem] forKey:@"AudioLang1"];
+	/* Audio Language One Surround Sound Checkbox*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"AudioLang1Surround"];
+	/* Audio Sample Rate*/
+	[preset setObject:@"44.1" forKey:@"AudioSampleRate"];
+	/* Audio Bitrate Rate*/
+	[preset setObject:@"160" forKey:@"AudioBitRate"];
 	/* Subtitles*/
 	[preset setObject:@"None" forKey:@"Subtitles"];
 	
