@@ -1,0 +1,114 @@
+diff -Naur a52dec_original/include/a52.h a52dec_patched/include/a52.h
+--- a52dec_original/include/a52.h	2002-01-28 05:37:54.000000000 +0000
++++ a52dec_patched/include/a52.h	2007-04-04 19:12:57.000000000 +0100
+@@ -48,6 +48,10 @@
+ #define A52_LFE 16
+ #define A52_ADJUST_LEVEL 32
+ 
++// this next constant can be ORed with A52_DOLBY to tell liba52 to use 5.0 DPLII matrix encoding,
++// rather than just 4.0 Dolby Surround matrix encoding
++#define A52_USE_DPLII 64
++
+ a52_state_t * a52_init (uint32_t mm_accel);
+ sample_t * a52_samples (a52_state_t * state);
+ int a52_syncinfo (uint8_t * buf, int * flags,
+diff -Naur a52dec_original/liba52/a52_internal.h a52dec_patched/liba52/a52_internal.h
+--- a52dec_original/liba52/a52_internal.h	2002-07-28 02:52:06.000000000 +0100
++++ a52dec_patched/liba52/a52_internal.h	2007-04-04 19:11:43.000000000 +0100
+@@ -93,6 +93,10 @@
+ #define LEVEL_45DB 0.5946035575013605
+ #define LEVEL_6DB 0.5
+ 
++// these next two constants are used for DPL matrix encoding in downmix.c
++#define LEVEL_SQRT_1_2 0.5
++#define LEVEL_SQRT_3_4 0.8660254037844386
++
+ #define EXP_REUSE (0)
+ #define EXP_D15   (1)
+ #define EXP_D25   (2)
+diff -Naur a52dec_original/liba52/downmix.c a52dec_patched/liba52/downmix.c
+--- a52dec_original/liba52/downmix.c	2002-01-28 05:37:54.000000000 +0000
++++ a52dec_patched/liba52/downmix.c	2007-04-06 13:47:49.000000000 +0100
+@@ -34,6 +34,7 @@
+ int a52_downmix_init (int input, int flags, sample_t * level,
+ 		      sample_t clev, sample_t slev)
+ {
++
+     static uint8_t table[11][8] = {
+ 	{A52_CHANNEL,	A52_DOLBY,	A52_STEREO,	A52_STEREO,
+ 	 A52_STEREO,	A52_STEREO,	A52_STEREO,	A52_STEREO},
+@@ -148,6 +149,9 @@
+ 	    break;
+ 	}
+ 
++	// add the DPLII flag back into the output if it was passed in
++	output = output | (flags & A52_USE_DPLII);
++
+     return output;
+ }
+ 
+@@ -418,17 +422,46 @@
+     }
+ }
+ 
+-static void mix32toS (sample_t * samples, sample_t bias)
++static void mix32toS (sample_t * samples, sample_t bias, int use_dpl2)
+ {
+-    int i;
+-    sample_t common, surround;
+ 
+-    for (i = 0; i < 256; i++) {
+-	common = samples[i + 256] + bias;
+-	surround = samples[i + 768] + samples[i + 1024];
+-	samples[i] += common - surround;
+-	samples[i + 256] = samples[i + 512] + common + surround;
+-    }
++	if (use_dpl2 == 1) {
++
++		int i;
++		sample_t cc, Lt, Rt, Ls, Rs, Lss, Rss;
++	
++		for (i = 0; i < 256; i++) {
++	
++			cc = samples[i + 256] * LEVEL_3DB;
++		
++			Lt = samples[i] + cc;
++			Rt = samples[i + 512] + cc;
++		
++			Ls = samples[i + 768];
++			Rs = samples[i + 1024];
++			
++			Lss = (LEVEL_SQRT_3_4 * Ls) - (LEVEL_SQRT_1_2 * Rs);
++			Rss = -(LEVEL_SQRT_1_2 * Ls) + (LEVEL_SQRT_3_4 * Rs);
++		
++			samples[i] = Lt + Lss;
++			samples[i + 256] = Rt + Rss;
++	
++		}
++
++	} else {
++
++		int i;
++		sample_t common, surround;
++	
++		for (i = 0; i < 256; i++) {
++		common = samples[i + 256] + bias;
++		surround = samples[i + 768] + samples[i + 1024];
++		samples[i] += common - surround;
++		samples[i + 256] = samples[i + 512] + common + surround;
++		}
++
++	}
++
+ }
+ 
+ static void move2to1 (sample_t * src, sample_t * dest, sample_t bias)
+@@ -533,7 +566,7 @@
+ 	break;
+ 
+     case CONVERT (A52_3F2R, A52_DOLBY):
+-	mix32toS (samples, bias);
++	mix32toS (samples, bias, ((output & A52_USE_DPLII) == A52_USE_DPLII));
+ 	break;
+ 
+     case CONVERT (A52_3F1R, A52_3F):
