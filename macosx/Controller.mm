@@ -1822,7 +1822,7 @@ the user is using "Custom" settings by determining the sender*/
 	/* Video quality */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
 	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
-	[preset setObject:@"3000" forKey:@"VideoAvgBitrate"];
+	[preset setObject:@"2500" forKey:@"VideoAvgBitrate"];
 	[preset setObject:[NSNumber numberWithFloat:[fVidQualitySlider floatValue]] forKey:@"VideoQualitySlider"];
 	
 	/* Video framerate */
@@ -1892,11 +1892,11 @@ the user is using "Custom" settings by determining the sender*/
 	/* Video encoder */
 	[preset setObject:@"x264 (h.264 Main)" forKey:@"VideoEncoder"];
 	/* x264 Option String (We can use this to tweak the appleTV output)*/
-	[preset setObject:@"level=30:cabac=1:me=1" forKey:@"x264Option"];
+	[preset setObject:@"level=30" forKey:@"x264Option"];
 	/* Video quality */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
 	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
-	[preset setObject:@"3000" forKey:@"VideoAvgBitrate"];
+	[preset setObject:@"2500" forKey:@"VideoAvgBitrate"];
 	[preset setObject:[NSNumber numberWithFloat:[fVidQualitySlider floatValue]] forKey:@"VideoQualitySlider"];
 	
 	/* Video framerate */
