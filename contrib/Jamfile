@@ -36,8 +36,9 @@ rule LibA52
 }
 actions LibA52
 {
+
     cd `dirname $(>)` && CONTRIB=`pwd` &&
-    rm -rf a52dec && tar xzf a52dec.tar.gz && cd a52dec &&
+    rm -rf a52dec && tar xzf a52dec.tar.gz && cd a52dec && patch -p1 < ../patch-a52dec.patch
     ./configure --prefix=$CONTRIB && make && make install &&
     strip -S $CONTRIB/lib/liba52.a
 }
