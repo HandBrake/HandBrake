@@ -179,16 +179,13 @@ static int FormatSettings[3][4] =
 
     /* Video framerate */
     [fVidRatePopUp removeAllItems];
-	/* Lets deprecate Same as Source for now, will leave it
-	here but commented out in case we change our minds */
-    //[fVidRatePopUp addItemWithTitle: _( @"Same as source" )];
+	[fVidRatePopUp addItemWithTitle: _( @"Same as source" )];
     for( int i = 0; i < hb_video_rates_count; i++ )
     {
         [fVidRatePopUp addItemWithTitle:
             [NSString stringWithCString: hb_video_rates[i].string]];
     }
-    /* we default to the most common film framerate */
-	[fVidRatePopUp selectItemWithTitle: @"23.976"];
+    [fVidRatePopUp selectItemAtIndex: 0];
 	
 	/* Picture Settings */
 	[fPicLabelPAROutp setStringValue: @""];
@@ -2018,14 +2015,8 @@ the user is using "Custom" settings by determining the sender*/
 		[self VideoMatrixChanged: NULL];
 		
 		/* Video framerate */
-		if ([[chosenPreset objectForKey:@"VideoFramerate"] isEqualToString: @"Same as source"])
-		{
-		[fVidRatePopUp selectItemWithTitle: @"23.976"];
-		}
-		else
-		{
 		[fVidRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoFramerate"]]];
-		}
+
 		/* GrayScale */
 		[fVidGrayscaleCheck setState:[[chosenPreset objectForKey:@"VideoGrayScale"] intValue]];
 		
