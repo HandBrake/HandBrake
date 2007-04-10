@@ -2124,7 +2124,7 @@ id theRecord, theValue;
     id theRecord;
     
     theRecord = [UserPresets objectAtIndex:rowIndex];
-    [theRecord setObject:anObject forKey:[aTableColumn identifier]];
+    [theRecord setObject:anObject forKey:@"PresetName"];
     /* We Sort the Presets By Factory or Custom */
 	NSSortDescriptor * presetTypeDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"Type" 
                                                     ascending:YES] autorelease];
