@@ -26,7 +26,7 @@ static int    vcodec      = HB_VCODEC_FFMPEG;
 static int    h264_13     = 0;
 static int    h264_30     = 0;
 static char * audios      = NULL;
-static int    surround    = 0;
+static int    audio_mixdown = HB_AMIXDOWN_DOLBYPLII;
 static int    sub         = 0;
 static int    width       = 0;
 static int    height      = 0;
@@ -392,6 +392,7 @@ static int HandleEvents( hb_handle_t * h )
                             tmp++;
                             continue;
                         }
+						job->audio_mixdowns[audio_count] = audio_mixdown;
                         job->audios[audio_count++] =
                             strtol( tmp, &tmp, 0 ) - 1;
                     }
@@ -402,10 +403,6 @@ static int HandleEvents( hb_handle_t * h )
                     job->audios[0] = -1;
                 }
             }
-			if( surround )
-			{
-				job->surround = 1;
-			}
             if( abitrate )
             {
                 job->abitrate = abitrate;
@@ -604,7 +601,8 @@ static void ShowHelp()
 	"    -B, --ab <kb/s>         Set audio bitrate (default: 128)\n"
 	"    -a, --audio <string>    Select audio channel(s) (\"none\" for no \n"
     "                            audio, default: first one)\n"
-    "    -6, --surround          Export 5.1 surround as 6-channel AAC\n"
+    "    -6, --mixdown <string>  Format for surround sound downmixing\n"
+    "                            (mono/stereo/dpl1/dpl2/6ch, default: dpl2)\n"
     "    -R, --arate             Set audio samplerate (" );
     for( i = 0; i < hb_audio_rates_count; i++ )
     {
@@ -647,7 +645,7 @@ static int ParseOptions( int argc, char ** argv )
             { "chapters",    required_argument, NULL,    'c' },
             { "markers",     no_argument,       NULL,    'm' },
             { "audio",       required_argument, NULL,    'a' },
-            { "surround",    no_argument,       NULL,    '6' },
+            { "mixdown",     required_argument, NULL,    '6' },
             { "subtitle",    required_argument, NULL,    's' },
 
             { "encoder",     required_argument, NULL,    'e' },
@@ -678,7 +676,7 @@ static int ParseOptions( int argc, char ** argv )
         int c;
 
         c = getopt_long( argc, argv,
-                         "hvuC:f:i:o:t:c:ma:6s:e:E:2dgpw:l:n:b:q:S:B:r:R:Qx:Y:X:",
+                         "hvuC:f:i:o:t:c:ma:6:s:e:E:2dgpw:l:n:b:q:S:B:r:R:Qx:Y:X:",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -741,7 +739,26 @@ static int ParseOptions( int argc, char ** argv )
                 audios = strdup( optarg );
                 break;
             case '6':
-                surround = 1;
+                if( !strcasecmp( optarg, "mono" ) )
+                {
+                    audio_mixdown = HB_AMIXDOWN_MONO;
+                }
+                else if( !strcasecmp( optarg, "stereo" ) )
+                {
+                    audio_mixdown = HB_AMIXDOWN_STEREO;
+                }
+                else if( !strcasecmp( optarg, "dpl1" ) )
+                {
+                    audio_mixdown = HB_AMIXDOWN_DOLBY;
+                }
+                else if( !strcasecmp( optarg, "dpl2" ) )
+                {
+                    audio_mixdown = HB_AMIXDOWN_DOLBYPLII;
+				}
+                else if( !strcasecmp( optarg, "6ch" ) )
+                {
+                    audio_mixdown = HB_AMIXDOWN_6CH;
+                }
                 break;
             case 's':
                 sub = atoi( optarg );
@@ -979,14 +996,7 @@ static int CheckOptions( int argc, char ** argv )
                 acodec = HB_ACODEC_VORBIS;
             }
         }
-		
-		if (acodec != HB_ACODEC_FAAC)
-		{
-			/* only attempt 5.1 export if exporting to AAC or Vorbis */
-			/* Vorbis doesn't seem to be quite ready yet */
-			surround = 0;
-        }
-		
+
     }
 
     return 0;

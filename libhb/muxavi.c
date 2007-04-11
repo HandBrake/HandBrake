@@ -369,7 +369,7 @@ static int AVIInit( hb_mux_object_t * m )
         {
             f.BytesCount     = sizeof( hb_wave_formatex_t ) - 8;
             f.FormatTag      = 0x2000;
-            f.Channels       = audio->channels;
+            f.Channels       = 2;
             f.SamplesPerSec  = audio->rate;
         }
         else

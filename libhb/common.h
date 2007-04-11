@@ -31,6 +31,7 @@
 typedef struct hb_handle_s hb_handle_t;
 typedef struct hb_list_s hb_list_t;
 typedef struct hb_rate_s hb_rate_t;
+typedef struct hb_mixdown_s hb_mixdown_t;
 typedef struct hb_job_s  hb_job_t;
 typedef struct hb_title_s hb_title_t;
 typedef struct hb_chapter_s hb_chapter_t;
@@ -70,17 +71,26 @@ struct hb_rate_s
     int    rate;
 };
 
+struct hb_mixdown_s
+{
+    char * human_readable_name;
+    char * internal_name;
+    int    amixdown;
+};
+
 #define HB_ASPECT_BASE 9
 #define HB_VIDEO_RATE_BASE   27000000
 
-extern hb_rate_t hb_video_rates[];
-extern int       hb_video_rates_count;
-extern hb_rate_t hb_audio_rates[];
-extern int       hb_audio_rates_count;
-extern int       hb_audio_rates_default;
-extern hb_rate_t hb_audio_bitrates[];
-extern int       hb_audio_bitrates_count;
-extern int       hb_audio_bitrates_default;
+extern hb_rate_t    hb_video_rates[];
+extern int          hb_video_rates_count;
+extern hb_rate_t    hb_audio_rates[];
+extern int          hb_audio_rates_count;
+extern int          hb_audio_rates_default;
+extern hb_rate_t    hb_audio_bitrates[];
+extern int          hb_audio_bitrates_count;
+extern int          hb_audio_bitrates_default;
+extern hb_mixdown_t hb_audio_mixdowns[];
+extern int          hb_audio_mixdowns_count;
 
 /******************************************************************************
  * hb_job_t: settings to be filled by the UI
@@ -151,10 +161,36 @@ struct hb_job_s
 	int				areBframes;
 	
     /* Audio tracks:
-         audios:         Indexes in hb_title_t's audios list, starting from 0.
-                         -1 indicates the end of the list
-	     surround:       1 if 5.1 should be preserved for AAC, 0 otherwise */
+         audios:          Indexes in hb_title_t's audios list, starting from 0.
+                          -1 indicates the end of the list
+	     audio_mixdowns:  The mixdown to be used for each audio track in audios[] */
+
+/* define some masks, used to extract the various information from the HB_AMIXDOWN_XXXX values */
+#define HB_AMIXDOWN_A52_FORMAT_MASK             0x00FF0000
+#define HB_AMIXDOWN_DISCRETE_CHANNEL_COUNT_MASK 0x0000F000
+#define HB_AMIXDOWN_FRONT_CHANNEL_COUNT_MASK    0x00000F00
+#define HB_AMIXDOWN_REAR_CHANNEL_COUNT_MASK     0x000000F0
+#define HB_AMIXDOWN_LFE_CHANNEL_COUNT_MASK      0x0000000F
+/* define the HB_AMIXDOWN_XXXX values */
+#define HB_AMIXDOWN_MONO                        0x01011100 // A52_FORMAT of A52_MONO                  = 1  = 0x01
+#define HB_AMIXDOWN_STEREO                      0x02022200 // A52_FORMAT of A52_STEREO                = 2  = 0x02
+#define HB_AMIXDOWN_DOLBY                       0x040A2310 // A52_FORMAT of A52_DOLBY                 = 10 = 0x0A
+#define HB_AMIXDOWN_DOLBYPLII                   0x084A2320 // A52_FORMAT of A52_DOLBY | A52_USE_DPLII = 74 = 0x4A
+#define HB_AMIXDOWN_6CH                         0x10176321 // A52_FORMAT of A52_3F2R | A52_LFE        = 23 = 0x17
+/* define some macros to extract the various information from the HB_AMIXDOWN_XXXX values */
+#define HB_AMIXDOWN_GET_A52_FORMAT( a ) ( ( a & HB_AMIXDOWN_A52_FORMAT_MASK ) >> 16 )
+#define HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT( a ) ( ( a & HB_AMIXDOWN_DISCRETE_CHANNEL_COUNT_MASK ) >> 12 )
+#define HB_AMIXDOWN_GET_FRONT_CHANNEL_COUNT( a ) ( ( a & HB_AMIXDOWN_FRONT_CHANNEL_COUNT_MASK ) >> 8 )
+#define HB_AMIXDOWN_GET_REAR_CHANNEL_COUNT( a ) ( ( a & HB_AMIXDOWN_REAR_CHANNEL_COUNT_MASK ) >> 4 )
+#define HB_AMIXDOWN_GET_LFE_CHANNEL_COUNT( a ) ( ( a & HB_AMIXDOWN_LFE_CHANNEL_COUNT_MASK ) )
+#define HB_AMIXDOWN_GET_NORMAL_CHANNEL_COUNT( a ) ( (( a & HB_AMIXDOWN_FRONT_CHANNEL_COUNT_MASK ) >> 8) + (( a & HB_AMIXDOWN_REAR_CHANNEL_COUNT_MASK ) >> 4) )
     int             audios[8];
+	int             audio_mixdowns[8];
+
+	/* this "surround" property will be removed shortly,
+	as soon as the AMIXDOWN code has been integrated into the Mac GUI
+	it's still included here to avoid breaking the Mac GUI short-term
+	however, it won't be applied in deca52.c etc. any more */
 	int             surround;
 
     /* Audio settings:
@@ -225,14 +261,16 @@ struct hb_audio_s
     int  codec;
     int  rate;
     int  bitrate;
-	/* channels:       The # of normal channels in the last used audio
-	   lfechannels:    The # of lfe channels in the last used audio
-	   channelsused:   The # of channels we will actually use for this job -
-	                   calculated based on surround, channels and lfechannels
-	                   in work.c */
-    int  channels;
-	int  lfechannels;
-	int channelsused;
+	/* src_discrete_front_channels: The # of discrete front channels in the source audio
+	   src_discrete_rear_channels:  The # of discrete rear channels in the source audio
+	   src_discrete_lfe_channels:   The # of discrete lfe channels in the source audio
+	   src_encoded_front_channels:  The # of front channels encoded into the source audio
+	   src_encoded_rear_channels:   The # of rear channels encoded into the source audio */
+    int src_discrete_front_channels;
+    int src_discrete_rear_channels;
+	int src_discrete_lfe_channels;
+    int src_encoded_front_channels;
+    int src_encoded_rear_channels;
 
 #ifdef __LIBHB__
     /* Internal data */
@@ -243,6 +281,10 @@ struct hb_audio_s
 
     hb_esconfig_t config;
     hb_mux_data_t * mux_data;
+
+	/* amixdown is the mixdown format to be used for this audio track */
+   	int amixdown;
+
 #endif
 };
 
@@ -380,6 +422,9 @@ struct hb_work_object_s
     hb_fifo_t         * fifo_in;
     hb_fifo_t         * fifo_out;
     hb_esconfig_t     * config;
+
+	/* amixdown is the mixdown format to be used if the work object is an audio track */
+   	int               amixdown;
 
     hb_work_private_t * private_data;
 

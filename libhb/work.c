@@ -5,6 +5,7 @@
    It may be used under the terms of the GNU General Public License. */
 
 #include "hb.h"
+#include "a52dec/a52.h"
 
 typedef struct
 {
@@ -89,7 +90,7 @@ static hb_work_object_t * getWork( int id )
 static void do_job( hb_job_t * job, int cpu_count )
 {
     hb_title_t    * title;
-    int             i;
+    int             i, j;
     hb_work_object_t * w;
     
     /* FIXME: This feels really hackish, anything better? */
@@ -218,7 +219,144 @@ static void do_job( hb_job_t * job, int cpu_count )
     {
         audio = hb_list_item( title->list_audio, i );
         hb_log( "   + %x, %s", audio->id, audio->lang );
+		
+		/* sense-check the current mixdown options */
 
+		/* log the requested mixdown */
+		for (j = 0; j < hb_audio_mixdowns_count; j++) {
+			if (hb_audio_mixdowns[j].amixdown == job->audio_mixdowns[i]) {
+				hb_log( "     + Requested mixdown: %s (%s)", hb_audio_mixdowns[j].human_readable_name, hb_audio_mixdowns[j].internal_name );
+				break;
+			}
+		}
+
+        if(audio->codec != HB_ACODEC_AC3) {
+
+			/* assume a stereo input and output for non-AC3 audio input (LPCM, MP2),
+			   regardless of the mixdown passed to us */
+            job->audio_mixdowns[i] = HB_AMIXDOWN_STEREO;
+
+		} else {
+
+			/* sense-check the AC3 mixdown */
+
+			/* audioCodecSupportsMono and audioCodecSupports6Ch are the same for now,
+			   but this may change in the future, so they are separated for flexibility */
+			int audioCodecSupportsMono = (job->acodec == HB_ACODEC_FAAC);
+			int audioCodecSupports6Ch = (job->acodec == HB_ACODEC_FAAC);
+
+			/* find out what the format of our source AC3 audio is */
+			switch (audio->config.a52.ac3flags & A52_CHANNEL_MASK) {
+			
+				/* mono sources */
+				case A52_MONO:
+				case A52_CHANNEL1:
+				case A52_CHANNEL2:
+					/* regardless of what stereo mixdown we've requested, a mono source always get mixed down
+					to mono if we can, and mixed up to stereo if we can't */
+					if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecSupportsMono == 1) {
+						job->audio_mixdowns[i] = HB_AMIXDOWN_MONO;
+					} else {
+						job->audio_mixdowns[i] = HB_AMIXDOWN_STEREO;
+					}
+					break;
+
+				/* stereo input */
+				case A52_CHANNEL:
+				case A52_STEREO:
+					/* if we've requested a mono mixdown, and it is supported, then do the mix */
+					/* use stereo if not supported */
+					if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecSupportsMono == 0) {
+						job->audio_mixdowns[i] = HB_AMIXDOWN_STEREO;
+					/* otherwise, preserve stereo regardless of if we requested something higher */
+					} else if (job->audio_mixdowns[i] > HB_AMIXDOWN_STEREO) {
+						job->audio_mixdowns[i] = HB_AMIXDOWN_STEREO;
+					}
+					break;
+
+				/* dolby (DPL1 aka Dolby Surround = 4.0 matrix-encoded) input */
+				/* the A52 flags don't allow for a way to distinguish between DPL1 and DPL2 on a DVD,
+				   so we always assume a DPL1 source for A52_DOLBY */
+				case A52_DOLBY:
+					/* if we've requested a mono mixdown, and it is supported, then do the mix */
+					/* preserve dolby if not supported */
+					if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecSupportsMono == 0) {
+						job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBY;
+					/* otherwise, preserve dolby even if we requested something higher */
+					/* a stereo mixdown will still be honoured here */
+					} else if (job->audio_mixdowns[i] > HB_AMIXDOWN_DOLBY) {
+						job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBY;
+					}
+					break;
+
+				/* 3F/2R input */
+				case A52_3F2R:
+					/* if we've requested a mono mixdown, and it is supported, then do the mix */
+					/* use dpl2 if not supported */
+					if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecSupportsMono == 0) {
+						job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBYPLII;
+					} else {
+						/* check if we have 3F2R input and also have an LFE - i.e. we have a 5.1 source) */
+						if (audio->config.a52.ac3flags & A52_LFE) {
+							/* we have a 5.1 source */
+							/* if we requested 6ch, but our audio format doesn't support it, then mix to DPLII instead */
+							if (job->audio_mixdowns[i] == HB_AMIXDOWN_6CH && audioCodecSupports6Ch == 0) {
+								job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBYPLII;
+							}
+						} else {
+							/* we have a 5.0 source, so we can't do 6ch conversion
+							default to DPL II instead */
+							if (job->audio_mixdowns[i] > HB_AMIXDOWN_DOLBYPLII) {
+								job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBYPLII;
+							}
+						}
+					}
+					/* all other mixdowns will have been preserved here */
+					break;
+
+				/* 3F/1R input */
+				case A52_3F1R:
+					/* if we've requested a mono mixdown, and it is supported, then do the mix */
+					/* use dpl1 if not supported */
+					if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecSupportsMono == 0) {
+						job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBY;
+					} else {
+						/* we have a 4.0 or 4.1 source, so we can't do DPLII or 6ch conversion
+						default to DPL I instead */
+						if (job->audio_mixdowns[i] > HB_AMIXDOWN_DOLBY) {
+							job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBY;
+						}
+					}
+					/* all other mixdowns will have been preserved here */
+					break;
+
+				default:
+					/* if we've requested a mono mixdown, and it is supported, then do the mix */
+					if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecSupportsMono == 1) {
+						job->audio_mixdowns[i] = HB_AMIXDOWN_MONO;
+					/* mix everything else down to stereo */
+					} else {
+						job->audio_mixdowns[i] = HB_AMIXDOWN_STEREO;
+					}
+
+			}			
+		}
+
+		/* log the output mixdown */
+		for (j = 0; j < hb_audio_mixdowns_count; j++) {
+			if (hb_audio_mixdowns[j].amixdown == job->audio_mixdowns[i]) {
+				hb_log( "     + Actual mixdown: %s (%s)", hb_audio_mixdowns[j].human_readable_name, hb_audio_mixdowns[j].internal_name );
+				break;
+			}
+		}
+
+		/* we now know we have a valid mixdown for the input source and the audio output format */
+		/* remember the mixdown for this track */
+		audio->amixdown = job->audio_mixdowns[i];
+
+        audio->config.vorbis.language = audio->lang_simple;
+
+		/* set up the audio work structures */
         audio->fifo_in   = hb_fifo_init( 2048 );
         audio->fifo_raw  = hb_fifo_init( 8 );
         audio->fifo_sync = hb_fifo_init( 8 );
@@ -239,6 +377,7 @@ static void do_job( hb_job_t * job, int cpu_count )
         w->fifo_in  = audio->fifo_in;
         w->fifo_out = audio->fifo_raw;
         w->config   = &audio->config;
+        w->amixdown = audio->amixdown;
         
         /* FIXME: This feels really hackish, anything better? */
         audio_w = calloc( sizeof( hb_work_object_t ), 1 );
@@ -258,11 +397,13 @@ static void do_job( hb_job_t * job, int cpu_count )
                 w = getWork( WORK_ENCVORBIS );
                 break;
         }
+
         if( job->acodec != HB_ACODEC_AC3 )
         {
             w->fifo_in  = audio->fifo_sync;
             w->fifo_out = audio->fifo_out;
             w->config   = &audio->config;
+            w->amixdown = audio->amixdown;
             
             /* FIXME: This feels really hackish, anything better? */
             audio_w = calloc( sizeof( hb_work_object_t ), 1 );
@@ -270,48 +411,8 @@ static void do_job( hb_job_t * job, int cpu_count )
         
             hb_list_add( job->list_work, audio_w );
         }
-		
-		/* store this audio's channel counts in the audio struct */
-		
-		/* we will only end up with a channelsused value other than 2
-		if we are encoding to AAC or OGM.  All other audio encodings will get
-		a stereo mix. */
-		
-		if (audio->channels == 5 && audio->lfechannels == 1) {
-			/* we have a 5.1 AC-3 source soundtrack */
-			if ((job->acodec == HB_ACODEC_FAAC || job->acodec == HB_ACODEC_VORBIS) && job->surround) {
-				/* we're going to be encoding to a 6ch-supporting format,
-				and have turned on the "preserve 5.1" flag */
-				audio->channelsused = 6;
-			} else {
-				/* mix 5.1 down to Dolby Digital (2-channel) */
-				audio->channelsused = 2;
-			}
-		} else if (audio->channels == 1 && audio->lfechannels == 0) {
-			/* we have a 1.0 mono AC-3 source soundtrack */
-			if (job->acodec == HB_ACODEC_FAAC || job->acodec == HB_ACODEC_VORBIS) {
-				/* we're going to be encoding to a 1ch-supporting format,
-				so mix down to a mono track */
-				audio->channelsused = 1;
-			} else {
-				/* mix up the mono track to stereo */
-				audio->channelsused = 2;
-			}
-		} else {
-			/* mix everything else down to stereo */
-			/* dolby pro-logic will be preserved in deca52.c if necessary
-			by referring to the value of audio->config->a52.ac3flags */
-			audio->channelsused = 2;
-		}
-		
-		/* remember the number of source channels, so that deca52.c knows what source we had */
-		audio->config.a52.channels = audio->channels;
-		audio->config.a52.lfechannels = audio->lfechannels;
-		
-		/* pass round the number of channels we actually used */
-        audio->config.aac.channelsused = audio->config.a52.channelsused = audio->config.vorbis.channelsused = audio->channelsused;
-        audio->config.vorbis.language = audio->lang_simple;
-		
+
+
     }
 
     /* Init read & write threads */

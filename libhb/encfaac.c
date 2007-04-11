@@ -20,7 +20,7 @@ struct hb_work_private_s
     hb_list_t     * list;
     int64_t         pts;
 	
-	int             channelsused;
+	int             out_discrete_channels;
 
 };
 
@@ -54,9 +54,9 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
     pv->job   = job;
 
 	/* pass the number of channels used into the private work data */
-	pv->channelsused = w->config->aac.channelsused;
+	pv->out_discrete_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(w->amixdown);
 
-    pv->faac = faacEncOpen( job->arate, pv->channelsused, &pv->input_samples,
+    pv->faac = faacEncOpen( job->arate, pv->out_discrete_channels, &pv->input_samples,
                            &pv->output_bytes );
     pv->buf  = malloc( pv->input_samples * sizeof( float ) );
     
@@ -65,7 +65,7 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
     cfg->aacObjectType = LOW;
     cfg->allowMidside  = 1;
 	
-	if (pv->channelsused == 6) {
+	if (pv->out_discrete_channels == 6) {
 		/* we are preserving 5.1 audio into 6-channel AAC,
 		so indicate that we have an lfe channel */
 		cfg->useLfe    = 1;
@@ -74,12 +74,12 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
 	}
 
     cfg->useTns        = 0;
-    cfg->bitRate       = job->abitrate * 1000 / pv->channelsused; /* Per channel */
+    cfg->bitRate       = job->abitrate * 1000 / pv->out_discrete_channels; /* Per channel */
     cfg->bandWidth     = 0;
     cfg->outputFormat  = 0;
     cfg->inputFormat   =  FAAC_INPUT_FLOAT;
 	
-	if (pv->channelsused == 6) {
+	if (pv->out_discrete_channels == 6) {
 		/* we are preserving 5.1 audio into 6-channel AAC, and need to
 		re-map the output of deca52 into our own mapping - the mapping
 		below is the default mapping expected by QuickTime */
@@ -147,8 +147,8 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
                       &pts, &pos );
 
     buf        = hb_buffer_init( pv->output_bytes );
-    buf->start = pts + 90000 * pos / pv->channelsused / sizeof( float ) / pv->job->arate;
-    buf->stop  = buf->start + 90000 * pv->input_samples / pv->job->arate / pv->channelsused;
+    buf->start = pts + 90000 * pos / pv->out_discrete_channels / sizeof( float ) / pv->job->arate;
+    buf->stop  = buf->start + 90000 * pv->input_samples / pv->job->arate / pv->out_discrete_channels;
     buf->size  = faacEncEncode( pv->faac, (int32_t *) pv->buf,
             pv->input_samples, buf->data, pv->output_bytes );
     buf->key   = 1;

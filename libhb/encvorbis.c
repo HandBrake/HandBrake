@@ -37,7 +37,7 @@ struct hb_work_private_s
     uint64_t        pts;
 
     hb_list_t     * list;
-    int           channelsused;
+    int           out_discrete_channels;
     int           channel_map[6];
 };
 
@@ -48,7 +48,7 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
 
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
-    pv->channelsused = w->config->vorbis.channelsused;
+    pv->out_discrete_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(w->amixdown);
 
     pv->job   = job;
 
@@ -56,7 +56,7 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
 
     /* init */
     vorbis_info_init( &pv->vi );
-    if( vorbis_encode_setup_managed( &pv->vi, pv->channelsused,
+    if( vorbis_encode_setup_managed( &pv->vi, pv->out_discrete_channels,
           job->arate, -1, 1000 * job->abitrate, -1 ) ||
         vorbis_encode_ctl( &pv->vi, OV_ECTL_RATEMANAGE_AVG, NULL ) ||
           vorbis_encode_setup_init( &pv->vi ) )
@@ -84,12 +84,12 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
                 header[i].packet, header[i].bytes );
     }
 
-    pv->input_samples = pv->channelsused * OGGVORBIS_FRAME_SIZE;
+    pv->input_samples = pv->out_discrete_channels * OGGVORBIS_FRAME_SIZE;
     pv->buf = malloc( pv->input_samples * sizeof( float ) );
 
     pv->list = hb_list_init();
 
-    switch (pv->channelsused) {
+    switch (pv->out_discrete_channels) {
         case 1:
             pv->channel_map[0] = 0;
             break;
@@ -102,7 +102,7 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
             pv->channel_map[5] = 3;
             break;
         default:
-            hb_log("encvorbis.c: Unable to correctly proccess %d channels, assuming stereo.", pv->channelsused);
+            hb_log("encvorbis.c: Unable to correctly proccess %d channels, assuming stereo.", pv->out_discrete_channels);
         case 2:
             // Assume stereo
             pv->channel_map[0] = 0;
@@ -199,9 +199,9 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
     buffer = vorbis_analysis_buffer( &pv->vd, OGGVORBIS_FRAME_SIZE );
     for( i = 0; i < OGGVORBIS_FRAME_SIZE; i++ )
     {
-        for( j = 0; j < pv->channelsused; j++)
+        for( j = 0; j < pv->out_discrete_channels; j++)
         {
-            buffer[j][i] = ((float *) pv->buf)[(pv->channelsused * i + pv->channel_map[j])] / 32768.f;
+            buffer[j][i] = ((float *) pv->buf)[(pv->out_discrete_channels * i + pv->channel_map[j])] / 32768.f;
         }
     }
     vorbis_analysis_wrote( &pv->vd, OGGVORBIS_FRAME_SIZE );

@@ -29,7 +29,7 @@ struct hb_work_private_s
 
     hb_list_t   * list;
 	
-	int           channelsused;
+	int           out_discrete_channels;
 	
 };
 
@@ -69,27 +69,11 @@ int deca52Init( hb_work_object_t * w, hb_job_t * job )
 	/* Decide what format we want out of a52dec
 	work.c has already done some of this deduction for us in do_job() */
 	
-	if (w->config->a52.channelsused == 6) {
-		/* we're going to be encoding to a 6ch-supporting format,
-		and have turned on the "preserve 5.1" flag */
-		pv->flags_out = A52_3F2R | A52_LFE;
-	} else if (w->config->a52.channelsused == 1) {
-		/* we're going to be encoding to a 1ch-supporting format,
-		so mix down to a mono track */
-		pv->flags_out = A52_MONO;
-	} else if (w->config->a52.channelsused == 2 && w->config->a52.channels == 5 && w->config->a52.lfechannels == 1) {
-		/* we are mixing a 5.1 source down to stereo, so use dolby surround */
-		pv->flags_out = A52_DOLBY;
-	} else if (w->config->a52.channelsused == 2 && ((w->config->a52.ac3flags & A52_CHANNEL_MASK) == A52_DOLBY)) {
-		/* we have a dolby stereo surround source, so preserve it */
-		pv->flags_out = A52_DOLBY;
-	} else {
-		/* mix everything else down to plain stereo */
-		pv->flags_out = A52_STEREO;
-	}
+	pv->flags_out = HB_AMIXDOWN_GET_A52_FORMAT(w->amixdown);
 
 	/* pass the number of channels used into the private work data */
-	pv->channelsused = w->config->a52.channelsused;
+	/* will only be actually used if we're not doing AC3 passthru */
+	pv->out_discrete_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(w->amixdown);
 
     pv->level     = 32768.0;
 
@@ -206,7 +190,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     a52_frame( pv->state, pv->frame, &pv->flags_out, &pv->level, 0 );
 
     /* 6 blocks per frame, 256 samples per block, channelsused channels */
-    buf        = hb_buffer_init( 6 * 256 * pv->channelsused * sizeof( float ) );
+    buf        = hb_buffer_init( 6 * 256 * pv->out_discrete_channels * sizeof( float ) );
     buf->start = pts + ( pos / pv->size ) * 6 * 256 * 90000 / pv->rate;
     buf->stop  = buf->start + 6 * 256 * 90000 / pv->rate;
 
@@ -217,14 +201,14 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
 
         a52_block( pv->state );
         samples_in  = a52_samples( pv->state );
-        samples_out = ((float *) buf->data) + 256 * pv->channelsused * i;
+        samples_out = ((float *) buf->data) + 256 * pv->out_discrete_channels * i;
 
         /* Interleave */
         for( j = 0; j < 256; j++ )
         {
-			for ( k = 0; k < pv->channelsused; k++ )
+			for ( k = 0; k < pv->out_discrete_channels; k++ )
 			{
-				samples_out[(pv->channelsused*j)+k]   = samples_in[(256*k)+j]; // DJA
+				samples_out[(pv->out_discrete_channels*j)+k]   = samples_in[(256*k)+j]; // DJA
 			}
         }
     }

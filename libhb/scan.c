@@ -468,39 +468,76 @@ static void LookForAC3( hb_title_t * title, hb_buffer_t * b )
                 case A52_MONO:
                 case A52_CHANNEL1:
                 case A52_CHANNEL2:
-                    audio->channels = 1;
+                    audio->src_discrete_front_channels = 1;
+                    audio->src_discrete_rear_channels = 0;
+                    audio->src_encoded_front_channels = 1;
+                    audio->src_encoded_rear_channels = 0;
                     break;
                 case A52_STEREO:
-                case A52_DOLBY:
                 case A52_CHANNEL:
-                    audio->channels = 2;
+                    audio->src_discrete_front_channels = 2;
+                    audio->src_discrete_rear_channels = 0;
+                    audio->src_encoded_front_channels = 2;
+                    audio->src_encoded_rear_channels = 0;
+                    break;
+                case A52_DOLBY:
+                    audio->src_discrete_front_channels = 2;
+                    audio->src_discrete_rear_channels = 0;
+                    audio->src_encoded_front_channels = 3;
+                    audio->src_encoded_rear_channels = 1;
                     break;
                 case A52_3F:
+                    audio->src_discrete_front_channels = 3;
+                    audio->src_discrete_rear_channels = 0;
+                    audio->src_encoded_front_channels = 3;
+                    audio->src_encoded_rear_channels = 0;
+                    break;
                 case A52_2F1R:
-                    audio->channels = 3;
+                    audio->src_discrete_front_channels = 2;
+                    audio->src_discrete_rear_channels = 1;
+                    audio->src_encoded_front_channels = 2;
+                    audio->src_encoded_rear_channels = 1;
                     break;
                 case A52_3F1R:
-                case A52_2F2R:
-                    audio->channels = 4;
+                    audio->src_discrete_front_channels = 3;
+                    audio->src_discrete_rear_channels = 1;
+                    audio->src_encoded_front_channels = 3;
+                    audio->src_encoded_rear_channels = 1;
+                    break;
+				case A52_2F2R:
+                    audio->src_discrete_front_channels = 2;
+                    audio->src_discrete_rear_channels = 2;
+                    audio->src_encoded_front_channels = 2;
+                    audio->src_encoded_rear_channels = 2;
                     break;
                 case A52_3F2R:
-                    audio->channels = 5;
+                    audio->src_discrete_front_channels = 3;
+                    audio->src_discrete_rear_channels = 2;
+                    audio->src_encoded_front_channels = 3;
+                    audio->src_encoded_rear_channels = 2;
                     break;
             }
 
 			if (flags & A52_LFE) {
-				audio->lfechannels = 1;
+                audio->src_discrete_lfe_channels = 1;
 			} else {
-				audio->lfechannels = 0;
+                audio->src_discrete_lfe_channels = 0;
 			}
 			
-			/* store the AC3 tags for future reference
+			/* store the AC3 FLAGS for future reference
 			This enables us to find out if we had a stereo or Dolby source later on */
 			audio->config.a52.ac3flags = flags;
 
             /* XXX */
-            sprintf( audio->lang + strlen( audio->lang ),
-                     " (%d.%d ch)", audio->channels, audio->lfechannels );
+			if ( (flags & A52_CHANNEL_MASK) == A52_DOLBY ) {
+				sprintf( audio->lang + strlen( audio->lang ),
+                     " (Dolby Surround)" );
+			} else {
+				sprintf( audio->lang + strlen( audio->lang ),
+                     " (%d.%d ch)",
+					 audio->src_discrete_front_channels + audio->src_discrete_rear_channels, audio->src_discrete_lfe_channels );
+			}
+
             break;
         }
     }

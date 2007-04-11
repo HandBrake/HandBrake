@@ -196,7 +196,7 @@ static void InitAudio( hb_work_object_t * w, int i )
 
         c->bit_rate    = sync->audio->bitrate;
         c->sample_rate = sync->audio->rate;
-        c->channels    = sync->audio->channels;
+        c->channels    = 2;
 
         if( avcodec_open( c, codec ) < 0 )
         {
@@ -224,7 +224,7 @@ static void InitAudio( hb_work_object_t * w, int i )
     {
         /* Initialize libsamplerate */
         int error;
-        sync->state             = src_new( SRC_LINEAR, sync->audio->channelsused, &error );
+        sync->state             = src_new( SRC_LINEAR, HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(sync->audio->amixdown), &error );
         sync->data.end_of_input = 0;
     }
 }
@@ -502,7 +502,7 @@ static void SyncAudio( hb_work_object_t * w, int i )
 
             int count_in, count_out;
 
-            count_in  = buf_raw->size / audio->channelsused / sizeof( float );
+            count_in  = buf_raw->size / HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown) / sizeof( float );
             count_out = ( buf_raw->stop - buf_raw->start ) * job->arate / 90000;
             if( buf->start < pts_expected - 1500 )
                 count_out--;
@@ -516,7 +516,7 @@ static void SyncAudio( hb_work_object_t * w, int i )
             sync->data.src_ratio = (double) sync->data.output_frames /
                                    (double) sync->data.input_frames;
 
-            buf = hb_buffer_init( sync->data.output_frames * audio->channelsused *
+            buf = hb_buffer_init( sync->data.output_frames * HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown) *
                                   sizeof( float ) );
             sync->data.data_out = (float *) buf->data;
             if( src_process( sync->state, &sync->data ) )
@@ -526,7 +526,7 @@ static void SyncAudio( hb_work_object_t * w, int i )
             }
             hb_buffer_close( &buf_raw );
 
-            buf->size = sync->data.output_frames_gen * audio->channelsused * sizeof( float );
+            buf->size = sync->data.output_frames_gen * HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown) * sizeof( float );
 
             /* Set dates for resampled data */
             buf->start = start;
@@ -609,7 +609,7 @@ static void InsertSilence( hb_work_object_t * w, int i )
     }
     else
     {
-        buf        = hb_buffer_init( sync->audio->channelsused * job->arate / 20 *
+        buf        = hb_buffer_init( HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(sync->audio->amixdown) * job->arate / 20 *
                                      sizeof( float ) );
         buf->start = sync->count_frames * 90000 / job->arate;
         buf->stop  = buf->start + 90000 / 20;
