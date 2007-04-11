@@ -1380,7 +1380,7 @@ static int FormatSettings[3][4] =
 			} else {
 				audio = (hb_audio_t *) hb_list_item( fTitle->list_audio, job->audios[thisaudio] );
 				if (audio != NULL) {
-					if (audio->channels == 5 && audio->lfechannels == 1) {
+					if (audio->src_discrete_front_channels == 3 && audio->src_discrete_rear_channels == 3 && audio->src_discrete_lfe_channels == 1) {
 						foundfiveoneaudio = true;
 						doneaudios = true; /* as it doesn't matter if we find any more! */
 					}
