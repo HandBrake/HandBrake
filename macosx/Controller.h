@@ -170,6 +170,7 @@
 - (IBAction) EncoderPopUpChanged: (id) sender;
 - (IBAction) SetEnabledStateOfAudioMixdownControls: (id) sender;
 - (IBAction) AudioTrackPopUpChanged: (id) sender;
+- (IBAction) AudioTrackPopUpChanged: (id) sender mixdownToUse: (int) mixdownToUse;
 
 - (IBAction) BrowseFile: (id) sender;
 - (void)     BrowseFileDone: (NSSavePanel *) sheet

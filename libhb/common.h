@@ -92,6 +92,8 @@ extern int          hb_audio_bitrates_count;
 extern int          hb_audio_bitrates_default;
 extern hb_mixdown_t hb_audio_mixdowns[];
 extern int          hb_audio_mixdowns_count;
+int hb_mixdown_get_mixdown_from_short_name( const char * short_name );
+const char * hb_mixdown_get_short_name_from_mixdown( int amixdown );
 
 /******************************************************************************
  * hb_job_t: settings to be filled by the UI

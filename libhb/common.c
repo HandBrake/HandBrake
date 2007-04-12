@@ -45,6 +45,32 @@ hb_mixdown_t hb_audio_mixdowns[] =
 int hb_audio_mixdowns_count = sizeof( hb_audio_mixdowns ) /
                               sizeof( hb_mixdown_t );
 
+int hb_mixdown_get_mixdown_from_short_name( const char * short_name )
+{
+    int i;
+    for (i = 0; i < hb_audio_mixdowns_count; i++)
+    {
+        if (strcmp(hb_audio_mixdowns[i].short_name, short_name) == 0)
+        {
+            return hb_audio_mixdowns[i].amixdown;
+        }
+    }
+    return 0;
+}
+
+const char * hb_mixdown_get_short_name_from_mixdown( int amixdown )
+{
+    int i;
+    for (i = 0; i < hb_audio_mixdowns_count; i++)
+    {
+        if (hb_audio_mixdowns[i].amixdown == amixdown)
+        {
+            return hb_audio_mixdowns[i].short_name;
+        }
+    }
+    return "";
+}
+
 /**********************************************************************
  * hb_reduce
  **********************************************************************

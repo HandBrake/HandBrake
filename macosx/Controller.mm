@@ -1170,8 +1170,8 @@ static int FormatSettings[3][4] =
 
 	/* changing the title may have changed the audio channels on offer, */
 	/* so call AudioTrackPopUpChanged for both audio tracks to update the mixdown popups */
-	[self AudioTrackPopUpChanged: fAudLang1PopUp];
-	[self AudioTrackPopUpChanged: fAudLang2PopUp];
+	[self AudioTrackPopUpChanged: fAudLang1PopUp mixdownToUse: 0];
+	[self AudioTrackPopUpChanged: fAudLang2PopUp mixdownToUse: 0];
 
 }
 
@@ -1269,8 +1269,8 @@ static int FormatSettings[3][4] =
 
 	/* changing the format may mean that we can / can't offer mono or 6ch, */
 	/* so call AudioTrackPopUpChanged for both audio tracks to update the mixdown popups */
-	[self AudioTrackPopUpChanged: fAudLang1PopUp];
-	[self AudioTrackPopUpChanged: fAudLang2PopUp];
+	[self AudioTrackPopUpChanged: fAudLang1PopUp mixdownToUse: 0];
+	[self AudioTrackPopUpChanged: fAudLang2PopUp mixdownToUse: 0];
 
 	/* We call method method to change UI to reflect whether a preset is used or not*/
 	[self CustomSettingUsed: sender];	
@@ -1315,8 +1315,8 @@ static int FormatSettings[3][4] =
 
 	/* changing the codecs on offer may mean that we can / can't offer mono or 6ch, */
 	/* so call AudioTrackPopUpChanged for both audio tracks to update the mixdown popups */
-	[self AudioTrackPopUpChanged: fAudLang1PopUp];
-	[self AudioTrackPopUpChanged: fAudLang2PopUp];
+	[self AudioTrackPopUpChanged: fAudLang1PopUp mixdownToUse: 0];
+	[self AudioTrackPopUpChanged: fAudLang2PopUp mixdownToUse: 0];
 
     [self CalculateBitrate: sender];
     /* We call method method to change UI to reflect whether a preset is used or not*/
@@ -1370,6 +1370,11 @@ static int FormatSettings[3][4] =
 }
 
 - (IBAction) AudioTrackPopUpChanged: (id) sender
+{
+    [self AudioTrackPopUpChanged: sender mixdownToUse: 0];
+}
+
+- (IBAction) AudioTrackPopUpChanged: (id) sender mixdownToUse: (int) mixdownToUse
 {
 
     /* make sure we have a selected title before continuing */
@@ -1517,16 +1522,26 @@ static int FormatSettings[3][4] =
                 
                 /* for now, this is hard-coded to a "best" mixdown of HB_AMIXDOWN_DOLBYPLII */
                 /* ultimately this should be a prefs option */
-                int prefsMixdown = HB_AMIXDOWN_DOLBYPLII;
+                int useMixdown;
                 
-                /* if prefsMixdown > maxMixdownUsed, then use maxMixdownUsed */
-                if (prefsMixdown > maxMixdownUsed) prefsMixdown = maxMixdownUsed;
+                /* if we passed in a mixdown to use - in order to load a preset - then try and use it */
+                if (mixdownToUse > 0)
+                {
+                    useMixdown = mixdownToUse;
+                }
+                else
+                {
+                    useMixdown = HB_AMIXDOWN_DOLBYPLII;
+                }
+                
+                /* if useMixdown > maxMixdownUsed, then use maxMixdownUsed */
+                if (useMixdown > maxMixdownUsed) useMixdown = maxMixdownUsed;
 
-                /* if prefsMixdown < minMixdownUsed, then use minMixdownUsed */
-                if (prefsMixdown < minMixdownUsed) prefsMixdown = minMixdownUsed;
+                /* if useMixdown < minMixdownUsed, then use minMixdownUsed */
+                if (useMixdown < minMixdownUsed) useMixdown = minMixdownUsed;
 
                 /* select the (possibly-amended) preferred mixdown */
-                [mixdownPopUp selectItemWithTag: prefsMixdown];
+                [mixdownPopUp selectItemWithTag: useMixdown];
             
             }
 
@@ -1832,8 +1847,24 @@ the user is using "Custom" settings by determining the sender*/
 	/*Audio*/
 	/* Audio Language One*/
 	[preset setObject:[fAudLang1PopUp titleOfSelectedItem] forKey:@"AudioLang1"];
-	/* Audio Language One Surround Sound Checkbox*/
-//	[preset setObject:[NSNumber numberWithInt:[fAudLang1SurroundCheck state]] forKey:@"AudioLang1Surround"];
+	/* Audio Track one mixdown */
+    if ([fAudLang1PopUp indexOfSelectedItem] > 0) {
+        [preset setObject:[NSString stringWithCString:hb_mixdown_get_short_name_from_mixdown([[fAudTrack1MixPopUp selectedItem] tag])] forKey:@"AudioLang1Mixdown"];
+    }
+    else
+    {
+        [preset setObject:[NSString stringWithCString:""] forKey:@"AudioLang1Mixdown"];
+    }
+	/* Audio Language Two*/
+	[preset setObject:[fAudLang2PopUp titleOfSelectedItem] forKey:@"AudioLang2"];
+	/* Audio Track Two mixdown */
+    if ([fAudLang2PopUp indexOfSelectedItem] > 0) {
+        [preset setObject:[NSString stringWithCString:hb_mixdown_get_short_name_from_mixdown([[fAudTrack2MixPopUp selectedItem] tag])] forKey:@"AudioLang2Mixdown"];
+    }
+    else
+    {
+        [preset setObject:[NSString stringWithCString:""] forKey:@"AudioLang2Mixdown"];
+    }
 	/* Audio Sample Rate*/
 	[preset setObject:[fAudRatePopUp titleOfSelectedItem] forKey:@"AudioSampleRate"];
 	/* Audio Bitrate Rate*/
@@ -2120,7 +2151,6 @@ the user is using "Custom" settings by determining the sender*/
 		[fDisplayX264Options setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"x264Option"]]];
 		/* Lets run through the following functions to get variables set there */
 		[self EncoderPopUpChanged: NULL];
-		[self AudioTrackPopUpChanged: NULL];
 		[self CalculateBitrate: NULL];
 		
 		/* Video quality */
@@ -2145,9 +2175,45 @@ the user is using "Custom" settings by determining the sender*/
 		/*Audio*/
 		/* Audio Language One*/
 		[fAudLang1PopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioLang1"]]];
-		/* Audio Language One Surround Sound Checkbox*/
-//		[fAudLang1SurroundCheck setState:[[chosenPreset objectForKey:@"AudioLang1Surround"] intValue]];
-		[self AudioTrackPopUpChanged: NULL];
+		/* We check to make sure something is selected for track 1 */
+		if ([fAudLang1PopUp indexOfSelectedItem] == -1)
+		{
+			/* If not we choose the first source in the track 1 dropdown */
+			[fAudLang1PopUp selectItemAtIndex: 0];
+		}
+
+        /* if the preset contains a mixdown value for track 1, then try and load it */
+        /* if the preset contains the empty string for this value, then we'll get
+           a mixdown of 0 from hb_mixdown_get_mixdown_from_short_name,
+           which will be correctly ignored by AudioTrackPopUpChanged */
+        /* if the mixdown is unavailable, AudioTrackPopUpChanged will choose the next best mixdown */
+        char cBuffer1[32];
+        NSString * short_name1 = [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioLang1Mixdown"]];
+        [short_name1 getCString:cBuffer1];
+        int mixdown1 = hb_mixdown_get_mixdown_from_short_name(cBuffer1);
+        [self AudioTrackPopUpChanged: fAudLang1PopUp mixdownToUse: mixdown1];
+
+		/* Audio Language Two*/
+		[fAudLang2PopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioLang2"]]];
+		/* We check to make sure something is selected for track 2 */
+		if ([fAudLang2PopUp indexOfSelectedItem] == -1)
+		{
+			/* If not we choose "None" in the track 2 dropdown */
+			[fAudLang2PopUp selectItemWithTitle: [NSString stringWithFormat:@"None"]];
+			//[self SetEnabledStateOfAudioMixdownControls: sender];
+		}
+		/* if the preset contains a mixdown value for track 2, then try and load it */
+        /* if the preset contains the empty string for this value, then we'll get
+           a mixdown of 0 from hb_mixdown_get_mixdown_from_short_name,
+           which will be correctly ignored by AudioTrackPopUpChanged */
+        /* if the mixdown is unavailable, AudioTrackPopUpChanged will choose the next best mixdown */
+        char cBuffer2[32];
+        NSString * short_name2 = [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioLang2Mixdown"]];
+        [short_name2 getCString:cBuffer2];
+        int mixdown2 = hb_mixdown_get_mixdown_from_short_name(cBuffer2);
+        [self AudioTrackPopUpChanged: fAudLang2PopUp mixdownToUse: mixdown2];
+	
+		
 		/* Audio Sample Rate*/
 		[fAudRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioSampleRate"]]];
 		/* Audio Bitrate Rate*/
