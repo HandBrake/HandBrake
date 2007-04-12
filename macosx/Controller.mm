@@ -1686,6 +1686,8 @@ the user is using "Custom" settings by determining the sender*/
 
 - (IBAction) ShowAddPresetPanel: (id) sender
 {
+    /* Deselect the currently selected Preset if there is one*/
+		[tableView deselectRow:[tableView selectedRow]];
     /* If we have MP4, AVC H.264 and x264 Main then we enable the x264 Options field for the
 	 Add Preset window we are about to open. We do this before we actually open the panel,
 	 as doing it after causes it to stick from the last selection for some reason. */
@@ -1699,7 +1701,9 @@ the user is using "Custom" settings by determining the sender*/
 		[fPresetNewX264Opt setEditable: NO];
 		[fPresetNewX264OptLabel setEnabled: NO];
 	}
-	
+		/* Erase info from the input fields */
+	[fPresetNewName setStringValue: @""];
+	[fPresetNewX264Opt setString:@""];
 	/* Show the panel */
 	[NSApp beginSheet: fAddPresetPanel modalForWindow: fWindow
         modalDelegate: NULL didEndSelector: NULL contextInfo: NULL];
@@ -1711,6 +1715,9 @@ the user is using "Custom" settings by determining the sender*/
 }
 - (IBAction) CloseAddPresetPanel: (id) sender
 {
+	/* Erase info from the input fields */
+	[fPresetNewName setStringValue: @""];
+	[fPresetNewX264Opt setString:@""];
     [NSApp stopModal];
 }
    /* We use this method to recreate new, updated factory
@@ -1757,7 +1764,11 @@ the user is using "Custom" settings by determining the sender*/
 {
     /* Here we create a custom user preset */
 	[UserPresets addObject:[self CreatePreset]];
+
+	/* We stop the modal window for the new preset */
+	[NSApp stopModal];
     [self AddPreset];
+	
 
 }
 - (void)AddPreset
@@ -1774,10 +1785,7 @@ the user is using "Custom" settings by determining the sender*/
 	NSArray *sortedArray=[UserPresets sortedArrayUsingDescriptors:sortDescriptors];
 	[UserPresets setArray:sortedArray];
 	
-	/* We stop the modal window for the new preset */
-	[fPresetNewName setStringValue: @""];
-	//[fPresetNewX264Opt setStringValue: @""];
-	[NSApp stopModal];
+	
 	/* We Reload the New Table data for presets */
     [tableView reloadData];
    /* We save all of the preset data here */
