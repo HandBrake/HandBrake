@@ -403,6 +403,12 @@ static int HandleEvents( hb_handle_t * h )
                     job->audios[0] = -1;
                 }
             }
+			else
+			{
+			    /* default to the first audio track if none has been specified */
+			    job->audios[0] = 0;
+			    job->audio_mixdowns[0] = audio_mixdown;
+			}
             if( abitrate )
             {
                 job->abitrate = abitrate;
