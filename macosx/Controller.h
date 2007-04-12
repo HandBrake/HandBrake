@@ -106,10 +106,15 @@
     /* Audio box */
     IBOutlet NSTextField         * fAudLang1Field;
     IBOutlet NSPopUpButton       * fAudLang1PopUp;
-    IBOutlet NSButton		     * fAudLang1SurroundCheck;
     IBOutlet NSTextField         * fAudLang2Field;
     IBOutlet NSPopUpButton       * fAudLang2PopUp;
-    IBOutlet NSTextField         * fAudRateField;
+	/* New Audio Mix PopUps */
+	IBOutlet NSTextField         * fAudTrack1MixLabel;
+	IBOutlet NSPopUpButton       * fAudTrack1MixPopUp;
+    IBOutlet NSTextField         * fAudTrack2MixLabel;
+	IBOutlet NSPopUpButton       * fAudTrack2MixPopUp;
+	
+	IBOutlet NSTextField         * fAudRateField;
     IBOutlet NSPopUpButton       * fAudRatePopUp;
     IBOutlet NSTextField         * fAudBitrateField;
     IBOutlet NSPopUpButton       * fAudBitratePopUp;
@@ -163,8 +168,8 @@
 - (IBAction) FormatPopUpChanged: (id) sender;
 - (IBAction) CodecsPopUpChanged: (id) sender;
 - (IBAction) EncoderPopUpChanged: (id) sender;
-- (IBAction) Check6ChannelAACExtraction: (id) sender;
-- (IBAction) LanguagePopUpChanged: (id) sender;
+- (IBAction) SetEnabledStateOfAudioMixdownControls: (id) sender;
+- (IBAction) AudioTrackPopUpChanged: (id) sender;
 
 - (IBAction) BrowseFile: (id) sender;
 - (void)     BrowseFileDone: (NSSavePanel *) sheet

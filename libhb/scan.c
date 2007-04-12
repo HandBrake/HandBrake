@@ -524,9 +524,12 @@ static void LookForAC3( hb_title_t * title, hb_buffer_t * b )
                 audio->src_discrete_lfe_channels = 0;
 			}
 			
-			/* store the AC3 FLAGS for future reference
+			/* store the AC3 flags for future reference
 			This enables us to find out if we had a stereo or Dolby source later on */
 			audio->config.a52.ac3flags = flags;
+
+			/* store the ac3 flags in the public ac3flags property too, so we can access it from the GUI */
+			audio->ac3flags = audio->config.a52.ac3flags;
 
             /* XXX */
 			if ( (flags & A52_CHANNEL_MASK) == A52_DOLBY ) {

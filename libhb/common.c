@@ -37,11 +37,11 @@ int hb_audio_bitrates_count = sizeof( hb_audio_bitrates ) /
 int hb_audio_bitrates_default = 8; /* 128 kbps */
 
 hb_mixdown_t hb_audio_mixdowns[] =
-{ { "Mono",               "HB_AMIXDOWN_MONO",      HB_AMIXDOWN_MONO      },
-  { "Stereo",             "HB_AMIXDOWN_STEREO",    HB_AMIXDOWN_STEREO    },
-  { "Dolby Surround",     "HB_AMIXDOWN_DOLBY",     HB_AMIXDOWN_DOLBY     },
-  { "Dolby Pro Logic II", "HB_AMIXDOWN_DOLBYPLII", HB_AMIXDOWN_DOLBYPLII },
-  { "6-channel discrete", "HB_AMIXDOWN_6CH",       HB_AMIXDOWN_6CH       } };
+{ { "Mono",               "HB_AMIXDOWN_MONO",      "mono",   HB_AMIXDOWN_MONO      },
+  { "Stereo",             "HB_AMIXDOWN_STEREO",    "stereo", HB_AMIXDOWN_STEREO    },
+  { "Dolby Surround",     "HB_AMIXDOWN_DOLBY",     "dpl1",   HB_AMIXDOWN_DOLBY     },
+  { "Dolby Pro Logic II", "HB_AMIXDOWN_DOLBYPLII", "dpl2",   HB_AMIXDOWN_DOLBYPLII },
+  { "6-channel discrete", "HB_AMIXDOWN_6CH",       "6ch",    HB_AMIXDOWN_6CH       } };
 int hb_audio_mixdowns_count = sizeof( hb_audio_mixdowns ) /
                               sizeof( hb_mixdown_t );
 

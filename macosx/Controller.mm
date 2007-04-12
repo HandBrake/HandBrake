@@ -5,6 +5,7 @@
    It may be used under the terms of the GNU General Public License. */
 
 #include "Controller.h"
+#include "a52dec/a52.h"
 
 #define _(a) NSLocalizedString(a,NULL)
 
@@ -577,6 +578,7 @@ static int FormatSettings[3][4] =
         fVidEncoderField, fVidEncoderPopUp, fVidQualityField,
         fVidQualityMatrix, fVidGrayscaleCheck, fSubField, fSubPopUp,
         fAudLang1Field, fAudLang1PopUp, fAudLang2Field, fAudLang2PopUp,
+        fAudTrack1MixLabel, fAudTrack1MixPopUp, fAudTrack2MixLabel, fAudTrack2MixPopUp,
         fAudRateField, fAudRatePopUp, fAudBitrateField,
         fAudBitratePopUp, fPictureButton, fQueueCheck, 
 		fPicSrcWidth,fPicSrcHeight,fPicSettingWidth,fPicSettingHeight,
@@ -605,12 +607,13 @@ static int FormatSettings[3][4] =
     }
 	
 	if (b) {
-		/* if we're enabling the interface, check if we should / should't offer 6-channel AAC extraction */
-		[self Check6ChannelAACExtraction: NULL];
+
+        /* if we're enabling the interface, check if the audio mixdown controls need to be enabled or not */
+        /* these will have been enabled by the mass control enablement above anyway, so we're sense-checking it here */
+        [self SetEnabledStateOfAudioMixdownControls: NULL];
 	
 	} else {
-		/* if we're disabling the interface, turn it off */
-		[fAudLang1SurroundCheck setEnabled: NO];
+
 		[tableView setEnabled: NO];
 	
 	}
@@ -850,12 +853,17 @@ static int FormatSettings[3][4] =
                      indexOfSelectedItem]].rate;
     job->abitrate = hb_audio_bitrates[[fAudBitratePopUp
                         indexOfSelectedItem]].rate;
-	/* have we selected that 5.1 should be extracted as AAC? */
-	if (job->acodec == HB_ACODEC_FAAC && [fAudLang1SurroundCheck isEnabled] && [fAudLang1SurroundCheck state] == NSOnState) {
-		job->surround = 1;
-	} else {
-		job->surround = 0;
-	}
+
+    /* Audio mixdown(s) */
+    if (job->audios[0] > -1)
+    {
+        job->audio_mixdowns[0] = [[fAudTrack1MixPopUp selectedItem] tag];
+    }
+
+    if (job->audios[1] > -1)
+    {
+        job->audio_mixdowns[1] = [[fAudTrack2MixPopUp selectedItem] tag];
+    }
 
 }
 
@@ -1160,11 +1168,10 @@ static int FormatSettings[3][4] =
 	
 	/* END pri */
 
-	/* changing the title may have changed the audio channels on offer, so */
-	/* check if this change means we should / should't offer 6-channel AAC extraction */
-	[self Check6ChannelAACExtraction: sender];
-    
-	
+	/* changing the title may have changed the audio channels on offer, */
+	/* so call AudioTrackPopUpChanged for both audio tracks to update the mixdown popups */
+	[self AudioTrackPopUpChanged: fAudLang1PopUp];
+	[self AudioTrackPopUpChanged: fAudLang2PopUp];
 
 }
 
@@ -1260,9 +1267,11 @@ static int FormatSettings[3][4] =
             @"%@.%s", string, ext]];
     }
 
-	/* changing the codecs on offer may mean that we are/aren't now offering AAC, so */
-	/* check if this change means we should / should't offer 6-channel AAC extraction */
-	[self Check6ChannelAACExtraction: sender];
+	/* changing the format may mean that we can / can't offer mono or 6ch, */
+	/* so call AudioTrackPopUpChanged for both audio tracks to update the mixdown popups */
+	[self AudioTrackPopUpChanged: fAudLang1PopUp];
+	[self AudioTrackPopUpChanged: fAudLang2PopUp];
+
 	/* We call method method to change UI to reflect whether a preset is used or not*/
 	[self CustomSettingUsed: sender];	
 	
@@ -1304,8 +1313,10 @@ static int FormatSettings[3][4] =
         [fAudBitratePopUp setEnabled: YES];
     }
 
-	/* check if this change means we should / should't offer 6-channel AAC extraction */
-	[self Check6ChannelAACExtraction: sender];
+	/* changing the codecs on offer may mean that we can / can't offer mono or 6ch, */
+	/* so call AudioTrackPopUpChanged for both audio tracks to update the mixdown popups */
+	[self AudioTrackPopUpChanged: fAudLang1PopUp];
+	[self AudioTrackPopUpChanged: fAudLang2PopUp];
 
     [self CalculateBitrate: sender];
     /* We call method method to change UI to reflect whether a preset is used or not*/
@@ -1334,7 +1345,7 @@ static int FormatSettings[3][4] =
 		 }
 
 		/* uncheck the "export 5.1 as 6-channel AAC" checkbox if it is checked */
-		[fAudLang1SurroundCheck setState: NSOffState];
+//		[fAudLang1SurroundCheck setState: NSOffState];
 
 	}
     
@@ -1343,80 +1354,187 @@ static int FormatSettings[3][4] =
     [self CustomSettingUsed: sender];
 }
 
-- (IBAction) Check6ChannelAACExtraction: (id) sender
+- (IBAction) SetEnabledStateOfAudioMixdownControls: (id) sender
 {
 
-	/* make sure we have a selected title before continuing */
-	if (fTitle == NULL) return;
+    /* enable/disable the mixdown text and popupbutton for audio track 1 */
+    [fAudTrack1MixPopUp setEnabled: ([fAudLang1PopUp indexOfSelectedItem] == 0) ? NO : YES];
+    [fAudTrack1MixLabel setTextColor: ([fAudLang1PopUp indexOfSelectedItem] == 0) ?
+        [NSColor disabledControlTextColor] : [NSColor controlTextColor]];
 
-	/* get the current title's job into a convenience variable */
-	hb_job_t * job = fTitle->job;
-	
-    /* get the current audio tracks */
-	/* this is done in PrepareJob too, but we want them here to check against below */
-    job->audios[0] = [fAudLang1PopUp indexOfSelectedItem] - 1;
-    job->audios[1] = [fAudLang2PopUp indexOfSelectedItem] - 1;
-    job->audios[2] = -1;
-
-	/* now, let's check if any selected audio track has 5.1 sound */
-	hb_audio_t * audio;
-	bool foundfiveoneaudio = false;
-
-	/* find out what the currently-selected audio codec is */
-    int format = [fDstFormatPopUp indexOfSelectedItem];
-    int codecs = [fDstCodecsPopUp indexOfSelectedItem];
-	int acodec = FormatSettings[format][codecs] & HB_ACODEC_MASK;
-
-	/* we only offer the option to extract 5.1 to 6-channel if the selected audio codec is AAC*/
-	if (acodec == HB_ACODEC_FAAC) {
-
-		bool doneaudios = false;
-		int thisaudio = 0;
-		
-		while (!doneaudios) {
-
-			if (job->audios[thisaudio] == -1) {
-				doneaudios = true;
-			} else {
-				audio = (hb_audio_t *) hb_list_item( fTitle->list_audio, job->audios[thisaudio] );
-				if (audio != NULL) {
-					if (audio->src_discrete_front_channels == 3 && audio->src_discrete_rear_channels == 3 && audio->src_discrete_lfe_channels == 1) {
-						foundfiveoneaudio = true;
-						doneaudios = true; /* as it doesn't matter if we find any more! */
-					}
-				}
-			}
-
-			thisaudio++;
-		}
-	}
-
-    /* If we are extracting to AAC, and any of our soundtracks were 5.1, then enable the checkbox  */
-	if (foundfiveoneaudio) {
-		[fAudLang1SurroundCheck setEnabled: YES];
-		/* Check default surround sound pref and if it is YES, lets also check the checkbox */
-		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultSurroundSound"] > 0)
-		{
-			[fAudLang1SurroundCheck setState: NSOnState];
-		}
-	} else {
-		[fAudLang1SurroundCheck setEnabled: NO];
-		/* as well as disabling the checkbox, let's uncheck it if it is checked */
-		[fAudLang1SurroundCheck setState: NSOffState];
-		
-	}
+    /* enable/disable the mixdown text and popupbutton for audio track 2 */
+    [fAudTrack2MixPopUp setEnabled: ([fAudLang2PopUp indexOfSelectedItem] == 0) ? NO : YES];
+    [fAudTrack2MixLabel setTextColor: ([fAudLang2PopUp indexOfSelectedItem] == 0) ?
+        [NSColor disabledControlTextColor] : [NSColor controlTextColor]];
 
 }
 
-
-- (IBAction) LanguagePopUpChanged: (id) sender
+- (IBAction) AudioTrackPopUpChanged: (id) sender
 {
-	
-	/* selecting a different language may mean we have a different number of channels, so */
-	/* check if this change means we should / should't offer 6-channel AAC extraction */
-	[self Check6ChannelAACExtraction: sender];
-	
-	/* see if the new language setting will change the bitrate we need */
+
+    /* make sure we have a selected title before continuing */
+    if (fTitle == NULL) return;
+
+    /* find out if audio track 1 or 2 was changed - this is passed to us in the tag of the sender */
+    /* the sender will have been either fAudLang1PopUp (tag = 0) or fAudLang2PopUp (tag = 1) */
+    int thisAudio = [sender tag];
+
+    /* get the index of the selected audio */
+    int thisAudioIndex = [sender indexOfSelectedItem] - 1;;
+
+    /* pointer for the hb_audio_s struct we will use later on */
+    hb_audio_t * audio;
+
+    /* find out what the currently-selected output audio codec is */
+    int format = [fDstFormatPopUp indexOfSelectedItem];
+    int codecs = [fDstCodecsPopUp indexOfSelectedItem];
+    int acodec = FormatSettings[format][codecs] & HB_ACODEC_MASK;
+
+    /* pointer to this track's mixdown NSPopUpButton */
+    NSTextField   * mixdownTextField;
+    NSPopUpButton * mixdownPopUp;
+
+    /* find our mixdown NSTextField and NSPopUpButton */
+    if (thisAudio == 0)
+    {
+        mixdownTextField = fAudTrack1MixLabel;
+        mixdownPopUp = fAudTrack1MixPopUp;
+    }
+    else
+    {
+        mixdownTextField = fAudTrack2MixLabel;
+        mixdownPopUp = fAudTrack2MixPopUp;
+    }
+
+    /* delete the previous audio mixdown options */
+    [mixdownPopUp removeAllItems];
+
+    /* check if the audio mixdown controls need their enabled state changing */
+    [self SetEnabledStateOfAudioMixdownControls: NULL];
+
+    if (thisAudioIndex != -1)
+    {
+
+        /* get the audio */
+        audio = (hb_audio_t *) hb_list_item( fTitle->list_audio, thisAudioIndex );
+        if (audio != NULL)
+        {
+
+            int audioCodecsSupportMono = (audio->codec == HB_ACODEC_AC3 && acodec == HB_ACODEC_FAAC);
+            int audioCodecsSupport6Ch = (audio->codec == HB_ACODEC_AC3 && acodec == HB_ACODEC_FAAC);
+
+            /* check for AC-3 passthru */
+            if (audio->codec == HB_ACODEC_AC3 && acodec == HB_ACODEC_AC3)
+            {
+                    [[mixdownPopUp menu] addItemWithTitle:
+                        [NSString stringWithCString: "AC3 Passthru"]
+                        action: NULL keyEquivalent: @""];
+            }
+            else
+            {
+            
+                /* find out if our selected output audio codec supports mono and / or 6ch */
+                /* we also check for an input codec of AC3,
+                   as it is the only library able to do the mixdown to mono / conversion to 6-ch */
+                /* audioCodecsSupportMono and audioCodecsSupport6Ch are the same for now,
+                   but this may change in the future, so they are separated for flexibility */
+
+                /* find out the audio channel layout for our input audio */
+                /* we'll cheat and use the liba52 layouts, even if the source isn't AC3 */
+                int channel_layout;
+                int audio_has_lfe;
+                if (audio->codec == HB_ACODEC_AC3)
+                {
+                    channel_layout = (audio->ac3flags & A52_CHANNEL_MASK);
+                    audio_has_lfe = (audio->ac3flags & A52_LFE);
+                }
+                else
+                {
+                    /* assume a stereo input for all other input codecs */
+                    channel_layout = A52_STEREO;
+                    audio_has_lfe = 0;
+                }
+
+                /* add the appropriate audio mixdown menuitems to the popupbutton */
+                /* in each case, we set the new menuitem's tag to be the amixdown value for that mixdown,
+                   so that we can reference the mixdown later */
+
+                /* keep a track of the min and max mixdowns we used, so we can select the best match later */
+                int minMixdownUsed = 0;
+                int maxMixdownUsed = 0;
+
+                /* do we want to add a mono option? */
+                if (audioCodecsSupportMono == 1) {
+                    id<NSMenuItem> menuItem = [[mixdownPopUp menu] addItemWithTitle:
+                        [NSString stringWithCString: hb_audio_mixdowns[0].human_readable_name]
+                        action: NULL keyEquivalent: @""];
+                    [menuItem setTag: hb_audio_mixdowns[0].amixdown];
+                    if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[0].amixdown;
+                    maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[0].amixdown);
+                }
+
+                /* do we want to add a stereo option? */
+                if (channel_layout >= A52_STEREO && channel_layout != A52_CHANNEL1 && channel_layout != A52_CHANNEL2) {
+                    id<NSMenuItem> menuItem = [[mixdownPopUp menu] addItemWithTitle:
+                        [NSString stringWithCString: hb_audio_mixdowns[1].human_readable_name]
+                        action: NULL keyEquivalent: @""];
+                    [menuItem setTag: hb_audio_mixdowns[1].amixdown];
+                    if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[1].amixdown;
+                    maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[1].amixdown);
+                }
+
+                /* do we want to add a dolby surround (DPL1) option? */
+                if (channel_layout == A52_3F1R || channel_layout == A52_3F2R || channel_layout == A52_DOLBY) {
+                    id<NSMenuItem> menuItem = [[mixdownPopUp menu] addItemWithTitle:
+                        [NSString stringWithCString: hb_audio_mixdowns[2].human_readable_name]
+                        action: NULL keyEquivalent: @""];
+                    [menuItem setTag: hb_audio_mixdowns[2].amixdown];
+                    if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[2].amixdown;
+                    maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[2].amixdown);
+                }
+
+                /* do we want to add a dolby pro logic 2 (DPL2) option? */
+                if (channel_layout == A52_3F2R) {
+                    id<NSMenuItem> menuItem = [[mixdownPopUp menu] addItemWithTitle:
+                        [NSString stringWithCString: hb_audio_mixdowns[3].human_readable_name]
+                        action: NULL keyEquivalent: @""];
+                    [menuItem setTag: hb_audio_mixdowns[3].amixdown];
+                    if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[3].amixdown;
+                    maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[3].amixdown);
+                }
+
+                /* do we want to add a 6-channel discrete option? */
+                if (audioCodecsSupport6Ch == 1 && channel_layout == A52_3F2R && audio_has_lfe == A52_LFE) {
+                    id<NSMenuItem> menuItem = [[mixdownPopUp menu] addItemWithTitle:
+                        [NSString stringWithCString: hb_audio_mixdowns[4].human_readable_name]
+                        action: NULL keyEquivalent: @""];
+                    [menuItem setTag: hb_audio_mixdowns[4].amixdown];
+                    if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[4].amixdown;
+                    maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[4].amixdown);
+                }
+
+                /* auto-select the best mixdown based on our saved mixdown preference */
+                
+                /* for now, this is hard-coded to a "best" mixdown of HB_AMIXDOWN_DOLBYPLII */
+                /* ultimately this should be a prefs option */
+                int prefsMixdown = HB_AMIXDOWN_DOLBYPLII;
+                
+                /* if prefsMixdown > maxMixdownUsed, then use maxMixdownUsed */
+                if (prefsMixdown > maxMixdownUsed) prefsMixdown = maxMixdownUsed;
+
+                /* if prefsMixdown < minMixdownUsed, then use minMixdownUsed */
+                if (prefsMixdown < minMixdownUsed) prefsMixdown = minMixdownUsed;
+
+                /* select the (possibly-amended) preferred mixdown */
+                [mixdownPopUp selectItemWithTag: prefsMixdown];
+            
+            }
+
+        }
+        
+    }
+
+	/* see if the new audio track choice will change the bitrate we need */
     [self CalculateBitrate: sender];	
 
 }
@@ -1715,7 +1833,7 @@ the user is using "Custom" settings by determining the sender*/
 	/* Audio Language One*/
 	[preset setObject:[fAudLang1PopUp titleOfSelectedItem] forKey:@"AudioLang1"];
 	/* Audio Language One Surround Sound Checkbox*/
-	[preset setObject:[NSNumber numberWithInt:[fAudLang1SurroundCheck state]] forKey:@"AudioLang1Surround"];
+//	[preset setObject:[NSNumber numberWithInt:[fAudLang1SurroundCheck state]] forKey:@"AudioLang1Surround"];
 	/* Audio Sample Rate*/
 	[preset setObject:[fAudRatePopUp titleOfSelectedItem] forKey:@"AudioSampleRate"];
 	/* Audio Bitrate Rate*/
@@ -2002,7 +2120,7 @@ the user is using "Custom" settings by determining the sender*/
 		[fDisplayX264Options setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"x264Option"]]];
 		/* Lets run through the following functions to get variables set there */
 		[self EncoderPopUpChanged: NULL];
-		[self Check6ChannelAACExtraction: NULL];
+		[self AudioTrackPopUpChanged: NULL];
 		[self CalculateBitrate: NULL];
 		
 		/* Video quality */
@@ -2028,8 +2146,8 @@ the user is using "Custom" settings by determining the sender*/
 		/* Audio Language One*/
 		[fAudLang1PopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioLang1"]]];
 		/* Audio Language One Surround Sound Checkbox*/
-		[fAudLang1SurroundCheck setState:[[chosenPreset objectForKey:@"AudioLang1Surround"] intValue]];
-		[self Check6ChannelAACExtraction: NULL];
+//		[fAudLang1SurroundCheck setState:[[chosenPreset objectForKey:@"AudioLang1Surround"] intValue]];
+		[self AudioTrackPopUpChanged: NULL];
 		/* Audio Sample Rate*/
 		[fAudRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioSampleRate"]]];
 		/* Audio Bitrate Rate*/

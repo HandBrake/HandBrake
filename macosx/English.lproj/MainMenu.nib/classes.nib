@@ -6,6 +6,7 @@
                 AddPreset = id; 
                 AddToQueue = id; 
                 AddUserPreset = id; 
+                AudioTrackPopUpChanged = id; 
                 BrowseFile = id; 
                 CalculateBitrate = id; 
                 Cancel = id; 
@@ -19,7 +20,6 @@
                 EncoderPopUpChanged = id; 
                 FormatPopUpChanged = id; 
                 InsertPreset = id; 
-                LanguagePopUpChanged = id; 
                 OpenForums = id; 
                 OpenHomepage = id; 
                 Pause = id; 
@@ -42,11 +42,14 @@
                 fAudBitratePopUp = NSPopUpButton; 
                 fAudLang1Field = NSTextField; 
                 fAudLang1PopUp = NSPopUpButton; 
-                fAudLang1SurroundCheck = NSButton; 
                 fAudLang2Field = NSTextField; 
                 fAudLang2PopUp = NSPopUpButton; 
                 fAudRateField = NSTextField; 
                 fAudRatePopUp = NSPopUpButton; 
+                fAudTrack1MixLabel = NSTextField; 
+                fAudTrack1MixPopUp = NSPopUpButton; 
+                fAudTrack2MixLabel = NSTextField; 
+                fAudTrack2MixPopUp = NSPopUpButton; 
                 fCreateChapterMarkers = NSButton; 
                 fDisplayX264Options = NSTextField; 
                 fDstBrowseButton = NSButton; 

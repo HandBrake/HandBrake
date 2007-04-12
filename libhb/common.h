@@ -75,6 +75,7 @@ struct hb_mixdown_s
 {
     char * human_readable_name;
     char * internal_name;
+    char * short_name;
     int    amixdown;
 };
 
@@ -271,6 +272,9 @@ struct hb_audio_s
 	int src_discrete_lfe_channels;
     int src_encoded_front_channels;
     int src_encoded_rear_channels;
+    
+    /* ac3flags is only set when the source audio format is HB_ACODEC_AC3 */
+    int ac3flags;
 
 #ifdef __LIBHB__
     /* Internal data */
