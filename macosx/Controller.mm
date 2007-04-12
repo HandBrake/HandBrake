@@ -1689,7 +1689,7 @@ the user is using "Custom" settings by determining the sender*/
     /* If we have MP4, AVC H.264 and x264 Main then we enable the x264 Options field for the
 	 Add Preset window we are about to open. We do this before we actually open the panel,
 	 as doing it after causes it to stick from the last selection for some reason. */
-	if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fDstCodecsPopUp indexOfSelectedItem] == 1 && [fVidEncoderPopUp indexOfSelectedItem] == 0)
+	if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fDstCodecsPopUp indexOfSelectedItem] == 1)
 	{
 		[fPresetNewX264Opt setEditable: YES];
 		[fPresetNewX264OptLabel setEnabled: YES];
@@ -1930,10 +1930,14 @@ the user is using "Custom" settings by determining the sender*/
 	//[preset setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
 	
 	/*Audio*/
-	/* Audio Language One*/
+	/* Audio track one*/
 	[preset setObject:[fAudLang1PopUp titleOfSelectedItem] forKey:@"AudioLang1"];
-	/* Audio Language One Surround Sound Checkbox*/
-	[preset setObject:[NSNumber numberWithInt:0] forKey:@"AudioLang1Surround"];
+	/* Track one mixdown dpl2*/
+	[preset setObject:[NSString stringWithCString:"stereo"] forKey:@"AudioLang1Mixdown"];
+    /* Audio track two */
+	[preset setObject:[NSString stringWithFormat:@"None"] forKey:@"AudioLang2"];
+	/* Track two mixdown */
+	[preset setObject:[NSString stringWithCString:""] forKey:@"AudioLang2Mixdown"];
 	/* Audio Sample Rate*/
 	[preset setObject:@"44.1" forKey:@"AudioSampleRate"];
 	/* Audio Bitrate Rate*/
@@ -2004,14 +2008,18 @@ the user is using "Custom" settings by determining the sender*/
 	//[preset setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
 	
 	/*Audio*/
-	/* Audio Language One*/
+	/* Audio track one*/
 	[preset setObject:[fAudLang1PopUp titleOfSelectedItem] forKey:@"AudioLang1"];
-	/* Audio Language One Surround Sound Checkbox*/
-	[preset setObject:[NSNumber numberWithInt:0] forKey:@"AudioLang1Surround"];
+	/* Track one mixdown dpl2*/
+	[preset setObject:[NSString stringWithCString:"dpl2"] forKey:@"AudioLang1Mixdown"];
+    /* Audio track two */
+	[preset setObject:[NSString stringWithFormat:@"None"] forKey:@"AudioLang2"];
+	/* Track two mixdown */
+	[preset setObject:[NSString stringWithCString:""] forKey:@"AudioLang2Mixdown"];
 	/* Audio Sample Rate*/
 	[preset setObject:@"44.1" forKey:@"AudioSampleRate"];
 	/* Audio Bitrate Rate*/
-	[preset setObject:@"320" forKey:@"AudioBitRate"];
+	[preset setObject:@"160" forKey:@"AudioBitRate"];
 	/* Subtitles*/
 	[preset setObject:@"None" forKey:@"Subtitles"];
 	
@@ -2041,7 +2049,7 @@ the user is using "Custom" settings by determining the sender*/
 	/* Video encoder */
 	[preset setObject:@"x264 (h.264 Main)" forKey:@"VideoEncoder"];
 	/* x264 Option String (We can use this to tweak the appleTV output)*/
-	[preset setObject:@"level=30" forKey:@"x264Option"];
+	[preset setObject:@"level=41" forKey:@"x264Option"];
 	/* Video quality */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
 	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
@@ -2075,10 +2083,14 @@ the user is using "Custom" settings by determining the sender*/
 	//[preset setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
 	
 	/*Audio*/
-	/* Audio Language One*/
+	/* Audio track one*/
 	[preset setObject:[fAudLang1PopUp titleOfSelectedItem] forKey:@"AudioLang1"];
-	/* Audio Language One Surround Sound Checkbox*/
-	[preset setObject:[NSNumber numberWithInt:0] forKey:@"AudioLang1Surround"];
+	/* Track one mixdown dpl2*/
+	[preset setObject:[NSString stringWithCString:"dpl2"] forKey:@"AudioLang1Mixdown"];
+    /* Audio track two */
+	[preset setObject:[NSString stringWithFormat:@"None"] forKey:@"AudioLang2"];
+	/* Track two mixdown */
+	[preset setObject:[NSString stringWithCString:""] forKey:@"AudioLang2Mixdown"];
 	/* Audio Sample Rate*/
 	[preset setObject:@"44.1" forKey:@"AudioSampleRate"];
 	/* Audio Bitrate Rate*/
