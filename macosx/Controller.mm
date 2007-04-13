@@ -1679,6 +1679,13 @@ the user is using "Custom" settings by determining the sender*/
 		/* Empty the field to display custom x264 preset options*/
 		[fDisplayX264Options setStringValue: @""];
 		curUserPresetChosenNum = nil;
+		/* If we have MP4, AVC H.264 and x264 Main then we look to see
+		if there are any x264 options from the preferences to use */
+		if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fDstCodecsPopUp indexOfSelectedItem] == 1)
+		{
+		//[fDisplayX264Options setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"x264Option"]]];
+			[fDisplayX264Options setStringValue: [NSString stringWithFormat:[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"]]];
+		}
 		
 	}
 }
@@ -1688,7 +1695,7 @@ the user is using "Custom" settings by determining the sender*/
 {
     /* Deselect the currently selected Preset if there is one*/
 		[tableView deselectRow:[tableView selectedRow]];
-    /* If we have MP4, AVC H.264 and x264 Main then we enable the x264 Options field for the
+    /* If we have MP4, AVC H.264 and Main then we enable the x264 Options field for the
 	 Add Preset window we are about to open. We do this before we actually open the panel,
 	 as doing it after causes it to stick from the last selection for some reason. */
 	if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fDstCodecsPopUp indexOfSelectedItem] == 1)
