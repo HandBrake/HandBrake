@@ -781,25 +781,29 @@ static int FormatSettings[3][4] =
 		
 		/* Set this flag to switch from Constant Quantizer(default) to Constant Rate Factor Thanks jbrjake
 		Currently only used with Constant Quality setting*/
-			if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultCrf"] > 0 && [fVidQualityMatrix selectedRow] == 2)
-	        {
+		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultCrf"] > 0 && [fVidQualityMatrix selectedRow] == 2)
+		{
 	        /* Can only be used with svn rev >= 89 */
 			job->crf = 1;
-	        }
+		}
 		
 		/* Below Sends x264 options to the core library if x264 is selected*/
 		/* First we look to see if a user preset has been selected that contains a x264 optional string CurUserPresetChosenNum = nil */
 		if (curUserPresetChosenNum != nil)
 		{
-			/* Lets use this to see if the proper string is being passed in the gui. We can comment out if need be.
-			for public use we have the field hidden in the nib */
-			[fDisplayX264Options setStringValue: [NSString stringWithFormat:@"%@",[chosenPreset valueForKey:@"x264Option"]]];
-			job->x264opts = [[chosenPreset valueForKey:@"x264Option"] cString];
+			
+			/* Lets use this as per Nyx, Thanks Nyx! */
+			job->x264opts = (const char *)calloc(1024, 1); /* Fixme, this just leaks */  
+			strcpy((char *)job->x264opts, [[chosenPreset valueForKey:@"x264Option"] UTF8String]);
+			//job->x264opts = [[chosenPreset valueForKey:@"x264Option"] cString];
 		}
 		else
 		{
 		    /* if not, then we check to see if there is a x264 opt in the preferences and use that if we want */
-			job->x264opts = [[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] UTF8String];
+			//job->x264opts = [[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] UTF8String];
+			/* Lets use this as per Nyx, Thanks Nyx! */
+			job->x264opts = (const char *)calloc(1024, 1); /* Fixme, this just leaks */  
+			strcpy((char *)job->x264opts, [[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] UTF8String]);
 		} 
 		
 		
@@ -902,7 +906,22 @@ static int FormatSettings[3][4] =
 			job->pass = 1;
 			hb_add( fHandle, job );
 			job->pass = 2;
-			job->x264opts = [[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] UTF8String];
+			/* First we look to see if a user preset has been selected that contains a x264 optional string CurUserPresetChosenNum = nil */
+			if (curUserPresetChosenNum != nil)
+			{
+				
+				/* Lets use this as per Nyx, Thanks Nyx! */
+				job->x264opts = (const char *)calloc(1024, 1); /* Fixme, this just leaks */  
+				strcpy((char *)job->x264opts, [[chosenPreset valueForKey:@"x264Option"] UTF8String]);
+				//job->x264opts = [[chosenPreset valueForKey:@"x264Option"] cString];
+			}
+			else
+			{
+				//job->x264opts = [[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] UTF8String];
+				/* Lets use this as per Nyx, Thanks Nyx! */
+				job->x264opts = (const char *)calloc(1024,1); /* Fixme, this just leaks */ 
+				strcpy((char *)job->x264opts, [[[NSUserDefaults standardUserDefaults]stringForKey:@"DefAdvancedx264Flags"] UTF8String]);
+			} 
 			hb_add( fHandle, job );
 		}
 		else
