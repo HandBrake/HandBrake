@@ -34,7 +34,7 @@ Cygwin setup:
     Also, I have not tried to build this with MinGW, I've only built it with
     the Cygwin environment, so you should build with Cygwin gcc and dev tools.
     Unfortunately this means you need to have cygwin1.dll around to run the
-    HBTest.exe program, but that's the way it is for now, until I get time
+    HandbrakeCLI.exe program, but that's the way it is for now, until I get time
     to try building it with MinGW.  If you want to try making it work with
     MinGW, then go for it!
 
@@ -67,7 +67,7 @@ Cygwin setup:
     Also, I have not tried to build this with MinGW, I've only built it with
     the Cygwin environment, so you should build with Cygwin gcc and dev tools.
     Unfortunately this means you need to have cygwin1.dll around to run the
-    HBTest.exe program, but that's the way it is for now, until I get time
+    HandbrakeCLI.exe program, but that's the way it is for now, until I get time
     to try building it with MinGW.  If you want to try making it work with
     MinGW, then go for it!
 
@@ -84,8 +84,13 @@ The file where the informations are stored is Makefile.config
 Step 3: build
 =============
 
-Run `make'. This will build libmediafork, MediaFork and MediaForkCLI as Universal Binary.
+Run `make'. This will build libmediafork, Handbrake and HandBrakeCLI as Universal Binary.
 This build method use precompiled contrib libraries. Script to build those binaries are provided too.
 All the build is handled by Xcode 2.4.1, should work on powerPC and Intel Macs.
+
+# To build under Cygwin simply use the command:
+make HandbrakeCLI
+
+This will download pre-compiled libaries and build the handbrake source.
 
 
