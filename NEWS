@@ -1,5 +1,85 @@
 NEWS file for MediaFork <http://handbrake.m0k.org/>
 
+
+Changes between 0.8.0b1 and 0.8.5b1
+
+	Core HandBrake Changes
+	+ Added: iTunes-style chapter markers.
+	+ Added: 5.1 AAC surround sound.
+	+ Added: Dolby Pro Logic I and II downmixing of discrete surround sound.
+	+ Added: 1-channel AAC sound from monophonic sources.
+	+ Added: Advanced x264 options. (including High Profile support)
+	+ Added: B-frames in x264 + .mp4
+	+ Added: PPC Linux Support.
+	+ Added: Preserve language IDs from the DVD in .mp4
+	+ Added: Snapshot build method.
+	+ Added: Anamorphic video display in QuickTime.
+	+ Changed: Renamed back to HandBrake.
+	+ Changed: Libraries updated.
+	+ Changed: Enabled Update Checker.
+	+ Fixed: Multiple Audio tracks.
+	+ Fixed: Sped up DVD scanning time by being nicer to libdvdread.
+	+ Fixed: .dmg is now mountable in Mac OS X versions older than 10.4
+	+ Fixed: Proper output size from x264 in target size mode.
+	+ Fixed: Allows output sizes larger than 2 gigs in Linux.
+	+ Fixed: Several small memory leaks have been plugged.
+	+ Fixed: Fixes for 64-bit systems.
+	+ Fixed: Keep Aspect Ratio is no longer forced, so user-set height values are respected.
+
+	CLI Interface Changes
+	+ Added: Customize maximum width and height while keeping aspect ratio
+	+ Changed: Much prettier help screen
+	+ Changed: HBTest/MediaForkCLI renamed to HandBrakeCLI
+	+ Fixed: Better display of audio and subtitle ids
+
+	Mac GUI Changes
+	+ Added: Presets! Includes initial ones for AppleTV, iPod, and PS3.
+	+ Added: Preference option to auto-name output files with the DVD name and title number.
+	+ Added: Preset support for x264 options.
+	+ Changed: Remembers last destination path.
+	+ Changed: Remembers last source path.
+	+ Changed: Copy and paste in text fields.
+	+ Changed: Updates target size more quickly.
+	+ Changed: Mac GUI no longer retains target size values between enqueued jobs. (http://HandBrake.m0k.org/forum/viewtopic.php?t=249)
+	+ Fixed: Preview frames are no longer distorted in anamorphic mode.
+	+ Fixed: Mac GUI no longer floats above other windows.
+	+ Fixed: Browse by file no longer dims the browse button preventing you from changing browse locations without switching back and forth between it and drive selection. (http://HandBrake.m0k.org/forum/viewtopic.php?t=342)
+	+ Fixed: Makes sure destination directory is valid.
+	+ Fixed: Fills in the file save field with the current output name instead of leaving it blank.
+	+ Fixed: Update destination field with the current path instead of using the last one, which could have been a DVD.
+
+	Windows GUI Changes – Version 2.2 beta 1
+	+ Added: A few presets for the iPod in the menu.
+	+ Added: Ability to set default settings for all program encode options. 
+	+ Added: Ability to turn off Automatic Update check on start-up. See Tools > Options
+	+ Added: Mod 16 check on the Height and Width boxes. 
+	+ Added: Check the amount of hard disk space left is not running low when saving file. 
+	+ Added: Option to have a Read DVD window showup on start-up.
+	+ Added: “View DVD data” Menu item in the tools menu. 
+	+ Added: Links to the Homepage, forum, wiki and documentation page in the Help menu.
+	+ Added: Chapter markers check box (New feature in 0.8.5b1 CLI)
+	+ Changed: View DVD Information no longer appears after clicking the “Browse” button. 
+	+ Changed: A few changes to the GUI - replaced textboxes with Dropdowns which auto-populate. 
+	+ Changed: Auto Crop and Aspect text now automatically update when a new title is selected.
+	+ Changed: Several tweaks to the GUI design, remove a few text items that are no longer needed.
+	+ Changed: Ability to Queue videos enabled with completely re-written code. 
+	+ Changed: Ability to queue stuff up while the encoding process is running. 
+	+ Changed: Ability to remove items from the encode queue while is running. 
+	+ Changed: Anamorphic option blanks out resolution boxes. 
+	+ Changed: Re-written update checker. 
+	+ Changed: Ability to turn off update check on start-up in Tools > Options
+	+ Changed: Auto Crop option now fills in figures into text boxes when selected. 
+	+ Changed: Mp4 now default output file extension.
+	+ Changed: Enabled 5.1 AAC option.
+	+ Changed: Enabled h264 advanced options. 
+	+ Changed: Updated the FAQ.
+	+ Changed: Included new version of HandBrake. Version 0.8.5b1.
+	+ Fixed: Pixel Ratio Not being saved with the profile.
+	+ Removed: Both “View Data” buttons on the Title Selection Window.
+	+ Removed: The “Read DVD” button. -  Automatically reads the DVD after selecting a source now.
+	+ Removed: The Help and Support window. Been replaced with a few Web Links.
+
+
 Changes between 0.7.1 and 0.8.0
  + MediaFork project forked from HandBrake source <http://handbrake.m0k.org/>
  + Updated libraries (meaning better quality, hopefully fewer bugs, and increased speeds)
