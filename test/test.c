@@ -436,17 +436,18 @@ static int HandleEvents( hb_handle_t * h )
             }
             job->file = strdup( output );
 
-			if( crf )
-			{
-				job->crf = 1;
-			}
+            if( crf )
+            {
+                job->crf = 1;
+            }
 
-			if (x264opts != NULL && *x264opts != '\0' )
-			{
-				hb_log("Applying the following x264 options: %s", x264opts);
-				job->x264opts = x264opts;
-			}
-			else /*avoids a bus error crash when options aren't specified*/
+            if (x264opts != NULL && *x264opts != '\0' )
+            {
+                fprintf( stderr, "Applying the following x264 options: %s\n", 
+                        x264opts);
+                job->x264opts = x264opts;
+            }
+            else /*avoids a bus error crash when options aren't specified*/
 			{
 				job->x264opts =  NULL;
 			}
