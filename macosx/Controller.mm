@@ -793,8 +793,8 @@ static int FormatSettings[3][4] =
 		{
 			
 			/* Lets use this as per Nyx, Thanks Nyx! */
-			job->x264opts = (const char *)calloc(1024, 1); /* Fixme, this just leaks */  
-			strcpy((char *)job->x264opts, [[chosenPreset valueForKey:@"x264Option"] UTF8String]);
+			job->x264opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */  
+			strcpy(job->x264opts, [[chosenPreset valueForKey:@"x264Option"] UTF8String]);
 			//job->x264opts = [[chosenPreset valueForKey:@"x264Option"] cString];
 		}
 		else
@@ -802,8 +802,8 @@ static int FormatSettings[3][4] =
 		    /* if not, then we check to see if there is a x264 opt in the preferences and use that if we want */
 			//job->x264opts = [[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] UTF8String];
 			/* Lets use this as per Nyx, Thanks Nyx! */
-			job->x264opts = (const char *)calloc(1024, 1); /* Fixme, this just leaks */  
-			strcpy((char *)job->x264opts, [[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] UTF8String]);
+			job->x264opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */  
+			strcpy(job->x264opts, [[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] UTF8String]);
 		} 
 		
 		
@@ -911,16 +911,16 @@ static int FormatSettings[3][4] =
 			{
 				
 				/* Lets use this as per Nyx, Thanks Nyx! */
-				job->x264opts = (const char *)calloc(1024, 1); /* Fixme, this just leaks */  
-				strcpy((char *)job->x264opts, [[chosenPreset valueForKey:@"x264Option"] UTF8String]);
+				job->x264opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */  
+				strcpy(job->x264opts, [[chosenPreset valueForKey:@"x264Option"] UTF8String]);
 				//job->x264opts = [[chosenPreset valueForKey:@"x264Option"] cString];
 			}
 			else
 			{
 				//job->x264opts = [[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] UTF8String];
 				/* Lets use this as per Nyx, Thanks Nyx! */
-				job->x264opts = (const char *)calloc(1024,1); /* Fixme, this just leaks */ 
-				strcpy((char *)job->x264opts, [[[NSUserDefaults standardUserDefaults]stringForKey:@"DefAdvancedx264Flags"] UTF8String]);
+				job->x264opts = (char *)calloc(1024,1); /* Fixme, this just leaks */ 
+				strcpy(job->x264opts, [[[NSUserDefaults standardUserDefaults]stringForKey:@"DefAdvancedx264Flags"] UTF8String]);
 			} 
 			hb_add( fHandle, job );
 		}
