@@ -154,7 +154,7 @@ static int MP4Init( hb_mux_object_t * m )
 	/* end of transformation matrix */
 
 	/* firstAudioTrack will be used to reference the first audio track when we add a chapter track */
-	MP4TrackId firstAudioTrack;
+	MP4TrackId firstAudioTrack = 0;
 
 	/* add the audio tracks */
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )

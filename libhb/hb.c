@@ -324,7 +324,7 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
     memset( filename, 0, 1024 );
 
     hb_get_tempory_filename( h, filename, "%x%d",
-                             (int) title, picture );
+                             (intptr_t) title, picture );
 
     file = fopen( filename, "r" );
     if( !file )

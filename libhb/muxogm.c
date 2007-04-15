@@ -205,7 +205,7 @@ static int OGMInit( hb_mux_object_t * m )
                 SetDWLE( &h.header.audio.i_avgbytespersec,
                          job->abitrate / 8 );
 
-                op.packet   = (char*) &h;
+                op.packet   = (unsigned char*) &h;
                 op.bytes    = sizeof( ogg_stream_header_t );
                 op.b_o_s    = 1;
                 op.e_o_s    = 0;

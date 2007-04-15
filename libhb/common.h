@@ -160,7 +160,7 @@ struct hb_job_s
     int             h264_13;
 	int				h264_level;
 	int				crf;
-	const char		*x264opts;
+	char		    *x264opts;
 	int				areBframes;
 	
     /* Audio tracks:

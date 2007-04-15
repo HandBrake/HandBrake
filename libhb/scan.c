@@ -330,7 +330,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         buf_raw = hb_list_item( list_raw, 0 );
 
         hb_get_tempory_filename( data->h, filename, "%x%d",
-                                 (int) title, i );
+                                 (intptr_t)title, i );
 
         file_preview = fopen( filename, "w" );
         if( file_preview )
