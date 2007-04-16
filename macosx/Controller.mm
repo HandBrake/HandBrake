@@ -847,27 +847,33 @@ static int FormatSettings[3][4] =
     /* Subtitle settings */
     job->subtitle = [fSubPopUp indexOfSelectedItem] - 1;
 
-    /* Audio tracks */
-    job->audios[0] = [fAudLang1PopUp indexOfSelectedItem] - 1;
-    job->audios[1] = [fAudLang2PopUp indexOfSelectedItem] - 1;
-    job->audios[2] = -1;
+    /* Audio tracks and mixdowns */
+    /* check for the condition where track 2 has an audio selected, but track 1 does not */
+    /* we will use track 2 as track 1 in this scenario */
+    if ([fAudLang1PopUp indexOfSelectedItem] > 0)
+    {
+        job->audios[0] = [fAudLang1PopUp indexOfSelectedItem] - 1;
+        job->audios[1] = [fAudLang2PopUp indexOfSelectedItem] - 1; /* will be -1 if "none" is selected */
+        job->audios[2] = -1;
+        job->audio_mixdowns[0] = [[fAudTrack1MixPopUp selectedItem] tag];
+        job->audio_mixdowns[1] = [[fAudTrack2MixPopUp selectedItem] tag];
+    }
+    else if ([fAudLang2PopUp indexOfSelectedItem] > 0)
+    {
+        job->audios[0] = [fAudLang2PopUp indexOfSelectedItem] - 1;
+        job->audio_mixdowns[0] = [[fAudTrack2MixPopUp selectedItem] tag];
+        job->audios[1] = -1;
+    }
+    else
+    {
+        job->audios[0] = -1;
+    }
 
     /* Audio settings */
     job->arate = hb_audio_rates[[fAudRatePopUp
                      indexOfSelectedItem]].rate;
     job->abitrate = hb_audio_bitrates[[fAudBitratePopUp
                         indexOfSelectedItem]].rate;
-
-    /* Audio mixdown(s) */
-    if (job->audios[0] > -1)
-    {
-        job->audio_mixdowns[0] = [[fAudTrack1MixPopUp selectedItem] tag];
-    }
-
-    if (job->audios[1] > -1)
-    {
-        job->audio_mixdowns[1] = [[fAudTrack2MixPopUp selectedItem] tag];
-    }
 
 }
 
@@ -1413,7 +1419,8 @@ static int FormatSettings[3][4] =
     NSPopUpButton * thisAudioPopUp  = (thisAudio == 1 ? fAudLang2PopUp : fAudLang1PopUp);
     NSPopUpButton * otherAudioPopUp = (thisAudio == 1 ? fAudLang1PopUp : fAudLang2PopUp);
     /* if the same track is selected in the other audio popup, then select "none" in that popup */
-    if ([thisAudioPopUp indexOfSelectedItem] == [otherAudioPopUp indexOfSelectedItem]) {
+    /* unless, of course, both are selected as "none!" */
+    if ([thisAudioPopUp indexOfSelectedItem] != 0 && [thisAudioPopUp indexOfSelectedItem] == [otherAudioPopUp indexOfSelectedItem]) {
         [otherAudioPopUp selectItemAtIndex: 0];
         [self AudioTrackPopUpChanged: otherAudioPopUp];
     }
