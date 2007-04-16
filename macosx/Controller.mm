@@ -1951,11 +1951,11 @@ the user is using "Custom" settings by determining the sender*/
 	/* Video encoder */
 	[preset setObject:@"x264 (h.264 iPod)" forKey:@"VideoEncoder"];
 	/* x264 Option String */
-	[preset setObject:@"" forKey:@"x264Option"];
+	[preset setObject:@"frameref=1:bframes=0:nofast_pskip:subq=6:partitions=p8x8,p8x4,p4x8,i4x4:qcomp=0:me=umh:nodct_decimate" forKey:@"x264Option"];
 	/* Video quality */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
 	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
-	[preset setObject:@"1400" forKey:@"VideoAvgBitrate"];
+	[preset setObject:@"1500" forKey:@"VideoAvgBitrate"];
 	[preset setObject:[NSNumber numberWithFloat:[fVidQualitySlider floatValue]] forKey:@"VideoQualitySlider"];
 	
 	/* Video framerate */
@@ -1986,15 +1986,15 @@ the user is using "Custom" settings by determining the sender*/
 	/* Audio track one*/
 	[preset setObject:[fAudLang1PopUp titleOfSelectedItem] forKey:@"AudioLang1"];
 	/* Track one mixdown dpl2*/
-	[preset setObject:[NSString stringWithCString:"stereo"] forKey:@"AudioLang1Mixdown"];
+	[preset setObject:[NSString stringWithCString:"dpl2"] forKey:@"AudioLang1Mixdown"];
     /* Audio track two */
 	[preset setObject:[NSString stringWithFormat:@"None"] forKey:@"AudioLang2"];
 	/* Track two mixdown */
 	[preset setObject:[NSString stringWithCString:""] forKey:@"AudioLang2Mixdown"];
 	/* Audio Sample Rate*/
-	[preset setObject:@"44.1" forKey:@"AudioSampleRate"];
+	[preset setObject:@"48" forKey:@"AudioSampleRate"];
 	/* Audio Bitrate Rate*/
-	[preset setObject:@"128" forKey:@"AudioBitRate"];
+	[preset setObject:@"160" forKey:@"AudioBitRate"];
 	/* Subtitles*/
 	[preset setObject:@"None" forKey:@"Subtitles"];
 	
@@ -2024,11 +2024,11 @@ the user is using "Custom" settings by determining the sender*/
 	/* Video encoder */
 	[preset setObject:@"x264 (h.264 Main)" forKey:@"VideoEncoder"];
 	/* x264 Option String (We can use this to tweak the appleTV output)*/
-	[preset setObject:@"" forKey:@"x264Option"];
+	[preset setObject:@"bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:no-dct-decimate=1:trellis=2" forKey:@"x264Option"];
 	/* Video quality */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
 	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
-	[preset setObject:@"2500" forKey:@"VideoAvgBitrate"];
+	[preset setObject:@"3000" forKey:@"VideoAvgBitrate"];
 	[preset setObject:[NSNumber numberWithFloat:[fVidQualitySlider floatValue]] forKey:@"VideoQualitySlider"];
 	
 	/* Video framerate */
