@@ -22,6 +22,8 @@ hb_buffer_t * hb_buffer_init( int size )
 
     b->alloc = size;
     b->size  = size;
+    if (!size)
+        return b;
 #if defined( SYS_DARWIN ) || defined( SYS_FREEBSD )
     b->data  = malloc( size );
 #elif defined( SYS_CYGWIN )

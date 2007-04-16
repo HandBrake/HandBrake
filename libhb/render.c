@@ -103,6 +103,13 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_title_t * title = job->title;
     hb_buffer_t * in = *buf_in, * buf;
 
+    if(!in->data)
+    {
+        /* If the input buffer is end of stream, send out an empty one to the next stage as well. */
+        *buf_out = hb_buffer_init(0);
+        return HB_WORK_OK;
+    }
+
     avpicture_fill( &pv->pic_raw, in->data, PIX_FMT_YUV420P,
                     title->width, title->height );
 

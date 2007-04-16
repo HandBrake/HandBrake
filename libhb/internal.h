@@ -40,7 +40,7 @@ struct hb_buffer_s
     int           key;
 
     /* Holds the output PTS from x264, for use by b-frame offsets in muxmp4.c */
-    int64_t     encodedPTS;
+    int64_t     renderOffset;
 
     int           x;
     int           y;

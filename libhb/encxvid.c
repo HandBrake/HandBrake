@@ -149,6 +149,13 @@ int encxvidWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     xvid_enc_frame_t frame;
     hb_buffer_t * in = *buf_in, * buf;
 
+    /* If this is the last empty frame, we're done */
+    if(!in->data)
+    {
+       *buf_out        = NULL;
+       return HB_WORK_DONE;
+    }
+
     /* Should be way too large */
     buf = hb_buffer_init( 3 * job->width * job->height / 2 );
     buf->start = in->start;

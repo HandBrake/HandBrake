@@ -259,6 +259,14 @@ static int SyncVideo( hb_work_object_t * w )
         hb_log( "sync: got %lld frames, %lld expected",
                 pv->count_frames, pv->count_frames_max );
         pv->done = 1;
+        
+        hb_buffer_t * buf_tmp;
+
+       // Drop an empty buffer into our output to ensure that things
+       // get flushed all the way out.
+        buf_tmp = hb_buffer_init(0); // Empty end buffer
+        hb_fifo_push( job->fifo_sync, buf_tmp );
+        
         return HB_WORK_DONE;
     }
 
@@ -399,6 +407,12 @@ static int SyncVideo( hb_work_object_t * w )
         {
             hb_log( "sync: got %lld frames", pv->count_frames );
             pv->done = 1;
+            
+           // Drop an empty buffer into our output to ensure that things
+           // get flushed all the way out.
+           buf_tmp = hb_buffer_init(0); // Empty end buffer
+           hb_fifo_push( job->fifo_sync, buf_tmp );
+            
             break;
         }
     }

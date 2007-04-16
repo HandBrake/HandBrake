@@ -67,26 +67,13 @@ static int MP4Init( hb_mux_object_t * m )
         /* Stolen from mp4creator */
         MP4SetVideoProfileLevel( m->file, 0x7F );
 
-		if (job->areBframes >= 1)
-		{
-			hb_log("muxmp4: Adjusting duration for B-frames");
-		    mux_data->track = MP4AddH264VideoTrack( m->file, job->arate,
-		            MP4_INVALID_DURATION+1, job->width, job->height,
-		            job->config.h264.sps[1], /* AVCProfileIndication */
-		            job->config.h264.sps[2], /* profile_compat */
-		            job->config.h264.sps[3], /* AVCLevelIndication */
-		            3 );      /* 4 bytes length before each NAL unit */			
-		}
-		else
-		{
-			hb_log("muxmp4: Using default duration as there are no B-frames");
 		mux_data->track = MP4AddH264VideoTrack( m->file, job->arate,
 		        MP4_INVALID_DURATION, job->width, job->height,
 		        job->config.h264.sps[1], /* AVCProfileIndication */
 		        job->config.h264.sps[2], /* profile_compat */
 		        job->config.h264.sps[3], /* AVCLevelIndication */
 		        3 );      /* 4 bytes length before each NAL unit */
-		}
+		
 
         MP4AddH264SequenceParameterSet( m->file, mux_data->track,
                 job->config.h264.sps, job->config.h264.sps_length );
@@ -241,24 +228,13 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         duration = MP4_INVALID_DURATION;
     }
 
-    /* If for some reason the first frame muxmp4 gets isn't a key-frame,
-       drop frames until we get one. (Yes, very bad. Quick and dirty.)
-       This is for QuickTime--when it sees a non-IDR frame first, it
-       displays a white box instead of video until the second GOP.
-       Also, you've got to save the skipped duration to keep from
-       throwing off the offset values. */
-    if((mux_data->track == 1) && (thisSample == 0) && (buf->key != 1) && (job->vcodec == HB_VCODEC_X264))
-    {
-	    initDelay +=duration;
-	    return 0;
-    }
     /* When we do get the first keyframe, use its duration as the
        initial delay added to the frame order offset for b-frames.
        Because of b-pyramid, double this duration when there are
        b-pyramids, as denoted by job->areBframes equalling 2. */
     if ((mux_data->track == 1) && (thisSample == 0) && (buf->key == 1) && (job->vcodec == HB_VCODEC_X264))
     {
-        initDelay += duration * job->areBframes;
+        initDelay = buf->renderOffset;
         thisSample++;
     }
 
@@ -269,7 +245,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
        difference between the presentation time stamp x264 gives
        and the decoding time stamp from the buffer data. */
        MP4WriteSample( m->file, mux_data->track, buf->data, buf->size,
-            duration, ((mux_data->track != 1) || (job->areBframes==0) || (job->vcodec != HB_VCODEC_X264)) ? 0 : ( initDelay + ((buf->encodedPTS - buf->start) * job->arate / 90000)),
+            duration, ((mux_data->track != 1) || (job->areBframes==0) || (job->vcodec != HB_VCODEC_X264)) ? 0 : (  buf->renderOffset * job->arate / 90000),
             (buf->key == 1) );
                                 
     return 0;
@@ -281,6 +257,33 @@ static int MP4End( hb_mux_object_t * m )
     hb_job_t * job = m->job;
     char filename[1024]; memset( filename, 0, 1024 );
 #endif
+
+    /* Walk the entire video sample table and find the minumum ctts value. */
+    {
+           MP4SampleId count = MP4GetTrackNumberOfSamples( m->file, 1);
+           MP4SampleId i;
+           MP4Duration renderingOffset = 2000000000, tmp;
+           
+           // Find the smallest rendering offset
+           for(i = 1; i <= count; i++)
+           {
+               tmp = MP4GetSampleRenderingOffset(m->file, 1, i);
+               if(tmp < renderingOffset)
+                   renderingOffset = tmp;
+           }
+           
+           // Adjust all ctts values down by renderingOffset
+           for(i = 1; i <= count; i++)
+           {
+               MP4SetSampleRenderingOffset(m->file,1,i,
+                   MP4GetSampleRenderingOffset(m->file,1,i) - renderingOffset);
+           }
+           
+           // Insert track edit to get A/V back in sync.  The edit amount is
+           // the rendering offset of the first sample.
+           MP4AddTrackEdit(m->file, 1, MP4_INVALID_EDIT_ID, MP4GetSampleRenderingOffset(m->file,1,1),
+               MP4GetTrackDuration(m->file, 1), 0);
+     }
 
     MP4Close( m->file );
 

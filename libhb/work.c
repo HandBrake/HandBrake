@@ -447,7 +447,7 @@ static void do_job( hb_job_t * job, int cpu_count )
         if( done &&
             !hb_fifo_size( job->fifo_sync ) &&
             !hb_fifo_size( job->fifo_render ) &&
-            hb_fifo_size( job->fifo_mpeg4 ) < 2 )
+            !hb_fifo_size( job->fifo_mpeg4 ) )
         {
             break;
         }

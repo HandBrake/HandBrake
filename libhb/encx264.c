@@ -23,11 +23,21 @@ hb_work_object_t hb_encx264 =
     encx264Close
 };
 
+// 16 is probably overkill but it's also the maximum for h.264 reference frames
+#define MAX_INFLIGHT_FRAMES 16
+
 struct hb_work_private_s
 {
     hb_job_t       * job;
     x264_t         * x264;
     x264_picture_t   pic_in;
+
+    // Internal queue of DTS start/stop values.
+    int64_t        dts_start[MAX_INFLIGHT_FRAMES];
+    int64_t        dts_stop[MAX_INFLIGHT_FRAMES];
+
+    int64_t        dts_write_index;
+    int64_t        dts_read_index;
 
     char             filename[1024];
 };
@@ -215,6 +225,9 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     x264_picture_alloc( &pv->pic_in, X264_CSP_I420,
                         job->width, job->height );
 
+    pv->dts_write_index = 0;
+    pv->dts_read_index = 0;
+
     return 0;
 }
 
@@ -240,31 +253,57 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     x264_nal_t  * nal;
     int i;
 
-    /* XXX avoid this memcpy ? */
-    memcpy( pv->pic_in.img.plane[0], in->data, job->width * job->height );
-    if( job->grayscale )
+    if (in->data)
     {
-        /* XXX x264 has currently no option for grayscale encoding */
-        memset( pv->pic_in.img.plane[1], 0x80, job->width * job->height / 4 );
-        memset( pv->pic_in.img.plane[2], 0x80, job->width * job->height / 4 );
+        /* XXX avoid this memcpy ? */
+        memcpy( pv->pic_in.img.plane[0], in->data, job->width * job->height );
+        if( job->grayscale )
+        {
+             /* XXX x264 has currently no option for grayscale encoding */
+             memset( pv->pic_in.img.plane[1], 0x80, job->width * job->height / 4 );
+             memset( pv->pic_in.img.plane[2], 0x80, job->width * job->height / 4 );
+        }
+        else
+        {
+             memcpy( pv->pic_in.img.plane[1], in->data + job->width * job->height,
+                      job->width * job->height / 4 );
+             memcpy( pv->pic_in.img.plane[2], in->data + 5 * job->width *
+                      job->height / 4, job->width * job->height / 4 );
+        }
+
+        pv->pic_in.i_type    = X264_TYPE_AUTO;
+        pv->pic_in.i_qpplus1 = 0;
+
+        // Remember current PTS value, use as DTS later
+        pv->dts_start[pv->dts_write_index & (MAX_INFLIGHT_FRAMES-1)] = in->start;
+        pv->dts_stop[pv->dts_write_index & (MAX_INFLIGHT_FRAMES-1)]  = in->stop;
+        pv->dts_write_index++;
+
+        /* Feed the input DTS to x264 so it can figure out proper output PTS */
+        pv->pic_in.i_pts = in->start;
+
+        x264_encoder_encode( pv->x264, &nal, &i_nal,
+                               &pv->pic_in, &pic_out );        
     }
     else
     {
-        memcpy( pv->pic_in.img.plane[1], in->data + job->width * job->height,
-                job->width * job->height / 4 );
-        memcpy( pv->pic_in.img.plane[2], in->data + 5 * job->width *
-                job->height / 4, job->width * job->height / 4 );
+        x264_encoder_encode( pv->x264, &nal, &i_nal,
+                             NULL, &pic_out );
+        /* No more delayed B frames */
+        if(i_nal == 0)
+        {
+            *buf_out        = NULL;
+            return HB_WORK_DONE;
+        }
+       else
+       {
+           /* Since we output at least one more frame, drop another empty one onto
+              our input fifo.  We'll keep doing this automatically until we stop
+              getting frames out of the encoder. */
+           hb_fifo_push(w->fifo_in, hb_buffer_init(0));
+       }
     }
-
-    pv->pic_in.i_type    = X264_TYPE_AUTO;
-    pv->pic_in.i_qpplus1 = 0;
-
-    /* Feed the input DTS to x264 so it can figure out proper output PTS */
-    pv->pic_in.i_pts = in->start;
-
-    x264_encoder_encode( pv->x264, &nal, &i_nal,
-                         &pv->pic_in, &pic_out );
-
+  
     /* Should be way too large */
     buf        = hb_buffer_init( 3 * job->width * job->height / 2 );
     buf->size  = 0;
@@ -272,76 +311,104 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     buf->stop  = in->stop;
     buf->key   = 0;
 
-    for( i = 0; i < i_nal; i++ )
+    if (i_nal)
     {
-        int size, data;
+       /* Should be way too large */
+       buf        = hb_buffer_init( 3 * job->width * job->height / 2 );
+       buf->size  = 0;
+       buf->start = in->start;
+       buf->stop  = in->stop;
+       buf->key   = 0;
+       
+       int64_t dts_start, dts_stop;
+               
+       // Get next DTS value to use
+       dts_start = pv->dts_start[pv->dts_read_index & (MAX_INFLIGHT_FRAMES-1)];
+       dts_stop  = pv->dts_stop[pv->dts_read_index & (MAX_INFLIGHT_FRAMES-1)];
+       pv->dts_read_index++;
+    
+       for( i = 0; i < i_nal; i++ )
+       {
+           int size, data;
 
-        data = buf->alloc - buf->size;
-        if( ( size = x264_nal_encode( buf->data + buf->size, &data,
+           data = buf->alloc - buf->size;
+           if( ( size = x264_nal_encode( buf->data + buf->size, &data,
                                       1, &nal[i] ) ) < 1 )
-        {
-            continue;
-        }
-
-        if( job->mux & HB_MUX_AVI )
-        {
-            if( nal[i].i_ref_idc == NAL_PRIORITY_HIGHEST )
             {
-                buf->key = 1;
+                continue;
             }
-            buf->size += size;
-            continue;
-        }
 
-        /* H.264 in .mp4 */
-        switch( buf->data[buf->size+4] & 0x1f )
-        {
-            case 0x7:
-            case 0x8:
-                /* SPS, PPS */
-                break;
+            if( job->mux & HB_MUX_AVI )
+            {
+                if( nal[i].i_ref_idc == NAL_PRIORITY_HIGHEST )
+                {
+                    buf->key = 1;
+                }
+                buf->size += size;
+                continue;
+            }
 
-            default:
-                /* H.264 in mp4 (stolen from mp4creator) */
-                buf->data[buf->size+0] = ( ( size - 4 ) >> 24 ) & 0xFF;
-                buf->data[buf->size+1] = ( ( size - 4 ) >> 16 ) & 0xFF;
-                buf->data[buf->size+2] = ( ( size - 4 ) >>  8 ) & 0xFF;
-                buf->data[buf->size+3] = ( ( size - 4 ) >>  0 ) & 0xFF;
+            /* H.264 in .mp4 */
+            switch( buf->data[buf->size+4] & 0x1f )
+            {
+                case 0x7:
+                case 0x8:
+                    /* SPS, PPS */
+                    break;
 
-        /* For IDR (key frames), buf->key = 1,
-           and the same for regular I-frames. */
-        if( (pic_out.i_type == X264_TYPE_IDR) || (pic_out.i_type == X264_TYPE_I) )
-        {
-        buf->key = 1;
-        }
-        /* For B-frames, buf->key = 2 */
-        else if( (pic_out.i_type == X264_TYPE_B) )
-        {
-        buf->key = 2;
-        }                
-        /* This is for b-pyramid, which has reference b-frames
-           However, it doesn't seem to ever be used...
-           They just show up as buf->key == 2 like
-           regular b-frames. */
-        else if( (pic_out.i_type == X264_TYPE_BREF) )
-        {
-            buf->key = 3;
-        }
-        /* For P-frames, buf->key = 0 */
-        else
-        {
-            buf->key = 0;
-        }
+                default:
+                    /* H.264 in mp4 (stolen from mp4creator) */
+                    buf->data[buf->size+0] = ( ( size - 4 ) >> 24 ) & 0xFF;
+                    buf->data[buf->size+1] = ( ( size - 4 ) >> 16 ) & 0xFF;
+                    buf->data[buf->size+2] = ( ( size - 4 ) >>  8 ) & 0xFF;
+                    buf->data[buf->size+3] = ( ( size - 4 ) >>  0 ) & 0xFF;
 
-        /* Store the output presentation time stamp
-           from x264 for use by muxmp4 in off-setting
-           b-frames with the CTTS atom. */
-        buf->encodedPTS = pic_out.i_pts;
+                /* For IDR (key frames), buf->key = 1,
+                   and the same for regular I-frames. */
+                if( (pic_out.i_type == X264_TYPE_IDR) || (pic_out.i_type == X264_TYPE_I) )
+                {
+                    buf->key = 1;
+                }
+                /* For B-frames, buf->key = 2 */
+                else if( (pic_out.i_type == X264_TYPE_B) )
+                {
+                    buf->key = 2;
+                }                
+                /* This is for b-pyramid, which has reference b-frames
+                   However, it doesn't seem to ever be used...
+                   They just show up as buf->key == 2 like
+                   regular b-frames. */
+                else if( (pic_out.i_type == X264_TYPE_BREF) )
+                {
+                    buf->key = 3;
+                }
+                /* For P-frames, buf->key = 0 */
+                else
+                {
+                    buf->key = 0;
+                }
+
+                /* Store the output presentation time stamp
+                   from x264 for use by muxmp4 in off-setting
+                   b-frames with the CTTS atom. */
+                /* For now, just add 1000000 to the offset so that the
+                   value is pretty much guaranteed to be positive.  The
+                   muxing code will minimize the renderOffsets at the end. */
+        
+                buf->renderOffset = pic_out.i_pts - dts_start + 1000000;
+               
+                /* Send out the next dts values */
+                buf->start = dts_start;
+                buf->stop  = dts_stop;
 
                 buf->size += size;
+            }
         }
     }
 
+    else
+        buf = NULL;
+    
     *buf_out = buf;
 
     return HB_WORK_OK;

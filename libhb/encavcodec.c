@@ -175,6 +175,12 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     AVFrame  * frame;
     hb_buffer_t * in = *buf_in, * buf;
 
+    if(!in->data)
+    {
+       *buf_out        = NULL;
+       return HB_WORK_DONE;
+    }
+
     frame              = avcodec_alloc_frame();
     frame->data[0]     = in->data;
     frame->data[1]     = frame->data[0] + job->width * job->height;
