@@ -258,6 +258,9 @@ static int MP4End( hb_mux_object_t * m )
     char filename[1024]; memset( filename, 0, 1024 );
 #endif
 
+    hb_job_t * job = m->job;
+    
+    if (job->areBframes)
     /* Walk the entire video sample table and find the minumum ctts value. */
     {
            MP4SampleId count = MP4GetTrackNumberOfSamples( m->file, 1);
