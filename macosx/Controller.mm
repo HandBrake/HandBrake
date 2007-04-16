@@ -587,7 +587,7 @@ static int FormatSettings[3][4] =
 		fPicLabelAr,fPicLabelDeinter,fPicLabelSrcX,fPicLabelOutputX,
 		fPicLabelPAROutp,fPicLabelPAROutputX,fPicSettingPARWidth,fPicSettingPARHeight,
 		fPicSettingPARDsply,fPicLabelAnamorphic,tableView,fPresetsAdd,fPresetsDelete,
-		fCreateChapterMarkers,fPresetNewX264OptLabel};
+		fCreateChapterMarkers,fPresetNewX264OptLabel,fDisplayX264Options};
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -1729,42 +1729,6 @@ the user is using "Custom" settings by determining the sender*/
 }
 
 
-- (IBAction) ShowAddPresetPanel: (id) sender
-{
-    /* Deselect the currently selected Preset if there is one*/
-		[tableView deselectRow:[tableView selectedRow]];
-    /* If we have MP4, AVC H.264 and Main then we enable the x264 Options field for the
-	 Add Preset window we are about to open. We do this before we actually open the panel,
-	 as doing it after causes it to stick from the last selection for some reason. */
-	if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fDstCodecsPopUp indexOfSelectedItem] == 1)
-	{
-		[fPresetNewX264Opt setEditable: YES];
-		[fPresetNewX264OptLabel setEnabled: YES];
-	}
-	else
-	{
-		[fPresetNewX264Opt setEditable: NO];
-		[fPresetNewX264OptLabel setEnabled: NO];
-	}
-		/* Erase info from the input fields */
-	[fPresetNewName setStringValue: @""];
-	[fPresetNewX264Opt setString:@""];
-	/* Show the panel */
-	[NSApp beginSheet: fAddPresetPanel modalForWindow: fWindow
-        modalDelegate: NULL didEndSelector: NULL contextInfo: NULL];
-    [NSApp runModalForWindow: fAddPresetPanel];
-    [NSApp endSheet: fAddPresetPanel];
-    [fAddPresetPanel orderOut: self];
-	
-	
-}
-- (IBAction) CloseAddPresetPanel: (id) sender
-{
-	/* Erase info from the input fields */
-	[fPresetNewName setStringValue: @""];
-	[fPresetNewX264Opt setString:@""];
-    [NSApp stopModal];
-}
    /* We use this method to recreate new, updated factory
    presets */
 - (IBAction)AddFactoryPresets:(id)sender
@@ -1805,11 +1769,49 @@ the user is using "Custom" settings by determining the sender*/
 
 }
 
+- (IBAction) ShowAddPresetPanel: (id) sender
+{
+    /* Deselect the currently selected Preset if there is one*/
+		[tableView deselectRow:[tableView selectedRow]];
+    /* If we have MP4, AVC H.264 and Main then we enable the x264 Options field for the
+	 Add Preset window we are about to open. We do this before we actually open the panel,
+	 as doing it after causes it to stick from the last selection for some reason. */
+	if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fDstCodecsPopUp indexOfSelectedItem] == 1)
+	{
+		[fPresetNewX264Opt setEditable: YES];
+		[fPresetNewX264OptLabel setEnabled: YES];
+	}
+	else
+	{
+		[fPresetNewX264Opt setEditable: NO];
+		[fPresetNewX264OptLabel setEnabled: NO];
+	}
+		/* Erase info from the input fields */
+	[fPresetNewName setStringValue: @""];
+	[fPresetNewX264Opt setStringValue:@""];
+	/* Show the panel */
+	[NSApp beginSheet: fAddPresetPanel modalForWindow: fWindow
+        modalDelegate: NULL didEndSelector: NULL contextInfo: NULL];
+    [NSApp runModalForWindow: fAddPresetPanel];
+    [NSApp endSheet: fAddPresetPanel];
+    [fAddPresetPanel orderOut: self];
+	
+	
+}
+- (IBAction) CloseAddPresetPanel: (id) sender
+{
+	[NSApp stopModal];
+}
+
+
 - (IBAction)AddUserPreset:(id)sender
 {
+
     /* Here we create a custom user preset */
 	[UserPresets addObject:[self CreatePreset]];
-
+	/* Erase info from the input fields */
+	[fPresetNewName setStringValue: @""];
+	[fPresetNewX264Opt setStringValue:@""];
 	/* We stop the modal window for the new preset */
 	[NSApp stopModal];
     [self AddPreset];
@@ -1865,7 +1867,7 @@ the user is using "Custom" settings by determining the sender*/
 	/* Video encoder */
 	[preset setObject:[fVidEncoderPopUp titleOfSelectedItem] forKey:@"VideoEncoder"];
 	/* x264 Option String */
-	[preset setObject:[fPresetNewX264Opt string] forKey:@"x264Option"];
+	[preset setObject:[fPresetNewX264Opt stringValue] forKey:@"x264Option"];
 	//[fDisplayX264Options setStringValue: [NSString stringWithFormat: @"Using Option: %@",CurUserPresetx264Opt]];
 	/* Video quality */
 	[preset setObject:[NSNumber numberWithInt:[fVidQualityMatrix selectedRow]] forKey:@"VideoQualityType"];
