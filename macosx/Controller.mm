@@ -1189,8 +1189,8 @@ static int FormatSettings[3][4] =
 
 	/* changing the title may have changed the audio channels on offer, */
 	/* so call AudioTrackPopUpChanged for both audio tracks to update the mixdown popups */
-	[self AudioTrackPopUpChanged: fAudLang1PopUp mixdownToUse: 0];
-	[self AudioTrackPopUpChanged: fAudLang2PopUp mixdownToUse: 0];
+	[self AudioTrackPopUpChanged: fAudLang1PopUp];
+	[self AudioTrackPopUpChanged: fAudLang2PopUp];
 
 }
 
@@ -1288,8 +1288,8 @@ static int FormatSettings[3][4] =
 
 	/* changing the format may mean that we can / can't offer mono or 6ch, */
 	/* so call AudioTrackPopUpChanged for both audio tracks to update the mixdown popups */
-	[self AudioTrackPopUpChanged: fAudLang1PopUp mixdownToUse: 0];
-	[self AudioTrackPopUpChanged: fAudLang2PopUp mixdownToUse: 0];
+	[self AudioTrackPopUpChanged: fAudLang1PopUp];
+	[self AudioTrackPopUpChanged: fAudLang2PopUp];
 
 	/* We call method method to change UI to reflect whether a preset is used or not*/
 	[self CustomSettingUsed: sender];	
@@ -1334,8 +1334,8 @@ static int FormatSettings[3][4] =
 
 	/* changing the codecs on offer may mean that we can / can't offer mono or 6ch, */
 	/* so call AudioTrackPopUpChanged for both audio tracks to update the mixdown popups */
-	[self AudioTrackPopUpChanged: fAudLang1PopUp mixdownToUse: 0];
-	[self AudioTrackPopUpChanged: fAudLang2PopUp mixdownToUse: 0];
+	[self AudioTrackPopUpChanged: fAudLang1PopUp];
+	[self AudioTrackPopUpChanged: fAudLang2PopUp];
 
     [self CalculateBitrate: sender];
     /* We call method method to change UI to reflect whether a preset is used or not*/
@@ -1390,6 +1390,7 @@ static int FormatSettings[3][4] =
 
 - (IBAction) AudioTrackPopUpChanged: (id) sender
 {
+    /* utility function to call AudioTrackPopUpChanged without passing in a mixdown-to-use */
     [self AudioTrackPopUpChanged: sender mixdownToUse: 0];
 }
 
@@ -1404,7 +1405,18 @@ static int FormatSettings[3][4] =
     int thisAudio = [sender tag];
 
     /* get the index of the selected audio */
-    int thisAudioIndex = [sender indexOfSelectedItem] - 1;;
+    int thisAudioIndex = [sender indexOfSelectedItem] - 1;
+
+    /* Handbrake can't currently cope with ripping the same source track twice */
+    /* So, if this audio is also selected in the other audio track popup, set that popup's selection to "none" */
+    /* get a reference to the two audio track popups */
+    NSPopUpButton * thisAudioPopUp  = (thisAudio == 1 ? fAudLang2PopUp : fAudLang1PopUp);
+    NSPopUpButton * otherAudioPopUp = (thisAudio == 1 ? fAudLang1PopUp : fAudLang2PopUp);
+    /* if the same track is selected in the other audio popup, then select "none" in that popup */
+    if ([thisAudioPopUp indexOfSelectedItem] == [otherAudioPopUp indexOfSelectedItem]) {
+        [otherAudioPopUp selectItemAtIndex: 0];
+        [self AudioTrackPopUpChanged: otherAudioPopUp];
+    }
 
     /* pointer for the hb_audio_s struct we will use later on */
     hb_audio_t * audio;
