@@ -1094,20 +1094,6 @@ static int FormatSettings[3][4] =
 /* Start Get and set the initial pic size for display */
 	hb_job_t * job = title->job;
 	fTitle = title; 
-	/*Set Source Size Fields Here */
-	[fPicSrcWidth setStringValue: [NSString stringWithFormat:
-							 @"%d", fTitle->width]];
-	[fPicSrcHeight setStringValue: [NSString stringWithFormat:
-							 @"%d", fTitle->height]];
-	/* We get the originial output picture width and height and put them
-	in variables for use with some presets later on */
-	PicOrigOutputWidth = job->width;
-	PicOrigOutputHeight = job->height;
-	/* we test getting the max output value for pic sizing here to be used later*/
-	[fPicSettingWidth setStringValue: [NSString stringWithFormat:
-		@"%d", PicOrigOutputWidth]];
-	[fPicSettingHeight setStringValue: [NSString stringWithFormat:
-		@"%d", PicOrigOutputHeight]];
 	/* Turn Deinterlace on/off depending on the preference */
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultDeinterlaceOn"] > 0)
 	{
@@ -1128,6 +1114,24 @@ static int FormatSettings[3][4] =
 	{
 		job->pixel_ratio = 0 ;
 	}
+	/*Set Source Size Fields Here */
+	[fPicSrcWidth setStringValue: [NSString stringWithFormat:
+							 @"%d", fTitle->width]];
+	[fPicSrcHeight setStringValue: [NSString stringWithFormat:
+							 @"%d", fTitle->height]];
+	/* We get the originial output picture width and height and put them
+	in variables for use with some presets later on */
+	PicOrigOutputWidth = job->width;
+	PicOrigOutputHeight = job->height;
+	/* we test getting the max output value for pic sizing here to be used later*/
+	[fPicSettingWidth setStringValue: [NSString stringWithFormat:
+		@"%d", PicOrigOutputWidth]];
+	[fPicSettingHeight setStringValue: [NSString stringWithFormat:
+		@"%d", PicOrigOutputHeight]];
+	/* we run the picture size values through
+	CalculatePictureSizing to get all picture size
+	information*/
+	[self CalculatePictureSizing: NULL];
 	/* Run Through EncoderPopUpChanged to see if there
 		needs to be any pic value modifications based on encoder settings */
 	//[self EncoderPopUpChanged: NULL];
@@ -1616,8 +1620,7 @@ static int FormatSettings[3][4] =
 /* Get and Display Current Pic Settings in main window */
 - (IBAction) CalculatePictureSizing: (id) sender
 {
-
-	//hb_job_t * job = fTitle->job;		
+	
 
 	[fPicSettingWidth setStringValue: [NSString stringWithFormat:
 		@"%d", fTitle->job->width]];
@@ -1637,6 +1640,8 @@ static int FormatSettings[3][4] =
 	int arpheight = fTitle->job->pixel_aspect_height;
 	int displayparwidth = titlewidth * arpwidth / arpheight;
 	int displayparheight = fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1];
+	[fPicSettingHeight setStringValue: [NSString stringWithFormat:
+		@"%d", displayparheight]];
 	[fPicLabelPAROutp setStringValue: @"Anamorphic Output:"];
 	[fPicLabelPAROutputX setStringValue: @"x"];
     [fPicSettingPARWidth setStringValue: [NSString stringWithFormat:

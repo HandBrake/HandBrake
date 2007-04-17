@@ -145,7 +145,7 @@ static int GetAlignedSize( int size )
 	
 	[fInfoField setStringValue: [NSString stringWithFormat:
 	@"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d", fTitle->width, fTitle->height,
-	MaxOutputWidth, MaxOutputHeight, displayparwidth,
+	MaxOutputWidth, displayparheight, displayparwidth,
 	displayparheight]];
 	
 	
@@ -171,8 +171,15 @@ static int GetAlignedSize( int size )
 	[fWidthStepper      setIntValue: MaxOutputWidth];
 	[fWidthField        setIntValue: MaxOutputWidth];
 	
-	[fHeightStepper      setIntValue: MaxOutputHeight];
-	[fHeightField        setIntValue: MaxOutputHeight];
+	/* This will show correct anamorphic height values, but
+	show distorted preview picture ratio */
+	[fHeightStepper      setIntValue: fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1]];
+	[fHeightField        setIntValue: fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1]];
+	
+	/* This will show wrong anamorphic height values, but
+	show proper preview picture ratio */
+	//[fHeightStepper      setIntValue: MaxOutputHeight];
+	//[fHeightField        setIntValue: MaxOutputHeight];
 	[fRatioCheck        setState: 0];
 
 	[fWidthStepper setEnabled: NO];
