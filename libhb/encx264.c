@@ -303,13 +303,6 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
            hb_fifo_push(w->fifo_in, hb_buffer_init(0));
        }
     }
-  
-    /* Should be way too large */
-    buf        = hb_buffer_init( 3 * job->width * job->height / 2 );
-    buf->size  = 0;
-    buf->start = in->start;
-    buf->stop  = in->stop;
-    buf->key   = 0;
 
     if (i_nal)
     {
