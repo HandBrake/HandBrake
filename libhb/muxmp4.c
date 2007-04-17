@@ -50,7 +50,7 @@ static int MP4Init( hb_mux_object_t * m )
     u_int16_t language_code;
 
     /* Create an empty mp4 file */
-    m->file = MP4Create( job->file, MP4_DETAILS_ERROR, MP4_CREATE_64BIT_DATA );
+    m->file = MP4Create( job->file, MP4_DETAILS_ERROR, 0 );
 
     /* Video track */
     mux_data      = malloc( sizeof( hb_mux_data_t ) );
