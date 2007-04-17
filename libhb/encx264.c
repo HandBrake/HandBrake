@@ -70,142 +70,148 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     param.i_fps_den    = job->vrate_base;
     param.i_keyint_max = 20 * job->vrate / job->vrate_base;
     param.i_log_level  = X264_LOG_INFO;
-	if( job->h264_level )
-	{
-	param.i_threads   = 1;
-	param.b_cabac     = 0;
-	param.i_level_idc = job->h264_level;
-	hb_log( "encx264: encoding at level %i",
-		param.i_level_idc );
-	}
+    if( job->h264_level )
+    {
+        param.i_threads   = 1;
+        param.b_cabac     = 0;
+        param.i_level_idc = job->h264_level;
+        hb_log( "encx264: encoding at level %i",
+                param.i_level_idc );
+    }
 
-	/* Slightly faster with minimal quality lost */
-	param.analyse.i_subpel_refine = 4;
+    /* Slightly faster with minimal quality lost */
+    param.analyse.i_subpel_refine = 4;
 
-	/* 	This section passes the string x264opts to libx264 for parsing into parameter names and values.
+    /*
+       	This section passes the string x264opts to libx264 for parsing into 
+        parameter names and values.
 
-	The string is set up like this:
-	option1=value1:option2=value 2
+        The string is set up like this:
+        option1=value1:option2=value 2
 
-	So, you have to iterate through based on the colons, and then put the left side of the equals sign in "name"
-	and the right side into "value." Then you hand those strings off to x264 for interpretation.
+        So, you have to iterate through based on the colons, and then put 
+        the left side of the equals sign in "name" and the right side into
+        "value." Then you hand those strings off to x264 for interpretation.
 
-	This is all based on the universal x264 option handling Loren Merritt implemented in the Mplayer/Mencoder project.
-	*/
- 
-	char *x264opts = job->x264opts;
-	if(x264opts != NULL && *x264opts != '\0')
-	{
-		while(*x264opts)
-		{
-	    	char *name = x264opts;
-	    	char *value;
-	    	int ret;
+        This is all based on the universal x264 option handling Loren
+        Merritt implemented in the Mplayer/Mencoder project.
+     */
 
-	    	x264opts += strcspn(x264opts, ":");
-	    	if(*x264opts)
-	   		{
-	       		*x264opts = 0;
-	       		x264opts++;
-	   		}
+    char *x264opts = job->x264opts;
+    if( x264opts != NULL && *x264opts != '\0' )
+    {
+        while( *x264opts )
+        {
+            char *name = x264opts;
+            char *value;
+            int ret;
 
-	    	value = strchr( name, '=' );
-	    	if(value)
-	   		{
-	        	*value = 0;
-	        	value++;
-	   		}
-		
-			/*
-				When B-frames are enabled, the max frame count increments by 1 (regardless of the number of B-frames).
-				If you don't change the duration of the video track when you mux, libmp4 barfs.
-				So, check if the x264opts are using B-frames, and when they are, set the boolean job->areBframes as true.
-			*/
+            x264opts += strcspn( x264opts, ":" );
+            if( *x264opts )
+            {
+                *x264opts = 0;
+                x264opts++;
+            }
 
-			if (!(strcmp(name, "bframes")))
-			{
-				if (atoi(value) > 0)
-				{
-					job->areBframes = 1;
-				}
-			}
+            value = strchr( name, '=' );
+            if( value )
+            {
+                *value = 0;
+                value++;
+            }
+
+            /*
+               When B-frames are enabled, the max frame count increments
+               by 1 (regardless of the number of B-frames). If you don't
+               change the duration of the video track when you mux, libmp4
+               barfs.  So, check if the x264opts are using B-frames, and
+               when they are, set the boolean job->areBframes as true.
+             */
+
+            if( !( strcmp( name, "bframes" ) ) )
+            {
+                if( atoi( value ) > 0 )
+                {
+                    job->areBframes = 1;
+                }
+            }
 
             /* Note b-pyramid here, so the initial delay can be doubled */
-            if (!(strcmp(name, "b-pyramid")))
+            if( !( strcmp( name, "b-pyramid" ) ) )
             {
-                if (value != NULL)
+                if( value != NULL )
                 {
-	                if (atoi(value) > 0)
-	                {
-		                job->areBframes = 2;
-	                }
+                    if( atoi( value ) > 0 )
+                    {
+                        job->areBframes = 2;
+                    }
                 }
                 else
                 {
                     job->areBframes = 2;
                 }
-			}
+            }
 
             /* Here's where the strings are passed to libx264 for parsing. */
-	    	ret = x264_param_parse(&param, name, value);
-	
-			/* 	Let x264 sanity check the options for us*/
-	    	if(ret == X264_PARAM_BAD_NAME)
-	         	printf("x264 options: Unknown suboption %s\n", name);
-	    	if(ret == X264_PARAM_BAD_VALUE)
-	       		printf("x264 options: Bad argument %s=%s\n", name, value ? value : "(null)");
-		}
-	}
+            ret = x264_param_parse( &param, name, value );
+
+            /* 	Let x264 sanity check the options for us*/
+            if( ret == X264_PARAM_BAD_NAME )
+                hb_log( "x264 options: Unknown suboption %s", name );
+            if( ret == X264_PARAM_BAD_VALUE )
+                hb_log( "x264 options: Bad argument %s=%s", name, value ? value : "(null)" );
+        }
+    }
 
 
-	if( job->pixel_ratio )
-	{
-	    param.vui.i_sar_width = job->pixel_aspect_width;
-	    param.vui.i_sar_height = job->pixel_aspect_height;
+    if( job->pixel_ratio )
+    {
+        param.vui.i_sar_width = job->pixel_aspect_width;
+        param.vui.i_sar_height = job->pixel_aspect_height;
 
-	    hb_log( "encx264: encoding with stored aspect %d/%d",
-	            param.vui.i_sar_width, param.vui.i_sar_height );
-	}
+        hb_log( "encx264: encoding with stored aspect %d/%d",
+                param.vui.i_sar_width, param.vui.i_sar_height );
+    }
 
 
-	if( job->vquality >= 0.0 && job->vquality <= 1.0 )
-	{
-	    switch(job->crf)
-		{
-			case 1:
-			/*Constant RF*/
-			param.rc.i_rc_method = X264_RC_CRF;
-			param.rc.f_rf_constant = 51 - job->vquality * 51;
-			hb_log( "encx264: Encoding at constant RF %f",
-				param.rc.f_rf_constant );
-			break;
+    if( job->vquality >= 0.0 && job->vquality <= 1.0 )
+    {
+        switch( job->crf )
+        {
+            case 1:
+                /*Constant RF*/
+                param.rc.i_rc_method = X264_RC_CRF;
+                param.rc.f_rf_constant = 51 - job->vquality * 51;
+                hb_log( "encx264: Encoding at constant RF %f",
+                        param.rc.f_rf_constant );
+                break;
 
-			case 0:
-			/*Constant QP*/
-			param.rc.i_rc_method = X264_RC_CQP;
-	    	param.rc.i_qp_constant = 51 - job->vquality * 51;
-	    	hb_log( "encx264: encoding at constant QP %d",
-	            param.rc.i_qp_constant );
-			break;
-		}
-	}
-	else
-	{
-	/* Rate control */
-	    param.rc.i_rc_method = X264_RC_ABR;
-	    param.rc.i_bitrate = job->vbitrate;
-	    switch( job->pass )
-	    {
-	        case 1:
-	            param.rc.b_stat_write  = 1;
-	            param.rc.psz_stat_out = pv->filename;
-	            break;
-	        case 2:
-	            param.rc.b_stat_read = 1;
-	            param.rc.psz_stat_in = pv->filename;
-	            break;
-	    }
-	}
+            case 0:
+                /*Constant QP*/
+                param.rc.i_rc_method = X264_RC_CQP;
+                param.rc.i_qp_constant = 51 - job->vquality * 51;
+                hb_log( "encx264: encoding at constant QP %d",
+                        param.rc.i_qp_constant );
+                break;
+        }
+    }
+    else
+    {
+        /* Rate control */
+        param.rc.i_rc_method = X264_RC_ABR;
+        param.rc.i_bitrate = job->vbitrate;
+        switch( job->pass )
+        {
+            case 1:
+                param.rc.b_stat_write  = 1;
+                param.rc.psz_stat_out = pv->filename;
+                break;
+            case 2:
+                param.rc.b_stat_read = 1;
+                param.rc.psz_stat_in = pv->filename;
+                break;
+        }
+    }
 
     hb_log( "encx264: opening libx264 (pass %d)", job->pass );
     pv->x264 = x264_encoder_open( &param );
@@ -223,7 +229,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     memcpy( &w->config->h264.pps[1], nal[2].p_payload, nal[2].i_payload );
 
     x264_picture_alloc( &pv->pic_in, X264_CSP_I420,
-                        job->width, job->height );
+            job->width, job->height );
 
     pv->dts_write_index = 0;
     pv->dts_read_index = 0;
@@ -253,22 +259,22 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     x264_nal_t  * nal;
     int i;
 
-    if (in->data)
+    if( in->data )
     {
         /* XXX avoid this memcpy ? */
         memcpy( pv->pic_in.img.plane[0], in->data, job->width * job->height );
         if( job->grayscale )
         {
-             /* XXX x264 has currently no option for grayscale encoding */
-             memset( pv->pic_in.img.plane[1], 0x80, job->width * job->height / 4 );
-             memset( pv->pic_in.img.plane[2], 0x80, job->width * job->height / 4 );
+            /* XXX x264 has currently no option for grayscale encoding */
+            memset( pv->pic_in.img.plane[1], 0x80, job->width * job->height / 4 );
+            memset( pv->pic_in.img.plane[2], 0x80, job->width * job->height / 4 );
         }
         else
         {
-             memcpy( pv->pic_in.img.plane[1], in->data + job->width * job->height,
-                      job->width * job->height / 4 );
-             memcpy( pv->pic_in.img.plane[2], in->data + 5 * job->width *
-                      job->height / 4, job->width * job->height / 4 );
+            memcpy( pv->pic_in.img.plane[1], in->data + job->width * job->height,
+                    job->width * job->height / 4 );
+            memcpy( pv->pic_in.img.plane[2], in->data + 5 * job->width *
+                    job->height / 4, job->width * job->height / 4 );
         }
 
         pv->pic_in.i_type    = X264_TYPE_AUTO;
@@ -283,50 +289,50 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
         pv->pic_in.i_pts = in->start;
 
         x264_encoder_encode( pv->x264, &nal, &i_nal,
-                               &pv->pic_in, &pic_out );        
+                             &pv->pic_in, &pic_out );        
     }
     else
     {
         x264_encoder_encode( pv->x264, &nal, &i_nal,
                              NULL, &pic_out );
         /* No more delayed B frames */
-        if(i_nal == 0)
+        if( i_nal == 0 )
         {
-            *buf_out        = NULL;
+            *buf_out = NULL;
             return HB_WORK_DONE;
         }
-       else
-       {
-           /* Since we output at least one more frame, drop another empty one onto
-              our input fifo.  We'll keep doing this automatically until we stop
-              getting frames out of the encoder. */
-           hb_fifo_push(w->fifo_in, hb_buffer_init(0));
-       }
+        else
+        {
+        /*  Since we output at least one more frame, drop another empty
+            one onto our input fifo.  We'll keep doing this automatically
+            until we stop getting frames out of the encoder. */
+            hb_fifo_push(w->fifo_in, hb_buffer_init(0));
+        }
     }
 
-    if (i_nal)
+    if( i_nal )
     {
-       /* Should be way too large */
-       buf        = hb_buffer_init( 3 * job->width * job->height / 2 );
-       buf->size  = 0;
-       buf->start = in->start;
-       buf->stop  = in->stop;
-       buf->key   = 0;
-       
-       int64_t dts_start, dts_stop;
-               
-       // Get next DTS value to use
-       dts_start = pv->dts_start[pv->dts_read_index & (MAX_INFLIGHT_FRAMES-1)];
-       dts_stop  = pv->dts_stop[pv->dts_read_index & (MAX_INFLIGHT_FRAMES-1)];
-       pv->dts_read_index++;
-    
-       for( i = 0; i < i_nal; i++ )
-       {
-           int size, data;
+        /* Should be way too large */
+        buf        = hb_buffer_init( 3 * job->width * job->height / 2 );
+        buf->size  = 0;
+        buf->start = in->start;
+        buf->stop  = in->stop;
+        buf->key   = 0;
 
-           data = buf->alloc - buf->size;
-           if( ( size = x264_nal_encode( buf->data + buf->size, &data,
-                                      1, &nal[i] ) ) < 1 )
+        int64_t dts_start, dts_stop;
+
+        /* Get next DTS value to use */
+        dts_start = pv->dts_start[pv->dts_read_index & (MAX_INFLIGHT_FRAMES-1)];
+        dts_stop  = pv->dts_stop[pv->dts_read_index & (MAX_INFLIGHT_FRAMES-1)];
+        pv->dts_read_index++;
+
+        for( i = 0; i < i_nal; i++ )
+        {
+            int size, data;
+
+            data = buf->alloc - buf->size;
+            if( ( size = x264_nal_encode( buf->data + buf->size, &data,
+                                          1, &nal[i] ) ) < 1 )
             {
                 continue;
             }
@@ -355,53 +361,52 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     buf->data[buf->size+1] = ( ( size - 4 ) >> 16 ) & 0xFF;
                     buf->data[buf->size+2] = ( ( size - 4 ) >>  8 ) & 0xFF;
                     buf->data[buf->size+3] = ( ( size - 4 ) >>  0 ) & 0xFF;
+                    switch( pic_out.i_type )
+                    {
+                    /*  For IDR (key frames), buf->key = 1,
+                        and the same for regular I-frames. */
+                        case X264_TYPE_IDR:
+                        case X264_TYPE_I:
+                            buf->key = 1;
+                            break;
+                    /*  For B-frames, buf->key = 2 */
+                        case X264_TYPE_B:
+                            buf->key = 2;
+                            break;
+                    /*  This is for b-pyramid, which has reference b-frames
+                        However, it doesn't seem to ever be used...
+                        They just show up as buf->key == 2 like
+                        regular b-frames. */
+                        case X264_TYPE_BREF:
+                            buf->key = 3;
+                            break;
+                    /*  For P-frames, buf->key = 0 */
+                        default:
+                            buf->key = 0;
+                    }
 
-                /* For IDR (key frames), buf->key = 1,
-                   and the same for regular I-frames. */
-                if( (pic_out.i_type == X264_TYPE_IDR) || (pic_out.i_type == X264_TYPE_I) )
-                {
-                    buf->key = 1;
-                }
-                /* For B-frames, buf->key = 2 */
-                else if( (pic_out.i_type == X264_TYPE_B) )
-                {
-                    buf->key = 2;
-                }                
-                /* This is for b-pyramid, which has reference b-frames
-                   However, it doesn't seem to ever be used...
-                   They just show up as buf->key == 2 like
-                   regular b-frames. */
-                else if( (pic_out.i_type == X264_TYPE_BREF) )
-                {
-                    buf->key = 3;
-                }
-                /* For P-frames, buf->key = 0 */
-                else
-                {
-                    buf->key = 0;
-                }
 
-                /* Store the output presentation time stamp
-                   from x264 for use by muxmp4 in off-setting
-                   b-frames with the CTTS atom. */
-                /* For now, just add 1000000 to the offset so that the
-                   value is pretty much guaranteed to be positive.  The
-                   muxing code will minimize the renderOffsets at the end. */
-        
-                buf->renderOffset = pic_out.i_pts - dts_start + 1000000;
-               
-                /* Send out the next dts values */
-                buf->start = dts_start;
-                buf->stop  = dts_stop;
+                    /* Store the output presentation time stamp
+                       from x264 for use by muxmp4 in off-setting
+                       b-frames with the CTTS atom.
+                       For now, just add 1000000 to the offset so that the
+                       value is pretty much guaranteed to be positive.  The
+                       muxing code will minimize the renderOffset at the end. */
 
-                buf->size += size;
+                    buf->renderOffset = pic_out.i_pts - dts_start + 1000000;
+
+                    /* Send out the next dts values */
+                    buf->start = dts_start;
+                    buf->stop  = dts_stop;
+
+                    buf->size += size;
             }
         }
     }
 
     else
         buf = NULL;
-    
+
     *buf_out = buf;
 
     return HB_WORK_OK;
