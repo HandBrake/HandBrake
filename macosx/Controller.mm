@@ -1700,8 +1700,11 @@ static int FormatSettings[3][4] =
 		{
 		[fPicSettingPARDsply setStringValue: @"Off"];
 		}	
-		
-	[self CustomSettingUsed: sender];
+	/* below will trigger the preset, if selected, to be
+	changed to "Custom". Lets comment out for now until
+	we figure out a way to determine if the picture values
+	changed modify the preset values */	
+	//[self CustomSettingUsed: sender];
 }
 
 - (IBAction) CalculateBitrate: (id) sender
@@ -1739,11 +1742,14 @@ the user is using "Custom" settings by determining the sender*/
 		[fDisplayX264Options setStringValue: @""];
 		curUserPresetChosenNum = nil;
 		/* If we have MP4, AVC H.264 and x264 Main then we look to see
-		if there are any x264 options from the preferences to use */
+			if there are any x264 options from the preferences to use */
 		if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fDstCodecsPopUp indexOfSelectedItem] == 1)
 		{
-		//[fDisplayX264Options setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"x264Option"]]];
-			[fDisplayX264Options setStringValue: [NSString stringWithFormat:[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"]]];
+		    /* Lets check to see if the user wants them displayed from the preferences */
+			if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefAdvancedx264FlagsShow"] > 0)
+			{
+				[fDisplayX264Options setStringValue: [NSString stringWithFormat:[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"]]];
+			}
 		}
 		
 	}
@@ -1889,8 +1895,7 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[fVidEncoderPopUp titleOfSelectedItem] forKey:@"VideoEncoder"];
 	/* x264 Option String */
 	[preset setObject:[fPresetNewX264Opt stringValue] forKey:@"x264Option"];
-	//[fDisplayX264Options setStringValue: [NSString stringWithFormat: @"Using Option: %@",CurUserPresetx264Opt]];
-	/* Video quality */
+	
 	[preset setObject:[NSNumber numberWithInt:[fVidQualityMatrix selectedRow]] forKey:@"VideoQualityType"];
 	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
 	[preset setObject:[fVidBitrateField stringValue] forKey:@"VideoAvgBitrate"];
@@ -2051,7 +2056,7 @@ the user is using "Custom" settings by determining the sender*/
 	/* Video quality */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
 	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
-	[preset setObject:@"3000" forKey:@"VideoAvgBitrate"];
+	[preset setObject:@"2500" forKey:@"VideoAvgBitrate"];
 	[preset setObject:[NSNumber numberWithFloat:[fVidQualitySlider floatValue]] forKey:@"VideoQualitySlider"];
 	
 	/* Video framerate */
@@ -2235,8 +2240,12 @@ the user is using "Custom" settings by determining the sender*/
 		[fVidEncoderPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]]];
 		
 		/* We can show the preset options here in the gui if we want to
-		Field is currently hidden from user, unhide it if we need to test */
-		[fDisplayX264Options setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"x264Option"]]];
+			so we check to see it the user has specified it in the prefs */
+		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefAdvancedx264FlagsShow"] > 0)
+		{
+			[fDisplayX264Options setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"x264Option"]]];
+		}
+		
 		/* Lets run through the following functions to get variables set there */
 		[self EncoderPopUpChanged: NULL];
 		[self CalculateBitrate: NULL];

@@ -195,7 +195,8 @@
             CLASS = PrefsController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
-                fDefAdvancedx264FlagsView = NSButton; 
+                fDefAdvancedx264FlagsShow = NSButton; 
+                fDefAdvancedx264FlagsView = NSTextField; 
                 fDefAutoNaming = NSButton; 
                 fDefChapterMarkers = NSButton; 
                 fDefCrf = NSButton; 

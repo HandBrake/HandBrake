@@ -16,7 +16,9 @@
 	IBOutlet NSButton * fDefAutoNaming;
 	IBOutlet NSButton * fDefChapterMarkers;
 
-	IBOutlet NSTextView * fDefAdvancedx264FlagsView;
+	IBOutlet NSTextField * fDefAdvancedx264FlagsView;
+	IBOutlet NSButton * fDefAdvancedx264FlagsShow;
+
 }
 
 - (IBAction) OpenPanel:    (id) sender;

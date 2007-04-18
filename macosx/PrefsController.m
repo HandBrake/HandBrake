@@ -24,6 +24,8 @@
                    forKey:@"DefaultPicSizeAutoiPod"];
 	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
                    forKey:@"PixelRatio"];
+	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
+                   forKey:@"DefAdvancedx264FlagsShow"];
 	appDefaults = [NSDictionary dictionaryWithObject:@""
                    forKey:@"DefAdvancedx264Flags"];
 	appDefaults = [NSDictionary dictionaryWithObject:@"YES"
@@ -40,7 +42,8 @@
                    forKey:@"DefaultAutoNaming"];
 	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
                    forKey:@"DefaultChapterMarkers"];
-    [defaults registerDefaults: appDefaults];
+    
+	[defaults registerDefaults: appDefaults];
 
 	/* fUpdateCheck Check or uncheck according to the preferences */
     [fUpdateCheck setState: [defaults boolForKey:@"CheckForUpdates"] ?
@@ -244,10 +247,13 @@
     [fDefPixelRatio setState: [defaults boolForKey:@"PixelRatio"] ?
 				  NSOnState : NSOffState];
 	
+	/* fDefAdvancedx264FlagsShow */
+    [fDefAdvancedx264FlagsShow setState: [defaults boolForKey:@"DefAdvancedx264FlagsShow"] ?
+				  NSOnState : NSOffState];
 	/* Insert default DefAdvanced x264 Flag here */
 	if ([defaults stringForKey:@"DefAdvancedx264Flags"]!=NULL)
 	{
-	[fDefAdvancedx264FlagsView setString:[defaults stringForKey:@"DefAdvancedx264Flags"]];
+	[fDefAdvancedx264FlagsView setStringValue:[defaults stringForKey:@"DefAdvancedx264Flags"]];
 	}
 	
 	/* fDefPresetDrawerShow Check or uncheck according to the preferences*/
@@ -347,10 +353,18 @@
     {
         [defaults setObject:@"NO" forKey:@"PixelRatio"];
     }
- 
+ /* Show Chosen Advanced Flags to be used in main window*/
+ if( [fDefAdvancedx264FlagsShow state] == NSOnState )
+    {
+        [defaults setObject:@"YES" forKey:@"DefAdvancedx264FlagsShow"];
+    }
+    else
+    {
+        [defaults setObject:@"NO" forKey:@"DefAdvancedx264FlagsShow"];
+    }
 		
 	/*Advanced x264 Flag string into */
-      [defaults setObject:[fDefAdvancedx264FlagsView string]  forKey:@"DefAdvancedx264Flags"];	
+      [defaults setObject:[fDefAdvancedx264FlagsView stringValue]  forKey:@"DefAdvancedx264Flags"];	
 	  
 	    /* Show Presets Drawer upon launch*/
 	
