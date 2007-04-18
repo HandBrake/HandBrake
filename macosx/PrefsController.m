@@ -24,8 +24,6 @@
                    forKey:@"DefaultPicSizeAutoiPod"];
 	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
                    forKey:@"PixelRatio"];
-          appDefaults = [NSDictionary dictionaryWithObject:@"NO"
-                   forKey:@"DefaultSurroundSound"];
 	appDefaults = [NSDictionary dictionaryWithObject:@""
                    forKey:@"DefAdvancedx264Flags"];
 	appDefaults = [NSDictionary dictionaryWithObject:@"YES"
@@ -246,10 +244,6 @@
     [fDefPixelRatio setState: [defaults boolForKey:@"PixelRatio"] ?
 				  NSOnState : NSOffState];
 	
-	/* fDefAudioSurround Check or uncheck according to the preferences */
-    [fDefAudioSurround setState: [defaults boolForKey:@"DefaultSurroundSound"] ?
-					 NSOnState : NSOffState];
-		
 	/* Insert default DefAdvanced x264 Flag here */
 	if ([defaults stringForKey:@"DefAdvancedx264Flags"]!=NULL)
 	{
@@ -354,18 +348,6 @@
         [defaults setObject:@"NO" forKey:@"PixelRatio"];
     }
  
-  
-        /* Use Surround Sound if available*/
-	
-	if( [fDefAudioSurround state] == NSOnState )
-    {
-        [defaults setObject:@"YES" forKey:@"DefaultSurroundSound"];
-    }
-    else
-    {
-        [defaults setObject:@"NO" forKey:@"DefaultSurroundSound"];
-    }	
-    
 		
 	/*Advanced x264 Flag string into */
       [defaults setObject:[fDefAdvancedx264FlagsView string]  forKey:@"DefAdvancedx264Flags"];	

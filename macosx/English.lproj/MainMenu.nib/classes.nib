@@ -196,7 +196,6 @@
             LANGUAGE = ObjC; 
             OUTLETS = {
                 fDefAdvancedx264FlagsView = NSButton; 
-                fDefAudioSurround = NSButton; 
                 fDefAutoNaming = NSButton; 
                 fDefChapterMarkers = NSButton; 
                 fDefCrf = NSButton; 

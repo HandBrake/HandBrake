@@ -190,12 +190,6 @@ struct hb_job_s
     int             audios[8];
 	int             audio_mixdowns[8];
 
-	/* this "surround" property will be removed shortly,
-	as soon as the AMIXDOWN code has been integrated into the Mac GUI
-	it's still included here to avoid breaking the Mac GUI short-term
-	however, it won't be applied in deca52.c etc. any more */
-	int             surround;
-
     /* Audio settings:
          acodec:   output codec
          abitrate: output bitrate (kbps)

@@ -1373,9 +1373,6 @@ static int FormatSettings[3][4] =
 		 
 		 }
 
-		/* uncheck the "export 5.1 as 6-channel AAC" checkbox if it is checked */
-//		[fAudLang1SurroundCheck setState: NSOffState];
-
 	}
     
 	[self CalculatePictureSizing: sender];

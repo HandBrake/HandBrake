@@ -12,7 +12,6 @@
 	IBOutlet NSButton * fDefDeinterlace;
 	IBOutlet NSButton * fDefPicSizeAutoSetipod;
 	IBOutlet NSButton * fDefPixelRatio;
-	IBOutlet NSButton * fDefAudioSurround;
 	IBOutlet NSButton * fDefPresetDrawerShow;
 	IBOutlet NSButton * fDefAutoNaming;
 	IBOutlet NSButton * fDefChapterMarkers;
