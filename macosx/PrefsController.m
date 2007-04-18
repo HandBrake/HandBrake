@@ -16,7 +16,7 @@
                    forKey:@"DefaultLanguage"];
 	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
                    forKey:@"DefaultMpegName"];
-	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
+	appDefaults = [NSDictionary dictionaryWithObject:@"YES"
                    forKey:@"DefaultCrf"];
 	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
                    forKey:@"DefaultDeinterlaceOn"];
