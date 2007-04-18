@@ -168,7 +168,10 @@
 - (IBAction) FormatPopUpChanged: (id) sender;
 - (IBAction) CodecsPopUpChanged: (id) sender;
 - (IBAction) EncoderPopUpChanged: (id) sender;
+
 - (IBAction) SetEnabledStateOfAudioMixdownControls: (id) sender;
+- (IBAction) AddAllAudioTracksToPopUp: (id) sender;
+- (IBAction) SelectAudioTrackInPopUp: (id) sender searchPrefixString: (NSString *) searchPrefixString selectIndexIfNotFound: (int) selectIndexIfNotFound;
 - (IBAction) AudioTrackPopUpChanged: (id) sender;
 - (IBAction) AudioTrackPopUpChanged: (id) sender mixdownToUse: (int) mixdownToUse;
 

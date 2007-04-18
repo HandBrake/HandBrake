@@ -1153,50 +1153,14 @@ static int FormatSettings[3][4] =
     }
     [fSubPopUp selectItemAtIndex: 0];
 
-    /* START pri */
-	hb_audio_t * audio;
-
-	// PRI CHANGES 02/12/06
-	NSString * audiotmppri;
-	NSString * audiosearchpri=[[NSUserDefaults standardUserDefaults] stringForKey:@"DefaultLanguage"];
-	int indxpri=0;
-	// End of pri changes 02/12/06
-    [fAudLang1PopUp removeAllItems];
-	[fAudLang2PopUp removeAllItems];
-    [fAudLang1PopUp addItemWithTitle: _( @"None" )];
-	[fAudLang2PopUp addItemWithTitle: _( @"None" )];
-    for( int i = 0; i < hb_list_count( title->list_audio ); i++ )
-    {
-        audio = (hb_audio_t *) hb_list_item( title->list_audio, i );
-	// PRI CHANGES 02/12/06
-		if (audiosearchpri!= NULL) 
-		{
-			audiotmppri=(NSString *) [NSString stringWithCString: audio->lang];
-			// Try to find the desired default language
-			if ([audiotmppri hasPrefix:audiosearchpri] && indxpri==0)
-			{
-				indxpri=i+1;
-			}
-		}
-	// End of pri changes 02/12/06
-
-        [[fAudLang1PopUp menu] addItemWithTitle:
-            [NSString stringWithCString: audio->lang]
-            action: NULL keyEquivalent: @""];
-       
-	   [[fAudLang2PopUp menu] addItemWithTitle:
-            [NSString stringWithCString: audio->lang]
-            action: NULL keyEquivalent: @""];
-		
-    }
-	// PRI CHANGES 02/12/06
-	if (indxpri==0) { indxpri=1; }
-	  [fAudLang1PopUp selectItemAtIndex: indxpri];
-	// End of pri changes 02/12/06
-    [fAudLang2PopUp selectItemAtIndex: 0];
+    /* Update audio popups */
+    [self AddAllAudioTracksToPopUp: fAudLang1PopUp];
+    [self AddAllAudioTracksToPopUp: fAudLang2PopUp];
+    /* search for the first instance of our prefs default language for track 1, and set track 2 to "none" */
+	NSString * audioSearchPrefix = [[NSUserDefaults standardUserDefaults] stringForKey:@"DefaultLanguage"];
+    [self SelectAudioTrackInPopUp: fAudLang1PopUp searchPrefixString: audioSearchPrefix selectIndexIfNotFound: 1];
+    [self SelectAudioTrackInPopUp: fAudLang2PopUp searchPrefixString: NULL selectIndexIfNotFound: 0];
 	
-	/* END pri */
-
 	/* changing the title may have changed the audio channels on offer, */
 	/* so call AudioTrackPopUpChanged for both audio tracks to update the mixdown popups */
 	[self AudioTrackPopUpChanged: fAudLang1PopUp];
@@ -1392,6 +1356,61 @@ static int FormatSettings[3][4] =
     [fAudTrack2MixPopUp setEnabled: ([fAudLang2PopUp indexOfSelectedItem] == 0) ? NO : YES];
     [fAudTrack2MixLabel setTextColor: ([fAudLang2PopUp indexOfSelectedItem] == 0) ?
         [NSColor disabledControlTextColor] : [NSColor controlTextColor]];
+
+}
+
+- (IBAction) AddAllAudioTracksToPopUp: (id) sender
+{
+
+    hb_list_t  * list  = hb_get_titles( fHandle );
+    hb_title_t * title = (hb_title_t*)
+        hb_list_item( list, [fSrcTitlePopUp indexOfSelectedItem] );
+
+	hb_audio_t * audio;
+
+    [sender removeAllItems];
+    [sender addItemWithTitle: _( @"None" )];
+    for( int i = 0; i < hb_list_count( title->list_audio ); i++ )
+    {
+        audio = (hb_audio_t *) hb_list_item( title->list_audio, i );
+        [[sender menu] addItemWithTitle:
+            [NSString stringWithCString: audio->lang]
+            action: NULL keyEquivalent: @""];
+    }
+    [sender selectItemAtIndex: 0];
+
+}
+
+- (IBAction) SelectAudioTrackInPopUp: (id) sender searchPrefixString: (NSString *) searchPrefixString selectIndexIfNotFound: (int) selectIndexIfNotFound
+{
+
+    /* this method can be used to find a language, or a language-and-source-format combination, by passing in the appropriate string */
+    /* e.g. to find the first French track, pass in an NSString * of "Francais" */
+    /* e.g. to find the first English 5.1 AC3 track, pass in an NSString * of "English (AC3) (5.1 ch)" */
+    /* if no matching track is found, then selectIndexIfNotFound is used to choose which track to select instead */
+    
+	if (searchPrefixString != NULL) 
+	{
+
+        for( int i = 0; i < [sender numberOfItems]; i++ )
+        {
+            /* Try to find the desired search string */
+            if ([[[sender itemAtIndex: i] title] hasPrefix:searchPrefixString])
+            {
+                [sender selectItemAtIndex: i];
+                return;
+            }
+        }
+        /* couldn't find the string, so select the requested "search string not found" item */
+        /* index of 0 means select the "none" item */
+        /* index of 1 means select the first audio track */
+        [sender selectItemAtIndex: selectIndexIfNotFound];
+	}
+    else
+    {
+        /* if no search string is provided, then select the selectIndexIfNotFound item */
+        [sender selectItemAtIndex: selectIndexIfNotFound];
+    }
 
 }
 
@@ -2243,14 +2262,10 @@ the user is using "Custom" settings by determining the sender*/
 		
 		/*Audio*/
 		/* Audio Language One*/
-		[fAudLang1PopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioLang1"]]];
-		/* We check to make sure something is selected for track 1 */
-		if ([fAudLang1PopUp indexOfSelectedItem] == -1)
-		{
-			/* If not we choose the first source in the track 1 dropdown */
-			[fAudLang1PopUp selectItemAtIndex: 0];
-		}
-
+        /* select our preferred audio language / mixdown format in the audio track popup */
+        /* SelectAudioTrackInPopUp will default to the first audio if the requested format can't be found */
+        [self SelectAudioTrackInPopUp: fAudLang1PopUp searchPrefixString: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioLang1"]]
+            selectIndexIfNotFound: 1];
         /* if the preset contains a mixdown value for track 1, then try and load it */
         /* if the preset contains the empty string for this value, then we'll get
            a mixdown of 0 from hb_mixdown_get_mixdown_from_short_name,
@@ -2263,14 +2278,10 @@ the user is using "Custom" settings by determining the sender*/
         [self AudioTrackPopUpChanged: fAudLang1PopUp mixdownToUse: mixdown1];
 
 		/* Audio Language Two*/
-		[fAudLang2PopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioLang2"]]];
-		/* We check to make sure something is selected for track 2 */
-		if ([fAudLang2PopUp indexOfSelectedItem] == -1)
-		{
-			/* If not we choose "None" in the track 2 dropdown */
-			[fAudLang2PopUp selectItemWithTitle: [NSString stringWithFormat:@"None"]];
-			//[self SetEnabledStateOfAudioMixdownControls: sender];
-		}
+        /* select our preferred audio language / mixdown format in the audio track popup */
+        /* SelectAudioTrackInPopUp will default to "none" if the requested format can't be found */
+        [self SelectAudioTrackInPopUp: fAudLang2PopUp searchPrefixString: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioLang2"]]
+            selectIndexIfNotFound: 0];
 		/* if the preset contains a mixdown value for track 2, then try and load it */
         /* if the preset contains the empty string for this value, then we'll get
            a mixdown of 0 from hb_mixdown_get_mixdown_from_short_name,
