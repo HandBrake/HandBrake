@@ -207,6 +207,7 @@
 
 - (IBAction) OpenHomepage: (id) sender;
 - (IBAction) OpenForums:   (id) sender;
+- (IBAction) OpenUserGuide:   (id) sender;
 
 // Preset Methods Here
 - (IBAction) CustomSettingUsed: (id) sender;

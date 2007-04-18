@@ -2448,7 +2448,11 @@ id theRecord, theValue;
     [[NSWorkspace sharedWorkspace] openURL: [NSURL
         URLWithString:@"http://handbrake.m0k.org/forum/"]];
 }
-
+- (IBAction) OpenUserGuide: (id) sender
+{
+    [[NSWorkspace sharedWorkspace] openURL: [NSURL
+        URLWithString:@"http://handbrake.m0k.org/trac/wiki/HandBrakeGuide"]];
+}
 
 
 @end
