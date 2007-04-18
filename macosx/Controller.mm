@@ -524,7 +524,7 @@ static int FormatSettings[3][4] =
             [fStatusField setStringValue: _( @"Done." )];
             [fRipIndicator setIndeterminate: NO];
             [fRipIndicator setDoubleValue: 0.0];
-            [fRipButton setTitle: _( @"Rip" )];
+            [fRipButton setTitle: _( @"Start" )];
 
             /* Restore dock icon */
             [self UpdateDockIcon: -1.0];
@@ -532,7 +532,7 @@ static int FormatSettings[3][4] =
             [fPauseButton setEnabled: NO];
             [fPauseButton setTitle: _( @"Pause" )];
             [fRipButton setEnabled: YES];
-            [fRipButton setTitle: _( @"Rip" )];
+            [fRipButton setTitle: _( @"Start" )];
 
             /* FIXME */
             hb_job_t * job;
@@ -882,7 +882,7 @@ static int FormatSettings[3][4] =
     bool e = ( [fQueueCheck state] == NSOnState );
     [fQueueAddButton  setHidden: !e];
     [fQueueShowButton setHidden: !e];
-    [fRipButton       setTitle: e ? @"Start" : @"Rip"];
+    [fRipButton       setTitle: e ? @"Start" : @"Start"];
 }
 
 - (IBAction) AddToQueue: (id) sender
