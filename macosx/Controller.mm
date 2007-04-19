@@ -1926,26 +1926,6 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
 	
 	/*Audio*/
-	/* Audio Language One*/
-	[preset setObject:[fAudLang1PopUp titleOfSelectedItem] forKey:@"AudioLang1"];
-	/* Audio Track one mixdown */
-    if ([fAudLang1PopUp indexOfSelectedItem] > 0) {
-        [preset setObject:[NSString stringWithCString:hb_mixdown_get_short_name_from_mixdown([[fAudTrack1MixPopUp selectedItem] tag])] forKey:@"AudioLang1Mixdown"];
-    }
-    else
-    {
-        [preset setObject:[NSString stringWithCString:""] forKey:@"AudioLang1Mixdown"];
-    }
-	/* Audio Language Two*/
-	[preset setObject:[fAudLang2PopUp titleOfSelectedItem] forKey:@"AudioLang2"];
-	/* Audio Track Two mixdown */
-    if ([fAudLang2PopUp indexOfSelectedItem] > 0) {
-        [preset setObject:[NSString stringWithCString:hb_mixdown_get_short_name_from_mixdown([[fAudTrack2MixPopUp selectedItem] tag])] forKey:@"AudioLang2Mixdown"];
-    }
-    else
-    {
-        [preset setObject:[NSString stringWithCString:""] forKey:@"AudioLang2Mixdown"];
-    }
 	/* Audio Sample Rate*/
 	[preset setObject:[fAudRatePopUp titleOfSelectedItem] forKey:@"AudioSampleRate"];
 	/* Audio Bitrate Rate*/
@@ -2011,14 +1991,6 @@ the user is using "Custom" settings by determining the sender*/
 	//[preset setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
 	
 	/*Audio*/
-	/* Audio track one*/
-	[preset setObject:[fAudLang1PopUp titleOfSelectedItem] forKey:@"AudioLang1"];
-	/* Track one mixdown dpl2*/
-	[preset setObject:[NSString stringWithCString:"dpl2"] forKey:@"AudioLang1Mixdown"];
-    /* Audio track two */
-	[preset setObject:[NSString stringWithFormat:@"None"] forKey:@"AudioLang2"];
-	/* Track two mixdown */
-	[preset setObject:[NSString stringWithCString:""] forKey:@"AudioLang2Mixdown"];
 	/* Audio Sample Rate*/
 	[preset setObject:@"48" forKey:@"AudioSampleRate"];
 	/* Audio Bitrate Rate*/
@@ -2089,14 +2061,6 @@ the user is using "Custom" settings by determining the sender*/
 	//[preset setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
 	
 	/*Audio*/
-	/* Audio track one*/
-	[preset setObject:[fAudLang1PopUp titleOfSelectedItem] forKey:@"AudioLang1"];
-	/* Track one mixdown dpl2*/
-	[preset setObject:[NSString stringWithCString:"dpl2"] forKey:@"AudioLang1Mixdown"];
-    /* Audio track two */
-	[preset setObject:[NSString stringWithFormat:@"None"] forKey:@"AudioLang2"];
-	/* Track two mixdown */
-	[preset setObject:[NSString stringWithCString:""] forKey:@"AudioLang2Mixdown"];
 	/* Audio Sample Rate*/
 	[preset setObject:@"44.1" forKey:@"AudioSampleRate"];
 	/* Audio Bitrate Rate*/
@@ -2164,14 +2128,6 @@ the user is using "Custom" settings by determining the sender*/
 	//[preset setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
 	
 	/*Audio*/
-	/* Audio track one*/
-	[preset setObject:[fAudLang1PopUp titleOfSelectedItem] forKey:@"AudioLang1"];
-	/* Track one mixdown dpl2*/
-	[preset setObject:[NSString stringWithCString:"dpl2"] forKey:@"AudioLang1Mixdown"];
-    /* Audio track two */
-	[preset setObject:[NSString stringWithFormat:@"None"] forKey:@"AudioLang2"];
-	/* Track two mixdown */
-	[preset setObject:[NSString stringWithCString:""] forKey:@"AudioLang2Mixdown"];
 	/* Audio Sample Rate*/
 	[preset setObject:@"44.1" forKey:@"AudioSampleRate"];
 	/* Audio Bitrate Rate*/
@@ -2270,38 +2226,6 @@ the user is using "Custom" settings by determining the sender*/
 		
 		
 		/*Audio*/
-		/* Audio Language One*/
-        /* select our preferred audio language / mixdown format in the audio track popup */
-        /* SelectAudioTrackInPopUp will default to the first audio if the requested format can't be found */
-        [self SelectAudioTrackInPopUp: fAudLang1PopUp searchPrefixString: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioLang1"]]
-            selectIndexIfNotFound: 1];
-        /* if the preset contains a mixdown value for track 1, then try and load it */
-        /* if the preset contains the empty string for this value, then we'll get
-           a mixdown of 0 from hb_mixdown_get_mixdown_from_short_name,
-           which will be correctly ignored by AudioTrackPopUpChanged */
-        /* if the mixdown is unavailable, AudioTrackPopUpChanged will choose the next best mixdown */
-        char cBuffer1[32];
-        NSString * short_name1 = [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioLang1Mixdown"]];
-        [short_name1 getCString:cBuffer1];
-        int mixdown1 = hb_mixdown_get_mixdown_from_short_name(cBuffer1);
-        [self AudioTrackPopUpChanged: fAudLang1PopUp mixdownToUse: mixdown1];
-
-		/* Audio Language Two*/
-        /* select our preferred audio language / mixdown format in the audio track popup */
-        /* SelectAudioTrackInPopUp will default to "none" if the requested format can't be found */
-        [self SelectAudioTrackInPopUp: fAudLang2PopUp searchPrefixString: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioLang2"]]
-            selectIndexIfNotFound: 0];
-		/* if the preset contains a mixdown value for track 2, then try and load it */
-        /* if the preset contains the empty string for this value, then we'll get
-           a mixdown of 0 from hb_mixdown_get_mixdown_from_short_name,
-           which will be correctly ignored by AudioTrackPopUpChanged */
-        /* if the mixdown is unavailable, AudioTrackPopUpChanged will choose the next best mixdown */
-        char cBuffer2[32];
-        NSString * short_name2 = [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioLang2Mixdown"]];
-        [short_name2 getCString:cBuffer2];
-        int mixdown2 = hb_mixdown_get_mixdown_from_short_name(cBuffer2);
-        [self AudioTrackPopUpChanged: fAudLang2PopUp mixdownToUse: mixdown2];
-	
 		
 		/* Audio Sample Rate*/
 		[fAudRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioSampleRate"]]];
