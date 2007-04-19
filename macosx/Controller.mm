@@ -1603,7 +1603,9 @@ static int FormatSettings[3][4] =
 
                 /* select the (possibly-amended) preferred mixdown */
                 [mixdownPopUp selectItemWithTag: useMixdown];
-            
+				
+				/* lets call the AudioTrackMixdownChanged method here to determine appropriate bitrates, etc. */
+                [self AudioTrackMixdownChanged: NULL];
             }
 
         }
@@ -1614,7 +1616,32 @@ static int FormatSettings[3][4] =
     [self CalculateBitrate: sender];	
 
 }
-
+- (IBAction) AudioTrackMixdownChanged: (id) sender
+{
+	/* If either mixdown popup includes 6-channel discrete, then allow up to 384 kbps*/
+	if ([[fAudTrack1MixPopUp selectedItem] tag] == HB_AMIXDOWN_6CH || [[fAudTrack2MixPopUp selectedItem] tag] == HB_AMIXDOWN_6CH)
+	{
+	    [fAudBitratePopUp removeAllItems];
+		for( int i = 0; i < hb_audio_bitrates_count; i++ )
+		{
+			[fAudBitratePopUp addItemWithTitle:
+				[NSString stringWithCString: hb_audio_bitrates[i].string]];
+		}
+		[fAudBitratePopUp selectItemAtIndex: 14];
+	}
+	/* Otherwise, cap the bitrate dropdown at 160 which is 9 in the array and use
+	the default bitrate from common.c*/
+	else
+	{
+		[fAudBitratePopUp removeAllItems];
+		for( int i = 0; i < 10; i++ )
+		{
+			[fAudBitratePopUp addItemWithTitle:
+				[NSString stringWithCString: hb_audio_bitrates[i].string]];
+		}
+		[fAudBitratePopUp selectItemAtIndex: hb_audio_bitrates_default];
+	}
+}
 /* lets set the picture size back to the max from right after title scan
    Lets use an IBAction here as down the road we could always use a checkbox
    in the gui to easily take the user back to max. Remember, the compiler

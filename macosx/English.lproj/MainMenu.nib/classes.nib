@@ -6,6 +6,7 @@
                 AddPreset = id; 
                 AddToQueue = id; 
                 AddUserPreset = id; 
+                AudioTrackMixdownChanged = id; 
                 AudioTrackPopUpChanged = id; 
                 BrowseFile = id; 
                 CalculateBitrate = id; 

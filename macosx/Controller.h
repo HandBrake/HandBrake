@@ -174,6 +174,7 @@
 - (IBAction) SelectAudioTrackInPopUp: (id) sender searchPrefixString: (NSString *) searchPrefixString selectIndexIfNotFound: (int) selectIndexIfNotFound;
 - (IBAction) AudioTrackPopUpChanged: (id) sender;
 - (IBAction) AudioTrackPopUpChanged: (id) sender mixdownToUse: (int) mixdownToUse;
+- (IBAction) AudioTrackMixdownChanged: (id) sender;
 
 - (IBAction) BrowseFile: (id) sender;
 - (void)     BrowseFileDone: (NSSavePanel *) sheet
