@@ -1483,6 +1483,11 @@ static int FormatSettings[3][4] =
         if (audio != NULL)
         {
 
+            /* find out if our selected output audio codec supports mono and / or 6ch */
+            /* we also check for an input codec of AC3,
+               as it is the only library able to do the mixdown to mono / conversion to 6-ch */
+            /* audioCodecsSupportMono and audioCodecsSupport6Ch are the same for now,
+               but this may change in the future, so they are separated for flexibility */
             int audioCodecsSupportMono = (audio->codec == HB_ACODEC_AC3 && acodec == HB_ACODEC_FAAC);
             int audioCodecsSupport6Ch = (audio->codec == HB_ACODEC_AC3 && acodec == HB_ACODEC_FAAC);
 
@@ -1495,12 +1500,6 @@ static int FormatSettings[3][4] =
             }
             else
             {
-            
-                /* find out if our selected output audio codec supports mono and / or 6ch */
-                /* we also check for an input codec of AC3,
-                   as it is the only library able to do the mixdown to mono / conversion to 6-ch */
-                /* audioCodecsSupportMono and audioCodecsSupport6Ch are the same for now,
-                   but this may change in the future, so they are separated for flexibility */
 
                 /* find out the audio channel layout for our input audio */
                 /* we'll cheat and use the liba52 layouts, even if the source isn't AC3 */
@@ -1514,6 +1513,7 @@ static int FormatSettings[3][4] =
                 else
                 {
                     /* assume a stereo input for all other input codecs */
+                    /* we're cheating and using liba52's A52_STEREO layout here, even though the source isn't AC3 */
                     channel_layout = A52_STEREO;
                     audio_has_lfe = 0;
                 }
@@ -1537,7 +1537,10 @@ static int FormatSettings[3][4] =
                 }
 
                 /* do we want to add a stereo option? */
-                if (channel_layout >= A52_STEREO && channel_layout != A52_CHANNEL1 && channel_layout != A52_CHANNEL2) {
+                /* offer stereo if we have a mono source and non-mono-supporting codecs, as otherwise we won't have a mixdown at all */
+                /* also offer stereo if we have a stereo-or-better source */
+                if (((channel_layout == A52_MONO || channel_layout == A52_CHANNEL1 || channel_layout == A52_CHANNEL2) && audioCodecsSupportMono == 0) ||
+                    (channel_layout >= A52_STEREO && channel_layout != A52_CHANNEL1 && channel_layout != A52_CHANNEL2)) {
                     id<NSMenuItem> menuItem = [[mixdownPopUp menu] addItemWithTitle:
                         [NSString stringWithCString: hb_audio_mixdowns[1].human_readable_name]
                         action: NULL keyEquivalent: @""];
