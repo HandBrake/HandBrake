@@ -10,38 +10,29 @@
     /* Unless the user specified otherwise, default is to check
        for update  DefAdvancedx264Flags*/
     defaults    = [NSUserDefaults standardUserDefaults];
-    appDefaults = [NSDictionary dictionaryWithObject:@"YES"
-                   forKey:@"CheckForUpdates"];
-	appDefaults = [NSDictionary dictionaryWithObject:@"English"
-                   forKey:@"DefaultLanguage"];
-	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
-                   forKey:@"DefaultMpegName"];
-	appDefaults = [NSDictionary dictionaryWithObject:@"YES"
-                   forKey:@"DefaultCrf"];
-	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
-                   forKey:@"DefaultDeinterlaceOn"];
-	appDefaults = [NSDictionary dictionaryWithObject:@"YES"
-                   forKey:@"DefaultPicSizeAutoiPod"];
-	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
-                   forKey:@"PixelRatio"];
-	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
-                   forKey:@"DefAdvancedx264FlagsShow"];
-	appDefaults = [NSDictionary dictionaryWithObject:@""
-                   forKey:@"DefAdvancedx264Flags"];
-	appDefaults = [NSDictionary dictionaryWithObject:@"YES"
-                   forKey:@"DefaultPresetsDrawerShow"];
-	NSString *defDestDirectory =  @"~/Desktop";
+
+   	NSString *defDestDirectory =  @"~/Desktop";
 	defDestDirectory = [defDestDirectory stringByExpandingTildeInPath];
-	appDefaults = [NSDictionary dictionaryWithObject:defDestDirectory forKey:@"LastDestinationDirectory"];
 	
 	NSString *defSrcDirectory =  @"~/Desktop";
 	defSrcDirectory = [defSrcDirectory stringByExpandingTildeInPath];
-	appDefaults = [NSDictionary dictionaryWithObject:defSrcDirectory forKey:@"LastSourceDirectory"];
-	
-	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
-                   forKey:@"DefaultAutoNaming"];
-	appDefaults = [NSDictionary dictionaryWithObject:@"NO"
-                   forKey:@"DefaultChapterMarkers"];
+
+    appDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
+        @"YES",             @"CheckForUpdates",
+        @"English",         @"DefaultLanguage",
+        @"NO",              @"DefaultMpegName",
+        @"YES",             @"DefaultCrf",
+        @"NO",              @"DefaultDeinterlaceOn",
+        @"YES",             @"DefaultPicSizeAutoiPod",
+        @"NO",              @"PixelRatio",
+        @"NO",              @"DefAdvancedx264FlagsShow",
+        @"",                @"DefAdvancedx264Flags",
+        @"YES",             @"DefaultPresetsDrawerShow",
+        defDestDirectory,   @"LastDestinationDirectory",
+        defSrcDirectory,    @"LastSourceDirectory",
+        @"NO",              @"DefaultAutoNaming",
+        @"NO",              @"DefaultChapterMarkers",
+        nil];
     
 	[defaults registerDefaults: appDefaults];
 
