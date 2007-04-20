@@ -2146,7 +2146,7 @@ the user is using "Custom" settings by determining the sender*/
 	
 	/*Audio*/
 	/* Audio Sample Rate*/
-	[preset setObject:@"44.1" forKey:@"AudioSampleRate"];
+	[preset setObject:@"48" forKey:@"AudioSampleRate"];
 	/* Audio Bitrate Rate*/
 	[preset setObject:@"160" forKey:@"AudioBitRate"];
 	/* Subtitles*/
@@ -2213,7 +2213,7 @@ the user is using "Custom" settings by determining the sender*/
 	
 	/*Audio*/
 	/* Audio Sample Rate*/
-	[preset setObject:@"44.1" forKey:@"AudioSampleRate"];
+	[preset setObject:@"48" forKey:@"AudioSampleRate"];
 	/* Audio Bitrate Rate*/
 	[preset setObject:@"160" forKey:@"AudioBitRate"];
 	/* Subtitles*/
