@@ -60,9 +60,12 @@ Scott <sr55ww@googlemail.com> (sr55)
  + mpeg4ip patches for cygwin compile
 
 Maurj <mediafork@maurj.com> (maurj)
+ + Dolby Surround and Dolby Pro Logic II mixdowns
  + 6-channel AAC audio from 5.1 source
- + mono AAC audio from mono source
+ + Mono AAC audio from mono source
  + PAR/anamorphic support in mp4 file format
+ + Chapter markers in mp4 file format
+ + Mac OS X GUI enhancements
 
 Unknown <mirkwood07@gmail.com> (mirkwood)
  + Windows CLI port
