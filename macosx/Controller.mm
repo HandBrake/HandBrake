@@ -872,8 +872,7 @@ static int FormatSettings[3][4] =
     /* Audio settings */
     job->arate = hb_audio_rates[[fAudRatePopUp
                      indexOfSelectedItem]].rate;
-    job->abitrate = hb_audio_bitrates[[fAudBitratePopUp
-                        indexOfSelectedItem]].rate;
+    job->abitrate = [[fAudBitratePopUp selectedItem] tag];
 
 }
 
@@ -1618,29 +1617,84 @@ static int FormatSettings[3][4] =
 }
 - (IBAction) AudioTrackMixdownChanged: (id) sender
 {
-	/* If either mixdown popup includes 6-channel discrete, then allow up to 384 kbps*/
-	if ([[fAudTrack1MixPopUp selectedItem] tag] == HB_AMIXDOWN_6CH || [[fAudTrack2MixPopUp selectedItem] tag] == HB_AMIXDOWN_6CH)
-	{
-	    [fAudBitratePopUp removeAllItems];
-		for( int i = 0; i < hb_audio_bitrates_count; i++ )
-		{
-			[fAudBitratePopUp addItemWithTitle:
-				[NSString stringWithCString: hb_audio_bitrates[i].string]];
-		}
-		[fAudBitratePopUp selectItemAtIndex: 14];
-	}
-	/* Otherwise, cap the bitrate dropdown at 160 which is 9 in the array and use
-	the default bitrate from common.c*/
-	else
-	{
-		[fAudBitratePopUp removeAllItems];
-		for( int i = 0; i < 10; i++ )
-		{
-			[fAudBitratePopUp addItemWithTitle:
-				[NSString stringWithCString: hb_audio_bitrates[i].string]];
-		}
-		[fAudBitratePopUp selectItemAtIndex: hb_audio_bitrates_default];
-	}
+
+    /* find out what the currently-selected output audio codec is */
+    int format = [fDstFormatPopUp indexOfSelectedItem];
+    int codecs = [fDstCodecsPopUp indexOfSelectedItem];
+    int acodec = FormatSettings[format][codecs] & HB_ACODEC_MASK;
+    
+    /* storage variable for the min and max bitrate allowed for this codec */
+    int minbitrate;
+    int maxbitrate;
+    
+    switch( acodec )
+    {
+        case HB_ACODEC_FAAC:
+            /* check if we have a 6ch discrete conversion in either audio track */
+            if ([[fAudTrack1MixPopUp selectedItem] tag] == HB_AMIXDOWN_6CH || [[fAudTrack2MixPopUp selectedItem] tag] == HB_AMIXDOWN_6CH)
+            {
+                /* FAAC is happy using our min bitrate of 32 kbps, even for 6ch */
+                minbitrate = 32;
+                /* If either mixdown popup includes 6-channel discrete, then allow up to 384 kbps */
+                maxbitrate = 384;
+                break;
+            }
+            else
+            {
+                /* FAAC is happy using our min bitrate of 32 kbps for stereo or mono */
+                minbitrate = 32;
+                /* FAAC won't honour anything more than 160 for stereo, so let's not offer it */
+                /* note: haven't dealt with mono separately here, FAAC will just use the max it can */
+                maxbitrate = 160;
+                break;
+            }
+
+        case HB_ACODEC_LAME:
+            /* Lame is happy using our min bitrate of 32 kbps */
+            minbitrate = 32;
+            /* Lame won't encode if the bitrate is higher than 320 kbps */
+            maxbitrate = 320;
+            break;
+
+        case HB_ACODEC_VORBIS:
+            /* Vorbis causes a crash if we use a bitrate below 48 kbps */
+            minbitrate = 48;
+            /* Vorbis can cope with 384 kbps quite happily, even for stereo */
+            maxbitrate = 384;
+            break;
+
+        default:
+            /* AC3 passthru disables the bitrate dropdown anyway, so we might as well just use the min and max bitrate */
+            minbitrate = 32;
+            maxbitrate = 384;
+        
+    }
+
+    [fAudBitratePopUp removeAllItems];
+
+    for( int i = 0; i < hb_audio_bitrates_count; i++ )
+    {
+        if (hb_audio_bitrates[i].rate >= minbitrate && hb_audio_bitrates[i].rate <= maxbitrate)
+        {
+            /* add a new menuitem for this bitrate */
+            id<NSMenuItem> menuItem = [[fAudBitratePopUp menu] addItemWithTitle:
+                [NSString stringWithCString: hb_audio_bitrates[i].string]
+                action: NULL keyEquivalent: @""];
+            /* set its tag to be the actual bitrate as an integer, so we can retrieve it later */
+            [menuItem setTag: hb_audio_bitrates[i].rate];
+        }
+    }
+
+    /* select the default bitrate (but use 384 for 6-ch AAC) */
+    if ([[fAudTrack1MixPopUp selectedItem] tag] == HB_AMIXDOWN_6CH || [[fAudTrack2MixPopUp selectedItem] tag] == HB_AMIXDOWN_6CH)
+    {
+        [fAudBitratePopUp selectItemWithTag: 384];
+    }
+    else
+    {
+        [fAudBitratePopUp selectItemWithTag: hb_audio_bitrates[hb_audio_bitrates_default].rate];
+    }
+
 }
 /* lets set the picture size back to the max from right after title scan
    Lets use an IBAction here as down the road we could always use a checkbox
