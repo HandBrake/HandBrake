@@ -100,6 +100,10 @@
 		4DD93FA4082036E8008E1322 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DDE9724052B7B2B00C39CA9 /* OpenGL.framework */; };
 		52AFF86A0B59BD07000DA7C4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		52AFF86B0B59BD14000DA7C4 /* Express.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4D1EA2DC0993B01000FDC1A2 /* Express.plist */; };
+		593034EB0BBA39A100172349 /* ChapterTitles.h in Headers */ = {isa = PBXBuildFile; fileRef = 593034E90BBA39A100172349 /* ChapterTitles.h */; };
+		593034EC0BBA39A100172349 /* ChapterTitles.m in Sources */ = {isa = PBXBuildFile; fileRef = 593034EA0BBA39A100172349 /* ChapterTitles.m */; };
+		59CBD2370BBB44DA004A3BE3 /* parsecsv.c in Sources */ = {isa = PBXBuildFile; fileRef = 59CBD2360BBB44DA004A3BE3 /* parsecsv.c */; };
+		59CBD2650BBB4D1B004A3BE3 /* ChapterTitles.m in Sources */ = {isa = PBXBuildFile; fileRef = 593034EA0BBA39A100172349 /* ChapterTitles.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -193,6 +197,9 @@
 		526FBC9B0B4CAB100064E04C /* common.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = common.c; path = ../libhb/common.c; sourceTree = SOURCE_ROOT; };
 		526FBC9D0B4CAB100064E04C /* deca52.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = deca52.c; path = ../libhb/deca52.c; sourceTree = SOURCE_ROOT; };
 		526FBC9E0B4CAB100064E04C /* decavcodec.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = decavcodec.c; path = ../libhb/decavcodec.c; sourceTree = SOURCE_ROOT; };
+		593034E90BBA39A100172349 /* ChapterTitles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChapterTitles.h; sourceTree = "<group>"; };
+		593034EA0BBA39A100172349 /* ChapterTitles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChapterTitles.m; sourceTree = "<group>"; };
+		59CBD2360BBB44DA004A3BE3 /* parsecsv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = parsecsv.c; path = ../test/parsecsv.c; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -341,6 +348,7 @@
 			children = (
 				0DF377970B7BF99A00115CB0 /* fakexcode.cpp */,
 				526FBC760B4CA8F40064E04C /* test.c */,
+				59CBD2360BBB44DA004A3BE3 /* parsecsv.c */,
 			);
 			name = "HandBrakeCLI Sources";
 			sourceTree = "<group>";
@@ -365,6 +373,8 @@
 				4D3ECC2609A4917000B2E45F /* WhiteBox.m */,
 				4D2AE78909CCB24C007E18F6 /* DriveDetector.m */,
 				4D2AE78A09CCB24C007E18F6 /* DriveDetector.h */,
+				593034E90BBA39A100172349 /* ChapterTitles.h */,
+				593034EA0BBA39A100172349 /* ChapterTitles.m */,
 			);
 			name = "HandBrake Sources";
 			sourceTree = "<group>";
@@ -393,6 +403,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				593034EB0BBA39A100172349 /* ChapterTitles.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -613,6 +624,7 @@
 				0DFF0B770B6BC72A00549488 /* common.c in Sources */,
 				0DFF0B790B6BC72A00549488 /* deca52.c in Sources */,
 				0DFF0B7A0B6BC72A00549488 /* decavcodec.c in Sources */,
+				593034EC0BBA39A100172349 /* ChapterTitles.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -622,6 +634,7 @@
 			files = (
 				0DFF0C100B6BCEE800549488 /* test.c in Sources */,
 				0DF377980B7BF99A00115CB0 /* fakexcode.cpp in Sources */,
+				59CBD2370BBB44DA004A3BE3 /* parsecsv.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -640,6 +653,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				59CBD2650BBB4D1B004A3BE3 /* ChapterTitles.m in Sources */,
 				4DD93F9A082036E8008E1322 /* main.mm in Sources */,
 				4DD93F9B082036E8008E1322 /* Controller.mm in Sources */,
 				4DD93F9C082036E8008E1322 /* PictureGLView.mm in Sources */,
@@ -1565,8 +1579,14 @@
 		4D4E7BC5087804870051572B /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				MACOSX_DEPLOYMENT_TARGET = 10.3;
+				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				ZERO_LINK = NO;
 			};
 			name = Development;
 		};
