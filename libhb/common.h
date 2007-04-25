@@ -211,6 +211,7 @@ struct hb_job_s
          subtitle: index in hb_title_t's subtitles list, starting
          from 0. -1 means no subtitle */
     int             subtitle;
+    int 			subtitleSmartAdjust;
 
     /* Muxer settings
          mux:  output file format
@@ -304,6 +305,9 @@ struct hb_chapter_s
 
     /* Exact duration (in 1/90000s) */
     uint64_t duration;
+    
+    /* Optional chapter title */
+    char     title[1024];
 };
 
 struct hb_subtitle_s
