@@ -223,7 +223,7 @@
 - (NSDictionary *)CreateIpodPreset;
 - (NSDictionary *)CreateAppleTVPreset;
 - (NSDictionary *)CreatePSThreePreset;  
-
+- (NSDictionary *)CreatePSPPreset;
 - (IBAction) RevertPictureSizeToMax:(id)sender;
 
 
