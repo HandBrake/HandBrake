@@ -29,7 +29,7 @@
     /* Queue panel */
     IBOutlet QueueController     * fQueueController;
     IBOutlet NSPanel             * fQueuePanel;
-    IBOutlet NSButton            * fQueueCheck;
+    IBOutlet NSTextField         * fQueueStatus;
     IBOutlet NSButton            * fQueueAddButton;
     IBOutlet NSButton            * fQueueShowButton;
 
@@ -191,7 +191,7 @@
 - (IBAction) ShowPicturePanel: (id) sender;
 - (IBAction) CalculatePictureSizing: (id) sender;
 
-- (IBAction) EnableQueue: (id) sender;
+
 - (IBAction) AddToQueue: (id) sender;
 - (IBAction) ShowQueuePanel: (id) sender;
 

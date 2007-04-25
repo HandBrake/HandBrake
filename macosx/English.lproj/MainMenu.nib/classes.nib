@@ -39,7 +39,7 @@
             LANGUAGE = ObjC; 
             OUTLETS = {
                 fAddPresetPanel = NSPanel; 
-                fAddToQuButton = NSTableView; 
+                fAddToQuButton = NSButton; 
                 fAudBitrateField = NSTextField; 
                 fAudBitratePopUp = NSPopUpButton; 
                 fAudLang1Field = NSTextField; 
@@ -98,10 +98,10 @@
                 fPresetsAdd = NSButton; 
                 fPresetsDelete = NSButton; 
                 fQueueAddButton = NSButton; 
-                fQueueCheck = NSButton; 
                 fQueueController = QueueController; 
                 fQueuePanel = NSPanel; 
                 fQueueShowButton = NSButton; 
+                fQueueStatus = NSTextField; 
                 fRipButton = NSButton; 
                 fRipIndicator = NSProgressIndicator; 
                 fScanController = ScanController; 

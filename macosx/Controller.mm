@@ -546,21 +546,20 @@ static int FormatSettings[3][4] =
         }
     }
 
-    /* FIXME: we should only do that when necessary */
-    if( [fQueueCheck state] == NSOnState )
-    {
+    /* Lets show the queue status
+	here in the main window*/
+
         int count = hb_count( fHandle );
         if( count )
         {
-            [fQueueCheck setTitle: [NSString stringWithFormat:
-                @"Enable queue (%d task%s in queue)",
+            [fQueueStatus setStringValue: [NSString stringWithFormat:
+                @"%d task%s in the queue",
                 count, ( count > 1 ) ? "s" : ""]];
         }
         else
         {
-            [fQueueCheck setTitle: @"Enable queue (no task in queue)"];
+            [fQueueStatus setStringValue: @""];
         }
-    }
 
     [[NSRunLoop currentRunLoop] addTimer: [NSTimer
         scheduledTimerWithTimeInterval: 0.2 target: self
@@ -582,7 +581,7 @@ static int FormatSettings[3][4] =
         fAudLang1Field, fAudLang1PopUp, fAudLang2Field, fAudLang2PopUp,
         fAudTrack1MixLabel, fAudTrack1MixPopUp, fAudTrack2MixLabel, fAudTrack2MixPopUp,
         fAudRateField, fAudRatePopUp, fAudBitrateField,
-        fAudBitratePopUp, fPictureButton, fQueueCheck, 
+        fAudBitratePopUp, fPictureButton,fQueueStatus, 
 		fPicSrcWidth,fPicSrcHeight,fPicSettingWidth,fPicSettingHeight,
 		fPicSettingARkeep,fPicSettingDeinterlace,fPicSettingARkeepDsply,
 		fPicSettingDeinterlaceDsply,fPicLabelSettings,fPicLabelSrc,fPicLabelOutp,
@@ -877,13 +876,7 @@ static int FormatSettings[3][4] =
 
 }
 
-- (IBAction) EnableQueue: (id) sender
-{
-    bool e = ( [fQueueCheck state] == NSOnState );
-    [fQueueAddButton  setHidden: !e];
-    [fQueueShowButton setHidden: !e];
-    [fRipButton       setTitle: e ? @"Start" : @"Start"];
-}
+
 
 - (IBAction) AddToQueue: (id) sender
 {
@@ -942,25 +935,21 @@ static int FormatSettings[3][4] =
 
 - (IBAction) Rip: (id) sender
 {
-   
-    
     /* Rip or Cancel ? */
     if( [[fRipButton title] isEqualToString: _( @"Cancel" )] )
     {
         [self Cancel: sender];
         return;
     }
-
-    if( [fQueueCheck state] == NSOffState )
-    {
-
-			[self AddToQueue: sender];
-
-		
-
-    }
-
-    /* We check for duplicate name here */
+	/* if there is no job in the queue, then add it to the queue and rip 
+	otherwise, there are already jobs in queue, so just rip the queue */
+	int count = hb_count( fHandle );
+	if( count < 1 )
+        {
+		[self AddToQueue: sender];
+		}
+    
+	    /* We check for duplicate name here */
 	if( [[NSFileManager defaultManager] fileExistsAtPath:
             [fDstFile2Field stringValue]] )
     {
