@@ -52,6 +52,7 @@
                 fAudTrack1MixPopUp = NSPopUpButton; 
                 fAudTrack2MixLabel = NSTextField; 
                 fAudTrack2MixPopUp = NSPopUpButton; 
+                fChapterTable = NSTableView; 
                 fCreateChapterMarkers = NSButton; 
                 fDisplayX264Options = NSTextField; 
                 fDstBrowseButton = NSButton; 

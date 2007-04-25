@@ -49,6 +49,8 @@ static int FormatSettings[3][4] =
     [fPictureController SetHandle: fHandle];
     [fQueueController   SetHandle: fHandle];
 	
+    fChapterTitlesDelegate = [[ChapterTitles alloc] init];
+    [fChapterTable setDataSource:fChapterTitlesDelegate];
 
      /* Call UpdateUI every 2/10 sec */
     [[NSRunLoop currentRunLoop] addTimer: [NSTimer
@@ -738,13 +740,12 @@ static int FormatSettings[3][4] =
     hb_title_t * title = (hb_title_t *) hb_list_item( list,
             [fSrcTitlePopUp indexOfSelectedItem] );
     hb_job_t * job = title->job;
+    int i;
 
     /* Chapter selection */
     job->chapter_start = [fSrcChapterStartPopUp indexOfSelectedItem] + 1;
     job->chapter_end   = [fSrcChapterEndPopUp   indexOfSelectedItem] + 1;
 	
-
-
     /* Format and codecs */
     int format = [fDstFormatPopUp indexOfSelectedItem];
     int codecs = [fDstCodecsPopUp indexOfSelectedItem];
@@ -755,7 +756,7 @@ static int FormatSettings[3][4] =
 	mpeg4 and the checkbox being checked */
 	if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fCreateChapterMarkers state] == NSOnState)
 	{
-	job->chapter_markers = 1;
+        job->chapter_markers = 1;
 	}
 	else
 	{
@@ -1136,7 +1137,6 @@ static int FormatSettings[3][4] =
 	//[self EncoderPopUpChanged: NULL];
 	/* END Get and set the initial pic size for display */ 
 
-
     /* Update subtitle popups */
     hb_subtitle_t * subtitle;
     [fSubPopUp removeAllItems];
@@ -1151,6 +1151,10 @@ static int FormatSettings[3][4] =
             subtitle->lang] action: NULL keyEquivalent: @""];
     }
     [fSubPopUp selectItemAtIndex: 0];
+    
+    /* Update chapter table */
+    [fChapterTitlesDelegate resetWithTitle:title];
+    [fChapterTable reloadData];
 
     /* Update audio popups */
     [self AddAllAudioTracksToPopUp: fAudLang1PopUp];

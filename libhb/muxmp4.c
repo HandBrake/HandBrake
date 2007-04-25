@@ -27,6 +27,10 @@ struct hb_mux_object_s
     /* Cumulated durations so far, in timescale units (see MP4Mux) */
     uint64_t sum_dur;
 	
+    /* Chapter state information for muxing */
+    MP4TrackId chapter_track;
+    int current_chapter;
+    uint64_t chapter_duration;
 };
 
 struct hb_mux_data_s
@@ -34,6 +38,91 @@ struct hb_mux_data_s
     MP4TrackId track;
 };
 
+struct hb_text_sample_s
+{
+    uint8_t     sample[1280];
+    uint32_t    length;
+    MP4Duration duration;
+};
+
+/**********************************************************************
+ * MP4CreateTextSample
+ **********************************************************************
+ * Creates a buffer for a text track sample
+ *********************************************************************/
+static struct hb_text_sample_s *MP4CreateTextSample( char *textString, uint64_t duration )
+{
+    struct hb_text_sample_s *sample = NULL;
+    int stringLength = strlen(textString);
+    int x;
+    
+    if( stringLength < 1024 )
+    {
+        sample = malloc( sizeof( struct hb_text_sample_s ) );
+
+        //textLength = (stringLength; // Account for BOM     
+        sample->length = stringLength + 2 + 12; // Account for text length code and other marker
+        sample->duration = (MP4Duration)duration;
+        
+        // 2-byte length marker
+        sample->sample[0] = (stringLength >> 8) & 0xff;
+        sample->sample[1] = stringLength & 0xff;
+        
+        strncpy( (char *)&(sample->sample[2]), textString, stringLength );
+        
+        x = 2 + stringLength;
+
+        // Modifier Length Marker
+        sample->sample[x] = 0x00;
+        sample->sample[x+1] = 0x00;
+        sample->sample[x+2] = 0x00;
+        sample->sample[x+3] = 0x0C;
+        
+        // Modifier Type Code
+        sample->sample[x+4] = 'e';
+        sample->sample[x+5] = 'n';
+        sample->sample[x+6] = 'c';
+        sample->sample[x+7] = 'd';
+        
+        // Modifier Value
+        sample->sample[x+8] = 0x00;
+        sample->sample[x+9] = 0x00;
+        sample->sample[x+10] = (256 >> 8) & 0xff;
+        sample->sample[x+11] = 256 & 0xff;
+    }
+    
+    return sample;
+}
+ 
+/**********************************************************************
+ * MP4GenerateChapterSample
+ **********************************************************************
+ * Creates a buffer for a text track sample
+ *********************************************************************/
+static struct hb_text_sample_s *MP4GenerateChapterSample( hb_mux_object_t * m, uint64_t duration )
+{
+    int chapter = m->current_chapter;
+    hb_chapter_t *chapter_data = hb_list_item( m->job->title->list_chapter, chapter - 1 );
+    char tmp_buffer[1024];
+    char *string = tmp_buffer;
+    
+    tmp_buffer[0] = '\0';
+    
+    if( chapter_data != NULL )
+    {
+        string = chapter_data->title;
+    }
+    
+    if( strlen(string) == 0 || strlen(string) >= 1024 )
+    {
+        snprintf( tmp_buffer, 1023, "Chapter %03i", chapter );
+        string = tmp_buffer;
+    }
+    
+    return MP4CreateTextSample( string, duration );
+}
+
+ 
 /**********************************************************************
  * MP4Init
  **********************************************************************
@@ -171,36 +260,15 @@ static int MP4Init( hb_mux_object_t * m )
 		
     }
 
-	if (job->chapter_markers) {
-
+	if (job->chapter_markers) 
+    {
 		/* add a text track for the chapters */
 		MP4TrackId textTrack;
-
 		textTrack = MP4AddChapterTextTrack(m->file, firstAudioTrack);
-
-		/* write the chapter markers for each selected chapter */
-		char markerBuf[13];
-		hb_chapter_t  * chapter;
-		MP4Duration chapterDuration;
-		float fOrigDuration, fTimescale;
-		float fTSDuration;
-
-		for( i = job->chapter_start - 1; i <= job->chapter_end - 1; i++ )
-		{
-			chapter = hb_list_item( title->list_chapter, i );
-
-			fOrigDuration = chapter->duration;
-			fTimescale = job->arate;
-			fTSDuration = (fOrigDuration / 90000) * fTimescale;
-			chapterDuration = (MP4Duration)fTSDuration;
-			
-			sprintf(markerBuf, "  Chapter %03i", i + 1);
-			markerBuf[0] = 0;
-			markerBuf[1] = 11; // "Chapter xxx"
-			MP4WriteSample(m->file, textTrack, (u_int8_t*)markerBuf, 13, chapterDuration, 0, true);
-
-		}
-		
+        
+        m->chapter_track = textTrack;
+        m->chapter_duration = 0;
+        m->current_chapter = job->chapter_start;
 	}
 	
     return 0;
@@ -214,7 +282,21 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     uint64_t duration;
 
     if( mux_data == job->mux_data )
-    {
+    {    
+        /* Add the sample before the new frame.
+           It is important that this be calculated prior to the duration
+           of the new video sample, as we want to sync to right after it.
+           (This is because of how durations for text tracks work in QT) */
+        if( job->chapter_markers && buf->new_chap )
+        {
+            struct hb_text_sample_s *sample = MP4GenerateChapterSample( m, (m->sum_dur - m->chapter_duration) );
+        
+            MP4WriteSample(m->file, m->chapter_track, sample->sample, sample->length, sample->duration, 0, true);
+            free(sample);
+            m->current_chapter++;
+            m->chapter_duration = m->sum_dur;
+        }
+    
         /* Video */
         /* Because we use the audio samplerate as the timescale,
            we have to use potentially variable durations so the video
@@ -253,6 +335,15 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
 
 static int MP4End( hb_mux_object_t * m )
 {
+    /* Write our final chapter marker */
+    if( m->job->chapter_markers )
+    {
+        struct hb_text_sample_s *sample = MP4GenerateChapterSample( m, (m->sum_dur - m->chapter_duration) );
+    
+        MP4WriteSample(m->file, m->chapter_track, sample->sample, sample->length, sample->duration, 0, true);
+        free(sample);
+    }
+    
 #if 0
     hb_job_t * job = m->job;
     char filename[1024]; memset( filename, 0, 1024 );

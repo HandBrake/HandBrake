@@ -110,8 +110,10 @@ int hb_demux_ps( hb_buffer_t * buf_ps, hb_list_t * list_es )
         /* Here we hit we ES payload */
         buf_es = hb_buffer_init( pes_packet_end - pos );
 
-        buf_es->id    = id;
-        buf_es->start = pts;
+        buf_es->id       = id;
+        buf_es->start    = pts;
+        buf_es->new_chap = buf_ps->new_chap; // Consume a chapter break, and apply it to the ES.
+        buf_ps->new_chap = 0;
         memcpy( buf_es->data, d + pos, pes_packet_end - pos );
 
         hb_list_add( list_es, buf_es );

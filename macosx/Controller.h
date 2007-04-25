@@ -8,6 +8,7 @@
 
 #include "hb.h"
 
+#include "ChapterTitles.h"
 #include "ScanController.h"
 #include "PictureController.h"
 #include "QueueController.h"
@@ -52,7 +53,6 @@
     IBOutlet NSTextField         * fDstFile1Field;
     IBOutlet NSTextField         * fDstFile2Field;
     IBOutlet NSButton            * fDstBrowseButton;
-	IBOutlet NSButton            * fCreateChapterMarkers;
 
     /* Video box */
     IBOutlet NSTextField         * fVidRateField;
@@ -118,6 +118,11 @@
     IBOutlet NSPopUpButton       * fAudRatePopUp;
     IBOutlet NSTextField         * fAudBitrateField;
     IBOutlet NSPopUpButton       * fAudBitratePopUp;
+    
+    /* Chapters box */
+    IBOutlet NSButton            * fCreateChapterMarkers;
+    IBOutlet NSTableView         * fChapterTable;
+             ChapterTitles       * fChapterTitlesDelegate;
 
     /* Bottom */
     IBOutlet NSButton            * fPictureButton;

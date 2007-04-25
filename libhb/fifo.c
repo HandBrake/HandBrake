@@ -129,7 +129,7 @@ hb_buffer_t * hb_fifo_get( hb_fifo_t * f )
     b->next   = NULL;
     f->size  -= 1;
     hb_unlock( f->lock );
-
+    
     return b;
 }
 

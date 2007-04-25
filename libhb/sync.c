@@ -244,6 +244,7 @@ static int SyncVideo( hb_work_object_t * w )
     hb_buffer_t * cur, * next, * sub = NULL;
     hb_job_t * job = pv->job;
     int64_t pts_expected;
+    int chap_break;
 
     if( pv->done )
     {
@@ -310,8 +311,11 @@ static int SyncVideo( hb_work_object_t * w )
             }
 
             /* Trash current picture */
+            /* Also, make sure we don't trash a chapter break */
+            chap_break = cur->new_chap;
             hb_buffer_close( &cur );
             pv->cur = cur = hb_fifo_get( job->fifo_raw );
+            cur->new_chap |= chap_break; // Don't stomp existing chapter breaks
 
             /* Calculate new offset */
             pv->pts_offset_old = pv->pts_offset;
@@ -358,8 +362,12 @@ static int SyncVideo( hb_work_object_t * w )
         {
             /* The current frame is too old but the next one matches,
                let's trash */
+            /* Also, make sure we don't trash a chapter break */
+            chap_break = cur->new_chap;
             hb_buffer_close( &cur );
             pv->cur = cur = hb_fifo_get( job->fifo_raw );
+            cur->new_chap |= chap_break; // Make sure we don't stomp the existing one.
+            
             continue;
         }
 
@@ -377,7 +385,7 @@ static int SyncVideo( hb_work_object_t * w )
             buf_tmp = cur;
             pv->cur = cur = hb_fifo_get( job->fifo_raw );
         }
-
+        
         /* Replace those MPEG-2 dates with our dates */
         buf_tmp->start = (uint64_t) pv->count_frames *
             pv->job->vrate_base / 300;

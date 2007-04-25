@@ -21,6 +21,7 @@ struct hb_libmpeg2_s
     int                  height;
     int                  rate;
     int                  got_iframe;
+    int                  look_for_break;
     int64_t              last_pts;
 };
 
@@ -36,6 +37,7 @@ hb_libmpeg2_t * hb_libmpeg2_init()
     m->libmpeg2 = mpeg2_init();
     m->info     = mpeg2_info( m->libmpeg2 );
     m->last_pts = -1;
+    m->look_for_break = 0;
 
     return m;
 }
@@ -51,6 +53,7 @@ int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
     mpeg2_state_t   state;
     hb_buffer_t   * buf;
     uint8_t       * data;
+    int             chap_break = 0;
 
     /* Feed libmpeg2 */
     if( buf_es->start > -1 )
@@ -86,6 +89,11 @@ int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 }
             }
         }
+        else if( state == STATE_GOP && m->look_for_break == 2)
+        {
+            printf("MPEG2: Group of pictures found, searching for I-Frame\n");
+            m->look_for_break = 1;
+        }
         else if( ( state == STATE_SLICE || state == STATE_END ) &&
                  m->info->display_fbuf )
         {
@@ -93,12 +101,28 @@ int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                   PIC_MASK_CODING_TYPE ) == PIC_FLAG_CODING_TYPE_I )
             {
                 m->got_iframe = 1;
+                
+                // If we are looking for a break, insert the chapter break on an I-Frame
+                if( m->look_for_break == 1 )
+                {
+                    printf("MPEG2: I-Frame Found\n");
+                    m->look_for_break = 0;
+                    chap_break = 1;
+                }
             }
 
             if( m->got_iframe )
             {
                 buf  = hb_buffer_init( m->width * m->height * 3 / 2 );
                 data = buf->data;
+
+                // Was a good break point found?
+                if( chap_break )
+                {
+                    printf("MPEG2: Chapter Break Inserted\n");
+                    chap_break = 0;
+                    buf->new_chap = 1;
+                }
 
                 memcpy( data, m->info->display_fbuf->buf[0],
                         m->width * m->height );
@@ -207,6 +231,15 @@ int decmpeg2Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
 {
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * buf, * last = NULL;
+
+    // The reader found a chapter break, consume it completely, and remove it from the
+    // stream. We need to shift it.
+    if( (*buf_in)->new_chap )
+    {
+        printf("MPEG2: Chapter Break Cell Found, searching for GOP\n");
+        pv->libmpeg2->look_for_break = 2;
+        (*buf_in)->new_chap = 0;
+    }
 
     hb_libmpeg2_decode( pv->libmpeg2, *buf_in, pv->list );
 

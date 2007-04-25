@@ -30,6 +30,7 @@ struct hb_dvd_s
     int            title_block_count;
     int            cell_cur;
     int            cell_next;
+    int            cell_overlap;
     int            block;
     int            pack_len;
     int            next_vobu;
@@ -555,7 +556,8 @@ int hb_dvd_start( hb_dvd_t * d, int title, int chapter )
     d->block     = d->pgc->cell_playback[d->cell_cur].first_sector;
     d->next_vobu = d->block;
     d->pack_len  = 0;
-
+    d->cell_overlap = 0;
+    
     return 1;
 }
 
@@ -709,6 +711,19 @@ int hb_dvd_read( hb_dvd_t * d, hb_buffer_t * b )
             d->cell_cur  = d->cell_next;
             d->next_vobu = d->pgc->cell_playback[d->cell_cur].first_sector;
             FindNextCell( d );
+            d->cell_overlap = 1;
+            printf("DVD: End of Cell\n");
+        }
+        
+        // Revert the cell overlap, and check for a chapter break
+        if( dsi_pack.vobu_sri.prev_vobu == SRI_END_OF_CELL )
+        {
+            printf("DVD: Beginning of Cell\n");
+            if( d->cell_overlap )
+            {
+                b->new_chap = hb_dvd_is_break( d );
+                d->cell_overlap = 0;
+            }
         }
     }
     else
@@ -736,19 +751,20 @@ int hb_dvd_chapter( hb_dvd_t * d )
 {
     int     i;
     int     pgc_id, pgn;
+	int     nr_of_ptts = d->ifo->vts_ptt_srpt->title[d->ttn-1].nr_of_ptts;
     pgc_t * pgc;
 
-    for( i = 0;
-         i < d->ifo->vts_ptt_srpt->title[d->ttn-1].nr_of_ptts;
-         i++ )
+    for( i = nr_of_ptts - 1;
+         i >= 0;
+         i-- )
     {
         /* Get pgc for chapter (i+1) */
         pgc_id = d->ifo->vts_ptt_srpt->title[d->ttn-1].ptt[i].pgcn;
         pgn    = d->ifo->vts_ptt_srpt->title[d->ttn-1].ptt[i].pgn;
         pgc    = d->ifo->vts_pgcit->pgci_srp[pgc_id-1].pgc;
 
-        if( d->cell_cur >= pgc->program_map[pgn-1] - 1 &&
-            d->cell_cur <= pgc->nr_of_cells - 1 )
+        if( d->cell_cur - d->cell_overlap >= pgc->program_map[pgn-1] - 1 &&
+            d->cell_cur - d->cell_overlap <= pgc->nr_of_cells - 1 )
         {
             /* We are in this chapter */
             return i + 1;
@@ -757,6 +773,70 @@ int hb_dvd_chapter( hb_dvd_t * d )
 
     /* End of title */
     return -1;
+}
+
+/***********************************************************************
+ * hb_dvd_is_break
+ ***********************************************************************
+ * Returns 1 if the current block is a new chapter start
+ **********************************************************************/
+int hb_dvd_is_break( hb_dvd_t * d )
+{
+    int     i, j;
+    int     pgc_id, pgn;
+	int     nr_of_ptts = d->ifo->vts_ptt_srpt->title[d->ttn-1].nr_of_ptts;
+    pgc_t * pgc;
+    int     cell, chapter_length, cell_end;
+    
+    for( i = nr_of_ptts - 1;
+         i > 0;
+         i-- )
+    {
+        /* Get pgc for chapter (i+1) */
+        pgc_id = d->ifo->vts_ptt_srpt->title[d->ttn-1].ptt[i].pgcn;
+        pgn    = d->ifo->vts_ptt_srpt->title[d->ttn-1].ptt[i].pgn;
+        pgc    = d->ifo->vts_pgcit->pgci_srp[pgc_id-1].pgc;
+        cell   = pgc->program_map[pgn-1] - 1;
+
+        if( cell <= d->cell_start )
+            break;
+
+        // This must not match against the start cell.
+        if( pgc->cell_playback[cell].first_sector == d->block && cell != d->cell_start )
+        {
+            /* Check to see if we merged this chapter into the previous one... */
+            /* As a note, merging chapters is probably bad practice for this very reason */
+            chapter_length = 0;
+            
+            if( i == nr_of_ptts - 1 )
+            {
+                cell_end = d->pgc->nr_of_cells;
+            }
+            else
+            {
+                cell_end = pgc->program_map[pgn] - 1;
+            }
+            
+            for( j = cell; j < cell_end; j++ )
+            {
+                chapter_length += pgc->cell_playback[j].last_sector + 1 - 
+                                  pgc->cell_playback[j].first_sector;
+            }
+            
+            if( chapter_length >= 2048 )
+            {
+                printf("DVD: Chapter Break Cell Found\n");
+                /* We have a chapter break */
+                return 1;
+            }
+            else
+            {
+                printf("DVD: Cell Found (%d)\n", chapter_length);
+            }
+        }
+    }
+    
+    return 0;
 }
 
 /***********************************************************************

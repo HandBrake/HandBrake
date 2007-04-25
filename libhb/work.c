@@ -535,6 +535,14 @@ static void work_loop( void * _w )
 //		w->thread_sleep_interval = MAX(1, (w->thread_sleep_interval - 1));
 
         w->work( w, &buf_in, &buf_out );
+
+        // Propogate any chapter breaks for the worker
+        if( buf_in && buf_out && buf_in->new_chap )
+        {
+            printf("WORK: Copying Chapter Break\n");
+            buf_out->new_chap = 1;
+        }
+        
         if( buf_in )
         {
             hb_buffer_close( &buf_in );

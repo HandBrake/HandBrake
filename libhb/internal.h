@@ -37,6 +37,7 @@ struct hb_buffer_s
     int           id;
     int64_t       start;
     int64_t       stop;
+    int           new_chap;
     int           key;
 
     /* Holds the output PTS from x264, for use by b-frame offsets in muxmp4.c */
@@ -111,6 +112,7 @@ void         hb_dvd_stop( hb_dvd_t * );
 int          hb_dvd_seek( hb_dvd_t *, float );
 int          hb_dvd_read( hb_dvd_t *, hb_buffer_t * );
 int          hb_dvd_chapter( hb_dvd_t * );
+int          hb_dvd_is_break( hb_dvd_t * d );
 void         hb_dvd_close( hb_dvd_t ** );
 
 /***********************************************************************

@@ -13,11 +13,13 @@ CXXFLAGS += -I../libhb
 LIBS2 = ../libhb/libhb.a $(LIBS:%=../contrib/lib/lib%.a)
 LDFLAGS += $(LIBS2)
 
-../HandBrakeCLI: test.c $(LIBS2)
+../HandBrakeCLI: test.c parsecsv.c $(LIBS2)
 	@CMD="$(CC) $(CFLAGS) -o test.o -c test.c"; $$CMD || \
 	( echo "Compile line for $@ was:"; echo $$CMD; false )
+        @CMD="$(CC) $(CFLAGS) -o parsecsv.o -c parsecsv.c"; $$CMD || \
+        ( echo "Compile line for $@ was:"; echo $$CMD; false )
 	@echo "Link HandBrakeCLI"
-	@CMD="g++ $(CXXFLAGS) -o ../HandBrakeCLI test.o $(LDFLAGS) -lz -lpthread"; $$CMD || \
+	@CMD="g++ $(CXXFLAGS) -o ../HandBrakeCLI test.o parsecsv.o $(LDFLAGS) -lz -lpthread"; $$CMD || \
 	( echo "Compile line for $@ was:"; echo $$CMD; false )
         @CMD="rm -rf ../plugins ; mkdir ../plugins ; cp ../contrib/lib/libquicktime/* ../plugins"; $$CMD
 

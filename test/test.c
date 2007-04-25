@@ -11,6 +11,7 @@
 #include <unistd.h>
 
 #include "hb.h"
+#include "parsecsv.h"
 
 /* Options */
 static int    debug       = HB_DEBUG_NONE;
@@ -44,6 +45,7 @@ static int    pixelratio  = 0;
 static int    chapter_start = 0;
 static int    chapter_end   = 0;
 static int    chapter_markers = 0;
+static char * marker_file   = NULL;
 static int	  crf			= 0;
 static char	  *x264opts		= NULL;
 static char	  *x264opts2 	= NULL;
@@ -314,6 +316,53 @@ static int HandleEvents( hb_handle_t * h )
 			if ( chapter_markers )
 			{
 				job->chapter_markers = chapter_markers;
+
+                if( marker_file != NULL )
+                {
+                    hb_csv_file_t * file = hb_open_csv_file( marker_file );
+                    hb_csv_cell_t * cell;
+                    int row = 0;
+                    int chapter = 0;
+                    
+                    fprintf( stderr, "Reading chapter markers from file %s\n", marker_file );
+                    
+                    if( file == NULL )
+                    {
+                         fprintf( stderr, "Cannot open chapter marker file, using defaults\n" );
+                    }
+                    else
+                    {
+                        /* Parse the cells */
+                        while( NULL != ( cell = hb_read_next_cell( file ) ) )
+                        {                            
+                            /* We have a chapter number */
+                            if( cell->cell_col == 0 )
+                            {
+                                row = cell->cell_row;
+                                chapter = atoi( cell->cell_text );
+                            }
+                             
+                            /* We have a chapter name */
+                            if( cell->cell_col == 1 && row == cell->cell_row )
+                            {
+                                /* If we have a valid chapter, copy the string an terminate it */
+                                if( chapter >= job->chapter_start && chapter <= job->chapter_end )
+                                {
+                                    hb_chapter_t * chapter_s;
+                                    
+                                    chapter_s = hb_list_item( job->title->list_chapter, chapter - 1);
+                                    strncpy(chapter_s->title, cell->cell_text, 1023);
+                                    chapter_s->title[1023] = '\0';
+                                }
+                            }                               
+                        
+                                                           
+                            hb_dispose_cell( cell );
+                        }
+                        
+                        hb_close_csv_file( file );
+                    }
+                }
 			}
 
             if( crop[0] >= 0 && crop[1] >= 0 &&
@@ -650,7 +699,7 @@ static int ParseOptions( int argc, char ** argv )
 
             { "title",       required_argument, NULL,    't' },
             { "chapters",    required_argument, NULL,    'c' },
-            { "markers",     no_argument,       NULL,    'm' },
+            { "markers",     optional_argument, NULL,    'm' },
             { "audio",       required_argument, NULL,    'a' },
             { "mixdown",     required_argument, NULL,    '6' },
             { "subtitle",    required_argument, NULL,    's' },
@@ -740,6 +789,10 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             }
             case 'm':
+                if( optarg != NULL )
+                {
+                    marker_file = strdup( optarg );
+                }
                 chapter_markers = 1;
                 break;
             case 'a':
