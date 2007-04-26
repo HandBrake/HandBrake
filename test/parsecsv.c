@@ -140,7 +140,6 @@ static uint16_t hb_parse_character( hb_csv_file_t * file )
 {
     int byte;
     uint16_t c;
-    int read_result;
     int need_char = 1;
     
     if( file == NULL )

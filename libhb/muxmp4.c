@@ -140,6 +140,12 @@ static int MP4Init( hb_mux_object_t * m )
 
     /* Create an empty mp4 file */
     m->file = MP4Create( job->file, MP4_DETAILS_ERROR, 0 );
+    if (m->file == MP4_INVALID_FILE_HANDLE)
+    {
+        hb_log("muxmp4.c: MP4Create failed!");
+        *job->die = 1;
+        return 0;
+    }
 
     /* Video track */
     mux_data      = malloc( sizeof( hb_mux_data_t ) );
@@ -149,12 +155,22 @@ static int MP4Init( hb_mux_object_t * m )
        synchronization issues (audio not playing at the correct speed).
        To workaround this, we use the audio samplerate as the
        timescale */
-    MP4SetTimeScale( m->file, job->arate );
+    if (!(MP4SetTimeScale( m->file, job->arate )))
+    {
+        hb_log("muxmp4.c: MP4SetTimeScale failed!");
+        *job->die = 1;
+        return 0;
+    }
 
     if( job->vcodec == HB_VCODEC_X264 )
     {
         /* Stolen from mp4creator */
-        MP4SetVideoProfileLevel( m->file, 0x7F );
+        if(!(MP4SetVideoProfileLevel( m->file, 0x7F )))
+        {
+            hb_log("muxmp4.c: MP4SetVideoProfileLevel failed!");
+            *job->die = 1;
+            return 0;
+        }
 
 		mux_data->track = MP4AddH264VideoTrack( m->file, job->arate,
 		        MP4_INVALID_DURATION, job->width, job->height,
@@ -178,14 +194,31 @@ static int MP4Init( hb_mux_object_t * m )
     }
     else /* FFmpeg or XviD */
     {
-        MP4SetVideoProfileLevel( m->file, MPEG4_SP_L3 );
+        if(!(MP4SetVideoProfileLevel( m->file, MPEG4_SP_L3 )))
+        {
+            hb_log("muxmp4.c: MP4SetVideoProfileLevel failed!");
+            *job->die = 1;
+            return 0;
+        }
         mux_data->track = MP4AddVideoTrack( m->file, job->arate,
                 MP4_INVALID_DURATION, job->width, job->height,
                 MP4_MPEG4_VIDEO_TYPE );
+        if (mux_data->track == MP4_INVALID_TRACK_ID)
+        {
+            hb_log("muxmp4.c: MP4AddVideoTrack failed!");
+            *job->die = 1;
+            return 0;
+        }
+        
 
         /* VOL from FFmpeg or XviD */
-        MP4SetTrackESConfiguration( m->file, mux_data->track,
-                job->config.mpeg4.bytes, job->config.mpeg4.length );
+        if (!(MP4SetTrackESConfiguration( m->file, mux_data->track,
+                job->config.mpeg4.bytes, job->config.mpeg4.length )))
+        {
+            hb_log("muxmp4.c: MP4SetTrackESConfiguration failed!");
+            *job->die = 1;
+            return 0;
+        }
     }
 
 	/* apply the anamorphic transformation matrix if needed */
@@ -235,6 +268,13 @@ static int MP4Init( hb_mux_object_t * m )
 	/* add the audio tracks */
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
+    	static u_int8_t reserved2[16] = {
+    		0x00, 0x00, 0x00, 0x00, 
+    		0x00, 0x00, 0x00, 0x00, 
+    		0x00, 0x02, 0x00, 0x10,
+    		0x00, 0x00, 0x00, 0x00, 
+	    };
+	    
         audio = hb_list_item( title->list_audio, i );
         mux_data = malloc( sizeof( hb_mux_data_t ) );
         audio->mux_data = mux_data;
@@ -251,6 +291,10 @@ static int MP4Init( hb_mux_object_t * m )
         language_code |= audio->iso639_2[1] - 0x60;  language_code <<= 5;
         language_code |= audio->iso639_2[2] - 0x60;
         MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.mdhd.language", language_code);
+        
+        /* Set the correct number of channels for this track */
+        reserved2[9] = (u_int8_t)HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown);
+        MP4SetTrackBytesProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.mp4a.reserved2", reserved2, sizeof(reserved2));
 				
 		/* store a reference to the first audio track,
 		so we can use it to feed the chapter text track's sample rate */

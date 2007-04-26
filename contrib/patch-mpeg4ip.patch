@@ -600,3 +600,26 @@ diff -Naur mpeg4ip.orig/lib/mp4v2/mp4file.h mpeg4ip.patched/lib/mp4v2/mp4file.h
  
  	MP4SampleId GetTrackNumberOfSamples(MP4TrackId trackId);
  
+diff -Naur mpeg4ip.orig/lib/mp4v2/atom_mp4a.cpp mpeg4ip.patched/lib/mp4v2/atom_mp4a.cpp
+--- mpeg4ip.orig/lib/mp4v2/atom_mp4a.cpp        2007-04-26 01:21:22.000000000 -0600
++++ mpeg4ip.patched/lib/mp4v2/atom_mp4a.cpp     2007-04-26 01:43:08.000000000 -0600
+@@ -29,7 +29,10 @@
+ 	AddProperty( /* 1 */
+ 		new MP4Integer16Property("dataReferenceIndex"));
+ 
+-	AddReserved("reserved2", 16); /* 2 */
++	/* patched by saintdev to allow us to set correct audio information */
++//	AddReserved("reserved2", 16); /* 2 */
++	AddProperty( /* 2 */
++		new MP4BytesProperty("reserved2", 16));
+ 
+ 	AddProperty( /* 3 */
+ 		new MP4Integer16Property("timeScale"));
+@@ -55,5 +58,6 @@
+ 	m_pProperties[2]->SetReadOnly(false);
+ 	((MP4BytesProperty*)m_pProperties[2])->
+ 		SetValue(reserved2, sizeof(reserved2));
+-	m_pProperties[2]->SetReadOnly(true);
++	/* patched by saintdev to allow us to set correct audio information */
++//	m_pProperties[2]->SetReadOnly(true);
+ }

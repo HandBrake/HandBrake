@@ -29,7 +29,8 @@ if $(OS) != CYGWIN
 
 # Interfaces
 CLI_BIN = HandBrakeCLI ;
-CLI_SRC = test/test.c ;
+CLI_SRC = test/test.c 
+          test/parsecsv.c ;
 BEOS_BIN = HandBrake ;
 BEOS_SRC = beos/HBApp.cpp beos/MainWindow.cpp beos/ScanWindow.cpp
            beos/PicWindow.cpp beos/Stepper.cpp beos/QueueWindow.cpp ;
