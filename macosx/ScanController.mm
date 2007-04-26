@@ -96,12 +96,6 @@
 
 	[fDetectedPopUp selectItemAtIndex: 0];
 
-    /*
-	if( [fMatrix isEnabled] )
-    {
-        [self EnableUI: YES];
-    }
-    */
 }
 
 - (void) EnableUI: (bool) b

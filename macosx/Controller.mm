@@ -522,27 +522,36 @@ static int FormatSettings[3][4] =
 
         case HB_STATE_WORKDONE:
         {
-            [self EnableUI: YES];
+            //[self EnableUI: YES];
             [fStatusField setStringValue: _( @"Done." )];
             [fRipIndicator setIndeterminate: NO];
             [fRipIndicator setDoubleValue: 0.0];
             [fRipButton setTitle: _( @"Start" )];
-
+			
             /* Restore dock icon */
             [self UpdateDockIcon: -1.0];
-
+			
             [fPauseButton setEnabled: NO];
             [fPauseButton setTitle: _( @"Pause" )];
             [fRipButton setEnabled: YES];
             [fRipButton setTitle: _( @"Start" )];
-
+			
             /* FIXME */
             hb_job_t * job;
             while( ( job = hb_job( fHandle, 0 ) ) )
             {
                 hb_rem( fHandle, job );
             }
-            break;
+            
+			/* Lets alert the user that the encode has finished */
+			int status;
+			NSBeep();
+			status = NSRunAlertPanel(@"Put down that cocktail...",@"your HandBrake encode is done!", @"OK", nil, nil);
+            if ( status == NSAlertDefaultReturn ) 
+			{
+				[self EnableUI: YES];
+			}
+			break;
         }
     }
 
@@ -2298,6 +2307,7 @@ the user is using "Custom" settings by determining the sender*/
         return;
     /* Alert user before deleting preset */
 	/* Comment out for now, tie to user pref eventually */
+
     //NSBeep();
     status = NSRunAlertPanel(@"Warning!", @"Are you sure that you want to delete the selected preset?", @"OK", @"Cancel", nil);
     
