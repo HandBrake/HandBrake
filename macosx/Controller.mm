@@ -9,6 +9,10 @@
 
 #define _(a) NSLocalizedString(a,NULL)
 
+
+
+
+
 static int FormatSettings[3][4] =
   { { HB_MUX_MP4 | HB_VCODEC_FFMPEG | HB_ACODEC_FAAC,
       HB_MUX_MP4 | HB_VCODEC_X264   | HB_ACODEC_FAAC,
@@ -37,13 +41,18 @@ static int FormatSettings[3][4] =
 
 - (void) applicationDidFinishLaunching: (NSNotification *) notification
 {
+
+
     int    build;
     char * version;
+
 
     /* Init libhb */
     fHandle = hb_init( HB_DEBUG_NONE, [[NSUserDefaults
         standardUserDefaults] boolForKey:@"CheckForUpdates"] );
-    
+	/* Set the Growl Delegate */
+	HBController *hbGrowlDelegate = [[HBController alloc] init];
+	[GrowlApplicationBridge setGrowlDelegate: hbGrowlDelegate];    
     /* Init others controllers */
     [fScanController    SetHandle: fHandle];
     [fPictureController SetHandle: fHandle];
@@ -97,7 +106,9 @@ static int FormatSettings[3][4] =
 
     [self TranslateStrings];
 
-	/* Init User Presets .plist */
+
+//[self registrationDictionaryForGrowl];
+/* Init User Presets .plist */
 	/* We declare the default NSFileManager into fileManager */
 	NSFileManager * fileManager = [NSFileManager defaultManager];
 	//presetPrefs = [[NSUserDefaults standardUserDefaults] retain];
@@ -225,7 +236,18 @@ static int FormatSettings[3][4] =
 
 }
 
+// register a test notification and make
+// it enabled by default
+#define SERVICE_NAME @"Encode Done"
+- (NSDictionary *)registrationDictionaryForGrowl 
+{ 
+NSDictionary *registrationDictionary = [NSDictionary dictionaryWithObjectsAndKeys: 
+[NSArray arrayWithObjects:SERVICE_NAME,nil], GROWL_NOTIFICATIONS_ALL, 
+[NSArray arrayWithObjects:SERVICE_NAME,nil], GROWL_NOTIFICATIONS_DEFAULT, 
+nil]; 
 
+return registrationDictionary; 
+} 
 - (void) TranslateStrings
 {
     [fSrcDVD1Field      setStringValue: _( @"DVD:" )];
@@ -543,15 +565,27 @@ static int FormatSettings[3][4] =
                 hb_rem( fHandle, job );
             }
             
-			/* Lets alert the user that the encode has finished */
-			int status;
-			NSBeep();
-			status = NSRunAlertPanel(@"Put down that cocktail...",@"your HandBrake encode is done!", @"OK", nil, nil);
-            if ( status == NSAlertDefaultReturn ) 
+			if (fEncodeState != 2) // if the encode has not been cancelled
 			{
-				[self EnableUI: YES];
+				/* Lets alert the user that the encode has finished */
+				/*Growl Notification*/
+				[self showGrowlDoneNotification: NULL];
+				/*On Screen Notification*/
+				int status;
+				NSBeep();
+				status = NSRunAlertPanel(@"Put down that cocktail...",@"your HandBrake encode is done!", @"OK", nil, nil);
+				//[NSApp requestUserAttention:NSInformationalRequest];
+				[NSApp requestUserAttention:NSCriticalRequest];
+				if ( status == NSAlertDefaultReturn ) 
+				{
+					[self EnableUI: YES];
+				}
 			}
-			break;
+			else
+			{
+			[self EnableUI: YES];
+			}
+            break;
         }
     }
 
@@ -574,6 +608,20 @@ static int FormatSettings[3][4] =
         scheduledTimerWithTimeInterval: 0.2 target: self
         selector: @selector( UpdateUI: ) userInfo: NULL repeats: FALSE]
         forMode: NSModalPanelRunLoopMode];
+}
+
+-(IBAction)showGrowlDoneNotification:(id)sender
+{
+
+  
+  [GrowlApplicationBridge 
+          notifyWithTitle:@"Put down that cocktail..." 
+              description:@"Thank You for using HandBrake" 
+         notificationName:SERVICE_NAME
+                 iconData:nil 
+                 priority:0 
+                 isSticky:1 
+             clickContext:nil];
 }
 
 - (void) EnableUI: (bool) b
@@ -748,7 +796,7 @@ static int FormatSettings[3][4] =
     hb_title_t * title = (hb_title_t *) hb_list_item( list,
             [fSrcTitlePopUp indexOfSelectedItem] );
     hb_job_t * job = title->job;
-    int i;
+    //int i;
 
     /* Chapter selection */
     job->chapter_start = [fSrcChapterStartPopUp indexOfSelectedItem] + 1;
@@ -1016,6 +1064,8 @@ static int FormatSettings[3][4] =
 {
     /* Let libhb do the job */
     hb_start( fHandle );
+	/*set the fEncodeState State */
+	fEncodeState = 1;
 
     /* Disable interface */
    [self EnableUI: NO];
@@ -1039,6 +1089,8 @@ static int FormatSettings[3][4] =
         hb_stop( fHandle );
         [fPauseButton setEnabled: NO];
         [fRipButton   setEnabled: NO];
+		/*set the fEncodeState State */
+	     fEncodeState = 2;
     }
 }
 

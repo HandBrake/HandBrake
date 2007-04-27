@@ -5,21 +5,23 @@
    It may be used under the terms of the GNU General Public License. */
 
 #include <Cocoa/Cocoa.h>
+#include <Growl/Growl.h>
 
 #include "hb.h"
+
 
 #include "ChapterTitles.h"
 #include "ScanController.h"
 #include "PictureController.h"
 #include "QueueController.h"
 
-@interface HBController : NSObject
+@interface HBController : NSObject <GrowlApplicationBridgeDelegate>
 
 {
     IBOutlet NSWindow            * fWindow;
 
     /* Scan panel */
-    IBOutlet ScanController      * fScanController;
+	IBOutlet ScanController      * fScanController;
     IBOutlet NSPanel             * fScanPanel;
 
     /* Picture panel */
@@ -158,6 +160,9 @@
 	IBOutlet NSButton            * fPresetsDelete;
     hb_handle_t                  * fHandle;
 	hb_title_t                   * fTitle;
+    /* integer to set to determine the previous state
+	of encode 0==idle, 1==encoding, 2==cancelled*/
+    int                            fEncodeState;
 }
 
 - (void)     TranslateStrings;
@@ -249,6 +254,9 @@
 		willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn
 		 row:(int)rowIndex;
 
+// Growl methods
+- (NSDictionary *) registrationDictionaryForGrowl;
+-(IBAction)showGrowlDoneNotification:(id)sender;
 
 @end
 
