@@ -616,7 +616,7 @@ return registrationDictionary;
   
   [GrowlApplicationBridge 
           notifyWithTitle:@"Put down that cocktail..." 
-              description:@"Thank You for using HandBrake" 
+              description:@"your HandBrake encode is done!" 
          notificationName:SERVICE_NAME
                  iconData:nil 
                  priority:0 
