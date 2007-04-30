@@ -1873,10 +1873,10 @@ the user is using "Custom" settings by determining the sender*/
 			if there are any x264 options from the preferences to use */
 		if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fDstCodecsPopUp indexOfSelectedItem] == 1)
 		{
-		    /* Lets check to see if the user wants them displayed from the preferences */
-			if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefAdvancedx264FlagsShow"] > 0)
+		    /* Lets check to see there is a specified string in the prefs, and use that if need be */
+			if ([[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] != @"")
 			{
-			//	[fDisplayX264Options setStringValue: [NSString stringWithFormat:[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"]]];
+			[fDisplayX264Options setStringValue: [NSString stringWithFormat:[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"]]];
 			}
 		}
 		else
@@ -2105,17 +2105,17 @@ the user is using "Custom" settings by determining the sender*/
 	/* Basic Picture Settings */
 	/* Use Max Picture settings for whatever the dvd is.*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesMaxPictureSettings"];
-	//[preset setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PictureWidth"];
-	//[preset setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PictureHeight"];
-	//[preset setObject:[NSNumber numberWithInt:fTitle->job->keep_ratio] forKey:@"PictureKeepRatio"];
-	//[preset setObject:[NSNumber numberWithInt:fTitle->job->deinterlace] forKey:@"PictureDeinterlace"];
-	//[preset setObject:[NSNumber numberWithInt:fTitle->job->pixel_ratio] forKey:@"PicturePAR"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureWidth"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureKeepRatio"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PicturePAR"];
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
-	//[preset setObject:[NSNumber numberWithInt:job->crop[0]] forKey:@"PictureTopCrop"];
-    //[preset setObject:[NSNumber numberWithInt:job->crop[1]] forKey:@"PictureBottomCrop"];
-	//[preset setObject:[NSNumber numberWithInt:job->crop[2]] forKey:@"PictureLeftCrop"];
-	//[preset setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureBottomCrop"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 	
 	/*Audio*/
 	/* Audio Sample Rate*/
@@ -2175,17 +2175,17 @@ the user is using "Custom" settings by determining the sender*/
 	/* Basic Picture Settings */
 	/* Use Max Picture settings for whatever the dvd is.*/
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesMaxPictureSettings"];
-	//[preset setObject:[NSNumber numberWithInt:PicOrigOutputWidth] forKey:@"PictureWidth"];
-	//[preset setObject:[NSNumber numberWithInt:PicOrigOutputHeight] forKey:@"PictureHeight"];
-	//[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureKeepRatio"];
-	//[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureWidth"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureKeepRatio"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PicturePAR"];
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
-	//[preset setObject:[NSNumber numberWithInt:job->crop[0]] forKey:@"PictureTopCrop"];
-    //[preset setObject:[NSNumber numberWithInt:job->crop[1]] forKey:@"PictureBottomCrop"];
-	//[preset setObject:[NSNumber numberWithInt:job->crop[2]] forKey:@"PictureLeftCrop"];
-	//[preset setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureBottomCrop"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 	
 	/*Audio*/
 	/* Audio Sample Rate*/
@@ -2211,7 +2211,7 @@ the user is using "Custom" settings by determining the sender*/
 	/*Set whether or not this is default, at creation set to 0*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
 	/*Get the whether or not to apply pic settings in the AddPresetPanel*/
-	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
+	[preset setObject:[NSNumber numberWithInt:2] forKey:@"UsesPictureSettings"];
 	/* File Format */
     [preset setObject:@"MP4 file" forKey:@"FileFormat"];
 	/* Chapter Markers*/
@@ -2242,17 +2242,17 @@ the user is using "Custom" settings by determining the sender*/
 	source to source*/
 	/* Use Max Picture settings for whatever the dvd is.*/
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesMaxPictureSettings"];
-	//[preset setObject:[NSNumber numberWithInt:PicOrigOutputWidth] forKey:@"PictureWidth"];
-	//[preset setObject:[NSNumber numberWithInt:PicOrigOutputHeight] forKey:@"PictureHeight"];
-	//[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureKeepRatio"];
-	//[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureWidth"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureKeepRatio"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PicturePAR"];
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
-	//[preset setObject:[NSNumber numberWithInt:job->crop[0]] forKey:@"PictureTopCrop"];
-    //[preset setObject:[NSNumber numberWithInt:job->crop[1]] forKey:@"PictureBottomCrop"];
-	//[preset setObject:[NSNumber numberWithInt:job->crop[2]] forKey:@"PictureLeftCrop"];
-	//[preset setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureBottomCrop"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 	
 	/*Audio*/
 	/* Audio Sample Rate*/
@@ -2315,10 +2315,10 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PicturePAR"];
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
-	//[preset setObject:[NSNumber numberWithInt:job->crop[0]] forKey:@"PictureTopCrop"];
-    //[preset setObject:[NSNumber numberWithInt:job->crop[1]] forKey:@"PictureBottomCrop"];
-	//[preset setObject:[NSNumber numberWithInt:job->crop[2]] forKey:@"PictureLeftCrop"];
-	//[preset setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureBottomCrop"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 	
 	/*Audio*/
 	/* Audio Sample Rate*/
