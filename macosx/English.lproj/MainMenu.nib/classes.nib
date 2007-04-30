@@ -55,6 +55,7 @@
                 fChapterTable = NSTableView; 
                 fCreateChapterMarkers = NSButton; 
                 fDisplayX264Options = NSTextField; 
+                fDisplayX264OptionsLabel = NSTextField; 
                 fDstBrowseButton = NSButton; 
                 fDstCodecsField = NSTextField; 
                 fDstCodecsPopUp = NSPopUpButton; 
@@ -90,9 +91,7 @@
                 fPicturePanel = NSPanel; 
                 fPresetDrawer = NSDrawer; 
                 fPresetNewName = NSTextField; 
-                fPresetNewPicSettingsApply = NSButton; 
-                fPresetNewX264Opt = NSTextField; 
-                fPresetNewX264OptLabel = NSTextField; 
+                fPresetNewPicSettingsPopUp = NSPopUpButton; 
                 fPresetSaveButton = NSButton; 
                 fPresetSelectedDisplay = NSTextField; 
                 fPresetsAdd = NSButton; 

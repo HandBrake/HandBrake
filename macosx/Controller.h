@@ -139,10 +139,9 @@
 	
 	IBOutlet NSDrawer            * fPresetDrawer;
 	IBOutlet NSTextField         * fPresetNewName;
-	IBOutlet NSTextField         * fPresetNewX264Opt;
-	IBOutlet NSTextField         * fPresetNewX264OptLabel;
-	IBOutlet NSButton            * fPresetNewPicSettingsApply;
+	IBOutlet NSPopUpButton       * fPresetNewPicSettingsPopUp;
 	IBOutlet NSTextField         * fPresetSelectedDisplay;
+	IBOutlet NSTextField         * fDisplayX264OptionsLabel;
 	IBOutlet NSTextField         * fDisplayX264Options;
 	
 	NSString                     * AppSupportDirectory;
