@@ -1,9 +1,9 @@
 SYSTEM = $(shell uname -s)
 
 ifeq ($(SYSTEM),CYGWIN_NT-5.1)
-	LIBS = a52 avformat avcodec avutil dvdread faac mp3lame mpeg2 vorbis vorbisenc ogg samplerate x264 xvidcore mp4v2 
+	LIBS = a52 avformat avcodec avutil dca dvdread faac mp3lame mpeg2 vorbis vorbisenc ogg samplerate x264 xvidcore mp4v2 
 else
-        LIBS = a52 avformat avcodec avutil dvdread dvdcss faac mp3lame mpeg2 vorbis vorbisenc ogg samplerate x264 xvidcore mp4v2 
+        LIBS = a52 avformat avcodec avutil dca dvdread dvdcss faac mp3lame mpeg2 vorbis vorbisenc ogg samplerate x264 xvidcore mp4v2 
 endif
 
 all: ../HandBrakeCLI
