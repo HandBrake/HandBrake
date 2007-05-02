@@ -1,0 +1,809 @@
+diff -Naur libdca/include/audio_out.h libdca_patched/include/audio_out.h
+--- libdca/include/audio_out.h	2007-05-02 10:05:03.000000000 +0100
++++ libdca_patched/include/audio_out.h	2007-05-02 10:09:42.000000000 +0100
+@@ -26,8 +26,8 @@
+ 
+ struct ao_instance_s {
+     int (* setup) (ao_instance_t * instance, int sample_rate, int * flags,
+-		   level_t * level, sample_t * bias);
+-    int (* play) (ao_instance_t * instance, int flags, sample_t * samples);
++		   dca_level_t * level, dca_sample_t * bias);
++    int (* play) (ao_instance_t * instance, int flags, dca_sample_t * samples);
+     void (* close) (ao_instance_t * instance);
+ };
+ 
+diff -Naur libdca/include/dca.h libdca_patched/include/dca.h
+--- libdca/include/dca.h	2007-05-02 10:05:03.000000000 +0100
++++ libdca_patched/include/dca.h	2007-05-02 10:09:36.000000000 +0100
+@@ -32,14 +32,14 @@
+ uint32_t mm_accel (void);
+ 
+ #if defined(LIBDCA_FIXED)
+-typedef int32_t sample_t;
+-typedef int32_t level_t;
++typedef int32_t dca_sample_t;
++typedef int32_t dca_level_t;
+ #elif defined(LIBDCA_DOUBLE)
+-typedef double sample_t;
+-typedef double level_t;
++typedef double dca_sample_t;
++typedef double dca_level_t;
+ #else
+-typedef float sample_t;
+-typedef float level_t;
++typedef float dca_sample_t;
++typedef float dca_level_t;
+ #endif
+ 
+ typedef struct dca_state_s dca_state_t;
+@@ -65,21 +65,24 @@
+ #define DCA_LFE 0x80
+ #define DCA_ADJUST_LEVEL 0x100
+ 
++#define DCA_OUT_DPLI  0x200
++#define DCA_OUT_DPLII 0x400
++
+ dca_state_t * dca_init (uint32_t mm_accel);
+ 
+ int dca_syncinfo (dca_state_t *state, uint8_t * buf, int * flags,
+                   int * sample_rate, int * bit_rate, int *frame_length);
+ 
+ int dca_frame (dca_state_t * state, uint8_t * buf, int * flags,
+-               level_t * level, sample_t bias);
++               dca_level_t * level, dca_sample_t bias);
+ 
+ void dca_dynrng (dca_state_t * state,
+-                 level_t (* call) (level_t, void *), void * data);
++                 dca_level_t (* call) (dca_level_t, void *), void * data);
+ 
+ int dca_blocks_num (dca_state_t * state);
+ int dca_block (dca_state_t * state);
+ 
+-sample_t * dca_samples (dca_state_t * state);
++dca_sample_t * dca_samples (dca_state_t * state);
+ 
+ void dca_free (dca_state_t * state);
+ 
+diff -Naur libdca/libao/audio_out_aif.c libdca_patched/libao/audio_out_aif.c
+--- libdca/libao/audio_out_aif.c	2007-05-02 10:05:04.000000000 +0100
++++ libdca_patched/libao/audio_out_aif.c	2007-05-02 10:09:41.000000000 +0100
+@@ -49,7 +49,7 @@
+ };
+ 
+ static int aif_setup (ao_instance_t * _instance, int sample_rate, int * flags,
+-		      level_t * level, sample_t * bias)
++		      dca_level_t * level, dca_sample_t * bias)
+ {
+     aif_instance_t * instance = (aif_instance_t *) _instance;
+ 
+@@ -78,7 +78,7 @@
+     buf[1] = value;
+ }
+ 
+-static int aif_play (ao_instance_t * _instance, int flags, sample_t * _samples)
++static int aif_play (ao_instance_t * _instance, int flags, dca_sample_t * _samples)
+ {
+     aif_instance_t * instance = (aif_instance_t *) _instance;
+     int16_t int16_samples[256*2];
+diff -Naur libdca/libao/audio_out_al.c libdca_patched/libao/audio_out_al.c
+--- libdca/libao/audio_out_al.c	2007-05-02 10:05:04.000000000 +0100
++++ libdca_patched/libao/audio_out_al.c	2007-05-02 10:09:41.000000000 +0100
+@@ -44,7 +44,7 @@
+ } al_instance_t;
+ 
+ static int al_setup (ao_instance_t * _instance, int sample_rate, int * flags,
+-		     level_t * level, sample_t * bias)
++		     dca_level_t * level, dca_sample_t * bias)
+ {
+     al_instance_t * instance = (al_instance_t *) _instance;
+ 
+@@ -59,7 +59,7 @@
+     return 0;
+ }
+ 
+-static int al_play (ao_instance_t * _instance, int flags, sample_t * _samples)
++static int al_play (ao_instance_t * _instance, int flags, dca_sample_t * _samples)
+ {
+     al_instance_t * instance = (al_instance_t *) _instance;
+     int16_t int16_samples[256*6];
+diff -Naur libdca/libao/audio_out_float.c libdca_patched/libao/audio_out_float.c
+--- libdca/libao/audio_out_float.c	2007-05-02 10:05:04.000000000 +0100
++++ libdca_patched/libao/audio_out_float.c	2007-05-02 10:09:40.000000000 +0100
+@@ -32,7 +32,7 @@
+ #include "audio_out_internal.h"
+ 
+ static int float_setup (ao_instance_t * instance, int sample_rate, int * flags,
+-			level_t * level, sample_t * bias)
++			dca_level_t * level, dca_sample_t * bias)
+ {
+     (void)instance;
+     (void)sample_rate;
+@@ -44,7 +44,7 @@
+ }
+ 
+ static int float_play (ao_instance_t * instance, int flags,
+-		       sample_t * _samples)
++		       dca_sample_t * _samples)
+ {
+ #if defined(LIBDCA_FIXED)
+     float samples[256 * 2];
+diff -Naur libdca/libao/audio_out_internal.h libdca_patched/libao/audio_out_internal.h
+--- libdca/libao/audio_out_internal.h	2007-05-02 10:05:04.000000000 +0100
++++ libdca_patched/libao/audio_out_internal.h	2007-05-02 10:09:40.000000000 +0100
+@@ -25,7 +25,7 @@
+ #ifdef LIBDCA_DOUBLE
+ typedef float convert_t;
+ #else
+-typedef sample_t convert_t;
++typedef dca_sample_t convert_t;
+ #endif
+ 
+ #ifdef LIBDCA_FIXED
+diff -Naur libdca/libao/audio_out_null.c libdca_patched/libao/audio_out_null.c
+--- libdca/libao/audio_out_null.c	2007-05-02 10:05:04.000000000 +0100
++++ libdca_patched/libao/audio_out_null.c	2007-05-02 10:09:39.000000000 +0100
+@@ -36,7 +36,7 @@
+ } null_instance_t;
+ 
+ static int null_setup (ao_instance_t * _instance, int sample_rate, int * flags,
+-		       level_t * level, sample_t * bias)
++		       dca_level_t * level, dca_sample_t * bias)
+ {
+     null_instance_t * instance = (null_instance_t *) _instance;
+ 
+@@ -48,7 +48,7 @@
+     return 0;
+ }
+ 
+-static int null_play (ao_instance_t * instance, int flags, sample_t * samples)
++static int null_play (ao_instance_t * instance, int flags, dca_sample_t * samples)
+ {
+     (void)instance; (void)flags; (void)samples;
+     return 0;
+diff -Naur libdca/libao/audio_out_oss.c libdca_patched/libao/audio_out_oss.c
+--- libdca/libao/audio_out_oss.c	2007-05-02 10:05:04.000000000 +0100
++++ libdca_patched/libao/audio_out_oss.c	2007-05-02 10:09:38.000000000 +0100
+@@ -68,7 +68,7 @@
+ } oss_instance_t;
+ 
+ static int oss_setup (ao_instance_t * _instance, int sample_rate, int * flags,
+-		      level_t * level, sample_t * bias)
++		      dca_level_t * level, dca_sample_t * bias)
+ {
+     oss_instance_t * instance = (oss_instance_t *) _instance;
+ 
+@@ -83,7 +83,7 @@
+     return 0;
+ }
+ 
+-static int oss_play (ao_instance_t * _instance, int flags, sample_t * _samples)
++static int oss_play (ao_instance_t * _instance, int flags, dca_sample_t * _samples)
+ {
+     oss_instance_t * instance = (oss_instance_t *) _instance;
+     int16_t int16_samples[256*6];
+diff -Naur libdca/libao/audio_out_peak.c libdca_patched/libao/audio_out_peak.c
+--- libdca/libao/audio_out_peak.c	2007-05-02 10:05:04.000000000 +0100
++++ libdca_patched/libao/audio_out_peak.c	2007-05-02 10:09:38.000000000 +0100
+@@ -16,7 +16,7 @@
+ } peak_instance_t;
+ 
+ static int peak_setup (ao_instance_t * _instance, int sample_rate, int * flags,
+-		       level_t * level, sample_t * bias)
++		       dca_level_t * level, dca_sample_t * bias)
+ {
+     peak_instance_t * instance = (peak_instance_t *) _instance;
+ 
+@@ -29,7 +29,7 @@
+     return 0;
+ }
+ 
+-static int peak_play (ao_instance_t * _instance, int flags, sample_t * samples)
++static int peak_play (ao_instance_t * _instance, int flags, dca_sample_t * samples)
+ {
+     peak_instance_t * instance = (peak_instance_t *) _instance;
+     int i;
+diff -Naur libdca/libao/audio_out_solaris.c libdca_patched/libao/audio_out_solaris.c
+--- libdca/libao/audio_out_solaris.c	2007-05-02 10:05:04.000000000 +0100
++++ libdca_patched/libao/audio_out_solaris.c	2007-05-02 10:09:37.000000000 +0100
+@@ -47,7 +47,7 @@
+ } solaris_instance_t;
+ 
+ static int solaris_setup (ao_instance_t * _instance, int sample_rate,
+-			  int * flags, level_t * level, sample_t * bias)
++			  int * flags, dca_level_t * level, dca_sample_t * bias)
+ {
+     solaris_instance_t * instance = (solaris_instance_t *) _instance;
+ 
+@@ -63,7 +63,7 @@
+ }
+ 
+ static int solaris_play (ao_instance_t * _instance, int flags,
+-			 sample_t * _samples)
++			 dca_sample_t * _samples)
+ {
+     solaris_instance_t * instance = (solaris_instance_t *) _instance;
+     int16_t int16_samples[256*2];
+diff -Naur libdca/libao/audio_out_wav.c libdca_patched/libao/audio_out_wav.c
+--- libdca/libao/audio_out_wav.c	2007-05-02 10:05:04.000000000 +0100
++++ libdca_patched/libao/audio_out_wav.c	2007-05-02 10:09:37.000000000 +0100
+@@ -87,7 +87,7 @@
+ };
+ 
+ static int wav_setup (ao_instance_t * _instance, int sample_rate, int * flags,
+-                      level_t * level, sample_t * bias)
++                      dca_level_t * level, dca_sample_t * bias)
+ {
+     wav_instance_t * instance = (wav_instance_t *) _instance;
+ 
+@@ -157,7 +157,7 @@
+ 
+ #include <stdio.h>
+ 
+-static int wav_play (ao_instance_t * _instance, int flags, sample_t * _samples)
++static int wav_play (ao_instance_t * _instance, int flags, dca_sample_t * _samples)
+ {
+     wav_instance_t * instance = (wav_instance_t *) _instance;
+     union
+diff -Naur libdca/libao/audio_out_win.c libdca_patched/libao/audio_out_win.c
+--- libdca/libao/audio_out_win.c	2007-05-02 10:05:04.000000000 +0100
++++ libdca_patched/libao/audio_out_win.c	2007-05-02 10:09:36.000000000 +0100
+@@ -55,7 +55,7 @@
+ } win_instance_t;
+ 
+ static int win_setup (ao_instance_t * _instance, int sample_rate, int * flags,
+-		      level_t * level, sample_t * bias)
++		      dca_level_t * level, dca_sample_t * bias)
+ {
+     win_instance_t * instance = (win_instance_t *) _instance;
+ 
+@@ -70,7 +70,7 @@
+     return 0;
+ }
+ 
+-static int win_play (ao_instance_t * _instance, int flags, sample_t * _samples)
++static int win_play (ao_instance_t * _instance, int flags, dca_sample_t * _samples)
+ {
+     win_instance_t * instance = (win_instance_t *) _instance;
+     int current_buffer;
+diff -Naur libdca/libdca/dca_internal.h libdca_patched/libdca/dca_internal.h
+--- libdca/libdca/dca_internal.h	2007-05-02 10:05:05.000000000 +0100
++++ libdca_patched/libdca/dca_internal.h	2007-05-02 10:09:35.000000000 +0100
+@@ -116,20 +116,20 @@
+     double subband_fir_noidea[DCA_PRIM_CHANNELS_MAX][64];
+ 
+     /* Audio output */
+-    level_t clev;            /* centre channel mix level */
+-    level_t slev;            /* surround channels mix level */
++    dca_level_t clev;            /* centre channel mix level */
++    dca_level_t slev;            /* surround channels mix level */
+ 
+     int output;              /* type of output */
+-    level_t level;           /* output level */
+-    sample_t bias;           /* output bias */
++    dca_level_t level;           /* output level */
++    dca_sample_t bias;           /* output bias */
+ 
+-    sample_t * samples;      /* pointer to the internal audio samples buffer */
++    dca_sample_t * samples;      /* pointer to the internal audio samples buffer */
+     int downmixed;
+ 
+     int dynrnge;             /* apply dynamic range */
+-    level_t dynrng;          /* dynamic range */
++    dca_level_t dynrng;          /* dynamic range */
+     void * dynrngdata;       /* dynamic range callback funtion and data */
+-    level_t (* dynrngcall) (level_t range, void * dynrngdata);
++    dca_level_t (* dynrngcall) (dca_level_t range, void * dynrngdata);
+ 
+     /* Bitstream handling */
+     uint32_t * buffer_start;
+@@ -155,19 +155,23 @@
+ #define LEVEL_45DB 0.5946035575013605
+ #define LEVEL_6DB 0.5
+ 
+-int dca_downmix_init (int input, int flags, level_t * level,
+-                      level_t clev, level_t slev);
+-int dca_downmix_coeff (level_t * coeff, int acmod, int output, level_t level,
+-                       level_t clev, level_t slev);
+-void dca_downmix (sample_t * samples, int acmod, int output, sample_t bias,
+-                  level_t clev, level_t slev);
+-void dca_upmix (sample_t * samples, int acmod, int output);
++// these next two constants are used for DPL matrix encoding in downmix.c
++#define LEVEL_SQRT_1_2 0.5
++#define LEVEL_SQRT_3_4 0.8660254037844386
++
++int dca_downmix_init (int input, int flags, dca_level_t * level,
++                      dca_level_t clev, dca_level_t slev);
++int dca_downmix_coeff (dca_level_t * coeff, int acmod, int output, dca_level_t level,
++                       dca_level_t clev, dca_level_t slev);
++void dca_downmix (dca_sample_t * samples, int acmod, int output, dca_sample_t bias,
++                  dca_level_t clev, dca_level_t slev);
++void dca_upmix (dca_sample_t * samples, int acmod, int output);
+ 
+ #define ROUND(x) ((int)((x) + ((x) > 0 ? 0.5 : -0.5)))
+ 
+ #ifndef LIBDCA_FIXED
+ 
+-typedef sample_t quantizer_t;
++typedef dca_sample_t quantizer_t;
+ #define SAMPLE(x) (x)
+ #define LEVEL(x) (x)
+ #define MUL(a,b) ((a) * (b))
+@@ -179,8 +183,8 @@
+ #else /* LIBDCA_FIXED */
+ 
+ typedef int16_t quantizer_t;
+-#define SAMPLE(x) (sample_t)((x) * (1 << 30))
+-#define LEVEL(x) (level_t)((x) * (1 << 26))
++#define SAMPLE(x) (dca_sample_t)((x) * (1 << 30))
++#define LEVEL(x) (dca_level_t)((x) * (1 << 26))
+ 
+ #if 0
+ #define MUL(a,b) ((int)(((int64_t)(a) * (b) + (1 << 29)) >> 30))
+diff -Naur libdca/libdca/downmix.c libdca_patched/libdca/downmix.c
+--- libdca/libdca/downmix.c	2007-05-02 10:05:05.000000000 +0100
++++ libdca_patched/libdca/downmix.c	2007-05-02 10:09:34.000000000 +0100
+@@ -33,8 +33,8 @@
+ 
+ #define CONVERT(acmod,output) (((output) << DCA_CHANNEL_BITS) + (acmod))
+ 
+-int dca_downmix_init (int input, int flags, level_t * level,
+-		      level_t clev, level_t slev)
++int dca_downmix_init (int input, int flags, dca_level_t * level,
++		      dca_level_t clev, dca_level_t slev)
+ {
+     static uint8_t table[11][10] = {
+         /* DCA_MONO */
+@@ -96,7 +96,7 @@
+ 	output = DCA_DOLBY;
+ 
+     if (flags & DCA_ADJUST_LEVEL) {
+-	level_t adjust;
++	dca_level_t adjust;
+ 
+ 	switch (CONVERT (input & 7, output)) {
+ 
+@@ -181,13 +181,16 @@
+ 	*level = MUL_L (*level, adjust);
+     }
+ 
++	// add the DPLI/DPLII flag back into the output if one was passed in
++	output = output | (flags & DCA_OUT_DPLI) | (flags & DCA_OUT_DPLII);
++
+     return output;
+ }
+ 
+-int dca_downmix_coeff (level_t * coeff, int acmod, int output, level_t level,
+-		       level_t clev, level_t slev)
++int dca_downmix_coeff (dca_level_t * coeff, int acmod, int output, dca_level_t level,
++		       dca_level_t clev, dca_level_t slev)
+ {
+-    level_t level_3db;
++    dca_level_t level_3db;
+ 
+     level_3db = MUL_C (level, LEVEL_3DB);
+ 
+@@ -344,7 +347,7 @@
+     return -1;	/* NOTREACHED */
+ }
+ 
+-static void mix2to1 (sample_t * dest, sample_t * src, sample_t bias)
++static void mix2to1 (dca_sample_t * dest, dca_sample_t * src, dca_sample_t bias)
+ {
+     int i;
+ 
+@@ -352,7 +355,7 @@
+ 	dest[i] += BIAS (src[i]);
+ }
+ 
+-static void mix3to1 (sample_t * samples, sample_t bias)
++static void mix3to1 (dca_sample_t * samples, dca_sample_t bias)
+ {
+     int i;
+ 
+@@ -360,7 +363,7 @@
+ 	samples[i] += BIAS (samples[i + 256] + samples[i + 512]);
+ }
+ 
+-static void mix4to1 (sample_t * samples, sample_t bias)
++static void mix4to1 (dca_sample_t * samples, dca_sample_t bias)
+ {
+     int i;
+ 
+@@ -369,7 +372,7 @@
+ 			    samples[i + 768]);
+ }
+ 
+-static void mix5to1 (sample_t * samples, sample_t bias)
++static void mix5to1 (dca_sample_t * samples, dca_sample_t bias)
+ {
+     int i;
+ 
+@@ -378,10 +381,10 @@
+ 			    samples[i + 768] + samples[i + 1024]);
+ }
+ 
+-static void mix3to2 (sample_t * samples, sample_t bias)
++static void mix3to2 (dca_sample_t * samples, dca_sample_t bias)
+ {
+     int i;
+-    sample_t common;
++    dca_sample_t common;
+ 
+     for (i = 0; i < 256; i++) {
+ 	common = BIAS (samples[i]);
+@@ -390,10 +393,10 @@
+     }
+ }
+ 
+-static void mix21to2 (sample_t * left, sample_t * right, sample_t bias)
++static void mix21to2 (dca_sample_t * left, dca_sample_t * right, dca_sample_t bias)
+ {
+     int i;
+-    sample_t common;
++    dca_sample_t common;
+ 
+     for (i = 0; i < 256; i++) {
+ 	common = BIAS (right[i + 256]);
+@@ -402,10 +405,10 @@
+     }
+ }
+ 
+-static void mix21toS (sample_t * samples, sample_t bias)
++static void mix21toS (dca_sample_t * samples, dca_sample_t bias)
+ {
+     int i;
+-    sample_t surround;
++    dca_sample_t surround;
+ 
+     for (i = 0; i < 256; i++) {
+ 	surround = samples[i + 512];
+@@ -414,10 +417,10 @@
+     }
+ }
+ 
+-static void mix31to2 (sample_t * samples, sample_t bias)
++static void mix31to2 (dca_sample_t * samples, dca_sample_t bias)
+ {
+     int i;
+-    sample_t common;
++    dca_sample_t common;
+ 
+     for (i = 0; i < 256; i++) {
+ 	common = BIAS (samples[i] + samples[i + 768]);
+@@ -426,10 +429,10 @@
+     }
+ }
+ 
+-static void mix31toS (sample_t * samples, sample_t bias)
++static void mix31toS (dca_sample_t * samples, dca_sample_t bias)
+ {
+     int i;
+-    sample_t common, surround;
++    dca_sample_t common, surround;
+ 
+     for (i = 0; i < 256; i++) {
+ 	common = BIAS (samples[i]);
+@@ -439,10 +442,10 @@
+     }
+ }
+ 
+-static void mix22toS (sample_t * samples, sample_t bias)
++static void mix22toS (dca_sample_t * samples, dca_sample_t bias)
+ {
+     int i;
+-    sample_t surround;
++    dca_sample_t surround;
+ 
+     for (i = 0; i < 256; i++) {
+ 	surround = samples[i + 512] + samples[i + 768];
+@@ -451,10 +454,10 @@
+     }
+ }
+ 
+-static void mix32to2 (sample_t * samples, sample_t bias)
++static void mix32to2 (dca_sample_t * samples, dca_sample_t bias)
+ {
+     int i;
+-    sample_t common;
++    dca_sample_t common;
+ 
+     for (i = 0; i < 256; i++) {
+ 	common = BIAS (samples[i]);
+@@ -463,20 +466,48 @@
+     }
+ }
+ 
+-static void mix32toS (sample_t * samples, sample_t bias)
++static void mix32toS (dca_sample_t * samples, dca_sample_t bias, int use_dpl2)
+ {
+-    int i;
+-    sample_t common, surround;
+ 
+-    for (i = 0; i < 256; i++) {
+-	common = BIAS (samples[i]);
+-	surround = samples[i + 768] + samples[i + 1024];
+-	samples[i] = samples[i + 256] + common - surround;
+-	samples[i + 256] = samples[i + 512] + common + surround;
+-    }
+-}
++	if (use_dpl2 == 1) {
++
++		int i;
++		dca_sample_t cc, Lt, Rt, Ls, Rs, Lss, Rss;
++	
++		for (i = 0; i < 256; i++) {
++	
++			cc = samples[i + 256] * LEVEL_3DB;
++		
++			Lt = samples[i] + cc;
++			Rt = samples[i + 512] + cc;
++		
++			Ls = samples[i + 768];
++			Rs = samples[i + 1024];
++			
++			Lss = (LEVEL_SQRT_3_4 * Ls) - (LEVEL_SQRT_1_2 * Rs);
++			Rss = -(LEVEL_SQRT_1_2 * Ls) + (LEVEL_SQRT_3_4 * Rs);
++		
++			samples[i] = Lt + Lss;
++			samples[i + 256] = Rt + Rss;
++	
++		}
++
++	} else {
++
++		int i;
++		dca_sample_t common, surround;
++	
++		for (i = 0; i < 256; i++) {
++		common = samples[i + 256] + bias;
++		surround = samples[i + 768] + samples[i + 1024];
++		samples[i] += common - surround;
++		samples[i + 256] = samples[i + 512] + common + surround;
++		}
+ 
+-static void move2to1 (sample_t * src, sample_t * dest, sample_t bias)
++	}
++
++}
++static void move2to1 (dca_sample_t * src, dca_sample_t * dest, dca_sample_t bias)
+ {
+     int i;
+ 
+@@ -484,7 +515,7 @@
+ 	dest[i] = BIAS (src[i] + src[i + 256]);
+ }
+ 
+-static void zero (sample_t * samples)
++static void zero (dca_sample_t * samples)
+ {
+     int i;
+ 
+@@ -492,8 +523,8 @@
+ 	samples[i] = 0;
+ }
+ 
+-void dca_downmix (sample_t * samples, int acmod, int output, sample_t bias,
+-		  level_t clev, level_t slev)
++void dca_downmix (dca_sample_t * samples, int acmod, int output, dca_sample_t bias,
++		  dca_level_t clev, dca_level_t slev)
+ {
+     (void)clev;
+ 
+@@ -529,7 +560,7 @@
+ 	break;
+ 
+     case CONVERT (DCA_MONO, DCA_DOLBY):
+-	memcpy (samples + 256, samples, 256 * sizeof (sample_t));
++	memcpy (samples + 256, samples, 256 * sizeof (dca_sample_t));
+ 	break;
+ 
+     case CONVERT (DCA_3F, DCA_STEREO):
+@@ -576,7 +607,7 @@
+ 	break;
+ 
+     case CONVERT (DCA_3F2R, DCA_DOLBY):
+-	mix32toS (samples, bias);
++	mix32toS (samples, bias, 0);
+ 	break;
+ 
+     case CONVERT (DCA_3F1R, DCA_3F):
+@@ -594,7 +625,7 @@
+ 
+     case CONVERT (DCA_3F1R, DCA_2F1R):
+ 	mix3to2 (samples, bias);
+-	memcpy (samples + 512, samples + 768, 256 * sizeof (sample_t));
++	memcpy (samples + 512, samples + 768, 256 * sizeof (dca_sample_t));
+ 	break;
+ 
+     case CONVERT (DCA_2F2R, DCA_2F1R):
+@@ -608,30 +639,52 @@
+ 
+     case CONVERT (DCA_3F2R, DCA_3F1R):
+ 	mix2to1 (samples + 768, samples + 1024, bias);
++	/* deal with the special-case 5.0 to 4.0 DPL mix */
++    if (output & DCA_OUT_DPLI)
++    {
++		mix31toS (samples, bias);
++	}
+ 	break;
+ 
+     case CONVERT (DCA_2F1R, DCA_2F2R):
+-	memcpy (samples + 768, samples + 512, 256 * sizeof (sample_t));
++	memcpy (samples + 768, samples + 512, 256 * sizeof (dca_sample_t));
+ 	break;
+ 
+     case CONVERT (DCA_3F1R, DCA_2F2R):
+ 	mix3to2 (samples, bias);
+-	memcpy (samples + 512, samples + 768, 256 * sizeof (sample_t));
++	memcpy (samples + 512, samples + 768, 256 * sizeof (dca_sample_t));
+ 	break;
+ 
+     case CONVERT (DCA_3F2R, DCA_2F2R):
+ 	mix3to2 (samples, bias);
+-	memcpy (samples + 512, samples + 768, 256 * sizeof (sample_t));
+-	memcpy (samples + 768, samples + 1024, 256 * sizeof (sample_t));
++	memcpy (samples + 512, samples + 768, 256 * sizeof (dca_sample_t));
++	memcpy (samples + 768, samples + 1024, 256 * sizeof (dca_sample_t));
+ 	break;
+ 
+     case CONVERT (DCA_3F1R, DCA_3F2R):
+-	memcpy (samples + 1024, samples + 768, 256 * sizeof (sample_t));
++	memcpy (samples + 1024, samples + 768, 256 * sizeof (dca_sample_t));
++	break;
++
++	/* deal with the special-case DPL mixes */
++
++    case CONVERT (DCA_3F1R, DCA_3F1R):
++    if (output & DCA_OUT_DPLI)
++    {
++		mix31toS (samples, bias);
++	}
+ 	break;
++
++    case CONVERT (DCA_3F2R, DCA_3F2R):
++    if (output & DCA_OUT_DPLII)
++    {
++		mix32toS (samples, bias, 1);
++	}
++	break;
++
+     }
+ }
+ 
+-void dca_upmix (sample_t * samples, int acmod, int output)
++void dca_upmix (dca_sample_t * samples, int acmod, int output)
+ {
+     switch (CONVERT (acmod, output & DCA_CHANNEL_MASK)) {
+ 
+@@ -657,7 +710,7 @@
+     case CONVERT (DCA_3F, DCA_STEREO):
+     case CONVERT (DCA_3F, DCA_DOLBY):
+     mix_3to2:
+-	memcpy (samples + 512, samples + 256, 256 * sizeof (sample_t));
++	memcpy (samples + 512, samples + 256, 256 * sizeof (dca_sample_t));
+ 	zero (samples + 256);
+ 	break;
+ 
+@@ -684,11 +737,11 @@
+ 	zero (samples + 1024);
+     case CONVERT (DCA_3F1R, DCA_2F1R):
+     mix_31to21:
+-	memcpy (samples + 768, samples + 512, 256 * sizeof (sample_t));
++	memcpy (samples + 768, samples + 512, 256 * sizeof (dca_sample_t));
+ 	goto mix_3to2;
+ 
+     case CONVERT (DCA_3F2R, DCA_2F2R):
+-	memcpy (samples + 1024, samples + 768, 256 * sizeof (sample_t));
++	memcpy (samples + 1024, samples + 768, 256 * sizeof (dca_sample_t));
+ 	goto mix_31to21;
+     }
+ }
+diff -Naur libdca/libdca/parse.c libdca_patched/libdca/parse.c
+--- libdca/libdca/parse.c	2007-05-02 10:05:05.000000000 +0100
++++ libdca_patched/libdca/parse.c	2007-05-02 10:09:33.000000000 +0100
+@@ -59,12 +59,12 @@
+ static int decode_blockcode (int code, int levels, int *values);
+ 
+ static void qmf_32_subbands (dca_state_t * state, int chans,
+-                             double samples_in[32][8], sample_t *samples_out,
+-                             double rScale, sample_t bias);
++                             double samples_in[32][8], dca_sample_t *samples_out,
++                             double rScale, dca_sample_t bias);
+ 
+ static void lfe_interpolation_fir (int nDecimationSelect, int nNumDeciSample,
+-                                   double *samples_in, sample_t *samples_out,
+-                                   double rScale, sample_t bias );
++                                   double *samples_in, dca_sample_t *samples_out,
++                                   double rScale, dca_sample_t bias );
+ 
+ static void pre_calc_cosmod( dca_state_t * state );
+ 
+@@ -80,7 +80,7 @@
+ 
+     memset (state, 0, sizeof(dca_state_t));
+ 
+-    state->samples = (sample_t *) memalign (16, 256 * 12 * sizeof (sample_t));
++    state->samples = (dca_sample_t *) memalign (16, 256 * 12 * sizeof (dca_sample_t));
+     if (state->samples == NULL) {
+         free (state);
+         return NULL;
+@@ -97,7 +97,7 @@
+     return state;
+ }
+ 
+-sample_t * dca_samples (dca_state_t * state)
++dca_sample_t * dca_samples (dca_state_t * state)
+ {
+     return state->samples;
+ }
+@@ -207,7 +207,7 @@
+ }
+ 
+ int dca_frame (dca_state_t * state, uint8_t * buf, int * flags,
+-               level_t * level, sample_t bias)
++               dca_level_t * level, dca_sample_t bias)
+ {
+     int i, j;
+     static float adj_table[] = { 1.0, 1.1250, 1.2500, 1.4375 };
+@@ -996,7 +996,7 @@
+     {
+         dca_upmix (state->samples, state->amode, state->output);
+     } else
+-    if (state->prim_channels > dca_channels[state->output & DCA_CHANNEL_MASK])
++    if (state->prim_channels >= dca_channels[state->output & DCA_CHANNEL_MASK])
+     {
+         dca_downmix (state->samples, state->amode, state->output, state->bias,
+                      state->clev, state->slev);
+@@ -1142,8 +1142,8 @@
+ }
+ 
+ static void qmf_32_subbands (dca_state_t * state, int chans,
+-                             double samples_in[32][8], sample_t *samples_out,
+-                             double scale, sample_t bias)
++                             double samples_in[32][8], dca_sample_t *samples_out,
++                             double scale, dca_sample_t bias)
+ {
+     double *prCoeff;
+     int i, j, k;
+@@ -1224,8 +1224,8 @@
+ }
+ 
+ static void lfe_interpolation_fir (int nDecimationSelect, int nNumDeciSample,
+-                                   double *samples_in, sample_t *samples_out,
+-                                   double scale, sample_t bias)
++                                   double *samples_in, dca_sample_t *samples_out,
++                                   double scale, dca_sample_t bias)
+ {
+     /* samples_in: An array holding decimated samples.
+      *   Samples in current subframe starts from samples_in[0],
+@@ -1275,7 +1275,7 @@
+ }
+ 
+ void dca_dynrng (dca_state_t * state,
+-                 level_t (* call) (level_t, void *), void * data)
++                 dca_level_t (* call) (dca_level_t, void *), void * data)
+ {
+     state->dynrange = 0;
+     if (call) {
+diff -Naur libdca/src/dcadec.c libdca_patched/src/dcadec.c
+--- libdca/src/dcadec.c	2007-05-02 10:05:04.000000000 +0100
++++ libdca_patched/src/dcadec.c	2007-05-02 10:09:35.000000000 +0100
+@@ -280,15 +280,15 @@
+ 		}
+ 		bufpos = buf + length;
+ 	    } else {
+-		level_t level;
+-		sample_t bias;
++		dca_level_t level;
++		dca_sample_t bias;
+ 		int i;
+ 
+ 		if (output->setup (output, sample_rate, &flags, &level, &bias))
+ 		    goto error;
+ 		if (!disable_adjust)
+ 		    flags |= DCA_ADJUST_LEVEL;
+-		level = (level_t) (level * gain);
++		level = (dca_level_t) (level * gain);
+ 		if (dca_frame (state, buf, &flags, &level, bias))
+ 		    goto error;
+ 		if (disable_dynrng)

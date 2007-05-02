@@ -154,6 +154,12 @@ union hb_esconfig_u
     	int  ac3flags;
     } a52;
 
+    struct
+    {
+    	/* dcaflags stores the flags from the DCA source, as found in scan.c */
+    	int  dcaflags;
+    } dca;
+
 };
 
 enum
@@ -166,6 +172,7 @@ enum
     WORK_ENCXVID,
     WORK_ENCX264,
     WORK_DECA52,
+    WORK_DECDCA,
     WORK_DECAVCODEC,
     WORK_DECLPCM,
     WORK_ENCFAAC,

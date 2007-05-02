@@ -10,12 +10,12 @@ SubDir TOP ;
 HANDBRAKE_LIBS = libhb.a
           contrib/lib/liba52.a        contrib/lib/libavformat.a
           contrib/lib/libavcodec.a    contrib/lib/libavutil.a
-          contrib/lib/libdvdread.a    contrib/lib/libmp4v2.a
-          contrib/lib/libfaac.a       contrib/lib/libmp3lame.a
-          contrib/lib/libmpeg2.a      contrib/lib/libvorbis.a
-          contrib/lib/libvorbisenc.a  contrib/lib/libogg.a
-          contrib/lib/libsamplerate.a contrib/lib/libx264.a
-          contrib/lib/libxvidcore.a ;
+          contrib/lib/libdca.a        contrib/lib/libdvdread.a
+          contrib/lib/libmp4v2.a      contrib/lib/libfaac.a
+          contrib/lib/libmp3lame.a    contrib/lib/libmpeg2.a
+          contrib/lib/libvorbis.a     contrib/lib/libvorbisenc.a
+          contrib/lib/libogg.a        contrib/lib/libsamplerate.a
+          contrib/lib/libx264.a       contrib/lib/libxvidcore.a ;
 
 if $(OS) = UNKNOWN
 {

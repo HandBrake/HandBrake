@@ -100,6 +100,8 @@
 		4DD93FA4082036E8008E1322 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DDE9724052B7B2B00C39CA9 /* OpenGL.framework */; };
 		52AFF86A0B59BD07000DA7C4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		52AFF86B0B59BD14000DA7C4 /* Express.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4D1EA2DC0993B01000FDC1A2 /* Express.plist */; };
+		5558B5690BE3BADF00E15E27 /* decdca.c in Sources */ = {isa = PBXBuildFile; fileRef = 5558B5680BE3BADF00E15E27 /* decdca.c */; };
+		5558B56A0BE3BADF00E15E27 /* decdca.c in Sources */ = {isa = PBXBuildFile; fileRef = 5558B5680BE3BADF00E15E27 /* decdca.c */; };
 		593034EB0BBA39A100172349 /* ChapterTitles.h in Headers */ = {isa = PBXBuildFile; fileRef = 593034E90BBA39A100172349 /* ChapterTitles.h */; };
 		593034EC0BBA39A100172349 /* ChapterTitles.m in Sources */ = {isa = PBXBuildFile; fileRef = 593034EA0BBA39A100172349 /* ChapterTitles.m */; };
 		59CBD2370BBB44DA004A3BE3 /* parsecsv.c in Sources */ = {isa = PBXBuildFile; fileRef = 59CBD2360BBB44DA004A3BE3 /* parsecsv.c */; };
@@ -212,6 +214,7 @@
 		526FBC9B0B4CAB100064E04C /* common.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = common.c; path = ../libhb/common.c; sourceTree = SOURCE_ROOT; };
 		526FBC9D0B4CAB100064E04C /* deca52.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = deca52.c; path = ../libhb/deca52.c; sourceTree = SOURCE_ROOT; };
 		526FBC9E0B4CAB100064E04C /* decavcodec.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = decavcodec.c; path = ../libhb/decavcodec.c; sourceTree = SOURCE_ROOT; };
+		5558B5680BE3BADF00E15E27 /* decdca.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = decdca.c; path = ../libhb/decdca.c; sourceTree = SOURCE_ROOT; };
 		593034E90BBA39A100172349 /* ChapterTitles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChapterTitles.h; sourceTree = "<group>"; };
 		593034EA0BBA39A100172349 /* ChapterTitles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChapterTitles.m; sourceTree = "<group>"; };
 		59CBD2360BBB44DA004A3BE3 /* parsecsv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = parsecsv.c; path = ../test/parsecsv.c; sourceTree = SOURCE_ROOT; };
@@ -356,6 +359,7 @@
 				0DFA5C9C0B8DD3B60020BC09 /* work.c */,
 				526FBC9B0B4CAB100064E04C /* common.c */,
 				526FBC9D0B4CAB100064E04C /* deca52.c */,
+				5558B5680BE3BADF00E15E27 /* decdca.c */,
 				526FBC9E0B4CAB100064E04C /* decavcodec.c */,
 			);
 			name = "libhb Sources";
@@ -608,6 +612,7 @@
 				0D096E010B707D3400A845D4 /* common.c in Sources */,
 				0D096E020B707D3400A845D4 /* deca52.c in Sources */,
 				0D096E030B707D3400A845D4 /* decavcodec.c in Sources */,
+				5558B56A0BE3BADF00E15E27 /* decdca.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -644,6 +649,7 @@
 				0DFF0B790B6BC72A00549488 /* deca52.c in Sources */,
 				0DFF0B7A0B6BC72A00549488 /* decavcodec.c in Sources */,
 				593034EC0BBA39A100172349 /* ChapterTitles.m in Sources */,
+				5558B5690BE3BADF00E15E27 /* decdca.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -768,6 +774,7 @@
 					../contrib/lib/libsamplerate.a,
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
+					../contrib/lib/libdca.a,
 					"-ldl",
 					"-flat_namespace",
 					"-read_only_relocs",
@@ -824,6 +831,7 @@
 					../contrib/lib/libsamplerate.a,
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
+					../contrib/lib/libdca.a,
 					"-ldl",
 					"-flat_namespace",
 					"-read_only_relocs",
@@ -878,6 +886,7 @@
 					../contrib/lib/libsamplerate.a,
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
+					../contrib/lib/libdca.a,
 					"-ldl",
 					"-flat_namespace",
 					"-read_only_relocs",
@@ -932,6 +941,7 @@
 					../contrib/lib/libsamplerate.a,
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
+					../contrib/lib/libdca.a,
 					"-ldl",
 					"-flat_namespace",
 					"-read_only_relocs",
@@ -1010,6 +1020,7 @@
 					../contrib/lib/libsamplerate.a,
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
+					../contrib/lib/libdca.a,
 				);
 				PRODUCT_NAME = HandBrake;
 				SECTORDER_FLAGS = "";
@@ -1057,6 +1068,7 @@
 					../contrib/lib/libsamplerate.a,
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
+					../contrib/lib/libdca.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "Instant HandBrake";
@@ -1096,6 +1108,7 @@
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
 					"-lz",
+					../contrib/lib/libdca.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = HandBrakeCLI;
@@ -1236,6 +1249,7 @@
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
 					"-lz",
+					../contrib/lib/libdca.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = HandBrakeCLI;
@@ -1276,6 +1290,7 @@
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
 					"-lz",
+					../contrib/lib/libdca.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = HandBrakeCLI;
@@ -1314,6 +1329,7 @@
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
 					"-lz",
+					../contrib/lib/libdca.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = HandBrakeCLI;
@@ -1359,6 +1375,7 @@
 					../contrib/lib/libsamplerate.a,
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
+					../contrib/lib/libdca.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "Instant HandBrake";
@@ -1404,6 +1421,7 @@
 					../contrib/lib/libsamplerate.a,
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
+					../contrib/lib/libdca.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "Instant HandBrake";
@@ -1447,6 +1465,7 @@
 					../contrib/lib/libsamplerate.a,
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
+					../contrib/lib/libdca.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "Instant HandBrake";
@@ -1497,6 +1516,7 @@
 					../contrib/lib/libsamplerate.a,
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
+					../contrib/lib/libdca.a,
 				);
 				PRODUCT_NAME = HandBrake;
 				SECTORDER_FLAGS = "";
@@ -1549,6 +1569,7 @@
 					../contrib/lib/libsamplerate.a,
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
+					../contrib/lib/libdca.a,
 				);
 				PRODUCT_NAME = HandBrake;
 				SECTORDER_FLAGS = "";
@@ -1599,6 +1620,7 @@
 					../contrib/lib/libsamplerate.a,
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
+					../contrib/lib/libdca.a,
 				);
 				PRODUCT_NAME = HandBrake;
 				SECTORDER_FLAGS = "";

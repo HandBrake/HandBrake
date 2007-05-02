@@ -231,7 +231,7 @@ static void PrintTitleInfo( hb_title_t * title )
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = hb_list_item( title->list_audio, i );
-        if( audio->codec & HB_ACODEC_AC3 )
+        if( ( audio->codec & HB_ACODEC_AC3 ) || ( audio->codec & HB_ACODEC_DCA) )
         {
             fprintf( stderr, "    + %d, %s, %dHz, %dbps\n", i + 1,
                      audio->lang, audio->rate, audio->bitrate );

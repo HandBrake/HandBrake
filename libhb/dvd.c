@@ -252,6 +252,11 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
                 audio->codec = HB_ACODEC_LPCM;
                 break;
 
+            case 0x06:
+                audio->id    = ( ( 0x88 + position ) << 8 ) | 0xbd;
+                audio->codec = HB_ACODEC_DCA;
+                break;
+
             default:
                 audio->id    = 0;
                 audio->codec = 0;
@@ -287,7 +292,8 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
         snprintf( audio->lang, sizeof( audio->lang ), "%s (%s)",
             strlen(lang->native_name) ? lang->native_name : lang->eng_name,
             audio->codec == HB_ACODEC_AC3 ? "AC3" : ( audio->codec ==
-                HB_ACODEC_MPGA ? "MPEG" : "LPCM" ) );
+                HB_ACODEC_DCA ? "DTS" : ( audio->codec ==
+                HB_ACODEC_MPGA ? "MPEG" : "LPCM" ) ) );
         snprintf( audio->lang_simple, sizeof( audio->lang_simple ), "%s",
                   strlen(lang->native_name) ? lang->native_name : lang->eng_name );
         snprintf( audio->iso639_2, sizeof( audio->iso639_2 ), "%s",

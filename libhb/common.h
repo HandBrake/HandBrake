@@ -169,24 +169,42 @@ struct hb_job_s
 	     audio_mixdowns:  The mixdown to be used for each audio track in audios[] */
 
 /* define some masks, used to extract the various information from the HB_AMIXDOWN_XXXX values */
-#define HB_AMIXDOWN_A52_FORMAT_MASK             0x00FF0000
-#define HB_AMIXDOWN_DISCRETE_CHANNEL_COUNT_MASK 0x0000F000
-#define HB_AMIXDOWN_FRONT_CHANNEL_COUNT_MASK    0x00000F00
-#define HB_AMIXDOWN_REAR_CHANNEL_COUNT_MASK     0x000000F0
-#define HB_AMIXDOWN_LFE_CHANNEL_COUNT_MASK      0x0000000F
+#define HB_AMIXDOWN_DCA_FORMAT_MASK             0x00FFF000
+#define HB_AMIXDOWN_A52_FORMAT_MASK             0x00000FF0
+#define HB_AMIXDOWN_DISCRETE_CHANNEL_COUNT_MASK 0x0000000F
+
 /* define the HB_AMIXDOWN_XXXX values */
-#define HB_AMIXDOWN_MONO                        0x01011100 // A52_FORMAT of A52_MONO                  = 1  = 0x01
-#define HB_AMIXDOWN_STEREO                      0x02022200 // A52_FORMAT of A52_STEREO                = 2  = 0x02
-#define HB_AMIXDOWN_DOLBY                       0x040A2310 // A52_FORMAT of A52_DOLBY                 = 10 = 0x0A
-#define HB_AMIXDOWN_DOLBYPLII                   0x084A2320 // A52_FORMAT of A52_DOLBY | A52_USE_DPLII = 74 = 0x4A
-#define HB_AMIXDOWN_6CH                         0x10176321 // A52_FORMAT of A52_3F2R | A52_LFE        = 23 = 0x17
+
+#define HB_AMIXDOWN_MONO                        0x01000001
+// DCA_FORMAT of DCA_MONO                  = 0    = 0x000
+// A52_FORMAT of A52_MONO                  = 1    = 0x01
+// discrete channel count of 1
+
+#define HB_AMIXDOWN_STEREO                      0x02002022
+// DCA_FORMAT of DCA_STEREO                = 2    = 0x002
+// A52_FORMAT of A52_STEREO                = 2    = 0x02
+// discrete channel count of 2
+
+#define HB_AMIXDOWN_DOLBY                       0x042070A2
+// DCA_FORMAT of DCA_3F1R | DCA_OUT_DPLI   = 519  = 0x207
+// A52_FORMAT of A52_DOLBY                 = 10   = 0x0A
+// discrete channel count of 2
+
+#define HB_AMIXDOWN_DOLBYPLII                   0x084094A2
+// DCA_FORMAT of DCA_3F2R | DCA_OUT_DPLII  = 1033 = 0x409
+// A52_FORMAT of A52_DOLBY | A52_USE_DPLII = 74   = 0x4A
+// discrete channel count of 2
+
+#define HB_AMIXDOWN_6CH                         0x10089176
+// DCA_FORMAT of DCA_3F2R | DCA_LFE        = 137  = 0x089
+// A52_FORMAT of A52_3F2R | A52_LFE        = 23   = 0x17
+// discrete channel count of 6
+
 /* define some macros to extract the various information from the HB_AMIXDOWN_XXXX values */
-#define HB_AMIXDOWN_GET_A52_FORMAT( a ) ( ( a & HB_AMIXDOWN_A52_FORMAT_MASK ) >> 16 )
-#define HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT( a ) ( ( a & HB_AMIXDOWN_DISCRETE_CHANNEL_COUNT_MASK ) >> 12 )
-#define HB_AMIXDOWN_GET_FRONT_CHANNEL_COUNT( a ) ( ( a & HB_AMIXDOWN_FRONT_CHANNEL_COUNT_MASK ) >> 8 )
-#define HB_AMIXDOWN_GET_REAR_CHANNEL_COUNT( a ) ( ( a & HB_AMIXDOWN_REAR_CHANNEL_COUNT_MASK ) >> 4 )
-#define HB_AMIXDOWN_GET_LFE_CHANNEL_COUNT( a ) ( ( a & HB_AMIXDOWN_LFE_CHANNEL_COUNT_MASK ) )
-#define HB_AMIXDOWN_GET_NORMAL_CHANNEL_COUNT( a ) ( (( a & HB_AMIXDOWN_FRONT_CHANNEL_COUNT_MASK ) >> 8) + (( a & HB_AMIXDOWN_REAR_CHANNEL_COUNT_MASK ) >> 4) )
+#define HB_AMIXDOWN_GET_DCA_FORMAT( a ) ( ( a & HB_AMIXDOWN_DCA_FORMAT_MASK ) >> 12 )
+#define HB_AMIXDOWN_GET_A52_FORMAT( a ) ( ( a & HB_AMIXDOWN_A52_FORMAT_MASK ) >> 4 )
+#define HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT( a ) ( ( a & HB_AMIXDOWN_DISCRETE_CHANNEL_COUNT_MASK ) )
+
     int             audios[8];
 	int             audio_mixdowns[8];
 
@@ -203,6 +221,7 @@ struct hb_job_s
 #define HB_ACODEC_AC3    0x000800
 #define HB_ACODEC_MPGA   0x001000
 #define HB_ACODEC_LPCM   0x002000
+#define HB_ACODEC_DCA    0x004000
     int             acodec;
     int             abitrate;
     int             arate;
@@ -272,6 +291,9 @@ struct hb_audio_s
     
     /* ac3flags is only set when the source audio format is HB_ACODEC_AC3 */
     int ac3flags;
+
+    /* dcaflags is only set when the source audio format is HB_ACODEC_DCA */
+    int dcaflags;
 
 #ifdef __LIBHB__
     /* Internal data */
@@ -448,6 +470,7 @@ extern hb_work_object_t hb_encavcodec;
 extern hb_work_object_t hb_encxvid;
 extern hb_work_object_t hb_encx264;
 extern hb_work_object_t hb_deca52;
+extern hb_work_object_t hb_decdca;
 extern hb_work_object_t hb_decavcodec;
 extern hb_work_object_t hb_declpcm;
 extern hb_work_object_t hb_encfaac;

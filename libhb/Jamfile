@@ -9,7 +9,7 @@ SubDir TOP libhb ;
 LIBHB_SRC =
 ipodutil.cpp common.c hb.c ports.c scan.c work.c decmpeg2.c encavcodec.c update.c
 demuxmpeg.c fifo.c render.c reader.c muxcommon.c muxmp4.c sync.c
-decsub.c deca52.c encfaac.c declpcm.c encx264.c decavcodec.c encxvid.c
+decsub.c deca52.c decdca.c encfaac.c declpcm.c encx264.c decavcodec.c encxvid.c
 muxavi.c enclame.c muxogm.c encvorbis.c dvd.c ;
 
 Library libhb : $(LIBHB_SRC) ;

@@ -6,6 +6,7 @@
 
 #include "hb.h"
 #include "a52dec/a52.h"
+#include "dca.h"
 
 typedef struct
 {
@@ -21,8 +22,8 @@ typedef struct
 
 static void ScanFunc( void * );
 static int  DecodePreviews( hb_scan_t *, hb_title_t * title );
-static void LookForAC3( hb_title_t * title, hb_buffer_t * b );
-static int  AllAC3OK( hb_title_t * title );
+static void LookForAC3AndDCA( hb_title_t * title, hb_buffer_t * b );
+static int  AllAC3AndDCAOK( hb_title_t * title );
 
 hb_thread_t * hb_scan_init( hb_handle_t * handle, const char * path,
                             int title_index, hb_list_t * list_title )
@@ -127,6 +128,7 @@ static void ScanFunc( void * _data )
 #undef p
 
         /* Decode previews */
+        /* this will also detect more AC3 / DTS information */
         if( !DecodePreviews( data, title ) )
         {
             /* TODO: free things */
@@ -134,13 +136,15 @@ static void ScanFunc( void * _data )
             continue;
         }
 
-        /* Make sure we found AC3 rates and bitrates */
+        /* Make sure we found AC3 / DCA rates and bitrates */
         for( j = 0; j < hb_list_count( title->list_audio ); )
         {
             audio = hb_list_item( title->list_audio, j );
-            if( audio->codec == HB_ACODEC_AC3 &&
+            if( ( audio->codec == HB_ACODEC_AC3 || audio->codec == HB_ACODEC_DCA ) &&
                 !audio->bitrate )
             {
+                hb_log( "scan: removing audio with codec of 0x%x because of no bitrate",
+                    audio->codec );
                 hb_list_rem( title->list_audio, audio );
                 free( audio );
                 continue;
@@ -284,12 +288,12 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                 }
                 else if( !i )
                 {
-                    LookForAC3( title, buf_es );
+                    LookForAC3AndDCA( title, buf_es );
                 }
                 hb_buffer_close( &buf_es );
 
                 if( hb_list_count( list_raw ) &&
-                    ( i || AllAC3OK( title ) ) )
+                    ( i || AllAC3AndDCAOK( title ) ) )
                 {
                     /* We got a picture */
                     break;
@@ -297,7 +301,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             }
 
             if( hb_list_count( list_raw ) &&
-                ( i || AllAC3OK( title ) ) )
+                ( i || AllAC3AndDCAOK( title ) ) )
             {
                 break;
             }
@@ -423,19 +427,21 @@ cleanup:
     return ret;
 }
 
-static void LookForAC3( hb_title_t * title, hb_buffer_t * b ) 
+static void LookForAC3AndDCA( hb_title_t * title, hb_buffer_t * b ) 
 {
     int i;
     int flags;
     int rate;
     int bitrate;
+    int frame_length;
+    dca_state_t * state;
 
-    /* Figure out if this is a AC3 buffer for a known track */
+    /* Figure out if this is a AC3 or DCA buffer for a known track */
     hb_audio_t * audio = NULL;
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = hb_list_item( title->list_audio, i );
-        if( audio->codec == HB_ACODEC_AC3 &&
+        if( ( audio->codec == HB_ACODEC_AC3 || audio->codec == HB_ACODEC_DCA ) &&
             audio->id    == b->id )
         {
             break;
@@ -458,95 +464,202 @@ static void LookForAC3( hb_title_t * title, hb_buffer_t * b )
 
     for( i = 0; i < b->size - 7; i++ )
     {
-        if( a52_syncinfo( &b->data[i], &flags, &rate, &bitrate ) )
+
+        if ( audio->codec == HB_ACODEC_AC3 )
         {
-            hb_log( "scan: rate=%dHz, bitrate=%d", rate, bitrate );
-            audio->rate    = rate;
-            audio->bitrate = bitrate;
-            switch( flags & A52_CHANNEL_MASK )
+
+            /* check for a52 */
+            if( a52_syncinfo( &b->data[i], &flags, &rate, &bitrate ) )
             {
-                case A52_MONO:
-                case A52_CHANNEL1:
-                case A52_CHANNEL2:
-                    audio->src_discrete_front_channels = 1;
-                    audio->src_discrete_rear_channels = 0;
-                    audio->src_encoded_front_channels = 1;
-                    audio->src_encoded_rear_channels = 0;
-                    break;
-                case A52_STEREO:
-                case A52_CHANNEL:
-                    audio->src_discrete_front_channels = 2;
-                    audio->src_discrete_rear_channels = 0;
-                    audio->src_encoded_front_channels = 2;
-                    audio->src_encoded_rear_channels = 0;
-                    break;
-                case A52_DOLBY:
-                    audio->src_discrete_front_channels = 2;
-                    audio->src_discrete_rear_channels = 0;
-                    audio->src_encoded_front_channels = 3;
-                    audio->src_encoded_rear_channels = 1;
-                    break;
-                case A52_3F:
-                    audio->src_discrete_front_channels = 3;
-                    audio->src_discrete_rear_channels = 0;
-                    audio->src_encoded_front_channels = 3;
-                    audio->src_encoded_rear_channels = 0;
-                    break;
-                case A52_2F1R:
-                    audio->src_discrete_front_channels = 2;
-                    audio->src_discrete_rear_channels = 1;
-                    audio->src_encoded_front_channels = 2;
-                    audio->src_encoded_rear_channels = 1;
-                    break;
-                case A52_3F1R:
-                    audio->src_discrete_front_channels = 3;
-                    audio->src_discrete_rear_channels = 1;
-                    audio->src_encoded_front_channels = 3;
-                    audio->src_encoded_rear_channels = 1;
-                    break;
-				case A52_2F2R:
-                    audio->src_discrete_front_channels = 2;
-                    audio->src_discrete_rear_channels = 2;
-                    audio->src_encoded_front_channels = 2;
-                    audio->src_encoded_rear_channels = 2;
-                    break;
-                case A52_3F2R:
-                    audio->src_discrete_front_channels = 3;
-                    audio->src_discrete_rear_channels = 2;
-                    audio->src_encoded_front_channels = 3;
-                    audio->src_encoded_rear_channels = 2;
-                    break;
+                hb_log( "scan: AC3, rate=%dHz, bitrate=%d", rate, bitrate );
+                audio->rate    = rate;
+                audio->bitrate = bitrate;
+                switch( flags & A52_CHANNEL_MASK )
+                {
+                    case A52_MONO:
+                    case A52_CHANNEL1:
+                    case A52_CHANNEL2:
+                        audio->src_discrete_front_channels = 1;
+                        audio->src_discrete_rear_channels = 0;
+                        audio->src_encoded_front_channels = 1;
+                        audio->src_encoded_rear_channels = 0;
+                        break;
+                    case A52_STEREO:
+                    case A52_CHANNEL:
+                        audio->src_discrete_front_channels = 2;
+                        audio->src_discrete_rear_channels = 0;
+                        audio->src_encoded_front_channels = 2;
+                        audio->src_encoded_rear_channels = 0;
+                        break;
+                    case A52_DOLBY:
+                        audio->src_discrete_front_channels = 2;
+                        audio->src_discrete_rear_channels = 0;
+                        audio->src_encoded_front_channels = 3;
+                        audio->src_encoded_rear_channels = 1;
+                        break;
+                    case A52_3F:
+                        audio->src_discrete_front_channels = 3;
+                        audio->src_discrete_rear_channels = 0;
+                        audio->src_encoded_front_channels = 3;
+                        audio->src_encoded_rear_channels = 0;
+                        break;
+                    case A52_2F1R:
+                        audio->src_discrete_front_channels = 2;
+                        audio->src_discrete_rear_channels = 1;
+                        audio->src_encoded_front_channels = 2;
+                        audio->src_encoded_rear_channels = 1;
+                        break;
+                    case A52_3F1R:
+                        audio->src_discrete_front_channels = 3;
+                        audio->src_discrete_rear_channels = 1;
+                        audio->src_encoded_front_channels = 3;
+                        audio->src_encoded_rear_channels = 1;
+                        break;
+                    case A52_2F2R:
+                        audio->src_discrete_front_channels = 2;
+                        audio->src_discrete_rear_channels = 2;
+                        audio->src_encoded_front_channels = 2;
+                        audio->src_encoded_rear_channels = 2;
+                        break;
+                    case A52_3F2R:
+                        audio->src_discrete_front_channels = 3;
+                        audio->src_discrete_rear_channels = 2;
+                        audio->src_encoded_front_channels = 3;
+                        audio->src_encoded_rear_channels = 2;
+                        break;
+                }
+
+                if (flags & A52_LFE) {
+                    audio->src_discrete_lfe_channels = 1;
+                } else {
+                    audio->src_discrete_lfe_channels = 0;
+                }
+                
+                /* store the AC3 flags for future reference
+                This enables us to find out if we had a stereo or Dolby source later on */
+                audio->config.a52.ac3flags = flags;
+
+                /* store the ac3 flags in the public ac3flags property too, so we can access it from the GUI */
+                audio->ac3flags = audio->config.a52.ac3flags;
+
+                /* XXX */
+                if ( (flags & A52_CHANNEL_MASK) == A52_DOLBY ) {
+                    sprintf( audio->lang + strlen( audio->lang ),
+                         " (Dolby Surround)" );
+                } else {
+                    sprintf( audio->lang + strlen( audio->lang ),
+                         " (%d.%d ch)",
+                         audio->src_discrete_front_channels + audio->src_discrete_rear_channels, audio->src_discrete_lfe_channels );
+                }
+
+                break;
+            
             }
 
-			if (flags & A52_LFE) {
-                audio->src_discrete_lfe_channels = 1;
-			} else {
-                audio->src_discrete_lfe_channels = 0;
-			}
-			
-			/* store the AC3 flags for future reference
-			This enables us to find out if we had a stereo or Dolby source later on */
-			audio->config.a52.ac3flags = flags;
+        }
+        else if ( audio->codec == HB_ACODEC_DCA )
+        {
 
-			/* store the ac3 flags in the public ac3flags property too, so we can access it from the GUI */
-			audio->ac3flags = audio->config.a52.ac3flags;
+            hb_log( "scan: checking for DCA syncinfo" );
 
-            /* XXX */
-			if ( (flags & A52_CHANNEL_MASK) == A52_DOLBY ) {
-				sprintf( audio->lang + strlen( audio->lang ),
-                     " (Dolby Surround)" );
-			} else {
-				sprintf( audio->lang + strlen( audio->lang ),
-                     " (%d.%d ch)",
-					 audio->src_discrete_front_channels + audio->src_discrete_rear_channels, audio->src_discrete_lfe_channels );
-			}
+            /* check for dca */
+            state = dca_init( 0 );
+            if( dca_syncinfo( state, &b->data[i], &flags, &rate, &bitrate, &frame_length ) )
+            {
+                hb_log( "scan: DCA, rate=%dHz, bitrate=%d", rate, bitrate );
+                audio->rate    = rate;
+                audio->bitrate = bitrate;
+                switch( flags & DCA_CHANNEL_MASK )
+                {
+                    case DCA_MONO:
+                        audio->src_discrete_front_channels = 1;
+                        audio->src_discrete_rear_channels = 0;
+                        audio->src_encoded_front_channels = 1;
+                        audio->src_encoded_rear_channels = 0;
+                        break;
+                    case DCA_CHANNEL:
+                    case DCA_STEREO:
+                    case DCA_STEREO_SUMDIFF:
+                    case DCA_STEREO_TOTAL:
+                        audio->src_discrete_front_channels = 2;
+                        audio->src_discrete_rear_channels = 0;
+                        audio->src_encoded_front_channels = 2;
+                        audio->src_encoded_rear_channels = 0;
+                        break;
+                    case DCA_DOLBY:
+                        audio->src_discrete_front_channels = 2;
+                        audio->src_discrete_rear_channels = 0;
+                        audio->src_encoded_front_channels = 3;
+                        audio->src_encoded_rear_channels = 1;
+                        break;
+                    case DCA_3F:
+                        audio->src_discrete_front_channels = 3;
+                        audio->src_discrete_rear_channels = 0;
+                        audio->src_encoded_front_channels = 3;
+                        audio->src_encoded_rear_channels = 0;
+                        break;
+                    case DCA_2F1R:
+                        audio->src_discrete_front_channels = 2;
+                        audio->src_discrete_rear_channels = 1;
+                        audio->src_encoded_front_channels = 2;
+                        audio->src_encoded_rear_channels = 1;
+                        break;
+                    case DCA_3F1R:
+                        audio->src_discrete_front_channels = 3;
+                        audio->src_discrete_rear_channels = 1;
+                        audio->src_encoded_front_channels = 3;
+                        audio->src_encoded_rear_channels = 1;
+                        break;
+                    case DCA_2F2R:
+                        audio->src_discrete_front_channels = 2;
+                        audio->src_discrete_rear_channels = 2;
+                        audio->src_encoded_front_channels = 2;
+                        audio->src_encoded_rear_channels = 2;
+                        break;
+                    case DCA_3F2R:
+                        audio->src_discrete_front_channels = 3;
+                        audio->src_discrete_rear_channels = 2;
+                        audio->src_encoded_front_channels = 3;
+                        audio->src_encoded_rear_channels = 2;
+                        break;
+                    case DCA_4F2R:
+                        audio->src_discrete_front_channels = 4;
+                        audio->src_discrete_rear_channels = 2;
+                        audio->src_encoded_front_channels = 4;
+                        audio->src_encoded_rear_channels = 2;
+                        break;
+                }
 
-            break;
+                if (flags & DCA_LFE) {
+                    audio->src_discrete_lfe_channels = 1;
+                } else {
+                    audio->src_discrete_lfe_channels = 0;
+                }
+                
+                /* store the DCA flags for future reference
+                This enables us to find out if we had a stereo or Dolby source later on */
+                audio->config.dca.dcaflags = flags;
+
+                /* store the dca flags in the public dcaflags property too, so we can access it from the GUI */
+                audio->dcaflags = audio->config.dca.dcaflags;
+
+                /* XXX */
+                if ( (flags & DCA_CHANNEL_MASK) == DCA_DOLBY ) {
+                    sprintf( audio->lang + strlen( audio->lang ),
+                         " (Dolby Surround)" );
+                } else {
+                    sprintf( audio->lang + strlen( audio->lang ),
+                         " (%d.%d ch)",
+                         audio->src_discrete_front_channels + audio->src_discrete_rear_channels, audio->src_discrete_lfe_channels );
+                }
+
+                break;
+            }
         }
     }
 }
 
-static int  AllAC3OK( hb_title_t * title )
+static int  AllAC3AndDCAOK( hb_title_t * title )
 {
     int i;
     hb_audio_t * audio;
@@ -554,7 +667,7 @@ static int  AllAC3OK( hb_title_t * title )
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = hb_list_item( title->list_audio, i );
-        if( audio->codec == HB_ACODEC_AC3 &&
+        if( ( audio->codec == HB_ACODEC_AC3 || audio->codec == HB_ACODEC_DCA ) &&
             !audio->bitrate )
         {
             return 0;

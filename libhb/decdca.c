@@ -1,31 +1,33 @@
-/* $Id: deca52.c,v 1.14 2005/03/03 17:21:57 titer Exp $
+/* $Id: decdca.c,v 1.14 2005/03/03 17:21:57 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
 #include "hb.h"
-
-#include "a52dec/a52.h"
+#include "dca.h"
 
 struct hb_work_private_s
 {
     hb_job_t    * job;
 
-    /* liba52 handle */
-    a52_state_t * state;
+    /* libdca handle */
+    dca_state_t * state;
 
     int           flags_in;
     int           flags_out;
     int           rate;
     int           bitrate;
+    int           frame_length;
     float         level;
     
     int           error;
     int           sync;
     int           size;
 
-    uint8_t       frame[3840];
+    /* max frame size of the 16 bits version is 16384 */
+    /* max frame size of the 14 bits version is 18726 */
+    uint8_t       frame[18726];
 
     hb_list_t   * list;
 	
@@ -33,17 +35,17 @@ struct hb_work_private_s
 	
 };
 
-int  deca52Init( hb_work_object_t *, hb_job_t * );
-int  deca52Work( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
-void deca52Close( hb_work_object_t * );
+int  decdcaInit( hb_work_object_t *, hb_job_t * );
+int  decdcaWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
+void decdcaClose( hb_work_object_t * );
 
-hb_work_object_t hb_deca52 =
+hb_work_object_t hb_decdca =
 {
-    WORK_DECA52,
-    "AC3 decoder",
-    deca52Init,
-    deca52Work,
-    deca52Close
+    WORK_DECDCA,
+    "DCA decoder",
+    decdcaInit,
+    decdcaWork,
+    decdcaClose
 };
 
 /***********************************************************************
@@ -52,11 +54,11 @@ hb_work_object_t hb_deca52 =
 static hb_buffer_t * Decode( hb_work_object_t * w );
 
 /***********************************************************************
- * hb_work_deca52_init
+ * hb_work_decdca_init
  ***********************************************************************
- * Allocate the work object, initialize liba52
+ * Allocate the work object, initialize libdca
  **********************************************************************/
-int deca52Init( hb_work_object_t * w, hb_job_t * job )
+int decdcaInit( hb_work_object_t * w, hb_job_t * job )
 {
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
@@ -64,12 +66,12 @@ int deca52Init( hb_work_object_t * w, hb_job_t * job )
     pv->job   = job;
 
     pv->list      = hb_list_init();
-    pv->state     = a52_init( 0 );
+    pv->state     = dca_init( 0 );
 
-	/* Decide what format we want out of a52dec
+	/* Decide what format we want out of libdca
 	work.c has already done some of this deduction for us in do_job() */
 	
-	pv->flags_out = HB_AMIXDOWN_GET_A52_FORMAT(w->amixdown);
+	pv->flags_out = HB_AMIXDOWN_GET_DCA_FORMAT(w->amixdown);
 
 	/* pass the number of channels used into the private work data */
 	/* will only be actually used if we're not doing AC3 passthru */
@@ -85,10 +87,10 @@ int deca52Init( hb_work_object_t * w, hb_job_t * job )
  ***********************************************************************
  * Free memory
  **********************************************************************/
-void deca52Close( hb_work_object_t * w )
+void decdcaClose( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
-    a52_free( pv->state );
+    dca_free( pv->state );
     hb_list_empty( &pv->list );
     free( pv );
     w->private_data = NULL;
@@ -100,7 +102,7 @@ void deca52Close( hb_work_object_t * w )
  * Add the given buffer to the data we already have, and decode as much
  * as we can
  **********************************************************************/
-int deca52Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
+int decdcaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 hb_buffer_t ** buf_out )
 {
     hb_work_private_t * pv = w->private_data;
@@ -131,22 +133,23 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     hb_buffer_t * buf;
     int           i, j, k;
     uint64_t      pts, pos;
+    int           num_blocks;
 
     /* Get a frame header if don't have one yet */
     if( !pv->sync )
     {
-        while( hb_list_bytes( pv->list ) >= 7 )
+        while( hb_list_bytes( pv->list ) >= 14 )
         {
-            /* We have 7 bytes, check if this is a correct header */
-            hb_list_seebytes( pv->list, pv->frame, 7 );
-            pv->size = a52_syncinfo( pv->frame, &pv->flags_in, &pv->rate,
-                                    &pv->bitrate );
+            /* We have 14 bytes, check if this is a correct header */
+            hb_list_seebytes( pv->list, pv->frame, 14 );
+            pv->size = dca_syncinfo( pv->state, pv->frame, &pv->flags_in, &pv->rate,
+                                    &pv->bitrate, &pv->frame_length );
             if( pv->size )
             {
                 /* It is. W00t. */
                 if( pv->error )
                 {
-                    hb_log( "a52_syncinfo ok" );
+                    hb_log( "dca_syncinfo ok" );
                 }
                 pv->error = 0;
                 pv->sync  = 1;
@@ -156,7 +159,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
             /* It is not */
             if( !pv->error )
             {
-                hb_log( "a52_syncinfo failed" );
+                hb_log( "dca_syncinfo failed" );
                 pv->error = 1;
             }
 
@@ -175,32 +178,24 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     /* Get the whole frame */
     hb_list_getbytes( pv->list, pv->frame, pv->size, &pts, &pos );
 
-    /* AC3 passthrough: don't decode the AC3 frame */
-    if( pv->job->acodec & HB_ACODEC_AC3 )
+    /* Feed libdca */
+    dca_frame( pv->state, pv->frame, &pv->flags_out, &pv->level, 0 );
+
+    /* find out how many blocks are in this frame */
+    num_blocks = dca_blocks_num( pv->state );
+
+    /* num_blocks blocks per frame, 256 samples per block, channelsused channels */
+    buf        = hb_buffer_init( num_blocks * 256 * pv->out_discrete_channels * sizeof( float ) );
+    buf->start = pts + ( pos / pv->size ) * num_blocks * 256 * 90000 / pv->rate;
+    buf->stop  = buf->start + num_blocks * 256 * 90000 / pv->rate;
+
+    for( i = 0; i < num_blocks; i++ )
     {
-        buf = hb_buffer_init( pv->size );
-        memcpy( buf->data, pv->frame, pv->size );
-        buf->start = pts + ( pos / pv->size ) * 6 * 256 * 90000 / pv->rate;
-        buf->stop  = buf->start + 6 * 256 * 90000 / pv->rate;
-        pv->sync = 0;
-        return buf;
-    }
-
-    /* Feed liba52 */
-    a52_frame( pv->state, pv->frame, &pv->flags_out, &pv->level, 0 );
-
-    /* 6 blocks per frame, 256 samples per block, channelsused channels */
-    buf        = hb_buffer_init( 6 * 256 * pv->out_discrete_channels * sizeof( float ) );
-    buf->start = pts + ( pos / pv->size ) * 6 * 256 * 90000 / pv->rate;
-    buf->stop  = buf->start + 6 * 256 * 90000 / pv->rate;
-
-    for( i = 0; i < 6; i++ )
-    {
-        sample_t * samples_in;
+        dca_sample_t * samples_in;
         float    * samples_out;
 
-        a52_block( pv->state );
-        samples_in  = a52_samples( pv->state );
+        dca_block( pv->state );
+        samples_in  = dca_samples( pv->state );
         samples_out = ((float *) buf->data) + 256 * pv->out_discrete_channels * i;
 
         /* Interleave */
@@ -208,7 +203,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
         {
 			for ( k = 0; k < pv->out_discrete_channels; k++ )
 			{
-				samples_out[(pv->out_discrete_channels*j)+k]   = samples_in[(256*k)+j];
+				samples_out[(pv->out_discrete_channels*j)+k]   = samples_in[(256*k)+j] * 16384;
 			}
         }
 

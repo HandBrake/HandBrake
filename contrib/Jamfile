@@ -107,6 +107,24 @@ if $(OS) != CYGWIN
     LibDvdCss $(SUBDIR)/lib/libdvdcss.a  : $(SUBDIR)/libdvdcss.tar.gz ;
 }
 
+# libdca
+rule LibDCA
+{
+    Depends $(<) : $(>) ;
+    Depends lib  : $(<) ;
+}
+actions LibDCA
+{
+    cd `dirname $(>)` && CONTRIB=`pwd` &&
+    rm -rf libdca && tar xzf libdca.tar.gz && cd libdca && patch -p1 < ../patch-libdca.patch
+	./bootstrap && ./configure && make &&
+	cp libdca/.libs/libdca.a $CONTRIB/lib &&
+	cp include/dca.h $CONTRIB/include &&
+	strip -S $CONTRIB/lib/libdca.a
+}
+Wget   $(SUBDIR)/libdca.tar.gz : $(SUBDIR)/version_libdca.txt ;
+LibDCA $(SUBDIR)/lib/libdca.a  : $(SUBDIR)/libdca.tar.gz ;
+
 # libdvdread
 rule LibDvdRead
 {
