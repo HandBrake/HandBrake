@@ -324,10 +324,10 @@ rule LibX264
     {
         LIBX264_PATCH = " patch -p1 < ../patch-x264-cygwin.patch && " ;
     }
-    else if $(OS) = LINUX
-    {
-        LIBX264_PATCH = " patch -p1 < ../patch-x264-linux.patch && " ;
-    }
+#    else if $(OS) = LINUX
+#    {
+#        LIBX264_PATCH = " patch -p1 < ../patch-x264-linux.patch && " ;
+#    }
     Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
 }

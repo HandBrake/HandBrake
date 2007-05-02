@@ -1,1 +1,1 @@
-http://download.m0k.org/handbrake/contrib/x264-r604.tar.gz 
+http://download.m0k.org/handbrake/contrib/x264-r654.tar.gz 
