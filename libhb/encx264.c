@@ -63,7 +63,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
     x264_param_default( &param );
 
-    param.i_threads    = hb_get_cpu_count();
+    param.i_threads    = ( hb_get_cpu_count() * 3 / 2 );
     param.i_width      = job->width;
     param.i_height     = job->height;
     param.i_fps_num    = job->vrate;
