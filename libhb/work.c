@@ -216,6 +216,20 @@ static void do_job( hb_job_t * job, int cpu_count )
                 "vorbis" ) );
     }
 
+    /* if we are doing AC3 passthru, then remove any non-AC3 audios from the job */
+    /* otherwise, Bad Things will happen */
+    for( i = 0; i < hb_list_count( title->list_audio ); )
+    {
+        audio = hb_list_item( title->list_audio, i );
+        if( ( job->acodec & HB_ACODEC_AC3 ) && ( audio->codec != HB_ACODEC_AC3 ) )
+        {
+            hb_list_rem( title->list_audio, audio );
+            free( audio );
+            continue;
+        }
+        i++;
+    }
+
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = hb_list_item( title->list_audio, i );
