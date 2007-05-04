@@ -35,6 +35,10 @@ libavcodec authors:
   Juan J. Sierralta
   Lionel Ulmer
 
+libdts authors:
+  Gildas Bazin
+  Sam Hocevar
+
 libdvdcss authors:
   Billy Biggs
   Stéphane Borel

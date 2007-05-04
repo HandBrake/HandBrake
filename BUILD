@@ -59,17 +59,30 @@ Step 1: get needed tools
 + gcc and g++
     There are usually included in your OS' dev tools. On BeOS/Zeta, the
     default gcc isn't enough, gcc 2.95.3 is required.
+
 + jam
     I use 2.5rc3, earlier versions might cause issues.
     On BeOS, you can download it at <http://www.haiku-os.org/develop.php>.
     On OS X, you cannot use the modified jam shipped with the developer
-    tools, use this one instead:
-    <http://download.m0k.org/handbrake/jam-2.5rc3-OSX.zip>.
+    tools, use the one included in the Handbrake svn checkout instead.
     On Cygwin, get the jam source from
     http://public.perforce.com/public/jam/index.html,
     compile it with gcc in Cygwin, and put the jam executable somewhere on
     your path.
+
 + nasm (Only for x86. On Mac OS X Intel, Xcode 2.4.1 include it)
+
++ libtool, autoconf, automake
+    To build libdca (the DTS audio extraction library) on Mac OS X via jam, you'll
+    need to update the default Mac OS X versions of libtool, autoconf and automake.
+    Compilation has been seen to work with libtool and libtool-shlibs v1.5.22-1000,
+    autoconf v2.60-4, and automake v1.9.6-3.  You can update these tools using Fink.
+    Download the Fink 0.8.1 Binary Installer for your platform (PowerPC or Intel)
+    from http://www.finkproject.org/download/index.php?phpLang=en and install Fink
+    using the installer.  If you want to use a GUI to run Fink, you can install
+    FinkCommander.  Download the FinkCommander 0.5.4 installer from
+    http://finkcommander.sourceforge.net/ and install from the disk image.  You can
+    install libtool, libtool-shlibs, autoconf and automake using FinkCommander.
 
 Cygwin setup:
     There are a couple extra things required to make the code build for Cygwin.
