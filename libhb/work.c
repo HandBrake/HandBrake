@@ -220,7 +220,7 @@ static void do_job( hb_job_t * job, int cpu_count )
     {
         audio = hb_list_item( title->list_audio, i );
         hb_log( "   + %x, %s", audio->id, audio->lang );
-		
+		        
 		/* sense-check the current mixdown options */
 
 		/* log the requested mixdown */
@@ -231,227 +231,108 @@ static void do_job( hb_job_t * job, int cpu_count )
 			}
 		}
 
-        if (audio->codec == HB_ACODEC_AC3)
-        {
+        /* sense-check the requested mixdown */
 
-			/* sense-check the AC3 mixdown */
+        /* audioCodecsSupportMono and audioCodecsSupport6Ch are the same for now,
+           but this may change in the future, so they are separated for flexibility */
+        int audioCodecsSupportMono = ((audio->codec == HB_ACODEC_AC3 ||
+            audio->codec == HB_ACODEC_DCA) && job->acodec == HB_ACODEC_FAAC);
+        int audioCodecsSupport6Ch =  ((audio->codec == HB_ACODEC_AC3 ||
+            audio->codec == HB_ACODEC_DCA) && job->acodec == HB_ACODEC_FAAC);
 
-			/* audioCodecSupportsMono and audioCodecSupports6Ch are the same for now,
-			   but this may change in the future, so they are separated for flexibility */
-			int audioCodecSupportsMono = (job->acodec == HB_ACODEC_FAAC);
-			int audioCodecSupports6Ch = (job->acodec == HB_ACODEC_FAAC);
+        /* find out what the format of our source audio is */
+        switch (audio->input_channel_layout) {
+        
+            /* mono sources */
+            case HB_INPUT_CH_LAYOUT_MONO:
+                /* regardless of what stereo mixdown we've requested, a mono source always get mixed down
+                to mono if we can, and mixed up to stereo if we can't */
+                if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecsSupportMono == 1) {
+                    job->audio_mixdowns[i] = HB_AMIXDOWN_MONO;
+                } else {
+                    job->audio_mixdowns[i] = HB_AMIXDOWN_STEREO;
+                }
+                break;
 
-			/* find out what the format of our source AC3 audio is */
-			switch (audio->config.a52.ac3flags & A52_CHANNEL_MASK) {
-			
-				/* mono sources */
-				case A52_MONO:
-				case A52_CHANNEL1:
-				case A52_CHANNEL2:
-					/* regardless of what stereo mixdown we've requested, a mono source always get mixed down
-					to mono if we can, and mixed up to stereo if we can't */
-					if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecSupportsMono == 1) {
-						job->audio_mixdowns[i] = HB_AMIXDOWN_MONO;
-					} else {
-						job->audio_mixdowns[i] = HB_AMIXDOWN_STEREO;
-					}
-					break;
+            /* stereo input */
+            case HB_INPUT_CH_LAYOUT_STEREO:
+                /* if we've requested a mono mixdown, and it is supported, then do the mix */
+                /* use stereo if not supported */
+                if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecsSupportMono == 0) {
+                    job->audio_mixdowns[i] = HB_AMIXDOWN_STEREO;
+                /* otherwise, preserve stereo regardless of if we requested something higher */
+                } else if (job->audio_mixdowns[i] > HB_AMIXDOWN_STEREO) {
+                    job->audio_mixdowns[i] = HB_AMIXDOWN_STEREO;
+                }
+                break;
 
-				/* stereo input */
-				case A52_CHANNEL:
-				case A52_STEREO:
-					/* if we've requested a mono mixdown, and it is supported, then do the mix */
-					/* use stereo if not supported */
-					if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecSupportsMono == 0) {
-						job->audio_mixdowns[i] = HB_AMIXDOWN_STEREO;
-					/* otherwise, preserve stereo regardless of if we requested something higher */
-					} else if (job->audio_mixdowns[i] > HB_AMIXDOWN_STEREO) {
-						job->audio_mixdowns[i] = HB_AMIXDOWN_STEREO;
-					}
-					break;
+            /* dolby (DPL1 aka Dolby Surround = 4.0 matrix-encoded) input */
+            /* the A52 flags don't allow for a way to distinguish between DPL1 and DPL2 on a DVD,
+               so we always assume a DPL1 source for A52_DOLBY */
+            case HB_INPUT_CH_LAYOUT_DOLBY:
+                /* if we've requested a mono mixdown, and it is supported, then do the mix */
+                /* preserve dolby if not supported */
+                if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecsSupportMono == 0) {
+                    job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBY;
+                /* otherwise, preserve dolby even if we requested something higher */
+                /* a stereo mixdown will still be honoured here */
+                } else if (job->audio_mixdowns[i] > HB_AMIXDOWN_DOLBY) {
+                    job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBY;
+                }
+                break;
 
-				/* dolby (DPL1 aka Dolby Surround = 4.0 matrix-encoded) input */
-				/* the A52 flags don't allow for a way to distinguish between DPL1 and DPL2 on a DVD,
-				   so we always assume a DPL1 source for A52_DOLBY */
-				case A52_DOLBY:
-					/* if we've requested a mono mixdown, and it is supported, then do the mix */
-					/* preserve dolby if not supported */
-					if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecSupportsMono == 0) {
-						job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBY;
-					/* otherwise, preserve dolby even if we requested something higher */
-					/* a stereo mixdown will still be honoured here */
-					} else if (job->audio_mixdowns[i] > HB_AMIXDOWN_DOLBY) {
-						job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBY;
-					}
-					break;
+            /* 3F/2R input */
+            case HB_INPUT_CH_LAYOUT_3F2R:
+            case HB_INPUT_CH_LAYOUT_3F2RLFE:
+                /* if we've requested a mono mixdown, and it is supported, then do the mix */
+                /* use dpl2 if not supported */
+                if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecsSupportMono == 0) {
+                    job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBYPLII;
+                } else {
+                    /* check if we have 3F2R input and also have an LFE - i.e. we have a 5.1 source) */
+                    if (audio->input_channel_layout == HB_INPUT_CH_LAYOUT_3F2RLFE) {
+                        /* we have a 5.1 source */
+                        /* if we requested 6ch, but our audio format doesn't support it, then mix to DPLII instead */
+                        if (job->audio_mixdowns[i] == HB_AMIXDOWN_6CH && audioCodecsSupport6Ch == 0) {
+                            job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBYPLII;
+                        }
+                    } else {
+                        /* we have a 5.0 source, so we can't do 6ch conversion
+                        default to DPL II instead */
+                        if (job->audio_mixdowns[i] > HB_AMIXDOWN_DOLBYPLII) {
+                            job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBYPLII;
+                        }
+                    }
+                }
+                /* all other mixdowns will have been preserved here */
+                break;
 
-				/* 3F/2R input */
-				case A52_3F2R:
-					/* if we've requested a mono mixdown, and it is supported, then do the mix */
-					/* use dpl2 if not supported */
-					if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecSupportsMono == 0) {
-						job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBYPLII;
-					} else {
-						/* check if we have 3F2R input and also have an LFE - i.e. we have a 5.1 source) */
-						if (audio->config.a52.ac3flags & A52_LFE) {
-							/* we have a 5.1 source */
-							/* if we requested 6ch, but our audio format doesn't support it, then mix to DPLII instead */
-							if (job->audio_mixdowns[i] == HB_AMIXDOWN_6CH && audioCodecSupports6Ch == 0) {
-								job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBYPLII;
-							}
-						} else {
-							/* we have a 5.0 source, so we can't do 6ch conversion
-							default to DPL II instead */
-							if (job->audio_mixdowns[i] > HB_AMIXDOWN_DOLBYPLII) {
-								job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBYPLII;
-							}
-						}
-					}
-					/* all other mixdowns will have been preserved here */
-					break;
+            /* 3F/1R input */
+            case HB_INPUT_CH_LAYOUT_3F1R:
+                /* if we've requested a mono mixdown, and it is supported, then do the mix */
+                /* use dpl1 if not supported */
+                if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecsSupportMono == 0) {
+                    job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBY;
+                } else {
+                    /* we have a 4.0 or 4.1 source, so we can't do DPLII or 6ch conversion
+                    default to DPL I instead */
+                    if (job->audio_mixdowns[i] > HB_AMIXDOWN_DOLBY) {
+                        job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBY;
+                    }
+                }
+                /* all other mixdowns will have been preserved here */
+                break;
 
-				/* 3F/1R input */
-				case A52_3F1R:
-					/* if we've requested a mono mixdown, and it is supported, then do the mix */
-					/* use dpl1 if not supported */
-					if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecSupportsMono == 0) {
-						job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBY;
-					} else {
-						/* we have a 4.0 or 4.1 source, so we can't do DPLII or 6ch conversion
-						default to DPL I instead */
-						if (job->audio_mixdowns[i] > HB_AMIXDOWN_DOLBY) {
-							job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBY;
-						}
-					}
-					/* all other mixdowns will have been preserved here */
-					break;
-
-				default:
-					/* if we've requested a mono mixdown, and it is supported, then do the mix */
-					if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecSupportsMono == 1) {
-						job->audio_mixdowns[i] = HB_AMIXDOWN_MONO;
-					/* mix everything else down to stereo */
-					} else {
-						job->audio_mixdowns[i] = HB_AMIXDOWN_STEREO;
-					}
-
+            default:
+                /* if we've requested a mono mixdown, and it is supported, then do the mix */
+                if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecsSupportMono == 1) {
+                    job->audio_mixdowns[i] = HB_AMIXDOWN_MONO;
+                /* mix everything else down to stereo */
+                } else {
+                    job->audio_mixdowns[i] = HB_AMIXDOWN_STEREO;
                 }
 
         }
-        else if (audio->codec == HB_ACODEC_DCA)
-        {
-
-			/* sense-check the DCA mixdown */
-
-			/* audioCodecSupportsMono and audioCodecSupports6Ch are the same for now,
-			   but this may change in the future, so they are separated for flexibility */
-			int audioCodecSupportsMono = (job->acodec == HB_ACODEC_FAAC);
-			int audioCodecSupports6Ch = (job->acodec == HB_ACODEC_FAAC);
-
-			/* find out what the format of our source DCA audio is */
-			switch (audio->config.dca.dcaflags & DCA_CHANNEL_MASK) {
-
-				/* mono sources */
-				case DCA_MONO:
-					/* regardless of what stereo mixdown we've requested, a mono source always get mixed down
-					to mono if we can, and mixed up to stereo if we can't */
-					if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecSupportsMono == 1) {
-						job->audio_mixdowns[i] = HB_AMIXDOWN_MONO;
-					} else {
-						job->audio_mixdowns[i] = HB_AMIXDOWN_STEREO;
-					}
-					break;
-
-				/* stereo input */
-                case DCA_CHANNEL:
-                case DCA_STEREO:
-                case DCA_STEREO_SUMDIFF:
-                case DCA_STEREO_TOTAL:
-					/* if we've requested a mono mixdown, and it is supported, then do the mix */
-					/* use stereo if not supported */
-					if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecSupportsMono == 0) {
-						job->audio_mixdowns[i] = HB_AMIXDOWN_STEREO;
-					/* otherwise, preserve stereo regardless of if we requested something higher */
-					} else if (job->audio_mixdowns[i] > HB_AMIXDOWN_STEREO) {
-						job->audio_mixdowns[i] = HB_AMIXDOWN_STEREO;
-					}
-					break;
-
-				/* dolby (DPL1 aka Dolby Surround = 4.0 matrix-encoded) input */
-				/* the A52 flags don't allow for a way to distinguish between DPL1 and DPL2 on a DVD,
-				   so we always assume a DPL1 source for A52_DOLBY */
-				case DCA_DOLBY:
-					/* if we've requested a mono mixdown, and it is supported, then do the mix */
-					/* preserve dolby if not supported */
-					if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecSupportsMono == 0) {
-						job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBY;
-					/* otherwise, preserve dolby even if we requested something higher */
-					/* a stereo mixdown will still be honoured here */
-					} else if (job->audio_mixdowns[i] > HB_AMIXDOWN_DOLBY) {
-						job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBY;
-					}
-					break;
-
-				/* 3F/2R input */
-				case DCA_3F2R:
-					/* if we've requested a mono mixdown, and it is supported, then do the mix */
-					/* use dpl2 if not supported */
-					if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecSupportsMono == 0) {
-						job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBYPLII;
-					} else {
-						/* check if we have 3F2R input and also have an LFE - i.e. we have a 5.1 source) */
-						if (audio->config.dca.dcaflags & DCA_LFE) {
-							/* we have a 5.1 source */
-							/* if we requested 6ch, but our audio format doesn't support it, then mix to DPLII instead */
-							if (job->audio_mixdowns[i] == HB_AMIXDOWN_6CH && audioCodecSupports6Ch == 0) {
-								job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBYPLII;
-							}
-						} else {
-							/* we have a 5.0 source, so we can't do 6ch conversion
-							default to DPL II instead */
-							if (job->audio_mixdowns[i] > HB_AMIXDOWN_DOLBYPLII) {
-								job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBYPLII;
-							}
-						}
-					}
-					/* all other mixdowns will have been preserved here */
-					break;
-
-				/* 3F/1R input */
-				case DCA_3F1R:
-					/* if we've requested a mono mixdown, and it is supported, then do the mix */
-					/* use dpl1 if not supported */
-					if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecSupportsMono == 0) {
-						job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBY;
-					} else {
-						/* we have a 4.0 or 4.1 source, so we can't do DPLII or 6ch conversion
-						default to DPL I instead */
-						if (job->audio_mixdowns[i] > HB_AMIXDOWN_DOLBY) {
-							job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBY;
-						}
-					}
-					/* all other mixdowns will have been preserved here */
-					break;
-
-				default:
-					/* if we've requested a mono mixdown, and it is supported, then do the mix */
-					if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecSupportsMono == 1) {
-						job->audio_mixdowns[i] = HB_AMIXDOWN_MONO;
-					/* mix everything else down to stereo */
-					} else {
-						job->audio_mixdowns[i] = HB_AMIXDOWN_STEREO;
-					}
-			}
-
-        }
-        else
-        {
-
-			/* assume a stereo input and output for non-AC3/DCA audio input (LPCM, MP2),
-			   regardless of the mixdown passed to us */
-            job->audio_mixdowns[i] = HB_AMIXDOWN_STEREO;
-
-		}
 
 		/* log the output mixdown */
 		for (j = 0; j < hb_audio_mixdowns_count; j++) {

@@ -1528,12 +1528,14 @@ return registrationDictionary;
         {
 
             /* find out if our selected output audio codec supports mono and / or 6ch */
-            /* we also check for an input codec of AC3,
-               as it is the only library able to do the mixdown to mono / conversion to 6-ch */
+            /* we also check for an input codec of AC3 or DCA,
+               as they are the only libraries able to do the mixdown to mono / conversion to 6-ch */
             /* audioCodecsSupportMono and audioCodecsSupport6Ch are the same for now,
                but this may change in the future, so they are separated for flexibility */
-            int audioCodecsSupportMono = (audio->codec == HB_ACODEC_AC3 && acodec == HB_ACODEC_FAAC);
-            int audioCodecsSupport6Ch = (audio->codec == HB_ACODEC_AC3 && acodec == HB_ACODEC_FAAC);
+            int audioCodecsSupportMono = ((audio->codec == HB_ACODEC_AC3 ||
+                audio->codec == HB_ACODEC_DCA) && acodec == HB_ACODEC_FAAC);
+            int audioCodecsSupport6Ch =  ((audio->codec == HB_ACODEC_AC3 ||
+                audio->codec == HB_ACODEC_DCA) && acodec == HB_ACODEC_FAAC);
 
             /* check for AC-3 passthru */
             if (audio->codec == HB_ACODEC_AC3 && acodec == HB_ACODEC_AC3)
@@ -1544,23 +1546,6 @@ return registrationDictionary;
             }
             else
             {
-
-                /* find out the audio channel layout for our input audio */
-                /* we'll cheat and use the liba52 layouts, even if the source isn't AC3 */
-                int channel_layout;
-                int audio_has_lfe;
-                if (audio->codec == HB_ACODEC_AC3)
-                {
-                    channel_layout = (audio->ac3flags & A52_CHANNEL_MASK);
-                    audio_has_lfe = (audio->ac3flags & A52_LFE);
-                }
-                else
-                {
-                    /* assume a stereo input for all other input codecs */
-                    /* we're cheating and using liba52's A52_STEREO layout here, even though the source isn't AC3 */
-                    channel_layout = A52_STEREO;
-                    audio_has_lfe = 0;
-                }
 
                 /* add the appropriate audio mixdown menuitems to the popupbutton */
                 /* in each case, we set the new menuitem's tag to be the amixdown value for that mixdown,
@@ -1583,8 +1568,8 @@ return registrationDictionary;
                 /* do we want to add a stereo option? */
                 /* offer stereo if we have a mono source and non-mono-supporting codecs, as otherwise we won't have a mixdown at all */
                 /* also offer stereo if we have a stereo-or-better source */
-                if (((channel_layout == A52_MONO || channel_layout == A52_CHANNEL1 || channel_layout == A52_CHANNEL2) && audioCodecsSupportMono == 0) ||
-                    (channel_layout >= A52_STEREO && channel_layout != A52_CHANNEL1 && channel_layout != A52_CHANNEL2)) {
+                if ((audio->input_channel_layout == HB_INPUT_CH_LAYOUT_MONO && audioCodecsSupportMono == 0) ||
+                    audio->input_channel_layout >= HB_INPUT_CH_LAYOUT_STEREO) {
                     id<NSMenuItem> menuItem = [[mixdownPopUp menu] addItemWithTitle:
                         [NSString stringWithCString: hb_audio_mixdowns[1].human_readable_name]
                         action: NULL keyEquivalent: @""];
@@ -1594,7 +1579,8 @@ return registrationDictionary;
                 }
 
                 /* do we want to add a dolby surround (DPL1) option? */
-                if (channel_layout == A52_3F1R || channel_layout == A52_3F2R || channel_layout == A52_DOLBY) {
+                if (audio->input_channel_layout == HB_INPUT_CH_LAYOUT_3F1R || audio->input_channel_layout == HB_INPUT_CH_LAYOUT_3F2R ||
+                    audio->input_channel_layout == HB_INPUT_CH_LAYOUT_3F2RLFE || audio->input_channel_layout == HB_INPUT_CH_LAYOUT_DOLBY) {
                     id<NSMenuItem> menuItem = [[mixdownPopUp menu] addItemWithTitle:
                         [NSString stringWithCString: hb_audio_mixdowns[2].human_readable_name]
                         action: NULL keyEquivalent: @""];
@@ -1604,7 +1590,7 @@ return registrationDictionary;
                 }
 
                 /* do we want to add a dolby pro logic 2 (DPL2) option? */
-                if (channel_layout == A52_3F2R) {
+                if (audio->input_channel_layout == HB_INPUT_CH_LAYOUT_3F2R || audio->input_channel_layout == HB_INPUT_CH_LAYOUT_3F2RLFE) {
                     id<NSMenuItem> menuItem = [[mixdownPopUp menu] addItemWithTitle:
                         [NSString stringWithCString: hb_audio_mixdowns[3].human_readable_name]
                         action: NULL keyEquivalent: @""];
@@ -1614,7 +1600,7 @@ return registrationDictionary;
                 }
 
                 /* do we want to add a 6-channel discrete option? */
-                if (audioCodecsSupport6Ch == 1 && channel_layout == A52_3F2R && audio_has_lfe == A52_LFE) {
+                if (audioCodecsSupport6Ch == 1 && audio->input_channel_layout == HB_INPUT_CH_LAYOUT_3F2RLFE) {
                     id<NSMenuItem> menuItem = [[mixdownPopUp menu] addItemWithTitle:
                         [NSString stringWithCString: hb_audio_mixdowns[4].human_readable_name]
                         action: NULL keyEquivalent: @""];

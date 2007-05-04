@@ -295,6 +295,36 @@ struct hb_audio_s
     /* dcaflags is only set when the source audio format is HB_ACODEC_DCA */
     int dcaflags;
 
+/* define some masks, used to extract the various information from the HB_AMIXDOWN_XXXX values */
+#define HB_INPUT_CH_LAYOUT_DISCRETE_FRONT_MASK 0xF0000
+#define HB_INPUT_CH_LAYOUT_DISCRETE_REAR_MASK  0x0F000
+#define HB_INPUT_CH_LAYOUT_DISCRETE_LFE_MASK   0x00F00
+#define HB_INPUT_CH_LAYOUT_ENCODED_FRONT_MASK  0x000F0
+#define HB_INPUT_CH_LAYOUT_ENCODED_REAR_MASK   0x0000F
+
+/* define the input channel layouts used to describe the channel layout of this audio */
+#define HB_INPUT_CH_LAYOUT_MONO    0x0110010
+#define HB_INPUT_CH_LAYOUT_STEREO  0x0220020
+#define HB_INPUT_CH_LAYOUT_DOLBY   0x0320031
+#define HB_INPUT_CH_LAYOUT_3F      0x0430030
+#define HB_INPUT_CH_LAYOUT_2F1R    0x0521021
+#define HB_INPUT_CH_LAYOUT_3F1R    0x0631031
+#define HB_INPUT_CH_LAYOUT_2F2R    0x0722022
+#define HB_INPUT_CH_LAYOUT_3F2R    0x0832032
+#define HB_INPUT_CH_LAYOUT_3F2RLFE 0x0A32132
+#define HB_INPUT_CH_LAYOUT_4F2R    0x0942042
+
+/* define some macros to extract the various information from the HB_AMIXDOWN_XXXX values */
+#define HB_INPUT_CH_LAYOUT_GET_DISCRETE_FRONT_COUNT( a ) ( ( a & HB_INPUT_CH_LAYOUT_DISCRETE_FRONT_MASK ) >> 16 )
+#define HB_INPUT_CH_LAYOUT_GET_DISCRETE_REAR_COUNT( a )  ( ( a & HB_INPUT_CH_LAYOUT_DISCRETE_REAR_MASK ) >> 12 )
+#define HB_INPUT_CH_LAYOUT_GET_DISCRETE_LFE_COUNT( a )   ( ( a & HB_INPUT_CH_LAYOUT_DISCRETE_LFE_MASK ) >> 8 )
+#define HB_INPUT_CH_LAYOUT_GET_ENCODED_FRONT_COUNT( a )   ( ( a & HB_INPUT_CH_LAYOUT_ENCODED_FRONT_MASK ) >> 4 )
+#define HB_INPUT_CH_LAYOUT_GET_ENCODED_REAR_COUNT( a )   ( ( a & HB_INPUT_CH_LAYOUT_ENCODED_REAR_MASK ) )
+
+	/* input_channel_layout is the channel layout of this audio */
+	/* this is used to provide a common way of describing the source audio */
+	int input_channel_layout;
+
 #ifdef __LIBHB__
     /* Internal data */
     hb_fifo_t * fifo_in;   /* AC3/MPEG/LPCM ES */
