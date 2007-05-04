@@ -93,6 +93,6 @@ LINKLIBS = $LINKLIBS ;
 EOF
 
 echo
-echo "To build MediaFork, run:"
-echo " './jam' on a Mac (or 'make' to try the UB build method),"
+echo "To build HandBrake, run:"
+echo " 'make' on a Mac (or './jam' to build all libraries from source),"
 echo " 'jam' on Linux or Windows."
