@@ -341,7 +341,7 @@ diff -Naur libdca/libdca/dca_internal.h libdca_patched/libdca/dca_internal.h
  #define MUL(a,b) ((int)(((int64_t)(a) * (b) + (1 << 29)) >> 30))
 diff -Naur libdca/libdca/downmix.c libdca_patched/libdca/downmix.c
 --- libdca/libdca/downmix.c	2007-05-02 10:05:05.000000000 +0100
-+++ libdca_patched/libdca/downmix.c	2007-05-02 10:09:34.000000000 +0100
++++ libdca_patched/libdca/downmix.c	2007-05-06 19:45:54.000000000 +0100
 @@ -33,8 +33,8 @@
  
  #define CONVERT(acmod,output) (((output) << DCA_CHANNEL_BITS) + (acmod))
@@ -470,21 +470,39 @@ diff -Naur libdca/libdca/downmix.c libdca_patched/libdca/downmix.c
  
      for (i = 0; i < 256; i++) {
  	common = BIAS (samples[i] + samples[i + 768]);
-@@ -426,10 +429,10 @@
+@@ -426,23 +429,32 @@
      }
  }
  
 -static void mix31toS (sample_t * samples, sample_t bias)
 +static void mix31toS (dca_sample_t * samples, dca_sample_t bias)
  {
-     int i;
+-    int i;
 -    sample_t common, surround;
-+    dca_sample_t common, surround;
  
-     for (i = 0; i < 256; i++) {
- 	common = BIAS (samples[i]);
-@@ -439,10 +442,10 @@
-     }
+-    for (i = 0; i < 256; i++) {
+-	common = BIAS (samples[i]);
+-	surround = samples[i + 768];
+-	samples[i] = samples[i + 256] + common - surround;
+-	samples[i + 256] = samples[i + 512] + common + surround;
+-    }
++	int i;
++	dca_sample_t cc, surround, Lt, Rt;
++
++	for (i = 0; i < 256; i++) {
++
++		cc = samples[i] * LEVEL_3DB;
++
++		surround = samples[i + 768];
++
++		Lt = samples[i + 256] + cc;
++		Rt = samples[i + 512] + cc;
++
++		samples[i] = Lt - surround;
++		samples[i + 256] = Rt + surround;
++
++	}
++
  }
  
 -static void mix22toS (sample_t * samples, sample_t bias)
@@ -496,7 +514,7 @@ diff -Naur libdca/libdca/downmix.c libdca_patched/libdca/downmix.c
  
      for (i = 0; i < 256; i++) {
  	surround = samples[i + 512] + samples[i + 768];
-@@ -451,10 +454,10 @@
+@@ -451,10 +463,10 @@
      }
  }
  
@@ -509,7 +527,7 @@ diff -Naur libdca/libdca/downmix.c libdca_patched/libdca/downmix.c
  
      for (i = 0; i < 256; i++) {
  	common = BIAS (samples[i]);
-@@ -463,20 +466,48 @@
+@@ -463,20 +475,55 @@
      }
  }
  
@@ -527,15 +545,16 @@ diff -Naur libdca/libdca/downmix.c libdca_patched/libdca/downmix.c
 -    }
 -}
 +	if (use_dpl2 == 1) {
-+
+ 
+-static void move2to1 (sample_t * src, sample_t * dest, sample_t bias)
 +		int i;
 +		dca_sample_t cc, Lt, Rt, Ls, Rs, Lss, Rss;
 +	
 +		for (i = 0; i < 256; i++) {
 +	
-+			cc = samples[i + 256] * LEVEL_3DB;
++			cc = samples[i] * LEVEL_3DB;
 +		
-+			Lt = samples[i] + cc;
++			Lt = samples[i + 256] + cc;
 +			Rt = samples[i + 512] + cc;
 +		
 +			Ls = samples[i + 768];
@@ -552,16 +571,22 @@ diff -Naur libdca/libdca/downmix.c libdca_patched/libdca/downmix.c
 +	} else {
 +
 +		int i;
-+		dca_sample_t common, surround;
++		dca_sample_t cc, surround, Lt, Rt;
 +	
 +		for (i = 0; i < 256; i++) {
-+		common = samples[i + 256] + bias;
-+		surround = samples[i + 768] + samples[i + 1024];
-+		samples[i] += common - surround;
-+		samples[i + 256] = samples[i + 512] + common + surround;
++
++			cc = samples[i] * LEVEL_3DB;
++
++			surround = samples[i + 768] + samples[i + 1024];
++
++			Lt = samples[i + 256] + cc;
++			Rt = samples[i + 512] + cc;
++
++			samples[i] = Lt - surround;
++			samples[i + 256] = Rt + surround;
++
 +		}
- 
--static void move2to1 (sample_t * src, sample_t * dest, sample_t bias)
++
 +	}
 +
 +}
@@ -569,7 +594,7 @@ diff -Naur libdca/libdca/downmix.c libdca_patched/libdca/downmix.c
  {
      int i;
  
-@@ -484,7 +515,7 @@
+@@ -484,7 +531,7 @@
  	dest[i] = BIAS (src[i] + src[i + 256]);
  }
  
@@ -578,7 +603,7 @@ diff -Naur libdca/libdca/downmix.c libdca_patched/libdca/downmix.c
  {
      int i;
  
-@@ -492,8 +523,8 @@
+@@ -492,8 +539,8 @@
  	samples[i] = 0;
  }
  
@@ -589,7 +614,7 @@ diff -Naur libdca/libdca/downmix.c libdca_patched/libdca/downmix.c
  {
      (void)clev;
  
-@@ -529,7 +560,7 @@
+@@ -529,7 +576,7 @@
  	break;
  
      case CONVERT (DCA_MONO, DCA_DOLBY):
@@ -598,7 +623,7 @@ diff -Naur libdca/libdca/downmix.c libdca_patched/libdca/downmix.c
  	break;
  
      case CONVERT (DCA_3F, DCA_STEREO):
-@@ -576,7 +607,7 @@
+@@ -576,7 +623,7 @@
  	break;
  
      case CONVERT (DCA_3F2R, DCA_DOLBY):
@@ -607,7 +632,7 @@ diff -Naur libdca/libdca/downmix.c libdca_patched/libdca/downmix.c
  	break;
  
      case CONVERT (DCA_3F1R, DCA_3F):
-@@ -594,7 +625,7 @@
+@@ -594,7 +641,7 @@
  
      case CONVERT (DCA_3F1R, DCA_2F1R):
  	mix3to2 (samples, bias);
@@ -616,7 +641,7 @@ diff -Naur libdca/libdca/downmix.c libdca_patched/libdca/downmix.c
  	break;
  
      case CONVERT (DCA_2F2R, DCA_2F1R):
-@@ -608,30 +639,52 @@
+@@ -608,30 +655,52 @@
  
      case CONVERT (DCA_3F2R, DCA_3F1R):
  	mix2to1 (samples + 768, samples + 1024, bias);
@@ -675,7 +700,7 @@ diff -Naur libdca/libdca/downmix.c libdca_patched/libdca/downmix.c
  {
      switch (CONVERT (acmod, output & DCA_CHANNEL_MASK)) {
  
-@@ -657,7 +710,7 @@
+@@ -657,7 +726,7 @@
      case CONVERT (DCA_3F, DCA_STEREO):
      case CONVERT (DCA_3F, DCA_DOLBY):
      mix_3to2:
@@ -684,7 +709,7 @@ diff -Naur libdca/libdca/downmix.c libdca_patched/libdca/downmix.c
  	zero (samples + 256);
  	break;
  
-@@ -684,11 +737,11 @@
+@@ -684,11 +753,11 @@
  	zero (samples + 1024);
      case CONVERT (DCA_3F1R, DCA_2F1R):
      mix_31to21:

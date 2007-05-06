@@ -255,7 +255,7 @@ static void do_job( hb_job_t * job, int cpu_count )
             audio->codec == HB_ACODEC_DCA) && job->acodec == HB_ACODEC_FAAC);
 
         /* find out what the format of our source audio is */
-        switch (audio->input_channel_layout) {
+        switch (audio->input_channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK) {
         
             /* mono sources */
             case HB_INPUT_CH_LAYOUT_MONO:
@@ -297,14 +297,13 @@ static void do_job( hb_job_t * job, int cpu_count )
 
             /* 3F/2R input */
             case HB_INPUT_CH_LAYOUT_3F2R:
-            case HB_INPUT_CH_LAYOUT_3F2RLFE:
                 /* if we've requested a mono mixdown, and it is supported, then do the mix */
                 /* use dpl2 if not supported */
                 if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecsSupportMono == 0) {
                     job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBYPLII;
                 } else {
                     /* check if we have 3F2R input and also have an LFE - i.e. we have a 5.1 source) */
-                    if (audio->input_channel_layout == HB_INPUT_CH_LAYOUT_3F2RLFE) {
+                    if (audio->input_channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE) {
                         /* we have a 5.1 source */
                         /* if we requested 6ch, but our audio format doesn't support it, then mix to DPLII instead */
                         if (job->audio_mixdowns[i] == HB_AMIXDOWN_6CH && audioCodecsSupport6Ch == 0) {
@@ -383,10 +382,11 @@ static void do_job( hb_job_t * job, int cpu_count )
                 w = getWork( WORK_DECLPCM );
                 break;
         }
-        w->fifo_in  = audio->fifo_in;
-        w->fifo_out = audio->fifo_raw;
-        w->config   = &audio->config;
-        w->amixdown = audio->amixdown;
+        w->fifo_in       = audio->fifo_in;
+        w->fifo_out      = audio->fifo_raw;
+        w->config        = &audio->config;
+        w->amixdown      = audio->amixdown;
+        w->source_acodec = audio->codec;
         
         /* FIXME: This feels really hackish, anything better? */
         audio_w = calloc( sizeof( hb_work_object_t ), 1 );
@@ -409,10 +409,11 @@ static void do_job( hb_job_t * job, int cpu_count )
 
         if( job->acodec != HB_ACODEC_AC3 )
         {
-            w->fifo_in  = audio->fifo_sync;
-            w->fifo_out = audio->fifo_out;
-            w->config   = &audio->config;
-            w->amixdown = audio->amixdown;
+            w->fifo_in       = audio->fifo_sync;
+            w->fifo_out      = audio->fifo_out;
+            w->config        = &audio->config;
+            w->amixdown      = audio->amixdown;
+            w->source_acodec = audio->codec;
             
             /* FIXME: This feels really hackish, anything better? */
             audio_w = calloc( sizeof( hb_work_object_t ), 1 );

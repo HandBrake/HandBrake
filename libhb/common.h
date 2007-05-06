@@ -278,16 +278,6 @@ struct hb_audio_s
     int  codec;
     int  rate;
     int  bitrate;
-	/* src_discrete_front_channels: The # of discrete front channels in the source audio
-	   src_discrete_rear_channels:  The # of discrete rear channels in the source audio
-	   src_discrete_lfe_channels:   The # of discrete lfe channels in the source audio
-	   src_encoded_front_channels:  The # of front channels encoded into the source audio
-	   src_encoded_rear_channels:   The # of rear channels encoded into the source audio */
-    int src_discrete_front_channels;
-    int src_discrete_rear_channels;
-	int src_discrete_lfe_channels;
-    int src_encoded_front_channels;
-    int src_encoded_rear_channels;
     
     /* ac3flags is only set when the source audio format is HB_ACODEC_AC3 */
     int ac3flags;
@@ -296,11 +286,12 @@ struct hb_audio_s
     int dcaflags;
 
 /* define some masks, used to extract the various information from the HB_AMIXDOWN_XXXX values */
-#define HB_INPUT_CH_LAYOUT_DISCRETE_FRONT_MASK 0xF0000
-#define HB_INPUT_CH_LAYOUT_DISCRETE_REAR_MASK  0x0F000
-#define HB_INPUT_CH_LAYOUT_DISCRETE_LFE_MASK   0x00F00
-#define HB_INPUT_CH_LAYOUT_ENCODED_FRONT_MASK  0x000F0
-#define HB_INPUT_CH_LAYOUT_ENCODED_REAR_MASK   0x0000F
+#define HB_INPUT_CH_LAYOUT_DISCRETE_FRONT_MASK  0x00F0000
+#define HB_INPUT_CH_LAYOUT_DISCRETE_REAR_MASK   0x000F000
+#define HB_INPUT_CH_LAYOUT_DISCRETE_LFE_MASK    0x0000F00
+#define HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK 0xFFFF0FF
+#define HB_INPUT_CH_LAYOUT_ENCODED_FRONT_MASK   0x00000F0
+#define HB_INPUT_CH_LAYOUT_ENCODED_REAR_MASK    0x000000F
 
 /* define the input channel layouts used to describe the channel layout of this audio */
 #define HB_INPUT_CH_LAYOUT_MONO    0x0110010
@@ -311,13 +302,14 @@ struct hb_audio_s
 #define HB_INPUT_CH_LAYOUT_3F1R    0x0631031
 #define HB_INPUT_CH_LAYOUT_2F2R    0x0722022
 #define HB_INPUT_CH_LAYOUT_3F2R    0x0832032
-#define HB_INPUT_CH_LAYOUT_3F2RLFE 0x0A32132
 #define HB_INPUT_CH_LAYOUT_4F2R    0x0942042
+#define HB_INPUT_CH_LAYOUT_HAS_LFE 0x0000100
 
 /* define some macros to extract the various information from the HB_AMIXDOWN_XXXX values */
 #define HB_INPUT_CH_LAYOUT_GET_DISCRETE_FRONT_COUNT( a ) ( ( a & HB_INPUT_CH_LAYOUT_DISCRETE_FRONT_MASK ) >> 16 )
 #define HB_INPUT_CH_LAYOUT_GET_DISCRETE_REAR_COUNT( a )  ( ( a & HB_INPUT_CH_LAYOUT_DISCRETE_REAR_MASK ) >> 12 )
 #define HB_INPUT_CH_LAYOUT_GET_DISCRETE_LFE_COUNT( a )   ( ( a & HB_INPUT_CH_LAYOUT_DISCRETE_LFE_MASK ) >> 8 )
+#define HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT( a ) ( ( ( a & HB_INPUT_CH_LAYOUT_DISCRETE_FRONT_MASK ) >> 16 ) + ( ( a & HB_INPUT_CH_LAYOUT_DISCRETE_REAR_MASK ) >> 12 ) + ( ( a & HB_INPUT_CH_LAYOUT_DISCRETE_LFE_MASK ) >> 8 ) )
 #define HB_INPUT_CH_LAYOUT_GET_ENCODED_FRONT_COUNT( a )   ( ( a & HB_INPUT_CH_LAYOUT_ENCODED_FRONT_MASK ) >> 4 )
 #define HB_INPUT_CH_LAYOUT_GET_ENCODED_REAR_COUNT( a )   ( ( a & HB_INPUT_CH_LAYOUT_ENCODED_REAR_MASK ) )
 
@@ -481,6 +473,8 @@ struct hb_work_object_s
 
 	/* amixdown is the mixdown format to be used if the work object is an audio track */
    	int               amixdown;
+    /* source_acodec is the source audio codec if the work object is an audio track */
+    int               source_acodec;
 
     hb_work_private_t * private_data;
 

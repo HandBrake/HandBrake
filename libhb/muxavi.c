@@ -369,7 +369,7 @@ static int AVIInit( hb_mux_object_t * m )
         {
             f.BytesCount     = sizeof( hb_wave_formatex_t ) - 8;
             f.FormatTag      = 0x2000;
-            f.Channels       = 2;
+            f.Channels       = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(audio->input_channel_layout);
             f.SamplesPerSec  = audio->rate;
         }
         else
@@ -377,7 +377,7 @@ static int AVIInit( hb_mux_object_t * m )
             f.BytesCount     = sizeof( hb_wave_formatex_t ) +
                                sizeof( hb_wave_mp3_t ) - 8;
             f.FormatTag      = 0x55;
-            f.Channels       = 2;
+            f.Channels       = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(job->audio_mixdowns[i]);
             f.SamplesPerSec  = job->arate;
         }
         f.AvgBytesPerSec = h.Rate;

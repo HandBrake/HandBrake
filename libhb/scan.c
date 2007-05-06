@@ -506,11 +506,7 @@ static void LookForAC3AndDCA( hb_title_t * title, hb_buffer_t * b )
                         break;
                     /* 3F/2R input */
                     case A52_3F2R:
-                        if (flags & A52_LFE) {
-                            audio->input_channel_layout = HB_INPUT_CH_LAYOUT_3F2RLFE;
-                        } else {
-                            audio->input_channel_layout = HB_INPUT_CH_LAYOUT_3F2R;
-                        }
+                        audio->input_channel_layout = HB_INPUT_CH_LAYOUT_3F2R;
                         break;
                     /* 3F/1R input */
                     case A52_3F1R:
@@ -529,6 +525,12 @@ static void LookForAC3AndDCA( hb_title_t * title, hb_buffer_t * b )
                     /* unknown */
                     default:
                         audio->input_channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
+                }
+                
+                /* add in our own LFE flag if the source has LFE */
+                if (flags & A52_LFE)
+                {
+                    audio->input_channel_layout = audio->input_channel_layout | HB_INPUT_CH_LAYOUT_HAS_LFE;
                 }
 
                 /* store the AC3 flags for future reference
@@ -582,11 +584,7 @@ static void LookForAC3AndDCA( hb_title_t * title, hb_buffer_t * b )
                         break;
                     /* 3F/2R input */
                     case DCA_3F2R:
-                        if (flags & DCA_LFE) {
-                            audio->input_channel_layout = HB_INPUT_CH_LAYOUT_3F2RLFE;
-                        } else {
-                            audio->input_channel_layout = HB_INPUT_CH_LAYOUT_3F2R;
-                        }
+                        audio->input_channel_layout = HB_INPUT_CH_LAYOUT_3F2R;
                         break;
                     /* 3F/1R input */
                     case DCA_3F1R:
@@ -608,6 +606,12 @@ static void LookForAC3AndDCA( hb_title_t * title, hb_buffer_t * b )
                     /* unknown */
                     default:
                         audio->input_channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
+                }
+
+                /* add in our own LFE flag if the source has LFE */
+                if (flags & DCA_LFE)
+                {
+                    audio->input_channel_layout = audio->input_channel_layout | HB_INPUT_CH_LAYOUT_HAS_LFE;
                 }
 
                 /* store the DCA flags for future reference

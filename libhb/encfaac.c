@@ -79,17 +79,19 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
     cfg->outputFormat  = 0;
     cfg->inputFormat   =  FAAC_INPUT_FLOAT;
 	
-	if (pv->out_discrete_channels == 6) {
-		/* we are preserving 5.1 audio into 6-channel AAC, and need to
-		re-map the output of deca52 into our own mapping - the mapping
-		below is the default mapping expected by QuickTime */
-		/* This doesn't seem to be correct for VLC on Linux */
-		cfg->channel_map[0] = 2;
-		cfg->channel_map[1] = 1;
-		cfg->channel_map[2] = 3;
-		cfg->channel_map[3] = 4;
-		cfg->channel_map[4] = 5;
-		cfg->channel_map[5] = 0;
+	if (w->amixdown == HB_AMIXDOWN_6CH && w->source_acodec == HB_ACODEC_AC3)
+    {
+        /* we are preserving 5.1 AC-3 audio into 6-channel AAC, and need to
+        re-map the output of deca52 into our own mapping - the mapping
+        below is the default mapping expected by QuickTime */
+        /* DTS output from libdca is already in the right mapping for QuickTime */
+        /* This doesn't seem to be correct for VLC on Linux */
+        cfg->channel_map[0] = 2;
+        cfg->channel_map[1] = 1;
+        cfg->channel_map[2] = 3;
+        cfg->channel_map[3] = 4;
+        cfg->channel_map[4] = 5;
+        cfg->channel_map[5] = 0;
 	}
 	
     if( !faacEncSetConfiguration( pv->faac, cfg ) )

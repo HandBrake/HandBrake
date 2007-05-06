@@ -1554,6 +1554,9 @@ return registrationDictionary;
                 /* keep a track of the min and max mixdowns we used, so we can select the best match later */
                 int minMixdownUsed = 0;
                 int maxMixdownUsed = 0;
+                
+                /* get the input channel layout without any lfe channels */
+                int layout = audio->input_channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK;
 
                 /* do we want to add a mono option? */
                 if (audioCodecsSupportMono == 1) {
@@ -1568,8 +1571,7 @@ return registrationDictionary;
                 /* do we want to add a stereo option? */
                 /* offer stereo if we have a mono source and non-mono-supporting codecs, as otherwise we won't have a mixdown at all */
                 /* also offer stereo if we have a stereo-or-better source */
-                if ((audio->input_channel_layout == HB_INPUT_CH_LAYOUT_MONO && audioCodecsSupportMono == 0) ||
-                    audio->input_channel_layout >= HB_INPUT_CH_LAYOUT_STEREO) {
+                if ((layout == HB_INPUT_CH_LAYOUT_MONO && audioCodecsSupportMono == 0) || layout >= HB_INPUT_CH_LAYOUT_STEREO) {
                     id<NSMenuItem> menuItem = [[mixdownPopUp menu] addItemWithTitle:
                         [NSString stringWithCString: hb_audio_mixdowns[1].human_readable_name]
                         action: NULL keyEquivalent: @""];
@@ -1579,8 +1581,7 @@ return registrationDictionary;
                 }
 
                 /* do we want to add a dolby surround (DPL1) option? */
-                if (audio->input_channel_layout == HB_INPUT_CH_LAYOUT_3F1R || audio->input_channel_layout == HB_INPUT_CH_LAYOUT_3F2R ||
-                    audio->input_channel_layout == HB_INPUT_CH_LAYOUT_3F2RLFE || audio->input_channel_layout == HB_INPUT_CH_LAYOUT_DOLBY) {
+                if (layout == HB_INPUT_CH_LAYOUT_3F1R || layout == HB_INPUT_CH_LAYOUT_3F2R || layout == HB_INPUT_CH_LAYOUT_DOLBY) {
                     id<NSMenuItem> menuItem = [[mixdownPopUp menu] addItemWithTitle:
                         [NSString stringWithCString: hb_audio_mixdowns[2].human_readable_name]
                         action: NULL keyEquivalent: @""];
@@ -1590,7 +1591,7 @@ return registrationDictionary;
                 }
 
                 /* do we want to add a dolby pro logic 2 (DPL2) option? */
-                if (audio->input_channel_layout == HB_INPUT_CH_LAYOUT_3F2R || audio->input_channel_layout == HB_INPUT_CH_LAYOUT_3F2RLFE) {
+                if (layout == HB_INPUT_CH_LAYOUT_3F2R) {
                     id<NSMenuItem> menuItem = [[mixdownPopUp menu] addItemWithTitle:
                         [NSString stringWithCString: hb_audio_mixdowns[3].human_readable_name]
                         action: NULL keyEquivalent: @""];
@@ -1600,7 +1601,7 @@ return registrationDictionary;
                 }
 
                 /* do we want to add a 6-channel discrete option? */
-                if (audioCodecsSupport6Ch == 1 && audio->input_channel_layout == HB_INPUT_CH_LAYOUT_3F2RLFE) {
+                if (audioCodecsSupport6Ch == 1 && layout == HB_INPUT_CH_LAYOUT_3F2R && (audio->input_channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE)) {
                     id<NSMenuItem> menuItem = [[mixdownPopUp menu] addItemWithTitle:
                         [NSString stringWithCString: hb_audio_mixdowns[4].human_readable_name]
                         action: NULL keyEquivalent: @""];
