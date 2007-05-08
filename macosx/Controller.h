@@ -135,6 +135,14 @@
     IBOutlet NSButton            * fPauseButton;
     IBOutlet NSButton            * fRipButton;
 
+	/* Advanced Tab for opts */
+	IBOutlet NSPopUpButton       * fX264optBframesPopUp;
+	IBOutlet NSPopUpButton       * fX264optRefPopUp;
+	IBOutlet NSPopUpButton       * fX264optNfpskipPopUp;
+	IBOutlet NSPopUpButton       * fX264optNodctdcmtPopUp;
+	IBOutlet NSPopUpButton       * fX264optSubmePopUp;
+	IBOutlet NSPopUpButton       * fX264optTrellisPopUp;
+
 	/* User Preset variables here fPresetNewPicSettingsApply*/
 	
 	IBOutlet NSDrawer            * fPresetDrawer;
@@ -218,6 +226,13 @@
 - (IBAction) OpenHomepage: (id) sender;
 - (IBAction) OpenForums:   (id) sender;
 - (IBAction) OpenUserGuide:   (id) sender;
+
+// x264 Advanced Panel Methods
+- (IBAction) X264AdvancedOptionsSet: (id) sender;
+- (IBAction) X264AdvancedOptionsStandardizeOptString: (id) sender;
+- (IBAction) X264AdvancedOptionsSetCurrentSettings: (id) sender;
+- (NSString *)  X264AdvancedOptionsStandardizeOptNames:(NSString *) cleanOptNameString;
+- (IBAction) X264AdvancedOptionsChanged: (id) sender;
 
 // Preset Methods Here
 - (IBAction) CustomSettingUsed: (id) sender;
