@@ -2206,8 +2206,16 @@ the user is using "Custom" settings by determining the sender*/
 		}
 		else // if none exists, add it to the string
 		{
+			if ([[fDisplayX264Options stringValue] isEqualToString: @""])
+			{
+			[fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+				[NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]-1]]];
+			}
+			else
+			{
 			[fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]], 
 				[NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]-1]]];
+			}
 		}
 		/* We now need to reset the opt widgets since we changed some stuff */		
 		[self X264AdvancedOptionsSet:NULL];		
