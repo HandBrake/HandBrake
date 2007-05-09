@@ -135,12 +135,22 @@
     IBOutlet NSButton            * fPauseButton;
     IBOutlet NSButton            * fRipButton;
 
-	/* Advanced Tab for opts */
+	/* Advanced Tab for opts fX264optView*/
+	IBOutlet NSView              * fX264optView;
+	IBOutlet NSTextField         * fX264optViewTitleLabel;
+	IBOutlet NSTextField         * fDisplayX264OptionsLabel;
+	IBOutlet NSTextField         * fDisplayX264Options;
+	IBOutlet NSTextField         * fX264optBframesLabel;
 	IBOutlet NSPopUpButton       * fX264optBframesPopUp;
+	IBOutlet NSTextField         * fX264optRefLabel;
 	IBOutlet NSPopUpButton       * fX264optRefPopUp;
+	IBOutlet NSTextField         * fX264optNfpskipLabel;
 	IBOutlet NSPopUpButton       * fX264optNfpskipPopUp;
+	IBOutlet NSTextField         * fX264optNodctdcmtLabel;
 	IBOutlet NSPopUpButton       * fX264optNodctdcmtPopUp;
+	IBOutlet NSTextField         * fX264optSubmeLabel;
 	IBOutlet NSPopUpButton       * fX264optSubmePopUp;
+	IBOutlet NSTextField         * fX264optTrellisLabel;
 	IBOutlet NSPopUpButton       * fX264optTrellisPopUp;
 
 	/* User Preset variables here fPresetNewPicSettingsApply*/
@@ -149,8 +159,6 @@
 	IBOutlet NSTextField         * fPresetNewName;
 	IBOutlet NSPopUpButton       * fPresetNewPicSettingsPopUp;
 	IBOutlet NSTextField         * fPresetSelectedDisplay;
-	IBOutlet NSTextField         * fDisplayX264OptionsLabel;
-	IBOutlet NSTextField         * fDisplayX264Options;
 	
 	NSString                     * AppSupportDirectory;
 	NSString                     * UserPresetsFile;

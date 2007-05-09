@@ -645,7 +645,10 @@ return registrationDictionary;
 		fPicLabelAr,fPicLabelDeinter,fPicLabelSrcX,fPicLabelOutputX,
 		fPicLabelPAROutp,fPicLabelPAROutputX,fPicSettingPARWidth,fPicSettingPARHeight,
 		fPicSettingPARDsply,fPicLabelAnamorphic,tableView,fPresetsAdd,fPresetsDelete,
-		fCreateChapterMarkers,fDisplayX264Options,fDisplayX264OptionsLabel};
+		fCreateChapterMarkers,fX264optViewTitleLabel,fDisplayX264Options,fDisplayX264OptionsLabel,fX264optBframesLabel,
+		fX264optBframesPopUp,fX264optRefLabel,fX264optRefPopUp,fX264optNfpskipLabel,fX264optNfpskipPopUp,
+		fX264optNodctdcmtLabel,fX264optNodctdcmtPopUp,fX264optSubmeLabel,fX264optSubmePopUp,
+		fX264optTrellisLabel,fX264optTrellisPopUp};
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -1316,17 +1319,20 @@ return registrationDictionary;
 {
     int format = [fDstFormatPopUp indexOfSelectedItem];
     int codecs = [fDstCodecsPopUp indexOfSelectedItem];
-	[fDisplayX264Options setEnabled: NO];
-	[fDisplayX264OptionsLabel setEnabled: NO];
-    /* Update the encoder popup fDisplayX264OptionsLabel*/
+	[fX264optView setHidden: YES];
+	[fX264optViewTitleLabel setStringValue: @"Only Used With The x264 (H.264) Codec"];
+	
+
+    /* Update the encoder popup*/
     if( ( FormatSettings[format][codecs] & HB_VCODEC_X264 ) )
     {
         /* MPEG-4 -> H.264 */
         [fVidEncoderPopUp removeAllItems];
 		[fVidEncoderPopUp addItemWithTitle: @"x264 (h.264 Main)"];
 		[fVidEncoderPopUp addItemWithTitle: @"x264 (h.264 iPod)"];
-        [fDisplayX264Options setEnabled: YES];
-        [fDisplayX264OptionsLabel setEnabled: YES];
+        [fX264optView setHidden: NO];
+		[fX264optViewTitleLabel setStringValue: @"x264 Advanced Options"];
+		
     }
     else if( ( FormatSettings[format][codecs] & HB_VCODEC_FFMPEG ) )
     {
@@ -1335,7 +1341,7 @@ return registrationDictionary;
         [fVidEncoderPopUp addItemWithTitle: @"FFmpeg"];
         [fVidEncoderPopUp addItemWithTitle: @"XviD"];
         [fVidEncoderPopUp selectItemAtIndex: 0];
-		
+				
     }
 
     if( FormatSettings[format][codecs] & HB_ACODEC_AC3 )
