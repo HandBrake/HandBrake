@@ -1883,7 +1883,7 @@ the user is using "Custom" settings by determining the sender*/
 	/*B-Frames fX264optBframesPopUp*/
 	int i;
 	[fX264optBframesPopUp removeAllItems];
-	[fX264optBframesPopUp addItemWithTitle:@"Unspecified"];
+	[fX264optBframesPopUp addItemWithTitle:@"Default (0)"];
 	for (i=0; i<17;i++)
 	{
 		[fX264optBframesPopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
@@ -1891,7 +1891,7 @@ the user is using "Custom" settings by determining the sender*/
 	
 	/*Reference Frames fX264optRefPopUp*/
 	[fX264optRefPopUp removeAllItems];
-	[fX264optRefPopUp addItemWithTitle:@"Unspecified"];
+	[fX264optRefPopUp addItemWithTitle:@"Default (1)"];
 	for (i=0; i<17;i++)
 	{
 		[fX264optRefPopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
@@ -1899,7 +1899,7 @@ the user is using "Custom" settings by determining the sender*/
 	
 	/*No Fast P-Skip fX264optNfpskipPopUp BOOLEAN*/
 	[fX264optNfpskipPopUp removeAllItems];
-	[fX264optNfpskipPopUp addItemWithTitle:@"Unspecified"];
+	[fX264optNfpskipPopUp addItemWithTitle:@"Default (No)"];
 	for (i=0; i<2;i++)
 	{
 		if (i==0)
@@ -1914,7 +1914,7 @@ the user is using "Custom" settings by determining the sender*/
 	
 	/*No Dict Decimate fX264optNodctdcmtPopUp BOOLEAN*/
 	[fX264optNodctdcmtPopUp removeAllItems];
-	[fX264optNodctdcmtPopUp addItemWithTitle:@"Unspecified"];
+	[fX264optNodctdcmtPopUp addItemWithTitle:@"Default (No)"];
 	for (i=0; i<2;i++)
 	{
 		if (i==0)
@@ -1929,7 +1929,7 @@ the user is using "Custom" settings by determining the sender*/
 	
 	/*Sub Me fX264optSubmePopUp*/
 	[fX264optSubmePopUp removeAllItems];
-	[fX264optSubmePopUp addItemWithTitle:@"Unspecified"];
+	[fX264optSubmePopUp addItemWithTitle:@"Default (4)"];
 	for (i=0; i<8;i++)
 	{
 		[fX264optSubmePopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
@@ -1937,7 +1937,7 @@ the user is using "Custom" settings by determining the sender*/
 	
 	/*Trellis fX264optTrellisPopUp*/
 	[fX264optTrellisPopUp removeAllItems];
-	[fX264optTrellisPopUp addItemWithTitle:@"Unspecified"];
+	[fX264optTrellisPopUp addItemWithTitle:@"Default (0)"];
 	for (i=0; i<3;i++)
 	{
 	[fX264optTrellisPopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
