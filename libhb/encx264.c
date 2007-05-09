@@ -72,7 +72,6 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     param.i_log_level  = X264_LOG_INFO;
     if( job->h264_level )
     {
-        param.i_threads   = 1;
         param.b_cabac     = 0;
         param.i_level_idc = job->h264_level;
         hb_log( "encx264: encoding at level %i",
