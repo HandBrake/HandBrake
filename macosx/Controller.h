@@ -152,6 +152,8 @@
 	IBOutlet NSPopUpButton       * fX264optSubmePopUp;
 	IBOutlet NSTextField         * fX264optTrellisLabel;
 	IBOutlet NSPopUpButton       * fX264optTrellisPopUp;
+    IBOutlet NSTextField          * fX264optMixedRefsLabel;
+    IBOutlet NSPopUpButton       * fX264optMixedRefsPopUp;
 
 	/* User Preset variables here fPresetNewPicSettingsApply*/
 	

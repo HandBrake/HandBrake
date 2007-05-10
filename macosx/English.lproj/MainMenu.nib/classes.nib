@@ -40,7 +40,7 @@
             CLASS = HBController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
-                fAddPresetPanel = NSPanel; 
+                fAddPresetPanel = NSPopUpButton; 
                 fAddToQuButton = NSButton; 
                 fAudBitrateField = NSTextField; 
                 fAudBitratePopUp = NSPopUpButton; 
@@ -138,6 +138,8 @@
                 fWindow = NSWindow; 
                 fX264optBframesLabel = NSTextField; 
                 fX264optBframesPopUp = NSPopUpButton; 
+                fX264optMixedRefsLabel = NSTextField; 
+                fX264optMixedRefsPopUp = NSPopUpButton; 
                 fX264optNfpskipLabel = NSTextField; 
                 fX264optNfpskipPopUp = NSPopUpButton; 
                 fX264optNodctdcmtLabel = NSTextField; 

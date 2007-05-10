@@ -648,7 +648,7 @@ return registrationDictionary;
 		fCreateChapterMarkers,fX264optViewTitleLabel,fDisplayX264Options,fDisplayX264OptionsLabel,fX264optBframesLabel,
 		fX264optBframesPopUp,fX264optRefLabel,fX264optRefPopUp,fX264optNfpskipLabel,fX264optNfpskipPopUp,
 		fX264optNodctdcmtLabel,fX264optNodctdcmtPopUp,fX264optSubmeLabel,fX264optSubmePopUp,
-		fX264optTrellisLabel,fX264optTrellisPopUp};
+		fX264optTrellisLabel,fX264optTrellisPopUp,fX264optMixedRefsLabel,fX264optMixedRefsPopUp};
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -1948,6 +1948,22 @@ the user is using "Custom" settings by determining the sender*/
 	{
 	[fX264optTrellisPopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
     }	
+    
+    /*Mixed-references fX264optMixedRefsPopUp BOOLEAN*/
+    [fX264optMixedRefsPopUp removeAllItems];
+       [fX264optMixedRefsPopUp addItemWithTitle:@"Default (No)"];
+       for (i=0; i<2;i++)
+       {
+               if (i==0)
+               {
+                       [fX264optMixedRefsPopUp addItemWithTitle:[NSString stringWithFormat:@"No"]];
+               }
+               else
+               {
+                       [fX264optMixedRefsPopUp addItemWithTitle:[NSString stringWithFormat:@"Yes"]];
+               }
+       }
+    
 	/* Standardize the option string */
 	[self X264AdvancedOptionsStandardizeOptString: NULL];
 	/* Set Current GUI Settings based on newly standardized string */
@@ -2104,6 +2120,12 @@ the user is using "Custom" settings by determining the sender*/
 					{
 						[fX264optTrellisPopUp selectItemAtIndex:[optValue intValue]+1];
 					}
+                    /*Mixed Refs NSPopUpButton*/
+                    if ([optName isEqualToString:@"mixed-refs"])
+                    {
+                        [fX264optMixedRefsPopUp selectItemAtIndex:[optValue intValue]+1];
+                    }
+                    
                     
 				}
 			}
@@ -2139,6 +2161,11 @@ the user is using "Custom" settings by determining the sender*/
 	{
 		optNameToChange = @"trellis";
 	}
+    if (sender == fX264optMixedRefsPopUp)
+    {
+        optNameToChange = @"mixed-refs";
+    }
+    
 	/* Set widgets depending on the opt string in field */
 	NSString * thisOpt; // The separated option such as "bframes=3"
 	NSString * optName = @""; // The option name such as "bframes"
