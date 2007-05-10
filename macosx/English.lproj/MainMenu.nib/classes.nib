@@ -40,7 +40,7 @@
             CLASS = HBController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
-                fAddPresetPanel = NSPopUpButton; 
+                fAddPresetPanel = NSPanel; 
                 fAddToQuButton = NSButton; 
                 fAudBitrateField = NSTextField; 
                 fAudBitratePopUp = NSPopUpButton; 
