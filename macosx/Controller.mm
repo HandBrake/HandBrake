@@ -649,7 +649,7 @@ return registrationDictionary;
 		fX264optBframesPopUp,fX264optRefLabel,fX264optRefPopUp,fX264optNfpskipLabel,fX264optNfpskipPopUp,
 		fX264optNodctdcmtLabel,fX264optNodctdcmtPopUp,fX264optSubmeLabel,fX264optSubmePopUp,
 		fX264optTrellisLabel,fX264optTrellisPopUp,fX264optMixedRefsLabel,fX264optMixedRefsPopUp,
-		fX264optMotionEstLabel,fX264optMotionEstPopUp};
+		fX264optMotionEstLabel,fX264optMotionEstPopUp,fX264optMERangeLabel,fX264optMERangePopUp};
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -1973,6 +1973,15 @@ the user is using "Custom" settings by determining the sender*/
     [fX264optMotionEstPopUp addItemWithTitle:@"Uneven Multi-Hexagon"];
     [fX264optMotionEstPopUp addItemWithTitle:@"Exhaustive"];
     
+    /*Motion Estimation range fX264optMERangePopUp*/
+    [fX264optMERangePopUp removeAllItems];
+    [fX264optMERangePopUp addItemWithTitle:@"Default (16)"];
+    for (i=4; i<65;i++)
+    {
+        [fX264optMERangePopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
+    }
+    
+    
     /* Standardize the option string */
     [self X264AdvancedOptionsStandardizeOptString: NULL];
     /* Set Current GUI Settings based on newly standardized string */
@@ -2072,6 +2081,10 @@ the user is using "Custom" settings by determining the sender*/
         cleanOptNameString = @"subq";
     }
     
+    /*ME Range*/
+    if ([cleanOptNameString isEqualToString:@"me-range"] || [cleanOptNameString isEqualToString:@"me_range"])
+        cleanOptNameString = @"merange";
+    
     return cleanOptNameString;	
 }
 
@@ -2160,7 +2173,13 @@ the user is using "Custom" settings by determining the sender*/
                         [fX264optMotionEstPopUp selectItemAtIndex:3];
                     else if ([optValue isEqualToString:@"esa"])
                         [fX264optMotionEstPopUp selectItemAtIndex:4];                        
-                }                                
+                }
+                /*ME Range NSPopUpButton*/
+                if ([optName isEqualToString:@"merange"])
+                {
+                    [fX264optMERangePopUp selectItemAtIndex:[optValue intValue]-3];
+                }
+                                                
             }
         }
     }
@@ -2202,6 +2221,10 @@ the user is using "Custom" settings by determining the sender*/
     if (sender == fX264optMotionEstPopUp)
     {
         optNameToChange = @"me";
+    }
+    if (sender == fX264optMERangePopUp)
+    {
+        optNameToChange = @"merange";
     }
     
     /* Set widgets depending on the opt string in field */
@@ -2282,6 +2305,10 @@ the user is using "Custom" settings by determining the sender*/
                                 break;
                         }
                     }
+                    else if ([optNameToChange isEqualToString:@"merange"])
+                    {
+                        thisOpt = [NSString stringWithFormat:@"%@=%d",optName,[sender indexOfSelectedItem]+3];
+                    }
                     else // we have a valid value to change, so change it
                     {
                         thisOpt = [NSString stringWithFormat:@"%@=%d",optName,[sender indexOfSelectedItem]-1];
@@ -2342,6 +2369,11 @@ the user is using "Custom" settings by determining the sender*/
                         break;
                 }
             }
+            else if ([optNameToChange isEqualToString:@"merange"])
+            {
+                [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                    [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]+3]]];
+            }
             else
             {
                 [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
@@ -2381,6 +2413,11 @@ the user is using "Custom" settings by determining the sender*/
                     default:
                          break;
                 }
+            }
+            else if ([optNameToChange isEqualToString:@"merange"])
+            {
+                [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]], 
+                    [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]+3]]];
             }
             else
             {

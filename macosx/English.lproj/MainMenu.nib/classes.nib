@@ -138,6 +138,8 @@
                 fWindow = NSWindow; 
                 fX264optBframesLabel = NSTextField; 
                 fX264optBframesPopUp = NSPopUpButton; 
+                fX264optMERangeLabel = NSTextField; 
+                fX264optMERangePopUp = NSPopUpButton; 
                 fX264optMixedRefsLabel = NSTextField; 
                 fX264optMixedRefsPopUp = NSPopUpButton; 
                 fX264optMotionEstLabel = NSTextField; 
