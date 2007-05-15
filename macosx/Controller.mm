@@ -648,7 +648,8 @@ return registrationDictionary;
 		fCreateChapterMarkers,fX264optViewTitleLabel,fDisplayX264Options,fDisplayX264OptionsLabel,fX264optBframesLabel,
 		fX264optBframesPopUp,fX264optRefLabel,fX264optRefPopUp,fX264optNfpskipLabel,fX264optNfpskipPopUp,
 		fX264optNodctdcmtLabel,fX264optNodctdcmtPopUp,fX264optSubmeLabel,fX264optSubmePopUp,
-		fX264optTrellisLabel,fX264optTrellisPopUp,fX264optMixedRefsLabel,fX264optMixedRefsPopUp};
+		fX264optTrellisLabel,fX264optTrellisPopUp,fX264optMixedRefsLabel,fX264optMixedRefsPopUp,
+		fX264optMotionEstLabel,fX264optMotionEstPopUp};
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -1964,6 +1965,14 @@ the user is using "Custom" settings by determining the sender*/
         }
     }
     
+    /*Motion Estimation fX264optMotionEstPopUp*/
+    [fX264optMotionEstPopUp removeAllItems];
+    [fX264optMotionEstPopUp addItemWithTitle:@"Default (Hexagon)"];
+    [fX264optMotionEstPopUp addItemWithTitle:@"Diamond"];
+    [fX264optMotionEstPopUp addItemWithTitle:@"Hexagon"];
+    [fX264optMotionEstPopUp addItemWithTitle:@"Uneven Multi-Hexagon"];
+    [fX264optMotionEstPopUp addItemWithTitle:@"Exhaustive"];
+    
     /* Standardize the option string */
     [self X264AdvancedOptionsStandardizeOptString: NULL];
     /* Set Current GUI Settings based on newly standardized string */
@@ -2134,6 +2143,18 @@ the user is using "Custom" settings by determining the sender*/
                 {
                     [fX264optMixedRefsPopUp selectItemAtIndex:[optValue intValue]+1];
                 }
+                /*Motion Estimation NSPopUpButton*/
+                if ([optName isEqualToString:@"me"])
+                {
+                    if ([optValue isEqualToString:@"dia"])
+                        [fX264optMotionEstPopUp selectItemAtIndex:1];
+                    else if ([optValue isEqualToString:@"hex"])
+                        [fX264optMotionEstPopUp selectItemAtIndex:2];
+                    else if ([optValue isEqualToString:@"umh"])
+                        [fX264optMotionEstPopUp selectItemAtIndex:3];
+                    else if ([optValue isEqualToString:@"esa"])
+                        [fX264optMotionEstPopUp selectItemAtIndex:4];                        
+                }                                
             }
         }
     }
@@ -2171,6 +2192,10 @@ the user is using "Custom" settings by determining the sender*/
     if (sender == fX264optMixedRefsPopUp)
     {
         optNameToChange = @"mixed-refs";
+    }
+    if (sender == fX264optMotionEstPopUp)
+    {
+        optNameToChange = @"me";
     }
     
     /* Set widgets depending on the opt string in field */
@@ -2219,6 +2244,30 @@ the user is using "Custom" settings by determining the sender*/
                     {
                         thisOpt = @"";
                     }
+                    else if ([optNameToChange isEqualToString:@"me"])
+                    {
+                        switch ([sender indexOfSelectedItem])
+                        {   
+                            case 1:
+                               thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"dia"];
+                               break;
+ 
+                            case 2:
+                               thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"hex"];
+                               break;
+ 
+                            case 3:
+                               thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"umh"];
+                               break;
+ 
+                            case 4:
+                               thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"esa"];
+                               break;
+                            
+                            default:
+                                break;
+                        }
+                    }
                     else // we have a valid value to change, so change it
                     {
                         thisOpt = [NSString stringWithFormat:@"%@=%d",optName,[sender indexOfSelectedItem]-1];
@@ -2251,13 +2300,79 @@ the user is using "Custom" settings by determining the sender*/
     {
         if ([[fDisplayX264Options stringValue] isEqualToString: @""])
         {
-            [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]-1]]];
+            if ([optNameToChange isEqualToString:@"me"])
+            {
+                switch ([sender indexOfSelectedItem])
+                {   
+                    case 1:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"dia"]]];
+                        break;
+               
+                    case 2:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"hex"]]];
+                        break;
+               
+                   case 3:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"umh"]]];
+                        break;
+               
+                   case 4:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"esa"]]];
+                        break;
+                   
+                   default:
+                        break;
+                }
+            }
+            else
+            {
+                [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                    [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]-1]]];
+            }
         }
         else
         {
-            [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]], 
-                [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]-1]]];
+            if ([optNameToChange isEqualToString:@"me"])
+            {
+                switch ([sender indexOfSelectedItem])
+                {   
+                    case 1:
+                         [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
+                             [NSString stringWithFormat:[fDisplayX264Options stringValue]],
+                             [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"dia"]]];
+                         break;
+
+                    case 2:
+                         [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
+                             [NSString stringWithFormat:[fDisplayX264Options stringValue]],
+                             [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"hex"]]];
+                         break;
+
+                    case 3:
+                         [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
+                             [NSString stringWithFormat:[fDisplayX264Options stringValue]],
+                             [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"umh"]]];
+                         break;
+
+                    case 4:
+                         [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
+                             [NSString stringWithFormat:[fDisplayX264Options stringValue]],
+                             [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"esa"]]];
+                         break;
+
+                    default:
+                         break;
+                }
+            }
+            else
+            {
+                [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]], 
+                    [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]-1]]];
+            }
         }
     }
 

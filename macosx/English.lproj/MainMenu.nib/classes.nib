@@ -140,6 +140,8 @@
                 fX264optBframesPopUp = NSPopUpButton; 
                 fX264optMixedRefsLabel = NSTextField; 
                 fX264optMixedRefsPopUp = NSPopUpButton; 
+                fX264optMotionEstLabel = NSTextField; 
+                fX264optMotionEstPopUp = NSPopUpButton; 
                 fX264optNfpskipLabel = NSTextField; 
                 fX264optNfpskipPopUp = NSPopUpButton; 
                 fX264optNodctdcmtLabel = NSTextField; 
