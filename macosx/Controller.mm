@@ -1979,61 +1979,59 @@ the user is using "Custom" settings by determining the sender*/
 	NSString * optValue = @"";// The option value such as "3"
 	NSString * changedOptString = @"";
 	NSArray *currentOptsArray;
-		/*First, we get an opt string to process */
-		NSString *currentOptString = [fDisplayX264Options stringValue];
-		/*verify there is an opt string to process */
-		NSRange currentOptRange = [currentOptString rangeOfString:@"="];
-		if (currentOptRange.location != NSNotFound)
+	/*First, we get an opt string to process */
+	NSString *currentOptString = [fDisplayX264Options stringValue];
+	/*verify there is an opt string to process */
+	NSRange currentOptRange = [currentOptString rangeOfString:@"="];
+	if (currentOptRange.location != NSNotFound)
+	{
+		/*Put individual options into an array based on the ":" separator for processing, result is "<opt>=<value>"*/
+		currentOptsArray = [currentOptString componentsSeparatedByString:@":"];
+		/*iterate through the array and get <opts> and <values*/
+		//NSEnumerator * enumerator = [currentOptsArray objectEnumerator];
+		int loopcounter;
+		int currentOptsArrayCount = [currentOptsArray count];
+		for (loopcounter = 0; loopcounter < currentOptsArrayCount; loopcounter++)
 		{
-			/*Put individual options into an array based on the ":" separator for processing, result is "<opt>=<value>"*/
-			currentOptsArray = [currentOptString componentsSeparatedByString:@":"];
-			/*iterate through the array and get <opts> and <values*/
-			//NSEnumerator * enumerator = [currentOptsArray objectEnumerator];
-			int loopcounter;
-			int currentOptsArrayCount = [currentOptsArray count];
-			for (loopcounter = 0; loopcounter < currentOptsArrayCount; loopcounter++)
+			thisOpt = [currentOptsArray objectAtIndex:loopcounter];
+			NSRange splitOptRange = [thisOpt rangeOfString:@"="];
+			if (splitOptRange.location != NSNotFound)
 			{
-				thisOpt = [currentOptsArray objectAtIndex:loopcounter];
-				NSRange splitOptRange = [thisOpt rangeOfString:@"="];
-				if (splitOptRange.location != NSNotFound)
-				{
-					optName = [thisOpt substringToIndex:splitOptRange.location];
-					optValue = [thisOpt substringFromIndex:splitOptRange.location + 1];
-					/* Standardize the names here depending on whats in the string */
-					optName = [self X264AdvancedOptionsStandardizeOptNames:optName];
-                    thisOpt = [NSString stringWithFormat:@"%@=%@",optName,optValue];	
-				}
-				else // No value given so we use a default of "1"
-				{
-					optName = thisOpt;
-					/* Standardize the names here depending on whats in the string */
-					optName = [self X264AdvancedOptionsStandardizeOptNames:optName];
-					thisOpt = [NSString stringWithFormat:@"%@=%d",optName,1];
-                }
+				optName = [thisOpt substringToIndex:splitOptRange.location];
+				optValue = [thisOpt substringFromIndex:splitOptRange.location + 1];
+				/* Standardize the names here depending on whats in the string */
+				optName = [self X264AdvancedOptionsStandardizeOptNames:optName];
+                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,optValue];	
+			}
+			else // No value given so we use a default of "1"
+			{
+				optName = thisOpt;
+				/* Standardize the names here depending on whats in the string */
+				optName = [self X264AdvancedOptionsStandardizeOptNames:optName];
+				thisOpt = [NSString stringWithFormat:@"%@=%d",optName,1];
+            }
+			
+			/* Construct New String for opts here */
+			if ([thisOpt isEqualToString:@""])
+			{
 				
-				/* Construct New String for opts here */
-				if ([thisOpt isEqualToString:@""])
+				changedOptString = [NSString stringWithFormat:@"%@%@",changedOptString,thisOpt];
+			}
+			else
+			{
+				if ([changedOptString isEqualToString:@""])
 				{
-					
-					changedOptString = [NSString stringWithFormat:@"%@%@",changedOptString,thisOpt];
+					changedOptString = [NSString stringWithFormat:@"%@",thisOpt];
 				}
 				else
 				{
-					if ([changedOptString isEqualToString:@""])
-					{
-						changedOptString = [NSString stringWithFormat:@"%@",thisOpt];
-					}
-					else
-					{
-						changedOptString = [NSString stringWithFormat:@"%@:%@",changedOptString,thisOpt];
-					}
+					changedOptString = [NSString stringWithFormat:@"%@:%@",changedOptString,thisOpt];
 				}
-				
-			}	
-		}
-		/* Change the option string to reflect the new standardized option string */
-		[fDisplayX264Options setStringValue:[NSString stringWithFormat:changedOptString]];
-		
+			}
+		}	
+	}
+	/* Change the option string to reflect the new standardized option string */
+	[fDisplayX264Options setStringValue:[NSString stringWithFormat:changedOptString]];
 }
 
 - (NSString *) X264AdvancedOptionsStandardizeOptNames:(NSString *) cleanOptNameString
@@ -2058,200 +2056,207 @@ the user is using "Custom" settings by determining the sender*/
 		
 - (IBAction) X264AdvancedOptionsSetCurrentSettings: (id) sender
 {
-	/* Set widgets depending on the opt string in field */
-	NSString * thisOpt; // The separated option such as "bframes=3"
-	NSString * optName = @""; // The option name such as "bframes"
-	NSString * optValue = @"";// The option value such as "3"
-	NSArray *currentOptsArray;
-		/*First, we get an opt string to process */
-		//NSString *currentOptString = @"bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:no-dct-decimate=1:trellis=2";
-		NSString *currentOptString = [fDisplayX264Options stringValue];
-		/*verify there is an opt string to process */
-		NSRange currentOptRange = [currentOptString rangeOfString:@"="];
-		if (currentOptRange.location != NSNotFound)
-		{
-			/* lets clean the opt string here to standardize any names*/
-			/*Put individual options into an array based on the ":" separator for processing, result is "<opt>=<value>"*/
-			currentOptsArray = [currentOptString componentsSeparatedByString:@":"];
-			/*iterate through the array and get <opts> and <values*/
-			//NSEnumerator * enumerator = [currentOptsArray objectEnumerator];
-			int loopcounter;
-			int currentOptsArrayCount = [currentOptsArray count];
-			/*iterate through the array and get <opts> and <values*/
-			for (loopcounter = 0; loopcounter < currentOptsArrayCount; loopcounter++)
-			{
-				thisOpt = [currentOptsArray objectAtIndex:loopcounter];
-				NSRange splitOptRange = [thisOpt rangeOfString:@"="];
-				if (splitOptRange.location != NSNotFound)
-				{
-					optName = [thisOpt substringToIndex:splitOptRange.location];
-					optValue = [thisOpt substringFromIndex:splitOptRange.location + 1];
-					
-					/*Run through the available widgets for x264 opts and set them, as you add widgets, 
-						they need to be added here. This should be moved to its own method probably*/
-					
-					/*bframes NSPopUpButton*/
-					if ([optName isEqualToString:@"bframes"])
-					{
-						[fX264optBframesPopUp selectItemAtIndex:[optValue intValue]+1];
-					}
-					/*ref NSPopUpButton*/
-					if ([optName isEqualToString:@"ref"])
-					{
-						[fX264optRefPopUp selectItemAtIndex:[optValue intValue]+1];
-					}
-					/*No Fast PSkip NSPopUpButton*/
-					if ([optName isEqualToString:@"no-fast-pskip"])
-					{
-						[fX264optNfpskipPopUp selectItemAtIndex:[optValue intValue]+1];
-					}
-					/*No Dict Decimate NSPopUpButton*/
-					if ([optName isEqualToString:@"no-dct-decimate"])
-					{
-						[fX264optNodctdcmtPopUp selectItemAtIndex:[optValue intValue]+1];
-					}
-					/*Sub Me NSPopUpButton*/
-					if ([optName isEqualToString:@"subme"])
-					{
-						[fX264optSubmePopUp selectItemAtIndex:[optValue intValue]+1];
-					}
-					/*Trellis NSPopUpButton*/
-					if ([optName isEqualToString:@"trellis"])
-					{
-						[fX264optTrellisPopUp selectItemAtIndex:[optValue intValue]+1];
-					}
-                    /*Mixed Refs NSPopUpButton*/
-                    if ([optName isEqualToString:@"mixed-refs"])
-                    {
-                        [fX264optMixedRefsPopUp selectItemAtIndex:[optValue intValue]+1];
-                    }
-                    
-                    
-				}
-			}
-		}
-		
+    /* Set widgets depending on the opt string in field */
+    NSString * thisOpt; // The separated option such as "bframes=3"
+    NSString * optName = @""; // The option name such as "bframes"
+    NSString * optValue = @"";// The option value such as "3"
+    NSArray *currentOptsArray;
+    
+    /*First, we get an opt string to process */
+    //NSString *currentOptString = @"bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:no-dct-decimate=1:trellis=2";
+    NSString *currentOptString = [fDisplayX264Options stringValue];
+    
+    /*verify there is an opt string to process */
+    NSRange currentOptRange = [currentOptString rangeOfString:@"="];
+    if (currentOptRange.location != NSNotFound)
+    {
+        /* lets clean the opt string here to standardize any names*/
+        /*Put individual options into an array based on the ":" separator for processing, result is "<opt>=<value>"*/
+        currentOptsArray = [currentOptString componentsSeparatedByString:@":"];
+        
+        /*iterate through the array and get <opts> and <values*/
+        //NSEnumerator * enumerator = [currentOptsArray objectEnumerator];
+        int loopcounter;
+        int currentOptsArrayCount = [currentOptsArray count];
+        
+        /*iterate through the array and get <opts> and <values*/
+        for (loopcounter = 0; loopcounter < currentOptsArrayCount; loopcounter++)
+        {
+            thisOpt = [currentOptsArray objectAtIndex:loopcounter];
+            NSRange splitOptRange = [thisOpt rangeOfString:@"="];
+            
+            if (splitOptRange.location != NSNotFound)
+            {
+                optName = [thisOpt substringToIndex:splitOptRange.location];
+                optValue = [thisOpt substringFromIndex:splitOptRange.location + 1];
+           
+                /*Run through the available widgets for x264 opts and set them, as you add widgets, 
+                they need to be added here. This should be moved to its own method probably*/
+           
+                /*bframes NSPopUpButton*/
+                if ([optName isEqualToString:@"bframes"])
+                {
+                    [fX264optBframesPopUp selectItemAtIndex:[optValue intValue]+1];
+                }
+                /*ref NSPopUpButton*/
+                if ([optName isEqualToString:@"ref"])
+                {
+                   [fX264optRefPopUp selectItemAtIndex:[optValue intValue]+1];
+                }
+                /*No Fast PSkip NSPopUpButton*/
+                if ([optName isEqualToString:@"no-fast-pskip"])
+                {
+                    [fX264optNfpskipPopUp selectItemAtIndex:[optValue intValue]+1];
+                }
+                /*No Dict Decimate NSPopUpButton*/
+                if ([optName isEqualToString:@"no-dct-decimate"])
+                {
+                    [fX264optNodctdcmtPopUp selectItemAtIndex:[optValue intValue]+1];
+                }
+                /*Sub Me NSPopUpButton*/
+                if ([optName isEqualToString:@"subme"])
+                {
+                    [fX264optSubmePopUp selectItemAtIndex:[optValue intValue]+1];
+                }
+                /*Trellis NSPopUpButton*/
+                if ([optName isEqualToString:@"trellis"])
+                {
+                    [fX264optTrellisPopUp selectItemAtIndex:[optValue intValue]+1];
+                }
+                /*Mixed Refs NSPopUpButton*/
+                if ([optName isEqualToString:@"mixed-refs"])
+                {
+                    [fX264optMixedRefsPopUp selectItemAtIndex:[optValue intValue]+1];
+                }
+            }
+        }
+    }
 }
 
 - (IBAction) X264AdvancedOptionsChanged: (id) sender
 {
-	/*Determine which outlet is being used and set optName to process accordingly */
-	NSString * optNameToChange = @""; // The option name such as "bframes"
-	if (sender == fX264optBframesPopUp)
-	{
-		optNameToChange = @"bframes";
-	}
-	if (sender == fX264optRefPopUp)
-	{
-		optNameToChange = @"ref";
-	}
-	if (sender == fX264optNfpskipPopUp)
-	{
-		optNameToChange = @"no-fast-pskip";
-	}
-	if (sender == fX264optNodctdcmtPopUp)
-	{
-		optNameToChange = @"no-dct-decimate";
-	}
-	if (sender == fX264optSubmePopUp)
-	{
-		optNameToChange = @"subme";
-	}
-	if (sender == fX264optTrellisPopUp)
-	{
-		optNameToChange = @"trellis";
-	}
+    /*Determine which outlet is being used and set optName to process accordingly */
+    NSString * optNameToChange = @""; // The option name such as "bframes"
+
+    if (sender == fX264optBframesPopUp)
+    {
+        optNameToChange = @"bframes";
+    }
+    if (sender == fX264optRefPopUp)
+    {
+        optNameToChange = @"ref";
+    }
+    if (sender == fX264optNfpskipPopUp)
+    {
+        optNameToChange = @"no-fast-pskip";
+    }
+    if (sender == fX264optNodctdcmtPopUp)
+    {
+        optNameToChange = @"no-dct-decimate";
+    }
+    if (sender == fX264optSubmePopUp)
+    {
+        optNameToChange = @"subme";
+    }
+    if (sender == fX264optTrellisPopUp)
+    {
+        optNameToChange = @"trellis";
+    }
     if (sender == fX264optMixedRefsPopUp)
     {
         optNameToChange = @"mixed-refs";
     }
     
-	/* Set widgets depending on the opt string in field */
-	NSString * thisOpt; // The separated option such as "bframes=3"
-	NSString * optName = @""; // The option name such as "bframes"
-	NSString * optValue = @"";// The option value such as "3"
-		NSArray *currentOptsArray;
-		/*First, we get an opt string to process */
-		//NSString *currentOptString = @"bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:no-dct-decimate=1:trellis=2";
-		NSString *currentOptString = [fDisplayX264Options stringValue];
-		/*verify there is an occurrence of the opt specified by the sender to change */
-		/*take care of any multi-value opt names here. This is extremely kludgy, but test for functionality
-		and worry about pretty later */
-		
-		NSRange currentOptRange = [currentOptString rangeOfString:optNameToChange];
-		if (currentOptRange.location != NSNotFound)
-		{
-			/* Create new empty opt string*/
-			NSString *changedOptString = @"";
-			/*Put individual options into an array based on the ":" separator for processing, result is "<opt>=<value>"*/
-			currentOptsArray = [currentOptString componentsSeparatedByString:@":"];
-			/*iterate through the array and get <opts> and <values*/
-			int loopcounter;
-			int currentOptsArrayCount = [currentOptsArray count];
-			for (loopcounter = 0; loopcounter < currentOptsArrayCount; loopcounter++)
-			{
-				thisOpt = [currentOptsArray objectAtIndex:loopcounter];
-				NSRange splitOptRange = [thisOpt rangeOfString:@"="];
-				if (splitOptRange.location != NSNotFound)
-				{
-					optName = [thisOpt substringToIndex:splitOptRange.location];
-					optValue = [thisOpt substringFromIndex:splitOptRange.location + 1];
-					
-					/*Run through the available widgets for x264 opts and set them, as you add widgets, 
-						they need to be added here. This should be moved to its own method probably*/
-					
-					/*If the optNameToChange is found, appropriately change the value or delete it if
-						"Unspecified" is set.*/
-					if ([optName isEqualToString:optNameToChange])
-					{
-						if ([sender indexOfSelectedItem] == 0) // means that "unspecified" is chosen, lets then remove it from the string
-						{
-							thisOpt = @"";
-						}
-						else // we have a valid value to change, so change it
-						{
-							thisOpt = [NSString stringWithFormat:@"%@=%d",optName,[sender indexOfSelectedItem]-1];
-							
-						}
-					}
-				
-				}
-				/* Construct New String for opts here */
-				if ([thisOpt isEqualToString:@""])
-				{
-					changedOptString = [NSString stringWithFormat:@"%@%@",changedOptString,thisOpt];
-				}
-				else
-				{
-					if ([changedOptString isEqualToString:@""])
-					{
-						changedOptString = [NSString stringWithFormat:@"%@",thisOpt];
-					}
-					else
-					{
-						changedOptString = [NSString stringWithFormat:@"%@:%@",changedOptString,thisOpt];
-					}
-				}
-					
-			}
-			/* Change the option string to reflect the new mod settings */
-		[fDisplayX264Options setStringValue:[NSString stringWithFormat:changedOptString]];	
-		}
-		else // if none exists, add it to the string
-		{
-			if ([[fDisplayX264Options stringValue] isEqualToString: @""])
-			{
-			[fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-				[NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]-1]]];
-			}
-			else
-			{
-			[fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]], 
-				[NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]-1]]];
-			}
-		}
-		/* We now need to reset the opt widgets since we changed some stuff */		
-		[self X264AdvancedOptionsSet:NULL];		
+    /* Set widgets depending on the opt string in field */
+    NSString * thisOpt; // The separated option such as "bframes=3"
+    NSString * optName = @""; // The option name such as "bframes"
+    NSString * optValue = @"";// The option value such as "3"
+    NSArray *currentOptsArray;
+
+    /*First, we get an opt string to process */
+    //EXAMPLE: NSString *currentOptString = @"bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:no-dct-decimate=1:trellis=2";
+    NSString *currentOptString = [fDisplayX264Options stringValue];
+
+    /*verify there is an occurrence of the opt specified by the sender to change */
+    /*take care of any multi-value opt names here. This is extremely kludgy, but test for functionality
+    and worry about pretty later */    
+    NSRange currentOptRange = [currentOptString rangeOfString:optNameToChange];
+    if (currentOptRange.location != NSNotFound)
+    {
+        /* Create new empty opt string*/
+        NSString *changedOptString = @"";
+
+        /*Put individual options into an array based on the ":" separator for processing, result is "<opt>=<value>"*/
+        currentOptsArray = [currentOptString componentsSeparatedByString:@":"];
+
+        /*iterate through the array and get <opts> and <values*/
+        int loopcounter;
+        int currentOptsArrayCount = [currentOptsArray count];
+        for (loopcounter = 0; loopcounter < currentOptsArrayCount; loopcounter++)
+        {
+            thisOpt = [currentOptsArray objectAtIndex:loopcounter];
+            NSRange splitOptRange = [thisOpt rangeOfString:@"="];
+
+            if (splitOptRange.location != NSNotFound)
+            {
+                optName = [thisOpt substringToIndex:splitOptRange.location];
+                optValue = [thisOpt substringFromIndex:splitOptRange.location + 1];
+                
+                /*Run through the available widgets for x264 opts and set them, as you add widgets, 
+                they need to be added here. This should be moved to its own method probably*/
+                
+                /*If the optNameToChange is found, appropriately change the value or delete it if
+                "Unspecified" is set.*/
+                if ([optName isEqualToString:optNameToChange])
+                {
+                    if ([sender indexOfSelectedItem] == 0) // means that "unspecified" is chosen, lets then remove it from the string
+                    {
+                        thisOpt = @"";
+                    }
+                    else // we have a valid value to change, so change it
+                    {
+                        thisOpt = [NSString stringWithFormat:@"%@=%d",optName,[sender indexOfSelectedItem]-1];
+                    }
+                }
+            }
+
+            /* Construct New String for opts here */
+            if ([thisOpt isEqualToString:@""])
+            {
+                changedOptString = [NSString stringWithFormat:@"%@%@",changedOptString,thisOpt];
+            }
+            else
+            {
+                if ([changedOptString isEqualToString:@""])
+                {
+                    changedOptString = [NSString stringWithFormat:@"%@",thisOpt];
+                }
+                else
+                {
+                    changedOptString = [NSString stringWithFormat:@"%@:%@",changedOptString,thisOpt];
+                }
+            }
+        }
+
+        /* Change the option string to reflect the new mod settings */
+        [fDisplayX264Options setStringValue:[NSString stringWithFormat:changedOptString]];	
+    }
+    else // if none exists, add it to the string
+    {
+        if ([[fDisplayX264Options stringValue] isEqualToString: @""])
+        {
+            [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]-1]]];
+        }
+        else
+        {
+            [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]], 
+                [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]-1]]];
+        }
+    }
+
+    /* We now need to reset the opt widgets since we changed some stuff */		
+    [self X264AdvancedOptionsSet:NULL];		
 }
 
 
