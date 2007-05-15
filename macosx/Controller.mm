@@ -1884,176 +1884,182 @@ the user is using "Custom" settings by determining the sender*/
 
 - (IBAction) X264AdvancedOptionsSet: (id) sender
 {
-	/*Set opt widget values here*/
-	
-	/*B-Frames fX264optBframesPopUp*/
-	int i;
-	[fX264optBframesPopUp removeAllItems];
-	[fX264optBframesPopUp addItemWithTitle:@"Default (0)"];
-	for (i=0; i<17;i++)
-	{
-		[fX264optBframesPopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
+    /*Set opt widget values here*/
+    
+    /*B-Frames fX264optBframesPopUp*/
+    int i;
+    [fX264optBframesPopUp removeAllItems];
+    [fX264optBframesPopUp addItemWithTitle:@"Default (0)"];
+    for (i=0; i<17;i++)
+    {
+        [fX264optBframesPopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
     }
-	
-	/*Reference Frames fX264optRefPopUp*/
-	[fX264optRefPopUp removeAllItems];
-	[fX264optRefPopUp addItemWithTitle:@"Default (1)"];
-	for (i=0; i<17;i++)
-	{
-		[fX264optRefPopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
+    
+    /*Reference Frames fX264optRefPopUp*/
+    [fX264optRefPopUp removeAllItems];
+    [fX264optRefPopUp addItemWithTitle:@"Default (1)"];
+    for (i=0; i<17;i++)
+    {
+        [fX264optRefPopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
     }
-	
-	/*No Fast P-Skip fX264optNfpskipPopUp BOOLEAN*/
-	[fX264optNfpskipPopUp removeAllItems];
-	[fX264optNfpskipPopUp addItemWithTitle:@"Default (No)"];
-	for (i=0; i<2;i++)
-	{
-		if (i==0)
-		{
-			[fX264optNfpskipPopUp addItemWithTitle:[NSString stringWithFormat:@"No"]];
-		}
-		else
-		{
-			[fX264optNfpskipPopUp addItemWithTitle:[NSString stringWithFormat:@"Yes"]];
-		}
-	}
-	
-	/*No Dict Decimate fX264optNodctdcmtPopUp BOOLEAN*/
-	[fX264optNodctdcmtPopUp removeAllItems];
-	[fX264optNodctdcmtPopUp addItemWithTitle:@"Default (No)"];
-	for (i=0; i<2;i++)
-	{
-		if (i==0)
-		{
-			[fX264optNodctdcmtPopUp addItemWithTitle:[NSString stringWithFormat:@"No"]];
-		}
-		else
-		{
-			[fX264optNodctdcmtPopUp addItemWithTitle:[NSString stringWithFormat:@"Yes"]];
-		}
-	}
-	
-	/*Sub Me fX264optSubmePopUp*/
-	[fX264optSubmePopUp removeAllItems];
-	[fX264optSubmePopUp addItemWithTitle:@"Default (4)"];
-	for (i=0; i<8;i++)
-	{
-		[fX264optSubmePopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
+    
+    /*No Fast P-Skip fX264optNfpskipPopUp BOOLEAN*/
+    [fX264optNfpskipPopUp removeAllItems];
+    [fX264optNfpskipPopUp addItemWithTitle:@"Default (No)"];
+    for (i=0; i<2;i++)
+    {
+        if (i==0)
+        {
+            [fX264optNfpskipPopUp addItemWithTitle:[NSString stringWithFormat:@"No"]];
+        }
+        else
+        {
+            [fX264optNfpskipPopUp addItemWithTitle:[NSString stringWithFormat:@"Yes"]];
+        }
     }
-	
-	/*Trellis fX264optTrellisPopUp*/
-	[fX264optTrellisPopUp removeAllItems];
-	[fX264optTrellisPopUp addItemWithTitle:@"Default (0)"];
-	for (i=0; i<3;i++)
-	{
-	[fX264optTrellisPopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
-    }	
+    
+    /*No Dict Decimate fX264optNodctdcmtPopUp BOOLEAN*/
+    [fX264optNodctdcmtPopUp removeAllItems];
+    [fX264optNodctdcmtPopUp addItemWithTitle:@"Default (No)"];
+    for (i=0; i<2;i++)
+    {
+        if (i==0)
+        {
+            [fX264optNodctdcmtPopUp addItemWithTitle:[NSString stringWithFormat:@"No"]];
+        }
+        else
+        {
+            [fX264optNodctdcmtPopUp addItemWithTitle:[NSString stringWithFormat:@"Yes"]];
+        }
+    }
+    
+    /*Sub Me fX264optSubmePopUp*/
+    [fX264optSubmePopUp removeAllItems];
+    [fX264optSubmePopUp addItemWithTitle:@"Default (4)"];
+    for (i=0; i<8;i++)
+    {
+        [fX264optSubmePopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
+    }
+    
+    /*Trellis fX264optTrellisPopUp*/
+    [fX264optTrellisPopUp removeAllItems];
+    [fX264optTrellisPopUp addItemWithTitle:@"Default (0)"];
+    for (i=0; i<3;i++)
+    {
+        [fX264optTrellisPopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
+    }
     
     /*Mixed-references fX264optMixedRefsPopUp BOOLEAN*/
     [fX264optMixedRefsPopUp removeAllItems];
-       [fX264optMixedRefsPopUp addItemWithTitle:@"Default (No)"];
-       for (i=0; i<2;i++)
-       {
-               if (i==0)
-               {
-                       [fX264optMixedRefsPopUp addItemWithTitle:[NSString stringWithFormat:@"No"]];
-               }
-               else
-               {
-                       [fX264optMixedRefsPopUp addItemWithTitle:[NSString stringWithFormat:@"Yes"]];
-               }
-       }
+    [fX264optMixedRefsPopUp addItemWithTitle:@"Default (No)"];
+    for (i=0; i<2;i++)
+    {
+        if (i==0)
+        {
+            [fX264optMixedRefsPopUp addItemWithTitle:[NSString stringWithFormat:@"No"]];
+        }
+        else
+        {
+            [fX264optMixedRefsPopUp addItemWithTitle:[NSString stringWithFormat:@"Yes"]];
+        }
+    }
     
-	/* Standardize the option string */
-	[self X264AdvancedOptionsStandardizeOptString: NULL];
-	/* Set Current GUI Settings based on newly standardized string */
-	[self X264AdvancedOptionsSetCurrentSettings: NULL];
-		
+    /* Standardize the option string */
+    [self X264AdvancedOptionsStandardizeOptString: NULL];
+    /* Set Current GUI Settings based on newly standardized string */
+    [self X264AdvancedOptionsSetCurrentSettings: NULL];
 }
 
 - (IBAction) X264AdvancedOptionsStandardizeOptString: (id) sender
 {
-	/* Set widgets depending on the opt string in field */
-	NSString * thisOpt; // The separated option such as "bframes=3"
-	NSString * optName = @""; // The option name such as "bframes"
-	NSString * optValue = @"";// The option value such as "3"
-	NSString * changedOptString = @"";
-	NSArray *currentOptsArray;
-	/*First, we get an opt string to process */
-	NSString *currentOptString = [fDisplayX264Options stringValue];
-	/*verify there is an opt string to process */
-	NSRange currentOptRange = [currentOptString rangeOfString:@"="];
-	if (currentOptRange.location != NSNotFound)
-	{
-		/*Put individual options into an array based on the ":" separator for processing, result is "<opt>=<value>"*/
-		currentOptsArray = [currentOptString componentsSeparatedByString:@":"];
-		/*iterate through the array and get <opts> and <values*/
-		//NSEnumerator * enumerator = [currentOptsArray objectEnumerator];
-		int loopcounter;
-		int currentOptsArrayCount = [currentOptsArray count];
-		for (loopcounter = 0; loopcounter < currentOptsArrayCount; loopcounter++)
-		{
-			thisOpt = [currentOptsArray objectAtIndex:loopcounter];
-			NSRange splitOptRange = [thisOpt rangeOfString:@"="];
-			if (splitOptRange.location != NSNotFound)
-			{
-				optName = [thisOpt substringToIndex:splitOptRange.location];
-				optValue = [thisOpt substringFromIndex:splitOptRange.location + 1];
-				/* Standardize the names here depending on whats in the string */
-				optName = [self X264AdvancedOptionsStandardizeOptNames:optName];
+    /* Set widgets depending on the opt string in field */
+    NSString * thisOpt; // The separated option such as "bframes=3"
+    NSString * optName = @""; // The option name such as "bframes"
+    NSString * optValue = @"";// The option value such as "3"
+    NSString * changedOptString = @"";
+    NSArray *currentOptsArray;
+
+    /*First, we get an opt string to process */
+    NSString *currentOptString = [fDisplayX264Options stringValue];
+
+    /*verify there is an opt string to process */
+    NSRange currentOptRange = [currentOptString rangeOfString:@"="];
+    if (currentOptRange.location != NSNotFound)
+    {
+        /*Put individual options into an array based on the ":" separator for processing, result is "<opt>=<value>"*/
+        currentOptsArray = [currentOptString componentsSeparatedByString:@":"];
+
+        /*iterate through the array and get <opts> and <values*/
+        //NSEnumerator * enumerator = [currentOptsArray objectEnumerator];
+        int loopcounter;
+        int currentOptsArrayCount = [currentOptsArray count];
+        for (loopcounter = 0; loopcounter < currentOptsArrayCount; loopcounter++)
+        {
+            thisOpt = [currentOptsArray objectAtIndex:loopcounter];
+            
+            NSRange splitOptRange = [thisOpt rangeOfString:@"="];
+            if (splitOptRange.location != NSNotFound)
+            {
+                optName = [thisOpt substringToIndex:splitOptRange.location];
+                optValue = [thisOpt substringFromIndex:splitOptRange.location + 1];
+                
+                /* Standardize the names here depending on whats in the string */
+                optName = [self X264AdvancedOptionsStandardizeOptNames:optName];
                 thisOpt = [NSString stringWithFormat:@"%@=%@",optName,optValue];	
-			}
-			else // No value given so we use a default of "1"
-			{
-				optName = thisOpt;
-				/* Standardize the names here depending on whats in the string */
-				optName = [self X264AdvancedOptionsStandardizeOptNames:optName];
-				thisOpt = [NSString stringWithFormat:@"%@=%d",optName,1];
             }
-			
-			/* Construct New String for opts here */
-			if ([thisOpt isEqualToString:@""])
-			{
-				
-				changedOptString = [NSString stringWithFormat:@"%@%@",changedOptString,thisOpt];
-			}
-			else
-			{
-				if ([changedOptString isEqualToString:@""])
-				{
-					changedOptString = [NSString stringWithFormat:@"%@",thisOpt];
-				}
-				else
-				{
-					changedOptString = [NSString stringWithFormat:@"%@:%@",changedOptString,thisOpt];
-				}
-			}
-		}	
-	}
-	/* Change the option string to reflect the new standardized option string */
-	[fDisplayX264Options setStringValue:[NSString stringWithFormat:changedOptString]];
+            else // No value given so we use a default of "1"
+            {
+                optName = thisOpt;
+                /* Standardize the names here depending on whats in the string */
+                optName = [self X264AdvancedOptionsStandardizeOptNames:optName];
+                thisOpt = [NSString stringWithFormat:@"%@=%d",optName,1];
+            }
+            
+            /* Construct New String for opts here */
+            if ([thisOpt isEqualToString:@""])
+            {
+                changedOptString = [NSString stringWithFormat:@"%@%@",changedOptString,thisOpt];
+            }
+            else
+            {
+                if ([changedOptString isEqualToString:@""])
+                {
+                    changedOptString = [NSString stringWithFormat:@"%@",thisOpt];
+                }
+                else
+                {
+                    changedOptString = [NSString stringWithFormat:@"%@:%@",changedOptString,thisOpt];
+                }
+            }
+        }
+    }
+    
+    /* Change the option string to reflect the new standardized option string */
+    [fDisplayX264Options setStringValue:[NSString stringWithFormat:changedOptString]];
 }
 
 - (NSString *) X264AdvancedOptionsStandardizeOptNames:(NSString *) cleanOptNameString
 {
-	if ([cleanOptNameString isEqualToString:@"ref"] || [cleanOptNameString isEqualToString:@"frameref"])
-	{
-		cleanOptNameString = @"ref";
-	}
-	/*No Fast PSkip nofast_pskip*/
-	if ([cleanOptNameString isEqualToString:@"no-fast-pskip"] || [cleanOptNameString isEqualToString:@"no_fast_pskip"] || [cleanOptNameString isEqualToString:@"nofast_pskip"])
-	{
-		cleanOptNameString = @"no-fast-pskip";
-	}
-	/*No Dict Decimate*/
-	if ([cleanOptNameString isEqualToString:@"no-dct-decimate"] || [cleanOptNameString isEqualToString:@"no_dct_decimate"] || [cleanOptNameString isEqualToString:@"nodct_decimate"])
-	{
-		cleanOptNameString = @"no-dct-decimate";
-	}
-	return cleanOptNameString;	
+    if ([cleanOptNameString isEqualToString:@"ref"] || [cleanOptNameString isEqualToString:@"frameref"])
+    {
+        cleanOptNameString = @"ref";
+    }
+    
+    /*No Fast PSkip nofast_pskip*/
+    if ([cleanOptNameString isEqualToString:@"no-fast-pskip"] || [cleanOptNameString isEqualToString:@"no_fast_pskip"] || [cleanOptNameString isEqualToString:@"nofast_pskip"])
+    {
+        cleanOptNameString = @"no-fast-pskip";
+    }
+    
+    /*No Dict Decimate*/
+    if ([cleanOptNameString isEqualToString:@"no-dct-decimate"] || [cleanOptNameString isEqualToString:@"no_dct_decimate"] || [cleanOptNameString isEqualToString:@"nodct_decimate"])
+    {
+        cleanOptNameString = @"no-dct-decimate";
+    }
+    
+    return cleanOptNameString;	
 }
 
-		
 - (IBAction) X264AdvancedOptionsSetCurrentSettings: (id) sender
 {
     /* Set widgets depending on the opt string in field */
