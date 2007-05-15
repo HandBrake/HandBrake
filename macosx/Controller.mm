@@ -2066,6 +2066,12 @@ the user is using "Custom" settings by determining the sender*/
         cleanOptNameString = @"no-dct-decimate";
     }
     
+    /*Subme*/
+    if ([cleanOptNameString isEqualToString:@"subme"])
+    {
+        cleanOptNameString = @"subq";
+    }
+    
     return cleanOptNameString;	
 }
 
@@ -2129,7 +2135,7 @@ the user is using "Custom" settings by determining the sender*/
                     [fX264optNodctdcmtPopUp selectItemAtIndex:[optValue intValue]+1];
                 }
                 /*Sub Me NSPopUpButton*/
-                if ([optName isEqualToString:@"subme"])
+                if ([optName isEqualToString:@"subq"])
                 {
                     [fX264optSubmePopUp selectItemAtIndex:[optValue intValue]+1];
                 }
@@ -2183,7 +2189,7 @@ the user is using "Custom" settings by determining the sender*/
     }
     if (sender == fX264optSubmePopUp)
     {
-        optNameToChange = @"subme";
+        optNameToChange = @"subq";
     }
     if (sender == fX264optTrellisPopUp)
     {
