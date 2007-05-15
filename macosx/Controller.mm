@@ -2210,9 +2210,17 @@ the user is using "Custom" settings by determining the sender*/
 
     /*verify there is an occurrence of the opt specified by the sender to change */
     /*take care of any multi-value opt names here. This is extremely kludgy, but test for functionality
-    and worry about pretty later */    
-    NSRange currentOptRange = [currentOptString rangeOfString:optNameToChange];
-    if (currentOptRange.location != NSNotFound)
+    and worry about pretty later */
+	
+	/*First, we create a pattern to check for ":"optNameToChange"=" to modify the option if the name falls after
+	the first character of the opt string (hence the ":") */
+	NSString *checkOptNameToChange = [NSString stringWithFormat:@":%@=",optNameToChange];
+    NSRange currentOptRange = [currentOptString rangeOfString:checkOptNameToChange];
+	/*Then we create a pattern to check for "<beginning of line>"optNameToChange"=" to modify the option to
+	see if the name falls at the beginning of the line, where we would not have the ":" as a pattern to test against*/
+	NSString *checkOptNameToChangeBeginning = [NSString stringWithFormat:@"%@=",optNameToChange];
+    NSRange currentOptRangeBeginning = [currentOptString rangeOfString:checkOptNameToChangeBeginning];
+    if (currentOptRange.location != NSNotFound || currentOptRangeBeginning.location == 0)
     {
         /* Create new empty opt string*/
         NSString *changedOptString = @"";
