@@ -433,10 +433,10 @@ return registrationDictionary;
 					break;
 				case 1: 
                      ext = "avi";
+                     break;
 				case 2:
-				   break;
                      ext = "ogm";
-			       break;
+			         break;
 				   }
 				
 				
