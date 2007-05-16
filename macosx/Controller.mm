@@ -1332,7 +1332,7 @@ return registrationDictionary;
 		[fVidEncoderPopUp addItemWithTitle: @"x264 (h.264 Main)"];
 		[fVidEncoderPopUp addItemWithTitle: @"x264 (h.264 iPod)"];
         [fX264optView setHidden: NO];
-		[fX264optViewTitleLabel setStringValue: @"x264 Advanced Options"];
+		[fX264optViewTitleLabel setStringValue: @""];
 		
     }
     else if( ( FormatSettings[format][codecs] & HB_VCODEC_FFMPEG ) )

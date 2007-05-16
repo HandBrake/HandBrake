@@ -22,7 +22,7 @@
 		<integer>21</integer>
 	</array>
 	<key>IBSystem Version</key>
-	<string>8L127</string>
+	<string>8P2137</string>
 	<key>IBUserGuides</key>
 	<dict>
 		<key>21</key>
@@ -30,6 +30,7 @@
 			<key>guideLocations</key>
 			<array>
 				<string>Horizontal:576.000000</string>
+				<string>Horizontal:319.000000</string>
 			</array>
 			<key>guidesLocked</key>
 			<false/>
