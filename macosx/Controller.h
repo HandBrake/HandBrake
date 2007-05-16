@@ -158,6 +158,12 @@
     IBOutlet NSPopUpButton       * fX264optMotionEstPopUp;
     IBOutlet NSTextField         * fX264optMERangeLabel;
     IBOutlet NSPopUpButton       * fX264optMERangePopUp;
+    IBOutlet NSTextField         * fX264optWeightBLabel;
+    IBOutlet NSPopUpButton       * fX264optWeightBPopUp;
+    IBOutlet NSTextField         * fX264optBRDOLabel;
+    IBOutlet NSPopUpButton       * fX264optBRDOPopUp;
+    IBOutlet NSTextField         * fX264optBPyramidLabel;
+    IBOutlet NSPopUpButton       * fX264optBPyramidPopUp;
     
 	/* User Preset variables here fPresetNewPicSettingsApply*/
 	

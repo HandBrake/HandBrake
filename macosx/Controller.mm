@@ -649,7 +649,9 @@ return registrationDictionary;
 		fX264optBframesPopUp,fX264optRefLabel,fX264optRefPopUp,fX264optNfpskipLabel,fX264optNfpskipPopUp,
 		fX264optNodctdcmtLabel,fX264optNodctdcmtPopUp,fX264optSubmeLabel,fX264optSubmePopUp,
 		fX264optTrellisLabel,fX264optTrellisPopUp,fX264optMixedRefsLabel,fX264optMixedRefsPopUp,
-		fX264optMotionEstLabel,fX264optMotionEstPopUp,fX264optMERangeLabel,fX264optMERangePopUp};
+		fX264optMotionEstLabel,fX264optMotionEstPopUp,fX264optMERangeLabel,fX264optMERangePopUp,
+		fX264optWeightBLabel,fX264optWeightBPopUp,fX264optBRDOLabel,fX264optBRDOPopUp,
+		fX264optBPyramidLabel,fX264optBPyramidPopUp};
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -1981,6 +1983,50 @@ the user is using "Custom" settings by determining the sender*/
         [fX264optMERangePopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
     }
     
+    /*Weighted B-Frame Prediction fX264optWeightBPopUp BOOLEAN*/
+    [fX264optWeightBPopUp removeAllItems];
+    [fX264optWeightBPopUp addItemWithTitle:@"Default (No)"];
+    for (i=0; i<2;i++)
+    {
+        if (i==0)
+        {
+            [fX264optWeightBPopUp addItemWithTitle:[NSString stringWithFormat:@"No"]];
+        }
+        else
+        {
+            [fX264optWeightBPopUp addItemWithTitle:[NSString stringWithFormat:@"Yes"]];
+        }
+    }
+    
+    /*B-Frame Rate Distortion Optimization fX264optBRDOPopUp BOOLEAN*/
+    [fX264optBRDOPopUp removeAllItems];
+    [fX264optBRDOPopUp addItemWithTitle:@"Default (No)"];
+    for (i=0; i<2;i++)
+    {
+        if (i==0)
+        {
+            [fX264optBRDOPopUp addItemWithTitle:[NSString stringWithFormat:@"No"]];
+        }
+        else
+        {
+            [fX264optBRDOPopUp addItemWithTitle:[NSString stringWithFormat:@"Yes"]];
+        }
+    }
+    
+    /*B-frame Pyramids fX264optBPyramidPopUp BOOLEAN*/
+    [fX264optBPyramidPopUp removeAllItems];
+    [fX264optBPyramidPopUp addItemWithTitle:@"Default (No)"];
+    for (i=0; i<2;i++)
+    {
+        if (i==0)
+        {
+            [fX264optBPyramidPopUp addItemWithTitle:[NSString stringWithFormat:@"No"]];
+        }
+        else
+        {
+            [fX264optBPyramidPopUp addItemWithTitle:[NSString stringWithFormat:@"Yes"]];
+        }
+    }
     
     /* Standardize the option string */
     [self X264AdvancedOptionsStandardizeOptString: NULL];
@@ -2085,6 +2131,24 @@ the user is using "Custom" settings by determining the sender*/
     if ([cleanOptNameString isEqualToString:@"me-range"] || [cleanOptNameString isEqualToString:@"me_range"])
         cleanOptNameString = @"merange";
     
+    /*WeightB*/
+    if ([cleanOptNameString isEqualToString:@"weight-b"] || [cleanOptNameString isEqualToString:@"weight_b"])
+    {
+        cleanOptNameString = @"weightb";
+    }
+    
+    /*BRDO*/
+    if ([cleanOptNameString isEqualToString:@"b-rdo"] || [cleanOptNameString isEqualToString:@"b_rdo"])
+    {
+        cleanOptNameString = @"brdo";
+    }
+    
+    /*B Pyramid*/
+    if ([cleanOptNameString isEqualToString:@"b_pyramid"])
+    {
+        cleanOptNameString = @"b-pyramid";
+    }
+    
     return cleanOptNameString;	
 }
 
@@ -2179,6 +2243,22 @@ the user is using "Custom" settings by determining the sender*/
                 {
                     [fX264optMERangePopUp selectItemAtIndex:[optValue intValue]-3];
                 }
+                /*Weighted B-Frames NSPopUpButton*/
+                if ([optName isEqualToString:@"weightb"])
+                {
+                    [fX264optWeightBPopUp selectItemAtIndex:[optValue intValue]+1];
+                }
+                /*BRDO NSPopUpButton*/
+                if ([optName isEqualToString:@"brdo"])
+                {
+                    [fX264optBRDOPopUp selectItemAtIndex:[optValue intValue]+1];
+                }
+                /*B Pyramid NSPopUpButton*/
+                if ([optName isEqualToString:@"b-pyramid"])
+                {
+                    [fX264optBPyramidPopUp selectItemAtIndex:[optValue intValue]+1];
+                }
+                
                                                 
             }
         }
@@ -2225,6 +2305,18 @@ the user is using "Custom" settings by determining the sender*/
     if (sender == fX264optMERangePopUp)
     {
         optNameToChange = @"merange";
+    }
+    if (sender == fX264optWeightBPopUp)
+    {
+        optNameToChange = @"weightb";
+    }
+    if (sender == fX264optBRDOPopUp)
+    {
+        optNameToChange = @"brdo";
+    }
+    if (sender == fX264optBPyramidPopUp)
+    {
+        optNameToChange = @"b-pyramid";
     }
     
     /* Set widgets depending on the opt string in field */
