@@ -2721,7 +2721,7 @@ the user is using "Custom" settings by determining the sender*/
 	/* Video encoder */
 	[preset setObject:@"x264 (h.264 iPod)" forKey:@"VideoEncoder"];
 	/* x264 Option String */
-	[preset setObject:@"frameref=1:bframes=0:nofast_pskip:subq=6:partitions=p8x8,p8x4,p4x8,i4x4:qcomp=0:me=umh:nodct_decimate" forKey:@"x264Option"];
+	[preset setObject:@"frameref=1:bframes=0:nofast_pskip:subq=6:partitions=p8x8,p8x4,p4x8,i4x4:qcomp=0:me=umh" forKey:@"x264Option"];
 	/* Video quality */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
 	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
@@ -2786,7 +2786,7 @@ the user is using "Custom" settings by determining the sender*/
 	/* Video encoder */
 	[preset setObject:@"x264 (h.264 Main)" forKey:@"VideoEncoder"];
 	/* x264 Option String (We can use this to tweak the appleTV output)*/
-	[preset setObject:@"bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:no-dct-decimate=1:trellis=2" forKey:@"x264Option"];
+	[preset setObject:@"bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=2" forKey:@"x264Option"];
 	/* Video quality */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
 	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
