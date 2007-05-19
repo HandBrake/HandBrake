@@ -651,7 +651,8 @@ return registrationDictionary;
 		fX264optTrellisLabel,fX264optTrellisPopUp,fX264optMixedRefsLabel,fX264optMixedRefsPopUp,
 		fX264optMotionEstLabel,fX264optMotionEstPopUp,fX264optMERangeLabel,fX264optMERangePopUp,
 		fX264optWeightBLabel,fX264optWeightBPopUp,fX264optBRDOLabel,fX264optBRDOPopUp,
-		fX264optBPyramidLabel,fX264optBPyramidPopUp};
+		fX264optBPyramidLabel,fX264optBPyramidPopUp,fX264optBiMELabel,fX264optBiMEPopUp,
+		fX264optDirectPredLabel,fX264optDirectPredPopUp};
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -2028,6 +2029,29 @@ the user is using "Custom" settings by determining the sender*/
         }
     }
     
+    /*Bidirectional Motion Estimation Refinement fX264optBiMEPopUp BOOLEAN*/
+    [fX264optBiMEPopUp removeAllItems];
+    [fX264optBiMEPopUp addItemWithTitle:@"Default (No)"];
+    for (i=0; i<2;i++)
+    {
+        if (i==0)
+        {
+            [fX264optBiMEPopUp addItemWithTitle:[NSString stringWithFormat:@"No"]];
+        }
+        else
+        {
+            [fX264optBiMEPopUp addItemWithTitle:[NSString stringWithFormat:@"Yes"]];
+        }
+    }
+    
+    /*Direct B-Frame Prediction Mode fX264optDirectPredPopUp*/
+    [fX264optDirectPredPopUp removeAllItems];
+    [fX264optDirectPredPopUp addItemWithTitle:@"Default (Spatial)"];
+    [fX264optDirectPredPopUp addItemWithTitle:@"None"];
+    [fX264optDirectPredPopUp addItemWithTitle:@"Spatial"];
+    [fX264optDirectPredPopUp addItemWithTitle:@"Temporal"];
+    [fX264optDirectPredPopUp addItemWithTitle:@"Automatic"];
+    
     /* Standardize the option string */
     [self X264AdvancedOptionsStandardizeOptString: NULL];
     /* Set Current GUI Settings based on newly standardized string */
@@ -2149,6 +2173,12 @@ the user is using "Custom" settings by determining the sender*/
         cleanOptNameString = @"b-pyramid";
     }
     
+    /*Direct Prediction*/
+    if ([cleanOptNameString isEqualToString:@"direct-pred"] || [cleanOptNameString isEqualToString:@"direct_pred"])
+    {
+        cleanOptNameString = @"direct";
+    }
+    
     return cleanOptNameString;	
 }
 
@@ -2258,7 +2288,23 @@ the user is using "Custom" settings by determining the sender*/
                 {
                     [fX264optBPyramidPopUp selectItemAtIndex:[optValue intValue]+1];
                 }
-                
+                /*Bidirectional Motion Estimation Refinement NSPopUpButton*/
+                if ([optName isEqualToString:@"bime"])
+                {
+                    [fX264optBiMEPopUp selectItemAtIndex:[optValue intValue]+1];
+                }
+                /*Direct B-frame Prediction NSPopUpButton*/
+                if ([optName isEqualToString:@"direct"])
+                {
+                    if ([optValue isEqualToString:@"none"])
+                        [fX264optDirectPredPopUp selectItemAtIndex:1];
+                    else if ([optValue isEqualToString:@"spatial"])
+                        [fX264optDirectPredPopUp selectItemAtIndex:2];
+                    else if ([optValue isEqualToString:@"temporal"])
+                        [fX264optDirectPredPopUp selectItemAtIndex:3];
+                    else if ([optValue isEqualToString:@"auto"])
+                        [fX264optDirectPredPopUp selectItemAtIndex:4];                        
+                }
                                                 
             }
         }
@@ -2317,6 +2363,14 @@ the user is using "Custom" settings by determining the sender*/
     if (sender == fX264optBPyramidPopUp)
     {
         optNameToChange = @"b-pyramid";
+    }
+    if (sender == fX264optBiMEPopUp)
+    {
+        optNameToChange = @"bime";
+    }
+    if (sender == fX264optDirectPredPopUp)
+    {
+        optNameToChange = @"direct";
     }
     
     /* Set widgets depending on the opt string in field */
@@ -2397,6 +2451,31 @@ the user is using "Custom" settings by determining the sender*/
                                 break;
                         }
                     }
+                    else if ([optNameToChange isEqualToString:@"direct"])
+                    {
+                        switch ([sender indexOfSelectedItem])
+                        {   
+                            case 1:
+                               thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"none"];
+                               break;
+ 
+                            case 2:
+                               thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"spatial"];
+                               break;
+ 
+                            case 3:
+                               thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"temporal"];
+                               break;
+ 
+                            case 4:
+                               thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"auto"];
+                               break;
+                            
+                            default:
+                                break;
+                        }
+                    }
+                    
                     else if ([optNameToChange isEqualToString:@"merange"])
                     {
                         thisOpt = [NSString stringWithFormat:@"%@=%d",optName,[sender indexOfSelectedItem]+3];
@@ -2461,6 +2540,35 @@ the user is using "Custom" settings by determining the sender*/
                         break;
                 }
             }
+            else if ([optNameToChange isEqualToString:@"direct"])
+            {
+                switch ([sender indexOfSelectedItem])
+                {   
+                    case 1:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"none"]]];
+                        break;
+               
+                    case 2:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"spatial"]]];
+                        break;
+               
+                   case 3:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"temporal"]]];
+                        break;
+               
+                   case 4:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"auto"]]];
+                        break;
+                   
+                   default:
+                        break;
+                }
+            }
+
             else if ([optNameToChange isEqualToString:@"merange"])
             {
                 [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
@@ -2506,6 +2614,39 @@ the user is using "Custom" settings by determining the sender*/
                          break;
                 }
             }
+            else if ([optNameToChange isEqualToString:@"direct"])
+            {
+                switch ([sender indexOfSelectedItem])
+                {   
+                    case 1:
+                         [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
+                             [NSString stringWithFormat:[fDisplayX264Options stringValue]],
+                             [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"none"]]];
+                         break;
+
+                    case 2:
+                         [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
+                             [NSString stringWithFormat:[fDisplayX264Options stringValue]],
+                             [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"spatial"]]];
+                         break;
+
+                    case 3:
+                         [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
+                             [NSString stringWithFormat:[fDisplayX264Options stringValue]],
+                             [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"temporal"]]];
+                         break;
+
+                    case 4:
+                         [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
+                             [NSString stringWithFormat:[fDisplayX264Options stringValue]],
+                             [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"auto"]]];
+                         break;
+
+                    default:
+                         break;
+                }
+            }
+
             else if ([optNameToChange isEqualToString:@"merange"])
             {
                 [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]], 

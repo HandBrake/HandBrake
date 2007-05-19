@@ -164,6 +164,10 @@
     IBOutlet NSPopUpButton       * fX264optBRDOPopUp;
     IBOutlet NSTextField         * fX264optBPyramidLabel;
     IBOutlet NSPopUpButton       * fX264optBPyramidPopUp;
+    IBOutlet NSTextField         * fX264optBiMELabel;
+    IBOutlet NSPopUpButton       * fX264optBiMEPopUp;
+    IBOutlet NSTextField         * fX264optDirectPredLabel;
+    IBOutlet NSPopUpButton       * fX264optDirectPredPopUp;
     
 	/* User Preset variables here fPresetNewPicSettingsApply*/
 	

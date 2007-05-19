@@ -142,6 +142,10 @@
                 fX264optBRDOPopUp = NSPopUpButton; 
                 fX264optBframesLabel = NSTextField; 
                 fX264optBframesPopUp = NSPopUpButton; 
+                fX264optBiMELabel = NSTextField; 
+                fX264optBiMEPopUp = NSPopUpButton; 
+                fX264optDirectPredLabel = NSTextField; 
+                fX264optDirectPredPopUp = NSPopUpButton; 
                 fX264optMERangeLabel = NSTextField; 
                 fX264optMERangePopUp = NSPopUpButton; 
                 fX264optMixedRefsLabel = NSTextField; 
