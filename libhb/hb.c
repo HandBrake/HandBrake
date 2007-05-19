@@ -114,7 +114,8 @@ hb_handle_t * hb_init_real( int verbose, int update_check )
     register_avcodec( &mpeg4_encoder );
     register_avcodec( &mp2_decoder );
     register_avcodec( &ac3_encoder );
-
+    av_register_codec_parser( &mpegaudio_parser);
+    
     /* Start library thread */
     hb_log( "hb_init: starting libhb thread" );
     h->die         = 0;

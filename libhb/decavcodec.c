@@ -27,6 +27,7 @@ struct hb_work_private_s
 
     AVCodecContext * context;
     int64_t          pts_last;
+    AVCodecParserContext *parser;
 };
 
 
@@ -38,12 +39,15 @@ struct hb_work_private_s
 int decavcodecInit( hb_work_object_t * w, hb_job_t * job )
 {
     AVCodec * codec;
+    
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
 
     pv->job   = job;
-
+    
     codec = avcodec_find_decoder( CODEC_ID_MP2 );
+    pv->parser = av_parser_init(CODEC_ID_MP2);
+    
     pv->context = avcodec_alloc_context();
     avcodec_open( pv->context, codec );
     pv->pts_last = -1;
@@ -59,6 +63,7 @@ int decavcodecInit( hb_work_object_t * w, hb_job_t * job )
 void decavcodecClose( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
+    av_parser_close(pv->parser);
     avcodec_close( pv->context );
 }
 
@@ -72,10 +77,12 @@ int decavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 {
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * in = *buf_in, * buf, * last = NULL;
-    int   pos, len, out_size, i;
+    int   pos, len, out_size, i, uncompressed_len;
     short buffer[AVCODEC_MAX_AUDIO_FRAME_SIZE];
     uint64_t cur;
-
+    unsigned char *parser_output_buffer;
+    int parser_output_buffer_len;
+    
     *buf_out = NULL;
 
     if( in->start < 0 ||
@@ -93,8 +100,13 @@ int decavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     pos = 0;
     while( pos < in->size )
     {
-        len = avcodec_decode_audio( pv->context, buffer, &out_size,
-                                    in->data + pos, in->size - pos );
+        len = av_parser_parse(pv->parser, pv->context,&parser_output_buffer,&parser_output_buffer_len,in->data + pos,in->size - pos,cur,cur);
+        
+        out_size = 0;
+        uncompressed_len = 0;
+        if (parser_output_buffer_len)
+          uncompressed_len = avcodec_decode_audio( pv->context, buffer, &out_size,
+                                    parser_output_buffer, parser_output_buffer_len );
         if( out_size )
         {
             short * s16;
@@ -102,8 +114,21 @@ int decavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
             buf = hb_buffer_init( 2 * out_size );
 
+            int sample_size_in_bytes = 2;   // Default to 2 bytes
+            switch (pv->context->sample_fmt)
+            {
+              case SAMPLE_FMT_S16:
+                sample_size_in_bytes = 2;
+                break;
+              /* We should handle other formats here - but that needs additional format conversion work below */
+              /* For now we'll just report the error and try to carry on */
+              default: 
+                hb_log("decavcodecWork - Unknown Sample Format from avcodec_decode_audio (%d) !", pv->context->sample_fmt);
+                break;
+            }
+            
             buf->start = cur;
-            buf->stop  = cur + 90000 * ( out_size / 4 ) /
+            buf->stop  = cur + 90000 * ( out_size / (sample_size_in_bytes * pv->context->channels) ) /
                          pv->context->sample_rate;
             cur = buf->stop;
 
