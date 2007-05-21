@@ -69,6 +69,11 @@
 		0DFF0B790B6BC72A00549488 /* deca52.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC9D0B4CAB100064E04C /* deca52.c */; };
 		0DFF0B7A0B6BC72A00549488 /* decavcodec.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC9E0B4CAB100064E04C /* decavcodec.c */; };
 		0DFF0C100B6BCEE800549488 /* test.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC760B4CA8F40064E04C /* test.c */; };
+		253886010BFE0A5B0064E995 /* HBOutputRedirect.h in Headers */ = {isa = PBXBuildFile; fileRef = 253885FF0BFE0A5B0064E995 /* HBOutputRedirect.h */; };
+		253886020BFE0A5B0064E995 /* HBOutputRedirect.m in Sources */ = {isa = PBXBuildFile; fileRef = 253886000BFE0A5B0064E995 /* HBOutputRedirect.m */; };
+		2538860C0BFE0B730064E995 /* OutputPanel.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2538860A0BFE0B730064E995 /* OutputPanel.nib */; };
+		253886170BFE0C160064E995 /* HBOutputPanelController.h in Headers */ = {isa = PBXBuildFile; fileRef = 253886150BFE0C160064E995 /* HBOutputPanelController.h */; };
+		253886180BFE0C160064E995 /* HBOutputPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 253886160BFE0C160064E995 /* HBOutputPanelController.m */; };
 		4D1125D809D72FD200E0657B /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D1125D709D72FD200E0657B /* libz.dylib */; };
 		4D1125D909D72FD200E0657B /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D1125D709D72FD200E0657B /* libz.dylib */; };
 		4D1EA2EA0993B09A00FDC1A2 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.mm */; };
@@ -182,6 +187,11 @@
 		0DFF0B720B6BC6E600549488 /* libhb.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libhb.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DFF0C0A0B6BCEC200549488 /* HandBrakeCLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = HandBrakeCLI; sourceTree = BUILT_PRODUCTS_DIR; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		253885FF0BFE0A5B0064E995 /* HBOutputRedirect.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = HBOutputRedirect.h; sourceTree = "<group>"; };
+		253886000BFE0A5B0064E995 /* HBOutputRedirect.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = HBOutputRedirect.m; sourceTree = "<group>"; };
+		2538860B0BFE0B730064E995 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/OutputPanel.nib; sourceTree = "<group>"; };
+		253886150BFE0C160064E995 /* HBOutputPanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBOutputPanelController.h; sourceTree = "<group>"; };
+		253886160BFE0C160064E995 /* HBOutputPanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBOutputPanelController.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -311,6 +321,7 @@
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
 				4D1EA3000993B13700FDC1A2 /* Express.nib */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+				2538860A0BFE0B730064E995 /* OutputPanel.nib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -397,6 +408,10 @@
 				4D2AE78A09CCB24C007E18F6 /* DriveDetector.h */,
 				593034E90BBA39A100172349 /* ChapterTitles.h */,
 				593034EA0BBA39A100172349 /* ChapterTitles.m */,
+				253885FF0BFE0A5B0064E995 /* HBOutputRedirect.h */,
+				253886000BFE0A5B0064E995 /* HBOutputRedirect.m */,
+				253886150BFE0C160064E995 /* HBOutputPanelController.h */,
+				253886160BFE0C160064E995 /* HBOutputPanelController.m */,
 			);
 			name = "HandBrake Sources";
 			sourceTree = "<group>";
@@ -440,6 +455,8 @@
 				4DD93F93082036E8008E1322 /* QueueController.h in Headers */,
 				4DD93F94082036E8008E1322 /* PrefsController.h in Headers */,
 				4D2AEA2A09CCB8FC007E18F6 /* DriveDetector.h in Headers */,
+				253886010BFE0A5B0064E995 /* HBOutputRedirect.h in Headers */,
+				253886170BFE0C160064E995 /* HBOutputPanelController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -574,6 +591,7 @@
 				4DD93F96082036E8008E1322 /* MainMenu.nib in Resources */,
 				4DD93F97082036E8008E1322 /* InfoPlist.strings in Resources */,
 				0DFA5C7B0B8DD1E90020BC09 /* HandBrake.icns in Resources */,
+				2538860C0BFE0B730064E995 /* OutputPanel.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -687,6 +705,8 @@
 				4DD93F9F082036E8008E1322 /* QueueController.mm in Sources */,
 				4DD93FA0082036E8008E1322 /* PrefsController.m in Sources */,
 				4D2AEA2909CCB8F9007E18F6 /* DriveDetector.m in Sources */,
+				253886020BFE0A5B0064E995 /* HBOutputRedirect.m in Sources */,
+				253886180BFE0C160064E995 /* HBOutputPanelController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -717,6 +737,14 @@
 				089C165DFE840E0CC02AAC07 /* English */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		2538860A0BFE0B730064E995 /* OutputPanel.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2538860B0BFE0B730064E995 /* English */,
+			);
+			name = OutputPanel.nib;
 			sourceTree = "<group>";
 		};
 		29B97318FDCFA39411CA2CEA /* MainMenu.nib */ = {

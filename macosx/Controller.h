@@ -15,6 +15,8 @@
 #include "PictureController.h"
 #include "QueueController.h"
 
+@class HBOutputPanelController;
+
 @interface HBController : NSObject <GrowlApplicationBridgeDelegate>
 
 {
@@ -194,6 +196,8 @@
     /* integer to set to determine the previous state
 	of encode 0==idle, 1==encoding, 2==cancelled*/
     int                            fEncodeState;
+	
+	HBOutputPanelController *outputPanel;
 }
 
 - (void)     TranslateStrings;
@@ -295,6 +299,7 @@
 // Growl methods
 - (NSDictionary *) registrationDictionaryForGrowl;
 -(IBAction)showGrowlDoneNotification:(id)sender;
+- (IBAction)showDebugOutputPanel:(id)sender;
 
 @end
 

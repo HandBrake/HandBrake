@@ -32,6 +32,7 @@
         defSrcDirectory,    @"LastSourceDirectory",
         @"NO",              @"DefaultAutoNaming",
         @"NO",              @"DefaultChapterMarkers",
+        @"NO",              @"ShowVerboseOutput",
         nil];
     
 	[defaults registerDefaults: appDefaults];

@@ -2,14 +2,15 @@
     IBClasses = (
         {
             ACTIONS = {
+                AddAllAudioTracksToPopUp = id; 
                 AddFactoryPresets = id; 
-                AddPreset = id; 
                 AddToQueue = id; 
                 AddUserPreset = id; 
                 AudioTrackMixdownChanged = id; 
                 AudioTrackPopUpChanged = id; 
                 BrowseFile = id; 
                 CalculateBitrate = id; 
+                CalculatePictureSizing = id; 
                 Cancel = id; 
                 ChapterPopUpChanged = id; 
                 CloseAddPresetPanel = id; 
@@ -17,7 +18,6 @@
                 CustomSettingUsed = id; 
                 DeleteFactoryPresets = id; 
                 DeletePreset = id; 
-                EnableQueue = id; 
                 EncoderPopUpChanged = id; 
                 FormatPopUpChanged = id; 
                 InsertPreset = id; 
@@ -26,7 +26,9 @@
                 OpenUserGuide = id; 
                 Pause = id; 
                 QualitySliderChanged = id; 
+                RevertPictureSizeToMax = id; 
                 Rip = id; 
+                SetEnabledStateOfAudioMixdownControls = id; 
                 ShowAddPresetPanel = id; 
                 ShowPicturePanel = id; 
                 ShowQueuePanel = id; 
@@ -35,6 +37,10 @@
                 VideoMatrixChanged = id; 
                 X264AdvancedOptionsChanged = id; 
                 X264AdvancedOptionsSet = id; 
+                X264AdvancedOptionsSetCurrentSettings = id; 
+                X264AdvancedOptionsStandardizeOptString = id; 
+                showDebugOutputPanel = id; 
+                showGrowlDoneNotification = id; 
                 tableViewSelected = id; 
             }; 
             CLASS = HBController; 
@@ -94,7 +100,6 @@
                 fPresetDrawer = NSDrawer; 
                 fPresetNewName = NSTextField; 
                 fPresetNewPicSettingsPopUp = NSPopUpButton; 
-                fPresetSaveButton = NSButton; 
                 fPresetSelectedDisplay = NSTextField; 
                 fPresetsAdd = NSButton; 
                 fPresetsDelete = NSButton; 

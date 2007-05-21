@@ -6,6 +6,7 @@
 
 #include "Controller.h"
 #include "a52dec/a52.h"
+#import "HBOutputPanelController.h"
 
 #define _(a) NSLocalizedString(a,NULL)
 
@@ -36,21 +37,20 @@ static int FormatSettings[3][4] =
 {
     self    = [super init];
     fHandle = NULL;
+	outputPanel = [[HBOutputPanelController alloc] init];
     return self;
 }
 
 - (void) applicationDidFinishLaunching: (NSNotification *) notification
 {
-
-
     int    build;
     char * version;
 
+    // Init libhb
+	int debugLevel = [[NSUserDefaults standardUserDefaults] boolForKey:@"ShowVerboseOutput"] ? HB_DEBUG_ALL : HB_DEBUG_NONE;
+    fHandle = hb_init(debugLevel, [[NSUserDefaults standardUserDefaults] boolForKey:@"CheckForUpdates"]);
 
-    /* Init libhb */
-    fHandle = hb_init( HB_DEBUG_NONE, [[NSUserDefaults
-        standardUserDefaults] boolForKey:@"CheckForUpdates"] );
-	/* Set the Growl Delegate */
+	// Set the Growl Delegate
 	HBController *hbGrowlDelegate = [[HBController alloc] init];
 	[GrowlApplicationBridge setGrowlDelegate: hbGrowlDelegate];    
     /* Init others controllers */
@@ -93,12 +93,16 @@ static int FormatSettings[3][4] =
     {
         [self Cancel: NULL];
         return NSTerminateCancel;
-    }
-    
-    /* Clean up */
-    hb_close( &fHandle );
+    }    
     return NSTerminateNow;
 }
+
+- (void)applicationWillTerminate:(NSNotification *)aNotification
+{
+	[outputPanel release];
+	hb_close(&fHandle);
+}
+
 
 - (void) awakeFromNib
 {
@@ -3345,6 +3349,11 @@ id theRecord, theValue;
 {
     [[NSWorkspace sharedWorkspace] openURL: [NSURL
         URLWithString:@"http://handbrake.m0k.org/trac/wiki/HandBrakeGuide"]];
+}
+
+- (IBAction)showDebugOutputPanel:(id)sender
+{
+	[outputPanel showOutputPanel:nil];
 }
 
 

@@ -1,0 +1,13 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {clearOutput = id; copyAllOutputToPasteboard = id; showOutputPanel = id; }; 
+            CLASS = HBOutputPanelController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {outputPanel = NSPanel; textView = NSTextView; }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}
