@@ -170,6 +170,9 @@
     IBOutlet NSPopUpButton       * fX264optBiMEPopUp;
     IBOutlet NSTextField         * fX264optDirectPredLabel;
     IBOutlet NSPopUpButton       * fX264optDirectPredPopUp;
+    IBOutlet NSTextField         * fX264optDeblockLabel;
+    IBOutlet NSPopUpButton       * fX264optAlphaDeblockPopUp;
+    IBOutlet NSPopUpButton       * fX264optBetaDeblockPopUp;
     
 	/* User Preset variables here fPresetNewPicSettingsApply*/
 	
