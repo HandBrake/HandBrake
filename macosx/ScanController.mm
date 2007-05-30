@@ -41,18 +41,9 @@
 - (void) Show
 {
  
-
-	fDriveDetector = [[DriveDetector alloc] initWithCallback: self
-        selector: @selector( openUpdateDrives: )];
-    [fDriveDetector run];
-	
-	// Here down continue with existing HB
-    [NSApp beginSheet: fPanel modalForWindow: fWindow
-        modalDelegate: nil didEndSelector: nil contextInfo: nil];
-    [NSApp runModalForWindow: fPanel];
-    [NSApp endSheet: fPanel];
-    [fPanel orderOut: self];
-
+    fDriveDetector = [[DriveDetector alloc] initWithCallback:self selector:@selector(openUpdateDrives:)];
+	[fDriveDetector run];
+	[NSApp beginSheet:fPanel modalForWindow:fWindow modalDelegate:nil didEndSelector:NULL contextInfo:NULL];
 }
 
 - (void) openUpdateDrives: (NSDictionary *) drives
@@ -132,16 +123,16 @@
             [self       EnableUI: YES];
             [fIndicator setDoubleValue: 0.0];
 
-            if( hb_list_count( hb_get_titles( fHandle ) ) )
-            {
-                /* Success */
-                [fStatusField setStringValue: @""];
-                [NSApp abortModal];
+            if (hb_list_count(hb_get_titles(fHandle)))
+             {
+             [fStatusField setStringValue:@""];
+				[NSApp endSheet:fPanel];
+				[fPanel orderOut:self];
+				
             }
             else
             {
-                [fStatusField setStringValue:
-                    _( @"No valid title found." )];
+             [fStatusField setStringValue:_( @"No valid title found.")];
             }
             break;
     }
@@ -178,9 +169,9 @@
    done right afterwards */
 - (IBAction) Browse: (id) sender
 {
-    [NSApp stopModal];
-    [self performSelectorOnMainThread: @selector( Browse2: )
-        withObject: nil waitUntilDone: NO];
+    [NSApp endSheet:fPanel];
+	[fPanel orderOut:self];
+	[self performSelectorOnMainThread:@selector(Browse2:) withObject:nil waitUntilDone:NO];
 }
 - (void) Browse2: (id) sender
 {
@@ -223,18 +214,12 @@
 }
 - (void) BrowseDone2: (id) sender
 {
-    [NSApp beginSheet: fPanel modalForWindow: fWindow
-        modalDelegate: nil didEndSelector: nil contextInfo: nil];
-    [NSApp runModalForWindow: fWindow];
-    [NSApp endSheet: fPanel];
-    [fPanel orderOut: self];
+    [NSApp beginSheet:fPanel modalForWindow:fWindow modalDelegate:nil didEndSelector:NULL contextInfo:NULL];
 }
 
 - (IBAction) Open: (id) sender
 {
-  //  NSString * path;
-    
-    [self         EnableUI: NO];
+  [self         EnableUI: NO];
     [fStatusField setStringValue: _( @"Opening..." )];
 
 	// From IHB
@@ -259,7 +244,9 @@
 
 - (IBAction) Cancel: (id) sender
 {
-    [NSApp stopModal];
+    //[NSApp stopModal];
+	[NSApp endSheet:fPanel];
+	[fPanel orderOut:self];
 }
 
 @end
