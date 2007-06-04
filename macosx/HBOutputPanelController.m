@@ -26,6 +26,7 @@
 	{
 		outputTextStorage = [[NSTextStorage alloc] init];
 		[[HBOutputRedirect stderrRedirect] addListener:self];
+		[[HBOutputRedirect stdoutRedirect] addListener:self];
 	}
 	return self;
 }
@@ -35,7 +36,8 @@
  */
 - (void)dealloc
 {
-	[[HBOutputRedirect stderrRedirect] removeListener:self];	
+	[[HBOutputRedirect stderrRedirect] removeListener:self];
+	[[HBOutputRedirect stdoutRedirect] removeListener:self];	
 	[outputTextStorage release];
 	[outputPanel release];
 	[super dealloc];
@@ -73,6 +75,7 @@
 
     [textView scrollRangeToVisible:NSMakeRange([outputTextStorage length], 0)];
 }
+- (void)stdoutRedirect:(NSString *)text { [self stderrRedirect:text]; }
 
 /**
  * Clears the output window.
