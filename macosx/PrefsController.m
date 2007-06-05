@@ -1,23 +1,21 @@
+/**
+ * @file
+ * Implementation of class PrefsController.
+ */
+
 #import "PrefsController.h"
 
 @implementation PrefsController
 
-- (void) awakeFromNib
+/**
+ * Registers default values to user defaults. This is called immediately
+ * when HandBrake starts, from [HBController init].
+ */
++ (void)registerUserDefaults
 {
-    NSUserDefaults * defaults;
-    NSDictionary   * appDefaults;
+    NSString *desktopDirectory =  [@"~/Desktop" stringByExpandingTildeInPath];
     
-    /* Unless the user specified otherwise, default is to check
-       for update  DefAdvancedx264Flags*/
-    defaults    = [NSUserDefaults standardUserDefaults];
-
-   	NSString *defDestDirectory =  @"~/Desktop";
-	defDestDirectory = [defDestDirectory stringByExpandingTildeInPath];
-	
-	NSString *defSrcDirectory =  @"~/Desktop";
-	defSrcDirectory = [defSrcDirectory stringByExpandingTildeInPath];
-
-    appDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
+    [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
         @"YES",             @"CheckForUpdates",
         @"English",         @"DefaultLanguage",
         @"NO",              @"DefaultMpegName",
@@ -28,14 +26,17 @@
         @"NO",              @"DefAdvancedx264FlagsShow",
         @"",                @"DefAdvancedx264Flags",
         @"YES",             @"DefaultPresetsDrawerShow",
-        defDestDirectory,   @"LastDestinationDirectory",
-        defSrcDirectory,    @"LastSourceDirectory",
+        desktopDirectory,   @"LastDestinationDirectory",
+        desktopDirectory,   @"LastSourceDirectory",
         @"NO",              @"DefaultAutoNaming",
         @"NO",              @"DefaultChapterMarkers",
         @"NO",              @"ShowVerboseOutput",
-        nil];
-    
-	[defaults registerDefaults: appDefaults];
+        nil]];
+}
+
+- (void) awakeFromNib
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
 	/* fUpdateCheck Check or uncheck according to the preferences */
     [fUpdateCheck setState: [defaults boolForKey:@"CheckForUpdates"] ?

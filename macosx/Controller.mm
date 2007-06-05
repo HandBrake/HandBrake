@@ -7,6 +7,7 @@
 #include "Controller.h"
 #include "a52dec/a52.h"
 #import "HBOutputPanelController.h"
+#import "PrefsController.h"
 
 #define _(a) NSLocalizedString(a,NULL)
 
@@ -35,9 +36,10 @@ static int FormatSettings[3][4] =
 
 - init
 {
-    self    = [super init];
+    self = [super init];
+    [PrefsController registerUserDefaults];
     fHandle = NULL;
-	outputPanel = [[HBOutputPanelController alloc] init];
+    outputPanel = [[HBOutputPanelController alloc] init];
     return self;
 }
 
@@ -3387,8 +3389,7 @@ id theRecord, theValue;
 
 - (IBAction)showDebugOutputPanel:(id)sender
 {
-	[outputPanel showOutputPanel:nil];
+    [outputPanel showOutputPanel:nil];
 }
-
 
 @end

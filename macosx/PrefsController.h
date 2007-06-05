@@ -1,4 +1,7 @@
-/* PrefsController */
+/**
+ * @file
+ * Interface of class PrefsController.
+ */
 
 #include <Cocoa/Cocoa.h>
 
@@ -20,6 +23,8 @@
 	IBOutlet NSButton * fDefAdvancedx264FlagsShow;
 
 }
+
++ (void)registerUserDefaults;
 
 - (IBAction) OpenPanel:    (id) sender;
 - (IBAction) ClosePanel:   (id) sender;
