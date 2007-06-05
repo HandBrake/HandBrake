@@ -44,7 +44,7 @@
 }
 
 /**
- * Loads output panel from OutputPanel.nib and shwos it.
+ * Loads output panel from OutputPanel.nib and shows it.
  */
 - (IBAction)showOutputPanel:(id)sender
 {
