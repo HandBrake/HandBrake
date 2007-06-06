@@ -7,13 +7,9 @@
 #include "Controller.h"
 #include "a52dec/a52.h"
 #import "HBOutputPanelController.h"
-#import "PrefsController.h"
+#import "HBPreferencesController.h"
 
 #define _(a) NSLocalizedString(a,NULL)
-
-
-
-
 
 static int FormatSettings[3][4] =
   { { HB_MUX_MP4 | HB_VCODEC_FFMPEG | HB_ACODEC_FAAC,
@@ -37,7 +33,7 @@ static int FormatSettings[3][4] =
 - init
 {
     self = [super init];
-    [PrefsController registerUserDefaults];
+    [HBPreferencesController registerUserDefaults];
     fHandle = NULL;
     outputPanel = [[HBOutputPanelController alloc] init];
     return self;
@@ -3387,9 +3383,23 @@ id theRecord, theValue;
         URLWithString:@"http://handbrake.m0k.org/trac/wiki/HandBrakeGuide"]];
 }
 
+/**
+ * Shows debug output window.
+ */
 - (IBAction)showDebugOutputPanel:(id)sender
 {
-    [outputPanel showOutputPanel:nil];
+    [outputPanel showOutputPanel:sender];
+}
+
+/**
+ * Creates preferences controller, shows preferences window modally, and
+ * releases the controller after user has closed the window.
+ */
+- (IBAction)showPreferencesWindow:(id)sender
+{
+    HBPreferencesController *controller = [[HBPreferencesController alloc] init];
+    [controller runModal:nil];
+    [controller release];
 }
 
 @end

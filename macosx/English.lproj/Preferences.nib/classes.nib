@@ -1,0 +1,11 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {close = id; runModal = id; }; 
+            CLASS = HBPreferencesController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}

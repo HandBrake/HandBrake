@@ -41,6 +41,7 @@
                 X264AdvancedOptionsStandardizeOptString = id; 
                 showDebugOutputPanel = id; 
                 showGrowlDoneNotification = id; 
+                showPreferencesWindow = id; 
                 tableViewSelected = id; 
             }; 
             CLASS = HBController; 
