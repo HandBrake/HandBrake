@@ -546,13 +546,87 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
         }
     }
 
-    /* Copy the subtitle we want (or not) */
     title_copy->list_subtitle = hb_list_init();
-    if( ( subtitle = hb_list_item( title->list_subtitle, job->subtitle ) ) )
+
+    if( job->pass != 1 ) 
     {
-        subtitle_copy = malloc( sizeof( hb_subtitle_t ) );
-        memcpy( subtitle_copy, subtitle, sizeof( hb_subtitle_t ) );
-        hb_list_add( title_copy->list_subtitle, subtitle_copy );
+        /* Copy the subtitle we want (or not) 
+         */
+        if( ( subtitle = hb_list_item( title->list_subtitle, job->subtitle ) ) )
+        {
+            subtitle_copy = malloc( sizeof( hb_subtitle_t ) );
+            memcpy( subtitle_copy, subtitle, sizeof( hb_subtitle_t ) );
+            hb_list_add( title_copy->list_subtitle, subtitle_copy );
+        }
+    } else { 
+        char audio_lang[4];
+
+        memset( audio_lang, 0, sizeof( audio_lang ) );
+
+        /*
+         * Pass 1, do we want to do a subtitle scan?
+         */
+        if( job->subtitle_scan ) 
+        {
+            /*
+             * Search for all occurances of the audio language in the
+             * subtitles and add them all to the
+             * title_copy->list_subtitle. First of all find the
+             * language for the audio.
+             */
+            for( i = 0; i < 8; i++ )
+            {
+                if( job->audios[i] < 0 )
+                {
+                    break;
+                }
+                if( ( audio = hb_list_item( title->list_audio, job->audios[i] ) ) )
+                {
+                    strncpy(audio_lang, audio->iso639_2, sizeof(audio_lang));
+                }
+            }
+        }
+
+        /*
+         * If we have a native language now is the time to see whether we want
+         * to enable subtitles for it if it differs from the audio language.
+         */
+        if( job->native_language ) 
+        {
+            if( strncasecmp( job->native_language, audio_lang, 
+                             sizeof( audio_lang ) ) != 0 )
+            {             
+
+                hb_log( "Enabled subtitles in native language '%s', audio is in '%s'",
+                        job->native_language, audio_lang);
+                /*
+                 * The main audio track is not in our native language, so switch
+                 * the subtitle scan to use our native language instead.
+                 */
+                strncpy( audio_lang, job->native_language, sizeof( audio_lang ) );
+            } else {
+                /*
+                 * native language is irrelevent, free it.
+                 */
+                free( job->native_language );
+                job->native_language = NULL;
+            }
+        }
+
+        for( i=0; i < hb_list_count( title->list_subtitle ); i++ ) 
+        {
+            subtitle = hb_list_item( title->list_subtitle, i );
+            if( strcmp( subtitle->iso639_2, audio_lang ) == 0 ) 
+            {
+                /*
+                 * Matched subtitle language with audio language, so
+                 * add this to our list to scan.
+                 */
+                subtitle_copy = malloc( sizeof( hb_subtitle_t ) );
+                memcpy( subtitle_copy, subtitle, sizeof( hb_subtitle_t ) );
+                hb_list_add( title_copy->list_subtitle, subtitle_copy );
+            }
+        }
     }
 
     /* Copy the job */

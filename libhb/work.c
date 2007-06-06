@@ -100,6 +100,11 @@ static void do_job( hb_job_t * job, int cpu_count )
     hb_audio_t   * audio;
     hb_subtitle_t * subtitle;
     int done;
+    unsigned int subtitle_highest = 0;
+    unsigned int subtitle_highest_id = 0;
+    unsigned int subtitle_lowest = -1;
+    unsigned int subtitle_lowest_id = 0;
+    unsigned int subtitle_hit = 0;
 
     title = job->title;
 
@@ -191,17 +196,31 @@ static void do_job( hb_job_t * job, int cpu_count )
     w->config   = &job->config;
     hb_list_add( job->list_work, w );
 
-    subtitle = hb_list_item( title->list_subtitle, 0 );
-    if( subtitle )
+    if( job->select_subtitle && !job->subtitle_scan ) 
     {
-        hb_log( " + subtitle %x, %s", subtitle->id, subtitle->lang );
+        hb_list_add( title->list_subtitle, *( job->select_subtitle ) );
+    }
 
-        subtitle->fifo_in  = hb_fifo_init( 8 );
-        subtitle->fifo_raw = hb_fifo_init( 8 );
+    for( i=0; i < hb_list_count(title->list_subtitle); i++ ) 
+    {
+        subtitle =  hb_list_item( title->list_subtitle, i );
 
-        hb_list_add( job->list_work, ( w = getWork( WORK_DECSUB ) ) );
-        w->fifo_in  = subtitle->fifo_in;
-        w->fifo_out = subtitle->fifo_raw;
+        if( subtitle )
+        {
+            hb_log( " + subtitle %x, %s", subtitle->id, subtitle->lang );
+            
+            subtitle->fifo_in  = hb_fifo_init( 8 );
+            subtitle->fifo_raw = hb_fifo_init( 8 );
+            
+            if (!job->subtitle_scan) {
+                /*
+                 * Don't add threads for subtitles when we are scanning
+                 */
+                hb_list_add( job->list_work, ( w = getWork( WORK_DECSUB ) ) );
+                w->fifo_in  = subtitle->fifo_in;
+                w->fifo_out = subtitle->fifo_raw;
+            }
+        }
     }
 
     if( job->acodec & HB_ACODEC_AC3 )
@@ -499,10 +518,13 @@ static void do_job( hb_job_t * job, int cpu_count )
     hb_fifo_close( &job->fifo_sync );
     hb_fifo_close( &job->fifo_render );
     hb_fifo_close( &job->fifo_mpeg4 );
-    if( subtitle )
-    {
-        hb_fifo_close( &subtitle->fifo_in );
-        hb_fifo_close( &subtitle->fifo_raw );
+    for (i=0; i < hb_list_count(title->list_subtitle); i++) {
+        subtitle =  hb_list_item( title->list_subtitle, i);
+        if( subtitle )
+        {
+            hb_fifo_close( &subtitle->fifo_in );
+            hb_fifo_close( &subtitle->fifo_raw );
+        }
     }
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
@@ -513,6 +535,79 @@ static void do_job( hb_job_t * job, int cpu_count )
         hb_fifo_close( &audio->fifo_out );
     }
     
+    /*
+     * Before closing the title print out our subtitle stats if we need to
+     * Find the highest and lowest.
+     */
+    for( i=0; i < hb_list_count( title->list_subtitle ); i++ ) 
+    {
+        subtitle =  hb_list_item( title->list_subtitle, i );
+        hb_log( "Subtitle stream 0x%x '%s': %d hits",
+               subtitle->id, subtitle->lang, subtitle->hits );
+        if( subtitle->hits > subtitle_highest ) 
+        {
+            subtitle_highest = subtitle->hits;
+            subtitle_highest_id = subtitle->id;
+        } 
+
+        if( subtitle->hits < subtitle_lowest ) 
+        {
+            subtitle_lowest = subtitle->hits;
+            subtitle_lowest_id = subtitle->id;
+        }
+    }
+
+    if( job->native_language ) {
+        /*
+         * We still have a native_language, so the audio and subtitles are
+         * different, so in this case it is a foreign film and we want to
+         * select the first subtitle in our language.
+         */
+        subtitle =  hb_list_item( title->list_subtitle, 0 );
+        subtitle_hit = subtitle->id;
+        hb_log( "Found a native-language subtitle id 0x%x", subtitle_hit);
+    } else {
+        if( subtitle_lowest < subtitle_highest ) 
+        {
+            /*
+             * OK we have more than one, and the lowest is lower, but how much
+             * lower to qualify for turning it on by default?
+             *
+             * Let's say 20% as a default.
+             */
+            if( subtitle_lowest < ( subtitle_highest * 0.2 ) ) 
+            {
+                subtitle_hit = subtitle_lowest_id;
+                hb_log( "Found a subtitle candidate id 0x%x",
+                        subtitle_hit );
+            } else {
+                hb_log( "No candidate subtitle detected during subtitle-scan");
+            }
+        }
+    }
+
+    if( job->select_subtitle ) 
+    {
+        if( job->subtitle_scan ) 
+        {
+            for( i=0; i < hb_list_count( title->list_subtitle ); i++ ) 
+            {
+                subtitle =  hb_list_item( title->list_subtitle, i );
+                if( subtitle->id = subtitle_hit ) 
+                {
+                    hb_list_rem( title->list_subtitle, subtitle );
+                    *( job->select_subtitle ) = subtitle;
+                }
+            }
+        } else {
+            /*
+             * Must be the second pass - we don't need this anymore.
+             */
+            free( job->select_subtitle );
+            job->select_subtitle = NULL;
+        }
+    }
+
     hb_title_close( &job->title );
     free( job );
 }

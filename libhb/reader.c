@@ -138,12 +138,26 @@ static hb_fifo_t * GetFifoForId( hb_job_t * job, int id )
         return job->fifo_mpeg2;
     }
 
-    if( ( subtitle = hb_list_item( title->list_subtitle, 0 ) ) &&
-        id == subtitle->id )
-    {
-        return subtitle->fifo_in;
+    if (job->subtitle_scan) {
+        /*
+         * Count the occurances of the subtitles, don't actually return any to encode.
+         */
+        for (i=0; i < hb_list_count(title->list_subtitle); i++) {
+            subtitle =  hb_list_item( title->list_subtitle, i);
+            if (id == subtitle->id) {
+                /*
+                 * A hit, count it.
+                 */
+                subtitle->hits++;
+            }
+        }
+    } else {
+        if( ( subtitle = hb_list_item( title->list_subtitle, 0 ) ) &&
+            id == subtitle->id )
+        {
+            return subtitle->fifo_in;
+        }
     }
-
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = hb_list_item( title->list_audio, i );

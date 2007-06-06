@@ -245,6 +245,10 @@ struct hb_job_s
     int             mux;
     const char          * file;
 
+    int subtitle_scan;
+    hb_subtitle_t ** select_subtitle;
+    char * native_language;
+
 #ifdef __LIBHB__
     /* Internal data */
     hb_handle_t   * h;
@@ -359,6 +363,8 @@ struct hb_subtitle_s
     int  id;
     char lang[1024];
     char iso639_2[4];
+
+    int hits;     /* How many hits/occurrences of this subtitle */
 
 #ifdef __LIBHB__
     /* Internal data */

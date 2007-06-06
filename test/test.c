@@ -20,6 +20,9 @@ static char * input       = NULL;
 static char * output      = NULL;
 static char * format      = NULL;
 static int    titleindex  = 1;
+static int    longest_title = 0;
+static int    subtitle_scan = 0;
+static char * native_language = NULL;
 static int    twoPass     = 0;
 static int    deinterlace = 0;
 static int    grayscale   = 0;
@@ -51,6 +54,8 @@ static char	  *x264opts		= NULL;
 static char	  *x264opts2 	= NULL;
 static int	  maxHeight		= 0;
 static int	  maxWidth		= 0;
+static int    turbo_opts_enabled = 0;
+static char * turbo_opts = "no-fast-pskip=0:subme=1:me=dia:trellis=0:analyse=none";
 
 /* Exit cleanly on Ctrl-C */
 static volatile int die = 0;
@@ -116,6 +121,13 @@ int main( int argc, char ** argv )
 
     /* Feed libhb with a DVD to scan */
     fprintf( stderr, "Opening %s...\n", input );
+
+    if (longest_title) {
+        /*
+         * We need to scan for all the titles in order to find the longest
+         */
+        titleindex = 0;
+    }
     hb_scan( h, input, titleindex );
 
     /* Wait... */
@@ -181,6 +193,7 @@ int main( int argc, char ** argv )
     if( output ) free( output );
     if( format ) free( format );
     if( audios ) free( audios );
+    if (native_language ) free (native_language );
 	if( x264opts ) free (x264opts );
 	if( x264opts2 ) free (x264opts2 );
 	
@@ -245,7 +258,8 @@ static void PrintTitleInfo( hb_title_t * title )
     for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
     {
         subtitle = hb_list_item( title->list_subtitle, i );
-        fprintf( stderr, "    + %d, %s\n", i + 1, subtitle->lang );
+        fprintf( stderr, "    + %d, %s (iso639-2: %s)\n", i + 1, subtitle->lang,
+            subtitle->iso639_2);
     }
 }
 
@@ -284,6 +298,44 @@ static int HandleEvents( hb_handle_t * h )
                 die = 1;
                 break;
             }
+	    if( longest_title )
+	    {
+                int i;
+                int longest_title_idx=0;
+                int longest_title_pos=-1;
+                int longest_title_time=0;
+                int title_time;
+                
+                fprintf( stderr, "Searching for longest title...\n" );
+
+                for( i = 0; i < hb_list_count( list ); i++ )
+                {
+                    title = hb_list_item( list, i );
+                    title_time = (title->hours*60*60 ) + (title->minutes *60) + (title->seconds);
+                    fprintf( stderr, " + Title (%d) index %d has length %dsec\n", 
+                             i, title->index, title_time );
+                    if( longest_title_time < title_time )
+                    {
+                        longest_title_time = title_time;
+                        longest_title_pos = i;
+                        longest_title_idx = title->index;
+                    }		    
+                }
+                if( longest_title_pos == -1 ) 
+                {
+                    fprintf( stderr, "No longest title found.\n" );
+                    die = 1;
+                    break;
+                }
+                titleindex = longest_title_idx;
+                fprintf( stderr, "Found longest title, setting title to %d\n", 
+                         longest_title_idx);
+
+                title = hb_list_item( list, longest_title_pos);
+            } else {
+                title = hb_list_item( list, 0 );
+            }
+
             if( !titleindex )
             {
                 /* Scan-only mode, print infos and exit */
@@ -298,7 +350,6 @@ static int HandleEvents( hb_handle_t * h )
             }
 
             /* Set job settings */
-            title = hb_list_item( list, 0 );
             job   = title->job;
 
             PrintTitleInfo( title );
@@ -479,6 +530,11 @@ static int HandleEvents( hb_handle_t * h )
                 job->subtitle = sub - 1;
             }
 
+            if( native_language )
+            {
+                job->native_language = strdup( native_language );
+            }
+
             if( job->mux )
             {
                 job->mux = mux;
@@ -490,31 +546,95 @@ static int HandleEvents( hb_handle_t * h )
                 job->crf = 1;
             }
 
-            if (x264opts != NULL && *x264opts != '\0' )
+            if( x264opts != NULL && *x264opts != '\0' )
             {
                 fprintf( stderr, "Applying the following x264 options: %s\n", 
-                        x264opts);
+                         x264opts);
                 job->x264opts = x264opts;
             }
             else /*avoids a bus error crash when options aren't specified*/
-			{
-				job->x264opts =  NULL;
-			}
-			if (maxWidth)
-				job->maxWidth = maxWidth;
-			if (maxHeight)
-				job->maxHeight = maxHeight;
+            {
+                job->x264opts =  NULL;
+            }
+            if (maxWidth)
+                job->maxWidth = maxWidth;
+            if (maxHeight)
+                job->maxHeight = maxHeight;
 				
             if( twoPass )
             {
+                /*
+                 * If subtitle_scan is enabled then only turn it on
+                 * for the first pass and then off again for the
+                 * second. 
+                 */
                 job->pass = 1;
+                job->subtitle_scan = subtitle_scan;
+                if( subtitle_scan ) 
+                {
+                    fprintf( stderr, "Subtitle Scan Enabled - enabling "
+                             "subtitles if found for foreign language segments\n");
+                    job->select_subtitle = malloc(sizeof(hb_subtitle_t*));
+                    *(job->select_subtitle) = NULL;
+                } 
+
+                /*
+                 * If turbo options have been selected then append them
+                 * to the x264opts now (size includes one ':' and the '\0')
+                 */
+                if( turbo_opts_enabled ) 
+                {
+                    int size = strlen(x264opts) + strlen(turbo_opts) + 2;
+                    char *tmp_x264opts;
+                        
+                    tmp_x264opts = malloc(size * sizeof(char));
+                    if( x264opts ) 
+                    {
+                        snprintf( tmp_x264opts, size, "%s:%s", 
+                                  x264opts, turbo_opts );  
+                        free( x264opts );
+                    } else {
+                        /*
+                         * No x264opts to modify, but apply the turbo options
+                         * anyway as they may be modifying defaults
+                         */
+                        snprintf( tmp_x264opts, size, "%s", 
+                                  turbo_opts );
+                    }
+                    x264opts = tmp_x264opts;
+
+                    fprintf( stderr, "Modified x264 options for pass 1 to append turbo options: %s\n",
+                             x264opts );
+
+                    job->x264opts = x264opts;
+                }     
                 hb_add( h, job );
                 job->pass = 2;
-				job->x264opts = x264opts2;
+                /*
+                 * On the second pass we turn off subtitle scan so that we
+                 * can actually encode using any subtitles that were auto
+                 * selected in the first pass (using the whacky select-subtitle
+                 * attribute of the job).
+                 */
+                job->subtitle_scan = 0;
+
+                job->x264opts = x264opts2;
+                
                 hb_add( h, job );
             }
             else
             {
+                /*
+                 * Turn on subtitle scan if requested, note that this option
+                 * precludes encoding of any actual subtitles.
+                 */
+                job->subtitle_scan = subtitle_scan;
+                if ( subtitle_scan ) 
+                {
+                    fprintf( stderr, "Subtitle Scan Enabled, will scan all "
+                             "subtitles matching the audio language for any\n"
+                             "that meet our auto-selection criteria.\n");
+                }
                 job->pass = 0;
                 hb_add( h, job );
             }
@@ -606,6 +726,7 @@ static void ShowHelp()
 	"    -i, --input <string>    Set input device\n"
 	"    -t, --title <number>    Select a title to encode (0 to scan only,\n"
     "                            default: 1)\n"
+    "    -L, --longest           Select the longest title\n"
     "    -c, --chapters <string> Select chapters (e.g. \"1-3\" for chapters\n"
     "                            1 to 3, or \"3\" for chapter 3 only,\n"
     "                            default: all chapters)\n"
@@ -624,6 +745,13 @@ static void ShowHelp()
 	"    -Y, --maxHeight <#>     Set maximum height\n"
 	"    -X, --maxWidth <#>      Set maximum width\n"
 	"    -s, --subtitle <number> Select subtitle (default: none)\n"
+    "    -U, --subtitle-scan     Scan for subtitles on the first pass, and choose\n"
+    "                            the one that's only used 20 percent of the time\n"
+    "                            or less. This should locate subtitles for short\n"
+    "                            foreign language segments. Only works with 2-pass.\n"
+    "    -N, --native-language   Select subtitles with this language if it does not\n"
+    "          <string>          match the Audio language. Provide the language's\n"
+    "                            iso639-2 code (fre, eng, spa, dut, et cetera)\n"
 	"    -m, --markers           Add chapter markers (mp4 output format only)\n"
 	"\n"
 	
@@ -673,10 +801,14 @@ static void ShowHelp()
 	"\n"
 	
 	
-	"### Advanced H264 Options----------------------------------------------------\n\n"
-	"    -x, --x264opts <string> Specify advanced x264 options in the\n"
-	"                            same style as mencoder:\n"
-	"                            option1=value1:option2=value2\n" );
+    "### Advanced H264 Options----------------------------------------------------\n\n"
+    "    -x, --x264opts <string> Specify advanced x264 options in the\n"
+    "                            same style as mencoder:\n"
+    "                            option1=value1:option2=value2\n"
+    "    -T, --turbo             When using 2-pass use the turbo options\n"
+    "                            on the first pass to improve speed\n"
+    "                            (only works with x264, affects PSNR by about 0.05dB,\n"
+    "                            and increases first pass speed two to four times)\n");
 }
 
 /****************************************************************************
@@ -698,11 +830,14 @@ static int ParseOptions( int argc, char ** argv )
             { "output",      required_argument, NULL,    'o' },
 
             { "title",       required_argument, NULL,    't' },
+            { "longest",     no_argument,       NULL,    'L' },
             { "chapters",    required_argument, NULL,    'c' },
             { "markers",     optional_argument, NULL,    'm' },
             { "audio",       required_argument, NULL,    'a' },
             { "mixdown",     required_argument, NULL,    '6' },
             { "subtitle",    required_argument, NULL,    's' },
+            { "subtitle-scan", no_argument,     NULL,    'U' },
+            { "native-language", required_argument, NULL,'N' },
 
             { "encoder",     required_argument, NULL,    'e' },
             { "aencoder",    required_argument, NULL,    'E' },
@@ -720,10 +855,12 @@ static int ParseOptions( int argc, char ** argv )
             { "ab",          required_argument, NULL,    'B' },
             { "rate",        required_argument, NULL,    'r' },
             { "arate",       required_argument, NULL,    'R' },
-			{ "crf",		 no_argument,		NULL,	 'Q' },
-			{ "x264opts",    required_argument, NULL,    'x' },
-			{ "maxHeight",	 required_argument, NULL, 	 'Y' },
-			{ "maxWidth",	 required_argument, NULL,	 'X' },
+            { "crf",         no_argument,       NULL,    'Q' },
+            { "x264opts",    required_argument, NULL,    'x' },
+            { "turbo",       no_argument,       NULL,    'T' },
+            
+            { "maxHeight",   required_argument, NULL,    'Y' },
+            { "maxWidth",    required_argument, NULL,    'X' },
 			
             { 0, 0, 0, 0 }
           };
@@ -732,7 +869,7 @@ static int ParseOptions( int argc, char ** argv )
         int c;
 
         c = getopt_long( argc, argv,
-                         "hvuC:f:i:o:t:c:ma:6:s:e:E:2dgpw:l:n:b:q:S:B:r:R:Qx:Y:X:",
+                         "hvuC:f:i:o:t:Lc:ma:6:s:UN:e:E:2dgpw:l:n:b:q:S:B:r:R:Qx:TY:X:",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -766,6 +903,9 @@ static int ParseOptions( int argc, char ** argv )
 
             case 't':
                 titleindex = atoi( optarg );
+                break;
+            case 'L':
+                longest_title = 1;
                 break;
             case 'c':
             {
@@ -823,7 +963,12 @@ static int ParseOptions( int argc, char ** argv )
             case 's':
                 sub = atoi( optarg );
                 break;
-
+            case 'U':
+                subtitle_scan = 1;
+                break;
+            case 'N':
+                native_language = strdup( optarg );
+                break;
             case '2':
                 twoPass = 1;
                 break;
@@ -942,19 +1087,22 @@ static int ParseOptions( int argc, char ** argv )
             case 'B':
                 abitrate = atoi( optarg );
                 break;
-			case 'Q':
-				crf = 1;
-				break;
-			case 'x':
-			   	x264opts = strdup( optarg );
-				x264opts2 = strdup( optarg );
-			    break;
-			case 'Y':
-				maxHeight = atoi( optarg );
-				break;
-			case 'X':
-				maxWidth = atoi (optarg );
-				break;
+            case 'Q':
+                crf = 1;
+                break;
+            case 'x':
+                x264opts = strdup( optarg );
+                x264opts2 = strdup( optarg );
+                break;
+            case 'T':
+                turbo_opts_enabled = 1;
+                break;
+            case 'Y':
+                maxHeight = atoi( optarg );
+                break;
+            case 'X':
+                maxWidth = atoi (optarg );
+                break;
 				
             default:
                 fprintf( stderr, "unknown option (%s)\n", argv[optind] );
