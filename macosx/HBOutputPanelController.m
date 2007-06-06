@@ -59,6 +59,8 @@
 		
     [textView scrollRangeToVisible:NSMakeRange([outputTextStorage length], 0)];
 	[outputPanel orderFront:nil];
+
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"OutputPanelIsOpen"];
 }
 
 /**
@@ -94,5 +96,11 @@
 	[pboard declareTypes:[NSArray arrayWithObject:NSStringPboardType] owner:nil];
 	[pboard setString:[outputTextStorage string] forType:NSStringPboardType];
 }
+
+- (void)windowWillClose:(NSNotification *)aNotification
+{
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"OutputPanelIsOpen"];
+}
+
 
 @end

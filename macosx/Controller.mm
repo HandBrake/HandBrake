@@ -44,6 +44,10 @@ static int FormatSettings[3][4] =
     int    build;
     char * version;
 
+    // Open debug output window now if it was visible when HB was closed
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"OutputPanelIsOpen"])
+        [self showDebugOutputPanel:nil];
+
     // Init libhb
 	int debugLevel = [[NSUserDefaults standardUserDefaults] boolForKey:@"ShowVerboseOutput"] ? HB_DEBUG_ALL : HB_DEBUG_NONE;
     fHandle = hb_init(debugLevel, [[NSUserDefaults standardUserDefaults] boolForKey:@"CheckForUpdates"]);
