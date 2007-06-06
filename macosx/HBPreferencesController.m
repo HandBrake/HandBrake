@@ -33,7 +33,6 @@
         @"NO",              @"DefaultDeinterlaceOn",
         @"YES",             @"DefaultPicSizeAutoiPod",
         @"NO",              @"PixelRatio",
-        @"NO",              @"DefAdvancedx264FlagsShow",
         @"",                @"DefAdvancedx264Flags",
         @"YES",             @"DefaultPresetsDrawerShow",
         desktopDirectory,   @"LastDestinationDirectory",
