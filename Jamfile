@@ -60,7 +60,7 @@ if $(OS) = MACOSX
               macosx/PictureController.h macosx/PictureController.mm
               macosx/PictureGLView.h macosx/PictureGLView.mm
               macosx/QueueController.h macosx/QueueController.mm
-              macosx/PrefsController.h macosx/PrefsController.m
+              macosx/HBPreferencesController.h macosx/HBPreferencesController.m
               macosx/English.lproj/InfoPlist.strings
               macosx/English.lproj/MainMenu.nib/classes.nib
               macosx/English.lproj/MainMenu.nib/info.nib
@@ -68,7 +68,11 @@ if $(OS) = MACOSX
               macosx/ExpressController.h macosx/ExpressController.m
               macosx/English.lproj/Express.nib/classes.nib
               macosx/English.lproj/Express.nib/info.nib
-              macosx/English.lproj/Express.nib/keyedobjects.nib ;
+              macosx/English.lproj/Express.nib/keyedobjects.nib
+              macosx/English.lproj/Preferences.nib
+              macosx/English.lproj/Preferences.nib/classes.nib
+              macosx/English.lproj/Preferences.nib/info.nib
+              macosx/English.lproj/Preferences.nib/keyedobjects.nib ;
               
     OSXApp HandBrake.app : $(OSX_SRC) $(HANDBRAKE_LIBS) ;
     
