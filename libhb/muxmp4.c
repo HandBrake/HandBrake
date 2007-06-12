@@ -137,6 +137,10 @@ static int MP4Init( hb_mux_object_t * m )
     hb_mux_data_t * mux_data;
     int i;
     u_int16_t language_code;
+    
+    /* Flags for enabling/disabling tracks in an MP4. */
+    typedef enum { TRACK_DISABLED = 0x0, TRACK_ENABLED = 0x1, TRACK_IN_MOVIE = 0x2, TRACK_IN_PREVIEW = 0x4, TRACK_IN_POSTER = 0x8}  track_header_flags;
+    
 
     /* Create an empty mp4 file */
     m->file = MP4Create( job->file, MP4_DETAILS_ERROR, 0 );
@@ -295,12 +299,23 @@ static int MP4Init( hb_mux_object_t * m )
         /* Set the correct number of channels for this track */
         reserved2[9] = (u_int8_t)HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown);
         MP4SetTrackBytesProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.mp4a.reserved2", reserved2, sizeof(reserved2));
-				
-		/* store a reference to the first audio track,
-		so we can use it to feed the chapter text track's sample rate */
-		if (i == 0) {
-			firstAudioTrack = mux_data->track;
-		}
+        
+        /* store a reference to the first audio track,
+        so we can use it to feed the chapter text track's sample rate */
+        if (i == 0) {
+            firstAudioTrack = mux_data->track;
+            
+            /* Enable the first audio track */
+            MP4SetTrackIntegerProperty(m->file, mux_data->track, "tkhd.flags", (TRACK_ENABLED | TRACK_IN_MOVIE));
+        }
+
+        else
+            /* Disable the other audio tracks so QuickTime doesn't play
+               them all at once. */
+        {
+            MP4SetTrackIntegerProperty(m->file, mux_data->track, "tkhd.flags", (TRACK_DISABLED | TRACK_IN_MOVIE));
+            hb_log("Disabled extra audio track %i", mux_data->track-1);
+        }
 		
     }
 
