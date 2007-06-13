@@ -1,0 +1,1125 @@
+Imports System.IO
+Imports System
+Imports System.Diagnostics
+Imports System.Threading
+Imports System.ComponentModel
+Imports System.Windows.Forms
+
+
+Public Class frmMain
+
+
+    Private Sub frmMain_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+
+        '# Sets the Version in the bottom corner of the screen.
+        Version.Text = System.String.Format(Version.Text, My.Application.Info.Version.Major, My.Application.Info.Version.Minor)
+
+        '# ----------------------------------------------------
+        '# Updated check on Startup.
+        Dim file_path As String = Application.StartupPath
+
+        Try
+            If My.Settings.StartupUpdate = 1 Then
+                ' Download the update file
+                ' open the file for reading and read the first 2 lines for GUI and CLI versions
+                Dim wc As New System.Net.WebClient()
+                wc.DownloadFile("http://download.m0k.org/handbrake/windows/update.txt", file_path & "\update.txt")
+                wc.Dispose()
+                Dim versionStream As StreamReader = File.OpenText(file_path & "\update.txt")
+                Dim windowsGUI As String = versionStream.ReadLine()
+                Dim windowsCLI As String = versionStream.ReadLine()
+                versionStream.Close()
+
+                ' If the version is now the same as the one shown here, Display the update label
+                If windowsGUI <> My.Settings.HandbrakeGUIVersion Then
+                    lbl_update.Visible = True
+                ElseIf windowsCLI <> My.Settings.HandbrakeCLIVersion Then
+                    lbl_update.Visible = True
+                End If
+
+            End If
+
+        Catch ex As Exception
+            '# No need to alert the user if the update fails. Its just annoying.
+        End Try
+
+        '#---------------------------------------------------
+        '# Load the Last used Settings
+        '#---------------------------------------------------
+        Try
+            If My.Settings.UseUsersDefaultSettings = 1 Then
+                'Source
+                text_source.Text = My.Settings.DVDSource
+                drp_dvdtitle.Text = My.Settings.DVDTitle
+                text_chaptors.Text = My.Settings.DVDChapter
+                'Destination
+                text_destination.Text = My.Settings.VideoDest
+                drp_videoEncoder.Text = My.Settings.VideoEncoder
+                drp_audioCodec.Text = My.Settings.AudioEncoder
+                text_width.Text = My.Settings.Width
+                text_height.Text = My.Settings.Height
+                'Picture Settings Tab
+                drp_crop.Text = My.Settings.CroppingOption
+                text_top.Text = My.Settings.CropTop
+                text_bottom.Text = My.Settings.CropBottom
+                text_left.Text = My.Settings.CropLeft
+                text_right.Text = My.Settings.CropRight
+                drp_subtitle.Text = My.Settings.Subtitles
+                'Video Settings Tab
+                text_bitrate.Text = My.Settings.VideoBitrate
+                text_filesize.Text = My.Settings.VideoFilesize
+                slider_videoQuality.Value = My.Settings.VideoQuality
+                check_2PassEncode.CheckState = My.Settings.TwoPass
+                check_DeInterlace.CheckState = My.Settings.DeInterlace
+                check_grayscale.CheckState = My.Settings.Grayscale
+                drp_videoFramerate.Text = My.Settings.Framerate
+                CheckPixelRatio.CheckState = My.Settings.PixelRatio
+                'Audio Settings Tab
+                drp_audioBitrate.Text = My.Settings.AudioBitrate
+                drp_audioSampleRate.Text = My.Settings.AudioSampleRate
+                drp_audioChannels.Text = My.Settings.AudioChannels
+                Check6ChanAudio.CheckState = My.Settings.FiveChanAudio
+                'Advanced Settings Tab
+                drp_processors.Text = My.Settings.Processors
+                'H264 Tab
+                CheckCRF.CheckState = My.Settings.CRF
+                rtf_h264advanced.Text = My.Settings.H264
+            End If
+        Catch ex As Exception
+            '# Not actually needed but vb required it to avoid an unhandled exception Interger to String issue. Maybe fix this later
+        End Try
+
+
+        '#---------------------------------------------------
+        '# Read DVD at Startup Dialog
+        '#---------------------------------------------------
+        If My.Settings.ReadDVDatStartup = 1 Then
+            frmReadDVD.Show()
+        End If
+    End Sub
+
+    '#
+    '#
+    '# Any Code relating to the frmMain menu bar
+    '#
+    '#
+
+    Private Sub mnu_exit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_exit.Click
+        Me.Close()
+    End Sub
+
+    Private Sub mnu_save_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_save.Click
+        'Source
+        Dim source As String = text_source.Text
+        Dim dvdTitle As String = drp_dvdtitle.Text
+        Dim dvdChaptor As String = text_chaptors.Text
+        'Destination
+        Dim destination As String = text_destination.Text
+        Dim videoEncoder As String = drp_videoEncoder.Text
+        Dim audioEncoder As String = drp_audioCodec.Text
+        Dim width As String = text_width.Text
+        Dim height As String = text_height.Text
+        'Picture Settings Tab
+        Dim cropTop As String = text_top.Text
+        Dim cropBottom As String = text_bottom.Text
+        Dim cropLeft As String = text_left.Text
+        Dim cropRight As String = text_right.Text
+        Dim subtitles As String = drp_subtitle.Text
+        'Video Settings Tab
+        Dim videoBitrate As String = text_bitrate.Text
+        Dim videoFilesize As String = text_filesize.Text
+        Dim videoQuality As String = slider_videoQuality.Value
+        Dim twoPassEncoding As String = check_2PassEncode.CheckState
+        Dim deinterlace As String = check_DeInterlace.CheckState
+        Dim grayscale As String = check_grayscale.CheckState
+        Dim videoFramerate As String = drp_videoFramerate.Text
+        Dim pixelRation As String = CheckPixelRatio.CheckState
+        Dim ChapterMarkers As String = Check_ChapterMarkers.CheckState
+        'Audio Settings Tab
+        Dim audioBitrate As String = drp_audioBitrate.Text
+        Dim audioSampleRate As String = drp_audioSampleRate.Text
+        Dim audioChannels As String = drp_audioChannels.Text
+        Dim enabled6chanAudio As String = Check6ChanAudio.CheckState
+        Dim AudioMixDown As String = drp_audioMixDown.Text
+        'Advanced Settings Tab
+        Dim processors As String = drp_processors.Text
+        'H264 Tab
+        Dim CRF As String = CheckCRF.CheckState
+        Dim advH264 As String = rtf_h264advanced.Text
+
+        Dim filename As String
+        File_Save.ShowDialog()
+        filename = File_Save.FileName
+        If (filename <> "") Then
+            Try
+                Dim ApplicationPath As String = Application.StartupPath
+                Dim StreamWriter As StreamWriter = File.CreateText(filename)
+                StreamWriter.WriteLine(source)
+                StreamWriter.WriteLine(dvdTitle)
+                StreamWriter.WriteLine(dvdChaptor)
+                StreamWriter.WriteLine(destination)
+                StreamWriter.WriteLine(videoEncoder)
+                StreamWriter.WriteLine(audioEncoder)
+                StreamWriter.WriteLine(width)
+                StreamWriter.WriteLine(height)
+                StreamWriter.WriteLine(cropTop)
+                StreamWriter.WriteLine(cropBottom)
+                StreamWriter.WriteLine(cropLeft)
+                StreamWriter.WriteLine(cropRight)
+                StreamWriter.WriteLine(subtitles)
+                StreamWriter.WriteLine(videoBitrate)
+                StreamWriter.WriteLine(videoFilesize)
+                StreamWriter.WriteLine(videoQuality)
+                StreamWriter.WriteLine(twoPassEncoding)
+                StreamWriter.WriteLine(deinterlace)
+                StreamWriter.WriteLine(grayscale)
+                StreamWriter.WriteLine(videoFramerate)
+                StreamWriter.WriteLine(ChapterMarkers) '# Fixed Pixel Ratio not saved bug
+                StreamWriter.WriteLine(pixelRation)
+                StreamWriter.WriteLine(audioBitrate)
+                StreamWriter.WriteLine(audioSampleRate)
+                StreamWriter.WriteLine(audioChannels)
+                StreamWriter.WriteLine(enabled6chanAudio)
+                StreamWriter.WriteLine(AudioMixDown)
+                StreamWriter.WriteLine(processors)
+                StreamWriter.WriteLine(CRF)
+                StreamWriter.WriteLine(advH264)
+                StreamWriter.Close()
+                MessageBox.Show("STATUS: Your profile has been sucessfully saved.")
+            Catch
+                MessageBox.Show("ERROR: Unable to write to the file. Please make sure the location has the correct permissions for file writing.")
+            End Try
+        End If
+    End Sub
+
+    Private Sub mnu_open_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_open.Click
+        Dim filename As String
+        File_Open.ShowDialog()
+        filename = File_Open.FileName
+        If (filename <> "") Then
+            Try
+                Dim inputStream As StreamReader = File.OpenText(filename)
+
+                text_source.Text = inputStream.ReadLine()
+                drp_dvdtitle.Text = inputStream.ReadLine()
+                text_chaptors.Text = inputStream.ReadLine()
+                text_destination.Text = inputStream.ReadLine()
+                drp_videoEncoder.Text = inputStream.ReadLine()
+                drp_audioCodec.Text = inputStream.ReadLine()
+                text_width.Text = inputStream.ReadLine()
+                text_height.Text = inputStream.ReadLine()
+                text_top.Text = inputStream.ReadLine()
+                text_bottom.Text = inputStream.ReadLine()
+                text_left.Text = inputStream.ReadLine()
+                text_right.Text = inputStream.ReadLine()
+                drp_subtitle.Text = inputStream.ReadLine()
+                text_bitrate.Text = inputStream.ReadLine()
+                text_filesize.Text = inputStream.ReadLine()
+                slider_videoQuality.Value = inputStream.ReadLine()
+                check_2PassEncode.CheckState = inputStream.ReadLine()
+                check_DeInterlace.CheckState = inputStream.ReadLine()
+                check_grayscale.CheckState = inputStream.ReadLine()
+                drp_videoFramerate.Text = inputStream.ReadLine()
+                CheckPixelRatio.CheckState = inputStream.ReadLine() '# Fix for pixel ratio not being saved
+                Check_ChapterMarkers.CheckState = inputStream.ReadLine()
+                drp_audioBitrate.Text = inputStream.ReadLine()
+                drp_audioSampleRate.Text = inputStream.ReadLine()
+                drp_audioChannels.Text = inputStream.ReadLine()
+                Check6ChanAudio.CheckState = inputStream.ReadLine()
+                drp_audioMixDown.Text = inputStream.ReadLine()
+                drp_processors.Text = inputStream.ReadLine()
+
+                'Advanced H264 Options
+                CheckCRF.CheckState = inputStream.ReadLine()
+                rtf_h264advanced.Text = inputStream.ReadLine()
+
+
+                ' Fix for SliderValue not appearing when Opening saved file
+                SliderValue.Text = slider_videoQuality.Value & "%"
+
+            Catch ex As Exception
+                MessageBox.Show("ERROR: Unable to load profile.")
+            End Try
+        End If
+
+    End Sub
+
+    Private Sub mnu_about_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_about.Click
+        frmAbout.Show()
+    End Sub
+
+    Private Sub mnu_update_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_update.Click
+        frmUpdate.Show()
+    End Sub
+
+    Private Sub mnu_encode_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_encode.Click
+        frmQueue.Show()
+    End Sub
+
+    Private Sub mnu_ProgramDefaultOptions_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_ProgramDefaultOptions.Click
+        'Source
+        My.Settings.DVDSource = text_source.Text
+        My.Settings.DVDTitle = drp_dvdtitle.Text
+        My.Settings.DVDChapter = text_chaptors.Text
+        'Destination
+        My.Settings.VideoDest = text_destination.Text
+        My.Settings.VideoEncoder = drp_videoEncoder.Text
+        My.Settings.AudioEncoder = drp_audioCodec.Text
+        My.Settings.Width = text_width.Text
+        My.Settings.Height = text_height.Text
+        'Picture Settings Tab
+        My.Settings.CroppingOption = drp_crop.Text
+        My.Settings.CropTop = text_top.Text
+        My.Settings.CropBottom = text_bottom.Text
+        My.Settings.CropLeft = text_left.Text
+        My.Settings.CropRight = text_right.Text
+        My.Settings.Subtitles = drp_subtitle.Text
+        'Video Settings Tab
+        My.Settings.VideoBitrate = text_bitrate.Text
+        My.Settings.VideoFilesize = text_filesize.Text
+        My.Settings.VideoQuality = slider_videoQuality.Value
+        My.Settings.TwoPass = check_2PassEncode.CheckState
+        My.Settings.DeInterlace = check_DeInterlace.CheckState
+        My.Settings.Grayscale = check_grayscale.CheckState
+        My.Settings.Framerate = drp_videoFramerate.Text
+        My.Settings.PixelRatio = CheckPixelRatio.CheckState
+        'Audio Settings Tab
+        My.Settings.AudioBitrate = drp_audioBitrate.Text
+        My.Settings.AudioSampleRate = drp_audioSampleRate.Text
+        My.Settings.AudioChannels = drp_audioChannels.Text
+        My.Settings.FiveChanAudio = Check6ChanAudio.CheckState
+        'Advanced Settings Tab
+        My.Settings.Processors = drp_processors.Text
+        'H264 Tab
+        My.Settings.CRF = CheckCRF.CheckState
+        My.Settings.H264 = rtf_h264advanced.Text
+
+    End Sub
+
+    Private Sub mnu_viewDVDdata_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_viewDVDdata.Click
+        frmSelect.Show()
+    End Sub
+
+    'Some Presets
+    Private Sub mnu_preset_ipod133_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_preset_ipod133.Click
+        text_width.Text = "640"
+        text_height.Text = "480"
+        drp_videoEncoder.Text = "H.264 (iPod)"
+        text_bitrate.Text = "1000"
+        text_filesize.Text = ""
+        slider_videoQuality.Value = 0
+        SliderValue.Text = "0%"
+        drp_audioBitrate.Text = "160"
+
+    End Sub
+
+    Private Sub mnu_preset_ipod178_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_preset_ipod178.Click
+        text_width.Text = "640"
+        text_height.Text = "352"
+        drp_videoEncoder.Text = "H.264 (iPod)"
+        text_bitrate.Text = "1000"
+        text_filesize.Text = ""
+        slider_videoQuality.Value = 0
+        SliderValue.Text = "0%"
+        drp_audioBitrate.Text = "160"
+    End Sub
+
+    Private Sub mnu_preset_ipod235_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_preset_ipod235.Click
+        text_width.Text = "640"
+        text_height.Text = "272"
+        drp_videoEncoder.Text = "H.264 (iPod)"
+        text_bitrate.Text = "1000"
+        text_filesize.Text = ""
+        slider_videoQuality.Value = 0
+        SliderValue.Text = "0%"
+        drp_audioBitrate.Text = "160"
+    End Sub
+
+    Private Sub mnu_presetPS3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_presetPS3.Click
+        text_width.Text = ""
+        text_height.Text = ""
+        drp_videoEncoder.Text = "H.264"
+        text_bitrate.Text = "3000"
+        text_filesize.Text = ""
+        slider_videoQuality.Value = 0
+        SliderValue.Text = "0%"
+        drp_audioBitrate.Text = "160"
+        CheckPixelRatio.CheckState = CheckState.Checked
+        drp_audioSampleRate.Text = "48"
+        rtf_h264advanced.Text = "level=41"
+    End Sub
+
+    Private Sub mnu_appleTv_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_appleTv.Click
+        text_width.Text = ""
+        text_height.Text = ""
+        drp_videoEncoder.Text = "H.264"
+        text_bitrate.Text = "3000"
+        text_filesize.Text = ""
+        slider_videoQuality.Value = 0
+        SliderValue.Text = "0%"
+        drp_audioBitrate.Text = "160"
+        CheckPixelRatio.CheckState = CheckState.Checked
+        drp_audioSampleRate.Text = "48"
+        rtf_h264advanced.Text = "bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:no-dct-decimate=1:trellis=2"
+    End Sub
+
+
+
+    Private Sub mnu_options_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_options.Click
+        frmOptions.Show()
+    End Sub
+
+    Private Sub mnu_wiki_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_wiki.Click
+        System.Diagnostics.Process.Start("http://handbrake.m0k.org/trac")
+    End Sub
+
+    Private Sub mnu_onlineDocs_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_onlineDocs.Click
+        System.Diagnostics.Process.Start("http://handbrake.m0k.org/?page_id=11")
+    End Sub
+
+    Private Sub mnu_homepage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_homepage.Click
+        System.Diagnostics.Process.Start("http://handbrake.m0k.org")
+    End Sub
+
+    Private Sub mnu_forum_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_forum.Click
+        System.Diagnostics.Process.Start("http://handbrake.m0k.org/forum")
+    End Sub
+
+    Private Sub mnu_faq_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_faq.Click
+        System.Diagnostics.Process.Start("http://handbrake.m0k.org/trac/wiki/WindowsGuiFaq")
+    End Sub
+
+    '#
+    '#
+    '# Buttons on the frmMain
+    '#
+    '#
+
+    Private Sub btn_Browse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_Browse.Click
+        Dim filename As String
+        text_source.Text = ""
+        If RadioDVD.Checked Then
+            DVD_Open.ShowDialog()
+            filename = DVD_Open.SelectedPath
+            text_source.Text = filename
+            If filename <> "" Then
+                frmStatus.Show()
+            End If
+        Else
+            ISO_Open.ShowDialog()
+            filename = ISO_Open.FileName
+            text_source.Text = filename
+            If filename <> "" Then
+                frmStatus.Show()
+            End If
+        End If
+    End Sub
+
+    Private Sub btn_destBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_destBrowse.Click
+        Dim filename As String
+        DVD_Save.ShowDialog()
+        filename = DVD_Save.FileName
+        text_destination.Text = filename.Trim
+        Dim DriveLetter() As String = text_destination.Text.Split(":")
+
+        '#
+        '# Make sure there is a reasonable amount of space left on the Drive.
+        '#
+        Try
+            Dim FileSys = CreateObject("Scripting.FileSystemObject")
+            Dim Drv
+            Try
+                Drv = FileSys.GetDrive(DriveLetter(0) & ":")
+
+                Dim lAvailableSpace As Long
+                lAvailableSpace = Drv.AvailableSpace
+                lAvailableSpace = lAvailableSpace / 1024 / 1024 / 1024
+                If lAvailableSpace < 4 Then
+                    MessageBox.Show("Warning: Low on Disk Space. There is: " & lAvailableSpace & "GB Available")
+                End If
+
+                Dim lTotalSpace As Long
+                lTotalSpace = Drv.TotalSize
+            Finally
+                Drv = Nothing
+            End Try
+        Catch ex As Exception
+            ' Ignore the Error - Change this to an IF Statment at some point so it works better.
+        End Try
+        
+    End Sub
+
+    Private Sub GenerateQuery_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GenerateQuery.Click
+        Dim query As String = GenerateTheQuery()
+        Dim ApplicationPath As String = Application.StartupPath
+        QueryEditorText.Text = """" + ApplicationPath + "\hbcli.exe""" + query
+    End Sub
+
+    Private Sub btn_ClearQuery_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_ClearQuery.Click
+        QueryEditorText.Text = ""
+    End Sub
+
+    Private Sub btn_h264Clear_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_h264Clear.Click
+        rtf_h264advanced.Text = ""
+    End Sub
+
+    Private Sub btn_queue_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_queue.Click
+        Dim query As String
+        'Dim ApplicationPath As String = Application.StartupPath
+        'If (QueryEditorText.Text = "") Then
+        query = GenerateTheQuery()
+        frmQueue.list_queue.Items.Add(query)
+        ' Else
+        '    query = QueryEditorText.Text
+        '     frmQueue.list_queue.Items.Add(query)
+        '  End If
+
+        frmQueue.Show()
+    End Sub
+
+    Private Sub btn_encode_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_encode.Click
+        Dim query As String
+        Dim ApplicationPath As String = Application.StartupPath
+
+        Try
+            If (QueryEditorText.Text = "") Then
+                query = GenerateTheQuery()
+                Shell("""" + ApplicationPath + "\hbcli.exe""" + query)
+                MessageBox.Show("The Handbrake encoder (CLI) will now start and should be encoding your video.")
+
+                'Lets start the process monitor to keep an eye on things.
+                hbcliMonitor = New ProcessMonitor()
+                Dim t = New Thread(AddressOf hbcliMonitor.tmrProcCheck)
+                t.Start()
+            Else
+                query = QueryEditorText.Text
+                Shell("""" + ApplicationPath + "\hbcli.exe""" + query)
+                MessageBox.Show("The Handbrake encoder (CLI) will now start and should be encoding your video.")
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Unable to Launch the Encoder.")
+            MessageBox.Show(ex.ToString) ' Debug
+        End Try
+
+    End Sub
+
+    Private Sub label_h264_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles label_h264.LinkClicked
+        System.Diagnostics.Process.Start("http://handbrake.m0k.org/trac/wiki/x264Options")
+    End Sub
+
+    '#
+    '#
+    '# Dynamic stuff on frm Main
+    '#
+    '#
+
+    Private Sub text_bitrate_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles text_bitrate.TextChanged
+        text_filesize.Text = ""
+        slider_videoQuality.Value = 0
+        SliderValue.Text = "0%"
+    End Sub
+
+    Private Sub text_filesize_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles text_filesize.TextChanged
+        text_bitrate.Text = ""
+        slider_videoQuality.Value = 0
+        SliderValue.Text = "0%"
+    End Sub
+
+    Private Sub slider_videoQuality_Scroll(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles slider_videoQuality.Scroll
+        SliderValue.Text = slider_videoQuality.Value.ToString + "%"
+        text_bitrate.Text = ""
+        text_filesize.Text = ""
+    End Sub
+
+    Private Sub text_width_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles text_width.TextChanged
+        Try
+            If CheckPixelRatio.CheckState = CheckState.Checked Then
+                text_width.Text = ""
+
+            Else
+                If (text_width.Text Mod 16) <> 0 Then
+                    text_width.BackColor = Color.LightCoral
+                Else
+                    text_width.BackColor = Color.LightGreen
+                End If
+            End If
+           
+        Catch ex As Exception
+
+        End Try
+
+    End Sub
+
+    Private Sub text_height_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles text_height.TextChanged
+        Try
+            If CheckPixelRatio.CheckState = CheckState.Checked Then
+                text_height.Text = ""
+            Else
+                If (text_height.Text Mod 16) <> 0 Then
+                    text_height.BackColor = Color.LightCoral
+                Else
+                    text_height.BackColor = Color.LightGreen
+                End If
+            End If
+        Catch ex As Exception
+
+        End Try
+
+    End Sub
+
+    Private Sub drp_crop_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles drp_crop.SelectedIndexChanged
+        If (drp_crop.SelectedItem = "Manual") Then
+            text_left.Enabled = True
+            text_right.Enabled = True
+            text_top.Enabled = True
+            text_bottom.Enabled = True
+        End If
+
+        If (drp_crop.SelectedItem = "Auto Crop") Then
+            text_left.Enabled = False
+            text_right.Enabled = False
+            text_top.Enabled = False
+            text_bottom.Enabled = False
+            text_left.Text = ""
+            text_right.Text = ""
+            text_top.Text = ""
+            text_bottom.Text = ""
+
+            If lbl_RecomendedCrop.Text <> "Select a Title" Then
+                Dim temp() As String
+                temp = lbl_RecomendedCrop.Text.Split("/")
+                text_left.Text = temp(2)
+                text_right.Text = temp(3)
+                text_top.Text = temp(0)
+                text_bottom.Text = temp(1)
+            End If
+        End If
+
+        If (drp_crop.SelectedItem = "No Crop") Then
+            text_left.Enabled = False
+            text_right.Enabled = False
+            text_top.Enabled = False
+            text_bottom.Enabled = False
+            text_left.Text = "0"
+            text_right.Text = "0"
+            text_top.Text = "0"
+            text_bottom.Text = "0"
+
+        End If
+    End Sub
+
+    Private Sub CheckPixelRatio_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckPixelRatio.CheckedChanged
+        text_width.Text = ""
+        text_height.Text = ""
+        text_width.BackColor = Color.White
+        text_height.BackColor = Color.White
+    End Sub
+
+    Private Sub drp_dvdtitle_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles drp_dvdtitle.SelectedIndexChanged
+        ' If the title changes then the following text values are no longer correct.
+        ' Maybe automatically update these in later versions.
+        lbl_Aspect.Text = "Select a Title"
+        lbl_RecomendedCrop.Text = "Select a Title"
+
+        ' If the title is not automatic then read the dvd.dat file and populate the Subtitles box depending on the title slected.
+        If drp_dvdtitle.Text <> "Automatic" Then
+            Dim temp() As String
+            Dim title As String
+            temp = drp_dvdtitle.Text.Split(" ")
+            title = temp(0).Trim
+
+            '### Find the line that matches the title number
+            Try
+                Dim file_path As String = Application.StartupPath
+                Dim ReadFile As StreamReader = File.OpenText(file_path & "\dvd.dat")
+                Dim ReadLine As String = ""
+
+                ReadLine = ReadFile.ReadLine()
+                While ReadLine <> ""
+                    Dim TempLine() As String
+                    Dim Tempdata() As String
+                    Dim TempCount As Integer
+                    Dim counter As Integer = 1
+
+                    TempLine = ReadLine.Split("~")
+                    If TempLine(0).Replace("+ ", "").Trim.Equals("title " & title & ":") Then
+
+                        '### Here we populate the subtitle box.
+                        Tempdata = TempLine(6).Split("&")
+                        TempCount = Tempdata.Length
+                        ' Cleanup the previous Subtitle Data
+                        drp_subtitle.Items.Clear()
+                        drp_subtitle.Items.Add("None")
+                        drp_subtitle.Text = "None"
+
+                        While counter <> TempCount
+                            drp_subtitle.Items.Add(Tempdata(counter).Trim.Replace("+ ", "").Replace(",", ""))
+                            counter = counter + 1
+                        End While
+                        counter = 1 ' Reset the counter for reuse
+
+                        '### Here we populate the Audio title box
+                        Tempdata = TempLine(5).Split("&")
+                        TempCount = Tempdata.Length
+                        ' Cleanup the previous Subtitle Data
+                        drp_audioChannels.Items.Clear()
+                        drp_audioChannels.Items.Add("Automatic")
+                        drp_audioChannels.Text = "Automatic"
+
+                        While counter <> TempCount
+                            Dim temporyvalues() As String = Tempdata(counter).Trim.Replace("+ ", "").Replace(",", "").Split(" ")
+                            drp_audioChannels.Items.Add(temporyvalues(0) & " " & temporyvalues(1) & " " & temporyvalues(2) & " " & temporyvalues(3) & ")")
+                            counter = counter + 1
+                        End While
+                        counter = 1 ' Reset the counter for reuse
+
+                        '### Here we Set the Aspect Ratio text
+                        Tempdata = TempLine(2).Split(",")
+                        lbl_Aspect.Text = Tempdata(1).Replace(",", "").Replace("aspect: ", "").Trim
+
+                        '### Finally Set the Recommended Crop Text
+                        Tempdata = TempLine(3).Split(" ")
+                        lbl_RecomendedCrop.Text = Tempdata(3).Replace(",", "").Trim
+
+                        '# Stop the while loop
+                        ReadLine = ""
+
+                    Else
+                        ReadLine = ReadFile.ReadLine()
+                    End If
+                End While
+                ReadFile.Close()
+            Catch ex As Exception
+                ' No need to display an error, The dropdowns will simply not update if a problem occurs here.
+            End Try
+        Else
+            ' If Automatic is selected or the user types in the box, then Clear the Subtitle and Audio Dropdowns
+            drp_audioChannels.Items.Clear()
+            drp_audioChannels.Items.Add("Automatic")
+            drp_audioChannels.Text = "Automatic"
+            drp_subtitle.Items.Clear()
+            drp_subtitle.Items.Add("None")
+            drp_subtitle.Text = "None"
+        End If
+    End Sub
+
+    Private Sub drp_audioCodec_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles drp_audioCodec.SelectedIndexChanged
+        'Dim Channels As String = drp_audioChannels.Text
+
+        ' If Channels = "Automatic" Then
+        'Channels = "2.0"
+        'Else
+        'Dim ChanData() As String = Channels.Trim.Split(" ")
+        'MessageBox.Show(ChanData.Length)
+        'If ChanData.Length <> 0 Then
+        'Channels = ChanData(2).Replace("(", "").Replace(")", "")
+        'MessageBox.Show(Channels)
+        'End If
+        'End If
+        drp_audioMixDown.Items.Clear()
+        If drp_audioCodec.Text = "AAC" Then
+            drp_audioMixDown.Items.Add("Mono")
+            drp_audioMixDown.Items.Add("Stereo")
+            drp_audioMixDown.Items.Add("Dolby Surround")
+            drp_audioMixDown.Items.Add("Dolby Pro Logic II")
+            drp_audioMixDown.Items.Add("6 Channel Discrete")
+            '# Need to impliment
+            '# 5.1 will will show 6ch dpl2
+            '# 5.0 will show dpl2 but not 6ch
+            '# Everything else, mono, stero, dpl1
+            drp_audioBitrate.Items.Clear()
+            drp_audioBitrate.Items.Add("32")
+            drp_audioBitrate.Items.Add("40")
+            drp_audioBitrate.Items.Add("48")
+            drp_audioBitrate.Items.Add("56")
+            drp_audioBitrate.Items.Add("64")
+            drp_audioBitrate.Items.Add("80")
+            drp_audioBitrate.Items.Add("86")
+            drp_audioBitrate.Items.Add("112")
+            drp_audioBitrate.Items.Add("128")
+            drp_audioBitrate.Items.Add("160")
+
+        Else
+            drp_audioMixDown.Items.Add("Stereo")
+            drp_audioMixDown.Items.Add("Dolby Surround")
+            drp_audioMixDown.Items.Add("Dolby Pro Logic II")
+
+            drp_audioBitrate.Items.Clear()
+            drp_audioBitrate.Items.Add("32")
+            drp_audioBitrate.Items.Add("40")
+            drp_audioBitrate.Items.Add("48")
+            drp_audioBitrate.Items.Add("56")
+            drp_audioBitrate.Items.Add("64")
+            drp_audioBitrate.Items.Add("80")
+            drp_audioBitrate.Items.Add("86")
+            drp_audioBitrate.Items.Add("112")
+            drp_audioBitrate.Items.Add("128")
+            drp_audioBitrate.Items.Add("160")
+            drp_audioBitrate.Items.Add("192")
+            drp_audioBitrate.Items.Add("224")
+            drp_audioBitrate.Items.Add("256")
+            drp_audioBitrate.Items.Add("320")
+            drp_audioBitrate.Items.Add("384")
+
+        End If
+        'mono
+        'stereo
+        'dpl1
+        'dpl2
+        '6ch
+
+    End Sub
+
+    Private Sub drp_audioMixDown_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles drp_audioMixDown.SelectedIndexChanged
+        If drp_audioCodec.Text = "AAC" Then
+            If drp_audioMixDown.Text = "6 Channel Discrete" Then
+                drp_audioBitrate.Items.Clear()
+                drp_audioBitrate.Items.Add("32")
+                drp_audioBitrate.Items.Add("40")
+                drp_audioBitrate.Items.Add("48")
+                drp_audioBitrate.Items.Add("56")
+                drp_audioBitrate.Items.Add("64")
+                drp_audioBitrate.Items.Add("80")
+                drp_audioBitrate.Items.Add("86")
+                drp_audioBitrate.Items.Add("112")
+                drp_audioBitrate.Items.Add("128")
+                drp_audioBitrate.Items.Add("160")
+                drp_audioBitrate.Items.Add("192")
+                drp_audioBitrate.Items.Add("224")
+                drp_audioBitrate.Items.Add("256")
+                drp_audioBitrate.Items.Add("320")
+                drp_audioBitrate.Items.Add("384")
+            End If
+        End If
+    End Sub
+
+    Private Sub Check_ChapterMarkers_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Check_ChapterMarkers.CheckedChanged
+        Dim destination As String = text_destination.Text
+        If text_destination.Text.Contains(" ") Then
+
+        End If
+        destination = destination.Replace(".mp4", ".m4v")
+        text_destination.Text = destination
+    End Sub
+
+    '#
+    '#
+    '# Functions
+    '#
+    '#
+
+    Function GenerateTheQuery()
+
+        'Source
+        Dim source As String = text_source.Text
+        Dim dvdTitle As String = drp_dvdtitle.Text
+        Dim dvdChaptor As String = text_chaptors.Text
+
+        If (source = "") Then
+            MessageBox.Show("ERROR: No Source has been selected.")
+        Else
+            source = " -i " + """" + source + """"
+        End If
+
+        If (dvdTitle = "Automatic") Then
+            dvdTitle = ""
+        Else
+            Dim titleInfo() As String
+            titleInfo = dvdTitle.Split(" ")
+            dvdTitle = " -t " + titleInfo(0)
+        End If
+
+        If (dvdChaptor = "Automatic") Then
+            dvdChaptor = ""
+        ElseIf (dvdChaptor = "") Then
+            dvdChaptor = ""
+        Else
+            dvdChaptor = " -c " + dvdChaptor
+        End If
+
+        Dim querySource As String = source + dvdTitle + dvdChaptor
+        '----------------------------------------------------------------------
+
+        'Destination
+        Dim destination As String = text_destination.Text
+        Dim videoEncoder As String = drp_videoEncoder.Text
+        Dim audioEncoder As String = drp_audioCodec.Text
+        Dim width As String = text_width.Text
+        Dim height As String = text_height.Text
+
+        If (destination = "") Then
+            MessageBox.Show("ERROR: No destination has been selected.")
+        Else
+            destination = " -o " + """" + destination + """"
+        End If
+
+        If (videoEncoder = "Mpeg 4") Then
+            videoEncoder = " -e ffmpeg"
+        ElseIf (videoEncoder = "Xvid") Then
+            videoEncoder = " -e xvid"
+        ElseIf (videoEncoder = "H.264") Then
+            videoEncoder = " -e x264"
+        ElseIf (videoEncoder = "H.264 Baseline 1.3") Then
+            videoEncoder = " -e x264b13"
+        ElseIf (videoEncoder = "H.264 (iPod)") Then
+            videoEncoder = " -e x264b30"
+        End If
+
+        If (audioEncoder = "AAC") Then
+            audioEncoder = " -E faac"
+        ElseIf (audioEncoder = "MP3") Then
+            audioEncoder = " -E lame"
+        ElseIf (audioEncoder = "Vorbis") Then
+            audioEncoder = " -E vorbis"
+        ElseIf (audioEncoder = "AC3") Then
+            audioEncoder = " -E ac3"
+        End If
+
+        If (width <> "") Then
+            width = " -w " + width
+        End If
+
+        If (height <> "") Then
+            height = " -l " + height
+        End If
+
+        Dim queryDestination As String = destination + videoEncoder + audioEncoder + width + height
+        '----------------------------------------------------------------------
+
+        'Picture Settings Tab
+        Dim cropSetting As String = drp_crop.Text
+        Dim cropTop As String = text_top.Text
+        Dim cropBottom As String = text_bottom.Text
+        Dim cropLeft As String = text_left.Text
+        Dim cropRight As String = text_right.Text
+        Dim subtitles As String = drp_subtitle.Text
+        Dim cropOut As String = "" 'Returns Crop Query
+
+        If cropSetting = "Auto Crop" Then
+            cropOut = ""
+        ElseIf cropSetting = "No Crop" Then
+            cropOut = " --crop 0:0:0:0 "
+        Else
+            cropOut = " --crop " + cropTop + ":" + cropBottom + ":" + cropLeft + ":" + cropRight
+        End If
+
+        If (subtitles = "None") Then
+            subtitles = ""
+        ElseIf (subtitles = "") Then
+            subtitles = ""
+        Else
+            Dim tempSub() As String
+            tempSub = subtitles.Split(" ")
+            subtitles = " -s " + tempSub(0)
+        End If
+
+        Dim queryPictureSettings As String = cropOut + subtitles
+        '----------------------------------------------------------------------
+
+        'Video Settings Tab
+        Dim videoBitrate As String = text_bitrate.Text
+        Dim videoFilesize As String = text_filesize.Text
+        Dim videoQuality As String = slider_videoQuality.Value
+        Dim twoPassEncoding As String = check_2PassEncode.CheckState
+        Dim deinterlace As String = check_DeInterlace.CheckState
+        Dim grayscale As String = check_grayscale.CheckState
+        Dim videoFramerate As String = drp_videoFramerate.Text
+        Dim pixelRatio As String = CheckPixelRatio.CheckState
+        Dim ChapterMarkers As String = Check_ChapterMarkers.CheckState
+
+        If (videoBitrate <> "") Then
+            videoBitrate = " -b " + videoBitrate
+        End If
+
+        If (videoFilesize <> "") Then
+            videoFilesize = " -S " + videoFilesize
+        End If
+
+        'Video Quality Setting
+        If (videoQuality = "0") Then
+            videoQuality = ""
+        Else
+            videoQuality = videoQuality / 100
+            If videoQuality = 1 Then
+                videoQuality = "1.0"
+            End If
+            videoQuality = " -q " + videoQuality
+        End If
+
+        If (twoPassEncoding = 1) Then
+            twoPassEncoding = " -2 "
+        Else
+            twoPassEncoding = ""
+        End If
+
+        If (deinterlace = 1) Then
+            deinterlace = " -d "
+        Else
+            deinterlace = ""
+        End If
+
+        If (grayscale = 1) Then
+            grayscale = " -g "
+        Else
+            grayscale = ""
+        End If
+
+        If (videoFramerate = "Automatic") Then
+            videoFramerate = ""
+        Else
+            videoFramerate = " -r " + videoFramerate
+        End If
+
+        If (pixelRatio = 1) Then
+            pixelRatio = " -p "
+        Else
+            pixelRatio = ""
+        End If
+
+        If (ChapterMarkers = 1) Then
+            ChapterMarkers = " -m "
+        Else
+            ChapterMarkers = ""
+        End If
+
+
+        Dim queryVideoSettings As String = videoBitrate + videoFilesize + videoQuality + twoPassEncoding + deinterlace + grayscale + videoFramerate + pixelRatio + ChapterMarkers
+        '----------------------------------------------------------------------
+
+        'Audio Settings Tab
+        Dim audioBitrate As String = drp_audioBitrate.Text
+        Dim audioSampleRate As String = drp_audioSampleRate.Text
+        Dim audioChannels As String = drp_audioChannels.Text
+        Dim SixChannelAudio As String = Check6ChanAudio.CheckState
+
+        If (audioBitrate <> "") Then
+            audioBitrate = " -B " + audioBitrate
+        End If
+
+        If (audioSampleRate <> "") Then
+            audioSampleRate = " -R " + audioSampleRate
+        End If
+
+
+        If (audioChannels = "Automatic") Then
+            audioChannels = ""
+        ElseIf (audioChannels = "") Then
+            audioChannels = ""
+        Else
+            Dim tempSub() As String
+            tempSub = audioChannels.Split(" ")
+            audioChannels = " -a " + tempSub(0)
+        End If
+
+        If (SixChannelAudio = 1) Then
+            If (drp_audioMixDown.Text = "Automatic") Then
+                drp_audioMixDown.Text = ""
+            End If
+            Dim Mixdown As String = drp_audioMixDown.Text
+            If Mixdown = "Mono" Then
+                Mixdown = "mono"
+            ElseIf Mixdown = "Stereo" Then
+                Mixdown = "stereo"
+            ElseIf Mixdown = "Dolby Surround" Then
+                Mixdown = "dpl1"
+            ElseIf Mixdown = "Dolby Pro Logic II" Then
+                Mixdown = "dpl2"
+            ElseIf Mixdown = "6 Channel Discrete" Then
+                Mixdown = "6ch"
+            Else
+                Mixdown = "stero"
+            End If
+            SixChannelAudio = " -6 " & Mixdown
+        Else
+            SixChannelAudio = ""
+        End If
+
+        Dim queryAudioSettings As String = audioBitrate + audioSampleRate + audioChannels + SixChannelAudio
+        '----------------------------------------------------------------------
+
+
+        ' H.264 Tab
+        Dim CRF As String = CheckCRF.CheckState
+        Dim h264Advanced = rtf_h264advanced.Text
+
+        If (CRF = 1) Then
+            CRF = " -Q "
+        Else
+            CRF = ""
+        End If
+
+        If (h264Advanced = "") Then
+            h264Advanced = ""
+        Else
+            h264Advanced = " -x " + h264Advanced
+        End If
+
+        Dim h264Settings As String = CRF + h264Advanced
+        '----------------------------------------------------------------------
+
+        'Advanced Settings Tab
+        Dim processors As String = drp_processors.Text
+
+        ' Number of Processors Handler
+        If (processors = "Automatic") Then
+            processors = ""
+        Else
+            processors = " -C " + processors + " "
+        End If
+
+        Dim queryAdvancedSettings As String = processors
+        '----------------------------------------------------------------------
+
+        Return querySource + queryDestination + queryPictureSettings + queryVideoSettings + h264Settings + queryAudioSettings + queryAdvancedSettings
+
+    End Function
+
+
+    '#
+    '#
+    '# hbcli.exe Handling. Some clever multi-threaded code to monitor the encode process.
+    '#
+    '#
+    ' Stage 1
+    ' Lets watch the hbcli process and when it finishes then Raise Event ThreadComplete
+    Dim WithEvents hbcliMonitor As ProcessMonitor
+    Public Class ProcessMonitor
+        Public isRunning As Integer = 1
+
+        Public Event ThreadComplete(ByVal isRunning As Integer)
+
+        Public Sub tmrProcCheck()
+            Dim isRunning As Integer
+            Dim process2 As Process = New Process
+            Dim running As Boolean = True
+            Dim hbProcess As Process() = Process.GetProcesses()
+
+            While running
+                Thread.Sleep(1000)
+                hbProcess = Process.GetProcesses()
+                running = False
+                Dim processArr2 As Process() = hbProcess
+                Dim i As Integer = 0
+                While i < CInt(processArr2.Length)
+                    Dim process1 As Process = processArr2(i)
+                    If process1.ProcessName.Equals("hbcli") Then
+                        running = True
+                    End If
+                    i = i + 1
+                End While
+            End While
+            isRunning = 0
+            RaiseEvent ThreadComplete(isRunning)
+        End Sub
+    End Class
+    ' Stage 2
+    ' The hbcli processes has exited at this point. Lets throw a messagebox at the user telling him the enocode has completed.
+    Sub TheadCompletedMonitor(ByVal isRunning As Integer) Handles hbcliMonitor.ThreadComplete
+        Dim ApplicationPath As String = Application.StartupPath ' The applications start parth
+        MessageBox.Show("Status: The encoding process has ended.")
+    End Sub
+    '------------------------------------------------
+
+
+ 
+End Class
