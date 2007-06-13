@@ -34,6 +34,7 @@
                 ShowQueuePanel = id; 
                 ShowScanPanel = id; 
                 TitlePopUpChanged = id; 
+                TwoPassCheckboxChanged = id; 
                 VideoMatrixChanged = id; 
                 X264AdvancedOptionsChanged = id; 
                 X264AdvancedOptionsSet = id; 
@@ -140,6 +141,7 @@
                 fVidRatePopUp = NSPopUpButton; 
                 fVidTargetCell = NSButtonCell; 
                 fVidTargetSizeField = NSTextField; 
+                fVidTurboPassCheck = NSButton; 
                 fVidTwoPassCheck = NSButton; 
                 fWindow = NSWindow; 
                 fX264optAlphaDeblockPopUp = NSPopUpButton; 

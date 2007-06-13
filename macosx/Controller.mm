@@ -176,12 +176,17 @@ static int FormatSettings[3][4] =
     [fDstFormatPopUp selectItemAtIndex: 0];
 
     [self FormatPopUpChanged: NULL];
-    /* We enable the create chapters checkbox here since we are .mp4 */	
+    
+	/* We enable the create chapters checkbox here since we are .mp4 */	
 	[fCreateChapterMarkers setEnabled: YES];
 	if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultChapterMarkers"] > 0)
 	{
 		[fCreateChapterMarkers setState: NSOnState];
 	}
+	
+
+	
+	
     [fDstFile2Field setStringValue: [NSString stringWithFormat:
         @"%@/Desktop/Movie.mp4", NSHomeDirectory()]];
 
@@ -190,6 +195,8 @@ static int FormatSettings[3][4] =
     [fVidEncoderPopUp addItemWithTitle: @"FFmpeg"];
     [fVidEncoderPopUp addItemWithTitle: @"XviD"];
 
+    
+	
     /* Video quality */
     [fVidTargetSizeField setIntValue: 700];
 	[fVidBitrateField    setIntValue: 1000];
@@ -239,7 +246,9 @@ static int FormatSettings[3][4] =
     [fRipButton setEnabled: NO];
 
 
-
+	/* We disable the Turbo 1st pass checkbox since we are not x264 */
+	[fVidTurboPassCheck setEnabled: NO];
+	[fVidTurboPassCheck setState: NSOffState];
 }
 
 // register a test notification and make
@@ -659,7 +668,7 @@ return registrationDictionary;
 		fX264optWeightBLabel,fX264optWeightBSwitch,fX264optBRDOLabel,fX264optBRDOSwitch,
 		fX264optBPyramidLabel,fX264optBPyramidSwitch,fX264optBiMELabel,fX264optBiMESwitch,
 		fX264optDirectPredLabel,fX264optDirectPredPopUp,fX264optDeblockLabel,
-		fX264optAlphaDeblockPopUp,fX264optBetaDeblockPopUp};
+		fX264optAlphaDeblockPopUp,fX264optBetaDeblockPopUp,fVidTurboPassCheck};
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -839,46 +848,41 @@ return registrationDictionary;
     }
     if( job->vcodec & HB_VCODEC_X264 )
     {
-	 if ([fVidEncoderPopUp indexOfSelectedItem] > 0 )
+		if ([fVidEncoderPopUp indexOfSelectedItem] > 0 )
 	    {
-		/* Just use new Baseline Level 3.0 
-		Lets Deprecate Baseline Level 1.3*/
-		job->h264_level = 30;
-		job->mux = HB_MUX_IPOD;
-        /* move sanity check for iPod Encoding here */
-		job->pixel_ratio = 0 ;
-
+			/* Just use new Baseline Level 3.0 
+			Lets Deprecate Baseline Level 1.3*/
+			job->h264_level = 30;
+			job->mux = HB_MUX_IPOD;
+			/* move sanity check for iPod Encoding here */
+			job->pixel_ratio = 0 ;
+			
 		}
 		
 		/* Set this flag to switch from Constant Quantizer(default) to Constant Rate Factor Thanks jbrjake
 		Currently only used with Constant Quality setting*/
 		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultCrf"] > 0 && [fVidQualityMatrix selectedRow] == 2)
 		{
-	        /* Can only be used with svn rev >= 89 */
-			job->crf = 1;
+	        job->crf = 1;
 		}
 		
 		/* Below Sends x264 options to the core library if x264 is selected*/
-		/* First we look to see if a user preset has been selected that contains a x264 optional string CurUserPresetChosenNum = nil */
-		//if (curUserPresetChosenNum != nil)
-		//{
-			
-			/* Lets use this as per Nyx, Thanks Nyx! fDisplayX264Options*/
-			job->x264opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */  
+		/* Lets use this as per Nyx, Thanks Nyx!*/
+		job->x264opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */
+		/* Turbo first pass if two pass and Turbo First pass is selected */
+		if( [fVidTwoPassCheck state] == NSOnState && [fVidTurboPassCheck state] == NSOnState )
+		{
+			/* pass the "Turbo" string to be appended to the existing x264 opts string into a variable for the first pass */
+			NSString *firstPassOptStringTurbo = @":ref=1:subme=1:me=dia:analyse=none:weightb=0:trellis=0:no-fast-pskip=0:8x8dct=0";
+			/* append the "Turbo" string variable to the existing opts string.
+			Note: the "Turbo" string must be appended, not prepended to work properly*/
+			NSString *firstPassOptStringCombined = [[fDisplayX264Options stringValue] stringByAppendingString:firstPassOptStringTurbo];
+			strcpy(job->x264opts, [firstPassOptStringCombined UTF8String]);
+		}
+		else
+		{
 			strcpy(job->x264opts, [[fDisplayX264Options stringValue] UTF8String]);
-			//strcpy(job->x264opts, [[chosenPreset valueForKey:@"x264Option"] UTF8String]);
-			//job->x264opts = [[chosenPreset valueForKey:@"x264Option"] cString];
-		//}
-		//else
-		//{
-		    /* if not, then we check to see if there is a x264 opt in the preferences and use that if we want */
-			//job->x264opts = [[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] UTF8String];
-			/* Lets use this as per Nyx, Thanks Nyx! */
-			//job->x264opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */  
-			//strcpy(job->x264opts, [[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] UTF8String]);
-		//} 
-		
-		
+		}
 		
         job->h264_13 = [fVidEncoderPopUp indexOfSelectedItem];
     }
@@ -1273,7 +1277,7 @@ return registrationDictionary;
                 _( @"AVC/H.264 Video / AAC Audio" )];
 			/* We enable the create chapters checkbox here since we are .mp4*/
 			[fCreateChapterMarkers setEnabled: YES];
-			break;
+            break;
         case 1: 
             ext = "avi";
             [fDstCodecsPopUp addItemWithTitle:
@@ -1320,7 +1324,8 @@ return registrationDictionary;
 	/* so call AudioTrackPopUpChanged for both audio tracks to update the mixdown popups */
 	[self AudioTrackPopUpChanged: fAudLang1PopUp];
 	[self AudioTrackPopUpChanged: fAudLang2PopUp];
-
+	/* We call the method to properly enable/disable turbo 2 pass */
+	[self TwoPassCheckboxChanged: sender];
 	/* We call method method to change UI to reflect whether a preset is used or not*/
 	[self CustomSettingUsed: sender];	
 	
@@ -1332,7 +1337,7 @@ return registrationDictionary;
     int codecs = [fDstCodecsPopUp indexOfSelectedItem];
 	[fX264optView setHidden: YES];
 	[fX264optViewTitleLabel setStringValue: @"Only Used With The x264 (H.264) Codec"];
-	
+
 
     /* Update the encoder popup*/
     if( ( FormatSettings[format][codecs] & HB_VCODEC_X264 ) )
@@ -1341,8 +1346,11 @@ return registrationDictionary;
         [fVidEncoderPopUp removeAllItems];
 		[fVidEncoderPopUp addItemWithTitle: @"x264 (h.264 Main)"];
 		[fVidEncoderPopUp addItemWithTitle: @"x264 (h.264 iPod)"];
+		[fVidEncoderPopUp selectItemAtIndex: 0];
         [fX264optView setHidden: NO];
 		[fX264optViewTitleLabel setStringValue: @""];
+
+
 		
     }
     else if( ( FormatSettings[format][codecs] & HB_VCODEC_FFMPEG ) )
@@ -1366,15 +1374,13 @@ return registrationDictionary;
         [fAudRatePopUp    setEnabled: YES];
         [fAudBitratePopUp setEnabled: YES];
     }
-
-	/* changing the codecs on offer may mean that we can / can't offer mono or 6ch, */
+    /* changing the codecs on offer may mean that we can / can't offer mono or 6ch, */
 	/* so call AudioTrackPopUpChanged for both audio tracks to update the mixdown popups */
 	[self AudioTrackPopUpChanged: fAudLang1PopUp];
 	[self AudioTrackPopUpChanged: fAudLang2PopUp];
 
     [self CalculateBitrate: sender];
-    /* We call method method to change UI to reflect whether a preset is used or not*/
-	[self CustomSettingUsed: sender];
+    [self TwoPassCheckboxChanged: sender];
 }
 
 - (IBAction) EncoderPopUpChanged: (id) sender
@@ -1401,8 +1407,37 @@ return registrationDictionary;
 	}
     
 	[self CalculatePictureSizing: sender];
-	/* We call method method to change UI to reflect whether a preset is used or not*/    
-    [self CustomSettingUsed: sender];
+	[self TwoPassCheckboxChanged: sender];
+}
+
+- (IBAction) TwoPassCheckboxChanged: (id) sender
+{
+	/* check to see if x264 is chosen */
+	if([fDstFormatPopUp indexOfSelectedItem] == 0 && [fDstCodecsPopUp indexOfSelectedItem] == 1)
+	{
+		if( [fVidTwoPassCheck state] == NSOnState)
+		{
+			[fVidTurboPassCheck setHidden: NO];
+		}
+		else
+		{
+			[fVidTurboPassCheck setHidden: YES];
+			[fVidTurboPassCheck setState: NSOffState];
+		}
+		/* Make sure Two Pass is checked if Turbo is checked */
+		if( [fVidTurboPassCheck state] == NSOnState)
+		{
+			[fVidTwoPassCheck setState: NSOnState];
+		}
+	}
+	else
+	{
+		[fVidTurboPassCheck setHidden: YES];
+		[fVidTurboPassCheck setState: NSOffState];
+	}
+	
+	/* We call method method to change UI to reflect whether a preset is used or not*/
+	[self CustomSettingUsed: sender];
 }
 
 - (IBAction) SetEnabledStateOfAudioMixdownControls: (id) sender
@@ -2850,7 +2885,8 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithInt:[fVidGrayscaleCheck state]] forKey:@"VideoGrayScale"];
 	/* 2 Pass Encoding */
 	[preset setObject:[NSNumber numberWithInt:[fVidTwoPassCheck state]] forKey:@"VideoTwoPass"];
-	
+	/* Turbo 2 pass Encoding fVidTurboPassCheck*/
+	[preset setObject:[NSNumber numberWithInt:[fVidTurboPassCheck state]] forKey:@"VideoTurboTwoPass"];
 	/*Picture Settings*/
 	hb_job_t * job = fTitle->job;
 	/* Basic Picture Settings */
@@ -3213,6 +3249,7 @@ the user is using "Custom" settings by determining the sender*/
 		
 		/* Lets run through the following functions to get variables set there */
 		[self EncoderPopUpChanged: NULL];
+		
 		[self CalculateBitrate: NULL];
 		
 		/* Video quality */
@@ -3232,7 +3269,9 @@ the user is using "Custom" settings by determining the sender*/
 		
 		/* 2 Pass Encoding */
 		[fVidTwoPassCheck setState:[[chosenPreset objectForKey:@"VideoTwoPass"] intValue]];
-		
+		[self TwoPassCheckboxChanged: NULL];
+		/* Turbo 1st pass for 2 Pass Encoding */
+		[fVidTurboPassCheck setState:[[chosenPreset objectForKey:@"VideoTurboTwoPass"] intValue]];
 		
 		/*Audio*/
 		

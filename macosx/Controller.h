@@ -73,7 +73,7 @@
     IBOutlet NSSlider            * fVidQualitySlider;
     IBOutlet NSButton            * fVidGrayscaleCheck;
     IBOutlet NSButton            * fVidTwoPassCheck;
-
+    IBOutlet NSButton            * fVidTurboPassCheck;
 	
 	/* Picture Settings box */
 	IBOutlet NSTextField         * fPicLabelSettings;
@@ -216,7 +216,7 @@
 - (IBAction) FormatPopUpChanged: (id) sender;
 - (IBAction) CodecsPopUpChanged: (id) sender;
 - (IBAction) EncoderPopUpChanged: (id) sender;
-
+- (IBAction) TwoPassCheckboxChanged: (id) sender;
 - (IBAction) SetEnabledStateOfAudioMixdownControls: (id) sender;
 - (IBAction) AddAllAudioTracksToPopUp: (id) sender;
 - (IBAction) SelectAudioTrackInPopUp: (id) sender searchPrefixString: (NSString *) searchPrefixString selectIndexIfNotFound: (int) selectIndexIfNotFound;
