@@ -143,7 +143,18 @@ static int MP4Init( hb_mux_object_t * m )
     
 
     /* Create an empty mp4 file */
-    m->file = MP4Create( job->file, MP4_DETAILS_ERROR, 0 );
+    if (job->largeFileSize)
+    /* Use 64-bit MP4 file */
+    {
+        m->file = MP4Create( job->file, MP4_DETAILS_ERROR, MP4_CREATE_64BIT_DATA ); 
+        hb_log("Using 64-bit MP4 formatting.");
+    }
+    else
+    /* Limit MP4s to less than 4 GB */
+    {
+        m->file = MP4Create( job->file, MP4_DETAILS_ERROR, 0 );
+    }
+    
     if (m->file == MP4_INVALID_FILE_HANDLE)
     {
         hb_log("muxmp4.c: MP4Create failed!");

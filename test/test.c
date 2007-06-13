@@ -56,6 +56,7 @@ static int	  maxHeight		= 0;
 static int	  maxWidth		= 0;
 static int    turbo_opts_enabled = 0;
 static char * turbo_opts = "no-fast-pskip=0:subme=1:me=dia:trellis=0:analyse=none";
+static int    largeFileSize = 0;
 
 /* Exit cleanly on Ctrl-C */
 static volatile int die = 0;
@@ -539,6 +540,12 @@ static int HandleEvents( hb_handle_t * h )
             {
                 job->mux = mux;
             }
+            
+            if ( largeFileSize )
+            {
+                job->largeFileSize = 1;
+            }
+            
             job->file = strdup( output );
 
             if( crf )
@@ -736,6 +743,8 @@ static void ShowHelp()
     "    -o, --output <string>   Set output file name\n"
 	"    -f, --format <string>   Set output format (avi/mp4/ogm, default:\n"
     "                            autodetected from file name)\n"
+    "    -4, --large-file        Use 64-bit mp4 files that can hold more than\n"
+    "                            4 GB. Note: Breaks iPod, @TV, PS3 compatibility.\n"""
     "\n"
 	
 	"### Picture Settings---------------------------------------------------------\n\n"
@@ -828,7 +837,8 @@ static int ParseOptions( int argc, char ** argv )
             { "format",      required_argument, NULL,    'f' },
             { "input",       required_argument, NULL,    'i' },
             { "output",      required_argument, NULL,    'o' },
-
+            { "large-file",  no_argument,       NULL,    '4' },
+            
             { "title",       required_argument, NULL,    't' },
             { "longest",     no_argument,       NULL,    'L' },
             { "chapters",    required_argument, NULL,    'c' },
@@ -869,7 +879,7 @@ static int ParseOptions( int argc, char ** argv )
         int c;
 
         c = getopt_long( argc, argv,
-                         "hvuC:f:i:o:t:Lc:ma:6:s:UN:e:E:2dgpw:l:n:b:q:S:B:r:R:Qx:TY:X:",
+                         "hvuC:f:4i:o:t:Lc:ma:6:s:UN:e:E:2dgpw:l:n:b:q:S:B:r:R:Qx:TY:X:",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -900,7 +910,9 @@ static int ParseOptions( int argc, char ** argv )
             case 'o':
                 output = strdup( optarg );
                 break;
-
+            case '4':
+                largeFileSize = 1;
+                break;
             case 't':
                 titleindex = atoi( optarg );
                 break;

@@ -142,10 +142,10 @@ struct hb_job_s
          vbitrate:          output bitrate (kbps)
          pass:              0, 1 or 2
          vrate, vrate_base: output framerate is vrate / vrate_base
-		 h264_level:		boolean for whether or not we're encoding for iPod
-		 crf:				boolean for whether to use constant rate factor with x264
-		 x264opts:			string of extra x264 options 
-		 areBframes:		boolean to note if b-frames are included in x264opts */
+         h264_level:        boolean for whether or not we're encoding for iPod
+         crf:               boolean for whether to use constant rate factor with x264
+         x264opts:          string of extra x264 options 
+         areBframes:        boolean to note if b-frames are included in x264opts */
 #define HB_VCODEC_MASK   0x0000FF
 #define HB_VCODEC_FFMPEG 0x000001
 #define HB_VCODEC_XVID   0x000002
@@ -158,15 +158,15 @@ struct hb_job_s
     int             vrate_base;
     int             pass;
     int             h264_13;
-	int				h264_level;
-	int				crf;
-	char		    *x264opts;
-	int				areBframes;
-	
+    int             h264_level;
+    int             crf;
+    char            *x264opts;
+    int             areBframes;
+    
     /* Audio tracks:
          audios:          Indexes in hb_title_t's audios list, starting from 0.
                           -1 indicates the end of the list
-	     audio_mixdowns:  The mixdown to be used for each audio track in audios[] */
+        audio_mixdowns:  The mixdown to be used for each audio track in audios[] */
 
 /* define some masks, used to extract the various information from the HB_AMIXDOWN_XXXX values */
 #define HB_AMIXDOWN_DCA_FORMAT_MASK             0x00FFF000
@@ -244,6 +244,10 @@ struct hb_job_s
 	
     int             mux;
     const char          * file;
+
+    /* Allow MP4 files > 4 gigs */
+    int             largeFileSize;
+    
 
     int subtitle_scan;
     hb_subtitle_t ** select_subtitle;
