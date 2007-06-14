@@ -40,6 +40,7 @@
         @"NO",              @"DefaultAutoNaming",
         @"NO",              @"DefaultChapterMarkers",
         @"NO",              @"ShowVerboseOutput",
+		@"NO",              @"AllowLargeFiles",
         nil]];
 }
 
