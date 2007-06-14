@@ -51,7 +51,8 @@
 
     /* Destination box */
     IBOutlet NSTextField         * fDstFormatField;
-    IBOutlet NSPopUpButton       * fDstFormatPopUp;
+	IBOutlet NSPopUpButton       * fDstFormatPopUp;
+	IBOutlet NSButton            * fDstMpgLargeFileCheck;
     IBOutlet NSTextField         * fDstCodecsField;
     IBOutlet NSPopUpButton       * fDstCodecsPopUp;
     IBOutlet NSTextField         * fDstFile1Field;

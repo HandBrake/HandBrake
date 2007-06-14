@@ -73,6 +73,7 @@
                 fDstFile2Field = NSTextField; 
                 fDstFormatField = NSTextField; 
                 fDstFormatPopUp = NSPopUpButton; 
+                fDstMpgLargeFileCheck = NSButton; 
                 fPauseButton = NSButton; 
                 fPicLabelAnamorphic = NSTextField; 
                 fPicLabelAr = NSTextField; 
@@ -177,6 +178,7 @@
                 fX264optViewTitleLabel = NSTextField; 
                 fX264optWeightBLabel = NSTextField; 
                 fX264optWeightBSwitch = NSButton; 
+                myOutlet = id; 
                 tableView = NSTableView; 
             }; 
             SUPERCLASS = NSObject; 

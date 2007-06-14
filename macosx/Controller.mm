@@ -668,7 +668,7 @@ return registrationDictionary;
 		fX264optWeightBLabel,fX264optWeightBSwitch,fX264optBRDOLabel,fX264optBRDOSwitch,
 		fX264optBPyramidLabel,fX264optBPyramidSwitch,fX264optBiMELabel,fX264optBiMESwitch,
 		fX264optDirectPredLabel,fX264optDirectPredPopUp,fX264optDeblockLabel,
-		fX264optAlphaDeblockPopUp,fX264optBetaDeblockPopUp,fVidTurboPassCheck};
+		fX264optAlphaDeblockPopUp,fX264optBetaDeblockPopUp,fVidTurboPassCheck,fDstMpgLargeFileCheck};
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -831,17 +831,34 @@ return registrationDictionary;
     job->mux    = FormatSettings[format][codecs] & HB_MUX_MASK;
     job->vcodec = FormatSettings[format][codecs] & HB_VCODEC_MASK;
     job->acodec = FormatSettings[format][codecs] & HB_ACODEC_MASK;
-    /* We set the chapter marker extraction here based on the format being
-	mpeg4 and the checkbox being checked */
-	if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fCreateChapterMarkers state] == NSOnState)
+    /* If mpeg-4, then set mpeg-4 specific options like chapters and > 4gb file sizes */
+	if ([fDstFormatPopUp indexOfSelectedItem] == 0)
 	{
-        job->chapter_markers = 1;
+        /* We set the chapter marker extraction here based on the format being
+		mpeg4 and the checkbox being checked */
+		if ([fCreateChapterMarkers state] == NSOnState)
+		{
+			job->chapter_markers = 1;
+		}
+		else
+		{
+			job->chapter_markers = 0;
+		}
+		/* We set the largeFileSize (64 bit formatting) variable here to allow for > 4gb files based on the format being
+		mpeg4 and the checkbox being checked 
+		*Note: this will break compatibility with some target devices like iPod, etc.!!!!*/
+		if ([fDstMpgLargeFileCheck state] == NSOnState)
+		{
+			job->largeFileSize = 1;
+		}
+		else
+		{
+			job->largeFileSize = 0;
+		}
 	}
-	else
-	{
-	job->chapter_markers = 0;
-	}
-    if( ( job->vcodec & HB_VCODEC_FFMPEG ) &&
+	
+	
+	if( ( job->vcodec & HB_VCODEC_FFMPEG ) &&
         [fVidEncoderPopUp indexOfSelectedItem] > 0 )
     {
         job->vcodec = HB_VCODEC_XVID;
@@ -1256,7 +1273,8 @@ return registrationDictionary;
     NSString * string = [fDstFile2Field stringValue];
     int format = [fDstFormatPopUp indexOfSelectedItem];
     char * ext = NULL;
-
+	/* Initially set the large file (64 bit formatting) output checkbox to hidden */
+    [fDstMpgLargeFileCheck setHidden: YES];
     /* Update the codecs popup */
     [fDstCodecsPopUp removeAllItems];
     switch( format )
@@ -1277,7 +1295,9 @@ return registrationDictionary;
                 _( @"AVC/H.264 Video / AAC Audio" )];
 			/* We enable the create chapters checkbox here since we are .mp4*/
 			[fCreateChapterMarkers setEnabled: YES];
-            break;
+			/* We show the Large File (64 bit formatting) checkbox since we are .mp4 */
+			[fDstMpgLargeFileCheck setHidden: NO];
+			break;
         case 1: 
             ext = "avi";
             [fDstCodecsPopUp addItemWithTitle:
@@ -1292,7 +1312,7 @@ return registrationDictionary;
 			and make sure it is unchecked*/
 			[fCreateChapterMarkers setEnabled: NO];
 			[fCreateChapterMarkers setState: NSOffState];
-            break;
+			break;
         case 2:
             ext = "ogm";
             [fDstCodecsPopUp addItemWithTitle:
@@ -1389,21 +1409,22 @@ return registrationDictionary;
 	/* Check to see if we need to modify the job pic values based on x264 (iPod) encoder selection */
     if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fDstCodecsPopUp indexOfSelectedItem] == 1 && [fVidEncoderPopUp indexOfSelectedItem] == 1)
     {
-	hb_job_t * job = fTitle->job;
-	job->pixel_ratio = 0 ;
-	
-		 if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPicSizeAutoiPod"] > 0)
-		 {
-		 
-		 if (job->width > 640)
-				{
+		hb_job_t * job = fTitle->job;
+		job->pixel_ratio = 0 ;
+		
+		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPicSizeAutoiPod"] > 0)
+		{
+			
+			if (job->width > 640)
+			{
 				job->width = 640;
-				}
-		 job->keep_ratio = 1;
-		 hb_fix_aspect( job, HB_KEEP_WIDTH );
-		 
-		 }
-
+			}
+			job->keep_ratio = 1;
+			hb_fix_aspect( job, HB_KEEP_WIDTH );
+			
+		}
+		/* Make sure the 64bit formatting checkbox is off */
+		[fDstMpgLargeFileCheck setState: NSOffState];
 	}
     
 	[self CalculatePictureSizing: sender];
@@ -2867,6 +2888,8 @@ the user is using "Custom" settings by determining the sender*/
     [preset setObject:[fDstFormatPopUp titleOfSelectedItem] forKey:@"FileFormat"];
 	/* Chapter Markers fCreateChapterMarkers*/
 	[preset setObject:[NSNumber numberWithInt:[fCreateChapterMarkers state]] forKey:@"ChapterMarkers"];
+	/* Allow Mpeg4 64 bit formatting +4GB file sizes */
+	[preset setObject:[NSNumber numberWithInt:[fDstMpgLargeFileCheck state]] forKey:@"Mp4LargeFile"];
 	/* Codecs */
 	[preset setObject:[fDstCodecsPopUp titleOfSelectedItem] forKey:@"FileCodecs"];
 	/* Video encoder */
@@ -3233,9 +3256,12 @@ the user is using "Custom" settings by determining the sender*/
 		/* File Format */
 		[fDstFormatPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileFormat"]]];
 		[self FormatPopUpChanged: NULL];
+		
 		/* Chapter Markers*/
 		[fCreateChapterMarkers setState:[[chosenPreset objectForKey:@"ChapterMarkers"] intValue]];
-	    /* Codecs */
+		/* Allow Mpeg4 64 bit formatting +4GB file sizes */
+		[fDstMpgLargeFileCheck setState:[[chosenPreset objectForKey:@"Mp4LargeFile"] intValue]];
+		/* Codecs */
 		[fDstCodecsPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]]];
 		[self CodecsPopUpChanged: NULL];
 		/* Video encoder */
