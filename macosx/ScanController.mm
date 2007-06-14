@@ -40,9 +40,24 @@
 
 - (void) Show
 {
- 
-    fDriveDetector = [[DriveDetector alloc] initWithCallback:self selector:@selector(openUpdateDrives:)];
-	[fDriveDetector run];
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DisableDvdAutoDetect"] == 0)
+	{
+	[fSelectString setStringValue:@"Select a DVD Source:"];
+		fDriveDetector = [[DriveDetector alloc] initWithCallback:self selector:@selector(openUpdateDrives:)];
+		[fDriveDetector run];
+	}
+	else
+	{
+	[fSelectString setStringValue:@"Select a DVD Source: (DVD drive auto-detect is disabled)"];
+
+	[fDetectedCell  setEnabled: 0];
+	[fDetectedPopUp setEnabled: 0];
+    [fFolderField   setEnabled: 1];
+    [fBrowseButton  setEnabled: 1];
+	[fOpenButton    setEnabled: 0];
+	[fBrowseButton  setEnabled: 1];
+	[fMatrix selectCell: fFolderCell];
+	}
 	[NSApp beginSheet:fPanel modalForWindow:fWindow modalDelegate:nil didEndSelector:NULL contextInfo:NULL];
 }
 
@@ -140,25 +155,36 @@
 
 - (IBAction) MatrixChanged: (id) sender
 {
-    /* Do we have detected drives */
+    /* Do we have detected drives  and is "Disable DVD Drive Auto Scan" off in prefs*/
 
-    if( [fDetectedPopUp numberOfItems] > 0 )
+    if( [fDetectedPopUp numberOfItems] > 0  && [[NSUserDefaults standardUserDefaults] boolForKey:@"DisableDvdAutoDetect"] == 0)
     {
         [fDetectedCell setEnabled: YES];
+		//[fMatrix selectCellAtRow:0 column:0];
+		
     }
     else
     {
-       [fMatrix selectCell: fFolderCell];
+       //[fMatrix selectCell: fFolderCell];
         [fDetectedCell setEnabled: NO];
-		[fMatrix selectCellAtRow:1 column:0];
+		
     }
 
     /* Enable controls related to the current choice */
-    bool foo;
-    foo = ( [fMatrix selectedRow] == 0 );
-    [fDetectedPopUp setEnabled:  foo];
-    [fFolderField   setEnabled: !foo];
-    [fBrowseButton  setEnabled: !foo];
+	/* If Detected Volume is selected */
+    if ( [fMatrix selectedRow] == 0 )
+	{
+	[fDetectedPopUp setEnabled: YES];
+    [fFolderField   setEnabled: NO];
+    [fBrowseButton  setEnabled: NO];
+	}
+	else
+	{
+	[fDetectedPopUp setEnabled: NO];
+    [fFolderField   setEnabled: YES];
+    [fBrowseButton  setEnabled: YES];
+	}
+
 
 }
 

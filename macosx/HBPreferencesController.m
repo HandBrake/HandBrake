@@ -41,6 +41,7 @@
         @"NO",              @"DefaultChapterMarkers",
         @"NO",              @"ShowVerboseOutput",
 		@"NO",              @"AllowLargeFiles",
+		@"NO",              @"DisableDvdAutoDetect",
         nil]];
 }
 

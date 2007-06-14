@@ -40,14 +40,17 @@
 
 - (void) run
 {
-    /* Set up a timer to check devices every second */
-    fTimer = [NSTimer scheduledTimerWithTimeInterval: 1.0 target: self
-        selector: @selector( detectTimer: ) userInfo: nil repeats: YES];
-    [[NSRunLoop currentRunLoop] addTimer: fTimer forMode:
-        NSModalPanelRunLoopMode];
-
-    /* Do a first update right away */
-    [fTimer fire];
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DisableDvdAutoDetect"] == 0)
+	{
+		/* Set up a timer to check devices every second */
+		fTimer = [NSTimer scheduledTimerWithTimeInterval: 1.0 target: self
+												selector: @selector( detectTimer: ) userInfo: nil repeats: YES];
+		[[NSRunLoop currentRunLoop] addTimer: fTimer forMode:
+			NSModalPanelRunLoopMode];
+		
+		/* Do a first update right away */
+		[fTimer fire];
+	}
 }
 
 - (void) stop
