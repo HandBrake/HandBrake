@@ -157,7 +157,7 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
     buf->stop  = buf->start + 90000 * pv->input_samples / pv->job->arate / pv->out_discrete_channels;
     buf->size  = faacEncEncode( pv->faac, (int32_t *) pv->buf,
             pv->input_samples, buf->data, pv->output_bytes );
-    buf->key   = 1;
+    buf->frametype   = HB_FRAME_AUDIO;
 
     if( !buf->size )
     {

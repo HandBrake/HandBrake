@@ -316,7 +316,7 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
         buf->size  = 0;
         buf->start = in->start;
         buf->stop  = in->stop;
-        buf->key   = 0;
+        buf->frametype   = 0;
 
         int64_t dts_start, dts_stop;
 
@@ -340,7 +340,7 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
             {
                 if( nal[i].i_ref_idc == NAL_PRIORITY_HIGHEST )
                 {
-                    buf->key = 1;
+                    buf->frametype = HB_FRAME_KEY;
                 }
                 buf->size += size;
                 continue;
@@ -362,26 +362,27 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     buf->data[buf->size+3] = ( ( size - 4 ) >>  0 ) & 0xFF;
                     switch( pic_out.i_type )
                     {
-                    /*  For IDR (key frames), buf->key = 1,
-                        and the same for regular I-frames. */
+                    /*  Decide what type of frame we have. */
                         case X264_TYPE_IDR:
-                        case X264_TYPE_I:
-                            buf->key = 1;
+                            buf->frametype = HB_FRAME_IDR;
                             break;
-                    /*  For B-frames, buf->key = 2 */
+                        case X264_TYPE_I:
+                            buf->frametype = HB_FRAME_I;
+                            break;
+                        case X264_TYPE_P:
+                            buf->frametype = HB_FRAME_P;
+                            break;
                         case X264_TYPE_B:
-                            buf->key = 2;
+                            buf->frametype = HB_FRAME_B;
                             break;
                     /*  This is for b-pyramid, which has reference b-frames
-                        However, it doesn't seem to ever be used...
-                        They just show up as buf->key == 2 like
-                        regular b-frames. */
+                        However, it doesn't seem to ever be used... */
                         case X264_TYPE_BREF:
-                            buf->key = 3;
+                            buf->frametype = HB_FRAME_BREF;
                             break;
-                    /*  For P-frames, buf->key = 0 */
+                    /*  If it isn't the above, what type of frame is it?? */
                         default:
-                            buf->key = 0;
+                            buf->frametype = 0;
                     }
 
 

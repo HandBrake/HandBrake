@@ -108,7 +108,7 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
     buf->stop  = buf->start + 90000 * 1152 / pv->job->arate;
     buf->size  = lame_encode_buffer_interleaved( pv->lame, samples_s16,
             1152, buf->data, LAME_MAXMP3BUFFER );
-    buf->key   = 1;
+    buf->frametype   = HB_FRAME_AUDIO;
 
     if( !buf->size )
     {

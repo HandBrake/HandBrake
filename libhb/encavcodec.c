@@ -195,7 +195,7 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                                       frame );
     buf->start = in->start;
     buf->stop  = in->stop;
-    buf->key   = pv->context->coded_frame->key_frame;
+    buf->frametype   = pv->context->coded_frame->key_frame ? HB_FRAME_KEY : HB_FRAME_REF;
 
     av_free( frame );
 

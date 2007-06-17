@@ -157,7 +157,7 @@ static hb_buffer_t * Flush( hb_work_object_t * w )
             memcpy( buf->data, &op, sizeof( ogg_packet ) );
             memcpy( buf->data + sizeof( ogg_packet ), op.packet,
                     op.bytes );
-            buf->key   = 1;
+            buf->frametype   = HB_FRAME_AUDIO;
             buf->start = pv->pts; /* No exact, but who cares - the OGM
                                     muxer doesn't use it */
             buf->stop  = buf->start +

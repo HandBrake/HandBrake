@@ -482,7 +482,7 @@ static int AVIMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
 
     /* Update index */
     IndexAddInt32( m->index, mux_data->fourcc );
-    IndexAddInt32( m->index, buf->key ? AVIIF_KEYFRAME : 0 );
+    IndexAddInt32( m->index, (buf->frametype & HB_FRAME_KEY) ? AVIIF_KEYFRAME : 0 );
     IndexAddInt32( m->index, 4 + m->size );
     IndexAddInt32( m->index, buf->size );
 

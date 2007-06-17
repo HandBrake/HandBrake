@@ -268,7 +268,7 @@ static int OGMMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         case HB_VCODEC_X264:
             op.bytes  = buf->size + 1;
             op.packet = malloc( op.bytes );
-            op.packet[0] = buf->key ? 0x08 : 0x00;
+            op.packet[0] = (buf->frametype & HB_FRAME_KEY) ? 0x08 : 0x00;
             memcpy( &op.packet[1], buf->data, buf->size );
             op.b_o_s       = 0;
             op.e_o_s       = 0;

@@ -38,7 +38,16 @@ struct hb_buffer_s
     int64_t       start;
     int64_t       stop;
     int           new_chap;
-    int           key;
+
+#define HB_FRAME_IDR    0x01
+#define HB_FRAME_I      0x02
+#define HB_FRAME_AUDIO  0x04
+#define HB_FRAME_P      0x10
+#define HB_FRAME_B      0x20
+#define HB_FRAME_BREF   0x40
+#define HB_FRAME_KEY    0x0F
+#define HB_FRAME_REF    0xF0
+    uint8_t       frametype;
 
     /* Holds the output PTS from x264, for use by b-frame offsets in muxmp4.c */
     int64_t     renderOffset;

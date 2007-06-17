@@ -194,7 +194,7 @@ int encxvidWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     frame.quant_inter_matrix = NULL;
 
     buf->size = xvid_encore( pv->xvid, XVID_ENC_ENCODE, &frame, NULL );
-    buf->key = ( frame.out_flags & XVID_KEYFRAME );
+    buf->frametype = ( frame.out_flags & XVID_KEYFRAME ) ? HB_FRAME_KEY : HB_FRAME_REF;
 
     if( !pv->configDone )
     {

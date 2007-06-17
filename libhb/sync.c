@@ -558,7 +558,7 @@ static void SyncAudio( hb_work_object_t * w, int i )
             sync->count_frames += sync->data.output_frames_gen;
         }
 
-        buf->key = 1;
+        buf->frametype = HB_FRAME_AUDIO;
         hb_fifo_push( fifo, buf );
     }
 
