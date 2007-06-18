@@ -42,6 +42,7 @@
         @"NO",              @"ShowVerboseOutput",
 		@"NO",              @"AllowLargeFiles",
 		@"NO",              @"DisableDvdAutoDetect",
+		@"Alert Window",         @"AlertWhenDone",
         nil]];
 }
 

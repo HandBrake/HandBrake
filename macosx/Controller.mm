@@ -579,19 +579,31 @@ return registrationDictionary;
             {
                 hb_rem( fHandle, job );
             }
-            
-			if (fEncodeState != 2) // if the encode has not been cancelled
-			{
-				/* Lets alert the user that the encode has finished */
-				/*Growl Notification*/
-				[self showGrowlDoneNotification: NULL];
-				/*On Screen Notification*/
-				int status;
-				NSBeep();
-				status = NSRunAlertPanel(@"Put down that cocktail...",@"your HandBrake encode is done!", @"OK", nil, nil);
-				//[NSApp requestUserAttention:NSInformationalRequest];
-				[NSApp requestUserAttention:NSCriticalRequest];
-				if ( status == NSAlertDefaultReturn ) 
+            /* Check to see if the encode state has not been cancelled
+			to determine if we should check for encode done notifications */
+			if (fEncodeState != 2) 			{
+				/* If Growl Notification or Window and Growl has been selected */
+				if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Growl Notification"] || 
+					[[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window And Growl"])
+                {
+					/*Growl Notification*/
+					[self showGrowlDoneNotification: NULL];
+                }
+                /* If Alert Window or Window and Growl has been selected */
+				if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window"] || 
+					[[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window And Growl"])
+                {
+					/*On Screen Notification*/
+					int status;
+					NSBeep();
+					status = NSRunAlertPanel(@"Put down that cocktail...",@"your HandBrake encode is done!", @"OK", nil, nil);
+					[NSApp requestUserAttention:NSCriticalRequest];
+					if ( status == NSAlertDefaultReturn ) 
+					{
+						[self EnableUI: YES];
+					}
+                }
+				else
 				{
 					[self EnableUI: YES];
 				}
