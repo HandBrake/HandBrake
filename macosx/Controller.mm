@@ -1259,7 +1259,17 @@ return registrationDictionary;
 
 - (IBAction) ChapterPopUpChanged: (id) sender
 {
-    hb_list_t  * list  = hb_get_titles( fHandle );
+    
+	/* If start chapter popup is greater than end chapter popup,
+	we set the end chapter popup to the same as start chapter popup */
+	if ([fSrcChapterStartPopUp indexOfSelectedItem] > [fSrcChapterEndPopUp indexOfSelectedItem])
+	{
+		[fSrcChapterEndPopUp selectItemAtIndex: [fSrcChapterStartPopUp indexOfSelectedItem]];
+    }
+
+		
+	
+	hb_list_t  * list  = hb_get_titles( fHandle );
     hb_title_t * title = (hb_title_t *)
         hb_list_item( list, [fSrcTitlePopUp indexOfSelectedItem] );
 
