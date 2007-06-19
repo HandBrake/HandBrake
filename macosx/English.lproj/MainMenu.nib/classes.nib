@@ -23,6 +23,7 @@
                 InsertPreset = id; 
                 OpenForums = id; 
                 OpenHomepage = id; 
+                OpenMainWindow = id; 
                 OpenUserGuide = id; 
                 Pause = id; 
                 QualitySliderChanged = id; 

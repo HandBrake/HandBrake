@@ -234,7 +234,7 @@
 
 - (IBAction) ShowPicturePanel: (id) sender;
 - (IBAction) CalculatePictureSizing: (id) sender;
-
+- (IBAction) OpenMainWindow: (id) sender;
 
 - (IBAction) AddToQueue: (id) sender;
 - (IBAction) ShowQueuePanel: (id) sender;

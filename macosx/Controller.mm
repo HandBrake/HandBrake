@@ -719,11 +719,31 @@ return registrationDictionary;
     [fScanController Show];
 }
 
+- (IBAction) OpenMainWindow: (id) sender
+{
+[fWindow  makeKeyAndOrderFront:nil];
+[fWindow setReleasedWhenClosed: YES];
+}
 - (BOOL) windowShouldClose: (id) sender
 {
-    /* Stop the application when the user closes the window */
-    [NSApp terminate: self];
-    return YES;
+
+	/* See if we are currently running */
+	hb_state_t s;
+	hb_get_state( fHandle, &s );
+	if ( s.state ==  HB_STATE_WORKING)
+	{
+	   /* If we are running, leave in memory when closing main window */
+	   [fWindow setReleasedWhenClosed: NO];
+	   return YES;
+
+	}
+	else
+	{
+		/* Stop the application when the user closes the window */
+		[NSApp terminate: self];
+		return YES;
+	}
+	
 }
 
 - (IBAction) VideoMatrixChanged: (id) sender;
