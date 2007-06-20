@@ -394,6 +394,8 @@ return registrationDictionary;
 
             if( !hb_list_count( list ) )
             {
+			/* We display a message if a valid dvd source was not chosen */
+			[fSrcDVD2Field setStringValue: @"No Valid DVD Source Chosen"];
                 break;
             }
 
@@ -403,8 +405,7 @@ return registrationDictionary;
             {
                 title = (hb_title_t *) hb_list_item( list, i );
                 /*Set DVD Name at top of window*/
-				[fSrcDVD2Field setStringValue: [NSString
-                  stringWithUTF8String: title->name]];	
+				[fSrcDVD2Field setStringValue: [NSString stringWithUTF8String: title->name]];
 				
 				/* Use the dvd name in the default output field here 
 				May want to add code to remove blank spaces for some dvd names*/

@@ -42,13 +42,24 @@
 {
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DisableDvdAutoDetect"] == 0)
 	{
+	/* We manually show these, in case they were hidden during a previous scan
+	with the Auto Detect turned off */
+	[fMatrix setHidden: NO];
+	[fDetectedPopUp setHidden: NO];
+	[fFolderField setHidden: NO];
+	[fOpenButton setHidden: NO];
+	[fCancelButton setHidden: NO];
+	[fBrowseButton setHidden: NO];
+	
 	[fSelectString setStringValue:@"Select a DVD Source:"];
 		fDriveDetector = [[DriveDetector alloc] initWithCallback:self selector:@selector(openUpdateDrives:)];
 		[fDriveDetector run];
+	/* We show the scan choice sheet */
+	[NSApp beginSheet:fPanel modalForWindow:fWindow modalDelegate:nil didEndSelector:NULL contextInfo:NULL];
 	}
 	else
 	{
-	[fSelectString setStringValue:@"Select a DVD Source: (DVD drive auto-detect is disabled)"];
+	[fSelectString setStringValue:@""];
 
 	[fDetectedCell  setEnabled: 0];
 	[fDetectedPopUp setEnabled: 0];
@@ -57,8 +68,16 @@
 	[fOpenButton    setEnabled: 0];
 	[fBrowseButton  setEnabled: 1];
 	[fMatrix selectCell: fFolderCell];
+	[fMatrix setHidden: YES];
+	[fDetectedPopUp setHidden: YES];
+	[fFolderField setHidden: YES];
+	[fOpenButton setHidden: YES];
+	[fCancelButton setHidden: YES];
+	[fBrowseButton setHidden: YES];
+	/* We go straight to the Browse Sheet */
+	[self Browse2: NULL];
 	}
-	[NSApp beginSheet:fPanel modalForWindow:fWindow modalDelegate:nil didEndSelector:NULL contextInfo:NULL];
+
 }
 
 - (void) openUpdateDrives: (NSDictionary *) drives
@@ -126,6 +145,7 @@
     {
 #define p s->param.scanning
         case HB_STATE_SCANNING:
+		[fSelectString setStringValue:@"HandBrake is Scanning Your Source..."];
             [fStatusField setStringValue: [NSString stringWithFormat:
                 _( @"Scanning title %d of %d..." ),
                 p.title_cur, p.title_count]];
@@ -148,6 +168,12 @@
             else
             {
              [fStatusField setStringValue:_( @"No valid title found.")];
+			 /* If DVD Auto Detect is disabled */
+		     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DisableDvdAutoDetect"] == 1)
+		     {
+			 [NSApp endSheet:fPanel];
+	         [fPanel orderOut:self];
+			 }
             }
             break;
     }
@@ -188,6 +214,8 @@
 
 }
 
+
+
 /* Browse:
    Remove the current sheet (the scan panel) and show an OpenPanel.
    Because we can't open the new sheet before the other one is
@@ -202,7 +230,7 @@
 - (void) Browse2: (id) sender
 {
     NSOpenPanel * panel;
-
+	
     panel = [NSOpenPanel openPanel];
     [panel setAllowsMultipleSelection: NO];
     [panel setCanChooseFiles: YES];
@@ -210,33 +238,62 @@
     NSString * sourceDirectory;
 	if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastSourceDirectory"])
 	{
-	sourceDirectory = [[NSUserDefaults standardUserDefaults] stringForKey:@"LastSourceDirectory"];
+		sourceDirectory = [[NSUserDefaults standardUserDefaults] stringForKey:@"LastSourceDirectory"];
 	}
 	else
 	{
-	sourceDirectory = @"~/Desktop";
-	sourceDirectory = [sourceDirectory stringByExpandingTildeInPath];
+		sourceDirectory = @"~/Desktop";
+		sourceDirectory = [sourceDirectory stringByExpandingTildeInPath];
 	}
-    [panel beginSheetForDirectory: sourceDirectory file: nil types: nil
-        modalForWindow: [NSApp mainWindow] modalDelegate: self
-        didEndSelector: @selector( BrowseDone:returnCode:contextInfo: )
-        contextInfo: nil];
+    /*
+	 Old open browse window, lets keep it her for a couple of revs for reference
+	 if problems might crop up */
+	/*
+	 [panel beginSheetForDirectory: sourceDirectory file: nil types: nil
+					modalForWindow: [NSApp mainWindow] modalDelegate: self
+					didEndSelector: @selector( BrowseDone:returnCode:contextInfo: )
+					   contextInfo: nil];
+	 */
+	[panel beginSheetForDirectory: sourceDirectory file: nil types: nil
+				   modalForWindow: fWindow modalDelegate: self
+				   didEndSelector: @selector( BrowseDone:returnCode:contextInfo: )
+					  contextInfo: nil];
 }
 
 /* Get the folder and switch sheets again. Use the same trick as
    above */
 - (void) BrowseDone: (NSOpenPanel *) sheet
-    returnCode: (int) returnCode contextInfo: (void *) contextInfo
+		 returnCode: (int) returnCode contextInfo: (void *) contextInfo
 {
-    if( returnCode == NSOKButton )
+    /* User selected a file to open */
+	if( returnCode == NSOKButton )
     {
         [fFolderField setStringValue:
             [[sheet filenames] objectAtIndex: 0]];
         [self Open: nil];
+		[self performSelectorOnMainThread: @selector( BrowseDone2: )
+							   withObject: nil waitUntilDone: NO];
     }
+	else // User clicked Cancel in browse window
+	{
+		/* If DVD Auto Detect is disabled */
+		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DisableDvdAutoDetect"] == 1)
+		{
+			/* We close the scan panel altogether */
+			    [self Cancel: nil];
+		}
+		else /* Dvd auto detect is on */
+		{
+			/* We return back to the scan choice sheet */
+			[self performSelectorOnMainThread: @selector( BrowseDone2: )
+								   withObject: nil waitUntilDone: NO];
+								   
+	
+		}
+	}
     
-    [self performSelectorOnMainThread: @selector( BrowseDone2: )
-        withObject: nil waitUntilDone: NO];
+    
+	
 }
 - (void) BrowseDone2: (id) sender
 {
@@ -248,7 +305,6 @@
   [self         EnableUI: NO];
     [fStatusField setStringValue: _( @"Opening..." )];
 
-	// From IHB
 	[fDriveDetector stop];
 
     if( [fMatrix selectedRow] )
@@ -270,8 +326,7 @@
 
 - (IBAction) Cancel: (id) sender
 {
-    //[NSApp stopModal];
-	[NSApp endSheet:fPanel];
+    [NSApp endSheet:fPanel];
 	[fPanel orderOut:self];
 }
 
