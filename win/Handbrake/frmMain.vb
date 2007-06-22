@@ -189,9 +189,9 @@ Public Class frmMain
                 StreamWriter.WriteLine(CRF)
                 StreamWriter.WriteLine(advH264)
                 StreamWriter.Close()
-                MessageBox.Show("STATUS: Your profile has been sucessfully saved.")
+                MessageBox.Show("Your profile has been sucessfully saved.", "STATUS", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
             Catch
-                MessageBox.Show("ERROR: Unable to write to the file. Please make sure the location has the correct permissions for file writing.")
+                MessageBox.Show("Unable to write to the file. Please make sure the location has the correct permissions for file writing.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Hand)
             End Try
         End If
     End Sub
@@ -243,7 +243,7 @@ Public Class frmMain
                 SliderValue.Text = slider_videoQuality.Value & "%"
 
             Catch ex As Exception
-                MessageBox.Show("ERROR: Unable to load profile.")
+                MessageBox.Show("Unable to load profile.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Hand)
             End Try
         End If
 
@@ -450,7 +450,7 @@ Public Class frmMain
                 lAvailableSpace = Drv.AvailableSpace
                 lAvailableSpace = lAvailableSpace / 1024 / 1024 / 1024
                 If lAvailableSpace < 4 Then
-                    MessageBox.Show("Warning: Low on Disk Space. There is: " & lAvailableSpace & "GB Available")
+                    MessageBox.Show("Low on Disk Space. There is: " & lAvailableSpace & "GB Available", "WARNING", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 End If
 
                 Dim lTotalSpace As Long
@@ -497,14 +497,14 @@ Public Class frmMain
         Dim ApplicationPath As String = Application.StartupPath
 
         If (frmQueue.list_queue.Items.Count > 0) Then
-            MessageBox.Show("ALERT: You have items on the video queue. If you wish to run the queue, click the Enocde Videos button on the Queue window.")
+            MessageBox.Show("You have items on the video queue. If you wish to run the queue, click the Enocde Videos button on the Queue window.", "ALERT", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
         End If
 
         Try
             If (QueryEditorText.Text = "") Then
                 query = GenerateTheQuery()
                 Shell("""" + ApplicationPath + "\hbcli.exe""" + query)
-                MessageBox.Show("The Handbrake encoder (CLI) will now start and should be encoding your video.")
+                MessageBox.Show("The Handbrake encoder (CLI) will now start and should be encoding your video.", "ALERT", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
 
                 'Lets start the process monitor to keep an eye on things.
                 hbcliMonitor = New ProcessMonitor()
@@ -513,7 +513,7 @@ Public Class frmMain
             Else
                 query = QueryEditorText.Text
                 Shell("""" + ApplicationPath + "\hbcli.exe""" + query)
-                MessageBox.Show("The Handbrake encoder (CLI) will now start and should be encoding your video.")
+                MessageBox.Show("The Handbrake encoder (CLI) will now start and should be encoding your video.", "ALERT", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
             End If
         Catch ex As Exception
             MessageBox.Show("Unable to Launch the Encoder.")
@@ -538,7 +538,7 @@ Public Class frmMain
 
         Try
             If (chapterFinish < chapterStart) Then
-                MessageBox.Show("Error: Invalid Chapter Range! - Final chapter can not be smaller than the starting chapter.")
+                MessageBox.Show("Invalid Chapter Range! - Final chapter can not be smaller than the starting chapter.", "WARNING", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             End If
         Catch ex As Exception
             MessageBox.Show("Invalid Character Entered")
@@ -551,10 +551,10 @@ Public Class frmMain
 
         Try
             If (chapterStart > chapterFinish) Then
-                MessageBox.Show("Error: Invalid Chapter Range! - Start chapter can not be larger than the Final chapter.")
+                MessageBox.Show("Invalid Chapter Range! - Start chapter can not be larger than the Final chapter.", "WARNING", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             End If
         Catch ex As Exception
-            MessageBox.Show("Invalid Character Entered")
+            MessageBox.Show("Invalid Character Entered", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Hand)
         End Try
     End Sub
 
@@ -892,7 +892,7 @@ Public Class frmMain
 
 
         If (source = "") Then
-            MessageBox.Show("ERROR: No Source has been selected.")
+            MessageBox.Show("No Source has been selected.", "WARNING", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         Else
             source = " -i " + """" + source + """"
         End If
@@ -924,7 +924,7 @@ Public Class frmMain
         Dim height As String = text_height.Text
 
         If (destination = "") Then
-            MessageBox.Show("ERROR: No destination has been selected.")
+            MessageBox.Show("No destination has been selected.", "WARNING", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         Else
             destination = " -o " + """" + destination + """"
         End If
@@ -1192,7 +1192,8 @@ Public Class frmMain
     ' The hbcli processes has exited at this point. Lets throw a messagebox at the user telling him the enocode has completed.
     Sub TheadCompletedMonitor(ByVal isRunning As Integer) Handles hbcliMonitor.ThreadComplete
         Dim ApplicationPath As String = Application.StartupPath ' The applications start parth
-        MessageBox.Show("Status: The encoding process has ended.")
+        MessageBox.Show("The encoding process has ended.", "ALERT", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
+
     End Sub
     '------------------------------------------------
 

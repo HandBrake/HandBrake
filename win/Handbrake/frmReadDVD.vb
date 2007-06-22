@@ -16,7 +16,7 @@ Public Class frmReadDVD
         Try
             Shell("cmd /c """"" + ApplicationPath + "\hbcli.exe"" -i """ + frmMain.text_source.Text + """" & " -t0 >" + """" + ApplicationPath + "\dvdinfo.dat""" + " 2>&1""")
         Catch ex As Exception
-            MessageBox.Show("ERROR: There was a problem launching the encoder. Code: frmS-1")
+            MessageBox.Show("Unable to launch the CLI encoder.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Hand)
             MessageBox.Show(ex.ToString)
         End Try
     End Sub
@@ -184,11 +184,12 @@ Public Class frmReadDVD
         '# Stage 4 - Write the parsed data out into a file. 
         '# But, if theres a problem, display an error message instead
         If errStatus = 1 Then
-            MessageBox.Show("ERROR: Error Reading the DVD. Some Title information may not be available.")
+            MessageBox.Show("Some DVD Title information may be missing however you may still be able to select your required title for encoding!", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
         End If
 
         If titleError = True Then
-            MessageBox.Show("ERROR: No Title(s) found.")
+            MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Hand)
+
         End If
 
         Try
@@ -203,7 +204,7 @@ Public Class frmReadDVD
             DataWriter.Close()
 
         Catch ex As Exception
-            MessageBox.Show("ERROR: Unable to write Data file. Please make sure the application has admin privileges.")
+            MessageBox.Show("Unable to write Data file. Please make sure the application has admin privileges.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Hand)
         End Try
 
         Me.Close()
@@ -221,7 +222,7 @@ Public Class frmReadDVD
             str(1) = titleInfo(1).Trim.Substring(12) ' Duration
         Catch ex As Exception
             MessageBox.Show(ex.ToString)
-            MessageBox.Show("ERROR: Incomplete DVD data found. Please copy the data on the View DVD Information tab and report this error.")
+            MessageBox.Show("ERROR: Incomplete DVD data found. Please copy the data on the View DVD Information tab and report this error.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Hand)
         End Try
 
         'Now lets add the info to the main form dropdowns

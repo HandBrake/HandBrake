@@ -2314,7 +2314,7 @@ Partial Class frmMain
         Me.lbl_update.AutoSize = True
         Me.lbl_update.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_update.ForeColor = System.Drawing.Color.Black
-        Me.lbl_update.Location = New System.Drawing.Point(218, 607)
+        Me.lbl_update.Location = New System.Drawing.Point(176, 607)
         Me.lbl_update.Name = "lbl_update"
         Me.lbl_update.Size = New System.Drawing.Size(181, 13)
         Me.lbl_update.TabIndex = 413
