@@ -2304,7 +2304,7 @@ Partial Class frmMain
         'DVD_Save
         '
         Me.DVD_Save.DefaultExt = "mp4"
-        Me.DVD_Save.Filter = "mp4|*.mp4 |avi|*.avi |ogm|*.ogm"
+        Me.DVD_Save.Filter = "mp4|*.mp4 |m4v|*.m4v |avi|*.avi |ogm|*.ogm"
         '
         'File_Save
         '

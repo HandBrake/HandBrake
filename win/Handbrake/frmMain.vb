@@ -434,6 +434,11 @@ Public Class frmMain
         Dim filename As String
         DVD_Save.ShowDialog()
         filename = DVD_Save.FileName
+
+        If Check_ChapterMarkers.CheckState = 1 Then
+            filename = filename.Replace(".mp4", ".m4v").Trim()
+        End If
+
         text_destination.Text = filename.Trim
         Dim DriveLetter() As String = text_destination.Text.Split(":")
 
@@ -461,7 +466,10 @@ Public Class frmMain
         Catch ex As Exception
             ' Ignore the Error - Change this to an IF Statment at some point so it works better.
         End Try
+
         
+
+
     End Sub
 
     Private Sub GenerateQuery_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GenerateQuery.Click
