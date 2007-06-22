@@ -67,6 +67,7 @@ Partial Class frmMain
         Me.drp_audioCodec = New System.Windows.Forms.ComboBox
         Me.Label12 = New System.Windows.Forms.Label
         Me.GroupBox1 = New System.Windows.Forms.GroupBox
+        Me.Label13 = New System.Windows.Forms.Label
         Me.drop_chapterFinish = New System.Windows.Forms.ComboBox
         Me.drop_chapterStart = New System.Windows.Forms.ComboBox
         Me.drp_dvdtitle = New System.Windows.Forms.ComboBox
@@ -227,7 +228,6 @@ Partial Class frmMain
         Me.DVD_Save = New System.Windows.Forms.SaveFileDialog
         Me.File_Save = New System.Windows.Forms.SaveFileDialog
         Me.lbl_update = New System.Windows.Forms.Label
-        Me.Label13 = New System.Windows.Forms.Label
         Label38 = New System.Windows.Forms.Label
         Me.frmMainMenu.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
@@ -257,7 +257,7 @@ Partial Class frmMain
         Me.frmMainMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.PresetsToolStripMenuItem, Me.HelpToolStripMenuItem})
         Me.frmMainMenu.Location = New System.Drawing.Point(0, 0)
         Me.frmMainMenu.Name = "frmMainMenu"
-        Me.frmMainMenu.Size = New System.Drawing.Size(733, 24)
+        Me.frmMainMenu.Size = New System.Drawing.Size(714, 24)
         Me.frmMainMenu.TabIndex = 0
         Me.frmMainMenu.Text = "MenuStrip1"
         '
@@ -468,7 +468,7 @@ Partial Class frmMain
         Me.GroupBox4.ForeColor = System.Drawing.Color.Black
         Me.GroupBox4.Location = New System.Drawing.Point(15, 165)
         Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(706, 126)
+        Me.GroupBox4.Size = New System.Drawing.Size(683, 126)
         Me.GroupBox4.TabIndex = 406
         Me.GroupBox4.TabStop = False
         Me.GroupBox4.Text = "Destination"
@@ -478,7 +478,7 @@ Partial Class frmMain
         Me.Label56.AutoSize = True
         Me.Label56.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label56.ForeColor = System.Drawing.Color.Black
-        Me.Label56.Location = New System.Drawing.Point(185, 90)
+        Me.Label56.Location = New System.Drawing.Point(170, 90)
         Me.Label56.Name = "Label56"
         Me.Label56.Size = New System.Drawing.Size(15, 13)
         Me.Label56.TabIndex = 38
@@ -488,7 +488,7 @@ Partial Class frmMain
         '
         Me.lbl_Aspect.AutoSize = True
         Me.lbl_Aspect.Font = New System.Drawing.Font("Verdana", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_Aspect.Location = New System.Drawing.Point(384, 91)
+        Me.lbl_Aspect.Location = New System.Drawing.Point(369, 91)
         Me.lbl_Aspect.Name = "lbl_Aspect"
         Me.lbl_Aspect.Size = New System.Drawing.Size(72, 12)
         Me.lbl_Aspect.TabIndex = 41
@@ -498,7 +498,7 @@ Partial Class frmMain
         '
         Me.Label91.AutoSize = True
         Me.Label91.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label91.Location = New System.Drawing.Point(280, 91)
+        Me.Label91.Location = New System.Drawing.Point(265, 91)
         Me.Label91.Name = "Label91"
         Me.Label91.Size = New System.Drawing.Size(54, 13)
         Me.Label91.TabIndex = 40
@@ -509,7 +509,7 @@ Partial Class frmMain
         Me.text_height.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.text_height.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.text_height.ForeColor = System.Drawing.SystemColors.InfoText
-        Me.text_height.Location = New System.Drawing.Point(206, 87)
+        Me.text_height.Location = New System.Drawing.Point(191, 87)
         Me.text_height.Name = "text_height"
         Me.text_height.Size = New System.Drawing.Size(64, 21)
         Me.text_height.TabIndex = 8
@@ -529,7 +529,7 @@ Partial Class frmMain
         '
         Me.text_width.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.text_width.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.text_width.Location = New System.Drawing.Point(114, 87)
+        Me.text_width.Location = New System.Drawing.Point(99, 87)
         Me.text_width.Name = "text_width"
         Me.text_width.Size = New System.Drawing.Size(64, 21)
         Me.text_width.TabIndex = 7
@@ -540,7 +540,7 @@ Partial Class frmMain
         Me.btn_destBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_destBrowse.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_destBrowse.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.btn_destBrowse.Location = New System.Drawing.Point(385, 21)
+        Me.btn_destBrowse.Location = New System.Drawing.Point(370, 21)
         Me.btn_destBrowse.Name = "btn_destBrowse"
         Me.btn_destBrowse.Size = New System.Drawing.Size(83, 22)
         Me.btn_destBrowse.TabIndex = 4
@@ -564,7 +564,7 @@ Partial Class frmMain
         Me.drp_videoEncoder.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.drp_videoEncoder.FormattingEnabled = True
         Me.drp_videoEncoder.Items.AddRange(New Object() {"Mpeg 4", "Xvid", "H.264", "H.264 (iPod)", "H.264 Baseline 1.3"})
-        Me.drp_videoEncoder.Location = New System.Drawing.Point(114, 54)
+        Me.drp_videoEncoder.Location = New System.Drawing.Point(99, 54)
         Me.drp_videoEncoder.Name = "drp_videoEncoder"
         Me.drp_videoEncoder.Size = New System.Drawing.Size(156, 21)
         Me.drp_videoEncoder.TabIndex = 5
@@ -585,7 +585,7 @@ Partial Class frmMain
         '
         Me.text_destination.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.text_destination.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.text_destination.Location = New System.Drawing.Point(114, 21)
+        Me.text_destination.Location = New System.Drawing.Point(99, 21)
         Me.text_destination.Name = "text_destination"
         Me.text_destination.Size = New System.Drawing.Size(262, 21)
         Me.text_destination.TabIndex = 4
@@ -596,7 +596,7 @@ Partial Class frmMain
         Me.drp_audioCodec.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.drp_audioCodec.FormattingEnabled = True
         Me.drp_audioCodec.Items.AddRange(New Object() {"AAC", "MP3", "Vorbis", "AC3"})
-        Me.drp_audioCodec.Location = New System.Drawing.Point(386, 53)
+        Me.drp_audioCodec.Location = New System.Drawing.Point(371, 53)
         Me.drp_audioCodec.Name = "drp_audioCodec"
         Me.drp_audioCodec.Size = New System.Drawing.Size(111, 21)
         Me.drp_audioCodec.TabIndex = 6
@@ -607,7 +607,7 @@ Partial Class frmMain
         Me.Label12.AutoSize = True
         Me.Label12.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label12.ForeColor = System.Drawing.Color.Black
-        Me.Label12.Location = New System.Drawing.Point(280, 57)
+        Me.Label12.Location = New System.Drawing.Point(265, 57)
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(94, 13)
         Me.Label12.TabIndex = 20
@@ -631,17 +631,27 @@ Partial Class frmMain
         Me.GroupBox1.ForeColor = System.Drawing.Color.Black
         Me.GroupBox1.Location = New System.Drawing.Point(15, 35)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(706, 124)
+        Me.GroupBox1.Size = New System.Drawing.Size(683, 124)
         Me.GroupBox1.TabIndex = 407
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Source"
+        '
+        'Label13
+        '
+        Me.Label13.AutoSize = True
+        Me.Label13.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label13.Location = New System.Drawing.Point(178, 85)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(21, 13)
+        Me.Label13.TabIndex = 42
+        Me.Label13.Text = "To"
         '
         'drop_chapterFinish
         '
         Me.drop_chapterFinish.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.drop_chapterFinish.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.drop_chapterFinish.FormattingEnabled = True
-        Me.drop_chapterFinish.Location = New System.Drawing.Point(234, 81)
+        Me.drop_chapterFinish.Location = New System.Drawing.Point(212, 81)
         Me.drop_chapterFinish.Name = "drop_chapterFinish"
         Me.drop_chapterFinish.Size = New System.Drawing.Size(69, 21)
         Me.drop_chapterFinish.TabIndex = 41
@@ -652,7 +662,7 @@ Partial Class frmMain
         Me.drop_chapterStart.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.drop_chapterStart.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.drop_chapterStart.FormattingEnabled = True
-        Me.drop_chapterStart.Location = New System.Drawing.Point(121, 81)
+        Me.drop_chapterStart.Location = New System.Drawing.Point(99, 81)
         Me.drop_chapterStart.Name = "drop_chapterStart"
         Me.drop_chapterStart.Size = New System.Drawing.Size(69, 21)
         Me.drop_chapterStart.TabIndex = 40
@@ -664,18 +674,17 @@ Partial Class frmMain
         Me.drp_dvdtitle.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.drp_dvdtitle.FormattingEnabled = True
         Me.drp_dvdtitle.Items.AddRange(New Object() {"Automatic"})
-        Me.drp_dvdtitle.Location = New System.Drawing.Point(121, 49)
+        Me.drp_dvdtitle.Location = New System.Drawing.Point(99, 50)
         Me.drp_dvdtitle.Name = "drp_dvdtitle"
         Me.drp_dvdtitle.Size = New System.Drawing.Size(119, 21)
         Me.drp_dvdtitle.TabIndex = 39
-        Me.drp_dvdtitle.Text = "Automatic"
         '
         'RadioDVD
         '
         Me.RadioDVD.AutoSize = True
         Me.RadioDVD.Checked = True
         Me.RadioDVD.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RadioDVD.Location = New System.Drawing.Point(380, 18)
+        Me.RadioDVD.Location = New System.Drawing.Point(358, 18)
         Me.RadioDVD.Name = "RadioDVD"
         Me.RadioDVD.Size = New System.Drawing.Size(51, 17)
         Me.RadioDVD.TabIndex = 20
@@ -687,7 +696,7 @@ Partial Class frmMain
         '
         Me.RadioISO.AutoSize = True
         Me.RadioISO.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RadioISO.Location = New System.Drawing.Point(380, 34)
+        Me.RadioISO.Location = New System.Drawing.Point(358, 34)
         Me.RadioISO.Name = "RadioISO"
         Me.RadioISO.Size = New System.Drawing.Size(47, 17)
         Me.RadioISO.TabIndex = 19
@@ -700,7 +709,7 @@ Partial Class frmMain
         Me.btn_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_Browse.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_Browse.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.btn_Browse.Location = New System.Drawing.Point(440, 21)
+        Me.btn_Browse.Location = New System.Drawing.Point(418, 21)
         Me.btn_Browse.Name = "btn_Browse"
         Me.btn_Browse.Size = New System.Drawing.Size(78, 22)
         Me.btn_Browse.TabIndex = 2
@@ -722,7 +731,7 @@ Partial Class frmMain
         '
         Me.text_source.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.text_source.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.text_source.Location = New System.Drawing.Point(121, 22)
+        Me.text_source.Location = New System.Drawing.Point(99, 22)
         Me.text_source.Name = "text_source"
         Me.text_source.Size = New System.Drawing.Size(253, 21)
         Me.text_source.TabIndex = 1
@@ -735,20 +744,20 @@ Partial Class frmMain
         Me.Label9.ForeColor = System.Drawing.Color.Black
         Me.Label9.Location = New System.Drawing.Point(12, 84)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(94, 13)
+        Me.Label9.Size = New System.Drawing.Size(64, 13)
         Me.Label9.TabIndex = 12
-        Me.Label9.Text = "DVD Chapters:"
+        Me.Label9.Text = "Chapters:"
         '
         'Label10
         '
         Me.Label10.AutoSize = True
         Me.Label10.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label10.ForeColor = System.Drawing.Color.Black
-        Me.Label10.Location = New System.Drawing.Point(12, 55)
+        Me.Label10.Location = New System.Drawing.Point(12, 56)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(66, 13)
+        Me.Label10.Size = New System.Drawing.Size(36, 13)
         Me.Label10.TabIndex = 11
-        Me.Label10.Text = "DVD Title:"
+        Me.Label10.Text = "Title:"
         '
         'Version
         '
@@ -767,7 +776,7 @@ Partial Class frmMain
         Me.btn_encode.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_encode.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_encode.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.btn_encode.Location = New System.Drawing.Point(597, 602)
+        Me.btn_encode.Location = New System.Drawing.Point(574, 602)
         Me.btn_encode.Name = "btn_encode"
         Me.btn_encode.Size = New System.Drawing.Size(124, 22)
         Me.btn_encode.TabIndex = 19
@@ -782,7 +791,7 @@ Partial Class frmMain
         Me.btn_queue.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_queue.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_queue.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.btn_queue.Location = New System.Drawing.Point(467, 602)
+        Me.btn_queue.Location = New System.Drawing.Point(444, 602)
         Me.btn_queue.Name = "btn_queue"
         Me.btn_queue.Size = New System.Drawing.Size(124, 22)
         Me.btn_queue.TabIndex = 412
@@ -803,7 +812,7 @@ Partial Class frmMain
         Me.h264Tab.Location = New System.Drawing.Point(4, 22)
         Me.h264Tab.Name = "h264Tab"
         Me.h264Tab.Padding = New System.Windows.Forms.Padding(3)
-        Me.h264Tab.Size = New System.Drawing.Size(698, 257)
+        Me.h264Tab.Size = New System.Drawing.Size(675, 257)
         Me.h264Tab.TabIndex = 5
         Me.h264Tab.Text = "H.264"
         Me.h264Tab.UseVisualStyleBackColor = True
@@ -842,7 +851,7 @@ Partial Class frmMain
         Me.btn_h264Clear.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_h264Clear.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_h264Clear.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.btn_h264Clear.Location = New System.Drawing.Point(601, 48)
+        Me.btn_h264Clear.Location = New System.Drawing.Point(584, 50)
         Me.btn_h264Clear.Name = "btn_h264Clear"
         Me.btn_h264Clear.Size = New System.Drawing.Size(79, 23)
         Me.btn_h264Clear.TabIndex = 45
@@ -874,7 +883,7 @@ Partial Class frmMain
         Me.rtf_h264advanced.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.rtf_h264advanced.Location = New System.Drawing.Point(16, 79)
         Me.rtf_h264advanced.Name = "rtf_h264advanced"
-        Me.rtf_h264advanced.Size = New System.Drawing.Size(664, 123)
+        Me.rtf_h264advanced.Size = New System.Drawing.Size(647, 123)
         Me.rtf_h264advanced.TabIndex = 41
         Me.rtf_h264advanced.Text = ""
         '
@@ -896,7 +905,7 @@ Partial Class frmMain
         Me.TabPage4.Location = New System.Drawing.Point(4, 22)
         Me.TabPage4.Name = "TabPage4"
         Me.TabPage4.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage4.Size = New System.Drawing.Size(698, 257)
+        Me.TabPage4.Size = New System.Drawing.Size(675, 257)
         Me.TabPage4.TabIndex = 4
         Me.TabPage4.Text = "Advanced Settings"
         Me.TabPage4.UseVisualStyleBackColor = True
@@ -950,7 +959,7 @@ Partial Class frmMain
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(698, 257)
+        Me.TabPage2.Size = New System.Drawing.Size(675, 257)
         Me.TabPage2.TabIndex = 3
         Me.TabPage2.Text = "Audio Settings"
         Me.TabPage2.UseVisualStyleBackColor = True
@@ -1106,7 +1115,7 @@ Partial Class frmMain
         Me.TabPage3.Location = New System.Drawing.Point(4, 22)
         Me.TabPage3.Name = "TabPage3"
         Me.TabPage3.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage3.Size = New System.Drawing.Size(698, 257)
+        Me.TabPage3.Size = New System.Drawing.Size(675, 257)
         Me.TabPage3.TabIndex = 2
         Me.TabPage3.Text = "Video Settings"
         Me.TabPage3.UseVisualStyleBackColor = True
@@ -1115,7 +1124,7 @@ Partial Class frmMain
         '
         Me.Label36.AutoSize = True
         Me.Label36.Font = New System.Drawing.Font("Verdana", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label36.Location = New System.Drawing.Point(514, 134)
+        Me.Label36.Location = New System.Drawing.Point(489, 134)
         Me.Label36.Name = "Label36"
         Me.Label36.Size = New System.Drawing.Size(109, 12)
         Me.Label36.TabIndex = 49
@@ -1125,7 +1134,7 @@ Partial Class frmMain
         '
         Me.Check_ChapterMarkers.AutoSize = True
         Me.Check_ChapterMarkers.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Check_ChapterMarkers.Location = New System.Drawing.Point(393, 131)
+        Me.Check_ChapterMarkers.Location = New System.Drawing.Point(368, 131)
         Me.Check_ChapterMarkers.Name = "Check_ChapterMarkers"
         Me.Check_ChapterMarkers.Size = New System.Drawing.Size(122, 17)
         Me.Check_ChapterMarkers.TabIndex = 48
@@ -1177,7 +1186,7 @@ Partial Class frmMain
         '
         Me.CheckPixelRatio.AutoSize = True
         Me.CheckPixelRatio.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CheckPixelRatio.Location = New System.Drawing.Point(393, 107)
+        Me.CheckPixelRatio.Location = New System.Drawing.Point(368, 107)
         Me.CheckPixelRatio.Name = "CheckPixelRatio"
         Me.CheckPixelRatio.Size = New System.Drawing.Size(121, 17)
         Me.CheckPixelRatio.TabIndex = 40
@@ -1188,7 +1197,7 @@ Partial Class frmMain
         '
         Me.Label23.AutoSize = True
         Me.Label23.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label23.Location = New System.Drawing.Point(390, 170)
+        Me.Label23.Location = New System.Drawing.Point(365, 170)
         Me.Label23.Name = "Label23"
         Me.Label23.Size = New System.Drawing.Size(100, 13)
         Me.Label23.TabIndex = 39
@@ -1198,7 +1207,7 @@ Partial Class frmMain
         '
         Me.Label22.AutoSize = True
         Me.Label22.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label22.Location = New System.Drawing.Point(390, 13)
+        Me.Label22.Location = New System.Drawing.Point(365, 13)
         Me.Label22.Name = "Label22"
         Me.Label22.Size = New System.Drawing.Size(175, 13)
         Me.Label22.TabIndex = 38
@@ -1218,7 +1227,7 @@ Partial Class frmMain
         '
         Me.check_grayscale.AutoSize = True
         Me.check_grayscale.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.check_grayscale.Location = New System.Drawing.Point(393, 84)
+        Me.check_grayscale.Location = New System.Drawing.Point(368, 84)
         Me.check_grayscale.Name = "check_grayscale"
         Me.check_grayscale.Size = New System.Drawing.Size(138, 17)
         Me.check_grayscale.TabIndex = 20
@@ -1239,7 +1248,7 @@ Partial Class frmMain
         '
         Me.check_DeInterlace.AutoSize = True
         Me.check_DeInterlace.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.check_DeInterlace.Location = New System.Drawing.Point(393, 61)
+        Me.check_DeInterlace.Location = New System.Drawing.Point(368, 61)
         Me.check_DeInterlace.Name = "check_DeInterlace"
         Me.check_DeInterlace.Size = New System.Drawing.Size(98, 17)
         Me.check_DeInterlace.TabIndex = 19
@@ -1252,7 +1261,7 @@ Partial Class frmMain
         Me.drp_videoFramerate.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.drp_videoFramerate.FormattingEnabled = True
         Me.drp_videoFramerate.Items.AddRange(New Object() {"Automatic", "5", "10", "12", "15", "23.976", "24", "25", "29.97"})
-        Me.drp_videoFramerate.Location = New System.Drawing.Point(512, 189)
+        Me.drp_videoFramerate.Location = New System.Drawing.Point(487, 189)
         Me.drp_videoFramerate.Name = "drp_videoFramerate"
         Me.drp_videoFramerate.Size = New System.Drawing.Size(112, 21)
         Me.drp_videoFramerate.TabIndex = 21
@@ -1262,7 +1271,7 @@ Partial Class frmMain
         '
         Me.check_2PassEncode.AutoSize = True
         Me.check_2PassEncode.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.check_2PassEncode.Location = New System.Drawing.Point(393, 38)
+        Me.check_2PassEncode.Location = New System.Drawing.Point(368, 38)
         Me.check_2PassEncode.Name = "check_2PassEncode"
         Me.check_2PassEncode.Size = New System.Drawing.Size(119, 17)
         Me.check_2PassEncode.TabIndex = 18
@@ -1291,7 +1300,7 @@ Partial Class frmMain
         '
         Me.Label46.AutoSize = True
         Me.Label46.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label46.Location = New System.Drawing.Point(390, 194)
+        Me.Label46.Location = New System.Drawing.Point(365, 194)
         Me.Label46.Name = "Label46"
         Me.Label46.Size = New System.Drawing.Size(107, 13)
         Me.Label46.TabIndex = 21
@@ -1348,7 +1357,7 @@ Partial Class frmMain
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(698, 257)
+        Me.TabPage1.Size = New System.Drawing.Size(675, 257)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Picture Settings"
         Me.TabPage1.UseVisualStyleBackColor = True
@@ -1359,7 +1368,7 @@ Partial Class frmMain
         Me.drp_subtitle.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.drp_subtitle.FormattingEnabled = True
         Me.drp_subtitle.Items.AddRange(New Object() {"None"})
-        Me.drp_subtitle.Location = New System.Drawing.Point(429, 36)
+        Me.drp_subtitle.Location = New System.Drawing.Point(404, 36)
         Me.drp_subtitle.Name = "drp_subtitle"
         Me.drp_subtitle.Size = New System.Drawing.Size(213, 21)
         Me.drp_subtitle.TabIndex = 42
@@ -1369,7 +1378,7 @@ Partial Class frmMain
         '
         Me.Label19.AutoSize = True
         Me.Label19.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label19.Location = New System.Drawing.Point(359, 13)
+        Me.Label19.Location = New System.Drawing.Point(334, 13)
         Me.Label19.Name = "Label19"
         Me.Label19.Size = New System.Drawing.Size(64, 13)
         Me.Label19.TabIndex = 39
@@ -1418,7 +1427,7 @@ Partial Class frmMain
         '
         Me.Label21.AutoSize = True
         Me.Label21.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label21.Location = New System.Drawing.Point(426, 63)
+        Me.Label21.Location = New System.Drawing.Point(401, 63)
         Me.Label21.Name = "Label21"
         Me.Label21.Size = New System.Drawing.Size(224, 26)
         Me.Label21.TabIndex = 34
@@ -1428,7 +1437,7 @@ Partial Class frmMain
         '
         Me.Label20.AutoSize = True
         Me.Label20.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label20.Location = New System.Drawing.Point(362, 39)
+        Me.Label20.Location = New System.Drawing.Point(337, 39)
         Me.Label20.Name = "Label20"
         Me.Label20.Size = New System.Drawing.Size(61, 13)
         Me.Label20.TabIndex = 33
@@ -1538,7 +1547,7 @@ Partial Class frmMain
         Me.advancedOptions.Location = New System.Drawing.Point(15, 311)
         Me.advancedOptions.Name = "advancedOptions"
         Me.advancedOptions.SelectedIndex = 0
-        Me.advancedOptions.Size = New System.Drawing.Size(706, 283)
+        Me.advancedOptions.Size = New System.Drawing.Size(683, 283)
         Me.advancedOptions.TabIndex = 410
         Me.advancedOptions.TabStop = False
         '
@@ -1552,7 +1561,7 @@ Partial Class frmMain
         Me.TabPage6.Location = New System.Drawing.Point(4, 22)
         Me.TabPage6.Name = "TabPage6"
         Me.TabPage6.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage6.Size = New System.Drawing.Size(698, 257)
+        Me.TabPage6.Size = New System.Drawing.Size(675, 257)
         Me.TabPage6.TabIndex = 6
         Me.TabPage6.Text = "Query Editor"
         Me.TabPage6.UseVisualStyleBackColor = True
@@ -1583,7 +1592,7 @@ Partial Class frmMain
         Me.btn_ClearQuery.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_ClearQuery.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_ClearQuery.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.btn_ClearQuery.Location = New System.Drawing.Point(602, 73)
+        Me.btn_ClearQuery.Location = New System.Drawing.Point(581, 73)
         Me.btn_ClearQuery.Name = "btn_ClearQuery"
         Me.btn_ClearQuery.Size = New System.Drawing.Size(79, 23)
         Me.btn_ClearQuery.TabIndex = 39
@@ -1608,7 +1617,7 @@ Partial Class frmMain
         Me.QueryEditorText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.QueryEditorText.Location = New System.Drawing.Point(16, 102)
         Me.QueryEditorText.Name = "QueryEditorText"
-        Me.QueryEditorText.Size = New System.Drawing.Size(665, 139)
+        Me.QueryEditorText.Size = New System.Drawing.Size(644, 139)
         Me.QueryEditorText.TabIndex = 41
         Me.QueryEditorText.Text = ""
         '
@@ -2312,21 +2321,11 @@ Partial Class frmMain
         Me.lbl_update.Text = ">>  UPDATE AVAILABLE <<"
         Me.lbl_update.Visible = False
         '
-        'Label13
-        '
-        Me.Label13.AutoSize = True
-        Me.Label13.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label13.Location = New System.Drawing.Point(200, 85)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(21, 13)
-        Me.Label13.TabIndex = 42
-        Me.Label13.Text = "To"
-        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(733, 631)
+        Me.ClientSize = New System.Drawing.Size(714, 631)
         Me.Controls.Add(Me.lbl_update)
         Me.Controls.Add(Me.btn_queue)
         Me.Controls.Add(Me.btn_encode)
