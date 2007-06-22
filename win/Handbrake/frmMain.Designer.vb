@@ -67,15 +67,15 @@ Partial Class frmMain
         Me.drp_audioCodec = New System.Windows.Forms.ComboBox
         Me.Label12 = New System.Windows.Forms.Label
         Me.GroupBox1 = New System.Windows.Forms.GroupBox
+        Me.drop_chapterFinish = New System.Windows.Forms.ComboBox
+        Me.drop_chapterStart = New System.Windows.Forms.ComboBox
         Me.drp_dvdtitle = New System.Windows.Forms.ComboBox
         Me.RadioDVD = New System.Windows.Forms.RadioButton
         Me.RadioISO = New System.Windows.Forms.RadioButton
-        Me.Label13 = New System.Windows.Forms.Label
         Me.btn_Browse = New System.Windows.Forms.Button
         Me.Label17 = New System.Windows.Forms.Label
         Me.text_source = New System.Windows.Forms.TextBox
         Me.Label9 = New System.Windows.Forms.Label
-        Me.text_chaptors = New System.Windows.Forms.TextBox
         Me.Label10 = New System.Windows.Forms.Label
         Me.Version = New System.Windows.Forms.Label
         Me.btn_encode = New System.Windows.Forms.Button
@@ -227,6 +227,7 @@ Partial Class frmMain
         Me.DVD_Save = New System.Windows.Forms.SaveFileDialog
         Me.File_Save = New System.Windows.Forms.SaveFileDialog
         Me.lbl_update = New System.Windows.Forms.Label
+        Me.Label13 = New System.Windows.Forms.Label
         Label38 = New System.Windows.Forms.Label
         Me.frmMainMenu.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
@@ -615,15 +616,16 @@ Partial Class frmMain
         'GroupBox1
         '
         Me.GroupBox1.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.GroupBox1.Controls.Add(Me.Label13)
+        Me.GroupBox1.Controls.Add(Me.drop_chapterFinish)
+        Me.GroupBox1.Controls.Add(Me.drop_chapterStart)
         Me.GroupBox1.Controls.Add(Me.drp_dvdtitle)
         Me.GroupBox1.Controls.Add(Me.RadioDVD)
         Me.GroupBox1.Controls.Add(Me.RadioISO)
-        Me.GroupBox1.Controls.Add(Me.Label13)
         Me.GroupBox1.Controls.Add(Me.btn_Browse)
         Me.GroupBox1.Controls.Add(Me.Label17)
         Me.GroupBox1.Controls.Add(Me.text_source)
         Me.GroupBox1.Controls.Add(Me.Label9)
-        Me.GroupBox1.Controls.Add(Me.text_chaptors)
         Me.GroupBox1.Controls.Add(Me.Label10)
         Me.GroupBox1.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox1.ForeColor = System.Drawing.Color.Black
@@ -633,6 +635,28 @@ Partial Class frmMain
         Me.GroupBox1.TabIndex = 407
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Source"
+        '
+        'drop_chapterFinish
+        '
+        Me.drop_chapterFinish.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.drop_chapterFinish.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.drop_chapterFinish.FormattingEnabled = True
+        Me.drop_chapterFinish.Location = New System.Drawing.Point(234, 81)
+        Me.drop_chapterFinish.Name = "drop_chapterFinish"
+        Me.drop_chapterFinish.Size = New System.Drawing.Size(69, 21)
+        Me.drop_chapterFinish.TabIndex = 41
+        Me.drop_chapterFinish.Text = "Auto"
+        '
+        'drop_chapterStart
+        '
+        Me.drop_chapterStart.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.drop_chapterStart.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.drop_chapterStart.FormattingEnabled = True
+        Me.drop_chapterStart.Location = New System.Drawing.Point(121, 81)
+        Me.drop_chapterStart.Name = "drop_chapterStart"
+        Me.drop_chapterStart.Size = New System.Drawing.Size(69, 21)
+        Me.drop_chapterStart.TabIndex = 40
+        Me.drop_chapterStart.Text = "Auto"
         '
         'drp_dvdtitle
         '
@@ -669,17 +693,6 @@ Partial Class frmMain
         Me.RadioISO.TabIndex = 19
         Me.RadioISO.Text = "ISO"
         Me.RadioISO.UseVisualStyleBackColor = True
-        '
-        'Label13
-        '
-        Me.Label13.AutoSize = True
-        Me.Label13.Font = New System.Drawing.Font("Verdana", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label13.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label13.Location = New System.Drawing.Point(245, 79)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(131, 24)
-        Me.Label13.TabIndex = 14
-        Me.Label13.Text = "or e.g   1,3-5" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "For Chapters 1,3,4 and 5"
         '
         'btn_Browse
         '
@@ -726,16 +739,6 @@ Partial Class frmMain
         Me.Label9.TabIndex = 12
         Me.Label9.Text = "DVD Chapters:"
         '
-        'text_chaptors
-        '
-        Me.text_chaptors.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.text_chaptors.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.text_chaptors.Location = New System.Drawing.Point(121, 81)
-        Me.text_chaptors.Name = "text_chaptors"
-        Me.text_chaptors.Size = New System.Drawing.Size(119, 21)
-        Me.text_chaptors.TabIndex = 3
-        Me.text_chaptors.Text = "Automatic"
-        '
         'Label10
         '
         Me.Label10.AutoSize = True
@@ -755,7 +758,7 @@ Partial Class frmMain
         Me.Version.Name = "Version"
         Me.Version.Size = New System.Drawing.Size(141, 20)
         Me.Version.TabIndex = 411
-        Me.Version.Text = "Version 2.25"
+        Me.Version.Text = "Version 2.3"
         '
         'btn_encode
         '
@@ -2309,6 +2312,16 @@ Partial Class frmMain
         Me.lbl_update.Text = ">>  UPDATE AVAILABLE <<"
         Me.lbl_update.Visible = False
         '
+        'Label13
+        '
+        Me.Label13.AutoSize = True
+        Me.Label13.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label13.Location = New System.Drawing.Point(200, 85)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(21, 13)
+        Me.Label13.TabIndex = 42
+        Me.Label13.Text = "To"
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -2374,7 +2387,6 @@ Partial Class frmMain
     Friend WithEvents drp_audioCodec As System.Windows.Forms.ComboBox
     Friend WithEvents Label12 As System.Windows.Forms.Label
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
-    Friend WithEvents Label13 As System.Windows.Forms.Label
     Friend WithEvents Label17 As System.Windows.Forms.Label
     Friend WithEvents text_source As System.Windows.Forms.TextBox
     Friend WithEvents Label9 As System.Windows.Forms.Label
@@ -2533,7 +2545,6 @@ Partial Class frmMain
     Friend WithEvents drp_processors As System.Windows.Forms.ComboBox
     Friend WithEvents drp_audioBitrate As System.Windows.Forms.ComboBox
     Friend WithEvents drp_dvdtitle As System.Windows.Forms.ComboBox
-    Friend WithEvents text_chaptors As System.Windows.Forms.TextBox
     Friend WithEvents ToolStripSeparator5 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents mnu_viewDVDdata As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Label4 As System.Windows.Forms.Label
@@ -2557,5 +2568,8 @@ Partial Class frmMain
     Friend WithEvents mnu_appleTv As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents mnu_presetPS3 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents mnu_faq As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents drop_chapterFinish As System.Windows.Forms.ComboBox
+    Friend WithEvents drop_chapterStart As System.Windows.Forms.ComboBox
+    Friend WithEvents Label13 As System.Windows.Forms.Label
 
 End Class

@@ -51,7 +51,8 @@ Public Class frmMain
                 'Source
                 text_source.Text = My.Settings.DVDSource
                 drp_dvdtitle.Text = My.Settings.DVDTitle
-                text_chaptors.Text = My.Settings.DVDChapter
+                drop_chapterStart.Text = My.Settings.ChapterStart
+                drop_chapterFinish.Text = My.Settings.ChapterFinish
                 'Destination
                 text_destination.Text = My.Settings.VideoDest
                 drp_videoEncoder.Text = My.Settings.VideoEncoder
@@ -94,7 +95,7 @@ Public Class frmMain
         '# Read DVD at Startup Dialog
         '#---------------------------------------------------
         If My.Settings.ReadDVDatStartup = 1 Then
-            frmReadDVD.Show()
+            frmSelectDVD.Show()
         End If
     End Sub
 
@@ -112,7 +113,9 @@ Public Class frmMain
         'Source
         Dim source As String = text_source.Text
         Dim dvdTitle As String = drp_dvdtitle.Text
-        Dim dvdChaptor As String = text_chaptors.Text
+
+        Dim ChapterStart As String = drop_chapterStart.Text
+        Dim ChapterFinish As String = drop_chapterFinish.Text
         'Destination
         Dim destination As String = text_destination.Text
         Dim videoEncoder As String = drp_videoEncoder.Text
@@ -156,7 +159,8 @@ Public Class frmMain
                 Dim StreamWriter As StreamWriter = File.CreateText(filename)
                 StreamWriter.WriteLine(source)
                 StreamWriter.WriteLine(dvdTitle)
-                StreamWriter.WriteLine(dvdChaptor)
+                StreamWriter.WriteLine(ChapterStart)
+                StreamWriter.WriteLine(ChapterFinish)
                 StreamWriter.WriteLine(destination)
                 StreamWriter.WriteLine(videoEncoder)
                 StreamWriter.WriteLine(audioEncoder)
@@ -174,7 +178,7 @@ Public Class frmMain
                 StreamWriter.WriteLine(deinterlace)
                 StreamWriter.WriteLine(grayscale)
                 StreamWriter.WriteLine(videoFramerate)
-                StreamWriter.WriteLine(ChapterMarkers) '# Fixed Pixel Ratio not saved bug
+                StreamWriter.WriteLine(ChapterMarkers)
                 StreamWriter.WriteLine(pixelRation)
                 StreamWriter.WriteLine(audioBitrate)
                 StreamWriter.WriteLine(audioSampleRate)
@@ -202,7 +206,8 @@ Public Class frmMain
 
                 text_source.Text = inputStream.ReadLine()
                 drp_dvdtitle.Text = inputStream.ReadLine()
-                text_chaptors.Text = inputStream.ReadLine()
+                drop_chapterStart.Text = inputStream.ReadLine()
+                drop_chapterFinish.Text = inputStream.ReadLine()
                 text_destination.Text = inputStream.ReadLine()
                 drp_videoEncoder.Text = inputStream.ReadLine()
                 drp_audioCodec.Text = inputStream.ReadLine()
@@ -220,8 +225,8 @@ Public Class frmMain
                 check_DeInterlace.CheckState = inputStream.ReadLine()
                 check_grayscale.CheckState = inputStream.ReadLine()
                 drp_videoFramerate.Text = inputStream.ReadLine()
-                CheckPixelRatio.CheckState = inputStream.ReadLine() '# Fix for pixel ratio not being saved
                 Check_ChapterMarkers.CheckState = inputStream.ReadLine()
+                CheckPixelRatio.CheckState = inputStream.ReadLine()
                 drp_audioBitrate.Text = inputStream.ReadLine()
                 drp_audioSampleRate.Text = inputStream.ReadLine()
                 drp_audioChannels.Text = inputStream.ReadLine()
@@ -260,7 +265,8 @@ Public Class frmMain
         'Source
         My.Settings.DVDSource = text_source.Text
         My.Settings.DVDTitle = drp_dvdtitle.Text
-        My.Settings.DVDChapter = text_chaptors.Text
+        My.Settings.ChapterStart = drop_chapterStart.Text
+        My.Settings.ChapterFinish = drop_chapterFinish.Text
         'Destination
         My.Settings.VideoDest = text_destination.Text
         My.Settings.VideoEncoder = drp_videoEncoder.Text
@@ -297,11 +303,12 @@ Public Class frmMain
     End Sub
 
     Private Sub mnu_viewDVDdata_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_viewDVDdata.Click
-        frmSelect.Show()
+        frmDvdData.Show()
     End Sub
 
     'Some Presets
     Private Sub mnu_preset_ipod133_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_preset_ipod133.Click
+        CheckPixelRatio.CheckState = CheckState.Unchecked
         text_width.Text = "640"
         text_height.Text = "480"
         drp_videoEncoder.Text = "H.264 (iPod)"
@@ -310,10 +317,12 @@ Public Class frmMain
         slider_videoQuality.Value = 0
         SliderValue.Text = "0%"
         drp_audioBitrate.Text = "160"
-
+        rtf_h264advanced.Text = ""
+        drp_crop.Text = "No Crop"
     End Sub
 
     Private Sub mnu_preset_ipod178_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_preset_ipod178.Click
+        CheckPixelRatio.CheckState = CheckState.Unchecked
         text_width.Text = "640"
         text_height.Text = "352"
         drp_videoEncoder.Text = "H.264 (iPod)"
@@ -322,9 +331,12 @@ Public Class frmMain
         slider_videoQuality.Value = 0
         SliderValue.Text = "0%"
         drp_audioBitrate.Text = "160"
+        rtf_h264advanced.Text = ""
+        drp_crop.Text = "No Crop"
     End Sub
 
     Private Sub mnu_preset_ipod235_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_preset_ipod235.Click
+        CheckPixelRatio.CheckState = CheckState.Unchecked
         text_width.Text = "640"
         text_height.Text = "272"
         drp_videoEncoder.Text = "H.264 (iPod)"
@@ -333,9 +345,12 @@ Public Class frmMain
         slider_videoQuality.Value = 0
         SliderValue.Text = "0%"
         drp_audioBitrate.Text = "160"
+        rtf_h264advanced.Text = ""
+        drp_crop.Text = "No Crop"
     End Sub
 
     Private Sub mnu_presetPS3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_presetPS3.Click
+        CheckPixelRatio.CheckState = CheckState.Unchecked
         text_width.Text = ""
         text_height.Text = ""
         drp_videoEncoder.Text = "H.264"
@@ -347,6 +362,7 @@ Public Class frmMain
         CheckPixelRatio.CheckState = CheckState.Checked
         drp_audioSampleRate.Text = "48"
         rtf_h264advanced.Text = "level=41"
+        drp_crop.Text = "No Crop"
     End Sub
 
     Private Sub mnu_appleTv_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_appleTv.Click
@@ -361,9 +377,8 @@ Public Class frmMain
         CheckPixelRatio.CheckState = CheckState.Checked
         drp_audioSampleRate.Text = "48"
         rtf_h264advanced.Text = "bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:no-dct-decimate=1:trellis=2"
+        drp_crop.Text = "No Crop"
     End Sub
-
-
 
     Private Sub mnu_options_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_options.Click
         frmOptions.Show()
@@ -403,14 +418,14 @@ Public Class frmMain
             filename = DVD_Open.SelectedPath
             text_source.Text = filename
             If filename <> "" Then
-                frmStatus.Show()
+                frmReadDVD.Show()
             End If
         Else
             ISO_Open.ShowDialog()
             filename = ISO_Open.FileName
             text_source.Text = filename
             If filename <> "" Then
-                frmStatus.Show()
+                frmReadDVD.Show()
             End If
         End If
     End Sub
@@ -481,6 +496,10 @@ Public Class frmMain
         Dim query As String
         Dim ApplicationPath As String = Application.StartupPath
 
+        If (frmQueue.list_queue.Items.Count > 0) Then
+            MessageBox.Show("ALERT: You have items on the video queue. If you wish to run the queue, click the Enocde Videos button on the Queue window.")
+        End If
+
         Try
             If (QueryEditorText.Text = "") Then
                 query = GenerateTheQuery()
@@ -512,6 +531,32 @@ Public Class frmMain
     '# Dynamic stuff on frm Main
     '#
     '#
+
+    Private Sub drop_chapterFinish_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles drop_chapterFinish.SelectedIndexChanged
+        Dim chapterFinish As Integer = drop_chapterFinish.Text
+        Dim chapterStart As Integer = drop_chapterStart.Text
+
+        Try
+            If (chapterFinish < chapterStart) Then
+                MessageBox.Show("Error: Invalid Chapter Range! - Final chapter can not be smaller than the starting chapter.")
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Invalid Character Entered")
+        End Try
+    End Sub
+
+    Private Sub drop_chapterStart_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles drop_chapterStart.SelectedIndexChanged
+        Dim chapterFinish As Integer = drop_chapterFinish.Text
+        Dim chapterStart As Integer = drop_chapterStart.Text
+
+        Try
+            If (chapterStart > chapterFinish) Then
+                MessageBox.Show("Error: Invalid Chapter Range! - Start chapter can not be larger than the Final chapter.")
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Invalid Character Entered")
+        End Try
+    End Sub
 
     Private Sub text_bitrate_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles text_bitrate.TextChanged
         text_filesize.Text = ""
@@ -643,6 +688,32 @@ Public Class frmMain
 
                     TempLine = ReadLine.Split("~")
                     If TempLine(0).Replace("+ ", "").Trim.Equals("title " & title & ":") Then
+                        '### Set the 2 Title boxes.
+                        Tempdata = TempLine(4).Split("&")
+                        TempCount = Tempdata.Length
+
+                        Dim chapterNumber() As String
+                        Dim chapter As String
+
+                        drop_chapterStart.Items.Clear()
+                        drop_chapterFinish.Items.Clear()
+
+                        drop_chapterStart.Text = "1"
+                        drop_chapterFinish.Text = TempCount - 1
+
+
+                        While counter <> TempCount
+                            chapterNumber = Tempdata(counter).Split(":")
+                            chapter = chapterNumber(0).Replace("+ ", "").Trim
+
+                            drop_chapterStart.Items.Add(chapter)
+                            drop_chapterFinish.Items.Add(chapter)
+
+                            counter = counter + 1
+                        End While
+                        counter = 1 ' Reset the counter for reuse
+
+
 
                         '### Here we populate the subtitle box.
                         Tempdata = TempLine(6).Split("&")
@@ -813,7 +884,12 @@ Public Class frmMain
         'Source
         Dim source As String = text_source.Text
         Dim dvdTitle As String = drp_dvdtitle.Text
-        Dim dvdChaptor As String = text_chaptors.Text
+        Dim chapterStart As String = drop_chapterStart.Text
+        Dim chapterFinish As String = drop_chapterFinish.Text
+        Dim totalChapters As String = drop_chapterFinish.Items.Count - 1
+        Dim dvdChapter As String = ""
+
+
 
         If (source = "") Then
             MessageBox.Show("ERROR: No Source has been selected.")
@@ -829,15 +905,15 @@ Public Class frmMain
             dvdTitle = " -t " + titleInfo(0)
         End If
 
-        If (dvdChaptor = "Automatic") Then
-            dvdChaptor = ""
-        ElseIf (dvdChaptor = "") Then
-            dvdChaptor = ""
+        If (chapterFinish.Equals("Auto") And chapterStart.Equals("Auto")) Then
+            dvdChapter = ""
+        ElseIf (chapterFinish = totalChapters & chapterStart > 1) Then
+            dvdChapter = ""
         Else
-            dvdChaptor = " -c " + dvdChaptor
+            dvdChapter = " -c " + chapterStart + "-" + chapterFinish
         End If
 
-        Dim querySource As String = source + dvdTitle + dvdChaptor
+        Dim querySource As String = source + dvdTitle + dvdChapter
         '----------------------------------------------------------------------
 
         'Destination
@@ -1121,5 +1197,4 @@ Public Class frmMain
     '------------------------------------------------
 
 
- 
 End Class

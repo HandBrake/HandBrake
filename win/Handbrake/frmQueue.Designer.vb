@@ -34,7 +34,7 @@ Partial Class frmQueue
         Me.btn_Close.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_Close.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_Close.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.btn_Close.Location = New System.Drawing.Point(485, 403)
+        Me.btn_Close.Location = New System.Drawing.Point(16, 403)
         Me.btn_Close.Name = "btn_Close"
         Me.btn_Close.Size = New System.Drawing.Size(124, 22)
         Me.btn_Close.TabIndex = 20
@@ -58,7 +58,7 @@ Partial Class frmQueue
         Me.btn_q_encoder.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_q_encoder.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_q_encoder.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.btn_q_encoder.Location = New System.Drawing.Point(16, 403)
+        Me.btn_q_encoder.Location = New System.Drawing.Point(485, 403)
         Me.btn_q_encoder.Name = "btn_q_encoder"
         Me.btn_q_encoder.Size = New System.Drawing.Size(124, 22)
         Me.btn_q_encoder.TabIndex = 22
@@ -82,7 +82,7 @@ Partial Class frmQueue
         Me.btn_delete.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_delete.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_delete.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.btn_delete.Location = New System.Drawing.Point(146, 403)
+        Me.btn_delete.Location = New System.Drawing.Point(355, 403)
         Me.btn_delete.Name = "btn_delete"
         Me.btn_delete.Size = New System.Drawing.Size(124, 22)
         Me.btn_delete.TabIndex = 24

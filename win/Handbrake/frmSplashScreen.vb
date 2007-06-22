@@ -30,7 +30,10 @@ Public NotInheritable Class frmSplashScreen
 
         'Copyright info
         'CLIV.Text = My.Application.Info.Copyright
+        Version.Text = "Version: " & My.Settings.HandbrakeGUIVersion & " (beta)"
+        CLIV.Text = "Windows CLI Version: " & My.Settings.HandbrakeCLIVersion
     End Sub
 
 
+  
 End Class

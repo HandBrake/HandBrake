@@ -90,9 +90,9 @@ Partial Class frmUpdate
         Me.Version.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Version.Location = New System.Drawing.Point(125, 100)
         Me.Version.Name = "Version"
-        Me.Version.Size = New System.Drawing.Size(32, 13)
+        Me.Version.Size = New System.Drawing.Size(64, 13)
         Me.Version.TabIndex = 41
-        Me.Version.Text = "2.25"
+        Me.Version.Text = "{Version}"
         Me.Version.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'Label4
@@ -202,9 +202,9 @@ Partial Class frmUpdate
         Me.cliVersion.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cliVersion.Location = New System.Drawing.Point(450, 100)
         Me.cliVersion.Name = "cliVersion"
-        Me.cliVersion.Size = New System.Drawing.Size(50, 13)
+        Me.cliVersion.Size = New System.Drawing.Size(64, 13)
         Me.cliVersion.TabIndex = 51
-        Me.cliVersion.Text = "0.8.5b1"
+        Me.cliVersion.Text = "{Version}"
         Me.cliVersion.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'Label8

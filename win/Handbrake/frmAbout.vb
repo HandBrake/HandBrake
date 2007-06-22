@@ -5,6 +5,6 @@ Public Class frmAbout
     End Sub
 
     Private Sub frmAbout_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Version.Text = System.String.Format(Version.Text, My.Application.Info.Version.Major, My.Application.Info.Version.Minor)
+        Version.Text = "Version " & My.Settings.HandbrakeGUIVersion
     End Sub
 End Class

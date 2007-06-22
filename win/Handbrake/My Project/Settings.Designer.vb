@@ -68,7 +68,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("2.25")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("2.3")>  _
         Public Property HandbrakeGUIVersion() As String
             Get
                 Return CType(Me("HandbrakeGUIVersion"),String)
@@ -333,12 +333,12 @@ Namespace My
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-        Public Property DVDChapter() As String
+        Public Property ChapterStart() As String
             Get
-                Return CType(Me("DVDChapter"),String)
+                Return CType(Me("ChapterStart"),String)
             End Get
             Set
-                Me("DVDChapter") = value
+                Me("ChapterStart") = value
             End Set
         End Property
         
@@ -459,6 +459,18 @@ Namespace My
             End Get
             Set
                 Me("ReadDVDatStartup") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property ChapterFinish() As String
+            Get
+                Return CType(Me("ChapterFinish"),String)
+            End Get
+            Set
+                Me("ChapterFinish") = value
             End Set
         End Property
     End Class

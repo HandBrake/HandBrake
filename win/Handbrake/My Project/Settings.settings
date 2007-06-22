@@ -6,7 +6,7 @@
       <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="HandbrakeGUIVersion" Type="System.String" Scope="User">
-      <Value Profile="(Default)">2.25</Value>
+      <Value Profile="(Default)">2.3</Value>
     </Setting>
     <Setting Name="HandbrakeCLIVersion" Type="System.String" Scope="User">
       <Value Profile="(Default)">0.8.5b1</Value>
@@ -71,7 +71,7 @@
     <Setting Name="DVDSource" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="DVDChapter" Type="System.String" Scope="User">
+    <Setting Name="ChapterStart" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="DVDTitle" Type="System.String" Scope="User">
@@ -103,6 +103,9 @@
     </Setting>
     <Setting Name="ReadDVDatStartup" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="ChapterFinish" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>
