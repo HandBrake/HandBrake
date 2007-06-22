@@ -24,17 +24,19 @@ Partial Class frmReadDVD
         Me.Label2 = New System.Windows.Forms.Label
         Me.Label3 = New System.Windows.Forms.Label
         Me.btn_ok = New System.Windows.Forms.Button
+        Me.Label4 = New System.Windows.Forms.Label
         Me.SuspendLayout()
         '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(81, 42)
+        Me.Label1.Font = New System.Drawing.Font("Verdana", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Location = New System.Drawing.Point(6, 94)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(364, 13)
+        Me.Label1.Size = New System.Drawing.Size(457, 12)
         Me.Label1.TabIndex = 20
-        Me.Label1.Text = "Please click OK to continue, This process may take a moment."
+        Me.Label1.Text = "Note: After pressing OK the window will remain open until the CLI has completed t" & _
+            "he scan."
         '
         'Label2
         '
@@ -52,9 +54,9 @@ Partial Class frmReadDVD
         Me.Label3.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label3.Location = New System.Drawing.Point(81, 21)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(124, 13)
+        Me.Label3.Size = New System.Drawing.Size(231, 13)
         Me.Label3.TabIndex = 22
-        Me.Label3.Text = "Reading Disc Data..."
+        Me.Label3.Text = "The CLI is currently reading the DVD..."
         '
         'btn_ok
         '
@@ -63,7 +65,7 @@ Partial Class frmReadDVD
         Me.btn_ok.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_ok.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_ok.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.btn_ok.Location = New System.Drawing.Point(454, 69)
+        Me.btn_ok.Location = New System.Drawing.Point(406, 64)
         Me.btn_ok.Name = "btn_ok"
         Me.btn_ok.Size = New System.Drawing.Size(56, 22)
         Me.btn_ok.TabIndex = 23
@@ -71,13 +73,24 @@ Partial Class frmReadDVD
         Me.btn_ok.Text = "Ok"
         Me.btn_ok.UseVisualStyleBackColor = False
         '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.Location = New System.Drawing.Point(81, 43)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(130, 13)
+        Me.Label4.TabIndex = 24
+        Me.Label4.Text = "Press OK to continue."
+        '
         'frmReadDVD
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(518, 98)
+        Me.ClientSize = New System.Drawing.Size(473, 116)
         Me.ControlBox = False
+        Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.btn_ok)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label2)
@@ -98,4 +111,5 @@ Partial Class frmReadDVD
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents btn_ok As System.Windows.Forms.Button
+    Friend WithEvents Label4 As System.Windows.Forms.Label
 End Class

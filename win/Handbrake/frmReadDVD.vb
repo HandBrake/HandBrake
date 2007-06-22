@@ -19,6 +19,7 @@ Public Class frmReadDVD
             MessageBox.Show("Unable to launch the CLI encoder.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Hand)
             MessageBox.Show(ex.ToString)
         End Try
+
     End Sub
 
     '#

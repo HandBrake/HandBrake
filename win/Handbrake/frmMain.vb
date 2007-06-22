@@ -480,15 +480,8 @@ Public Class frmMain
 
     Private Sub btn_queue_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_queue.Click
         Dim query As String
-        'Dim ApplicationPath As String = Application.StartupPath
-        'If (QueryEditorText.Text = "") Then
         query = GenerateTheQuery()
         frmQueue.list_queue.Items.Add(query)
-        ' Else
-        '    query = QueryEditorText.Text
-        '     frmQueue.list_queue.Items.Add(query)
-        '  End If
-
         frmQueue.Show()
     End Sub
 
@@ -514,6 +507,11 @@ Public Class frmMain
                 query = QueryEditorText.Text
                 Shell("""" + ApplicationPath + "\hbcli.exe""" + query)
                 MessageBox.Show("The Handbrake encoder (CLI) will now start and should be encoding your video.", "ALERT", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
+
+                'Lets start the process monitor to keep an eye on things.
+                hbcliMonitor = New ProcessMonitor()
+                Dim t = New Thread(AddressOf hbcliMonitor.tmrProcCheck)
+                t.Start()
             End If
         Catch ex As Exception
             MessageBox.Show("Unable to Launch the Encoder.")
