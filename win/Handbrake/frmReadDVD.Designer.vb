@@ -58,7 +58,7 @@ Partial Class frmReadDVD
         '
         'btn_ok
         '
-        Me.btn_ok.BackColor = System.Drawing.SystemColors.ActiveBorder
+        Me.btn_ok.BackColor = System.Drawing.SystemColors.Control
         Me.btn_ok.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.btn_ok.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_ok.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -71,7 +71,7 @@ Partial Class frmReadDVD
         Me.btn_ok.Text = "Ok"
         Me.btn_ok.UseVisualStyleBackColor = False
         '
-        'frmStatus
+        'frmReadDVD
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -84,7 +84,7 @@ Partial Class frmReadDVD
         Me.Controls.Add(Me.Label1)
         Me.Cursor = System.Windows.Forms.Cursors.Default
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.Name = "frmStatus"
+        Me.Name = "frmReadDVD"
         Me.Padding = New System.Windows.Forms.Padding(1)
         Me.ShowIcon = False
         Me.ShowInTaskbar = False

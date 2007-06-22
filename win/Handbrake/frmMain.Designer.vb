@@ -254,10 +254,11 @@ Partial Class frmMain
         '
         'frmMainMenu
         '
+        Me.frmMainMenu.BackColor = System.Drawing.SystemColors.Control
         Me.frmMainMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.PresetsToolStripMenuItem, Me.HelpToolStripMenuItem})
         Me.frmMainMenu.Location = New System.Drawing.Point(0, 0)
         Me.frmMainMenu.Name = "frmMainMenu"
-        Me.frmMainMenu.Size = New System.Drawing.Size(714, 24)
+        Me.frmMainMenu.Size = New System.Drawing.Size(710, 24)
         Me.frmMainMenu.TabIndex = 0
         Me.frmMainMenu.Text = "MenuStrip1"
         '
@@ -340,6 +341,7 @@ Partial Class frmMain
         '
         'PresetsToolStripMenuItem
         '
+        Me.PresetsToolStripMenuItem.BackColor = System.Drawing.SystemColors.Control
         Me.PresetsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnu_preset_ipod133, Me.mnu_preset_ipod178, Me.mnu_preset_ipod235, Me.mnu_appleTv, Me.mnu_presetPS3, Me.ToolStripSeparator4, Me.mnu_ProgramDefaultOptions})
         Me.PresetsToolStripMenuItem.Name = "PresetsToolStripMenuItem"
         Me.PresetsToolStripMenuItem.Size = New System.Drawing.Size(55, 20)
@@ -416,7 +418,7 @@ Partial Class frmMain
         '
         Me.mnu_faq.Name = "mnu_faq"
         Me.mnu_faq.Size = New System.Drawing.Size(157, 22)
-        Me.mnu_faq.Text = "Faq"
+        Me.mnu_faq.Text = "FAQ"
         '
         'WebsiteToolStripMenuItem
         '
@@ -450,7 +452,7 @@ Partial Class frmMain
         '
         'GroupBox4
         '
-        Me.GroupBox4.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.GroupBox4.BackColor = System.Drawing.SystemColors.Control
         Me.GroupBox4.Controls.Add(Me.Label56)
         Me.GroupBox4.Controls.Add(Me.lbl_Aspect)
         Me.GroupBox4.Controls.Add(Me.Label91)
@@ -466,7 +468,7 @@ Partial Class frmMain
         Me.GroupBox4.Controls.Add(Me.Label12)
         Me.GroupBox4.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox4.ForeColor = System.Drawing.Color.Black
-        Me.GroupBox4.Location = New System.Drawing.Point(15, 165)
+        Me.GroupBox4.Location = New System.Drawing.Point(15, 169)
         Me.GroupBox4.Name = "GroupBox4"
         Me.GroupBox4.Size = New System.Drawing.Size(683, 126)
         Me.GroupBox4.TabIndex = 406
@@ -615,7 +617,7 @@ Partial Class frmMain
         '
         'GroupBox1
         '
-        Me.GroupBox1.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.GroupBox1.BackColor = System.Drawing.SystemColors.Control
         Me.GroupBox1.Controls.Add(Me.Label13)
         Me.GroupBox1.Controls.Add(Me.drop_chapterFinish)
         Me.GroupBox1.Controls.Add(Me.drop_chapterStart)
@@ -771,7 +773,7 @@ Partial Class frmMain
         '
         'btn_encode
         '
-        Me.btn_encode.BackColor = System.Drawing.SystemColors.ActiveBorder
+        Me.btn_encode.BackColor = System.Drawing.SystemColors.Control
         Me.btn_encode.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.btn_encode.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_encode.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -786,7 +788,7 @@ Partial Class frmMain
         '
         'btn_queue
         '
-        Me.btn_queue.BackColor = System.Drawing.SystemColors.ActiveBorder
+        Me.btn_queue.BackColor = System.Drawing.SystemColors.Control
         Me.btn_queue.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.btn_queue.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_queue.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -801,6 +803,7 @@ Partial Class frmMain
         '
         'h264Tab
         '
+        Me.h264Tab.BackColor = System.Drawing.SystemColors.Control
         Me.h264Tab.Controls.Add(Me.Label43)
         Me.h264Tab.Controls.Add(Me.label_h264)
         Me.h264Tab.Controls.Add(Me.Label95)
@@ -815,7 +818,6 @@ Partial Class frmMain
         Me.h264Tab.Size = New System.Drawing.Size(675, 257)
         Me.h264Tab.TabIndex = 5
         Me.h264Tab.Text = "H.264"
-        Me.h264Tab.UseVisualStyleBackColor = True
         '
         'Label43
         '
@@ -899,6 +901,7 @@ Partial Class frmMain
         '
         'TabPage4
         '
+        Me.TabPage4.BackColor = System.Drawing.SystemColors.Control
         Me.TabPage4.Controls.Add(Me.drp_processors)
         Me.TabPage4.Controls.Add(Me.Label6)
         Me.TabPage4.Controls.Add(Me.Label11)
@@ -908,7 +911,6 @@ Partial Class frmMain
         Me.TabPage4.Size = New System.Drawing.Size(675, 257)
         Me.TabPage4.TabIndex = 4
         Me.TabPage4.Text = "Advanced Settings"
-        Me.TabPage4.UseVisualStyleBackColor = True
         '
         'drp_processors
         '
@@ -944,6 +946,7 @@ Partial Class frmMain
         '
         'TabPage2
         '
+        Me.TabPage2.BackColor = System.Drawing.SystemColors.Control
         Me.TabPage2.Controls.Add(Me.Label29)
         Me.TabPage2.Controls.Add(Me.drp_audioMixDown)
         Me.TabPage2.Controls.Add(Me.drp_audioChannels)
@@ -962,7 +965,6 @@ Partial Class frmMain
         Me.TabPage2.Size = New System.Drawing.Size(675, 257)
         Me.TabPage2.TabIndex = 3
         Me.TabPage2.Text = "Audio Settings"
-        Me.TabPage2.UseVisualStyleBackColor = True
         '
         'Label29
         '
@@ -1090,6 +1092,7 @@ Partial Class frmMain
         '
         'TabPage3
         '
+        Me.TabPage3.BackColor = System.Drawing.SystemColors.Control
         Me.TabPage3.Controls.Add(Me.Label36)
         Me.TabPage3.Controls.Add(Me.Check_ChapterMarkers)
         Me.TabPage3.Controls.Add(Me.Label28)
@@ -1118,7 +1121,6 @@ Partial Class frmMain
         Me.TabPage3.Size = New System.Drawing.Size(675, 257)
         Me.TabPage3.TabIndex = 2
         Me.TabPage3.Text = "Video Settings"
-        Me.TabPage3.UseVisualStyleBackColor = True
         '
         'Label36
         '
@@ -1283,7 +1285,7 @@ Partial Class frmMain
         Me.slider_videoQuality.Location = New System.Drawing.Point(129, 90)
         Me.slider_videoQuality.Maximum = 100
         Me.slider_videoQuality.Name = "slider_videoQuality"
-        Me.slider_videoQuality.Size = New System.Drawing.Size(167, 42)
+        Me.slider_videoQuality.Size = New System.Drawing.Size(167, 45)
         Me.slider_videoQuality.TabIndex = 6
         Me.slider_videoQuality.TickFrequency = 17
         '
@@ -1337,6 +1339,7 @@ Partial Class frmMain
         '
         'TabPage1
         '
+        Me.TabPage1.BackColor = System.Drawing.SystemColors.Control
         Me.TabPage1.Controls.Add(Me.drp_subtitle)
         Me.TabPage1.Controls.Add(Me.Label19)
         Me.TabPage1.Controls.Add(Me.lbl_RecomendedCrop)
@@ -1360,7 +1363,6 @@ Partial Class frmMain
         Me.TabPage1.Size = New System.Drawing.Size(675, 257)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Picture Settings"
-        Me.TabPage1.UseVisualStyleBackColor = True
         '
         'drp_subtitle
         '
@@ -1553,6 +1555,7 @@ Partial Class frmMain
         '
         'TabPage6
         '
+        Me.TabPage6.BackColor = System.Drawing.SystemColors.Control
         Me.TabPage6.Controls.Add(Me.Label7)
         Me.TabPage6.Controls.Add(Me.Label39)
         Me.TabPage6.Controls.Add(Me.btn_ClearQuery)
@@ -1564,7 +1567,6 @@ Partial Class frmMain
         Me.TabPage6.Size = New System.Drawing.Size(675, 257)
         Me.TabPage6.TabIndex = 6
         Me.TabPage6.Text = "Query Editor"
-        Me.TabPage6.UseVisualStyleBackColor = True
         '
         'Label7
         '
@@ -2325,7 +2327,7 @@ Partial Class frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(714, 631)
+        Me.ClientSize = New System.Drawing.Size(710, 633)
         Me.Controls.Add(Me.lbl_update)
         Me.Controls.Add(Me.btn_queue)
         Me.Controls.Add(Me.btn_encode)

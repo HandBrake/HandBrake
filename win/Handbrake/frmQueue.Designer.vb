@@ -29,7 +29,7 @@ Partial Class frmQueue
         '
         'btn_Close
         '
-        Me.btn_Close.BackColor = System.Drawing.SystemColors.ActiveBorder
+        Me.btn_Close.BackColor = System.Drawing.SystemColors.Control
         Me.btn_Close.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.btn_Close.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_Close.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -53,7 +53,7 @@ Partial Class frmQueue
         '
         'btn_q_encoder
         '
-        Me.btn_q_encoder.BackColor = System.Drawing.SystemColors.ActiveBorder
+        Me.btn_q_encoder.BackColor = System.Drawing.SystemColors.Control
         Me.btn_q_encoder.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.btn_q_encoder.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_q_encoder.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -77,7 +77,7 @@ Partial Class frmQueue
         '
         'btn_delete
         '
-        Me.btn_delete.BackColor = System.Drawing.SystemColors.ActiveBorder
+        Me.btn_delete.BackColor = System.Drawing.SystemColors.Control
         Me.btn_delete.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.btn_delete.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_delete.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))

@@ -11,8 +11,7 @@
     <RootNamespace>Handbrake</RootNamespace>
     <AssemblyName>Handbrake</AssemblyName>
     <MyType>WindowsForms</MyType>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>handbrakepineapple.ico</ApplicationIcon>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -198,6 +197,9 @@
       <ProductName>.NET Framework 2.0</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="handbrakepineapple.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

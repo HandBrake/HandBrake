@@ -47,7 +47,7 @@ Partial Class frmDvdData
         '
         'btn_close
         '
-        Me.btn_close.BackColor = System.Drawing.SystemColors.ActiveBorder
+        Me.btn_close.BackColor = System.Drawing.SystemColors.Control
         Me.btn_close.FlatAppearance.BorderColor = System.Drawing.Color.Black
         Me.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_close.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -60,7 +60,7 @@ Partial Class frmDvdData
         Me.btn_close.Text = "Close Window"
         Me.btn_close.UseVisualStyleBackColor = False
         '
-        'frmSelect
+        'frmDvdData
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -69,7 +69,7 @@ Partial Class frmDvdData
         Me.Controls.Add(Me.rtf_dvdInfo)
         Me.Controls.Add(Me.btn_close)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.Name = "frmSelect"
+        Me.Name = "frmDvdData"
         Me.Text = "Read DVD"
         Me.ResumeLayout(False)
         Me.PerformLayout()

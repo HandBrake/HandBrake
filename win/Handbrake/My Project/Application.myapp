@@ -4,7 +4,7 @@
   <MainForm>frmMain</MainForm>
   <SingleInstance>true</SingleInstance>
   <ShutdownMode>0</ShutdownMode>
-  <EnableVisualStyles>false</EnableVisualStyles>
+  <EnableVisualStyles>true</EnableVisualStyles>
   <AuthenticationMode>0</AuthenticationMode>
   <SplashScreen>frmSplashScreen</SplashScreen>
   <SaveMySettingsOnExit>true</SaveMySettingsOnExit>
