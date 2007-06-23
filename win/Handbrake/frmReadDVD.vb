@@ -29,7 +29,7 @@ Public Class frmReadDVD
     '# Stage 2 - Parse the dvdinfo.dat file
     '# Stage 3 - output the parsed version to dvd.dat or handle errors if any
     '#
-    '#
+    '# This all needs re-written. It's a real mess. Should really dump all the info into an array so external files are not required.
 
     Private Sub btn_ok_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_ok.Click
         '# Stage 1 - Wait til the hbcli exe has finished
