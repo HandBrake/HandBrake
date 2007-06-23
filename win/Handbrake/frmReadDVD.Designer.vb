@@ -31,18 +31,18 @@ Partial Class frmReadDVD
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Verdana", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(6, 94)
+        Me.Label1.Location = New System.Drawing.Point(72, 53)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(457, 12)
+        Me.Label1.Size = New System.Drawing.Size(269, 24)
         Me.Label1.TabIndex = 20
-        Me.Label1.Text = "Note: After pressing OK the window will remain open until the CLI has completed t" & _
-            "he scan."
+        Me.Label1.Text = "Note: After pressing OK the window will remain open " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "until the CLI has completed" & _
+            " the scan."
         '
         'Label2
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(23, 20)
+        Me.Label2.Location = New System.Drawing.Point(13, 12)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(52, 13)
         Me.Label2.TabIndex = 21
@@ -52,7 +52,7 @@ Partial Class frmReadDVD
         '
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(81, 21)
+        Me.Label3.Location = New System.Drawing.Point(71, 13)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(231, 13)
         Me.Label3.TabIndex = 22
@@ -65,7 +65,7 @@ Partial Class frmReadDVD
         Me.btn_ok.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_ok.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_ok.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.btn_ok.Location = New System.Drawing.Point(406, 64)
+        Me.btn_ok.Location = New System.Drawing.Point(413, 58)
         Me.btn_ok.Name = "btn_ok"
         Me.btn_ok.Size = New System.Drawing.Size(56, 22)
         Me.btn_ok.TabIndex = 23
@@ -77,7 +77,7 @@ Partial Class frmReadDVD
         '
         Me.Label4.AutoSize = True
         Me.Label4.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.Location = New System.Drawing.Point(81, 43)
+        Me.Label4.Location = New System.Drawing.Point(71, 35)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(130, 13)
         Me.Label4.TabIndex = 24
@@ -88,7 +88,7 @@ Partial Class frmReadDVD
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(473, 116)
+        Me.ClientSize = New System.Drawing.Size(473, 84)
         Me.ControlBox = False
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.btn_ok)

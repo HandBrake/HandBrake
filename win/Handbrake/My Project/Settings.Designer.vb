@@ -473,6 +473,30 @@ Namespace My
                 Me("ChapterFinish") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property turboFirstPass() As String
+            Get
+                Return CType(Me("turboFirstPass"),String)
+            End Get
+            Set
+                Me("turboFirstPass") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property largeFile() As String
+            Get
+                Return CType(Me("largeFile"),String)
+            End Get
+            Set
+                Me("largeFile") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

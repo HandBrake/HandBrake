@@ -75,6 +75,8 @@ Public Class frmMain
                 check_grayscale.CheckState = My.Settings.Grayscale
                 drp_videoFramerate.Text = My.Settings.Framerate
                 CheckPixelRatio.CheckState = My.Settings.PixelRatio
+                check_turbo.CheckState = My.Settings.turboFirstPass
+                check_largeFile.CheckState = My.Settings.largeFile
                 'Audio Settings Tab
                 drp_audioBitrate.Text = My.Settings.AudioBitrate
                 drp_audioSampleRate.Text = My.Settings.AudioSampleRate
@@ -138,6 +140,8 @@ Public Class frmMain
         Dim videoFramerate As String = drp_videoFramerate.Text
         Dim pixelRation As String = CheckPixelRatio.CheckState
         Dim ChapterMarkers As String = Check_ChapterMarkers.CheckState
+        Dim turboH264 As String = check_turbo.CheckState
+        Dim largeFile As String = check_largeFile.CheckState
         'Audio Settings Tab
         Dim audioBitrate As String = drp_audioBitrate.Text
         Dim audioSampleRate As String = drp_audioSampleRate.Text
@@ -180,6 +184,8 @@ Public Class frmMain
                 StreamWriter.WriteLine(videoFramerate)
                 StreamWriter.WriteLine(ChapterMarkers)
                 StreamWriter.WriteLine(pixelRation)
+                StreamWriter.WriteLine(turboH264)
+                StreamWriter.WriteLine(largeFile)
                 StreamWriter.WriteLine(audioBitrate)
                 StreamWriter.WriteLine(audioSampleRate)
                 StreamWriter.WriteLine(audioChannels)
@@ -227,6 +233,8 @@ Public Class frmMain
                 drp_videoFramerate.Text = inputStream.ReadLine()
                 Check_ChapterMarkers.CheckState = inputStream.ReadLine()
                 CheckPixelRatio.CheckState = inputStream.ReadLine()
+                check_turbo.CheckState = inputStream.ReadLine()
+                check_largeFile.CheckState = inputStream.ReadLine()
                 drp_audioBitrate.Text = inputStream.ReadLine()
                 drp_audioSampleRate.Text = inputStream.ReadLine()
                 drp_audioChannels.Text = inputStream.ReadLine()
@@ -289,6 +297,8 @@ Public Class frmMain
         My.Settings.Grayscale = check_grayscale.CheckState
         My.Settings.Framerate = drp_videoFramerate.Text
         My.Settings.PixelRatio = CheckPixelRatio.CheckState
+        My.Settings.turboFirstPass = check_turbo.CheckState
+        My.Settings.largeFile = check_largeFile.CheckState
         'Audio Settings Tab
         My.Settings.AudioBitrate = drp_audioBitrate.Text
         My.Settings.AudioSampleRate = drp_audioSampleRate.Text
@@ -466,9 +476,6 @@ Public Class frmMain
         Catch ex As Exception
             ' Ignore the Error - Change this to an IF Statment at some point so it works better.
         End Try
-
-        
-
 
     End Sub
 
@@ -879,6 +886,28 @@ Public Class frmMain
         text_destination.Text = destination
     End Sub
 
+    Private Sub check_largeFile_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles check_largeFile.Click
+        If (Not text_destination.Text.Contains(".mp4")) Then
+            MessageBox.Show("This option is only compatible with the mp4 file container.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            check_largeFile.CheckState = CheckState.Unchecked
+        End If
+    End Sub
+
+    Private Sub check_turbo_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles check_turbo.Click
+        If (Not drp_videoEncoder.Text.Contains("H.264")) Then
+            MessageBox.Show("This option is only compatible with the H.264 encoder's", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            check_turbo.CheckState = CheckState.Unchecked
+        End If
+    End Sub
+
+    Private Sub drp_videoEncoder_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles drp_videoEncoder.SelectedIndexChanged
+        ' Turn off some options which are H.264 only when the user selects a non h.264 encoder
+        If (Not drp_videoEncoder.Text.Contains("H.264")) Then
+            check_turbo.CheckState = CheckState.Unchecked
+            CheckCRF.CheckState = CheckState.Unchecked
+        End If
+    End Sub
+
     '#
     '#
     '# Functions
@@ -1008,6 +1037,8 @@ Public Class frmMain
         Dim videoFramerate As String = drp_videoFramerate.Text
         Dim pixelRatio As String = CheckPixelRatio.CheckState
         Dim ChapterMarkers As String = Check_ChapterMarkers.CheckState
+        Dim turboH264 As String = check_turbo.CheckState
+        Dim largeFile As String = check_largeFile.CheckState
 
         If (videoBitrate <> "") Then
             videoBitrate = " -b " + videoBitrate
@@ -1064,8 +1095,21 @@ Public Class frmMain
             ChapterMarkers = ""
         End If
 
+        If (turboH264 = 1) Then
+            turboH264 = " -T "
+        Else
+            turboH264 = ""
+        End If
 
-        Dim queryVideoSettings As String = videoBitrate + videoFilesize + videoQuality + twoPassEncoding + deinterlace + grayscale + videoFramerate + pixelRatio + ChapterMarkers
+        If (largeFile = 1) Then
+            largeFile = " -4 "
+        Else
+            largeFile = ""
+        End If
+
+
+        Dim queryVideoSettings As String = _
+        videoBitrate + videoFilesize + videoQuality + twoPassEncoding + deinterlace + grayscale + videoFramerate + pixelRatio + ChapterMarkers + turboH264 + largeFile
         '----------------------------------------------------------------------
 
         'Audio Settings Tab
@@ -1201,7 +1245,5 @@ Public Class frmMain
         MessageBox.Show("The encoding process has ended.", "ALERT", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
 
     End Sub
-    '------------------------------------------------
-
-
+    '-----------------------------------------------
 End Class
