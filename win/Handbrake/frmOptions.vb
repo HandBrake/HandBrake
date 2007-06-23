@@ -3,6 +3,7 @@ Imports System.IO
 Public Class frmOptions
 
     Private Sub btn_close_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_close.Click
+        My.Settings.Save()
         Me.Close()
     End Sub
 
@@ -72,7 +73,7 @@ Public Class frmOptions
         End If
     End Sub
 
-   
+
     Private Sub check_readDVDWindow_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles check_readDVDWindow.CheckedChanged
         If check_readDVDWindow.CheckState = 1 Then
             Try

@@ -10,7 +10,6 @@ Public Class frmMain
 
 
     Private Sub frmMain_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-
         '# Sets the Version in the bottom corner of the screen.
         Version.Text = System.String.Format(Version.Text, My.Application.Info.Version.Major, My.Application.Info.Version.Minor)
 
@@ -304,7 +303,7 @@ Public Class frmMain
         'H264 Tab
         My.Settings.CRF = CheckCRF.CheckState
         My.Settings.H264 = rtf_h264advanced.Text
-
+        My.Settings.Save()
     End Sub
 
     Private Sub mnu_viewDVDdata_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mnu_viewDVDdata.Click
