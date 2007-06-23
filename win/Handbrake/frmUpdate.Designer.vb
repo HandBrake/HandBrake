@@ -22,7 +22,6 @@ Partial Class frmUpdate
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmUpdate))
         Me.Label1 = New System.Windows.Forms.Label
         Me.Dest_browse = New System.Windows.Forms.Button
-        Me.Label14 = New System.Windows.Forms.Label
         Me.Label2 = New System.Windows.Forms.Label
         Me.Version = New System.Windows.Forms.Label
         Me.Label4 = New System.Windows.Forms.Label
@@ -55,29 +54,18 @@ Partial Class frmUpdate
         Me.Dest_browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.Dest_browse.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Dest_browse.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.Dest_browse.Location = New System.Drawing.Point(12, 174)
+        Me.Dest_browse.Location = New System.Drawing.Point(372, 136)
         Me.Dest_browse.Name = "Dest_browse"
         Me.Dest_browse.Size = New System.Drawing.Size(107, 22)
         Me.Dest_browse.TabIndex = 38
         Me.Dest_browse.Text = "Check Now"
         Me.Dest_browse.UseVisualStyleBackColor = True
         '
-        'Label14
-        '
-        Me.Label14.AutoSize = True
-        Me.Label14.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label14.Location = New System.Drawing.Point(12, 32)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(242, 13)
-        Me.Label14.TabIndex = 39
-        Me.Label14.Text = "Click the ""Check Now"" button to continue"
-        Me.Label14.TextAlign = System.Drawing.ContentAlignment.TopCenter
-        '
         'Label2
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(12, 100)
+        Me.Label2.Location = New System.Drawing.Point(12, 81)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(107, 13)
         Me.Label2.TabIndex = 40
@@ -88,7 +76,7 @@ Partial Class frmUpdate
         '
         Me.Version.AutoSize = True
         Me.Version.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Version.Location = New System.Drawing.Point(125, 100)
+        Me.Version.Location = New System.Drawing.Point(125, 81)
         Me.Version.Name = "Version"
         Me.Version.Size = New System.Drawing.Size(64, 13)
         Me.Version.TabIndex = 41
@@ -99,7 +87,7 @@ Partial Class frmUpdate
         '
         Me.Label4.AutoSize = True
         Me.Label4.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.Location = New System.Drawing.Point(12, 120)
+        Me.Label4.Location = New System.Drawing.Point(12, 101)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(93, 13)
         Me.Label4.TabIndex = 42
@@ -110,7 +98,7 @@ Partial Class frmUpdate
         '
         Me.lbl_latest.AutoSize = True
         Me.lbl_latest.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_latest.Location = New System.Drawing.Point(125, 120)
+        Me.lbl_latest.Location = New System.Drawing.Point(125, 101)
         Me.lbl_latest.Name = "lbl_latest"
         Me.lbl_latest.Size = New System.Drawing.Size(113, 13)
         Me.lbl_latest.TabIndex = 43
@@ -123,7 +111,7 @@ Partial Class frmUpdate
         Me.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_close.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_close.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.btn_close.Location = New System.Drawing.Point(490, 174)
+        Me.btn_close.Location = New System.Drawing.Point(12, 136)
         Me.btn_close.Name = "btn_close"
         Me.btn_close.Size = New System.Drawing.Size(107, 22)
         Me.btn_close.TabIndex = 44
@@ -137,17 +125,15 @@ Partial Class frmUpdate
         Me.lbl_update.ForeColor = System.Drawing.Color.DarkOrange
         Me.lbl_update.Location = New System.Drawing.Point(12, 145)
         Me.lbl_update.Name = "lbl_update"
-        Me.lbl_update.Size = New System.Drawing.Size(534, 13)
+        Me.lbl_update.Size = New System.Drawing.Size(0, 13)
         Me.lbl_update.TabIndex = 45
-        Me.lbl_update.Text = "A new version is available. Please visit the project page to download the update." & _
-            ""
         Me.lbl_update.Visible = False
         '
         'Label3
         '
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(12, 76)
+        Me.Label3.Location = New System.Drawing.Point(12, 57)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(92, 13)
         Me.Label3.TabIndex = 46
@@ -157,7 +143,7 @@ Partial Class frmUpdate
         '
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(337, 76)
+        Me.Label5.Location = New System.Drawing.Point(256, 57)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(163, 13)
         Me.Label5.TabIndex = 47
@@ -167,7 +153,7 @@ Partial Class frmUpdate
         '
         Me.Label6.AutoSize = True
         Me.Label6.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(337, 120)
+        Me.Label6.Location = New System.Drawing.Point(256, 101)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(93, 13)
         Me.Label6.TabIndex = 49
@@ -178,7 +164,7 @@ Partial Class frmUpdate
         '
         Me.Label7.AutoSize = True
         Me.Label7.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(337, 100)
+        Me.Label7.Location = New System.Drawing.Point(256, 81)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(107, 13)
         Me.Label7.TabIndex = 48
@@ -189,7 +175,7 @@ Partial Class frmUpdate
         '
         Me.lbl_encoderVersion.AutoSize = True
         Me.lbl_encoderVersion.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_encoderVersion.Location = New System.Drawing.Point(450, 120)
+        Me.lbl_encoderVersion.Location = New System.Drawing.Point(369, 101)
         Me.lbl_encoderVersion.Name = "lbl_encoderVersion"
         Me.lbl_encoderVersion.Size = New System.Drawing.Size(113, 13)
         Me.lbl_encoderVersion.TabIndex = 50
@@ -200,7 +186,7 @@ Partial Class frmUpdate
         '
         Me.cliVersion.AutoSize = True
         Me.cliVersion.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cliVersion.Location = New System.Drawing.Point(450, 100)
+        Me.cliVersion.Location = New System.Drawing.Point(369, 81)
         Me.cliVersion.Name = "cliVersion"
         Me.cliVersion.Size = New System.Drawing.Size(64, 13)
         Me.cliVersion.TabIndex = 51
@@ -210,10 +196,10 @@ Partial Class frmUpdate
         'Label8
         '
         Me.Label8.AutoSize = True
-        Me.Label8.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.Location = New System.Drawing.Point(12, 54)
+        Me.Label8.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.Location = New System.Drawing.Point(12, 32)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(156, 13)
+        Me.Label8.Size = New System.Drawing.Size(142, 13)
         Me.Label8.TabIndex = 52
         Me.Label8.Text = "Startup Update Check: "
         '
@@ -221,17 +207,17 @@ Partial Class frmUpdate
         '
         Me.lbl_startupStatus.AutoSize = True
         Me.lbl_startupStatus.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_startupStatus.Location = New System.Drawing.Point(167, 55)
+        Me.lbl_startupStatus.Location = New System.Drawing.Point(150, 32)
         Me.lbl_startupStatus.Name = "lbl_startupStatus"
-        Me.lbl_startupStatus.Size = New System.Drawing.Size(28, 13)
+        Me.lbl_startupStatus.Size = New System.Drawing.Size(55, 13)
         Me.lbl_startupStatus.TabIndex = 53
-        Me.lbl_startupStatus.Text = "Off "
+        Me.lbl_startupStatus.Text = "{status}"
         '
         'frmUpdate
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(609, 208)
+        Me.ClientSize = New System.Drawing.Size(502, 172)
         Me.Controls.Add(Me.lbl_startupStatus)
         Me.Controls.Add(Me.Label8)
         Me.Controls.Add(Me.cliVersion)
@@ -246,7 +232,6 @@ Partial Class frmUpdate
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Version)
         Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.Label14)
         Me.Controls.Add(Me.Dest_browse)
         Me.Controls.Add(Me.Label1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -258,7 +243,6 @@ Partial Class frmUpdate
     End Sub
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Dest_browse As System.Windows.Forms.Button
-    Friend WithEvents Label14 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Version As System.Windows.Forms.Label
     Friend WithEvents Label4 As System.Windows.Forms.Label

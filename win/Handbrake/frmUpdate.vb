@@ -31,17 +31,14 @@ Public Class frmUpdate
             lbl_encoderVersion.Text = windowsCLI
 
             ' If the version is now the same as the one shown here, Display the update label
-            If windowsGUI <> My.Settings.HandbrakeGUIVersion Then
-                lbl_update.Visible = True
-            ElseIf windowsCLI <> My.Settings.HandbrakeCLIVersion Then
-                lbl_update.Visible = True
+            If (windowsGUI <> My.Settings.HandbrakeGUIVersion Or windowsCLI <> My.Settings.HandbrakeCLIVersion) Then
+                MessageBox.Show("A new version is available. Please visit the project website to download the update.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
             End If
 
 
         Catch ex As Exception
             ' Handdle any errors that may occur
-            MessageBox.Show("ERROR: Unable to check for updates. The server may be unavailible at the moment. Please try again later!")
-            MessageBox.Show(ex.ToString) ' Debug output
+            MessageBox.Show("Unable to check for updates. The server may be unavailible at the moment. Please try again later!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand)
         End Try
 
 

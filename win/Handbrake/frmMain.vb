@@ -81,7 +81,6 @@ Public Class frmMain
                 drp_audioBitrate.Text = My.Settings.AudioBitrate
                 drp_audioSampleRate.Text = My.Settings.AudioSampleRate
                 drp_audioChannels.Text = My.Settings.AudioChannels
-                Check6ChanAudio.CheckState = My.Settings.FiveChanAudio
                 'Advanced Settings Tab
                 drp_processors.Text = My.Settings.Processors
                 'H264 Tab
@@ -146,7 +145,6 @@ Public Class frmMain
         Dim audioBitrate As String = drp_audioBitrate.Text
         Dim audioSampleRate As String = drp_audioSampleRate.Text
         Dim audioChannels As String = drp_audioChannels.Text
-        Dim enabled6chanAudio As String = Check6ChanAudio.CheckState
         Dim AudioMixDown As String = drp_audioMixDown.Text
         'Advanced Settings Tab
         Dim processors As String = drp_processors.Text
@@ -189,7 +187,6 @@ Public Class frmMain
                 StreamWriter.WriteLine(audioBitrate)
                 StreamWriter.WriteLine(audioSampleRate)
                 StreamWriter.WriteLine(audioChannels)
-                StreamWriter.WriteLine(enabled6chanAudio)
                 StreamWriter.WriteLine(AudioMixDown)
                 StreamWriter.WriteLine(processors)
                 StreamWriter.WriteLine(CRF)
@@ -238,7 +235,6 @@ Public Class frmMain
                 drp_audioBitrate.Text = inputStream.ReadLine()
                 drp_audioSampleRate.Text = inputStream.ReadLine()
                 drp_audioChannels.Text = inputStream.ReadLine()
-                Check6ChanAudio.CheckState = inputStream.ReadLine()
                 drp_audioMixDown.Text = inputStream.ReadLine()
                 drp_processors.Text = inputStream.ReadLine()
 
@@ -303,7 +299,6 @@ Public Class frmMain
         My.Settings.AudioBitrate = drp_audioBitrate.Text
         My.Settings.AudioSampleRate = drp_audioSampleRate.Text
         My.Settings.AudioChannels = drp_audioChannels.Text
-        My.Settings.FiveChanAudio = Check6ChanAudio.CheckState
         'Advanced Settings Tab
         My.Settings.Processors = drp_processors.Text
         'H264 Tab
@@ -575,12 +570,14 @@ Public Class frmMain
         text_filesize.Text = ""
         slider_videoQuality.Value = 0
         SliderValue.Text = "0%"
+        CheckCRF.CheckState = CheckState.Unchecked
     End Sub
 
     Private Sub text_filesize_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles text_filesize.TextChanged
         text_bitrate.Text = ""
         slider_videoQuality.Value = 0
         SliderValue.Text = "0%"
+        CheckCRF.CheckState = CheckState.Unchecked
     End Sub
 
     Private Sub slider_videoQuality_Scroll(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles slider_videoQuality.Scroll
@@ -605,7 +602,6 @@ Public Class frmMain
         Catch ex As Exception
 
         End Try
-
     End Sub
 
     Private Sub text_height_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles text_height.TextChanged
@@ -908,6 +904,13 @@ Public Class frmMain
         End If
     End Sub
 
+    Private Sub CheckCRF_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckCRF.Click
+        If (slider_videoQuality.Value = 0) Then
+            MessageBox.Show("This option is can only be used with the 'Video Quality' slider.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            CheckCRF.CheckState = CheckState.Unchecked
+        End If
+    End Sub
+
     '#
     '#
     '# Functions
@@ -1116,7 +1119,8 @@ Public Class frmMain
         Dim audioBitrate As String = drp_audioBitrate.Text
         Dim audioSampleRate As String = drp_audioSampleRate.Text
         Dim audioChannels As String = drp_audioChannels.Text
-        Dim SixChannelAudio As String = Check6ChanAudio.CheckState
+        Dim Mixdown As String = drp_audioMixDown.Text
+        Dim SixChannelAudio As String = ""
 
         If (audioBitrate <> "") Then
             audioBitrate = " -B " + audioBitrate
@@ -1137,28 +1141,30 @@ Public Class frmMain
             audioChannels = " -a " + tempSub(0)
         End If
 
-        If (SixChannelAudio = 1) Then
-            If (drp_audioMixDown.Text = "Automatic") Then
-                drp_audioMixDown.Text = ""
-            End If
-            Dim Mixdown As String = drp_audioMixDown.Text
-            If Mixdown = "Mono" Then
-                Mixdown = "mono"
-            ElseIf Mixdown = "Stereo" Then
-                Mixdown = "stereo"
-            ElseIf Mixdown = "Dolby Surround" Then
-                Mixdown = "dpl1"
-            ElseIf Mixdown = "Dolby Pro Logic II" Then
-                Mixdown = "dpl2"
-            ElseIf Mixdown = "6 Channel Discrete" Then
-                Mixdown = "6ch"
-            Else
-                Mixdown = "stero"
-            End If
+
+        If (Mixdown = "Automatic") Then
+            Mixdown = ""
+        ElseIf Mixdown = "Mono" Then
+            Mixdown = "mono"
+        ElseIf Mixdown = "Stereo" Then
+            Mixdown = "stereo"
+        ElseIf Mixdown = "Dolby Surround" Then
+            Mixdown = "dpl1"
+        ElseIf Mixdown = "Dolby Pro Logic II" Then
+            Mixdown = "dpl2"
+        ElseIf Mixdown = "6 Channel Discrete" Then
+            Mixdown = "6ch"
+        Else
+            Mixdown = "stero"
+        End If
+
+        If (Mixdown <> "") Then
             SixChannelAudio = " -6 " & Mixdown
         Else
             SixChannelAudio = ""
         End If
+
+
 
         Dim queryAudioSettings As String = audioBitrate + audioSampleRate + audioChannels + SixChannelAudio
         '----------------------------------------------------------------------
@@ -1242,8 +1248,10 @@ Public Class frmMain
     ' The hbcli processes has exited at this point. Lets throw a messagebox at the user telling him the enocode has completed.
     Sub TheadCompletedMonitor(ByVal isRunning As Integer) Handles hbcliMonitor.ThreadComplete
         Dim ApplicationPath As String = Application.StartupPath ' The applications start parth
-        MessageBox.Show("The encoding process has ended.", "ALERT", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
+        MessageBox.Show("The encoding process has ended.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
 
     End Sub
     '-----------------------------------------------
+
+
 End Class
