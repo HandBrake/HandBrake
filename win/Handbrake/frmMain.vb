@@ -597,6 +597,13 @@ Public Class frmMain
                     text_width.BackColor = Color.LightGreen
                 End If
             End If
+
+            If (Not lbl_Aspect.Text.Equals("Select a Title")) Then
+                Dim height As Integer = text_width.Text / lbl_Aspect.Text
+                Dim mod16 As Integer = height Mod 16
+                height = height - mod16
+                text_height.Text = height
+            End If
            
         Catch ex As Exception
 
