@@ -2343,9 +2343,9 @@ Partial Class frmMain
         Me.lbl_update.ForeColor = System.Drawing.Color.Black
         Me.lbl_update.Location = New System.Drawing.Point(89, 595)
         Me.lbl_update.Name = "lbl_update"
-        Me.lbl_update.Size = New System.Drawing.Size(213, 13)
+        Me.lbl_update.Size = New System.Drawing.Size(193, 13)
         Me.lbl_update.TabIndex = 413
-        Me.lbl_update.Text = "- ( A New Version is available. )"
+        Me.lbl_update.Text = "- A New Version is available!"
         Me.lbl_update.Visible = False
         '
         'frmMain
