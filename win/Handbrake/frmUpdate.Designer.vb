@@ -54,7 +54,7 @@ Partial Class frmUpdate
         Me.Dest_browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.Dest_browse.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Dest_browse.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.Dest_browse.Location = New System.Drawing.Point(372, 136)
+        Me.Dest_browse.Location = New System.Drawing.Point(15, 137)
         Me.Dest_browse.Name = "Dest_browse"
         Me.Dest_browse.Size = New System.Drawing.Size(107, 22)
         Me.Dest_browse.TabIndex = 38
@@ -111,11 +111,11 @@ Partial Class frmUpdate
         Me.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_close.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_close.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.btn_close.Location = New System.Drawing.Point(12, 136)
+        Me.btn_close.Location = New System.Drawing.Point(360, 137)
         Me.btn_close.Name = "btn_close"
-        Me.btn_close.Size = New System.Drawing.Size(107, 22)
+        Me.btn_close.Size = New System.Drawing.Size(122, 22)
         Me.btn_close.TabIndex = 44
-        Me.btn_close.Text = "Close"
+        Me.btn_close.Text = "Close Window"
         Me.btn_close.UseVisualStyleBackColor = True
         '
         'lbl_update
@@ -217,7 +217,7 @@ Partial Class frmUpdate
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(502, 172)
+        Me.ClientSize = New System.Drawing.Size(498, 172)
         Me.Controls.Add(Me.lbl_startupStatus)
         Me.Controls.Add(Me.Label8)
         Me.Controls.Add(Me.cliVersion)

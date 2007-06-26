@@ -497,6 +497,17 @@ Namespace My
                 Me("largeFile") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
+        Public Property verbose() As Integer
+            Get
+                Return CType(Me("verbose"),Integer)
+            End Get
+            Set
+                Me("verbose") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

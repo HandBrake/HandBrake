@@ -31,6 +31,12 @@ Public Class frmOptions
                 check_readDVDWindow.CheckState = CheckState.Unchecked
             End If
 
+            If My.Settings.verbose = 1 Then
+                check_verbose.CheckState = CheckState.Checked
+            Else
+                check_verbose.CheckState = CheckState.Unchecked
+            End If
+
         Catch ex As Exception
             MessageBox.Show("ERROR:  " & ex.ToString)
         End Try
@@ -89,4 +95,23 @@ Public Class frmOptions
             End Try
         End If
     End Sub
+
+
+    Private Sub check_verbose_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles check_verbose.CheckedChanged
+        If check_verbose.CheckState = 1 Then
+            Try
+                My.Settings.verbose = 1
+            Catch Ex As Exception
+                MessageBox.Show("ERROR:  " & Ex.ToString)
+            End Try
+        Else
+            Try
+                My.Settings.verbose = 0
+            Catch Ex As Exception
+                MessageBox.Show("ERROR:  " & Ex.ToString)
+            End Try
+        End If
+    End Sub
+
+
 End Class

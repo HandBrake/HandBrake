@@ -191,9 +191,9 @@ Public Class frmMain
                 StreamWriter.WriteLine(CRF)
                 StreamWriter.WriteLine(advH264)
                 StreamWriter.Close()
-                MessageBox.Show("Your profile has been sucessfully saved.", "STATUS", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
+                MessageBox.Show("Your profile has been sucessfully saved.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
             Catch
-                MessageBox.Show("Unable to write to the file. Please make sure the location has the correct permissions for file writing.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Hand)
+                MessageBox.Show("Unable to write to the file. Please make sure the location has the correct permissions for file writing.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand)
             End Try
         End If
     End Sub
@@ -246,7 +246,7 @@ Public Class frmMain
                 SliderValue.Text = slider_videoQuality.Value & "%"
 
             Catch ex As Exception
-                MessageBox.Show("Unable to load profile.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Hand)
+                MessageBox.Show("Unable to load profile.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand)
             End Try
         End If
 
@@ -459,7 +459,7 @@ Public Class frmMain
                 lAvailableSpace = Drv.AvailableSpace
                 lAvailableSpace = lAvailableSpace / 1024 / 1024 / 1024
                 If lAvailableSpace < 4 Then
-                    MessageBox.Show("Low on Disk Space. There is: " & lAvailableSpace & "GB Available", "WARNING", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    MessageBox.Show("Low on Disk Space. There is: " & lAvailableSpace & "GB Available", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 End If
 
                 Dim lTotalSpace As Long
@@ -499,33 +499,34 @@ Public Class frmMain
         Dim ApplicationPath As String = Application.StartupPath
 
         If (frmQueue.list_queue.Items.Count > 0) Then
-            MessageBox.Show("You have items on the video queue. If you wish to run the queue, click the Enocde Videos button on the Queue window.", "ALERT", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
+            MessageBox.Show("You have items on the video queue. If you wish to run the queue please use the encode video button on the queue window." _
+                                , "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
 
-        Try
-            If (QueryEditorText.Text = "") Then
-                query = GenerateTheQuery()
-                Shell("""" + ApplicationPath + "\hbcli.exe""" + query)
-                MessageBox.Show("The Handbrake encoder (CLI) will now start and should be encoding your video.", "ALERT", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
+            Try
+                If (QueryEditorText.Text = "") Then
+                    query = GenerateTheQuery()
+                    Shell("""" + ApplicationPath + "\hbcli.exe""" + query)
+                MessageBox.Show("The Handbrake encoder (CLI) will now start and should be encoding your video.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
 
-                'Lets start the process monitor to keep an eye on things.
-                hbcliMonitor = New ProcessMonitor()
-                Dim t = New Thread(AddressOf hbcliMonitor.tmrProcCheck)
-                t.Start()
-            Else
-                query = QueryEditorText.Text
-                Shell("""" + ApplicationPath + "\hbcli.exe""" + query)
-                MessageBox.Show("The Handbrake encoder (CLI) will now start and should be encoding your video.", "ALERT", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
+                    'Lets start the process monitor to keep an eye on things.
+                    hbcliMonitor = New ProcessMonitor()
+                    Dim t = New Thread(AddressOf hbcliMonitor.tmrProcCheck)
+                    t.Start()
+                Else
+                    query = QueryEditorText.Text
+                    Shell("""" + ApplicationPath + "\hbcli.exe""" + query)
+                MessageBox.Show("The Handbrake encoder (CLI) will now start and should be encoding your video.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
 
-                'Lets start the process monitor to keep an eye on things.
-                hbcliMonitor = New ProcessMonitor()
-                Dim t = New Thread(AddressOf hbcliMonitor.tmrProcCheck)
-                t.Start()
-            End If
-        Catch ex As Exception
-            MessageBox.Show("Unable to Launch the Encoder.")
-            MessageBox.Show(ex.ToString) ' Debug
-        End Try
+                    'Lets start the process monitor to keep an eye on things.
+                    hbcliMonitor = New ProcessMonitor()
+                    Dim t = New Thread(AddressOf hbcliMonitor.tmrProcCheck)
+                    t.Start()
+                End If
+            Catch ex As Exception
+            MessageBox.Show("Unable to launch the HandBrake encoder.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show(ex.ToString) ' Debug
+            End Try
 
     End Sub
 
@@ -545,10 +546,10 @@ Public Class frmMain
 
         Try
             If (chapterFinish < chapterStart) Then
-                MessageBox.Show("Invalid Chapter Range! - Final chapter can not be smaller than the starting chapter.", "WARNING", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                MessageBox.Show("Invalid Chapter Range! - Final chapter can not be smaller than the starting chapter.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             End If
         Catch ex As Exception
-            MessageBox.Show("Invalid Character Entered")
+            MessageBox.Show("Invalid Character Entered!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand)
         End Try
     End Sub
 
@@ -558,10 +559,10 @@ Public Class frmMain
 
         Try
             If (chapterStart > chapterFinish) Then
-                MessageBox.Show("Invalid Chapter Range! - Start chapter can not be larger than the Final chapter.", "WARNING", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                MessageBox.Show("Invalid Chapter Range! - Start chapter can not be larger than the Final chapter.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             End If
         Catch ex As Exception
-            MessageBox.Show("Invalid Character Entered", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Hand)
+            MessageBox.Show("Invalid Character Entered", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand)
         End Try
     End Sub
 
@@ -936,7 +937,7 @@ Public Class frmMain
 
 
         If (source = "") Then
-            MessageBox.Show("No Source has been selected.", "WARNING", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show("No Source has been selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         Else
             source = " -i " + """" + source + """"
         End If
@@ -953,6 +954,8 @@ Public Class frmMain
             dvdChapter = ""
         ElseIf (chapterFinish = totalChapters & chapterStart > 1) Then
             dvdChapter = ""
+        ElseIf chapterFinish = chapterStart Then
+            dvdChapter = " -c " + chapterStart
         Else
             dvdChapter = " -c " + chapterStart + "-" + chapterFinish
         End If
@@ -968,7 +971,7 @@ Public Class frmMain
         Dim height As String = text_height.Text
 
         If (destination = "") Then
-            MessageBox.Show("No destination has been selected.", "WARNING", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show("No destination has been selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         Else
             destination = " -o " + """" + destination + """"
         End If
@@ -1208,7 +1211,15 @@ Public Class frmMain
         Dim queryAdvancedSettings As String = processors
         '----------------------------------------------------------------------
 
-        Return querySource + queryDestination + queryPictureSettings + queryVideoSettings + h264Settings + queryAudioSettings + queryAdvancedSettings
+        ' Verbose option
+        Dim verbose As String = ""
+        If My.Settings.verbose = 1 Then
+            verbose = " -v "
+        End If
+        '----------------------------------------------------------------------
+
+
+        Return querySource + queryDestination + queryPictureSettings + queryVideoSettings + h264Settings + queryAudioSettings + queryAdvancedSettings + verbose
 
     End Function
 
@@ -1258,9 +1269,4 @@ Public Class frmMain
 
     End Sub
     '-----------------------------------------------
-
-
-    Private Sub TabPage1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TabPage1.Click
-
-    End Sub
 End Class

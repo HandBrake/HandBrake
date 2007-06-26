@@ -25,6 +25,8 @@ Partial Class frmQueue
         Me.btn_q_encoder = New System.Windows.Forms.Button
         Me.Label1 = New System.Windows.Forms.Label
         Me.btn_delete = New System.Windows.Forms.Button
+        Me.btn_up = New System.Windows.Forms.Button
+        Me.btn_down = New System.Windows.Forms.Button
         Me.SuspendLayout()
         '
         'btn_Close
@@ -34,7 +36,7 @@ Partial Class frmQueue
         Me.btn_Close.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_Close.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_Close.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.btn_Close.Location = New System.Drawing.Point(16, 403)
+        Me.btn_Close.Location = New System.Drawing.Point(518, 377)
         Me.btn_Close.Name = "btn_Close"
         Me.btn_Close.Size = New System.Drawing.Size(124, 22)
         Me.btn_Close.TabIndex = 20
@@ -46,9 +48,9 @@ Partial Class frmQueue
         '
         Me.list_queue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.list_queue.FormattingEnabled = True
-        Me.list_queue.Location = New System.Drawing.Point(16, 34)
+        Me.list_queue.Location = New System.Drawing.Point(12, 40)
         Me.list_queue.Name = "list_queue"
-        Me.list_queue.Size = New System.Drawing.Size(593, 353)
+        Me.list_queue.Size = New System.Drawing.Size(630, 327)
         Me.list_queue.TabIndex = 21
         '
         'btn_q_encoder
@@ -58,7 +60,7 @@ Partial Class frmQueue
         Me.btn_q_encoder.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_q_encoder.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_q_encoder.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.btn_q_encoder.Location = New System.Drawing.Point(485, 403)
+        Me.btn_q_encoder.Location = New System.Drawing.Point(12, 377)
         Me.btn_q_encoder.Name = "btn_q_encoder"
         Me.btn_q_encoder.Size = New System.Drawing.Size(124, 22)
         Me.btn_q_encoder.TabIndex = 22
@@ -69,7 +71,7 @@ Partial Class frmQueue
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(13, 13)
+        Me.Label1.Location = New System.Drawing.Point(12, 17)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(110, 13)
         Me.Label1.TabIndex = 23
@@ -82,7 +84,7 @@ Partial Class frmQueue
         Me.btn_delete.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_delete.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_delete.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.btn_delete.Location = New System.Drawing.Point(355, 403)
+        Me.btn_delete.Location = New System.Drawing.Point(142, 377)
         Me.btn_delete.Name = "btn_delete"
         Me.btn_delete.Size = New System.Drawing.Size(124, 22)
         Me.btn_delete.TabIndex = 24
@@ -90,12 +92,44 @@ Partial Class frmQueue
         Me.btn_delete.Text = "Delete Item"
         Me.btn_delete.UseVisualStyleBackColor = False
         '
+        'btn_up
+        '
+        Me.btn_up.BackColor = System.Drawing.SystemColors.Control
+        Me.btn_up.FlatAppearance.BorderColor = System.Drawing.Color.Black
+        Me.btn_up.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btn_up.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btn_up.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.btn_up.Location = New System.Drawing.Point(436, 12)
+        Me.btn_up.Name = "btn_up"
+        Me.btn_up.Size = New System.Drawing.Size(100, 22)
+        Me.btn_up.TabIndex = 25
+        Me.btn_up.TabStop = False
+        Me.btn_up.Text = "Move Up"
+        Me.btn_up.UseVisualStyleBackColor = False
+        '
+        'btn_down
+        '
+        Me.btn_down.BackColor = System.Drawing.SystemColors.Control
+        Me.btn_down.FlatAppearance.BorderColor = System.Drawing.Color.Black
+        Me.btn_down.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btn_down.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btn_down.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.btn_down.Location = New System.Drawing.Point(542, 12)
+        Me.btn_down.Name = "btn_down"
+        Me.btn_down.Size = New System.Drawing.Size(100, 22)
+        Me.btn_down.TabIndex = 26
+        Me.btn_down.TabStop = False
+        Me.btn_down.Text = "Move Down"
+        Me.btn_down.UseVisualStyleBackColor = False
+        '
         'frmQueue
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(621, 437)
+        Me.ClientSize = New System.Drawing.Size(651, 411)
         Me.ControlBox = False
+        Me.Controls.Add(Me.btn_down)
+        Me.Controls.Add(Me.btn_up)
         Me.Controls.Add(Me.btn_delete)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.btn_q_encoder)
@@ -103,6 +137,8 @@ Partial Class frmQueue
         Me.Controls.Add(Me.btn_Close)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
+        Me.MaximumSize = New System.Drawing.Size(659, 438)
+        Me.MinimumSize = New System.Drawing.Size(659, 438)
         Me.Name = "frmQueue"
         Me.ShowInTaskbar = False
         Me.Text = " Queue"
@@ -115,4 +151,6 @@ Partial Class frmQueue
     Friend WithEvents btn_q_encoder As System.Windows.Forms.Button
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents btn_delete As System.Windows.Forms.Button
+    Friend WithEvents btn_up As System.Windows.Forms.Button
+    Friend WithEvents btn_down As System.Windows.Forms.Button
 End Class

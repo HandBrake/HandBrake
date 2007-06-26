@@ -33,7 +33,8 @@ Public Class frmQueue
         Try
             Shell("""" + ApplicationPath + "\hbcli.exe""" + list_queue.Items.Item(encodeItems))
         Catch ex As Exception
-            MessageBox.Show("ERROR: No items left on the queue. Code: 01")
+            MessageBox.Show("Unable to launch the encoder. Queue run failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand)
+            MessageBox.Show(ex.ToString)
         End Try
 
         ' Lets start the process monitor
@@ -68,7 +69,8 @@ Public Class frmQueue
             Try
                 Shell("""" + ApplicationPath + "\hbcli.exe""" + list_queue.Items.Item(encodeItems))
             Catch ex As Exception
-                MessageBox.Show("Error Code: q1, Please report this error.")
+                MessageBox.Show("Unable to launch the encoder. Queue run failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand)
+                MessageBox.Show(ex.ToString)
             End Try
 
             ' Lets start the process monitor
@@ -132,5 +134,36 @@ Public Class frmQueue
         End Sub
     End Class
 
+    Private Sub btn_up_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_up.Click
+        Dim count As Integer = list_queue.Items.Count
+        Dim itemToMove As Integer = list_queue.SelectedIndex
+        Dim previousItem As String = ""
+        Dim previousItemint As Integer = 0
 
+        If (itemToMove > 0) Then
+            previousItemint = itemToMove - 1
+            previousItem = list_queue.Items.Item(previousItemint)
+            list_queue.Items.Item(previousItemint) = list_queue.Items.Item(itemToMove)
+            list_queue.Items.Item(itemToMove) = previousItem
+            list_queue.SelectedIndex = list_queue.SelectedIndex - 1
+        End If
+    End Sub
+
+    Private Sub btn_down_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_down.Click
+        Dim count As Integer = list_queue.Items.Count
+        Dim itemToMove As Integer = list_queue.SelectedIndex
+        Dim itemAfter As String = ""
+        Dim itemAfterInt As Integer = 0
+
+
+        MessageBox.Show(count)
+        MessageBox.Show(itemToMove)
+        If (itemToMove < (count - 1)) Then
+            itemAfterInt = itemToMove + 1
+            itemAfter = list_queue.Items.Item(itemAfterInt)
+            list_queue.Items.Item(itemAfterInt) = list_queue.Items.Item(itemToMove)
+            list_queue.Items.Item(itemToMove) = itemAfter
+            list_queue.SelectedIndex = list_queue.SelectedIndex + 1
+        End If
+    End Sub
 End Class

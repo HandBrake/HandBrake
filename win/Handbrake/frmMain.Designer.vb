@@ -30,7 +30,6 @@ Partial Class frmMain
         Me.toolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator
         Me.mnu_exit = New System.Windows.Forms.ToolStripMenuItem
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
-        Me.mnu_encode = New System.Windows.Forms.ToolStripMenuItem
         Me.mnu_viewDVDdata = New System.Windows.Forms.ToolStripMenuItem
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator
         Me.mnu_options = New System.Windows.Forms.ToolStripMenuItem
@@ -230,6 +229,7 @@ Partial Class frmMain
         Me.DVD_Save = New System.Windows.Forms.SaveFileDialog
         Me.File_Save = New System.Windows.Forms.SaveFileDialog
         Me.lbl_update = New System.Windows.Forms.Label
+        Me.mnu_encode = New System.Windows.Forms.ToolStripMenuItem
         Label38 = New System.Windows.Forms.Label
         Me.frmMainMenu.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
@@ -260,7 +260,7 @@ Partial Class frmMain
         Me.frmMainMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.PresetsToolStripMenuItem, Me.HelpToolStripMenuItem})
         Me.frmMainMenu.Location = New System.Drawing.Point(0, 0)
         Me.frmMainMenu.Name = "frmMainMenu"
-        Me.frmMainMenu.Size = New System.Drawing.Size(700, 24)
+        Me.frmMainMenu.Size = New System.Drawing.Size(675, 24)
         Me.frmMainMenu.TabIndex = 0
         Me.frmMainMenu.Text = "MenuStrip1"
         '
@@ -317,12 +317,6 @@ Partial Class frmMain
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
         Me.ToolsToolStripMenuItem.Text = "&Tools"
-        '
-        'mnu_encode
-        '
-        Me.mnu_encode.Name = "mnu_encode"
-        Me.mnu_encode.Size = New System.Drawing.Size(155, 22)
-        Me.mnu_encode.Text = "Encode Queue"
         '
         'mnu_viewDVDdata
         '
@@ -470,9 +464,9 @@ Partial Class frmMain
         Me.GroupBox4.Controls.Add(Me.Label12)
         Me.GroupBox4.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox4.ForeColor = System.Drawing.Color.Black
-        Me.GroupBox4.Location = New System.Drawing.Point(15, 159)
+        Me.GroupBox4.Location = New System.Drawing.Point(15, 157)
         Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(668, 126)
+        Me.GroupBox4.Size = New System.Drawing.Size(647, 126)
         Me.GroupBox4.TabIndex = 406
         Me.GroupBox4.TabStop = False
         Me.GroupBox4.Text = "Destination"
@@ -635,7 +629,7 @@ Partial Class frmMain
         Me.GroupBox1.ForeColor = System.Drawing.Color.Black
         Me.GroupBox1.Location = New System.Drawing.Point(15, 35)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(668, 116)
+        Me.GroupBox1.Size = New System.Drawing.Size(647, 116)
         Me.GroupBox1.TabIndex = 407
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Source"
@@ -781,7 +775,7 @@ Partial Class frmMain
         Me.btn_encode.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_encode.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_encode.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.btn_encode.Location = New System.Drawing.Point(559, 591)
+        Me.btn_encode.Location = New System.Drawing.Point(534, 590)
         Me.btn_encode.Name = "btn_encode"
         Me.btn_encode.Size = New System.Drawing.Size(124, 22)
         Me.btn_encode.TabIndex = 19
@@ -796,7 +790,7 @@ Partial Class frmMain
         Me.btn_queue.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_queue.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_queue.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.btn_queue.Location = New System.Drawing.Point(428, 591)
+        Me.btn_queue.Location = New System.Drawing.Point(403, 590)
         Me.btn_queue.Name = "btn_queue"
         Me.btn_queue.Size = New System.Drawing.Size(124, 22)
         Me.btn_queue.TabIndex = 412
@@ -817,7 +811,7 @@ Partial Class frmMain
         Me.h264Tab.Location = New System.Drawing.Point(4, 22)
         Me.h264Tab.Name = "h264Tab"
         Me.h264Tab.Padding = New System.Windows.Forms.Padding(3)
-        Me.h264Tab.Size = New System.Drawing.Size(660, 268)
+        Me.h264Tab.Size = New System.Drawing.Size(639, 268)
         Me.h264Tab.TabIndex = 5
         Me.h264Tab.Text = "H.264"
         '
@@ -855,7 +849,7 @@ Partial Class frmMain
         Me.btn_h264Clear.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_h264Clear.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_h264Clear.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.btn_h264Clear.Location = New System.Drawing.Point(565, 50)
+        Me.btn_h264Clear.Location = New System.Drawing.Point(542, 50)
         Me.btn_h264Clear.Name = "btn_h264Clear"
         Me.btn_h264Clear.Size = New System.Drawing.Size(79, 23)
         Me.btn_h264Clear.TabIndex = 45
@@ -877,7 +871,7 @@ Partial Class frmMain
         Me.rtf_h264advanced.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.rtf_h264advanced.Location = New System.Drawing.Point(16, 79)
         Me.rtf_h264advanced.Name = "rtf_h264advanced"
-        Me.rtf_h264advanced.Size = New System.Drawing.Size(628, 123)
+        Me.rtf_h264advanced.Size = New System.Drawing.Size(605, 123)
         Me.rtf_h264advanced.TabIndex = 41
         Me.rtf_h264advanced.Text = ""
         '
@@ -900,7 +894,7 @@ Partial Class frmMain
         Me.TabPage4.Location = New System.Drawing.Point(4, 22)
         Me.TabPage4.Name = "TabPage4"
         Me.TabPage4.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage4.Size = New System.Drawing.Size(660, 268)
+        Me.TabPage4.Size = New System.Drawing.Size(639, 268)
         Me.TabPage4.TabIndex = 4
         Me.TabPage4.Text = "Advanced Settings"
         '
@@ -953,7 +947,7 @@ Partial Class frmMain
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(660, 268)
+        Me.TabPage2.Size = New System.Drawing.Size(639, 268)
         Me.TabPage2.TabIndex = 3
         Me.TabPage2.Text = "Audio Settings"
         '
@@ -1102,7 +1096,7 @@ Partial Class frmMain
         Me.TabPage3.Location = New System.Drawing.Point(4, 22)
         Me.TabPage3.Name = "TabPage3"
         Me.TabPage3.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage3.Size = New System.Drawing.Size(660, 268)
+        Me.TabPage3.Size = New System.Drawing.Size(639, 268)
         Me.TabPage3.TabIndex = 2
         Me.TabPage3.Text = "Video Settings"
         '
@@ -1386,7 +1380,7 @@ Partial Class frmMain
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(660, 268)
+        Me.TabPage1.Size = New System.Drawing.Size(639, 268)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Picture Settings"
         '
@@ -1395,7 +1389,7 @@ Partial Class frmMain
         Me.drp_subtitle.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.drp_subtitle.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.drp_subtitle.FormattingEnabled = True
-        Me.drp_subtitle.Location = New System.Drawing.Point(404, 36)
+        Me.drp_subtitle.Location = New System.Drawing.Point(381, 36)
         Me.drp_subtitle.Name = "drp_subtitle"
         Me.drp_subtitle.Size = New System.Drawing.Size(213, 21)
         Me.drp_subtitle.TabIndex = 42
@@ -1405,7 +1399,7 @@ Partial Class frmMain
         '
         Me.Label19.AutoSize = True
         Me.Label19.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label19.Location = New System.Drawing.Point(334, 13)
+        Me.Label19.Location = New System.Drawing.Point(311, 13)
         Me.Label19.Name = "Label19"
         Me.Label19.Size = New System.Drawing.Size(64, 13)
         Me.Label19.TabIndex = 39
@@ -1454,7 +1448,7 @@ Partial Class frmMain
         '
         Me.Label21.AutoSize = True
         Me.Label21.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label21.Location = New System.Drawing.Point(401, 63)
+        Me.Label21.Location = New System.Drawing.Point(378, 63)
         Me.Label21.Name = "Label21"
         Me.Label21.Size = New System.Drawing.Size(224, 26)
         Me.Label21.TabIndex = 34
@@ -1464,7 +1458,7 @@ Partial Class frmMain
         '
         Me.Label20.AutoSize = True
         Me.Label20.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label20.Location = New System.Drawing.Point(337, 39)
+        Me.Label20.Location = New System.Drawing.Point(314, 39)
         Me.Label20.Name = "Label20"
         Me.Label20.Size = New System.Drawing.Size(61, 13)
         Me.Label20.TabIndex = 33
@@ -1574,7 +1568,7 @@ Partial Class frmMain
         Me.advancedOptions.Location = New System.Drawing.Point(15, 291)
         Me.advancedOptions.Name = "advancedOptions"
         Me.advancedOptions.SelectedIndex = 0
-        Me.advancedOptions.Size = New System.Drawing.Size(668, 294)
+        Me.advancedOptions.Size = New System.Drawing.Size(647, 294)
         Me.advancedOptions.TabIndex = 410
         Me.advancedOptions.TabStop = False
         '
@@ -1589,7 +1583,7 @@ Partial Class frmMain
         Me.TabPage6.Location = New System.Drawing.Point(4, 22)
         Me.TabPage6.Name = "TabPage6"
         Me.TabPage6.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage6.Size = New System.Drawing.Size(660, 268)
+        Me.TabPage6.Size = New System.Drawing.Size(639, 268)
         Me.TabPage6.TabIndex = 6
         Me.TabPage6.Text = "Query Editor"
         '
@@ -1619,7 +1613,7 @@ Partial Class frmMain
         Me.btn_ClearQuery.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_ClearQuery.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_ClearQuery.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.btn_ClearQuery.Location = New System.Drawing.Point(566, 73)
+        Me.btn_ClearQuery.Location = New System.Drawing.Point(542, 73)
         Me.btn_ClearQuery.Name = "btn_ClearQuery"
         Me.btn_ClearQuery.Size = New System.Drawing.Size(79, 23)
         Me.btn_ClearQuery.TabIndex = 39
@@ -1644,7 +1638,7 @@ Partial Class frmMain
         Me.QueryEditorText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.QueryEditorText.Location = New System.Drawing.Point(16, 102)
         Me.QueryEditorText.Name = "QueryEditorText"
-        Me.QueryEditorText.Size = New System.Drawing.Size(629, 139)
+        Me.QueryEditorText.Size = New System.Drawing.Size(605, 139)
         Me.QueryEditorText.TabIndex = 41
         Me.QueryEditorText.Text = ""
         '
@@ -2348,11 +2342,17 @@ Partial Class frmMain
         Me.lbl_update.Text = "- A New Version is available!"
         Me.lbl_update.Visible = False
         '
+        'mnu_encode
+        '
+        Me.mnu_encode.Name = "mnu_encode"
+        Me.mnu_encode.Size = New System.Drawing.Size(155, 22)
+        Me.mnu_encode.Text = "Encode Queue"
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(700, 621)
+        Me.ClientSize = New System.Drawing.Size(675, 621)
         Me.Controls.Add(Me.lbl_update)
         Me.Controls.Add(Me.btn_queue)
         Me.Controls.Add(Me.btn_encode)
@@ -2364,6 +2364,7 @@ Partial Class frmMain
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.frmMainMenu
         Me.MaximumSize = New System.Drawing.Size(878, 750)
+        Me.MinimumSize = New System.Drawing.Size(683, 648)
         Me.Name = "frmMain"
         Me.Text = "Handbrake"
         Me.frmMainMenu.ResumeLayout(False)
@@ -2397,7 +2398,6 @@ Partial Class frmMain
     Friend WithEvents toolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents mnu_exit As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents mnu_encode As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents HelpToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents mnu_about As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GroupBox4 As System.Windows.Forms.GroupBox
@@ -2599,5 +2599,6 @@ Partial Class frmMain
     Friend WithEvents check_largeFile As System.Windows.Forms.CheckBox
     Friend WithEvents Label37 As System.Windows.Forms.Label
     Friend WithEvents Label41 As System.Windows.Forms.Label
+    Friend WithEvents mnu_encode As System.Windows.Forms.ToolStripMenuItem
 
 End Class
