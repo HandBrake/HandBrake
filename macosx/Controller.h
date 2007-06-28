@@ -271,7 +271,8 @@
 - (IBAction) ShowAddPresetPanel: (id) sender;
 - (IBAction) CloseAddPresetPanel: (id) sender;
 - (NSDictionary *)CreatePreset;
-- (NSDictionary *)CreateIpodPreset;
+- (NSDictionary *)CreateIpodLowPreset;
+- (NSDictionary *)CreateIpodHighPreset;
 - (NSDictionary *)CreateAppleTVPreset;
 - (NSDictionary *)CreatePSThreePreset;  
 - (NSDictionary *)CreatePSPPreset;

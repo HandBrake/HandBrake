@@ -1323,15 +1323,15 @@ return registrationDictionary;
     switch( format )
     {
         case 0:
-				/*Get Default MP4 File Extension*/
-				if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultMpegName"] > 0)
-				{
+			/*Get Default MP4 File Extension*/
+			if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultMpegName"] > 0)
+			{
 				ext = "m4v";
-				}
-				else
-				{
+			}
+			else
+			{
 				ext = "mp4";
-				}
+			}
             [fDstCodecsPopUp addItemWithTitle:
                 _( @"MPEG-4 Video / AAC Audio" )];
             [fDstCodecsPopUp addItemWithTitle:
@@ -1342,13 +1342,15 @@ return registrationDictionary;
 			if we have enabled the option in the global preferences*/
 			if ([[NSUserDefaults standardUserDefaults] boolForKey:@"AllowLargeFiles"] > 0)
 			{
-			[fDstMpgLargeFileCheck setHidden: NO];
+				[fDstMpgLargeFileCheck setHidden: NO];
 			}
-			else
-			{
-			[fDstMpgLargeFileCheck setState: NSOffState];
-			}
-			break;
+				else
+				{
+					/* if not enable in global preferences, we additionaly sanity check that the
+					hidden checkbox is set to off. */
+					[fDstMpgLargeFileCheck setState: NSOffState];
+				}
+				break;
         case 1: 
             ext = "avi";
             [fDstCodecsPopUp addItemWithTitle:
@@ -2818,8 +2820,9 @@ the user is using "Custom" settings by determining the sender*/
 {
     /* First, we delete any existing built in presets */
     [self DeleteFactoryPresets: sender];
-    /* Then, we re-create new built in presets programmatically CreatePSPPreset*/
-	[UserPresets addObject:[self CreateIpodPreset]];
+    /* Then, we re-create new built in presets programmatically CreateIpodOnlyPreset*/
+	[UserPresets addObject:[self CreateIpodLowPreset]];
+	[UserPresets addObject:[self CreateIpodHighPreset]];
 	[UserPresets addObject:[self CreateAppleTVPreset]];
 	[UserPresets addObject:[self CreatePSThreePreset]];
 	[UserPresets addObject:[self CreatePSPPreset]];
@@ -2992,17 +2995,17 @@ the user is using "Custom" settings by determining the sender*/
 
 }
 
-- (NSDictionary *)CreateIpodPreset
+- (NSDictionary *)CreateIpodLowPreset
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
-    [preset setObject:@"HB-iPod" forKey:@"PresetName"];
+    [preset setObject:@"HB-iPod Low-Res" forKey:@"PresetName"];
 	/*Set whether or not this is a user preset or factory 0 is factory, 1 is user*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
 	/*Set whether or not this is default, at creation set to 0*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
 	/*Get the whether or not to apply pic settings in the AddPresetPanel*/
-	[preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesPictureSettings"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
 	/* File Format */
     [preset setObject:@"MP4 file" forKey:@"FileFormat"];
 	/* Chapter Markers*/
@@ -3012,7 +3015,73 @@ the user is using "Custom" settings by determining the sender*/
 	/* Video encoder */
 	[preset setObject:@"x264 (h.264 iPod)" forKey:@"VideoEncoder"];
 	/* x264 Option String */
-	[preset setObject:@"frameref=1:bframes=0:nofast_pskip:subq=6:partitions=p8x8,p8x4,p4x8,i4x4:qcomp=0:me=umh" forKey:@"x264Option"];
+	[preset setObject:@"keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1" forKey:@"x264Option"];
+	/* Video quality */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
+	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
+	[preset setObject:@"700" forKey:@"VideoAvgBitrate"];
+	[preset setObject:[NSNumber numberWithFloat:[fVidQualitySlider floatValue]] forKey:@"VideoQualitySlider"];
+	
+	/* Video framerate */
+	[preset setObject:@"Same as source" forKey:@"VideoFramerate"];
+	/* GrayScale */
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
+	/* 2 Pass Encoding */
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoTwoPass"];
+	
+	/*Picture Settings*/
+	//hb_job_t * job = fTitle->job;
+	/* Basic Picture Settings */
+	/* Use Max Picture settings for whatever the dvd is.*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesMaxPictureSettings"];
+	[preset setObject:[NSNumber numberWithInt:320] forKey:@"PictureWidth"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureKeepRatio"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PicturePAR"];
+	/* Set crop settings here */
+	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureBottomCrop"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
+	
+	/*Audio*/
+	/* Audio Sample Rate*/
+	[preset setObject:@"48" forKey:@"AudioSampleRate"];
+	/* Audio Bitrate Rate*/
+	[preset setObject:@"160" forKey:@"AudioBitRate"];
+	/* Subtitles*/
+	[preset setObject:@"None" forKey:@"Subtitles"];
+	
+
+    [preset autorelease];
+    return preset;
+
+}
+
+
+- (NSDictionary *)CreateIpodHighPreset
+{
+    NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
+	/* Get the New Preset Name from the field in the AddPresetPanel */
+    [preset setObject:@"HB-iPod High-Res" forKey:@"PresetName"];
+	/*Set whether or not this is a user preset or factory 0 is factory, 1 is user*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
+	/*Set whether or not this is default, at creation set to 0*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
+	/*Get the whether or not to apply pic settings in the AddPresetPanel*/
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
+	/* File Format */
+    [preset setObject:@"MP4 file" forKey:@"FileFormat"];
+	/* Chapter Markers*/
+	 [preset setObject:[NSNumber numberWithInt:1] forKey:@"ChapterMarkers"];
+    /* Codecs */
+	[preset setObject:@"AVC/H.264 Video / AAC Audio" forKey:@"FileCodecs"];
+	/* Video encoder */
+	[preset setObject:@"x264 (h.264 iPod)" forKey:@"VideoEncoder"];
+	/* x264 Option String */
+	[preset setObject:@"keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1" forKey:@"x264Option"];
 	/* Video quality */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
 	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
@@ -3031,9 +3100,9 @@ the user is using "Custom" settings by determining the sender*/
 	/* Basic Picture Settings */
 	/* Use Max Picture settings for whatever the dvd is.*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesMaxPictureSettings"];
-	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureWidth"];
+	[preset setObject:[NSNumber numberWithInt:640] forKey:@"PictureWidth"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
-	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureKeepRatio"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureKeepRatio"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PicturePAR"];
 	/* Set crop settings here */
