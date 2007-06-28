@@ -880,7 +880,7 @@ return registrationDictionary;
 		/* We set the largeFileSize (64 bit formatting) variable here to allow for > 4gb files based on the format being
 		mpeg4 and the checkbox being checked 
 		*Note: this will break compatibility with some target devices like iPod, etc.!!!!*/
-		if ([fDstMpgLargeFileCheck state] == NSOnState)
+		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"AllowLargeFiles"] > 0 && [fDstMpgLargeFileCheck state] == NSOnState)
 		{
 			job->largeFileSize = 1;
 		}
@@ -1338,8 +1338,16 @@ return registrationDictionary;
                 _( @"AVC/H.264 Video / AAC Audio" )];
 			/* We enable the create chapters checkbox here since we are .mp4*/
 			[fCreateChapterMarkers setEnabled: YES];
-			/* We show the Large File (64 bit formatting) checkbox since we are .mp4 */
+			/* We show the Large File (64 bit formatting) checkbox since we are .mp4 
+			if we have enabled the option in the global preferences*/
+			if ([[NSUserDefaults standardUserDefaults] boolForKey:@"AllowLargeFiles"] > 0)
+			{
 			[fDstMpgLargeFileCheck setHidden: NO];
+			}
+			else
+			{
+			[fDstMpgLargeFileCheck setState: NSOffState];
+			}
 			break;
         case 1: 
             ext = "avi";
