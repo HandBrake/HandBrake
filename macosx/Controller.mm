@@ -3498,15 +3498,40 @@ show the built in presets in a blue font. */
  forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
 {
     NSDictionary *userPresetDict = [UserPresets objectAtIndex:rowIndex];
-   if ([[userPresetDict objectForKey:@"Type"] intValue] == 0)
+	NSColor *fontColor;
+	NSColor *shadowColor;
+	/* First, we check to see if its a selected row, if so, we use white since its highlighted in blue */
+	if ([[aTableView selectedRowIndexes] containsIndex:rowIndex] && ([tableView editedRow] != rowIndex))
 	{
-		[aCell setTextColor:[NSColor blueColor]];
+		
+		fontColor = [NSColor whiteColor];
+		shadowColor = [NSColor colorWithDeviceRed:(127.0/255.0) green:(140.0/255.0) blue:(160.0/255.0) alpha:1.0];
 	}
 	else
 	{
-		[aCell setTextColor:[NSColor blackColor]];
+		/* We set the properties of unselected rows */
+		/* if built-in preset (defined by "type" == 0) we use a blue font */
+		if ([[userPresetDict objectForKey:@"Type"] intValue] == 0)
+		{
+			fontColor = [NSColor blueColor];
+		}
+		else // User created preset, use a black font
+		{
+			fontColor = [NSColor blackColor];
+		}
+		shadowColor = nil;
 	}
-
+	[aCell setTextColor:fontColor];
+	/* this shadow stuff (like mail app) for some reason looks crappy, commented out
+	temporarily in case we want to resurrect it */
+	/*
+	NSShadow *shadow = [[NSShadow alloc] init];
+	NSSize shadowOffset = { width: 1.0, height: -1.5};
+	[shadow setShadowOffset:shadowOffset];
+	[shadow setShadowColor:shadowColor];
+	[shadow set];
+	*/
+	
 }
 /* Method to display tooltip with the description for each preset, if available */
 - (NSString *)tableView:(NSTableView *)aTableView toolTipForCell:(NSCell *)aCell 
