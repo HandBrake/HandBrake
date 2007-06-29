@@ -2868,8 +2868,9 @@ the user is using "Custom" settings by determining the sender*/
 	[fPresetNewPicSettingsPopUp addItemWithTitle:@"Source Maximum (post source scan)"];
 	[fPresetNewPicSettingsPopUp selectItemAtIndex: 0];	
 	
-		/* Erase info from the input fields */
+		/* Erase info from the input fields fPresetNewDesc*/
 	[fPresetNewName setStringValue: @""];
+	[fPresetNewDesc setStringValue: @""];
 	/* Show the panel */
 	[NSApp beginSheet: fAddPresetPanel modalForWindow: fWindow
         modalDelegate: NULL didEndSelector: NULL contextInfo: NULL];
@@ -2892,6 +2893,7 @@ the user is using "Custom" settings by determining the sender*/
 	[UserPresets addObject:[self CreatePreset]];
 	/* Erase info from the input fields */
 	[fPresetNewName setStringValue: @""];
+	[fPresetNewDesc setStringValue: @""];
 	/* We stop the modal window for the new preset */
 	[NSApp stopModal];
     [self AddPreset];
@@ -2938,6 +2940,8 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
 	/*Get the whether or not to apply pic settings in the AddPresetPanel*/
 	[preset setObject:[NSNumber numberWithInt:[fPresetNewPicSettingsPopUp indexOfSelectedItem]] forKey:@"UsesPictureSettings"];
+	/* Get New Preset Description from the field in the AddPresetPanel*/
+	[preset setObject:[fPresetNewDesc stringValue] forKey:@"PresetDescription"];
 	/* File Format */
     [preset setObject:[fDstFormatPopUp titleOfSelectedItem] forKey:@"FileFormat"];
 	/* Chapter Markers fCreateChapterMarkers*/
@@ -3006,6 +3010,8 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
 	/*Get the whether or not to apply pic settings in the AddPresetPanel*/
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
+	/* Get the New Preset Description from the field in the AddPresetPanel */
+    [preset setObject:@"HandBrakes Built in Low Resolution Preset for the iPod - Optimized for great playback on the iPod screen with smaller file size" forKey:@"PresetDescription"];
 	/* File Format */
     [preset setObject:@"MP4 file" forKey:@"FileFormat"];
 	/* Chapter Markers*/
@@ -3072,6 +3078,8 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
 	/*Get the whether or not to apply pic settings in the AddPresetPanel*/
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
+	/* Get the New Preset Description from the field in the AddPresetPanel */
+    [preset setObject:@"HandBrakes Built in High Resolution Preset for the iPod - Best iPod video quality, great for viewing on a tv using your iPod" forKey:@"PresetDescription"];
 	/* File Format */
     [preset setObject:@"MP4 file" forKey:@"FileFormat"];
 	/* Chapter Markers*/
@@ -3137,6 +3145,8 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
 	/*Get the whether or not to apply pic settings in the AddPresetPanel*/
 	[preset setObject:[NSNumber numberWithInt:2] forKey:@"UsesPictureSettings"];
+	/* Get the New Preset Description from the field in the AddPresetPanel */
+    [preset setObject:@"HandBrakes Built in Preset for the AppleTV - Provides a good balance between quality, file size, and optimizes performance whether synching or streaming" forKey:@"PresetDescription"];
 	/* File Format */
     [preset setObject:@"MP4 file" forKey:@"FileFormat"];
 	/* Chapter Markers*/
@@ -3207,6 +3217,8 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
 	/*Get the whether or not to apply pic settings in the AddPresetPanel*/
 	[preset setObject:[NSNumber numberWithInt:2] forKey:@"UsesPictureSettings"];
+	/* Get the New Preset Description from the field in the AddPresetPanel */
+    [preset setObject:@"HandBrakes Built in Preset for the Sony PS3" forKey:@"PresetDescription"];
 	/* File Format */
     [preset setObject:@"MP4 file" forKey:@"FileFormat"];
 	/* Chapter Markers*/
@@ -3273,6 +3285,8 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
 	/*Get the whether or not to apply pic settings in the AddPresetPanel*/
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
+	/* Get the New Preset Description from the field in the AddPresetPanel */
+    [preset setObject:@"HandBrakes Built in Preset for the Sony PSP" forKey:@"PresetDescription"];
 	/* File Format */
     [preset setObject:@"MP4 file" forKey:@"FileFormat"];
 	/* Chapter Markers*/
@@ -3492,6 +3506,26 @@ show the built in presets in a blue font. */
 	{
 		[aCell setTextColor:[NSColor blackColor]];
 	}
+
+}
+/* Method to display tooltip with the description for each preset, if available */
+- (NSString *)tableView:(NSTableView *)aTableView toolTipForCell:(NSCell *)aCell 
+                   rect:(NSRectPointer)aRect tableColumn:(NSTableColumn *)aTableColumn
+                    row:(int)rowIndex mouseLocation:(NSPoint)aPos
+{
+     /* initialize the tooltip contents variable */
+	 NSString *loc_tip;
+     /* if there is a description for the preset, we show it in the tooltip */
+	 if ([[UserPresets objectAtIndex:rowIndex] valueForKey:@"PresetDescription"])
+	 {
+	 loc_tip = [NSString stringWithFormat: @"%@",[[UserPresets objectAtIndex:rowIndex] valueForKey:@"PresetDescription"]];
+	 return (loc_tip);
+	 }
+	 else
+	 {
+	 loc_tip = @"No description available";
+	 }
+	 return (loc_tip);
 
 }
 

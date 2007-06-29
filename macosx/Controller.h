@@ -175,10 +175,11 @@
     IBOutlet NSPopUpButton       * fX264optAlphaDeblockPopUp;
     IBOutlet NSPopUpButton       * fX264optBetaDeblockPopUp;
     
-	/* User Preset variables here fPresetNewPicSettingsApply*/
+	/* User Preset variables here fPresetNewDesc*/
 	
 	IBOutlet NSDrawer            * fPresetDrawer;
 	IBOutlet NSTextField         * fPresetNewName;
+	IBOutlet NSTextField         * fPresetNewDesc;
 	IBOutlet NSPopUpButton       * fPresetNewPicSettingsPopUp;
 	IBOutlet NSTextField         * fPresetSelectedDisplay;
 	
