@@ -548,6 +548,7 @@ Public Class frmMain
     '#
 
     Private Sub drop_chapterFinish_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles drop_chapterFinish.SelectedIndexChanged
+        QueryEditorText.Text = "" ' Just clearing the quert editor box. Users may forget
         Dim chapterFinish As Integer = drop_chapterFinish.Text
         Dim chapterStart As Integer = drop_chapterStart.Text
 
@@ -561,8 +562,10 @@ Public Class frmMain
     End Sub
 
     Private Sub drop_chapterStart_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles drop_chapterStart.SelectedIndexChanged
+        QueryEditorText.Text = "" ' Just clearing the quert editor box. Users may forget
         Dim chapterFinish As Integer = drop_chapterFinish.Text
         Dim chapterStart As Integer = drop_chapterStart.Text
+
 
         Try
             If (chapterStart > chapterFinish) Then
@@ -688,6 +691,7 @@ Public Class frmMain
         ' Maybe automatically update these in later versions.
         lbl_Aspect.Text = "Select a Title"
         lbl_RecomendedCrop.Text = "Select a Title"
+        QueryEditorText.Text = ""
 
         ' If the title is not automatic then read the dvd.dat file and populate the Subtitles box depending on the title slected.
         If drp_dvdtitle.Text <> "Automatic" Then
