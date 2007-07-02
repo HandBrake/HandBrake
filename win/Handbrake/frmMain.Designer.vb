@@ -19,6 +19,7 @@ Partial Class frmMain
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container
         Dim Label38 As System.Windows.Forms.Label
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
         Me.frmMainMenu = New System.Windows.Forms.MenuStrip
@@ -30,6 +31,7 @@ Partial Class frmMain
         Me.toolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator
         Me.mnu_exit = New System.Windows.Forms.ToolStripMenuItem
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
+        Me.mnu_encode = New System.Windows.Forms.ToolStripMenuItem
         Me.mnu_viewDVDdata = New System.Windows.Forms.ToolStripMenuItem
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator
         Me.mnu_options = New System.Windows.Forms.ToolStripMenuItem
@@ -229,7 +231,7 @@ Partial Class frmMain
         Me.DVD_Save = New System.Windows.Forms.SaveFileDialog
         Me.File_Save = New System.Windows.Forms.SaveFileDialog
         Me.lbl_update = New System.Windows.Forms.Label
-        Me.mnu_encode = New System.Windows.Forms.ToolStripMenuItem
+        Me.ToolTip = New System.Windows.Forms.ToolTip(Me.components)
         Label38 = New System.Windows.Forms.Label
         Me.frmMainMenu.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
@@ -317,6 +319,12 @@ Partial Class frmMain
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
         Me.ToolsToolStripMenuItem.Text = "&Tools"
+        '
+        'mnu_encode
+        '
+        Me.mnu_encode.Name = "mnu_encode"
+        Me.mnu_encode.Size = New System.Drawing.Size(155, 22)
+        Me.mnu_encode.Text = "Encode Queue"
         '
         'mnu_viewDVDdata
         '
@@ -587,6 +595,7 @@ Partial Class frmMain
         Me.text_destination.Name = "text_destination"
         Me.text_destination.Size = New System.Drawing.Size(262, 21)
         Me.text_destination.TabIndex = 4
+        Me.ToolTip.SetToolTip(Me.text_destination, "Where you wish to save your output file.")
         '
         'drp_audioCodec
         '
@@ -654,6 +663,7 @@ Partial Class frmMain
         Me.drop_chapterFinish.Size = New System.Drawing.Size(69, 21)
         Me.drop_chapterFinish.TabIndex = 41
         Me.drop_chapterFinish.Text = "Auto"
+        Me.ToolTip.SetToolTip(Me.drop_chapterFinish, "Encode chapters to this number")
         '
         'drop_chapterStart
         '
@@ -665,6 +675,7 @@ Partial Class frmMain
         Me.drop_chapterStart.Size = New System.Drawing.Size(69, 21)
         Me.drop_chapterStart.TabIndex = 40
         Me.drop_chapterStart.Text = "Auto"
+        Me.ToolTip.SetToolTip(Me.drop_chapterStart, "Encode chatpers from this number.")
         '
         'drp_dvdtitle
         '
@@ -677,6 +688,7 @@ Partial Class frmMain
         Me.drp_dvdtitle.Size = New System.Drawing.Size(119, 21)
         Me.drp_dvdtitle.TabIndex = 39
         Me.drp_dvdtitle.Text = "Automatic"
+        Me.ToolTip.SetToolTip(Me.drp_dvdtitle, "The title number you wish to encode.")
         '
         'RadioDVD
         '
@@ -735,6 +747,7 @@ Partial Class frmMain
         Me.text_source.Size = New System.Drawing.Size(253, 21)
         Me.text_source.TabIndex = 1
         Me.text_source.Text = "Click ""Browse"" to continue"
+        Me.ToolTip.SetToolTip(Me.text_source, "The input source location.")
         '
         'Label9
         '
@@ -775,7 +788,7 @@ Partial Class frmMain
         Me.btn_encode.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_encode.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_encode.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.btn_encode.Location = New System.Drawing.Point(534, 590)
+        Me.btn_encode.Location = New System.Drawing.Point(538, 590)
         Me.btn_encode.Name = "btn_encode"
         Me.btn_encode.Size = New System.Drawing.Size(124, 22)
         Me.btn_encode.TabIndex = 19
@@ -790,7 +803,7 @@ Partial Class frmMain
         Me.btn_queue.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_queue.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_queue.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.btn_queue.Location = New System.Drawing.Point(403, 590)
+        Me.btn_queue.Location = New System.Drawing.Point(407, 590)
         Me.btn_queue.Name = "btn_queue"
         Me.btn_queue.Size = New System.Drawing.Size(124, 22)
         Me.btn_queue.TabIndex = 412
@@ -1394,6 +1407,7 @@ Partial Class frmMain
         Me.drp_subtitle.Size = New System.Drawing.Size(213, 21)
         Me.drp_subtitle.TabIndex = 42
         Me.drp_subtitle.Text = "None"
+        Me.ToolTip.SetToolTip(Me.drp_subtitle, "Select the subtitle language you require from this dropdown.")
         '
         'Label19
         '
@@ -2342,12 +2356,6 @@ Partial Class frmMain
         Me.lbl_update.Text = "- A New Version is available!"
         Me.lbl_update.Visible = False
         '
-        'mnu_encode
-        '
-        Me.mnu_encode.Name = "mnu_encode"
-        Me.mnu_encode.Size = New System.Drawing.Size(155, 22)
-        Me.mnu_encode.Text = "Encode Queue"
-        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -2600,5 +2608,6 @@ Partial Class frmMain
     Friend WithEvents Label37 As System.Windows.Forms.Label
     Friend WithEvents Label41 As System.Windows.Forms.Label
     Friend WithEvents mnu_encode As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolTip As System.Windows.Forms.ToolTip
 
 End Class

@@ -503,30 +503,37 @@ Public Class frmMain
                                 , "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
 
-            Try
-                If (QueryEditorText.Text = "") Then
-                    query = GenerateTheQuery()
-                    Shell("""" + ApplicationPath + "\hbcli.exe""" + query)
+        Try
+            If (QueryEditorText.Text = "") Then
+                query = GenerateTheQuery()
+
+                Dim params As String = query
+                Dim proc As New System.Diagnostics.Process
+                proc = System.Diagnostics.Process.Start("""" + ApplicationPath + "\hbcli.exe""", params)
+
                 MessageBox.Show("The Handbrake encoder (CLI) will now start and should be encoding your video.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
 
-                    'Lets start the process monitor to keep an eye on things.
-                    hbcliMonitor = New ProcessMonitor()
-                    Dim t = New Thread(AddressOf hbcliMonitor.tmrProcCheck)
-                    t.Start()
-                Else
-                    query = QueryEditorText.Text
-                    Shell("""" + ApplicationPath + "\hbcli.exe""" + query)
+                'Lets start the process monitor to keep an eye on things.
+                hbcliMonitor = New ProcessMonitor()
+                Dim t = New Thread(AddressOf hbcliMonitor.tmrProcCheck)
+                t.Start()
+            Else
+                query = QueryEditorText.Text
+
+                Dim params As String = query
+                Dim proc As New System.Diagnostics.Process
+                proc = System.Diagnostics.Process.Start("""" + ApplicationPath + "\hbcli.exe""", params)
                 MessageBox.Show("The Handbrake encoder (CLI) will now start and should be encoding your video.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
 
-                    'Lets start the process monitor to keep an eye on things.
-                    hbcliMonitor = New ProcessMonitor()
-                    Dim t = New Thread(AddressOf hbcliMonitor.tmrProcCheck)
-                    t.Start()
-                End If
-            Catch ex As Exception
+                'Lets start the process monitor to keep an eye on things.
+                hbcliMonitor = New ProcessMonitor()
+                Dim t = New Thread(AddressOf hbcliMonitor.tmrProcCheck)
+                t.Start()
+            End If
+        Catch ex As Exception
             MessageBox.Show("Unable to launch the HandBrake encoder.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                MessageBox.Show(ex.ToString) ' Debug
-            End Try
+            MessageBox.Show(ex.ToString) ' Debug
+        End Try
 
     End Sub
 
@@ -1269,4 +1276,5 @@ Public Class frmMain
 
     End Sub
     '-----------------------------------------------
+
 End Class
