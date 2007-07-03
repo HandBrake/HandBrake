@@ -80,8 +80,6 @@ Public Class frmMain
                 drp_audioBitrate.Text = My.Settings.AudioBitrate
                 drp_audioSampleRate.Text = My.Settings.AudioSampleRate
                 drp_audioChannels.Text = My.Settings.AudioChannels
-                'Advanced Settings Tab
-                drp_processors.Text = My.Settings.Processors
                 'H264 Tab
                 CheckCRF.CheckState = My.Settings.CRF
                 rtf_h264advanced.Text = My.Settings.H264
@@ -145,8 +143,6 @@ Public Class frmMain
         Dim audioSampleRate As String = drp_audioSampleRate.Text
         Dim audioChannels As String = drp_audioChannels.Text
         Dim AudioMixDown As String = drp_audioMixDown.Text
-        'Advanced Settings Tab
-        Dim processors As String = drp_processors.Text
         'H264 Tab
         Dim CRF As String = CheckCRF.CheckState
         Dim advH264 As String = rtf_h264advanced.Text
@@ -187,7 +183,6 @@ Public Class frmMain
                 StreamWriter.WriteLine(audioSampleRate)
                 StreamWriter.WriteLine(audioChannels)
                 StreamWriter.WriteLine(AudioMixDown)
-                StreamWriter.WriteLine(processors)
                 StreamWriter.WriteLine(CRF)
                 StreamWriter.WriteLine(advH264)
                 StreamWriter.Close()
@@ -235,7 +230,6 @@ Public Class frmMain
                 drp_audioSampleRate.Text = inputStream.ReadLine()
                 drp_audioChannels.Text = inputStream.ReadLine()
                 drp_audioMixDown.Text = inputStream.ReadLine()
-                drp_processors.Text = inputStream.ReadLine()
 
                 'Advanced H264 Options
                 CheckCRF.CheckState = inputStream.ReadLine()
@@ -298,8 +292,6 @@ Public Class frmMain
         My.Settings.AudioBitrate = drp_audioBitrate.Text
         My.Settings.AudioSampleRate = drp_audioSampleRate.Text
         My.Settings.AudioChannels = drp_audioChannels.Text
-        'Advanced Settings Tab
-        My.Settings.Processors = drp_processors.Text
         'H264 Tab
         My.Settings.CRF = CheckCRF.CheckState
         My.Settings.H264 = rtf_h264advanced.Text
@@ -565,8 +557,6 @@ Public Class frmMain
         QueryEditorText.Text = "" ' Just clearing the quert editor box. Users may forget
         Dim chapterFinish As Integer = drop_chapterFinish.Text
         Dim chapterStart As Integer = drop_chapterStart.Text
-
-
         Try
             If (chapterStart > chapterFinish) Then
                 MessageBox.Show("Invalid Chapter Range! - Start chapter can not be larger than the Final chapter.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -1209,8 +1199,8 @@ Public Class frmMain
         Dim h264Settings As String = CRF + h264Advanced
         '----------------------------------------------------------------------
 
-        'Advanced Settings Tab
-        Dim processors As String = drp_processors.Text
+        'Processors (Program Settings)
+        Dim processors As String = My.Settings.Processors
 
         ' Number of Processors Handler
         If (processors = "Automatic") Then
@@ -1222,7 +1212,7 @@ Public Class frmMain
         Dim queryAdvancedSettings As String = processors
         '----------------------------------------------------------------------
 
-        ' Verbose option
+        ' Verbose option (Program Settings)
         Dim verbose As String = ""
         If My.Settings.verbose = 1 Then
             verbose = " -v "

@@ -31,8 +31,12 @@ Partial Class frmOptions
         Me.check_verbose = New System.Windows.Forms.CheckBox
         Me.GroupBox2 = New System.Windows.Forms.GroupBox
         Me.File_Save = New System.Windows.Forms.SaveFileDialog
+        Me.GroupBox3 = New System.Windows.Forms.GroupBox
+        Me.drp_processors = New System.Windows.Forms.ComboBox
+        Me.Label11 = New System.Windows.Forms.Label
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
+        Me.GroupBox3.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -62,7 +66,7 @@ Partial Class frmOptions
         Me.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_close.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_close.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.btn_close.Location = New System.Drawing.Point(292, 287)
+        Me.btn_close.Location = New System.Drawing.Point(292, 387)
         Me.btn_close.Name = "btn_close"
         Me.btn_close.Size = New System.Drawing.Size(107, 22)
         Me.btn_close.TabIndex = 45
@@ -115,7 +119,7 @@ Partial Class frmOptions
         '
         Me.GroupBox1.Controls.Add(Me.check_verbose)
         Me.GroupBox1.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox1.Location = New System.Drawing.Point(12, 211)
+        Me.GroupBox1.Location = New System.Drawing.Point(12, 306)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(386, 70)
         Me.GroupBox1.TabIndex = 50
@@ -154,11 +158,45 @@ Partial Class frmOptions
         Me.File_Save.DefaultExt = "hb"
         Me.File_Save.Filter = "txt|*.txt"
         '
+        'GroupBox3
+        '
+        Me.GroupBox3.Controls.Add(Me.drp_processors)
+        Me.GroupBox3.Controls.Add(Me.Label11)
+        Me.GroupBox3.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.GroupBox3.Location = New System.Drawing.Point(13, 211)
+        Me.GroupBox3.Name = "GroupBox3"
+        Me.GroupBox3.Size = New System.Drawing.Size(386, 89)
+        Me.GroupBox3.TabIndex = 52
+        Me.GroupBox3.TabStop = False
+        Me.GroupBox3.Text = "Processor Detection"
+        '
+        'drp_processors
+        '
+        Me.drp_processors.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.drp_processors.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.drp_processors.FormattingEnabled = True
+        Me.drp_processors.Items.AddRange(New Object() {"Automatic", "1", "2", "3", "4", "5", "6", "7", "8"})
+        Me.drp_processors.Location = New System.Drawing.Point(19, 50)
+        Me.drp_processors.Name = "drp_processors"
+        Me.drp_processors.Size = New System.Drawing.Size(111, 21)
+        Me.drp_processors.TabIndex = 41
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label11.Location = New System.Drawing.Point(16, 27)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(142, 13)
+        Me.Label11.TabIndex = 40
+        Me.Label11.Text = "Number of processors: "
+        '
         'frmOptions
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(411, 320)
+        Me.ClientSize = New System.Drawing.Size(411, 421)
+        Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.btn_close)
@@ -170,6 +208,8 @@ Partial Class frmOptions
         Me.GroupBox1.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
+        Me.GroupBox3.ResumeLayout(False)
+        Me.GroupBox3.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -184,4 +224,7 @@ Partial Class frmOptions
     Friend WithEvents check_verbose As System.Windows.Forms.CheckBox
     Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
     Friend WithEvents File_Save As System.Windows.Forms.SaveFileDialog
+    Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
+    Friend WithEvents drp_processors As System.Windows.Forms.ComboBox
+    Friend WithEvents Label11 As System.Windows.Forms.Label
 End Class

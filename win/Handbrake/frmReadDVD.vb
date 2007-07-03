@@ -10,11 +10,10 @@ Public Class frmReadDVD
     '# Write the output to dvdinfo.dat
     '#
     Private Sub frmStatus_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Me.Show()
-        Dim ApplicationPath As String = Application.StartupPath
+        Dim applicationPath As String = Application.StartupPath
 
         Try
-            Shell("cmd /c """"" + ApplicationPath + "\hbcli.exe"" -i """ + frmMain.text_source.Text + """" & " -t0 >" + """" + ApplicationPath + "\dvdinfo.dat""" + " 2>&1""")
+            Shell("cmd /c """"" + applicationPath + "\hbcli.exe"" -i """ + frmMain.text_source.Text + """" & " -t0 >" + """" + applicationPath + "\dvdinfo.dat""" + " 2>&1""")
         Catch ex As Exception
             MessageBox.Show("Unable to launch the CLI encoder.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Hand)
             MessageBox.Show(ex.ToString)
@@ -22,17 +21,9 @@ Public Class frmReadDVD
 
     End Sub
 
-    '#
-    '#
-    '# Ok Button Handler
-    '# Stage 1 - Wait til hbcli.exe has finished writing data out to file dvdinfo.dat
-    '# Stage 2 - Parse the dvdinfo.dat file
-    '# Stage 3 - output the parsed version to dvd.dat or handle errors if any
-    '#
-    '# This all needs re-written. It's a real mess. Should really dump all the info into an array so external files are not required.
 
     Private Sub btn_ok_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_ok.Click
-        '# Stage 1 - Wait til the hbcli exe has finished
+        'Wait til the hbcli process finishes but do this on another thread so the readDVD window doesn't lock up.
         Dim isRunning As Integer
         Dim process2 As Process = New Process
         Dim running As Boolean = True
@@ -54,155 +45,157 @@ Public Class frmReadDVD
         End While
         isRunning = 0
 
+        ' Once hbcli.exe has finished. appened --end-- to the end of the file. This will be our EOF marker.
+        Dim applicationPath As String = Application.StartupPath
+        Dim fileWriter As System.IO.StreamWriter
+        fileWriter = File.AppendText(applicationPath & "\dvdinfo.dat")
+        fileWriter.WriteLine("--end--")
+        fileWriter.Flush()
+        fileWriter.Close()
 
-        '# Stage 2 - Parse the dvdinfo.dat file
-        '# This involves creating a string for each title and putting it into an array.
-        '# This array is called dvdData()
-
-
-        ' Lets clean any previous contents out of the DVD Title dropdown.
+        ' Clean the dvd title dropdown menu so it does not contain any of the previos items
         frmMain.drp_dvdtitle.Items.Clear()
 
-        Dim file_path As String = Application.StartupPath
-        Dim errStatus As Integer = 0
-        Dim dvdData(150) As String
-        Dim break As Boolean = False
-        Dim titleError As Boolean = False
+
+        ' Open dvdinfo.dat for reading and parse its contents. Place parsed contents in dvd.dat
+        ' Firstly we need to declare the storage array outside the try/catch statments so it can be used elsewhere.
+        Dim dvdInfoArray(150) As String
 
         Try
-            ' Parse the Data into a Single String with ~ Sepeartor
-            Dim RlineFile As StreamReader = File.OpenText(file_path & "\dvdinfo.dat")
-            Dim RLine As String
+            ' File and Line contents varibles
+            Dim ReadLine As StreamReader = File.OpenText(applicationPath & "\dvdinfo.dat")
+            Dim LineContents As String = ""
+
+            ' DVD info stroage varibles
             Dim titleData As String = ""
-            Dim ChaptStatus As Integer = 0
-            Dim AudioTrackStatus As Integer = 0
-            Dim SubtitleStatus As Integer = 0
+            Dim duationData As String = ""
+            Dim sizeData As String = ""
+            Dim cropdata As String = ""
+            Dim chatperData As String = ""
+            Dim audioData As String = ""
+            Dim subtitleData As String = ""
+
+            Dim fullTitleData As String = ""
+
+            ' Position Pointers
+            Dim chapterPointer As Boolean = False
+            Dim audioPointer As Boolean = False
+            Dim subtitlePointer As Boolean = False
             Dim counter As Integer = 0
-            Dim counter2 As String = 0
-            Dim ErrorCounter As Integer = 0
-            RLine = "---"
-            dvdData(counter2) = "---Start---"
 
-            While RLine <> Nothing
-                If (RLine.Contains("+ title")) Then
-                    If (titleData <> "") Then
-                        dvdData(counter2) = titleData
-                        add(titleData)
-                        counter2 = counter2 + 1
+            ' Error handling varibles
+            Dim titleError As Boolean = False
+            Dim readError As Boolean = False
+
+            ' Read every line of the file and place the contents in the approiate varible.
+            While Not LineContents.Equals("--end--")
+                ' Get all the 1 liner data and set chaper potiner to true when done
+                If (LineContents.Contains("exited.")) Then
+                    subtitlePointer = False
+                    fullTitleData = titleData.Trim + " ~ " + duationData.Trim + " ~ " + sizeData.Trim + " ~ " + cropdata.Trim + " ~ " + chatperData.Trim + " ~ " + audioData.Trim + " ~ " + subtitleData.Trim
+                    dvdInfoArray(counter) = fullTitleData
+                    add(fullTitleData)
+                    counter = counter + 1
+                ElseIf (LineContents.Contains("+ title")) Then
+                    If (titleData <> Nothing) Then
+                        subtitlePointer = False
+                        fullTitleData = titleData.Trim + " ~ " + duationData.Trim + " ~ " + sizeData.Trim + " ~ " + cropdata.Trim + " ~ " + chatperData.Trim + " ~ " + audioData.Trim + " ~ " + subtitleData.Trim
+                        dvdInfoArray(counter) = fullTitleData
+                        add(fullTitleData)
+                        counter = counter + 1
                     End If
-                    ChaptStatus = 0
-                    AudioTrackStatus = 0
-                    SubtitleStatus = 0
-                    titleData = RLine.Trim
-                ElseIf (RLine.Contains("exited.")) Then
-                    add(titleData)
-                    dvdData(counter2) = titleData
-                    counter2 = counter2 + 1
-                    ChaptStatus = 0
-                    AudioTrackStatus = 0
-                    SubtitleStatus = 0
-                    break = True
-                ElseIf (RLine.Contains("***")) Then
-                    errStatus = 1
-                ElseIf (RLine.Contains("No title")) Then
-                    titleError = True
-                    break = True
-                ElseIf (RLine.Contains("+ duration")) Then
-                    titleData = titleData & " ~ " & RLine.Trim
-                ElseIf (RLine.Contains("+ size")) Then
-                    titleData = titleData & " ~ " & RLine.Trim
-                ElseIf (RLine.Contains("+ autocrop")) Then
-                    titleData = titleData & " ~ " & RLine.Trim
-                ElseIf (RLine.Contains("+ chapters")) Then
-                    titleData = titleData & " ~ " & RLine.Trim
-                    ChaptStatus = 1
-                    AudioTrackStatus = 0
-                    SubtitleStatus = 0
-                ElseIf (RLine.Contains("+ audio")) Then
-                    titleData = titleData & " ~ " & RLine.Trim
-                    ChaptStatus = 0
-                    AudioTrackStatus = 1
-                    SubtitleStatus = 0
-                ElseIf (RLine.Contains("+ subtitle tracks")) Then
-                    titleData = titleData & " ~ " & RLine.Trim
-                    ChaptStatus = 0
-                    AudioTrackStatus = 0
-                    SubtitleStatus = 1
+                    titleData = LineContents
+                ElseIf (LineContents.Contains("+ duration")) Then
+                    duationData = LineContents
+                ElseIf (LineContents.Contains("+ size")) Then
+                    sizeData = LineContents
+                ElseIf (LineContents.Contains("+ autocrop")) Then
+                    cropdata = LineContents
+                ElseIf (LineContents.Contains("+ chapters")) Then
+                    chatperData = LineContents
+                    chapterPointer = True
+                End If
 
-                ElseIf (ChaptStatus = 1) Then
-                    ' This IF statment is here incase no chapters appear.
-                    If (RLine.Contains("+ audio")) Then
-                        ChaptStatus = 0
-                        AudioTrackStatus = 1
-                        SubtitleStatus = 0
-                    End If
-                    titleData = titleData & " & " & RLine.Trim
-
-                ElseIf (AudioTrackStatus = 1) Then
-                    'This if statment is here incase there was no audio tracks
-                    If (RLine.Contains("+ subtitle tracks")) Then
-                        ChaptStatus = 0
-                        AudioTrackStatus = 1
-                        SubtitleStatus = 0
-                    End If
-                    titleData = titleData & " & " & RLine.Trim
-
-                ElseIf (SubtitleStatus = 1) Then
-                    If (RLine.Contains("+ title")) Then
-                        If (titleData <> "") Then
-                            dvdData(counter2) = titleData
-                            counter2 = counter2 + 1
-                        End If
-                        ChaptStatus = 0
-                        AudioTrackStatus = 0
-                        SubtitleStatus = 0
-                        titleData = RLine.Trim
+                ' Get all the chapter information in 1 varible
+                If chapterPointer = True Then
+                    If LineContents.Contains("+ audio") Then
+                        chapterPointer = False
+                        audioPointer = True
+                        audioData = LineContents
                     Else
-                        titleData = titleData & " & " & RLine.Trim
-                    End If
-                End If
-                RLine = RlineFile.ReadLine()
-
-                If break = True Then
-                    RLine = Nothing
-                ElseIf RLine = "" Then
-                    RLine = " "
-                    ErrorCounter = ErrorCounter + 1
-                    If ErrorCounter = 50 Then
-                        RLine = Nothing
+                        If Not chatperData.Equals(LineContents) Then
+                            chatperData = chatperData & " & " & LineContents.Trim
+                        End If
                     End If
                 End If
 
-                counter = counter + 1
+                ' Get all the audio channel information in 1 varible
+                If audioPointer = True Then
+                    If LineContents.Contains("+ subtitle") Then
+                        audioPointer = False
+                        subtitlePointer = True
+                        subtitleData = LineContents
+                    Else
+                        If Not audioData.Equals(LineContents) Then
+                            audioData = audioData & " & " & LineContents.Trim
+                        End If
+                    End If
+                End If
+
+                ' Get all the subtitle data into 1 varible
+                If subtitlePointer = True Then
+                    If LineContents.Contains("+ subtitle") Then
+                        subtitleData = LineContents
+                    Else
+                        If Not subtitleData.Equals(LineContents) Then
+                            subtitleData = subtitleData & " & " & LineContents.Trim
+                        End If
+                    End If
+                End If
+
+                ' Handle some of Handbrakes Error outputs if they occur.
+                If (LineContents.Contains("No title")) Then
+                    titleError = True
+                End If
+
+                If (LineContents.Contains("***")) Then
+                    readError = True
+                End If
+
+                ' Read the next line of the file
+                LineContents = ReadLine.ReadLine
             End While
-            '# Close the file. Its no longer needed here.
-            RlineFile.Close()
+
+            ' Close the file as it is no longer required
+            ReadLine.Close()
+
+
+            ' Display error messages for errors detected above.
+            If readError = True Then
+                MessageBox.Show("Some DVD Title information may be missing however you may still be able to select your required title for encoding!", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
+            End If
+
+            If titleError = True Then
+                MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Hand)
+            End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.ToString) ' Debug
+            MessageBox.Show("DEBUG: " & ex.ToString)
         End Try
 
-        '# Stage 4 - Write the parsed data out into a file. 
-        '# But, if theres a problem, display an error message instead
-        If errStatus = 1 Then
-            MessageBox.Show("Some DVD Title information may be missing however you may still be able to select your required title for encoding!", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
-        End If
 
-        If titleError = True Then
-            MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Hand)
 
-        End If
-
+        ' Take the information from dvdInfoArray and output each item in the array to a seperate line in the file.
         Try
-            Dim DataWriter As StreamWriter = New StreamWriter(file_path & "\dvd.dat")
-            Dim dvdCount As Integer = dvdData.Length
+            Dim outputWriter As StreamWriter = New StreamWriter(applicationPath & "\dvd.dat")
+            Dim dvdCount As Integer = dvdInfoArray.Length
             Dim counter As String = 0
 
             While counter <> dvdCount
-                DataWriter.WriteLine(dvdData(counter))
+                outputWriter.WriteLine(dvdInfoArray(counter))
                 counter = counter + 1
             End While
-            DataWriter.Close()
+            outputWriter.Close()
 
         Catch ex As Exception
             MessageBox.Show("Unable to write Data file. Please make sure the application has admin privileges.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Hand)
@@ -210,6 +203,8 @@ Public Class frmReadDVD
 
         Me.Close()
     End Sub
+
+
 
     '# A function to Add data to frmSelects Select Title Tab and also populate frmMains dvdTitle Tab
     Function add(ByVal titleData)
@@ -222,7 +217,6 @@ Public Class frmReadDVD
             str(0) = titleInfo(0).Trim.Substring(8).Replace(":", "") 'Title
             str(1) = titleInfo(1).Trim.Substring(12) ' Duration
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
             MessageBox.Show("ERROR: Incomplete DVD data found. Please copy the data on the View DVD Information tab and report this error.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Hand)
         End Try
 

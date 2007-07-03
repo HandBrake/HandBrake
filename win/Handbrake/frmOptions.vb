@@ -10,8 +10,6 @@ Public Class frmOptions
 
     ' Set the check boxes to the correct state. Checked or unchecked
     Private Sub frmOptions_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Dim file_path As String = Application.StartupPath
-
         Try
             If My.Settings.StartupUpdate = 1 Then
                 check_updateCheck.CheckState = CheckState.Checked
@@ -36,6 +34,8 @@ Public Class frmOptions
             Else
                 check_verbose.CheckState = CheckState.Unchecked
             End If
+
+            drp_processors.Text = My.Settings.Processors
 
         Catch ex As Exception
             MessageBox.Show("ERROR:  " & ex.ToString)
@@ -79,7 +79,6 @@ Public Class frmOptions
         End If
     End Sub
 
-
     Private Sub check_readDVDWindow_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles check_readDVDWindow.CheckedChanged
         If check_readDVDWindow.CheckState = 1 Then
             Try
@@ -95,7 +94,6 @@ Public Class frmOptions
             End Try
         End If
     End Sub
-
 
     Private Sub check_verbose_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles check_verbose.CheckedChanged
         If check_verbose.CheckState = 1 Then
@@ -114,4 +112,7 @@ Public Class frmOptions
     End Sub
 
 
+    Private Sub drp_processors_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles drp_processors.SelectedIndexChanged
+        My.Settings.Processors = drp_processors.Text
+    End Sub
 End Class
