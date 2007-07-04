@@ -17,7 +17,8 @@ typedef struct
     hb_list_t   * list_title;
     
     hb_dvd_t    * dvd;
-
+	hb_stream_t * stream;
+	
 } hb_scan_t;
 
 static void ScanFunc( void * );
@@ -44,6 +45,9 @@ static void ScanFunc( void * _data )
     hb_title_t * title;
     int          i;
 
+	data->dvd = NULL;
+	data->stream = NULL;
+	
     /* Try to open the path as a DVD. If it fails, try as a file */
     hb_log( "scan: trying to open with libdvdread" );
     if( ( data->dvd = hb_dvd_init( data->path ) ) )
@@ -68,18 +72,15 @@ static void ScanFunc( void * _data )
     }
     else
     {
-    	/* Open as a VOB file */
-        FILE * file;
-        hb_log( "scan: trying to open as VOB file" );
-        file = fopen( data->path, "rb" );
-        if( file )
+        if ( hb_stream_is_stream_type(data->path) )
         {
-            /* XXX */
-            fclose( file );
+          hb_log( "scan: trying to open as MPEG-2 Stream");
+		  data->stream = hb_stream_open (data->path);
+          hb_list_add( data->list_title, hb_stream_title_scan( data->stream ) );
         }
         else
         {
-            hb_log( "scan: fopen failed" );
+            hb_log( "scan: unrecognized file type" );
             return;
         }
     }
@@ -123,7 +124,7 @@ static void ScanFunc( void * _data )
         /* Update the UI */
         state.state   = HB_STATE_SCANNING;
         p.title_cur   = title->index;
-        p.title_count = hb_dvd_title_count( data->dvd );
+        p.title_count = data->dvd ? hb_dvd_title_count( data->dvd ) : hb_list_count(data->list_title);
         hb_set_state( data->h, &state );
 #undef p
 
@@ -135,7 +136,33 @@ static void ScanFunc( void * _data )
             hb_list_rem( data->list_title, title );
             continue;
         }
-
+        
+		if (data->stream)
+		{
+			// Stream based processing uses PID's to handle the different audio options for a given title
+			for( j = 0; j < hb_list_count( title->list_audio ); j++ )
+			{
+				audio = hb_list_item( title->list_audio, j );
+				hb_stream_update_audio(data->stream, audio);
+			}
+		}
+		else if (data->dvd)
+		{
+			/* Make sure we found AC3 rates and bitrates */
+			for( j = 0; j < hb_list_count( title->list_audio ); )
+			{
+				audio = hb_list_item( title->list_audio, j );
+				if( audio->codec == HB_ACODEC_AC3 &&
+					!audio->bitrate )
+				{
+					hb_list_rem( title->list_audio, audio );
+					free( audio );
+					continue;
+				}
+				j++;
+			}
+		}
+		
         /* Make sure we found AC3 / DCA rates and bitrates */
         for( j = 0; j < hb_list_count( title->list_audio ); )
         {
@@ -241,6 +268,10 @@ static void ScanFunc( void * _data )
     {
         hb_dvd_close( &data->dvd );
     }
+	if (data->stream)
+	{
+		hb_stream_close(&data->stream);
+	}
     free( data->path );
     free( data );
     _data = NULL;
@@ -259,35 +290,56 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
     hb_buffer_t   * buf_ps, * buf_es, * buf_raw;
     hb_list_t     * list_es, * list_raw;
     hb_libmpeg2_t * mpeg2;
-
-    buf_ps   = hb_buffer_init( 2048 );
+    
+    buf_ps   = hb_buffer_init( HB_DVD_READ_BUFFER_SIZE );
     list_es  = hb_list_init();
     list_raw = hb_list_init();
 
     hb_log( "scan: decoding previews for title %d", title->index );
 
-    hb_dvd_start( data->dvd, title->index, 1 );
-
+    if (data->dvd)
+      hb_dvd_start( data->dvd, title->index, 1 );
+      
     for( i = 0; i < 10; i++ )
     {
         int j, k;
         FILE * file_preview;
         char   filename[1024];
 
-        if( !hb_dvd_seek( data->dvd, (float) ( i + 1 ) / 11.0 ) )
+        if (data->dvd)
         {
-            goto error;
+          if( !hb_dvd_seek( data->dvd, (float) ( i + 1 ) / 11.0 ) )
+          {
+              goto error;
+          }
         }
-
+        else if (data->stream)
+        {
+          if (!hb_stream_seek(data->stream, (float) ( i + 1 ) / 11.0 ) )
+          {
+            goto error;
+          }
+        }
+        
         hb_log( "scan: preview %d", i + 1 );
 
         mpeg2 = hb_libmpeg2_init();
 
         for( j = 0; j < 10240 ; j++ )
         {
-            if( !hb_dvd_read( data->dvd, buf_ps ) )
+            if (data->dvd)
             {
+              if( !hb_dvd_read( data->dvd, buf_ps ) )
+              {
+                  goto error;
+              }
+            }
+            else if (data->stream)
+            {
+              if ( !hb_stream_read(data->stream,buf_ps) )
+              {
                 goto error;
+              }
             }
             hb_demux_ps( buf_ps, list_es );
 
@@ -329,8 +381,13 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         {
             /* Get size and rate infos */
             title->rate = 27000000;
+            int ar;
             hb_libmpeg2_info( mpeg2, &title->width, &title->height,
-                              &title->rate_base );
+                              &title->rate_base, &ar );
+            // The aspect ratio may have already been set by parsing the VOB/IFO details on a DVD, however
+            // if we're working with program/transport streams that data needs to come from within the stream.
+            if (title->aspect <= 0)
+              title->aspect = ar;
             title->crop[0] = title->crop[1] = title->height / 2;
             title->crop[2] = title->crop[3] = title->width / 2;
         }
@@ -435,7 +492,9 @@ cleanup:
         hb_buffer_close( &buf_raw );
     }
     hb_list_close( &list_raw );
-    hb_dvd_stop( data->dvd );
+    if (data->dvd)
+      hb_dvd_stop( data->dvd );
+
     return ret;
 }
 

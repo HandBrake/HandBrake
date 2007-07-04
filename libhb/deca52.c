@@ -25,6 +25,8 @@ struct hb_work_private_s
     int           sync;
     int           size;
 
+    int64_t       next_expected_pts;
+
     uint8_t       frame[3840];
 
     hb_list_t   * list;
@@ -76,7 +78,8 @@ int deca52Init( hb_work_object_t * w, hb_job_t * job )
 	pv->out_discrete_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(w->amixdown);
 
     pv->level     = 32768.0;
-
+    pv->next_expected_pts = 0;
+    
     return 0;
 }
 
@@ -191,9 +194,15 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
 
     /* 6 blocks per frame, 256 samples per block, channelsused channels */
     buf        = hb_buffer_init( 6 * 256 * pv->out_discrete_channels * sizeof( float ) );
+    if (pts == -1)
+    {
+      pts = pv->next_expected_pts;
+    }
     buf->start = pts + ( pos / pv->size ) * 6 * 256 * 90000 / pv->rate;
     buf->stop  = buf->start + 6 * 256 * 90000 / pv->rate;
 
+    pv->next_expected_pts = buf->stop;
+    
     for( i = 0; i < 6; i++ )
     {
         sample_t * samples_in;

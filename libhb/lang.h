@@ -205,7 +205,7 @@ static const iso639_lang_t languages[] =
   { "Zulu", "", "zu", "zul" },
   { NULL, NULL, NULL } };
 
-iso639_lang_t * lang_for_code( int code )
+static iso639_lang_t * lang_for_code( int code )
 {
     char code_string[2];
     iso639_lang_t * lang;

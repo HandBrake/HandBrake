@@ -114,6 +114,8 @@
 		59CBD2650BBB4D1B004A3BE3 /* ChapterTitles.m in Sources */ = {isa = PBXBuildFile; fileRef = 593034EA0BBA39A100172349 /* ChapterTitles.m */; };
 		A29E05800BE1283E000533F5 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A29E057F0BE1283E000533F5 /* Growl.framework */; };
 		A29E058B0BE12889000533F5 /* Growl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A29E057F0BE1283E000533F5 /* Growl.framework */; };
+		EAA526930C3B25D200944FF2 /* stream.c in Sources */ = {isa = PBXBuildFile; fileRef = EAA526920C3B25D200944FF2 /* stream.c */; };
+		EAA526940C3B25D200944FF2 /* stream.c in Sources */ = {isa = PBXBuildFile; fileRef = EAA526920C3B25D200944FF2 /* stream.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -231,6 +233,7 @@
 		593034EA0BBA39A100172349 /* ChapterTitles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChapterTitles.m; sourceTree = "<group>"; };
 		59CBD2360BBB44DA004A3BE3 /* parsecsv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = parsecsv.c; path = ../test/parsecsv.c; sourceTree = SOURCE_ROOT; };
 		A29E057F0BE1283E000533F5 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Growl.framework; sourceTree = "<group>"; };
+		EAA526920C3B25D200944FF2 /* stream.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = stream.c; path = ../libhb/stream.c; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -346,6 +349,7 @@
 		526FBC8D0B4CA9F90064E04C /* libhb Sources */ = {
 			isa = PBXGroup;
 			children = (
+				EAA526920C3B25D200944FF2 /* stream.c */,
 				0DFA5C7E0B8DD3B60020BC09 /* declpcm.c */,
 				0DFA5C7F0B8DD3B60020BC09 /* decmpeg2.c */,
 				0DFA5C800B8DD3B60020BC09 /* decsub.c */,
@@ -635,6 +639,7 @@
 				0D096E020B707D3400A845D4 /* deca52.c in Sources */,
 				0D096E030B707D3400A845D4 /* decavcodec.c in Sources */,
 				5558B56A0BE3BADF00E15E27 /* decdca.c in Sources */,
+				EAA526940C3B25D200944FF2 /* stream.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -672,6 +677,7 @@
 				0DFF0B7A0B6BC72A00549488 /* decavcodec.c in Sources */,
 				593034EC0BBA39A100172349 /* ChapterTitles.m in Sources */,
 				5558B5690BE3BADF00E15E27 /* decdca.c in Sources */,
+				EAA526930C3B25D200944FF2 /* stream.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

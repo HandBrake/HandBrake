@@ -20,6 +20,7 @@ struct hb_libmpeg2_s
     int                  width;
     int                  height;
     int                  rate;
+    int                  aspect_ratio;
     int                  got_iframe;
     int                  look_for_break;
     int64_t              last_pts;
@@ -87,6 +88,28 @@ int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                        output 23.976 */
                     m->rate = 1126125;
                 }
+            }
+            if ( m->aspect_ratio <= 0 )
+            {
+              // We can parse out the aspect ratio from the Sequence Start Header data in buf_es->data
+              
+              // Make sure we have the correct data in the buffer
+              if ((buf_es->data[0] == 0x00) && (buf_es->data[1] == 0x00) && (buf_es->data[2] == 0x01) && (buf_es->data[3] == 0xb3))
+              {
+                unsigned char ar_fr = buf_es->data[7];    // Top 4 bits == aspect ratio flag  - bottom 4 bits == rate flags
+                switch ((ar_fr & 0xf0) >> 4)
+                {
+                  case 2:
+                    m->aspect_ratio = HB_ASPECT_BASE * 4 / 3;   // 4:3
+                    break;
+                  case 3:
+                    m->aspect_ratio = HB_ASPECT_BASE * 16 / 9;  // 16:9
+                    break;
+                  default:
+                    hb_log("hb_libmpeg2_decode - STATE_SEQUENCE unexpected aspect ratio/frame rate 0x%x\n", ar_fr);
+                    break;
+                }
+              } 
             }
         }
         else if( state == STATE_GOP && m->look_for_break == 2)
@@ -170,11 +193,12 @@ int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
  * 
  *********************************************************************/
 void hb_libmpeg2_info( hb_libmpeg2_t * m, int * width, int * height,
-                        int * rate )
+                        int * rate, int *aspect_ratio )
 {
     *width  = m->width;
     *height = m->height;
     *rate   = m->rate;
+    *aspect_ratio = m->aspect_ratio;
 }
 
 /**********************************************************************

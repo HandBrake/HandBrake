@@ -22,7 +22,7 @@ ifeq ($(SYSTEM),Linux)
 endif
 
 SRCS = common.c hb.c ports.c scan.c work.c decmpeg2.c encavcodec.c \
-	   update.c demuxmpeg.c fifo.c render.c reader.c muxcommon.c \
+	   update.c demuxmpeg.c fifo.c render.c reader.c muxcommon.c stream.c \
 	   muxmp4.c sync.c decsub.c deca52.c decdca.c encfaac.c declpcm.c encx264.c \
 	   decavcodec.c encxvid.c muxavi.c enclame.c muxogm.c encvorbis.c \
 	   dvd.c  ipodutil.cpp

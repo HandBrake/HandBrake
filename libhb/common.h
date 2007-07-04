@@ -28,6 +28,8 @@
 #define EVEN( a )        ( (a) + ( (a) & 1 ) )
 #define MULTIPLE_16( a ) ( 16 * ( ( (a) + 8 ) / 16 ) )
 
+#define HB_DVD_READ_BUFFER_SIZE 2048
+
 typedef struct hb_handle_s hb_handle_t;
 typedef struct hb_list_s hb_list_t;
 typedef struct hb_rate_s hb_rate_t;
@@ -338,6 +340,8 @@ struct hb_audio_s
 	/* amixdown is the mixdown format to be used for this audio track */
    	int amixdown;
 
+	/* Source PID is only valid for MPEG Transport Streams */
+	int source_pid;
 #endif
 };
 

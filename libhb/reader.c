@@ -14,6 +14,7 @@ typedef struct
 
     hb_dvd_t     * dvd;
     hb_buffer_t  * ps;
+    hb_stream_t  * stream;
 
 } hb_reader_t;
 
@@ -53,25 +54,43 @@ static void ReaderFunc( void * _r )
     hb_fifo_t    * fifo;
     hb_buffer_t  * buf;
     hb_list_t    * list;
-    int            chapter;
+    int            chapter = -1;
 
     if( !( r->dvd = hb_dvd_init( r->title->dvd ) ) )
     {
-        return;
+        if ( !(r->stream = hb_stream_open(r->title->dvd) ) )
+        {
+          return;
+        }
     }
 
-    if( !hb_dvd_start( r->dvd, r->title->index, r->job->chapter_start ) )
+    if (r->dvd)
     {
-        hb_dvd_close( &r->dvd );
-        return;
+      if( !hb_dvd_start( r->dvd, r->title->index, r->job->chapter_start ) )
+      {
+          hb_dvd_close( &r->dvd );
+          return;
+      }
     }
-
+    
+	if (r->stream)
+	{
+		// At this point r->audios[0] gives us the index of the selected audio track for output track 0
+		// we cannot effectively demux multiple PID's into the seperate output tracks unfortunately
+		// so we'll just specifiy things here for a single track.
+		hb_stream_set_selected_audio_pid_index(r->stream, r->job->audios[0]);
+	}
+	
     list  = hb_list_init();
-    r->ps = hb_buffer_init( 2048 );
+    r->ps = hb_buffer_init( HB_DVD_READ_BUFFER_SIZE );
 
     while( !*r->die && !r->job->done )
     {
-        chapter = hb_dvd_chapter( r->dvd );
+        if (r->dvd)
+          chapter = hb_dvd_chapter( r->dvd );
+        else if (r->stream)
+          chapter = 1;
+          
         if( chapter < 0 )
         {
             hb_log( "reader: end of the title reached" );
@@ -84,11 +103,21 @@ static void ReaderFunc( void * _r )
             break;
         }
 
-        if( !hb_dvd_read( r->dvd, r->ps ) )
+        if (r->dvd)
         {
-            break;
+          if( !hb_dvd_read( r->dvd, r->ps ) )
+          {
+              break;
+          }
         }
-
+        else if (r->stream)
+        {
+          if ( !hb_stream_read( r->stream, r->ps ) )
+          {
+            break;
+          }
+        }
+        
         hb_demux_ps( r->ps, list );
 
         while( ( buf = hb_list_item( list, 0 ) ) )
@@ -113,8 +142,16 @@ static void ReaderFunc( void * _r )
 
     hb_list_empty( &list );
     hb_buffer_close( &r->ps );
-    hb_dvd_stop( r->dvd );
-    hb_dvd_close( &r->dvd );
+    if (r->dvd)
+    {
+      hb_dvd_stop( r->dvd );
+      hb_dvd_close( &r->dvd );
+    }
+    else if (r->stream)
+    {
+      hb_stream_close(&r->stream);
+    }
+    
     free( r );
     _r = NULL;
 

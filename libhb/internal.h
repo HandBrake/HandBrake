@@ -100,7 +100,7 @@ int              hb_libmpeg2_decode( hb_libmpeg2_t *,
                                       hb_buffer_t * es_buf,
                                       hb_list_t * raw_list );
 void             hb_libmpeg2_info( hb_libmpeg2_t * m, int * width,
-                                    int * height, int * rate );
+                                    int * height, int * rate, int * aspect_ratio );
 void             hb_libmpeg2_close( hb_libmpeg2_t ** );
 
 /***********************************************************************
@@ -112,6 +112,7 @@ int hb_demux_ps( hb_buffer_t * ps_buf, hb_list_t * es_list );
  * dvd.c
  **********************************************************************/
 typedef struct hb_dvd_s hb_dvd_t;
+typedef struct hb_stream_s hb_stream_t;
 
 hb_dvd_t *   hb_dvd_init( char * path );
 int          hb_dvd_title_count( hb_dvd_t * );
@@ -123,6 +124,15 @@ int          hb_dvd_read( hb_dvd_t *, hb_buffer_t * );
 int          hb_dvd_chapter( hb_dvd_t * );
 int          hb_dvd_is_break( hb_dvd_t * d );
 void         hb_dvd_close( hb_dvd_t ** );
+
+int         hb_stream_is_stream_type( char * path);
+hb_stream_t * hb_stream_open( char * path );
+void		 hb_stream_close( hb_stream_t ** );
+hb_title_t * hb_stream_title_scan( hb_stream_t *);
+int          hb_stream_read( hb_stream_t *, hb_buffer_t *);
+int          hb_stream_seek( hb_stream_t *, float );
+void		 hb_stream_update_audio( hb_stream_t *, hb_audio_t *);
+void		 hb_stream_set_selected_audio_pid_index(hb_stream_t *, int);
 
 /***********************************************************************
  * Work objects
