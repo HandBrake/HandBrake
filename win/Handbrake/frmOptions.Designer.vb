@@ -34,6 +34,8 @@ Partial Class frmOptions
         Me.GroupBox3 = New System.Windows.Forms.GroupBox
         Me.drp_processors = New System.Windows.Forms.ComboBox
         Me.Label11 = New System.Windows.Forms.Label
+        Me.drp_Priority = New System.Windows.Forms.ComboBox
+        Me.Label4 = New System.Windows.Forms.Label
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
@@ -43,7 +45,7 @@ Partial Class frmOptions
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(17, 27)
+        Me.Label1.Location = New System.Drawing.Point(13, 22)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(151, 13)
         Me.Label1.TabIndex = 0
@@ -53,7 +55,7 @@ Partial Class frmOptions
         '
         Me.check_updateCheck.AutoSize = True
         Me.check_updateCheck.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.check_updateCheck.Location = New System.Drawing.Point(20, 48)
+        Me.check_updateCheck.Location = New System.Drawing.Point(16, 43)
         Me.check_updateCheck.Name = "check_updateCheck"
         Me.check_updateCheck.Size = New System.Drawing.Size(71, 17)
         Me.check_updateCheck.TabIndex = 1
@@ -66,7 +68,7 @@ Partial Class frmOptions
         Me.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_close.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_close.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.btn_close.Location = New System.Drawing.Point(292, 387)
+        Me.btn_close.Location = New System.Drawing.Point(291, 403)
         Me.btn_close.Name = "btn_close"
         Me.btn_close.Size = New System.Drawing.Size(107, 22)
         Me.btn_close.TabIndex = 45
@@ -77,7 +79,7 @@ Partial Class frmOptions
         '
         Me.check_userDefaultSettings.AutoSize = True
         Me.check_userDefaultSettings.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.check_userDefaultSettings.Location = New System.Drawing.Point(20, 98)
+        Me.check_userDefaultSettings.Location = New System.Drawing.Point(16, 93)
         Me.check_userDefaultSettings.Name = "check_userDefaultSettings"
         Me.check_userDefaultSettings.Size = New System.Drawing.Size(71, 17)
         Me.check_userDefaultSettings.TabIndex = 47
@@ -88,7 +90,7 @@ Partial Class frmOptions
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(17, 77)
+        Me.Label2.Location = New System.Drawing.Point(13, 72)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(229, 13)
         Me.Label2.TabIndex = 46
@@ -98,7 +100,7 @@ Partial Class frmOptions
         '
         Me.check_readDVDWindow.AutoSize = True
         Me.check_readDVDWindow.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.check_readDVDWindow.Location = New System.Drawing.Point(20, 151)
+        Me.check_readDVDWindow.Location = New System.Drawing.Point(16, 146)
         Me.check_readDVDWindow.Name = "check_readDVDWindow"
         Me.check_readDVDWindow.Size = New System.Drawing.Size(71, 17)
         Me.check_readDVDWindow.TabIndex = 49
@@ -109,7 +111,7 @@ Partial Class frmOptions
         '
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(17, 129)
+        Me.Label3.Location = New System.Drawing.Point(13, 124)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(215, 13)
         Me.Label3.TabIndex = 48
@@ -119,7 +121,7 @@ Partial Class frmOptions
         '
         Me.GroupBox1.Controls.Add(Me.check_verbose)
         Me.GroupBox1.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox1.Location = New System.Drawing.Point(12, 306)
+        Me.GroupBox1.Location = New System.Drawing.Point(12, 327)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(386, 70)
         Me.GroupBox1.TabIndex = 50
@@ -148,7 +150,7 @@ Partial Class frmOptions
         Me.GroupBox2.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox2.Location = New System.Drawing.Point(12, 12)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(386, 193)
+        Me.GroupBox2.Size = New System.Drawing.Size(386, 175)
         Me.GroupBox2.TabIndex = 51
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "General Settings"
@@ -160,12 +162,14 @@ Partial Class frmOptions
         '
         'GroupBox3
         '
+        Me.GroupBox3.Controls.Add(Me.drp_Priority)
+        Me.GroupBox3.Controls.Add(Me.Label4)
         Me.GroupBox3.Controls.Add(Me.drp_processors)
         Me.GroupBox3.Controls.Add(Me.Label11)
         Me.GroupBox3.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox3.Location = New System.Drawing.Point(13, 211)
+        Me.GroupBox3.Location = New System.Drawing.Point(13, 193)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(386, 89)
+        Me.GroupBox3.Size = New System.Drawing.Size(386, 128)
         Me.GroupBox3.TabIndex = 52
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Processor Detection"
@@ -176,7 +180,7 @@ Partial Class frmOptions
         Me.drp_processors.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.drp_processors.FormattingEnabled = True
         Me.drp_processors.Items.AddRange(New Object() {"Automatic", "1", "2", "3", "4", "5", "6", "7", "8"})
-        Me.drp_processors.Location = New System.Drawing.Point(19, 50)
+        Me.drp_processors.Location = New System.Drawing.Point(15, 40)
         Me.drp_processors.Name = "drp_processors"
         Me.drp_processors.Size = New System.Drawing.Size(111, 21)
         Me.drp_processors.TabIndex = 41
@@ -185,17 +189,38 @@ Partial Class frmOptions
         '
         Me.Label11.AutoSize = True
         Me.Label11.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label11.Location = New System.Drawing.Point(16, 27)
+        Me.Label11.Location = New System.Drawing.Point(12, 22)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(142, 13)
         Me.Label11.TabIndex = 40
         Me.Label11.Text = "Number of processors: "
         '
+        'drp_Priority
+        '
+        Me.drp_Priority.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.drp_Priority.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.drp_Priority.FormattingEnabled = True
+        Me.drp_Priority.Items.AddRange(New Object() {"Realtime", "High", "Above Normal", "Normal", "Below Normal", "Low"})
+        Me.drp_Priority.Location = New System.Drawing.Point(15, 91)
+        Me.drp_Priority.Name = "drp_Priority"
+        Me.drp_Priority.Size = New System.Drawing.Size(111, 21)
+        Me.drp_Priority.TabIndex = 43
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.Location = New System.Drawing.Point(12, 73)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(132, 13)
+        Me.Label4.TabIndex = 42
+        Me.Label4.Text = "Default Priority Level:"
+        '
         'frmOptions
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(411, 421)
+        Me.ClientSize = New System.Drawing.Size(411, 435)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
@@ -227,4 +252,6 @@ Partial Class frmOptions
     Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
     Friend WithEvents drp_processors As System.Windows.Forms.ComboBox
     Friend WithEvents Label11 As System.Windows.Forms.Label
+    Friend WithEvents drp_Priority As System.Windows.Forms.ComboBox
+    Friend WithEvents Label4 As System.Windows.Forms.Label
 End Class

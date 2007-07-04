@@ -508,6 +508,18 @@ Namespace My
                 Me("verbose") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Normal")>  _
+        Public Property Priority() As String
+            Get
+                Return CType(Me("Priority"),String)
+            End Get
+            Set
+                Me("Priority") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

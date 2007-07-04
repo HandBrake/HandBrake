@@ -502,6 +502,25 @@ Public Class frmMain
                 Dim params As String = query
                 Dim proc As New System.Diagnostics.Process
                 proc = System.Diagnostics.Process.Start("""" + ApplicationPath + "\hbcli.exe""", params)
+                If My.Settings.Priority <> "Normal" Then
+                    Dim level As String
+                    level = My.Settings.Priority
+
+                    Select Case level
+                        Case "Realtime"
+                            proc.PriorityClass = ProcessPriorityClass.RealTime
+                        Case "High"
+                            proc.PriorityClass = ProcessPriorityClass.High
+                        Case "Above Normal"
+                            proc.PriorityClass = ProcessPriorityClass.AboveNormal
+                        Case "Below Normal"
+                            proc.PriorityClass = ProcessPriorityClass.BelowNormal
+                        Case "Low"
+                            proc.PriorityClass = ProcessPriorityClass.Idle
+                    End Select
+
+
+                End If
 
                 MessageBox.Show("The Handbrake encoder (CLI) will now start and should be encoding your video.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
 
@@ -676,12 +695,21 @@ Public Class frmMain
         text_height.BackColor = Color.White
     End Sub
 
+    Private Sub drp_dvdtitle_click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles drp_dvdtitle.Click
+        If drp_dvdtitle.Items.Count = 1 Then
+            MessageBox.Show("There are no titles to select. Please scan the DVD by clicking the 'browse' button above before trying to select a title.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        End If
+    End Sub
+
     Private Sub drp_dvdtitle_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles drp_dvdtitle.SelectedIndexChanged
         ' If the title changes then the following text values are no longer correct.
         ' Maybe automatically update these in later versions.
         lbl_Aspect.Text = "Select a Title"
         lbl_RecomendedCrop.Text = "Select a Title"
         QueryEditorText.Text = ""
+
+        ' Check if there are any titles and alert the user if there is not
+        
 
         ' If the title is not automatic then read the dvd.dat file and populate the Subtitles box depending on the title slected.
         If drp_dvdtitle.Text <> "Automatic" Then

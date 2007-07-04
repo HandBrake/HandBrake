@@ -116,5 +116,8 @@
     <Setting Name="verbose" Type="System.Int32" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="Priority" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Normal</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

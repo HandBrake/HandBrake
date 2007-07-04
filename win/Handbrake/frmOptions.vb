@@ -36,6 +36,7 @@ Public Class frmOptions
             End If
 
             drp_processors.Text = My.Settings.Processors
+            drp_Priority.Text = My.Settings.Priority
 
         Catch ex As Exception
             MessageBox.Show("ERROR:  " & ex.ToString)
@@ -114,5 +115,9 @@ Public Class frmOptions
 
     Private Sub drp_processors_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles drp_processors.SelectedIndexChanged
         My.Settings.Processors = drp_processors.Text
+    End Sub
+
+    Private Sub ComboBox1_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles drp_Priority.SelectedIndexChanged
+        My.Settings.Priority = drp_Priority.Text
     End Sub
 End Class
