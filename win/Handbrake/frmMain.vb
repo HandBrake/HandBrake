@@ -502,6 +502,7 @@ Public Class frmMain
                 Dim params As String = query
                 Dim proc As New System.Diagnostics.Process
                 proc = System.Diagnostics.Process.Start("""" + ApplicationPath + "\hbcli.exe""", params)
+
                 If My.Settings.Priority <> "Normal" Then
                     Dim level As String
                     level = My.Settings.Priority
@@ -518,8 +519,6 @@ Public Class frmMain
                         Case "Low"
                             proc.PriorityClass = ProcessPriorityClass.Idle
                     End Select
-
-
                 End If
 
                 MessageBox.Show("The Handbrake encoder (CLI) will now start and should be encoding your video.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
@@ -534,6 +533,25 @@ Public Class frmMain
                 Dim params As String = query
                 Dim proc As New System.Diagnostics.Process
                 proc = System.Diagnostics.Process.Start("""" + ApplicationPath + "\hbcli.exe""", params)
+
+                If My.Settings.Priority <> "Normal" Then
+                    Dim level As String
+                    level = My.Settings.Priority
+
+                    Select Case level
+                        Case "Realtime"
+                            proc.PriorityClass = ProcessPriorityClass.RealTime
+                        Case "High"
+                            proc.PriorityClass = ProcessPriorityClass.High
+                        Case "Above Normal"
+                            proc.PriorityClass = ProcessPriorityClass.AboveNormal
+                        Case "Below Normal"
+                            proc.PriorityClass = ProcessPriorityClass.BelowNormal
+                        Case "Low"
+                            proc.PriorityClass = ProcessPriorityClass.Idle
+                    End Select
+                End If
+
                 MessageBox.Show("The Handbrake encoder (CLI) will now start and should be encoding your video.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
 
                 'Lets start the process monitor to keep an eye on things.
