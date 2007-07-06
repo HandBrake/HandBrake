@@ -194,6 +194,7 @@ static void do_job( hb_job_t * job, int cpu_count )
     w->fifo_in  = job->fifo_render;
     w->fifo_out = job->fifo_mpeg4;
     w->config   = &job->config;
+    
     hb_list_add( job->list_work, w );
 
     if( job->select_subtitle && !job->subtitle_scan ) 
@@ -573,9 +574,9 @@ static void do_job( hb_job_t * job, int cpu_count )
              * OK we have more than one, and the lowest is lower, but how much
              * lower to qualify for turning it on by default?
              *
-             * Let's say 20% as a default.
+             * Let's say 10% as a default.
              */
-            if( subtitle_lowest < ( subtitle_highest * 0.2 ) ) 
+            if( subtitle_lowest < ( subtitle_highest * 0.1 ) ) 
             {
                 subtitle_hit = subtitle_lowest_id;
                 hb_log( "Found a subtitle candidate id 0x%x",

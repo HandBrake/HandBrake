@@ -510,6 +510,7 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
     hb_audio_t    * audio,    * audio_copy;
     hb_subtitle_t * subtitle, * subtitle_copy;
     int             i;
+    char            audio_lang[4];
 
     /* Copy the title */
     title      = job->title;
@@ -548,60 +549,39 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
 
     title_copy->list_subtitle = hb_list_init();
 
-    if( job->pass != 1 ) 
-    {
-        /* Copy the subtitle we want (or not) 
-         */
-        if( ( subtitle = hb_list_item( title->list_subtitle, job->subtitle ) ) )
-        {
-            subtitle_copy = malloc( sizeof( hb_subtitle_t ) );
-            memcpy( subtitle_copy, subtitle, sizeof( hb_subtitle_t ) );
-            hb_list_add( title_copy->list_subtitle, subtitle_copy );
-        }
-    } else { 
-        char audio_lang[4];
 
-        memset( audio_lang, 0, sizeof( audio_lang ) );
+    memset( audio_lang, 0, sizeof( audio_lang ) );
 
+    if ( job->subtitle_scan || job->native_language ) {
+      
         /*
-         * Pass 1, do we want to do a subtitle scan?
+         * Find the first audio language that is being encoded
          */
-        if( job->subtitle_scan ) 
+        for( i = 0; i < 8; i++ )
         {
-            /*
-             * Search for all occurances of the audio language in the
-             * subtitles and add them all to the
-             * title_copy->list_subtitle. First of all find the
-             * language for the audio.
-             */
-            for( i = 0; i < 8; i++ )
+            if( job->audios[i] < 0 )
             {
-                if( job->audios[i] < 0 )
-                {
-                    break;
-                }
-                if( ( audio = hb_list_item( title->list_audio, job->audios[i] ) ) )
-                {
-                    strncpy(audio_lang, audio->iso639_2, sizeof(audio_lang));
-                }
+                break;
+            }
+            if( ( audio = hb_list_item( title->list_audio, job->audios[i] ) ) )
+            {
+                strncpy(audio_lang, audio->iso639_2, sizeof(audio_lang));
+                break;
             }
         }
 
-        /*
-         * If we have a native language now is the time to see whether we want
-         * to enable subtitles for it if it differs from the audio language.
-         */
+        
         if( job->native_language ) 
         {
             if( strncasecmp( job->native_language, audio_lang, 
                              sizeof( audio_lang ) ) != 0 )
             {             
-
+                
                 hb_log( "Enabled subtitles in native language '%s', audio is in '%s'",
                         job->native_language, audio_lang);
                 /*
                  * The main audio track is not in our native language, so switch
-                 * the subtitle scan to use our native language instead.
+                 * the subtitles to use our native language instead.
                  */
                 strncpy( audio_lang, job->native_language, sizeof( audio_lang ) );
             } else {
@@ -612,7 +592,13 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
                 job->native_language = NULL;
             }
         }
-
+    }
+    
+    if ( job->subtitle_scan || job->native_language ) 
+    {
+        /*
+         * Select subtitles that match the language we want
+         */
         for( i=0; i < hb_list_count( title->list_subtitle ); i++ ) 
         {
             subtitle = hb_list_item( title->list_subtitle, i );
@@ -622,6 +608,28 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
                  * Matched subtitle language with audio language, so
                  * add this to our list to scan.
                  */
+                subtitle_copy = malloc( sizeof( hb_subtitle_t ) );
+                memcpy( subtitle_copy, subtitle, sizeof( hb_subtitle_t ) );
+                hb_list_add( title_copy->list_subtitle, subtitle_copy );
+                if ( !job->subtitle_scan ) {
+                    /*
+                     * With native language just select the
+                     * first match in our langiage, not all of
+                     * them.
+                     */
+                    break;
+                }
+            }
+        }
+    } else {
+        /*
+         * Manually selected subtitle, in which case only bother adding them
+         * for pass 0 or pass 2 of a two pass.
+         */
+        if( job->pass != 1 ) 
+        {
+            if( ( subtitle = hb_list_item( title->list_subtitle, job->subtitle ) ) )
+            {
                 subtitle_copy = malloc( sizeof( hb_subtitle_t ) );
                 memcpy( subtitle_copy, subtitle, sizeof( hb_subtitle_t ) );
                 hb_list_add( title_copy->list_subtitle, subtitle_copy );
