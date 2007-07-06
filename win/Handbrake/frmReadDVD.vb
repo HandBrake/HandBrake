@@ -15,7 +15,7 @@ Public Class frmReadDVD
         Try
             Shell("cmd /c """"" + applicationPath + "\hbcli.exe"" -i """ + frmMain.text_source.Text + """" & " -t0 >" + """" + applicationPath + "\dvdinfo.dat""" + " 2>&1""")
         Catch ex As Exception
-            MessageBox.Show("Unable to launch the CLI encoder.", "Errir", MessageBoxButtons.OK, MessageBoxIcon.Hand)
+            MessageBox.Show("Unable to launch the CLI encoder.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand)
             MessageBox.Show(ex.ToString)
         End Try
 
