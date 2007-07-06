@@ -88,7 +88,27 @@ Public Class frmQueue
         Else
             'Start the encode process
             Try
-                Shell("""" + ApplicationPath + "\hbcli.exe""" + list_queue.Items.Item(encodeItems))
+                Dim params As String = list_queue.Items.Item(encodeItems)
+                Dim proc As New System.Diagnostics.Process
+                proc = System.Diagnostics.Process.Start("""" + ApplicationPath + "\hbcli.exe""", params)
+
+                If My.Settings.Priority <> "Normal" Then
+                    Dim level As String
+                    level = My.Settings.Priority
+
+                    Select Case level
+                        Case "Realtime"
+                            proc.PriorityClass = ProcessPriorityClass.RealTime
+                        Case "High"
+                            proc.PriorityClass = ProcessPriorityClass.High
+                        Case "Above Normal"
+                            proc.PriorityClass = ProcessPriorityClass.AboveNormal
+                        Case "Below Normal"
+                            proc.PriorityClass = ProcessPriorityClass.BelowNormal
+                        Case "Low"
+                            proc.PriorityClass = ProcessPriorityClass.Idle
+                    End Select
+                End If
             Catch ex As Exception
                 MessageBox.Show("Unable to launch the encoder. Queue run failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand)
                 MessageBox.Show(ex.ToString)
