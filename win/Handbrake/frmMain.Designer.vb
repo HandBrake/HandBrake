@@ -704,9 +704,10 @@ Partial Class frmMain
         Me.RadioISO.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RadioISO.Location = New System.Drawing.Point(358, 34)
         Me.RadioISO.Name = "RadioISO"
-        Me.RadioISO.Size = New System.Drawing.Size(47, 17)
+        Me.RadioISO.Size = New System.Drawing.Size(44, 17)
         Me.RadioISO.TabIndex = 19
-        Me.RadioISO.Text = "ISO"
+        Me.RadioISO.Text = "File"
+        Me.ToolTip.SetToolTip(Me.RadioISO, "ISO, TS, MPG")
         Me.RadioISO.UseVisualStyleBackColor = True
         '
         'btn_Browse
@@ -715,7 +716,7 @@ Partial Class frmMain
         Me.btn_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btn_Browse.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btn_Browse.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.btn_Browse.Location = New System.Drawing.Point(418, 21)
+        Me.btn_Browse.Location = New System.Drawing.Point(415, 22)
         Me.btn_Browse.Name = "btn_Browse"
         Me.btn_Browse.Size = New System.Drawing.Size(78, 22)
         Me.btn_Browse.TabIndex = 2
@@ -2282,7 +2283,7 @@ Partial Class frmMain
         'ISO_Open
         '
         Me.ISO_Open.DefaultExt = "iso"
-        Me.ISO_Open.Filter = "iso|*.iso"
+        Me.ISO_Open.Filter = "iso|*.iso |mpg|*.mpg |mpeg|*.mpeg |ts|*.ts |VOB|*.VOB"
         '
         'DVD_Save
         '

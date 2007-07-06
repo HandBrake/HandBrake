@@ -697,7 +697,7 @@ Public Class frmMain
 
     Private Sub drp_dvdtitle_click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles drp_dvdtitle.Click
         If drp_dvdtitle.Items.Count = 1 Then
-            MessageBox.Show("There are no titles to select. Please scan the DVD by clicking the 'browse' button above before trying to select a title.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show("There are no titles to select. Please scan the DVD by clicking the 'browse' button above before trying to select a title.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
         End If
     End Sub
 

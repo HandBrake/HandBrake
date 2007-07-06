@@ -90,7 +90,7 @@ Partial Class frmSplashScreen
         Me.Version.Name = "Version"
         Me.Version.Size = New System.Drawing.Size(316, 18)
         Me.Version.TabIndex = 1
-        Me.Version.Text = "Version 2.25 (beta)"
+        Me.Version.Text = "Version {Version}"
         '
         'CLIV
         '
@@ -101,7 +101,7 @@ Partial Class frmSplashScreen
         Me.CLIV.Name = "CLIV"
         Me.CLIV.Size = New System.Drawing.Size(316, 108)
         Me.CLIV.TabIndex = 2
-        Me.CLIV.Text = "Windows CLI Version: 0.8.5b1"
+        Me.CLIV.Text = "Windows CLI Version: {Version}"
         '
         'frmSplashScreen
         '

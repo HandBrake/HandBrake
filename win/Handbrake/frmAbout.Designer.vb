@@ -49,9 +49,9 @@ Partial Class frmAbout
         Me.Version.Font = New System.Drawing.Font("Verdana", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Version.Location = New System.Drawing.Point(252, 17)
         Me.Version.Name = "Version"
-        Me.Version.Size = New System.Drawing.Size(88, 13)
+        Me.Version.Size = New System.Drawing.Size(72, 13)
         Me.Version.TabIndex = 18
-        Me.Version.Text = "Version 2.25"
+        Me.Version.Text = "{Version}"
         '
         'Label3
         '

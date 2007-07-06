@@ -511,7 +511,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("Normal")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Below Normal")>  _
         Public Property Priority() As String
             Get
                 Return CType(Me("Priority"),String)

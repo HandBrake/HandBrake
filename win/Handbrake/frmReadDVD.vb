@@ -15,7 +15,7 @@ Public Class frmReadDVD
         Try
             Shell("cmd /c """"" + applicationPath + "\hbcli.exe"" -i """ + frmMain.text_source.Text + """" & " -t0 >" + """" + applicationPath + "\dvdinfo.dat""" + " 2>&1""")
         Catch ex As Exception
-            MessageBox.Show("Unable to launch the CLI encoder.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Hand)
+            MessageBox.Show("Unable to launch the CLI encoder.", "Errir", MessageBoxButtons.OK, MessageBoxIcon.Hand)
             MessageBox.Show(ex.ToString)
         End Try
 
@@ -176,7 +176,7 @@ Public Class frmReadDVD
             End If
 
             If titleError = True Then
-                MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Hand)
+                MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand)
             End If
 
         Catch ex As Exception
@@ -198,7 +198,7 @@ Public Class frmReadDVD
             outputWriter.Close()
 
         Catch ex As Exception
-            MessageBox.Show("Unable to write Data file. Please make sure the application has admin privileges.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Hand)
+            MessageBox.Show("Unable to write Data file. Please make sure the application has admin privileges.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand)
         End Try
 
         Me.Close()
@@ -217,7 +217,7 @@ Public Class frmReadDVD
             str(0) = titleInfo(0).Trim.Substring(8).Replace(":", "") 'Title
             str(1) = titleInfo(1).Trim.Substring(12) ' Duration
         Catch ex As Exception
-            MessageBox.Show("ERROR: Incomplete DVD data found. Please copy the data on the View DVD Information tab and report this error.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Hand)
+            MessageBox.Show("Incomplete DVD data found. Please copy the data on the View DVD Information tab and report this error.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand)
         End Try
 
         'Now lets add the info to the main form dropdowns

@@ -117,7 +117,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="Priority" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Normal</Value>
+      <Value Profile="(Default)">Below Normal</Value>
     </Setting>
   </Settings>
 </SettingsFile>
