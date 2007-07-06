@@ -43,8 +43,13 @@
     IBOutlet NSButton        * fNextButton;
     IBOutlet NSTextField     * fInfoField;
 	
+	
+	
 	int                        MaxOutputWidth;
 	int                        MaxOutputHeight;
+	
+	/* widgets in main window */
+	IBOutlet NSTextField     * fAutoCropMainWindow;
 
 }
 

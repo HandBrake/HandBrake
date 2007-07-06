@@ -76,7 +76,7 @@
     IBOutlet NSButton            * fVidTwoPassCheck;
     IBOutlet NSButton            * fVidTurboPassCheck;
 	
-	/* Picture Settings box */
+	/* Picture Settings box fPicSettingAutoCropDsply*/
 	IBOutlet NSTextField         * fPicLabelSettings;
 	IBOutlet NSTextField         * fPicLabelSrc;
 	IBOutlet NSTextField         * fPicLabelOutp;
@@ -94,6 +94,8 @@
 	IBOutlet NSTextField         * fPicSettingDeinterlace;
 	IBOutlet NSTextField         * fPicSettingARkeepDsply;
 	IBOutlet NSTextField         * fPicSettingPARDsply;
+	IBOutlet NSTextField         * fPicSettingAutoCrop;
+	IBOutlet NSTextField         * fPicSettingAutoCropDsply;
 	IBOutlet NSTextField         * fPicSettingDeinterlaceDsply;
 	IBOutlet NSTextField         * fPicLabelAnamorphic;
 	IBOutlet NSTextField         * fPicLabelPAROutp;

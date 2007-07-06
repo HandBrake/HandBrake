@@ -480,8 +480,12 @@ return registrationDictionary;
             // Select the longuest title
 			[fSrcTitlePopUp selectItemAtIndex: indxpri];
             /* We set the Settings Display to "Default" here
-			until we get default presets implemented */
+				until we get default presets implemented */
 			[fPresetSelectedDisplay setStringValue: @"Default"];
+			/* We set the auto crop in the main window to value "1" just as in PictureController,
+			 as it does not seem to be taken from any job-> variable */
+			[fPicSettingAutoCrop setStringValue: [NSString stringWithFormat:
+				@"%d", 1]];
 			
             [self TitlePopUpChanged: NULL];
             [self EnableUI: YES];
@@ -1919,29 +1923,39 @@ return registrationDictionary;
 		
 	/* Set ON/Off values for the deinterlace/keep aspect ratio according to boolean */	
 	if (fTitle->job->keep_ratio > 0)
-		{
+	{
 		[fPicSettingARkeepDsply setStringValue: @"On"];
-        }
-		else
-		{
+	}
+	else
+	{
 		[fPicSettingARkeepDsply setStringValue: @"Off"];
-		}	
+	}	
 	if (fTitle->job->deinterlace > 0)
-		{
+	{
 		[fPicSettingDeinterlaceDsply setStringValue: @"On"];
-        }
-		else
-		{
+	}
+	else
+	{
 		[fPicSettingDeinterlaceDsply setStringValue: @"Off"];
-		}
+	}
 	if (fTitle->job->pixel_ratio > 0)
-		{
+	{
 		[fPicSettingPARDsply setStringValue: @"On"];
-        }
-		else
-		{
+	}
+	else
+	{
 		[fPicSettingPARDsply setStringValue: @"Off"];
-		}	
+	}
+	/* Set the display field for crop as per boolean */
+	if ([[fPicSettingAutoCrop stringValue] isEqualToString: @"0"])
+	{
+	    [fPicSettingAutoCropDsply setStringValue: @"Custom"];
+	}
+	else
+	{
+		[fPicSettingAutoCropDsply setStringValue: @"Auto"];
+	}	
+	
 	/* below will trigger the preset, if selected, to be
 	changed to "Custom". Lets comment out for now until
 	we figure out a way to determine if the picture values
@@ -2980,6 +2994,8 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithInt:fTitle->job->pixel_ratio] forKey:@"PicturePAR"];
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
+	//[preset setObject:[NSNumber numberWithInt:[[fPictureController fCropMatrix] selectedRow]] forKey:@"PictureAutoCrop"];
+
 	[preset setObject:[NSNumber numberWithInt:job->crop[0]] forKey:@"PictureTopCrop"];
     [preset setObject:[NSNumber numberWithInt:job->crop[1]] forKey:@"PictureBottomCrop"];
 	[preset setObject:[NSNumber numberWithInt:job->crop[2]] forKey:@"PictureLeftCrop"];
@@ -3040,6 +3056,7 @@ the user is using "Custom" settings by determining the sender*/
 	/* Basic Picture Settings */
 	/* Use Max Picture settings for whatever the dvd is.*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesMaxPictureSettings"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureAutoCrop"];
 	[preset setObject:[NSNumber numberWithInt:320] forKey:@"PictureWidth"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureKeepRatio"];
@@ -3469,10 +3486,25 @@ the user is using "Custom" settings by determining the sender*/
 					hb_fix_aspect( job, HB_KEEP_WIDTH );
 				}
 				job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
+				/* AutoCrop is in preset, then use the autocrop settings for each dvd */
+				if ([[chosenPreset objectForKey:@"PictureAutoCrop"]  intValue] == 1)
+				{
+				[fPicSettingAutoCrop setStringValue: [NSString stringWithFormat:
+				@"%d", 1]];
 				job->crop[0] = [[chosenPreset objectForKey:@"PictureTopCrop"]  intValue];
 				job->crop[1] = [[chosenPreset objectForKey:@"PictureBottomCrop"]  intValue];
 				job->crop[2] = [[chosenPreset objectForKey:@"PictureLeftCrop"]  intValue];
 				job->crop[3] = [[chosenPreset objectForKey:@"PictureRightCrop"]  intValue];
+				}
+				else /* if custom crop has been saved in preset, use the saved custom cropping regardless of the source */
+				{
+				[fPicSettingAutoCrop setStringValue: [NSString stringWithFormat:
+				@"%d", 0]];
+				job->crop[0] = [[chosenPreset objectForKey:@"PictureTopCrop"]  intValue];
+				job->crop[1] = [[chosenPreset objectForKey:@"PictureBottomCrop"]  intValue];
+				job->crop[2] = [[chosenPreset objectForKey:@"PictureLeftCrop"]  intValue];
+				job->crop[3] = [[chosenPreset objectForKey:@"PictureRightCrop"]  intValue];
+				}
 			}
 			[self CalculatePictureSizing: NULL]; 
 		}

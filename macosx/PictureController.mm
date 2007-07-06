@@ -87,7 +87,14 @@ static int GetAlignedSize( int size )
     [fCropRightStepper  setMaxValue: title->width/2-2];
     [fDeinterlaceCheck  setState:    job->deinterlace ? NSOnState : NSOffState];
 	[fPARCheck  setState:    job->pixel_ratio ? NSOnState : NSOffState];
-
+	if ([fAutoCropMainWindow  intValue] == 0)
+	{
+	[fCropMatrix  selectCellAtRow: 1 column:0];
+	}
+	else
+	{
+	[fCropMatrix  selectCellAtRow: 0 column:0];
+	}
     MaxOutputWidth = job->width;
 	MaxOutputHeight = job->height;
     fPicture = 0;
@@ -214,6 +221,7 @@ static int GetAlignedSize( int size )
     [fCropBottomStepper setEnabled: !autocrop];
     [fCropLeftStepper   setEnabled: !autocrop];
     [fCropRightStepper  setEnabled: !autocrop];
+	[fAutoCropMainWindow  setStringValue: [NSString stringWithFormat:@"%d",autocrop]];
     if( autocrop )
     {
         memcpy( job->crop, fTitle->crop, 4 * sizeof( int ) );

@@ -88,6 +88,8 @@
                 fPicLabelSrcX = NSTextField; 
                 fPicSettingARkeep = NSTextField; 
                 fPicSettingARkeepDsply = NSTextField; 
+                fPicSettingAutoCrop = NSTextField; 
+                fPicSettingAutoCropDsply = NSTextField; 
                 fPicSettingDeinterlace = NSTextField; 
                 fPicSettingDeinterlaceDsply = NSTextField; 
                 fPicSettingHeight = NSTextField; 
@@ -206,6 +208,7 @@
             CLASS = PictureController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
+                fAutoCropMainWindow = NSTextField; 
                 fCropBottomField = NSTextField; 
                 fCropBottomStepper = NSStepper; 
                 fCropLeftField = NSTextField; 
