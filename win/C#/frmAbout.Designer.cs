@@ -55,7 +55,7 @@ namespace Handbrake
             this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_close.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(410, 208);
+            this.btn_close.Location = new System.Drawing.Point(415, 229);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(99, 22);
             this.btn_close.TabIndex = 27;
@@ -109,16 +109,17 @@ namespace Handbrake
             this.Label1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label1.Location = new System.Drawing.Point(144, 161);
             this.Label1.Name = "Label1";
-            this.Label1.Size = new System.Drawing.Size(296, 39);
+            this.Label1.Size = new System.Drawing.Size(305, 52);
             this.Label1.TabIndex = 22;
-            this.Label1.Text = "\"Titer\" - The original developer of handbrake.\r\nEveryone on the current developme" +
-                "nt team listed:\r\nhttp://handbrake.m0k.org/?page_id=9";
+            this.Label1.Text = "- \"Titer\" - The original developer of handbrake.\r\n- Everyone on the current devel" +
+                "opment team listed:\r\n  http://handbrake.m0k.org/?page_id=9\r\n- Ported to C#.net w" +
+                "ith help from \"brianmario\"";
             // 
-            // About
+            // frmAbout
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(526, 239);
+            this.ClientSize = new System.Drawing.Size(526, 259);
             this.Controls.Add(this.Label4);
             this.Controls.Add(this.btn_close);
             this.Controls.Add(this.Version);
@@ -127,7 +128,7 @@ namespace Handbrake
             this.Controls.Add(this.PictureBox1);
             this.Controls.Add(this.Label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "About";
+            this.Name = "frmAbout";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "About Handbrake";
             this.Load += new System.EventHandler(this.About_Load);
