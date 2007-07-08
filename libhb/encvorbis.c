@@ -71,7 +71,7 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
     }
 
     ctl_rate_arg.bitrate_average_kbps = 1000 * job->abitrate;
-    ctl_rate_arg.managed = 1;
+    ctl_rate_arg.management_active = 1;
 
     if( vorbis_encode_ctl( &pv->vi, OV_ECTL_RATEMANAGE2_SET, &ctl_rate_arg ) ||
           vorbis_encode_setup_init( &pv->vi ) )
