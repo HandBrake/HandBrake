@@ -1,0 +1,95 @@
+namespace Handbrake
+{
+    partial class frmDVDData
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmDVDData));
+            this.Label2 = new System.Windows.Forms.Label();
+            this.rtf_dvdInfo = new System.Windows.Forms.RichTextBox();
+            this.btn_close = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // Label2
+            // 
+            this.Label2.AutoSize = true;
+            this.Label2.Location = new System.Drawing.Point(13, 8);
+            this.Label2.Name = "Label2";
+            this.Label2.Size = new System.Drawing.Size(518, 26);
+            this.Label2.TabIndex = 30;
+            this.Label2.Text = "Handbrake\'s DVD information output in an unparsed form.\r\nNote if you have not sca" +
+                "nned the DVD this feature will display the information for the last DVD that was" +
+                " read.";
+            // 
+            // rtf_dvdInfo
+            // 
+            this.rtf_dvdInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.rtf_dvdInfo.Location = new System.Drawing.Point(16, 51);
+            this.rtf_dvdInfo.Name = "rtf_dvdInfo";
+            this.rtf_dvdInfo.Size = new System.Drawing.Size(515, 403);
+            this.rtf_dvdInfo.TabIndex = 29;
+            this.rtf_dvdInfo.Text = "";
+            // 
+            // btn_close
+            // 
+            this.btn_close.BackColor = System.Drawing.SystemColors.Control;
+            this.btn_close.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_close.Location = new System.Drawing.Point(421, 462);
+            this.btn_close.Name = "btn_close";
+            this.btn_close.Size = new System.Drawing.Size(110, 22);
+            this.btn_close.TabIndex = 28;
+            this.btn_close.TabStop = false;
+            this.btn_close.Text = "Close Window";
+            this.btn_close.UseVisualStyleBackColor = false;
+            // 
+            // DVDData
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(545, 493);
+            this.Controls.Add(this.Label2);
+            this.Controls.Add(this.rtf_dvdInfo);
+            this.Controls.Add(this.btn_close);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "DVDData";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Read DVD";
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        internal System.Windows.Forms.Label Label2;
+        internal System.Windows.Forms.RichTextBox rtf_dvdInfo;
+        internal System.Windows.Forms.Button btn_close;
+    }
+}

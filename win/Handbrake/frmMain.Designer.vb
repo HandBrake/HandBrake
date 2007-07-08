@@ -2283,7 +2283,7 @@ Partial Class frmMain
         'ISO_Open
         '
         Me.ISO_Open.DefaultExt = "iso"
-        Me.ISO_Open.Filter = "iso|*.iso |mpg|*.mpg |mpeg|*.mpeg |ts|*.ts |VOB|*.VOB"
+        Me.ISO_Open.Filter = "All Supported Files|*.iso;*.mpg;*.mpeg;*.vob"
         '
         'DVD_Save
         '
