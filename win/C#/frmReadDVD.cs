@@ -32,18 +32,21 @@ namespace Handbrake
             hbProc.StartInfo.FileName = "hbcli.exe";
             hbProc.StartInfo.RedirectStandardOutput = true;
             hbProc.StartInfo.RedirectStandardError = true;
-            hbProc.StartInfo.StandardOutputEncoding = System.Text.Encoding.UTF8;
-            hbProc.StartInfo.StandardErrorEncoding = System.Text.Encoding.UTF8;
+            //hbProc.StartInfo.StandardOutputEncoding = System.Text.Encoding.UTF8;
+            //hbProc.StartInfo.StandardErrorEncoding = System.Text.Encoding.UTF8;
             hbProc.StartInfo.Arguments = query;
             hbProc.StartInfo.UseShellExecute = false;
             hbProc.Start();
 
+            rtf_dvdInfo.Text = "-- Start --";
             while (hbProc.StandardOutput.BaseStream.CanRead && !hbProc.HasExited)
             {
-                MessageBox.Show(hbProc.StandardOutput.ReadLine());
-                MessageBox.Show(hbProc.StandardError.ReadLine());
-                Console.Read();
+                rtf_dvdInfo.Text = rtf_dvdInfo.Text + "\n" + hbProc.StandardOutput.ReadLine();
+                rtf_dvdInfo.Text = rtf_dvdInfo.Text + "\n" + hbProc.StandardError.ReadLine();
+                MessageBox.Show("Test");
             }
+
+            rtf_dvdInfo.Text = rtf_dvdInfo.Text + "\n" + "-- End --";
         }
 
         private void btn_ok_Click(object sender, EventArgs e)
