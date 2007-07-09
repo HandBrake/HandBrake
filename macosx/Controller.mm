@@ -905,7 +905,7 @@ return registrationDictionary;
 		if ([fVidEncoderPopUp indexOfSelectedItem] > 0 )
 	    {
 			/* Just use new Baseline Level 3.0 
-			Lets Deprecate Baseline Level 1.3*/
+			Lets Deprecate Baseline Level 1.3h264_level*/
 			job->h264_level = 30;
 			job->mux = HB_MUX_IPOD;
 			/* move sanity check for iPod Encoding here */
