@@ -241,6 +241,7 @@ namespace Handbrake
             this.drp_dvdtitle.TabIndex = 39;
             this.drp_dvdtitle.Text = "Automatic";
             this.ToolTip.SetToolTip(this.drp_dvdtitle, "The title number you wish to encode.");
+            this.drp_dvdtitle.SelectedIndexChanged += new System.EventHandler(this.drp_dvdtitle_SelectedIndexChanged);
             // 
             // RadioISO
             // 
@@ -702,6 +703,7 @@ namespace Handbrake
             this.text_height.Name = "text_height";
             this.text_height.Size = new System.Drawing.Size(64, 21);
             this.text_height.TabIndex = 8;
+            this.text_height.TextChanged += new System.EventHandler(this.text_height_TextChanged);
             // 
             // Label55
             // 
@@ -722,6 +724,7 @@ namespace Handbrake
             this.text_width.Name = "text_width";
             this.text_width.Size = new System.Drawing.Size(64, 21);
             this.text_width.TabIndex = 7;
+            this.text_width.TextChanged += new System.EventHandler(this.text_width_TextChanged);
             // 
             // btn_destBrowse
             // 
@@ -764,6 +767,7 @@ namespace Handbrake
             this.drp_videoEncoder.Size = new System.Drawing.Size(156, 21);
             this.drp_videoEncoder.TabIndex = 5;
             this.drp_videoEncoder.Text = "H.264";
+            this.drp_videoEncoder.SelectedIndexChanged += new System.EventHandler(this.drp_videoEncoder_SelectedIndexChanged);
             // 
             // Label47
             // 
@@ -791,6 +795,7 @@ namespace Handbrake
             this.drp_audioCodec.Size = new System.Drawing.Size(111, 21);
             this.drp_audioCodec.TabIndex = 6;
             this.drp_audioCodec.Text = "AAC";
+            this.drp_audioCodec.SelectedIndexChanged += new System.EventHandler(this.drp_audioCodec_SelectedIndexChanged);
             // 
             // Label12
             // 
@@ -988,6 +993,7 @@ namespace Handbrake
             this.drp_crop.Size = new System.Drawing.Size(123, 21);
             this.drp_crop.TabIndex = 9;
             this.drp_crop.Text = "No Crop";
+            this.drp_crop.SelectedIndexChanged += new System.EventHandler(this.drp_crop_SelectedIndexChanged);
             // 
             // text_right
             // 
@@ -1075,6 +1081,7 @@ namespace Handbrake
             this.check_largeFile.TabIndex = 51;
             this.check_largeFile.Text = "Larger mp4 Files (> 4GB)";
             this.check_largeFile.UseVisualStyleBackColor = true;
+            this.check_largeFile.Click += new System.EventHandler(this.check_largeFile_CheckedChanged);
             // 
             // check_turbo
             // 
@@ -1086,6 +1093,7 @@ namespace Handbrake
             this.check_turbo.TabIndex = 50;
             this.check_turbo.Text = "Turbo 1st Pass";
             this.check_turbo.UseVisualStyleBackColor = true;
+            this.check_turbo.Click += new System.EventHandler(this.check_turbo_CheckedChanged);
             // 
             // Label36
             // 
@@ -1107,6 +1115,7 @@ namespace Handbrake
             this.Check_ChapterMarkers.TabIndex = 48;
             this.Check_ChapterMarkers.Text = "Chapter Markers";
             this.Check_ChapterMarkers.UseVisualStyleBackColor = true;
+            this.Check_ChapterMarkers.CheckedChanged += new System.EventHandler(this.Check_ChapterMarkers_CheckedChanged);
             // 
             // Label28
             // 
@@ -1148,6 +1157,7 @@ namespace Handbrake
             this.CheckCRF.TabIndex = 44;
             this.CheckCRF.Text = "Enable CRF";
             this.CheckCRF.UseVisualStyleBackColor = true;
+            this.CheckCRF.Click += new System.EventHandler(this.CheckCRF_CheckedChanged);
             // 
             // CheckPixelRatio
             // 
@@ -1159,6 +1169,7 @@ namespace Handbrake
             this.CheckPixelRatio.TabIndex = 40;
             this.CheckPixelRatio.Text = "Anamorphic PAR";
             this.CheckPixelRatio.UseVisualStyleBackColor = true;
+            this.CheckPixelRatio.CheckedChanged += new System.EventHandler(this.CheckPixelRatio_CheckedChanged);
             // 
             // Label23
             // 
@@ -1355,6 +1366,7 @@ namespace Handbrake
             this.drp_audioMixDown.Size = new System.Drawing.Size(173, 21);
             this.drp_audioMixDown.TabIndex = 50;
             this.drp_audioMixDown.Text = "Automatic";
+            this.drp_audioMixDown.SelectedIndexChanged += new System.EventHandler(this.drp_audioMixDown_SelectedIndexChanged);
             // 
             // drp_audioChannels
             // 
@@ -1372,6 +1384,17 @@ namespace Handbrake
             this.drp_audioBitrate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drp_audioBitrate.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audioBitrate.FormattingEnabled = true;
+            this.drp_audioBitrate.Items.AddRange(new object[] {
+            "32",
+            "40",
+            "48",
+            "56",
+            "64",
+            "80",
+            "86",
+            "112",
+            "128",
+            "160"});
             this.drp_audioBitrate.Location = new System.Drawing.Point(157, 37);
             this.drp_audioBitrate.Name = "drp_audioBitrate";
             this.drp_audioBitrate.Size = new System.Drawing.Size(101, 21);

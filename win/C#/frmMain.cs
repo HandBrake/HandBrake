@@ -141,6 +141,7 @@ namespace Handbrake
         {
             File_Open.ShowDialog();
         }
+
         private void mnu_save_Click(object sender, EventArgs e)
         {
             File_Save.ShowDialog();
@@ -373,6 +374,13 @@ namespace Handbrake
 
             DVD_Save.ShowDialog();
             text_destination.Text = DVD_Save.FileName;
+
+            if (Check_ChapterMarkers.CheckState.ToString() == "Checked")
+            {
+                string destination = text_destination.Text;
+                destination = destination.Replace(".mp4", ".m4v");
+                text_destination.Text = destination;
+            }
         }
 
         private void btn_h264Clear_Click(object sender, EventArgs e)
@@ -503,8 +511,241 @@ namespace Handbrake
             System.Diagnostics.Process.Start("http://handbrake.m0k.org/trac/wiki/x264Options");
         }
 
+        private void text_width_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (CheckPixelRatio.CheckState.ToString() == "Checked") {
+                    text_width.Text = "";
+                } else {
+                    if ((int.Parse(text_width.Text) % 16) != 0){
+                        text_width.BackColor = Color.LightCoral;
+                    }else {
+                        text_width.BackColor = Color.LightGreen;
+                    }
+                }
 
+                if (!lbl_Aspect.Text.Equals("Select a Title")){
+                    int height = int.Parse(text_width.Text) / int.Parse(lbl_Aspect.Text);
+                    int mod16 = height % 16;
+                    height = height - mod16;
+                    text_height.Text = height.ToString();
+                }
+               
+            } catch(Exception){
+            }
+        }
 
+        private void text_height_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (CheckPixelRatio.CheckState.ToString() == "Checked")
+                {
+                    text_height.Text = "";
+                }
+                else
+                {
+                    if ((int.Parse(text_height.Text) % 16) != 0)
+                    {
+                        text_height.BackColor = Color.LightCoral;
+                    }
+                    else
+                    {
+                        text_height.BackColor = Color.LightGreen;
+                    }
+                }
+            } catch(Exception){
+            }
+        }
+
+        private void drp_crop_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if ((string)drp_crop.SelectedItem == "Manual")
+            {
+            text_left.Enabled = true;
+            text_right.Enabled = true;
+            text_top.Enabled = true;
+            text_bottom.Enabled = true;
+            }
+
+            if ((string)drp_crop.SelectedItem == "Auto Crop")
+            {
+                text_left.Enabled = false;
+                text_right.Enabled = false;
+                text_top.Enabled = false;
+                text_bottom.Enabled = false;
+                text_left.Text = "";
+                text_right.Text = "";
+                text_top.Text = "";
+                text_bottom.Text = "";
+
+                if (lbl_RecomendedCrop.Text != "Select a Title")
+                {
+                    string[] temp = new string[4];
+                    temp = lbl_RecomendedCrop.Text.Split('/');
+                    text_left.Text = temp[2];
+                    text_right.Text = temp[3];
+                    text_top.Text = temp[0];
+                    text_bottom.Text = temp[1];
+                }
+            }
+
+            if ((string)drp_crop.SelectedItem == "No Crop")
+            {
+                text_left.Enabled = false;
+                text_right.Enabled = false;
+                text_top.Enabled = false;
+                text_bottom.Enabled = false;
+                text_left.Text = "0";
+                text_right.Text = "0";
+                text_top.Text = "0";
+                text_bottom.Text = "0";
+
+            }
+        }
+        
+        private void CheckPixelRatio_CheckedChanged(object sender, EventArgs e)
+        {
+            text_width.Text = "";
+            text_height.Text = "";
+            text_width.BackColor = Color.White;
+            text_height.BackColor = Color.White;
+        }
+
+        private void drp_dvdtitle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (drp_dvdtitle.Items.Count == 1)
+            {
+                MessageBox.Show("There are no titles to select. Please scan the DVD by clicking the 'browse' button above before trying to select a title.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+        }
+
+        private void drp_audioCodec_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            //CLI Audio mixdown Names: mono stereo dpl1 dpl2 6ch
+
+            drp_audioMixDown.Items.Clear();
+
+            if (drp_audioCodec.Text == "AAC")
+            {
+                drp_audioMixDown.Items.Add("Mono");
+                drp_audioMixDown.Items.Add("Stereo");
+                drp_audioMixDown.Items.Add("Dolby Surround");
+                drp_audioMixDown.Items.Add("Dolby Pro Logic II");
+                drp_audioMixDown.Items.Add("6 Channel Discrete");
+                drp_audioBitrate.Items.Clear();
+                drp_audioBitrate.Items.Add("32");
+                drp_audioBitrate.Items.Add("40");
+                drp_audioBitrate.Items.Add("48");
+                drp_audioBitrate.Items.Add("56");
+                drp_audioBitrate.Items.Add("64");
+                drp_audioBitrate.Items.Add("80");
+                drp_audioBitrate.Items.Add("86");
+                drp_audioBitrate.Items.Add("112");
+                drp_audioBitrate.Items.Add("128");
+                drp_audioBitrate.Items.Add("160");
+
+            }
+            else
+            {
+                drp_audioMixDown.Items.Add("Stereo");
+                drp_audioMixDown.Items.Add("Dolby Surround");
+                drp_audioMixDown.Items.Add("Dolby Pro Logic II");
+
+                drp_audioBitrate.Items.Clear();
+                drp_audioBitrate.Items.Add("32");
+                drp_audioBitrate.Items.Add("40");
+                drp_audioBitrate.Items.Add("48");
+                drp_audioBitrate.Items.Add("56");
+                drp_audioBitrate.Items.Add("64");
+                drp_audioBitrate.Items.Add("80");
+                drp_audioBitrate.Items.Add("86");
+                drp_audioBitrate.Items.Add("112");
+                drp_audioBitrate.Items.Add("128");
+                drp_audioBitrate.Items.Add("160");
+                drp_audioBitrate.Items.Add("192");
+                drp_audioBitrate.Items.Add("224");
+                drp_audioBitrate.Items.Add("256");
+                drp_audioBitrate.Items.Add("320");
+                drp_audioBitrate.Items.Add("384");
+            }
+        }
+
+        private void drp_audioMixDown_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (drp_audioCodec.Text == "AAC")
+            {
+                if (drp_audioMixDown.Text == "6 Channel Discrete")
+                {
+
+                    drp_audioBitrate.Items.Clear();
+                    drp_audioBitrate.Items.Add("32");
+                    drp_audioBitrate.Items.Add("40");
+                    drp_audioBitrate.Items.Add("48");
+                    drp_audioBitrate.Items.Add("56");
+                    drp_audioBitrate.Items.Add("64");
+                    drp_audioBitrate.Items.Add("80");
+                    drp_audioBitrate.Items.Add("86");
+                    drp_audioBitrate.Items.Add("112");
+                    drp_audioBitrate.Items.Add("128");
+                    drp_audioBitrate.Items.Add("160");
+                    drp_audioBitrate.Items.Add("192");
+                    drp_audioBitrate.Items.Add("224");
+                    drp_audioBitrate.Items.Add("256");
+                    drp_audioBitrate.Items.Add("320");
+                    drp_audioBitrate.Items.Add("384");
+                }
+            }
+        }
+
+        private void Check_ChapterMarkers_CheckedChanged(object sender, EventArgs e)
+        {
+            if (Check_ChapterMarkers.CheckState.ToString() == "Checked")
+            {
+                string destination = text_destination.Text;
+                destination = destination.Replace(".mp4", ".m4v");
+                text_destination.Text = destination;
+            }
+        }
+
+        private void check_largeFile_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!text_destination.Text.Contains(".mp4"))
+            {
+                MessageBox.Show("This option is only compatible with the mp4 file container.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                check_largeFile.CheckState = CheckState.Unchecked;
+            }
+        }
+
+        private void check_turbo_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!drp_videoEncoder.Text.Contains("H.264"))
+            {
+                MessageBox.Show("This option is only compatible with the H.264 encoder's", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                check_turbo.CheckState = CheckState.Unchecked;
+            }
+        }
+
+        private void drp_videoEncoder_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //Turn off some options which are H.264 only when the user selects a non h.264 encoder
+            if (!drp_videoEncoder.Text.Contains("H.264"))
+            {
+                check_turbo.CheckState = CheckState.Unchecked;
+                CheckCRF.CheckState = CheckState.Unchecked;
+            }
+        }
+
+        private void CheckCRF_CheckedChanged(object sender, EventArgs e)
+        {
+            if (slider_videoQuality.Value == 0)
+            {
+                MessageBox.Show("This option is can only be used with the 'Video Quality' slider.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                CheckCRF.CheckState = CheckState.Unchecked;
+            }
+        }
 
         //
         // The Query Generation Function
@@ -942,11 +1183,8 @@ namespace Handbrake
             // ----------------------------------------------------------------------
 
             return querySource+ queryDestination+ queryPictureSettings+ queryVideoSettings+ h264Settings+ queryAudioSettings+ queryAdvancedSettings+ verbose;
-        }
+        }     
 
-        
-
-        
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

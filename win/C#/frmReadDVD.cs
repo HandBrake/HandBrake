@@ -198,7 +198,7 @@ namespace Handbrake
 
         private void btn_ok_Click(object sender, EventArgs e)
         {
-            start(inputFile);
+            scan(inputFile);
         }
 
        
