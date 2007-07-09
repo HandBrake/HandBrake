@@ -79,7 +79,7 @@
     hb_title_t * title;
 
     NSSize size = [fScrollView contentSize];
-    int height = MAX( 20 + 125 * hb_count( fHandle ), size.height );
+    int height = MAX( 20 + 145 * hb_count( fHandle ), size.height );
     [fTaskView setFrame: NSMakeRect(0,0,size.width,height)];
 
     NSRect rect = NSMakeRect(10,height-10,size.width-20,10);
@@ -98,7 +98,7 @@
        /* show the name of the source Note: use title->name instead of
 	   title->dvd since name is just the chosen folder, instead of dvd which is the full path*/ 
         [self AddTextField: [NSString stringWithFormat:
-            @"Task: %d Source: %s  Title: %d   Chapters: %d to %d   Pass: %d of %d",i, title->name, title->index , j->chapter_start, j->chapter_end,MAX( 1, j->pass ), MIN( 2, j->pass + 1 )] rect: &rect];
+            @"Task: %d Source: %s  Title: %d   Chapters: %d to %d   Pass: %d of %d",i+1, title->name, title->index , j->chapter_start, j->chapter_end,MAX( 1, j->pass ), MIN( 2, j->pass + 1 )] rect: &rect];
        /* Muxer settings (File Format in the gui) */
 		if (j->mux == 65536 || j->mux == 131072 || j->mux == 1048576)
 		{
