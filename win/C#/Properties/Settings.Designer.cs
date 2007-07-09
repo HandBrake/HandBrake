@@ -489,5 +489,17 @@ namespace Handbrake.Properties {
                 this["VideoQuality"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string FullDVDInfo {
+            get {
+                return ((string)(this["FullDVDInfo"]));
+            }
+            set {
+                this["FullDVDInfo"] = value;
+            }
+        }
     }
 }

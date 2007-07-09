@@ -242,6 +242,7 @@ namespace Handbrake
             this.drp_dvdtitle.Text = "Automatic";
             this.ToolTip.SetToolTip(this.drp_dvdtitle, "The title number you wish to encode.");
             this.drp_dvdtitle.SelectedIndexChanged += new System.EventHandler(this.drp_dvdtitle_SelectedIndexChanged);
+            this.drp_dvdtitle.Click += new System.EventHandler(this.drp_dvdtitle_Click);
             // 
             // RadioISO
             // 

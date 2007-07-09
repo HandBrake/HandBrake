@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Net;
+using System.IO;
 
 namespace Handbrake
 {
@@ -139,12 +140,200 @@ namespace Handbrake
         // FILE MENU --------------------------------------------------------------
         private void mnu_open_Click(object sender, EventArgs e)
         {
+            string filename;
             File_Open.ShowDialog();
+            filename = File_Open.FileName;
+            if (filename != "")
+            {
+                try
+                {
+                    // Create StreamReader & open file
+                    StreamReader line = new StreamReader(filename);
+                    string temporyLine; // Used for reading the line into a varible before processing on the checkState items below.
+                    
+                    // Read in the data and set the correct GUI component with the setting.
+                    text_source.Text = line.ReadLine();
+                    drp_dvdtitle.Text = line.ReadLine();
+                    drop_chapterStart.Text = line.ReadLine();
+                    drop_chapterFinish.Text = line.ReadLine();
+                    text_destination.Text = line.ReadLine();
+                    drp_videoEncoder.Text = line.ReadLine();
+                    drp_audioCodec.Text = line.ReadLine();
+                    text_width.Text = line.ReadLine();
+                    text_height.Text = line.ReadLine();
+                    text_top.Text = line.ReadLine();
+                    text_bottom.Text = line.ReadLine();
+                    text_left.Text = line.ReadLine();
+                    text_right.Text = line.ReadLine();
+                    drp_subtitle.Text = line.ReadLine();
+                    text_bitrate.Text = line.ReadLine();
+                    text_filesize.Text = line.ReadLine();
+                    slider_videoQuality.Value = int.Parse(line.ReadLine());
+
+                    temporyLine = line.ReadLine();
+                    if (temporyLine == "Checked")
+                    {
+                        check_2PassEncode.CheckState = CheckState.Checked;
+                    }
+
+                    temporyLine = line.ReadLine();
+                    if (temporyLine == "Checked")
+                    {
+                        check_DeInterlace.CheckState = CheckState.Checked;
+                    }
+
+                    temporyLine = line.ReadLine();
+                    if (temporyLine == "Checked")
+                    {
+                        check_grayscale.CheckState = CheckState.Checked;
+                    }
+
+                    drp_videoFramerate.Text = line.ReadLine();
+
+                    temporyLine = line.ReadLine();
+                    if (temporyLine == "Checked")
+                    {
+                        Check_ChapterMarkers.CheckState = CheckState.Checked;
+                    }
+
+                    temporyLine = line.ReadLine();
+                    if (temporyLine == "Checked")
+                    {
+                        CheckPixelRatio.CheckState = CheckState.Checked;
+                    }
+
+                    temporyLine = line.ReadLine();
+                    if (temporyLine == "Checked")
+                    {
+                        check_turbo.CheckState = CheckState.Checked;
+                    }
+
+                    temporyLine = line.ReadLine();
+                    if (temporyLine == "Checked")
+                    {
+                        check_largeFile.CheckState = CheckState.Checked;
+                    }
+   
+                    drp_audioBitrate.Text = line.ReadLine();
+                    drp_audioSampleRate.Text = line.ReadLine();
+                    drp_audioChannels.Text = line.ReadLine();
+                    drp_audioMixDown.Text = line.ReadLine();
+                    
+                    // Advanced H264 Options
+                    temporyLine = line.ReadLine();
+                    if (temporyLine == "Checked")
+                    {
+                        CheckCRF.CheckState = CheckState.Checked;
+                    }
+                    rtf_h264advanced.Text = line.ReadLine();
+
+                    // Close the stream
+                    line.Close();
+
+
+                    // Fix for SliderValue not appearing when Opening saved file
+                    SliderValue.Text = slider_videoQuality.Value + "%";
+
+                } catch (Exception){
+                    MessageBox.Show("Unable to load profile.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                }
+            }
         }
 
         private void mnu_save_Click(object sender, EventArgs e)
         {
+            // Note : All these declarations are not really needed and should be removed at some point.
+            // The values can simply be added directly to the WriteLine statments.
+                
+            //Source
+            string source = text_source.Text;
+            string dvdTitle = drp_dvdtitle.Text;
+            string ChapterStart = drop_chapterStart.Text;
+            string ChapterFinish = drop_chapterFinish.Text;
+            //Destination
+            string destination = text_destination.Text;
+            string videoEncoder = drp_videoEncoder.Text;
+            string audioEncoder = drp_audioCodec.Text;
+            string width = text_width.Text;
+            string height = text_height.Text;
+            //Picture Settings Tab
+            string cropTop = text_top.Text;
+            string cropBottom = text_bottom.Text;
+            string cropLeft = text_left.Text;
+            string cropRight = text_right.Text;
+            string subtitles = drp_subtitle.Text;
+            //Video Settings Tab
+            string videoBitrate = text_bitrate.Text;
+            string videoFilesize = text_filesize.Text;
+            string videoQuality = slider_videoQuality.Value.ToString();
+            string twoPassEncoding = check_2PassEncode.CheckState.ToString();
+            string deinterlace = check_DeInterlace.CheckState.ToString();
+            string grayscale = check_grayscale.CheckState.ToString();
+            string videoFramerate = drp_videoFramerate.Text;
+            string pixelRation = CheckPixelRatio.CheckState.ToString();
+            string ChapterMarkers = Check_ChapterMarkers.CheckState.ToString();
+            string turboH264 = check_turbo.CheckState.ToString();
+            string largeFile = check_largeFile.CheckState.ToString();
+            //Audio Settings Tab
+            string audioBitrate = drp_audioBitrate.Text;
+            string audioSampleRate = drp_audioSampleRate.Text;
+            string audioChannels = drp_audioChannels.Text;
+            string AudioMixDown = drp_audioMixDown.Text;
+            //H264 Tab
+            string CRF = CheckCRF.CheckState.ToString();
+            string advH264 = rtf_h264advanced.Text;
+
+            string filename;
             File_Save.ShowDialog();
+            filename = File_Save.FileName;
+            if (filename != "")
+            {
+                try
+                {
+                    // Create a StreamWriter and open the file
+                    StreamWriter line = new StreamWriter(filename);
+
+                   line.WriteLine(source);
+                   line.WriteLine(dvdTitle);
+                   line.WriteLine(ChapterStart);
+                   line.WriteLine(ChapterFinish);
+                   line.WriteLine(destination);
+                   line.WriteLine(videoEncoder);
+                   line.WriteLine(audioEncoder);
+                   line.WriteLine(width);
+                   line.WriteLine(height);
+                   line.WriteLine(cropTop);
+                   line.WriteLine(cropBottom);
+                   line.WriteLine(cropLeft);
+                   line.WriteLine(cropRight);
+                   line.WriteLine(subtitles);
+                   line.WriteLine(videoBitrate);
+                   line.WriteLine(videoFilesize);
+                   line.WriteLine(videoQuality);
+                   line.WriteLine(twoPassEncoding);
+                   line.WriteLine(deinterlace);
+                   line.WriteLine(grayscale);
+                   line.WriteLine(videoFramerate);
+                   line.WriteLine(ChapterMarkers);
+                   line.WriteLine(pixelRation);
+                   line.WriteLine(turboH264);
+                   line.WriteLine(largeFile);
+                   line.WriteLine(audioBitrate);
+                   line.WriteLine(audioSampleRate);
+                   line.WriteLine(audioChannels);
+                   line.WriteLine(AudioMixDown);
+                   line.WriteLine(CRF);
+                   line.WriteLine(advH264);
+                   // close the stream
+                   line.Close();
+                   MessageBox.Show("Your profile has been sucessfully saved.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                }
+                catch(Exception)
+                {
+                    MessageBox.Show("Unable to write to the file. Please make sure the location has the correct permissions for file writing.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                }
+                
+            }
         }
 
         private void mnu_update_Click(object sender, EventArgs e)
@@ -613,7 +802,7 @@ namespace Handbrake
             text_height.BackColor = Color.White;
         }
 
-        private void drp_dvdtitle_SelectedIndexChanged(object sender, EventArgs e)
+        private void drp_dvdtitle_Click(object sender, EventArgs e)
         {
             if (drp_dvdtitle.Items.Count == 1)
             {
@@ -746,6 +935,11 @@ namespace Handbrake
                 CheckCRF.CheckState = CheckState.Unchecked;
             }
         }
+
+        private void drp_dvdtitle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //TODO: Convert the Parsing Code.
+        } 
 
         //
         // The Query Generation Function
@@ -1183,8 +1377,7 @@ namespace Handbrake
             // ----------------------------------------------------------------------
 
             return querySource+ queryDestination+ queryPictureSettings+ queryVideoSettings+ h264Settings+ queryAudioSettings+ queryAdvancedSettings+ verbose;
-        }     
-
+        }
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

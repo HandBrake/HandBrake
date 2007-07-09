@@ -75,13 +75,13 @@ namespace Handbrake
                 if (line.Contains("exited.")){
                     subtitlePointer = false;
                     fullTitleData = titleData.Trim() + " ~ " + duationData.Trim() + " ~ " + sizeData.Trim() + " ~ " + cropdata.Trim() + " ~ " + chatperData.Trim() + " ~ " + audioData.Trim() + " ~ " + subtitleData.Trim();
-                    add(fullTitleData);
+                    add(fullTitleData, titleData, duationData);
                     counter++;
                 }else if (line.Contains("+ title")){
                     if (titleData != "") {
                         subtitlePointer = true;
                         fullTitleData = titleData.Trim() + " ~ " + duationData.Trim() + " ~ " + sizeData.Trim() + " ~ " + cropdata.Trim() + " ~ " + chatperData.Trim() + " ~ " + audioData.Trim() + " ~ " + subtitleData.Trim();
-                        add(fullTitleData);
+                        add(fullTitleData, titleData, duationData);
                         counter = counter + 1;
                     }
                     titleData = line;
@@ -172,29 +172,30 @@ namespace Handbrake
             }
         }
 
-        public void add(string titleData)
+        public void add(string fullTitleData, string titleData, string durationData)
         {
-            string[] titleInfo = new string[10];
-            string[] str = new string[1];
 
-            string title;
-            string t ="";
-            string d ="";
-
-            titleInfo = titleData.Split('~');
             try
             {
-                t = titleInfo[0].Trim().Substring(8).Replace(":", ""); // Title
-                d = titleInfo[1].Trim().Substring(12); //Duration
-            } catch(Exception){
-                MessageBox.Show("Incomplete DVD data found. Please copy the data on the View DVD Information tab and report this error.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-            }
+                string t = titleData.Trim().Substring(8).Replace(":", "");
+                string d = durationData.Trim().Substring(12);
 
-            //Now lets add the info to the main form dropdowns
-           frmMain form = (frmMain)frmMain.ActiveForm;
-           title = t + " " + " " + d + " ";
-           form.drp_dvdtitle.Items.Add(title);
+                // Lets store the captured full title data as a string in the programs settings file.
+                // This can then be used by the DVD title dropdown menu to populate other fields.
+
+                Properties.Settings.Default.FullDVDInfo = Properties.Settings.Default.FullDVDInfo + " \n " + fullTitleData;
+
+                //Now lets add the info to the main form dropdowns
+                frmMain form = (frmMain)frmMain.ActiveForm;
+                string title = t + " " + " " + d + " ";
+                form.drp_dvdtitle.Items.Add(title);
+            }
+            catch (Exception)
+            {
+                // Don't really need to do anything about it.
+            }
         }
+
 
         private void btn_ok_Click(object sender, EventArgs e)
         {
