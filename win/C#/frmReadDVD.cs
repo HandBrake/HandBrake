@@ -30,9 +30,10 @@ namespace Handbrake
             hbProc.StartInfo.UseShellExecute = false;
             hbProc.Start();
             System.IO.StreamReader errorReader = new System.IO.StreamReader(new System.IO.BufferedStream(hbProc.StandardError.BaseStream));
-            //rtf_dvdInfo.AppendText(errorReader.ReadToEnd());
             hbProc.WaitForExit();
             hbProc.Close();
+
+            //Parsing.DVD thisDvd = Parsing.DVD.Parse(errorReader);
 
             String DvdData = errorReader.ReadToEnd();
             DvdData = DvdData + "-- end --";

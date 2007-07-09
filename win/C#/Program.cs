@@ -12,7 +12,6 @@ namespace Handbrake
         [STAThread]
         static void Main()
         {
-            // testing svn: brianmario
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new frmMain());

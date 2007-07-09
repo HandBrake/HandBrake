@@ -61,7 +61,11 @@
     <Compile Include="frmOptions.Designer.cs">
       <DependentUpon>frmOptions.cs</DependentUpon>
     </Compile>
-    <Compile Include="HB.cs" />
+    <Compile Include="Parsing\AudioTrack.cs" />
+    <Compile Include="Parsing\Chapter.cs" />
+    <Compile Include="Parsing\DVD.cs" />
+    <Compile Include="Parsing\Subtitle.cs" />
+    <Compile Include="Parsing\Title.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="frmAbout.resx">
