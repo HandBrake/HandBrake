@@ -90,6 +90,7 @@
                 fPicSettingARkeepDsply = NSTextField; 
                 fPicSettingAutoCrop = NSTextField; 
                 fPicSettingAutoCropDsply = NSTextField; 
+                fPicSettingAutoCropLabel = NSTextField; 
                 fPicSettingDeinterlace = NSTextField; 
                 fPicSettingDeinterlaceDsply = NSTextField; 
                 fPicSettingHeight = NSTextField; 
