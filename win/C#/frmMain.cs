@@ -536,7 +536,7 @@ namespace Handbrake
                 if (filename != "")
                 {
                     text_source.Text = filename;
-                    Form frmReadDVD = new frmReadDVD(filename);
+                    Form frmReadDVD = new frmReadDVD(filename, (frmMain)frmMain.ActiveForm);
                     frmReadDVD.Show();
                 }
 
@@ -548,7 +548,7 @@ namespace Handbrake
                 if (filename != "")
                 {
                     text_source.Text = filename;
-                    Form frmReadDVD = new frmReadDVD(filename);
+                    Form frmReadDVD = new frmReadDVD(filename, (frmMain)frmMain.ActiveForm);
                     frmReadDVD.Show();
                 }
 
@@ -936,9 +936,49 @@ namespace Handbrake
             }
         }
 
+        Parsing.DVD thisDVD;
+        public void setStreamReader(Parsing.DVD dvd)
+        {
+            this.thisDVD = dvd;
+        }
+
         private void drp_dvdtitle_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //TODO: Convert the Parsing Code.
+            // Reset some values on the form
+            lbl_Aspect.Text = "Select a Title";
+            lbl_RecomendedCrop.Text = "Select a Title";
+            QueryEditorText.Text = "";
+
+            // If the dropdown is set to automatic nothing else needs to be done.
+            // Otheriwse if its not, title data has to be loased from parsing.
+            if (drp_dvdtitle.Text != "Automatic")
+            {
+                string[] temp;
+                string title;
+                temp = drp_dvdtitle.Text.Split(' ');
+                title = temp[0].Trim();
+              
+                int count = thisDVD.Titles.Count - 1;
+                int counter = 0;
+
+                while (count >= counter)
+                {
+
+                    if (thisDVD.Titles[counter].TitleNumber.ToString() == title)
+                    {
+                        lbl_Aspect.Text = thisDVD.Titles[counter].AspectRatio.ToString();
+                        lbl_RecomendedCrop.Text = thisDVD.Titles[counter].AutoCropDimensions[0] + "/" + thisDVD.Titles[counter].AutoCropDimensions[1] + "/" + thisDVD.Titles[counter].AutoCropDimensions[2] + "/" + thisDVD.Titles[counter].AutoCropDimensions[3];
+                        // Still need to set these up.
+                        MessageBox.Show(thisDVD.Titles[counter].AudioTracks[0].ToString());
+                        MessageBox.Show(thisDVD.Titles[counter].Chapters.ToString());
+                        MessageBox.Show(thisDVD.Titles[counter].Subtitles.ToString());
+                    }
+                    counter++;
+                }
+
+
+            }
+            
         } 
 
         //

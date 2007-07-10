@@ -29,21 +29,22 @@ namespace Handbrake
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmReadDVD));
-            this.Label4 = new System.Windows.Forms.Label();
+            this.lbl_pressOk = new System.Windows.Forms.Label();
             this.btn_ok = new System.Windows.Forms.Button();
             this.Label3 = new System.Windows.Forms.Label();
             this.Label2 = new System.Windows.Forms.Label();
+            this.lbl_status = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // Label4
+            // lbl_pressOk
             // 
-            this.Label4.AutoSize = true;
-            this.Label4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label4.Location = new System.Drawing.Point(66, 51);
-            this.Label4.Name = "Label4";
-            this.Label4.Size = new System.Drawing.Size(178, 13);
-            this.Label4.TabIndex = 29;
-            this.Label4.Text = "Press OK to start the process.";
+            this.lbl_pressOk.AutoSize = true;
+            this.lbl_pressOk.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_pressOk.Location = new System.Drawing.Point(66, 60);
+            this.lbl_pressOk.Name = "lbl_pressOk";
+            this.lbl_pressOk.Size = new System.Drawing.Size(178, 13);
+            this.lbl_pressOk.TabIndex = 29;
+            this.lbl_pressOk.Text = "Press OK to start the process.";
             // 
             // btn_ok
             // 
@@ -81,12 +82,24 @@ namespace Handbrake
             this.Label2.TabIndex = 26;
             this.Label2.Text = "Status:";
             // 
+            // lbl_status
+            // 
+            this.lbl_status.AutoSize = true;
+            this.lbl_status.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_status.Location = new System.Drawing.Point(66, 41);
+            this.lbl_status.Name = "lbl_status";
+            this.lbl_status.Size = new System.Drawing.Size(178, 13);
+            this.lbl_status.TabIndex = 30;
+            this.lbl_status.Text = "Processing.... Please Wait!";
+            this.lbl_status.Visible = false;
+            // 
             // frmReadDVD
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(473, 86);
-            this.Controls.Add(this.Label4);
+            this.Controls.Add(this.lbl_status);
+            this.Controls.Add(this.lbl_pressOk);
             this.Controls.Add(this.btn_ok);
             this.Controls.Add(this.Label3);
             this.Controls.Add(this.Label2);
@@ -101,9 +114,10 @@ namespace Handbrake
 
         #endregion
 
-        internal System.Windows.Forms.Label Label4;
+        internal System.Windows.Forms.Label lbl_pressOk;
         internal System.Windows.Forms.Button btn_ok;
         internal System.Windows.Forms.Label Label3;
         internal System.Windows.Forms.Label Label2;
+        internal System.Windows.Forms.Label lbl_status;
     }
 }

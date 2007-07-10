@@ -37,6 +37,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="file.txt" />
     <Compile Include="frmAbout.cs">
       <SubType>Form</SubType>
     </Compile>
