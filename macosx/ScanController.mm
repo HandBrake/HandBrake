@@ -72,7 +72,7 @@
 	[fDetectedPopUp setHidden: YES];
 	[fFolderField setHidden: YES];
 	[fOpenButton setHidden: YES];
-	[fCancelButton setHidden: YES];
+	[fCancelButton setHidden: NO];
 	[fBrowseButton setHidden: YES];
 	/* We go straight to the Browse Sheet */
 	[self Browse2: NULL];
