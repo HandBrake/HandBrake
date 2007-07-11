@@ -29,8 +29,6 @@ namespace Handbrake
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmUpdate));
-            this.lbl_startupStatus = new System.Windows.Forms.Label();
-            this.Label8 = new System.Windows.Forms.Label();
             this.cliVersion = new System.Windows.Forms.Label();
             this.lbl_cliVersion = new System.Windows.Forms.Label();
             this.Label6 = new System.Windows.Forms.Label();
@@ -47,31 +45,11 @@ namespace Handbrake
             this.Label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // lbl_startupStatus
-            // 
-            this.lbl_startupStatus.AutoSize = true;
-            this.lbl_startupStatus.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_startupStatus.Location = new System.Drawing.Point(152, 34);
-            this.lbl_startupStatus.Name = "lbl_startupStatus";
-            this.lbl_startupStatus.Size = new System.Drawing.Size(55, 13);
-            this.lbl_startupStatus.TabIndex = 69;
-            this.lbl_startupStatus.Text = "{status}";
-            // 
-            // Label8
-            // 
-            this.Label8.AutoSize = true;
-            this.Label8.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label8.Location = new System.Drawing.Point(14, 34);
-            this.Label8.Name = "Label8";
-            this.Label8.Size = new System.Drawing.Size(142, 13);
-            this.Label8.TabIndex = 68;
-            this.Label8.Text = "Startup Update Check: ";
-            // 
             // cliVersion
             // 
             this.cliVersion.AutoSize = true;
             this.cliVersion.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cliVersion.Location = new System.Drawing.Point(371, 83);
+            this.cliVersion.Location = new System.Drawing.Point(371, 58);
             this.cliVersion.Name = "cliVersion";
             this.cliVersion.Size = new System.Drawing.Size(64, 13);
             this.cliVersion.TabIndex = 67;
@@ -82,7 +60,7 @@ namespace Handbrake
             // 
             this.lbl_cliVersion.AutoSize = true;
             this.lbl_cliVersion.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_cliVersion.Location = new System.Drawing.Point(371, 103);
+            this.lbl_cliVersion.Location = new System.Drawing.Point(371, 78);
             this.lbl_cliVersion.Name = "lbl_cliVersion";
             this.lbl_cliVersion.Size = new System.Drawing.Size(113, 13);
             this.lbl_cliVersion.TabIndex = 66;
@@ -93,7 +71,7 @@ namespace Handbrake
             // 
             this.Label6.AutoSize = true;
             this.Label6.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label6.Location = new System.Drawing.Point(258, 103);
+            this.Label6.Location = new System.Drawing.Point(258, 78);
             this.Label6.Name = "Label6";
             this.Label6.Size = new System.Drawing.Size(93, 13);
             this.Label6.TabIndex = 65;
@@ -104,7 +82,7 @@ namespace Handbrake
             // 
             this.Label7.AutoSize = true;
             this.Label7.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label7.Location = new System.Drawing.Point(258, 83);
+            this.Label7.Location = new System.Drawing.Point(258, 58);
             this.Label7.Name = "Label7";
             this.Label7.Size = new System.Drawing.Size(107, 13);
             this.Label7.TabIndex = 64;
@@ -115,7 +93,7 @@ namespace Handbrake
             // 
             this.Label5.AutoSize = true;
             this.Label5.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label5.Location = new System.Drawing.Point(258, 59);
+            this.Label5.Location = new System.Drawing.Point(258, 34);
             this.Label5.Name = "Label5";
             this.Label5.Size = new System.Drawing.Size(163, 13);
             this.Label5.TabIndex = 63;
@@ -125,7 +103,7 @@ namespace Handbrake
             // 
             this.Label3.AutoSize = true;
             this.Label3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label3.Location = new System.Drawing.Point(14, 59);
+            this.Label3.Location = new System.Drawing.Point(14, 34);
             this.Label3.Name = "Label3";
             this.Label3.Size = new System.Drawing.Size(92, 13);
             this.Label3.TabIndex = 62;
@@ -148,7 +126,7 @@ namespace Handbrake
             this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(362, 139);
+            this.btn_close.Location = new System.Drawing.Point(362, 104);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(122, 22);
             this.btn_close.TabIndex = 60;
@@ -160,7 +138,7 @@ namespace Handbrake
             // 
             this.lbl_GuiVersion.AutoSize = true;
             this.lbl_GuiVersion.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_GuiVersion.Location = new System.Drawing.Point(127, 103);
+            this.lbl_GuiVersion.Location = new System.Drawing.Point(127, 78);
             this.lbl_GuiVersion.Name = "lbl_GuiVersion";
             this.lbl_GuiVersion.Size = new System.Drawing.Size(113, 13);
             this.lbl_GuiVersion.TabIndex = 59;
@@ -171,7 +149,7 @@ namespace Handbrake
             // 
             this.Label4.AutoSize = true;
             this.Label4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label4.Location = new System.Drawing.Point(14, 103);
+            this.Label4.Location = new System.Drawing.Point(14, 78);
             this.Label4.Name = "Label4";
             this.Label4.Size = new System.Drawing.Size(93, 13);
             this.Label4.TabIndex = 58;
@@ -182,7 +160,7 @@ namespace Handbrake
             // 
             this.Version.AutoSize = true;
             this.Version.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Version.Location = new System.Drawing.Point(127, 83);
+            this.Version.Location = new System.Drawing.Point(127, 58);
             this.Version.Name = "Version";
             this.Version.Size = new System.Drawing.Size(64, 13);
             this.Version.TabIndex = 57;
@@ -193,7 +171,7 @@ namespace Handbrake
             // 
             this.Label2.AutoSize = true;
             this.Label2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label2.Location = new System.Drawing.Point(14, 83);
+            this.Label2.Location = new System.Drawing.Point(14, 58);
             this.Label2.Name = "Label2";
             this.Label2.Size = new System.Drawing.Size(107, 13);
             this.Label2.TabIndex = 56;
@@ -206,7 +184,7 @@ namespace Handbrake
             this.btn_update.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_update.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_update.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_update.Location = new System.Drawing.Point(17, 139);
+            this.btn_update.Location = new System.Drawing.Point(14, 104);
             this.btn_update.Name = "btn_update";
             this.btn_update.Size = new System.Drawing.Size(107, 22);
             this.btn_update.TabIndex = 55;
@@ -228,9 +206,7 @@ namespace Handbrake
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(498, 172);
-            this.Controls.Add(this.lbl_startupStatus);
-            this.Controls.Add(this.Label8);
+            this.ClientSize = new System.Drawing.Size(498, 139);
             this.Controls.Add(this.cliVersion);
             this.Controls.Add(this.lbl_cliVersion);
             this.Controls.Add(this.Label6);
@@ -258,8 +234,6 @@ namespace Handbrake
 
         #endregion
 
-        internal System.Windows.Forms.Label lbl_startupStatus;
-        internal System.Windows.Forms.Label Label8;
         internal System.Windows.Forms.Label cliVersion;
         internal System.Windows.Forms.Label lbl_cliVersion;
         internal System.Windows.Forms.Label Label6;

@@ -82,6 +82,7 @@ namespace Handbrake
             this.Name = "frmDVDData";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Read DVD";
+            this.Load += new System.EventHandler(this.frmDVDData_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

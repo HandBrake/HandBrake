@@ -53,15 +53,6 @@ namespace Handbrake
             // Set the labels with their correct values.
             Version.Text = Properties.Settings.Default.GuiVersion;
             cliVersion.Text = Properties.Settings.Default.CliVersion;
-
-            // Display On/Off depending on the updateStatus setting
-            string updateStatus = Properties.Settings.Default.updateStatus;
-
-            if(updateStatus == "1"){
-                lbl_startupStatus.Text = "On";
-            }else{
-                lbl_startupStatus.Text = "Off";
-            }
         }
     }
 }

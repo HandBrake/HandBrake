@@ -43,11 +43,11 @@
     <Compile Include="frmAbout.Designer.cs">
       <DependentUpon>frmAbout.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmDVDData.cs">
+    <Compile Include="frmDvdInfo.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmDVDData.Designer.cs">
-      <DependentUpon>frmDVDData.cs</DependentUpon>
+    <Compile Include="frmDvdInfo.Designer.cs">
+      <DependentUpon>frmDvdInfo.cs</DependentUpon>
     </Compile>
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
@@ -73,9 +73,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>frmAbout.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmDVDData.resx">
+    <EmbeddedResource Include="frmDvdInfo.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>frmDVDData.cs</DependentUpon>
+      <DependentUpon>frmDvdInfo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <SubType>Designer</SubType>

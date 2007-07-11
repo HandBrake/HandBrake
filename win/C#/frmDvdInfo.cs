@@ -10,6 +10,11 @@ namespace Handbrake
 {
     public partial class frmDVDData : Form
     {
+
+        /*
+         * This window should be used to display the RAW output of the handbrake CLI which is produced during the scan.
+         */
+
         public frmDVDData()
         {
             InitializeComponent();
