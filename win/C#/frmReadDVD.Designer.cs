@@ -103,6 +103,7 @@ namespace Handbrake
             this.Controls.Add(this.btn_ok);
             this.Controls.Add(this.Label3);
             this.Controls.Add(this.Label2);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmReadDVD";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

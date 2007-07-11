@@ -37,7 +37,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="file.txt" />
     <Compile Include="frmAbout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -65,6 +64,7 @@
     <Compile Include="Parsing\AudioTrack.cs" />
     <Compile Include="Parsing\Chapter.cs" />
     <Compile Include="Parsing\DVD.cs" />
+    <Compile Include="Parsing\Parser.cs" />
     <Compile Include="Parsing\Subtitle.cs" />
     <Compile Include="Parsing\Title.cs" />
     <Compile Include="Program.cs" />

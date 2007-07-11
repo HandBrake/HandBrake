@@ -133,6 +133,12 @@ namespace Handbrake.Parsing
             this.m_cellRange = new int[2];
         }
 
+        public override string ToString()
+        {
+            return string.Format("{0} - {1}h{2}m{3}s", this.m_titleNumber, this.m_duration.Hours, 
+                this.m_duration.Minutes, this.m_duration.Seconds);
+        }
+
         public static Title Parse(StreamReader output)
         {
             Title thisTitle = new Title();

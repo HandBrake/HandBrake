@@ -12,20 +12,44 @@ namespace Handbrake
 {
     public partial class frmReadDVD : Form
     {
+        private string inputFile;
+        private frmMain mainWindow;
+        private Parsing.DVD thisDvd;
+        private delegate void UpdateUIHandler();
 
-        string inputFile;
-        frmMain mainWindow;
-
-        public frmReadDVD(string inputFile, frmMain window)
+        public frmReadDVD(string inputFile, frmMain parent)
         {
             InitializeComponent();
             this.inputFile = inputFile;
-            this.mainWindow = window;
+            this.mainWindow = parent;
         }
 
         private void btn_ok_Click(object sender, EventArgs e)
         {
-           
+            lbl_status.Visible = true;
+            btn_ok.Enabled = false;
+            lbl_pressOk.Visible = false;
+            // throw cli call and parsing on it's own thread
+            System.Threading.ThreadPool.QueueUserWorkItem(startProc);
+        }
+
+        private void updateUIElements()
+        {
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new UpdateUIHandler(updateUIElements));
+                return;
+            }
+            // Now pass this streamreader to frmMain so that it can be used there.
+            mainWindow.setStreamReader(thisDvd);
+
+            mainWindow.drp_dvdtitle.Items.Clear();
+            mainWindow.drp_dvdtitle.Items.AddRange(thisDvd.Titles.ToArray());
+            this.Close();
+        }
+
+        private void startProc(object state)
+        {
             string query = "-i " + '"' + inputFile + '"' + " -t0";
             System.Diagnostics.Process hbProc = new System.Diagnostics.Process();
             hbProc.StartInfo.FileName = "hbcli.exe";
@@ -35,33 +59,15 @@ namespace Handbrake
             hbProc.StartInfo.UseShellExecute = false;
             hbProc.StartInfo.CreateNoWindow = true;
 
-            
             hbProc.Start();
-            StreamReader readData = new StreamReader(new BufferedStream(hbProc.StandardError.BaseStream));
+            Parsing.Parser readData = new Parsing.Parser(hbProc.StandardError.BaseStream);
             hbProc.WaitForExit();
             hbProc.Close();
 
             // Setup the parser
-            Parsing.DVD thisDvd = Parsing.DVD.Parse(readData);
+            thisDvd = Parsing.DVD.Parse(readData);
 
-            // Now pass this streamreader to frmMain so that it can be used there.
-            mainWindow.setStreamReader(thisDvd);
-
-            // Setup frmMain drp_dvdTitle with the title information in the form:  1 (02:34:11)
-            int count = thisDvd.Titles.Count -1;
-            int counter = 0;
-            string title;
-
-            while (count >= counter)
-            {
-                title = thisDvd.Titles[counter].TitleNumber.ToString() + " (" + thisDvd.Titles[counter].Duration.ToString() + ")";
-                mainWindow.drp_dvdtitle.Items.Add(title);
-                counter++;
-            }
-            this.Close();
+            updateUIElements();
         }
-
-
-       
     }
 }

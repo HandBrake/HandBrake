@@ -68,8 +68,9 @@ namespace Handbrake
             this.btn_close.TabStop = false;
             this.btn_close.Text = "Close Window";
             this.btn_close.UseVisualStyleBackColor = false;
+            this.btn_close.Click += new System.EventHandler(this.btn_close_Click);
             // 
-            // DVDData
+            // frmDVDData
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -78,7 +79,7 @@ namespace Handbrake
             this.Controls.Add(this.rtf_dvdInfo);
             this.Controls.Add(this.btn_close);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "DVDData";
+            this.Name = "frmDVDData";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Read DVD";
             this.ResumeLayout(false);

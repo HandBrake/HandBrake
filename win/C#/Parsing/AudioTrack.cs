@@ -61,6 +61,11 @@ namespace Handbrake.Parsing
             }
         }
 
+        public override string ToString()
+        {
+            return string.Format("{0} ({1}) ({2})", this.m_language, this.m_format, this.m_subFormat);
+        }
+
         public static AudioTrack Parse(StreamReader output)
         {
             string curLine = output.ReadLine();

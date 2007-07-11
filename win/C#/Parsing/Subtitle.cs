@@ -25,6 +25,11 @@ namespace Handbrake.Parsing
             }
         }
 
+        public override string ToString()
+        {
+            return this.m_language;
+        }
+
         public static Subtitle Parse(StreamReader output)
         {
             string curLine = output.ReadLine();

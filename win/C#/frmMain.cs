@@ -339,7 +339,7 @@ namespace Handbrake
         private void mnu_update_Click(object sender, EventArgs e)
         {
             Form Update = new frmUpdate();
-            Update.Show();
+            Update.ShowDialog();
         }
 
         private void mnu_exit_Click(object sender, EventArgs e)
@@ -351,7 +351,7 @@ namespace Handbrake
         private void mnu_encode_Click(object sender, EventArgs e)
         {
             Form Queue = new frmQueue();
-            Queue.Show();
+            Queue.ShowDialog();
         }
 
         private void mnu_viewDVDdata_Click(object sender, EventArgs e)
@@ -363,7 +363,7 @@ namespace Handbrake
         private void mnu_options_Click(object sender, EventArgs e)
         {
             Form Options = new frmOptions();
-            Options.Show();
+            Options.ShowDialog();
         }
 
         // PRESETS MENU --------------------------------------------------------------
@@ -516,7 +516,7 @@ namespace Handbrake
         private void mnu_about_Click(object sender, EventArgs e)
         {
 			Form About = new frmAbout();
-            About.Show();
+            About.ShowDialog();
         }
 
 
@@ -536,8 +536,8 @@ namespace Handbrake
                 if (filename != "")
                 {
                     text_source.Text = filename;
-                    Form frmReadDVD = new frmReadDVD(filename, (frmMain)frmMain.ActiveForm);
-                    frmReadDVD.Show();
+                    Form frmReadDVD = new frmReadDVD(filename, this);
+                    frmReadDVD.ShowDialog();
                 }
 
             }
@@ -548,8 +548,8 @@ namespace Handbrake
                 if (filename != "")
                 {
                     text_source.Text = filename;
-                    Form frmReadDVD = new frmReadDVD(filename, (frmMain)frmMain.ActiveForm);
-                    frmReadDVD.Show();
+                    Form frmReadDVD = new frmReadDVD(filename, this);
+                    frmReadDVD.ShowDialog();
                 }
 
             }
