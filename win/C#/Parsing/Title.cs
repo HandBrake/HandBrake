@@ -35,7 +35,7 @@ namespace Handbrake.Parsing
             }
         }
 
-        private int m_vts;
+        /*private int m_vts;
         public int Vts
         {
             get
@@ -69,7 +69,7 @@ namespace Handbrake.Parsing
             {
                 return this.m_blockCount;
             }
-        }
+        }*/
 
         private int m_titleNumber;
         public int TitleNumber
@@ -107,14 +107,14 @@ namespace Handbrake.Parsing
             }
         }
 
-        private float m_fps;
+        /*private float m_fps;
         public float Fps
         {
             get
             {
                 return this.m_fps;
             }
-        }
+        }*/
 
         private int[] m_autoCrop;
         public int[] AutoCropDimensions

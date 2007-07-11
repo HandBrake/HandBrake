@@ -1362,6 +1362,12 @@ namespace Handbrake
             this.drp_audioMixDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drp_audioMixDown.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audioMixDown.FormattingEnabled = true;
+            this.drp_audioMixDown.Items.AddRange(new object[] {
+            "Mono",
+            "Stereo",
+            "Dolby Surround",
+            "Dolby Pro Logic II",
+            "6 Channel Discrete"});
             this.drp_audioMixDown.Location = new System.Drawing.Point(157, 127);
             this.drp_audioMixDown.Name = "drp_audioMixDown";
             this.drp_audioMixDown.Size = new System.Drawing.Size(173, 21);

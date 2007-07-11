@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Net;
 using System.IO;
+using System.Diagnostics;
 
 namespace Handbrake
 {
@@ -242,46 +243,6 @@ namespace Handbrake
 
         private void mnu_save_Click(object sender, EventArgs e)
         {
-            // Note : All these declarations are not really needed and should be removed at some point.
-            // The values can simply be added directly to the WriteLine statments.
-                
-            //Source
-            string source = text_source.Text;
-            string dvdTitle = drp_dvdtitle.Text;
-            string ChapterStart = drop_chapterStart.Text;
-            string ChapterFinish = drop_chapterFinish.Text;
-            //Destination
-            string destination = text_destination.Text;
-            string videoEncoder = drp_videoEncoder.Text;
-            string audioEncoder = drp_audioCodec.Text;
-            string width = text_width.Text;
-            string height = text_height.Text;
-            //Picture Settings Tab
-            string cropTop = text_top.Text;
-            string cropBottom = text_bottom.Text;
-            string cropLeft = text_left.Text;
-            string cropRight = text_right.Text;
-            string subtitles = drp_subtitle.Text;
-            //Video Settings Tab
-            string videoBitrate = text_bitrate.Text;
-            string videoFilesize = text_filesize.Text;
-            string videoQuality = slider_videoQuality.Value.ToString();
-            string twoPassEncoding = check_2PassEncode.CheckState.ToString();
-            string deinterlace = check_DeInterlace.CheckState.ToString();
-            string grayscale = check_grayscale.CheckState.ToString();
-            string videoFramerate = drp_videoFramerate.Text;
-            string pixelRation = CheckPixelRatio.CheckState.ToString();
-            string ChapterMarkers = Check_ChapterMarkers.CheckState.ToString();
-            string turboH264 = check_turbo.CheckState.ToString();
-            string largeFile = check_largeFile.CheckState.ToString();
-            //Audio Settings Tab
-            string audioBitrate = drp_audioBitrate.Text;
-            string audioSampleRate = drp_audioSampleRate.Text;
-            string audioChannels = drp_audioChannels.Text;
-            string AudioMixDown = drp_audioMixDown.Text;
-            //H264 Tab
-            string CRF = CheckCRF.CheckState.ToString();
-            string advH264 = rtf_h264advanced.Text;
 
             string filename;
             File_Save.ShowDialog();
@@ -293,40 +254,46 @@ namespace Handbrake
                     // Create a StreamWriter and open the file
                     StreamWriter line = new StreamWriter(filename);
 
-                   line.WriteLine(source);
-                   line.WriteLine(dvdTitle);
-                   line.WriteLine(ChapterStart);
-                   line.WriteLine(ChapterFinish);
-                   line.WriteLine(destination);
-                   line.WriteLine(videoEncoder);
-                   line.WriteLine(audioEncoder);
-                   line.WriteLine(width);
-                   line.WriteLine(height);
-                   line.WriteLine(cropTop);
-                   line.WriteLine(cropBottom);
-                   line.WriteLine(cropLeft);
-                   line.WriteLine(cropRight);
-                   line.WriteLine(subtitles);
-                   line.WriteLine(videoBitrate);
-                   line.WriteLine(videoFilesize);
-                   line.WriteLine(videoQuality);
-                   line.WriteLine(twoPassEncoding);
-                   line.WriteLine(deinterlace);
-                   line.WriteLine(grayscale);
-                   line.WriteLine(videoFramerate);
-                   line.WriteLine(ChapterMarkers);
-                   line.WriteLine(pixelRation);
-                   line.WriteLine(turboH264);
-                   line.WriteLine(largeFile);
-                   line.WriteLine(audioBitrate);
-                   line.WriteLine(audioSampleRate);
-                   line.WriteLine(audioChannels);
-                   line.WriteLine(AudioMixDown);
-                   line.WriteLine(CRF);
-                   line.WriteLine(advH264);
-                   // close the stream
-                   line.Close();
-                   MessageBox.Show("Your profile has been sucessfully saved.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                    //Source
+                    line.WriteLine(text_source.Text);
+                    line.WriteLine(drp_dvdtitle.Text);
+                    line.WriteLine(drop_chapterStart.Text);
+                    line.WriteLine(drop_chapterFinish.Text);
+                    //Destination
+                    line.WriteLine(text_destination.Text);
+                    line.WriteLine(drp_videoEncoder.Text);
+                    line.WriteLine(drp_audioCodec.Text);
+                    line.WriteLine(text_width.Text);
+                    line.WriteLine(text_height.Text);
+                    //Picture Settings Tab
+                    line.WriteLine(text_top.Text);
+                    line.WriteLine(text_bottom.Text);
+                    line.WriteLine(text_left.Text);
+                    line.WriteLine(text_right.Text);
+                    line.WriteLine(drp_subtitle.Text);
+                    //Video Settings Tab
+                    line.WriteLine(text_bitrate.Text);
+                    line.WriteLine(text_filesize.Text);
+                    line.WriteLine(slider_videoQuality.Value.ToString());
+                    line.WriteLine(check_2PassEncode.CheckState.ToString());
+                    line.WriteLine(check_DeInterlace.CheckState.ToString());
+                    line.WriteLine(check_grayscale.CheckState.ToString());
+                    line.WriteLine(drp_videoFramerate.Text);
+                    line.WriteLine(Check_ChapterMarkers.CheckState.ToString());
+                    line.WriteLine(CheckPixelRatio.CheckState.ToString());
+                    line.WriteLine(check_turbo.CheckState.ToString());
+                    line.WriteLine(check_largeFile.CheckState.ToString());
+                    //Audio Settings Tab
+                    line.WriteLine(drp_audioBitrate.Text);
+                    line.WriteLine(drp_audioSampleRate.Text);
+                    line.WriteLine(drp_audioChannels.Text);
+                    line.WriteLine(drp_audioMixDown.Text);
+                    //H264 Tab
+                    line.WriteLine(CheckCRF.CheckState.ToString());
+                    line.WriteLine(rtf_h264advanced.Text);
+                    // close the stream
+                    line.Close();
+                    MessageBox.Show("Your profile has been sucessfully saved.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 }
                 catch(Exception)
                 {
@@ -490,27 +457,27 @@ namespace Handbrake
         // Help Menu --------------------------------------------------------------
         private void mnu_wiki_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("http://handbrake.m0k.org/trac");
+           Process.Start("http://handbrake.m0k.org/trac");
         }
 
         private void mnu_onlineDocs_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("http://handbrake.m0k.org/?page_id=11");
+            Process.Start("http://handbrake.m0k.org/?page_id=11");
         }
 
         private void mnu_faq_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("http://handbrake.m0k.org/trac/wiki/WindowsGuiFaq");
+            Process.Start("http://handbrake.m0k.org/trac/wiki/WindowsGuiFaq");
         }
 
         private void mnu_homepage_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("http://handbrake.m0k.org");
+           Process.Start("http://handbrake.m0k.org");
         }
 
         private void mnu_forum_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("http://handbrake.m0k.org/forum");
+            Process.Start("http://handbrake.m0k.org/forum");
         }
 
         private void mnu_about_Click(object sender, EventArgs e)
@@ -564,7 +531,7 @@ namespace Handbrake
             DVD_Save.ShowDialog();
             text_destination.Text = DVD_Save.FileName;
 
-            if (Check_ChapterMarkers.CheckState.ToString() == "Checked")
+            if (Check_ChapterMarkers.Checked)
             {
                 string destination = text_destination.Text;
                 destination = destination.Replace(".mp4", ".m4v");
@@ -601,7 +568,6 @@ namespace Handbrake
             if (QueryEditorText.Text == "")
             {
                 query = GenerateTheQuery();
-                MessageBox.Show(query);
             }
             else
             {
@@ -631,11 +597,11 @@ namespace Handbrake
             QueryEditorText.Text = "";
             if ((drop_chapterFinish.Text != "Auto") && (drop_chapterStart.Text != "Auto"))
             {
-                int chapterFinish = int.Parse(drop_chapterFinish.Text);
-                int chapterStart = int.Parse(drop_chapterStart.Text);
-
                 try
                 {
+                    int chapterFinish = int.Parse(drop_chapterFinish.Text);
+                    int chapterStart = int.Parse(drop_chapterStart.Text);
+
                     if (chapterFinish < chapterStart)
                     {
                         MessageBox.Show("Invalid Chapter Range! - Final chapter can not be smaller than the starting chapter.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -655,11 +621,11 @@ namespace Handbrake
             QueryEditorText.Text = "";
             if ((drop_chapterFinish.Text != "Auto") && (drop_chapterStart.Text != "Auto"))
             {
-                int chapterFinish = int.Parse(drop_chapterFinish.Text);
-                int chapterStart = int.Parse(drop_chapterStart.Text);
-
                 try
                 {
+                    int chapterFinish = int.Parse(drop_chapterFinish.Text);
+                    int chapterStart = int.Parse(drop_chapterStart.Text);
+
                     if (chapterFinish > chapterStart)
                     {
                         MessageBox.Show("Invalid Chapter Range! - Start chapter can not be larger than the Final chapter.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -697,14 +663,14 @@ namespace Handbrake
 
         private void label_h264_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://handbrake.m0k.org/trac/wiki/x264Options");
+            Process.Start("http://handbrake.m0k.org/trac/wiki/x264Options");
         }
 
         private void text_width_TextChanged(object sender, EventArgs e)
         {
             try
             {
-                if (CheckPixelRatio.CheckState.ToString() == "Checked") {
+                if (CheckPixelRatio.Checked) {
                     text_width.Text = "";
                 } else {
                     if ((int.Parse(text_width.Text) % 16) != 0){
@@ -722,6 +688,7 @@ namespace Handbrake
                 }
                
             } catch(Exception){
+                
             }
         }
 
@@ -729,7 +696,7 @@ namespace Handbrake
         {
             try
             {
-                if (CheckPixelRatio.CheckState.ToString() == "Checked")
+                if (CheckPixelRatio.Checked)
                 {
                     text_height.Text = "";
                 }
@@ -745,6 +712,7 @@ namespace Handbrake
                     }
                 }
             } catch(Exception){
+                // No need to alert the user.
             }
         }
 
@@ -819,11 +787,13 @@ namespace Handbrake
 
             if (drp_audioCodec.Text == "AAC")
             {
+                drp_audioMixDown.Items.Clear();
                 drp_audioMixDown.Items.Add("Mono");
                 drp_audioMixDown.Items.Add("Stereo");
                 drp_audioMixDown.Items.Add("Dolby Surround");
                 drp_audioMixDown.Items.Add("Dolby Pro Logic II");
                 drp_audioMixDown.Items.Add("6 Channel Discrete");
+                
                 drp_audioBitrate.Items.Clear();
                 drp_audioBitrate.Items.Add("32");
                 drp_audioBitrate.Items.Add("40");
@@ -839,6 +809,7 @@ namespace Handbrake
             }
             else
             {
+                drp_audioMixDown.Items.Clear();
                 drp_audioMixDown.Items.Add("Stereo");
                 drp_audioMixDown.Items.Add("Dolby Surround");
                 drp_audioMixDown.Items.Add("Dolby Pro Logic II");
@@ -891,7 +862,7 @@ namespace Handbrake
 
         private void Check_ChapterMarkers_CheckedChanged(object sender, EventArgs e)
         {
-            if (Check_ChapterMarkers.CheckState.ToString() == "Checked")
+            if (Check_ChapterMarkers.Checked)
             {
                 string destination = text_destination.Text;
                 destination = destination.Replace(".mp4", ".m4v");
@@ -998,36 +969,26 @@ namespace Handbrake
             string dvdChapter = "";
 
             if (source ==  "")
-            {
                 MessageBox.Show("No Source has been selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }else{
+            else
+            {
                 source = " -i " + '"' + source+ '"'; //'"'+
             }
 
             if (dvdTitle ==  "Automatic")
-            {
                 dvdTitle = "";
-            }else{
+            else
+            {
                 string[] titleInfo = dvdTitle.Split(' ');
                 dvdTitle = " -t "+ titleInfo[0];
             }
 
-
-
-
-            if ((chapterFinish.Equals("Auto") && chapterStart.Equals("Auto")))
-            {
+            if (chapterFinish.Equals("Auto") && chapterStart.Equals("Auto"))
                 dvdChapter = "";
-            }
             else if (chapterFinish == chapterStart)
-            {
                 dvdChapter = " -c " + chapterStart;
-            }
-
             else
-            {
                 dvdChapter = " -c " + chapterStart + "-" + chapterFinish;
-            }
 
             string querySource = source+ dvdTitle+ dvdChapter;
             // ----------------------------------------------------------------------
@@ -1039,70 +1000,61 @@ namespace Handbrake
             string audioEncoder = drp_audioCodec.Text;
             string width = text_width.Text;
             string height = text_height.Text;
-            if ((destination ==  ""))
-            {
+
+            if (destination ==  "")
                 MessageBox.Show("No destination has been selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-
             else
-            {
                 destination = " -o " + '"' + destination + '"'; //'"'+ 
+
+
+            switch (videoEncoder)
+            {
+                case "Mpeg 4":
+                    videoEncoder = " -e ffmpeg";
+                    break;
+                case "Xvid":
+                    videoEncoder = " -e xvid";
+                    break;
+                case "H.264":
+                    videoEncoder = " -e x264";
+                    break;
+                case "H.264 Baseline 1.3":
+                    videoEncoder = " -e x264b13";
+                    break;
+                case "H.264 (iPod)":
+                    videoEncoder = " -e x264b30";
+                    break;
+                default:
+                    Mixdown = " -e x264";
+                    break;
+            }
+           
+            switch (audioEncoder)
+            {
+                case "AAC":
+                    audioEncoder = " -E faac";
+                    break;
+                case "MP3":
+                    audioEncoder = " -E lame";
+                    break;
+                case "Vorbis":
+                    audioEncoder = " -E vorbis";
+                    break;
+                case "AC3":
+                    audioEncoder = " -E ac3";
+                    break;
+                default:
+                    Mixdown = " -E faac";
+                    break;
             }
 
-            if ((videoEncoder ==  "Mpeg 4"))
-            {
-                videoEncoder = " -e ffmpeg";
-            }
-
-            else if ((videoEncoder ==  "Xvid"))
-            {
-                videoEncoder = " -e xvid";
-            }
-
-            else if ((videoEncoder ==  "H.264"))
-            {
-                videoEncoder = " -e x264";
-            }
-
-            else if ((videoEncoder ==  "H.264 Baseline 1.3"))
-            {
-                videoEncoder = " -e x264b13";
-            }
-
-            else if ((videoEncoder ==  "H.264 (iPod)"))
-            {
-                videoEncoder = " -e x264b30";
-            }
-
-            if ((audioEncoder ==  "AAC"))
-            {
-                audioEncoder = " -E faac";
-            }
-
-            else if ((audioEncoder ==  "MP3"))
-            {
-                audioEncoder = " -E lame";
-            }
-
-            else if ((audioEncoder ==  "Vorbis"))
-            {
-                audioEncoder = " -E vorbis";
-            }
-
-            else if ((audioEncoder ==  "AC3"))
-            {
-                audioEncoder = " -E ac3";
-            }
-
-            if ((width !=  ""))
-            {
+            if (width !=  "")
                 width = " -w "+ width;
-            }
+            
 
-            if ((height !=  ""))
-            {
+            if (height !=  "")
                 height = " -l "+ height;
-            }
+            
 
             string queryDestination = destination+ videoEncoder+ audioEncoder+ width+ height;
             // ----------------------------------------------------------------------
@@ -1118,31 +1070,17 @@ namespace Handbrake
             string cropOut = "";
             // Returns Crop Query
 
-            if (cropSetting ==  "Auto Crop")
-            {
+            if (cropSetting == "Auto Crop")
                 cropOut = "";
-            }
-
-            else if (cropSetting ==  "No Crop")
-            {
+            else if (cropSetting == "No Crop")
                 cropOut = " --crop 0:0:0:0 ";
-            }
-
             else
-            {
-                cropOut = " --crop "+ cropTop+ ":"+ cropBottom+ ":"+ cropLeft+ ":"+ cropRight;
-            }
+                cropOut = " --crop " + cropTop + ":" + cropBottom + ":" + cropLeft + ":" + cropRight;
 
-            if ((subtitles ==  "None"))
-            {
+            if (subtitles ==  "None")
                 subtitles = "";
-            }
-
-            else if ((subtitles ==  ""))
-            {
+            else if (subtitles ==  "")
                 subtitles = "";
-            }
-
             else
             {
                 string[] tempSub;
@@ -1158,33 +1096,26 @@ namespace Handbrake
             string videoBitrate = text_bitrate.Text;
             string videoFilesize = text_filesize.Text;
             int videoQuality = slider_videoQuality.Value;
-            string vidQSetting;
-            string twoPassEncoding = check_2PassEncode.CheckState.ToString();
-            string deinterlace = check_DeInterlace.CheckState.ToString();
-            string grayscale = check_grayscale.CheckState.ToString();
+            string vidQSetting = "";
+            string twoPassEncoding = "";
+            string deinterlace = "";
+            string grayscale = "";
             string videoFramerate = drp_videoFramerate.Text;
-            string pixelRatio = CheckPixelRatio.CheckState.ToString();
-            string ChapterMarkers = Check_ChapterMarkers.CheckState.ToString();
-            string turboH264 = check_turbo.CheckState.ToString();
-            string largeFile = check_largeFile.CheckState.ToString();
+            string pixelRatio = "";
+            string ChapterMarkers = "";
+            string turboH264 = "";
+            string largeFile = "";
 
-            if ((videoBitrate !=  ""))
-            {
+            if (videoBitrate !=  "")
                 videoBitrate = " -b "+ videoBitrate;
-            }
 
-            if ((videoFilesize !=  ""))
-            {
+            if (videoFilesize !=  "")
                 videoFilesize = " -S "+ videoFilesize;
-            }
 
             // Video Quality Setting
 
             if ((videoQuality ==  0))
-            {
                 vidQSetting = "";
-            }
-
             else
             {
                 videoQuality = videoQuality/ 100;
@@ -1196,85 +1127,31 @@ namespace Handbrake
                 vidQSetting = " -q " + videoQuality.ToString();
             }
 
-            if ((twoPassEncoding ==  "1"))
-            {
+            if (check_2PassEncode.Checked)
                 twoPassEncoding = " -2 ";
-            }
 
-            else
-            {
-                twoPassEncoding = "";
-            }
-
-            if ((deinterlace ==  "1"))
-            {
+            if (check_DeInterlace.Checked)
                 deinterlace = " -d ";
-            }
 
-            else
-            {
-                deinterlace = "";
-            }
-
-            if ((grayscale ==  "1"))
-            {
+            if (check_grayscale.Checked)
                 grayscale = " -g ";
-            }
 
-            else
-            {
-                grayscale = "";
-            }
-
-            if ((videoFramerate ==  "Automatic"))
-            {
+            if (videoFramerate ==  "Automatic")
                 videoFramerate = "";
-            }
-
             else
-            {
                 videoFramerate = " -r "+ videoFramerate;
-            }
 
-            if ((pixelRatio ==  "1"))
-            {
+            if (CheckPixelRatio.Checked)
                 pixelRatio = " -p ";
-            }
 
-            else
-            {
-                pixelRatio = "";
-            }
-
-            if ((ChapterMarkers ==  "1"))
-            {
+            if (Check_ChapterMarkers.Checked)
                 ChapterMarkers = " -m ";
-            }
 
-            else
-            {
-                ChapterMarkers = "";
-            }
-
-            if ((turboH264 ==  "1"))
-            {
+            if (check_turbo.Checked)
                 turboH264 = " -T ";
-            }
 
-            else
-            {
-                turboH264 = "";
-            }
-
-            if ((largeFile ==  "1"))
-            {
+            if (check_largeFile.Checked)
                 largeFile = " -4 ";
-            }
-
-            else
-            {
-                largeFile = "";
-            }
 
             string queryVideoSettings = videoBitrate + videoFilesize + vidQSetting + twoPassEncoding + deinterlace + grayscale + videoFramerate + pixelRatio + ChapterMarkers + turboH264 + largeFile;
             // ----------------------------------------------------------------------
@@ -1286,26 +1163,17 @@ namespace Handbrake
             string audioChannels = drp_audioChannels.Text;
             string Mixdown = drp_audioMixDown.Text;
             string SixChannelAudio = "";
-            if ((audioBitrate !=  ""))
-            {
+
+            if (audioBitrate !=  "")
                 audioBitrate = " -B "+ audioBitrate;
-            }
 
-            if ((audioSampleRate !=  ""))
-            {
+            if (audioSampleRate !=  "")
                 audioSampleRate = " -R "+ audioSampleRate;
-            }
 
-            if ((audioChannels ==  "Automatic"))
-            {
+            if (audioChannels ==  "Automatic")
                 audioChannels = "";
-            }
-
-            else if ((audioChannels ==  ""))
-            {
+            else if (audioChannels ==  "")
                 audioChannels = "";
-            }
-
             else
             {
                 string[] tempSub;
@@ -1313,50 +1181,35 @@ namespace Handbrake
                 audioChannels = " -a "+ tempSub[0];
             }
 
-            if ((Mixdown ==  "Automatic"))
+            switch (Mixdown)
             {
-                Mixdown = "";
+                case "Automatic":
+                    Mixdown = "";
+                    break;
+                case "Mono":
+                    Mixdown = "mono";
+                    break;
+                case "Stereo":
+                    Mixdown = "stereo";
+                    break;
+                case "Dolby Surround":
+                    Mixdown = "dpl1";
+                    break;
+                case "Dolby Pro Logic II":
+                    Mixdown = "dpl2";
+                    break;
+                case "6 Channel Discrete":
+                    Mixdown = "6ch";
+                    break;
+                default:
+                    Mixdown = "stero";
+                    break;
             }
 
-            else if (Mixdown ==  "Mono")
-            {
-                Mixdown = "mono";
-            }
-
-            else if (Mixdown ==  "Stereo")
-            {
-                Mixdown = "stereo";
-            }
-
-            else if (Mixdown ==  "Dolby Surround")
-            {
-                Mixdown = "dpl1";
-            }
-
-            else if (Mixdown ==  "Dolby Pro Logic II")
-            {
-                Mixdown = "dpl2";
-            }
-
-            else if (Mixdown ==  "6 Channel Discrete")
-            {
-                Mixdown = "6ch";
-            }
-
-            else
-            {
-                Mixdown = "stero";
-            }
-
-            if ((Mixdown !=  ""))
-            {
+            if (Mixdown !=  "")
                 SixChannelAudio = " -6 "+ Mixdown;
-            }
-
             else
-            {
                 SixChannelAudio = "";
-            }
 
             string queryAudioSettings = audioBitrate+ audioSampleRate+ audioChannels+ SixChannelAudio;
             // ----------------------------------------------------------------------
@@ -1366,24 +1219,15 @@ namespace Handbrake
             string CRF = CheckCRF.CheckState.ToString();
             string h264Advanced = rtf_h264advanced.Text;
             if ((CRF ==  "1"))
-            {
                 CRF = " -Q ";
-            }
-
             else
-            {
                 CRF = "";
-            }
 
             if ((h264Advanced ==  ""))
-            {
                 h264Advanced = "";
-            }
-
             else
-            {
                 h264Advanced = " -x "+ h264Advanced;
-            }
+    
 
             string h264Settings = CRF+ h264Advanced;
             // ----------------------------------------------------------------------
@@ -1393,15 +1237,11 @@ namespace Handbrake
             string processors = Properties.Settings.Default.Processors;
             //  Number of Processors Handler
 
-            if ((processors ==  "Automatic"))
-            {
+            if (processors ==  "Automatic")
                 processors = "";
-            }
-
             else
-            {
                 processors = " -C "+ processors+ " ";
-            }
+
 
             string queryAdvancedSettings = processors;
             // ----------------------------------------------------------------------
@@ -1409,10 +1249,8 @@ namespace Handbrake
             //  Verbose option (Program Settings)
 
             string verbose = "";
-            if ( Properties.Settings.Default.verbose ==  "1")
-            {
+            if (Properties.Settings.Default.verbose ==  "1")
                 verbose = " -v ";
-            }
 
             // ----------------------------------------------------------------------
 

@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Threading;
 
 
 namespace Handbrake
@@ -30,7 +31,7 @@ namespace Handbrake
             btn_ok.Enabled = false;
             lbl_pressOk.Visible = false;
             // throw cli call and parsing on it's own thread
-            System.Threading.ThreadPool.QueueUserWorkItem(startProc);
+            ThreadPool.QueueUserWorkItem(startProc);
         }
 
         private void updateUIElements()
@@ -68,6 +69,11 @@ namespace Handbrake
             thisDvd = Parsing.DVD.Parse(readData);
 
             updateUIElements();
+        }
+
+        private void frmReadDVD_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
