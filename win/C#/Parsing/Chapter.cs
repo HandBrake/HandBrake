@@ -16,7 +16,7 @@ namespace Handbrake.Parsing
             }
         }
 
-        /*private int[] m_cellRange;
+        private int[] m_cellRange;
         public int[] CellRange
         {
             get
@@ -32,7 +32,7 @@ namespace Handbrake.Parsing
             {
                 return this.m_blocks;
             }
-        }*/
+        }
 
         private TimeSpan m_duration;
         public TimeSpan Duration
