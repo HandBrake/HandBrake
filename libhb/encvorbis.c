@@ -39,6 +39,7 @@ struct hb_work_private_s
     hb_list_t     * list;
     int           out_discrete_channels;
     int           channel_map[6];
+    int64_t       prev_blocksize;
 };
 
 int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
@@ -160,6 +161,7 @@ static hb_buffer_t * Flush( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * buf;
+    int64_t     blocksize = 0;
 
     if( vorbis_analysis_blockout( &pv->vd, &pv->vb ) == 1 )
     {
@@ -174,12 +176,12 @@ static hb_buffer_t * Flush( hb_work_object_t * w )
             memcpy( buf->data, &op, sizeof( ogg_packet ) );
             memcpy( buf->data + sizeof( ogg_packet ), op.packet,
                     op.bytes );
+            blocksize = vorbis_packet_blocksize(&pv->vi, &op);
             buf->frametype   = HB_FRAME_AUDIO;
-            buf->start = pv->pts; /* No exact, but who cares - the OGM
-                                    muxer doesn't use it */
-            buf->stop  = buf->start +
-                90000 * OGGVORBIS_FRAME_SIZE + pv->job->arate;
-
+            buf->start = (int64_t)(vorbis_granule_time(&pv->vd, op.granulepos) * 90000);
+            buf->stop  = (int64_t)(vorbis_granule_time(&pv->vd, (pv->prev_blocksize + blocksize)/4 + op.granulepos) * 90000);
+            /* The stop time isn't accurate for the first ~3 packets, as the actual blocksize depends on the previous _and_ current packets. */
+            pv->prev_blocksize = blocksize;
             return buf;
         }
     }
