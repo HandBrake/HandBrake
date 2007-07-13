@@ -70,10 +70,5 @@ namespace Handbrake
 
             updateUIElements();
         }
-
-        private void frmReadDVD_Load(object sender, EventArgs e)
-        {
-
-        }
     }
 }

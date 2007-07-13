@@ -10,19 +10,31 @@ namespace Handbrake
 {
     public partial class frmQueue : Form
     {
-        public frmQueue()
+        private string query = "";
+
+        public frmQueue(string query)
         {
             InitializeComponent();
+            this.query = query;
         }
 
         public void addItem(String item)
         {
             list_queue.Items.Add(item);
+            MessageBox.Show("test");
         }
 
         private void btn_Close_Click(object sender, EventArgs e)
         {
             this.Close();
         }
+
+        private void frmQueue_Load(object sender, EventArgs e)
+        {
+            addItem(query);
+            MessageBox.Show("test");
+        }
+
+
     }
 }

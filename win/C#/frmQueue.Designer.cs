@@ -148,6 +148,7 @@ namespace Handbrake
             this.Name = "frmQueue";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Queue";
+            this.Load += new System.EventHandler(this.frmQueue_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

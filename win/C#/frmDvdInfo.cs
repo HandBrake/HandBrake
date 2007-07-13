@@ -8,14 +8,14 @@ using System.Windows.Forms;
 
 namespace Handbrake
 {
-    public partial class frmDVDData : Form
+    public partial class frmDvdInfo : Form
     {
 
         /*
          * This window should be used to display the RAW output of the handbrake CLI which is produced during the scan.
          */
 
-        public frmDVDData()
+        public frmDvdInfo()
         {
             InitializeComponent();
         }

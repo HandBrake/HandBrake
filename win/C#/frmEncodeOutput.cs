@@ -12,7 +12,8 @@ namespace Handbrake
     {
 
         /*
-         * This window should be used to display the RAW output of the handbrake CLI which is produced during the scan.
+         * This window will be used to display the raw output of hbcli.exe when it is encoding.
+         * 
          */
 
         public frmDVDData()
@@ -23,6 +24,11 @@ namespace Handbrake
         private void btn_close_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void frmDVDData_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

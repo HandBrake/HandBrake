@@ -317,13 +317,14 @@ namespace Handbrake
         // TOOLS MENU --------------------------------------------------------------
         private void mnu_encode_Click(object sender, EventArgs e)
         {
-            Form Queue = new frmQueue();
+            string query = ""; // temp fix for bug here.
+            Form Queue = new frmQueue(query);
             Queue.ShowDialog();
         }
 
         private void mnu_viewDVDdata_Click(object sender, EventArgs e)
         {
-            Form DVDData = new frmDVDData();
+            Form DVDData = new frmDvdInfo();
             DVDData.Show();
         }
 
@@ -557,7 +558,9 @@ namespace Handbrake
 
         private void btn_queue_Click(object sender, EventArgs e)
         {
-            Form Queue = new frmQueue();
+            String query = GenerateTheQuery();
+            MessageBox.Show(query);
+            Form Queue = new frmQueue(query);
             Queue.Show();
         }
 
@@ -1025,7 +1028,7 @@ namespace Handbrake
                     videoEncoder = " -e x264b30";
                     break;
                 default:
-                    Mixdown = " -e x264";
+                    videoEncoder = " -e x264";
                     break;
             }
            
@@ -1044,7 +1047,7 @@ namespace Handbrake
                     audioEncoder = " -E ac3";
                     break;
                 default:
-                    Mixdown = " -E faac";
+                    audioEncoder = " -E faac";
                     break;
             }
 
