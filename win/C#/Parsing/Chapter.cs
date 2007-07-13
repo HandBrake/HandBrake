@@ -16,7 +16,7 @@ namespace Handbrake.Parsing
             }
         }
 
-        private int[] m_cellRange;
+        /*private int[] m_cellRange;
         public int[] CellRange
         {
             get
@@ -32,7 +32,7 @@ namespace Handbrake.Parsing
             {
                 return this.m_blocks;
             }
-        }
+        }*/
 
         private TimeSpan m_duration;
         public TimeSpan Duration
@@ -51,8 +51,8 @@ namespace Handbrake.Parsing
                 Chapter thisChapter = new Chapter();
                 string[] splitter = curLine.Split(new string[] { "    + ", ": cells ", ", ", " blocks, duration ", "->" }, StringSplitOptions.RemoveEmptyEntries);
                 thisChapter.m_chapterNumber = int.Parse(splitter[0]);
-                thisChapter.m_cellRange = new int[2] { int.Parse(splitter[1]), int.Parse(splitter[2]) };
-                thisChapter.m_blocks = int.Parse(splitter[3]);
+                //thisChapter.m_cellRange = new int[2] { int.Parse(splitter[1]), int.Parse(splitter[2]) };
+                //thisChapter.m_blocks = int.Parse(splitter[3]);
                 thisChapter.m_duration = TimeSpan.Parse(splitter[4]);
                 return thisChapter;
             }

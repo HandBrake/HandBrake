@@ -133,7 +133,6 @@ namespace Handbrake
         }
 
 
-
         // --------------------------------------------------------------
         // The Menu Bar
         // --------------------------------------------------------------
@@ -317,9 +316,7 @@ namespace Handbrake
         // TOOLS MENU --------------------------------------------------------------
         private void mnu_encode_Click(object sender, EventArgs e)
         {
-            string query = ""; // temp fix for bug here.
-            Form Queue = new frmQueue(query);
-            Queue.ShowDialog();
+            //Queue.ShowDialog();
         }
 
         private void mnu_viewDVDdata_Click(object sender, EventArgs e)
@@ -507,7 +504,6 @@ namespace Handbrake
                     Form frmReadDVD = new frmReadDVD(filename, this);
                     frmReadDVD.ShowDialog();
                 }
-
             }
             else
             {
@@ -519,10 +515,7 @@ namespace Handbrake
                     Form frmReadDVD = new frmReadDVD(filename, this);
                     frmReadDVD.ShowDialog();
                 }
-
-            }
-
-                
+            }  
         }
 
         private void btn_destBrowse_Click(object sender, EventArgs e)
@@ -556,12 +549,15 @@ namespace Handbrake
             QueryEditorText.Text = "";
         }
 
+
+        
+     
+        private frmQueue queueWindow = (frmQueue)new frmQueue();
         private void btn_queue_Click(object sender, EventArgs e)
         {
             String query = GenerateTheQuery();
-            MessageBox.Show(query);
-            Form Queue = new frmQueue(query);
-            Queue.Show();
+            queueWindow.list_queue.Items.Add(query);
+            queueWindow.Show();
         }
 
         private void btn_encode_Click(object sender, EventArgs e)

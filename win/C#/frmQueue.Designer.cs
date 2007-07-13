@@ -36,6 +36,9 @@ namespace Handbrake
             this.btn_q_encoder = new System.Windows.Forms.Button();
             this.list_queue = new System.Windows.Forms.ListBox();
             this.btn_Close = new System.Windows.Forms.Button();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.label2 = new System.Windows.Forms.Label();
+            this.lbl_progressValue = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btn_down
@@ -52,6 +55,7 @@ namespace Handbrake
             this.btn_down.TabStop = false;
             this.btn_down.Text = "Move Down";
             this.btn_down.UseVisualStyleBackColor = false;
+            this.btn_down.Click += new System.EventHandler(this.btn_down_Click);
             // 
             // btn_up
             // 
@@ -67,6 +71,7 @@ namespace Handbrake
             this.btn_up.TabStop = false;
             this.btn_up.Text = "Move Up";
             this.btn_up.UseVisualStyleBackColor = false;
+            this.btn_up.Click += new System.EventHandler(this.btn_up_Click);
             // 
             // btn_delete
             // 
@@ -82,6 +87,7 @@ namespace Handbrake
             this.btn_delete.TabStop = false;
             this.btn_delete.Text = "Delete Item";
             this.btn_delete.UseVisualStyleBackColor = false;
+            this.btn_delete.Click += new System.EventHandler(this.btn_delete_Click);
             // 
             // Label1
             // 
@@ -106,6 +112,7 @@ namespace Handbrake
             this.btn_q_encoder.TabStop = false;
             this.btn_q_encoder.Text = "Encode Video(s)";
             this.btn_q_encoder.UseVisualStyleBackColor = false;
+            this.btn_q_encoder.Click += new System.EventHandler(this.btn_q_encoder_Click);
             // 
             // list_queue
             // 
@@ -113,7 +120,7 @@ namespace Handbrake
             this.list_queue.FormattingEnabled = true;
             this.list_queue.Location = new System.Drawing.Point(10, 37);
             this.list_queue.Name = "list_queue";
-            this.list_queue.Size = new System.Drawing.Size(630, 327);
+            this.list_queue.Size = new System.Drawing.Size(630, 288);
             this.list_queue.TabIndex = 28;
             // 
             // btn_Close
@@ -132,11 +139,40 @@ namespace Handbrake
             this.btn_Close.UseVisualStyleBackColor = false;
             this.btn_Close.Click += new System.EventHandler(this.btn_Close_Click);
             // 
+            // progressBar
+            // 
+            this.progressBar.Location = new System.Drawing.Point(74, 331);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(513, 23);
+            this.progressBar.TabIndex = 34;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 336);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(51, 13);
+            this.label2.TabIndex = 35;
+            this.label2.Text = "Progress:";
+            // 
+            // lbl_progressValue
+            // 
+            this.lbl_progressValue.AutoSize = true;
+            this.lbl_progressValue.Location = new System.Drawing.Point(593, 337);
+            this.lbl_progressValue.Name = "lbl_progressValue";
+            this.lbl_progressValue.Size = new System.Drawing.Size(24, 13);
+            this.lbl_progressValue.TabIndex = 36;
+            this.lbl_progressValue.Text = "0 %";
+            // 
             // frmQueue
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(651, 404);
+            this.ControlBox = false;
+            this.Controls.Add(this.lbl_progressValue);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.progressBar);
             this.Controls.Add(this.btn_down);
             this.Controls.Add(this.btn_up);
             this.Controls.Add(this.btn_delete);
@@ -148,7 +184,6 @@ namespace Handbrake
             this.Name = "frmQueue";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Queue";
-            this.Load += new System.EventHandler(this.frmQueue_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -163,5 +198,8 @@ namespace Handbrake
         internal System.Windows.Forms.Button btn_q_encoder;
         internal System.Windows.Forms.ListBox list_queue;
         internal System.Windows.Forms.Button btn_Close;
+        private System.Windows.Forms.ProgressBar progressBar;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lbl_progressValue;
     }
 }

@@ -33,7 +33,7 @@ namespace Handbrake
             // throw cli call and parsing on it's own thread
             ThreadPool.QueueUserWorkItem(startProc);
         }
-
+     
         private void updateUIElements()
         {
             if (this.InvokeRequired)
