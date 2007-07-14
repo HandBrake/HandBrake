@@ -224,4 +224,5 @@ typedef struct hb_mux_data_s   hb_mux_data_t;
 DECLARE_MUX( mp4 );
 DECLARE_MUX( avi );
 DECLARE_MUX( ogm );
+DECLARE_MUX( mkv );
 

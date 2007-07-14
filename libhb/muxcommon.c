@@ -80,6 +80,8 @@ static void MuxerFunc( void * _mux )
             case HB_MUX_OGM:
                 m = hb_mux_ogm_init( job );
                 break;
+            case HB_MUX_MKV:
+                m = hb_mux_mkv_init( job );
         }
     }
 

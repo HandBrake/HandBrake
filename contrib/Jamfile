@@ -390,3 +390,18 @@ Wget        $(SUBDIR)/zlib.tar.gz   : $(SUBDIR)/version_zlib.txt ;
 Zlib $(SUBDIR)/lib/libz.a : $(SUBDIR)/zlib.tar.gz ;
 }
 
+rule LibMkv
+{
+    Depends $(<) : $(>) ;
+    Depends lib  : $(<) ;
+}
+actions LibMkv
+{
+    cd `dirname $(>)` && CONTRIB=`pwd` &&
+    rm -rf libmkv && tar xzf libmkv.tar.gz && cd libmkv &&
+    ./configure --disable-shared --enable-static --prefix=$CONTRIB &&
+    make && make install &&
+    strip -S $CONTRIB/lib/libmkv.a
+}
+Wget    $(SUBDIR)/libmkv.tar.gz : $(SUBDIR)/version_libmkv.txt ;
+LibMkv  $(SUBDIR)/lib/libmkv.a  : $(SUBDIR)/libmkv.tar.gz ;

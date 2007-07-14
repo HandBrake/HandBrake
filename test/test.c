@@ -741,7 +741,7 @@ static void ShowHelp()
 	
 	"### Destination Options------------------------------------------------------\n\n"
     "    -o, --output <string>   Set output file name\n"
-	"    -f, --format <string>   Set output format (avi/mp4/ogm, default:\n"
+	"    -f, --format <string>   Set output format (avi/mp4/ogm/mkv, default:\n"
     "                            autodetected from file name)\n"
     "    -4, --large-file        Use 64-bit mp4 files that can hold more than\n"
     "                            4 GB. Note: Breaks iPod, @TV, PS3 compatibility.\n"""
@@ -966,7 +966,7 @@ static int ParseOptions( int argc, char ** argv )
                 else if( !strcasecmp( optarg, "dpl2" ) )
                 {
                     audio_mixdown = HB_AMIXDOWN_DOLBYPLII;
-				}
+                }
                 else if( !strcasecmp( optarg, "6ch" ) )
                 {
                     audio_mixdown = HB_AMIXDOWN_6CH;
@@ -1011,11 +1011,11 @@ static int ParseOptions( int argc, char ** argv )
                     vcodec = HB_VCODEC_X264;
                     h264_13 = 1;
                 }
-		else if( !strcasecmp( optarg, "x264b30" ) )
-		{
-		    vcodec = HB_VCODEC_X264;
-		    h264_30 = 1;
-		}
+                else if( !strcasecmp( optarg, "x264b30" ) )
+                {
+                    vcodec = HB_VCODEC_X264;
+                    h264_30 = 1;
+                }
                 else
                 {
                     fprintf( stderr, "invalid codec (%s)\n", optarg );
@@ -1030,6 +1030,14 @@ static int ParseOptions( int argc, char ** argv )
                 else if( !strcasecmp( optarg, "lame" ) )
                 {
                     acodec = HB_ACODEC_LAME;
+                }
+                else if( !strcasecmp( optarg, "faac" ) )
+                {
+                    acodec = HB_ACODEC_FAAC;
+                }
+                else if( !strcasecmp( optarg, "vorbis") )
+                {
+                    acodec = HB_ACODEC_VORBIS;
                 }
                 break;
             case 'w':
@@ -1159,17 +1167,21 @@ static int CheckOptions( int argc, char ** argv )
                 mux = HB_MUX_AVI;
             }
             else if( p && ( !strcasecmp( p, ".mp4" )  ||
-							!strcasecmp( p, ".m4v" ) ) )
+                            !strcasecmp( p, ".m4v" ) ) )
             {
-	    	if ( h264_30 == 1 )
+                if ( h264_30 == 1 )
                     mux = HB_MUX_IPOD;
-		else
-		    mux = HB_MUX_MP4;
+                else
+                    mux = HB_MUX_MP4;
             }
             else if( p && ( !strcasecmp( p, ".ogm" ) ||
                             !strcasecmp( p, ".ogg" ) ) )
             {
                 mux = HB_MUX_OGM;
+            }
+            else if( p && !strcasecmp(p, ".mkv" ) )
+            {
+                mux = HB_MUX_MKV;
             }
             else
             {
@@ -1184,20 +1196,24 @@ static int CheckOptions( int argc, char ** argv )
         }
         else if( !strcasecmp( format, "mp4" ) )
         {
-	    if ( h264_30 == 1)
-	        mux = HB_MUX_IPOD;
+            if ( h264_30 == 1)
+                mux = HB_MUX_IPOD;
             else
-	        mux = HB_MUX_MP4;
+                mux = HB_MUX_MP4;
         }
         else if( !strcasecmp( format, "ogm" ) ||
                  !strcasecmp( format, "ogg" ) )
         {
             mux = HB_MUX_OGM;
         }
+        else if( !strcasecmp( format, "mkv" ) )
+        {
+            mux = HB_MUX_MKV;
+        }
         else
         {
             fprintf( stderr, "Invalid output format (%s). Possible "
-                     "choices are avi, mp4 and ogm\n.", format );
+                     "choices are avi, mp4, m4v, ogm, ogg and mkv\n.", format );
             return 1;
         }
 
@@ -1214,6 +1230,10 @@ static int CheckOptions( int argc, char ** argv )
             else if( mux == HB_MUX_OGM )
             {
                 acodec = HB_ACODEC_VORBIS;
+            }
+            else if( mux == HB_MUX_MKV )
+            {
+                acodec = HB_ACODEC_AC3;
             }
         }
 

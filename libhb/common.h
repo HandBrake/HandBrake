@@ -243,6 +243,7 @@ struct hb_job_s
 #define HB_MUX_AVI  0x040000
 #define HB_MUX_OGM  0x080000
 #define HB_MUX_IPOD 0x100000
+#define HB_MUX_MKV  0x200000
 	
     int             mux;
     const char          * file;
