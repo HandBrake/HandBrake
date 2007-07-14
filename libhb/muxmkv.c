@@ -192,7 +192,7 @@ static int MKVInit( hb_mux_object_t * m )
         track->audio.channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown);
 //        track->defaultDuration = job->arate * 1000;
         mux_data->track = mk_createTrack(m->file, track);
-        if (track->codecPrivate != NULL)
+        if (job->acodec == HB_ACODEC_VORBIS && track->codecPrivate != NULL)
           free(track->codecPrivate);
     }
 
