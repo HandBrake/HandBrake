@@ -86,6 +86,30 @@ namespace Handbrake
                 hbProc.StartInfo.Arguments = query;
                 hbProc.StartInfo.UseShellExecute = false;
                 hbProc.Start();
+                // Set the process Priority
+                string priority = Properties.Settings.Default.processPriority;
+                switch (priority)
+                {
+                    case "Realtime":
+                        hbProc.PriorityClass = ProcessPriorityClass.RealTime;
+                        break;
+                    case "High":
+                        hbProc.PriorityClass = ProcessPriorityClass.High;
+                        break;
+                    case "Above Normal":
+                        hbProc.PriorityClass = ProcessPriorityClass.AboveNormal;
+                        break;
+                    case "Normal":
+                        hbProc.PriorityClass = ProcessPriorityClass.Normal;
+                        break;
+                    case "Low":
+                        hbProc.PriorityClass = ProcessPriorityClass.Idle;
+                        break;
+                    default:
+                        hbProc.PriorityClass = ProcessPriorityClass.BelowNormal;
+                        break;
+                }
+
                 hbProc.WaitForExit();
                 hbProc.Close();
                 counter++;
@@ -95,7 +119,7 @@ namespace Handbrake
 
         private void updateUIElements(int progressSplit)
         {
-            // This needs to be written so there is no cross-thread problems
+            // This needs to be written so there is no cross-thread problems ********************
             thisWindow.list_queue.Items.Remove(0);
             progressBar.Value = progressBar.Value + progressSplit;
             progressBar.Update();

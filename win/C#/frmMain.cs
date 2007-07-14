@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Net;
 using System.IO;
 using System.Diagnostics;
+using System.Threading;
 
 namespace Handbrake
 {
@@ -316,7 +317,7 @@ namespace Handbrake
         // TOOLS MENU --------------------------------------------------------------
         private void mnu_encode_Click(object sender, EventArgs e)
         {
-            //Queue.ShowDialog();
+            showQueue();
         }
 
         private void mnu_viewDVDdata_Click(object sender, EventArgs e)
@@ -549,14 +550,16 @@ namespace Handbrake
             QueryEditorText.Text = "";
         }
 
-
-        
-     
         private frmQueue queueWindow = (frmQueue)new frmQueue();
         private void btn_queue_Click(object sender, EventArgs e)
         {
             String query = GenerateTheQuery();
             queueWindow.list_queue.Items.Add(query);
+            queueWindow.Show();
+        }
+
+        private void showQueue()
+        {
             queueWindow.Show();
         }
 
@@ -578,13 +581,49 @@ namespace Handbrake
             hbProc.StartInfo.Arguments = query;
             hbProc.StartInfo.UseShellExecute = false;
             hbProc.Start();
-            
 
-            MessageBox.Show("The encode process has now started.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            // Set the process Priority
+            string priority = Properties.Settings.Default.processPriority;
+            switch (priority)
+            {
+                case "Realtime":
+                    hbProc.PriorityClass = ProcessPriorityClass.RealTime;
+                    break;
+                case "High":
+                    hbProc.PriorityClass = ProcessPriorityClass.High;
+                    break;
+                case "Above Normal":
+                    hbProc.PriorityClass = ProcessPriorityClass.AboveNormal;
+                    break;
+                case "Normal":
+                    hbProc.PriorityClass = ProcessPriorityClass.Normal;
+                    break;
+                case "Low":
+                    hbProc.PriorityClass = ProcessPriorityClass.Idle;
+                    break;
+                default:
+                    hbProc.PriorityClass = ProcessPriorityClass.BelowNormal;
+                    break;
+            }
+            
+            //hbProc.WaitForExit;
+            //hbProc.Close;
+            ThreadPool.QueueUserWorkItem(procMonitor);
+           
+
+            
        
             // TODO: Need to write a bit of code here to do process monitoring.
             // Note: hbProc.waitForExit will freeze the app, meaning one cannot add additional items to the queue during an encode.
         }
+
+        private void procMonitor(object state)
+        {
+           MessageBox.Show("The encode process has now started.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+        }
+
+
+
 
         // -------------------------------------------------------------- 
         // Items that require actions on frmMain
@@ -625,7 +664,7 @@ namespace Handbrake
                     int chapterFinish = int.Parse(drop_chapterFinish.Text);
                     int chapterStart = int.Parse(drop_chapterStart.Text);
 
-                    if (chapterFinish > chapterStart)
+                    if (chapterFinish < chapterStart)
                     {
                         MessageBox.Show("Invalid Chapter Range! - Start chapter can not be larger than the Final chapter.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
@@ -679,15 +718,17 @@ namespace Handbrake
                     }
                 }
 
+                // There is a bug here *******************************************************************
                 if (!lbl_Aspect.Text.Equals("Select a Title")){
                     int height = int.Parse(text_width.Text) / int.Parse(lbl_Aspect.Text);
+                    MessageBox.Show("test");
                     int mod16 = height % 16;
                     height = height - mod16;
                     text_height.Text = height.ToString();
                 }
                
             } catch(Exception){
-                
+                // No need to alert the user if there is a problem here.
             }
         }
 
@@ -917,6 +958,8 @@ namespace Handbrake
             // Reset some values on the form
             lbl_Aspect.Text = "Select a Title";
             lbl_RecomendedCrop.Text = "Select a Title";
+            drop_chapterStart.Items.Clear();
+            drop_chapterFinish.Items.Clear();
             QueryEditorText.Text = "";
 
             // If the dropdown is set to automatic nothing else needs to be done.
@@ -938,10 +981,28 @@ namespace Handbrake
                     {
                         lbl_Aspect.Text = thisDVD.Titles[counter].AspectRatio.ToString();
                         lbl_RecomendedCrop.Text = thisDVD.Titles[counter].AutoCropDimensions[0] + "/" + thisDVD.Titles[counter].AutoCropDimensions[1] + "/" + thisDVD.Titles[counter].AutoCropDimensions[2] + "/" + thisDVD.Titles[counter].AutoCropDimensions[3];
+
+                        // Chapter Dropdown Menus
+                        int chapterCount = thisDVD.Titles[counter].Chapters.Count;
+                        int loopCouter = 1;
+                        while (loopCouter <= chapterCount) 
+                        {
+                            drop_chapterStart.Items.Add(loopCouter);
+                            drop_chapterFinish.Items.Add(loopCouter);
+
+                            drop_chapterStart.Text = "1";
+                            drop_chapterFinish.Text = loopCouter.ToString();
+                            loopCouter++;
+                        }
+
+                        // Audio Drop down Menu.
+                        //thisDVD.Titles[counter].AudioTracks[0].ToString()
+
+                        // Subtitle Dropdown Menu.
+
                         // Still need to set these up.
-                        MessageBox.Show(thisDVD.Titles[counter].AudioTracks[0].ToString());
-                        MessageBox.Show(thisDVD.Titles[counter].Chapters.ToString());
-                        MessageBox.Show(thisDVD.Titles[counter].Subtitles.ToString());
+                        //thisDVD.Titles[counter].Subtitles.ToString()
+     
                     }
                     counter++;
                 }

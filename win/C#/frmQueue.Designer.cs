@@ -149,7 +149,7 @@ namespace Handbrake
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 336);
+            this.label2.Location = new System.Drawing.Point(7, 337);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(51, 13);
             this.label2.TabIndex = 35;
@@ -158,7 +158,7 @@ namespace Handbrake
             // lbl_progressValue
             // 
             this.lbl_progressValue.AutoSize = true;
-            this.lbl_progressValue.Location = new System.Drawing.Point(593, 337);
+            this.lbl_progressValue.Location = new System.Drawing.Point(605, 337);
             this.lbl_progressValue.Name = "lbl_progressValue";
             this.lbl_progressValue.Size = new System.Drawing.Size(24, 13);
             this.lbl_progressValue.TabIndex = 36;
