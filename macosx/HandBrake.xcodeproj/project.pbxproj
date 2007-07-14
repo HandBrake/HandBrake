@@ -116,6 +116,8 @@
 		A29E058B0BE12889000533F5 /* Growl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A29E057F0BE1283E000533F5 /* Growl.framework */; };
 		EAA526930C3B25D200944FF2 /* stream.c in Sources */ = {isa = PBXBuildFile; fileRef = EAA526920C3B25D200944FF2 /* stream.c */; };
 		EAA526940C3B25D200944FF2 /* stream.c in Sources */ = {isa = PBXBuildFile; fileRef = EAA526920C3B25D200944FF2 /* stream.c */; };
+		FC6CE2C10C495A6B001A2D5B /* muxmkv.c in Sources */ = {isa = PBXBuildFile; fileRef = FC6CE2C00C495A6B001A2D5B /* muxmkv.c */; };
+		FC6CE2C20C495A6B001A2D5B /* muxmkv.c in Sources */ = {isa = PBXBuildFile; fileRef = FC6CE2C00C495A6B001A2D5B /* muxmkv.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -234,6 +236,7 @@
 		59CBD2360BBB44DA004A3BE3 /* parsecsv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = parsecsv.c; path = ../test/parsecsv.c; sourceTree = SOURCE_ROOT; };
 		A29E057F0BE1283E000533F5 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Growl.framework; sourceTree = "<group>"; };
 		EAA526920C3B25D200944FF2 /* stream.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = stream.c; path = ../libhb/stream.c; sourceTree = SOURCE_ROOT; };
+		FC6CE2C00C495A6B001A2D5B /* muxmkv.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = muxmkv.c; path = ../libhb/muxmkv.c; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -299,6 +302,7 @@
 		29B97314FDCFA39411CA2CEA /* HandBrake */ = {
 			isa = PBXGroup;
 			children = (
+				FC6CE2C00C495A6B001A2D5B /* muxmkv.c */,
 				526FBC940B4CAA310064E04C /* Instant HandBrake Sources */,
 				526FBC930B4CAA260064E04C /* HandBrake Sources */,
 				526FBC920B4CAA120064E04C /* HandBrakeCLI Sources */,
@@ -640,6 +644,7 @@
 				0D096E030B707D3400A845D4 /* decavcodec.c in Sources */,
 				5558B56A0BE3BADF00E15E27 /* decdca.c in Sources */,
 				EAA526940C3B25D200944FF2 /* stream.c in Sources */,
+				FC6CE2C20C495A6B001A2D5B /* muxmkv.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -678,6 +683,7 @@
 				593034EC0BBA39A100172349 /* ChapterTitles.m in Sources */,
 				5558B5690BE3BADF00E15E27 /* decdca.c in Sources */,
 				EAA526930C3B25D200944FF2 /* stream.c in Sources */,
+				FC6CE2C10C495A6B001A2D5B /* muxmkv.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -821,6 +827,7 @@
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
 					../contrib/lib/libdca.a,
+					../contrib/lib/libmkv.a,
 					"-ldl",
 					"-flat_namespace",
 					"-read_only_relocs",
@@ -878,6 +885,7 @@
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
 					../contrib/lib/libdca.a,
+					../contrib/lib/libmkv.a,
 					"-ldl",
 					"-flat_namespace",
 					"-read_only_relocs",
@@ -933,6 +941,7 @@
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
 					../contrib/lib/libdca.a,
+					../contrib/lib/libmkv.a,
 					"-ldl",
 					"-flat_namespace",
 					"-read_only_relocs",
@@ -988,6 +997,7 @@
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
 					../contrib/lib/libdca.a,
+					../contrib/lib/libmkv.a,
 					"-ldl",
 					"-flat_namespace",
 					"-read_only_relocs",
@@ -1067,6 +1077,7 @@
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
 					../contrib/lib/libdca.a,
+					../contrib/lib/libmkv.a,
 				);
 				PRODUCT_NAME = HandBrake;
 				SECTORDER_FLAGS = "";
@@ -1115,6 +1126,7 @@
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
 					../contrib/lib/libdca.a,
+					../contrib/lib/libmkv.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "Instant HandBrake";
@@ -1155,6 +1167,7 @@
 					../contrib/lib/libxvidcore.a,
 					"-lz",
 					../contrib/lib/libdca.a,
+					../contrib/lib/libmkv.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = HandBrakeCLI;
@@ -1296,6 +1309,7 @@
 					../contrib/lib/libxvidcore.a,
 					"-lz",
 					../contrib/lib/libdca.a,
+					../contrib/lib/libmkv.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = HandBrakeCLI;
@@ -1337,6 +1351,7 @@
 					../contrib/lib/libxvidcore.a,
 					"-lz",
 					../contrib/lib/libdca.a,
+					../contrib/lib/libmkv.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = HandBrakeCLI;
@@ -1376,6 +1391,7 @@
 					../contrib/lib/libxvidcore.a,
 					"-lz",
 					../contrib/lib/libdca.a,
+					../contrib/lib/libmkv.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = HandBrakeCLI;
@@ -1422,6 +1438,7 @@
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
 					../contrib/lib/libdca.a,
+					../contrib/lib/libmkv.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "Instant HandBrake";
@@ -1468,6 +1485,7 @@
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
 					../contrib/lib/libdca.a,
+					../contrib/lib/libmkv.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "Instant HandBrake";
@@ -1512,6 +1530,7 @@
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
 					../contrib/lib/libdca.a,
+					../contrib/lib/libmkv.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "Instant HandBrake";
@@ -1563,6 +1582,7 @@
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
 					../contrib/lib/libdca.a,
+					../contrib/lib/libmkv.a,
 				);
 				PRODUCT_NAME = HandBrake;
 				SECTORDER_FLAGS = "";
@@ -1616,6 +1636,7 @@
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
 					../contrib/lib/libdca.a,
+					../contrib/lib/libmkv.a,
 				);
 				PRODUCT_NAME = HandBrake;
 				SECTORDER_FLAGS = "";
@@ -1667,6 +1688,7 @@
 					../contrib/lib/libx264.a,
 					../contrib/lib/libxvidcore.a,
 					../contrib/lib/libdca.a,
+					../contrib/lib/libmkv.a,
 				);
 				PRODUCT_NAME = HandBrake;
 				SECTORDER_FLAGS = "";
