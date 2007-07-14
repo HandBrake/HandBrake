@@ -24,7 +24,7 @@ endif
 SRCS = common.c hb.c ports.c scan.c work.c decmpeg2.c encavcodec.c \
 	   update.c demuxmpeg.c fifo.c render.c reader.c muxcommon.c stream.c \
 	   muxmp4.c sync.c decsub.c deca52.c decdca.c encfaac.c declpcm.c encx264.c \
-	   decavcodec.c encxvid.c muxavi.c enclame.c muxogm.c encvorbis.c \
+	   decavcodec.c encxvid.c muxmkv.c muxavi.c enclame.c muxogm.c encvorbis.c \
 	   dvd.c  ipodutil.cpp
 OTMP = $(SRCS:%.c=%.o) 
 OBJS = $(OTMP:%.cpp=%.o)
@@ -38,7 +38,8 @@ CONTRIBS = ../contrib/lib/liba52.a ../contrib/lib/libavformat.a \
 		   ../contrib/lib/libvorbis.a ../contrib/lib/libvorbisenc.a \
 		   ../contrib/lib/libvorbisfile.a ../contrib/lib/libogg.a \
 		   ../contrib/lib/libsamplerate.a ../contrib/lib/libx264.a \
-		   ../contrib/lib/libxvidcore.a  ../contrib/lib/libmp4v2.a
+		   ../contrib/lib/libxvidcore.a  ../contrib/lib/libmp4v2.a \
+		   ../contrib/lib/libmkv.a
 else
 CONTRIBS = ../contrib/lib/liba52.a ../contrib/lib/libavformat.a \
 		   ../contrib/lib/libavcodec.a ../contrib/lib/libavutil.a \
@@ -46,7 +47,7 @@ CONTRIBS = ../contrib/lib/liba52.a ../contrib/lib/libavformat.a \
 		   ../contrib/lib/libdvdcss.a ../contrib/lib/libfaac.a \
 		   ../contrib/lib/libmp3lame.a ../contrib/lib/libmpeg2.a \ ../contrib/lib/libmpeg2convert.a ../contrib/lib/libvorbis.a \ ../contrib/lib/libvorbisenc.a ../contrib/lib/libvorbisfile.a \ ../contrib/lib/libogg.a ../contrib/lib/libsamplerate.a \
 		   ../contrib/lib/libx264.a ../contrib/lib/libxvidcore.a \
-		   ../contrib/lib/libmp4v2.a
+		   ../contrib/lib/libmp4v2.a ../contrib/lib/libmkv.a
 endif
 
 CFLAGS += -I../contrib/include -D__LIBHB__ -DUSE_PTHREAD -DHB_VERSION=\"$(HB_VERSION)\" -DHB_BUILD=$(HB_BUILD) $(SYSDEF)
