@@ -14,6 +14,8 @@ namespace Handbrake
 {
     public partial class frmMain : Form
     {
+        System.Diagnostics.Process hbProc;
+
         public frmMain()
         {
             InitializeComponent();
@@ -137,8 +139,8 @@ namespace Handbrake
         // Some windows that require only 1 instance.
         // --------------------------------------------------------------
 
-        private frmDvdInfo dvdInfoWindow = (frmDvdInfo)new frmDvdInfo();
-        private frmQueue queueWindow = (frmQueue)new frmQueue();
+        private frmDvdInfo dvdInfoWindow = new frmDvdInfo();
+        private frmQueue queueWindow = new frmQueue();
 
         // --------------------------------------------------------------
         // The Menu Bar
@@ -595,7 +597,7 @@ namespace Handbrake
                 query = QueryEditorText.Text;
             }
 
-            System.Diagnostics.Process hbProc = new System.Diagnostics.Process();
+            hbProc = new System.Diagnostics.Process();
             hbProc.StartInfo.FileName = "hbcli.exe";
             hbProc.StartInfo.Arguments = query;
             hbProc.StartInfo.UseShellExecute = false;
@@ -624,17 +626,18 @@ namespace Handbrake
                     hbProc.PriorityClass = ProcessPriorityClass.BelowNormal;
                     break;
             }
-            MessageBox.Show("The encode process has now started.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-            //hbProc.WaitForExit;
-            //hbProc.Close;
+
             ThreadPool.QueueUserWorkItem(procMonitor);
             // TODO: Need to write a bit of code here to do process monitoring.
-            // Note: hbProc.waitForExit will freeze the app, meaning one cannot add additional items to the queue during an encode.
         }
 
         private void procMonitor(object state)
         {
-           MessageBox.Show("The encode process has now ended.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            MessageBox.Show("The encode process has now started.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            hbProc.WaitForExit();
+            hbProc.Close();
+            hbProc.Dispose();
+            MessageBox.Show("The encode process has now ended.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
 
 
@@ -979,6 +982,32 @@ namespace Handbrake
             // Otheriwse if its not, title data has to be loased from parsing.
             if (drp_dvdtitle.Text != "Automatic")
             {
+                Parsing.Title selectedTitle = drp_dvdtitle.SelectedItem as Parsing.Title;
+                lbl_Aspect.Text = selectedTitle.AspectRatio.ToString();
+                lbl_RecomendedCrop.Text = string.Format("{0}/{1}/{2}/{3}", selectedTitle.AutoCropDimensions[0], selectedTitle.AutoCropDimensions[1], selectedTitle.AutoCropDimensions[2], selectedTitle.AutoCropDimensions[3]);
+
+                drop_chapterStart.Items.Clear();
+                drop_chapterStart.Items.AddRange(selectedTitle.Chapters.ToArray());
+                drop_chapterStart.Text = selectedTitle.Chapters[0].ToString();
+
+                drop_chapterFinish.Items.Clear();
+                drop_chapterFinish.Items.AddRange(selectedTitle.Chapters.ToArray());
+                drop_chapterFinish.Text = selectedTitle.Chapters[selectedTitle.Chapters.Count - 1].ToString();
+
+                drp_audioChannels.Items.Clear();
+                drp_audioChannels.Items.AddRange(selectedTitle.AudioTracks.ToArray());
+                if (drp_audioChannels.Items.Count > 0)
+                {
+                    drp_audioChannels.Text = drp_audioChannels.Items[0].ToString();
+                }
+
+                drp_subtitle.Items.Clear();
+                drp_subtitle.Items.AddRange(selectedTitle.Subtitles.ToArray());
+                if (drp_subtitle.Items.Count > 0)
+                {
+                    drp_subtitle.Text = drp_subtitle.Items[0].ToString();
+                }
+                /*
                 string[] temp;
                 string title;
                 temp = drp_dvdtitle.Text.Split(' ');
@@ -1032,7 +1061,7 @@ namespace Handbrake
                         }    
                     }
                     counter++;
-                }
+                }*/
             }
         } 
 

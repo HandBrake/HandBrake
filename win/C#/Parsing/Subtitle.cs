@@ -27,7 +27,7 @@ namespace Handbrake.Parsing
 
         public override string ToString()
         {
-            return this.m_language;
+            return string.Format("{0} {1}", this.m_trackNumber, this.m_language);
         }
 
         public static Subtitle Parse(StreamReader output)

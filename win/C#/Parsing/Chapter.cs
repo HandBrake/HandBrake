@@ -43,6 +43,11 @@ namespace Handbrake.Parsing
             }
         }
 
+        public override string ToString()
+        {
+            return this.m_chapterNumber.ToString();
+        }
+
         public static Chapter Parse(StreamReader output)
         {
             string curLine = output.ReadLine();
