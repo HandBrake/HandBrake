@@ -141,7 +141,6 @@ namespace Handbrake
         }
 
         #region The Menu Bar
-
         #region File Menu
 
         private void mnu_open_Click(object sender, EventArgs e)
@@ -499,7 +498,6 @@ namespace Handbrake
         }
 
         #endregion
-
         #endregion
 
         // -------------------------------------------------------------- 
@@ -655,6 +653,7 @@ namespace Handbrake
 
         private void drop_chapterStart_SelectedIndexChanged(object sender, EventArgs e)
         {
+            lbl_chptWarn.Visible = false;
             QueryEditorText.Text = "";
             if ((drop_chapterFinish.Text != "Auto") && (drop_chapterStart.Text != "Auto"))
             {
@@ -665,12 +664,14 @@ namespace Handbrake
 
                     if (chapterFinish < chapterStart)
                     {
-                        MessageBox.Show("Invalid Chapter Range! - Final chapter can not be smaller than the starting chapter.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        lbl_chptWarn.Visible = true;
+                        lbl_chptWarn.Text = "Invalid Chapter Range!";
                     }
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show("Invalid Character Entered!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                    lbl_chptWarn.Visible = true;
+                    lbl_chptWarn.Text = "Invalid Chapter Range!";
                 }
             }
 
@@ -679,6 +680,7 @@ namespace Handbrake
 
         private void drop_chapterFinish_SelectedIndexChanged(object sender, EventArgs e)
         {
+            lbl_chptWarn.Visible = false;
             QueryEditorText.Text = "";
             if ((drop_chapterFinish.Text != "Auto") && (drop_chapterStart.Text != "Auto"))
             {
@@ -689,12 +691,14 @@ namespace Handbrake
 
                     if (chapterFinish < chapterStart)
                     {
-                        MessageBox.Show("Invalid Chapter Range! - Start chapter can not be larger than the Final chapter.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        lbl_chptWarn.Visible = true;
+                        lbl_chptWarn.Text = "Invalid Chapter Range!";
                     }
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show("Invalid Character Entered!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                    lbl_chptWarn.Visible = true;
+                    lbl_chptWarn.Text = "Invalid Chapter Range!";
                 }
             }
         }
@@ -1022,12 +1026,10 @@ namespace Handbrake
             }
         } 
 
-        /// <summary>
-        /// The Query Generation Function
-        /// This function was imported from old vb.net version of this application.
-        /// It could probably do with being cleaned up a good deal at some point
-        /// </summary>
-        /// <returns></returns>
+        // The Query Generation Function
+        // This function was imported from old vb.net version of this application.
+        // It could probably do with being cleaned up a good deal at some point
+  
         public string GenerateTheQuery()
         {
             string source = text_source.Text;

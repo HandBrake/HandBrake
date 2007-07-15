@@ -169,6 +169,7 @@ namespace Handbrake
             this.btn_queue = new System.Windows.Forms.Button();
             this.btn_encode = new System.Windows.Forms.Button();
             this.Version = new System.Windows.Forms.Label();
+            this.lbl_chptWarn = new System.Windows.Forms.Label();
             Label38 = new System.Windows.Forms.Label();
             this.frmMainMenu.SuspendLayout();
             this.GroupBox1.SuspendLayout();
@@ -195,7 +196,7 @@ namespace Handbrake
             // DVD_Save
             // 
             this.DVD_Save.DefaultExt = "mp4";
-            this.DVD_Save.Filter = "mp4|*.mp4 |m4v|*.m4v |avi|*.avi |ogm|*.ogm";
+            this.DVD_Save.Filter = "mp4|*.mp4 |m4v|*.m4v |avi|*.avi |ogm|*.ogm |mkv|*.mkv";
             // 
             // File_Save
             // 
@@ -549,6 +550,7 @@ namespace Handbrake
             // GroupBox1
             // 
             this.GroupBox1.BackColor = System.Drawing.SystemColors.Control;
+            this.GroupBox1.Controls.Add(this.lbl_chptWarn);
             this.GroupBox1.Controls.Add(this.Label13);
             this.GroupBox1.Controls.Add(this.drop_chapterFinish);
             this.GroupBox1.Controls.Add(this.drop_chapterStart);
@@ -1699,6 +1701,16 @@ namespace Handbrake
             this.Version.TabIndex = 415;
             this.Version.Text = "Version 2.3";
             // 
+            // lbl_chptWarn
+            // 
+            this.lbl_chptWarn.AutoSize = true;
+            this.lbl_chptWarn.Location = new System.Drawing.Point(287, 85);
+            this.lbl_chptWarn.Name = "lbl_chptWarn";
+            this.lbl_chptWarn.Size = new System.Drawing.Size(77, 13);
+            this.lbl_chptWarn.TabIndex = 43;
+            this.lbl_chptWarn.Text = "{Warning}";
+            this.lbl_chptWarn.Visible = false;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1880,6 +1892,7 @@ namespace Handbrake
         internal System.Windows.Forms.Button btn_queue;
         internal System.Windows.Forms.Button btn_encode;
         internal System.Windows.Forms.Label Version;
+        private System.Windows.Forms.Label lbl_chptWarn;
 
     }
 }

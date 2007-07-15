@@ -73,9 +73,10 @@ namespace Handbrake
 
         private void startProc(object state)
         {
+            // Reminder: There is still a bug here where the loop suddenly halts for no good reson. UpdateUIelements runs, then the loop finishes several items early.
             for (int i = 0; i < list_queue.Items.Count; i++)
             {
-                string query = list_queue.Items[i] as string;
+                string query = list_queue.Items[0] as string;
                 Process hbProc = new Process();
                 hbProc.StartInfo.FileName = "hbcli.exe";
                 hbProc.StartInfo.Arguments = query;
@@ -108,6 +109,8 @@ namespace Handbrake
 
                 hbProc.WaitForExit();
                 hbProc.Close();
+                hbProc.Dispose();
+                
 
                 updateUIElements();
             }
@@ -120,7 +123,6 @@ namespace Handbrake
                 this.BeginInvoke(new ProgressUpdateHandler(updateUIElements));
                 return;
             }
-
             this.list_queue.Items.RemoveAt(0);
             progressBar.PerformStep();
             lbl_progressValue.Text = string.Format("{0} %", progressBar.Value);

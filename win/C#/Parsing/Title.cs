@@ -147,32 +147,39 @@ namespace Handbrake.Parsing
              * This will be converted to use Regex soon, I promise ;)
              * brianmario - 7/9/07
              */
-
-            string curLine = output.ReadLine();
-            thisTitle.m_titleNumber = int.Parse(curLine.Substring(curLine.Length - 2, 1));
-            curLine = output.ReadLine();
-            string[] splitter = curLine.Split(',');
-            //thisTitle.m_vts = int.Parse(splitter[0].Substring(8));
-            //thisTitle.m_ttn = int.Parse(splitter[1].Substring(5));
-            splitter = splitter[2].Trim().Split(' ', '(', ')');
-            //thisTitle.m_blockCount = int.Parse(splitter[3]);
-            splitter = splitter[1].Split('-', '>');
-            //thisTitle.m_cellRange[0] = int.Parse(splitter[0]);
-            //thisTitle.m_cellRange[1] = int.Parse(splitter[2]);
-            curLine = output.ReadLine();
-            splitter = curLine.Split(new string[] { "  + duration: " }, StringSplitOptions.RemoveEmptyEntries);
-            thisTitle.m_duration = TimeSpan.Parse(splitter[0]);
-            curLine = output.ReadLine();
-            splitter = curLine.Split(new string[] { "  + size: ", "aspect: ", ", ", " fps", "x" }, StringSplitOptions.RemoveEmptyEntries);
-            thisTitle.m_resolution = new Size(int.Parse(splitter[0]), int.Parse(splitter[1]));
-            thisTitle.m_aspectRatio = float.Parse(splitter[2].ToString());
-            //thisTitle.m_fps = float.Parse(splitter[3].ToString());
-            curLine = output.ReadLine();
-            splitter = curLine.Split(new string[] { "  + autocrop: ", "/" }, StringSplitOptions.RemoveEmptyEntries);
-            thisTitle.m_autoCrop = new int[4] { int.Parse(splitter[0]), int.Parse(splitter[1]), int.Parse(splitter[2]), int.Parse(splitter[3]) };
-            thisTitle.m_chapters.AddRange(Chapter.ParseList(output));
-            thisTitle.m_audioTracks.AddRange(AudioTrack.ParseList(output));
-            thisTitle.m_subtitles.AddRange(Subtitle.ParseList(output));
+            try
+            {
+                string curLine = output.ReadLine();
+                thisTitle.m_titleNumber = int.Parse(curLine.Substring(curLine.Length - 2, 1));
+                curLine = output.ReadLine();
+                string[] splitter = curLine.Split(',');
+                //thisTitle.m_vts = int.Parse(splitter[0].Substring(8));
+                //thisTitle.m_ttn = int.Parse(splitter[1].Substring(5));
+                splitter = splitter[2].Trim().Split(' ', '(', ')');
+                //thisTitle.m_blockCount = int.Parse(splitter[3]);
+                splitter = splitter[1].Split('-', '>');
+                //thisTitle.m_cellRange[0] = int.Parse(splitter[0]);
+                //thisTitle.m_cellRange[1] = int.Parse(splitter[2]);
+                curLine = output.ReadLine();
+                splitter = curLine.Split(new string[] { "  + duration: " }, StringSplitOptions.RemoveEmptyEntries);
+                thisTitle.m_duration = TimeSpan.Parse(splitter[0]);
+                curLine = output.ReadLine();
+                splitter = curLine.Split(new string[] { "  + size: ", "aspect: ", ", ", " fps", "x" }, StringSplitOptions.RemoveEmptyEntries);
+                thisTitle.m_resolution = new Size(int.Parse(splitter[0]), int.Parse(splitter[1]));
+                thisTitle.m_aspectRatio = float.Parse(splitter[2].ToString());
+                //thisTitle.m_fps = float.Parse(splitter[3].ToString());
+                curLine = output.ReadLine();
+                splitter = curLine.Split(new string[] { "  + autocrop: ", "/" }, StringSplitOptions.RemoveEmptyEntries);
+                thisTitle.m_autoCrop = new int[4] { int.Parse(splitter[0]), int.Parse(splitter[1]), int.Parse(splitter[2]), int.Parse(splitter[3]) };
+                thisTitle.m_chapters.AddRange(Chapter.ParseList(output));
+                thisTitle.m_audioTracks.AddRange(AudioTrack.ParseList(output));
+                thisTitle.m_subtitles.AddRange(Subtitle.ParseList(output));
+            }
+            catch (Exception)
+            {
+                // hbcli crashed caused an exception here. Just threw this in to prevent a program error.
+                // Can be debuged later.
+            }
 
             return thisTitle;
         }
