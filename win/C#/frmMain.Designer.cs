@@ -1717,7 +1717,6 @@ namespace Handbrake
             this.MinimumSize = new System.Drawing.Size(683, 648);
             this.Name = "frmMain";
             this.Text = "Handbrake";
-            this.Load += new System.EventHandler(this.frmMain_Load);
             this.frmMainMenu.ResumeLayout(false);
             this.frmMainMenu.PerformLayout();
             this.GroupBox1.ResumeLayout(false);

@@ -12,7 +12,7 @@ namespace Handbrake
 {
     public partial class frmQueue : Form
     {
-        private frmQueue thisWindow;
+        private delegate void ProgressUpdateHandler(int progressSplit);
 
         public frmQueue()
         {
@@ -86,6 +86,7 @@ namespace Handbrake
                 hbProc.StartInfo.Arguments = query;
                 hbProc.StartInfo.UseShellExecute = false;
                 hbProc.Start();
+
                 // Set the process Priority
                 string priority = Properties.Settings.Default.processPriority;
                 switch (priority)
@@ -113,14 +114,20 @@ namespace Handbrake
                 hbProc.WaitForExit();
                 hbProc.Close();
                 counter++;
-                //updateUIElements(progressSplit);
+
+                updateUIElements(progressSplit);
             }
         }
 
         private void updateUIElements(int progressSplit)
         {
-            // This needs to be written so there is no cross-thread problems ********************
-            thisWindow.list_queue.Items.Remove(0);
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new ProgressUpdateHandler(updateUIElements), new object[] { progressSplit });
+                return;
+            }
+
+            this.list_queue.Items.Remove(0);
             progressBar.Value = progressBar.Value + progressSplit;
             progressBar.Update();
         }

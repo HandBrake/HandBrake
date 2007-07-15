@@ -14,18 +14,19 @@ namespace Handbrake
 {
     public partial class frmMain : Form
     {
-        System.Diagnostics.Process hbProc;
+        private System.Diagnostics.Process hbProc;
+        private Parsing.DVD thisDVD;
+
+        // --------------------------------------------------------------
+        // Some windows that require only 1 instance.
+        // --------------------------------------------------------------
+        private frmDvdInfo dvdInfoWindow = new frmDvdInfo();
+        private frmQueue queueWindow = new frmQueue();
 
         public frmMain()
         {
             InitializeComponent();
-        }
 
-        // --------------------------------------------------------------
-        // onLoad - setup the program ready for use.
-        // --------------------------------------------------------------
-        private void frmMain_Load(object sender, EventArgs e)
-        {
             // Set the Version number lable to the corect version.
             Version.Text = "Version " + Properties.Settings.Default.GuiVersion;
 
@@ -34,7 +35,6 @@ namespace Handbrake
 
             // Now load the users default if required.
             loadUserDefaults();
-            
         }
 
         public void loadUserDefaults()
@@ -43,28 +43,32 @@ namespace Handbrake
             {
                 if (Properties.Settings.Default.defaultSettings == "Checked")
                 {
-                    //Source
+                    // Source
                     text_source.Text = Properties.Settings.Default.DVDSource;
                     drp_dvdtitle.Text = Properties.Settings.Default.DVDTitle;
                     drop_chapterStart.Text = Properties.Settings.Default.ChapterStart;
                     drop_chapterFinish.Text = Properties.Settings.Default.ChapterFinish;
-                    //Destination
+
+                    // Destination
                     text_destination.Text = Properties.Settings.Default.VideoDest;
                     drp_videoEncoder.Text = Properties.Settings.Default.VideoEncoder;
                     drp_audioCodec.Text = Properties.Settings.Default.AudioEncoder;
                     text_width.Text = Properties.Settings.Default.Width;
                     text_height.Text = Properties.Settings.Default.Height;
-                    //Picture Settings Tab
+
+                    // Picture Settings Tab
                     drp_crop.Text = Properties.Settings.Default.CroppingOption;
                     text_top.Text = Properties.Settings.Default.CropTop;
                     text_bottom.Text = Properties.Settings.Default.CropBottom;
                     text_left.Text = Properties.Settings.Default.CropLeft;
                     text_right.Text = Properties.Settings.Default.CropRight;
                     drp_subtitle.Text = Properties.Settings.Default.Subtitles;
-                    //Video Settings Tab
+
+                    // Video Settings Tab
                     text_bitrate.Text = Properties.Settings.Default.VideoBitrate;
                     text_filesize.Text = Properties.Settings.Default.VideoFilesize;
                     slider_videoQuality.Value = Properties.Settings.Default.VideoQuality;
+
                     if (Properties.Settings.Default.TwoPass == "Checked")
                     {
                         check_2PassEncode.CheckState = CheckState.Checked;
@@ -92,11 +96,12 @@ namespace Handbrake
                     {
                         check_largeFile.CheckState = CheckState.Checked;
                     }
-                    //Audio Settings Tab
+                    // Audio Settings Tab
                     drp_audioBitrate.Text = Properties.Settings.Default.AudioBitrate;
                     drp_audioSampleRate.Text = Properties.Settings.Default.AudioSampleRate;
                     drp_audioChannels.Text = Properties.Settings.Default.AudioChannels;
-                    //H264 Tab
+
+                    // H264 Tab
                     if (Properties.Settings.Default.CRF == "Checked")
                     {
                         CheckCRF.CheckState = CheckState.Checked;
@@ -127,26 +132,18 @@ namespace Handbrake
                         lbl_update.Visible = true;
                     }
                 }
-                //else fail displaying an error message.
+                // else fail displaying an error message.
                 catch (Exception)
                 {
-                    //Silently ignore the error
+                    // Silently ignore the error
                 }
             }
         }
 
-        // --------------------------------------------------------------
-        // Some windows that require only 1 instance.
-        // --------------------------------------------------------------
+        #region The Menu Bar
 
-        private frmDvdInfo dvdInfoWindow = new frmDvdInfo();
-        private frmQueue queueWindow = new frmQueue();
+        #region File Menu
 
-        // --------------------------------------------------------------
-        // The Menu Bar
-        // --------------------------------------------------------------
-
-        // FILE MENU --------------------------------------------------------------
         private void mnu_open_Click(object sender, EventArgs e)
         {
             string filename;
@@ -322,7 +319,10 @@ namespace Handbrake
             this.Close();
         }
 
-        // TOOLS MENU --------------------------------------------------------------
+        #endregion
+
+        #region Tools Menu
+
         private void mnu_encode_Click(object sender, EventArgs e)
         {
             showQueue();
@@ -339,7 +339,10 @@ namespace Handbrake
             Options.ShowDialog();
         }
 
-        // PRESETS MENU --------------------------------------------------------------
+        #endregion
+
+        #region Presets Menu
+
         private void mnu_preset_ipod133_Click(object sender, EventArgs e)
         {
             CheckPixelRatio.CheckState = CheckState.Unchecked;
@@ -460,7 +463,10 @@ namespace Handbrake
             Properties.Settings.Default.Save();
         }
 
-        // Help Menu --------------------------------------------------------------
+        #endregion
+
+        #region Help Menu
+
         private void mnu_wiki_Click(object sender, EventArgs e)
         {
            Process.Start("http://handbrake.m0k.org/trac");
@@ -492,7 +498,9 @@ namespace Handbrake
             About.ShowDialog();
         }
 
+        #endregion
 
+        #endregion
 
         // -------------------------------------------------------------- 
         // Buttons on the main Window
@@ -641,10 +649,9 @@ namespace Handbrake
         }
 
 
-        // -------------------------------------------------------------- 
-        // Items that require actions on frmMain
-        // --------------------------------------------------------------
-
+        //---------------------------------------------------
+        //  Items that require actions on frmMain
+        //---------------------------------------------------
 
         private void drop_chapterStart_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -963,7 +970,6 @@ namespace Handbrake
             }
         }
 
-        Parsing.DVD thisDVD;
         public void setStreamReader(Parsing.DVD dvd)
         {
             this.thisDVD = dvd;
@@ -988,11 +994,17 @@ namespace Handbrake
 
                 drop_chapterStart.Items.Clear();
                 drop_chapterStart.Items.AddRange(selectedTitle.Chapters.ToArray());
-                drop_chapterStart.Text = selectedTitle.Chapters[0].ToString();
+                if (drop_chapterStart.Items.Count > 0)
+                {
+                    drop_chapterStart.Text = drop_chapterStart.Items[0].ToString();
+                }
 
                 drop_chapterFinish.Items.Clear();
                 drop_chapterFinish.Items.AddRange(selectedTitle.Chapters.ToArray());
-                drop_chapterFinish.Text = selectedTitle.Chapters[selectedTitle.Chapters.Count - 1].ToString();
+                if (drop_chapterFinish.Items.Count > 0)
+                {
+                    drop_chapterFinish.Text = drop_chapterFinish.Items[drop_chapterFinish.Items.Count - 1].ToString();
+                }
 
                 drp_audioChannels.Items.Clear();
                 drp_audioChannels.Items.AddRange(selectedTitle.AudioTracks.ToArray());
@@ -1007,71 +1019,15 @@ namespace Handbrake
                 {
                     drp_subtitle.Text = drp_subtitle.Items[0].ToString();
                 }
-                /*
-                string[] temp;
-                string title;
-                temp = drp_dvdtitle.Text.Split(' ');
-                title = temp[0].Trim();
-              
-                int count = thisDVD.Titles.Count - 1;
-                int counter = 0;
-
-                while (count >= counter)
-                {
-
-                    if (thisDVD.Titles[counter].TitleNumber.ToString() == title)
-                    {
-                        lbl_Aspect.Text = thisDVD.Titles[counter].AspectRatio.ToString();
-                        lbl_RecomendedCrop.Text = thisDVD.Titles[counter].AutoCropDimensions[0] + "/" + thisDVD.Titles[counter].AutoCropDimensions[1] + "/" + thisDVD.Titles[counter].AutoCropDimensions[2] + "/" + thisDVD.Titles[counter].AutoCropDimensions[3];
-
-                        // Chapter Dropdown Menus
-                        int chapterCount = thisDVD.Titles[counter].Chapters.Count;
-                        int loopCouter = 1;
-                        while (loopCouter <= chapterCount) 
-                        {
-                            drop_chapterStart.Items.Add(loopCouter);
-                            drop_chapterFinish.Items.Add(loopCouter);
-
-                            drop_chapterStart.Text = "1";
-                            drop_chapterFinish.Text = loopCouter.ToString();
-                            loopCouter++;
-                        }
-
-                        // Audio Drop down Menu.
-                        int audioCount = thisDVD.Titles[counter].AudioTracks.Count -1;
-                        loopCouter = 0;
-                        string audioTrack = "";
-                        while (loopCouter <= audioCount)
-                        {
-                            audioTrack = thisDVD.Titles[counter].AudioTracks[loopCouter].TrackNumber + " " + thisDVD.Titles[counter].AudioTracks[loopCouter].Language + " (" + thisDVD.Titles[counter].AudioTracks[loopCouter].Format + ") (" + thisDVD.Titles[counter].AudioTracks[loopCouter].SubFormat + ")";
-                            drp_audioChannels.Items.Add(audioTrack);
-                            loopCouter++;
-                        }
-                        
-                        // Subtitle Dropdown Menu.
-                        int subtitleCount = thisDVD.Titles[counter].Subtitles.Count - 1;
-                        loopCouter = 0;
-                        string subtitleTrack = "";
-
-                        while (loopCouter <= audioCount)
-                        {
-                            subtitleTrack = thisDVD.Titles[counter].Subtitles[loopCouter].TrackNumber + " " + thisDVD.Titles[counter].Subtitles[loopCouter].Language;
-                            drp_subtitle.Items.Add(subtitleTrack);
-                            loopCouter++;
-                        }    
-                    }
-                    counter++;
-                }*/
             }
         } 
 
-        //
-        // The Query Generation Function
-        //
-
-
-        // This function was imported from old vb.net version of this application.
-        // It could probably do with being cleaned up a good deal at some point
+        /// <summary>
+        /// The Query Generation Function
+        /// This function was imported from old vb.net version of this application.
+        /// It could probably do with being cleaned up a good deal at some point
+        /// </summary>
+        /// <returns></returns>
         public string GenerateTheQuery()
         {
             string source = text_source.Text;
