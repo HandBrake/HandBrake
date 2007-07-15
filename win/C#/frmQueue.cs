@@ -12,7 +12,7 @@ namespace Handbrake
 {
     public partial class frmQueue : Form
     {
-        private delegate void ProgressUpdateHandler(int progressSplit);
+        private delegate void ProgressUpdateHandler();
 
         public frmQueue()
         {
@@ -66,21 +66,16 @@ namespace Handbrake
         {
             progressBar.Value = 0;
             lbl_progressValue.Text = "0 %";
+            progressBar.Step = 100 / list_queue.Items.Count;
             progressBar.Update();
             ThreadPool.QueueUserWorkItem(startProc);
         }
 
         private void startProc(object state)
         {
-            int listSize = list_queue.Items.Count;
-            listSize--;
-            int counter = 0;
-            int progressSplit = listSize / 100;
-
-            while (counter <= listSize)
+            for (int i = 0; i < list_queue.Items.Count; i++)
             {
-                String query = list_queue.Items[0].ToString();
-
+                string query = list_queue.Items[i] as string;
                 Process hbProc = new Process();
                 hbProc.StartInfo.FileName = "hbcli.exe";
                 hbProc.StartInfo.Arguments = query;
@@ -88,8 +83,8 @@ namespace Handbrake
                 hbProc.Start();
 
                 // Set the process Priority
-                string priority = Properties.Settings.Default.processPriority;
-                switch (priority)
+
+                switch (Properties.Settings.Default.processPriority)
                 {
                     case "Realtime":
                         hbProc.PriorityClass = ProcessPriorityClass.RealTime;
@@ -113,22 +108,22 @@ namespace Handbrake
 
                 hbProc.WaitForExit();
                 hbProc.Close();
-                counter++;
 
-                updateUIElements(progressSplit);
+                updateUIElements();
             }
         }
 
-        private void updateUIElements(int progressSplit)
+        private void updateUIElements()
         {
             if (this.InvokeRequired)
             {
-                this.BeginInvoke(new ProgressUpdateHandler(updateUIElements), new object[] { progressSplit });
+                this.BeginInvoke(new ProgressUpdateHandler(updateUIElements));
                 return;
             }
 
-            this.list_queue.Items.Remove(0);
-            progressBar.Value = progressBar.Value + progressSplit;
+            this.list_queue.Items.RemoveAt(0);
+            progressBar.PerformStep();
+            lbl_progressValue.Text = string.Format("{0} %", progressBar.Value);
             progressBar.Update();
         }
     }

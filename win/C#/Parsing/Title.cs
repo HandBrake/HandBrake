@@ -135,7 +135,7 @@ namespace Handbrake.Parsing
 
         public override string ToString()
         {
-            return string.Format("{0} ({1}:{2}:{3})", this.m_titleNumber, this.m_duration.Hours, 
+            return string.Format("{0} ({1:00}:{2:00}:{3:00})", this.m_titleNumber, this.m_duration.Hours, 
                 this.m_duration.Minutes, this.m_duration.Seconds);
         }
 
