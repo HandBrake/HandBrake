@@ -76,6 +76,7 @@ namespace Handbrake
             this.mnu_about = new System.Windows.Forms.ToolStripMenuItem();
             this.frmMainMenu = new System.Windows.Forms.MenuStrip();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
+            this.lbl_chptWarn = new System.Windows.Forms.Label();
             this.Label13 = new System.Windows.Forms.Label();
             this.RadioDVD = new System.Windows.Forms.RadioButton();
             this.btn_Browse = new System.Windows.Forms.Button();
@@ -169,7 +170,6 @@ namespace Handbrake
             this.btn_queue = new System.Windows.Forms.Button();
             this.btn_encode = new System.Windows.Forms.Button();
             this.Version = new System.Windows.Forms.Label();
-            this.lbl_chptWarn = new System.Windows.Forms.Label();
             Label38 = new System.Windows.Forms.Label();
             this.frmMainMenu.SuspendLayout();
             this.GroupBox1.SuspendLayout();
@@ -196,7 +196,7 @@ namespace Handbrake
             // DVD_Save
             // 
             this.DVD_Save.DefaultExt = "mp4";
-            this.DVD_Save.Filter = "mp4|*.mp4 |m4v|*.m4v |avi|*.avi |ogm|*.ogm |mkv|*.mkv";
+            this.DVD_Save.Filter = ".mp4|*.mp4| .m4v|*.m4v |.avi|*.avi |.ogm|*.ogm |.mkv|*.mkv";
             // 
             // File_Save
             // 
@@ -570,6 +570,16 @@ namespace Handbrake
             this.GroupBox1.TabIndex = 408;
             this.GroupBox1.TabStop = false;
             this.GroupBox1.Text = "Source";
+            // 
+            // lbl_chptWarn
+            // 
+            this.lbl_chptWarn.AutoSize = true;
+            this.lbl_chptWarn.Location = new System.Drawing.Point(287, 85);
+            this.lbl_chptWarn.Name = "lbl_chptWarn";
+            this.lbl_chptWarn.Size = new System.Drawing.Size(77, 13);
+            this.lbl_chptWarn.TabIndex = 43;
+            this.lbl_chptWarn.Text = "{Warning}";
+            this.lbl_chptWarn.Visible = false;
             // 
             // Label13
             // 
@@ -1701,16 +1711,6 @@ namespace Handbrake
             this.Version.TabIndex = 415;
             this.Version.Text = "Version 2.3";
             // 
-            // lbl_chptWarn
-            // 
-            this.lbl_chptWarn.AutoSize = true;
-            this.lbl_chptWarn.Location = new System.Drawing.Point(287, 85);
-            this.lbl_chptWarn.Name = "lbl_chptWarn";
-            this.lbl_chptWarn.Size = new System.Drawing.Size(77, 13);
-            this.lbl_chptWarn.TabIndex = 43;
-            this.lbl_chptWarn.Text = "{Warning}";
-            this.lbl_chptWarn.Visible = false;
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1754,7 +1754,6 @@ namespace Handbrake
 
         #endregion
 
-        private System.Windows.Forms.SaveFileDialog DVD_Save;
         internal System.Windows.Forms.SaveFileDialog File_Save;
         internal System.Windows.Forms.ToolTip ToolTip;
         internal System.Windows.Forms.FolderBrowserDialog DVD_Open;
@@ -1893,6 +1892,7 @@ namespace Handbrake
         internal System.Windows.Forms.Button btn_encode;
         internal System.Windows.Forms.Label Version;
         private System.Windows.Forms.Label lbl_chptWarn;
+        internal System.Windows.Forms.SaveFileDialog DVD_Save;
 
     }
 }

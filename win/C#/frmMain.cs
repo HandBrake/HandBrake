@@ -1011,6 +1011,7 @@ namespace Handbrake
                 }
 
                 drp_audioChannels.Items.Clear();
+                drp_subtitle.Items.Add("Automatic");
                 drp_audioChannels.Items.AddRange(selectedTitle.AudioTracks.ToArray());
                 if (drp_audioChannels.Items.Count > 0)
                 {
@@ -1018,6 +1019,7 @@ namespace Handbrake
                 }
 
                 drp_subtitle.Items.Clear();
+                drp_subtitle.Items.Add("None");
                 drp_subtitle.Items.AddRange(selectedTitle.Subtitles.ToArray());
                 if (drp_subtitle.Items.Count > 0)
                 {
@@ -1327,6 +1329,8 @@ namespace Handbrake
 
             return querySource+ queryDestination+ queryPictureSettings+ queryVideoSettings+ h264Settings+ queryAudioSettings+ queryAdvancedSettings+ verbose;
         }
+
+
 
         // This is the END of the road ------------------------------------------------------------------------------
     }
