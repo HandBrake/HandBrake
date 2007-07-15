@@ -15,14 +15,16 @@ namespace Handbrake
     {
         private string inputFile;
         private frmMain mainWindow;
+        private frmDvdInfo dvdInfo;
         private Parsing.DVD thisDvd;
         private delegate void UpdateUIHandler();
 
-        public frmReadDVD(string inputFile, frmMain parent)
+        public frmReadDVD(string inputFile, frmMain parent, frmDvdInfo dvdInfoWindow)
         {
             InitializeComponent();
             this.inputFile = inputFile;
             this.mainWindow = parent;
+            this.dvdInfo = dvdInfoWindow;
         }
 
         private void btn_ok_Click(object sender, EventArgs e)
@@ -46,6 +48,11 @@ namespace Handbrake
 
             mainWindow.drp_dvdtitle.Items.Clear();
             mainWindow.drp_dvdtitle.Items.AddRange(thisDvd.Titles.ToArray());
+
+            // Just a quick test to see if data can be pushed to frmDvdInfo.
+            // What needs to happen here is the plaintext outout needs to be sent to the frmDvdInfo.
+            dvdInfo.rtf_dvdInfo.Text = thisDvd.ToString();
+
             this.Close();
         }
 
@@ -70,5 +77,6 @@ namespace Handbrake
 
             updateUIElements();
         }
+
     }
 }

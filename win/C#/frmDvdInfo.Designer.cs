@@ -1,6 +1,6 @@
 namespace Handbrake
 {
-    partial class frmDVDData
+    partial class frmDvdInfo
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@ namespace Handbrake
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmDVDData));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmDvdInfo));
             this.Label2 = new System.Windows.Forms.Label();
             this.rtf_dvdInfo = new System.Windows.Forms.RichTextBox();
             this.btn_close = new System.Windows.Forms.Button();
@@ -70,7 +70,7 @@ namespace Handbrake
             this.btn_close.UseVisualStyleBackColor = false;
             this.btn_close.Click += new System.EventHandler(this.btn_close_Click);
             // 
-            // frmDVDData
+            // frmDvdInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -79,10 +79,9 @@ namespace Handbrake
             this.Controls.Add(this.rtf_dvdInfo);
             this.Controls.Add(this.btn_close);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "frmDVDData";
+            this.Name = "frmDvdInfo";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Read DVD";
-            this.Load += new System.EventHandler(this.frmDVDData_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

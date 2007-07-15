@@ -37,12 +37,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="frmEncodeOutput.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmEncodeOutput.Designer.cs">
-      <DependentUpon>frmEncodeOutput.cs</DependentUpon>
-    </Compile>
     <Compile Include="frmAbout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -75,10 +69,6 @@
     <Compile Include="Parsing\Title.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="frmEncodeOutput.resx">
-      <DependentUpon>frmEncodeOutput.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="frmAbout.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmAbout.cs</DependentUpon>

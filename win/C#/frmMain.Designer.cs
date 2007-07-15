@@ -264,7 +264,7 @@ namespace Handbrake
             this.text_source.Name = "text_source";
             this.text_source.Size = new System.Drawing.Size(253, 21);
             this.text_source.TabIndex = 1;
-            this.text_source.Text = "Click \"Browse\" to continue";
+            this.text_source.Text = "Click \'Browse\' to continue";
             this.ToolTip.SetToolTip(this.text_source, "The input source location.");
             // 
             // text_destination

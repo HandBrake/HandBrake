@@ -27,6 +27,7 @@ namespace Handbrake.Parsing
             while (!output.EndOfStream)
             {
                 string curLine = output.ReadLine();
+
                 if (curLine.Contains("Scanning title"))
                 {
                     thisDVD.m_titles.AddRange(Title.ParseList(output));

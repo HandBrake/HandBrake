@@ -133,6 +133,12 @@ namespace Handbrake
             }
         }
 
+        // --------------------------------------------------------------
+        // Some windows that require only 1 instance.
+        // --------------------------------------------------------------
+
+        private frmDvdInfo dvdInfoWindow = (frmDvdInfo)new frmDvdInfo();
+        private frmQueue queueWindow = (frmQueue)new frmQueue();
 
         // --------------------------------------------------------------
         // The Menu Bar
@@ -322,8 +328,7 @@ namespace Handbrake
 
         private void mnu_viewDVDdata_Click(object sender, EventArgs e)
         {
-            Form DVDData = new frmDvdInfo();
-            DVDData.Show();
+            dvdInfoWindow.Show();
         }
 
         private void mnu_options_Click(object sender, EventArgs e)
@@ -492,6 +497,7 @@ namespace Handbrake
         // --------------------------------------------------------------
         private void btn_Browse_Click(object sender, EventArgs e)
         {
+            
             String filename ="";
             text_source.Text = "";
 
@@ -502,7 +508,7 @@ namespace Handbrake
                 if (filename != "")
                 {
                     text_source.Text = filename;
-                    Form frmReadDVD = new frmReadDVD(filename, this);
+                    Form frmReadDVD = new frmReadDVD(filename, this, dvdInfoWindow);
                     frmReadDVD.ShowDialog();
                 }
             }
@@ -513,10 +519,24 @@ namespace Handbrake
                 if (filename != "")
                 {
                     text_source.Text = filename;
-                    Form frmReadDVD = new frmReadDVD(filename, this);
+                    Form frmReadDVD = new frmReadDVD(filename, this, dvdInfoWindow);
                     frmReadDVD.ShowDialog();
                 }
             }  
+
+            // Quick check to make sure some titles were found.
+            if (filename != "")
+            {
+                if (drp_dvdtitle.Items.Count == 0)
+                {
+                    MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                }
+            }
+            else
+            {
+                text_source.Text = "Click 'Browse' to continue";
+            }
+
         }
 
         private void btn_destBrowse_Click(object sender, EventArgs e)
@@ -550,7 +570,6 @@ namespace Handbrake
             QueryEditorText.Text = "";
         }
 
-        private frmQueue queueWindow = (frmQueue)new frmQueue();
         private void btn_queue_Click(object sender, EventArgs e)
         {
             String query = GenerateTheQuery();
@@ -605,24 +624,18 @@ namespace Handbrake
                     hbProc.PriorityClass = ProcessPriorityClass.BelowNormal;
                     break;
             }
-            
+            MessageBox.Show("The encode process has now started.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             //hbProc.WaitForExit;
             //hbProc.Close;
             ThreadPool.QueueUserWorkItem(procMonitor);
-           
-
-            
-       
             // TODO: Need to write a bit of code here to do process monitoring.
             // Note: hbProc.waitForExit will freeze the app, meaning one cannot add additional items to the queue during an encode.
         }
 
         private void procMonitor(object state)
         {
-           MessageBox.Show("The encode process has now started.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+           MessageBox.Show("The encode process has now ended.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
-
-
 
 
         // -------------------------------------------------------------- 
@@ -996,20 +1009,31 @@ namespace Handbrake
                         }
 
                         // Audio Drop down Menu.
-                        //thisDVD.Titles[counter].AudioTracks[0].ToString()
-
+                        int audioCount = thisDVD.Titles[counter].AudioTracks.Count -1;
+                        loopCouter = 0;
+                        string audioTrack = "";
+                        while (loopCouter <= audioCount)
+                        {
+                            audioTrack = thisDVD.Titles[counter].AudioTracks[loopCouter].TrackNumber + " " + thisDVD.Titles[counter].AudioTracks[loopCouter].Language + " (" + thisDVD.Titles[counter].AudioTracks[loopCouter].Format + ") (" + thisDVD.Titles[counter].AudioTracks[loopCouter].SubFormat + ")";
+                            drp_audioChannels.Items.Add(audioTrack);
+                            loopCouter++;
+                        }
+                        
                         // Subtitle Dropdown Menu.
+                        int subtitleCount = thisDVD.Titles[counter].Subtitles.Count - 1;
+                        loopCouter = 0;
+                        string subtitleTrack = "";
 
-                        // Still need to set these up.
-                        //thisDVD.Titles[counter].Subtitles.ToString()
-     
+                        while (loopCouter <= audioCount)
+                        {
+                            subtitleTrack = thisDVD.Titles[counter].Subtitles[loopCouter].TrackNumber + " " + thisDVD.Titles[counter].Subtitles[loopCouter].Language;
+                            drp_subtitle.Items.Add(subtitleTrack);
+                            loopCouter++;
+                        }    
                     }
                     counter++;
                 }
-
-
             }
-            
         } 
 
         //
@@ -1309,7 +1333,7 @@ namespace Handbrake
             //  Verbose option (Program Settings)
 
             string verbose = "";
-            if (Properties.Settings.Default.verbose ==  "1")
+            if (Properties.Settings.Default.verbose ==  "Checked")
                 verbose = " -v ";
 
             // ----------------------------------------------------------------------
