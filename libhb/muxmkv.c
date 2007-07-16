@@ -85,6 +85,8 @@ static int MKVInit( hb_mux_object_t * m )
             memcpy( avcC+11+job->config.h264.sps_length, job->config.h264.pps, job->config.h264.pps_length );
             track->codecPrivate = avcC;
             track->codecPrivateSize = avcC_len;
+            if (job->areBframes)
+                track->minCache = 1;
             break;
         case HB_VCODEC_XVID:
         case HB_VCODEC_FFMPEG:
