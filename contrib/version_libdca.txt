@@ -1,1 +1,1 @@
-http://download.m0k.org/handbrake/contrib/libdca-r81.tar.gz
+http://download.m0k.org/handbrake/contrib/libdca-r81-strapped.tar.gz

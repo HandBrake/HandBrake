@@ -117,7 +117,7 @@ actions LibDCA
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf libdca && tar xzf libdca.tar.gz && cd libdca && patch -p1 < ../patch-libdca.patch
-	./bootstrap && ./configure && make &&
+	./configure && make &&
 	cp libdca/.libs/libdca.a $CONTRIB/lib &&
 	cp include/dca.h $CONTRIB/include &&
 	strip -S $CONTRIB/lib/libdca.a
