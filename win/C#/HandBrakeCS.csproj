@@ -63,7 +63,6 @@
       <DependentUpon>frmOptions.cs</DependentUpon>
     </Compile>
     <Compile Include="Functions\CLI.cs" />
-    <Compile Include="Functions\Update.cs" />
     <Compile Include="Parsing\AudioTrack.cs" />
     <Compile Include="Parsing\Chapter.cs" />
     <Compile Include="Parsing\DVD.cs" />

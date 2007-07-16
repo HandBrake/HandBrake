@@ -611,6 +611,7 @@ namespace Handbrake
 
         private void procMonitor(object state)
         {
+            //******* BUG HERE, hbProc is not getting passed in here.
             MessageBox.Show("The encode process has now started.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             hbProc.WaitForExit();
             hbProc.Close();
@@ -984,7 +985,7 @@ namespace Handbrake
                 }
 
                 drp_audioChannels.Items.Clear();
-                drp_subtitle.Items.Add("Automatic");
+                drp_audioChannels.Items.Add("Automatic");
                 drp_audioChannels.Items.AddRange(selectedTitle.AudioTracks.ToArray());
                 if (drp_audioChannels.Items.Count > 0)
                 {
@@ -1002,9 +1003,6 @@ namespace Handbrake
         } 
 
         // The Query Generation Function
-        // This function was imported from old vb.net version of this application.
-        // It could probably do with being cleaned up a good deal at some point
-  
         public string GenerateTheQuery()
         {
             string source = text_source.Text;
