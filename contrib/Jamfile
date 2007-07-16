@@ -328,13 +328,14 @@ rule LibX264
 #    {
 #        LIBX264_PATCH = " patch -p1 < ../patch-x264-linux.patch && " ;
 #    }
+    LIBX264_AQ_PATCH = " patch -p0 < ../patch-x264-aq.patch && " ;
     Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
 }
 actions LibX264
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
-    rm -rf x264 && tar xzf x264.tar.gz && cd x264 && $(LIBX264_PATCH)
+    rm -rf x264 && tar xzf x264.tar.gz && cd x264 && $(LIBX264_PATCH) $(LIBX264_AQ_PATCH)
     ./configure --prefix=$CONTRIB --enable-pthread && make &&
     make install &&
     strip -S $CONTRIB/lib/libx264.a
