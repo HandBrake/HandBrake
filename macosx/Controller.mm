@@ -2021,24 +2021,10 @@ the user is using "Custom" settings by determining the sender*/
 		[fPresetSelectedDisplay setStringValue: @"Custom"];
 		
 		curUserPresetChosenNum = nil;
-		/* If we have MP4, AVC H.264 and x264 Main then we look to see
-			if there are any x264 options from the preferences to use */
-		if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fDstCodecsPopUp indexOfSelectedItem] == 1)
-		{
-		    /* Lets check to see there is a specified string in the prefs, and use that if need be */
-			if ([[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"] != @"")
-			{
-				[fDisplayX264Options setStringValue: [NSString stringWithFormat:[[NSUserDefaults standardUserDefaults] stringForKey:@"DefAdvancedx264Flags"]]];
-			}
-		}
-		else
-		{
-			/* Empty the field to display custom x264 preset options*/
-			[fDisplayX264Options setStringValue: @""];
-		}
+
 		
 	}
-	[self X264AdvancedOptionsSet:NULL];
+
 }
 
 - (IBAction) X264AdvancedOptionsSet: (id) sender
