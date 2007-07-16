@@ -204,7 +204,8 @@
     /* integer to set to determine the previous state
 	of encode 0==idle, 1==encoding, 2==cancelled*/
     int                            fEncodeState;
-	
+	int                            currentScanCount;
+	NSString                      * currentSource;
 	HBOutputPanelController *outputPanel;
 }
 
@@ -212,7 +213,7 @@
 
 - (void)     UpdateUI: (NSTimer *) timer;
 - (void)     EnableUI: (bool) enable;
-
+- (IBAction) ShowNewScan: (id) sender;
 - (IBAction) ShowScanPanel: (id) sender;
 
 - (IBAction) TitlePopUpChanged: (id) sender;

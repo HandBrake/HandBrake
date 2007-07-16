@@ -57,7 +57,7 @@
 	/* We show the scan choice sheet */
 	[NSApp beginSheet:fPanel modalForWindow:fWindow modalDelegate:nil didEndSelector:NULL contextInfo:NULL];
 	}
-	else
+	else // If dvd auto detect is turned off
 	{
 	[fSelectString setStringValue:@""];
 
@@ -145,7 +145,7 @@
     {
 #define p s->param.scanning
         case HB_STATE_SCANNING:
-		[fSelectString setStringValue:@"HandBrake is Scanning Your Source..."];
+			[fSelectString setStringValue:@"HandBrake is Scanning Your Source..."];
             [fStatusField setStringValue: [NSString stringWithFormat:
                 _( @"Scanning title %d of %d..." ),
                 p.title_cur, p.title_count]];
@@ -153,29 +153,46 @@
                 p.title_count];
             break;
 #undef p
-
+			
         case HB_STATE_SCANDONE:
             [self       EnableUI: YES];
             [fIndicator setDoubleValue: 0.0];
-
-            if (hb_list_count(hb_get_titles(fHandle)))
+            /*
+			 if (hb_list_count(hb_get_titles(fHandle)))
              {
-             [fStatusField setStringValue:@""];
-				[NSApp endSheet:fPanel];
-				[fPanel orderOut:self];
-				
-            }
-            else
-            {
-             [fStatusField setStringValue:_( @"No valid title found.")];
-			 /* If DVD Auto Detect is disabled */
-		     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DisableDvdAutoDetect"] == 1)
-		     {
-			 [NSApp endSheet:fPanel];
-	         [fPanel orderOut:self];
+				 [fStatusField setStringValue:@""];
+				 [NSApp endSheet:fPanel];
+				 [fPanel orderOut:self];
+				 
 			 }
-            }
+			 else
+			 {
+				 [fStatusField setStringValue:_( @"No valid title found.")];
+				 // If DVD Auto Detect is disabled 
+				 if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DisableDvdAutoDetect"] == 1)
+				 {
+					 [NSApp endSheet:fPanel];
+					 [fPanel orderOut:self];
+				 }
+			 }
+			 */
+			[fStatusField setStringValue:@""];
+			[NSApp endSheet:fPanel];
+			[fPanel orderOut:self];
             break;
+        /* garbage collection here just in case we get caught in a HB_STATE_WORKING
+		   phase if scanning while encoding */
+        case HB_STATE_WORKING:
+
+		/* Update slider */
+		/* Use "barber pole" as we currently have no way to measure
+		   progress of scan while encoding */
+		   [fStatusField setStringValue:@"Performing background scan ..."];
+            [fIndicator setIndeterminate: YES];
+            [fIndicator startAnimation: nil];
+			break;
+
+
     }
 }
 
@@ -298,30 +315,29 @@
 - (void) BrowseDone2: (id) sender
 {
     [NSApp beginSheet:fPanel modalForWindow:fWindow modalDelegate:nil didEndSelector:NULL contextInfo:NULL];
+
 }
 
 - (IBAction) Open: (id) sender
 {
-  [self         EnableUI: NO];
-    [fStatusField setStringValue: _( @"Opening..." )];
 
-	[fDriveDetector stop];
-
-    if( [fMatrix selectedRow] )
-    {
-	/* we set the last source directory in the prefs here */
-	NSString *sourceDirectory = [[fFolderField stringValue] stringByDeletingLastPathComponent];
-	[[NSUserDefaults standardUserDefaults] setObject:sourceDirectory forKey:@"LastSourceDirectory"];
-    	hb_scan( fHandle, [[fFolderField stringValue] UTF8String], 0 );
-    }
-    else
-    {
-	    hb_scan( fHandle, [[fDrives objectForKey: [fDetectedPopUp
-                 titleOfSelectedItem]] UTF8String], 0 );
-    }
-	
-	
-	
+		[fStatusField setStringValue: _( @"Opening..." )];
+		[fIndicator setIndeterminate: YES];
+        [fIndicator startAnimation: nil];
+		[fDriveDetector stop];
+		
+		if( [fMatrix selectedRow] )
+		{
+			/* we set the last source directory in the prefs here */
+			NSString *sourceDirectory = [[fFolderField stringValue] stringByDeletingLastPathComponent];
+			[[NSUserDefaults standardUserDefaults] setObject:sourceDirectory forKey:@"LastSourceDirectory"];
+			hb_scan( fHandle, [[fFolderField stringValue] UTF8String], 0 );
+		}
+		else
+		{
+			hb_scan( fHandle, [[fDrives objectForKey: [fDetectedPopUp
+				titleOfSelectedItem]] UTF8String], 0 );
+		}
 }
 
 - (IBAction) Cancel: (id) sender

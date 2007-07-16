@@ -31,9 +31,13 @@ struct hb_handle_s
 
     hb_lock_t    * state_lock;
     hb_state_t     state;
-
+    
     int            paused;
     hb_lock_t    * pause_lock;
+    /* For MacGui active queue
+       increments each time the scan thread completes*/
+    int            scanCount;
+    
 };
 
 hb_work_object_t * hb_objects = NULL;
@@ -123,6 +127,9 @@ hb_handle_t * hb_init_real( int verbose, int update_check )
                                      HB_NORMAL_PRIORITY );
 
     return h;
+	
+	/* Set the scan count to start at 0 */
+	//scan_count = 0;
 }
 
 /**
@@ -751,6 +758,15 @@ void hb_get_state( hb_handle_t * h, hb_state_t * s )
 }
 
 /**
+ * Called in MacGui in UpdateUI to check
+ *  for a new scan being completed to set a new source
+ */
+int hb_get_scancount( hb_handle_t * h)
+ {
+     return h->scanCount;
+ }
+
+/**
  * Closes access to libhb by freeing the hb_handle_t handle ontained in hb_init_real.
  * @param _h Pointer to handle to hb_handle_t.
  */
@@ -817,8 +833,11 @@ static void thread_func( void * _h )
             hb_log( "libhb: scan thread found %d valid title(s)",
                     hb_list_count( h->list_title ) );
             hb_lock( h->state_lock );
-            h->state.state = HB_STATE_SCANDONE;
-            hb_unlock( h->state_lock );
+            h->state.state = HB_STATE_SCANDONE; //originally state.state
+			hb_unlock( h->state_lock );
+			/*we increment this sessions scan count by one for the MacGui
+			to trigger a new source being set */
+            h->scanCount++;
         }
 
         /* Check if the work thread is done */

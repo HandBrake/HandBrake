@@ -91,7 +91,7 @@
             removeFromSuperviewWithoutNeedingDisplay];
     }
 
-    for( i = 0; i < hb_count( fHandle ); i++ )
+     for( i = 0; i < hb_count( fHandle ); i++ )
     {
         j = hb_job( fHandle, i );
         title = j->title;
@@ -171,6 +171,7 @@
 		int displayparwidth = titlewidth * j->pixel_aspect_width / j->pixel_aspect_height;
 	    int displayparheight = title->height - j->crop[0] - j->crop[1];
 		jobPictureDetail = [NSString stringWithFormat: @"Picture: %d x %d Anamorphic", displayparwidth, displayparheight];
+		//jobPictureDetail = [NSString stringWithFormat: @"Picture: Anamorphic"];
 		}
 		else
 		{

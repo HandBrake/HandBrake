@@ -111,7 +111,7 @@ static int FormatSettings[3][4] =
     [fWindow center];
 
     [self TranslateStrings];
-
+    currentScanCount = 0;
 
 //[self registrationDictionaryForGrowl];
 /* Init User Presets .plist */
@@ -367,9 +367,23 @@ return registrationDictionary;
 
 - (void) UpdateUI: (NSTimer *) timer
 {
+/* check to see if there has been a new scan done
+   this bypasses the constraints of HB_STATE_WORKING
+   not allowing setting a newly scanned source */
+int checkScanCount = hb_get_scancount( fHandle );
+if (checkScanCount > currentScanCount)
+	{
+		[fScanController Cancel: NULL];
+		[self ShowNewScan: NULL];
+		currentScanCount = checkScanCount;
+	}
+
+
+
 
     hb_state_t s;
     hb_get_state( fHandle, &s );
+
 
     switch( s.state )
     {
@@ -379,16 +393,172 @@ return registrationDictionary;
         case HB_STATE_SCANNING:
             [fScanController UpdateUI: &s];
             break;
-
+		
 #define p s.param.scandone
         case HB_STATE_SCANDONE:
         {
+		[fScanController Cancel: NULL];
+        [self ShowNewScan: NULL];
+            break;
+        }
+#undef p
+
+#define p s.param.working
+        case HB_STATE_WORKING:
+        {
+            float progress_total;
+            NSMutableString * string;
+			/* Currently, p.job_cur and p.job_count get screwed up when adding
+			   jobs during encoding, if they cannot be fixed in libhb, will implement a
+			   nasty but working cocoa solution */
+			/* Update text field */
+			string = [NSMutableString stringWithFormat: _( @"Encoding: task %d of %d, %.2f %%" ), p.job_cur, p.job_count, 100.0 * p.progress];
+            
+			if( p.seconds > -1 )
+            {
+                [string appendFormat:
+                    _( @" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)" ),
+                    p.rate_cur, p.rate_avg, p.hours, p.minutes, p.seconds];
+            }
+            [fStatusField setStringValue: string];
+			
+            /* Update slider */
+			progress_total = ( p.progress + p.job_cur - 1 ) / p.job_count;
+            [fRipIndicator setIndeterminate: NO];
+            [fRipIndicator setDoubleValue: 100.0 * progress_total];
+			
+            /* Update dock icon */
+            [self UpdateDockIcon: progress_total];
+			
+            [fPauseButton setEnabled: YES];
+            [fPauseButton setTitle: _( @"Pause" )];
+            [fRipButton setEnabled: YES];
+            [fRipButton setTitle: _( @"Cancel" )];
+			
+			
+			
+            break;
+        }
+#undef p
+
+#define p s.param.muxing
+        case HB_STATE_MUXING:
+        {
+            NSMutableString * string;
+			
+            /* Update text field */
+            string = [NSMutableString stringWithFormat:
+                _( @"Muxing..." )];
+            [fStatusField setStringValue: string];
+			
+            /* Update slider */
+            [fRipIndicator setIndeterminate: YES];
+            [fRipIndicator startAnimation: nil];
+			
+            /* Update dock icon */
+            [self UpdateDockIcon: 1.0];
+			
+            [fPauseButton setEnabled: YES];
+            [fPauseButton setTitle: _( @"Pause" )];
+            [fRipButton setEnabled: YES];
+            [fRipButton setTitle: _( @"Cancel" )];
+            break;
+        }
+#undef p
+			
+        case HB_STATE_PAUSED:
+		    [fStatusField setStringValue: _( @"Paused" )];
+            [fPauseButton setEnabled: YES];
+            [fPauseButton setTitle: _( @"Resume" )];
+            [fRipButton setEnabled: YES];
+            [fRipButton setTitle: _( @"Cancel" )];
+            break;
+
+        case HB_STATE_WORKDONE:
+        {
+            [fStatusField setStringValue: _( @"Done." )];
+            [fRipIndicator setIndeterminate: NO];
+            [fRipIndicator setDoubleValue: 0.0];
+            [fRipButton setTitle: _( @"Start" )];
+			
+            /* Restore dock icon */
+            [self UpdateDockIcon: -1.0];
+			
+            [fPauseButton setEnabled: NO];
+            [fPauseButton setTitle: _( @"Pause" )];
+            [fRipButton setEnabled: YES];
+            [fRipButton setTitle: _( @"Start" )];
+			
+            /* FIXME */
+            hb_job_t * job;
+            while( ( job = hb_job( fHandle, 0 ) ) )
+            {
+                hb_rem( fHandle, job );
+            }
+            /* Check to see if the encode state has not been cancelled
+			to determine if we should check for encode done notifications */
+			if (fEncodeState != 2) 			{
+				/* If Growl Notification or Window and Growl has been selected */
+				if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Growl Notification"] || 
+					[[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window And Growl"])
+                {
+					/*Growl Notification*/
+					[self showGrowlDoneNotification: NULL];
+                }
+                /* If Alert Window or Window and Growl has been selected */
+				if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window"] || 
+					[[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window And Growl"])
+                {
+					/*On Screen Notification*/
+					int status;
+					NSBeep();
+					status = NSRunAlertPanel(@"Put down that cocktail...",@"your HandBrake encode is done!", @"OK", nil, nil);
+					[NSApp requestUserAttention:NSCriticalRequest];
+					if ( status == NSAlertDefaultReturn ) 
+					{
+						[self EnableUI: YES];
+					}
+                }
+				else
+				{
+					[self EnableUI: YES];
+				}
+			}
+			else
+			{
+			[self EnableUI: YES];
+			}
+            break;
+        }
+    }
+
+    /* Lets show the queue status
+	here in the main window*/
+        int queue_count = hb_count( fHandle );
+        if( queue_count )
+        {
+            [fQueueStatus setStringValue: [NSString stringWithFormat:
+                @"%d task%s in the queue",
+                queue_count, ( queue_count > 1 ) ? "s" : ""]];
+        }
+        else
+        {
+            [fQueueStatus setStringValue: @""];
+        }
+
+    [[NSRunLoop currentRunLoop] addTimer: [NSTimer
+        scheduledTimerWithTimeInterval: 0.2 target: self
+        selector: @selector( UpdateUI: ) userInfo: NULL repeats: FALSE]
+        forMode: NSModalPanelRunLoopMode];
+}
+- (IBAction) ShowNewScan:(id)sender
+{
             hb_list_t  * list;
             hb_title_t * title;
 			int indxpri=0; 	  // Used to search the longuest title (default in combobox)
 			int longuestpri=0; // Used to search the longuest title (default in combobox)
 
-            [fScanController UpdateUI: &s];
+            //[fScanController UpdateUI: &s];
 
             list = hb_get_titles( fHandle );
 
@@ -396,7 +566,7 @@ return registrationDictionary;
             {
 			/* We display a message if a valid dvd source was not chosen */
 			[fSrcDVD2Field setStringValue: @"No Valid DVD Source Chosen"];
-                break;
+            currentSource = [fSrcDVD2Field stringValue];
             }
 
 
@@ -405,8 +575,8 @@ return registrationDictionary;
             {
                 title = (hb_title_t *) hb_list_item( list, i );
                 /*Set DVD Name at top of window*/
-				[fSrcDVD2Field setStringValue: [NSString stringWithUTF8String: title->name]];
-				
+				[fSrcDVD2Field setStringValue:[NSString stringWithUTF8String: title->name]];
+				currentSource = [NSString stringWithUTF8String: title->dvd];
 				/* Use the dvd name in the default output field here 
 				May want to add code to remove blank spaces for some dvd names*/
 				/* Check to see if the last destination has been set,use if so, if not, use Desktop */
@@ -491,156 +661,8 @@ return registrationDictionary;
             [self EnableUI: YES];
             [fPauseButton setEnabled: NO];
             [fRipButton   setEnabled: YES];
-            break;
-        }
-#undef p
-
-#define p s.param.working
-        case HB_STATE_WORKING:
-        {
-            float progress_total;
-            NSMutableString * string;
-
-            /* Update text field */
-            string = [NSMutableString stringWithFormat:
-                _( @"Encoding: task %d of %d, %.2f %%" ),
-                p.job_cur, p.job_count, 100.0 * p.progress];
-            if( p.seconds > -1 )
-            {
-                [string appendFormat:
-                    _( @" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)" ),
-                    p.rate_cur, p.rate_avg, p.hours, p.minutes, p.seconds];
-            }
-            [fStatusField setStringValue: string];
-
-            /* Update slider */
-            progress_total = ( p.progress + p.job_cur - 1 ) / p.job_count;
-            [fRipIndicator setIndeterminate: NO];
-            [fRipIndicator setDoubleValue: 100.0 * progress_total];
-
-            /* Update dock icon */
-            [self UpdateDockIcon: progress_total];
-
-            [fPauseButton setEnabled: YES];
-            [fPauseButton setTitle: _( @"Pause" )];
-            [fRipButton setEnabled: YES];
-            [fRipButton setTitle: _( @"Cancel" )];
-            break;
-        }
-#undef p
-
-#define p s.param.muxing
-        case HB_STATE_MUXING:
-        {
-            NSMutableString * string;
-			
-            /* Update text field */
-            string = [NSMutableString stringWithFormat:
-                _( @"Muxing..." )];
-            [fStatusField setStringValue: string];
-			
-            /* Update slider */
-            [fRipIndicator setIndeterminate: YES];
-            [fRipIndicator startAnimation: nil];
-			
-            /* Update dock icon */
-            [self UpdateDockIcon: 1.0];
-			
-            [fPauseButton setEnabled: YES];
-            [fPauseButton setTitle: _( @"Pause" )];
-            [fRipButton setEnabled: YES];
-            [fRipButton setTitle: _( @"Cancel" )];
-            break;
-        }
-#undef p
-			
-        case HB_STATE_PAUSED:
-		    [fStatusField setStringValue: _( @"Paused" )];
-            [fPauseButton setEnabled: YES];
-            [fPauseButton setTitle: _( @"Resume" )];
-            [fRipButton setEnabled: YES];
-            [fRipButton setTitle: _( @"Cancel" )];
-            break;
-
-        case HB_STATE_WORKDONE:
-        {
-            //[self EnableUI: YES];
-            [fStatusField setStringValue: _( @"Done." )];
-            [fRipIndicator setIndeterminate: NO];
-            [fRipIndicator setDoubleValue: 0.0];
-            [fRipButton setTitle: _( @"Start" )];
-			
-            /* Restore dock icon */
-            [self UpdateDockIcon: -1.0];
-			
-            [fPauseButton setEnabled: NO];
-            [fPauseButton setTitle: _( @"Pause" )];
-            [fRipButton setEnabled: YES];
-            [fRipButton setTitle: _( @"Start" )];
-			
-            /* FIXME */
-            hb_job_t * job;
-            while( ( job = hb_job( fHandle, 0 ) ) )
-            {
-                hb_rem( fHandle, job );
-            }
-            /* Check to see if the encode state has not been cancelled
-			to determine if we should check for encode done notifications */
-			if (fEncodeState != 2) 			{
-				/* If Growl Notification or Window and Growl has been selected */
-				if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Growl Notification"] || 
-					[[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window And Growl"])
-                {
-					/*Growl Notification*/
-					[self showGrowlDoneNotification: NULL];
-                }
-                /* If Alert Window or Window and Growl has been selected */
-				if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window"] || 
-					[[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window And Growl"])
-                {
-					/*On Screen Notification*/
-					int status;
-					NSBeep();
-					status = NSRunAlertPanel(@"Put down that cocktail...",@"your HandBrake encode is done!", @"OK", nil, nil);
-					[NSApp requestUserAttention:NSCriticalRequest];
-					if ( status == NSAlertDefaultReturn ) 
-					{
-						[self EnableUI: YES];
-					}
-                }
-				else
-				{
-					[self EnableUI: YES];
-				}
-			}
-			else
-			{
-			[self EnableUI: YES];
-			}
-            break;
-        }
-    }
-
-    /* Lets show the queue status
-	here in the main window*/
-
-        int count = hb_count( fHandle );
-        if( count )
-        {
-            [fQueueStatus setStringValue: [NSString stringWithFormat:
-                @"%d task%s in the queue",
-                count, ( count > 1 ) ? "s" : ""]];
-        }
-        else
-        {
-            [fQueueStatus setStringValue: @""];
-        }
-
-    [[NSRunLoop currentRunLoop] addTimer: [NSTimer
-        scheduledTimerWithTimeInterval: 0.2 target: self
-        selector: @selector( UpdateUI: ) userInfo: NULL repeats: FALSE]
-        forMode: NSModalPanelRunLoopMode];
 }
+
 
 -(IBAction)showGrowlDoneNotification:(id)sender
 {
@@ -655,7 +677,6 @@ return registrationDictionary;
                  isSticky:1 
              clickContext:nil];
 }
-
 - (void) EnableUI: (bool) b
 {
     NSControl * controls[] =
@@ -1049,6 +1070,9 @@ return registrationDictionary;
 		}
 	
 	[[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];
+	/* Lets try to update stuff, taken from remove in the queue controller */
+	[fQueueController performSelectorOnMainThread: @selector( Update: )
+        withObject: sender waitUntilDone: NO];
 	}
 }
 
@@ -1130,7 +1154,7 @@ return registrationDictionary;
 	fEncodeState = 1;
 
     /* Disable interface */
-   [self EnableUI: NO];
+   //[self EnableUI: NO];
     [fPauseButton setEnabled: NO];
     [fRipButton   setEnabled: NO];
 }

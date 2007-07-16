@@ -94,6 +94,9 @@ void          hb_stop( hb_handle_t * );
    Should be regularly called by the UI (like 5 or 10 times a second).
    Look at test/test.c to see how to use it. */
 void hb_get_state( hb_handle_t *, hb_state_t * );
+/* hb_get_scancount() is called by the MacGui in UpdateUI to 
+   check for a new scan during HB_STATE_WORKING phase  */
+int hb_get_scancount( hb_handle_t * );
 
 /* hb_close()
    Aborts all current jobs if any, frees memory. */
