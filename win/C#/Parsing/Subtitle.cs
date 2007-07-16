@@ -53,6 +53,7 @@ namespace Handbrake.Parsing
             while ((char)output.Peek() != '+') // oh glorious hack, serve me well
             {
                 Subtitle thisSubtitle = Subtitle.Parse(output);
+
                 if (thisSubtitle != null)
                 {
                     subtitles.Add(thisSubtitle);

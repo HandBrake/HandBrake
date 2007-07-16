@@ -603,38 +603,10 @@ namespace Handbrake
                 query = QueryEditorText.Text;
             }
 
-            hbProc = new System.Diagnostics.Process();
-            hbProc.StartInfo.FileName = "hbcli.exe";
-            hbProc.StartInfo.Arguments = query;
-            hbProc.StartInfo.UseShellExecute = false;
-            hbProc.Start();
-
-            // Set the process Priority
-            string priority = Properties.Settings.Default.processPriority;
-            switch (priority)
-            {
-                case "Realtime":
-                    hbProc.PriorityClass = ProcessPriorityClass.RealTime;
-                    break;
-                case "High":
-                    hbProc.PriorityClass = ProcessPriorityClass.High;
-                    break;
-                case "Above Normal":
-                    hbProc.PriorityClass = ProcessPriorityClass.AboveNormal;
-                    break;
-                case "Normal":
-                    hbProc.PriorityClass = ProcessPriorityClass.Normal;
-                    break;
-                case "Low":
-                    hbProc.PriorityClass = ProcessPriorityClass.Idle;
-                    break;
-                default:
-                    hbProc.PriorityClass = ProcessPriorityClass.BelowNormal;
-                    break;
-            }
+            Functions.CLI process = new Functions.CLI();
+            Process hbProc = process.runCli(this, query, false, false, false, false);
 
             ThreadPool.QueueUserWorkItem(procMonitor);
-            // TODO: Need to write a bit of code here to do process monitoring.
         }
 
         private void procMonitor(object state)
@@ -744,9 +716,10 @@ namespace Handbrake
                         text_width.BackColor = Color.LightGreen;
                     }
                 }
-
+ 
                 // There is a bug here *******************************************************************
-                if (!lbl_Aspect.Text.Equals("Select a Title")){
+                if (lbl_Aspect.Text != "Select a Title")
+                {
                     int height = int.Parse(text_width.Text) / int.Parse(lbl_Aspect.Text);
                     MessageBox.Show("test");
                     int mod16 = height % 16;

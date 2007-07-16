@@ -77,40 +77,13 @@ namespace Handbrake
             for (int i = 0; i < initialListCount; i++)
             {
                 string query = list_queue.Items[0].ToString();
-                Process hbProc = new Process();
-                hbProc.StartInfo.FileName = "hbcli.exe";
-                hbProc.StartInfo.Arguments = query;
-                hbProc.StartInfo.UseShellExecute = false;
-                hbProc.Start();
 
-                // Set the process Priority
-
-                switch (Properties.Settings.Default.processPriority)
-                {
-                    case "Realtime":
-                        hbProc.PriorityClass = ProcessPriorityClass.RealTime;
-                        break;
-                    case "High":
-                        hbProc.PriorityClass = ProcessPriorityClass.High;
-                        break;
-                    case "Above Normal":
-                        hbProc.PriorityClass = ProcessPriorityClass.AboveNormal;
-                        break;
-                    case "Normal":
-                        hbProc.PriorityClass = ProcessPriorityClass.Normal;
-                        break;
-                    case "Low":
-                        hbProc.PriorityClass = ProcessPriorityClass.Idle;
-                        break;
-                    default:
-                        hbProc.PriorityClass = ProcessPriorityClass.BelowNormal;
-                        break;
-                }
-
+                Functions.CLI process = new Functions.CLI();
+                Process hbProc = process.runCli(this, query, false, false, false, false);
+       
                 hbProc.WaitForExit();
                 hbProc.Close();
                 hbProc.Dispose();
-
 
                 updateUIElements();
             }

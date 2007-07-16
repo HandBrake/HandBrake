@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Threading;
+using System.Diagnostics;
 
 
 namespace Handbrake
@@ -59,15 +60,10 @@ namespace Handbrake
         private void startProc(object state)
         {
             string query = "-i " + '"' + inputFile + '"' + " -t0";
-            System.Diagnostics.Process hbProc = new System.Diagnostics.Process();
-            hbProc.StartInfo.FileName = "hbcli.exe";
-            hbProc.StartInfo.RedirectStandardOutput = true;
-            hbProc.StartInfo.RedirectStandardError = true;
-            hbProc.StartInfo.Arguments = query;
-            hbProc.StartInfo.UseShellExecute = false;
-            hbProc.StartInfo.CreateNoWindow = true;
+          
+            Functions.CLI process = new Functions.CLI();
+            Process hbProc = process.runCli(this, query, true, true, false, true);
 
-            hbProc.Start();
             Parsing.Parser readData = new Parsing.Parser(hbProc.StandardError.BaseStream);
             hbProc.WaitForExit();
             hbProc.Close();
