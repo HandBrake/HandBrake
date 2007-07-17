@@ -11,19 +11,29 @@
 
 #define _(a) NSLocalizedString(a,NULL)
 
-static int FormatSettings[3][4] =
+static int FormatSettings[4][10] =
   { { HB_MUX_MP4 | HB_VCODEC_FFMPEG | HB_ACODEC_FAAC,
-      HB_MUX_MP4 | HB_VCODEC_X264   | HB_ACODEC_FAAC,
-      0,
-      0 },
+	  HB_MUX_MP4 | HB_VCODEC_X264   | HB_ACODEC_FAAC,
+	  0,
+	  0},
     { HB_MUX_AVI | HB_VCODEC_FFMPEG | HB_ACODEC_LAME,
-      HB_MUX_AVI | HB_VCODEC_FFMPEG | HB_ACODEC_AC3,
-      HB_MUX_AVI | HB_VCODEC_X264   | HB_ACODEC_LAME,
-      HB_MUX_AVI | HB_VCODEC_X264   | HB_ACODEC_AC3 },
+	  HB_MUX_AVI | HB_VCODEC_FFMPEG | HB_ACODEC_AC3,
+	  HB_MUX_AVI | HB_VCODEC_X264   | HB_ACODEC_LAME,
+	  HB_MUX_AVI | HB_VCODEC_X264   | HB_ACODEC_AC3},
     { HB_MUX_OGM | HB_VCODEC_FFMPEG | HB_ACODEC_VORBIS,
-      HB_MUX_OGM | HB_VCODEC_FFMPEG | HB_ACODEC_LAME,
-      0,
-      0 } };
+	  HB_MUX_OGM | HB_VCODEC_FFMPEG | HB_ACODEC_LAME,
+	  0,
+	  0 },
+    { HB_MUX_MKV | HB_VCODEC_FFMPEG | HB_ACODEC_FAAC,
+	  HB_MUX_MKV | HB_VCODEC_FFMPEG | HB_ACODEC_AC3,
+	  HB_MUX_MKV | HB_VCODEC_FFMPEG | HB_ACODEC_LAME,
+	  HB_MUX_MKV | HB_VCODEC_FFMPEG | HB_ACODEC_VORBIS,
+	  HB_MUX_MKV | HB_VCODEC_X264   | HB_ACODEC_FAAC,
+	  HB_MUX_MKV | HB_VCODEC_X264   | HB_ACODEC_AC3,
+	  HB_MUX_MKV | HB_VCODEC_X264   | HB_ACODEC_LAME,
+	  HB_MUX_MKV | HB_VCODEC_X264   | HB_ACODEC_VORBIS,
+	  0,
+	  0 } };
 
 /*******************************
  * HBController implementation *
@@ -173,6 +183,7 @@ static int FormatSettings[3][4] =
     [fDstFormatPopUp addItemWithTitle: _( @"MP4 file" )];
     [fDstFormatPopUp addItemWithTitle: _( @"AVI file" )];
     [fDstFormatPopUp addItemWithTitle: _( @"OGM file" )];
+	[fDstFormatPopUp addItemWithTitle: _( @"MKV file" )];
     [fDstFormatPopUp selectItemAtIndex: 0];
 
     [self FormatPopUpChanged: NULL];
@@ -1405,6 +1416,29 @@ if (checkScanCount > currentScanCount)
 			and make sure it is unchecked*/
 			[fCreateChapterMarkers setEnabled: NO];
 			[fCreateChapterMarkers setState: NSOffState];
+			break;
+		case 3:
+            ext = "mkv";
+            [fDstCodecsPopUp addItemWithTitle:
+                _( @"MPEG-4 Video / AAC Audio" )];
+				[fDstCodecsPopUp addItemWithTitle:
+                _( @"MPEG-4 Video / AC-3 Audio" )];
+			[fDstCodecsPopUp addItemWithTitle:
+                _( @"MPEG-4 Video / MP3 Audio" )];
+			[fDstCodecsPopUp addItemWithTitle:
+                _( @"MPEG-4 Video / Vorbis Audio" )];
+            
+			[fDstCodecsPopUp addItemWithTitle:
+                _( @"AVC/H.264 Video / AAC Audio" )];
+			[fDstCodecsPopUp addItemWithTitle:
+                _( @"AVC/H.264 Video / AC-3 Audio" )];
+			[fDstCodecsPopUp addItemWithTitle:
+                _( @"AVC/H.264 Video / MP3 Audio" )];
+			[fDstCodecsPopUp addItemWithTitle:
+                _( @"AVC/H.264 Video / Vorbis Audio" )];
+            /* We disable the create chapters checkbox here since we are NOT .mp4 
+			and make sure it is unchecked*/
+			[fCreateChapterMarkers setEnabled: YES];
 			break;
     }
     [self CodecsPopUpChanged: NULL];

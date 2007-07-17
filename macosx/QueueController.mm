@@ -112,6 +112,11 @@
 		{
 		jobFormat = @"OGM"; // HB_MUX_OGM
 		}
+		if (j->mux == 2097152)
+		{
+		jobFormat = @"MKV"; // HB_MUX_MKV
+		}
+		// 2097152
 		/* Video Codec settings (Encoder in the gui) */
 		if (j->vcodec == 1)
 		{
