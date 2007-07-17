@@ -124,6 +124,28 @@ namespace Handbrake.Parsing
                 curLine = output.ReadLine();
                 splitter = curLine.Split(new string[] { "  + autocrop: ", "/" }, StringSplitOptions.RemoveEmptyEntries);
                 thisTitle.m_autoCrop = new int[4] { int.Parse(splitter[0]), int.Parse(splitter[1]), int.Parse(splitter[2]), int.Parse(splitter[3]) };
+
+                /* 
+                 * 
+                 * A Few Bugs that need fixed.
+                 * 
+                 * 
+                 * Problem 1
+                 * There is a small problem here... What happens if the DVD has no Subtitles? or Handbrake misses the Audio or Chapter track 
+                 * data due to an error.
+                 * 
+                 * hbcli will sit in a suspended state until it is forcefully closed.
+                 * 
+                 * Problem 2
+                 * See AudioTrack.cs Line 80 for details
+                 * 
+                 * Problem 3
+                 * Doesn't seem to support DVD's where the first track is 0 instead of 1, and only includes 1 title (TS/MPG files)
+                 * Simply Doesn't list any titles.
+                 * 
+                 * 
+                 */
+         
                 thisTitle.m_chapters.AddRange(Chapter.ParseList(output));
                 thisTitle.m_audioTracks.AddRange(AudioTrack.ParseList(output));
                 thisTitle.m_subtitles.AddRange(Subtitle.ParseList(output));

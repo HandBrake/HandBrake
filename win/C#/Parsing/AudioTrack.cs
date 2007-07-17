@@ -76,6 +76,12 @@ namespace Handbrake.Parsing
                 thisTrack.m_trackNumber = int.Parse(splitter[0]);
                 thisTrack.m_language = splitter[1];
                 thisTrack.m_format = splitter[2];
+                /*
+                 * Problem 2
+                 * Field 'Handbrake.frmMain.hbProc' is never assigned to, and will always have it's default value null.
+                 * This happens with "AllAudios.iso" which is a test file. http://www.sr88.co.uk/AllAudios.iso  (~95MB)
+                 */
+
                 thisTrack.m_subFormat = splitter[3];
                 thisTrack.m_frequency = int.Parse(splitter[4]);
                 thisTrack.m_bitrate = int.Parse(splitter[5]);
