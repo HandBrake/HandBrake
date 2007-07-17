@@ -14,7 +14,7 @@ namespace Handbrake
 {
     public partial class frmMain : Form
     {
-        private System.Diagnostics.Process hbProc;
+        private Process hbProc;
         private Parsing.DVD thisDVD;
 
         // --------------------------------------------------------------
@@ -604,14 +604,13 @@ namespace Handbrake
             }
 
             Functions.CLI process = new Functions.CLI();
-            Process hbProc = process.runCli(this, query, false, false, false, false);
-
+            hbProc = process.runCli(this, query, false, false, false, false);
+          
             ThreadPool.QueueUserWorkItem(procMonitor);
         }
 
         private void procMonitor(object state)
         {
-            //******* BUG HERE, hbProc is not getting passed in here.
             MessageBox.Show("The encode process has now started.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             hbProc.WaitForExit();
             hbProc.Close();
@@ -706,31 +705,48 @@ namespace Handbrake
 
         private void text_width_TextChanged(object sender, EventArgs e)
         {
+
             try
             {
-                if (CheckPixelRatio.Checked) {
+                if (CheckPixelRatio.Checked)
+                {
                     text_width.Text = "";
-                } else {
-                    if ((int.Parse(text_width.Text) % 16) != 0){
+                }
+                else
+                {
+                    if ((int.Parse(text_width.Text) % 16) != 0)
+                    {
                         text_width.BackColor = Color.LightCoral;
-                    }else {
+                    }
+                    else
+                    {
                         text_width.BackColor = Color.LightGreen;
                     }
                 }
- 
-                // There is a bug here *******************************************************************
+
                 if (lbl_Aspect.Text != "Select a Title")
                 {
-                    int height = int.Parse(text_width.Text) / int.Parse(lbl_Aspect.Text);
-                    MessageBox.Show("test");
-                    int mod16 = height % 16;
+                    double height = int.Parse(text_width.Text) / double.Parse(lbl_Aspect.Text);
+                    double mod16 = height % 16;
                     height = height - mod16;
-                    text_height.Text = height.ToString();
+
+                    if (text_width.Text == "")
+                    {
+                        text_height.Text = "";
+                        text_width.BackColor = Color.White;
+                    }
+                    else
+                    {
+                        text_height.Text = height.ToString();
+                    }
                 }
-               
-            } catch(Exception){
-                // No need to alert the user if there is a problem here.
             }
+            catch (Exception)
+            {
+                // No need to throw an error here.
+            }
+               
+          
         }
 
         private void text_height_TextChanged(object sender, EventArgs e)
