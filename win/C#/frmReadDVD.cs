@@ -18,6 +18,7 @@ namespace Handbrake
         private frmMain mainWindow;
         private frmDvdInfo dvdInfo;
         private Parsing.DVD thisDvd;
+        private Process hbProc;
         private delegate void UpdateUIHandler();
 
         public frmReadDVD(string inputFile, frmMain parent, frmDvdInfo dvdInfoWindow)
@@ -50,10 +51,6 @@ namespace Handbrake
             mainWindow.drp_dvdtitle.Items.Clear();
             mainWindow.drp_dvdtitle.Items.AddRange(thisDvd.Titles.ToArray());
 
-            // Just a quick test to see if data can be pushed to frmDvdInfo.
-            // What needs to happen here is the plaintext outout needs to be sent to the frmDvdInfo.
-            dvdInfo.rtf_dvdInfo.Text = thisDvd.ToString();
-
             this.Close();
         }
 
@@ -62,10 +59,10 @@ namespace Handbrake
             string query = "-i " + '"' + inputFile + '"' + " -t0";
           
             Functions.CLI process = new Functions.CLI();
-            Process hbProc = process.runCli(this, query, true, true, false, true);
+            hbProc = process.runCli(this, query, true, true, false, true);
 
             Parsing.Parser readData = new Parsing.Parser(hbProc.StandardError.BaseStream);
-            hbProc.WaitForExit();
+            //hbProc.WaitForExit();
             hbProc.Close();
 
             // Setup the parser

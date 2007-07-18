@@ -53,12 +53,12 @@ namespace Handbrake
             this.btn_ok.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_ok.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_ok.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_ok.Location = new System.Drawing.Point(405, 51);
+            this.btn_ok.Location = new System.Drawing.Point(400, 52);
             this.btn_ok.Name = "btn_ok";
-            this.btn_ok.Size = new System.Drawing.Size(56, 22);
+            this.btn_ok.Size = new System.Drawing.Size(61, 22);
             this.btn_ok.TabIndex = 28;
             this.btn_ok.TabStop = false;
-            this.btn_ok.Text = "Ok";
+            this.btn_ok.Text = "OK";
             this.btn_ok.UseVisualStyleBackColor = false;
             this.btn_ok.Click += new System.EventHandler(this.btn_ok_Click);
             // 

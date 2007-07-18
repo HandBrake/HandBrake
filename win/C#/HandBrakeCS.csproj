@@ -37,6 +37,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CLI\Jobs\Encode.cs" />
+    <Compile Include="CLI\Jobs\Job.cs" />
+    <Compile Include="CLI\Jobs\ParseDVD.cs" />
     <Compile Include="CLI\Manager.cs" />
     <Compile Include="frmAbout.cs">
       <SubType>Form</SubType>

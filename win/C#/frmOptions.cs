@@ -10,14 +10,12 @@ namespace Handbrake
 {
     public partial class frmOptions : Form
     {
+        /// <summary>
+        /// When the form loads, Initialise all the setting components with their correct values
+        /// </summary>
         public frmOptions()
         {
             InitializeComponent();
-        }
-
-        // When the form loads, Initialise all the setting components with their correct values
-        private void frmOptions_Load(object sender, EventArgs e)
-        {
             if (Properties.Settings.Default.updateStatus == "Checked")
             {
                 check_updateCheck.CheckState = CheckState.Checked;
@@ -41,7 +39,6 @@ namespace Handbrake
                 check_verbose.CheckState = CheckState.Checked;
             }
         }
-
 
         private void check_updateCheck_CheckedChanged(object sender, EventArgs e)
         {

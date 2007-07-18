@@ -13,17 +13,12 @@ namespace Handbrake
         public frmAbout()
         {
             InitializeComponent();
+            Version.Text = Properties.Settings.Default.GuiVersion;
         }
 
         private void btn_close_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-
-      
-        private void About_Load(object sender, EventArgs e)
-        {
-            Version.Text = Properties.Settings.Default.GuiVersion;
         }
     }
 }
