@@ -5,9 +5,15 @@ using System.IO;
 
 namespace Handbrake.Parsing
 {
+    /// <summary>
+    /// An object represending an AudioTrack associated with a Title, in a DVD
+    /// </summary>
     public class AudioTrack
     {
         private int m_trackNumber;
+        /// <summary>
+        /// The track number of this Audio Track
+        /// </summary>
         public int TrackNumber
         {
             get
@@ -17,6 +23,9 @@ namespace Handbrake.Parsing
         }
 
         private string m_language;
+        /// <summary>
+        /// The language (if detected) of this Audio Track
+        /// </summary>
         public string Language
         {
             get
@@ -26,6 +35,9 @@ namespace Handbrake.Parsing
         }
 
         private string m_format;
+        /// <summary>
+        /// The primary format of this Audio Track
+        /// </summary>
         public string Format
         {
             get
@@ -35,6 +47,9 @@ namespace Handbrake.Parsing
         }
 
         private string m_subFormat;
+        /// <summary>
+        /// Additional format info for this Audio Track
+        /// </summary>
         public string SubFormat
         {
             get
@@ -44,6 +59,9 @@ namespace Handbrake.Parsing
         }
 
         private int m_frequency;
+        /// <summary>
+        /// The frequency (in MHz) of this Audio Track
+        /// </summary>
         public int Frequency
         {
             get
@@ -53,6 +71,9 @@ namespace Handbrake.Parsing
         }
 
         private int m_bitrate;
+        /// <summary>
+        /// The bitrate (in kbps) of this Audio Track
+        /// </summary>
         public int Bitrate
         {
             get
@@ -61,6 +82,10 @@ namespace Handbrake.Parsing
             }
         }
 
+        /// <summary>
+        /// Override of the ToString method to make this object easier to use in the UI
+        /// </summary>
+        /// <returns>A string formatted as: {track #} {language} ({format}) ({sub-format})</returns>
         public override string ToString()
         {
             return string.Format("{0} {1} ({2}) ({3})", this.m_trackNumber, this.m_language, this.m_format, this.m_subFormat);

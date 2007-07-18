@@ -5,9 +5,15 @@ using System.IO;
 
 namespace Handbrake.Parsing
 {
+    /// <summary>
+    /// An object representing a Chapter aosciated with a Title, in a DVD
+    /// </summary>
     public class Chapter
     {
         private int m_chapterNumber;
+        /// <summary>
+        /// The number of this Chapter, in regards to it's parent Title
+        /// </summary>
         public int ChapterNumber
         {
             get
@@ -17,6 +23,9 @@ namespace Handbrake.Parsing
         }
 
         private TimeSpan m_duration;
+        /// <summary>
+        /// The length in time this Chapter spans
+        /// </summary>
         public TimeSpan Duration
         {
             get
@@ -25,6 +34,10 @@ namespace Handbrake.Parsing
             }
         }
 
+        /// <summary>
+        /// Override of the ToString method to make this object easier to use in the UI
+        /// </summary>
+        /// <returns>A string formatted as: {chapter #}</returns>
         public override string ToString()
         {
             return this.m_chapterNumber.ToString();

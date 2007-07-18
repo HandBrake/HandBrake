@@ -7,9 +7,15 @@ using System.Windows.Forms;
 
 namespace Handbrake.Parsing
 {
+    /// <summary>
+    /// An object that represents a single Title of a DVD
+    /// </summary>
     public class Title
     {
         private List<Chapter> m_chapters;
+        /// <summary>
+        /// Collection of chapters in this Title
+        /// </summary>
         public List<Chapter> Chapters
         {
             get
@@ -19,6 +25,9 @@ namespace Handbrake.Parsing
         }
 
         private List<AudioTrack> m_audioTracks;
+        /// <summary>
+        /// Collection of audio tracks associated with this Title
+        /// </summary>
         public List<AudioTrack> AudioTracks
         {
             get
@@ -28,6 +37,9 @@ namespace Handbrake.Parsing
         }
 
         private List<Subtitle> m_subtitles;
+        /// <summary>
+        /// Collection of subtitles associated with this Title
+        /// </summary>
         public List<Subtitle> Subtitles
         {
             get
@@ -37,6 +49,9 @@ namespace Handbrake.Parsing
         }
 
         private int m_titleNumber;
+        /// <summary>
+        /// The track number of this Title
+        /// </summary>
         public int TitleNumber
         {
             get
@@ -46,6 +61,9 @@ namespace Handbrake.Parsing
         }
 
         private TimeSpan m_duration;
+        /// <summary>
+        /// The length in time of this Title
+        /// </summary>
         public TimeSpan Duration
         {
             get
@@ -55,6 +73,9 @@ namespace Handbrake.Parsing
         }
 
         private Size m_resolution;
+        /// <summary>
+        /// The resolution (width/height) of this Title
+        /// </summary>
         public Size Resolution
         {
             get
@@ -64,6 +85,9 @@ namespace Handbrake.Parsing
         }
 
         private float m_aspectRatio;
+        /// <summary>
+        /// The aspect ratio of this Title
+        /// </summary>
         public float AspectRatio
         {
             get
@@ -74,6 +98,14 @@ namespace Handbrake.Parsing
 
 
         private int[] m_autoCrop;
+        /// <summary>
+        /// The automatically detected crop region for this Title.
+        /// This is an int array with 4 items in it as so:
+        /// 0: 
+        /// 1: 
+        /// 2: 
+        /// 3: 
+        /// </summary>
         public int[] AutoCropDimensions
         {
             get
@@ -82,6 +114,9 @@ namespace Handbrake.Parsing
             }
         }
 
+        /// <summary>
+        /// The constructor for this object
+        /// </summary>
         public Title()
         {
             this.m_audioTracks = new List<AudioTrack>();
@@ -89,6 +124,10 @@ namespace Handbrake.Parsing
             this.m_subtitles = new List<Subtitle>();
         }
 
+        /// <summary>
+        /// Override of the ToString method to provide an easy way to use this object in the UI
+        /// </summary>
+        /// <returns>A string representing this track in the format: {title #} (00:00:00)</returns>
         public override string ToString()
         {
             return string.Format("{0} ({1:00}:{2:00}:{3:00})", this.m_titleNumber, this.m_duration.Hours, 

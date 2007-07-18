@@ -39,6 +39,10 @@ namespace Handbrake.Parsing
         /// </summary>
         public static event DataReadEventHandler OnReadToEnd;
 
+        /// <summary>
+        /// Default constructor for this object
+        /// </summary>
+        /// <param name="baseStream">The stream to parse from</param>
         public Parser(Stream baseStream) : base(baseStream)
         {
             this.m_buffer = string.Empty;

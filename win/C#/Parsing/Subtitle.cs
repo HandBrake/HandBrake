@@ -5,9 +5,15 @@ using System.IO;
 
 namespace Handbrake.Parsing
 {
+    /// <summary>
+    /// An object that represents a subtitle associated with a Title, in a DVD
+    /// </summary>
     public class Subtitle
     {
         private int m_trackNumber;
+        /// <summary>
+        /// The track number of this Subtitle
+        /// </summary>
         public int TrackNumber
         {
             get
@@ -17,6 +23,9 @@ namespace Handbrake.Parsing
         }
 
         private string m_language;
+        /// <summary>
+        /// The language (if detected) of this Subtitle
+        /// </summary>
         public string Language
         {
             get
@@ -25,6 +34,10 @@ namespace Handbrake.Parsing
             }
         }
 
+        /// <summary>
+        /// Override of the ToString method to make this object easier to use in the UI
+        /// </summary>
+        /// <returns>A string formatted as: {track #} {language}</returns>
         public override string ToString()
         {
             return string.Format("{0} {1}", this.m_trackNumber, this.m_language);
