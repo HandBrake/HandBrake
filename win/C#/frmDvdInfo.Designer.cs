@@ -37,7 +37,7 @@ namespace Handbrake
             // Label2
             // 
             this.Label2.AutoSize = true;
-            this.Label2.Location = new System.Drawing.Point(13, 8);
+            this.Label2.Location = new System.Drawing.Point(13, 14);
             this.Label2.Name = "Label2";
             this.Label2.Size = new System.Drawing.Size(518, 26);
             this.Label2.TabIndex = 30;
@@ -79,6 +79,9 @@ namespace Handbrake
             this.Controls.Add(this.rtf_dvdInfo);
             this.Controls.Add(this.btn_close);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(553, 520);
+            this.MinimumSize = new System.Drawing.Size(553, 520);
             this.Name = "frmDvdInfo";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Read DVD";

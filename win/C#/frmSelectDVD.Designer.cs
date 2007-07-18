@@ -45,7 +45,7 @@ namespace Handbrake
             this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(317, 76);
+            this.btn_close.Location = new System.Drawing.Point(317, 65);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(78, 22);
             this.btn_close.TabIndex = 54;
@@ -65,7 +65,7 @@ namespace Handbrake
             // ISO_Open
             // 
             this.ISO_Open.DefaultExt = "iso";
-            this.ISO_Open.Filter = "iso|*.iso";
+            this.ISO_Open.Filter = "All Supported Files|*.iso;*.mpg;*.mpeg;*.vob";
             // 
             // RadioDVD
             // 
@@ -86,9 +86,9 @@ namespace Handbrake
             this.RadioISO.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RadioISO.Location = new System.Drawing.Point(261, 45);
             this.RadioISO.Name = "RadioISO";
-            this.RadioISO.Size = new System.Drawing.Size(47, 17);
+            this.RadioISO.Size = new System.Drawing.Size(44, 17);
             this.RadioISO.TabIndex = 51;
-            this.RadioISO.Text = "ISO";
+            this.RadioISO.Text = "File";
             this.RadioISO.UseVisualStyleBackColor = true;
             // 
             // btn_Browse
@@ -113,11 +113,11 @@ namespace Handbrake
             this.text_source.Size = new System.Drawing.Size(242, 21);
             this.text_source.TabIndex = 48;
             // 
-            // SelectDVD
+            // frmSelectDVD
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(418, 111);
+            this.ClientSize = new System.Drawing.Size(402, 94);
             this.Controls.Add(this.btn_close);
             this.Controls.Add(this.Label1);
             this.Controls.Add(this.RadioDVD);
@@ -125,7 +125,10 @@ namespace Handbrake
             this.Controls.Add(this.btn_Browse);
             this.Controls.Add(this.text_source);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "SelectDVD";
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(410, 121);
+            this.MinimumSize = new System.Drawing.Size(410, 121);
+            this.Name = "frmSelectDVD";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Read DVD";
             this.ResumeLayout(false);

@@ -129,6 +129,9 @@ namespace Handbrake
             this.Controls.Add(this.Label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximumSize = new System.Drawing.Size(532, 284);
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(532, 284);
             this.Name = "frmAbout";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "About Handbrake";

@@ -41,7 +41,7 @@ namespace Handbrake
             // 
             this.lbl_pressOk.AutoSize = true;
             this.lbl_pressOk.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_pressOk.Location = new System.Drawing.Point(66, 61);
+            this.lbl_pressOk.Location = new System.Drawing.Point(77, 61);
             this.lbl_pressOk.Name = "lbl_pressOk";
             this.lbl_pressOk.Size = new System.Drawing.Size(178, 13);
             this.lbl_pressOk.TabIndex = 29;
@@ -54,9 +54,9 @@ namespace Handbrake
             this.btn_ok.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_ok.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_ok.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_ok.Location = new System.Drawing.Point(400, 56);
+            this.btn_ok.Location = new System.Drawing.Point(418, 56);
             this.btn_ok.Name = "btn_ok";
-            this.btn_ok.Size = new System.Drawing.Size(61, 22);
+            this.btn_ok.Size = new System.Drawing.Size(71, 22);
             this.btn_ok.TabIndex = 28;
             this.btn_ok.TabStop = false;
             this.btn_ok.Text = "OK";
@@ -67,7 +67,7 @@ namespace Handbrake
             // 
             this.Label3.AutoSize = true;
             this.Label3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label3.Location = new System.Drawing.Point(66, 9);
+            this.Label3.Location = new System.Drawing.Point(77, 9);
             this.Label3.Name = "Label3";
             this.Label3.Size = new System.Drawing.Size(222, 26);
             this.Label3.TabIndex = 27;
@@ -77,7 +77,7 @@ namespace Handbrake
             // 
             this.Label2.AutoSize = true;
             this.Label2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label2.Location = new System.Drawing.Point(8, 8);
+            this.Label2.Location = new System.Drawing.Point(9, 8);
             this.Label2.Name = "Label2";
             this.Label2.Size = new System.Drawing.Size(52, 13);
             this.Label2.TabIndex = 26;
@@ -87,7 +87,7 @@ namespace Handbrake
             // 
             this.lbl_status.AutoSize = true;
             this.lbl_status.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_status.Location = new System.Drawing.Point(66, 41);
+            this.lbl_status.Location = new System.Drawing.Point(77, 41);
             this.lbl_status.Name = "lbl_status";
             this.lbl_status.Size = new System.Drawing.Size(178, 13);
             this.lbl_status.TabIndex = 31;
@@ -97,29 +97,32 @@ namespace Handbrake
             // lbl_progress
             // 
             this.lbl_progress.AutoSize = true;
-            this.lbl_progress.Location = new System.Drawing.Point(365, 61);
+            this.lbl_progress.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_progress.Location = new System.Drawing.Point(285, 41);
             this.lbl_progress.Name = "lbl_progress";
-            this.lbl_progress.Size = new System.Drawing.Size(29, 13);
+            this.lbl_progress.Size = new System.Drawing.Size(45, 13);
             this.lbl_progress.TabIndex = 32;
             this.lbl_progress.Text = "{ % }";
             this.lbl_progress.Visible = false;
             // 
             // frmReadDVD
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(473, 86);
+            this.ClientSize = new System.Drawing.Size(499, 86);
+            this.ControlBox = false;
             this.Controls.Add(this.lbl_progress);
             this.Controls.Add(this.lbl_status);
             this.Controls.Add(this.lbl_pressOk);
             this.Controls.Add(this.btn_ok);
             this.Controls.Add(this.Label3);
             this.Controls.Add(this.Label2);
+            this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(479, 111);
-            this.MinimumSize = new System.Drawing.Size(479, 111);
+            this.MaximumSize = new System.Drawing.Size(505, 111);
+            this.MinimumSize = new System.Drawing.Size(505, 111);
             this.Name = "frmReadDVD";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

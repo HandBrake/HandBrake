@@ -181,6 +181,7 @@ namespace Handbrake
             this.Controls.Add(this.list_queue);
             this.Controls.Add(this.btn_Close);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(659, 431);
             this.Name = "frmQueue";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Queue";
