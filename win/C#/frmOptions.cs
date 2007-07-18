@@ -74,8 +74,6 @@ namespace Handbrake
         {
             Properties.Settings.Default.Save(); // Small hack for Vista. Seems to work fine on XP without this
             this.Close();
-        }
-
-      
+        }     
     }
 }

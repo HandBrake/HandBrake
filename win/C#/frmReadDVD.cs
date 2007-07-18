@@ -34,8 +34,9 @@ namespace Handbrake
         {
             btn_ok.Enabled = false;
             lbl_pressOk.Visible = false;
-            scanProgress.Value = 0;
-            scanProgress.Visible = true;
+            lbl_progress.Text = "0%";
+            lbl_progress.Visible = true;
+            lbl_status.Visible = true;
             // throw cli call and parsing on it's own thread
             ThreadPool.QueueUserWorkItem(startProc);
         }
@@ -64,7 +65,7 @@ namespace Handbrake
             hbProc = process.runCli(this, query, true, true, false, true);
 
             Parsing.Parser readData = new Parsing.Parser(hbProc.StandardError.BaseStream);
-            //hbProc.WaitForExit();
+            hbProc.WaitForExit();
             hbProc.Close();
 
             // Setup the parser
@@ -85,7 +86,7 @@ namespace Handbrake
             {
                 progress = 100;
             }
-            this.scanProgress.Value = progress;
+            this.lbl_progress.Text = progress.ToString() + "%";
         }
 
     }

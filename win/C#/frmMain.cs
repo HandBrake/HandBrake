@@ -22,7 +22,12 @@ namespace Handbrake
         // --------------------------------------------------------------
         private frmDvdInfo dvdInfoWindow = new frmDvdInfo();
         private frmQueue queueWindow = new frmQueue();
-
+        
+        // -------------------------------------------------------------- 
+        // Stuff that needs doing on startup.
+        // - Load users default settings. (if required)
+        // - Do an update check (if required)
+        // --------------------------------------------------------------
         public frmMain()
         {
             InitializeComponent();
@@ -119,7 +124,6 @@ namespace Handbrake
         {
             if (Properties.Settings.Default.updateStatus == "Checked")
             {
-
                 try
                 {
                     String updateFile = Properties.Settings.Default.updateFile;
@@ -132,7 +136,6 @@ namespace Handbrake
                         lbl_update.Visible = true;
                     }
                 }
-                // else fail displaying an error message.
                 catch (Exception)
                 {
                     // Silently ignore the error
@@ -140,7 +143,10 @@ namespace Handbrake
             }
         }
 
-        #region The Menu Bar
+        // -------------------------------------------------------------- 
+        // The main Menu bar.
+        // -------------------------------------------------------------- 
+
         #region File Menu
 
         private void mnu_open_Click(object sender, EventArgs e)
@@ -498,7 +504,6 @@ namespace Handbrake
         }
 
         #endregion
-        #endregion
 
         // -------------------------------------------------------------- 
         // Buttons on the main Window
@@ -617,8 +622,7 @@ namespace Handbrake
             hbProc.Dispose();
             MessageBox.Show("The encode process has now ended.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
-
-
+        
         //---------------------------------------------------
         //  Items that require actions on frmMain
         //---------------------------------------------------
@@ -1016,9 +1020,11 @@ namespace Handbrake
                     drp_subtitle.Text = drp_subtitle.Items[0].ToString();
                 }
             }
-        } 
+        }
 
-        // The Query Generation Function
+        //---------------------------------------------------
+        //  The query Generation function.
+        //---------------------------------------------------
         public string GenerateTheQuery()
         {
             string source = text_source.Text;
@@ -1316,8 +1322,6 @@ namespace Handbrake
 
             return querySource+ queryDestination+ queryPictureSettings+ queryVideoSettings+ h264Settings+ queryAudioSettings+ queryAdvancedSettings+ verbose;
         }
-
-
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

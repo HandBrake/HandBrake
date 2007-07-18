@@ -33,14 +33,15 @@ namespace Handbrake
             this.btn_ok = new System.Windows.Forms.Button();
             this.Label3 = new System.Windows.Forms.Label();
             this.Label2 = new System.Windows.Forms.Label();
-            this.scanProgress = new System.Windows.Forms.ProgressBar();
+            this.lbl_status = new System.Windows.Forms.Label();
+            this.lbl_progress = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lbl_pressOk
             // 
             this.lbl_pressOk.AutoSize = true;
             this.lbl_pressOk.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_pressOk.Location = new System.Drawing.Point(216, 56);
+            this.lbl_pressOk.Location = new System.Drawing.Point(66, 61);
             this.lbl_pressOk.Name = "lbl_pressOk";
             this.lbl_pressOk.Size = new System.Drawing.Size(178, 13);
             this.lbl_pressOk.TabIndex = 29;
@@ -53,7 +54,7 @@ namespace Handbrake
             this.btn_ok.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_ok.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_ok.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_ok.Location = new System.Drawing.Point(400, 52);
+            this.btn_ok.Location = new System.Drawing.Point(400, 56);
             this.btn_ok.Name = "btn_ok";
             this.btn_ok.Size = new System.Drawing.Size(61, 22);
             this.btn_ok.TabIndex = 28;
@@ -82,27 +83,45 @@ namespace Handbrake
             this.Label2.TabIndex = 26;
             this.Label2.Text = "Status:";
             // 
-            // scanProgress
+            // lbl_status
             // 
-            this.scanProgress.Location = new System.Drawing.Point(22, 51);
-            this.scanProgress.Name = "scanProgress";
-            this.scanProgress.Size = new System.Drawing.Size(361, 23);
-            this.scanProgress.TabIndex = 30;
-            this.scanProgress.Visible = false;
+            this.lbl_status.AutoSize = true;
+            this.lbl_status.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_status.Location = new System.Drawing.Point(66, 41);
+            this.lbl_status.Name = "lbl_status";
+            this.lbl_status.Size = new System.Drawing.Size(178, 13);
+            this.lbl_status.TabIndex = 31;
+            this.lbl_status.Text = "Processing.... Please Wait!";
+            this.lbl_status.Visible = false;
+            // 
+            // lbl_progress
+            // 
+            this.lbl_progress.AutoSize = true;
+            this.lbl_progress.Location = new System.Drawing.Point(365, 61);
+            this.lbl_progress.Name = "lbl_progress";
+            this.lbl_progress.Size = new System.Drawing.Size(29, 13);
+            this.lbl_progress.TabIndex = 32;
+            this.lbl_progress.Text = "{ % }";
+            this.lbl_progress.Visible = false;
             // 
             // frmReadDVD
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(473, 86);
-            this.Controls.Add(this.scanProgress);
+            this.Controls.Add(this.lbl_progress);
+            this.Controls.Add(this.lbl_status);
             this.Controls.Add(this.lbl_pressOk);
             this.Controls.Add(this.btn_ok);
             this.Controls.Add(this.Label3);
             this.Controls.Add(this.Label2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(479, 111);
+            this.MinimumSize = new System.Drawing.Size(479, 111);
             this.Name = "frmReadDVD";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Reading DVD...";
             this.ResumeLayout(false);
@@ -116,6 +135,7 @@ namespace Handbrake
         internal System.Windows.Forms.Button btn_ok;
         internal System.Windows.Forms.Label Label3;
         internal System.Windows.Forms.Label Label2;
-        private System.Windows.Forms.ProgressBar scanProgress;
+        internal System.Windows.Forms.Label lbl_status;
+        private System.Windows.Forms.Label lbl_progress;
     }
 }
