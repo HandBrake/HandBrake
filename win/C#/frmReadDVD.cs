@@ -27,13 +27,15 @@ namespace Handbrake
             this.inputFile = inputFile;
             this.mainWindow = parent;
             this.dvdInfo = dvdInfoWindow;
+            Parsing.Parser.OnScanProgress += Parser_OnScanProgress;
         }
 
         private void btn_ok_Click(object sender, EventArgs e)
         {
-            lbl_status.Visible = true;
             btn_ok.Enabled = false;
             lbl_pressOk.Visible = false;
+            scanProgress.Value = 0;
+            scanProgress.Visible = true;
             // throw cli call and parsing on it's own thread
             ThreadPool.QueueUserWorkItem(startProc);
         }
@@ -69,6 +71,16 @@ namespace Handbrake
             thisDvd = Parsing.DVD.Parse(readData);
 
             updateUIElements();
+        }
+
+        private void Parser_OnScanProgress(object Sender, int CurrentTitle, int TitleCount)
+        {
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new Parsing.ScanProgressEventHandler(Parser_OnScanProgress), new object[] { Sender, CurrentTitle, TitleCount });
+                return;
+            }
+            this.scanProgress.Value = Convert.ToInt32(Convert.ToDouble(CurrentTitle) / Convert.ToDouble(TitleCount) * 100) + 1;
         }
 
     }

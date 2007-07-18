@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Handbrake.Parsing
 {
@@ -11,6 +12,8 @@ namespace Handbrake.Parsing
     /// <param name="Sender">The object which raised this delegate</param>
     /// <param name="Data">The data parsed from the stream</param>
     public delegate void DataReadEventHandler(object Sender, string Data);
+
+    public delegate void ScanProgressEventHandler(object Sender, int CurrentTitle, int TitleCount);
 
     /// <summary>
     /// A simple wrapper around a StreamReader to keep track of the entire output from a cli process
@@ -39,6 +42,8 @@ namespace Handbrake.Parsing
         /// </summary>
         public static event DataReadEventHandler OnReadToEnd;
 
+        public static event ScanProgressEventHandler OnScanProgress;
+
         /// <summary>
         /// Default constructor for this object
         /// </summary>
@@ -52,9 +57,14 @@ namespace Handbrake.Parsing
         {
             string tmp = base.ReadLine();
             this.m_buffer += tmp;
+            Match m = Regex.Match(tmp, "^Scanning title ([0-9]*) of ([0-9]*)");
             if (OnReadLine != null)
             {
                 OnReadLine(this, tmp);
+            }
+            if (m.Success && OnScanProgress != null)
+            {
+                OnScanProgress(this, int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
             }
             return tmp;
         }
