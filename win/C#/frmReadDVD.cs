@@ -80,7 +80,12 @@ namespace Handbrake
                 this.BeginInvoke(new Parsing.ScanProgressEventHandler(Parser_OnScanProgress), new object[] { Sender, CurrentTitle, TitleCount });
                 return;
             }
-            this.scanProgress.Value = Convert.ToInt32(Convert.ToDouble(CurrentTitle) / Convert.ToDouble(TitleCount) * 100) + 1;
+            int progress = Convert.ToInt32(Convert.ToDouble(CurrentTitle) / Convert.ToDouble(TitleCount) * 100) + 1;
+            if (progress > 100)
+            {
+                progress = 100;
+            }
+            this.scanProgress.Value = progress;
         }
 
     }
