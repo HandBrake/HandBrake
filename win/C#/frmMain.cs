@@ -608,18 +608,18 @@ namespace Handbrake
                 query = QueryEditorText.Text;
             }
 
-            Functions.CLI process = new Functions.CLI();
-            hbProc = process.runCli(this, query, false, false, false, false);
-          
-            ThreadPool.QueueUserWorkItem(procMonitor);
+            ThreadPool.QueueUserWorkItem(procMonitor, query);
         }
 
         private void procMonitor(object state)
         {
+            Functions.CLI process = new Functions.CLI();
+            hbProc = process.runCli(this, (string)state, false, false, false, false);
             MessageBox.Show("The encode process has now started.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             hbProc.WaitForExit();
             hbProc.Close();
             hbProc.Dispose();
+            hbProc = null;
             MessageBox.Show("The encode process has now ended.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
         
@@ -989,6 +989,9 @@ namespace Handbrake
                 Parsing.Title selectedTitle = drp_dvdtitle.SelectedItem as Parsing.Title;
                 lbl_Aspect.Text = selectedTitle.AspectRatio.ToString();
                 lbl_RecomendedCrop.Text = string.Format("{0}/{1}/{2}/{3}", selectedTitle.AutoCropDimensions[0], selectedTitle.AutoCropDimensions[1], selectedTitle.AutoCropDimensions[2], selectedTitle.AutoCropDimensions[3]);
+
+                text_width.Text = selectedTitle.Resolution.Width.ToString();
+                text_height.Text = selectedTitle.Resolution.Height.ToString();
 
                 drop_chapterStart.Items.Clear();
                 drop_chapterStart.Items.AddRange(selectedTitle.Chapters.ToArray());
