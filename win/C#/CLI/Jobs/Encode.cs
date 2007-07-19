@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Handbrake.CLI.Jobs
 {
-    public class Encode
+    public class Encode : Job
     {
         public override string ToString()
         {

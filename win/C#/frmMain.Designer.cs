@@ -170,6 +170,7 @@ namespace Handbrake
             this.btn_queue = new System.Windows.Forms.Button();
             this.btn_encode = new System.Windows.Forms.Button();
             this.Version = new System.Windows.Forms.Label();
+            this.tempEncodeLbl = new System.Windows.Forms.Label();
             Label38 = new System.Windows.Forms.Label();
             this.frmMainMenu.SuspendLayout();
             this.GroupBox1.SuspendLayout();
@@ -1283,7 +1284,7 @@ namespace Handbrake
             this.slider_videoQuality.Location = new System.Drawing.Point(129, 90);
             this.slider_videoQuality.Maximum = 100;
             this.slider_videoQuality.Name = "slider_videoQuality";
-            this.slider_videoQuality.Size = new System.Drawing.Size(167, 42);
+            this.slider_videoQuality.Size = new System.Drawing.Size(167, 45);
             this.slider_videoQuality.TabIndex = 6;
             this.slider_videoQuality.TickFrequency = 17;
             this.slider_videoQuality.Scroll += new System.EventHandler(this.slider_videoQuality_Scroll);
@@ -1711,11 +1712,23 @@ namespace Handbrake
             this.Version.TabIndex = 415;
             this.Version.Text = "Version 2.3";
             // 
+            // tempEncodeLbl
+            // 
+            this.tempEncodeLbl.AutoSize = true;
+            this.tempEncodeLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tempEncodeLbl.Location = new System.Drawing.Point(370, 19);
+            this.tempEncodeLbl.Name = "tempEncodeLbl";
+            this.tempEncodeLbl.Size = new System.Drawing.Size(115, 13);
+            this.tempEncodeLbl.TabIndex = 418;
+            this.tempEncodeLbl.Text = "Encoding started...";
+            this.tempEncodeLbl.Visible = false;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(675, 621);
+            this.Controls.Add(this.tempEncodeLbl);
             this.Controls.Add(this.lbl_update);
             this.Controls.Add(this.btn_queue);
             this.Controls.Add(this.btn_encode);
@@ -1893,6 +1906,7 @@ namespace Handbrake
         internal System.Windows.Forms.Label Version;
         private System.Windows.Forms.Label lbl_chptWarn;
         internal System.Windows.Forms.SaveFileDialog DVD_Save;
+        private System.Windows.Forms.Label tempEncodeLbl;
 
     }
 }

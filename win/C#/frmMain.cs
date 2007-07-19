@@ -598,6 +598,7 @@ namespace Handbrake
         private void btn_encode_Click(object sender, EventArgs e)
         {
             String query = "";
+            tempEncodeLbl.Visible = true;
  
             if (QueryEditorText.Text == "")
             {
@@ -611,11 +612,31 @@ namespace Handbrake
             ThreadPool.QueueUserWorkItem(procMonitor, query);
         }
 
+        private void encode_OnEncodeProgress(object Sender, int CurrentTask, int TaskCount, float PercentComplete, float CurrentFps, float AverageFps, TimeSpan TimeRemaining)
+        {
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new Parsing.EncodeProgressEventHandler(encode_OnEncodeProgress),
+                    new object[] { Sender, CurrentTask, TaskCount, PercentComplete, CurrentFps, AverageFps, TimeRemaining });
+                return;
+            }
+            tempEncodeLbl.Text = string.Format("Encode Progress: {0}%", PercentComplete);
+        }
+
         private void procMonitor(object state)
         {
             Functions.CLI process = new Functions.CLI();
-            hbProc = process.runCli(this, (string)state, false, false, false, false);
-            MessageBox.Show("The encode process has now started.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            hbProc = process.runCli(this, (string)state, true, true, false, true);
+
+            Parsing.Parser encode = new Parsing.Parser(hbProc.StandardError.BaseStream);
+            //TODO: prevent this event from being subscribed more than once
+            encode.OnEncodeProgress += encode_OnEncodeProgress;
+            while (!encode.EndOfStream)
+            {
+                encode.ReadLine();
+            }
+
+            MessageBox.Show("The ncode process has now started.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             hbProc.WaitForExit();
             hbProc.Close();
             hbProc.Dispose();

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Handbrake.CLI.Jobs
 {
-    public class ParseDVD
+    public class ParseDVD : Job
     {
         public override string ToString()
         {

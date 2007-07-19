@@ -27,7 +27,6 @@ namespace Handbrake
             this.inputFile = inputFile;
             this.mainWindow = parent;
             this.dvdInfo = dvdInfoWindow;
-            Parsing.Parser.OnScanProgress += Parser_OnScanProgress;
         }
 
         private void btn_ok_Click(object sender, EventArgs e)
@@ -65,6 +64,9 @@ namespace Handbrake
             hbProc = process.runCli(this, query, true, true, false, true);
 
             Parsing.Parser readData = new Parsing.Parser(hbProc.StandardError.BaseStream);
+            readData.OnScanProgress += Parser_OnScanProgress;
+            readData.OnReadLine += dvdInfo.HandleParsedData;
+            readData.OnReadToEnd += dvdInfo.HandleParsedData;
             hbProc.Close();
 
             // Setup the parser

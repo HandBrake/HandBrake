@@ -16,12 +16,10 @@ namespace Handbrake
         public frmDvdInfo()
         {
             InitializeComponent();
-            Parsing.Parser.OnReadLine += HandleParsedData;
-            Parsing.Parser.OnReadToEnd += HandleParsedData;
             this.rtf_dvdInfo.Text = string.Empty;
         }
 
-        private void HandleParsedData(object Sender, string Data)
+        public void HandleParsedData(object Sender, string Data)
         {
             if (this.InvokeRequired)
             {
