@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Handbrake.Parsing
 {
@@ -43,15 +44,14 @@ namespace Handbrake.Parsing
             return this.m_chapterNumber.ToString();
         }
 
-        public static Chapter Parse(StreamReader output)
+        public static Chapter Parse(StringReader output)
         {
-            string curLine = output.ReadLine();
-            if (!curLine.Contains("  + audio tracks:"))
+            Match m = Regex.Match(output.ReadLine(), @"^    \+ ([0-9]*): cells ([0-9]*)->([0-9]*), ([0-9]*) blocks, duration ([0-9]{2}:[0-9]{2}:[0-9]{2})");
+            if (m.Success)
             {
                 Chapter thisChapter = new Chapter();
-                string[] splitter = curLine.Split(new string[] { "    + ", ": cells ", ", ", " blocks, duration ", "->" }, StringSplitOptions.RemoveEmptyEntries);
-                thisChapter.m_chapterNumber = int.Parse(splitter[0]);
-                thisChapter.m_duration = TimeSpan.Parse(splitter[4]);
+                thisChapter.m_chapterNumber = int.Parse(m.Groups[1].Value);
+                thisChapter.m_duration = TimeSpan.Parse(m.Groups[5].Value);
                 return thisChapter;
             }
             else
@@ -60,14 +60,19 @@ namespace Handbrake.Parsing
             }
         }
 
-        public static Chapter[] ParseList(StreamReader output)
+        public static Chapter[] ParseList(StringReader output)
         {
             List<Chapter> chapters = new List<Chapter>();
-            string curLine = output.ReadLine();
-            while (!curLine.Contains("  + audio tracks:"))
+
+            // this is to read the "  + chapters:" line from the buffer
+            // so we can start reading the chapters themselvs
+            output.ReadLine();
+
+            while (true)
             {
+                // Start of the chapter list for this Title
                 Chapter thisChapter = Chapter.Parse(output);
-           
+
                 if (thisChapter != null)
                 {
                     chapters.Add(thisChapter);

@@ -239,7 +239,7 @@ namespace Handbrake
             this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(291, 402);
+            this.btn_close.Location = new System.Drawing.Point(292, 402);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(107, 22);
             this.btn_close.TabIndex = 53;
@@ -249,15 +249,14 @@ namespace Handbrake
             // 
             // frmOptions
             // 
-            this.ClientSize = new System.Drawing.Size(411, 435);
+            this.ClientSize = new System.Drawing.Size(411, 436);
             this.Controls.Add(this.GroupBox2);
             this.Controls.Add(this.GroupBox3);
             this.Controls.Add(this.GroupBox1);
             this.Controls.Add(this.btn_close);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(419, 462);
-            this.MinimumSize = new System.Drawing.Size(419, 462);
             this.Name = "frmOptions";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Options";

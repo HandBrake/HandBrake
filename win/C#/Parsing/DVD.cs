@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using System.Windows.Forms;
-
+using System.Text.RegularExpressions;
 
 namespace Handbrake.Parsing
 {
@@ -37,11 +36,13 @@ namespace Handbrake.Parsing
             DVD thisDVD = new DVD();
             while (!output.EndOfStream)
             {
-                string curLine = output.ReadLine();
-
-                if (curLine.Contains("Scanning title"))
+                if ((char)output.Peek() == '+')
                 {
-                    thisDVD.m_titles.AddRange(Title.ParseList(output));
+                    thisDVD.m_titles.AddRange(Title.ParseList(output.ReadToEnd()));
+                }
+                else
+                {
+                    output.ReadLine();
                 }
             }
             return thisDVD;

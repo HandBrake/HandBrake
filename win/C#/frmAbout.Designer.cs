@@ -55,7 +55,7 @@ namespace Handbrake
             this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_close.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(415, 229);
+            this.btn_close.Location = new System.Drawing.Point(415, 218);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(99, 22);
             this.btn_close.TabIndex = 27;
@@ -117,9 +117,10 @@ namespace Handbrake
             // 
             // frmAbout
             // 
+            this.AcceptButton = this.btn_close;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(526, 259);
+            this.ClientSize = new System.Drawing.Size(526, 252);
             this.Controls.Add(this.Label4);
             this.Controls.Add(this.btn_close);
             this.Controls.Add(this.Version);
@@ -127,8 +128,9 @@ namespace Handbrake
             this.Controls.Add(this.Label2);
             this.Controls.Add(this.PictureBox1);
             this.Controls.Add(this.Label1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(532, 284);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(532, 284);

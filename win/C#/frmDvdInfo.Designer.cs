@@ -47,10 +47,11 @@ namespace Handbrake
             // 
             // rtf_dvdInfo
             // 
-            this.rtf_dvdInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.rtf_dvdInfo.DetectUrls = false;
             this.rtf_dvdInfo.Location = new System.Drawing.Point(16, 51);
             this.rtf_dvdInfo.Name = "rtf_dvdInfo";
-            this.rtf_dvdInfo.Size = new System.Drawing.Size(515, 403);
+            this.rtf_dvdInfo.ReadOnly = true;
+            this.rtf_dvdInfo.Size = new System.Drawing.Size(515, 395);
             this.rtf_dvdInfo.TabIndex = 29;
             this.rtf_dvdInfo.Text = "";
             // 
@@ -61,7 +62,7 @@ namespace Handbrake
             this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(421, 462);
+            this.btn_close.Location = new System.Drawing.Point(421, 452);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(110, 22);
             this.btn_close.TabIndex = 28;
@@ -72,12 +73,14 @@ namespace Handbrake
             // 
             // frmDvdInfo
             // 
+            this.AcceptButton = this.btn_close;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(545, 493);
+            this.ClientSize = new System.Drawing.Size(545, 486);
             this.Controls.Add(this.Label2);
             this.Controls.Add(this.rtf_dvdInfo);
             this.Controls.Add(this.btn_close);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(553, 520);

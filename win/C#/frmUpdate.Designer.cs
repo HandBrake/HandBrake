@@ -206,7 +206,7 @@ namespace Handbrake
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(498, 139);
+            this.ClientSize = new System.Drawing.Size(498, 132);
             this.Controls.Add(this.cliVersion);
             this.Controls.Add(this.lbl_cliVersion);
             this.Controls.Add(this.Label6);
@@ -221,7 +221,7 @@ namespace Handbrake
             this.Controls.Add(this.Label2);
             this.Controls.Add(this.btn_update);
             this.Controls.Add(this.Label1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(504, 164);

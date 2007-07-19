@@ -65,7 +65,6 @@ namespace Handbrake
             hbProc = process.runCli(this, query, true, true, false, true);
 
             Parsing.Parser readData = new Parsing.Parser(hbProc.StandardError.BaseStream);
-            hbProc.WaitForExit();
             hbProc.Close();
 
             // Setup the parser

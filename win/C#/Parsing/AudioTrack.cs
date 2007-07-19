@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Handbrake.Parsing
 {
@@ -91,25 +92,18 @@ namespace Handbrake.Parsing
             return string.Format("{0} {1} ({2}) ({3})", this.m_trackNumber, this.m_language, this.m_format, this.m_subFormat);
         }
 
-        public static AudioTrack Parse(StreamReader output)
+        public static AudioTrack Parse(StringReader output)
         {
-            string curLine = output.ReadLine();
-            if (!curLine.Contains("  + subtitle tracks:"))
+            Match m = Regex.Match(output.ReadLine(), @"^    \+ ([0-9]*), ([A-Za-z0-9]*) \((.*)\) \((.*)\), ([0-9]*)Hz, ([0-9]*)bps");
+            if (m.Success)
             {
                 AudioTrack thisTrack = new AudioTrack();
-                string[] splitter = curLine.Split(new string[] { "    + ", ", ", " (", ") (", " ch", "), ", "Hz, ", "bps" }, StringSplitOptions.RemoveEmptyEntries);
-                thisTrack.m_trackNumber = int.Parse(splitter[0]);
-                thisTrack.m_language = splitter[1];
-                thisTrack.m_format = splitter[2];
-                /*
-                 * Problem 2
-                 * Field 'Handbrake.frmMain.hbProc' is never assigned to, and will always have it's default value null.
-                 * This happens with "AllAudios.iso" which is a test file. http://www.sr88.co.uk/AllAudios.iso  (~95MB)
-                 */
-
-                thisTrack.m_subFormat = splitter[3];
-                thisTrack.m_frequency = int.Parse(splitter[4]);
-                thisTrack.m_bitrate = int.Parse(splitter[5]);
+                thisTrack.m_trackNumber = int.Parse(m.Groups[1].Value);
+                thisTrack.m_language = m.Groups[2].Value;
+                thisTrack.m_format = m.Groups[3].Value;
+                thisTrack.m_subFormat = m.Groups[4].Value;
+                thisTrack.m_frequency = int.Parse(m.Groups[5].Value);
+                thisTrack.m_bitrate = int.Parse(m.Groups[6].Value);
                 return thisTrack;
             }
             else
@@ -118,10 +112,10 @@ namespace Handbrake.Parsing
             }
         }
 
-        public static AudioTrack[] ParseList(StreamReader output)
+        public static AudioTrack[] ParseList(StringReader output)
         {
             List<AudioTrack> tracks = new List<AudioTrack>();
-            while (true) // oh glorious hack, serve me well
+            while (true)
             {
                 AudioTrack thisTrack = AudioTrack.Parse(output);
                 if (thisTrack != null)

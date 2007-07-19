@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Handbrake.Parsing
 {
@@ -43,15 +44,15 @@ namespace Handbrake.Parsing
             return string.Format("{0} {1}", this.m_trackNumber, this.m_language);
         }
 
-        public static Subtitle Parse(StreamReader output)
+        public static Subtitle Parse(StringReader output)
         {
             string curLine = output.ReadLine();
-            if (!curLine.Contains("HandBrake has exited."))
+            Match m = Regex.Match(curLine, @"^    \+ ([0-9]*), ([A-Za-z]*) \((.*)\)");
+            if (m.Success && !curLine.Contains("HandBrake has exited."))
             {
                 Subtitle thisSubtitle = new Subtitle();
-                string[] splitter = curLine.Split(new string[] { "    + ", ", " }, StringSplitOptions.RemoveEmptyEntries);
-                thisSubtitle.m_trackNumber = int.Parse(splitter[0]);
-                thisSubtitle.m_language = splitter[1];
+                thisSubtitle.m_trackNumber = int.Parse(m.Groups[1].Value);
+                thisSubtitle.m_language = m.Groups[2].Value;
                 return thisSubtitle;
             }
             else
@@ -60,10 +61,10 @@ namespace Handbrake.Parsing
             }
         }
 
-        public static Subtitle[] ParseList(StreamReader output)
+        public static Subtitle[] ParseList(StringReader output)
         {
             List<Subtitle> subtitles = new List<Subtitle>();
-            while ((char)output.Peek() != '+') // oh glorious hack, serve me well
+            while ((char)output.Peek() != '+')
             {
                 Subtitle thisSubtitle = Subtitle.Parse(output);
 

@@ -13,6 +13,12 @@ namespace Handbrake.Parsing
     /// <param name="Data">The data parsed from the stream</param>
     public delegate void DataReadEventHandler(object Sender, string Data);
 
+    /// <summary>
+    /// A delegate to handle events regarding progress during DVD scanning
+    /// </summary>
+    /// <param name="Sender">The object who's raising the event</param>
+    /// <param name="CurrentTitle">The title number currently being processed</param>
+    /// <param name="TitleCount">The total number of titiles to be processed</param>
     public delegate void ScanProgressEventHandler(object Sender, int CurrentTitle, int TitleCount);
 
     /// <summary>
@@ -42,6 +48,9 @@ namespace Handbrake.Parsing
         /// </summary>
         public static event DataReadEventHandler OnReadToEnd;
 
+        /// <summary>
+        /// Raised upon the catching of a "Scanning title # of #..." in the stream
+        /// </summary>
         public static event ScanProgressEventHandler OnScanProgress;
 
         /// <summary>

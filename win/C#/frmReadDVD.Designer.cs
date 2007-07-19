@@ -54,7 +54,7 @@ namespace Handbrake
             this.btn_ok.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_ok.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_ok.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_ok.Location = new System.Drawing.Point(418, 56);
+            this.btn_ok.Location = new System.Drawing.Point(416, 45);
             this.btn_ok.Name = "btn_ok";
             this.btn_ok.Size = new System.Drawing.Size(71, 22);
             this.btn_ok.TabIndex = 28;
@@ -107,9 +107,10 @@ namespace Handbrake
             // 
             // frmReadDVD
             // 
+            this.AcceptButton = this.btn_ok;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(499, 86);
+            this.ClientSize = new System.Drawing.Size(499, 79);
             this.ControlBox = false;
             this.Controls.Add(this.lbl_progress);
             this.Controls.Add(this.lbl_status);
@@ -118,7 +119,7 @@ namespace Handbrake
             this.Controls.Add(this.Label3);
             this.Controls.Add(this.Label2);
             this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(505, 111);
