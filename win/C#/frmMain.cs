@@ -598,7 +598,7 @@ namespace Handbrake
         private void btn_encode_Click(object sender, EventArgs e)
         {
             String query = "";
-            tempEncodeLbl.Visible = true;
+            lbl_encode.Visible = true;
  
             if (QueryEditorText.Text == "")
             {
@@ -620,13 +620,15 @@ namespace Handbrake
                     new object[] { Sender, CurrentTask, TaskCount, PercentComplete, CurrentFps, AverageFps, TimeRemaining });
                 return;
             }
-            tempEncodeLbl.Text = string.Format("Encode Progress: {0}%", PercentComplete);
+            lbl_encode.Text = string.Format("Encode Progress: {0}%,       FPS: {1},       Avg FPS: {2},       Time Remaining: {3} ", PercentComplete, CurrentFps, AverageFps, TimeRemaining);
         }
 
         private void procMonitor(object state)
         {
             Functions.CLI process = new Functions.CLI();
             hbProc = process.runCli(this, (string)state, true, true, false, true);
+
+            MessageBox.Show("The encode process has now started.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
 
             Parsing.Parser encode = new Parsing.Parser(hbProc.StandardError.BaseStream);
             //TODO: prevent this event from being subscribed more than once
@@ -636,7 +638,7 @@ namespace Handbrake
                 encode.ReadLine();
             }
 
-            MessageBox.Show("The ncode process has now started.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            
             hbProc.WaitForExit();
             hbProc.Close();
             hbProc.Dispose();
@@ -736,6 +738,7 @@ namespace Handbrake
                 if (CheckPixelRatio.Checked)
                 {
                     text_width.Text = "";
+                    text_width.BackColor = Color.White;
                 }
                 else
                 {
@@ -781,6 +784,7 @@ namespace Handbrake
                 if (CheckPixelRatio.Checked)
                 {
                     text_height.Text = "";
+                    text_width.BackColor = Color.White;
                 }
                 else
                 {
@@ -1008,12 +1012,14 @@ namespace Handbrake
             if (drp_dvdtitle.Text != "Automatic")
             {
                 Parsing.Title selectedTitle = drp_dvdtitle.SelectedItem as Parsing.Title;
+
+                // Set the Aspect Ratio
                 lbl_Aspect.Text = selectedTitle.AspectRatio.ToString();
+
+                // Set the Recommended Cropping values
                 lbl_RecomendedCrop.Text = string.Format("{0}/{1}/{2}/{3}", selectedTitle.AutoCropDimensions[0], selectedTitle.AutoCropDimensions[1], selectedTitle.AutoCropDimensions[2], selectedTitle.AutoCropDimensions[3]);
-
-                text_width.Text = selectedTitle.Resolution.Width.ToString();
-                text_height.Text = selectedTitle.Resolution.Height.ToString();
-
+                
+                // Populate the Start chapter Dropdown
                 drop_chapterStart.Items.Clear();
                 drop_chapterStart.Items.AddRange(selectedTitle.Chapters.ToArray());
                 if (drop_chapterStart.Items.Count > 0)
@@ -1021,6 +1027,7 @@ namespace Handbrake
                     drop_chapterStart.Text = drop_chapterStart.Items[0].ToString();
                 }
 
+                // Populate the Final Chapter Dropdown
                 drop_chapterFinish.Items.Clear();
                 drop_chapterFinish.Items.AddRange(selectedTitle.Chapters.ToArray());
                 if (drop_chapterFinish.Items.Count > 0)
@@ -1028,6 +1035,7 @@ namespace Handbrake
                     drop_chapterFinish.Text = drop_chapterFinish.Items[drop_chapterFinish.Items.Count - 1].ToString();
                 }
 
+                // Populate the Audio Channels Dropdown
                 drp_audioChannels.Items.Clear();
                 drp_audioChannels.Items.Add("Automatic");
                 drp_audioChannels.Items.AddRange(selectedTitle.AudioTracks.ToArray());
@@ -1036,6 +1044,7 @@ namespace Handbrake
                     drp_audioChannels.Text = drp_audioChannels.Items[0].ToString();
                 }
 
+                // Populate the Subtitles dropdown
                 drp_subtitle.Items.Clear();
                 drp_subtitle.Items.Add("None");
                 drp_subtitle.Items.AddRange(selectedTitle.Subtitles.ToArray());

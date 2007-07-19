@@ -170,7 +170,7 @@ namespace Handbrake
             this.btn_queue = new System.Windows.Forms.Button();
             this.btn_encode = new System.Windows.Forms.Button();
             this.Version = new System.Windows.Forms.Label();
-            this.tempEncodeLbl = new System.Windows.Forms.Label();
+            this.lbl_encode = new System.Windows.Forms.Label();
             Label38 = new System.Windows.Forms.Label();
             this.frmMainMenu.SuspendLayout();
             this.GroupBox1.SuspendLayout();
@@ -1284,7 +1284,7 @@ namespace Handbrake
             this.slider_videoQuality.Location = new System.Drawing.Point(129, 90);
             this.slider_videoQuality.Maximum = 100;
             this.slider_videoQuality.Name = "slider_videoQuality";
-            this.slider_videoQuality.Size = new System.Drawing.Size(167, 45);
+            this.slider_videoQuality.Size = new System.Drawing.Size(167, 42);
             this.slider_videoQuality.TabIndex = 6;
             this.slider_videoQuality.TickFrequency = 17;
             this.slider_videoQuality.Scroll += new System.EventHandler(this.slider_videoQuality_Scroll);
@@ -1663,7 +1663,7 @@ namespace Handbrake
             this.lbl_update.AutoSize = true;
             this.lbl_update.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_update.ForeColor = System.Drawing.Color.Black;
-            this.lbl_update.Location = new System.Drawing.Point(86, 594);
+            this.lbl_update.Location = new System.Drawing.Point(91, 614);
             this.lbl_update.Name = "lbl_update";
             this.lbl_update.Size = new System.Drawing.Size(193, 13);
             this.lbl_update.TabIndex = 417;
@@ -1677,7 +1677,7 @@ namespace Handbrake
             this.btn_queue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_queue.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_queue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_queue.Location = new System.Drawing.Point(404, 589);
+            this.btn_queue.Location = new System.Drawing.Point(407, 609);
             this.btn_queue.Name = "btn_queue";
             this.btn_queue.Size = new System.Drawing.Size(124, 22);
             this.btn_queue.TabIndex = 416;
@@ -1693,7 +1693,7 @@ namespace Handbrake
             this.btn_encode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_encode.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_encode.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_encode.Location = new System.Drawing.Point(535, 589);
+            this.btn_encode.Location = new System.Drawing.Point(538, 609);
             this.btn_encode.Name = "btn_encode";
             this.btn_encode.Size = new System.Drawing.Size(124, 22);
             this.btn_encode.TabIndex = 414;
@@ -1706,29 +1706,29 @@ namespace Handbrake
             // 
             this.Version.BackColor = System.Drawing.Color.Transparent;
             this.Version.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Version.Location = new System.Drawing.Point(13, 594);
+            this.Version.Location = new System.Drawing.Point(16, 614);
             this.Version.Name = "Version";
-            this.Version.Size = new System.Drawing.Size(141, 20);
+            this.Version.Size = new System.Drawing.Size(79, 20);
             this.Version.TabIndex = 415;
             this.Version.Text = "Version 2.3";
             // 
-            // tempEncodeLbl
+            // lbl_encode
             // 
-            this.tempEncodeLbl.AutoSize = true;
-            this.tempEncodeLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tempEncodeLbl.Location = new System.Drawing.Point(370, 19);
-            this.tempEncodeLbl.Name = "tempEncodeLbl";
-            this.tempEncodeLbl.Size = new System.Drawing.Size(115, 13);
-            this.tempEncodeLbl.TabIndex = 418;
-            this.tempEncodeLbl.Text = "Encoding started...";
-            this.tempEncodeLbl.Visible = false;
+            this.lbl_encode.AutoSize = true;
+            this.lbl_encode.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_encode.Location = new System.Drawing.Point(16, 589);
+            this.lbl_encode.Name = "lbl_encode";
+            this.lbl_encode.Size = new System.Drawing.Size(96, 13);
+            this.lbl_encode.TabIndex = 418;
+            this.lbl_encode.Text = "Encoding started...";
+            this.lbl_encode.Visible = false;
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(675, 621);
-            this.Controls.Add(this.tempEncodeLbl);
+            this.ClientSize = new System.Drawing.Size(675, 636);
+            this.Controls.Add(this.lbl_encode);
             this.Controls.Add(this.lbl_update);
             this.Controls.Add(this.btn_queue);
             this.Controls.Add(this.btn_encode);
@@ -1906,7 +1906,7 @@ namespace Handbrake
         internal System.Windows.Forms.Label Version;
         private System.Windows.Forms.Label lbl_chptWarn;
         internal System.Windows.Forms.SaveFileDialog DVD_Save;
-        private System.Windows.Forms.Label tempEncodeLbl;
+        private System.Windows.Forms.Label lbl_encode;
 
     }
 }
