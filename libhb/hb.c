@@ -23,6 +23,7 @@ struct hb_handle_s
        from this one (see work.c) */
     hb_list_t    * jobs;
     int            job_count;
+    int            job_count_permanent;
     volatile int   work_die;
     int            work_error;
     hb_thread_t  * work_thread;
@@ -655,6 +656,8 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
 
     /* Add the job to the list */
     hb_list_add( h->jobs, job_copy );
+    h->job_count = hb_count(h);
+    h->job_count_permanent++;
 }
 
 /**
@@ -665,6 +668,10 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
 void hb_rem( hb_handle_t * h, hb_job_t * job )
 {
     hb_list_rem( h->jobs, job );
+    
+    h->job_count = hb_count(h);
+    if (h->job_count_permanent)
+        h->job_count_permanent--;
 
     /* XXX free everything XXX */
 }
@@ -738,6 +745,9 @@ void hb_resume( hb_handle_t * h )
 void hb_stop( hb_handle_t * h )
 {
     h->work_die = 1;
+
+    h->job_count = hb_count(h);
+    h->job_count_permanent = 0;
 
     hb_resume( h );
 }
@@ -851,6 +861,10 @@ static void thread_func( void * _h )
             hb_lock( h->state_lock );
             h->state.state                = HB_STATE_WORKDONE;
             h->state.param.workdone.error = h->work_error;
+            
+            h->job_count = hb_count(h);
+            if (h->job_count < 1)
+                h->job_count_permanent = 0;
             hb_unlock( h->state_lock );
         }
 
@@ -902,9 +916,12 @@ void hb_set_state( hb_handle_t * h, hb_state_t * s )
     if( h->state.state == HB_STATE_WORKING )
     {
         /* XXX Hack */
+        if (h->job_count < 1)
+            h->job_count_permanent = 1;
+        
         h->state.param.working.job_cur =
-            h->job_count - hb_list_count( h->jobs );
-        h->state.param.working.job_count = h->job_count;
+            h->job_count_permanent - hb_list_count( h->jobs );
+        h->state.param.working.job_count = h->job_count_permanent;
     }
     hb_unlock( h->state_lock );
     hb_unlock( h->pause_lock );
