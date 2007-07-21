@@ -32,8 +32,8 @@ namespace Handbrake
             this.productName = new System.Windows.Forms.Label();
             this.cliVersion = new System.Windows.Forms.Label();
             this.guiVerison = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.lbl_cli = new System.Windows.Forms.Label();
+            this.lbl_gui = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -68,25 +68,25 @@ namespace Handbrake
             this.guiVerison.TabIndex = 2;
             this.guiVerison.Text = "Version:";
             // 
-            // label2
+            // lbl_cli
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(331, 197);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(88, 13);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "{CLI Version}";
+            this.lbl_cli.AutoSize = true;
+            this.lbl_cli.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_cli.Location = new System.Drawing.Point(331, 197);
+            this.lbl_cli.Name = "lbl_cli";
+            this.lbl_cli.Size = new System.Drawing.Size(88, 13);
+            this.lbl_cli.TabIndex = 4;
+            this.lbl_cli.Text = "{CLI Version}";
             // 
-            // label3
+            // lbl_gui
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(331, 170);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(90, 13);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "{GUI Version}";
+            this.lbl_gui.AutoSize = true;
+            this.lbl_gui.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_gui.Location = new System.Drawing.Point(331, 170);
+            this.lbl_gui.Name = "lbl_gui";
+            this.lbl_gui.Size = new System.Drawing.Size(90, 13);
+            this.lbl_gui.TabIndex = 5;
+            this.lbl_gui.Text = "{GUI Version}";
             // 
             // label1
             // 
@@ -119,8 +119,8 @@ namespace Handbrake
             this.ControlBox = false;
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.lbl_gui);
+            this.Controls.Add(this.lbl_cli);
             this.Controls.Add(this.guiVerison);
             this.Controls.Add(this.cliVersion);
             this.Controls.Add(this.productName);
@@ -139,8 +139,8 @@ namespace Handbrake
         private System.Windows.Forms.Label productName;
         private System.Windows.Forms.Label cliVersion;
         private System.Windows.Forms.Label guiVerison;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lbl_cli;
+        private System.Windows.Forms.Label lbl_gui;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label4;
     }

@@ -214,7 +214,8 @@ namespace Handbrake
             this.drop_chapterFinish.Size = new System.Drawing.Size(69, 21);
             this.drop_chapterFinish.TabIndex = 41;
             this.drop_chapterFinish.Text = "Auto";
-            this.ToolTip.SetToolTip(this.drop_chapterFinish, "Encode chapters to this number");
+            this.ToolTip.SetToolTip(this.drop_chapterFinish, "Step 3 - Select the chapter range you would like to enocde. (default: All Chapter" +
+                    "s)");
             this.drop_chapterFinish.SelectedIndexChanged += new System.EventHandler(this.drop_chapterFinish_SelectedIndexChanged);
             // 
             // drop_chapterStart
@@ -227,7 +228,8 @@ namespace Handbrake
             this.drop_chapterStart.Size = new System.Drawing.Size(69, 21);
             this.drop_chapterStart.TabIndex = 40;
             this.drop_chapterStart.Text = "Auto";
-            this.ToolTip.SetToolTip(this.drop_chapterStart, "Encode chatpers from this number.");
+            this.ToolTip.SetToolTip(this.drop_chapterStart, "Step 3 - Select the chapter range you would like to enocde. (default: All Chapter" +
+                    "s)");
             this.drop_chapterStart.SelectedIndexChanged += new System.EventHandler(this.drop_chapterStart_SelectedIndexChanged);
             // 
             // drp_dvdtitle
@@ -242,7 +244,7 @@ namespace Handbrake
             this.drp_dvdtitle.Size = new System.Drawing.Size(119, 21);
             this.drp_dvdtitle.TabIndex = 39;
             this.drp_dvdtitle.Text = "Automatic";
-            this.ToolTip.SetToolTip(this.drp_dvdtitle, "The title number you wish to encode.");
+            this.ToolTip.SetToolTip(this.drp_dvdtitle, "Step 2 - Select the title number you wish to encode.");
             this.drp_dvdtitle.SelectedIndexChanged += new System.EventHandler(this.drp_dvdtitle_SelectedIndexChanged);
             this.drp_dvdtitle.Click += new System.EventHandler(this.drp_dvdtitle_Click);
             // 
@@ -277,7 +279,7 @@ namespace Handbrake
             this.text_destination.Name = "text_destination";
             this.text_destination.Size = new System.Drawing.Size(262, 21);
             this.text_destination.TabIndex = 4;
-            this.ToolTip.SetToolTip(this.text_destination, "Where you wish to save your output file.");
+            this.ToolTip.SetToolTip(this.text_destination, "Location where the enoceded file will be saved.");
             // 
             // drp_subtitle
             // 
@@ -616,6 +618,7 @@ namespace Handbrake
             this.btn_Browse.Size = new System.Drawing.Size(78, 22);
             this.btn_Browse.TabIndex = 2;
             this.btn_Browse.Text = "Browse";
+            this.ToolTip.SetToolTip(this.btn_Browse, "Step 1 - Select a Source. This can be either a DVD or ts/mpg/iso file");
             this.btn_Browse.UseVisualStyleBackColor = true;
             this.btn_Browse.Click += new System.EventHandler(this.btn_Browse_Click);
             // 
@@ -717,6 +720,7 @@ namespace Handbrake
             this.text_height.Name = "text_height";
             this.text_height.Size = new System.Drawing.Size(64, 21);
             this.text_height.TabIndex = 8;
+            this.ToolTip.SetToolTip(this.text_height, "Video Resolution (Height)");
             this.text_height.TextChanged += new System.EventHandler(this.text_height_TextChanged);
             // 
             // Label55
@@ -738,6 +742,7 @@ namespace Handbrake
             this.text_width.Name = "text_width";
             this.text_width.Size = new System.Drawing.Size(64, 21);
             this.text_width.TabIndex = 7;
+            this.ToolTip.SetToolTip(this.text_width, "Video Resolution (Width)");
             this.text_width.TextChanged += new System.EventHandler(this.text_width_TextChanged);
             // 
             // btn_destBrowse
@@ -751,6 +756,7 @@ namespace Handbrake
             this.btn_destBrowse.Size = new System.Drawing.Size(83, 22);
             this.btn_destBrowse.TabIndex = 4;
             this.btn_destBrowse.Text = "Browse";
+            this.ToolTip.SetToolTip(this.btn_destBrowse, "Step 4 - Select a location to save your encoded file.");
             this.btn_destBrowse.UseVisualStyleBackColor = true;
             this.btn_destBrowse.Click += new System.EventHandler(this.btn_destBrowse_Click);
             // 
@@ -781,6 +787,7 @@ namespace Handbrake
             this.drp_videoEncoder.Size = new System.Drawing.Size(156, 21);
             this.drp_videoEncoder.TabIndex = 5;
             this.drp_videoEncoder.Text = "H.264";
+            this.ToolTip.SetToolTip(this.drp_videoEncoder, "Step 5 - Select a video encoder");
             this.drp_videoEncoder.SelectedIndexChanged += new System.EventHandler(this.drp_videoEncoder_SelectedIndexChanged);
             // 
             // Label47
@@ -809,6 +816,7 @@ namespace Handbrake
             this.drp_audioCodec.Size = new System.Drawing.Size(111, 21);
             this.drp_audioCodec.TabIndex = 6;
             this.drp_audioCodec.Text = "AAC";
+            this.ToolTip.SetToolTip(this.drp_audioCodec, "Step 6 - Select an audio encoder.");
             this.drp_audioCodec.SelectedIndexChanged += new System.EventHandler(this.drp_audioCodec_SelectedIndexChanged);
             // 
             // Label12
@@ -1742,6 +1750,7 @@ namespace Handbrake
             this.MinimumSize = new System.Drawing.Size(683, 648);
             this.Name = "frmMain";
             this.Text = "Handbrake";
+            this.Load += new System.EventHandler(this.frmMain_Load);
             this.frmMainMenu.ResumeLayout(false);
             this.frmMainMenu.PerformLayout();
             this.GroupBox1.ResumeLayout(false);

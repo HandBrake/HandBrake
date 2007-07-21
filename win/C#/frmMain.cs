@@ -20,8 +20,7 @@ namespace Handbrake
         // --------------------------------------------------------------
         // Some windows that require only 1 instance.
         // --------------------------------------------------------------
-        private frmDvdInfo dvdInfoWindow = new frmDvdInfo();
-        private frmQueue queueWindow = new frmQueue();
+        private frmQueue queueWindow = new frmQueue();  
         
         // -------------------------------------------------------------- 
         // Stuff that needs doing on startup.
@@ -30,6 +29,7 @@ namespace Handbrake
         // --------------------------------------------------------------
         public frmMain()
         {
+            
             InitializeComponent();
 
             // Set the Version number lable to the corect version.
@@ -333,9 +333,17 @@ namespace Handbrake
             showQueue();
         }
 
+        private frmDvdInfo dvdInfoWindow = new frmDvdInfo();
         private void mnu_viewDVDdata_Click(object sender, EventArgs e)
         {
             dvdInfoWindow.Show();
+
+            // BUG *******************************************************
+            // Cross-thread operation not valid: Control 'rtf_dvdInfo' accessed from a thread other than the thread it was created on.
+            // This happens when the DVD is scanned and this item is then selected.
+            // If this item is selected so a blank copy of the window appears, then a DVD is scanned, there is no cross-thread issue.
+            // ***********************************************************
+
         }
 
         private void mnu_options_Click(object sender, EventArgs e)
@@ -1354,6 +1362,11 @@ namespace Handbrake
             // ----------------------------------------------------------------------
 
             return querySource+ queryDestination+ queryPictureSettings+ queryVideoSettings+ h264Settings+ queryAudioSettings+ queryAdvancedSettings+ verbose;
+        }
+
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+
         }
 
         // This is the END of the road ------------------------------------------------------------------------------
