@@ -32,6 +32,7 @@ namespace Handbrake
         private void btn_ok_Click(object sender, EventArgs e)
         {
             btn_ok.Enabled = false;
+            btn_skip.Visible = true;
             lbl_pressOk.Visible = false;
             lbl_progress.Text = "0%";
             lbl_progress.Visible = true;
@@ -68,7 +69,8 @@ namespace Handbrake
             readData.OnReadLine += dvdInfo.HandleParsedData;
             readData.OnReadToEnd += dvdInfo.HandleParsedData;
             hbProc.Close();
-
+            hbProc.Dispose();
+   
             // Setup the parser
             thisDvd = Parsing.DVD.Parse(readData);
 
@@ -88,6 +90,14 @@ namespace Handbrake
                 progress = 100;
             }
             this.lbl_progress.Text = progress.ToString() + "%";
+        }
+
+        private void btn_skip_Click(object sender, EventArgs e)
+        {
+            // TODO *****************************************************************
+            // This needs to be implimented so that is destroys the above thread
+            // closing hbcli with it.
+            //***********************************************************************
         }
 
     }

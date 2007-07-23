@@ -27,10 +27,17 @@ namespace Handbrake
         // - Load users default settings. (if required)
         // - Do an update check (if required)
         // --------------------------------------------------------------
+        private frmDvdInfo dvdInfoWindow = new frmDvdInfo();
+        
         public frmMain()
         {
-            
+
             InitializeComponent();
+
+            // This is a quick Hack fix for the cross-thread problem with frmDvdIndo ************************
+            dvdInfoWindow.Show();
+            dvdInfoWindow.Hide();
+            // **********************************************************************************************
 
             // Set the Version number lable to the corect version.
             Version.Text = "Version " + Properties.Settings.Default.GuiVersion;
@@ -333,15 +340,25 @@ namespace Handbrake
             showQueue();
         }
 
-        private frmDvdInfo dvdInfoWindow = new frmDvdInfo();
+       
         private void mnu_viewDVDdata_Click(object sender, EventArgs e)
         {
-            dvdInfoWindow.Show();
+            try
+            {
+                dvdInfoWindow.Show();
+                
+            }
+            catch (Exception)
+            {
+            }
 
             // BUG *******************************************************
             // Cross-thread operation not valid: Control 'rtf_dvdInfo' accessed from a thread other than the thread it was created on.
             // This happens when the DVD is scanned and this item is then selected.
             // If this item is selected so a blank copy of the window appears, then a DVD is scanned, there is no cross-thread issue.
+            // NOTE: Try/catch added to prevent final build crashing.
+            // NOTE2: Included a quick fix in frmMain(). Simply show and hide the window when starting the app.
+            // Note3: Suspect the problem lies with line 30.
             // ***********************************************************
 
         }
@@ -593,9 +610,17 @@ namespace Handbrake
 
         private void btn_queue_Click(object sender, EventArgs e)
         {
-            String query = GenerateTheQuery();
-            queueWindow.list_queue.Items.Add(query);
-            queueWindow.Show();
+            if (text_destination.Text != "" && text_source.Text != "")
+            {
+
+                String query = GenerateTheQuery();
+                queueWindow.list_queue.Items.Add(query);
+                queueWindow.Show();
+            } 
+            else 
+            {
+                MessageBox.Show("No Source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void showQueue()
@@ -630,7 +655,6 @@ namespace Handbrake
             }
             lbl_encode.Text = string.Format("Encode Progress: {0}%,       FPS: {1},       Avg FPS: {2},       Time Remaining: {3} ", PercentComplete, CurrentFps, AverageFps, TimeRemaining);
         }
-
 
         private void procMonitor(object state)
         {
