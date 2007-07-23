@@ -550,7 +550,7 @@ namespace Handbrake
             {
                 if (drp_dvdtitle.Items.Count == 0)
                 {
-                    MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                    MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source. Please refer to the FAQ for details..", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                 }
             }
             else
@@ -630,6 +630,7 @@ namespace Handbrake
             }
             lbl_encode.Text = string.Format("Encode Progress: {0}%,       FPS: {1},       Avg FPS: {2},       Time Remaining: {3} ", PercentComplete, CurrentFps, AverageFps, TimeRemaining);
         }
+
 
         private void procMonitor(object state)
         {
@@ -716,6 +717,7 @@ namespace Handbrake
             slider_videoQuality.Value = 0;
             SliderValue.Text = "0%";
             CheckCRF.CheckState = CheckState.Unchecked;
+            CheckCRF.Enabled = false;
         }
 
         private void text_filesize_TextChanged(object sender, EventArgs e)
@@ -724,6 +726,7 @@ namespace Handbrake
             slider_videoQuality.Value = 0;
             SliderValue.Text = "0%";
             CheckCRF.CheckState = CheckState.Unchecked;
+            CheckCRF.Enabled = false;
         }
 
         private void slider_videoQuality_Scroll(object sender, EventArgs e)
@@ -731,6 +734,7 @@ namespace Handbrake
             SliderValue.Text = slider_videoQuality.Value.ToString() + "%";
             text_bitrate.Text = "";
             text_filesize.Text = "";
+            CheckCRF.Enabled = true;
         }
 
         private void label_h264_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -973,15 +977,6 @@ namespace Handbrake
             }
         }
 
-        private void check_turbo_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!drp_videoEncoder.Text.Contains("H.264"))
-            {
-                MessageBox.Show("This option is only compatible with the H.264 encoder's", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                check_turbo.CheckState = CheckState.Unchecked;
-            }
-        }
-
         private void drp_videoEncoder_SelectedIndexChanged(object sender, EventArgs e)
         {
             //Turn off some options which are H.264 only when the user selects a non h.264 encoder
@@ -989,16 +984,17 @@ namespace Handbrake
             {
                 check_turbo.CheckState = CheckState.Unchecked;
                 CheckCRF.CheckState = CheckState.Unchecked;
+                CheckCRF.Enabled = false;
+                check_turbo.Enabled = false;
+                h264Tab.Enabled = false;
             }
-        }
-
-        private void CheckCRF_CheckedChanged(object sender, EventArgs e)
-        {
-            if (slider_videoQuality.Value == 0)
+            else
             {
-                MessageBox.Show("This option is can only be used with the 'Video Quality' slider.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                CheckCRF.CheckState = CheckState.Unchecked;
+                CheckCRF.Enabled = true;
+                check_turbo.Enabled = true;
+                h264Tab.Enabled = true;
             }
+
         }
 
         public void setStreamReader(Parsing.DVD dvd)
@@ -1363,12 +1359,6 @@ namespace Handbrake
 
             return querySource+ queryDestination+ queryPictureSettings+ queryVideoSettings+ h264Settings+ queryAudioSettings+ queryAdvancedSettings+ verbose;
         }
-
-        private void frmMain_Load(object sender, EventArgs e)
-        {
-
-        }
-
         // This is the END of the road ------------------------------------------------------------------------------
     }
 }
