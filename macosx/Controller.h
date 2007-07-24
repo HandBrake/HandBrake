@@ -281,6 +281,14 @@
 - (NSDictionary *)CreateAppleTVPreset;
 - (NSDictionary *)CreatePSThreePreset;  
 - (NSDictionary *)CreatePSPPreset;
+- (NSDictionary *)CreateNormalPreset;
+- (NSDictionary *)CreateClassicPreset;
+- (NSDictionary *)CreateQuickTimePreset;
+- (NSDictionary *)CreateFilmPreset;
+- (NSDictionary *)CreateTelevisionPreset;
+- (NSDictionary *)CreateAnimationPreset;
+- (NSDictionary *)CreateBedlamPreset;
+- (NSDictionary *)CreateiPhonePreset;
 - (IBAction) RevertPictureSizeToMax:(id)sender;
 
 
