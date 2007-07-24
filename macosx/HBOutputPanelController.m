@@ -55,6 +55,8 @@
 		
 		[outputPanel setFrameAutosaveName:@"OutputPanelFrame"];
 		[[textView layoutManager] replaceTextStorage:outputTextStorage];
+		[[textView enclosingScrollView] setLineScroll:10];
+		[[textView enclosingScrollView] setPageScroll:20];
 	}
 		
     [textView scrollRangeToVisible:NSMakeRange([outputTextStorage length], 0)];
