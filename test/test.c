@@ -591,7 +591,7 @@ static int HandleEvents( hb_handle_t * h )
                  */
                 if( turbo_opts_enabled ) 
                 {
-                    int size = strlen(x264opts) + strlen(turbo_opts) + 2;
+                    int size = (x264opts ? strlen(x264opts) : 0) + strlen(turbo_opts) + 2;
                     char *tmp_x264opts;
                         
                     tmp_x264opts = malloc(size * sizeof(char));
