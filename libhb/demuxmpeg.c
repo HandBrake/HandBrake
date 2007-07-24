@@ -112,8 +112,11 @@ int hb_demux_ps( hb_buffer_t * buf_ps, hb_list_t * list_es )
 
         buf_es->id       = id;
         buf_es->start    = pts;
-        buf_es->new_chap = buf_ps->new_chap; // Consume a chapter break, and apply it to the ES.
-        buf_ps->new_chap = 0;
+        if (id == 0xE0) {
+            // Consume a chapter break, and apply it to the ES.
+            buf_es->new_chap = buf_ps->new_chap;
+            buf_ps->new_chap = 0;
+        }
         memcpy( buf_es->data, d + pos, pes_packet_end - pos );
 
         hb_list_add( list_es, buf_es );
