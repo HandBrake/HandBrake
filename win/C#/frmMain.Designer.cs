@@ -167,6 +167,7 @@ namespace Handbrake
             this.btn_encode = new System.Windows.Forms.Button();
             this.Version = new System.Windows.Forms.Label();
             this.lbl_encode = new System.Windows.Forms.Label();
+            this.btn_eCancel = new System.Windows.Forms.Button();
             Label38 = new System.Windows.Forms.Label();
             this.frmMainMenu.SuspendLayout();
             this.GroupBox1.SuspendLayout();
@@ -1637,7 +1638,7 @@ namespace Handbrake
             this.btn_queue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_queue.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_queue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_queue.Location = new System.Drawing.Point(406, 589);
+            this.btn_queue.Location = new System.Drawing.Point(335, 589);
             this.btn_queue.Name = "btn_queue";
             this.btn_queue.Size = new System.Drawing.Size(124, 22);
             this.btn_queue.TabIndex = 416;
@@ -1683,11 +1684,29 @@ namespace Handbrake
             this.lbl_encode.Text = "Encoding started...";
             this.lbl_encode.Visible = false;
             // 
+            // btn_eCancel
+            // 
+            this.btn_eCancel.BackColor = System.Drawing.SystemColors.Control;
+            this.btn_eCancel.Enabled = false;
+            this.btn_eCancel.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_eCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_eCancel.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_eCancel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_eCancel.Location = new System.Drawing.Point(465, 589);
+            this.btn_eCancel.Name = "btn_eCancel";
+            this.btn_eCancel.Size = new System.Drawing.Size(65, 22);
+            this.btn_eCancel.TabIndex = 419;
+            this.btn_eCancel.TabStop = false;
+            this.btn_eCancel.Text = "Cancel";
+            this.btn_eCancel.UseVisualStyleBackColor = false;
+            this.btn_eCancel.Click += new System.EventHandler(this.btn_eCancel_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(675, 621);
+            this.Controls.Add(this.btn_eCancel);
             this.Controls.Add(this.lbl_encode);
             this.Controls.Add(this.lbl_update);
             this.Controls.Add(this.btn_queue);
@@ -1863,6 +1882,7 @@ namespace Handbrake
         private System.Windows.Forms.Label lbl_chptWarn;
         internal System.Windows.Forms.SaveFileDialog DVD_Save;
         private System.Windows.Forms.Label lbl_encode;
+        internal System.Windows.Forms.Button btn_eCancel;
 
     }
 }

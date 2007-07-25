@@ -638,8 +638,19 @@ namespace Handbrake
             queueWindow.Show();
         }
 
+
+
+
+
+        //---------------------------------------------------
+        // Encode / Cancel Buttons
+        // Encode Progress Text Handler
+        //---------------------------------------------------
+        Functions.CLI process = new Functions.CLI();
+
         private void btn_encode_Click(object sender, EventArgs e)
         {
+            btn_eCancel.Enabled = true;
             String query = "";
             lbl_encode.Visible = true;
  
@@ -655,6 +666,47 @@ namespace Handbrake
             ThreadPool.QueueUserWorkItem(procMonitor, query);
         }
 
+        private void btn_eCancel_Click(object sender, EventArgs e)
+        {
+            process.killCLI();
+            process.setNull();
+            lbl_encode.Text = "Encoding Canceled";
+        }
+   
+        private void procMonitor(object state)
+        {
+            
+            hbProc = process.runCli(this, (string)state, true, true, false, true);
+
+            MessageBox.Show("The encode process has now started.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+
+            try
+            {
+                Parsing.Parser encode = new Parsing.Parser(hbProc.StandardError.BaseStream);
+                encode.OnEncodeProgress += encode_OnEncodeProgress;
+                while (!encode.EndOfStream)
+                {
+                    encode.ReadLine();
+                }
+
+                hbProc.WaitForExit();
+                process.closeCLI();
+                hbProc = null;
+            }
+            catch (Exception)
+            { 
+                // Do Nothing
+            }
+
+            //TODO: prevent this event from being subscribed more than once
+
+            
+            MessageBox.Show("The encode process has now ended.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+        }
+
+
+
+
         private void encode_OnEncodeProgress(object Sender, int CurrentTask, int TaskCount, float PercentComplete, float CurrentFps, float AverageFps, TimeSpan TimeRemaining)
         {
             if (this.InvokeRequired)
@@ -664,29 +716,6 @@ namespace Handbrake
                 return;
             }
             lbl_encode.Text = string.Format("Encode Progress: {0}%,       FPS: {1},       Avg FPS: {2},       Time Remaining: {3} ", PercentComplete, CurrentFps, AverageFps, TimeRemaining);
-        }
-
-        private void procMonitor(object state)
-        {
-            Functions.CLI process = new Functions.CLI();
-            hbProc = process.runCli(this, (string)state, true, true, false, true);
-
-            MessageBox.Show("The encode process has now started.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-
-            Parsing.Parser encode = new Parsing.Parser(hbProc.StandardError.BaseStream);
-            //TODO: prevent this event from being subscribed more than once
-            encode.OnEncodeProgress += encode_OnEncodeProgress;
-            while (!encode.EndOfStream)
-            {
-                encode.ReadLine();
-            }
-
-            
-            hbProc.WaitForExit();
-            hbProc.Close();
-            hbProc.Dispose();
-            hbProc = null;
-            MessageBox.Show("The encode process has now ended.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
         
         //---------------------------------------------------
@@ -1393,6 +1422,8 @@ namespace Handbrake
 
             return querySource+ queryDestination+ queryPictureSettings+ queryVideoSettings+ h264Settings+ queryAudioSettings+ queryAdvancedSettings+ verbose;
         }
+
+        
 
         // This is the END of the road ------------------------------------------------------------------------------
     }
