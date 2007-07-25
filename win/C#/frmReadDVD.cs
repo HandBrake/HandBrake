@@ -20,6 +20,7 @@ namespace Handbrake
         private Parsing.DVD thisDvd;
         private Process hbProc;
         private delegate void UpdateUIHandler();
+        private int cancel = 0;
 
         public frmReadDVD(string inputFile, frmMain parent, frmDvdInfo dvdInfoWindow)
         {
@@ -32,7 +33,7 @@ namespace Handbrake
         private void btn_ok_Click(object sender, EventArgs e)
         {
             btn_ok.Enabled = false;
-            //btn_skip.Visible = true;
+            btn_skip.Visible = true;
             lbl_pressOk.Visible = false;
             lbl_progress.Text = "0%";
             lbl_progress.Visible = true;
@@ -57,26 +58,28 @@ namespace Handbrake
             this.Close();
         }
 
+        Functions.CLI process = new Functions.CLI();
         private void startProc(object state)
         {
             string query = "-i " + '"' + inputFile + '"' + " -t0";
           
-            Functions.CLI process = new Functions.CLI();
+            
             hbProc = process.runCli(this, query, true, true, false, true);
 
             Parsing.Parser readData = new Parsing.Parser(hbProc.StandardError.BaseStream);
             readData.OnScanProgress += Parser_OnScanProgress;
-          
-
             readData.OnReadLine += dvdInfo.HandleParsedData;
             readData.OnReadToEnd += dvdInfo.HandleParsedData;
-            hbProc.Close();
-            hbProc.Dispose();
-   
+
             // Setup the parser
             thisDvd = Parsing.DVD.Parse(readData);
 
-            updateUIElements();
+            if (cancel != 1)
+            {
+                updateUIElements();
+                process.killCLI();
+                process.closeCLI();
+            }
         }
 
         private void Parser_OnScanProgress(object Sender, int CurrentTitle, int TitleCount)
@@ -96,10 +99,10 @@ namespace Handbrake
 
         private void btn_skip_Click(object sender, EventArgs e)
         {
-            // TODO *****************************************************************
-            // This needs to be implimented so that is destroys the above thread
-            // closing hbcli with it.
-            //***********************************************************************
+            process.killCLI();
+            this.Close();
+            cancel = 1;
+            
         }
 
     }

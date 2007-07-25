@@ -2,15 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Diagnostics;
+using System.Windows.Forms;
  
 
 namespace Handbrake.Functions
 {
     class CLI
     {
+        Process hbProc = new Process();
+        
         public Process runCli(object s, string query, bool stderr, bool stdout, bool useShellExec, bool noWindow)
         {
-            Process hbProc = new Process();
             hbProc.StartInfo.FileName = "hbcli.exe";
             hbProc.StartInfo.Arguments = query;
             hbProc.StartInfo.RedirectStandardOutput = stdout;
@@ -42,6 +44,24 @@ namespace Handbrake.Functions
                     break;
             }
             return hbProc;
+        }
+
+        public void killCLI()
+        {
+            try
+            {
+                hbProc.Kill();
+            }
+            catch (Exception)
+            {
+                // No need to do anything. Chances are the process was already dead.
+            }
+        }
+
+        public void closeCLI()
+        {
+            hbProc.Close();
+            hbProc.Dispose();
         }
     }
 }
