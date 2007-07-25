@@ -17,12 +17,12 @@
 	<array>
 		<integer>1477</integer>
 	</array>
+	<key>IBOldestOS</key>
+	<integer>4</integer>
 	<key>IBOpenObjects</key>
 	<array>
 		<integer>1843</integer>
 		<integer>365</integer>
-		<integer>21</integer>
-		<integer>29</integer>
 	</array>
 	<key>IBSystem Version</key>
 	<string>8R2218</string>
