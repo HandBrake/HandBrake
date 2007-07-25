@@ -14,8 +14,8 @@ namespace Handbrake
         public frmSplashScreen()
         {
             InitializeComponent();
-            lbl_cli.Text = Properties.Settings.Default.CliVersion;
-            lbl_gui.Text = Properties.Settings.Default.GuiVersion;
+            //lbl_cli.Text = Properties.Settings.Default.CliVersion;
+            //lbl_gui.Text = Properties.Settings.Default.GuiVersion;
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Handbrake
         private void btn_ok_Click(object sender, EventArgs e)
         {
             btn_ok.Enabled = false;
-            btn_skip.Visible = true;
+            //btn_skip.Visible = true;
             lbl_pressOk.Visible = false;
             lbl_progress.Text = "0%";
             lbl_progress.Visible = true;
@@ -66,6 +66,8 @@ namespace Handbrake
 
             Parsing.Parser readData = new Parsing.Parser(hbProc.StandardError.BaseStream);
             readData.OnScanProgress += Parser_OnScanProgress;
+          
+
             readData.OnReadLine += dvdInfo.HandleParsedData;
             readData.OnReadToEnd += dvdInfo.HandleParsedData;
             hbProc.Close();

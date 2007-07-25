@@ -31,6 +31,9 @@ namespace Handbrake
         
         public frmMain()
         {
+            
+            ThreadPool.QueueUserWorkItem(showSplash);
+            Thread.Sleep(3000);
 
             InitializeComponent();
 
@@ -49,6 +52,13 @@ namespace Handbrake
             loadUserDefaults();
         }
 
+        public void showSplash(object sender)
+        {
+            Form splash = new frmSplashScreen();
+            splash.Show();
+            Thread.Sleep(3000);
+            splash.Close();
+        }
         public void loadUserDefaults()
         { 
             try
@@ -1383,6 +1393,7 @@ namespace Handbrake
 
             return querySource+ queryDestination+ queryPictureSettings+ queryVideoSettings+ h264Settings+ queryAudioSettings+ queryAdvancedSettings+ verbose;
         }
+
         // This is the END of the road ------------------------------------------------------------------------------
     }
 }

@@ -10,6 +10,7 @@
     <RootNamespace>Handbrake</RootNamespace>
     <AssemblyName>Handbrake</AssemblyName>
     <ApplicationIcon>handbrakepineapple.ico</ApplicationIcon>
+    <StartupObject>Handbrake.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -173,6 +174,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="handbrakepineapple.ico" />
+    <None Include="Resources\tempSplash.jpg" />
     <None Include="splash.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

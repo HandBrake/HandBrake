@@ -66,5 +66,12 @@ namespace Handbrake.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        internal static System.Drawing.Bitmap tempSplash {
+            get {
+                object obj = ResourceManager.GetObject("tempSplash", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }
