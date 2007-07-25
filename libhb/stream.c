@@ -553,7 +553,7 @@ void hb_stream_update_audio(hb_stream_t *stream, hb_audio_t *audio)
 	
 	if (stream->stream_type == hb_stream_type_program)
 	{
-		lang = lang_for_code('');
+		lang = lang_for_code('u' << 8 | 'n' << 8 | 'd');
 	}
 	else if (stream->stream_type == hb_stream_type_transport)
 	{
