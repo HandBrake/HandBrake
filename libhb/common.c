@@ -493,7 +493,7 @@ void hb_list_close( hb_list_t ** _l )
  *********************************************************************/
 void hb_log( char * log, ... )
 {
-    char        string[82]; /* 80 chars + \n + \0 */
+    char        string[182]; /* 180 chars + \n + \0 */
     time_t      _now;
     struct tm * now;
     va_list     args;
@@ -512,7 +512,7 @@ void hb_log( char * log, ... )
 
     /* Convert the message to a string */
     va_start( args, log );
-    vsnprintf( string + 11, 69, log, args );
+    vsnprintf( string + 11, 169, log, args );
     va_end( args );
 
     /* Add the end of line */

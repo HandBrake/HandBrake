@@ -201,6 +201,11 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     buf->start = pts + ( pos / pv->size ) * 6 * 256 * 90000 / pv->rate;
     buf->stop  = buf->start + 6 * 256 * 90000 / pv->rate;
 
+    /*
+       * To track AC3 PTS add this back in again.
+        *hb_log("AC3: pts is %lld, buf->start %lld buf->stop %lld", pts, buf->start, buf->stop); 
+        */
+    
     pv->next_expected_pts = buf->stop;
     
     for( i = 0; i < 6; i++ )

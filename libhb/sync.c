@@ -298,7 +298,7 @@ static int SyncVideo( hb_work_object_t * w )
         if( next->start < cur->start - PTS_DISCONTINUITY_TOLERANCE ||
             next->start > cur->start + PTS_DISCONTINUITY_TOLERANCE )
         {
-            hb_log( "PTS discontinuity (%lld, %lld)",
+	    hb_log( "Sync: Video PTS discontinuity (current buffer start=%lld, next buffer start=%lld), trash Video",
                     cur->start, next->start );
             
             /* Trash all subtitles */
@@ -468,26 +468,56 @@ static void SyncAudio( hb_work_object_t * w, int i )
         /* The PTS of the samples we are expecting now */
         pts_expected = pv->pts_offset + sync->count_frames * 90000 / rate;
 
+	/*
+	  * Using the same logic as the Video have we crossed a VOB boundary as detected
+	   * by the expected PTS and the PTS of our audio being out by more than the tolerance
+	   * value.
+	   */
         if( ( buf->start > pts_expected + PTS_DISCONTINUITY_TOLERANCE ||
               buf->start < pts_expected - PTS_DISCONTINUITY_TOLERANCE ) &&
             pv->pts_offset_old > INT64_MIN )
         {
+	    /*
+	       * Useful debug, but too verbose for normal use.
+	           hb_log("Sync:  Audio discontinuity (%lld < %lld < %lld)",
+		   pts_expected - PTS_DISCONTINUITY_TOLERANCE, buf->start,
+		   pts_expected + PTS_DISCONTINUITY_TOLERANCE );
+	    */
+	    
             /* There has been a PTS discontinuity, and this frame might
-               be from before the discontinuity */
+               be from before the discontinuity*/
             pts_expected = pv->pts_offset_old + sync->count_frames *
                 90000 / rate;
 
+	    /*
+	      * Is the audio from a valid period given the previous Video PTS. I.e. has there
+	       * just been a video PTS discontinuity and this audio belongs to the vdeo from
+	       * before?
+	       */
             if( buf->start > pts_expected + PTS_DISCONTINUITY_TOLERANCE ||
                 buf->start < pts_expected - PTS_DISCONTINUITY_TOLERANCE )
             {
-                /* There is really nothing we can do with it */
-                buf = hb_fifo_get( audio->fifo_raw );
-                hb_buffer_close( &buf );
-                continue;
-            }
-
-            /* Use the older offset */
-            start = pts_expected - pv->pts_offset_old;
+		/*
+		  * It's outside of our tolerance for where the video is now, and it's outside 
+		  * of the tolerance for where we have been in the case of a VOB change.
+		  * Try and reconverge regardless. so continue on to our convergence 
+		  * code below which will kick in as it will be more than 100ms out.
+		  * 
+		  * Note that trashing the Audio could make things worse if the Audio is in
+		  * front because we will end up diverging even more. We need to hold on
+		  * to the audio until the video catches up.
+		*/
+		hb_log("Sync: Audio is way out of sync, attempt to reconverge from current video PTS");
+		
+		/*
+		  * It wasn't from the old place, so we must be from the new, but just too far out. So attempt to
+		  * reconverge by resetting the point we want to be to where we are currently wanting to be.
+		  */
+		pts_expected = pv->pts_offset + sync->count_frames * 90000 / rate;
+	    } else {
+                 /* Use the older offset */
+                start = pts_expected - pv->pts_offset_old;
+	    }
         }
         else
         {
@@ -497,15 +527,17 @@ static void SyncAudio( hb_work_object_t * w, int i )
         /* Tolerance: 100 ms */
         if( buf->start < pts_expected - 9000 )
         {
-            /* Late audio, trash it */
-            hb_log( "sync: trashing late audio" );
+	    /* Audio is behind the Video, trash it, can't use it now. */
+	    hb_log( "Sync: Audio PTS (%lld) < Video PTS (%lld) by greater than 100ms, trashing audio to reconverge",
+		      buf->start, pts_expected);
             buf = hb_fifo_get( audio->fifo_raw );
             hb_buffer_close( &buf );
             continue;
         }
         else if( buf->start > pts_expected + 9000 )
         {
-            /* Missing audio, send a frame of silence */
+            /* Audio is ahead of the Video, insert silence until we catch up*/
+	    hb_log("Sync: Audio PTS (%lld) >  Video PTS (%lld) by greater than 100ms insert silence until reconverged", buf->start, pts_expected);
             InsertSilence( w, i );
             continue;
         }
@@ -588,6 +620,7 @@ static int NeedSilence( hb_work_object_t * w, hb_audio_t * audio )
     {
         /* We might miss some audio to complete encoding and muxing
            the video track */
+	hb_log("Reader has exited early, inserting silence.");
         return 1;
     }
 
@@ -598,6 +631,7 @@ static int NeedSilence( hb_work_object_t * w, hb_audio_t * audio )
         hb_fifo_is_full( job->fifo_mpeg4 ) )
     {
         /* Too much video and no audio, oh-oh */
+	hb_log("Still got some video - and nothing in the audio fifo, insert silence");
         return 1;
     }
 

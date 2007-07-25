@@ -161,6 +161,10 @@ int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                     buf->start =
                         ( (uint64_t) m->info->display_picture->tag << 32 ) |
                         ( (uint64_t) m->info->display_picture->tag2 );
+		    /*
+		      * Add back in again to track PTS of MPEG2 frames
+		      * hb_log("MPEG2: Normal buf->start = %lld", buf->start);
+		    */
                 }
                 else if( m->last_pts > -1 )
                 {
