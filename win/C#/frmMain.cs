@@ -646,6 +646,7 @@ namespace Handbrake
         // Encode / Cancel Buttons
         // Encode Progress Text Handler
         //---------------------------------------------------
+
         Functions.CLI process = new Functions.CLI();
 
         private void btn_encode_Click(object sender, EventArgs e)
@@ -675,37 +676,38 @@ namespace Handbrake
    
         private void procMonitor(object state)
         {
-            
-            hbProc = process.runCli(this, (string)state, true, true, false, true);
-
-            MessageBox.Show("The encode process has now started.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-
-            try
+            // Make sure we are not already encoding and if we are then display an error.
+            if (hbProc != null)
             {
-                Parsing.Parser encode = new Parsing.Parser(hbProc.StandardError.BaseStream);
-                encode.OnEncodeProgress += encode_OnEncodeProgress;
-                while (!encode.EndOfStream)
+                MessageBox.Show("Handbrake is already encoding a video!", "Status", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                hbProc = process.runCli(this, (string)state, true, true, false, true);
+
+                MessageBox.Show("The encode process has now started.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+
+                try
                 {
-                    encode.ReadLine();
+                    Parsing.Parser encode = new Parsing.Parser(hbProc.StandardError.BaseStream);
+                    encode.OnEncodeProgress += encode_OnEncodeProgress;
+                    while (!encode.EndOfStream)
+                    {
+                        encode.ReadLine();
+                    }
+
+                    hbProc.WaitForExit();
+                    process.closeCLI();
+                    hbProc = null;
+                }
+                catch (Exception)
+                {
+                    // Do nothing
                 }
 
-                hbProc.WaitForExit();
-                process.closeCLI();
-                hbProc = null;
+                MessageBox.Show("The encode process has now ended.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
-            catch (Exception)
-            { 
-                // Do Nothing
-            }
-
-            //TODO: prevent this event from being subscribed more than once
-
-            
-            MessageBox.Show("The encode process has now ended.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
-
-
-
 
         private void encode_OnEncodeProgress(object Sender, int CurrentTask, int TaskCount, float PercentComplete, float CurrentFps, float AverageFps, TimeSpan TimeRemaining)
         {
