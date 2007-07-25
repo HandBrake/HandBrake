@@ -51,7 +51,6 @@
             LANGUAGE = ObjC; 
             OUTLETS = {
                 fAddPresetPanel = NSPanel; 
-                fAddToQuButton = NSButton; 
                 fAudBitrateField = NSTextField; 
                 fAudBitratePopUp = NSPopUpButton; 
                 fAudLang1Field = NSTextField; 
@@ -76,7 +75,6 @@
                 fDstFormatField = NSTextField; 
                 fDstFormatPopUp = NSPopUpButton; 
                 fDstMpgLargeFileCheck = NSButton; 
-                fPauseButton = NSButton; 
                 fPicLabelAnamorphic = NSTextField; 
                 fPicLabelAr = NSTextField; 
                 fPicLabelDeinter = NSTextField; 
@@ -112,16 +110,12 @@
                 fPresetSelectedDisplay = NSTextField; 
                 fPresetsAdd = NSButton; 
                 fPresetsDelete = NSButton; 
-                fQueueAddButton = NSButton; 
                 fQueueController = QueueController; 
                 fQueuePanel = NSPanel; 
-                fQueueShowButton = NSButton; 
                 fQueueStatus = NSTextField; 
-                fRipButton = NSButton; 
                 fRipIndicator = NSProgressIndicator; 
                 fScanController = ScanController; 
                 fScanPanel = NSPanel; 
-                fShowQuButton = NSButton; 
                 fSrcChapterEndPopUp = NSPopUpButton; 
                 fSrcChapterField = NSTextField; 
                 fSrcChapterStartPopUp = NSPopUpButton; 

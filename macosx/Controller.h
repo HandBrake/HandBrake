@@ -21,22 +21,22 @@
 
 {
     IBOutlet NSWindow            * fWindow;
-
+	
     /* Scan panel */
 	IBOutlet ScanController      * fScanController;
     IBOutlet NSPanel             * fScanPanel;
-
+	
     /* Picture panel */
     IBOutlet PictureController   * fPictureController;
     IBOutlet NSPanel             * fPicturePanel;
-
+	
     /* Queue panel */
     IBOutlet QueueController     * fQueueController;
     IBOutlet NSPanel             * fQueuePanel;
     IBOutlet NSTextField         * fQueueStatus;
-    IBOutlet NSButton            * fQueueAddButton;
-    IBOutlet NSButton            * fQueueShowButton;
-
+    //IBOutlet NSButton            * fQueueAddButton;
+    //IBOutlet NSButton            * fQueueShowButton;
+	
     /* Source box */
     IBOutlet NSTextField         * fSrcDVD1Field;
     IBOutlet NSTextField         * fSrcDVD2Field;
@@ -48,7 +48,7 @@
     IBOutlet NSPopUpButton       * fSrcChapterEndPopUp;
     IBOutlet NSTextField         * fSrcDuration1Field;
     IBOutlet NSTextField         * fSrcDuration2Field;
-
+	
     /* Destination box */
     IBOutlet NSTextField         * fDstFormatField;
 	IBOutlet NSPopUpButton       * fDstFormatPopUp;
@@ -58,7 +58,7 @@
     IBOutlet NSTextField         * fDstFile1Field;
     IBOutlet NSTextField         * fDstFile2Field;
     IBOutlet NSButton            * fDstBrowseButton;
-
+	
     /* Video box */
     IBOutlet NSTextField         * fVidRateField;
     IBOutlet NSPopUpButton       * fVidRatePopUp;
@@ -110,7 +110,7 @@
     /* Subtitles box */
     IBOutlet NSTextField         * fSubField;
     IBOutlet NSPopUpButton       * fSubPopUp;
-
+	
     /* Audio box */
     IBOutlet NSTextField         * fAudLang1Field;
     IBOutlet NSPopUpButton       * fAudLang1PopUp;
@@ -130,8 +130,8 @@
     /* Chapters box */
     IBOutlet NSButton            * fCreateChapterMarkers;
     IBOutlet NSTableView         * fChapterTable;
-             ChapterTitles       * fChapterTitlesDelegate;
-
+	ChapterTitles       * fChapterTitlesDelegate;
+	
     /* Bottom */
     IBOutlet NSButton            * fPictureButton;
     IBOutlet NSTextField         * fStatusField;
@@ -140,7 +140,7 @@
     IBOutlet NSButton            * fAddToQuButton;
     IBOutlet NSButton            * fPauseButton;
     IBOutlet NSButton            * fRipButton;
-
+	
 	/* Advanced Tab for opts fX264optView*/
 	IBOutlet NSView              * fX264optView;
 	IBOutlet NSTextField         * fX264optViewTitleLabel;
@@ -202,11 +202,17 @@
     hb_handle_t                  * fHandle;
 	hb_title_t                   * fTitle;
     /* integer to set to determine the previous state
-	of encode 0==idle, 1==encoding, 2==cancelled*/
+		of encode 0==idle, 1==encoding, 2==cancelled*/
     int                            fEncodeState;
 	int                            currentScanCount;
 	NSString                      * currentSource;
 	HBOutputPanelController *outputPanel;
+	
+	BOOL                         startButtonEnabled;
+    BOOL                         pauseButtonEnabled;
+    BOOL                         AddToQueueButtonEnabled;
+	BOOL                         stopOrStart;
+	BOOL                         resumeOrPause;
 }
 
 - (void)     TranslateStrings;
@@ -318,6 +324,6 @@
 - (NSDictionary *) registrationDictionaryForGrowl;
 -(IBAction)showGrowlDoneNotification:(id)sender;
 - (IBAction)showDebugOutputPanel:(id)sender;
-
+- (void)setupToolbar;
 @end
 

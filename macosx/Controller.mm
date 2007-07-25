@@ -35,6 +35,16 @@ static int FormatSettings[4][10] =
 	  0,
 	  0 } };
 
+/* We setup the toolbar values here */
+static NSString*       MyDocToolbarIdentifier          = @"My Document Toolbar Identifier";
+static NSString*       ToggleDrawerIdentifier  = @"Toggle Drawer Item Identifier";
+//static NSString*       ToggleDrawerIdentifier  = @"Toggle Presets Item Identifier";
+static NSString*       StartEncodingIdentifier         = @"Start Encoding Item Identifier";
+static NSString*       PauseEncodingIdentifier         = @"Pause Encoding Item Identifier";
+static NSString*       ShowQueueIdentifier     = @"Show Queue Item Identifier";
+static NSString*       AddToQueueIdentifier    = @"Add to Queue Item Identifier";
+static NSString*       DebugOutputIdentifier   = @"Debug Output Item Identifier";
+
 /*******************************
  * HBController implementation *
  *******************************/
@@ -253,13 +263,224 @@ static int FormatSettings[4][10] =
     [fStatusField setStringValue: @""];
 
     [self EnableUI: NO];
-    [fPauseButton setEnabled: NO];
-    [fRipButton setEnabled: NO];
-
+    //[fPauseButton setEnabled: NO];
+    //[fRipButton setEnabled: NO];
+	/* Use new Toolbar start and pause here */
+	
+	pauseButtonEnabled = NO;
+	startButtonEnabled = NO;
+       [self setupToolbar];
+	/* In Ritsuka's patch, this goes below the Turbo stuff below
+	   Lets try to keep it all together */
+       startButtonEnabled = NO;
+       stopOrStart = NO;
+       AddToQueueButtonEnabled = NO;
+       pauseButtonEnabled = NO;
+       resumeOrPause = NO;
 
 	/* We disable the Turbo 1st pass checkbox since we are not x264 */
 	[fVidTurboPassCheck setEnabled: NO];
 	[fVidTurboPassCheck setState: NSOffState];
+}
+
+// ============================================================
+// NSToolbar Related Methods
+// ============================================================
+
+- (void) setupToolbar {
+    // Create a new toolbar instance, and attach it to our document window 
+    NSToolbar *toolbar = [[[NSToolbar alloc] initWithIdentifier: MyDocToolbarIdentifier] autorelease];
+    
+    // Set up toolbar properties: Allow customization, give a default display mode, and remember state in user defaults 
+    [toolbar setAllowsUserCustomization: YES];
+    [toolbar setAutosavesConfiguration: YES];
+    [toolbar setDisplayMode: NSToolbarDisplayModeIconAndLabel];
+    
+    // We are the delegate
+    [toolbar setDelegate: self];
+    
+    // Attach the toolbar to the document window 
+    [fWindow setToolbar: toolbar];
+}
+
+- (NSToolbarItem *) toolbar: (NSToolbar *)toolbar itemForItemIdentifier: (NSString *) itemIdent willBeInsertedIntoToolbar:(BOOL) willBeInserted {
+    // Required delegate method:  Given an item identifier, this method returns an item 
+    // The toolbar will use this method to obtain toolbar items that can be displayed in the customization sheet, or in the toolbar itself 
+    NSToolbarItem *toolbarItem = nil;
+    
+    if ([itemIdent isEqual: ToggleDrawerIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
+		
+        // Set the text label to be displayed in the toolbar and customization palette 
+		[toolbarItem setLabel: @"Toggle Presets"];
+		[toolbarItem setPaletteLabel: @"Toggler Presets"];
+		
+		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
+		[toolbarItem setToolTip: @"Open/Close Preset Drawer"];
+		[toolbarItem setImage: [NSImage imageNamed: @"Drawer-List2"]];
+		
+		// Tell the item what message to send when it is clicked 
+		[toolbarItem setTarget: self];
+		[toolbarItem setAction: @selector(toggleDrawer)];
+		
+	} else if ([itemIdent isEqual: StartEncodingIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
+		
+        // Set the text label to be displayed in the toolbar and customization palette 
+		[toolbarItem setLabel: @"Start"];
+		[toolbarItem setPaletteLabel: @"Start Encoding"];
+		
+		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
+		[toolbarItem setToolTip: @"Start Encoding"];
+		[toolbarItem setImage: [NSImage imageNamed: @"Play"]];
+		
+		// Tell the item what message to send when it is clicked 
+		[toolbarItem setTarget: self];
+		[toolbarItem setAction: @selector(Rip:)];
+		
+		
+		
+	} else if ([itemIdent isEqual: ShowQueueIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
+		
+        // Set the text label to be displayed in the toolbar and customization palette 
+		[toolbarItem setLabel: @"Show Queue"];
+		[toolbarItem setPaletteLabel: @"Show Queue"];
+		
+		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
+		[toolbarItem setToolTip: @"Show Queue"];
+		[toolbarItem setImage: [NSImage imageNamed: @"Brushed Window"]];
+		
+		// Tell the item what message to send when it is clicked 
+		[toolbarItem setTarget: self];
+		[toolbarItem setAction: @selector(ShowQueuePanel:)];
+		
+	} else if ([itemIdent isEqual: AddToQueueIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
+		
+        // Set the text label to be displayed in the toolbar and customization palette 
+		[toolbarItem setLabel: @"Add to Queue"];
+		[toolbarItem setPaletteLabel: @"Add to Queue"];
+		
+		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
+		[toolbarItem setToolTip: @"Add to Queue"];
+		[toolbarItem setImage: [NSImage imageNamed: @"Add"]];
+		
+		// Tell the item what message to send when it is clicked 
+		[toolbarItem setTarget: self];
+		[toolbarItem setAction: @selector(AddToQueue:)];
+		
+		
+	} else if ([itemIdent isEqual: PauseEncodingIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
+		
+        // Set the text label to be displayed in the toolbar and customization palette 
+		[toolbarItem setLabel: @"Pause"];
+		[toolbarItem setPaletteLabel: @"Pause Encoding"];
+		
+		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
+		[toolbarItem setToolTip: @"Pause Encoding"];
+		[toolbarItem setImage: [NSImage imageNamed: @"Pause"]];
+		
+		// Tell the item what message to send when it is clicked 
+		[toolbarItem setTarget: self];
+		[toolbarItem setAction: @selector(Pause:)];
+		
+	} else if ([itemIdent isEqual: DebugOutputIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
+		
+        // Set the text label to be displayed in the toolbar and customization palette 
+		[toolbarItem setLabel: @"Activity Window"];
+		[toolbarItem setPaletteLabel: @"Show Activity Window"];
+		
+		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
+		[toolbarItem setToolTip: @"Show Activity Window"];
+		[toolbarItem setImage: [NSImage imageNamed: @"Terminal"]];
+		
+		// Tell the item what message to send when it is clicked 
+		[toolbarItem setTarget: self];
+		[toolbarItem setAction: @selector(showDebugOutputPanel:)];
+		
+    } else {
+        //itemIdent refered to a toolbar item that is not provide or supported by us or cocoa 
+        //Returning nil will inform the toolbar this kind of item is not supported 
+		toolbarItem = nil;
+    }
+	
+    return toolbarItem;
+}
+
+- (void) toggleDrawer {
+    [fPresetDrawer toggle:self];
+}
+
+- (NSArray *) toolbarDefaultItemIdentifiers: (NSToolbar *) toolbar {
+    // Required delegate method:  Returns the ordered list of items to be shown in the toolbar by default    
+    // If during the toolbar's initialization, no overriding values are found in the user defaults, or if the
+    // user chooses to revert to the default items this set will be used 
+    return [NSArray arrayWithObjects:  StartEncodingIdentifier, PauseEncodingIdentifier, NSToolbarSeparatorItemIdentifier,
+		AddToQueueIdentifier, ShowQueueIdentifier,
+		NSToolbarFlexibleSpaceItemIdentifier, 
+		NSToolbarSpaceItemIdentifier, DebugOutputIdentifier, ToggleDrawerIdentifier, nil];
+}
+
+- (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar {
+    // Required delegate method:  Returns the list of all allowed items by identifier.  By default, the toolbar 
+    // does not assume any items are allowed, even the separator.  So, every allowed item must be explicitly listed   
+    // The set of allowed items is used to construct the customization palette 
+    return [NSArray arrayWithObjects:  StartEncodingIdentifier, PauseEncodingIdentifier, AddToQueueIdentifier, ShowQueueIdentifier,
+		DebugOutputIdentifier, NSToolbarCustomizeToolbarItemIdentifier,
+		NSToolbarFlexibleSpaceItemIdentifier, NSToolbarSpaceItemIdentifier,
+		NSToolbarSeparatorItemIdentifier,ToggleDrawerIdentifier, nil];
+}
+
+- (BOOL) validateToolbarItem: (NSToolbarItem *) toolbarItem {
+    // Optional method:  This message is sent to us since we are the target of some toolbar item actions 
+    BOOL enable = NO;
+    if ([[toolbarItem itemIdentifier] isEqual: ToggleDrawerIdentifier]) {
+		enable = YES;
+	}
+	if ([[toolbarItem itemIdentifier] isEqual: StartEncodingIdentifier]) {
+		enable = startButtonEnabled;
+		if(stopOrStart) {
+			[toolbarItem setImage: [NSImage imageNamed: @"Stop"]];
+			[toolbarItem setLabel: @"Cancel"];
+			[toolbarItem setPaletteLabel: @"Cancel"];
+			[toolbarItem setToolTip: @"Cancel Encoding"];
+		}
+		else {
+			[toolbarItem setImage: [NSImage imageNamed: @"Play"]];
+			[toolbarItem setLabel: @"Start"];
+			[toolbarItem setPaletteLabel: @"Start Encoding"];
+			[toolbarItem setToolTip: @"Start Encoding"];
+		}
+		
+	}
+	if ([[toolbarItem itemIdentifier] isEqual: PauseEncodingIdentifier]) {
+		enable = pauseButtonEnabled;
+		if(resumeOrPause) {
+			[toolbarItem setImage: [NSImage imageNamed: @"Play"]];
+			[toolbarItem setLabel: @"Resume"];
+			[toolbarItem setPaletteLabel: @"Resume Encoding"];
+			[toolbarItem setToolTip: @"Resume Encoding"];
+		}
+		else {
+			[toolbarItem setImage: [NSImage imageNamed: @"Pause"]];
+			[toolbarItem setLabel: @"Pause"];
+			[toolbarItem setPaletteLabel: @"Pause Encoding"];
+			[toolbarItem setToolTip: @"Pause Encoding"];
+		}
+	}
+	if ([[toolbarItem itemIdentifier] isEqual: DebugOutputIdentifier]) {
+		enable = YES;
+	}
+	if ([[toolbarItem itemIdentifier] isEqual: ShowQueueIdentifier]) {
+		enable = YES;
+	}
+	if ([[toolbarItem itemIdentifier] isEqual: AddToQueueIdentifier]) {
+		enable = AddToQueueButtonEnabled;
+	}
+    return enable;
 }
 
 // register a test notification and make
@@ -378,50 +599,50 @@ return registrationDictionary;
 
 - (void) UpdateUI: (NSTimer *) timer
 {
-/* check to see if there has been a new scan done
-   this bypasses the constraints of HB_STATE_WORKING
-   not allowing setting a newly scanned source */
-int checkScanCount = hb_get_scancount( fHandle );
-if (checkScanCount > currentScanCount)
+	/* check to see if there has been a new scan done
+	this bypasses the constraints of HB_STATE_WORKING
+	not allowing setting a newly scanned source */
+	int checkScanCount = hb_get_scancount( fHandle );
+	if (checkScanCount > currentScanCount)
 	{
 		[fScanController Cancel: NULL];
 		[self ShowNewScan: NULL];
 		currentScanCount = checkScanCount;
 	}
-
-
-
-
+	
+	
+	
+	
     hb_state_t s;
     hb_get_state( fHandle, &s );
-
-
+	
+	
     switch( s.state )
     {
         case HB_STATE_IDLE:
             break;
-
+			
         case HB_STATE_SCANNING:
             [fScanController UpdateUI: &s];
             break;
-		
+			
 #define p s.param.scandone
         case HB_STATE_SCANDONE:
         {
-		[fScanController Cancel: NULL];
-        [self ShowNewScan: NULL];
+			[fScanController Cancel: NULL];
+			[self ShowNewScan: NULL];
             break;
         }
 #undef p
-
+			
 #define p s.param.working
         case HB_STATE_WORKING:
         {
             float progress_total;
             NSMutableString * string;
 			/* Currently, p.job_cur and p.job_count get screwed up when adding
-			   jobs during encoding, if they cannot be fixed in libhb, will implement a
-			   nasty but working cocoa solution */
+				jobs during encoding, if they cannot be fixed in libhb, will implement a
+				nasty but working cocoa solution */
 			/* Update text field */
 			string = [NSMutableString stringWithFormat: _( @"Encoding: task %d of %d, %.2f %%" ), p.job_cur, p.job_count, 100.0 * p.progress];
             
@@ -441,17 +662,16 @@ if (checkScanCount > currentScanCount)
             /* Update dock icon */
             [self UpdateDockIcon: progress_total];
 			
-            [fPauseButton setEnabled: YES];
-            [fPauseButton setTitle: _( @"Pause" )];
-            [fRipButton setEnabled: YES];
-            [fRipButton setTitle: _( @"Cancel" )];
-			
-			
+            /* new toolbar controls */
+            pauseButtonEnabled = YES;
+            resumeOrPause = NO;
+            startButtonEnabled = YES;
+            stopOrStart = YES;			
 			
             break;
         }
 #undef p
-
+			
 #define p s.param.muxing
         case HB_STATE_MUXING:
         {
@@ -469,22 +689,27 @@ if (checkScanCount > currentScanCount)
             /* Update dock icon */
             [self UpdateDockIcon: 1.0];
 			
-            [fPauseButton setEnabled: YES];
-            [fPauseButton setTitle: _( @"Pause" )];
-            [fRipButton setEnabled: YES];
-            [fRipButton setTitle: _( @"Cancel" )];
+            //[fPauseButton setEnabled: YES];
+            //[fPauseButton setTitle: _( @"Pause" )];
+            //[fRipButton setEnabled: YES];
+			// [fRipButton setTitle: _( @"Cancel" )];
             break;
         }
 #undef p
 			
         case HB_STATE_PAUSED:
-		    [fStatusField setStringValue: _( @"Paused" )];
-            [fPauseButton setEnabled: YES];
-            [fPauseButton setTitle: _( @"Resume" )];
-            [fRipButton setEnabled: YES];
-            [fRipButton setTitle: _( @"Cancel" )];
+		    //[fStatusField setStringValue: _( @"Paused" )];
+            //[fPauseButton setEnabled: YES];
+            //[fPauseButton setTitle: _( @"Resume" )];
+            //[fRipButton setEnabled: YES];
+            //[fRipButton setTitle: _( @"Cancel" )];
+			/* new toolbar controls */
+            pauseButtonEnabled = YES;
+            resumeOrPause = YES;
+            startButtonEnabled = YES;
+            stopOrStart = YES;
             break;
-
+			
         case HB_STATE_WORKDONE:
         {
             [fStatusField setStringValue: _( @"Done." )];
@@ -495,10 +720,21 @@ if (checkScanCount > currentScanCount)
             /* Restore dock icon */
             [self UpdateDockIcon: -1.0];
 			
-            [fPauseButton setEnabled: NO];
-            [fPauseButton setTitle: _( @"Pause" )];
-            [fRipButton setEnabled: YES];
-            [fRipButton setTitle: _( @"Start" )];
+            //[fPauseButton setEnabled: NO];
+            //[fPauseButton setTitle: _( @"Pause" )];
+			// [fRipButton setEnabled: YES];
+			// [fRipButton setTitle: _( @"Start" )];
+			/* new toolbar controls */
+            pauseButtonEnabled = NO;
+            resumeOrPause = NO;
+            startButtonEnabled = YES;
+            stopOrStart = NO;
+			NSRect frame = [fWindow frame];
+			if (frame.size.width <= 591)
+				frame.size.width = 591;
+			frame.size.height += -44;
+			frame.origin.y -= -44;
+			[fWindow setFrame:frame display:YES animate:YES];
 			
             /* FIXME */
             hb_job_t * job;
@@ -507,7 +743,7 @@ if (checkScanCount > currentScanCount)
                 hb_rem( fHandle, job );
             }
             /* Check to see if the encode state has not been cancelled
-			to determine if we should check for encode done notifications */
+				to determine if we should check for encode done notifications */
 			if (fEncodeState != 2) 			{
 				/* If Growl Notification or Window and Growl has been selected */
 				if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Growl Notification"] || 
@@ -537,30 +773,30 @@ if (checkScanCount > currentScanCount)
 			}
 			else
 			{
-			[self EnableUI: YES];
+				[self EnableUI: YES];
 			}
             break;
         }
     }
-
+	
     /* Lets show the queue status
-	here in the main window*/
-        int queue_count = hb_count( fHandle );
-        if( queue_count )
-        {
-            [fQueueStatus setStringValue: [NSString stringWithFormat:
-                @"%d task%s in the queue",
-                queue_count, ( queue_count > 1 ) ? "s" : ""]];
-        }
-        else
-        {
-            [fQueueStatus setStringValue: @""];
-        }
-
+		here in the main window*/
+	int queue_count = hb_count( fHandle );
+	if( queue_count )
+	{
+		[fQueueStatus setStringValue: [NSString stringWithFormat:
+			@"%d task%s in the queue",
+						 queue_count, ( queue_count > 1 ) ? "s" : ""]];
+	}
+	else
+	{
+		[fQueueStatus setStringValue: @""];
+	}
+	
     [[NSRunLoop currentRunLoop] addTimer: [NSTimer
         scheduledTimerWithTimeInterval: 0.2 target: self
-        selector: @selector( UpdateUI: ) userInfo: NULL repeats: FALSE]
-        forMode: NSModalPanelRunLoopMode];
+							  selector: @selector( UpdateUI: ) userInfo: NULL repeats: FALSE]
+								 forMode: NSModalPanelRunLoopMode];
 }
 - (IBAction) ShowNewScan:(id)sender
 {
@@ -670,8 +906,13 @@ if (checkScanCount > currentScanCount)
 			
             [self TitlePopUpChanged: NULL];
             [self EnableUI: YES];
-            [fPauseButton setEnabled: NO];
-            [fRipButton   setEnabled: YES];
+            //[fPauseButton setEnabled: NO];
+            //[fRipButton   setEnabled: YES];
+		startButtonEnabled = YES;
+       stopOrStart = NO;
+       AddToQueueButtonEnabled = YES;
+       pauseButtonEnabled = NO;
+       resumeOrPause = NO;
 }
 
 
@@ -1090,8 +1331,9 @@ if (checkScanCount > currentScanCount)
 - (IBAction) Rip: (id) sender
 {
     /* Rip or Cancel ? */
-    if( [[fRipButton title] isEqualToString: _( @"Cancel" )] )
-    {
+ //   if( [[fRipButton title] isEqualToString: _( @"Cancel" )] )
+    if(stopOrStart)
+	{
         [self Cancel: sender];
         return;
     }
@@ -1163,11 +1405,19 @@ if (checkScanCount > currentScanCount)
     hb_start( fHandle );
 	/*set the fEncodeState State */
 	fEncodeState = 1;
-
+	
     /* Disable interface */
-   //[self EnableUI: NO];
-    [fPauseButton setEnabled: NO];
-    [fRipButton   setEnabled: NO];
+	//[self EnableUI: NO];
+	// [fPauseButton setEnabled: NO];
+	// [fRipButton   setEnabled: NO];
+	pauseButtonEnabled = NO;
+	startButtonEnabled = NO;
+	NSRect frame = [fWindow frame];
+    if (frame.size.width <= 591)
+        frame.size.width = 591;
+    frame.size.height += 44;
+    frame.origin.y -= 44;
+    [fWindow setFrame:frame display:YES animate:YES];
 }
 
 - (IBAction) Cancel: (id) sender
@@ -1184,8 +1434,10 @@ if (checkScanCount > currentScanCount)
     if( returnCode == NSAlertAlternateReturn )
     {
         hb_stop( fHandle );
-        [fPauseButton setEnabled: NO];
-        [fRipButton   setEnabled: NO];
+       // [fPauseButton setEnabled: NO];
+       // [fRipButton   setEnabled: NO];
+	   pauseButtonEnabled = NO;
+       startButtonEnabled = NO;
 		/*set the fEncodeState State */
 	     fEncodeState = 2;
     }
@@ -1193,10 +1445,14 @@ if (checkScanCount > currentScanCount)
 
 - (IBAction) Pause: (id) sender
 {
-    [fPauseButton setEnabled: NO];
-    [fRipButton   setEnabled: NO];
+   // [fPauseButton setEnabled: NO];
+   // [fRipButton   setEnabled: NO];
 
-    if( [[fPauseButton title] isEqualToString: _( @"Resume" )] )
+   // if( [[fPauseButton title] isEqualToString: _( @"Resume" )] )
+          pauseButtonEnabled = NO;
+       startButtonEnabled = NO;
+
+    if(resumeOrPause)
     {
         hb_resume( fHandle );
     }

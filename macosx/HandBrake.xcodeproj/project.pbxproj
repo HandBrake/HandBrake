@@ -112,12 +112,19 @@
 		593034EC0BBA39A100172349 /* ChapterTitles.m in Sources */ = {isa = PBXBuildFile; fileRef = 593034EA0BBA39A100172349 /* ChapterTitles.m */; };
 		59CBD2370BBB44DA004A3BE3 /* parsecsv.c in Sources */ = {isa = PBXBuildFile; fileRef = 59CBD2360BBB44DA004A3BE3 /* parsecsv.c */; };
 		59CBD2650BBB4D1B004A3BE3 /* ChapterTitles.m in Sources */ = {isa = PBXBuildFile; fileRef = 593034EA0BBA39A100172349 /* ChapterTitles.m */; };
+		A273E04E0C57B39A00493A45 /* Add.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E0470C57B39A00493A45 /* Add.tiff */; };
+		A273E04F0C57B39A00493A45 /* Brushed Window.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E0480C57B39A00493A45 /* Brushed Window.tiff */; };
+		A273E0500C57B39A00493A45 /* Drawer-List2.png in Resources */ = {isa = PBXBuildFile; fileRef = A273E0490C57B39A00493A45 /* Drawer-List2.png */; };
+		A273E0510C57B39A00493A45 /* Pause.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E04A0C57B39A00493A45 /* Pause.tiff */; };
+		A273E0520C57B39A00493A45 /* Play.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E04B0C57B39A00493A45 /* Play.tiff */; };
+		A273E0530C57B39A00493A45 /* Stop.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E04C0C57B39A00493A45 /* Stop.tiff */; };
+		A273E0540C57B39A00493A45 /* Terminal.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E04D0C57B39A00493A45 /* Terminal.tiff */; };
+		A273E09A0C57C1CC00493A45 /* muxmkv.c in Sources */ = {isa = PBXBuildFile; fileRef = A273E0950C57C19500493A45 /* muxmkv.c */; };
+		A273E09B0C57C1CD00493A45 /* muxmkv.c in Sources */ = {isa = PBXBuildFile; fileRef = A273E0950C57C19500493A45 /* muxmkv.c */; };
 		A29E05800BE1283E000533F5 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A29E057F0BE1283E000533F5 /* Growl.framework */; };
 		A29E058B0BE12889000533F5 /* Growl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A29E057F0BE1283E000533F5 /* Growl.framework */; };
 		EAA526930C3B25D200944FF2 /* stream.c in Sources */ = {isa = PBXBuildFile; fileRef = EAA526920C3B25D200944FF2 /* stream.c */; };
 		EAA526940C3B25D200944FF2 /* stream.c in Sources */ = {isa = PBXBuildFile; fileRef = EAA526920C3B25D200944FF2 /* stream.c */; };
-		FC6CE2C10C495A6B001A2D5B /* muxmkv.c in Sources */ = {isa = PBXBuildFile; fileRef = FC6CE2C00C495A6B001A2D5B /* muxmkv.c */; };
-		FC6CE2C20C495A6B001A2D5B /* muxmkv.c in Sources */ = {isa = PBXBuildFile; fileRef = FC6CE2C00C495A6B001A2D5B /* muxmkv.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -234,9 +241,16 @@
 		593034E90BBA39A100172349 /* ChapterTitles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChapterTitles.h; sourceTree = "<group>"; };
 		593034EA0BBA39A100172349 /* ChapterTitles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChapterTitles.m; sourceTree = "<group>"; };
 		59CBD2360BBB44DA004A3BE3 /* parsecsv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = parsecsv.c; path = ../test/parsecsv.c; sourceTree = SOURCE_ROOT; };
+		A273E0470C57B39A00493A45 /* Add.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Add.tiff; sourceTree = "<group>"; };
+		A273E0480C57B39A00493A45 /* Brushed Window.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "Brushed Window.tiff"; sourceTree = "<group>"; };
+		A273E0490C57B39A00493A45 /* Drawer-List2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Drawer-List2.png"; sourceTree = "<group>"; };
+		A273E04A0C57B39A00493A45 /* Pause.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Pause.tiff; sourceTree = "<group>"; };
+		A273E04B0C57B39A00493A45 /* Play.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Play.tiff; sourceTree = "<group>"; };
+		A273E04C0C57B39A00493A45 /* Stop.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Stop.tiff; sourceTree = "<group>"; };
+		A273E04D0C57B39A00493A45 /* Terminal.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Terminal.tiff; sourceTree = "<group>"; };
+		A273E0950C57C19500493A45 /* muxmkv.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = muxmkv.c; path = ../libhb/muxmkv.c; sourceTree = SOURCE_ROOT; };
 		A29E057F0BE1283E000533F5 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Growl.framework; sourceTree = "<group>"; };
 		EAA526920C3B25D200944FF2 /* stream.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = stream.c; path = ../libhb/stream.c; sourceTree = SOURCE_ROOT; };
-		FC6CE2C00C495A6B001A2D5B /* muxmkv.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = muxmkv.c; path = ../libhb/muxmkv.c; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -302,7 +316,7 @@
 		29B97314FDCFA39411CA2CEA /* HandBrake */ = {
 			isa = PBXGroup;
 			children = (
-				FC6CE2C00C495A6B001A2D5B /* muxmkv.c */,
+				A273E0460C57B39A00493A45 /* icons */,
 				526FBC940B4CAA310064E04C /* Instant HandBrake Sources */,
 				526FBC930B4CAA260064E04C /* HandBrake Sources */,
 				526FBC920B4CAA120064E04C /* HandBrakeCLI Sources */,
@@ -353,6 +367,7 @@
 		526FBC8D0B4CA9F90064E04C /* libhb Sources */ = {
 			isa = PBXGroup;
 			children = (
+				A273E0950C57C19500493A45 /* muxmkv.c */,
 				EAA526920C3B25D200944FF2 /* stream.c */,
 				0DFA5C7E0B8DD3B60020BC09 /* declpcm.c */,
 				0DFA5C7F0B8DD3B60020BC09 /* decmpeg2.c */,
@@ -435,6 +450,20 @@
 				4D1EA2DC0993B01000FDC1A2 /* Express.plist */,
 			);
 			name = "Instant HandBrake Sources";
+			sourceTree = "<group>";
+		};
+		A273E0460C57B39A00493A45 /* icons */ = {
+			isa = PBXGroup;
+			children = (
+				A273E0470C57B39A00493A45 /* Add.tiff */,
+				A273E0480C57B39A00493A45 /* Brushed Window.tiff */,
+				A273E0490C57B39A00493A45 /* Drawer-List2.png */,
+				A273E04A0C57B39A00493A45 /* Pause.tiff */,
+				A273E04B0C57B39A00493A45 /* Play.tiff */,
+				A273E04C0C57B39A00493A45 /* Stop.tiff */,
+				A273E04D0C57B39A00493A45 /* Terminal.tiff */,
+			);
+			path = icons;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -604,6 +633,13 @@
 				0DFA5C7B0B8DD1E90020BC09 /* HandBrake.icns in Resources */,
 				2538860C0BFE0B730064E995 /* OutputPanel.nib in Resources */,
 				25DE1FAD0C1699E500F01FC8 /* Preferences.nib in Resources */,
+				A273E04E0C57B39A00493A45 /* Add.tiff in Resources */,
+				A273E04F0C57B39A00493A45 /* Brushed Window.tiff in Resources */,
+				A273E0500C57B39A00493A45 /* Drawer-List2.png in Resources */,
+				A273E0510C57B39A00493A45 /* Pause.tiff in Resources */,
+				A273E0520C57B39A00493A45 /* Play.tiff in Resources */,
+				A273E0530C57B39A00493A45 /* Stop.tiff in Resources */,
+				A273E0540C57B39A00493A45 /* Terminal.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -644,7 +680,7 @@
 				0D096E030B707D3400A845D4 /* decavcodec.c in Sources */,
 				5558B56A0BE3BADF00E15E27 /* decdca.c in Sources */,
 				EAA526940C3B25D200944FF2 /* stream.c in Sources */,
-				FC6CE2C20C495A6B001A2D5B /* muxmkv.c in Sources */,
+				A273E09B0C57C1CD00493A45 /* muxmkv.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -683,7 +719,7 @@
 				593034EC0BBA39A100172349 /* ChapterTitles.m in Sources */,
 				5558B5690BE3BADF00E15E27 /* decdca.c in Sources */,
 				EAA526930C3B25D200944FF2 /* stream.c in Sources */,
-				FC6CE2C10C495A6B001A2D5B /* muxmkv.c in Sources */,
+				A273E09A0C57C1CC00493A45 /* muxmkv.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
