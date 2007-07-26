@@ -152,7 +152,7 @@ static int GetAlignedSize( int size )
 	
 	[fInfoField setStringValue: [NSString stringWithFormat:
 	@"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d", fTitle->width, fTitle->height,
-	MaxOutputWidth, displayparheight, displayparwidth,
+	titlewidth, displayparheight, displayparwidth,
 	displayparheight]];
 	
 	

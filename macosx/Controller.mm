@@ -2256,6 +2256,8 @@ list = hb_get_titles( fHandle );
 	int arpheight = fTitle->job->pixel_aspect_height;
 	int displayparwidth = titlewidth * arpwidth / arpheight;
 	int displayparheight = fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1];
+	[fPicSettingWidth setStringValue: [NSString stringWithFormat:
+		@"%d", titlewidth]];
 	[fPicSettingHeight setStringValue: [NSString stringWithFormat:
 		@"%d", displayparheight]];
 	[fPicLabelPAROutp setStringValue: @"Anamorphic Output:"];
