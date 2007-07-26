@@ -548,6 +548,8 @@ namespace Handbrake
             
             String filename ="";
             text_source.Text = "";
+            
+            int scanTwice = 0;
 
             if (RadioDVD.Checked)
             {
@@ -555,9 +557,9 @@ namespace Handbrake
                 filename = DVD_Open.SelectedPath;
                 if (filename != "")
                 {
+                    Form frmRD = new frmReadDVD(filename, this, dvdInfoWindow);
                     text_source.Text = filename;
-                    Form frmReadDVD = new frmReadDVD(filename, this, dvdInfoWindow);
-                    frmReadDVD.ShowDialog();
+                    frmRD.ShowDialog();
                 }
             }
             else
@@ -566,24 +568,37 @@ namespace Handbrake
                 filename = ISO_Open.FileName;
                 if (filename != "")
                 {
+                    Form frmRD = new frmReadDVD(filename, this, dvdInfoWindow);
                     text_source.Text = filename;
-                    Form frmReadDVD = new frmReadDVD(filename, this, dvdInfoWindow);
-                    frmReadDVD.ShowDialog();
+                    frmRD.ShowDialog();
                 }
             }  
 
-            // Quick check to make sure some titles were found.
+            // Check if there was titles in the dvd title dropdown
+            // If there isn't any, rescan the DVD. hbcli occasionally fails (see bug in encode) with standard error.
             if (filename != "")
             {
-                if (drp_dvdtitle.Items.Count == 0)
+                if (drp_dvdtitle.Items.Count == 0) 
                 {
-                    MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source. Please refer to the FAQ for details..", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                    MessageBox.Show(scanTwice.ToString());
+                    if (scanTwice == 0)
+                    {
+                        MessageBox.Show("Scan Failed. Will attempt to scan the source 1 more time.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                        Form frmRD = new frmReadDVD(filename, this, dvdInfoWindow);
+                        frmRD.ShowDialog();
+                        scanTwice = 1;
+                    }
                 }
             }
             else
             {
                 text_source.Text = "Click 'Browse' to continue";
             }
+
+            if (drp_dvdtitle.Items.Count == 0)
+            {
+                MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source. Please refer to the FAQ for details.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+           }
 
         }
 
@@ -665,6 +680,7 @@ namespace Handbrake
             }
 
             ThreadPool.QueueUserWorkItem(procMonitor, query);
+            lbl_encode.Text = "Encoding Started";
         }
 
         private void btn_eCancel_Click(object sender, EventArgs e)
@@ -683,22 +699,30 @@ namespace Handbrake
             }
             else
             {
-                hbProc = process.runCli(this, (string)state, true, true, false, true);
+                hbProc = process.runCli(this, (string)state, false, false, false, false);
 
                 MessageBox.Show("The encode process has now started.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
 
                 try
                 {
-                    Parsing.Parser encode = new Parsing.Parser(hbProc.StandardError.BaseStream);
-                    encode.OnEncodeProgress += encode_OnEncodeProgress;
-                    while (!encode.EndOfStream)
-                    {
-                        encode.ReadLine();
-                    }
+
+                    //*****************************************************************************************
+                    // BUG!
+                    // When the below code is used and standard error is set to true, hbcli is outputing a
+                    // video stream which has mild corruption issues every few seconds.
+                    // Maybe an issue with the Parser cauing the CLI to hickup/pause?
+                    //*****************************************************************************************
+
+                    //Parsing.Parser encode = new Parsing.Parser(hbProc.StandardError.BaseStream);
+                    //encode.OnEncodeProgress += encode_OnEncodeProgress;
+                    //while (!encode.EndOfStream)
+                    //{
+                    //    encode.ReadLine();
+                    //}
 
                     hbProc.WaitForExit();
                     process.closeCLI();
-                    hbProc = null;
+                    
                 }
                 catch (Exception)
                 {
@@ -706,6 +730,7 @@ namespace Handbrake
                 }
 
                 MessageBox.Show("The encode process has now ended.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                hbProc = null;
             }
         }
 

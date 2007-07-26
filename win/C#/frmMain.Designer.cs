@@ -1638,9 +1638,9 @@ namespace Handbrake
             this.btn_queue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_queue.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_queue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_queue.Location = new System.Drawing.Point(335, 589);
+            this.btn_queue.Location = new System.Drawing.Point(415, 589);
             this.btn_queue.Name = "btn_queue";
-            this.btn_queue.Size = new System.Drawing.Size(124, 22);
+            this.btn_queue.Size = new System.Drawing.Size(115, 22);
             this.btn_queue.TabIndex = 416;
             this.btn_queue.TabStop = false;
             this.btn_queue.Text = "Add to Queue";
@@ -1692,13 +1692,14 @@ namespace Handbrake
             this.btn_eCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_eCancel.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_eCancel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_eCancel.Location = new System.Drawing.Point(465, 589);
+            this.btn_eCancel.Location = new System.Drawing.Point(344, 589);
             this.btn_eCancel.Name = "btn_eCancel";
             this.btn_eCancel.Size = new System.Drawing.Size(65, 22);
             this.btn_eCancel.TabIndex = 419;
             this.btn_eCancel.TabStop = false;
             this.btn_eCancel.Text = "Cancel";
             this.btn_eCancel.UseVisualStyleBackColor = false;
+            this.btn_eCancel.Visible = false;
             this.btn_eCancel.Click += new System.EventHandler(this.btn_eCancel_Click);
             // 
             // frmMain
