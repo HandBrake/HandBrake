@@ -599,15 +599,32 @@ return registrationDictionary;
 
 - (void) UpdateUI: (NSTimer *) timer
 {
-	/* check to see if there has been a new scan done
+
+hb_list_t  * list;
+list = hb_get_titles( fHandle );	
+    /* check to see if there has been a new scan done
 	this bypasses the constraints of HB_STATE_WORKING
 	not allowing setting a newly scanned source */
 	int checkScanCount = hb_get_scancount( fHandle );
 	if (checkScanCount > currentScanCount)
 	{
-		[fScanController Cancel: NULL];
-		[self ShowNewScan: NULL];
+
 		currentScanCount = checkScanCount;
+			[fScanController Cancel: NULL];
+		    [fScanIndicator setIndeterminate: NO];
+            [fScanIndicator setDoubleValue: 0.0];
+			[fScanIndicator setHidden: YES];
+			[fScanController Cancel: NULL];
+			if( !hb_list_count( list ) )
+            {
+			/* We display a message if a valid dvd source was not chosen */
+			[fSrcDVD2Field setStringValue: @"No Valid DVD Source Chosen"];
+            currentSource = [fSrcDVD2Field stringValue];
+            }
+			else
+			{
+			[self ShowNewScan: NULL];
+			}
 	}
 	
 	
@@ -621,16 +638,37 @@ return registrationDictionary;
     {
         case HB_STATE_IDLE:
             break;
-			
+#define p s.param.scanning			
         case HB_STATE_SCANNING:
-            [fScanController UpdateUI: &s];
+		{
+            [fSrcDVD2Field setStringValue: [NSString stringWithFormat:
+                _( @"Scanning title %d of %d..." ),
+                p.title_cur, p.title_count]];
+            [fScanIndicator setIndeterminate: NO];
+			[fScanIndicator setDoubleValue: 100.0 * ( p.title_cur - 1 ) /
+                p.title_count];
             break;
-			
+		}
+#undef p
+	
 #define p s.param.scandone
         case HB_STATE_SCANDONE:
         {
+			
+			[fScanIndicator setIndeterminate: NO];
+            [fScanIndicator setDoubleValue: 0.0];
+			[fScanIndicator setHidden: YES];
 			[fScanController Cancel: NULL];
+			if( !hb_list_count( list ) )
+            {
+			/* We display a message if a valid dvd source was not chosen */
+			[fSrcDVD2Field setStringValue: @"No Valid DVD Source Chosen"];
+            currentSource = [fSrcDVD2Field stringValue];
+            }
+			else
+			{
 			[self ShowNewScan: NULL];
+			}
             break;
         }
 #undef p
@@ -715,7 +753,7 @@ return registrationDictionary;
             [fStatusField setStringValue: _( @"Done." )];
             [fRipIndicator setIndeterminate: NO];
             [fRipIndicator setDoubleValue: 0.0];
-            [fRipButton setTitle: _( @"Start" )];
+            //[fRipButton setTitle: _( @"Start" )];
 			
             /* Restore dock icon */
             [self UpdateDockIcon: -1.0];
@@ -824,6 +862,7 @@ return registrationDictionary;
                 /*Set DVD Name at top of window*/
 				[fSrcDVD2Field setStringValue:[NSString stringWithUTF8String: title->name]];
 				currentSource = [NSString stringWithUTF8String: title->dvd];
+				sourceDisplayName = [NSString stringWithUTF8String: title->name];
 				/* Use the dvd name in the default output field here 
 				May want to add code to remove blank spaces for some dvd names*/
 				/* Check to see if the last destination has been set,use if so, if not, use Desktop */
@@ -932,7 +971,7 @@ return registrationDictionary;
 - (void) EnableUI: (bool) b
 {
     NSControl * controls[] =
-      { fSrcDVD1Field, fSrcDVD2Field, fSrcTitleField, fSrcTitlePopUp,
+      { fSrcDVD1Field, fSrcTitleField, fSrcTitlePopUp,
         fSrcChapterField, fSrcChapterStartPopUp, fSrcChapterToField,
         fSrcChapterEndPopUp, fSrcDuration1Field, fSrcDuration2Field,
         fDstFormatField, fDstFormatPopUp, fDstCodecsField,

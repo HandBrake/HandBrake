@@ -115,7 +115,9 @@
                 fQueueStatus = NSTextField; 
                 fRipIndicator = NSProgressIndicator; 
                 fScanController = ScanController; 
+                fScanIndicator = NSProgressIndicator; 
                 fScanPanel = NSPanel; 
+                fScanStatus = NSTextField; 
                 fSrcChapterEndPopUp = NSPopUpButton; 
                 fSrcChapterField = NSTextField; 
                 fSrcChapterStartPopUp = NSPopUpButton; 
@@ -266,14 +268,6 @@
             SUPERCLASS = NSObject; 
         }, 
         {
-            ACTIONS = {
-                Browse = id; 
-                Browse2 = id; 
-                BrowseDone2 = id; 
-                Cancel = id; 
-                MatrixChanged = id; 
-                Open = id; 
-            }; 
             CLASS = ScanController; 
             LANGUAGE = ObjC; 
             OUTLETS = {

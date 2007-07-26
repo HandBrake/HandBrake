@@ -34,10 +34,11 @@
     IBOutlet QueueController     * fQueueController;
     IBOutlet NSPanel             * fQueuePanel;
     IBOutlet NSTextField         * fQueueStatus;
-    //IBOutlet NSButton            * fQueueAddButton;
-    //IBOutlet NSButton            * fQueueShowButton;
 	
     /* Source box */
+	IBOutlet NSProgressIndicator * fScanIndicator;
+	NSString                     * sourceDisplayName;
+	IBOutlet NSTextField         * fScanStatus;
     IBOutlet NSTextField         * fSrcDVD1Field;
     IBOutlet NSTextField         * fSrcDVD2Field;
     IBOutlet NSTextField         * fSrcTitleField;

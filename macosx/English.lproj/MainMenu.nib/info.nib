@@ -13,6 +13,10 @@
 	</dict>
 	<key>IBFramework Version</key>
 	<string>446.1</string>
+	<key>IBLockedObjects</key>
+	<array>
+		<integer>2382</integer>
+	</array>
 	<key>IBLockedTabItems</key>
 	<array>
 		<integer>1477</integer>
@@ -21,8 +25,10 @@
 	<integer>4</integer>
 	<key>IBOpenObjects</key>
 	<array>
+		<integer>29</integer>
+		<integer>21</integer>
+		<integer>1162</integer>
 		<integer>1843</integer>
-		<integer>365</integer>
 	</array>
 	<key>IBSystem Version</key>
 	<string>8R2218</string>

@@ -15,35 +15,21 @@
     
     IBOutlet NSWindow            * fWindow;
     IBOutlet NSPanel             * fPanel;
-    IBOutlet NSTextField         * fSelectString;
-    IBOutlet NSMatrix            * fMatrix;
-    IBOutlet NSButtonCell        * fDetectedCell;
-    IBOutlet NSPopUpButton       * fDetectedPopUp;
-    IBOutlet NSButtonCell        * fFolderCell;
-    IBOutlet NSTextField         * fFolderField;
-    IBOutlet NSButton            * fBrowseButton;
+    
     IBOutlet NSTextField         * fStatusField;
     IBOutlet NSProgressIndicator * fIndicator;
-    IBOutlet NSButton            * fCancelButton;
-    IBOutlet NSButton            * fOpenButton;
+
 	
     DriveDetector                * fDriveDetector;
     NSDictionary                 * fDrives;	
 }
 
-- (void)     TranslateStrings;
 - (void)     SetHandle:     (hb_handle_t *) handle;
 - (void)     Show;
-- (void)     UpdateUI:      (hb_state_t *) state;
-
-- (IBAction) MatrixChanged: (id) sender;
 - (IBAction) Browse:        (id) sender;
-- (IBAction) Open:          (id) sender;
 - (IBAction) Cancel:        (id) sender;
-
-- (void) Browse2: (id) sender;
 - (void) BrowseDone: (NSOpenPanel *) sheet
     returnCode: (int) returnCode contextInfo: (void *) contextInfo;
-- (void) BrowseDone2: (id) sender;
+
 
 @end
