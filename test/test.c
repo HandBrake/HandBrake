@@ -635,12 +635,9 @@ static int HandleEvents( hb_handle_t * h )
                  * Turn on subtitle scan if requested, note that this option
                  * precludes encoding of any actual subtitles.
                  */
-                job->subtitle_scan = subtitle_scan;
                 if ( subtitle_scan ) 
                 {
-                    fprintf( stderr, "Subtitle Scan Enabled, will scan all "
-                             "subtitles matching the audio language for any\n"
-                             "that meet our auto-selection criteria.\n");
+                    fprintf( stderr, "Warning: Subtitle Scan only works in two-pass, disabling\n");
                 }
                 job->pass = 0;
                 hb_add( h, job );

@@ -199,6 +199,11 @@ static void do_job( hb_job_t * job, int cpu_count )
 
     if( job->select_subtitle && !job->subtitle_scan ) 
     {
+        /*
+         * Must be second pass of a two pass with subtitle scan enabled, so
+         * add the subtitle that we found on the first pass for use in this
+         * pass.
+         */
         hb_list_add( title->list_subtitle, *( job->select_subtitle ) );
     }
 
@@ -535,54 +540,56 @@ static void do_job( hb_job_t * job, int cpu_count )
         hb_fifo_close( &audio->fifo_sync );
         hb_fifo_close( &audio->fifo_out );
     }
-    
-    /*
-     * Before closing the title print out our subtitle stats if we need to
-     * Find the highest and lowest.
-     */
-    for( i=0; i < hb_list_count( title->list_subtitle ); i++ ) 
+
+    if( job->subtitle_scan )
     {
-        subtitle =  hb_list_item( title->list_subtitle, i );
-        hb_log( "Subtitle stream 0x%x '%s': %d hits",
-               subtitle->id, subtitle->lang, subtitle->hits );
-        if( subtitle->hits > subtitle_highest ) 
-        {
-            subtitle_highest = subtitle->hits;
-            subtitle_highest_id = subtitle->id;
-        } 
-
-        if( subtitle->hits < subtitle_lowest ) 
-        {
-            subtitle_lowest = subtitle->hits;
-            subtitle_lowest_id = subtitle->id;
-        }
-    }
-
-    if( job->native_language ) {
         /*
-         * We still have a native_language, so the audio and subtitles are
-         * different, so in this case it is a foreign film and we want to
-         * select the first subtitle in our language.
+         * Before closing the title print out our subtitle stats if we need to
+         * Find the highest and lowest.
          */
-        subtitle =  hb_list_item( title->list_subtitle, 0 );
-        subtitle_hit = subtitle->id;
-        hb_log( "Found a native-language subtitle id 0x%x", subtitle_hit);
-    } else {
-        if( subtitle_lowest < subtitle_highest ) 
+        for( i=0; i < hb_list_count( title->list_subtitle ); i++ ) 
         {
-            /*
-             * OK we have more than one, and the lowest is lower, but how much
-             * lower to qualify for turning it on by default?
-             *
-             * Let's say 10% as a default.
-             */
-            if( subtitle_lowest < ( subtitle_highest * 0.1 ) ) 
+            subtitle =  hb_list_item( title->list_subtitle, i );
+            hb_log( "Subtitle stream 0x%x '%s': %d hits",
+                    subtitle->id, subtitle->lang, subtitle->hits );
+            if( subtitle->hits > subtitle_highest ) 
             {
-                subtitle_hit = subtitle_lowest_id;
-                hb_log( "Found a subtitle candidate id 0x%x",
-                        subtitle_hit );
-            } else {
-                hb_log( "No candidate subtitle detected during subtitle-scan");
+                subtitle_highest = subtitle->hits;
+                subtitle_highest_id = subtitle->id;
+            } 
+            
+            if( subtitle->hits < subtitle_lowest ) 
+            {
+                subtitle_lowest = subtitle->hits;
+                subtitle_lowest_id = subtitle->id;
+            }
+        }
+        
+        if( job->native_language ) {
+            /*
+             * We still have a native_language, so the audio and subtitles are
+             * different, so in this case it is a foreign film and we want to
+             * select the subtitle with the highest hits in our language.
+             */
+            subtitle_hit = subtitle_highest_id;
+            hb_log( "Found a native-language subtitle id 0x%x", subtitle_hit);
+        } else {
+            if( subtitle_lowest < subtitle_highest ) 
+            {
+                /*
+                 * OK we have more than one, and the lowest is lower, but how much
+                 * lower to qualify for turning it on by default?
+                 *
+                 * Let's say 10% as a default.
+                 */
+                if( subtitle_lowest < ( subtitle_highest * 0.1 ) ) 
+                {
+                    subtitle_hit = subtitle_lowest_id;
+                    hb_log( "Found a subtitle candidate id 0x%x",
+                            subtitle_hit );
+                } else {
+                    hb_log( "No candidate subtitle detected during subtitle-scan");
+                }
             }
         }
     }
