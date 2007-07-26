@@ -580,10 +580,10 @@ namespace Handbrake
             {
                 if (drp_dvdtitle.Items.Count == 0) 
                 {
-                    MessageBox.Show(scanTwice.ToString());
                     if (scanTwice == 0)
                     {
-                        MessageBox.Show("Scan Failed. Will attempt to scan the source 1 more time.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                        MessageBox.Show("Scan Failed. Waiting 5 Seconds before attempting to re-scan the source a 2nd time.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                        Thread.Sleep(3000);
                         Form frmRD = new frmReadDVD(filename, this, dvdInfoWindow);
                         frmRD.ShowDialog();
                         scanTwice = 1;
