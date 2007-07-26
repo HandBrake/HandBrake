@@ -11,6 +11,10 @@
 
 #include "hb.h"
 
+/* Scale factor to apply to timecodes to convert from HandBrake's
+ * 1/90000s to nanoseconds as expected by libmkv */
+#define TIMECODE_SCALE 1000000000 / 90000
+
 struct hb_mux_object_s
 {
     HB_MUX_COMMON;
@@ -219,16 +223,13 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     if (mux_data == job->mux_data)
     {
         /* Video */
-        /* Where does the 11130 come from? I had to calculate it from the actual
-          * and the observed duration of the file. Otherwise the timecodes come
-          * out way too small, and you get a 2hr movie that plays in .64 sec.  */
         if ((job->vcodec == HB_VCODEC_X264) && (buf->frametype & HB_FRAME_REF))
         {
-            timecode = (buf->start + (buf->renderOffset - 1000000)) * 11130;
+            timecode = (buf->start + (buf->renderOffset - 1000000)) * TIMECODE_SCALE;
         }
         else
         {
-            timecode = buf->start * 11130;
+            timecode = buf->start * TIMECODE_SCALE;
         }
 
         if (job->chapter_markers && (buf->new_chap || timecode == 0))
@@ -254,13 +255,13 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             mux_data->prev_chapter_tc = timecode;
         }
 
-        if (buf->stop * 11130 > mux_data->max_tc)
-            mux_data->max_tc = buf->stop * 11130;
+        if (buf->stop * TIMECODE_SCALE > mux_data->max_tc)
+            mux_data->max_tc = buf->stop * TIMECODE_SCALE;
     }
     else
     {
         /* Audio */
-        timecode = buf->start * 11130;
+        timecode = buf->start * TIMECODE_SCALE;
         if (job->acodec == HB_ACODEC_VORBIS)
         {
             /* ughhh, vorbis is a pain :( */
