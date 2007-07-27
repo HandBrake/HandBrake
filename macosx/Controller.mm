@@ -44,6 +44,7 @@ static NSString*       PauseEncodingIdentifier         = @"Pause Encoding Item I
 static NSString*       ShowQueueIdentifier     = @"Show Queue Item Identifier";
 static NSString*       AddToQueueIdentifier    = @"Add to Queue Item Identifier";
 static NSString*       DebugOutputIdentifier   = @"Debug Output Item Identifier";
+static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifier";
 
 /*******************************
  * HBController implementation *
@@ -400,7 +401,22 @@ static NSString*       DebugOutputIdentifier   = @"Debug Output Item Identifier"
 		// Tell the item what message to send when it is clicked 
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(showDebugOutputPanel:)];
-		
+        
+		} else if ([itemIdent isEqual: ChooseSourceIdentifier]) {
+         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
+
+         // Set the text label to be displayed in the toolbar and customization palette 
+                [toolbarItem setLabel: @"Source"];
+                [toolbarItem setPaletteLabel: @"Source"];
+ 
+                // Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
+                [toolbarItem setToolTip: @"Choose Video Source"];
+                [toolbarItem setImage: [NSImage imageNamed: @"Disc"]];
+ 
+                // Tell the item what message to send when it is clicked 
+                [toolbarItem setTarget: self];
+                [toolbarItem setAction: @selector(ShowScanPanel:)];
+	
     } else {
         //itemIdent refered to a toolbar item that is not provide or supported by us or cocoa 
         //Returning nil will inform the toolbar this kind of item is not supported 
@@ -418,7 +434,7 @@ static NSString*       DebugOutputIdentifier   = @"Debug Output Item Identifier"
     // Required delegate method:  Returns the ordered list of items to be shown in the toolbar by default    
     // If during the toolbar's initialization, no overriding values are found in the user defaults, or if the
     // user chooses to revert to the default items this set will be used 
-    return [NSArray arrayWithObjects:  StartEncodingIdentifier, PauseEncodingIdentifier, NSToolbarSeparatorItemIdentifier,
+    return [NSArray arrayWithObjects: ChooseSourceIdentifier, NSToolbarSeparatorItemIdentifier, StartEncodingIdentifier, PauseEncodingIdentifier,
 		AddToQueueIdentifier, ShowQueueIdentifier,
 		NSToolbarFlexibleSpaceItemIdentifier, 
 		NSToolbarSpaceItemIdentifier, DebugOutputIdentifier, ToggleDrawerIdentifier, nil];
@@ -430,7 +446,7 @@ static NSString*       DebugOutputIdentifier   = @"Debug Output Item Identifier"
     // The set of allowed items is used to construct the customization palette 
     return [NSArray arrayWithObjects:  StartEncodingIdentifier, PauseEncodingIdentifier, AddToQueueIdentifier, ShowQueueIdentifier,
 		DebugOutputIdentifier, NSToolbarCustomizeToolbarItemIdentifier,
-		NSToolbarFlexibleSpaceItemIdentifier, NSToolbarSpaceItemIdentifier,
+		NSToolbarFlexibleSpaceItemIdentifier, NSToolbarSpaceItemIdentifier, NSToolbarSpaceItemIdentifier, ChooseSourceIdentifier,
 		NSToolbarSeparatorItemIdentifier,ToggleDrawerIdentifier, nil];
 }
 
@@ -480,7 +496,10 @@ static NSString*       DebugOutputIdentifier   = @"Debug Output Item Identifier"
 	if ([[toolbarItem itemIdentifier] isEqual: AddToQueueIdentifier]) {
 		enable = AddToQueueButtonEnabled;
 	}
-    return enable;
+	if ([[toolbarItem itemIdentifier] isEqual: ChooseSourceIdentifier]) {
+        enable = YES;
+    }    
+	return enable;
 }
 
 // register a test notification and make

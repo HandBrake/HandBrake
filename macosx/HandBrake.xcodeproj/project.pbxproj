@@ -121,6 +121,7 @@
 		A273E0540C57B39A00493A45 /* Terminal.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E04D0C57B39A00493A45 /* Terminal.tiff */; };
 		A273E09A0C57C1CC00493A45 /* muxmkv.c in Sources */ = {isa = PBXBuildFile; fileRef = A273E0950C57C19500493A45 /* muxmkv.c */; };
 		A273E09B0C57C1CD00493A45 /* muxmkv.c in Sources */ = {isa = PBXBuildFile; fileRef = A273E0950C57C19500493A45 /* muxmkv.c */; };
+		A28468680C5A43D900EF9A98 /* Disc.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A28468670C5A43D900EF9A98 /* Disc.tiff */; };
 		A29E05800BE1283E000533F5 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A29E057F0BE1283E000533F5 /* Growl.framework */; };
 		A29E058B0BE12889000533F5 /* Growl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A29E057F0BE1283E000533F5 /* Growl.framework */; };
 		EAA526930C3B25D200944FF2 /* stream.c in Sources */ = {isa = PBXBuildFile; fileRef = EAA526920C3B25D200944FF2 /* stream.c */; };
@@ -257,6 +258,7 @@
 		A273E04C0C57B39A00493A45 /* Stop.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Stop.tiff; sourceTree = "<group>"; };
 		A273E04D0C57B39A00493A45 /* Terminal.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Terminal.tiff; sourceTree = "<group>"; };
 		A273E0950C57C19500493A45 /* muxmkv.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = muxmkv.c; path = ../libhb/muxmkv.c; sourceTree = SOURCE_ROOT; };
+		A28468670C5A43D900EF9A98 /* Disc.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Disc.tiff; sourceTree = "<group>"; };
 		A29E057F0BE1283E000533F5 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Growl.framework; sourceTree = "<group>"; };
 		EAA526920C3B25D200944FF2 /* stream.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = stream.c; path = ../libhb/stream.c; sourceTree = SOURCE_ROOT; };
 		FC85194C0C59A02C0073812C /* denoise.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = denoise.c; path = ../libhb/denoise.c; sourceTree = SOURCE_ROOT; };
@@ -471,6 +473,7 @@
 		A273E0460C57B39A00493A45 /* icons */ = {
 			isa = PBXGroup;
 			children = (
+				A28468670C5A43D900EF9A98 /* Disc.tiff */,
 				A273E0470C57B39A00493A45 /* Add.tiff */,
 				A273E0480C57B39A00493A45 /* Brushed Window.tiff */,
 				A273E0490C57B39A00493A45 /* Drawer-List2.png */,
@@ -656,6 +659,7 @@
 				A273E0520C57B39A00493A45 /* Play.tiff in Resources */,
 				A273E0530C57B39A00493A45 /* Stop.tiff in Resources */,
 				A273E0540C57B39A00493A45 /* Terminal.tiff in Resources */,
+				A28468680C5A43D900EF9A98 /* Disc.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
