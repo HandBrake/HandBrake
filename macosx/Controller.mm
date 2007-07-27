@@ -1909,7 +1909,7 @@ list = hb_get_titles( fHandle );
 - (IBAction) TwoPassCheckboxChanged: (id) sender
 {
 	/* check to see if x264 is chosen */
-	if([fDstFormatPopUp indexOfSelectedItem] == 0 && [fDstCodecsPopUp indexOfSelectedItem] == 1)
+	if(([fDstFormatPopUp indexOfSelectedItem] == 0 && [fDstCodecsPopUp indexOfSelectedItem] == 1) || ([fDstFormatPopUp indexOfSelectedItem] == 1 && ([fDstCodecsPopUp indexOfSelectedItem] == 2 || [fDstCodecsPopUp indexOfSelectedItem] == 3)))
 	{
 		if( [fVidTwoPassCheck state] == NSOnState)
 		{
