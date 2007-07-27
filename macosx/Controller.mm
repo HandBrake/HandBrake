@@ -1358,7 +1358,11 @@ list = hb_get_titles( fHandle );
                      indexOfSelectedItem]].rate;
     job->abitrate = [[fAudBitratePopUp selectedItem] tag];
     
-    /* TODO: Filter settings */ 
+    /* TODO: Filter settings */
+    if( job->filters )
+    {
+        hb_list_close( &job->filters );
+    }
     job->filters = hb_list_init();
 #if 1
     /* Run old deinterlacer if deinterlacing specified */

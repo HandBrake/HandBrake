@@ -718,6 +718,19 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
     job_copy->h     = h;
     job_copy->pause = h->pause_lock;
 
+    /* Copy the job filter list */
+    if( job->filters )
+    {
+        int i;
+        int filter_count = hb_list_count( job->filters );
+        job_copy->filters = hb_list_init();        
+        for( i = 0; i < filter_count; i++ )
+        {
+            hb_filter_object_t * filter = hb_list_item( job->filters, i );
+            hb_list_add( job_copy->filters, filter );
+        }        
+    }
+    
     /* Add the job to the list */
     hb_list_add( h->jobs, job_copy );
     h->job_count = hb_count(h);
@@ -855,6 +868,10 @@ void hb_close( hb_handle_t ** _h )
     while( ( title = hb_list_item( h->list_title, 0 ) ) )
     {
         hb_list_rem( h->list_title, title );
+        if( title->job && title->job->filters )
+        {
+            hb_list_close( &title->job->filters );
+        }
         free( title->job );
         hb_title_close( &title );
     }
