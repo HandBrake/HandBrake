@@ -814,7 +814,7 @@ static void ShowHelp()
      "          <QP:M>            (default 0:2)\n"
      "    -8, --denoise           Denoise video with hqdn3d filter\n"
      "          <SL:SC:TL:TC>     (default 4:3:6:4.5)\n"
-     "    -8, --detelecine        Detelecine video with pullup filter\n"
+     "    -9, --detelecine        Detelecine video with pullup filter\n"
      "          <L:R:T:B:SB:MP>   (default 1:1:4:4:0:0)\n"
     "    -g, --grayscale         Grayscale encoding\n"
     "    -p, --pixelratio        Store pixel aspect ratio in video stream\n"
