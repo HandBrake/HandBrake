@@ -634,16 +634,8 @@ list = hb_get_titles( fHandle );
             [fScanIndicator setDoubleValue: 0.0];
 			[fScanIndicator setHidden: YES];
 			[fScanController Cancel: NULL];
-			if( !hb_list_count( list ) )
-            {
-			/* We display a message if a valid dvd source was not chosen */
-			[fSrcDVD2Field setStringValue: @"No Valid DVD Source Chosen"];
-            currentSource = [fSrcDVD2Field stringValue];
-            }
-			else
-			{
 			[self ShowNewScan: NULL];
-			}
+
 	}
 	
 	
@@ -678,17 +670,8 @@ list = hb_get_titles( fHandle );
             [fScanIndicator setDoubleValue: 0.0];
 			[fScanIndicator setHidden: YES];
 			[fScanController Cancel: NULL];
-			if( !hb_list_count( list ) )
-            {
-			/* We display a message if a valid dvd source was not chosen */
-			[fSrcDVD2Field setStringValue: @"No Valid DVD Source Chosen"];
-            currentSource = [fSrcDVD2Field stringValue];
-            }
-			else
-			{
 			[self ShowNewScan: NULL];
-			}
-            break;
+			break;
         }
 #undef p
 			
@@ -827,6 +810,31 @@ list = hb_get_titles( fHandle );
 				{
 					[self EnableUI: YES];
 				}
+			           /* If sleep has been selected */ 
+            if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Put Computer To Sleep"]) 
+                { 
+               /* Sleep */ 
+               NSDictionary* errorDict; 
+               NSAppleEventDescriptor* returnDescriptor = NULL; 
+               NSAppleScript* scriptObject = [[NSAppleScript alloc] initWithSource: 
+                        @"tell application \"Finder\" to sleep"]; 
+               returnDescriptor = [scriptObject executeAndReturnError: &errorDict]; 
+               [scriptObject release]; 
+               [self EnableUI: YES]; 
+                } 
+            /* If Shutdown has been selected */ 
+            if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Shut Down Computer"]) 
+                { 
+               /* Shut Down */ 
+               NSDictionary* errorDict; 
+               NSAppleEventDescriptor* returnDescriptor = NULL; 
+               NSAppleScript* scriptObject = [[NSAppleScript alloc] initWithSource: 
+                        @"tell application \"Finder\" to shut down"]; 
+               returnDescriptor = [scriptObject executeAndReturnError: &errorDict]; 
+               [scriptObject release]; 
+               [self EnableUI: YES]; 
+                }
+			
 			}
 			else
 			{
@@ -857,120 +865,133 @@ list = hb_get_titles( fHandle );
 }
 - (IBAction) ShowNewScan:(id)sender
 {
-            hb_list_t  * list;
-            hb_title_t * title;
-			int indxpri=0; 	  // Used to search the longuest title (default in combobox)
-			int longuestpri=0; // Used to search the longuest title (default in combobox)
-
-            //[fScanController UpdateUI: &s];
-
-            list = hb_get_titles( fHandle );
-
-            if( !hb_list_count( list ) )
-            {
-			/* We display a message if a valid dvd source was not chosen */
-			[fSrcDVD2Field setStringValue: @"No Valid DVD Source Chosen"];
-            currentSource = [fSrcDVD2Field stringValue];
-            }
-
-
-            [fSrcTitlePopUp removeAllItems];
-            for( int i = 0; i < hb_list_count( list ); i++ )
-            {
-                title = (hb_title_t *) hb_list_item( list, i );
-                /*Set DVD Name at top of window*/
-				[fSrcDVD2Field setStringValue:[NSString stringWithUTF8String: title->name]];
-				currentSource = [NSString stringWithUTF8String: title->dvd];
-				sourceDisplayName = [NSString stringWithUTF8String: title->name];
-				/* Use the dvd name in the default output field here 
+	hb_list_t  * list;
+	hb_title_t * title;
+	int indxpri=0; 	  // Used to search the longuest title (default in combobox)
+	int longuestpri=0; // Used to search the longuest title (default in combobox)
+	
+	list = hb_get_titles( fHandle );
+	
+	if( !hb_list_count( list ) )
+	{
+		/* We display a message if a valid dvd source was not chosen */
+		if (sourceDisplayName)
+		{
+		/* Temporary string if til restoring old source is fixed */
+		[fSrcDVD2Field setStringValue: @"Not A Valid Source"];
+		//[fSrcDVD2Field setStringValue: [NSString stringWithFormat: @"%s", sourceDisplayName]];
+		}
+		else
+		{
+	    [fSrcDVD2Field setStringValue: @"No Valid Title Found"];
+		}	
+	}
+	else
+	{
+		
+		[fSrcTitlePopUp removeAllItems];
+		for( int i = 0; i < hb_list_count( list ); i++ )
+		{
+			title = (hb_title_t *) hb_list_item( list, i );
+			/*Set DVD Name at top of window*/
+			[fSrcDVD2Field setStringValue:[NSString stringWithUTF8String: title->name]];
+			
+			currentSource = [NSString stringWithUTF8String: title->dvd];
+			
+			
+			/* Use the dvd name in the default output field here 
 				May want to add code to remove blank spaces for some dvd names*/
-				/* Check to see if the last destination has been set,use if so, if not, use Desktop */
-				if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"])
-				{
+			/* Check to see if the last destination has been set,use if so, if not, use Desktop */
+			if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"])
+			{
 				[fDstFile2Field setStringValue: [NSString stringWithFormat:
-                @"%@/%@.mp4", [[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"],[NSString
+					@"%@/%@.mp4", [[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"],[NSString
                   stringWithUTF8String: title->name]]];
-				}
-				else
-				{
+			}
+			else
+			{
 				[fDstFile2Field setStringValue: [NSString stringWithFormat:
-                @"%@/Desktop/%@.mp4", NSHomeDirectory(),[NSString
+					@"%@/Desktop/%@.mp4", NSHomeDirectory(),[NSString
                   stringWithUTF8String: title->name]]];
-				}
-
-                  
-                if (longuestpri < title->hours*60*60 + title->minutes *60 + title->seconds)
-                {
-                	longuestpri=title->hours*60*60 + title->minutes *60 + title->seconds;
-                	indxpri=i;
-                }
-                
-				
-                int format = [fDstFormatPopUp indexOfSelectedItem];
-				char * ext = NULL;
-				switch( format )
-                {
-                 case 0:
-					 
-					 /*Get Default MP4 File Extension for mpeg4 (.mp4 or .m4v) from prefs*/
-					 if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultMpegName"] > 0)
-					 {
-					 ext = "m4v";
-					 }
-				     else
-				     {
-					 ext = "mp4";
-					 }
+			}
+			
+			
+			if (longuestpri < title->hours*60*60 + title->minutes *60 + title->seconds)
+			{
+				longuestpri=title->hours*60*60 + title->minutes *60 + title->seconds;
+				indxpri=i;
+			}
+			
+			
+			int format = [fDstFormatPopUp indexOfSelectedItem];
+			char * ext = NULL;
+			switch( format )
+			{
+				case 0:
+					
+					/*Get Default MP4 File Extension for mpeg4 (.mp4 or .m4v) from prefs*/
+					if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultMpegName"] > 0)
+					{
+						ext = "m4v";
+					}
+					else
+					{
+						ext = "mp4";
+					}
 					break;
 				case 1: 
-                     ext = "avi";
-                     break;
+					ext = "avi";
+					break;
 				case 2:
-                     ext = "ogm";
-			         break;
-				   }
-				
-				
-				NSString * string = [fDstFile2Field stringValue];
-				/* Add/replace File Output name to the correct extension*/
-				if( [string characterAtIndex: [string length] - 4] == '.' )
-				{
-					[fDstFile2Field setStringValue: [NSString stringWithFormat:
-						@"%@.%s", [string substringToIndex: [string length] - 4],
-						ext]];
-				}
-				else
-				{
-					[fDstFile2Field setStringValue: [NSString stringWithFormat:
-						@"%@.%s", string, ext]];
-				}
-
-				
-			    [fSrcTitlePopUp addItemWithTitle: [NSString
+					ext = "ogm";
+					break;
+			}
+			
+			
+			NSString * string = [fDstFile2Field stringValue];
+			/* Add/replace File Output name to the correct extension*/
+			if( [string characterAtIndex: [string length] - 4] == '.' )
+			{
+				[fDstFile2Field setStringValue: [NSString stringWithFormat:
+					@"%@.%s", [string substringToIndex: [string length] - 4],
+					ext]];
+			}
+			else
+			{
+				[fDstFile2Field setStringValue: [NSString stringWithFormat:
+					@"%@.%s", string, ext]];
+			}
+			
+			
+			[fSrcTitlePopUp addItemWithTitle: [NSString
                     stringWithFormat: @"%d - %02dh%02dm%02ds",
-                    title->index, title->hours, title->minutes,
-                    title->seconds]];
+				title->index, title->hours, title->minutes,
+				title->seconds]];
 			
-            }
-            // Select the longuest title
-			[fSrcTitlePopUp selectItemAtIndex: indxpri];
-            /* We set the Settings Display to "Default" here
-				until we get default presets implemented */
-			[fPresetSelectedDisplay setStringValue: @"Default"];
-			/* We set the auto crop in the main window to value "1" just as in PictureController,
-			 as it does not seem to be taken from any job-> variable */
-			[fPicSettingAutoCrop setStringValue: [NSString stringWithFormat:
-				@"%d", 1]];
-			
-            [self TitlePopUpChanged: NULL];
-            [self EnableUI: YES];
-            //[fPauseButton setEnabled: NO];
-            //[fRipButton   setEnabled: YES];
+		}
+		// Select the longuest title
+		[fSrcTitlePopUp selectItemAtIndex: indxpri];
+		/* We set the Settings Display to "Default" here
+			until we get default presets implemented */
+		[fPresetSelectedDisplay setStringValue: @"Default"];
+		/* We set the auto crop in the main window to value "1" just as in PictureController,
+			as it does not seem to be taken from any job-> variable */
+		[fPicSettingAutoCrop setStringValue: [NSString stringWithFormat:
+			@"%d", 1]];
+		
+		[self TitlePopUpChanged: NULL];
+		[self EnableUI: YES];
+		//[fPauseButton setEnabled: NO];
+		//[fRipButton   setEnabled: YES];
 		startButtonEnabled = YES;
-       stopOrStart = NO;
-       AddToQueueButtonEnabled = YES;
-       pauseButtonEnabled = NO;
-       resumeOrPause = NO;
+		stopOrStart = NO;
+		AddToQueueButtonEnabled = YES;
+		pauseButtonEnabled = NO;
+		resumeOrPause = NO;
+		/* we record the current source name here in case the next scan is unsuccessful,
+				then we can replace the scan progress with the old name if necessary */
+			sourceDisplayName = [NSString stringWithFormat:[fSrcDVD2Field stringValue]];
+	}
 }
 
 
