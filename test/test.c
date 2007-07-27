@@ -24,7 +24,14 @@ static int    longest_title = 0;
 static int    subtitle_scan = 0;
 static char * native_language = NULL;
 static int    twoPass     = 0;
-static int    deinterlace = 0;
+static int    deinterlace           = 0;
+static char * deinterlace_opt       = 0;
+static int    deblock               = 0;
+static char * deblock_opt           = 0;
+static int    denoise               = 0;
+static char * denoise_opt           = 0;
+static int    detelecine            = 0;
+static char * detelecine_opt        = 0;
 static int    grayscale   = 0;
 static int    vcodec      = HB_VCODEC_FFMPEG;
 static int    h264_13     = 0;
@@ -427,6 +434,29 @@ static int HandleEvents( hb_handle_t * h )
             job->grayscale   = grayscale;
             job->pixel_ratio = pixelratio;
 
+            /* Add selected filters */
+            job->filters = hb_list_init();
+            if( detelecine )
+            {
+                hb_filter_detelecine.settings = detelecine_opt;
+                hb_list_add( job->filters, &hb_filter_detelecine );
+            }
+            if( deinterlace )
+            {
+                hb_filter_deinterlace.settings = deinterlace_opt;
+                hb_list_add( job->filters, &hb_filter_deinterlace );
+            }
+            if( deblock )
+            {
+                hb_filter_deblock.settings = deblock_opt;
+                hb_list_add( job->filters, &hb_filter_deblock );
+            }
+            if( denoise )
+            {
+                hb_filter_denoise.settings = denoise_opt;
+                hb_list_add( job->filters, &hb_filter_denoise );
+            }
+            
             if( width && height )
             {
                 job->width  = width;
@@ -778,7 +808,14 @@ static void ShowHelp()
     fprintf( stderr, ")\n"
 	"\n"
 	"    -2, --two-pass          Use two-pass mode\n"
-    "    -d, --deinterlace       Deinterlace video\n"
+     "    -d, --deinterlace       Deinterlace video with yadif/mcdeint filter\n"
+     "          <YM:FD:MM:QP>     (default 0:-1:-1:1)\n"            
+     "    -7, --deblock           Deblock video with pp7 filter\n"
+     "          <QP:M>            (default 0:2)\n"
+     "    -8, --denoise           Denoise video with hqdn3d filter\n"
+     "          <SL:SC:TL:TC>     (default 4:3:6:4.5)\n"
+     "    -8, --detelecine        Detelecine video with pullup filter\n"
+     "          <L:R:T:B:SB:MP>   (default 1:1:4:4:0:0)\n"
     "    -g, --grayscale         Grayscale encoding\n"
     "    -p, --pixelratio        Store pixel aspect ratio in video stream\n"
 	
@@ -849,7 +886,10 @@ static int ParseOptions( int argc, char ** argv )
             { "encoder",     required_argument, NULL,    'e' },
             { "aencoder",    required_argument, NULL,    'E' },
             { "two-pass",    no_argument,       NULL,    '2' },
-            { "deinterlace", no_argument,       NULL,    'd' },
+            { "deinterlace", optional_argument, NULL,    'd' },
+            { "deblock",     optional_argument, NULL,    '7' },
+            { "denoise",     optional_argument, NULL,    '8' },
+            { "detelecine",  optional_argument, NULL,    '9' },
             { "grayscale",   no_argument,       NULL,    'g' },
             { "pixelratio",  no_argument,       NULL,    'p' },
             { "width",       required_argument, NULL,    'w' },
@@ -876,7 +916,7 @@ static int ParseOptions( int argc, char ** argv )
         int c;
 
         c = getopt_long( argc, argv,
-                         "hvuC:f:4i:o:t:Lc:ma:6:s:UN:e:E:2dgpw:l:n:b:q:S:B:r:R:Qx:TY:X:",
+                         "hvuC:f:4i:o:t:Lc:ma:6:s:UN:e:E:2d789gpw:l:n:b:q:S:B:r:R:Qx:TY:X:",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -982,8 +1022,33 @@ static int ParseOptions( int argc, char ** argv )
                 twoPass = 1;
                 break;
             case 'd':
+                if( optarg != NULL )
+                {
+                    deinterlace_opt = strdup( optarg );
+                }
                 deinterlace = 1;
                 break;
+            case '7':
+                if( optarg != NULL )
+                {
+                    deblock_opt = strdup( optarg );
+                }
+                deblock = 1;
+                break;
+            case '8':
+                if( optarg != NULL )
+                {
+                    denoise_opt = strdup( optarg );
+                }
+                denoise = 1;
+                break;                
+            case '9':
+                if( optarg != NULL )
+                {
+                    detelecine_opt = strdup( optarg );
+                }
+                detelecine = 1;
+                break;                
             case 'g':
                 grayscale = 1;
                 break;

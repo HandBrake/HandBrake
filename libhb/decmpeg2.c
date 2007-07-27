@@ -180,6 +180,9 @@ int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 }
                 m->last_pts = buf->start;
 
+                /* Store picture flags for later use by filters */
+                buf->flags = m->info->display_picture->flags;
+                
                 hb_list_add( list_raw, buf );
             }
         }

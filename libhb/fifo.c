@@ -62,6 +62,15 @@ void hb_buffer_close( hb_buffer_t ** _b )
     *_b = NULL;
 }
 
+void hb_buffer_copy_settings( hb_buffer_t * dst, const hb_buffer_t * src )
+{
+    dst->start     = src->start;
+    dst->stop      = src->stop;
+    dst->new_chap  = src->new_chap;
+    dst->frametype = src->frametype;
+    dst->flags     = src->flags;
+}
+
 /* Fifo */
 struct hb_fifo_s
 {

@@ -43,6 +43,8 @@ typedef struct hb_state_s hb_state_t;
 typedef union  hb_esconfig_u     hb_esconfig_t;
 typedef struct hb_work_private_s hb_work_private_t;
 typedef struct hb_work_object_s  hb_work_object_t;
+typedef struct hb_filter_private_s hb_filter_private_t;
+typedef struct hb_filter_object_s  hb_filter_object_t;
 typedef struct hb_buffer_s hb_buffer_t;
 typedef struct hb_fifo_s hb_fifo_t;
 typedef struct hb_lock_s hb_lock_t;
@@ -126,6 +128,7 @@ struct hb_job_s
 
     int             crop[4];
     int             deinterlace;
+    hb_list_t     * filters;
     int             width;
     int             height;
     int             keep_ratio;
@@ -515,5 +518,34 @@ extern hb_work_object_t hb_declpcm;
 extern hb_work_object_t hb_encfaac;
 extern hb_work_object_t hb_enclame;
 extern hb_work_object_t hb_encvorbis;
+
+#define FILTER_OK      0
+#define FILTER_DELAY   1
+#define FILTER_FAILED  2
+#define FILTER_DROP    3
+
+struct hb_filter_object_s
+{
+    int                     id;
+    char                  * name;
+    char                  * settings;
+
+#ifdef __LIBHB__
+    hb_filter_private_t* (* init)  ( int, int, int, char * );
+    
+    int                  (* work)  ( const hb_buffer_t *, hb_buffer_t **,
+                                     int, int, int, hb_filter_private_t * );
+    
+    void                 (* close) ( hb_filter_private_t * );
+    
+    hb_filter_private_t   * private_data;
+    //hb_buffer_t           * buffer;
+#endif
+};
+
+extern hb_filter_object_t hb_filter_detelecine;
+extern hb_filter_object_t hb_filter_deinterlace;
+extern hb_filter_object_t hb_filter_deblock;
+extern hb_filter_object_t hb_filter_denoise;
 
 #endif

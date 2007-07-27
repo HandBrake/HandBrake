@@ -25,7 +25,7 @@ SRCS = common.c hb.c ports.c scan.c work.c decmpeg2.c encavcodec.c \
 	   update.c demuxmpeg.c fifo.c render.c reader.c muxcommon.c stream.c \
 	   muxmp4.c sync.c decsub.c deca52.c decdca.c encfaac.c declpcm.c encx264.c \
 	   decavcodec.c encxvid.c muxmkv.c muxavi.c enclame.c muxogm.c encvorbis.c \
-	   dvd.c  ipodutil.cpp
+	   dvd.c  ipodutil.cpp deblock.c deinterlace.c denoise.c detelecine.c
 OTMP = $(SRCS:%.c=%.o) 
 OBJS = $(OTMP:%.cpp=%.o)
 

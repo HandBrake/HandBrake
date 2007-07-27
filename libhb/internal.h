@@ -48,6 +48,7 @@ struct hb_buffer_s
 #define HB_FRAME_KEY    0x0F
 #define HB_FRAME_REF    0xF0
     uint8_t       frametype;
+    uint8_t       flags;
 
     /* Holds the output PTS from x264, for use by b-frame offsets in muxmp4.c */
     int64_t     renderOffset;
@@ -65,7 +66,8 @@ struct hb_buffer_s
 hb_buffer_t * hb_buffer_init( int size );
 void          hb_buffer_realloc( hb_buffer_t *, int size );
 void          hb_buffer_close( hb_buffer_t ** );
-
+void          hb_buffer_copy_settings( hb_buffer_t * dst, 
+                                       const hb_buffer_t * src );
 
 hb_fifo_t   * hb_fifo_init();
 int           hb_fifo_size( hb_fifo_t * );
@@ -197,6 +199,14 @@ enum
     WORK_ENCFAAC,
     WORK_ENCLAME,
     WORK_ENCVORBIS
+};
+
+enum
+{
+    FILTER_DEINTERLACE = 1,
+    FILTER_DEBLOCK,
+    FILTER_DENOISE,
+    FILTER_DETELECINE
 };
 
 extern hb_work_object_t * hb_objects;

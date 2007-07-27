@@ -1317,7 +1317,30 @@ list = hb_get_titles( fHandle );
     job->arate = hb_audio_rates[[fAudRatePopUp
                      indexOfSelectedItem]].rate;
     job->abitrate = [[fAudBitratePopUp selectedItem] tag];
+    
+    /* TODO: Filter settings */ 
+    job->filters = hb_list_init();
+#if 1
+    /* Run old deinterlacer if deinterlacing specified */
+    if( job->deinterlace )
+    {        
+        hb_filter_deinterlace.settings = "-1"; 
+        hb_list_add( job->filters, &hb_filter_deinterlace );
+    }
+#else
+    /* Choose your own filters! Here's some examples... */
+    hb_filter_detelecine.settings = "1:1:4:4:0:0";
+    hb_list_add( job->filters, &hb_filter_detelecine );
 
+    hb_filter_deinterlace.settings = "3:-1:2:10";
+    hb_list_add( job->filters, &hb_filter_deinterlace );
+
+    hb_filter_deblock.settings = "4:2";
+    hb_list_add( job->filters, &hb_filter_deblock );
+
+    hb_filter_denoise.settings = "3:2:3:3";
+    hb_list_add( job->filters, &hb_filter_denoise );
+#endif     
 }
 
 

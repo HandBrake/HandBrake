@@ -125,6 +125,14 @@
 		A29E058B0BE12889000533F5 /* Growl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A29E057F0BE1283E000533F5 /* Growl.framework */; };
 		EAA526930C3B25D200944FF2 /* stream.c in Sources */ = {isa = PBXBuildFile; fileRef = EAA526920C3B25D200944FF2 /* stream.c */; };
 		EAA526940C3B25D200944FF2 /* stream.c in Sources */ = {isa = PBXBuildFile; fileRef = EAA526920C3B25D200944FF2 /* stream.c */; };
+		FC8519500C59A02C0073812C /* denoise.c in Sources */ = {isa = PBXBuildFile; fileRef = FC85194C0C59A02C0073812C /* denoise.c */; };
+		FC8519510C59A02C0073812C /* deinterlace.c in Sources */ = {isa = PBXBuildFile; fileRef = FC85194D0C59A02C0073812C /* deinterlace.c */; };
+		FC8519520C59A02C0073812C /* deblock.c in Sources */ = {isa = PBXBuildFile; fileRef = FC85194E0C59A02C0073812C /* deblock.c */; };
+		FC8519530C59A02C0073812C /* detelecine.c in Sources */ = {isa = PBXBuildFile; fileRef = FC85194F0C59A02C0073812C /* detelecine.c */; };
+		FC8519540C59A02C0073812C /* denoise.c in Sources */ = {isa = PBXBuildFile; fileRef = FC85194C0C59A02C0073812C /* denoise.c */; };
+		FC8519550C59A02C0073812C /* deinterlace.c in Sources */ = {isa = PBXBuildFile; fileRef = FC85194D0C59A02C0073812C /* deinterlace.c */; };
+		FC8519560C59A02C0073812C /* deblock.c in Sources */ = {isa = PBXBuildFile; fileRef = FC85194E0C59A02C0073812C /* deblock.c */; };
+		FC8519570C59A02C0073812C /* detelecine.c in Sources */ = {isa = PBXBuildFile; fileRef = FC85194F0C59A02C0073812C /* detelecine.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -251,6 +259,10 @@
 		A273E0950C57C19500493A45 /* muxmkv.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = muxmkv.c; path = ../libhb/muxmkv.c; sourceTree = SOURCE_ROOT; };
 		A29E057F0BE1283E000533F5 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Growl.framework; sourceTree = "<group>"; };
 		EAA526920C3B25D200944FF2 /* stream.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = stream.c; path = ../libhb/stream.c; sourceTree = SOURCE_ROOT; };
+		FC85194C0C59A02C0073812C /* denoise.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = denoise.c; path = ../libhb/denoise.c; sourceTree = SOURCE_ROOT; };
+		FC85194D0C59A02C0073812C /* deinterlace.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = deinterlace.c; path = ../libhb/deinterlace.c; sourceTree = SOURCE_ROOT; };
+		FC85194E0C59A02C0073812C /* deblock.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = deblock.c; path = ../libhb/deblock.c; sourceTree = SOURCE_ROOT; };
+		FC85194F0C59A02C0073812C /* detelecine.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = detelecine.c; path = ../libhb/detelecine.c; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -378,6 +390,10 @@
 				0DFA5C840B8DD3B60020BC09 /* encfaac.c */,
 				0DFA5C850B8DD3B60020BC09 /* enclame.c */,
 				0DFA5C860B8DD3B60020BC09 /* encvorbis.c */,
+				FC85194C0C59A02C0073812C /* denoise.c */,
+				FC85194D0C59A02C0073812C /* deinterlace.c */,
+				FC85194E0C59A02C0073812C /* deblock.c */,
+				FC85194F0C59A02C0073812C /* detelecine.c */,
 				0DFA5C870B8DD3B60020BC09 /* encx264.c */,
 				0DFA5C880B8DD3B60020BC09 /* encxvid.c */,
 				0DFA5C890B8DD3B60020BC09 /* fifo.c */,
@@ -681,6 +697,10 @@
 				5558B56A0BE3BADF00E15E27 /* decdca.c in Sources */,
 				EAA526940C3B25D200944FF2 /* stream.c in Sources */,
 				A273E09B0C57C1CD00493A45 /* muxmkv.c in Sources */,
+				FC8519540C59A02C0073812C /* denoise.c in Sources */,
+				FC8519550C59A02C0073812C /* deinterlace.c in Sources */,
+				FC8519560C59A02C0073812C /* deblock.c in Sources */,
+				FC8519570C59A02C0073812C /* detelecine.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -720,6 +740,10 @@
 				5558B5690BE3BADF00E15E27 /* decdca.c in Sources */,
 				EAA526930C3B25D200944FF2 /* stream.c in Sources */,
 				A273E09A0C57C1CC00493A45 /* muxmkv.c in Sources */,
+				FC8519500C59A02C0073812C /* denoise.c in Sources */,
+				FC8519510C59A02C0073812C /* deinterlace.c in Sources */,
+				FC8519520C59A02C0073812C /* deblock.c in Sources */,
+				FC8519530C59A02C0073812C /* detelecine.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
