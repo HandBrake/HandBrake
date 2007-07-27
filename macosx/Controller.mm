@@ -851,7 +851,7 @@ list = hb_get_titles( fHandle );
 	}
 	
     [[NSRunLoop currentRunLoop] addTimer: [NSTimer
-        scheduledTimerWithTimeInterval: 0.2 target: self
+        scheduledTimerWithTimeInterval: 0.5 target: self
 							  selector: @selector( UpdateUI: ) userInfo: NULL repeats: FALSE]
 								 forMode: NSModalPanelRunLoopMode];
 }
