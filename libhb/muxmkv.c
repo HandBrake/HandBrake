@@ -59,6 +59,7 @@ static int MKVInit( hb_mux_object_t * m )
 
     track->trackType = MK_TRACK_VIDEO;
     track->flagDefault = 1;
+    track->flagEnabled = 1;
     switch (job->vcodec)
     {
         case HB_VCODEC_X264:
@@ -190,7 +191,7 @@ static int MKVInit( hb_mux_object_t * m )
             track->flagDefault = 1;
             default_track_flag = 0;
         }
-        
+        track->flagEnabled = 1;
         track->trackType = MK_TRACK_AUDIO;
         track->language = audio->iso639_2;
         track->audio.samplingFreq = (float)job->arate;
