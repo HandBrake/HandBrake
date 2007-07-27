@@ -28,7 +28,6 @@ struct hb_mux_data_s
 {
     mk_Track  * track;
     uint64_t  prev_chapter_tc;
-    uint64_t  max_tc;
     uint16_t  current_chapter;
 };
 
@@ -237,7 +236,7 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             /* Make sure we're not writing a chapter that has 0 length */
             if (mux_data->prev_chapter_tc != timecode)
             {
-                chapter_data = hb_list_item( title->list_chapter, mux_data->current_chapter );
+                chapter_data = hb_list_item( title->list_chapter, mux_data->current_chapter++ );
                 tmp_buffer[0] = '\0';
 
                 if( chapter_data != NULL )
@@ -247,16 +246,13 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
 
                 if( strlen(string) == 0 || strlen(string) >= 1024 )
                 {
-                    snprintf( tmp_buffer, 1023, "Chapter %02i", mux_data->current_chapter++ );
+                    snprintf( tmp_buffer, 1023, "Chapter %02i", mux_data->current_chapter );
                     string = tmp_buffer;
                 }
-                mk_createChapterSimple(m->file, mux_data->prev_chapter_tc, timecode, string);
+                mk_createChapterSimple(m->file, mux_data->prev_chapter_tc, mux_data->prev_chapter_tc, string);
             }
             mux_data->prev_chapter_tc = timecode;
         }
-
-        if (buf->stop * TIMECODE_SCALE > mux_data->max_tc)
-            mux_data->max_tc = buf->stop * TIMECODE_SCALE;
     }
     else
     {
@@ -288,7 +284,7 @@ static int MKVEnd( hb_mux_object_t * m )
     hb_job_t  *job = m->job;
     hb_mux_data_t *mux_data = job->mux_data;
     hb_title_t  *title = job->title;
-    hb_chapter_t *chapter_data = hb_list_item( title->list_chapter, mux_data->current_chapter );
+    hb_chapter_t *chapter_data = hb_list_item( title->list_chapter, mux_data->current_chapter++ );
     char tmp_buffer[1024];
     char *string = tmp_buffer;
 
@@ -306,7 +302,7 @@ static int MKVEnd( hb_mux_object_t * m )
             snprintf( tmp_buffer, 1023, "Chapter %02i", mux_data->current_chapter );
             string = tmp_buffer;
         }
-        mk_createChapterSimple(m->file, mux_data->prev_chapter_tc, mux_data->max_tc, string);
+        mk_createChapterSimple(m->file, mux_data->prev_chapter_tc, mux_data->prev_chapter_tc, string);
     }
 
     mk_close(m->file);
