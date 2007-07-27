@@ -178,6 +178,12 @@
     IBOutlet NSTextField         * fX264optDeblockLabel;
     IBOutlet NSPopUpButton       * fX264optAlphaDeblockPopUp;
     IBOutlet NSPopUpButton       * fX264optBetaDeblockPopUp;
+    IBOutlet NSTextField         * fX264optAnalyseLabel;
+    IBOutlet NSPopUpButton       * fX264optAnalysePopUp;
+    IBOutlet NSTextField         * fX264opt8x8dctLabel;
+    IBOutlet NSButton            * fX264opt8x8dctSwitch;
+    IBOutlet NSTextField         * fX264optCabacLabel;
+    IBOutlet NSButton            * fX264optCabacSwitch;
     
 	/* User Preset variables here fPresetNewDesc*/
 	

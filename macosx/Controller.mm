@@ -996,7 +996,8 @@ list = hb_get_titles( fHandle );
 		fX264optMotionEstLabel,fX264optMotionEstPopUp,fX264optMERangeLabel,fX264optMERangePopUp,
 		fX264optWeightBLabel,fX264optWeightBSwitch,fX264optBRDOLabel,fX264optBRDOSwitch,
 		fX264optBPyramidLabel,fX264optBPyramidSwitch,fX264optBiMELabel,fX264optBiMESwitch,
-		fX264optDirectPredLabel,fX264optDirectPredPopUp,fX264optDeblockLabel,
+		fX264optDirectPredLabel,fX264optDirectPredPopUp,fX264optDeblockLabel,fX264optAnalyseLabel,
+		fX264optAnalysePopUp,fX264opt8x8dctLabel,fX264opt8x8dctSwitch,fX264optCabacLabel,fX264optCabacSwitch,
 		fX264optAlphaDeblockPopUp,fX264optBetaDeblockPopUp,fVidTurboPassCheck,fDstMpgLargeFileCheck,fPicSettingAutoCropLabel,
 		fPicSettingAutoCropDsply};
 
@@ -2456,6 +2457,18 @@ the user is using "Custom" settings by determining the sender*/
         [fX264optBetaDeblockPopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
     }     
     
+    /* Analysis fX264optAnalysePopUp */
+    [fX264optAnalysePopUp removeAllItems];
+    [fX264optAnalysePopUp addItemWithTitle:@"Default (some)"]; /* 0=default */
+    [fX264optAnalysePopUp addItemWithTitle:[NSString stringWithFormat:@"None"]]; /* 1=none */
+    [fX264optAnalysePopUp addItemWithTitle:[NSString stringWithFormat:@"All"]]; /* 2=all */
+    
+    /* 8x8 DCT fX264op8x8dctSwitch */
+    [fX264opt8x8dctSwitch setState:0];
+    
+    /* CABAC fX264opCabacSwitch */
+    [fX264optCabacSwitch setState:1];
+
     /* Standardize the option string */
     [self X264AdvancedOptionsStandardizeOptString: NULL];
     /* Set Current GUI Settings based on newly standardized string */
@@ -2588,6 +2601,13 @@ the user is using "Custom" settings by determining the sender*/
     {
         cleanOptNameString = @"deblock";
     }
+
+    /*Analysis*/
+    if ([cleanOptNameString isEqualToString:@"partitions"])
+    {
+        cleanOptNameString = @"analyse";
+    }
+
         
     return cleanOptNameString;	
 }
@@ -2750,6 +2770,32 @@ the user is using "Custom" settings by determining the sender*/
                             [fX264optBetaDeblockPopUp selectItemAtIndex:7];                        
                         }
                     }
+                }
+                /* Analysis NSPopUpButton */
+                if ([optName isEqualToString:@"analyse"])
+                {
+                    if ([optValue isEqualToString:@"p8x8,b8x8,i8x8,i4x4"])
+                    {
+                        [fX264optAnalysePopUp selectItemAtIndex:0];
+                    }
+                    if ([optValue isEqualToString:@"none"])
+                    {
+                        [fX264optAnalysePopUp selectItemAtIndex:1];
+                    }
+                    if ([optValue isEqualToString:@"all"])
+                    {
+                        [fX264optAnalysePopUp selectItemAtIndex:2];
+                    }
+                }
+                /* 8x8 DCT NSButton */
+                if ([optName isEqualToString:@"8x8dct"])
+                {
+                    [fX264opt8x8dctSwitch setState:[optValue intValue]];
+                }
+                /* CABAC NSButton */
+                if ([optName isEqualToString:@"cabac"])
+                {
+                    [fX264optCabacSwitch setState:[optValue intValue]];
                 }                                                                 
             }
         }
@@ -2825,6 +2871,18 @@ the user is using "Custom" settings by determining the sender*/
     {
         optNameToChange = @"deblock";
     }        
+    if (sender == fX264optAnalysePopUp)
+    {
+        optNameToChange = @"analyse";
+    }
+    if (sender == fX264opt8x8dctSwitch)
+    {
+        optNameToChange = @"8x8dct";
+    }
+    if (sender == fX264optCabacSwitch)
+    {
+        optNameToChange = @"cabac";
+    }
     
     /* Set widgets depending on the opt string in field */
     NSString * thisOpt; // The separated option such as "bframes=3"
@@ -2887,7 +2945,7 @@ the user is using "Custom" settings by determining the sender*/
                             thisOpt = [NSString stringWithFormat:@"%@=%d,%d",optName, ([fX264optAlphaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optAlphaDeblockPopUp indexOfSelectedItem]-7 : 0,([fX264optBetaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optBetaDeblockPopUp indexOfSelectedItem]-7 : 0];
                         }
                     }
-                    else if /*Boolean Switches*/ ([optNameToChange isEqualToString:@"mixed-refs"] || [optNameToChange isEqualToString:@"weightb"] || [optNameToChange isEqualToString:@"brdo"] || [optNameToChange isEqualToString:@"bime"] || [optNameToChange isEqualToString:@"b-pyramid"] || [optNameToChange isEqualToString:@"no-fast-pskip"] || [optNameToChange isEqualToString:@"no-dct-decimate"])
+                    else if /*Boolean Switches*/ ([optNameToChange isEqualToString:@"mixed-refs"] || [optNameToChange isEqualToString:@"weightb"] || [optNameToChange isEqualToString:@"brdo"] || [optNameToChange isEqualToString:@"bime"] || [optNameToChange isEqualToString:@"b-pyramid"] || [optNameToChange isEqualToString:@"no-fast-pskip"] || [optNameToChange isEqualToString:@"no-dct-decimate"] || [optNameToChange isEqualToString:@"8x8dct"] )
                     {
                         if ([sender state] == 0)
                         {
@@ -2896,6 +2954,17 @@ the user is using "Custom" settings by determining the sender*/
                         else
                         {
                             thisOpt = [NSString stringWithFormat:@"%@=%d",optName,1];
+                        }
+                    }
+                    else if ([optNameToChange isEqualToString:@"cabac"])
+                    {
+                        if ([sender state] == 1)
+                        {
+                            thisOpt = @"";
+                        }
+                        else
+                        {
+                            thisOpt = [NSString stringWithFormat:@"%@=%d",optName,0];
                         }
                     }                                        
                     else if (([sender indexOfSelectedItem] == 0) && (sender != fX264optAlphaDeblockPopUp) && (sender != fX264optBetaDeblockPopUp) ) // means that "unspecified" is chosen, lets then remove it from the string
@@ -2944,6 +3013,22 @@ the user is using "Custom" settings by determining the sender*/
  
                             case 4:
                                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"auto"];
+                               break;
+                            
+                            default:
+                                break;
+                        }
+                    }
+                    else if ([optNameToChange isEqualToString:@"analyse"])
+                    {
+                        switch ([sender indexOfSelectedItem])
+                        {   
+                            case 1:
+                               thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"none"];
+                               break;
+ 
+                            case 2:
+                               thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"all"];
                                break;
                             
                             default:
@@ -3042,6 +3127,24 @@ the user is using "Custom" settings by determining the sender*/
                         break;
                 }
             }
+            else if ([optNameToChange isEqualToString:@"analyse"])
+            {
+                switch ([sender indexOfSelectedItem])
+                {   
+                    case 1:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"none"]]];
+                        break;
+               
+                    case 2:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"all"]]];
+                        break;
+                   
+                   default:
+                        break;
+                }
+            }
 
             else if ([optNameToChange isEqualToString:@"merange"])
             {
@@ -3052,7 +3155,7 @@ the user is using "Custom" settings by determining the sender*/
             {
                 [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d,%d", ([fX264optAlphaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optAlphaDeblockPopUp indexOfSelectedItem]-7 : 0, ([fX264optBetaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optBetaDeblockPopUp indexOfSelectedItem]-7 : 0]]];                
             }
-            else if /*Boolean Switches*/ ([optNameToChange isEqualToString:@"mixed-refs"] || [optNameToChange isEqualToString:@"weightb"] || [optNameToChange isEqualToString:@"brdo"] || [optNameToChange isEqualToString:@"bime"] || [optNameToChange isEqualToString:@"b-pyramid"] || [optNameToChange isEqualToString:@"no-fast-pskip"] || [optNameToChange isEqualToString:@"no-dct-decimate"])            {
+            else if /*Boolean Switches*/ ([optNameToChange isEqualToString:@"mixed-refs"] || [optNameToChange isEqualToString:@"weightb"] || [optNameToChange isEqualToString:@"brdo"] || [optNameToChange isEqualToString:@"bime"] || [optNameToChange isEqualToString:@"b-pyramid"] || [optNameToChange isEqualToString:@"no-fast-pskip"] || [optNameToChange isEqualToString:@"no-dct-decimate"] || [optNameToChange isEqualToString:@"8x8dct"] )            {
                 if ([sender state] == 0)
                 {
                     [fDisplayX264Options setStringValue:[NSString stringWithFormat:@""]];                    
@@ -3061,6 +3164,18 @@ the user is using "Custom" settings by determining the sender*/
                 {
                     [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
                         [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender state]]]];
+                }
+            }
+            else if ([optNameToChange isEqualToString:@"cabac"])
+            {
+                if ([sender state] == 1)
+                {
+                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@""]];                                        
+                }
+                else
+                {
+                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                        [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender state]]]];                    
                 }
             }            
             else
@@ -3135,6 +3250,26 @@ the user is using "Custom" settings by determining the sender*/
                          break;
                 }
             }
+            else if ([optNameToChange isEqualToString:@"analyse"])
+            {
+                switch ([sender indexOfSelectedItem])
+                {   
+                    case 1:
+                         [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
+                             [NSString stringWithFormat:[fDisplayX264Options stringValue]],
+                             [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"none"]]];
+                         break;
+
+                    case 2:
+                         [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
+                             [NSString stringWithFormat:[fDisplayX264Options stringValue]],
+                             [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"all"]]];
+                         break;
+
+                    default:
+                         break;
+                }
+            }
 
             else if ([optNameToChange isEqualToString:@"merange"])
             {
@@ -3145,7 +3280,7 @@ the user is using "Custom" settings by determining the sender*/
             {
                 [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", [NSString stringWithFormat:[fDisplayX264Options stringValue]], [NSString stringWithFormat:optNameToChange], [NSString stringWithFormat:@"%d,%d", ([fX264optAlphaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optAlphaDeblockPopUp indexOfSelectedItem]-7 : 0, ([fX264optBetaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optBetaDeblockPopUp indexOfSelectedItem]-7 : 0]]];                
             }
-            else if /*Boolean Switches*/ ([optNameToChange isEqualToString:@"mixed-refs"] || [optNameToChange isEqualToString:@"weightb"] || [optNameToChange isEqualToString:@"brdo"] || [optNameToChange isEqualToString:@"bime"] || [optNameToChange isEqualToString:@"b-pyramid"] || [optNameToChange isEqualToString:@"no-fast-pskip"] || [optNameToChange isEqualToString:@"no-dct-decimate"])
+            else if /*Boolean Switches*/ ([optNameToChange isEqualToString:@"mixed-refs"] || [optNameToChange isEqualToString:@"weightb"] || [optNameToChange isEqualToString:@"brdo"] || [optNameToChange isEqualToString:@"bime"] || [optNameToChange isEqualToString:@"b-pyramid"] || [optNameToChange isEqualToString:@"no-fast-pskip"] || [optNameToChange isEqualToString:@"no-dct-decimate"] || [optNameToChange isEqualToString:@"8x8dct"] )
             {
                 if ([sender state] == 0)
                 {
@@ -3155,6 +3290,18 @@ the user is using "Custom" settings by determining the sender*/
                 {
                     [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]], 
                         [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender state]]]];                
+                }
+            }
+            else if ([optNameToChange isEqualToString:@"cabac"])
+            {
+                if ([sender state] == 1)
+                {
+                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]]]];                    
+                }
+                else
+                {
+                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]], 
+                        [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender state]]]];
                 }
             }
             else

@@ -147,7 +147,11 @@
                 fVidTurboPassCheck = NSButton; 
                 fVidTwoPassCheck = NSButton; 
                 fWindow = NSWindow; 
+                fX264opt8x8dctLabel = NSTextField; 
+                fX264opt8x8dctSwitch = NSButton; 
                 fX264optAlphaDeblockPopUp = NSPopUpButton; 
+                fX264optAnalyseLabel = NSTextField; 
+                fX264optAnalysePopUp = NSPopUpButton; 
                 fX264optBPyramidLabel = NSTextField; 
                 fX264optBPyramidSwitch = NSButton; 
                 fX264optBRDOLabel = NSTextField; 
@@ -157,6 +161,8 @@
                 fX264optBframesPopUp = NSPopUpButton; 
                 fX264optBiMELabel = NSTextField; 
                 fX264optBiMESwitch = NSButton; 
+                fX264optCabacLabel = NSTextField; 
+                fX264optCabacSwitch = NSButton; 
                 fX264optDeblockLabel = NSTextField; 
                 fX264optDirectPredLabel = NSTextField; 
                 fX264optDirectPredPopUp = NSPopUpButton; 
