@@ -3699,6 +3699,7 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PicturePAR"];
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureAutoCrop"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureBottomCrop"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
@@ -3908,6 +3909,7 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PicturePAR"];
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureAutoCrop"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureBottomCrop"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
@@ -4451,6 +4453,7 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PicturePAR"];
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureAutoCrop"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureBottomCrop"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
