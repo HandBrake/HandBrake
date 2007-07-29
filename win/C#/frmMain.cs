@@ -713,12 +713,13 @@ namespace Handbrake
                     // Maybe an issue with the Parser cauing the CLI to hickup/pause?
                     //*****************************************************************************************
 
-                    //Parsing.Parser encode = new Parsing.Parser(hbProc.StandardError.BaseStream);
-                    //encode.OnEncodeProgress += encode_OnEncodeProgress;
-                    //while (!encode.EndOfStream)
-                    //{
-                    //    encode.ReadLine();
-                    //}
+                    /*
+                    Parsing.Parser encode = new Parsing.Parser(hbProc.StandardError.BaseStream);
+                    encode.OnEncodeProgress += encode_OnEncodeProgress;
+                    while (!encode.EndOfStream)
+                    {
+                        encode.ReadLine();
+                    }*/
 
                     hbProc.WaitForExit();
                     process.closeCLI();

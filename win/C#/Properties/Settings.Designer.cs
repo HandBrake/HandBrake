@@ -86,18 +86,6 @@ namespace Handbrake.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string readDVDWindow {
-            get {
-                return ((string)(this["readDVDWindow"]));
-            }
-            set {
-                this["readDVDWindow"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string defaultSettings {
             get {
                 return ((string)(this["defaultSettings"]));

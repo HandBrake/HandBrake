@@ -33,9 +33,7 @@ namespace Handbrake
             this.GroupBox2 = new System.Windows.Forms.GroupBox();
             this.Label1 = new System.Windows.Forms.Label();
             this.check_updateCheck = new System.Windows.Forms.CheckBox();
-            this.check_readDVDWindow = new System.Windows.Forms.CheckBox();
             this.Label2 = new System.Windows.Forms.Label();
-            this.Label3 = new System.Windows.Forms.Label();
             this.check_userDefaultSettings = new System.Windows.Forms.CheckBox();
             this.Label4 = new System.Windows.Forms.Label();
             this.check_verbose = new System.Windows.Forms.CheckBox();
@@ -72,14 +70,12 @@ namespace Handbrake
             // 
             this.GroupBox2.Controls.Add(this.Label1);
             this.GroupBox2.Controls.Add(this.check_updateCheck);
-            this.GroupBox2.Controls.Add(this.check_readDVDWindow);
             this.GroupBox2.Controls.Add(this.Label2);
-            this.GroupBox2.Controls.Add(this.Label3);
             this.GroupBox2.Controls.Add(this.check_userDefaultSettings);
             this.GroupBox2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GroupBox2.Location = new System.Drawing.Point(12, 11);
             this.GroupBox2.Name = "GroupBox2";
-            this.GroupBox2.Size = new System.Drawing.Size(386, 175);
+            this.GroupBox2.Size = new System.Drawing.Size(386, 132);
             this.GroupBox2.TabIndex = 55;
             this.GroupBox2.TabStop = false;
             this.GroupBox2.Text = "General Settings";
@@ -106,18 +102,6 @@ namespace Handbrake
             this.check_updateCheck.UseVisualStyleBackColor = true;
             this.check_updateCheck.CheckedChanged += new System.EventHandler(this.check_updateCheck_CheckedChanged);
             // 
-            // check_readDVDWindow
-            // 
-            this.check_readDVDWindow.AutoSize = true;
-            this.check_readDVDWindow.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_readDVDWindow.Location = new System.Drawing.Point(16, 146);
-            this.check_readDVDWindow.Name = "check_readDVDWindow";
-            this.check_readDVDWindow.Size = new System.Drawing.Size(71, 17);
-            this.check_readDVDWindow.TabIndex = 49;
-            this.check_readDVDWindow.Text = "Enabled";
-            this.check_readDVDWindow.UseVisualStyleBackColor = true;
-            this.check_readDVDWindow.CheckedChanged += new System.EventHandler(this.check_readDVDWindow_CheckedChanged);
-            // 
             // Label2
             // 
             this.Label2.AutoSize = true;
@@ -127,16 +111,6 @@ namespace Handbrake
             this.Label2.Size = new System.Drawing.Size(229, 13);
             this.Label2.TabIndex = 46;
             this.Label2.Text = "Load Users Default Settings on Startup";
-            // 
-            // Label3
-            // 
-            this.Label3.AutoSize = true;
-            this.Label3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label3.Location = new System.Drawing.Point(13, 124);
-            this.Label3.Name = "Label3";
-            this.Label3.Size = new System.Drawing.Size(215, 13);
-            this.Label3.TabIndex = 48;
-            this.Label3.Text = "Show Select DVD window on startup";
             // 
             // check_userDefaultSettings
             // 
@@ -215,7 +189,7 @@ namespace Handbrake
             this.GroupBox3.Controls.Add(this.drp_processors);
             this.GroupBox3.Controls.Add(this.Label11);
             this.GroupBox3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GroupBox3.Location = new System.Drawing.Point(13, 192);
+            this.GroupBox3.Location = new System.Drawing.Point(13, 149);
             this.GroupBox3.Name = "GroupBox3";
             this.GroupBox3.Size = new System.Drawing.Size(386, 128);
             this.GroupBox3.TabIndex = 56;
@@ -226,7 +200,7 @@ namespace Handbrake
             // 
             this.GroupBox1.Controls.Add(this.check_verbose);
             this.GroupBox1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GroupBox1.Location = new System.Drawing.Point(12, 326);
+            this.GroupBox1.Location = new System.Drawing.Point(13, 283);
             this.GroupBox1.Name = "GroupBox1";
             this.GroupBox1.Size = new System.Drawing.Size(386, 70);
             this.GroupBox1.TabIndex = 54;
@@ -239,7 +213,7 @@ namespace Handbrake
             this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(292, 402);
+            this.btn_close.Location = new System.Drawing.Point(292, 360);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(107, 22);
             this.btn_close.TabIndex = 53;
@@ -249,7 +223,7 @@ namespace Handbrake
             // 
             // frmOptions
             // 
-            this.ClientSize = new System.Drawing.Size(411, 436);
+            this.ClientSize = new System.Drawing.Size(411, 394);
             this.Controls.Add(this.GroupBox2);
             this.Controls.Add(this.GroupBox3);
             this.Controls.Add(this.GroupBox1);
@@ -277,9 +251,7 @@ namespace Handbrake
         internal System.Windows.Forms.GroupBox GroupBox2;
         internal System.Windows.Forms.Label Label1;
         internal System.Windows.Forms.CheckBox check_updateCheck;
-        internal System.Windows.Forms.CheckBox check_readDVDWindow;
         internal System.Windows.Forms.Label Label2;
-        internal System.Windows.Forms.Label Label3;
         internal System.Windows.Forms.CheckBox check_userDefaultSettings;
         internal System.Windows.Forms.Label Label4;
         internal System.Windows.Forms.CheckBox check_verbose;

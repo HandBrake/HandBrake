@@ -1085,9 +1085,9 @@ namespace Handbrake
             this.Label37.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label37.Location = new System.Drawing.Point(382, 194);
             this.Label37.Name = "Label37";
-            this.Label37.Size = new System.Drawing.Size(228, 12);
+            this.Label37.Size = new System.Drawing.Size(241, 12);
             this.Label37.TabIndex = 52;
-            this.Label37.Text = " Note: Breaks iPod, @TV, PS3 compatibility.";
+            this.Label37.Text = "Warning: Breaks iPod, @TV, PS3 compatibility.";
             // 
             // check_largeFile
             // 

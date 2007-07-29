@@ -25,12 +25,6 @@ namespace Handbrake
             {
                 check_userDefaultSettings.CheckState = CheckState.Checked;
             }
-
-            if (Properties.Settings.Default.readDVDWindow == "Checked")
-            {
-                check_readDVDWindow.CheckState = CheckState.Checked;
-            }
-
             drp_processors.Text = Properties.Settings.Default.Processors;
             drp_Priority.Text = Properties.Settings.Default.processPriority;
 
@@ -48,11 +42,6 @@ namespace Handbrake
         private void check_userDefaultSettings_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.defaultSettings = check_userDefaultSettings.CheckState.ToString();
-        }
-
-        private void check_readDVDWindow_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.readDVDWindow = check_readDVDWindow.CheckState.ToString();
         }
 
         private void drp_processors_SelectedIndexChanged(object sender, EventArgs e)
@@ -74,6 +63,6 @@ namespace Handbrake
         {
             Properties.Settings.Default.Save(); // Small hack for Vista. Seems to work fine on XP without this
             this.Close();
-        }     
+        }
     }
 }

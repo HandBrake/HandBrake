@@ -17,9 +17,6 @@
     <Setting Name="Processors" Type="System.String" Scope="User">
       <Value Profile="(Default)">Automatic</Value>
     </Setting>
-    <Setting Name="readDVDWindow" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="defaultSettings" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>

@@ -110,10 +110,6 @@
       <SubType>Designer</SubType>
       <DependentUpon>frmReadDVD.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmSelectDVD.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>frmSelectDVD.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="frmSplashScreen.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmSplashScreen.cs</DependentUpon>
@@ -148,12 +144,6 @@
     </Compile>
     <Compile Include="frmReadDVD.Designer.cs">
       <DependentUpon>frmReadDVD.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmSelectDVD.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmSelectDVD.Designer.cs">
-      <DependentUpon>frmSelectDVD.cs</DependentUpon>
     </Compile>
     <Compile Include="frmSplashScreen.cs">
       <SubType>Form</SubType>
