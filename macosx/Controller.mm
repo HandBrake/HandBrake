@@ -134,7 +134,6 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
     [self TranslateStrings];
     currentScanCount = 0;
 
-//[self registrationDictionaryForGrowl];
 /* Init User Presets .plist */
 	/* We declare the default NSFileManager into fileManager */
 	NSFileManager * fileManager = [NSFileManager defaultManager];
@@ -180,6 +179,9 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
     UserPresets = [[NSMutableArray alloc] init];
 	[self AddFactoryPresets:NULL];
   }
+  
+
+
   /* Show/Dont Show Presets drawer upon launch based
   on user preference DefaultPresetsDrawerShow*/
   if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow"] > 0)
@@ -282,7 +284,15 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 	/* We disable the Turbo 1st pass checkbox since we are not x264 */
 	[fVidTurboPassCheck setEnabled: NO];
 	[fVidTurboPassCheck setState: NSOffState];
+
+
+  /* lets get our default prefs here */
+  [self GetDefaultPresets: NULL];
+  /* lets initialize the current successful scancount here to 0 */
+  currentSuccessfulScanCount = 0;
+  
 }
+
 
 // ============================================================
 // NSToolbar Related Methods
@@ -888,6 +898,11 @@ list = hb_get_titles( fHandle );
 	}
 	else
 	{
+		/* We increment the successful scancount here by one,
+		   which we use at the end of this function to tell the gui
+		   if this is the first successful scan since launch and whether
+		   or not we should set all settings to the defaults */
+		currentSuccessfulScanCount++;
 		
 		[fSrcTitlePopUp removeAllItems];
 		for( int i = 0; i < hb_list_count( list ); i++ )
@@ -991,6 +1006,13 @@ list = hb_get_titles( fHandle );
 		/* we record the current source name here in case the next scan is unsuccessful,
 				then we can replace the scan progress with the old name if necessary */
 			sourceDisplayName = [NSString stringWithFormat:[fSrcDVD2Field stringValue]];
+	
+	
+	   /* if its the initial successful scan after awakeFromNib */
+	   if (currentSuccessfulScanCount == 1)
+	   {
+       [self SelectDefaultPreset: NULL];
+	   }
 	}
 }
 
@@ -2418,6 +2440,7 @@ the user is using "Custom" settings by determining the sender*/
 	{
 		/* Deselect the currently selected Preset if there is one*/
 		[tableView deselectRow:[tableView selectedRow]];
+		[fPresetMakeDefault setEnabled: NO];
 		/* Change UI to show "Custom" settings are being used */
 		[fPresetSelectedDisplay setStringValue: @"Custom"];
 		
@@ -3937,7 +3960,7 @@ the user is using "Custom" settings by determining the sender*/
 	/*Set whether or not this is a user preset or factory 0 is factory, 1 is user*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
 	/*Set whether or not this is default, at creation set to 0*/
-	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"Default"];
 	/*Get the whether or not to apply pic settings in the AddPresetPanel*/
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
 	/* Get the New Preset Description from the field in the AddPresetPanel */
@@ -4503,6 +4526,70 @@ the user is using "Custom" settings by determining the sender*/
         [self savePreset];   
     }
 }
+
+- (IBAction)GetDefaultPresets:(id)sender
+{
+	int i = 0;
+    NSEnumerator *enumerator = [UserPresets objectEnumerator];
+	id tempObject;
+	while (tempObject = [enumerator nextObject])
+	{
+		NSDictionary *thisPresetDict = tempObject;
+		if ([[thisPresetDict objectForKey:@"Default"] intValue] == 1) // 1 is HB default
+		{
+			presetHbDefault = i;	
+		}
+		if ([[thisPresetDict objectForKey:@"Default"] intValue] == 2) // 2 is User specified default
+		{
+			presetUserDefault = i;	
+		}
+		i++;
+	}
+}
+
+- (IBAction)SetDefaultPreset:(id)sender
+{
+    int i = 0;
+    NSEnumerator *enumerator = [UserPresets objectEnumerator];
+	id tempObject;
+	/* First make sure the old user specified default preset is removed */
+	while (tempObject = [enumerator nextObject])
+	{
+		/* make sure we are not removing the default HB preset */
+		if ([[[UserPresets objectAtIndex:i] objectForKey:@"Default"] intValue] != 1) // 1 is HB default
+		{
+			[[UserPresets objectAtIndex:i] setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
+		}
+		i++;
+	}
+	/* Second, go ahead and set the appropriate user specfied preset */
+	/* we get the chosen preset from the UserPresets array */
+	if ([[[UserPresets objectAtIndex:[tableView selectedRow]] objectForKey:@"Default"] intValue] != 1) // 1 is HB default
+	{
+		[[UserPresets objectAtIndex:[tableView selectedRow]] setObject:[NSNumber numberWithInt:2] forKey:@"Default"];
+	}
+	
+	
+	/* We save all of the preset data here */
+    [self savePreset];
+	/* We Reload the New Table data for presets */
+    [tableView reloadData];
+}
+
+- (IBAction)SelectDefaultPreset:(id)sender
+{
+	if (presetUserDefault)
+	{
+	[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:presetUserDefault] byExtendingSelection:NO];
+	[self tableViewSelected:NULL];
+	}
+	else if (presetHbDefault) // we use the built in default presetHbDefault
+	{
+	[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:presetHbDefault] byExtendingSelection:NO];
+	[self tableViewSelected:NULL];
+	}
+}
+
 - (IBAction)tableViewSelected:(id)sender
 {
     /* Since we cannot disable the presets tableView in terms of clickability
@@ -4512,10 +4599,18 @@ the user is using "Custom" settings by determining the sender*/
 	{
 		
 		/* we get the chosen preset from the UserPresets array */
-		chosenPreset = [UserPresets objectAtIndex:[sender selectedRow]];
+		chosenPreset = [UserPresets objectAtIndex:[tableView selectedRow]];
 		curUserPresetChosenNum = [sender selectedRow];
 		/* we set the preset display field in main window here */
 		[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@",[chosenPreset valueForKey:@"PresetName"]]];
+		if ([[chosenPreset objectForKey:@"Default"] intValue] == 1)
+		{
+		[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@ (Default)",[chosenPreset valueForKey:@"PresetName"]]];
+		}
+		else
+		{
+		[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@",[chosenPreset valueForKey:@"PresetName"]]];
+		}
 		/* File Format */
 		[fDstFormatPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileFormat"]]];
 		[self FormatPopUpChanged: NULL];
@@ -4622,7 +4717,7 @@ the user is using "Custom" settings by determining the sender*/
 		}
 		
 
-
+[fPresetMakeDefault setEnabled: YES];
 
 }
 }
@@ -4642,8 +4737,10 @@ show the built in presets in a blue font. */
  forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
 {
     NSDictionary *userPresetDict = [UserPresets objectAtIndex:rowIndex];
+	NSFont *txtFont;
 	NSColor *fontColor;
 	NSColor *shadowColor;
+	txtFont = [NSFont systemFontOfSize: [NSFont smallSystemFontSize]];
 	/* First, we check to see if its a selected row, if so, we use white since its highlighted in blue */
 	if ([[aTableView selectedRowIndexes] containsIndex:rowIndex] && ([tableView editedRow] != rowIndex))
 	{
@@ -4665,7 +4762,19 @@ show the built in presets in a blue font. */
 		}
 		shadowColor = nil;
 	}
+	/* We check to see if this is the HB default, if so, color it appropriately */
+	if (!presetUserDefault && presetHbDefault && rowIndex == presetHbDefault)
+	{
+	txtFont = [NSFont boldSystemFontOfSize: [NSFont smallSystemFontSize]];
+	}
+	/* We check to see if this is the User Specified default, if so, color it appropriately */
+	if (presetUserDefault && rowIndex == presetUserDefault)
+	{
+	txtFont = [NSFont boldSystemFontOfSize: [NSFont smallSystemFontSize]];
+	}
+	
 	[aCell setTextColor:fontColor];
+	[aCell setFont:txtFont];
 	/* this shadow stuff (like mail app) for some reason looks crappy, commented out
 	temporarily in case we want to resurrect it */
 	/*
@@ -4738,6 +4847,8 @@ id theRecord, theValue;
 - (void)savePreset
 {
     [UserPresets writeToFile:UserPresetsFile atomically:YES];
+	/* We get the default preset in case it changed */
+	[self GetDefaultPresets: NULL];
 
 }
 

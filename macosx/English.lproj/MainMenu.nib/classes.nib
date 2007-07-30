@@ -29,6 +29,8 @@
                 QualitySliderChanged = id; 
                 RevertPictureSizeToMax = id; 
                 Rip = id; 
+                SelectDefaultPreset = id; 
+                SetDefaultPreset = id; 
                 SetEnabledStateOfAudioMixdownControls = id; 
                 ShowAddPresetPanel = id; 
                 ShowNewScan = id; 
@@ -104,6 +106,7 @@
                 fPictureController = PictureController; 
                 fPicturePanel = NSPanel; 
                 fPresetDrawer = NSDrawer; 
+                fPresetMakeDefault = NSButton; 
                 fPresetNewDesc = NSTextField; 
                 fPresetNewName = NSTextField; 
                 fPresetNewPicSettingsPopUp = NSPopUpButton; 

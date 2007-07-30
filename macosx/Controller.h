@@ -185,7 +185,7 @@
     IBOutlet NSTextField         * fX264optCabacLabel;
     IBOutlet NSButton            * fX264optCabacSwitch;
     
-	/* User Preset variables here fPresetNewDesc*/
+	/* User Preset variables here */
 	
 	IBOutlet NSDrawer            * fPresetDrawer;
 	IBOutlet NSTextField         * fPresetNewName;
@@ -201,17 +201,22 @@
 	NSMutableArray               * UserPresetssortedArray;
 	NSMutableDictionary          * chosenPreset;
     int                            curUserPresetChosenNum;
-	
+	 
+	int                            presetHbDefault; // this is 1 in "Default" preset key
+	int                            presetUserDefault;// this is 2 in "Default" preset key
     IBOutlet NSPanel             * fAddPresetPanel;
 	IBOutlet NSTableView         * tableView;
 	IBOutlet NSButton            * fPresetsAdd;
 	IBOutlet NSButton            * fPresetsDelete;
+	IBOutlet NSButton            * fPresetMakeDefault;
+	
     hb_handle_t                  * fHandle;
 	hb_title_t                   * fTitle;
     /* integer to set to determine the previous state
 		of encode 0==idle, 1==encoding, 2==cancelled*/
     int                            fEncodeState;
 	int                            currentScanCount;
+	int                            currentSuccessfulScanCount;
 	NSString                      * currentSource;
 	HBOutputPanelController *outputPanel;
 	
@@ -304,7 +309,8 @@
 - (NSDictionary *)CreateiPhonePreset;
 - (IBAction) RevertPictureSizeToMax:(id)sender;
 
-
+- (IBAction)SetDefaultPreset:(id)sender;
+- (IBAction)SelectDefaultPreset:(id)sender;
 - (void) savePreset;
 - (IBAction)AddFactoryPresets:(id)sender;
 - (IBAction)DeleteFactoryPresets:(id)sender;
@@ -312,6 +318,7 @@
 - (void)AddPreset;
 - (IBAction)InsertPreset:(id)sender;
 - (IBAction)DeletePreset:(id)sender;
+- (IBAction)GetDefaultPresets:(id)sender;
 - (IBAction)tableViewSelected:(id)sender;
 // NSTableDataSource methods
 - (int)numberOfRowsInTableView:(NSTableView *)aTableView;
