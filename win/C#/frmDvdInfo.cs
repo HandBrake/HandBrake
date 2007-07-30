@@ -40,5 +40,6 @@ namespace Handbrake
             this.Hide();
             base.OnClosing(e);
         }
+
     }
 }

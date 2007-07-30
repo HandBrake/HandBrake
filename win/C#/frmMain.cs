@@ -549,7 +549,7 @@ namespace Handbrake
             String filename ="";
             text_source.Text = "";
             
-            int scanTwice = 0;
+            //int scanTwice = 0;
 
             if (RadioDVD.Checked)
             {
@@ -578,7 +578,8 @@ namespace Handbrake
             // If there isn't any, rescan the DVD. hbcli occasionally fails (see bug in encode) with standard error.
             if (filename != "")
             {
-                if (drp_dvdtitle.Items.Count == 0) 
+               // Disbaled the 2nd pass for the time being.
+               /* if (drp_dvdtitle.Items.Count == 0) 
                 {
                     if (scanTwice == 0)
                     {
@@ -588,7 +589,7 @@ namespace Handbrake
                         frmRD.ShowDialog();
                         scanTwice = 1;
                     }
-                }
+                }*/
             }
             else
             {
@@ -597,7 +598,7 @@ namespace Handbrake
 
             if (drp_dvdtitle.Items.Count == 0)
             {
-                MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source. Please refer to the FAQ for details.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source. Please refer to the FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
            }
 
         }
@@ -699,7 +700,7 @@ namespace Handbrake
             }
             else
             {
-                hbProc = process.runCli(this, (string)state, false, false, false, false);
+                hbProc = process.runCli(this, (string)state, true, true, false, false);
 
                 MessageBox.Show("The encode process has now started.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
 
@@ -713,17 +714,17 @@ namespace Handbrake
                     // Maybe an issue with the Parser cauing the CLI to hickup/pause?
                     //*****************************************************************************************
 
-                    /*
-                    Parsing.Parser encode = new Parsing.Parser(hbProc.StandardError.BaseStream);
+                    
+                    /*Parsing.Parser encode = new Parsing.Parser(hbProc.StandardError.BaseStream);
                     encode.OnEncodeProgress += encode_OnEncodeProgress;
                     while (!encode.EndOfStream)
                     {
                         encode.ReadLine();
-                    }*/
+                    }
 
                     hbProc.WaitForExit();
                     process.closeCLI();
-                    
+                    */
                 }
                 catch (Exception)
                 {

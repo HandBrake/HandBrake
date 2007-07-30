@@ -61,18 +61,40 @@ namespace Handbrake
         Functions.CLI process = new Functions.CLI();
         private void startProc(object state)
         {
-            string query = "-i " + '"' + inputFile + '"' + " -t0";
-          
-            
-            hbProc = process.runCli(this, query, true, true, false, true);
+            //string query = "-i " + '"' + inputFile + '"' + " -t0";
+            // hbProc = process.runCli(this, query, true, true, false, true);
 
+            //*********************************************************************************************************************************************
+            /*
+             * Quick and Dirty hack to get around the stderr crashes of hbcli. Lets try feeding brians parser text straight from a text file.
+             */
+            string appPath = Application.StartupPath.ToString();
+            appPath = appPath + "\\";
+            string strCmdLine = "cmd /c " + '"' + '"' + appPath + "\\hbcli.exe" + '"' +  " -i" + '"' + inputFile + '"' + " -t0 >" + '"'+ appPath + "\\dvdinfo.dat" + '"' + " 2>&1" + '"';
+            Process hbproc = Process.Start("CMD.exe", strCmdLine);
+            hbproc.WaitForExit();
+
+
+            StreamReader sr = new StreamReader(appPath + "dvdinfo.dat");
+    
+            thisDvd = Parsing.DVD.Parse(sr);
+
+            sr.Close();
+            Console.ReadLine();
+            updateUIElements();
+            //*********************************************************************************************************************************************
+
+            /*
+             * This has been temporily disabled due to the stderr issue
+             * 
+             * 
             Parsing.Parser readData = new Parsing.Parser(hbProc.StandardError.BaseStream);
             readData.OnScanProgress += Parser_OnScanProgress;
             readData.OnReadLine += dvdInfo.HandleParsedData;
             readData.OnReadToEnd += dvdInfo.HandleParsedData;
 
             // Setup the parser
-            thisDvd = Parsing.DVD.Parse(readData);
+            
 
             if (cancel != 1)
             {
@@ -80,6 +102,7 @@ namespace Handbrake
                 process.killCLI();
                 process.closeCLI();
             }
+            */
         }
 
         private void Parser_OnScanProgress(object Sender, int CurrentTitle, int TitleCount)
@@ -99,10 +122,9 @@ namespace Handbrake
 
         private void btn_skip_Click(object sender, EventArgs e)
         {
-            process.killCLI();
+            //process.killCLI();
             this.Close();
-            cancel = 1;
-            
+            cancel = 1;  
         }
 
     }

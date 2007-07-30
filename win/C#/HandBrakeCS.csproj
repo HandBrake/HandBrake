@@ -161,7 +161,7 @@
   <ItemGroup>
     <Content Include="handbrakepineapple.ico" />
     <None Include="Resources\tempSplash.jpg" />
-    <None Include="splash.jpg" />
+    <None Include="Resources\splash.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
