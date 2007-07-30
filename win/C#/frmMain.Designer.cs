@@ -194,7 +194,7 @@ namespace Handbrake
             // DVD_Save
             // 
             this.DVD_Save.DefaultExt = "mp4";
-            this.DVD_Save.Filter = ".mp4|*.mp4| .m4v|*.m4v |.avi|*.avi |.ogm|*.ogm |.mkv|*.mkv";
+            this.DVD_Save.Filter = "*.mp4|*.mp4|*.m4v|*.m4v|*.avi|*.avi|*.ogm|*.ogm|*.mkv|*.mkv";
             // 
             // File_Save
             // 

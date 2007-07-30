@@ -33,10 +33,10 @@ namespace Handbrake
         private void btn_ok_Click(object sender, EventArgs e)
         {
             btn_ok.Enabled = false;
-            btn_skip.Visible = true;
+            //btn_skip.Visible = true;
             lbl_pressOk.Visible = false;
             lbl_progress.Text = "0%";
-            lbl_progress.Visible = true;
+            //lbl_progress.Visible = true;
             lbl_status.Visible = true;
             // throw cli call and parsing on it's own thread
             ThreadPool.QueueUserWorkItem(startProc);

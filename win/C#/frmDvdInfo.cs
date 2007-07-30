@@ -5,6 +5,8 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
+
 
 namespace Handbrake
 {
@@ -17,9 +19,22 @@ namespace Handbrake
         {
             InitializeComponent();
             this.rtf_dvdInfo.Text = string.Empty;
+
+            string appPath = Application.StartupPath.ToString();
+            appPath = appPath + "\\";
+            StreamReader sr = new StreamReader(appPath + "dvdinfo.dat");
+            
+            string line = sr.ReadLine();
+
+            while (line != null)
+            {
+                this.rtf_dvdInfo.AppendText(line + System.Environment.NewLine);
+                line = sr.ReadLine();
+            }
+            sr.Close();
         }
 
-        public void HandleParsedData(object Sender, string Data)
+        /*public void HandleParsedData(object Sender, string Data)
         {
             if (this.InvokeRequired)
             {
@@ -27,19 +42,19 @@ namespace Handbrake
                 return;
             }
             this.rtf_dvdInfo.AppendText(Data + System.Environment.NewLine);
-        }
+        }*/
 
         private void btn_close_Click(object sender, EventArgs e)
         {
-            this.Close();
+            this.Hide();
         }
 
-        protected override void OnClosing(CancelEventArgs e)
+        /*protected override void OnClosing(CancelEventArgs e)
         {
             e.Cancel = true;
             this.Hide();
             base.OnClosing(e);
-        }
+        }*/
 
     }
 }

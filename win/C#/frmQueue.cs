@@ -104,6 +104,9 @@ namespace Handbrake
             if (progressBar.Value == 100)
             {
                 MessageBox.Show("Encode Queue Completed!", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                progressBar.Value = 0;
+                progressBar.Update();
+                lbl_progressValue.Text = "0 %";
             }
         }
     }

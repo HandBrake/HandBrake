@@ -121,7 +121,7 @@
     <value>False</value>
   </metadata>
   <metadata name="DVD_Save.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>530, 18</value>
+    <value>529, 18</value>
   </metadata>
   <metadata name="File_Save.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>633, 18</value>

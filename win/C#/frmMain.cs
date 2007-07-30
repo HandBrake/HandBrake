@@ -669,7 +669,7 @@ namespace Handbrake
         {
             btn_eCancel.Enabled = true;
             String query = "";
-            lbl_encode.Visible = true;
+            lbl_encode.Visible = false;
  
             if (QueryEditorText.Text == "")
             {
@@ -700,9 +700,9 @@ namespace Handbrake
             }
             else
             {
-                hbProc = process.runCli(this, (string)state, true, true, false, false);
-
+                hbProc = process.runCli(this, (string)state, false, false, false, false);
                 MessageBox.Show("The encode process has now started.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                hbProc.WaitForExit();
 
                 try
                 {
