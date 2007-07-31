@@ -1075,7 +1075,7 @@ namespace Handbrake
             this.TabPage3.Location = new System.Drawing.Point(4, 22);
             this.TabPage3.Name = "TabPage3";
             this.TabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage3.Size = new System.Drawing.Size(639, 242);
+            this.TabPage3.Size = new System.Drawing.Size(622, 242);
             this.TabPage3.TabIndex = 2;
             this.TabPage3.Text = "Video Settings";
             // 
@@ -1317,7 +1317,7 @@ namespace Handbrake
             this.TabPage2.Location = new System.Drawing.Point(4, 22);
             this.TabPage2.Name = "TabPage2";
             this.TabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage2.Size = new System.Drawing.Size(639, 242);
+            this.TabPage2.Size = new System.Drawing.Size(622, 242);
             this.TabPage2.TabIndex = 3;
             this.TabPage2.Text = "Audio Settings";
             // 
@@ -1470,7 +1470,7 @@ namespace Handbrake
             this.h264Tab.Location = new System.Drawing.Point(4, 22);
             this.h264Tab.Name = "h264Tab";
             this.h264Tab.Padding = new System.Windows.Forms.Padding(3);
-            this.h264Tab.Size = new System.Drawing.Size(639, 242);
+            this.h264Tab.Size = new System.Drawing.Size(622, 242);
             this.h264Tab.TabIndex = 5;
             this.h264Tab.Text = "H.264";
             // 
@@ -1557,7 +1557,7 @@ namespace Handbrake
             this.TabPage6.Location = new System.Drawing.Point(4, 22);
             this.TabPage6.Name = "TabPage6";
             this.TabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage6.Size = new System.Drawing.Size(639, 242);
+            this.TabPage6.Size = new System.Drawing.Size(622, 242);
             this.TabPage6.TabIndex = 6;
             this.TabPage6.Text = "Query Editor";
             // 

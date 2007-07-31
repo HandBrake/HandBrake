@@ -638,8 +638,15 @@ namespace Handbrake
         {
             if (text_destination.Text != "" && text_source.Text != "")
             {
-
-                String query = GenerateTheQuery();
+                string query;
+                if (QueryEditorText.Text == "")
+                {
+                    query = GenerateTheQuery();
+                }
+                else
+                {
+                    query = QueryEditorText.Text;
+                }
                 queueWindow.list_queue.Items.Add(query);
                 queueWindow.Show();
             } 

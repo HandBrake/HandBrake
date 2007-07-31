@@ -20,18 +20,25 @@ namespace Handbrake
             InitializeComponent();
             this.rtf_dvdInfo.Text = string.Empty;
 
-            string appPath = Application.StartupPath.ToString();
-            appPath = appPath + "\\";
-            StreamReader sr = new StreamReader(appPath + "dvdinfo.dat");
-            
-            string line = sr.ReadLine();
-
-            while (line != null)
+            try
             {
-                this.rtf_dvdInfo.AppendText(line + System.Environment.NewLine);
-                line = sr.ReadLine();
+                string appPath = Application.StartupPath.ToString();
+                appPath = appPath + "\\";
+                StreamReader sr = new StreamReader(appPath + "dvdinfo.dat");
+
+                string line = sr.ReadLine();
+
+                while (line != null)
+                {
+                    this.rtf_dvdInfo.AppendText(line + System.Environment.NewLine);
+                    line = sr.ReadLine();
+                }
+                sr.Close();
             }
-            sr.Close();
+            catch (Exception)
+            { 
+               // Don't do anything
+            }
         }
 
         /*public void HandleParsedData(object Sender, string Data)
