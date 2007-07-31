@@ -1245,17 +1245,7 @@ list = hb_get_titles( fHandle );
     /* If mpeg-4, then set mpeg-4 specific options like chapters and > 4gb file sizes */
 	if ([fDstFormatPopUp indexOfSelectedItem] == 0)
 	{
-        /* We set the chapter marker extraction here based on the format being
-		mpeg4 and the checkbox being checked */
-		if ([fCreateChapterMarkers state] == NSOnState)
-		{
-			job->chapter_markers = 1;
-		}
-		else
-		{
-			job->chapter_markers = 0;
-		}
-		/* We set the largeFileSize (64 bit formatting) variable here to allow for > 4gb files based on the format being
+        /* We set the largeFileSize (64 bit formatting) variable here to allow for > 4gb files based on the format being
 		mpeg4 and the checkbox being checked 
 		*Note: this will break compatibility with some target devices like iPod, etc.!!!!*/
 		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"AllowLargeFiles"] > 0 && [fDstMpgLargeFileCheck state] == NSOnState)
@@ -1267,8 +1257,19 @@ list = hb_get_titles( fHandle );
 			job->largeFileSize = 0;
 		}
 	}
-	
-	
+	if ([fDstFormatPopUp indexOfSelectedItem] == 0 || [fDstFormatPopUp indexOfSelectedItem] == 3)
+	{
+	  /* We set the chapter marker extraction here based on the format being
+		mpeg4 or mkv and the checkbox being checked */
+		if ([fCreateChapterMarkers state] == NSOnState)
+		{
+			job->chapter_markers = 1;
+		}
+		else
+		{
+			job->chapter_markers = 0;
+		}
+	}
 	if( ( job->vcodec & HB_VCODEC_FFMPEG ) &&
         [fVidEncoderPopUp indexOfSelectedItem] > 0 )
     {
