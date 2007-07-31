@@ -2315,18 +2315,24 @@ list = hb_get_titles( fHandle );
    resolves IBActions down to -(void) during compile anyway */
 - (IBAction) RevertPictureSizeToMax: (id) sender
 {
-	 hb_job_t * job = fTitle->job;
+	hb_job_t * job = fTitle->job;
 	/* We use the output picture width and height
 	as calculated from libhb right after title is set
 	in TitlePopUpChanged */
 	job->width = PicOrigOutputWidth;
 	job->height = PicOrigOutputHeight;
-
-
-    
-	[self CalculatePictureSizing: sender];
-	/* We call method method to change UI to reflect whether a preset is used or not*/    
-    [self CustomSettingUsed: sender];
+    [fPicSettingAutoCrop setStringValue: [NSString stringWithFormat:
+		@"%d", 1]];
+	/* Here we use the auto crop values determined right after scan */
+	job->crop[0] = AutoCropTop;
+	job->crop[1] = AutoCropBottom;
+	job->crop[2] = AutoCropLeft;
+	job->crop[3] = AutoCropRight;
+				
+				
+				[self CalculatePictureSizing: sender];
+				/* We call method method to change UI to reflect whether a preset is used or not*/    
+				[self CustomSettingUsed: sender];
 }
 
 
