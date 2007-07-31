@@ -95,10 +95,9 @@ namespace Handbrake
                     {
                         check_2PassEncode.CheckState = CheckState.Checked;
                     }
-                    if (Properties.Settings.Default.DeInterlace == "Checked")
-                    {
-                        check_DeInterlace.CheckState = CheckState.Checked;
-                    }
+  
+                    drp_deInterlace_option.Text = Properties.Settings.Default.DeInterlace;
+
                     if (Properties.Settings.Default.Grayscale == "Checked")
                     {
                         check_grayscale.CheckState = CheckState.Checked;
@@ -204,11 +203,7 @@ namespace Handbrake
                         check_2PassEncode.CheckState = CheckState.Checked;
                     }
 
-                    temporyLine = line.ReadLine();
-                    if (temporyLine == "Checked")
-                    {
-                        check_DeInterlace.CheckState = CheckState.Checked;
-                    }
+                    drp_deInterlace_option.Text = line.ReadLine();
 
                     temporyLine = line.ReadLine();
                     if (temporyLine == "Checked")
@@ -303,7 +298,7 @@ namespace Handbrake
                     line.WriteLine(text_filesize.Text);
                     line.WriteLine(slider_videoQuality.Value.ToString());
                     line.WriteLine(check_2PassEncode.CheckState.ToString());
-                    line.WriteLine(check_DeInterlace.CheckState.ToString());
+                    line.WriteLine(drp_deInterlace_option.Text);
                     line.WriteLine(check_grayscale.CheckState.ToString());
                     line.WriteLine(drp_videoFramerate.Text);
                     line.WriteLine(Check_ChapterMarkers.CheckState.ToString());
@@ -487,7 +482,7 @@ namespace Handbrake
             Properties.Settings.Default.VideoFilesize = text_filesize.Text;
             Properties.Settings.Default.VideoQuality = slider_videoQuality.Value;
             Properties.Settings.Default.TwoPass = check_2PassEncode.CheckState.ToString();
-            Properties.Settings.Default.DeInterlace = check_DeInterlace.CheckState.ToString();
+            Properties.Settings.Default.DeInterlace = drp_deInterlace_option.Text;
             Properties.Settings.Default.Grayscale = check_grayscale.CheckState.ToString();
             Properties.Settings.Default.Framerate = drp_videoFramerate.Text;
             Properties.Settings.Default.PixelRatio = CheckPixelRatio.CheckState.ToString();
@@ -1304,26 +1299,26 @@ namespace Handbrake
                 subtitles = " -s "+ tempSub[0];
             }
 
-            if (check_DeInterlace.Checked)
-            {
-                switch (deInterlace_Option)
+            switch (deInterlace_Option)
                 {
-                    case "Default":
+                    case "None":
+                        deinterlace = "";
+                        break;
+                    case "Origional ( Fast )":
                         deinterlace = " --deinterlace";
                         break;
-                    case "yadif":
+                    case "yadif ( Slow )":
                         deinterlace = " --deinterlace=" + '"' + "1" + '"';
                         break;
-                    case "yadif + mcdeint":
+                    case "yadif + mcdeint ( Slower )":
                         deinterlace = " -d " + '"' + "1:-1:1" + '"';
                         break;
-                    case "yadif + mcdeint (Slow)":
+                    case "yadif + mcdeint  ( Slowest )":
                         deinterlace = " --deinterlace=" + '"' + "3:-1:2" + '"';
                         break;
                     default:
                         deinterlace = " --deinterlace=";
                         break;
-                }
             }
 
             if (check_grayscale.Checked)
@@ -1496,6 +1491,7 @@ namespace Handbrake
 
             return querySource+ queryDestination+ queryPictureSettings+ queryVideoSettings+ h264Settings+ queryAudioSettings+ queryAdvancedSettings+ verbose;
         }
+
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

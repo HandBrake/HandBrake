@@ -134,9 +134,10 @@ namespace Handbrake
             this.Label18 = new System.Windows.Forms.Label();
             this.drp_audioSampleRate = new System.Windows.Forms.ComboBox();
             this.TabPage3 = new System.Windows.Forms.TabPage();
-            this.check_deTelecine = new System.Windows.Forms.CheckBox();
-            this.check_deNoise = new System.Windows.Forms.CheckBox();
-            this.check_deBlock = new System.Windows.Forms.CheckBox();
+            this.label25 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.Label37 = new System.Windows.Forms.Label();
             this.check_largeFile = new System.Windows.Forms.CheckBox();
             this.check_turbo = new System.Windows.Forms.CheckBox();
@@ -153,7 +154,6 @@ namespace Handbrake
             this.text_bitrate = new System.Windows.Forms.TextBox();
             this.Label42 = new System.Windows.Forms.Label();
             this.TabPage1 = new System.Windows.Forms.TabPage();
-            this.check_DeInterlace = new System.Windows.Forms.CheckBox();
             this.Check_ChapterMarkers = new System.Windows.Forms.CheckBox();
             this.CheckPixelRatio = new System.Windows.Forms.CheckBox();
             this.check_grayscale = new System.Windows.Forms.CheckBox();
@@ -397,7 +397,7 @@ namespace Handbrake
             "Normal (-d)",
             "yadif(-d=\"1\")",
             "yadif+mcdeint(-d=\"1:-1:1\")"});
-            this.drp_deBlock.Location = new System.Drawing.Point(472, 126);
+            this.drp_deBlock.Location = new System.Drawing.Point(470, 151);
             this.drp_deBlock.Name = "drp_deBlock";
             this.drp_deBlock.Size = new System.Drawing.Size(147, 21);
             this.drp_deBlock.TabIndex = 61;
@@ -413,7 +413,7 @@ namespace Handbrake
             "Normal (-d)",
             "yadif(-d=\"1\")",
             "yadif+mcdeint(-d=\"1:-1:1\")"});
-            this.drp_DeNoise.Location = new System.Drawing.Point(472, 153);
+            this.drp_DeNoise.Location = new System.Drawing.Point(470, 178);
             this.drp_DeNoise.Name = "drp_DeNoise";
             this.drp_DeNoise.Size = new System.Drawing.Size(147, 21);
             this.drp_DeNoise.TabIndex = 64;
@@ -429,7 +429,7 @@ namespace Handbrake
             "Normal (-d)",
             "yadif(-d=\"1\")",
             "yadif+mcdeint(-d=\"1:-1:1\")"});
-            this.drp_deTelecine.Location = new System.Drawing.Point(472, 180);
+            this.drp_deTelecine.Location = new System.Drawing.Point(470, 205);
             this.drp_deTelecine.Name = "drp_deTelecine";
             this.drp_deTelecine.Size = new System.Drawing.Size(147, 21);
             this.drp_deTelecine.TabIndex = 65;
@@ -454,15 +454,16 @@ namespace Handbrake
             this.drp_deInterlace_option.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_deInterlace_option.FormattingEnabled = true;
             this.drp_deInterlace_option.Items.AddRange(new object[] {
-            "Default",
-            "yadif",
-            "yadif + mcdeint",
-            "yadif + mcdeint (Slow)"});
-            this.drp_deInterlace_option.Location = new System.Drawing.Point(447, 194);
+            "None",
+            "Origional ( Fast )",
+            "yadif ( Slow )",
+            "yadif + mcdeint ( Slower )",
+            "yadif + mcdeint  ( Slowest )"});
+            this.drp_deInterlace_option.Location = new System.Drawing.Point(470, 124);
             this.drp_deInterlace_option.Name = "drp_deInterlace_option";
             this.drp_deInterlace_option.Size = new System.Drawing.Size(147, 21);
-            this.drp_deInterlace_option.TabIndex = 55;
-            this.drp_deInterlace_option.Text = "Default";
+            this.drp_deInterlace_option.TabIndex = 67;
+            this.drp_deInterlace_option.Text = "None";
             this.ToolTip.SetToolTip(this.drp_deInterlace_option, "Select the subtitle language you require from this dropdown.");
             // 
             // File_Open
@@ -1320,12 +1321,14 @@ namespace Handbrake
             // TabPage3
             // 
             this.TabPage3.BackColor = System.Drawing.SystemColors.Control;
+            this.TabPage3.Controls.Add(this.label25);
+            this.TabPage3.Controls.Add(this.label24);
+            this.TabPage3.Controls.Add(this.label11);
+            this.TabPage3.Controls.Add(this.label4);
+            this.TabPage3.Controls.Add(this.drp_deInterlace_option);
             this.TabPage3.Controls.Add(this.drp_deTelecine);
             this.TabPage3.Controls.Add(this.drp_DeNoise);
-            this.TabPage3.Controls.Add(this.check_deTelecine);
-            this.TabPage3.Controls.Add(this.check_deNoise);
             this.TabPage3.Controls.Add(this.drp_deBlock);
-            this.TabPage3.Controls.Add(this.check_deBlock);
             this.TabPage3.Controls.Add(this.Label37);
             this.TabPage3.Controls.Add(this.check_largeFile);
             this.TabPage3.Controls.Add(this.check_turbo);
@@ -1351,38 +1354,45 @@ namespace Handbrake
             this.TabPage3.Text = "Video Settings";
             this.TabPage3.UseVisualStyleBackColor = true;
             // 
-            // check_deTelecine
+            // label25
             // 
-            this.check_deTelecine.AutoSize = true;
-            this.check_deTelecine.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_deTelecine.Location = new System.Drawing.Point(368, 182);
-            this.check_deTelecine.Name = "check_deTelecine";
-            this.check_deTelecine.Size = new System.Drawing.Size(94, 17);
-            this.check_deTelecine.TabIndex = 63;
-            this.check_deTelecine.Text = "De-Telecine";
-            this.check_deTelecine.UseVisualStyleBackColor = true;
+            this.label25.AutoSize = true;
+            this.label25.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label25.Location = new System.Drawing.Point(365, 208);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(72, 13);
+            this.label25.TabIndex = 71;
+            this.label25.Text = "Detelecine:";
             // 
-            // check_deNoise
+            // label24
             // 
-            this.check_deNoise.AutoSize = true;
-            this.check_deNoise.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_deNoise.Location = new System.Drawing.Point(368, 155);
-            this.check_deNoise.Name = "check_deNoise";
-            this.check_deNoise.Size = new System.Drawing.Size(78, 17);
-            this.check_deNoise.TabIndex = 62;
-            this.check_deNoise.Text = "De-Noise";
-            this.check_deNoise.UseVisualStyleBackColor = true;
+            this.label24.AutoSize = true;
+            this.label24.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label24.Location = new System.Drawing.Point(365, 182);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(58, 13);
+            this.label24.TabIndex = 70;
+            this.label24.Text = "Denoise:";
             // 
-            // check_deBlock
+            // label11
             // 
-            this.check_deBlock.AutoSize = true;
-            this.check_deBlock.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_deBlock.Location = new System.Drawing.Point(368, 128);
-            this.check_deBlock.Name = "check_deBlock";
-            this.check_deBlock.Size = new System.Drawing.Size(78, 17);
-            this.check_deBlock.TabIndex = 60;
-            this.check_deBlock.Text = "De-Block";
-            this.check_deBlock.UseVisualStyleBackColor = true;
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(365, 154);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(58, 13);
+            this.label11.TabIndex = 69;
+            this.label11.Text = "Deblock:";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(365, 127);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(77, 13);
+            this.label4.TabIndex = 68;
+            this.label4.Text = "Deinterlace:";
             // 
             // Label37
             // 
@@ -1552,8 +1562,6 @@ namespace Handbrake
             // TabPage1
             // 
             this.TabPage1.BackColor = System.Drawing.SystemColors.Control;
-            this.TabPage1.Controls.Add(this.drp_deInterlace_option);
-            this.TabPage1.Controls.Add(this.check_DeInterlace);
             this.TabPage1.Controls.Add(this.Check_ChapterMarkers);
             this.TabPage1.Controls.Add(this.CheckPixelRatio);
             this.TabPage1.Controls.Add(this.check_grayscale);
@@ -1582,17 +1590,6 @@ namespace Handbrake
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "Picture Settings";
             this.TabPage1.UseVisualStyleBackColor = true;
-            // 
-            // check_DeInterlace
-            // 
-            this.check_DeInterlace.AutoSize = true;
-            this.check_DeInterlace.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_DeInterlace.Location = new System.Drawing.Point(317, 196);
-            this.check_DeInterlace.Name = "check_DeInterlace";
-            this.check_DeInterlace.Size = new System.Drawing.Size(93, 17);
-            this.check_DeInterlace.TabIndex = 54;
-            this.check_DeInterlace.Text = "DeInterlace";
-            this.check_DeInterlace.UseVisualStyleBackColor = true;
             // 
             // Check_ChapterMarkers
             // 
@@ -1961,10 +1958,7 @@ namespace Handbrake
         internal System.Windows.Forms.TabPage TabPage3;
         internal System.Windows.Forms.ComboBox drp_deTelecine;
         internal System.Windows.Forms.ComboBox drp_DeNoise;
-        internal System.Windows.Forms.CheckBox check_deTelecine;
-        internal System.Windows.Forms.CheckBox check_deNoise;
         internal System.Windows.Forms.ComboBox drp_deBlock;
-        internal System.Windows.Forms.CheckBox check_deBlock;
         internal System.Windows.Forms.Label Label37;
         internal System.Windows.Forms.CheckBox check_largeFile;
         internal System.Windows.Forms.CheckBox check_turbo;
@@ -1977,13 +1971,10 @@ namespace Handbrake
         internal System.Windows.Forms.CheckBox check_2PassEncode;
         internal System.Windows.Forms.TrackBar slider_videoQuality;
         internal System.Windows.Forms.TextBox text_filesize;
-        internal System.Windows.Forms.Label Label46;
         internal System.Windows.Forms.Label Label40;
         internal System.Windows.Forms.TextBox text_bitrate;
         internal System.Windows.Forms.Label Label42;
         internal System.Windows.Forms.TabPage TabPage1;
-        internal System.Windows.Forms.ComboBox drp_deInterlace_option;
-        internal System.Windows.Forms.CheckBox check_DeInterlace;
         internal System.Windows.Forms.CheckBox Check_ChapterMarkers;
         internal System.Windows.Forms.CheckBox CheckPixelRatio;
         internal System.Windows.Forms.CheckBox check_grayscale;
@@ -2006,6 +1997,12 @@ namespace Handbrake
         internal System.Windows.Forms.TextBox text_right;
         internal System.Windows.Forms.TextBox text_left;
         internal System.Windows.Forms.TabControl advancedOptions;
+        internal System.Windows.Forms.ComboBox drp_deInterlace_option;
+        internal System.Windows.Forms.Label label24;
+        internal System.Windows.Forms.Label label11;
+        internal System.Windows.Forms.Label label4;
+        internal System.Windows.Forms.Label Label46;
+        internal System.Windows.Forms.Label label25;
 
     }
 }
