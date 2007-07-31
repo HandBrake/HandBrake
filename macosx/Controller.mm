@@ -291,7 +291,7 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
   [self GetDefaultPresets: NULL];
   /* lets initialize the current successful scancount here to 0 */
   currentSuccessfulScanCount = 0;
-  
+
 }
 
 
@@ -659,7 +659,7 @@ list = hb_get_titles( fHandle );
     switch( s.state )
     {
         case HB_STATE_IDLE:
-            break;
+		break;
 #define p s.param.scanning			
         case HB_STATE_SCANNING:
 		{
@@ -987,15 +987,13 @@ list = hb_get_titles( fHandle );
 		}
 		// Select the longuest title
 		[fSrcTitlePopUp selectItemAtIndex: indxpri];
-		/* We set the Settings Display to "Default" here
-			until we get default presets implemented */
-		[fPresetSelectedDisplay setStringValue: @"Default"];
+		[self TitlePopUpChanged: NULL];
 		/* We set the auto crop in the main window to value "1" just as in PictureController,
 			as it does not seem to be taken from any job-> variable */
 		[fPicSettingAutoCrop setStringValue: [NSString stringWithFormat:
 			@"%d", 0]];
 		
-		[self TitlePopUpChanged: NULL];
+		
 		[self EnableUI: YES];
 		
 		startButtonEnabled = YES;
@@ -1007,12 +1005,12 @@ list = hb_get_titles( fHandle );
 				then we can replace the scan progress with the old name if necessary */
 			sourceDisplayName = [NSString stringWithFormat:[fSrcDVD2Field stringValue]];
 	
-	
-	   /* if its the initial successful scan after awakeFromNib */
+	/* if its the initial successful scan after awakeFromNib */
 	   if (currentSuccessfulScanCount == 1)
 	   {
        [self SelectDefaultPreset: NULL];
-	   }
+	   }  
+	   
 	}
 }
 
@@ -1705,7 +1703,8 @@ list = hb_get_titles( fHandle );
 	/* so call AudioTrackPopUpChanged for both audio tracks to update the mixdown popups */
 	[self AudioTrackPopUpChanged: fAudLang1PopUp];
 	[self AudioTrackPopUpChanged: fAudLang2PopUp];
-
+	/* lets call tableViewSelected to make sure that any preset we have selected is enforced after a title change */
+	[self tableViewSelected:NULL];
 }
 
 - (IBAction) ChapterPopUpChanged: (id) sender
@@ -4589,12 +4588,13 @@ the user is using "Custom" settings by determining the sender*/
 
 - (IBAction)SelectDefaultPreset:(id)sender
 {
+	/* if there is a user specified default, we use it */
 	if (presetUserDefault)
 	{
 	[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:presetUserDefault] byExtendingSelection:NO];
 	[self tableViewSelected:NULL];
 	}
-	else if (presetHbDefault) // we use the built in default presetHbDefault
+	else if (presetHbDefault) //else we use the built in default presetHbDefault
 	{
 	[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:presetHbDefault] byExtendingSelection:NO];
 	[self tableViewSelected:NULL];
@@ -4608,135 +4608,136 @@ the user is using "Custom" settings by determining the sender*/
 	   or not clicking on a preset will do anything */
 	if ([fPresetsAdd isEnabled])
 	{
-		
-		/* we get the chosen preset from the UserPresets array */
-		chosenPreset = [UserPresets objectAtIndex:[tableView selectedRow]];
-		curUserPresetChosenNum = [sender selectedRow];
-		/* we set the preset display field in main window here */
-		[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@",[chosenPreset valueForKey:@"PresetName"]]];
-		if ([[chosenPreset objectForKey:@"Default"] intValue] == 1)
-		{
-		[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@ (Default)",[chosenPreset valueForKey:@"PresetName"]]];
-		}
-		else
-		{
-		[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@",[chosenPreset valueForKey:@"PresetName"]]];
-		}
-		/* File Format */
-		[fDstFormatPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileFormat"]]];
-		[self FormatPopUpChanged: NULL];
-		
-		/* Chapter Markers*/
-		[fCreateChapterMarkers setState:[[chosenPreset objectForKey:@"ChapterMarkers"] intValue]];
-		/* Allow Mpeg4 64 bit formatting +4GB file sizes */
-		[fDstMpgLargeFileCheck setState:[[chosenPreset objectForKey:@"Mp4LargeFile"] intValue]];
-		/* Codecs */
-		[fDstCodecsPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]]];
-		[self CodecsPopUpChanged: NULL];
-		/* Video encoder */
-		[fVidEncoderPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]]];
-		
-		/* We can show the preset options here in the gui if we want to
-			so we check to see it the user has specified it in the prefs */
-		[fDisplayX264Options setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"x264Option"]]];
-
-		[self X264AdvancedOptionsSet:NULL];
-		
-		/* Lets run through the following functions to get variables set there */
-		[self EncoderPopUpChanged: NULL];
-		
-		[self CalculateBitrate: NULL];
-		
-		/* Video quality */
-		[fVidQualityMatrix selectCellAtRow:[[chosenPreset objectForKey:@"VideoQualityType"] intValue] column:0];
-		
-		[fVidTargetSizeField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoTargetSize"]]];
-		[fVidBitrateField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoAvgBitrate"]]];
-		
-		[fVidQualitySlider setFloatValue: [[chosenPreset valueForKey:@"VideoQualitySlider"] floatValue]];
-		[self VideoMatrixChanged: NULL];
-		
-		/* Video framerate */
-		[fVidRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoFramerate"]]];
-
-		/* GrayScale */
-		[fVidGrayscaleCheck setState:[[chosenPreset objectForKey:@"VideoGrayScale"] intValue]];
-		
-		/* 2 Pass Encoding */
-		[fVidTwoPassCheck setState:[[chosenPreset objectForKey:@"VideoTwoPass"] intValue]];
-		[self TwoPassCheckboxChanged: NULL];
-		/* Turbo 1st pass for 2 Pass Encoding */
-		[fVidTurboPassCheck setState:[[chosenPreset objectForKey:@"VideoTurboTwoPass"] intValue]];
-		
-		/*Audio*/
-		
-		/* Audio Sample Rate*/
-		[fAudRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioSampleRate"]]];
-		/* Audio Bitrate Rate*/
-		[fAudBitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioBitRate"]]];
-		/*Subtitles*/
-		[fSubPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Subtitles"]]];
-		
-		/* Picture Settings */
-		/* Look to see if we apply these here in objectForKey:@"UsesPictureSettings"] */
-		if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] > 0)
-		{
-			hb_job_t * job = fTitle->job;
-			/* Check to see if we should use the max picture setting for the current title*/
-			if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] == 2 || [[chosenPreset objectForKey:@"UsesMaxPictureSettings"]  intValue] == 1)
+		if ([tableView selectedRow])
+		{	
+			/* we get the chosen preset from the UserPresets array */
+			chosenPreset = [UserPresets objectAtIndex:[tableView selectedRow]];
+			curUserPresetChosenNum = [sender selectedRow];
+			/* we set the preset display field in main window here */
+			[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@",[chosenPreset valueForKey:@"PresetName"]]];
+			if ([[chosenPreset objectForKey:@"Default"] intValue] == 1)
 			{
-				/* Use Max Picture settings for whatever the dvd is.*/
-				[self RevertPictureSizeToMax: NULL];
-				job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
-				if (job->keep_ratio == 1)
-				{
-					hb_fix_aspect( job, HB_KEEP_WIDTH );
-				}
-				job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
+				[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@ (Default)",[chosenPreset valueForKey:@"PresetName"]]];
 			}
 			else
 			{
-				job->width = [[chosenPreset objectForKey:@"PictureWidth"]  intValue];
-				job->height = [[chosenPreset objectForKey:@"PictureHeight"]  intValue];
-				job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
-				if (job->keep_ratio == 1)
-				{
-					hb_fix_aspect( job, HB_KEEP_WIDTH );
-				}
-				job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
-				job->deinterlace = [[chosenPreset objectForKey:@"PictureDeinterlace"]  intValue];
-				/* If Cropping is set to custom, then recall all four crop values from
-				   when the preset was created and apply them */
-				if ([[chosenPreset objectForKey:@"PictureAutoCrop"]  intValue] == 0)
-				{
-				[fPicSettingAutoCrop setStringValue: [NSString stringWithFormat:
-				@"%d", 0]];
-				
-				/* Here we use the custom crop values saved at the time the preset was saved */
-				job->crop[0] = [[chosenPreset objectForKey:@"PictureTopCrop"]  intValue];
-				job->crop[1] = [[chosenPreset objectForKey:@"PictureBottomCrop"]  intValue];
-				job->crop[2] = [[chosenPreset objectForKey:@"PictureLeftCrop"]  intValue];
-				job->crop[3] = [[chosenPreset objectForKey:@"PictureRightCrop"]  intValue];
-				
-				}
-				else /* if auto crop has been saved in preset, set to auto and use post scan auto crop */
-				{
-				[fPicSettingAutoCrop setStringValue: [NSString stringWithFormat:
-				@"%d", 1]];
-				/* Here we use the auto crop values determined right after scan */
-                job->crop[0] = AutoCropTop;
-				job->crop[1] = AutoCropBottom;
-				job->crop[2] = AutoCropLeft;
-				job->crop[3] = AutoCropRight;
-				
-				}
+				[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@",[chosenPreset valueForKey:@"PresetName"]]];
 			}
-			[self CalculatePictureSizing: NULL]; 
-		}
-		
-
-[fPresetMakeDefault setEnabled: YES];
-
+			/* File Format */
+			[fDstFormatPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileFormat"]]];
+			[self FormatPopUpChanged: NULL];
+			
+			/* Chapter Markers*/
+			[fCreateChapterMarkers setState:[[chosenPreset objectForKey:@"ChapterMarkers"] intValue]];
+			/* Allow Mpeg4 64 bit formatting +4GB file sizes */
+			[fDstMpgLargeFileCheck setState:[[chosenPreset objectForKey:@"Mp4LargeFile"] intValue]];
+			/* Codecs */
+			[fDstCodecsPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]]];
+			[self CodecsPopUpChanged: NULL];
+			/* Video encoder */
+			[fVidEncoderPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]]];
+			
+			/* We can show the preset options here in the gui if we want to
+				so we check to see it the user has specified it in the prefs */
+			[fDisplayX264Options setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"x264Option"]]];
+			
+			[self X264AdvancedOptionsSet:NULL];
+			
+			/* Lets run through the following functions to get variables set there */
+			[self EncoderPopUpChanged: NULL];
+			
+			[self CalculateBitrate: NULL];
+			
+			/* Video quality */
+			[fVidQualityMatrix selectCellAtRow:[[chosenPreset objectForKey:@"VideoQualityType"] intValue] column:0];
+			
+			[fVidTargetSizeField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoTargetSize"]]];
+			[fVidBitrateField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoAvgBitrate"]]];
+			
+			[fVidQualitySlider setFloatValue: [[chosenPreset valueForKey:@"VideoQualitySlider"] floatValue]];
+			[self VideoMatrixChanged: NULL];
+			
+			/* Video framerate */
+			[fVidRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoFramerate"]]];
+			
+			/* GrayScale */
+			[fVidGrayscaleCheck setState:[[chosenPreset objectForKey:@"VideoGrayScale"] intValue]];
+			
+			/* 2 Pass Encoding */
+			[fVidTwoPassCheck setState:[[chosenPreset objectForKey:@"VideoTwoPass"] intValue]];
+			[self TwoPassCheckboxChanged: NULL];
+			/* Turbo 1st pass for 2 Pass Encoding */
+			[fVidTurboPassCheck setState:[[chosenPreset objectForKey:@"VideoTurboTwoPass"] intValue]];
+			
+			/*Audio*/
+			
+			/* Audio Sample Rate*/
+			[fAudRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioSampleRate"]]];
+			/* Audio Bitrate Rate*/
+			[fAudBitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioBitRate"]]];
+			/*Subtitles*/
+			[fSubPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Subtitles"]]];
+			
+			/* Picture Settings */
+			/* Look to see if we apply these here in objectForKey:@"UsesPictureSettings"] */
+			if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] > 0)
+			{
+				hb_job_t * job = fTitle->job;
+				/* Check to see if we should use the max picture setting for the current title*/
+				if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] == 2 || [[chosenPreset objectForKey:@"UsesMaxPictureSettings"]  intValue] == 1)
+				{
+					/* Use Max Picture settings for whatever the dvd is.*/
+					[self RevertPictureSizeToMax: NULL];
+					job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
+					if (job->keep_ratio == 1)
+					{
+						hb_fix_aspect( job, HB_KEEP_WIDTH );
+					}
+					job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
+				}
+				else
+				{
+					job->width = [[chosenPreset objectForKey:@"PictureWidth"]  intValue];
+					job->height = [[chosenPreset objectForKey:@"PictureHeight"]  intValue];
+					job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
+					if (job->keep_ratio == 1)
+					{
+						hb_fix_aspect( job, HB_KEEP_WIDTH );
+					}
+					job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
+					job->deinterlace = [[chosenPreset objectForKey:@"PictureDeinterlace"]  intValue];
+					/* If Cropping is set to custom, then recall all four crop values from
+						when the preset was created and apply them */
+					if ([[chosenPreset objectForKey:@"PictureAutoCrop"]  intValue] == 0)
+					{
+						[fPicSettingAutoCrop setStringValue: [NSString stringWithFormat:
+							@"%d", 0]];
+						
+						/* Here we use the custom crop values saved at the time the preset was saved */
+						job->crop[0] = [[chosenPreset objectForKey:@"PictureTopCrop"]  intValue];
+						job->crop[1] = [[chosenPreset objectForKey:@"PictureBottomCrop"]  intValue];
+						job->crop[2] = [[chosenPreset objectForKey:@"PictureLeftCrop"]  intValue];
+						job->crop[3] = [[chosenPreset objectForKey:@"PictureRightCrop"]  intValue];
+						
+					}
+					else /* if auto crop has been saved in preset, set to auto and use post scan auto crop */
+					{
+						[fPicSettingAutoCrop setStringValue: [NSString stringWithFormat:
+							@"%d", 1]];
+						/* Here we use the auto crop values determined right after scan */
+						job->crop[0] = AutoCropTop;
+						job->crop[1] = AutoCropBottom;
+						job->crop[2] = AutoCropLeft;
+						job->crop[3] = AutoCropRight;
+						
+					}
+				}
+				[self CalculatePictureSizing: NULL]; 
+			}
+			
+			
+			[fPresetMakeDefault setEnabled: YES];
+			}
 }
 }
 
