@@ -1384,27 +1384,35 @@ list = hb_get_titles( fHandle );
         hb_list_close( &job->filters );
     }
     job->filters = hb_list_init();
-#if 1
-    /* Run old deinterlacer if deinterlacing specified */
-    if( job->deinterlace )
+   
+   if( job->deinterlace == 1)
     {        
-        hb_filter_deinterlace.settings = "-1"; 
-        hb_list_add( job->filters, &hb_filter_deinterlace );
+        if ([fPicSettingDeinterlace intValue] == 1)
+        {
+            /* Run old deinterlacer by default */
+            hb_filter_deinterlace.settings = "-1"; 
+            hb_list_add( job->filters, &hb_filter_deinterlace );
+        }
+        if ([fPicSettingDeinterlace intValue] == 2)
+        {
+            /* Yadif mode 1 */
+            hb_filter_deinterlace.settings = "1"; 
+            hb_list_add( job->filters, &hb_filter_deinterlace );            
+        }
+        if ([fPicSettingDeinterlace intValue] == 3)
+        {
+            /* Yadif and Mcdeint */
+            hb_filter_deinterlace.settings = "1:-1:1"; 
+            hb_list_add( job->filters, &hb_filter_deinterlace );            
+        }
+        if ([fPicSettingDeinterlace intValue] == 4)
+        {
+            /* Yadif and Mcdeint Slow Modes*/
+            hb_filter_deinterlace.settings = "3:-1:2"; 
+            hb_list_add( job->filters, &hb_filter_deinterlace );            
+        }
     }
-#else
-    /* Choose your own filters! Here's some examples... */
-    hb_filter_detelecine.settings = "1:1:4:4:0:0";
-    hb_list_add( job->filters, &hb_filter_detelecine );
 
-    hb_filter_deinterlace.settings = "3:-1:2:10";
-    hb_list_add( job->filters, &hb_filter_deinterlace );
-
-    hb_filter_deblock.settings = "4:2";
-    hb_list_add( job->filters, &hb_filter_deblock );
-
-    hb_filter_denoise.settings = "3:2:3:3";
-    hb_list_add( job->filters, &hb_filter_denoise );
-#endif     
 }
 
 
@@ -2346,8 +2354,8 @@ list = hb_get_titles( fHandle );
 		@"%d", fTitle->job->height]];
 	[fPicSettingARkeep setStringValue: [NSString stringWithFormat:
 		@"%d", fTitle->job->keep_ratio]];		 
-	[fPicSettingDeinterlace setStringValue: [NSString stringWithFormat:
-		@"%d", fTitle->job->deinterlace]];
+	//[fPicSettingDeinterlace setStringValue: [NSString stringWithFormat:
+	//	@"%d", fTitle->job->deinterlace]];
 	[fPicSettingPAR setStringValue: [NSString stringWithFormat:
 		@"%d", fTitle->job->pixel_ratio]];
 		
@@ -2378,7 +2386,16 @@ list = hb_get_titles( fHandle );
 	[fPicSettingPARWidth setStringValue: @""];
 	[fPicSettingPARHeight setStringValue:  @""];
 	}
+	if ([fPicSettingDeinterlace intValue] == 0)
+	{
+	fTitle->job->deinterlace = 0;
+	}
+	else
+	{
+	fTitle->job->deinterlace = 1;
+	}
 		
+				
 	/* Set ON/Off values for the deinterlace/keep aspect ratio according to boolean */	
 	if (fTitle->job->keep_ratio > 0)
 	{
@@ -2388,14 +2405,28 @@ list = hb_get_titles( fHandle );
 	{
 		[fPicSettingARkeepDsply setStringValue: @"Off"];
 	}	
-	if (fTitle->job->deinterlace > 0)
-	{
-		[fPicSettingDeinterlaceDsply setStringValue: @"On"];
-	}
-	else
+	
+	if ([fPicSettingDeinterlace intValue] == 0)
 	{
 		[fPicSettingDeinterlaceDsply setStringValue: @"Off"];
 	}
+	else if ([fPicSettingDeinterlace intValue] == 1)
+	{
+		[fPicSettingDeinterlaceDsply setStringValue: @"Fast"];
+	}
+	else if ([fPicSettingDeinterlace intValue] == 2)
+	{
+		[fPicSettingDeinterlaceDsply setStringValue: @"Slow"];
+	}
+	else if ([fPicSettingDeinterlace intValue] == 3)
+	{
+		[fPicSettingDeinterlaceDsply setStringValue: @"Slower"];
+	}
+	else if ([fPicSettingDeinterlace intValue] == 4)
+	{
+		[fPicSettingDeinterlaceDsply setStringValue: @"Slowest"];
+	}
+	
 	if (fTitle->job->pixel_ratio > 0)
 	{
 		[fPicSettingPARDsply setStringValue: @"On"];
@@ -3590,7 +3621,7 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PictureWidth"];
 	[preset setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PictureHeight"];
 	[preset setObject:[NSNumber numberWithInt:fTitle->job->keep_ratio] forKey:@"PictureKeepRatio"];
-	[preset setObject:[NSNumber numberWithInt:fTitle->job->deinterlace] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:[fPicSettingDeinterlace intValue]] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:fTitle->job->pixel_ratio] forKey:@"PicturePAR"];
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
@@ -4705,7 +4736,7 @@ the user is using "Custom" settings by determining the sender*/
 						hb_fix_aspect( job, HB_KEEP_WIDTH );
 					}
 					job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
-					job->deinterlace = [[chosenPreset objectForKey:@"PictureDeinterlace"]  intValue];
+					[fPicSettingDeinterlace setStringValue: [NSString stringWithFormat: @"%d",[[chosenPreset objectForKey:@"PictureDeinterlace"]  intValue]]];
 					/* If Cropping is set to custom, then recall all four crop values from
 						when the preset was created and apply them */
 					if ([[chosenPreset objectForKey:@"PictureAutoCrop"]  intValue] == 0)

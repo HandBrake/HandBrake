@@ -225,7 +225,8 @@
                 fCropRightStepper = NSStepper; 
                 fCropTopField = NSTextField; 
                 fCropTopStepper = NSStepper; 
-                fDeinterlaceCheck = NSButton; 
+                fDeinterlaceLevelMainWindow = NSTextField; 
+                fDeinterlacePopUp = NSPopUpButton; 
                 fEffectsCheck = NSButton; 
                 fHeightField = NSTextField; 
                 fHeightStepper = NSStepper; 

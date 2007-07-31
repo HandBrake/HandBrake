@@ -85,7 +85,20 @@ static int GetAlignedSize( int size )
     [fCropBottomStepper setMaxValue: title->height/2-2];
     [fCropLeftStepper   setMaxValue: title->width/2-2];
     [fCropRightStepper  setMaxValue: title->width/2-2];
-    [fDeinterlaceCheck  setState:    job->deinterlace ? NSOnState : NSOffState];
+    
+	
+	/* we use a popup to show the deinterlace settings */
+	[fDeinterlacePopUp removeAllItems];
+    [fDeinterlacePopUp addItemWithTitle: @"None"];
+    [fDeinterlacePopUp addItemWithTitle: @"Fast"];
+    [fDeinterlacePopUp addItemWithTitle: @"Slow"];
+	[fDeinterlacePopUp addItemWithTitle: @"Slower"];
+	[fDeinterlacePopUp addItemWithTitle: @"Slowest"];
+    /* we need a conditional to figure out how to set deinterlace */
+	
+	[fDeinterlacePopUp selectItemAtIndex: [fDeinterlaceLevelMainWindow intValue]];
+	
+	
 	[fPARCheck  setState:    job->pixel_ratio ? NSOnState : NSOffState];
 	if ([fAutoCropMainWindow  intValue] == 0)
 	{
@@ -220,7 +233,19 @@ static int GetAlignedSize( int size )
     job->width       = [fWidthStepper  intValue];
     job->height      = [fHeightStepper intValue];
     job->keep_ratio  = ( [fRatioCheck state] == NSOnState );
-    job->deinterlace = ( [fDeinterlaceCheck state] == NSOnState );
+	
+	/* new multilevel deinterlacing popup */
+	[fDeinterlaceLevelMainWindow setStringValue: [NSString stringWithFormat: @"%d",[fDeinterlacePopUp indexOfSelectedItem]]];
+	if ([fDeinterlaceLevelMainWindow stringValue] == 0)
+	{
+    job->deinterlace = 0;
+	}
+	else
+	{
+	job->deinterlace = 1;
+	}
+	
+	
 	job->pixel_ratio = ( [fPARCheck state] == NSOnState );
 
 
