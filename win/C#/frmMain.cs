@@ -59,6 +59,7 @@ namespace Handbrake
             Thread.Sleep(3000);
             splash.Close();
         }
+
         public void loadUserDefaults()
         { 
             try
@@ -97,6 +98,18 @@ namespace Handbrake
                     }
   
                     drp_deInterlace_option.Text = Properties.Settings.Default.DeInterlace;
+                    drp_deNoise.Text = Properties.Settings.Default.denoise;
+
+                    if (Properties.Settings.Default.detelecine == "Checked")
+                    {
+                        check_detelecine.CheckState = CheckState.Checked;
+                    }
+
+                    if (Properties.Settings.Default.detelecine == "Checked")
+                    {
+                        check_deblock.CheckState = CheckState.Checked;
+                    }
+
 
                     if (Properties.Settings.Default.Grayscale == "Checked")
                     {
@@ -488,6 +501,9 @@ namespace Handbrake
             Properties.Settings.Default.PixelRatio = CheckPixelRatio.CheckState.ToString();
             Properties.Settings.Default.turboFirstPass = check_turbo.CheckState.ToString();
             Properties.Settings.Default.largeFile = check_largeFile.CheckState.ToString();
+            Properties.Settings.Default.detelecine = check_detelecine.CheckState.ToString();
+            Properties.Settings.Default.denoise = drp_deNoise.Text;
+            Properties.Settings.Default.deblock = check_deblock.CheckState.ToString();
             //Audio Settings Tab
             Properties.Settings.Default.AudioBitrate = drp_audioBitrate.Text;
             Properties.Settings.Default.AudioSampleRate = drp_audioSampleRate.Text;
@@ -1304,16 +1320,16 @@ namespace Handbrake
                     case "None":
                         deinterlace = "";
                         break;
-                    case "Origional ( Fast )":
+                    case "Origional (Fast)":
                         deinterlace = " --deinterlace";
                         break;
-                    case "yadif ( Slow )":
+                    case "yadif (Slow)":
                         deinterlace = " --deinterlace=" + '"' + "1" + '"';
                         break;
-                    case "yadif + mcdeint ( Slower )":
-                        deinterlace = " -d " + '"' + "1:-1:1" + '"';
+                    case "yadif + mcdeint (Slower)":
+                        deinterlace = " --deinterlace=" + '"' + "1:-1:1" + '"';
                         break;
-                    case "yadif + mcdeint  ( Slowest )":
+                    case "yadif + mcdeint (Slowest)":
                         deinterlace = " --deinterlace=" + '"' + "3:-1:2" + '"';
                         break;
                     default:
@@ -1343,6 +1359,9 @@ namespace Handbrake
             string videoFramerate = drp_videoFramerate.Text;
             string turboH264 = "";
             string largeFile = "";
+            string deblock = "";
+            string detelecine = "";
+            string denoise = "";
 
             if (videoBitrate !=  "")
                 videoBitrate = " -b "+ videoBitrate;
@@ -1379,16 +1398,29 @@ namespace Handbrake
             if (check_largeFile.Checked)
                 largeFile = " -4 ";
 
-            /*
-             * -7, --deblock           Deblock video with pp7 filter
-             * <QP:M>            (default 0:2)
-             * -8, --denoise           Denoise video with hqdn3d filter
-             * <SL:SC:TL:TC>     (default 4:3:6:4.5)
-             * -9, --detelecine        Detelecine video with pullup filter
-             * <L:R:T:B:SB:MP>   (default 1:1:4:4:0:0)
-             */
+            if (check_deblock.Checked)
+                deblock = " --deblock";
 
-            string queryVideoSettings = videoBitrate + videoFilesize + vidQSetting + twoPassEncoding  + videoFramerate + turboH264 + largeFile;
+            if (check_detelecine.Checked)
+                detelecine = " --detelecine";
+
+            switch (drp_deNoise.Text)
+            {
+                case "None":
+                    denoise = "";
+                    break;
+                case "Weak":
+                    denoise = " --denoise=3:2:3:3";
+                    break;
+                case "Strong":
+                    denoise = " --denoise=7:7:5:5";
+                    break;
+                default:
+                    denoise = "";
+                    break;
+            }
+
+            string queryVideoSettings = videoBitrate + videoFilesize + vidQSetting + twoPassEncoding + videoFramerate + turboH264 + largeFile + deblock + detelecine + denoise;
             // ----------------------------------------------------------------------
 
             // Audio Settings Tab
@@ -1491,7 +1523,6 @@ namespace Handbrake
 
             return querySource+ queryDestination+ queryPictureSettings+ queryVideoSettings+ h264Settings+ queryAudioSettings+ queryAdvancedSettings+ verbose;
         }
-
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

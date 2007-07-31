@@ -489,5 +489,41 @@ namespace Handbrake.Properties {
                 this["FullDVDInfo"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string denoise {
+            get {
+                return ((string)(this["denoise"]));
+            }
+            set {
+                this["denoise"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string detelecine {
+            get {
+                return ((string)(this["detelecine"]));
+            }
+            set {
+                this["detelecine"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string deblock {
+            get {
+                return ((string)(this["deblock"]));
+            }
+            set {
+                this["deblock"] = value;
+            }
+        }
     }
 }

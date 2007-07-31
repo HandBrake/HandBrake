@@ -47,11 +47,9 @@ namespace Handbrake
             this.drp_videoEncoder = new System.Windows.Forms.ComboBox();
             this.drp_audioCodec = new System.Windows.Forms.ComboBox();
             this.CheckCRF = new System.Windows.Forms.CheckBox();
-            this.drp_deBlock = new System.Windows.Forms.ComboBox();
-            this.drp_DeNoise = new System.Windows.Forms.ComboBox();
-            this.drp_deTelecine = new System.Windows.Forms.ComboBox();
             this.drp_subtitle = new System.Windows.Forms.ComboBox();
             this.drp_deInterlace_option = new System.Windows.Forms.ComboBox();
+            this.drp_deNoise = new System.Windows.Forms.ComboBox();
             this.DVD_Open = new System.Windows.Forms.FolderBrowserDialog();
             this.File_Open = new System.Windows.Forms.OpenFileDialog();
             this.ISO_Open = new System.Windows.Forms.OpenFileDialog();
@@ -134,9 +132,10 @@ namespace Handbrake
             this.Label18 = new System.Windows.Forms.Label();
             this.drp_audioSampleRate = new System.Windows.Forms.ComboBox();
             this.TabPage3 = new System.Windows.Forms.TabPage();
-            this.label25 = new System.Windows.Forms.Label();
             this.label24 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
+            this.check_deblock = new System.Windows.Forms.CheckBox();
+            this.check_detelecine = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.Label37 = new System.Windows.Forms.Label();
             this.check_largeFile = new System.Windows.Forms.CheckBox();
@@ -388,54 +387,6 @@ namespace Handbrake
             this.ToolTip.SetToolTip(this.CheckCRF, "Constant Rate Factor");
             this.CheckCRF.UseVisualStyleBackColor = true;
             // 
-            // drp_deBlock
-            // 
-            this.drp_deBlock.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.drp_deBlock.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.drp_deBlock.FormattingEnabled = true;
-            this.drp_deBlock.Items.AddRange(new object[] {
-            "Normal (-d)",
-            "yadif(-d=\"1\")",
-            "yadif+mcdeint(-d=\"1:-1:1\")"});
-            this.drp_deBlock.Location = new System.Drawing.Point(470, 151);
-            this.drp_deBlock.Name = "drp_deBlock";
-            this.drp_deBlock.Size = new System.Drawing.Size(147, 21);
-            this.drp_deBlock.TabIndex = 61;
-            this.drp_deBlock.Text = "None";
-            this.ToolTip.SetToolTip(this.drp_deBlock, "Select the subtitle language you require from this dropdown.");
-            // 
-            // drp_DeNoise
-            // 
-            this.drp_DeNoise.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.drp_DeNoise.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.drp_DeNoise.FormattingEnabled = true;
-            this.drp_DeNoise.Items.AddRange(new object[] {
-            "Normal (-d)",
-            "yadif(-d=\"1\")",
-            "yadif+mcdeint(-d=\"1:-1:1\")"});
-            this.drp_DeNoise.Location = new System.Drawing.Point(470, 178);
-            this.drp_DeNoise.Name = "drp_DeNoise";
-            this.drp_DeNoise.Size = new System.Drawing.Size(147, 21);
-            this.drp_DeNoise.TabIndex = 64;
-            this.drp_DeNoise.Text = "None";
-            this.ToolTip.SetToolTip(this.drp_DeNoise, "Select the subtitle language you require from this dropdown.");
-            // 
-            // drp_deTelecine
-            // 
-            this.drp_deTelecine.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.drp_deTelecine.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.drp_deTelecine.FormattingEnabled = true;
-            this.drp_deTelecine.Items.AddRange(new object[] {
-            "Normal (-d)",
-            "yadif(-d=\"1\")",
-            "yadif+mcdeint(-d=\"1:-1:1\")"});
-            this.drp_deTelecine.Location = new System.Drawing.Point(470, 205);
-            this.drp_deTelecine.Name = "drp_deTelecine";
-            this.drp_deTelecine.Size = new System.Drawing.Size(147, 21);
-            this.drp_deTelecine.TabIndex = 65;
-            this.drp_deTelecine.Text = "None";
-            this.ToolTip.SetToolTip(this.drp_deTelecine, "Select the subtitle language you require from this dropdown.");
-            // 
             // drp_subtitle
             // 
             this.drp_subtitle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -455,16 +406,32 @@ namespace Handbrake
             this.drp_deInterlace_option.FormattingEnabled = true;
             this.drp_deInterlace_option.Items.AddRange(new object[] {
             "None",
-            "Origional ( Fast )",
-            "yadif ( Slow )",
-            "yadif + mcdeint ( Slower )",
-            "yadif + mcdeint  ( Slowest )"});
-            this.drp_deInterlace_option.Location = new System.Drawing.Point(470, 124);
+            "Origional (Fast)",
+            "yadif (Slow)",
+            "yadif + mcdeint (Slower)",
+            "yadif + mcdeint  (Slowest)"});
+            this.drp_deInterlace_option.Location = new System.Drawing.Point(467, 154);
             this.drp_deInterlace_option.Name = "drp_deInterlace_option";
-            this.drp_deInterlace_option.Size = new System.Drawing.Size(147, 21);
+            this.drp_deInterlace_option.Size = new System.Drawing.Size(161, 21);
             this.drp_deInterlace_option.TabIndex = 67;
             this.drp_deInterlace_option.Text = "None";
             this.ToolTip.SetToolTip(this.drp_deInterlace_option, "Select the subtitle language you require from this dropdown.");
+            // 
+            // drp_deNoise
+            // 
+            this.drp_deNoise.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drp_deNoise.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.drp_deNoise.FormattingEnabled = true;
+            this.drp_deNoise.Items.AddRange(new object[] {
+            "None",
+            "Weak",
+            "Strong"});
+            this.drp_deNoise.Location = new System.Drawing.Point(467, 211);
+            this.drp_deNoise.Name = "drp_deNoise";
+            this.drp_deNoise.Size = new System.Drawing.Size(161, 21);
+            this.drp_deNoise.TabIndex = 72;
+            this.drp_deNoise.Text = "None";
+            this.ToolTip.SetToolTip(this.drp_deNoise, "Select the subtitle language you require from this dropdown.");
             // 
             // File_Open
             // 
@@ -1321,14 +1288,13 @@ namespace Handbrake
             // TabPage3
             // 
             this.TabPage3.BackColor = System.Drawing.SystemColors.Control;
-            this.TabPage3.Controls.Add(this.label25);
             this.TabPage3.Controls.Add(this.label24);
+            this.TabPage3.Controls.Add(this.drp_deNoise);
             this.TabPage3.Controls.Add(this.label11);
+            this.TabPage3.Controls.Add(this.check_deblock);
+            this.TabPage3.Controls.Add(this.check_detelecine);
             this.TabPage3.Controls.Add(this.label4);
             this.TabPage3.Controls.Add(this.drp_deInterlace_option);
-            this.TabPage3.Controls.Add(this.drp_deTelecine);
-            this.TabPage3.Controls.Add(this.drp_DeNoise);
-            this.TabPage3.Controls.Add(this.drp_deBlock);
             this.TabPage3.Controls.Add(this.Label37);
             this.TabPage3.Controls.Add(this.check_largeFile);
             this.TabPage3.Controls.Add(this.check_turbo);
@@ -1354,41 +1320,53 @@ namespace Handbrake
             this.TabPage3.Text = "Video Settings";
             this.TabPage3.UseVisualStyleBackColor = true;
             // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label25.Location = new System.Drawing.Point(365, 208);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(72, 13);
-            this.label25.TabIndex = 71;
-            this.label25.Text = "Detelecine:";
-            // 
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label24.Location = new System.Drawing.Point(365, 182);
+            this.label24.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label24.Location = new System.Drawing.Point(365, 133);
             this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(58, 13);
-            this.label24.TabIndex = 70;
-            this.label24.Text = "Denoise:";
+            this.label24.Size = new System.Drawing.Size(109, 13);
+            this.label24.TabIndex = 73;
+            this.label24.Text = "Picture Cleanup";
             // 
             // label11
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(365, 154);
+            this.label11.Location = new System.Drawing.Point(365, 214);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(58, 13);
-            this.label11.TabIndex = 69;
-            this.label11.Text = "Deblock:";
+            this.label11.TabIndex = 71;
+            this.label11.Text = "Denoise:";
+            // 
+            // check_deblock
+            // 
+            this.check_deblock.AutoSize = true;
+            this.check_deblock.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_deblock.Location = new System.Drawing.Point(467, 186);
+            this.check_deblock.Name = "check_deblock";
+            this.check_deblock.Size = new System.Drawing.Size(72, 17);
+            this.check_deblock.TabIndex = 70;
+            this.check_deblock.Text = "Deblock";
+            this.check_deblock.UseVisualStyleBackColor = true;
+            // 
+            // check_detelecine
+            // 
+            this.check_detelecine.AutoSize = true;
+            this.check_detelecine.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_detelecine.Location = new System.Drawing.Point(368, 185);
+            this.check_detelecine.Name = "check_detelecine";
+            this.check_detelecine.Size = new System.Drawing.Size(86, 17);
+            this.check_detelecine.TabIndex = 69;
+            this.check_detelecine.Text = "Detelecine";
+            this.check_detelecine.UseVisualStyleBackColor = true;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(365, 127);
+            this.label4.Location = new System.Drawing.Point(365, 157);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(77, 13);
             this.label4.TabIndex = 68;
@@ -1956,9 +1934,6 @@ namespace Handbrake
         internal System.Windows.Forms.Label Label18;
         internal System.Windows.Forms.ComboBox drp_audioSampleRate;
         internal System.Windows.Forms.TabPage TabPage3;
-        internal System.Windows.Forms.ComboBox drp_deTelecine;
-        internal System.Windows.Forms.ComboBox drp_DeNoise;
-        internal System.Windows.Forms.ComboBox drp_deBlock;
         internal System.Windows.Forms.Label Label37;
         internal System.Windows.Forms.CheckBox check_largeFile;
         internal System.Windows.Forms.CheckBox check_turbo;
@@ -1998,11 +1973,13 @@ namespace Handbrake
         internal System.Windows.Forms.TextBox text_left;
         internal System.Windows.Forms.TabControl advancedOptions;
         internal System.Windows.Forms.ComboBox drp_deInterlace_option;
-        internal System.Windows.Forms.Label label24;
-        internal System.Windows.Forms.Label label11;
         internal System.Windows.Forms.Label label4;
         internal System.Windows.Forms.Label Label46;
-        internal System.Windows.Forms.Label label25;
+        internal System.Windows.Forms.CheckBox check_deblock;
+        internal System.Windows.Forms.CheckBox check_detelecine;
+        internal System.Windows.Forms.Label label24;
+        internal System.Windows.Forms.ComboBox drp_deNoise;
+        internal System.Windows.Forms.Label label11;
 
     }
 }
