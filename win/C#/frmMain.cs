@@ -1158,9 +1158,18 @@ namespace Handbrake
             }
         }
 
-        //---------------------------------------------------
-        //  The query Generation function.
-        //---------------------------------------------------
+
+
+
+
+        /* 
+         * ---------------------------------------------------
+         * 
+         * The query Generation function.
+         * 
+         * ---------------------------------------------------
+         */
+
         public string GenerateTheQuery()
         {
             string source = text_source.Text;
@@ -1270,6 +1279,11 @@ namespace Handbrake
             string cropRight = text_right.Text;
             string subtitles = drp_subtitle.Text;
             string cropOut = "";
+            string deInterlace_Option = drp_deInterlace_option.Text;
+            string deinterlace = "";
+            string grayscale = "";
+            string pixelRatio = "";
+            string ChapterMarkers = "";
             // Returns Crop Query
 
             if (cropSetting == "Auto Crop")
@@ -1290,7 +1304,38 @@ namespace Handbrake
                 subtitles = " -s "+ tempSub[0];
             }
 
-            string queryPictureSettings = cropOut+ subtitles;
+            if (check_DeInterlace.Checked)
+            {
+                switch (deInterlace_Option)
+                {
+                    case "Default":
+                        deinterlace = " --deinterlace";
+                        break;
+                    case "yadif":
+                        deinterlace = " --deinterlace=" + '"' + "1" + '"';
+                        break;
+                    case "yadif + mcdeint":
+                        deinterlace = " -d " + '"' + "1:-1:1" + '"';
+                        break;
+                    case "yadif + mcdeint (Slow)":
+                        deinterlace = " --deinterlace=" + '"' + "3:-1:2" + '"';
+                        break;
+                    default:
+                        deinterlace = " --deinterlace=";
+                        break;
+                }
+            }
+
+            if (check_grayscale.Checked)
+                grayscale = " -g ";
+
+            if (CheckPixelRatio.Checked)
+                pixelRatio = " -p ";
+
+            if (Check_ChapterMarkers.Checked)
+                ChapterMarkers = " -m ";
+
+            string queryPictureSettings = cropOut + subtitles + deinterlace + grayscale + pixelRatio + ChapterMarkers;
             // ----------------------------------------------------------------------
 
             // Video Settings Tab
@@ -1300,11 +1345,7 @@ namespace Handbrake
             int videoQuality = slider_videoQuality.Value;
             string vidQSetting = "";
             string twoPassEncoding = "";
-            string deinterlace = "";
-            string grayscale = "";
             string videoFramerate = drp_videoFramerate.Text;
-            string pixelRatio = "";
-            string ChapterMarkers = "";
             string turboH264 = "";
             string largeFile = "";
 
@@ -1332,22 +1373,10 @@ namespace Handbrake
             if (check_2PassEncode.Checked)
                 twoPassEncoding = " -2 ";
 
-            if (check_DeInterlace.Checked)
-                deinterlace = " -d ";
-
-            if (check_grayscale.Checked)
-                grayscale = " -g ";
-
             if (videoFramerate ==  "Automatic")
                 videoFramerate = "";
             else
                 videoFramerate = " -r "+ videoFramerate;
-
-            if (CheckPixelRatio.Checked)
-                pixelRatio = " -p ";
-
-            if (Check_ChapterMarkers.Checked)
-                ChapterMarkers = " -m ";
 
             if (check_turbo.Checked)
                 turboH264 = " -T ";
@@ -1355,7 +1384,16 @@ namespace Handbrake
             if (check_largeFile.Checked)
                 largeFile = " -4 ";
 
-            string queryVideoSettings = videoBitrate + videoFilesize + vidQSetting + twoPassEncoding + deinterlace + grayscale + videoFramerate + pixelRatio + ChapterMarkers + turboH264 + largeFile;
+            /*
+             * -7, --deblock           Deblock video with pp7 filter
+             * <QP:M>            (default 0:2)
+             * -8, --denoise           Denoise video with hqdn3d filter
+             * <SL:SC:TL:TC>     (default 4:3:6:4.5)
+             * -9, --detelecine        Detelecine video with pullup filter
+             * <L:R:T:B:SB:MP>   (default 1:1:4:4:0:0)
+             */
+
+            string queryVideoSettings = videoBitrate + videoFilesize + vidQSetting + twoPassEncoding  + videoFramerate + turboH264 + largeFile;
             // ----------------------------------------------------------------------
 
             // Audio Settings Tab
@@ -1458,8 +1496,6 @@ namespace Handbrake
 
             return querySource+ queryDestination+ queryPictureSettings+ queryVideoSettings+ h264Settings+ queryAudioSettings+ queryAdvancedSettings+ verbose;
         }
-
-        
 
         // This is the END of the road ------------------------------------------------------------------------------
     }
