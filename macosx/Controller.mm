@@ -38,7 +38,6 @@ static int FormatSettings[4][10] =
 /* We setup the toolbar values here */
 static NSString*       MyDocToolbarIdentifier          = @"My Document Toolbar Identifier";
 static NSString*       ToggleDrawerIdentifier  = @"Toggle Drawer Item Identifier";
-//static NSString*       ToggleDrawerIdentifier  = @"Toggle Presets Item Identifier";
 static NSString*       StartEncodingIdentifier         = @"Start Encoding Item Identifier";
 static NSString*       PauseEncodingIdentifier         = @"Pause Encoding Item Identifier";
 static NSString*       ShowQueueIdentifier     = @"Show Queue Item Identifier";
@@ -132,9 +131,11 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
     [fWindow center];
 
     [self TranslateStrings];
-    currentScanCount = 0;
+    /* Initialize currentScanCount so HB can use it to
+	   evaluate successive scans */
+	currentScanCount = 0;
 
-/* Init User Presets .plist */
+    /* Init User Presets .plist */
 	/* We declare the default NSFileManager into fileManager */
 	NSFileManager * fileManager = [NSFileManager defaultManager];
 	//presetPrefs = [[NSUserDefaults standardUserDefaults] retain];
@@ -992,12 +993,11 @@ list = hb_get_titles( fHandle );
 		/* We set the auto crop in the main window to value "1" just as in PictureController,
 			as it does not seem to be taken from any job-> variable */
 		[fPicSettingAutoCrop setStringValue: [NSString stringWithFormat:
-			@"%d", 1]];
+			@"%d", 0]];
 		
 		[self TitlePopUpChanged: NULL];
 		[self EnableUI: YES];
-		//[fPauseButton setEnabled: NO];
-		//[fRipButton   setEnabled: YES];
+		
 		startButtonEnabled = YES;
 		stopOrStart = NO;
 		AddToQueueButtonEnabled = YES;
@@ -1651,10 +1651,15 @@ list = hb_get_titles( fHandle );
 							 @"%d", fTitle->width]];
 	[fPicSrcHeight setStringValue: [NSString stringWithFormat:
 							 @"%d", fTitle->height]];
+							 
 	/* We get the originial output picture width and height and put them
 	in variables for use with some presets later on */
 	PicOrigOutputWidth = job->width;
 	PicOrigOutputHeight = job->height;
+	AutoCropTop = job->crop[0];
+	AutoCropBottom = job->crop[1];
+	AutoCropLeft = job->crop[2];
+	AutoCropRight = job->crop[3];
 	/* we test getting the max output value for pic sizing here to be used later*/
 	[fPicSettingWidth setStringValue: [NSString stringWithFormat:
 		@"%d", PicOrigOutputWidth]];
@@ -3584,7 +3589,7 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithInt:fTitle->job->pixel_ratio] forKey:@"PicturePAR"];
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
-	//[preset setObject:[NSNumber numberWithInt:[[fPictureController fCropMatrix] selectedRow]] forKey:@"PictureAutoCrop"];
+	[preset setObject:[NSNumber numberWithInt:[fPicSettingAutoCrop intValue]] forKey:@"PictureAutoCrop"];
 
 	[preset setObject:[NSNumber numberWithInt:job->crop[0]] forKey:@"PictureTopCrop"];
     [preset setObject:[NSNumber numberWithInt:job->crop[1]] forKey:@"PictureBottomCrop"];
@@ -4693,24 +4698,31 @@ the user is using "Custom" settings by determining the sender*/
 					hb_fix_aspect( job, HB_KEEP_WIDTH );
 				}
 				job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
-				/* AutoCrop is in preset, then use the autocrop settings for each dvd */
-				if ([[chosenPreset objectForKey:@"PictureAutoCrop"]  intValue] == 1)
-				{
-				[fPicSettingAutoCrop setStringValue: [NSString stringWithFormat:
-				@"%d", 1]];
-				job->crop[0] = [[chosenPreset objectForKey:@"PictureTopCrop"]  intValue];
-				job->crop[1] = [[chosenPreset objectForKey:@"PictureBottomCrop"]  intValue];
-				job->crop[2] = [[chosenPreset objectForKey:@"PictureLeftCrop"]  intValue];
-				job->crop[3] = [[chosenPreset objectForKey:@"PictureRightCrop"]  intValue];
-				}
-				else /* if custom crop has been saved in preset, use the saved custom cropping regardless of the source */
+				job->deinterlace = [[chosenPreset objectForKey:@"PictureDeinterlace"]  intValue];
+				/* If Cropping is set to custom, then recall all four crop values from
+				   when the preset was created and apply them */
+				if ([[chosenPreset objectForKey:@"PictureAutoCrop"]  intValue] == 0)
 				{
 				[fPicSettingAutoCrop setStringValue: [NSString stringWithFormat:
 				@"%d", 0]];
+				
+				/* Here we use the custom crop values saved at the time the preset was saved */
 				job->crop[0] = [[chosenPreset objectForKey:@"PictureTopCrop"]  intValue];
 				job->crop[1] = [[chosenPreset objectForKey:@"PictureBottomCrop"]  intValue];
 				job->crop[2] = [[chosenPreset objectForKey:@"PictureLeftCrop"]  intValue];
 				job->crop[3] = [[chosenPreset objectForKey:@"PictureRightCrop"]  intValue];
+				
+				}
+				else /* if auto crop has been saved in preset, set to auto and use post scan auto crop */
+				{
+				[fPicSettingAutoCrop setStringValue: [NSString stringWithFormat:
+				@"%d", 1]];
+				/* Here we use the auto crop values determined right after scan */
+                job->crop[0] = AutoCropTop;
+				job->crop[1] = AutoCropBottom;
+				job->crop[2] = AutoCropLeft;
+				job->crop[3] = AutoCropRight;
+				
 				}
 			}
 			[self CalculatePictureSizing: NULL]; 

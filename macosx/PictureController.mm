@@ -90,6 +90,15 @@ static int GetAlignedSize( int size )
 	if ([fAutoCropMainWindow  intValue] == 0)
 	{
 	[fCropMatrix  selectCellAtRow: 1 column:0];
+	/* If auto, lets set the crop steppers according to current job->crop values */
+	[fCropTopStepper    setIntValue: job->crop[0]];
+    [fCropTopField      setIntValue: job->crop[0]];
+    [fCropBottomStepper setIntValue: job->crop[1]];
+    [fCropBottomField   setIntValue: job->crop[1]];
+    [fCropLeftStepper   setIntValue: job->crop[2]];
+    [fCropLeftField     setIntValue: job->crop[2]];
+    [fCropRightStepper  setIntValue: job->crop[3]];
+    [fCropRightField    setIntValue: job->crop[3]];
 	}
 	else
 	{

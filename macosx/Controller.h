@@ -107,7 +107,10 @@
     /* Picture variables */
 	int                        PicOrigOutputWidth;
 	int                        PicOrigOutputHeight;
-	
+	int                        AutoCropTop;
+	int                        AutoCropBottom;
+	int                        AutoCropLeft;
+	int                        AutoCropRight;
     /* Subtitles box */
     IBOutlet NSTextField         * fSubField;
     IBOutlet NSPopUpButton       * fSubPopUp;
