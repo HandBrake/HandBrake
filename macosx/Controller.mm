@@ -4578,7 +4578,7 @@ the user is using "Custom" settings by determining the sender*/
 	{
 		[[UserPresets objectAtIndex:[tableView selectedRow]] setObject:[NSNumber numberWithInt:2] forKey:@"Default"];
 	}
-	
+	presetUserDefault = [tableView selectedRow];
 	
 	/* We save all of the preset data here */
     [self savePreset];
