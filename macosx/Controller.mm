@@ -4640,7 +4640,7 @@ the user is using "Custom" settings by determining the sender*/
 	   or not clicking on a preset will do anything */
 	if ([fPresetsAdd isEnabled])
 	{
-		if ([tableView selectedRow])
+		if ([tableView selectedRow] >= 0)
 		{	
 			/* we get the chosen preset from the UserPresets array */
 			chosenPreset = [UserPresets objectAtIndex:[tableView selectedRow]];
