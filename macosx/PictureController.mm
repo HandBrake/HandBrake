@@ -236,7 +236,7 @@ static int GetAlignedSize( int size )
 	
 	/* new multilevel deinterlacing popup */
 	[fDeinterlaceLevelMainWindow setStringValue: [NSString stringWithFormat: @"%d",[fDeinterlacePopUp indexOfSelectedItem]]];
-	if ([fDeinterlaceLevelMainWindow stringValue] == 0)
+	if ([fDeinterlacePopUp indexOfSelectedItem] == 0)
 	{
     job->deinterlace = 0;
 	}
