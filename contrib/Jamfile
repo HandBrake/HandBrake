@@ -48,14 +48,8 @@ LibA52 $(SUBDIR)/lib/liba52.a  : $(SUBDIR)/a52dec.tar.gz ;
 # libavcodec
 rule LibAvCodec
 {
-    FFMPEG_PATCH = "patch -p1 < ../patch-ffmpeg.patch" ;
-    if $(OS) = MACOSX && $(OSPLAT) = X86
-    {
-       FFMPEG_OPTIONS  = --enable-memalign-hack ;
-     # This patch simply don't apply correctly so don't try to do it
-     #  FFMPEG_PATCH   += " && patch -p1 < ../patch-ffmpeg-macintel.patch" ;
-    }
-    else if $(OS) = CYGWIN
+    FFMPEG_PATCH = "patch -p0 < ../patch-ffmpeg.patch" ;
+    if $(OS) = CYGWIN
     {
         FFMPEG_PATCH += " && patch -p1 < ../patch-ffmpeg-cygwin.patch " ;
     }
@@ -67,7 +61,7 @@ actions LibAvCodec
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf ffmpeg && tar xzf ffmpeg.tar.gz &&
     cd ffmpeg && $(FFMPEG_PATCH) &&
-    ./configure --prefix=$CONTRIB $(FFMPEG_OPTIONS) --enable-gpl --disable-audio-beos --enable-shared --enable-static&&
+    ./configure --prefix=$CONTRIB $(FFMPEG_OPTIONS) --enable-gpl --enable-swscaler --disable-decoders --enable-decoder=mp2 --disable-encoders --enable-encoder=mpeg4 --enable-encoder=mp2 --enable-encoder=ac3 --enable-encoder=snow --disable-audio-beos --enable-shared --enable-static &&
     make && make install &&
     strip -S $CONTRIB/lib/libavcodec.a
 }
@@ -85,6 +79,7 @@ actions LibAvUtil
 }
 LibAvUtil $(SUBDIR)/lib/libavutil.a : $(SUBDIR)/lib/libavcodec.a ;
 LibAvUtil $(SUBDIR)/lib/libavformat.a : $(SUBDIR)/lib/libavcodec.a ;
+LibAvUtil $(SUBDIR)/lib/libswscale.a : $(SUBDIR)/lib/libavcodec.a ;
 
 # CSS doesn't work on Cygwin/Windows as of now, so don't use it.
 if $(OS) != CYGWIN
@@ -243,7 +238,7 @@ actions LibMpeg2
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf mpeg2dec && tar xzf mpeg2dec.tar.gz && cd mpeg2dec &&
-    ./configure --prefix=$CONTRIB --disable-shared &&
+    ./configure --prefix=$CONTRIB --disable-shared --disable-sdl &&
     make && make install &&
     strip -S $CONTRIB/lib/libmpeg2.a
 }

@@ -892,6 +892,7 @@
 					../contrib/lib/libxvidcore.a,
 					../contrib/lib/libdca.a,
 					../contrib/lib/libmkv.a,
+					../contrib/lib/libswscale.a,
 					"-ldl",
 					"-flat_namespace",
 					"-read_only_relocs",
@@ -950,6 +951,7 @@
 					../contrib/lib/libxvidcore.a,
 					../contrib/lib/libdca.a,
 					../contrib/lib/libmkv.a,
+					../contrib/lib/libswscale.a,
 					"-ldl",
 					"-flat_namespace",
 					"-read_only_relocs",
@@ -1006,6 +1008,7 @@
 					../contrib/lib/libxvidcore.a,
 					../contrib/lib/libdca.a,
 					../contrib/lib/libmkv.a,
+					../contrib/lib/libswscale.a,
 					"-ldl",
 					"-flat_namespace",
 					"-read_only_relocs",
@@ -1062,6 +1065,7 @@
 					../contrib/lib/libxvidcore.a,
 					../contrib/lib/libdca.a,
 					../contrib/lib/libmkv.a,
+					../contrib/lib/libswscale.a,
 					"-ldl",
 					"-flat_namespace",
 					"-read_only_relocs",
@@ -1142,6 +1146,7 @@
 					../contrib/lib/libxvidcore.a,
 					../contrib/lib/libdca.a,
 					../contrib/lib/libmkv.a,
+					../contrib/lib/libswscale.a,
 				);
 				PRODUCT_NAME = HandBrake;
 				SECTORDER_FLAGS = "";
@@ -1191,6 +1196,7 @@
 					../contrib/lib/libxvidcore.a,
 					../contrib/lib/libdca.a,
 					../contrib/lib/libmkv.a,
+					../contrib/lib/libswscale.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "Instant HandBrake";
@@ -1232,6 +1238,7 @@
 					"-lz",
 					../contrib/lib/libdca.a,
 					../contrib/lib/libmkv.a,
+					../contrib/lib/libswscale.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = HandBrakeCLI;
@@ -1374,6 +1381,7 @@
 					"-lz",
 					../contrib/lib/libdca.a,
 					../contrib/lib/libmkv.a,
+					../contrib/lib/libswscale.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = HandBrakeCLI;
@@ -1416,6 +1424,7 @@
 					"-lz",
 					../contrib/lib/libdca.a,
 					../contrib/lib/libmkv.a,
+					../contrib/lib/libswscale.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = HandBrakeCLI;
@@ -1456,6 +1465,7 @@
 					"-lz",
 					../contrib/lib/libdca.a,
 					../contrib/lib/libmkv.a,
+					../contrib/lib/libswscale.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = HandBrakeCLI;
@@ -1503,6 +1513,7 @@
 					../contrib/lib/libxvidcore.a,
 					../contrib/lib/libdca.a,
 					../contrib/lib/libmkv.a,
+					../contrib/lib/libswscale.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "Instant HandBrake";
@@ -1550,6 +1561,7 @@
 					../contrib/lib/libxvidcore.a,
 					../contrib/lib/libdca.a,
 					../contrib/lib/libmkv.a,
+					../contrib/lib/libswscale.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "Instant HandBrake";
@@ -1595,6 +1607,7 @@
 					../contrib/lib/libxvidcore.a,
 					../contrib/lib/libdca.a,
 					../contrib/lib/libmkv.a,
+					../contrib/lib/libswscale.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "Instant HandBrake";
@@ -1647,6 +1660,7 @@
 					../contrib/lib/libxvidcore.a,
 					../contrib/lib/libdca.a,
 					../contrib/lib/libmkv.a,
+					../contrib/lib/libswscale.a,
 				);
 				PRODUCT_NAME = HandBrake;
 				SECTORDER_FLAGS = "";
@@ -1701,6 +1715,7 @@
 					../contrib/lib/libxvidcore.a,
 					../contrib/lib/libdca.a,
 					../contrib/lib/libmkv.a,
+					../contrib/lib/libswscale.a,
 				);
 				PRODUCT_NAME = HandBrake;
 				SECTORDER_FLAGS = "";
@@ -1753,6 +1768,7 @@
 					../contrib/lib/libxvidcore.a,
 					../contrib/lib/libdca.a,
 					../contrib/lib/libmkv.a,
+					../contrib/lib/libswscale.a,
 				);
 				PRODUCT_NAME = HandBrake;
 				SECTORDER_FLAGS = "";

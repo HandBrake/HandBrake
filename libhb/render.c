@@ -7,13 +7,15 @@
 #include "hb.h"
 
 #include "ffmpeg/avcodec.h"
+#include "ffmpeg/swscale.h"
 
 struct hb_work_private_s
 {
     hb_job_t * job;
 
-    ImgReSampleContext * context;
+    struct SwsContext  * context;
     AVPicture            pic_tmp_in;
+    AVPicture            pic_tmp_crop;
     AVPicture            pic_tmp_out;        
     hb_buffer_t        * buf_scale;
     hb_fifo_t          * subtitle_queue;
@@ -102,9 +104,6 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_job_t   * job   = pv->job;
     hb_title_t * title = job->title;
     hb_buffer_t * in = *buf_in, * buf_tmp_in = *buf_in;
-
-    int title_size = 3 * title->width * title->height / 2;
-    int job_size = 3 * job->width * job->height / 2;
     
     if(!in->data)
     {
@@ -124,7 +123,7 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     }
     
     /* Setup render buffer */
-    hb_buffer_t * buf_render = hb_buffer_init( job_size );  
+    hb_buffer_t * buf_render = hb_buffer_init( 3 * job->width * job->height / 2 );  
 
     /* Apply filters */
     if( job->filters )
@@ -194,8 +193,16 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         avpicture_fill( &pv->pic_tmp_out, buf_render->data, 
                         PIX_FMT_YUV420P,
                         job->width, job->height );
-        
-        img_resample( pv->context, &pv->pic_tmp_out, &pv->pic_tmp_in );
+
+        // Crop; this alters the pointer to the data to point to the correct place for cropped frame
+        av_picture_crop( &pv->pic_tmp_crop, &pv->pic_tmp_in, PIX_FMT_YUV420P,
+                         job->crop[0], job->crop[2] );
+
+        // Scale pic_crop into pic_render according to the context set up in renderInit
+        sws_scale(pv->context,
+                  pv->pic_tmp_crop.data, pv->pic_tmp_crop.linesize,
+                  0, title->height - (job->crop[0] + job->crop[1]),
+                  pv->pic_tmp_out.data,  pv->pic_tmp_out.linesize);
         
         hb_buffer_copy_settings( buf_render, buf_tmp_in );
         
@@ -271,17 +278,17 @@ int renderInit( hb_work_object_t * w, hb_job_t * job )
     w->private_data = pv;
 
     /* Get title and title size */
-    hb_title_t * title = job->title;    
-    int title_size = 3 * title->width * title->height / 2;    
-    
+    hb_title_t * title = job->title;
+
     /* If crop or scale is specified, setup rescale context */
     if( job->crop[0] || job->crop[1] || job->crop[2] || job->crop[3] ||
         job->width != title->width || job->height != title->height )
     {
-        pv->context = img_resample_full_init(
-            job->width, job->height, title->width, title->height,
-            job->crop[0], job->crop[1], job->crop[2], job->crop[3],
-            0, 0, 0, 0 );
+        pv->context = sws_getContext(title->width  - (job->crop[2] + job->crop[3]),
+                                     title->height - (job->crop[0] + job->crop[1]),
+                                     PIX_FMT_YUV420P,
+                                     job->width, job->height, PIX_FMT_YUV420P,
+                                     SWS_LANCZOS, NULL, NULL, NULL);
     }   
     
     /* Setup FIFO queue for subtitle cache */

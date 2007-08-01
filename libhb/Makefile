@@ -39,15 +39,19 @@ CONTRIBS = ../contrib/lib/liba52.a ../contrib/lib/libavformat.a \
 		   ../contrib/lib/libvorbisfile.a ../contrib/lib/libogg.a \
 		   ../contrib/lib/libsamplerate.a ../contrib/lib/libx264.a \
 		   ../contrib/lib/libxvidcore.a  ../contrib/lib/libmp4v2.a \
-		   ../contrib/lib/libmkv.a
+		   ../contrib/lib/libmkv.a ../contrib/lib/libswscale.a
 else
 CONTRIBS = ../contrib/lib/liba52.a ../contrib/lib/libavformat.a \
 		   ../contrib/lib/libavcodec.a ../contrib/lib/libavutil.a \
 		   ../contrib/lib/libdca.a ../contrib/lib/libdvdread.a \
 		   ../contrib/lib/libdvdcss.a ../contrib/lib/libfaac.a \
-		   ../contrib/lib/libmp3lame.a ../contrib/lib/libmpeg2.a \ ../contrib/lib/libmpeg2convert.a ../contrib/lib/libvorbis.a \ ../contrib/lib/libvorbisenc.a ../contrib/lib/libvorbisfile.a \ ../contrib/lib/libogg.a ../contrib/lib/libsamplerate.a \
+		   ../contrib/lib/libmp3lame.a ../contrib/lib/libmpeg2.a \
+		   ../contrib/lib/libmpeg2convert.a ../contrib/lib/libvorbis.a \
+		   ../contrib/lib/libvorbisenc.a ../contrib/lib/libvorbisfile.a \
+		   ../contrib/lib/libogg.a ../contrib/lib/libsamplerate.a \
 		   ../contrib/lib/libx264.a ../contrib/lib/libxvidcore.a \
-		   ../contrib/lib/libmp4v2.a ../contrib/lib/libmkv.a
+		   ../contrib/lib/libmp4v2.a ../contrib/lib/libmkv.a \
+		   ../contrib/lib/libswscale.a
 endif
 
 CFLAGS += -I../contrib/include -D__LIBHB__ -DUSE_PTHREAD -DHB_VERSION=\"$(HB_VERSION)\" -DHB_BUILD=$(HB_BUILD) $(SYSDEF)

@@ -1,53 +1,50 @@
-diff -Naur t/ffmpeg/configure ffmpeg/configure
---- t/ffmpeg/configure	2007-01-13 12:58:43.000000000 +0100
-+++ ffmpeg/configure	2007-01-13 20:41:28.000000000 +0100
-@@ -674,7 +674,7 @@
- 2.9-beos-991026*|2.9-beos-000224*) echo "R5/GG gcc"
- mmx="no"
- ;;
--*20010315*) echo "BeBits gcc"
-+*20010315*|2.95.3*) echo "BeBits gcc"
- add_cflags "-fno-expensive-optimizations"
- ;;
- esac
-diff -Naur t/ffmpeg/libavformat/Makefile ffmpeg/libavformat/Makefile
---- t/ffmpeg/libavformat/Makefile	2007-01-13 12:58:43.000000000 +0100
-+++ ffmpeg/libavformat/Makefile	2007-01-13 20:41:28.000000000 +0100
-@@ -58,6 +58,7 @@
- OBJS-$(CONFIG_TGP_MUXER)                 += movenc.o riff.o isom.o
- OBJS-$(CONFIG_MP4_MUXER)                 += movenc.o riff.o isom.o
- OBJS-$(CONFIG_PSP_MUXER)                 += movenc.o riff.o isom.o
-+OBJS-$(CONFIG_IPOD_MUXER)                 += movenc.o riff.o isom.o
- OBJS-$(CONFIG_TG2_MUXER)                 += movenc.o riff.o isom.o
- OBJS-$(CONFIG_MP3_DEMUXER)               += mp3.o
- OBJS-$(CONFIG_MP2_MUXER)                 += mp3.o
-diff -Naur t/ffmpeg/libavformat/allformats.c ffmpeg/libavformat/allformats.c
---- t/ffmpeg/libavformat/allformats.c	2007-01-13 12:58:43.000000000 +0100
-+++ ffmpeg/libavformat/allformats.c	2007-01-13 20:41:28.000000000 +0100
-@@ -91,6 +91,9 @@
-     REGISTER_MUXDEMUX(IMAGE2PIPE, image2pipe);
-     REGISTER_DEMUXER (INGENIENT, ingenient);
-     REGISTER_DEMUXER (IPMOVIE, ipmovie);
-+#ifdef CONFIG_IPOD_MUXER
-+	REGISTER_MUXER   (IPOD, ipod);
+Index: configure
+===================================================================
+--- configure	(revision 9814)
++++ configure	(working copy)
+@@ -1095,7 +1095,7 @@
+       2.9-beos-991026*|2.9-beos-000224*) echo "R5/GG gcc"
+         mmx="no"
+         ;;
+-      *20010315*) echo "BeBits gcc"
++      *20010315*|2.95.3*) echo "BeBits gcc"
+         add_cflags "-fno-expensive-optimizations"
+         ;;
+     esac
+Index: libavformat/Makefile
+===================================================================
+--- libavformat/Makefile	(revision 9814)
++++ libavformat/Makefile	(working copy)
+@@ -69,6 +69,7 @@
+ OBJS-$(CONFIG_IMAGE2PIPE_MUXER)          += img2.o
+ OBJS-$(CONFIG_INGENIENT_DEMUXER)         += raw.o
+ OBJS-$(CONFIG_IPMOVIE_DEMUXER)           += ipmovie.o
++OBJS-$(CONFIG_IPOD_MUXER)                += movenc.o riff.o isom.o
+ OBJS-$(CONFIG_M4V_DEMUXER)               += raw.o
+ OBJS-$(CONFIG_M4V_MUXER)                 += raw.o
+ OBJS-$(CONFIG_MATROSKA_DEMUXER)          += matroskadec.o matroska.o riff.o
+Index: libavformat/tcp.c
+===================================================================
+--- libavformat/tcp.c	(revision 9814)
++++ libavformat/tcp.c	(working copy)
+@@ -88,11 +88,13 @@
+                 break;
+         }
+ 
++#ifndef __BEOS__
+         /* test error */
+         optlen = sizeof(ret);
+         getsockopt (fd, SOL_SOCKET, SO_ERROR, &ret, &optlen);
+         if (ret != 0)
+             goto fail;
 +#endif
-     REGISTER_MUXDEMUX(M4V, m4v);
-     REGISTER_DEMUXER (MATROSKA, matroska);
-     REGISTER_MUXDEMUX(MJPEG, mjpeg);
-diff -Naur t/ffmpeg/libavformat/allformats.h ffmpeg/libavformat/allformats.h
---- t/ffmpeg/libavformat/allformats.h	2007-01-13 12:58:43.000000000 +0100
-+++ ffmpeg/libavformat/allformats.h	2007-01-13 20:41:28.000000000 +0100
-@@ -77,6 +77,7 @@
- extern AVOutputFormat mov_muxer;
- extern AVOutputFormat tgp_muxer;
- extern AVOutputFormat mp4_muxer;
-+extern AVOutputFormat ipod_muxer;
- extern AVOutputFormat psp_muxer;
- extern AVOutputFormat tg2_muxer;
- extern AVInputFormat mp3_demuxer;
-diff -Naur t/ffmpeg/libavformat/movenc.c ffmpeg/libavformat/movenc.c
---- t/ffmpeg/libavformat/movenc.c	2007-01-13 12:58:43.000000000 +0100
-+++ ffmpeg/libavformat/movenc.c	2007-01-13 20:41:28.000000000 +0100
+     }
+     s->fd = fd;
+     return 0;
+Index: libavformat/movenc.c
+===================================================================
+--- libavformat/movenc.c	(revision 9814)
++++ libavformat/movenc.c	(working copy)
 @@ -36,6 +36,7 @@
  #define MODE_PSP 3 // example working PSP command line:
  // ffmpeg -i testinput.avi  -f psp -r 14.985 -s 320x240 -b 768 -ar 24000 -ab 32 M4V00001.MP4
@@ -64,7 +61,7 @@ diff -Naur t/ffmpeg/libavformat/movenc.c ffmpeg/libavformat/movenc.c
      long        sampleSize;
      int         hasKeyframes;
      int         hasBframes;
-@@ -598,6 +600,18 @@
+@@ -572,6 +574,18 @@
      return tag;
  }
  
@@ -83,7 +80,7 @@ diff -Naur t/ffmpeg/libavformat/movenc.c ffmpeg/libavformat/movenc.c
  static int mov_write_video_tag(ByteIOContext *pb, MOVTrack* track)
  {
      offset_t pos = url_ftell(pb);
-@@ -647,8 +661,21 @@
+@@ -621,9 +635,22 @@
          mov_write_d263_tag(pb);
      else if(track->enc->codec_id == CODEC_ID_SVQ3)
          mov_write_svq3_tag(pb);
@@ -102,12 +99,13 @@ diff -Naur t/ffmpeg/libavformat/movenc.c ffmpeg/libavformat/movenc.c
 +			put_be32(pb, 0x0000039C); 
 +		}
 +	}
-+
-+	mov_write_colr_tag(pb);
  
++	mov_write_colr_tag(pb);
++
      return updateSize (pb, pos);
  }
-@@ -700,46 +727,18 @@
+ 
+@@ -674,46 +701,18 @@
      return atom_size;
  }
  
@@ -115,7 +113,7 @@ diff -Naur t/ffmpeg/libavformat/movenc.c ffmpeg/libavformat/movenc.c
  /* Time to sample atom */
  static int mov_write_stts_tag(ByteIOContext *pb, MOVTrack* track)
  {
--    Time2Sample *stts_entries;
+-    MOV_stts_t *stts_entries;
 -    uint32_t entries = -1;
 -    uint32_t atom_size;
 -    int i;
@@ -161,7 +159,7 @@ diff -Naur t/ffmpeg/libavformat/movenc.c ffmpeg/libavformat/movenc.c
  }
  
  static int mov_write_dref_tag(ByteIOContext *pb)
-@@ -929,6 +928,10 @@
+@@ -911,6 +910,10 @@
      /* Track width and height, for visual only */
      if(track->enc->codec_type == CODEC_TYPE_VIDEO) {
          double sample_aspect_ratio = av_q2d(track->enc->sample_aspect_ratio);
@@ -172,7 +170,7 @@ diff -Naur t/ffmpeg/libavformat/movenc.c ffmpeg/libavformat/movenc.c
          if( !sample_aspect_ratio ) sample_aspect_ratio = 1;
          put_be32(pb, sample_aspect_ratio * track->enc->width*0x10000);
          put_be32(pb, track->enc->height*0x10000);
-@@ -1340,6 +1343,8 @@
+@@ -1322,6 +1325,8 @@
      for (i=0; i<mov->nb_streams; i++) {
          if(mov->tracks[i].entry <= 0) continue;
  
@@ -181,7 +179,7 @@ diff -Naur t/ffmpeg/libavformat/movenc.c ffmpeg/libavformat/movenc.c
          mov->tracks[i].time = mov->time;
          mov->tracks[i].trackID = i+1;
      }
-@@ -1387,6 +1392,8 @@
+@@ -1369,6 +1374,8 @@
          put_tag(pb, "MSNV");
      else if ( mov->mode == MODE_MP4 )
          put_tag(pb, "isom");
@@ -190,7 +188,7 @@ diff -Naur t/ffmpeg/libavformat/movenc.c ffmpeg/libavformat/movenc.c
      else
          put_tag(pb, "qt  ");
  
-@@ -1398,6 +1405,8 @@
+@@ -1380,6 +1387,8 @@
          put_tag(pb, "3g2a");
      else if ( mov->mode == MODE_PSP )
          put_tag(pb, "MSNV");
@@ -199,7 +197,7 @@ diff -Naur t/ffmpeg/libavformat/movenc.c ffmpeg/libavformat/movenc.c
      else if ( mov->mode == MODE_MP4 )
          put_tag(pb, "mp41");
      else
-@@ -1479,7 +1488,8 @@
+@@ -1466,7 +1475,8 @@
          else if (!strcmp("3g2", s->oformat->name)) mov->mode = MODE_3G2;
          else if (!strcmp("mov", s->oformat->name)) mov->mode = MODE_MOV;
          else if (!strcmp("psp", s->oformat->name)) mov->mode = MODE_PSP;
@@ -209,20 +207,23 @@ diff -Naur t/ffmpeg/libavformat/movenc.c ffmpeg/libavformat/movenc.c
          mov_write_ftyp_tag(pb,s);
          if ( mov->mode == MODE_PSP ) {
              if ( s->nb_streams != 2 ) {
-@@ -1500,10 +1510,12 @@
+@@ -1487,6 +1497,7 @@
          if(st->codec->codec_type == CODEC_TYPE_VIDEO){
              track->tag = mov_find_video_codec_tag(s, track);
              track->timescale = st->codec->time_base.den;
 +            track->sampleDuration = st->codec->time_base.num;
              av_set_pts_info(st, 64, 1, st->codec->time_base.den);
+             if (track->timescale > 100000)
+                 av_log(NULL, AV_LOG_WARNING,
+@@ -1496,6 +1507,7 @@
          }else if(st->codec->codec_type == CODEC_TYPE_AUDIO){
              track->tag = mov_find_audio_codec_tag(s, track);
              track->timescale = st->codec->sample_rate;
 +            track->sampleDuration = st->codec->frame_size;
              av_set_pts_info(st, 64, 1, st->codec->sample_rate);
-             switch(track->enc->codec_id){
-             case CODEC_ID_MP3:
-@@ -1689,6 +1701,21 @@
+             if(!st->codec->frame_size){
+                 av_log(s, AV_LOG_ERROR, "track %d: codec frame size is not set\n", i);
+@@ -1675,6 +1687,21 @@
      .flags = AVFMT_GLOBALHEADER,
  };
  #endif
@@ -244,20 +245,29 @@ diff -Naur t/ffmpeg/libavformat/movenc.c ffmpeg/libavformat/movenc.c
  #ifdef CONFIG_PSP_MUXER
  AVOutputFormat psp_muxer = {
      "psp",
-diff -Naur t/ffmpeg/libavformat/tcp.c ffmpeg/libavformat/tcp.c
---- t/ffmpeg/libavformat/tcp.c	2007-01-13 12:58:43.000000000 +0100
-+++ ffmpeg/libavformat/tcp.c	2007-01-13 20:41:28.000000000 +0100
-@@ -114,11 +114,13 @@
-                 break;
-         }
- 
-+#ifndef __BEOS__
-         /* test error */
-         optlen = sizeof(ret);
-         getsockopt (fd, SOL_SOCKET, SO_ERROR, &ret, &optlen);
-         if (ret != 0)
-             goto fail;
+Index: libavformat/allformats.c
+===================================================================
+--- libavformat/allformats.c	(revision 9814)
++++ libavformat/allformats.c	(working copy)
+@@ -89,6 +89,9 @@
+     REGISTER_MUXDEMUX(IMAGE2PIPE, image2pipe);
+     REGISTER_DEMUXER (INGENIENT, ingenient);
+     REGISTER_DEMUXER (IPMOVIE, ipmovie);
++#ifdef CONFIG_IPOD_MUXER
++    REGISTER_MUXER   (IPOD, ipod);
 +#endif
-     }
-     s->fd = fd;
-     return 0;
+     if (!ENABLE_NUT_DEMUXER) REGISTER_DEMUXER (LIBNUT, libnut);
+     REGISTER_MUXER   (LIBNUT, libnut);
+     REGISTER_MUXDEMUX(M4V, m4v);
+Index: libavformat/allformats.h
+===================================================================
+--- libavformat/allformats.h	(revision 9814)
++++ libavformat/allformats.h	(working copy)
+@@ -142,6 +142,7 @@
+ extern AVOutputFormat image2pipe_muxer;
+ extern AVOutputFormat image_muxer;
+ extern AVOutputFormat imagepipe_muxer;
++extern AVOutputFormat ipod_muxer;
+ extern AVOutputFormat libnut_muxer;
+ extern AVOutputFormat m4v_muxer;
+ extern AVOutputFormat mjpeg_muxer;

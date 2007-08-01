@@ -1,6 +1,7 @@
 #include "hb.h"
 
 #include "ffmpeg/avcodec.h"
+#include "ffmpeg/swscale.h"
 
 struct hb_handle_s
 {
@@ -116,9 +117,7 @@ hb_handle_t * hb_init_real( int verbose, int update_check )
 
     /* libavcodec */
     avcodec_init();
-    register_avcodec( &mpeg4_encoder );
-    register_avcodec( &mp2_decoder );
-    register_avcodec( &ac3_encoder );
+    avcodec_register_all();
     av_register_codec_parser( &mpegaudio_parser);
     
     /* Start library thread */
@@ -195,9 +194,7 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
 
     /* libavcodec */
     avcodec_init();
-    register_avcodec( &mpeg4_encoder );
-    register_avcodec( &mp2_decoder );
-    register_avcodec( &ac3_encoder );
+    avcodec_register_all();
 
     /* Start library thread */
     hb_log( "hb_init: starting libhb thread" );
@@ -312,25 +309,15 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
     hb_job_t           * job = title->job;
     char                 filename[1024];
     FILE               * file;
-    uint8_t            * buf1, * buf2, * buf3, * buf4, * pen;
+    uint8_t            * pen;
     uint32_t           * p32;
-    AVPicture            pic1, pic2, pic3, pic4;
-    ImgReSampleContext * context;
+    AVPicture            pic_in, pic_preview, pic_deint, pic_crop, pic_scale;
+    struct SwsContext  * context;
     int                  i;
 
-    buf1 = malloc( title->width * title->height * 3 / 2 );
-    buf2 = malloc( title->width * title->height * 3 / 2 );
-    buf3 = malloc( title->width * title->height * 3 / 2 );
-    buf4 = malloc( title->width * title->height * 4 );
-    avpicture_fill( &pic1, buf1, PIX_FMT_YUV420P,
-                    title->width, title->height );
-    avpicture_fill( &pic2, buf2, PIX_FMT_YUV420P,
-                    title->width, title->height );
-    avpicture_fill( &pic3, buf3, PIX_FMT_YUV420P,
-                    job->width, job->height );
-    avpicture_fill( &pic4, buf4, PIX_FMT_RGBA32,
-                    job->width, job->height );
-    
+    // Allocate the AVPicture frames and fill in
+    avpicture_alloc( &pic_in, PIX_FMT_YUV420P, title->width, title->height );
+
     memset( filename, 0, 1024 );
 
     hb_get_tempory_filename( h, filename, "%x%d",
@@ -343,26 +330,43 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
         return;
     }
 
-    fread( buf1, title->width * title->height * 3 / 2, 1, file );
+    fread( pic_in.data[0], title->width * title->height * 3 / 2, 1, file );
     fclose( file );
-
-    context = img_resample_full_init(
-            job->width, job->height, title->width, title->height,
-            job->crop[0], job->crop[1], job->crop[2], job->crop[3],
-            0, 0, 0, 0 );
 
     if( job->deinterlace )
     {
-        avpicture_deinterlace( &pic2, &pic1, PIX_FMT_YUV420P,
-                               title->width, title->height );
-        img_resample( context, &pic3, &pic2 );
+        // Allocate picture to deinterlace into and deinterlace
+        avpicture_alloc( &pic_deint, PIX_FMT_YUV420P, title->width, title->height );
+        avpicture_deinterlace( &pic_deint, &pic_in, PIX_FMT_YUV420P, title->width, title->height );
+
+        av_picture_crop( &pic_crop, &pic_deint, PIX_FMT_YUV420P, job->crop[0], job->crop[2] );
     }
     else
     {
-        img_resample( context, &pic3, &pic1 );
+        av_picture_crop( &pic_crop, &pic_in, PIX_FMT_YUV420P, job->crop[0], job->crop[2] );
     }
-    img_convert( &pic4, PIX_FMT_RGBA32, &pic3, PIX_FMT_YUV420P,
-                 job->width, job->height );
+
+    // Allocate picture to scale into, get scaling context and scale
+    avpicture_alloc( &pic_scale, PIX_FMT_YUV420P, job->width, job->height );
+    context = sws_getContext(title->width  - (job->crop[2] + job->crop[3]),
+                             title->height - (job->crop[0] + job->crop[1]),
+                             PIX_FMT_YUV420P,
+                             job->width, job->height, PIX_FMT_YUV420P,
+                             SWS_LANCZOS, NULL, NULL, NULL);
+    sws_scale(context,
+              pic_crop.data, pic_crop.linesize,
+              0, title->height - (job->crop[0] + job->crop[1]),
+              pic_scale.data, pic_scale.linesize);
+
+    // Allocate RGBA32 preview picture and create preview
+    avpicture_alloc( &pic_preview, PIX_FMT_RGBA32, job->width, job->height );
+    context = sws_getContext(job->width, job->height, PIX_FMT_YUV420P,
+                             job->width, job->height, PIX_FMT_RGBA32,
+                             SWS_LANCZOS, NULL, NULL, NULL);
+    sws_scale(context,
+              pic_scale.data, pic_scale.linesize,
+              0, job->height,
+              pic_preview.data, pic_preview.linesize);
 
     /* Gray background */
     p32 = (uint32_t *) buffer;
@@ -382,17 +386,17 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
         nextLine = pen + 4 * ( title->width + 2 );
         memset( pen, 0xFF, 4 );
         pen += 4;
-        memcpy( pen, buf4 + 4 * job->width * i, 4 * job->width );
+        memcpy( pen, pic_preview.data[0] + 4 * job->width * i, 4 * job->width );
         pen += 4 * job->width;
         memset( pen, 0xFF, 4 );
         pen = nextLine;
     }
     memset( pen, 0xFF, 4 * ( job->width + 2 ) );
 
-    free( buf1 );
-    free( buf2 );
-    free( buf3 );
-    free( buf4 );
+    avpicture_free( &pic_preview );
+    avpicture_free( &pic_scale );
+    if( job->deinterlace ) avpicture_free( &pic_deint );
+    avpicture_free( &pic_in );
 }
 
 /**

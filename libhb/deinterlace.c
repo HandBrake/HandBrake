@@ -394,8 +394,8 @@ hb_filter_private_t * hb_deinterlace_init( int pix_fmt,
     /* Allocate mcdeint specific buffers */
     if( pv->mcdeint_mode >= 0 )
     {
-		avcodec_init();
-        register_avcodec( &snow_encoder );
+        avcodec_init();
+        avcodec_register_all();
         
         AVCodec * enc = avcodec_find_encoder( CODEC_ID_SNOW );
         
