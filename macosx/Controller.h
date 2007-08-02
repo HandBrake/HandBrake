@@ -14,7 +14,7 @@
 #include "ScanController.h"
 #include "PictureController.h"
 #include "QueueController.h"
-
+#import "MVMenuButton.h"
 @class HBOutputPanelController;
 
 @interface HBController : NSObject <GrowlApplicationBridgeDelegate>
@@ -211,7 +211,8 @@
 	IBOutlet NSTableView         * tableView;
 	IBOutlet NSButton            * fPresetsAdd;
 	IBOutlet NSButton            * fPresetsDelete;
-	IBOutlet NSButton            * fPresetMakeDefault;
+    IBOutlet MVMenuButton           * fPresetsActionButton;
+    IBOutlet NSMenu                         * fPresetsActionMenu;
 	
     hb_handle_t                  * fHandle;
 	hb_title_t                   * fTitle;

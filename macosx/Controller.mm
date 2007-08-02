@@ -129,12 +129,12 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 - (void) awakeFromNib
 {
     [fWindow center];
-
+	
     [self TranslateStrings];
     /* Initialize currentScanCount so HB can use it to
-	   evaluate successive scans */
+		evaluate successive scans */
 	currentScanCount = 0;
-
+	
     /* Init User Presets .plist */
 	/* We declare the default NSFileManager into fileManager */
 	NSFileManager * fileManager = [NSFileManager defaultManager];
@@ -158,12 +158,12 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 	
 	if ([fileManager fileExistsAtPath:UserPresetsFile] == 0) 
 	{
-
+		
 		[fileManager createFileAtPath:UserPresetsFile contents:nil attributes:nil];
 		
 	}
 	// We check for the x264profiles.plist here
-	 
+	
 	if ([fileManager fileExistsAtPath:x264ProfilesFile] == 0) 
 	{
         
@@ -171,27 +171,27 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 	}
     
 	
-  UserPresetsFile = @"~/Library/Application Support/HandBrake/UserPresets.plist";
-  UserPresetsFile = [[UserPresetsFile stringByExpandingTildeInPath]retain];
-
-  UserPresets = [[NSMutableArray alloc] initWithContentsOfFile:UserPresetsFile];
-  if (nil == UserPresets) 
-  {
-    UserPresets = [[NSMutableArray alloc] init];
-	[self AddFactoryPresets:NULL];
-  }
-  
-
-
-  /* Show/Dont Show Presets drawer upon launch based
-  on user preference DefaultPresetsDrawerShow*/
-  if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow"] > 0)
-		{
-	  [fPresetDrawer open];
-		}
-
-
-
+	UserPresetsFile = @"~/Library/Application Support/HandBrake/UserPresets.plist";
+	UserPresetsFile = [[UserPresetsFile stringByExpandingTildeInPath]retain];
+	
+	UserPresets = [[NSMutableArray alloc] initWithContentsOfFile:UserPresetsFile];
+	if (nil == UserPresets) 
+	{
+		UserPresets = [[NSMutableArray alloc] init];
+		[self AddFactoryPresets:NULL];
+	}
+	
+	
+	
+	/* Show/Dont Show Presets drawer upon launch based
+		on user preference DefaultPresetsDrawerShow*/
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow"] > 0)
+	{
+		[fPresetDrawer open];
+	}
+	
+	
+	
     /* Destination box*/
     [fDstFormatPopUp removeAllItems];
     [fDstFormatPopUp addItemWithTitle: _( @"MP4 file" )];
@@ -199,7 +199,7 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
     [fDstFormatPopUp addItemWithTitle: _( @"OGM file" )];
 	[fDstFormatPopUp addItemWithTitle: _( @"MKV file" )];
     [fDstFormatPopUp selectItemAtIndex: 0];
-
+	
     [self FormatPopUpChanged: NULL];
     
 	/* We enable the create chapters checkbox here since we are .mp4 */	
@@ -209,26 +209,26 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 		[fCreateChapterMarkers setState: NSOnState];
 	}
 	
-
+	
 	
 	
     [fDstFile2Field setStringValue: [NSString stringWithFormat:
         @"%@/Desktop/Movie.mp4", NSHomeDirectory()]];
-
+	
     /* Video encoder */
     [fVidEncoderPopUp removeAllItems];
     [fVidEncoderPopUp addItemWithTitle: @"FFmpeg"];
     [fVidEncoderPopUp addItemWithTitle: @"XviD"];
-
+	
     
 	
     /* Video quality */
     [fVidTargetSizeField setIntValue: 700];
 	[fVidBitrateField    setIntValue: 1000];
-
+	
     [fVidQualityMatrix   selectCell: fVidBitrateCell];
     [self VideoMatrixChanged: NULL];
-
+	
     /* Video framerate */
     [fVidRatePopUp removeAllItems];
 	[fVidRatePopUp addItemWithTitle: _( @"Same as source" )];
@@ -253,7 +253,7 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
             [NSString stringWithCString: hb_audio_bitrates[i].string]];
     }
     [fAudBitratePopUp selectItemAtIndex: hb_audio_bitrates_default];
-
+	
     /* Audio samplerate */
     [fAudRatePopUp removeAllItems];
     for( int i = 0; i < hb_audio_rates_count; i++ )
@@ -262,36 +262,31 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
             [NSString stringWithCString: hb_audio_rates[i].string]];
     }
     [fAudRatePopUp selectItemAtIndex: hb_audio_rates_default];
-
+	
     /* Bottom */
     [fStatusField setStringValue: @""];
-
-    [self EnableUI: NO];
-    //[fPauseButton setEnabled: NO];
-    //[fRipButton setEnabled: NO];
-	/* Use new Toolbar start and pause here */
 	
-	pauseButtonEnabled = NO;
+    [self EnableUI: NO];
+    /* Use new Toolbar start and pause here */
 	startButtonEnabled = NO;
-       [self setupToolbar];
-	/* In Ritsuka's patch, this goes below the Turbo stuff below
-	   Lets try to keep it all together */
-       startButtonEnabled = NO;
-       stopOrStart = NO;
-       AddToQueueButtonEnabled = NO;
-       pauseButtonEnabled = NO;
-       resumeOrPause = NO;
-
+	stopOrStart = NO;
+	AddToQueueButtonEnabled = NO;
+	pauseButtonEnabled = NO;
+	resumeOrPause = NO;
+	[self setupToolbar];
+	
+	[fPresetsActionButton setMenu:fPresetsActionMenu];
+	
 	/* We disable the Turbo 1st pass checkbox since we are not x264 */
 	[fVidTurboPassCheck setEnabled: NO];
 	[fVidTurboPassCheck setState: NSOffState];
-
-
-  /* lets get our default prefs here */
-  [self GetDefaultPresets: NULL];
-  /* lets initialize the current successful scancount here to 0 */
-  currentSuccessfulScanCount = 0;
-
+	
+	
+	/* lets get our default prefs here */
+	[self GetDefaultPresets: NULL];
+	/* lets initialize the current successful scancount here to 0 */
+	currentSuccessfulScanCount = 0;
+	
 }
 
 
@@ -2482,7 +2477,7 @@ the user is using "Custom" settings by determining the sender*/
 	{
 		/* Deselect the currently selected Preset if there is one*/
 		[tableView deselectRow:[tableView selectedRow]];
-		[fPresetMakeDefault setEnabled: NO];
+		[[fPresetsActionMenu itemAtIndex:0] setEnabled: NO];
 		/* Change UI to show "Custom" settings are being used */
 		[fPresetSelectedDisplay setStringValue: @"Custom"];
 		
@@ -4768,7 +4763,7 @@ the user is using "Custom" settings by determining the sender*/
 			}
 			
 			
-			[fPresetMakeDefault setEnabled: YES];
+			[[fPresetsActionMenu itemAtIndex:0] setEnabled: YES];
 			}
 }
 }
