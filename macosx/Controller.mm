@@ -841,6 +841,15 @@ list = hb_get_titles( fHandle );
                [self EnableUI: YES]; 
                 }
 			
+						// MetaX insertion via AppleScript
+			if([[NSUserDefaults standardUserDefaults] boolForKey: @"sendToMetaX"] == YES)
+			{
+			NSAppleScript *myScript = [[NSAppleScript alloc] initWithSource: [NSString stringWithFormat: @"%@%@%@", @"tell application \"MetaX\" to open (POSIX file \"", [fDstFile2Field stringValue], @"\")"]];
+			[myScript executeAndReturnError: nil];
+			[myScript release];
+			}
+			
+			
 			}
 			else
 			{
@@ -998,7 +1007,7 @@ list = hb_get_titles( fHandle );
 		resumeOrPause = NO;
 		/* we record the current source name here in case the next scan is unsuccessful,
 				then we can replace the scan progress with the old name if necessary */
-			sourceDisplayName = [NSString stringWithFormat:[fSrcDVD2Field stringValue]];
+       sourceDisplayName = [NSString stringWithFormat:[fSrcDVD2Field stringValue]];
 	
 	/* if its the initial successful scan after awakeFromNib */
 	   if (currentSuccessfulScanCount == 1)
