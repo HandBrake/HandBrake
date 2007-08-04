@@ -470,6 +470,110 @@ namespace Handbrake
             drp_crop.Text = "No Crop";
         }
 
+        //------------------------------NEW PRESETS START HERE---------------------------
+        private void mnu_normal_Click(object sender, EventArgs e)
+        {
+            CheckPixelRatio.CheckState = CheckState.Unchecked;
+            text_width.Text = "";
+            text_height.Text = "";
+            drp_videoEncoder.Text = "H.264";
+            text_bitrate.Text = "3000";
+            text_filesize.Text = "";
+            slider_videoQuality.Value = 0;
+            SliderValue.Text = "0%";
+            drp_audioBitrate.Text = "160";
+            CheckPixelRatio.CheckState = CheckState.Checked;
+            drp_audioSampleRate.Text = "48";
+            rtf_h264advanced.Text = "level=41";
+            drp_crop.Text = "No Crop";
+        }
+
+        private void mnu_Classic_Click(object sender, EventArgs e)
+        {
+            CheckPixelRatio.CheckState = CheckState.Unchecked;
+            text_width.Text = "";
+            text_height.Text = "";
+            drp_videoEncoder.Text = "H.264";
+            text_bitrate.Text = "3000";
+            text_filesize.Text = "";
+            slider_videoQuality.Value = 0;
+            SliderValue.Text = "0%";
+            drp_audioBitrate.Text = "160";
+            CheckPixelRatio.CheckState = CheckState.Checked;
+            drp_audioSampleRate.Text = "48";
+            rtf_h264advanced.Text = "level=41";
+            drp_crop.Text = "No Crop";
+        }
+
+        private void mnu_film_Click(object sender, EventArgs e)
+        {
+            CheckPixelRatio.CheckState = CheckState.Unchecked;
+            text_width.Text = "";
+            text_height.Text = "";
+            drp_videoEncoder.Text = "H.264";
+            text_bitrate.Text = "3000";
+            text_filesize.Text = "";
+            slider_videoQuality.Value = 0;
+            SliderValue.Text = "0%";
+            drp_audioBitrate.Text = "160";
+            CheckPixelRatio.CheckState = CheckState.Checked;
+            drp_audioSampleRate.Text = "48";
+            rtf_h264advanced.Text = "level=41";
+            drp_crop.Text = "No Crop";
+        }
+
+        private void mnu_television_Click(object sender, EventArgs e)
+        {
+            CheckPixelRatio.CheckState = CheckState.Unchecked;
+            text_width.Text = "";
+            text_height.Text = "";
+            drp_videoEncoder.Text = "H.264";
+            text_bitrate.Text = "3000";
+            text_filesize.Text = "";
+            slider_videoQuality.Value = 0;
+            SliderValue.Text = "0%";
+            drp_audioBitrate.Text = "160";
+            CheckPixelRatio.CheckState = CheckState.Checked;
+            drp_audioSampleRate.Text = "48";
+            rtf_h264advanced.Text = "level=41";
+            drp_crop.Text = "No Crop";
+        }
+
+        private void mnu_qt_Click(object sender, EventArgs e)
+        {
+            CheckPixelRatio.CheckState = CheckState.Unchecked;
+            text_width.Text = "";
+            text_height.Text = "";
+            drp_videoEncoder.Text = "H.264";
+            text_bitrate.Text = "3000";
+            text_filesize.Text = "";
+            slider_videoQuality.Value = 0;
+            SliderValue.Text = "0%";
+            drp_audioBitrate.Text = "160";
+            CheckPixelRatio.CheckState = CheckState.Checked;
+            drp_audioSampleRate.Text = "48";
+            rtf_h264advanced.Text = "level=41";
+            drp_crop.Text = "No Crop";
+        }
+
+        private void mnu_psp_Click(object sender, EventArgs e)
+        {
+            CheckPixelRatio.CheckState = CheckState.Unchecked;
+            text_width.Text = "";
+            text_height.Text = "";
+            drp_videoEncoder.Text = "H.264";
+            text_bitrate.Text = "3000";
+            text_filesize.Text = "";
+            slider_videoQuality.Value = 0;
+            SliderValue.Text = "0%";
+            drp_audioBitrate.Text = "160";
+            CheckPixelRatio.CheckState = CheckState.Checked;
+            drp_audioSampleRate.Text = "48";
+            rtf_h264advanced.Text = "level=41";
+            drp_crop.Text = "No Crop";
+        }
+
+
         private void mnu_ProgramDefaultOptions_Click(object sender, EventArgs e)
         {
             //Source
@@ -554,65 +658,8 @@ namespace Handbrake
         // -------------------------------------------------------------- 
         // Buttons on the main Window
         // --------------------------------------------------------------
-        private void btn_Browse_Click(object sender, EventArgs e)
-        {
-            
-            String filename ="";
-            text_source.Text = "";
-            
-            //int scanTwice = 0;
 
-            if (RadioDVD.Checked)
-            {
-                DVD_Open.ShowDialog();
-                filename = DVD_Open.SelectedPath;
-                if (filename != "")
-                {
-                    Form frmRD = new frmReadDVD(filename, this, dvdInfoWindow);
-                    text_source.Text = filename;
-                    frmRD.ShowDialog();
-                }
-            }
-            else
-            {
-                ISO_Open.ShowDialog();
-                filename = ISO_Open.FileName;
-                if (filename != "")
-                {
-                    Form frmRD = new frmReadDVD(filename, this, dvdInfoWindow);
-                    text_source.Text = filename;
-                    frmRD.ShowDialog();
-                }
-            }  
-
-            // Check if there was titles in the dvd title dropdown
-            // If there isn't any, rescan the DVD. hbcli occasionally fails (see bug in encode) with standard error.
-            if (filename != "")
-            {
-               // Disbaled the 2nd pass for the time being.
-               /* if (drp_dvdtitle.Items.Count == 0) 
-                {
-                    if (scanTwice == 0)
-                    {
-                        MessageBox.Show("Scan Failed. Waiting 5 Seconds before attempting to re-scan the source a 2nd time.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                        Thread.Sleep(3000);
-                        Form frmRD = new frmReadDVD(filename, this, dvdInfoWindow);
-                        frmRD.ShowDialog();
-                        scanTwice = 1;
-                    }
-                }*/
-            }
-            else
-            {
-                text_source.Text = "Click 'Browse' to continue";
-            }
-
-            if (drp_dvdtitle.Items.Count == 0)
-            {
-                MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source. Please refer to the FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-           }
-
-        }
+        #region Buttons
 
         private void btn_destBrowse_Click(object sender, EventArgs e)
         {
@@ -672,14 +719,14 @@ namespace Handbrake
             queueWindow.Show();
         }
 
-
-
-
+        #endregion
 
         //---------------------------------------------------
         // Encode / Cancel Buttons
         // Encode Progress Text Handler
         //---------------------------------------------------
+
+        #region Encode/CLI
 
         Functions.CLI process = new Functions.CLI();
 
@@ -764,10 +811,14 @@ namespace Handbrake
             }
             lbl_encode.Text = string.Format("Encode Progress: {0}%,       FPS: {1},       Avg FPS: {2},       Time Remaining: {3} ", PercentComplete, CurrentFps, AverageFps, TimeRemaining);
         }
-        
+
+        #endregion
+
         //---------------------------------------------------
         //  Items that require actions on frmMain
         //---------------------------------------------------
+
+        #region frmMain Actions
 
         private void drop_chapterStart_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1169,9 +1220,7 @@ namespace Handbrake
             }
         }
 
-
-
-
+        #endregion
 
         /* 
          * ---------------------------------------------------
@@ -1180,6 +1229,8 @@ namespace Handbrake
          * 
          * ---------------------------------------------------
          */
+
+        #region Program Functions
 
         public string GenerateTheQuery()
         {
@@ -1523,6 +1574,9 @@ namespace Handbrake
 
             return querySource+ queryDestination+ queryPictureSettings+ queryVideoSettings+ h264Settings+ queryAudioSettings+ queryAdvancedSettings+ verbose;
         }
+
+        #endregion
+
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

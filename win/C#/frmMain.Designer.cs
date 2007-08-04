@@ -174,6 +174,13 @@ namespace Handbrake
             this.text_right = new System.Windows.Forms.TextBox();
             this.text_left = new System.Windows.Forms.TextBox();
             this.advancedOptions = new System.Windows.Forms.TabControl();
+            this.mnu_psp = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_Classic = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_qt = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_television = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_film = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_iphone = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_normal = new System.Windows.Forms.ToolStripMenuItem();
             Label38 = new System.Windows.Forms.Label();
             this.frmMainMenu.SuspendLayout();
             this.GroupBox1.SuspendLayout();
@@ -297,7 +304,6 @@ namespace Handbrake
             this.btn_Browse.Text = "Browse";
             this.ToolTip.SetToolTip(this.btn_Browse, "Step 1 - Select a Source. This can be either a DVD or ts/mpg/iso file");
             this.btn_Browse.UseVisualStyleBackColor = true;
-            this.btn_Browse.Click += new System.EventHandler(this.btn_Browse_Click);
             // 
             // text_height
             // 
@@ -545,7 +551,14 @@ namespace Handbrake
             this.mnu_preset_ipod178,
             this.mnu_preset_ipod235,
             this.mnu_appleTv,
+            this.mnu_iphone,
             this.mnu_presetPS3,
+            this.mnu_psp,
+            this.mnu_qt,
+            this.mnu_television,
+            this.mnu_film,
+            this.mnu_Classic,
+            this.mnu_normal,
             this.ToolStripSeparator4,
             this.mnu_ProgramDefaultOptions});
             this.PresetsToolStripMenuItem.Name = "PresetsToolStripMenuItem";
@@ -556,21 +569,21 @@ namespace Handbrake
             // 
             this.mnu_preset_ipod133.Name = "mnu_preset_ipod133";
             this.mnu_preset_ipod133.Size = new System.Drawing.Size(276, 22);
-            this.mnu_preset_ipod133.Text = "iPod (1.33)";
+            this.mnu_preset_ipod133.Text = "iPod (Aspect Ratio 1.33)";
             this.mnu_preset_ipod133.Click += new System.EventHandler(this.mnu_preset_ipod133_Click);
             // 
             // mnu_preset_ipod178
             // 
             this.mnu_preset_ipod178.Name = "mnu_preset_ipod178";
             this.mnu_preset_ipod178.Size = new System.Drawing.Size(276, 22);
-            this.mnu_preset_ipod178.Text = "iPod (1.78)";
+            this.mnu_preset_ipod178.Text = "iPod (Aspect Ratio 1.78)";
             this.mnu_preset_ipod178.Click += new System.EventHandler(this.mnu_preset_ipod178_Click);
             // 
             // mnu_preset_ipod235
             // 
             this.mnu_preset_ipod235.Name = "mnu_preset_ipod235";
             this.mnu_preset_ipod235.Size = new System.Drawing.Size(276, 22);
-            this.mnu_preset_ipod235.Text = "iPod (2.35)";
+            this.mnu_preset_ipod235.Text = "iPod (Aspect Ratio 2.35)";
             this.mnu_preset_ipod235.Click += new System.EventHandler(this.mnu_preset_ipod235_Click);
             // 
             // mnu_appleTv
@@ -1792,6 +1805,54 @@ namespace Handbrake
             this.advancedOptions.TabIndex = 411;
             this.advancedOptions.TabStop = false;
             // 
+            // mnu_psp
+            // 
+            this.mnu_psp.Name = "mnu_psp";
+            this.mnu_psp.Size = new System.Drawing.Size(276, 22);
+            this.mnu_psp.Text = "PSP";
+            this.mnu_psp.Click += new System.EventHandler(this.mnu_psp_Click);
+            // 
+            // mnu_Classic
+            // 
+            this.mnu_Classic.Name = "mnu_Classic";
+            this.mnu_Classic.Size = new System.Drawing.Size(276, 22);
+            this.mnu_Classic.Text = "Classic";
+            this.mnu_Classic.Click += new System.EventHandler(this.mnu_Classic_Click);
+            // 
+            // mnu_qt
+            // 
+            this.mnu_qt.Name = "mnu_qt";
+            this.mnu_qt.Size = new System.Drawing.Size(276, 22);
+            this.mnu_qt.Text = "Quicktime";
+            this.mnu_qt.Click += new System.EventHandler(this.mnu_qt_Click);
+            // 
+            // mnu_television
+            // 
+            this.mnu_television.Name = "mnu_television";
+            this.mnu_television.Size = new System.Drawing.Size(276, 22);
+            this.mnu_television.Text = "Television";
+            this.mnu_television.Click += new System.EventHandler(this.mnu_television_Click);
+            // 
+            // mnu_film
+            // 
+            this.mnu_film.Name = "mnu_film";
+            this.mnu_film.Size = new System.Drawing.Size(276, 22);
+            this.mnu_film.Text = "Film";
+            this.mnu_film.Click += new System.EventHandler(this.mnu_film_Click);
+            // 
+            // mnu_iphone
+            // 
+            this.mnu_iphone.Name = "mnu_iphone";
+            this.mnu_iphone.Size = new System.Drawing.Size(276, 22);
+            this.mnu_iphone.Text = "iPhone";
+            // 
+            // mnu_normal
+            // 
+            this.mnu_normal.Name = "mnu_normal";
+            this.mnu_normal.Size = new System.Drawing.Size(276, 22);
+            this.mnu_normal.Text = "Normal";
+            this.mnu_normal.Click += new System.EventHandler(this.mnu_normal_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1980,6 +2041,13 @@ namespace Handbrake
         internal System.Windows.Forms.Label label24;
         internal System.Windows.Forms.ComboBox drp_deNoise;
         internal System.Windows.Forms.Label label11;
+        private System.Windows.Forms.ToolStripMenuItem mnu_iphone;
+        private System.Windows.Forms.ToolStripMenuItem mnu_psp;
+        private System.Windows.Forms.ToolStripMenuItem mnu_qt;
+        private System.Windows.Forms.ToolStripMenuItem mnu_television;
+        private System.Windows.Forms.ToolStripMenuItem mnu_film;
+        private System.Windows.Forms.ToolStripMenuItem mnu_Classic;
+        private System.Windows.Forms.ToolStripMenuItem mnu_normal;
 
     }
 }
