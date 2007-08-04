@@ -660,6 +660,45 @@ namespace Handbrake
         // --------------------------------------------------------------
 
         #region Buttons
+        private void btn_Browse_Click(object sender, EventArgs e)
+        {
+            String filename =""; 
+	 	    text_source.Text = ""; 
+	 	              	 
+	 	    if (RadioDVD.Checked) 
+	 	    { 
+	 	        DVD_Open.ShowDialog(); 
+	 	        filename = DVD_Open.SelectedPath; 
+	 	        if (filename != "") 
+	 	        { 
+	 	            Form frmRD = new frmReadDVD(filename, this, dvdInfoWindow); 
+	 	            text_source.Text = filename; 
+	 	            frmRD.ShowDialog(); 
+	 	        } 
+	 	     } 
+	 	     else 
+	 	     { 
+	 	        ISO_Open.ShowDialog(); 
+	 	        filename = ISO_Open.FileName; 
+	 	        if (filename != "") 
+	 	        { 
+	 	            Form frmRD = new frmReadDVD(filename, this, dvdInfoWindow); 
+	 	            text_source.Text = filename; 
+	 	            frmRD.ShowDialog(); 
+	 	        } 
+	 	     }   
+	 	 
+	 	     // Check if there was titles in the dvd title dropdown 
+	 	     if (filename == "") 
+	 	     { 
+	 	        text_source.Text = "Click 'Browse' to continue"; 
+	 	     } 
+	 	 
+	 	     if (drp_dvdtitle.Items.Count == 0) 
+	 	     { 
+	 	        MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source. Please refer to the FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand); 
+	 	     }  	        
+        }
 
         private void btn_destBrowse_Click(object sender, EventArgs e)
         {
@@ -1576,6 +1615,8 @@ namespace Handbrake
         }
 
         #endregion
+
+        
 
 
         // This is the END of the road ------------------------------------------------------------------------------

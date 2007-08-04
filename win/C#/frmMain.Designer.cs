@@ -70,7 +70,14 @@ namespace Handbrake
             this.mnu_preset_ipod178 = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_preset_ipod235 = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_appleTv = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_iphone = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_presetPS3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_psp = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_qt = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_television = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_film = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_Classic = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_normal = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.mnu_ProgramDefaultOptions = new System.Windows.Forms.ToolStripMenuItem();
             this.HelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -174,13 +181,6 @@ namespace Handbrake
             this.text_right = new System.Windows.Forms.TextBox();
             this.text_left = new System.Windows.Forms.TextBox();
             this.advancedOptions = new System.Windows.Forms.TabControl();
-            this.mnu_psp = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_Classic = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_qt = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_television = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_film = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_iphone = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_normal = new System.Windows.Forms.ToolStripMenuItem();
             Label38 = new System.Windows.Forms.Label();
             this.frmMainMenu.SuspendLayout();
             this.GroupBox1.SuspendLayout();
@@ -304,6 +304,7 @@ namespace Handbrake
             this.btn_Browse.Text = "Browse";
             this.ToolTip.SetToolTip(this.btn_Browse, "Step 1 - Select a Source. This can be either a DVD or ts/mpg/iso file");
             this.btn_Browse.UseVisualStyleBackColor = true;
+            this.btn_Browse.Click += new System.EventHandler(this.btn_Browse_Click);
             // 
             // text_height
             // 
@@ -593,12 +594,60 @@ namespace Handbrake
             this.mnu_appleTv.Text = "Apple TV";
             this.mnu_appleTv.Click += new System.EventHandler(this.mnu_appleTv_Click);
             // 
+            // mnu_iphone
+            // 
+            this.mnu_iphone.Name = "mnu_iphone";
+            this.mnu_iphone.Size = new System.Drawing.Size(276, 22);
+            this.mnu_iphone.Text = "iPhone";
+            // 
             // mnu_presetPS3
             // 
             this.mnu_presetPS3.Name = "mnu_presetPS3";
             this.mnu_presetPS3.Size = new System.Drawing.Size(276, 22);
             this.mnu_presetPS3.Text = "PS3";
             this.mnu_presetPS3.Click += new System.EventHandler(this.mnu_presetPS3_Click);
+            // 
+            // mnu_psp
+            // 
+            this.mnu_psp.Name = "mnu_psp";
+            this.mnu_psp.Size = new System.Drawing.Size(276, 22);
+            this.mnu_psp.Text = "PSP";
+            this.mnu_psp.Click += new System.EventHandler(this.mnu_psp_Click);
+            // 
+            // mnu_qt
+            // 
+            this.mnu_qt.Name = "mnu_qt";
+            this.mnu_qt.Size = new System.Drawing.Size(276, 22);
+            this.mnu_qt.Text = "Quicktime";
+            this.mnu_qt.Click += new System.EventHandler(this.mnu_qt_Click);
+            // 
+            // mnu_television
+            // 
+            this.mnu_television.Name = "mnu_television";
+            this.mnu_television.Size = new System.Drawing.Size(276, 22);
+            this.mnu_television.Text = "Television";
+            this.mnu_television.Click += new System.EventHandler(this.mnu_television_Click);
+            // 
+            // mnu_film
+            // 
+            this.mnu_film.Name = "mnu_film";
+            this.mnu_film.Size = new System.Drawing.Size(276, 22);
+            this.mnu_film.Text = "Film";
+            this.mnu_film.Click += new System.EventHandler(this.mnu_film_Click);
+            // 
+            // mnu_Classic
+            // 
+            this.mnu_Classic.Name = "mnu_Classic";
+            this.mnu_Classic.Size = new System.Drawing.Size(276, 22);
+            this.mnu_Classic.Text = "Classic";
+            this.mnu_Classic.Click += new System.EventHandler(this.mnu_Classic_Click);
+            // 
+            // mnu_normal
+            // 
+            this.mnu_normal.Name = "mnu_normal";
+            this.mnu_normal.Size = new System.Drawing.Size(276, 22);
+            this.mnu_normal.Text = "Normal";
+            this.mnu_normal.Click += new System.EventHandler(this.mnu_normal_Click);
             // 
             // ToolStripSeparator4
             // 
@@ -1804,54 +1853,6 @@ namespace Handbrake
             this.advancedOptions.Size = new System.Drawing.Size(647, 268);
             this.advancedOptions.TabIndex = 411;
             this.advancedOptions.TabStop = false;
-            // 
-            // mnu_psp
-            // 
-            this.mnu_psp.Name = "mnu_psp";
-            this.mnu_psp.Size = new System.Drawing.Size(276, 22);
-            this.mnu_psp.Text = "PSP";
-            this.mnu_psp.Click += new System.EventHandler(this.mnu_psp_Click);
-            // 
-            // mnu_Classic
-            // 
-            this.mnu_Classic.Name = "mnu_Classic";
-            this.mnu_Classic.Size = new System.Drawing.Size(276, 22);
-            this.mnu_Classic.Text = "Classic";
-            this.mnu_Classic.Click += new System.EventHandler(this.mnu_Classic_Click);
-            // 
-            // mnu_qt
-            // 
-            this.mnu_qt.Name = "mnu_qt";
-            this.mnu_qt.Size = new System.Drawing.Size(276, 22);
-            this.mnu_qt.Text = "Quicktime";
-            this.mnu_qt.Click += new System.EventHandler(this.mnu_qt_Click);
-            // 
-            // mnu_television
-            // 
-            this.mnu_television.Name = "mnu_television";
-            this.mnu_television.Size = new System.Drawing.Size(276, 22);
-            this.mnu_television.Text = "Television";
-            this.mnu_television.Click += new System.EventHandler(this.mnu_television_Click);
-            // 
-            // mnu_film
-            // 
-            this.mnu_film.Name = "mnu_film";
-            this.mnu_film.Size = new System.Drawing.Size(276, 22);
-            this.mnu_film.Text = "Film";
-            this.mnu_film.Click += new System.EventHandler(this.mnu_film_Click);
-            // 
-            // mnu_iphone
-            // 
-            this.mnu_iphone.Name = "mnu_iphone";
-            this.mnu_iphone.Size = new System.Drawing.Size(276, 22);
-            this.mnu_iphone.Text = "iPhone";
-            // 
-            // mnu_normal
-            // 
-            this.mnu_normal.Name = "mnu_normal";
-            this.mnu_normal.Size = new System.Drawing.Size(276, 22);
-            this.mnu_normal.Text = "Normal";
-            this.mnu_normal.Click += new System.EventHandler(this.mnu_normal_Click);
             // 
             // frmMain
             // 
