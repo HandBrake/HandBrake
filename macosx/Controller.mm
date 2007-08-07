@@ -234,8 +234,26 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 	[fVidRatePopUp addItemWithTitle: _( @"Same as source" )];
     for( int i = 0; i < hb_video_rates_count; i++ )
     {
-        [fVidRatePopUp addItemWithTitle:
-            [NSString stringWithCString: hb_video_rates[i].string]];
+        if ([[NSString stringWithCString: hb_video_rates[i].string] isEqualToString: [NSString stringWithFormat: @"%.3f",23.976]])
+		{
+			[fVidRatePopUp addItemWithTitle:[NSString stringWithFormat: @"%@%@",
+				[NSString stringWithCString: hb_video_rates[i].string], @" (NTSC Film)"]];
+		}
+		else if ([[NSString stringWithCString: hb_video_rates[i].string] isEqualToString: [NSString stringWithFormat: @"%d",25]])
+		{
+			[fVidRatePopUp addItemWithTitle:[NSString stringWithFormat: @"%@%@",
+				[NSString stringWithCString: hb_video_rates[i].string], @" (PAL Film/Video)"]];
+		}
+		else if ([[NSString stringWithCString: hb_video_rates[i].string] isEqualToString: [NSString stringWithFormat: @"%.2f",29.97]])
+		{
+			[fVidRatePopUp addItemWithTitle:[NSString stringWithFormat: @"%@%@",
+				[NSString stringWithCString: hb_video_rates[i].string], @" (NTSC Video)"]];
+		}
+		else
+		{
+			[fVidRatePopUp addItemWithTitle:
+				[NSString stringWithCString: hb_video_rates[i].string]];
+		}
     }
     [fVidRatePopUp selectItemAtIndex: 0];
 	
@@ -250,7 +268,8 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
     for( int i = 0; i < hb_audio_bitrates_count; i++ )
     {
         [fAudBitratePopUp addItemWithTitle:
-            [NSString stringWithCString: hb_audio_bitrates[i].string]];
+				[NSString stringWithCString: hb_audio_bitrates[i].string]];
+
     }
     [fAudBitratePopUp selectItemAtIndex: hb_audio_bitrates_default];
 	
