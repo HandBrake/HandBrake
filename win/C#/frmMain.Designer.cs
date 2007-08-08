@@ -66,9 +66,7 @@ namespace Handbrake
             this.ToolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.mnu_options = new System.Windows.Forms.ToolStripMenuItem();
             this.PresetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_preset_ipod133 = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_preset_ipod178 = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_preset_ipod235 = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_preset = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_appleTv = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_iphone = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_presetPS3 = new System.Windows.Forms.ToolStripMenuItem();
@@ -548,9 +546,7 @@ namespace Handbrake
             // 
             this.PresetsToolStripMenuItem.BackColor = System.Drawing.SystemColors.Control;
             this.PresetsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnu_preset_ipod133,
-            this.mnu_preset_ipod178,
-            this.mnu_preset_ipod235,
+            this.mnu_preset,
             this.mnu_appleTv,
             this.mnu_iphone,
             this.mnu_presetPS3,
@@ -566,26 +562,12 @@ namespace Handbrake
             this.PresetsToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
             this.PresetsToolStripMenuItem.Text = "&Presets";
             // 
-            // mnu_preset_ipod133
+            // mnu_preset
             // 
-            this.mnu_preset_ipod133.Name = "mnu_preset_ipod133";
-            this.mnu_preset_ipod133.Size = new System.Drawing.Size(276, 22);
-            this.mnu_preset_ipod133.Text = "iPod (Aspect Ratio 1.33)";
-            this.mnu_preset_ipod133.Click += new System.EventHandler(this.mnu_preset_ipod133_Click);
-            // 
-            // mnu_preset_ipod178
-            // 
-            this.mnu_preset_ipod178.Name = "mnu_preset_ipod178";
-            this.mnu_preset_ipod178.Size = new System.Drawing.Size(276, 22);
-            this.mnu_preset_ipod178.Text = "iPod (Aspect Ratio 1.78)";
-            this.mnu_preset_ipod178.Click += new System.EventHandler(this.mnu_preset_ipod178_Click);
-            // 
-            // mnu_preset_ipod235
-            // 
-            this.mnu_preset_ipod235.Name = "mnu_preset_ipod235";
-            this.mnu_preset_ipod235.Size = new System.Drawing.Size(276, 22);
-            this.mnu_preset_ipod235.Text = "iPod (Aspect Ratio 2.35)";
-            this.mnu_preset_ipod235.Click += new System.EventHandler(this.mnu_preset_ipod235_Click);
+            this.mnu_preset.Name = "mnu_preset";
+            this.mnu_preset.Size = new System.Drawing.Size(276, 22);
+            this.mnu_preset.Text = "iPod";
+            this.mnu_preset.Click += new System.EventHandler(this.mnu_preset_ipod133_Click);
             // 
             // mnu_appleTv
             // 
@@ -1873,6 +1855,7 @@ namespace Handbrake
             this.MaximumSize = new System.Drawing.Size(878, 750);
             this.MinimumSize = new System.Drawing.Size(683, 648);
             this.Name = "frmMain";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Handbrake";
             this.frmMainMenu.ResumeLayout(false);
             this.frmMainMenu.PerformLayout();
@@ -1917,9 +1900,7 @@ namespace Handbrake
         internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator5;
         internal System.Windows.Forms.ToolStripMenuItem mnu_options;
         internal System.Windows.Forms.ToolStripMenuItem PresetsToolStripMenuItem;
-        internal System.Windows.Forms.ToolStripMenuItem mnu_preset_ipod133;
-        internal System.Windows.Forms.ToolStripMenuItem mnu_preset_ipod178;
-        internal System.Windows.Forms.ToolStripMenuItem mnu_preset_ipod235;
+        internal System.Windows.Forms.ToolStripMenuItem mnu_preset;
         internal System.Windows.Forms.ToolStripMenuItem mnu_appleTv;
         internal System.Windows.Forms.ToolStripMenuItem mnu_presetPS3;
         internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator4;

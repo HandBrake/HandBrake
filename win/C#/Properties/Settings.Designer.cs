@@ -525,5 +525,17 @@ namespace Handbrake.Properties {
                 this["deblock"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string QuickStartWindow {
+            get {
+                return ((string)(this["QuickStartWindow"]));
+            }
+            set {
+                this["QuickStartWindow"] = value;
+            }
+        }
     }
 }

@@ -68,6 +68,12 @@
     <Compile Include="frmOptions.Designer.cs">
       <DependentUpon>frmOptions.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmQuickStart.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmQuickStart.Designer.cs">
+      <DependentUpon>frmQuickStart.cs</DependentUpon>
+    </Compile>
     <Compile Include="Functions\CLI.cs" />
     <Compile Include="Parsing\AudioTrack.cs" />
     <Compile Include="Parsing\Chapter.cs" />
@@ -96,6 +102,10 @@
     <EmbeddedResource Include="frmOptions.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmOptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmQuickStart.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmQuickStart.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -160,6 +170,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="handbrakepineapple.ico" />
+    <None Include="Resources\Remove.png" />
+    <None Include="Resources\Movies.png" />
+    <None Include="Resources\info.png" />
+    <None Include="Resources\History.png" />
+    <None Include="Resources\Help.png" />
+    <None Include="Resources\General Preferences.png" />
+    <None Include="Resources\Emoticon.png" />
+    <None Include="Resources\Disc.png" />
+    <None Include="Resources\Delete.png" />
+    <None Include="Resources\Burn.png" />
     <None Include="Resources\tempSplash.jpg" />
     <None Include="Resources\splash.jpg" />
   </ItemGroup>

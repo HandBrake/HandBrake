@@ -38,7 +38,7 @@ namespace Handbrake
             this.BackColor = System.Drawing.Color.White;
             this.BackgroundImage = global::Handbrake.Properties.Resources.tempSplash;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(496, 276);
+            this.ClientSize = new System.Drawing.Size(496, 303);
             this.ControlBox = false;
             this.Font = new System.Drawing.Font("Corbel", 8.25F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;

@@ -42,6 +42,7 @@ namespace Handbrake
             dvdInfoWindow.Hide();
             // **********************************************************************************************
 
+
             // Set the Version number lable to the corect version.
             Version.Text = "Version " + Properties.Settings.Default.GuiVersion;
 
@@ -50,6 +51,9 @@ namespace Handbrake
 
             // Now load the users default if required.
             loadUserDefaults();
+
+            // Display the quick start window if required.
+            quickStart();
         }
 
         public void showSplash(object sender)
@@ -171,6 +175,16 @@ namespace Handbrake
                 }
             }
         }
+
+        public void quickStart()
+        {
+            if ((Properties.Settings.Default.QuickStartWindow == "Checked") || (Properties.Settings.Default.QuickStartWindow == ""))
+            {
+                frmQuickStart quickstart = new frmQuickStart();
+                quickstart.ShowDialog();
+            }
+        }
+
 
         // -------------------------------------------------------------- 
         // The main Menu bar.
@@ -395,7 +409,7 @@ namespace Handbrake
         {
             CheckPixelRatio.CheckState = CheckState.Unchecked;
             text_width.Text = "640";
-            text_height.Text = "480";
+            text_height.Text = "Auto";
             drp_videoEncoder.Text = "H.264 (iPod)";
             text_bitrate.Text = "1000";
             text_filesize.Text = "";
@@ -406,35 +420,7 @@ namespace Handbrake
             drp_crop.Text = "No Crop";
         }
 
-        private void mnu_preset_ipod178_Click(object sender, EventArgs e)
-        {
-            CheckPixelRatio.CheckState = CheckState.Unchecked;
-            text_width.Text = "640";
-            text_height.Text = "352";
-            drp_videoEncoder.Text = "H.264 (iPod)";
-            text_bitrate.Text = "1000";
-            text_filesize.Text = "";
-            slider_videoQuality.Value = 0;
-            SliderValue.Text = "0%";
-            drp_audioBitrate.Text = "160";
-            rtf_h264advanced.Text = "";
-            drp_crop.Text = "No Crop";
-        }
 
-        private void mnu_preset_ipod235_Click(object sender, EventArgs e)
-        {
-            CheckPixelRatio.CheckState = CheckState.Unchecked;
-            text_width.Text = "640";
-            text_height.Text = "272";
-            drp_videoEncoder.Text = "H.264 (iPod)";
-            text_bitrate.Text = "1000";
-            text_filesize.Text = "";
-            slider_videoQuality.Value = 0;
-            SliderValue.Text = "0%";
-            drp_audioBitrate.Text = "160";
-            rtf_h264advanced.Text = "";
-            drp_crop.Text = "No Crop";
-        }
 
         private void mnu_appleTv_Click(object sender, EventArgs e)
         {
@@ -993,20 +979,23 @@ namespace Handbrake
         {
             try
             {
-                if (CheckPixelRatio.Checked)
+                if (text_height.Text != "Auto")
                 {
-                    text_height.Text = "";
-                    text_width.BackColor = Color.White;
-                }
-                else
-                {
-                    if ((int.Parse(text_height.Text) % 16) != 0)
+                    if (CheckPixelRatio.Checked)
                     {
-                        text_height.BackColor = Color.LightCoral;
+                        text_height.Text = "";
+                        text_width.BackColor = Color.White;
                     }
                     else
                     {
-                        text_height.BackColor = Color.LightGreen;
+                        if ((int.Parse(text_height.Text) % 16) != 0)
+                        {
+                            text_height.BackColor = Color.LightCoral;
+                        }
+                        else
+                        {
+                            text_height.BackColor = Color.LightGreen;
+                        }
                     }
                 }
             } catch(Exception){
@@ -1362,10 +1351,16 @@ namespace Handbrake
 
             if (width !=  "")
                 width = " -w "+ width;
-            
 
-            if (height !=  "")
-                height = " -l "+ height;
+
+            if (height == "Auto")
+            {
+                height = "";
+            }
+            else if (height != "")
+            {
+                height = " -l " + height;
+            }
             
 
             string queryDestination = destination+ videoEncoder+ audioEncoder+ width+ height;
@@ -1406,25 +1401,25 @@ namespace Handbrake
             }
 
             switch (deInterlace_Option)
-                {
-                    case "None":
-                        deinterlace = "";
-                        break;
-                    case "Origional (Fast)":
-                        deinterlace = " --deinterlace";
-                        break;
-                    case "yadif (Slow)":
-                        deinterlace = " --deinterlace=" + '"' + "1" + '"';
-                        break;
-                    case "yadif + mcdeint (Slower)":
-                        deinterlace = " --deinterlace=" + '"' + "1:-1:1" + '"';
-                        break;
-                    case "yadif + mcdeint (Slowest)":
-                        deinterlace = " --deinterlace=" + '"' + "3:-1:2" + '"';
-                        break;
-                    default:
-                        deinterlace = " --deinterlace=";
-                        break;
+            {
+                case "None":
+                    deinterlace = "";
+                    break;
+                case "Origional (Fast)":
+                    deinterlace = " --deinterlace";
+                    break;
+                case "yadif (Slow)":
+                    deinterlace = " --deinterlace=" + '"' + "1" + '"';
+                    break;
+                case "yadif + mcdeint (Slower)":
+                    deinterlace = " --deinterlace=" + '"' + "1:-1:1" + '"';
+                    break;
+                case "yadif + mcdeint (Slowest)":
+                    deinterlace = " --deinterlace=" + '"' + "3:-1:2" + '"';
+                    break;
+                default:
+                    deinterlace = " --deinterlace=";
+                    break;
             }
 
             if (check_grayscale.Checked)
