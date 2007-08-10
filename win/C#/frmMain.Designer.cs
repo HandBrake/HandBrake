@@ -54,7 +54,6 @@ namespace Handbrake
             this.File_Open = new System.Windows.Forms.OpenFileDialog();
             this.ISO_Open = new System.Windows.Forms.OpenFileDialog();
             this.FileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_open = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_save = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.mnu_update = new System.Windows.Forms.ToolStripMenuItem();
@@ -415,7 +414,7 @@ namespace Handbrake
             "yadif (Slow)",
             "yadif + mcdeint (Slower)",
             "yadif + mcdeint  (Slowest)"});
-            this.drp_deInterlace_option.Location = new System.Drawing.Point(467, 154);
+            this.drp_deInterlace_option.Location = new System.Drawing.Point(462, 154);
             this.drp_deInterlace_option.Name = "drp_deInterlace_option";
             this.drp_deInterlace_option.Size = new System.Drawing.Size(161, 21);
             this.drp_deInterlace_option.TabIndex = 67;
@@ -431,12 +430,17 @@ namespace Handbrake
             "None",
             "Weak",
             "Strong"});
-            this.drp_deNoise.Location = new System.Drawing.Point(467, 211);
+            this.drp_deNoise.Location = new System.Drawing.Point(462, 211);
             this.drp_deNoise.Name = "drp_deNoise";
             this.drp_deNoise.Size = new System.Drawing.Size(161, 21);
             this.drp_deNoise.TabIndex = 72;
             this.drp_deNoise.Text = "None";
             this.ToolTip.SetToolTip(this.drp_deNoise, "Select the subtitle language you require from this dropdown.");
+            // 
+            // DVD_Open
+            // 
+            this.DVD_Open.Description = "Select the \"VIDEO_TS\" folder from your DVD Drvie.";
+            this.DVD_Open.ShowNewFolderButton = false;
             // 
             // File_Open
             // 
@@ -451,7 +455,6 @@ namespace Handbrake
             // FileToolStripMenuItem
             // 
             this.FileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnu_open,
             this.mnu_save,
             this.ToolStripSeparator1,
             this.mnu_update,
@@ -461,47 +464,37 @@ namespace Handbrake
             this.FileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
             this.FileToolStripMenuItem.Text = "&File";
             // 
-            // mnu_open
-            // 
-            this.mnu_open.Image = ((System.Drawing.Image)(resources.GetObject("mnu_open.Image")));
-            this.mnu_open.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.mnu_open.Name = "mnu_open";
-            this.mnu_open.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.mnu_open.Size = new System.Drawing.Size(184, 22);
-            this.mnu_open.Text = "&Open Profile";
-            this.mnu_open.Click += new System.EventHandler(this.mnu_open_Click);
-            // 
             // mnu_save
             // 
             this.mnu_save.Image = ((System.Drawing.Image)(resources.GetObject("mnu_save.Image")));
             this.mnu_save.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.mnu_save.Name = "mnu_save";
             this.mnu_save.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.mnu_save.Size = new System.Drawing.Size(184, 22);
+            this.mnu_save.Size = new System.Drawing.Size(180, 22);
             this.mnu_save.Text = "&Save Profile";
             this.mnu_save.Click += new System.EventHandler(this.mnu_save_Click);
             // 
             // ToolStripSeparator1
             // 
             this.ToolStripSeparator1.Name = "ToolStripSeparator1";
-            this.ToolStripSeparator1.Size = new System.Drawing.Size(181, 6);
+            this.ToolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // mnu_update
             // 
             this.mnu_update.Name = "mnu_update";
-            this.mnu_update.Size = new System.Drawing.Size(184, 22);
+            this.mnu_update.Size = new System.Drawing.Size(180, 22);
             this.mnu_update.Text = "Check for Updates";
             this.mnu_update.Click += new System.EventHandler(this.mnu_update_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(181, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
             // 
             // mnu_exit
             // 
             this.mnu_exit.Name = "mnu_exit";
-            this.mnu_exit.Size = new System.Drawing.Size(184, 22);
+            this.mnu_exit.Size = new System.Drawing.Size(180, 22);
             this.mnu_exit.Text = "E&xit";
             this.mnu_exit.Click += new System.EventHandler(this.mnu_exit_Click);
             // 
@@ -751,7 +744,7 @@ namespace Handbrake
             this.GroupBox1.Controls.Add(this.Label10);
             this.GroupBox1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GroupBox1.ForeColor = System.Drawing.Color.Black;
-            this.GroupBox1.Location = new System.Drawing.Point(15, 35);
+            this.GroupBox1.Location = new System.Drawing.Point(14, 35);
             this.GroupBox1.Name = "GroupBox1";
             this.GroupBox1.Size = new System.Drawing.Size(647, 116);
             this.GroupBox1.TabIndex = 408;
@@ -842,7 +835,7 @@ namespace Handbrake
             this.GroupBox4.Controls.Add(this.Label12);
             this.GroupBox4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GroupBox4.ForeColor = System.Drawing.Color.Black;
-            this.GroupBox4.Location = new System.Drawing.Point(15, 157);
+            this.GroupBox4.Location = new System.Drawing.Point(14, 157);
             this.GroupBox4.Name = "GroupBox4";
             this.GroupBox4.Size = new System.Drawing.Size(647, 126);
             this.GroupBox4.TabIndex = 409;
@@ -976,7 +969,7 @@ namespace Handbrake
             this.Version.Name = "Version";
             this.Version.Size = new System.Drawing.Size(79, 20);
             this.Version.TabIndex = 415;
-            this.Version.Text = "Version 2.3";
+            this.Version.Text = "Version 2.4";
             // 
             // lbl_encode
             // 
@@ -1368,7 +1361,7 @@ namespace Handbrake
             // 
             this.label24.AutoSize = true;
             this.label24.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label24.Location = new System.Drawing.Point(365, 133);
+            this.label24.Location = new System.Drawing.Point(360, 133);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(109, 13);
             this.label24.TabIndex = 73;
@@ -1378,7 +1371,7 @@ namespace Handbrake
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(365, 214);
+            this.label11.Location = new System.Drawing.Point(360, 214);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(58, 13);
             this.label11.TabIndex = 71;
@@ -1388,7 +1381,7 @@ namespace Handbrake
             // 
             this.check_deblock.AutoSize = true;
             this.check_deblock.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_deblock.Location = new System.Drawing.Point(467, 186);
+            this.check_deblock.Location = new System.Drawing.Point(462, 186);
             this.check_deblock.Name = "check_deblock";
             this.check_deblock.Size = new System.Drawing.Size(72, 17);
             this.check_deblock.TabIndex = 70;
@@ -1399,7 +1392,7 @@ namespace Handbrake
             // 
             this.check_detelecine.AutoSize = true;
             this.check_detelecine.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_detelecine.Location = new System.Drawing.Point(368, 185);
+            this.check_detelecine.Location = new System.Drawing.Point(363, 185);
             this.check_detelecine.Name = "check_detelecine";
             this.check_detelecine.Size = new System.Drawing.Size(86, 17);
             this.check_detelecine.TabIndex = 69;
@@ -1410,7 +1403,7 @@ namespace Handbrake
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(365, 157);
+            this.label4.Location = new System.Drawing.Point(360, 157);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(77, 13);
             this.label4.TabIndex = 68;
@@ -1420,7 +1413,7 @@ namespace Handbrake
             // 
             this.Label37.AutoSize = true;
             this.Label37.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label37.Location = new System.Drawing.Point(387, 104);
+            this.Label37.Location = new System.Drawing.Point(382, 104);
             this.Label37.Name = "Label37";
             this.Label37.Size = new System.Drawing.Size(241, 12);
             this.Label37.TabIndex = 52;
@@ -1430,7 +1423,7 @@ namespace Handbrake
             // 
             this.check_largeFile.AutoSize = true;
             this.check_largeFile.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_largeFile.Location = new System.Drawing.Point(368, 84);
+            this.check_largeFile.Location = new System.Drawing.Point(363, 84);
             this.check_largeFile.Name = "check_largeFile";
             this.check_largeFile.Size = new System.Drawing.Size(172, 17);
             this.check_largeFile.TabIndex = 51;
@@ -1442,7 +1435,7 @@ namespace Handbrake
             // 
             this.check_turbo.AutoSize = true;
             this.check_turbo.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_turbo.Location = new System.Drawing.Point(368, 61);
+            this.check_turbo.Location = new System.Drawing.Point(363, 61);
             this.check_turbo.Name = "check_turbo";
             this.check_turbo.Size = new System.Drawing.Size(110, 17);
             this.check_turbo.TabIndex = 50;
@@ -1463,7 +1456,7 @@ namespace Handbrake
             // 
             this.Label22.AutoSize = true;
             this.Label22.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label22.Location = new System.Drawing.Point(365, 13);
+            this.Label22.Location = new System.Drawing.Point(360, 13);
             this.Label22.Name = "Label22";
             this.Label22.Size = new System.Drawing.Size(175, 13);
             this.Label22.TabIndex = 38;
@@ -1514,7 +1507,7 @@ namespace Handbrake
             // 
             this.check_2PassEncode.AutoSize = true;
             this.check_2PassEncode.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_2PassEncode.Location = new System.Drawing.Point(368, 38);
+            this.check_2PassEncode.Location = new System.Drawing.Point(363, 38);
             this.check_2PassEncode.Name = "check_2PassEncode";
             this.check_2PassEncode.Size = new System.Drawing.Size(119, 17);
             this.check_2PassEncode.TabIndex = 18;
@@ -1829,7 +1822,7 @@ namespace Handbrake
             this.advancedOptions.Controls.Add(this.h264Tab);
             this.advancedOptions.Controls.Add(this.TabPage6);
             this.advancedOptions.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.advancedOptions.Location = new System.Drawing.Point(15, 295);
+            this.advancedOptions.Location = new System.Drawing.Point(14, 295);
             this.advancedOptions.Name = "advancedOptions";
             this.advancedOptions.SelectedIndex = 0;
             this.advancedOptions.Size = new System.Drawing.Size(647, 268);
@@ -1884,7 +1877,6 @@ namespace Handbrake
 
         internal System.Windows.Forms.SaveFileDialog File_Save;
         internal System.Windows.Forms.ToolTip ToolTip;
-        internal System.Windows.Forms.FolderBrowserDialog DVD_Open;
         internal System.Windows.Forms.OpenFileDialog File_Open;
         internal System.Windows.Forms.OpenFileDialog ISO_Open;
         internal System.Windows.Forms.ToolStripMenuItem FileToolStripMenuItem;
@@ -2030,6 +2022,7 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripMenuItem mnu_film;
         private System.Windows.Forms.ToolStripMenuItem mnu_Classic;
         private System.Windows.Forms.ToolStripMenuItem mnu_normal;
+        internal System.Windows.Forms.FolderBrowserDialog DVD_Open;
 
     }
 }

@@ -382,6 +382,7 @@ namespace Handbrake
             }
             catch (Exception)
             {
+                // No action required
             }
 
             // BUG *******************************************************
@@ -1611,7 +1612,8 @@ namespace Handbrake
 
         #endregion
 
-        
+
+      
 
 
         // This is the END of the road ------------------------------------------------------------------------------

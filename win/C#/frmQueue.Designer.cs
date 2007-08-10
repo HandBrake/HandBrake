@@ -118,6 +118,7 @@ namespace Handbrake
             // 
             this.list_queue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.list_queue.FormattingEnabled = true;
+            this.list_queue.HorizontalScrollbar = true;
             this.list_queue.Location = new System.Drawing.Point(10, 37);
             this.list_queue.Name = "list_queue";
             this.list_queue.Size = new System.Drawing.Size(630, 288);
