@@ -311,6 +311,10 @@
 - (NSDictionary *)CreateAnimationPreset;
 - (NSDictionary *)CreateBedlamPreset;
 - (NSDictionary *)CreateiPhonePreset;
+- (NSDictionary *)CreateDeuxSixQuatrePreset;
+- (NSDictionary *)CreateBrokePreset;
+- (NSDictionary *)CreateBlindPreset;
+
 - (IBAction) RevertPictureSizeToMax:(id)sender;
 
 - (IBAction)SetDefaultPreset:(id)sender;

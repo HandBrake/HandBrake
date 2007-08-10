@@ -3494,6 +3494,9 @@ the user is using "Custom" settings by determining the sender*/
     [UserPresets addObject:[self CreateTelevisionPreset]];
     [UserPresets addObject:[self CreateAnimationPreset]];
     [UserPresets addObject:[self CreateBedlamPreset]];
+    [UserPresets addObject:[self CreateDeuxSixQuatrePreset]];
+    [UserPresets addObject:[self CreateBrokePreset]];
+    [UserPresets addObject:[self CreateBlindPreset]];
     
     [self AddPreset];
 }
@@ -3674,7 +3677,7 @@ the user is using "Custom" settings by determining the sender*/
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
-    [preset setObject:@"HB-iPod Low-Res" forKey:@"PresetName"];
+    [preset setObject:@"iPod Low-Rez" forKey:@"PresetName"];
 	/*Set whether or not this is a user preset or factory 0 is factory, 1 is user*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
 	/*Set whether or not this is default, at creation set to 0*/
@@ -3743,7 +3746,7 @@ the user is using "Custom" settings by determining the sender*/
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
-    [preset setObject:@"HB-iPod High-Res" forKey:@"PresetName"];
+    [preset setObject:@"iPod High-Rez" forKey:@"PresetName"];
 	/*Set whether or not this is a user preset or factory 0 is factory, 1 is user*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
 	/*Set whether or not this is default, at creation set to 0*/
@@ -3811,7 +3814,7 @@ the user is using "Custom" settings by determining the sender*/
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
-    [preset setObject:@"HB-AppleTV" forKey:@"PresetName"];
+    [preset setObject:@"AppleTV" forKey:@"PresetName"];
 	/*Set whether or not this is a user preset where 0 is factory, 1 is user*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
 	/*Set whether or not this is default, at creation set to 0*/
@@ -3883,7 +3886,7 @@ the user is using "Custom" settings by determining the sender*/
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
-    [preset setObject:@"HB-PS3" forKey:@"PresetName"];
+    [preset setObject:@"PS3" forKey:@"PresetName"];
 	/*Set whether or not this is a user preset where 0 is factory, 1 is user*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
 	/*Set whether or not this is default, at creation set to 0*/
@@ -3951,7 +3954,7 @@ the user is using "Custom" settings by determining the sender*/
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
-    [preset setObject:@"HB-PSP" forKey:@"PresetName"];
+    [preset setObject:@"PSP" forKey:@"PresetName"];
 	/*Set whether or not this is a user preset where 0 is factory, 1 is user*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
 	/*Set whether or not this is default, at creation set to 0*/
@@ -4021,7 +4024,7 @@ the user is using "Custom" settings by determining the sender*/
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
-    [preset setObject:@"HB-Normal" forKey:@"PresetName"];
+    [preset setObject:@"Normal" forKey:@"PresetName"];
 	/*Set whether or not this is a user preset or factory 0 is factory, 1 is user*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
 	/*Set whether or not this is default, at creation set to 0*/
@@ -4052,6 +4055,7 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
 	/* 2 Pass Encoding */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoTwoPass"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoTurboTwoPass"];
 	
 	/*Picture Settings*/
 	//hb_job_t * job = fTitle->job;
@@ -4089,7 +4093,7 @@ the user is using "Custom" settings by determining the sender*/
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
-    [preset setObject:@"HB-Classic" forKey:@"PresetName"];
+    [preset setObject:@"Classic" forKey:@"PresetName"];
 	/*Set whether or not this is a user preset or factory 0 is factory, 1 is user*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
 	/*Set whether or not this is default, at creation set to 0*/
@@ -4157,7 +4161,7 @@ the user is using "Custom" settings by determining the sender*/
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
-    [preset setObject:@"HB-Film" forKey:@"PresetName"];
+    [preset setObject:@"Film" forKey:@"PresetName"];
 	/*Set whether or not this is a user preset or factory 0 is factory, 1 is user*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
 	/*Set whether or not this is default, at creation set to 0*/
@@ -4188,6 +4192,7 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
 	/* 2 Pass Encoding */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoTwoPass"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoTurboTwoPass"];
 	
 	/*Picture Settings*/
 	//hb_job_t * job = fTitle->job;
@@ -4225,7 +4230,7 @@ the user is using "Custom" settings by determining the sender*/
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
-    [preset setObject:@"HB-Television" forKey:@"PresetName"];
+    [preset setObject:@"Television" forKey:@"PresetName"];
 	/*Set whether or not this is a user preset or factory 0 is factory, 1 is user*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
 	/*Set whether or not this is default, at creation set to 0*/
@@ -4251,11 +4256,12 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithFloat:[fVidQualitySlider floatValue]] forKey:@"VideoQualitySlider"];
 	
 	/* Video framerate */
-	[preset setObject:@"29.97" forKey:@"VideoFramerate"];
+	[preset setObject:@"Same as source" forKey:@"VideoFramerate"];
 	/* GrayScale */
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
 	/* 2 Pass Encoding */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoTwoPass"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoTurboTwoPass"];
 	
 	/*Picture Settings*/
 	//hb_job_t * job = fTitle->job;
@@ -4293,7 +4299,7 @@ the user is using "Custom" settings by determining the sender*/
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
-    [preset setObject:@"HB-Animation" forKey:@"PresetName"];
+    [preset setObject:@"Animation" forKey:@"PresetName"];
 	/*Set whether or not this is a user preset or factory 0 is factory, 1 is user*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
 	/*Set whether or not this is default, at creation set to 0*/
@@ -4319,11 +4325,12 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithFloat:[fVidQualitySlider floatValue]] forKey:@"VideoQualitySlider"];
 	
 	/* Video framerate */
-	[preset setObject:@"29.97" forKey:@"VideoFramerate"];
+	[preset setObject:@"Same as source" forKey:@"VideoFramerate"];
 	/* GrayScale */
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
 	/* 2 Pass Encoding */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoTwoPass"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoTurboTwoPass"];
 	
 	/*Picture Settings*/
 	//hb_job_t * job = fTitle->job;
@@ -4361,7 +4368,7 @@ the user is using "Custom" settings by determining the sender*/
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
-    [preset setObject:@"HB-QuickTime" forKey:@"PresetName"];
+    [preset setObject:@"QuickTime" forKey:@"PresetName"];
 	/*Set whether or not this is a user preset or factory 0 is factory, 1 is user*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
 	/*Set whether or not this is default, at creation set to 0*/
@@ -4392,6 +4399,7 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
 	/* 2 Pass Encoding */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoTwoPass"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoTurboTwoPass"];
 	
 	/*Picture Settings*/
 	//hb_job_t * job = fTitle->job;
@@ -4429,7 +4437,7 @@ the user is using "Custom" settings by determining the sender*/
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
-    [preset setObject:@"HB-Bedlam" forKey:@"PresetName"];
+    [preset setObject:@"Bedlam" forKey:@"PresetName"];
 	/*Set whether or not this is a user preset or factory 0 is factory, 1 is user*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
 	/*Set whether or not this is default, at creation set to 0*/
@@ -4460,6 +4468,7 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
 	/* 2 Pass Encoding */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoTwoPass"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoTurboTwoPass"];
 	
 	/*Picture Settings*/
 	//hb_job_t * job = fTitle->job;
@@ -4497,7 +4506,7 @@ the user is using "Custom" settings by determining the sender*/
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
-    [preset setObject:@"HB-iPhone" forKey:@"PresetName"];
+    [preset setObject:@"iPhone" forKey:@"PresetName"];
 	/*Set whether or not this is a user preset or factory 0 is factory, 1 is user*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
 	/*Set whether or not this is default, at creation set to 0*/
@@ -4551,6 +4560,75 @@ the user is using "Custom" settings by determining the sender*/
 	/* Audio Sample Rate*/
 	[preset setObject:@"48" forKey:@"AudioSampleRate"];
 	/* Audio Bitrate Rate*/
+	[preset setObject:@"128" forKey:@"AudioBitRate"];
+	/* Subtitles*/
+	[preset setObject:@"None" forKey:@"Subtitles"];
+	
+
+    [preset autorelease];
+    return preset;
+
+}
+
+- (NSDictionary *)CreateDeuxSixQuatrePreset
+{
+    NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
+	/* Get the New Preset Name from the field in the AddPresetPanel */
+    [preset setObject:@"Deux Six Quatre" forKey:@"PresetName"];
+	/*Set whether or not this is a user preset or factory 0 is factory, 1 is user*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
+	/*Set whether or not this is default, at creation set to 0*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
+	/*Get the whether or not to apply pic settings in the AddPresetPanel*/
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
+	/* Get the New Preset Description from the field in the AddPresetPanel */
+    [preset setObject:@"HandBrake's preset for true high profile x264 quality. A good balance of quality and speed, based on community standards found in the wild. This preset will give you a much better sense of x264's capabilities than vanilla main profile." forKey:@"PresetDescription"];
+	/* File Format */
+    [preset setObject:@"MKV file" forKey:@"FileFormat"];
+	/* Chapter Markers*/
+	 [preset setObject:[NSNumber numberWithInt:1] forKey:@"ChapterMarkers"];
+    /* Codecs */
+	[preset setObject:@"AVC/H.264 Video / AC-3 Audio" forKey:@"FileCodecs"];
+	/* Video encoder */
+	[preset setObject:@"x264 (h.264 Main)" forKey:@"VideoEncoder"];
+	/* x264 Option String */
+	[preset setObject:@"ref=5:mixed-refs:bframes=3:bime:weightb:b-rdo:b-pyramid:me=umh:subme=7:trellis=1:analyse=all:8x8dct:no-fast-pskip" forKey:@"x264Option"];
+	/* Video quality */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
+	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
+	[preset setObject:@"1600" forKey:@"VideoAvgBitrate"];
+	[preset setObject:[NSNumber numberWithFloat:[fVidQualitySlider floatValue]] forKey:@"VideoQualitySlider"];
+	
+	/* Video framerate */
+	[preset setObject:@"Same as source" forKey:@"VideoFramerate"];
+	/* GrayScale */
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
+	/* 2 Pass Encoding */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoTwoPass"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoTurboTwoPass"];
+	
+	/*Picture Settings*/
+	//hb_job_t * job = fTitle->job;
+	/* Basic Picture Settings */
+	/* Use Max Picture settings for whatever the dvd is.*/
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesMaxPictureSettings"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureAutoCrop"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureWidth"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureKeepRatio"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PicturePAR"];
+	/* Set crop settings here */
+	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureBottomCrop"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
+	
+	/*Audio*/
+	/* Audio Sample Rate*/
+	[preset setObject:@"48" forKey:@"AudioSampleRate"];
+	/* Audio Bitrate Rate*/
 	[preset setObject:@"160" forKey:@"AudioBitRate"];
 	/* Subtitles*/
 	[preset setObject:@"None" forKey:@"Subtitles"];
@@ -4560,6 +4638,145 @@ the user is using "Custom" settings by determining the sender*/
     return preset;
 
 }
+
+- (NSDictionary *)CreateBrokePreset
+{
+    NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
+	/* Get the New Preset Name from the field in the AddPresetPanel */
+    [preset setObject:@"Broke" forKey:@"PresetName"];
+	/*Set whether or not this is a user preset or factory 0 is factory, 1 is user*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
+	/*Set whether or not this is default, at creation set to 0*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
+	/*Get the whether or not to apply pic settings in the AddPresetPanel*/
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
+	/* Get the New Preset Description from the field in the AddPresetPanel */
+    [preset setObject:@"HandBrake's preset for people without a lot of money to waste on hard drives. Tries to maximize quality for burning to CDs, so you can party like it's 1999." forKey:@"PresetDescription"];
+	/* File Format */
+    [preset setObject:@"MP4 file" forKey:@"FileFormat"];
+	/* Chapter Markers*/
+	 [preset setObject:[NSNumber numberWithInt:1] forKey:@"ChapterMarkers"];
+    /* Codecs */
+	[preset setObject:@"AVC/H.264 Video / AAC Audio" forKey:@"FileCodecs"];
+	/* Video encoder */
+	[preset setObject:@"x264 (h.264 Main)" forKey:@"VideoEncoder"];
+	/* x264 Option String */
+	[preset setObject:@"ref=3:mixed-refs:bframes=9:bime:weightb:b-rdo:b-pyramid::direct=auto:me=umh:subme=6:trellis=1:analyse=all:8x8dct:no-fast-pskip" forKey:@"x264Option"];
+	/* Video quality */
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoQualityType"];
+	[preset setObject:@"695" forKey:@"VideoTargetSize"];
+	[preset setObject:@"1600" forKey:@"VideoAvgBitrate"];
+	[preset setObject:[NSNumber numberWithFloat:[fVidQualitySlider floatValue]] forKey:@"VideoQualitySlider"];
+	
+	/* Video framerate */
+	[preset setObject:@"Same as source" forKey:@"VideoFramerate"];
+	/* GrayScale */
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
+	/* 2 Pass Encoding */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoTwoPass"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoTurboTwoPass"];
+	
+	/*Picture Settings*/
+	//hb_job_t * job = fTitle->job;
+	/* Basic Picture Settings */
+	/* Use Max Picture settings for whatever the dvd is.*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesMaxPictureSettings"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureAutoCrop"];
+	[preset setObject:[NSNumber numberWithInt:720] forKey:@"PictureWidth"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureKeepRatio"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PicturePAR"];
+	/* Set crop settings here */
+	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureBottomCrop"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
+	
+	/*Audio*/
+	/* Audio Sample Rate*/
+	[preset setObject:@"48" forKey:@"AudioSampleRate"];
+	/* Audio Bitrate Rate*/
+	[preset setObject:@"128" forKey:@"AudioBitRate"];
+	/* Subtitles*/
+	[preset setObject:@"None" forKey:@"Subtitles"];
+	
+
+    [preset autorelease];
+    return preset;
+
+}
+
+- (NSDictionary *)CreateBlindPreset
+{
+    NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
+	/* Get the New Preset Name from the field in the AddPresetPanel */
+    [preset setObject:@"Blind" forKey:@"PresetName"];
+	/*Set whether or not this is a user preset or factory 0 is factory, 1 is user*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
+	/*Set whether or not this is default, at creation set to 0*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
+	/*Get the whether or not to apply pic settings in the AddPresetPanel*/
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
+	/* Get the New Preset Description from the field in the AddPresetPanel */
+    [preset setObject:@"HandBrake's preset for impatient people who don't care about picture quality." forKey:@"PresetDescription"];
+	/* File Format */
+    [preset setObject:@"MP4 file" forKey:@"FileFormat"];
+	/* Chapter Markers*/
+	 [preset setObject:[NSNumber numberWithInt:1] forKey:@"ChapterMarkers"];
+    /* Codecs */
+	[preset setObject:@"MPEG-4 Video / AAC Audio" forKey:@"FileCodecs"];
+	/* Video encoder */
+	[preset setObject:@"FFmpeg" forKey:@"VideoEncoder"];
+	/* x264 Option String */
+	[preset setObject:@"" forKey:@"x264Option"];
+	/* Video quality */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
+	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
+	[preset setObject:@"512" forKey:@"VideoAvgBitrate"];
+	[preset setObject:[NSNumber numberWithFloat:[fVidQualitySlider floatValue]] forKey:@"VideoQualitySlider"];
+	
+	/* Video framerate */
+	[preset setObject:@"Same as source" forKey:@"VideoFramerate"];
+	/* GrayScale */
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
+	/* 2 Pass Encoding */
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoTwoPass"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoTurboTwoPass"];
+	
+	/*Picture Settings*/
+	//hb_job_t * job = fTitle->job;
+	/* Basic Picture Settings */
+	/* Use Max Picture settings for whatever the dvd is.*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesMaxPictureSettings"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureAutoCrop"];
+	[preset setObject:[NSNumber numberWithInt:512] forKey:@"PictureWidth"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureKeepRatio"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PicturePAR"];
+	/* Set crop settings here */
+	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureBottomCrop"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
+	
+	/*Audio*/
+	/* Audio Sample Rate*/
+	[preset setObject:@"48" forKey:@"AudioSampleRate"];
+	/* Audio Bitrate Rate*/
+	[preset setObject:@"128" forKey:@"AudioBitRate"];
+	/* Subtitles*/
+	[preset setObject:@"None" forKey:@"Subtitles"];
+	
+
+    [preset autorelease];
+    return preset;
+
+}
+
 
 - (IBAction)DeletePreset:(id)sender
 {
