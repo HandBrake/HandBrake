@@ -54,12 +54,13 @@ namespace Handbrake
             this.File_Open = new System.Windows.Forms.OpenFileDialog();
             this.ISO_Open = new System.Windows.Forms.OpenFileDialog();
             this.FileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_open = new System.Windows.Forms.ToolStripMenuItem(); 
+            this.mnu_open = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_save = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.mnu_update = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.mnu_exit = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_open3 = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_encode = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_viewDVDdata = new System.Windows.Forms.ToolStripMenuItem();
@@ -452,7 +453,6 @@ namespace Handbrake
             // 
             this.ISO_Open.DefaultExt = "ISO";
             this.ISO_Open.Filter = "All Supported Files|*.iso;*.mpg;*.mpeg;*.vob";
-            
             // 
             // FileToolStripMenuItem
             // 
@@ -466,18 +466,16 @@ namespace Handbrake
             this.FileToolStripMenuItem.Name = "FileToolStripMenuItem";
             this.FileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
             this.FileToolStripMenuItem.Text = "&File";
-            
-            //
-            // mnu_open 
-	 	    //  
+            // 
+            // mnu_open
+            // 
             this.mnu_open.Image = ((System.Drawing.Image)(resources.GetObject("mnu_open.Image")));
-	 	    this.mnu_open.ImageTransparentColor = System.Drawing.Color.Magenta; 
-	 	    this.mnu_open.Name = "mnu_open"; 
-	 	    this.mnu_open.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O))); 
-	 	    this.mnu_open.Size = new System.Drawing.Size(184, 22); 
-	 	    this.mnu_open.Text = "&Open Profile"; 
-	 	    this.mnu_open.Click += new System.EventHandler(this.mnu_open_Click);  	            
-            //
+            this.mnu_open.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.mnu_open.Name = "mnu_open";
+            this.mnu_open.Size = new System.Drawing.Size(180, 22);
+            this.mnu_open.Text = "&Open Profile";
+            this.mnu_open.Click += new System.EventHandler(this.mnu_open_Click);
+            // 
             // mnu_save
             // 
             this.mnu_save.Image = ((System.Drawing.Image)(resources.GetObject("mnu_save.Image")));
@@ -511,6 +509,11 @@ namespace Handbrake
             this.mnu_exit.Size = new System.Drawing.Size(180, 22);
             this.mnu_exit.Text = "E&xit";
             this.mnu_exit.Click += new System.EventHandler(this.mnu_exit_Click);
+            // 
+            // mnu_open3
+            // 
+            this.mnu_open3.Name = "mnu_open3";
+            this.mnu_open3.Size = new System.Drawing.Size(32, 19);
             // 
             // ToolsToolStripMenuItem
             // 
@@ -1894,7 +1897,7 @@ namespace Handbrake
         internal System.Windows.Forms.OpenFileDialog File_Open;
         internal System.Windows.Forms.OpenFileDialog ISO_Open;
         internal System.Windows.Forms.ToolStripMenuItem FileToolStripMenuItem;
-        internal System.Windows.Forms.ToolStripMenuItem mnu_open;
+        internal System.Windows.Forms.ToolStripMenuItem mnu_open3;
         internal System.Windows.Forms.ToolStripMenuItem mnu_save;
         internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator1;
         internal System.Windows.Forms.ToolStripMenuItem mnu_update;
@@ -2037,6 +2040,7 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripMenuItem mnu_Classic;
         private System.Windows.Forms.ToolStripMenuItem mnu_normal;
         internal System.Windows.Forms.FolderBrowserDialog DVD_Open;
+        private System.Windows.Forms.ToolStripMenuItem mnu_open;
 
     }
 }
