@@ -54,6 +54,7 @@ namespace Handbrake
             this.File_Open = new System.Windows.Forms.OpenFileDialog();
             this.ISO_Open = new System.Windows.Forms.OpenFileDialog();
             this.FileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_open = new System.Windows.Forms.ToolStripMenuItem(); 
             this.mnu_save = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.mnu_update = new System.Windows.Forms.ToolStripMenuItem();
@@ -451,10 +452,12 @@ namespace Handbrake
             // 
             this.ISO_Open.DefaultExt = "ISO";
             this.ISO_Open.Filter = "All Supported Files|*.iso;*.mpg;*.mpeg;*.vob";
+            
             // 
             // FileToolStripMenuItem
             // 
             this.FileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnu_open,
             this.mnu_save,
             this.ToolStripSeparator1,
             this.mnu_update,
@@ -463,7 +466,18 @@ namespace Handbrake
             this.FileToolStripMenuItem.Name = "FileToolStripMenuItem";
             this.FileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
             this.FileToolStripMenuItem.Text = "&File";
-            // 
+            
+            //
+            // mnu_open 
+	 	    //  
+            this.mnu_open.Image = ((System.Drawing.Image)(resources.GetObject("mnu_open.Image")));
+	 	    this.mnu_open.ImageTransparentColor = System.Drawing.Color.Magenta; 
+	 	    this.mnu_open.Name = "mnu_open"; 
+	 	    this.mnu_open.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O))); 
+	 	    this.mnu_open.Size = new System.Drawing.Size(184, 22); 
+	 	    this.mnu_open.Text = "&Open Profile"; 
+	 	    this.mnu_open.Click += new System.EventHandler(this.mnu_open_Click);  	            
+            //
             // mnu_save
             // 
             this.mnu_save.Image = ((System.Drawing.Image)(resources.GetObject("mnu_save.Image")));
