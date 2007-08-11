@@ -1419,20 +1419,20 @@ list = hb_get_titles( fHandle );
         }
         if ([fPicSettingDeinterlace intValue] == 2)
         {
-            /* Yadif mode 1 */
-            hb_filter_deinterlace.settings = "1"; 
+            /* Yadif mode 0 (1-pass with spatial deinterlacing.) */
+            hb_filter_deinterlace.settings = "0"; 
             hb_list_add( job->filters, &hb_filter_deinterlace );            
         }
         if ([fPicSettingDeinterlace intValue] == 3)
         {
-            /* Yadif and Mcdeint */
-            hb_filter_deinterlace.settings = "1:-1:1"; 
+            /* Yadif (1-pass w/o spatial deinterlacing) and Mcdeint */
+            hb_filter_deinterlace.settings = "2:-1:1"; 
             hb_list_add( job->filters, &hb_filter_deinterlace );            
         }
         if ([fPicSettingDeinterlace intValue] == 4)
         {
-            /* Yadif and Mcdeint Slow Modes*/
-            hb_filter_deinterlace.settings = "3:-1:2"; 
+            /* Yadif (2-pass w/ spatial deinterlacing) and Mcdeint Slow Mode*/
+            hb_filter_deinterlace.settings = "1:-1:2"; 
             hb_list_add( job->filters, &hb_filter_deinterlace );            
         }
     }
