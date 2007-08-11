@@ -1,0 +1,33 @@
+diff -ur orig/header.c mpeg2dec/libmpeg2/header.c
+--- orig/header.c	2003-12-22 12:24:02.000000000 +0100
++++ mpeg2dec/libmpeg2/header.c	2004-08-02 18:07:50.000000000 +0200
+@@ -100,6 +100,9 @@
+     mpeg2dec->decoder.convert = NULL;
+     mpeg2dec->decoder.convert_id = NULL;
+     mpeg2dec->picture = mpeg2dec->pictures;
++    memset(&mpeg2dec->fbuf_alloc[0].fbuf, 0, sizeof(mpeg2_fbuf_t));
++    memset(&mpeg2dec->fbuf_alloc[1].fbuf, 0, sizeof(mpeg2_fbuf_t));
++    memset(&mpeg2dec->fbuf_alloc[2].fbuf, 0, sizeof(mpeg2_fbuf_t));
+     mpeg2dec->fbuf[0] = &mpeg2dec->fbuf_alloc[0].fbuf;
+     mpeg2dec->fbuf[1] = &mpeg2dec->fbuf_alloc[1].fbuf;
+     mpeg2dec->fbuf[2] = &mpeg2dec->fbuf_alloc[2].fbuf;
+@@ -551,6 +554,7 @@
+ 	if (!(mpeg2dec->sequence.flags & SEQ_FLAG_PROGRESSIVE_SEQUENCE)) {
+ 	    picture->nb_fields = (buffer[3] & 2) ? 3 : 2;
+ 	    flags |= (buffer[3] & 128) ? PIC_FLAG_TOP_FIELD_FIRST : 0;
++	    flags |= (buffer[3] &   2) ? PIC_FLAG_REPEAT_FIRST_FIELD : 0;
+ 	} else
+ 	    picture->nb_fields = (buffer[3]&2) ? ((buffer[3]&128) ? 6 : 4) : 2;
+ 	break;
+diff -ur orig/mpeg2.h mpeg2dec/include/mpeg2.h
+--- orig/mpeg2.h	2003-12-22 13:13:35.000000000 +0100
++++ mpeg2dec/include/mpeg2.h	2004-02-18 13:50:13.000000000 +0100
+@@ -82,6 +82,7 @@
+ #define PIC_FLAG_COMPOSITE_DISPLAY 32
+ #define PIC_FLAG_SKIP 64
+ #define PIC_FLAG_TAGS 128
++#define PIC_FLAG_REPEAT_FIRST_FIELD 256
+ #define PIC_MASK_COMPOSITE_DISPLAY 0xfffff000
+ 
+ typedef struct mpeg2_picture_s {
+

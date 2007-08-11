@@ -237,7 +237,7 @@ rule LibMpeg2
 actions LibMpeg2
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
-    rm -rf mpeg2dec && tar xzf mpeg2dec.tar.gz && cd mpeg2dec &&
+    rm -rf mpeg2dec && tar xzf mpeg2dec.tar.gz && cd mpeg2dec && patch -p1 < ../patch-libmpeg2.patch &&
     ./configure --prefix=$CONTRIB --disable-shared --disable-sdl &&
     make && make install &&
     strip -S $CONTRIB/lib/libmpeg2.a
