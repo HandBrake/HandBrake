@@ -3677,6 +3677,7 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithInt:fTitle->job->keep_ratio] forKey:@"PictureKeepRatio"];
 	[preset setObject:[NSNumber numberWithInt:[fPicSettingDeinterlace intValue]] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:fTitle->job->pixel_ratio] forKey:@"PicturePAR"];
+	[preset setObject:[fPicSettingDetelecine stringValue] forKey:@"PictureDetelecine"];
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
 	[preset setObject:[NSNumber numberWithInt:[fPicSettingAutoCrop intValue]] forKey:@"PictureAutoCrop"];
@@ -5063,7 +5064,7 @@ the user is using "Custom" settings by determining the sender*/
 					}
 					job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
 				}
-				else
+				else // Apply picture settings that were in effect at the time the preset was saved
 				{
 					job->width = [[chosenPreset objectForKey:@"PictureWidth"]  intValue];
 					job->height = [[chosenPreset objectForKey:@"PictureHeight"]  intValue];
@@ -5074,6 +5075,12 @@ the user is using "Custom" settings by determining the sender*/
 					}
 					job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
 					[fPicSettingDeinterlace setStringValue: [NSString stringWithFormat: @"%d",[[chosenPreset objectForKey:@"PictureDeinterlace"]  intValue]]];
+					
+					if ([chosenPreset objectForKey:@"PictureDetelecine"])
+					{
+					[fPicSettingDetelecine setStringValue: [NSString stringWithFormat: @"%@",[chosenPreset valueForKey:@"PictureDetelecine"]]];
+					}
+					
 					/* If Cropping is set to custom, then recall all four crop values from
 						when the preset was created and apply them */
 					if ([[chosenPreset objectForKey:@"PictureAutoCrop"]  intValue] == 0)
