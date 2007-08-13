@@ -4344,7 +4344,7 @@ the user is using "Custom" settings by determining the sender*/
 	/* Video encoder */
 	[preset setObject:@"x264 (h.264 Main)" forKey:@"VideoEncoder"];
 	/* x264 Option String */
-	[preset setObject:@"ref=6:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2" forKey:@"x264Option"];
+	[preset setObject:@"ref=5:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2" forKey:@"x264Option"];
 	/* Video quality */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
 	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
@@ -4403,7 +4403,7 @@ the user is using "Custom" settings by determining the sender*/
 	/*Get the whether or not to apply pic settings in the AddPresetPanel*/
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
 	/* Get the New Preset Description from the field in the AddPresetPanel */
-    [preset setObject:@"HandBrake's settings for use with QuickTime." forKey:@"PresetDescription"];
+    [preset setObject:@"HandBrake's high quality settings for use with QuickTime. It can be slow, so use it when the Normal preset doesn't look good enough." forKey:@"PresetDescription"];
 	/* File Format */
     [preset setObject:@"MP4 file" forKey:@"FileFormat"];
 	/* Chapter Markers*/
@@ -4413,7 +4413,7 @@ the user is using "Custom" settings by determining the sender*/
 	/* Video encoder */
 	[preset setObject:@"x264 (h.264 Main)" forKey:@"VideoEncoder"];
 	/* x264 Option String */
-	[preset setObject:@"ref=6:mixed-refs:bframes=3:bime:weightb:b-rdo:direct-auto:me=umh:subme=6:analyse=all:8x8dct:trellis=2:no-fast-pskip" forKey:@"x264Option"];
+	[preset setObject:@"ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct-auto:me=umh:subme=5:analyse=all:8x8dct:trellis=1:no-fast-pskip" forKey:@"x264Option"];
 	/* Video quality */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
 	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
