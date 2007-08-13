@@ -318,6 +318,7 @@
 - (NSDictionary *)CreateDeuxSixQuatrePreset;
 - (NSDictionary *)CreateBrokePreset;
 - (NSDictionary *)CreateBlindPreset;
+- (NSDictionary *)CreateCRFPreset;
 
 - (IBAction) RevertPictureSizeToMax:(id)sender;
 
