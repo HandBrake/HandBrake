@@ -117,6 +117,31 @@ static int GetAlignedSize( int size )
 	{
 	[fCropMatrix  selectCellAtRow: 0 column:0];
 	}
+	
+	/* set the detelecine state according to the state in main window */
+	/* if framerate is 23.976 we do not allow detelecine, otherwise, enable and set according to fDetelecineMainWindow outlet */ 
+	if (fTitle->rate_base == 1126125 || [[fVidFrameRatePopUpMainWindow titleOfSelectedItem] isEqualToString: @"23.976 (NTSC Film)"])
+	{
+		[fDetelecineMainWindow setStringValue: @"No"];
+		[fDetelecineCheck setEnabled: NO];
+		[fDetelecineCheck setState: NSOffState];
+		
+	}
+	else
+	{
+	[fDetelecineCheck setEnabled: YES];
+		if ([[fDetelecineMainWindow stringValue] isEqualToString: @"Yes"])
+		{
+			[fDetelecineCheck setState: NSOnState];
+		}
+		else
+		{
+			[fDetelecineCheck setState: NSOffState];
+		}
+		
+	}
+	
+	
     MaxOutputWidth = job->width;
 	MaxOutputHeight = job->height;
     fPicture = 0;
@@ -243,6 +268,16 @@ static int GetAlignedSize( int size )
 	else
 	{
 	job->deinterlace = 1;
+	}
+	
+	/* set the detelecine state according to the integer set in the main window field */
+	if ([fDetelecineCheck state] == 1)
+	{
+	[fDetelecineMainWindow setStringValue: @"Yes"];
+	}
+	else
+	{
+	[fDetelecineMainWindow setStringValue: @"No"];
 	}
 	
 	

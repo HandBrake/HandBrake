@@ -99,6 +99,9 @@
 	IBOutlet NSTextField         * fPicSettingAutoCrop;
 	IBOutlet NSTextField         * fPicSettingAutoCropDsply;
 	IBOutlet NSTextField         * fPicSettingDeinterlaceDsply;
+	IBOutlet NSTextField         * fPicSettingDetelecine;
+	IBOutlet NSTextField         * fPicSettingDetelecineLabel;
+
 	IBOutlet NSTextField         * fPicLabelAnamorphic;
 	IBOutlet NSTextField         * fPicLabelPAROutp;
 	IBOutlet NSTextField         * fPicLabelPAROutputX;
@@ -245,6 +248,7 @@
 - (IBAction) CodecsPopUpChanged: (id) sender;
 - (IBAction) EncoderPopUpChanged: (id) sender;
 - (IBAction) TwoPassCheckboxChanged: (id) sender;
+- (IBAction ) VideoFrameRateChanged: (id) sender;
 - (IBAction) SetEnabledStateOfAudioMixdownControls: (id) sender;
 - (IBAction) AddAllAudioTracksToPopUp: (id) sender;
 - (IBAction) SelectAudioTrackInPopUp: (id) sender searchPrefixString: (NSString *) searchPrefixString selectIndexIfNotFound: (int) selectIndexIfNotFound;

@@ -263,7 +263,10 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 	[fPicSettingPARWidth setStringValue: @""];
 	[fPicSettingPARHeight setStringValue:  @""];
 	
-    /* Audio bitrate */
+	/*Set detelecine to Off upon launch */
+	[fPicSettingDetelecine setStringValue: @"No"];
+	
+	/* Audio bitrate */
     [fAudBitratePopUp removeAllItems];
     for( int i = 0; i < hb_audio_bitrates_count; i++ )
     {
@@ -1082,7 +1085,7 @@ list = hb_get_titles( fHandle );
 		fX264optDirectPredLabel,fX264optDirectPredPopUp,fX264optDeblockLabel,fX264optAnalyseLabel,
 		fX264optAnalysePopUp,fX264opt8x8dctLabel,fX264opt8x8dctSwitch,fX264optCabacLabel,fX264optCabacSwitch,
 		fX264optAlphaDeblockPopUp,fX264optBetaDeblockPopUp,fVidTurboPassCheck,fDstMpgLargeFileCheck,fPicSettingAutoCropLabel,
-		fPicSettingAutoCropDsply};
+		fPicSettingAutoCropDsply,fPicSettingDetelecine,fPicSettingDetelecineLabel};
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -1409,6 +1412,13 @@ list = hb_get_titles( fHandle );
     }
     job->filters = hb_list_init();
    
+   /* Detelecine */
+   if ([[fPicSettingDetelecine stringValue] isEqualToString: @"Yes"])
+   {
+   hb_list_add( job->filters, &hb_filter_detelecine );
+   }
+   
+   /* Deinterlace */
    if( job->deinterlace == 1)
     {        
         if ([fPicSettingDeinterlace intValue] == 1)
@@ -2000,6 +2010,15 @@ list = hb_get_titles( fHandle );
 	[self CustomSettingUsed: sender];
 }
 
+- (IBAction ) VideoFrameRateChanged: (id) sender
+{
+/* We call method method to CalculatePictureSizing to error check detelecine*/
+[self CalculatePictureSizing: sender];
+
+/* We call method method to change UI to reflect whether a preset is used or not*/
+	[self CustomSettingUsed: sender];
+}
+
 - (IBAction) SetEnabledStateOfAudioMixdownControls: (id) sender
 {
 
@@ -2468,6 +2487,13 @@ list = hb_get_titles( fHandle );
 	{
 		[fPicSettingAutoCropDsply setStringValue: @"Auto"];
 	}	
+	/* check video framerate and turn off detelecine if necessary */
+	if (fTitle->rate_base == 1126125 || [[fVidRatePopUp titleOfSelectedItem] isEqualToString: @"23.976 (NTSC Film)"])
+	{
+		[fPicSettingDetelecine setStringValue: @"No"];
+	}
+	
+	
 	
 	/* below will trigger the preset, if selected, to be
 	changed to "Custom". Lets comment out for now until

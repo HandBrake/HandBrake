@@ -39,6 +39,7 @@
                 ShowScanPanel = id; 
                 TitlePopUpChanged = id; 
                 TwoPassCheckboxChanged = id; 
+                VideoFrameRateChanged = id; 
                 VideoMatrixChanged = id; 
                 X264AdvancedOptionsChanged = id; 
                 X264AdvancedOptionsSet = id; 
@@ -94,6 +95,8 @@
                 fPicSettingAutoCropLabel = NSTextField; 
                 fPicSettingDeinterlace = NSTextField; 
                 fPicSettingDeinterlaceDsply = NSTextField; 
+                fPicSettingDetelecine = NSTextField; 
+                fPicSettingDetelecineLabel = NSTextField; 
                 fPicSettingHeight = NSTextField; 
                 fPicSettingPAR = NSTextField; 
                 fPicSettingPARDsply = NSTextField; 
@@ -229,6 +232,8 @@
                 fCropTopStepper = NSStepper; 
                 fDeinterlaceLevelMainWindow = NSTextField; 
                 fDeinterlacePopUp = NSPopUpButton; 
+                fDetelecineCheck = NSButton; 
+                fDetelecineMainWindow = NSTextField; 
                 fEffectsCheck = NSButton; 
                 fHeightField = NSTextField; 
                 fHeightStepper = NSStepper; 
@@ -245,6 +250,7 @@
                 fPictureGLView = HBPictureGLView; 
                 fPrevButton = NSButton; 
                 fRatioCheck = NSButton; 
+                fVidFrameRatePopUpMainWindow = NSPopUpButton; 
                 fWidthField = NSTextField; 
                 fWidthStepper = NSStepper; 
             }; 

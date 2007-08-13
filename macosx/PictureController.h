@@ -37,6 +37,7 @@
     IBOutlet NSTextField     * fCropRightField;
     IBOutlet NSStepper       * fCropRightStepper;
     IBOutlet NSPopUpButton   * fDeinterlacePopUp;
+	IBOutlet NSButton        * fDetelecineCheck;
 	IBOutlet NSButton        * fPARCheck;
     IBOutlet NSButton        * fEffectsCheck;
     IBOutlet NSButton        * fPrevButton;
@@ -51,6 +52,9 @@
 	/* widgets in main window */
 	IBOutlet NSTextField     * fAutoCropMainWindow;
 	IBOutlet NSTextField     * fDeinterlaceLevelMainWindow;
+	IBOutlet NSTextField     * fDetelecineMainWindow;
+	IBOutlet NSPopUpButton   * fVidFrameRatePopUpMainWindow;
+	
 
 }
 
