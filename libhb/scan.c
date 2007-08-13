@@ -290,6 +290,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
     hb_buffer_t   * buf_ps, * buf_es, * buf_raw;
     hb_list_t     * list_es, * list_raw;
     hb_libmpeg2_t * mpeg2;
+    int progressive_count = 0;
     
     buf_ps   = hb_buffer_init( HB_DVD_READ_BUFFER_SIZE );
     list_es  = hb_list_init();
@@ -306,6 +307,8 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         FILE * file_preview;
         char   filename[1024];
 
+        //hb_log("Seeking to: %f", (float) ( i + 1 ) / 11.0 );
+       
         if (data->dvd)
         {
           if( !hb_dvd_seek( data->dvd, (float) ( i + 1 ) / 11.0 ) )
@@ -377,13 +380,40 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             goto error;
         }
 
-        if( !i )
+        /* Get size and rate infos */
+        title->rate = 27000000;
+        int ar;
+        hb_libmpeg2_info( mpeg2, &title->width, &title->height,
+                          &title->rate_base, &ar );
+       
+        if (title->rate_base == 1126125)
         {
-            /* Get size and rate infos */
-            title->rate = 27000000;
-            int ar;
-            hb_libmpeg2_info( mpeg2, &title->width, &title->height,
-                              &title->rate_base, &ar );
+            /* Frame FPS is 23.976 (meaning it's progressive), so
+               start keeping track of how many are reporting at
+               that speed. When enough show up that way, we want
+               to make that the overall title FPS.
+            */
+            progressive_count++;
+
+            if (progressive_count < 6)
+                /* Not enough frames are reporting as progressive,
+                   which means we should be conservative and use
+                   29.97 as the title's FPS for now.
+                */
+                title->rate_base = 900900;           
+            else
+            {
+                /* A majority of the scan frames are progressive. Make that
+                    the title's FPS, and announce it once to the log.
+                */
+                if (progressive_count == 6)
+                    hb_log("Title's mostly progressive NTSC, setting fps to 23.976");
+                title->rate_base = 1126125;               
+            }
+        }
+               
+        if( i == 2) // Use the third frame's info, so as to skip opening logos
+        {
             // The aspect ratio may have already been set by parsing the VOB/IFO details on a DVD, however
             // if we're working with program/transport streams that data needs to come from within the stream.
             if (title->aspect <= 0)

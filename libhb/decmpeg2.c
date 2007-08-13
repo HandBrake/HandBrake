@@ -8,6 +8,26 @@
 
 #include "mpeg2dec/mpeg2.h"
 
+/* Cadence tracking */
+#ifndef PIC_FLAG_REPEAT_FIRST_FIELD
+#define PIC_FLAG_REPEAT_FIRST_FIELD 256
+#endif
+#define TOP_FIRST PIC_FLAG_TOP_FIELD_FIRST
+#define PROGRESSIVE PIC_FLAG_PROGRESSIVE_FRAME
+#define COMPOSITE PIC_FLAG_COMPOSITE_DISPLAY
+#define SKIP PIC_FLAG_SKIP
+#define TAGS PIC_FLAG_TAGS
+#define REPEAT_FIRST PIC_FLAG_REPEAT_FIRST_FIELD
+#define COMPOSITE_MASK PIC_MASK_COMPOSITE_DISPLAY
+#define TB 8
+#define BT 16
+#define BT_PROG 32
+#define BTB_PROG 64
+#define TB_PROG 128
+#define TBT_PROG 256
+int cadence[6];
+int flag = 0;
+
 /**********************************************************************
  * hb_libmpeg2_t
  **********************************************************************
@@ -80,14 +100,6 @@ int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 m->width  = m->info->sequence->width;
                 m->height = m->info->sequence->height;
                 m->rate   = m->info->sequence->frame_period;
-                
-                if( m->rate == 900900 )
-                {
-                    /* 29.97 fps. 3:2 pulldown might, or might not be
-                       used. I can't find a way to know, so we always
-                       output 23.976 */
-                    m->rate = 1126125;
-                }
             }
             if ( m->aspect_ratio <= 0 )
             {
@@ -180,6 +192,92 @@ int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 }
                 m->last_pts = buf->start;
 
+                flag = m->info->display_picture->flags;
+               
+/*  Uncomment this block to see frame-by-frame picture flags, as the video encodes.
+               hb_log("***** MPEG 2 Picture Info for PTS %lld *****", buf->start);
+                if( flag & TOP_FIRST )
+                    hb_log("MPEG2 Flag: Top field first");
+                if( flag & PROGRESSIVE )
+                    hb_log("MPEG2 Flag: Progressive");
+                if( flag & COMPOSITE )
+                    hb_log("MPEG2 Flag: Composite");
+                if( flag & SKIP )
+                    hb_log("MPEG2 Flag: Skip!");
+                if( flag & TAGS )
+                    hb_log("MPEG2 Flag: TAGS");
+                if(flag & REPEAT_FIRST )
+                    hb_log("MPEG2 Flag: Repeat first field");
+                if( flag & COMPOSITE_MASK )
+                    hb_log("MPEG2 Flag: Composite mask");
+                hb_log("fields: %d", m->info->display_picture->nb_fields);
+*/             
+                /*  Rotate the cadence tracking. */
+                cadence[5] = cadence[4];
+                cadence[4] = cadence[3];
+                cadence[3] = cadence[2];
+                cadence[2] = cadence[1];
+                cadence[1] = cadence[0];
+               
+                if ( !(flag & PROGRESSIVE) && !(flag & TOP_FIRST) )
+                {
+                    /* Not progressive, not top first...
+                       That means it's probably bottom
+                       first, 2 fields displayed.
+                    */
+                    //hb_log("MPEG2 Flag: Bottom field first, 2 fields displayed.");
+                    cadence[0] = BT;
+                }
+                else if ( !(flag & PROGRESSIVE) && (flag & TOP_FIRST) )
+                {
+                    /* Not progressive, top is first,
+                       Two fields displayed.
+                    */
+                    //hb_log("MPEG2 Flag: Top field first, 2 fields displayed.");
+                    cadence[0] = TB;
+                }
+                else if ( (flag & PROGRESSIVE) && !(flag & TOP_FIRST) && !( flag & REPEAT_FIRST )  )
+                {
+                    /* Progressive, but noting else.
+                       That means Bottom first,
+                       2 fields displayed.
+                    */
+                    //hb_log("MPEG2 Flag: Progressive. Bottom field first, 2 fields displayed.");
+                    cadence[0] = BT_PROG;
+                }
+                else if ( (flag & PROGRESSIVE) && !(flag & TOP_FIRST) && ( flag & REPEAT_FIRST )  )
+                {
+                    /* Progressive, and repeat. .
+                       That means Bottom first,
+                       3 fields displayed.
+                    */
+                    //hb_log("MPEG2 Flag: Progressive repeat. Bottom field first, 3 fields displayed.");
+                    cadence[0] = BTB_PROG;
+                }
+                else if ( (flag & PROGRESSIVE) && (flag & TOP_FIRST) && !( flag & REPEAT_FIRST )  )
+                {
+                    /* Progressive, top first.
+                       That means top first,
+                       2 fields displayed.
+                    */
+                    //hb_log("MPEG2 Flag: Progressive. Top field first, 2 fields displayed.");
+                    cadence[0] = TB_PROG;
+                }
+                else if ( (flag & PROGRESSIVE) && (flag & TOP_FIRST) && ( flag & REPEAT_FIRST )  )
+                {
+                    /* Progressive, top, repeat.
+                       That means top first,
+                       3 fields displayed.
+                    */
+                    //hb_log("MPEG2 Flag: Progressive repeat. Top field first, 3 fields displayed.");
+                    cadence[0] = TBT_PROG;
+                }
+                                               
+                if ( (cadence[2] <= TB) && (cadence[1] <= TB) && (cadence[0] > TB) && (cadence[0]) && (cadence[1]) )
+                    hb_log("PTS %lld: Interlaced -> Progressive", buf->start);
+                if ( (cadence[2] > TB) && (cadence[1] <= TB) && (cadence[0] <= TB) && (cadence[0]) && (cadence[1]) )
+                    hb_log("PTS %lld: Progressive -> Interlaced", buf->start);
+
                 /* Store picture flags for later use by filters */
                 buf->flags = m->info->display_picture->flags;
                 
@@ -204,6 +302,16 @@ void hb_libmpeg2_info( hb_libmpeg2_t * m, int * width, int * height,
 {
     *width  = m->width;
     *height = m->height;
+    if( (m->info->display_picture->flags & PROGRESSIVE) && (m->height == 480) )
+      {
+          /* The frame is progressive and it's NTSC DVD height, so change its FPS to 23.976.
+             This might not be correct for the title. It's really just for scan.c's benefit.
+             Scan.c will reset the fps to 29.97, until a simple majority of the preview
+             frames report at 23.976.
+          */
+          //hb_log("Detecting NTSC Progressive Frame");
+          m->rate = 1126125;
+      }
     *rate   = m->rate;
     *aspect_ratio = m->aspect_ratio;
 }
