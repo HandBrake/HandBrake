@@ -5100,6 +5100,11 @@ the user is using "Custom" settings by determining the sender*/
 					if (job->keep_ratio == 1)
 					{
 						hb_fix_aspect( job, HB_KEEP_WIDTH );
+						if( job->height > fTitle->height )
+						{
+							job->height = fTitle->height;
+							hb_fix_aspect( job, HB_KEEP_HEIGHT );
+						}
 					}
 					job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
 				}
@@ -5111,6 +5116,11 @@ the user is using "Custom" settings by determining the sender*/
 					if (job->keep_ratio == 1)
 					{
 						hb_fix_aspect( job, HB_KEEP_WIDTH );
+						if( job->height > fTitle->height )
+						{
+							job->height = fTitle->height;
+							hb_fix_aspect( job, HB_KEEP_HEIGHT );
+						}
 					}
 					job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
 					[fPicSettingDeinterlace setStringValue: [NSString stringWithFormat: @"%d",[[chosenPreset objectForKey:@"PictureDeinterlace"]  intValue]]];
