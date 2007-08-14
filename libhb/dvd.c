@@ -718,13 +718,13 @@ int hb_dvd_read( hb_dvd_t * d, hb_buffer_t * b )
             d->next_vobu = d->pgc->cell_playback[d->cell_cur].first_sector;
             FindNextCell( d );
             d->cell_overlap = 1;
-            printf("DVD: End of Cell\n");
+            hb_log("DVD: End of Cell");
         }
         
         // Revert the cell overlap, and check for a chapter break
         if( dsi_pack.vobu_sri.prev_vobu == SRI_END_OF_CELL )
         {
-            printf("DVD: Beginning of Cell\n");
+            hb_log("DVD: Beginning of Cell");
             if( d->cell_overlap )
             {
                 b->new_chap = hb_dvd_is_break( d );
@@ -831,13 +831,13 @@ int hb_dvd_is_break( hb_dvd_t * d )
             
             if( chapter_length >= 2048 )
             {
-                printf("DVD: Chapter Break Cell Found\n");
+                hb_log("DVD: Chapter Break Cell Found");
                 /* We have a chapter break */
                 return 1;
             }
             else
             {
-                printf("DVD: Cell Found (%d)\n", chapter_length);
+                hb_log("DVD: Cell Found (%d)", chapter_length);
             }
         }
     }
