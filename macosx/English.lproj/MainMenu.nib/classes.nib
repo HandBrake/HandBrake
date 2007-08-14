@@ -95,6 +95,9 @@
                 fPicSettingAutoCropLabel = NSTextField; 
                 fPicSettingDeinterlace = NSTextField; 
                 fPicSettingDeinterlaceDsply = NSTextField; 
+                fPicSettingDenoise = NSTextField; 
+                fPicSettingDenoiseDsply = NSTextField; 
+                fPicSettingDenoiseLabel = NSTextField; 
                 fPicSettingDetelecine = NSTextField; 
                 fPicSettingDetelecineLabel = NSTextField; 
                 fPicSettingHeight = NSTextField; 
@@ -232,6 +235,8 @@
                 fCropTopStepper = NSStepper; 
                 fDeinterlaceLevelMainWindow = NSTextField; 
                 fDeinterlacePopUp = NSPopUpButton; 
+                fDenoiseMainWindow = NSTextField; 
+                fDenoisePopUp = NSPopUpButton; 
                 fDetelecineCheck = NSButton; 
                 fDetelecineMainWindow = NSTextField; 
                 fEffectsCheck = NSButton; 

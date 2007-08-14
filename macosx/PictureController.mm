@@ -94,8 +94,8 @@ static int GetAlignedSize( int size )
     [fDeinterlacePopUp addItemWithTitle: @"Slow"];
 	[fDeinterlacePopUp addItemWithTitle: @"Slower"];
 	[fDeinterlacePopUp addItemWithTitle: @"Slowest"];
-    /* we need a conditional to figure out how to set deinterlace */
-	
+    
+	/* Set deinterlaces level according to the integer in the main window */
 	[fDeinterlacePopUp selectItemAtIndex: [fDeinterlaceLevelMainWindow intValue]];
 	
 	
@@ -141,6 +141,14 @@ static int GetAlignedSize( int size )
 		
 	}
 	
+	/* we use a popup to show the denoise settings */
+	[fDenoisePopUp removeAllItems];
+    [fDenoisePopUp addItemWithTitle: @"None"];
+    [fDenoisePopUp addItemWithTitle: @"Weak"];
+	[fDenoisePopUp addItemWithTitle: @"Medium"];
+    [fDenoisePopUp addItemWithTitle: @"Strong"];
+	/* Set deinterlaces level according to the integer in the main window */
+	[fDenoisePopUp selectItemAtIndex: [fDenoiseMainWindow intValue]];
 	
     MaxOutputWidth = job->width;
 	MaxOutputHeight = job->height;
@@ -259,7 +267,7 @@ static int GetAlignedSize( int size )
     job->height      = [fHeightStepper intValue];
     job->keep_ratio  = ( [fRatioCheck state] == NSOnState );
 	
-	/* new multilevel deinterlacing popup */
+	/* multilevel deinterlacing popup */
 	[fDeinterlaceLevelMainWindow setStringValue: [NSString stringWithFormat: @"%d",[fDeinterlacePopUp indexOfSelectedItem]]];
 	if ([fDeinterlacePopUp indexOfSelectedItem] == 0)
 	{
@@ -280,7 +288,8 @@ static int GetAlignedSize( int size )
 	[fDetelecineMainWindow setStringValue: @"No"];
 	}
 	
-	
+	/* new multilevel deinterlacing popup */
+	[fDenoiseMainWindow setStringValue: [NSString stringWithFormat: @"%d",[fDenoisePopUp indexOfSelectedItem]]];
 	job->pixel_ratio = ( [fPARCheck state] == NSOnState );
 
 

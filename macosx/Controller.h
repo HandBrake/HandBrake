@@ -93,14 +93,17 @@
 	IBOutlet NSTextField         * fPicSettingARkeep;
 	IBOutlet NSTextField         * fPicSettingPAR;
 	IBOutlet NSTextField         * fPicSettingDeinterlace;
+	IBOutlet NSTextField         * fPicSettingDeinterlaceDsply;
 	IBOutlet NSTextField         * fPicSettingARkeepDsply;
 	IBOutlet NSTextField         * fPicSettingPARDsply;
 	IBOutlet NSTextField         * fPicSettingAutoCropLabel;
 	IBOutlet NSTextField         * fPicSettingAutoCrop;
 	IBOutlet NSTextField         * fPicSettingAutoCropDsply;
-	IBOutlet NSTextField         * fPicSettingDeinterlaceDsply;
 	IBOutlet NSTextField         * fPicSettingDetelecine;
 	IBOutlet NSTextField         * fPicSettingDetelecineLabel;
+	IBOutlet NSTextField         * fPicSettingDenoise;
+	IBOutlet NSTextField         * fPicSettingDenoiseDsply;
+	IBOutlet NSTextField         * fPicSettingDenoiseLabel;
 
 	IBOutlet NSTextField         * fPicLabelAnamorphic;
 	IBOutlet NSTextField         * fPicLabelPAROutp;

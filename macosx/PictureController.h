@@ -38,6 +38,7 @@
     IBOutlet NSStepper       * fCropRightStepper;
     IBOutlet NSPopUpButton   * fDeinterlacePopUp;
 	IBOutlet NSButton        * fDetelecineCheck;
+	IBOutlet NSPopUpButton   * fDenoisePopUp;
 	IBOutlet NSButton        * fPARCheck;
     IBOutlet NSButton        * fEffectsCheck;
     IBOutlet NSButton        * fPrevButton;
@@ -54,6 +55,7 @@
 	IBOutlet NSTextField     * fDeinterlaceLevelMainWindow;
 	IBOutlet NSTextField     * fDetelecineMainWindow;
 	IBOutlet NSPopUpButton   * fVidFrameRatePopUpMainWindow;
+	IBOutlet NSTextField     * fDenoiseMainWindow;
 	
 
 }

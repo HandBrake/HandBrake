@@ -265,6 +265,7 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 	
 	/*Set detelecine to Off upon launch */
 	[fPicSettingDetelecine setStringValue: @"No"];
+	[fPicSettingDenoise setStringValue: @"0"];
 	
 	/* Audio bitrate */
     [fAudBitratePopUp removeAllItems];
@@ -1085,7 +1086,7 @@ list = hb_get_titles( fHandle );
 		fX264optDirectPredLabel,fX264optDirectPredPopUp,fX264optDeblockLabel,fX264optAnalyseLabel,
 		fX264optAnalysePopUp,fX264opt8x8dctLabel,fX264opt8x8dctSwitch,fX264optCabacLabel,fX264optCabacSwitch,
 		fX264optAlphaDeblockPopUp,fX264optBetaDeblockPopUp,fVidTurboPassCheck,fDstMpgLargeFileCheck,fPicSettingAutoCropLabel,
-		fPicSettingAutoCropDsply,fPicSettingDetelecine,fPicSettingDetelecineLabel};
+		fPicSettingAutoCropDsply,fPicSettingDetelecine,fPicSettingDetelecineLabel,fPicSettingDenoiseLabel};
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -1412,7 +1413,7 @@ list = hb_get_titles( fHandle );
     }
     job->filters = hb_list_init();
    
-   /* Detelecine */
+	/* Detelecine */
    if ([[fPicSettingDetelecine stringValue] isEqualToString: @"Yes"])
    {
    hb_list_add( job->filters, &hb_filter_detelecine );
@@ -1441,11 +1442,29 @@ list = hb_get_titles( fHandle );
         }
         if ([fPicSettingDeinterlace intValue] == 4)
         {
-            /* Yadif (2-pass w/ spatial deinterlacing) and Mcdeint Slow Mode*/
-            hb_filter_deinterlace.settings = "1:-1:2"; 
+            /* Yadif (2-pass w/ spatial deinterlacing) and Mcdeint*/
+            hb_filter_deinterlace.settings = "1:-1:1"; 
             hb_list_add( job->filters, &hb_filter_deinterlace );            
         }
     }
+	
+	/* Denoise */
+	
+	if ([fPicSettingDenoise intValue] == 1) // Weak in popup
+	{
+		hb_filter_denoise.settings = "2:1:2:3"; 
+        hb_list_add( job->filters, &hb_filter_denoise );	
+	}
+	else if ([fPicSettingDenoise intValue] == 2) // Medium in popup
+	{
+		hb_filter_denoise.settings = "3:2:2:3"; 
+        hb_list_add( job->filters, &hb_filter_denoise );	
+	}
+	else if ([fPicSettingDenoise intValue] == 3) // Strong in popup
+	{
+		hb_filter_denoise.settings = "7:7:5:5"; 
+        hb_list_add( job->filters, &hb_filter_denoise );	
+	}
 
 }
 
@@ -2448,7 +2467,7 @@ list = hb_get_titles( fHandle );
 	{
 		[fPicSettingARkeepDsply setStringValue: @"Off"];
 	}	
-	
+	/* Deinterlace */
 	if ([fPicSettingDeinterlace intValue] == 0)
 	{
 		[fPicSettingDeinterlaceDsply setStringValue: @"Off"];
@@ -2468,6 +2487,23 @@ list = hb_get_titles( fHandle );
 	else if ([fPicSettingDeinterlace intValue] == 4)
 	{
 		[fPicSettingDeinterlaceDsply setStringValue: @"Slowest"];
+	}
+	/* Denoise */
+	if ([fPicSettingDenoise intValue] == 0)
+	{
+		[fPicSettingDenoiseDsply setStringValue: @"Off"];
+	}
+	else if ([fPicSettingDenoise intValue] == 1)
+	{
+		[fPicSettingDenoiseDsply setStringValue: @"Weak"];
+	}
+	else if ([fPicSettingDenoise intValue] == 2)
+	{
+		[fPicSettingDenoiseDsply setStringValue: @"Medium"];
+	}
+	else if ([fPicSettingDenoise intValue] == 3)
+	{
+		[fPicSettingDenoiseDsply setStringValue: @"Strong"];
 	}
 	
 	if (fTitle->job->pixel_ratio > 0)
@@ -3678,6 +3714,7 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithInt:[fPicSettingDeinterlace intValue]] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:fTitle->job->pixel_ratio] forKey:@"PicturePAR"];
 	[preset setObject:[fPicSettingDetelecine stringValue] forKey:@"PictureDetelecine"];
+	[preset setObject:[NSNumber numberWithInt:[fPicSettingDenoise intValue]] forKey:@"PictureDenoise"]; 
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
 	[preset setObject:[NSNumber numberWithInt:[fPicSettingAutoCrop intValue]] forKey:@"PictureAutoCrop"];
@@ -5080,7 +5117,10 @@ the user is using "Custom" settings by determining the sender*/
 					{
 					[fPicSettingDetelecine setStringValue: [NSString stringWithFormat: @"%@",[chosenPreset valueForKey:@"PictureDetelecine"]]];
 					}
-					
+					if ([chosenPreset objectForKey:@"PictureDenoise"])
+					{
+					[fPicSettingDenoise setStringValue: [NSString stringWithFormat: @"%d",[[chosenPreset objectForKey:@"PictureDenoise"]  intValue]]];
+					}
 					/* If Cropping is set to custom, then recall all four crop values from
 						when the preset was created and apply them */
 					if ([[chosenPreset objectForKey:@"PictureAutoCrop"]  intValue] == 0)
