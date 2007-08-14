@@ -1180,6 +1180,8 @@ list = hb_get_titles( fHandle );
     if( quality )
     {
         [fVidTwoPassCheck setState: NSOffState];
+		[fVidTurboPassCheck setHidden: YES];
+		[fVidTurboPassCheck setState: NSOffState];
     }
 
     [self QualitySliderChanged: sender];
