@@ -144,15 +144,15 @@ static void do_job( hb_job_t * job, int cpu_count )
     
     if( job->filters )
     {
+        hb_log(" + filters");
         for( i = 0; i < hb_list_count( job->filters ); i++ )
         {
             hb_filter_object_t * filter = hb_list_item( job->filters, i );
-            hb_log(" + filter: %s", filter->name);
             if (filter->settings)
-                hb_log("   + settings: %s", filter->settings);
+                hb_log("   + %s (%s)", filter->name, filter->settings);
             else
-                hb_log("   + settings: default");
-        }        
+                hb_log("   + %s (default settings)", filter->name);
+        }
     }
     
     if( job->vquality >= 0.0 && job->vquality <= 1.0 )
