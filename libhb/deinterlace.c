@@ -77,7 +77,7 @@ void hb_deinterlace_close( hb_filter_private_t * pv );
 hb_filter_object_t hb_filter_deinterlace =
 {   
     FILTER_DEINTERLACE,
-    "Deinterlace (yadif/mcdeint)",
+    "Deinterlace (ffmpeg or yadif/mcdeint)",
     NULL,
     hb_deinterlace_init,
     hb_deinterlace_work,

@@ -140,8 +140,21 @@ static void do_job( hb_job_t * job, int cpu_count )
     hb_log( " + %dx%d -> %dx%d, crop %d/%d/%d/%d",
             title->width, title->height, job->width, job->height,
             job->crop[0], job->crop[1], job->crop[2], job->crop[3] );
-    hb_log( " + deinterlace %s", job->deinterlace ? "on" : "off" );
     hb_log( " + grayscale %s", job->grayscale ? "on" : "off" );
+    
+    if( job->filters )
+    {
+        for( i = 0; i < hb_list_count( job->filters ); i++ )
+        {
+            hb_filter_object_t * filter = hb_list_item( job->filters, i );
+            hb_log(" + filter: %s", filter->name);
+            if (filter->settings)
+                hb_log("   + settings: %s", filter->settings);
+            else
+                hb_log("   + settings: default");
+        }        
+    }
+    
     if( job->vquality >= 0.0 && job->vquality <= 1.0 )
     {
         hb_log( " + %.3f fps, video quality %.2f", (float) job->vrate /

@@ -731,7 +731,6 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
         for( i = 0; i < filter_count; i++ )
         {
             hb_filter_object_t * filter = hb_list_item( job->filters, i );
-            hb_log("Adding filter: %s", filter->name);
             hb_list_add( job_copy->filters, filter );
         }        
     }
