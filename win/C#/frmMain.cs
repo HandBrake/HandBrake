@@ -10,6 +10,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Threading;
 
+
 namespace Handbrake
 {
     public partial class frmMain : Form
@@ -31,7 +32,11 @@ namespace Handbrake
         
         public frmMain()
         {
+
+
+
             
+
             ThreadPool.QueueUserWorkItem(showSplash);
             Thread.Sleep(3000);
 
@@ -54,6 +59,9 @@ namespace Handbrake
 
             // Display the quick start window if required.
             quickStart();
+
+            //MessageBox.Show(System.Environment.OSVersion.Version.ToString());
+        
         }
 
         public void showSplash(object sender)
@@ -1439,7 +1447,7 @@ namespace Handbrake
 
             string videoBitrate = text_bitrate.Text;
             string videoFilesize = text_filesize.Text;
-            int videoQuality = slider_videoQuality.Value;
+            double videoQuality = slider_videoQuality.Value;
             string vidQSetting = "";
             string twoPassEncoding = "";
             string videoFramerate = drp_videoFramerate.Text;
@@ -1448,6 +1456,13 @@ namespace Handbrake
             string deblock = "";
             string detelecine = "";
             string denoise = "";
+            string CRF = CheckCRF.CheckState.ToString();
+
+
+            if ((CRF == "Checked"))
+                CRF = " -Q ";
+            else
+                CRF = "";
 
             if (videoBitrate !=  "")
                 videoBitrate = " -b "+ videoBitrate;
@@ -1461,7 +1476,9 @@ namespace Handbrake
                 vidQSetting = "";
             else
             {
-                videoQuality = videoQuality/ 100;
+                MessageBox.Show(videoQuality.ToString());
+                videoQuality = videoQuality / 100;
+                MessageBox.Show(videoQuality.ToString());
                 if (videoQuality ==  1)
                 {
                     vidQSetting = "1.0";
@@ -1569,20 +1586,16 @@ namespace Handbrake
 
             //  H.264 Tab
 
-            string CRF = CheckCRF.CheckState.ToString();
+            
             string h264Advanced = rtf_h264advanced.Text;
-            if ((CRF ==  "1"))
-                CRF = " -Q ";
-            else
-                CRF = "";
-
+            
             if ((h264Advanced ==  ""))
                 h264Advanced = "";
             else
                 h264Advanced = " -x "+ h264Advanced;
     
 
-            string h264Settings = CRF+ h264Advanced;
+            string h264Settings = h264Advanced;
             // ----------------------------------------------------------------------
 
             // Processors (Program Settings)
