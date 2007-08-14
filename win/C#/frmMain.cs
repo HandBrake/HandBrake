@@ -1476,9 +1476,7 @@ namespace Handbrake
                 vidQSetting = "";
             else
             {
-                MessageBox.Show(videoQuality.ToString());
                 videoQuality = videoQuality / 100;
-                MessageBox.Show(videoQuality.ToString());
                 if (videoQuality ==  1)
                 {
                     vidQSetting = "1.0";
