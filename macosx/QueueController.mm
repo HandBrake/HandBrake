@@ -1,4 +1,4 @@
-#include "QueueController.h"
+    #include "QueueController.h"
 
 @implementation QueueController
 
@@ -98,8 +98,7 @@
        /* show the name of the source Note: use title->name instead of
 	   title->dvd since name is just the chosen folder, instead of dvd which is the full path*/ 
         [self AddTextField: [NSString stringWithFormat:
-            @"Task: %d Source: %s  Title: %d   Chapters: %d to %d   Pass: %d of %d",i+1, title->name, title->index , j->chapter_start, j->chapter_end,MAX( 1, j->pass ), MIN( 2, j->pass + 1 )] rect: &rect];
-       /* Muxer settings (File Format in the gui) */
+            @"Task: %d   Source: %s, Title %d, Chapters %d-%d   Pass: %d of %d",i+1, title->name, title->index , j->chapter_start, j->chapter_end,MAX( 1, j->pass ), MIN( 2, j->pass + 1 )] rect: &rect];       /* Muxer settings (File Format in the gui) */
 		if (j->mux == 65536 || j->mux == 131072 || j->mux == 1048576)
 		{
 		jobFormat = @"MP4"; // HB_MUX_MP4,HB_MUX_PSP,HB_MUX_IPOD
@@ -158,12 +157,12 @@
 		/* Show Basic File info */
 		if (j->chapter_markers == 1)
 		{
-			[self AddTextField: [NSString stringWithFormat: @"Format: %@   Codecs: %@ Video / %@ Audio  Chapter Markers", jobFormat, jobVideoCodec, jobAudioCodec]
-						  rect: &rect];
+        [self AddTextField: [NSString stringWithFormat: @"Format: %@ Container, %@ Video + %@ Audio, Chapter Markers", jobFormat, jobVideoCodec, jobAudioCodec] 
+		                  rect: &rect];
 		}
 		else
 		{
-			[self AddTextField: [NSString stringWithFormat: @"Format: %@   Codecs: %@ Video / %@ Audio", jobFormat, jobVideoCodec, jobAudioCodec]
+			[self AddTextField: [NSString stringWithFormat: @"Format: %@ Container, %@ Video + %@ Audio", jobFormat, jobVideoCodec, jobAudioCodec]
 						  rect: &rect];
 		}
 			
@@ -175,12 +174,11 @@
 		int titlewidth = title->width - j->crop[2] - j->crop[3];
 		int displayparwidth = titlewidth * j->pixel_aspect_width / j->pixel_aspect_height;
 	    int displayparheight = title->height - j->crop[0] - j->crop[1];
-		jobPictureDetail = [NSString stringWithFormat: @"Picture: %d x %d Anamorphic", displayparwidth, displayparheight];
-		//jobPictureDetail = [NSString stringWithFormat: @"Picture: Anamorphic"];
+		jobPictureDetail = [NSString stringWithFormat: @"Picture: %dx%d (%dx%d Anamorphic)", displayparwidth, displayparheight, j->width, displayparheight];
 		}
 		else
 		{
-		jobPictureDetail = [NSString stringWithFormat: @"Picture: %d x %d", j->width, j->height];
+		jobPictureDetail = [NSString stringWithFormat: @"Picture: %dx%d", j->width, j->height];
 		}
 		if (j->keep_ratio == 1)
 		{
@@ -189,12 +187,12 @@
 		
 		if (j->grayscale == 1)
 		{
-		jobPictureDetail = [jobPictureDetail stringByAppendingString: @" ,Grayscale"];
+		jobPictureDetail = [jobPictureDetail stringByAppendingString: @", Grayscale"];
 		}
 		
 		if (j->deinterlace == 1)
 		{
-		jobPictureDetail = [jobPictureDetail stringByAppendingString: @" ,Deinterlace"];
+		jobPictureDetail = [jobPictureDetail stringByAppendingString: @", Deinterlace"];
 		}
 		/* Show Picture info */	
 		[self AddTextField: [NSString stringWithFormat: @"%@", jobPictureDetail]rect: &rect];
@@ -202,7 +200,7 @@
 		/* Detailed Video info */
 		if (j->vquality <= 0 || j->vquality >= 1)
 		{
-			jobVideoQuality =[NSString stringWithFormat: @"%d (kbps)", j->vbitrate]; 
+		jobVideoQuality =[NSString stringWithFormat: @"%d kbps", j->vbitrate];
 		}
 		else
 		{
@@ -211,17 +209,30 @@
 			/* this is screwed up kind of. Needs to be formatted properly */
 			if (j->crf == 1)
 			{
-				jobVideoQuality =[NSString stringWithFormat: @"%@ %% (crf)", vidQuality];
+			jobVideoQuality =[NSString stringWithFormat: @"%@%% CRF", vidQuality];			
 			}
 			else
 			{
-				jobVideoQuality =[NSString stringWithFormat: @"%@ %% (cqp)", vidQuality];
+			jobVideoQuality =[NSString stringWithFormat: @"%@%% CQP", vidQuality];
 			}
 		}
 		
 		
-		jobVideoDetail = [NSString stringWithFormat:@"Video: %@ %@ FPS: %d", jobVideoCodec, jobVideoQuality, j->vrate / j->vrate_base];
-		
+			if (j->vrate_base == 1126125)
+			{
+				/* NTSC FILM 23.976 */
+				jobVideoDetail = [NSString stringWithFormat:@"Video: %@, %@, 23.976 fps", jobVideoCodec, jobVideoQuality];
+			}
+			else if (j->vrate_base == 900900)
+			{
+				/* NTSC 29.97 */
+				jobVideoDetail = [NSString stringWithFormat:@"Video: %@, %@, 29.97 fps", jobVideoCodec, jobVideoQuality];
+			}
+			else
+			{
+				/* Everything else */
+				jobVideoDetail = [NSString stringWithFormat:@"Video: %@, %@, %d fps", jobVideoCodec, jobVideoQuality, j->vrate / j->vrate_base];
+			}
 		
 		/* Add the video detail string to the job filed in the window */
 		[self AddTextField: [NSString stringWithFormat:@"%@", jobVideoDetail] rect: &rect];
@@ -234,14 +245,14 @@
 			[self AddTextField: [NSString stringWithFormat:@"x264 Options: %@", [NSString stringWithUTF8String:j->x264opts]] rect: &rect];
 		}
 		
-		/* Audio Detail abitrate arate*/
+		/* Audio Detail */
 		if ([jobAudioCodec isEqualToString: @"AC3"])
 		{
-		jobAudioDetail = [NSString stringWithFormat:@"Audio: %@ Pass-Through", jobAudioCodec];
+		jobAudioDetail = [NSString stringWithFormat:@"Audio: %@, Pass-Through", jobAudioCodec];
 		}
 		else
 		{
-		jobAudioDetail = [NSString stringWithFormat:@"Audio: %@ Bitrate:%d (kbps) Sample Rate:%d (khz)", jobAudioCodec, j->abitrate, j->arate];
+		jobAudioDetail = [NSString stringWithFormat:@"Audio: %@, %d kbps, %d Hz", jobAudioCodec, j->abitrate, j->arate];
 		}
 		
 		/* we now get the audio mixdown info for each of the two gui audio tracks */
@@ -252,26 +263,26 @@
 		{
 			if (j->audio_mixdowns[ai] == HB_AMIXDOWN_MONO)
 			{ 
-				jobAudioDetail = [jobAudioDetail stringByAppendingString: [NSString stringWithFormat:@" ,Track %d: Mono",ai + 1]];
+				jobAudioDetail = [jobAudioDetail stringByAppendingString: [NSString stringWithFormat:@", Track %d: Mono",ai + 1]];
 			}
 			if (j->audio_mixdowns[ai] == HB_AMIXDOWN_STEREO)
 			{ 
-				jobAudioDetail = [jobAudioDetail stringByAppendingString: [NSString stringWithFormat:@" ,Track %d: Stero",ai + 1]];
+				jobAudioDetail = [jobAudioDetail stringByAppendingString: [NSString stringWithFormat:@", Track %d: Stereo",ai + 1]];
 			}
 			if (j->audio_mixdowns[ai] == HB_AMIXDOWN_DOLBY)
 			{ 
-				jobAudioDetail = [jobAudioDetail stringByAppendingString: [NSString stringWithFormat:@" ,Track %d: Dolby Surround",ai + 1]];
+				jobAudioDetail = [jobAudioDetail stringByAppendingString: [NSString stringWithFormat:@", Track %d: Dolby Surround",ai + 1]];
 			}
 			if (j->audio_mixdowns[ai] == HB_AMIXDOWN_DOLBYPLII)
 			{ 
-				jobAudioDetail = [jobAudioDetail stringByAppendingString: [NSString stringWithFormat:@" ,Track %d: DPL2",ai + 1]];
+				jobAudioDetail = [jobAudioDetail stringByAppendingString: [NSString stringWithFormat:@", Track %d: Dolby Pro Logic II",ai + 1]];
 			}
 			if (j->audio_mixdowns[ai] == HB_AMIXDOWN_6CH)
 			{ 
-				jobAudioDetail = [jobAudioDetail stringByAppendingString: [NSString stringWithFormat:@" ,Track %d: 6 Channel Discreet",ai + 1]];
+				jobAudioDetail = [jobAudioDetail stringByAppendingString: [NSString stringWithFormat:@", Track %d: 6-channel discreet",ai + 1]];
 			}
 		}
-		//jobAudioDetail = [jobAudioDetail stringByAppendingString: [NSString stringWithFormat:@" ,MixDown: %d",j->audio_mixdowns]];
+		
 		/* Add the Audio detail string to the job filed in the window */
 		[self AddTextField: [NSString stringWithFormat:@"%@", jobAudioDetail] rect: &rect];
 		
