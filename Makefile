@@ -32,6 +32,12 @@ mrproper:
 release:
 	(rm -rf HandBrake HandBrake*dmg ; mkdir -p HandBrake/api HandBrake/doc HandBrake/doc/pdf; cp test/BUILDSHARED AUTHORS BUILD COPYING CREDITS NEWS THANKS TRANSLATIONS HandBrake/doc ; cp -rp pdf/ HandBrake/doc/pdf/ ; cp -rp HandBrake.app HandBrake ; cp -rp libhb/libhb.dylib HandBrake/api ; cp -rp libhb/hb.h libhb/common.h libhb/ports.h HandBrake/api ; cp -rp HandBrakeCLI HandBrake ; hdiutil create -srcfolder HandBrake  -format UDZO HandBrake-$(HB_VERSION)-MacOS_UB.dmg ; rm -rf HandBrake )
 
+gui-release:
+	(rm -rf HandBrake HandBrake*GUI_UB.dmg ; mkdir -p HandBrake/docs ; cp AUTHORS BUILD COPYING CREDITS NEWS THANKS TRANSLATIONS HandBrake/docs ; cp -rp HandBrake.app HandBrake  ; hdiutil create -srcfolder HandBrake  -format UDBZ HandBrake-$(HB_VERSION)-MacOSX.4_GUI_UB.dmg ; rm -rf HandBrake )
+
+cli-release:
+	(rm -rf HandBrake HandBrake*CLI_UB.dmg ; mkdir -p HandBrake/docs ; cp test/BUILDSHARED AUTHORS BUILD COPYING CREDITS NEWS THANKS TRANSLATIONS HandBrake/docs ; cp -rp HandBrakeCLI HandBrake ; hdiutil create -srcfolder HandBrake  -format UDZO HandBrake-$(HB_VERSION)-MacOSX.3_CLI_UB.dmg ; rm -rf HandBrake )
+
 endif
 
 ifeq ($(SYSTEM),Linux)
