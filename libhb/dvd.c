@@ -658,7 +658,7 @@ int hb_dvd_read( hb_dvd_t * d, hb_buffer_t * b )
 
             if( DVDReadBlocks( d->file, d->next_vobu, 1, b->data ) != 1 )
             {
-                hb_log( "dvd: Unrecoverable Read Error from DVD, probable HD or DVD Failure (blk: %d)", d->next_vobu );
+                hb_log( "dvd: Unrecoverable Read Error from DVD, potential HD or DVD Failure (blk: %d)", d->next_vobu );
                 return 0;
             }
 
