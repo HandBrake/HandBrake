@@ -7,7 +7,7 @@
 #include <Cocoa/Cocoa.h>
 
 #include "hb.h"
-@class DriveDetector;
+//@class DriveDetector;
 @interface ScanController : NSObject
 {
     hb_handle_t                  * fHandle;
@@ -20,8 +20,8 @@
     IBOutlet NSProgressIndicator * fIndicator;
 
 	
-    DriveDetector                * fDriveDetector;
-    NSDictionary                 * fDrives;	
+   // DriveDetector                * fDriveDetector;
+   // NSDictionary                 * fDrives;	
 }
 
 - (void)     SetHandle:     (hb_handle_t *) handle;
@@ -30,6 +30,6 @@
 - (IBAction) Cancel:        (id) sender;
 - (void) BrowseDone: (NSOpenPanel *) sheet
     returnCode: (int) returnCode contextInfo: (void *) contextInfo;
-
+- (NSString *)dvdDevicePathForVolume: (NSString *)volumePath;;
 
 @end
