@@ -89,8 +89,8 @@ namespace Handbrake
             this.HelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OnlineDocumentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_wiki = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_onlineDocs = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_faq = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_onlineDocs = new System.Windows.Forms.ToolStripMenuItem();
             this.WebsiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_homepage = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_forum = new System.Windows.Forms.ToolStripMenuItem();
@@ -770,19 +770,19 @@ namespace Handbrake
             this.mnu_wiki.Text = "Wiki / User Guides";
             this.mnu_wiki.Click += new System.EventHandler(this.mnu_wiki_Click);
             // 
+            // mnu_faq
+            // 
+            this.mnu_faq.Name = "mnu_faq";
+            this.mnu_faq.Size = new System.Drawing.Size(195, 22);
+            this.mnu_faq.Text = "FAQ";
+            this.mnu_faq.Click += new System.EventHandler(this.mnu_faq_Click);
+            // 
             // mnu_onlineDocs
             // 
             this.mnu_onlineDocs.Name = "mnu_onlineDocs";
             this.mnu_onlineDocs.Size = new System.Drawing.Size(195, 22);
             this.mnu_onlineDocs.Text = "Full Documentation List";
             this.mnu_onlineDocs.Click += new System.EventHandler(this.mnu_onlineDocs_Click);
-            // 
-            // mnu_faq
-            // 
-            this.mnu_faq.Name = "mnu_faq";
-            this.mnu_faq.Size = new System.Drawing.Size(157, 22);
-            this.mnu_faq.Text = "FAQ";
-            this.mnu_faq.Click += new System.EventHandler(this.mnu_faq_Click);
             // 
             // WebsiteToolStripMenuItem
             // 
@@ -1722,6 +1722,7 @@ namespace Handbrake
             this.Check_ChapterMarkers.TabIndex = 50;
             this.Check_ChapterMarkers.Text = "Chapter Markers";
             this.Check_ChapterMarkers.UseVisualStyleBackColor = true;
+            this.Check_ChapterMarkers.CheckedChanged += new System.EventHandler(this.Check_ChapterMarkers_CheckedChanged);
             // 
             // CheckPixelRatio
             // 
@@ -1733,6 +1734,7 @@ namespace Handbrake
             this.CheckPixelRatio.TabIndex = 49;
             this.CheckPixelRatio.Text = "Anamorphic PAR";
             this.CheckPixelRatio.UseVisualStyleBackColor = true;
+            this.CheckPixelRatio.CheckedChanged += new System.EventHandler(this.CheckPixelRatio_CheckedChanged);
             // 
             // check_grayscale
             // 

@@ -417,7 +417,6 @@ namespace Handbrake
 
         private void mnu_animation_Click(object sender, EventArgs e)
         {
-            // NEEDS MKV
             CheckPixelRatio.CheckState = CheckState.Checked;
             text_width.Text = "";
             text_height.Text = "";
@@ -435,6 +434,14 @@ namespace Handbrake
             drp_crop.Text = "No Crop";
             check_turbo.CheckState = CheckState.Checked;
             drp_audioCodec.Text = "AAC";
+
+            // Set file extension to MKV
+            string destination = text_destination.Text;
+            destination = destination.Replace(".mp4", ".mkv");
+            destination = destination.Replace(".avi", ".mkv");
+            destination = destination.Replace(".m4v", ".mkv");
+            destination = destination.Replace(".ogm", ".mkv");
+            text_destination.Text = destination;
         }
 
         private void mnu_appleTv_Click(object sender, EventArgs e)
@@ -460,7 +467,6 @@ namespace Handbrake
 
         private void mnu_bedlam_Click(object sender, EventArgs e)
         {
-            // NEEDS MKV
             CheckPixelRatio.CheckState = CheckState.Checked;
             text_width.Text = "";
             text_height.Text = "";
@@ -478,6 +484,14 @@ namespace Handbrake
             drp_crop.Text = "No Crop";
             check_turbo.CheckState = CheckState.Checked;
             drp_audioCodec.Text = "AC3";
+
+            // Set file extension to MKV
+            string destination = text_destination.Text;
+            destination = destination.Replace(".mp4", ".mkv");
+            destination = destination.Replace(".avi", ".mkv");
+            destination = destination.Replace(".m4v", ".mkv");
+            destination = destination.Replace(".ogm", ".mkv");
+            text_destination.Text = destination;
         }
 
         private void mnu_blind_Click(object sender, EventArgs e)
@@ -545,7 +559,6 @@ namespace Handbrake
 
         private void mnu_CQR_Click(object sender, EventArgs e)
         {
-            // NEEDS MKV
             CheckPixelRatio.CheckState = CheckState.Checked;
             text_width.Text = "";
             text_height.Text = "";
@@ -557,17 +570,24 @@ namespace Handbrake
             drp_audioBitrate.Text = "160";
             Check_ChapterMarkers.CheckState = CheckState.Checked;
             drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "ref=3:mixed-refs:bframes=3:b-pyramid:b-rdo:bime:weightb:filter=-2,-1:subme=6:trellis=1:analyse=all:8x8dct:me=umh ";
+            rtf_h264advanced.Text = "ref=3:mixed-refs:bframes=3:b-pyramid:b-rdo:bime:weightb:filter=-2,-1:subme=6:trellis=1:analyse=all:8x8dct:me=umh";
             drp_deInterlace_option.Text = "None";
             check_2PassEncode.CheckState = CheckState.Unchecked;
             drp_crop.Text = "No Crop";
             check_turbo.CheckState = CheckState.Unchecked;
             drp_audioCodec.Text = "AC3";
+
+            // Set file extension to MKV
+            string destination = text_destination.Text;
+            destination = destination.Replace(".mp4", ".mkv");
+            destination = destination.Replace(".avi", ".mkv");
+            destination = destination.Replace(".m4v", ".mkv");
+            destination = destination.Replace(".ogm", ".mkv");
+            text_destination.Text = destination;
         }
 
         private void mnu_DSQ_Click(object sender, EventArgs e)
         {
-            // Needs MKV
             CheckPixelRatio.CheckState = CheckState.Checked;
             text_width.Text = "";
             text_height.Text = "";
@@ -585,11 +605,18 @@ namespace Handbrake
             drp_crop.Text = "No Crop";
             check_turbo.CheckState = CheckState.Checked;
             drp_audioCodec.Text = "AC3";
+
+            // Set file extension to MKV
+            string destination = text_destination.Text;
+            destination = destination.Replace(".mp4", ".mkv");
+            destination = destination.Replace(".avi", ".mkv");
+            destination = destination.Replace(".m4v", ".mkv");
+            destination = destination.Replace(".ogm", ".mkv");
+            text_destination.Text = destination;
         }
 
         private void mnu_film_Click(object sender, EventArgs e)
         {
-            // Needs MKV
             CheckPixelRatio.CheckState = CheckState.Checked;
             text_width.Text = "";
             text_height.Text = "";
@@ -607,6 +634,14 @@ namespace Handbrake
             drp_crop.Text = "No Crop";
             check_turbo.CheckState = CheckState.Checked;
             drp_audioCodec.Text = "AC3";
+
+            // Set file extension to MKV
+            string destination = text_destination.Text;
+            destination = destination.Replace(".mp4", ".mkv");
+            destination = destination.Replace(".avi", ".mkv");
+            destination = destination.Replace(".m4v", ".mkv");
+            destination = destination.Replace(".ogm", ".mkv");
+            text_destination.Text = destination;
         }
 
         private void mnu_iphone_Click(object sender, EventArgs e)
@@ -758,7 +793,6 @@ namespace Handbrake
 
         private void mnu_television_Click(object sender, EventArgs e)
         {
-            // NEEDS MKV
             CheckPixelRatio.CheckState = CheckState.Unchecked;
             text_width.Text = "";
             text_height.Text = "";
@@ -776,6 +810,15 @@ namespace Handbrake
             drp_crop.Text = "No Crop";
             check_turbo.CheckState = CheckState.Checked;
             drp_audioCodec.Text = "AAC";
+
+            // Set file extension to MKV
+            string destination = text_destination.Text;
+            destination = destination.Replace(".mp4", ".mkv");
+            destination = destination.Replace(".avi", ".mkv");
+            destination = destination.Replace(".m4v", ".mkv");
+            destination = destination.Replace(".ogm", ".mkv");
+            text_destination.Text = destination;
+            
         }
 
 
@@ -1833,6 +1876,8 @@ namespace Handbrake
         }
 
         #endregion
+
+
         // This is the END of the road ------------------------------------------------------------------------------
     }
 }
