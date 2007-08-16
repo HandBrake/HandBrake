@@ -551,7 +551,7 @@ return registrationDictionary;
     [fSrcChapterToField setStringValue: _( @"to" )];
     [fSrcDuration1Field setStringValue: _( @"Duration:" )];
 
-    [fDstFormatField    setStringValue: _( @"File format:" )];
+    [fDstFormatField    setStringValue: _( @"Format:" )];
     [fDstCodecsField    setStringValue: _( @"Codecs:" )];
     [fDstFile1Field     setStringValue: _( @"File:" )];
     [fDstBrowseButton   setTitle:       _( @"Browse" )];
@@ -801,8 +801,8 @@ list = hb_get_titles( fHandle );
 			NSRect frame = [fWindow frame];
 			if (frame.size.width <= 591)
 				frame.size.width = 591;
-			frame.size.height += -44;
-			frame.origin.y -= -44;
+			frame.size.height += -36;
+			frame.origin.y -= -36;
 			[fWindow setFrame:frame display:YES animate:YES];
 			
             /* FIXME */
@@ -1605,8 +1605,8 @@ list = hb_get_titles( fHandle );
 	NSRect frame = [fWindow frame];
     if (frame.size.width <= 591)
         frame.size.width = 591;
-    frame.size.height += 44;
-    frame.origin.y -= 44;
+    frame.size.height += 36;
+    frame.origin.y -= 36;
     [fWindow setFrame:frame display:YES animate:YES];
 }
 
@@ -2510,7 +2510,7 @@ list = hb_get_titles( fHandle );
 	
 	if (fTitle->job->pixel_ratio > 0)
 	{
-		[fPicSettingPARDsply setStringValue: @"On"];
+		[fPicSettingPARDsply setStringValue: @""];
 	}
 	else
 	{
