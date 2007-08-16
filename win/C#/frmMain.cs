@@ -413,74 +413,113 @@ namespace Handbrake
         #endregion
 
         #region Presets Menu
+        // Need to write a handler for file extension
 
-        private void mnu_preset_ipod133_Click(object sender, EventArgs e)
+        private void mnu_animation_Click(object sender, EventArgs e)
         {
-            CheckPixelRatio.CheckState = CheckState.Unchecked;
-            text_width.Text = "640";
-            text_height.Text = "Auto";
-            drp_videoEncoder.Text = "H.264 (iPod)";
+            // NEEDS MKV
+            CheckPixelRatio.CheckState = CheckState.Checked;
+            text_width.Text = "";
+            text_height.Text = "";
+            drp_videoEncoder.Text = "H.264";
             text_bitrate.Text = "1000";
             text_filesize.Text = "";
             slider_videoQuality.Value = 0;
             SliderValue.Text = "0%";
             drp_audioBitrate.Text = "160";
-            rtf_h264advanced.Text = "";
+            Check_ChapterMarkers.CheckState = CheckState.Checked;
+            drp_audioSampleRate.Text = "48";
+            rtf_h264advanced.Text = "ref=5:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2";
+            drp_deInterlace_option.Text = "Origional (Fast)";
+            check_2PassEncode.CheckState = CheckState.Checked;
             drp_crop.Text = "No Crop";
+            check_turbo.CheckState = CheckState.Checked;
+            drp_audioCodec.Text = "AAC";
         }
-
-
 
         private void mnu_appleTv_Click(object sender, EventArgs e)
         {
+            CheckPixelRatio.CheckState = CheckState.Checked;
             text_width.Text = "";
             text_height.Text = "";
             drp_videoEncoder.Text = "H.264";
-            text_bitrate.Text = "3000";
+            text_bitrate.Text = "2500";
             text_filesize.Text = "";
             slider_videoQuality.Value = 0;
             SliderValue.Text = "0%";
             drp_audioBitrate.Text = "160";
-            CheckPixelRatio.CheckState = CheckState.Checked;
+            Check_ChapterMarkers.CheckState = CheckState.Checked;
             drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:no-dct-decimate=1:trellis=2";
+            rtf_h264advanced.Text = "bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=2";
+            drp_deInterlace_option.Text = "None";
+            check_2PassEncode.CheckState = CheckState.Unchecked;
             drp_crop.Text = "No Crop";
-            
+            check_turbo.CheckState = CheckState.Unchecked;
+            drp_audioCodec.Text = "AAC";
         }
 
-        private void mnu_presetPS3_Click(object sender, EventArgs e)
+        private void mnu_bedlam_Click(object sender, EventArgs e)
         {
-            CheckPixelRatio.CheckState = CheckState.Unchecked;
+            // NEEDS MKV
+            CheckPixelRatio.CheckState = CheckState.Checked;
             text_width.Text = "";
             text_height.Text = "";
             drp_videoEncoder.Text = "H.264";
-            text_bitrate.Text = "3000";
+            text_bitrate.Text = "1800";
             text_filesize.Text = "";
             slider_videoQuality.Value = 0;
             SliderValue.Text = "0%";
             drp_audioBitrate.Text = "160";
-            CheckPixelRatio.CheckState = CheckState.Checked;
+            Check_ChapterMarkers.CheckState = CheckState.Checked;
             drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "level=41";
+            rtf_h264advanced.Text = "ref=16:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=7:me-range=64:analyse=all:8x8dct:trellis=2:no-fast-pskip:no-dct-decimate:filter=-2,-1";
+            drp_deInterlace_option.Text = "None";
+            check_2PassEncode.CheckState = CheckState.Checked;
             drp_crop.Text = "No Crop";
+            check_turbo.CheckState = CheckState.Checked;
+            drp_audioCodec.Text = "AC3";
         }
 
-        //------------------------------NEW PRESETS START HERE---------------------------
-        private void mnu_normal_Click(object sender, EventArgs e)
+        private void mnu_blind_Click(object sender, EventArgs e)
         {
             CheckPixelRatio.CheckState = CheckState.Unchecked;
-            text_width.Text = "";
+            text_width.Text = "512";
             text_height.Text = "";
             drp_videoEncoder.Text = "H.264";
-            text_bitrate.Text = "3000";
+            text_bitrate.Text = "512";
             text_filesize.Text = "";
             slider_videoQuality.Value = 0;
             SliderValue.Text = "0%";
-            drp_audioBitrate.Text = "160";
-            CheckPixelRatio.CheckState = CheckState.Checked;
+            drp_audioBitrate.Text = "128";
+            Check_ChapterMarkers.CheckState = CheckState.Checked;
             drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "level=41";
+            rtf_h264advanced.Text = "";
+            drp_deInterlace_option.Text = "None";
+            check_2PassEncode.CheckState = CheckState.Unchecked;
             drp_crop.Text = "No Crop";
+            check_turbo.CheckState = CheckState.Unchecked;
+            drp_audioCodec.Text = "AAC";
+        }
+
+        private void mnu_broke_Click(object sender, EventArgs e)
+        {
+            CheckPixelRatio.CheckState = CheckState.Unchecked;
+            text_width.Text = "640";
+            text_height.Text = "";
+            drp_videoEncoder.Text = "H.264";
+            text_bitrate.Text = "";
+            text_filesize.Text = "695";
+            slider_videoQuality.Value = 0;
+            SliderValue.Text = "0%";
+            drp_audioBitrate.Text = "128";
+            Check_ChapterMarkers.CheckState = CheckState.Checked;
+            drp_audioSampleRate.Text = "48";
+            rtf_h264advanced.Text = "ref=3:mixed-refs:bframes=6:bime:weightb:b-rdo:b-pyramid::direct=auto:me=umh:subme=6:trellis=1:analyse=all:8x8dct:no-fast-pskip";
+            drp_deInterlace_option.Text = "None";
+            check_2PassEncode.CheckState = CheckState.Checked;
+            drp_crop.Text = "No Crop";
+            check_turbo.CheckState = CheckState.Checked;
+            drp_audioCodec.Text = "AAC";
         }
 
         private void mnu_Classic_Click(object sender, EventArgs e)
@@ -489,84 +528,256 @@ namespace Handbrake
             text_width.Text = "";
             text_height.Text = "";
             drp_videoEncoder.Text = "H.264";
-            text_bitrate.Text = "3000";
+            text_bitrate.Text = "1000";
             text_filesize.Text = "";
             slider_videoQuality.Value = 0;
             SliderValue.Text = "0%";
             drp_audioBitrate.Text = "160";
-            CheckPixelRatio.CheckState = CheckState.Checked;
+            Check_ChapterMarkers.CheckState = CheckState.Unchecked;
             drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "level=41";
+            rtf_h264advanced.Text = "";
+            drp_deInterlace_option.Text = "None";
+            check_2PassEncode.CheckState = CheckState.Unchecked;
             drp_crop.Text = "No Crop";
+            check_turbo.CheckState = CheckState.Unchecked;
+            drp_audioCodec.Text = "AAC";
+        }
+
+        private void mnu_CQR_Click(object sender, EventArgs e)
+        {
+            // NEEDS MKV
+            CheckPixelRatio.CheckState = CheckState.Checked;
+            text_width.Text = "";
+            text_height.Text = "";
+            drp_videoEncoder.Text = "H.264";
+            text_bitrate.Text = "";
+            text_filesize.Text = "";
+            slider_videoQuality.Value = 64;
+            SliderValue.Text = "64%";
+            drp_audioBitrate.Text = "160";
+            Check_ChapterMarkers.CheckState = CheckState.Checked;
+            drp_audioSampleRate.Text = "48";
+            rtf_h264advanced.Text = "ref=3:mixed-refs:bframes=3:b-pyramid:b-rdo:bime:weightb:filter=-2,-1:subme=6:trellis=1:analyse=all:8x8dct:me=umh ";
+            drp_deInterlace_option.Text = "None";
+            check_2PassEncode.CheckState = CheckState.Unchecked;
+            drp_crop.Text = "No Crop";
+            check_turbo.CheckState = CheckState.Unchecked;
+            drp_audioCodec.Text = "AC3";
+        }
+
+        private void mnu_DSQ_Click(object sender, EventArgs e)
+        {
+            // Needs MKV
+            CheckPixelRatio.CheckState = CheckState.Checked;
+            text_width.Text = "";
+            text_height.Text = "";
+            drp_videoEncoder.Text = "H.264";
+            text_bitrate.Text = "1600";
+            text_filesize.Text = "";
+            slider_videoQuality.Value = 0;
+            SliderValue.Text = "0%";
+            drp_audioBitrate.Text = "160";
+            Check_ChapterMarkers.CheckState = CheckState.Checked;
+            drp_audioSampleRate.Text = "48";
+            rtf_h264advanced.Text = "ref=5:mixed-refs:bframes=3:bime:weightb:b-rdo:b-pyramid:me=umh:subme=7:trellis=1:analyse=all:8x8dct:no-fast-pskip";
+            drp_deInterlace_option.Text = "None";
+            check_2PassEncode.CheckState = CheckState.Checked;
+            drp_crop.Text = "No Crop";
+            check_turbo.CheckState = CheckState.Checked;
+            drp_audioCodec.Text = "AC3";
         }
 
         private void mnu_film_Click(object sender, EventArgs e)
         {
-            CheckPixelRatio.CheckState = CheckState.Unchecked;
+            // Needs MKV
+            CheckPixelRatio.CheckState = CheckState.Checked;
             text_width.Text = "";
             text_height.Text = "";
             drp_videoEncoder.Text = "H.264";
-            text_bitrate.Text = "3000";
+            text_bitrate.Text = "2000";
             text_filesize.Text = "";
             slider_videoQuality.Value = 0;
             SliderValue.Text = "0%";
             drp_audioBitrate.Text = "160";
-            CheckPixelRatio.CheckState = CheckState.Checked;
+            Check_ChapterMarkers.CheckState = CheckState.Checked;
             drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "level=41";
+            rtf_h264advanced.Text = "ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:no-fast-pskip";
+            drp_deInterlace_option.Text = "None";
+            check_2PassEncode.CheckState = CheckState.Checked;
             drp_crop.Text = "No Crop";
+            check_turbo.CheckState = CheckState.Checked;
+            drp_audioCodec.Text = "AC3";
         }
 
-        private void mnu_television_Click(object sender, EventArgs e)
+        private void mnu_iphone_Click(object sender, EventArgs e)
         {
             CheckPixelRatio.CheckState = CheckState.Unchecked;
-            text_width.Text = "";
+            text_width.Text = "480";
             text_height.Text = "";
-            drp_videoEncoder.Text = "H.264";
-            text_bitrate.Text = "3000";
+            drp_videoEncoder.Text = "H.264 (iPod)";
+            text_bitrate.Text = "960";
             text_filesize.Text = "";
             slider_videoQuality.Value = 0;
             SliderValue.Text = "0%";
-            drp_audioBitrate.Text = "160";
-            CheckPixelRatio.CheckState = CheckState.Checked;
+            drp_audioBitrate.Text = "128";
+            Check_ChapterMarkers.CheckState = CheckState.Checked;
             drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "level=41";
+            rtf_h264advanced.Text = "cabac=0:ref=1:analyse=all:me=umh:subme=6:no-fast-pskip=1:trellis=1";
+            drp_deInterlace_option.Text = "None";
+            check_2PassEncode.CheckState = CheckState.Unchecked;
             drp_crop.Text = "No Crop";
+            check_turbo.CheckState = CheckState.Unchecked;
+            drp_audioCodec.Text = "AAC";
         }
 
-        private void mnu_qt_Click(object sender, EventArgs e)
+        private void mnu_ipod_Click(object sender, EventArgs e)
         {
             CheckPixelRatio.CheckState = CheckState.Unchecked;
-            text_width.Text = "";
+            text_width.Text = "640";
             text_height.Text = "";
-            drp_videoEncoder.Text = "H.264";
-            text_bitrate.Text = "3000";
+            drp_videoEncoder.Text = "H.264 (iPod)";
+            text_bitrate.Text = "1500";
             text_filesize.Text = "";
             slider_videoQuality.Value = 0;
             SliderValue.Text = "0%";
             drp_audioBitrate.Text = "160";
-            CheckPixelRatio.CheckState = CheckState.Checked;
+            Check_ChapterMarkers.CheckState = CheckState.Checked;
             drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "level=41";
+            rtf_h264advanced.Text = "keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1";
+            drp_deInterlace_option.Text = "None";
+            check_2PassEncode.CheckState = CheckState.Unchecked;
             drp_crop.Text = "No Crop";
+            check_turbo.CheckState = CheckState.Unchecked;
+            drp_audioCodec.Text = "AAC";
+        }
+
+        private void mnu_ipodLow_Click(object sender, EventArgs e)
+        {
+            CheckPixelRatio.CheckState = CheckState.Unchecked;
+            text_width.Text = "320";
+            text_height.Text = "";
+            drp_videoEncoder.Text = "H.264 (iPod)";
+            text_bitrate.Text = "700";
+            text_filesize.Text = "";
+            slider_videoQuality.Value = 0;
+            SliderValue.Text = "0%";
+            drp_audioBitrate.Text = "160";
+            Check_ChapterMarkers.CheckState = CheckState.Checked;
+            drp_audioSampleRate.Text = "48";
+            rtf_h264advanced.Text = "keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1";
+            drp_deInterlace_option.Text = "None";
+            check_2PassEncode.CheckState = CheckState.Unchecked;
+            drp_crop.Text = "No Crop";
+            check_turbo.CheckState = CheckState.Unchecked;
+            drp_audioCodec.Text = "AAC";
+        }
+
+        private void mnu_normal_Click(object sender, EventArgs e)
+        {
+            CheckPixelRatio.CheckState = CheckState.Checked;
+            text_width.Text = "";
+            text_height.Text = "";
+            drp_videoEncoder.Text = "H.264";
+            text_bitrate.Text = "1500";
+            text_filesize.Text = "";
+            slider_videoQuality.Value = 0;
+            SliderValue.Text = "0%";
+            drp_audioBitrate.Text = "160";
+            Check_ChapterMarkers.CheckState = CheckState.Checked;
+            drp_audioSampleRate.Text = "48";
+            rtf_h264advanced.Text = "ref=2:bframes=2:subme=5:me=umh";
+            drp_deInterlace_option.Text = "None";
+            check_2PassEncode.CheckState = CheckState.Checked;
+            drp_crop.Text = "No Crop";
+            check_turbo.CheckState = CheckState.Checked;
+            drp_audioCodec.Text = "AAC";
+        }
+
+        private void mnu_PS3_Click(object sender, EventArgs e)
+        {
+            CheckPixelRatio.CheckState = CheckState.Checked;
+            text_width.Text = "";
+            text_height.Text = "";
+            drp_videoEncoder.Text = "H.264";
+            text_bitrate.Text = "2500";
+            text_filesize.Text = "";
+            slider_videoQuality.Value = 0;
+            SliderValue.Text = "0%";
+            drp_audioBitrate.Text = "160";
+            Check_ChapterMarkers.CheckState = CheckState.Checked;
+            drp_audioSampleRate.Text = "48";
+            rtf_h264advanced.Text = "level=41:subme=5:me=umh";
+            drp_deInterlace_option.Text = "None";
+            check_2PassEncode.CheckState = CheckState.Unchecked;
+            drp_crop.Text = "No Crop";
+            check_turbo.CheckState = CheckState.Unchecked;
+            drp_audioCodec.Text = "AAC";
         }
 
         private void mnu_psp_Click(object sender, EventArgs e)
         {
             CheckPixelRatio.CheckState = CheckState.Unchecked;
-            text_width.Text = "";
-            text_height.Text = "";
+            text_width.Text = "368";
+            text_height.Text = "208";
             drp_videoEncoder.Text = "H.264";
-            text_bitrate.Text = "3000";
+            text_bitrate.Text = "1024";
             text_filesize.Text = "";
             slider_videoQuality.Value = 0;
             SliderValue.Text = "0%";
             drp_audioBitrate.Text = "160";
-            CheckPixelRatio.CheckState = CheckState.Checked;
+            Check_ChapterMarkers.CheckState = CheckState.Checked;
             drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "level=41";
+            rtf_h264advanced.Text = "";
+            drp_deInterlace_option.Text = "None";
+            check_2PassEncode.CheckState = CheckState.Unchecked;
             drp_crop.Text = "No Crop";
+            check_turbo.CheckState = CheckState.Unchecked;
+            drp_audioCodec.Text = "AAC";
         }
+
+        private void mnu_qt_Click(object sender, EventArgs e)
+        {
+            CheckPixelRatio.CheckState = CheckState.Checked;
+            text_width.Text = "";
+            text_height.Text = "";
+            drp_videoEncoder.Text = "H.264";
+            text_bitrate.Text = "2000";
+            text_filesize.Text = "";
+            slider_videoQuality.Value = 0;
+            SliderValue.Text = "0%";
+            drp_audioBitrate.Text = "160";
+            Check_ChapterMarkers.CheckState = CheckState.Checked;
+            drp_audioSampleRate.Text = "48";
+            rtf_h264advanced.Text = "ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct-auto:me=umh:subme=5:analyse=all:8x8dct:trellis=1:no-fast-pskip";
+            drp_deInterlace_option.Text = "None";
+            check_2PassEncode.CheckState = CheckState.Checked;
+            drp_crop.Text = "No Crop";
+            check_turbo.CheckState = CheckState.Checked;
+            drp_audioCodec.Text = "AAC";
+        }
+
+        private void mnu_television_Click(object sender, EventArgs e)
+        {
+            // NEEDS MKV
+            CheckPixelRatio.CheckState = CheckState.Unchecked;
+            text_width.Text = "";
+            text_height.Text = "";
+            drp_videoEncoder.Text = "H.264";
+            text_bitrate.Text = "1300";
+            text_filesize.Text = "";
+            slider_videoQuality.Value = 0;
+            SliderValue.Text = "0%";
+            drp_audioBitrate.Text = "160";
+            Check_ChapterMarkers.CheckState = CheckState.Checked;
+            drp_audioSampleRate.Text = "48";
+            rtf_h264advanced.Text = "ref=3:mixed-refs:bframes=6:bime:weightb:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip";
+            drp_deInterlace_option.Text = "Origional (Fast)";
+            check_2PassEncode.CheckState = CheckState.Checked;
+            drp_crop.Text = "No Crop";
+            check_turbo.CheckState = CheckState.Checked;
+            drp_audioCodec.Text = "AAC";
+        }
+
 
 
         private void mnu_ProgramDefaultOptions_Click(object sender, EventArgs e)
@@ -622,14 +833,14 @@ namespace Handbrake
            Process.Start("http://handbrake.m0k.org/trac");
         }
 
-        private void mnu_onlineDocs_Click(object sender, EventArgs e)
-        {
-            Process.Start("http://handbrake.m0k.org/?page_id=11");
-        }
-
         private void mnu_faq_Click(object sender, EventArgs e)
         {
             Process.Start("http://handbrake.m0k.org/trac/wiki/WindowsGuiFaq");
+        }
+
+        private void mnu_onlineDocs_Click(object sender, EventArgs e)
+        {
+            Process.Start("http://handbrake.m0k.org/?page_id=11");
         }
 
         private void mnu_homepage_Click(object sender, EventArgs e)
@@ -1622,11 +1833,6 @@ namespace Handbrake
         }
 
         #endregion
-
-
-      
-
-
         // This is the END of the road ------------------------------------------------------------------------------
     }
 }
