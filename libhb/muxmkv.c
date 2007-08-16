@@ -144,35 +144,24 @@ static int MKVInit( hb_mux_object_t * m )
                 break;
             case HB_ACODEC_VORBIS:
                 {
-                    int i, j;
-                    int64_t offset = 0;
-                    int64_t cp_size = 0;
-                    char    *cp;
+                    int i;
+                    uint64_t cp_size = 0;
                     track->codecID = MK_ACODEC_VORBIS;
-                    cp_size = sizeof( char );
+                    uint64_t  header_sizes[3];
                     for (i = 0; i < 3; ++i)
                     {
                         ogg_headers[i] = (ogg_packet *)audio->config.vorbis.headers[i];
                         ogg_headers[i]->packet = (unsigned char *)&audio->config.vorbis.headers[i] + sizeof( ogg_packet );
-                        cp_size += (sizeof( char ) * ((ogg_headers[i]->bytes / 255) + 1)) + ogg_headers[i]->bytes;
-                            /* This will be too big, but it doesn't matter, as we only need it to be big enough. */
+                        header_sizes[i] = ogg_headers[i]->bytes;
                     }
-                    cp = track->codecPrivate = calloc(1, cp_size);
-                    cp[offset++] = 0x02;
-                    for (i = 0; i < 2; ++i)
-                    {
-                        for (j = ogg_headers[i]->bytes; j >= 255; j -= 255)
-                        {
-                            cp[offset++] = 255;
-                        }
-                        cp[offset++] = j;
-                    }
+                    track->codecPrivate = mk_laceXiph(header_sizes, 2, &cp_size);
+                    track->codecPrivate = realloc(track->codecPrivate, cp_size + ogg_headers[0]->bytes + ogg_headers[1]->bytes + ogg_headers[2]->bytes);
                     for(i = 0; i < 3; ++i)
                     {
-                        memcpy(cp + offset, ogg_headers[i]->packet, ogg_headers[i]->bytes);
-                        offset += ogg_headers[i]->bytes;
+                        memcpy(track->codecPrivate + cp_size, ogg_headers[i]->packet, ogg_headers[i]->bytes);
+                        cp_size += ogg_headers[i]->bytes;
                     }
-                    track->codecPrivateSize = offset;
+                    track->codecPrivateSize = cp_size;
                 }
                 break;
             case HB_ACODEC_FAAC:
