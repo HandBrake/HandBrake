@@ -68,6 +68,7 @@ namespace Handbrake
             // 
             // GroupBox2
             // 
+            this.GroupBox2.BackColor = System.Drawing.SystemColors.ControlLight;
             this.GroupBox2.Controls.Add(this.Label1);
             this.GroupBox2.Controls.Add(this.check_updateCheck);
             this.GroupBox2.Controls.Add(this.Label2);
@@ -184,6 +185,7 @@ namespace Handbrake
             // 
             // GroupBox3
             // 
+            this.GroupBox3.BackColor = System.Drawing.SystemColors.ControlLight;
             this.GroupBox3.Controls.Add(this.drp_Priority);
             this.GroupBox3.Controls.Add(this.Label4);
             this.GroupBox3.Controls.Add(this.drp_processors);
@@ -198,6 +200,7 @@ namespace Handbrake
             // 
             // GroupBox1
             // 
+            this.GroupBox1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.GroupBox1.Controls.Add(this.check_verbose);
             this.GroupBox1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GroupBox1.Location = new System.Drawing.Point(13, 283);
@@ -209,6 +212,7 @@ namespace Handbrake
             // 
             // btn_close
             // 
+            this.btn_close.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_close.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -218,11 +222,12 @@ namespace Handbrake
             this.btn_close.Size = new System.Drawing.Size(107, 22);
             this.btn_close.TabIndex = 53;
             this.btn_close.Text = "Close";
-            this.btn_close.UseVisualStyleBackColor = true;
+            this.btn_close.UseVisualStyleBackColor = false;
             this.btn_close.Click += new System.EventHandler(this.btn_close_Click);
             // 
             // frmOptions
             // 
+            this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(411, 394);
             this.Controls.Add(this.GroupBox2);
             this.Controls.Add(this.GroupBox3);

@@ -50,7 +50,7 @@ namespace Handbrake
             // 
             // btn_ok
             // 
-            this.btn_ok.BackColor = System.Drawing.SystemColors.Control;
+            this.btn_ok.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_ok.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_ok.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_ok.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -108,7 +108,7 @@ namespace Handbrake
             // 
             // btn_skip
             // 
-            this.btn_skip.BackColor = System.Drawing.SystemColors.Control;
+            this.btn_skip.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_skip.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_skip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_skip.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -119,7 +119,7 @@ namespace Handbrake
             this.btn_skip.TabIndex = 33;
             this.btn_skip.TabStop = false;
             this.btn_skip.Text = "Cancel";
-            this.btn_skip.UseVisualStyleBackColor = true;
+            this.btn_skip.UseVisualStyleBackColor = false;
             this.btn_skip.Visible = false;
             this.btn_skip.Click += new System.EventHandler(this.btn_skip_Click);
             // 
@@ -128,6 +128,7 @@ namespace Handbrake
             this.AcceptButton = this.btn_ok;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(434, 88);
             this.ControlBox = false;
             this.Controls.Add(this.btn_skip);

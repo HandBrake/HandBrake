@@ -1037,7 +1037,7 @@ namespace Handbrake
             // 
             // btn_queue
             // 
-            this.btn_queue.BackColor = System.Drawing.SystemColors.Control;
+            this.btn_queue.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_queue.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_queue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_queue.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1053,7 +1053,7 @@ namespace Handbrake
             // 
             // btn_encode
             // 
-            this.btn_encode.BackColor = System.Drawing.SystemColors.Control;
+            this.btn_encode.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_encode.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_encode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_encode.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

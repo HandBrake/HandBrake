@@ -43,7 +43,7 @@ namespace Handbrake
             // 
             // btn_down
             // 
-            this.btn_down.BackColor = System.Drawing.SystemColors.Control;
+            this.btn_down.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_down.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_down.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_down.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -59,7 +59,7 @@ namespace Handbrake
             // 
             // btn_up
             // 
-            this.btn_up.BackColor = System.Drawing.SystemColors.Control;
+            this.btn_up.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_up.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_up.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_up.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -75,7 +75,7 @@ namespace Handbrake
             // 
             // btn_delete
             // 
-            this.btn_delete.BackColor = System.Drawing.SystemColors.Control;
+            this.btn_delete.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_delete.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_delete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_delete.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -100,7 +100,7 @@ namespace Handbrake
             // 
             // btn_q_encoder
             // 
-            this.btn_q_encoder.BackColor = System.Drawing.SystemColors.Control;
+            this.btn_q_encoder.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_q_encoder.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_q_encoder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_q_encoder.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -126,7 +126,7 @@ namespace Handbrake
             // 
             // btn_Close
             // 
-            this.btn_Close.BackColor = System.Drawing.SystemColors.Control;
+            this.btn_Close.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_Close.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_Close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_Close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -142,6 +142,7 @@ namespace Handbrake
             // 
             // progressBar
             // 
+            this.progressBar.BackColor = System.Drawing.SystemColors.ControlLight;
             this.progressBar.Location = new System.Drawing.Point(74, 331);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(513, 23);
@@ -169,6 +170,7 @@ namespace Handbrake
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(657, 406);
             this.ControlBox = false;
             this.Controls.Add(this.lbl_progressValue);

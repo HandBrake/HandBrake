@@ -37,6 +37,7 @@ namespace Handbrake
             // Label2
             // 
             this.Label2.AutoSize = true;
+            this.Label2.BackColor = System.Drawing.SystemColors.ControlLight;
             this.Label2.Location = new System.Drawing.Point(13, 14);
             this.Label2.Name = "Label2";
             this.Label2.Size = new System.Drawing.Size(518, 26);
@@ -57,7 +58,7 @@ namespace Handbrake
             // 
             // btn_close
             // 
-            this.btn_close.BackColor = System.Drawing.SystemColors.Control;
+            this.btn_close.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_close.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -76,6 +77,7 @@ namespace Handbrake
             this.AcceptButton = this.btn_close;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(547, 495);
             this.Controls.Add(this.Label2);
             this.Controls.Add(this.rtf_dvdInfo);

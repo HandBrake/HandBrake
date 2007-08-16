@@ -51,6 +51,7 @@ namespace Handbrake
             // 
             // btn_close
             // 
+            this.btn_close.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_close.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_close.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -60,7 +61,7 @@ namespace Handbrake
             this.btn_close.Size = new System.Drawing.Size(99, 22);
             this.btn_close.TabIndex = 27;
             this.btn_close.Text = "Close";
-            this.btn_close.UseVisualStyleBackColor = true;
+            this.btn_close.UseVisualStyleBackColor = false;
             this.btn_close.Click += new System.EventHandler(this.btn_close_Click);
             // 
             // Version
@@ -120,7 +121,8 @@ namespace Handbrake
             this.AcceptButton = this.btn_close;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(526, 252);
+            this.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.ClientSize = new System.Drawing.Size(526, 259);
             this.Controls.Add(this.Label4);
             this.Controls.Add(this.btn_close);
             this.Controls.Add(this.Version);
