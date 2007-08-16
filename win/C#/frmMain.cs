@@ -1650,7 +1650,18 @@ namespace Handbrake
             else if (cropSetting == "No Crop")
                 cropOut = " --crop 0:0:0:0 ";
             else
+            {
+                if (text_top.Text == "")
+                    cropTop = "0";
+                if (text_bottom.Text == "")
+                    cropBottom = "0";
+                if (text_left.Text == "")
+                    cropLeft = "0";
+                if (text_right.Text == "")
+                    cropRight = "0";
+
                 cropOut = " --crop " + cropTop + ":" + cropBottom + ":" + cropLeft + ":" + cropRight;
+            }
 
             if (subtitles ==  "None")
                 subtitles = "";
