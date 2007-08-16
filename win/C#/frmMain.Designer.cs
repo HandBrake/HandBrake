@@ -835,7 +835,7 @@ namespace Handbrake
             // 
             // GroupBox1
             // 
-            this.GroupBox1.BackColor = System.Drawing.SystemColors.Control;
+            this.GroupBox1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.GroupBox1.Controls.Add(this.lbl_chptWarn);
             this.GroupBox1.Controls.Add(this.Label13);
             this.GroupBox1.Controls.Add(this.drop_chapterFinish);
@@ -925,7 +925,7 @@ namespace Handbrake
             // 
             // GroupBox4
             // 
-            this.GroupBox4.BackColor = System.Drawing.SystemColors.Control;
+            this.GroupBox4.BackColor = System.Drawing.SystemColors.ControlLight;
             this.GroupBox4.Controls.Add(this.Label56);
             this.GroupBox4.Controls.Add(this.lbl_Aspect);
             this.GroupBox4.Controls.Add(this.Label91);
@@ -1108,7 +1108,7 @@ namespace Handbrake
             // 
             // TabPage6
             // 
-            this.TabPage6.BackColor = System.Drawing.SystemColors.Control;
+            this.TabPage6.BackColor = System.Drawing.SystemColors.ControlLight;
             this.TabPage6.Controls.Add(this.Label7);
             this.TabPage6.Controls.Add(this.Label39);
             this.TabPage6.Controls.Add(this.btn_ClearQuery);
@@ -1120,7 +1120,6 @@ namespace Handbrake
             this.TabPage6.Size = new System.Drawing.Size(639, 242);
             this.TabPage6.TabIndex = 6;
             this.TabPage6.Text = "Query Editor";
-            this.TabPage6.UseVisualStyleBackColor = true;
             // 
             // Label7
             // 
@@ -1182,7 +1181,7 @@ namespace Handbrake
             // 
             // h264Tab
             // 
-            this.h264Tab.BackColor = System.Drawing.SystemColors.Control;
+            this.h264Tab.BackColor = System.Drawing.SystemColors.ControlLight;
             this.h264Tab.Controls.Add(this.Label43);
             this.h264Tab.Controls.Add(this.label_h264);
             this.h264Tab.Controls.Add(this.Label95);
@@ -1196,7 +1195,6 @@ namespace Handbrake
             this.h264Tab.Size = new System.Drawing.Size(639, 242);
             this.h264Tab.TabIndex = 5;
             this.h264Tab.Text = "H.264";
-            this.h264Tab.UseVisualStyleBackColor = true;
             // 
             // Label43
             // 
@@ -1272,7 +1270,7 @@ namespace Handbrake
             // 
             // TabPage2
             // 
-            this.TabPage2.BackColor = System.Drawing.SystemColors.Control;
+            this.TabPage2.BackColor = System.Drawing.SystemColors.ControlLight;
             this.TabPage2.Controls.Add(this.Label29);
             this.TabPage2.Controls.Add(this.drp_audioMixDown);
             this.TabPage2.Controls.Add(this.drp_audioChannels);
@@ -1290,7 +1288,6 @@ namespace Handbrake
             this.TabPage2.Size = new System.Drawing.Size(639, 242);
             this.TabPage2.TabIndex = 3;
             this.TabPage2.Text = "Audio Settings";
-            this.TabPage2.UseVisualStyleBackColor = true;
             // 
             // Label29
             // 
@@ -1430,7 +1427,7 @@ namespace Handbrake
             // 
             // TabPage3
             // 
-            this.TabPage3.BackColor = System.Drawing.SystemColors.Control;
+            this.TabPage3.BackColor = System.Drawing.SystemColors.ControlLight;
             this.TabPage3.Controls.Add(this.label24);
             this.TabPage3.Controls.Add(this.drp_deNoise);
             this.TabPage3.Controls.Add(this.label11);
@@ -1461,7 +1458,6 @@ namespace Handbrake
             this.TabPage3.Size = new System.Drawing.Size(639, 242);
             this.TabPage3.TabIndex = 2;
             this.TabPage3.Text = "Video Settings";
-            this.TabPage3.UseVisualStyleBackColor = true;
             // 
             // label24
             // 
@@ -1682,7 +1678,7 @@ namespace Handbrake
             // 
             // TabPage1
             // 
-            this.TabPage1.BackColor = System.Drawing.SystemColors.Control;
+            this.TabPage1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.TabPage1.Controls.Add(this.Check_ChapterMarkers);
             this.TabPage1.Controls.Add(this.CheckPixelRatio);
             this.TabPage1.Controls.Add(this.check_grayscale);
@@ -1710,7 +1706,6 @@ namespace Handbrake
             this.TabPage1.Size = new System.Drawing.Size(639, 242);
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "Picture Settings";
-            this.TabPage1.UseVisualStyleBackColor = true;
             // 
             // Check_ChapterMarkers
             // 
@@ -1941,6 +1936,7 @@ namespace Handbrake
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(675, 621);
             this.Controls.Add(this.btn_eCancel);
             this.Controls.Add(this.lbl_encode);
