@@ -302,16 +302,19 @@ void hb_libmpeg2_info( hb_libmpeg2_t * m, int * width, int * height,
 {
     *width  = m->width;
     *height = m->height;
-    if( (m->info->display_picture->flags & PROGRESSIVE) && (m->height == 480) )
-      {
-          /* The frame is progressive and it's NTSC DVD height, so change its FPS to 23.976.
-             This might not be correct for the title. It's really just for scan.c's benefit.
-             Scan.c will reset the fps to 29.97, until a simple majority of the preview
-             frames report at 23.976.
-          */
-          //hb_log("Detecting NTSC Progressive Frame");
-          m->rate = 1126125;
-      }
+    if (m->info->display_fbuf)
+    {
+        if( (m->info->display_picture->flags & PROGRESSIVE) && (m->height == 480) )
+        {
+            /* The frame is progressive and it's NTSC DVD height, so change its FPS to 23.976.
+               This might not be correct for the title. It's really just for scan.c's benefit.
+               Scan.c will reset the fps to 29.97, until a simple majority of the preview
+               frames report at 23.976.
+            */
+            //hb_log("Detecting NTSC Progressive Frame");
+            m->rate = 1126125;
+        }
+    }
     *rate   = m->rate;
     *aspect_ratio = m->aspect_ratio;
 }
