@@ -124,6 +124,8 @@
 		A28468680C5A43D900EF9A98 /* Disc.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A28468670C5A43D900EF9A98 /* Disc.tiff */; };
 		A29E05800BE1283E000533F5 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A29E057F0BE1283E000533F5 /* Growl.framework */; };
 		A29E058B0BE12889000533F5 /* Growl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A29E057F0BE1283E000533F5 /* Growl.framework */; };
+		A2A1EC310C76C35E00827E0D /* HBDVDDetector.h in Headers */ = {isa = PBXBuildFile; fileRef = A2A1EC300C76C35E00827E0D /* HBDVDDetector.h */; };
+		A2A1EC3A0C76C58400827E0D /* HBDriveDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = A2A1EC390C76C58400827E0D /* HBDriveDetector.m */; };
 		A2DFC66E0C6196D900E66E89 /* actionWidget.png in Resources */ = {isa = PBXBuildFile; fileRef = A2DFC66C0C6196D900E66E89 /* actionWidget.png */; };
 		A2DFC66F0C6196D900E66E89 /* actionWidgetPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = A2DFC66D0C6196D900E66E89 /* actionWidgetPressed.png */; };
 		A2DFC6750C6197C600E66E89 /* MVMenuButton.h in Headers */ = {isa = PBXBuildFile; fileRef = A2DFC6740C6197C600E66E89 /* MVMenuButton.h */; };
@@ -264,6 +266,8 @@
 		A273E0950C57C19500493A45 /* muxmkv.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = muxmkv.c; path = ../libhb/muxmkv.c; sourceTree = SOURCE_ROOT; };
 		A28468670C5A43D900EF9A98 /* Disc.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Disc.tiff; sourceTree = "<group>"; };
 		A29E057F0BE1283E000533F5 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Growl.framework; sourceTree = "<group>"; };
+		A2A1EC300C76C35E00827E0D /* HBDVDDetector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = HBDVDDetector.h; sourceTree = "<group>"; };
+		A2A1EC390C76C58400827E0D /* HBDriveDetector.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = HBDriveDetector.m; sourceTree = "<group>"; };
 		A2DFC66C0C6196D900E66E89 /* actionWidget.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = actionWidget.png; sourceTree = "<group>"; };
 		A2DFC66D0C6196D900E66E89 /* actionWidgetPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = actionWidgetPressed.png; sourceTree = "<group>"; };
 		A2DFC6740C6197C600E66E89 /* MVMenuButton.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MVMenuButton.h; sourceTree = "<group>"; };
@@ -460,6 +464,8 @@
 				4D2AE78A09CCB24C007E18F6 /* DriveDetector.h */,
 				593034E90BBA39A100172349 /* ChapterTitles.h */,
 				593034EA0BBA39A100172349 /* ChapterTitles.m */,
+				A2A1EC300C76C35E00827E0D /* HBDVDDetector.h */,
+				A2A1EC390C76C58400827E0D /* HBDriveDetector.m */,
 				253885FF0BFE0A5B0064E995 /* HBOutputRedirect.h */,
 				253886000BFE0A5B0064E995 /* HBOutputRedirect.m */,
 				253886150BFE0C160064E995 /* HBOutputPanelController.h */,
@@ -526,6 +532,7 @@
 				4DD93F92082036E8008E1322 /* PictureController.h in Headers */,
 				4DD93F93082036E8008E1322 /* QueueController.h in Headers */,
 				4D2AEA2A09CCB8FC007E18F6 /* DriveDetector.h in Headers */,
+				A2A1EC310C76C35E00827E0D /* HBDVDDetector.h in Headers */,
 				253886010BFE0A5B0064E995 /* HBOutputRedirect.h in Headers */,
 				253886170BFE0C160064E995 /* HBOutputPanelController.h in Headers */,
 				25DE1FB60C169A0C00F01FC8 /* HBPreferencesController.h in Headers */,
@@ -799,6 +806,7 @@
 				4DD93F9E082036E8008E1322 /* PictureController.mm in Sources */,
 				4DD93F9F082036E8008E1322 /* QueueController.mm in Sources */,
 				4D2AEA2909CCB8F9007E18F6 /* DriveDetector.m in Sources */,
+				A2A1EC3A0C76C58400827E0D /* HBDriveDetector.m in Sources */,
 				253886020BFE0A5B0064E995 /* HBOutputRedirect.m in Sources */,
 				253886180BFE0C160064E995 /* HBOutputPanelController.m in Sources */,
 				25DE1FB70C169A0C00F01FC8 /* HBPreferencesController.m in Sources */,

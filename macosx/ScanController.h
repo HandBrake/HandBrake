@@ -18,10 +18,7 @@
     
     IBOutlet NSTextField         * fStatusField;
     IBOutlet NSProgressIndicator * fIndicator;
-
 	
-   // DriveDetector                * fDriveDetector;
-   // NSDictionary                 * fDrives;	
 }
 
 - (void)     SetHandle:     (hb_handle_t *) handle;
@@ -30,6 +27,6 @@
 - (IBAction) Cancel:        (id) sender;
 - (void) BrowseDone: (NSOpenPanel *) sheet
     returnCode: (int) returnCode contextInfo: (void *) contextInfo;
-- (NSString *)dvdDevicePathForVolume: (NSString *)volumePath;;
+
 
 @end
