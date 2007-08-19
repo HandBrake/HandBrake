@@ -197,7 +197,6 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 	}
 	
 	
-	
     /* Destination box*/
     [fDstFormatPopUp removeAllItems];
     [fDstFormatPopUp addItemWithTitle: _( @"MP4 file" )];
@@ -272,6 +271,18 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 	/*Set detelecine to Off upon launch */
 	[fPicSettingDetelecine setStringValue: @"No"];
 	[fPicSettingDenoise setStringValue: @"0"];
+	/* if Deinterlace upon launch is specified in the prefs, then set to 1 for "Fast",
+	   if not, then set to 0 for none */
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultDeinterlaceOn"] > 0)
+	{
+	[fPicSettingDeinterlace setStringValue: @"1"];
+	}
+	else
+	{
+	[fPicSettingDeinterlace setStringValue: @"0"];
+	}
+	/* Set Auto Crop to On at launch */
+	[fPicSettingAutoCrop setStringValue: @"1"];
 	
 	/* Audio bitrate */
     [fAudBitratePopUp removeAllItems];
@@ -1032,10 +1043,7 @@ list = hb_get_titles( fHandle );
 		// Select the longuest title
 		[fSrcTitlePopUp selectItemAtIndex: indxpri];
 		[self TitlePopUpChanged: NULL];
-		/* We set the auto crop in the main window to value "1" just as in PictureController,
-			as it does not seem to be taken from any job-> variable */
-		[fPicSettingAutoCrop setStringValue: [NSString stringWithFormat:
-			@"%d", 0]];
+		
 		
 		
 		[self EnableUI: YES];
@@ -1759,6 +1767,9 @@ list = hb_get_titles( fHandle );
 							 @"%d", fTitle->width]];
 	[fPicSrcHeight setStringValue: [NSString stringWithFormat:
 							 @"%d", fTitle->height]];
+							 
+	/* Set Auto Crop to on upon selecting a new title */
+	[fPicSettingAutoCrop setStringValue: @"1"];
 							 
 	/* We get the originial output picture width and height and put them
 	in variables for use with some presets later on */
@@ -3946,7 +3957,7 @@ the user is using "Custom" settings by determining the sender*/
 	/* Video encoder */
 	[preset setObject:@"x264 (h.264 Main)" forKey:@"VideoEncoder"];
 	/* x264 Option String (We can use this to tweak the appleTV output)*/
-	[preset setObject:@"bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=2" forKey:@"x264Option"];
+	[preset setObject:@"bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=2:cabac=0" forKey:@"x264Option"];
 	/* Video quality */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
 	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
