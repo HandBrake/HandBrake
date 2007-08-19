@@ -1135,7 +1135,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = ..;
-				CURRENT_PROJECT_VERSION = 0.8.5b1;
+				CURRENT_PROJECT_VERSION = 0.9.0;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
@@ -1149,6 +1149,7 @@
 				);
 				INFOPLIST_FILE = HandBrake.plist;
 				LIBRARY_SEARCH_PATHS = "";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					../libhb/libhb.a,
@@ -1646,7 +1647,7 @@
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = ..;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 0.8.5b1;
+				CURRENT_PROJECT_VERSION = 0.9.0;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
@@ -1663,6 +1664,7 @@
 				);
 				INFOPLIST_FILE = HandBrake.plist;
 				LIBRARY_SEARCH_PATHS = "";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					../libhb/libhb.a,
@@ -1703,7 +1705,7 @@
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = ..;
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 0.8.5b1;
+				CURRENT_PROJECT_VERSION = 0.9.0;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
@@ -1718,6 +1720,7 @@
 				);
 				INFOPLIST_FILE = HandBrake.plist;
 				LIBRARY_SEARCH_PATHS = "";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					../libhb/libhb.a,
@@ -1757,7 +1760,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = ..;
-				CURRENT_PROJECT_VERSION = 0.8.5b1;
+				CURRENT_PROJECT_VERSION = 0.9.0;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
@@ -1771,6 +1774,7 @@
 				);
 				INFOPLIST_FILE = HandBrake.plist;
 				LIBRARY_SEARCH_PATHS = "";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					../libhb/libhb.a,

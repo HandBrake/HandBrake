@@ -22,7 +22,7 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
         <key>CFBundleExecutable</key>
         <string>HandBrake</string>
         <key>CFBundleGetInfoString</key>
-        <string>0.8.5b1</string>
+        <string>0.9.0</string>
         <key>CFBundleIconFile</key>
         <string>HandBrake</string>
         <key>CFBundleIdentifier</key>
@@ -34,7 +34,7 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
         <key>CFBundlePackageType</key>
         <string>APPL</string>
         <key>CFBundleShortVersionString</key>
-        <string>0.8.5b1</string>
+        <string>$2</string>
         <key>CFBundleSignature</key>
         <string>HB##</string>
         <key>CFBundleVersion</key>
