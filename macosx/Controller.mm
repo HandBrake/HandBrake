@@ -129,8 +129,14 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 - (void) awakeFromNib
 {
     [fWindow center];
-	
-    [self TranslateStrings];
+	/* set the main menu bar so it doesnt auto enable the menu items
+	   so we can manually do it with setEnabled: This should be changed
+	   to use validateUserInterfaceItem: along with setAutoEnablesItems: YES
+	   in the next release */
+	[fMenuBarFileMenu setAutoenablesItems: NO];
+    [fMenuBarWindowMenu setAutoenablesItems: NO];
+	[fMenuPauseEncode setEnabled: NO];
+	[self TranslateStrings];
     /* Initialize currentScanCount so HB can use it to
 		evaluate successive scans */
 	currentScanCount = 0;
@@ -656,15 +662,22 @@ list = hb_get_titles( fHandle );
 	int checkScanCount = hb_get_scancount( fHandle );
 	if (checkScanCount > currentScanCount)
 	{
-
+		
 		currentScanCount = checkScanCount;
-			[fScanController Cancel: NULL];
-		    [fScanIndicator setIndeterminate: NO];
-            [fScanIndicator setDoubleValue: 0.0];
-			[fScanIndicator setHidden: YES];
-			[fScanController Cancel: NULL];
-			[self ShowNewScan: NULL];
-
+		[fScanController Cancel: NULL];
+		[fScanIndicator setIndeterminate: NO];
+		[fScanIndicator setDoubleValue: 0.0];
+		[fScanIndicator setHidden: YES];
+		[fScanController Cancel: NULL];
+		/* Enable/Disable Menu Controls Accordingly */
+		[fMenuOpenSource setEnabled: YES];
+		[fMenuStartEncode setEnabled: YES];
+		[fMenuAddToQueue setEnabled: YES];
+		
+		[fMenuPicturePanelShow setEnabled: YES];
+		[fMenuQueuePanelShow setEnabled: YES];
+		[self ShowNewScan: NULL];
+		
 	}
 	
 	
@@ -731,6 +744,10 @@ list = hb_get_titles( fHandle );
             /* Update dock icon */
             [self UpdateDockIcon: progress_total];
 			
+			/* Main Menu controls */
+			[fMenuPauseEncode setTitle: @"Pause Encode"];
+			[fMenuStartEncode setTitle: @"Cancel Encode"];
+			
             /* new toolbar controls */
             pauseButtonEnabled = YES;
             resumeOrPause = NO;
@@ -758,20 +775,17 @@ list = hb_get_titles( fHandle );
             /* Update dock icon */
             [self UpdateDockIcon: 1.0];
 			
-            //[fPauseButton setEnabled: YES];
-            //[fPauseButton setTitle: _( @"Pause" )];
-            //[fRipButton setEnabled: YES];
-			// [fRipButton setTitle: _( @"Cancel" )];
+			
             break;
         }
 #undef p
 			
         case HB_STATE_PAUSED:
-		    //[fStatusField setStringValue: _( @"Paused" )];
-            //[fPauseButton setEnabled: YES];
-            //[fPauseButton setTitle: _( @"Resume" )];
-            //[fRipButton setEnabled: YES];
-            //[fRipButton setTitle: _( @"Cancel" )];
+		    [fStatusField setStringValue: _( @"Paused" )];
+            
+			[fMenuPauseEncode setTitle: @"Resume Encode"];
+			
+			
 			/* new toolbar controls */
             pauseButtonEnabled = YES;
             resumeOrPause = YES;
@@ -784,8 +798,11 @@ list = hb_get_titles( fHandle );
             [fStatusField setStringValue: _( @"Done." )];
             [fRipIndicator setIndeterminate: NO];
             [fRipIndicator setDoubleValue: 0.0];
-            //[fRipButton setTitle: _( @"Start" )];
-			
+            
+			/* Main Menu Controls*/
+			[fMenuPauseEncode setTitle: @"Pause Encode"];
+			[fMenuPauseEncode setEnabled: NO];
+			[fMenuStartEncode setTitle: @"Start Encode"];
             /* Restore dock icon */
             [self UpdateDockIcon: -1.0];
 			
@@ -1122,7 +1139,17 @@ list = hb_get_titles( fHandle );
 
 - (IBAction) ShowScanPanel: (id) sender
 {
-    [fScanController Show];
+    /* Enable/Disable Menu Controls Accordingly */
+	[fMenuOpenSource setEnabled: NO];
+	[fMenuStartEncode setEnabled: NO];
+	[fMenuAddToQueue setEnabled: NO];
+	
+	[fMenuPicturePanelShow setEnabled: NO];
+	[fMenuQueuePanelShow setEnabled: NO];
+	
+	
+	[fScanController Show];
+	
 }
 
 - (IBAction) OpenMainWindow: (id) sender
@@ -1220,7 +1247,15 @@ list = hb_get_titles( fHandle );
 
 - (IBAction) ShowPicturePanel: (id) sender
 {
-    hb_list_t  * list  = hb_get_titles( fHandle );
+    /* Enable/Disable Menu Controls Accordingly */
+	[fMenuOpenSource setEnabled: NO];
+	[fMenuStartEncode setEnabled: NO];
+	[fMenuAddToQueue setEnabled: NO];
+	
+	[fMenuPicturePanelShow setEnabled: NO];
+	[fMenuQueuePanelShow setEnabled: NO];
+	
+	hb_list_t  * list  = hb_get_titles( fHandle );
     hb_title_t * title = (hb_title_t *) hb_list_item( list,
             [fSrcTitlePopUp indexOfSelectedItem] );
 
@@ -1237,6 +1272,15 @@ list = hb_get_titles( fHandle );
     [NSApp runModalForWindow: fPicturePanel];
     [NSApp endSheet: fPicturePanel];
     [fPicturePanel orderOut: self];
+	
+	/* Enable/Disable Menu Controls Accordingly */
+	[fMenuOpenSource setEnabled: YES];
+	[fMenuStartEncode setEnabled: YES];
+	[fMenuAddToQueue setEnabled: YES];
+	
+	[fMenuPicturePanelShow setEnabled: YES];
+	[fMenuQueuePanelShow setEnabled: YES];
+	
 	[self CalculatePictureSizing: sender];
 }
 
@@ -1602,6 +1646,9 @@ list = hb_get_titles( fHandle );
 	// [fRipButton   setEnabled: NO];
 	pauseButtonEnabled = NO;
 	startButtonEnabled = NO;
+	
+	[fMenuPauseEncode setEnabled: YES];
+	
 	NSRect frame = [fWindow frame];
     if (frame.size.width <= 591)
         frame.size.width = 591;
