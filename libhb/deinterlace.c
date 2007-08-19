@@ -425,7 +425,7 @@ hb_filter_private_t * hb_deinterlace_init( int pix_fmt,
                 case 3:
                     avctx_enc->refs = 3;
                 case 2:
-                    avctx_enc->me_method = ME_ITER;
+                    avctx_enc->me_method = ME_UMH;
                 case 1:
                     avctx_enc->flags |= CODEC_FLAG_4MV;
                     avctx_enc->dia_size =2;
