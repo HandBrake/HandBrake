@@ -1,5 +1,48 @@
 NEWS file for HandBrake <http://handbrake.m0k.org/>
 
+Changes between 0.8.5b1 and 0.9.0:
+
+	Core HandBrake Changes
+	+ Added: Matroska (MKV) container output
+	+ Added: Limited MPEG-2 transport stream (.VOB and .TS) input support
+	+ Added: Option to write MP4 files larger than 4GB
+	+ Added: Video filters (pullup, yadif, mcdeint, hqdn3d, pp7)
+	+ Added: DTS audio input
+	+ Changed: Switched to Lanczos scaling from libswscale
+	+ Changed: Precise chapter marker location
+	+ Changed: Newer libraries
+	+ Changed: Much faster (threaded) iPod encoding
+	+ Changed: "Same as source" works differently (better?) now
+	+ Fixed: Audio drops should be thoroughly banished now
+	+ Fixed: MP2 audio support
+	Assorted other changes
+	
+	CLI Changes:
+	+ Added: Chapter naming
+	+ Added: Many new command line options for subtitles and filters.
+	+ Added: Turbo for 2-pass x264 encodes
+	Assorted other changes
+	
+	Mac Changes:
+	+ Added: Chapter naming
+	+ Added: Growl support
+	+ Added: Advanced x264 settings tab
+	+ Added: Logging window
+	+ Added: Turbo for 2-pass x264 encodes
+	+ Added: Many new presets
+	+ Added: Unified toolbar
+	+ Changed: Default settings
+	+ Changed: Further integration of the queue and active queuing
+	+ Changed: Browse DVDs like any other volumes
+	+ Fixed: No more floating window syndrome (Mac)
+	+ Fixed: Presets retain "magic sauce" when you change settings
+	Assorted other changes
+	
+	Windows Changes:
+	+ Changed: New C#-based Windows GUI front-end
+	+ Changed: Improved queuing
+	+ Changed: DVD information parser
+	Assorted other changes
 
 Changes between 0.8.0b1 and 0.8.5b1
 
