@@ -11,8 +11,8 @@ if ! $(DEFINES)
     Exit "Please run ./configure first." ;
 }
 
-HB_VERSION  = 0.8.5b1 ;
-HB_BUILD    = 2007042001 ;
+HB_VERSION  = 0.9.0 ;
+HB_BUILD    = 2007081900 ;
 DEFINES    += HB_VERSION=\\\"$(HB_VERSION)\\\" HB_BUILD=$(HB_BUILD) ;
 LANGUAGES   = fr de it pl ru nl es pt ja ;
 RM          = rm -rf ;
