@@ -28,11 +28,16 @@ John Allen (?) <johnallenemail@gmail.com> (johnallen)
 Joe Crain <joe@dynaflashtech.net> (dynaflash)
  + Mac OS X GUI enhancements/rewrite
 
+Edward Groenendaal <unknown> (eddyg)
+ + Major bug fixes
+ + Subtitle scan
+
 Rodney Hester <rhester@multics.dynalias.com> (rhester)
  + iPod firmware 1.2+ 640x480 MPEG-4/H.264 support
 
-Benjamin Lake <me@benlake.org> (benlake)
- + Mac OS X GUI enhancements/rewrite
+Andrew Kimpton <awk@awkward.org> (awk)
+ + MPEG Audio fixes
+ + MPEG Stream Support
 
 Chris Lee <clee@kde.org>
  + PAR/anamorphic support
@@ -41,6 +46,21 @@ Chris Lee <clee@kde.org>
 
 Chris Long <chris.long@mac.com> (chrislong)
  + iPod firmware 1.2+ 640x480 MPEG-4/H.264 support
+
+Maurj <handbrake@maurj.com> (maurj)
+ + Dolby Surround and Dolby Pro Logic II mixdowns
+ + 6-channel AAC audio from 5.1 source
+ + Mono AAC audio from mono source
+ + PAR/anamorphic support in mp4 file format
+ + Chapter markers in mp4 file format
+ + Mac OS X GUI enhancements
+ + Support for DTS audio sources
+
+Mirkwood <mirkwood07@gmail.com> (mirkwood)
+ + Windows CLI port
+
+Nyx <unknown> (Nyx)
+ + Frame re-ordering and flushing in mp4
 
 Philippe Rigaux <pri@nopapers.org> (prigaux)
  + 3rd party library integration
@@ -56,23 +76,4 @@ Jonathon Rubin <jb.rubin@gmail.com> (jbrjake)
 Scott <sr55ww@googlemail.com> (sr55)
  + Windows GUI
  + mpeg4ip patches for cygwin compile
-
-Maurj <handbrake@maurj.com> (maurj)
- + Dolby Surround and Dolby Pro Logic II mixdowns
- + 6-channel AAC audio from 5.1 source
- + Mono AAC audio from mono source
- + PAR/anamorphic support in mp4 file format
- + Chapter markers in mp4 file format
- + Mac OS X GUI enhancements
- + Support for DTS audio sources
-
-Unknown <mirkwood07@gmail.com> (mirkwood)
- + Windows CLI port
-
-Unknown <unknown> (Nyx)
- + Frame re-ordering and flushing in mp4
- 
- Andrew Kimpton <awk@awkward.org> (awk)
- + MPEG Audio fixes
- + MPEG Stream Support
- 
+  
