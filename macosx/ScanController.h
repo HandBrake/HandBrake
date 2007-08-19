@@ -18,6 +18,18 @@
     
     IBOutlet NSTextField         * fStatusField;
     IBOutlet NSProgressIndicator * fIndicator;
+	IBOutlet NSTextField         * fMainWindowSrcName;
+	
+	/* Menu Items */
+	/* File Menu */
+	IBOutlet NSMenuItem * fMainMenuOpenSource;
+	IBOutlet NSMenuItem * fMainMenuAddToQueue;
+	IBOutlet NSMenuItem * fMainMenuStartEncode;
+	IBOutlet NSMenuItem * fMainMenuPauseEncode;
+	/* Window Menu */
+	IBOutlet NSMenuItem * fMenuQueuePanelShow;
+	IBOutlet NSMenuItem * fMenuPicturePanelShow;
+	
 	
 }
 

@@ -95,6 +95,18 @@
     }
 	else // User clicked Cancel in browse window
 	{
+		/* use the outlets to the main menu bar to determine what to
+		   enable and disable */
+		[fMainMenuOpenSource setEnabled: YES];
+		/* if we have a title loaded up */
+		if ([[fMainWindowSrcName stringValue] length] > 0)
+		{
+		[fMainMenuAddToQueue setEnabled: YES];
+		[fMainMenuStartEncode setEnabled: YES];
+		//[fMainMenuPauseEncode setEnabled: YES];
+		[fMenuQueuePanelShow setEnabled: YES];
+		[fMenuPicturePanelShow setEnabled: YES];
+		}
 		[self Cancel: nil];
 	}
     

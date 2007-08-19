@@ -311,7 +311,14 @@
                 fFolderCell = NSButtonCell; 
                 fFolderField = NSTextField; 
                 fIndicator = NSProgressIndicator; 
+                fMainMenuAddToQueue = NSMenuItem; 
+                fMainMenuOpenSource = NSMenuItem; 
+                fMainMenuPauseEncode = NSMenuItem; 
+                fMainMenuStartEncode = NSMenuItem; 
+                fMainWindowSrcName = NSTextField; 
                 fMatrix = NSMatrix; 
+                fMenuPicturePanelShow = NSMenuItem; 
+                fMenuQueuePanelShow = NSMenuItem; 
                 fOpenButton = NSButton; 
                 fPanel = NSPanel; 
                 fSelectString = NSTextField; 
