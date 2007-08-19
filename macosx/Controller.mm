@@ -1375,7 +1375,7 @@ list = hb_get_titles( fHandle );
 		if( [fVidTwoPassCheck state] == NSOnState && [fVidTurboPassCheck state] == NSOnState )
 		{
 			/* pass the "Turbo" string to be appended to the existing x264 opts string into a variable for the first pass */
-			NSString *firstPassOptStringTurbo = @":ref=1:subme=1:me=dia:analyse=none:weightb=0:trellis=0:no-fast-pskip=0:8x8dct=0";
+			NSString *firstPassOptStringTurbo = @":ref=1:subme=1:me=dia:analyse=none:trellis=0:no-fast-pskip=0:8x8dct=0";
 			/* append the "Turbo" string variable to the existing opts string.
 			Note: the "Turbo" string must be appended, not prepended to work properly*/
 			NSString *firstPassOptStringCombined = [[fDisplayX264Options stringValue] stringByAppendingString:firstPassOptStringTurbo];
@@ -4775,7 +4775,7 @@ the user is using "Custom" settings by determining the sender*/
 	/* Video encoder */
 	[preset setObject:@"x264 (h.264 Main)" forKey:@"VideoEncoder"];
 	/* x264 Option String */
-	[preset setObject:@"ref=3:mixed-refs:bframes=6:bime:weightb:b-rdo:b-pyramid::direct=auto:me=umh:subme=6:trellis=1:analyse=all:8x8dct:no-fast-pskip" forKey:@"x264Option"];
+	[preset setObject:@"ref=3:mixed-refs:bframes=6:bime:weightb:b-rdo:b-pyramid:direct=auto:me=umh:subme=6:trellis=1:analyse=all:8x8dct:no-fast-pskip" forKey:@"x264Option"];
 	/* Video quality */
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoQualityType"];
 	[preset setObject:@"695" forKey:@"VideoTargetSize"];
