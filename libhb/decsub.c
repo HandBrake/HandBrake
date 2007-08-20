@@ -24,6 +24,8 @@ struct hb_work_private_s
 
     int        offsets[2];
     uint8_t    lum[4];
+    uint8_t    chromaU[4];
+    uint8_t    chromaV[4];
     uint8_t    alpha[4];
 };
 
@@ -173,8 +175,29 @@ static void ParseControls( hb_work_object_t * w )
 
                     for( j = 0; j < 4; j++ )
                     {
+                        /*
+                         * Not sure what is happening here, in theory
+                         * the palette is in YCbCr. And we want YUV.
+                         *
+                         * However it looks more like YCrCb (according
+                         * to pgcedit). And the scalers for YCrCb don't
+                         * work, but I get the right colours by doing
+                         * no conversion.
+                         */
                         uint32_t color = title->palette[colors[j]];
-                        pv->lum[3-j] = (color>>16) & 0xff;
+                        uint8_t Cr, Cb, y;
+                        y = (color>>16) & 0xff;
+                        Cr = (color>>8) & 0xff;
+                        Cb = (color) & 0xff;
+                        pv->lum[3-j] = y;
+                        pv->chromaU[3-j] = Cb;
+                        pv->chromaV[3-j] = Cr;
+                        /* hb_log("color[%d] y = %d, u = %d, v = %d",
+                               3-j,
+                               pv->lum[3-j],
+                               pv->chromaU[3-j],
+                               pv->chromaV[3-j]); 
+                        */
                     }
                     i += 2;
                     break;
@@ -262,6 +285,7 @@ static hb_buffer_t * CropSubtitle( hb_work_object_t * w, uint8_t * raw )
     int realwidth, realheight;
     hb_buffer_t * buf;
     uint8_t * lum_in, * lum_out, * alpha_in, * alpha_out;
+    uint8_t * u_in, * u_out, * v_in, * v_out;
 
     alpha = raw + pv->width * pv->height;
 
@@ -314,7 +338,7 @@ static hb_buffer_t * CropSubtitle( hb_work_object_t * w, uint8_t * raw )
     realwidth  = crop[3] - crop[2] + 1;
     realheight = crop[1] - crop[0] + 1;
 
-    buf         = hb_buffer_init( realwidth * realheight * 2 );
+    buf         = hb_buffer_init( realwidth * realheight * 4 );
     buf->start  = pv->pts_start;
     buf->stop   = pv->pts_stop;
     buf->x      = pv->x + crop[2];
@@ -324,17 +348,30 @@ static hb_buffer_t * CropSubtitle( hb_work_object_t * w, uint8_t * raw )
 
     lum_in    = raw + crop[0] * pv->width + crop[2];
     alpha_in  = lum_in + pv->width * pv->height;
+    u_in      = alpha_in + pv->width * pv->height;
+    v_in      = u_in + pv->width * pv->height;
+
     lum_out   = buf->data;
     alpha_out = lum_out + realwidth * realheight;
+    u_out     = alpha_out + realwidth * realheight;
+    v_out     = u_out + realwidth * realheight;
 
     for( i = 0; i < realheight; i++ )
     {
         memcpy( lum_out, lum_in, realwidth );
         memcpy( alpha_out, alpha_in, realwidth );
+        memcpy( u_out, u_in, realwidth );
+        memcpy( v_out, v_in, realwidth );
+
         lum_in    += pv->width;
         alpha_in  += pv->width;
+        u_in      += pv->width;
+        v_in      += pv->width;
+
         lum_out   += realwidth;
         alpha_out += realwidth;
+        u_out     += realwidth;
+        v_out     += realwidth;
     }
 
     return buf;
@@ -353,7 +390,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     ParseControls( w );
 
     /* Do the actual decoding now */
-    buf_raw = malloc( pv->width * pv->height * 2 );
+    buf_raw = malloc( pv->width * pv->height * 4 );
 
 #define GET_NEXT_NIBBLE code = ( code << 4 ) | ( ( ( *offset & 1 ) ? \
 ( pv->buf[((*offset)>>1)] & 0xF ) : ( pv->buf[((*offset)>>1)] >> 4 ) ) ); \
@@ -369,7 +406,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
 
         for( col = 0; col < pv->width; col += code >> 2 )
         {
-            uint8_t * lum, * alpha;
+            uint8_t * lum, * alpha,  * chromaU, * chromaV;
 
             code = 0;
             GET_NEXT_NIBBLE;
@@ -393,10 +430,17 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
 
             lum   = buf_raw;
             alpha = lum + pv->width * pv->height;
+            chromaU = alpha + pv->width * pv->height;
+            chromaV = chromaU + pv->width * pv->height;
+
             memset( lum + line * pv->width + col,
                     pv->lum[code & 3], code >> 2 );
             memset( alpha + line * pv->width + col,
                     pv->alpha[code & 3], code >> 2 );
+            memset( chromaU + line * pv->width + col,
+                    pv->chromaU[code & 3], code >> 2 );
+            memset( chromaV + line * pv->width + col,
+                    pv->chromaV[code & 3], code >> 2 );
         }
 
         /* Byte-align */

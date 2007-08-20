@@ -34,13 +34,33 @@ hb_work_object_t hb_render =
     renderClose
 };
 
+/*
+ * getU() & getV()
+ *
+ * Utility function that finds where the U is in the YUV sub-picture
+ *
+ * The Y data is at the top, followed by U and V, but the U and V
+ * are half the width of the Y, i.e. each chroma element covers 2x2
+ * of the Y's.
+ */
+static uint8_t *getU(uint8_t *data, int width, int height, int x, int y)
+{
+    return(&data[(((y/2) * (width/2)) + (x/2)) + (width*height)]);
+}
+
+static uint8_t *getV(uint8_t *data, int width, int height, int x, int y)
+{
+    return(&data[(((y/2) * (width/2)) + (x/2)) + (width*height) + 
+                 (width*height)/4]);
+}
+
 static void ApplySub( hb_job_t * job, hb_buffer_t * buf,
                       hb_buffer_t ** _sub )
 {
     hb_buffer_t * sub = *_sub;
     hb_title_t * title = job->title;
     int i, j, offset_top, offset_left;
-    uint8_t * lum, * alpha, * out;
+    uint8_t * lum, * alpha, * out, * sub_chromaU, * sub_chromaV;
 
     if( !sub )
     {
@@ -73,6 +93,9 @@ static void ApplySub( hb_job_t * job, hb_buffer_t * buf,
 
     lum   = sub->data;
     alpha = lum + sub->width * sub->height;
+    sub_chromaU = alpha + sub->width * sub->height;
+    sub_chromaV = sub_chromaU + sub->width * sub->height;
+
     out   = buf->data + offset_top * title->width + offset_left;
 
     for( i = 0; i < sub->height; i++ )
@@ -83,14 +106,40 @@ static void ApplySub( hb_job_t * job, hb_buffer_t * buf,
             {
                 if( offset_left + j >= 0 && offset_left + j < title->width )
                 {
+                    uint8_t *chromaU, *chromaV;
+
+                    /*
+                     * Merge the luminance and alpha with the picture
+                     */
                     out[j] = ( (uint16_t) out[j] * ( 16 - (uint16_t) alpha[j] ) +
                                (uint16_t) lum[j] * (uint16_t) alpha[j] ) >> 4;
+                    /*
+                     * Set the chroma (colour) based on whether there is
+                     * any alpha at all. Don't try to blend with the picture.
+                     */
+                    chromaU = getU(buf->data, title->width, title->height,
+                                   offset_left+j, offset_top+i);
+                    
+                    chromaV = getV(buf->data, title->width, title->height,
+                                   offset_left+j, offset_top+i);
+                    
+                    if( alpha[j] > 0 )
+                    {
+                        /*
+                         * Add the chroma from the sub-picture, as this is 
+                         * not a transparent element.
+                         */
+                        *chromaU = sub_chromaU[j];
+                        *chromaV = sub_chromaV[j];
+                    } 
                 }
             }
         }
 
         lum   += sub->width;
         alpha += sub->width;
+        sub_chromaU += sub->width;
+        sub_chromaV += sub->width;
         out   += title->width;
     }
 
