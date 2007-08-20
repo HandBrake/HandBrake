@@ -22,6 +22,7 @@ static char * format      = NULL;
 static int    titleindex  = 1;
 static int    longest_title = 0;
 static int    subtitle_scan = 0;
+static int    subtitle_force = 0;
 static char * native_language = NULL;
 static int    twoPass     = 0;
 static int    deinterlace           = 0;
@@ -597,7 +598,12 @@ static int HandleEvents( hb_handle_t * h )
                 job->maxWidth = maxWidth;
             if (maxHeight)
                 job->maxHeight = maxHeight;
-				
+
+            if( subtitle_force )
+            {
+                job->subtitle_force = subtitle_force;
+            } 
+		
             if( twoPass )
             {
                 /*
@@ -782,9 +788,11 @@ static void ShowHelp()
 	"    -X, --maxWidth <#>      Set maximum width\n"
 	"    -s, --subtitle <number> Select subtitle (default: none)\n"
     "    -U, --subtitle-scan     Scan for subtitles on the first pass, and choose\n"
-    "                            the one that's only used 20 percent of the time\n"
+    "                            the one that's only used 10 percent of the time\n"
     "                            or less. This should locate subtitles for short\n"
     "                            foreign language segments. Only works with 2-pass.\n"
+    "    -F, --subtitle-force    Only display subtitles from the selected stream if\n"
+    "                            the subtitles have the forced flag set.\n"
     "    -N, --native-language   Select subtitles with this language if it does not\n"
     "          <string>          match the Audio language. Provide the language's\n"
     "                            iso639-2 code (fre, eng, spa, dut, et cetera)\n"
@@ -881,6 +889,7 @@ static int ParseOptions( int argc, char ** argv )
             { "mixdown",     required_argument, NULL,    '6' },
             { "subtitle",    required_argument, NULL,    's' },
             { "subtitle-scan", no_argument,     NULL,    'U' },
+            { "subtitle-forced", no_argument,   NULL,    'F' },
             { "native-language", required_argument, NULL,'N' },
 
             { "encoder",     required_argument, NULL,    'e' },
@@ -916,7 +925,7 @@ static int ParseOptions( int argc, char ** argv )
         int c;
 
         c = getopt_long( argc, argv,
-                         "hvuC:f:4i:o:t:Lc:ma:6:s:UN:e:E:2d789gpw:l:n:b:q:S:B:r:R:Qx:TY:X:",
+                         "hvuC:f:4i:o:t:Lc:ma:6:s:UFN:e:E:2d789gpw:l:n:b:q:S:B:r:R:Qx:TY:X:",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -1014,6 +1023,9 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case 'U':
                 subtitle_scan = 1;
+                break;
+            case 'F':
+                subtitle_force = 1;
                 break;
             case 'N':
                 native_language = strdup( optarg );

@@ -257,6 +257,7 @@ struct hb_job_s
 
     int subtitle_scan;
     hb_subtitle_t ** select_subtitle;
+    int subtitle_force;
     char * native_language;
 
 #ifdef __LIBHB__

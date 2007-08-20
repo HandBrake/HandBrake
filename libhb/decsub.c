@@ -17,6 +17,7 @@ struct hb_work_private_s
     int64_t    pts;
     int64_t    pts_start;
     int64_t    pts_stop;
+    int        pts_forced;
     int        x;
     int        y;
     int        width;
@@ -135,6 +136,7 @@ static void ParseControls( hb_work_object_t * w )
 
     pv->pts_start = 0;
     pv->pts_stop  = 0;
+    pv->pts_forced  = 0;
 
     for( i = pv->size_rle; ; )
     {
@@ -145,26 +147,41 @@ static void ParseControls( hb_work_object_t * w )
         {
             command = pv->buf[i++];
 
-            if( command == 0xFF )
+            /*
+             * There are eight commands available for
+             * Sub-Pictures. The first SP_DCSQ should contain, as a
+             * minimum, SET_COLOR, SET_CONTR, SET_DAREA, and
+             * SET_DSPXA
+             */
+
+            if( command == 0xFF ) // 0xFF - CMD_END - ends one SP_DCSQ
             {
                 break;
             }
 
             switch( command )
             {
-                case 0x00:
-                    break;
-
-                case 0x01:
+                case 0x00: // 0x00 - FSTA_DSP - Forced Start Display, no arguments
                     pv->pts_start = pv->pts + date * 900;
+                    pv->pts_forced = 1;
                     break;
 
-                case 0x02:
+                case 0x01: // 0x01 - STA_DSP - Start Display, no arguments
+                    pv->pts_start = pv->pts + date * 900;
+                    pv->pts_forced  = 0;
+                    break;
+
+                case 0x02: // 0x02 - STP_DSP - Stop Display, no arguments
                     pv->pts_stop = pv->pts + date * 900;
                     break;
 
-                case 0x03:
-                {
+                case 0x03: // 0x03 - SET_COLOR - Set Colour indices
+                {              
+                    /* 
+                     * SET_COLOR - provides four indices into the CLUT
+                     * for the current PGC to associate with the four
+                     * pixel values
+                     */
                     int colors[4];
                     int j;
 
@@ -202,8 +219,13 @@ static void ParseControls( hb_work_object_t * w )
                     i += 2;
                     break;
                 }
-                case 0x04:
+                case 0x04: // 0x04 - SET_CONTR - Set Contrast
                 {
+                    /* 
+                     * SET_CONTR - directly provides the four contrast
+                     * (alpha blend) values to associate with the four
+                     * pixel values
+                     */
                     pv->alpha[3] = (pv->buf[i+0]>>4)&0x0f;
                     pv->alpha[2] = (pv->buf[i+0])&0x0f;
                     pv->alpha[1] = (pv->buf[i+1]>>4)&0x0f;
@@ -211,7 +233,7 @@ static void ParseControls( hb_work_object_t * w )
                     i += 2;
                     break;
                 }
-                case 0x05:
+                case 0x05: // 0x05 - SET_DAREA - defines the display area
                 {
                     pv->x     = (pv->buf[i+0]<<4) | ((pv->buf[i+1]>>4)&0x0f);
                     pv->width = (((pv->buf[i+1]&0x0f)<<8)| pv->buf[i+2]) - pv->x + 1;
@@ -220,7 +242,7 @@ static void ParseControls( hb_work_object_t * w )
                     i += 6;
                     break;
                 }
-                case 0x06:
+                case 0x06: // 0x06 - SET_DSPXA - defines the pixel data addresses
                 {
                     pv->offsets[0] = ( pv->buf[i] << 8 ) | pv->buf[i+1]; i += 2;
                     pv->offsets[1] = ( pv->buf[i] << 8 ) | pv->buf[i+1]; i += 2;
@@ -385,9 +407,19 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     int * offset;
     hb_buffer_t * buf;
     uint8_t * buf_raw = NULL;
+    hb_job_t * job = pv->job;
 
     /* Get infos about the subtitle */
     ParseControls( w );
+
+    if( job->subtitle_force && pv->pts_forced == 0 )
+    {
+        /*
+         * When forcing subtitles, ignore all those that don't
+         * have the forced flag set.
+         */
+        return NULL;
+    } 
 
     /* Do the actual decoding now */
     buf_raw = malloc( pv->width * pv->height * 4 );
