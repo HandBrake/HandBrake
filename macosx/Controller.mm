@@ -1866,6 +1866,8 @@ list = hb_get_titles( fHandle );
             subtitle->lang] action: NULL keyEquivalent: @""];
     }
     [fSubPopUp selectItemAtIndex: 0];
+	
+	[self SubtitleSelectionChanged: NULL];
     
     /* Update chapter table */
     [fChapterTitlesDelegate resetWithTitle:title];
@@ -2497,6 +2499,21 @@ list = hb_get_titles( fHandle );
     }
 
 }
+
+- (IBAction) SubtitleSelectionChanged: (id) sender
+{
+	if ([fSubPopUp indexOfSelectedItem] == 0)
+	{
+	[fSubForcedCheck setState: NSOffState];
+	[fSubForcedCheck setEnabled: NO];	
+	}
+	else
+	{
+	[fSubForcedCheck setEnabled: YES];	
+	}
+	
+}
+
 /* lets set the picture size back to the max from right after title scan
    Lets use an IBAction here as down the road we could always use a checkbox
    in the gui to easily take the user back to max. Remember, the compiler

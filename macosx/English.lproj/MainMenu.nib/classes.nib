@@ -37,6 +37,7 @@
                 ShowPicturePanel = id; 
                 ShowQueuePanel = id; 
                 ShowScanPanel = id; 
+                SubtitleSelectionChanged = id; 
                 TitlePopUpChanged = id; 
                 TwoPassCheckboxChanged = id; 
                 VideoFrameRateChanged = id; 
@@ -150,6 +151,7 @@
                 fSrcTitlePopUp = NSPopUpButton; 
                 fStatusField = NSTextField; 
                 fSubField = NSTextField; 
+                fSubForcedCheck = NSButton; 
                 fSubPopUp = NSPopUpButton; 
                 fVidBitrateCell = NSButtonCell; 
                 fVidBitrateField = NSTextField; 

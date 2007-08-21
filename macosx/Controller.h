@@ -134,6 +134,7 @@
     /* Subtitles box */
     IBOutlet NSTextField         * fSubField;
     IBOutlet NSPopUpButton       * fSubPopUp;
+	IBOutlet NSButton            * fSubForcedCheck;
 	
     /* Audio box */
     IBOutlet NSTextField         * fAudLang1Field;
@@ -272,6 +273,7 @@
 - (IBAction) AudioTrackPopUpChanged: (id) sender;
 - (IBAction) AudioTrackPopUpChanged: (id) sender mixdownToUse: (int) mixdownToUse;
 - (IBAction) AudioTrackMixdownChanged: (id) sender;
+- (IBAction) SubtitleSelectionChanged: (id) sender;
 
 - (IBAction) BrowseFile: (id) sender;
 - (void)     BrowseFileDone: (NSSavePanel *) sheet
