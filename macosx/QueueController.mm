@@ -97,7 +97,18 @@
         title = j->title;
        /* show the name of the source Note: use title->name instead of
 	   title->dvd since name is just the chosen folder, instead of dvd which is the full path*/ 
-        [self AddTextField: [NSString stringWithFormat:
+        if (j->pass == -1)
+        {
+            /*
+             * Scan pass
+             */
+            [self AddTextField: [NSString stringWithFormat:
+            @"Task: %d   Source: %s, Title %d, Chapters %d-%d   Pass: Scan",i+1, title->name, title->index , j->chapter_start, j->chapter_end] rect: &rect];
+        } else {
+            /*
+             * Normal pass
+             */
+            [self AddTextField: [NSString stringWithFormat:
             @"Task: %d   Source: %s, Title %d, Chapters %d-%d   Pass: %d of %d",i+1, title->name, title->index , j->chapter_start, j->chapter_end,MAX( 1, j->pass ), MIN( 2, j->pass + 1 )] rect: &rect];       /* Muxer settings (File Format in the gui) */
 		if (j->mux == 65536 || j->mux == 131072 || j->mux == 1048576)
 		{
@@ -288,6 +299,7 @@
 		
 		/*Destination Field */
 		[self AddTextField: [NSString stringWithFormat: @"Destination: %s", j->file] rect: &rect];
+                }
         /* Show remove button */
 		[self AddButton: &rect tag: i];
     }
