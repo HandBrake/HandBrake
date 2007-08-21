@@ -459,7 +459,7 @@ namespace Handbrake
             // ISO_Open
             // 
             this.ISO_Open.DefaultExt = "ISO";
-            this.ISO_Open.Filter = "All Supported Files|*.iso;*.mpg;*.mpeg;*.vob";
+            this.ISO_Open.Filter = "All Supported Files|*.iso;*.mpg;*.mpeg;*.vob;*.ts";
             this.ISO_Open.SupportMultiDottedExtensions = true;
             // 
             // FileToolStripMenuItem

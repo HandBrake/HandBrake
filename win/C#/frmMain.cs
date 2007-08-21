@@ -9,15 +9,17 @@ using System.Net;
 using System.IO;
 using System.Diagnostics;
 using System.Threading;
-
+using System.Runtime.InteropServices;
 
 namespace Handbrake
 {
+
     public partial class frmMain : Form
     {
+
         private Process hbProc;
         private Parsing.DVD thisDVD;
-
+        
         // --------------------------------------------------------------
         // Some windows that require only 1 instance.
         // --------------------------------------------------------------
@@ -32,10 +34,6 @@ namespace Handbrake
         
         public frmMain()
         {
-
-
-
-            
 
             ThreadPool.QueueUserWorkItem(showSplash);
             Thread.Sleep(3000);
@@ -1322,7 +1320,7 @@ namespace Handbrake
 
         private void drp_dvdtitle_Click(object sender, EventArgs e)
         {
-            if (drp_dvdtitle.Items.Count == 1)
+            if (drp_dvdtitle.Items.Count == 0)
             {
                 MessageBox.Show("There are no titles to select. Please scan the DVD by clicking the 'browse' button above before trying to select a title.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }

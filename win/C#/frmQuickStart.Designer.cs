@@ -217,7 +217,7 @@ namespace Handbrake
             this.label7.Size = new System.Drawing.Size(463, 39);
             this.label7.TabIndex = 430;
             this.label7.Text = "If you don\'t read the documentation / user guides then you will most likely fail." +
-                " \r\nYou will not recieve support on the forums if you have not read the\r\nFAQ / Gu" +
+                " \r\nYou will not receive support on the forums if you have not read the\r\nFAQ / Gu" +
                 "ides and searched the forum.";
             // 
             // pictureBox8

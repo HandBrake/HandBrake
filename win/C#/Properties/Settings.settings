@@ -5,9 +5,6 @@
     <Setting Name="GuiVersion" Type="System.String" Scope="User">
       <Value Profile="(Default)">2.4</Value>
     </Setting>
-    <Setting Name="CliVersion" Type="System.String" Scope="User">
-      <Value Profile="(Default)">0.8.5b1</Value>
-    </Setting>
     <Setting Name="updateFile" Type="System.String" Scope="User">
       <Value Profile="(Default)">http://download.m0k.org/handbrake/windows/update.txt</Value>
     </Setting>
@@ -130,6 +127,9 @@
     </Setting>
     <Setting Name="QuickStartWindow" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="CliVersion" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0.9.0</Value>
     </Setting>
   </Settings>
 </SettingsFile>
