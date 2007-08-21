@@ -1431,7 +1431,7 @@ list = hb_get_titles( fHandle );
 
 
     /* Subtitle settings */
-    job->subtitle = [fSubPopUp indexOfSelectedItem] - 3;
+    job->subtitle = [fSubPopUp indexOfSelectedItem] - 2;
 
     /* Audio tracks and mixdowns */
     /* check for the condition where track 2 has an audio selected, but track 1 does not */
@@ -1546,7 +1546,7 @@ list = hb_get_titles( fHandle );
 		/* Destination file */
 		job->file = [[fDstFile2Field stringValue] UTF8String];
 
-                if( job->subtitle == -1 )
+                if( [fSubForcedCheck state] == NSOnState )
                 {
                     job->subtitle_force = 1;
                 } else {
@@ -1554,10 +1554,9 @@ list = hb_get_titles( fHandle );
                 }
 
                 /*
-                 * subtitle of -1 and -2 is a scan
+                 * subtitle of -1 is a scan
                  */
-                if( job->subtitle == -1 ||
-                    job->subtitle == -2 )
+                if( job->subtitle == -1 )
                 {
                     char *x264opts_tmp;
 
@@ -1589,7 +1588,7 @@ list = hb_get_titles( fHandle );
                 /* No subtitle were selected, so reset the subtitle to -1 (which before
                  * this point meant we were scanning
                  */
-                if( job->subtitle == -3 )
+                if( job->subtitle == -2 )
                 {
                     job->subtitle = -1;
                 }
@@ -1855,7 +1854,6 @@ list = hb_get_titles( fHandle );
     [fSubPopUp removeAllItems];
     [fSubPopUp addItemWithTitle: @"None"];
     [fSubPopUp addItemWithTitle: @"Autoselect"];
-    [fSubPopUp addItemWithTitle: @"Autoselect (forced only)"];
     for( int i = 0; i < hb_list_count( title->list_subtitle ); i++ )
     {
         subtitle = (hb_subtitle_t *) hb_list_item( title->list_subtitle, i );
