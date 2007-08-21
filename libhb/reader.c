@@ -172,12 +172,23 @@ static hb_fifo_t * GetFifoForId( hb_job_t * job, int id )
 
     if( id == 0xE0 )
     {
-        return job->fifo_mpeg2;
+        if( !job->subtitle_scan )
+        {
+            return job->fifo_mpeg2;
+        } else {
+            /*
+             * Ditch the mpeg2 video when doing a subtitle scan.
+             */
+            return NULL;
+        }
     }
 
     if (job->subtitle_scan) {
         /*
-         * Count the occurances of the subtitles, don't actually return any to encode.
+         * Count the occurances of the subtitles, don't actually
+         * return any to encode unless we are looking fro forced
+         * subtitles in which case we need to look in the sub picture
+         * to see if it has the forced flag enabled.
          */
         for (i=0; i < hb_list_count(title->list_subtitle); i++) {
             subtitle =  hb_list_item( title->list_subtitle, i);
@@ -186,6 +197,11 @@ static hb_fifo_t * GetFifoForId( hb_job_t * job, int id )
                  * A hit, count it.
                  */
                 subtitle->hits++;
+                if( job->subtitle_force )
+                {
+                    return subtitle->fifo_in;
+                }
+                break;
             }
         }
     } else {

@@ -145,7 +145,7 @@ struct hb_job_s
          vquality:          output quality (0.0..1.0)
                             if < 0.0 or > 1.0, bitrate is used instead
          vbitrate:          output bitrate (kbps)
-         pass:              0, 1 or 2
+         pass:              0, 1 or 2 (or -1 for scan)
          vrate, vrate_base: output framerate is vrate / vrate_base
          h264_level:        boolean for whether or not we're encoding for iPod
          crf:               boolean for whether to use constant rate factor with x264
@@ -378,6 +378,7 @@ struct hb_subtitle_s
     char iso639_2[4];
 
     int hits;     /* How many hits/occurrences of this subtitle */
+    int forced_hits; /* How many forced hits in this subtitle */
 
 #ifdef __LIBHB__
     /* Internal data */

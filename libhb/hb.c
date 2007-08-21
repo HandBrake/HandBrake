@@ -23,6 +23,7 @@ struct hb_handle_s
     /* The thread which processes the jobs. Others threads are launched
        from this one (see work.c) */
     hb_list_t    * jobs;
+    hb_job_t     * current_job;
     int            job_count;
     int            job_count_permanent;
     volatile int   work_die;
@@ -186,6 +187,7 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
 
     h->list_title = hb_list_init();
     h->jobs       = hb_list_init();
+    h->current_job = NULL;
 
     h->state_lock  = hb_lock_init();
     h->state.state = HB_STATE_IDLE;
@@ -509,6 +511,11 @@ hb_job_t * hb_job( hb_handle_t * h, int i )
     return hb_list_item( h->jobs, i );
 }
 
+hb_job_t * hb_current_job( hb_handle_t * h )
+{
+    return( h->current_job );
+}
+
 /**
  * Adds a job to the job list.
  * @param h Handle to hb_handle_t.
@@ -542,7 +549,7 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
     title_copy->list_audio = hb_list_init();
 
     /* Do nothing about audio during first pass */
-    if( job->pass != 1 )
+    if( job->pass == 0 || job->pass == 2 )
     {
         for( i = 0; i < 8; i++ )
         {
@@ -562,19 +569,21 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
     title_copy->list_subtitle = hb_list_init();
 
     /*
-     * The following code is confusing, there are three ways in which we select subtitles
-     * and it depends on whether this is single or two pass mode.
+     * The following code is confusing, there are three ways in which
+     * we select subtitles and it depends on whether this is single or
+     * two pass mode.
      *
-     * subtitle_scan may be enabled, in which case the first pass scans all subtitles
-     * of that language. The second pass does not select any because they are set at the
-     * end of the first pass.
+     * subtitle_scan may be enabled, in which case the first pass
+     * scans all subtitles of that language. The second pass does not
+     * select any because they are set at the end of the first pass.
      *
-     * native_language may have a preferred language, in which case we may be switching
-     * the language we want for the subtitles in the first pass of a single pass, or the
-     * second pass of a two pass.
+     * native_language may have a preferred language, in which case we
+     * may be switching the language we want for the subtitles in the
+     * first pass of a single pass, or the second pass of a two pass.
      *
-     * We may have manually selected a subtitle, in which case that is selected in the
-     * first pass of a single pass, or the second of a two pass.
+     * We may have manually selected a subtitle, in which case that is
+     * selected in the first pass of a single pass, or the second of a
+     * two pass.
      */
     memset( audio_lang, 0, sizeof( audio_lang ) );
 
@@ -666,7 +675,7 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
         {
             /*
              * Don't add subtitles here, we'll add them via select_subtitle
-             * at the end of pass 1
+             * at the end of the subtitle_scan.
              */
         } else {
             /*
@@ -786,7 +795,7 @@ void hb_start( hb_handle_t * h )
 
     h->work_die    = 0;
     h->work_thread = hb_work_init( h->jobs, h->cpu_count,
-                                   &h->work_die, &h->work_error );
+                                   &h->work_die, &h->work_error, &h->current_job );
 }
 
 /**

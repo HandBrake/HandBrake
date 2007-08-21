@@ -654,9 +654,23 @@ int hb_dvd_read( hb_dvd_t * d, hb_buffer_t * b )
         
         for( ;; )
         {
-            int block, pack_len, next_vobu;
+            int block, pack_len, next_vobu, read_retry;
 
-            if( DVDReadBlocks( d->file, d->next_vobu, 1, b->data ) != 1 )
+            for( read_retry = 0; read_retry < 3; read_retry++ )
+            {
+                if( DVDReadBlocks( d->file, d->next_vobu, 1, b->data ) == 1 )
+                {
+                    /*
+                     * Successful read.
+                     */
+                    break;
+                } else {
+                    hb_log( "dvd: Read Error on blk %d, attempt %d",
+                            d->next_vobu, read_retry );
+                }
+            }
+
+            if( read_retry == 3 )
             {
                 hb_log( "dvd: Unrecoverable Read Error from DVD, potential HD or DVD Failure (blk: %d)", d->next_vobu );
                 return 0;

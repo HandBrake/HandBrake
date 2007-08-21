@@ -11,6 +11,7 @@
 typedef struct
 {
     hb_list_t * jobs;
+    hb_job_t  ** current_job;
     int         cpu_count;
     int       * error;
     volatile int * die;
@@ -29,11 +30,12 @@ static void work_loop( void * );
  * @param error Handle to error indicator.
  */
 hb_thread_t * hb_work_init( hb_list_t * jobs, int cpu_count,
-                            volatile int * die, int * error )
+                            volatile int * die, int * error, hb_job_t ** job )
 {
     hb_work_t * work = calloc( sizeof( hb_work_t ), 1 );
 
     work->jobs      = jobs;
+    work->current_job = job;
     work->cpu_count = cpu_count;
     work->die       = die;
     work->error     = error;
@@ -56,7 +58,9 @@ static void work_func( void * _work )
     {
         hb_list_rem( work->jobs, job );
         job->die = work->die;
+        *(work->current_job) = job;
         do_job( job, work->cpu_count );
+        *(work->current_job) = NULL;
     }
 
     *(work->error) = HB_ERROR_NONE;
@@ -96,6 +100,7 @@ static void do_job( hb_job_t * job, int cpu_count )
     
     /* FIXME: This feels really hackish, anything better? */
     hb_work_object_t * audio_w = NULL;
+    hb_work_object_t * sub_w = NULL;
 
     hb_audio_t   * audio;
     hb_subtitle_t * subtitle;
@@ -104,6 +109,7 @@ static void do_job( hb_job_t * job, int cpu_count )
     unsigned int subtitle_highest_id = 0;
     unsigned int subtitle_lowest = -1;
     unsigned int subtitle_lowest_id = 0;
+    unsigned int subtitle_forced_id = 0;
     unsigned int subtitle_hit = 0;
 
     title = job->title;
@@ -217,7 +223,10 @@ static void do_job( hb_job_t * job, int cpu_count )
          * add the subtitle that we found on the first pass for use in this
          * pass.
          */
-        hb_list_add( title->list_subtitle, *( job->select_subtitle ) );
+        if (*(job->select_subtitle))
+        {
+            hb_list_add( title->list_subtitle, *( job->select_subtitle ) );
+        }
     }
 
     for( i=0; i < hb_list_count(title->list_subtitle); i++ ) 
@@ -231,13 +240,40 @@ static void do_job( hb_job_t * job, int cpu_count )
             subtitle->fifo_in  = hb_fifo_init( 8 );
             subtitle->fifo_raw = hb_fifo_init( 8 );
             
-            if (!job->subtitle_scan) {
+            /*
+             * Disable forced subtitles if we didn't find any in the scan
+             * so that we display normal subtitles instead.
+             *
+             * select_subtitle implies that we did a scan.
+             */
+            if( !job->subtitle_scan && job->subtitle_force && 
+                job->select_subtitle ) 
+            {
+                if( subtitle->forced_hits == 0 )
+                {
+                    job->subtitle_force = 0;
+                }
+            }
+
+            if (!job->subtitle_scan || job->subtitle_force) {
                 /*
-                 * Don't add threads for subtitles when we are scanning
+                 * Don't add threads for subtitles when we are scanning, unless
+                 * looking for forced subtitles.
                  */
-                hb_list_add( job->list_work, ( w = getWork( WORK_DECSUB ) ) );
-                w->fifo_in  = subtitle->fifo_in;
-                w->fifo_out = subtitle->fifo_raw;
+                if( sub_w != NULL )
+                { 
+                    /*
+                     * Need to copy the prior subtitle structure so that we
+                     * don't overwrite the fifos.
+                     */
+                    sub_w = calloc( sizeof( hb_work_object_t ), 1 );
+                    sub_w = memcpy( sub_w, w, sizeof( hb_work_object_t ));
+                } else {
+                    w = sub_w = getWork( WORK_DECSUB );
+                }
+                hb_list_add( job->list_work, sub_w );
+                sub_w->fifo_in  = subtitle->fifo_in;
+                sub_w->fifo_out = subtitle->fifo_raw;
             }
         }
     }
@@ -563,8 +599,9 @@ static void do_job( hb_job_t * job, int cpu_count )
         for( i=0; i < hb_list_count( title->list_subtitle ); i++ ) 
         {
             subtitle =  hb_list_item( title->list_subtitle, i );
-            hb_log( "Subtitle stream 0x%x '%s': %d hits",
-                    subtitle->id, subtitle->lang, subtitle->hits );
+            hb_log( "Subtitle stream 0x%x '%s': %d hits (%d forced)",
+                    subtitle->id, subtitle->lang, subtitle->hits,
+                    subtitle->forced_hits );
             if( subtitle->hits > subtitle_highest ) 
             {
                 subtitle_highest = subtitle->hits;
@@ -575,6 +612,11 @@ static void do_job( hb_job_t * job, int cpu_count )
             {
                 subtitle_lowest = subtitle->hits;
                 subtitle_lowest_id = subtitle->id;
+            }
+
+            if ( subtitle->forced_hits > 0 )
+            {
+                subtitle_forced_id = subtitle->id;
             }
         }
         
@@ -587,11 +629,21 @@ static void do_job( hb_job_t * job, int cpu_count )
             subtitle_hit = subtitle_highest_id;
             hb_log( "Found a native-language subtitle id 0x%x", subtitle_hit);
         } else {
-            if( subtitle_lowest < subtitle_highest ) 
+            if( subtitle_forced_id )
             {
                 /*
-                 * OK we have more than one, and the lowest is lower, but how much
-                 * lower to qualify for turning it on by default?
+                 * If there are any subtitle streams with forced subtitles
+                 * then select it in preference to the lowest.
+                 */
+                subtitle_hit = subtitle_forced_id;
+                hb_log("Found a subtitle candidate id 0x%x (contains forced subs)",
+                       subtitle_hit);
+            } else if( subtitle_lowest < subtitle_highest ) 
+            {
+                /*
+                 * OK we have more than one, and the lowest is lower,
+                 * but how much lower to qualify for turning it on by
+                 * default?
                  *
                  * Let's say 10% as a default.
                  */
@@ -614,7 +666,7 @@ static void do_job( hb_job_t * job, int cpu_count )
             for( i=0; i < hb_list_count( title->list_subtitle ); i++ ) 
             {
                 subtitle =  hb_list_item( title->list_subtitle, i );
-                if( subtitle->id = subtitle_hit ) 
+                if( subtitle->id == subtitle_hit ) 
                 {
                     hb_list_rem( title->list_subtitle, subtitle );
                     *( job->select_subtitle ) = subtitle;
@@ -622,7 +674,10 @@ static void do_job( hb_job_t * job, int cpu_count )
             }
         } else {
             /*
-             * Must be the second pass - we don't need this anymore.
+             * Must be the end of pass 0 or 2 - we don't need this anymore.
+             *
+             * Have to put the subtitle list back together in the title though
+             * or the GUI will have a hissy fit.
              */
             free( job->select_subtitle );
             job->select_subtitle = NULL;

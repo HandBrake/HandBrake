@@ -87,7 +87,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         context->flags |= CODEC_FLAG_GRAY;
     }
 
-    if( job->pass )
+    if( job->pass != 0 && job->pass != -1 )
     {
         char filename[1024]; memset( filename, 0, 1024 );
         hb_get_tempory_filename( job->h, filename, "ffmpeg.log" );

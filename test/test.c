@@ -598,12 +598,40 @@ static int HandleEvents( hb_handle_t * h )
                 job->maxWidth = maxWidth;
             if (maxHeight)
                 job->maxHeight = maxHeight;
-
+	
             if( subtitle_force )
             {
                 job->subtitle_force = subtitle_force;
-            } 
-		
+            }
+
+            if( subtitle_scan )
+            {
+                char *x264opts_tmp;
+
+                /*
+                 * When subtitle scan is enabled do a fast pre-scan job
+                 * which will determine which subtitles to enable, if any.
+                 */
+                job->pass = -1;
+                
+                x264opts_tmp = job->x264opts;
+
+                job->x264opts = NULL;
+
+                job->subtitle_scan = subtitle_scan;  
+                fprintf( stderr, "Subtitle Scan Enabled - enabling "
+                         "subtitles if found for foreign language segments\n");
+                job->select_subtitle = malloc(sizeof(hb_subtitle_t*));
+                *(job->select_subtitle) = NULL;
+                
+                /*
+                 * Add the pre-scan job
+                 */
+                hb_add( h, job );
+
+                job->x264opts = x264opts_tmp;
+            }
+
             if( twoPass )
             {
                 /*
@@ -611,15 +639,13 @@ static int HandleEvents( hb_handle_t * h )
                  * for the first pass and then off again for the
                  * second. 
                  */
+                hb_subtitle_t **subtitle_tmp = job->select_subtitle;
+
+                job->select_subtitle = NULL;
+
                 job->pass = 1;
-                job->subtitle_scan = subtitle_scan;
-                if( subtitle_scan ) 
-                {
-                    fprintf( stderr, "Subtitle Scan Enabled - enabling "
-                             "subtitles if found for foreign language segments\n");
-                    job->select_subtitle = malloc(sizeof(hb_subtitle_t*));
-                    *(job->select_subtitle) = NULL;
-                } 
+
+                job->subtitle_scan = 0;
 
                 /*
                  * If turbo options have been selected then append them
@@ -652,6 +678,9 @@ static int HandleEvents( hb_handle_t * h )
                     job->x264opts = x264opts;
                 }     
                 hb_add( h, job );
+
+                job->select_subtitle = subtitle_tmp;
+
                 job->pass = 2;
                 /*
                  * On the second pass we turn off subtitle scan so that we
@@ -670,11 +699,9 @@ static int HandleEvents( hb_handle_t * h )
                 /*
                  * Turn on subtitle scan if requested, note that this option
                  * precludes encoding of any actual subtitles.
-                 */
-                if ( subtitle_scan ) 
-                {
-                    fprintf( stderr, "Warning: Subtitle Scan only works in two-pass, disabling\n");
-                }
+                 */ 
+
+                job->subtitle_scan = 0;
                 job->pass = 0;
                 hb_add( h, job );
             }
@@ -791,8 +818,10 @@ static void ShowHelp()
     "                            the one that's only used 10 percent of the time\n"
     "                            or less. This should locate subtitles for short\n"
     "                            foreign language segments. Only works with 2-pass.\n"
-    "    -F, --subtitle-force    Only display subtitles from the selected stream if\n"
-    "                            the subtitles have the forced flag set.\n"
+    "    -F, --subtitle-forced   Only display subtitles from the selected stream if\n"
+    "                            the subtitle has the forced flag set. May be used in\n"
+    "                            conjunction with --subtitle-scan to auto-select\n"
+    "                            a stream if it contains forced subtitles.\n"
     "    -N, --native-language   Select subtitles with this language if it does not\n"
     "          <string>          match the Audio language. Provide the language's\n"
     "                            iso639-2 code (fre, eng, spa, dut, et cetera)\n"

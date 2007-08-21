@@ -22,6 +22,7 @@ struct hb_work_private_s
     int        y;
     int        width;
     int        height;
+    int        stream_id;
 
     int        offsets[2];
     uint8_t    lum[4];
@@ -52,6 +53,8 @@ int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_buffer_t * in = *buf_in;
 
     int size_sub, size_rle;
+
+    pv->stream_id = in->id;
 
     size_sub = ( in->data[0] << 8 ) | in->data[1];
     size_rle = ( in->data[2] << 8 ) | in->data[3];
@@ -129,8 +132,9 @@ static void ParseControls( hb_work_object_t * w )
     hb_work_private_t * pv = w->private_data;
     hb_job_t * job = pv->job;
     hb_title_t * title = job->title;
+    hb_subtitle_t * subtitle;
 
-    int i;
+    int i, n;
     int command;
     int date, next;
 
@@ -164,6 +168,23 @@ static void ParseControls( hb_work_object_t * w )
                 case 0x00: // 0x00 - FSTA_DSP - Forced Start Display, no arguments
                     pv->pts_start = pv->pts + date * 900;
                     pv->pts_forced = 1;
+
+                    /*
+                     * If we are doing a subtitle scan then note down
+                     */
+                    if( job->subtitle_scan )
+                    {
+                        for( n=0; n < hb_list_count(title->list_subtitle); n++ ) 
+                        {
+                            subtitle = hb_list_item( title->list_subtitle, n);
+                            if( pv->stream_id == subtitle->id ) {
+                                /*
+                                 * A hit, count it.
+                                 */
+                                subtitle->forced_hits++;
+                            }
+                        }
+                    }
                     break;
 
                 case 0x01: // 0x01 - STA_DSP - Start Display, no arguments
@@ -215,7 +236,7 @@ static void ParseControls( hb_work_object_t * w )
                                pv->chromaU[3-j],
                                pv->chromaV[3-j]); 
                         */
-                    }
+                    } 
                     i += 2;
                     break;
                 }
@@ -412,17 +433,19 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     /* Get infos about the subtitle */
     ParseControls( w );
 
-    if( job->subtitle_force && pv->pts_forced == 0 )
+    if( job->subtitle_scan || ( job->subtitle_force && pv->pts_forced == 0 ) )
     {
         /*
+         * Don't encode subtitles when doing a scan.
+         *
          * When forcing subtitles, ignore all those that don't
          * have the forced flag set.
          */
         return NULL;
-    } 
+    }
 
     /* Do the actual decoding now */
-    buf_raw = malloc( pv->width * pv->height * 4 );
+    buf_raw = malloc( ( pv->width * pv->height ) * 4 );
 
 #define GET_NEXT_NIBBLE code = ( code << 4 ) | ( ( ( *offset & 1 ) ? \
 ( pv->buf[((*offset)>>1)] & 0xF ) : ( pv->buf[((*offset)>>1)] >> 4 ) ) ); \

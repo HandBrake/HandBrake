@@ -112,7 +112,7 @@ static void ApplySub( hb_job_t * job, hb_buffer_t * buf,
                      * Merge the luminance and alpha with the picture
                      */
                     out[j] = ( (uint16_t) out[j] * ( 16 - (uint16_t) alpha[j] ) +
-                               (uint16_t) lum[j] * (uint16_t) alpha[j] ) >> 4;
+                               (uint16_t) lum[j] * (uint16_t) alpha[j] ) >> 4;   
                     /*
                      * Set the chroma (colour) based on whether there is
                      * any alpha at all. Don't try to blend with the picture.

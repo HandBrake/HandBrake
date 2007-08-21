@@ -65,7 +65,7 @@ static void MuxerFunc( void * _mux )
     hb_mux_object_t * m = NULL;
 
     /* Get a real muxer */
-    if( job->pass != 1 )
+    if( job->pass == 0 || job->pass == 2)
     {
         switch( job->mux )
         {
@@ -114,7 +114,7 @@ static void MuxerFunc( void * _mux )
     }
 
     /* Create file, write headers */
-    if( job->pass != 1 )
+    if( job->pass == 0 || job->pass == 2 )
     {
         m->init( m );
     }
@@ -148,7 +148,7 @@ static void MuxerFunc( void * _mux )
 //		thread_sleep_interval = MAX(1, (thread_sleep_interval - 1));
 
         buf = hb_fifo_get( track->fifo );
-        if( job->pass != 1 )
+        if( job->pass == 0 || job->pass == 2 )
         {
             m->mux( m, track->mux_data, buf );
             track->frames += 1;
@@ -158,7 +158,7 @@ static void MuxerFunc( void * _mux )
         hb_buffer_close( &buf );
     }
 
-    if( job->pass != 1 )
+    if( job->pass == 0 || job->pass == 2 )
     {
         struct stat sb;
         uint64_t bytes_total, frames_total;
