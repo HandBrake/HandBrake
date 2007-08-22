@@ -19,5 +19,6 @@ namespace Handbrake
         {
             this.Close();
         }
+
     }
 }

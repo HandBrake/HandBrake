@@ -20,7 +20,7 @@ namespace Handbrake
         private Parsing.DVD thisDvd;
         private Process hbProc;
         private delegate void UpdateUIHandler();
-        private int cancel = 0;
+        //private int cancel = 0;
 
         public frmReadDVD(string inputFile, frmMain parent, frmDvdInfo dvdInfoWindow)
         {
@@ -32,7 +32,7 @@ namespace Handbrake
 
         private void btn_ok_Click(object sender, EventArgs e)
         {
-            
+      
             try
             {
                 btn_ok.Enabled = false;
@@ -90,22 +90,27 @@ namespace Handbrake
                 string strCmdLine = "cmd /c " + '"' + '"' + appPath + "\\hbcli.exe" + '"' +  " -i" + '"' + inputFile + '"' + " -t0 >" + '"'+ appPath + "\\dvdinfo.dat" + '"' + " 2>&1" + '"';
                 Process hbproc = Process.Start("CMD.exe", strCmdLine);
                 hbproc.WaitForExit();
+                hbproc.Dispose();
+                hbproc.Close();
 
           
                 StreamReader sr = new StreamReader(appPath + "dvdinfo.dat");
-        
                 thisDvd = Parsing.DVD.Parse(sr);
 
                 sr.Close();
+
                 Console.ReadLine();
+
                 updateUIElements();
             }
             catch (Exception exc)
             {
                 MessageBox.Show(exc.ToString());
             }
-            //*********************************************************************************************************************************************
 
+        }
+
+            //*********************************************************************************************************************************************
             /*
              * This has been temporily disabled due to the stderr issue
              * 
@@ -125,7 +130,8 @@ namespace Handbrake
                 process.closeCLI();
             }
             */
-        }
+            //*********************************************************************************************************************************************
+
 
         /*private void Parser_OnScanProgress(object Sender, int CurrentTitle, int TitleCount)
         {
@@ -147,7 +153,7 @@ namespace Handbrake
             try
             {
                 this.Close();
-                cancel = 1;
+                //cancel = 1;
             }
             catch (Exception exc)
             {

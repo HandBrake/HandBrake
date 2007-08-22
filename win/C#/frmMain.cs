@@ -1228,9 +1228,10 @@ namespace Handbrake
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception exc)
             {
                 // No need to throw an error here.
+                // Note on non english systems, this will throw an error because of double.Parse(lbl_Aspect.Text); not working.
             }
                
           

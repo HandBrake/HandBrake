@@ -1,17 +1,23 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
 using System.Text;
-using System.IO;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.IO;
+using System.Threading;
+using System.Diagnostics;
 
 namespace Handbrake.Parsing
 {
+    
     /// <summary>
     /// An object representing a scanned DVD
     /// </summary>
     public class DVD
     {
+
         private List<Title> m_titles;
         /// <summary>
         /// Collection of Titles associated with this DVD
@@ -39,11 +45,12 @@ namespace Handbrake.Parsing
             {
                 if ((char)output.Peek() == '+')
                 {
-                    thisDVD.m_titles.AddRange(Title.ParseList(output.ReadToEnd()));
+                    string testb = output.ReadToEnd();
+                    thisDVD.m_titles.AddRange(Title.ParseList(testb));
                 }
                 else
                 {
-                    output.ReadLine();
+                    string test = output.ReadLine();
                 }
             }
             return thisDVD;
