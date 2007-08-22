@@ -219,9 +219,7 @@
 	
 	NSString                     * AppSupportDirectory;
 	NSString                     * UserPresetsFile;
-	NSString                     * x264ProfilesFile;
 	NSMutableArray               * UserPresets;
-	NSMutableArray               * x264Profiles;
 	NSMutableArray               * UserPresetssortedArray;
 	NSMutableDictionary          * chosenPreset;
     int                            curUserPresetChosenNum;
@@ -232,8 +230,8 @@
 	IBOutlet NSTableView         * tableView;
 	IBOutlet NSButton            * fPresetsAdd;
 	IBOutlet NSButton            * fPresetsDelete;
-    IBOutlet MVMenuButton           * fPresetsActionButton;
-    IBOutlet NSMenu                         * fPresetsActionMenu;
+    IBOutlet MVMenuButton        * fPresetsActionButton;
+    IBOutlet NSMenu              * fPresetsActionMenu;
 	
     hb_handle_t                  * fHandle;
 	hb_title_t                   * fTitle;
@@ -243,7 +241,7 @@
 	int                            currentScanCount;
 	int                            currentSuccessfulScanCount;
 	NSString                      * currentSource;
-	HBOutputPanelController *outputPanel;
+	HBOutputPanelController       *outputPanel;
 	
 	BOOL                         startButtonEnabled;
     BOOL                         pauseButtonEnabled;
@@ -317,6 +315,7 @@
 - (IBAction) X264AdvancedOptionsChanged: (id) sender;
 
 // Preset Methods Here
+- (void) loadPresets;
 - (IBAction) CustomSettingUsed: (id) sender;
 - (IBAction) ShowAddPresetPanel: (id) sender;
 - (IBAction) CloseAddPresetPanel: (id) sender;

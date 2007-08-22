@@ -141,52 +141,9 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 		evaluate successive scans */
 	currentScanCount = 0;
 	
-    /* Init User Presets .plist */
-	/* We declare the default NSFileManager into fileManager */
-	NSFileManager * fileManager = [NSFileManager defaultManager];
-	//presetPrefs = [[NSUserDefaults standardUserDefaults] retain];
-	/* we set the files and support paths here */
-	AppSupportDirectory = @"~/Library/Application Support/HandBrake";
-    AppSupportDirectory = [AppSupportDirectory stringByExpandingTildeInPath];
-    
-	UserPresetsFile = @"~/Library/Application Support/HandBrake/UserPresets.plist";
-    UserPresetsFile = [UserPresetsFile stringByExpandingTildeInPath];
-	
-	x264ProfilesFile = @"~/Library/Application Support/HandBrake/x264Profiles.plist";
-    x264ProfilesFile = [x264ProfilesFile stringByExpandingTildeInPath];
-	/* We check for the app support directory for media fork */
-	if ([fileManager fileExistsAtPath:AppSupportDirectory] == 0) 
-	{
-		// If it doesnt exist yet, we create it here 
-		[fileManager createDirectoryAtPath:AppSupportDirectory attributes:nil];
-	}
-	// We check for the presets.plist here
-	
-	if ([fileManager fileExistsAtPath:UserPresetsFile] == 0) 
-	{
+    /* Init UserPresets .plist */
+	[self loadPresets];
 		
-		[fileManager createFileAtPath:UserPresetsFile contents:nil attributes:nil];
-		
-	}
-	// We check for the x264profiles.plist here
-	
-	if ([fileManager fileExistsAtPath:x264ProfilesFile] == 0) 
-	{
-        
-		[fileManager createFileAtPath:x264ProfilesFile contents:nil attributes:nil];
-	}
-    
-	
-	UserPresetsFile = @"~/Library/Application Support/HandBrake/UserPresets.plist";
-	UserPresetsFile = [[UserPresetsFile stringByExpandingTildeInPath]retain];
-	
-	UserPresets = [[NSMutableArray alloc] initWithContentsOfFile:UserPresetsFile];
-	if (nil == UserPresets) 
-	{
-		UserPresets = [[NSMutableArray alloc] init];
-		[self AddFactoryPresets:NULL];
-	}
-	
 	
 	
 	/* Show/Dont Show Presets drawer upon launch based
@@ -329,6 +286,36 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 	
 }
 
+- (void) loadPresets {
+	/* We declare the default NSFileManager into fileManager */
+	NSFileManager * fileManager = [NSFileManager defaultManager];
+	/* we set the files and support paths here */
+	AppSupportDirectory = @"~/Library/Application Support/HandBrake";
+    AppSupportDirectory = [AppSupportDirectory stringByExpandingTildeInPath];
+    //UserPresetsFile = @"~/Library/Application Support/HandBrake/UserPresets.plist";
+    //UserPresetsFile = [UserPresetsFile stringByExpandingTildeInPath];
+	/* We check for the app support directory for handbrake */
+	if ([fileManager fileExistsAtPath:AppSupportDirectory] == 0) 
+	{
+		// If it doesnt exist yet, we create it here 
+		[fileManager createDirectoryAtPath:AppSupportDirectory attributes:nil];
+	}
+	/* We check for the presets.plist here */
+	if ([fileManager fileExistsAtPath:UserPresetsFile] == 0) 
+	{
+		[fileManager createFileAtPath:UserPresetsFile contents:nil attributes:nil];
+	}
+	UserPresetsFile = @"~/Library/Application Support/HandBrake/UserPresets.plist";
+	UserPresetsFile = [[UserPresetsFile stringByExpandingTildeInPath]retain];
+	
+	UserPresets = [[NSMutableArray alloc] initWithContentsOfFile:UserPresetsFile];
+	if (nil == UserPresets) 
+	{
+		UserPresets = [[NSMutableArray alloc] init];
+		[self AddFactoryPresets:NULL];
+	}
+	
+}
 
 // ============================================================
 // NSToolbar Related Methods
