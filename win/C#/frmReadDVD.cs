@@ -32,30 +32,45 @@ namespace Handbrake
 
         private void btn_ok_Click(object sender, EventArgs e)
         {
-            btn_ok.Enabled = false;
-            //btn_skip.Visible = true;
-            lbl_pressOk.Visible = false;
-            lbl_progress.Text = "0%";
-            //lbl_progress.Visible = true;
-            lbl_status.Visible = true;
-            // throw cli call and parsing on it's own thread
-            ThreadPool.QueueUserWorkItem(startProc);
+            
+            try
+            {
+                btn_ok.Enabled = false;
+                //btn_skip.Visible = true;
+                lbl_pressOk.Visible = false;
+                lbl_progress.Text = "0%";
+                //lbl_progress.Visible = true;
+                lbl_status.Visible = true;
+                // throw cli call and parsing on it's own thread
+                ThreadPool.QueueUserWorkItem(startProc);
+            }
+            catch(Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
         }
      
         private void updateUIElements()
         {
-            if (this.InvokeRequired)
+            try
             {
-                this.BeginInvoke(new UpdateUIHandler(updateUIElements));
-                return;
+                if (this.InvokeRequired)
+                {
+                    this.BeginInvoke(new UpdateUIHandler(updateUIElements));
+                    return;
+                }
+                // Now pass this streamreader to frmMain so that it can be used there.
+                mainWindow.setStreamReader(thisDvd);
+
+                mainWindow.drp_dvdtitle.Items.Clear();
+                mainWindow.drp_dvdtitle.Items.AddRange(thisDvd.Titles.ToArray());
+
+                this.Close();
             }
-            // Now pass this streamreader to frmMain so that it can be used there.
-            mainWindow.setStreamReader(thisDvd);
-
-            mainWindow.drp_dvdtitle.Items.Clear();
-            mainWindow.drp_dvdtitle.Items.AddRange(thisDvd.Titles.ToArray());
-
-            this.Close();
+            catch(Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
         }
 
         Functions.CLI process = new Functions.CLI();
@@ -68,20 +83,27 @@ namespace Handbrake
             /*
              * Quick and Dirty hack to get around the stderr crashes of hbcli. Lets try feeding brians parser text straight from a text file.
              */
-            string appPath = Application.StartupPath.ToString();
-            appPath = appPath + "\\";
-            string strCmdLine = "cmd /c " + '"' + '"' + appPath + "\\hbcli.exe" + '"' +  " -i" + '"' + inputFile + '"' + " -t0 >" + '"'+ appPath + "\\dvdinfo.dat" + '"' + " 2>&1" + '"';
-            Process hbproc = Process.Start("CMD.exe", strCmdLine);
-            hbproc.WaitForExit();
+            try
+            {
+                string appPath = Application.StartupPath.ToString();
+                appPath = appPath + "\\";
+                string strCmdLine = "cmd /c " + '"' + '"' + appPath + "\\hbcli.exe" + '"' +  " -i" + '"' + inputFile + '"' + " -t0 >" + '"'+ appPath + "\\dvdinfo.dat" + '"' + " 2>&1" + '"';
+                Process hbproc = Process.Start("CMD.exe", strCmdLine);
+                hbproc.WaitForExit();
 
+          
+                StreamReader sr = new StreamReader(appPath + "dvdinfo.dat");
+        
+                thisDvd = Parsing.DVD.Parse(sr);
 
-            StreamReader sr = new StreamReader(appPath + "dvdinfo.dat");
-    
-            thisDvd = Parsing.DVD.Parse(sr);
-
-            sr.Close();
-            Console.ReadLine();
-            updateUIElements();
+                sr.Close();
+                Console.ReadLine();
+                updateUIElements();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
             //*********************************************************************************************************************************************
 
             /*
@@ -105,7 +127,7 @@ namespace Handbrake
             */
         }
 
-        private void Parser_OnScanProgress(object Sender, int CurrentTitle, int TitleCount)
+        /*private void Parser_OnScanProgress(object Sender, int CurrentTitle, int TitleCount)
         {
             if (this.InvokeRequired)
             {
@@ -118,14 +140,19 @@ namespace Handbrake
                 progress = 100;
             }
             this.lbl_progress.Text = progress.ToString() + "%";
-        }
+        }*/
 
         private void btn_skip_Click(object sender, EventArgs e)
         {
-            //process.killCLI();
-            this.Close();
-            cancel = 1;  
+            try
+            {
+                this.Close();
+                cancel = 1;
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
         }
-
     }
 }

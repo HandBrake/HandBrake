@@ -55,7 +55,6 @@ namespace Handbrake
 
                 if ((initialListCount - i) != (list_queue.Items.Count))
                 {
-                    MessageBox.Show("Added an Item");
                     initialListCount++;
                 }
             }
