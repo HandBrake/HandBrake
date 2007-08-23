@@ -9,11 +9,17 @@
 #import "HBOutputRedirect.h"
 
 /// Maximum amount of characters that can be shown in the view.
-#define TextStorageUpperSizeLimit 20000
+// Original value used by cleaner
+//#define TextStorageUpperSizeLimit 20000
+// lets use this higher value for now for better gui debugging
+#define TextStorageUpperSizeLimit 40000
 
 /// When old output is removed, this is the amount of characters that will be
 /// left in outputTextStorage.
-#define TextStorageLowerSizeLimit 15000
+// Original value used by cleaner
+//#define TextStorageLowerSizeLimit 15000
+// lets use this higher value for now for better gui debugging
+#define TextStorageLowerSizeLimit 35000
 
 @implementation HBOutputPanelController
 
