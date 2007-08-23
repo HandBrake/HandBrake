@@ -86,7 +86,7 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
      /* Call UpdateUI every 2/10 sec */
     [[NSRunLoop currentRunLoop] addTimer: [NSTimer
         scheduledTimerWithTimeInterval: 0.2 target: self
-        selector: @selector( UpdateUI: ) userInfo: NULL repeats: FALSE]
+        selector: @selector( updateUI: ) userInfo: NULL repeats: FALSE]
         forMode: NSModalPanelRunLoopMode];
 
     if( ( build = hb_check_update( fHandle, &version ) ) > -1 )
@@ -95,7 +95,7 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 	
         NSBeginInformationalAlertSheet( _( @"Update is available" ),
             _( @"Go get it!" ), _( @"Discard" ), NULL, fWindow, self,
-            @selector( UpdateAlertDone:returnCode:contextInfo: ),
+            @selector( updateAlertDone:returnCode:contextInfo: ),
             NULL, NULL, [NSString stringWithFormat:
             _( @"HandBrake %s (build %d) is now available for download." ),
             version, build] );
@@ -104,7 +104,7 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
     }
 
     /* Show scan panel ASAP */
-    [self performSelectorOnMainThread: @selector(ShowScanPanel:)
+    [self performSelectorOnMainThread: @selector(showScanPanel:)
         withObject: NULL waitUntilDone: NO];
 }
 
@@ -162,7 +162,7 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 	[fDstFormatPopUp addItemWithTitle: _( @"MKV file" )];
     [fDstFormatPopUp selectItemAtIndex: 0];
 	
-    [self FormatPopUpChanged: NULL];
+    [self formatPopUpChanged: NULL];
     
 	/* We enable the create chapters checkbox here since we are .mp4 */	
 	[fCreateChapterMarkers setEnabled: YES];
@@ -189,7 +189,7 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 	[fVidBitrateField    setIntValue: 1000];
 	
     [fVidQualityMatrix   selectCell: fVidBitrateCell];
-    [self VideoMatrixChanged: NULL];
+    [self videoMatrixChanged: NULL];
 	
     /* Video framerate */
     [fVidRatePopUp removeAllItems];
@@ -263,11 +263,11 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
     /* Bottom */
     [fStatusField setStringValue: @""];
 	
-    [self EnableUI: NO];
+    [self enableUI: NO];
     /* Use new Toolbar start and pause here */
 	startButtonEnabled = NO;
 	stopOrStart = NO;
-	AddToQueueButtonEnabled = NO;
+	addToQueueButtonEnabled = NO;
 	pauseButtonEnabled = NO;
 	resumeOrPause = NO;
 	[self setupToolbar];
@@ -280,7 +280,7 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 	
 	
 	/* lets get our default prefs here */
-	[self GetDefaultPresets: NULL];
+	[self getDefaultPresets: NULL];
 	/* lets initialize the current successful scancount here to 0 */
 	currentSuccessfulScanCount = 0;
 	
@@ -312,7 +312,7 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 	if (nil == UserPresets) 
 	{
 		UserPresets = [[NSMutableArray alloc] init];
-		[self AddFactoryPresets:NULL];
+		[self addFactoryPresets:NULL];
 	}
 	
 }
@@ -387,7 +387,7 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 		
 		// Tell the item what message to send when it is clicked 
 		[toolbarItem setTarget: self];
-		[toolbarItem setAction: @selector(ShowQueuePanel:)];
+		[toolbarItem setAction: @selector(showQueuePanel:)];
 		
 	} else if ([itemIdent isEqual: AddToQueueIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
@@ -402,7 +402,7 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 		
 		// Tell the item what message to send when it is clicked 
 		[toolbarItem setTarget: self];
-		[toolbarItem setAction: @selector(AddToQueue:)];
+		[toolbarItem setAction: @selector(addToQueue:)];
 		
 		
 	} else if ([itemIdent isEqual: PauseEncodingIdentifier]) {
@@ -448,7 +448,7 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
  
                 // Tell the item what message to send when it is clicked 
                 [toolbarItem setTarget: self];
-                [toolbarItem setAction: @selector(ShowScanPanel:)];
+                [toolbarItem setAction: @selector(showScanPanel:)];
 	
     } else {
         //itemIdent refered to a toolbar item that is not provide or supported by us or cocoa 
@@ -527,7 +527,7 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 		enable = YES;
 	}
 	if ([[toolbarItem itemIdentifier] isEqual: AddToQueueIdentifier]) {
-		enable = AddToQueueButtonEnabled;
+		enable = addToQueueButtonEnabled;
 	}
 	if ([[toolbarItem itemIdentifier] isEqual: ChooseSourceIdentifier]) {
         enable = YES;
@@ -649,7 +649,7 @@ return registrationDictionary;
     [icon release];
 }
 
-- (void) UpdateUI: (NSTimer *) timer
+- (void) updateUI: (NSTimer *) timer
 {
 
 hb_list_t  * list;
@@ -674,7 +674,7 @@ list = hb_get_titles( fHandle );
 		
 		[fMenuPicturePanelShow setEnabled: YES];
 		[fMenuQueuePanelShow setEnabled: YES];
-		[self ShowNewScan: NULL];
+		[self showNewScan: NULL];
 		
 	}
 	
@@ -710,7 +710,7 @@ list = hb_get_titles( fHandle );
             [fScanIndicator setDoubleValue: 0.0];
 			[fScanIndicator setHidden: YES];
 			[fScanController Cancel: NULL];
-			[self ShowNewScan: NULL];
+			[self showNewScan: NULL];
 			break;
         }
 #undef p
@@ -847,12 +847,12 @@ list = hb_get_titles( fHandle );
 					[NSApp requestUserAttention:NSCriticalRequest];
 					if ( status == NSAlertDefaultReturn ) 
 					{
-						[self EnableUI: YES];
+						[self enableUI: YES];
 					}
                 }
 				else
 				{
-					[self EnableUI: YES];
+					[self enableUI: YES];
 				}
 			           /* If sleep has been selected */ 
             if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Put Computer To Sleep"]) 
@@ -864,7 +864,7 @@ list = hb_get_titles( fHandle );
                         @"tell application \"Finder\" to sleep"]; 
                returnDescriptor = [scriptObject executeAndReturnError: &errorDict]; 
                [scriptObject release]; 
-               [self EnableUI: YES]; 
+               [self enableUI: YES]; 
                 } 
             /* If Shutdown has been selected */ 
             if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Shut Down Computer"]) 
@@ -876,7 +876,7 @@ list = hb_get_titles( fHandle );
                         @"tell application \"Finder\" to shut down"]; 
                returnDescriptor = [scriptObject executeAndReturnError: &errorDict]; 
                [scriptObject release]; 
-               [self EnableUI: YES]; 
+               [self enableUI: YES]; 
                 }
 			
 						// MetaX insertion via AppleScript
@@ -891,7 +891,7 @@ list = hb_get_titles( fHandle );
 			}
 			else
 			{
-				[self EnableUI: YES];
+				[self enableUI: YES];
 			}
             break;
         }
@@ -913,10 +913,10 @@ list = hb_get_titles( fHandle );
 	
     [[NSRunLoop currentRunLoop] addTimer: [NSTimer
         scheduledTimerWithTimeInterval: 0.5 target: self
-							  selector: @selector( UpdateUI: ) userInfo: NULL repeats: FALSE]
+							  selector: @selector( updateUI: ) userInfo: NULL repeats: FALSE]
 								 forMode: NSModalPanelRunLoopMode];
 }
-- (IBAction) ShowNewScan:(id)sender
+- (IBAction) showNewScan:(id)sender
 {
 	hb_list_t  * list;
 	hb_title_t * title;
@@ -1029,15 +1029,15 @@ list = hb_get_titles( fHandle );
 		}
 		// Select the longuest title
 		[fSrcTitlePopUp selectItemAtIndex: indxpri];
-		[self TitlePopUpChanged: NULL];
+		[self titlePopUpChanged: NULL];
 		
 		
 		
-		[self EnableUI: YES];
+		[self enableUI: YES];
 		
 		startButtonEnabled = YES;
 		stopOrStart = NO;
-		AddToQueueButtonEnabled = YES;
+		addToQueueButtonEnabled = YES;
 		pauseButtonEnabled = NO;
 		resumeOrPause = NO;
 		/* we record the current source name here in case the next scan is unsuccessful,
@@ -1047,7 +1047,7 @@ list = hb_get_titles( fHandle );
 	/* if its the initial successful scan after awakeFromNib */
 	   if (currentSuccessfulScanCount == 1)
 	   {
-       [self SelectDefaultPreset: NULL];
+       [self selectDefaultPreset: NULL];
 	   }  
 	   
 	}
@@ -1067,7 +1067,7 @@ list = hb_get_titles( fHandle );
                  isSticky:1 
              clickContext:nil];
 }
-- (void) EnableUI: (bool) b
+- (void) enableUI: (bool) b
 {
     NSControl * controls[] =
       { fSrcDVD1Field, fSrcTitleField, fSrcTitlePopUp,
@@ -1121,7 +1121,7 @@ list = hb_get_titles( fHandle );
 
         /* if we're enabling the interface, check if the audio mixdown controls need to be enabled or not */
         /* these will have been enabled by the mass control enablement above anyway, so we're sense-checking it here */
-        [self SetEnabledStateOfAudioMixdownControls: NULL];
+        [self setEnabledStateOfAudioMixdownControls: NULL];
 	
 	} else {
 
@@ -1129,10 +1129,10 @@ list = hb_get_titles( fHandle );
 	
 	}
 
-    [self VideoMatrixChanged: NULL];
+    [self videoMatrixChanged: NULL];
 }
 
-- (IBAction) ShowScanPanel: (id) sender
+- (IBAction) showScanPanel: (id) sender
 {
     /* Enable/Disable Menu Controls Accordingly */
 	[fMenuOpenSource setEnabled: NO];
@@ -1147,7 +1147,7 @@ list = hb_get_titles( fHandle );
 	
 }
 
-- (IBAction) OpenMainWindow: (id) sender
+- (IBAction) openMainWindow: (id) sender
 {
 [fWindow  makeKeyAndOrderFront:nil];
 [fWindow setReleasedWhenClosed: YES];
@@ -1174,7 +1174,7 @@ list = hb_get_titles( fHandle );
 	
 }
 
-- (IBAction) VideoMatrixChanged: (id) sender;
+- (IBAction) videoMatrixChanged: (id) sender;
 {
     bool target, bitrate, quality;
 
@@ -1206,31 +1206,31 @@ list = hb_get_titles( fHandle );
 		[fVidTurboPassCheck setState: NSOffState];
     }
 
-    [self QualitySliderChanged: sender];
-    [self CalculateBitrate:     sender];
-	[self CustomSettingUsed: sender];
+    [self qualitySliderChanged: sender];
+    [self calculateBitrate:     sender];
+	[self customSettingUsed: sender];
 }
 
-- (IBAction) QualitySliderChanged: (id) sender
+- (IBAction) qualitySliderChanged: (id) sender
 {
     [fVidConstantCell setTitle: [NSString stringWithFormat:
         _( @"Constant quality: %.0f %%" ), 100.0 *
         [fVidQualitySlider floatValue]]];
-		[self CustomSettingUsed: sender];
+		[self customSettingUsed: sender];
 }
 
-- (IBAction) BrowseFile: (id) sender
+- (IBAction) browseFile: (id) sender
 {
     /* Open a panel to let the user choose and update the text field */
     NSSavePanel * panel = [NSSavePanel savePanel];
 	/* We get the current file name and path from the destination field here */
 	[panel beginSheetForDirectory: [[fDstFile2Field stringValue] stringByDeletingLastPathComponent] file: [[fDstFile2Field stringValue] lastPathComponent]
 				   modalForWindow: fWindow modalDelegate: self
-				   didEndSelector: @selector( BrowseFileDone:returnCode:contextInfo: )
+				   didEndSelector: @selector( browseFileDone:returnCode:contextInfo: )
 					  contextInfo: NULL];
 }
 
-- (void) BrowseFileDone: (NSSavePanel *) sheet
+- (void) browseFileDone: (NSSavePanel *) sheet
     returnCode: (int) returnCode contextInfo: (void *) contextInfo
 {
     if( returnCode == NSOKButton )
@@ -1240,7 +1240,7 @@ list = hb_get_titles( fHandle );
     }
 }
 
-- (IBAction) ShowPicturePanel: (id) sender
+- (IBAction) showPicturePanel: (id) sender
 {
     /* Enable/Disable Menu Controls Accordingly */
 	[fMenuOpenSource setEnabled: NO];
@@ -1276,10 +1276,10 @@ list = hb_get_titles( fHandle );
 	[fMenuPicturePanelShow setEnabled: YES];
 	[fMenuQueuePanelShow setEnabled: YES];
 	
-	[self CalculatePictureSizing: sender];
+	[self calculatePictureSizing: sender];
 }
 
-- (IBAction) ShowQueuePanel: (id) sender
+- (IBAction) showQueuePanel: (id) sender
 {
     /* Update the OutlineView */
     [fQueueController Update: sender];
@@ -1511,7 +1511,7 @@ list = hb_get_titles( fHandle );
 
 
 
-- (IBAction) AddToQueue: (id) sender
+- (IBAction) addToQueue: (id) sender
 {
 /* We get the destination directory from the destingation field here */
 	NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
@@ -1627,7 +1627,7 @@ list = hb_get_titles( fHandle );
 	int count = hb_count( fHandle );
 	if( count < 1 )
         {
-		[self AddToQueue: sender];
+		[self addToQueue: sender];
 		}
     
 	    /* We check for duplicate name here */
@@ -1636,7 +1636,7 @@ list = hb_get_titles( fHandle );
     {
         NSBeginCriticalAlertSheet( _( @"File already exists" ),
             _( @"Cancel" ), _( @"Overwrite" ), NULL, fWindow, self,
-            @selector( OverwriteAlertDone:returnCode:contextInfo: ),
+            @selector( overWriteAlertDone:returnCode:contextInfo: ),
             NULL, NULL, [NSString stringWithFormat:
             _( @"Do you want to overwrite %@?" ),
             [fDstFile2Field stringValue]] );
@@ -1659,7 +1659,7 @@ list = hb_get_titles( fHandle );
 
 }
 
-- (void) OverwriteAlertDone: (NSWindow *) sheet
+- (void) overWriteAlertDone: (NSWindow *) sheet
     returnCode: (int) returnCode contextInfo: (void *) contextInfo
 {
     if( returnCode == NSAlertAlternateReturn )
@@ -1668,19 +1668,19 @@ list = hb_get_titles( fHandle );
     }
 }
 
-- (void) UpdateAlertDone: (NSWindow *) sheet
+- (void) updateAlertDone: (NSWindow *) sheet
     returnCode: (int) returnCode contextInfo: (void *) contextInfo
 {
     if( returnCode == NSAlertAlternateReturn )
     {
         /* Show scan panel */
-        [self performSelectorOnMainThread: @selector(ShowScanPanel:)
+        [self performSelectorOnMainThread: @selector(showScanPanel:)
             withObject: NULL waitUntilDone: NO];
         return;
     }
 
     /* Go to HandBrake homepage and exit */
-    [self OpenHomepage: NULL];
+    [self openHomepage: NULL];
     [NSApp terminate: self];
 }
 
@@ -1692,7 +1692,7 @@ list = hb_get_titles( fHandle );
 	fEncodeState = 1;
 	
     /* Disable interface */
-	//[self EnableUI: NO];
+	//[self enableUI: NO];
 	// [fPauseButton setEnabled: NO];
 	// [fRipButton   setEnabled: NO];
 	pauseButtonEnabled = NO;
@@ -1750,7 +1750,7 @@ list = hb_get_titles( fHandle );
     }
 }
 
-- (IBAction) TitlePopUpChanged: (id) sender
+- (IBAction) titlePopUpChanged: (id) sender
 {
     hb_list_t  * list  = hb_get_titles( fHandle );
     hb_title_t * title = (hb_title_t*)
@@ -1780,7 +1780,7 @@ list = hb_get_titles( fHandle );
     [fSrcChapterStartPopUp selectItemAtIndex: 0];
     [fSrcChapterEndPopUp   selectItemAtIndex:
         hb_list_count( title->list_chapter ) - 1];
-    [self ChapterPopUpChanged: NULL];
+    [self chapterPopUpChanged: NULL];
 
 /* Start Get and set the initial pic size for display */
 	hb_job_t * job = title->job;
@@ -1828,12 +1828,12 @@ list = hb_get_titles( fHandle );
 	[fPicSettingHeight setStringValue: [NSString stringWithFormat:
 		@"%d", PicOrigOutputHeight]];
 	/* we run the picture size values through
-	CalculatePictureSizing to get all picture size
+	calculatePictureSizing to get all picture size
 	information*/
-	[self CalculatePictureSizing: NULL];
-	/* Run Through EncoderPopUpChanged to see if there
+	[self calculatePictureSizing: NULL];
+	/* Run Through encoderPopUpChanged to see if there
 		needs to be any pic value modifications based on encoder settings */
-	//[self EncoderPopUpChanged: NULL];
+	//[self encoderPopUpChanged: NULL];
 	/* END Get and set the initial pic size for display */ 
 
     /* Update subtitle popups */
@@ -1852,29 +1852,29 @@ list = hb_get_titles( fHandle );
     }
     [fSubPopUp selectItemAtIndex: 0];
 	
-	[self SubtitleSelectionChanged: NULL];
+	[self subtitleSelectionChanged: NULL];
     
     /* Update chapter table */
     [fChapterTitlesDelegate resetWithTitle:title];
     [fChapterTable reloadData];
 
     /* Update audio popups */
-    [self AddAllAudioTracksToPopUp: fAudLang1PopUp];
-    [self AddAllAudioTracksToPopUp: fAudLang2PopUp];
+    [self addAllAudioTracksToPopUp: fAudLang1PopUp];
+    [self addAllAudioTracksToPopUp: fAudLang2PopUp];
     /* search for the first instance of our prefs default language for track 1, and set track 2 to "none" */
 	NSString * audioSearchPrefix = [[NSUserDefaults standardUserDefaults] stringForKey:@"DefaultLanguage"];
-    [self SelectAudioTrackInPopUp: fAudLang1PopUp searchPrefixString: audioSearchPrefix selectIndexIfNotFound: 1];
-    [self SelectAudioTrackInPopUp: fAudLang2PopUp searchPrefixString: NULL selectIndexIfNotFound: 0];
+    [self selectAudioTrackInPopUp: fAudLang1PopUp searchPrefixString: audioSearchPrefix selectIndexIfNotFound: 1];
+    [self selectAudioTrackInPopUp: fAudLang2PopUp searchPrefixString: NULL selectIndexIfNotFound: 0];
 	
 	/* changing the title may have changed the audio channels on offer, */
-	/* so call AudioTrackPopUpChanged for both audio tracks to update the mixdown popups */
-	[self AudioTrackPopUpChanged: fAudLang1PopUp];
-	[self AudioTrackPopUpChanged: fAudLang2PopUp];
+	/* so call audioTrackPopUpChanged for both audio tracks to update the mixdown popups */
+	[self audioTrackPopUpChanged: fAudLang1PopUp];
+	[self audioTrackPopUpChanged: fAudLang2PopUp];
 	/* lets call tableViewSelected to make sure that any preset we have selected is enforced after a title change */
 	[self tableViewSelected:NULL];
 }
 
-- (IBAction) ChapterPopUpChanged: (id) sender
+- (IBAction) chapterPopUpChanged: (id) sender
 {
     
 	/* If start chapter popup is greater than end chapter popup,
@@ -1904,10 +1904,10 @@ list = hb_get_titles( fHandle );
         @"%02lld:%02lld:%02lld", duration / 3600, ( duration / 60 ) % 60,
         duration % 60]];
 
-    [self CalculateBitrate: sender];
+    [self calculateBitrate: sender];
 }
 
-- (IBAction) FormatPopUpChanged: (id) sender
+- (IBAction) formatPopUpChanged: (id) sender
 {
     NSString * string = [fDstFile2Field stringValue];
     int format = [fDstFormatPopUp indexOfSelectedItem];
@@ -1997,7 +1997,7 @@ list = hb_get_titles( fHandle );
 			[fCreateChapterMarkers setEnabled: YES];
 			break;
     }
-    [self CodecsPopUpChanged: NULL];
+    [self codecsPopUpChanged: NULL];
 
     /* Add/replace to the correct extension */
     if( [string characterAtIndex: [string length] - 4] == '.' )
@@ -2013,17 +2013,17 @@ list = hb_get_titles( fHandle );
     }
 
 	/* changing the format may mean that we can / can't offer mono or 6ch, */
-	/* so call AudioTrackPopUpChanged for both audio tracks to update the mixdown popups */
-	[self AudioTrackPopUpChanged: fAudLang1PopUp];
-	[self AudioTrackPopUpChanged: fAudLang2PopUp];
+	/* so call audioTrackPopUpChanged for both audio tracks to update the mixdown popups */
+	[self audioTrackPopUpChanged: fAudLang1PopUp];
+	[self audioTrackPopUpChanged: fAudLang2PopUp];
 	/* We call the method to properly enable/disable turbo 2 pass */
-	[self TwoPassCheckboxChanged: sender];
+	[self twoPassCheckboxChanged: sender];
 	/* We call method method to change UI to reflect whether a preset is used or not*/
-	[self CustomSettingUsed: sender];	
+	[self customSettingUsed: sender];	
 	
 }
 
-- (IBAction) CodecsPopUpChanged: (id) sender
+- (IBAction) codecsPopUpChanged: (id) sender
 {
     int format = [fDstFormatPopUp indexOfSelectedItem];
     int codecs = [fDstCodecsPopUp indexOfSelectedItem];
@@ -2067,15 +2067,15 @@ list = hb_get_titles( fHandle );
         [fAudBitratePopUp setEnabled: YES];
     }
     /* changing the codecs on offer may mean that we can / can't offer mono or 6ch, */
-	/* so call AudioTrackPopUpChanged for both audio tracks to update the mixdown popups */
-	[self AudioTrackPopUpChanged: fAudLang1PopUp];
-	[self AudioTrackPopUpChanged: fAudLang2PopUp];
+	/* so call audioTrackPopUpChanged for both audio tracks to update the mixdown popups */
+	[self audioTrackPopUpChanged: fAudLang1PopUp];
+	[self audioTrackPopUpChanged: fAudLang2PopUp];
 
-    [self CalculateBitrate: sender];
-    [self TwoPassCheckboxChanged: sender];
+    [self calculateBitrate: sender];
+    [self twoPassCheckboxChanged: sender];
 }
 
-- (IBAction) EncoderPopUpChanged: (id) sender
+- (IBAction) encoderPopUpChanged: (id) sender
 {
     
 	/* Check to see if we need to modify the job pic values based on x264 (iPod) encoder selection */
@@ -2099,11 +2099,11 @@ list = hb_get_titles( fHandle );
 		[fDstMpgLargeFileCheck setState: NSOffState];
 	}
     
-	[self CalculatePictureSizing: sender];
-	[self TwoPassCheckboxChanged: sender];
+	[self calculatePictureSizing: sender];
+	[self twoPassCheckboxChanged: sender];
 }
 
-- (IBAction) TwoPassCheckboxChanged: (id) sender
+- (IBAction) twoPassCheckboxChanged: (id) sender
 {
 	/* check to see if x264 is chosen */
 	int format = [fDstFormatPopUp indexOfSelectedItem];
@@ -2132,19 +2132,19 @@ list = hb_get_titles( fHandle );
 	}
 	
 	/* We call method method to change UI to reflect whether a preset is used or not*/
-	[self CustomSettingUsed: sender];
+	[self customSettingUsed: sender];
 }
 
-- (IBAction ) VideoFrameRateChanged: (id) sender
+- (IBAction ) videoFrameRateChanged: (id) sender
 {
-/* We call method method to CalculatePictureSizing to error check detelecine*/
-[self CalculatePictureSizing: sender];
+/* We call method method to calculatePictureSizing to error check detelecine*/
+[self calculatePictureSizing: sender];
 
 /* We call method method to change UI to reflect whether a preset is used or not*/
-	[self CustomSettingUsed: sender];
+	[self customSettingUsed: sender];
 }
 
-- (IBAction) SetEnabledStateOfAudioMixdownControls: (id) sender
+- (IBAction) setEnabledStateOfAudioMixdownControls: (id) sender
 {
 
     /* enable/disable the mixdown text and popupbutton for audio track 1 */
@@ -2159,7 +2159,7 @@ list = hb_get_titles( fHandle );
 
 }
 
-- (IBAction) AddAllAudioTracksToPopUp: (id) sender
+- (IBAction) addAllAudioTracksToPopUp: (id) sender
 {
 
     hb_list_t  * list  = hb_get_titles( fHandle );
@@ -2181,7 +2181,7 @@ list = hb_get_titles( fHandle );
 
 }
 
-- (IBAction) SelectAudioTrackInPopUp: (id) sender searchPrefixString: (NSString *) searchPrefixString selectIndexIfNotFound: (int) selectIndexIfNotFound
+- (IBAction) selectAudioTrackInPopUp: (id) sender searchPrefixString: (NSString *) searchPrefixString selectIndexIfNotFound: (int) selectIndexIfNotFound
 {
 
     /* this method can be used to find a language, or a language-and-source-format combination, by passing in the appropriate string */
@@ -2214,13 +2214,13 @@ list = hb_get_titles( fHandle );
 
 }
 
-- (IBAction) AudioTrackPopUpChanged: (id) sender
+- (IBAction) audioTrackPopUpChanged: (id) sender
 {
-    /* utility function to call AudioTrackPopUpChanged without passing in a mixdown-to-use */
-    [self AudioTrackPopUpChanged: sender mixdownToUse: 0];
+    /* utility function to call audioTrackPopUpChanged without passing in a mixdown-to-use */
+    [self audioTrackPopUpChanged: sender mixdownToUse: 0];
 }
 
-- (IBAction) AudioTrackPopUpChanged: (id) sender mixdownToUse: (int) mixdownToUse
+- (IBAction) audioTrackPopUpChanged: (id) sender mixdownToUse: (int) mixdownToUse
 {
 
     /* make sure we have a selected title before continuing */
@@ -2242,7 +2242,7 @@ list = hb_get_titles( fHandle );
     /* unless, of course, both are selected as "none!" */
     if ([thisAudioPopUp indexOfSelectedItem] != 0 && [thisAudioPopUp indexOfSelectedItem] == [otherAudioPopUp indexOfSelectedItem]) {
         [otherAudioPopUp selectItemAtIndex: 0];
-        [self AudioTrackPopUpChanged: otherAudioPopUp];
+        [self audioTrackPopUpChanged: otherAudioPopUp];
     }
 
     /* pointer for the hb_audio_s struct we will use later on */
@@ -2273,7 +2273,7 @@ list = hb_get_titles( fHandle );
     [mixdownPopUp removeAllItems];
 
     /* check if the audio mixdown controls need their enabled state changing */
-    [self SetEnabledStateOfAudioMixdownControls: NULL];
+    [self setEnabledStateOfAudioMixdownControls: NULL];
 
     if (thisAudioIndex != -1)
     {
@@ -2391,8 +2391,8 @@ list = hb_get_titles( fHandle );
                 /* select the (possibly-amended) preferred mixdown */
                 [mixdownPopUp selectItemWithTag: useMixdown];
 				
-				/* lets call the AudioTrackMixdownChanged method here to determine appropriate bitrates, etc. */
-                [self AudioTrackMixdownChanged: NULL];
+				/* lets call the audioTrackMixdownChanged method here to determine appropriate bitrates, etc. */
+                [self audioTrackMixdownChanged: NULL];
             }
 
         }
@@ -2400,10 +2400,10 @@ list = hb_get_titles( fHandle );
     }
 
 	/* see if the new audio track choice will change the bitrate we need */
-    [self CalculateBitrate: sender];	
+    [self calculateBitrate: sender];	
 
 }
-- (IBAction) AudioTrackMixdownChanged: (id) sender
+- (IBAction) audioTrackMixdownChanged: (id) sender
 {
 
     /* find out what the currently-selected output audio codec is */
@@ -2485,7 +2485,7 @@ list = hb_get_titles( fHandle );
 
 }
 
-- (IBAction) SubtitleSelectionChanged: (id) sender
+- (IBAction) subtitleSelectionChanged: (id) sender
 {
 	if ([fSubPopUp indexOfSelectedItem] == 0)
 	{
@@ -2503,7 +2503,7 @@ list = hb_get_titles( fHandle );
    Lets use an IBAction here as down the road we could always use a checkbox
    in the gui to easily take the user back to max. Remember, the compiler
    resolves IBActions down to -(void) during compile anyway */
-- (IBAction) RevertPictureSizeToMax: (id) sender
+- (IBAction) revertPictureSizeToMax: (id) sender
 {
 	hb_job_t * job = fTitle->job;
 	/* We use the output picture width and height
@@ -2520,14 +2520,14 @@ list = hb_get_titles( fHandle );
 	job->crop[3] = AutoCropRight;
 				
 				
-				[self CalculatePictureSizing: sender];
+				[self calculatePictureSizing: sender];
 				/* We call method method to change UI to reflect whether a preset is used or not*/    
-				[self CustomSettingUsed: sender];
+				[self customSettingUsed: sender];
 }
 
 
 /* Get and Display Current Pic Settings in main window */
-- (IBAction) CalculatePictureSizing: (id) sender
+- (IBAction) calculatePictureSizing: (id) sender
 {
 	
 
@@ -2656,10 +2656,10 @@ list = hb_get_titles( fHandle );
 	changed to "Custom". Lets comment out for now until
 	we figure out a way to determine if the picture values
 	changed modify the preset values */	
-	//[self CustomSettingUsed: sender];
+	//[self customSettingUsed: sender];
 }
 
-- (IBAction) CalculateBitrate: (id) sender
+- (IBAction) calculateBitrate: (id) sender
 {
     if( !fHandle || [fVidQualityMatrix selectedRow] != 0 )
     {
@@ -2682,7 +2682,7 @@ list = hb_get_titles( fHandle );
 /* Method to determine if we should change the UI
 To reflect whether or not a Preset is being used or if
 the user is using "Custom" settings by determining the sender*/
-- (IBAction) CustomSettingUsed: (id) sender
+- (IBAction) customSettingUsed: (id) sender
 {
 	if ([sender stringValue] != NULL)
 	{
@@ -3659,32 +3659,32 @@ the user is using "Custom" settings by determining the sender*/
 
    /* We use this method to recreate new, updated factory
    presets */
-- (IBAction)AddFactoryPresets:(id)sender
+- (IBAction)addFactoryPresets:(id)sender
 {
     /* First, we delete any existing built in presets */
-    [self DeleteFactoryPresets: sender];
+    [self deleteFactoryPresets: sender];
     /* Then, we re-create new built in presets programmatically CreateIpodOnlyPreset*/
-    [UserPresets addObject:[self CreateNormalPreset]];
-    [UserPresets addObject:[self CreateClassicPreset]];
-    [UserPresets addObject:[self CreateQuickTimePreset]];
-	[UserPresets addObject:[self CreateIpodLowPreset]];
-	[UserPresets addObject:[self CreateIpodHighPreset]];
-	[UserPresets addObject:[self CreateAppleTVPreset]];
-    [UserPresets addObject:[self CreateiPhonePreset]];
-	[UserPresets addObject:[self CreatePSThreePreset]];
-	[UserPresets addObject:[self CreatePSPPreset]];
-	[UserPresets addObject:[self CreateFilmPreset]];
-    [UserPresets addObject:[self CreateTelevisionPreset]];
-    [UserPresets addObject:[self CreateAnimationPreset]];
-    [UserPresets addObject:[self CreateBedlamPreset]];
-    [UserPresets addObject:[self CreateDeuxSixQuatrePreset]];
-    [UserPresets addObject:[self CreateBrokePreset]];
-    [UserPresets addObject:[self CreateBlindPreset]];
-    [UserPresets addObject:[self CreateCRFPreset]];
+    [UserPresets addObject:[self createNormalPreset]];
+    [UserPresets addObject:[self createClassicPreset]];
+    [UserPresets addObject:[self createQuickTimePreset]];
+	[UserPresets addObject:[self createIpodLowPreset]];
+	[UserPresets addObject:[self createIpodHighPreset]];
+	[UserPresets addObject:[self createAppleTVPreset]];
+    [UserPresets addObject:[self createiPhonePreset]];
+	[UserPresets addObject:[self createPSThreePreset]];
+	[UserPresets addObject:[self createPSPPreset]];
+	[UserPresets addObject:[self createFilmPreset]];
+    [UserPresets addObject:[self createTelevisionPreset]];
+    [UserPresets addObject:[self createAnimationPreset]];
+    [UserPresets addObject:[self createBedlamPreset]];
+    [UserPresets addObject:[self createDeuxSixQuatrePreset]];
+    [UserPresets addObject:[self createBrokePreset]];
+    [UserPresets addObject:[self createBlindPreset]];
+    [UserPresets addObject:[self createCRFPreset]];
     
-    [self AddPreset];
+    [self addPreset];
 }
-- (IBAction)DeleteFactoryPresets:(id)sender
+- (IBAction)deleteFactoryPresets:(id)sender
 {
     //int status;
     NSEnumerator *enumerator = [UserPresets objectEnumerator];
@@ -3712,7 +3712,7 @@ the user is using "Custom" settings by determining the sender*/
 
 }
 
-- (IBAction) ShowAddPresetPanel: (id) sender
+- (IBAction) showAddPresetPanel: (id) sender
 {
     /* Deselect the currently selected Preset if there is one*/
 		[tableView deselectRow:[tableView selectedRow]];
@@ -3736,27 +3736,27 @@ the user is using "Custom" settings by determining the sender*/
 	
 	
 }
-- (IBAction) CloseAddPresetPanel: (id) sender
+- (IBAction) closeAddPresetPanel: (id) sender
 {
 	[NSApp stopModal];
 }
 
 
-- (IBAction)AddUserPreset:(id)sender
+- (IBAction)addUserPreset:(id)sender
 {
 
     /* Here we create a custom user preset */
-	[UserPresets addObject:[self CreatePreset]];
+	[UserPresets addObject:[self createPreset]];
 	/* Erase info from the input fields */
 	[fPresetNewName setStringValue: @""];
 	[fPresetNewDesc setStringValue: @""];
 	/* We stop the modal window for the new preset */
 	[NSApp stopModal];
-    [self AddPreset];
+    [self addPreset];
 	
 
 }
-- (void)AddPreset
+- (void)addPreset
 {
 
 	
@@ -3777,15 +3777,15 @@ the user is using "Custom" settings by determining the sender*/
     [self savePreset];
 }
 
-- (IBAction)InsertPreset:(id)sender
+- (IBAction)insertPreset:(id)sender
 {
     int index = [tableView selectedRow];
-    [UserPresets insertObject:[self CreatePreset] atIndex:index];
+    [UserPresets insertObject:[self createPreset] atIndex:index];
     [tableView reloadData];
     [self savePreset];
 }
 
-- (NSDictionary *)CreatePreset
+- (NSDictionary *)createPreset
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
@@ -3859,7 +3859,7 @@ the user is using "Custom" settings by determining the sender*/
 
 }
 
-- (NSDictionary *)CreateIpodLowPreset
+- (NSDictionary *)createIpodLowPreset
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
@@ -3928,7 +3928,7 @@ the user is using "Custom" settings by determining the sender*/
 }
 
 
-- (NSDictionary *)CreateIpodHighPreset
+- (NSDictionary *)createIpodHighPreset
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
@@ -3996,7 +3996,7 @@ the user is using "Custom" settings by determining the sender*/
 
 }
 
-- (NSDictionary *)CreateAppleTVPreset
+- (NSDictionary *)createAppleTVPreset
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
@@ -4068,7 +4068,7 @@ the user is using "Custom" settings by determining the sender*/
 
 }
 
-- (NSDictionary *)CreatePSThreePreset
+- (NSDictionary *)createPSThreePreset
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
@@ -4136,7 +4136,7 @@ the user is using "Custom" settings by determining the sender*/
     return preset;
 
 }
-- (NSDictionary *)CreatePSPPreset
+- (NSDictionary *)createPSPPreset
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
@@ -4206,7 +4206,7 @@ the user is using "Custom" settings by determining the sender*/
 
 }
 
-- (NSDictionary *)CreateNormalPreset
+- (NSDictionary *)createNormalPreset
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
@@ -4275,7 +4275,7 @@ the user is using "Custom" settings by determining the sender*/
 
 }
 
-- (NSDictionary *)CreateClassicPreset
+- (NSDictionary *)createClassicPreset
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
@@ -4343,7 +4343,7 @@ the user is using "Custom" settings by determining the sender*/
 
 }
 
-- (NSDictionary *)CreateFilmPreset
+- (NSDictionary *)createFilmPreset
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
@@ -4412,7 +4412,7 @@ the user is using "Custom" settings by determining the sender*/
 
 }
 
-- (NSDictionary *)CreateTelevisionPreset
+- (NSDictionary *)createTelevisionPreset
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
@@ -4481,7 +4481,7 @@ the user is using "Custom" settings by determining the sender*/
 
 }
 
-- (NSDictionary *)CreateAnimationPreset
+- (NSDictionary *)createAnimationPreset
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
@@ -4550,7 +4550,7 @@ the user is using "Custom" settings by determining the sender*/
 
 }
 
-- (NSDictionary *)CreateQuickTimePreset
+- (NSDictionary *)createQuickTimePreset
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
@@ -4619,7 +4619,7 @@ the user is using "Custom" settings by determining the sender*/
 
 }
 
-- (NSDictionary *)CreateBedlamPreset
+- (NSDictionary *)createBedlamPreset
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
@@ -4688,7 +4688,7 @@ the user is using "Custom" settings by determining the sender*/
 
 }
 
-- (NSDictionary *)CreateiPhonePreset
+- (NSDictionary *)createiPhonePreset
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
@@ -4756,7 +4756,7 @@ the user is using "Custom" settings by determining the sender*/
 
 }
 
-- (NSDictionary *)CreateDeuxSixQuatrePreset
+- (NSDictionary *)createDeuxSixQuatrePreset
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
@@ -4825,7 +4825,7 @@ the user is using "Custom" settings by determining the sender*/
 
 }
 
-- (NSDictionary *)CreateBrokePreset
+- (NSDictionary *)createBrokePreset
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
@@ -4894,7 +4894,7 @@ the user is using "Custom" settings by determining the sender*/
 
 }
 
-- (NSDictionary *)CreateBlindPreset
+- (NSDictionary *)createBlindPreset
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
@@ -4963,7 +4963,7 @@ the user is using "Custom" settings by determining the sender*/
 
 }
 
-- (NSDictionary *)CreateCRFPreset
+- (NSDictionary *)createCRFPreset
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
@@ -5033,7 +5033,7 @@ the user is using "Custom" settings by determining the sender*/
 }
 
 
-- (IBAction)DeletePreset:(id)sender
+- (IBAction)deletePreset:(id)sender
 {
     int status;
     NSEnumerator *enumerator;
@@ -5064,7 +5064,7 @@ the user is using "Custom" settings by determining the sender*/
     }
 }
 
-- (IBAction)GetDefaultPresets:(id)sender
+- (IBAction)getDefaultPresets:(id)sender
 {
 	int i = 0;
     NSEnumerator *enumerator = [UserPresets objectEnumerator];
@@ -5084,7 +5084,7 @@ the user is using "Custom" settings by determining the sender*/
 	}
 }
 
-- (IBAction)SetDefaultPreset:(id)sender
+- (IBAction)setDefaultPreset:(id)sender
 {
     int i = 0;
     NSEnumerator *enumerator = [UserPresets objectEnumerator];
@@ -5113,7 +5113,7 @@ the user is using "Custom" settings by determining the sender*/
     [tableView reloadData];
 }
 
-- (IBAction)SelectDefaultPreset:(id)sender
+- (IBAction)selectDefaultPreset:(id)sender
 {
 	/* if there is a user specified default, we use it */
 	if (presetUserDefault)
@@ -5152,7 +5152,7 @@ the user is using "Custom" settings by determining the sender*/
 			}
 			/* File Format */
 			[fDstFormatPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileFormat"]]];
-			[self FormatPopUpChanged: NULL];
+			[self formatPopUpChanged: NULL];
 			
 			/* Chapter Markers*/
 			[fCreateChapterMarkers setState:[[chosenPreset objectForKey:@"ChapterMarkers"] intValue]];
@@ -5160,7 +5160,7 @@ the user is using "Custom" settings by determining the sender*/
 			[fDstMpgLargeFileCheck setState:[[chosenPreset objectForKey:@"Mp4LargeFile"] intValue]];
 			/* Codecs */
 			[fDstCodecsPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]]];
-			[self CodecsPopUpChanged: NULL];
+			[self codecsPopUpChanged: NULL];
 			/* Video encoder */
 			[fVidEncoderPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]]];
 			
@@ -5171,9 +5171,9 @@ the user is using "Custom" settings by determining the sender*/
 			[self X264AdvancedOptionsSet:NULL];
 			
 			/* Lets run through the following functions to get variables set there */
-			[self EncoderPopUpChanged: NULL];
+			[self encoderPopUpChanged: NULL];
 			
-			[self CalculateBitrate: NULL];
+			[self calculateBitrate: NULL];
 			
 			/* Video quality */
 			[fVidQualityMatrix selectCellAtRow:[[chosenPreset objectForKey:@"VideoQualityType"] intValue] column:0];
@@ -5182,7 +5182,7 @@ the user is using "Custom" settings by determining the sender*/
 			[fVidBitrateField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoAvgBitrate"]]];
 			
 			[fVidQualitySlider setFloatValue: [[chosenPreset valueForKey:@"VideoQualitySlider"] floatValue]];
-			[self VideoMatrixChanged: NULL];
+			[self videoMatrixChanged: NULL];
 			
 			/* Video framerate */
 			[fVidRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoFramerate"]]];
@@ -5192,7 +5192,7 @@ the user is using "Custom" settings by determining the sender*/
 			
 			/* 2 Pass Encoding */
 			[fVidTwoPassCheck setState:[[chosenPreset objectForKey:@"VideoTwoPass"] intValue]];
-			[self TwoPassCheckboxChanged: NULL];
+			[self twoPassCheckboxChanged: NULL];
 			/* Turbo 1st pass for 2 Pass Encoding */
 			[fVidTurboPassCheck setState:[[chosenPreset objectForKey:@"VideoTurboTwoPass"] intValue]];
 			
@@ -5214,7 +5214,7 @@ the user is using "Custom" settings by determining the sender*/
 				if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] == 2 || [[chosenPreset objectForKey:@"UsesMaxPictureSettings"]  intValue] == 1)
 				{
 					/* Use Max Picture settings for whatever the dvd is.*/
-					[self RevertPictureSizeToMax: NULL];
+					[self revertPictureSizeToMax: NULL];
 					job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
 					if (job->keep_ratio == 1)
 					{
@@ -5278,7 +5278,7 @@ the user is using "Custom" settings by determining the sender*/
 						
 					}
 				}
-				[self CalculatePictureSizing: NULL]; 
+				[self calculatePictureSizing: NULL]; 
 			}
 			
 			
@@ -5413,7 +5413,7 @@ id theRecord, theValue;
 {
     [UserPresets writeToFile:UserPresetsFile atomically:YES];
 	/* We get the default preset in case it changed */
-	[self GetDefaultPresets: NULL];
+	[self getDefaultPresets: NULL];
 
 }
 
@@ -5421,31 +5421,31 @@ id theRecord, theValue;
 
 - (void) controlTextDidBeginEditing: (NSNotification *) notification
 {
-    [self CalculateBitrate: NULL];
+    [self calculateBitrate: NULL];
 }
 
 - (void) controlTextDidEndEditing: (NSNotification *) notification
 {
-    [self CalculateBitrate: NULL];
+    [self calculateBitrate: NULL];
 }
 
 - (void) controlTextDidChange: (NSNotification *) notification
 {
-    [self CalculateBitrate: NULL];
+    [self calculateBitrate: NULL];
 }
 
-- (IBAction) OpenHomepage: (id) sender
+- (IBAction) openHomepage: (id) sender
 {
     [[NSWorkspace sharedWorkspace] openURL: [NSURL
         URLWithString:@"http://handbrake.m0k.org/"]];
 }
 
-- (IBAction) OpenForums: (id) sender
+- (IBAction) openForums: (id) sender
 {
     [[NSWorkspace sharedWorkspace] openURL: [NSURL
         URLWithString:@"http://handbrake.m0k.org/forum/"]];
 }
-- (IBAction) OpenUserGuide: (id) sender
+- (IBAction) openUserGuide: (id) sender
 {
     [[NSWorkspace sharedWorkspace] openURL: [NSURL
         URLWithString:@"http://handbrake.m0k.org/trac/wiki/HandBrakeGuide"]];

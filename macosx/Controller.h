@@ -245,52 +245,52 @@
 	
 	BOOL                         startButtonEnabled;
     BOOL                         pauseButtonEnabled;
-    BOOL                         AddToQueueButtonEnabled;
+    BOOL                         addToQueueButtonEnabled;
 	BOOL                         stopOrStart;
 	BOOL                         resumeOrPause;
 }
 
 - (void)     TranslateStrings;
 
-- (void)     UpdateUI: (NSTimer *) timer;
-- (void)     EnableUI: (bool) enable;
-- (IBAction) ShowNewScan: (id) sender;
-- (IBAction) ShowScanPanel: (id) sender;
+- (void)     updateUI: (NSTimer *) timer;
+- (void)     enableUI: (bool) enable;
+- (IBAction) showNewScan: (id) sender;
+- (IBAction) showScanPanel: (id) sender;
 
-- (IBAction) TitlePopUpChanged: (id) sender;
-- (IBAction) ChapterPopUpChanged: (id) sender;
+- (IBAction) titlePopUpChanged: (id) sender;
+- (IBAction) chapterPopUpChanged: (id) sender;
 
-- (IBAction) FormatPopUpChanged: (id) sender;
-- (IBAction) CodecsPopUpChanged: (id) sender;
-- (IBAction) EncoderPopUpChanged: (id) sender;
-- (IBAction) TwoPassCheckboxChanged: (id) sender;
-- (IBAction ) VideoFrameRateChanged: (id) sender;
-- (IBAction) SetEnabledStateOfAudioMixdownControls: (id) sender;
-- (IBAction) AddAllAudioTracksToPopUp: (id) sender;
-- (IBAction) SelectAudioTrackInPopUp: (id) sender searchPrefixString: (NSString *) searchPrefixString selectIndexIfNotFound: (int) selectIndexIfNotFound;
-- (IBAction) AudioTrackPopUpChanged: (id) sender;
-- (IBAction) AudioTrackPopUpChanged: (id) sender mixdownToUse: (int) mixdownToUse;
-- (IBAction) AudioTrackMixdownChanged: (id) sender;
-- (IBAction) SubtitleSelectionChanged: (id) sender;
+- (IBAction) formatPopUpChanged: (id) sender;
+- (IBAction) codecsPopUpChanged: (id) sender;
+- (IBAction) encoderPopUpChanged: (id) sender;
+- (IBAction) twoPassCheckboxChanged: (id) sender;
+- (IBAction) videoFrameRateChanged: (id) sender;
+- (IBAction) setEnabledStateOfAudioMixdownControls: (id) sender;
+- (IBAction) addAllAudioTracksToPopUp: (id) sender;
+- (IBAction) selectAudioTrackInPopUp: (id) sender searchPrefixString: (NSString *) searchPrefixString selectIndexIfNotFound: (int) selectIndexIfNotFound;
+- (IBAction) audioTrackPopUpChanged: (id) sender;
+- (IBAction) audioTrackPopUpChanged: (id) sender mixdownToUse: (int) mixdownToUse;
+- (IBAction) audioTrackMixdownChanged: (id) sender;
+- (IBAction) subtitleSelectionChanged: (id) sender;
 
-- (IBAction) BrowseFile: (id) sender;
-- (void)     BrowseFileDone: (NSSavePanel *) sheet
+- (IBAction) browseFile: (id) sender;
+- (void)     browseFileDone: (NSSavePanel *) sheet
     returnCode: (int) returnCode contextInfo: (void *) contextInfo;
 
-- (IBAction) VideoMatrixChanged: (id) sender;
-- (IBAction) QualitySliderChanged: (id) sender;
+- (IBAction) videoMatrixChanged: (id) sender;
+- (IBAction) qualitySliderChanged: (id) sender;
 
-- (IBAction) ShowPicturePanel: (id) sender;
-- (IBAction) CalculatePictureSizing: (id) sender;
-- (IBAction) OpenMainWindow: (id) sender;
+- (IBAction) showPicturePanel: (id) sender;
+- (IBAction) calculatePictureSizing: (id) sender;
+- (IBAction) openMainWindow: (id) sender;
 
-- (IBAction) AddToQueue: (id) sender;
-- (IBAction) ShowQueuePanel: (id) sender;
+- (IBAction) addToQueue: (id) sender;
+- (IBAction) showQueuePanel: (id) sender;
 
 - (IBAction) Rip: (id) sender;
-- (void)     OverwriteAlertDone: (NSWindow *) sheet
+- (void)     overWriteAlertDone: (NSWindow *) sheet
     returnCode: (int) returnCode contextInfo: (void *) contextInfo;
-- (void)     UpdateAlertDone: (NSWindow *) sheet
+- (void)     updateAlertDone: (NSWindow *) sheet
     returnCode: (int) returnCode contextInfo: (void *) contextInfo;
 - (void)     _Rip;
 - (IBAction) Cancel: (id) sender;
@@ -298,14 +298,14 @@
     contextInfo: (void *) contextInfo;
 - (IBAction) Pause: (id) sender;
 
-- (IBAction) CalculateBitrate: (id) sender;
+- (IBAction) calculateBitrate: (id) sender;
 - (void) controlTextDidBeginEditing: (NSNotification *) notification;
 - (void) controlTextDidEndEditing: (NSNotification *) notification;
 - (void) controlTextDidChange: (NSNotification *) notification;
 
-- (IBAction) OpenHomepage: (id) sender;
-- (IBAction) OpenForums:   (id) sender;
-- (IBAction) OpenUserGuide:   (id) sender;
+- (IBAction) openHomepage: (id) sender;
+- (IBAction) openForums:   (id) sender;
+- (IBAction) openUserGuide:   (id) sender;
 
 // x264 Advanced Panel Methods
 - (IBAction) X264AdvancedOptionsSet: (id) sender;
@@ -316,41 +316,42 @@
 
 // Preset Methods Here
 - (void) loadPresets;
-- (IBAction) CustomSettingUsed: (id) sender;
-- (IBAction) ShowAddPresetPanel: (id) sender;
-- (IBAction) CloseAddPresetPanel: (id) sender;
-- (NSDictionary *)CreatePreset;
-- (NSDictionary *)CreateIpodLowPreset;
-- (NSDictionary *)CreateIpodHighPreset;
-- (NSDictionary *)CreateAppleTVPreset;
-- (NSDictionary *)CreatePSThreePreset;  
-- (NSDictionary *)CreatePSPPreset;
-- (NSDictionary *)CreateNormalPreset;
-- (NSDictionary *)CreateClassicPreset;
-- (NSDictionary *)CreateQuickTimePreset;
-- (NSDictionary *)CreateFilmPreset;
-- (NSDictionary *)CreateTelevisionPreset;
-- (NSDictionary *)CreateAnimationPreset;
-- (NSDictionary *)CreateBedlamPreset;
-- (NSDictionary *)CreateiPhonePreset;
-- (NSDictionary *)CreateDeuxSixQuatrePreset;
-- (NSDictionary *)CreateBrokePreset;
-- (NSDictionary *)CreateBlindPreset;
-- (NSDictionary *)CreateCRFPreset;
+- (IBAction) customSettingUsed: (id) sender;
+- (IBAction) showAddPresetPanel: (id) sender;
+- (IBAction) closeAddPresetPanel: (id) sender;
+- (NSDictionary *)createPreset;
+- (NSDictionary *)createIpodLowPreset;
+- (NSDictionary *)createIpodHighPreset;
+- (NSDictionary *)createAppleTVPreset;
+- (NSDictionary *)createPSThreePreset;  
+- (NSDictionary *)createPSPPreset;
+- (NSDictionary *)createNormalPreset;
+- (NSDictionary *)createClassicPreset;
+- (NSDictionary *)createQuickTimePreset;
+- (NSDictionary *)createFilmPreset;
+- (NSDictionary *)createTelevisionPreset;
+- (NSDictionary *)createAnimationPreset;
+- (NSDictionary *)createBedlamPreset;
+- (NSDictionary *)createiPhonePreset;
+- (NSDictionary *)createDeuxSixQuatrePreset;
+- (NSDictionary *)createBrokePreset;
+- (NSDictionary *)createBlindPreset;
+- (NSDictionary *)createCRFPreset;
 
-- (IBAction) RevertPictureSizeToMax:(id)sender;
+- (IBAction) revertPictureSizeToMax:(id)sender;
 
-- (IBAction)SetDefaultPreset:(id)sender;
-- (IBAction)SelectDefaultPreset:(id)sender;
+- (IBAction)setDefaultPreset:(id)sender;
+- (IBAction)selectDefaultPreset:(id)sender;
 - (void) savePreset;
-- (IBAction)AddFactoryPresets:(id)sender;
-- (IBAction)DeleteFactoryPresets:(id)sender;
-- (IBAction)AddUserPreset:(id)sender;
-- (void)AddPreset;
-- (IBAction)InsertPreset:(id)sender;
-- (IBAction)DeletePreset:(id)sender;
-- (IBAction)GetDefaultPresets:(id)sender;
+- (IBAction)addFactoryPresets:(id)sender;
+- (IBAction)deleteFactoryPresets:(id)sender;
+- (IBAction)addUserPreset:(id)sender;
+- (void)addPreset;
+- (IBAction)insertPreset:(id)sender;
+- (IBAction)deletePreset:(id)sender;
+- (IBAction)getDefaultPresets:(id)sender;
 - (IBAction)tableViewSelected:(id)sender;
+
 // NSTableDataSource methods
 - (int)numberOfRowsInTableView:(NSTableView *)aTableView;
 - (id)tableView:(NSTableView *)aTableView
