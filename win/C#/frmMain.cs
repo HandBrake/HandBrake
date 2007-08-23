@@ -862,6 +862,7 @@ namespace Handbrake
             //H264 Tab
             Properties.Settings.Default.CRF = CheckCRF.CheckState.ToString();
             Properties.Settings.Default.H264 = rtf_h264advanced.Text;
+
             Properties.Settings.Default.Save();
         }
 

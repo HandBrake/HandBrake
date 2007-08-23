@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
+using System.Text.RegularExpressions; 
 using System.Windows.Forms;
 using System.IO;
 using System.Threading;
@@ -50,7 +51,7 @@ namespace Handbrake.Parsing
                 }
                 else
                 {
-                    string test = output.ReadLine();
+                    output.ReadLine();
                 }
             }
             return thisDVD;
