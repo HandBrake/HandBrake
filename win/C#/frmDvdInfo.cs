@@ -19,7 +19,32 @@ namespace Handbrake
         {
             InitializeComponent();
             this.rtf_dvdInfo.Text = string.Empty;
+            
+        }
 
+        /*public void HandleParsedData(object Sender, string Data)
+        {
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new Parsing.DataReadEventHandler(HandleParsedData), new object[] { Sender, Data });
+                return;
+            }
+            this.rtf_dvdInfo.AppendText(Data + System.Environment.NewLine);
+        }*/
+
+        private void btn_close_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+        }
+
+        private void frmDvdInfo_Load(object sender, EventArgs e)
+        {
+            this.rtf_dvdInfo.Text = string.Empty;
+            readFile();
+        }
+
+        private void readFile()
+        {
             try
             {
                 string appPath = Application.StartupPath.ToString();
@@ -36,24 +61,9 @@ namespace Handbrake
                 sr.Close();
             }
             catch (Exception)
-            { 
-               // Don't do anything
-            }
-        }
-
-        /*public void HandleParsedData(object Sender, string Data)
-        {
-            if (this.InvokeRequired)
             {
-                this.BeginInvoke(new Parsing.DataReadEventHandler(HandleParsedData), new object[] { Sender, Data });
-                return;
+                // Don't do anything
             }
-            this.rtf_dvdInfo.AppendText(Data + System.Environment.NewLine);
-        }*/
-
-        private void btn_close_Click(object sender, EventArgs e)
-        {
-            this.Hide();
         }
 
         /*protected override void OnClosing(CancelEventArgs e)

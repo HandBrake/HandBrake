@@ -85,9 +85,8 @@ namespace Handbrake
              */
             try
             {
-                string appPath = Application.StartupPath.ToString();
-                appPath = appPath + "\\";
-                string strCmdLine = "cmd /c " + '"' + '"' + appPath + "\\hbcli.exe" + '"' +  " -i" + '"' + inputFile + '"' + " -t0 >" + '"'+ appPath + "\\dvdinfo.dat" + '"' + " 2>&1" + '"';
+                string appPath = Application.StartupPath.ToString()+ "\\";
+                string strCmdLine = "cmd /c " + '"' + '"' + appPath + "hbcli.exe" + '"' +  " -i " + '"' + inputFile + '"' + " -t0 >" + '"'+ appPath + "dvdinfo.dat" + '"' + " 2>&1" + '"';
                 Process hbproc = Process.Start("CMD.exe", strCmdLine);
                 hbproc.WaitForExit();
                 hbproc.Dispose();
@@ -96,7 +95,6 @@ namespace Handbrake
           
                 StreamReader sr = new StreamReader(appPath + "dvdinfo.dat");
                 thisDvd = Parsing.DVD.Parse(sr);
-
                 sr.Close();
 
                 Console.ReadLine();

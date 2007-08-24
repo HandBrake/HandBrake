@@ -30,7 +30,7 @@ namespace Handbrake
         // - Load users default settings. (if required)
         // - Do an update check (if required)
         // --------------------------------------------------------------
-        private frmDvdInfo dvdInfoWindow = new frmDvdInfo();
+        //private frmDvdInfo dvdInfoWindow = new frmDvdInfo();
         
         public frmMain()
         {
@@ -41,8 +41,8 @@ namespace Handbrake
             InitializeComponent();
 
             // This is a quick Hack fix for the cross-thread problem with frmDvdIndo ************************
-            dvdInfoWindow.Show();
-            dvdInfoWindow.Hide();
+            //dvdInfoWindow.Show();
+            //dvdInfoWindow.Hide();
             // **********************************************************************************************
 
 
@@ -383,8 +383,8 @@ namespace Handbrake
         {
             try
             {
+                frmDvdInfo dvdInfoWindow = new frmDvdInfo();
                 dvdInfoWindow.Show();
-                
             }
             catch (Exception)
             {
@@ -911,8 +911,8 @@ namespace Handbrake
         private void btn_Browse_Click(object sender, EventArgs e)
         {
             String filename =""; 
-	 	    text_source.Text = ""; 
-	 	              	 
+	 	    text_source.Text = "";
+            frmDvdInfo dvdInfoWindow = new frmDvdInfo();          	 
 	 	    if (RadioDVD.Checked) 
 	 	    { 
 	 	        DVD_Open.ShowDialog(); 
@@ -1229,7 +1229,7 @@ namespace Handbrake
                     }
                 }
             }
-            catch (Exception exc)
+            catch (Exception)
             {
                 // No need to throw an error here.
                 // Note on non english systems, this will throw an error because of double.Parse(lbl_Aspect.Text); not working.
