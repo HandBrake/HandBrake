@@ -25,7 +25,7 @@
 #define BTB_PROG 64
 #define TB_PROG 128
 #define TBT_PROG 256
-int cadence[6];
+int cadence[12];
 int flag = 0;
 
 /**********************************************************************
@@ -213,11 +213,11 @@ int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 hb_log("fields: %d", m->info->display_picture->nb_fields);
 */             
                 /*  Rotate the cadence tracking. */
-                cadence[5] = cadence[4];
-                cadence[4] = cadence[3];
-                cadence[3] = cadence[2];
-                cadence[2] = cadence[1];
-                cadence[1] = cadence[0];
+                int i = 0;
+                for(i=11; i > 0; i--)
+                {
+                    cadence[i] = cadence[i-1];
+                }
                
                 if ( !(flag & PROGRESSIVE) && !(flag & TOP_FIRST) )
                 {
@@ -273,10 +273,10 @@ int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                     cadence[0] = TBT_PROG;
                 }
                                                
-                if ( (cadence[2] <= TB) && (cadence[1] <= TB) && (cadence[0] > TB) && (cadence[0]) && (cadence[1]) )
-                    hb_log("PTS %lld: Interlaced -> Progressive", buf->start);
-                if ( (cadence[2] > TB) && (cadence[1] <= TB) && (cadence[0] <= TB) && (cadence[0]) && (cadence[1]) )
-                    hb_log("PTS %lld: Progressive -> Interlaced", buf->start);
+                if ( (cadence[2] <= TB) && (cadence[1] <= TB) && (cadence[0] > TB) && (cadence[11]) )
+                    hb_log("%fs: Interlaced -> Progressive", (float)buf->start / 90000);
+                if ( (cadence[2] > TB) && (cadence[1] <= TB) && (cadence[0] <= TB) && (cadence[11]) )
+                    hb_log("%fs: Progressive -> Interlaced", (float)buf->start / 90000);
 
                 /* Store picture flags for later use by filters */
                 buf->flags = m->info->display_picture->flags;
