@@ -283,6 +283,8 @@
         }
         job->audios[1] = -1;
 
+        job->audio_mixdowns[0] = HB_AMIXDOWN_DOLBYPLII;
+        
         /* Subtitle selection */
         hb_subtitle_t * subtitle;
         lang = [[fConvertSubtitlePopUp titleOfSelectedItem] UTF8String];
