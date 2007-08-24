@@ -852,7 +852,17 @@ void hb_get_state( hb_handle_t * h, hb_state_t * s )
     hb_lock( h->state_lock );
 
     memcpy( s, &h->state, sizeof( hb_state_t ) );
-    h->state.state = HB_STATE_IDLE;
+    if ( h->state.state == HB_STATE_SCANDONE || h->state.state == HB_STATE_WORKDONE )
+        h->state.state = HB_STATE_IDLE;
+
+    hb_unlock( h->state_lock );
+}
+
+void hb_get_state2( hb_handle_t * h, hb_state_t * s )
+{
+    hb_lock( h->state_lock );
+
+    memcpy( s, &h->state, sizeof( hb_state_t ) );
 
     hb_unlock( h->state_lock );
 }

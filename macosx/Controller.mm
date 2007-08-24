@@ -111,7 +111,9 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 - (NSApplicationTerminateReply) applicationShouldTerminate:
     (NSApplication *) app
 {
-    if( [[fRipButton title] isEqualToString: _( @"Cancel" )] )
+     hb_state_t s;
+    hb_get_state2( fHandle, &s );
+    if ( s.state ==  HB_STATE_WORKING)    
     {
         [self Cancel: NULL];
         return NSTerminateCancel;
@@ -1157,7 +1159,7 @@ list = hb_get_titles( fHandle );
 
 	/* See if we are currently running */
 	hb_state_t s;
-	hb_get_state( fHandle, &s );
+    hb_get_state2( fHandle, &s );
 	if ( s.state ==  HB_STATE_WORKING)
 	{
 	   /* If we are running, leave in memory when closing main window */
@@ -1167,9 +1169,13 @@ list = hb_get_titles( fHandle );
 	}
 	else
 	{
-		/* Stop the application when the user closes the window */
-		[NSApp terminate: self];
-		return YES;
+		/* If we are running, leave in memory when closing main window */
+	   [fWindow setReleasedWhenClosed: NO];
+	   return YES;
+        
+        /* Stop the application when the user closes the window */
+		//[NSApp terminate: self];
+		//return YES;
 	}
 	
 }
