@@ -83,8 +83,11 @@ int hb_stream_is_stream_type( char * path )
 {
   if ((strstr(path,".mpg") != NULL) ||
       (strstr(path,".vob") != NULL) || 
+      (strstr(path, ".VOB") != NULL) ||
+      (strstr(path, ".mpeg") != NULL) ||
       (strstr(path,".ts") != NULL) || 
-      (strstr(path, ".m2t") != NULL))
+      (strstr(path, ".m2t") != NULL) ||
+      (strstr(path, ".TS") != NULL))
   {
     return 1;
   }
@@ -112,12 +115,12 @@ hb_stream_t * hb_stream_open( char * path )
 
     d->path = strdup( path );
 
-	if ( ( strstr(d->path,".ts") != NULL) || ( strstr(d->path,".m2t") != NULL))
+	if ( ( strstr(d->path,".ts") != NULL) || ( strstr(d->path,".m2t") != NULL) || ( strstr(d->path,".TS") != NULL) )
 	{
 		d->stream_type = hb_stream_type_transport;
 		hb_ts_stream_init(d);
 	}
-	else if (( strstr(d->path,".mpg") != NULL) || ( strstr(d->path,".vob") != NULL))
+	else if (( strstr(d->path,".mpg") != NULL) || ( strstr(d->path,".vob") != NULL) || ( strstr(d->path,".mpeg") != NULL) || ( strstr(d->path,".VOB") != NULL))
 	{
 		d->stream_type = hb_stream_type_program;
 	}
