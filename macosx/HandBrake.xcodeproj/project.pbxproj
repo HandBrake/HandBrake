@@ -109,6 +109,7 @@
 		593034EC0BBA39A100172349 /* ChapterTitles.m in Sources */ = {isa = PBXBuildFile; fileRef = 593034EA0BBA39A100172349 /* ChapterTitles.m */; };
 		59CBD2370BBB44DA004A3BE3 /* parsecsv.c in Sources */ = {isa = PBXBuildFile; fileRef = 59CBD2360BBB44DA004A3BE3 /* parsecsv.c */; };
 		59CBD2650BBB4D1B004A3BE3 /* ChapterTitles.m in Sources */ = {isa = PBXBuildFile; fileRef = 593034EA0BBA39A100172349 /* ChapterTitles.m */; };
+		A2122D820C7EAF6600AB87A4 /* DriveDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = A2122D810C7EAF6600AB87A4 /* DriveDetector.m */; };
 		A273E04E0C57B39A00493A45 /* Add.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E0470C57B39A00493A45 /* Add.tiff */; };
 		A273E04F0C57B39A00493A45 /* Brushed Window.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E0480C57B39A00493A45 /* Brushed Window.tiff */; };
 		A273E0500C57B39A00493A45 /* Drawer-List2.png in Resources */ = {isa = PBXBuildFile; fileRef = A273E0490C57B39A00493A45 /* Drawer-List2.png */; };
@@ -251,6 +252,8 @@
 		593034E90BBA39A100172349 /* ChapterTitles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChapterTitles.h; sourceTree = "<group>"; };
 		593034EA0BBA39A100172349 /* ChapterTitles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChapterTitles.m; sourceTree = "<group>"; };
 		59CBD2360BBB44DA004A3BE3 /* parsecsv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = parsecsv.c; path = ../test/parsecsv.c; sourceTree = SOURCE_ROOT; };
+		A2122D800C7EAF6500AB87A4 /* DriveDetector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DriveDetector.h; sourceTree = "<group>"; };
+		A2122D810C7EAF6600AB87A4 /* DriveDetector.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DriveDetector.m; sourceTree = "<group>"; };
 		A273E0470C57B39A00493A45 /* Add.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Add.tiff; sourceTree = "<group>"; };
 		A273E0480C57B39A00493A45 /* Brushed Window.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "Brushed Window.tiff"; sourceTree = "<group>"; };
 		A273E0490C57B39A00493A45 /* Drawer-List2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Drawer-List2.png"; sourceTree = "<group>"; };
@@ -472,6 +475,8 @@
 		526FBC940B4CAA310064E04C /* Instant HandBrake Sources */ = {
 			isa = PBXGroup;
 			children = (
+				A2122D800C7EAF6500AB87A4 /* DriveDetector.h */,
+				A2122D810C7EAF6600AB87A4 /* DriveDetector.m */,
 				4D1EA31A0993B24700FDC1A2 /* ExpressController.h */,
 				4D1EA31B0993B24700FDC1A2 /* ExpressController.m */,
 				4D1EA2DC0993B01000FDC1A2 /* Express.plist */,
@@ -782,6 +787,7 @@
 				4D1EA2EA0993B09A00FDC1A2 /* main.mm in Sources */,
 				4D1EA31C0993B24700FDC1A2 /* ExpressController.m in Sources */,
 				4D3ECC2709A4917000B2E45F /* WhiteBox.m in Sources */,
+				A2122D820C7EAF6600AB87A4 /* DriveDetector.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
