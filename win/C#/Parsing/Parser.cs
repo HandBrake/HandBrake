@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace Handbrake.Parsing
 {
@@ -79,30 +80,38 @@ namespace Handbrake.Parsing
         public override string ReadLine()
         {
             string tmp = base.ReadLine();
-            this.m_buffer += tmp;
-            Match m = Regex.Match(tmp, "^Scanning title ([0-9]*) of ([0-9]*)");
-            if (OnReadLine != null)
+            try
             {
-                OnReadLine(this, tmp);
-            }
-            if (m.Success && OnScanProgress != null)
-            {
-                OnScanProgress(this, int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
-            }
-            m = Regex.Match(tmp, @"^Encoding: task ([0-9]*) of ([0-9]*), ([0-9]*\.[0-9]*) %( \(([0-9]*\.[0-9]*) fps, avg ([0-9]*\.[0-9]*) fps, ETA ([0-9]{2})h([0-9]{2})m([0-9]{2})s\))?");
-            if (m.Success && OnEncodeProgress != null)
-            {
-                int currentTask = int.Parse(m.Groups[1].Value);
-                int totalTasks = int.Parse(m.Groups[2].Value);
-                float percent = float.Parse(m.Groups[3].Value);
-                float currentFps = m.Groups[5].Value == string.Empty ? 0.0F : float.Parse(m.Groups[5].Value);
-                float avgFps = m.Groups[6].Value == string.Empty ? 0.0F : float.Parse(m.Groups[6].Value);
-                TimeSpan remaining = TimeSpan.Zero;
-                if (m.Groups[7].Value != string.Empty)
+                
+                this.m_buffer += tmp;
+                Match m = Regex.Match(tmp, "^Scanning title ([0-9]*) of ([0-9]*)");
+                if (OnReadLine != null)
                 {
-                    remaining = TimeSpan.Parse(m.Groups[7].Value + ":" + m.Groups[8].Value + ":" + m.Groups[9].Value);
+                    OnReadLine(this, tmp);
                 }
-                OnEncodeProgress(this, currentTask, totalTasks, percent, currentFps, avgFps, remaining);
+                if (m.Success && OnScanProgress != null)
+                {
+                    OnScanProgress(this, int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
+                }
+                m = Regex.Match(tmp, @"^Encoding: task ([0-9]*) of ([0-9]*), ([0-9]*\.[0-9]*) %( \(([0-9]*\.[0-9]*) fps, avg ([0-9]*\.[0-9]*) fps, ETA ([0-9]{2})h([0-9]{2})m([0-9]{2})s\))?");
+                if (m.Success && OnEncodeProgress != null)
+                {
+                    int currentTask = int.Parse(m.Groups[1].Value);
+                    int totalTasks = int.Parse(m.Groups[2].Value);
+                    float percent = float.Parse(m.Groups[3].Value);
+                    float currentFps = m.Groups[5].Value == string.Empty ? 0.0F : float.Parse(m.Groups[5].Value);
+                    float avgFps = m.Groups[6].Value == string.Empty ? 0.0F : float.Parse(m.Groups[6].Value);
+                    TimeSpan remaining = TimeSpan.Zero;
+                    if (m.Groups[7].Value != string.Empty)
+                    {
+                        remaining = TimeSpan.Parse(m.Groups[7].Value + ":" + m.Groups[8].Value + ":" + m.Groups[9].Value);
+                    }
+                    OnEncodeProgress(this, currentTask, totalTasks, percent, currentFps, avgFps, remaining);
+                }
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("Parser.cs - ReadLine " + exc.ToString());
             }
             return tmp;
         }
@@ -110,10 +119,18 @@ namespace Handbrake.Parsing
         public override string ReadToEnd()
         {
             string tmp = base.ReadToEnd();
-            this.m_buffer += tmp;
-            if (OnReadToEnd != null)
+            try
             {
-                OnReadToEnd(this, tmp);
+                
+                this.m_buffer += tmp;
+                if (OnReadToEnd != null)
+                {
+                    OnReadToEnd(this, tmp);
+                }
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("Parser.cs - ReadToEnd " + exc.ToString());
             }
             return tmp;
         }

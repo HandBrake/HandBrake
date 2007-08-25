@@ -11,15 +11,20 @@
     <AssemblyName>Handbrake</AssemblyName>
     <ApplicationIcon>handbrakepineapple.ico</ApplicationIcon>
     <StartupObject>Handbrake.Program</StartupObject>
+    <TargetZone>LocalIntranet</TargetZone>
+    <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>default</LangVersion>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <NoStdLib>false</NoStdLib>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -170,6 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="handbrakepineapple.ico" />
+    <BaseApplicationManifest Include="Properties\app.manifest" />
     <None Include="Resources\Remove.png" />
     <None Include="Resources\Movies.png" />
     <None Include="Resources\info.png" />

@@ -46,7 +46,7 @@ namespace Handbrake
             }
             catch(Exception exc)
             {
-                MessageBox.Show(exc.ToString());
+                MessageBox.Show("frmReadDVD.cs - btn_ok_Click " + exc.ToString());
             }
         }
      
@@ -69,7 +69,7 @@ namespace Handbrake
             }
             catch(Exception exc)
             {
-                MessageBox.Show(exc.ToString());
+                MessageBox.Show("frmReadDVD.cs - updateUIElements " + exc.ToString());
             }
         }
 
@@ -103,7 +103,7 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.ToString());
+                MessageBox.Show("frmReadDVD.cs - startProc " + exc.ToString());
             }
 
         }

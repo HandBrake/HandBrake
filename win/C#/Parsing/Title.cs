@@ -137,11 +137,9 @@ namespace Handbrake.Parsing
         public static Title Parse(StringReader output)
         {
             Title thisTitle = new Title();
-
-            // Match track number for this title
             try
             {
-
+                // Match track number for this title
                 Match m = Regex.Match(output.ReadLine(), @"^\+ title ([0-9]*):");
                 if (m.Success)
                 {
@@ -150,20 +148,21 @@ namespace Handbrake.Parsing
                 output.ReadLine();
 
                 // Get duration for this title
+
                 m = Regex.Match(output.ReadLine(), @"^  \+ duration: ([0-9]{2}:[0-9]{2}:[0-9]{2})");
                 if (m.Success)
                 {
                     thisTitle.m_duration = TimeSpan.Parse(m.Groups[1].Value);
                 }
 
+
                 // Get resolution, aspect ratio and FPS for this title
                 m = Regex.Match(output.ReadLine(), @"^  \+ size: ([0-9]*)x([0-9]*), aspect: ([0-9]*\.[0-9]*), ([0-9]*\.[0-9]*) fps");
                 if (m.Success)
                 {
                     thisTitle.m_resolution = new Size(int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
-                    thisTitle.m_aspectRatio = m.Groups[3].ToString(); // Converted to a String for French Lanuage based systems. Some weird exception thrown
-                                                                      // when trying to parse it as a float
-                    // we don't need FPS right now
+                    thisTitle.m_aspectRatio = m.Groups[3].ToString(); // Converted to a String from float. Caused issue on french systems
+                                                                      // French system floats are 1,78 not 1.78 and the CLI always outputs a . 
                 }
 
                 // Get autocrop region for this title
@@ -179,18 +178,27 @@ namespace Handbrake.Parsing
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.ToString());
+                MessageBox.Show("Title.cs - Parse " + exc.ToString());
             }
+     
+        
             return thisTitle;
         }
 
         public static Title[] ParseList(string output)
         {
             List<Title> titles = new List<Title>();
-            StringReader sr = new StringReader(output);
-            while ((char)sr.Peek() == '+')
+            try
             {
-                titles.Add(Title.Parse(sr));
+                StringReader sr = new StringReader(output);
+                while ((char)sr.Peek() == '+')
+                {
+                    titles.Add(Title.Parse(sr));
+                }
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("Title.cs - ParseList " + exc.ToString());
             }
             return titles.ToArray();
         }

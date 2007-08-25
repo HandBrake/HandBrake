@@ -752,7 +752,7 @@ namespace Handbrake
             CheckPixelRatio.CheckState = CheckState.Unchecked;
             text_width.Text = "368";
             text_height.Text = "208";
-            drp_videoEncoder.Text = "H.264";
+            drp_videoEncoder.Text = "Mpeg 4";
             text_bitrate.Text = "1024";
             text_filesize.Text = "";
             slider_videoQuality.Value = 0;

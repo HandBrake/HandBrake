@@ -42,17 +42,23 @@ namespace Handbrake.Parsing
         public static DVD Parse(StreamReader output)
         {
             DVD thisDVD = new DVD();
-            while (!output.EndOfStream)
+            try
             {
-                if ((char)output.Peek() == '+')
+                while (!output.EndOfStream)
                 {
-                    string testb = output.ReadToEnd();
-                    thisDVD.m_titles.AddRange(Title.ParseList(testb));
+                    if ((char)output.Peek() == '+')
+                    {
+                        thisDVD.m_titles.AddRange(Title.ParseList(output.ReadToEnd()));
+                    }
+                    else
+                    {
+                        output.ReadLine();
+                    }
                 }
-                else
-                {
-                    output.ReadLine();
-                }
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("DVD.CS - Parse" + exc.ToString());
             }
             return thisDVD;
         }
