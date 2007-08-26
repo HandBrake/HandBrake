@@ -25,7 +25,7 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2.40")]
+        [global::System.Configuration.DefaultSettingValueAttribute("2.41")]
         public string GuiVersion {
             get {
                 return ((string)(this["GuiVersion"]));
@@ -528,7 +528,7 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.9.0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.9.1")]
         public string CliVersion {
             get {
                 return ((string)(this["CliVersion"]));

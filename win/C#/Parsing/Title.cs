@@ -130,8 +130,8 @@ namespace Handbrake.Parsing
         /// <returns>A string representing this track in the format: {title #} (00:00:00)</returns>
         public override string ToString()
         {
-            return string.Format("{0} ({1:00}:{2:00}:{3:00})", this.m_titleNumber, this.m_duration.Hours,
-                this.m_duration.Minutes, this.m_duration.Seconds);
+                   return string.Format("{0} ({1:00}:{2:00}:{3:00})", this.m_titleNumber, this.m_duration.Hours,
+                    this.m_duration.Minutes, this.m_duration.Seconds);
         }
 
         public static Title Parse(StringReader output)
@@ -139,42 +139,77 @@ namespace Handbrake.Parsing
             Title thisTitle = new Title();
             try
             {
-                // Match track number for this title
                 Match m = Regex.Match(output.ReadLine(), @"^\+ title ([0-9]*):");
-                if (m.Success)
+                try
                 {
-                    thisTitle.m_titleNumber = int.Parse(m.Groups[1].Value);
+                    // Match track number for this title
+                    if (m.Success)
+                    {
+                        thisTitle.m_titleNumber = int.Parse(m.Groups[1].Value);
+                    }
+                    output.ReadLine();
                 }
-                output.ReadLine();
+                catch (Exception exc)
+                {
+                    MessageBox.Show("Title.cs - Track Number " + exc.ToString());
+                }
+  
 
                 // Get duration for this title
-
-                m = Regex.Match(output.ReadLine(), @"^  \+ duration: ([0-9]{2}:[0-9]{2}:[0-9]{2})");
-                if (m.Success)
+                try
                 {
-                    thisTitle.m_duration = TimeSpan.Parse(m.Groups[1].Value);
+                    m = Regex.Match(output.ReadLine(), @"^  \+ duration: ([0-9]{2}:[0-9]{2}:[0-9]{2})");
+                    if (m.Success)
+                    {
+                        thisTitle.m_duration = TimeSpan.Parse(m.Groups[1].Value);
+                    }
+                }
+                catch (Exception exc)
+                {
+                    MessageBox.Show("Title.cs - Duration " + exc.ToString());
+                }
+
+                try
+                {
+                    // Get resolution, aspect ratio and FPS for this title
+                    m = Regex.Match(output.ReadLine(), @"^  \+ size: ([0-9]*)x([0-9]*), aspect: ([0-9]*\.[0-9]*), ([0-9]*\.[0-9]*) fps");
+                    if (m.Success)
+                    {
+                        thisTitle.m_resolution = new Size(int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
+                        thisTitle.m_aspectRatio = m.Groups[3].ToString(); // Converted to a String from float. Caused issue on french systems
+                        // French system floats are 1,78 not 1.78 and the CLI always outputs a . 
+                    }
+                }
+                catch (Exception exc)
+                {
+                    MessageBox.Show("Title.cs - Resolution and Aspect " + exc.ToString());
+                }
+
+                try
+                {
+                    // Get autocrop region for this title
+                    m = Regex.Match(output.ReadLine(), @"^  \+ autocrop: ([0-9]*)/([0-9]*)/([0-9]*)/([0-9]*)");
+                    if (m.Success)
+                    {
+                        thisTitle.m_autoCrop = new int[4] { int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value), int.Parse(m.Groups[3].Value), int.Parse(m.Groups[4].Value) };
+                    }
+                }
+                catch (Exception exc)
+                {
+                    MessageBox.Show("Title.cs - Auto Crop " + exc.ToString());
                 }
 
 
-                // Get resolution, aspect ratio and FPS for this title
-                m = Regex.Match(output.ReadLine(), @"^  \+ size: ([0-9]*)x([0-9]*), aspect: ([0-9]*\.[0-9]*), ([0-9]*\.[0-9]*) fps");
-                if (m.Success)
+                try
                 {
-                    thisTitle.m_resolution = new Size(int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
-                    thisTitle.m_aspectRatio = m.Groups[3].ToString(); // Converted to a String from float. Caused issue on french systems
-                                                                      // French system floats are 1,78 not 1.78 and the CLI always outputs a . 
+                    thisTitle.m_chapters.AddRange(Chapter.ParseList(output));
+                    thisTitle.m_audioTracks.AddRange(AudioTrack.ParseList(output));
+                    thisTitle.m_subtitles.AddRange(Subtitle.ParseList(output));
                 }
-
-                // Get autocrop region for this title
-                m = Regex.Match(output.ReadLine(), @"^  \+ autocrop: ([0-9]*)/([0-9]*)/([0-9]*)/([0-9]*)");
-                if (m.Success)
+                catch (Exception exc)
                 {
-                    thisTitle.m_autoCrop = new int[4] { int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value), int.Parse(m.Groups[3].Value), int.Parse(m.Groups[4].Value) };
+                    MessageBox.Show("Title.cs - Chapters / Audio / Subtitles " + exc.ToString());
                 }
-
-                thisTitle.m_chapters.AddRange(Chapter.ParseList(output));
-                thisTitle.m_audioTracks.AddRange(AudioTrack.ParseList(output));
-                thisTitle.m_subtitles.AddRange(Subtitle.ParseList(output));
             }
             catch (Exception exc)
             {
