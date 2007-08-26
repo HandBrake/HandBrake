@@ -438,6 +438,7 @@ namespace Handbrake
             this.drp_deNoise.Items.AddRange(new object[] {
             "None",
             "Weak",
+            "Medium",
             "Strong"});
             this.drp_deNoise.Location = new System.Drawing.Point(462, 211);
             this.drp_deNoise.Name = "drp_deNoise";

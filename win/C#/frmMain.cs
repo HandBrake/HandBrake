@@ -1680,19 +1680,19 @@ namespace Handbrake
                     deinterlace = "";
                     break;
                 case "Origional (Fast)":
-                    deinterlace = " --deinterlace";
+                    deinterlace = " --deinterlace=1";
                     break;
                 case "yadif (Slow)":
-                    deinterlace = " --deinterlace=" + '"' + "1" + '"';
+                    deinterlace = " --deinterlace=" + '"' + "0" + '"';
                     break;
                 case "yadif + mcdeint (Slower)":
-                    deinterlace = " --deinterlace=" + '"' + "1:-1:1" + '"';
+                    deinterlace = " --deinterlace=" + '"' + "2:-1:1" + '"';
                     break;
                 case "yadif + mcdeint (Slowest)":
-                    deinterlace = " --deinterlace=" + '"' + "3:-1:2" + '"';
+                    deinterlace = " --deinterlace=" + '"' + "1:-1:1" + '"';
                     break;
                 default:
-                    deinterlace = " --deinterlace=";
+                    deinterlace = "";
                     break;
             }
 
@@ -1776,7 +1776,10 @@ namespace Handbrake
                     denoise = "";
                     break;
                 case "Weak":
-                    denoise = " --denoise=3:2:3:3";
+                    denoise = " --denoise=2:1:2:3";
+                    break;
+                case "Medium":
+                    denoise = " --denoise=3:2:2:3";
                     break;
                 case "Strong":
                     denoise = " --denoise=7:7:5:5";
