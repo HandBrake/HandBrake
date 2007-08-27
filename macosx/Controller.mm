@@ -674,16 +674,8 @@ list = hb_get_titles( fHandle );
 		[fScanIndicator setIndeterminate: NO];
 		[fScanIndicator setDoubleValue: 0.0];
 		[fScanIndicator setHidden: YES];
-		//[fScanController Cancel: NULL];
-		/* Enable/Disable Menu Controls Accordingly */
-		[fMenuOpenSource setEnabled: YES];
-		[fMenuStartEncode setEnabled: YES];
-		[fMenuAddToQueue setEnabled: YES];
-		
-		[fMenuPicturePanelShow setEnabled: YES];
-		[fMenuQueuePanelShow setEnabled: YES];
+
 		[self showNewScan: NULL];
-		
 	}
 	
 	
@@ -935,24 +927,24 @@ list = hb_get_titles( fHandle );
 	if( !hb_list_count( list ) )
 	{
 		/* We display a message if a valid dvd source was not chosen */
-		if (sourceDisplayName)
-		{
-		/* Temporary string if til restoring old source is fixed */
-		[fSrcDVD2Field setStringValue: @"Not A Valid Source"];
-		//[fSrcDVD2Field setStringValue: [NSString stringWithFormat: @"%s", sourceDisplayName]];
-		}
-		else
-		{
-	    [fSrcDVD2Field setStringValue: @"No Valid Title Found"];
-		}	
+		[fSrcDVD2Field setStringValue: @"No Valid Title Found"];
+        [fMenuOpenSource setEnabled: YES];	
 	}
 	else
 	{
-		/* We increment the successful scancount here by one,
+     /* We increment the successful scancount here by one,
 		   which we use at the end of this function to tell the gui
 		   if this is the first successful scan since launch and whether
 		   or not we should set all settings to the defaults */
 		currentSuccessfulScanCount++;
+
+		[self enableUI: YES];
+		/* Enable/Disable Menu Controls Accordingly */
+		[fMenuOpenSource setEnabled: YES];
+		[fMenuStartEncode setEnabled: YES];
+		[fMenuAddToQueue setEnabled: YES];
+		[fMenuPicturePanelShow setEnabled: YES];
+		[fMenuQueuePanelShow setEnabled: YES];
 		
 		[fSrcTitlePopUp removeAllItems];
 		for( int i = 0; i < hb_list_count( list ); i++ )
@@ -1148,6 +1140,7 @@ list = hb_get_titles( fHandle );
 	
 	[fMenuPicturePanelShow setEnabled: NO];
 	[fMenuQueuePanelShow setEnabled: NO];
+    [self enableUI: NO];
 	
 	[self browseSources:NULL];
 }
@@ -1214,6 +1207,7 @@ list = hb_get_titles( fHandle );
 		[fMenuStartEncode setEnabled: YES];
 		[fMenuPicturePanelShow setEnabled: YES];
         [fMenuQueuePanelShow setEnabled: YES];
+        [self enableUI: YES];
         }
 	}
 }
