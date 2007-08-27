@@ -57,7 +57,6 @@ if $(OS) = BEOS
 if $(OS) = MACOSX
 {
     OSX_SRC = macosx/main.mm macosx/Controller.h macosx/Controller.mm
-              macosx/ScanController.h macosx/ScanController.mm
               macosx/PictureController.h macosx/PictureController.mm
               macosx/PictureGLView.h macosx/PictureGLView.mm
               macosx/QueueController.h macosx/QueueController.mm
