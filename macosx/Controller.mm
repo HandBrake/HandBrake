@@ -6,7 +6,7 @@
 
 #include "Controller.h"
 #include "a52dec/a52.h"
-#include "lang.h"
+#import "lang.h"
 #import "HBOutputPanelController.h"
 #import "HBPreferencesController.h"
 /* Added to integrate scanning into HBController */

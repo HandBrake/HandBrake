@@ -10,7 +10,8 @@ LIBHB_SRC =
 ipodutil.cpp common.c hb.c ports.c scan.c work.c decmpeg2.c encavcodec.c update.c
 demuxmpeg.c fifo.c render.c reader.c muxcommon.c muxmp4.c sync.c stream.c
 decsub.c deca52.c decdca.c encfaac.c declpcm.c encx264.c decavcodec.c encxvid.c
-muxavi.c enclame.c muxogm.c encvorbis.c dvd.c muxmkv.c deblock.c deinterlace.c denoise.c detelecine.c ;
+muxavi.c enclame.c muxogm.c encvorbis.c dvd.c muxmkv.c deblock.c deinterlace.c 
+denoise.c detelecine.c lang.c ;
 
 Library libhb : $(LIBHB_SRC) ;
 

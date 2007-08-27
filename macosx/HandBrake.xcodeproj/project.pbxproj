@@ -126,6 +126,7 @@
 		A2DFC66F0C6196D900E66E89 /* actionWidgetPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = A2DFC66D0C6196D900E66E89 /* actionWidgetPressed.png */; };
 		A2DFC6750C6197C600E66E89 /* MVMenuButton.h in Headers */ = {isa = PBXBuildFile; fileRef = A2DFC6740C6197C600E66E89 /* MVMenuButton.h */; };
 		A2DFC6770C61980700E66E89 /* MVMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A2DFC6760C61980700E66E89 /* MVMenuButton.m */; };
+		B48359A80C82960500E04440 /* lang.c in Sources */ = {isa = PBXBuildFile; fileRef = B48359A70C82960500E04440 /* lang.c */; };
 		EAA526930C3B25D200944FF2 /* stream.c in Sources */ = {isa = PBXBuildFile; fileRef = EAA526920C3B25D200944FF2 /* stream.c */; };
 		EAA526940C3B25D200944FF2 /* stream.c in Sources */ = {isa = PBXBuildFile; fileRef = EAA526920C3B25D200944FF2 /* stream.c */; };
 		FC8519500C59A02C0073812C /* denoise.c in Sources */ = {isa = PBXBuildFile; fileRef = FC85194C0C59A02C0073812C /* denoise.c */; };
@@ -266,6 +267,7 @@
 		A2DFC66D0C6196D900E66E89 /* actionWidgetPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = actionWidgetPressed.png; sourceTree = "<group>"; };
 		A2DFC6740C6197C600E66E89 /* MVMenuButton.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MVMenuButton.h; sourceTree = "<group>"; };
 		A2DFC6760C61980700E66E89 /* MVMenuButton.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MVMenuButton.m; sourceTree = "<group>"; };
+		B48359A70C82960500E04440 /* lang.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lang.c; path = ../libhb/lang.c; sourceTree = SOURCE_ROOT; };
 		EAA526920C3B25D200944FF2 /* stream.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = stream.c; path = ../libhb/stream.c; sourceTree = SOURCE_ROOT; };
 		FC85194C0C59A02C0073812C /* denoise.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = denoise.c; path = ../libhb/denoise.c; sourceTree = SOURCE_ROOT; };
 		FC85194D0C59A02C0073812C /* deinterlace.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = deinterlace.c; path = ../libhb/deinterlace.c; sourceTree = SOURCE_ROOT; };
@@ -387,6 +389,7 @@
 		526FBC8D0B4CA9F90064E04C /* libhb Sources */ = {
 			isa = PBXGroup;
 			children = (
+				B48359A70C82960500E04440 /* lang.c */,
 				A273E0950C57C19500493A45 /* muxmkv.c */,
 				EAA526920C3B25D200944FF2 /* stream.c */,
 				0DFA5C7E0B8DD3B60020BC09 /* declpcm.c */,
@@ -760,6 +763,7 @@
 				FC8519510C59A02C0073812C /* deinterlace.c in Sources */,
 				FC8519520C59A02C0073812C /* deblock.c in Sources */,
 				FC8519530C59A02C0073812C /* detelecine.c in Sources */,
+				B48359A80C82960500E04440 /* lang.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
