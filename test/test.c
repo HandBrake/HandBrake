@@ -1345,3 +1345,13 @@ static int CheckOptions( int argc, char ** argv )
     return 0;
 }
 
+/****************************************************************************
+ * hb_error_handler
+ * 
+ * When using the CLI just display using hb_log as we always did in the past
+ * make sure that we prefix with a nice ERROR message to catch peoples eyes.
+ ****************************************************************************/
+void hb_error_handler ( const char *errmsg )
+{
+    hb_log( "ERROR: %s", errmsg );
+}

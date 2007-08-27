@@ -157,7 +157,7 @@ static int MP4Init( hb_mux_object_t * m )
     
     if (m->file == MP4_INVALID_FILE_HANDLE)
     {
-        hb_log("muxmp4.c: MP4Create failed!");
+        hb_error("muxmp4.c: MP4Create failed!");
         *job->die = 1;
         return 0;
     }
@@ -172,7 +172,7 @@ static int MP4Init( hb_mux_object_t * m )
        timescale */
     if (!(MP4SetTimeScale( m->file, job->arate )))
     {
-        hb_log("muxmp4.c: MP4SetTimeScale failed!");
+        hb_error("muxmp4.c: MP4SetTimeScale failed!");
         *job->die = 1;
         return 0;
     }
@@ -182,7 +182,7 @@ static int MP4Init( hb_mux_object_t * m )
         /* Stolen from mp4creator */
         if(!(MP4SetVideoProfileLevel( m->file, 0x7F )))
         {
-            hb_log("muxmp4.c: MP4SetVideoProfileLevel failed!");
+            hb_error("muxmp4.c: MP4SetVideoProfileLevel failed!");
             *job->die = 1;
             return 0;
         }
@@ -211,7 +211,7 @@ static int MP4Init( hb_mux_object_t * m )
     {
         if(!(MP4SetVideoProfileLevel( m->file, MPEG4_SP_L3 )))
         {
-            hb_log("muxmp4.c: MP4SetVideoProfileLevel failed!");
+            hb_error("muxmp4.c: MP4SetVideoProfileLevel failed!");
             *job->die = 1;
             return 0;
         }
@@ -220,7 +220,7 @@ static int MP4Init( hb_mux_object_t * m )
                 MP4_MPEG4_VIDEO_TYPE );
         if (mux_data->track == MP4_INVALID_TRACK_ID)
         {
-            hb_log("muxmp4.c: MP4AddVideoTrack failed!");
+            hb_error("muxmp4.c: MP4AddVideoTrack failed!");
             *job->die = 1;
             return 0;
         }
@@ -230,7 +230,7 @@ static int MP4Init( hb_mux_object_t * m )
         if (!(MP4SetTrackESConfiguration( m->file, mux_data->track,
                 job->config.mpeg4.bytes, job->config.mpeg4.length )))
         {
-            hb_log("muxmp4.c: MP4SetTrackESConfiguration failed!");
+            hb_error("muxmp4.c: MP4SetTrackESConfiguration failed!");
             *job->die = 1;
             return 0;
         }
@@ -360,8 +360,17 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         if( job->chapter_markers && buf->new_chap )
         {
             struct hb_text_sample_s *sample = MP4GenerateChapterSample( m, (m->sum_dur - m->chapter_duration) );
-        
-            MP4WriteSample(m->file, m->chapter_track, sample->sample, sample->length, sample->duration, 0, true);
+            
+            if( !MP4WriteSample(m->file, 
+                                m->chapter_track, 
+                                sample->sample, 
+                                sample->length, 
+                                sample->duration, 
+                                0, true) )
+            {
+                hb_error("Failed to write to output file, disk full?");
+                *job->die = 1;
+            }
             free(sample);
             m->current_chapter++;
             m->chapter_duration = m->sum_dur;
@@ -396,21 +405,42 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
        If there are b-frames, offset by the initDelay plus the
        difference between the presentation time stamp x264 gives
        and the decoding time stamp from the buffer data. */
-       MP4WriteSample( m->file, mux_data->track, buf->data, buf->size,
-            duration, ((mux_data->track != 1) || (job->areBframes==0) || (job->vcodec != HB_VCODEC_X264)) ? 0 : (  buf->renderOffset * job->arate / 90000),
-            ((buf->frametype & HB_FRAME_KEY) != 0) );
+    if( !MP4WriteSample( m->file, 
+                         mux_data->track, 
+                         buf->data, 
+                         buf->size,
+                         duration, 
+                         ((mux_data->track != 1) || 
+                          (job->areBframes==0) || 
+                          (job->vcodec != HB_VCODEC_X264)) ? 0 : (  buf->renderOffset * job->arate / 90000),
+                         ((buf->frametype & HB_FRAME_KEY) != 0) ) )
+    {
+        hb_error("Failed to write to output file, disk full?");   
+        *job->die = 1;
+    }
                                 
     return 0;
 }
 
 static int MP4End( hb_mux_object_t * m )
-{
+{ 
+    hb_job_t   * job   = m->job;
+
     /* Write our final chapter marker */
     if( m->job->chapter_markers )
     {
         struct hb_text_sample_s *sample = MP4GenerateChapterSample( m, (m->sum_dur - m->chapter_duration) );
     
-        MP4WriteSample(m->file, m->chapter_track, sample->sample, sample->length, sample->duration, 0, true);
+        if( !MP4WriteSample(m->file, 
+                            m->chapter_track, 
+                            sample->sample, 
+                            sample->length, 
+                            sample->duration, 
+                            0, true) )
+        {
+            hb_error("Failed to write to output file, disk full?");      
+            *job->die = 1;
+        }
         free(sample);
     }
     
@@ -419,8 +449,6 @@ static int MP4End( hb_mux_object_t * m )
     char filename[1024]; memset( filename, 0, 1024 );
 #endif
 
-    hb_job_t * job = m->job;
-    
     if (job->areBframes)
     /* Walk the entire video sample table and find the minumum ctts value. */
     {

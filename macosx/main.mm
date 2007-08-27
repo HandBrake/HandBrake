@@ -11,6 +11,19 @@ void SigHandler( int signal )
     [NSApp terminate: NULL];
 } 
 
+/****************************************************************************
+ * hb_error_handler
+ * 
+ * Change this to display a dialog box - and maybe move it somewhere else,
+ * this is the only place I could find that looked like C :)
+****************************************************************************/
+extern "C" {
+void hb_error_handler( const char *errmsg )
+{
+    fprintf(stderr, "ERROR: %s\n", errmsg );
+}
+}
+
 int main( int argc, const char ** argv )
 {
     signal( SIGINT, SigHandler );

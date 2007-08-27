@@ -489,7 +489,7 @@ void hb_list_close( hb_list_t ** _l )
  * hb_log
  **********************************************************************
  * If verbose mode is one, print message with timestamp. Messages
- * longer than 80 characters are stripped ;p
+ * longer than 180 characters are stripped ;p
  *********************************************************************/
 void hb_log( char * log, ... )
 {
@@ -520,6 +520,31 @@ void hb_log( char * log, ... )
 
     /* Print it */
     fprintf( stderr, "%s", string );
+}
+
+/**********************************************************************
+ * hb_error
+ **********************************************************************
+ * Using whatever output is available display this error. 
+ *********************************************************************/
+void hb_error( char * log, ... )
+{
+    char        string[181]; /* 180 chars + \0 */
+    time_t      _now;
+    struct tm * now;
+    va_list     args;
+
+    extern void hb_error_handler(const char *errmsg);
+
+    /* Convert the message to a string */
+    va_start( args, log );
+    vsnprintf( string, 180, log, args );
+    va_end( args );
+
+    /*
+     * Got the error in a single string, send it off to be dispatched.
+     */
+    hb_error_handler(string);
 }
 
 /**********************************************************************

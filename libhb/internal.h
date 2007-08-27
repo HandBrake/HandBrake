@@ -8,6 +8,7 @@
  * common.c
  **********************************************************************/
 void hb_log( char * log, ... );
+void hb_error( char * fmt, ...);
 
 int  hb_list_bytes( hb_list_t * );
 void hb_list_seebytes( hb_list_t * l, uint8_t * dst, int size );

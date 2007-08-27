@@ -100,7 +100,7 @@ static int MKVInit( hb_mux_object_t * m )
             break;
         default:
             *job->die = 1;
-            hb_log("muxmkv: Unknown video codec: %x", job->vcodec);
+            hb_error("muxmkv: Unknown video codec: %x", job->vcodec);
             return 0;
     }
 
@@ -171,7 +171,7 @@ static int MKVInit( hb_mux_object_t * m )
                 break;
             default:
                 *job->die = 1;
-                hb_log("muxmkv: Unknown audio codec: %x", job->acodec);
+                hb_error("muxmkv: Unknown audio codec: %x", job->acodec);
                 return 0;
         }
         
@@ -191,7 +191,11 @@ static int MKVInit( hb_mux_object_t * m )
           free(track->codecPrivate);
     }
 
-    mk_writeHeader( m->file, "HandBrake " HB_VERSION);
+    if( mk_writeHeader( m->file, "HandBrake " HB_VERSION) < 0 )
+    {
+        hb_error( "Failed to write to output file, disk full?");
+        *job->die = 1;
+    }
     if (track != NULL)
         free(track);
     if (avcC != NULL)
@@ -262,10 +266,22 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         }
     }
 
-    mk_startFrame(m->file, mux_data->track);
-    mk_addFrameData(m->file, mux_data->track, buf->data, buf->size);
-    mk_setFrameFlags(m->file, mux_data->track, timecode,
-        ((job->vcodec == HB_VCODEC_X264 && mux_data == job->mux_data) ? (buf->frametype == HB_FRAME_IDR) : ((buf->frametype & HB_FRAME_KEY) != 0)) );
+    if( mk_startFrame(m->file, mux_data->track) < 0)
+    {
+        hb_error( "Failed to write start frame to output file, Disk Full?" );
+        *job->die = 1;
+    }
+    if( mk_addFrameData(m->file, mux_data->track, buf->data, buf->size) < 0 )
+    {
+        hb_error( "Failed to write frame data to output file, Disk Full?" );
+        *job->die = 1;
+    }
+    if( mk_setFrameFlags(m->file, mux_data->track, timecode,
+                         ((job->vcodec == HB_VCODEC_X264 && mux_data == job->mux_data) ? (buf->frametype == HB_FRAME_IDR) : ((buf->frametype & HB_FRAME_KEY) != 0)) ) < 0 )
+    {
+        hb_error( "Failed to write frame flags to output file, Disk Full?" );  
+        *job->die = 1; 
+    }
     return 0;
 }
 

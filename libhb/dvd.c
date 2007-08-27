@@ -79,14 +79,14 @@ hb_dvd_t * hb_dvd_init( char * path )
     /* Open device */
     if( !( d->reader = DVDOpen( path ) ) )
     {
-        hb_log( "dvd: DVDOpen failed (%s)", path );
+        hb_error( "dvd: DVDOpen failed (%s)", path );
         goto fail;
     }
 
     /* Open main IFO */
     if( !( d->vmg = ifoOpen( d->reader, 0 ) ) )
     {
-        hb_log( "dvd: ifoOpen failed" );
+        hb_error( "dvd: ifoOpen failed" );
         goto fail;
     }
 
@@ -147,7 +147,7 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
     hb_log( "scan: opening IFO for VTS %d", title->vts );
     if( !( vts = ifoOpen( d->reader, title->vts ) ) )
     {
-        hb_log( "scan: ifoOpen failed" );
+        hb_error( "scan: ifoOpen failed" );
         goto fail;
     }
 
@@ -159,6 +159,14 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
     pgn    = vts->vts_ptt_srpt->title[title->ttn-1].ptt[0].pgn;
     d->pgc = vts->vts_pgcit->pgci_srp[pgc_id-1].pgc;
 
+    hb_log("pgc_id: %d, pgn: %d: pgc: 0x%x", pgc_id, pgn, d->pgc);
+
+    if( !d->pgc )
+    {
+        hb_error( "scan: pgc not valid, skipping" );
+        goto fail;
+    }
+ 
     /* Start cell */
     title->cell_start  = d->pgc->program_map[pgn-1] - 1;
     title->block_start = d->pgc->cell_playback[title->cell_start].first_sector;
@@ -523,13 +531,13 @@ int hb_dvd_start( hb_dvd_t * d, int title, int chapter )
     d->ttn = d->vmg->tt_srpt->title[title-1].vts_ttn;
     if( !( d->ifo = ifoOpen( d->reader, d->vts ) ) )
     {
-        hb_log( "dvd: ifoOpen failed for VTS %d", d->vts );
+        hb_error( "dvd: ifoOpen failed for VTS %d", d->vts );
         return 0;
     }
     if( !( d->file = DVDOpenFile( d->reader, d->vts,
                                   DVD_READ_TITLE_VOBS ) ) )
     {
-        hb_log( "dvd: DVDOpenFile failed for VTS %d", d->vts );
+        hb_error( "dvd: DVDOpenFile failed for VTS %d", d->vts );
         return 0;
     }
 
@@ -750,7 +758,7 @@ int hb_dvd_read( hb_dvd_t * d, hb_buffer_t * b )
     {
         if( DVDReadBlocks( d->file, d->block, 1, b->data ) != 1 )
         {
-            hb_log( "reader: DVDReadBlocks failed (%d)", d->block );
+            hb_error( "reader: DVDReadBlocks failed (%d)", d->block );
             return 0;
         }
         d->pack_len--;
