@@ -53,6 +53,14 @@ static int MKVInit( hb_mux_object_t * m )
 
     m->file = mk_createWriter(job->file, 1000000, 1);
 
+    if( !m->file )
+    {
+        hb_error( "Could not create output file, Disk Full?" );
+        job->mux_data = NULL;
+        *job->die = 1;
+        return 0;
+    }
+
     /* Video track */
     mux_data      = calloc(1, sizeof( hb_mux_data_t ) );
     job->mux_data = mux_data;
@@ -268,7 +276,7 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
 
     if( mk_startFrame(m->file, mux_data->track) < 0)
     {
-        hb_error( "Failed to write start frame to output file, Disk Full?" );
+        hb_error( "Failed to write frame to output file, Disk Full?" );
         *job->die = 1;
     }
     mk_addFrameData(m->file, mux_data->track, buf->data, buf->size);
@@ -282,9 +290,19 @@ static int MKVEnd( hb_mux_object_t * m )
     hb_job_t  *job = m->job;
     hb_mux_data_t *mux_data = job->mux_data;
     hb_title_t  *title = job->title;
-    hb_chapter_t *chapter_data = hb_list_item( title->list_chapter, mux_data->current_chapter++ );
+    hb_chapter_t *chapter_data;
     char tmp_buffer[1024];
     char *string = tmp_buffer;
+
+    if( !job->mux_data )
+    {
+        /*
+         * We must have failed to create the file in the first place.
+         */
+        return 0;
+    }
+
+    chapter_data = hb_list_item( title->list_chapter, mux_data->current_chapter++ );
 
     if(job->chapter_markers)
     {
