@@ -127,6 +127,7 @@
 		A2DFC6750C6197C600E66E89 /* MVMenuButton.h in Headers */ = {isa = PBXBuildFile; fileRef = A2DFC6740C6197C600E66E89 /* MVMenuButton.h */; };
 		A2DFC6770C61980700E66E89 /* MVMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A2DFC6760C61980700E66E89 /* MVMenuButton.m */; };
 		B48359A80C82960500E04440 /* lang.c in Sources */ = {isa = PBXBuildFile; fileRef = B48359A70C82960500E04440 /* lang.c */; };
+		D4D49FED0C83355600F01215 /* lang.c in Sources */ = {isa = PBXBuildFile; fileRef = B48359A70C82960500E04440 /* lang.c */; };
 		EAA526930C3B25D200944FF2 /* stream.c in Sources */ = {isa = PBXBuildFile; fileRef = EAA526920C3B25D200944FF2 /* stream.c */; };
 		EAA526940C3B25D200944FF2 /* stream.c in Sources */ = {isa = PBXBuildFile; fileRef = EAA526920C3B25D200944FF2 /* stream.c */; };
 		FC8519500C59A02C0073812C /* denoise.c in Sources */ = {isa = PBXBuildFile; fileRef = FC85194C0C59A02C0073812C /* denoise.c */; };
@@ -685,6 +686,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4D49FED0C83355600F01215 /* lang.c in Sources */,
 				0DFA5CD90B8DD4210020BC09 /* declpcm.c in Sources */,
 				0DFA5CDA0B8DD4210020BC09 /* decmpeg2.c in Sources */,
 				0DFA5CDB0B8DD4210020BC09 /* decsub.c in Sources */,
