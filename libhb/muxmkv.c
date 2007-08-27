@@ -271,17 +271,9 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         hb_error( "Failed to write start frame to output file, Disk Full?" );
         *job->die = 1;
     }
-    if( mk_addFrameData(m->file, mux_data->track, buf->data, buf->size) < 0 )
-    {
-        hb_error( "Failed to write frame data to output file, Disk Full?" );
-        *job->die = 1;
-    }
-    if( mk_setFrameFlags(m->file, mux_data->track, timecode,
-                         ((job->vcodec == HB_VCODEC_X264 && mux_data == job->mux_data) ? (buf->frametype == HB_FRAME_IDR) : ((buf->frametype & HB_FRAME_KEY) != 0)) ) < 0 )
-    {
-        hb_error( "Failed to write frame flags to output file, Disk Full?" );  
-        *job->die = 1; 
-    }
+    mk_addFrameData(m->file, mux_data->track, buf->data, buf->size);
+    mk_setFrameFlags(m->file, mux_data->track, timecode,
+                     ((job->vcodec == HB_VCODEC_X264 && mux_data == job->mux_data) ? (buf->frametype == HB_FRAME_IDR) : ((buf->frametype & HB_FRAME_KEY) != 0)) );
     return 0;
 }
 
@@ -311,7 +303,11 @@ static int MKVEnd( hb_mux_object_t * m )
         mk_createChapterSimple(m->file, mux_data->prev_chapter_tc, mux_data->prev_chapter_tc, string);
     }
 
-    mk_close(m->file);
+    if( mk_close(m->file) < 0 )
+    {
+        hb_error( "Failed to flush the last frame and close the output file, Disk Full?" );
+        *job->die = 1;
+    }
 
     // TODO: Free what we alloc'd
 
