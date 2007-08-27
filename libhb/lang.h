@@ -224,4 +224,19 @@ static iso639_lang_t * lang_for_code( int code )
     return (iso639_lang_t*) languages;
 }
 
+static iso639_lang_t * lang_for_english( const char * english )
+{
+    iso639_lang_t * lang;
+    
+    for( lang = (iso639_lang_t*) languages; lang->eng_name; lang++ )
+    {
+        if( !strcmp( lang->eng_name, english ) )
+        {
+            return lang;
+        }
+    }
+
+    return (iso639_lang_t*) languages;
+}
+
 #endif

@@ -6,6 +6,7 @@
 
 #include "Controller.h"
 #include "a52dec/a52.h"
+#include "lang.h"
 #import "HBOutputPanelController.h"
 #import "HBPreferencesController.h"
 
@@ -1421,7 +1422,25 @@ list = hb_get_titles( fHandle );
 
     job->grayscale = ( [fVidGrayscaleCheck state] == NSOnState );
     
-
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PreferredLanguageSubtitles"] == 1)
+    {
+        /*
+         * This user prefers to have subtitles when the default language
+         * is not their own. So set the native language seleector to their
+         * language.
+         *
+         * Unfortunatly for us the language in the GUI is not in the
+         * right ISO-639-3 format that native_language expects.
+         */
+        NSString * language = [[NSUserDefaults standardUserDefaults] stringForKey:@"DefaultLanguage"];
+        iso639_lang_t *lang_code = lang_for_english( [ language cString ] );
+        if( lang_code )
+        {
+            job->native_language = lang_code->iso639_2;
+        } else {
+            job->native_language = NULL;
+        }
+    }  
 
     /* Subtitle settings */
     job->subtitle = [fSubPopUp indexOfSelectedItem] - 2;
@@ -1869,7 +1888,16 @@ list = hb_get_titles( fHandle );
     [self addAllAudioTracksToPopUp: fAudLang2PopUp];
     /* search for the first instance of our prefs default language for track 1, and set track 2 to "none" */
 	NSString * audioSearchPrefix = [[NSUserDefaults standardUserDefaults] stringForKey:@"DefaultLanguage"];
-    [self selectAudioTrackInPopUp: fAudLang1PopUp searchPrefixString: audioSearchPrefix selectIndexIfNotFound: 1];
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PreferredLanguageSubtitles"] != 1)
+    {
+        [self selectAudioTrackInPopUp: fAudLang1PopUp searchPrefixString: audioSearchPrefix selectIndexIfNotFound: 1];
+    } else {
+        /*
+         * We prefer to have subtitles and not change the audio language from the
+         * default (first one).
+         */
+        [self selectAudioTrackInPopUp: fAudLang1PopUp searchPrefixString: NULL selectIndexIfNotFound: 1];
+    }
     [self selectAudioTrackInPopUp: fAudLang2PopUp searchPrefixString: NULL selectIndexIfNotFound: 0];
 	
 	/* changing the title may have changed the audio channels on offer, */
