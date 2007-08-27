@@ -80,8 +80,7 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
     fHandle = hb_init(debugLevel, [[NSUserDefaults standardUserDefaults] boolForKey:@"CheckForUpdates"]);
 
 	// Set the Growl Delegate
-	HBController *hbGrowlDelegate = [[HBController alloc] init];
-	[GrowlApplicationBridge setGrowlDelegate: hbGrowlDelegate];    
+    [GrowlApplicationBridge setGrowlDelegate: self];    
     /* Init others controllers */
     [fPictureController SetHandle: fHandle];
     [fQueueController   SetHandle: fHandle];
