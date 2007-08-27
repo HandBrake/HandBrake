@@ -5,6 +5,7 @@
    It may be used under the terms of the GNU General Public License. */
 
 #include <Cocoa/Cocoa.h>
+#import "hb.h"
 
 void SigHandler( int signal )
 {
@@ -20,12 +21,13 @@ void SigHandler( int signal )
 extern "C" {
 void hb_error_handler( const char *errmsg )
 {
-    fprintf(stderr, "ERROR: %s\n", errmsg );
+    fprintf(stderr, "GUI ERROR dialog: %s\n", errmsg );
 }
 }
 
 int main( int argc, const char ** argv )
 {
     signal( SIGINT, SigHandler );
+    hb_register_error_handler(&hb_error_handler);
     return NSApplicationMain( argc, argv );
 }

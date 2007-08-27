@@ -77,6 +77,17 @@ static int  ParseOptions( int argc, char ** argv );
 static int  CheckOptions( int argc, char ** argv );
 static int  HandleEvents( hb_handle_t * h );
 
+/****************************************************************************
+ * hb_error_handler
+ * 
+ * When using the CLI just display using hb_log as we always did in the past
+ * make sure that we prefix with a nice ERROR message to catch peoples eyes.
+ ****************************************************************************/
+static void hb_cli_error_handler ( const char *errmsg )
+{
+    hb_log( "ERROR: %s", errmsg );
+}
+
 int main( int argc, char ** argv )
 {
     hb_handle_t * h;
@@ -89,6 +100,9 @@ int main( int argc, char ** argv )
     {
         return 1;
     }
+
+    /* Register our error handler */
+    hb_register_error_handler(&hb_cli_error_handler);
 
     /* Init libhb */
     h = hb_init( debug, update );
@@ -1343,15 +1357,4 @@ static int CheckOptions( int argc, char ** argv )
     }
 
     return 0;
-}
-
-/****************************************************************************
- * hb_error_handler
- * 
- * When using the CLI just display using hb_log as we always did in the past
- * make sure that we prefix with a nice ERROR message to catch peoples eyes.
- ****************************************************************************/
-void hb_error_handler ( const char *errmsg )
-{
-    hb_log( "ERROR: %s", errmsg );
 }

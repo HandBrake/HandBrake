@@ -36,6 +36,8 @@ int hb_audio_bitrates_count = sizeof( hb_audio_bitrates ) /
                               sizeof( hb_rate_t );
 int hb_audio_bitrates_default = 8; /* 128 kbps */
 
+static hb_error_handler_t *error_handler = NULL;
+
 hb_mixdown_t hb_audio_mixdowns[] =
 { { "Mono",               "HB_AMIXDOWN_MONO",      "mono",   HB_AMIXDOWN_MONO      },
   { "Stereo",             "HB_AMIXDOWN_STEREO",    "stereo", HB_AMIXDOWN_STEREO    },
@@ -530,11 +532,7 @@ void hb_log( char * log, ... )
 void hb_error( char * log, ... )
 {
     char        string[181]; /* 180 chars + \0 */
-    time_t      _now;
-    struct tm * now;
     va_list     args;
-
-    extern void hb_error_handler(const char *errmsg);
 
     /* Convert the message to a string */
     va_start( args, log );
@@ -544,7 +542,17 @@ void hb_error( char * log, ... )
     /*
      * Got the error in a single string, send it off to be dispatched.
      */
-    hb_error_handler(string);
+    if( error_handler )
+    {
+        error_handler( string );
+    } else {
+        hb_log( string );
+    }
+}
+
+void hb_register_error_handler( hb_error_handler_t * handler )
+{
+    error_handler = handler;
 }
 
 /**********************************************************************

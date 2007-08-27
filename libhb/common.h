@@ -550,4 +550,8 @@ extern hb_filter_object_t hb_filter_deinterlace;
 extern hb_filter_object_t hb_filter_deblock;
 extern hb_filter_object_t hb_filter_denoise;
 
+typedef void hb_error_handler_t( const char *errmsg );
+
+extern void hb_register_error_handler( hb_error_handler_t * handler );
+
 #endif
