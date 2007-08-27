@@ -11,7 +11,6 @@
 
 
 #include "ChapterTitles.h"
-#include "ScanController.h"
 #include "PictureController.h"
 #include "QueueController.h"
 #import "MVMenuButton.h"
@@ -21,10 +20,6 @@
 
 {
     IBOutlet NSWindow            * fWindow;
-	
-    /* Scan panel */
-	IBOutlet ScanController      * fScanController;
-    IBOutlet NSPanel             * fScanPanel;
 	
     /* Picture panel */
     IBOutlet PictureController   * fPictureController;
@@ -155,7 +150,7 @@
     /* Chapters box */
     IBOutlet NSButton            * fCreateChapterMarkers;
     IBOutlet NSTableView         * fChapterTable;
-	ChapterTitles       * fChapterTitlesDelegate;
+	ChapterTitles                * fChapterTitlesDelegate;
 	
     /* Bottom */
     IBOutlet NSButton            * fPictureButton;
@@ -256,7 +251,10 @@
 - (void)     enableUI: (bool) enable;
 - (IBAction) showNewScan: (id) sender;
 - (IBAction) showScanPanel: (id) sender;
-
+- (IBAction) browseSources: (id) sender;
+- (void) browseSourcesDone: (NSOpenPanel *) sheet
+    returnCode: (int) returnCode contextInfo: (void *) contextInfo;
+    
 - (IBAction) titlePopUpChanged: (id) sender;
 - (IBAction) chapterPopUpChanged: (id) sender;
 

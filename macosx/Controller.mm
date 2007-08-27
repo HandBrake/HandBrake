@@ -9,6 +9,12 @@
 #include "lang.h"
 #import "HBOutputPanelController.h"
 #import "HBPreferencesController.h"
+/* Added to integrate scanning into HBController */
+#include <IOKit/IOKitLib.h>
+#include <IOKit/storage/IOMedia.h>
+#include <IOKit/storage/IODVDMedia.h>
+#include "HBDVDDetector.h"
+#include "dvdread/dvd_reader.h"
 
 #define _(a) NSLocalizedString(a,NULL)
 
@@ -77,7 +83,6 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 	HBController *hbGrowlDelegate = [[HBController alloc] init];
 	[GrowlApplicationBridge setGrowlDelegate: hbGrowlDelegate];    
     /* Init others controllers */
-    [fScanController    SetHandle: fHandle];
     [fPictureController SetHandle: fHandle];
     [fQueueController   SetHandle: fHandle];
 	
@@ -665,11 +670,11 @@ list = hb_get_titles( fHandle );
 	{
 		
 		currentScanCount = checkScanCount;
-		[fScanController Cancel: NULL];
+		//[fScanController Cancel: NULL];
 		[fScanIndicator setIndeterminate: NO];
 		[fScanIndicator setDoubleValue: 0.0];
 		[fScanIndicator setHidden: YES];
-		[fScanController Cancel: NULL];
+		//[fScanController Cancel: NULL];
 		/* Enable/Disable Menu Controls Accordingly */
 		[fMenuOpenSource setEnabled: YES];
 		[fMenuStartEncode setEnabled: YES];
@@ -712,7 +717,6 @@ list = hb_get_titles( fHandle );
 			[fScanIndicator setIndeterminate: NO];
             [fScanIndicator setDoubleValue: 0.0];
 			[fScanIndicator setHidden: YES];
-			[fScanController Cancel: NULL];
 			[self showNewScan: NULL];
 			break;
         }
@@ -1145,10 +1149,75 @@ list = hb_get_titles( fHandle );
 	[fMenuPicturePanelShow setEnabled: NO];
 	[fMenuQueuePanelShow setEnabled: NO];
 	
-	
-	[fScanController Show];
-	
+	[self browseSources:NULL];
 }
+
+- (void) browseSources: (id) sender
+{
+    NSOpenPanel * panel;
+	
+    panel = [NSOpenPanel openPanel];
+    [panel setAllowsMultipleSelection: NO];
+    [panel setCanChooseFiles: YES];
+    [panel setCanChooseDirectories: YES ];
+    NSString * sourceDirectory;
+	if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastSourceDirectory"])
+	{
+		sourceDirectory = [[NSUserDefaults standardUserDefaults] stringForKey:@"LastSourceDirectory"];
+	}
+	else
+	{
+		sourceDirectory = @"~/Desktop";
+		sourceDirectory = [sourceDirectory stringByExpandingTildeInPath];
+	}
+   [panel beginSheetForDirectory: sourceDirectory file: nil types: nil
+				   modalForWindow: fWindow modalDelegate: self
+				   didEndSelector: @selector( browseSourcesDone:returnCode:contextInfo: )
+					  contextInfo: nil];
+}
+
+- (void) browseSourcesDone: (NSOpenPanel *) sheet
+		 returnCode: (int) returnCode contextInfo: (void *) contextInfo
+{
+    /* User selected a file to open */
+	if( returnCode == NSOKButton )
+    {
+        [fSrcDVD2Field setStringValue: _( @"Opening a new source ..." )];
+		[fScanIndicator setHidden: NO];
+	    [fScanIndicator setIndeterminate: YES];
+        [fScanIndicator startAnimation: nil];
+		
+		/* we set the last source directory in the prefs here */
+		NSString *sourceDirectory = [[[sheet filenames] objectAtIndex: 0] stringByDeletingLastPathComponent];
+		[[NSUserDefaults standardUserDefaults] setObject:sourceDirectory forKey:@"LastSourceDirectory"];
+		
+        NSString *path = [[sheet filenames] objectAtIndex: 0];
+        HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
+        if( [detector isVideoDVD] )
+        {
+            // The chosen path was actually on a DVD, so use the raw block
+            // device path instead.
+            path = [detector devicePath];
+        }
+		
+		hb_scan( fHandle, [path UTF8String], 0 );
+	}
+	else // User clicked Cancel in browse window
+	{
+		/* use the outlets to the main menu bar to determine what to
+		   enable and disable */
+		[fMenuOpenSource setEnabled: YES];
+		/* if we have a title loaded up */
+		if ([[fSrcDVD2Field stringValue] length] > 0)
+		{
+		[fMenuAddToQueue setEnabled: YES];
+		[fMenuStartEncode setEnabled: YES];
+		[fMenuPicturePanelShow setEnabled: YES];
+        [fMenuQueuePanelShow setEnabled: YES];
+        }
+	}
+}
+
 
 - (IBAction) openMainWindow: (id) sender
 {

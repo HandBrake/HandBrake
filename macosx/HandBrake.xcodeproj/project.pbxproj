@@ -87,7 +87,6 @@
 		4D3ECC2709A4917000B2E45F /* WhiteBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D3ECC2609A4917000B2E45F /* WhiteBox.m */; };
 		4DD93F8F082036E8008E1322 /* Controller.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DF3C8CB052889CD00A80101 /* Controller.h */; };
 		4DD93F90082036E8008E1322 /* PictureGLView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D85758F052B78E300C39CA9 /* PictureGLView.h */; };
-		4DD93F91082036E8008E1322 /* ScanController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D86C74F07281F4E007BA979 /* ScanController.h */; };
 		4DD93F92082036E8008E1322 /* PictureController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D1FD381073D19CE00E46515 /* PictureController.h */; };
 		4DD93F93082036E8008E1322 /* QueueController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DD27BA507C0065C0023D231 /* QueueController.h */; };
 		4DD93F96082036E8008E1322 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
@@ -95,7 +94,6 @@
 		4DD93F9A082036E8008E1322 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.mm */; settings = {ATTRIBUTES = (); }; };
 		4DD93F9B082036E8008E1322 /* Controller.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4DF3C8CC052889CD00A80101 /* Controller.mm */; };
 		4DD93F9C082036E8008E1322 /* PictureGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4D85758E052B78E300C39CA9 /* PictureGLView.mm */; };
-		4DD93F9D082036E8008E1322 /* ScanController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4D86C74E07281F4E007BA979 /* ScanController.mm */; };
 		4DD93F9E082036E8008E1322 /* PictureController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4D1FD382073D19CE00E46515 /* PictureController.mm */; };
 		4DD93F9F082036E8008E1322 /* QueueController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4DD27BA607C0065C0023D231 /* QueueController.mm */; };
 		4DD93FA2082036E8008E1322 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -236,8 +234,6 @@
 		4D3ECC2609A4917000B2E45F /* WhiteBox.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = WhiteBox.m; sourceTree = "<group>"; };
 		4D85758E052B78E300C39CA9 /* PictureGLView.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = PictureGLView.mm; sourceTree = "<group>"; };
 		4D85758F052B78E300C39CA9 /* PictureGLView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PictureGLView.h; sourceTree = "<group>"; };
-		4D86C74E07281F4E007BA979 /* ScanController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = ScanController.mm; sourceTree = "<group>"; };
-		4D86C74F07281F4E007BA979 /* ScanController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ScanController.h; sourceTree = "<group>"; };
 		4DD27BA507C0065C0023D231 /* QueueController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = QueueController.h; sourceTree = "<group>"; };
 		4DD27BA607C0065C0023D231 /* QueueController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = QueueController.mm; sourceTree = "<group>"; };
 		4DDE9724052B7B2B00C39CA9 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
@@ -450,8 +446,6 @@
 				4D1FD382073D19CE00E46515 /* PictureController.mm */,
 				4DF3C8CB052889CD00A80101 /* Controller.h */,
 				4DF3C8CC052889CD00A80101 /* Controller.mm */,
-				4D86C74E07281F4E007BA979 /* ScanController.mm */,
-				4D86C74F07281F4E007BA979 /* ScanController.h */,
 				4D85758E052B78E300C39CA9 /* PictureGLView.mm */,
 				4D85758F052B78E300C39CA9 /* PictureGLView.h */,
 				4DD27BA507C0065C0023D231 /* QueueController.h */,
@@ -526,7 +520,6 @@
 				A2DFC6750C6197C600E66E89 /* MVMenuButton.h in Headers */,
 				4DD93F8F082036E8008E1322 /* Controller.h in Headers */,
 				4DD93F90082036E8008E1322 /* PictureGLView.h in Headers */,
-				4DD93F91082036E8008E1322 /* ScanController.h in Headers */,
 				4DD93F92082036E8008E1322 /* PictureController.h in Headers */,
 				4DD93F93082036E8008E1322 /* QueueController.h in Headers */,
 				A2A1EC310C76C35E00827E0D /* HBDVDDetector.h in Headers */,
@@ -799,7 +792,6 @@
 				4DD93F9A082036E8008E1322 /* main.mm in Sources */,
 				4DD93F9B082036E8008E1322 /* Controller.mm in Sources */,
 				4DD93F9C082036E8008E1322 /* PictureGLView.mm in Sources */,
-				4DD93F9D082036E8008E1322 /* ScanController.mm in Sources */,
 				4DD93F9E082036E8008E1322 /* PictureController.mm in Sources */,
 				4DD93F9F082036E8008E1322 /* QueueController.mm in Sources */,
 				A2A1EC3A0C76C58400827E0D /* HBDVDDetector.m in Sources */,
