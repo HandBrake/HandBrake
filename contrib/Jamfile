@@ -80,8 +80,8 @@ actions LibAvUtil
 {
     strip -S $(<)
 }
-#LibAvUtil $(SUBDIR)/lib/libavutil.a : $(SUBDIR)/lib/libavcodec.a ;
-#LibAvUtil $(SUBDIR)/lib/libavformat.a : $(SUBDIR)/lib/libavcodec.a ;
+LibAvUtil $(SUBDIR)/lib/libavutil.a : $(SUBDIR)/lib/libavcodec.a ;
+LibAvUtil $(SUBDIR)/lib/libavformat.a : $(SUBDIR)/lib/libavcodec.a ;
 LibAvUtil $(SUBDIR)/lib/libswscale.a : $(SUBDIR)/lib/libavcodec.a ;
 
 # CSS doesn't work on Cygwin/Windows as of now, so don't use it.
