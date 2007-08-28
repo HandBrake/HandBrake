@@ -85,7 +85,7 @@ static int  HandleEvents( hb_handle_t * h );
  ****************************************************************************/
 static void hb_cli_error_handler ( const char *errmsg )
 {
-    hb_log( "ERROR: %s", errmsg );
+    fprintf( stderr, "ERROR: %s", errmsg );
 }
 
 int main( int argc, char ** argv )
