@@ -1199,13 +1199,13 @@ list = hb_get_titles( fHandle );
 		/* use the outlets to the main menu bar to determine what to
 		   enable and disable */
 		[fMenuOpenSource setEnabled: YES];
+        [fMenuQueuePanelShow setEnabled: YES];
 		/* if we have a title loaded up */
 		if ([[fSrcDVD2Field stringValue] length] > 0)
 		{
 		[fMenuAddToQueue setEnabled: YES];
 		[fMenuStartEncode setEnabled: YES];
 		[fMenuPicturePanelShow setEnabled: YES];
-        [fMenuQueuePanelShow setEnabled: YES];
         [self enableUI: YES];
         }
 	}
