@@ -39,8 +39,8 @@ actions LibA52
 
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf a52dec && tar xzf a52dec.tar.gz && cd a52dec && patch -p1 < ../patch-a52dec.patch &&
-    ./configure --prefix=$(CONTRIB) --cache-file=$(CONTRIB)/config.cache && make && make install &&
-    strip -S $(CONTRIB)/lib/liba52.a
+    ./configure --prefix=$CONTRIB --cache-file=$CONTRIB/config.cache && make && make install &&
+    strip -S $CONTRIB/lib/liba52.a
 }
 Wget   $(SUBDIR)/a52dec.tar.gz : $(SUBDIR)/version_a52dec.txt ;
 LibA52 $(SUBDIR)/lib/liba52.a  : $(SUBDIR)/a52dec.tar.gz ;
@@ -61,12 +61,12 @@ actions LibAvCodec
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf ffmpeg && tar xzf ffmpeg.tar.gz &&
     cd ffmpeg && $(FFMPEG_PATCH) &&
-    ./configure --prefix=$(CONTRIB) --enable-gpl --enable-swscaler --disable-audio-beos --disable-shared --enable-static \
+    ./configure --prefix=$CONTRIB --enable-gpl --enable-swscaler --disable-audio-beos --disable-shared --enable-static \
         --disable-decoders --enable-decoder=mp2 --disable-parsers --enable-parser=mpegaudio \
         --disable-encoders --enable-encoder=mpeg4 --enable-encoder=ac3 --enable-encoder=snow \
         --disable-muxers --disable-demuxers --disable-protocols --disable-bsfs &&
     make && make install &&
-    strip -S $(CONTRIB)/lib/libavcodec.a
+    strip -S $CONTRIB/lib/libavcodec.a
 }
 Wget       $(SUBDIR)/ffmpeg.tar.gz    : $(SUBDIR)/version_ffmpeg.txt ;
 LibAvCodec $(SUBDIR)/lib/libavcodec.a : $(SUBDIR)/ffmpeg.tar.gz ;
@@ -98,8 +98,8 @@ if $(OS) != CYGWIN
     {
         cd `dirname $(>)` && CONTRIB=`pwd` &&
         rm -rf libdvdcss && tar xzf libdvdcss.tar.gz && cd libdvdcss &&
-        ./configure --prefix=$(CONTRIB) --cache-file=$(CONTRIB)/config.cache && make && make install &&
-        strip -S $(CONTRIB)/lib/libdvdcss.a
+        ./configure --prefix=$CONTRIB --cache-file=$CONTRIB/config.cache && make && make install &&
+        strip -S $CONTRIB/lib/libdvdcss.a
     }
     Wget      $(SUBDIR)/libdvdcss.tar.gz : $(SUBDIR)/version_libdvdcss.txt ;
     LibDvdCss $(SUBDIR)/lib/libdvdcss.a  : $(SUBDIR)/libdvdcss.tar.gz ;
@@ -115,8 +115,8 @@ actions LibDCA
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf libdca && tar xzf libdca.tar.gz && cd libdca && patch -p1 < ../patch-libdca.patch &&
-    ./configure --prefix=$(CONTRIB) --cache-file=$(CONTRIB)/config.cache && make && make install &&
-    strip -S $(CONTRIB)/lib/libdca.a
+    ./configure --prefix=$CONTRIB --cache-file=$CONTRIB/config.cache && make && make install &&
+    strip -S $CONTRIB/lib/libdca.a
 }
 Wget   $(SUBDIR)/libdca.tar.gz : $(SUBDIR)/version_libdca.txt ;
 LibDCA $(SUBDIR)/lib/libdca.a  : $(SUBDIR)/libdca.tar.gz ;
@@ -133,9 +133,9 @@ if $(OS) != CYGWIN
     {
         cd `dirname $(>)` && CONTRIB=`pwd` &&
         rm -rf libdvdread && tar xzf libdvdread.tar.gz && cd libdvdread &&
-        ./configure --prefix=$(CONTRIB) --cache-file=$(CONTRIB)/config.cache --disable-shared --with-libdvdcss=$CONTRIB &&
+        ./configure --prefix=$CONTRIB --cache-file=$CONTRIB/config.cache --disable-shared --with-libdvdcss=$CONTRIB &&
         make && make install &&
-        strip -S $(CONTRIB)/lib/libdvdread.a
+        strip -S $CONTRIB/lib/libdvdread.a
     }
 }
 else {
@@ -145,9 +145,9 @@ else {
     {
         cd `dirname $(>)` && CONTRIB=`pwd` &&
         rm -rf libdvdread && tar xzf libdvdread.tar.gz && cd libdvdread &&
-        ./configure --prefix=$(CONTRIB) --cache-file=$(CONTRIB)/config.cache --disable-shared &&
+        ./configure --prefix=$CONTRIB --cache-file=$CONTRIB/config.cache --disable-shared &&
         make && make install &&
-        strip -S $(CONTRIB)/lib/libdvdread.a
+        strip -S $CONTRIB/lib/libdvdread.a
     }
 }
 Wget       $(SUBDIR)/libdvdread.tar.gz : $(SUBDIR)/version_libdvdread.txt ;
@@ -163,9 +163,9 @@ actions LibFaac
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf faac && tar xzf faac.tar.gz && cd faac &&
-    ./configure --prefix=$(CONTRIB) --cache-file=$(CONTRIB)/config.cache --disable-shared --enable-static &&
+    ./configure --prefix=$CONTRIB --cache-file=$CONTRIB/config.cache --disable-shared --enable-static &&
     make && make install &&
-    strip -S $(CONTRIB)/lib/libfaac.a
+    strip -S $CONTRIB/lib/libfaac.a
 }
 Wget    $(SUBDIR)/faac.tar.gz   : $(SUBDIR)/version_faac.txt ;
 LibFaac $(SUBDIR)/lib/libfaac.a : $(SUBDIR)/faac.tar.gz ;
@@ -180,9 +180,9 @@ actions LibMp3Lame
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf lame && tar xzf lame.tar.gz && cd lame &&
-    ./configure --prefix=$(CONTRIB) --cache-file=$(CONTRIB)/config.cache --disable-shared &&
+    ./configure --prefix=$CONTRIB --cache-file=$CONTRIB/config.cache --disable-shared &&
     make && make install &&
-    strip -S $(CONTRIB)/lib/libmp3lame.a
+    strip -S $CONTRIB/lib/libmp3lame.a
 }
 Wget       $(SUBDIR)/lame.tar.gz      : $(SUBDIR)/version_lame.txt ;
 LibMp3Lame $(SUBDIR)/lib/libmp3lame.a : $(SUBDIR)/lame.tar.gz ;
@@ -200,11 +200,11 @@ if $(OS) != CYGWIN
         cd `dirname $(>)` && CONTRIB=`pwd` &&
         rm -rf mpeg4ip && tar xzf mpeg4ip.tar.gz && cd mpeg4ip &&
         patch -p1 < ../patch-mpeg4ip.patch && patch -p0 < ../patch-mpeg4ip-pascal-str.patch &&
-        ./bootstrap --cache-file=$(CONTRIB)/config.cache --disable-mp3lame --disable-faac --disable-x264 --disable-server --disable-player &&
-        make -C lib/mp4v2 libmp4v2.la && cp lib/mp4v2/.libs/libmp4v2.a $(CONTRIB)/lib &&
+        ./bootstrap --cache-file=$CONTRIB/config.cache --disable-mp3lame --disable-faac --disable-x264 --disable-server --disable-player &&
+        make -C lib/mp4v2 libmp4v2.la && cp lib/mp4v2/.libs/libmp4v2.a $CONTRIB/lib &&
         cp mpeg4ip_config.h include/mpeg4ip.h include/mpeg4ip_version.h \
-            include/mpeg4ip_win32.h lib/mp4v2/*.h $(CONTRIB)/include &&
-        strip -S $(CONTRIB)/lib/libmp4v2.a
+            include/mpeg4ip_win32.h lib/mp4v2/*.h $CONTRIB/include &&
+        strip -S $CONTRIB/lib/libmp4v2.a
     }
 }
 else
@@ -214,11 +214,11 @@ else
         cd `dirname $(>)` && CONTRIB=`pwd` &&
         rm -rf mpeg4ip && tar xzf mpeg4ip.tar.gz && cd mpeg4ip &&
         patch -p1 < ../patch-mpeg4ip.patch && patch -p1 < ../patch_mpeg4ip_cygwin.patch && patch -p0 < ../patch-mpeg4ip-pascal-str.patch &&
-        ./bootstrap --cache-file=$(CONTRIB)/config.cache --disable-mp3lame --disable-faac --disable-x264 --disable-server --disable-player &&
-        make -C lib/mp4v2 libmp4v2.la && cp lib/mp4v2/.libs/libmp4v2.a $(CONTRIB)/lib &&
+        ./bootstrap --cache-file=$CONTRIB/config.cache --disable-mp3lame --disable-faac --disable-x264 --disable-server --disable-player &&
+        make -C lib/mp4v2 libmp4v2.la && cp lib/mp4v2/.libs/libmp4v2.a $CONTRIB/lib &&
         cp mpeg4ip_config.h include/mpeg4ip.h include/mpeg4ip_version.h \
-            include/mpeg4ip_win32.h lib/mp4v2/*.h $(CONTRIB)/include &&
-        strip -S $(CONTRIB)/lib/libmp4v2.a
+            include/mpeg4ip_win32.h lib/mp4v2/*.h $CONTRIB/include &&
+        strip -S $CONTRIB/lib/libmp4v2.a
     }
 }
 Wget     $(SUBDIR)/mpeg4ip.tar.gz : $(SUBDIR)/version_mpeg4ip.txt ;
@@ -233,9 +233,9 @@ actions LibMkv
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf libmkv && tar xzf libmkv.tar.gz && cd libmkv &&
-    ./configure --disable-shared --enable-static --prefix=$(CONTRIB) --cache-file=$(CONTRIB)/config.cache &&
+    ./configure --disable-shared --enable-static --prefix=$CONTRIB --cache-file=$CONTRIB/config.cache &&
     make && make install &&
-    strip -S $(CONTRIB)/lib/libmkv.a
+    strip -S $CONTRIB/lib/libmkv.a
 }
 Wget    $(SUBDIR)/libmkv.tar.gz : $(SUBDIR)/version_libmkv.txt ;
 LibMkv  $(SUBDIR)/lib/libmkv.a  : $(SUBDIR)/libmkv.tar.gz ;
@@ -250,9 +250,9 @@ actions LibMpeg2
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf mpeg2dec && tar xzf mpeg2dec.tar.gz && cd mpeg2dec && patch -p1 < ../patch-libmpeg2.patch &&
-    ./configure --prefix=$(CONTRIB) --cache-file=$(CONTRIB)/config.cache --disable-shared --disable-sdl &&
+    ./configure --prefix=$CONTRIB --cache-file=$CONTRIB/config.cache --disable-shared --disable-sdl &&
     make && make install &&
-    strip -S $(CONTRIB)/lib/libmpeg2.a
+    strip -S $CONTRIB/lib/libmpeg2.a
 }
 Wget     $(SUBDIR)/mpeg2dec.tar.gz : $(SUBDIR)/version_mpeg2dec.txt ;
 LibMpeg2 $(SUBDIR)/lib/libmpeg2.a  : $(SUBDIR)/mpeg2dec.tar.gz ;
@@ -267,9 +267,9 @@ actions LibOgg
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf libogg && tar xzf libogg.tar.gz && cd libogg &&
-    ./configure --prefix=$(CONTRIB) --cache-file=$(CONTRIB)/config.cache --disable-shared &&
+    ./configure --prefix=$CONTRIB --cache-file=$CONTRIB/config.cache --disable-shared &&
     make && make install &&
-    strip -S $(CONTRIB)/lib/libogg.a
+    strip -S $CONTRIB/lib/libogg.a
 }
 Wget   $(SUBDIR)/libogg.tar.gz : $(SUBDIR)/version_libogg.txt ;
 LibOgg $(SUBDIR)/lib/libogg.a  : $(SUBDIR)/libogg.tar.gz ;
@@ -284,9 +284,9 @@ actions LibSampleRate
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf libsamplerate && tar xzf libsamplerate.tar.gz && cd libsamplerate &&
-    ./configure --prefix=$(CONTRIB) --cache-file=$(CONTRIB)/config.cache --disable-shared &&
+    ./configure --prefix=$CONTRIB --cache-file=$CONTRIB/config.cache --disable-shared &&
     make && make install &&
-    strip -S $(CONTRIB)/lib/libsamplerate.a
+    strip -S $CONTRIB/lib/libsamplerate.a
 }
 Wget          $(SUBDIR)/libsamplerate.tar.gz : $(SUBDIR)/version_libsamplerate.txt ;
 LibSampleRate $(SUBDIR)/lib/libsamplerate.a  : $(SUBDIR)/libsamplerate.tar.gz ;
@@ -301,9 +301,9 @@ actions LibVorbis
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf libvorbis && tar xzf libvorbis.tar.gz && cd libvorbis &&
-    ./configure --prefix=$(CONTRIB) --with-ogg=$(CONTRIB) --cache-file=$(CONTRIB)/config.cache --disable-shared &&
+    ./configure --prefix=$CONTRIB --with-ogg=$CONTRIB --cache-file=$CONTRIB/config.cache --disable-shared &&
     make && make install &&
-    strip -S $(CONTRIB)/lib/libvorbis.a
+    strip -S $CONTRIB/lib/libvorbis.a
 }
 Wget      $(SUBDIR)/libvorbis.tar.gz : $(SUBDIR)/version_libvorbis.txt ;
 LibVorbis $(SUBDIR)/lib/libvorbis.a  : $(SUBDIR)/libvorbis.tar.gz ;
@@ -339,7 +339,7 @@ actions LibX264
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf x264 && tar xzf x264.tar.gz && cd x264 && $(LIBX264_PATCH)
-    ./configure --prefix=$(CONTRIB) --enable-pthread && make &&
+    ./configure --prefix=$CONTRIB --enable-pthread && make &&
     make install &&
     strip -S $CONTRIB/lib/libx264.a
 }
@@ -366,10 +366,10 @@ actions LibXvidCore
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf xvidcore && tar xzf xvidcore.tar.gz &&
     cd xvidcore && $(LIBXVIDCORE_PATCH)
-    cd build/generic/ && ./configure --prefix=$(CONTRIB) --cache-file=$(CONTRIB)/config.cache && make libxvidcore.a &&
+    cd build/generic/ && ./configure --prefix=$CONTRIB --cache-file=$CONTRIB/config.cache && make libxvidcore.a &&
     cp ./=build/libxvidcore.a $CONTRIB/lib/ &&
     cp ../../src/xvid.h $CONTRIB/include/ &&
-    strip -S $(CONTRIB)/lib/libxvidcore.a
+    strip -S $CONTRIB/lib/libxvidcore.a
 }
 Wget        $(SUBDIR)/xvidcore.tar.gz   : $(SUBDIR)/version_xvidcore.txt ;
 LibXvidCore $(SUBDIR)/lib/libxvidcore.a : $(SUBDIR)/xvidcore.tar.gz ;
@@ -386,9 +386,9 @@ if $(OS) = CYGWIN
     {
         cd `dirname $(>)` && CONTRIB=`pwd` &&
         rm -rf zlib && tar xzf zlib.tar.gz &&
-        cd zlib && ./configure --prefix=$(CONTRIB) --cache-file=$(CONTRIB)/config.cache &&
-        make && make install && touch $(CONTRIB)/.contrib &&
-        strip -S $(CONTRIB)/lib/libz.a
+        cd zlib && ./configure --prefix=$CONTRIB --cache-file=$CONTRIB/config.cache &&
+        make && make install && touch $CONTRIB/.contrib &&
+        strip -S $CONTRIB/lib/libz.a
     }
     Wget  $(SUBDIR)/zlib.tar.gz : $(SUBDIR)/version_zlib.txt ;
     Zlib  $(SUBDIR)/lib/libz.a  : $(SUBDIR)/zlib.tar.gz ;
