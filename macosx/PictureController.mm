@@ -32,10 +32,10 @@ static int GetAlignedSize( int size )
 
     [fWidthStepper  setValueWraps: NO];
     [fWidthStepper  setIncrement: 16];
-    [fWidthStepper  setMinValue: 16];
+    [fWidthStepper  setMinValue: 32];
     [fHeightStepper setValueWraps: NO];
     [fHeightStepper setIncrement: 16];
-    [fHeightStepper setMinValue: 16];
+    [fHeightStepper setMinValue: 32];
 
     [fCropTopStepper    setIncrement: 2];
     [fCropTopStepper    setMinValue:  0];
@@ -347,7 +347,15 @@ static int GetAlignedSize( int size )
     [fCropLeftField     setIntValue: job->crop[2]];
     [fCropRightStepper  setIntValue: job->crop[3]];
     [fCropRightField    setIntValue: job->crop[3]];
+    /* Sanity Check Here for < 16 px preview to avoid
+       crashing hb_get_preview. In fact, just for kicks
+       lets getting previews at a min limit of 32, since
+       no human can see any meaningful detail below that */
+    if (job->width >= 32 && job->height >= 32)
+    {
     [self Display: HB_ANIMATE_NONE];
+    }
+
 }
 
 - (IBAction) PreviousPicture: (id) sender
