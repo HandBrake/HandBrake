@@ -419,10 +419,6 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
     avpicture_free( &pic_scale );
     avpicture_free( &pic_deint );
     avpicture_free( &pic_in );
-    free( buf1 );
-    free( buf2 );
-    free( buf3 );
-    free( buf4 );
 }
 
 /**
