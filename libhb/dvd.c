@@ -736,17 +736,19 @@ int hb_dvd_read( hb_dvd_t * d, hb_buffer_t * b )
 
         if( dsi_pack.vobu_sri.next_vobu == SRI_END_OF_CELL )
         {
+            hb_log( "DVD: End of Cell (%d) at block %d", d->cell_cur, 
+                    d->block );
             d->cell_cur  = d->cell_next;
             d->next_vobu = d->pgc->cell_playback[d->cell_cur].first_sector;
             FindNextCell( d );
             d->cell_overlap = 1;
-            hb_log("DVD: End of Cell");
         }
         
         // Revert the cell overlap, and check for a chapter break
         if( dsi_pack.vobu_sri.prev_vobu == SRI_END_OF_CELL )
         {
-            hb_log("DVD: Beginning of Cell");
+            hb_log( "DVD: Beginning of Cell (%d) at block %d", d->cell_cur, 
+                   d->block );
             if( d->cell_overlap )
             {
                 b->new_chap = hb_dvd_is_break( d );
