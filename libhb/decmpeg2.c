@@ -126,7 +126,7 @@ int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
         }
         else if( state == STATE_GOP && m->look_for_break == 2)
         {
-            printf("MPEG2: Group of pictures found, searching for I-Frame\n");
+            hb_log("MPEG2: Group of pictures found, searching for I-Frame");
             m->look_for_break = 1;
         }
         else if( ( state == STATE_SLICE || state == STATE_END ) &&
@@ -140,7 +140,7 @@ int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 // If we are looking for a break, insert the chapter break on an I-Frame
                 if( m->look_for_break == 1 )
                 {
-                    printf("MPEG2: I-Frame Found\n");
+                    hb_log("MPEG2: I-Frame Found");
                     m->look_for_break = 0;
                     chap_break = 1;
                 }
@@ -154,7 +154,7 @@ int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 // Was a good break point found?
                 if( chap_break )
                 {
-                    printf("MPEG2: Chapter Break Inserted\n");
+                    hb_log("MPEG2: Chapter Break Inserted");
                     chap_break = 0;
                     buf->new_chap = 1;
                 }
@@ -378,7 +378,7 @@ int decmpeg2Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     // stream. We need to shift it.
     if( (*buf_in)->new_chap )
     {
-        printf("MPEG2: Chapter Break Cell Found, searching for GOP\n");
+        hb_log("MPEG2: Chapter Break Cell Found, searching for GOP");
         pv->libmpeg2->look_for_break = 2;
         (*buf_in)->new_chap = 0;
     }

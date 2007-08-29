@@ -721,7 +721,7 @@ static void work_loop( void * _w )
         // Propogate any chapter breaks for the worker
         if( buf_in && buf_out && buf_in->new_chap )
         {
-            printf("WORK: Copying Chapter Break\n");
+            hb_log("WORK: Copying Chapter Break");
             buf_out->new_chap = 1;
         }
         
