@@ -141,7 +141,12 @@ static void ParseControls( hb_work_object_t * w )
     pv->pts_start = 0;
     pv->pts_stop  = 0;
     pv->pts_forced  = 0;
-
+	
+    pv->alpha[3] = 0;
+    pv->alpha[2] = 0;
+    pv->alpha[1] = 0;
+    pv->alpha[0] = 0;
+    
     for( i = pv->size_rle; ; )
     {
         date = ( pv->buf[i] << 8 ) | pv->buf[i+1]; i += 2;
@@ -193,7 +198,8 @@ static void ParseControls( hb_work_object_t * w )
                     break;
 
                 case 0x02: // 0x02 - STP_DSP - Stop Display, no arguments
-                    pv->pts_stop = pv->pts + date * 900;
+					if(!pv->pts_stop)
+						pv->pts_stop = pv->pts + date * 900;
                     break;
 
                 case 0x03: // 0x03 - SET_COLOR - Set Colour indices
@@ -247,10 +253,32 @@ static void ParseControls( hb_work_object_t * w )
                      * (alpha blend) values to associate with the four
                      * pixel values
                      */
-                    pv->alpha[3] = (pv->buf[i+0]>>4)&0x0f;
-                    pv->alpha[2] = (pv->buf[i+0])&0x0f;
-                    pv->alpha[1] = (pv->buf[i+1]>>4)&0x0f;
-                    pv->alpha[0] = (pv->buf[i+1])&0x0f;
+                    uint8_t    alpha[4];
+                    
+                    alpha[3] = (pv->buf[i+0]>>4)&0x0f;
+                    alpha[2] = (pv->buf[i+0])&0x0f;
+                    alpha[1] = (pv->buf[i+1]>>4)&0x0f;
+                    alpha[0] = (pv->buf[i+1])&0x0f;
+                    
+                    
+                    int lastAlpha = pv->alpha[3] + pv->alpha[2] + pv->alpha[1] + pv->alpha[0];
+                    int currAlpha = alpha[3] + alpha[2] + alpha[1] + alpha[0];
+                    
+                    // fading-in, save the highest alpha value
+                    if( currAlpha > lastAlpha ) 
+                    {
+                        pv->alpha[3] = alpha[3];
+                        pv->alpha[2] = alpha[2];
+                        pv->alpha[1] = alpha[1];
+                        pv->alpha[0] = alpha[0];
+                    }
+                    
+                    // fading-out
+                    if( currAlpha < lastAlpha && !pv->pts_stop ) 
+                    {
+                        pv->pts_stop = pv->pts + date * 900;
+                    }
+                    
                     i += 2;
                     break;
                 }
@@ -271,6 +299,8 @@ static void ParseControls( hb_work_object_t * w )
                 }
             }
         }
+		
+
 
         if( i > next )
         {
