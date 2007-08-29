@@ -29,40 +29,11 @@ namespace Handbrake
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmReadDVD));
-            this.lbl_pressOk = new System.Windows.Forms.Label();
-            this.btn_ok = new System.Windows.Forms.Button();
             this.Label3 = new System.Windows.Forms.Label();
             this.Label2 = new System.Windows.Forms.Label();
             this.lbl_status = new System.Windows.Forms.Label();
             this.lbl_progress = new System.Windows.Forms.Label();
-            this.btn_skip = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // lbl_pressOk
-            // 
-            this.lbl_pressOk.AutoSize = true;
-            this.lbl_pressOk.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_pressOk.Location = new System.Drawing.Point(77, 61);
-            this.lbl_pressOk.Name = "lbl_pressOk";
-            this.lbl_pressOk.Size = new System.Drawing.Size(178, 13);
-            this.lbl_pressOk.TabIndex = 29;
-            this.lbl_pressOk.Text = "Press OK to start the process.";
-            // 
-            // btn_ok
-            // 
-            this.btn_ok.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.btn_ok.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_ok.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_ok.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_ok.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_ok.Location = new System.Drawing.Point(351, 56);
-            this.btn_ok.Name = "btn_ok";
-            this.btn_ok.Size = new System.Drawing.Size(71, 22);
-            this.btn_ok.TabIndex = 28;
-            this.btn_ok.TabStop = false;
-            this.btn_ok.Text = "OK";
-            this.btn_ok.UseVisualStyleBackColor = false;
-            this.btn_ok.Click += new System.EventHandler(this.btn_ok_Click);
             // 
             // Label3
             // 
@@ -106,36 +77,15 @@ namespace Handbrake
             this.lbl_progress.Text = "{ % }";
             this.lbl_progress.Visible = false;
             // 
-            // btn_skip
-            // 
-            this.btn_skip.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.btn_skip.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_skip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_skip.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_skip.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_skip.Location = new System.Drawing.Point(351, 4);
-            this.btn_skip.Name = "btn_skip";
-            this.btn_skip.Size = new System.Drawing.Size(71, 22);
-            this.btn_skip.TabIndex = 33;
-            this.btn_skip.TabStop = false;
-            this.btn_skip.Text = "Cancel";
-            this.btn_skip.UseVisualStyleBackColor = false;
-            this.btn_skip.Visible = false;
-            this.btn_skip.Click += new System.EventHandler(this.btn_skip_Click);
-            // 
             // frmReadDVD
             // 
-            this.AcceptButton = this.btn_ok;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(434, 88);
+            this.ClientSize = new System.Drawing.Size(346, 70);
             this.ControlBox = false;
-            this.Controls.Add(this.btn_skip);
             this.Controls.Add(this.lbl_progress);
             this.Controls.Add(this.lbl_status);
-            this.Controls.Add(this.lbl_pressOk);
-            this.Controls.Add(this.btn_ok);
             this.Controls.Add(this.Label3);
             this.Controls.Add(this.Label2);
             this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -155,12 +105,9 @@ namespace Handbrake
 
         #endregion
 
-        internal System.Windows.Forms.Label lbl_pressOk;
-        internal System.Windows.Forms.Button btn_ok;
         internal System.Windows.Forms.Label Label3;
         internal System.Windows.Forms.Label Label2;
         internal System.Windows.Forms.Label lbl_status;
         private System.Windows.Forms.Label lbl_progress;
-        internal System.Windows.Forms.Button btn_skip;
     }
 }

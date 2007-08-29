@@ -42,6 +42,7 @@ namespace Handbrake
             this.Label11 = new System.Windows.Forms.Label();
             this.GroupBox3 = new System.Windows.Forms.GroupBox();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
+            this.check_guiDebug = new System.Windows.Forms.CheckBox();
             this.btn_close = new System.Windows.Forms.Button();
             this.GroupBox2.SuspendLayout();
             this.GroupBox3.SuspendLayout();
@@ -141,9 +142,9 @@ namespace Handbrake
             this.check_verbose.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.check_verbose.Location = new System.Drawing.Point(20, 31);
             this.check_verbose.Name = "check_verbose";
-            this.check_verbose.Size = new System.Drawing.Size(71, 17);
+            this.check_verbose.Size = new System.Drawing.Size(139, 17);
             this.check_verbose.TabIndex = 51;
-            this.check_verbose.Text = "Enabled";
+            this.check_verbose.Text = "Enable Verbose CLI";
             this.check_verbose.UseVisualStyleBackColor = true;
             this.check_verbose.CheckedChanged += new System.EventHandler(this.check_verbose_CheckedChanged);
             // 
@@ -201,6 +202,7 @@ namespace Handbrake
             // GroupBox1
             // 
             this.GroupBox1.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.GroupBox1.Controls.Add(this.check_guiDebug);
             this.GroupBox1.Controls.Add(this.check_verbose);
             this.GroupBox1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GroupBox1.Location = new System.Drawing.Point(13, 283);
@@ -208,7 +210,19 @@ namespace Handbrake
             this.GroupBox1.Size = new System.Drawing.Size(386, 70);
             this.GroupBox1.TabIndex = 54;
             this.GroupBox1.TabStop = false;
-            this.GroupBox1.Text = "Verbose Mode";
+            this.GroupBox1.Text = "Verbose && Debug Mode";
+            // 
+            // check_guiDebug
+            // 
+            this.check_guiDebug.AutoSize = true;
+            this.check_guiDebug.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_guiDebug.Location = new System.Drawing.Point(187, 31);
+            this.check_guiDebug.Name = "check_guiDebug";
+            this.check_guiDebug.Size = new System.Drawing.Size(131, 17);
+            this.check_guiDebug.TabIndex = 52;
+            this.check_guiDebug.Text = "Enable GUI Debug";
+            this.check_guiDebug.UseVisualStyleBackColor = true;
+            this.check_guiDebug.CheckedChanged += new System.EventHandler(this.check_guiDebug_CheckedChanged);
             // 
             // btn_close
             // 
@@ -266,5 +280,6 @@ namespace Handbrake
         internal System.Windows.Forms.GroupBox GroupBox3;
         internal System.Windows.Forms.GroupBox GroupBox1;
         internal System.Windows.Forms.Button btn_close;
+        internal System.Windows.Forms.CheckBox check_guiDebug;
     }
 }

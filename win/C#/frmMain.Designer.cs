@@ -268,7 +268,7 @@ namespace Handbrake
             // 
             this.RadioISO.AutoSize = true;
             this.RadioISO.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RadioISO.Location = new System.Drawing.Point(358, 34);
+            this.RadioISO.Location = new System.Drawing.Point(487, 33);
             this.RadioISO.Name = "RadioISO";
             this.RadioISO.Size = new System.Drawing.Size(44, 17);
             this.RadioISO.TabIndex = 19;
@@ -282,7 +282,7 @@ namespace Handbrake
             this.text_source.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.text_source.Location = new System.Drawing.Point(99, 22);
             this.text_source.Name = "text_source";
-            this.text_source.Size = new System.Drawing.Size(253, 21);
+            this.text_source.Size = new System.Drawing.Size(294, 21);
             this.text_source.TabIndex = 1;
             this.text_source.Text = "Click \'Browse\' to continue";
             this.ToolTip.SetToolTip(this.text_source, "The input source location.");
@@ -293,7 +293,7 @@ namespace Handbrake
             this.text_destination.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.text_destination.Location = new System.Drawing.Point(99, 21);
             this.text_destination.Name = "text_destination";
-            this.text_destination.Size = new System.Drawing.Size(262, 21);
+            this.text_destination.Size = new System.Drawing.Size(294, 21);
             this.text_destination.TabIndex = 4;
             this.ToolTip.SetToolTip(this.text_destination, "Location where the enoceded file will be saved.");
             // 
@@ -303,7 +303,7 @@ namespace Handbrake
             this.btn_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_Browse.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_Browse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_Browse.Location = new System.Drawing.Point(424, 22);
+            this.btn_Browse.Location = new System.Drawing.Point(399, 22);
             this.btn_Browse.Name = "btn_Browse";
             this.btn_Browse.Size = new System.Drawing.Size(78, 22);
             this.btn_Browse.TabIndex = 2;
@@ -341,7 +341,7 @@ namespace Handbrake
             this.btn_destBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_destBrowse.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_destBrowse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_destBrowse.Location = new System.Drawing.Point(370, 21);
+            this.btn_destBrowse.Location = new System.Drawing.Point(399, 21);
             this.btn_destBrowse.Name = "btn_destBrowse";
             this.btn_destBrowse.Size = new System.Drawing.Size(83, 22);
             this.btn_destBrowse.TabIndex = 4;
@@ -460,7 +460,7 @@ namespace Handbrake
             // ISO_Open
             // 
             this.ISO_Open.DefaultExt = "ISO";
-            this.ISO_Open.Filter = "All Supported Files|*.iso;*.mpg;*.mpeg;*.vob;*.ts";
+            this.ISO_Open.Filter = "All Supported Files|*.iso;*.mpg;*.m2t;*.vob;*.ts;*.mpeg;";
             this.ISO_Open.SupportMultiDottedExtensions = true;
             // 
             // FileToolStripMenuItem
@@ -822,7 +822,7 @@ namespace Handbrake
             // 
             // frmMainMenu
             // 
-            this.frmMainMenu.BackColor = System.Drawing.SystemColors.Control;
+            this.frmMainMenu.BackColor = System.Drawing.SystemColors.ControlLight;
             this.frmMainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.FileToolStripMenuItem,
             this.ToolsToolStripMenuItem,
@@ -830,7 +830,7 @@ namespace Handbrake
             this.HelpToolStripMenuItem});
             this.frmMainMenu.Location = new System.Drawing.Point(0, 0);
             this.frmMainMenu.Name = "frmMainMenu";
-            this.frmMainMenu.Size = new System.Drawing.Size(675, 24);
+            this.frmMainMenu.Size = new System.Drawing.Size(676, 24);
             this.frmMainMenu.TabIndex = 1;
             this.frmMainMenu.Text = "MenuStrip1";
             // 
@@ -883,7 +883,7 @@ namespace Handbrake
             this.RadioDVD.AutoSize = true;
             this.RadioDVD.Checked = true;
             this.RadioDVD.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RadioDVD.Location = new System.Drawing.Point(358, 18);
+            this.RadioDVD.Location = new System.Drawing.Point(487, 17);
             this.RadioDVD.Name = "RadioDVD";
             this.RadioDVD.Size = new System.Drawing.Size(60, 17);
             this.RadioDVD.TabIndex = 20;
@@ -1081,10 +1081,10 @@ namespace Handbrake
             // lbl_encode
             // 
             this.lbl_encode.AutoSize = true;
-            this.lbl_encode.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_encode.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_encode.Location = new System.Drawing.Point(12, 571);
             this.lbl_encode.Name = "lbl_encode";
-            this.lbl_encode.Size = new System.Drawing.Size(96, 13);
+            this.lbl_encode.Size = new System.Drawing.Size(129, 13);
             this.lbl_encode.TabIndex = 418;
             this.lbl_encode.Text = "Encoding started...";
             this.lbl_encode.Visible = false;
@@ -1938,7 +1938,7 @@ namespace Handbrake
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(675, 621);
+            this.ClientSize = new System.Drawing.Size(676, 621);
             this.Controls.Add(this.btn_eCancel);
             this.Controls.Add(this.lbl_encode);
             this.Controls.Add(this.lbl_update);

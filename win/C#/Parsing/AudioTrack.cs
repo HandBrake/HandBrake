@@ -98,12 +98,12 @@ namespace Handbrake.Parsing
             if (m.Success)
             {
                 AudioTrack thisTrack = new AudioTrack();
-                thisTrack.m_trackNumber = int.Parse(m.Groups[1].Value);
+                thisTrack.m_trackNumber = int.Parse(m.Groups[1].Value.Trim().ToString());
                 thisTrack.m_language = m.Groups[2].Value;
                 thisTrack.m_format = m.Groups[3].Value;
                 thisTrack.m_subFormat = m.Groups[4].Value;
-                thisTrack.m_frequency = int.Parse(m.Groups[5].Value);
-                thisTrack.m_bitrate = int.Parse(m.Groups[6].Value);
+                thisTrack.m_frequency = int.Parse(m.Groups[5].Value.Trim().ToString());
+                thisTrack.m_bitrate = int.Parse(m.Groups[6].Value.Trim().ToString());
                 return thisTrack;
             }
             else

@@ -32,6 +32,11 @@ namespace Handbrake
             {
                 check_verbose.CheckState = CheckState.Checked;
             }
+
+            if (Properties.Settings.Default.GuiDebug == "Checked")
+            {
+                check_guiDebug.CheckState = CheckState.Checked;
+            }
         }
 
         private void check_updateCheck_CheckedChanged(object sender, EventArgs e)
@@ -64,5 +69,12 @@ namespace Handbrake
             Properties.Settings.Default.Save(); // Small hack for Vista. Seems to work fine on XP without this
             this.Close();
         }
+
+        private void check_guiDebug_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.GuiDebug = check_guiDebug.CheckState.ToString();
+        }
+
+
     }
 }

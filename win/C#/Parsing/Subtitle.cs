@@ -51,7 +51,7 @@ namespace Handbrake.Parsing
             if (m.Success && !curLine.Contains("HandBrake has exited."))
             {
                 Subtitle thisSubtitle = new Subtitle();
-                thisSubtitle.m_trackNumber = int.Parse(m.Groups[1].Value);
+                thisSubtitle.m_trackNumber = int.Parse(m.Groups[1].Value.Trim().ToString());
                 thisSubtitle.m_language = m.Groups[2].Value;
                 return thisSubtitle;
             }

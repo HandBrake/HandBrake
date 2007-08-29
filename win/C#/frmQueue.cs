@@ -71,6 +71,7 @@ namespace Handbrake
                 return;
             }
             this.list_queue.Items.RemoveAt(0);
+
             progressBar.PerformStep();
             lbl_progressValue.Text = string.Format("{0} %", progressBar.Value);
             progressBar.Update();
@@ -93,6 +94,8 @@ namespace Handbrake
          * Code to Re-arrange / Delete items from the Queue
          * 
          */
+        #region Queue Management
+
         private void btn_up_Click(object sender, EventArgs e)
         {
             int count = list_queue.Items.Count;
@@ -133,6 +136,7 @@ namespace Handbrake
             if (started == true)
                 initialListCount--;
         }
+        #endregion
 
         /*
          * Hide the Queue Window

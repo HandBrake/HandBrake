@@ -537,5 +537,30 @@ namespace Handbrake.Properties {
                 this["CliVersion"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Checked")]
+        public string GuiDebug {
+            get {
+                return ((string)(this["GuiDebug"]));
+            }
+            set {
+                this["GuiDebug"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Program Error. Please enable debug more in: Tools > Options. If the error re-occu" +
+            "rs, please report it on the forums.")]
+        public string defaultError {
+            get {
+                return ((string)(this["defaultError"]));
+            }
+            set {
+                this["defaultError"] = value;
+            }
+        }
     }
 }

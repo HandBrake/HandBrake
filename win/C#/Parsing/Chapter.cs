@@ -50,7 +50,7 @@ namespace Handbrake.Parsing
             if (m.Success)
             {
                 Chapter thisChapter = new Chapter();
-                thisChapter.m_chapterNumber = int.Parse(m.Groups[1].Value);
+                thisChapter.m_chapterNumber = int.Parse(m.Groups[1].Value.Trim().ToString());
                 thisChapter.m_duration = TimeSpan.Parse(m.Groups[5].Value);
                 return thisChapter;
             }

@@ -131,5 +131,11 @@
     <Setting Name="CliVersion" Type="System.String" Scope="User">
       <Value Profile="(Default)">0.9.1</Value>
     </Setting>
+    <Setting Name="GuiDebug" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Checked</Value>
+    </Setting>
+    <Setting Name="defaultError" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Program Error. Please enable debug more in: Tools &gt; Options. If the error re-occurs, please report it on the forums.</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

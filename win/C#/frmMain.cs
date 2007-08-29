@@ -1019,10 +1019,8 @@ namespace Handbrake
 
         private void btn_encode_Click(object sender, EventArgs e)
         {
-            btn_eCancel.Enabled = true;
-            String query = "";
-            lbl_encode.Visible = false;
- 
+            //btn_eCancel.Enabled = true;
+            String query = "";            
             if (QueryEditorText.Text == "")
             {
                 query = GenerateTheQuery();
@@ -1033,7 +1031,8 @@ namespace Handbrake
             }
 
             ThreadPool.QueueUserWorkItem(procMonitor, query);
-            lbl_encode.Text = "Encoding Started";
+            lbl_encode.Visible = true;
+            lbl_encode.Text = "Encoding in Progress";
         }
 
         private void btn_eCancel_Click(object sender, EventArgs e)
@@ -1053,7 +1052,6 @@ namespace Handbrake
             else
             {
                 hbProc = process.runCli(this, (string)state, false, false, false, false);
-                MessageBox.Show("The encode process has now started.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 hbProc.WaitForExit();
 
                 try
@@ -1083,13 +1081,25 @@ namespace Handbrake
                     // Do nothing
                 }
 
-                MessageBox.Show("The encode process has now ended.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+
+                setEncodeLabel();
                 hbProc = null;
             }
         }
-
-        private void encode_OnEncodeProgress(object Sender, int CurrentTask, int TaskCount, float PercentComplete, float CurrentFps, float AverageFps, TimeSpan TimeRemaining)
+        private delegate void UpdateUIHandler();
+        private void setEncodeLabel()
         {
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new UpdateUIHandler(setEncodeLabel));
+                return;
+            }
+            lbl_encode.Text = "Encoding Finished";
+        }
+
+        /*private void encode_OnEncodeProgress(object Sender, int CurrentTask, int TaskCount, float PercentComplete, float CurrentFps, float AverageFps, TimeSpan TimeRemaining)
+        {
+            
             if (this.InvokeRequired)
             {
                 this.BeginInvoke(new Parsing.EncodeProgressEventHandler(encode_OnEncodeProgress),
@@ -1097,7 +1107,7 @@ namespace Handbrake
                 return;
             }
             lbl_encode.Text = string.Format("Encode Progress: {0}%,       FPS: {1},       Avg FPS: {2},       Time Remaining: {3} ", PercentComplete, CurrentFps, AverageFps, TimeRemaining);
-        }
+        }*/
 
         #endregion
 

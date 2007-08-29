@@ -28,28 +28,34 @@ namespace Handbrake
             this.inputFile = inputFile;
             this.mainWindow = parent;
             this.dvdInfo = dvdInfoWindow;
+            startScan();
+            
         }
 
-        private void btn_ok_Click(object sender, EventArgs e)
+        private void startScan()
         {
-      
             try
             {
-                btn_ok.Enabled = false;
                 //btn_skip.Visible = true;
-                lbl_pressOk.Visible = false;
                 lbl_progress.Text = "0%";
                 //lbl_progress.Visible = true;
                 lbl_status.Visible = true;
                 // throw cli call and parsing on it's own thread
                 ThreadPool.QueueUserWorkItem(startProc);
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
-                MessageBox.Show("frmReadDVD.cs - btn_ok_Click " + exc.ToString());
+                if (Properties.Settings.Default.GuiDebug == "Checked")
+                {
+                    MessageBox.Show("frmReadDVD.cs - startScan " + exc.ToString());
+                }
+                else
+                {
+                    MessageBox.Show(Properties.Settings.Default.defaultError.ToString());
+                }
             }
         }
-     
+   
         private void updateUIElements()
         {
             try
@@ -69,7 +75,14 @@ namespace Handbrake
             }
             catch(Exception exc)
             {
-                MessageBox.Show("frmReadDVD.cs - updateUIElements " + exc.ToString());
+                if (Properties.Settings.Default.GuiDebug == "Checked")
+                {
+                    MessageBox.Show("frmReadDVD.cs - updateUIElements " + exc.ToString());
+                }
+                else
+                {
+                    MessageBox.Show(Properties.Settings.Default.defaultError.ToString());
+                }
             }
         }
 
@@ -103,7 +116,14 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                MessageBox.Show("frmReadDVD.cs - startProc " + exc.ToString());
+                if (Properties.Settings.Default.GuiDebug == "Checked")
+                {
+                    MessageBox.Show("frmReadDVD.cs - startProc " + exc.ToString());
+                }
+                else
+                {
+                    MessageBox.Show(Properties.Settings.Default.defaultError.ToString());
+                }
             }
 
         }
@@ -146,17 +166,5 @@ namespace Handbrake
             this.lbl_progress.Text = progress.ToString() + "%";
         }*/
 
-        private void btn_skip_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.Close();
-                //cancel = 1;
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.ToString());
-            }
-        }
     }
 }
