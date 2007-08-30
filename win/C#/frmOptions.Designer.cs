@@ -44,6 +44,8 @@ namespace Handbrake
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
             this.check_guiDebug = new System.Windows.Forms.CheckBox();
             this.btn_close = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.check_tooltip = new System.Windows.Forms.CheckBox();
             this.GroupBox2.SuspendLayout();
             this.GroupBox3.SuspendLayout();
             this.GroupBox1.SuspendLayout();
@@ -70,6 +72,8 @@ namespace Handbrake
             // GroupBox2
             // 
             this.GroupBox2.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.GroupBox2.Controls.Add(this.label3);
+            this.GroupBox2.Controls.Add(this.check_tooltip);
             this.GroupBox2.Controls.Add(this.Label1);
             this.GroupBox2.Controls.Add(this.check_updateCheck);
             this.GroupBox2.Controls.Add(this.Label2);
@@ -77,7 +81,7 @@ namespace Handbrake
             this.GroupBox2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GroupBox2.Location = new System.Drawing.Point(12, 11);
             this.GroupBox2.Name = "GroupBox2";
-            this.GroupBox2.Size = new System.Drawing.Size(386, 132);
+            this.GroupBox2.Size = new System.Drawing.Size(386, 173);
             this.GroupBox2.TabIndex = 55;
             this.GroupBox2.TabStop = false;
             this.GroupBox2.Text = "General Settings";
@@ -108,7 +112,7 @@ namespace Handbrake
             // 
             this.Label2.AutoSize = true;
             this.Label2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label2.Location = new System.Drawing.Point(13, 72);
+            this.Label2.Location = new System.Drawing.Point(13, 67);
             this.Label2.Name = "Label2";
             this.Label2.Size = new System.Drawing.Size(229, 13);
             this.Label2.TabIndex = 46;
@@ -118,7 +122,7 @@ namespace Handbrake
             // 
             this.check_userDefaultSettings.AutoSize = true;
             this.check_userDefaultSettings.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_userDefaultSettings.Location = new System.Drawing.Point(16, 93);
+            this.check_userDefaultSettings.Location = new System.Drawing.Point(16, 88);
             this.check_userDefaultSettings.Name = "check_userDefaultSettings";
             this.check_userDefaultSettings.Size = new System.Drawing.Size(71, 17);
             this.check_userDefaultSettings.TabIndex = 47;
@@ -192,7 +196,7 @@ namespace Handbrake
             this.GroupBox3.Controls.Add(this.drp_processors);
             this.GroupBox3.Controls.Add(this.Label11);
             this.GroupBox3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GroupBox3.Location = new System.Drawing.Point(13, 149);
+            this.GroupBox3.Location = new System.Drawing.Point(13, 190);
             this.GroupBox3.Name = "GroupBox3";
             this.GroupBox3.Size = new System.Drawing.Size(386, 128);
             this.GroupBox3.TabIndex = 56;
@@ -205,7 +209,7 @@ namespace Handbrake
             this.GroupBox1.Controls.Add(this.check_guiDebug);
             this.GroupBox1.Controls.Add(this.check_verbose);
             this.GroupBox1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GroupBox1.Location = new System.Drawing.Point(13, 283);
+            this.GroupBox1.Location = new System.Drawing.Point(13, 324);
             this.GroupBox1.Name = "GroupBox1";
             this.GroupBox1.Size = new System.Drawing.Size(386, 70);
             this.GroupBox1.TabIndex = 54;
@@ -231,7 +235,7 @@ namespace Handbrake
             this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(292, 360);
+            this.btn_close.Location = new System.Drawing.Point(292, 410);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(107, 22);
             this.btn_close.TabIndex = 53;
@@ -239,10 +243,32 @@ namespace Handbrake
             this.btn_close.UseVisualStyleBackColor = false;
             this.btn_close.Click += new System.EventHandler(this.btn_close_Click);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(13, 117);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(116, 13);
+            this.label3.TabIndex = 48;
+            this.label3.Text = "Enable GUI tooltips";
+            // 
+            // check_tooltip
+            // 
+            this.check_tooltip.AutoSize = true;
+            this.check_tooltip.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_tooltip.Location = new System.Drawing.Point(16, 138);
+            this.check_tooltip.Name = "check_tooltip";
+            this.check_tooltip.Size = new System.Drawing.Size(71, 17);
+            this.check_tooltip.TabIndex = 49;
+            this.check_tooltip.Text = "Enabled";
+            this.check_tooltip.UseVisualStyleBackColor = true;
+            this.check_tooltip.CheckedChanged += new System.EventHandler(this.check_tooltip_CheckedChanged);
+            // 
             // frmOptions
             // 
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(411, 394);
+            this.ClientSize = new System.Drawing.Size(411, 444);
             this.Controls.Add(this.GroupBox2);
             this.Controls.Add(this.GroupBox3);
             this.Controls.Add(this.GroupBox1);
@@ -281,5 +307,7 @@ namespace Handbrake
         internal System.Windows.Forms.GroupBox GroupBox1;
         internal System.Windows.Forms.Button btn_close;
         internal System.Windows.Forms.CheckBox check_guiDebug;
+        internal System.Windows.Forms.Label label3;
+        internal System.Windows.Forms.CheckBox check_tooltip;
     }
 }

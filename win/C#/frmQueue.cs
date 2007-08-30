@@ -145,5 +145,10 @@ namespace Handbrake
         {
             this.Hide();
         }
+
+        private void btn_minimise_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
     }
 }

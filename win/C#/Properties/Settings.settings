@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="GuiVersion" Type="System.String" Scope="User">
-      <Value Profile="(Default)">2.41</Value>
+      <Value Profile="(Default)">2.4.1</Value>
     </Setting>
     <Setting Name="updateFile" Type="System.String" Scope="User">
       <Value Profile="(Default)">http://download.m0k.org/handbrake/windows/update.txt</Value>
@@ -18,10 +18,10 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="updateStatus" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Checked</Value>
     </Setting>
     <Setting Name="verbose" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Checked</Value>
     </Setting>
     <Setting Name="DVDSource" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -126,7 +126,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="QuickStartWindow" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Checked</Value>
     </Setting>
     <Setting Name="CliVersion" Type="System.String" Scope="User">
       <Value Profile="(Default)">0.9.1</Value>
@@ -136,6 +136,9 @@
     </Setting>
     <Setting Name="defaultError" Type="System.String" Scope="User">
       <Value Profile="(Default)">Program Error. Please enable debug more in: Tools &gt; Options. If the error re-occurs, please report it on the forums.</Value>
+    </Setting>
+    <Setting Name="tooltipEnable" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Checked</Value>
     </Setting>
   </Settings>
 </SettingsFile>

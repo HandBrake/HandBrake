@@ -25,7 +25,7 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2.41")]
+        [global::System.Configuration.DefaultSettingValueAttribute("2.4.1")]
         public string GuiVersion {
             get {
                 return ((string)(this["GuiVersion"]));
@@ -85,7 +85,7 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Checked")]
         public string updateStatus {
             get {
                 return ((string)(this["updateStatus"]));
@@ -97,7 +97,7 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Checked")]
         public string verbose {
             get {
                 return ((string)(this["verbose"]));
@@ -516,7 +516,7 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Checked")]
         public string QuickStartWindow {
             get {
                 return ((string)(this["QuickStartWindow"]));
@@ -560,6 +560,18 @@ namespace Handbrake.Properties {
             }
             set {
                 this["defaultError"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Checked")]
+        public string tooltipEnable {
+            get {
+                return ((string)(this["tooltipEnable"]));
+            }
+            set {
+                this["tooltipEnable"] = value;
             }
         }
     }

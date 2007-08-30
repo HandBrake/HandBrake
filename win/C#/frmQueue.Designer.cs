@@ -39,6 +39,7 @@ namespace Handbrake
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.label2 = new System.Windows.Forms.Label();
             this.lbl_progressValue = new System.Windows.Forms.Label();
+            this.btn_minimise = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btn_down
@@ -131,9 +132,9 @@ namespace Handbrake
             this.btn_Close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_Close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_Close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_Close.Location = new System.Drawing.Point(516, 374);
+            this.btn_Close.Location = new System.Drawing.Point(532, 374);
             this.btn_Close.Name = "btn_Close";
-            this.btn_Close.Size = new System.Drawing.Size(124, 22);
+            this.btn_Close.Size = new System.Drawing.Size(108, 22);
             this.btn_Close.TabIndex = 27;
             this.btn_Close.TabStop = false;
             this.btn_Close.Text = "Close Window";
@@ -166,13 +167,29 @@ namespace Handbrake
             this.lbl_progressValue.TabIndex = 36;
             this.lbl_progressValue.Text = "0 %";
             // 
+            // btn_minimise
+            // 
+            this.btn_minimise.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_minimise.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_minimise.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_minimise.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_minimise.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_minimise.Location = new System.Drawing.Point(389, 374);
+            this.btn_minimise.Name = "btn_minimise";
+            this.btn_minimise.Size = new System.Drawing.Size(137, 22);
+            this.btn_minimise.TabIndex = 37;
+            this.btn_minimise.TabStop = false;
+            this.btn_minimise.Text = "Minimize Window";
+            this.btn_minimise.UseVisualStyleBackColor = false;
+            this.btn_minimise.Click += new System.EventHandler(this.btn_minimise_Click);
+            // 
             // frmQueue
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(657, 406);
-            this.ControlBox = false;
+            this.Controls.Add(this.btn_minimise);
             this.Controls.Add(this.lbl_progressValue);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.progressBar);
@@ -185,6 +202,7 @@ namespace Handbrake
             this.Controls.Add(this.btn_Close);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(663, 431);
             this.MinimumSize = new System.Drawing.Size(663, 431);
             this.Name = "frmQueue";
@@ -207,5 +225,6 @@ namespace Handbrake
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lbl_progressValue;
+        internal System.Windows.Forms.Button btn_minimise;
     }
 }

@@ -58,11 +58,14 @@ namespace Handbrake
             // Display the quick start window if required.
             quickStart();
 
+            // Enable or disable tooltips
+            tooltip();
+
             //MessageBox.Show(System.Environment.OSVersion.Version.ToString());
         
         }
 
-        public void showSplash(object sender)
+        private void showSplash(object sender)
         {
             Form splash = new frmSplashScreen();
             splash.Show();
@@ -70,7 +73,7 @@ namespace Handbrake
             splash.Close();
         }
 
-        public void loadUserDefaults()
+        private void loadUserDefaults()
         { 
             try
             {
@@ -159,7 +162,7 @@ namespace Handbrake
             }
         }
 
-        public void updateCheck()
+        private void updateCheck()
         {
             if (Properties.Settings.Default.updateStatus == "Checked")
             {
@@ -182,12 +185,20 @@ namespace Handbrake
             }
         }
 
-        public void quickStart()
+        private void quickStart()
         {
             if ((Properties.Settings.Default.QuickStartWindow == "Checked") || (Properties.Settings.Default.QuickStartWindow == ""))
             {
                 frmQuickStart quickstart = new frmQuickStart();
                 quickstart.ShowDialog();
+            }
+        }
+
+        private void tooltip()
+        {
+            if (Properties.Settings.Default.tooltipEnable == "Checked")
+            {
+                ToolTip.Active = true;
             }
         }
 
@@ -1389,7 +1400,6 @@ namespace Handbrake
                 drp_audioBitrate.Items.Add("224");
                 drp_audioBitrate.Items.Add("256");
                 drp_audioBitrate.Items.Add("320");
-                drp_audioBitrate.Items.Add("384");
             }
         }
 
