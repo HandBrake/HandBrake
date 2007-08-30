@@ -1096,7 +1096,7 @@ list = hb_get_titles( fHandle );
 		fX264optDirectPredLabel,fX264optDirectPredPopUp,fX264optDeblockLabel,fX264optAnalyseLabel,
 		fX264optAnalysePopUp,fX264opt8x8dctLabel,fX264opt8x8dctSwitch,fX264optCabacLabel,fX264optCabacSwitch,
 		fX264optAlphaDeblockPopUp,fX264optBetaDeblockPopUp,fVidTurboPassCheck,fDstMpgLargeFileCheck,fPicSettingAutoCropLabel,
-		fPicSettingAutoCropDsply,fPicSettingDetelecine,fPicSettingDetelecineLabel,fPicSettingDenoiseLabel,fSubForcedCheck,};
+		fPicSettingAutoCropDsply,fPicSettingDetelecine,fPicSettingDetelecineLabel,fPicSettingDenoiseLabel,fPicSettingDenoiseDsply,fSubForcedCheck,};
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
