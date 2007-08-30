@@ -61,7 +61,7 @@ actions LibAvCodec
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf ffmpeg && tar xzf ffmpeg.tar.gz &&
     cd ffmpeg && $(FFMPEG_PATCH) &&
-    ./configure --prefix=$CONTRIB --enable-gpl --enable-swscaler --disable-audio-beos --disable-shared --enable-static \
+    ./configure --prefix=$CONTRIB --enable-gpl --enable-pthreads --enable-swscaler --disable-audio-beos --disable-shared --enable-static \
         --disable-decoders --enable-decoder=mp2 --disable-parsers --enable-parser=mpegaudio \
         --disable-encoders --enable-encoder=mpeg4 --enable-encoder=ac3 --enable-encoder=snow \
         --disable-muxers --disable-demuxers --disable-protocols --disable-bsfs &&
