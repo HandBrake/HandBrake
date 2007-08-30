@@ -386,7 +386,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         hb_libmpeg2_info( mpeg2, &title->width, &title->height,
                           &title->rate_base, &ar );
        
-        if (title->rate_base == 1126125)
+        if( title->rate_base == 1126125 )
         {
             /* Frame FPS is 23.976 (meaning it's progressive), so
                start keeping track of how many are reporting at
@@ -395,21 +395,33 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             */
             progressive_count++;
 
-            if (progressive_count < 6)
+            if( progressive_count < 6 )
+            {
                 /* Not enough frames are reporting as progressive,
                    which means we should be conservative and use
                    29.97 as the title's FPS for now.
                 */
                 title->rate_base = 900900;           
+            }
             else
             {
                 /* A majority of the scan frames are progressive. Make that
                     the title's FPS, and announce it once to the log.
                 */
-                if (progressive_count == 6)
+                if( progressive_count == 6 )
+                {
                     hb_log("Title's mostly progressive NTSC, setting fps to 23.976");
+                }
                 title->rate_base = 1126125;               
             }
+        } 
+        else if( title->rate_base == 900900 && progressive_count >= 6 )
+        {
+            /*
+             * We've already deduced that the frame rate is 23.976, so set it
+             * back again.
+             */
+            title->rate_base = 1126125;
         }
                
         if( i == 2) // Use the third frame's info, so as to skip opening logos
