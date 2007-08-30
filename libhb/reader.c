@@ -117,6 +117,28 @@ static void ReaderFunc( void * _r )
             break;
           }
         }
+
+        if( r->job->subtitle_scan )
+        {
+            /*
+             * Need to update the progress during a subtitle scan
+             */
+            hb_state_t state;
+
+#define p state.param.working
+
+            state.state = HB_STATE_WORKING;
+            p.progress = (float)chapter / (float)r->job->chapter_end;
+            if( p.progress > 1.0 )
+            {
+                p.progress = 1.0;
+            } 
+            p.rate_avg = 0.0;
+            p.hours    = -1;
+            p.minutes  = -1;
+            p.seconds  = -1;
+            hb_set_state( r->job->h, &state );
+        }
         
         hb_demux_ps( r->ps, list );
 
