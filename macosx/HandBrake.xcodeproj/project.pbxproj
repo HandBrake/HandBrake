@@ -890,7 +890,7 @@
 					"$(OTHER_CFLAGS_QUOTED_1)",
 					"-DUSE_PTHREAD",
 				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.0\\\" -DHB_BUILD=2007081900";
+				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.1\\\" -DHB_BUILD=22007083100";
 				OTHER_LDFLAGS = (
 					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
@@ -949,7 +949,7 @@
 					"$(OTHER_CFLAGS_QUOTED_1)",
 					"-DUSE_PTHREAD",
 				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.0\\\" -DHB_BUILD=2007081900";
+				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.1\\\" -DHB_BUILD=22007083100";
 				OTHER_LDFLAGS = (
 					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
@@ -1006,7 +1006,7 @@
 					"$(OTHER_CFLAGS_QUOTED_1)",
 					"-DUSE_PTHREAD",
 				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.0\\\" -DHB_BUILD=2007081900";
+				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.1\\\" -DHB_BUILD=22007083100";
 				OTHER_LDFLAGS = (
 					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
@@ -1063,7 +1063,7 @@
 					"$(OTHER_CFLAGS_QUOTED_1)",
 					"-DUSE_PTHREAD",
 				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.0\\\" -DHB_BUILD=2007081900";
+				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.1\\\" -DHB_BUILD=22007083100";
 				OTHER_LDFLAGS = (
 					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
