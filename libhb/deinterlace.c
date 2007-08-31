@@ -65,7 +65,7 @@ hb_filter_private_t * hb_deinterlace_init( int pix_fmt,
                                            int height,
                                            char * settings );
 
-int hb_deinterlace_work( const hb_buffer_t * buf_in,
+int hb_deinterlace_work( hb_buffer_t * buf_in,
                          hb_buffer_t ** buf_out,
                          int pix_fmt,
                          int width, 
@@ -497,7 +497,7 @@ void hb_deinterlace_close( hb_filter_private_t * pv )
     free( pv );
 }
 
-int hb_deinterlace_work( const hb_buffer_t * buf_in,
+int hb_deinterlace_work( hb_buffer_t * buf_in,
                          hb_buffer_t ** buf_out,
                          int pix_fmt,
                          int width, 
@@ -552,6 +552,9 @@ int hb_deinterlace_work( const hb_buffer_t * buf_in,
         
         hb_buffer_copy_settings( pv->buf_settings, buf_in );
 
+        /* don't let 'work_loop' send a chapter mark upstream */
+        buf_in->new_chap  = 0;
+
         pv->yadif_ready = 1;
         
         return FILTER_DELAY;
@@ -588,6 +591,9 @@ int hb_deinterlace_work( const hb_buffer_t * buf_in,
     
     /* Replace buffered settings with input buffer settings */
     hb_buffer_copy_settings( pv->buf_settings, buf_in );    
+
+    /* don't let 'work_loop' send a chapter mark upstream */
+    buf_in->new_chap  = 0;
 
     return FILTER_OK;
 }
