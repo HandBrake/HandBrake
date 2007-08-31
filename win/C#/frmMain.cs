@@ -377,7 +377,7 @@ namespace Handbrake
 
         private void mnu_exit_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Application.Exit();
         }
 
         #endregion
@@ -1119,6 +1119,9 @@ namespace Handbrake
                         break;
                     case "Lock System":
                         LockWorkStation();
+                        break;
+                    case "Quit HandBrake":
+                        Application.Exit();
                         break;
                     default:
                         break;

@@ -87,6 +87,9 @@ namespace Handbrake
                 case "Lock System":
                     LockWorkStation();
                     break;
+                case "Quit HandBrake":
+                    Application.Exit();
+                    break;
                 default:
                     break;
             }

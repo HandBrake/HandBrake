@@ -256,7 +256,8 @@ namespace Handbrake
             "Suspend",
             "Hibernate",
             "Lock System",
-            "Log Off"});
+            "Log Off",
+            "Quit HandBrake"});
             this.drp_completeOption.Location = new System.Drawing.Point(223, 29);
             this.drp_completeOption.Name = "drp_completeOption";
             this.drp_completeOption.Size = new System.Drawing.Size(111, 21);
