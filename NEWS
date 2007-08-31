@@ -1,5 +1,30 @@
 NEWS file for HandBrake <http://handbrake.m0k.org/>
 
+Changes between 0.9.0 and 0.9.1:
+
+	Core HandBrake Changes:
+	+ Added: Forced subtitle support
+	+ Changed: Color subtitles now display in color, instead of being transparent.
+	+ Changed: All errors to stderr with hb_log() instead of to stdout with fprintf()
+	+ Changed: Accept stream input where the file type is in caps (.VOB instead of just .vob, etc)
+	+ Fixed: No more hanging when using MKV with chapter markers
+	+ Fixed: "Same as source" FPS now works correctly when the end-credits of a progressive film are interlaced.
+	+ Fixed: "Slow" deinterlacing no longer doubles up the chapter markers
+	+ Fixed: Proper display of fading subtitles
+	Assorted other changes
+	
+	Mac Changes:
+	+ Changed: Bigger buffer for the Activity Log
+	+ Fixed: Closing the main window no longer causes HandBrake to quit
+	+ Fixed: Changing dimensions in Picture Settings no longer causes a crash
+	Assorted other changes
+	
+	Windows Changes:
+	+ Added: More robust exception handling
+	+ Added: On-completion options to shutdown, suspend, etc
+	+ Added: Turn tooltips on or off
+	Assorted other changes
+	
 Changes between 0.8.5b1 and 0.9.0:
 
 	Core HandBrake Changes
