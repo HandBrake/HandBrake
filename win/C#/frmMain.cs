@@ -769,7 +769,7 @@ namespace Handbrake
             slider_videoQuality.Value = 0;
             SliderValue.Text = "0%";
             drp_audioBitrate.Text = "160";
-            Check_ChapterMarkers.CheckState = CheckState.Checked;
+            Check_ChapterMarkers.CheckState = CheckState.Unchecked;
             drp_audioSampleRate.Text = "48";
             rtf_h264advanced.Text = "";
             drp_deInterlace_option.Text = "None";
