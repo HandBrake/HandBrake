@@ -4638,7 +4638,7 @@ the user is using "Custom" settings by determining the sender*/
 	/* Video encoder */
 	[preset setObject:@"x264 (h.264 Main)" forKey:@"VideoEncoder"];
 	/* x264 Option String */
-	[preset setObject:@"ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct-auto:me=umh:subme=5:analyse=all:8x8dct:trellis=1:no-fast-pskip" forKey:@"x264Option"];
+	[preset setObject:@"ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:me=umh:subme=5:analyse=all:8x8dct:trellis=1:no-fast-pskip" forKey:@"x264Option"];
 	/* Video quality */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
 	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
