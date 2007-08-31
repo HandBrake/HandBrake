@@ -1052,7 +1052,13 @@ namespace Handbrake
             process.setNull();
             lbl_encode.Text = "Encoding Canceled";
         }
-   
+
+
+        [DllImport("user32.dll")]
+        public static extern void LockWorkStation();
+        [DllImport("user32.dll")]
+        public static extern int ExitWindowsEx(int uFlags, int dwReason); 
+
         private void procMonitor(object state)
         {
             // Make sure we are not already encoding and if we are then display an error.
@@ -1095,9 +1101,33 @@ namespace Handbrake
 
                 setEncodeLabel();
                 hbProc = null;
+
+                // Do something whent he encode ends.
+                switch (Properties.Settings.Default.CompletionOption)
+                {
+                    case "Shutdown":
+                        System.Diagnostics.Process.Start("Shutdown", "-s -t 60");
+                        break;
+                    case "Log Off":
+                        ExitWindowsEx(0, 0); 
+                        break;
+                    case "Suspend":
+                        Application.SetSuspendState(PowerState.Suspend, true, true);
+                        break;
+                    case "Hibernate":
+                        Application.SetSuspendState(PowerState.Hibernate, true, true);
+                        break;
+                    case "Lock System":
+                        LockWorkStation();
+                        break;
+                    default:
+                        break;
+                }
             }
         }
+
         private delegate void UpdateUIHandler();
+
         private void setEncodeLabel()
         {
             if (this.InvokeRequired)

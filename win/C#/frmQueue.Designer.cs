@@ -49,12 +49,12 @@ namespace Handbrake
             this.btn_down.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_down.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_down.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_down.Location = new System.Drawing.Point(540, 9);
+            this.btn_down.Location = new System.Drawing.Point(585, 9);
             this.btn_down.Name = "btn_down";
-            this.btn_down.Size = new System.Drawing.Size(100, 22);
+            this.btn_down.Size = new System.Drawing.Size(55, 22);
             this.btn_down.TabIndex = 33;
             this.btn_down.TabStop = false;
-            this.btn_down.Text = "Move Down";
+            this.btn_down.Text = "Down";
             this.btn_down.UseVisualStyleBackColor = false;
             this.btn_down.Click += new System.EventHandler(this.btn_down_Click);
             // 
@@ -65,12 +65,12 @@ namespace Handbrake
             this.btn_up.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_up.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_up.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_up.Location = new System.Drawing.Point(434, 9);
+            this.btn_up.Location = new System.Drawing.Point(539, 9);
             this.btn_up.Name = "btn_up";
-            this.btn_up.Size = new System.Drawing.Size(100, 22);
+            this.btn_up.Size = new System.Drawing.Size(40, 22);
             this.btn_up.TabIndex = 32;
             this.btn_up.TabStop = false;
-            this.btn_up.Text = "Move Up";
+            this.btn_up.Text = "Up";
             this.btn_up.UseVisualStyleBackColor = false;
             this.btn_up.Click += new System.EventHandler(this.btn_up_Click);
             // 
@@ -189,6 +189,7 @@ namespace Handbrake
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(657, 406);
+            this.ControlBox = false;
             this.Controls.Add(this.btn_minimise);
             this.Controls.Add(this.lbl_progressValue);
             this.Controls.Add(this.label2);

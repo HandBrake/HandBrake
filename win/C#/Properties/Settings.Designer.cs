@@ -574,5 +574,17 @@ namespace Handbrake.Properties {
                 this["tooltipEnable"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Do Nothing")]
+        public string CompletionOption {
+            get {
+                return ((string)(this["CompletionOption"]));
+            }
+            set {
+                this["CompletionOption"] = value;
+            }
+        }
     }
 }

@@ -27,6 +27,7 @@ namespace Handbrake
             }
             drp_processors.Text = Properties.Settings.Default.Processors;
             drp_Priority.Text = Properties.Settings.Default.processPriority;
+            drp_completeOption.Text = Properties.Settings.Default.CompletionOption;
 
             if (Properties.Settings.Default.verbose == "Checked")
             {
@@ -85,6 +86,13 @@ namespace Handbrake
             Properties.Settings.Default.tooltipEnable = check_tooltip.CheckState.ToString();
         }
 
+        private void drp_completeOption_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.CompletionOption = drp_completeOption.Text;
+        }
+
+    
+ 
 
     }
 }

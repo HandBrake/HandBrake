@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace Handbrake
 {
@@ -37,6 +38,13 @@ namespace Handbrake
          * Code to Handle the CLI and updating of the UI as each process is completed.
          * 
          */
+
+        [DllImport("user32.dll")]
+        public static extern void LockWorkStation();
+        [DllImport("user32.dll")]
+        public static extern int ExitWindowsEx(int uFlags, int dwReason); 
+
+
         private void startProc(object state)
         {
             started = true;
@@ -60,6 +68,29 @@ namespace Handbrake
             }
             started = false;
             resetQueue();
+
+            // Do something whent he encode ends.
+            switch (Properties.Settings.Default.CompletionOption)
+            {
+                case "Shutdown":
+                    System.Diagnostics.Process.Start("Shutdown", "-s -t 60");
+                    break;
+                case "Log Off":
+                    ExitWindowsEx(0, 0);
+                    break;
+                case "Suspend":
+                    Application.SetSuspendState(PowerState.Suspend, true, true);
+                    break;
+                case "Hibernate":
+                    Application.SetSuspendState(PowerState.Hibernate, true, true);
+                    break;
+                case "Lock System":
+                    LockWorkStation();
+                    break;
+                default:
+                    break;
+            }
+
             MessageBox.Show("Encode Queue Completed!", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
 
