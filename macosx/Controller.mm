@@ -1000,6 +1000,9 @@ list = hb_get_titles( fHandle );
 				case 2:
 					ext = "ogm";
 					break;
+				case 3:
+					ext = "mkv";
+					break;
 			}
 			
 			
