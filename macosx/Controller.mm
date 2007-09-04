@@ -1832,7 +1832,7 @@ list = hb_get_titles( fHandle );
 		[fDstFile2Field setStringValue: [NSString stringWithFormat:
 			@"%@/%@-%d.%@", [[fDstFile2Field stringValue] stringByDeletingLastPathComponent],
 			[NSString stringWithUTF8String: title->name],
-			[fSrcTitlePopUp indexOfSelectedItem] + 1,
+			  title->index,
 			[[fDstFile2Field stringValue] pathExtension]]];	
 	}
 
