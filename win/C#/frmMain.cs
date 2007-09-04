@@ -162,26 +162,29 @@ namespace Handbrake
             }
         }
 
-        private void updateCheck()
+        private int updateCheck()
         {
-            if (Properties.Settings.Default.updateStatus == "Checked")
+            try
             {
-                try
-                {
-                    String updateFile = Properties.Settings.Default.updateFile;
-                    WebClient client = new WebClient();
-                    String data = client.DownloadString(updateFile);
-                    String[] versionData = data.Split('\n');
+                String updateFile = Properties.Settings.Default.updateFile;
+                WebClient client = new WebClient();
+                String data = client.DownloadString(updateFile);
+                String[] versionData = data.Split('\n');
 
-                    if ((versionData[0] != Properties.Settings.Default.GuiVersion) || (versionData[1] != Properties.Settings.Default.CliVersion))
-                    {
-                        lbl_update.Visible = true;
-                    }
-                }
-                catch (Exception)
+                if ((versionData[0] != Properties.Settings.Default.GuiVersion) || (versionData[1] != Properties.Settings.Default.CliVersion))
                 {
-                    // Silently ignore the error
+                    lbl_update.Visible = true;
+                    return 1;
                 }
+                else
+                {
+                    return 0;
+                }
+            }
+            catch (Exception)
+            {
+                // Silently ignore the error
+                return 0;
             }
         }
 
@@ -371,8 +374,15 @@ namespace Handbrake
 
         private void mnu_update_Click(object sender, EventArgs e)
         {
-            Form Update = new frmUpdate();
-            Update.ShowDialog();
+            int update = updateCheck();
+            if (update == 1)
+            {
+                MessageBox.Show("There is a new update available. Please visit http://handbrake.m0k.org for details!", "Update Check", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("There are no new updates at this time.", "Update Check", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         private void mnu_exit_Click(object sender, EventArgs e)
@@ -451,6 +461,8 @@ namespace Handbrake
             destination = destination.Replace(".m4v", ".mkv");
             destination = destination.Replace(".ogm", ".mkv");
             text_destination.Text = destination;
+
+            groupBox_output.Text = "Output Settings (Preset: Animation)";
         }
 
         private void mnu_appleTv_Click(object sender, EventArgs e)
@@ -472,6 +484,8 @@ namespace Handbrake
             drp_crop.Text = "No Crop";
             check_turbo.CheckState = CheckState.Unchecked;
             drp_audioCodec.Text = "AAC";
+
+            groupBox_output.Text = "Output Settings (Preset: Apple TV)";
         }
 
         private void mnu_bedlam_Click(object sender, EventArgs e)
@@ -501,6 +515,8 @@ namespace Handbrake
             destination = destination.Replace(".m4v", ".mkv");
             destination = destination.Replace(".ogm", ".mkv");
             text_destination.Text = destination;
+
+            groupBox_output.Text = "Output Settings (Preset: Bedlam)";
         }
 
         private void mnu_blind_Click(object sender, EventArgs e)
@@ -522,6 +538,8 @@ namespace Handbrake
             drp_crop.Text = "No Crop";
             check_turbo.CheckState = CheckState.Unchecked;
             drp_audioCodec.Text = "AAC";
+
+            groupBox_output.Text = "Output Settings (Preset: Blind)";
         }
 
         private void mnu_broke_Click(object sender, EventArgs e)
@@ -543,6 +561,8 @@ namespace Handbrake
             drp_crop.Text = "No Crop";
             check_turbo.CheckState = CheckState.Checked;
             drp_audioCodec.Text = "AAC";
+
+            groupBox_output.Text = "Output Settings (Preset: Broke)";
         }
 
         private void mnu_Classic_Click(object sender, EventArgs e)
@@ -564,6 +584,8 @@ namespace Handbrake
             drp_crop.Text = "No Crop";
             check_turbo.CheckState = CheckState.Unchecked;
             drp_audioCodec.Text = "AAC";
+
+            groupBox_output.Text = "Output Settings (Preset: Classic)";
         }
 
         private void mnu_CQR_Click(object sender, EventArgs e)
@@ -593,6 +615,8 @@ namespace Handbrake
             destination = destination.Replace(".m4v", ".mkv");
             destination = destination.Replace(".ogm", ".mkv");
             text_destination.Text = destination;
+
+            groupBox_output.Text = "Output Settings (Preset: CQR)";
         }
 
         private void mnu_DSQ_Click(object sender, EventArgs e)
@@ -622,6 +646,8 @@ namespace Handbrake
             destination = destination.Replace(".m4v", ".mkv");
             destination = destination.Replace(".ogm", ".mkv");
             text_destination.Text = destination;
+
+            groupBox_output.Text = "Output Settings (Preset: DSQ)";
         }
 
         private void mnu_film_Click(object sender, EventArgs e)
@@ -651,6 +677,8 @@ namespace Handbrake
             destination = destination.Replace(".m4v", ".mkv");
             destination = destination.Replace(".ogm", ".mkv");
             text_destination.Text = destination;
+
+            groupBox_output.Text = "Output Settings (Preset: Film)";
         }
 
         private void mnu_iphone_Click(object sender, EventArgs e)
@@ -672,6 +700,8 @@ namespace Handbrake
             drp_crop.Text = "No Crop";
             check_turbo.CheckState = CheckState.Unchecked;
             drp_audioCodec.Text = "AAC";
+
+            groupBox_output.Text = "Output Settings (Preset: iPhone)";
         }
 
         private void mnu_ipod_Click(object sender, EventArgs e)
@@ -693,6 +723,8 @@ namespace Handbrake
             drp_crop.Text = "No Crop";
             check_turbo.CheckState = CheckState.Unchecked;
             drp_audioCodec.Text = "AAC";
+
+            groupBox_output.Text = "Output Settings (Preset: iPod High Rez)";
         }
 
         private void mnu_ipodLow_Click(object sender, EventArgs e)
@@ -714,6 +746,8 @@ namespace Handbrake
             drp_crop.Text = "No Crop";
             check_turbo.CheckState = CheckState.Unchecked;
             drp_audioCodec.Text = "AAC";
+
+            groupBox_output.Text = "Output Settings (Preset: iPod Low Rez)";
         }
 
         private void mnu_normal_Click(object sender, EventArgs e)
@@ -735,6 +769,8 @@ namespace Handbrake
             drp_crop.Text = "No Crop";
             check_turbo.CheckState = CheckState.Checked;
             drp_audioCodec.Text = "AAC";
+
+            groupBox_output.Text = "Output Settings (Preset: Normal)";
         }
 
         private void mnu_PS3_Click(object sender, EventArgs e)
@@ -756,6 +792,8 @@ namespace Handbrake
             drp_crop.Text = "No Crop";
             check_turbo.CheckState = CheckState.Unchecked;
             drp_audioCodec.Text = "AAC";
+
+            groupBox_output.Text = "Output Settings (Preset: PS3)";
         }
 
         private void mnu_psp_Click(object sender, EventArgs e)
@@ -777,6 +815,8 @@ namespace Handbrake
             drp_crop.Text = "No Crop";
             check_turbo.CheckState = CheckState.Unchecked;
             drp_audioCodec.Text = "AAC";
+
+            groupBox_output.Text = "Output Settings (Preset: PSP)";
         }
 
         private void mnu_qt_Click(object sender, EventArgs e)
@@ -798,6 +838,8 @@ namespace Handbrake
             drp_crop.Text = "No Crop";
             check_turbo.CheckState = CheckState.Checked;
             drp_audioCodec.Text = "AAC";
+
+            groupBox_output.Text = "Output Settings (Preset: Quicktime)";
         }
 
         private void mnu_television_Click(object sender, EventArgs e)
@@ -827,6 +869,8 @@ namespace Handbrake
             destination = destination.Replace(".m4v", ".mkv");
             destination = destination.Replace(".ogm", ".mkv");
             text_destination.Text = destination;
+
+            groupBox_output.Text = "Output Settings (Preset: Television)";
             
         }
 
@@ -1163,7 +1207,7 @@ namespace Handbrake
 
         private void drop_chapterStart_SelectedIndexChanged(object sender, EventArgs e)
         {
-            lbl_chptWarn.Visible = false;
+            drop_chapterStart.BackColor = Color.White;
             QueryEditorText.Text = "";
             if ((drop_chapterFinish.Text != "Auto") && (drop_chapterStart.Text != "Auto"))
             {
@@ -1174,14 +1218,12 @@ namespace Handbrake
 
                     if (chapterFinish < chapterStart)
                     {
-                        lbl_chptWarn.Visible = true;
-                        lbl_chptWarn.Text = "Invalid Chapter Range!";
+                        drop_chapterStart.BackColor = Color.LightCoral;
                     }
                 }
                 catch (Exception)
                 {
-                    lbl_chptWarn.Visible = true;
-                    lbl_chptWarn.Text = "Invalid Chapter Range!";
+                    drop_chapterStart.BackColor = Color.LightCoral;
                 }
             }
 
@@ -1190,7 +1232,7 @@ namespace Handbrake
 
         private void drop_chapterFinish_SelectedIndexChanged(object sender, EventArgs e)
         {
-            lbl_chptWarn.Visible = false;
+            drop_chapterFinish.BackColor = Color.White;
             QueryEditorText.Text = "";
             if ((drop_chapterFinish.Text != "Auto") && (drop_chapterStart.Text != "Auto"))
             {
@@ -1201,14 +1243,12 @@ namespace Handbrake
 
                     if (chapterFinish < chapterStart)
                     {
-                        lbl_chptWarn.Visible = true;
-                        lbl_chptWarn.Text = "Invalid Chapter Range!";
+                        drop_chapterFinish.BackColor = Color.LightCoral;
                     }
                 }
                 catch (Exception)
                 {
-                    lbl_chptWarn.Visible = true;
-                    lbl_chptWarn.Text = "Invalid Chapter Range!";
+                    drop_chapterFinish.BackColor = Color.LightCoral;
                 }
             }
         }
@@ -1943,6 +1983,7 @@ namespace Handbrake
         }
 
         #endregion
+
 
 
         // This is the END of the road ------------------------------------------------------------------------------

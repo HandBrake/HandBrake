@@ -71,12 +71,6 @@
     <Compile Include="frmAbout.Designer.cs">
       <DependentUpon>frmAbout.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmDebug.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmDebug.Designer.cs">
-      <DependentUpon>frmDebug.cs</DependentUpon>
-    </Compile>
     <Compile Include="frmDvdInfo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -114,10 +108,6 @@
       <SubType>Designer</SubType>
       <DependentUpon>frmAbout.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmDebug.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>frmDebug.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="frmDvdInfo.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmDvdInfo.cs</DependentUpon>
@@ -151,10 +141,6 @@
       <SubType>Designer</SubType>
       <DependentUpon>frmSplashScreen.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmUpdate.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>frmUpdate.cs</DependentUpon>
-    </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
@@ -187,12 +173,6 @@
     </Compile>
     <Compile Include="frmSplashScreen.Designer.cs">
       <DependentUpon>frmSplashScreen.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmUpdate.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmUpdate.Designer.cs">
-      <DependentUpon>frmUpdate.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
