@@ -230,7 +230,7 @@ namespace Handbrake
             this.drop_chapterFinish.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drop_chapterFinish.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drop_chapterFinish.FormattingEnabled = true;
-            this.drop_chapterFinish.Location = new System.Drawing.Point(434, 58);
+            this.drop_chapterFinish.Location = new System.Drawing.Point(408, 58);
             this.drop_chapterFinish.Name = "drop_chapterFinish";
             this.drop_chapterFinish.Size = new System.Drawing.Size(69, 21);
             this.drop_chapterFinish.TabIndex = 41;
@@ -244,7 +244,7 @@ namespace Handbrake
             this.drop_chapterStart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drop_chapterStart.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drop_chapterStart.FormattingEnabled = true;
-            this.drop_chapterStart.Location = new System.Drawing.Point(321, 58);
+            this.drop_chapterStart.Location = new System.Drawing.Point(295, 58);
             this.drop_chapterStart.Name = "drop_chapterStart";
             this.drop_chapterStart.Size = new System.Drawing.Size(69, 21);
             this.drop_chapterStart.TabIndex = 40;
@@ -1005,7 +1005,7 @@ namespace Handbrake
             // 
             this.Label13.AutoSize = true;
             this.Label13.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label13.Location = new System.Drawing.Point(400, 62);
+            this.Label13.Location = new System.Drawing.Point(374, 61);
             this.Label13.Name = "Label13";
             this.Label13.Size = new System.Drawing.Size(21, 13);
             this.Label13.TabIndex = 42;
@@ -1040,7 +1040,7 @@ namespace Handbrake
             this.Label9.AutoSize = true;
             this.Label9.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label9.ForeColor = System.Drawing.Color.Black;
-            this.Label9.Location = new System.Drawing.Point(234, 61);
+            this.Label9.Location = new System.Drawing.Point(224, 61);
             this.Label9.Name = "Label9";
             this.Label9.Size = new System.Drawing.Size(64, 13);
             this.Label9.TabIndex = 12;
