@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace Handbrake
 {
@@ -13,12 +14,18 @@ namespace Handbrake
         public frmAbout()
         {
             InitializeComponent();
-            Version.Text = Properties.Settings.Default.GuiVersion;
+            Version.Text = Properties.Settings.Default.CliVersion;
+            lbl_guiVer.Text = Properties.Settings.Default.GuiVersion;
         }
 
         private void btn_close_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void label_credits_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("http://handbrake.m0k.org/trac/wiki/x264Options");
         }
     }
 }
