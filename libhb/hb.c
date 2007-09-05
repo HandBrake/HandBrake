@@ -364,7 +364,7 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
                              title->height - (job->crop[0] + job->crop[1]),
                              PIX_FMT_YUV420P,
                              job->width, job->height, PIX_FMT_YUV420P,
-                             SWS_LANCZOS, NULL, NULL, NULL);
+                             SWS_LANCZOS|SWS_ACCURATE_RND, NULL, NULL, NULL);
 
     // Scale
     sws_scale(context,
@@ -378,7 +378,7 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
     // Get preview context
     context = sws_getContext(job->width, job->height, PIX_FMT_YUV420P,
                              job->width, job->height, PIX_FMT_RGBA32,
-                             SWS_LANCZOS, NULL, NULL, NULL);
+                             SWS_LANCZOS|SWS_ACCURATE_RND, NULL, NULL, NULL);
 
     // Create preview
     sws_scale(context,
