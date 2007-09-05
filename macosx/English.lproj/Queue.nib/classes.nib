@@ -42,7 +42,7 @@
                 showNewScan = id; 
                 showPicturePanel = id; 
                 showPreferencesWindow = id; 
-                showQueueWindow = id; 
+                showQueuePanel = id; 
                 showScanPanel = id; 
                 subtitleSelectionChanged = id; 
                 tableViewSelected = id; 
@@ -131,6 +131,8 @@
                 fPresetsActionMenu = NSMenu; 
                 fPresetsAdd = NSButton; 
                 fPresetsDelete = NSButton; 
+                fQueueController = QueueController; 
+                fQueuePanel = NSPanel; 
                 fQueueStatus = NSTextField; 
                 fRipIndicator = NSProgressIndicator; 
                 fScanController = ScanController; 
@@ -211,6 +213,31 @@
             SUPERCLASS = NSObject; 
         }, 
         {CLASS = HBPictureGLView; LANGUAGE = ObjC; SUPERCLASS = NSOpenGLView; }, 
+        {
+            ACTIONS = {
+                cancelCurrentJob = id; 
+                detailChanged = id; 
+                removeSelectedJob = id; 
+                showQueueWindow = id; 
+                toggleStartPause = id; 
+            }; 
+            CLASS = HBQueueController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                fCurrentJobPane = NSView; 
+                fDetailCheckbox = NSButton; 
+                fJobDescTextField = NSTextField; 
+                fProgressBar = NSProgressIndicator; 
+                fProgressStatus = NSTextField; 
+                fProgressTimeRemaining = NSTextField; 
+                fQueueCountField = NSTextField; 
+                fQueuePane = NSView; 
+                fQueueWindow = NSWindow; 
+                fStartPauseButton = NSButton; 
+                fTaskView = NSTableView; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
         {
             CLASS = HBTargetSizeField; 
             LANGUAGE = ObjC; 
@@ -294,10 +321,48 @@
             SUPERCLASS = NSObject; 
         }, 
         {
-            ACTIONS = {ClosePanel = id; Remove = id; Update = id; }; 
+            ACTIONS = {detailChanged = id; removeTask = id; showQueueWindow = id; }; 
             CLASS = QueueController; 
             LANGUAGE = ObjC; 
-            OUTLETS = {fScrollView = NSScrollView; fTaskView = NSView; }; 
+            OUTLETS = {
+                fCurrentJobPane = NSView; 
+                fDetailCheckbox = NSButton; 
+                fJobDescTextField = NSTextField; 
+                fProgressBar = NSProgressIndicator; 
+                fProgressStatus = NSTextField; 
+                fProgressTimeRemaining = NSTextField; 
+                fQueueCountField = NSTextField; 
+                fQueuePane = NSView; 
+                fQueueWindow = NSWindow; 
+                fTaskView = NSTableView; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            CLASS = ScanController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                fBrowseButton = NSButton; 
+                fCancelButton = NSButton; 
+                fDetectedCell = NSButtonCell; 
+                fDetectedPopUp = NSPopUpButton; 
+                fFolderCell = NSButtonCell; 
+                fFolderField = NSTextField; 
+                fIndicator = NSProgressIndicator; 
+                fMainMenuAddToQueue = NSMenuItem; 
+                fMainMenuOpenSource = NSMenuItem; 
+                fMainMenuPauseEncode = NSMenuItem; 
+                fMainMenuStartEncode = NSMenuItem; 
+                fMainWindowSrcName = NSTextField; 
+                fMatrix = NSMatrix; 
+                fMenuPicturePanelShow = NSMenuItem; 
+                fMenuQueuePanelShow = NSMenuItem; 
+                fOpenButton = NSButton; 
+                fPanel = NSPanel; 
+                fSelectString = NSTextField; 
+                fStatusField = NSTextField; 
+                fWindow = NSWindow; 
+            }; 
             SUPERCLASS = NSObject; 
         }
     ); 

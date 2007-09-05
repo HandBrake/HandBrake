@@ -88,14 +88,12 @@
 		4DD93F8F082036E8008E1322 /* Controller.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DF3C8CB052889CD00A80101 /* Controller.h */; };
 		4DD93F90082036E8008E1322 /* PictureGLView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D85758F052B78E300C39CA9 /* PictureGLView.h */; };
 		4DD93F92082036E8008E1322 /* PictureController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D1FD381073D19CE00E46515 /* PictureController.h */; };
-		4DD93F93082036E8008E1322 /* QueueController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DD27BA507C0065C0023D231 /* QueueController.h */; };
 		4DD93F96082036E8008E1322 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		4DD93F97082036E8008E1322 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		4DD93F9A082036E8008E1322 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.mm */; settings = {ATTRIBUTES = (); }; };
 		4DD93F9B082036E8008E1322 /* Controller.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4DF3C8CC052889CD00A80101 /* Controller.mm */; };
 		4DD93F9C082036E8008E1322 /* PictureGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4D85758E052B78E300C39CA9 /* PictureGLView.mm */; };
 		4DD93F9E082036E8008E1322 /* PictureController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4D1FD382073D19CE00E46515 /* PictureController.mm */; };
-		4DD93F9F082036E8008E1322 /* QueueController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4DD27BA607C0065C0023D231 /* QueueController.mm */; };
 		4DD93FA2082036E8008E1322 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		4DD93FA3082036E8008E1322 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DEB2024052B055F00C39CA9 /* IOKit.framework */; };
 		4DD93FA4082036E8008E1322 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DDE9724052B7B2B00C39CA9 /* OpenGL.framework */; };
@@ -128,6 +126,15 @@
 		A2DFC6770C61980700E66E89 /* MVMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A2DFC6760C61980700E66E89 /* MVMenuButton.m */; };
 		B48359A80C82960500E04440 /* lang.c in Sources */ = {isa = PBXBuildFile; fileRef = B48359A70C82960500E04440 /* lang.c */; };
 		D4D49FED0C83355600F01215 /* lang.c in Sources */ = {isa = PBXBuildFile; fileRef = B48359A70C82960500E04440 /* lang.c */; };
+		E3003C7F0C88505D0072F2A8 /* DeleteHighlightPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = E3003C7E0C88505D0072F2A8 /* DeleteHighlightPressed.png */; };
+		E3003CB50C8852B70072F2A8 /* DeletePressed.png in Resources */ = {isa = PBXBuildFile; fileRef = E3003CB40C8852B70072F2A8 /* DeletePressed.png */; };
+		E37C89410C83988F00C1B919 /* DeleteHighlight.png in Resources */ = {isa = PBXBuildFile; fileRef = E37C893D0C83988F00C1B919 /* DeleteHighlight.png */; };
+		E37C89420C83988F00C1B919 /* Delete.png in Resources */ = {isa = PBXBuildFile; fileRef = E37C893E0C83988F00C1B919 /* Delete.png */; };
+		E37C89430C83988F00C1B919 /* JobSmall.png in Resources */ = {isa = PBXBuildFile; fileRef = E37C893F0C83988F00C1B919 /* JobSmall.png */; };
+		E37C89440C83988F00C1B919 /* JobLarge.png in Resources */ = {isa = PBXBuildFile; fileRef = E37C89400C83988F00C1B919 /* JobLarge.png */; };
+		E37C89470C83989F00C1B919 /* HBQueueController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E37C89450C83989F00C1B919 /* HBQueueController.mm */; };
+		E37C89480C83989F00C1B919 /* HBQueueController.h in Headers */ = {isa = PBXBuildFile; fileRef = E37C89460C83989F00C1B919 /* HBQueueController.h */; };
+		E37C894F0C8398CF00C1B919 /* Queue.nib in Resources */ = {isa = PBXBuildFile; fileRef = E37C894D0C8398CF00C1B919 /* Queue.nib */; };
 		EAA526930C3B25D200944FF2 /* stream.c in Sources */ = {isa = PBXBuildFile; fileRef = EAA526920C3B25D200944FF2 /* stream.c */; };
 		EAA526940C3B25D200944FF2 /* stream.c in Sources */ = {isa = PBXBuildFile; fileRef = EAA526920C3B25D200944FF2 /* stream.c */; };
 		FC8519500C59A02C0073812C /* denoise.c in Sources */ = {isa = PBXBuildFile; fileRef = FC85194C0C59A02C0073812C /* denoise.c */; };
@@ -236,8 +243,6 @@
 		4D3ECC2609A4917000B2E45F /* WhiteBox.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = WhiteBox.m; sourceTree = "<group>"; };
 		4D85758E052B78E300C39CA9 /* PictureGLView.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = PictureGLView.mm; sourceTree = "<group>"; };
 		4D85758F052B78E300C39CA9 /* PictureGLView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PictureGLView.h; sourceTree = "<group>"; };
-		4DD27BA507C0065C0023D231 /* QueueController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = QueueController.h; sourceTree = "<group>"; };
-		4DD27BA607C0065C0023D231 /* QueueController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = QueueController.mm; sourceTree = "<group>"; };
 		4DDE9724052B7B2B00C39CA9 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		4DEB2024052B055F00C39CA9 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		4DF3C8CB052889CD00A80101 /* Controller.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Controller.h; sourceTree = "<group>"; };
@@ -269,6 +274,15 @@
 		A2DFC6740C6197C600E66E89 /* MVMenuButton.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MVMenuButton.h; sourceTree = "<group>"; };
 		A2DFC6760C61980700E66E89 /* MVMenuButton.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MVMenuButton.m; sourceTree = "<group>"; };
 		B48359A70C82960500E04440 /* lang.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lang.c; path = ../libhb/lang.c; sourceTree = SOURCE_ROOT; };
+		E3003C7E0C88505D0072F2A8 /* DeleteHighlightPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DeleteHighlightPressed.png; sourceTree = "<group>"; };
+		E3003CB40C8852B70072F2A8 /* DeletePressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DeletePressed.png; sourceTree = "<group>"; };
+		E37C893D0C83988F00C1B919 /* DeleteHighlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DeleteHighlight.png; sourceTree = "<group>"; };
+		E37C893E0C83988F00C1B919 /* Delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Delete.png; sourceTree = "<group>"; };
+		E37C893F0C83988F00C1B919 /* JobSmall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JobSmall.png; sourceTree = "<group>"; };
+		E37C89400C83988F00C1B919 /* JobLarge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JobLarge.png; sourceTree = "<group>"; };
+		E37C89450C83989F00C1B919 /* HBQueueController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = HBQueueController.mm; sourceTree = "<group>"; };
+		E37C89460C83989F00C1B919 /* HBQueueController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = HBQueueController.h; sourceTree = "<group>"; };
+		E37C894E0C8398CF00C1B919 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Queue.nib; sourceTree = "<group>"; };
 		EAA526920C3B25D200944FF2 /* stream.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = stream.c; path = ../libhb/stream.c; sourceTree = SOURCE_ROOT; };
 		FC85194C0C59A02C0073812C /* denoise.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = denoise.c; path = ../libhb/denoise.c; sourceTree = SOURCE_ROOT; };
 		FC85194D0C59A02C0073812C /* deinterlace.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = deinterlace.c; path = ../libhb/deinterlace.c; sourceTree = SOURCE_ROOT; };
@@ -369,6 +383,7 @@
 				2538860A0BFE0B730064E995 /* OutputPanel.nib */,
 				25DE1FAB0C1699E500F01FC8 /* Preferences.nib */,
 				4D1EA3000993B13700FDC1A2 /* Express.nib */,
+				E37C894D0C8398CF00C1B919 /* Queue.nib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -452,8 +467,6 @@
 				4DF3C8CC052889CD00A80101 /* Controller.mm */,
 				4D85758E052B78E300C39CA9 /* PictureGLView.mm */,
 				4D85758F052B78E300C39CA9 /* PictureGLView.h */,
-				4DD27BA507C0065C0023D231 /* QueueController.h */,
-				4DD27BA607C0065C0023D231 /* QueueController.mm */,
 				4D3ECC2509A4917000B2E45F /* WhiteBox.h */,
 				4D3ECC2609A4917000B2E45F /* WhiteBox.m */,
 				593034E90BBA39A100172349 /* ChapterTitles.h */,
@@ -466,6 +479,8 @@
 				253886160BFE0C160064E995 /* HBOutputPanelController.m */,
 				25DE1FB40C169A0C00F01FC8 /* HBPreferencesController.h */,
 				25DE1FB50C169A0C00F01FC8 /* HBPreferencesController.m */,
+				E37C89460C83989F00C1B919 /* HBQueueController.h */,
+				E37C89450C83989F00C1B919 /* HBQueueController.mm */,
 			);
 			name = "HandBrake Sources";
 			sourceTree = "<group>";
@@ -495,6 +510,12 @@
 				A273E04B0C57B39A00493A45 /* Play.tiff */,
 				A273E04C0C57B39A00493A45 /* Stop.tiff */,
 				A273E04D0C57B39A00493A45 /* Terminal.tiff */,
+				E37C893E0C83988F00C1B919 /* Delete.png */,
+				E3003CB40C8852B70072F2A8 /* DeletePressed.png */,
+				E37C893D0C83988F00C1B919 /* DeleteHighlight.png */,
+				E3003C7E0C88505D0072F2A8 /* DeleteHighlightPressed.png */,
+				E37C89400C83988F00C1B919 /* JobLarge.png */,
+				E37C893F0C83988F00C1B919 /* JobSmall.png */,
 			);
 			path = icons;
 			sourceTree = "<group>";
@@ -525,11 +546,11 @@
 				4DD93F8F082036E8008E1322 /* Controller.h in Headers */,
 				4DD93F90082036E8008E1322 /* PictureGLView.h in Headers */,
 				4DD93F92082036E8008E1322 /* PictureController.h in Headers */,
-				4DD93F93082036E8008E1322 /* QueueController.h in Headers */,
 				A2A1EC310C76C35E00827E0D /* HBDVDDetector.h in Headers */,
 				253886010BFE0A5B0064E995 /* HBOutputRedirect.h in Headers */,
 				253886170BFE0C160064E995 /* HBOutputPanelController.h in Headers */,
 				25DE1FB60C169A0C00F01FC8 /* HBPreferencesController.h in Headers */,
+				E37C89480C83989F00C1B919 /* HBQueueController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -676,6 +697,13 @@
 				A28468680C5A43D900EF9A98 /* Disc.tiff in Resources */,
 				A2DFC66E0C6196D900E66E89 /* actionWidget.png in Resources */,
 				A2DFC66F0C6196D900E66E89 /* actionWidgetPressed.png in Resources */,
+				E37C89410C83988F00C1B919 /* DeleteHighlight.png in Resources */,
+				E37C89420C83988F00C1B919 /* Delete.png in Resources */,
+				E37C89430C83988F00C1B919 /* JobSmall.png in Resources */,
+				E37C89440C83988F00C1B919 /* JobLarge.png in Resources */,
+				E37C894F0C8398CF00C1B919 /* Queue.nib in Resources */,
+				E3003C7F0C88505D0072F2A8 /* DeleteHighlightPressed.png in Resources */,
+				E3003CB50C8852B70072F2A8 /* DeletePressed.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -799,12 +827,12 @@
 				4DD93F9B082036E8008E1322 /* Controller.mm in Sources */,
 				4DD93F9C082036E8008E1322 /* PictureGLView.mm in Sources */,
 				4DD93F9E082036E8008E1322 /* PictureController.mm in Sources */,
-				4DD93F9F082036E8008E1322 /* QueueController.mm in Sources */,
 				A2A1EC3A0C76C58400827E0D /* HBDVDDetector.m in Sources */,
 				253886020BFE0A5B0064E995 /* HBOutputRedirect.m in Sources */,
 				253886180BFE0C160064E995 /* HBOutputPanelController.m in Sources */,
 				25DE1FB70C169A0C00F01FC8 /* HBPreferencesController.m in Sources */,
 				A2DFC6770C61980700E66E89 /* MVMenuButton.m in Sources */,
+				E37C89470C83989F00C1B919 /* HBQueueController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -859,6 +887,14 @@
 				29B97319FDCFA39411CA2CEA /* English */,
 			);
 			name = MainMenu.nib;
+			sourceTree = "<group>";
+		};
+		E37C894D0C8398CF00C1B919 /* Queue.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E37C894E0C8398CF00C1B919 /* English */,
+			);
+			name = Queue.nib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -1274,6 +1310,7 @@
 					ppc,
 					i386,
 				);
+				GCC_PREPROCESSOR_DEFINITIONS = "JOB_GROUPS=1";
 				MACOSX_DEPLOYMENT_TARGET = 10.3;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
@@ -1288,7 +1325,7 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
@@ -1505,7 +1542,7 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				HEADER_SEARCH_PATHS = ../libhb;
@@ -1654,7 +1691,6 @@
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				HEADER_SEARCH_PATHS = (
 					../libhb,
@@ -1814,6 +1850,7 @@
 				GCC_DEBUGGING_SYMBOLS = default;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "JOB_GROUPS=1";
 				MACOSX_DEPLOYMENT_TARGET = 10.3;
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
@@ -1824,6 +1861,7 @@
 		4D4E7BC6087804870051572B /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = "JOB_GROUPS=1";
 				MACOSX_DEPLOYMENT_TARGET = 10.3;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
@@ -1832,6 +1870,7 @@
 		4D4E7BC7087804870051572B /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = "JOB_GROUPS=1";
 				MACOSX_DEPLOYMENT_TARGET = 10.3;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};

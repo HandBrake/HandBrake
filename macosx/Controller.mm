@@ -51,6 +51,26 @@ static NSString*       AddToQueueIdentifier    = @"Add to Queue Item Identifier"
 static NSString*       DebugOutputIdentifier   = @"Debug Output Item Identifier";
 static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifier";
 
+#if JOB_GROUPS
+/**
+ * Returns the number of jobs groups in the queue.
+ * @param h Handle to hb_handle_t.
+ * @return Number of job groups.
+ */
+static int hb_group_count(hb_handle_t * h)    
+{
+	hb_job_t * job;
+	int count = 0;
+	int index = 0;
+	while( ( job = hb_job( h, index++ ) ) )
+	{
+		if (job->sequence_id == 0)
+			count++;
+	}
+	return count;
+}
+#endif
+
 /*******************************
  * HBController implementation *
  *******************************/
@@ -62,6 +82,7 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
     [HBPreferencesController registerUserDefaults];
     fHandle = NULL;
     outputPanel = [[HBOutputPanelController alloc] init];
+    fQueueController = [[HBQueueController alloc] init];
     return self;
 }
 
@@ -69,10 +90,6 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 {
     int    build;
     char * version;
-
-    // Open debug output window now if it was visible when HB was closed
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"OutputPanelIsOpen"])
-        [self showDebugOutputPanel:nil];
 
     // Init libhb
 	int debugLevel = [[NSUserDefaults standardUserDefaults] boolForKey:@"ShowVerboseOutput"] ? HB_DEBUG_ALL : HB_DEBUG_NONE;
@@ -82,7 +99,7 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
     [GrowlApplicationBridge setGrowlDelegate: self];    
     /* Init others controllers */
     [fPictureController SetHandle: fHandle];
-    [fQueueController   SetHandle: fHandle];
+    [fQueueController   setHandle: fHandle];
 	
     fChapterTitlesDelegate = [[ChapterTitles alloc] init];
     [fChapterTable setDataSource:fChapterTitlesDelegate];
@@ -107,6 +124,16 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 
     }
 
+    // Open debug output window now if it was visible when HB was closed
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"OutputPanelIsOpen"])
+        [self showDebugOutputPanel:nil];
+
+    // Open queue window now if it was visible when HB was closed
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"QueueWindowIsOpen"])
+        [self showQueueWindow:nil];
+
+	[self openMainWindow:nil];
+	
     /* Show scan panel ASAP */
     [self performSelectorOnMainThread: @selector(showScanPanel:)
         withObject: NULL waitUntilDone: NO];
@@ -128,6 +155,7 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 - (void)applicationWillTerminate:(NSNotification *)aNotification
 {
 	[outputPanel release];
+	[fQueueController release];
 	hb_close(&fHandle);
 }
 
@@ -150,7 +178,7 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
     /* Init UserPresets .plist */
 	[self loadPresets];
 		
-	
+	fRipIndicatorShown = NO;  // initially out of view in the nib
 	
 	/* Show/Dont Show Presets drawer upon launch based
 		on user preference DefaultPresetsDrawerShow*/
@@ -393,7 +421,7 @@ static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifie
 		
 		// Tell the item what message to send when it is clicked 
 		[toolbarItem setTarget: self];
-		[toolbarItem setAction: @selector(showQueuePanel:)];
+		[toolbarItem setAction: @selector(showQueueWindow:)];
 		
 	} else if ([itemIdent isEqual: AddToQueueIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
@@ -736,6 +764,21 @@ list = hb_get_titles( fHandle );
             [fRipIndicator setIndeterminate: NO];
             [fRipIndicator setDoubleValue: 100.0 * progress_total];
 			
+            // If progress bar hasn't been revealed at the bottom of the window, do
+            // that now. This code used to be in _Rip. I moved it to here to handle
+            // the case where hb_start is called by HBQueueController and not from
+            // HBController.
+            if (!fRipIndicatorShown)
+            {
+                NSRect frame = [fWindow frame];
+                if (frame.size.width <= 591)
+                    frame.size.width = 591;
+                frame.size.height += 36;
+                frame.origin.y -= 36;
+                [fWindow setFrame:frame display:YES animate:YES];
+                fRipIndicatorShown = YES;
+            }
+
             /* Update dock icon */
             [self UpdateDockIcon: progress_total];
 			
@@ -749,6 +792,15 @@ list = hb_get_titles( fHandle );
             startButtonEnabled = YES;
             stopOrStart = YES;			
 			
+            // Has current job changed? That means the queue has probably changed as
+			// well so update it
+            if (fLastKnownCurrentJob != hb_current_job(fHandle))
+            {
+                fLastKnownCurrentJob = hb_current_job(fHandle);
+                [fQueueController updateQueueUI];
+            }
+            [fQueueController updateCurrentJobUI];
+            
             break;
         }
 #undef p
@@ -770,6 +822,8 @@ list = hb_get_titles( fHandle );
             /* Update dock icon */
             [self UpdateDockIcon: 1.0];
 			
+			// Pass along the info to HBQueueController
+            [fQueueController updateCurrentJobUI];
 			
             break;
         }
@@ -786,6 +840,10 @@ list = hb_get_titles( fHandle );
             resumeOrPause = YES;
             startButtonEnabled = YES;
             stopOrStart = YES;
+
+			// Pass along the info to HBQueueController
+            [fQueueController updateCurrentJobUI];
+
             break;
 			
         case HB_STATE_WORKDONE:
@@ -810,19 +868,42 @@ list = hb_get_titles( fHandle );
             resumeOrPause = NO;
             startButtonEnabled = YES;
             stopOrStart = NO;
-			NSRect frame = [fWindow frame];
-			if (frame.size.width <= 591)
-				frame.size.width = 591;
-			frame.size.height += -36;
-			frame.origin.y -= -36;
-			[fWindow setFrame:frame display:YES animate:YES];
-			
+
+#if JOB_GROUPS
+            hb_job_t * job;
+            while( ( job = hb_job( fHandle, 0 ) ) && (job->sequence_id != 0) )
+                hb_rem( fHandle, job );
+			// Start processing back up if jobs still left in queue
+			if (hb_count(fHandle) > 0)
+			{
+				hb_start(fHandle);
+				break;
+			}
+#else
             /* FIXME */
             hb_job_t * job;
             while( ( job = hb_job( fHandle, 0 ) ) )
             {
                 hb_rem( fHandle, job );
             }
+#endif
+			
+            if (fRipIndicatorShown)
+            {
+                NSRect frame = [fWindow frame];
+                if (frame.size.width <= 591)
+				    frame.size.width = 591;
+                frame.size.height += -36;
+                frame.origin.y -= -36;
+                [fWindow setFrame:frame display:YES animate:YES];
+				fRipIndicatorShown = NO;
+			}
+			
+            // Queue has been modified so update the UI
+			fLastKnownCurrentJob = nil;
+            [fQueueController updateQueueUI];
+            [fQueueController updateCurrentJobUI];
+			
             /* Check to see if the encode state has not been cancelled
 				to determine if we should check for encode done notifications */
 			if (fEncodeState != 2) 			{
@@ -896,7 +977,11 @@ list = hb_get_titles( fHandle );
 	
     /* Lets show the queue status
 		here in the main window*/
+#if JOB_GROUPS
+	int queue_count = hb_group_count( fHandle );
+#else
 	int queue_count = hb_count( fHandle );
+#endif
 	if( queue_count )
 	{
 		[fQueueStatus setStringValue: [NSString stringWithFormat:
@@ -1350,19 +1435,6 @@ list = hb_get_titles( fHandle );
 	[self calculatePictureSizing: sender];
 }
 
-- (IBAction) showQueuePanel: (id) sender
-{
-    /* Update the OutlineView */
-    [fQueueController Update: sender];
-
-    /* Show the panel */
-    [NSApp beginSheet: fQueuePanel modalForWindow: fWindow
-        modalDelegate: NULL didEndSelector: NULL contextInfo: NULL];
-    [NSApp runModalForWindow: fQueuePanel];
-    [NSApp endSheet: fQueuePanel];
-    [fQueuePanel orderOut: self];
-}
-
 - (void) PrepareJob
 {
     hb_list_t  * list  = hb_get_titles( fHandle );
@@ -1597,6 +1669,12 @@ list = hb_get_titles( fHandle );
 														  [fSrcTitlePopUp indexOfSelectedItem] );
 		hb_job_t * job = title->job;
 		
+#if JOB_GROUPS
+		// Assign a sequence number, starting at zero, to each job added so they can
+		// be lumped together in the UI.
+		job->sequence_id = -1;
+#endif
+		
 		[self PrepareJob];
 		
 		/* Destination file */
@@ -1634,6 +1712,9 @@ list = hb_get_titles( fHandle );
                     /*
                      * Add the pre-scan job
                      */
+#if JOB_GROUPS
+					job->sequence_id++;
+#endif
                     hb_add( fHandle, job );
 
                     job->x264opts = x264opts_tmp;
@@ -1658,7 +1739,13 @@ list = hb_get_titles( fHandle );
                         job->subtitle_scan = 0;
 
 			job->pass = 1;
+#if JOB_GROUPS
+			job->sequence_id++;
+#endif
 			hb_add( fHandle, job );
+#if JOB_GROUPS
+			job->sequence_id++;
+#endif
 			job->pass = 2;
 			
 			job->x264opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */  
@@ -1672,13 +1759,16 @@ list = hb_get_titles( fHandle );
 		{
                         job->subtitle_scan = 0;
 			job->pass = 0;
+#if JOB_GROUPS
+			job->sequence_id++;
+#endif
 			hb_add( fHandle, job );
 		}
 	
 	[[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];
 	/* Lets try to update stuff, taken from remove in the queue controller */
-	[fQueueController performSelectorOnMainThread: @selector( Update: )
-        withObject: sender waitUntilDone: NO];
+	[fQueueController performSelectorOnMainThread: @selector( updateQueueUI )
+        withObject: NULL waitUntilDone: NO];
 	}
 }
 
@@ -1769,12 +1859,14 @@ list = hb_get_titles( fHandle );
 	
 	[fMenuPauseEncode setEnabled: YES];
 	
+/* Moved this to updateUI
 	NSRect frame = [fWindow frame];
     if (frame.size.width <= 591)
         frame.size.width = 591;
     frame.size.height += 36;
     frame.origin.y -= 36;
     [fWindow setFrame:frame display:YES animate:YES];
+*/
 }
 
 - (IBAction) Cancel: (id) sender
@@ -5537,6 +5629,14 @@ id theRecord, theValue;
     HBPreferencesController *controller = [[HBPreferencesController alloc] init];
     [controller runModal:nil];
     [controller release];
+}
+
+/**
+ * Shows queue window.
+ */
+- (IBAction) showQueueWindow:(id)sender
+{
+    [fQueueController showQueueWindow:sender];
 }
 
 @end

@@ -12,7 +12,7 @@
 
 #include "ChapterTitles.h"
 #include "PictureController.h"
-#include "QueueController.h"
+#include "HBQueueController.h"
 #import "MVMenuButton.h"
 @class HBOutputPanelController;
 
@@ -26,8 +26,7 @@
     IBOutlet NSPanel             * fPicturePanel;
 	
     /* Queue panel */
-    IBOutlet QueueController     * fQueueController;
-    IBOutlet NSPanel             * fQueuePanel;
+    HBQueueController            * fQueueController;
     IBOutlet NSTextField         * fQueueStatus;
 	
 	/* Menu Items */
@@ -160,6 +159,7 @@
     IBOutlet NSButton            * fAddToQuButton;
     IBOutlet NSButton            * fPauseButton;
     IBOutlet NSButton            * fRipButton;
+	BOOL                           fRipIndicatorShown;
 	
 	/* Advanced Tab for opts fX264optView*/
 	IBOutlet NSView              * fX264optView;
@@ -238,6 +238,8 @@
 	NSString                      * currentSource;
 	HBOutputPanelController       *outputPanel;
 	
+    hb_job_t                     * fLastKnownCurrentJob;
+	
 	BOOL                         startButtonEnabled;
     BOOL                         pauseButtonEnabled;
     BOOL                         addToQueueButtonEnabled;
@@ -283,7 +285,7 @@
 - (IBAction) openMainWindow: (id) sender;
 
 - (IBAction) addToQueue: (id) sender;
-- (IBAction) showQueuePanel: (id) sender;
+- (IBAction) showQueueWindow:(id)sender;
 
 - (IBAction) Rip: (id) sender;
 - (void)     overWriteAlertDone: (NSWindow *) sheet

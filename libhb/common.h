@@ -104,6 +104,11 @@ const char * hb_mixdown_get_short_name_from_mixdown( int amixdown );
  *****************************************************************************/
 struct hb_job_s
 {
+#if JOB_GROUPS
+    /* ID assigned by UI so it can lump jobs together */
+    int             sequence_id;
+#endif
+	
     /* Pointer to the title to be ripped */
     hb_title_t    * title;
     

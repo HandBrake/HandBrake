@@ -796,6 +796,7 @@ void hb_start( hb_handle_t * h )
 {
     /* XXX Hack */
     h->job_count = hb_list_count( h->jobs );
+    h->job_count_permanent = h->job_count;
 
     hb_lock( h->state_lock );
     h->state.state = HB_STATE_WORKING;
