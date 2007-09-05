@@ -89,9 +89,7 @@ namespace Handbrake
         private void drp_completeOption_SelectedIndexChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.CompletionOption = drp_completeOption.Text;
-        }
-
-    
+        }  
  
 
     }

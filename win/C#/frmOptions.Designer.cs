@@ -277,7 +277,7 @@ namespace Handbrake
             // frmOptions
             // 
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(411, 405);
+            this.ClientSize = new System.Drawing.Size(413, 403);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.GroupBox2);
             this.Controls.Add(this.GroupBox3);

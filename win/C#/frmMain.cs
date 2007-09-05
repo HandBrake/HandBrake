@@ -1984,8 +1984,6 @@ namespace Handbrake
 
         #endregion
 
-
-
         // This is the END of the road ------------------------------------------------------------------------------
     }
 }
