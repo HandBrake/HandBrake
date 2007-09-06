@@ -235,16 +235,13 @@
     int                            fEncodeState;
 	int                            currentScanCount;
 	int                            currentSuccessfulScanCount;
+    int                            SuccessfulScan;
 	NSString                      * currentSource;
 	HBOutputPanelController       *outputPanel;
 	
     hb_job_t                     * fLastKnownCurrentJob;
 	
-	BOOL                         startButtonEnabled;
-    BOOL                         pauseButtonEnabled;
-    BOOL                         addToQueueButtonEnabled;
-	BOOL                         stopOrStart;
-	BOOL                         resumeOrPause;
+    NSToolbar                    *toolbar;
 }
 
 - (void)     TranslateStrings;

@@ -41,15 +41,15 @@ static int FormatSettings[4][10] =
 	  0,
 	  0 } };
 
+
 /* We setup the toolbar values here */
-static NSString*       MyDocToolbarIdentifier          = @"My Document Toolbar Identifier";
-static NSString*       ToggleDrawerIdentifier  = @"Toggle Drawer Item Identifier";
-static NSString*       StartEncodingIdentifier         = @"Start Encoding Item Identifier";
-static NSString*       PauseEncodingIdentifier         = @"Pause Encoding Item Identifier";
-static NSString*       ShowQueueIdentifier     = @"Show Queue Item Identifier";
-static NSString*       AddToQueueIdentifier    = @"Add to Queue Item Identifier";
-static NSString*       DebugOutputIdentifier   = @"Debug Output Item Identifier";
-static NSString*       ChooseSourceIdentifier   = @"Choose Source Item Identifier";
+static NSString *        ToggleDrawerIdentifier             = @"Toggle Drawer Item Identifier";
+static NSString *        StartEncodingIdentifier            = @"Start Encoding Item Identifier";
+static NSString *        PauseEncodingIdentifier            = @"Pause Encoding Item Identifier";
+static NSString *        ShowQueueIdentifier                = @"Show Queue Item Identifier";
+static NSString *        AddToQueueIdentifier               = @"Add to Queue Item Identifier";
+static NSString *        ShowActivityIdentifier             = @"Debug Output Item Identifier";
+static NSString *        ChooseSourceIdentifier             = @"Choose Source Item Identifier";
 
 #if JOB_GROUPS
 /**
@@ -298,12 +298,6 @@ static int hb_group_count(hb_handle_t * h)
     [fStatusField setStringValue: @""];
 	
     [self enableUI: NO];
-    /* Use new Toolbar start and pause here */
-	startButtonEnabled = NO;
-	stopOrStart = NO;
-	addToQueueButtonEnabled = NO;
-	pauseButtonEnabled = NO;
-	resumeOrPause = NO;
 	[self setupToolbar];
 	
 	[fPresetsActionButton setMenu:fPresetsActionMenu];
@@ -356,217 +350,185 @@ static int hb_group_count(hb_handle_t * h)
 // ============================================================
 
 - (void) setupToolbar {
-    // Create a new toolbar instance, and attach it to our document window 
-    NSToolbar *toolbar = [[[NSToolbar alloc] initWithIdentifier: MyDocToolbarIdentifier] autorelease];
+    toolbar = [[[NSToolbar alloc] initWithIdentifier: @"HandBrake Toolbar"] autorelease];
     
-    // Set up toolbar properties: Allow customization, give a default display mode, and remember state in user defaults 
     [toolbar setAllowsUserCustomization: YES];
     [toolbar setAutosavesConfiguration: YES];
     [toolbar setDisplayMode: NSToolbarDisplayModeIconAndLabel];
     
-    // We are the delegate
     [toolbar setDelegate: self];
     
-    // Attach the toolbar to the document window 
     [fWindow setToolbar: toolbar];
 }
 
-- (NSToolbarItem *) toolbar: (NSToolbar *)toolbar itemForItemIdentifier: (NSString *) itemIdent willBeInsertedIntoToolbar:(BOOL) willBeInserted {
-    // Required delegate method:  Given an item identifier, this method returns an item 
-    // The toolbar will use this method to obtain toolbar items that can be displayed in the customization sheet, or in the toolbar itself 
-    NSToolbarItem *toolbarItem = nil;
+- (NSToolbarItem *) toolbar: (NSToolbar *)toolbar itemForItemIdentifier:
+    (NSString *) itemIdent willBeInsertedIntoToolbar:(BOOL) willBeInserted {
+    NSToolbarItem * item = [[NSToolbarItem alloc] initWithItemIdentifier: itemIdent];
     
-    if ([itemIdent isEqual: ToggleDrawerIdentifier]) {
-        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
-		
-        // Set the text label to be displayed in the toolbar and customization palette 
-		[toolbarItem setLabel: @"Toggle Presets"];
-		[toolbarItem setPaletteLabel: @"Toggler Presets"];
-		
-		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-		[toolbarItem setToolTip: @"Open/Close Preset Drawer"];
-		[toolbarItem setImage: [NSImage imageNamed: @"Drawer-List2"]];
-		
-		// Tell the item what message to send when it is clicked 
-		[toolbarItem setTarget: self];
-		[toolbarItem setAction: @selector(toggleDrawer)];
-		
-	} else if ([itemIdent isEqual: StartEncodingIdentifier]) {
-        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
-		
-        // Set the text label to be displayed in the toolbar and customization palette 
-		[toolbarItem setLabel: @"Start"];
-		[toolbarItem setPaletteLabel: @"Start Encoding"];
-		
-		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-		[toolbarItem setToolTip: @"Start Encoding"];
-		[toolbarItem setImage: [NSImage imageNamed: @"Play"]];
-		
-		// Tell the item what message to send when it is clicked 
-		[toolbarItem setTarget: self];
-		[toolbarItem setAction: @selector(Rip:)];
-		
-		
-		
-	} else if ([itemIdent isEqual: ShowQueueIdentifier]) {
-        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
-		
-        // Set the text label to be displayed in the toolbar and customization palette 
-		[toolbarItem setLabel: @"Show Queue"];
-		[toolbarItem setPaletteLabel: @"Show Queue"];
-		
-		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-		[toolbarItem setToolTip: @"Show Queue"];
-		[toolbarItem setImage: [NSImage imageNamed: @"Brushed Window"]];
-		
-		// Tell the item what message to send when it is clicked 
-		[toolbarItem setTarget: self];
-		[toolbarItem setAction: @selector(showQueueWindow:)];
-		
-	} else if ([itemIdent isEqual: AddToQueueIdentifier]) {
-        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
-		
-        // Set the text label to be displayed in the toolbar and customization palette 
-		[toolbarItem setLabel: @"Add to Queue"];
-		[toolbarItem setPaletteLabel: @"Add to Queue"];
-		
-		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-		[toolbarItem setToolTip: @"Add to Queue"];
-		[toolbarItem setImage: [NSImage imageNamed: @"Add"]];
-		
-		// Tell the item what message to send when it is clicked 
-		[toolbarItem setTarget: self];
-		[toolbarItem setAction: @selector(addToQueue:)];
-		
-		
-	} else if ([itemIdent isEqual: PauseEncodingIdentifier]) {
-        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
-		
-        // Set the text label to be displayed in the toolbar and customization palette 
-		[toolbarItem setLabel: @"Pause"];
-		[toolbarItem setPaletteLabel: @"Pause Encoding"];
-		
-		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-		[toolbarItem setToolTip: @"Pause Encoding"];
-		[toolbarItem setImage: [NSImage imageNamed: @"Pause"]];
-		
-		// Tell the item what message to send when it is clicked 
-		[toolbarItem setTarget: self];
-		[toolbarItem setAction: @selector(Pause:)];
-		
-	} else if ([itemIdent isEqual: DebugOutputIdentifier]) {
-        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
-		
-        // Set the text label to be displayed in the toolbar and customization palette 
-		[toolbarItem setLabel: @"Activity Window"];
-		[toolbarItem setPaletteLabel: @"Show Activity Window"];
-		
-		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-		[toolbarItem setToolTip: @"Show Activity Window"];
-		[toolbarItem setImage: [NSImage imageNamed: @"Terminal"]];
-		
-		// Tell the item what message to send when it is clicked 
-		[toolbarItem setTarget: self];
-		[toolbarItem setAction: @selector(showDebugOutputPanel:)];
-        
-		} else if ([itemIdent isEqual: ChooseSourceIdentifier]) {
-         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
-
-         // Set the text label to be displayed in the toolbar and customization palette 
-                [toolbarItem setLabel: @"Source"];
-                [toolbarItem setPaletteLabel: @"Source"];
- 
-                // Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-                [toolbarItem setToolTip: @"Choose Video Source"];
-                [toolbarItem setImage: [NSImage imageNamed: @"Disc"]];
- 
-                // Tell the item what message to send when it is clicked 
-                [toolbarItem setTarget: self];
-                [toolbarItem setAction: @selector(showScanPanel:)];
-	
-    } else {
-        //itemIdent refered to a toolbar item that is not provide or supported by us or cocoa 
-        //Returning nil will inform the toolbar this kind of item is not supported 
-		toolbarItem = nil;
+    if ([itemIdent isEqualToString: ToggleDrawerIdentifier])
+    {
+        [item setLabel: @"Toggle Presets"];
+        [item setPaletteLabel: @"Toggler Presets"];
+        [item setToolTip: @"Open/Close Preset Drawer"];
+        [item setImage: [NSImage imageNamed: @"Drawer-List2"]];
+        [item setTarget: self];
+        [item setAction: @selector(toggleDrawer:)];
+        [item setAutovalidates: NO];
     }
-	
-    return toolbarItem;
+    else if ([itemIdent isEqualToString: StartEncodingIdentifier])
+    {
+        [item setLabel: @"Start"];
+        [item setPaletteLabel: @"Start Encoding"];
+        [item setToolTip: @"Start Encoding"];
+        [item setImage: [NSImage imageNamed: @"Play"]];
+        [item setTarget: self];
+        [item setAction: @selector(Rip:)];
+    }
+    else if ([itemIdent isEqualToString: ShowQueueIdentifier])
+    {
+        [item setLabel: @"Show Queue"];
+        [item setPaletteLabel: @"Show Queue"];
+        [item setToolTip: @"Show Queue"];
+        [item setImage: [NSImage imageNamed: @"Brushed Window"]];
+        [item setTarget: self];
+        [item setAction: @selector(showQueueWindow:)];
+        [item setAutovalidates: NO];
+    }
+    else if ([itemIdent isEqualToString: AddToQueueIdentifier])
+    {
+        [item setLabel: @"Add to Queue"];
+        [item setPaletteLabel: @"Add to Queue"];
+        [item setToolTip: @"Add to Queue"];
+        [item setImage: [NSImage imageNamed: @"Add"]];
+        [item setTarget: self];
+        [item setAction: @selector(addToQueue:)];
+    }
+    else if ([itemIdent isEqualToString: PauseEncodingIdentifier])
+    {
+        [item setLabel: @"Pause"];
+        [item setPaletteLabel: @"Pause Encoding"];
+        [item setToolTip: @"Pause Encoding"];
+        [item setImage: [NSImage imageNamed: @"Pause"]];
+        [item setTarget: self];
+        [item setAction: @selector(Pause:)];
+    }
+    else if ([itemIdent isEqualToString: ShowActivityIdentifier]) {
+        [item setLabel: @"Activity Window"];
+        [item setPaletteLabel: @"Show Activity Window"];
+        [item setToolTip: @"Show Activity Window"];
+        [item setImage: [NSImage imageNamed: @"Terminal"]];
+        [item setTarget: self];
+        [item setAction: @selector(showDebugOutputPanel:)];
+        [item setAutovalidates: NO];
+    }
+    else if ([itemIdent isEqualToString: ChooseSourceIdentifier])
+    {
+        [item setLabel: @"Source"];
+        [item setPaletteLabel: @"Source"];
+        [item setToolTip: @"Choose Video Source"];
+        [item setImage: [NSImage imageNamed: @"Disc"]];
+        [item setTarget: self];
+        [item setAction: @selector(showScanPanel:)];
+        [item setAutovalidates: NO];
+    }
+    else
+    {
+        [item release];
+        return nil;
+    }
+
+    return item;
 }
 
-- (void) toggleDrawer {
-    [fPresetDrawer toggle:self];
+- (NSArray *) toolbarDefaultItemIdentifiers: (NSToolbar *) toolbar
+{
+    return [NSArray arrayWithObjects: ChooseSourceIdentifier, NSToolbarSeparatorItemIdentifier, StartEncodingIdentifier,
+        PauseEncodingIdentifier, AddToQueueIdentifier, ShowQueueIdentifier, NSToolbarFlexibleSpaceItemIdentifier, 
+		NSToolbarSpaceItemIdentifier, ShowActivityIdentifier, ToggleDrawerIdentifier, nil];
 }
 
-- (NSArray *) toolbarDefaultItemIdentifiers: (NSToolbar *) toolbar {
-    // Required delegate method:  Returns the ordered list of items to be shown in the toolbar by default    
-    // If during the toolbar's initialization, no overriding values are found in the user defaults, or if the
-    // user chooses to revert to the default items this set will be used 
-    return [NSArray arrayWithObjects: ChooseSourceIdentifier, NSToolbarSeparatorItemIdentifier, StartEncodingIdentifier, PauseEncodingIdentifier,
-		AddToQueueIdentifier, ShowQueueIdentifier,
-		NSToolbarFlexibleSpaceItemIdentifier, 
-		NSToolbarSpaceItemIdentifier, DebugOutputIdentifier, ToggleDrawerIdentifier, nil];
+- (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar
+{
+    return [NSArray arrayWithObjects:  StartEncodingIdentifier, PauseEncodingIdentifier, AddToQueueIdentifier,
+        ChooseSourceIdentifier, ShowQueueIdentifier, ShowActivityIdentifier, ToggleDrawerIdentifier,
+        NSToolbarCustomizeToolbarItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier, NSToolbarSpaceItemIdentifier,
+        NSToolbarSpaceItemIdentifier, NSToolbarSeparatorItemIdentifier, nil];
 }
 
-- (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar {
-    // Required delegate method:  Returns the list of all allowed items by identifier.  By default, the toolbar 
-    // does not assume any items are allowed, even the separator.  So, every allowed item must be explicitly listed   
-    // The set of allowed items is used to construct the customization palette 
-    return [NSArray arrayWithObjects:  StartEncodingIdentifier, PauseEncodingIdentifier, AddToQueueIdentifier, ShowQueueIdentifier,
-		DebugOutputIdentifier, NSToolbarCustomizeToolbarItemIdentifier,
-		NSToolbarFlexibleSpaceItemIdentifier, NSToolbarSpaceItemIdentifier, NSToolbarSpaceItemIdentifier, ChooseSourceIdentifier,
-		NSToolbarSeparatorItemIdentifier,ToggleDrawerIdentifier, nil];
-}
+- (BOOL) validateToolbarItem: (NSToolbarItem *) toolbarItem
+{
+    NSString * ident = [toolbarItem itemIdentifier];
+        
+    if (fHandle)
+    {
+        hb_state_t s;
+        hb_get_state2( fHandle, &s );
+        
+        if (s.state == HB_STATE_WORKING)
+        {
+            if ([ident isEqualToString: StartEncodingIdentifier])
+            {
+                [toolbarItem setImage: [NSImage imageNamed: @"Stop"]];
+                [toolbarItem setLabel: @"Cancel"];
+                [toolbarItem setPaletteLabel: @"Cancel"];
+                [toolbarItem setToolTip: @"Cancel Encoding"];
+                return YES;
+            }
+            if ([ident isEqualToString: PauseEncodingIdentifier])
+            {
+                [toolbarItem setImage: [NSImage imageNamed: @"Pause"]];
+                [toolbarItem setLabel: @"Pause"];
+                [toolbarItem setPaletteLabel: @"Pause Encoding"];
+                [toolbarItem setToolTip: @"Pause Encoding"];
+                return YES;
+            }
+            if (SuccessfulScan)
+                if ([ident isEqualToString: AddToQueueIdentifier])
+                    return YES;
+        }
+        else if (s.state == HB_STATE_PAUSED)
+        {
+            if ([ident isEqualToString: PauseEncodingIdentifier])
+            {
+                [toolbarItem setImage: [NSImage imageNamed: @"Play"]];
+                [toolbarItem setLabel: @"Resume"];
+                [toolbarItem setPaletteLabel: @"Resume Encoding"];
+                [toolbarItem setToolTip: @"Resume Encoding"];
+                return YES;
+            }
+            if ([ident isEqualToString: StartEncodingIdentifier])
+                return YES;
+            if ([ident isEqualToString: AddToQueueIdentifier])
+                return YES;
+        }
+        else if (s.state == HB_STATE_SCANNING)
+            return NO;
+        else if (s.state == HB_STATE_WORKDONE || s.state == HB_STATE_SCANDONE || SuccessfulScan)
+        {
+            if ([ident isEqualToString: StartEncodingIdentifier])
+            {
+                [toolbarItem setImage: [NSImage imageNamed: @"Play"]];
+                [toolbarItem setLabel: @"Start"];
+                [toolbarItem setPaletteLabel: @"Start Encoding"];
+                [toolbarItem setToolTip: @"Start Encoding"];
+                return YES;
+            }
+            if ([ident isEqualToString: AddToQueueIdentifier])
+                return YES;
+        }
 
-- (BOOL) validateToolbarItem: (NSToolbarItem *) toolbarItem {
-    // Optional method:  This message is sent to us since we are the target of some toolbar item actions 
-    BOOL enable = NO;
-    if ([[toolbarItem itemIdentifier] isEqual: ToggleDrawerIdentifier]) {
-		enable = YES;
-	}
-	if ([[toolbarItem itemIdentifier] isEqual: StartEncodingIdentifier]) {
-		enable = startButtonEnabled;
-		if(stopOrStart) {
-			[toolbarItem setImage: [NSImage imageNamed: @"Stop"]];
-			[toolbarItem setLabel: @"Cancel"];
-			[toolbarItem setPaletteLabel: @"Cancel"];
-			[toolbarItem setToolTip: @"Cancel Encoding"];
-		}
-		else {
-			[toolbarItem setImage: [NSImage imageNamed: @"Play"]];
-			[toolbarItem setLabel: @"Start"];
-			[toolbarItem setPaletteLabel: @"Start Encoding"];
-			[toolbarItem setToolTip: @"Start Encoding"];
-		}
-		
-	}
-	if ([[toolbarItem itemIdentifier] isEqual: PauseEncodingIdentifier]) {
-		enable = pauseButtonEnabled;
-		if(resumeOrPause) {
-			[toolbarItem setImage: [NSImage imageNamed: @"Play"]];
-			[toolbarItem setLabel: @"Resume"];
-			[toolbarItem setPaletteLabel: @"Resume Encoding"];
-			[toolbarItem setToolTip: @"Resume Encoding"];
-		}
-		else {
-			[toolbarItem setImage: [NSImage imageNamed: @"Pause"]];
-			[toolbarItem setLabel: @"Pause"];
-			[toolbarItem setPaletteLabel: @"Pause Encoding"];
-			[toolbarItem setToolTip: @"Pause Encoding"];
-		}
-	}
-	if ([[toolbarItem itemIdentifier] isEqual: DebugOutputIdentifier]) {
-		enable = YES;
-	}
-	if ([[toolbarItem itemIdentifier] isEqual: ShowQueueIdentifier]) {
-		enable = YES;
-	}
-	if ([[toolbarItem itemIdentifier] isEqual: AddToQueueIdentifier]) {
-		enable = addToQueueButtonEnabled;
-	}
-	if ([[toolbarItem itemIdentifier] isEqual: ChooseSourceIdentifier]) {
-        enable = YES;
-    }    
-	return enable;
+    }
+    
+    if ([ident isEqualToString: ShowQueueIdentifier])
+        return YES;
+    if ([ident isEqualToString: ToggleDrawerIdentifier])
+        return YES;
+    if ([ident isEqualToString: ChooseSourceIdentifier])
+        return YES;
+    if ([ident isEqualToString: ShowActivityIdentifier])
+        return YES;
+    
+    return NO;
 }
 
 // register a test notification and make
@@ -736,6 +698,7 @@ list = hb_get_titles( fHandle );
             [fScanIndicator setDoubleValue: 0.0];
 			[fScanIndicator setHidden: YES];
 			[self showNewScan: NULL];
+            [toolbar validateVisibleItems];
 			break;
         }
 #undef p
@@ -785,13 +748,7 @@ list = hb_get_titles( fHandle );
 			/* Main Menu controls */
 			[fMenuPauseEncode setTitle: @"Pause Encode"];
 			[fMenuStartEncode setTitle: @"Cancel Encode"];
-			
-            /* new toolbar controls */
-            pauseButtonEnabled = YES;
-            resumeOrPause = NO;
-            startButtonEnabled = YES;
-            stopOrStart = YES;			
-			
+
             // Has current job changed? That means the queue has probably changed as
 			// well so update it
             if (fLastKnownCurrentJob != hb_current_job(fHandle))
@@ -833,13 +790,6 @@ list = hb_get_titles( fHandle );
 		    [fStatusField setStringValue: _( @"Paused" )];
             
 			[fMenuPauseEncode setTitle: @"Resume Encode"];
-			
-			
-			/* new toolbar controls */
-            pauseButtonEnabled = YES;
-            resumeOrPause = YES;
-            startButtonEnabled = YES;
-            stopOrStart = YES;
 
 			// Pass along the info to HBQueueController
             [fQueueController updateCurrentJobUI];
@@ -851,6 +801,7 @@ list = hb_get_titles( fHandle );
             [fStatusField setStringValue: _( @"Done." )];
             [fRipIndicator setIndeterminate: NO];
             [fRipIndicator setDoubleValue: 0.0];
+            [toolbar validateVisibleItems];
             
 			/* Main Menu Controls*/
 			[fMenuPauseEncode setTitle: @"Pause Encode"];
@@ -858,16 +809,6 @@ list = hb_get_titles( fHandle );
 			[fMenuStartEncode setTitle: @"Start Encode"];
             /* Restore dock icon */
             [self UpdateDockIcon: -1.0];
-			
-            //[fPauseButton setEnabled: NO];
-            //[fPauseButton setTitle: _( @"Pause" )];
-			// [fRipButton setEnabled: YES];
-			// [fRipButton setTitle: _( @"Start" )];
-			/* new toolbar controls */
-            pauseButtonEnabled = NO;
-            resumeOrPause = NO;
-            startButtonEnabled = YES;
-            stopOrStart = NO;
 
 #if JOB_GROUPS
             hb_job_t * job;
@@ -1011,7 +952,8 @@ list = hb_get_titles( fHandle );
 	{
 		/* We display a message if a valid dvd source was not chosen */
 		[fSrcDVD2Field setStringValue: @"No Valid Title Found"];
-        [fMenuOpenSource setEnabled: YES];	
+        [fMenuOpenSource setEnabled: YES];
+        SuccessfulScan = 0;
 	}
 	else
 	{
@@ -1019,7 +961,9 @@ list = hb_get_titles( fHandle );
 		   which we use at the end of this function to tell the gui
 		   if this is the first successful scan since launch and whether
 		   or not we should set all settings to the defaults */
-		currentSuccessfulScanCount++;
+		
+        SuccessfulScan = 1;
+        currentSuccessfulScanCount++;
 
 		[self enableUI: YES];
 		/* Enable/Disable Menu Controls Accordingly */
@@ -1028,6 +972,7 @@ list = hb_get_titles( fHandle );
 		[fMenuAddToQueue setEnabled: YES];
 		[fMenuPicturePanelShow setEnabled: YES];
 		[fMenuQueuePanelShow setEnabled: YES];
+        [toolbar validateVisibleItems];
 		
 		[fSrcTitlePopUp removeAllItems];
 		for( int i = 0; i < hb_list_count( list ); i++ )
@@ -1120,11 +1065,6 @@ list = hb_get_titles( fHandle );
 		
 		[self enableUI: YES];
 		
-		startButtonEnabled = YES;
-		stopOrStart = NO;
-		addToQueueButtonEnabled = YES;
-		pauseButtonEnabled = NO;
-		resumeOrPause = NO;
 		/* we record the current source name here in case the next scan is unsuccessful,
 				then we can replace the scan progress with the old name if necessary */
        sourceDisplayName = [NSString stringWithFormat:[fSrcDVD2Field stringValue]];
@@ -1132,9 +1072,8 @@ list = hb_get_titles( fHandle );
 	/* if its the initial successful scan after awakeFromNib */
 	   if (currentSuccessfulScanCount == 1)
 	   {
-       [self selectDefaultPreset: NULL];
+            [self selectDefaultPreset: NULL];
 	   }  
-	   
 	}
 }
 
@@ -1301,33 +1240,13 @@ list = hb_get_titles( fHandle );
 
 - (IBAction) openMainWindow: (id) sender
 {
-[fWindow  makeKeyAndOrderFront:nil];
-[fWindow setReleasedWhenClosed: YES];
+    [fWindow  makeKeyAndOrderFront:nil];
+    [fWindow setReleasedWhenClosed: YES];
 }
 - (BOOL) windowShouldClose: (id) sender
 {
-
-	/* See if we are currently running */
-	hb_state_t s;
-    hb_get_state2( fHandle, &s );
-	if ( s.state ==  HB_STATE_WORKING)
-	{
-	   /* If we are running, leave in memory when closing main window */
-	   [fWindow setReleasedWhenClosed: NO];
-	   return YES;
-
-	}
-	else
-	{
-		/* If we are running, leave in memory when closing main window */
-	   [fWindow setReleasedWhenClosed: NO];
-	   return YES;
-        
-        /* Stop the application when the user closes the window */
-		//[NSApp terminate: self];
-		//return YES;
-	}
-	
+    [fWindow setReleasedWhenClosed: NO];
+    return YES;
 }
 
 - (IBAction) videoMatrixChanged: (id) sender;
@@ -1775,8 +1694,10 @@ list = hb_get_titles( fHandle );
 - (IBAction) Rip: (id) sender
 {
     /* Rip or Cancel ? */
- //   if( [[fRipButton title] isEqualToString: _( @"Cancel" )] )
-    if(stopOrStart)
+    hb_state_t s;
+    hb_get_state2( fHandle, &s );
+
+    if(s.state == HB_STATE_WORKING || s.state == HB_STATE_PAUSED)
 	{
         [self Cancel: sender];
         return;
@@ -1849,24 +1770,8 @@ list = hb_get_titles( fHandle );
     hb_start( fHandle );
 	/*set the fEncodeState State */
 	fEncodeState = 1;
-	
-    /* Disable interface */
-	//[self enableUI: NO];
-	// [fPauseButton setEnabled: NO];
-	// [fRipButton   setEnabled: NO];
-	pauseButtonEnabled = NO;
-	startButtonEnabled = NO;
-	
+
 	[fMenuPauseEncode setEnabled: YES];
-	
-/* Moved this to updateUI
-	NSRect frame = [fWindow frame];
-    if (frame.size.width <= 591)
-        frame.size.width = 591;
-    frame.size.height += 36;
-    frame.origin.y -= 36;
-    [fWindow setFrame:frame display:YES animate:YES];
-*/
 }
 
 - (IBAction) Cancel: (id) sender
@@ -1883,10 +1788,6 @@ list = hb_get_titles( fHandle );
     if( returnCode == NSAlertAlternateReturn )
     {
         hb_stop( fHandle );
-       // [fPauseButton setEnabled: NO];
-       // [fRipButton   setEnabled: NO];
-	   pauseButtonEnabled = NO;
-       startButtonEnabled = NO;
 		/*set the fEncodeState State */
 	     fEncodeState = 2;
     }
@@ -1894,14 +1795,10 @@ list = hb_get_titles( fHandle );
 
 - (IBAction) Pause: (id) sender
 {
-   // [fPauseButton setEnabled: NO];
-   // [fRipButton   setEnabled: NO];
+    hb_state_t s;
+    hb_get_state2( fHandle, &s );
 
-   // if( [[fPauseButton title] isEqualToString: _( @"Resume" )] )
-          pauseButtonEnabled = NO;
-       startButtonEnabled = NO;
-
-    if(resumeOrPause)
+    if( s.state == HB_STATE_PAUSED )
     {
         hb_resume( fHandle );
     }
@@ -5637,6 +5534,11 @@ id theRecord, theValue;
 - (IBAction) showQueueWindow:(id)sender
 {
     [fQueueController showQueueWindow:sender];
+}
+
+
+- (IBAction) toggleDrawer:(id)sender {
+    [fPresetDrawer toggle:self];
 }
 
 @end
