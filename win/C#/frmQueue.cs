@@ -42,59 +42,64 @@ namespace Handbrake
         [DllImport("user32.dll")]
         public static extern void LockWorkStation();
         [DllImport("user32.dll")]
-        public static extern int ExitWindowsEx(int uFlags, int dwReason); 
+        public static extern int ExitWindowsEx(int uFlags, int dwReason);
 
+        private void processItem()
+        {
+
+        }
 
         private void startProc(object state)
         {
-            started = true;
-            initialListCount = list_queue.Items.Count;
-            for (int i = 0; i < initialListCount; i++)
+            try
             {
-                string query = list_queue.Items[0].ToString();
-
-                Functions.CLI process = new Functions.CLI();
-                Process hbProc = process.runCli(this, query, false, false, false, false);
-                
-                hbProc.WaitForExit();
-                hbProc.Close();
-                hbProc.Dispose();
-                updateUIElements();
-
-                if ((initialListCount - i) != (list_queue.Items.Count))
+                initialListCount = list_queue.Items.Count;
+                while (list_queue.Items.Count != 0)
                 {
-                    initialListCount++;
+                    string query = list_queue.Items[0].ToString();
+                    updateUIElements();
+                        
+                    Functions.CLI process = new Functions.CLI();
+                    Process hbProc = process.runCli(this, query, false, false, false, false);
+
+                    hbProc.WaitForExit();
+                    hbProc.Close();
+                    hbProc.Dispose();
                 }
-            }
-            started = false;
-            resetQueue();
 
-            // Do something whent he encode ends.
-            switch (Properties.Settings.Default.CompletionOption)
+                resetQueue();
+
+                // Do something whent he encode ends.
+                switch (Properties.Settings.Default.CompletionOption)
+                {
+                    case "Shutdown":
+                        System.Diagnostics.Process.Start("Shutdown", "-s -t 60");
+                        break;
+                    case "Log Off":
+                        ExitWindowsEx(0, 0);
+                        break;
+                    case "Suspend":
+                        Application.SetSuspendState(PowerState.Suspend, true, true);
+                        break;
+                    case "Hibernate":
+                        Application.SetSuspendState(PowerState.Hibernate, true, true);
+                        break;
+                    case "Lock System":
+                        LockWorkStation();
+                        break;
+                    case "Quit HandBrake":
+                        Application.Exit();
+                        break;
+                    default:
+                        break;
+                }
+
+                MessageBox.Show("Encode Queue Completed!", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+            catch (Exception exc)
             {
-                case "Shutdown":
-                    System.Diagnostics.Process.Start("Shutdown", "-s -t 60");
-                    break;
-                case "Log Off":
-                    ExitWindowsEx(0, 0);
-                    break;
-                case "Suspend":
-                    Application.SetSuspendState(PowerState.Suspend, true, true);
-                    break;
-                case "Hibernate":
-                    Application.SetSuspendState(PowerState.Hibernate, true, true);
-                    break;
-                case "Lock System":
-                    LockWorkStation();
-                    break;
-                case "Quit HandBrake":
-                    Application.Exit();
-                    break;
-                default:
-                    break;
+                MessageBox.Show(exc.ToString());
             }
-
-            MessageBox.Show("Encode Queue Completed!", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
 
         private void updateUIElements()
@@ -167,8 +172,6 @@ namespace Handbrake
         private void btn_delete_Click(object sender, EventArgs e)
         {
             list_queue.Items.Remove(list_queue.SelectedItem);
-            if (started == true)
-                initialListCount--;
         }
         #endregion
 

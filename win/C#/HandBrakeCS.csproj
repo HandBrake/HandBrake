@@ -102,12 +102,6 @@
     <Compile Include="Parsing\Parser.cs" />
     <Compile Include="Parsing\Subtitle.cs" />
     <Compile Include="Parsing\Title.cs" />
-    <Compile Include="PictureController.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PictureController.Designer.cs">
-      <DependentUpon>PictureController.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="frmAbout.resx">
@@ -129,10 +123,6 @@
     <EmbeddedResource Include="frmQuickStart.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmQuickStart.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PictureController.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>PictureController.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
