@@ -20,10 +20,8 @@ namespace Handbrake
             InitializeComponent();
         }
 
-        int initialListCount = 0;
-        bool started = false;
+        #region Queue Handling
 
-      
         private void btn_q_encoder_Click(object sender, EventArgs e)
         {
             progressBar.Value = 0;
@@ -33,27 +31,15 @@ namespace Handbrake
             ThreadPool.QueueUserWorkItem(startProc);
         }
 
-        /*
-         * 
-         * Code to Handle the CLI and updating of the UI as each process is completed.
-         * 
-         */
-
         [DllImport("user32.dll")]
         public static extern void LockWorkStation();
         [DllImport("user32.dll")]
         public static extern int ExitWindowsEx(int uFlags, int dwReason);
 
-        private void processItem()
-        {
-
-        }
-
         private void startProc(object state)
         {
             try
             {
-                initialListCount = list_queue.Items.Count;
                 while (list_queue.Items.Count != 0)
                 {
                     string query = list_queue.Items[0].ToString();
@@ -128,11 +114,8 @@ namespace Handbrake
             progressBar.Update();
         }
 
-        /*
-         * 
-         * Code to Re-arrange / Delete items from the Queue
-         * 
-         */
+        #endregion
+
         #region Queue Management
 
         private void btn_up_Click(object sender, EventArgs e)
@@ -175,9 +158,8 @@ namespace Handbrake
         }
         #endregion
 
-        /*
-         * Hide the Queue Window
-         */
+        #region Window Management
+
         private void btn_Close_Click(object sender, EventArgs e)
         {
             this.Hide();
@@ -187,5 +169,7 @@ namespace Handbrake
         {
             this.WindowState = FormWindowState.Minimized;
         }
+
+        #endregion
     }
 }

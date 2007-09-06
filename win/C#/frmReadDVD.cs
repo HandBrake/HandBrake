@@ -20,7 +20,6 @@ namespace Handbrake
         private Parsing.DVD thisDvd;
         private Process hbProc;
         private delegate void UpdateUIHandler();
-        //private int cancel = 0;
 
         public frmReadDVD(string inputFile, frmMain parent, frmDvdInfo dvdInfoWindow)
         {
@@ -70,7 +69,10 @@ namespace Handbrake
 
                 mainWindow.drp_dvdtitle.Items.Clear();
                 mainWindow.drp_dvdtitle.Items.AddRange(thisDvd.Titles.ToArray());
-
+                mainWindow.drp_dvdtitle.Text = "Automatic";
+                mainWindow.drop_chapterFinish.Text = "Auto";
+                mainWindow.drop_chapterStart.Text = "Auto";
+  
                 this.Close();
             }
             catch(Exception exc)
@@ -87,15 +89,12 @@ namespace Handbrake
         }
 
         Functions.CLI process = new Functions.CLI();
+
         private void startProc(object state)
         {
             //string query = "-i " + '"' + inputFile + '"' + " -t0";
             // hbProc = process.runCli(this, query, true, true, false, true);
 
-            //*********************************************************************************************************************************************
-            /*
-             * Quick and Dirty hack to get around the stderr crashes of hbcli. Lets try feeding brians parser text straight from a text file.
-             */
             try
             {
                 string appPath = Application.StartupPath.ToString()+ "\\";
