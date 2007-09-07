@@ -45,7 +45,6 @@ namespace Handbrake
             //dvdInfoWindow.Hide();
             // **********************************************************************************************
 
-
             // Set the Version number lable to the corect version.
             Version.Text = "Version " + Properties.Settings.Default.GuiVersion;
 
@@ -61,16 +60,14 @@ namespace Handbrake
             // Enable or disable tooltips
             tooltip();
 
-            //MessageBox.Show(System.Environment.OSVersion.Version.ToString());
-        
         }
 
         private void showSplash(object sender)
         {
             Form splash = new frmSplashScreen();
             splash.Show();
-            Thread.Sleep(3000);
-            splash.Close();
+            Thread.Sleep(1500);  // Display splash screen for 1.5 Seconds
+            splash.Close(); // Then close.
         }
 
         private void loadUserDefaults()
@@ -398,29 +395,11 @@ namespace Handbrake
         {
             showQueue();
         }
-
-       
+   
         private void mnu_viewDVDdata_Click(object sender, EventArgs e)
         {
-            try
-            {
-                frmDvdInfo dvdInfoWindow = new frmDvdInfo();
-                dvdInfoWindow.Show();
-            }
-            catch (Exception)
-            {
-                // No action required
-            }
-
-            // BUG *******************************************************
-            // Cross-thread operation not valid: Control 'rtf_dvdInfo' accessed from a thread other than the thread it was created on.
-            // This happens when the DVD is scanned and this item is then selected.
-            // If this item is selected so a blank copy of the window appears, then a DVD is scanned, there is no cross-thread issue.
-            // NOTE: Try/catch added to prevent final build crashing.
-            // NOTE2: Included a quick fix in frmMain(). Simply show and hide the window when starting the app.
-            // Note3: Suspect the problem lies with line 30.
-            // ***********************************************************
-
+            frmDvdInfo dvdInfoWindow = new frmDvdInfo();
+            dvdInfoWindow.Show();
         }
 
         private void mnu_options_Click(object sender, EventArgs e)
@@ -436,432 +415,135 @@ namespace Handbrake
 
         private void mnu_animation_Click(object sender, EventArgs e)
         {
-            CheckPixelRatio.CheckState = CheckState.Checked;
-            text_width.Text = "";
-            text_height.Text = "";
-            drp_videoEncoder.Text = "H.264";
-            text_bitrate.Text = "1000";
-            text_filesize.Text = "";
-            slider_videoQuality.Value = 0;
-            SliderValue.Text = "0%";
-            drp_audioBitrate.Text = "160";
-            Check_ChapterMarkers.CheckState = CheckState.Checked;
-            drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "ref=5:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2";
-            drp_deInterlace_option.Text = "Origional (Fast)";
-            check_2PassEncode.CheckState = CheckState.Checked;
-            drp_crop.Text = "No Crop";
-            check_turbo.CheckState = CheckState.Checked;
-            drp_audioCodec.Text = "AAC";
+            setGuiSetttings(CheckState.Checked, "", "", "H.264", "1000", "", 0, "0%", "160", CheckState.Checked, "48", "ref=5:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2", "Origional (Fast)", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Apple Animation)");
 
-            // Set file extension to MKV
-            string destination = text_destination.Text;
-            destination = destination.Replace(".mp4", ".mkv");
-            destination = destination.Replace(".avi", ".mkv");
-            destination = destination.Replace(".m4v", ".mkv");
-            destination = destination.Replace(".ogm", ".mkv");
-            text_destination.Text = destination;
-
-            groupBox_output.Text = "Output Settings (Preset: Animation)";
+            setMkv();
         }
 
         private void mnu_appleTv_Click(object sender, EventArgs e)
         {
-            CheckPixelRatio.CheckState = CheckState.Checked;
-            text_width.Text = "";
-            text_height.Text = "";
-            drp_videoEncoder.Text = "H.264";
-            text_bitrate.Text = "2500";
-            text_filesize.Text = "";
-            slider_videoQuality.Value = 0;
-            SliderValue.Text = "0%";
-            drp_audioBitrate.Text = "160";
-            Check_ChapterMarkers.CheckState = CheckState.Checked;
-            drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=2";
-            drp_deInterlace_option.Text = "None";
-            check_2PassEncode.CheckState = CheckState.Unchecked;
-            drp_crop.Text = "No Crop";
-            check_turbo.CheckState = CheckState.Unchecked;
-            drp_audioCodec.Text = "AAC";
-
-            groupBox_output.Text = "Output Settings (Preset: Apple TV)";
+            setGuiSetttings(CheckState.Checked, "", "", "H.264", "2500", "", 0, "0%", "160", CheckState.Checked, "48", "bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=2", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: Apple TV)");
         }
 
         private void mnu_bedlam_Click(object sender, EventArgs e)
         {
-            CheckPixelRatio.CheckState = CheckState.Checked;
-            text_width.Text = "";
-            text_height.Text = "";
-            drp_videoEncoder.Text = "H.264";
-            text_bitrate.Text = "1800";
-            text_filesize.Text = "";
-            slider_videoQuality.Value = 0;
-            SliderValue.Text = "0%";
-            drp_audioBitrate.Text = "160";
-            Check_ChapterMarkers.CheckState = CheckState.Checked;
-            drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "ref=16:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=7:me-range=64:analyse=all:8x8dct:trellis=2:no-fast-pskip:no-dct-decimate:filter=-2,-1";
-            drp_deInterlace_option.Text = "None";
-            check_2PassEncode.CheckState = CheckState.Checked;
-            drp_crop.Text = "No Crop";
-            check_turbo.CheckState = CheckState.Checked;
-            drp_audioCodec.Text = "AC3";
+            setGuiSetttings(CheckState.Checked, "", "", "H.264", "1800", "", 0, "0%", "160", CheckState.Checked, "48", "ref=16:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=7:me-range=64:analyse=all:8x8dct:trellis=2:no-fast-pskip:no-dct-decimate:filter=-2,-1", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Bedlam)");
 
-            // Set file extension to MKV
-            string destination = text_destination.Text;
-            destination = destination.Replace(".mp4", ".mkv");
-            destination = destination.Replace(".avi", ".mkv");
-            destination = destination.Replace(".m4v", ".mkv");
-            destination = destination.Replace(".ogm", ".mkv");
-            text_destination.Text = destination;
-
-            groupBox_output.Text = "Output Settings (Preset: Bedlam)";
+            setMkv();
         }
 
         private void mnu_blind_Click(object sender, EventArgs e)
         {
-            CheckPixelRatio.CheckState = CheckState.Unchecked;
-            text_width.Text = "512";
-            text_height.Text = "";
-            drp_videoEncoder.Text = "H.264";
-            text_bitrate.Text = "512";
-            text_filesize.Text = "";
-            slider_videoQuality.Value = 0;
-            SliderValue.Text = "0%";
-            drp_audioBitrate.Text = "128";
-            Check_ChapterMarkers.CheckState = CheckState.Checked;
-            drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "";
-            drp_deInterlace_option.Text = "None";
-            check_2PassEncode.CheckState = CheckState.Unchecked;
-            drp_crop.Text = "No Crop";
-            check_turbo.CheckState = CheckState.Unchecked;
-            drp_audioCodec.Text = "AAC";
-
-            groupBox_output.Text = "Output Settings (Preset: Blind)";
+            setGuiSetttings(CheckState.Unchecked, "512", "", "H.264", "512", "", 0, "0%", "128", CheckState.Checked, "48", "", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: Blind)");
         }
 
         private void mnu_broke_Click(object sender, EventArgs e)
         {
-            CheckPixelRatio.CheckState = CheckState.Unchecked;
-            text_width.Text = "640";
-            text_height.Text = "";
-            drp_videoEncoder.Text = "H.264";
-            text_bitrate.Text = "";
-            text_filesize.Text = "695";
-            slider_videoQuality.Value = 0;
-            SliderValue.Text = "0%";
-            drp_audioBitrate.Text = "128";
-            Check_ChapterMarkers.CheckState = CheckState.Checked;
-            drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "ref=3:mixed-refs:bframes=6:bime:weightb:b-rdo:b-pyramid::direct=auto:me=umh:subme=6:trellis=1:analyse=all:8x8dct:no-fast-pskip";
-            drp_deInterlace_option.Text = "None";
-            check_2PassEncode.CheckState = CheckState.Checked;
-            drp_crop.Text = "No Crop";
-            check_turbo.CheckState = CheckState.Checked;
-            drp_audioCodec.Text = "AAC";
-
-            groupBox_output.Text = "Output Settings (Preset: Broke)";
+            setGuiSetttings(CheckState.Unchecked, "640", "", "H.264", "", "695", 0, "0%", "128", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=6:bime:weightb:b-rdo:b-pyramid::direct=auto:me=umh:subme=6:trellis=1:analyse=all:8x8dct:no-fast-pskip", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Broke)");
         }
 
         private void mnu_Classic_Click(object sender, EventArgs e)
         {
-            CheckPixelRatio.CheckState = CheckState.Unchecked;
-            text_width.Text = "";
-            text_height.Text = "";
-            drp_videoEncoder.Text = "H.264";
-            text_bitrate.Text = "1000";
-            text_filesize.Text = "";
-            slider_videoQuality.Value = 0;
-            SliderValue.Text = "0%";
-            drp_audioBitrate.Text = "160";
-            Check_ChapterMarkers.CheckState = CheckState.Unchecked;
-            drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "";
-            drp_deInterlace_option.Text = "None";
-            check_2PassEncode.CheckState = CheckState.Unchecked;
-            drp_crop.Text = "No Crop";
-            check_turbo.CheckState = CheckState.Unchecked;
-            drp_audioCodec.Text = "AAC";
-
-            groupBox_output.Text = "Output Settings (Preset: Classic)";
+            setGuiSetttings(CheckState.Unchecked, "", "", "H.264", "1000", "", 0, "0%", "160", CheckState.Unchecked, "48", "", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: Classic)");
         }
 
         private void mnu_CQR_Click(object sender, EventArgs e)
         {
-            CheckPixelRatio.CheckState = CheckState.Checked;
-            text_width.Text = "";
-            text_height.Text = "";
-            drp_videoEncoder.Text = "H.264";
-            text_bitrate.Text = "";
-            text_filesize.Text = "";
-            slider_videoQuality.Value = 64;
-            SliderValue.Text = "64%";
-            drp_audioBitrate.Text = "160";
-            Check_ChapterMarkers.CheckState = CheckState.Checked;
-            drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "ref=3:mixed-refs:bframes=3:b-pyramid:b-rdo:bime:weightb:filter=-2,-1:subme=6:trellis=1:analyse=all:8x8dct:me=umh";
-            drp_deInterlace_option.Text = "None";
-            check_2PassEncode.CheckState = CheckState.Unchecked;
-            drp_crop.Text = "No Crop";
-            check_turbo.CheckState = CheckState.Unchecked;
-            drp_audioCodec.Text = "AC3";
+            setGuiSetttings(CheckState.Checked, "", "", "H.264", "", "", 64, "64%", "160", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=3:b-pyramid:b-rdo:bime:weightb:filter=-2,-1:subme=6:trellis=1:analyse=all:8x8dct:me=umh", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AC3", "Output Settings (Preset: CQR)");
 
-            // Set file extension to MKV
-            string destination = text_destination.Text;
-            destination = destination.Replace(".mp4", ".mkv");
-            destination = destination.Replace(".avi", ".mkv");
-            destination = destination.Replace(".m4v", ".mkv");
-            destination = destination.Replace(".ogm", ".mkv");
-            text_destination.Text = destination;
-
-            groupBox_output.Text = "Output Settings (Preset: CQR)";
+            setMkv();
         }
 
         private void mnu_DSQ_Click(object sender, EventArgs e)
         {
-            CheckPixelRatio.CheckState = CheckState.Checked;
-            text_width.Text = "";
-            text_height.Text = "";
-            drp_videoEncoder.Text = "H.264";
-            text_bitrate.Text = "1600";
-            text_filesize.Text = "";
-            slider_videoQuality.Value = 0;
-            SliderValue.Text = "0%";
-            drp_audioBitrate.Text = "160";
-            Check_ChapterMarkers.CheckState = CheckState.Checked;
-            drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "ref=5:mixed-refs:bframes=3:bime:weightb:b-rdo:b-pyramid:me=umh:subme=7:trellis=1:analyse=all:8x8dct:no-fast-pskip";
-            drp_deInterlace_option.Text = "None";
-            check_2PassEncode.CheckState = CheckState.Checked;
-            drp_crop.Text = "No Crop";
-            check_turbo.CheckState = CheckState.Checked;
-            drp_audioCodec.Text = "AC3";
+            setGuiSetttings(CheckState.Checked, "", "", "H.264", "1600", "", 0, "0%", "160", CheckState.Checked, "48", "ref=5:mixed-refs:bframes=3:bime:weightb:b-rdo:b-pyramid:me=umh:subme=7:trellis=1:analyse=all:8x8dct:no-fast-pskip", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AC3", "Output Settings (Preset: DSQ)");
 
-            // Set file extension to MKV
-            string destination = text_destination.Text;
-            destination = destination.Replace(".mp4", ".mkv");
-            destination = destination.Replace(".avi", ".mkv");
-            destination = destination.Replace(".m4v", ".mkv");
-            destination = destination.Replace(".ogm", ".mkv");
-            text_destination.Text = destination;
-
-            groupBox_output.Text = "Output Settings (Preset: DSQ)";
+            setMkv();
         }
 
         private void mnu_film_Click(object sender, EventArgs e)
         {
-            CheckPixelRatio.CheckState = CheckState.Checked;
-            text_width.Text = "";
-            text_height.Text = "";
-            drp_videoEncoder.Text = "H.264";
-            text_bitrate.Text = "2000";
-            text_filesize.Text = "";
-            slider_videoQuality.Value = 0;
-            SliderValue.Text = "0%";
-            drp_audioBitrate.Text = "160";
-            Check_ChapterMarkers.CheckState = CheckState.Checked;
-            drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:no-fast-pskip";
-            drp_deInterlace_option.Text = "None";
-            check_2PassEncode.CheckState = CheckState.Checked;
-            drp_crop.Text = "No Crop";
-            check_turbo.CheckState = CheckState.Checked;
-            drp_audioCodec.Text = "AC3";
+            setGuiSetttings(CheckState.Checked, "", "", "H.264", "2000", "", 0, "0%", "160", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:no-fast-pskip", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AC3", "Output Settings (Preset: Film)");
 
-            // Set file extension to MKV
-            string destination = text_destination.Text;
-            destination = destination.Replace(".mp4", ".mkv");
-            destination = destination.Replace(".avi", ".mkv");
-            destination = destination.Replace(".m4v", ".mkv");
-            destination = destination.Replace(".ogm", ".mkv");
-            text_destination.Text = destination;
-
-            groupBox_output.Text = "Output Settings (Preset: Film)";
+            setMkv();
         }
 
         private void mnu_iphone_Click(object sender, EventArgs e)
         {
-            CheckPixelRatio.CheckState = CheckState.Unchecked;
-            text_width.Text = "480";
-            text_height.Text = "";
-            drp_videoEncoder.Text = "H.264 (iPod)";
-            text_bitrate.Text = "960";
-            text_filesize.Text = "";
-            slider_videoQuality.Value = 0;
-            SliderValue.Text = "0%";
-            drp_audioBitrate.Text = "128";
-            Check_ChapterMarkers.CheckState = CheckState.Checked;
-            drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "cabac=0:ref=1:analyse=all:me=umh:subme=6:no-fast-pskip=1:trellis=1";
-            drp_deInterlace_option.Text = "None";
-            check_2PassEncode.CheckState = CheckState.Unchecked;
-            drp_crop.Text = "No Crop";
-            check_turbo.CheckState = CheckState.Unchecked;
-            drp_audioCodec.Text = "AAC";
 
-            groupBox_output.Text = "Output Settings (Preset: iPhone)";
+            setGuiSetttings(CheckState.Unchecked, "480", "", "H.264", "960", "", 0, "0%", "128", CheckState.Checked, "48", "cabac=0:ref=1:analyse=all:me=umh:subme=6:no-fast-pskip=1:trellis=1", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: iPhone)");
+
         }
 
         private void mnu_ipod_Click(object sender, EventArgs e)
         {
-            CheckPixelRatio.CheckState = CheckState.Unchecked;
-            text_width.Text = "640";
-            text_height.Text = "";
-            drp_videoEncoder.Text = "H.264 (iPod)";
-            text_bitrate.Text = "1500";
-            text_filesize.Text = "";
-            slider_videoQuality.Value = 0;
-            SliderValue.Text = "0%";
-            drp_audioBitrate.Text = "160";
-            Check_ChapterMarkers.CheckState = CheckState.Checked;
-            drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1";
-            drp_deInterlace_option.Text = "None";
-            check_2PassEncode.CheckState = CheckState.Unchecked;
-            drp_crop.Text = "No Crop";
-            check_turbo.CheckState = CheckState.Unchecked;
-            drp_audioCodec.Text = "AAC";
-
-            groupBox_output.Text = "Output Settings (Preset: iPod High Rez)";
+            setGuiSetttings(CheckState.Unchecked, "640", "", "H.264", "1500", "", 0, "0%", "160", CheckState.Checked, "48", "keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: iPod High Rez)");
         }
 
         private void mnu_ipodLow_Click(object sender, EventArgs e)
         {
-            CheckPixelRatio.CheckState = CheckState.Unchecked;
-            text_width.Text = "320";
-            text_height.Text = "";
-            drp_videoEncoder.Text = "H.264 (iPod)";
-            text_bitrate.Text = "700";
-            text_filesize.Text = "";
-            slider_videoQuality.Value = 0;
-            SliderValue.Text = "0%";
-            drp_audioBitrate.Text = "160";
-            Check_ChapterMarkers.CheckState = CheckState.Checked;
-            drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1";
-            drp_deInterlace_option.Text = "None";
-            check_2PassEncode.CheckState = CheckState.Unchecked;
-            drp_crop.Text = "No Crop";
-            check_turbo.CheckState = CheckState.Unchecked;
-            drp_audioCodec.Text = "AAC";
-
-            groupBox_output.Text = "Output Settings (Preset: iPod Low Rez)";
+            setGuiSetttings(CheckState.Unchecked, "320", "", "H.264", "700", "", 0, "0%", "160", CheckState.Checked, "48", "keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: iPod Low Rez)");
         }
 
         private void mnu_normal_Click(object sender, EventArgs e)
         {
-            CheckPixelRatio.CheckState = CheckState.Checked;
-            text_width.Text = "";
-            text_height.Text = "";
-            drp_videoEncoder.Text = "H.264";
-            text_bitrate.Text = "1500";
-            text_filesize.Text = "";
-            slider_videoQuality.Value = 0;
-            SliderValue.Text = "0%";
-            drp_audioBitrate.Text = "160";
-            Check_ChapterMarkers.CheckState = CheckState.Checked;
-            drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "ref=2:bframes=2:subme=5:me=umh";
-            drp_deInterlace_option.Text = "None";
-            check_2PassEncode.CheckState = CheckState.Checked;
-            drp_crop.Text = "No Crop";
-            check_turbo.CheckState = CheckState.Checked;
-            drp_audioCodec.Text = "AAC";
 
-            groupBox_output.Text = "Output Settings (Preset: Normal)";
+            setGuiSetttings(CheckState.Checked, "", "", "H.264", "1500", "", 0, "0%", "160", CheckState.Checked, "48", "ref=2:bframes=2:subme=5:me=umh", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Normal)");
+
         }
 
         private void mnu_PS3_Click(object sender, EventArgs e)
         {
-            CheckPixelRatio.CheckState = CheckState.Checked;
-            text_width.Text = "";
-            text_height.Text = "";
-            drp_videoEncoder.Text = "H.264";
-            text_bitrate.Text = "2500";
-            text_filesize.Text = "";
-            slider_videoQuality.Value = 0;
-            SliderValue.Text = "0%";
-            drp_audioBitrate.Text = "160";
-            Check_ChapterMarkers.CheckState = CheckState.Checked;
-            drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "level=41:subme=5:me=umh";
-            drp_deInterlace_option.Text = "None";
-            check_2PassEncode.CheckState = CheckState.Unchecked;
-            drp_crop.Text = "No Crop";
-            check_turbo.CheckState = CheckState.Unchecked;
-            drp_audioCodec.Text = "AAC";
-
-            groupBox_output.Text = "Output Settings (Preset: PS3)";
+            setGuiSetttings(CheckState.Checked, "", "", "H.264", "2500", "", 0, "0%", "160", CheckState.Checked, "48", "level=41:subme=5:me=umh", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: PS3)");
         }
 
         private void mnu_psp_Click(object sender, EventArgs e)
         {
-            CheckPixelRatio.CheckState = CheckState.Unchecked;
-            text_width.Text = "368";
-            text_height.Text = "208";
-            drp_videoEncoder.Text = "Mpeg 4";
-            text_bitrate.Text = "1024";
-            text_filesize.Text = "";
-            slider_videoQuality.Value = 0;
-            SliderValue.Text = "0%";
-            drp_audioBitrate.Text = "160";
-            Check_ChapterMarkers.CheckState = CheckState.Unchecked;
-            drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "";
-            drp_deInterlace_option.Text = "None";
-            check_2PassEncode.CheckState = CheckState.Unchecked;
-            drp_crop.Text = "No Crop";
-            check_turbo.CheckState = CheckState.Unchecked;
-            drp_audioCodec.Text = "AAC";
-
-            groupBox_output.Text = "Output Settings (Preset: PSP)";
+            setGuiSetttings(CheckState.Unchecked, "368", "208", "Mpeg 4", "1024", "", 0, "0%", "160", CheckState.Unchecked, "48", "", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: PSP)");
         }
 
         private void mnu_qt_Click(object sender, EventArgs e)
         {
-            CheckPixelRatio.CheckState = CheckState.Checked;
-            text_width.Text = "";
-            text_height.Text = "";
-            drp_videoEncoder.Text = "H.264";
-            text_bitrate.Text = "2000";
-            text_filesize.Text = "";
-            slider_videoQuality.Value = 0;
-            SliderValue.Text = "0%";
-            drp_audioBitrate.Text = "160";
-            Check_ChapterMarkers.CheckState = CheckState.Checked;
-            drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct-auto:me=umh:subme=5:analyse=all:8x8dct:trellis=1:no-fast-pskip";
-            drp_deInterlace_option.Text = "None";
-            check_2PassEncode.CheckState = CheckState.Checked;
-            drp_crop.Text = "No Crop";
-            check_turbo.CheckState = CheckState.Checked;
-            drp_audioCodec.Text = "AAC";
 
-            groupBox_output.Text = "Output Settings (Preset: Quicktime)";
+            setGuiSetttings(CheckState.Checked, "", "", "H.264", "2000", "", 0, "0%", "160", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct-auto:me=umh:subme=5:analyse=all:8x8dct:trellis=1:no-fast-pskip", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Quicktime)");
+
         }
 
         private void mnu_television_Click(object sender, EventArgs e)
         {
-            CheckPixelRatio.CheckState = CheckState.Unchecked;
-            text_width.Text = "";
-            text_height.Text = "";
-            drp_videoEncoder.Text = "H.264";
-            text_bitrate.Text = "1300";
-            text_filesize.Text = "";
-            slider_videoQuality.Value = 0;
-            SliderValue.Text = "0%";
-            drp_audioBitrate.Text = "160";
-            Check_ChapterMarkers.CheckState = CheckState.Checked;
-            drp_audioSampleRate.Text = "48";
-            rtf_h264advanced.Text = "ref=3:mixed-refs:bframes=6:bime:weightb:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip";
-            drp_deInterlace_option.Text = "Origional (Fast)";
-            check_2PassEncode.CheckState = CheckState.Checked;
-            drp_crop.Text = "No Crop";
-            check_turbo.CheckState = CheckState.Checked;
-            drp_audioCodec.Text = "AAC";
 
+            setGuiSetttings(CheckState.Unchecked, "", "", "H.264", "1300", "", 0, "0%", "160", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=6:bime:weightb:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip", "Origional (Fast)", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Television)");
+
+            setMkv();
+        }
+
+        // Function to setup the preset.
+        // It's a bit dirty but i'll sort this out later. Simply done to reduce the amount of code above.
+        private void setGuiSetttings(CheckState anamorphic, string width, string height, string vencoder, string bitrate, string filesize, int quality, string qpercent, string audioBit, CheckState chpt, string audioSample, string h264, string deinterlace, CheckState twopass, string crop, CheckState turbo, string audioCodec, string preset)
+        {
+            CheckPixelRatio.CheckState = anamorphic;
+            text_width.Text = width;
+            text_height.Text = height;
+            drp_videoEncoder.Text = vencoder;
+            text_bitrate.Text = bitrate;
+            text_filesize.Text = filesize;
+            slider_videoQuality.Value = quality;
+            SliderValue.Text = qpercent;
+            drp_audioBitrate.Text = audioBit;
+            Check_ChapterMarkers.CheckState = chpt;
+            drp_audioSampleRate.Text = audioSample;
+            rtf_h264advanced.Text = h264;
+            drp_deInterlace_option.Text = deinterlace;
+            check_2PassEncode.CheckState = twopass;
+            drp_crop.Text = crop;
+            check_turbo.CheckState = turbo;
+            drp_audioCodec.Text = audioCodec;
+
+            groupBox_output.Text = preset;
+        }
+
+        private void setMkv()
+        {
             // Set file extension to MKV
             string destination = text_destination.Text;
             destination = destination.Replace(".mp4", ".mkv");
@@ -869,13 +551,9 @@ namespace Handbrake
             destination = destination.Replace(".m4v", ".mkv");
             destination = destination.Replace(".ogm", ".mkv");
             text_destination.Text = destination;
-
-            groupBox_output.Text = "Output Settings (Preset: Television)";
-            
         }
 
-
-
+        // Set user default settings are main gui settings.
         private void mnu_ProgramDefaultOptions_Click(object sender, EventArgs e)
         {
             //Source
@@ -1509,6 +1187,12 @@ namespace Handbrake
             {
                 string destination = text_destination.Text;
                 destination = destination.Replace(".mp4", ".m4v");
+                text_destination.Text = destination;
+            }
+            else
+            {
+                string destination = text_destination.Text;
+                destination = destination.Replace(".m4v", ".mp4");
                 text_destination.Text = destination;
             }
         }
