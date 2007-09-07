@@ -51,7 +51,6 @@ static NSString *        AddToQueueIdentifier               = @"Add to Queue Ite
 static NSString *        ShowActivityIdentifier             = @"Debug Output Item Identifier";
 static NSString *        ChooseSourceIdentifier             = @"Choose Source Item Identifier";
 
-#if JOB_GROUPS
 /**
  * Returns the number of jobs groups in the queue.
  * @param h Handle to hb_handle_t.
@@ -69,7 +68,6 @@ static int hb_group_count(hb_handle_t * h)
 	}
 	return count;
 }
-#endif
 
 /*******************************
  * HBController implementation *
@@ -163,6 +161,8 @@ static int hb_group_count(hb_handle_t * h)
 - (void) awakeFromNib
 {
     [fWindow center];
+    [fWindow setExcludedFromWindowsMenu:YES];
+    
 	/* set the main menu bar so it doesnt auto enable the menu items
 	   so we can manually do it with setEnabled: This should be changed
 	   to use validateUserInterfaceItem: along with setAutoEnablesItems: YES
@@ -666,8 +666,7 @@ list = hb_get_titles( fHandle );
 		[self showNewScan: NULL];
 	}
 	
-	
-	
+    BOOL jobGroups = [[NSUserDefaults standardUserDefaults] boolForKey:@"QueueShowsJobsAsGroups"];
 	
     hb_state_t s;
     hb_get_state( fHandle, &s );
@@ -810,24 +809,20 @@ list = hb_get_titles( fHandle );
             /* Restore dock icon */
             [self UpdateDockIcon: -1.0];
 
-#if JOB_GROUPS
-            hb_job_t * job;
-            while( ( job = hb_job( fHandle, 0 ) ) && (job->sequence_id != 0) )
-                hb_rem( fHandle, job );
-			// Start processing back up if jobs still left in queue
-			if (hb_count(fHandle) > 0)
-			{
-				hb_start(fHandle);
-				break;
-			}
-#else
-            /* FIXME */
-            hb_job_t * job;
-            while( ( job = hb_job( fHandle, 0 ) ) )
+            if (jobGroups)
             {
-                hb_rem( fHandle, job );
+                // Delete all remaining scans of this job
+                hb_job_t * job;
+                while( ( job = hb_job( fHandle, 0 ) ) && (job->sequence_id != 0) )
+                    hb_rem( fHandle, job );
             }
-#endif
+
+            // Start processing back up if jobs still left in queue
+            if (hb_count(fHandle) > 0)
+            {
+                hb_start(fHandle);
+                break;
+            }
 			
             if (fRipIndicatorShown)
             {
@@ -916,13 +911,8 @@ list = hb_get_titles( fHandle );
         }
     }
 	
-    /* Lets show the queue status
-		here in the main window*/
-#if JOB_GROUPS
-	int queue_count = hb_group_count( fHandle );
-#else
-	int queue_count = hb_count( fHandle );
-#endif
+    /* Lets show the queue status here in the main window */
+	int queue_count = jobGroups ? hb_group_count( fHandle ) : hb_count( fHandle );
 	if( queue_count )
 	{
 		[fQueueStatus setStringValue: [NSString stringWithFormat:
@@ -939,6 +929,7 @@ list = hb_get_titles( fHandle );
 							  selector: @selector( updateUI: ) userInfo: NULL repeats: FALSE]
 								 forMode: NSModalPanelRunLoopMode];
 }
+
 - (IBAction) showNewScan:(id)sender
 {
 	hb_list_t  * list;
@@ -1588,11 +1579,9 @@ list = hb_get_titles( fHandle );
 														  [fSrcTitlePopUp indexOfSelectedItem] );
 		hb_job_t * job = title->job;
 		
-#if JOB_GROUPS
-		// Assign a sequence number, starting at zero, to each job added so they can
-		// be lumped together in the UI.
-		job->sequence_id = -1;
-#endif
+        // Assign a sequence number, starting at zero, to each job added so they can
+        // be lumped together in the UI.
+        job->sequence_id = -1;
 		
 		[self PrepareJob];
 		
@@ -1631,9 +1620,7 @@ list = hb_get_titles( fHandle );
                     /*
                      * Add the pre-scan job
                      */
-#if JOB_GROUPS
-					job->sequence_id++;
-#endif
+					job->sequence_id++; // for job grouping
                     hb_add( fHandle, job );
 
                     job->x264opts = x264opts_tmp;
@@ -1651,26 +1638,21 @@ list = hb_get_titles( fHandle );
 
 		if( [fVidTwoPassCheck state] == NSOnState )
 		{
-                        hb_subtitle_t **subtitle_tmp = job->select_subtitle;
-
-                        job->select_subtitle = NULL;
-
-                        job->subtitle_scan = 0;
+            hb_subtitle_t **subtitle_tmp = job->select_subtitle;
+            job->select_subtitle = NULL;
+            job->subtitle_scan = 0;
 
 			job->pass = 1;
-#if JOB_GROUPS
-			job->sequence_id++;
-#endif
+			job->sequence_id++; // for job grouping
 			hb_add( fHandle, job );
-#if JOB_GROUPS
-			job->sequence_id++;
-#endif
+            
 			job->pass = 2;
+			job->sequence_id++; // for job grouping
 			
 			job->x264opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */  
 			strcpy(job->x264opts, [[fDisplayX264Options stringValue] UTF8String]);
 
-                        job->select_subtitle = subtitle_tmp;
+            job->select_subtitle = subtitle_tmp;
 
 			hb_add( fHandle, job );
 		}
@@ -1678,9 +1660,7 @@ list = hb_get_titles( fHandle );
 		{
                         job->subtitle_scan = 0;
 			job->pass = 0;
-#if JOB_GROUPS
-			job->sequence_id++;
-#endif
+			job->sequence_id++; // for job grouping
 			hb_add( fHandle, job );
 		}
 	

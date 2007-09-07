@@ -6,7 +6,6 @@
 
 #include "HBQueueController.h"
 
-#if JOB_GROUPS
 /**
  * Returns the number of jobs groups in the queue.
  * @param h Handle to hb_handle_t.
@@ -91,7 +90,14 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
     return NULL;
 }
 
-#endif // JOB_GROUPS
+#pragma mark -
+
+// Toolbar identifiers
+static NSString*    HBQueueToolbar                            = @"HBQueueToolbar";
+static NSString*    HBStartPauseResumeToolbarIdentifier       = @"HBStartPauseResumeToolbarIdentifier";
+static NSString*    HBShowDetailToolbarIdentifier             = @"HBShowDetailToolbarIdentifier";
+static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsToolbarIdentifier";
+
 
 @implementation HBQueueController
 
@@ -106,7 +112,12 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
         [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
             @"NO",      @"QueueWindowIsOpen",
             @"NO",      @"QueueShowsDetail",
+            @"YES",     @"QueueShowsJobsAsGroups",
             nil]];
+
+        fShowsDetail = [[NSUserDefaults standardUserDefaults] boolForKey:@"QueueShowsDetail"];
+        fShowsJobsAsGroups = [[NSUserDefaults standardUserDefaults] boolForKey:@"QueueShowsJobsAsGroups"];
+
     }
     return self; 
 }
@@ -202,12 +213,35 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
 //------------------------------------------------------------------------------------
 // Enables or disables the display of detail information for each job.
 //------------------------------------------------------------------------------------
-- (void)showDetail: (BOOL)showDetail
+- (void)setShowsDetail: (BOOL)showsDetail
 {
-    // clumsy - have to update UI
-    [fDetailCheckbox setState:showDetail ? NSOnState : NSOffState];
+    fShowsDetail = showsDetail;
     
-    [fTaskView setRowHeight:showDetail ? 110.0 : 17.0];
+    [[NSUserDefaults standardUserDefaults] setBool:showsDetail forKey:@"QueueShowsDetail"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+
+    // clumsy - have to update UI
+    [fDetailCheckbox setState:showsDetail ? NSOnState : NSOffState];
+    
+    [fTaskView setRowHeight:showsDetail ? 110.0 : 17.0];
+    if ([fTaskView selectedRow] != -1)
+        [fTaskView scrollRowToVisible:[fTaskView selectedRow]];
+}
+
+//------------------------------------------------------------------------------------
+// Enables or disables the grouping of job passes into one item in the UI.
+//------------------------------------------------------------------------------------
+- (void)setShowsJobsAsGroups: (BOOL)showsGroups
+{
+    fShowsJobsAsGroups = showsGroups;
+    
+    [[NSUserDefaults standardUserDefaults] setBool:showsGroups forKey:@"QueueShowsJobsAsGroups"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+
+    // clumsy - have to update UI
+    [fJobGroupsCheckbox setState:showsGroups ? NSOnState : NSOffState];
+    
+    [self updateQueueUI];
     if ([fTaskView selectedRow] != -1)
         [fTaskView scrollRowToVisible:[fTaskView selectedRow]];
 }
@@ -257,11 +291,11 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
     // Other info in plain
     aMutableString = [NSMutableString stringWithCapacity:200];
     
+    BOOL jobGroups = [[NSUserDefaults standardUserDefaults] boolForKey:@"QueueShowsJobsAsGroups"];
 
-#if JOB_GROUPS
     // The subtitle scan doesn't contain all the stuff we need (like x264opts).
     // So grab the next job in the group for display purposes.
-    if (job->pass == -1)
+    if (jobGroups && job->pass == -1)
     {
         // When job is the one currently being processed, then the next in its group
         // is the the first job in the queue.
@@ -273,7 +307,6 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
         if (nextjob)    // Overly cautious in case there is no next job!
             job = nextjob;
     }
-#endif
 
     NSString * chapterString = (job->chapter_start == job->chapter_end) ?
             [NSString stringWithFormat:@"Chapter %d", job->chapter_start] :
@@ -289,15 +322,15 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
     // Normal pass
     else
     {
-#if JOB_GROUPS
-        [aMutableString appendString:[NSString stringWithFormat:
-                @"\nTitle %d, %@, %d-Pass",
-                title->index, chapterString, MIN( 2, job->pass + 1 )]];
-#else
-        [aMutableString appendString:[NSString stringWithFormat:
-                @"\nTitle %d, %@, Pass %d of %d",
-                title->index, chapterString, MAX( 1, job->pass ), MIN( 2, job->pass + 1 )]];
-#endif
+        if (jobGroups)
+            [aMutableString appendString:[NSString stringWithFormat:
+                    @"\nTitle %d, %@, %d-Pass",
+                    title->index, chapterString, MIN( 2, job->pass + 1 )]];
+        else
+            [aMutableString appendString:[NSString stringWithFormat:
+                    @"\nTitle %d, %@, Pass %d of %d",
+                    title->index, chapterString, MAX( 1, job->pass ), MIN( 2, job->pass + 1 )]];
+        
 
         NSString * jobFormat;
         NSString * jobPictureDetail;
@@ -460,25 +493,35 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
 {
     if (s->state == HB_STATE_WORKING)
     {
+        NSString * msg;
         if (job->pass == -1)
-            return NSLocalizedString( @"Analyzing subtitles", nil );
-        if (job->pass == 1)
-            return NSLocalizedString( @"Analyzing video", nil );
+            msg = NSLocalizedString( @"Analyzing subtitles", nil );
+        else if (job->pass == 1)
+            msg = NSLocalizedString( @"Analyzing video", nil );
         else if ((job->pass == 0) ||  (job->pass == 2))
-            return NSLocalizedString( @"Encoding movie", nil );
+            msg = NSLocalizedString( @"Encoding movie", nil );
+        else
+            return @""; // unknown condition!
+            
+        if( s->param.working.seconds > -1 )
+        {
+            return [NSString stringWithFormat:
+                NSLocalizedString( @"%@ (%.2f fps, avg %.2f fps)", nil ),
+                msg, s->param.working.rate_cur, s->param.working.rate_avg];
+        }
+        else
+            return msg;
+
     }
+
     else if (s->state == HB_STATE_MUXING)
-    {
         return NSLocalizedString( @"Muxing", nil );
-    }
+
     else if (s->state == HB_STATE_PAUSED)
-    {
         return NSLocalizedString( @"Paused", nil );
-    }
+
     else if (s->state == HB_STATE_WORKDONE)
-    {
         return NSLocalizedString( @"Done", nil );
-    }
     
     return @"";
 }
@@ -491,6 +534,41 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
     if (s->state == HB_STATE_WORKING)
     {
         #define p s->param.working
+        if (p.seconds < 0)
+            return @"";
+        
+        // Minutes always needed
+        NSString * minutes;
+        if (p.minutes > 1)
+          minutes = [NSString stringWithFormat:NSLocalizedString( @"%d minutes ", nil ), p.minutes];
+        else if (p.minutes == 1)
+          minutes = NSLocalizedString( @"1 minute ", nil );
+        else
+          minutes = @"";
+        
+        if (p.hours >= 1)
+        {
+            NSString * hours;
+            if (p.hours > 1)
+              hours = [NSString stringWithFormat:NSLocalizedString( @"%d hours ", nil ), p.hours];
+            else
+              hours = NSLocalizedString( @"1 hour ", nil );
+
+            return [NSString stringWithFormat:NSLocalizedString( @"%@%@remaining", nil ), hours, minutes];
+        }
+        
+        else
+        {
+            NSString * seconds;
+            if (p.seconds > 1)
+              seconds = [NSString stringWithFormat:NSLocalizedString( @"%d seconds ", nil ), p.seconds];
+            else
+              seconds = NSLocalizedString( @"1 second ", nil );
+
+            return [NSString stringWithFormat:NSLocalizedString( @"%@%@remaining", nil ), minutes, seconds];
+        }
+
+/* here is code that does it more like the Finder
         if( p.seconds > -1 )
         {
             float estHours = (p.hours + (p.minutes / 60.0));
@@ -513,6 +591,7 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
         }
         else
             return NSLocalizedString( @"Time remaining: Calculating...", nil );
+*/
         #undef p
     }
     
@@ -528,11 +607,12 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
     {
         #define p s->param.working
         [fProgressBar setIndeterminate:NO];
-#if JOB_GROUPS
-        float progress_total = 100.0 * ( p.progress + p.job_cur - 1 ) / p.job_count;
-#else
-        float progress_total = 100.0 * p.progress;
-#endif
+
+        BOOL jobGroups = [[NSUserDefaults standardUserDefaults] boolForKey:@"QueueShowsJobsAsGroups"];
+        float progress_total = jobGroups ?
+                100.0 * ( p.progress + p.job_cur - 1 ) / p.job_count :
+                100.0 * p.progress;
+
         [fProgressBar setDoubleValue:progress_total];
         #undef p
     }
@@ -557,6 +637,8 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
 //------------------------------------------------------------------------------------
 - (void) updateStartPauseButton
 {
+
+// ************* THIS METHOD CAN DISAPPEAR. THE BUTTON IS NOW HIDDEN AND CAN BE DELETED
     if (!fHandle) return;
 
     hb_state_t s;
@@ -597,15 +679,27 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
 - (void)updateQueueCountField
 {
     NSString * msg;
-#if JOB_GROUPS
-    int jobCount = fHandle ? hb_group_count(fHandle) : 0;
-#else
-    int jobCount = fHandle ? hb_count(fHandle) : 0;
-#endif
-    if (jobCount == 1)
-        msg = NSLocalizedString(@"1 pending job", nil);
+    int jobCount;
+    BOOL jobGroups = [[NSUserDefaults standardUserDefaults] boolForKey:@"QueueShowsJobsAsGroups"];
+    
+    if (jobGroups)
+    {
+        jobCount = fHandle ? hb_group_count(fHandle) : 0;
+        if (jobCount == 1)
+            msg = NSLocalizedString(@"1 pending encode", nil);
+        else
+            msg = [NSString stringWithFormat:NSLocalizedString(@"%d pending encodes", nil), jobCount];
+    }
     else
-        msg = [NSString stringWithFormat:NSLocalizedString(@"%d pending jobs", nil), jobCount];
+    {
+        jobCount = fHandle ? hb_count(fHandle) : 0;
+        if (jobCount == 1)
+            msg = NSLocalizedString(@"1 pending pass", nil);
+        else
+            msg = [NSString stringWithFormat:NSLocalizedString(@"%d pending passes", nil), jobCount];
+
+    }
+
     [fQueueCountField setStringValue:msg];
 }
 
@@ -625,12 +719,17 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
     }
 
     if (job)
-    {	
+    {
         [fJobDescTextField setAttributedStringValue:[self attributedDescriptionForJob:job withDetail:YES withHighlighting:NO]];
 
         [self showCurrentJobPane:YES];
-        [fProgressStatus setStringValue:[self progressStatusStringForJob:job state:&s]];
-        [fProgressTimeRemaining setStringValue:[self progressTimeRemainingStringForJob:job state:&s]];
+        [fJobIconView setImage: fShowsJobsAsGroups ? [NSImage imageNamed:@"JobLarge"] : [NSImage imageNamed:@"JobPassLarge"] ];
+        
+        NSString * statusMsg = [self progressStatusStringForJob:job state:&s];
+        NSString * timeMsg = [self progressTimeRemainingStringForJob:job state:&s];
+        if ([timeMsg length] > 0)
+            statusMsg = [NSString stringWithFormat:@"%@ - %@", statusMsg, timeMsg];
+        [fProgressTextField setStringValue:statusMsg];
         [self updateProgressBarWithState:&s];
     }
     else
@@ -640,6 +739,10 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
         [self showCurrentJobPane:NO];
         [fProgressBar stopAnimation:nil];    // just in case in was animating
     }
+
+    // Gross hack. Also update start/pause button. Have to do it here since we don't
+    // have any other periodic chance to update the button.
+    [self updateStartPauseButton];
 }
 
 //------------------------------------------------------------------------------------
@@ -665,11 +768,11 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
     int row = [sender selectedRow];
     if (row != -1)
     {
-#if JOB_GROUPS
-        hb_rem_group( fHandle, hb_group( fHandle, row ) );
-#else
-        hb_rem( fHandle, hb_job( fHandle, row ) );
-#endif
+        BOOL jobGroups = [[NSUserDefaults standardUserDefaults] boolForKey:@"QueueShowsJobsAsGroups"];
+        if (jobGroups)
+            hb_rem_group( fHandle, hb_group( fHandle, row ) );
+        else
+            hb_rem( fHandle, hb_job( fHandle, row ) );
         [self updateQueueUI];
     }
 }
@@ -713,18 +816,65 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
 
 //------------------------------------------------------------------------------------
 // Enables or disables the display of detail information for each job based on the 
-// current value of the fDetailCheckbox control.
+// state of the sender.
 //------------------------------------------------------------------------------------
 - (IBAction)detailChanged: (id)sender
 {
-    BOOL detail = [fDetailCheckbox state] == NSOnState;
-    [[NSUserDefaults standardUserDefaults] setBool:detail forKey:@"QueueShowsDetail"];
+    if ([sender isMemberOfClass:[NSButton class]])
+    {
+        BOOL detail = [sender state] == NSOnState;
+        [[NSUserDefaults standardUserDefaults] setBool:detail forKey:@"QueueShowsDetail"];
 
-    [self showDetail:detail];
+        [self setShowsDetail:detail];
+    }
 }
 
 //------------------------------------------------------------------------------------
-// Toggles the processing of jobs on or off epending on the current state
+// Enables or disables the display of job groups based on the state of the sender.
+//------------------------------------------------------------------------------------
+- (IBAction)jobGroupsChanged: (id)sender
+{
+    if ([sender isMemberOfClass:[NSButton class]])
+    {
+        BOOL groups = [sender state] == NSOnState;
+        [[NSUserDefaults standardUserDefaults] setBool:groups forKey:@"QueueShowsJobsAsGroups"];
+
+        [self setShowsJobsAsGroups:groups];
+    }
+    else if ([sender isMemberOfClass:[NSSegmentedControl class]])
+    {
+        BOOL groups = [sender selectedSegment] == 0;
+        [[NSUserDefaults standardUserDefaults] setBool:groups forKey:@"QueueShowsJobsAsGroups"];
+
+        [self setShowsJobsAsGroups:groups];
+    }
+    else if ([sender isMemberOfClass:[NSMatrix class]])
+    {
+        BOOL groups = [sender selectedColumn] == 0;
+        [[NSUserDefaults standardUserDefaults] setBool:groups forKey:@"QueueShowsJobsAsGroups"];
+
+        [self setShowsJobsAsGroups:groups];
+    }
+}
+
+//------------------------------------------------------------------------------------
+// Toggles the Shows Detail setting.
+//------------------------------------------------------------------------------------
+- (IBAction)toggleShowsDetail: (id)sender
+{
+    [self setShowsDetail:!fShowsDetail];
+}
+
+//------------------------------------------------------------------------------------
+// Toggles the Shows Jobs As Groups setting.
+//------------------------------------------------------------------------------------
+- (IBAction)toggleShowsJobsAsGroups: (id)sender
+{
+    [self setShowsJobsAsGroups:!fShowsJobsAsGroups];
+}
+
+//------------------------------------------------------------------------------------
+// Toggles the processing of jobs on or off depending on the current state
 //------------------------------------------------------------------------------------
 - (IBAction)toggleStartPause: (id)sender
 {
@@ -737,25 +887,308 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
         hb_resume (fHandle);
     else if ((s.state == HB_STATE_WORKING) || (s.state == HB_STATE_MUXING))
         hb_pause (fHandle);
-#if JOB_GROUPS
-    else if (hb_group_count(fHandle) > 0)
-#else
-    else if (hb_count(fHandle) > 0)
-#endif
-        hb_start (fHandle);
+    else
+    {
+        BOOL jobGroups = [[NSUserDefaults standardUserDefaults] boolForKey:@"QueueShowsJobsAsGroups"];
+        if (jobGroups)
+        {
+            if (hb_group_count(fHandle) > 0)
+                hb_start (fHandle);
+        }
+        else if (hb_count(fHandle) > 0)
+            hb_start (fHandle);
+    }    
 }
+
+#pragma mark -
+#pragma mark Toolbar
+
+//------------------------------------------------------------------------------------
+// setupToolbar
+//------------------------------------------------------------------------------------
+- (void)setupToolbar
+{
+    // Create a new toolbar instance, and attach it to our window 
+    NSToolbar *toolbar = [[[NSToolbar alloc] initWithIdentifier: HBQueueToolbar] autorelease];
+    
+    // Set up toolbar properties: Allow customization, give a default display mode, and remember state in user defaults 
+    [toolbar setAllowsUserCustomization: YES];
+    [toolbar setAutosavesConfiguration: YES];
+    [toolbar setDisplayMode: NSToolbarDisplayModeIconAndLabel];
+    
+    // We are the delegate
+    [toolbar setDelegate: self];
+    
+    // Attach the toolbar to our window 
+    [fQueueWindow setToolbar: toolbar];
+}
+
+//------------------------------------------------------------------------------------
+// toolbar:itemForItemIdentifier:willBeInsertedIntoToolbar:
+//------------------------------------------------------------------------------------
+- (NSToolbarItem *)toolbar:(NSToolbar *)toolbar
+        itemForItemIdentifier:(NSString *)itemIdentifier
+        willBeInsertedIntoToolbar:(BOOL)flag
+{
+    // Required delegate method: Given an item identifier, this method returns an item.
+    // The toolbar will use this method to obtain toolbar items that can be displayed
+    // in the customization sheet, or in the toolbar itself.
+    
+    NSToolbarItem *toolbarItem = nil;
+    
+    if ([itemIdentifier isEqual: HBStartPauseResumeToolbarIdentifier])
+    {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdentifier] autorelease];
+		
+        // Set the text label to be displayed in the toolbar and customization palette 
+		[toolbarItem setLabel: @"Start"];
+		[toolbarItem setPaletteLabel: @"Start/Pause"];
+		
+		// Set up a reasonable tooltip, and image
+		[toolbarItem setToolTip: @"Start Encoding"];
+		[toolbarItem setImage: [NSImage imageNamed: @"Play"]];
+		
+		// Tell the item what message to send when it is clicked 
+		[toolbarItem setTarget: self];
+		[toolbarItem setAction: @selector(toggleStartPause:)];
+	}
+    
+    else if ([itemIdentifier isEqual: HBShowDetailToolbarIdentifier])
+    {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdentifier] autorelease];
+		
+        // Set the text label to be displayed in the toolbar and customization palette 
+		[toolbarItem setLabel: @"Show Detail"];
+		[toolbarItem setPaletteLabel: @"Show Detail"];
+		
+		// Set up a reasonable tooltip, and image
+		[toolbarItem setToolTip: @"Show Detail"];
+		[toolbarItem setImage: [NSImage imageNamed: @"Info"]];
+		
+		// Tell the item what message to send when it is clicked 
+		[toolbarItem setTarget: self];
+		[toolbarItem setAction: @selector(toggleShowsDetail:)];
+	}
+    
+    else if ([itemIdentifier isEqual: HBShowGroupsToolbarIdentifier])
+    {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdentifier] autorelease];
+		
+        // Set the text label to be displayed in the toolbar and customization palette 
+		[toolbarItem setLabel: @"View"];
+		[toolbarItem setPaletteLabel: @"View"];
+		
+		// Set up a reasonable tooltip, and image
+		[toolbarItem setToolTip: @"View"];
+//		[toolbarItem setImage: [NSImage imageNamed: @"Disc"]];
+        
+        
+        NSButtonCell * buttonCell = [[[NSButtonCell alloc] initImageCell:nil] autorelease];
+        [buttonCell setBezelStyle:NSShadowlessSquareBezelStyle];//NSShadowlessSquareBezelStyle
+        [buttonCell setButtonType:NSToggleButton];
+        [buttonCell setBordered:NO];
+        [buttonCell setImagePosition:NSImageOnly];
+
+        NSMatrix * matrix = [[[NSMatrix alloc] initWithFrame:NSMakeRect(0,0,54,25)
+                mode:NSRadioModeMatrix
+                prototype:buttonCell
+                numberOfRows:1
+                numberOfColumns:2] autorelease];
+        [matrix setCellSize:NSMakeSize(27, 25)];
+        [matrix setIntercellSpacing:NSMakeSize(0, 0)];
+        [matrix selectCellAtRow:0 column:(fShowsJobsAsGroups ? 0 : 1)];
+
+        buttonCell = [matrix cellAtRow:0 column:0];
+        [buttonCell setTitle:@""];
+        [buttonCell setImage:[NSImage imageNamed: @"Encodes"]];
+        [buttonCell setAlternateImage:[NSImage imageNamed: @"EncodesPressed"]];
+        buttonCell = [matrix cellAtRow:0 column:1];
+        [buttonCell setTitle:@""];
+        [buttonCell setImage:[NSImage imageNamed: @"Passes"]];
+        [buttonCell setAlternateImage:[NSImage imageNamed: @"PassesPressed"]];
+        [toolbarItem setMinSize: [matrix frame].size];
+        [toolbarItem setMaxSize: [matrix frame].size];
+		[toolbarItem setView: matrix];
+
+/*
+        NSSegmentedControl * segControl = [[[NSSegmentedControl alloc] initWithFrame:NSMakeRect(0,0,20,20)] autorelease];
+        [[segControl cell] setControlSize:NSSmallControlSize];
+        [segControl setSegmentCount:2];
+        [segControl setLabel:@"Encodes" forSegment:0];
+        [segControl setLabel:@"Passes" forSegment:1];
+        [segControl setImage:[NSImage imageNamed:@"Delete"] forSegment:0];
+        [segControl setImage:[NSImage imageNamed:@"Delete"] forSegment:1];
+        [segControl setSelectedSegment: (fShowsJobsAsGroups ? 0 : 1)];
+        [segControl sizeToFit];
+        [toolbarItem setMinSize: [segControl frame].size];
+        [toolbarItem setMaxSize: [segControl frame].size];
+		[toolbarItem setView: segControl];
+*/
+
+/*
+        NSButton * button = [[[NSButton alloc] initWithFrame:NSMakeRect(0,0,20,20)] autorelease];
+        [button setButtonType:NSSwitchButton];
+        [button setTitle:@""];
+        [button setState: fShowsJobsAsGroups ? NSOnState : NSOffState];
+        [toolbarItem setMinSize: NSMakeSize(20,20)];
+        [toolbarItem setMaxSize: NSMakeSize(20,20)];
+		[toolbarItem setView: button];
+*/
+		
+		// Tell the item what message to send when it is clicked 
+		[toolbarItem setTarget: self];
+		[toolbarItem setAction: @selector(jobGroupsChanged:)];
+	}
+    
+    return toolbarItem;
+}
+
+//------------------------------------------------------------------------------------
+// toolbarDefaultItemIdentifiers:
+//------------------------------------------------------------------------------------
+- (NSArray *) toolbarDefaultItemIdentifiers: (NSToolbar *) toolbar
+{
+    // Required delegate method: Returns the ordered list of items to be shown in the
+    // toolbar by default.
+    
+    return [NSArray arrayWithObjects:
+        HBStartPauseResumeToolbarIdentifier,
+		NSToolbarSeparatorItemIdentifier,
+		HBShowGroupsToolbarIdentifier,
+        HBShowDetailToolbarIdentifier,
+        nil];
+}
+
+//------------------------------------------------------------------------------------
+// toolbarAllowedItemIdentifiers:
+//------------------------------------------------------------------------------------
+- (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar
+{
+    // Required delegate method: Returns the list of all allowed items by identifier.
+    // By default, the toolbar does not assume any items are allowed, even the
+    // separator. So, every allowed item must be explicitly listed.
+
+    return [NSArray arrayWithObjects:
+        HBStartPauseResumeToolbarIdentifier,
+		HBShowGroupsToolbarIdentifier,
+        HBShowDetailToolbarIdentifier,
+		NSToolbarCustomizeToolbarItemIdentifier,
+		NSToolbarFlexibleSpaceItemIdentifier,
+        NSToolbarSpaceItemIdentifier,
+		NSToolbarSeparatorItemIdentifier,
+        nil];
+}
+
+//------------------------------------------------------------------------------------
+// validateToolbarItem:
+//------------------------------------------------------------------------------------
+- (BOOL) validateToolbarItem: (NSToolbarItem *) toolbarItem
+{
+    // Optional method: This message is sent to us since we are the target of some
+    // toolbar item actions.
+
+    if (!fHandle) return NO;
+
+    BOOL enable = NO;
+
+    hb_state_t s;
+    hb_get_state2 (fHandle, &s);
+
+    if ([[toolbarItem itemIdentifier] isEqual: HBStartPauseResumeToolbarIdentifier])
+    {
+        if (s.state == HB_STATE_PAUSED)
+        {
+            enable = YES;
+            [toolbarItem setImage:[NSImage imageNamed: @"Play"]];
+			[toolbarItem setLabel: @"Resume"];
+			[toolbarItem setPaletteLabel: @"Resume"];
+			[toolbarItem setToolTip: @"Resume Encoding"];
+       }
+        
+        else if ((s.state == HB_STATE_WORKING) || (s.state == HB_STATE_MUXING))
+        {
+            enable = YES;
+            [toolbarItem setImage:[NSImage imageNamed: @"Pause"]];
+			[toolbarItem setLabel: @"Pause"];
+			[toolbarItem setPaletteLabel: @"Pause"];
+			[toolbarItem setToolTip: @"Pause Encoding"];
+        }
+
+        else if (hb_count(fHandle) > 0)
+        {
+            enable = YES;
+            [toolbarItem setImage:[NSImage imageNamed: @"Play"]];
+			[toolbarItem setLabel: @"Start"];
+			[toolbarItem setPaletteLabel: @"Start"];
+			[toolbarItem setToolTip: @"Start Encoding"];
+        }
+
+        else
+        {
+            enable = NO;
+            [toolbarItem setImage:[NSImage imageNamed: @"Play"]];
+			[toolbarItem setLabel: @"Start"];
+			[toolbarItem setPaletteLabel: @"Start"];
+			[toolbarItem setToolTip: @"Start Encoding"];
+        }
+	}
+    
+/* not used because HBShowGroupsToolbarIdentifier is now a custom view
+    else if ([[toolbarItem itemIdentifier] isEqual: HBShowGroupsToolbarIdentifier])
+    {
+        enable = hb_count(fHandle) > 0;
+        if (fShowsJobsAsGroups)
+        {
+            [toolbarItem setLabel: @"View Passes"];
+            [toolbarItem setPaletteLabel: @"View Passes"];
+            [toolbarItem setToolTip: @"Displays items in the queue as individual passes"];
+        }
+        else
+        {
+            [toolbarItem setLabel: @"View Encodes"];
+            [toolbarItem setPaletteLabel: @"View Encodes"];
+            [toolbarItem setToolTip: @"Displays items in the queue as encodes"];
+        }
+    }
+*/
+    
+    else if ([[toolbarItem itemIdentifier] isEqual: HBShowDetailToolbarIdentifier])
+    {
+        enable = hb_count(fHandle) > 0;
+        if (fShowsDetail)
+        {
+            [toolbarItem setLabel: @"Hide Detail"];
+            [toolbarItem setPaletteLabel: @"Hide Detail"];
+            [toolbarItem setToolTip: @"Displays detailed information in the queue"];
+        }
+        else
+        {
+            [toolbarItem setLabel: @"Show Detail"];
+            [toolbarItem setPaletteLabel: @"Show Detail"];
+            [toolbarItem setToolTip: @"Displays detailed information in the queue"];
+        }
+    }
+
+	return enable;
+}
+
+#pragma mark -
 
 //------------------------------------------------------------------------------------
 // awakeFromNib
 //------------------------------------------------------------------------------------
 - (void)awakeFromNib
 {
+    [self setupToolbar];
+    
     if (![fQueueWindow setFrameUsingName:@"Queue"])
         [fQueueWindow center];
     [fQueueWindow setFrameAutosaveName: @"Queue"];
-
+    [fQueueWindow setExcludedFromWindowsMenu:YES];
+    
     // Show/hide UI elements
-    [self showDetail:[[NSUserDefaults standardUserDefaults] boolForKey:@"QueueShowsDetail"]];
+    [self setShowsDetail:fShowsDetail];
+    [self setShowsJobsAsGroups:fShowsJobsAsGroups];
     [self showCurrentJobPane:NO];
 }
 
@@ -768,16 +1201,19 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"QueueWindowIsOpen"];
 }
 
+#pragma mark -
+#pragma mark NSTableView delegate
+
 //------------------------------------------------------------------------------------
 // NSTableView delegate
 //------------------------------------------------------------------------------------
 - (int)numberOfRowsInTableView: (NSTableView *)aTableView
 {
-#if JOB_GROUPS
-    return fHandle ? hb_group_count(fHandle) : 0;
-#else
-    return fHandle ? hb_count(fHandle) : 0;
-#endif
+    BOOL jobGroups = [[NSUserDefaults standardUserDefaults] boolForKey:@"QueueShowsJobsAsGroups"];
+    if (jobGroups)
+        return hb_group_count(fHandle);
+    else
+        return hb_count(fHandle);
 }
 
 //------------------------------------------------------------------------------------
@@ -791,26 +1227,27 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
         return @"";    // fatal error!
         
     hb_job_t * job;
-#if JOB_GROUPS
-    job = hb_group(fHandle, rowIndex);
-#else
-    job = hb_job(fHandle, rowIndex);
-#endif
+
+    BOOL jobGroups = [[NSUserDefaults standardUserDefaults] boolForKey:@"QueueShowsJobsAsGroups"];
+    if (jobGroups)
+        job = hb_group(fHandle, rowIndex);
+    else
+        job = hb_job(fHandle, rowIndex);
+
     if (!job)
         return @"";    // fatal error!
 
     if ([[aTableColumn identifier] isEqualToString:@"desc"])
     {
         BOOL highlighted = [aTableView isRowSelected:rowIndex] && [[aTableView window] isKeyWindow] && ([[aTableView window] firstResponder] == aTableView);
-        BOOL showDetail = [fDetailCheckbox state] == NSOnState;
-        return [self attributedDescriptionForJob:job withDetail:showDetail withHighlighting:highlighted];    
+        return [self attributedDescriptionForJob:job withDetail:fShowsDetail withHighlighting:highlighted];    
     }
     
     else if ([[aTableColumn identifier] isEqualToString:@"delete"])
         return @"";
 
     else if ([[aTableColumn identifier] isEqualToString:@"icon"])
-        return [NSImage imageNamed:@"JobSmall"];
+        return fShowsJobsAsGroups ? [NSImage imageNamed:@"JobSmall"] : [NSImage imageNamed:@"JobPassSmall"];
 
     return @"";
 }

@@ -128,6 +128,13 @@
 		D4D49FED0C83355600F01215 /* lang.c in Sources */ = {isa = PBXBuildFile; fileRef = B48359A70C82960500E04440 /* lang.c */; };
 		E3003C7F0C88505D0072F2A8 /* DeleteHighlightPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = E3003C7E0C88505D0072F2A8 /* DeleteHighlightPressed.png */; };
 		E3003CB50C8852B70072F2A8 /* DeletePressed.png in Resources */ = {isa = PBXBuildFile; fileRef = E3003CB40C8852B70072F2A8 /* DeletePressed.png */; };
+		E30EC7730C90BDD0004B9545 /* Encodes.png in Resources */ = {isa = PBXBuildFile; fileRef = E30EC76F0C90BDD0004B9545 /* Encodes.png */; };
+		E30EC7740C90BDD0004B9545 /* PassesPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = E30EC7700C90BDD0004B9545 /* PassesPressed.png */; };
+		E30EC7750C90BDD0004B9545 /* Passes.png in Resources */ = {isa = PBXBuildFile; fileRef = E30EC7710C90BDD0004B9545 /* Passes.png */; };
+		E30EC7760C90BDD0004B9545 /* EncodesPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = E30EC7720C90BDD0004B9545 /* EncodesPressed.png */; };
+		E318F0470C90D6D3003EFB59 /* JobPassLarge.png in Resources */ = {isa = PBXBuildFile; fileRef = E318F0460C90D6D3003EFB59 /* JobPassLarge.png */; };
+		E318F0580C90D88C003EFB59 /* JobPassSmall.png in Resources */ = {isa = PBXBuildFile; fileRef = E318F0570C90D88C003EFB59 /* JobPassSmall.png */; };
+		E318F0830C90DC4A003EFB59 /* Info.png in Resources */ = {isa = PBXBuildFile; fileRef = E318F0820C90DC4A003EFB59 /* Info.png */; };
 		E37C89410C83988F00C1B919 /* DeleteHighlight.png in Resources */ = {isa = PBXBuildFile; fileRef = E37C893D0C83988F00C1B919 /* DeleteHighlight.png */; };
 		E37C89420C83988F00C1B919 /* Delete.png in Resources */ = {isa = PBXBuildFile; fileRef = E37C893E0C83988F00C1B919 /* Delete.png */; };
 		E37C89430C83988F00C1B919 /* JobSmall.png in Resources */ = {isa = PBXBuildFile; fileRef = E37C893F0C83988F00C1B919 /* JobSmall.png */; };
@@ -276,6 +283,13 @@
 		B48359A70C82960500E04440 /* lang.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lang.c; path = ../libhb/lang.c; sourceTree = SOURCE_ROOT; };
 		E3003C7E0C88505D0072F2A8 /* DeleteHighlightPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DeleteHighlightPressed.png; sourceTree = "<group>"; };
 		E3003CB40C8852B70072F2A8 /* DeletePressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DeletePressed.png; sourceTree = "<group>"; };
+		E30EC76F0C90BDD0004B9545 /* Encodes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Encodes.png; sourceTree = "<group>"; };
+		E30EC7700C90BDD0004B9545 /* PassesPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PassesPressed.png; sourceTree = "<group>"; };
+		E30EC7710C90BDD0004B9545 /* Passes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Passes.png; sourceTree = "<group>"; };
+		E30EC7720C90BDD0004B9545 /* EncodesPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodesPressed.png; sourceTree = "<group>"; };
+		E318F0460C90D6D3003EFB59 /* JobPassLarge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JobPassLarge.png; sourceTree = "<group>"; };
+		E318F0570C90D88C003EFB59 /* JobPassSmall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JobPassSmall.png; sourceTree = "<group>"; };
+		E318F0820C90DC4A003EFB59 /* Info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Info.png; sourceTree = "<group>"; };
 		E37C893D0C83988F00C1B919 /* DeleteHighlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DeleteHighlight.png; sourceTree = "<group>"; };
 		E37C893E0C83988F00C1B919 /* Delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Delete.png; sourceTree = "<group>"; };
 		E37C893F0C83988F00C1B919 /* JobSmall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JobSmall.png; sourceTree = "<group>"; };
@@ -516,6 +530,13 @@
 				E3003C7E0C88505D0072F2A8 /* DeleteHighlightPressed.png */,
 				E37C89400C83988F00C1B919 /* JobLarge.png */,
 				E37C893F0C83988F00C1B919 /* JobSmall.png */,
+				E30EC76F0C90BDD0004B9545 /* Encodes.png */,
+				E30EC7720C90BDD0004B9545 /* EncodesPressed.png */,
+				E30EC7700C90BDD0004B9545 /* PassesPressed.png */,
+				E30EC7710C90BDD0004B9545 /* Passes.png */,
+				E318F0570C90D88C003EFB59 /* JobPassSmall.png */,
+				E318F0460C90D6D3003EFB59 /* JobPassLarge.png */,
+				E318F0820C90DC4A003EFB59 /* Info.png */,
 			);
 			path = icons;
 			sourceTree = "<group>";
@@ -704,6 +725,13 @@
 				E37C894F0C8398CF00C1B919 /* Queue.nib in Resources */,
 				E3003C7F0C88505D0072F2A8 /* DeleteHighlightPressed.png in Resources */,
 				E3003CB50C8852B70072F2A8 /* DeletePressed.png in Resources */,
+				E30EC7730C90BDD0004B9545 /* Encodes.png in Resources */,
+				E30EC7740C90BDD0004B9545 /* PassesPressed.png in Resources */,
+				E30EC7750C90BDD0004B9545 /* Passes.png in Resources */,
+				E30EC7760C90BDD0004B9545 /* EncodesPressed.png in Resources */,
+				E318F0470C90D6D3003EFB59 /* JobPassLarge.png in Resources */,
+				E318F0580C90D88C003EFB59 /* JobPassSmall.png in Resources */,
+				E318F0830C90DC4A003EFB59 /* Info.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1850,7 +1878,6 @@
 				GCC_DEBUGGING_SYMBOLS = default;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = "JOB_GROUPS=1";
 				MACOSX_DEPLOYMENT_TARGET = 10.3;
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;

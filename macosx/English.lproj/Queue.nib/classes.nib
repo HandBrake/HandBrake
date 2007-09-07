@@ -217,8 +217,11 @@
             ACTIONS = {
                 cancelCurrentJob = id; 
                 detailChanged = id; 
+                jobGroupsChanged = id; 
                 removeSelectedJob = id; 
                 showQueueWindow = id; 
+                toggleShowsDetail = id; 
+                toggleShowsJobsAsGroups = id; 
                 toggleStartPause = id; 
             }; 
             CLASS = HBQueueController; 
@@ -227,9 +230,10 @@
                 fCurrentJobPane = NSView; 
                 fDetailCheckbox = NSButton; 
                 fJobDescTextField = NSTextField; 
+                fJobGroupsCheckbox = NSButton; 
+                fJobIconView = NSImageView; 
                 fProgressBar = NSProgressIndicator; 
-                fProgressStatus = NSTextField; 
-                fProgressTimeRemaining = NSTextField; 
+                fProgressTextField = NSTextField; 
                 fQueueCountField = NSTextField; 
                 fQueuePane = NSView; 
                 fQueueWindow = NSWindow; 
@@ -250,6 +254,7 @@
             SUPERCLASS = NSTextField; 
         }, 
         {CLASS = MVMenuButton; LANGUAGE = ObjC; SUPERCLASS = NSButton; }, 
+        {CLASS = NSSegmentedControl; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
         {
             ACTIONS = {
                 ClosePanel = id; 
