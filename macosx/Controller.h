@@ -14,6 +14,8 @@
 #include "PictureController.h"
 #include "HBQueueController.h"
 #import "MVMenuButton.h"
+#import "HBAdvancedController.h"
+
 @class HBOutputPanelController;
 
 @interface HBController : NSObject <GrowlApplicationBridgeDelegate>
@@ -24,7 +26,7 @@
     /* Picture panel */
     IBOutlet PictureController   * fPictureController;
     IBOutlet NSPanel             * fPicturePanel;
-	
+	IBOutlet NSBox               * fAdvancedView;
     /* Queue panel */
     HBQueueController            * fQueueController;
     IBOutlet NSTextField         * fQueueStatus;
@@ -46,8 +48,6 @@
     /* Source box */
 	IBOutlet NSProgressIndicator * fScanIndicator;
 	NSString                     * sourceDisplayName;
-	IBOutlet NSTextField         * fScanStatus;
-    IBOutlet NSTextField         * fSrcDVD1Field;
     IBOutlet NSTextField         * fSrcDVD2Field;
     IBOutlet NSTextField         * fSrcTitleField;
     IBOutlet NSPopUpButton       * fSrcTitlePopUp;
@@ -155,54 +155,7 @@
     IBOutlet NSButton            * fPictureButton;
     IBOutlet NSTextField         * fStatusField;
     IBOutlet NSProgressIndicator * fRipIndicator;
-    IBOutlet NSButton            * fShowQuButton;
-    IBOutlet NSButton            * fAddToQuButton;
-    IBOutlet NSButton            * fPauseButton;
-    IBOutlet NSButton            * fRipButton;
 	BOOL                           fRipIndicatorShown;
-	
-	/* Advanced Tab for opts fX264optView*/
-	IBOutlet NSView              * fX264optView;
-	IBOutlet NSTextField         * fX264optViewTitleLabel;
-	IBOutlet NSTextField         * fDisplayX264OptionsLabel;
-	IBOutlet NSTextField         * fDisplayX264Options;
-	IBOutlet NSTextField         * fX264optBframesLabel;
-	IBOutlet NSPopUpButton       * fX264optBframesPopUp;
-	IBOutlet NSTextField         * fX264optRefLabel;
-	IBOutlet NSPopUpButton       * fX264optRefPopUp;
-	IBOutlet NSTextField         * fX264optNfpskipLabel;
-	IBOutlet NSButton            * fX264optNfpskipSwitch;
-	IBOutlet NSTextField         * fX264optNodctdcmtLabel;
-	IBOutlet NSButton            * fX264optNodctdcmtSwitch;
-	IBOutlet NSTextField         * fX264optSubmeLabel;
-	IBOutlet NSPopUpButton       * fX264optSubmePopUp;
-	IBOutlet NSTextField         * fX264optTrellisLabel;
-	IBOutlet NSPopUpButton       * fX264optTrellisPopUp;
-    IBOutlet NSTextField         * fX264optMixedRefsLabel;
-    IBOutlet NSButton            * fX264optMixedRefsSwitch;
-    IBOutlet NSTextField         * fX264optMotionEstLabel;
-    IBOutlet NSPopUpButton       * fX264optMotionEstPopUp;
-    IBOutlet NSTextField         * fX264optMERangeLabel;
-    IBOutlet NSPopUpButton       * fX264optMERangePopUp;
-    IBOutlet NSTextField         * fX264optWeightBLabel;
-    IBOutlet NSButton            * fX264optWeightBSwitch;
-    IBOutlet NSTextField         * fX264optBRDOLabel;
-    IBOutlet NSButton            * fX264optBRDOSwitch;
-    IBOutlet NSTextField         * fX264optBPyramidLabel;
-    IBOutlet NSButton            * fX264optBPyramidSwitch;
-    IBOutlet NSTextField         * fX264optBiMELabel;
-    IBOutlet NSButton            * fX264optBiMESwitch;
-    IBOutlet NSTextField         * fX264optDirectPredLabel;
-    IBOutlet NSPopUpButton       * fX264optDirectPredPopUp;
-    IBOutlet NSTextField         * fX264optDeblockLabel;
-    IBOutlet NSPopUpButton       * fX264optAlphaDeblockPopUp;
-    IBOutlet NSPopUpButton       * fX264optBetaDeblockPopUp;
-    IBOutlet NSTextField         * fX264optAnalyseLabel;
-    IBOutlet NSPopUpButton       * fX264optAnalysePopUp;
-    IBOutlet NSTextField         * fX264opt8x8dctLabel;
-    IBOutlet NSButton            * fX264opt8x8dctSwitch;
-    IBOutlet NSTextField         * fX264optCabacLabel;
-    IBOutlet NSButton            * fX264optCabacSwitch;
     
 	/* User Preset variables here */
 	
@@ -238,6 +191,7 @@
     int                            SuccessfulScan;
 	NSString                      * currentSource;
 	HBOutputPanelController       *outputPanel;
+    HBAdvancedController          *fAdvancedOptions;
 	
     hb_job_t                     * fLastKnownCurrentJob;
 	
@@ -284,6 +238,8 @@
 - (IBAction) addToQueue: (id) sender;
 - (IBAction) showQueueWindow:(id)sender;
 
+- (IBAction)showPreferencesWindow:(id)sender;
+
 - (IBAction) Rip: (id) sender;
 - (void)     overWriteAlertDone: (NSWindow *) sheet
     returnCode: (int) returnCode contextInfo: (void *) contextInfo;
@@ -303,13 +259,6 @@
 - (IBAction) openHomepage: (id) sender;
 - (IBAction) openForums:   (id) sender;
 - (IBAction) openUserGuide:   (id) sender;
-
-// x264 Advanced Panel Methods
-- (IBAction) X264AdvancedOptionsSet: (id) sender;
-- (IBAction) X264AdvancedOptionsStandardizeOptString: (id) sender;
-- (IBAction) X264AdvancedOptionsSetCurrentSettings: (id) sender;
-- (NSString *)  X264AdvancedOptionsStandardizeOptNames:(NSString *) cleanOptNameString;
-- (IBAction) X264AdvancedOptionsChanged: (id) sender;
 
 // Preset Methods Here
 - (void) loadPresets;

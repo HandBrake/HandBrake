@@ -1,0 +1,61 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {
+                X264AdvancedOptionsChanged = id; 
+                X264AdvancedOptionsSet = id; 
+                X264AdvancedOptionsSetCurrentSettings = id; 
+                X264AdvancedOptionsStandardizeOptString = id; 
+            }; 
+            CLASS = HBAdvancedController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                fDisplayX264Options = NSTextField; 
+                fDisplayX264OptionsLabel = NSTextField; 
+                fEmptyView = NSView; 
+                fX264opt8x8dctLabel = NSTextField; 
+                fX264opt8x8dctSwitch = NSButton; 
+                fX264optAlphaDeblockPopUp = NSPopUpButton; 
+                fX264optAnalyseLabel = NSTextField; 
+                fX264optAnalysePopUp = NSPopUpButton; 
+                fX264optBPyramidLabel = NSTextField; 
+                fX264optBPyramidSwitch = NSButton; 
+                fX264optBRDOLabel = NSTextField; 
+                fX264optBRDOSwitch = NSButton; 
+                fX264optBetaDeblockPopUp = NSPopUpButton; 
+                fX264optBframesLabel = NSTextField; 
+                fX264optBframesPopUp = NSPopUpButton; 
+                fX264optBiMELabel = NSTextField; 
+                fX264optBiMESwitch = NSButton; 
+                fX264optCabacLabel = NSTextField; 
+                fX264optCabacSwitch = NSButton; 
+                fX264optDeblockLabel = NSTextField; 
+                fX264optDirectPredLabel = NSTextField; 
+                fX264optDirectPredPopUp = NSPopUpButton; 
+                fX264optMERangeLabel = NSTextField; 
+                fX264optMERangePopUp = NSPopUpButton; 
+                fX264optMixedRefsLabel = NSTextField; 
+                fX264optMixedRefsSwitch = NSButton; 
+                fX264optMotionEstLabel = NSTextField; 
+                fX264optMotionEstPopUp = NSPopUpButton; 
+                fX264optNfpskipLabel = NSTextField; 
+                fX264optNfpskipSwitch = NSButton; 
+                fX264optNodctdcmtLabel = NSTextField; 
+                fX264optNodctdcmtSwitch = NSButton; 
+                fX264optRefLabel = NSTextField; 
+                fX264optRefPopUp = NSPopUpButton; 
+                fX264optSubmeLabel = NSTextField; 
+                fX264optSubmePopUp = NSPopUpButton; 
+                fX264optTrellisLabel = NSTextField; 
+                fX264optTrellisPopUp = NSPopUpButton; 
+                fX264optView = NSView; 
+                fX264optViewTitleLabel = NSTextField; 
+                fX264optWeightBLabel = NSTextField; 
+                fX264optWeightBSwitch = NSButton; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}
