@@ -223,7 +223,7 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
     // clumsy - have to update UI
     [fDetailCheckbox setState:showsDetail ? NSOnState : NSOffState];
     
-    [fTaskView setRowHeight:showsDetail ? 110.0 : 17.0];
+    [fTaskView setRowHeight:showsDetail ? 98.0 : 17.0];
     if ([fTaskView selectedRow] != -1)
         [fTaskView scrollRowToVisible:[fTaskView selectedRow]];
 }
@@ -274,8 +274,10 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
                 [NSColor whiteColor], NSForegroundColorAttributeName,
                 ps, NSParagraphStyleAttributeName,
                 nil] retain];
-    static NSDictionary* titleAttribute = [[NSDictionary dictionaryWithObject:
-                [NSFont systemFontOfSize:[NSFont systemFontSize]] forKey:NSFontAttributeName] retain];
+    static NSDictionary* titleAttribute = [[NSDictionary dictionaryWithObjectsAndKeys:
+                [NSFont systemFontOfSize:[NSFont systemFontSize]], NSFontAttributeName,
+                ps, NSParagraphStyleAttributeName,
+                nil] retain];
 
     finalString = [[[NSMutableAttributedString alloc] init] autorelease];
 
@@ -285,9 +287,6 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
     anAttributedString = [[[NSAttributedString alloc] initWithString:[NSString stringWithUTF8String:title->name] attributes:titleAttribute] autorelease];
     [finalString appendAttributedString:anAttributedString];
 
-    if (!detail)
-        return finalString;
-        
     // Other info in plain
     aMutableString = [NSMutableString stringWithCapacity:200];
     
@@ -316,7 +315,7 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
     if (job->pass == -1)
     {
         [aMutableString appendString:[NSString stringWithFormat:
-                @"\nTitle %d, %@, Pass: Scan", title->index, chapterString]];
+                @"  (Title %d, %@, Subtitle Scan)", title->index, chapterString]];
     }
 
     // Normal pass
@@ -324,159 +323,161 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
     {
         if (jobGroups)
             [aMutableString appendString:[NSString stringWithFormat:
-                    @"\nTitle %d, %@, %d-Pass",
+                    @"  (Title %d, %@, %d-Pass)",
                     title->index, chapterString, MIN( 2, job->pass + 1 )]];
         else
             [aMutableString appendString:[NSString stringWithFormat:
-                    @"\nTitle %d, %@, Pass %d of %d",
+                    @"  (Title %d, %@, Pass %d of %d)",
                     title->index, chapterString, MAX( 1, job->pass ), MIN( 2, job->pass + 1 )]];
         
-
-        NSString * jobFormat;
-        NSString * jobPictureDetail;
-        NSString * jobVideoDetail;
-        NSString * jobVideoCodec;
-        NSString * jobVideoQuality;
-        NSString * jobAudioDetail;
-        NSString * jobAudioCodec;
-
-        /* Muxer settings (File Format in the gui) */
-        if (job->mux == 65536 || job->mux == 131072 || job->mux == 1048576)
-            jobFormat = @"MP4"; // HB_MUX_MP4,HB_MUX_PSP,HB_MUX_IPOD
-        else if (job->mux == 262144)
-            jobFormat = @"AVI"; // HB_MUX_AVI
-        else if (job->mux == 524288)
-            jobFormat = @"OGM"; // HB_MUX_OGM
-        else if (job->mux == 2097152)
-            jobFormat = @"MKV"; // HB_MUX_MKV
-        else
-            jobFormat = @"unknown";
-        
-        // 2097152
-        /* Video Codec settings (Encoder in the gui) */
-        if (job->vcodec == 1)
-            jobVideoCodec = @"FFmpeg"; // HB_VCODEC_FFMPEG
-        else if (job->vcodec == 2)
-            jobVideoCodec = @"XviD"; // HB_VCODEC_XVID
-        else if (job->vcodec == 4)
+        if (detail)
         {
-            /* Deterimine for sure how we are now setting iPod uuid atom */
-            if (job->h264_level) // We are encoding for iPod
-                jobVideoCodec = @"x264 (H.264 iPod)"; // HB_VCODEC_X264    
+            NSString * jobFormat;
+            NSString * jobPictureDetail;
+            NSString * jobVideoDetail;
+            NSString * jobVideoCodec;
+            NSString * jobVideoQuality;
+            NSString * jobAudioDetail;
+            NSString * jobAudioCodec;
+
+            /* Muxer settings (File Format in the gui) */
+            if (job->mux == 65536 || job->mux == 131072 || job->mux == 1048576)
+                jobFormat = @"MP4"; // HB_MUX_MP4,HB_MUX_PSP,HB_MUX_IPOD
+            else if (job->mux == 262144)
+                jobFormat = @"AVI"; // HB_MUX_AVI
+            else if (job->mux == 524288)
+                jobFormat = @"OGM"; // HB_MUX_OGM
+            else if (job->mux == 2097152)
+                jobFormat = @"MKV"; // HB_MUX_MKV
             else
-                jobVideoCodec = @"x264 (H.264 Main)"; // HB_VCODEC_X264
-        }
-        else
-            jobVideoCodec = @"unknown";
-        
-        /* Audio Codecs (Second half of Codecs in the gui) */
-        if (job->acodec == 256)
-            jobAudioCodec = @"AAC"; // HB_ACODEC_FAAC
-        else if (job->acodec == 512)
-            jobAudioCodec = @"MP3"; // HB_ACODEC_LAME
-        else if (job->acodec == 1024)
-            jobAudioCodec = @"Vorbis"; // HB_ACODEC_VORBIS
-        else if (job->acodec == 2048)
-            jobAudioCodec = @"AC3"; // HB_ACODEC_AC3
-        else
-            jobAudioCodec = @"unknown";
-        /* Show Basic File info */
-        if (job->chapter_markers == 1)
-            [aMutableString appendString:[NSString stringWithFormat:@"\nFormat: %@ Container, %@ Video + %@ Audio, Chapter Markers", jobFormat, jobVideoCodec, jobAudioCodec]];
-        else
-            [aMutableString appendString:[NSString stringWithFormat:@"\nFormat: %@ Container, %@ Video + %@ Audio", jobFormat, jobVideoCodec, jobAudioCodec]];
+                jobFormat = @"unknown";
             
-        /*Picture info*/
-        /*integers for picture values deinterlace, crop[4], keep_ratio, grayscale, pixel_ratio, pixel_aspect_width, pixel_aspect_height,
-         maxWidth, maxHeight */
-        if (job->pixel_ratio == 1)
-        {
-            int titlewidth = title->width - job->crop[2] - job->crop[3];
-            int displayparwidth = titlewidth * job->pixel_aspect_width / job->pixel_aspect_height;
-            int displayparheight = title->height - job->crop[0] - job->crop[1];
-            jobPictureDetail = [NSString stringWithFormat:@"Picture: %dx%d (%dx%d Anamorphic)", displayparwidth, displayparheight, job->width, displayparheight];
-        }
-        else
-            jobPictureDetail = [NSString stringWithFormat:@"Picture: %dx%d", job->width, job->height];
-        if (job->keep_ratio == 1)
-            jobPictureDetail = [jobPictureDetail stringByAppendingString:@" Keep Aspect Ratio"];
-        
-        if (job->grayscale == 1)
-            jobPictureDetail = [jobPictureDetail stringByAppendingString:@", Grayscale"];
-        
-        if (job->deinterlace == 1)
-            jobPictureDetail = [jobPictureDetail stringByAppendingString:@", Deinterlace"];
-        /* Show Picture info */    
-        [aMutableString appendString:[NSString stringWithFormat:@"\n%@", jobPictureDetail]];
-        
-        /* Detailed Video info */
-        if (job->vquality <= 0 || job->vquality >= 1)
-            jobVideoQuality =[NSString stringWithFormat:@"%d kbps", job->vbitrate];
-        else
-        {
-            NSNumber * vidQuality;
-            vidQuality = [NSNumber numberWithInt:job->vquality * 100];
-            /* this is screwed up kind of. Needs to be formatted properly */
-            if (job->crf == 1)
-                jobVideoQuality =[NSString stringWithFormat:@"%@%% CRF", vidQuality];            
+            // 2097152
+            /* Video Codec settings (Encoder in the gui) */
+            if (job->vcodec == 1)
+                jobVideoCodec = @"FFmpeg"; // HB_VCODEC_FFMPEG
+            else if (job->vcodec == 2)
+                jobVideoCodec = @"XviD"; // HB_VCODEC_XVID
+            else if (job->vcodec == 4)
+            {
+                /* Deterimine for sure how we are now setting iPod uuid atom */
+                if (job->h264_level) // We are encoding for iPod
+                    jobVideoCodec = @"x264 (H.264 iPod)"; // HB_VCODEC_X264    
+                else
+                    jobVideoCodec = @"x264 (H.264 Main)"; // HB_VCODEC_X264
+            }
             else
-                jobVideoQuality =[NSString stringWithFormat:@"%@%% CQP", vidQuality];
+                jobVideoCodec = @"unknown";
+            
+            /* Audio Codecs (Second half of Codecs in the gui) */
+            if (job->acodec == 256)
+                jobAudioCodec = @"AAC"; // HB_ACODEC_FAAC
+            else if (job->acodec == 512)
+                jobAudioCodec = @"MP3"; // HB_ACODEC_LAME
+            else if (job->acodec == 1024)
+                jobAudioCodec = @"Vorbis"; // HB_ACODEC_VORBIS
+            else if (job->acodec == 2048)
+                jobAudioCodec = @"AC3"; // HB_ACODEC_AC3
+            else
+                jobAudioCodec = @"unknown";
+            /* Show Basic File info */
+            if (job->chapter_markers == 1)
+                [aMutableString appendString:[NSString stringWithFormat:@"\nFormat: %@ Container, %@ Video + %@ Audio, Chapter Markers", jobFormat, jobVideoCodec, jobAudioCodec]];
+            else
+                [aMutableString appendString:[NSString stringWithFormat:@"\nFormat: %@ Container, %@ Video + %@ Audio", jobFormat, jobVideoCodec, jobAudioCodec]];
+                
+            /*Picture info*/
+            /*integers for picture values deinterlace, crop[4], keep_ratio, grayscale, pixel_ratio, pixel_aspect_width, pixel_aspect_height,
+             maxWidth, maxHeight */
+            if (job->pixel_ratio == 1)
+            {
+                int titlewidth = title->width - job->crop[2] - job->crop[3];
+                int displayparwidth = titlewidth * job->pixel_aspect_width / job->pixel_aspect_height;
+                int displayparheight = title->height - job->crop[0] - job->crop[1];
+                jobPictureDetail = [NSString stringWithFormat:@"Picture: %dx%d (%dx%d Anamorphic)", displayparwidth, displayparheight, job->width, displayparheight];
+            }
+            else
+                jobPictureDetail = [NSString stringWithFormat:@"Picture: %dx%d", job->width, job->height];
+            if (job->keep_ratio == 1)
+                jobPictureDetail = [jobPictureDetail stringByAppendingString:@" Keep Aspect Ratio"];
+            
+            if (job->grayscale == 1)
+                jobPictureDetail = [jobPictureDetail stringByAppendingString:@", Grayscale"];
+            
+            if (job->deinterlace == 1)
+                jobPictureDetail = [jobPictureDetail stringByAppendingString:@", Deinterlace"];
+            /* Show Picture info */    
+            [aMutableString appendString:[NSString stringWithFormat:@"\n%@", jobPictureDetail]];
+            
+            /* Detailed Video info */
+            if (job->vquality <= 0 || job->vquality >= 1)
+                jobVideoQuality =[NSString stringWithFormat:@"%d kbps", job->vbitrate];
+            else
+            {
+                NSNumber * vidQuality;
+                vidQuality = [NSNumber numberWithInt:job->vquality * 100];
+                /* this is screwed up kind of. Needs to be formatted properly */
+                if (job->crf == 1)
+                    jobVideoQuality =[NSString stringWithFormat:@"%@%% CRF", vidQuality];            
+                else
+                    jobVideoQuality =[NSString stringWithFormat:@"%@%% CQP", vidQuality];
+            }
+            
+            if (job->vrate_base == 1126125)
+            {
+                /* NTSC FILM 23.976 */
+                jobVideoDetail = [NSString stringWithFormat:@"Video: %@, %@, 23.976 fps", jobVideoCodec, jobVideoQuality];
+            }
+            else if (job->vrate_base == 900900)
+            {
+                /* NTSC 29.97 */
+                jobVideoDetail = [NSString stringWithFormat:@"Video: %@, %@, 29.97 fps", jobVideoCodec, jobVideoQuality];
+            }
+            else
+            {
+                /* Everything else */
+                jobVideoDetail = [NSString stringWithFormat:@"Video: %@, %@, %d fps", jobVideoCodec, jobVideoQuality, job->vrate / job->vrate_base];
+            }
+            
+            /* Add the video detail string to the job filed in the window */
+            [aMutableString appendString:[NSString stringWithFormat:@"\n%@", jobVideoDetail]];
+            
+            /* if there is an x264 option string, lets add it here*/
+            /*NOTE: Due to size, lets get this in a tool tip*/
+            
+            if (job->x264opts)
+                [aMutableString appendString:[NSString stringWithFormat:@"\nx264 Options: %@", [NSString stringWithUTF8String:job->x264opts]]];
+            
+            /* Audio Detail */
+            if ([jobAudioCodec isEqualToString: @"AC3"])
+                jobAudioDetail = [NSString stringWithFormat:@"Audio: %@, Pass-Through", jobAudioCodec];
+            else
+                jobAudioDetail = [NSString stringWithFormat:@"Audio: %@, %d kbps, %d Hz", jobAudioCodec, job->abitrate, job->arate];
+            
+            /* we now get the audio mixdown info for each of the two gui audio tracks */
+            /* lets do it the long way here to get a handle on things.
+                Hardcoded for two tracks for gui: audio_mixdowns[i] audio_mixdowns[i] */
+            int ai; // counter for each audios [] , macgui only allows for two audio tracks currently
+            for( ai = 0; ai < 2; ai++ )
+            {
+                if (job->audio_mixdowns[ai] == HB_AMIXDOWN_MONO)
+                    jobAudioDetail = [jobAudioDetail stringByAppendingString:[NSString stringWithFormat:@", Track %d: Mono",ai + 1]];
+                if (job->audio_mixdowns[ai] == HB_AMIXDOWN_STEREO)
+                    jobAudioDetail = [jobAudioDetail stringByAppendingString:[NSString stringWithFormat:@", Track %d: Stereo",ai + 1]];
+                if (job->audio_mixdowns[ai] == HB_AMIXDOWN_DOLBY)
+                    jobAudioDetail = [jobAudioDetail stringByAppendingString:[NSString stringWithFormat:@", Track %d: Dolby Surround",ai + 1]];
+                if (job->audio_mixdowns[ai] == HB_AMIXDOWN_DOLBYPLII)
+                    jobAudioDetail = [jobAudioDetail stringByAppendingString:[NSString stringWithFormat:@", Track %d: Dolby Pro Logic II",ai + 1]];
+                if (job->audio_mixdowns[ai] == HB_AMIXDOWN_6CH)
+                    jobAudioDetail = [jobAudioDetail stringByAppendingString:[NSString stringWithFormat:@", Track %d: 6-channel discreet",ai + 1]];
+            }
+            
+            /* Add the Audio detail string to the job filed in the window */
+            [aMutableString appendString:[NSString stringWithFormat: @"\n%@", jobAudioDetail]];
+            
+            /*Destination Field */
+            [aMutableString appendString:[NSString stringWithFormat:@"\nDestination: %@", [NSString stringWithUTF8String:job->file]]];
         }
-        
-        if (job->vrate_base == 1126125)
-        {
-            /* NTSC FILM 23.976 */
-            jobVideoDetail = [NSString stringWithFormat:@"Video: %@, %@, 23.976 fps", jobVideoCodec, jobVideoQuality];
-        }
-        else if (job->vrate_base == 900900)
-        {
-            /* NTSC 29.97 */
-            jobVideoDetail = [NSString stringWithFormat:@"Video: %@, %@, 29.97 fps", jobVideoCodec, jobVideoQuality];
-        }
-        else
-        {
-            /* Everything else */
-            jobVideoDetail = [NSString stringWithFormat:@"Video: %@, %@, %d fps", jobVideoCodec, jobVideoQuality, job->vrate / job->vrate_base];
-        }
-        
-        /* Add the video detail string to the job filed in the window */
-        [aMutableString appendString:[NSString stringWithFormat:@"\n%@", jobVideoDetail]];
-        
-        /* if there is an x264 option string, lets add it here*/
-        /*NOTE: Due to size, lets get this in a tool tip*/
-        
-        if (job->x264opts)
-            [aMutableString appendString:[NSString stringWithFormat:@"\nx264 Options: %@", [NSString stringWithUTF8String:job->x264opts]]];
-        
-        /* Audio Detail */
-        if ([jobAudioCodec isEqualToString: @"AC3"])
-            jobAudioDetail = [NSString stringWithFormat:@"Audio: %@, Pass-Through", jobAudioCodec];
-        else
-            jobAudioDetail = [NSString stringWithFormat:@"Audio: %@, %d kbps, %d Hz", jobAudioCodec, job->abitrate, job->arate];
-        
-        /* we now get the audio mixdown info for each of the two gui audio tracks */
-        /* lets do it the long way here to get a handle on things.
-            Hardcoded for two tracks for gui: audio_mixdowns[i] audio_mixdowns[i] */
-        int ai; // counter for each audios [] , macgui only allows for two audio tracks currently
-        for( ai = 0; ai < 2; ai++ )
-        {
-            if (job->audio_mixdowns[ai] == HB_AMIXDOWN_MONO)
-                jobAudioDetail = [jobAudioDetail stringByAppendingString:[NSString stringWithFormat:@", Track %d: Mono",ai + 1]];
-            if (job->audio_mixdowns[ai] == HB_AMIXDOWN_STEREO)
-                jobAudioDetail = [jobAudioDetail stringByAppendingString:[NSString stringWithFormat:@", Track %d: Stereo",ai + 1]];
-            if (job->audio_mixdowns[ai] == HB_AMIXDOWN_DOLBY)
-                jobAudioDetail = [jobAudioDetail stringByAppendingString:[NSString stringWithFormat:@", Track %d: Dolby Surround",ai + 1]];
-            if (job->audio_mixdowns[ai] == HB_AMIXDOWN_DOLBYPLII)
-                jobAudioDetail = [jobAudioDetail stringByAppendingString:[NSString stringWithFormat:@", Track %d: Dolby Pro Logic II",ai + 1]];
-            if (job->audio_mixdowns[ai] == HB_AMIXDOWN_6CH)
-                jobAudioDetail = [jobAudioDetail stringByAppendingString:[NSString stringWithFormat:@", Track %d: 6-channel discreet",ai + 1]];
-        }
-        
-        /* Add the Audio detail string to the job filed in the window */
-        [aMutableString appendString:[NSString stringWithFormat: @"\n%@", jobAudioDetail]];
-        
-        /*Destination Field */
-        [aMutableString appendString:[NSString stringWithFormat:@"\nDestination: %@", [NSString stringWithUTF8String:job->file]]];
     }
     
     anAttributedString = [[[NSAttributedString alloc] initWithString:aMutableString attributes:highlighted ? detailHighlightedAttribute : detailAttribute] autorelease];
