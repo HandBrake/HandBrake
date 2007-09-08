@@ -147,7 +147,7 @@
 	
 	IBOutlet NSDrawer            * fPresetDrawer;
 	IBOutlet NSTextField         * fPresetNewName;
-	IBOutlet NSTextField          * fPresetNewDesc;
+	IBOutlet NSTextField         * fPresetNewDesc;
 	IBOutlet NSPopUpButton       * fPresetNewPicSettingsPopUp;
 	IBOutlet NSTextField         * fPresetSelectedDisplay;
 	

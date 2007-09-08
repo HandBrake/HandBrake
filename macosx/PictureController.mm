@@ -346,7 +346,8 @@ static int GetAlignedSize( int size )
 
 - (IBAction) ClosePanel: (id) sender
 {
-	[NSApp stopModal];
+    [NSApp endSheet: fPicturePanel];
+    [fPicturePanel orderOut: self];
 }
 
 - (BOOL) autoCrop
@@ -399,9 +400,6 @@ static int GetAlignedSize( int size )
 
     [NSApp beginSheet: fPicturePanel modalForWindow: fWindow
         modalDelegate: NULL didEndSelector: NULL contextInfo: NULL];
-    [NSApp runModalForWindow: fPicturePanel];
-    [NSApp endSheet: fPicturePanel];
-    [fPicturePanel orderOut: self];
 }
 
 - (BOOL) loadMyNibFile

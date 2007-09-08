@@ -521,15 +521,18 @@ static int hb_group_count(hb_handle_t * h)
     
     if (fHandle)
     {
-
-        if (action == @selector(addToQueue:) || action == @selector(showPicturePanel:))
-            return SuccessfulScan;
-            
+        if (action == @selector(addToQueue:) || action == @selector(showPicturePanel:) || action == @selector(showAddPresetPanel:))
+            return SuccessfulScan && [fWindow attachedSheet] == nil;
+        
         if (action == @selector(showScanPanel:))
         {
             if (s.state == HB_STATE_SCANNING)
                 return NO;
+            else
+                return [fWindow attachedSheet] == nil;
         }
+        if (action == @selector(selectDefaultPreset:))
+            return [tableView selectedRow] >= 0 && [fWindow attachedSheet] == nil;
         if (action == @selector(Pause:))
         {
             if (s.state == HB_STATE_WORKING)
@@ -558,12 +561,11 @@ static int hb_group_count(hb_handle_t * h)
             {
                 if(![[menuItem title] isEqualToString:@"Start Encoding"])
                     [menuItem setTitle:@"Start Encoding"];
-                return YES;
+                return [fWindow attachedSheet] == nil;
             }
             else
                 return NO;
         }
-
     
     return YES;
 }
@@ -574,13 +576,14 @@ static int hb_group_count(hb_handle_t * h)
 #define SERVICE_NAME @"Encode Done"
 - (NSDictionary *)registrationDictionaryForGrowl 
 { 
-NSDictionary *registrationDictionary = [NSDictionary dictionaryWithObjectsAndKeys: 
-[NSArray arrayWithObjects:SERVICE_NAME,nil], GROWL_NOTIFICATIONS_ALL, 
-[NSArray arrayWithObjects:SERVICE_NAME,nil], GROWL_NOTIFICATIONS_DEFAULT, 
-nil]; 
+    NSDictionary *registrationDictionary = [NSDictionary dictionaryWithObjectsAndKeys: 
+    [NSArray arrayWithObjects:SERVICE_NAME,nil], GROWL_NOTIFICATIONS_ALL, 
+    [NSArray arrayWithObjects:SERVICE_NAME,nil], GROWL_NOTIFICATIONS_DEFAULT, 
+    nil]; 
 
-return registrationDictionary; 
+    return registrationDictionary; 
 } 
+
 - (void) TranslateStrings
 {
     [fSrcTitleField     setStringValue: _( @"Title:" )];
@@ -2687,8 +2690,6 @@ the user is using "Custom" settings by determining the sender*/
 		[fPresetSelectedDisplay setStringValue: @"Custom"];
 		
 		curUserPresetChosenNum = nil;
-
-		
 	}
 
 }
@@ -2751,40 +2752,40 @@ the user is using "Custom" settings by determining the sender*/
 - (IBAction) showAddPresetPanel: (id) sender
 {
     /* Deselect the currently selected Preset if there is one*/
-		[tableView deselectRow:[tableView selectedRow]];
+    [tableView deselectRow:[tableView selectedRow]];
 
-	/* Populate the preset picture settings popup here */
-	[fPresetNewPicSettingsPopUp removeAllItems];
-	[fPresetNewPicSettingsPopUp addItemWithTitle:@"None"];
-	[fPresetNewPicSettingsPopUp addItemWithTitle:@"Current"];
-	[fPresetNewPicSettingsPopUp addItemWithTitle:@"Source Maximum (post source scan)"];
-	[fPresetNewPicSettingsPopUp selectItemAtIndex: 0];	
+    /* Populate the preset picture settings popup here */
+    [fPresetNewPicSettingsPopUp removeAllItems];
+    [fPresetNewPicSettingsPopUp addItemWithTitle:@"None"];
+    [fPresetNewPicSettingsPopUp addItemWithTitle:@"Current"];
+    [fPresetNewPicSettingsPopUp addItemWithTitle:@"Source Maximum (post source scan)"];
+    [fPresetNewPicSettingsPopUp selectItemAtIndex: 0];	
 	
-		/* Erase info from the input fields fPresetNewDesc*/
+    /* Erase info from the input fields fPresetNewDesc*/
 	[fPresetNewName setStringValue: @""];
 	[fPresetNewDesc setStringValue: @""];
 	/* Show the panel */
-	[NSApp beginSheet: fAddPresetPanel modalForWindow: fWindow
-        modalDelegate: NULL didEndSelector: NULL contextInfo: NULL];
-    [NSApp runModalForWindow: fAddPresetPanel];
-    [NSApp endSheet: fAddPresetPanel];
-    [fAddPresetPanel orderOut: self];
+	[NSApp beginSheet: fAddPresetPanel modalForWindow: fWindow modalDelegate: NULL didEndSelector: NULL contextInfo: NULL];
 }
 
 - (IBAction) closeAddPresetPanel: (id) sender
 {
-	[NSApp stopModal];
+    [NSApp endSheet: fAddPresetPanel];
+    [fAddPresetPanel orderOut: self];
 }
-
 
 - (IBAction)addUserPreset:(id)sender
 {
-    /* Here we create a custom user preset */
-    [UserPresets addObject:[self createPreset]];
-    
-	/* We stop the modal window for the new preset */
-	[NSApp stopModal];
-    [self addPreset];
+    if (![[fPresetNewName stringValue] length])
+            NSRunAlertPanel(@"Warning!", @"You need to insert a name for the preset.", @"OK", nil , nil);
+    else
+    {
+        /* Here we create a custom user preset */
+        [UserPresets addObject:[self createPreset]];
+        [self addPreset];
+        
+        [self closeAddPresetPanel:NULL];
+    }
 }
 - (void)addPreset
 {
