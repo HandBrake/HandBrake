@@ -1,0 +1,44 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = HBPictureGLView; LANGUAGE = ObjC; SUPERCLASS = NSOpenGLView; }, 
+        {
+            ACTIONS = {
+                ClosePanel = id; 
+                NextPicture = id; 
+                PreviousPicture = id; 
+                SettingsChanged = id; 
+            }; 
+            CLASS = PictureController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                fCropBottomField = NSTextField; 
+                fCropBottomStepper = NSStepper; 
+                fCropLeftField = NSTextField; 
+                fCropLeftStepper = NSStepper; 
+                fCropMatrix = NSMatrix; 
+                fCropRightField = NSTextField; 
+                fCropRightStepper = NSStepper; 
+                fCropTopField = NSTextField; 
+                fCropTopStepper = NSStepper; 
+                fDeinterlacePopUp = NSPopUpButton; 
+                fDenoisePopUp = NSPopUpButton; 
+                fDetelecineCheck = NSButton; 
+                fEffectsCheck = NSButton; 
+                fHeightField = NSTextField; 
+                fHeightStepper = NSStepper; 
+                fInfoField = NSTextField; 
+                fNextButton = NSButton; 
+                fPARCheck = NSButton; 
+                fPictureGLView = HBPictureGLView; 
+                fPicturePanel = NSPanel; 
+                fPrevButton = NSButton; 
+                fRatioCheck = NSButton; 
+                fWidthField = NSTextField; 
+                fWidthStepper = NSStepper; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

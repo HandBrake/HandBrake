@@ -4,15 +4,14 @@
    Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
-#include <Cocoa/Cocoa.h>
-#include <Growl/Growl.h>
+#import <Cocoa/Cocoa.h>
+#import <Growl/Growl.h>
 
 #include "hb.h"
 
-
-#include "ChapterTitles.h"
-#include "PictureController.h"
-#include "HBQueueController.h"
+#import "ChapterTitles.h"
+#import "PictureController.h"
+#import "HBQueueController.h"
 #import "MVMenuButton.h"
 #import "HBAdvancedController.h"
 
@@ -22,14 +21,21 @@
 
 {
     IBOutlet NSWindow            * fWindow;
-	
+    NSToolbar                    * toolbar;
+    
     /* Picture panel */
-    IBOutlet PictureController   * fPictureController;
-    IBOutlet NSPanel             * fPicturePanel;
+    PictureController            * fPictureController;
+    
+    /* Advanced options tab */
+    HBAdvancedController         * fAdvancedOptions;
 	IBOutlet NSBox               * fAdvancedView;
+
     /* Queue panel */
     HBQueueController            * fQueueController;
     IBOutlet NSTextField         * fQueueStatus;
+    
+    /* Output panel */
+    HBOutputPanelController       *outputPanel;
 	
 	/* Menu Items */
 	/* File Menu */
@@ -90,31 +96,25 @@
 	IBOutlet NSTextField         * fPicLabelSrc;
 	IBOutlet NSTextField         * fPicLabelOutp;
 	IBOutlet NSTextField         * fPicLabelAr;
-	IBOutlet NSTextField         * fPicLabelDeinter;
 	IBOutlet NSTextField         * fPicLabelSrcX;
 	IBOutlet NSTextField         * fPicLabelOutputX;
+	IBOutlet NSTextField         * fPicLabelAutoCrop;
+    IBOutlet NSTextField         * fPicLabelDetelecine;
+	IBOutlet NSTextField         * fPicLabelDeinterlace;
+    IBOutlet NSTextField         * fPicLabelDenoise;
 	
 	IBOutlet NSTextField         * fPicSrcWidth;
 	IBOutlet NSTextField         * fPicSrcHeight;
 	IBOutlet NSTextField         * fPicSettingWidth;
 	IBOutlet NSTextField         * fPicSettingHeight;
+	IBOutlet NSTextField         * fPicSettingDeinterlace;
 	IBOutlet NSTextField         * fPicSettingARkeep;
 	IBOutlet NSTextField         * fPicSettingPAR;
-	IBOutlet NSTextField         * fPicSettingDeinterlace;
-	IBOutlet NSTextField         * fPicSettingDeinterlaceDsply;
-	IBOutlet NSTextField         * fPicSettingARkeepDsply;
-	IBOutlet NSTextField         * fPicSettingPARDsply;
-	IBOutlet NSTextField         * fPicSettingAutoCropLabel;
 	IBOutlet NSTextField         * fPicSettingAutoCrop;
-	IBOutlet NSTextField         * fPicSettingAutoCropDsply;
 	IBOutlet NSTextField         * fPicSettingDetelecine;
-	IBOutlet NSTextField         * fPicSettingDetelecineLabel;
 	IBOutlet NSTextField         * fPicSettingDenoise;
-	IBOutlet NSTextField         * fPicSettingDenoiseDsply;
-	IBOutlet NSTextField         * fPicSettingDenoiseLabel;
 
 	IBOutlet NSTextField         * fPicLabelAnamorphic;
-	IBOutlet NSTextField         * fPicLabelPAROutp;
 	IBOutlet NSTextField         * fPicLabelPAROutputX;
 	IBOutlet NSTextField         * fPicSettingPARWidth;
 	IBOutlet NSTextField         * fPicSettingPARHeight;
@@ -190,12 +190,8 @@
 	int                            currentSuccessfulScanCount;
     int                            SuccessfulScan;
 	NSString                      * currentSource;
-	HBOutputPanelController       *outputPanel;
-    HBAdvancedController          *fAdvancedOptions;
 	
     hb_job_t                     * fLastKnownCurrentJob;
-	
-    NSToolbar                    *toolbar;
 }
 
 - (void)     TranslateStrings;

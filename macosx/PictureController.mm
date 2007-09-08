@@ -96,49 +96,41 @@ static int GetAlignedSize( int size )
 	[fDeinterlacePopUp addItemWithTitle: @"Slowest"];
     
 	/* Set deinterlaces level according to the integer in the main window */
-	[fDeinterlacePopUp selectItemAtIndex: [fDeinterlaceLevelMainWindow intValue]];
+	[fDeinterlacePopUp selectItemAtIndex: fPictureFilterSettings.deinterlace];
 	
 	
 	[fPARCheck  setState:    job->pixel_ratio ? NSOnState : NSOffState];
-	if ([fAutoCropMainWindow  intValue] == 0)
+    
+	if (!autoCrop)
 	{
-	[fCropMatrix  selectCellAtRow: 1 column:0];
-	/* If auto, lets set the crop steppers according to current job->crop values */
-	[fCropTopStepper    setIntValue: job->crop[0]];
-    [fCropTopField      setIntValue: job->crop[0]];
-    [fCropBottomStepper setIntValue: job->crop[1]];
-    [fCropBottomField   setIntValue: job->crop[1]];
-    [fCropLeftStepper   setIntValue: job->crop[2]];
-    [fCropLeftField     setIntValue: job->crop[2]];
-    [fCropRightStepper  setIntValue: job->crop[3]];
-    [fCropRightField    setIntValue: job->crop[3]];
+        [fCropMatrix  selectCellAtRow: 1 column:0];
+        /* If auto, lets set the crop steppers according to current job->crop values */
+        [fCropTopStepper    setIntValue: job->crop[0]];
+        [fCropTopField      setIntValue: job->crop[0]];
+        [fCropBottomStepper setIntValue: job->crop[1]];
+        [fCropBottomField   setIntValue: job->crop[1]];
+        [fCropLeftStepper   setIntValue: job->crop[2]];
+        [fCropLeftField     setIntValue: job->crop[2]];
+        [fCropRightStepper  setIntValue: job->crop[3]];
+        [fCropRightField    setIntValue: job->crop[3]];
 	}
 	else
 	{
-	[fCropMatrix  selectCellAtRow: 0 column:0];
+        [fCropMatrix  selectCellAtRow: 0 column:0];
 	}
 	
 	/* set the detelecine state according to the state in main window */
 	/* if framerate is 23.976 we do not allow detelecine, otherwise, enable and set according to fDetelecineMainWindow outlet */ 
-	if (fTitle->rate_base == 1126125 || [[fVidFrameRatePopUpMainWindow titleOfSelectedItem] isEqualToString: @"23.976 (NTSC Film)"])
+	if (fTitle->rate_base == 1126125)
 	{
-		[fDetelecineMainWindow setStringValue: @"No"];
 		[fDetelecineCheck setEnabled: NO];
 		[fDetelecineCheck setState: NSOffState];
 		
 	}
 	else
 	{
-	[fDetelecineCheck setEnabled: YES];
-		if ([[fDetelecineMainWindow stringValue] isEqualToString: @"Yes"])
-		{
-			[fDetelecineCheck setState: NSOnState];
-		}
-		else
-		{
-			[fDetelecineCheck setState: NSOffState];
-		}
-		
+        [fDetelecineCheck setEnabled: YES];
+        [fDetelecineCheck setState: fPictureFilterSettings.detelecine];
 	}
 	
 	/* we use a popup to show the denoise settings */
@@ -147,8 +139,8 @@ static int GetAlignedSize( int size )
     [fDenoisePopUp addItemWithTitle: @"Weak"];
 	[fDenoisePopUp addItemWithTitle: @"Medium"];
     [fDenoisePopUp addItemWithTitle: @"Strong"];
-	/* Set deinterlaces level according to the integer in the main window */
-	[fDenoisePopUp selectItemAtIndex: [fDenoiseMainWindow intValue]];
+	/* Set denoises level according to the integer in the main window */
+	[fDenoisePopUp selectItemAtIndex: fPictureFilterSettings.denoise];
 	
     MaxOutputWidth = job->width;
 	MaxOutputHeight = job->height;
@@ -230,77 +222,51 @@ static int GetAlignedSize( int size )
     
 	if ([fPARCheck state] == 1 )
 	{
-	[fWidthStepper      setIntValue: MaxOutputWidth];
-	[fWidthField        setIntValue: MaxOutputWidth];
-	
-	/* This will show correct anamorphic height values, but
-	show distorted preview picture ratio */
-	[fHeightStepper      setIntValue: fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1]];
-	[fHeightField        setIntValue: fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1]];
-	
-	/* This will show wrong anamorphic height values, but
-	show proper preview picture ratio */
-	//[fHeightStepper      setIntValue: MaxOutputHeight];
-	//[fHeightField        setIntValue: MaxOutputHeight];
-	[fRatioCheck        setState: 0];
-
-	[fWidthStepper setEnabled: NO];
-	[fWidthField setEnabled: NO];
-	[fHeightStepper setEnabled: NO];
-	[fHeightField setEnabled: NO];
-	[fRatioCheck setEnabled: NO];
-	
-	
-	}
+        [fWidthStepper      setIntValue: MaxOutputWidth];
+        [fWidthField        setIntValue: MaxOutputWidth];
+        
+        /* This will show correct anamorphic height values, but
+            show distorted preview picture ratio */
+        [fHeightStepper      setIntValue: fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1]];
+        [fHeightField        setIntValue: fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1]];
+        
+        /* This will show wrong anamorphic height values, but
+            show proper preview picture ratio */
+        //[fHeightStepper      setIntValue: MaxOutputHeight];
+        //[fHeightField        setIntValue: MaxOutputHeight];
+        [fRatioCheck        setState: 0];
+        
+        [fWidthStepper setEnabled: NO];
+        [fWidthField setEnabled: NO];
+        [fHeightStepper setEnabled: NO];
+        [fHeightField setEnabled: NO];
+        [fRatioCheck setEnabled: NO];
+    }
+    
 	else
 	{
-	[fWidthStepper setEnabled: YES];
-	[fWidthField setEnabled: YES];
-	[fHeightStepper setEnabled: YES];
-	[fHeightField setEnabled: YES];
-	[fRatioCheck setEnabled: YES];
+        [fWidthStepper setEnabled: YES];
+        [fWidthField setEnabled: YES];
+        [fHeightStepper setEnabled: YES];
+        [fHeightField setEnabled: YES];
+        [fRatioCheck setEnabled: YES];
 	}
-	
-	
 	
     job->width       = [fWidthStepper  intValue];
     job->height      = [fHeightStepper intValue];
     job->keep_ratio  = ( [fRatioCheck state] == NSOnState );
-	
-	/* multilevel deinterlacing popup */
-	[fDeinterlaceLevelMainWindow setStringValue: [NSString stringWithFormat: @"%d",[fDeinterlacePopUp indexOfSelectedItem]]];
-	if ([fDeinterlacePopUp indexOfSelectedItem] == 0)
-	{
-    job->deinterlace = 0;
-	}
-	else
-	{
-	job->deinterlace = 1;
-	}
-	
-	/* set the detelecine state according to the integer set in the main window field */
-	if ([fDetelecineCheck state] == 1)
-	{
-	[fDetelecineMainWindow setStringValue: @"Yes"];
-	}
-	else
-	{
-	[fDetelecineMainWindow setStringValue: @"No"];
-	}
-	
-	/* new multilevel deinterlacing popup */
-	[fDenoiseMainWindow setStringValue: [NSString stringWithFormat: @"%d",[fDenoisePopUp indexOfSelectedItem]]];
+	fPictureFilterSettings.deinterlace = [fDeinterlacePopUp indexOfSelectedItem];
+    fPictureFilterSettings.denoise     = [fDenoisePopUp indexOfSelectedItem];
+    fPictureFilterSettings.detelecine  = [fDetelecineCheck state];
 	job->pixel_ratio = ( [fPARCheck state] == NSOnState );
 
-
-
-    bool autocrop = ( [fCropMatrix selectedRow] == 0 );
-    [fCropTopStepper    setEnabled: !autocrop];
-    [fCropBottomStepper setEnabled: !autocrop];
-    [fCropLeftStepper   setEnabled: !autocrop];
-    [fCropRightStepper  setEnabled: !autocrop];
-	[fAutoCropMainWindow  setStringValue: [NSString stringWithFormat:@"%d",autocrop]];
-    if( autocrop )
+    autoCrop = ( [fCropMatrix selectedRow] == 0 );
+    [fCropTopStepper    setEnabled: !autoCrop];
+    [fCropBottomStepper setEnabled: !autoCrop];
+    [fCropLeftStepper   setEnabled: !autoCrop];
+    [fCropRightStepper  setEnabled: !autoCrop];
+//	[fAutoCropMainWindow  setStringValue: [NSString stringWithFormat:@"%d",autocrop]];
+    if( autoCrop )
     {
         memcpy( job->crop, fTitle->crop, 4 * sizeof( int ) );
     }
@@ -353,7 +319,7 @@ static int GetAlignedSize( int size )
        no human can see any meaningful detail below that */
     if (job->width >= 64 && job->height >= 64)
     {
-    [self Display: HB_ANIMATE_NONE];
+        [self Display: HB_ANIMATE_NONE];
     }
 
 }
@@ -380,8 +346,73 @@ static int GetAlignedSize( int size )
 
 - (IBAction) ClosePanel: (id) sender
 {
-
 	[NSApp stopModal];
+}
+
+- (BOOL) autoCrop
+{
+    return autoCrop;
+}
+- (void) setAutoCrop: (BOOL) setting
+{
+    autoCrop = setting;
+}
+
+- (int) detelecine
+{
+    return fPictureFilterSettings.detelecine;
+}
+
+- (void) setDetelecine: (int) setting
+{
+    fPictureFilterSettings.detelecine = setting;
+}
+
+- (int) deinterlace
+{
+    return fPictureFilterSettings.deinterlace;
+}
+
+- (void) setDeinterlace: (int) setting {
+    fPictureFilterSettings.deinterlace = setting;
+}
+
+- (int) denoise
+{
+    return fPictureFilterSettings.denoise;
+}
+
+- (void) setDenoise: (int) setting
+{
+    fPictureFilterSettings.denoise = setting;
+}
+
+- (void) showPanelInWindow: (NSWindow *) fWindow forTitle:(hb_title_t *)title {
+    [self loadMyNibFile];
+
+    NSSize newSize;
+    newSize.width  = 246 + title->width;
+    newSize.height = 80 + title->height;
+    [fPicturePanel setContentSize: newSize];
+
+    [self SetTitle: title];
+
+    [NSApp beginSheet: fPicturePanel modalForWindow: fWindow
+        modalDelegate: NULL didEndSelector: NULL contextInfo: NULL];
+    [NSApp runModalForWindow: fPicturePanel];
+    [NSApp endSheet: fPicturePanel];
+    [fPicturePanel orderOut: self];
+}
+
+- (BOOL) loadMyNibFile
+{
+    if(![NSBundle loadNibNamed:@"PictureSettings" owner:self])
+    {
+        NSLog(@"Warning! Could not load myNib file.\n");
+        return NO;
+    }
+    
+    return YES;
 }
 
 @end

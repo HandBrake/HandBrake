@@ -21,6 +21,8 @@
     int                        fTexBufSize;
     int                        fPicture;
 
+    IBOutlet NSPanel         * fPicturePanel;
+
     IBOutlet HBPictureGLView * fPictureGLView;
     IBOutlet NSTextField     * fWidthField;
     IBOutlet NSStepper       * fWidthStepper;
@@ -45,18 +47,15 @@
     IBOutlet NSButton        * fNextButton;
     IBOutlet NSTextField     * fInfoField;
 	
-	
-	
-	int                        MaxOutputWidth;
-	int                        MaxOutputHeight;
-	
-	/* widgets in main window */
-	IBOutlet NSTextField     * fAutoCropMainWindow;
-	IBOutlet NSTextField     * fDeinterlaceLevelMainWindow;
-	IBOutlet NSTextField     * fDetelecineMainWindow;
-	IBOutlet NSPopUpButton   * fVidFrameRatePopUpMainWindow;
-	IBOutlet NSTextField     * fDenoiseMainWindow;
-	
+    int     MaxOutputWidth;
+    int     MaxOutputHeight;
+    BOOL    autoCrop;
+    
+    struct {
+        int    detelecine;
+        int     deinterlace;
+        int     denoise;
+    } fPictureFilterSettings;
 
 }
 
@@ -68,5 +67,18 @@
 - (IBAction) PreviousPicture: (id) sender;
 - (IBAction) NextPicture: (id) sender;
 - (IBAction) ClosePanel: (id) sender;
+
+- (BOOL) autoCrop;
+- (void) setAutoCrop: (BOOL) setting;
+
+- (int) detelecine;
+- (void) setDetelecine: (int) setting;
+- (int) deinterlace;
+- (void) setDeinterlace: (int) setting;
+- (int) denoise;
+- (void) setDenoise: (int) setting;
+
+- (void) showPanelInWindow: (NSWindow *) fWindow forTitle:(hb_title_t *)title;
+- (BOOL) loadMyNibFile;
 
 @end

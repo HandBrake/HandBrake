@@ -125,6 +125,7 @@
 		A2DFC6750C6197C600E66E89 /* MVMenuButton.h in Headers */ = {isa = PBXBuildFile; fileRef = A2DFC6740C6197C600E66E89 /* MVMenuButton.h */; };
 		A2DFC6770C61980700E66E89 /* MVMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A2DFC6760C61980700E66E89 /* MVMenuButton.m */; };
 		A97A1DB40C91A6800015BC08 /* Express.nib in Resources */ = {isa = PBXBuildFile; fileRef = A97A1DB20C91A6800015BC08 /* Express.nib */; };
+		A9ABA2270C92AECA00D98324 /* PictureSettings.nib in Resources */ = {isa = PBXBuildFile; fileRef = A9ABA2250C92AECA00D98324 /* PictureSettings.nib */; };
 		A9AC41DF0C918DB500DDF9B8 /* HBAdvancedController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9AC41DD0C918DB500DDF9B8 /* HBAdvancedController.m */; };
 		A9AC41E00C918DB500DDF9B8 /* HBAdvancedController.h in Headers */ = {isa = PBXBuildFile; fileRef = A9AC41DE0C918DB500DDF9B8 /* HBAdvancedController.h */; };
 		A9AC41E70C918DC000DDF9B8 /* AdvancedView.nib in Resources */ = {isa = PBXBuildFile; fileRef = A9AC41E50C918DC000DDF9B8 /* AdvancedView.nib */; };
@@ -198,7 +199,7 @@
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0D096DFF0B707D1200A845D4 /* libhb.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libhb.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
-		0D6E35760B6BD4F0005AABB3 /* HandBrake.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = HandBrake.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0D6E35760B6BD4F0005AABB3 /* HandBrake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HandBrake.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DF377970B7BF99A00115CB0 /* fakexcode.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = fakexcode.cpp; path = ../test/fakexcode.cpp; sourceTree = SOURCE_ROOT; };
 		0DFA5C7A0B8DD1E90020BC09 /* HandBrake.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = HandBrake.icns; sourceTree = "<group>"; };
 		0DFA5C7E0B8DD3B60020BC09 /* declpcm.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = declpcm.c; path = ../libhb/declpcm.c; sourceTree = SOURCE_ROOT; };
@@ -285,6 +286,7 @@
 		A2DFC6740C6197C600E66E89 /* MVMenuButton.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MVMenuButton.h; sourceTree = "<group>"; };
 		A2DFC6760C61980700E66E89 /* MVMenuButton.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MVMenuButton.m; sourceTree = "<group>"; };
 		A97A1DB30C91A6800015BC08 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Express.nib; sourceTree = "<group>"; };
+		A9ABA2260C92AECA00D98324 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/PictureSettings.nib; sourceTree = "<group>"; };
 		A9AC41DD0C918DB500DDF9B8 /* HBAdvancedController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = HBAdvancedController.m; sourceTree = "<group>"; };
 		A9AC41DE0C918DB500DDF9B8 /* HBAdvancedController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = HBAdvancedController.h; sourceTree = "<group>"; };
 		A9AC41E60C918DC000DDF9B8 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/AdvancedView.nib; sourceTree = "<group>"; };
@@ -402,6 +404,7 @@
 			children = (
 				0DFA5C7A0B8DD1E90020BC09 /* HandBrake.icns */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
+				A9ABA2250C92AECA00D98324 /* PictureSettings.nib */,
 				A97A1DB20C91A6800015BC08 /* Express.nib */,
 				A9AC41E50C918DC000DDF9B8 /* AdvancedView.nib */,
 				2538860A0BFE0B730064E995 /* OutputPanel.nib */,
@@ -747,6 +750,7 @@
 				E318F0830C90DC4A003EFB59 /* Info.png in Resources */,
 				A9AC41E70C918DC000DDF9B8 /* AdvancedView.nib in Resources */,
 				A97A1DB40C91A6800015BC08 /* Express.nib in Resources */,
+				A9ABA2270C92AECA00D98324 /* PictureSettings.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -939,6 +943,14 @@
 				A97A1DB30C91A6800015BC08 /* English */,
 			);
 			name = Express.nib;
+			sourceTree = "<group>";
+		};
+		A9ABA2250C92AECA00D98324 /* PictureSettings.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A9ABA2260C92AECA00D98324 /* English */,
+			);
+			name = PictureSettings.nib;
 			sourceTree = "<group>";
 		};
 		A9AC41E50C918DC000DDF9B8 /* AdvancedView.nib */ = {

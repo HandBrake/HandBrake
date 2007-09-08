@@ -80,6 +80,7 @@ static int hb_group_count(hb_handle_t * h)
     [HBPreferencesController registerUserDefaults];
     fHandle = NULL;
     outputPanel = [[HBOutputPanelController alloc] init];
+    fPictureController = [[PictureController alloc] init];
     fQueueController = [[HBQueueController alloc] init];
     fAdvancedOptions = [[HBAdvancedController alloc] init];
     return self;
@@ -136,15 +137,14 @@ static int hb_group_count(hb_handle_t * h)
     /* Show scan panel ASAP */
     [self performSelectorOnMainThread: @selector(showScanPanel:)
         withObject: NULL waitUntilDone: NO];
-
 }
 
 - (NSApplicationTerminateReply) applicationShouldTerminate:
     (NSApplication *) app
 {
-     hb_state_t s;
+    hb_state_t s;
     hb_get_state2( fHandle, &s );
-    if ( s.state ==  HB_STATE_WORKING)    
+    if ( s.state ==  HB_STATE_WORKING )    
     {
         [self Cancel: NULL];
         return NSTerminateCancel;
@@ -256,26 +256,12 @@ static int hb_group_count(hb_handle_t * h)
     [fVidRatePopUp selectItemAtIndex: 0];
 	
 	/* Picture Settings */
-	[fPicLabelPAROutp setStringValue: @""];
 	[fPicLabelPAROutputX setStringValue: @""];
 	[fPicSettingPARWidth setStringValue: @""];
 	[fPicSettingPARHeight setStringValue:  @""];
 	
-	/*Set detelecine to Off upon launch */
-	[fPicSettingDetelecine setStringValue: @"No"];
-	[fPicSettingDenoise setStringValue: @"0"];
-	/* if Deinterlace upon launch is specified in the prefs, then set to 1 for "Fast",
-	   if not, then set to 0 for none */
-	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultDeinterlaceOn"] > 0)
-	{
-	[fPicSettingDeinterlace setStringValue: @"1"];
-	}
-	else
-	{
-	[fPicSettingDeinterlace setStringValue: @"0"];
-	}
 	/* Set Auto Crop to On at launch */
-	[fPicSettingAutoCrop setStringValue: @"1"];
+    [fPictureController setAutoCrop:YES];
 	
 	/* Audio bitrate */
     [fAudBitratePopUp removeAllItems];
@@ -466,7 +452,7 @@ static int hb_group_count(hb_handle_t * h)
         hb_state_t s;
         hb_get_state2( fHandle, &s );
         
-        if (s.state == HB_STATE_WORKING)
+        if (s.state == HB_STATE_WORKING || s.state == HB_STATE_MUXING)
         {
             if ([ident isEqualToString: StartEncodingIdentifier])
             {
@@ -1060,20 +1046,24 @@ list = hb_get_titles( fHandle );
 		/* we record the current source name here in case the next scan is unsuccessful,
 				then we can replace the scan progress with the old name if necessary */
        sourceDisplayName = [NSString stringWithFormat:[fSrcDVD2Field stringValue]];
-	
-	/* if its the initial successful scan after awakeFromNib */
+       
+       /* if its the initial successful scan after awakeFromNib */
 	   if (currentSuccessfulScanCount == 1)
 	   {
-            [self selectDefaultPreset: NULL];
-	   }  
+           [self selectDefaultPreset: NULL];
+           /* if Deinterlace upon launch is specified in the prefs, then set to 1 for "Fast",
+           if not, then set to 0 for none */
+           if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultDeinterlaceOn"] > 0)
+               [fPictureController setDeinterlace:1];
+           else
+               [fPictureController setDeinterlace:0];
+	   }
+       
 	}
 }
 
-
 -(IBAction)showGrowlDoneNotification:(id)sender
 {
-
-  
   [GrowlApplicationBridge 
           notifyWithTitle:@"Put down that cocktail..." 
               description:@"your HandBrake encode is done!" 
@@ -1083,6 +1073,7 @@ list = hb_get_titles( fHandle );
                  isSticky:1 
              clickContext:nil];
 }
+
 - (void) enableUI: (bool) b
 {
     NSControl * controls[] =
@@ -1098,14 +1089,13 @@ list = hb_get_titles( fHandle );
         fAudTrack1MixLabel, fAudTrack1MixPopUp, fAudTrack2MixLabel, fAudTrack2MixPopUp,
         fAudRateField, fAudRatePopUp, fAudBitrateField,
         fAudBitratePopUp, fPictureButton,fQueueStatus, 
-		fPicSrcWidth,fPicSrcHeight,fPicSettingWidth,fPicSettingHeight,
-		fPicSettingARkeep,fPicSettingDeinterlace,fPicSettingARkeepDsply,
-		fPicSettingDeinterlaceDsply,fPicLabelSettings,fPicLabelSrc,fPicLabelOutp,
-		fPicLabelAr,fPicLabelDeinter,fPicLabelSrcX,fPicLabelOutputX,
-		fPicLabelPAROutp,fPicLabelPAROutputX,fPicSettingPARWidth,fPicSettingPARHeight,
-		fPicSettingPARDsply,fPicLabelAnamorphic,tableView,fPresetsAdd,fPresetsDelete,
-		fCreateChapterMarkers,fVidTurboPassCheck,fDstMpgLargeFileCheck,fPicSettingAutoCropLabel,
-		fPicSettingAutoCropDsply,fPicSettingDetelecine,fPicSettingDetelecineLabel,fPicSettingDenoiseLabel,fPicSettingDenoiseDsply,fSubForcedCheck,};
+		fPicSrcWidth,fPicSrcHeight,fPicSettingWidth,fPicSettingHeight,fPicSettingARkeep,
+		fPicSettingDeinterlace,fPicLabelSettings,fPicLabelSrc,fPicLabelOutp,
+		fPicLabelAr,fPicLabelDeinterlace,fPicLabelSrcX,fPicLabelOutputX,
+		fPicLabelPAROutputX,fPicSettingPARWidth,fPicSettingPARHeight,
+		fPicSettingPAR,fPicLabelAnamorphic,tableView,fPresetsAdd,fPresetsDelete,
+		fCreateChapterMarkers,fVidTurboPassCheck,fDstMpgLargeFileCheck,fPicLabelAutoCrop,
+		fPicSettingAutoCrop,fPicSettingDetelecine,fPicLabelDetelecine,fPicLabelDenoise,fPicSettingDenoise,fSubForcedCheck,};
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -1221,16 +1211,28 @@ list = hb_get_titles( fHandle );
 	}
 }
 
-
 - (IBAction) openMainWindow: (id) sender
 {
     [fWindow  makeKeyAndOrderFront:nil];
     [fWindow setReleasedWhenClosed: YES];
 }
+
 - (BOOL) windowShouldClose: (id) sender
 {
     [fWindow setReleasedWhenClosed: NO];
     return YES;
+}
+
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication hasVisibleWindows:(BOOL)flag
+{
+    if( !flag ) {
+        [fWindow  makeKeyAndOrderFront:nil];
+        [fWindow setReleasedWhenClosed: YES];
+        
+        return YES;
+    }
+    
+    return NO;
 }
 
 - (IBAction) videoMatrixChanged: (id) sender;
@@ -1312,22 +1314,9 @@ list = hb_get_titles( fHandle );
 	hb_list_t  * list  = hb_get_titles( fHandle );
     hb_title_t * title = (hb_title_t *) hb_list_item( list,
             [fSrcTitlePopUp indexOfSelectedItem] );
+    
+    [fPictureController showPanelInWindow:fWindow forTitle:title];
 
-    /* Resize the panel */
-    NSSize newSize;
-    newSize.width  = 246 + title->width;
-    newSize.height = 80 + title->height;
-    [fPicturePanel setContentSize: newSize];
-
-    [fPictureController SetTitle: title];
-
-    [NSApp beginSheet: fPicturePanel modalForWindow: fWindow
-        modalDelegate: NULL didEndSelector: NULL contextInfo: NULL];
-    [NSApp runModalForWindow: fPicturePanel];
-    [NSApp endSheet: fPicturePanel];
-    [fPicturePanel orderOut: self];
-	
-	/* Enable/Disable Menu Controls Accordingly */
 	[fMenuOpenSource setEnabled: YES];
 	[fMenuStartEncode setEnabled: YES];
 	[fMenuAddToQueue setEnabled: YES];
@@ -1491,61 +1480,53 @@ list = hb_get_titles( fHandle );
                      indexOfSelectedItem]].rate;
     job->abitrate = [[fAudBitratePopUp selectedItem] tag];
     
-    /* TODO: Filter settings */
-    if( job->filters )
-    {
-        hb_list_close( &job->filters );
-    }
     job->filters = hb_list_init();
    
 	/* Detelecine */
-   if ([[fPicSettingDetelecine stringValue] isEqualToString: @"Yes"])
-   {
-   hb_list_add( job->filters, &hb_filter_detelecine );
-   }
+    if ([fPictureController detelecine])
+    {
+        hb_list_add( job->filters, &hb_filter_detelecine );
+    }
    
-   /* Deinterlace */
-   if( job->deinterlace == 1)
-    {        
-        if ([fPicSettingDeinterlace intValue] == 1)
-        {
-            /* Run old deinterlacer by default */
-            hb_filter_deinterlace.settings = "-1"; 
-            hb_list_add( job->filters, &hb_filter_deinterlace );
-        }
-        if ([fPicSettingDeinterlace intValue] == 2)
-        {
-            /* Yadif mode 0 (1-pass with spatial deinterlacing.) */
-            hb_filter_deinterlace.settings = "0"; 
-            hb_list_add( job->filters, &hb_filter_deinterlace );            
-        }
-        if ([fPicSettingDeinterlace intValue] == 3)
-        {
-            /* Yadif (1-pass w/o spatial deinterlacing) and Mcdeint */
-            hb_filter_deinterlace.settings = "2:-1:1"; 
-            hb_list_add( job->filters, &hb_filter_deinterlace );            
-        }
-        if ([fPicSettingDeinterlace intValue] == 4)
-        {
-            /* Yadif (2-pass w/ spatial deinterlacing) and Mcdeint*/
-            hb_filter_deinterlace.settings = "1:-1:1"; 
-            hb_list_add( job->filters, &hb_filter_deinterlace );            
-        }
+    /* Deinterlace */
+    if ([fPictureController deinterlace] == 1)
+    {
+        /* Run old deinterlacer by default */
+        hb_filter_deinterlace.settings = "-1"; 
+        hb_list_add( job->filters, &hb_filter_deinterlace );
+    }
+    else if ([fPictureController deinterlace] == 2)
+    {
+        /* Yadif mode 0 (1-pass with spatial deinterlacing.) */
+        hb_filter_deinterlace.settings = "0"; 
+        hb_list_add( job->filters, &hb_filter_deinterlace );            
+    }
+    else if ([fPictureController deinterlace] == 3)
+    {
+        /* Yadif (1-pass w/o spatial deinterlacing) and Mcdeint */
+        hb_filter_deinterlace.settings = "2:-1:1"; 
+        hb_list_add( job->filters, &hb_filter_deinterlace );            
+    }
+    else if ([fPictureController deinterlace] == 4)
+    {
+        /* Yadif (2-pass w/ spatial deinterlacing) and Mcdeint*/
+        hb_filter_deinterlace.settings = "1:-1:1"; 
+        hb_list_add( job->filters, &hb_filter_deinterlace );            
     }
 	
 	/* Denoise */
 	
-	if ([fPicSettingDenoise intValue] == 1) // Weak in popup
+	if ([fPictureController denoise] == 1) // Weak in popup
 	{
 		hb_filter_denoise.settings = "2:1:2:3"; 
         hb_list_add( job->filters, &hb_filter_denoise );	
 	}
-	else if ([fPicSettingDenoise intValue] == 2) // Medium in popup
+	else if ([fPictureController denoise] == 2) // Medium in popup
 	{
 		hb_filter_denoise.settings = "3:2:2:3"; 
         hb_list_add( job->filters, &hb_filter_denoise );	
 	}
-	else if ([fPicSettingDenoise intValue] == 3) // Strong in popup
+	else if ([fPictureController denoise] == 3) // Strong in popup
 	{
 		hb_filter_denoise.settings = "7:7:5:5"; 
         hb_list_add( job->filters, &hb_filter_denoise );	
@@ -1819,11 +1800,11 @@ list = hb_get_titles( fHandle );
 	/* Turn Deinterlace on/off depending on the preference */
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultDeinterlaceOn"] > 0)
 	{
-		job->deinterlace = 1;
+		[fPictureController setDeinterlace:1];
 	}
 	else
 	{
-		job->deinterlace = 0;
+		[fPictureController setDeinterlace:0];
 	}
 	
 	/* Pixel Ratio Setting */
@@ -1843,8 +1824,8 @@ list = hb_get_titles( fHandle );
 							 @"%d", fTitle->height]];
 							 
 	/* Set Auto Crop to on upon selecting a new title */
-	[fPicSettingAutoCrop setStringValue: @"1"];
-							 
+    [fPictureController setAutoCrop:YES];
+    
 	/* We get the originial output picture width and height and put them
 	in variables for use with some presets later on */
 	PicOrigOutputWidth = job->width;
@@ -2164,10 +2145,10 @@ list = hb_get_titles( fHandle );
 
 - (IBAction ) videoFrameRateChanged: (id) sender
 {
-/* We call method method to calculatePictureSizing to error check detelecine*/
-[self calculatePictureSizing: sender];
+    /* We call method method to calculatePictureSizing to error check detelecine*/
+    [self calculatePictureSizing: sender];
 
-/* We call method method to change UI to reflect whether a preset is used or not*/
+    /* We call method method to change UI to reflect whether a preset is used or not*/
 	[self customSettingUsed: sender];
 }
 
@@ -2538,8 +2519,7 @@ list = hb_get_titles( fHandle );
 	in TitlePopUpChanged */
 	job->width = PicOrigOutputWidth;
 	job->height = PicOrigOutputHeight;
-    [fPicSettingAutoCrop setStringValue: [NSString stringWithFormat:
-		@"%d", 1]];
+    [fPictureController setAutoCrop:YES];
 	/* Here we use the auto crop values determined right after scan */
 	job->crop[0] = AutoCropTop;
 	job->crop[1] = AutoCropBottom;
@@ -2556,125 +2536,109 @@ list = hb_get_titles( fHandle );
 /* Get and Display Current Pic Settings in main window */
 - (IBAction) calculatePictureSizing: (id) sender
 {
-	
-
-	[fPicSettingWidth setStringValue: [NSString stringWithFormat:
-		@"%d", fTitle->job->width]];
-	[fPicSettingHeight setStringValue: [NSString stringWithFormat:
-		@"%d", fTitle->job->height]];
-	[fPicSettingARkeep setStringValue: [NSString stringWithFormat:
-		@"%d", fTitle->job->keep_ratio]];		 
-	//[fPicSettingDeinterlace setStringValue: [NSString stringWithFormat:
-	//	@"%d", fTitle->job->deinterlace]];
-	[fPicSettingPAR setStringValue: [NSString stringWithFormat:
-		@"%d", fTitle->job->pixel_ratio]];
+	[fPicSettingWidth setStringValue: [NSString stringWithFormat:@"%d", fTitle->job->width]];
+	[fPicSettingHeight setStringValue: [NSString stringWithFormat:@"%d", fTitle->job->height]];
 		
 	if (fTitle->job->pixel_ratio == 1)
 	{
-	int titlewidth = fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3];
-	int arpwidth = fTitle->job->pixel_aspect_width;
-	int arpheight = fTitle->job->pixel_aspect_height;
-	int displayparwidth = titlewidth * arpwidth / arpheight;
-	int displayparheight = fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1];
-	[fPicSettingWidth setStringValue: [NSString stringWithFormat:
-		@"%d", titlewidth]];
-	[fPicSettingHeight setStringValue: [NSString stringWithFormat:
-		@"%d", displayparheight]];
-	[fPicLabelPAROutp setStringValue: @"Anamorphic Output:"];
-	[fPicLabelPAROutputX setStringValue: @"x"];
-    [fPicSettingPARWidth setStringValue: [NSString stringWithFormat:
-        @"%d", displayparwidth]];
-	[fPicSettingPARHeight setStringValue: [NSString stringWithFormat:
-        @"%d", displayparheight]];
-
-	fTitle->job->keep_ratio = 0;
+        int titlewidth = fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3];
+        int arpwidth = fTitle->job->pixel_aspect_width;
+        int arpheight = fTitle->job->pixel_aspect_height;
+        int displayparwidth = titlewidth * arpwidth / arpheight;
+        int displayparheight = fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1];
+        
+        [fPicSettingWidth setStringValue: [NSString stringWithFormat:@"%d", titlewidth]];
+        [fPicSettingHeight setStringValue: [NSString stringWithFormat:@"%d", displayparheight]];
+        [fPicLabelPAROutputX setStringValue: @"x"];
+        [fPicSettingPARWidth setStringValue: [NSString stringWithFormat:@"%d", displayparwidth]];
+        [fPicSettingPARHeight setStringValue: [NSString stringWithFormat:@"%d", displayparheight]];
+        
+        fTitle->job->keep_ratio = 0;
 	}
 	else
 	{
-	[fPicLabelPAROutp setStringValue: @""];
-	[fPicLabelPAROutputX setStringValue: @""];
-	[fPicSettingPARWidth setStringValue: @""];
-	[fPicSettingPARHeight setStringValue:  @""];
+        [fPicLabelPAROutputX setStringValue: @""];
+        [fPicSettingPARWidth setStringValue: @""];
+        [fPicSettingPARHeight setStringValue:  @""];
 	}
-	if ([fPicSettingDeinterlace intValue] == 0)
-	{
-	fTitle->job->deinterlace = 0;
-	}
-	else
-	{
-	fTitle->job->deinterlace = 1;
-	}
-		
 				
 	/* Set ON/Off values for the deinterlace/keep aspect ratio according to boolean */	
 	if (fTitle->job->keep_ratio > 0)
 	{
-		[fPicSettingARkeepDsply setStringValue: @"On"];
+		[fPicSettingARkeep setStringValue: @"On"];
 	}
 	else
 	{
-		[fPicSettingARkeepDsply setStringValue: @"Off"];
+		[fPicSettingARkeep setStringValue: @"Off"];
 	}	
+    /* Detelecine */
+    if ([fPictureController detelecine]) {
+        [fPicSettingDetelecine setStringValue: @"Yes"];
+    }
+    else {
+        [fPicSettingDetelecine setStringValue: @"No"];
+    }
+
 	/* Deinterlace */
-	if ([fPicSettingDeinterlace intValue] == 0)
+	if ([fPictureController deinterlace] == 0)
 	{
-		[fPicSettingDeinterlaceDsply setStringValue: @"Off"];
+		[fPicSettingDeinterlace setStringValue: @"Off"];
 	}
-	else if ([fPicSettingDeinterlace intValue] == 1)
+	else if ([fPictureController deinterlace] == 1)
 	{
-		[fPicSettingDeinterlaceDsply setStringValue: @"Fast"];
+		[fPicSettingDeinterlace setStringValue: @"Fast"];
 	}
-	else if ([fPicSettingDeinterlace intValue] == 2)
+	else if ([fPictureController deinterlace] == 2)
 	{
-		[fPicSettingDeinterlaceDsply setStringValue: @"Slow"];
+		[fPicSettingDeinterlace setStringValue: @"Slow"];
 	}
-	else if ([fPicSettingDeinterlace intValue] == 3)
+	else if ([fPictureController deinterlace] == 3)
 	{
-		[fPicSettingDeinterlaceDsply setStringValue: @"Slower"];
+		[fPicSettingDeinterlace setStringValue: @"Slower"];
 	}
-	else if ([fPicSettingDeinterlace intValue] == 4)
+	else if ([fPictureController deinterlace] ==4)
 	{
-		[fPicSettingDeinterlaceDsply setStringValue: @"Slowest"];
+		[fPicSettingDeinterlace setStringValue: @"Slowest"];
 	}
 	/* Denoise */
-	if ([fPicSettingDenoise intValue] == 0)
+	if ([fPictureController denoise] == 0)
 	{
-		[fPicSettingDenoiseDsply setStringValue: @"Off"];
+		[fPicSettingDenoise setStringValue: @"Off"];
 	}
-	else if ([fPicSettingDenoise intValue] == 1)
+	else if ([fPictureController denoise] == 1)
 	{
-		[fPicSettingDenoiseDsply setStringValue: @"Weak"];
+		[fPicSettingDenoise setStringValue: @"Weak"];
 	}
-	else if ([fPicSettingDenoise intValue] == 2)
+	else if ([fPictureController denoise] == 2)
 	{
-		[fPicSettingDenoiseDsply setStringValue: @"Medium"];
+		[fPicSettingDenoise setStringValue: @"Medium"];
 	}
-	else if ([fPicSettingDenoise intValue] == 3)
+	else if ([fPictureController denoise] == 3)
 	{
-		[fPicSettingDenoiseDsply setStringValue: @"Strong"];
+		[fPicSettingDenoise setStringValue: @"Strong"];
 	}
 	
 	if (fTitle->job->pixel_ratio > 0)
 	{
-		[fPicSettingPARDsply setStringValue: @""];
+		[fPicSettingPAR setStringValue: @""];
 	}
 	else
 	{
-		[fPicSettingPARDsply setStringValue: @"Off"];
+		[fPicSettingPAR setStringValue: @"Off"];
 	}
 	/* Set the display field for crop as per boolean */
-	if ([[fPicSettingAutoCrop stringValue] isEqualToString: @"0"])
+	if (![fPictureController autoCrop])
 	{
-	    [fPicSettingAutoCropDsply setStringValue: @"Custom"];
+	    [fPicSettingAutoCrop setStringValue: @"Custom"];
 	}
 	else
 	{
-		[fPicSettingAutoCropDsply setStringValue: @"Auto"];
+		[fPicSettingAutoCrop setStringValue: @"Auto"];
 	}	
 	/* check video framerate and turn off detelecine if necessary */
 	if (fTitle->rate_base == 1126125 || [[fVidRatePopUp titleOfSelectedItem] isEqualToString: @"23.976 (NTSC Film)"])
 	{
-		[fPicSettingDetelecine setStringValue: @"No"];
+		[fPictureController setDetelecine:0];
 	}
 	
 	
@@ -2901,13 +2865,13 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PictureWidth"];
 	[preset setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PictureHeight"];
 	[preset setObject:[NSNumber numberWithInt:fTitle->job->keep_ratio] forKey:@"PictureKeepRatio"];
-	[preset setObject:[NSNumber numberWithInt:[fPicSettingDeinterlace intValue]] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:[fPictureController deinterlace]] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:fTitle->job->pixel_ratio] forKey:@"PicturePAR"];
-	[preset setObject:[fPicSettingDetelecine stringValue] forKey:@"PictureDetelecine"];
-	[preset setObject:[NSNumber numberWithInt:[fPicSettingDenoise intValue]] forKey:@"PictureDenoise"]; 
+	[preset setObject:[NSNumber numberWithInt:[fPictureController detelecine]] forKey:@"PictureDetelecine"];
+	[preset setObject:[NSNumber numberWithInt:[fPictureController denoise]] forKey:@"PictureDenoise"]; 
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
-	[preset setObject:[NSNumber numberWithInt:[fPicSettingAutoCrop intValue]] forKey:@"PictureAutoCrop"];
+	[preset setObject:[NSNumber numberWithInt:[fPictureController autoCrop]] forKey:@"PictureAutoCrop"];
 
 	[preset setObject:[NSNumber numberWithInt:job->crop[0]] forKey:@"PictureTopCrop"];
     [preset setObject:[NSNumber numberWithInt:job->crop[1]] forKey:@"PictureBottomCrop"];
@@ -4309,22 +4273,21 @@ the user is using "Custom" settings by determining the sender*/
 						}
 					}
 					job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
-					[fPicSettingDeinterlace setStringValue: [NSString stringWithFormat: @"%d",[[chosenPreset objectForKey:@"PictureDeinterlace"]  intValue]]];
+                    [fPictureController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
 					
 					if ([chosenPreset objectForKey:@"PictureDetelecine"])
 					{
-					[fPicSettingDetelecine setStringValue: [NSString stringWithFormat: @"%@",[chosenPreset valueForKey:@"PictureDetelecine"]]];
+                        [fPictureController setDetelecine:[[chosenPreset objectForKey:@"PictureDetelecine"] intValue]];
 					}
 					if ([chosenPreset objectForKey:@"PictureDenoise"])
 					{
-					[fPicSettingDenoise setStringValue: [NSString stringWithFormat: @"%d",[[chosenPreset objectForKey:@"PictureDenoise"]  intValue]]];
+                        [fPictureController setDenoise:[[chosenPreset objectForKey:@"PictureDenoise"] intValue]];
 					}
 					/* If Cropping is set to custom, then recall all four crop values from
 						when the preset was created and apply them */
 					if ([[chosenPreset objectForKey:@"PictureAutoCrop"]  intValue] == 0)
 					{
-						[fPicSettingAutoCrop setStringValue: [NSString stringWithFormat:
-							@"%d", 0]];
+                        [fPictureController setAutoCrop:NO];
 						
 						/* Here we use the custom crop values saved at the time the preset was saved */
 						job->crop[0] = [[chosenPreset objectForKey:@"PictureTopCrop"]  intValue];
@@ -4335,9 +4298,8 @@ the user is using "Custom" settings by determining the sender*/
 					}
 					else /* if auto crop has been saved in preset, set to auto and use post scan auto crop */
 					{
-						[fPicSettingAutoCrop setStringValue: [NSString stringWithFormat:
-							@"%d", 1]];
-						/* Here we use the auto crop values determined right after scan */
+                        [fPictureController setAutoCrop:YES];
+                        /* Here we use the auto crop values determined right after scan */
 						job->crop[0] = AutoCropTop;
 						job->crop[1] = AutoCropBottom;
 						job->crop[2] = AutoCropLeft;
