@@ -165,14 +165,7 @@ static int hb_group_count(hb_handle_t * h)
     [fWindow center];
     [fWindow setExcludedFromWindowsMenu:YES];
     [fAdvancedOptions setView:fAdvancedView];
-	/* set the main menu bar so it doesnt auto enable the menu items
-	   so we can manually do it with setEnabled: This should be changed
-	   to use validateUserInterfaceItem: along with setAutoEnablesItems: YES
-	   in the next release */
-	[fMenuBarFileMenu setAutoenablesItems: NO];
-    [fMenuBarWindowMenu setAutoenablesItems: NO];
-	[fMenuPauseEncode setEnabled: NO];
-	[self TranslateStrings];
+
     /* Initialize currentScanCount so HB can use it to
 		evaluate successive scans */
 	currentScanCount = 0;
@@ -519,6 +512,63 @@ static int hb_group_count(hb_handle_t * h)
     return NO;
 }
 
+- (BOOL) validateMenuItem: (NSMenuItem *) menuItem
+{
+    SEL action = [menuItem action];
+    
+    hb_state_t s;
+    hb_get_state2( fHandle, &s );
+    
+    if (fHandle)
+    {
+
+        if (action == @selector(addToQueue:) || action == @selector(showPicturePanel:))
+            return SuccessfulScan;
+            
+        if (action == @selector(showScanPanel:))
+        {
+            if (s.state == HB_STATE_SCANNING)
+                return NO;
+        }
+        if (action == @selector(Pause:))
+        {
+            if (s.state == HB_STATE_WORKING)
+            {
+                if(![[menuItem title] isEqualToString:@"Pause Encoding"])
+                    [menuItem setTitle:@"Pause Encoding"];
+                return YES;
+            }
+            else if (s.state == HB_STATE_PAUSED)
+            {
+                if(![[menuItem title] isEqualToString:@"Resume Encoding"])
+                    [menuItem setTitle:@"Resume Encoding"];
+                return YES;
+            }
+            else
+                return NO;
+        }
+        if (action == @selector(Rip:))
+            if (s.state == HB_STATE_WORKING || s.state == HB_STATE_MUXING || s.state == HB_STATE_PAUSED)
+            {
+                if(![[menuItem title] isEqualToString:@"Stop Encoding"])
+                    [menuItem setTitle:@"Stop Encoding"];
+                return YES;
+            }
+            else if (SuccessfulScan)
+            {
+                if(![[menuItem title] isEqualToString:@"Start Encoding"])
+                    [menuItem setTitle:@"Start Encoding"];
+                return YES;
+            }
+            else
+                return NO;
+        }
+
+    
+    return YES;
+}
+
+
 // register a test notification and make
 // it enabled by default
 #define SERVICE_NAME @"Encode Done"
@@ -731,10 +781,6 @@ list = hb_get_titles( fHandle );
             /* Update dock icon */
             [self UpdateDockIcon: progress_total];
 			
-			/* Main Menu controls */
-			[fMenuPauseEncode setTitle: @"Pause Encode"];
-			[fMenuStartEncode setTitle: @"Cancel Encode"];
-
             // Has current job changed? That means the queue has probably changed as
 			// well so update it
             if (fLastKnownCurrentJob != hb_current_job(fHandle))
@@ -775,8 +821,6 @@ list = hb_get_titles( fHandle );
         case HB_STATE_PAUSED:
 		    [fStatusField setStringValue: _( @"Paused" )];
             
-			[fMenuPauseEncode setTitle: @"Resume Encode"];
-
 			// Pass along the info to HBQueueController
             [fQueueController updateCurrentJobUI];
 
@@ -788,11 +832,7 @@ list = hb_get_titles( fHandle );
             [fRipIndicator setIndeterminate: NO];
             [fRipIndicator setDoubleValue: 0.0];
             [toolbar validateVisibleItems];
-            
-			/* Main Menu Controls*/
-			[fMenuPauseEncode setTitle: @"Pause Encode"];
-			[fMenuPauseEncode setEnabled: NO];
-			[fMenuStartEncode setTitle: @"Start Encode"];
+
             /* Restore dock icon */
             [self UpdateDockIcon: -1.0];
 
@@ -930,7 +970,6 @@ list = hb_get_titles( fHandle );
 	{
 		/* We display a message if a valid dvd source was not chosen */
 		[fSrcDVD2Field setStringValue: @"No Valid Title Found"];
-        [fMenuOpenSource setEnabled: YES];
         SuccessfulScan = 0;
 	}
 	else
@@ -944,12 +983,7 @@ list = hb_get_titles( fHandle );
         currentSuccessfulScanCount++;
 
 		[self enableUI: YES];
-		/* Enable/Disable Menu Controls Accordingly */
-		[fMenuOpenSource setEnabled: YES];
-		[fMenuStartEncode setEnabled: YES];
-		[fMenuAddToQueue setEnabled: YES];
-		[fMenuPicturePanelShow setEnabled: YES];
-		[fMenuQueuePanelShow setEnabled: YES];
+
         [toolbar validateVisibleItems];
 		
 		[fSrcTitlePopUp removeAllItems];
@@ -1132,13 +1166,6 @@ list = hb_get_titles( fHandle );
 
 - (IBAction) showScanPanel: (id) sender
 {
-    /* Enable/Disable Menu Controls Accordingly */
-	[fMenuOpenSource setEnabled: NO];
-	[fMenuStartEncode setEnabled: NO];
-	[fMenuAddToQueue setEnabled: NO];
-	
-	[fMenuPicturePanelShow setEnabled: NO];
-	[fMenuQueuePanelShow setEnabled: NO];
     [self enableUI: NO];
 	
 	[self browseSources:NULL];
@@ -1196,17 +1223,10 @@ list = hb_get_titles( fHandle );
 	}
 	else // User clicked Cancel in browse window
 	{
-		/* use the outlets to the main menu bar to determine what to
-		   enable and disable */
-		[fMenuOpenSource setEnabled: YES];
-        [fMenuQueuePanelShow setEnabled: YES];
 		/* if we have a title loaded up */
 		if ([[fSrcDVD2Field stringValue] length] > 0)
 		{
-		[fMenuAddToQueue setEnabled: YES];
-		[fMenuStartEncode setEnabled: YES];
-		[fMenuPicturePanelShow setEnabled: YES];
-        [self enableUI: YES];
+            [self enableUI: YES];
         }
 	}
 }
@@ -1303,27 +1323,12 @@ list = hb_get_titles( fHandle );
 
 - (IBAction) showPicturePanel: (id) sender
 {
-    /* Enable/Disable Menu Controls Accordingly */
-	[fMenuOpenSource setEnabled: NO];
-	[fMenuStartEncode setEnabled: NO];
-	[fMenuAddToQueue setEnabled: NO];
-	
-	[fMenuPicturePanelShow setEnabled: NO];
-	[fMenuQueuePanelShow setEnabled: NO];
-	
 	hb_list_t  * list  = hb_get_titles( fHandle );
     hb_title_t * title = (hb_title_t *) hb_list_item( list,
             [fSrcTitlePopUp indexOfSelectedItem] );
     
     [fPictureController showPanelInWindow:fWindow forTitle:title];
-
-	[fMenuOpenSource setEnabled: YES];
-	[fMenuStartEncode setEnabled: YES];
-	[fMenuAddToQueue setEnabled: YES];
-	
-	[fMenuPicturePanelShow setEnabled: YES];
-	[fMenuQueuePanelShow setEnabled: YES];
-	
+    
 	[self calculatePictureSizing: sender];
 }
 
@@ -1724,8 +1729,6 @@ list = hb_get_titles( fHandle );
     hb_start( fHandle );
 	/*set the fEncodeState State */
 	fEncodeState = 1;
-
-	[fMenuPauseEncode setEnabled: YES];
 }
 
 - (IBAction) Cancel: (id) sender
@@ -2766,9 +2769,8 @@ the user is using "Custom" settings by determining the sender*/
     [NSApp runModalForWindow: fAddPresetPanel];
     [NSApp endSheet: fAddPresetPanel];
     [fAddPresetPanel orderOut: self];
-	
-	
 }
+
 - (IBAction) closeAddPresetPanel: (id) sender
 {
 	[NSApp stopModal];
@@ -2777,17 +2779,12 @@ the user is using "Custom" settings by determining the sender*/
 
 - (IBAction)addUserPreset:(id)sender
 {
-
     /* Here we create a custom user preset */
-	[UserPresets addObject:[self createPreset]];
-	/* Erase info from the input fields */
-	[fPresetNewName setStringValue: @""];
-	[fPresetNewDesc setStringValue: @""];
+    [UserPresets addObject:[self createPreset]];
+    
 	/* We stop the modal window for the new preset */
 	[NSApp stopModal];
     [self addPreset];
-	
-
 }
 - (void)addPreset
 {
@@ -4390,12 +4387,12 @@ show the built in presets in a blue font. */
      /* if there is a description for the preset, we show it in the tooltip */
 	 if ([[UserPresets objectAtIndex:rowIndex] valueForKey:@"PresetDescription"])
 	 {
-	 loc_tip = [NSString stringWithFormat: @"%@",[[UserPresets objectAtIndex:rowIndex] valueForKey:@"PresetDescription"]];
-	 return (loc_tip);
+        loc_tip = [NSString stringWithFormat: @"%@",[[UserPresets objectAtIndex:rowIndex] valueForKey:@"PresetDescription"]];
+        return (loc_tip);
 	 }
 	 else
 	 {
-	 loc_tip = @"No description available";
+        loc_tip = @"No description available";
 	 }
 	 return (loc_tip);
 

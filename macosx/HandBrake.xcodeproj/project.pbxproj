@@ -508,8 +508,8 @@
 				25DE1FB50C169A0C00F01FC8 /* HBPreferencesController.m */,
 				E37C89460C83989F00C1B919 /* HBQueueController.h */,
 				E37C89450C83989F00C1B919 /* HBQueueController.mm */,
-				A9AC41DD0C918DB500DDF9B8 /* HBAdvancedController.m */,
 				A9AC41DE0C918DB500DDF9B8 /* HBAdvancedController.h */,
+				A9AC41DD0C918DB500DDF9B8 /* HBAdvancedController.m */,
 			);
 			name = "HandBrake Sources";
 			sourceTree = "<group>";

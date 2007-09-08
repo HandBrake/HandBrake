@@ -130,16 +130,6 @@
                 fDstFormatField = NSTextField; 
                 fDstFormatPopUp = NSPopUpButton; 
                 fDstMpgLargeFileCheck = NSButton; 
-                fMenuActivityWindowShow = NSMenuItem; 
-                fMenuAddToQueue = NSMenuItem; 
-                fMenuBarFileMenu = NSMenu; 
-                fMenuBarWindowMenu = NSMenu; 
-                fMenuOpenSource = NSMenuItem; 
-                fMenuPauseEncode = NSMenuItem; 
-                fMenuPicturePanelShow = NSMenuItem; 
-                fMenuPresetsDrawerToggle = NSMenuItem; 
-                fMenuQueuePanelShow = NSMenuItem; 
-                fMenuStartEncode = NSMenuItem; 
                 fPicLabelAnamorphic = NSTextField; 
                 fPicLabelAr = NSTextField; 
                 fPicLabelAutoCrop = NSTextField; 

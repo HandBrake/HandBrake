@@ -37,20 +37,6 @@
     /* Output panel */
     HBOutputPanelController       *outputPanel;
 	
-	/* Menu Items */
-	/* File Menu */
-	IBOutlet NSMenu * fMenuBarFileMenu;
-	IBOutlet NSMenuItem * fMenuOpenSource;
-	IBOutlet NSMenuItem * fMenuAddToQueue;
-	IBOutlet NSMenuItem * fMenuStartEncode;
-	IBOutlet NSMenuItem * fMenuPauseEncode;
-	/* Window Menu */
-	IBOutlet NSMenu * fMenuBarWindowMenu;
-	IBOutlet NSMenuItem * fMenuPresetsDrawerToggle;
-	IBOutlet NSMenuItem * fMenuQueuePanelShow;
-	IBOutlet NSMenuItem * fMenuPicturePanelShow;
-	IBOutlet NSMenuItem * fMenuActivityWindowShow;
-	
     /* Source box */
 	IBOutlet NSProgressIndicator * fScanIndicator;
 	NSString                     * sourceDisplayName;
@@ -161,7 +147,7 @@
 	
 	IBOutlet NSDrawer            * fPresetDrawer;
 	IBOutlet NSTextField         * fPresetNewName;
-	IBOutlet NSTextField         * fPresetNewDesc;
+	IBOutlet NSTextField          * fPresetNewDesc;
 	IBOutlet NSPopUpButton       * fPresetNewPicSettingsPopUp;
 	IBOutlet NSTextField         * fPresetSelectedDisplay;
 	
