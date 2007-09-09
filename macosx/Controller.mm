@@ -80,7 +80,7 @@ static int hb_group_count(hb_handle_t * h)
     [HBPreferencesController registerUserDefaults];
     fHandle = NULL;
     outputPanel = [[HBOutputPanelController alloc] init];
-    fPictureController = [[PictureController alloc] init];
+    fPictureController = [[PictureController alloc] initWithDelegate:self];
     fQueueController = [[HBQueueController alloc] init];
     fAdvancedOptions = [[HBAdvancedController alloc] init];
     return self;
@@ -104,11 +104,11 @@ static int hb_group_count(hb_handle_t * h)
     fChapterTitlesDelegate = [[ChapterTitles alloc] init];
     [fChapterTable setDataSource:fChapterTitlesDelegate];
 
-     /* Call UpdateUI every 2/10 sec */
+     /* Call UpdateUI every 1/2 sec */
     [[NSRunLoop currentRunLoop] addTimer: [NSTimer
-        scheduledTimerWithTimeInterval: 0.2 target: self
-        selector: @selector( updateUI: ) userInfo: NULL repeats: FALSE]
-        forMode: NSModalPanelRunLoopMode];
+        scheduledTimerWithTimeInterval: 0.5 target: self
+        selector: @selector( updateUI: ) userInfo: NULL repeats: YES]
+        forMode: NSEventTrackingRunLoopMode];
 
     if( ( build = hb_check_update( fHandle, &version ) ) > -1 )
     {
@@ -688,8 +688,8 @@ static int hb_group_count(hb_handle_t * h)
 - (void) updateUI: (NSTimer *) timer
 {
 
-hb_list_t  * list;
-list = hb_get_titles( fHandle );	
+    hb_list_t  * list;
+    list = hb_get_titles( fHandle );	
     /* check to see if there has been a new scan done
 	this bypasses the constraints of HB_STATE_WORKING
 	not allowing setting a newly scanned source */
@@ -953,11 +953,6 @@ list = hb_get_titles( fHandle );
 	{
 		[fQueueStatus setStringValue: @""];
 	}
-	
-    [[NSRunLoop currentRunLoop] addTimer: [NSTimer
-        scheduledTimerWithTimeInterval: 0.5 target: self
-							  selector: @selector( updateUI: ) userInfo: NULL repeats: FALSE]
-								 forMode: NSModalPanelRunLoopMode];
 }
 
 - (IBAction) showNewScan:(id)sender
@@ -1320,7 +1315,6 @@ list = hb_get_titles( fHandle );
     if( returnCode == NSOKButton )
     {
         [fDstFile2Field setStringValue: [sheet filename]];
-		
     }
 }
 
@@ -1329,10 +1323,11 @@ list = hb_get_titles( fHandle );
 	hb_list_t  * list  = hb_get_titles( fHandle );
     hb_title_t * title = (hb_title_t *) hb_list_item( list,
             [fSrcTitlePopUp indexOfSelectedItem] );
-    
     [fPictureController showPanelInWindow:fWindow forTitle:title];
-    
-	[self calculatePictureSizing: sender];
+}
+
+- (void)pictureSettingsDidChange {
+	[self calculatePictureSizing: NULL];
 }
 
 - (void) PrepareJob
@@ -1772,7 +1767,7 @@ list = hb_get_titles( fHandle );
 {
     hb_list_t  * list  = hb_get_titles( fHandle );
     hb_title_t * title = (hb_title_t*)
-        hb_list_item( list, [fSrcTitlePopUp indexOfSelectedItem] );
+    hb_list_item( list, [fSrcTitlePopUp indexOfSelectedItem] );
 		
 		
     /* If Auto Naming is on. We create an output filename of dvd name - title number */
@@ -1816,7 +1811,6 @@ list = hb_get_titles( fHandle );
 	/* Pixel Ratio Setting */
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PixelRatio"])
     {
-
 		job->pixel_ratio = 1 ;
 	}
 	else
@@ -1903,7 +1897,6 @@ list = hb_get_titles( fHandle );
     }
 
 		
-	
 	hb_list_t  * list  = hb_get_titles( fHandle );
     hb_title_t * title = (hb_title_t *)
         hb_list_item( list, [fSrcTitlePopUp indexOfSelectedItem] );

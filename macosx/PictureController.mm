@@ -18,6 +18,15 @@ static int GetAlignedSize( int size )
 
 @implementation PictureController
 
+- (id)initWithDelegate:(id)del
+{
+	if (self = [super init])
+	{
+		delegate = del;
+	}
+	return self;
+}
+
 - (void) SetHandle: (hb_handle_t *) handle
 {
     fHandle = handle;
@@ -321,7 +330,6 @@ static int GetAlignedSize( int size )
     {
         [self Display: HB_ANIMATE_NONE];
     }
-
 }
 
 - (IBAction) PreviousPicture: (id) sender
@@ -346,6 +354,9 @@ static int GetAlignedSize( int size )
 
 - (IBAction) ClosePanel: (id) sender
 {
+    if ([delegate respondsToSelector:@selector(pictureSettingsDidChange)])
+        [delegate pictureSettingsDidChange];
+        
     [NSApp endSheet: fPicturePanel];
     [fPicturePanel orderOut: self];
 }

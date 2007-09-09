@@ -57,7 +57,9 @@
         int     denoise;
     } fPictureFilterSettings;
 
+    id delegate;
 }
+- (id)initWithDelegate:(id)del;
 
 - (void) SetHandle: (hb_handle_t *) handle;
 - (void) SetTitle:  (hb_title_t *)  title;
@@ -80,5 +82,8 @@
 
 - (void) showPanelInWindow: (NSWindow *) fWindow forTitle:(hb_title_t *)title;
 - (BOOL) loadMyNibFile;
+@end
 
+@interface NSObject (PictureControllertDelegateMethod)
+- (void)pictureSettingsDidChange;
 @end
