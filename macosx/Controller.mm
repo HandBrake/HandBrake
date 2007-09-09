@@ -2496,12 +2496,12 @@ static int hb_group_count(hb_handle_t * h)
 {
 	if ([fSubPopUp indexOfSelectedItem] == 0)
 	{
-	[fSubForcedCheck setState: NSOffState];
-	[fSubForcedCheck setEnabled: NO];	
+        [fSubForcedCheck setState: NSOffState];
+        [fSubForcedCheck setEnabled: NO];	
 	}
 	else
 	{
-	[fSubForcedCheck setEnabled: YES];	
+        [fSubForcedCheck setEnabled: YES];	
 	}
 	
 }
@@ -2666,7 +2666,7 @@ static int hb_group_count(hb_handle_t * h)
     [fVidBitrateField setIntValue: hb_calc_bitrate( job,
             [fVidTargetSizeField intValue] )];
 			
-			
+    [self customSettingUsed:sender];
 }
 
 /* Method to determine if we should change the UI
@@ -4428,7 +4428,6 @@ id theRecord, theValue;
     [self savePreset];
 }
 
-
 - (void)savePreset
 {
     [UserPresets writeToFile:UserPresetsFile atomically:YES];
@@ -4436,8 +4435,6 @@ id theRecord, theValue;
 	[self getDefaultPresets: NULL];
 
 }
-
-
 
 - (void) controlTextDidBeginEditing: (NSNotification *) notification
 {
