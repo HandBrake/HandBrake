@@ -7,11 +7,11 @@
 
 @interface HBPreferencesController : NSWindowController
 {
+    IBOutlet NSView         * fGeneralView, * fPictureView, * fAudioView, * fAdvancedView;
 }
 
 + (void)registerUserDefaults;
 - (id)init;
-- (IBAction)runModal:(id)sender;
 - (IBAction)close:(id)sender;
 
 @end

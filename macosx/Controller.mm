@@ -83,6 +83,7 @@ static int hb_group_count(hb_handle_t * h)
     fPictureController = [[PictureController alloc] initWithDelegate:self];
     fQueueController = [[HBQueueController alloc] init];
     fAdvancedOptions = [[HBAdvancedController alloc] init];
+    fPreferencesController = [[HBPreferencesController alloc] init];
     return self;
 }
 
@@ -1286,7 +1287,7 @@ static int hb_group_count(hb_handle_t * h)
     }
 
     [self qualitySliderChanged: sender];
-    [self calculateBitrate:     sender];
+    [self calculateBitrate: sender];
 	[self customSettingUsed: sender];
 }
 
@@ -1767,7 +1768,7 @@ static int hb_group_count(hb_handle_t * h)
 {
     hb_list_t  * list  = hb_get_titles( fHandle );
     hb_title_t * title = (hb_title_t*)
-    hb_list_item( list, [fSrcTitlePopUp indexOfSelectedItem] );
+        hb_list_item( list, [fSrcTitlePopUp indexOfSelectedItem] );
 		
 		
     /* If Auto Naming is on. We create an output filename of dvd name - title number */
@@ -2003,8 +2004,7 @@ static int hb_group_count(hb_handle_t * h)
                 _( @"AVC/H.264 Video / MP3 Audio" )];
 			[fDstCodecsPopUp addItemWithTitle:
                 _( @"AVC/H.264 Video / Vorbis Audio" )];
-            /* We disable the create chapters checkbox here since we are NOT .mp4 
-			and make sure it is unchecked*/
+            /* We enable the create chapters checkbox here since */
 			[fCreateChapterMarkers setEnabled: YES];
 			break;
     }
@@ -2665,8 +2665,6 @@ static int hb_group_count(hb_handle_t * h)
 
     [fVidBitrateField setIntValue: hb_calc_bitrate( job,
             [fVidTargetSizeField intValue] )];
-			
-    [self customSettingUsed:sender];
 }
 
 /* Method to determine if we should change the UI
@@ -4436,16 +4434,6 @@ id theRecord, theValue;
 
 }
 
-- (void) controlTextDidBeginEditing: (NSNotification *) notification
-{
-    [self calculateBitrate: NULL];
-}
-
-- (void) controlTextDidEndEditing: (NSNotification *) notification
-{
-    [self calculateBitrate: NULL];
-}
-
 - (void) controlTextDidChange: (NSNotification *) notification
 {
     [self calculateBitrate: NULL];
@@ -4477,14 +4465,15 @@ id theRecord, theValue;
 }
 
 /**
- * Creates preferences controller, shows preferences window modally, and
- * releases the controller after user has closed the window.
+ * Shows preferences window modally.
  */
-- (IBAction)showPreferencesWindow:(id)sender
+- (IBAction) showPreferencesWindow: (id) sender
 {
-    HBPreferencesController *controller = [[HBPreferencesController alloc] init];
-    [controller runModal:nil];
-    [controller release];
+    NSWindow * window = [fPreferencesController window];
+    if (![window isVisible])
+        [window center];
+
+    [window makeKeyAndOrderFront: nil];
 }
 
 /**

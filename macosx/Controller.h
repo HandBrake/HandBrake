@@ -14,6 +14,7 @@
 #import "HBQueueController.h"
 #import "MVMenuButton.h"
 #import "HBAdvancedController.h"
+#import "HBPreferencesController.h"
 
 @class HBOutputPanelController;
 
@@ -30,6 +31,8 @@
     HBAdvancedController         * fAdvancedOptions;
 	IBOutlet NSBox               * fAdvancedView;
 
+    HBPreferencesController      * fPreferencesController;
+    
     /* Queue panel */
     HBQueueController            * fQueueController;
     IBOutlet NSTextField         * fQueueStatus;
@@ -234,8 +237,6 @@
 - (IBAction) Pause: (id) sender;
 
 - (IBAction) calculateBitrate: (id) sender;
-- (void) controlTextDidBeginEditing: (NSNotification *) notification;
-- (void) controlTextDidEndEditing: (NSNotification *) notification;
 - (void) controlTextDidChange: (NSNotification *) notification;
 
 - (IBAction) openHomepage: (id) sender;
