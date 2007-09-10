@@ -130,6 +130,8 @@
 		A9AC41E00C918DB500DDF9B8 /* HBAdvancedController.h in Headers */ = {isa = PBXBuildFile; fileRef = A9AC41DE0C918DB500DDF9B8 /* HBAdvancedController.h */; };
 		A9AC41E70C918DC000DDF9B8 /* AdvancedView.nib in Resources */ = {isa = PBXBuildFile; fileRef = A9AC41E50C918DC000DDF9B8 /* AdvancedView.nib */; };
 		A9B4CEC80C95752B0086548A /* Preferences.png in Resources */ = {isa = PBXBuildFile; fileRef = A9B4CEC70C95752B0086548A /* Preferences.png */; };
+		A9DE40450C959834008A5440 /* minus-8.png in Resources */ = {isa = PBXBuildFile; fileRef = A9DE40430C959834008A5440 /* minus-8.png */; };
+		A9DE40460C959834008A5440 /* plus-8.png in Resources */ = {isa = PBXBuildFile; fileRef = A9DE40440C959834008A5440 /* plus-8.png */; };
 		B48359A80C82960500E04440 /* lang.c in Sources */ = {isa = PBXBuildFile; fileRef = B48359A70C82960500E04440 /* lang.c */; };
 		D4D49FED0C83355600F01215 /* lang.c in Sources */ = {isa = PBXBuildFile; fileRef = B48359A70C82960500E04440 /* lang.c */; };
 		E3003C7F0C88505D0072F2A8 /* DeleteHighlightPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = E3003C7E0C88505D0072F2A8 /* DeleteHighlightPressed.png */; };
@@ -292,6 +294,8 @@
 		A9AC41DE0C918DB500DDF9B8 /* HBAdvancedController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = HBAdvancedController.h; sourceTree = "<group>"; };
 		A9AC41E60C918DC000DDF9B8 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/AdvancedView.nib; sourceTree = "<group>"; };
 		A9B4CEC70C95752B0086548A /* Preferences.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Preferences.png; sourceTree = "<group>"; };
+		A9DE40430C959834008A5440 /* minus-8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "minus-8.png"; sourceTree = "<group>"; };
+		A9DE40440C959834008A5440 /* plus-8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "plus-8.png"; sourceTree = "<group>"; };
 		B48359A70C82960500E04440 /* lang.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lang.c; path = ../libhb/lang.c; sourceTree = SOURCE_ROOT; };
 		E3003C7E0C88505D0072F2A8 /* DeleteHighlightPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DeleteHighlightPressed.png; sourceTree = "<group>"; };
 		E3003CB40C8852B70072F2A8 /* DeletePressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DeletePressed.png; sourceTree = "<group>"; };
@@ -531,6 +535,8 @@
 		A273E0460C57B39A00493A45 /* icons */ = {
 			isa = PBXGroup;
 			children = (
+				A9DE40430C959834008A5440 /* minus-8.png */,
+				A9DE40440C959834008A5440 /* plus-8.png */,
 				A9B4CEC70C95752B0086548A /* Preferences.png */,
 				A2DFC66C0C6196D900E66E89 /* actionWidget.png */,
 				A2DFC66D0C6196D900E66E89 /* actionWidgetPressed.png */,
@@ -755,6 +761,8 @@
 				A97A1DB40C91A6800015BC08 /* Express.nib in Resources */,
 				A9ABA2270C92AECA00D98324 /* PictureSettings.nib in Resources */,
 				A9B4CEC80C95752B0086548A /* Preferences.png in Resources */,
+				A9DE40450C959834008A5440 /* minus-8.png in Resources */,
+				A9DE40460C959834008A5440 /* plus-8.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
