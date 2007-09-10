@@ -60,6 +60,7 @@ if $(OS) = MACOSX
               macosx/PictureController.h macosx/PictureController.mm
               macosx/PictureGLView.h macosx/PictureGLView.mm
               macosx/HBQueueController.h macosx/HBQueueController.mm
+			  macosx/HBAdvancedController.h macosx/HBAdvancedController.m
               macosx/HBPreferencesController.h macosx/HBPreferencesController.m
               macosx/English.lproj/InfoPlist.strings
               macosx/English.lproj/MainMenu.nib/classes.nib
@@ -69,6 +70,12 @@ if $(OS) = MACOSX
               macosx/English.lproj/Express.nib/classes.nib
               macosx/English.lproj/Express.nib/info.nib
               macosx/English.lproj/Express.nib/keyedobjects.nib
+              macosx/English.lproj/PictureSettings.nib/classes.nib
+              macosx/English.lproj/PictureSettings.nib/info.nib
+              macosx/English.lproj/PictureSettings.nib/keyedobjects.nib
+              macosx/English.lproj/AdvancedView.nib/classes.nib
+              macosx/English.lproj/AdvancedView.nib/info.nib
+              macosx/English.lproj/AdvancedView.nib/keyedobjects.nib
 			  macosx/English.lproj/Queue.nib
               macosx/English.lproj/Queue.nib/classes.nib
               macosx/English.lproj/Queue.nib/info.nib
