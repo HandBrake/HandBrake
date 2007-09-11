@@ -91,7 +91,7 @@
     if ([ident isEqualToString: TOOLBAR_GENERAL])
     {
         [item setLabel: NSLocalizedString(@"General", "General")];
-        [item setImage: [NSImage imageNamed: @"Preferences.png"]];
+        [item setImage: [NSImage imageNamed: @"pref-general"]];
         [item setTarget: self];
         [item setAction: @selector(setPrefView:)];
         [item setAutovalidates: NO];
@@ -99,7 +99,7 @@
     else if ([ident isEqualToString: TOOLBAR_PICTURE])
     {
         [item setLabel: NSLocalizedString(@"Picture", "Picture")];
-//        [item setImage: [NSImage imageNamed: @"???.png"]];
+        [item setImage: [NSImage imageNamed: @"pref-picture"]];
         [item setTarget: self];
         [item setAction: @selector(setPrefView:)];
         [item setAutovalidates: NO];
@@ -107,7 +107,7 @@
     else if ([ident isEqualToString: TOOLBAR_AUDIO])
     {
         [item setLabel: NSLocalizedString(@"Audio", "Audio")];
-  //      [item setImage: [NSImage imageNamed: @"???.png"]];
+        [item setImage: [NSImage imageNamed: @"pref-audio"]];
         [item setTarget: self];
         [item setAction: @selector(setPrefView:)];
         [item setAutovalidates: NO];
@@ -115,7 +115,7 @@
     else if ([ident isEqualToString: TOOLBAR_ADVANCED])
     {
         [item setLabel: NSLocalizedString(@"Advanced", "Advanced")];
- //       [item setImage: [NSImage imageNamed: @"???.png"]];
+//        [item setImage: [NSImage imageNamed: @"pref-advanced"]];
         [item setTarget: self];
         [item setAction: @selector(setPrefView:)];
         [item setAutovalidates: NO];
