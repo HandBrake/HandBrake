@@ -265,7 +265,19 @@ static int GetAlignedSize( int size )
     job->width       = [fWidthStepper  intValue];
     job->height      = [fHeightStepper intValue];
     job->keep_ratio  = ( [fRatioCheck state] == NSOnState );
+    
 	fPictureFilterSettings.deinterlace = [fDeinterlacePopUp indexOfSelectedItem];
+    /* if the gui deinterlace settings are fast through slowest, the job->deinterlace
+       value needs to be set to one, for the job as well as the previews showing deinterlacing
+       otherwise set job->deinterlace to 0 or "off" */
+    if (fPictureFilterSettings.deinterlace > 0)
+    {
+    job->deinterlace  = 1;
+    }
+    else
+    {
+    job->deinterlace  = 0;
+    }
     fPictureFilterSettings.denoise     = [fDenoisePopUp indexOfSelectedItem];
     fPictureFilterSettings.detelecine  = [fDetelecineCheck state];
 	job->pixel_ratio = ( [fPARCheck state] == NSOnState );
