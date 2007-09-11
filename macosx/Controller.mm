@@ -1710,9 +1710,15 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     }
     else
     {
+        /* We add a the encode to the queue if there is nothing in it and then start our encode.
+           This should be reviewed by travistex to verify queue sync, etc.*/
+        if( hb_count( fHandle ) == 0)
+        {
+            [self doAddToQueue]; 
+        }
         [self doRip];
     }
-}
+} 
 
 /* overWriteAlertDone: called from the alert posted by Rip: that asks the user if they
    want to overwrite an exiting movie file.
