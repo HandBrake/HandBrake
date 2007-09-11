@@ -258,7 +258,7 @@ struct hb_job_s
     int             largeFileSize;
     
 
-    int subtitle_scan;
+    int indepth_scan;
     hb_subtitle_t ** select_subtitle;
     int subtitle_force;
     char * native_language;

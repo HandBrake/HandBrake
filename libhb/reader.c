@@ -118,7 +118,7 @@ static void ReaderFunc( void * _r )
           }
         }
 
-        if( r->job->subtitle_scan )
+        if( r->job->indepth_scan )
         {
             /*
              * Need to update the progress during a subtitle scan
@@ -139,7 +139,7 @@ static void ReaderFunc( void * _r )
             p.seconds  = -1;
             hb_set_state( r->job->h, &state );
         }
-        
+
         hb_demux_ps( r->ps, list );
 
         while( ( buf = hb_list_item( list, 0 ) ) )
@@ -194,18 +194,21 @@ static hb_fifo_t * GetFifoForId( hb_job_t * job, int id )
 
     if( id == 0xE0 )
     {
-        if( !job->subtitle_scan )
+        if( job->indepth_scan ) 
         {
-            return job->fifo_mpeg2;
-        } else {
             /*
-             * Ditch the mpeg2 video when doing a subtitle scan.
+             * Ditch the video here during the indepth scan until
+             * we can improve the MPEG2 decode performance.
              */
             return NULL;
+        } 
+        else 
+        {
+            return job->fifo_mpeg2;
         }
     }
 
-    if (job->subtitle_scan) {
+    if( job->indepth_scan ) {
         /*
          * Count the occurances of the subtitles, don't actually
          * return any to encode unless we are looking fro forced
@@ -233,12 +236,15 @@ static hb_fifo_t * GetFifoForId( hb_job_t * job, int id )
             return subtitle->fifo_in;
         }
     }
-    for( i = 0; i < hb_list_count( title->list_audio ); i++ )
+    if( !job->indepth_scan ) 
     {
-        audio = hb_list_item( title->list_audio, i );
-        if( id == audio->id )
+        for( i = 0; i < hb_list_count( title->list_audio ); i++ )
         {
-            return audio->fifo_in;
+            audio = hb_list_item( title->list_audio, i );
+            if( id == audio->id )
+            {
+                return audio->fifo_in;
+            }
         }
     }
 

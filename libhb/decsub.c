@@ -177,7 +177,7 @@ static void ParseControls( hb_work_object_t * w )
                     /*
                      * If we are doing a subtitle scan then note down
                      */
-                    if( job->subtitle_scan )
+                    if( job->indepth_scan )
                     {
                         for( n=0; n < hb_list_count(title->list_subtitle); n++ ) 
                         {
@@ -198,8 +198,8 @@ static void ParseControls( hb_work_object_t * w )
                     break;
 
                 case 0x02: // 0x02 - STP_DSP - Stop Display, no arguments
-					if(!pv->pts_stop)
-						pv->pts_stop = pv->pts + date * 900;
+                    if(!pv->pts_stop)
+                        pv->pts_stop = pv->pts + date * 900;
                     break;
 
                 case 0x03: // 0x03 - SET_COLOR - Set Colour indices
@@ -463,7 +463,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     /* Get infos about the subtitle */
     ParseControls( w );
 
-    if( job->subtitle_scan || ( job->subtitle_force && pv->pts_forced == 0 ) )
+    if( job->indepth_scan || ( job->subtitle_force && pv->pts_forced == 0 ) )
     {
         /*
          * Don't encode subtitles when doing a scan.

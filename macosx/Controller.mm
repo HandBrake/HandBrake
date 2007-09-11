@@ -1590,7 +1590,7 @@ static int hb_group_count(hb_handle_t * h)
 
                     job->x264opts = NULL;
                     
-                    job->subtitle_scan = 1;  
+                    job->indepth_scan = 1;  
 
                     job->select_subtitle = (hb_subtitle_t**)malloc(sizeof(hb_subtitle_t*));
                     *(job->select_subtitle) = NULL;
@@ -1617,8 +1617,7 @@ static int hb_group_count(hb_handle_t * h)
 		if( [fVidTwoPassCheck state] == NSOnState )
 		{
             hb_subtitle_t **subtitle_tmp = job->select_subtitle;
-            job->select_subtitle = NULL;
-            job->subtitle_scan = 0;
+                        job->indepth_scan = 0;
 
 			job->pass = 1;
 			job->sequence_id++; // for job grouping
@@ -1636,7 +1635,7 @@ static int hb_group_count(hb_handle_t * h)
 		}
 		else
 		{
-                        job->subtitle_scan = 0;
+                        job->indepth_scan = 0;
 			job->pass = 0;
 			job->sequence_id++; // for job grouping
 			hb_add( fHandle, job );

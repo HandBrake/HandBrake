@@ -304,6 +304,11 @@ hb_filter_private_t * hb_denoise_init( int pix_fmt,
     }
     
     hb_filter_private_t * pv = malloc( sizeof(struct hb_filter_private_s) );
+
+    /*
+     * Clear the memory to avoid freeing uninitialised memory later.
+     */
+    memset( pv, 0, sizeof( struct hb_filter_private_s ) );
     
     pv->pix_fmt  = pix_fmt;    
     pv->width[0]  = width;

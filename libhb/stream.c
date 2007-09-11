@@ -676,7 +676,7 @@ static void hb_stream_put_back(hb_stream_t *stream, int i)
 			stream->ps_decode_buffer[read_buffer_index].read_pos -= i;
 		}
 		else
-		  fprintf(stderr, "hb_stream_put_back - trying to step beyond the start of the buffer, read_pos = %d amt to put back = %d\n", stream->ps_decode_buffer[read_buffer_index].read_pos, i);
+		  hb_error("hb_stream_put_back - trying to step beyond the start of the buffer, read_pos = %d amt to put back = %d\n", stream->ps_decode_buffer[read_buffer_index].read_pos, i);
 	}
 }
 

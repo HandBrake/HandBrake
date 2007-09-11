@@ -632,7 +632,7 @@ static int HandleEvents( hb_handle_t * h )
 
                 job->x264opts = NULL;
 
-                job->subtitle_scan = subtitle_scan;  
+                job->indepth_scan = subtitle_scan;  
                 fprintf( stderr, "Subtitle Scan Enabled - enabling "
                          "subtitles if found for foreign language segments\n");
                 job->select_subtitle = malloc(sizeof(hb_subtitle_t*));
@@ -659,7 +659,7 @@ static int HandleEvents( hb_handle_t * h )
 
                 job->pass = 1;
 
-                job->subtitle_scan = 0;
+                job->indepth_scan = 0;
 
                 /*
                  * If turbo options have been selected then append them
@@ -702,7 +702,7 @@ static int HandleEvents( hb_handle_t * h )
                  * selected in the first pass (using the whacky select-subtitle
                  * attribute of the job).
                  */
-                job->subtitle_scan = 0;
+                job->indepth_scan = 0;
 
                 job->x264opts = x264opts2;
                 
@@ -715,7 +715,7 @@ static int HandleEvents( hb_handle_t * h )
                  * precludes encoding of any actual subtitles.
                  */ 
 
-                job->subtitle_scan = 0;
+                job->indepth_scan = 0;
                 job->pass = 0;
                 hb_add( h, job );
             }

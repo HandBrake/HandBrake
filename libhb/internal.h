@@ -64,6 +64,9 @@ struct hb_buffer_s
     hb_buffer_t * next;
 };
 
+void hb_buffer_pool_init( void );
+void hb_buffer_pool_free( void );
+
 hb_buffer_t * hb_buffer_init( int size );
 void          hb_buffer_realloc( hb_buffer_t *, int size );
 void          hb_buffer_close( hb_buffer_t ** );

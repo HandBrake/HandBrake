@@ -104,6 +104,11 @@ hb_handle_t * hb_init_real( int verbose, int update_check )
         }
     }
 
+    /*
+     * Initialise buffer pool
+     */
+    hb_buffer_pool_init();
+
     /* CPU count detection */
     hb_log( "hb_init: checking cpu count" );
     h->cpu_count = hb_get_cpu_count();
@@ -607,7 +612,7 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
      */
     memset( audio_lang, 0, sizeof( audio_lang ) );
 
-    if ( job->subtitle_scan || job->native_language ) {
+    if ( job->indepth_scan || job->native_language ) {
       
         /*
          * Find the first audio language that is being encoded
@@ -659,7 +664,7 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
      * If doing a subtitle scan then add all the matching subtitles for this
      * language.
      */
-    if ( job->subtitle_scan ) 
+    if ( job->indepth_scan ) 
     {
         for( i=0; i < hb_list_count( title->list_subtitle ); i++ ) 
         {
@@ -926,6 +931,7 @@ void hb_close( hb_handle_t ** _h )
     hb_lock_close( &h->pause_lock );
     free( h );
     *_h = NULL;
+
 }
 
 /**

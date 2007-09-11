@@ -160,6 +160,16 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
        *buf_out = hb_buffer_init(0);
        return HB_WORK_OK;
     }
+
+    /*
+     * During the indepth_scan ditch the buffers here before applying filters or attempting to
+     * use the subtitles.
+     */
+    if( job->indepth_scan )
+    {      
+        *buf_out = NULL;
+        return HB_WORK_OK;
+    }
     
     /* Push subtitles onto queue just in case we need to delay a frame */
     if( in->sub )

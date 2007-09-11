@@ -22,6 +22,8 @@ static void work_func();
 static void do_job( hb_job_t *, int cpu_count );
 static void work_loop( void * );
 
+#define FIFO_SIZE 32
+
 /**
  * Allocates work object and launches work thread with work_func.
  * @param jobs Handle to hb_list_t.
@@ -174,10 +176,10 @@ static void do_job( hb_job_t * job, int cpu_count )
     }
 	hb_log (" + PixelRatio: %d, width:%d, height: %d",job->pixel_ratio,job->width, job->height);
     job->fifo_mpeg2  = hb_fifo_init( 2048 );
-    job->fifo_raw    = hb_fifo_init( 8 );
-    job->fifo_sync   = hb_fifo_init( 8 );
-    job->fifo_render = hb_fifo_init( 8 );
-    job->fifo_mpeg4  = hb_fifo_init( 8 );
+    job->fifo_raw    = hb_fifo_init( FIFO_SIZE );
+    job->fifo_sync   = hb_fifo_init( FIFO_SIZE );
+    job->fifo_render = hb_fifo_init( FIFO_SIZE );
+    job->fifo_mpeg4  = hb_fifo_init( FIFO_SIZE );
 
     /* Synchronization */
     hb_list_add( job->list_work, ( w = getWork( WORK_SYNC ) ) );
@@ -216,7 +218,7 @@ static void do_job( hb_job_t * job, int cpu_count )
     
     hb_list_add( job->list_work, w );
 
-    if( job->select_subtitle && !job->subtitle_scan ) 
+    if( job->select_subtitle && !job->indepth_scan ) 
     {
         /*
          * Must be second pass of a two pass with subtitle scan enabled, so
@@ -237,8 +239,8 @@ static void do_job( hb_job_t * job, int cpu_count )
         {
             hb_log( " + subtitle %x, %s", subtitle->id, subtitle->lang );
             
-            subtitle->fifo_in  = hb_fifo_init( 8 );
-            subtitle->fifo_raw = hb_fifo_init( 8 );
+            subtitle->fifo_in  = hb_fifo_init( FIFO_SIZE );
+            subtitle->fifo_raw = hb_fifo_init( FIFO_SIZE );
             
             /*
              * Disable forced subtitles if we didn't find any in the scan
@@ -246,7 +248,7 @@ static void do_job( hb_job_t * job, int cpu_count )
              *
              * select_subtitle implies that we did a scan.
              */
-            if( !job->subtitle_scan && job->subtitle_force && 
+            if( !job->indepth_scan && job->subtitle_force && 
                 job->select_subtitle ) 
             {
                 if( subtitle->forced_hits == 0 )
@@ -255,7 +257,7 @@ static void do_job( hb_job_t * job, int cpu_count )
                 }
             }
 
-            if (!job->subtitle_scan || job->subtitle_force) {
+            if (!job->indepth_scan || job->subtitle_force) {
                 /*
                  * Don't add threads for subtitles when we are scanning, unless
                  * looking for forced subtitles.
@@ -437,9 +439,9 @@ static void do_job( hb_job_t * job, int cpu_count )
 
 		/* set up the audio work structures */
         audio->fifo_in   = hb_fifo_init( 2048 );
-        audio->fifo_raw  = hb_fifo_init( 8 );
-        audio->fifo_sync = hb_fifo_init( 8 );
-        audio->fifo_out  = hb_fifo_init( 8 );
+        audio->fifo_raw  = hb_fifo_init( FIFO_SIZE );
+        audio->fifo_sync = hb_fifo_init( FIFO_SIZE );
+        audio->fifo_out  = hb_fifo_init( FIFO_SIZE );
 
         switch( audio->codec )
         {
@@ -512,7 +514,7 @@ static void do_job( hb_job_t * job, int cpu_count )
     {
         w = hb_list_item( job->list_work, i );
         w->done = &job->done;
-		w->thread_sleep_interval = 10;
+        w->thread_sleep_interval = 10;
         w->init( w, job );
         w->thread = hb_thread_init( w->name, work_loop, w,
                                     HB_LOW_PRIORITY );
@@ -520,7 +522,7 @@ static void do_job( hb_job_t * job, int cpu_count )
 
     done = 0;
     w = hb_list_item( job->list_work, 0 );
-	w->thread_sleep_interval = 50;
+    w->thread_sleep_interval = 50;
     w->init( w, job );
     while( !*job->die )
     {
@@ -573,6 +575,9 @@ static void do_job( hb_job_t * job, int cpu_count )
     hb_fifo_close( &job->fifo_sync );
     hb_fifo_close( &job->fifo_render );
     hb_fifo_close( &job->fifo_mpeg4 );
+
+    hb_buffer_pool_free();
+
     for (i=0; i < hb_list_count(title->list_subtitle); i++) {
         subtitle =  hb_list_item( title->list_subtitle, i);
         if( subtitle )
@@ -590,7 +595,7 @@ static void do_job( hb_job_t * job, int cpu_count )
         hb_fifo_close( &audio->fifo_out );
     }
 
-    if( job->subtitle_scan )
+    if( job->indepth_scan )
     {
         /*
          * Before closing the title print out our subtitle stats if we need to
@@ -661,7 +666,7 @@ static void do_job( hb_job_t * job, int cpu_count )
 
     if( job->select_subtitle ) 
     {
-        if( job->subtitle_scan ) 
+        if( job->indepth_scan ) 
         {
             for( i=0; i < hb_list_count( title->list_subtitle ); i++ ) 
             {
