@@ -50,7 +50,7 @@
         desktopDirectory,   @"LastSourceDirectory",
         @"NO",              @"DefaultAutoNaming",
         @"NO",              @"DefaultChapterMarkers",
-        @"NO",              @"ShowVerboseOutput",
+        @"YES",              @"ShowVerboseOutput",
 		@"NO",              @"AllowLargeFiles",
 		@"NO",              @"DisableDvdAutoDetect",
 		@"Alert Window",    @"AlertWhenDone",
