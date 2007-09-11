@@ -23,6 +23,7 @@ static int GetAlignedSize( int size )
 	if (self = [super init])
 	{
 		delegate = del;
+        [self loadMyNibFile];
 	}
 	return self;
 }
@@ -400,8 +401,6 @@ static int GetAlignedSize( int size )
 }
 
 - (void) showPanelInWindow: (NSWindow *) fWindow forTitle:(hb_title_t *)title {
-    [self loadMyNibFile];
-
     NSSize newSize;
     newSize.width  = 246 + title->width;
     newSize.height = 80 + title->height;
