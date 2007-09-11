@@ -221,6 +221,10 @@
 - (IBAction) openMainWindow: (id) sender;
 
 - (IBAction) addToQueue: (id) sender;
+- (void) overwriteAddToQueueAlertDone: (NSWindow *) sheet
+    returnCode: (int) returnCode contextInfo: (void *) contextInfo;
+- (void)     doAddToQueue;
+
 - (IBAction) showQueueWindow:(id)sender;
 
 - (IBAction)showPreferencesWindow:(id)sender;
@@ -230,10 +234,9 @@
     returnCode: (int) returnCode contextInfo: (void *) contextInfo;
 - (void)     updateAlertDone: (NSWindow *) sheet
     returnCode: (int) returnCode contextInfo: (void *) contextInfo;
-- (void)     _Rip;
+- (void)     doRip;
+
 - (IBAction) Cancel: (id) sender;
-- (void)     _Cancel: (NSWindow *) sheet returnCode: (int) returnCode
-    contextInfo: (void *) contextInfo;
 - (IBAction) Pause: (id) sender;
 
 - (IBAction) calculateBitrate: (id) sender;

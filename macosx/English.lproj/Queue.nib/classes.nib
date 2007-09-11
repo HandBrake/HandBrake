@@ -212,32 +212,31 @@
             }; 
             SUPERCLASS = NSObject; 
         }, 
+        {CLASS = HBImageAndTextCell; LANGUAGE = ObjC; SUPERCLASS = NSTextFieldCell; }, 
         {CLASS = HBPictureGLView; LANGUAGE = ObjC; SUPERCLASS = NSOpenGLView; }, 
         {
             ACTIONS = {
                 cancelCurrentJob = id; 
-                detailChanged = id; 
-                jobGroupsChanged = id; 
+                hideDetail = id; 
                 removeSelectedJob = id; 
+                showDetail = id; 
+                showJobsAsGroups = id; 
+                showJobsAsPasses = id; 
                 showQueueWindow = id; 
-                toggleShowsDetail = id; 
-                toggleShowsJobsAsGroups = id; 
                 toggleStartPause = id; 
             }; 
             CLASS = HBQueueController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
                 fCurrentJobPane = NSView; 
-                fDetailCheckbox = NSButton; 
                 fJobDescTextField = NSTextField; 
-                fJobGroupsCheckbox = NSButton; 
                 fJobIconView = NSImageView; 
+                fOutlineView = NSOutlineView; 
                 fProgressBar = NSProgressIndicator; 
                 fProgressTextField = NSTextField; 
                 fQueueCountField = NSTextField; 
                 fQueuePane = NSView; 
                 fQueueWindow = NSWindow; 
-                fStartPauseButton = NSButton; 
                 fTaskView = NSTableView; 
             }; 
             SUPERCLASS = NSObject; 

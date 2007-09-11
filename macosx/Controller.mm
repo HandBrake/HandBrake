@@ -51,23 +51,6 @@ static NSString *        AddToQueueIdentifier               = @"Add to Queue Ite
 static NSString *        ShowActivityIdentifier             = @"Debug Output Item Identifier";
 static NSString *        ChooseSourceIdentifier             = @"Choose Source Item Identifier";
 
-/**
- * Returns the number of jobs groups in the queue.
- * @param h Handle to hb_handle_t.
- * @return Number of job groups.
- */
-static int hb_group_count(hb_handle_t * h)    
-{
-	hb_job_t * job;
-	int count = 0;
-	int index = 0;
-	while( ( job = hb_job( h, index++ ) ) )
-	{
-		if (job->sequence_id == 0)
-			count++;
-	}
-	return count;
-}
 
 /*******************************
  * HBController implementation *
@@ -101,6 +84,7 @@ static int hb_group_count(hb_handle_t * h)
     /* Init others controllers */
     [fPictureController SetHandle: fHandle];
     [fQueueController   setHandle: fHandle];
+    [fQueueController   setHBController: self];
 	
     fChapterTitlesDelegate = [[ChapterTitles alloc] init];
     [fChapterTable setDataSource:fChapterTitlesDelegate];
@@ -433,7 +417,7 @@ static int hb_group_count(hb_handle_t * h)
 {
     return [NSArray arrayWithObjects:  StartEncodingIdentifier, PauseEncodingIdentifier, AddToQueueIdentifier,
         ChooseSourceIdentifier, ShowQueueIdentifier, ShowActivityIdentifier, ToggleDrawerIdentifier,
-        NSToolbarCustomizeToolbarItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier, NSToolbarSpaceItemIdentifier,
+        NSToolbarCustomizeToolbarItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier,
         NSToolbarSpaceItemIdentifier, NSToolbarSeparatorItemIdentifier, nil];
 }
 
@@ -451,9 +435,9 @@ static int hb_group_count(hb_handle_t * h)
             if ([ident isEqualToString: StartEncodingIdentifier])
             {
                 [toolbarItem setImage: [NSImage imageNamed: @"Stop"]];
-                [toolbarItem setLabel: @"Cancel"];
-                [toolbarItem setPaletteLabel: @"Cancel"];
-                [toolbarItem setToolTip: @"Cancel Encoding"];
+                [toolbarItem setLabel: @"Stop"];
+                [toolbarItem setPaletteLabel: @"Stop"];
+                [toolbarItem setToolTip: @"Stop Encoding"];
                 return YES;
             }
             if ([ident isEqualToString: PauseEncodingIdentifier])
@@ -490,7 +474,10 @@ static int hb_group_count(hb_handle_t * h)
             if ([ident isEqualToString: StartEncodingIdentifier])
             {
                 [toolbarItem setImage: [NSImage imageNamed: @"Play"]];
-                [toolbarItem setLabel: @"Start"];
+                if (hb_count(fHandle) > 0)
+                    [toolbarItem setLabel: @"Start Queue"];
+                else
+                    [toolbarItem setLabel: @"Start"];
                 [toolbarItem setPaletteLabel: @"Start Encoding"];
                 [toolbarItem setToolTip: @"Start Encoding"];
                 return YES;
@@ -707,8 +694,6 @@ static int hb_group_count(hb_handle_t * h)
 		[self showNewScan: NULL];
 	}
 	
-    BOOL jobGroups = [[NSUserDefaults standardUserDefaults] boolForKey:@"QueueShowsJobsAsGroups"];
-	
     hb_state_t s;
     hb_get_state( fHandle, &s );
 	
@@ -768,7 +753,7 @@ static int hb_group_count(hb_handle_t * h)
             [fRipIndicator setDoubleValue: 100.0 * progress_total];
 			
             // If progress bar hasn't been revealed at the bottom of the window, do
-            // that now. This code used to be in _Rip. I moved it to here to handle
+            // that now. This code used to be in doRip. I moved it to here to handle
             // the case where hb_start is called by HBQueueController and not from
             // HBController.
             if (!fRipIndicatorShown)
@@ -832,6 +817,27 @@ static int hb_group_count(hb_handle_t * h)
 			
         case HB_STATE_WORKDONE:
         {
+            // HB_STATE_WORKDONE happpens as a result of hblib finishing all its jobs
+            // or someone calling hb_stop. In the latter case, hb_stop does not clear
+            // out the remaining passes/jobs in the queue. We'll do that here.
+                        
+            // Delete all remaining scans of this job, ie, delete whole encodes.
+            hb_job_t * job;
+            while( ( job = hb_job( fHandle, 0 ) ) && (job->sequence_id != 0) )
+                hb_rem( fHandle, job );
+
+            // Start processing back up if jobs still left in queue
+            if (hb_count(fHandle) > 0)
+            {
+                hb_start(fHandle);
+                fEncodeState = 1;
+                // Validate the toolbar (hack). The toolbar will usually get autovalidated
+                // before we had the chance to restart the queue, hence it will now be in
+                // the wrong state.
+                [toolbar validateVisibleItems];
+                break;
+            }
+
             [fStatusField setStringValue: _( @"Done." )];
             [fRipIndicator setIndeterminate: NO];
             [fRipIndicator setDoubleValue: 0.0];
@@ -840,21 +846,6 @@ static int hb_group_count(hb_handle_t * h)
             /* Restore dock icon */
             [self UpdateDockIcon: -1.0];
 
-            if (jobGroups)
-            {
-                // Delete all remaining scans of this job
-                hb_job_t * job;
-                while( ( job = hb_job( fHandle, 0 ) ) && (job->sequence_id != 0) )
-                    hb_rem( fHandle, job );
-            }
-
-            // Start processing back up if jobs still left in queue
-            if (hb_count(fHandle) > 0)
-            {
-                hb_start(fHandle);
-                break;
-            }
-			
             if (fRipIndicatorShown)
             {
                 NSRect frame = [fWindow frame];
@@ -888,7 +879,7 @@ static int hb_group_count(hb_handle_t * h)
 					/*On Screen Notification*/
 					int status;
 					NSBeep();
-					status = NSRunAlertPanel(@"Put down that cocktail...",@"your HandBrake encode is done!", @"OK", nil, nil);
+					status = NSRunAlertPanel(@"Put down that cocktail...",@"Your HandBrake encode is done!", @"OK", nil, nil);
 					[NSApp requestUserAttention:NSCriticalRequest];
 					if ( status == NSAlertDefaultReturn ) 
 					{
@@ -943,12 +934,12 @@ static int hb_group_count(hb_handle_t * h)
     }
 	
     /* Lets show the queue status here in the main window */
-	int queue_count = jobGroups ? hb_group_count( fHandle ) : hb_count( fHandle );
+	int queue_count = hb_count( fHandle );
 	if( queue_count )
 	{
 		[fQueueStatus setStringValue: [NSString stringWithFormat:
-			@"%d task%s in the queue",
-						 queue_count, ( queue_count > 1 ) ? "s" : ""]];
+			@"%d pass%s in the queue",
+						 queue_count, ( queue_count > 1 ) ? "es" : ""]];
 	}
 	else
 	{
@@ -1540,114 +1531,142 @@ static int hb_group_count(hb_handle_t * h)
 
 
 
+/* addToQueue: puts up an alert before ultimately calling doAddToQueue
+*/
 - (IBAction) addToQueue: (id) sender
 {
-/* We get the destination directory from the destingation field here */
+	/* We get the destination directory from the destination field here */
 	NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
 	/* We check for a valid destination here */
 	if ([[NSFileManager defaultManager] fileExistsAtPath:destinationDirectory] == 0) 
 	{
 		NSRunAlertPanel(@"Warning!", @"This is not a valid destination directory!", @"OK", nil, nil);
+        return;
 	}
-	else
-	{
-		
-		hb_list_t  * list  = hb_get_titles( fHandle );
-		hb_title_t * title = (hb_title_t *) hb_list_item( list,
-														  [fSrcTitlePopUp indexOfSelectedItem] );
-		hb_job_t * job = title->job;
-		
-        // Assign a sequence number, starting at zero, to each job added so they can
-        // be lumped together in the UI.
-        job->sequence_id = -1;
-		
-		[self PrepareJob];
-		
-		/* Destination file */
-		job->file = [[fDstFile2Field stringValue] UTF8String];
 
-                if( [fSubForcedCheck state] == NSOnState )
-                {
-                    job->subtitle_force = 1;
-                } else {
-                    job->subtitle_force = 0;
-                }
+    /* We check for duplicate name here */
+	if( [[NSFileManager defaultManager] fileExistsAtPath:
+            [fDstFile2Field stringValue]] )
+    {
+        NSBeginCriticalAlertSheet( _( @"File already exists" ),
+            _( @"Cancel" ), _( @"Overwrite" ), NULL, fWindow, self,
+            @selector( overwriteAddToQueueAlertDone:returnCode:contextInfo: ),
+            NULL, NULL, [NSString stringWithFormat:
+            _( @"Do you want to overwrite %@?" ),
+            [fDstFile2Field stringValue]] );
+        // overwriteAddToQueueAlertDone: will be called when the alert is dismissed.
+    }
+    else
+    {
+        [self doAddToQueue];
+    }
+}
 
-                /*
-                 * subtitle of -1 is a scan
-                 */
-                if( job->subtitle == -1 )
-                {
-                    char *x264opts_tmp;
+/* overwriteAddToQueueAlertDone: called from the alert posted by addToQueue that asks
+   the user if they want to overwrite an exiting movie file.
+*/
+- (void) overwriteAddToQueueAlertDone: (NSWindow *) sheet
+    returnCode: (int) returnCode contextInfo: (void *) contextInfo
+{
+    if( returnCode == NSAlertAlternateReturn )
+        [self doAddToQueue];
+}
 
-                    /*
-                     * When subtitle scan is enabled do a fast pre-scan job
-                     * which will determine which subtitles to enable, if any.
-                     */
-                    job->pass = -1;
-                    x264opts_tmp = job->x264opts;
-                    job->subtitle = -1;
+- (void) doAddToQueue
+{
+    hb_list_t  * list  = hb_get_titles( fHandle );
+    hb_title_t * title = (hb_title_t *) hb_list_item( list, [fSrcTitlePopUp indexOfSelectedItem] );
+    hb_job_t * job = title->job;
 
-                    job->x264opts = NULL;
-                    
-                    job->indepth_scan = 1;  
+    // Assign a sequence number, starting at zero, to each job added so they can
+    // be lumped together in the UI.
+    job->sequence_id = -1;
 
-                    job->select_subtitle = (hb_subtitle_t**)malloc(sizeof(hb_subtitle_t*));
-                    *(job->select_subtitle) = NULL;
-                    
-                    /*
-                     * Add the pre-scan job
-                     */
-					job->sequence_id++; // for job grouping
-                    hb_add( fHandle, job );
+    [self PrepareJob];
 
-                    job->x264opts = x264opts_tmp;
-                } else {
-                    job->select_subtitle = NULL;
-                }
+    /* Destination file */
+    job->file = [[fDstFile2Field stringValue] UTF8String];
 
-                /* No subtitle were selected, so reset the subtitle to -1 (which before
-                 * this point meant we were scanning
-                 */
-                if( job->subtitle == -2 )
-                {
-                    job->subtitle = -1;
-                }
+    if( [fSubForcedCheck state] == NSOnState )
+        job->subtitle_force = 1;
+    else
+        job->subtitle_force = 0;
 
-		if( [fVidTwoPassCheck state] == NSOnState )
-		{
-            hb_subtitle_t **subtitle_tmp = job->select_subtitle;
-                        job->indepth_scan = 0;
+    /*
+    * subtitle of -1 is a scan
+    */
+    if( job->subtitle == -1 )
+    {
+        char *x264opts_tmp;
 
-			job->pass = 1;
-			job->sequence_id++; // for job grouping
-			hb_add( fHandle, job );
-            
-			job->pass = 2;
-			job->sequence_id++; // for job grouping
-			
-			job->x264opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */  
-			strcpy(job->x264opts, [[fAdvancedOptions optionsString] UTF8String]);
+        /*
+        * When subtitle scan is enabled do a fast pre-scan job
+        * which will determine which subtitles to enable, if any.
+        */
+        job->pass = -1;
+        x264opts_tmp = job->x264opts;
+        job->subtitle = -1;
 
-            job->select_subtitle = subtitle_tmp;
+        job->x264opts = NULL;
 
-			hb_add( fHandle, job );
-		}
-		else
-		{
-                        job->indepth_scan = 0;
-			job->pass = 0;
-			job->sequence_id++; // for job grouping
-			hb_add( fHandle, job );
-		}
+        job->indepth_scan = 1;  
+
+        job->select_subtitle = (hb_subtitle_t**)malloc(sizeof(hb_subtitle_t*));
+        *(job->select_subtitle) = NULL;
+
+        /*
+        * Add the pre-scan job
+        */
+        job->sequence_id++; // for job grouping
+        hb_add( fHandle, job );
+
+        job->x264opts = x264opts_tmp;
+    }
+    else
+        job->select_subtitle = NULL;
+
+    /* No subtitle were selected, so reset the subtitle to -1 (which before
+    * this point meant we were scanning
+    */
+    if( job->subtitle == -2 )
+        job->subtitle = -1;
+
+    if( [fVidTwoPassCheck state] == NSOnState )
+    {
+        hb_subtitle_t **subtitle_tmp = job->select_subtitle;
+        job->indepth_scan = 0;
+
+        job->pass = 1;
+        job->sequence_id++; // for job grouping
+        hb_add( fHandle, job );
+
+        job->pass = 2;
+        job->sequence_id++; // for job grouping
+
+        job->x264opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */  
+        strcpy(job->x264opts, [[fAdvancedOptions optionsString] UTF8String]);
+
+        job->select_subtitle = subtitle_tmp;
+
+        hb_add( fHandle, job );
+    }
+    else
+    {
+        job->indepth_scan = 0;
+        job->pass = 0;
+        job->sequence_id++; // for job grouping
+        hb_add( fHandle, job );
+    }
 	
+    NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
 	[[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];
 	/* Lets try to update stuff, taken from remove in the queue controller */
 	[fQueueController performSelectorOnMainThread: @selector( updateQueueUI )
         withObject: NULL waitUntilDone: NO];
-	}
 }
 
+/* Rip: puts up an alert before ultimately calling doRip
+*/
 - (IBAction) Rip: (id) sender
 {
     /* Rip or Cancel ? */
@@ -1659,17 +1678,26 @@ static int hb_group_count(hb_handle_t * h)
         [self Cancel: sender];
         return;
     }
-	/* if there is no job in the queue, then add it to the queue and rip 
-	otherwise, there are already jobs in queue, so just rip the queue */
-	int count = hb_count( fHandle );
-	if( count < 1 )
-        {
-		[self addToQueue: sender];
-		}
     
-	    /* We check for duplicate name here */
-	if( [[NSFileManager defaultManager] fileExistsAtPath:
-            [fDstFile2Field stringValue]] )
+    // If there are jobs in the queue, then this is a rip the queue
+    
+    if (hb_count( fHandle ) > 0)
+    {
+        [self doRip];
+        return;
+    }
+
+    // Before adding jobs to the queue, check for a valid destination.
+
+    NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:destinationDirectory] == 0) 
+    {
+        NSRunAlertPanel(@"Warning!", @"This is not a valid destination directory!", @"OK", nil, nil);
+        return;
+    }
+
+    /* We check for duplicate name here */
+    if( [[NSFileManager defaultManager] fileExistsAtPath:[fDstFile2Field stringValue]] )
     {
         NSBeginCriticalAlertSheet( _( @"File already exists" ),
             _( @"Cancel" ), _( @"Overwrite" ), NULL, fWindow, self,
@@ -1677,31 +1705,34 @@ static int hb_group_count(hb_handle_t * h)
             NULL, NULL, [NSString stringWithFormat:
             _( @"Do you want to overwrite %@?" ),
             [fDstFile2Field stringValue]] );
-        return;
+            
+        // overWriteAlertDone: will be called when the alert is dismissed. It will call doRip.
     }
-	/* We get the destination directory from the destination field here */
-	NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
-	/* We check for a valid destination here */
-	if ([[NSFileManager defaultManager] fileExistsAtPath:destinationDirectory] == 0) 
-	{
-		NSRunAlertPanel(@"Warning!", @"This is not a valid destination directory!", @"OK", nil, nil);
-	}
-	else
-	{
-	[[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];
-		[self _Rip];
-	}
-	
-
-
+    else
+    {
+        [self doRip];
+    }
 }
 
+/* overWriteAlertDone: called from the alert posted by Rip: that asks the user if they
+   want to overwrite an exiting movie file.
+*/
 - (void) overWriteAlertDone: (NSWindow *) sheet
     returnCode: (int) returnCode contextInfo: (void *) contextInfo
 {
     if( returnCode == NSAlertAlternateReturn )
     {
-        [self _Rip];
+        /* if there is no job in the queue, then add it to the queue and rip 
+        otherwise, there are already jobs in queue, so just rip the queue */
+        int count = hb_count( fHandle );
+        if( count == 0 )
+        {
+            [self doAddToQueue];
+        }
+
+        NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
+        [[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];
+        [self doRip];
     }
 }
 
@@ -1721,7 +1752,7 @@ static int hb_group_count(hb_handle_t * h)
     [NSApp terminate: self];
 }
 
-- (void) _Rip
+- (void) doRip
 {
     /* Let libhb do the job */
     hb_start( fHandle );
@@ -1729,24 +1760,81 @@ static int hb_group_count(hb_handle_t * h)
 	fEncodeState = 1;
 }
 
-- (IBAction) Cancel: (id) sender
+
+
+
+
+//------------------------------------------------------------------------------------
+// Cancels the current job and proceeds with the next one in the queue.
+//------------------------------------------------------------------------------------
+- (void) doCancelCurrentJob
 {
-    NSBeginCriticalAlertSheet( _( @"Cancel - Are you sure?" ),
-        _( @"Keep working" ), _( @"Cancel encoding" ), NULL, fWindow, self,
-        @selector( _Cancel:returnCode:contextInfo: ), NULL, NULL,
-        _( @"Encoding won't be recoverable." ) );
+    // Stop the current job. hb_stop will only cancel the current pass and then set
+    // its state to HB_STATE_WORKDONE. It also does this asynchronously. So when we
+    // see the state has changed to HB_STATE_WORKDONE (in updateUI), we'll delete the
+    // remaining passes of the job and then start the queue back up if there are any
+    // remaining jobs.
+     
+    hb_stop( fHandle );
+    fEncodeState = 2;   // don't alert at end of processing since this was a cancel
+    
 }
 
-- (void) _Cancel: (NSWindow *) sheet
-    returnCode: (int) returnCode contextInfo: (void *) contextInfo
+//------------------------------------------------------------------------------------
+// Displays an alert asking user if the want to cancel encoding of current job.
+// Cancel: returns immediately after posting the alert. Later, when the user
+// acknowledges the alert, doCancelCurrentJob is called.
+//------------------------------------------------------------------------------------
+- (IBAction)Cancel: (id)sender
 {
-    if( returnCode == NSAlertAlternateReturn )
+    if (!fHandle) return;
+    
+    hb_job_t * job = hb_current_job(fHandle);
+    if (!job) return;
+
+    // If command key is down, don't prompt
+    BOOL hasCmdKeyMask = ([[NSApp currentEvent] modifierFlags] & NSCommandKeyMask) != 0;
+    if (hasCmdKeyMask)
+        [self doCancelCurrentJob];
+    else
     {
-        hb_stop( fHandle );
-		/*set the fEncodeState State */
-	     fEncodeState = 2;
+        NSString * alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Do you want to stop encoding of %@?", nil),
+                [NSString stringWithUTF8String:job->title->name]];
+        
+        // Which window to attach the sheet to?
+        NSWindow * docWindow;
+        if ([sender respondsToSelector: @selector(window)])
+            docWindow = [sender window];
+        else
+            docWindow = fWindow;
+            
+        NSBeginCriticalAlertSheet(
+                alertTitle,
+                NSLocalizedString(@"Keep Encoding", nil), NSLocalizedString(@"Stop Encoding", nil), nil, docWindow, self,
+                nil, @selector(didDimissCancelCurrentJob:returnCode:contextInfo:), nil,
+                NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", nil),
+                [NSString stringWithUTF8String:job->title->name]);
+        
+        // didDimissCancelCurrentJob:returnCode:contextInfo: will be called when the dialog is dismissed
+
+        // N.B.: didDimissCancelCurrentJob:returnCode:contextInfo: is designated as the dismiss
+        // selector to prevent a crash. As a dismiss selector, the alert window will
+        // have already be dismissed. If we don't do it this way, the dismissing of
+        // the alert window will cause the table view to be redrawn at a point where
+        // current job has been deleted by hblib but we don't know about it yet. This
+        // is a prime example of wy we need to NOT be relying on hb_current_job!!!!
     }
 }
+
+- (void) didDimissCancelCurrentJob: (NSWindow *)sheet returnCode: (int)returnCode contextInfo: (void *)contextInfo
+{
+    if (returnCode == NSAlertAlternateReturn)
+        [self doCancelCurrentJob];
+}
+
+
+
+
 
 - (IBAction) Pause: (id) sender
 {
