@@ -2744,7 +2744,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 - (IBAction) calculateBitrate: (id) sender
 {
-    if( !fHandle || [fVidQualityMatrix selectedRow] != 0 )
+    if( !fHandle || [fVidQualityMatrix selectedRow] != 0 || !SuccessfulScan )
     {
         return;
     }
