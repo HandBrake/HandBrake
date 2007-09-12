@@ -237,6 +237,8 @@
 - (void)     doRip;
 
 - (IBAction) Cancel: (id) sender;
+- (void)     doCancelCurrentJob;
+
 - (IBAction) Pause: (id) sender;
 
 - (IBAction) calculateBitrate: (id) sender;

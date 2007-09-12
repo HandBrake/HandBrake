@@ -124,16 +124,44 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         withObject: NULL waitUntilDone: NO];
 }
 
-- (NSApplicationTerminateReply) applicationShouldTerminate:
-    (NSApplication *) app
+- (NSApplicationTerminateReply) applicationShouldTerminate: (NSApplication *) app
 {
+    // Warn if encoding a movie
     hb_state_t s;
-    hb_get_state2( fHandle, &s );
-    if ( s.state ==  HB_STATE_WORKING )    
+    hb_get_state( fHandle, &s );
+    hb_job_t * job = hb_current_job( fHandle );
+    if ( job && ( s.state != HB_STATE_IDLE ) )
     {
-        [self Cancel: NULL];
-        return NSTerminateCancel;
-    }    
+        hb_job_t * job = hb_current_job( fHandle );
+        int result = NSRunCriticalAlertPanel(
+                NSLocalizedString(@"Are you sure you want to quit HandBrake?", nil),
+                NSLocalizedString(@"%@ is currently encoding. If you quit HandBrake, your movie will be lost. Do you want to quit anyway?", nil),
+                NSLocalizedString(@"Quit", nil), NSLocalizedString(@"Don't Quit", nil), nil,
+                job ? [NSString stringWithUTF8String:job->title->name] : @"A movie" );
+        
+        if (result == NSAlertDefaultReturn)
+        {
+            [self doCancelCurrentJob];
+            return NSTerminateNow;
+        }
+        else
+            return NSTerminateCancel;
+    }
+    
+    // Warn if items still in the queue
+    else if ( hb_count( fHandle ) > 0 )
+    {
+        int result = NSRunCriticalAlertPanel(
+                NSLocalizedString(@"Are you sure you want to quit HandBrake?", nil),
+                NSLocalizedString(@"One or more encodes are queued for encoding. Do you want to quit anyway?", nil),
+                NSLocalizedString(@"Quit", nil), NSLocalizedString(@"Don't Quit", nil), nil);
+        
+        if ( result == NSAlertDefaultReturn )
+            return NSTerminateNow;
+        else
+            return NSTerminateCancel;
+    }
+    
     return NSTerminateNow;
 }
 
@@ -1710,15 +1738,18 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     }
     else
     {
-        /* We add a the encode to the queue if there is nothing in it and then start our encode.
-           This should be reviewed by travistex to verify queue sync, etc.*/
+        /* if there are no jobs in the queue, then add this one to the queue and rip 
+        otherwise, just rip the queue */
         if( hb_count( fHandle ) == 0)
         {
-            [self doAddToQueue]; 
+            [self doAddToQueue];
         }
+
+        NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
+        [[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];
         [self doRip];
     }
-} 
+}
 
 /* overWriteAlertDone: called from the alert posted by Rip: that asks the user if they
    want to overwrite an exiting movie file.
@@ -1728,10 +1759,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 {
     if( returnCode == NSAlertAlternateReturn )
     {
-        /* if there is no job in the queue, then add it to the queue and rip 
-        otherwise, there are already jobs in queue, so just rip the queue */
-        int count = hb_count( fHandle );
-        if( count == 0 )
+        /* if there are no jobs in the queue, then add this one to the queue and rip 
+        otherwise, just rip the queue */
+        if( hb_count( fHandle ) == 0 )
         {
             [self doAddToQueue];
         }
@@ -1798,38 +1828,31 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     hb_job_t * job = hb_current_job(fHandle);
     if (!job) return;
 
-    // If command key is down, don't prompt
-    BOOL hasCmdKeyMask = ([[NSApp currentEvent] modifierFlags] & NSCommandKeyMask) != 0;
-    if (hasCmdKeyMask)
-        [self doCancelCurrentJob];
+    NSString * alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Do you want to stop encoding of %@?", nil),
+            [NSString stringWithUTF8String:job->title->name]];
+    
+    // Which window to attach the sheet to?
+    NSWindow * docWindow;
+    if ([sender respondsToSelector: @selector(window)])
+        docWindow = [sender window];
     else
-    {
-        NSString * alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Do you want to stop encoding of %@?", nil),
-                [NSString stringWithUTF8String:job->title->name]];
+        docWindow = fWindow;
         
-        // Which window to attach the sheet to?
-        NSWindow * docWindow;
-        if ([sender respondsToSelector: @selector(window)])
-            docWindow = [sender window];
-        else
-            docWindow = fWindow;
-            
-        NSBeginCriticalAlertSheet(
-                alertTitle,
-                NSLocalizedString(@"Keep Encoding", nil), NSLocalizedString(@"Stop Encoding", nil), nil, docWindow, self,
-                nil, @selector(didDimissCancelCurrentJob:returnCode:contextInfo:), nil,
-                NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", nil),
-                [NSString stringWithUTF8String:job->title->name]);
-        
-        // didDimissCancelCurrentJob:returnCode:contextInfo: will be called when the dialog is dismissed
+    NSBeginCriticalAlertSheet(
+            alertTitle,
+            NSLocalizedString(@"Keep Encoding", nil), NSLocalizedString(@"Stop Encoding", nil), nil, docWindow, self,
+            nil, @selector(didDimissCancelCurrentJob:returnCode:contextInfo:), nil,
+            NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", nil),
+            [NSString stringWithUTF8String:job->title->name]);
+    
+    // didDimissCancelCurrentJob:returnCode:contextInfo: will be called when the dialog is dismissed
 
-        // N.B.: didDimissCancelCurrentJob:returnCode:contextInfo: is designated as the dismiss
-        // selector to prevent a crash. As a dismiss selector, the alert window will
-        // have already be dismissed. If we don't do it this way, the dismissing of
-        // the alert window will cause the table view to be redrawn at a point where
-        // current job has been deleted by hblib but we don't know about it yet. This
-        // is a prime example of wy we need to NOT be relying on hb_current_job!!!!
-    }
+    // N.B.: didDimissCancelCurrentJob:returnCode:contextInfo: is designated as the dismiss
+    // selector to prevent a crash. As a dismiss selector, the alert window will
+    // have already be dismissed. If we don't do it this way, the dismissing of
+    // the alert window will cause the table view to be redrawn at a point where
+    // current job has been deleted by hblib but we don't know about it yet. This
+    // is a prime example of wy we need to NOT be relying on hb_current_job!!!!
 }
 
 - (void) didDimissCancelCurrentJob: (NSWindow *)sheet returnCode: (int)returnCode contextInfo: (void *)contextInfo
