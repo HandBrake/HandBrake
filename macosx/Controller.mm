@@ -423,7 +423,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setImage: [NSImage imageNamed: @"Disc"]];
         [item setTarget: self];
         [item setAction: @selector(showScanPanel:)];
-        [item setAutovalidates: NO];
     }
     else
     {
@@ -1000,10 +999,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		   if this is the first successful scan since launch and whether
 		   or not we should set all settings to the defaults */
 		
-        SuccessfulScan = 1;
         currentSuccessfulScanCount++;
-
-		[self enableUI: YES];
 
         [toolbar validateVisibleItems];
 		
@@ -1095,7 +1091,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		[self titlePopUpChanged: NULL];
 		
 		
-		
+        SuccessfulScan = 1;
 		[self enableUI: YES];
 		
 		/* we record the current source name here in case the next scan is unsuccessful,
