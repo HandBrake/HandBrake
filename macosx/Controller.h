@@ -305,5 +305,7 @@
 -(IBAction)showGrowlDoneNotification:(id)sender;
 - (IBAction)showDebugOutputPanel:(id)sender;
 - (void)setupToolbar;
+
+- (void) remindUserOfSleepOrShutdown;
 @end
 

@@ -793,6 +793,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 frame.origin.y -= 36;
                 [fWindow setFrame:frame display:YES animate:YES];
                 fRipIndicatorShown = YES;
+                /* We check to see if we need to warn the user that the computer will go to sleep
+                   or shut down when encoding is finished */
+                [self remindUserOfSleepOrShutdown];
             }
 
             /* Update dock icon */
@@ -1787,6 +1790,36 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [self openHomepage: NULL];
     [NSApp terminate: self];
 }
+
+- (void) remindUserOfSleepOrShutdown
+{
+       if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Put Computer To Sleep"])
+       {
+               /*Warn that computer will sleep after encoding*/
+               int reminduser;
+               NSBeep();
+               reminduser = NSRunAlertPanel(@"The computer will sleep after encoding is done.",@"You have selected to sleep the computer after encoding. To turn off sleeping, go to the HandBrake preferences.", @"OK", @"Preferences...", nil);
+               [NSApp requestUserAttention:NSCriticalRequest];
+               if ( reminduser == NSAlertAlternateReturn ) 
+               {
+                       [self showPreferencesWindow:NULL];
+               }
+       } 
+       else if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Shut Down Computer"])
+       {
+               /*Warn that computer will shut down after encoding*/
+               int reminduser;
+               NSBeep();
+               reminduser = NSRunAlertPanel(@"The computer will shut down after encoding is done.",@"You have selected to shut down the computer after encoding. To turn off shut down, go to the HandBrake preferences.", @"OK", @"Preferences...", nil);
+               [NSApp requestUserAttention:NSCriticalRequest];
+               if ( reminduser == NSAlertAlternateReturn ) 
+               {
+                       [self showPreferencesWindow:NULL];
+               }
+       }
+
+}
+
 
 - (void) doRip
 {
