@@ -347,7 +347,7 @@ int renderInit( hb_work_object_t * w, hb_job_t * job )
                                      title->height - (job->crop[0] + job->crop[1]),
                                      PIX_FMT_YUV420P,
                                      job->width, job->height, PIX_FMT_YUV420P,
-                                     SWS_LANCZOS|SWS_ACCURATE_RND, NULL, NULL, NULL);
+                                     (uint16_t)(SWS_LANCZOS|SWS_ACCURATE_RND), NULL, NULL, NULL);
     }   
     
     /* Setup FIFO queue for subtitle cache */
