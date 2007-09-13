@@ -53,6 +53,7 @@ static int    abitrate    = 0;
 static int    mux         = 0;
 static int    acodec      = 0;
 static int    pixelratio  = 0;
+static int    loosePixelratio = 0;
 static int    chapter_start = 0;
 static int    chapter_end   = 0;
 static int    chapter_markers = 0;
@@ -447,7 +448,6 @@ static int HandleEvents( hb_handle_t * h )
 
             job->deinterlace = deinterlace;
             job->grayscale   = grayscale;
-            job->pixel_ratio = pixelratio;
 
             /* Add selected filters */
             job->filters = hb_list_init();
@@ -471,7 +471,16 @@ static int HandleEvents( hb_handle_t * h )
                 hb_filter_denoise.settings = denoise_opt;
                 hb_list_add( job->filters, &hb_filter_denoise );
             }
-            
+
+            if (loosePixelratio)
+            {
+                job->pixel_ratio = 2;
+            }
+            else
+            {
+                job->pixel_ratio = pixelratio;
+            }
+
             if( width && height )
             {
                 job->width  = width;
@@ -870,6 +879,7 @@ static void ShowHelp()
      "          <L:R:T:B:SB:MP>   (default 1:1:4:4:0:0)\n"
     "    -g, --grayscale         Grayscale encoding\n"
     "    -p, --pixelratio        Store pixel aspect ratio in video stream\n"
+    "    -P, --loosePixelratio   Store pixel aspect ratio with specified x*y\n"
 	
 	"\n"
 	
@@ -945,6 +955,7 @@ static int ParseOptions( int argc, char ** argv )
             { "detelecine",  optional_argument, NULL,    '9' },
             { "grayscale",   no_argument,       NULL,    'g' },
             { "pixelratio",  no_argument,       NULL,    'p' },
+            { "loosePixelratio", no_argument,   NULL,    'P' },
             { "width",       required_argument, NULL,    'w' },
             { "height",      required_argument, NULL,    'l' },
             { "crop",        required_argument, NULL,    'n' },
@@ -969,7 +980,7 @@ static int ParseOptions( int argc, char ** argv )
         int c;
 
         c = getopt_long( argc, argv,
-                         "hvuC:f:4i:o:t:Lc:ma:6:s:UFN:e:E:2d789gpw:l:n:b:q:S:B:r:R:Qx:TY:X:",
+                         "hvuC:f:4i:o:t:Lc:ma:6:s:UFN:e:E:2d789gpPw:l:n:b:q:S:B:r:R:Qx:TY:X:",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -1110,6 +1121,9 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case 'p':
                 pixelratio = 1;
+                break;
+            case 'P':
+                loosePixelratio = 1;
                 break;
             case 'e':
                 if( !strcasecmp( optarg, "ffmpeg" ) )

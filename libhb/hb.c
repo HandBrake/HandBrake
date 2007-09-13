@@ -431,75 +431,90 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
  * @param job Handle to hb_job_t.
  * @param aspect Desired aspect ratio. Value of -1 uses title aspect.
  * @param pixels Maximum desired pixel count.
+ * @param par If true, skip the cropping and keep-aspect-ratio stuff.
  */
-void hb_set_size( hb_job_t * job, int aspect, int pixels )
+void hb_set_size( hb_job_t * job, int aspect, int pixels, int par )
 {
     hb_title_t * title = job->title;
 
     int croppedWidth  = title->width - title->crop[2] - title->crop[3];
     int croppedHeight = title->height - title->crop[0] - title->crop[1];
-    int croppedAspect = title->aspect * title->height * croppedWidth /
-                            croppedHeight / title->width;
-    int addCrop;
-    int i, w, h;
-
-    if( aspect <= 0 )
+   
+    int croppedAspect;
+    if (par)
     {
-        /* Keep the best possible aspect ratio */
+        /* That means we're setting size for video with non-square pixels */
+        croppedAspect = croppedWidth * HB_ASPECT_BASE / croppedHeight;
         aspect = croppedAspect;
     }
-
-    /* Crop if necessary to obtain the desired ratio */
-    memcpy( job->crop, title->crop, 4 * sizeof( int ) );
-    if( aspect < croppedAspect )
+    else
     {
-        /* Need to crop on the left and right */
-        addCrop = croppedWidth - aspect * croppedHeight * title->width /
-                    title->aspect / title->height;
-        if( addCrop & 3 )
-        {
-            addCrop = ( addCrop + 1 ) / 2;
-            job->crop[2] += addCrop;
-            job->crop[3] += addCrop;
-        }
-        else if( addCrop & 2 )
-        {
-            addCrop /= 2;
-            job->crop[2] += addCrop - 1;
-            job->crop[3] += addCrop + 1;
-        }
-        else
-        {
-            addCrop /= 2;
-            job->crop[2] += addCrop;
-            job->crop[3] += addCrop;
-        }
-    }
-    else if( aspect > croppedAspect )
-    {
-        /* Need to crop on the top and bottom */
-        addCrop = croppedHeight - croppedWidth * title->aspect *
-            title->height / aspect / title->width;
-        if( addCrop & 3 )
-        {
-            addCrop = ( addCrop + 1 ) / 2;
-            job->crop[0] += addCrop;
-            job->crop[1] += addCrop;
-        }
-        else if( addCrop & 2 )
-        {
-            addCrop /= 2;
-            job->crop[0] += addCrop - 1;
-            job->crop[1] += addCrop + 1;
-        }
-        else
-        {
-            addCrop /= 2;
-            job->crop[0] += addCrop;
-            job->crop[1] += addCrop;
-        }
-    }
+        /* We're free to change cropping and maintain display aspect ratio */
+        croppedAspect = title->aspect * title->height * croppedWidth /
+            croppedHeight / title->width;
+           
+        int addCrop;
 
+        if( aspect <= 0 )
+        {
+            /* Keep the best possible aspect ratio */
+            aspect = croppedAspect;
+        }
+
+        /* Crop if necessary to obtain the desired ratio */
+        memcpy( job->crop, title->crop, 4 * sizeof( int ) );
+        if( aspect < croppedAspect )
+        {
+            /* Need to crop on the left and right */
+            addCrop = croppedWidth - aspect * croppedHeight * title->width /
+                        title->aspect / title->height;
+            if( addCrop & 3 )
+            {
+                addCrop = ( addCrop + 1 ) / 2;
+                job->crop[2] += addCrop;
+                job->crop[3] += addCrop;
+            }
+            else if( addCrop & 2 )
+            {
+                addCrop /= 2;
+                job->crop[2] += addCrop - 1;
+                job->crop[3] += addCrop + 1;
+            }
+            else
+            {
+                addCrop /= 2;
+                job->crop[2] += addCrop;
+                job->crop[3] += addCrop;
+            }
+        }
+        else if( aspect > croppedAspect )
+        {
+            /* Need to crop on the top and bottom */
+            addCrop = croppedHeight - croppedWidth * title->aspect *
+                title->height / aspect / title->width;
+            if( addCrop & 3 )
+            {
+                addCrop = ( addCrop + 1 ) / 2;
+                job->crop[0] += addCrop;
+                job->crop[1] += addCrop;
+            }
+            else if( addCrop & 2 )
+            {
+                addCrop /= 2;
+                job->crop[0] += addCrop - 1;
+                job->crop[1] += addCrop + 1;
+            }
+            else
+            {
+                addCrop /= 2;
+                job->crop[0] += addCrop;
+                job->crop[1] += addCrop;
+            }
+        }
+
+    }
+   
+    int i, w, h;
     /* Compute a resolution from the number of pixels and aspect */
     for( i = 0;; i++ )
     {
