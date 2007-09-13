@@ -115,7 +115,7 @@
     else if ([ident isEqualToString: TOOLBAR_ADVANCED])
     {
         [item setLabel: NSLocalizedString(@"Advanced", "Advanced")];
-//        [item setImage: [NSImage imageNamed: @"pref-advanced"]];
+        [item setImage: [NSImage imageNamed: @"pref-advanced"]];
         [item setTarget: self];
         [item setAction: @selector(setPrefView:)];
         [item setAutovalidates: NO];

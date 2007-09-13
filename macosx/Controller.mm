@@ -364,7 +364,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setLabel: @"Toggle Presets"];
         [item setPaletteLabel: @"Toggler Presets"];
         [item setToolTip: @"Open/Close Preset Drawer"];
-        [item setImage: [NSImage imageNamed: @"Drawer-List2"]];
+        [item setImage: [NSImage imageNamed: @"Drawer"]];
         [item setTarget: self];
         [item setAction: @selector(toggleDrawer:)];
         [item setAutovalidates: NO];
@@ -383,7 +383,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setLabel: @"Show Queue"];
         [item setPaletteLabel: @"Show Queue"];
         [item setToolTip: @"Show Queue"];
-        [item setImage: [NSImage imageNamed: @"Brushed Window"]];
+        [item setImage: [NSImage imageNamed: @"Queue"]];
         [item setTarget: self];
         [item setAction: @selector(showQueueWindow:)];
         [item setAutovalidates: NO];
@@ -393,7 +393,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setLabel: @"Add to Queue"];
         [item setPaletteLabel: @"Add to Queue"];
         [item setToolTip: @"Add to Queue"];
-        [item setImage: [NSImage imageNamed: @"Add"]];
+        [item setImage: [NSImage imageNamed: @"AddToQueue"]];
         [item setTarget: self];
         [item setAction: @selector(addToQueue:)];
     }
@@ -410,7 +410,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setLabel: @"Activity Window"];
         [item setPaletteLabel: @"Show Activity Window"];
         [item setToolTip: @"Show Activity Window"];
-        [item setImage: [NSImage imageNamed: @"Terminal"]];
+        [item setImage: [NSImage imageNamed: @"ActivityWindow"]];
         [item setTarget: self];
         [item setAction: @selector(showDebugOutputPanel:)];
         [item setAutovalidates: NO];
@@ -420,7 +420,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setLabel: @"Source"];
         [item setPaletteLabel: @"Source"];
         [item setToolTip: @"Choose Video Source"];
-        [item setImage: [NSImage imageNamed: @"Disc"]];
+        [item setImage: [NSImage imageNamed: @"Source"]];
         [item setTarget: self];
         [item setAction: @selector(showScanPanel:)];
     }
