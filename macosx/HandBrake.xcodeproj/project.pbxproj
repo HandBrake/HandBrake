@@ -304,15 +304,15 @@
 		A29E057F0BE1283E000533F5 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Growl.framework; sourceTree = "<group>"; };
 		A2A1EC300C76C35E00827E0D /* HBDVDDetector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = HBDVDDetector.h; sourceTree = "<group>"; };
 		A2A1EC390C76C58400827E0D /* HBDVDDetector.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = HBDVDDetector.m; sourceTree = "<group>"; };
-		A2D7AD5E0C998AD30082CA33 /* ActivityWindow.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = ActivityWindow.tiff; path = icons/ActivityWindow.tiff; sourceTree = "<group>"; };
-		A2D7AD5F0C998AD30082CA33 /* AddToQueue.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = AddToQueue.tiff; path = icons/AddToQueue.tiff; sourceTree = "<group>"; };
-		A2D7AD600C998AD30082CA33 /* Drawer.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Drawer.tiff; path = icons/Drawer.tiff; sourceTree = "<group>"; };
-		A2D7AD610C998AD30082CA33 /* pref-advanced.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "pref-advanced.tiff"; path = "icons/pref-advanced.tiff"; sourceTree = "<group>"; };
-		A2D7AD620C998AD30082CA33 /* pref-audio.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "pref-audio.tiff"; path = "icons/pref-audio.tiff"; sourceTree = "<group>"; };
-		A2D7AD630C998AD30082CA33 /* pref-general.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "pref-general.tiff"; path = "icons/pref-general.tiff"; sourceTree = "<group>"; };
-		A2D7AD640C998AD30082CA33 /* pref-picture.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "pref-picture.tiff"; path = "icons/pref-picture.tiff"; sourceTree = "<group>"; };
-		A2D7AD650C998AD30082CA33 /* Queue.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Queue.tiff; path = icons/Queue.tiff; sourceTree = "<group>"; };
-		A2D7AD660C998AD30082CA33 /* Source.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Source.tiff; path = icons/Source.tiff; sourceTree = "<group>"; };
+		A2D7AD5E0C998AD30082CA33 /* ActivityWindow.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = ActivityWindow.tiff; sourceTree = "<group>"; };
+		A2D7AD5F0C998AD30082CA33 /* AddToQueue.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = AddToQueue.tiff; sourceTree = "<group>"; };
+		A2D7AD600C998AD30082CA33 /* Drawer.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Drawer.tiff; sourceTree = "<group>"; };
+		A2D7AD610C998AD30082CA33 /* pref-advanced.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "pref-advanced.tiff"; sourceTree = "<group>"; };
+		A2D7AD620C998AD30082CA33 /* pref-audio.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "pref-audio.tiff"; sourceTree = "<group>"; };
+		A2D7AD630C998AD30082CA33 /* pref-general.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "pref-general.tiff"; sourceTree = "<group>"; };
+		A2D7AD640C998AD30082CA33 /* pref-picture.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "pref-picture.tiff"; sourceTree = "<group>"; };
+		A2D7AD650C998AD30082CA33 /* Queue.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Queue.tiff; sourceTree = "<group>"; };
+		A2D7AD660C998AD30082CA33 /* Source.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Source.tiff; sourceTree = "<group>"; };
 		A2DFC66C0C6196D900E66E89 /* actionWidget.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = actionWidget.png; sourceTree = "<group>"; };
 		A2DFC66D0C6196D900E66E89 /* actionWidgetPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = actionWidgetPressed.png; sourceTree = "<group>"; };
 		A2DFC6740C6197C600E66E89 /* MVMenuButton.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MVMenuButton.h; sourceTree = "<group>"; };
@@ -423,15 +423,6 @@
 		29B97314FDCFA39411CA2CEA /* HandBrake */ = {
 			isa = PBXGroup;
 			children = (
-				A2D7AD5E0C998AD30082CA33 /* ActivityWindow.tiff */,
-				A2D7AD5F0C998AD30082CA33 /* AddToQueue.tiff */,
-				A2D7AD600C998AD30082CA33 /* Drawer.tiff */,
-				A2D7AD610C998AD30082CA33 /* pref-advanced.tiff */,
-				A2D7AD620C998AD30082CA33 /* pref-audio.tiff */,
-				A2D7AD630C998AD30082CA33 /* pref-general.tiff */,
-				A2D7AD640C998AD30082CA33 /* pref-picture.tiff */,
-				A2D7AD650C998AD30082CA33 /* Queue.tiff */,
-				A2D7AD660C998AD30082CA33 /* Source.tiff */,
 				526FBC940B4CAA310064E04C /* Instant HandBrake Sources */,
 				526FBC930B4CAA260064E04C /* HandBrake Sources */,
 				526FBC920B4CAA120064E04C /* HandBrakeCLI Sources */,
@@ -586,6 +577,15 @@
 		A273E0460C57B39A00493A45 /* icons */ = {
 			isa = PBXGroup;
 			children = (
+				A2D7AD5E0C998AD30082CA33 /* ActivityWindow.tiff */,
+				A2D7AD5F0C998AD30082CA33 /* AddToQueue.tiff */,
+				A2D7AD600C998AD30082CA33 /* Drawer.tiff */,
+				A2D7AD610C998AD30082CA33 /* pref-advanced.tiff */,
+				A2D7AD620C998AD30082CA33 /* pref-audio.tiff */,
+				A2D7AD630C998AD30082CA33 /* pref-general.tiff */,
+				A2D7AD640C998AD30082CA33 /* pref-picture.tiff */,
+				A2D7AD650C998AD30082CA33 /* Queue.tiff */,
+				A2D7AD660C998AD30082CA33 /* Source.tiff */,
 				A91C68A10C967D83003ADAD1 /* pref-audio.png */,
 				A94537550C95E6A300EBB9B1 /* pref-picture.png */,
 				A96041070C96FC5C00CBAB1E /* pref-general.png */,

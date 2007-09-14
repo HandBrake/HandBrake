@@ -1007,11 +1007,23 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		for( int i = 0; i < hb_list_count( list ); i++ )
 		{
 			title = (hb_title_t *) hb_list_item( list, i );
+			
+            currentSource = [NSString stringWithUTF8String: title->dvd];
+            
+            /* To get the source name as well as the default output name, first we check to see if
+               the selected directory is the VIDEO_TS Directory */
+            if ([[currentSource lastPathComponent] isEqualToString: @"VIDEO_TS"])
+            {
+            /* If VIDEO_TS Folder is chosen, choose its parent folder for the source display name */
+            sourceDisplayName = [NSString stringWithFormat:[[currentSource stringByDeletingLastPathComponent] lastPathComponent]];
+            }
+            else
+            {
+            /* if not the VIDEO_TS Folder, we can assume the chosen folder is the source name */
+            sourceDisplayName = [NSString stringWithFormat:[currentSource lastPathComponent]];
+            }
 			/*Set DVD Name at top of window*/
-			[fSrcDVD2Field setStringValue:[NSString stringWithUTF8String: title->name]];
-			
-			currentSource = [NSString stringWithUTF8String: title->dvd];
-			
+			[fSrcDVD2Field setStringValue:[NSString stringWithFormat: @"%@", sourceDisplayName]];
 			
 			/* Use the dvd name in the default output field here 
 				May want to add code to remove blank spaces for some dvd names*/
@@ -1019,14 +1031,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 			if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"])
 			{
 				[fDstFile2Field setStringValue: [NSString stringWithFormat:
-					@"%@/%@.mp4", [[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"],[NSString
-                  stringWithUTF8String: title->name]]];
+					@"%@/%@.mp4", [[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"],sourceDisplayName]];
 			}
 			else
 			{
 				[fDstFile2Field setStringValue: [NSString stringWithFormat:
-					@"%@/Desktop/%@.mp4", NSHomeDirectory(),[NSString
-                  stringWithUTF8String: title->name]]];
+					@"%@/Desktop/%@.mp4", NSHomeDirectory(),sourceDisplayName]];
 			}
 			
 			
@@ -1094,11 +1104,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         SuccessfulScan = 1;
 		[self enableUI: YES];
 		
-		/* we record the current source name here in case the next scan is unsuccessful,
-				then we can replace the scan progress with the old name if necessary */
-       sourceDisplayName = [NSString stringWithFormat:[fSrcDVD2Field stringValue]];
-       
-       /* if its the initial successful scan after awakeFromNib */
+		/* if its the initial successful scan after awakeFromNib */
 	   if (currentSuccessfulScanCount == 1)
 	   {
            [self selectDefaultPreset: NULL];
