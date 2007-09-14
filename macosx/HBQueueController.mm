@@ -6,14 +6,15 @@
 
 #include "HBQueueController.h"
 #include "Controller.h"
+#import "HBImageAndTextCell.h"
 
-#define HB_QUEUE_DRAGGING 0
-#define HBQueueDataType         @"HBQueueDataType"
+#define HB_QUEUE_DRAGGING 0        // <--- NOT COMPLETELY FUNCTIONAL YET
+#define HBQueueDataType            @"HBQueueDataType"
 
 // UNI_QUEUE turns on the feature where the first item in the queue NSTableView is the
 // current job followed by the jobs in hblib's queue. In this scheme, fCurrentJobPane
 // disappers.
-#define HB_UNI_QUEUE 0
+#define HB_UNI_QUEUE 0             // <--- NOT COMPLETELY FUNCTIONAL YET
 
 #define HB_ROW_HEIGHT_DETAIL       98.0
 #define HB_ROW_HEIGHT_NO_DETAIL    17.0
@@ -91,6 +92,7 @@ static void hb_rem_group( hb_handle_t * h, hb_job_t * job )
     }
 }
 
+#if HB_OUTLINE_QUEUE
 /**
  * Returns handle to the next job after the given job.
  * @param h Handle to hb_handle_t.
@@ -108,6 +110,7 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
     }
     return NULL;
 }
+#endif
 
 #pragma mark -
 //------------------------------------------------------------------------------------
@@ -148,15 +151,22 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
 
 @end
 
+
+
+
+
 #endif // HB_OUTLINE_QUEUE
 
 #pragma mark -
 
 // Toolbar identifiers
-static NSString*    HBQueueToolbar                            = @"HBQueueToolbar";
-static NSString*    HBStartPauseResumeToolbarIdentifier       = @"HBStartPauseResumeToolbarIdentifier";
-static NSString*    HBShowDetailToolbarIdentifier             = @"HBShowDetailToolbarIdentifier";
-static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsToolbarIdentifier";
+static NSString*    HBQueueToolbar                            = @"HBQueueToolbar1";
+static NSString*    HBQueueStartCancelToolbarIdentifier       = @"HBQueueStartCancelToolbarIdentifier";
+static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseResumeToolbarIdentifier";
+#if !HB_OUTLINE_QUEUE
+static NSString*    HBShowDetailToolbarIdentifier             = @"HBQueueShowDetailToolbarIdentifier";
+static NSString*    HBShowGroupsToolbarIdentifier             = @"HBQueueShowGroupsToolbarIdentifier";
+#endif
 
 
 @implementation HBQueueController
@@ -175,10 +185,11 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
             @"YES",     @"QueueShowsJobsAsGroups",
             nil]];
 
-        fShowsDetail = [[NSUserDefaults standardUserDefaults] boolForKey:@"QueueShowsDetail"];
 #if HB_OUTLINE_QUEUE
+        fShowsDetail = YES;
         fShowsJobsAsGroups = YES;
 #else
+        fShowsDetail = [[NSUserDefaults standardUserDefaults] boolForKey:@"QueueShowsDetail"];
         fShowsJobsAsGroups = [[NSUserDefaults standardUserDefaults] boolForKey:@"QueueShowsJobsAsGroups"];
 #endif
 
@@ -202,6 +213,7 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
     
 #if HB_OUTLINE_QUEUE
     [fEncodes release];
+    [fSavedExpandedItems release];
 #endif
 
     [super dealloc];
@@ -294,26 +306,22 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
 //------------------------------------------------------------------------------------
 - (void)setShowsDetail: (BOOL)showsDetail
 {
+#if HB_OUTLINE_QUEUE
+    return; // Can't modify this value. It's always YES.
+#else
     fShowsDetail = showsDetail;
     
     [[NSUserDefaults standardUserDefaults] setBool:showsDetail forKey:@"QueueShowsDetail"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 
     [fTaskView setRowHeight:showsDetail ? HB_ROW_HEIGHT_DETAIL : HB_ROW_HEIGHT_NO_DETAIL];
-#if HB_UNI_QUEUE
+  #if HB_UNI_QUEUE
     if (hb_count(fHandle))
         [fTaskView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:0]];
-#endif
-#if HB_OUTLINE_QUEUE
-
-        [fOutlineView noteHeightOfRowsWithIndexesChanged:
-            [NSIndexSet indexSetWithIndexesInRange:
-                NSMakeRange(0,[fOutlineView numberOfRows])
-                ]];
-#endif
-
+  #endif
     if ([fTaskView selectedRow] != -1)
         [fTaskView scrollRowToVisible:[fTaskView selectedRow]];
+#endif
 }
 
 //------------------------------------------------------------------------------------
@@ -323,7 +331,7 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
 {
 #if HB_OUTLINE_QUEUE
     return; // Can't modify this value. It's always YES.
-#endif
+#else
     fShowsJobsAsGroups = showsGroups;
     
     [[NSUserDefaults standardUserDefaults] setBool:showsGroups forKey:@"QueueShowsJobsAsGroups"];
@@ -332,6 +340,7 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
     [self updateQueueUI];
     if ([fTaskView selectedRow] != -1)
         [fTaskView scrollRowToVisible:[fTaskView selectedRow]];
+#endif
 }
 
 //------------------------------------------------------------------------------------
@@ -368,9 +377,11 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
 //------------------------------------------------------------------------------------
 - (void)rebuildEncodes
 {
-    [fEncodes removeAllObjects];
+    [fEncodes autorelease];
+    fEncodes = [[NSMutableArray arrayWithCapacity:0] retain];
 
     NSMutableArray * aJobGroup = [NSMutableArray arrayWithCapacity:0];
+
     hb_job_t * nextJob = hb_group( fHandle, 0 );
     while( nextJob )
     {
@@ -387,7 +398,118 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
         nextJob = hb_next_job (fHandle, nextJob);
     }
     if ([aJobGroup count] > 0)
+    {
         [fEncodes addObject:aJobGroup];
+    }
+}
+#endif
+
+#if HB_OUTLINE_QUEUE
+//------------------------------------------------------------------------------------
+// Saves the state of the items that are currently expanded. Calling restoreExpandedItems
+// will restore the state of all items to match what was saved by saveExpandedItems.
+//------------------------------------------------------------------------------------
+- (void) saveExpandedItems
+{
+    if (!fSavedExpandedItems)
+        fSavedExpandedItems = [[NSMutableIndexSet alloc] init];
+    else
+        [fSavedExpandedItems removeAllIndexes];
+    
+    // NB: This code is stuffing the address of each job into an index set. While it
+    // works 99.9% of the time, it's not the ideal solution. We need unique ids in
+    // each job, possibly using the existing sequence_id field. Could use the high
+    // word as a unique encode id and the low word the sequence number.
+    
+    id anEncode;
+    NSEnumerator * e = [fEncodes objectEnumerator];
+    while ( (anEncode = [e nextObject]) )
+    {
+        if ([fOutlineView isItemExpanded: anEncode])
+            [fSavedExpandedItems addIndex: (unsigned int)[[anEncode objectAtIndex:0] job]];
+    }
+    
+    // Save the selection also. This is really UGLY code. Since I have to rebuild the
+    // entire outline hierachy every time hblib changes its job list, there's no easy
+    // way for me to remember the selection state. So here's the strategy. If a *group*
+    // object is selected, then the first hb_job_t item in the group is saved in
+    // fSavedSelectedItem. If a job is selected, then its hb_job_t item is saved. To
+    // distinguish between a group being selected vs an actual job, the high bit of
+    // fSavedSelectedItem is set when it refers to a job object. I know, not pretty.
+    // This could go away if I'd save a unique id in each job object.
+
+    int selection = [fOutlineView selectedRow];
+    if (selection == -1)
+        fSavedSelectedItem = 0;
+    else
+    {
+        id obj = [fOutlineView itemAtRow: selection];
+        if ([obj isKindOfClass:[HBJob class]])
+            fSavedSelectedItem = (unsigned int)[obj job] | 0x80000000;  // set high bit!
+        else
+            fSavedSelectedItem = (unsigned int)[[obj objectAtIndex:0] job];
+    }
+    
+}
+#endif
+
+#if HB_OUTLINE_QUEUE
+//------------------------------------------------------------------------------------
+// Restores the expanded state of items in the outline view to match those saved by a
+// previous call to saveExpandedItems.
+//------------------------------------------------------------------------------------
+- (void) restoreExpandedItems
+{
+    if (fSavedExpandedItems)
+    {
+        id anEncode;
+        NSEnumerator * e = [fEncodes objectEnumerator];
+        while ( (anEncode = [e nextObject]) )
+        {
+            hb_job_t * j = [[anEncode objectAtIndex:0] job];
+            if ([fSavedExpandedItems containsIndex: (unsigned int)j])
+                [fOutlineView expandItem: anEncode];
+        }
+    }
+    
+    if (fSavedSelectedItem)
+    {
+        // Ugh. Have to cycle through each row looking for the previously selected job.
+        // See the explanation in saveExpandedItems about the logic here.
+        
+        // Find out if the selection was a job or a group.
+        BOOL isJob = (fSavedSelectedItem & 0x80000000) == 0x80000000;
+        // Find out what hb_job_t was selected
+        hb_job_t * j = (hb_job_t *)(fSavedSelectedItem & ~0x80000000); // strip high bit
+        
+        int rowToSelect = -1;
+        for (int i = 0; i < [fOutlineView numberOfRows]; i++)
+        {
+            id obj = [fOutlineView itemAtRow: i];
+            if (isJob && [obj isKindOfClass:[HBJob class]])
+            {
+                // For a job in the outline view, test to see if it is a match
+                if ([obj job] == j)
+                {
+                    rowToSelect = i;
+                    break;
+                }
+            }
+            else if (!isJob && ![obj isKindOfClass:[HBJob class]])
+            {
+                // For a group, test to see if the group's first job is a match
+                if ([[obj objectAtIndex:0] job] == j)
+                {
+                    rowToSelect = i;
+                    break;
+                }
+            }
+        }
+        if (rowToSelect == -1)
+            [fOutlineView deselectAll: nil];
+        else
+            [fOutlineView selectRow:rowToSelect byExtendingSelection:NO];
+    }
 }
 #endif
 
@@ -442,6 +564,7 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
 
     // The subtitle scan doesn't contain all the stuff we need (like x264opts).
     // So grab the next job in the group for display purposes.
+/*
     if (fShowsJobsAsGroups && job->pass == -1)
     {
         // When job is the one currently being processed, then the next in its group
@@ -454,6 +577,7 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
         if (nextjob)    // Overly cautious in case there is no next job!
             job = nextjob;
     }
+*/
 
     if (withTitle)
     {
@@ -469,14 +593,22 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
         }
         else
         {
+            int numPasses = MIN( 2, job->pass + 1 );
             if (fShowsJobsAsGroups)
-                [aMutableString appendString:[NSString stringWithFormat:
-                        @"  (Title %d, %@, %d-Pass)",
-                        title->index, chapterString, MIN( 2, job->pass + 1 )]];
+            {
+                if (numPasses == 1)
+                    [aMutableString appendString:[NSString stringWithFormat:
+                        @"  (Title %d, %@, 1 Passes)",
+                        title->index, chapterString]];
+                else
+                    [aMutableString appendString:[NSString stringWithFormat:
+                        @"  (Title %d, %@, %d Passes)",
+                        title->index, chapterString, numPasses]];
+            }
             else
                 [aMutableString appendString:[NSString stringWithFormat:
                         @"  (Title %d, %@, Pass %d of %d)",
-                        title->index, chapterString, MAX( 1, job->pass ), MIN( 2, job->pass + 1 )]];
+                        title->index, chapterString, MAX( 1, job->pass ), numPasses]];
         }
     }
     
@@ -484,7 +616,12 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
     
     
     // Normal pass - show detail
-    if (withDetail && job->pass != -1)
+    if (withDetail && job->pass == -1)
+    {
+        [aMutableString appendString:@"Subtitle Pass"];
+    }
+    
+    else if (withDetail && job->pass != -1)
     {
         NSString * jobFormat;
         NSString * jobPictureDetail;
@@ -493,6 +630,22 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
         NSString * jobVideoQuality;
         NSString * jobAudioDetail;
         NSString * jobAudioCodec;
+
+        if ([aMutableString length] != 0)
+            [aMutableString appendString:@"\n"];
+        
+//        if (job->pass == -1)
+//            [aMutableString appendString:@"Subtitle Pass"];
+//        else
+        {
+            int passNum = MAX( 1, job->pass );
+            if (passNum == 1)
+                [aMutableString appendString:@"1st Pass"];
+            else if (passNum == 2)
+                [aMutableString appendString:@"2nd Pass"];
+            else
+                [aMutableString appendString:[NSString stringWithFormat: @"Pass %d", passNum]];
+        }
 
         /* Muxer settings (File Format in the gui) */
         if (job->mux == 65536 || job->mux == 131072 || job->mux == 1048576)
@@ -626,7 +779,7 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
                 jobAudioDetail = [jobAudioDetail stringByAppendingString:[NSString stringWithFormat:@", Track %d: 6-channel discreet",ai + 1]];
         }
         
-        /* Add the Audio detail string to the job filed in the window */
+        /* Add the Audio detail string to the job field in the window */
         [aMutableString appendString:[NSString stringWithFormat: @"\n%@", jobAudioDetail]];
         
         /*Destination Field */
@@ -859,12 +1012,15 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
 - (void)updateQueueUI
 {
 #if HB_OUTLINE_QUEUE
+    [self saveExpandedItems];
     [self rebuildEncodes];
     [fOutlineView noteNumberOfRowsChanged];
     [fOutlineView reloadData];
-#endif
+    [self restoreExpandedItems];
+#else
     [fTaskView noteNumberOfRowsChanged];
     [fTaskView reloadData];
+#endif
     
     [self updateQueueCountField];
 }
@@ -893,10 +1049,15 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
                 hb_rem( fHandle, hb_job( fHandle, row ) );
         }
 #else
+  #if HB_OUTLINE_QUEUE
+        hb_job_t * job = [[[fOutlineView itemAtRow: row] objectAtIndex: 0] job];
+        hb_rem_group( fHandle, job );
+  #else
         if (fShowsJobsAsGroups)
             hb_rem_group( fHandle, hb_group( fHandle, row ) );
         else
             hb_rem( fHandle, hb_job( fHandle, row ) );
+  #endif
 #endif
         [self updateQueueUI];
     }
@@ -952,19 +1113,18 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
 }
 
 //------------------------------------------------------------------------------------
-// Toggles the processing of jobs on or off depending on the current state
+// Starts or cancels the processing of jobs depending on the current state
 //------------------------------------------------------------------------------------
-- (IBAction)toggleStartPause: (id)sender
+- (IBAction)toggleStartCancel: (id)sender
 {
     if (!fHandle) return;
     
     hb_state_t s;
     hb_get_state2 (fHandle, &s);
 
-    if (s.state == HB_STATE_PAUSED)
-        hb_resume (fHandle);
-    else if ((s.state == HB_STATE_WORKING) || (s.state == HB_STATE_MUXING))
-        hb_pause (fHandle);
+    if ((s.state == HB_STATE_PAUSED) || (s.state == HB_STATE_WORKING) || (s.state == HB_STATE_MUXING))
+        [fHBController Cancel: fQueuePane]; // sender == fQueuePane so that warning alert shows up on queue window
+
     else
     {
         if (fShowsJobsAsGroups)
@@ -976,6 +1136,37 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
             [fHBController doRip];
     }    
 }
+
+//------------------------------------------------------------------------------------
+// Toggles the pause/resume state of hblib
+//------------------------------------------------------------------------------------
+- (IBAction)togglePauseResume: (id)sender
+{
+    if (!fHandle) return;
+    
+    hb_state_t s;
+    hb_get_state2 (fHandle, &s);
+
+    if (s.state == HB_STATE_PAUSED)
+        hb_resume (fHandle);
+    else if ((s.state == HB_STATE_WORKING) || (s.state == HB_STATE_MUXING))
+        hb_pause (fHandle);
+}
+
+#if HB_OUTLINE_METRIC_CONTROLS
+static float spacingWidth = 3.0;
+- (IBAction)imageSpacingChanged: (id)sender;
+{
+    spacingWidth = [sender floatValue];
+    [fOutlineView setNeedsDisplay: YES];
+}
+- (IBAction)indentChanged: (id)sender
+{
+    [fOutlineView setIndentationPerLevel: [sender floatValue]];
+    [fOutlineView setNeedsDisplay: YES];
+}
+#endif
+
 
 #pragma mark -
 #pragma mark Toolbar
@@ -1013,13 +1204,13 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
     
     NSToolbarItem *toolbarItem = nil;
     
-    if ([itemIdentifier isEqual: HBStartPauseResumeToolbarIdentifier])
+    if ([itemIdentifier isEqual: HBQueueStartCancelToolbarIdentifier])
     {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdentifier] autorelease];
 		
         // Set the text label to be displayed in the toolbar and customization palette 
 		[toolbarItem setLabel: @"Start"];
-		[toolbarItem setPaletteLabel: @"Start/Pause"];
+		[toolbarItem setPaletteLabel: @"Start/Cancel"];
 		
 		// Set up a reasonable tooltip, and image
 		[toolbarItem setToolTip: @"Start Encoding"];
@@ -1027,9 +1218,27 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
 		
 		// Tell the item what message to send when it is clicked 
 		[toolbarItem setTarget: self];
-		[toolbarItem setAction: @selector(toggleStartPause:)];
+		[toolbarItem setAction: @selector(toggleStartCancel:)];
 	}
     
+    if ([itemIdentifier isEqual: HBQueuePauseResumeToolbarIdentifier])
+    {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdentifier] autorelease];
+		
+        // Set the text label to be displayed in the toolbar and customization palette 
+		[toolbarItem setLabel: @"Pause"];
+		[toolbarItem setPaletteLabel: @"Pause/Resume"];
+		
+		// Set up a reasonable tooltip, and image
+		[toolbarItem setToolTip: @"Pause Encoding"];
+		[toolbarItem setImage: [NSImage imageNamed: @"Pause"]];
+		
+		// Tell the item what message to send when it is clicked 
+		[toolbarItem setTarget: self];
+		[toolbarItem setAction: @selector(togglePauseResume:)];
+	}
+    
+#if !HB_OUTLINE_QUEUE
     else if ([itemIdentifier isEqual: HBShowDetailToolbarIdentifier])
     {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdentifier] autorelease];
@@ -1134,6 +1343,7 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
 		[toolbarItem setAction: @selector(jobGroupsChanged:)];
 */
 	}
+#endif
     
     return toolbarItem;
 }
@@ -1147,10 +1357,13 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
     // toolbar by default.
     
     return [NSArray arrayWithObjects:
-        HBStartPauseResumeToolbarIdentifier,
+        HBQueueStartCancelToolbarIdentifier,
+        HBQueuePauseResumeToolbarIdentifier,
+#if !HB_OUTLINE_QUEUE
 		NSToolbarSeparatorItemIdentifier,
 		HBShowGroupsToolbarIdentifier,
         HBShowDetailToolbarIdentifier,
+#endif
         nil];
 }
 
@@ -1164,9 +1377,12 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
     // separator. So, every allowed item must be explicitly listed.
 
     return [NSArray arrayWithObjects:
-        HBStartPauseResumeToolbarIdentifier,
+        HBQueueStartCancelToolbarIdentifier,
+        HBQueuePauseResumeToolbarIdentifier,
+#if !HB_OUTLINE_QUEUE
 		HBShowGroupsToolbarIdentifier,
         HBShowDetailToolbarIdentifier,
+#endif
 		NSToolbarCustomizeToolbarItemIdentifier,
 		NSToolbarFlexibleSpaceItemIdentifier,
         NSToolbarSpaceItemIdentifier,
@@ -1189,24 +1405,14 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
     hb_state_t s;
     hb_get_state2 (fHandle, &s);
 
-    if ([[toolbarItem itemIdentifier] isEqual: HBStartPauseResumeToolbarIdentifier])
+    if ([[toolbarItem itemIdentifier] isEqual: HBQueueStartCancelToolbarIdentifier])
     {
-        if (s.state == HB_STATE_PAUSED)
+        if ((s.state == HB_STATE_PAUSED) || (s.state == HB_STATE_WORKING) || (s.state == HB_STATE_MUXING))
         {
             enable = YES;
-            [toolbarItem setImage:[NSImage imageNamed: @"Play"]];
-			[toolbarItem setLabel: @"Resume"];
-			[toolbarItem setPaletteLabel: @"Resume"];
-			[toolbarItem setToolTip: @"Resume Encoding"];
-       }
-        
-        else if ((s.state == HB_STATE_WORKING) || (s.state == HB_STATE_MUXING))
-        {
-            enable = YES;
-            [toolbarItem setImage:[NSImage imageNamed: @"Pause"]];
-			[toolbarItem setLabel: @"Pause"];
-			[toolbarItem setPaletteLabel: @"Pause"];
-			[toolbarItem setToolTip: @"Pause Encoding"];
+            [toolbarItem setImage:[NSImage imageNamed: @"Stop"]];
+			[toolbarItem setLabel: @"Stop"];
+			[toolbarItem setToolTip: @"Stop Encoding"];
         }
 
         else if (hb_count(fHandle) > 0)
@@ -1214,7 +1420,6 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
             enable = YES;
             [toolbarItem setImage:[NSImage imageNamed: @"Play"]];
 			[toolbarItem setLabel: @"Start"];
-			[toolbarItem setPaletteLabel: @"Start"];
 			[toolbarItem setToolTip: @"Start Encoding"];
         }
 
@@ -1223,11 +1428,37 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
             enable = NO;
             [toolbarItem setImage:[NSImage imageNamed: @"Play"]];
 			[toolbarItem setLabel: @"Start"];
-			[toolbarItem setPaletteLabel: @"Start"];
 			[toolbarItem setToolTip: @"Start Encoding"];
         }
 	}
     
+    if ([[toolbarItem itemIdentifier] isEqual: HBQueuePauseResumeToolbarIdentifier])
+    {
+        if (s.state == HB_STATE_PAUSED)
+        {
+            enable = YES;
+            [toolbarItem setImage:[NSImage imageNamed: @"Play"]];
+			[toolbarItem setLabel: @"Resume"];
+			[toolbarItem setToolTip: @"Resume Encoding"];
+       }
+        
+        else if ((s.state == HB_STATE_WORKING) || (s.state == HB_STATE_MUXING))
+        {
+            enable = YES;
+            [toolbarItem setImage:[NSImage imageNamed: @"Pause"]];
+			[toolbarItem setLabel: @"Pause"];
+			[toolbarItem setToolTip: @"Pause Encoding"];
+        }
+        else
+        {
+            enable = NO;
+            [toolbarItem setImage:[NSImage imageNamed: @"Pause"]];
+			[toolbarItem setLabel: @"Pause"];
+			[toolbarItem setToolTip: @"Pause Encoding"];
+        }
+	}
+    
+#if !HB_OUTLINE_QUEUE
     else if ([[toolbarItem itemIdentifier] isEqual: HBShowGroupsToolbarIdentifier])
     {
         enable = hb_count(fHandle) > 0;
@@ -1259,6 +1490,7 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
             [toolbarItem setToolTip: @"Displays detailed information in the queue"];
         }
     }
+#endif
 
 	return enable;
 }
@@ -1276,21 +1508,38 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
         [fQueueWindow center];
     [fQueueWindow setFrameAutosaveName: @"Queue"];
     [fQueueWindow setExcludedFromWindowsMenu:YES];
-    
-    // Show/hide UI elements
-    [self setShowsDetail:fShowsDetail];
-    [self setShowsJobsAsGroups:fShowsJobsAsGroups];
-    [self showCurrentJobPane:NO];
+
+#if HB_OUTLINE_QUEUE
+    [[fOutlineView enclosingScrollView] setHidden: NO];
+#else
+    [[fTaskView enclosingScrollView] setHidden: NO];
+#endif
 
 #if HB_QUEUE_DRAGGING
+  #if HB_OUTLINE_QUEUE
+    [fOutlineView registerForDraggedTypes: [NSArray arrayWithObject:HBQueueDataType] ];
+  #else
     [fTaskView registerForDraggedTypes: [NSArray arrayWithObject:HBQueueDataType] ];
+  #endif
 #endif
 
 #if HB_OUTLINE_QUEUE
     // Don't allow autoresizing of main column, else the "delete" column will get
     // pushed out of view.
     [fOutlineView setAutoresizesOutlineColumn: NO];
+    [fOutlineView setIndentationPerLevel:21];
 #endif
+#if HB_OUTLINE_METRIC_CONTROLS
+    [fIndentation setHidden: NO];
+    [fSpacing setHidden: NO];
+    [fIndentation setIntValue:[fOutlineView indentationPerLevel]];  // debug
+    [fSpacing setIntValue:3];       // debug
+#endif
+
+    // Show/hide UI elements
+    [self setShowsDetail:fShowsDetail];
+    [self setShowsJobsAsGroups:fShowsJobsAsGroups];
+    [self showCurrentJobPane:NO];
 }
 
 
@@ -1450,6 +1699,8 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
 }
 #endif
 
+#pragma mark -
+#pragma mark NSOutlineView delegate
 
 #if HB_OUTLINE_QUEUE
 
@@ -1476,8 +1727,22 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
 
 - (float)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item
 {
-    if (fShowsDetail && [item isKindOfClass:[HBJob class]])
+/*
+    if (fShowsDetail && [item isKindOfClass:[HBJob class]] && ([item job]->pass != -1))
         return HB_ROW_HEIGHT_DETAIL;
+    else
+        return HB_ROW_HEIGHT_NO_DETAIL;
+*/
+
+    if (fShowsDetail && [item isKindOfClass:[HBJob class]])
+    {
+        hb_job_t * j = [item job];
+        NSAssert (j != nil, @"job is nil");
+        if (j->pass != -1)
+            return HB_ROW_HEIGHT_DETAIL;
+        else
+            return HB_ROW_HEIGHT_NO_DETAIL;
+    }
     else
         return HB_ROW_HEIGHT_NO_DETAIL;
 }
@@ -1490,7 +1755,8 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
         if ([[tableColumn identifier] isEqualToString:@"desc"])
         {
             hb_job_t * job = [item job];
-//            return [self attributedDescriptionForJob:job withTitle:NO withDetail:fShowsDetail withHighlighting:highlighted];
+            return [self attributedDescriptionForJob:job withTitle:NO withDetail:fShowsDetail withHighlighting:highlighted];
+/*
             if (job->pass == -1)
                 return @"Subtitle Scan";
             else
@@ -1500,9 +1766,9 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
                     return @"1st Pass";
                 if (passNum == 2)
                     return @"2nd Pass";
-                else
-                    return [NSString stringWithFormat: @"Pass %d", passNum];
+                return [NSString stringWithFormat: @"Pass %d", passNum];
             }
+*/
         }
     }
     
@@ -1520,6 +1786,13 @@ static NSString*    HBShowGroupsToolbarIdentifier             = @"HBShowGroupsTo
 {
     if ([[tableColumn identifier] isEqualToString:@"desc"])
     {
+#if HB_OUTLINE_METRIC_CONTROLS
+        NSSize theSize = [cell imageSpacing];
+        theSize.width = spacingWidth;
+        [cell setImageSpacing: theSize];
+#endif
+        
+        // Set the image here since the value returned from outlineView:objectValueForTableColumn: didn't specify the image part
         if ([item isKindOfClass:[HBJob class]])
             [cell setImage:[self smallImageForPass: [item job]->pass]];
         else

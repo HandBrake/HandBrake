@@ -1828,6 +1828,15 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 
 
+//------------------------------------------------------------------------------------
+// Removes all jobs from the queue. Does not cancel the current processing job.
+//------------------------------------------------------------------------------------
+- (void) doDeleteQueuedJobs
+{
+    hb_job_t * job;
+    while( ( job = hb_job( fHandle, 0 ) ) )
+        hb_rem( fHandle, job );
+}
 
 //------------------------------------------------------------------------------------
 // Cancels the current job and proceeds with the next one in the queue.
@@ -1869,7 +1878,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         
     NSBeginCriticalAlertSheet(
             alertTitle,
-            NSLocalizedString(@"Keep Encoding", nil), NSLocalizedString(@"Stop Encoding", nil), nil, docWindow, self,
+            NSLocalizedString(@"Keep Encoding", nil),
+            NSLocalizedString(@"Delete All", nil),
+            NSLocalizedString(@"Stop Encoding", nil),
+            docWindow, self,
             nil, @selector(didDimissCancelCurrentJob:returnCode:contextInfo:), nil,
             NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", nil),
             [NSString stringWithUTF8String:job->title->name]);
@@ -1886,8 +1898,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 - (void) didDimissCancelCurrentJob: (NSWindow *)sheet returnCode: (int)returnCode contextInfo: (void *)contextInfo
 {
-    if (returnCode == NSAlertAlternateReturn)
+    if (returnCode == NSAlertOtherReturn)
         [self doCancelCurrentJob];
+    else if (returnCode == NSAlertAlternateReturn)
+    {
+        [self doDeleteQueuedJobs];
+        [self doCancelCurrentJob];
+    }
 }
 
 

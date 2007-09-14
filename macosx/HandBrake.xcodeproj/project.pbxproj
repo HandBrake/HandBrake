@@ -161,6 +161,8 @@
 		E371678E0C92F6180072B384 /* JobPassSecondLarge.png in Resources */ = {isa = PBXBuildFile; fileRef = E37167880C92F6180072B384 /* JobPassSecondLarge.png */; };
 		E37167A90C92FAA50072B384 /* JobPassUnknownSmall.png in Resources */ = {isa = PBXBuildFile; fileRef = E37167A70C92FAA50072B384 /* JobPassUnknownSmall.png */; };
 		E37167AA0C92FAA50072B384 /* JobPassUnknownLarge.png in Resources */ = {isa = PBXBuildFile; fileRef = E37167A80C92FAA50072B384 /* JobPassUnknownLarge.png */; };
+		E37172670C977D340072B384 /* HBImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E37172650C977D340072B384 /* HBImageAndTextCell.m */; };
+		E37172680C977D340072B384 /* HBImageAndTextCell.h in Headers */ = {isa = PBXBuildFile; fileRef = E37172660C977D340072B384 /* HBImageAndTextCell.h */; };
 		E37C89410C83988F00C1B919 /* DeleteHighlight.png in Resources */ = {isa = PBXBuildFile; fileRef = E37C893D0C83988F00C1B919 /* DeleteHighlight.png */; };
 		E37C89420C83988F00C1B919 /* Delete.png in Resources */ = {isa = PBXBuildFile; fileRef = E37C893E0C83988F00C1B919 /* Delete.png */; };
 		E37C89430C83988F00C1B919 /* JobSmall.png in Resources */ = {isa = PBXBuildFile; fileRef = E37C893F0C83988F00C1B919 /* JobSmall.png */; };
@@ -342,6 +344,8 @@
 		E37167880C92F6180072B384 /* JobPassSecondLarge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JobPassSecondLarge.png; sourceTree = "<group>"; };
 		E37167A70C92FAA50072B384 /* JobPassUnknownSmall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JobPassUnknownSmall.png; sourceTree = "<group>"; };
 		E37167A80C92FAA50072B384 /* JobPassUnknownLarge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JobPassUnknownLarge.png; sourceTree = "<group>"; };
+		E37172650C977D340072B384 /* HBImageAndTextCell.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = HBImageAndTextCell.m; sourceTree = "<group>"; };
+		E37172660C977D340072B384 /* HBImageAndTextCell.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = HBImageAndTextCell.h; sourceTree = "<group>"; };
 		E37C893D0C83988F00C1B919 /* DeleteHighlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DeleteHighlight.png; sourceTree = "<group>"; };
 		E37C893E0C83988F00C1B919 /* Delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Delete.png; sourceTree = "<group>"; };
 		E37C893F0C83988F00C1B919 /* JobSmall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JobSmall.png; sourceTree = "<group>"; };
@@ -561,6 +565,8 @@
 				E37C89450C83989F00C1B919 /* HBQueueController.mm */,
 				A9AC41DE0C918DB500DDF9B8 /* HBAdvancedController.h */,
 				A9AC41DD0C918DB500DDF9B8 /* HBAdvancedController.m */,
+				E37172660C977D340072B384 /* HBImageAndTextCell.h */,
+				E37172650C977D340072B384 /* HBImageAndTextCell.m */,
 			);
 			name = "HandBrake Sources";
 			sourceTree = "<group>";
@@ -651,6 +657,7 @@
 				25DE1FB60C169A0C00F01FC8 /* HBPreferencesController.h in Headers */,
 				E37C89480C83989F00C1B919 /* HBQueueController.h in Headers */,
 				A9AC41E00C918DB500DDF9B8 /* HBAdvancedController.h in Headers */,
+				E37172680C977D340072B384 /* HBImageAndTextCell.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -965,6 +972,7 @@
 				A2DFC6770C61980700E66E89 /* MVMenuButton.m in Sources */,
 				E37C89470C83989F00C1B919 /* HBQueueController.mm in Sources */,
 				A9AC41DF0C918DB500DDF9B8 /* HBAdvancedController.m in Sources */,
+				E37172670C977D340072B384 /* HBImageAndTextCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

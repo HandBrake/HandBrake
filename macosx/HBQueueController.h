@@ -11,7 +11,8 @@
 @class HBController;
 
 // HB_OUTLINE_QUEUE turns on an outline view for the queue.
-#define HB_OUTLINE_QUEUE 0
+#define HB_OUTLINE_QUEUE 1
+#define HB_OUTLINE_METRIC_CONTROLS 0    // for tweaking the outline cell spacings
 
 
 @interface HBQueueController : NSObject
@@ -23,8 +24,9 @@
     BOOL                         fShowsJobsAsGroups;
     BOOL                         fShowsDetail;
 #if HB_OUTLINE_QUEUE
-    NSMutableArray               *fEncodes;
-    IBOutlet NSOutlineView       *fOutlineView;
+    NSMutableArray               *fEncodes;   // hblib's job list organized in a hierarchy. Contents are HBJobs.
+    NSMutableIndexSet            *fSavedExpandedItems;
+    unsigned int                 fSavedSelectedItem;
 #endif
     
     //  +---------------fQueueWindow----------------+
@@ -55,8 +57,16 @@
     
     // fQueuePane - always visible; fills entire window when fCurrentJobPane is hidden
     IBOutlet NSView              *fQueuePane;
+#if HB_OUTLINE_QUEUE
+    IBOutlet NSOutlineView       *fOutlineView;
+#else
     IBOutlet NSTableView         *fTaskView;
+#endif
     IBOutlet NSTextField         *fQueueCountField;
+#if HB_OUTLINE_METRIC_CONTROLS
+    IBOutlet NSSlider            *fIndentation; // debug
+    IBOutlet NSSlider            *fSpacing;     // debug
+#endif
     
 }
 
@@ -72,6 +82,12 @@
 - (IBAction)hideDetail: (id)sender;
 - (IBAction)showJobsAsGroups: (id)sender;
 - (IBAction)showJobsAsPasses: (id)sender;
-- (IBAction)toggleStartPause: (id)sender;
+- (IBAction)toggleStartCancel: (id)sender;
+- (IBAction)togglePauseResume: (id)sender;
+
+#if HB_OUTLINE_METRIC_CONTROLS
+- (IBAction)imageSpacingChanged: (id)sender;
+- (IBAction)indentChanged: (id)sender;
+#endif
 
 @end

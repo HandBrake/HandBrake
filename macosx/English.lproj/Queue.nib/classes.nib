@@ -218,17 +218,21 @@
             ACTIONS = {
                 cancelCurrentJob = id; 
                 hideDetail = id; 
+                imageSpacingChanged = id; 
+                indentChanged = id; 
                 removeSelectedJob = id; 
                 showDetail = id; 
                 showJobsAsGroups = id; 
                 showJobsAsPasses = id; 
                 showQueueWindow = id; 
-                toggleStartPause = id; 
+                togglePauseResume = id; 
+                toggleStartCancel = id; 
             }; 
             CLASS = HBQueueController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
                 fCurrentJobPane = NSView; 
+                fIndentation = NSSlider; 
                 fJobDescTextField = NSTextField; 
                 fJobIconView = NSImageView; 
                 fOutlineView = NSOutlineView; 
@@ -237,6 +241,7 @@
                 fQueueCountField = NSTextField; 
                 fQueuePane = NSView; 
                 fQueueWindow = NSWindow; 
+                fSpacing = NSSlider; 
                 fTaskView = NSTableView; 
             }; 
             SUPERCLASS = NSObject; 
