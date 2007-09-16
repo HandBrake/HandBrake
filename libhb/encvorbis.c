@@ -56,12 +56,21 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
 
     hb_log( "encvorbis: opening libvorbis" );
 
+    /* 28kbps/channel seems to be the minimum for 6ch vorbis. */
+    int min_bitrate = 28 * pv->out_discrete_channels;
+    if (pv->out_discrete_channels > 2 && job->abitrate < min_bitrate)
+    {
+        hb_log( "encvorbis: Selected bitrate (%d kbps) too low for %d channel audio.", job->abitrate, pv->out_discrete_channels);
+        hb_log( "encvorbis: Resetting bitrate to %d kbps", min_bitrate);
+        job->abitrate = min_bitrate;
+    }
+
     /* init */
     vorbis_info_init( &pv->vi );
     if( vorbis_encode_setup_managed( &pv->vi, pv->out_discrete_channels,
           job->arate, -1, 1000 * job->abitrate, -1 ) )
     {
-        hb_log( "encvorbis: vorbis_encode_setup_managed failed" );
+        hb_error( "encvorbis: vorbis_encode_setup_managed failed.\n" );
         *job->die = 1;
         return 0;
     }
@@ -77,7 +86,7 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
     if( vorbis_encode_ctl( &pv->vi, OV_ECTL_RATEMANAGE2_SET, &ctl_rate_arg ) ||
           vorbis_encode_setup_init( &pv->vi ) )
     {
-        hb_log( "encvorbis: vorbis_encode_ctl( ratemanage2_set ) OR vorbis_encode_setup_init failed" );
+        hb_error( "encvorbis: vorbis_encode_ctl( ratemanage2_set ) OR vorbis_encode_setup_init failed.\n" );
         *job->die = 1;
         return 0;
     }
@@ -144,8 +153,9 @@ void encvorbisClose( hb_work_object_t * w )
     vorbis_dsp_clear( &pv->vd );
     vorbis_comment_clear( &pv->vc );
     vorbis_info_clear( &pv->vi );
-    
-    hb_list_empty( &pv->list );
+
+    if (pv->list)
+        hb_list_empty( &pv->list );
     
     free( pv->buf );
     free( pv );

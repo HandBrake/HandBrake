@@ -326,9 +326,9 @@ static void do_job( hb_job_t * job, int cpu_count )
         /* audioCodecsSupportMono and audioCodecsSupport6Ch are the same for now,
            but this may change in the future, so they are separated for flexibility */
         int audioCodecsSupportMono = ((audio->codec == HB_ACODEC_AC3 ||
-            audio->codec == HB_ACODEC_DCA) && job->acodec == HB_ACODEC_FAAC);
+            audio->codec == HB_ACODEC_DCA) && (job->acodec == HB_ACODEC_FAAC || job->acodec == HB_ACODEC_VORBIS));
         int audioCodecsSupport6Ch =  ((audio->codec == HB_ACODEC_AC3 ||
-            audio->codec == HB_ACODEC_DCA) && job->acodec == HB_ACODEC_FAAC);
+            audio->codec == HB_ACODEC_DCA) && (job->acodec == HB_ACODEC_FAAC || job->acodec == HB_ACODEC_VORBIS));
 
         /* find out what the format of our source audio is */
         switch (audio->input_channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK) {
