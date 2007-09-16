@@ -6,6 +6,14 @@
 
 #include "PictureController.h"
 
+@interface PictureController (Private)
+
+- (NSSize)optimalViewSizeForImageSize: (NSSize)imageSize;
+- (void)resizeSheetForViewSize: (NSSize)viewSize;
+- (void)setViewSize: (NSSize)viewSize;
+
+@end
+
 static int GetAlignedSize( int size )
 {
     int result = 1;
@@ -204,6 +212,7 @@ static int GetAlignedSize( int size )
 	int arpheight = fTitle->job->pixel_aspect_height;
 	int displayparwidth = titlewidth * arpwidth / arpheight;
 	int displayparheight = fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1];
+    
 	if (fTitle->job->pixel_ratio == 1)
 	{
 	
@@ -221,6 +230,18 @@ static int GetAlignedSize( int size )
         fTitle->job->width, fTitle->job->height]];	
 	}
 
+    // Show the scaled text
+    NSSize viewSize = [fPictureGLView frame].size;
+    if( ((int)viewSize.width) != fTitle->width )
+    {
+        float scale = viewSize.width / ((float)fTitle->width);
+        NSString *scaleString = [NSString stringWithFormat:
+            NSLocalizedString( @" (Preview scaled to %.0f%% actual size)",
+                               @"String shown when a preview is scaled" ),
+            scale * 100.0];
+        [fInfoField setStringValue:
+            [[fInfoField stringValue] stringByAppendingString:scaleString]];
+    }
 
     [fPrevButton setEnabled: ( fPicture > 0 )];
     [fNextButton setEnabled: ( fPicture < 9 )];
@@ -412,16 +433,20 @@ static int GetAlignedSize( int size )
     fPictureFilterSettings.denoise = setting;
 }
 
-- (void) showPanelInWindow: (NSWindow *) fWindow forTitle:(hb_title_t *)title {
-    NSSize newSize;
-    newSize.width  = 246 + title->width;
-    newSize.height = 80 + title->height;
-    [fPicturePanel setContentSize: newSize];
+- (void)showPanelInWindow: (NSWindow *)fWindow forTitle: (hb_title_t *)title
+{
+    NSSize viewSize = [self optimalViewSizeForImageSize:NSMakeSize( title->width,
+                                                                    title->height )];
+    [self resizeSheetForViewSize:viewSize];
+    [self setViewSize:viewSize];
 
-    [self SetTitle: title];
-
-    [NSApp beginSheet: fPicturePanel modalForWindow: fWindow
-        modalDelegate: NULL didEndSelector: NULL contextInfo: NULL];
+    [self SetTitle:title];
+    
+    [NSApp beginSheet:fPicturePanel
+       modalForWindow:fWindow
+        modalDelegate:nil
+       didEndSelector:nil
+          contextInfo:NULL];
 }
 
 - (BOOL) loadMyNibFile
@@ -433,6 +458,106 @@ static int GetAlignedSize( int size )
     }
     
     return YES;
+}
+
+@end
+
+@implementation PictureController (Private)
+
+//
+// -[PictureController(Private) optimalViewSizeForImageSize:]
+//
+// Given the size of the preview image to be shown, returns the best possible
+// size for the OpenGL view.
+//
+- (NSSize)optimalViewSizeForImageSize: (NSSize)imageSize
+{
+    // The min size is 320x240
+    float minWidth = 320.0;
+    float minHeight = 240.0;
+    
+    // The max size of the view is when the sheet is taking up 85% of the screen.
+    NSSize screenSize = [[NSScreen mainScreen] frame].size;
+    NSSize sheetSize = [fPicturePanel frame].size;
+    NSSize viewAreaSize = [fPictureGLViewArea frame].size;
+    float paddingX = sheetSize.width - viewAreaSize.width;
+    float paddingY = sheetSize.height - viewAreaSize.height;
+    float maxWidth = (0.85 * screenSize.width) - paddingX;
+    float maxHeight = (0.85 * screenSize.height) - paddingY;
+    
+    NSSize resultSize = imageSize;
+    
+    // Its better to have a view that's too small than a view that's too big, so
+    // apply the maximum constraints last.
+    if( resultSize.width < minWidth )
+    {
+        resultSize.height *= (minWidth / resultSize.width);
+        resultSize.width = minWidth;
+    }
+    if( resultSize.height < minHeight )
+    {
+        resultSize.width *= (minHeight / resultSize.height);
+        resultSize.height = minHeight;
+    }
+    if( resultSize.width > maxWidth )
+    {
+        resultSize.height *= (maxWidth / resultSize.width);
+        resultSize.width = maxWidth;
+    }
+    if( resultSize.height > maxHeight )
+    {
+        resultSize.width *= (maxHeight / resultSize.height);
+        resultSize.height = maxHeight;
+    }
+    
+    return resultSize;
+}
+
+//
+// -[PictureController(Private) resizePanelForViewSize:]
+//
+// Resizes the entire sheet to accomodate an OpenGL view of a particular size.
+//
+- (void)resizeSheetForViewSize: (NSSize)viewSize
+{
+    // Figure out the deltas for the new frame area
+    NSSize currentSize = [fPictureGLViewArea frame].size;
+    float deltaX = viewSize.width - currentSize.width;
+    float deltaY = viewSize.height - currentSize.height;
+    
+    // Now resize the whole panel by those same deltas, but don't exceed the min
+    NSRect frame = [fPicturePanel frame];
+    NSSize maxSize = [fPicturePanel maxSize];
+    NSSize minSize = [fPicturePanel minSize];
+    frame.size.width += deltaX;
+    frame.size.height += deltaY;
+    if( frame.size.width < minSize.width )
+    {
+        frame.size.width = minSize.width;
+    }
+    if( frame.size.height < minSize.height )
+    {
+        frame.size.height = minSize.height;
+    }
+    
+    [fPicturePanel setFrame:frame display:YES];
+}
+
+//
+// -[PictureController(Private) setViewSize:]
+//
+// Changes the OpenGL view's size and centers it vertially inside of its area.
+// Assumes resizeSheetForViewSize: has already been called.
+//
+- (void)setViewSize: (NSSize)viewSize
+{
+    [fPictureGLView setFrameSize:viewSize];
+    
+    // center it vertically
+    NSPoint origin = [fPictureGLViewArea frame].origin;
+    origin.y += ([fPictureGLViewArea frame].size.height -
+                 [fPictureGLView frame].size.height) / 2.0;
+    [fPictureGLView setFrameOrigin:origin];
 }
 
 @end

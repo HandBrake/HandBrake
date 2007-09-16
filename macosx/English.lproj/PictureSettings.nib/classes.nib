@@ -2,6 +2,7 @@
     IBClasses = (
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {CLASS = HBPictureGLView; LANGUAGE = ObjC; SUPERCLASS = NSOpenGLView; }, 
+        {CLASS = NSObject; LANGUAGE = ObjC; }, 
         {
             ACTIONS = {
                 ClosePanel = id; 
@@ -12,6 +13,7 @@
             CLASS = PictureController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
+                delegate = id; 
                 fCropBottomField = NSTextField; 
                 fCropBottomStepper = NSStepper; 
                 fCropLeftField = NSTextField; 
@@ -31,6 +33,7 @@
                 fNextButton = NSButton; 
                 fPARCheck = NSButton; 
                 fPictureGLView = HBPictureGLView; 
+                fPictureGLViewArea = NSBox; 
                 fPicturePanel = NSPanel; 
                 fPrevButton = NSButton; 
                 fRatioCheck = NSButton; 

@@ -24,6 +24,7 @@
     IBOutlet NSPanel         * fPicturePanel;
 
     IBOutlet HBPictureGLView * fPictureGLView;
+    IBOutlet NSBox           * fPictureGLViewArea;
     IBOutlet NSTextField     * fWidthField;
     IBOutlet NSStepper       * fWidthStepper;
     IBOutlet NSTextField     * fHeightField;
@@ -80,7 +81,7 @@
 - (int) denoise;
 - (void) setDenoise: (int) setting;
 
-- (void) showPanelInWindow: (NSWindow *) fWindow forTitle:(hb_title_t *)title;
+- (void)showPanelInWindow: (NSWindow *)fWindow forTitle: (hb_title_t *)title;
 - (BOOL) loadMyNibFile;
 @end
 
