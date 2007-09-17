@@ -1,0 +1,17 @@
+Index: encoder/slicetype.c
+===================================================================
+--- encoder/slicetype.c (revision 665)
++++ encoder/slicetype.c (working copy)
+@@ -379,7 +379,12 @@
+         return;
+     frames[0] = h->frames.last_nonb;
+     for( j = 0; h->frames.next[j]; j++ )
++    {
++        // if the app wants an IDR, give it to them
++        if ( h->frames.next[j]->i_type == X264_TYPE_IDR )
++            return;
+         frames[j+1] = h->frames.next[j];
++    }
+     keyint_limit = h->param.i_keyint_max - frames[0]->i_frame + h->frames.i_last_idr - 1;
+     num_frames = X264_MIN( j, keyint_limit );
+     if( num_frames == 0 )

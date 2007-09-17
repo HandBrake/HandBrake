@@ -38,6 +38,7 @@ struct hb_work_private_s
 
     int64_t        dts_write_index;
     int64_t        dts_read_index;
+    int64_t        next_chap;
 
     char             filename[1024];
 };
@@ -232,6 +233,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
     pv->dts_write_index = 0;
     pv->dts_read_index = 0;
+    pv->next_chap = 0;
 
     return 0;
 }
@@ -276,7 +278,25 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     job->height / 4, job->width * job->height / 4 );
         }
 
-        pv->pic_in.i_type    = X264_TYPE_AUTO;
+        if( in->new_chap && job->chapter_markers )
+        {
+            /* chapters have to start with an IDR frame so request that this
+               frame be coded as IDR. Since there may be up to 16 frames
+               currently buffered in the encoder remember the timestamp so
+               when this frame finally pops out of the encoder we'll mark
+               its buffer as the start of a chapter. */
+            pv->pic_in.i_type = X264_TYPE_IDR;
+            if( pv->next_chap == 0 )
+            {
+                pv->next_chap = in->start;
+            }
+            /* don't let 'work_loop' put a chapter mark on the wrong buffer */
+            in->new_chap = 0;
+        }
+        else
+        {
+            pv->pic_in.i_type = X264_TYPE_AUTO;
+        }
         pv->pic_in.i_qpplus1 = 0;
 
         // Remember current PTS value, use as DTS later
@@ -365,6 +385,15 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     /*  Decide what type of frame we have. */
                         case X264_TYPE_IDR:
                             buf->frametype = HB_FRAME_IDR;
+                            /* if we have a chapter marker pending and this
+                               frame's presentation time stamp is at or after
+                               the marker's time stamp, use this as the
+                               chapter start. */
+                            if( pv->next_chap != 0 && pv->next_chap <= pic_out.i_pts )
+                            {
+                                pv->next_chap = 0;
+                                buf->new_chap = 1;
+                            }
                             break;
                         case X264_TYPE_I:
                             buf->frametype = HB_FRAME_I;
