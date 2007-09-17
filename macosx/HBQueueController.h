@@ -24,9 +24,10 @@
     BOOL                         fShowsJobsAsGroups;
     BOOL                         fShowsDetail;
 #if HB_OUTLINE_QUEUE
-    NSMutableArray               *fEncodes;   // hblib's job list organized in a hierarchy. Contents are HBJobs.
+    NSMutableArray               *fEncodes;   // hblib's job list organized in a hierarchy. Contents are NSArrays of HBJobs.
     NSMutableIndexSet            *fSavedExpandedItems;
     unsigned int                 fSavedSelectedItem;
+    hb_job_t                     *fLastKnownCurrentJob;
 #endif
     
     //  +---------------fQueueWindow----------------+
