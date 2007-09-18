@@ -11,6 +11,7 @@
 - (NSSize)optimalViewSizeForImageSize: (NSSize)imageSize;
 - (void)resizeSheetForViewSize: (NSSize)viewSize;
 - (void)setViewSize: (NSSize)viewSize;
+- (BOOL)viewNeedsToResizeToSize: (NSSize)newSize;
 
 @end
 
@@ -115,10 +116,9 @@ static int GetAlignedSize( int size )
     
 	/* Set deinterlaces level according to the integer in the main window */
 	[fDeinterlacePopUp selectItemAtIndex: fPictureFilterSettings.deinterlace];
-	
-	
-	[fPARCheck  setState:    job->pixel_ratio ? NSOnState : NSOffState];
-    
+
+	[fPARCheck setState:(job->pixel_ratio ? NSOnState : NSOffState)];
+
 	if (!autoCrop)
 	{
         [fCropMatrix  selectCellAtRow: 1 column:0];
@@ -212,27 +212,33 @@ static int GetAlignedSize( int size )
 	int arpheight = fTitle->job->pixel_aspect_height;
 	int displayparwidth = titlewidth * arpwidth / arpheight;
 	int displayparheight = fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1];
-    
-	if (fTitle->job->pixel_ratio == 1)
-	{
-	
-	[fInfoField setStringValue: [NSString stringWithFormat:
-	@"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d", fTitle->width, fTitle->height,
-	titlewidth, displayparheight, displayparwidth,
-	displayparheight]];
-	
-	
-	}
-	else
-	{
-	[fInfoField setStringValue: [NSString stringWithFormat:
-        @"Source: %dx%d, Output: %dx%d", fTitle->width, fTitle->height,
-        fTitle->job->width, fTitle->job->height]];	
-	}
 
-    // Show the scaled text
-    NSSize viewSize = [fPictureGLView frame].size;
-    if( ((int)viewSize.width) != fTitle->width )
+    NSSize displaySize = NSMakeSize( (float)fTitle->width, (float)fTitle->height );
+    if( fTitle->job->pixel_ratio == 1 )
+    {
+        [fInfoField setStringValue:[NSString stringWithFormat:
+                            @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d",
+                            fTitle->width, fTitle->height, titlewidth,
+                            displayparheight, displayparwidth, displayparheight]];
+        displaySize.width *= ((float)arpwidth) / ((float)arpheight);
+    }
+    else
+    {
+    [fInfoField setStringValue: [NSString stringWithFormat:
+        @"Source: %dx%d, Output: %dx%d", fTitle->width, fTitle->height,
+        fTitle->job->width, fTitle->job->height]];
+    }
+
+    NSSize viewSize = [self optimalViewSizeForImageSize:displaySize];
+    if( [self viewNeedsToResizeToSize:viewSize] )
+    {
+        [self resizeSheetForViewSize:viewSize];
+        [self setViewSize:viewSize];
+    }
+    
+    // Show the scaled text (use the height to check since the width can vary
+    // with anamorphic video).
+    if( ((int)viewSize.height) != fTitle->height )
     {
         float scale = viewSize.width / ((float)fTitle->width);
         NSString *scaleString = [NSString stringWithFormat:
@@ -251,7 +257,7 @@ static int GetAlignedSize( int size )
 {
     hb_job_t * job = fTitle->job;
     
-	if ([fPARCheck state] == 1 )
+	if( [fPARCheck state] == NSOnState )
 	{
         [fWidthStepper      setIntValue: MaxOutputWidth];
         [fWidthField        setIntValue: MaxOutputWidth];
@@ -265,7 +271,7 @@ static int GetAlignedSize( int size )
             show proper preview picture ratio */
         //[fHeightStepper      setIntValue: MaxOutputHeight];
         //[fHeightField        setIntValue: MaxOutputHeight];
-        [fRatioCheck        setState: 0];
+        [fRatioCheck setState:NSOffState];
         
         [fWidthStepper setEnabled: NO];
         [fWidthField setEnabled: NO];
@@ -435,11 +441,6 @@ static int GetAlignedSize( int size )
 
 - (void)showPanelInWindow: (NSWindow *)fWindow forTitle: (hb_title_t *)title
 {
-    NSSize viewSize = [self optimalViewSizeForImageSize:NSMakeSize( title->width,
-                                                                    title->height )];
-    [self resizeSheetForViewSize:viewSize];
-    [self setViewSize:viewSize];
-
     [self SetTitle:title];
     
     [NSApp beginSheet:fPicturePanel
@@ -514,7 +515,7 @@ static int GetAlignedSize( int size )
 }
 
 //
-// -[PictureController(Private) resizePanelForViewSize:]
+// -[PictureController(Private) resizePanelForViewSize:animate:]
 //
 // Resizes the entire sheet to accomodate an OpenGL view of a particular size.
 //
@@ -539,8 +540,13 @@ static int GetAlignedSize( int size )
     {
         frame.size.height = minSize.height;
     }
-    
-    [fPicturePanel setFrame:frame display:YES];
+
+    // But now the sheet is off-center, so also shift the origin to center it and
+    // keep the top aligned.
+    frame.origin.x -= (deltaX / 2.0);
+    frame.origin.y -= deltaY;
+
+    [fPicturePanel setFrame:frame display:YES animate:YES];
 }
 
 //
@@ -559,5 +565,17 @@ static int GetAlignedSize( int size )
                  [fPictureGLView frame].size.height) / 2.0;
     [fPictureGLView setFrameOrigin:origin];
 }
+
+//
+// -[PictureController(Private) viewNeedsToResizeToSize:]
+//
+// Returns YES if the view will need to resize to match the given size.
+//
+- (BOOL)viewNeedsToResizeToSize: (NSSize)newSize
+{
+    NSSize viewSize = [fPictureGLView frame].size;
+    return (newSize.width != viewSize.width || newSize.height != viewSize.height);
+}
+
 
 @end
