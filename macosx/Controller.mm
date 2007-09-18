@@ -2621,11 +2621,22 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             break;
 
         case HB_ACODEC_VORBIS:
+        if ([[fAudTrack1MixPopUp selectedItem] tag] == HB_AMIXDOWN_6CH || [[fAudTrack2MixPopUp selectedItem] tag] == HB_AMIXDOWN_6CH)
+            {
+                /* Vorbis causes a crash if we use a bitrate below 192 kbps with 6 channel */
+                minbitrate = 192;
+                /* If either mixdown popup includes 6-channel discrete, then allow up to 384 kbps */
+                maxbitrate = 384;
+                break;
+            }
+            else
+            {
             /* Vorbis causes a crash if we use a bitrate below 48 kbps */
             minbitrate = 48;
             /* Vorbis can cope with 384 kbps quite happily, even for stereo */
             maxbitrate = 384;
             break;
+            }
 
         default:
             /* AC3 passthru disables the bitrate dropdown anyway, so we might as well just use the min and max bitrate */
