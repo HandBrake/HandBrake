@@ -2466,7 +2466,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             int audioCodecsSupportMono = ((audio->codec == HB_ACODEC_AC3 ||
                 audio->codec == HB_ACODEC_DCA) && acodec == HB_ACODEC_FAAC);
             int audioCodecsSupport6Ch =  ((audio->codec == HB_ACODEC_AC3 ||
-                audio->codec == HB_ACODEC_DCA) && acodec == HB_ACODEC_FAAC);
+                audio->codec == HB_ACODEC_DCA) && (acodec == HB_ACODEC_FAAC ||
+                acodec == HB_ACODEC_VORBIS));
 
             /* check for AC-3 passthru */
             if (audio->codec == HB_ACODEC_AC3 && acodec == HB_ACODEC_AC3)
