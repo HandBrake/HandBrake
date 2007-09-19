@@ -300,7 +300,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
 
     if (data->dvd)
       hb_dvd_start( data->dvd, title->index, 1 );
-      
+    
     for( i = 0; i < 10; i++ )
     {
         int j, k;
@@ -334,14 +334,16 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             {
               if( !hb_dvd_read( data->dvd, buf_ps ) )
               {
-                  goto error;
+                  hb_log("Could not read preview %d, skipped", i);
+                  goto skip_preview;
               }
             }
             else if (data->stream)
             {
               if ( !hb_stream_read(data->stream,buf_ps) )
               {
-                goto error;
+                  hb_log("Could not read preview %d, skipped", i);
+                  goto skip_preview;
               }
             }
             hb_demux_ps( buf_ps, list_es );
@@ -497,6 +499,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                 }
         }
 
+skip_preview:
         while( ( buf_raw = hb_list_item( list_raw, 0 ) ) )
         {
             hb_list_rem( list_raw, buf_raw );
