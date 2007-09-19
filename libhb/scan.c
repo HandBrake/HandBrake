@@ -334,7 +334,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             {
               if( !hb_dvd_read( data->dvd, buf_ps ) )
               {
-                  hb_log("Could not read preview %d, skipped", i);
+                  hb_log( "Warning: Could not read data for preview %d, skipped", i + 1 );
                   goto skip_preview;
               }
             }
@@ -342,7 +342,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             {
               if ( !hb_stream_read(data->stream,buf_ps) )
               {
-                  hb_log("Could not read preview %d, skipped", i);
+                  hb_log( "Warning: Could not read data for preview %d, skipped", i + 1 );
                   goto skip_preview;
               }
             }
