@@ -52,6 +52,12 @@
     int     MaxOutputHeight;
     BOOL    autoCrop;
     
+    /* used to track the previous state of the keep aspect
+    ratio checkbox when turning anamorphic on, so it can be
+    returned to the previous state when anamorphic is turned
+    off */
+    BOOL    keepAspectRatioPreviousState; 
+    
     struct {
         int    detelecine;
         int     deinterlace;

@@ -118,7 +118,8 @@ static int GetAlignedSize( int size )
 	[fDeinterlacePopUp selectItemAtIndex: fPictureFilterSettings.deinterlace];
 
 	[fPARCheck setState:(job->pixel_ratio ? NSOnState : NSOffState)];
-
+    /* We initially set the previous state of keep ar to on */
+    keepAspectRatioPreviousState = 1;
 	if (!autoCrop)
 	{
         [fCropMatrix  selectCellAtRow: 1 column:0];
@@ -163,6 +164,7 @@ static int GetAlignedSize( int size )
     MaxOutputWidth = job->width;
 	MaxOutputHeight = job->height;
     fPicture = 0;
+
     [self SettingsChanged: nil];
 }
 
@@ -266,27 +268,36 @@ static int GetAlignedSize( int size )
             show distorted preview picture ratio */
         [fHeightStepper      setIntValue: fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1]];
         [fHeightField        setIntValue: fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1]];
-        
-        /* This will show wrong anamorphic height values, but
-            show proper preview picture ratio */
-        //[fHeightStepper      setIntValue: MaxOutputHeight];
-        //[fHeightField        setIntValue: MaxOutputHeight];
+
+        /* if the sender is the Anamorphic checkbox, record the state
+           of KeepAspect Ratio so it can be reset if Anamorphic is unchecked again */
+        if (sender == fPARCheck)
+        {
+        keepAspectRatioPreviousState = [fRatioCheck state];
+        }
         [fRatioCheck setState:NSOffState];
+        [fRatioCheck setEnabled: NO];
         
         [fWidthStepper setEnabled: NO];
         [fWidthField setEnabled: NO];
         [fHeightStepper setEnabled: NO];
         [fHeightField setEnabled: NO];
-        [fRatioCheck setEnabled: NO];
+        
     }
-    
-	else
+    else
 	{
         [fWidthStepper setEnabled: YES];
         [fWidthField setEnabled: YES];
         [fHeightStepper setEnabled: YES];
         [fHeightField setEnabled: YES];
         [fRatioCheck setEnabled: YES];
+        /* if the sender is the Anamorphic checkbox, we return the
+           keep AR checkbox to its previous state */
+        if (sender == fPARCheck)
+        {
+        [fRatioCheck setState:keepAspectRatioPreviousState];
+        }
+        
 	}
 	
     job->width       = [fWidthStepper  intValue];
@@ -314,7 +325,7 @@ static int GetAlignedSize( int size )
     [fCropBottomStepper setEnabled: !autoCrop];
     [fCropLeftStepper   setEnabled: !autoCrop];
     [fCropRightStepper  setEnabled: !autoCrop];
-//	[fAutoCropMainWindow  setStringValue: [NSString stringWithFormat:@"%d",autocrop]];
+
     if( autoCrop )
     {
         memcpy( job->crop, fTitle->crop, 4 * sizeof( int ) );
