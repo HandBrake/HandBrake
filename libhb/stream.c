@@ -20,6 +20,7 @@ typedef enum { hb_stream_type_unknown = 0, hb_stream_type_transport, hb_stream_t
 //#define kVideoStream 0
 //#define kAudioStream 1
 #define kNumDecodeBuffers 2
+#define kMaxNumberPMTStreams 32
 
 #define CLOCKRATE		((int64_t)27000000)			// MPEG System clock rate
 #define STREAMRATE		((int64_t)2401587)			// Original HD stream rate 19.2 Mbps
@@ -65,7 +66,33 @@ struct hb_stream_s
 	int				 ts_streamid[kMaxNumberDecodeStreams];
 	int				 ts_audio_stream_type[kMaxNumberAudioPIDS];
 	
-	FILE			 *debug_output;
+	struct 
+	{
+		unsigned short program_number;
+		unsigned short program_map_PID;
+	} pat_info[kMaxNumberPMTStreams];
+	int	 ts_number_pat_entries;
+	
+	struct
+	{
+		int reading;
+		unsigned char *tablebuf;
+		unsigned int tablepos;
+		unsigned char current_continuity_counter;
+		
+		int section_length;
+		int program_number;
+		unsigned int PCR_PID;
+		int program_info_length;
+		unsigned char *progam_info_descriptor_data;
+		struct
+		{
+			unsigned char stream_type;
+			unsigned short elementary_PID;
+			unsigned short ES_info_length;
+			unsigned char *es_info_descriptor_data;
+		} pmt_stream_info[kMaxNumberPMTStreams];
+	} pmt_info;
 };
 
 /***********************************************************************
@@ -147,12 +174,6 @@ void hb_stream_close( hb_stream_t ** _d )
 		d->file_handle = NULL;
     }
 
-	if (d->debug_output)
-	{
-		fclose(d->debug_output);
-		d->debug_output = NULL;
-	}
-	
 	int i=0;
 	for (i = 0; i < kNumDecodeBuffers; i++)
 	{
@@ -506,13 +527,11 @@ void hb_stream_set_audio_id_and_codec(hb_stream_t *stream, hb_audio_t *audio)
 
       //Start at the beginning of the stream
       hb_stream_seek(stream, 0.0f);
-//		fseeko(stream->file_handle,0 ,SEEK_SET);
 		
       // Now we must scan forwards for a valid audio start code (0x000001xx)
       buf = hb_buffer_init(HB_DVD_READ_BUFFER_SIZE);
       while (!done)
       {
-//			if (fread(buf->data,4096,1,stream->file_handle) == 1)
               if (hb_stream_read(stream, buf) == 1)
               {
                 int i=0;
@@ -574,58 +593,64 @@ void hb_stream_update_audio(hb_stream_t *stream, hb_audio_t *audio)
 		}
 		
 		lang = lang_for_code(stream->a52_info[i].lang_code);
-		audio->rate = stream->a52_info[i].rate;
-		audio->bitrate = stream->a52_info[i].bitrate;
-		audio->config.a52.ac3flags = audio->ac3flags = stream->a52_info[i].flags;
+		if (!audio->rate)
+			audio->rate = stream->a52_info[i].rate;
+		if (!audio->bitrate)
+			audio->bitrate = stream->a52_info[i].bitrate;
+		if (!audio->config.a52.ac3flags)
+			audio->config.a52.ac3flags = audio->ac3flags = stream->a52_info[i].flags;
 
 	}
 	
-	switch( audio->ac3flags & A52_CHANNEL_MASK )
+	if (!audio->input_channel_layout)
 	{
-		/* mono sources */
-		case A52_MONO:
-		case A52_CHANNEL1:
-		case A52_CHANNEL2:
-			audio->input_channel_layout = HB_INPUT_CH_LAYOUT_MONO;
-			break;
-		/* stereo input */
-		case A52_CHANNEL:
-		case A52_STEREO:
-			audio->input_channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
-			break;
-		/* dolby (DPL1 aka Dolby Surround = 4.0 matrix-encoded) input */
-		case A52_DOLBY:
-			audio->input_channel_layout = HB_INPUT_CH_LAYOUT_DOLBY;
-			break;
-		/* 3F/2R input */
-		case A52_3F2R:
-			audio->input_channel_layout = HB_INPUT_CH_LAYOUT_3F2R;
-			break;
-		/* 3F/1R input */
-		case A52_3F1R:
-			audio->input_channel_layout = HB_INPUT_CH_LAYOUT_3F1R;
-			break;
-		/* other inputs */
-		case A52_3F:
-			audio->input_channel_layout = HB_INPUT_CH_LAYOUT_3F;
-			break;
-		case A52_2F1R:
-			audio->input_channel_layout = HB_INPUT_CH_LAYOUT_2F1R;
-			break;
-		case A52_2F2R:
-			audio->input_channel_layout = HB_INPUT_CH_LAYOUT_2F2R;
-			break;
-		/* unknown */
-		default:
-			audio->input_channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
-	}
+		switch( audio->ac3flags & A52_CHANNEL_MASK )
+		{
+			/* mono sources */
+			case A52_MONO:
+			case A52_CHANNEL1:
+			case A52_CHANNEL2:
+				audio->input_channel_layout = HB_INPUT_CH_LAYOUT_MONO;
+				break;
+			/* stereo input */
+			case A52_CHANNEL:
+			case A52_STEREO:
+				audio->input_channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
+				break;
+			/* dolby (DPL1 aka Dolby Surround = 4.0 matrix-encoded) input */
+			case A52_DOLBY:
+				audio->input_channel_layout = HB_INPUT_CH_LAYOUT_DOLBY;
+				break;
+			/* 3F/2R input */
+			case A52_3F2R:
+				audio->input_channel_layout = HB_INPUT_CH_LAYOUT_3F2R;
+				break;
+			/* 3F/1R input */
+			case A52_3F1R:
+				audio->input_channel_layout = HB_INPUT_CH_LAYOUT_3F1R;
+				break;
+			/* other inputs */
+			case A52_3F:
+				audio->input_channel_layout = HB_INPUT_CH_LAYOUT_3F;
+				break;
+			case A52_2F1R:
+				audio->input_channel_layout = HB_INPUT_CH_LAYOUT_2F1R;
+				break;
+			case A52_2F2R:
+				audio->input_channel_layout = HB_INPUT_CH_LAYOUT_2F2R;
+				break;
+			/* unknown */
+			default:
+				audio->input_channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
+		}
 
-	/* add in our own LFE flag if the source has LFE */
-	if (audio->ac3flags & A52_LFE)
-	{
-		audio->input_channel_layout = audio->input_channel_layout | HB_INPUT_CH_LAYOUT_HAS_LFE;
+		/* add in our own LFE flag if the source has LFE */
+		if (audio->ac3flags & A52_LFE)
+		{
+			audio->input_channel_layout = audio->input_channel_layout | HB_INPUT_CH_LAYOUT_HAS_LFE;
+		}
 	}
-
+	
 	snprintf( audio->lang, sizeof( audio->lang ), "%s (%s)", strlen(lang->native_name) ? lang->native_name : lang->eng_name,
 	  audio->codec == HB_ACODEC_AC3 ? "AC3" : ( audio->codec == HB_ACODEC_MPGA ? "MPEG" : "LPCM" ) );
 	snprintf( audio->lang_simple, sizeof( audio->lang_simple ), "%s", strlen(lang->native_name) ? lang->native_name : lang->eng_name );
@@ -713,8 +738,6 @@ static void hb_ts_stream_init(hb_stream_t *stream)
 	// output stream. It should not be set until after all the 
 	// pids in the stream have been discovered.
 	stream->ts_selected_audio_pid_index = -1;
-	
-	stream->debug_output = fopen("/Users/awk/Desktop/hb_debug.mpg", "wb");
 	
 	// Find the audio and video pids in the stream
 	hb_ts_stream_find_pids(stream);
@@ -849,16 +872,92 @@ static inline unsigned int get_bits(int bits)
 	return val;
 }
 
+int decode_program_map(hb_stream_t* stream)
+{
+	unsigned int pos = 0;
+	set_buf(stream->pmt_info.tablebuf, stream->pmt_info.tablepos, 0);
+
+	unsigned char table_id	= get_bits(8);
+															  get_bits(4);
+	unsigned int section_length = get_bits(12);
+	stream->pmt_info.section_length = section_length;
+	
+	unsigned int program_number = get_bits(16);
+	stream->pmt_info.program_number = program_number;
+																get_bits(2);
+	unsigned char version_number = get_bits(5);
+															  get_bits(1);
+	unsigned char section_number = get_bits(8);
+	unsigned char last_section_number = get_bits(8);
+															  get_bits(3);
+	unsigned int PCR_PID = get_bits(13);
+	stream->pmt_info.PCR_PID = PCR_PID;
+															  get_bits(4);
+	unsigned int program_info_length = get_bits(12);
+	stream->pmt_info.program_info_length = program_info_length;
+
+	int i=0;
+	unsigned char *descriptor_buf = (unsigned char *) malloc(program_info_length);
+	for (i = 0; i < program_info_length; i++)
+	{
+	  descriptor_buf[i] = get_bits(8);
+	}                                 
+	
+	int cur_pos =  9 /* data after the section length field*/ + program_info_length;
+	int done_reading_stream_types = 0;
+	while (!done_reading_stream_types)
+	{
+	  unsigned char stream_type = get_bits(8);
+		  get_bits(3);
+	  unsigned int elementary_PID = get_bits(13);
+		  get_bits(4);
+	  unsigned int ES_info_length = get_bits(12);
+	  
+	  int i=0;
+	  unsigned char *ES_info_buf = (unsigned char *) malloc(ES_info_length);
+	  for (i=0; i < ES_info_length; i++)
+	  {
+		ES_info_buf[i] = get_bits(8);
+	  }
+	
+	  if (stream_type == 0x02)
+	  {
+		if (stream->ts_number_video_pids <= kMaxNumberVideoPIDS)
+		  stream->ts_number_video_pids++;
+		stream->ts_video_pids[stream->ts_number_video_pids-1] = elementary_PID;
+	  }
+	  if ((stream_type == 0x04) || (stream_type == 0x81) || (stream_type == 0x03) || (stream_type == 0x06))    // ATSC Defines stream type 0x81 for AC-3/A52 audio, there's also some evidence of streams using type 6 for AC-3 audio too
+	  {
+		if (stream->ts_number_audio_pids <= kMaxNumberAudioPIDS)
+		  stream->ts_number_audio_pids++;
+		stream->ts_audio_pids[stream->ts_number_audio_pids-1] =  elementary_PID;
+
+		stream->a52_info[stream->ts_number_audio_pids-1].lang_code = 'e' << 8 | 'n';
+		stream->ts_audio_stream_type[stream->ts_number_audio_pids-1] = stream_type;
+		
+		if (ES_info_length > 0)
+		{
+		  hb_log("decode_program_map - Elementary Stream Info Present, decode language codes ?");
+		}
+
+	  }
+
+	  cur_pos += 5 /* stream header */ + ES_info_length;
+	  
+	  free(ES_info_buf);
+	  
+	  if (cur_pos >= section_length - 4 /* stop before the CRC */)
+		done_reading_stream_types = 1;
+	}
+							 
+	free(descriptor_buf);
+	return 1;
+}
+
 // ------------------------------------------------------------------------------------
 
-int decode_program_map(unsigned char *buf, hb_stream_t *stream)
+int build_program_map(unsigned char *buf, hb_stream_t *stream)
 {
-    unsigned char tablebuf[1024];
-    unsigned int tablepos = 0;
-    
-    int reading = 0;
-
-
     // Get adaption header info
     int adapt_len = 0;
     int adaption = (buf[3] & 0x30) >> 4;
@@ -871,120 +970,56 @@ int decode_program_map(unsigned char *buf, hb_stream_t *stream)
     if (adapt_len > 184)
             return 0;
 
-    // Get pointer length
-    int pointer_len = buf[4 + adapt_len] + 1;
-
     // Get payload start indicator
     int start;
     start = (buf[1] & 0x40) != 0;
 
-    if (start)
-            reading = 1;
+    // Get pointer length - only valid in packets with a start flag
+    int pointer_len = 0;
+	if (start && stream->pmt_info.reading)
+	{
+		// We just finished a bunch of packets - parse the program map details
+		int decode_ok = 0;
+		if (stream->pmt_info.tablebuf[0] == 0x02)
+			decode_ok = decode_program_map(stream);
+		free(stream->pmt_info.tablebuf);
+		stream->pmt_info.tablebuf = NULL;
+		stream->pmt_info.tablepos = 0;
+		stream->pmt_info.reading = 0;
+		if (decode_ok)
+			return decode_ok;
+	}
+
+	if (start)
+	{
+		pointer_len = buf[4 + adapt_len] + 1;
+		stream->pmt_info.tablepos = 0;
+	}	
+	// Get Continuity Counter
+	int continuity_counter = buf[3] & 0x0f;
+	if (!start && (stream->pmt_info.current_continuity_counter + 1 != continuity_counter))
+	{
+		hb_log("build_program_map - Continuity Counter %d out of sequence - expected %d", continuity_counter, stream->pmt_info.current_continuity_counter+1);
+		return 0;
+	}
+	stream->pmt_info.current_continuity_counter = continuity_counter;
+	stream->pmt_info.reading |= start;
 
     // Add the payload for this packet to the current buffer
-    if (reading && (184 - adapt_len) > 0)
+	int amount_to_copy = 184 - adapt_len - pointer_len;
+    if (stream->pmt_info.reading && (amount_to_copy > 0))
     {
-            if (tablepos + 184 - adapt_len - pointer_len > 1024)
-            {
-                    hb_log("decode_program_map - Bad program section length (> 1024)");
-                    return 0;
-            }
-            memcpy(tablebuf + tablepos, buf + 4 + adapt_len + pointer_len, 184 - adapt_len - pointer_len);
-            tablepos += 184 - adapt_len - pointer_len;
-    }
-
-    if (start && reading)
-    {
-            int done_reading_stream_types = 0;
-            
-            memcpy(tablebuf + tablepos, buf + 4 + adapt_len + 1, pointer_len - 1);
-
-            unsigned int pos = 0;
-            set_buf(tablebuf + pos, tablepos - pos, 0);
-
-            unsigned char section_id	= get_bits(8);
-                                                                      get_bits(4);
-            unsigned int section_length = get_bits(12);
-            unsigned int program_number = get_bits(16);
-                                                                        get_bits(2);
-            unsigned char version_number = get_bits(5);
-                                                                      get_bits(1);
-            unsigned char section_number = get_bits(8);
-            unsigned char last_section_number = get_bits(8);
-                                                                      get_bits(3);
-            unsigned int PCR_PID = get_bits(13);
-                                                                      get_bits(4);
-            unsigned int program_info_length = get_bits(12);
-            int i=0;
-            unsigned char *descriptor_buf = (unsigned char *) malloc(program_info_length);
-            for (i = 0; i < program_info_length; i++)
-            {
-              descriptor_buf[i] = get_bits(8);
-            }                                 
-            
-            int cur_pos =  9 /* data so far */ + program_info_length;
-            done_reading_stream_types = 0;
-            while (!done_reading_stream_types)
-            {
-              unsigned char stream_type = get_bits(8);
-                  get_bits(3);
-              unsigned int elementary_PID = get_bits(13);
-                  get_bits(4);
-              unsigned int ES_info_length = get_bits(12);
-              
-              int i=0;
-              unsigned char *ES_info_buf = (unsigned char *) malloc(ES_info_length);
-              for (i=0; i < ES_info_length; i++)
-              {
-                ES_info_buf[i] = get_bits(8);
-              }
-            
-              if (stream_type == 0x02)
-              {
-                if (stream->ts_number_video_pids <= kMaxNumberVideoPIDS)
-                  stream->ts_number_video_pids++;
-                stream->ts_video_pids[stream->ts_number_video_pids-1] = elementary_PID;
-              }
-              if ((stream_type == 0x04) || (stream_type == 0x81) || (stream_type == 0x03) || (stream_type == 0x06))    // ATSC Defines stream type 0x81 for AC-3/A52 audio, there's also some evidence of streams using type 6 for AC-3 audio too
-              {
-                if (stream->ts_number_audio_pids <= kMaxNumberAudioPIDS)
-                  stream->ts_number_audio_pids++;
-                stream->ts_audio_pids[stream->ts_number_audio_pids-1] =  elementary_PID;
-
-                stream->a52_info[stream->ts_number_audio_pids-1].lang_code = 'e' << 8 | 'n';
-				stream->ts_audio_stream_type[stream->ts_number_audio_pids-1] = stream_type;
+			stream->pmt_info.tablebuf = realloc(stream->pmt_info.tablebuf, stream->pmt_info.tablepos + amount_to_copy);
 				
-                if (ES_info_length > 0)
-                {
-                  hb_log("decode_program_map - Elementary Stream Info Present, decode language codes ?");
-                }
-
-              }
-
-              cur_pos += 5 /* stream header */ + ES_info_length;
-              
-              free(ES_info_buf);
-              
-              if (cur_pos >= section_length - 4 /* stop before the CRC */)
-                done_reading_stream_types = 1;
-            }
-                                     
-            free(descriptor_buf);
+            memcpy(stream->pmt_info.tablebuf + stream->pmt_info.tablepos, buf + 4 + adapt_len + pointer_len, amount_to_copy);
+            stream->pmt_info.tablepos += amount_to_copy;
     }
-    
-    return 1;
+
+    return 0;
 }
 
-int decode_PAT(unsigned char *buf, unsigned int *program_num, unsigned int *network_PID, unsigned int *program_map_PID)
+int decode_PAT(unsigned char *buf, hb_stream_t *stream)
 {
-//    int maxchannels = 8;
-//    static ATSC_CHANNEL_INFO* channels;
-//
-//    if (channels == NULL)
-//      channels = (ATSC_CHANNEL_INFO*) malloc(maxchannels * sizeof(ATSC_CHANNEL_INFO));
-//      
-//    int numchannels;
-
     unsigned char tablebuf[1024];
     unsigned int tablepos = 0;
     
@@ -1029,6 +1064,7 @@ int decode_PAT(unsigned char *buf, unsigned int *program_num, unsigned int *netw
     {
             memcpy(tablebuf + tablepos, buf + 4 + adapt_len + 1, pointer_len - 1);
 
+			
             unsigned int pos = 0;
             //while (pos < tablepos)
             {
@@ -1043,7 +1079,6 @@ int decode_PAT(unsigned char *buf, unsigned int *program_num, unsigned int *netw
                     unsigned int current_next	= get_bits(1);
                     unsigned int section_num	= get_bits(8);
                     unsigned int last_section	= get_bits(8);
-//                    unsigned int protocol_ver	= get_bits(8);
 
                     switch (section_id)
                     {
@@ -1053,29 +1088,24 @@ int decode_PAT(unsigned char *buf, unsigned int *program_num, unsigned int *netw
                           section_len -= 5;    // Already read transport stream ID, version num, section num, and last section num
                           section_len -= 4;   // Ignore the CRC
                           int curr_pos = 0;
-                          while (curr_pos < section_len)
+						  stream->ts_number_pat_entries = 0;
+                          while ((curr_pos < section_len) && (stream->ts_number_pat_entries < kMaxNumberPMTStreams))
                           {
                             unsigned int pkt_program_num = get_bits(16);
-                            if (program_num)
-                              *program_num = pkt_program_num;
+							stream->pat_info[stream->ts_number_pat_entries].program_number = pkt_program_num;
                               
                             get_bits(3);  // Reserved
                             if (pkt_program_num == 0)
                             {
                               unsigned int pkt_network_PID = get_bits(13);
-//                              printf("PAT - Transport ID = 0x%x (%d) program_num 0x%x (%d) network_PID = 0x%x (%d)\n", transport_id, transport_id, pkt_program_num, pkt_program_num, pkt_network_PID, pkt_network_PID);
-                              if (network_PID)
-                                *network_PID = pkt_network_PID;
-                                
                             }
                             else
                             {
                               unsigned int pkt_program_map_PID = get_bits(13);
-//                              printf("PAT - Transport ID = 0x%x (%d) program_num 0x%x (%d) program_map_PID = 0x%x (%d)\n", transport_id, transport_id, pkt_program_num, pkt_program_num, pkt_program_map_PID, pkt_program_map_PID);
-                              if (program_map_PID)
-                                *program_map_PID = pkt_program_map_PID;
+                                stream->pat_info[stream->ts_number_pat_entries].program_map_PID = pkt_program_map_PID;
                             }
                             curr_pos += 4;
+							stream->ts_number_pat_entries++;
                           }
                         }
                         break;
@@ -1101,11 +1131,6 @@ static int flushbuf(hb_stream_t *stream)
 {
 	int old_write_index = stream->ps_current_write_buffer_index;
 
-	if (stream->debug_output)
-	{
-		fwrite(stream->ps_decode_buffer[stream->ps_current_write_buffer_index].data, stream->ps_decode_buffer[stream->ps_current_write_buffer_index].len, 1, stream->debug_output);
-	}
-	
 	// Flip the buffers and start moving on to the next
 	stream->ps_current_write_buffer_index++;
 	if (stream->ps_current_write_buffer_index > kNumDecodeBuffers-1)
@@ -1303,7 +1328,6 @@ int generate_output_data(hb_stream_t *stream, int write_ac3, int curstream, int 
 			
 			for (;;)
 			{
-//				int64_t fpos = ftell64(fout);
 				if ((stream->ps_decode_buffer[stream->ps_current_write_buffer_index].len % HB_DVD_READ_BUFFER_SIZE) != 0)
 				{
 					hb_log("write_output_stream - Packet's not falling on read buffer size boundries!");
@@ -1330,10 +1354,6 @@ int generate_output_data(hb_stream_t *stream, int write_ac3, int curstream, int 
 					return 1;
 				}
 
-//				if (pid == stream->ts_audio_pids[0])
-//					stream->ts_packetbuf[curstream][pos + 3] = stream->ts_streamid[kAudioStream];
-//				else
-//					stream->ts_packetbuf[curstream][pos + 3] = stream->ts_streamid[kVideoStream];
 				int index_of_selected_pid = -1;
 				if ((index_of_selected_pid = index_of_video_pid(pid,stream)) < 0)
 				{
@@ -1511,7 +1531,7 @@ static void hb_ts_stream_find_pids(hb_stream_t *stream)
 {
 	unsigned char buf[188];
 	int curstream = 0;
-
+	
 	// Stream ID info
 	unsigned int program_num = 0;
 	unsigned int network_PID = 0;
@@ -1539,7 +1559,6 @@ static void hb_ts_stream_find_pids(hb_stream_t *stream)
 		}
 		else
 		{
-//			curfilepos += bytesRead;
 			bytesReadInPacket = 0;
 		}
 
@@ -1558,47 +1577,61 @@ static void hb_ts_stream_find_pids(hb_stream_t *stream)
 		// Get pid
 		int pid = (((buf[1] & 0x1F) << 8) | buf[2]) & 0x1FFF;
                 
-                if ((pid == 0x0000) && (program_num == 0))
-                {
-                  decode_PAT(buf, &program_num, &network_PID, &program_map_PID);
-                  continue;
-                }
-                
-                if (pid == 0x1ffb)
-                {
-                  printf("Need to decode PSIP data !\n");
-                  continue;
-                }
-                
-                if ((network_PID > 0) && (pid == network_PID))
-                {
-                  printf("Need to Decode network PID section !\n");
-                  continue;
-                }
-                
-                if ((program_map_PID > 0) && (pid == program_map_PID))
-                {
-                  decode_program_map(buf, stream);
-                  break;;
-                }
-                
-                // Skip until we have a complete set of PIDs
-                if ((stream->ts_number_video_pids == 0) || (stream->ts_number_audio_pids == 0))
-                  continue;
+		if ((pid == 0x0000) && (program_num == 0))
+		{
+		  decode_PAT(buf, stream);
+		  continue;
 		}
 		
-		hb_log("hb_ts_stream_find_pids - found the following PIDS");
-		hb_log("    Video PIDS : ");
-		int i=0;
-		for (i=0; i < stream->ts_number_video_pids; i++)
+		if (pid == 0x1ffb)
 		{
-			hb_log("      0x%x (%d)", stream->ts_video_pids[i], stream->ts_video_pids[i]);
+		  printf("Need to decode PSIP data !\n");
+		  continue;
 		}
-		hb_log("    Audio PIDS : ");
-		for (i = 0; i < stream->ts_number_audio_pids; i++)
+		
+		if ((network_PID > 0) && (pid == network_PID))
 		{
-			hb_log("      0x%x (%d)", stream->ts_audio_pids[i], stream->ts_audio_pids[i]);
+		  printf("Need to Decode network PID section !\n");
+		  continue;
 		}
+		
+		int pat_index = 0;
+		for (pat_index = 0; pat_index < stream->ts_number_pat_entries; pat_index++)
+		{
+			// There are some streams where the PAT table has multiple entries as if their are
+			// multiple programs in the same transport stream, and yet there's actually only one
+			// program really in the stream. This seems to be true for transport streams that
+			// originate in the HDHomeRun but have been output by EyeTV's export utility. What I think
+			// is happening is that the HDHomeRun is sending the entire transport stream as broadcast, 
+			// but the EyeTV is only recording a single (selected) program number and not rewriting the 
+			// PAT info on export to match what's actually on the stream.
+			// Until we have a way of handling multiple programs per transport stream elegantly we'll match
+			// on the first pat entry for which we find a matching program map PID.  The ideal solution would
+			// be to build a title choice popup from the PAT program number details and then select from
+			// their - but right now the API's not capable of that.
+			if (pid == stream->pat_info[pat_index].program_map_PID)
+			{
+			  if (build_program_map(buf, stream) > 0)
+				break;
+			}
+		}
+		// Keep going  until we have a complete set of PIDs
+		if ((stream->ts_number_video_pids > 0) && (stream->ts_number_audio_pids > 0))
+		  break;
+	}
+	
+	hb_log("hb_ts_stream_find_pids - found the following PIDS");
+	hb_log("    Video PIDS : ");
+	int i=0;
+	for (i=0; i < stream->ts_number_video_pids; i++)
+	{
+		hb_log("      0x%x (%d)", stream->ts_video_pids[i], stream->ts_video_pids[i]);
+	}
+	hb_log("    Audio PIDS : ");
+	for (i = 0; i < stream->ts_number_audio_pids; i++)
+	{
+		hb_log("      0x%x (%d)", stream->ts_audio_pids[i], stream->ts_audio_pids[i]);
+	}
  }
 
 int index_of_video_pid(int pid, hb_stream_t *stream)
@@ -1933,17 +1966,19 @@ static void hb_ts_stream_decode(hb_stream_t *stream)
 //			if (pid == stream->ts_audio_pids[0] /*&& audstreamid == 0xBD*/)
 			if (index_of_audio_pid(pid, stream) >= 0)
 			{
-				if ((stream->ts_audio_stream_type[curstream] == 0x04) || (stream->ts_audio_stream_type[curstream] == 0x81))
+				// Curstream is a zero based index of streams and includes both video and audio streams, so we must subtract the numver of video streams
+				// from the indes value used here since ts_audio_stream_type is indexed only by audio streams.
+				if ((stream->ts_audio_stream_type[curstream - stream->ts_number_video_pids] == 0x04) || (stream->ts_audio_stream_type[curstream - stream->ts_number_video_pids] == 0x81))
 				{
 					write_ac3 = hb_ts_handle_ac3_audio(stream, curstream, buf, adapt_len);
 				}
-				else if (stream->ts_audio_stream_type[curstream] == 0x03)
+				else if (stream->ts_audio_stream_type[curstream - stream->ts_number_video_pids] == 0x03)
 				{
 					hb_ts_handle_mpeg_audio(stream, curstream, buf, adapt_len);
 				}
 				else
 				{
-					hb_log("hb_ts_stream_decode - Unknown Audio Stream type ! 0x%x (%d)", stream->ts_audio_stream_type[curstream], stream->ts_audio_stream_type[curstream]);
+					hb_log("hb_ts_stream_decode - Unknown Audio Stream type ! 0x%x (%d)", stream->ts_audio_stream_type[curstream - stream->ts_number_video_pids], stream->ts_audio_stream_type[curstream - stream->ts_number_video_pids]);
 				}
 			}
 		
