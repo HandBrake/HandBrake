@@ -39,9 +39,9 @@ namespace Handbrake
             this.label2 = new System.Windows.Forms.Label();
             this.lbl_progressValue = new System.Windows.Forms.Label();
             this.btn_minimise = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -140,7 +140,7 @@ namespace Handbrake
             this.progressBar.BackColor = System.Drawing.SystemColors.ControlLight;
             this.progressBar.Location = new System.Drawing.Point(67, 264);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(573, 23);
+            this.progressBar.Size = new System.Drawing.Size(576, 23);
             this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar.TabIndex = 34;
             // 
@@ -178,15 +178,6 @@ namespace Handbrake
             this.btn_minimise.UseVisualStyleBackColor = false;
             this.btn_minimise.Click += new System.EventHandler(this.btn_minimise_Click);
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::Handbrake.Properties.Resources.Queue;
-            this.pictureBox1.Location = new System.Drawing.Point(13, 13);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(32, 32);
-            this.pictureBox1.TabIndex = 38;
-            this.pictureBox1.TabStop = false;
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -206,12 +197,21 @@ namespace Handbrake
             this.label1.TabIndex = 40;
             this.label1.Text = "List of items ready to be encoded:";
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::Handbrake.Properties.Resources.Queue;
+            this.pictureBox1.Location = new System.Drawing.Point(13, 13);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(32, 32);
+            this.pictureBox1.TabIndex = 38;
+            this.pictureBox1.TabStop = false;
+            // 
             // frmQueue
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(726, 339);
+            this.ClientSize = new System.Drawing.Size(718, 335);
             this.ControlBox = false;
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label3);

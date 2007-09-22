@@ -60,13 +60,6 @@ namespace Handbrake.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap Burn {
-            get {
-                object obj = ResourceManager.GetObject("Burn", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         internal static System.Drawing.Bitmap Delete {
             get {
                 object obj = ResourceManager.GetObject("Delete", resourceCulture);
@@ -119,6 +112,13 @@ namespace Handbrake.Properties {
         internal static System.Drawing.Bitmap Movies {
             get {
                 object obj = ResourceManager.GetObject("Movies", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Movies_Small {
+            get {
+                object obj = ResourceManager.GetObject("Movies_Small", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
