@@ -2090,6 +2090,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 - (IBAction) formatPopUpChanged: (id) sender
 {
     NSString * string = [fDstFile2Field stringValue];
+    NSString * selectedCodecs = [fDstCodecsPopUp titleOfSelectedItem];
     int format = [fDstFormatPopUp indexOfSelectedItem];
     char * ext = NULL;
 	/* Initially set the large file (64 bit formatting) output checkbox to hidden */
@@ -2176,6 +2177,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 			[fCreateChapterMarkers setEnabled: YES];
 			break;
     }
+    if ( SuccessfulScan ) {
+        [fDstCodecsPopUp selectItemWithTitle:selectedCodecs];
+        if ( [fDstCodecsPopUp selectedItem] == NULL )
+            [fDstCodecsPopUp selectItemAtIndex:0];
+        }
     [self codecsPopUpChanged: NULL];
 
     /* Add/replace to the correct extension */
