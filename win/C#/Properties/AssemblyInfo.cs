@@ -7,7 +7,7 @@ using System.Resources;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Handbrake")]
-[assembly: AssemblyDescription("DVD to MPEG-4 converter")]
+[assembly: AssemblyDescription("DVD Like Source to MPEG-4 converter")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Handbrake")]
 [assembly: AssemblyProduct("Handbrake")]

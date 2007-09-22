@@ -78,7 +78,7 @@ namespace Handbrake
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(547, 495);
+            this.ClientSize = new System.Drawing.Size(547, 481);
             this.Controls.Add(this.Label2);
             this.Controls.Add(this.rtf_dvdInfo);
             this.Controls.Add(this.btn_close);
@@ -87,7 +87,7 @@ namespace Handbrake
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(553, 520);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(553, 520);
+            this.MinimumSize = new System.Drawing.Size(553, 506);
             this.Name = "frmDvdInfo";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Read DVD";

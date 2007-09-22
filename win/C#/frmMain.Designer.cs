@@ -126,6 +126,7 @@ namespace Handbrake
             this.lbl_encode = new System.Windows.Forms.Label();
             this.btn_eCancel = new System.Windows.Forms.Button();
             this.TabPage6 = new System.Windows.Forms.TabPage();
+            this.label23 = new System.Windows.Forms.Label();
             this.Label7 = new System.Windows.Forms.Label();
             this.Label39 = new System.Windows.Forms.Label();
             this.btn_ClearQuery = new System.Windows.Forms.Button();
@@ -186,7 +187,7 @@ namespace Handbrake
             this.text_left = new System.Windows.Forms.TextBox();
             this.advancedOptions = new System.Windows.Forms.TabControl();
             this.groupBox_dest = new System.Windows.Forms.GroupBox();
-            this.label23 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             Label38 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
             this.frmMainMenu.SuspendLayout();
@@ -230,7 +231,7 @@ namespace Handbrake
             this.drop_chapterFinish.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drop_chapterFinish.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drop_chapterFinish.FormattingEnabled = true;
-            this.drop_chapterFinish.Location = new System.Drawing.Point(408, 58);
+            this.drop_chapterFinish.Location = new System.Drawing.Point(408, 55);
             this.drop_chapterFinish.Name = "drop_chapterFinish";
             this.drop_chapterFinish.Size = new System.Drawing.Size(69, 21);
             this.drop_chapterFinish.TabIndex = 41;
@@ -244,7 +245,7 @@ namespace Handbrake
             this.drop_chapterStart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drop_chapterStart.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drop_chapterStart.FormattingEnabled = true;
-            this.drop_chapterStart.Location = new System.Drawing.Point(295, 58);
+            this.drop_chapterStart.Location = new System.Drawing.Point(295, 55);
             this.drop_chapterStart.Name = "drop_chapterStart";
             this.drop_chapterStart.Size = new System.Drawing.Size(69, 21);
             this.drop_chapterStart.TabIndex = 40;
@@ -260,7 +261,7 @@ namespace Handbrake
             this.drp_dvdtitle.FormattingEnabled = true;
             this.drp_dvdtitle.Items.AddRange(new object[] {
             "Automatic"});
-            this.drp_dvdtitle.Location = new System.Drawing.Point(99, 55);
+            this.drp_dvdtitle.Location = new System.Drawing.Point(99, 52);
             this.drp_dvdtitle.Name = "drp_dvdtitle";
             this.drp_dvdtitle.Size = new System.Drawing.Size(119, 21);
             this.drp_dvdtitle.TabIndex = 39;
@@ -273,7 +274,7 @@ namespace Handbrake
             // 
             this.RadioISO.AutoSize = true;
             this.RadioISO.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RadioISO.Location = new System.Drawing.Point(549, 25);
+            this.RadioISO.Location = new System.Drawing.Point(549, 22);
             this.RadioISO.Name = "RadioISO";
             this.RadioISO.Size = new System.Drawing.Size(44, 17);
             this.RadioISO.TabIndex = 19;
@@ -285,7 +286,7 @@ namespace Handbrake
             // 
             this.text_source.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.text_source.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.text_source.Location = new System.Drawing.Point(99, 22);
+            this.text_source.Location = new System.Drawing.Point(99, 19);
             this.text_source.Name = "text_source";
             this.text_source.Size = new System.Drawing.Size(294, 21);
             this.text_source.TabIndex = 1;
@@ -308,7 +309,7 @@ namespace Handbrake
             this.btn_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_Browse.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_Browse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_Browse.Location = new System.Drawing.Point(399, 22);
+            this.btn_Browse.Location = new System.Drawing.Point(399, 19);
             this.btn_Browse.Name = "btn_Browse";
             this.btn_Browse.Size = new System.Drawing.Size(78, 22);
             this.btn_Browse.TabIndex = 2;
@@ -322,7 +323,7 @@ namespace Handbrake
             this.text_height.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.text_height.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.text_height.ForeColor = System.Drawing.SystemColors.InfoText;
-            this.text_height.Location = new System.Drawing.Point(196, 58);
+            this.text_height.Location = new System.Drawing.Point(196, 54);
             this.text_height.Name = "text_height";
             this.text_height.Size = new System.Drawing.Size(64, 21);
             this.text_height.TabIndex = 8;
@@ -333,7 +334,7 @@ namespace Handbrake
             // 
             this.text_width.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.text_width.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.text_width.Location = new System.Drawing.Point(104, 58);
+            this.text_width.Location = new System.Drawing.Point(104, 54);
             this.text_width.Name = "text_width";
             this.text_width.Size = new System.Drawing.Size(64, 21);
             this.text_width.TabIndex = 7;
@@ -366,7 +367,7 @@ namespace Handbrake
             "H.264",
             "H.264 (iPod)",
             "H.264 Baseline 1.3"});
-            this.drp_videoEncoder.Location = new System.Drawing.Point(104, 25);
+            this.drp_videoEncoder.Location = new System.Drawing.Point(104, 21);
             this.drp_videoEncoder.Name = "drp_videoEncoder";
             this.drp_videoEncoder.Size = new System.Drawing.Size(156, 21);
             this.drp_videoEncoder.TabIndex = 5;
@@ -384,7 +385,7 @@ namespace Handbrake
             "MP3",
             "Vorbis",
             "AC3"});
-            this.drp_audioCodec.Location = new System.Drawing.Point(376, 24);
+            this.drp_audioCodec.Location = new System.Drawing.Point(376, 20);
             this.drp_audioCodec.Name = "drp_audioCodec";
             this.drp_audioCodec.Size = new System.Drawing.Size(111, 21);
             this.drp_audioCodec.TabIndex = 6;
@@ -410,7 +411,7 @@ namespace Handbrake
             this.QueryEditorText.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.QueryEditorText.Location = new System.Drawing.Point(16, 88);
             this.QueryEditorText.Name = "QueryEditorText";
-            this.QueryEditorText.Size = new System.Drawing.Size(605, 122);
+            this.QueryEditorText.Size = new System.Drawing.Size(605, 93);
             this.QueryEditorText.TabIndex = 41;
             this.QueryEditorText.Text = "";
             this.ToolTip.SetToolTip(this.QueryEditorText, "Manually add or edit a query generated by the GUI.");
@@ -420,7 +421,7 @@ namespace Handbrake
             this.rtf_h264advanced.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.rtf_h264advanced.Location = new System.Drawing.Point(16, 79);
             this.rtf_h264advanced.Name = "rtf_h264advanced";
-            this.rtf_h264advanced.Size = new System.Drawing.Size(605, 96);
+            this.rtf_h264advanced.Size = new System.Drawing.Size(605, 76);
             this.rtf_h264advanced.TabIndex = 41;
             this.rtf_h264advanced.Text = "";
             this.ToolTip.SetToolTip(this.rtf_h264advanced, "H.264 advanced options can be added here. See link below for details.");
@@ -648,6 +649,7 @@ namespace Handbrake
             // 
             // mnu_encode
             // 
+            this.mnu_encode.Image = global::Handbrake.Properties.Resources.Queue_Small;
             this.mnu_encode.Name = "mnu_encode";
             this.mnu_encode.Size = new System.Drawing.Size(155, 22);
             this.mnu_encode.Text = "View Queue";
@@ -655,6 +657,7 @@ namespace Handbrake
             // 
             // mnu_viewDVDdata
             // 
+            this.mnu_viewDVDdata.Image = global::Handbrake.Properties.Resources.Output_Small;
             this.mnu_viewDVDdata.Name = "mnu_viewDVDdata";
             this.mnu_viewDVDdata.Size = new System.Drawing.Size(155, 22);
             this.mnu_viewDVDdata.Text = "View DVD data";
@@ -667,6 +670,7 @@ namespace Handbrake
             // 
             // mnu_options
             // 
+            this.mnu_options.Image = global::Handbrake.Properties.Resources.Pref_Small;
             this.mnu_options.Name = "mnu_options";
             this.mnu_options.Size = new System.Drawing.Size(155, 22);
             this.mnu_options.Text = "Options";
@@ -963,7 +967,7 @@ namespace Handbrake
             this.GroupBox1.ForeColor = System.Drawing.Color.Black;
             this.GroupBox1.Location = new System.Drawing.Point(14, 35);
             this.GroupBox1.Name = "GroupBox1";
-            this.GroupBox1.Size = new System.Drawing.Size(647, 98);
+            this.GroupBox1.Size = new System.Drawing.Size(647, 87);
             this.GroupBox1.TabIndex = 408;
             this.GroupBox1.TabStop = false;
             this.GroupBox1.Text = "Source";
@@ -972,7 +976,7 @@ namespace Handbrake
             // 
             this.Label13.AutoSize = true;
             this.Label13.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label13.Location = new System.Drawing.Point(374, 61);
+            this.Label13.Location = new System.Drawing.Point(374, 58);
             this.Label13.Name = "Label13";
             this.Label13.Size = new System.Drawing.Size(21, 13);
             this.Label13.TabIndex = 42;
@@ -983,7 +987,7 @@ namespace Handbrake
             this.RadioDVD.AutoSize = true;
             this.RadioDVD.Checked = true;
             this.RadioDVD.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RadioDVD.Location = new System.Drawing.Point(483, 25);
+            this.RadioDVD.Location = new System.Drawing.Point(483, 22);
             this.RadioDVD.Name = "RadioDVD";
             this.RadioDVD.Size = new System.Drawing.Size(60, 17);
             this.RadioDVD.TabIndex = 20;
@@ -996,7 +1000,7 @@ namespace Handbrake
             this.Label17.AutoSize = true;
             this.Label17.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label17.ForeColor = System.Drawing.Color.Black;
-            this.Label17.Location = new System.Drawing.Point(12, 25);
+            this.Label17.Location = new System.Drawing.Point(17, 22);
             this.Label17.Name = "Label17";
             this.Label17.Size = new System.Drawing.Size(52, 13);
             this.Label17.TabIndex = 6;
@@ -1007,7 +1011,7 @@ namespace Handbrake
             this.Label9.AutoSize = true;
             this.Label9.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label9.ForeColor = System.Drawing.Color.Black;
-            this.Label9.Location = new System.Drawing.Point(224, 61);
+            this.Label9.Location = new System.Drawing.Point(224, 58);
             this.Label9.Name = "Label9";
             this.Label9.Size = new System.Drawing.Size(64, 13);
             this.Label9.TabIndex = 12;
@@ -1018,7 +1022,7 @@ namespace Handbrake
             this.Label10.AutoSize = true;
             this.Label10.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label10.ForeColor = System.Drawing.Color.Black;
-            this.Label10.Location = new System.Drawing.Point(12, 61);
+            this.Label10.Location = new System.Drawing.Point(17, 55);
             this.Label10.Name = "Label10";
             this.Label10.Size = new System.Drawing.Size(36, 13);
             this.Label10.TabIndex = 11;
@@ -1039,9 +1043,9 @@ namespace Handbrake
             this.groupBox_output.Controls.Add(this.Label12);
             this.groupBox_output.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox_output.ForeColor = System.Drawing.Color.Black;
-            this.groupBox_output.Location = new System.Drawing.Point(14, 194);
+            this.groupBox_output.Location = new System.Drawing.Point(14, 185);
             this.groupBox_output.Name = "groupBox_output";
-            this.groupBox_output.Size = new System.Drawing.Size(647, 89);
+            this.groupBox_output.Size = new System.Drawing.Size(647, 82);
             this.groupBox_output.TabIndex = 409;
             this.groupBox_output.TabStop = false;
             this.groupBox_output.Text = "Output Settings (Preset: None)";
@@ -1051,7 +1055,7 @@ namespace Handbrake
             this.Label56.AutoSize = true;
             this.Label56.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label56.ForeColor = System.Drawing.Color.Black;
-            this.Label56.Location = new System.Drawing.Point(175, 61);
+            this.Label56.Location = new System.Drawing.Point(175, 57);
             this.Label56.Name = "Label56";
             this.Label56.Size = new System.Drawing.Size(15, 13);
             this.Label56.TabIndex = 38;
@@ -1061,7 +1065,7 @@ namespace Handbrake
             // 
             this.lbl_Aspect.AutoSize = true;
             this.lbl_Aspect.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_Aspect.Location = new System.Drawing.Point(374, 62);
+            this.lbl_Aspect.Location = new System.Drawing.Point(374, 58);
             this.lbl_Aspect.Name = "lbl_Aspect";
             this.lbl_Aspect.Size = new System.Drawing.Size(72, 12);
             this.lbl_Aspect.TabIndex = 41;
@@ -1071,7 +1075,7 @@ namespace Handbrake
             // 
             this.Label91.AutoSize = true;
             this.Label91.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label91.Location = new System.Drawing.Point(270, 62);
+            this.Label91.Location = new System.Drawing.Point(270, 58);
             this.Label91.Name = "Label91";
             this.Label91.Size = new System.Drawing.Size(87, 13);
             this.Label91.TabIndex = 40;
@@ -1082,7 +1086,7 @@ namespace Handbrake
             this.Label55.AutoSize = true;
             this.Label55.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label55.ForeColor = System.Drawing.Color.Black;
-            this.Label55.Location = new System.Drawing.Point(17, 62);
+            this.Label55.Location = new System.Drawing.Point(17, 58);
             this.Label55.Name = "Label55";
             this.Label55.Size = new System.Drawing.Size(85, 13);
             this.Label55.TabIndex = 29;
@@ -1093,7 +1097,7 @@ namespace Handbrake
             this.Label47.AutoSize = true;
             this.Label47.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label47.ForeColor = System.Drawing.Color.Black;
-            this.Label47.Location = new System.Drawing.Point(17, 28);
+            this.Label47.Location = new System.Drawing.Point(17, 24);
             this.Label47.Name = "Label47";
             this.Label47.Size = new System.Drawing.Size(62, 13);
             this.Label47.TabIndex = 12;
@@ -1104,7 +1108,7 @@ namespace Handbrake
             this.Label12.AutoSize = true;
             this.Label12.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label12.ForeColor = System.Drawing.Color.Black;
-            this.Label12.Location = new System.Drawing.Point(270, 28);
+            this.Label12.Location = new System.Drawing.Point(270, 24);
             this.Label12.Name = "Label12";
             this.Label12.Size = new System.Drawing.Size(94, 13);
             this.Label12.TabIndex = 20;
@@ -1115,18 +1119,18 @@ namespace Handbrake
             this.Label3.AutoSize = true;
             this.Label3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label3.ForeColor = System.Drawing.Color.Black;
-            this.Label3.Location = new System.Drawing.Point(12, 23);
+            this.Label3.Location = new System.Drawing.Point(17, 21);
             this.Label3.Name = "Label3";
-            this.Label3.Size = new System.Drawing.Size(80, 13);
+            this.Label3.Size = new System.Drawing.Size(31, 13);
             this.Label3.TabIndex = 3;
-            this.Label3.Text = "Destination: ";
+            this.Label3.Text = "File:";
             // 
             // lbl_update
             // 
             this.lbl_update.AutoSize = true;
             this.lbl_update.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_update.ForeColor = System.Drawing.Color.Black;
-            this.lbl_update.Location = new System.Drawing.Point(102, 594);
+            this.lbl_update.Location = new System.Drawing.Point(93, 540);
             this.lbl_update.Name = "lbl_update";
             this.lbl_update.Size = new System.Drawing.Size(193, 13);
             this.lbl_update.TabIndex = 417;
@@ -1140,7 +1144,7 @@ namespace Handbrake
             this.btn_queue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_queue.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_queue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_queue.Location = new System.Drawing.Point(415, 589);
+            this.btn_queue.Location = new System.Drawing.Point(414, 535);
             this.btn_queue.Name = "btn_queue";
             this.btn_queue.Size = new System.Drawing.Size(115, 22);
             this.btn_queue.TabIndex = 416;
@@ -1156,7 +1160,7 @@ namespace Handbrake
             this.btn_encode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_encode.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_encode.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_encode.Location = new System.Drawing.Point(536, 589);
+            this.btn_encode.Location = new System.Drawing.Point(535, 535);
             this.btn_encode.Name = "btn_encode";
             this.btn_encode.Size = new System.Drawing.Size(124, 22);
             this.btn_encode.TabIndex = 414;
@@ -1169,17 +1173,17 @@ namespace Handbrake
             // 
             this.Version.BackColor = System.Drawing.Color.Transparent;
             this.Version.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Version.Location = new System.Drawing.Point(12, 594);
+            this.Version.Location = new System.Drawing.Point(11, 540);
             this.Version.Name = "Version";
-            this.Version.Size = new System.Drawing.Size(94, 20);
+            this.Version.Size = new System.Drawing.Size(84, 20);
             this.Version.TabIndex = 415;
-            this.Version.Text = "Version 2.4";
+            this.Version.Text = "Version 2.4.1";
             // 
             // lbl_encode
             // 
             this.lbl_encode.AutoSize = true;
             this.lbl_encode.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_encode.Location = new System.Drawing.Point(12, 571);
+            this.lbl_encode.Location = new System.Drawing.Point(11, 520);
             this.lbl_encode.Name = "lbl_encode";
             this.lbl_encode.Size = new System.Drawing.Size(129, 13);
             this.lbl_encode.TabIndex = 418;
@@ -1194,7 +1198,7 @@ namespace Handbrake
             this.btn_eCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_eCancel.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_eCancel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_eCancel.Location = new System.Drawing.Point(344, 589);
+            this.btn_eCancel.Location = new System.Drawing.Point(343, 535);
             this.btn_eCancel.Name = "btn_eCancel";
             this.btn_eCancel.Size = new System.Drawing.Size(65, 22);
             this.btn_eCancel.TabIndex = 419;
@@ -1207,6 +1211,7 @@ namespace Handbrake
             // TabPage6
             // 
             this.TabPage6.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.TabPage6.Controls.Add(this.button1);
             this.TabPage6.Controls.Add(this.label23);
             this.TabPage6.Controls.Add(this.Label7);
             this.TabPage6.Controls.Add(this.Label39);
@@ -1216,9 +1221,18 @@ namespace Handbrake
             this.TabPage6.Location = new System.Drawing.Point(4, 22);
             this.TabPage6.Name = "TabPage6";
             this.TabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage6.Size = new System.Drawing.Size(639, 242);
+            this.TabPage6.Size = new System.Drawing.Size(639, 211);
             this.TabPage6.TabIndex = 6;
             this.TabPage6.Text = "Query Editor";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(13, 186);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(403, 13);
+            this.label23.TabIndex = 43;
+            this.label23.Text = "Remember to re-generate the query each time you change a setting!";
             // 
             // Label7
             // 
@@ -1261,7 +1275,7 @@ namespace Handbrake
             this.GenerateQuery.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.GenerateQuery.Location = new System.Drawing.Point(16, 59);
             this.GenerateQuery.Name = "GenerateQuery";
-            this.GenerateQuery.Size = new System.Drawing.Size(176, 23);
+            this.GenerateQuery.Size = new System.Drawing.Size(154, 23);
             this.GenerateQuery.TabIndex = 38;
             this.GenerateQuery.Text = "Generate Query Now";
             this.GenerateQuery.UseVisualStyleBackColor = true;
@@ -1280,14 +1294,14 @@ namespace Handbrake
             this.h264Tab.Location = new System.Drawing.Point(4, 22);
             this.h264Tab.Name = "h264Tab";
             this.h264Tab.Padding = new System.Windows.Forms.Padding(3);
-            this.h264Tab.Size = new System.Drawing.Size(639, 242);
+            this.h264Tab.Size = new System.Drawing.Size(639, 211);
             this.h264Tab.TabIndex = 5;
             this.h264Tab.Text = "H.264";
             // 
             // Label43
             // 
             this.Label43.AutoSize = true;
-            this.Label43.Location = new System.Drawing.Point(78, 206);
+            this.Label43.Location = new System.Drawing.Point(78, 187);
             this.Label43.Name = "Label43";
             this.Label43.Size = new System.Drawing.Size(158, 13);
             this.Label43.TabIndex = 48;
@@ -1296,7 +1310,7 @@ namespace Handbrake
             // label_h264
             // 
             this.label_h264.AutoSize = true;
-            this.label_h264.Location = new System.Drawing.Point(13, 206);
+            this.label_h264.Location = new System.Drawing.Point(13, 187);
             this.label_h264.Name = "label_h264";
             this.label_h264.Size = new System.Drawing.Size(66, 13);
             this.label_h264.TabIndex = 47;
@@ -1307,7 +1321,7 @@ namespace Handbrake
             // Label95
             // 
             this.Label95.AutoSize = true;
-            this.Label95.Location = new System.Drawing.Point(13, 187);
+            this.Label95.Location = new System.Drawing.Point(13, 168);
             this.Label95.Name = "Label95";
             this.Label95.Size = new System.Drawing.Size(387, 13);
             this.Label95.TabIndex = 46;
@@ -1368,7 +1382,7 @@ namespace Handbrake
             this.TabPage2.Location = new System.Drawing.Point(4, 22);
             this.TabPage2.Name = "TabPage2";
             this.TabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage2.Size = new System.Drawing.Size(639, 242);
+            this.TabPage2.Size = new System.Drawing.Size(639, 211);
             this.TabPage2.TabIndex = 3;
             this.TabPage2.Text = "Audio && Subtitles";
             // 
@@ -1522,7 +1536,7 @@ namespace Handbrake
             this.TabPage3.Location = new System.Drawing.Point(4, 22);
             this.TabPage3.Name = "TabPage3";
             this.TabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage3.Size = new System.Drawing.Size(639, 242);
+            this.TabPage3.Size = new System.Drawing.Size(639, 211);
             this.TabPage3.TabIndex = 2;
             this.TabPage3.Text = "Video Settings";
             // 
@@ -1647,7 +1661,7 @@ namespace Handbrake
             this.TabPage1.Location = new System.Drawing.Point(4, 22);
             this.TabPage1.Name = "TabPage1";
             this.TabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage1.Size = new System.Drawing.Size(639, 242);
+            this.TabPage1.Size = new System.Drawing.Size(639, 211);
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "Picture Settings";
             // 
@@ -1803,7 +1817,7 @@ namespace Handbrake
             // 
             this.Label53.AutoSize = true;
             this.Label53.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label53.Location = new System.Drawing.Point(134, 196);
+            this.Label53.Location = new System.Drawing.Point(134, 187);
             this.Label53.Name = "Label53";
             this.Label53.Size = new System.Drawing.Size(48, 13);
             this.Label53.TabIndex = 32;
@@ -1813,7 +1827,7 @@ namespace Handbrake
             // 
             this.Label52.AutoSize = true;
             this.Label52.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label52.Location = new System.Drawing.Point(138, 105);
+            this.Label52.Location = new System.Drawing.Point(138, 96);
             this.Label52.Name = "Label52";
             this.Label52.Size = new System.Drawing.Size(28, 13);
             this.Label52.TabIndex = 31;
@@ -1843,7 +1857,7 @@ namespace Handbrake
             // 
             this.Label15.AutoSize = true;
             this.Label15.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label15.Location = new System.Drawing.Point(39, 148);
+            this.Label15.Location = new System.Drawing.Point(39, 139);
             this.Label15.Name = "Label15";
             this.Label15.Size = new System.Drawing.Size(28, 13);
             this.Label15.TabIndex = 29;
@@ -1853,7 +1867,7 @@ namespace Handbrake
             // 
             this.text_top.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.text_top.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.text_top.Location = new System.Drawing.Point(131, 120);
+            this.text_top.Location = new System.Drawing.Point(131, 111);
             this.text_top.Name = "text_top";
             this.text_top.Size = new System.Drawing.Size(51, 21);
             this.text_top.TabIndex = 10;
@@ -1863,7 +1877,7 @@ namespace Handbrake
             // 
             this.text_bottom.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.text_bottom.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.text_bottom.Location = new System.Drawing.Point(131, 172);
+            this.text_bottom.Location = new System.Drawing.Point(131, 163);
             this.text_bottom.Name = "text_bottom";
             this.text_bottom.Size = new System.Drawing.Size(51, 21);
             this.text_bottom.TabIndex = 12;
@@ -1889,7 +1903,7 @@ namespace Handbrake
             // 
             this.text_right.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.text_right.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.text_right.Location = new System.Drawing.Point(190, 145);
+            this.text_right.Location = new System.Drawing.Point(190, 136);
             this.text_right.Name = "text_right";
             this.text_right.Size = new System.Drawing.Size(51, 21);
             this.text_right.TabIndex = 13;
@@ -1899,7 +1913,7 @@ namespace Handbrake
             // 
             this.text_left.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.text_left.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.text_left.Location = new System.Drawing.Point(72, 145);
+            this.text_left.Location = new System.Drawing.Point(72, 136);
             this.text_left.Name = "text_left";
             this.text_left.Size = new System.Drawing.Size(51, 21);
             this.text_left.TabIndex = 11;
@@ -1913,10 +1927,10 @@ namespace Handbrake
             this.advancedOptions.Controls.Add(this.h264Tab);
             this.advancedOptions.Controls.Add(this.TabPage6);
             this.advancedOptions.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.advancedOptions.Location = new System.Drawing.Point(14, 295);
+            this.advancedOptions.Location = new System.Drawing.Point(14, 276);
             this.advancedOptions.Name = "advancedOptions";
             this.advancedOptions.SelectedIndex = 0;
-            this.advancedOptions.Size = new System.Drawing.Size(647, 268);
+            this.advancedOptions.Size = new System.Drawing.Size(647, 237);
             this.advancedOptions.TabIndex = 411;
             this.advancedOptions.TabStop = false;
             // 
@@ -1926,28 +1940,32 @@ namespace Handbrake
             this.groupBox_dest.Controls.Add(this.text_destination);
             this.groupBox_dest.Controls.Add(this.btn_destBrowse);
             this.groupBox_dest.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox_dest.Location = new System.Drawing.Point(14, 138);
+            this.groupBox_dest.Location = new System.Drawing.Point(14, 128);
             this.groupBox_dest.Name = "groupBox_dest";
             this.groupBox_dest.Size = new System.Drawing.Size(646, 50);
             this.groupBox_dest.TabIndex = 420;
             this.groupBox_dest.TabStop = false;
             this.groupBox_dest.Text = "Destination";
             // 
-            // label23
+            // button1
             // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(13, 221);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(403, 13);
-            this.label23.TabIndex = 43;
-            this.label23.Text = "Remember to re-generate the query each time you change a setting!";
+            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.button1.Location = new System.Drawing.Point(176, 59);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(134, 23);
+            this.button1.TabIndex = 44;
+            this.button1.Text = "Copy to Clipboard";
+            this.button1.UseVisualStyleBackColor = true;
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(675, 621);
+            this.ClientSize = new System.Drawing.Size(675, 564);
             this.Controls.Add(this.groupBox_dest);
             this.Controls.Add(this.btn_eCancel);
             this.Controls.Add(this.lbl_encode);
@@ -1960,7 +1978,7 @@ namespace Handbrake
             this.Controls.Add(this.GroupBox1);
             this.Controls.Add(this.frmMainMenu);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(683, 648);
+            this.MinimumSize = new System.Drawing.Size(683, 580);
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Handbrake";
@@ -2147,6 +2165,7 @@ namespace Handbrake
         internal System.Windows.Forms.Label label4;
         internal System.Windows.Forms.ComboBox drp_deInterlace_option;
         private System.Windows.Forms.Label label23;
+        internal System.Windows.Forms.Button button1;
 
     }
 }

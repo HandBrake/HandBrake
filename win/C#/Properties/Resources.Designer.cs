@@ -88,9 +88,9 @@ namespace Handbrake.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap General_Preferences {
+        internal static System.Drawing.Bitmap General_Prefences {
             get {
-                object obj = ResourceManager.GetObject("General Preferences", resourceCulture);
+                object obj = ResourceManager.GetObject("General_Prefences", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -119,6 +119,34 @@ namespace Handbrake.Properties {
         internal static System.Drawing.Bitmap Movies {
             get {
                 object obj = ResourceManager.GetObject("Movies", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Output_Small {
+            get {
+                object obj = ResourceManager.GetObject("Output_Small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Pref_Small {
+            get {
+                object obj = ResourceManager.GetObject("Pref_Small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Queue {
+            get {
+                object obj = ResourceManager.GetObject("Queue", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Queue_Small {
+            get {
+                object obj = ResourceManager.GetObject("Queue_Small", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

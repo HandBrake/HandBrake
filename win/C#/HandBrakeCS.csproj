@@ -177,8 +177,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="handbrakepineapple.ico" />
+    <Content Include="Resources\Output_Small.png" />
+    <Content Include="Resources\Pref_Small.png" />
+    <Content Include="Resources\Queue.png" />
+    <Content Include="Resources\Queue_Small.png" />
     <None Include="Resources\SplashScreen.jpg" />
-    <BaseApplicationManifest Include="Properties\app.manifest" />
     <None Include="Resources\Remove.png" />
     <None Include="Resources\Movies.png" />
     <None Include="Resources\info.png" />

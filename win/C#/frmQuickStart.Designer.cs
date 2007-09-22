@@ -223,7 +223,7 @@ namespace Handbrake
             // pictureBox8
             // 
             this.pictureBox8.ErrorImage = global::Handbrake.Properties.Resources.info;
-            this.pictureBox8.Image = global::Handbrake.Properties.Resources.General_Preferences;
+            this.pictureBox8.Image = global::Handbrake.Properties.Resources.General_Prefences;
             this.pictureBox8.Location = new System.Drawing.Point(12, 71);
             this.pictureBox8.Name = "pictureBox8";
             this.pictureBox8.Size = new System.Drawing.Size(34, 33);
