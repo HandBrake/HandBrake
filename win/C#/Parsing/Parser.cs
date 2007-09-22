@@ -98,9 +98,9 @@ namespace Handbrake.Parsing
                 {
                     int currentTask = int.Parse(m.Groups[1].Value);
                     int totalTasks = int.Parse(m.Groups[2].Value);
-                    float percent = float.Parse(m.Groups[3].Value);
-                    float currentFps = m.Groups[5].Value == string.Empty ? 0.0F : float.Parse(m.Groups[5].Value);
-                    float avgFps = m.Groups[6].Value == string.Empty ? 0.0F : float.Parse(m.Groups[6].Value);
+                    float percent = float.Parse(m.Groups[3].Value, Functions.CLI.Culture);
+                    float currentFps = m.Groups[5].Value == string.Empty ? 0.0F : float.Parse(m.Groups[5].Value, Functions.CLI.Culture);
+                    float avgFps = m.Groups[6].Value == string.Empty ? 0.0F : float.Parse(m.Groups[6].Value, Functions.CLI.Culture);
                     TimeSpan remaining = TimeSpan.Zero;
                     if (m.Groups[7].Value != string.Empty)
                     {

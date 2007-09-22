@@ -3,12 +3,20 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Diagnostics;
 using System.Windows.Forms;
+using System.Globalization;
  
 
 namespace Handbrake.Functions
 {
     class CLI
     {
+        /// <summary>
+        /// CLI output is based on en-US locale,
+        /// we use this CultureInfo as IFormatProvider to *.Parse() calls
+        /// </summary>
+        static readonly public CultureInfo Culture = new CultureInfo("en-US", false); 
+
+
         Process hbProc = new Process();
         
         public Process runCli(object s, string query, bool stderr, bool stdout, bool useShellExec, bool noWindow)

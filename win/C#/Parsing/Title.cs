@@ -85,11 +85,11 @@ namespace Handbrake.Parsing
             }
         }
 
-        private string m_aspectRatio;
+        private float m_aspectRatio;
         /// <summary>
         /// The aspect ratio of this Title
         /// </summary>
-        public string AspectRatio
+        public float AspectRatio
         {
             get
             {
@@ -192,8 +192,7 @@ namespace Handbrake.Parsing
                     if (m.Success)
                     {
                         thisTitle.m_resolution = new Size(int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
-                        thisTitle.m_aspectRatio = m.Groups[3].ToString(); // Converted to a String from float. Caused issue on french systems
-                        // French system floats are 1,78 not 1.78 and the CLI always outputs a . 
+                        thisTitle.m_aspectRatio = float.Parse(m.Groups[3].Value, Functions.CLI.Culture);
                     }
                 }
                 catch (Exception exc)
