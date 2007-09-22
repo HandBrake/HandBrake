@@ -88,9 +88,9 @@ namespace Handbrake.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap General_Prefences {
+        internal static System.Drawing.Bitmap General_Preferences {
             get {
-                object obj = ResourceManager.GetObject("General_Prefences", resourceCulture);
+                object obj = ResourceManager.GetObject("General_Preferences", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
