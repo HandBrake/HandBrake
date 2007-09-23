@@ -21,14 +21,6 @@ static int FormatSettings[4][10] =
   { { HB_MUX_MP4 | HB_VCODEC_FFMPEG | HB_ACODEC_FAAC,
 	  HB_MUX_MP4 | HB_VCODEC_X264   | HB_ACODEC_FAAC,
 	  0,
-	  0},
-    { HB_MUX_AVI | HB_VCODEC_FFMPEG | HB_ACODEC_LAME,
-	  HB_MUX_AVI | HB_VCODEC_FFMPEG | HB_ACODEC_AC3,
-	  HB_MUX_AVI | HB_VCODEC_X264   | HB_ACODEC_LAME,
-	  HB_MUX_AVI | HB_VCODEC_X264   | HB_ACODEC_AC3},
-    { HB_MUX_OGM | HB_VCODEC_FFMPEG | HB_ACODEC_VORBIS,
-	  HB_MUX_OGM | HB_VCODEC_FFMPEG | HB_ACODEC_LAME,
-	  0,
 	  0 },
     { HB_MUX_MKV | HB_VCODEC_FFMPEG | HB_ACODEC_FAAC,
 	  HB_MUX_MKV | HB_VCODEC_FFMPEG | HB_ACODEC_AC3,
@@ -39,8 +31,15 @@ static int FormatSettings[4][10] =
 	  HB_MUX_MKV | HB_VCODEC_X264   | HB_ACODEC_LAME,
 	  HB_MUX_MKV | HB_VCODEC_X264   | HB_ACODEC_VORBIS,
 	  0,
+	  0 },
+    { HB_MUX_AVI | HB_VCODEC_FFMPEG | HB_ACODEC_LAME,
+	  HB_MUX_AVI | HB_VCODEC_FFMPEG | HB_ACODEC_AC3,
+	  HB_MUX_AVI | HB_VCODEC_X264   | HB_ACODEC_LAME,
+	  HB_MUX_AVI | HB_VCODEC_X264   | HB_ACODEC_AC3},
+    { HB_MUX_OGM | HB_VCODEC_FFMPEG | HB_ACODEC_VORBIS,
+	  HB_MUX_OGM | HB_VCODEC_FFMPEG | HB_ACODEC_LAME,
+	  0,
 	  0 } };
-
 
 /* We setup the toolbar values here */
 static NSString *        ToggleDrawerIdentifier             = @"Toggle Drawer Item Identifier";
@@ -199,9 +198,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* Destination box*/
     [fDstFormatPopUp removeAllItems];
     [fDstFormatPopUp addItemWithTitle: _( @"MP4 file" )];
+	[fDstFormatPopUp addItemWithTitle: _( @"MKV file" )];
     [fDstFormatPopUp addItemWithTitle: _( @"AVI file" )];
     [fDstFormatPopUp addItemWithTitle: _( @"OGM file" )];
-	[fDstFormatPopUp addItemWithTitle: _( @"MKV file" )];
     [fDstFormatPopUp selectItemAtIndex: 0];
 	
     [self formatPopUpChanged: NULL];
@@ -990,7 +989,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	{
 		/* We display a message if a valid dvd source was not chosen */
 		[fSrcDVD2Field setStringValue: @"No Valid Title Found"];
-        SuccessfulScan = 0;
+        SuccessfulScan = NO;
 	}
 	else
 	{
@@ -1047,61 +1046,19 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 			}
 			
 			
-			int format = [fDstFormatPopUp indexOfSelectedItem];
-			char * ext = NULL;
-			switch( format )
-			{
-				case 0:
-					
-					/*Get Default MP4 File Extension for mpeg4 (.mp4 or .m4v) from prefs*/
-					if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultMpegName"] > 0)
-					{
-						ext = "m4v";
-					}
-					else
-					{
-						ext = "mp4";
-					}
-					break;
-				case 1: 
-					ext = "avi";
-					break;
-				case 2:
-					ext = "ogm";
-					break;
-				case 3:
-					ext = "mkv";
-					break;
-			}
+        [self formatPopUpChanged:NULL];
 			
-			
-			NSString * string = [fDstFile2Field stringValue];
-			/* Add/replace File Output name to the correct extension*/
-			if( [string characterAtIndex: [string length] - 4] == '.' )
-			{
-				[fDstFile2Field setStringValue: [NSString stringWithFormat:
-					@"%@.%s", [string substringToIndex: [string length] - 4],
-					ext]];
-			}
-			else
-			{
-				[fDstFile2Field setStringValue: [NSString stringWithFormat:
-					@"%@.%s", string, ext]];
-			}
-			
-			
-			[fSrcTitlePopUp addItemWithTitle: [NSString
-                    stringWithFormat: @"%d - %02dh%02dm%02ds",
-				title->index, title->hours, title->minutes,
-				title->seconds]];
-			
+        [fSrcTitlePopUp addItemWithTitle: [NSString
+                stringWithFormat: @"%d - %02dh%02dm%02ds",
+                title->index, title->hours, title->minutes,
+                title->seconds]];
 		}
+        
 		// Select the longuest title
 		[fSrcTitlePopUp selectItemAtIndex: indxpri];
 		[self titlePopUpChanged: NULL];
 		
-		
-        SuccessfulScan = 1;
+        SuccessfulScan = YES;
 		[self enableUI: YES];
 		
 		/* if its the initial successful scan after awakeFromNib */
@@ -1122,13 +1079,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 -(IBAction)showGrowlDoneNotification:(id)sender
 {
   [GrowlApplicationBridge 
-          notifyWithTitle:@"Put down that cocktail..." 
-              description:@"your HandBrake encode is done!" 
-         notificationName:SERVICE_NAME
-                 iconData:nil 
-                 priority:0 
-                 isSticky:1 
-             clickContext:nil];
+            notifyWithTitle:@"Put down that cocktail..." 
+                description:@"your HandBrake encode is done!" 
+           notificationName:SERVICE_NAME
+                   iconData:nil 
+                   priority:0 
+                   isSticky:1 
+               clickContext:nil];
 }
 
 - (void) enableUI: (bool) b
@@ -1190,7 +1147,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 - (IBAction) showScanPanel: (id) sender
 {
     [self enableUI: NO];
-	
 	[self browseSources:NULL];
 }
 
@@ -1257,12 +1213,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 - (IBAction) openMainWindow: (id) sender
 {
     [fWindow  makeKeyAndOrderFront:nil];
-    [fWindow setReleasedWhenClosed: YES];
 }
 
 - (BOOL) windowShouldClose: (id) sender
 {
-    [fWindow setReleasedWhenClosed: NO];
     return YES;
 }
 
@@ -1270,8 +1224,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 {
     if( !flag ) {
         [fWindow  makeKeyAndOrderFront:nil];
-        [fWindow setReleasedWhenClosed: YES];
-        
+                
         return YES;
     }
     
@@ -2109,10 +2062,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 			{
 				ext = "mp4";
 			}
-            [fDstCodecsPopUp addItemWithTitle:
-                _( @"MPEG-4 Video / AAC Audio" )];
-            [fDstCodecsPopUp addItemWithTitle:
-                _( @"AVC/H.264 Video / AAC Audio" )];
+            
+            [fDstCodecsPopUp addItemWithTitle:_( @"MPEG-4 Video / AAC Audio" )];
+            [fDstCodecsPopUp addItemWithTitle:_( @"AVC/H.264 Video / AAC Audio" )];
+            
 			/* We enable the create chapters checkbox here since we are .mp4*/
 			[fCreateChapterMarkers setEnabled: YES];
 			/* We show the Large File (64 bit formatting) checkbox since we are .mp4 
@@ -2125,87 +2078,78 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 				{
 					/* if not enable in global preferences, we additionaly sanity check that the
 					hidden checkbox is set to off. */
-					[fDstMpgLargeFileCheck setState: NSOffState];
+                    [fDstMpgLargeFileCheck setState: NSOffState];
 				}
-				break;
-        case 1: 
-            ext = "avi";
-            [fDstCodecsPopUp addItemWithTitle:
-                _( @"MPEG-4 Video / MP3 Audio" )];
-            [fDstCodecsPopUp addItemWithTitle:
-                _( @"MPEG-4 Video / AC-3 Audio" )];
-            [fDstCodecsPopUp addItemWithTitle:
-                _( @"AVC/H.264 Video / MP3 Audio" )];
-            [fDstCodecsPopUp addItemWithTitle:
-                _( @"AVC/H.264 Video / AC-3 Audio" )];
-			/* We disable the create chapters checkbox here since we are NOT .mp4 
-			and make sure it is unchecked*/
-			[fCreateChapterMarkers setEnabled: NO];
-			[fCreateChapterMarkers setState: NSOffState];
-			break;
-        case 2:
-            ext = "ogm";
-            [fDstCodecsPopUp addItemWithTitle:
-                _( @"MPEG-4 Video / Vorbis Audio" )];
-            [fDstCodecsPopUp addItemWithTitle:
-                _( @"MPEG-4 Video / MP3 Audio" )];
-            /* We disable the create chapters checkbox here since we are NOT .mp4 
-			and make sure it is unchecked*/
-			[fCreateChapterMarkers setEnabled: NO];
-			[fCreateChapterMarkers setState: NSOffState];
-			break;
-		case 3:
-            ext = "mkv";
-            [fDstCodecsPopUp addItemWithTitle:
-                _( @"MPEG-4 Video / AAC Audio" )];
-				[fDstCodecsPopUp addItemWithTitle:
-                _( @"MPEG-4 Video / AC-3 Audio" )];
-			[fDstCodecsPopUp addItemWithTitle:
-                _( @"MPEG-4 Video / MP3 Audio" )];
-			[fDstCodecsPopUp addItemWithTitle:
-                _( @"MPEG-4 Video / Vorbis Audio" )];
+            break;
             
-			[fDstCodecsPopUp addItemWithTitle:
-                _( @"AVC/H.264 Video / AAC Audio" )];
-			[fDstCodecsPopUp addItemWithTitle:
-                _( @"AVC/H.264 Video / AC-3 Audio" )];
-			[fDstCodecsPopUp addItemWithTitle:
-                _( @"AVC/H.264 Video / MP3 Audio" )];
-			[fDstCodecsPopUp addItemWithTitle:
-                _( @"AVC/H.264 Video / Vorbis Audio" )];
-            /* We enable the create chapters checkbox here since */
+        case 1:
+            ext = "mkv";
+            [fDstCodecsPopUp addItemWithTitle:_( @"MPEG-4 Video / AAC Audio" )];
+            [fDstCodecsPopUp addItemWithTitle:_( @"MPEG-4 Video / AC-3 Audio" )];
+			[fDstCodecsPopUp addItemWithTitle:_( @"MPEG-4 Video / MP3 Audio" )];
+			[fDstCodecsPopUp addItemWithTitle:_( @"MPEG-4 Video / Vorbis Audio" )];
+            
+			[fDstCodecsPopUp addItemWithTitle:_( @"AVC/H.264 Video / AAC Audio" )];
+			[fDstCodecsPopUp addItemWithTitle:_( @"AVC/H.264 Video / AC-3 Audio" )];
+			[fDstCodecsPopUp addItemWithTitle:_( @"AVC/H.264 Video / MP3 Audio" )];
+			[fDstCodecsPopUp addItemWithTitle:_( @"AVC/H.264 Video / Vorbis Audio" )];
+            /* We enable the create chapters checkbox here */
 			[fCreateChapterMarkers setEnabled: YES];
 			break;
+            
+        case 2: 
+            ext = "avi";
+            [fDstCodecsPopUp addItemWithTitle:_( @"MPEG-4 Video / MP3 Audio" )];
+            [fDstCodecsPopUp addItemWithTitle:_( @"MPEG-4 Video / AC-3 Audio" )];
+            [fDstCodecsPopUp addItemWithTitle:_( @"AVC/H.264 Video / MP3 Audio" )];
+            [fDstCodecsPopUp addItemWithTitle:_( @"AVC/H.264 Video / AC-3 Audio" )];
+			/* We disable the create chapters checkbox here and make sure it is unchecked*/
+			[fCreateChapterMarkers setEnabled: NO];
+			[fCreateChapterMarkers setState: NSOffState];
+			break;
+            
+        case 3:
+            ext = "ogm";
+            [fDstCodecsPopUp addItemWithTitle:_( @"MPEG-4 Video / Vorbis Audio" )];
+            [fDstCodecsPopUp addItemWithTitle:_( @"MPEG-4 Video / MP3 Audio" )];
+            /* We disable the create chapters checkbox here and make sure it is unchecked*/
+			[fCreateChapterMarkers setEnabled: NO];
+			[fCreateChapterMarkers setState: NSOffState];
+			break;
     }
+    
     if ( SuccessfulScan ) {
         [fDstCodecsPopUp selectItemWithTitle:selectedCodecs];
-        if ( [fDstCodecsPopUp selectedItem] == NULL )
-            [fDstCodecsPopUp selectItemAtIndex:0];
+        
+        /* Add/replace to the correct extension */
+        if( [string characterAtIndex: [string length] - 4] == '.' )
+        {
+            [fDstFile2Field setStringValue: [NSString stringWithFormat:
+                @"%@.%s", [string substringToIndex: [string length] - 4],
+                ext]];
         }
-    [self codecsPopUpChanged: NULL];
-
-    /* Add/replace to the correct extension */
-    if( [string characterAtIndex: [string length] - 4] == '.' )
-    {
-        [fDstFile2Field setStringValue: [NSString stringWithFormat:
-            @"%@.%s", [string substringToIndex: [string length] - 4],
-            ext]];
+        else
+        {
+            [fDstFile2Field setStringValue: [NSString stringWithFormat:
+                @"%@.%s", string, ext]];
+        }
+        
+        if ( [fDstCodecsPopUp selectedItem] == NULL )
+        {
+            [fDstCodecsPopUp selectItemAtIndex:0];
+            [self codecsPopUpChanged: NULL];
+            
+            /* changing the format may mean that we can / can't offer mono or 6ch, */
+            /* so call audioTrackPopUpChanged for both audio tracks to update the mixdown popups */
+            [self audioTrackPopUpChanged: fAudLang1PopUp];
+            [self audioTrackPopUpChanged: fAudLang2PopUp];
+            /* We call the method to properly enable/disable turbo 2 pass */
+            [self twoPassCheckboxChanged: sender];
+            /* We call method method to change UI to reflect whether a preset is used or not*/
+        }
     }
-    else
-    {
-        [fDstFile2Field setStringValue: [NSString stringWithFormat:
-            @"%@.%s", string, ext]];
-    }
-
-	/* changing the format may mean that we can / can't offer mono or 6ch, */
-	/* so call audioTrackPopUpChanged for both audio tracks to update the mixdown popups */
-	[self audioTrackPopUpChanged: fAudLang1PopUp];
-	[self audioTrackPopUpChanged: fAudLang2PopUp];
-	/* We call the method to properly enable/disable turbo 2 pass */
-	[self twoPassCheckboxChanged: sender];
-	/* We call method method to change UI to reflect whether a preset is used or not*/
+    
 	[self customSettingUsed: sender];	
-	
 }
 
 - (IBAction) codecsPopUpChanged: (id) sender
@@ -4651,7 +4595,7 @@ id theRecord, theValue;
 }
 
 /**
- * Shows preferences window modally.
+ * Shows preferences window.
  */
 - (IBAction) showPreferencesWindow: (id) sender
 {

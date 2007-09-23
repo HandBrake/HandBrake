@@ -177,7 +177,7 @@
     int                            fEncodeState;
 	int                            currentScanCount;
 	int                            currentSuccessfulScanCount;
-    int                            SuccessfulScan;
+    BOOL                           SuccessfulScan;
 	NSString                      * currentSource;
 	
     hb_job_t                     * fLastKnownCurrentJob;
