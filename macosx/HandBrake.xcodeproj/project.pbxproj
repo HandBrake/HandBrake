@@ -106,16 +106,11 @@
 		59CBD2370BBB44DA004A3BE3 /* parsecsv.c in Sources */ = {isa = PBXBuildFile; fileRef = 59CBD2360BBB44DA004A3BE3 /* parsecsv.c */; };
 		59CBD2650BBB4D1B004A3BE3 /* ChapterTitles.m in Sources */ = {isa = PBXBuildFile; fileRef = 593034EA0BBA39A100172349 /* ChapterTitles.m */; };
 		A2122D820C7EAF6600AB87A4 /* DriveDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = A2122D810C7EAF6600AB87A4 /* DriveDetector.m */; };
-		A273E04E0C57B39A00493A45 /* Add.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E0470C57B39A00493A45 /* Add.tiff */; };
-		A273E04F0C57B39A00493A45 /* Brushed Window.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E0480C57B39A00493A45 /* Brushed Window.tiff */; };
-		A273E0500C57B39A00493A45 /* Drawer-List2.png in Resources */ = {isa = PBXBuildFile; fileRef = A273E0490C57B39A00493A45 /* Drawer-List2.png */; };
 		A273E0510C57B39A00493A45 /* Pause.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E04A0C57B39A00493A45 /* Pause.tiff */; };
 		A273E0520C57B39A00493A45 /* Play.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E04B0C57B39A00493A45 /* Play.tiff */; };
 		A273E0530C57B39A00493A45 /* Stop.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E04C0C57B39A00493A45 /* Stop.tiff */; };
-		A273E0540C57B39A00493A45 /* Terminal.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E04D0C57B39A00493A45 /* Terminal.tiff */; };
 		A273E09A0C57C1CC00493A45 /* muxmkv.c in Sources */ = {isa = PBXBuildFile; fileRef = A273E0950C57C19500493A45 /* muxmkv.c */; };
 		A273E09B0C57C1CD00493A45 /* muxmkv.c in Sources */ = {isa = PBXBuildFile; fileRef = A273E0950C57C19500493A45 /* muxmkv.c */; };
-		A28468680C5A43D900EF9A98 /* Disc.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A28468670C5A43D900EF9A98 /* Disc.tiff */; };
 		A29E05800BE1283E000533F5 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A29E057F0BE1283E000533F5 /* Growl.framework */; };
 		A29E058B0BE12889000533F5 /* Growl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A29E057F0BE1283E000533F5 /* Growl.framework */; };
 		A2A1EC310C76C35E00827E0D /* HBDVDDetector.h in Headers */ = {isa = PBXBuildFile; fileRef = A2A1EC300C76C35E00827E0D /* HBDVDDetector.h */; };
@@ -133,9 +128,6 @@
 		A2DFC66F0C6196D900E66E89 /* actionWidgetPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = A2DFC66D0C6196D900E66E89 /* actionWidgetPressed.png */; };
 		A2DFC6750C6197C600E66E89 /* MVMenuButton.h in Headers */ = {isa = PBXBuildFile; fileRef = A2DFC6740C6197C600E66E89 /* MVMenuButton.h */; };
 		A2DFC6770C61980700E66E89 /* MVMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A2DFC6760C61980700E66E89 /* MVMenuButton.m */; };
-		A91C68A20C967D83003ADAD1 /* pref-audio.png in Resources */ = {isa = PBXBuildFile; fileRef = A91C68A10C967D83003ADAD1 /* pref-audio.png */; };
-		A94537560C95E6A300EBB9B1 /* pref-picture.png in Resources */ = {isa = PBXBuildFile; fileRef = A94537550C95E6A300EBB9B1 /* pref-picture.png */; };
-		A96041080C96FC5C00CBAB1E /* pref-general.png in Resources */ = {isa = PBXBuildFile; fileRef = A96041070C96FC5C00CBAB1E /* pref-general.png */; };
 		A97A1DB40C91A6800015BC08 /* Express.nib in Resources */ = {isa = PBXBuildFile; fileRef = A97A1DB20C91A6800015BC08 /* Express.nib */; };
 		A9ABA2270C92AECA00D98324 /* PictureSettings.nib in Resources */ = {isa = PBXBuildFile; fileRef = A9ABA2250C92AECA00D98324 /* PictureSettings.nib */; };
 		A9AC41DF0C918DB500DDF9B8 /* HBAdvancedController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9AC41DD0C918DB500DDF9B8 /* HBAdvancedController.m */; };
@@ -292,15 +284,10 @@
 		59CBD2360BBB44DA004A3BE3 /* parsecsv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = parsecsv.c; path = ../test/parsecsv.c; sourceTree = SOURCE_ROOT; };
 		A2122D800C7EAF6500AB87A4 /* DriveDetector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DriveDetector.h; sourceTree = "<group>"; };
 		A2122D810C7EAF6600AB87A4 /* DriveDetector.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DriveDetector.m; sourceTree = "<group>"; };
-		A273E0470C57B39A00493A45 /* Add.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Add.tiff; sourceTree = "<group>"; };
-		A273E0480C57B39A00493A45 /* Brushed Window.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "Brushed Window.tiff"; sourceTree = "<group>"; };
-		A273E0490C57B39A00493A45 /* Drawer-List2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Drawer-List2.png"; sourceTree = "<group>"; };
 		A273E04A0C57B39A00493A45 /* Pause.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Pause.tiff; sourceTree = "<group>"; };
 		A273E04B0C57B39A00493A45 /* Play.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Play.tiff; sourceTree = "<group>"; };
 		A273E04C0C57B39A00493A45 /* Stop.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Stop.tiff; sourceTree = "<group>"; };
-		A273E04D0C57B39A00493A45 /* Terminal.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Terminal.tiff; sourceTree = "<group>"; };
 		A273E0950C57C19500493A45 /* muxmkv.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = muxmkv.c; path = ../libhb/muxmkv.c; sourceTree = SOURCE_ROOT; };
-		A28468670C5A43D900EF9A98 /* Disc.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Disc.tiff; sourceTree = "<group>"; };
 		A29E057F0BE1283E000533F5 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Growl.framework; sourceTree = "<group>"; };
 		A2A1EC300C76C35E00827E0D /* HBDVDDetector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = HBDVDDetector.h; sourceTree = "<group>"; };
 		A2A1EC390C76C58400827E0D /* HBDVDDetector.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = HBDVDDetector.m; sourceTree = "<group>"; };
@@ -317,9 +304,6 @@
 		A2DFC66D0C6196D900E66E89 /* actionWidgetPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = actionWidgetPressed.png; sourceTree = "<group>"; };
 		A2DFC6740C6197C600E66E89 /* MVMenuButton.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MVMenuButton.h; sourceTree = "<group>"; };
 		A2DFC6760C61980700E66E89 /* MVMenuButton.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MVMenuButton.m; sourceTree = "<group>"; };
-		A91C68A10C967D83003ADAD1 /* pref-audio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pref-audio.png"; sourceTree = "<group>"; };
-		A94537550C95E6A300EBB9B1 /* pref-picture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pref-picture.png"; sourceTree = "<group>"; };
-		A96041070C96FC5C00CBAB1E /* pref-general.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pref-general.png"; sourceTree = "<group>"; };
 		A97A1DB30C91A6800015BC08 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Express.nib; sourceTree = "<group>"; };
 		A9ABA2260C92AECA00D98324 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/PictureSettings.nib; sourceTree = "<group>"; };
 		A9AC41DD0C918DB500DDF9B8 /* HBAdvancedController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = HBAdvancedController.m; sourceTree = "<group>"; };
@@ -479,7 +463,6 @@
 			isa = PBXGroup;
 			children = (
 				B48359A70C82960500E04440 /* lang.c */,
-				A273E0950C57C19500493A45 /* muxmkv.c */,
 				EAA526920C3B25D200944FF2 /* stream.c */,
 				0DFA5C7E0B8DD3B60020BC09 /* declpcm.c */,
 				0DFA5C7F0B8DD3B60020BC09 /* decmpeg2.c */,
@@ -499,9 +482,10 @@
 				0DFA5C890B8DD3B60020BC09 /* fifo.c */,
 				0DFA5C8A0B8DD3B60020BC09 /* hb.c */,
 				0DFA5C8D0B8DD3B60020BC09 /* ipodutil.cpp */,
-				0DFA5C910B8DD3B60020BC09 /* muxavi.c */,
 				0DFA5C920B8DD3B60020BC09 /* muxcommon.c */,
+				A273E0950C57C19500493A45 /* muxmkv.c */,
 				0DFA5C930B8DD3B60020BC09 /* muxmp4.c */,
+				0DFA5C910B8DD3B60020BC09 /* muxavi.c */,
 				0DFA5C940B8DD3B60020BC09 /* muxogm.c */,
 				0DFA5C950B8DD3B60020BC09 /* ports.c */,
 				0DFA5C970B8DD3B60020BC09 /* reader.c */,
@@ -577,30 +561,22 @@
 		A273E0460C57B39A00493A45 /* icons */ = {
 			isa = PBXGroup;
 			children = (
-				A2D7AD5E0C998AD30082CA33 /* ActivityWindow.tiff */,
+				A2D7AD660C998AD30082CA33 /* Source.tiff */,
+				A273E04A0C57B39A00493A45 /* Pause.tiff */,
+				A273E04B0C57B39A00493A45 /* Play.tiff */,
+				A273E04C0C57B39A00493A45 /* Stop.tiff */,
 				A2D7AD5F0C998AD30082CA33 /* AddToQueue.tiff */,
+				A2D7AD650C998AD30082CA33 /* Queue.tiff */,
+				A2D7AD5E0C998AD30082CA33 /* ActivityWindow.tiff */,
 				A2D7AD600C998AD30082CA33 /* Drawer.tiff */,
+				A2D7AD630C998AD30082CA33 /* pref-general.tiff */,
 				A2D7AD610C998AD30082CA33 /* pref-advanced.tiff */,
 				A2D7AD620C998AD30082CA33 /* pref-audio.tiff */,
-				A2D7AD630C998AD30082CA33 /* pref-general.tiff */,
 				A2D7AD640C998AD30082CA33 /* pref-picture.tiff */,
-				A2D7AD650C998AD30082CA33 /* Queue.tiff */,
-				A2D7AD660C998AD30082CA33 /* Source.tiff */,
-				A91C68A10C967D83003ADAD1 /* pref-audio.png */,
-				A94537550C95E6A300EBB9B1 /* pref-picture.png */,
-				A96041070C96FC5C00CBAB1E /* pref-general.png */,
 				A9DE40430C959834008A5440 /* minus-8.png */,
 				A9DE40440C959834008A5440 /* plus-8.png */,
 				A2DFC66C0C6196D900E66E89 /* actionWidget.png */,
 				A2DFC66D0C6196D900E66E89 /* actionWidgetPressed.png */,
-				A28468670C5A43D900EF9A98 /* Disc.tiff */,
-				A273E0470C57B39A00493A45 /* Add.tiff */,
-				A273E0480C57B39A00493A45 /* Brushed Window.tiff */,
-				A273E0490C57B39A00493A45 /* Drawer-List2.png */,
-				A273E04A0C57B39A00493A45 /* Pause.tiff */,
-				A273E04B0C57B39A00493A45 /* Play.tiff */,
-				A273E04C0C57B39A00493A45 /* Stop.tiff */,
-				A273E04D0C57B39A00493A45 /* Terminal.tiff */,
 				E37C893E0C83988F00C1B919 /* Delete.png */,
 				E3003CB40C8852B70072F2A8 /* DeletePressed.png */,
 				E37C893D0C83988F00C1B919 /* DeleteHighlight.png */,
@@ -794,14 +770,9 @@
 				0DFA5C7B0B8DD1E90020BC09 /* HandBrake.icns in Resources */,
 				2538860C0BFE0B730064E995 /* OutputPanel.nib in Resources */,
 				25DE1FAD0C1699E500F01FC8 /* Preferences.nib in Resources */,
-				A273E04E0C57B39A00493A45 /* Add.tiff in Resources */,
-				A273E04F0C57B39A00493A45 /* Brushed Window.tiff in Resources */,
-				A273E0500C57B39A00493A45 /* Drawer-List2.png in Resources */,
 				A273E0510C57B39A00493A45 /* Pause.tiff in Resources */,
 				A273E0520C57B39A00493A45 /* Play.tiff in Resources */,
 				A273E0530C57B39A00493A45 /* Stop.tiff in Resources */,
-				A273E0540C57B39A00493A45 /* Terminal.tiff in Resources */,
-				A28468680C5A43D900EF9A98 /* Disc.tiff in Resources */,
 				A2DFC66E0C6196D900E66E89 /* actionWidget.png in Resources */,
 				A2DFC66F0C6196D900E66E89 /* actionWidgetPressed.png in Resources */,
 				E37C89410C83988F00C1B919 /* DeleteHighlight.png in Resources */,
@@ -830,9 +801,6 @@
 				E37167AA0C92FAA50072B384 /* JobPassUnknownLarge.png in Resources */,
 				A9DE40450C959834008A5440 /* minus-8.png in Resources */,
 				A9DE40460C959834008A5440 /* plus-8.png in Resources */,
-				A94537560C95E6A300EBB9B1 /* pref-picture.png in Resources */,
-				A91C68A20C967D83003ADAD1 /* pref-audio.png in Resources */,
-				A96041080C96FC5C00CBAB1E /* pref-general.png in Resources */,
 				A2D7AD670C998AD30082CA33 /* ActivityWindow.tiff in Resources */,
 				A2D7AD680C998AD30082CA33 /* AddToQueue.tiff in Resources */,
 				A2D7AD690C998AD30082CA33 /* Drawer.tiff in Resources */,
