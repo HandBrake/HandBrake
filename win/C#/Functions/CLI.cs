@@ -16,7 +16,6 @@ namespace Handbrake.Functions
         /// </summary>
         static readonly public CultureInfo Culture = new CultureInfo("en-US", false); 
 
-
         Process hbProc = new Process();
         
         public Process runCli(object s, string query, bool stderr, bool stdout, bool useShellExec, bool noWindow)

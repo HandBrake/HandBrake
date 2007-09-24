@@ -10,13 +10,18 @@ using System.IO;
 using System.Diagnostics;
 using System.Threading;
 using System.Runtime.InteropServices;
+using Microsoft.VisualBasic;
 
 namespace Handbrake
 {
 
     public partial class frmMain : Form
     {
+        // -------------------------------------------------------------- 
+        // Applicaiton Startup Stuff
+        // --------------------------------------------------------------
 
+        #region Application Startup
         private Process hbProc;
         private Parsing.DVD thisDVD;
         
@@ -24,19 +29,18 @@ namespace Handbrake
         // Some windows that require only 1 instance.
         // --------------------------------------------------------------
         private frmQueue queueWindow = new frmQueue();  
-        
-        // -------------------------------------------------------------- 
-        // Stuff that needs doing on startup.
-        // - Load users default settings. (if required)
-        // - Do an update check (if required)
-        // --------------------------------------------------------------
         //private frmDvdInfo dvdInfoWindow = new frmDvdInfo();
         
+
+        /*
+         * Stuff that needs to be done on program launch
+         */
+ 
         public frmMain()
         {
 
             ThreadPool.QueueUserWorkItem(showSplash);
-            Thread.Sleep(3000);
+            Thread.Sleep(1000);
 
             InitializeComponent();
 
@@ -44,6 +48,9 @@ namespace Handbrake
             //dvdInfoWindow.Show();
             //dvdInfoWindow.Hide();
             // **********************************************************************************************
+
+            // System Requirements Check
+            systemCheck();
 
             // Set the Version number lable to the corect version.
             Version.Text = "Version " + Properties.Settings.Default.GuiVersion;
@@ -62,6 +69,8 @@ namespace Handbrake
 
         }
 
+        #region Initializeation Functions
+        
         private void showSplash(object sender)
         {
             Form splash = new frmSplashScreen();
@@ -202,6 +211,91 @@ namespace Handbrake
             }
         }
 
+        #region Memory Check
+
+        public struct MEMORYSTATUS
+        {
+            public UInt32 dwLength;
+            public UInt32 dwMemoryLoad;
+            public UInt32 dwTotalPhys; // Used
+            public UInt32 dwAvailPhys;
+            public UInt32 dwTotalPageFile;
+            public UInt32 dwAvailPageFile;
+            public UInt32 dwTotalVirtual;
+            public UInt32 dwAvailVirtual;
+            // Aditional Varibles left in for future usage (JIC)
+        }
+
+        [DllImport("kernel32.dll")]
+        public static extern void GlobalMemoryStatus
+        (
+            ref MEMORYSTATUS lpBuffer
+        );
+
+        public uint CheckMemeory()
+        {
+            // Call the native GlobalMemoryStatus method
+            // with the defined structure.
+            MEMORYSTATUS memStatus = new MEMORYSTATUS();
+            GlobalMemoryStatus(ref memStatus);
+
+            // Use a StringBuilder for the message box string.
+            uint MemoryInfo = memStatus.dwTotalPhys;
+
+            // Return the Ram Information
+            return MemoryInfo;
+
+        }
+
+
+        #endregion
+        Boolean preventLaunch = false;
+        private void systemCheck()
+        {
+            try
+            {
+                // Make sure the screen resolution is not below 1024x768
+                System.Windows.Forms.Screen scr = System.Windows.Forms.Screen.PrimaryScreen;
+                if ((scr.Bounds.Width < 1024) || (scr.Bounds.Height < 768))
+                {
+                    MessageBox.Show("Your system does not meet the minimum requirements for HandBrake. \n Screen resolution is too Low. Must be 1024x768 or greater", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    preventLaunch = true;
+                }
+
+                // Make sure the system has enough RAM. 384MB or greater
+                uint memory = CheckMemeory();
+
+                if (memory < 319) // Set to 319 to allow for 64MB dedicated to video Memory and Windows returnig the memory figure slightly out.
+                {
+                    MessageBox.Show("Your system does not meet the minimum requirements for HandBrake. \n Insufficient Memory. 384MB or greater required.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    preventLaunch = true;
+                }
+            }
+            catch (Exception exc)
+            {
+                if (Properties.Settings.Default.GuiDebug == "Checked")
+                {
+                    MessageBox.Show("frmMain.cs - systemCheck() " + exc.ToString());
+                }
+            }
+        }
+
+        #endregion
+
+
+
+        // -------------------------------------------------------------- 
+        // Close the Application on main window load if required by the system Check
+        // --------------------------------------------------------------
+
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            if (preventLaunch == true)
+            {
+                Application.Exit();
+            }
+        }
+        #endregion
 
         // -------------------------------------------------------------- 
         // The main Menu bar.
@@ -1290,13 +1384,10 @@ namespace Handbrake
 
         #endregion
 
-        /* 
-         * ---------------------------------------------------
-         * 
-         * The query Generation function.
-         * 
-         * ---------------------------------------------------
-         */
+        //---------------------------------------------------
+        //  Some Functions
+        //  - Query Generation
+        //---------------------------------------------------
 
         #region Program Functions
 
@@ -1667,6 +1758,8 @@ namespace Handbrake
         }
 
         #endregion
+
+        
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

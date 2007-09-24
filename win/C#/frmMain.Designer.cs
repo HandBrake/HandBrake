@@ -126,6 +126,7 @@ namespace Handbrake
             this.lbl_encode = new System.Windows.Forms.Label();
             this.btn_eCancel = new System.Windows.Forms.Button();
             this.TabPage6 = new System.Windows.Forms.TabPage();
+            this.button1 = new System.Windows.Forms.Button();
             this.label23 = new System.Windows.Forms.Label();
             this.Label7 = new System.Windows.Forms.Label();
             this.Label39 = new System.Windows.Forms.Label();
@@ -187,7 +188,6 @@ namespace Handbrake
             this.text_left = new System.Windows.Forms.TextBox();
             this.advancedOptions = new System.Windows.Forms.TabControl();
             this.groupBox_dest = new System.Windows.Forms.GroupBox();
-            this.button1 = new System.Windows.Forms.Button();
             Label38 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
             this.frmMainMenu.SuspendLayout();
@@ -1225,6 +1225,19 @@ namespace Handbrake
             this.TabPage6.TabIndex = 6;
             this.TabPage6.Text = "Query Editor";
             // 
+            // button1
+            // 
+            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.button1.Location = new System.Drawing.Point(176, 59);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(134, 23);
+            this.button1.TabIndex = 44;
+            this.button1.Text = "Copy to Clipboard";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
             // label23
             // 
             this.label23.AutoSize = true;
@@ -1947,19 +1960,6 @@ namespace Handbrake
             this.groupBox_dest.TabStop = false;
             this.groupBox_dest.Text = "Destination";
             // 
-            // button1
-            // 
-            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.button1.Location = new System.Drawing.Point(176, 59);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(134, 23);
-            this.button1.TabIndex = 44;
-            this.button1.Text = "Copy to Clipboard";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1982,6 +1982,7 @@ namespace Handbrake
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Handbrake";
+            this.Load += new System.EventHandler(this.frmMain_Load);
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).EndInit();
             this.frmMainMenu.ResumeLayout(false);
             this.frmMainMenu.PerformLayout();
