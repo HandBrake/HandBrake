@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -10,7 +11,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Threading;
 using System.Runtime.InteropServices;
-using Microsoft.VisualBasic;
+
 
 namespace Handbrake
 {
@@ -22,19 +23,12 @@ namespace Handbrake
         // --------------------------------------------------------------
 
         #region Application Startup
+
         private Process hbProc;
-        private Parsing.DVD thisDVD;
-        
-        // --------------------------------------------------------------
-        // Some windows that require only 1 instance.
-        // --------------------------------------------------------------
+        private Parsing.DVD thisDVD;        
         private frmQueue queueWindow = new frmQueue();  
         //private frmDvdInfo dvdInfoWindow = new frmDvdInfo();
-        
 
-        /*
-         * Stuff that needs to be done on program launch
-         */
  
         public frmMain()
         {
@@ -58,7 +52,7 @@ namespace Handbrake
             // Run the update checker.
             updateCheck();
 
-            // Now load the users default if required.
+            // Now load the users default if required. (Will overide the above setting)
             loadUserDefaults();
 
             // Display the quick start window if required.
@@ -67,8 +61,22 @@ namespace Handbrake
             // Enable or disable tooltips
             tooltip();
 
+
+            // Hide the presets part of the window
+            this.Width = 590;
+
+            // Create and initializes a new StringCollection.
+            StringCollection myCol = new StringCollection();
+            // Add a range of elements from an array to the end of the StringCollection.
+            String[] myArr = new String[] { "RED", "orange", "yellow", "RED", "green", "blue", "RED", "indigo", "violet", "RED" };
+            myCol.AddRange(myArr);
+
+            Properties.Settings.Default.BuiltInPresets = myCol;
+  
+
         }
 
+        // Functions to preform tasks required on startup.
         #region Initializeation Functions
         
         private void showSplash(object sender)
@@ -115,7 +123,7 @@ namespace Handbrake
                     {
                         check_2PassEncode.CheckState = CheckState.Checked;
                     }
-  
+
                     drp_deInterlace_option.Text = Properties.Settings.Default.DeInterlace;
                     drp_deNoise.Text = Properties.Settings.Default.denoise;
 
@@ -160,6 +168,13 @@ namespace Handbrake
                         CheckCRF.CheckState = CheckState.Checked;
                     }
                     rtf_h264advanced.Text = Properties.Settings.Default.H264;
+
+                    groupBox_output.Text = "Output Settings (Preset: " + Properties.Settings.Default.SelectedPreset + ")";
+                }
+                else
+                {
+                    // Load the default preset on lauch
+                    ListBox_Presets.SelectedItem = "Normal";
                 }
             }
             catch (Exception)
@@ -282,19 +297,17 @@ namespace Handbrake
 
         #endregion
 
-
-
-        // -------------------------------------------------------------- 
         // Close the Application on main window load if required by the system Check
-        // --------------------------------------------------------------
-
-        private void frmMain_Load(object sender, EventArgs e)
+        #region Form Load
+            private void frmMain_Load(object sender, EventArgs e)
         {
             if (preventLaunch == true)
             {
                 Application.Exit();
             }
         }
+        #endregion
+
         #endregion
 
         // -------------------------------------------------------------- 
@@ -505,192 +518,45 @@ namespace Handbrake
         #endregion
 
         #region Presets Menu
-        // Need to write a handler for file extension
 
-        private void mnu_animation_Click(object sender, EventArgs e)
+        private void mnu_presetReset_Click(object sender, EventArgs e)
         {
-            setGuiSetttings(CheckState.Checked, "", "", "H.264", "1000", "", 0, "0%", "160", CheckState.Checked, "48", "ref=5:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2", "Origional (Fast)", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Apple Animation)");
+            ListBox_Presets.Items.Clear();
+            ListBox_Presets.Items.Add("Animation");
+            ListBox_Presets.Items.Add("AppleTV");
+            ListBox_Presets.Items.Add("Bedlam");
+            ListBox_Presets.Items.Add("Blind");
+            ListBox_Presets.Items.Add("Broke");
+            ListBox_Presets.Items.Add("Classic");
+            ListBox_Presets.Items.Add("Constant Quality Rate");
+            ListBox_Presets.Items.Add("Deux Six Quatre");
+            ListBox_Presets.Items.Add("Film");
+            ListBox_Presets.Items.Add("iPhone");
+            ListBox_Presets.Items.Add("iPod High-Rez");
+            ListBox_Presets.Items.Add("iPod Low-Rez");
+            ListBox_Presets.Items.Add("Normal");
+            ListBox_Presets.Items.Add("PS3");
+            ListBox_Presets.Items.Add("PSP");
+            ListBox_Presets.Items.Add("QuickTime");
+            ListBox_Presets.Items.Add("Television");
 
-            setMkv();
+            if (presetStatus == false)
+            {
+                this.Width = 881;
+                presetStatus = true;
+                btn_presets.Text = "Hide Presets";
+            }
         }
 
-        private void mnu_appleTv_Click(object sender, EventArgs e)
+        private void mnu_SelectDefault_Click(object sender, EventArgs e)
         {
-            setGuiSetttings(CheckState.Checked, "", "", "H.264", "2500", "", 0, "0%", "160", CheckState.Checked, "48", "bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=2", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: Apple TV)");
-        }
-
-        private void mnu_bedlam_Click(object sender, EventArgs e)
-        {
-            setGuiSetttings(CheckState.Checked, "", "", "H.264", "1800", "", 0, "0%", "160", CheckState.Checked, "48", "ref=16:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=7:me-range=64:analyse=all:8x8dct:trellis=2:no-fast-pskip:no-dct-decimate:filter=-2,-1", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Bedlam)");
-
-            setMkv();
-        }
-
-        private void mnu_blind_Click(object sender, EventArgs e)
-        {
-            setGuiSetttings(CheckState.Unchecked, "512", "", "H.264", "512", "", 0, "0%", "128", CheckState.Checked, "48", "", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: Blind)");
-        }
-
-        private void mnu_broke_Click(object sender, EventArgs e)
-        {
-            setGuiSetttings(CheckState.Unchecked, "640", "", "H.264", "", "695", 0, "0%", "128", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=6:bime:weightb:b-rdo:b-pyramid::direct=auto:me=umh:subme=6:trellis=1:analyse=all:8x8dct:no-fast-pskip", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Broke)");
-        }
-
-        private void mnu_Classic_Click(object sender, EventArgs e)
-        {
-            setGuiSetttings(CheckState.Unchecked, "", "", "H.264", "1000", "", 0, "0%", "160", CheckState.Unchecked, "48", "", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: Classic)");
-        }
-
-        private void mnu_CQR_Click(object sender, EventArgs e)
-        {
-            setGuiSetttings(CheckState.Checked, "", "", "H.264", "", "", 64, "64%", "160", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=3:b-pyramid:b-rdo:bime:weightb:filter=-2,-1:subme=6:trellis=1:analyse=all:8x8dct:me=umh", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AC3", "Output Settings (Preset: CQR)");
-
-            setMkv();
-        }
-
-        private void mnu_DSQ_Click(object sender, EventArgs e)
-        {
-            setGuiSetttings(CheckState.Checked, "", "", "H.264", "1600", "", 0, "0%", "160", CheckState.Checked, "48", "ref=5:mixed-refs:bframes=3:bime:weightb:b-rdo:b-pyramid:me=umh:subme=7:trellis=1:analyse=all:8x8dct:no-fast-pskip", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AC3", "Output Settings (Preset: DSQ)");
-
-            setMkv();
-        }
-
-        private void mnu_film_Click(object sender, EventArgs e)
-        {
-            setGuiSetttings(CheckState.Checked, "", "", "H.264", "2000", "", 0, "0%", "160", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:no-fast-pskip", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AC3", "Output Settings (Preset: Film)");
-
-            setMkv();
-        }
-
-        private void mnu_iphone_Click(object sender, EventArgs e)
-        {
-
-            setGuiSetttings(CheckState.Unchecked, "480", "", "H.264", "960", "", 0, "0%", "128", CheckState.Checked, "48", "cabac=0:ref=1:analyse=all:me=umh:subme=6:no-fast-pskip=1:trellis=1", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: iPhone)");
-
-        }
-
-        private void mnu_ipod_Click(object sender, EventArgs e)
-        {
-            setGuiSetttings(CheckState.Unchecked, "640", "", "H.264", "1500", "", 0, "0%", "160", CheckState.Checked, "48", "keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: iPod High Rez)");
-        }
-
-        private void mnu_ipodLow_Click(object sender, EventArgs e)
-        {
-            setGuiSetttings(CheckState.Unchecked, "320", "", "H.264", "700", "", 0, "0%", "160", CheckState.Checked, "48", "keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: iPod Low Rez)");
-        }
-
-        private void mnu_normal_Click(object sender, EventArgs e)
-        {
-
-            setGuiSetttings(CheckState.Checked, "", "", "H.264", "1500", "", 0, "0%", "160", CheckState.Checked, "48", "ref=2:bframes=2:subme=5:me=umh", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Normal)");
-
-        }
-
-        private void mnu_PS3_Click(object sender, EventArgs e)
-        {
-            setGuiSetttings(CheckState.Checked, "", "", "H.264", "2500", "", 0, "0%", "160", CheckState.Checked, "48", "level=41:subme=5:me=umh", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: PS3)");
-        }
-
-        private void mnu_psp_Click(object sender, EventArgs e)
-        {
-            setGuiSetttings(CheckState.Unchecked, "368", "208", "Mpeg 4", "1024", "", 0, "0%", "160", CheckState.Unchecked, "48", "", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: PSP)");
-        }
-
-        private void mnu_qt_Click(object sender, EventArgs e)
-        {
-
-            setGuiSetttings(CheckState.Checked, "", "", "H.264", "2000", "", 0, "0%", "160", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct-auto:me=umh:subme=5:analyse=all:8x8dct:trellis=1:no-fast-pskip", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Quicktime)");
-
-        }
-
-        private void mnu_television_Click(object sender, EventArgs e)
-        {
-
-            setGuiSetttings(CheckState.Unchecked, "", "", "H.264", "1300", "", 0, "0%", "160", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=6:bime:weightb:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip", "Origional (Fast)", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Television)");
-
-            setMkv();
-        }
-
-        // Function to setup the preset.
-        // It's a bit dirty but i'll sort this out later. Simply done to reduce the amount of code above.
-        private void setGuiSetttings(CheckState anamorphic, string width, string height, string vencoder, string bitrate, string filesize, int quality, string qpercent, string audioBit, CheckState chpt, string audioSample, string h264, string deinterlace, CheckState twopass, string crop, CheckState turbo, string audioCodec, string preset)
-        {
-            CheckPixelRatio.CheckState = anamorphic;
-            text_width.Text = width;
-            text_height.Text = height;
-            drp_videoEncoder.Text = vencoder;
-            text_bitrate.Text = bitrate;
-            text_filesize.Text = filesize;
-            slider_videoQuality.Value = quality;
-            SliderValue.Text = qpercent;
-            drp_audioBitrate.Text = audioBit;
-            Check_ChapterMarkers.CheckState = chpt;
-            drp_audioSampleRate.Text = audioSample;
-            rtf_h264advanced.Text = h264;
-            drp_deInterlace_option.Text = deinterlace;
-            check_2PassEncode.CheckState = twopass;
-            drp_crop.Text = crop;
-            check_turbo.CheckState = turbo;
-            drp_audioCodec.Text = audioCodec;
-
-            groupBox_output.Text = preset;
-        }
-
-        private void setMkv()
-        {
-            // Set file extension to MKV
-            string destination = text_destination.Text;
-            destination = destination.Replace(".mp4", ".mkv");
-            destination = destination.Replace(".avi", ".mkv");
-            destination = destination.Replace(".m4v", ".mkv");
-            destination = destination.Replace(".ogm", ".mkv");
-            text_destination.Text = destination;
-        }
-
-        // Set user default settings are main gui settings.
-        private void mnu_ProgramDefaultOptions_Click(object sender, EventArgs e)
-        {
-            //Source
-            Properties.Settings.Default.DVDSource = text_source.Text;
-            Properties.Settings.Default.DVDTitle = drp_dvdtitle.Text;
-            Properties.Settings.Default.ChapterStart = drop_chapterStart.Text;
-            Properties.Settings.Default.ChapterFinish = drop_chapterFinish.Text;
-            //Destination
-            Properties.Settings.Default.VideoDest = text_destination.Text;
-            Properties.Settings.Default.VideoEncoder = drp_videoEncoder.Text;
-            Properties.Settings.Default.AudioEncoder = drp_audioCodec.Text;
-            Properties.Settings.Default.Width = text_width.Text;
-            Properties.Settings.Default.Height = text_height.Text;
-            //Picture Settings Tab
-            Properties.Settings.Default.CroppingOption = drp_crop.Text;
-            Properties.Settings.Default.CropTop = text_top.Text;
-            Properties.Settings.Default.CropBottom = text_bottom.Text;
-            Properties.Settings.Default.CropLeft = text_left.Text;
-            Properties.Settings.Default.CropRight = text_right.Text;
-            Properties.Settings.Default.Subtitles = drp_subtitle.Text;
-            //Video Settings Tab
-            Properties.Settings.Default.VideoBitrate = text_bitrate.Text;
-            Properties.Settings.Default.VideoFilesize = text_filesize.Text;
-            Properties.Settings.Default.VideoQuality = slider_videoQuality.Value;
-            Properties.Settings.Default.TwoPass = check_2PassEncode.CheckState.ToString();
-            Properties.Settings.Default.DeInterlace = drp_deInterlace_option.Text;
-            Properties.Settings.Default.Grayscale = check_grayscale.CheckState.ToString();
-            Properties.Settings.Default.Framerate = drp_videoFramerate.Text;
-            Properties.Settings.Default.PixelRatio = CheckPixelRatio.CheckState.ToString();
-            Properties.Settings.Default.turboFirstPass = check_turbo.CheckState.ToString();
-            Properties.Settings.Default.largeFile = check_largeFile.CheckState.ToString();
-            Properties.Settings.Default.detelecine = check_detelecine.CheckState.ToString();
-            Properties.Settings.Default.denoise = drp_deNoise.Text;
-            Properties.Settings.Default.deblock = check_deblock.CheckState.ToString();
-            //Audio Settings Tab
-            Properties.Settings.Default.AudioBitrate = drp_audioBitrate.Text;
-            Properties.Settings.Default.AudioSampleRate = drp_audioSampleRate.Text;
-            Properties.Settings.Default.AudioChannels = drp_audioChannels.Text;
-            //H264 Tab
-            Properties.Settings.Default.CRF = CheckCRF.CheckState.ToString();
-            Properties.Settings.Default.H264 = rtf_h264advanced.Text;
-
-            Properties.Settings.Default.Save();
+            ListBox_Presets.SelectedItem = "Normal";
+            if (presetStatus == false)
+            {
+                this.Width = 881;
+                presetStatus = true;
+                btn_presets.Text = "Hide Presets";
+            }
         }
 
         #endregion
@@ -831,6 +697,207 @@ namespace Handbrake
         private void showQueue()
         {
             queueWindow.Show();
+        }
+
+        #endregion
+
+        // -------------------------------------------------------------- 
+        // Main Window Preset System
+        // --------------------------------------------------------------
+
+        #region Preset System
+
+        // Varibles
+        private Boolean presetStatus = false;
+
+        // Buttons
+        private void btn_presets_Click(object sender, EventArgs e)
+        {
+            if (presetStatus == false)
+            {
+                this.Width = 881;
+                presetStatus = true;
+                btn_presets.Text = "Hide Presets";
+            }
+            else
+            {
+                this.Width = 590;
+                presetStatus = false;
+                btn_presets.Text = "Show Presets";
+            }
+
+        }
+
+        private void btn_addPreset_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_removePreset_Click(object sender, EventArgs e)
+        {
+            ListBox_Presets.Items.Remove(ListBox_Presets.SelectedItem);
+        }
+
+        private void btn_setDefault_Click(object sender, EventArgs e)
+        {
+            //Source
+            Properties.Settings.Default.DVDSource = text_source.Text;
+            Properties.Settings.Default.DVDTitle = drp_dvdtitle.Text;
+            Properties.Settings.Default.ChapterStart = drop_chapterStart.Text;
+            Properties.Settings.Default.ChapterFinish = drop_chapterFinish.Text;
+            //Destination
+            Properties.Settings.Default.VideoDest = text_destination.Text;
+            Properties.Settings.Default.VideoEncoder = drp_videoEncoder.Text;
+            Properties.Settings.Default.AudioEncoder = drp_audioCodec.Text;
+            Properties.Settings.Default.Width = text_width.Text;
+            Properties.Settings.Default.Height = text_height.Text;
+            //Picture Settings Tab
+            Properties.Settings.Default.CroppingOption = drp_crop.Text;
+            Properties.Settings.Default.CropTop = text_top.Text;
+            Properties.Settings.Default.CropBottom = text_bottom.Text;
+            Properties.Settings.Default.CropLeft = text_left.Text;
+            Properties.Settings.Default.CropRight = text_right.Text;
+            Properties.Settings.Default.Subtitles = drp_subtitle.Text;
+            //Video Settings Tab
+            Properties.Settings.Default.VideoBitrate = text_bitrate.Text;
+            Properties.Settings.Default.VideoFilesize = text_filesize.Text;
+            Properties.Settings.Default.VideoQuality = slider_videoQuality.Value;
+            Properties.Settings.Default.TwoPass = check_2PassEncode.CheckState.ToString();
+            Properties.Settings.Default.DeInterlace = drp_deInterlace_option.Text;
+            Properties.Settings.Default.Grayscale = check_grayscale.CheckState.ToString();
+            Properties.Settings.Default.Framerate = drp_videoFramerate.Text;
+            Properties.Settings.Default.PixelRatio = CheckPixelRatio.CheckState.ToString();
+            Properties.Settings.Default.turboFirstPass = check_turbo.CheckState.ToString();
+            Properties.Settings.Default.largeFile = check_largeFile.CheckState.ToString();
+            Properties.Settings.Default.detelecine = check_detelecine.CheckState.ToString();
+            Properties.Settings.Default.denoise = drp_deNoise.Text;
+            Properties.Settings.Default.deblock = check_deblock.CheckState.ToString();
+            //Audio Settings Tab
+            Properties.Settings.Default.AudioBitrate = drp_audioBitrate.Text;
+            Properties.Settings.Default.AudioSampleRate = drp_audioSampleRate.Text;
+            Properties.Settings.Default.AudioChannels = drp_audioChannels.Text;
+            //H264 Tab
+            Properties.Settings.Default.CRF = CheckCRF.CheckState.ToString();
+            Properties.Settings.Default.H264 = rtf_h264advanced.Text;
+            Properties.Settings.Default.SelectedPreset = ListBox_Presets.SelectedItem.ToString();
+            Properties.Settings.Default.Save();
+        }
+
+
+        // Preset Seleciton
+        private void ListBox_Presets_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string selectedPreset = null;
+            if (ListBox_Presets.SelectedItem != null)
+            {
+                selectedPreset = ListBox_Presets.SelectedItem.ToString();
+            }
+            else
+            {
+                selectedPreset = "";
+            }
+
+            switch (selectedPreset)
+            {
+                case "Animation":
+                    setGuiSetttings(CheckState.Checked, "", "", "H.264", "1000", "", 0, "0%", "160", CheckState.Checked, "48", "ref=5:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2", "Origional (Fast)", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Apple Animation)");
+                    setMkv();
+                    break;
+                case "AppleTV":
+                    setGuiSetttings(CheckState.Checked, "", "", "H.264", "2500", "", 0, "0%", "160", CheckState.Checked, "48", "bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=2", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: Apple TV)");
+                    break;
+                case "Bedlam":
+                    setGuiSetttings(CheckState.Checked, "", "", "H.264", "1800", "", 0, "0%", "160", CheckState.Checked, "48", "ref=16:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=7:me-range=64:analyse=all:8x8dct:trellis=2:no-fast-pskip:no-dct-decimate:filter=-2,-1", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Bedlam)");
+                    setMkv();
+                    break;
+                case "Blind":
+                    setGuiSetttings(CheckState.Unchecked, "512", "", "H.264", "512", "", 0, "0%", "128", CheckState.Checked, "48", "", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: Blind)");
+                    break;
+                case "Broke":
+                    setGuiSetttings(CheckState.Unchecked, "640", "", "H.264", "", "695", 0, "0%", "128", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=6:bime:weightb:b-rdo:b-pyramid::direct=auto:me=umh:subme=6:trellis=1:analyse=all:8x8dct:no-fast-pskip", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Broke)");
+                    break;
+                case "Classic":
+                    setGuiSetttings(CheckState.Unchecked, "", "", "H.264", "1000", "", 0, "0%", "160", CheckState.Unchecked, "48", "", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: Classic)");
+                    break;
+                case "Constant Quality Rate":
+                    setGuiSetttings(CheckState.Checked, "", "", "H.264", "", "", 64, "64%", "160", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=3:b-pyramid:b-rdo:bime:weightb:filter=-2,-1:subme=6:trellis=1:analyse=all:8x8dct:me=umh", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AC3", "Output Settings (Preset: CQR)");
+                    setMkv();
+                    break;
+                case "Deux Six Quatre":
+                    setGuiSetttings(CheckState.Checked, "", "", "H.264", "1600", "", 0, "0%", "160", CheckState.Checked, "48", "ref=5:mixed-refs:bframes=3:bime:weightb:b-rdo:b-pyramid:me=umh:subme=7:trellis=1:analyse=all:8x8dct:no-fast-pskip", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AC3", "Output Settings (Preset: DSQ)");
+                    setMkv();
+                    break;
+                case "Film":
+                    setGuiSetttings(CheckState.Checked, "", "", "H.264", "2000", "", 0, "0%", "160", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:no-fast-pskip", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AC3", "Output Settings (Preset: Film)");
+                    setMkv();
+                    break;
+                case "iPhone":
+                    setGuiSetttings(CheckState.Unchecked, "480", "", "H.264", "960", "", 0, "0%", "128", CheckState.Checked, "48", "cabac=0:ref=1:analyse=all:me=umh:subme=6:no-fast-pskip=1:trellis=1", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: iPhone)");
+                    break;
+                case "iPod High-Rez":
+                    setGuiSetttings(CheckState.Unchecked, "640", "", "H.264", "1500", "", 0, "0%", "160", CheckState.Checked, "48", "keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: iPod High Rez)");
+                    break;
+                case "iPod Low-Rez":
+                    setGuiSetttings(CheckState.Unchecked, "320", "", "H.264", "700", "", 0, "0%", "160", CheckState.Checked, "48", "keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: iPod Low Rez)");
+                    break;
+                case "Normal":
+                    setGuiSetttings(CheckState.Checked, "", "", "H.264", "1500", "", 0, "0%", "160", CheckState.Checked, "48", "ref=2:bframes=2:subme=5:me=umh", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Normal)");
+                    break;
+                case "PS3":
+                    setGuiSetttings(CheckState.Checked, "", "", "H.264", "2500", "", 0, "0%", "160", CheckState.Checked, "48", "level=41:subme=5:me=umh", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: PS3)");
+                    break;
+                case "PSP":
+                    setGuiSetttings(CheckState.Unchecked, "368", "208", "Mpeg 4", "1024", "", 0, "0%", "160", CheckState.Unchecked, "48", "", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: PSP)");
+                    break;
+                case "QuickTime":
+                    setGuiSetttings(CheckState.Checked, "", "", "H.264", "2000", "", 0, "0%", "160", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct-auto:me=umh:subme=5:analyse=all:8x8dct:trellis=1:no-fast-pskip", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Quicktime)");
+                    break;
+                case "Television":
+                    setGuiSetttings(CheckState.Unchecked, "", "", "H.264", "1300", "", 0, "0%", "160", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=6:bime:weightb:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip", "Origional (Fast)", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Television)");
+                    setMkv();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+
+
+
+        // Functions - It's a bit dirty but i'll sort this out later. Simply done to reduce the amount of code above.
+        private void setGuiSetttings(CheckState anamorphic, string width, string height, string vencoder, string bitrate, string filesize, int quality, string qpercent, string audioBit, CheckState chpt, string audioSample, string h264, string deinterlace, CheckState twopass, string crop, CheckState turbo, string audioCodec, string preset)
+        {
+            CheckPixelRatio.CheckState = anamorphic;
+            text_width.Text = width;
+            text_height.Text = height;
+            drp_videoEncoder.Text = vencoder;
+            text_bitrate.Text = bitrate;
+            text_filesize.Text = filesize;
+            slider_videoQuality.Value = quality;
+            SliderValue.Text = qpercent;
+            drp_audioBitrate.Text = audioBit;
+            Check_ChapterMarkers.CheckState = chpt;
+            drp_audioSampleRate.Text = audioSample;
+            rtf_h264advanced.Text = h264;
+            drp_deInterlace_option.Text = deinterlace;
+            check_2PassEncode.CheckState = twopass;
+            drp_crop.Text = crop;
+            check_turbo.CheckState = turbo;
+            drp_audioCodec.Text = audioCodec;
+
+            groupBox_output.Text = preset;
+        }
+
+        private void setMkv()
+        {
+            // Set file extension to MKV
+            string destination = text_destination.Text;
+            destination = destination.Replace(".mp4", ".mkv");
+            destination = destination.Replace(".avi", ".mkv");
+            destination = destination.Replace(".m4v", ".mkv");
+            destination = destination.Replace(".ogm", ".mkv");
+            text_destination.Text = destination;
         }
 
         #endregion
@@ -1758,8 +1825,6 @@ namespace Handbrake
         }
 
         #endregion
-
-        
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

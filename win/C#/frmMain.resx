@@ -172,11 +172,6 @@
         Cv71r/4OTrQ4xWMwWlcAAAAASUVORK5CYII=
 </value>
   </data>
-  <data name="mnu_DSQ.ToolTipText" xml:space="preserve">
-    <value>HandBrake's preset for true high profile x264 quality. 
-A good balance of quality and speed, based on community standards found in the wild. 
-This preset will give you a much better sense of x264's capabilities than vanilla main profile.</value>
-  </data>
   <metadata name="frmMainMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>94, 17</value>
   </metadata>

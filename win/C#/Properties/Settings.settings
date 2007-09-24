@@ -143,5 +143,11 @@
     <Setting Name="CompletionOption" Type="System.String" Scope="User">
       <Value Profile="(Default)">Do Nothing</Value>
     </Setting>
+    <Setting Name="BuiltInPresets" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="SelectedPreset" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

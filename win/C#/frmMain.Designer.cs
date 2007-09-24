@@ -58,6 +58,7 @@ namespace Handbrake
             this.text_filesize = new System.Windows.Forms.TextBox();
             this.text_bitrate = new System.Windows.Forms.TextBox();
             this.drp_subtitle = new System.Windows.Forms.ComboBox();
+            this.btn_presets = new System.Windows.Forms.Button();
             this.DVD_Open = new System.Windows.Forms.FolderBrowserDialog();
             this.File_Open = new System.Windows.Forms.OpenFileDialog();
             this.ISO_Open = new System.Windows.Forms.OpenFileDialog();
@@ -75,25 +76,9 @@ namespace Handbrake
             this.ToolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.mnu_options = new System.Windows.Forms.ToolStripMenuItem();
             this.PresetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_animation = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_appleTv = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_bedlam = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_blind = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_broke = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_Classic = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_CQR = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_DSQ = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_film = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_iphone = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_ipod = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_ipodLow = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_normal = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_ps3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_psp = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_qt = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_television = new System.Windows.Forms.ToolStripMenuItem();
-            this.ToolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.mnu_ProgramDefaultOptions = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_presetReset = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.mnu_SelectDefault = new System.Windows.Forms.ToolStripMenuItem();
             this.HelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OnlineDocumentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_wiki = new System.Windows.Forms.ToolStripMenuItem();
@@ -188,6 +173,11 @@ namespace Handbrake
             this.text_left = new System.Windows.Forms.TextBox();
             this.advancedOptions = new System.Windows.Forms.TabControl();
             this.groupBox_dest = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btn_setDefault = new System.Windows.Forms.Button();
+            this.btn_removePreset = new System.Windows.Forms.Button();
+            this.btn_addPreset = new System.Windows.Forms.Button();
+            this.ListBox_Presets = new System.Windows.Forms.ListBox();
             Label38 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
             this.frmMainMenu.SuspendLayout();
@@ -200,6 +190,7 @@ namespace Handbrake
             this.TabPage1.SuspendLayout();
             this.advancedOptions.SuspendLayout();
             this.groupBox_dest.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // Label38
@@ -208,9 +199,9 @@ namespace Handbrake
             Label38.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             Label38.Location = new System.Drawing.Point(304, 67);
             Label38.Name = "Label38";
-            Label38.Size = new System.Drawing.Size(103, 13);
-            Label38.TabIndex = 30;
-            Label38.Text = "Target Size (MB)";
+            Label38.Size = new System.Drawing.Size(108, 13);
+            Label38.TabIndex = 63;
+            Label38.Text = "Target Size (MB):";
             // 
             // DVD_Save
             // 
@@ -234,7 +225,7 @@ namespace Handbrake
             this.drop_chapterFinish.Location = new System.Drawing.Point(408, 55);
             this.drop_chapterFinish.Name = "drop_chapterFinish";
             this.drop_chapterFinish.Size = new System.Drawing.Size(69, 21);
-            this.drop_chapterFinish.TabIndex = 41;
+            this.drop_chapterFinish.TabIndex = 7;
             this.drop_chapterFinish.Text = "Auto";
             this.ToolTip.SetToolTip(this.drop_chapterFinish, "Step 3 - Select the chapter range you would like to enocde. (default: All Chapter" +
                     "s)");
@@ -248,7 +239,7 @@ namespace Handbrake
             this.drop_chapterStart.Location = new System.Drawing.Point(295, 55);
             this.drop_chapterStart.Name = "drop_chapterStart";
             this.drop_chapterStart.Size = new System.Drawing.Size(69, 21);
-            this.drop_chapterStart.TabIndex = 40;
+            this.drop_chapterStart.TabIndex = 6;
             this.drop_chapterStart.Text = "Auto";
             this.ToolTip.SetToolTip(this.drop_chapterStart, "Step 3 - Select the chapter range you would like to enocde. (default: All Chapter" +
                     "s)");
@@ -264,7 +255,7 @@ namespace Handbrake
             this.drp_dvdtitle.Location = new System.Drawing.Point(99, 52);
             this.drp_dvdtitle.Name = "drp_dvdtitle";
             this.drp_dvdtitle.Size = new System.Drawing.Size(119, 21);
-            this.drp_dvdtitle.TabIndex = 39;
+            this.drp_dvdtitle.TabIndex = 5;
             this.drp_dvdtitle.Text = "Automatic";
             this.ToolTip.SetToolTip(this.drp_dvdtitle, "Step 2 - Select the title number you wish to encode.");
             this.drp_dvdtitle.SelectedIndexChanged += new System.EventHandler(this.drp_dvdtitle_SelectedIndexChanged);
@@ -277,7 +268,7 @@ namespace Handbrake
             this.RadioISO.Location = new System.Drawing.Point(549, 22);
             this.RadioISO.Name = "RadioISO";
             this.RadioISO.Size = new System.Drawing.Size(44, 17);
-            this.RadioISO.TabIndex = 19;
+            this.RadioISO.TabIndex = 3;
             this.RadioISO.Text = "File";
             this.ToolTip.SetToolTip(this.RadioISO, "ISO, TS, MPG");
             this.RadioISO.UseVisualStyleBackColor = true;
@@ -300,7 +291,7 @@ namespace Handbrake
             this.text_destination.Location = new System.Drawing.Point(99, 19);
             this.text_destination.Name = "text_destination";
             this.text_destination.Size = new System.Drawing.Size(294, 21);
-            this.text_destination.TabIndex = 4;
+            this.text_destination.TabIndex = 14;
             this.ToolTip.SetToolTip(this.text_destination, "Location where the enoceded file will be saved.");
             // 
             // btn_Browse
@@ -312,7 +303,7 @@ namespace Handbrake
             this.btn_Browse.Location = new System.Drawing.Point(399, 19);
             this.btn_Browse.Name = "btn_Browse";
             this.btn_Browse.Size = new System.Drawing.Size(78, 22);
-            this.btn_Browse.TabIndex = 2;
+            this.btn_Browse.TabIndex = 4;
             this.btn_Browse.Text = "Browse";
             this.ToolTip.SetToolTip(this.btn_Browse, "Step 1 - Select a Source. This can be either a DVD or ts/mpg/iso file");
             this.btn_Browse.UseVisualStyleBackColor = true;
@@ -326,7 +317,7 @@ namespace Handbrake
             this.text_height.Location = new System.Drawing.Point(196, 54);
             this.text_height.Name = "text_height";
             this.text_height.Size = new System.Drawing.Size(64, 21);
-            this.text_height.TabIndex = 8;
+            this.text_height.TabIndex = 24;
             this.ToolTip.SetToolTip(this.text_height, "Video Resolution (Height)");
             this.text_height.TextChanged += new System.EventHandler(this.text_height_TextChanged);
             // 
@@ -337,7 +328,7 @@ namespace Handbrake
             this.text_width.Location = new System.Drawing.Point(104, 54);
             this.text_width.Name = "text_width";
             this.text_width.Size = new System.Drawing.Size(64, 21);
-            this.text_width.TabIndex = 7;
+            this.text_width.TabIndex = 22;
             this.ToolTip.SetToolTip(this.text_width, "Video Resolution (Width)");
             this.text_width.TextChanged += new System.EventHandler(this.text_width_TextChanged);
             // 
@@ -350,7 +341,7 @@ namespace Handbrake
             this.btn_destBrowse.Location = new System.Drawing.Point(399, 18);
             this.btn_destBrowse.Name = "btn_destBrowse";
             this.btn_destBrowse.Size = new System.Drawing.Size(83, 22);
-            this.btn_destBrowse.TabIndex = 4;
+            this.btn_destBrowse.TabIndex = 15;
             this.btn_destBrowse.Text = "Browse";
             this.ToolTip.SetToolTip(this.btn_destBrowse, "Step 4 - Select a location to save your encoded file.");
             this.btn_destBrowse.UseVisualStyleBackColor = true;
@@ -370,7 +361,7 @@ namespace Handbrake
             this.drp_videoEncoder.Location = new System.Drawing.Point(104, 21);
             this.drp_videoEncoder.Name = "drp_videoEncoder";
             this.drp_videoEncoder.Size = new System.Drawing.Size(156, 21);
-            this.drp_videoEncoder.TabIndex = 5;
+            this.drp_videoEncoder.TabIndex = 18;
             this.drp_videoEncoder.Text = "H.264";
             this.ToolTip.SetToolTip(this.drp_videoEncoder, "Step 5 - Select a video encoder");
             this.drp_videoEncoder.SelectedIndexChanged += new System.EventHandler(this.drp_videoEncoder_SelectedIndexChanged);
@@ -388,7 +379,7 @@ namespace Handbrake
             this.drp_audioCodec.Location = new System.Drawing.Point(376, 20);
             this.drp_audioCodec.Name = "drp_audioCodec";
             this.drp_audioCodec.Size = new System.Drawing.Size(111, 21);
-            this.drp_audioCodec.TabIndex = 6;
+            this.drp_audioCodec.TabIndex = 20;
             this.drp_audioCodec.Text = "AAC";
             this.ToolTip.SetToolTip(this.drp_audioCodec, "Step 6 - Select an audio encoder.");
             this.drp_audioCodec.SelectedIndexChanged += new System.EventHandler(this.drp_audioCodec_SelectedIndexChanged);
@@ -401,7 +392,7 @@ namespace Handbrake
             this.CheckCRF.Location = new System.Drawing.Point(446, 133);
             this.CheckCRF.Name = "CheckCRF";
             this.CheckCRF.Size = new System.Drawing.Size(146, 17);
-            this.CheckCRF.TabIndex = 44;
+            this.CheckCRF.TabIndex = 67;
             this.CheckCRF.Text = "Constant Rate Factor";
             this.ToolTip.SetToolTip(this.CheckCRF, "Constant Rate Factor");
             this.CheckCRF.UseVisualStyleBackColor = true;
@@ -412,7 +403,7 @@ namespace Handbrake
             this.QueryEditorText.Location = new System.Drawing.Point(16, 88);
             this.QueryEditorText.Name = "QueryEditorText";
             this.QueryEditorText.Size = new System.Drawing.Size(605, 93);
-            this.QueryEditorText.TabIndex = 41;
+            this.QueryEditorText.TabIndex = 93;
             this.QueryEditorText.Text = "";
             this.ToolTip.SetToolTip(this.QueryEditorText, "Manually add or edit a query generated by the GUI.");
             // 
@@ -422,7 +413,7 @@ namespace Handbrake
             this.rtf_h264advanced.Location = new System.Drawing.Point(16, 79);
             this.rtf_h264advanced.Name = "rtf_h264advanced";
             this.rtf_h264advanced.Size = new System.Drawing.Size(605, 76);
-            this.rtf_h264advanced.TabIndex = 41;
+            this.rtf_h264advanced.TabIndex = 84;
             this.rtf_h264advanced.Text = "";
             this.ToolTip.SetToolTip(this.rtf_h264advanced, "H.264 advanced options can be added here. See link below for details.");
             // 
@@ -445,7 +436,7 @@ namespace Handbrake
             this.drp_audioBitrate.Location = new System.Drawing.Point(137, 37);
             this.drp_audioBitrate.Name = "drp_audioBitrate";
             this.drp_audioBitrate.Size = new System.Drawing.Size(101, 21);
-            this.drp_audioBitrate.TabIndex = 40;
+            this.drp_audioBitrate.TabIndex = 70;
             this.drp_audioBitrate.Text = "128";
             this.ToolTip.SetToolTip(this.drp_audioBitrate, "Set the Audio Bit-Rate");
             // 
@@ -463,7 +454,7 @@ namespace Handbrake
             this.drp_audioSampleRate.Location = new System.Drawing.Point(137, 67);
             this.drp_audioSampleRate.Name = "drp_audioSampleRate";
             this.drp_audioSampleRate.Size = new System.Drawing.Size(101, 21);
-            this.drp_audioSampleRate.TabIndex = 23;
+            this.drp_audioSampleRate.TabIndex = 72;
             this.drp_audioSampleRate.Text = "44.1";
             this.ToolTip.SetToolTip(this.drp_audioSampleRate, "Set the Audio Sample Rate");
             // 
@@ -474,7 +465,7 @@ namespace Handbrake
             this.check_largeFile.Location = new System.Drawing.Point(16, 107);
             this.check_largeFile.Name = "check_largeFile";
             this.check_largeFile.Size = new System.Drawing.Size(172, 17);
-            this.check_largeFile.TabIndex = 51;
+            this.check_largeFile.TabIndex = 56;
             this.check_largeFile.Text = "Larger mp4 Files (> 4GB)";
             this.ToolTip.SetToolTip(this.check_largeFile, "Allows creation of mp4 files greater than 4GB.");
             this.check_largeFile.UseVisualStyleBackColor = true;
@@ -487,7 +478,7 @@ namespace Handbrake
             this.check_turbo.Location = new System.Drawing.Point(37, 84);
             this.check_turbo.Name = "check_turbo";
             this.check_turbo.Size = new System.Drawing.Size(110, 17);
-            this.check_turbo.TabIndex = 50;
+            this.check_turbo.TabIndex = 55;
             this.check_turbo.Text = "Turbo 1st Pass";
             this.ToolTip.SetToolTip(this.check_turbo, "Makes the first pass of a 2 pass encode faster.");
             this.check_turbo.UseVisualStyleBackColor = true;
@@ -510,7 +501,7 @@ namespace Handbrake
             this.drp_videoFramerate.Location = new System.Drawing.Point(126, 149);
             this.drp_videoFramerate.Name = "drp_videoFramerate";
             this.drp_videoFramerate.Size = new System.Drawing.Size(112, 21);
-            this.drp_videoFramerate.TabIndex = 21;
+            this.drp_videoFramerate.TabIndex = 59;
             this.drp_videoFramerate.Text = "Automatic";
             this.ToolTip.SetToolTip(this.drp_videoFramerate, "Can be left to automcatic in most cases.");
             // 
@@ -520,7 +511,7 @@ namespace Handbrake
             this.slider_videoQuality.Maximum = 100;
             this.slider_videoQuality.Name = "slider_videoQuality";
             this.slider_videoQuality.Size = new System.Drawing.Size(167, 42);
-            this.slider_videoQuality.TabIndex = 6;
+            this.slider_videoQuality.TabIndex = 66;
             this.slider_videoQuality.TickFrequency = 17;
             this.ToolTip.SetToolTip(this.slider_videoQuality, "Set the quality level of the video. (Around 70% is fine for most)");
             this.slider_videoQuality.Scroll += new System.EventHandler(this.slider_videoQuality_Scroll);
@@ -532,7 +523,7 @@ namespace Handbrake
             this.text_filesize.Location = new System.Drawing.Point(446, 63);
             this.text_filesize.Name = "text_filesize";
             this.text_filesize.Size = new System.Drawing.Size(156, 21);
-            this.text_filesize.TabIndex = 16;
+            this.text_filesize.TabIndex = 64;
             this.ToolTip.SetToolTip(this.text_filesize, "Set the file size you wish the encoded file to be.");
             this.text_filesize.TextChanged += new System.EventHandler(this.text_filesize_TextChanged);
             // 
@@ -543,7 +534,7 @@ namespace Handbrake
             this.text_bitrate.Location = new System.Drawing.Point(446, 36);
             this.text_bitrate.Name = "text_bitrate";
             this.text_bitrate.Size = new System.Drawing.Size(156, 21);
-            this.text_bitrate.TabIndex = 15;
+            this.text_bitrate.TabIndex = 62;
             this.ToolTip.SetToolTip(this.text_bitrate, "Set the bitrate of the video");
             this.text_bitrate.TextChanged += new System.EventHandler(this.text_bitrate_TextChanged);
             // 
@@ -555,9 +546,24 @@ namespace Handbrake
             this.drp_subtitle.Location = new System.Drawing.Point(406, 36);
             this.drp_subtitle.Name = "drp_subtitle";
             this.drp_subtitle.Size = new System.Drawing.Size(213, 21);
-            this.drp_subtitle.TabIndex = 54;
+            this.drp_subtitle.TabIndex = 80;
             this.drp_subtitle.Text = "None";
             this.ToolTip.SetToolTip(this.drp_subtitle, "Select the subtitle language you require from this dropdown.");
+            // 
+            // btn_presets
+            // 
+            this.btn_presets.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_presets.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_presets.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_presets.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_presets.Location = new System.Drawing.Point(549, 12);
+            this.btn_presets.Name = "btn_presets";
+            this.btn_presets.Size = new System.Drawing.Size(111, 22);
+            this.btn_presets.TabIndex = 102;
+            this.btn_presets.Text = "Show Presets";
+            this.ToolTip.SetToolTip(this.btn_presets, "Step 4 - Select a location to save your encoded file.");
+            this.btn_presets.UseVisualStyleBackColor = true;
+            this.btn_presets.Click += new System.EventHandler(this.btn_presets_Click);
             // 
             // DVD_Open
             // 
@@ -678,185 +684,35 @@ namespace Handbrake
             // 
             // PresetsToolStripMenuItem
             // 
-            this.PresetsToolStripMenuItem.BackColor = System.Drawing.SystemColors.Control;
+            this.PresetsToolStripMenuItem.BackColor = System.Drawing.SystemColors.ControlLight;
             this.PresetsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnu_animation,
-            this.mnu_appleTv,
-            this.mnu_bedlam,
-            this.mnu_blind,
-            this.mnu_broke,
-            this.mnu_Classic,
-            this.mnu_CQR,
-            this.mnu_DSQ,
-            this.mnu_film,
-            this.mnu_iphone,
-            this.mnu_ipod,
-            this.mnu_ipodLow,
-            this.mnu_normal,
-            this.mnu_ps3,
-            this.mnu_psp,
-            this.mnu_qt,
-            this.mnu_television,
-            this.ToolStripSeparator4,
-            this.mnu_ProgramDefaultOptions});
+            this.mnu_presetReset,
+            this.toolStripSeparator4,
+            this.mnu_SelectDefault});
             this.PresetsToolStripMenuItem.Name = "PresetsToolStripMenuItem";
             this.PresetsToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
             this.PresetsToolStripMenuItem.Text = "&Presets";
             // 
-            // mnu_animation
+            // mnu_presetReset
             // 
-            this.mnu_animation.Name = "mnu_animation";
-            this.mnu_animation.Size = new System.Drawing.Size(276, 22);
-            this.mnu_animation.Text = "Animation";
-            this.mnu_animation.ToolTipText = "HandBrake\'s settings for cartoons, anime, and CGI.";
-            this.mnu_animation.Click += new System.EventHandler(this.mnu_animation_Click);
+            this.mnu_presetReset.Name = "mnu_presetReset";
+            this.mnu_presetReset.Size = new System.Drawing.Size(194, 22);
+            this.mnu_presetReset.Text = "Update Built-in Presets";
+            this.mnu_presetReset.ToolTipText = "Resets all presets.";
+            this.mnu_presetReset.Click += new System.EventHandler(this.mnu_presetReset_Click);
             // 
-            // mnu_appleTv
+            // toolStripSeparator4
             // 
-            this.mnu_appleTv.Name = "mnu_appleTv";
-            this.mnu_appleTv.Size = new System.Drawing.Size(276, 22);
-            this.mnu_appleTv.Text = "Apple TV";
-            this.mnu_appleTv.ToolTipText = "HandBrake\'s settings for the AppleTV. \r\nProvides a good balance between quality a" +
-                "nd file size, and optimizes performance.";
-            this.mnu_appleTv.Click += new System.EventHandler(this.mnu_appleTv_Click);
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(191, 6);
             // 
-            // mnu_bedlam
+            // mnu_SelectDefault
             // 
-            this.mnu_bedlam.Name = "mnu_bedlam";
-            this.mnu_bedlam.Size = new System.Drawing.Size(276, 22);
-            this.mnu_bedlam.Text = "Bedlam";
-            this.mnu_bedlam.ToolTipText = "HandBrake\'s settings maxed out for slowest encoding and highest quality. \r\nUse at" +
-                " your own risk. So slow it\'s not just insane...it\'s a trip to the looney bin.";
-            this.mnu_bedlam.Click += new System.EventHandler(this.mnu_bedlam_Click);
-            // 
-            // mnu_blind
-            // 
-            this.mnu_blind.Name = "mnu_blind";
-            this.mnu_blind.Size = new System.Drawing.Size(276, 22);
-            this.mnu_blind.Text = "Blind";
-            this.mnu_blind.ToolTipText = "HandBrake\'s preset for impatient people who don\'t care about picture quality.";
-            this.mnu_blind.Click += new System.EventHandler(this.mnu_blind_Click);
-            // 
-            // mnu_broke
-            // 
-            this.mnu_broke.Name = "mnu_broke";
-            this.mnu_broke.Size = new System.Drawing.Size(276, 22);
-            this.mnu_broke.Text = "Broke";
-            this.mnu_broke.ToolTipText = "HandBrake\'s preset for people without a lot of money to waste on hard drives. \r\nT" +
-                "ries to maximize quality for burning to CDs, so you can party like it\'s 1999.";
-            this.mnu_broke.Click += new System.EventHandler(this.mnu_broke_Click);
-            // 
-            // mnu_Classic
-            // 
-            this.mnu_Classic.Name = "mnu_Classic";
-            this.mnu_Classic.Size = new System.Drawing.Size(276, 22);
-            this.mnu_Classic.Text = "Classic";
-            this.mnu_Classic.ToolTipText = "HandBrake\'s traditional, faster, lower-quality settings.";
-            this.mnu_Classic.Click += new System.EventHandler(this.mnu_Classic_Click);
-            // 
-            // mnu_CQR
-            // 
-            this.mnu_CQR.Name = "mnu_CQR";
-            this.mnu_CQR.Size = new System.Drawing.Size(276, 22);
-            this.mnu_CQR.Text = "Constant Quality Rate";
-            this.mnu_CQR.ToolTipText = "HandBrake\'s preset for consistently excellent quality in one pass, \r\nwith the dow" +
-                "nside of entirely unpredictable file sizes and bitrates.";
-            this.mnu_CQR.Click += new System.EventHandler(this.mnu_CQR_Click);
-            // 
-            // mnu_DSQ
-            // 
-            this.mnu_DSQ.Name = "mnu_DSQ";
-            this.mnu_DSQ.Size = new System.Drawing.Size(276, 22);
-            this.mnu_DSQ.Text = "Deux Six Quatre";
-            this.mnu_DSQ.ToolTipText = resources.GetString("mnu_DSQ.ToolTipText");
-            this.mnu_DSQ.Click += new System.EventHandler(this.mnu_DSQ_Click);
-            // 
-            // mnu_film
-            // 
-            this.mnu_film.Name = "mnu_film";
-            this.mnu_film.Size = new System.Drawing.Size(276, 22);
-            this.mnu_film.Text = "Film";
-            this.mnu_film.ToolTipText = "HandBrake\'s preset for feature films.";
-            this.mnu_film.Click += new System.EventHandler(this.mnu_film_Click);
-            // 
-            // mnu_iphone
-            // 
-            this.mnu_iphone.Name = "mnu_iphone";
-            this.mnu_iphone.Size = new System.Drawing.Size(276, 22);
-            this.mnu_iphone.Text = "iPhone";
-            this.mnu_iphone.ToolTipText = "HandBrake\'s settings for the iPhone.";
-            this.mnu_iphone.Click += new System.EventHandler(this.mnu_iphone_Click);
-            // 
-            // mnu_ipod
-            // 
-            this.mnu_ipod.Name = "mnu_ipod";
-            this.mnu_ipod.Size = new System.Drawing.Size(276, 22);
-            this.mnu_ipod.Text = "iPod High Rez";
-            this.mnu_ipod.ToolTipText = "HandBrake\'s high resolution settings for the iPod.\r\nGood video quality, great for" +
-                " viewing on a TV using your iPod.";
-            this.mnu_ipod.Click += new System.EventHandler(this.mnu_ipod_Click);
-            // 
-            // mnu_ipodLow
-            // 
-            this.mnu_ipodLow.Name = "mnu_ipodLow";
-            this.mnu_ipodLow.Size = new System.Drawing.Size(276, 22);
-            this.mnu_ipodLow.Text = "iPod Low Rez";
-            this.mnu_ipodLow.ToolTipText = "HandBrake\'s low resolution settings for the iPod. \r\nOptimized for great playback " +
-                "on the iPod screen, with smaller file size.";
-            this.mnu_ipodLow.Click += new System.EventHandler(this.mnu_ipodLow_Click);
-            // 
-            // mnu_normal
-            // 
-            this.mnu_normal.Name = "mnu_normal";
-            this.mnu_normal.Size = new System.Drawing.Size(276, 22);
-            this.mnu_normal.Text = "Normal";
-            this.mnu_normal.ToolTipText = "HandBrake\'s normal, default settings.";
-            this.mnu_normal.Click += new System.EventHandler(this.mnu_normal_Click);
-            // 
-            // mnu_ps3
-            // 
-            this.mnu_ps3.Name = "mnu_ps3";
-            this.mnu_ps3.Size = new System.Drawing.Size(276, 22);
-            this.mnu_ps3.Text = "PS3";
-            this.mnu_ps3.ToolTipText = "HandBrake\'s settings for the Sony PlayStation 3.";
-            this.mnu_ps3.Click += new System.EventHandler(this.mnu_PS3_Click);
-            // 
-            // mnu_psp
-            // 
-            this.mnu_psp.Name = "mnu_psp";
-            this.mnu_psp.Size = new System.Drawing.Size(276, 22);
-            this.mnu_psp.Text = "PSP";
-            this.mnu_psp.ToolTipText = "HandBrake\'s settings for the Sony PlayStation Portable.";
-            this.mnu_psp.Click += new System.EventHandler(this.mnu_psp_Click);
-            // 
-            // mnu_qt
-            // 
-            this.mnu_qt.Name = "mnu_qt";
-            this.mnu_qt.Size = new System.Drawing.Size(276, 22);
-            this.mnu_qt.Text = "Quicktime";
-            this.mnu_qt.ToolTipText = "HandBrake\'s high quality settings for use with QuickTime. \r\nIt can be slow, so us" +
-                "e it when the Normal preset doesn\'t look good enough.";
-            this.mnu_qt.Click += new System.EventHandler(this.mnu_qt_Click);
-            // 
-            // mnu_television
-            // 
-            this.mnu_television.Name = "mnu_television";
-            this.mnu_television.Size = new System.Drawing.Size(276, 22);
-            this.mnu_television.Text = "Television";
-            this.mnu_television.ToolTipText = "HandBrake\'s settings for video from television.";
-            this.mnu_television.Click += new System.EventHandler(this.mnu_television_Click);
-            // 
-            // ToolStripSeparator4
-            // 
-            this.ToolStripSeparator4.Name = "ToolStripSeparator4";
-            this.ToolStripSeparator4.Size = new System.Drawing.Size(273, 6);
-            // 
-            // mnu_ProgramDefaultOptions
-            // 
-            this.mnu_ProgramDefaultOptions.Name = "mnu_ProgramDefaultOptions";
-            this.mnu_ProgramDefaultOptions.Size = new System.Drawing.Size(276, 22);
-            this.mnu_ProgramDefaultOptions.Text = "Set current options as program defaults";
-            this.mnu_ProgramDefaultOptions.Click += new System.EventHandler(this.mnu_ProgramDefaultOptions_Click);
+            this.mnu_SelectDefault.Name = "mnu_SelectDefault";
+            this.mnu_SelectDefault.Size = new System.Drawing.Size(194, 22);
+            this.mnu_SelectDefault.Text = "Select Default Preset";
+            this.mnu_SelectDefault.ToolTipText = "Select HandBrake\'s default preset";
+            this.mnu_SelectDefault.Click += new System.EventHandler(this.mnu_SelectDefault_Click);
             // 
             // HelpToolStripMenuItem
             // 
@@ -945,7 +801,7 @@ namespace Handbrake
             this.HelpToolStripMenuItem});
             this.frmMainMenu.Location = new System.Drawing.Point(0, 0);
             this.frmMainMenu.Name = "frmMainMenu";
-            this.frmMainMenu.Size = new System.Drawing.Size(675, 24);
+            this.frmMainMenu.Size = new System.Drawing.Size(873, 24);
             this.frmMainMenu.TabIndex = 1;
             this.frmMainMenu.Text = "MenuStrip1";
             // 
@@ -968,7 +824,7 @@ namespace Handbrake
             this.GroupBox1.Location = new System.Drawing.Point(14, 35);
             this.GroupBox1.Name = "GroupBox1";
             this.GroupBox1.Size = new System.Drawing.Size(647, 87);
-            this.GroupBox1.TabIndex = 408;
+            this.GroupBox1.TabIndex = 12;
             this.GroupBox1.TabStop = false;
             this.GroupBox1.Text = "Source";
             // 
@@ -979,7 +835,7 @@ namespace Handbrake
             this.Label13.Location = new System.Drawing.Point(374, 58);
             this.Label13.Name = "Label13";
             this.Label13.Size = new System.Drawing.Size(21, 13);
-            this.Label13.TabIndex = 42;
+            this.Label13.TabIndex = 8;
             this.Label13.Text = "To";
             // 
             // RadioDVD
@@ -990,7 +846,7 @@ namespace Handbrake
             this.RadioDVD.Location = new System.Drawing.Point(483, 22);
             this.RadioDVD.Name = "RadioDVD";
             this.RadioDVD.Size = new System.Drawing.Size(60, 17);
-            this.RadioDVD.TabIndex = 20;
+            this.RadioDVD.TabIndex = 2;
             this.RadioDVD.TabStop = true;
             this.RadioDVD.Text = "Folder";
             this.RadioDVD.UseVisualStyleBackColor = true;
@@ -1003,7 +859,7 @@ namespace Handbrake
             this.Label17.Location = new System.Drawing.Point(17, 22);
             this.Label17.Name = "Label17";
             this.Label17.Size = new System.Drawing.Size(52, 13);
-            this.Label17.TabIndex = 6;
+            this.Label17.TabIndex = 11;
             this.Label17.Text = "Source:";
             // 
             // Label9
@@ -1014,7 +870,7 @@ namespace Handbrake
             this.Label9.Location = new System.Drawing.Point(224, 58);
             this.Label9.Name = "Label9";
             this.Label9.Size = new System.Drawing.Size(64, 13);
-            this.Label9.TabIndex = 12;
+            this.Label9.TabIndex = 9;
             this.Label9.Text = "Chapters:";
             // 
             // Label10
@@ -1025,7 +881,7 @@ namespace Handbrake
             this.Label10.Location = new System.Drawing.Point(17, 55);
             this.Label10.Name = "Label10";
             this.Label10.Size = new System.Drawing.Size(36, 13);
-            this.Label10.TabIndex = 11;
+            this.Label10.TabIndex = 10;
             this.Label10.Text = "Title:";
             // 
             // groupBox_output
@@ -1046,7 +902,7 @@ namespace Handbrake
             this.groupBox_output.Location = new System.Drawing.Point(14, 185);
             this.groupBox_output.Name = "groupBox_output";
             this.groupBox_output.Size = new System.Drawing.Size(647, 82);
-            this.groupBox_output.TabIndex = 409;
+            this.groupBox_output.TabIndex = 16;
             this.groupBox_output.TabStop = false;
             this.groupBox_output.Text = "Output Settings (Preset: None)";
             // 
@@ -1058,27 +914,27 @@ namespace Handbrake
             this.Label56.Location = new System.Drawing.Point(175, 57);
             this.Label56.Name = "Label56";
             this.Label56.Size = new System.Drawing.Size(15, 13);
-            this.Label56.TabIndex = 38;
+            this.Label56.TabIndex = 23;
             this.Label56.Text = "x";
             // 
             // lbl_Aspect
             // 
             this.lbl_Aspect.AutoSize = true;
             this.lbl_Aspect.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_Aspect.Location = new System.Drawing.Point(374, 58);
+            this.lbl_Aspect.Location = new System.Drawing.Point(374, 57);
             this.lbl_Aspect.Name = "lbl_Aspect";
             this.lbl_Aspect.Size = new System.Drawing.Size(72, 12);
-            this.lbl_Aspect.TabIndex = 41;
+            this.lbl_Aspect.TabIndex = 26;
             this.lbl_Aspect.Text = "Select a Title";
             // 
             // Label91
             // 
             this.Label91.AutoSize = true;
             this.Label91.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label91.Location = new System.Drawing.Point(270, 58);
+            this.Label91.Location = new System.Drawing.Point(270, 57);
             this.Label91.Name = "Label91";
             this.Label91.Size = new System.Drawing.Size(87, 13);
-            this.Label91.TabIndex = 40;
+            this.Label91.TabIndex = 25;
             this.Label91.Text = "Aspect Ratio: ";
             // 
             // Label55
@@ -1086,10 +942,10 @@ namespace Handbrake
             this.Label55.AutoSize = true;
             this.Label55.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label55.ForeColor = System.Drawing.Color.Black;
-            this.Label55.Location = new System.Drawing.Point(17, 58);
+            this.Label55.Location = new System.Drawing.Point(17, 57);
             this.Label55.Name = "Label55";
             this.Label55.Size = new System.Drawing.Size(85, 13);
-            this.Label55.TabIndex = 29;
+            this.Label55.TabIndex = 21;
             this.Label55.Text = "Width/Height:";
             // 
             // Label47
@@ -1100,7 +956,7 @@ namespace Handbrake
             this.Label47.Location = new System.Drawing.Point(17, 24);
             this.Label47.Name = "Label47";
             this.Label47.Size = new System.Drawing.Size(62, 13);
-            this.Label47.TabIndex = 12;
+            this.Label47.TabIndex = 17;
             this.Label47.Text = "Encoder: ";
             // 
             // Label12
@@ -1111,7 +967,7 @@ namespace Handbrake
             this.Label12.Location = new System.Drawing.Point(270, 24);
             this.Label12.Name = "Label12";
             this.Label12.Size = new System.Drawing.Size(94, 13);
-            this.Label12.TabIndex = 20;
+            this.Label12.TabIndex = 19;
             this.Label12.Text = "Audio Encoder:";
             // 
             // Label3
@@ -1133,7 +989,7 @@ namespace Handbrake
             this.lbl_update.Location = new System.Drawing.Point(93, 540);
             this.lbl_update.Name = "lbl_update";
             this.lbl_update.Size = new System.Drawing.Size(193, 13);
-            this.lbl_update.TabIndex = 417;
+            this.lbl_update.TabIndex = 98;
             this.lbl_update.Text = "- A New Version is available!";
             this.lbl_update.Visible = false;
             // 
@@ -1147,7 +1003,7 @@ namespace Handbrake
             this.btn_queue.Location = new System.Drawing.Point(414, 535);
             this.btn_queue.Name = "btn_queue";
             this.btn_queue.Size = new System.Drawing.Size(115, 22);
-            this.btn_queue.TabIndex = 416;
+            this.btn_queue.TabIndex = 100;
             this.btn_queue.TabStop = false;
             this.btn_queue.Text = "Add to Queue";
             this.btn_queue.UseVisualStyleBackColor = false;
@@ -1163,7 +1019,7 @@ namespace Handbrake
             this.btn_encode.Location = new System.Drawing.Point(535, 535);
             this.btn_encode.Name = "btn_encode";
             this.btn_encode.Size = new System.Drawing.Size(124, 22);
-            this.btn_encode.TabIndex = 414;
+            this.btn_encode.TabIndex = 101;
             this.btn_encode.TabStop = false;
             this.btn_encode.Text = "Encode Video";
             this.btn_encode.UseVisualStyleBackColor = false;
@@ -1176,7 +1032,7 @@ namespace Handbrake
             this.Version.Location = new System.Drawing.Point(11, 540);
             this.Version.Name = "Version";
             this.Version.Size = new System.Drawing.Size(84, 20);
-            this.Version.TabIndex = 415;
+            this.Version.TabIndex = 97;
             this.Version.Text = "Version 2.4.1";
             // 
             // lbl_encode
@@ -1186,7 +1042,7 @@ namespace Handbrake
             this.lbl_encode.Location = new System.Drawing.Point(11, 520);
             this.lbl_encode.Name = "lbl_encode";
             this.lbl_encode.Size = new System.Drawing.Size(129, 13);
-            this.lbl_encode.TabIndex = 418;
+            this.lbl_encode.TabIndex = 96;
             this.lbl_encode.Text = "Encoding started...";
             this.lbl_encode.Visible = false;
             // 
@@ -1201,7 +1057,7 @@ namespace Handbrake
             this.btn_eCancel.Location = new System.Drawing.Point(343, 535);
             this.btn_eCancel.Name = "btn_eCancel";
             this.btn_eCancel.Size = new System.Drawing.Size(65, 22);
-            this.btn_eCancel.TabIndex = 419;
+            this.btn_eCancel.TabIndex = 99;
             this.btn_eCancel.TabStop = false;
             this.btn_eCancel.Text = "Cancel";
             this.btn_eCancel.UseVisualStyleBackColor = false;
@@ -1234,7 +1090,7 @@ namespace Handbrake
             this.button1.Location = new System.Drawing.Point(176, 59);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(134, 23);
-            this.button1.TabIndex = 44;
+            this.button1.TabIndex = 92;
             this.button1.Text = "Copy to Clipboard";
             this.button1.UseVisualStyleBackColor = true;
             // 
@@ -1244,7 +1100,7 @@ namespace Handbrake
             this.label23.Location = new System.Drawing.Point(13, 186);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(403, 13);
-            this.label23.TabIndex = 43;
+            this.label23.TabIndex = 94;
             this.label23.Text = "Remember to re-generate the query each time you change a setting!";
             // 
             // Label7
@@ -1254,7 +1110,7 @@ namespace Handbrake
             this.Label7.Location = new System.Drawing.Point(13, 13);
             this.Label7.Name = "Label7";
             this.Label7.Size = new System.Drawing.Size(89, 13);
-            this.Label7.TabIndex = 42;
+            this.Label7.TabIndex = 89;
             this.Label7.Text = "Query Editor";
             // 
             // Label39
@@ -1263,7 +1119,7 @@ namespace Handbrake
             this.Label39.Location = new System.Drawing.Point(13, 34);
             this.Label39.Name = "Label39";
             this.Label39.Size = new System.Drawing.Size(331, 13);
-            this.Label39.TabIndex = 40;
+            this.Label39.TabIndex = 90;
             this.Label39.Text = "Here you can alter the query generated by the program.";
             // 
             // btn_ClearQuery
@@ -1275,7 +1131,7 @@ namespace Handbrake
             this.btn_ClearQuery.Location = new System.Drawing.Point(542, 59);
             this.btn_ClearQuery.Name = "btn_ClearQuery";
             this.btn_ClearQuery.Size = new System.Drawing.Size(79, 23);
-            this.btn_ClearQuery.TabIndex = 39;
+            this.btn_ClearQuery.TabIndex = 95;
             this.btn_ClearQuery.Text = "Clear";
             this.btn_ClearQuery.UseVisualStyleBackColor = true;
             this.btn_ClearQuery.Click += new System.EventHandler(this.btn_ClearQuery_Click);
@@ -1289,7 +1145,7 @@ namespace Handbrake
             this.GenerateQuery.Location = new System.Drawing.Point(16, 59);
             this.GenerateQuery.Name = "GenerateQuery";
             this.GenerateQuery.Size = new System.Drawing.Size(154, 23);
-            this.GenerateQuery.TabIndex = 38;
+            this.GenerateQuery.TabIndex = 91;
             this.GenerateQuery.Text = "Generate Query Now";
             this.GenerateQuery.UseVisualStyleBackColor = true;
             this.GenerateQuery.Click += new System.EventHandler(this.GenerateQuery_Click);
@@ -1317,7 +1173,7 @@ namespace Handbrake
             this.Label43.Location = new System.Drawing.Point(78, 187);
             this.Label43.Name = "Label43";
             this.Label43.Size = new System.Drawing.Size(158, 13);
-            this.Label43.TabIndex = 48;
+            this.Label43.TabIndex = 87;
             this.Label43.Text = "for help using this feature.";
             // 
             // label_h264
@@ -1326,7 +1182,7 @@ namespace Handbrake
             this.label_h264.Location = new System.Drawing.Point(13, 187);
             this.label_h264.Name = "label_h264";
             this.label_h264.Size = new System.Drawing.Size(66, 13);
-            this.label_h264.TabIndex = 47;
+            this.label_h264.TabIndex = 86;
             this.label_h264.TabStop = true;
             this.label_h264.Text = "Click Here";
             this.label_h264.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.label_h264_LinkClicked);
@@ -1337,7 +1193,7 @@ namespace Handbrake
             this.Label95.Location = new System.Drawing.Point(13, 168);
             this.Label95.Name = "Label95";
             this.Label95.Size = new System.Drawing.Size(387, 13);
-            this.Label95.TabIndex = 46;
+            this.Label95.TabIndex = 85;
             this.Label95.Text = "Note: Incorrect usage of this feature will cause the encoder to fail!";
             // 
             // btn_h264Clear
@@ -1349,7 +1205,7 @@ namespace Handbrake
             this.btn_h264Clear.Location = new System.Drawing.Point(542, 50);
             this.btn_h264Clear.Name = "btn_h264Clear";
             this.btn_h264Clear.Size = new System.Drawing.Size(79, 23);
-            this.btn_h264Clear.TabIndex = 45;
+            this.btn_h264Clear.TabIndex = 88;
             this.btn_h264Clear.Text = "Clear";
             this.btn_h264Clear.UseVisualStyleBackColor = true;
             this.btn_h264Clear.Click += new System.EventHandler(this.btn_h264Clear_Click);
@@ -1361,7 +1217,7 @@ namespace Handbrake
             this.Label90.Location = new System.Drawing.Point(13, 13);
             this.Label90.Name = "Label90";
             this.Label90.Size = new System.Drawing.Size(165, 13);
-            this.Label90.TabIndex = 42;
+            this.Label90.TabIndex = 82;
             this.Label90.Text = "Advanced H.264 Options";
             // 
             // Label92
@@ -1370,7 +1226,7 @@ namespace Handbrake
             this.Label92.Location = new System.Drawing.Point(13, 41);
             this.Label92.Name = "Label92";
             this.Label92.Size = new System.Drawing.Size(370, 26);
-            this.Label92.TabIndex = 40;
+            this.Label92.TabIndex = 83;
             this.Label92.Text = "Specify advanced x264 options in the same style as mencoder:\r\noption1=value1:opti" +
                 "on2=value2";
             // 
@@ -1406,7 +1262,7 @@ namespace Handbrake
             this.Label19.Location = new System.Drawing.Point(339, 13);
             this.Label19.Name = "Label19";
             this.Label19.Size = new System.Drawing.Size(64, 13);
-            this.Label19.TabIndex = 53;
+            this.Label19.TabIndex = 78;
             this.Label19.Text = "Subtitles";
             // 
             // Label21
@@ -1416,7 +1272,7 @@ namespace Handbrake
             this.Label21.Location = new System.Drawing.Point(403, 63);
             this.Label21.Name = "Label21";
             this.Label21.Size = new System.Drawing.Size(224, 26);
-            this.Label21.TabIndex = 52;
+            this.Label21.TabIndex = 81;
             this.Label21.Text = "Please note that subtitles will be hard \r\ncoded into the video.\r\n";
             // 
             // Label20
@@ -1426,7 +1282,7 @@ namespace Handbrake
             this.Label20.Location = new System.Drawing.Point(339, 39);
             this.Label20.Name = "Label20";
             this.Label20.Size = new System.Drawing.Size(61, 13);
-            this.Label20.TabIndex = 51;
+            this.Label20.TabIndex = 79;
             this.Label20.Text = "Subtitles:";
             // 
             // Label29
@@ -1436,7 +1292,7 @@ namespace Handbrake
             this.Label29.Location = new System.Drawing.Point(135, 151);
             this.Label29.Name = "Label29";
             this.Label29.Size = new System.Drawing.Size(189, 24);
-            this.Label29.TabIndex = 42;
+            this.Label29.TabIndex = 77;
             this.Label29.Text = "Please note: Some options require a \r\n5.1 Audio Channel to be selected.";
             // 
             // drp_audioMixDown
@@ -1445,6 +1301,7 @@ namespace Handbrake
             this.drp_audioMixDown.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audioMixDown.FormattingEnabled = true;
             this.drp_audioMixDown.Items.AddRange(new object[] {
+            "Automatic",
             "Mono",
             "Stereo",
             "Dolby Surround",
@@ -1453,7 +1310,7 @@ namespace Handbrake
             this.drp_audioMixDown.Location = new System.Drawing.Point(137, 127);
             this.drp_audioMixDown.Name = "drp_audioMixDown";
             this.drp_audioMixDown.Size = new System.Drawing.Size(173, 21);
-            this.drp_audioMixDown.TabIndex = 50;
+            this.drp_audioMixDown.TabIndex = 76;
             this.drp_audioMixDown.Text = "Automatic";
             this.drp_audioMixDown.SelectedIndexChanged += new System.EventHandler(this.drp_audioMixDown_SelectedIndexChanged);
             // 
@@ -1465,7 +1322,7 @@ namespace Handbrake
             this.drp_audioChannels.Location = new System.Drawing.Point(137, 97);
             this.drp_audioChannels.Name = "drp_audioChannels";
             this.drp_audioChannels.Size = new System.Drawing.Size(173, 21);
-            this.drp_audioChannels.TabIndex = 49;
+            this.drp_audioChannels.TabIndex = 74;
             this.drp_audioChannels.Text = "Automatic";
             // 
             // Label14
@@ -1475,7 +1332,7 @@ namespace Handbrake
             this.Label14.Location = new System.Drawing.Point(13, 130);
             this.Label14.Name = "Label14";
             this.Label14.Size = new System.Drawing.Size(78, 13);
-            this.Label14.TabIndex = 39;
+            this.Label14.TabIndex = 75;
             this.Label14.Text = "Track 1 Mix:";
             // 
             // Label5
@@ -1485,7 +1342,7 @@ namespace Handbrake
             this.Label5.Location = new System.Drawing.Point(13, 13);
             this.Label5.Name = "Label5";
             this.Label5.Size = new System.Drawing.Size(101, 13);
-            this.Label5.TabIndex = 37;
+            this.Label5.TabIndex = 68;
             this.Label5.Text = "Audio Settings";
             // 
             // Label35
@@ -1503,7 +1360,7 @@ namespace Handbrake
             this.Label16.Location = new System.Drawing.Point(13, 40);
             this.Label16.Name = "Label16";
             this.Label16.Size = new System.Drawing.Size(91, 13);
-            this.Label16.TabIndex = 20;
+            this.Label16.TabIndex = 69;
             this.Label16.Text = "Bitrate (kbps):";
             // 
             // Label32
@@ -1513,7 +1370,7 @@ namespace Handbrake
             this.Label32.Location = new System.Drawing.Point(13, 100);
             this.Label32.Name = "Label32";
             this.Label32.Size = new System.Drawing.Size(55, 13);
-            this.Label32.TabIndex = 29;
+            this.Label32.TabIndex = 73;
             this.Label32.Text = "Track 1:";
             // 
             // Label18
@@ -1523,7 +1380,7 @@ namespace Handbrake
             this.Label18.Location = new System.Drawing.Point(13, 70);
             this.Label18.Name = "Label18";
             this.Label18.Size = new System.Drawing.Size(120, 13);
-            this.Label18.TabIndex = 23;
+            this.Label18.TabIndex = 71;
             this.Label18.Text = "Sample Rate (kHz):";
             // 
             // TabPage3
@@ -1560,7 +1417,7 @@ namespace Handbrake
             this.check_grayscale.Location = new System.Drawing.Point(16, 38);
             this.check_grayscale.Name = "check_grayscale";
             this.check_grayscale.Size = new System.Drawing.Size(138, 17);
-            this.check_grayscale.TabIndex = 74;
+            this.check_grayscale.TabIndex = 53;
             this.check_grayscale.Text = "Grayscale Encoding";
             this.check_grayscale.UseVisualStyleBackColor = true;
             // 
@@ -1571,7 +1428,7 @@ namespace Handbrake
             this.Label37.Location = new System.Drawing.Point(35, 127);
             this.Label37.Name = "Label37";
             this.Label37.Size = new System.Drawing.Size(241, 12);
-            this.Label37.TabIndex = 52;
+            this.Label37.TabIndex = 57;
             this.Label37.Text = "Warning: Breaks iPod, @TV, PS3 compatibility.";
             // 
             // Label22
@@ -1581,7 +1438,7 @@ namespace Handbrake
             this.Label22.Location = new System.Drawing.Point(13, 13);
             this.Label22.Name = "Label22";
             this.Label22.Size = new System.Drawing.Size(191, 13);
-            this.Label22.TabIndex = 38;
+            this.Label22.TabIndex = 52;
             this.Label22.Text = "Advanced Encoding Settings";
             // 
             // check_2PassEncode
@@ -1591,7 +1448,7 @@ namespace Handbrake
             this.check_2PassEncode.Location = new System.Drawing.Point(16, 61);
             this.check_2PassEncode.Name = "check_2PassEncode";
             this.check_2PassEncode.Size = new System.Drawing.Size(119, 17);
-            this.check_2PassEncode.TabIndex = 18;
+            this.check_2PassEncode.TabIndex = 54;
             this.check_2PassEncode.Text = "2-Pass Encoding";
             this.check_2PassEncode.UseVisualStyleBackColor = true;
             // 
@@ -1602,7 +1459,7 @@ namespace Handbrake
             this.Label2.Location = new System.Drawing.Point(304, 13);
             this.Label2.Name = "Label2";
             this.Label2.Size = new System.Drawing.Size(110, 13);
-            this.Label2.TabIndex = 37;
+            this.Label2.TabIndex = 60;
             this.Label2.Text = "Quality Settings";
             // 
             // Label42
@@ -1612,7 +1469,7 @@ namespace Handbrake
             this.Label42.Location = new System.Drawing.Point(304, 38);
             this.Label42.Name = "Label42";
             this.Label42.Size = new System.Drawing.Size(117, 13);
-            this.Label42.TabIndex = 18;
+            this.Label42.TabIndex = 61;
             this.Label42.Text = "Avg Bitrate (kbps):";
             // 
             // SliderValue
@@ -1632,7 +1489,7 @@ namespace Handbrake
             this.Label46.Location = new System.Drawing.Point(13, 152);
             this.Label46.Name = "Label46";
             this.Label46.Size = new System.Drawing.Size(107, 13);
-            this.Label46.TabIndex = 21;
+            this.Label46.TabIndex = 58;
             this.Label46.Text = "Video Framerate:";
             // 
             // Label40
@@ -1642,7 +1499,7 @@ namespace Handbrake
             this.Label40.Location = new System.Drawing.Point(304, 96);
             this.Label40.Name = "Label40";
             this.Label40.Size = new System.Drawing.Size(107, 13);
-            this.Label40.TabIndex = 27;
+            this.Label40.TabIndex = 65;
             this.Label40.Text = "Constant Quality:";
             // 
             // TabPage1
@@ -1685,7 +1542,7 @@ namespace Handbrake
             this.label24.Location = new System.Drawing.Point(314, 13);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(109, 13);
-            this.label24.TabIndex = 80;
+            this.label24.TabIndex = 42;
             this.label24.Text = "Picture Cleanup";
             // 
             // drp_deNoise
@@ -1701,7 +1558,7 @@ namespace Handbrake
             this.drp_deNoise.Location = new System.Drawing.Point(416, 91);
             this.drp_deNoise.Name = "drp_deNoise";
             this.drp_deNoise.Size = new System.Drawing.Size(161, 21);
-            this.drp_deNoise.TabIndex = 79;
+            this.drp_deNoise.TabIndex = 48;
             this.drp_deNoise.Text = "None";
             // 
             // label11
@@ -1711,7 +1568,7 @@ namespace Handbrake
             this.label11.Location = new System.Drawing.Point(314, 94);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(58, 13);
-            this.label11.TabIndex = 78;
+            this.label11.TabIndex = 47;
             this.label11.Text = "Denoise:";
             // 
             // check_deblock
@@ -1721,7 +1578,7 @@ namespace Handbrake
             this.check_deblock.Location = new System.Drawing.Point(416, 37);
             this.check_deblock.Name = "check_deblock";
             this.check_deblock.Size = new System.Drawing.Size(72, 17);
-            this.check_deblock.TabIndex = 77;
+            this.check_deblock.TabIndex = 44;
             this.check_deblock.Text = "Deblock";
             this.check_deblock.UseVisualStyleBackColor = true;
             // 
@@ -1732,7 +1589,7 @@ namespace Handbrake
             this.check_detelecine.Location = new System.Drawing.Point(317, 36);
             this.check_detelecine.Name = "check_detelecine";
             this.check_detelecine.Size = new System.Drawing.Size(86, 17);
-            this.check_detelecine.TabIndex = 76;
+            this.check_detelecine.TabIndex = 43;
             this.check_detelecine.Text = "Detelecine";
             this.check_detelecine.UseVisualStyleBackColor = true;
             // 
@@ -1743,7 +1600,7 @@ namespace Handbrake
             this.label4.Location = new System.Drawing.Point(314, 66);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(77, 13);
-            this.label4.TabIndex = 75;
+            this.label4.TabIndex = 45;
             this.label4.Text = "Deinterlace:";
             // 
             // drp_deInterlace_option
@@ -1760,7 +1617,7 @@ namespace Handbrake
             this.drp_deInterlace_option.Location = new System.Drawing.Point(416, 63);
             this.drp_deInterlace_option.Name = "drp_deInterlace_option";
             this.drp_deInterlace_option.Size = new System.Drawing.Size(161, 21);
-            this.drp_deInterlace_option.TabIndex = 74;
+            this.drp_deInterlace_option.TabIndex = 46;
             this.drp_deInterlace_option.Text = "None";
             // 
             // Check_ChapterMarkers
@@ -1770,7 +1627,7 @@ namespace Handbrake
             this.Check_ChapterMarkers.Location = new System.Drawing.Point(317, 173);
             this.Check_ChapterMarkers.Name = "Check_ChapterMarkers";
             this.Check_ChapterMarkers.Size = new System.Drawing.Size(122, 17);
-            this.Check_ChapterMarkers.TabIndex = 50;
+            this.Check_ChapterMarkers.TabIndex = 51;
             this.Check_ChapterMarkers.Text = "Chapter Markers";
             this.Check_ChapterMarkers.UseVisualStyleBackColor = true;
             this.Check_ChapterMarkers.CheckedChanged += new System.EventHandler(this.Check_ChapterMarkers_CheckedChanged);
@@ -1782,7 +1639,7 @@ namespace Handbrake
             this.CheckPixelRatio.Location = new System.Drawing.Point(317, 150);
             this.CheckPixelRatio.Name = "CheckPixelRatio";
             this.CheckPixelRatio.Size = new System.Drawing.Size(121, 17);
-            this.CheckPixelRatio.TabIndex = 49;
+            this.CheckPixelRatio.TabIndex = 50;
             this.CheckPixelRatio.Text = "Anamorphic PAR";
             this.CheckPixelRatio.UseVisualStyleBackColor = true;
             this.CheckPixelRatio.CheckedChanged += new System.EventHandler(this.CheckPixelRatio_CheckedChanged);
@@ -1794,7 +1651,7 @@ namespace Handbrake
             this.label6.Location = new System.Drawing.Point(314, 128);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(173, 13);
-            this.label6.TabIndex = 45;
+            this.label6.TabIndex = 49;
             this.label6.Text = "Additional Output Options";
             // 
             // lbl_RecomendedCrop
@@ -1804,7 +1661,7 @@ namespace Handbrake
             this.lbl_RecomendedCrop.Location = new System.Drawing.Point(119, 72);
             this.lbl_RecomendedCrop.Name = "lbl_RecomendedCrop";
             this.lbl_RecomendedCrop.Size = new System.Drawing.Size(72, 12);
-            this.lbl_RecomendedCrop.TabIndex = 38;
+            this.lbl_RecomendedCrop.TabIndex = 32;
             this.lbl_RecomendedCrop.Text = "Select a Title";
             // 
             // Label8
@@ -1813,7 +1670,7 @@ namespace Handbrake
             this.Label8.Location = new System.Drawing.Point(13, 71);
             this.Label8.Name = "Label8";
             this.Label8.Size = new System.Drawing.Size(70, 13);
-            this.Label8.TabIndex = 37;
+            this.Label8.TabIndex = 31;
             this.Label8.Text = "Auto Crop:";
             // 
             // Label1
@@ -1823,7 +1680,7 @@ namespace Handbrake
             this.Label1.Location = new System.Drawing.Point(13, 13);
             this.Label1.Name = "Label1";
             this.Label1.Size = new System.Drawing.Size(65, 13);
-            this.Label1.TabIndex = 36;
+            this.Label1.TabIndex = 28;
             this.Label1.Text = "Cropping";
             // 
             // Label53
@@ -1833,7 +1690,7 @@ namespace Handbrake
             this.Label53.Location = new System.Drawing.Point(134, 187);
             this.Label53.Name = "Label53";
             this.Label53.Size = new System.Drawing.Size(48, 13);
-            this.Label53.TabIndex = 32;
+            this.Label53.TabIndex = 40;
             this.Label53.Text = "Bottom";
             // 
             // Label52
@@ -1843,17 +1700,17 @@ namespace Handbrake
             this.Label52.Location = new System.Drawing.Point(138, 96);
             this.Label52.Name = "Label52";
             this.Label52.Size = new System.Drawing.Size(28, 13);
-            this.Label52.TabIndex = 31;
+            this.Label52.TabIndex = 33;
             this.Label52.Text = "Top";
             // 
             // Label51
             // 
             this.Label51.AutoSize = true;
             this.Label51.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label51.Location = new System.Drawing.Point(243, 148);
+            this.Label51.Location = new System.Drawing.Point(247, 139);
             this.Label51.Name = "Label51";
             this.Label51.Size = new System.Drawing.Size(36, 13);
-            this.Label51.TabIndex = 30;
+            this.Label51.TabIndex = 38;
             this.Label51.Text = "Right";
             // 
             // Label50
@@ -1863,7 +1720,7 @@ namespace Handbrake
             this.Label50.Location = new System.Drawing.Point(13, 41);
             this.Label50.Name = "Label50";
             this.Label50.Size = new System.Drawing.Size(88, 13);
-            this.Label50.TabIndex = 17;
+            this.Label50.TabIndex = 29;
             this.Label50.Text = "Select Option:";
             // 
             // Label15
@@ -1873,7 +1730,7 @@ namespace Handbrake
             this.Label15.Location = new System.Drawing.Point(39, 139);
             this.Label15.Name = "Label15";
             this.Label15.Size = new System.Drawing.Size(28, 13);
-            this.Label15.TabIndex = 29;
+            this.Label15.TabIndex = 35;
             this.Label15.Text = "Left";
             // 
             // text_top
@@ -1883,7 +1740,7 @@ namespace Handbrake
             this.text_top.Location = new System.Drawing.Point(131, 111);
             this.text_top.Name = "text_top";
             this.text_top.Size = new System.Drawing.Size(51, 21);
-            this.text_top.TabIndex = 10;
+            this.text_top.TabIndex = 34;
             this.text_top.Text = "0";
             // 
             // text_bottom
@@ -1893,7 +1750,7 @@ namespace Handbrake
             this.text_bottom.Location = new System.Drawing.Point(131, 163);
             this.text_bottom.Name = "text_bottom";
             this.text_bottom.Size = new System.Drawing.Size(51, 21);
-            this.text_bottom.TabIndex = 12;
+            this.text_bottom.TabIndex = 41;
             this.text_bottom.Text = "0";
             // 
             // drp_crop
@@ -1908,7 +1765,7 @@ namespace Handbrake
             this.drp_crop.Location = new System.Drawing.Point(118, 36);
             this.drp_crop.Name = "drp_crop";
             this.drp_crop.Size = new System.Drawing.Size(123, 21);
-            this.drp_crop.TabIndex = 9;
+            this.drp_crop.TabIndex = 30;
             this.drp_crop.Text = "No Crop";
             this.drp_crop.SelectedIndexChanged += new System.EventHandler(this.drp_crop_SelectedIndexChanged);
             // 
@@ -1919,7 +1776,7 @@ namespace Handbrake
             this.text_right.Location = new System.Drawing.Point(190, 136);
             this.text_right.Name = "text_right";
             this.text_right.Size = new System.Drawing.Size(51, 21);
-            this.text_right.TabIndex = 13;
+            this.text_right.TabIndex = 37;
             this.text_right.Text = "0";
             // 
             // text_left
@@ -1929,7 +1786,7 @@ namespace Handbrake
             this.text_left.Location = new System.Drawing.Point(72, 136);
             this.text_left.Name = "text_left";
             this.text_left.Size = new System.Drawing.Size(51, 21);
-            this.text_left.TabIndex = 11;
+            this.text_left.TabIndex = 36;
             this.text_left.Text = "0";
             // 
             // advancedOptions
@@ -1944,7 +1801,7 @@ namespace Handbrake
             this.advancedOptions.Name = "advancedOptions";
             this.advancedOptions.SelectedIndex = 0;
             this.advancedOptions.Size = new System.Drawing.Size(647, 237);
-            this.advancedOptions.TabIndex = 411;
+            this.advancedOptions.TabIndex = 27;
             this.advancedOptions.TabStop = false;
             // 
             // groupBox_dest
@@ -1956,16 +1813,112 @@ namespace Handbrake
             this.groupBox_dest.Location = new System.Drawing.Point(14, 128);
             this.groupBox_dest.Name = "groupBox_dest";
             this.groupBox_dest.Size = new System.Drawing.Size(646, 50);
-            this.groupBox_dest.TabIndex = 420;
+            this.groupBox_dest.TabIndex = 13;
             this.groupBox_dest.TabStop = false;
             this.groupBox_dest.Text = "Destination";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.btn_setDefault);
+            this.groupBox2.Controls.Add(this.btn_removePreset);
+            this.groupBox2.Controls.Add(this.ListBox_Presets);
+            this.groupBox2.Controls.Add(this.btn_addPreset);
+            this.groupBox2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox2.Location = new System.Drawing.Point(674, 35);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(193, 478);
+            this.groupBox2.TabIndex = 103;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Presets";
+            // 
+            // btn_setDefault
+            // 
+            this.btn_setDefault.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_setDefault.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_setDefault.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_setDefault.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_setDefault.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_setDefault.Location = new System.Drawing.Point(113, 445);
+            this.btn_setDefault.Name = "btn_setDefault";
+            this.btn_setDefault.Size = new System.Drawing.Size(72, 22);
+            this.btn_setDefault.TabIndex = 107;
+            this.btn_setDefault.TabStop = false;
+            this.btn_setDefault.Text = "Set Default";
+            this.ToolTip.SetToolTip(this.btn_setDefault, "Set current settings as program defaults.\r\nRequires option to be enabled in Tools" +
+                    " > Options");
+            this.btn_setDefault.UseVisualStyleBackColor = false;
+            this.btn_setDefault.Click += new System.EventHandler(this.btn_setDefault_Click);
+            // 
+            // btn_removePreset
+            // 
+            this.btn_removePreset.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_removePreset.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_removePreset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_removePreset.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_removePreset.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_removePreset.Location = new System.Drawing.Point(52, 445);
+            this.btn_removePreset.Name = "btn_removePreset";
+            this.btn_removePreset.Size = new System.Drawing.Size(55, 22);
+            this.btn_removePreset.TabIndex = 106;
+            this.btn_removePreset.TabStop = false;
+            this.btn_removePreset.Text = "Remove";
+            this.btn_removePreset.UseVisualStyleBackColor = false;
+            this.btn_removePreset.Visible = false;
+            this.btn_removePreset.Click += new System.EventHandler(this.btn_removePreset_Click);
+            // 
+            // btn_addPreset
+            // 
+            this.btn_addPreset.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_addPreset.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_addPreset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_addPreset.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_addPreset.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_addPreset.Location = new System.Drawing.Point(11, 445);
+            this.btn_addPreset.Name = "btn_addPreset";
+            this.btn_addPreset.Size = new System.Drawing.Size(35, 22);
+            this.btn_addPreset.TabIndex = 105;
+            this.btn_addPreset.TabStop = false;
+            this.btn_addPreset.Text = "Add";
+            this.btn_addPreset.UseVisualStyleBackColor = false;
+            this.btn_addPreset.Visible = false;
+            this.btn_addPreset.Click += new System.EventHandler(this.btn_addPreset_Click);
+            // 
+            // ListBox_Presets
+            // 
+            this.ListBox_Presets.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ListBox_Presets.FormattingEnabled = true;
+            this.ListBox_Presets.Items.AddRange(new object[] {
+            "Animation",
+            "AppleTV",
+            "Bedlam",
+            "Blind",
+            "Broke",
+            "Classic",
+            "Constant Quality Rate",
+            "Deux Six Quatre",
+            "Film",
+            "iPhone",
+            "iPod High-Rez",
+            "iPod Low-Rez",
+            "Normal",
+            "PS3",
+            "PSP",
+            "QuickTime",
+            "Television"});
+            this.ListBox_Presets.Location = new System.Drawing.Point(11, 19);
+            this.ListBox_Presets.Name = "ListBox_Presets";
+            this.ListBox_Presets.Size = new System.Drawing.Size(174, 420);
+            this.ListBox_Presets.TabIndex = 104;
+            this.ListBox_Presets.SelectedIndexChanged += new System.EventHandler(this.ListBox_Presets_SelectedIndexChanged);
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(675, 564);
+            this.ClientSize = new System.Drawing.Size(873, 564);
+            this.Controls.Add(this.btn_presets);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox_dest);
             this.Controls.Add(this.btn_eCancel);
             this.Controls.Add(this.lbl_encode);
@@ -1978,11 +1931,10 @@ namespace Handbrake
             this.Controls.Add(this.GroupBox1);
             this.Controls.Add(this.frmMainMenu);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(683, 580);
+            this.MinimumSize = new System.Drawing.Size(680, 580);
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Handbrake";
-            this.Load += new System.EventHandler(this.frmMain_Load);
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).EndInit();
             this.frmMainMenu.ResumeLayout(false);
             this.frmMainMenu.PerformLayout();
@@ -2003,6 +1955,7 @@ namespace Handbrake
             this.advancedOptions.ResumeLayout(false);
             this.groupBox_dest.ResumeLayout(false);
             this.groupBox_dest.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2027,10 +1980,7 @@ namespace Handbrake
         internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator5;
         internal System.Windows.Forms.ToolStripMenuItem mnu_options;
         internal System.Windows.Forms.ToolStripMenuItem PresetsToolStripMenuItem;
-        internal System.Windows.Forms.ToolStripMenuItem mnu_ipod;
-        internal System.Windows.Forms.ToolStripMenuItem mnu_appleTv;
-        internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator4;
-        internal System.Windows.Forms.ToolStripMenuItem mnu_ProgramDefaultOptions;
+        internal System.Windows.Forms.ToolStripMenuItem mnu_presetReset;
         internal System.Windows.Forms.ToolStripMenuItem HelpToolStripMenuItem;
         internal System.Windows.Forms.ToolStripMenuItem OnlineDocumentationToolStripMenuItem;
         internal System.Windows.Forms.ToolStripMenuItem mnu_wiki;
@@ -2135,23 +2085,8 @@ namespace Handbrake
         internal System.Windows.Forms.TextBox text_left;
         internal System.Windows.Forms.TabControl advancedOptions;
         internal System.Windows.Forms.Label Label46;
-        private System.Windows.Forms.ToolStripMenuItem mnu_iphone;
-        private System.Windows.Forms.ToolStripMenuItem mnu_psp;
-        private System.Windows.Forms.ToolStripMenuItem mnu_qt;
-        private System.Windows.Forms.ToolStripMenuItem mnu_television;
-        private System.Windows.Forms.ToolStripMenuItem mnu_film;
-        private System.Windows.Forms.ToolStripMenuItem mnu_Classic;
-        private System.Windows.Forms.ToolStripMenuItem mnu_normal;
         internal System.Windows.Forms.FolderBrowserDialog DVD_Open;
         private System.Windows.Forms.ToolStripMenuItem mnu_open;
-        private System.Windows.Forms.ToolStripMenuItem mnu_bedlam;
-        private System.Windows.Forms.ToolStripMenuItem mnu_blind;
-        private System.Windows.Forms.ToolStripMenuItem mnu_broke;
-        private System.Windows.Forms.ToolStripMenuItem mnu_animation;
-        private System.Windows.Forms.ToolStripMenuItem mnu_CQR;
-        private System.Windows.Forms.ToolStripMenuItem mnu_DSQ;
-        private System.Windows.Forms.ToolStripMenuItem mnu_ipodLow;
-        private System.Windows.Forms.ToolStripMenuItem mnu_ps3;
         private System.Windows.Forms.GroupBox groupBox_dest;
         internal System.Windows.Forms.ComboBox drp_subtitle;
         internal System.Windows.Forms.Label Label19;
@@ -2167,6 +2102,14 @@ namespace Handbrake
         internal System.Windows.Forms.ComboBox drp_deInterlace_option;
         private System.Windows.Forms.Label label23;
         internal System.Windows.Forms.Button button1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        internal System.Windows.Forms.Button btn_removePreset;
+        internal System.Windows.Forms.Button btn_addPreset;
+        private System.Windows.Forms.ListBox ListBox_Presets;
+        internal System.Windows.Forms.Button btn_presets;
+        internal System.Windows.Forms.Button btn_setDefault;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem mnu_SelectDefault;
 
     }
 }

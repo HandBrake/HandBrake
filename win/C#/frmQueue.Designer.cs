@@ -211,7 +211,7 @@ namespace Handbrake
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(718, 335);
+            this.ClientSize = new System.Drawing.Size(724, 335);
             this.ControlBox = false;
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label3);

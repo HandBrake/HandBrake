@@ -586,5 +586,28 @@ namespace Handbrake.Properties {
                 this["CompletionOption"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection BuiltInPresets {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["BuiltInPresets"]));
+            }
+            set {
+                this["BuiltInPresets"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SelectedPreset {
+            get {
+                return ((string)(this["SelectedPreset"]));
+            }
+            set {
+                this["SelectedPreset"] = value;
+            }
+        }
     }
 }
