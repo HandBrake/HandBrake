@@ -187,15 +187,22 @@ namespace Handbrake
         {
             try
             {
-                String updateFile = Properties.Settings.Default.updateFile;
-                WebClient client = new WebClient();
-                String data = client.DownloadString(updateFile);
-                String[] versionData = data.Split('\n');
-
-                if ((versionData[0] != Properties.Settings.Default.GuiVersion) || (versionData[1] != Properties.Settings.Default.CliVersion))
+                if (Properties.Settings.Default.updateStatus == "Checked")
                 {
-                    lbl_update.Visible = true;
-                    return 1;
+                    String updateFile = Properties.Settings.Default.updateFile;
+                    WebClient client = new WebClient();
+                    String data = client.DownloadString(updateFile);
+                    String[] versionData = data.Split('\n');
+
+                    if ((versionData[0] != Properties.Settings.Default.GuiVersion) || (versionData[1] != Properties.Settings.Default.CliVersion))
+                    {
+                        lbl_update.Visible = true;
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
                 }
                 else
                 {
