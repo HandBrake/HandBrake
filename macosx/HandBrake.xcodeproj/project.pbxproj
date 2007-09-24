@@ -139,20 +139,10 @@
 		D4D49FED0C83355600F01215 /* lang.c in Sources */ = {isa = PBXBuildFile; fileRef = B48359A70C82960500E04440 /* lang.c */; };
 		E3003C7F0C88505D0072F2A8 /* DeleteHighlightPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = E3003C7E0C88505D0072F2A8 /* DeleteHighlightPressed.png */; };
 		E3003CB50C8852B70072F2A8 /* DeletePressed.png in Resources */ = {isa = PBXBuildFile; fileRef = E3003CB40C8852B70072F2A8 /* DeletePressed.png */; };
-		E30EC7730C90BDD0004B9545 /* Encodes.png in Resources */ = {isa = PBXBuildFile; fileRef = E30EC76F0C90BDD0004B9545 /* Encodes.png */; };
-		E30EC7740C90BDD0004B9545 /* PassesPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = E30EC7700C90BDD0004B9545 /* PassesPressed.png */; };
-		E30EC7750C90BDD0004B9545 /* Passes.png in Resources */ = {isa = PBXBuildFile; fileRef = E30EC7710C90BDD0004B9545 /* Passes.png */; };
-		E30EC7760C90BDD0004B9545 /* EncodesPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = E30EC7720C90BDD0004B9545 /* EncodesPressed.png */; };
-		E37167800C92F5090072B384 /* DetailPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = E371677E0C92F5090072B384 /* DetailPressed.png */; };
-		E37167810C92F5090072B384 /* Detail.png in Resources */ = {isa = PBXBuildFile; fileRef = E371677F0C92F5090072B384 /* Detail.png */; };
 		E37167890C92F6180072B384 /* JobPassSecondSmall.png in Resources */ = {isa = PBXBuildFile; fileRef = E37167830C92F6180072B384 /* JobPassSecondSmall.png */; };
 		E371678A0C92F6180072B384 /* JobPassSubtitleSmall.png in Resources */ = {isa = PBXBuildFile; fileRef = E37167840C92F6180072B384 /* JobPassSubtitleSmall.png */; };
 		E371678B0C92F6180072B384 /* JobPassFirstSmall.png in Resources */ = {isa = PBXBuildFile; fileRef = E37167850C92F6180072B384 /* JobPassFirstSmall.png */; };
-		E371678C0C92F6180072B384 /* JobPassFirstLarge.png in Resources */ = {isa = PBXBuildFile; fileRef = E37167860C92F6180072B384 /* JobPassFirstLarge.png */; };
-		E371678D0C92F6180072B384 /* JobPassSubtitleLarge.png in Resources */ = {isa = PBXBuildFile; fileRef = E37167870C92F6180072B384 /* JobPassSubtitleLarge.png */; };
-		E371678E0C92F6180072B384 /* JobPassSecondLarge.png in Resources */ = {isa = PBXBuildFile; fileRef = E37167880C92F6180072B384 /* JobPassSecondLarge.png */; };
 		E37167A90C92FAA50072B384 /* JobPassUnknownSmall.png in Resources */ = {isa = PBXBuildFile; fileRef = E37167A70C92FAA50072B384 /* JobPassUnknownSmall.png */; };
-		E37167AA0C92FAA50072B384 /* JobPassUnknownLarge.png in Resources */ = {isa = PBXBuildFile; fileRef = E37167A80C92FAA50072B384 /* JobPassUnknownLarge.png */; };
 		E37172670C977D340072B384 /* HBImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E37172650C977D340072B384 /* HBImageAndTextCell.m */; };
 		E37172680C977D340072B384 /* HBImageAndTextCell.h in Headers */ = {isa = PBXBuildFile; fileRef = E37172660C977D340072B384 /* HBImageAndTextCell.h */; };
 		E37C89410C83988F00C1B919 /* DeleteHighlight.png in Resources */ = {isa = PBXBuildFile; fileRef = E37C893D0C83988F00C1B919 /* DeleteHighlight.png */; };
@@ -314,20 +304,10 @@
 		B48359A70C82960500E04440 /* lang.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lang.c; path = ../libhb/lang.c; sourceTree = SOURCE_ROOT; };
 		E3003C7E0C88505D0072F2A8 /* DeleteHighlightPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DeleteHighlightPressed.png; sourceTree = "<group>"; };
 		E3003CB40C8852B70072F2A8 /* DeletePressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DeletePressed.png; sourceTree = "<group>"; };
-		E30EC76F0C90BDD0004B9545 /* Encodes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Encodes.png; sourceTree = "<group>"; };
-		E30EC7700C90BDD0004B9545 /* PassesPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PassesPressed.png; sourceTree = "<group>"; };
-		E30EC7710C90BDD0004B9545 /* Passes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Passes.png; sourceTree = "<group>"; };
-		E30EC7720C90BDD0004B9545 /* EncodesPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodesPressed.png; sourceTree = "<group>"; };
-		E371677E0C92F5090072B384 /* DetailPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DetailPressed.png; sourceTree = "<group>"; };
-		E371677F0C92F5090072B384 /* Detail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Detail.png; sourceTree = "<group>"; };
 		E37167830C92F6180072B384 /* JobPassSecondSmall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JobPassSecondSmall.png; sourceTree = "<group>"; };
 		E37167840C92F6180072B384 /* JobPassSubtitleSmall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JobPassSubtitleSmall.png; sourceTree = "<group>"; };
 		E37167850C92F6180072B384 /* JobPassFirstSmall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JobPassFirstSmall.png; sourceTree = "<group>"; };
-		E37167860C92F6180072B384 /* JobPassFirstLarge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JobPassFirstLarge.png; sourceTree = "<group>"; };
-		E37167870C92F6180072B384 /* JobPassSubtitleLarge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JobPassSubtitleLarge.png; sourceTree = "<group>"; };
-		E37167880C92F6180072B384 /* JobPassSecondLarge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JobPassSecondLarge.png; sourceTree = "<group>"; };
 		E37167A70C92FAA50072B384 /* JobPassUnknownSmall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JobPassUnknownSmall.png; sourceTree = "<group>"; };
-		E37167A80C92FAA50072B384 /* JobPassUnknownLarge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JobPassUnknownLarge.png; sourceTree = "<group>"; };
 		E37172650C977D340072B384 /* HBImageAndTextCell.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = HBImageAndTextCell.m; sourceTree = "<group>"; };
 		E37172660C977D340072B384 /* HBImageAndTextCell.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = HBImageAndTextCell.h; sourceTree = "<group>"; };
 		E37C893D0C83988F00C1B919 /* DeleteHighlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DeleteHighlight.png; sourceTree = "<group>"; };
@@ -581,22 +561,12 @@
 				E3003CB40C8852B70072F2A8 /* DeletePressed.png */,
 				E37C893D0C83988F00C1B919 /* DeleteHighlight.png */,
 				E3003C7E0C88505D0072F2A8 /* DeleteHighlightPressed.png */,
-				E30EC76F0C90BDD0004B9545 /* Encodes.png */,
-				E30EC7720C90BDD0004B9545 /* EncodesPressed.png */,
-				E30EC7700C90BDD0004B9545 /* PassesPressed.png */,
-				E30EC7710C90BDD0004B9545 /* Passes.png */,
 				E37C89400C83988F00C1B919 /* JobLarge.png */,
 				E37C893F0C83988F00C1B919 /* JobSmall.png */,
 				E37167850C92F6180072B384 /* JobPassFirstSmall.png */,
-				E37167860C92F6180072B384 /* JobPassFirstLarge.png */,
 				E37167830C92F6180072B384 /* JobPassSecondSmall.png */,
-				E37167880C92F6180072B384 /* JobPassSecondLarge.png */,
 				E37167840C92F6180072B384 /* JobPassSubtitleSmall.png */,
-				E37167870C92F6180072B384 /* JobPassSubtitleLarge.png */,
 				E37167A70C92FAA50072B384 /* JobPassUnknownSmall.png */,
-				E37167A80C92FAA50072B384 /* JobPassUnknownLarge.png */,
-				E371677E0C92F5090072B384 /* DetailPressed.png */,
-				E371677F0C92F5090072B384 /* Detail.png */,
 			);
 			path = icons;
 			sourceTree = "<group>";
@@ -782,23 +752,13 @@
 				E37C894F0C8398CF00C1B919 /* Queue.nib in Resources */,
 				E3003C7F0C88505D0072F2A8 /* DeleteHighlightPressed.png in Resources */,
 				E3003CB50C8852B70072F2A8 /* DeletePressed.png in Resources */,
-				E30EC7730C90BDD0004B9545 /* Encodes.png in Resources */,
-				E30EC7740C90BDD0004B9545 /* PassesPressed.png in Resources */,
-				E30EC7750C90BDD0004B9545 /* Passes.png in Resources */,
-				E30EC7760C90BDD0004B9545 /* EncodesPressed.png in Resources */,
 				A9AC41E70C918DC000DDF9B8 /* AdvancedView.nib in Resources */,
 				A97A1DB40C91A6800015BC08 /* Express.nib in Resources */,
 				A9ABA2270C92AECA00D98324 /* PictureSettings.nib in Resources */,
-				E37167800C92F5090072B384 /* DetailPressed.png in Resources */,
-				E37167810C92F5090072B384 /* Detail.png in Resources */,
 				E37167890C92F6180072B384 /* JobPassSecondSmall.png in Resources */,
 				E371678A0C92F6180072B384 /* JobPassSubtitleSmall.png in Resources */,
 				E371678B0C92F6180072B384 /* JobPassFirstSmall.png in Resources */,
-				E371678C0C92F6180072B384 /* JobPassFirstLarge.png in Resources */,
-				E371678D0C92F6180072B384 /* JobPassSubtitleLarge.png in Resources */,
-				E371678E0C92F6180072B384 /* JobPassSecondLarge.png in Resources */,
 				E37167A90C92FAA50072B384 /* JobPassUnknownSmall.png in Resources */,
-				E37167AA0C92FAA50072B384 /* JobPassUnknownLarge.png in Resources */,
 				A9DE40450C959834008A5440 /* minus-8.png in Resources */,
 				A9DE40460C959834008A5440 /* plus-8.png in Resources */,
 				A2D7AD670C998AD30082CA33 /* ActivityWindow.tiff in Resources */,
