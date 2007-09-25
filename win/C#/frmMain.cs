@@ -183,7 +183,8 @@ namespace Handbrake
             }
         }
 
-        private int updateCheck()
+        // This is a re-usable function.
+        private Boolean updateCheck()
         {
             try
             {
@@ -194,25 +195,26 @@ namespace Handbrake
                     String data = client.DownloadString(updateFile);
                     String[] versionData = data.Split('\n');
 
-                    if ((versionData[0] != Properties.Settings.Default.GuiVersion) || (versionData[1] != Properties.Settings.Default.CliVersion))
-                    {
-                        lbl_update.Visible = true;
-                        return 1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
+                    int verdata = int.Parse(versionData[0].Replace(".", ""));
+                    int vergui = int.Parse(Properties.Settings.Default.GuiVersion.Replace(".", ""));
+                    int verd1 = int.Parse(versionData[1].Replace(".", ""));
+                    int cliversion = int.Parse(Properties.Settings.Default.CliVersion.Replace(".", ""));
+
+                    Boolean update = ((verdata > vergui) || (verd1 > cliversion));
+   
+                    lbl_update.Visible = update;
+
+                    return update;   
                 }
                 else
                 {
-                    return 0;
+                    return false;
                 }
             }
             catch (Exception)
             {
                 // Silently ignore the error
-                return 0;
+                return false;
             }
         }
 
@@ -483,19 +485,6 @@ namespace Handbrake
             }
         }
 
-        private void mnu_update_Click(object sender, EventArgs e)
-        {
-            int update = updateCheck();
-            if (update == 1)
-            {
-                MessageBox.Show("There is a new update available. Please visit http://handbrake.m0k.org for details!", "Update Check", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                MessageBox.Show("There are no new updates at this time.", "Update Check", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
-
         private void mnu_exit_Click(object sender, EventArgs e)
         {
             Application.Exit();
@@ -595,6 +584,19 @@ namespace Handbrake
             Process.Start("http://handbrake.m0k.org/forum");
         }
 
+        private void mnu_UpdateCheck_Click(object sender, EventArgs e)
+        {
+            Boolean update = updateCheck();
+            if (update == true)
+            {
+                MessageBox.Show("There is a new update available. Please visit http://handbrake.m0k.org for details!", "Update Check", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("There are no new updates at this time.", "Update Check", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
         private void mnu_about_Click(object sender, EventArgs e)
         {
 			Form About = new frmAbout();
@@ -608,6 +610,7 @@ namespace Handbrake
         // --------------------------------------------------------------
 
         #region Buttons
+
         private void btn_Browse_Click(object sender, EventArgs e)
         {
             String filename =""; 
@@ -699,6 +702,11 @@ namespace Handbrake
             {
                 MessageBox.Show("No Source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+        private void btn_copy_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(QueryEditorText.Text, TextDataFormat.Text);
         }
 
         private void showQueue()
