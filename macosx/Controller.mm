@@ -1622,6 +1622,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         hb_subtitle_t **subtitle_tmp = job->select_subtitle;
         job->indepth_scan = 0;
 
+        /*
+         * Do not autoselect subtitles on the first pass of a two pass
+         */
+        job->select_subtitle = NULL;
+        
         job->pass = 1;
         job->sequence_id++; // for job grouping
         hb_add( fHandle, job );
