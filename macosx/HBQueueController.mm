@@ -618,6 +618,12 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
 {
     [fDescription deleteCharactersInRange: NSMakeRange(0, [fDescription length])]; 
 
+    if ([self count] == 0)
+    {
+        NSAssert(NO, @" jobgroup with no jobs");
+        return;
+    }
+    
     HBJob * job = [self jobAtIndex:0];
     
     [fDescription appendAttributedString: [job attributedDescriptionWithHBHandle: handle
@@ -725,6 +731,10 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
             nil]];
 
         fJobGroups = [[NSMutableArray arrayWithCapacity:0] retain];
+
+        BOOL loadSucceeded = [NSBundle loadNibNamed:@"Queue" owner:self] && fQueueWindow;
+        NSAssert(loadSucceeded, @"Could not open Queue nib");
+        NSAssert(fQueueWindow, @"fQueueWindow not found in Queue nib");
     }
     return self; 
 }
@@ -767,12 +777,6 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 //------------------------------------------------------------------------------------
 - (IBAction) showQueueWindow: (id)sender
 {
-    if (!fQueueWindow)
-    {
-        BOOL loadSucceeded = [NSBundle loadNibNamed:@"Queue" owner:self] && fQueueWindow;
-        NSAssert(loadSucceeded, @"Could not open Queue nib file");
-    }
-
     [self updateQueueUI];
     [self updateCurrentJobUI];
 
@@ -1532,6 +1536,37 @@ static float spacingWidth = 3.0;
 }
 
 #pragma mark -
+
+- (void)moveObjectsInArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(unsigned)insertIndex
+{
+	unsigned index = [indexSet lastIndex];
+	unsigned aboveInsertIndexCount = 0;
+	
+	while (index != NSNotFound)
+	{
+		unsigned removeIndex;
+		
+		if (index >= insertIndex)
+		{
+			removeIndex = index + aboveInsertIndexCount;
+			aboveInsertIndexCount++;
+		}
+		else
+		{
+			removeIndex = index;
+			insertIndex--;
+		}
+		
+		id object = [[array objectAtIndex:removeIndex] retain];
+		[array removeObjectAtIndex:removeIndex];
+		[array insertObject:object atIndex:insertIndex];
+		[object release];
+		
+		index = [indexSet indexLessThanIndex:index];
+	}
+}
+
+#pragma mark -
 #pragma mark NSOutlineView delegate
 
 - (id)outlineView:(NSOutlineView *)outlineView child:(int)index ofItem:(id)item
@@ -1656,7 +1691,9 @@ static float spacingWidth = 3.0;
 #if HB_QUEUE_DRAGGING
 - (BOOL)outlineView:(NSOutlineView *)outlineView writeItems:(NSArray *)items toPasteboard:(NSPasteboard *)pboard
 {
-    fDraggedNodes = items; // Don't retain since this is just holding temporaral drag information, and it is only used during a drag!  We could put this in the pboard actually.
+    // Don't retain since this is just holding temporaral drag information, and it is
+    //only used during a drag!  We could put this in the pboard actually.
+    fDraggedNodes = items;
     
     // Provide data for our custom type, and simple NSStrings.
     [pboard declareTypes:[NSArray arrayWithObjects: HBQueuePboardType, nil] owner:self];
@@ -1683,18 +1720,21 @@ static float spacingWidth = 3.0;
 #if HB_QUEUE_DRAGGING
 - (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(int)index
 {
-//    NSPasteboard* pboard = [info draggingPasteboard];
-//    NSData* rowData = [pboard dataForType:HBQueuePboardType];
-//    NSIndexSet* rowIndexes = [NSKeyedUnarchiver unarchiveObjectWithData:rowData];
-//    int dragRow = [rowIndexes firstIndex];
- 
-    // Move the specified row to its new location...
-    HBJob * draggedJob = [fDraggedNodes objectAtIndex: 0];
-    NSLog(@"dragged job = %@", draggedJob);
-    NSLog(@"drag from location = %d", [fJobGroups indexOfObject: draggedJob]);
-    NSLog(@"drag to location = %d", index);
-    NSLog(@"acceptDrop");
+    NSMutableIndexSet *moveItems = [NSMutableIndexSet indexSet];
     
+    id obj;
+    NSEnumerator *enumerator = [fDraggedNodes objectEnumerator];
+    while (obj = [enumerator nextObject])
+    {
+        [moveItems addIndex:[fJobGroups indexOfObject:obj]];
+    }
+
+    // Rearrange the data and view
+    [self saveOutlineViewState];
+    [self moveObjectsInArray:fJobGroups fromIndexes:moveItems toIndex: index];
+    [fOutlineView reloadData];
+    [self restoreOutlineViewState];
+        
     return YES;
 }
 #endif
