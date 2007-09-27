@@ -64,9 +64,6 @@ namespace Handbrake
             this.File_Open = new System.Windows.Forms.OpenFileDialog();
             this.ISO_Open = new System.Windows.Forms.OpenFileDialog();
             this.FileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_open = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_save = new System.Windows.Forms.ToolStripMenuItem();
-            this.ToolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.mnu_exit = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_open3 = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -175,9 +172,10 @@ namespace Handbrake
             this.advancedOptions = new System.Windows.Forms.TabControl();
             this.groupBox_dest = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.btn_removePreset = new System.Windows.Forms.Button();
             this.ListBox_Presets = new System.Windows.Forms.ListBox();
+            this.btn_removePreset = new System.Windows.Forms.Button();
             this.btn_addPreset = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
             Label38 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
             this.frmMainMenu.SuspendLayout();
@@ -191,6 +189,7 @@ namespace Handbrake
             this.advancedOptions.SuspendLayout();
             this.groupBox_dest.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // Label38
@@ -572,7 +571,7 @@ namespace Handbrake
             this.btn_setDefault.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_setDefault.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_setDefault.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_setDefault.Location = new System.Drawing.Point(113, 445);
+            this.btn_setDefault.Location = new System.Drawing.Point(110, 23);
             this.btn_setDefault.Name = "btn_setDefault";
             this.btn_setDefault.Size = new System.Drawing.Size(72, 22);
             this.btn_setDefault.TabIndex = 107;
@@ -602,42 +601,15 @@ namespace Handbrake
             // FileToolStripMenuItem
             // 
             this.FileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnu_open,
-            this.mnu_save,
-            this.ToolStripSeparator1,
             this.mnu_exit});
             this.FileToolStripMenuItem.Name = "FileToolStripMenuItem";
             this.FileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
             this.FileToolStripMenuItem.Text = "&File";
             // 
-            // mnu_open
-            // 
-            this.mnu_open.Image = ((System.Drawing.Image)(resources.GetObject("mnu_open.Image")));
-            this.mnu_open.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.mnu_open.Name = "mnu_open";
-            this.mnu_open.Size = new System.Drawing.Size(180, 22);
-            this.mnu_open.Text = "&Open Profile";
-            this.mnu_open.Click += new System.EventHandler(this.mnu_open_Click);
-            // 
-            // mnu_save
-            // 
-            this.mnu_save.Image = ((System.Drawing.Image)(resources.GetObject("mnu_save.Image")));
-            this.mnu_save.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.mnu_save.Name = "mnu_save";
-            this.mnu_save.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.mnu_save.Size = new System.Drawing.Size(180, 22);
-            this.mnu_save.Text = "&Save Profile";
-            this.mnu_save.Click += new System.EventHandler(this.mnu_save_Click);
-            // 
-            // ToolStripSeparator1
-            // 
-            this.ToolStripSeparator1.Name = "ToolStripSeparator1";
-            this.ToolStripSeparator1.Size = new System.Drawing.Size(177, 6);
-            // 
             // mnu_exit
             // 
             this.mnu_exit.Name = "mnu_exit";
-            this.mnu_exit.Size = new System.Drawing.Size(180, 22);
+            this.mnu_exit.Size = new System.Drawing.Size(103, 22);
             this.mnu_exit.Text = "E&xit";
             this.mnu_exit.Click += new System.EventHandler(this.mnu_exit_Click);
             // 
@@ -1840,34 +1812,14 @@ namespace Handbrake
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.btn_setDefault);
-            this.groupBox2.Controls.Add(this.btn_removePreset);
             this.groupBox2.Controls.Add(this.ListBox_Presets);
-            this.groupBox2.Controls.Add(this.btn_addPreset);
             this.groupBox2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.Location = new System.Drawing.Point(674, 35);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(193, 478);
+            this.groupBox2.Size = new System.Drawing.Size(193, 404);
             this.groupBox2.TabIndex = 103;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Presets";
-            // 
-            // btn_removePreset
-            // 
-            this.btn_removePreset.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.btn_removePreset.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_removePreset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_removePreset.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_removePreset.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_removePreset.Location = new System.Drawing.Point(52, 445);
-            this.btn_removePreset.Name = "btn_removePreset";
-            this.btn_removePreset.Size = new System.Drawing.Size(55, 22);
-            this.btn_removePreset.TabIndex = 106;
-            this.btn_removePreset.TabStop = false;
-            this.btn_removePreset.Text = "Remove";
-            this.btn_removePreset.UseVisualStyleBackColor = false;
-            this.btn_removePreset.Visible = false;
-            this.btn_removePreset.Click += new System.EventHandler(this.btn_removePreset_Click);
             // 
             // ListBox_Presets
             // 
@@ -1891,11 +1843,29 @@ namespace Handbrake
             "PSP",
             "QuickTime",
             "Television"});
-            this.ListBox_Presets.Location = new System.Drawing.Point(11, 19);
+            this.ListBox_Presets.Location = new System.Drawing.Point(11, 21);
             this.ListBox_Presets.Name = "ListBox_Presets";
-            this.ListBox_Presets.Size = new System.Drawing.Size(174, 420);
+            this.ListBox_Presets.Size = new System.Drawing.Size(174, 368);
             this.ListBox_Presets.TabIndex = 104;
+            this.ToolTip.SetToolTip(this.ListBox_Presets, "To load a preset, simply click the preset you desire.");
             this.ListBox_Presets.SelectedIndexChanged += new System.EventHandler(this.ListBox_Presets_SelectedIndexChanged);
+            // 
+            // btn_removePreset
+            // 
+            this.btn_removePreset.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_removePreset.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_removePreset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_removePreset.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_removePreset.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_removePreset.Location = new System.Drawing.Point(59, 23);
+            this.btn_removePreset.Name = "btn_removePreset";
+            this.btn_removePreset.Size = new System.Drawing.Size(45, 22);
+            this.btn_removePreset.TabIndex = 106;
+            this.btn_removePreset.TabStop = false;
+            this.btn_removePreset.Text = "Save";
+            this.ToolTip.SetToolTip(this.btn_removePreset, "Save the current settings as a preset.");
+            this.btn_removePreset.UseVisualStyleBackColor = false;
+            this.btn_removePreset.Click += new System.EventHandler(this.btn_removePreset_Click);
             // 
             // btn_addPreset
             // 
@@ -1904,15 +1874,28 @@ namespace Handbrake
             this.btn_addPreset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_addPreset.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_addPreset.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_addPreset.Location = new System.Drawing.Point(11, 445);
+            this.btn_addPreset.Location = new System.Drawing.Point(8, 23);
             this.btn_addPreset.Name = "btn_addPreset";
-            this.btn_addPreset.Size = new System.Drawing.Size(35, 22);
+            this.btn_addPreset.Size = new System.Drawing.Size(45, 22);
             this.btn_addPreset.TabIndex = 105;
             this.btn_addPreset.TabStop = false;
-            this.btn_addPreset.Text = "Add";
+            this.btn_addPreset.Text = "Open";
+            this.ToolTip.SetToolTip(this.btn_addPreset, "Open a preset which you have saved.");
             this.btn_addPreset.UseVisualStyleBackColor = false;
-            this.btn_addPreset.Visible = false;
             this.btn_addPreset.Click += new System.EventHandler(this.btn_addPreset_Click);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.btn_removePreset);
+            this.groupBox3.Controls.Add(this.btn_setDefault);
+            this.groupBox3.Controls.Add(this.btn_addPreset);
+            this.groupBox3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox3.Location = new System.Drawing.Point(674, 448);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(193, 61);
+            this.groupBox3.TabIndex = 108;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Preset Functions";
             // 
             // frmMain
             // 
@@ -1920,6 +1903,7 @@ namespace Handbrake
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(873, 564);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.btn_presets);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox_dest);
@@ -1959,6 +1943,7 @@ namespace Handbrake
             this.groupBox_dest.ResumeLayout(false);
             this.groupBox_dest.PerformLayout();
             this.groupBox2.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1972,8 +1957,6 @@ namespace Handbrake
         internal System.Windows.Forms.OpenFileDialog ISO_Open;
         internal System.Windows.Forms.ToolStripMenuItem FileToolStripMenuItem;
         internal System.Windows.Forms.ToolStripMenuItem mnu_open3;
-        internal System.Windows.Forms.ToolStripMenuItem mnu_save;
-        internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator1;
         internal System.Windows.Forms.ToolStripMenuItem mnu_exit;
         internal System.Windows.Forms.ToolStripMenuItem ToolsToolStripMenuItem;
         internal System.Windows.Forms.ToolStripMenuItem mnu_encode;
@@ -2087,7 +2070,6 @@ namespace Handbrake
         internal System.Windows.Forms.TabControl advancedOptions;
         internal System.Windows.Forms.Label Label46;
         internal System.Windows.Forms.FolderBrowserDialog DVD_Open;
-        private System.Windows.Forms.ToolStripMenuItem mnu_open;
         private System.Windows.Forms.GroupBox groupBox_dest;
         internal System.Windows.Forms.ComboBox drp_subtitle;
         internal System.Windows.Forms.Label Label19;
@@ -2113,6 +2095,7 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripMenuItem mnu_SelectDefault;
         private System.Windows.Forms.ToolStripMenuItem mnu_UpdateCheck;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.GroupBox groupBox3;
 
     }
 }

@@ -29,7 +29,9 @@ namespace Handbrake.Functions
                 hbProc.StartInfo.RedirectStandardError = stderr;
                 hbProc.StartInfo.UseShellExecute = useShellExec;
                 hbProc.StartInfo.CreateNoWindow = noWindow;
+                hbProc.StartInfo.WindowStyle = ProcessWindowStyle.Minimized; // Why doesn't this work??
                 hbProc.Start();
+                
 
                 // Set the process Priority
                 switch (Properties.Settings.Default.processPriority)
@@ -53,6 +55,8 @@ namespace Handbrake.Functions
                         hbProc.PriorityClass = ProcessPriorityClass.BelowNormal;
                         break;
                 }
+
+                
             }
             catch
             {

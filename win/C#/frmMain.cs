@@ -29,7 +29,6 @@ namespace Handbrake
         private frmQueue queueWindow = new frmQueue();  
         //private frmDvdInfo dvdInfoWindow = new frmDvdInfo();
 
- 
         public frmMain()
         {
 
@@ -42,9 +41,6 @@ namespace Handbrake
             //dvdInfoWindow.Show();
             //dvdInfoWindow.Hide();
             // **********************************************************************************************
-
-            // System Requirements Check
-            systemCheck();
 
             // Set the Version number lable to the corect version.
             Version.Text = "Version " + Properties.Settings.Default.GuiVersion;
@@ -61,7 +57,6 @@ namespace Handbrake
             // Enable or disable tooltips
             tooltip();
 
-
             // Hide the presets part of the window
             this.Width = 590;
 
@@ -72,13 +67,8 @@ namespace Handbrake
             myCol.AddRange(myArr);
 
             Properties.Settings.Default.BuiltInPresets = myCol;
-  
-
         }
 
-        // Functions to preform tasks required on startup.
-        #region Initializeation Functions
-        
         private void showSplash(object sender)
         {
             Form splash = new frmSplashScreen();
@@ -183,7 +173,6 @@ namespace Handbrake
             }
         }
 
-        // This is a re-usable function.
         private Boolean updateCheck()
         {
             try
@@ -235,88 +224,6 @@ namespace Handbrake
             }
         }
 
-        #region Memory Check
-
-        public struct MEMORYSTATUS
-        {
-            public UInt32 dwLength;
-            public UInt32 dwMemoryLoad;
-            public UInt32 dwTotalPhys; // Used
-            public UInt32 dwAvailPhys;
-            public UInt32 dwTotalPageFile;
-            public UInt32 dwAvailPageFile;
-            public UInt32 dwTotalVirtual;
-            public UInt32 dwAvailVirtual;
-            // Aditional Varibles left in for future usage (JIC)
-        }
-
-        [DllImport("kernel32.dll")]
-        public static extern void GlobalMemoryStatus
-        (
-            ref MEMORYSTATUS lpBuffer
-        );
-
-        public uint CheckMemeory()
-        {
-            // Call the native GlobalMemoryStatus method
-            // with the defined structure.
-            MEMORYSTATUS memStatus = new MEMORYSTATUS();
-            GlobalMemoryStatus(ref memStatus);
-
-            // Use a StringBuilder for the message box string.
-            uint MemoryInfo = memStatus.dwTotalPhys;
-
-            // Return the Ram Information
-            return MemoryInfo;
-
-        }
-
-
-        #endregion
-        Boolean preventLaunch = false;
-        private void systemCheck()
-        {
-            try
-            {
-                // Make sure the screen resolution is not below 1024x768
-                System.Windows.Forms.Screen scr = System.Windows.Forms.Screen.PrimaryScreen;
-                if ((scr.Bounds.Width < 1024) || (scr.Bounds.Height < 768))
-                {
-                    MessageBox.Show("Your system does not meet the minimum requirements for HandBrake. \n Screen resolution is too Low. Must be 1024x768 or greater", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    preventLaunch = true;
-                }
-
-                // Make sure the system has enough RAM. 384MB or greater
-                uint memory = CheckMemeory();
-
-                if (memory < 319) // Set to 319 to allow for 64MB dedicated to video Memory and Windows returnig the memory figure slightly out.
-                {
-                    MessageBox.Show("Your system does not meet the minimum requirements for HandBrake. \n Insufficient Memory. 384MB or greater required.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    preventLaunch = true;
-                }
-            }
-            catch (Exception exc)
-            {
-                if (Properties.Settings.Default.GuiDebug == "Checked")
-                {
-                    MessageBox.Show("frmMain.cs - systemCheck() " + exc.ToString());
-                }
-            }
-        }
-
-        #endregion
-
-        // Close the Application on main window load if required by the system Check
-        #region Form Load
-            private void frmMain_Load(object sender, EventArgs e)
-        {
-            if (preventLaunch == true)
-            {
-                Application.Exit();
-            }
-        }
-        #endregion
-
         #endregion
 
         // -------------------------------------------------------------- 
@@ -324,166 +231,6 @@ namespace Handbrake
         // -------------------------------------------------------------- 
 
         #region File Menu
-
-        private void mnu_open_Click(object sender, EventArgs e)
-        {
-            string filename;
-            File_Open.ShowDialog();
-            filename = File_Open.FileName;
-            if (filename != "")
-            {
-                try
-                {
-                    // Create StreamReader & open file
-                    StreamReader line = new StreamReader(filename);
-                    string temporyLine; // Used for reading the line into a varible before processing on the checkState items below.
-                    
-                    // Read in the data and set the correct GUI component with the setting.
-                    text_source.Text = line.ReadLine();
-                    drp_dvdtitle.Text = line.ReadLine();
-                    drop_chapterStart.Text = line.ReadLine();
-                    drop_chapterFinish.Text = line.ReadLine();
-                    text_destination.Text = line.ReadLine();
-                    drp_videoEncoder.Text = line.ReadLine();
-                    drp_audioCodec.Text = line.ReadLine();
-                    text_width.Text = line.ReadLine();
-                    text_height.Text = line.ReadLine();
-                    text_top.Text = line.ReadLine();
-                    text_bottom.Text = line.ReadLine();
-                    text_left.Text = line.ReadLine();
-                    text_right.Text = line.ReadLine();
-                    drp_subtitle.Text = line.ReadLine();
-                    text_bitrate.Text = line.ReadLine();
-                    text_filesize.Text = line.ReadLine();
-                    slider_videoQuality.Value = int.Parse(line.ReadLine());
-
-                    temporyLine = line.ReadLine();
-                    if (temporyLine == "Checked")
-                    {
-                        check_2PassEncode.CheckState = CheckState.Checked;
-                    }
-
-                    drp_deInterlace_option.Text = line.ReadLine();
-
-                    temporyLine = line.ReadLine();
-                    if (temporyLine == "Checked")
-                    {
-                        check_grayscale.CheckState = CheckState.Checked;
-                    }
-
-                    drp_videoFramerate.Text = line.ReadLine();
-
-                    temporyLine = line.ReadLine();
-                    if (temporyLine == "Checked")
-                    {
-                        Check_ChapterMarkers.CheckState = CheckState.Checked;
-                    }
-
-                    temporyLine = line.ReadLine();
-                    if (temporyLine == "Checked")
-                    {
-                        CheckPixelRatio.CheckState = CheckState.Checked;
-                    }
-
-                    temporyLine = line.ReadLine();
-                    if (temporyLine == "Checked")
-                    {
-                        check_turbo.CheckState = CheckState.Checked;
-                    }
-
-                    temporyLine = line.ReadLine();
-                    if (temporyLine == "Checked")
-                    {
-                        check_largeFile.CheckState = CheckState.Checked;
-                    }
-   
-                    drp_audioBitrate.Text = line.ReadLine();
-                    drp_audioSampleRate.Text = line.ReadLine();
-                    drp_audioChannels.Text = line.ReadLine();
-                    drp_audioMixDown.Text = line.ReadLine();
-                    
-                    // Advanced H264 Options
-                    temporyLine = line.ReadLine();
-                    if (temporyLine == "Checked")
-                    {
-                        CheckCRF.CheckState = CheckState.Checked;
-                    }
-                    rtf_h264advanced.Text = line.ReadLine();
-
-                    // Close the stream
-                    line.Close();
-
-
-                    // Fix for SliderValue not appearing when Opening saved file
-                    SliderValue.Text = slider_videoQuality.Value + "%";
-
-                } catch (Exception){
-                    MessageBox.Show("Unable to load profile.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                }
-            }
-        }
-
-        private void mnu_save_Click(object sender, EventArgs e)
-        {
-
-            string filename;
-            File_Save.ShowDialog();
-            filename = File_Save.FileName;
-            if (filename != "")
-            {
-                try
-                {
-                    // Create a StreamWriter and open the file
-                    StreamWriter line = new StreamWriter(filename);
-
-                    //Source
-                    line.WriteLine(text_source.Text);
-                    line.WriteLine(drp_dvdtitle.Text);
-                    line.WriteLine(drop_chapterStart.Text);
-                    line.WriteLine(drop_chapterFinish.Text);
-                    //Destination
-                    line.WriteLine(text_destination.Text);
-                    line.WriteLine(drp_videoEncoder.Text);
-                    line.WriteLine(drp_audioCodec.Text);
-                    line.WriteLine(text_width.Text);
-                    line.WriteLine(text_height.Text);
-                    //Picture Settings Tab
-                    line.WriteLine(text_top.Text);
-                    line.WriteLine(text_bottom.Text);
-                    line.WriteLine(text_left.Text);
-                    line.WriteLine(text_right.Text);
-                    line.WriteLine(drp_subtitle.Text);
-                    //Video Settings Tab
-                    line.WriteLine(text_bitrate.Text);
-                    line.WriteLine(text_filesize.Text);
-                    line.WriteLine(slider_videoQuality.Value.ToString());
-                    line.WriteLine(check_2PassEncode.CheckState.ToString());
-                    line.WriteLine(drp_deInterlace_option.Text);
-                    line.WriteLine(check_grayscale.CheckState.ToString());
-                    line.WriteLine(drp_videoFramerate.Text);
-                    line.WriteLine(Check_ChapterMarkers.CheckState.ToString());
-                    line.WriteLine(CheckPixelRatio.CheckState.ToString());
-                    line.WriteLine(check_turbo.CheckState.ToString());
-                    line.WriteLine(check_largeFile.CheckState.ToString());
-                    //Audio Settings Tab
-                    line.WriteLine(drp_audioBitrate.Text);
-                    line.WriteLine(drp_audioSampleRate.Text);
-                    line.WriteLine(drp_audioChannels.Text);
-                    line.WriteLine(drp_audioMixDown.Text);
-                    //H264 Tab
-                    line.WriteLine(CheckCRF.CheckState.ToString());
-                    line.WriteLine(rtf_h264advanced.Text);
-                    // close the stream
-                    line.Close();
-                    MessageBox.Show("Your profile has been sucessfully saved.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                }
-                catch(Exception)
-                {
-                    MessageBox.Show("Unable to write to the file. Please make sure the location has the correct permissions for file writing.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                }
-                
-            }
-        }
 
         private void mnu_exit_Click(object sender, EventArgs e)
         {
@@ -745,12 +492,163 @@ namespace Handbrake
 
         private void btn_addPreset_Click(object sender, EventArgs e)
         {
+            string filename;
+            File_Open.ShowDialog();
+            filename = File_Open.FileName;
+            if (filename != "")
+            {
+                try
+                {
+                    // Create StreamReader & open file
+                    StreamReader line = new StreamReader(filename);
+                    string temporyLine; // Used for reading the line into a varible before processing on the checkState items below.
 
+                    // Read in the data and set the correct GUI component with the setting.
+                    text_source.Text = line.ReadLine();
+                    drp_dvdtitle.Text = line.ReadLine();
+                    drop_chapterStart.Text = line.ReadLine();
+                    drop_chapterFinish.Text = line.ReadLine();
+                    text_destination.Text = line.ReadLine();
+                    drp_videoEncoder.Text = line.ReadLine();
+                    drp_audioCodec.Text = line.ReadLine();
+                    text_width.Text = line.ReadLine();
+                    text_height.Text = line.ReadLine();
+                    text_top.Text = line.ReadLine();
+                    text_bottom.Text = line.ReadLine();
+                    text_left.Text = line.ReadLine();
+                    text_right.Text = line.ReadLine();
+                    drp_subtitle.Text = line.ReadLine();
+                    text_bitrate.Text = line.ReadLine();
+                    text_filesize.Text = line.ReadLine();
+                    slider_videoQuality.Value = int.Parse(line.ReadLine());
+
+                    temporyLine = line.ReadLine();
+                    if (temporyLine == "Checked")
+                    {
+                        check_2PassEncode.CheckState = CheckState.Checked;
+                    }
+
+                    drp_deInterlace_option.Text = line.ReadLine();
+
+                    temporyLine = line.ReadLine();
+                    if (temporyLine == "Checked")
+                    {
+                        check_grayscale.CheckState = CheckState.Checked;
+                    }
+
+                    drp_videoFramerate.Text = line.ReadLine();
+
+                    temporyLine = line.ReadLine();
+                    if (temporyLine == "Checked")
+                    {
+                        Check_ChapterMarkers.CheckState = CheckState.Checked;
+                    }
+
+                    temporyLine = line.ReadLine();
+                    if (temporyLine == "Checked")
+                    {
+                        CheckPixelRatio.CheckState = CheckState.Checked;
+                    }
+
+                    temporyLine = line.ReadLine();
+                    if (temporyLine == "Checked")
+                    {
+                        check_turbo.CheckState = CheckState.Checked;
+                    }
+
+                    temporyLine = line.ReadLine();
+                    if (temporyLine == "Checked")
+                    {
+                        check_largeFile.CheckState = CheckState.Checked;
+                    }
+
+                    drp_audioBitrate.Text = line.ReadLine();
+                    drp_audioSampleRate.Text = line.ReadLine();
+                    drp_audioChannels.Text = line.ReadLine();
+                    drp_audioMixDown.Text = line.ReadLine();
+
+                    // Advanced H264 Options
+                    temporyLine = line.ReadLine();
+                    if (temporyLine == "Checked")
+                    {
+                        CheckCRF.CheckState = CheckState.Checked;
+                    }
+                    rtf_h264advanced.Text = line.ReadLine();
+
+                    // Close the stream
+                    line.Close();
+
+
+                    // Fix for SliderValue not appearing when Opening saved file
+                    SliderValue.Text = slider_videoQuality.Value + "%";
+
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Unable to load profile.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                }
+            }
         }
 
         private void btn_removePreset_Click(object sender, EventArgs e)
         {
-            ListBox_Presets.Items.Remove(ListBox_Presets.SelectedItem);
+            string filename;
+            File_Save.ShowDialog();
+            filename = File_Save.FileName;
+            if (filename != "")
+            {
+                try
+                {
+                    // Create a StreamWriter and open the file
+                    StreamWriter line = new StreamWriter(filename);
+
+                    //Source
+                    line.WriteLine(text_source.Text);
+                    line.WriteLine(drp_dvdtitle.Text);
+                    line.WriteLine(drop_chapterStart.Text);
+                    line.WriteLine(drop_chapterFinish.Text);
+                    //Destination
+                    line.WriteLine(text_destination.Text);
+                    line.WriteLine(drp_videoEncoder.Text);
+                    line.WriteLine(drp_audioCodec.Text);
+                    line.WriteLine(text_width.Text);
+                    line.WriteLine(text_height.Text);
+                    //Picture Settings Tab
+                    line.WriteLine(text_top.Text);
+                    line.WriteLine(text_bottom.Text);
+                    line.WriteLine(text_left.Text);
+                    line.WriteLine(text_right.Text);
+                    line.WriteLine(drp_subtitle.Text);
+                    //Video Settings Tab
+                    line.WriteLine(text_bitrate.Text);
+                    line.WriteLine(text_filesize.Text);
+                    line.WriteLine(slider_videoQuality.Value.ToString());
+                    line.WriteLine(check_2PassEncode.CheckState.ToString());
+                    line.WriteLine(drp_deInterlace_option.Text);
+                    line.WriteLine(check_grayscale.CheckState.ToString());
+                    line.WriteLine(drp_videoFramerate.Text);
+                    line.WriteLine(Check_ChapterMarkers.CheckState.ToString());
+                    line.WriteLine(CheckPixelRatio.CheckState.ToString());
+                    line.WriteLine(check_turbo.CheckState.ToString());
+                    line.WriteLine(check_largeFile.CheckState.ToString());
+                    //Audio Settings Tab
+                    line.WriteLine(drp_audioBitrate.Text);
+                    line.WriteLine(drp_audioSampleRate.Text);
+                    line.WriteLine(drp_audioChannels.Text);
+                    line.WriteLine(drp_audioMixDown.Text);
+                    //H264 Tab
+                    line.WriteLine(CheckCRF.CheckState.ToString());
+                    line.WriteLine(rtf_h264advanced.Text);
+                    // close the stream
+                    line.Close();
+                    MessageBox.Show("Your profile has been sucessfully saved.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Unable to write to the file. Please make sure the location has the correct permissions for file writing.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                }
+
+            }
         }
 
         private void btn_setDefault_Click(object sender, EventArgs e)
@@ -875,9 +773,6 @@ namespace Handbrake
                     break;
             }
         }
-
-
-
 
 
         // Functions - It's a bit dirty but i'll sort this out later. Simply done to reduce the amount of code above.
@@ -1840,6 +1735,7 @@ namespace Handbrake
         }
 
         #endregion
+
 
         // This is the END of the road ------------------------------------------------------------------------------
     }
