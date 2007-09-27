@@ -97,7 +97,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         Merritt implemented in the Mplayer/Mencoder project.
      */
 
-    char *x264opts = job->x264opts;
+    char *x264opts = strdup(job->x264opts);
     if( x264opts != NULL && *x264opts != '\0' )
     {
         while( *x264opts )
@@ -162,6 +162,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
                 hb_log( "x264 options: Bad argument %s=%s", name, value ? value : "(null)" );
         }
     }
+    free(x264opts);
 
 
     if( job->pixel_ratio )
