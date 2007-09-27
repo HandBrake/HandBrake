@@ -2009,8 +2009,54 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	/* so call audioTrackPopUpChanged for both audio tracks to update the mixdown popups */
 	[self audioTrackPopUpChanged: fAudLang1PopUp];
 	[self audioTrackPopUpChanged: fAudLang2PopUp];
-	/* lets call tableViewSelected to make sure that any preset we have selected is enforced after a title change */
-	[self tableViewSelected:NULL];
+    
+    /* We repopulate the Video Framerate popup and show the detected framerate along with "Same as Source"*/
+    [fVidRatePopUp removeAllItems];
+    if (fTitle->rate_base == 1126125) // 23.976 NTSC Film
+    {
+        [fVidRatePopUp addItemWithTitle: @"Same as source (23.976)"];
+    }
+    else if (fTitle->rate_base == 1080000) // 25 PAL Film/Video
+    {
+        [fVidRatePopUp addItemWithTitle: @"Same as source (25)"];
+    }
+    else if (fTitle->rate_base == 900900) // 29.97 NTSC Video
+    {
+        [fVidRatePopUp addItemWithTitle: @"Same as source (29.97)"];
+    }
+    else
+    {
+        /* if none of the common dvd source framerates is detected, just use "Same as source" */
+        [fVidRatePopUp addItemWithTitle: @"Same as source"];
+    }
+	for( int i = 0; i < hb_video_rates_count; i++ )
+    {
+        if ([[NSString stringWithCString: hb_video_rates[i].string] isEqualToString: [NSString stringWithFormat: @"%.3f",23.976]])
+		{
+			[fVidRatePopUp addItemWithTitle:[NSString stringWithFormat: @"%@%@",
+				[NSString stringWithCString: hb_video_rates[i].string], @" (NTSC Film)"]];
+		}
+		else if ([[NSString stringWithCString: hb_video_rates[i].string] isEqualToString: [NSString stringWithFormat: @"%d",25]])
+		{
+			[fVidRatePopUp addItemWithTitle:[NSString stringWithFormat: @"%@%@",
+				[NSString stringWithCString: hb_video_rates[i].string], @" (PAL Film/Video)"]];
+		}
+		else if ([[NSString stringWithCString: hb_video_rates[i].string] isEqualToString: [NSString stringWithFormat: @"%.2f",29.97]])
+		{
+			[fVidRatePopUp addItemWithTitle:[NSString stringWithFormat: @"%@%@",
+				[NSString stringWithCString: hb_video_rates[i].string], @" (NTSC Video)"]];
+		}
+		else
+		{
+			[fVidRatePopUp addItemWithTitle:
+				[NSString stringWithCString: hb_video_rates[i].string]];
+		}
+    }   
+    [fVidRatePopUp selectItemAtIndex: 0];
+    
+   /* lets call tableViewSelected to make sure that any preset we have selected is enforced after a title change */
+	[self tableViewSelected:NULL]; 
+	
 }
 
 - (IBAction) chapterPopUpChanged: (id) sender
@@ -2974,7 +3020,14 @@ the user is using "Custom" settings by determining the sender*/
 	[preset setObject:[NSNumber numberWithFloat:[fVidQualitySlider floatValue]] forKey:@"VideoQualitySlider"];
 	
 	/* Video framerate */
-	[preset setObject:[fVidRatePopUp titleOfSelectedItem] forKey:@"VideoFramerate"];
+    if ([fVidRatePopUp indexOfSelectedItem] == 0) // Same as source is selected
+	{
+    [preset setObject:[NSString stringWithFormat: @"Same as source"] forKey:@"VideoFramerate"];
+    }
+    else // we can record the actual titleOfSelectedItem
+    {
+    [preset setObject:[fVidRatePopUp titleOfSelectedItem] forKey:@"VideoFramerate"];
+    }
 	/* GrayScale */
 	[preset setObject:[NSNumber numberWithInt:[fVidGrayscaleCheck state]] forKey:@"VideoGrayScale"];
 	/* 2 Pass Encoding */
@@ -4340,7 +4393,16 @@ the user is using "Custom" settings by determining the sender*/
 			[self videoMatrixChanged: NULL];
 			
 			/* Video framerate */
-			[fVidRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoFramerate"]]];
+			/* For video preset video framerate, we want to make sure that Same as source does not conflict with the
+               detected framerate in the fVidRatePopUp so we use index 0*/
+			if ([[NSString stringWithFormat:[chosenPreset valueForKey:@"VideoFramerate"]] isEqualToString: @"Same as source"])
+            {
+                [fVidRatePopUp selectItemAtIndex: 0];
+            }
+            else
+            {
+                [fVidRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoFramerate"]]];
+            }
 			
 			/* GrayScale */
 			[fVidGrayscaleCheck setState:[[chosenPreset objectForKey:@"VideoGrayScale"] intValue]];
