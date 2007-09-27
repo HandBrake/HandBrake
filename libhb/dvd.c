@@ -450,6 +450,7 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
             chapter_old->cell_end    = chapter->cell_end;
             chapter_old->block_end   = chapter->block_end;
             chapter_old->block_count += chapter->block_count;
+            chapter_old->duration += chapter->duration;
             free( chapter );
             chapter = chapter_old;
         }
