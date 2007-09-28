@@ -1007,14 +1007,15 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		{
 			title = (hb_title_t *) hb_list_item( list, i );
 			
-            currentSource = [NSString stringWithUTF8String: title->dvd];
+            currentSource = [NSString stringWithUTF8String: title->name];
             
             /* To get the source name as well as the default output name, first we check to see if
                the selected directory is the VIDEO_TS Directory */
             if ([[currentSource lastPathComponent] isEqualToString: @"VIDEO_TS"])
             {
-            /* If VIDEO_TS Folder is chosen, choose its parent folder for the source display name */
-            sourceDisplayName = [NSString stringWithFormat:[[currentSource stringByDeletingLastPathComponent] lastPathComponent]];
+            /* If VIDEO_TS Folder is chosen, choose its parent folder for the source display name 
+               we have to use the title->dvd value so we get the proper name of the volume if a physical dvd is the source*/
+            sourceDisplayName = [NSString stringWithFormat:[[[NSString stringWithUTF8String: title->dvd] stringByDeletingLastPathComponent] lastPathComponent]];
             }
             else
             {
