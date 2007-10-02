@@ -99,8 +99,11 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
     if( job->x264opts != NULL && *job->x264opts != '\0' )
     {
-        char *x264opts = strdup(job->x264opts);
-        while( *x264opts )
+        char *x264opts, *x264opts_start;
+
+        x264opts = x264opts_start = strdup(job->x264opts);
+
+        while( x264opts_start && *x264opts )
         {
             char *name = x264opts;
             char *value;
@@ -161,7 +164,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
             if( ret == X264_PARAM_BAD_VALUE )
                 hb_log( "x264 options: Bad argument %s=%s", name, value ? value : "(null)" );
         }
-        free(x264opts);
+        free(x264opts_start);
     }
 
 
