@@ -93,39 +93,42 @@ hb_buffer_t * hb_buffer_init( int size )
     int b_alloc;
     int resize = 0;
 
-    /*
-     * The buffer pools are allocated in increasing size
-     */
-    for( i = 0; i < buffers.entries; i++ )
+    if( size > 0 )
     {
-        if( buffers.pool[i]->buffer_size >= size )
+        /*
+         * The buffer pools are allocated in increasing size
+         */
+        for( i = 0; i < buffers.entries; i++ )
         {
-            /*
-             * This pool is big enough, but are there any buffers in it?
-             */
-            if( hb_fifo_size( buffers.pool[i] ) ) 
+            if( buffers.pool[i]->buffer_size >= size )
             {
                 /*
-                 * We've found a matching buffer pool, with buffers.
+                 * This pool is big enough, but are there any buffers in it?
                  */
-                buffer_pool = buffers.pool[i];
-                resize =  buffers.pool[i]->buffer_size;
-            } else {
-                /*
-                 * Buffer pool is empty, 
-                 */
-                if( resize ) {
+                if( hb_fifo_size( buffers.pool[i] ) ) 
+                {
                     /*
-                     * This is the second time through, so break out of here to avoid
-                     * using too large a buffer for a small job.
+                     * We've found a matching buffer pool, with buffers.
                      */
-                    break;
+                    buffer_pool = buffers.pool[i];
+                    resize =  buffers.pool[i]->buffer_size;
+                } else {
+                    /*
+                     * Buffer pool is empty, 
+                     */
+                    if( resize ) {
+                        /*
+                         * This is the second time through, so break
+                         * out of here to avoid using too large a
+                         * buffer for a small job.
+                         */
+                        break;
+                    }
+                    resize =  buffers.pool[i]->buffer_size;
                 }
-                resize =  buffers.pool[i]->buffer_size;
             }
         }
     }
-
     /*
      * Don't reuse the 0 size buffers, not much gain.
      */

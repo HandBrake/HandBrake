@@ -576,8 +576,6 @@ static void do_job( hb_job_t * job, int cpu_count )
     hb_fifo_close( &job->fifo_render );
     hb_fifo_close( &job->fifo_mpeg4 );
 
-    hb_buffer_pool_free();
-
     for (i=0; i < hb_list_count(title->list_subtitle); i++) {
         subtitle =  hb_list_item( title->list_subtitle, i);
         if( subtitle )
@@ -688,6 +686,8 @@ static void do_job( hb_job_t * job, int cpu_count )
             job->select_subtitle = NULL;
         }
     }
+
+    hb_buffer_pool_free();
 
     hb_title_close( &job->title );
     free( job );
