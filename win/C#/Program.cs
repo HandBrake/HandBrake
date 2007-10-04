@@ -23,15 +23,9 @@ namespace Handbrake
         [STAThread]
         static void Main()
         {
-            
-            /* Some Code to allow development builds to expire.
-             * 
-             * long start = DateTime.Now.Ticks;
-             * 633286573227430160 today was long end = DateTime.Now.AddDays(31).Ticks;
-             * if (start > 633286573227430160) { MessageBox.Show("Sorry, this Handbrake has expired"); return; }
-             * 
-             */
-
+            // 633265950858281250 = 16:52 28-Sep-07  //864000000000 nanoseconds per day
+            //long start = DateTime.Now.Ticks;
+            //if (start > 633274593039531250) {MessageBox.Show("Sorry, This development build of Handbrake has expired."); return; } // Will Expire Oct 8th
 
             // Check the system meets the system requirements.
             Boolean launch = true;

@@ -43,6 +43,11 @@ namespace Handbrake
             {
                 check_tooltip.CheckState = CheckState.Checked;
             }
+
+            if (Properties.Settings.Default.showPresets == "Checked")
+            {
+                check_showPreset.CheckState = CheckState.Checked;
+            }
         }
 
         private void check_updateCheck_CheckedChanged(object sender, EventArgs e)
@@ -89,6 +94,11 @@ namespace Handbrake
         private void drp_completeOption_SelectedIndexChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.CompletionOption = drp_completeOption.Text;
+        }
+
+        private void check_showPreset_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.showPresets = check_showPreset.CheckState.ToString();
         }  
  
 

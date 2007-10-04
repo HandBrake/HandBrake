@@ -601,12 +601,24 @@ namespace Handbrake.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string SelectedPreset {
+        public string showPresets {
             get {
-                return ((string)(this["SelectedPreset"]));
+                return ((string)(this["showPresets"]));
             }
             set {
-                this["SelectedPreset"] = value;
+                this["showPresets"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string selectedPreset {
+            get {
+                return ((string)(this["selectedPreset"]));
+            }
+            set {
+                this["selectedPreset"] = value;
             }
         }
     }

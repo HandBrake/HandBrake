@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Handbrake"
-!define PRODUCT_VERSION "2.4"
+!define PRODUCT_VERSION "2.4.1"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Handbrake.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
@@ -36,7 +36,7 @@
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "Handbrake-Win.exe"
+OutFile "Handbrake-Setup.exe"
 
 !include WordFunc.nsh
 !insertmacro VersionCompare
@@ -73,9 +73,6 @@ Function GetDotNETVersion
 FunctionEnd
 
 
-
-
-
 InstallDir "$PROGRAMFILES\Handbrake"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
@@ -93,6 +90,16 @@ Section "Handbrake" SEC01
   File "hbcli.exe"
   File "Handbrake.exe.config"
   File "handbrakepineapple.ico"
+  
+  SetOutPath "$INSTDIR\doc"
+  SetOverwrite ifnewer
+  File "doc\AUTHORS"
+  File "doc\BUILD"
+  File "doc\COPYING"
+  File "doc\CREDITS"
+  File "doc\NEWS"
+  File "doc\THANKS"
+  File "doc\TRANSLATIONS"
 SectionEnd
 
 Section -AdditionalIcons
@@ -127,6 +134,14 @@ Section Uninstall
   Delete "$INSTDIR\dvdinfo.dat"
   Delete "$INSTDIR\Handbrake.exe"
   Delete "$INSTDIR\Handbrake.exe.config"
+  Delete "$INSTDIR\doc\AUTHORS"
+  Delete "$INSTDIR\doc\BUILD"
+  Delete "$INSTDIR\doc\COPYING"
+  Delete "$INSTDIR\doc\CREDITS"
+  Delete "$INSTDIR\doc\NEWS"
+  Delete "$INSTDIR\doc\THANKS"
+  Delete "$INSTDIR\doc\TRANSLATIONS"
+
   Delete "$SMPROGRAMS\Handbrake\Uninstall.lnk"
   Delete "$DESKTOP\Handbrake.lnk"
   Delete "$SMPROGRAMS\Handbrake\Handbrake.lnk"

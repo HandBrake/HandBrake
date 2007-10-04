@@ -60,6 +60,9 @@ namespace Handbrake
             this.drp_subtitle = new System.Windows.Forms.ComboBox();
             this.btn_presets = new System.Windows.Forms.Button();
             this.btn_setDefault = new System.Windows.Forms.Button();
+            this.ListBox_Presets = new System.Windows.Forms.ListBox();
+            this.btn_removePreset = new System.Windows.Forms.Button();
+            this.btn_addPreset = new System.Windows.Forms.Button();
             this.DVD_Open = new System.Windows.Forms.FolderBrowserDialog();
             this.File_Open = new System.Windows.Forms.OpenFileDialog();
             this.ISO_Open = new System.Windows.Forms.OpenFileDialog();
@@ -172,9 +175,6 @@ namespace Handbrake
             this.advancedOptions = new System.Windows.Forms.TabControl();
             this.groupBox_dest = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.ListBox_Presets = new System.Windows.Forms.ListBox();
-            this.btn_removePreset = new System.Windows.Forms.Button();
-            this.btn_addPreset = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             Label38 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
@@ -560,7 +560,7 @@ namespace Handbrake
             this.btn_presets.Size = new System.Drawing.Size(111, 22);
             this.btn_presets.TabIndex = 102;
             this.btn_presets.Text = "Show Presets";
-            this.ToolTip.SetToolTip(this.btn_presets, "Step 4 - Select a location to save your encoded file.");
+            this.ToolTip.SetToolTip(this.btn_presets, "Show or Hide the preset section");
             this.btn_presets.UseVisualStyleBackColor = true;
             this.btn_presets.Click += new System.EventHandler(this.btn_presets_Click);
             // 
@@ -581,6 +581,69 @@ namespace Handbrake
                     " > Options");
             this.btn_setDefault.UseVisualStyleBackColor = false;
             this.btn_setDefault.Click += new System.EventHandler(this.btn_setDefault_Click);
+            // 
+            // ListBox_Presets
+            // 
+            this.ListBox_Presets.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ListBox_Presets.FormattingEnabled = true;
+            this.ListBox_Presets.Items.AddRange(new object[] {
+            "Animation",
+            "AppleTV",
+            "Bedlam",
+            "Blind",
+            "Broke",
+            "Classic",
+            "Constant Quality Rate",
+            "Deux Six Quatre",
+            "Film",
+            "iPhone",
+            "iPod High-Rez",
+            "iPod Low-Rez",
+            "Normal",
+            "PS3",
+            "PSP",
+            "QuickTime",
+            "Television"});
+            this.ListBox_Presets.Location = new System.Drawing.Point(11, 21);
+            this.ListBox_Presets.Name = "ListBox_Presets";
+            this.ListBox_Presets.Size = new System.Drawing.Size(174, 368);
+            this.ListBox_Presets.TabIndex = 104;
+            this.ToolTip.SetToolTip(this.ListBox_Presets, "To load a preset, simply click the preset you desire.");
+            this.ListBox_Presets.SelectedIndexChanged += new System.EventHandler(this.ListBox_Presets_SelectedIndexChanged);
+            // 
+            // btn_removePreset
+            // 
+            this.btn_removePreset.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_removePreset.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_removePreset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_removePreset.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_removePreset.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_removePreset.Location = new System.Drawing.Point(59, 23);
+            this.btn_removePreset.Name = "btn_removePreset";
+            this.btn_removePreset.Size = new System.Drawing.Size(45, 22);
+            this.btn_removePreset.TabIndex = 106;
+            this.btn_removePreset.TabStop = false;
+            this.btn_removePreset.Text = "Save";
+            this.ToolTip.SetToolTip(this.btn_removePreset, "Save the current settings as a preset.");
+            this.btn_removePreset.UseVisualStyleBackColor = false;
+            this.btn_removePreset.Click += new System.EventHandler(this.btn_removePreset_Click);
+            // 
+            // btn_addPreset
+            // 
+            this.btn_addPreset.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_addPreset.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_addPreset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_addPreset.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_addPreset.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_addPreset.Location = new System.Drawing.Point(8, 23);
+            this.btn_addPreset.Name = "btn_addPreset";
+            this.btn_addPreset.Size = new System.Drawing.Size(45, 22);
+            this.btn_addPreset.TabIndex = 105;
+            this.btn_addPreset.TabStop = false;
+            this.btn_addPreset.Text = "Open";
+            this.ToolTip.SetToolTip(this.btn_addPreset, "Open a preset which you have saved.");
+            this.btn_addPreset.UseVisualStyleBackColor = false;
+            this.btn_addPreset.Click += new System.EventHandler(this.btn_addPreset_Click);
             // 
             // DVD_Open
             // 
@@ -1820,69 +1883,6 @@ namespace Handbrake
             this.groupBox2.TabIndex = 103;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Presets";
-            // 
-            // ListBox_Presets
-            // 
-            this.ListBox_Presets.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ListBox_Presets.FormattingEnabled = true;
-            this.ListBox_Presets.Items.AddRange(new object[] {
-            "Animation",
-            "AppleTV",
-            "Bedlam",
-            "Blind",
-            "Broke",
-            "Classic",
-            "Constant Quality Rate",
-            "Deux Six Quatre",
-            "Film",
-            "iPhone",
-            "iPod High-Rez",
-            "iPod Low-Rez",
-            "Normal",
-            "PS3",
-            "PSP",
-            "QuickTime",
-            "Television"});
-            this.ListBox_Presets.Location = new System.Drawing.Point(11, 21);
-            this.ListBox_Presets.Name = "ListBox_Presets";
-            this.ListBox_Presets.Size = new System.Drawing.Size(174, 368);
-            this.ListBox_Presets.TabIndex = 104;
-            this.ToolTip.SetToolTip(this.ListBox_Presets, "To load a preset, simply click the preset you desire.");
-            this.ListBox_Presets.SelectedIndexChanged += new System.EventHandler(this.ListBox_Presets_SelectedIndexChanged);
-            // 
-            // btn_removePreset
-            // 
-            this.btn_removePreset.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.btn_removePreset.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_removePreset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_removePreset.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_removePreset.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_removePreset.Location = new System.Drawing.Point(59, 23);
-            this.btn_removePreset.Name = "btn_removePreset";
-            this.btn_removePreset.Size = new System.Drawing.Size(45, 22);
-            this.btn_removePreset.TabIndex = 106;
-            this.btn_removePreset.TabStop = false;
-            this.btn_removePreset.Text = "Save";
-            this.ToolTip.SetToolTip(this.btn_removePreset, "Save the current settings as a preset.");
-            this.btn_removePreset.UseVisualStyleBackColor = false;
-            this.btn_removePreset.Click += new System.EventHandler(this.btn_removePreset_Click);
-            // 
-            // btn_addPreset
-            // 
-            this.btn_addPreset.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.btn_addPreset.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_addPreset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_addPreset.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_addPreset.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_addPreset.Location = new System.Drawing.Point(8, 23);
-            this.btn_addPreset.Name = "btn_addPreset";
-            this.btn_addPreset.Size = new System.Drawing.Size(45, 22);
-            this.btn_addPreset.TabIndex = 105;
-            this.btn_addPreset.TabStop = false;
-            this.btn_addPreset.Text = "Open";
-            this.ToolTip.SetToolTip(this.btn_addPreset, "Open a preset which you have saved.");
-            this.btn_addPreset.UseVisualStyleBackColor = false;
-            this.btn_addPreset.Click += new System.EventHandler(this.btn_addPreset_Click);
             // 
             // groupBox3
             // 

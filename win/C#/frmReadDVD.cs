@@ -109,8 +109,6 @@ namespace Handbrake
                 thisDvd = Parsing.DVD.Parse(sr);
                 sr.Close();
 
-                Console.ReadLine();
-
                 updateUIElements();
             }
             catch (Exception exc)

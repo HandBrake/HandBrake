@@ -46,6 +46,7 @@ namespace Handbrake
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.drp_completeOption = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.check_showPreset = new System.Windows.Forms.CheckBox();
             this.GroupBox2.SuspendLayout();
             this.GroupBox3.SuspendLayout();
             this.GroupBox1.SuspendLayout();
@@ -73,13 +74,14 @@ namespace Handbrake
             // GroupBox2
             // 
             this.GroupBox2.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.GroupBox2.Controls.Add(this.check_showPreset);
             this.GroupBox2.Controls.Add(this.check_tooltip);
             this.GroupBox2.Controls.Add(this.check_updateCheck);
             this.GroupBox2.Controls.Add(this.check_userDefaultSettings);
             this.GroupBox2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GroupBox2.Location = new System.Drawing.Point(12, 11);
             this.GroupBox2.Name = "GroupBox2";
-            this.GroupBox2.Size = new System.Drawing.Size(386, 103);
+            this.GroupBox2.Size = new System.Drawing.Size(386, 123);
             this.GroupBox2.TabIndex = 55;
             this.GroupBox2.TabStop = false;
             this.GroupBox2.Text = "General Settings";
@@ -186,7 +188,7 @@ namespace Handbrake
             this.GroupBox3.Controls.Add(this.drp_processors);
             this.GroupBox3.Controls.Add(this.Label11);
             this.GroupBox3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GroupBox3.Location = new System.Drawing.Point(12, 191);
+            this.GroupBox3.Location = new System.Drawing.Point(12, 211);
             this.GroupBox3.Name = "GroupBox3";
             this.GroupBox3.Size = new System.Drawing.Size(386, 94);
             this.GroupBox3.TabIndex = 56;
@@ -199,7 +201,7 @@ namespace Handbrake
             this.GroupBox1.Controls.Add(this.check_guiDebug);
             this.GroupBox1.Controls.Add(this.check_verbose);
             this.GroupBox1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GroupBox1.Location = new System.Drawing.Point(12, 291);
+            this.GroupBox1.Location = new System.Drawing.Point(12, 311);
             this.GroupBox1.Name = "GroupBox1";
             this.GroupBox1.Size = new System.Drawing.Size(386, 70);
             this.GroupBox1.TabIndex = 54;
@@ -225,7 +227,7 @@ namespace Handbrake
             this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(291, 371);
+            this.btn_close.Location = new System.Drawing.Point(291, 391);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(107, 22);
             this.btn_close.TabIndex = 53;
@@ -238,7 +240,7 @@ namespace Handbrake
             this.groupBox4.Controls.Add(this.drp_completeOption);
             this.groupBox4.Controls.Add(this.label5);
             this.groupBox4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox4.Location = new System.Drawing.Point(12, 120);
+            this.groupBox4.Location = new System.Drawing.Point(12, 140);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(386, 65);
             this.groupBox4.TabIndex = 57;
@@ -274,10 +276,22 @@ namespace Handbrake
             this.label5.TabIndex = 42;
             this.label5.Text = "When the encode completes:";
             // 
+            // check_showPreset
+            // 
+            this.check_showPreset.AutoSize = true;
+            this.check_showPreset.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_showPreset.Location = new System.Drawing.Point(15, 94);
+            this.check_showPreset.Name = "check_showPreset";
+            this.check_showPreset.Size = new System.Drawing.Size(362, 17);
+            this.check_showPreset.TabIndex = 50;
+            this.check_showPreset.Text = "Always Show Presets (Hide\'s the Show/Hide preset button)";
+            this.check_showPreset.UseVisualStyleBackColor = true;
+            this.check_showPreset.CheckedChanged += new System.EventHandler(this.check_showPreset_CheckedChanged);
+            // 
             // frmOptions
             // 
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(413, 403);
+            this.ClientSize = new System.Drawing.Size(413, 422);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.GroupBox2);
             this.Controls.Add(this.GroupBox3);
@@ -321,5 +335,6 @@ namespace Handbrake
         private System.Windows.Forms.GroupBox groupBox4;
         internal System.Windows.Forms.ComboBox drp_completeOption;
         internal System.Windows.Forms.Label label5;
+        internal System.Windows.Forms.CheckBox check_showPreset;
     }
 }

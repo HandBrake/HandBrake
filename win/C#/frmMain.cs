@@ -27,12 +27,12 @@ namespace Handbrake
         private Process hbProc;
         private Parsing.DVD thisDVD;        
         private frmQueue queueWindow = new frmQueue();  
-        //private frmDvdInfo dvdInfoWindow = new frmDvdInfo();
 
         public frmMain()
         {
 
-            ThreadPool.QueueUserWorkItem(showSplash);
+            // Load the splash screen on another thread. Once completed wait for 1 second.
+            ThreadPool.QueueUserWorkItem(showSplash); 
             Thread.Sleep(1000);
 
             InitializeComponent();
@@ -43,7 +43,7 @@ namespace Handbrake
             // **********************************************************************************************
 
             // Set the Version number lable to the corect version.
-            Version.Text = "Version " + Properties.Settings.Default.GuiVersion;
+            Version.Text = "Version " + Properties.Settings.Default.CliVersion;
 
             // Run the update checker.
             updateCheck();
@@ -60,20 +60,27 @@ namespace Handbrake
             // Hide the presets part of the window
             this.Width = 590;
 
-            // Create and initializes a new StringCollection.
+            showPresets();
+
+            /*
+             * This code can be used for storing preset and preset name information in future versions.
+             * Please ignore it for the moment.
+            // Create and initialize a new StringCollection.
             StringCollection myCol = new StringCollection();
             // Add a range of elements from an array to the end of the StringCollection.
             String[] myArr = new String[] { "RED", "orange", "yellow", "RED", "green", "blue", "RED", "indigo", "violet", "RED" };
             myCol.AddRange(myArr);
-
             Properties.Settings.Default.BuiltInPresets = myCol;
+            MessageBox.Show(Properties.Settings.Default.BuiltInPresets.ToString());
+            */
         }
 
         private void showSplash(object sender)
         {
+            // Display splash screen for 1.5 Seconds
             Form splash = new frmSplashScreen();
             splash.Show();
-            Thread.Sleep(1500);  // Display splash screen for 1.5 Seconds
+            Thread.Sleep(1500);  
             splash.Close(); // Then close.
         }
 
@@ -81,6 +88,7 @@ namespace Handbrake
         { 
             try
             {
+                // Load the users default settings or if the user has not got this option enabled, load the normal preset.
                 if (Properties.Settings.Default.defaultSettings == "Checked")
                 {
                     // Source
@@ -159,7 +167,7 @@ namespace Handbrake
                     }
                     rtf_h264advanced.Text = Properties.Settings.Default.H264;
 
-                    groupBox_output.Text = "Output Settings (Preset: " + Properties.Settings.Default.SelectedPreset + ")";
+                    groupBox_output.Text = "Output Settings (Preset: " + Properties.Settings.Default.selectedPreset + ")";
                 }
                 else
                 {
@@ -222,6 +230,16 @@ namespace Handbrake
             {
                 ToolTip.Active = true;
             }
+        }
+
+        private void showPresets()
+        {
+            if (Properties.Settings.Default.showPresets == "Checked")
+            {
+                btn_presets.Visible = false;
+                this.Width = 881;
+            }
+
         }
 
         #endregion
@@ -360,7 +378,7 @@ namespace Handbrake
 
         private void btn_Browse_Click(object sender, EventArgs e)
         {
-            String filename =""; 
+            String filename = ""; 
 	 	    text_source.Text = "";
             frmDvdInfo dvdInfoWindow = new frmDvdInfo();          	 
 	 	    if (RadioDVD.Checked) 
@@ -391,7 +409,8 @@ namespace Handbrake
 	 	     { 
 	 	        text_source.Text = "Click 'Browse' to continue"; 
 	 	     } 
-	 	 
+	 	    
+             // If there are no titles in the dropdown menu then the scan has obviously failed. Display an error message explaining to the user.
 	 	     if (drp_dvdtitle.Items.Count == 0) 
 	 	     { 
 	 	        MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source. Please refer to the FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand); 
@@ -400,8 +419,6 @@ namespace Handbrake
 
         private void btn_destBrowse_Click(object sender, EventArgs e)
         {
-            // TODO: Need to write some code to check if there is a reasonable amount of disk space left.
-
             DVD_Save.ShowDialog();
             text_destination.Text = DVD_Save.FileName;
 
@@ -431,7 +448,9 @@ namespace Handbrake
 
         private void btn_queue_Click(object sender, EventArgs e)
         {
-            if (text_destination.Text != "" && text_source.Text != "")
+            if (text_source.Text == "" || text_source.Text == "Click 'Browse' to continue" || text_destination.Text == "")
+                MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else
             {
                 string query;
                 if (QueryEditorText.Text == "")
@@ -445,10 +464,6 @@ namespace Handbrake
                 queueWindow.list_queue.Items.Add(query);
                 queueWindow.Show();
             } 
-            else 
-            {
-                MessageBox.Show("No Source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
         }
 
         private void btn_copy_Click(object sender, EventArgs e)
@@ -692,10 +707,16 @@ namespace Handbrake
             //H264 Tab
             Properties.Settings.Default.CRF = CheckCRF.CheckState.ToString();
             Properties.Settings.Default.H264 = rtf_h264advanced.Text;
-            Properties.Settings.Default.SelectedPreset = ListBox_Presets.SelectedItem.ToString();
+            try
+            {
+                Properties.Settings.Default.selectedPreset = ListBox_Presets.SelectedItem.ToString();
+            }
+            catch (Exception exc)
+            {
+                // If the user has not selected an item, then an exception may be thrown. Catch and ignore.
+            }
             Properties.Settings.Default.Save();
         }
-
 
         // Preset Seleciton
         private void ListBox_Presets_SelectedIndexChanged(object sender, EventArgs e)
@@ -774,7 +795,6 @@ namespace Handbrake
             }
         }
 
-
         // Functions - It's a bit dirty but i'll sort this out later. Simply done to reduce the amount of code above.
         private void setGuiSetttings(CheckState anamorphic, string width, string height, string vencoder, string bitrate, string filesize, int quality, string qpercent, string audioBit, CheckState chpt, string audioSample, string h264, string deinterlace, CheckState twopass, string crop, CheckState turbo, string audioCodec, string preset)
         {
@@ -823,20 +843,25 @@ namespace Handbrake
 
         private void btn_encode_Click(object sender, EventArgs e)
         {
-            //btn_eCancel.Enabled = true;
-            String query = "";            
-            if (QueryEditorText.Text == "")
-            {
-                query = GenerateTheQuery();
-            }
+            if (text_source.Text == "" || text_source.Text == "Click 'Browse' to continue" || text_destination.Text == "")
+                MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
-                query = QueryEditorText.Text;
-            }
+                btn_eCancel.Enabled = true;
+                String query = "";
+                if (QueryEditorText.Text == "")
+                {
+                    query = GenerateTheQuery();
+                }
+                else
+                {
+                    query = QueryEditorText.Text;
+                }
 
-            ThreadPool.QueueUserWorkItem(procMonitor, query);
-            lbl_encode.Visible = true;
-            lbl_encode.Text = "Encoding in Progress";
+                ThreadPool.QueueUserWorkItem(procMonitor, query);
+                lbl_encode.Visible = true;
+                lbl_encode.Text = "Encoding in Progress";
+            }
         }
 
         private void btn_eCancel_Click(object sender, EventArgs e)
@@ -845,7 +870,6 @@ namespace Handbrake
             process.setNull();
             lbl_encode.Text = "Encoding Canceled";
         }
-
 
         [DllImport("user32.dll")]
         public static extern void LockWorkStation();
@@ -866,7 +890,7 @@ namespace Handbrake
 
                 try
                 {
-
+                    /*
                     //*****************************************************************************************
                     // BUG!
                     // When the below code is used and standard error is set to true, hbcli is outputing a
@@ -875,7 +899,7 @@ namespace Handbrake
                     //*****************************************************************************************
 
                     
-                    /*Parsing.Parser encode = new Parsing.Parser(hbProc.StandardError.BaseStream);
+                    Parsing.Parser encode = new Parsing.Parser(hbProc.StandardOutput.BaseStream);
                     encode.OnEncodeProgress += encode_OnEncodeProgress;
                     while (!encode.EndOfStream)
                     {
@@ -884,11 +908,13 @@ namespace Handbrake
 
                     hbProc.WaitForExit();
                     process.closeCLI();
-                    */
+                     */
+                    
                 }
-                catch (Exception)
+                catch (Exception exc)
                 {
                     // Do nothing
+                    MessageBox.Show(exc.ToString());
                 }
 
 
@@ -934,7 +960,7 @@ namespace Handbrake
             lbl_encode.Text = "Encoding Finished";
         }
 
-        /*private void encode_OnEncodeProgress(object Sender, int CurrentTask, int TaskCount, float PercentComplete, float CurrentFps, float AverageFps, TimeSpan TimeRemaining)
+        private void encode_OnEncodeProgress(object Sender, int CurrentTask, int TaskCount, float PercentComplete, float CurrentFps, float AverageFps, TimeSpan TimeRemaining)
         {
             
             if (this.InvokeRequired)
@@ -944,7 +970,7 @@ namespace Handbrake
                 return;
             }
             lbl_encode.Text = string.Format("Encode Progress: {0}%,       FPS: {1},       Avg FPS: {2},       Time Remaining: {3} ", PercentComplete, CurrentFps, AverageFps, TimeRemaining);
-        }*/
+        }
 
         #endregion
 
@@ -1377,12 +1403,7 @@ namespace Handbrake
             int totalChapters = drop_chapterFinish.Items.Count - 1;
             string dvdChapter = "";
 
-            if (source ==  "")
-                MessageBox.Show("No Source has been selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            else
-            {
-                source = " -i " + '"' + source+ '"'; //'"'+
-            }
+            source = " -i " + '"' + source+ '"';
 
             if (dvdTitle ==  "Automatic")
                 dvdTitle = "";
@@ -1735,7 +1756,6 @@ namespace Handbrake
         }
 
         #endregion
-
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

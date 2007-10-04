@@ -146,7 +146,10 @@
     <Setting Name="BuiltInPresets" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="SelectedPreset" Type="System.String" Scope="User">
+    <Setting Name="showPresets" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="selectedPreset" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>
