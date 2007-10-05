@@ -176,6 +176,8 @@ namespace Handbrake
             this.groupBox_dest = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.mnu_quickStart = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             Label38 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
             this.frmMainMenu.SuspendLayout();
@@ -672,7 +674,7 @@ namespace Handbrake
             // mnu_exit
             // 
             this.mnu_exit.Name = "mnu_exit";
-            this.mnu_exit.Size = new System.Drawing.Size(103, 22);
+            this.mnu_exit.Size = new System.Drawing.Size(152, 22);
             this.mnu_exit.Text = "E&xit";
             this.mnu_exit.Click += new System.EventHandler(this.mnu_exit_Click);
             // 
@@ -758,6 +760,8 @@ namespace Handbrake
             // HelpToolStripMenuItem
             // 
             this.HelpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnu_quickStart,
+            this.toolStripSeparator1,
             this.OnlineDocumentationToolStripMenuItem,
             this.WebsiteToolStripMenuItem,
             this.ToolStripSeparator3,
@@ -775,7 +779,7 @@ namespace Handbrake
             this.mnu_faq,
             this.mnu_onlineDocs});
             this.OnlineDocumentationToolStripMenuItem.Name = "OnlineDocumentationToolStripMenuItem";
-            this.OnlineDocumentationToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.OnlineDocumentationToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.OnlineDocumentationToolStripMenuItem.Text = "Online Documentation";
             // 
             // mnu_wiki
@@ -805,7 +809,7 @@ namespace Handbrake
             this.mnu_homepage,
             this.mnu_forum});
             this.WebsiteToolStripMenuItem.Name = "WebsiteToolStripMenuItem";
-            this.WebsiteToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.WebsiteToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.WebsiteToolStripMenuItem.Text = "Website";
             // 
             // mnu_homepage
@@ -825,24 +829,24 @@ namespace Handbrake
             // ToolStripSeparator3
             // 
             this.ToolStripSeparator3.Name = "ToolStripSeparator3";
-            this.ToolStripSeparator3.Size = new System.Drawing.Size(187, 6);
+            this.ToolStripSeparator3.Size = new System.Drawing.Size(194, 6);
             // 
             // mnu_UpdateCheck
             // 
             this.mnu_UpdateCheck.Name = "mnu_UpdateCheck";
-            this.mnu_UpdateCheck.Size = new System.Drawing.Size(190, 22);
+            this.mnu_UpdateCheck.Size = new System.Drawing.Size(197, 22);
             this.mnu_UpdateCheck.Text = "Check for Updates";
             this.mnu_UpdateCheck.Click += new System.EventHandler(this.mnu_UpdateCheck_Click);
             // 
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(187, 6);
+            this.toolStripSeparator6.Size = new System.Drawing.Size(194, 6);
             // 
             // mnu_about
             // 
             this.mnu_about.Name = "mnu_about";
-            this.mnu_about.Size = new System.Drawing.Size(190, 22);
+            this.mnu_about.Size = new System.Drawing.Size(197, 22);
             this.mnu_about.Text = "About...";
             this.mnu_about.Click += new System.EventHandler(this.mnu_about_Click);
             // 
@@ -1088,7 +1092,7 @@ namespace Handbrake
             this.Version.Name = "Version";
             this.Version.Size = new System.Drawing.Size(84, 20);
             this.Version.TabIndex = 97;
-            this.Version.Text = "Version 2.4.1";
+            this.Version.Text = "Version 0.9.1";
             // 
             // lbl_encode
             // 
@@ -1897,6 +1901,18 @@ namespace Handbrake
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Preset Functions";
             // 
+            // mnu_quickStart
+            // 
+            this.mnu_quickStart.Name = "mnu_quickStart";
+            this.mnu_quickStart.Size = new System.Drawing.Size(197, 22);
+            this.mnu_quickStart.Text = "Quick Start Information";
+            this.mnu_quickStart.Click += new System.EventHandler(this.mnu_quickStart_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(194, 6);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2096,6 +2112,8 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripMenuItem mnu_UpdateCheck;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.ToolStripMenuItem mnu_quickStart;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 
     }
 }

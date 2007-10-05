@@ -26,12 +26,5 @@ namespace Handbrake
         {
             this.Close();
         }
-
-        private void check_disableWindow_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.QuickStartWindow = "UnChecked";
-            Properties.Settings.Default.Save();
-        }
-
     }
 }

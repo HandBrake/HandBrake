@@ -24,11 +24,15 @@ namespace Handbrake
 
         private void btn_q_encoder_Click(object sender, EventArgs e)
         {
-            progressBar.Value = 0;
-            lbl_progressValue.Text = "0 %";
-            progressBar.Step = 100 / list_queue.Items.Count;
-            progressBar.Update();
-            ThreadPool.QueueUserWorkItem(startProc);
+            if (list_queue.Items.Count != 0)
+            {
+                progressBar.Value = 0;
+                lbl_progressValue.Text = "0 %";
+                progressBar.Step = 100 / list_queue.Items.Count;
+                progressBar.Update();
+                ThreadPool.QueueUserWorkItem(startProc);
+            }
+             
         }
 
         [DllImport("user32.dll")]

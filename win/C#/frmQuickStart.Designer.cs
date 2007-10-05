@@ -29,7 +29,6 @@ namespace Handbrake
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmQuickStart));
-            this.check_disableWindow = new System.Windows.Forms.CheckBox();
             this.btn_close = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -55,18 +54,6 @@ namespace Handbrake
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
             this.SuspendLayout();
             // 
-            // check_disableWindow
-            // 
-            this.check_disableWindow.AutoSize = true;
-            this.check_disableWindow.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_disableWindow.Location = new System.Drawing.Point(12, 406);
-            this.check_disableWindow.Name = "check_disableWindow";
-            this.check_disableWindow.Size = new System.Drawing.Size(185, 17);
-            this.check_disableWindow.TabIndex = 0;
-            this.check_disableWindow.Text = "Do not show on next launch";
-            this.check_disableWindow.UseVisualStyleBackColor = true;
-            this.check_disableWindow.CheckedChanged += new System.EventHandler(this.check_disableWindow_CheckedChanged);
-            // 
             // btn_close
             // 
             this.btn_close.BackColor = System.Drawing.SystemColors.Control;
@@ -74,7 +61,7 @@ namespace Handbrake
             this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(399, 402);
+            this.btn_close.Location = new System.Drawing.Point(399, 387);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(111, 22);
             this.btn_close.TabIndex = 415;
@@ -247,7 +234,7 @@ namespace Handbrake
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(522, 439);
+            this.ClientSize = new System.Drawing.Size(522, 420);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.pictureBox8);
             this.Controls.Add(this.label7);
@@ -264,7 +251,6 @@ namespace Handbrake
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btn_close);
-            this.Controls.Add(this.check_disableWindow);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmQuickStart";
@@ -285,7 +271,6 @@ namespace Handbrake
 
         #endregion
 
-        private System.Windows.Forms.CheckBox check_disableWindow;
         internal System.Windows.Forms.Button btn_close;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox pictureBox1;

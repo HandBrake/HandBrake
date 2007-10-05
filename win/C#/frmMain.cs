@@ -51,9 +51,6 @@ namespace Handbrake
             // Now load the users default if required. (Will overide the above setting)
             loadUserDefaults();
 
-            // Display the quick start window if required.
-            quickStart();
-
             // Enable or disable tooltips
             tooltip();
 
@@ -215,15 +212,6 @@ namespace Handbrake
             }
         }
 
-        private void quickStart()
-        {
-            if ((Properties.Settings.Default.QuickStartWindow == "Checked") || (Properties.Settings.Default.QuickStartWindow == ""))
-            {
-                frmQuickStart quickstart = new frmQuickStart();
-                quickstart.ShowDialog();
-            }
-        }
-
         private void tooltip()
         {
             if (Properties.Settings.Default.tooltipEnable == "Checked")
@@ -323,6 +311,13 @@ namespace Handbrake
         #endregion
 
         #region Help Menu
+
+
+        private void mnu_quickStart_Click(object sender, EventArgs e)
+        {
+            Form QuickStart = new frmQuickStart();
+            QuickStart.ShowDialog();
+        }
 
         private void mnu_wiki_Click(object sender, EventArgs e)
         {
@@ -1313,6 +1308,7 @@ namespace Handbrake
                 CheckCRF.Enabled = false;
                 check_turbo.Enabled = false;
                 h264Tab.Enabled = false;
+                rtf_h264advanced.Text = "";
             }
             else
             {

@@ -125,9 +125,6 @@
     <Setting Name="deblock" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="QuickStartWindow" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Checked</Value>
-    </Setting>
     <Setting Name="CliVersion" Type="System.String" Scope="User">
       <Value Profile="(Default)">0.9.1</Value>
     </Setting>

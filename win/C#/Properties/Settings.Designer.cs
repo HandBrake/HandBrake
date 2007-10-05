@@ -516,18 +516,6 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Checked")]
-        public string QuickStartWindow {
-            get {
-                return ((string)(this["QuickStartWindow"]));
-            }
-            set {
-                this["QuickStartWindow"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0.9.1")]
         public string CliVersion {
             get {
