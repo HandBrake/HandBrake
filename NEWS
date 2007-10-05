@@ -4,25 +4,41 @@ Changes between 0.9.0 and 0.9.1:
 
 	Core HandBrake Changes:
 	+ Added: Forced subtitle support
+	+ Added: 6-channel Vorbis audio
+	+ Changed: Much better buffer management, leading to impressive speed-ups all over the place
 	+ Changed: Color subtitles now display in color, instead of being transparent.
 	+ Changed: All errors to stderr with hb_log() instead of to stdout with fprintf()
 	+ Changed: Accept stream input where the file type is in caps (.VOB instead of just .vob, etc)
+	+ Changed: Better quality Vorbis codec (AoTuV)
+	+ Changed: Faster (threaded) ffmpeg
+	+ Changed: Force x264 to use a key frame at chapter markers
+	+ Changed: Try to recover from bad preview scans instead of crashing
 	+ Fixed: No more hanging when using MKV with chapter markers
 	+ Fixed: "Same as source" FPS now works correctly when the end-credits of a progressive film are interlaced.
 	+ Fixed: "Slow" deinterlacing no longer doubles up the chapter markers
 	+ Fixed: Proper display of fading subtitles
+	+ Fixed: Nasty artifacts from inaccurate rounding in the video scaler
+	+ Fixed: Improved compatibility with streams that have missing/misplaced PMTs
 	Assorted other changes
 	
 	Mac Changes:
 	+ Changed: Bigger buffer for the Activity Log
+	+ Changed: Redesigned Queueing window
+	+ Changed: Redesigned Preferences window
+	+ Changed: Structural reorganization of the code into more segmented files
 	+ Fixed: Closing the main window no longer causes HandBrake to quit
 	+ Fixed: Changing dimensions in Picture Settings no longer causes a crash
+	+ Fixed: Target size bitrate calculation
+	+ Fixed: Picture Settings previews now scale to display resolution and screen size
 	Assorted other changes
 	
 	Windows Changes:
 	+ Added: More robust exception handling
 	+ Added: On-completion options to shutdown, suspend, etc
 	+ Added: Turn tooltips on or off
+	+ Changed: Open source, NullSoft installer
+	+ Fixed: Add-to-queue issues
+	+ Fixed: Foreign language issues
 	Assorted other changes
 	
 Changes between 0.8.5b1 and 0.9.0:
