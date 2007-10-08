@@ -95,6 +95,11 @@ int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         /* We got a complete subtitle, decode it */
         *buf_out = Decode( w );
 
+        if( buf_out && *buf_out )
+        {
+            (*buf_out)->sequence = in->sequence;
+        }
+
         /* Wait for the next one */
         pv->size_sub = 0;
         pv->size_got = 0;

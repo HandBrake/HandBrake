@@ -617,9 +617,12 @@ static void do_job( hb_job_t * job, int cpu_count )
                 subtitle_lowest_id = subtitle->id;
             }
 
-            if ( subtitle->forced_hits > 0 )
+            if( subtitle->forced_hits > 0 )
             {
-                subtitle_forced_id = subtitle->id;
+                if( subtitle_forced_id == 0 )
+                {
+                    subtitle_forced_id = subtitle->id;
+                }
             }
         }
         

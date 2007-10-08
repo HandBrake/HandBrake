@@ -15,6 +15,8 @@ typedef struct
     hb_dvd_t     * dvd;
     hb_buffer_t  * ps;
     hb_stream_t  * stream;
+    
+    uint           sequence;
 
 } hb_reader_t;
 
@@ -38,6 +40,7 @@ hb_thread_t * hb_reader_init( hb_job_t * job )
     r->job   = job;
     r->title = job->title;
     r->die   = job->die;
+    r->sequence = 0;
     
     return hb_thread_init( "reader", ReaderFunc, r,
                            HB_NORMAL_PRIORITY );
@@ -153,6 +156,7 @@ static void ReaderFunc( void * _r )
                 {
                     hb_snooze( 50 );
                 }
+                buf->sequence = r->sequence++;
                 hb_fifo_push( fifo, buf );
             }
             else

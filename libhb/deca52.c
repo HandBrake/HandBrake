@@ -27,6 +27,8 @@ struct hb_work_private_s
 
     int64_t       next_expected_pts;
 
+    int64_t       sequence;
+
     uint8_t       frame[3840];
 
     hb_list_t   * list;
@@ -79,6 +81,7 @@ int deca52Init( hb_work_object_t * w, hb_job_t * job )
 
     pv->level     = 32768.0;
     pv->next_expected_pts = 0;
+    pv->sequence = 0;
     
     return 0;
 }
@@ -109,13 +112,19 @@ int deca52Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * buf;
 
+    if( buf_in && *buf_in )
+    {
+        pv->sequence = (*buf_in)->sequence;
+    }
+
     hb_list_add( pv->list, *buf_in );
     *buf_in = NULL;
 
     /* If we got more than a frame, chain raw buffers */
     *buf_out = buf = Decode( w );
     while( buf )
-    {
+    { 
+        buf->sequence = pv->sequence;
         buf->next = Decode( w );
         buf       = buf->next;
     }

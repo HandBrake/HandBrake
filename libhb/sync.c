@@ -42,6 +42,7 @@ struct hb_work_private_s
     int64_t pts_offset_old;
     int64_t count_frames;
     int64_t count_frames_max;
+    int64_t video_sequence;
     hb_buffer_t * cur; /* The next picture to process */
 
     /* Audio */
@@ -106,6 +107,8 @@ int syncInit( hb_work_object_t * w, hb_job_t * job )
     /* Get subtitle info, if any */
     pv->subtitle = hb_list_item( title->list_subtitle, 0 );
 
+    pv->video_sequence = 0;
+
     return 0;
 }
 
@@ -144,9 +147,14 @@ void syncClose( hb_work_object_t * w )
  * Work
  ***********************************************************************
  * The root routine of this work abject
+ *
+ * The way this works is that we are syncing the audio to the PTS of
+ * the last video that we processed. That's why we skip the audio sync
+ * if we haven't got a valid PTS from the video yet.
+ *
  **********************************************************************/
 int syncWork( hb_work_object_t * w, hb_buffer_t ** unused1,
-                 hb_buffer_t ** unused2 )
+              hb_buffer_t ** unused2 )
 {
     hb_work_private_t * pv = w->private_data;
     int i;
@@ -294,6 +302,13 @@ static int SyncVideo( hb_work_object_t * w )
             pv->pts_offset = cur->start;
         }
 
+        /*
+
+         * Track the video sequence number localy so that we can sync the audio
+         * to it using the sequence number as well as the PTS.
+         */
+        pv->video_sequence = cur->sequence;
+
         /* Check for PTS jumps over 0.5 second */
         if( next->start < cur->start - PTS_DISCONTINUITY_TOLERANCE ||
             next->start > cur->start + PTS_DISCONTINUITY_TOLERANCE )
@@ -301,12 +316,26 @@ static int SyncVideo( hb_work_object_t * w )
 	    hb_log( "Sync: Video PTS discontinuity (current buffer start=%lld, next buffer start=%lld), trash Video",
                     cur->start, next->start );
             
-            /* Trash all subtitles */
+            /*
+             * Do we need to trash the subtitle, is it from the next->start period
+             * or is it from our old position. If the latter then trash it.
+             */
             if( pv->subtitle )
             {
-                while( ( sub = hb_fifo_get( pv->subtitle->fifo_raw ) ) )
+                while( ( sub = hb_fifo_see( pv->subtitle->fifo_raw ) ) )
                 {
-                    hb_buffer_close( &sub );
+                    if( ( sub->start > ( cur->start - PTS_DISCONTINUITY_TOLERANCE ) ) &&
+                        ( sub->start < ( cur->start + PTS_DISCONTINUITY_TOLERANCE ) ) )
+                    {
+                        /*
+                         * The subtitle is from our current time region which we are
+                         * jumping from. So trash it as we are about to jump backwards
+                         * or forwards and don't want it blocking the subtitle fifo.
+                         */
+                        hb_log("Trashing subtitle 0x%x due to PTS discontinuity", sub);
+                        sub = hb_fifo_get( pv->subtitle->fifo_raw );
+                        hb_buffer_close( &sub );
+                    }
                 }
             }
 
@@ -321,6 +350,8 @@ static int SyncVideo( hb_work_object_t * w )
             pv->pts_offset_old = pv->pts_offset;
             pv->pts_offset     = cur->start -
                 pv->count_frames * pv->job->vrate_base / 300;
+
+            pv->video_sequence = cur->sequence;
             continue;
         }
 
@@ -336,26 +367,130 @@ static int SyncVideo( hb_work_object_t * w )
                 if( sub2 && sub->stop > sub2->start )
                     sub->stop = sub2->start;
 
-                if( sub->stop > cur->start )
-                    break;
+                // hb_log("0x%x: video seq: %lld  subtitle sequence: %lld", 
+                //       sub, cur->sequence, sub->sequence);
 
-                /* The subtitle is older than this picture, trash it */
+                if( sub->sequence > cur->sequence )
+                {
+                    /*
+                     * The video is behind where we are, so wait until
+                     * it catches up to the same reader point on the
+                     * DVD. Then our PTS should be in the same region
+                     * as the video.
+                     */
+                    sub = NULL;
+                    break;
+                }
+
+                if( sub->stop > cur->start ) {
+                    /*
+                     * The stop time is in the future, so fall through
+                     * and we'll deal with it in the next block of
+                     * code.
+                     */
+                    break;
+                } 
+                else 
+                {
+                    /*
+                     * The stop time is in the past. But is it due to
+                     * it having been played already, or has the PTS
+                     * been reset to 0?
+                     */
+                    if( ( cur->start - sub->stop ) > PTS_DISCONTINUITY_TOLERANCE ) {
+                        /*
+                         * There is a lot of time between our current
+                         * video and where this subtitle is ending,
+                         * assume that we are about to reset the PTS
+                         * and do not throw away this subtitle.
+                         */
+                        break;
+                    }
+                }
+
+                /* 
+                 * The subtitle is older than this picture, trash it 
+                 */
                 sub = hb_fifo_get( pv->subtitle->fifo_raw );
                 hb_buffer_close( &sub );
             }
 
-            /* If we have subtitles left in the fifo, check if we should
-               apply the first one to the current frame or if we should
-               keep it for later */
-            if( sub && sub->start > cur->start )
+            /*
+             * There is a valid subtitle, is it time to display it?
+             */
+            if( sub )
             {
-                sub = NULL;
+                if( sub->stop > sub->start)
+                {
+                    /*
+                     * Normal subtitle which ends after it starts, check to 
+                     * see that the current video is between the start and end.
+                     */
+                    if( cur->start > sub->start &&
+                        cur->start < sub->stop )
+                    {
+                        /*
+                         * We should be playing this, so leave the
+                         * subtitle in place.
+                         *
+                         * fall through to display
+                         */
+                    } 
+                    else
+                    {
+                        /*
+                         * Defer until the play point is within the subtitle
+                         */
+                        sub = NULL;
+                    }
+                }
+                else
+                {
+                    /*
+                     * The end of the subtitle is less than the start, this is a
+                     * sign of a PTS discontinuity.
+                     */
+                    if( sub->start > cur->start )
+                    {
+                        /*
+                         * we haven't reached the start time yet, or
+                         * we have jumped backwards after having
+                         * already started this subtitle.
+                         */
+                        if( cur->start < sub->stop )
+                        {
+                            /*
+                             * We have jumped backwards and so should
+                             * continue displaying this subtitle.
+                             *
+                             * fall through to display.
+                             */
+                        } 
+                        else 
+                        {
+                            /*
+                             * Defer until the play point is within the subtitle
+                             */
+                            sub = NULL;
+                        }
+                    } else {
+                        /*
+                         * Play this subtitle as the start is greater than our
+                         * video point.
+                         *
+                         * fall through to display/
+                         */
+                    }
+                }
             }
         }
 
         /* The PTS of the frame we are expecting now */
         pts_expected = pv->pts_offset +
             pv->count_frames * pv->job->vrate_base / 300;
+
+        //hb_log("Video expecting PTS %lld, current frame: %lld, next frame: %lld, cf: %lld", 
+        //       pts_expected, cur->start, next->start, pv->count_frames * pv->job->vrate_base / 300 );
 
         if( cur->start < pts_expected - pv->job->vrate_base / 300 / 2 &&
             next->start < pts_expected + pv->job->vrate_base / 300 / 2 )
@@ -376,7 +511,8 @@ static int SyncVideo( hb_work_object_t * w )
             /* We'll need the current frame more than one time. Make a
                copy of it and keep it */
             buf_tmp = hb_buffer_init( cur->size );
-            memcpy( buf_tmp->data, cur->data, cur->size );
+            memcpy( buf_tmp->data, cur->data, cur->size ); 
+            buf_tmp->sequence = cur->sequence;
         }
         else
         {
@@ -468,52 +604,61 @@ static void SyncAudio( hb_work_object_t * w, int i )
         /* The PTS of the samples we are expecting now */
         pts_expected = pv->pts_offset + sync->count_frames * 90000 / rate;
 
-	/*
-	  * Using the same logic as the Video have we crossed a VOB boundary as detected
-	   * by the expected PTS and the PTS of our audio being out by more than the tolerance
-	   * value.
-	   */
+        // hb_log("Video Sequence: %lld, Audio Sequence: %lld", pv->video_sequence, buf->sequence);
+        /*
+         * Using the same logic as the Video have we crossed a VOB
+         * boundary as detected by the expected PTS and the PTS of our
+         * audio being out by more than the tolerance value.
+         */
         if( ( buf->start > pts_expected + PTS_DISCONTINUITY_TOLERANCE ||
               buf->start < pts_expected - PTS_DISCONTINUITY_TOLERANCE ) &&
             pv->pts_offset_old > INT64_MIN )
         {
 	    /*
-	       * Useful debug, but too verbose for normal use.
-	           hb_log("Sync:  Audio discontinuity (%lld < %lld < %lld)",
+             * Useful debug, but too verbose for normal use.
+             */
+            hb_log("Sync: Audio discontinuity (sequence: vid %lld aud %lld) (pts %lld < %lld < %lld)",
+                   pv->video_sequence, buf->sequence,
 		   pts_expected - PTS_DISCONTINUITY_TOLERANCE, buf->start,
 		   pts_expected + PTS_DISCONTINUITY_TOLERANCE );
-	    */
 	    
             /* There has been a PTS discontinuity, and this frame might
                be from before the discontinuity*/
             pts_expected = pv->pts_offset_old + sync->count_frames *
                 90000 / rate;
 
-	    /*
-	      * Is the audio from a valid period given the previous Video PTS. I.e. has there
-	       * just been a video PTS discontinuity and this audio belongs to the vdeo from
-	       * before?
-	       */
+            /*
+             * Is the audio from a valid period given the previous
+             * Video PTS. I.e. has there just been a video PTS
+             * discontinuity and this audio belongs to the vdeo from
+             * before?
+             */
             if( buf->start > pts_expected + PTS_DISCONTINUITY_TOLERANCE ||
                 buf->start < pts_expected - PTS_DISCONTINUITY_TOLERANCE )
             {
-		/*
-		  * It's outside of our tolerance for where the video is now, and it's outside 
-		  * of the tolerance for where we have been in the case of a VOB change.
-		  * Try and reconverge regardless. so continue on to our convergence 
-		  * code below which will kick in as it will be more than 100ms out.
-		  * 
-		  * Note that trashing the Audio could make things worse if the Audio is in
-		  * front because we will end up diverging even more. We need to hold on
-		  * to the audio until the video catches up.
-		*/
-		hb_log("Sync: Audio is way out of sync, attempt to reconverge from current video PTS");
+                /*
+                 * It's outside of our tolerance for where the video
+                 * is now, and it's outside of the tolerance for
+                 * where we have been in the case of a VOB change.
+                 * Try and reconverge regardless. so continue on to
+                 * our convergence code below which will kick in as
+                 * it will be more than 100ms out.
+                 * 
+                 * Note that trashing the Audio could make things
+                 * worse if the Audio is in front because we will end
+                 * up diverging even more. We need to hold on to the
+                 * audio until the video catches up.
+                 */
+                hb_log("Sync: Audio is way out of sync, attempt to reconverge from current video PTS");
 		
-		/*
-		  * It wasn't from the old place, so we must be from the new, but just too far out. So attempt to
-		  * reconverge by resetting the point we want to be to where we are currently wanting to be.
-		  */
+                /*
+                 * It wasn't from the old place, so we must be from
+                 * the new, but just too far out. So attempt to
+                 * reconverge by resetting the point we want to be to
+                 * where we are currently wanting to be.
+                 */
 		pts_expected = pv->pts_offset + sync->count_frames * 90000 / rate;
+                start = pts_expected - pv->pts_offset;
 	    } else {
                  /* Use the older offset */
                 start = pts_expected - pv->pts_offset_old;

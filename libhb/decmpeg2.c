@@ -151,6 +151,8 @@ int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 buf  = hb_buffer_init( m->width * m->height * 3 / 2 );
                 data = buf->data;
 
+                buf->sequence = buf_es->sequence;
+
                 // Was a good break point found?
                 if( chap_break )
                 {

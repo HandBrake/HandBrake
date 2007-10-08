@@ -35,6 +35,8 @@ struct hb_buffer_s
     uint8_t *     data;
     int           cur;
 
+    int64_t       sequence;
+
     int           id;
     int64_t       start;
     int64_t       stop;
