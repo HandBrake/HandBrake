@@ -3903,7 +3903,7 @@ the user is using "Custom" settings by determining the sender*/
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
-    [preset setObject:@"iPhone" forKey:@"PresetName"];
+    [preset setObject:@"iPhone / iPod Touch" forKey:@"PresetName"];
 	/*Set whether or not this is a user preset or factory 0 is factory, 1 is user*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
 	/*Set whether or not this is default, at creation set to 0*/
