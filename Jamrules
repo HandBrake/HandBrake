@@ -12,7 +12,7 @@ if ! $(DEFINES)
 }
 
 HB_VERSION  = 0.9.1 ;
-HB_BUILD    = 2007083100 ;
+HB_BUILD    = 2007100800 ;
 DEFINES    += HB_VERSION=\\\"$(HB_VERSION)\\\" HB_BUILD=$(HB_BUILD) ;
 LANGUAGES   = fr de it pl ru nl es pt ja ;
 RM          = rm -rf ;
