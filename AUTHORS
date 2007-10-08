@@ -28,6 +28,9 @@ John Allen (?) <johnallenemail@gmail.com> (johnallen)
 Joe Crain <joe@dynaflashtech.net> (dynaflash)
  + Mac OS X GUI enhancements/rewrite
 
+Damiano Galassi <damiog@gmail.com> (ritsuka)
+ + Mac OS X GUI enhancements
+
 Edward Groenendaal <unknown> (eddyg)
  + Major bug fixes
  + Subtitle scan
@@ -46,6 +49,9 @@ Chris Lee <clee@kde.org>
 
 Chris Long <chris.long@mac.com> (chrislong)
  + iPod firmware 1.2+ 640x480 MPEG-4/H.264 support
+
+Brian Mario <Unknown> (brianmario)
+ + Windows GUI
 
 Maurj <handbrake@maurj.com> (maurj)
  + Dolby Surround and Dolby Pro Logic II mixdowns
@@ -76,9 +82,6 @@ Jonathon Rubin <jb.rubin@gmail.com> (jbrjake)
 Scott <sr55ww@googlemail.com> (sr55)
  + Windows GUI
  + Windows CLI port
- 
-Brian Mario <Unknown> (brianmario)
- + Windows GUI
 
-Damiano Galassi <damiog@gmail.com> (ritsuka)
- + Mac OS X GUI enhancements
+Chris Thoman <cthoman@gmail.com> (huevos_rancheros)
+ + Ported video filters from libmpcodec
