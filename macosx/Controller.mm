@@ -801,12 +801,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 			
             // Has current job changed? That means the queue has probably changed as
 			// well so update it
-            if (fLastKnownCurrentJob != hb_current_job(fHandle))
-            {
-                fLastKnownCurrentJob = hb_current_job(fHandle);
-                [fQueueController updateQueueUI];
-            }
-            [fQueueController updateCurrentJobUI];
+            [fQueueController hblibStateChanged: s];
             
             break;
         }
@@ -830,7 +825,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             [self UpdateDockIcon: 1.0];
 			
 			// Pass along the info to HBQueueController
-            [fQueueController updateCurrentJobUI];
+            [fQueueController hblibStateChanged: s];
 			
             break;
         }
@@ -840,7 +835,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		    [fStatusField setStringValue: _( @"Paused" )];
             
 			// Pass along the info to HBQueueController
-            [fQueueController updateCurrentJobUI];
+            [fQueueController hblibStateChanged: s];
 
             break;
 			
@@ -886,10 +881,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 				fRipIndicatorShown = NO;
 			}
 			
-            // Queue has been modified so update the UI
-			fLastKnownCurrentJob = nil;
-            [fQueueController updateQueueUI];
-            [fQueueController updateCurrentJobUI];
+			// Pass along the info to HBQueueController
+            [fQueueController hblibStateChanged: s];
 			
             /* Check to see if the encode state has not been cancelled
 				to determine if we should check for encode done notifications */
@@ -1652,9 +1645,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	
     NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
 	[[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];
-	/* Lets try to update stuff, taken from remove in the queue controller */
-	[fQueueController performSelectorOnMainThread: @selector( updateQueueUI )
-        withObject: NULL waitUntilDone: NO];
+	
+    // Notify the queue
+	[fQueueController hblibJobListChanged];
 }
 
 /* Rip: puts up an alert before ultimately calling doRip
@@ -1814,6 +1807,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     // remaining passes of the job and then start the queue back up if there are any
     // remaining jobs.
      
+    [fQueueController hblibWillStop];
     hb_stop( fHandle );
     fEncodeState = 2;   // don't alert at end of processing since this was a cancel
     

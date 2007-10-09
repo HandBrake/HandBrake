@@ -221,7 +221,8 @@
                 cancelCurrentJob = id; 
                 imageSpacingChanged = id; 
                 indentChanged = id; 
-                removeSelectedJob = id; 
+                removeSelectedJobGroups = id; 
+                revealSelectedJobGroups = id; 
                 showQueueWindow = id; 
                 togglePauseResume = id; 
                 toggleStartCancel = id; 

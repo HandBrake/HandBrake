@@ -179,8 +179,6 @@
 	int                            currentSuccessfulScanCount;
     BOOL                           SuccessfulScan;
 	NSString                      * currentSource;
-	
-    hb_job_t                     * fLastKnownCurrentJob;
 }
 
 - (void)     TranslateStrings;
