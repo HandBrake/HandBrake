@@ -138,19 +138,7 @@ static int GetAlignedSize( int size )
         [fCropMatrix  selectCellAtRow: 0 column:0];
 	}
 	
-	/* set the detelecine state according to the state in main window */
-	/* if framerate is 23.976 we do not allow detelecine, otherwise, enable and set according to fDetelecineMainWindow outlet */ 
-	if (fTitle->rate_base == 1126125)
-	{
-		[fDetelecineCheck setEnabled: NO];
-		[fDetelecineCheck setState: NSOffState];
-		
-	}
-	else
-	{
-        [fDetelecineCheck setEnabled: YES];
-        [fDetelecineCheck setState: fPictureFilterSettings.detelecine];
-	}
+	
 	
 	/* we use a popup to show the denoise settings */
 	[fDenoisePopUp removeAllItems];

@@ -2816,11 +2816,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	{
 		[fPicSettingAutoCrop setStringValue: @"Auto"];
 	}	
-	/* check video framerate and turn off detelecine if necessary */
-	if (fTitle->rate_base == 1126125 || [[fVidRatePopUp titleOfSelectedItem] isEqualToString: @"23.976 (NTSC Film)"])
-	{
-		[fPictureController setDetelecine:0];
-	}
+	
 	
 	
 	
