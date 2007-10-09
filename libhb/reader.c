@@ -58,6 +58,7 @@ static void ReaderFunc( void * _r )
     hb_buffer_t  * buf;
     hb_list_t    * list;
     int            chapter = -1;
+    int            chapter_end = r->job->chapter_end;
 
     if( !( r->dvd = hb_dvd_init( r->title->dvd ) ) )
     {
@@ -69,7 +70,26 @@ static void ReaderFunc( void * _r )
 
     if (r->dvd)
     {
-      if( !hb_dvd_start( r->dvd, r->title->index, r->job->chapter_start ) )
+      /*
+       * XXX this code is a temporary hack that should go away if/when
+       *     chapter merging goes away in libhb/dvd.c
+       * map the start and end chapter numbers to on-media chapter
+       * numbers since chapter merging could cause the handbrake numbers
+       * to diverge from the media numbers and, if our chapter_end is after
+       * a media chapter that got merged, we'll stop ripping too early.
+       */
+      int start = r->job->chapter_start;
+      hb_chapter_t * chap = hb_list_item( r->title->list_chapter, chapter_end - 1 );
+
+      chapter_end = chap->index;
+      if (start > 1)
+      {
+         chap = hb_list_item( r->title->list_chapter, start - 1 );
+         start = chap->index;
+      }
+      /* end chapter mapping XXX */
+
+      if( !hb_dvd_start( r->dvd, r->title->index, start ) )
       {
           hb_dvd_close( &r->dvd );
           return;
@@ -99,10 +119,10 @@ static void ReaderFunc( void * _r )
             hb_log( "reader: end of the title reached" );
             break;
         }
-        if( chapter > r->job->chapter_end )
+        if( chapter > chapter_end )
         {
-            hb_log( "reader: end of chapter %d reached (%d)",
-                    r->job->chapter_end, chapter );
+            hb_log( "reader: end of chapter %d (media %d) reached at media chapter %d",
+                    r->job->chapter_end, chapter_end, chapter );
             break;
         }
 

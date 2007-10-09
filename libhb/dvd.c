@@ -386,7 +386,8 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
         pgc_t * pgc_next;
 
         chapter = calloc( sizeof( hb_chapter_t ), 1 );
-        chapter->index = c;
+        /* remember the on-disc chapter number */
+        chapter->index = i + 1;
 
         pgc_id = vts->vts_ptt_srpt->title[title->ttn-1].ptt[i].pgcn;
         pgn    = vts->vts_ptt_srpt->title[title->ttn-1].ptt[i].pgn;
@@ -439,14 +440,13 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
             d->cell_cur = d->cell_next;
         }
 
-        if( chapter->block_count < 2048 && chapter->index > 1 )
+        if( chapter->block_count < 2048 && c > 1 )
         {
-            hb_log( "scan: chapter %d too short (%d blocks, "
-                    "cells=%d->%d), merging", chapter->index,
+            hb_log( "scan: chapter %d(%d) too short (%d blocks, "
+                    "cells=%d->%d), merging", c, chapter->index,
                     chapter->block_count, chapter->cell_start,
                     chapter->cell_end );
-            chapter_old = hb_list_item( title->list_chapter,
-                                        chapter->index - 2 );
+            chapter_old = hb_list_item( title->list_chapter, c - 2 );
             chapter_old->cell_end    = chapter->cell_end;
             chapter_old->block_end   = chapter->block_end;
             chapter_old->block_count += chapter->block_count;
