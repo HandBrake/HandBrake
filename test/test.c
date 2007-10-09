@@ -188,9 +188,11 @@ int main( int argc, char ** argv )
                 switch( buf[0] )
                 {
                     case 'q':
+                        fprintf( stdout, "\nEncoding Quit by user command\n" );
                         die = 1;
                         break;
                     case 'p':
+                        fprintf( stdout, "\nEncoding Paused by user command, 'r' to resume\n" );
                         hb_pause( h );
                         break;
                     case 'r':
@@ -227,11 +229,11 @@ int main( int argc, char ** argv )
 
 static void ShowCommands()
 {
-    fprintf( stderr, "Commands:\n" );
-    fprintf( stderr, " [h]elp    Show this message\n" );
-    fprintf( stderr, " [q]uit    Exit HandBrakeCLI\n" );
-    fprintf( stderr, " [p]ause   Pause encoding\n" );
-    fprintf( stderr, " [r]esume  Resume encoding\n" );
+    fprintf( stdout, "\nCommands:\n" );
+    fprintf( stdout, " [h]elp    Show this message\n" );
+    fprintf( stdout, " [q]uit    Exit HandBrakeCLI\n" );
+    fprintf( stdout, " [p]ause   Pause encoding\n" );
+    fprintf( stdout, " [r]esume  Resume encoding\n" );
 }
 
 static void PrintTitleInfo( hb_title_t * title )
@@ -725,21 +727,23 @@ static int HandleEvents( hb_handle_t * h )
 
 #define p s.param.working
         case HB_STATE_WORKING:
-            fprintf( stderr, "\rEncoding: task %d of %d, %.2f %%",
+            fprintf( stdout, "\rEncoding: task %d of %d, %.2f %%",
                      p.job_cur, p.job_count, 100.0 * p.progress );
             if( p.seconds > -1 )
             {
-                fprintf( stderr, " (%.2f fps, avg %.2f fps, ETA "
+                fprintf( stdout, " (%.2f fps, avg %.2f fps, ETA "
                          "%02dh%02dm%02ds)", p.rate_cur, p.rate_avg,
                          p.hours, p.minutes, p.seconds );
             }
+            fflush(stdout);
             break;
 #undef p
 
 #define p s.param.muxing
         case HB_STATE_MUXING:
         {
-            fprintf( stderr, "\rMuxing: %.2f %%", 100.0 * p.progress );
+            fprintf( stdout, "\rMuxing: %.2f %%", 100.0 * p.progress );
+            fflush(stdout);
             break;
         }
 #undef p
