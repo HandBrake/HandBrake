@@ -85,3 +85,7 @@ Scott <sr55ww@googlemail.com> (sr55)
 
 Chris Thoman <cthoman@gmail.com> (huevos_rancheros)
  + Ported video filters from libmpcodec
+
+Mark Krenek <markkrenek@mac.com> (travistex)
+ + Mac OS X GUI enhancements
+ + Mac OS X GUI Queueing system
