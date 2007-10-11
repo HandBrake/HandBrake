@@ -1,0 +1,46 @@
+--- x264/orig.configer  2007-09-15 20:14:00.202704854 +0200
++++ x264/configure      2007-09-15 20:15:13.969525668 +0200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#! /usr/xpg4/bin/sh
+
+ if test x"$1" = x"-h" -o x"$1" = x"--help" ; then
+
+@@ -76,7 +76,7 @@
+ # check whether 'echo -n' works as expected, otherwise try printf
+ if [ "x`echo -n houba`" = xhouba ]
+ then
+-  ECHON="echo -n"
++  ECHON="/usr/ucb/echo -n"
+ elif [ "x`printf houba`" = xhouba ]
+ then
+   ECHON="printf"
+ 
+diff -Naur x264/encoder/ratecontrol.c solaris.x264/encoder/ratecontrol.c
+--- x264/encoder/ratecontrol.c	2007-05-01 22:45:01.000000000 +0200
++++ solaris.x264/encoder/ratecontrol.c	2007-07-08 15:08:46.037119995 +0200
+@@ -35,6 +35,9 @@
+ #include "common/cpu.h"
+ #include "ratecontrol.h"
+ 
++#if defined(SYS_SunOS)
++#define isfinite _finite
++#endif
+ #if defined(SYS_OPENBSD)
+ #define isfinite finite
+ #endif
+--- x264.base/Makefile	Mon Jul 16 08:45:03 2007
++++ x264/Makefile	Thu Oct 11 11:52:46 2007
+@@ -147,8 +147,10 @@
+ 	$(MAKE) -C gtk distclean
+ 
+ install: x264 $(SONAME)
+-	install -d $(DESTDIR)$(bindir) $(DESTDIR)$(includedir)
+-	install -d $(DESTDIR)$(libdir) $(DESTDIR)$(libdir)/pkgconfig
++	install -d $(DESTDIR)$(bindir) 
++	install -d $(DESTDIR)$(includedir)
++	install -d $(DESTDIR)$(libdir) 
++	install -d $(DESTDIR)$(libdir)/pkgconfig
+ 	install -m 644 x264.h $(DESTDIR)$(includedir)
+ 	install -m 644 libx264.a $(DESTDIR)$(libdir)
+ 	install -m 644 x264.pc $(DESTDIR)$(libdir)/pkgconfig

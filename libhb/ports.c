@@ -12,6 +12,8 @@
 #include <signal.h>
 #elif defined( SYS_CYGWIN )
 #include <windows.h>
+#elif defined( SYS_SunOS )
+#include <sys/processor.h>
 #endif
 
 #if USE_PTHREAD
@@ -74,7 +76,7 @@ void hb_snooze( int delay )
     }
 #if defined( SYS_BEOS )
     snooze( 1000 * delay );
-#elif defined( SYS_DARWIN ) || defined( SYS_LINUX ) || defined( SYS_FREEBSD )
+#elif defined( SYS_DARWIN ) || defined( SYS_LINUX ) || defined( SYS_FREEBSD) || defined( SYS_SunOS )
     usleep( 1000 * delay );
 #elif defined( SYS_CYGWIN )
     Sleep( delay );
@@ -146,6 +148,22 @@ int hb_get_cpu_count()
     SYSTEM_INFO cpuinfo;
     GetSystemInfo( &cpuinfo );
     cpu_count = cpuinfo.dwNumberOfProcessors;
+#elif defined( SYS_SunOS )
+    {
+        processorid_t cpumax;
+        int i,j=0;
+
+        cpumax = sysconf(_SC_CPUID_MAX);
+
+        for(i = 0; i <= cpumax; i++ )
+        {
+            if(p_online(i, P_STATUS) != -1)
+            {
+                j++;
+            }
+        }
+        cpu_count=j;
+    }
 #endif
 
     cpu_count = MAX( 1, cpu_count );

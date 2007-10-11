@@ -5,6 +5,7 @@ CXX="g++"
 CCFLAGS="$CCFLAGS -Wall -g"
 OPTIM="$OPTIM -O3 -funroll-loops"
 LINKLIBS="-lz"
+MAKE=make
 
 # System-specific flags
 SYSTEM=`uname -s`
@@ -55,6 +56,10 @@ case $SYSTEM in
     DEFINES="$DEFINES SYS_CYGWIN USE_PTHREAD"
     LINKLIBS="$LINKLIBS -lpthread"
     ;;
+  SunOS)
+    DEFINES="$DEFINES SYS_SunOS USE_PTHREAD _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64"
+    LINKLIBS="$LINKLIBS -lpthread -lsocket -lnsl"
+    ;;
 
   *)
     echo "Unsupported operating system"
@@ -70,7 +75,7 @@ int main()
     return *( (char *) &i );
 }
 EOF
-if ( cc -o testconf testconf.c && ./testconf ) > /dev/null 2>&1
+if ( $CC -o testconf testconf.c && ./testconf ) > /dev/null 2>&1
 then
   echo "Endian: big"
   DEFINES="$DEFINES WORDS_BIGENDIAN"
@@ -78,6 +83,19 @@ else
   echo "Endian: little"
 fi
 rm -f testconf.c testconf
+
+#
+# Use Gnu make when available over the built in make
+#
+if ( make --version | grep GNU ) > /dev/null 2>&1
+then
+MAKE=make
+elif ( gmake --version | grep GNU ) > /dev/null 2>&1
+then
+MAKE=gmake
+else
+MAKE=make
+fi
 
 # Generate config.jam
 rm -f config.jam
@@ -90,6 +108,7 @@ C++FLAGS = $CCFLAGS ;
 OPTIM    = $OPTIM ;
 DEFINES  = $DEFINES ;
 LINKLIBS = $LINKLIBS ;
+MAKE     = $MAKE ;
 EOF
 
 echo

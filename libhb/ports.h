@@ -37,7 +37,7 @@ typedef struct hb_thread_s hb_thread_t;
 #elif defined( SYS_DARWIN )
 #  define HB_LOW_PRIORITY    0
 #  define HB_NORMAL_PRIORITY 31
-#elif defined( SYS_LINUX ) || defined( SYS_FREEBSD )
+#elif defined( SYS_LINUX ) || defined( SYS_FREEBSD ) || defined ( SYS_SunOS )
 #  define HB_LOW_PRIORITY    0
 #  define HB_NORMAL_PRIORITY 0
 #elif defined( SYS_CYGWIN )
