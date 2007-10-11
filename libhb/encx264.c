@@ -23,8 +23,7 @@ hb_work_object_t hb_encx264 =
     encx264Close
 };
 
-// 16 is probably overkill but it's also the maximum for h.264 reference frames
-#define MAX_INFLIGHT_FRAMES 16
+#define DTS_BUFFER_SIZE 32 
 
 struct hb_work_private_s
 {
@@ -33,8 +32,8 @@ struct hb_work_private_s
     x264_picture_t   pic_in;
 
     // Internal queue of DTS start/stop values.
-    int64_t        dts_start[MAX_INFLIGHT_FRAMES];
-    int64_t        dts_stop[MAX_INFLIGHT_FRAMES];
+    int64_t        dts_start[DTS_BUFFER_SIZE];
+    int64_t        dts_stop[DTS_BUFFER_SIZE];
 
     int64_t        dts_write_index;
     int64_t        dts_read_index;
@@ -304,8 +303,8 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
         pv->pic_in.i_qpplus1 = 0;
 
         // Remember current PTS value, use as DTS later
-        pv->dts_start[pv->dts_write_index & (MAX_INFLIGHT_FRAMES-1)] = in->start;
-        pv->dts_stop[pv->dts_write_index & (MAX_INFLIGHT_FRAMES-1)]  = in->stop;
+        pv->dts_start[pv->dts_write_index & (DTS_BUFFER_SIZE-1)] = in->start;
+        pv->dts_stop[pv->dts_write_index & (DTS_BUFFER_SIZE-1)]  = in->stop;
         pv->dts_write_index++;
 
         /* Feed the input DTS to x264 so it can figure out proper output PTS */
@@ -345,8 +344,8 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
         int64_t dts_start, dts_stop;
 
         /* Get next DTS value to use */
-        dts_start = pv->dts_start[pv->dts_read_index & (MAX_INFLIGHT_FRAMES-1)];
-        dts_stop  = pv->dts_stop[pv->dts_read_index & (MAX_INFLIGHT_FRAMES-1)];
+        dts_start = pv->dts_start[pv->dts_read_index & (DTS_BUFFER_SIZE-1)];
+        dts_stop  = pv->dts_stop[pv->dts_read_index & (DTS_BUFFER_SIZE-1)];
         pv->dts_read_index++;
 
         for( i = 0; i < i_nal; i++ )
