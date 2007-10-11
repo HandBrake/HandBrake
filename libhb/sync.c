@@ -335,6 +335,8 @@ static int SyncVideo( hb_work_object_t * w )
                         hb_log("Trashing subtitle 0x%x due to PTS discontinuity", sub);
                         sub = hb_fifo_get( pv->subtitle->fifo_raw );
                         hb_buffer_close( &sub );
+                    } else {
+                        break;
                     }
                 }
             }
