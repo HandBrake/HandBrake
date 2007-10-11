@@ -34,6 +34,8 @@ struct hb_dvd_s
     int            block;
     int            pack_len;
     int            next_vobu;
+    int            in_cell;
+    int            in_sync;
 };
 
 /***********************************************************************
@@ -572,7 +574,9 @@ int hb_dvd_start( hb_dvd_t * d, int title, int chapter )
     d->next_vobu = d->block;
     d->pack_len  = 0;
     d->cell_overlap = 0;
-    
+    d->in_cell = 0;
+    d->in_sync = 2;
+
     return 1;
 }
 
@@ -631,18 +635,56 @@ int hb_dvd_seek( hb_dvd_t * d, float f )
         return 0;
     }
 
+    /*
+     * Assume that we are in sync, even if we are not given that it is obvious
+     * that we are out of sync if we have just done a seek.
+     */
+    d->in_sync = 2;
+
     return 1;
 }
 
 
 /***********************************************************************
  * is_nav_pack
- ***********************************************************************
- * Pretty much directly lifted from libdvdread's play_title function.
- **********************************************************************/
+ ***********************************************************************/
 int is_nav_pack( unsigned char *buf )
 {
-    return ( buf[41] == 0xbf && buf[1027] == 0xbf );
+    /*
+     * The NAV Pack is comprised of the PCI Packet and DSI Packet, both 
+     * of these start at known offsets and start with a special identifier.
+     *
+     * NAV = {
+     *  PCI = { 00 00 01 bf  # private stream header
+     *          ?? ??        # length
+     *          00           # substream
+     *          ...
+     *        }
+     *  DSI = { 00 00 01 bf  # private stream header
+     *          ?? ??        # length
+     *          01           # substream
+     *          ...
+     *        }
+     *
+     * The PCI starts at offset 0x26 into the sector, and the DSI starts at 0x400
+     *
+     * This information from: http://dvd.sourceforge.net/dvdinfo/
+     */
+    if( ( buf[0x26] == 0x00 &&      // PCI
+          buf[0x27] == 0x00 &&
+          buf[0x28] == 0x01 &&
+          buf[0x29] == 0xbf &&
+          buf[0x2c] == 0x00 ) &&
+        ( buf[0x400] == 0x00 &&     // DSI
+          buf[0x401] == 0x00 &&
+          buf[0x402] == 0x01 &&
+          buf[0x403] == 0xbf &&
+          buf[0x406] == 0x01 ) )
+    {
+        return ( 1 );
+    } else {
+        return ( 0 );
+    }
 }
 
 
@@ -687,6 +729,11 @@ int hb_dvd_read( hb_dvd_t * d, hb_buffer_t * b )
 
             if ( !is_nav_pack( b->data ) ) { 
                 (d->next_vobu)++;
+                if( d->in_sync == 1 ) {
+                    hb_log("DVD: Lost sync, searching for NAV pack at blk %d", 
+                           d->next_vobu);
+                    d->in_sync = 0;
+                }
                 continue;
             }
 
@@ -712,6 +759,7 @@ int hb_dvd_read( hb_dvd_t * d, hb_buffer_t * b )
                             d->next_vobu, block, pack_len, next_vobu );
 #endif
                 }
+
                 d->block     = block;
                 d->pack_len  = pack_len;
                 d->next_vobu = next_vobu;
@@ -735,21 +783,44 @@ int hb_dvd_read( hb_dvd_t * d, hb_buffer_t * b )
             (d->next_vobu)++;
         }
 
-        if( dsi_pack.vobu_sri.next_vobu == SRI_END_OF_CELL )
+        if( d->in_sync == 0 || d->in_sync == 2 )
         {
+            if( d->in_sync == 0 )
+            {
+                hb_log( "DVD: In sync with DVD at block %d", d->block );
+            }
+            d->in_sync = 1;
+        }
+
+        if( dsi_pack.vobu_sri.next_vobu == SRI_END_OF_CELL )
+        { 
             hb_log( "DVD: End of Cell (%d) at block %d", d->cell_cur, 
                     d->block );
             d->cell_cur  = d->cell_next;
+            d->in_cell = 0;
             d->next_vobu = d->pgc->cell_playback[d->cell_cur].first_sector;
             FindNextCell( d );
             d->cell_overlap = 1;
+            
         }
-        
+
         // Revert the cell overlap, and check for a chapter break
         if( dsi_pack.vobu_sri.prev_vobu == SRI_END_OF_CELL )
         {
             hb_log( "DVD: Beginning of Cell (%d) at block %d", d->cell_cur, 
                    d->block );
+            if( d->in_cell )
+            {
+                hb_error( "DVD: Assuming missed End of Cell (%d)", d->cell_cur );
+                d->cell_cur  = d->cell_next;
+                d->next_vobu = d->pgc->cell_playback[d->cell_cur].first_sector;
+                FindNextCell( d );
+                d->cell_overlap = 1;
+                d->in_cell = 0;
+            } else {
+                d->in_cell = 1;
+            }
+
             if( d->cell_overlap )
             {
                 b->new_chap = hb_dvd_is_break( d );
@@ -782,7 +853,7 @@ int hb_dvd_chapter( hb_dvd_t * d )
 {
     int     i;
     int     pgc_id, pgn;
-	int     nr_of_ptts = d->ifo->vts_ptt_srpt->title[d->ttn-1].nr_of_ptts;
+    int     nr_of_ptts = d->ifo->vts_ptt_srpt->title[d->ttn-1].nr_of_ptts;
     pgc_t * pgc;
 
     for( i = nr_of_ptts - 1;
@@ -862,7 +933,7 @@ int hb_dvd_is_break( hb_dvd_t * d )
             }
             else
             {
-                hb_log("DVD: Cell Found (%d)", chapter_length);
+                hb_log("DVD: Cell Found (len=%d)", chapter_length);
             }
         }
     }
@@ -912,6 +983,9 @@ static void FindNextCell( hb_dvd_t * d )
              i++;
         }
         d->cell_next = d->cell_cur + i + 1;
+        hb_log( "DVD: Skipping multi-angle cells %d-%d", 
+                d->cell_cur, 
+                d->cell_next - 1 );
     }
     else
     {
