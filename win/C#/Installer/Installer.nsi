@@ -47,7 +47,7 @@ Function .onInit
   Call GetDotNETVersion
   Pop $0
   ${If} $0 == "not found"
-    MessageBox MB_OK|MB_ICONSTOP ".NET runtime library is not installed."
+    MessageBox MB_OK|MB_ICONSTOP ".NET runtime library is not installed. $\r$\n You can download .Net Framework 2 from the microsoft website. $\r$\n Alternatively you can use google for a direct download URL"
     Abort
   ${EndIf}
 
@@ -55,7 +55,7 @@ Function .onInit
 
   ${VersionCompare} $0 "2.0" $1
   ${If} $1 == 2
-    MessageBox MB_OK|MB_ICONSTOP ".NET runtime library v2.0 or newer is required. You have $0."
+    MessageBox MB_OK|MB_ICONSTOP ".NET runtime library v2.0 or newer is required. You have $0. $\r$\n You can download .Net Framework 2 from the microsoft website. $\r$\n Alternatively you can use google for a direct download URL"
     Abort
   ${EndIf}
 FunctionEnd
