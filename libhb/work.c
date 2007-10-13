@@ -22,7 +22,7 @@ static void work_func();
 static void do_job( hb_job_t *, int cpu_count );
 static void work_loop( void * );
 
-#define FIFO_SIZE 32
+#define FIFO_CPU_MULT 8
 
 /**
  * Allocates work object and launches work thread with work_func.
@@ -176,10 +176,10 @@ static void do_job( hb_job_t * job, int cpu_count )
     }
 	hb_log (" + PixelRatio: %d, width:%d, height: %d",job->pixel_ratio,job->width, job->height);
     job->fifo_mpeg2  = hb_fifo_init( 2048 );
-    job->fifo_raw    = hb_fifo_init( FIFO_SIZE );
-    job->fifo_sync   = hb_fifo_init( FIFO_SIZE );
-    job->fifo_render = hb_fifo_init( FIFO_SIZE );
-    job->fifo_mpeg4  = hb_fifo_init( FIFO_SIZE );
+    job->fifo_raw    = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
+    job->fifo_sync   = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
+    job->fifo_render = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
+    job->fifo_mpeg4  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
 
     /* Synchronization */
     hb_list_add( job->list_work, ( w = getWork( WORK_SYNC ) ) );
@@ -239,8 +239,8 @@ static void do_job( hb_job_t * job, int cpu_count )
         {
             hb_log( " + subtitle %x, %s", subtitle->id, subtitle->lang );
             
-            subtitle->fifo_in  = hb_fifo_init( FIFO_SIZE );
-            subtitle->fifo_raw = hb_fifo_init( FIFO_SIZE );
+            subtitle->fifo_in  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
+            subtitle->fifo_raw = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
             
             /*
              * Disable forced subtitles if we didn't find any in the scan
@@ -439,9 +439,9 @@ static void do_job( hb_job_t * job, int cpu_count )
 
 		/* set up the audio work structures */
         audio->fifo_in   = hb_fifo_init( 2048 );
-        audio->fifo_raw  = hb_fifo_init( FIFO_SIZE );
-        audio->fifo_sync = hb_fifo_init( FIFO_SIZE );
-        audio->fifo_out  = hb_fifo_init( FIFO_SIZE );
+        audio->fifo_raw  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
+        audio->fifo_sync = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
+        audio->fifo_out  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
 
         switch( audio->codec )
         {
