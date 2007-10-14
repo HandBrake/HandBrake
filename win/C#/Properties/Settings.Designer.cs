@@ -25,7 +25,7 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2.4.1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("2.4.2")]
         public string GuiVersion {
             get {
                 return ((string)(this["GuiVersion"]));
@@ -516,7 +516,7 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.9.1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.9.2")]
         public string CliVersion {
             get {
                 return ((string)(this["CliVersion"]));
@@ -607,6 +607,18 @@ namespace Handbrake.Properties {
             }
             set {
                 this["selectedPreset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string chapterMarker {
+            get {
+                return ((string)(this["chapterMarker"]));
+            }
+            set {
+                this["chapterMarker"] = value;
             }
         }
     }

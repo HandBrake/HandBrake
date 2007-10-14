@@ -120,8 +120,8 @@ namespace Handbrake
 
         #endregion
 
-        #region Queue Management
 
+        #region Queue Management
         private void btn_up_Click(object sender, EventArgs e)
         {
             int count = list_queue.Items.Count;
@@ -161,6 +161,8 @@ namespace Handbrake
             list_queue.Items.Remove(list_queue.SelectedItem);
         }
         #endregion
+
+
 
         #region Window Management
 

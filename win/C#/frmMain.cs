@@ -152,6 +152,12 @@ namespace Handbrake
                     {
                         check_largeFile.CheckState = CheckState.Checked;
                     }
+
+                    if (Properties.Settings.Default.chapterMarker == "Checked")
+                    {
+                        Check_ChapterMarkers.CheckState = CheckState.Checked;
+                    }
+                   
                     // Audio Settings Tab
                     drp_audioBitrate.Text = Properties.Settings.Default.AudioBitrate;
                     drp_audioSampleRate.Text = Properties.Settings.Default.AudioSampleRate;
@@ -463,7 +469,8 @@ namespace Handbrake
 
         private void btn_copy_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(QueryEditorText.Text, TextDataFormat.Text);
+            if (QueryEditorText.Text != "")
+                Clipboard.SetText(QueryEditorText.Text, TextDataFormat.Text);
         }
 
         private void showQueue()
@@ -695,6 +702,7 @@ namespace Handbrake
             Properties.Settings.Default.detelecine = check_detelecine.CheckState.ToString();
             Properties.Settings.Default.denoise = drp_deNoise.Text;
             Properties.Settings.Default.deblock = check_deblock.CheckState.ToString();
+            Properties.Settings.Default.chapterMarker = Check_ChapterMarkers.CheckState.ToString();
             //Audio Settings Tab
             Properties.Settings.Default.AudioBitrate = drp_audioBitrate.Text;
             Properties.Settings.Default.AudioSampleRate = drp_audioSampleRate.Text;
@@ -760,14 +768,14 @@ namespace Handbrake
                     setGuiSetttings(CheckState.Checked, "", "", "H.264", "2000", "", 0, "0%", "160", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:no-fast-pskip", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AC3", "Output Settings (Preset: Film)");
                     setMkv();
                     break;
-                case "iPhone":
-                    setGuiSetttings(CheckState.Unchecked, "480", "", "H.264", "960", "", 0, "0%", "128", CheckState.Checked, "48", "cabac=0:ref=1:analyse=all:me=umh:subme=6:no-fast-pskip=1:trellis=1", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: iPhone)");
+                case "iPhone / iPod Touch":
+                    setGuiSetttings(CheckState.Unchecked, "480", "", "H.264 (iPod)", "960", "", 0, "0%", "128", CheckState.Checked, "48", "cabac=0:ref=1:analyse=all:me=umh:subme=6:no-fast-pskip=1:trellis=1", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: iPhone)");
                     break;
                 case "iPod High-Rez":
-                    setGuiSetttings(CheckState.Unchecked, "640", "", "H.264", "1500", "", 0, "0%", "160", CheckState.Checked, "48", "keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: iPod High Rez)");
+                    setGuiSetttings(CheckState.Unchecked, "640", "", "H.264 (iPod)", "1500", "", 0, "0%", "160", CheckState.Checked, "48", "keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: iPod High Rez)");
                     break;
                 case "iPod Low-Rez":
-                    setGuiSetttings(CheckState.Unchecked, "320", "", "H.264", "700", "", 0, "0%", "160", CheckState.Checked, "48", "keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: iPod Low Rez)");
+                    setGuiSetttings(CheckState.Unchecked, "320", "", "H.264 (iPod)", "700", "", 0, "0%", "160", CheckState.Checked, "48", "keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: iPod Low Rez)");
                     break;
                 case "Normal":
                     setGuiSetttings(CheckState.Checked, "", "", "H.264", "1500", "", 0, "0%", "160", CheckState.Checked, "48", "ref=2:bframes=2:subme=5:me=umh", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Normal)");
@@ -1056,13 +1064,14 @@ namespace Handbrake
 
         private void text_width_TextChanged(object sender, EventArgs e)
         {
-
             try
             {
                 if (CheckPixelRatio.Checked)
                 {
                     text_width.Text = "";
-                    text_width.BackColor = Color.White;
+                    text_width.BackColor = Color.LightCoral;
+                    CheckPixelRatio.BackColor = Color.LightCoral;
+                    lbl_anamorphicError.Visible = true;
                 }
                 else
                 {
@@ -1091,7 +1100,7 @@ namespace Handbrake
                     {
                         text_height.Text = height.ToString();
                     }
-                }
+                }                   
             }
             catch (Exception)
             {
@@ -1106,25 +1115,25 @@ namespace Handbrake
         {
             try
             {
-                if (text_height.Text != "Auto")
-                {
-                    if (CheckPixelRatio.Checked)
+                if (CheckPixelRatio.Checked)
                     {
                         text_height.Text = "";
-                        text_width.BackColor = Color.White;
+                        text_height.BackColor = Color.LightCoral;
+                        CheckPixelRatio.BackColor = Color.LightCoral;
+                        lbl_anamorphicError.Visible = true;
+                }
+                else
+                {
+                    if ((int.Parse(text_height.Text) % 16) != 0)
+                    {
+                            text_height.BackColor = Color.LightCoral;
                     }
                     else
                     {
-                        if ((int.Parse(text_height.Text) % 16) != 0)
-                        {
-                            text_height.BackColor = Color.LightCoral;
-                        }
-                        else
-                        {
                             text_height.BackColor = Color.LightGreen;
-                        }
                     }
                 }
+
             } catch(Exception){
                 // No need to alert the user.
             }
@@ -1182,6 +1191,36 @@ namespace Handbrake
             text_height.Text = "";
             text_width.BackColor = Color.White;
             text_height.BackColor = Color.White;
+            CheckPixelRatio.BackColor = frmMain.DefaultBackColor;
+            lbl_anamorphicError.Visible = false;
+        }
+
+        private void check_2PassEncode_CheckedChanged(object sender, EventArgs e)
+        {
+            if (check_2PassEncode.CheckState.ToString() == "Checked")
+            {
+                check_turbo.Enabled = true;
+            }
+            else
+            {
+                check_turbo.Enabled = false;
+                check_turbo.CheckState = CheckState.Unchecked;
+            }
+        }
+
+        private void check_largeFile_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!text_destination.Text.Contains(".mp4"))
+            {
+                lbl_largeMp4Warning.Text = "Warning: Only mp4 files are supported";
+                lbl_largeMp4Warning.ForeColor = Color.Red;
+                check_largeFile.CheckState = CheckState.Unchecked;
+            }
+            else
+            {
+                lbl_largeMp4Warning.Text = "Warning: Breaks iPod, @TV, PS3 compatibility.";
+                lbl_largeMp4Warning.ForeColor = Color.Black;
+            }
         }
 
         private void drp_dvdtitle_Click(object sender, EventArgs e)
@@ -1289,14 +1328,7 @@ namespace Handbrake
             }
         }
 
-        private void check_largeFile_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!text_destination.Text.Contains(".mp4"))
-            {
-                MessageBox.Show("This option is only compatible with the mp4 file container.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                check_largeFile.CheckState = CheckState.Unchecked;
-            }
-        }
+
 
         private void drp_videoEncoder_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1541,8 +1573,8 @@ namespace Handbrake
                 case "None":
                     deinterlace = "";
                     break;
-                case "Origional (Fast)":
-                    deinterlace = " --deinterlace=1";
+                case "Original (Fast)":
+                    deinterlace = " --deinterlace=" + '"' + "-1" + '"';
                     break;
                 case "yadif (Slow)":
                     deinterlace = " --deinterlace=" + '"' + "0" + '"';
@@ -1585,8 +1617,7 @@ namespace Handbrake
             string denoise = "";
             string CRF = CheckCRF.CheckState.ToString();
 
-
-            if ((CRF == "Checked"))
+            if (CRF == "Checked")
                 CRF = " -Q ";
             else
                 CRF = "";
@@ -1651,7 +1682,7 @@ namespace Handbrake
                     break;
             }
 
-            string queryVideoSettings = videoBitrate + videoFilesize + vidQSetting + twoPassEncoding + videoFramerate + turboH264 + largeFile + deblock + detelecine + denoise;
+            string queryVideoSettings = videoBitrate + videoFilesize + vidQSetting + CRF + twoPassEncoding + videoFramerate + turboH264 + largeFile + deblock + detelecine + denoise;
             // ----------------------------------------------------------------------
 
             // Audio Settings Tab
@@ -1700,7 +1731,7 @@ namespace Handbrake
                     Mixdown = "6ch";
                     break;
                 default:
-                    Mixdown = "stero";
+                    Mixdown = "";
                     break;
             }
 
@@ -1752,6 +1783,27 @@ namespace Handbrake
         }
 
         #endregion
+
+
+
+        private Functions.QueryParser thisQuery;
+        private void button1_Click(object sender, EventArgs e)
+        {
+            String query = "";
+            if (QueryEditorText.Text == "")
+            {
+                query = GenerateTheQuery();
+            }
+            else
+            {
+                query = QueryEditorText.Text;
+            }
+            thisQuery = Functions.QueryParser.Parse(query);
+            MessageBox.Show(thisQuery.DeTelecine.ToString());
+        }
+
+
+
 
         // This is the END of the road ------------------------------------------------------------------------------
     }
