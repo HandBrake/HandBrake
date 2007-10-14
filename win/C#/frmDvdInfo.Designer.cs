@@ -29,6 +29,7 @@ namespace Handbrake
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmDvdInfo));
             this.Label2 = new System.Windows.Forms.Label();
             this.rtf_dvdInfo = new System.Windows.Forms.RichTextBox();
             this.btn_close = new System.Windows.Forms.Button();
@@ -105,22 +106,20 @@ namespace Handbrake
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(547, 482);
-            this.ControlBox = false;
+            this.ClientSize = new System.Drawing.Size(545, 493);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.Label2);
             this.Controls.Add(this.rtf_dvdInfo);
             this.Controls.Add(this.btn_close);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(553, 520);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(553, 506);
             this.Name = "frmDvdInfo";
-            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = " ";
+            this.Text = "Media Information";
             this.Load += new System.EventHandler(this.frmDvdInfo_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);

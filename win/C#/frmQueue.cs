@@ -120,7 +120,6 @@ namespace Handbrake
 
         #endregion
 
-
         #region Queue Management
         private void btn_up_Click(object sender, EventArgs e)
         {
@@ -162,8 +161,6 @@ namespace Handbrake
         }
         #endregion
 
-
-
         #region Window Management
 
         private void btn_Close_Click(object sender, EventArgs e)
@@ -177,6 +174,13 @@ namespace Handbrake
         }
 
         #endregion
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            e.Cancel = true;
+            this.Hide();
+            base.OnClosing(e);
+        }
 
     }
 }

@@ -41,10 +41,11 @@ namespace Handbrake
 
                 // Make sure the system has enough RAM. 384MB or greater
                 uint memory = MemoryCheck.CheckMemeory();
-
-                if (memory < 319) // Set to 319 to allow for 64MB dedicated to video Memory and Windows returnig the memory figure slightly out.
+                memory = memory / 1024 / 1024;
+               
+                if (memory < 320)
                 {
-                    MessageBox.Show("Your system does not meet the minimum requirements for HandBrake. \n Insufficient Memory. 384MB or greater required.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Your system does not meet the minimum requirements for HandBrake. \n Insufficient RAM. 512MB or greater required. You have: " + memory.ToString() + "MB", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     launch = false;
                 }
             }

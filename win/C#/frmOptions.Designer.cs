@@ -31,6 +31,7 @@ namespace Handbrake
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmOptions));
             this.drp_Priority = new System.Windows.Forms.ComboBox();
             this.GroupBox2 = new System.Windows.Forms.GroupBox();
+            this.check_showPreset = new System.Windows.Forms.CheckBox();
             this.check_tooltip = new System.Windows.Forms.CheckBox();
             this.check_updateCheck = new System.Windows.Forms.CheckBox();
             this.check_userDefaultSettings = new System.Windows.Forms.CheckBox();
@@ -46,7 +47,6 @@ namespace Handbrake
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.drp_completeOption = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.check_showPreset = new System.Windows.Forms.CheckBox();
             this.GroupBox2.SuspendLayout();
             this.GroupBox3.SuspendLayout();
             this.GroupBox1.SuspendLayout();
@@ -85,6 +85,18 @@ namespace Handbrake
             this.GroupBox2.TabIndex = 55;
             this.GroupBox2.TabStop = false;
             this.GroupBox2.Text = "General Settings";
+            // 
+            // check_showPreset
+            // 
+            this.check_showPreset.AutoSize = true;
+            this.check_showPreset.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_showPreset.Location = new System.Drawing.Point(15, 94);
+            this.check_showPreset.Name = "check_showPreset";
+            this.check_showPreset.Size = new System.Drawing.Size(362, 17);
+            this.check_showPreset.TabIndex = 50;
+            this.check_showPreset.Text = "Always Show Presets (Hide\'s the Show/Hide preset button)";
+            this.check_showPreset.UseVisualStyleBackColor = true;
+            this.check_showPreset.CheckedChanged += new System.EventHandler(this.check_showPreset_CheckedChanged);
             // 
             // check_tooltip
             // 
@@ -276,18 +288,6 @@ namespace Handbrake
             this.label5.TabIndex = 42;
             this.label5.Text = "When the encode completes:";
             // 
-            // check_showPreset
-            // 
-            this.check_showPreset.AutoSize = true;
-            this.check_showPreset.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_showPreset.Location = new System.Drawing.Point(15, 94);
-            this.check_showPreset.Name = "check_showPreset";
-            this.check_showPreset.Size = new System.Drawing.Size(362, 17);
-            this.check_showPreset.TabIndex = 50;
-            this.check_showPreset.Text = "Always Show Presets (Hide\'s the Show/Hide preset button)";
-            this.check_showPreset.UseVisualStyleBackColor = true;
-            this.check_showPreset.CheckedChanged += new System.EventHandler(this.check_showPreset_CheckedChanged);
-            // 
             // frmOptions
             // 
             this.BackColor = System.Drawing.SystemColors.ControlLight;
@@ -297,7 +297,7 @@ namespace Handbrake
             this.Controls.Add(this.GroupBox3);
             this.Controls.Add(this.GroupBox1);
             this.Controls.Add(this.btn_close);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;

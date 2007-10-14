@@ -163,7 +163,6 @@ namespace Handbrake
             this.Controls.Add(this.Label2);
             this.Controls.Add(this.PictureBox1);
             this.Controls.Add(this.Label1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;

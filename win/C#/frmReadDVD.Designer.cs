@@ -32,7 +32,6 @@ namespace Handbrake
             this.Label3 = new System.Windows.Forms.Label();
             this.Label2 = new System.Windows.Forms.Label();
             this.lbl_status = new System.Windows.Forms.Label();
-            this.lbl_progress = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // Label3
@@ -66,25 +65,13 @@ namespace Handbrake
             this.lbl_status.Text = "Processing.... Please Wait!";
             this.lbl_status.Visible = false;
             // 
-            // lbl_progress
-            // 
-            this.lbl_progress.AutoSize = true;
-            this.lbl_progress.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_progress.Location = new System.Drawing.Point(285, 41);
-            this.lbl_progress.Name = "lbl_progress";
-            this.lbl_progress.Size = new System.Drawing.Size(45, 13);
-            this.lbl_progress.TabIndex = 32;
-            this.lbl_progress.Text = "{ % }";
-            this.lbl_progress.Visible = false;
-            // 
             // frmReadDVD
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(346, 70);
+            this.ClientSize = new System.Drawing.Size(357, 74);
             this.ControlBox = false;
-            this.Controls.Add(this.lbl_progress);
             this.Controls.Add(this.lbl_status);
             this.Controls.Add(this.Label3);
             this.Controls.Add(this.Label2);
@@ -108,6 +95,5 @@ namespace Handbrake
         internal System.Windows.Forms.Label Label3;
         internal System.Windows.Forms.Label Label2;
         internal System.Windows.Forms.Label lbl_status;
-        private System.Windows.Forms.Label lbl_progress;
     }
 }

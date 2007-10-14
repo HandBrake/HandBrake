@@ -35,11 +35,7 @@ namespace Handbrake
         {
             try
             {
-                //btn_skip.Visible = true;
-                lbl_progress.Text = "0%";
-                //lbl_progress.Visible = true;
                 lbl_status.Visible = true;
-                // throw cli call and parsing on it's own thread
                 ThreadPool.QueueUserWorkItem(startProc);
             }
             catch (Exception exc)
@@ -92,9 +88,6 @@ namespace Handbrake
 
         private void startProc(object state)
         {
-            //string query = "-i " + '"' + inputFile + '"' + " -t0";
-            // hbProc = process.runCli(this, query, true, true, false, true);
-
             try
             {
                 string appPath = Application.StartupPath.ToString()+ "\\";
@@ -124,44 +117,5 @@ namespace Handbrake
             }
 
         }
-
-            //*********************************************************************************************************************************************
-            /*
-             * This has been temporily disabled due to the stderr issue
-             * 
-             * 
-            Parsing.Parser readData = new Parsing.Parser(hbProc.StandardError.BaseStream);
-            readData.OnScanProgress += Parser_OnScanProgress;
-            readData.OnReadLine += dvdInfo.HandleParsedData;
-            readData.OnReadToEnd += dvdInfo.HandleParsedData;
-
-            // Setup the parser
-            
-
-            if (cancel != 1)
-            {
-                updateUIElements();
-                process.killCLI();
-                process.closeCLI();
-            }
-            */
-            //*********************************************************************************************************************************************
-
-
-        /*private void Parser_OnScanProgress(object Sender, int CurrentTitle, int TitleCount)
-        {
-            if (this.InvokeRequired)
-            {
-                this.BeginInvoke(new Parsing.ScanProgressEventHandler(Parser_OnScanProgress), new object[] { Sender, CurrentTitle, TitleCount });
-                return;
-            }
-            int progress = Convert.ToInt32(Convert.ToDouble(CurrentTitle) / Convert.ToDouble(TitleCount) * 100) + 1;
-            if (progress > 100)
-            {
-                progress = 100;
-            }
-            this.lbl_progress.Text = progress.ToString() + "%";
-        }*/
-
     }
 }

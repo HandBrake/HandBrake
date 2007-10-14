@@ -38,10 +38,9 @@ namespace Handbrake
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.label2 = new System.Windows.Forms.Label();
             this.lbl_progressValue = new System.Windows.Forms.Label();
-            this.btn_minimise = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -162,32 +161,6 @@ namespace Handbrake
             this.lbl_progressValue.TabIndex = 36;
             this.lbl_progressValue.Text = "0 %";
             // 
-            // btn_minimise
-            // 
-            this.btn_minimise.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.btn_minimise.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_minimise.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_minimise.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_minimise.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_minimise.Location = new System.Drawing.Point(471, 305);
-            this.btn_minimise.Name = "btn_minimise";
-            this.btn_minimise.Size = new System.Drawing.Size(129, 22);
-            this.btn_minimise.TabIndex = 37;
-            this.btn_minimise.TabStop = false;
-            this.btn_minimise.Text = "Minimize Window";
-            this.btn_minimise.UseVisualStyleBackColor = false;
-            this.btn_minimise.Click += new System.EventHandler(this.btn_minimise_Click);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(51, 25);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(48, 13);
-            this.label3.TabIndex = 39;
-            this.label3.Text = "Queue";
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -206,17 +179,25 @@ namespace Handbrake
             this.pictureBox1.TabIndex = 38;
             this.pictureBox1.TabStop = false;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(51, 25);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(48, 13);
+            this.label3.TabIndex = 39;
+            this.label3.Text = "Queue";
+            // 
             // frmQueue
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(727, 336);
-            this.ControlBox = false;
+            this.ClientSize = new System.Drawing.Size(723, 332);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.btn_minimise);
             this.Controls.Add(this.lbl_progressValue);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.progressBar);
@@ -226,13 +207,11 @@ namespace Handbrake
             this.Controls.Add(this.btn_q_encoder);
             this.Controls.Add(this.list_queue);
             this.Controls.Add(this.btn_Close);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "frmQueue";
-            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = " ";
+            this.Text = "Encode Queue";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -250,9 +229,8 @@ namespace Handbrake
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lbl_progressValue;
-        internal System.Windows.Forms.Button btn_minimise;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label3;
     }
 }

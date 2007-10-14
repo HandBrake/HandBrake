@@ -141,7 +141,7 @@ namespace Handbrake
             this.label4.Size = new System.Drawing.Size(460, 26);
             this.label4.TabIndex = 424;
             this.label4.Text = "There are a number of built in presets. If you are unsure which settings to use,\r" +
-                "\nthen simply select the desired preset from the \"Presets\" Menu.";
+                "\nthen simply select the desired preset from the \"Presets\" list.";
             // 
             // pictureBox5
             // 
@@ -251,7 +251,6 @@ namespace Handbrake
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btn_close);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmQuickStart";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
