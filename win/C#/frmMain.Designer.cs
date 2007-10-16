@@ -177,10 +177,12 @@ namespace Handbrake
             this.text_right = new System.Windows.Forms.TextBox();
             this.text_left = new System.Windows.Forms.TextBox();
             this.advancedOptions = new System.Windows.Forms.TabControl();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
             this.groupBox_dest = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
             Label38 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
             this.frmMainMenu.SuspendLayout();
@@ -192,10 +194,10 @@ namespace Handbrake
             this.TabPage3.SuspendLayout();
             this.TabPage1.SuspendLayout();
             this.advancedOptions.SuspendLayout();
+            this.tabPage4.SuspendLayout();
             this.groupBox_dest.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            this.tabPage4.SuspendLayout();
             this.SuspendLayout();
             // 
             // Label38
@@ -211,7 +213,7 @@ namespace Handbrake
             // DVD_Save
             // 
             this.DVD_Save.DefaultExt = "mp4";
-            this.DVD_Save.Filter = "mp4|.mp4|m4v|.m4v|avi|.avi|ogm|.ogm|mkv|.mkv";
+            this.DVD_Save.Filter = "mp4|*.mp4|m4v|*.m4v|avi|*.avi|ogm|*.ogm|mkv|*.mkv";
             // 
             // File_Save
             // 
@@ -659,7 +661,7 @@ namespace Handbrake
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.button1.Location = new System.Drawing.Point(8, 13);
+            this.button1.Location = new System.Drawing.Point(16, 78);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(114, 22);
             this.button1.TabIndex = 109;
@@ -696,7 +698,7 @@ namespace Handbrake
             // mnu_exit
             // 
             this.mnu_exit.Name = "mnu_exit";
-            this.mnu_exit.Size = new System.Drawing.Size(103, 22);
+            this.mnu_exit.Size = new System.Drawing.Size(152, 22);
             this.mnu_exit.Text = "E&xit";
             this.mnu_exit.Click += new System.EventHandler(this.mnu_exit_Click);
             // 
@@ -1141,7 +1143,7 @@ namespace Handbrake
             // 
             // btn_eCancel
             // 
-            this.btn_eCancel.BackColor = System.Drawing.SystemColors.Control;
+            this.btn_eCancel.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_eCancel.Enabled = false;
             this.btn_eCancel.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_eCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1173,7 +1175,6 @@ namespace Handbrake
             this.TabPage6.Size = new System.Drawing.Size(639, 211);
             this.TabPage6.TabIndex = 6;
             this.TabPage6.Text = "Query Editor";
-            this.TabPage6.UseVisualStyleBackColor = true;
             // 
             // btn_copy
             // 
@@ -1261,7 +1262,6 @@ namespace Handbrake
             this.h264Tab.Size = new System.Drawing.Size(639, 211);
             this.h264Tab.TabIndex = 5;
             this.h264Tab.Text = "H.264";
-            this.h264Tab.UseVisualStyleBackColor = true;
             // 
             // Label43
             // 
@@ -1350,7 +1350,6 @@ namespace Handbrake
             this.TabPage2.Size = new System.Drawing.Size(639, 211);
             this.TabPage2.TabIndex = 3;
             this.TabPage2.Text = "Audio && Subtitles";
-            this.TabPage2.UseVisualStyleBackColor = true;
             // 
             // Label19
             // 
@@ -1506,7 +1505,6 @@ namespace Handbrake
             this.TabPage3.Size = new System.Drawing.Size(639, 211);
             this.TabPage3.TabIndex = 2;
             this.TabPage3.Text = "Video Settings";
-            this.TabPage3.UseVisualStyleBackColor = true;
             // 
             // check_grayscale
             // 
@@ -1634,7 +1632,6 @@ namespace Handbrake
             this.TabPage1.Size = new System.Drawing.Size(639, 211);
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "Picture Settings";
-            this.TabPage1.UseVisualStyleBackColor = true;
             // 
             // lbl_anamorphicError
             // 
@@ -1748,13 +1745,14 @@ namespace Handbrake
             // CheckPixelRatio
             // 
             this.CheckPixelRatio.AutoSize = true;
+            this.CheckPixelRatio.BackColor = System.Drawing.SystemColors.ControlLight;
             this.CheckPixelRatio.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CheckPixelRatio.Location = new System.Drawing.Point(317, 150);
             this.CheckPixelRatio.Name = "CheckPixelRatio";
             this.CheckPixelRatio.Size = new System.Drawing.Size(121, 17);
             this.CheckPixelRatio.TabIndex = 50;
             this.CheckPixelRatio.Text = "Anamorphic PAR";
-            this.CheckPixelRatio.UseVisualStyleBackColor = true;
+            this.CheckPixelRatio.UseVisualStyleBackColor = false;
             this.CheckPixelRatio.CheckedChanged += new System.EventHandler(this.CheckPixelRatio_CheckedChanged);
             // 
             // label6
@@ -1918,12 +1916,46 @@ namespace Handbrake
             this.advancedOptions.TabIndex = 27;
             this.advancedOptions.TabStop = false;
             // 
+            // tabPage4
+            // 
+            this.tabPage4.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.tabPage4.Controls.Add(this.label26);
+            this.tabPage4.Controls.Add(this.label25);
+            this.tabPage4.Controls.Add(this.button1);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Size = new System.Drawing.Size(639, 211);
+            this.tabPage4.TabIndex = 7;
+            this.tabPage4.Text = "Development";
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label26.Location = new System.Drawing.Point(13, 35);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(372, 26);
+            this.label26.TabIndex = 130;
+            this.label26.Text = "This tab is used for testing of new features. You can ignore this.\r\nIt will not b" +
+                "e a user visible tab on release.";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label25.Location = new System.Drawing.Point(13, 13);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(93, 13);
+            this.label25.TabIndex = 110;
+            this.label25.Text = "Development";
+            // 
             // groupBox_dest
             // 
             this.groupBox_dest.Controls.Add(this.Label3);
             this.groupBox_dest.Controls.Add(this.text_destination);
             this.groupBox_dest.Controls.Add(this.btn_destBrowse);
             this.groupBox_dest.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox_dest.ForeColor = System.Drawing.Color.Black;
             this.groupBox_dest.Location = new System.Drawing.Point(14, 128);
             this.groupBox_dest.Name = "groupBox_dest";
             this.groupBox_dest.Size = new System.Drawing.Size(646, 50);
@@ -1935,6 +1967,7 @@ namespace Handbrake
             // 
             this.groupBox2.Controls.Add(this.ListBox_Presets);
             this.groupBox2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox2.ForeColor = System.Drawing.Color.Black;
             this.groupBox2.Location = new System.Drawing.Point(674, 35);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(193, 404);
@@ -1948,22 +1981,13 @@ namespace Handbrake
             this.groupBox3.Controls.Add(this.btn_setDefault);
             this.groupBox3.Controls.Add(this.btn_addPreset);
             this.groupBox3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox3.ForeColor = System.Drawing.Color.Black;
             this.groupBox3.Location = new System.Drawing.Point(674, 448);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(193, 61);
             this.groupBox3.TabIndex = 108;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Preset Functions";
-            // 
-            // tabPage4
-            // 
-            this.tabPage4.Controls.Add(this.button1);
-            this.tabPage4.Location = new System.Drawing.Point(4, 22);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(639, 211);
-            this.tabPage4.TabIndex = 7;
-            this.tabPage4.Text = "Development";
-            this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // frmMain
             // 
@@ -2008,11 +2032,12 @@ namespace Handbrake
             this.TabPage1.ResumeLayout(false);
             this.TabPage1.PerformLayout();
             this.advancedOptions.ResumeLayout(false);
+            this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
             this.groupBox_dest.ResumeLayout(false);
             this.groupBox_dest.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
-            this.tabPage4.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2170,6 +2195,8 @@ namespace Handbrake
         internal System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label lbl_anamorphicError;
         private System.Windows.Forms.TabPage tabPage4;
+        internal System.Windows.Forms.Label label26;
+        internal System.Windows.Forms.Label label25;
 
     }
 }

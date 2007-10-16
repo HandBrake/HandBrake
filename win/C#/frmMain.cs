@@ -420,9 +420,16 @@ namespace Handbrake
 
         private void btn_destBrowse_Click(object sender, EventArgs e)
         {
+            // This removes the file extension from the filename box on the save file dialog.
+            // It's daft but some users don't realise that typing an extension overrides the dropdown extension selected.
+            // Should be a nicer way to do this.
+            DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", "").Replace(".m4v", "").Replace(".mkv", "").Replace(".ogm", "").Replace(".avi", "");
+           
+            // Show the dialog and set the main form file path
             DVD_Save.ShowDialog();
             text_destination.Text = DVD_Save.FileName;
 
+            // Quicktime requires .m4v file for chapter markers to work. If checked, change the extension to .m4v (mp4 and m4v are the same thing)
             if (Check_ChapterMarkers.Checked)
             {
                 string destination = text_destination.Text;
@@ -1191,7 +1198,7 @@ namespace Handbrake
             text_height.Text = "";
             text_width.BackColor = Color.White;
             text_height.BackColor = Color.White;
-            CheckPixelRatio.BackColor = frmMain.DefaultBackColor;
+            CheckPixelRatio.BackColor = TabPage1.BackColor;
             lbl_anamorphicError.Visible = false;
         }
 
@@ -1199,7 +1206,10 @@ namespace Handbrake
         {
             if (check_2PassEncode.CheckState.ToString() == "Checked")
             {
-                check_turbo.Enabled = true;
+                if (drp_videoEncoder.Text.Contains("H.264"))
+                {
+                    check_turbo.Enabled = true;
+                }
             }
             else
             {
@@ -1345,7 +1355,10 @@ namespace Handbrake
             else
             {
                 CheckCRF.Enabled = true;
-                check_turbo.Enabled = true;
+                if (check_2PassEncode.CheckState.ToString() == "Checked")
+                {
+                    check_turbo.Enabled = true;
+                }
                 h264Tab.Enabled = true;
             }
 
@@ -1801,9 +1814,6 @@ namespace Handbrake
             thisQuery = Functions.QueryParser.Parse(query);
             MessageBox.Show(thisQuery.DeTelecine.ToString());
         }
-
-
-
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

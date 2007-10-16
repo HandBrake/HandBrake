@@ -43,19 +43,19 @@ namespace Handbrake
             // 
             this.Label2.AutoSize = true;
             this.Label2.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.Label2.Location = new System.Drawing.Point(51, 41);
+            this.Label2.Location = new System.Drawing.Point(59, 41);
             this.Label2.Name = "Label2";
-            this.Label2.Size = new System.Drawing.Size(279, 13);
+            this.Label2.Size = new System.Drawing.Size(341, 13);
             this.Label2.TabIndex = 30;
             this.Label2.Text = "Handbrake\'s DVD information output in an unparsed form.";
             // 
             // rtf_dvdInfo
             // 
             this.rtf_dvdInfo.DetectUrls = false;
-            this.rtf_dvdInfo.Location = new System.Drawing.Point(16, 70);
+            this.rtf_dvdInfo.Location = new System.Drawing.Point(19, 70);
             this.rtf_dvdInfo.Name = "rtf_dvdInfo";
             this.rtf_dvdInfo.ReadOnly = true;
-            this.rtf_dvdInfo.Size = new System.Drawing.Size(515, 365);
+            this.rtf_dvdInfo.Size = new System.Drawing.Size(600, 365);
             this.rtf_dvdInfo.TabIndex = 29;
             this.rtf_dvdInfo.Text = "";
             this.ToolTip.SetToolTip(this.rtf_dvdInfo, "Note: If you have not scanned a DVD then this window\r\nwill display the previously" +
@@ -68,9 +68,9 @@ namespace Handbrake
             this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(421, 452);
+            this.btn_close.Location = new System.Drawing.Point(491, 452);
             this.btn_close.Name = "btn_close";
-            this.btn_close.Size = new System.Drawing.Size(110, 22);
+            this.btn_close.Size = new System.Drawing.Size(128, 22);
             this.btn_close.TabIndex = 28;
             this.btn_close.TabStop = false;
             this.btn_close.Text = "Close Window";
@@ -80,9 +80,9 @@ namespace Handbrake
             // pictureBox1
             // 
             this.pictureBox1.Image = global::Handbrake.Properties.Resources.Movies;
-            this.pictureBox1.Location = new System.Drawing.Point(13, 13);
+            this.pictureBox1.Location = new System.Drawing.Point(15, 13);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(32, 32);
+            this.pictureBox1.Size = new System.Drawing.Size(37, 32);
             this.pictureBox1.TabIndex = 39;
             this.pictureBox1.TabStop = false;
             // 
@@ -90,7 +90,7 @@ namespace Handbrake
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(51, 25);
+            this.label1.Location = new System.Drawing.Point(59, 25);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(127, 13);
             this.label1.TabIndex = 40;
@@ -103,20 +103,21 @@ namespace Handbrake
             // frmDvdInfo
             // 
             this.AcceptButton = this.btn_close;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(545, 493);
+            this.ClientSize = new System.Drawing.Size(636, 493);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.Label2);
             this.Controls.Add(this.rtf_dvdInfo);
             this.Controls.Add(this.btn_close);
+            this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(553, 520);
+            this.MaximumSize = new System.Drawing.Size(644, 520);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(553, 506);
+            this.MinimumSize = new System.Drawing.Size(644, 506);
             this.Name = "frmDvdInfo";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Media Information";

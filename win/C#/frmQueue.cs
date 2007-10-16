@@ -24,13 +24,20 @@ namespace Handbrake
 
         private void btn_q_encoder_Click(object sender, EventArgs e)
         {
-            if (list_queue.Items.Count != 0)
+            try
             {
-                progressBar.Value = 0;
-                lbl_progressValue.Text = "0 %";
-                progressBar.Step = 100 / list_queue.Items.Count;
-                progressBar.Update();
-                ThreadPool.QueueUserWorkItem(startProc);
+                if (list_queue.Items.Count != 0)
+                {
+                    progressBar.Value = 0;
+                    lbl_progressValue.Text = "0 %";
+                    progressBar.Step = 100 / list_queue.Items.Count;
+                    progressBar.Update();
+                    ThreadPool.QueueUserWorkItem(startProc);
+                }
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
             }
              
         }
@@ -161,19 +168,11 @@ namespace Handbrake
         }
         #endregion
 
-        #region Window Management
 
         private void btn_Close_Click(object sender, EventArgs e)
         {
             this.Hide();
         }
-
-        private void btn_minimise_Click(object sender, EventArgs e)
-        {
-            this.WindowState = FormWindowState.Minimized;
-        }
-
-        #endregion
 
         protected override void OnClosing(CancelEventArgs e)
         {
