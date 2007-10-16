@@ -252,20 +252,33 @@ static int MP4Init( hb_mux_object_t * m )
 			memcpy(nval, val, size);
 
 			float width, height;
-			float widthRatio;
 			width = job->pixel_aspect_width;
 			height = job->pixel_aspect_height;
-			widthRatio = (width / height) * 0x10000;
 
-			uint32_t widthRatioInt;
-			widthRatioInt = (uint32_t)widthRatio;
+           uint32_t pixelRatioInt;
+           if (width >= height)
+           {
+               pixelRatioInt = (uint32_t)((width / height) * 0x10000);
 
 #ifdef WORDS_BIGENDIAN
-			ptr32[0] = widthRatioInt;
+               ptr32[0] = pixelRatioInt;
 #else
-			/* we need to switch the endianness, as the file format expects big endian */
-			ptr32[0] = ((widthRatioInt & 0x000000FF) << 24) + ((widthRatioInt & 0x0000FF00) << 8) + ((widthRatioInt & 0x00FF0000) >> 8) + ((widthRatioInt & 0xFF000000) >> 24);
+               /* we need to switch the endianness, as the file format expects big endian */
+               ptr32[0] = ((pixelRatioInt & 0x000000FF) << 24) + ((pixelRatioInt & 0x0000FF00) << 8) + ((pixelRatioInt & 0x00FF0000) >> 8) + ((pixelRatioInt & 0xFF000000) >> 24);
 #endif
+
+           }
+           else
+           {
+               pixelRatioInt = (uint32_t)((height / width) * 0x10000);
+#ifdef WORDS_BIGENDIAN
+               ptr32[4] = pixelRatioInt;
+#else
+                /* we need to switch the endianness, as the file format expects big endian */
+                ptr32[4] = ((pixelRatioInt & 0x000000FF) << 24) + ((pixelRatioInt & 0x0000FF00) << 8) + ((pixelRatioInt & 0x00FF0000) >> 8) + ((pixelRatioInt & 0xFF000000) >> 24);
+#endif
+            }
+
 
 			if(!MP4SetBytesProperty(m->file, "moov.trak.tkhd.reserved3", nval, size)) {
 				hb_log("Problem setting transform matrix");
