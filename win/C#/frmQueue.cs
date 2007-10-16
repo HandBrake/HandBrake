@@ -21,13 +21,21 @@ namespace Handbrake
         }
 
         #region Queue Handling
-
+        Boolean cancel = false;
         private void btn_q_encoder_Click(object sender, EventArgs e)
         {
+            // Reset some values
+            
+            lbl_status.Visible = false;
+            cancel = false;
+
+            // Start the encode
             try
             {
                 if (list_queue.Items.Count != 0)
                 {
+                    // Setup or reset some values
+                    btn_cancel.Visible = true;
                     progressBar.Value = 0;
                     lbl_progressValue.Text = "0 %";
                     progressBar.Step = 100 / list_queue.Items.Count;
@@ -40,6 +48,12 @@ namespace Handbrake
                 MessageBox.Show(exc.ToString());
             }
              
+        }
+        private void btn_cancel_Click(object sender, EventArgs e)
+        {
+            cancel = true;
+            btn_cancel.Visible = false;
+            MessageBox.Show("No further items on the queue will start. The current encode process will continue until it is finished. \nClick 'Encode Video' when you wish to continue encoding the queue.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         [DllImport("user32.dll")]
@@ -54,6 +68,7 @@ namespace Handbrake
                 while (list_queue.Items.Count != 0)
                 {
                     string query = list_queue.Items[0].ToString();
+                    
                     updateUIElements();
                         
                     Functions.CLI process = new Functions.CLI();
@@ -62,9 +77,18 @@ namespace Handbrake
                     hbProc.WaitForExit();
                     hbProc.Close();
                     hbProc.Dispose();
+
+                    query = "";
+
+                    if (cancel == true)
+                    {
+                        break;
+                    }
+                    
                 }
 
                 resetQueue();
+                
 
                 // Do something whent he encode ends.
                 switch (Properties.Settings.Default.CompletionOption)
@@ -90,8 +114,6 @@ namespace Handbrake
                     default:
                         break;
                 }
-
-                MessageBox.Show("Encode Queue Completed!", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
             catch (Exception exc)
             {
@@ -101,28 +123,55 @@ namespace Handbrake
 
         private void updateUIElements()
         {
-            if (this.InvokeRequired)
+            try
             {
-                this.BeginInvoke(new ProgressUpdateHandler(updateUIElements));
-                return;
-            }
-            this.list_queue.Items.RemoveAt(0);
+                if (this.InvokeRequired)
+                {
+                    this.BeginInvoke(new ProgressUpdateHandler(updateUIElements));
+                    return;
+                }
+                this.list_queue.Items.RemoveAt(0);
 
-            progressBar.PerformStep();
-            lbl_progressValue.Text = string.Format("{0} %", progressBar.Value);
-            progressBar.Update();
+                progressBar.PerformStep();
+                lbl_progressValue.Text = string.Format("{0} %", progressBar.Value);
+                progressBar.Update();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
         }
 
         private void resetQueue()
         {
-            if (this.InvokeRequired)
+            try
             {
-                this.BeginInvoke(new ProgressUpdateHandler(resetQueue));
-                return;
+                if (this.InvokeRequired)
+                {
+                    this.BeginInvoke(new ProgressUpdateHandler(resetQueue));
+                    return;
+                }
+
+                if (cancel == true)
+                {
+                    lbl_status.Visible = true;
+                    lbl_status.Text = "Encode Queue Cancelled!";
+                }
+                else
+                {
+                    lbl_status.Visible = true;
+                    lbl_status.Text = "Encode Queue Completed!";
+                }
+                btn_cancel.Visible = false;
+
+                lbl_progressValue.Text = "0 %";
+                progressBar.Value = 0;
+                progressBar.Update();
             }
-            lbl_progressValue.Text = "0 %";
-            progressBar.Value = 0;
-            progressBar.Update();
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
         }
 
         #endregion
@@ -180,6 +229,8 @@ namespace Handbrake
             this.Hide();
             base.OnClosing(e);
         }
+
+
 
     }
 }

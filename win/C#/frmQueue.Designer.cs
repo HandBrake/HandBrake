@@ -28,6 +28,7 @@ namespace Handbrake
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmQueue));
             this.btn_down = new System.Windows.Forms.Button();
             this.btn_up = new System.Windows.Forms.Button();
@@ -41,6 +42,9 @@ namespace Handbrake
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.btn_cancel = new System.Windows.Forms.Button();
+            this.lbl_status = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -189,12 +193,44 @@ namespace Handbrake
             this.label3.TabIndex = 39;
             this.label3.Text = "Queue";
             // 
+            // btn_cancel
+            // 
+            this.btn_cancel.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_cancel.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_cancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_cancel.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_cancel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_cancel.Location = new System.Drawing.Point(143, 302);
+            this.btn_cancel.Name = "btn_cancel";
+            this.btn_cancel.Size = new System.Drawing.Size(91, 22);
+            this.btn_cancel.TabIndex = 41;
+            this.btn_cancel.TabStop = false;
+            this.btn_cancel.Text = "Stop Queue";
+            this.toolTip1.SetToolTip(this.btn_cancel, "This will prevent any more encode processes from starting. It will not stop the c" +
+                    "urrent process!");
+            this.btn_cancel.UseVisualStyleBackColor = false;
+            this.btn_cancel.Visible = false;
+            this.btn_cancel.Click += new System.EventHandler(this.btn_cancel_Click);
+            // 
+            // lbl_status
+            // 
+            this.lbl_status.AutoSize = true;
+            this.lbl_status.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_status.Location = new System.Drawing.Point(260, 268);
+            this.lbl_status.Name = "lbl_status";
+            this.lbl_status.Size = new System.Drawing.Size(176, 13);
+            this.lbl_status.TabIndex = 42;
+            this.lbl_status.Text = "Encode Queue Completed!";
+            this.lbl_status.Visible = false;
+            // 
             // frmQueue
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(723, 332);
+            this.Controls.Add(this.lbl_status);
+            this.Controls.Add(this.btn_cancel);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.pictureBox1);
@@ -232,5 +268,8 @@ namespace Handbrake
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
+        internal System.Windows.Forms.Button btn_cancel;
+        private System.Windows.Forms.Label lbl_status;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

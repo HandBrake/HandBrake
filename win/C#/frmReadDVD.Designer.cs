@@ -81,7 +81,6 @@ namespace Handbrake
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(538, 113);
             this.Name = "frmReadDVD";
-            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Reading DVD...";
             this.TopMost = true;
