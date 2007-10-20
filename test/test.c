@@ -884,11 +884,15 @@ static void ShowHelp()
 	"\n"
 	"    -2, --two-pass          Use two-pass mode\n"
      "    -d, --deinterlace       Deinterlace video with yadif/mcdeint filter\n"
-     "          <YM:FD:MM:QP>     (default 0:-1:-1:1)\n"            
+     "          <YM:FD:MM:QP>     (default 0:-1:-1:1)\n"
+     "           or\n"
+     "          <fast/slow/slower/slowest>\n"            
      "    -7, --deblock           Deblock video with pp7 filter\n"
      "          <QP:M>            (default 0:2)\n"
      "    -8, --denoise           Denoise video with hqdn3d filter\n"
      "          <SL:SC:TL:TC>     (default 4:3:6:4.5)\n"
+     "           or\n"
+     "          <weak/medium/strong>\n"
      "    -9, --detelecine        Detelecine video with pullup filter\n"
      "          <L:R:T:B:SB:MP>   (default 1:1:4:4:0:0)\n"
     "    -g, --grayscale         Grayscale encoding\n"
@@ -1108,7 +1112,26 @@ static int ParseOptions( int argc, char ** argv )
             case 'd':
                 if( optarg != NULL )
                 {
-                    deinterlace_opt = strdup( optarg );
+                    if (!( strcmp( optarg, "fast" ) ))
+                    {
+                        deinterlace_opt = "-1";
+                    }
+                    else if (!( strcmp( optarg, "slow" ) ))
+                    {
+                        deinterlace_opt = "0";
+                    }
+                    else if (!( strcmp( optarg, "slower" ) ))
+                    {
+                        deinterlace_opt = "2:-1:1";
+                    }
+                    else if (!( strcmp( optarg, "slowest" ) ))
+                    {
+                        deinterlace_opt = "1:-1:1";
+                    }
+                    else
+                    {
+                        deinterlace_opt = strdup( optarg );
+                    }
                 }
                 deinterlace = 1;
                 break;
@@ -1122,7 +1145,22 @@ static int ParseOptions( int argc, char ** argv )
             case '8':
                 if( optarg != NULL )
                 {
-                    denoise_opt = strdup( optarg );
+                    if (!( strcmp( optarg, "weak" ) ))
+                    {
+                        denoise_opt = "2:1:2:3";
+                    }
+                    else if (!( strcmp( optarg, "medium" ) ))
+                    {
+                        denoise_opt = "3:2:2:3";
+                    }
+                    else if (!( strcmp( optarg, "strong" ) ))
+                    {
+                        denoise_opt = "7:7:5:5";
+                    }
+                    else
+                    {
+                        denoise_opt = strdup( optarg );
+                    }
                 }
                 denoise = 1;
                 break;                
