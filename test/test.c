@@ -909,8 +909,9 @@ static void ShowHelp()
 	"    -E, --aencoder <string> Set audio encoder (faac/lame/vorbis/ac3, ac3\n"
     "                            meaning passthrough, default: guessed)\n"
 	"    -B, --ab <kb/s>         Set audio bitrate (default: 128)\n"
-	"    -a, --audio <string>    Select audio channel(s) (\"none\" for no \n"
-    "                            audio, default: first one)\n"
+	"    -a, --audio <string>    Select audio channel(s), separated by commas\n"
+	"                            (\"none\" for no audio, \"1,2,3\" for multiple\n"
+	"                             tracks, default: first one, max: eight)\n"
     "    -6, --mixdown <string>  Format for surround sound downmixing\n"
     "                            (mono/stereo/dpl1/dpl2/6ch, default: dpl2)\n"
     "    -R, --arate             Set audio samplerate (" );
