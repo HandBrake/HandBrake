@@ -48,10 +48,18 @@ struct hb_work_private_s
     /* Audio */
     hb_sync_audio_t sync_audio[8];
 
+    /* Flags */
+    int discontinuity;
+
     /* Statistics */
     uint64_t st_counts[4];
     uint64_t st_dates[4];
     uint64_t st_first;
+
+    /* Throttle message flags */
+    int   trashing_audio;
+    int   inserting_silence;
+    int   way_out_of_sync;
 };
 
 /***********************************************************************
@@ -84,6 +92,12 @@ int syncInit( hb_work_object_t * w, hb_job_t * job )
     pv->pts_offset     = INT64_MIN;
     pv->pts_offset_old = INT64_MIN;
     pv->count_frames   = 0;
+
+    pv->discontinuity = 0;
+
+    pv->trashing_audio = 0;
+    pv->inserting_silence = 0;
+    pv->way_out_of_sync = 0;
 
     /* Calculate how many video frames we are expecting */
     duration = 0;
@@ -303,7 +317,6 @@ static int SyncVideo( hb_work_object_t * w )
         }
 
         /*
-
          * Track the video sequence number localy so that we can sync the audio
          * to it using the sequence number as well as the PTS.
          */
@@ -313,8 +326,8 @@ static int SyncVideo( hb_work_object_t * w )
         if( next->start < cur->start - PTS_DISCONTINUITY_TOLERANCE ||
             next->start > cur->start + PTS_DISCONTINUITY_TOLERANCE )
         {
-	    hb_log( "Sync: Video PTS discontinuity (current buffer start=%lld, next buffer start=%lld), trash Video",
-                    cur->start, next->start );
+	    hb_log( "Sync: Video PTS discontinuity %s (current buffer start=%lld, next buffer start=%lld)",
+                    pv->discontinuity ? "second" : "first", cur->start, next->start );
             
             /*
              * Do we need to trash the subtitle, is it from the next->start period
@@ -352,6 +365,11 @@ static int SyncVideo( hb_work_object_t * w )
             pv->pts_offset_old = pv->pts_offset;
             pv->pts_offset     = cur->start -
                 pv->count_frames * pv->job->vrate_base / 300;
+
+            if( !pv->discontinuity )
+            {
+                pv->discontinuity = 1;
+            }
 
             pv->video_sequence = cur->sequence;
             continue;
@@ -607,27 +625,52 @@ static void SyncAudio( hb_work_object_t * w, int i )
         pts_expected = pv->pts_offset + sync->count_frames * 90000 / rate;
 
         // hb_log("Video Sequence: %lld, Audio Sequence: %lld", pv->video_sequence, buf->sequence);
+
         /*
          * Using the same logic as the Video have we crossed a VOB
          * boundary as detected by the expected PTS and the PTS of our
          * audio being out by more than the tolerance value.
          */
-        if( ( buf->start > pts_expected + PTS_DISCONTINUITY_TOLERANCE ||
-              buf->start < pts_expected - PTS_DISCONTINUITY_TOLERANCE ) &&
-            pv->pts_offset_old > INT64_MIN )
+        if( buf->start > pts_expected + PTS_DISCONTINUITY_TOLERANCE ||
+            buf->start < pts_expected - PTS_DISCONTINUITY_TOLERANCE )
         {
-	    /*
-             * Useful debug, but too verbose for normal use.
-             */
-            hb_log("Sync: Audio discontinuity (sequence: vid %lld aud %lld) (pts %lld < %lld < %lld)",
-                   pv->video_sequence, buf->sequence,
-		   pts_expected - PTS_DISCONTINUITY_TOLERANCE, buf->start,
-		   pts_expected + PTS_DISCONTINUITY_TOLERANCE );
-	    
             /* There has been a PTS discontinuity, and this frame might
                be from before the discontinuity*/
-            pts_expected = pv->pts_offset_old + sync->count_frames *
-                90000 / rate;
+
+            if( pv->discontinuity )
+            {
+                /*
+                 * There is an outstanding discontinuity, so use the offset from 
+                 * that discontinuity.
+                 */
+                pts_expected = pv->pts_offset_old + sync->count_frames *
+                    90000 / rate;
+            }
+            else
+            {
+                /*
+                 * No outstanding discontinuity, so the audio must be leading the
+                 * video (or the PTS values are really stuffed). So lets mark this
+                 * as a discontinuity ourselves for the audio to use until
+                 * the video also crosses the discontinuity.
+                 *
+                 * pts_offset is used when we are in the same time space as the video
+                 * pts_offset_old when in a discontinuity.
+                 *
+                 * Therefore set the pts_offset_old given the new pts_offset for this
+                 * current buffer.
+                 */
+                pv->discontinuity = 1;
+                pv->pts_offset_old = buf->start - sync->count_frames *
+                    90000 / rate;
+                pts_expected = pv->pts_offset_old + sync->count_frames *
+                    90000 / rate;
+
+                hb_log("Sync: Audio discontinuity (sequence: vid %lld aud %lld) (pts %lld < %lld < %lld)",
+                       pv->video_sequence, buf->sequence,
+                       pts_expected - PTS_DISCONTINUITY_TOLERANCE, buf->start,
+                       pts_expected + PTS_DISCONTINUITY_TOLERANCE );
+            }
 
             /*
              * Is the audio from a valid period given the previous
@@ -651,7 +694,11 @@ static void SyncAudio( hb_work_object_t * w, int i )
                  * up diverging even more. We need to hold on to the
                  * audio until the video catches up.
                  */
-                hb_log("Sync: Audio is way out of sync, attempt to reconverge from current video PTS");
+                if( !pv->way_out_of_sync )
+                {
+                    hb_log("Sync: Audio is way out of sync, attempt to reconverge from current video PTS");
+                    pv->way_out_of_sync = 1;
+                }
 		
                 /*
                  * It wasn't from the old place, so we must be from
@@ -669,14 +716,28 @@ static void SyncAudio( hb_work_object_t * w, int i )
         else
         {
             start = pts_expected - pv->pts_offset;
+
+            if( pv->discontinuity )
+            {
+                /*
+                 * The Audio is tracking the Video again using the normal pts_offset, so the
+                 * discontinuity is over.
+                 */
+                hb_log( "Sync: Audio joined Video after discontinuity at PTS %lld", buf->start );
+                pv->discontinuity = 0;
+            }
         }
 
         /* Tolerance: 100 ms */
         if( buf->start < pts_expected - 9000 )
         {
-	    /* Audio is behind the Video, trash it, can't use it now. */
-	    hb_log( "Sync: Audio PTS (%lld) < Video PTS (%lld) by greater than 100ms, trashing audio to reconverge",
-		      buf->start, pts_expected);
+            if( !pv->trashing_audio )
+            {
+                /* Audio is behind the Video, trash it, can't use it now. */
+                hb_log( "Sync: Audio PTS (%lld) < Video PTS (%lld) by greater than 100ms, trashing audio to reconverge",
+                        buf->start, pts_expected);
+                pv->trashing_audio = 1;
+            }
             buf = hb_fifo_get( audio->fifo_raw );
             hb_buffer_close( &buf );
             continue;
@@ -684,9 +745,28 @@ static void SyncAudio( hb_work_object_t * w, int i )
         else if( buf->start > pts_expected + 9000 )
         {
             /* Audio is ahead of the Video, insert silence until we catch up*/
-	    hb_log("Sync: Audio PTS (%lld) >  Video PTS (%lld) by greater than 100ms insert silence until reconverged", buf->start, pts_expected);
+            if( !pv->inserting_silence )
+            {
+                hb_log("Sync: Audio PTS (%lld) >  Video PTS (%lld) by greater than 100ms insert silence until reconverged", buf->start, pts_expected);
+                pv->inserting_silence = 1;
+            }
             InsertSilence( w, i );
             continue;
+        } 
+        else 
+        {
+            if( pv->trashing_audio || pv->inserting_silence )
+            {
+                hb_log( "Sync: Audio back in Sync at PTS %lld", buf->start );
+                pv->trashing_audio = 0;
+                pv->inserting_silence = 0;
+            }
+            if( pv->way_out_of_sync )
+            {
+                hb_log( "Sync: Audio no longer way out of sync at PTS %lld",
+                        buf->start );
+                pv->way_out_of_sync = 0;
+            }
         }
 
         if( job->acodec & HB_ACODEC_AC3 )
@@ -739,6 +819,16 @@ static void SyncAudio( hb_work_object_t * w, int i )
 
         buf->frametype = HB_FRAME_AUDIO;
         hb_fifo_push( fifo, buf );
+    }
+
+    if( hb_fifo_is_full( fifo ) &&
+        pv->way_out_of_sync ) 
+    {
+        /*
+         * Trash the top audio packet to avoid dead lock as we reconverge.
+         */
+        buf = hb_fifo_get( audio->fifo_raw );
+        hb_buffer_close( &buf ); 
     }
 
     if( NeedSilence( w, audio ) )
@@ -818,8 +908,6 @@ static void InsertSilence( hb_work_object_t * w, int i )
         buf->stop  = buf->start + 90000 / 20;
         memset( buf->data, 0, buf->size );
 
-        hb_log( "sync: adding 50 ms of silence for track %x",
-                sync->audio->id );
         hb_fifo_push( sync->audio->fifo_sync, buf );
 
         sync->count_frames += job->arate / 20;
