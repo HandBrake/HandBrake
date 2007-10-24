@@ -482,7 +482,6 @@ static int HandleEvents( hb_handle_t * h )
             }
             if( denoise )
             {
-                hb_log("Added denoise setting of '%s'", hb_filter_denoise.settings);
                 hb_filter_denoise.settings = denoise_opt;
                 hb_list_add( job->filters, &hb_filter_denoise );
             }
