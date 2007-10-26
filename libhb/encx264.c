@@ -68,7 +68,16 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     param.i_height     = job->height;
     param.i_fps_num    = job->vrate;
     param.i_fps_den    = job->vrate_base;
-    param.i_keyint_max = 20 * job->vrate / job->vrate_base;
+    
+    if (job->vrate_base != 1080000)
+    {
+        /* If the fps isn't 25, adjust the key intervals. Add 1 because
+           we want 24, not 23 with a truncated remainder.               */
+        param.i_keyint_min     = (job->vrate / job->vrate_base) + 1;
+        param.i_keyint_max = (10 * job->vrate / job->vrate_base) + 1;
+        hb_log("encx264: keyint-min: %i, keyint-max: %i", param.i_keyint_min, param.i_keyint_max);        
+    }
+    
     param.i_log_level  = X264_LOG_INFO;
     if( job->h264_level )
     {
