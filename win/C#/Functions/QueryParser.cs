@@ -398,14 +398,6 @@ namespace Handbrake.Functions
         {
             QueryParser thisQuery = new QueryParser();
 
-            // Example Input
-            // -i "C:\Documents and Settings\Scott\Desktop\Files\DVD\Test Image.iso" 
-            //-t 1 -c 3-5 -o "C:\test.mp4" -e x264 -E faac -w 720 -l 400 --crop 0:0:0:0
-            //-s 1 --deinterlace="1:-1:1" -g  -m  -b 2500 -2  -r 25 -T  -4  --deblock --detelecine 
-            //--denoise=7:7:5:5 -x bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=2 -B 160 -R 48 -a 1 -6 stereo -v 
-            //-q 0.45 -Q -S 2134
-
-
             //Source
             Regex r1 = new Regex(@"(-i)(?:\s\"")([a-zA-Z0-9:\\\s\.]+)(?:\"")");
             Match source = r1.Match(input.Replace('"', '\"'));
@@ -455,22 +447,24 @@ namespace Handbrake.Functions
              
             
             // ### NOTES ###
-            // The following code needs alot of error handling added to it at some point.
             // May be an idea to add additional options such as CPU etc later.
 
             try
             {
                 //Source
                 thisQuery.q_source = source.ToString();
-                thisQuery.q_dvdTitle = int.Parse(title.ToString().Replace("-t ", ""));
+                if (title.ToString() != "")
+                    thisQuery.q_dvdTitle = int.Parse(title.ToString().Replace("-t ", ""));
                 thisQuery.q_dvdChapters = chapters.ToString();
 
                 //Destination
                 thisQuery.q_destination = destination.ToString();
                 thisQuery.q_videoEncoder = videoEncoder.ToString();
                 thisQuery.q_audioEncoder = audioEncoder.ToString();
-                thisQuery.q_videoWidth = int.Parse(width.ToString().Replace("-w ", ""));
-                thisQuery.q_videoHeight = int.Parse(height.ToString().Replace("-l ", ""));
+                if (width.ToString() != "")
+                    thisQuery.q_videoWidth = int.Parse(width.ToString().Replace("-w ", ""));
+                if (height.ToString() != "")
+                    thisQuery.q_videoHeight = int.Parse(height.ToString().Replace("-l ", ""));
 
                 //Picture Settings Tab
                 thisQuery.q_cropValues = crop.ToString();
@@ -489,7 +483,8 @@ namespace Handbrake.Functions
                 thisQuery.q_videoFramerate = videoFramerate.ToString();
                 thisQuery.q_avgBitrate = videoBitrate.ToString();
                 thisQuery.q_videoTargetSize = videoFilesize.ToString();
-                thisQuery.q_videoQuality = int.Parse(videoQuality.ToString());
+                if (videoQuality.ToString() != "")
+                    thisQuery.q_videoQuality = int.Parse(videoQuality.ToString());
                 thisQuery.q_crf = CRF.Success;
 
                 //Audio Settings Tab
@@ -507,7 +502,7 @@ namespace Handbrake.Functions
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.ToString());
+                MessageBox.Show("An error has occured in the Query Parser. Please report this error on the forum in the 'Windows' support section. \n\n" + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             return thisQuery;
