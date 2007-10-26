@@ -45,7 +45,12 @@ namespace Handbrake
             this.btn_cancel = new System.Windows.Forms.Button();
             this.lbl_status = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.text_edit = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.btn_updateQuery = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btn_down
@@ -55,7 +60,7 @@ namespace Handbrake
             this.btn_down.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_down.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_down.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_down.Location = new System.Drawing.Point(650, 144);
+            this.btn_down.Location = new System.Drawing.Point(656, 91);
             this.btn_down.Name = "btn_down";
             this.btn_down.Size = new System.Drawing.Size(64, 22);
             this.btn_down.TabIndex = 33;
@@ -71,7 +76,7 @@ namespace Handbrake
             this.btn_up.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_up.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_up.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_up.Location = new System.Drawing.Point(649, 116);
+            this.btn_up.Location = new System.Drawing.Point(655, 63);
             this.btn_up.Name = "btn_up";
             this.btn_up.Size = new System.Drawing.Size(64, 22);
             this.btn_up.TabIndex = 32;
@@ -87,7 +92,7 @@ namespace Handbrake
             this.btn_delete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_delete.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_delete.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_delete.Location = new System.Drawing.Point(650, 190);
+            this.btn_delete.Location = new System.Drawing.Point(656, 137);
             this.btn_delete.Name = "btn_delete";
             this.btn_delete.Size = new System.Drawing.Size(64, 22);
             this.btn_delete.TabIndex = 31;
@@ -103,7 +108,7 @@ namespace Handbrake
             this.btn_q_encoder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_q_encoder.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_q_encoder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_q_encoder.Location = new System.Drawing.Point(13, 302);
+            this.btn_q_encoder.Location = new System.Drawing.Point(10, 366);
             this.btn_q_encoder.Name = "btn_q_encoder";
             this.btn_q_encoder.Size = new System.Drawing.Size(124, 22);
             this.btn_q_encoder.TabIndex = 29;
@@ -115,12 +120,13 @@ namespace Handbrake
             // list_queue
             // 
             this.list_queue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.list_queue.FormattingEnabled = true;
+            this.list_queue.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.list_queue.HorizontalScrollbar = true;
-            this.list_queue.Location = new System.Drawing.Point(13, 72);
+            this.list_queue.Location = new System.Drawing.Point(19, 19);
             this.list_queue.Name = "list_queue";
             this.list_queue.Size = new System.Drawing.Size(630, 184);
             this.list_queue.TabIndex = 28;
+            this.list_queue.SelectedIndexChanged += new System.EventHandler(this.list_queue_SelectedIndexChanged);
             // 
             // btn_Close
             // 
@@ -129,7 +135,7 @@ namespace Handbrake
             this.btn_Close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_Close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_Close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_Close.Location = new System.Drawing.Point(606, 305);
+            this.btn_Close.Location = new System.Drawing.Point(639, 366);
             this.btn_Close.Name = "btn_Close";
             this.btn_Close.Size = new System.Drawing.Size(108, 22);
             this.btn_Close.TabIndex = 27;
@@ -141,16 +147,16 @@ namespace Handbrake
             // progressBar
             // 
             this.progressBar.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.progressBar.Location = new System.Drawing.Point(67, 264);
+            this.progressBar.Location = new System.Drawing.Point(64, 328);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(576, 23);
+            this.progressBar.Size = new System.Drawing.Size(653, 23);
             this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar.TabIndex = 34;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(10, 270);
+            this.label2.Location = new System.Drawing.Point(7, 334);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(51, 13);
             this.label2.TabIndex = 35;
@@ -159,7 +165,7 @@ namespace Handbrake
             // lbl_progressValue
             // 
             this.lbl_progressValue.AutoSize = true;
-            this.lbl_progressValue.Location = new System.Drawing.Point(646, 270);
+            this.lbl_progressValue.Location = new System.Drawing.Point(723, 332);
             this.lbl_progressValue.Name = "lbl_progressValue";
             this.lbl_progressValue.Size = new System.Drawing.Size(24, 13);
             this.lbl_progressValue.TabIndex = 36;
@@ -200,7 +206,7 @@ namespace Handbrake
             this.btn_cancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_cancel.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_cancel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_cancel.Location = new System.Drawing.Point(143, 302);
+            this.btn_cancel.Location = new System.Drawing.Point(140, 366);
             this.btn_cancel.Name = "btn_cancel";
             this.btn_cancel.Size = new System.Drawing.Size(91, 22);
             this.btn_cancel.TabIndex = 41;
@@ -216,19 +222,73 @@ namespace Handbrake
             // 
             this.lbl_status.AutoSize = true;
             this.lbl_status.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_status.Location = new System.Drawing.Point(260, 268);
+            this.lbl_status.Location = new System.Drawing.Point(314, 332);
             this.lbl_status.Name = "lbl_status";
             this.lbl_status.Size = new System.Drawing.Size(176, 13);
             this.lbl_status.TabIndex = 42;
             this.lbl_status.Text = "Encode Queue Completed!";
             this.lbl_status.Visible = false;
             // 
+            // text_edit
+            // 
+            this.text_edit.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.text_edit.Location = new System.Drawing.Point(119, 209);
+            this.text_edit.Name = "text_edit";
+            this.text_edit.Size = new System.Drawing.Size(530, 21);
+            this.text_edit.TabIndex = 43;
+            this.toolTip1.SetToolTip(this.text_edit, "Avoid using this feature when the encoder is about to start a new task. You may o" +
+                    "verwrite the wrong job");
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(16, 211);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(97, 13);
+            this.label4.TabIndex = 45;
+            this.label4.Text = "Modify Query:";
+            // 
+            // btn_updateQuery
+            // 
+            this.btn_updateQuery.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_updateQuery.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_updateQuery.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_updateQuery.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_updateQuery.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_updateQuery.Location = new System.Drawing.Point(655, 207);
+            this.btn_updateQuery.Name = "btn_updateQuery";
+            this.btn_updateQuery.Size = new System.Drawing.Size(64, 23);
+            this.btn_updateQuery.TabIndex = 46;
+            this.btn_updateQuery.TabStop = false;
+            this.btn_updateQuery.Text = "Update";
+            this.btn_updateQuery.UseVisualStyleBackColor = false;
+            this.btn_updateQuery.Click += new System.EventHandler(this.btn_updateQuery_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.list_queue);
+            this.groupBox1.Controls.Add(this.btn_updateQuery);
+            this.groupBox1.Controls.Add(this.btn_delete);
+            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.btn_up);
+            this.groupBox1.Controls.Add(this.text_edit);
+            this.groupBox1.Controls.Add(this.btn_down);
+            this.groupBox1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox1.Location = new System.Drawing.Point(12, 73);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(735, 249);
+            this.groupBox1.TabIndex = 47;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Queued Management";
+            // 
             // frmQueue
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(723, 332);
+            this.ClientSize = new System.Drawing.Size(761, 396);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.lbl_status);
             this.Controls.Add(this.btn_cancel);
             this.Controls.Add(this.label1);
@@ -237,11 +297,7 @@ namespace Handbrake
             this.Controls.Add(this.lbl_progressValue);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.progressBar);
-            this.Controls.Add(this.btn_down);
-            this.Controls.Add(this.btn_up);
-            this.Controls.Add(this.btn_delete);
             this.Controls.Add(this.btn_q_encoder);
-            this.Controls.Add(this.list_queue);
             this.Controls.Add(this.btn_Close);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -249,6 +305,8 @@ namespace Handbrake
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Encode Queue";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -260,7 +318,6 @@ namespace Handbrake
         internal System.Windows.Forms.Button btn_up;
         internal System.Windows.Forms.Button btn_delete;
         internal System.Windows.Forms.Button btn_q_encoder;
-        internal System.Windows.Forms.ListBox list_queue;
         internal System.Windows.Forms.Button btn_Close;
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.Label label2;
@@ -271,5 +328,10 @@ namespace Handbrake
         internal System.Windows.Forms.Button btn_cancel;
         private System.Windows.Forms.Label lbl_status;
         private System.Windows.Forms.ToolTip toolTip1;
+        public System.Windows.Forms.ListBox list_queue;
+        private System.Windows.Forms.TextBox text_edit;
+        private System.Windows.Forms.Label label4;
+        internal System.Windows.Forms.Button btn_updateQuery;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }

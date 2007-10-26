@@ -40,8 +40,11 @@ namespace Handbrake
                     lbl_progressValue.Text = "0 %";
                     progressBar.Step = 100 / list_queue.Items.Count;
                     progressBar.Update();
-                    ThreadPool.QueueUserWorkItem(startProc);
-                }
+                    //ThreadPool.QueueUserWorkItem(startProc);
+                    // Testing a new way of launching a thread. Hopefully will fix a random freeze up of the main thread.
+                    Thread test = new Thread(startProc);
+                    test.Start();
+                 }
             }
             catch (Exception exc)
             {
@@ -70,7 +73,7 @@ namespace Handbrake
                     string query = list_queue.Items[0].ToString();
                     
                     updateUIElements();
-                        
+                   
                     Functions.CLI process = new Functions.CLI();
                     Process hbProc = process.runCli(this, query, false, false, false, false);
 
@@ -156,11 +159,13 @@ namespace Handbrake
                 {
                     lbl_status.Visible = true;
                     lbl_status.Text = "Encode Queue Cancelled!";
+                    text_edit.Text = "";
                 }
                 else
                 {
                     lbl_status.Visible = true;
                     lbl_status.Text = "Encode Queue Completed!";
+                    text_edit.Text = "";
                 }
                 btn_cancel.Visible = false;
 
@@ -217,6 +222,34 @@ namespace Handbrake
         }
         #endregion
 
+        #region Queue Item Modification
+
+        int listCount = 0;
+
+        private void btn_updateQuery_Click(object sender, EventArgs e)
+        {
+            if (text_edit.Text != "")
+            {
+                if (list_queue.Items.Count != listCount)
+                {
+                    MessageBox.Show("Unable to modify the selected item. The number of items on the list has changed.  \nPlease avoid modifying an item when a new encode is about to start!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                else
+                {
+                    if (list_queue.SelectedItem != null)
+                        list_queue.Items[list_queue.SelectedIndex] = text_edit.Text;
+                }
+            }
+        }
+
+        private void list_queue_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (list_queue.SelectedItem != null)
+                text_edit.Text = list_queue.SelectedItem.ToString();
+
+            listCount = list_queue.Items.Count;
+        }
+        #endregion
 
         private void btn_Close_Click(object sender, EventArgs e)
         {
@@ -229,6 +262,11 @@ namespace Handbrake
             this.Hide();
             base.OnClosing(e);
         }
+
+     
+        
+
+
 
 
 

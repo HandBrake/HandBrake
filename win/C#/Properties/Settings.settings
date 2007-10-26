@@ -15,7 +15,7 @@
       <Value Profile="(Default)">Automatic</Value>
     </Setting>
     <Setting Name="defaultSettings" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Checked</Value>
     </Setting>
     <Setting Name="updateStatus" Type="System.String" Scope="User">
       <Value Profile="(Default)">Checked</Value>
@@ -143,7 +143,7 @@
     <Setting Name="BuiltInPresets" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="showPresets" Type="System.String" Scope="User">
+    <Setting Name="hidePresets" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="selectedPreset" Type="System.String" Scope="User">

@@ -73,7 +73,7 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Checked")]
         public string defaultSettings {
             get {
                 return ((string)(this["defaultSettings"]));
@@ -589,12 +589,12 @@ namespace Handbrake.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string showPresets {
+        public string hidePresets {
             get {
-                return ((string)(this["showPresets"]));
+                return ((string)(this["hidePresets"]));
             }
             set {
-                this["showPresets"] = value;
+                this["hidePresets"] = value;
             }
         }
         

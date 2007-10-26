@@ -54,10 +54,8 @@ namespace Handbrake
             // Enable or disable tooltips
             tooltip();
 
-            // Hide the presets part of the window
-            this.Width = 590;
-
-            showPresets();
+            // Hide the preset bar should the user have the option enabled.
+            hidePresetBar();
 
             /*
              * This code can be used for storing preset and preset name information in future versions.
@@ -226,12 +224,12 @@ namespace Handbrake
             }
         }
 
-        private void showPresets()
+        private void hidePresetBar()
         {
-            if (Properties.Settings.Default.showPresets == "Checked")
+            if (Properties.Settings.Default.hidePresets == "Checked")
             {
-                btn_presets.Visible = false;
-                this.Width = 881;
+                btn_presets.Visible = true;
+                this.Width = 591;
             }
 
         }
@@ -243,6 +241,169 @@ namespace Handbrake
         // -------------------------------------------------------------- 
 
         #region File Menu
+
+
+
+        private void mnu_open_Click(object sender, EventArgs e)
+        {
+            string filename;
+            File_Open.ShowDialog();
+            filename = File_Open.FileName;
+            if (filename != "")
+            {
+                try
+                {
+                    // Create StreamReader & open file
+                    StreamReader line = new StreamReader(filename);
+                    string temporyLine; // Used for reading the line into a varible before processing on the checkState items below.
+
+                    // Read in the data and set the correct GUI component with the setting.
+                    text_source.Text = line.ReadLine();
+                    drp_dvdtitle.Text = line.ReadLine();
+                    drop_chapterStart.Text = line.ReadLine();
+                    drop_chapterFinish.Text = line.ReadLine();
+                    text_destination.Text = line.ReadLine();
+                    drp_videoEncoder.Text = line.ReadLine();
+                    drp_audioCodec.Text = line.ReadLine();
+                    text_width.Text = line.ReadLine();
+                    text_height.Text = line.ReadLine();
+                    text_top.Text = line.ReadLine();
+                    text_bottom.Text = line.ReadLine();
+                    text_left.Text = line.ReadLine();
+                    text_right.Text = line.ReadLine();
+                    drp_subtitle.Text = line.ReadLine();
+                    text_bitrate.Text = line.ReadLine();
+                    text_filesize.Text = line.ReadLine();
+                    slider_videoQuality.Value = int.Parse(line.ReadLine());
+
+                    temporyLine = line.ReadLine();
+                    if (temporyLine == "Checked")
+                    {
+                        check_2PassEncode.CheckState = CheckState.Checked;
+                    }
+
+                    drp_deInterlace_option.Text = line.ReadLine();
+
+                    temporyLine = line.ReadLine();
+                    if (temporyLine == "Checked")
+                    {
+                        check_grayscale.CheckState = CheckState.Checked;
+                    }
+
+                    drp_videoFramerate.Text = line.ReadLine();
+
+                    temporyLine = line.ReadLine();
+                    if (temporyLine == "Checked")
+                    {
+                        Check_ChapterMarkers.CheckState = CheckState.Checked;
+                    }
+
+                    temporyLine = line.ReadLine();
+                    if (temporyLine == "Checked")
+                    {
+                        CheckPixelRatio.CheckState = CheckState.Checked;
+                    }
+
+                    temporyLine = line.ReadLine();
+                    if (temporyLine == "Checked")
+                    {
+                        check_turbo.CheckState = CheckState.Checked;
+                    }
+
+                    temporyLine = line.ReadLine();
+                    if (temporyLine == "Checked")
+                    {
+                        check_largeFile.CheckState = CheckState.Checked;
+                    }
+
+                    drp_audioBitrate.Text = line.ReadLine();
+                    drp_audioSampleRate.Text = line.ReadLine();
+                    drp_audioChannels.Text = line.ReadLine();
+                    drp_audioMixDown.Text = line.ReadLine();
+
+                    // Advanced H264 Options
+                    temporyLine = line.ReadLine();
+                    if (temporyLine == "Checked")
+                    {
+                        CheckCRF.CheckState = CheckState.Checked;
+                    }
+                    rtf_h264advanced.Text = line.ReadLine();
+
+                    // Close the stream
+                    line.Close();
+
+
+                    // Fix for SliderValue not appearing when Opening saved file
+                    SliderValue.Text = slider_videoQuality.Value + "%";
+
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Unable to load profile.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                }
+            }
+        }
+
+        private void mnu_save_Click(object sender, EventArgs e)
+        {
+            string filename;
+            File_Save.ShowDialog();
+            filename = File_Save.FileName;
+            if (filename != "")
+            {
+                try
+                {
+                    // Create a StreamWriter and open the file
+                    StreamWriter line = new StreamWriter(filename);
+
+                    //Source
+                    line.WriteLine(text_source.Text);
+                    line.WriteLine(drp_dvdtitle.Text);
+                    line.WriteLine(drop_chapterStart.Text);
+                    line.WriteLine(drop_chapterFinish.Text);
+                    //Destination
+                    line.WriteLine(text_destination.Text);
+                    line.WriteLine(drp_videoEncoder.Text);
+                    line.WriteLine(drp_audioCodec.Text);
+                    line.WriteLine(text_width.Text);
+                    line.WriteLine(text_height.Text);
+                    //Picture Settings Tab
+                    line.WriteLine(text_top.Text);
+                    line.WriteLine(text_bottom.Text);
+                    line.WriteLine(text_left.Text);
+                    line.WriteLine(text_right.Text);
+                    line.WriteLine(drp_subtitle.Text);
+                    //Video Settings Tab
+                    line.WriteLine(text_bitrate.Text);
+                    line.WriteLine(text_filesize.Text);
+                    line.WriteLine(slider_videoQuality.Value.ToString());
+                    line.WriteLine(check_2PassEncode.CheckState.ToString());
+                    line.WriteLine(drp_deInterlace_option.Text);
+                    line.WriteLine(check_grayscale.CheckState.ToString());
+                    line.WriteLine(drp_videoFramerate.Text);
+                    line.WriteLine(Check_ChapterMarkers.CheckState.ToString());
+                    line.WriteLine(CheckPixelRatio.CheckState.ToString());
+                    line.WriteLine(check_turbo.CheckState.ToString());
+                    line.WriteLine(check_largeFile.CheckState.ToString());
+                    //Audio Settings Tab
+                    line.WriteLine(drp_audioBitrate.Text);
+                    line.WriteLine(drp_audioSampleRate.Text);
+                    line.WriteLine(drp_audioChannels.Text);
+                    line.WriteLine(drp_audioMixDown.Text);
+                    //H264 Tab
+                    line.WriteLine(CheckCRF.CheckState.ToString());
+                    line.WriteLine(rtf_h264advanced.Text);
+                    // close the stream
+                    line.Close();
+                    MessageBox.Show("Your profile has been sucessfully saved.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Unable to write to the file. Please make sure the location has the correct permissions for file writing.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                }
+
+            }
+        }
 
         private void mnu_exit_Click(object sender, EventArgs e)
         {
@@ -381,7 +542,8 @@ namespace Handbrake
         {
             String filename = ""; 
 	 	    text_source.Text = "";
-            frmDvdInfo dvdInfoWindow = new frmDvdInfo();          	 
+            frmDvdInfo dvdInfoWindow = new frmDvdInfo();
+        
 	 	    if (RadioDVD.Checked) 
 	 	    { 
 	 	        DVD_Open.ShowDialog(); 
@@ -456,6 +618,7 @@ namespace Handbrake
 
         private void btn_queue_Click(object sender, EventArgs e)
         {
+          
             if (text_source.Text == "" || text_source.Text == "Click 'Browse' to continue" || text_destination.Text == "")
                 MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
@@ -473,7 +636,7 @@ namespace Handbrake
                 queueWindow.Show();
             } 
         }
-
+ 
         private void btn_copy_Click(object sender, EventArgs e)
         {
             if (QueryEditorText.Text != "")
@@ -512,167 +675,6 @@ namespace Handbrake
                 btn_presets.Text = "Show Presets";
             }
 
-        }
-
-        private void btn_addPreset_Click(object sender, EventArgs e)
-        {
-            string filename;
-            File_Open.ShowDialog();
-            filename = File_Open.FileName;
-            if (filename != "")
-            {
-                try
-                {
-                    // Create StreamReader & open file
-                    StreamReader line = new StreamReader(filename);
-                    string temporyLine; // Used for reading the line into a varible before processing on the checkState items below.
-
-                    // Read in the data and set the correct GUI component with the setting.
-                    text_source.Text = line.ReadLine();
-                    drp_dvdtitle.Text = line.ReadLine();
-                    drop_chapterStart.Text = line.ReadLine();
-                    drop_chapterFinish.Text = line.ReadLine();
-                    text_destination.Text = line.ReadLine();
-                    drp_videoEncoder.Text = line.ReadLine();
-                    drp_audioCodec.Text = line.ReadLine();
-                    text_width.Text = line.ReadLine();
-                    text_height.Text = line.ReadLine();
-                    text_top.Text = line.ReadLine();
-                    text_bottom.Text = line.ReadLine();
-                    text_left.Text = line.ReadLine();
-                    text_right.Text = line.ReadLine();
-                    drp_subtitle.Text = line.ReadLine();
-                    text_bitrate.Text = line.ReadLine();
-                    text_filesize.Text = line.ReadLine();
-                    slider_videoQuality.Value = int.Parse(line.ReadLine());
-
-                    temporyLine = line.ReadLine();
-                    if (temporyLine == "Checked")
-                    {
-                        check_2PassEncode.CheckState = CheckState.Checked;
-                    }
-
-                    drp_deInterlace_option.Text = line.ReadLine();
-
-                    temporyLine = line.ReadLine();
-                    if (temporyLine == "Checked")
-                    {
-                        check_grayscale.CheckState = CheckState.Checked;
-                    }
-
-                    drp_videoFramerate.Text = line.ReadLine();
-
-                    temporyLine = line.ReadLine();
-                    if (temporyLine == "Checked")
-                    {
-                        Check_ChapterMarkers.CheckState = CheckState.Checked;
-                    }
-
-                    temporyLine = line.ReadLine();
-                    if (temporyLine == "Checked")
-                    {
-                        CheckPixelRatio.CheckState = CheckState.Checked;
-                    }
-
-                    temporyLine = line.ReadLine();
-                    if (temporyLine == "Checked")
-                    {
-                        check_turbo.CheckState = CheckState.Checked;
-                    }
-
-                    temporyLine = line.ReadLine();
-                    if (temporyLine == "Checked")
-                    {
-                        check_largeFile.CheckState = CheckState.Checked;
-                    }
-
-                    drp_audioBitrate.Text = line.ReadLine();
-                    drp_audioSampleRate.Text = line.ReadLine();
-                    drp_audioChannels.Text = line.ReadLine();
-                    drp_audioMixDown.Text = line.ReadLine();
-
-                    // Advanced H264 Options
-                    temporyLine = line.ReadLine();
-                    if (temporyLine == "Checked")
-                    {
-                        CheckCRF.CheckState = CheckState.Checked;
-                    }
-                    rtf_h264advanced.Text = line.ReadLine();
-
-                    // Close the stream
-                    line.Close();
-
-
-                    // Fix for SliderValue not appearing when Opening saved file
-                    SliderValue.Text = slider_videoQuality.Value + "%";
-
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("Unable to load profile.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                }
-            }
-        }
-
-        private void btn_removePreset_Click(object sender, EventArgs e)
-        {
-            string filename;
-            File_Save.ShowDialog();
-            filename = File_Save.FileName;
-            if (filename != "")
-            {
-                try
-                {
-                    // Create a StreamWriter and open the file
-                    StreamWriter line = new StreamWriter(filename);
-
-                    //Source
-                    line.WriteLine(text_source.Text);
-                    line.WriteLine(drp_dvdtitle.Text);
-                    line.WriteLine(drop_chapterStart.Text);
-                    line.WriteLine(drop_chapterFinish.Text);
-                    //Destination
-                    line.WriteLine(text_destination.Text);
-                    line.WriteLine(drp_videoEncoder.Text);
-                    line.WriteLine(drp_audioCodec.Text);
-                    line.WriteLine(text_width.Text);
-                    line.WriteLine(text_height.Text);
-                    //Picture Settings Tab
-                    line.WriteLine(text_top.Text);
-                    line.WriteLine(text_bottom.Text);
-                    line.WriteLine(text_left.Text);
-                    line.WriteLine(text_right.Text);
-                    line.WriteLine(drp_subtitle.Text);
-                    //Video Settings Tab
-                    line.WriteLine(text_bitrate.Text);
-                    line.WriteLine(text_filesize.Text);
-                    line.WriteLine(slider_videoQuality.Value.ToString());
-                    line.WriteLine(check_2PassEncode.CheckState.ToString());
-                    line.WriteLine(drp_deInterlace_option.Text);
-                    line.WriteLine(check_grayscale.CheckState.ToString());
-                    line.WriteLine(drp_videoFramerate.Text);
-                    line.WriteLine(Check_ChapterMarkers.CheckState.ToString());
-                    line.WriteLine(CheckPixelRatio.CheckState.ToString());
-                    line.WriteLine(check_turbo.CheckState.ToString());
-                    line.WriteLine(check_largeFile.CheckState.ToString());
-                    //Audio Settings Tab
-                    line.WriteLine(drp_audioBitrate.Text);
-                    line.WriteLine(drp_audioSampleRate.Text);
-                    line.WriteLine(drp_audioChannels.Text);
-                    line.WriteLine(drp_audioMixDown.Text);
-                    //H264 Tab
-                    line.WriteLine(CheckCRF.CheckState.ToString());
-                    line.WriteLine(rtf_h264advanced.Text);
-                    // close the stream
-                    line.Close();
-                    MessageBox.Show("Your profile has been sucessfully saved.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("Unable to write to the file. Please make sure the location has the correct permissions for file writing.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                }
-
-            }
         }
 
         private void btn_setDefault_Click(object sender, EventArgs e)
@@ -731,6 +733,7 @@ namespace Handbrake
         // Preset Seleciton
         private void ListBox_Presets_SelectedIndexChanged(object sender, EventArgs e)
         {
+            
             string selectedPreset = null;
             if (ListBox_Presets.SelectedItem != null)
             {
@@ -743,59 +746,78 @@ namespace Handbrake
 
             switch (selectedPreset)
             {
+                //(anamorphic, width, height, vencoder, bitrate, filesize, quality, qpercent, audioBit, chpt, audioSample, h264, deinterlace, twopass, crop, turbo, audioCodec, preset
+
                 case "Animation":
                     setGuiSetttings(CheckState.Checked, "", "", "H.264", "1000", "", 0, "0%", "160", CheckState.Checked, "48", "ref=5:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2", "Origional (Fast)", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Apple Animation)");
                     setMkv();
                     break;
+
                 case "AppleTV":
-                    setGuiSetttings(CheckState.Checked, "", "", "H.264", "2500", "", 0, "0%", "160", CheckState.Checked, "48", "bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=2", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: Apple TV)");
+                    setGuiSetttings(CheckState.Checked, "", "", "H.264", "2500", "", 0, "0%", "160", CheckState.Checked, "48", "bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=2:cabac=0", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: Apple TV)");
                     break;
+                
                 case "Bedlam":
-                    setGuiSetttings(CheckState.Checked, "", "", "H.264", "1800", "", 0, "0%", "160", CheckState.Checked, "48", "ref=16:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=7:me-range=64:analyse=all:8x8dct:trellis=2:no-fast-pskip:no-dct-decimate:filter=-2,-1", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Bedlam)");
+                    setGuiSetttings(CheckState.Checked, "", "", "H.264", "1800", "", 0, "0%", "160", CheckState.Checked, "48", "ref=16:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=7:me-range=64:analyse=all:8x8dct:trellis=2:no-fast-pskip:no-dct-decimate:filter=-2,-1", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AC3", "Output Settings (Preset: Bedlam)");
                     setMkv();
                     break;
+
                 case "Blind":
-                    setGuiSetttings(CheckState.Unchecked, "512", "", "H.264", "512", "", 0, "0%", "128", CheckState.Checked, "48", "", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: Blind)");
+                    setGuiSetttings(CheckState.Unchecked, "512", "", "Mpeg 4", "512", "", 0, "0%", "128", CheckState.Checked, "48", "", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: Blind)");
                     break;
+
                 case "Broke":
                     setGuiSetttings(CheckState.Unchecked, "640", "", "H.264", "", "695", 0, "0%", "128", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=6:bime:weightb:b-rdo:b-pyramid::direct=auto:me=umh:subme=6:trellis=1:analyse=all:8x8dct:no-fast-pskip", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Broke)");
                     break;
+
                 case "Classic":
-                    setGuiSetttings(CheckState.Unchecked, "", "", "H.264", "1000", "", 0, "0%", "160", CheckState.Unchecked, "48", "", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: Classic)");
+                    setGuiSetttings(CheckState.Unchecked, "", "", "Mpeg 4", "1000", "", 0, "0%", "160", CheckState.Unchecked, "48", "", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: Classic)");
                     break;
+
                 case "Constant Quality Rate":
                     setGuiSetttings(CheckState.Checked, "", "", "H.264", "", "", 64, "64%", "160", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=3:b-pyramid:b-rdo:bime:weightb:filter=-2,-1:subme=6:trellis=1:analyse=all:8x8dct:me=umh", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AC3", "Output Settings (Preset: CQR)");
                     setMkv();
                     break;
+
                 case "Deux Six Quatre":
                     setGuiSetttings(CheckState.Checked, "", "", "H.264", "1600", "", 0, "0%", "160", CheckState.Checked, "48", "ref=5:mixed-refs:bframes=3:bime:weightb:b-rdo:b-pyramid:me=umh:subme=7:trellis=1:analyse=all:8x8dct:no-fast-pskip", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AC3", "Output Settings (Preset: DSQ)");
                     setMkv();
                     break;
+
                 case "Film":
                     setGuiSetttings(CheckState.Checked, "", "", "H.264", "2000", "", 0, "0%", "160", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:no-fast-pskip", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AC3", "Output Settings (Preset: Film)");
                     setMkv();
                     break;
+
                 case "iPhone / iPod Touch":
                     setGuiSetttings(CheckState.Unchecked, "480", "", "H.264 (iPod)", "960", "", 0, "0%", "128", CheckState.Checked, "48", "cabac=0:ref=1:analyse=all:me=umh:subme=6:no-fast-pskip=1:trellis=1", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: iPhone)");
                     break;
+
                 case "iPod High-Rez":
                     setGuiSetttings(CheckState.Unchecked, "640", "", "H.264 (iPod)", "1500", "", 0, "0%", "160", CheckState.Checked, "48", "keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: iPod High Rez)");
                     break;
+
                 case "iPod Low-Rez":
                     setGuiSetttings(CheckState.Unchecked, "320", "", "H.264 (iPod)", "700", "", 0, "0%", "160", CheckState.Checked, "48", "keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: iPod Low Rez)");
                     break;
+                
                 case "Normal":
                     setGuiSetttings(CheckState.Checked, "", "", "H.264", "1500", "", 0, "0%", "160", CheckState.Checked, "48", "ref=2:bframes=2:subme=5:me=umh", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Normal)");
                     break;
+               
                 case "PS3":
                     setGuiSetttings(CheckState.Checked, "", "", "H.264", "2500", "", 0, "0%", "160", CheckState.Checked, "48", "level=41:subme=5:me=umh", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: PS3)");
                     break;
+                
                 case "PSP":
-                    setGuiSetttings(CheckState.Unchecked, "368", "208", "Mpeg 4", "1024", "", 0, "0%", "160", CheckState.Unchecked, "48", "", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: PSP)");
+                    setGuiSetttings(CheckState.Unchecked, "368", "208", "Mpeg 4", "1024", "", 0, "0%", "160", CheckState.Checked, "48", "", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: PSP)");
                     break;
+               
                 case "QuickTime":
-                    setGuiSetttings(CheckState.Checked, "", "", "H.264", "2000", "", 0, "0%", "160", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct-auto:me=umh:subme=5:analyse=all:8x8dct:trellis=1:no-fast-pskip", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Quicktime)");
+                    setGuiSetttings(CheckState.Checked, "", "", "H.264", "2000", "", 0, "0%", "160", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:me=umh:subme=5:analyse=all:8x8dct:trellis=1:no-fast-pskip", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Quicktime)");
                     break;
+
+                
                 case "Television":
                     setGuiSetttings(CheckState.Unchecked, "", "", "H.264", "1300", "", 0, "0%", "160", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=6:bime:weightb:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip", "Origional (Fast)", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Television)");
                     setMkv();
@@ -1814,6 +1836,9 @@ namespace Handbrake
             thisQuery = Functions.QueryParser.Parse(query);
             MessageBox.Show(thisQuery.DeTelecine.ToString());
         }
+
+ 
+
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

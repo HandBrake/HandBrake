@@ -92,9 +92,9 @@ namespace Handbrake
             this.check_showPreset.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.check_showPreset.Location = new System.Drawing.Point(15, 94);
             this.check_showPreset.Name = "check_showPreset";
-            this.check_showPreset.Size = new System.Drawing.Size(362, 17);
+            this.check_showPreset.Size = new System.Drawing.Size(115, 17);
             this.check_showPreset.TabIndex = 50;
-            this.check_showPreset.Text = "Always Show Presets (Hide\'s the Show/Hide preset button)";
+            this.check_showPreset.Text = "Hide Preset Bar";
             this.check_showPreset.UseVisualStyleBackColor = true;
             this.check_showPreset.CheckedChanged += new System.EventHandler(this.check_showPreset_CheckedChanged);
             // 

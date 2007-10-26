@@ -44,7 +44,7 @@ namespace Handbrake
                 check_tooltip.CheckState = CheckState.Checked;
             }
 
-            if (Properties.Settings.Default.showPresets == "Checked")
+            if (Properties.Settings.Default.hidePresets == "Checked")
             {
                 check_showPreset.CheckState = CheckState.Checked;
             }
@@ -98,7 +98,7 @@ namespace Handbrake
 
         private void check_showPreset_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.showPresets = check_showPreset.CheckState.ToString();
+            Properties.Settings.Default.hidePresets = check_showPreset.CheckState.ToString();
         }  
  
 
