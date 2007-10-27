@@ -33,7 +33,7 @@ namespace Handbrake
             {
                 // Make sure the screen resolution is not below 1024x768
                 System.Windows.Forms.Screen scr = System.Windows.Forms.Screen.PrimaryScreen;
-                if ((scr.Bounds.Width < 1024) || (scr.Bounds.Height < 768))
+                if ((scr.Bounds.Width < 1024) || (scr.Bounds.Height < 720))
                 {
                     MessageBox.Show("Your system does not meet the minimum requirements for HandBrake. \n Screen resolution is too Low. Must be 1024x768 or greater", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     launch = false;
