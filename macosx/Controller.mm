@@ -123,6 +123,22 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         withObject: NULL waitUntilDone: NO];
 }
 
+- (void) updateAlertDone: (NSWindow *) sheet
+    returnCode: (int) returnCode contextInfo: (void *) contextInfo
+{
+    if( returnCode == NSAlertAlternateReturn )
+    {
+        /* Show scan panel */
+        [self performSelectorOnMainThread: @selector(showScanPanel:)
+            withObject: NULL waitUntilDone: NO];
+        return;
+    }
+
+    /* Go to HandBrake homepage and exit */
+    [self openHomepage: NULL];
+    [NSApp terminate: self];
+}
+
 - (NSApplicationTerminateReply) applicationShouldTerminate: (NSApplication *) app
 {
     // Warn if encoding a movie
@@ -307,297 +323,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     
 }
 
-- (void) loadPresets {
-	/* We declare the default NSFileManager into fileManager */
-	NSFileManager * fileManager = [NSFileManager defaultManager];
-	/* we set the files and support paths here */
-	AppSupportDirectory = @"~/Library/Application Support/HandBrake";
-    AppSupportDirectory = [AppSupportDirectory stringByExpandingTildeInPath];
-    //UserPresetsFile = @"~/Library/Application Support/HandBrake/UserPresets.plist";
-    //UserPresetsFile = [UserPresetsFile stringByExpandingTildeInPath];
-	/* We check for the app support directory for handbrake */
-	if ([fileManager fileExistsAtPath:AppSupportDirectory] == 0) 
-	{
-		// If it doesnt exist yet, we create it here 
-		[fileManager createDirectoryAtPath:AppSupportDirectory attributes:nil];
-	}
-	/* We check for the presets.plist here */
-	if ([fileManager fileExistsAtPath:UserPresetsFile] == 0) 
-	{
-		[fileManager createFileAtPath:UserPresetsFile contents:nil attributes:nil];
-	}
-	UserPresetsFile = @"~/Library/Application Support/HandBrake/UserPresets.plist";
-	UserPresetsFile = [[UserPresetsFile stringByExpandingTildeInPath]retain];
-	
-	UserPresets = [[NSMutableArray alloc] initWithContentsOfFile:UserPresetsFile];
-	if (nil == UserPresets) 
-	{
-		UserPresets = [[NSMutableArray alloc] init];
-		[self addFactoryPresets:NULL];
-	}
-	
-}
-
-// ============================================================
-// NSToolbar Related Methods
-// ============================================================
-
-- (void) setupToolbar {
-    toolbar = [[[NSToolbar alloc] initWithIdentifier: @"HandBrake Toolbar"] autorelease];
-    
-    [toolbar setAllowsUserCustomization: YES];
-    [toolbar setAutosavesConfiguration: YES];
-    [toolbar setDisplayMode: NSToolbarDisplayModeIconAndLabel];
-    
-    [toolbar setDelegate: self];
-    
-    [fWindow setToolbar: toolbar];
-}
-
-- (NSToolbarItem *) toolbar: (NSToolbar *)toolbar itemForItemIdentifier:
-    (NSString *) itemIdent willBeInsertedIntoToolbar:(BOOL) willBeInserted {
-    NSToolbarItem * item = [[NSToolbarItem alloc] initWithItemIdentifier: itemIdent];
-    
-    if ([itemIdent isEqualToString: ToggleDrawerIdentifier])
-    {
-        [item setLabel: @"Toggle Presets"];
-        [item setPaletteLabel: @"Toggler Presets"];
-        [item setToolTip: @"Open/Close Preset Drawer"];
-        [item setImage: [NSImage imageNamed: @"Drawer"]];
-        [item setTarget: self];
-        [item setAction: @selector(toggleDrawer:)];
-        [item setAutovalidates: NO];
-    }
-    else if ([itemIdent isEqualToString: StartEncodingIdentifier])
-    {
-        [item setLabel: @"Start"];
-        [item setPaletteLabel: @"Start Encoding"];
-        [item setToolTip: @"Start Encoding"];
-        [item setImage: [NSImage imageNamed: @"Play"]];
-        [item setTarget: self];
-        [item setAction: @selector(Rip:)];
-    }
-    else if ([itemIdent isEqualToString: ShowQueueIdentifier])
-    {
-        [item setLabel: @"Show Queue"];
-        [item setPaletteLabel: @"Show Queue"];
-        [item setToolTip: @"Show Queue"];
-        [item setImage: [NSImage imageNamed: @"Queue"]];
-        [item setTarget: self];
-        [item setAction: @selector(showQueueWindow:)];
-        [item setAutovalidates: NO];
-    }
-    else if ([itemIdent isEqualToString: AddToQueueIdentifier])
-    {
-        [item setLabel: @"Add to Queue"];
-        [item setPaletteLabel: @"Add to Queue"];
-        [item setToolTip: @"Add to Queue"];
-        [item setImage: [NSImage imageNamed: @"AddToQueue"]];
-        [item setTarget: self];
-        [item setAction: @selector(addToQueue:)];
-    }
-    else if ([itemIdent isEqualToString: PauseEncodingIdentifier])
-    {
-        [item setLabel: @"Pause"];
-        [item setPaletteLabel: @"Pause Encoding"];
-        [item setToolTip: @"Pause Encoding"];
-        [item setImage: [NSImage imageNamed: @"Pause"]];
-        [item setTarget: self];
-        [item setAction: @selector(Pause:)];
-    }
-    else if ([itemIdent isEqualToString: ShowActivityIdentifier]) {
-        [item setLabel: @"Activity Window"];
-        [item setPaletteLabel: @"Show Activity Window"];
-        [item setToolTip: @"Show Activity Window"];
-        [item setImage: [NSImage imageNamed: @"ActivityWindow"]];
-        [item setTarget: self];
-        [item setAction: @selector(showDebugOutputPanel:)];
-        [item setAutovalidates: NO];
-    }
-    else if ([itemIdent isEqualToString: ChooseSourceIdentifier])
-    {
-        [item setLabel: @"Source"];
-        [item setPaletteLabel: @"Source"];
-        [item setToolTip: @"Choose Video Source"];
-        [item setImage: [NSImage imageNamed: @"Source"]];
-        [item setTarget: self];
-        [item setAction: @selector(showScanPanel:)];
-    }
-    else
-    {
-        [item release];
-        return nil;
-    }
-
-    return item;
-}
-
-- (NSArray *) toolbarDefaultItemIdentifiers: (NSToolbar *) toolbar
-{
-    return [NSArray arrayWithObjects: ChooseSourceIdentifier, NSToolbarSeparatorItemIdentifier, StartEncodingIdentifier,
-        PauseEncodingIdentifier, AddToQueueIdentifier, ShowQueueIdentifier, NSToolbarFlexibleSpaceItemIdentifier, 
-		NSToolbarSpaceItemIdentifier, ShowActivityIdentifier, ToggleDrawerIdentifier, nil];
-}
-
-- (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar
-{
-    return [NSArray arrayWithObjects:  StartEncodingIdentifier, PauseEncodingIdentifier, AddToQueueIdentifier,
-        ChooseSourceIdentifier, ShowQueueIdentifier, ShowActivityIdentifier, ToggleDrawerIdentifier,
-        NSToolbarCustomizeToolbarItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier,
-        NSToolbarSpaceItemIdentifier, NSToolbarSeparatorItemIdentifier, nil];
-}
-
-- (BOOL) validateToolbarItem: (NSToolbarItem *) toolbarItem
-{
-    NSString * ident = [toolbarItem itemIdentifier];
-        
-    if (fHandle)
-    {
-        hb_state_t s;
-        hb_get_state2( fHandle, &s );
-        
-        if (s.state == HB_STATE_WORKING || s.state == HB_STATE_MUXING)
-        {
-            if ([ident isEqualToString: StartEncodingIdentifier])
-            {
-                [toolbarItem setImage: [NSImage imageNamed: @"Stop"]];
-                [toolbarItem setLabel: @"Stop"];
-                [toolbarItem setPaletteLabel: @"Stop"];
-                [toolbarItem setToolTip: @"Stop Encoding"];
-                return YES;
-            }
-            if ([ident isEqualToString: PauseEncodingIdentifier])
-            {
-                [toolbarItem setImage: [NSImage imageNamed: @"Pause"]];
-                [toolbarItem setLabel: @"Pause"];
-                [toolbarItem setPaletteLabel: @"Pause Encoding"];
-                [toolbarItem setToolTip: @"Pause Encoding"];
-                return YES;
-            }
-            if (SuccessfulScan)
-                if ([ident isEqualToString: AddToQueueIdentifier])
-                    return YES;
-        }
-        else if (s.state == HB_STATE_PAUSED)
-        {
-            if ([ident isEqualToString: PauseEncodingIdentifier])
-            {
-                [toolbarItem setImage: [NSImage imageNamed: @"Play"]];
-                [toolbarItem setLabel: @"Resume"];
-                [toolbarItem setPaletteLabel: @"Resume Encoding"];
-                [toolbarItem setToolTip: @"Resume Encoding"];
-                return YES;
-            }
-            if ([ident isEqualToString: StartEncodingIdentifier])
-                return YES;
-            if ([ident isEqualToString: AddToQueueIdentifier])
-                return YES;
-        }
-        else if (s.state == HB_STATE_SCANNING)
-            return NO;
-        else if (s.state == HB_STATE_WORKDONE || s.state == HB_STATE_SCANDONE || SuccessfulScan)
-        {
-            if ([ident isEqualToString: StartEncodingIdentifier])
-            {
-                [toolbarItem setImage: [NSImage imageNamed: @"Play"]];
-                if (hb_count(fHandle) > 0)
-                    [toolbarItem setLabel: @"Start Queue"];
-                else
-                    [toolbarItem setLabel: @"Start"];
-                [toolbarItem setPaletteLabel: @"Start Encoding"];
-                [toolbarItem setToolTip: @"Start Encoding"];
-                return YES;
-            }
-            if ([ident isEqualToString: AddToQueueIdentifier])
-                return YES;
-        }
-
-    }
-    
-    if ([ident isEqualToString: ShowQueueIdentifier])
-        return YES;
-    if ([ident isEqualToString: ToggleDrawerIdentifier])
-        return YES;
-    if ([ident isEqualToString: ChooseSourceIdentifier])
-        return YES;
-    if ([ident isEqualToString: ShowActivityIdentifier])
-        return YES;
-    
-    return NO;
-}
-
-- (BOOL) validateMenuItem: (NSMenuItem *) menuItem
-{
-    SEL action = [menuItem action];
-    
-    hb_state_t s;
-    hb_get_state2( fHandle, &s );
-    
-    if (fHandle)
-    {
-        if (action == @selector(addToQueue:) || action == @selector(showPicturePanel:) || action == @selector(showAddPresetPanel:))
-            return SuccessfulScan && [fWindow attachedSheet] == nil;
-        
-        if (action == @selector(showScanPanel:))
-        {
-            if (s.state == HB_STATE_SCANNING)
-                return NO;
-            else
-                return [fWindow attachedSheet] == nil;
-        }
-        if (action == @selector(selectDefaultPreset:))
-            return [tableView selectedRow] >= 0 && [fWindow attachedSheet] == nil;
-        if (action == @selector(Pause:))
-        {
-            if (s.state == HB_STATE_WORKING)
-            {
-                if(![[menuItem title] isEqualToString:@"Pause Encoding"])
-                    [menuItem setTitle:@"Pause Encoding"];
-                return YES;
-            }
-            else if (s.state == HB_STATE_PAUSED)
-            {
-                if(![[menuItem title] isEqualToString:@"Resume Encoding"])
-                    [menuItem setTitle:@"Resume Encoding"];
-                return YES;
-            }
-            else
-                return NO;
-        }
-        if (action == @selector(Rip:))
-            if (s.state == HB_STATE_WORKING || s.state == HB_STATE_MUXING || s.state == HB_STATE_PAUSED)
-            {
-                if(![[menuItem title] isEqualToString:@"Stop Encoding"])
-                    [menuItem setTitle:@"Stop Encoding"];
-                return YES;
-            }
-            else if (SuccessfulScan)
-            {
-                if(![[menuItem title] isEqualToString:@"Start Encoding"])
-                    [menuItem setTitle:@"Start Encoding"];
-                return [fWindow attachedSheet] == nil;
-            }
-            else
-                return NO;
-        }
-    
-    return YES;
-}
-
-
-// register a test notification and make
-// it enabled by default
-#define SERVICE_NAME @"Encode Done"
-- (NSDictionary *)registrationDictionaryForGrowl 
-{ 
-    NSDictionary *registrationDictionary = [NSDictionary dictionaryWithObjectsAndKeys: 
-    [NSArray arrayWithObjects:SERVICE_NAME,nil], GROWL_NOTIFICATIONS_ALL, 
-    [NSArray arrayWithObjects:SERVICE_NAME,nil], GROWL_NOTIFICATIONS_DEFAULT, 
-    nil]; 
-
-    return registrationDictionary; 
-} 
-
 - (void) TranslateStrings
 {
     [fSrcTitleField     setStringValue: _( @"Title:" )];
@@ -614,6 +339,64 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [fVidEncoderField   setStringValue: _( @"Encoder:" )];
     [fVidQualityField   setStringValue: _( @"Quality:" )];
 }
+
+
+- (void) enableUI: (bool) b
+{
+    NSControl * controls[] =
+      { fSrcTitleField, fSrcTitlePopUp,
+        fSrcChapterField, fSrcChapterStartPopUp, fSrcChapterToField,
+        fSrcChapterEndPopUp, fSrcDuration1Field, fSrcDuration2Field,
+        fDstFormatField, fDstFormatPopUp, fDstCodecsField,
+        fDstCodecsPopUp, fDstFile1Field, fDstFile2Field,
+        fDstBrowseButton, fVidRateField, fVidRatePopUp,
+        fVidEncoderField, fVidEncoderPopUp, fVidQualityField,
+        fVidQualityMatrix, fVidGrayscaleCheck, fSubField, fSubPopUp,
+        fAudLang1Field, fAudLang1PopUp, fAudLang2Field, fAudLang2PopUp,
+        fAudTrack1MixLabel, fAudTrack1MixPopUp, fAudTrack2MixLabel, fAudTrack2MixPopUp,
+        fAudRateField, fAudRatePopUp, fAudBitrateField,
+        fAudBitratePopUp, fPictureButton,fQueueStatus, 
+		fPicSrcWidth,fPicSrcHeight,fPicSettingWidth,fPicSettingHeight,fPicSettingARkeep,
+		fPicSettingDeinterlace,fPicLabelSettings,fPicLabelSrc,fPicLabelOutp,
+		fPicLabelAr,fPicLabelDeinterlace,fPicLabelSrcX,fPicLabelOutputX,
+		fPicLabelPAROutputX,fPicSettingPARWidth,fPicSettingPARHeight,
+		fPicSettingPAR,fPicLabelAnamorphic,tableView,fPresetsAdd,fPresetsDelete,
+		fCreateChapterMarkers,fVidTurboPassCheck,fDstMpgLargeFileCheck,fPicLabelAutoCrop,
+		fPicSettingAutoCrop,fPicSettingDetelecine,fPicLabelDetelecine,fPicLabelDenoise,fPicSettingDenoise,fSubForcedCheck,};
+
+    for( unsigned i = 0;
+         i < sizeof( controls ) / sizeof( NSControl * ); i++ )
+    {
+        if( [[controls[i] className] isEqualToString: @"NSTextField"] )
+        {
+            NSTextField * tf = (NSTextField *) controls[i];
+            if( ![tf isBezeled] )
+            {
+                [tf setTextColor: b ? [NSColor controlTextColor] :
+                    [NSColor disabledControlTextColor]];
+                continue;
+            }
+        }
+        [controls[i] setEnabled: b];
+
+    }
+	
+	if (b) {
+
+        /* if we're enabling the interface, check if the audio mixdown controls need to be enabled or not */
+        /* these will have been enabled by the mass control enablement above anyway, so we're sense-checking it here */
+        [self setEnabledStateOfAudioMixdownControls: NULL];
+	
+	} else {
+
+		[tableView setEnabled: NO];
+	
+	}
+
+    [self videoMatrixChanged: NULL];
+    [fAdvancedOptions enableUI:b];
+}
+
 
 /***********************************************************************
  * UpdateDockIcon
@@ -969,6 +752,351 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	}
 }
 
+
+#pragma mark -
+#pragma mark Toolbar
+// ============================================================
+// NSToolbar Related Methods
+// ============================================================
+
+- (void) setupToolbar {
+    toolbar = [[[NSToolbar alloc] initWithIdentifier: @"HandBrake Toolbar"] autorelease];
+    
+    [toolbar setAllowsUserCustomization: YES];
+    [toolbar setAutosavesConfiguration: YES];
+    [toolbar setDisplayMode: NSToolbarDisplayModeIconAndLabel];
+    
+    [toolbar setDelegate: self];
+    
+    [fWindow setToolbar: toolbar];
+}
+
+- (NSToolbarItem *) toolbar: (NSToolbar *)toolbar itemForItemIdentifier:
+    (NSString *) itemIdent willBeInsertedIntoToolbar:(BOOL) willBeInserted {
+    NSToolbarItem * item = [[NSToolbarItem alloc] initWithItemIdentifier: itemIdent];
+    
+    if ([itemIdent isEqualToString: ToggleDrawerIdentifier])
+    {
+        [item setLabel: @"Toggle Presets"];
+        [item setPaletteLabel: @"Toggler Presets"];
+        [item setToolTip: @"Open/Close Preset Drawer"];
+        [item setImage: [NSImage imageNamed: @"Drawer"]];
+        [item setTarget: self];
+        [item setAction: @selector(toggleDrawer:)];
+        [item setAutovalidates: NO];
+    }
+    else if ([itemIdent isEqualToString: StartEncodingIdentifier])
+    {
+        [item setLabel: @"Start"];
+        [item setPaletteLabel: @"Start Encoding"];
+        [item setToolTip: @"Start Encoding"];
+        [item setImage: [NSImage imageNamed: @"Play"]];
+        [item setTarget: self];
+        [item setAction: @selector(Rip:)];
+    }
+    else if ([itemIdent isEqualToString: ShowQueueIdentifier])
+    {
+        [item setLabel: @"Show Queue"];
+        [item setPaletteLabel: @"Show Queue"];
+        [item setToolTip: @"Show Queue"];
+        [item setImage: [NSImage imageNamed: @"Queue"]];
+        [item setTarget: self];
+        [item setAction: @selector(showQueueWindow:)];
+        [item setAutovalidates: NO];
+    }
+    else if ([itemIdent isEqualToString: AddToQueueIdentifier])
+    {
+        [item setLabel: @"Add to Queue"];
+        [item setPaletteLabel: @"Add to Queue"];
+        [item setToolTip: @"Add to Queue"];
+        [item setImage: [NSImage imageNamed: @"AddToQueue"]];
+        [item setTarget: self];
+        [item setAction: @selector(addToQueue:)];
+    }
+    else if ([itemIdent isEqualToString: PauseEncodingIdentifier])
+    {
+        [item setLabel: @"Pause"];
+        [item setPaletteLabel: @"Pause Encoding"];
+        [item setToolTip: @"Pause Encoding"];
+        [item setImage: [NSImage imageNamed: @"Pause"]];
+        [item setTarget: self];
+        [item setAction: @selector(Pause:)];
+    }
+    else if ([itemIdent isEqualToString: ShowActivityIdentifier]) {
+        [item setLabel: @"Activity Window"];
+        [item setPaletteLabel: @"Show Activity Window"];
+        [item setToolTip: @"Show Activity Window"];
+        [item setImage: [NSImage imageNamed: @"ActivityWindow"]];
+        [item setTarget: self];
+        [item setAction: @selector(showDebugOutputPanel:)];
+        [item setAutovalidates: NO];
+    }
+    else if ([itemIdent isEqualToString: ChooseSourceIdentifier])
+    {
+        [item setLabel: @"Source"];
+        [item setPaletteLabel: @"Source"];
+        [item setToolTip: @"Choose Video Source"];
+        [item setImage: [NSImage imageNamed: @"Source"]];
+        [item setTarget: self];
+        [item setAction: @selector(showScanPanel:)];
+    }
+    else
+    {
+        [item release];
+        return nil;
+    }
+
+    return item;
+}
+
+- (NSArray *) toolbarDefaultItemIdentifiers: (NSToolbar *) toolbar
+{
+    return [NSArray arrayWithObjects: ChooseSourceIdentifier, NSToolbarSeparatorItemIdentifier, StartEncodingIdentifier,
+        PauseEncodingIdentifier, AddToQueueIdentifier, ShowQueueIdentifier, NSToolbarFlexibleSpaceItemIdentifier, 
+		NSToolbarSpaceItemIdentifier, ShowActivityIdentifier, ToggleDrawerIdentifier, nil];
+}
+
+- (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar
+{
+    return [NSArray arrayWithObjects:  StartEncodingIdentifier, PauseEncodingIdentifier, AddToQueueIdentifier,
+        ChooseSourceIdentifier, ShowQueueIdentifier, ShowActivityIdentifier, ToggleDrawerIdentifier,
+        NSToolbarCustomizeToolbarItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier,
+        NSToolbarSpaceItemIdentifier, NSToolbarSeparatorItemIdentifier, nil];
+}
+
+- (BOOL) validateToolbarItem: (NSToolbarItem *) toolbarItem
+{
+    NSString * ident = [toolbarItem itemIdentifier];
+        
+    if (fHandle)
+    {
+        hb_state_t s;
+        hb_get_state2( fHandle, &s );
+        
+        if (s.state == HB_STATE_WORKING || s.state == HB_STATE_MUXING)
+        {
+            if ([ident isEqualToString: StartEncodingIdentifier])
+            {
+                [toolbarItem setImage: [NSImage imageNamed: @"Stop"]];
+                [toolbarItem setLabel: @"Stop"];
+                [toolbarItem setPaletteLabel: @"Stop"];
+                [toolbarItem setToolTip: @"Stop Encoding"];
+                return YES;
+            }
+            if ([ident isEqualToString: PauseEncodingIdentifier])
+            {
+                [toolbarItem setImage: [NSImage imageNamed: @"Pause"]];
+                [toolbarItem setLabel: @"Pause"];
+                [toolbarItem setPaletteLabel: @"Pause Encoding"];
+                [toolbarItem setToolTip: @"Pause Encoding"];
+                return YES;
+            }
+            if (SuccessfulScan)
+                if ([ident isEqualToString: AddToQueueIdentifier])
+                    return YES;
+        }
+        else if (s.state == HB_STATE_PAUSED)
+        {
+            if ([ident isEqualToString: PauseEncodingIdentifier])
+            {
+                [toolbarItem setImage: [NSImage imageNamed: @"Play"]];
+                [toolbarItem setLabel: @"Resume"];
+                [toolbarItem setPaletteLabel: @"Resume Encoding"];
+                [toolbarItem setToolTip: @"Resume Encoding"];
+                return YES;
+            }
+            if ([ident isEqualToString: StartEncodingIdentifier])
+                return YES;
+            if ([ident isEqualToString: AddToQueueIdentifier])
+                return YES;
+        }
+        else if (s.state == HB_STATE_SCANNING)
+            return NO;
+        else if (s.state == HB_STATE_WORKDONE || s.state == HB_STATE_SCANDONE || SuccessfulScan)
+        {
+            if ([ident isEqualToString: StartEncodingIdentifier])
+            {
+                [toolbarItem setImage: [NSImage imageNamed: @"Play"]];
+                if (hb_count(fHandle) > 0)
+                    [toolbarItem setLabel: @"Start Queue"];
+                else
+                    [toolbarItem setLabel: @"Start"];
+                [toolbarItem setPaletteLabel: @"Start Encoding"];
+                [toolbarItem setToolTip: @"Start Encoding"];
+                return YES;
+            }
+            if ([ident isEqualToString: AddToQueueIdentifier])
+                return YES;
+        }
+
+    }
+    
+    if ([ident isEqualToString: ShowQueueIdentifier])
+        return YES;
+    if ([ident isEqualToString: ToggleDrawerIdentifier])
+        return YES;
+    if ([ident isEqualToString: ChooseSourceIdentifier])
+        return YES;
+    if ([ident isEqualToString: ShowActivityIdentifier])
+        return YES;
+    
+    return NO;
+}
+
+- (BOOL) validateMenuItem: (NSMenuItem *) menuItem
+{
+    SEL action = [menuItem action];
+    
+    hb_state_t s;
+    hb_get_state2( fHandle, &s );
+    
+    if (fHandle)
+    {
+        if (action == @selector(addToQueue:) || action == @selector(showPicturePanel:) || action == @selector(showAddPresetPanel:))
+            return SuccessfulScan && [fWindow attachedSheet] == nil;
+        
+        if (action == @selector(showScanPanel:))
+        {
+            if (s.state == HB_STATE_SCANNING)
+                return NO;
+            else
+                return [fWindow attachedSheet] == nil;
+        }
+        if (action == @selector(selectDefaultPreset:))
+            return [tableView selectedRow] >= 0 && [fWindow attachedSheet] == nil;
+        if (action == @selector(Pause:))
+        {
+            if (s.state == HB_STATE_WORKING)
+            {
+                if(![[menuItem title] isEqualToString:@"Pause Encoding"])
+                    [menuItem setTitle:@"Pause Encoding"];
+                return YES;
+            }
+            else if (s.state == HB_STATE_PAUSED)
+            {
+                if(![[menuItem title] isEqualToString:@"Resume Encoding"])
+                    [menuItem setTitle:@"Resume Encoding"];
+                return YES;
+            }
+            else
+                return NO;
+        }
+        if (action == @selector(Rip:))
+            if (s.state == HB_STATE_WORKING || s.state == HB_STATE_MUXING || s.state == HB_STATE_PAUSED)
+            {
+                if(![[menuItem title] isEqualToString:@"Stop Encoding"])
+                    [menuItem setTitle:@"Stop Encoding"];
+                return YES;
+            }
+            else if (SuccessfulScan)
+            {
+                if(![[menuItem title] isEqualToString:@"Start Encoding"])
+                    [menuItem setTitle:@"Start Encoding"];
+                return [fWindow attachedSheet] == nil;
+            }
+            else
+                return NO;
+        }
+    
+    return YES;
+}
+
+#pragma mark -
+#pragma mark Growl
+// register a test notification and make
+// it enabled by default
+#define SERVICE_NAME @"Encode Done"
+- (NSDictionary *)registrationDictionaryForGrowl 
+{ 
+    NSDictionary *registrationDictionary = [NSDictionary dictionaryWithObjectsAndKeys: 
+    [NSArray arrayWithObjects:SERVICE_NAME,nil], GROWL_NOTIFICATIONS_ALL, 
+    [NSArray arrayWithObjects:SERVICE_NAME,nil], GROWL_NOTIFICATIONS_DEFAULT, 
+    nil]; 
+
+    return registrationDictionary; 
+} 
+
+-(IBAction)showGrowlDoneNotification:(id)sender
+{
+  [GrowlApplicationBridge 
+            notifyWithTitle:@"Put down that cocktail..." 
+                description:@"your HandBrake encode is done!" 
+           notificationName:SERVICE_NAME
+                   iconData:nil 
+                   priority:0 
+                   isSticky:1 
+               clickContext:nil];
+}
+
+#pragma mark -
+#pragma mark Get New Source
+
+- (IBAction) showScanPanel: (id) sender
+{
+    [self enableUI: NO];
+	[self browseSources:NULL];
+}
+
+- (void) browseSources: (id) sender
+{
+    NSOpenPanel * panel;
+	
+    panel = [NSOpenPanel openPanel];
+    [panel setAllowsMultipleSelection: NO];
+    [panel setCanChooseFiles: YES];
+    [panel setCanChooseDirectories: YES ];
+    NSString * sourceDirectory;
+	if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastSourceDirectory"])
+	{
+		sourceDirectory = [[NSUserDefaults standardUserDefaults] stringForKey:@"LastSourceDirectory"];
+	}
+	else
+	{
+		sourceDirectory = @"~/Desktop";
+		sourceDirectory = [sourceDirectory stringByExpandingTildeInPath];
+	}
+   [panel beginSheetForDirectory: sourceDirectory file: nil types: nil
+				   modalForWindow: fWindow modalDelegate: self
+				   didEndSelector: @selector( browseSourcesDone:returnCode:contextInfo: )
+					  contextInfo: nil];
+}
+
+- (void) browseSourcesDone: (NSOpenPanel *) sheet
+		 returnCode: (int) returnCode contextInfo: (void *) contextInfo
+{
+    /* User selected a file to open */
+	if( returnCode == NSOKButton )
+    {
+        [fSrcDVD2Field setStringValue: _( @"Opening a new source ..." )];
+		[fScanIndicator setHidden: NO];
+	    [fScanIndicator setIndeterminate: YES];
+        [fScanIndicator startAnimation: nil];
+		
+		/* we set the last source directory in the prefs here */
+		NSString *sourceDirectory = [[[sheet filenames] objectAtIndex: 0] stringByDeletingLastPathComponent];
+		[[NSUserDefaults standardUserDefaults] setObject:sourceDirectory forKey:@"LastSourceDirectory"];
+		
+        NSString *path = [[sheet filenames] objectAtIndex: 0];
+        HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
+        if( [detector isVideoDVD] )
+        {
+            // The chosen path was actually on a DVD, so use the raw block
+            // device path instead.
+            path = [detector devicePath];
+        }
+		
+		hb_scan( fHandle, [path UTF8String], 0 );
+	}
+	else // User clicked Cancel in browse window
+	{
+		/* if we have a title loaded up */
+		if ([[fSrcDVD2Field stringValue] length] > 0)
+		{
+            [self enableUI: YES];
+        }
+	}
+}
+
 - (IBAction) showNewScan:(id)sender
 {
 	hb_list_t  * list;
@@ -1070,139 +1198,33 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	}
 }
 
--(IBAction)showGrowlDoneNotification:(id)sender
+
+#pragma mark -
+#pragma mark New Output Destination
+
+- (IBAction) browseFile: (id) sender
 {
-  [GrowlApplicationBridge 
-            notifyWithTitle:@"Put down that cocktail..." 
-                description:@"your HandBrake encode is done!" 
-           notificationName:SERVICE_NAME
-                   iconData:nil 
-                   priority:0 
-                   isSticky:1 
-               clickContext:nil];
-}
-
-- (void) enableUI: (bool) b
-{
-    NSControl * controls[] =
-      { fSrcTitleField, fSrcTitlePopUp,
-        fSrcChapterField, fSrcChapterStartPopUp, fSrcChapterToField,
-        fSrcChapterEndPopUp, fSrcDuration1Field, fSrcDuration2Field,
-        fDstFormatField, fDstFormatPopUp, fDstCodecsField,
-        fDstCodecsPopUp, fDstFile1Field, fDstFile2Field,
-        fDstBrowseButton, fVidRateField, fVidRatePopUp,
-        fVidEncoderField, fVidEncoderPopUp, fVidQualityField,
-        fVidQualityMatrix, fVidGrayscaleCheck, fSubField, fSubPopUp,
-        fAudLang1Field, fAudLang1PopUp, fAudLang2Field, fAudLang2PopUp,
-        fAudTrack1MixLabel, fAudTrack1MixPopUp, fAudTrack2MixLabel, fAudTrack2MixPopUp,
-        fAudRateField, fAudRatePopUp, fAudBitrateField,
-        fAudBitratePopUp, fPictureButton,fQueueStatus, 
-		fPicSrcWidth,fPicSrcHeight,fPicSettingWidth,fPicSettingHeight,fPicSettingARkeep,
-		fPicSettingDeinterlace,fPicLabelSettings,fPicLabelSrc,fPicLabelOutp,
-		fPicLabelAr,fPicLabelDeinterlace,fPicLabelSrcX,fPicLabelOutputX,
-		fPicLabelPAROutputX,fPicSettingPARWidth,fPicSettingPARHeight,
-		fPicSettingPAR,fPicLabelAnamorphic,tableView,fPresetsAdd,fPresetsDelete,
-		fCreateChapterMarkers,fVidTurboPassCheck,fDstMpgLargeFileCheck,fPicLabelAutoCrop,
-		fPicSettingAutoCrop,fPicSettingDetelecine,fPicLabelDetelecine,fPicLabelDenoise,fPicSettingDenoise,fSubForcedCheck,};
-
-    for( unsigned i = 0;
-         i < sizeof( controls ) / sizeof( NSControl * ); i++ )
-    {
-        if( [[controls[i] className] isEqualToString: @"NSTextField"] )
-        {
-            NSTextField * tf = (NSTextField *) controls[i];
-            if( ![tf isBezeled] )
-            {
-                [tf setTextColor: b ? [NSColor controlTextColor] :
-                    [NSColor disabledControlTextColor]];
-                continue;
-            }
-        }
-        [controls[i] setEnabled: b];
-
-    }
-	
-	if (b) {
-
-        /* if we're enabling the interface, check if the audio mixdown controls need to be enabled or not */
-        /* these will have been enabled by the mass control enablement above anyway, so we're sense-checking it here */
-        [self setEnabledStateOfAudioMixdownControls: NULL];
-	
-	} else {
-
-		[tableView setEnabled: NO];
-	
-	}
-
-    [self videoMatrixChanged: NULL];
-    [fAdvancedOptions enableUI:b];
-}
-
-- (IBAction) showScanPanel: (id) sender
-{
-    [self enableUI: NO];
-	[self browseSources:NULL];
-}
-
-- (void) browseSources: (id) sender
-{
-    NSOpenPanel * panel;
-	
-    panel = [NSOpenPanel openPanel];
-    [panel setAllowsMultipleSelection: NO];
-    [panel setCanChooseFiles: YES];
-    [panel setCanChooseDirectories: YES ];
-    NSString * sourceDirectory;
-	if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastSourceDirectory"])
-	{
-		sourceDirectory = [[NSUserDefaults standardUserDefaults] stringForKey:@"LastSourceDirectory"];
-	}
-	else
-	{
-		sourceDirectory = @"~/Desktop";
-		sourceDirectory = [sourceDirectory stringByExpandingTildeInPath];
-	}
-   [panel beginSheetForDirectory: sourceDirectory file: nil types: nil
+    /* Open a panel to let the user choose and update the text field */
+    NSSavePanel * panel = [NSSavePanel savePanel];
+	/* We get the current file name and path from the destination field here */
+	[panel beginSheetForDirectory: [[fDstFile2Field stringValue] stringByDeletingLastPathComponent] file: [[fDstFile2Field stringValue] lastPathComponent]
 				   modalForWindow: fWindow modalDelegate: self
-				   didEndSelector: @selector( browseSourcesDone:returnCode:contextInfo: )
-					  contextInfo: nil];
+				   didEndSelector: @selector( browseFileDone:returnCode:contextInfo: )
+					  contextInfo: NULL];
 }
 
-- (void) browseSourcesDone: (NSOpenPanel *) sheet
-		 returnCode: (int) returnCode contextInfo: (void *) contextInfo
+- (void) browseFileDone: (NSSavePanel *) sheet
+    returnCode: (int) returnCode contextInfo: (void *) contextInfo
 {
-    /* User selected a file to open */
-	if( returnCode == NSOKButton )
+    if( returnCode == NSOKButton )
     {
-        [fSrcDVD2Field setStringValue: _( @"Opening a new source ..." )];
-		[fScanIndicator setHidden: NO];
-	    [fScanIndicator setIndeterminate: YES];
-        [fScanIndicator startAnimation: nil];
-		
-		/* we set the last source directory in the prefs here */
-		NSString *sourceDirectory = [[[sheet filenames] objectAtIndex: 0] stringByDeletingLastPathComponent];
-		[[NSUserDefaults standardUserDefaults] setObject:sourceDirectory forKey:@"LastSourceDirectory"];
-		
-        NSString *path = [[sheet filenames] objectAtIndex: 0];
-        HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
-        if( [detector isVideoDVD] )
-        {
-            // The chosen path was actually on a DVD, so use the raw block
-            // device path instead.
-            path = [detector devicePath];
-        }
-		
-		hb_scan( fHandle, [path UTF8String], 0 );
-	}
-	else // User clicked Cancel in browse window
-	{
-		/* if we have a title loaded up */
-		if ([[fSrcDVD2Field stringValue] length] > 0)
-		{
-            [self enableUI: YES];
-        }
-	}
+        [fDstFile2Field setStringValue: [sheet filename]];
+    }
 }
+
+
+#pragma mark -
+#pragma mark Main Window Control
 
 - (IBAction) openMainWindow: (id) sender
 {
@@ -1225,82 +1247,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     return NO;
 }
 
-- (IBAction) videoMatrixChanged: (id) sender;
-{
-    bool target, bitrate, quality;
+#pragma mark -
+#pragma mark Job Handling
 
-    target = bitrate = quality = false;
-    if( [fVidQualityMatrix isEnabled] )
-    {
-        switch( [fVidQualityMatrix selectedRow] )
-        {
-            case 0:
-                target = true;
-                break;
-            case 1:
-                bitrate = true;
-                break;
-            case 2:
-                quality = true;
-                break;
-        }
-    }
-    [fVidTargetSizeField  setEnabled: target];
-    [fVidBitrateField     setEnabled: bitrate];
-    [fVidQualitySlider    setEnabled: quality];
-    [fVidTwoPassCheck     setEnabled: !quality &&
-        [fVidQualityMatrix isEnabled]];
-    if( quality )
-    {
-        [fVidTwoPassCheck setState: NSOffState];
-		[fVidTurboPassCheck setHidden: YES];
-		[fVidTurboPassCheck setState: NSOffState];
-    }
-
-    [self qualitySliderChanged: sender];
-    [self calculateBitrate: sender];
-	[self customSettingUsed: sender];
-}
-
-- (IBAction) qualitySliderChanged: (id) sender
-{
-    [fVidConstantCell setTitle: [NSString stringWithFormat:
-        _( @"Constant quality: %.0f %%" ), 100.0 *
-        [fVidQualitySlider floatValue]]];
-		[self customSettingUsed: sender];
-}
-
-- (IBAction) browseFile: (id) sender
-{
-    /* Open a panel to let the user choose and update the text field */
-    NSSavePanel * panel = [NSSavePanel savePanel];
-	/* We get the current file name and path from the destination field here */
-	[panel beginSheetForDirectory: [[fDstFile2Field stringValue] stringByDeletingLastPathComponent] file: [[fDstFile2Field stringValue] lastPathComponent]
-				   modalForWindow: fWindow modalDelegate: self
-				   didEndSelector: @selector( browseFileDone:returnCode:contextInfo: )
-					  contextInfo: NULL];
-}
-
-- (void) browseFileDone: (NSSavePanel *) sheet
-    returnCode: (int) returnCode contextInfo: (void *) contextInfo
-{
-    if( returnCode == NSOKButton )
-    {
-        [fDstFile2Field setStringValue: [sheet filename]];
-    }
-}
-
-- (IBAction) showPicturePanel: (id) sender
-{
-	hb_list_t  * list  = hb_get_titles( fHandle );
-    hb_title_t * title = (hb_title_t *) hb_list_item( list,
-            [fSrcTitlePopUp indexOfSelectedItem] );
-    [fPictureController showPanelInWindow:fWindow forTitle:title];
-}
-
-- (void)pictureSettingsDidChange {
-	[self calculatePictureSizing: NULL];
-}
 
 - (void) PrepareJob
 {
@@ -1729,22 +1678,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     }
 }
 
-- (void) updateAlertDone: (NSWindow *) sheet
-    returnCode: (int) returnCode contextInfo: (void *) contextInfo
-{
-    if( returnCode == NSAlertAlternateReturn )
-    {
-        /* Show scan panel */
-        [self performSelectorOnMainThread: @selector(showScanPanel:)
-            withObject: NULL waitUntilDone: NO];
-        return;
-    }
-
-    /* Go to HandBrake homepage and exit */
-    [self openHomepage: NULL];
-    [NSApp terminate: self];
-}
-
 - (void) remindUserOfSleepOrShutdown
 {
        if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Put Computer To Sleep"])
@@ -1884,6 +1817,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         hb_pause( fHandle );
     }
 }
+
+#pragma mark -
+#pragma mark GUI Controls Changed Methods
 
 - (IBAction) titlePopUpChanged: (id) sender
 {
@@ -2274,6 +2210,28 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	[self twoPassCheckboxChanged: sender];
 }
 
+/* Method to determine if we should change the UI
+To reflect whether or not a Preset is being used or if
+the user is using "Custom" settings by determining the sender*/
+- (IBAction) customSettingUsed: (id) sender
+{
+	if ([sender stringValue] != NULL)
+	{
+		/* Deselect the currently selected Preset if there is one*/
+		[tableView deselectRow:[tableView selectedRow]];
+		[[fPresetsActionMenu itemAtIndex:0] setEnabled: NO];
+		/* Change UI to show "Custom" settings are being used */
+		[fPresetSelectedDisplay setStringValue: @"Custom"];
+		
+		curUserPresetChosenNum = nil;
+	}
+
+}
+
+
+#pragma mark -
+#pragma mark - Video
+
 - (IBAction) twoPassCheckboxChanged: (id) sender
 {
 	/* check to see if x264 is chosen */
@@ -2314,6 +2272,219 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* We call method method to change UI to reflect whether a preset is used or not*/
 	[self customSettingUsed: sender];
 }
+- (IBAction) videoMatrixChanged: (id) sender;
+{
+    bool target, bitrate, quality;
+
+    target = bitrate = quality = false;
+    if( [fVidQualityMatrix isEnabled] )
+    {
+        switch( [fVidQualityMatrix selectedRow] )
+        {
+            case 0:
+                target = true;
+                break;
+            case 1:
+                bitrate = true;
+                break;
+            case 2:
+                quality = true;
+                break;
+        }
+    }
+    [fVidTargetSizeField  setEnabled: target];
+    [fVidBitrateField     setEnabled: bitrate];
+    [fVidQualitySlider    setEnabled: quality];
+    [fVidTwoPassCheck     setEnabled: !quality &&
+        [fVidQualityMatrix isEnabled]];
+    if( quality )
+    {
+        [fVidTwoPassCheck setState: NSOffState];
+		[fVidTurboPassCheck setHidden: YES];
+		[fVidTurboPassCheck setState: NSOffState];
+    }
+
+    [self qualitySliderChanged: sender];
+    [self calculateBitrate: sender];
+	[self customSettingUsed: sender];
+}
+
+- (IBAction) qualitySliderChanged: (id) sender
+{
+    [fVidConstantCell setTitle: [NSString stringWithFormat:
+        _( @"Constant quality: %.0f %%" ), 100.0 *
+        [fVidQualitySlider floatValue]]];
+		[self customSettingUsed: sender];
+}
+
+- (void) controlTextDidChange: (NSNotification *) notification
+{
+    [self calculateBitrate: NULL];
+}
+
+- (IBAction) calculateBitrate: (id) sender
+{
+    if( !fHandle || [fVidQualityMatrix selectedRow] != 0 || !SuccessfulScan )
+    {
+        return;
+    }
+
+    hb_list_t  * list  = hb_get_titles( fHandle );
+    hb_title_t * title = (hb_title_t *) hb_list_item( list,
+            [fSrcTitlePopUp indexOfSelectedItem] );
+    hb_job_t * job = title->job;
+
+    [self PrepareJob];
+
+    [fVidBitrateField setIntValue: hb_calc_bitrate( job,
+            [fVidTargetSizeField intValue] )];
+}
+
+#pragma mark -
+#pragma mark - Picture
+
+/* lets set the picture size back to the max from right after title scan
+   Lets use an IBAction here as down the road we could always use a checkbox
+   in the gui to easily take the user back to max. Remember, the compiler
+   resolves IBActions down to -(void) during compile anyway */
+- (IBAction) revertPictureSizeToMax: (id) sender
+{
+	hb_job_t * job = fTitle->job;
+	/* We use the output picture width and height
+	as calculated from libhb right after title is set
+	in TitlePopUpChanged */
+	job->width = PicOrigOutputWidth;
+	job->height = PicOrigOutputHeight;
+    [fPictureController setAutoCrop:YES];
+	/* Here we use the auto crop values determined right after scan */
+	job->crop[0] = AutoCropTop;
+	job->crop[1] = AutoCropBottom;
+	job->crop[2] = AutoCropLeft;
+	job->crop[3] = AutoCropRight;
+				
+				
+				[self calculatePictureSizing: sender];
+				/* We call method method to change UI to reflect whether a preset is used or not*/    
+				[self customSettingUsed: sender];
+}
+
+/**
+ * Registers changes made in the Picture Settings Window.
+ */
+
+- (void)pictureSettingsDidChange {
+	[self calculatePictureSizing: NULL];
+}
+
+/* Get and Display Current Pic Settings in main window */
+- (IBAction) calculatePictureSizing: (id) sender
+{
+	[fPicSettingWidth setStringValue: [NSString stringWithFormat:@"%d", fTitle->job->width]];
+	[fPicSettingHeight setStringValue: [NSString stringWithFormat:@"%d", fTitle->job->height]];
+		
+	if (fTitle->job->pixel_ratio == 1)
+	{
+        int titlewidth = fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3];
+        int arpwidth = fTitle->job->pixel_aspect_width;
+        int arpheight = fTitle->job->pixel_aspect_height;
+        int displayparwidth = titlewidth * arpwidth / arpheight;
+        int displayparheight = fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1];
+        
+        [fPicSettingWidth setStringValue: [NSString stringWithFormat:@"%d", titlewidth]];
+        [fPicSettingHeight setStringValue: [NSString stringWithFormat:@"%d", displayparheight]];
+        [fPicLabelPAROutputX setStringValue: @"x"];
+        [fPicSettingPARWidth setStringValue: [NSString stringWithFormat:@"%d", displayparwidth]];
+        [fPicSettingPARHeight setStringValue: [NSString stringWithFormat:@"%d", displayparheight]];
+        
+        fTitle->job->keep_ratio = 0;
+	}
+	else
+	{
+        [fPicLabelPAROutputX setStringValue: @""];
+        [fPicSettingPARWidth setStringValue: @""];
+        [fPicSettingPARHeight setStringValue:  @""];
+	}
+				
+	/* Set ON/Off values for the deinterlace/keep aspect ratio according to boolean */	
+	if (fTitle->job->keep_ratio > 0)
+	{
+		[fPicSettingARkeep setStringValue: @"On"];
+	}
+	else
+	{
+		[fPicSettingARkeep setStringValue: @"Off"];
+	}	
+    /* Detelecine */
+    if ([fPictureController detelecine]) {
+        [fPicSettingDetelecine setStringValue: @"Yes"];
+    }
+    else {
+        [fPicSettingDetelecine setStringValue: @"No"];
+    }
+
+	/* Deinterlace */
+	if ([fPictureController deinterlace] == 0)
+	{
+		[fPicSettingDeinterlace setStringValue: @"Off"];
+	}
+	else if ([fPictureController deinterlace] == 1)
+	{
+		[fPicSettingDeinterlace setStringValue: @"Fast"];
+	}
+	else if ([fPictureController deinterlace] == 2)
+	{
+		[fPicSettingDeinterlace setStringValue: @"Slow"];
+	}
+	else if ([fPictureController deinterlace] == 3)
+	{
+		[fPicSettingDeinterlace setStringValue: @"Slower"];
+	}
+	else if ([fPictureController deinterlace] ==4)
+	{
+		[fPicSettingDeinterlace setStringValue: @"Slowest"];
+	}
+	/* Denoise */
+	if ([fPictureController denoise] == 0)
+	{
+		[fPicSettingDenoise setStringValue: @"Off"];
+	}
+	else if ([fPictureController denoise] == 1)
+	{
+		[fPicSettingDenoise setStringValue: @"Weak"];
+	}
+	else if ([fPictureController denoise] == 2)
+	{
+		[fPicSettingDenoise setStringValue: @"Medium"];
+	}
+	else if ([fPictureController denoise] == 3)
+	{
+		[fPicSettingDenoise setStringValue: @"Strong"];
+	}
+	
+	if (fTitle->job->pixel_ratio > 0)
+	{
+		[fPicSettingPAR setStringValue: @""];
+	}
+	else
+	{
+		[fPicSettingPAR setStringValue: @"Off"];
+	}
+	/* Set the display field for crop as per boolean */
+	if (![fPictureController autoCrop])
+	{
+	    [fPicSettingAutoCrop setStringValue: @"Custom"];
+	}
+	else
+	{
+		[fPicSettingAutoCrop setStringValue: @"Auto"];
+	}	
+	
+
+}
+
+
+#pragma mark -
+#pragma mark - Audio and Subtitles
 
 - (IBAction) setEnabledStateOfAudioMixdownControls: (id) sender
 {
@@ -2682,235 +2853,399 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	
 }
 
-/* lets set the picture size back to the max from right after title scan
-   Lets use an IBAction here as down the road we could always use a checkbox
-   in the gui to easily take the user back to max. Remember, the compiler
-   resolves IBActions down to -(void) during compile anyway */
-- (IBAction) revertPictureSizeToMax: (id) sender
+
+
+
+#pragma mark -
+#pragma mark Open New Windows
+
+- (IBAction) openHomepage: (id) sender
 {
-	hb_job_t * job = fTitle->job;
-	/* We use the output picture width and height
-	as calculated from libhb right after title is set
-	in TitlePopUpChanged */
-	job->width = PicOrigOutputWidth;
-	job->height = PicOrigOutputHeight;
-    [fPictureController setAutoCrop:YES];
-	/* Here we use the auto crop values determined right after scan */
-	job->crop[0] = AutoCropTop;
-	job->crop[1] = AutoCropBottom;
-	job->crop[2] = AutoCropLeft;
-	job->crop[3] = AutoCropRight;
-				
-				
-				[self calculatePictureSizing: sender];
-				/* We call method method to change UI to reflect whether a preset is used or not*/    
-				[self customSettingUsed: sender];
+    [[NSWorkspace sharedWorkspace] openURL: [NSURL
+        URLWithString:@"http://handbrake.m0k.org/"]];
+}
+
+- (IBAction) openForums: (id) sender
+{
+    [[NSWorkspace sharedWorkspace] openURL: [NSURL
+        URLWithString:@"http://handbrake.m0k.org/forum/"]];
+}
+- (IBAction) openUserGuide: (id) sender
+{
+    [[NSWorkspace sharedWorkspace] openURL: [NSURL
+        URLWithString:@"http://handbrake.m0k.org/trac/wiki/HandBrakeGuide"]];
+}
+
+/**
+ * Shows debug output window.
+ */
+- (IBAction)showDebugOutputPanel:(id)sender
+{
+    [outputPanel showOutputPanel:sender];
+}
+
+/**
+ * Shows preferences window.
+ */
+- (IBAction) showPreferencesWindow: (id) sender
+{
+    NSWindow * window = [fPreferencesController window];
+    if (![window isVisible])
+        [window center];
+
+    [window makeKeyAndOrderFront: nil];
+}
+
+/**
+ * Shows queue window.
+ */
+- (IBAction) showQueueWindow:(id)sender
+{
+    [fQueueController showQueueWindow:sender];
 }
 
 
-/* Get and Display Current Pic Settings in main window */
-- (IBAction) calculatePictureSizing: (id) sender
-{
-	[fPicSettingWidth setStringValue: [NSString stringWithFormat:@"%d", fTitle->job->width]];
-	[fPicSettingHeight setStringValue: [NSString stringWithFormat:@"%d", fTitle->job->height]];
-		
-	if (fTitle->job->pixel_ratio == 1)
-	{
-        int titlewidth = fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3];
-        int arpwidth = fTitle->job->pixel_aspect_width;
-        int arpheight = fTitle->job->pixel_aspect_height;
-        int displayparwidth = titlewidth * arpwidth / arpheight;
-        int displayparheight = fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1];
-        
-        [fPicSettingWidth setStringValue: [NSString stringWithFormat:@"%d", titlewidth]];
-        [fPicSettingHeight setStringValue: [NSString stringWithFormat:@"%d", displayparheight]];
-        [fPicLabelPAROutputX setStringValue: @"x"];
-        [fPicSettingPARWidth setStringValue: [NSString stringWithFormat:@"%d", displayparwidth]];
-        [fPicSettingPARHeight setStringValue: [NSString stringWithFormat:@"%d", displayparheight]];
-        
-        fTitle->job->keep_ratio = 0;
-	}
-	else
-	{
-        [fPicLabelPAROutputX setStringValue: @""];
-        [fPicSettingPARWidth setStringValue: @""];
-        [fPicSettingPARHeight setStringValue:  @""];
-	}
-				
-	/* Set ON/Off values for the deinterlace/keep aspect ratio according to boolean */	
-	if (fTitle->job->keep_ratio > 0)
-	{
-		[fPicSettingARkeep setStringValue: @"On"];
-	}
-	else
-	{
-		[fPicSettingARkeep setStringValue: @"Off"];
-	}	
-    /* Detelecine */
-    if ([fPictureController detelecine]) {
-        [fPicSettingDetelecine setStringValue: @"Yes"];
-    }
-    else {
-        [fPicSettingDetelecine setStringValue: @"No"];
-    }
-
-	/* Deinterlace */
-	if ([fPictureController deinterlace] == 0)
-	{
-		[fPicSettingDeinterlace setStringValue: @"Off"];
-	}
-	else if ([fPictureController deinterlace] == 1)
-	{
-		[fPicSettingDeinterlace setStringValue: @"Fast"];
-	}
-	else if ([fPictureController deinterlace] == 2)
-	{
-		[fPicSettingDeinterlace setStringValue: @"Slow"];
-	}
-	else if ([fPictureController deinterlace] == 3)
-	{
-		[fPicSettingDeinterlace setStringValue: @"Slower"];
-	}
-	else if ([fPictureController deinterlace] ==4)
-	{
-		[fPicSettingDeinterlace setStringValue: @"Slowest"];
-	}
-	/* Denoise */
-	if ([fPictureController denoise] == 0)
-	{
-		[fPicSettingDenoise setStringValue: @"Off"];
-	}
-	else if ([fPictureController denoise] == 1)
-	{
-		[fPicSettingDenoise setStringValue: @"Weak"];
-	}
-	else if ([fPictureController denoise] == 2)
-	{
-		[fPicSettingDenoise setStringValue: @"Medium"];
-	}
-	else if ([fPictureController denoise] == 3)
-	{
-		[fPicSettingDenoise setStringValue: @"Strong"];
-	}
-	
-	if (fTitle->job->pixel_ratio > 0)
-	{
-		[fPicSettingPAR setStringValue: @""];
-	}
-	else
-	{
-		[fPicSettingPAR setStringValue: @"Off"];
-	}
-	/* Set the display field for crop as per boolean */
-	if (![fPictureController autoCrop])
-	{
-	    [fPicSettingAutoCrop setStringValue: @"Custom"];
-	}
-	else
-	{
-		[fPicSettingAutoCrop setStringValue: @"Auto"];
-	}	
-	
-	
-	
-	
-	/* below will trigger the preset, if selected, to be
-	changed to "Custom". Lets comment out for now until
-	we figure out a way to determine if the picture values
-	changed modify the preset values */	
-	//[self customSettingUsed: sender];
+- (IBAction) toggleDrawer:(id)sender {
+    [fPresetDrawer toggle:self];
 }
 
-- (IBAction) calculateBitrate: (id) sender
-{
-    if( !fHandle || [fVidQualityMatrix selectedRow] != 0 || !SuccessfulScan )
-    {
-        return;
-    }
+/**
+ * Shows Picture Settings Window.
+ */
 
-    hb_list_t  * list  = hb_get_titles( fHandle );
+- (IBAction) showPicturePanel: (id) sender
+{
+	hb_list_t  * list  = hb_get_titles( fHandle );
     hb_title_t * title = (hb_title_t *) hb_list_item( list,
             [fSrcTitlePopUp indexOfSelectedItem] );
-    hb_job_t * job = title->job;
-
-    [self PrepareJob];
-
-    [fVidBitrateField setIntValue: hb_calc_bitrate( job,
-            [fVidTargetSizeField intValue] )];
+    [fPictureController showPanelInWindow:fWindow forTitle:title];
 }
 
-/* Method to determine if we should change the UI
-To reflect whether or not a Preset is being used or if
-the user is using "Custom" settings by determining the sender*/
-- (IBAction) customSettingUsed: (id) sender
+#pragma mark -
+#pragma mark Preset Table View Methods
+
+- (IBAction)tableViewSelected:(id)sender
 {
-	if ([sender stringValue] != NULL)
+    /* Since we cannot disable the presets tableView in terms of clickability
+	   we will use the enabled state of the add presets button to determine whether
+	   or not clicking on a preset will do anything */
+	if ([fPresetsAdd isEnabled])
 	{
-		/* Deselect the currently selected Preset if there is one*/
-		[tableView deselectRow:[tableView selectedRow]];
-		[[fPresetsActionMenu itemAtIndex:0] setEnabled: NO];
-		/* Change UI to show "Custom" settings are being used */
-		[fPresetSelectedDisplay setStringValue: @"Custom"];
-		
-		curUserPresetChosenNum = nil;
-	}
-
-}
-
-   /* We use this method to recreate new, updated factory
-   presets */
-- (IBAction)addFactoryPresets:(id)sender
-{
-    /* First, we delete any existing built in presets */
-    [self deleteFactoryPresets: sender];
-    /* Then, we re-create new built in presets programmatically CreateIpodOnlyPreset*/
-    [UserPresets addObject:[self createNormalPreset]];
-    [UserPresets addObject:[self createClassicPreset]];
-    [UserPresets addObject:[self createQuickTimePreset]];
-	[UserPresets addObject:[self createIpodLowPreset]];
-	[UserPresets addObject:[self createIpodHighPreset]];
-	[UserPresets addObject:[self createAppleTVPreset]];
-    [UserPresets addObject:[self createiPhonePreset]];
-	[UserPresets addObject:[self createPSThreePreset]];
-	[UserPresets addObject:[self createPSPPreset]];
-	[UserPresets addObject:[self createFilmPreset]];
-    [UserPresets addObject:[self createTelevisionPreset]];
-    [UserPresets addObject:[self createAnimationPreset]];
-    [UserPresets addObject:[self createBedlamPreset]];
-    [UserPresets addObject:[self createDeuxSixQuatrePreset]];
-    [UserPresets addObject:[self createBrokePreset]];
-    [UserPresets addObject:[self createBlindPreset]];
-    [UserPresets addObject:[self createCRFPreset]];
-    
-    [self addPreset];
-}
-- (IBAction)deleteFactoryPresets:(id)sender
-{
-    //int status;
-    NSEnumerator *enumerator = [UserPresets objectEnumerator];
-	id tempObject;
-    
-	//NSNumber *index;
-    NSMutableArray *tempArray;
-
-
-        tempArray = [NSMutableArray array];
-        /* we look here to see if the preset is we move on to the next one */
-        while ( tempObject = [enumerator nextObject] )  
-		{
-			/* if the preset is "Factory" then we put it in the array of
-			presets to delete */
-			if ([[tempObject objectForKey:@"Type"] intValue] == 0)
+		if ([tableView selectedRow] >= 0)
+		{	
+			/* we get the chosen preset from the UserPresets array */
+			chosenPreset = [UserPresets objectAtIndex:[tableView selectedRow]];
+			curUserPresetChosenNum = [sender selectedRow];
+			/* we set the preset display field in main window here */
+			[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@",[chosenPreset valueForKey:@"PresetName"]]];
+			if ([[chosenPreset objectForKey:@"Default"] intValue] == 1)
 			{
-				[tempArray addObject:tempObject];
+				[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@ (Default)",[chosenPreset valueForKey:@"PresetName"]]];
 			}
-        }
-        
-        [UserPresets removeObjectsInArray:tempArray];
-        [tableView reloadData];
-        [self savePreset];   
+			else
+			{
+				[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@",[chosenPreset valueForKey:@"PresetName"]]];
+			}
+			/* File Format */
+			[fDstFormatPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileFormat"]]];
+			[self formatPopUpChanged: NULL];
+			
+			/* Chapter Markers*/
+			[fCreateChapterMarkers setState:[[chosenPreset objectForKey:@"ChapterMarkers"] intValue]];
+			/* Allow Mpeg4 64 bit formatting +4GB file sizes */
+			[fDstMpgLargeFileCheck setState:[[chosenPreset objectForKey:@"Mp4LargeFile"] intValue]];
+			/* Codecs */
+			[fDstCodecsPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]]];
+			[self codecsPopUpChanged: NULL];
+			/* Video encoder */
+			[fVidEncoderPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]]];
+			
+			/* We can show the preset options here in the gui if we want to
+				so we check to see it the user has specified it in the prefs */
+			[fAdvancedOptions setOptions: [NSString stringWithFormat:[chosenPreset valueForKey:@"x264Option"]]];
+			
+			/* Lets run through the following functions to get variables set there */
+			[self encoderPopUpChanged: NULL];
+			
+			[self calculateBitrate: NULL];
+			
+			/* Video quality */
+			[fVidQualityMatrix selectCellAtRow:[[chosenPreset objectForKey:@"VideoQualityType"] intValue] column:0];
+			
+			[fVidTargetSizeField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoTargetSize"]]];
+			[fVidBitrateField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoAvgBitrate"]]];
+			
+			[fVidQualitySlider setFloatValue: [[chosenPreset valueForKey:@"VideoQualitySlider"] floatValue]];
+			[self videoMatrixChanged: NULL];
+			
+			/* Video framerate */
+			/* For video preset video framerate, we want to make sure that Same as source does not conflict with the
+               detected framerate in the fVidRatePopUp so we use index 0*/
+			if ([[NSString stringWithFormat:[chosenPreset valueForKey:@"VideoFramerate"]] isEqualToString: @"Same as source"])
+            {
+                [fVidRatePopUp selectItemAtIndex: 0];
+            }
+            else
+            {
+                [fVidRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoFramerate"]]];
+            }
+			
+			/* GrayScale */
+			[fVidGrayscaleCheck setState:[[chosenPreset objectForKey:@"VideoGrayScale"] intValue]];
+			
+			/* 2 Pass Encoding */
+			[fVidTwoPassCheck setState:[[chosenPreset objectForKey:@"VideoTwoPass"] intValue]];
+			[self twoPassCheckboxChanged: NULL];
+			/* Turbo 1st pass for 2 Pass Encoding */
+			[fVidTurboPassCheck setState:[[chosenPreset objectForKey:@"VideoTurboTwoPass"] intValue]];
+			
+			/*Audio*/
+			
+			/* Audio Sample Rate*/
+			[fAudRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioSampleRate"]]];
+			/* Audio Bitrate Rate*/
+			[fAudBitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioBitRate"]]];
+			/*Subtitles*/
+			[fSubPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Subtitles"]]];
+			
+			/* Picture Settings */
+			/* Look to see if we apply these here in objectForKey:@"UsesPictureSettings"] */
+			if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] > 0)
+			{
+				hb_job_t * job = fTitle->job;
+				/* Check to see if we should use the max picture setting for the current title*/
+				if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] == 2 || [[chosenPreset objectForKey:@"UsesMaxPictureSettings"]  intValue] == 1)
+				{
+					/* Use Max Picture settings for whatever the dvd is.*/
+					[self revertPictureSizeToMax: NULL];
+					job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
+					if (job->keep_ratio == 1)
+					{
+						hb_fix_aspect( job, HB_KEEP_WIDTH );
+						if( job->height > fTitle->height )
+						{
+							job->height = fTitle->height;
+							hb_fix_aspect( job, HB_KEEP_HEIGHT );
+						}
+					}
+					job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
+				}
+				else // Apply picture settings that were in effect at the time the preset was saved
+				{
+					job->width = [[chosenPreset objectForKey:@"PictureWidth"]  intValue];
+					job->height = [[chosenPreset objectForKey:@"PictureHeight"]  intValue];
+					job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
+					if (job->keep_ratio == 1)
+					{
+						hb_fix_aspect( job, HB_KEEP_WIDTH );
+						if( job->height > fTitle->height )
+						{
+							job->height = fTitle->height;
+							hb_fix_aspect( job, HB_KEEP_HEIGHT );
+						}
+					}
+					job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
+                    [fPictureController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
+					
+					if ([chosenPreset objectForKey:@"PictureDetelecine"])
+					{
+                        [fPictureController setDetelecine:[[chosenPreset objectForKey:@"PictureDetelecine"] intValue]];
+					}
+					if ([chosenPreset objectForKey:@"PictureDenoise"])
+					{
+                        [fPictureController setDenoise:[[chosenPreset objectForKey:@"PictureDenoise"] intValue]];
+					}
+					/* If Cropping is set to custom, then recall all four crop values from
+						when the preset was created and apply them */
+					if ([[chosenPreset objectForKey:@"PictureAutoCrop"]  intValue] == 0)
+					{
+                        [fPictureController setAutoCrop:NO];
+						
+						/* Here we use the custom crop values saved at the time the preset was saved */
+						job->crop[0] = [[chosenPreset objectForKey:@"PictureTopCrop"]  intValue];
+						job->crop[1] = [[chosenPreset objectForKey:@"PictureBottomCrop"]  intValue];
+						job->crop[2] = [[chosenPreset objectForKey:@"PictureLeftCrop"]  intValue];
+						job->crop[3] = [[chosenPreset objectForKey:@"PictureRightCrop"]  intValue];
+						
+					}
+					else /* if auto crop has been saved in preset, set to auto and use post scan auto crop */
+					{
+                        [fPictureController setAutoCrop:YES];
+                        /* Here we use the auto crop values determined right after scan */
+						job->crop[0] = AutoCropTop;
+						job->crop[1] = AutoCropBottom;
+						job->crop[2] = AutoCropLeft;
+						job->crop[3] = AutoCropRight;
+						
+					}
+				}
+				[self calculatePictureSizing: NULL]; 
+			}
+			
+			
+			[[fPresetsActionMenu itemAtIndex:0] setEnabled: YES];
+			}
+}
+}
+
+
+
+- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+{
+    return [UserPresets count];
+}
+
+/* we use this to determine display characteristics for
+each table cell based on content currently only used to
+show the built in presets in a blue font. */
+- (void)tableView:(NSTableView *)aTableView
+ willDisplayCell:(id)aCell 
+ forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+{
+    NSDictionary *userPresetDict = [UserPresets objectAtIndex:rowIndex];
+	NSFont *txtFont;
+	NSColor *fontColor;
+	NSColor *shadowColor;
+	txtFont = [NSFont systemFontOfSize: [NSFont smallSystemFontSize]];
+	/* First, we check to see if its a selected row, if so, we use white since its highlighted in blue */
+	if ([[aTableView selectedRowIndexes] containsIndex:rowIndex] && ([tableView editedRow] != rowIndex))
+	{
+		
+		fontColor = [NSColor whiteColor];
+		shadowColor = [NSColor colorWithDeviceRed:(127.0/255.0) green:(140.0/255.0) blue:(160.0/255.0) alpha:1.0];
+	}
+	else
+	{
+		/* We set the properties of unselected rows */
+		/* if built-in preset (defined by "type" == 0) we use a blue font */
+		if ([[userPresetDict objectForKey:@"Type"] intValue] == 0)
+		{
+			fontColor = [NSColor blueColor];
+		}
+		else // User created preset, use a black font
+		{
+			fontColor = [NSColor blackColor];
+		}
+		shadowColor = nil;
+	}
+	/* We check to see if this is the HB default, if so, color it appropriately */
+	if (!presetUserDefault && presetHbDefault && rowIndex == presetHbDefault)
+	{
+	txtFont = [NSFont boldSystemFontOfSize: [NSFont smallSystemFontSize]];
+	}
+	/* We check to see if this is the User Specified default, if so, color it appropriately */
+	if (presetUserDefault && rowIndex == presetUserDefault)
+	{
+	txtFont = [NSFont boldSystemFontOfSize: [NSFont smallSystemFontSize]];
+	}
+	
+	[aCell setTextColor:fontColor];
+	[aCell setFont:txtFont];
+	/* this shadow stuff (like mail app) for some reason looks crappy, commented out
+	temporarily in case we want to resurrect it */
+	/*
+	NSShadow *shadow = [[NSShadow alloc] init];
+	NSSize shadowOffset = { width: 1.0, height: -1.5};
+	[shadow setShadowOffset:shadowOffset];
+	[shadow setShadowColor:shadowColor];
+	[shadow set];
+	*/
+	
+}
+/* Method to display tooltip with the description for each preset, if available */
+- (NSString *)tableView:(NSTableView *)aTableView toolTipForCell:(NSCell *)aCell 
+                   rect:(NSRectPointer)aRect tableColumn:(NSTableColumn *)aTableColumn
+                    row:(int)rowIndex mouseLocation:(NSPoint)aPos
+{
+     /* initialize the tooltip contents variable */
+	 NSString *loc_tip;
+     /* if there is a description for the preset, we show it in the tooltip */
+	 if ([[UserPresets objectAtIndex:rowIndex] valueForKey:@"PresetDescription"])
+	 {
+        loc_tip = [NSString stringWithFormat: @"%@",[[UserPresets objectAtIndex:rowIndex] valueForKey:@"PresetDescription"]];
+        return (loc_tip);
+	 }
+	 else
+	 {
+        loc_tip = @"No description available";
+	 }
+	 return (loc_tip);
 
 }
+
+- (id)tableView:(NSTableView *)aTableView
+      objectValueForTableColumn:(NSTableColumn *)aTableColumn
+      row:(int)rowIndex
+{
+id theRecord, theValue;
+    
+    theRecord = [UserPresets objectAtIndex:rowIndex];
+    theValue = [theRecord objectForKey:[aTableColumn identifier]];
+    return theValue;
+}
+
+// NSTableDataSource method that we implement to edit values directly in the table...
+- (void)tableView:(NSTableView *)aTableView
+        setObjectValue:(id)anObject
+        forTableColumn:(NSTableColumn *)aTableColumn
+        row:(int)rowIndex
+{
+    id theRecord;
+    
+    theRecord = [UserPresets objectAtIndex:rowIndex];
+    [theRecord setObject:anObject forKey:@"PresetName"];
+    /* We Sort the Presets By Factory or Custom */
+	NSSortDescriptor * presetTypeDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"Type" 
+                                                    ascending:YES] autorelease];
+		/* We Sort the Presets Alphabetically by name */
+	NSSortDescriptor * presetNameDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"PresetName" 
+                                                    ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease];
+	NSArray *sortDescriptors=[NSArray arrayWithObjects:presetTypeDescriptor,presetNameDescriptor,nil];
+    NSArray *sortedArray=[UserPresets sortedArrayUsingDescriptors:sortDescriptors];
+	[UserPresets setArray:sortedArray];
+	/* We Reload the New Table data for presets */
+    [tableView reloadData];
+   /* We save all of the preset data here */
+    [self savePreset];
+}
+
+
+
+
+#pragma mark -
+#pragma mark Manage Presets
+
+- (void) loadPresets {
+	/* We declare the default NSFileManager into fileManager */
+	NSFileManager * fileManager = [NSFileManager defaultManager];
+	/* we set the files and support paths here */
+	AppSupportDirectory = @"~/Library/Application Support/HandBrake";
+    AppSupportDirectory = [AppSupportDirectory stringByExpandingTildeInPath];
+    //UserPresetsFile = @"~/Library/Application Support/HandBrake/UserPresets.plist";
+    //UserPresetsFile = [UserPresetsFile stringByExpandingTildeInPath];
+	/* We check for the app support directory for handbrake */
+	if ([fileManager fileExistsAtPath:AppSupportDirectory] == 0) 
+	{
+		// If it doesnt exist yet, we create it here 
+		[fileManager createDirectoryAtPath:AppSupportDirectory attributes:nil];
+	}
+	/* We check for the presets.plist here */
+	if ([fileManager fileExistsAtPath:UserPresetsFile] == 0) 
+	{
+		[fileManager createFileAtPath:UserPresetsFile contents:nil attributes:nil];
+	}
+	UserPresetsFile = @"~/Library/Application Support/HandBrake/UserPresets.plist";
+	UserPresetsFile = [[UserPresetsFile stringByExpandingTildeInPath]retain];
+	
+	UserPresets = [[NSMutableArray alloc] initWithContentsOfFile:UserPresetsFile];
+	if (nil == UserPresets) 
+	{
+		UserPresets = [[NSMutableArray alloc] init];
+		[self addFactoryPresets:NULL];
+	}
+	
+}
+
 
 - (IBAction) showAddPresetPanel: (id) sender
 {
@@ -3060,6 +3395,176 @@ the user is using "Custom" settings by determining the sender*/
 
 }
 
+- (void)savePreset
+{
+    [UserPresets writeToFile:UserPresetsFile atomically:YES];
+	/* We get the default preset in case it changed */
+	[self getDefaultPresets: NULL];
+
+}
+
+- (IBAction)deletePreset:(id)sender
+{
+    int status;
+    NSEnumerator *enumerator;
+    NSNumber *index;
+    NSMutableArray *tempArray;
+    id tempObject;
+    
+    if ( [tableView numberOfSelectedRows] == 0 )
+        return;
+    /* Alert user before deleting preset */
+	/* Comment out for now, tie to user pref eventually */
+
+    //NSBeep();
+    status = NSRunAlertPanel(@"Warning!", @"Are you sure that you want to delete the selected preset?", @"OK", @"Cancel", nil);
+    
+    if ( status == NSAlertDefaultReturn ) {
+        enumerator = [tableView selectedRowEnumerator];
+        tempArray = [NSMutableArray array];
+        
+        while ( (index = [enumerator nextObject]) ) {
+            tempObject = [UserPresets objectAtIndex:[index intValue]];
+            [tempArray addObject:tempObject];
+        }
+        
+        [UserPresets removeObjectsInArray:tempArray];
+        [tableView reloadData];
+        [self savePreset];   
+    }
+}
+
+#pragma mark -
+#pragma mark Manage Default Preset
+
+- (IBAction)getDefaultPresets:(id)sender
+{
+	int i = 0;
+    NSEnumerator *enumerator = [UserPresets objectEnumerator];
+	id tempObject;
+	while (tempObject = [enumerator nextObject])
+	{
+		NSDictionary *thisPresetDict = tempObject;
+		if ([[thisPresetDict objectForKey:@"Default"] intValue] == 1) // 1 is HB default
+		{
+			presetHbDefault = i;	
+		}
+		if ([[thisPresetDict objectForKey:@"Default"] intValue] == 2) // 2 is User specified default
+		{
+			presetUserDefault = i;	
+		}
+		i++;
+	}
+}
+
+- (IBAction)setDefaultPreset:(id)sender
+{
+    int i = 0;
+    NSEnumerator *enumerator = [UserPresets objectEnumerator];
+	id tempObject;
+	/* First make sure the old user specified default preset is removed */
+	while (tempObject = [enumerator nextObject])
+	{
+		/* make sure we are not removing the default HB preset */
+		if ([[[UserPresets objectAtIndex:i] objectForKey:@"Default"] intValue] != 1) // 1 is HB default
+		{
+			[[UserPresets objectAtIndex:i] setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
+		}
+		i++;
+	}
+	/* Second, go ahead and set the appropriate user specfied preset */
+	/* we get the chosen preset from the UserPresets array */
+	if ([[[UserPresets objectAtIndex:[tableView selectedRow]] objectForKey:@"Default"] intValue] != 1) // 1 is HB default
+	{
+		[[UserPresets objectAtIndex:[tableView selectedRow]] setObject:[NSNumber numberWithInt:2] forKey:@"Default"];
+	}
+	presetUserDefault = [tableView selectedRow];
+	
+	/* We save all of the preset data here */
+    [self savePreset];
+	/* We Reload the New Table data for presets */
+    [tableView reloadData];
+}
+
+- (IBAction)selectDefaultPreset:(id)sender
+{
+	/* if there is a user specified default, we use it */
+	if (presetUserDefault)
+	{
+	[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:presetUserDefault] byExtendingSelection:NO];
+	[self tableViewSelected:NULL];
+	}
+	else if (presetHbDefault) //else we use the built in default presetHbDefault
+	{
+	[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:presetHbDefault] byExtendingSelection:NO];
+	[self tableViewSelected:NULL];
+	}
+}
+
+
+#pragma mark -
+#pragma mark Manage Built In Presets
+
+
+- (IBAction)deleteFactoryPresets:(id)sender
+{
+    //int status;
+    NSEnumerator *enumerator = [UserPresets objectEnumerator];
+	id tempObject;
+    
+	//NSNumber *index;
+    NSMutableArray *tempArray;
+
+
+        tempArray = [NSMutableArray array];
+        /* we look here to see if the preset is we move on to the next one */
+        while ( tempObject = [enumerator nextObject] )  
+		{
+			/* if the preset is "Factory" then we put it in the array of
+			presets to delete */
+			if ([[tempObject objectForKey:@"Type"] intValue] == 0)
+			{
+				[tempArray addObject:tempObject];
+			}
+        }
+        
+        [UserPresets removeObjectsInArray:tempArray];
+        [tableView reloadData];
+        [self savePreset];   
+
+}
+
+   /* We use this method to recreate new, updated factory
+   presets */
+- (IBAction)addFactoryPresets:(id)sender
+{
+    /* First, we delete any existing built in presets */
+    [self deleteFactoryPresets: sender];
+    /* Then, we re-create new built in presets programmatically CreateIpodOnlyPreset*/
+    [UserPresets addObject:[self createNormalPreset]];
+    [UserPresets addObject:[self createClassicPreset]];
+    [UserPresets addObject:[self createQuickTimePreset]];
+	[UserPresets addObject:[self createIpodLowPreset]];
+	[UserPresets addObject:[self createIpodHighPreset]];
+	[UserPresets addObject:[self createAppleTVPreset]];
+    [UserPresets addObject:[self createiPhonePreset]];
+	[UserPresets addObject:[self createPSThreePreset]];
+	[UserPresets addObject:[self createPSPPreset]];
+	[UserPresets addObject:[self createFilmPreset]];
+    [UserPresets addObject:[self createTelevisionPreset]];
+    [UserPresets addObject:[self createAnimationPreset]];
+    [UserPresets addObject:[self createBedlamPreset]];
+    [UserPresets addObject:[self createDeuxSixQuatrePreset]];
+    [UserPresets addObject:[self createBrokePreset]];
+    [UserPresets addObject:[self createBlindPreset]];
+    [UserPresets addObject:[self createCRFPreset]];
+    
+    [self addPreset];
+}
+
+#pragma mark -
+#pragma mark Built In Preset Definitions
+/* These NSDictionary Buit In Preset definitions contain all of the settings for one built in preset */
 - (NSDictionary *)createIpodLowPreset
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
@@ -4234,447 +4739,7 @@ the user is using "Custom" settings by determining the sender*/
 }
 
 
-- (IBAction)deletePreset:(id)sender
-{
-    int status;
-    NSEnumerator *enumerator;
-    NSNumber *index;
-    NSMutableArray *tempArray;
-    id tempObject;
-    
-    if ( [tableView numberOfSelectedRows] == 0 )
-        return;
-    /* Alert user before deleting preset */
-	/* Comment out for now, tie to user pref eventually */
-
-    //NSBeep();
-    status = NSRunAlertPanel(@"Warning!", @"Are you sure that you want to delete the selected preset?", @"OK", @"Cancel", nil);
-    
-    if ( status == NSAlertDefaultReturn ) {
-        enumerator = [tableView selectedRowEnumerator];
-        tempArray = [NSMutableArray array];
-        
-        while ( (index = [enumerator nextObject]) ) {
-            tempObject = [UserPresets objectAtIndex:[index intValue]];
-            [tempArray addObject:tempObject];
-        }
-        
-        [UserPresets removeObjectsInArray:tempArray];
-        [tableView reloadData];
-        [self savePreset];   
-    }
-}
-
-- (IBAction)getDefaultPresets:(id)sender
-{
-	int i = 0;
-    NSEnumerator *enumerator = [UserPresets objectEnumerator];
-	id tempObject;
-	while (tempObject = [enumerator nextObject])
-	{
-		NSDictionary *thisPresetDict = tempObject;
-		if ([[thisPresetDict objectForKey:@"Default"] intValue] == 1) // 1 is HB default
-		{
-			presetHbDefault = i;	
-		}
-		if ([[thisPresetDict objectForKey:@"Default"] intValue] == 2) // 2 is User specified default
-		{
-			presetUserDefault = i;	
-		}
-		i++;
-	}
-}
-
-- (IBAction)setDefaultPreset:(id)sender
-{
-    int i = 0;
-    NSEnumerator *enumerator = [UserPresets objectEnumerator];
-	id tempObject;
-	/* First make sure the old user specified default preset is removed */
-	while (tempObject = [enumerator nextObject])
-	{
-		/* make sure we are not removing the default HB preset */
-		if ([[[UserPresets objectAtIndex:i] objectForKey:@"Default"] intValue] != 1) // 1 is HB default
-		{
-			[[UserPresets objectAtIndex:i] setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
-		}
-		i++;
-	}
-	/* Second, go ahead and set the appropriate user specfied preset */
-	/* we get the chosen preset from the UserPresets array */
-	if ([[[UserPresets objectAtIndex:[tableView selectedRow]] objectForKey:@"Default"] intValue] != 1) // 1 is HB default
-	{
-		[[UserPresets objectAtIndex:[tableView selectedRow]] setObject:[NSNumber numberWithInt:2] forKey:@"Default"];
-	}
-	presetUserDefault = [tableView selectedRow];
-	
-	/* We save all of the preset data here */
-    [self savePreset];
-	/* We Reload the New Table data for presets */
-    [tableView reloadData];
-}
-
-- (IBAction)selectDefaultPreset:(id)sender
-{
-	/* if there is a user specified default, we use it */
-	if (presetUserDefault)
-	{
-	[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:presetUserDefault] byExtendingSelection:NO];
-	[self tableViewSelected:NULL];
-	}
-	else if (presetHbDefault) //else we use the built in default presetHbDefault
-	{
-	[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:presetHbDefault] byExtendingSelection:NO];
-	[self tableViewSelected:NULL];
-	}
-}
-
-- (IBAction)tableViewSelected:(id)sender
-{
-    /* Since we cannot disable the presets tableView in terms of clickability
-	   we will use the enabled state of the add presets button to determine whether
-	   or not clicking on a preset will do anything */
-	if ([fPresetsAdd isEnabled])
-	{
-		if ([tableView selectedRow] >= 0)
-		{	
-			/* we get the chosen preset from the UserPresets array */
-			chosenPreset = [UserPresets objectAtIndex:[tableView selectedRow]];
-			curUserPresetChosenNum = [sender selectedRow];
-			/* we set the preset display field in main window here */
-			[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@",[chosenPreset valueForKey:@"PresetName"]]];
-			if ([[chosenPreset objectForKey:@"Default"] intValue] == 1)
-			{
-				[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@ (Default)",[chosenPreset valueForKey:@"PresetName"]]];
-			}
-			else
-			{
-				[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@",[chosenPreset valueForKey:@"PresetName"]]];
-			}
-			/* File Format */
-			[fDstFormatPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileFormat"]]];
-			[self formatPopUpChanged: NULL];
-			
-			/* Chapter Markers*/
-			[fCreateChapterMarkers setState:[[chosenPreset objectForKey:@"ChapterMarkers"] intValue]];
-			/* Allow Mpeg4 64 bit formatting +4GB file sizes */
-			[fDstMpgLargeFileCheck setState:[[chosenPreset objectForKey:@"Mp4LargeFile"] intValue]];
-			/* Codecs */
-			[fDstCodecsPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]]];
-			[self codecsPopUpChanged: NULL];
-			/* Video encoder */
-			[fVidEncoderPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]]];
-			
-			/* We can show the preset options here in the gui if we want to
-				so we check to see it the user has specified it in the prefs */
-			[fAdvancedOptions setOptions: [NSString stringWithFormat:[chosenPreset valueForKey:@"x264Option"]]];
-			
-			/* Lets run through the following functions to get variables set there */
-			[self encoderPopUpChanged: NULL];
-			
-			[self calculateBitrate: NULL];
-			
-			/* Video quality */
-			[fVidQualityMatrix selectCellAtRow:[[chosenPreset objectForKey:@"VideoQualityType"] intValue] column:0];
-			
-			[fVidTargetSizeField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoTargetSize"]]];
-			[fVidBitrateField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoAvgBitrate"]]];
-			
-			[fVidQualitySlider setFloatValue: [[chosenPreset valueForKey:@"VideoQualitySlider"] floatValue]];
-			[self videoMatrixChanged: NULL];
-			
-			/* Video framerate */
-			/* For video preset video framerate, we want to make sure that Same as source does not conflict with the
-               detected framerate in the fVidRatePopUp so we use index 0*/
-			if ([[NSString stringWithFormat:[chosenPreset valueForKey:@"VideoFramerate"]] isEqualToString: @"Same as source"])
-            {
-                [fVidRatePopUp selectItemAtIndex: 0];
-            }
-            else
-            {
-                [fVidRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoFramerate"]]];
-            }
-			
-			/* GrayScale */
-			[fVidGrayscaleCheck setState:[[chosenPreset objectForKey:@"VideoGrayScale"] intValue]];
-			
-			/* 2 Pass Encoding */
-			[fVidTwoPassCheck setState:[[chosenPreset objectForKey:@"VideoTwoPass"] intValue]];
-			[self twoPassCheckboxChanged: NULL];
-			/* Turbo 1st pass for 2 Pass Encoding */
-			[fVidTurboPassCheck setState:[[chosenPreset objectForKey:@"VideoTurboTwoPass"] intValue]];
-			
-			/*Audio*/
-			
-			/* Audio Sample Rate*/
-			[fAudRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioSampleRate"]]];
-			/* Audio Bitrate Rate*/
-			[fAudBitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioBitRate"]]];
-			/*Subtitles*/
-			[fSubPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Subtitles"]]];
-			
-			/* Picture Settings */
-			/* Look to see if we apply these here in objectForKey:@"UsesPictureSettings"] */
-			if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] > 0)
-			{
-				hb_job_t * job = fTitle->job;
-				/* Check to see if we should use the max picture setting for the current title*/
-				if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] == 2 || [[chosenPreset objectForKey:@"UsesMaxPictureSettings"]  intValue] == 1)
-				{
-					/* Use Max Picture settings for whatever the dvd is.*/
-					[self revertPictureSizeToMax: NULL];
-					job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
-					if (job->keep_ratio == 1)
-					{
-						hb_fix_aspect( job, HB_KEEP_WIDTH );
-						if( job->height > fTitle->height )
-						{
-							job->height = fTitle->height;
-							hb_fix_aspect( job, HB_KEEP_HEIGHT );
-						}
-					}
-					job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
-				}
-				else // Apply picture settings that were in effect at the time the preset was saved
-				{
-					job->width = [[chosenPreset objectForKey:@"PictureWidth"]  intValue];
-					job->height = [[chosenPreset objectForKey:@"PictureHeight"]  intValue];
-					job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
-					if (job->keep_ratio == 1)
-					{
-						hb_fix_aspect( job, HB_KEEP_WIDTH );
-						if( job->height > fTitle->height )
-						{
-							job->height = fTitle->height;
-							hb_fix_aspect( job, HB_KEEP_HEIGHT );
-						}
-					}
-					job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
-                    [fPictureController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
-					
-					if ([chosenPreset objectForKey:@"PictureDetelecine"])
-					{
-                        [fPictureController setDetelecine:[[chosenPreset objectForKey:@"PictureDetelecine"] intValue]];
-					}
-					if ([chosenPreset objectForKey:@"PictureDenoise"])
-					{
-                        [fPictureController setDenoise:[[chosenPreset objectForKey:@"PictureDenoise"] intValue]];
-					}
-					/* If Cropping is set to custom, then recall all four crop values from
-						when the preset was created and apply them */
-					if ([[chosenPreset objectForKey:@"PictureAutoCrop"]  intValue] == 0)
-					{
-                        [fPictureController setAutoCrop:NO];
-						
-						/* Here we use the custom crop values saved at the time the preset was saved */
-						job->crop[0] = [[chosenPreset objectForKey:@"PictureTopCrop"]  intValue];
-						job->crop[1] = [[chosenPreset objectForKey:@"PictureBottomCrop"]  intValue];
-						job->crop[2] = [[chosenPreset objectForKey:@"PictureLeftCrop"]  intValue];
-						job->crop[3] = [[chosenPreset objectForKey:@"PictureRightCrop"]  intValue];
-						
-					}
-					else /* if auto crop has been saved in preset, set to auto and use post scan auto crop */
-					{
-                        [fPictureController setAutoCrop:YES];
-                        /* Here we use the auto crop values determined right after scan */
-						job->crop[0] = AutoCropTop;
-						job->crop[1] = AutoCropBottom;
-						job->crop[2] = AutoCropLeft;
-						job->crop[3] = AutoCropRight;
-						
-					}
-				}
-				[self calculatePictureSizing: NULL]; 
-			}
-			
-			
-			[[fPresetsActionMenu itemAtIndex:0] setEnabled: YES];
-			}
-}
-}
 
 
-
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView
-{
-    return [UserPresets count];
-}
-
-/* we use this to determine display characteristics for
-each table cell based on content currently only used to
-show the built in presets in a blue font. */
-- (void)tableView:(NSTableView *)aTableView
- willDisplayCell:(id)aCell 
- forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
-{
-    NSDictionary *userPresetDict = [UserPresets objectAtIndex:rowIndex];
-	NSFont *txtFont;
-	NSColor *fontColor;
-	NSColor *shadowColor;
-	txtFont = [NSFont systemFontOfSize: [NSFont smallSystemFontSize]];
-	/* First, we check to see if its a selected row, if so, we use white since its highlighted in blue */
-	if ([[aTableView selectedRowIndexes] containsIndex:rowIndex] && ([tableView editedRow] != rowIndex))
-	{
-		
-		fontColor = [NSColor whiteColor];
-		shadowColor = [NSColor colorWithDeviceRed:(127.0/255.0) green:(140.0/255.0) blue:(160.0/255.0) alpha:1.0];
-	}
-	else
-	{
-		/* We set the properties of unselected rows */
-		/* if built-in preset (defined by "type" == 0) we use a blue font */
-		if ([[userPresetDict objectForKey:@"Type"] intValue] == 0)
-		{
-			fontColor = [NSColor blueColor];
-		}
-		else // User created preset, use a black font
-		{
-			fontColor = [NSColor blackColor];
-		}
-		shadowColor = nil;
-	}
-	/* We check to see if this is the HB default, if so, color it appropriately */
-	if (!presetUserDefault && presetHbDefault && rowIndex == presetHbDefault)
-	{
-	txtFont = [NSFont boldSystemFontOfSize: [NSFont smallSystemFontSize]];
-	}
-	/* We check to see if this is the User Specified default, if so, color it appropriately */
-	if (presetUserDefault && rowIndex == presetUserDefault)
-	{
-	txtFont = [NSFont boldSystemFontOfSize: [NSFont smallSystemFontSize]];
-	}
-	
-	[aCell setTextColor:fontColor];
-	[aCell setFont:txtFont];
-	/* this shadow stuff (like mail app) for some reason looks crappy, commented out
-	temporarily in case we want to resurrect it */
-	/*
-	NSShadow *shadow = [[NSShadow alloc] init];
-	NSSize shadowOffset = { width: 1.0, height: -1.5};
-	[shadow setShadowOffset:shadowOffset];
-	[shadow setShadowColor:shadowColor];
-	[shadow set];
-	*/
-	
-}
-/* Method to display tooltip with the description for each preset, if available */
-- (NSString *)tableView:(NSTableView *)aTableView toolTipForCell:(NSCell *)aCell 
-                   rect:(NSRectPointer)aRect tableColumn:(NSTableColumn *)aTableColumn
-                    row:(int)rowIndex mouseLocation:(NSPoint)aPos
-{
-     /* initialize the tooltip contents variable */
-	 NSString *loc_tip;
-     /* if there is a description for the preset, we show it in the tooltip */
-	 if ([[UserPresets objectAtIndex:rowIndex] valueForKey:@"PresetDescription"])
-	 {
-        loc_tip = [NSString stringWithFormat: @"%@",[[UserPresets objectAtIndex:rowIndex] valueForKey:@"PresetDescription"]];
-        return (loc_tip);
-	 }
-	 else
-	 {
-        loc_tip = @"No description available";
-	 }
-	 return (loc_tip);
-
-}
-
-- (id)tableView:(NSTableView *)aTableView
-      objectValueForTableColumn:(NSTableColumn *)aTableColumn
-      row:(int)rowIndex
-{
-id theRecord, theValue;
-    
-    theRecord = [UserPresets objectAtIndex:rowIndex];
-    theValue = [theRecord objectForKey:[aTableColumn identifier]];
-    return theValue;
-}
-
-// NSTableDataSource method that we implement to edit values directly in the table...
-- (void)tableView:(NSTableView *)aTableView
-        setObjectValue:(id)anObject
-        forTableColumn:(NSTableColumn *)aTableColumn
-        row:(int)rowIndex
-{
-    id theRecord;
-    
-    theRecord = [UserPresets objectAtIndex:rowIndex];
-    [theRecord setObject:anObject forKey:@"PresetName"];
-    /* We Sort the Presets By Factory or Custom */
-	NSSortDescriptor * presetTypeDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"Type" 
-                                                    ascending:YES] autorelease];
-		/* We Sort the Presets Alphabetically by name */
-	NSSortDescriptor * presetNameDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"PresetName" 
-                                                    ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease];
-	NSArray *sortDescriptors=[NSArray arrayWithObjects:presetTypeDescriptor,presetNameDescriptor,nil];
-    NSArray *sortedArray=[UserPresets sortedArrayUsingDescriptors:sortDescriptors];
-	[UserPresets setArray:sortedArray];
-	/* We Reload the New Table data for presets */
-    [tableView reloadData];
-   /* We save all of the preset data here */
-    [self savePreset];
-}
-
-- (void)savePreset
-{
-    [UserPresets writeToFile:UserPresetsFile atomically:YES];
-	/* We get the default preset in case it changed */
-	[self getDefaultPresets: NULL];
-
-}
-
-- (void) controlTextDidChange: (NSNotification *) notification
-{
-    [self calculateBitrate: NULL];
-}
-
-- (IBAction) openHomepage: (id) sender
-{
-    [[NSWorkspace sharedWorkspace] openURL: [NSURL
-        URLWithString:@"http://handbrake.m0k.org/"]];
-}
-
-- (IBAction) openForums: (id) sender
-{
-    [[NSWorkspace sharedWorkspace] openURL: [NSURL
-        URLWithString:@"http://handbrake.m0k.org/forum/"]];
-}
-- (IBAction) openUserGuide: (id) sender
-{
-    [[NSWorkspace sharedWorkspace] openURL: [NSURL
-        URLWithString:@"http://handbrake.m0k.org/trac/wiki/HandBrakeGuide"]];
-}
-
-/**
- * Shows debug output window.
- */
-- (IBAction)showDebugOutputPanel:(id)sender
-{
-    [outputPanel showOutputPanel:sender];
-}
-
-/**
- * Shows preferences window.
- */
-- (IBAction) showPreferencesWindow: (id) sender
-{
-    NSWindow * window = [fPreferencesController window];
-    if (![window isVisible])
-        [window center];
-
-    [window makeKeyAndOrderFront: nil];
-}
-
-/**
- * Shows queue window.
- */
-- (IBAction) showQueueWindow:(id)sender
-{
-    [fQueueController showQueueWindow:sender];
-}
-
-
-- (IBAction) toggleDrawer:(id)sender {
-    [fPresetDrawer toggle:self];
-}
 
 @end
