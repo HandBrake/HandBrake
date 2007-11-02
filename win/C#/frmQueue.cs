@@ -42,8 +42,8 @@ namespace Handbrake
                     progressBar.Update();
                     //ThreadPool.QueueUserWorkItem(startProc);
                     // Testing a new way of launching a thread. Hopefully will fix a random freeze up of the main thread.
-                    Thread test = new Thread(startProc);
-                    test.Start();
+                    Thread theQ = new Thread(startProc);
+                    theQ.Start();
                  }
             }
             catch (Exception exc)
@@ -262,13 +262,6 @@ namespace Handbrake
             this.Hide();
             base.OnClosing(e);
         }
-
-     
-        
-
-
-
-
 
     }
 }

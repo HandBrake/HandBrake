@@ -99,8 +99,8 @@ namespace Handbrake
         private void check_showPreset_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.hidePresets = check_showPreset.CheckState.ToString();
-        }  
- 
+        }
+
 
     }
 }

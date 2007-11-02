@@ -23,7 +23,7 @@ namespace Handbrake.Functions
             try
             {
                 hbProc = new Process();
-                hbProc.StartInfo.FileName = "hbcli.exe";
+                hbProc.StartInfo.FileName = "HandBrakeCLI.exe";
                 hbProc.StartInfo.Arguments = query;
                 hbProc.StartInfo.RedirectStandardOutput = stdout;
                 hbProc.StartInfo.RedirectStandardError = stderr;

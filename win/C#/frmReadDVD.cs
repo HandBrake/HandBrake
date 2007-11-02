@@ -91,7 +91,7 @@ namespace Handbrake
             try
             {
                 string appPath = Application.StartupPath.ToString()+ "\\";
-                string strCmdLine = "cmd /c " + '"' + '"' + appPath + "hbcli.exe" + '"' +  " -i " + '"' + inputFile + '"' + " -t0 >" + '"'+ appPath + "dvdinfo.dat" + '"' + " 2>&1" + '"';
+                string strCmdLine = "cmd /c " + '"' + '"' + appPath + "HandBrakeCLI.exe" + '"' + " -i " + '"' + inputFile + '"' + " -t0 >" + '"' + appPath + "dvdinfo.dat" + '"' + " 2>&1" + '"';
                 Process hbproc = Process.Start("CMD.exe", strCmdLine);
                 hbproc.WaitForExit();
                 hbproc.Dispose();
