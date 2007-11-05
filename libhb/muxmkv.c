@@ -192,7 +192,7 @@ static int MKVInit( hb_mux_object_t * m )
         track->trackType = MK_TRACK_AUDIO;
         track->language = audio->iso639_2;
         track->audio.samplingFreq = (float)job->arate;
-        track->audio.channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown);
+        track->audio.channels = (job->acodec == HB_ACODEC_AC3) ? HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(audio->input_channel_layout) : HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown);
 //        track->defaultDuration = job->arate * 1000;
         mux_data->track = mk_createTrack(m->file, track);
         if (job->acodec == HB_ACODEC_VORBIS && track->codecPrivate != NULL)
