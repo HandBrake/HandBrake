@@ -51,16 +51,29 @@ namespace Handbrake.Functions
             }
         }
 
-        private string q_dvdChapters;
+        private string q_chaptersStart;
         /// <summary>
         /// Returns an String
         /// DVD Chapter number or chapter range.
         /// </summary>
-        public string DVDChapters
+        public string DVDChapterStart
         {
             get
             {
-                return this.q_dvdChapters;
+                return this.q_chaptersStart;
+            }
+        }
+
+        private string q_chaptersFinish;
+        /// <summary>
+        /// Returns an String
+        /// DVD Chapter number or chapter range.
+        /// </summary>
+        public string DVDChapterFinish
+        {
+            get
+            {
+                return this.q_chaptersFinish;
             }
         }
 
@@ -126,6 +139,58 @@ namespace Handbrake.Functions
             get
             {
                 return this.q_cropValues;
+            }
+        }
+
+        private string q_croptop;
+        /// <summary>
+        /// Returns an String
+        /// Cropping values.
+        /// </summary>
+        public string CropTop
+        {
+            get
+            {
+                return this.q_croptop;
+            }
+        }
+
+        private string q_cropbottom;
+        /// <summary>
+        /// Returns an String
+        /// Cropping values.
+        /// </summary>
+        public string CropBottom
+        {
+            get
+            {
+                return this.q_cropbottom;
+            }
+        }
+
+        private string q_cropLeft;
+        /// <summary>
+        /// Returns an String
+        /// Cropping values.
+        /// </summary>
+        public string CropLeft
+        {
+            get
+            {
+                return this.q_cropLeft;
+            }
+        }
+
+        private string q_cropRight;
+        /// <summary>
+        /// Returns an String
+        /// Cropping values.
+        /// </summary>
+        public string CropRight
+        {
+            get
+            {
+                return this.q_cropRight;
             }
         }
 
@@ -404,6 +469,8 @@ namespace Handbrake.Functions
             Match title = Regex.Match(input, @"-t ([0-9]*)");
             Match chapters = Regex.Match(input, @"-c ([0-9-]*)");
 
+           
+
             //Destination
             Regex r2 = new Regex(@"(-o)(?:\s\"")([a-zA-Z0-9:\\\s\.]+)(?:\"")");
             Match destination = r2.Match(input.Replace('"', '\"'));
@@ -417,7 +484,7 @@ namespace Handbrake.Functions
             Match denoise = Regex.Match(input, @"--denoise=([0-9:]*)");
             Match deblock = Regex.Match(input, @"--deblock");
             Match detelecine = Regex.Match(input, @"--detelecine");
-            Match anamorphic = Regex.Match(input, @"-p");
+            Match anamorphic = Regex.Match(input, @"-p ");
             Match chapterMarkers = Regex.Match(input, @"-m");
             Match crop = Regex.Match(input, @"--crop ([0-9]):([0-9]):([0-9]):([0-9])");
 
@@ -448,30 +515,45 @@ namespace Handbrake.Functions
             
             // ### NOTES ###
             // May be an idea to add additional options such as CPU etc later.
+            // Need to remove all the tags e.g -x -w etc
+            // Need to split up crop options + chapters into seperate items
 
             try
             {
-                //Source
-                thisQuery.q_source = source.ToString();
+
+                thisQuery.q_source = source.ToString().Replace("-i ", "").Replace("\"", "");
                 if (title.ToString() != "")
-                    thisQuery.q_dvdTitle = int.Parse(title.ToString().Replace("-t ", ""));
-                thisQuery.q_dvdChapters = chapters.ToString();
+                         thisQuery.q_dvdTitle = int.Parse(title.ToString().Replace("-t ", ""));
+                
+                string[] actTitles = new string[2];
+                actTitles = chapters.ToString().Replace("-c ", "").Split('-');
+
+                thisQuery.q_chaptersStart = actTitles[0];
+                thisQuery.q_chaptersFinish = actTitles[1];
 
                 //Destination
-                thisQuery.q_destination = destination.ToString();
-                thisQuery.q_videoEncoder = videoEncoder.ToString();
-                thisQuery.q_audioEncoder = audioEncoder.ToString();
+                thisQuery.q_destination = destination.ToString().Replace("-o ","").Replace("\"", "");
+                thisQuery.q_videoEncoder = videoEncoder.ToString().Replace("-e ", "");
+                thisQuery.q_audioEncoder = audioEncoder.ToString().Replace("-E ", "");
                 if (width.ToString() != "")
                     thisQuery.q_videoWidth = int.Parse(width.ToString().Replace("-w ", ""));
                 if (height.ToString() != "")
                     thisQuery.q_videoHeight = int.Parse(height.ToString().Replace("-l ", ""));
 
                 //Picture Settings Tab
-                thisQuery.q_cropValues = crop.ToString();
+                thisQuery.q_cropValues = crop.ToString().Replace("--crop ", "");
+                string[] actCropValues = new string[3];
+                actCropValues = thisQuery.q_cropValues.Split(':');
+                thisQuery.q_croptop = actCropValues[0];
+                thisQuery.q_cropbottom = actCropValues[3];
+                thisQuery.q_cropLeft = actCropValues[2];
+                thisQuery.q_cropRight = actCropValues[1];
+
+
                 thisQuery.q_detelecine = detelecine.Success;
                 thisQuery.q_deBlock = deblock.Success;
-                thisQuery.q_deinterlace = deinterlace.ToString();
-                thisQuery.q_denoise = denoise.ToString();
+                thisQuery.q_deinterlace = deinterlace.ToString().Replace("--deinterlace=","").Replace("\"", "");
+                thisQuery.q_denoise = denoise.ToString().Replace("--denoise=","");
                 thisQuery.q_anamorphic = anamorphic.Success;
                 thisQuery.q_chapterMarkers = chapterMarkers.Success;
 
@@ -480,22 +562,27 @@ namespace Handbrake.Functions
                 thisQuery.q_twoPass = twoPass.Success;
                 thisQuery.q_turboFirst = turboFirstPass.Success;
                 thisQuery.q_largeMp4 = largerMp4.Success;
-                thisQuery.q_videoFramerate = videoFramerate.ToString();
-                thisQuery.q_avgBitrate = videoBitrate.ToString();
-                thisQuery.q_videoTargetSize = videoFilesize.ToString();
-                if (videoQuality.ToString() != "")
-                    thisQuery.q_videoQuality = int.Parse(videoQuality.ToString());
+                thisQuery.q_videoFramerate = videoFramerate.ToString().Replace("-r ","");
+                thisQuery.q_avgBitrate = videoBitrate.ToString().Replace("-b ","");
+                thisQuery.q_videoTargetSize = videoFilesize.ToString().Replace("-S ","");
+
+                double qConvert = 0;
+                if (videoQuality.ToString().Replace("-q ", "") != null)
+                {
+                    qConvert = double.Parse(videoQuality.ToString().Replace("-q ", "")) * 100;
+                    thisQuery.q_videoQuality = int.Parse(qConvert.ToString());
+                }
                 thisQuery.q_crf = CRF.Success;
 
                 //Audio Settings Tab
-                thisQuery.q_audioBitrate = audioBitrate.ToString();
-                thisQuery.q_audioSamplerate = audioSampleRate.ToString();
-                thisQuery.q_audioTrack1 = audioChannel.ToString();
-                thisQuery.q_audioTrackMix = audioChannelsMix.ToString();
-                thisQuery.q_subtitles = subtitles.ToString();
+                thisQuery.q_audioBitrate = audioBitrate.ToString().Replace("-B ", "");
+                thisQuery.q_audioSamplerate = audioSampleRate.ToString().Replace("-R ","");
+                thisQuery.q_audioTrack1 = audioChannel.ToString().Replace("-a ", "");
+                thisQuery.q_audioTrackMix = audioChannelsMix.ToString().Replace("-6 ", "");
+                thisQuery.q_subtitles = subtitles.ToString().Replace("-s ", "");
 
                 //H264 Tab
-                thisQuery.q_h264 = x264.ToString();
+                thisQuery.q_h264 = x264.ToString().Replace("-x ", "");
 
                 //Progam Options
                 thisQuery.q_verbose = verbose.Success;
