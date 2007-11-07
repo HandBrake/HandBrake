@@ -91,6 +91,7 @@
     IBOutlet NSTextField         * fPicLabelDetelecine;
 	IBOutlet NSTextField         * fPicLabelDeinterlace;
     IBOutlet NSTextField         * fPicLabelDenoise;
+    IBOutlet NSTextField         * fPicLabelDeblock;
 	
 	IBOutlet NSTextField         * fPicSrcWidth;
 	IBOutlet NSTextField         * fPicSrcHeight;
@@ -102,6 +103,7 @@
 	IBOutlet NSTextField         * fPicSettingAutoCrop;
 	IBOutlet NSTextField         * fPicSettingDetelecine;
 	IBOutlet NSTextField         * fPicSettingDenoise;
+    IBOutlet NSTextField         * fPicSettingDeblock;
 
 	IBOutlet NSTextField         * fPicLabelAnamorphic;
 	IBOutlet NSTextField         * fPicLabelPAROutputX;

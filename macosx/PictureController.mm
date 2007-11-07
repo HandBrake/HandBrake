@@ -306,6 +306,7 @@ static int GetAlignedSize( int size )
     }
     fPictureFilterSettings.denoise     = [fDenoisePopUp indexOfSelectedItem];
     fPictureFilterSettings.detelecine  = [fDetelecineCheck state];
+    fPictureFilterSettings.deblock  = [fDeblockCheck state];
 	job->pixel_ratio = ( [fPARCheck state] == NSOnState );
 
     autoCrop = ( [fCropMatrix selectedRow] == 0 );
@@ -436,6 +437,16 @@ static int GetAlignedSize( int size )
 - (void) setDenoise: (int) setting
 {
     fPictureFilterSettings.denoise = setting;
+}
+
+- (int) deblock
+{
+    return fPictureFilterSettings.deblock;
+}
+
+- (void) setDeblock: (int) setting
+{
+    fPictureFilterSettings.deblock = setting;
 }
 
 - (void)showPanelInWindow: (NSWindow *)fWindow forTitle: (hb_title_t *)title

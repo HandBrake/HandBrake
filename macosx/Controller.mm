@@ -362,7 +362,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		fPicLabelPAROutputX,fPicSettingPARWidth,fPicSettingPARHeight,
 		fPicSettingPAR,fPicLabelAnamorphic,tableView,fPresetsAdd,fPresetsDelete,
 		fCreateChapterMarkers,fVidTurboPassCheck,fDstMpgLargeFileCheck,fPicLabelAutoCrop,
-		fPicSettingAutoCrop,fPicSettingDetelecine,fPicLabelDetelecine,fPicLabelDenoise,fPicSettingDenoise,fSubForcedCheck,};
+		fPicSettingAutoCrop,fPicSettingDetelecine,fPicLabelDetelecine,fPicLabelDenoise,fPicSettingDenoise,
+        fSubForcedCheck,fPicSettingDeblock,fPicLabelDeblock,};
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -1403,7 +1404,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     job->arate = hb_audio_rates[[fAudRatePopUp
                      indexOfSelectedItem]].rate;
     job->abitrate = [[fAudBitratePopUp selectedItem] tag];
-    
+   
+    /* Filters */ 
     job->filters = hb_list_init();
    
 	/* Detelecine */
@@ -1455,6 +1457,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		hb_filter_denoise.settings = "7:7:5:5"; 
         hb_list_add( job->filters, &hb_filter_denoise );	
 	}
+    
+    /* Deblock  (uses pp7 default) */
+    if ([fPictureController deblock])
+    {
+        hb_list_add( job->filters, &hb_filter_deblock );
+    }
 
 }
 
@@ -2460,6 +2468,14 @@ the user is using "Custom" settings by determining the sender*/
 	{
 		[fPicSettingDenoise setStringValue: @"Strong"];
 	}
+
+    /* Deblock */
+    if ([fPictureController deblock]) {
+        [fPicSettingDeblock setStringValue: @"Yes"];
+    }
+    else {
+        [fPicSettingDeblock setStringValue: @"No"];
+    }
 	
 	if (fTitle->job->pixel_ratio > 0)
 	{

@@ -23,6 +23,7 @@
                 fCropRightStepper = NSStepper; 
                 fCropTopField = NSTextField; 
                 fCropTopStepper = NSStepper; 
+                fDeblockCheck = NSButton; 
                 fDeinterlacePopUp = NSPopUpButton; 
                 fDenoisePopUp = NSPopUpButton; 
                 fDetelecineCheck = NSButton; 

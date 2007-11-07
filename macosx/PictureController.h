@@ -41,6 +41,7 @@
     IBOutlet NSStepper       * fCropRightStepper;
     IBOutlet NSPopUpButton   * fDeinterlacePopUp;
 	IBOutlet NSButton        * fDetelecineCheck;
+    IBOutlet NSButton        * fDeblockCheck;
 	IBOutlet NSPopUpButton   * fDenoisePopUp;
 	IBOutlet NSButton        * fPARCheck;
     IBOutlet NSButton        * fEffectsCheck;
@@ -62,6 +63,7 @@
         int    detelecine;
         int     deinterlace;
         int     denoise;
+        int     deblock;
     } fPictureFilterSettings;
 
     id delegate;
@@ -86,6 +88,8 @@
 - (void) setDeinterlace: (int) setting;
 - (int) denoise;
 - (void) setDenoise: (int) setting;
+- (int) deblock;
+- (void) setDeblock: (int) setting;
 
 - (void)showPanelInWindow: (NSWindow *)fWindow forTitle: (hb_title_t *)title;
 - (BOOL) loadMyNibFile;

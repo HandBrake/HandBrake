@@ -133,6 +133,7 @@
                 fPicLabelAnamorphic = NSTextField; 
                 fPicLabelAr = NSTextField; 
                 fPicLabelAutoCrop = NSTextField; 
+                fPicLabelDeblock = NSTextField; 
                 fPicLabelDeinterlace = NSTextField; 
                 fPicLabelDenoise = NSTextField; 
                 fPicLabelDetelecine = NSTextField; 
@@ -144,6 +145,7 @@
                 fPicLabelSrcX = NSTextField; 
                 fPicSettingARkeep = NSTextField; 
                 fPicSettingAutoCrop = NSTextField; 
+                fPicSettingDeblock = NSTextField; 
                 fPicSettingDeinterlace = NSTextField; 
                 fPicSettingDenoise = NSTextField; 
                 fPicSettingDetelecine = NSTextField; 
