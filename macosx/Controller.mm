@@ -3061,6 +3061,8 @@ the user is using "Custom" settings by determining the sender*/
 						}
 					}
 					job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
+                    
+                    /* Filters */
                     [fPictureController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
 					
 					if ([chosenPreset objectForKey:@"PictureDetelecine"])
@@ -3070,6 +3072,10 @@ the user is using "Custom" settings by determining the sender*/
 					if ([chosenPreset objectForKey:@"PictureDenoise"])
 					{
                         [fPictureController setDenoise:[[chosenPreset objectForKey:@"PictureDenoise"] intValue]];
+					}
+                    if ([chosenPreset objectForKey:@"PictureDeblock"])
+					{
+                        [fPictureController setDeblock:[[chosenPreset objectForKey:@"PictureDeblock"] intValue]];
 					}
 					/* If Cropping is set to custom, then recall all four crop values from
 						when the preset was created and apply them */
@@ -3387,7 +3393,9 @@ id theRecord, theValue;
 	[preset setObject:[NSNumber numberWithInt:[fPictureController deinterlace]] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:fTitle->job->pixel_ratio] forKey:@"PicturePAR"];
 	[preset setObject:[NSNumber numberWithInt:[fPictureController detelecine]] forKey:@"PictureDetelecine"];
-	[preset setObject:[NSNumber numberWithInt:[fPictureController denoise]] forKey:@"PictureDenoise"]; 
+	[preset setObject:[NSNumber numberWithInt:[fPictureController denoise]] forKey:@"PictureDenoise"];
+    [preset setObject:[NSNumber numberWithInt:[fPictureController deblock]] forKey:@"PictureDeblock"];
+    
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
 	[preset setObject:[NSNumber numberWithInt:[fPictureController autoCrop]] forKey:@"PictureAutoCrop"];
