@@ -774,7 +774,8 @@
                         }
                         else // we have a valid value to change, so change it
                         {
-                            thisOpt = [NSString stringWithFormat:@"%@=%d",optName,[sender indexOfSelectedItem]-1];
+                            if ( [sender indexOfSelectedItem] != 0 )
+                                thisOpt = [NSString stringWithFormat:@"%@=%d",optName,[sender indexOfSelectedItem]-1];
                         }
                     }
                 }
@@ -913,7 +914,8 @@
                 }            
                 else
                 {
-                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                    if ( [sender indexOfSelectedItem] != 0 )
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
                         [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]-1]]];
                 }
             }
@@ -1039,7 +1041,8 @@
                 }
                 else
                 {
-                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]], 
+                    if ( [sender indexOfSelectedItem] != 0 )
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]], 
                         [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]-1]]];
                 }
             }
