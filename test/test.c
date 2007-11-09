@@ -67,6 +67,8 @@ static int	  maxWidth		= 0;
 static int    turbo_opts_enabled = 0;
 static char * turbo_opts = "ref=1:subme=1:me=dia:analyse=none:trellis=0:no-fast-pskip=0:8x8dct=0";
 static int    largeFileSize = 0;
+static int    preset        = 0;
+static char * preset_name   = 0;
 
 /* Exit cleanly on Ctrl-C */
 static volatile int die = 0;
@@ -75,6 +77,8 @@ static void SigHandler( int );
 /* Utils */
 static void ShowCommands();
 static void ShowHelp();
+static void ShowPresets();
+
 static int  ParseOptions( int argc, char ** argv );
 static int  CheckOptions( int argc, char ** argv );
 static int  HandleEvents( hb_handle_t * h );
@@ -223,6 +227,7 @@ int main( int argc, char ** argv )
     if (native_language ) free (native_language );
 	if( x264opts ) free (x264opts );
 	if( x264opts2 ) free (x264opts2 );
+    if (preset_name) free (preset_name);
 	
     fprintf( stderr, "HandBrake has exited.\n" );
 
@@ -391,6 +396,245 @@ static int HandleEvents( hb_handle_t * h )
                                           job->chapter_end );
             }
 
+            if (preset)
+            {
+                hb_log("+ Using preset: %s", preset_name);
+                
+                if (!strcmp(preset_name, "Animation"))
+                {
+                    mux = HB_MUX_MKV;
+                    vcodec = HB_VCODEC_X264;
+                    job->vbitrate = 1000;
+                    job->abitrate = 160;
+                    job->arate = 48000;
+                    acodec = HB_ACODEC_FAAC;
+                    x264opts = strdup("ref=5:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2");
+                    job->chapter_markers = 1;
+                    job->deinterlace = 1;
+                    pixelratio = 1;
+                    twoPass = 1;
+                    turbo_opts_enabled = 1;
+                }
+
+                if (!strcmp(preset_name, "AppleTV"))
+                {
+                    mux = HB_MUX_MP4;
+                    vcodec = HB_VCODEC_X264;
+                    job->vbitrate = 2500;
+                    job->abitrate = 160;
+                    job->arate = 48000;
+                    acodec = HB_ACODEC_FAAC;
+                    x264opts = strdup("bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=2:cabac=0");
+                    job->chapter_markers = 1;
+                    pixelratio = 1;
+                }
+
+                if (!strcmp(preset_name, "Bedlam"))
+                {
+                    mux = HB_MUX_MKV;
+                    vcodec = HB_VCODEC_X264;
+                    job->vbitrate = 1800;
+                    job->abitrate = 160;
+                    job->arate = 48000;
+                    acodec = HB_ACODEC_AC3;
+                    x264opts = strdup("ref=16:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=7:me-range=64:analyse=all:8x8dct:trellis=2:no-fast-pskip:no-dct-decimate:filter=-2,-1");
+                    job->chapter_markers = 1;
+                    pixelratio = 1;
+                    twoPass = 1;
+                    turbo_opts_enabled = 1;
+                }
+
+                if (!strcmp(preset_name, "Blind"))
+                {
+                    mux = HB_MUX_MP4;
+                    job->vbitrate = 512;
+                    job->abitrate = 128;
+                    job->arate = 48000;
+                    acodec = HB_ACODEC_FAAC;
+                    job->width = 512;
+                    job->chapter_markers = 1;
+                }
+
+                if (!strcmp(preset_name, "Broke"))
+                {
+                    mux = HB_MUX_MP4;
+                    vcodec = HB_VCODEC_X264;
+                    size = 695;
+                    job->abitrate = 128;
+                    job->arate = 48000;
+                    acodec = HB_ACODEC_FAAC;
+                    job->width = 640;
+                    x264opts = strdup("ref=3:mixed-refs:bframes=6:bime:weightb:b-rdo:b-pyramid:direct=auto:me=umh:subme=6:trellis=1:analyse=all:8x8dct:no-fast-pskip");
+                    job->chapter_markers = 1;
+                    twoPass = 1;
+                    turbo_opts_enabled = 1;
+                }
+
+                if (!strcmp(preset_name, "Classic"))
+                {
+                    mux = HB_MUX_MP4;
+                    job->vbitrate = 1000;
+                    job->abitrate = 160;
+                    job->arate = 48000;
+                    acodec = HB_ACODEC_FAAC;
+                }
+
+                if (!strcmp(preset_name, "Constant Quality Rate"))
+                {
+                    mux = HB_MUX_MKV;
+                    vcodec = HB_VCODEC_X264;
+                    job->vquality = 0.64709997177124023;
+                    job->abitrate = 160;
+                    job->arate = 48000;
+                    acodec = HB_ACODEC_AC3;
+                    x264opts = strdup("ref=3:mixed-refs:bframes=3:b-pyramid:b-rdo:bime:weightb:filter=-2,-1:subme=6:trellis=1:analyse=all:8x8dct:me=umh");
+                    job->chapter_markers = 1;
+                    pixelratio = 1;
+                }
+
+                if (!strcmp(preset_name, "Deux Six Quatre"))
+                {
+                    mux = HB_MUX_MKV;
+                    vcodec = HB_VCODEC_X264;
+                    job->vbitrate = 1600;
+                    job->abitrate = 160;
+                    job->arate = 48000;
+                    acodec = HB_ACODEC_AC3;
+                    x264opts = strdup("ref=5:mixed-refs:bframes=3:bime:weightb:b-rdo:b-pyramid:me=umh:subme=7:trellis=1:analyse=all:8x8dct:no-fast-pskip");
+                    job->chapter_markers = 1;
+                    pixelratio = 1;
+                    twoPass = 1;
+                    turbo_opts_enabled = 1;
+                }
+
+                if (!strcmp(preset_name, "Film"))
+                {
+                    mux = HB_MUX_MKV;
+                    vcodec = HB_VCODEC_X264;
+                    job->vbitrate = 2000;
+                    job->abitrate = 160;
+                    job->arate = 48000;
+                    acodec = HB_ACODEC_AC3;
+                    x264opts = strdup("ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:no-fast-pskip");
+                    job->chapter_markers = 1;
+                    pixelratio = 1;
+                    twoPass = 1;
+                    turbo_opts_enabled = 1;
+                }
+
+                if (!strcmp(preset_name, "iPhone"))
+                {
+                    mux = HB_MUX_MP4;
+                    vcodec = HB_VCODEC_X264;
+                    job->h264_level = 30;
+                    job->vbitrate = 960;
+                    job->abitrate = 128;
+                    job->arate = 48000;
+                    acodec = HB_ACODEC_FAAC;
+                    job->width = 480;
+                    x264opts = strdup("cabac=0:ref=1:analyse=all:me=umh:subme=6:no-fast-pskip=1:trellis=1");
+                    job->chapter_markers = 1;
+                }
+
+                if (!strcmp(preset_name, "iPod High-Rez"))
+                {
+                    mux = HB_MUX_MP4;
+                    vcodec = HB_VCODEC_X264;
+                    job->h264_level = 30;
+                    job->vbitrate = 1500;
+                    job->abitrate = 160;
+                    job->arate = 48000;
+                    acodec = HB_ACODEC_FAAC;
+                    job->width = 640;
+                    x264opts = strdup("keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1");
+                    job->chapter_markers = 1;
+                }
+
+                if (!strcmp(preset_name, "iPod Low-Rez"))
+                {
+                    mux = HB_MUX_MP4;
+                    vcodec = HB_VCODEC_X264;
+                    job->h264_level = 30;
+                    job->vbitrate = 700;
+                    job->abitrate = 160;
+                    job->arate = 48000;
+                    acodec = HB_ACODEC_FAAC;
+                    job->width = 320;
+                    x264opts = strdup("keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1");
+                    job->chapter_markers = 1;
+                }
+
+                if (!strcmp(preset_name, "Normal"))
+                {
+                    mux = HB_MUX_MP4;
+                    vcodec = HB_VCODEC_X264;
+                    job->vbitrate = 1500;
+                    job->abitrate = 160;
+                    job->arate = 48000;
+                    acodec = HB_ACODEC_FAAC;
+                    x264opts = strdup("ref=2:bframes=2:subme=5:me=umh");
+                    job->chapter_markers = 1;
+                    pixelratio = 1;
+                    twoPass = 1;
+                    turbo_opts_enabled = 1;
+                }
+
+                if (!strcmp(preset_name, "PS3"))
+                {
+                    mux = HB_MUX_MP4;
+                    vcodec = HB_VCODEC_X264;
+                    job->vbitrate = 2500;
+                    job->abitrate = 160;
+                    job->arate = 48000;
+                    acodec = HB_ACODEC_FAAC;
+                    x264opts = strdup("level=41:subme=5:me=umh");
+                    job->chapter_markers = 1;
+                    pixelratio = 1;
+                }
+
+                if (!strcmp(preset_name, "PSP"))
+                {
+                    mux = HB_MUX_MP4;
+                    job->vbitrate = 1024;
+                    job->abitrate = 128;
+                    job->arate = 48000;
+                    acodec = HB_ACODEC_FAAC;
+                    job->width = 368;
+                    job->height = 208;
+                    job->chapter_markers = 1;
+                }
+
+                if (!strcmp(preset_name, "QuickTime"))
+                {
+                    mux = HB_MUX_MP4;
+                    vcodec = HB_VCODEC_X264;
+                    job->vbitrate = 2000;
+                    job->abitrate = 160;
+                    job->arate = 48000;
+                    acodec = HB_ACODEC_FAAC;
+                    x264opts = strdup("ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:me=umh:subme=5:analyse=all:8x8dct:trellis=1:no-fast-pskip");
+                    job->chapter_markers = 1;
+                    pixelratio = 1;
+                    twoPass = 1;
+                    turbo_opts_enabled = 1;
+                }
+
+                if (!strcmp(preset_name, "Television"))
+                {
+                    mux = HB_MUX_MKV;
+                    vcodec = HB_VCODEC_X264;
+                    job->vbitrate = 1300;
+                    job->abitrate = 160;
+                    job->arate = 48000;
+                    acodec = HB_ACODEC_FAAC;
+                    x264opts = strdup("ref=3:mixed-refs:bframes=6:bime:weightb:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip");
+                    job->chapter_markers = 1;
+                    job->deinterlace = 1;
+                    twoPass = 1;
+                    turbo_opts_enabled = 1;
+                }
+            }
+            
 			if ( chapter_markers )
 			{
 				job->chapter_markers = chapter_markers;
@@ -681,6 +925,11 @@ static int HandleEvents( hb_handle_t * h )
                 job->pass = 1;
 
                 job->indepth_scan = 0;
+                
+                if (x264opts)
+                {
+                    x264opts2 = strdup(x264opts);
+                }
 
                 /*
                  * If turbo options have been selected then append them
@@ -939,6 +1188,47 @@ static void ShowHelp()
 }
 
 /****************************************************************************
+ * ShowPresets:
+ ****************************************************************************/
+static void ShowPresets()
+{
+    printf("\n+ Animation:  -e x264 -b 1000 -B 160 -R 48 -E faac -f mkv -m -d -p -2 -T -x ref=5:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2\n");
+
+    printf("\n+ AppleTV:  -e x264 -b 2500 -B 160 -R 48 -E faac -f mp4 -m -p -x bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=2:cabac=0\n");
+
+    printf("\n+ Bedlam:  -e x264 -b 1800 -B 160 -R 48 -E ac3 -f mkv -m -p -2 -T -x ref=16:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=7:me-range=64:analyse=all:8x8dct:trellis=2:no-fast-pskip:no-dct-decimate:filter=-2,-1\n");
+
+    printf("\n+ Blind:  -b 512 -B 128 -R 48 -E faac -f mp4 -w 512 -m\n");
+
+    printf("\n+ Broke:  -e x264 -S 695 -B 128 -R 48 -E faac -f mp4 -w 640 -m -2 -T -x ref=3:mixed-refs:bframes=6:bime:weightb:b-rdo:b-pyramid:direct=auto:me=umh:subme=6:trellis=1:analyse=all:8x8dct:no-fast-pskip\n");
+
+    printf("\n+ Classic:  -b 1000 -B 160 -R 48 -E faac -f mp4\n");
+
+    printf("\n+ Constant Quality Rate:  -e x264 -q 0.64709997177124023 -B 160 -R 48 -E ac3 -f mkv -m -p -x ref=3:mixed-refs:bframes=3:b-pyramid:b-rdo:bime:weightb:filter=-2,-1:subme=6:trellis=1:analyse=all:8x8dct:me=umh\n");
+
+    printf("\n+ Deux Six Quatre:  -e x264 -b 1600 -B 160 -R 48 -E ac3 -f mkv -m -p -2 -T -x ref=5:mixed-refs:bframes=3:bime:weightb:b-rdo:b-pyramid:me=umh:subme=7:trellis=1:analyse=all:8x8dct:no-fast-pskip\n");
+
+    printf("\n+ Film:  -e x264 -b 2000 -B 160 -R 48 -E ac3 -f mkv -m -p -2 -T -x ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:no-fast-pskip\n");
+
+    printf("\n+ iPhone:  -e x264b30 -b 960 -B 128 -R 48 -E faac -f mp4 -w 480 -m -x cabac=0:ref=1:analyse=all:me=umh:subme=6:no-fast-pskip=1:trellis=1\n");
+
+    printf("\n+ iPod High-Rez:  -e x264b30 -b 1500 -B 160 -R 48 -E faac -f mp4 -w 640 -m -x keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1\n");
+
+    printf("\n+ iPod Low-Rez:  -e x264b30 -b 700 -B 160 -R 48 -E faac -f mp4 -w 320 -m -x keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1\n");
+
+    printf("\n+ Normal:  -e x264 -b 1500 -B 160 -R 48 -E faac -f mp4 -m -p -2 -T -x ref=2:bframes=2:subme=5:me=umh\n");
+
+    printf("\n+ PS3:  -e x264 -b 2500 -B 160 -R 48 -E faac -f mp4 -m -p -x level=41:subme=5:me=umh\n");
+
+    printf("\n+ PSP:  -b 1024 -B 128 -R 48 -E faac -f mp4 -w 368 -l 208 -m\n");
+
+    printf("\n+ QuickTime:  -e x264 -b 2000 -B 160 -R 48 -E faac -f mp4 -m -p -2 -T -x ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:me=umh:subme=5:analyse=all:8x8dct:trellis=1:no-fast-pskip\n");
+
+    printf("\n+ Television:  -e x264 -b 1300 -B 160 -R 48 -E faac -f mkv -m -d -2 -T -x ref=3:mixed-refs:bframes=6:bime:weightb:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip\n");
+    
+}
+
+/****************************************************************************
  * ParseOptions:
  ****************************************************************************/
 static int ParseOptions( int argc, char ** argv )
@@ -991,9 +1281,10 @@ static int ParseOptions( int argc, char ** argv )
             { "crf",         no_argument,       NULL,    'Q' },
             { "x264opts",    required_argument, NULL,    'x' },
             { "turbo",       no_argument,       NULL,    'T' },
-            
             { "maxHeight",   required_argument, NULL,    'Y' },
             { "maxWidth",    required_argument, NULL,    'X' },
+            { "preset",      required_argument, NULL,    'Z' },
+            { "preset-list", no_argument,       NULL,    'z' },
 			
             { 0, 0, 0, 0 }
           };
@@ -1002,7 +1293,7 @@ static int ParseOptions( int argc, char ** argv )
         int c;
 
         c = getopt_long( argc, argv,
-                         "hvuC:f:4i:o:t:Lc:ma:6:s:UFN:e:E:2d789gpP::w:l:n:b:q:S:B:r:R:Qx:TY:X:",
+                         "hvuC:f:4i:o:t:Lc:ma:6:s:UFN:e:E:2d789gpP::w:l:n:b:q:S:B:r:R:Qx:TY:X:Z:z",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -1023,7 +1314,15 @@ static int ParseOptions( int argc, char ** argv )
             case 'C':
                 cpu = atoi( optarg );
                 break;
-
+            
+            case 'Z':
+                preset = 1;
+                preset_name = strdup(optarg);
+                break;
+            case 'z':
+                ShowPresets();
+                exit ( 0 );
+                
             case 'f':
                 format = strdup( optarg );
                 break;
@@ -1304,7 +1603,6 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case 'x':
                 x264opts = strdup( optarg );
-                x264opts2 = strdup( optarg );
                 break;
             case 'T':
                 turbo_opts_enabled = 1;
