@@ -1252,7 +1252,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 #pragma mark Job Handling
 
 
-- (void) PrepareJob
+- (void) prepareJob
 {
     hb_list_t  * list  = hb_get_titles( fHandle );
     hb_title_t * title = (hb_title_t *) hb_list_item( list,
@@ -1519,7 +1519,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     // be lumped together in the UI.
     job->sequence_id = -1;
 
-    [self PrepareJob];
+    [self prepareJob];
 
     /* Destination file */
     job->file = [[fDstFile2Field stringValue] UTF8String];
@@ -2342,7 +2342,7 @@ the user is using "Custom" settings by determining the sender*/
             [fSrcTitlePopUp indexOfSelectedItem] );
     hb_job_t * job = title->job;
 
-    [self PrepareJob];
+    [self prepareJob];
 
     [fVidBitrateField setIntValue: hb_calc_bitrate( job,
             [fVidTargetSizeField intValue] )];
