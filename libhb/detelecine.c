@@ -975,7 +975,7 @@ int hb_detelecine_work( const hb_buffer_t * buf_in,
         }
         else
         {
-            goto output_frame;
+            goto discard_frame;
         }
     }
     
@@ -987,7 +987,7 @@ int hb_detelecine_work( const hb_buffer_t * buf_in,
         
 		if (!frame) 
         {
-            goto output_frame;
+            goto discard_frame;
         }
 		if( frame->length < 2 ) 
         {
@@ -995,19 +995,19 @@ int hb_detelecine_work( const hb_buffer_t * buf_in,
 
 			if( !(buf_in->flags & PIC_FLAG_REPEAT_FIRST_FIELD) )
             {
-                goto output_frame;
+                goto discard_frame;
             }
 			
             frame = pullup_get_frame( ctx );
 			
             if( !frame ) 
             {
-                goto output_frame;
+                goto discard_frame;
             }
 			if( frame->length < 2 ) 
             {
 				pullup_release_frame( frame );
-                goto output_frame;
+                goto discard_frame;
 			}
 		}
     }
@@ -1034,6 +1034,15 @@ int hb_detelecine_work( const hb_buffer_t * buf_in,
 output_frame:    
     *buf_out = pv->buf_out;    
     return FILTER_OK;
+
+/* This and all discard_frame calls shown above are
+   the result of me restoring the functionality in
+   pullup that huevos_rancheros disabled because
+   HB couldn't handle it.                           */
+discard_frame:    
+    *buf_out = pv->buf_out;
+    return FILTER_DROP;
+
 }
 
 

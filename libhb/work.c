@@ -160,6 +160,27 @@ static void do_job( hb_job_t * job, int cpu_count )
             job->crop[0], job->crop[1], job->crop[2], job->crop[3] );
     hb_log( " + grayscale %s", job->grayscale ? "on" : "off" );
     
+    if ( job->vfr )
+    {
+        job->vrate_base = 900900;
+
+        int detelecine_present = 0;        
+        if ( job->filters )
+        {
+            for( i = 0; i < hb_list_count( job->filters ); i++ )
+            {
+                hb_filter_object_t * filter = hb_list_item( job->filters, i );
+                if (filter->id == FILTER_DETELECINE)
+                    detelecine_present = 1;
+            }            
+        }
+        
+        if (!detelecine_present)
+            hb_list_add( job->filters, &hb_filter_detelecine );
+        
+        hb_log("work: VFR mode -- Switching FPS to 29.97 and detelecining.");
+    }
+    
     if( job->filters )
     {
         hb_log(" + filters");

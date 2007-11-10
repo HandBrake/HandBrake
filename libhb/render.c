@@ -19,6 +19,10 @@ struct hb_work_private_s
     AVPicture            pic_tmp_out;        
     hb_buffer_t        * buf_scale;
     hb_fifo_t          * subtitle_queue;
+    hb_fifo_t          * delay_queue;
+    int                  frames_to_extend;
+    int                  dropped_frames;
+    int                  extended_frames;
 };
 
 int  renderInit( hb_work_object_t *, hb_job_t * );
@@ -153,10 +157,14 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_job_t   * job   = pv->job;
     hb_title_t * title = job->title;
     hb_buffer_t * in = *buf_in, * buf_tmp_in = *buf_in;
+    hb_buffer_t * ivtc_buffer = NULL;
     
     if(!in->data)
     {
-        /* If the input buffer is end of stream, send out an empty one to the next stage as well. */
+        /* If the input buffer is end of stream, send out an empty one
+         * to the next stage as well. Note that this will result in us
+         * losing the current contents of the delay queue.
+         */
        *buf_out = hb_buffer_init(0);
        return HB_WORK_OK;
     }
@@ -227,6 +235,11 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             {
                 hb_fifo_get( pv->subtitle_queue );
                 buf_tmp_in = NULL;
+                if( job->vfr )
+                {
+                    pv->frames_to_extend += 4;
+                    pv->dropped_frames++;
+                }
                 break;
             }
         }
@@ -291,6 +304,49 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         memcpy( buf_render->data, buf_tmp_in->data, buf_render->size );
         hb_buffer_copy_settings( buf_render, buf_tmp_in );
     }
+    
+    if (*buf_out)
+    {
+        hb_fifo_push( pv->delay_queue, *buf_out );
+        *buf_out = NULL;        
+    }
+
+    /*
+     * Keep the last three frames in our queue, this ensures that we have the last
+     * two always in there should we need to rewrite the durations on them.
+     */
+    if( hb_fifo_size( pv->delay_queue ) >= 3 )
+    {
+        *buf_out = hb_fifo_get( pv->delay_queue );
+    } 
+
+    if( *buf_out )
+    {
+        if( pv->frames_to_extend )
+        {
+            /*
+             * A frame's been dropped by VFR detelecine.
+             * Gotta make up the lost time. This will also
+             * slow down the video to 23.976fps.
+             * The dropped frame ran for 3003 ticks, so
+             * divvy it up amongst the 4 frames left behind.
+             * This is what the delay_queue is for;
+             * telecined sequences start 2 frames before
+             * the dropped frame, so to slow down the right
+             * ones you need a 2 frame delay between
+             * reading input and writing output.
+             */
+            ivtc_buffer = *buf_out;
+            
+            if (pv->frames_to_extend % 4)
+                ivtc_buffer->stop += 751;
+            else
+                ivtc_buffer->stop += 750;
+                
+            pv->frames_to_extend--;
+            pv->extended_frames++;
+        }
+    }
 
     return HB_WORK_OK;
 }
@@ -299,12 +355,21 @@ void renderClose( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;   
         
+    hb_log("render: dropped frames: %i (%i ticks)", pv->dropped_frames, (pv->dropped_frames * 3003) );
+    hb_log("render: extended frames: %i (%i ticks)", pv->extended_frames, ( ( pv->extended_frames / 4 ) * 3003 ) );
+    hb_log("render: Lost time: %i frames (%i ticks)", (pv->dropped_frames * 4) - (pv->extended_frames), (pv->dropped_frames * 3003) - ( ( pv->extended_frames / 4 ) * 3003 ) );
+
     /* Cleanup subtitle queue */
     if( pv->subtitle_queue )
     {
         hb_fifo_close( &pv->subtitle_queue );
     }
     
+    if( pv->delay_queue )
+    {
+        hb_fifo_close( &pv->delay_queue );
+    }
+   
     /* Cleanup filters */
     /* TODO: Move to work.c? */
     if( pv->job->filters )
@@ -352,6 +417,10 @@ int renderInit( hb_work_object_t * w, hb_job_t * job )
     
     /* Setup FIFO queue for subtitle cache */
     pv->subtitle_queue = hb_fifo_init( 8 );    
+    pv->delay_queue = hb_fifo_init( 8 );
+    pv->frames_to_extend = 0;
+    pv->dropped_frames = 0;
+    pv->extended_frames = 0;
     
     /* Setup filters */
     /* TODO: Move to work.c? */

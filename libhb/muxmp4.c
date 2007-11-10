@@ -393,7 +393,14 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         /* Because we use the audio samplerate as the timescale,
            we have to use potentially variable durations so the video
            doesn't go out of sync */
-        duration    = ( buf->stop * job->arate / 90000 ) - m->sum_dur;
+        if ( job->vfr )
+        {
+            duration    = ( ( buf->stop * job->arate / 90000 ) - ( buf->start * job->arate / 90000 ) );
+        }
+        else
+        {
+            duration    = ( buf->stop * job->arate / 90000 ) - m->sum_dur;
+        }
         m->sum_dur += duration;
     }
     else

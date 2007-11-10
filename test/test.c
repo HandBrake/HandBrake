@@ -69,6 +69,7 @@ static char * turbo_opts = "ref=1:subme=1:me=dia:analyse=none:trellis=0:no-fast-
 static int    largeFileSize = 0;
 static int    preset        = 0;
 static char * preset_name   = 0;
+static int    vfr           = 0;
 
 /* Exit cleanly on Ctrl-C */
 static volatile int die = 0;
@@ -877,6 +878,9 @@ static int HandleEvents( hb_handle_t * h )
                 job->maxWidth = maxWidth;
             if (maxHeight)
                 job->maxHeight = maxHeight;
+            
+            if (vfr)
+                job->vfr = 1;
 	
             if( subtitle_force )
             {
@@ -1177,14 +1181,16 @@ static void ShowHelp()
 	"\n"
 	
 	
-    "### Advanced H264 Options----------------------------------------------------\n\n"
+    "### Advanced Options---------------------------------------------------------\n\n"
     "    -x, --x264opts <string> Specify advanced x264 options in the\n"
     "                            same style as mencoder:\n"
     "                            option1=value1:option2=value2\n"
     "    -T, --turbo             When using 2-pass use the turbo options\n"
     "                            on the first pass to improve speed\n"
     "                            (only works with x264, affects PSNR by about 0.05dB,\n"
-    "                            and increases first pass speed two to four times)\n");
+    "                            and increases first pass speed two to four times)\n"
+    "    -V, --vfr               Perform variable framerate detelecine on NTSC content\n"
+    );
 }
 
 /****************************************************************************
@@ -1285,6 +1291,7 @@ static int ParseOptions( int argc, char ** argv )
             { "maxWidth",    required_argument, NULL,    'X' },
             { "preset",      required_argument, NULL,    'Z' },
             { "preset-list", no_argument,       NULL,    'z' },
+            { "vfr",         no_argument,       NULL,    'V' },
 			
             { 0, 0, 0, 0 }
           };
@@ -1293,7 +1300,7 @@ static int ParseOptions( int argc, char ** argv )
         int c;
 
         c = getopt_long( argc, argv,
-                         "hvuC:f:4i:o:t:Lc:ma:6:s:UFN:e:E:2d789gpP::w:l:n:b:q:S:B:r:R:Qx:TY:X:Z:z",
+                         "hvuC:f:4i:o:t:Lc:ma:6:s:UFN:e:E:2d789gpP::w:l:n:b:q:S:B:r:R:Qx:TY:X:VZ:z",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -1612,6 +1619,9 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case 'X':
                 maxWidth = atoi (optarg );
+                break;
+            case 'V':
+                vfr = 1;
                 break;
 				
             default:

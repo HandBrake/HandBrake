@@ -172,7 +172,8 @@ struct hb_job_s
     int             crf;
     char            *x264opts;
     int             areBframes;
-    
+    int             vfr;
+
     /* Audio tracks:
          audios:          Indexes in hb_title_t's audios list, starting from 0.
                           -1 indicates the end of the list
