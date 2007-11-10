@@ -1077,6 +1077,10 @@ static void ShowHelp()
     "    -u, --update            Check for updates and exit\n"
     "    -v, --verbose           Be verbose\n"
     "    -C, --cpu               Set CPU count (default: autodetected)\n"
+    "    -Z. --preset <string>   Use a built-in preset. Capitalization matters, and\n"
+    "                            if the preset name has spaces, surround it with\n"
+    "                            double quotation marks\n"
+    "    -z, --preset-list       See a list of available built-in presets\n"
     "\n"
 	
 	"### Source Options-----------------------------------------------------------\n\n"
@@ -1104,7 +1108,7 @@ static void ShowHelp()
 	"    -Y, --maxHeight <#>     Set maximum height\n"
 	"    -X, --maxWidth <#>      Set maximum width\n"
 	"    -s, --subtitle <number> Select subtitle (default: none)\n"
-    "    -U, --subtitle-scan     Scan for subtitles in an extra first pass, and choose\n"
+    "    -U, --subtitle-scan     Scan for subtitles in an extra 1st pass, and choose\n"
     "                            the one that's only used 10 percent of the time\n"
     "                            or less. This should locate subtitles for short\n"
     "                            foreign language segments. Best used in conjunction\n"
@@ -1189,7 +1193,7 @@ static void ShowHelp()
     "                            on the first pass to improve speed\n"
     "                            (only works with x264, affects PSNR by about 0.05dB,\n"
     "                            and increases first pass speed two to four times)\n"
-    "    -V, --vfr               Perform variable framerate detelecine on NTSC content\n"
+    "    -V, --vfr               Perform variable framerate detelecine on NTSC video\n"
     );
 }
 
