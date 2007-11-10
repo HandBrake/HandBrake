@@ -11,11 +11,11 @@ using System.IO;
 using System.Diagnostics;
 using System.Threading;
 using System.Runtime.InteropServices;
+using System.Globalization;
 
 
 namespace Handbrake
 {
-
     public partial class frmMain : Form
     {
         // -------------------------------------------------------------- 
@@ -26,53 +26,95 @@ namespace Handbrake
 
         // Some stuff that needs to be Initialized. 
         private Process hbProc;
-        private Parsing.DVD thisDVD;        
-        private frmQueue queueWindow = new frmQueue();  
+        private Parsing.DVD thisDVD;
+        private frmQueue queueWindow = new frmQueue();
 
         // The main window beings here...
         public frmMain()
         {
+            // Load the splash screen in this thread
+            Form splash = new frmSplashScreen();
+            splash.Show();
 
-            // Load the splash screen on another thread. Once completed wait for 1 second.
-            ThreadPool.QueueUserWorkItem(showSplash); 
-            Thread.Sleep(1000);
+            //Create a label that can be updated from the parent thread.
+            Label lblStatus = new Label();
+
+            //Size the label
+            lblStatus.Size = new Size(250, 20);
+
+            //Position the label
+            lblStatus.Location = new Point(10, 280);
+
+            //Put the label on the splash form
+            splash.Controls.Add(lblStatus);
+
+            //Fire a thread to wait for 2 seconds.  The splash screen will exit when the time expires
+            Thread timer = new Thread(splashTimer);
+            timer.Start();
 
             InitializeComponent();
 
-            // This is a quick Hack fix for the cross-thread problem with frmDvdIndo ************************
-            //dvdInfoWindow.Show();
-            //dvdInfoWindow.Hide();
-            // **********************************************************************************************
+            // show the form, but leave disabled until preloading is complete
+            this.Enabled = false;
+
+            // Show the main form
+            this.Show();
+
+            // Forces frmMain to draw
+            Application.DoEvents();
 
             // Set the Version number lable to the corect version.
             Version.Text = "Version " + Properties.Settings.Default.CliVersion;
 
+            // update the status
+            lblStatus.Text = "Checking for updates ...";
+            // redraw the splash screen
+            Application.DoEvents();
             // Run the update checker.
             updateCheck();
+            Thread.Sleep(300);
 
             // Now load the users default if required. (Will overide the above setting)
+            lblStatus.Text = "Loading User Default Settings...";
+            Application.DoEvents();
             loadUserDefaults();
+            Thread.Sleep(300);
 
             // Enable or disable tooltips
+            lblStatus.Text = "Loading Tooltips ...";
+            Application.DoEvents();
             tooltip();
+            Thread.Sleep(300);
 
-            // Hide the preset bar should the user have the option enabled.
+            // Update the presets
+            lblStatus.Text = "Updaing Presets ...";
+            Application.DoEvents();
+            updatePresets();
+            Thread.Sleep(300);
+
+            // Hide the preset bar if required.
             hidePresetBar();
 
-            // Load in all the presets
-            updatePresets();
+            //Finished Loading
+            lblStatus.Text = "Loading Complete!";
+            Application.DoEvents();
+            Thread.Sleep(300);
 
-            /*
-             * This code can be used for storing preset and preset name information in future versions.
-             * Please ignore it for the moment.
-            // Create and initialize a new StringCollection.
-            StringCollection myCol = new StringCollection();
-            // Add a range of elements from an array to the end of the StringCollection.
-            String[] myArr = new String[] { "RED", "orange", "yellow", "RED", "green", "blue", "RED", "indigo", "violet", "RED" };
-            myCol.AddRange(myArr);
-            Properties.Settings.Default.BuiltInPresets = myCol;
-            MessageBox.Show(Properties.Settings.Default.BuiltInPresets.ToString());
-            */
+            // Wait until splash screen is done
+            while (timer.IsAlive)
+            { Thread.Sleep(100); }
+
+            //Close the splash screen
+            splash.Close();
+            splash.Dispose();
+
+            // Turn the interface back to the user
+            this.Enabled = true;
+        }
+
+        private void splashTimer(object sender)
+        {
+            Thread.Sleep(2000);  //sit for 2 seconds then exit
         }
 
         private void showSplash(object sender)
@@ -80,12 +122,12 @@ namespace Handbrake
             // Display splash screen for 1.5 Seconds
             Form splash = new frmSplashScreen();
             splash.Show();
-            Thread.Sleep(1500);  
+            Thread.Sleep(1500);
             splash.Close(); // Then close.
         }
 
         private void loadUserDefaults()
-        { 
+        {
             try
             {
                 // Load the users default settings or if the user has not got this option enabled, load the normal preset.
@@ -160,7 +202,7 @@ namespace Handbrake
                     {
                         Check_ChapterMarkers.CheckState = CheckState.Checked;
                     }
-                   
+
                     // Audio Settings Tab
                     drp_audioBitrate.Text = Properties.Settings.Default.AudioBitrate;
                     drp_audioSampleRate.Text = Properties.Settings.Default.AudioSampleRate;
@@ -209,10 +251,10 @@ namespace Handbrake
                     int cliversion = int.Parse(Properties.Settings.Default.CliVersion.Replace(".", ""));
 
                     Boolean update = ((verdata > vergui) || (verd1 > cliversion));
-   
+
                     lbl_update.Visible = update;
 
-                    return update;   
+                    return update;
                 }
                 else
                 {
@@ -251,105 +293,39 @@ namespace Handbrake
         // -------------------------------------------------------------- 
 
         #region File Menu
-
-
-
         private void mnu_open_Click(object sender, EventArgs e)
         {
             string filename;
             File_Open.ShowDialog();
             filename = File_Open.FileName;
+
             if (filename != "")
             {
                 try
                 {
+                    // Some things that need to be done to reset some gui components:
+                    CheckPixelRatio.CheckState = CheckState.Unchecked;
+
+                    //---------------------------
+                    // Get the Preset
+                    // ---------------------------
+
                     // Create StreamReader & open file
                     StreamReader line = new StreamReader(filename);
-                    string temporyLine; // Used for reading the line into a varible before processing on the checkState items below.
 
-                    // Read in the data and set the correct GUI component with the setting.
-                    text_source.Text = line.ReadLine();
-                    drp_dvdtitle.Text = line.ReadLine();
-                    drop_chapterStart.Text = line.ReadLine();
-                    drop_chapterFinish.Text = line.ReadLine();
-                    text_destination.Text = line.ReadLine();
-                    drp_videoEncoder.Text = line.ReadLine();
-                    drp_audioCodec.Text = line.ReadLine();
-                    text_width.Text = line.ReadLine();
-                    text_height.Text = line.ReadLine();
-                    text_top.Text = line.ReadLine();
-                    text_bottom.Text = line.ReadLine();
-                    text_left.Text = line.ReadLine();
-                    text_right.Text = line.ReadLine();
-                    drp_subtitle.Text = line.ReadLine();
-                    text_bitrate.Text = line.ReadLine();
-                    text_filesize.Text = line.ReadLine();
-                    slider_videoQuality.Value = int.Parse(line.ReadLine());
+                    // Send the query from the file to the Query Parser class
+                    Functions.QueryParser presetQuery = Functions.QueryParser.Parse(line.ReadLine());
 
-                    temporyLine = line.ReadLine();
-                    if (temporyLine == "Checked")
-                    {
-                        check_2PassEncode.CheckState = CheckState.Checked;
-                    }
-
-                    drp_deInterlace_option.Text = line.ReadLine();
-
-                    temporyLine = line.ReadLine();
-                    if (temporyLine == "Checked")
-                    {
-                        check_grayscale.CheckState = CheckState.Checked;
-                    }
-
-                    drp_videoFramerate.Text = line.ReadLine();
-
-                    temporyLine = line.ReadLine();
-                    if (temporyLine == "Checked")
-                    {
-                        Check_ChapterMarkers.CheckState = CheckState.Checked;
-                    }
-
-                    temporyLine = line.ReadLine();
-                    if (temporyLine == "Checked")
-                    {
-                        CheckPixelRatio.CheckState = CheckState.Checked;
-                    }
-
-                    temporyLine = line.ReadLine();
-                    if (temporyLine == "Checked")
-                    {
-                        check_turbo.CheckState = CheckState.Checked;
-                    }
-
-                    temporyLine = line.ReadLine();
-                    if (temporyLine == "Checked")
-                    {
-                        check_largeFile.CheckState = CheckState.Checked;
-                    }
-
-                    drp_audioBitrate.Text = line.ReadLine();
-                    drp_audioSampleRate.Text = line.ReadLine();
-                    drp_audioChannels.Text = line.ReadLine();
-                    drp_audioMixDown.Text = line.ReadLine();
-
-                    // Advanced H264 Options
-                    temporyLine = line.ReadLine();
-                    if (temporyLine == "Checked")
-                    {
-                        CheckCRF.CheckState = CheckState.Checked;
-                    }
-                    rtf_h264advanced.Text = line.ReadLine();
+                    // Now load the preset
+                    presetLoader(presetQuery, filename);
 
                     // Close the stream
                     line.Close();
-
-
-                    // Fix for SliderValue not appearing when Opening saved file
-                    SliderValue.Text = slider_videoQuality.Value + "%";
-
                 }
-                catch (Exception)
+                catch (Exception exc)
                 {
                     MessageBox.Show("Unable to load profile.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                    MessageBox.Show(exc.ToString());
                 }
             }
         }
@@ -366,43 +342,10 @@ namespace Handbrake
                     // Create a StreamWriter and open the file
                     StreamWriter line = new StreamWriter(filename);
 
-                    //Source
-                    line.WriteLine(text_source.Text);
-                    line.WriteLine(drp_dvdtitle.Text);
-                    line.WriteLine(drop_chapterStart.Text);
-                    line.WriteLine(drop_chapterFinish.Text);
-                    //Destination
-                    line.WriteLine(text_destination.Text);
-                    line.WriteLine(drp_videoEncoder.Text);
-                    line.WriteLine(drp_audioCodec.Text);
-                    line.WriteLine(text_width.Text);
-                    line.WriteLine(text_height.Text);
-                    //Picture Settings Tab
-                    line.WriteLine(text_top.Text);
-                    line.WriteLine(text_bottom.Text);
-                    line.WriteLine(text_left.Text);
-                    line.WriteLine(text_right.Text);
-                    line.WriteLine(drp_subtitle.Text);
-                    //Video Settings Tab
-                    line.WriteLine(text_bitrate.Text);
-                    line.WriteLine(text_filesize.Text);
-                    line.WriteLine(slider_videoQuality.Value.ToString());
-                    line.WriteLine(check_2PassEncode.CheckState.ToString());
-                    line.WriteLine(drp_deInterlace_option.Text);
-                    line.WriteLine(check_grayscale.CheckState.ToString());
-                    line.WriteLine(drp_videoFramerate.Text);
-                    line.WriteLine(Check_ChapterMarkers.CheckState.ToString());
-                    line.WriteLine(CheckPixelRatio.CheckState.ToString());
-                    line.WriteLine(check_turbo.CheckState.ToString());
-                    line.WriteLine(check_largeFile.CheckState.ToString());
-                    //Audio Settings Tab
-                    line.WriteLine(drp_audioBitrate.Text);
-                    line.WriteLine(drp_audioSampleRate.Text);
-                    line.WriteLine(drp_audioChannels.Text);
-                    line.WriteLine(drp_audioMixDown.Text);
-                    //H264 Tab
-                    line.WriteLine(CheckCRF.CheckState.ToString());
-                    line.WriteLine(rtf_h264advanced.Text);
+                    // Generate and write the query string to the file
+                    String query = GenerateTheQuery();
+                    line.WriteLine(query);
+
                     // close the stream
                     line.Close();
                     MessageBox.Show("Your profile has been sucessfully saved.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
@@ -428,7 +371,7 @@ namespace Handbrake
         {
             showQueue();
         }
-   
+
         private void mnu_viewDVDdata_Click(object sender, EventArgs e)
         {
             frmDvdInfo dvdInfoWindow = new frmDvdInfo();
@@ -483,7 +426,7 @@ namespace Handbrake
 
         private void mnu_wiki_Click(object sender, EventArgs e)
         {
-           Process.Start("http://handbrake.m0k.org/trac");
+            Process.Start("http://handbrake.m0k.org/trac");
         }
 
         private void mnu_faq_Click(object sender, EventArgs e)
@@ -498,7 +441,7 @@ namespace Handbrake
 
         private void mnu_homepage_Click(object sender, EventArgs e)
         {
-           Process.Start("http://handbrake.m0k.org");
+            Process.Start("http://handbrake.m0k.org");
         }
 
         private void mnu_forum_Click(object sender, EventArgs e)
@@ -521,7 +464,7 @@ namespace Handbrake
 
         private void mnu_about_Click(object sender, EventArgs e)
         {
-			Form About = new frmAbout();
+            Form About = new frmAbout();
             About.ShowDialog();
         }
 
@@ -535,44 +478,44 @@ namespace Handbrake
 
         private void btn_Browse_Click(object sender, EventArgs e)
         {
-            String filename = ""; 
-	 	    text_source.Text = "";
+            String filename = "";
+            text_source.Text = "";
             frmDvdInfo dvdInfoWindow = new frmDvdInfo();
-        
-	 	    if (RadioDVD.Checked) 
-	 	    { 
-	 	        DVD_Open.ShowDialog(); 
-	 	        filename = DVD_Open.SelectedPath; 
-	 	        if (filename != "") 
-	 	        { 
-	 	            Form frmRD = new frmReadDVD(filename, this, dvdInfoWindow); 
-	 	            text_source.Text = filename; 
-	 	            frmRD.ShowDialog(); 
-	 	        } 
-	 	     } 
-	 	     else 
-	 	     { 
-	 	        ISO_Open.ShowDialog(); 
-	 	        filename = ISO_Open.FileName; 
-	 	        if (filename != "") 
-	 	        { 
-	 	            Form frmRD = new frmReadDVD(filename, this, dvdInfoWindow); 
-	 	            text_source.Text = filename; 
-	 	            frmRD.ShowDialog(); 
-	 	        } 
-	 	     }   
-	 	 
-	 	     // Check if there was titles in the dvd title dropdown 
-	 	     if (filename == "") 
-	 	     { 
-	 	        text_source.Text = "Click 'Browse' to continue"; 
-	 	     } 
-	 	    
-             // If there are no titles in the dropdown menu then the scan has obviously failed. Display an error message explaining to the user.
-	 	     if (drp_dvdtitle.Items.Count == 0) 
-	 	     { 
-	 	        MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source. Please refer to the FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand); 
-	 	     }  	        
+
+            if (RadioDVD.Checked)
+            {
+                DVD_Open.ShowDialog();
+                filename = DVD_Open.SelectedPath;
+                if (filename != "")
+                {
+                    Form frmRD = new frmReadDVD(filename, this, dvdInfoWindow);
+                    text_source.Text = filename;
+                    frmRD.ShowDialog();
+                }
+            }
+            else
+            {
+                ISO_Open.ShowDialog();
+                filename = ISO_Open.FileName;
+                if (filename != "")
+                {
+                    Form frmRD = new frmReadDVD(filename, this, dvdInfoWindow);
+                    text_source.Text = filename;
+                    frmRD.ShowDialog();
+                }
+            }
+
+            // Check if there was titles in the dvd title dropdown 
+            if (filename == "")
+            {
+                text_source.Text = "Click 'Browse' to continue";
+            }
+
+            // If there are no titles in the dropdown menu then the scan has obviously failed. Display an error message explaining to the user.
+            if (drp_dvdtitle.Items.Count == 0)
+            {
+                MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source. Please refer to the FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+            }
         }
 
         private void btn_destBrowse_Click(object sender, EventArgs e)
@@ -581,7 +524,7 @@ namespace Handbrake
             // It's daft but some users don't realise that typing an extension overrides the dropdown extension selected.
             // Should be a nicer way to do this.
             DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", "").Replace(".m4v", "").Replace(".mkv", "").Replace(".ogm", "").Replace(".avi", "");
-           
+
             // Show the dialog and set the main form file path
             DVD_Save.ShowDialog();
             text_destination.Text = DVD_Save.FileName;
@@ -613,7 +556,7 @@ namespace Handbrake
 
         private void btn_queue_Click(object sender, EventArgs e)
         {
-          
+
             if (text_source.Text == "" || text_source.Text == "Click 'Browse' to continue" || text_destination.Text == "")
                 MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
@@ -629,9 +572,9 @@ namespace Handbrake
                 }
                 queueWindow.list_queue.Items.Add(query);
                 queueWindow.Show();
-            } 
+            }
         }
- 
+
         private void btn_copy_Click(object sender, EventArgs e)
         {
             if (QueryEditorText.Text != "")
@@ -682,7 +625,7 @@ namespace Handbrake
                 preset_listview = new ListViewItem(presetList);
 
                 // Now Fill Out List View with Items
-                listview_presets.Items.Add(preset_listview);      
+                listview_presets.Items.Add(preset_listview);
             }
         }
 
@@ -775,24 +718,30 @@ namespace Handbrake
                     break;
 
                 case "AppleTV":
+                    setmp4();
                     setGuiSetttings(CheckState.Checked, "", "", "H.264", "2500", "", 0, "0%", "160", CheckState.Checked, "48", "bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=2:cabac=0", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: Apple TV)");
                     break;
 
                 case "Bedlam":
+                    setmp4();
                     setGuiSetttings(CheckState.Checked, "", "", "H.264", "1800", "", 0, "0%", "160", CheckState.Checked, "48", "ref=16:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=7:me-range=64:analyse=all:8x8dct:trellis=2:no-fast-pskip:no-dct-decimate:filter=-2,-1", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AC3", "Output Settings (Preset: Bedlam)");
-                    setMkv();
                     break;
 
                 case "Blind":
+                    setmp4();
                     setGuiSetttings(CheckState.Unchecked, "512", "", "Mpeg 4", "512", "", 0, "0%", "128", CheckState.Checked, "48", "", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: Blind)");
                     break;
 
                 case "Broke":
+                    setmp4();
                     setGuiSetttings(CheckState.Unchecked, "640", "", "H.264", "", "695", 0, "0%", "128", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=6:bime:weightb:b-rdo:b-pyramid::direct=auto:me=umh:subme=6:trellis=1:analyse=all:8x8dct:no-fast-pskip", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Broke)");
                     break;
 
+
                 case "Classic":
+                    setmp4();
                     setGuiSetttings(CheckState.Unchecked, "", "", "Mpeg 4", "1000", "", 0, "0%", "160", CheckState.Unchecked, "48", "", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: Classic)");
+
                     break;
 
                 case "Constant Quality Rate":
@@ -811,30 +760,37 @@ namespace Handbrake
                     break;
 
                 case "iPhone / iPod Touch":
+                    setmp4();
                     setGuiSetttings(CheckState.Unchecked, "480", "", "H.264 (iPod)", "960", "", 0, "0%", "128", CheckState.Checked, "48", "cabac=0:ref=1:analyse=all:me=umh:subme=6:no-fast-pskip=1:trellis=1", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: iPhone)");
                     break;
 
                 case "iPod High-Rez":
+                    setmp4();
                     setGuiSetttings(CheckState.Unchecked, "640", "", "H.264 (iPod)", "1500", "", 0, "0%", "160", CheckState.Checked, "48", "keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: iPod High Rez)");
                     break;
 
                 case "iPod Low-Rez":
                     setGuiSetttings(CheckState.Unchecked, "320", "", "H.264 (iPod)", "700", "", 0, "0%", "160", CheckState.Checked, "48", "keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: iPod Low Rez)");
+                    setmp4();
                     break;
 
                 case "Normal":
                     setGuiSetttings(CheckState.Checked, "", "", "H.264", "1500", "", 0, "0%", "160", CheckState.Checked, "48", "ref=2:bframes=2:subme=5:me=umh", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Normal)");
+                    setmp4();
                     break;
 
                 case "PS3":
+                    setmp4();
                     setGuiSetttings(CheckState.Checked, "", "", "H.264", "2500", "", 0, "0%", "160", CheckState.Checked, "48", "level=41:subme=5:me=umh", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: PS3)");
                     break;
 
                 case "PSP":
+                    setmp4();
                     setGuiSetttings(CheckState.Unchecked, "368", "208", "Mpeg 4", "1024", "", 0, "0%", "160", CheckState.Checked, "48", "", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: PSP)");
                     break;
 
                 case "QuickTime":
+                    setmp4();
                     setGuiSetttings(CheckState.Checked, "", "", "H.264", "2000", "", 0, "0%", "160", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:me=umh:subme=5:analyse=all:8x8dct:trellis=1:no-fast-pskip", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Quicktime)");
                     break;
 
@@ -883,6 +839,16 @@ namespace Handbrake
             destination = destination.Replace(".ogm", ".mkv");
             text_destination.Text = destination;
         }
+        private void setmp4()
+        {
+            // Set file extension to MKV
+            string destination = text_destination.Text;
+            destination = destination.Replace(".m4v", ".mp4");
+            destination = destination.Replace(".avi", ".mp4");
+            destination = destination.Replace(".mkv", ".mp4");
+            destination = destination.Replace(".ogm", ".mp4");
+            text_destination.Text = destination;
+        }
 
         #endregion
 
@@ -928,7 +894,7 @@ namespace Handbrake
         [DllImport("user32.dll")]
         public static extern void LockWorkStation();
         [DllImport("user32.dll")]
-        public static extern int ExitWindowsEx(int uFlags, int dwReason); 
+        public static extern int ExitWindowsEx(int uFlags, int dwReason);
 
         private void procMonitor(object state)
         {
@@ -963,7 +929,7 @@ namespace Handbrake
                     hbProc.WaitForExit();
                     process.closeCLI();
                      */
-                    
+
                 }
                 catch (Exception exc)
                 {
@@ -982,7 +948,7 @@ namespace Handbrake
                         System.Diagnostics.Process.Start("Shutdown", "-s -t 60");
                         break;
                     case "Log Off":
-                        ExitWindowsEx(0, 0); 
+                        ExitWindowsEx(0, 0);
                         break;
                     case "Suspend":
                         Application.SetSuspendState(PowerState.Suspend, true, true);
@@ -1016,7 +982,7 @@ namespace Handbrake
 
         private void encode_OnEncodeProgress(object Sender, int CurrentTask, int TaskCount, float PercentComplete, float CurrentFps, float AverageFps, TimeSpan TimeRemaining)
         {
-            
+
             if (this.InvokeRequired)
             {
                 this.BeginInvoke(new Parsing.EncodeProgressEventHandler(encode_OnEncodeProgress),
@@ -1056,7 +1022,7 @@ namespace Handbrake
                 }
             }
 
-            
+
         }
 
         private void drop_chapterFinish_SelectedIndexChanged(object sender, EventArgs e)
@@ -1122,7 +1088,7 @@ namespace Handbrake
                     text_width.Text = "";
                     text_width.BackColor = Color.LightCoral;
                     CheckPixelRatio.BackColor = Color.LightCoral;
-                    
+
                 }
                 else
                 {
@@ -1151,15 +1117,15 @@ namespace Handbrake
                     {
                         text_height.Text = height.ToString();
                     }
-                }                   
+                }
             }
             catch (Exception)
             {
                 // No need to throw an error here.
                 // Note on non english systems, this will throw an error because of double.Parse(lbl_Aspect.Text); not working.
             }
-               
-          
+
+
         }
 
         private void text_height_TextChanged(object sender, EventArgs e)
@@ -1167,24 +1133,26 @@ namespace Handbrake
             try
             {
                 if (CheckPixelRatio.Checked)
-                    {
-                        text_height.Text = "";
-                        text_height.BackColor = Color.LightCoral;
-                        CheckPixelRatio.BackColor = Color.LightCoral;
+                {
+                    text_height.Text = "";
+                    text_height.BackColor = Color.LightCoral;
+                    CheckPixelRatio.BackColor = Color.LightCoral;
                 }
                 else
                 {
                     if ((int.Parse(text_height.Text) % 16) != 0)
                     {
-                            text_height.BackColor = Color.LightCoral;
+                        text_height.BackColor = Color.LightCoral;
                     }
                     else
                     {
-                            text_height.BackColor = Color.LightGreen;
+                        text_height.BackColor = Color.LightGreen;
                     }
                 }
 
-            } catch(Exception){
+            }
+            catch (Exception)
+            {
                 // No need to alert the user.
             }
         }
@@ -1193,10 +1161,10 @@ namespace Handbrake
         {
             if ((string)drp_crop.SelectedItem == "Manual")
             {
-            text_left.Enabled = true;
-            text_right.Enabled = true;
-            text_top.Enabled = true;
-            text_bottom.Enabled = true;
+                text_left.Enabled = true;
+                text_right.Enabled = true;
+                text_top.Enabled = true;
+                text_bottom.Enabled = true;
             }
 
             if ((string)drp_crop.SelectedItem == "Auto Crop")
@@ -1234,7 +1202,7 @@ namespace Handbrake
 
             }
         }
-        
+
         private void CheckPixelRatio_CheckedChanged(object sender, EventArgs e)
         {
             text_width.Text = "";
@@ -1298,7 +1266,7 @@ namespace Handbrake
                 drp_audioMixDown.Items.Add("Dolby Surround");
                 drp_audioMixDown.Items.Add("Dolby Pro Logic II");
                 drp_audioMixDown.Items.Add("6 Channel Discrete");
-                
+
                 drp_audioBitrate.Items.Clear();
                 drp_audioBitrate.Items.Add("32");
                 drp_audioBitrate.Items.Add("40");
@@ -1380,8 +1348,6 @@ namespace Handbrake
             }
         }
 
-
-
         private void drp_videoEncoder_SelectedIndexChanged(object sender, EventArgs e)
         {
             //Turn off some options which are H.264 only when the user selects a non h.264 encoder
@@ -1431,7 +1397,7 @@ namespace Handbrake
 
                 // Set the Recommended Cropping values
                 lbl_RecomendedCrop.Text = string.Format("{0}/{1}/{2}/{3}", selectedTitle.AutoCropDimensions[0], selectedTitle.AutoCropDimensions[1], selectedTitle.AutoCropDimensions[2], selectedTitle.AutoCropDimensions[3]);
-                
+
                 // Populate the Start chapter Dropdown
                 drop_chapterStart.Items.Clear();
                 drop_chapterStart.Items.AddRange(selectedTitle.Chapters.ToArray());
@@ -1477,6 +1443,7 @@ namespace Handbrake
 
         #region Program Functions
 
+        // Generate a CLI Query String
         public string GenerateTheQuery()
         {
             string source = text_source.Text;
@@ -1486,14 +1453,14 @@ namespace Handbrake
             int totalChapters = drop_chapterFinish.Items.Count - 1;
             string dvdChapter = "";
 
-            source = " -i " + '"' + source+ '"';
+            source = " -i " + '"' + source + '"';
 
-            if (dvdTitle ==  "Automatic")
+            if (dvdTitle == "Automatic")
                 dvdTitle = "";
             else
             {
                 string[] titleInfo = dvdTitle.Split(' ');
-                dvdTitle = " -t "+ titleInfo[0];
+                dvdTitle = " -t " + titleInfo[0];
             }
 
             if (chapterFinish.Equals("Auto") && chapterStart.Equals("Auto"))
@@ -1503,7 +1470,7 @@ namespace Handbrake
             else
                 dvdChapter = " -c " + chapterStart + "-" + chapterFinish;
 
-            string querySource = source+ dvdTitle+ dvdChapter;
+            string querySource = source + dvdTitle + dvdChapter;
             // ----------------------------------------------------------------------
 
             // Destination
@@ -1514,7 +1481,7 @@ namespace Handbrake
             string width = text_width.Text;
             string height = text_height.Text;
 
-            if (destination ==  "")
+            if (destination == "")
                 MessageBox.Show("No destination has been selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
                 destination = " -o " + '"' + destination + '"'; //'"'+ 
@@ -1541,7 +1508,7 @@ namespace Handbrake
                     videoEncoder = " -e x264";
                     break;
             }
-           
+
             switch (audioEncoder)
             {
                 case "AAC":
@@ -1561,8 +1528,8 @@ namespace Handbrake
                     break;
             }
 
-            if (width !=  "")
-                width = " -w "+ width;
+            if (width != "")
+                width = " -w " + width;
 
 
             if (height == "Auto")
@@ -1573,9 +1540,9 @@ namespace Handbrake
             {
                 height = " -l " + height;
             }
-            
 
-            string queryDestination = destination+ videoEncoder+ audioEncoder+ width+ height;
+
+            string queryDestination = destination + videoEncoder + audioEncoder + width + height;
             // ----------------------------------------------------------------------
 
             // Picture Settings Tab
@@ -1612,15 +1579,15 @@ namespace Handbrake
                 cropOut = " --crop " + cropTop + ":" + cropBottom + ":" + cropLeft + ":" + cropRight;
             }
 
-            if (subtitles ==  "None")
+            if (subtitles == "None")
                 subtitles = "";
-            else if (subtitles ==  "")
+            else if (subtitles == "")
                 subtitles = "";
             else
             {
                 string[] tempSub;
                 tempSub = subtitles.Split(' ');
-                subtitles = " -s "+ tempSub[0];
+                subtitles = " -s " + tempSub[0];
             }
 
             switch (deInterlace_Option)
@@ -1629,16 +1596,16 @@ namespace Handbrake
                     deinterlace = "";
                     break;
                 case "Original (Fast)":
-                    deinterlace = " --deinterlace=" + '"' + "-1" + '"';
+                    deinterlace = " --deinterlace=fast";
                     break;
                 case "yadif (Slow)":
-                    deinterlace = " --deinterlace=" + '"' + "0" + '"';
+                    deinterlace = " --deinterlace=slow";
                     break;
                 case "yadif + mcdeint (Slower)":
-                    deinterlace = " --deinterlace=" + '"' + "2:-1:1" + '"';
+                    deinterlace = " --deinterlace=slower";
                     break;
                 case "yadif + mcdeint (Slowest)":
-                    deinterlace = " --deinterlace=" + '"' + "1:-1:1" + '"';
+                    deinterlace = " --deinterlace=slowest";
                     break;
                 default:
                     deinterlace = "";
@@ -1677,34 +1644,33 @@ namespace Handbrake
             else
                 CRF = "";
 
-            if (videoBitrate !=  "")
-                videoBitrate = " -b "+ videoBitrate;
+            if (videoBitrate != "")
+                videoBitrate = " -b " + videoBitrate;
 
-            if (videoFilesize !=  "")
-                videoFilesize = " -S "+ videoFilesize;
+            if (videoFilesize != "")
+                videoFilesize = " -S " + videoFilesize;
 
             // Video Quality Setting
 
-            if ((videoQuality ==  0))
+            if ((videoQuality == 0))
                 vidQSetting = "";
             else
             {
                 videoQuality = videoQuality / 100;
-                if (videoQuality ==  1)
+                if (videoQuality == 1)
                 {
                     vidQSetting = "1.0";
                 }
-
-                vidQSetting = " -q " + videoQuality.ToString();
+                vidQSetting = " -q " + videoQuality.ToString(new CultureInfo("en-US")); 
             }
 
             if (check_2PassEncode.Checked)
                 twoPassEncoding = " -2 ";
 
-            if (videoFramerate ==  "Automatic")
+            if (videoFramerate == "Automatic")
                 videoFramerate = "";
             else
-                videoFramerate = " -r "+ videoFramerate;
+                videoFramerate = " -r " + videoFramerate;
 
             if (check_turbo.Checked)
                 turboH264 = " -T ";
@@ -1724,13 +1690,13 @@ namespace Handbrake
                     denoise = "";
                     break;
                 case "Weak":
-                    denoise = " --denoise=2:1:2:3";
+                    denoise = " --denoise=weak";
                     break;
                 case "Medium":
-                    denoise = " --denoise=3:2:2:3";
+                    denoise = " --denoise=medium";
                     break;
                 case "Strong":
-                    denoise = " --denoise=7:7:5:5";
+                    denoise = " --denoise=strong";
                     break;
                 default:
                     denoise = "";
@@ -1748,21 +1714,21 @@ namespace Handbrake
             string Mixdown = drp_audioMixDown.Text;
             string SixChannelAudio = "";
 
-            if (audioBitrate !=  "")
-                audioBitrate = " -B "+ audioBitrate;
+            if (audioBitrate != "")
+                audioBitrate = " -B " + audioBitrate;
 
-            if (audioSampleRate !=  "")
-                audioSampleRate = " -R "+ audioSampleRate;
+            if (audioSampleRate != "")
+                audioSampleRate = " -R " + audioSampleRate;
 
-            if (audioChannels ==  "Automatic")
+            if (audioChannels == "Automatic")
                 audioChannels = "";
-            else if (audioChannels ==  "")
+            else if (audioChannels == "")
                 audioChannels = "";
             else
             {
                 string[] tempSub;
                 tempSub = audioChannels.Split(' ');
-                audioChannels = " -a "+ tempSub[0];
+                audioChannels = " -a " + tempSub[0];
             }
 
             switch (Mixdown)
@@ -1790,24 +1756,24 @@ namespace Handbrake
                     break;
             }
 
-            if (Mixdown !=  "")
-                SixChannelAudio = " -6 "+ Mixdown;
+            if (Mixdown != "")
+                SixChannelAudio = " -6 " + Mixdown;
             else
                 SixChannelAudio = "";
 
-            string queryAudioSettings = audioBitrate+ audioSampleRate+ audioChannels+ SixChannelAudio;
+            string queryAudioSettings = audioBitrate + audioSampleRate + audioChannels + SixChannelAudio;
             // ----------------------------------------------------------------------
 
             //  H.264 Tab
 
-            
+
             string h264Advanced = rtf_h264advanced.Text;
-            
-            if ((h264Advanced ==  ""))
+
+            if ((h264Advanced == ""))
                 h264Advanced = "";
             else
-                h264Advanced = " -x "+ h264Advanced;
-    
+                h264Advanced = " -x " + h264Advanced;
+
 
             string h264Settings = h264Advanced;
             // ----------------------------------------------------------------------
@@ -1817,10 +1783,10 @@ namespace Handbrake
             string processors = Properties.Settings.Default.Processors;
             //  Number of Processors Handler
 
-            if (processors ==  "Automatic")
+            if (processors == "Automatic")
                 processors = "";
             else
-                processors = " -C "+ processors+ " ";
+                processors = " -C " + processors + " ";
 
 
             string queryAdvancedSettings = processors;
@@ -1829,34 +1795,187 @@ namespace Handbrake
             //  Verbose option (Program Settings)
 
             string verbose = "";
-            if (Properties.Settings.Default.verbose ==  "Checked")
+            if (Properties.Settings.Default.verbose == "Checked")
                 verbose = " -v ";
 
             // ----------------------------------------------------------------------
 
-            return querySource+ queryDestination+ queryPictureSettings+ queryVideoSettings+ h264Settings+ queryAudioSettings+ queryAdvancedSettings+ verbose;
+            return querySource + queryDestination + queryPictureSettings + queryVideoSettings + h264Settings + queryAudioSettings + queryAdvancedSettings + verbose;
         }
 
-        #endregion
-
-
-
-        private Functions.QueryParser thisQuery;
-        private void button1_Click(object sender, EventArgs e)
+        // Load a Preset
+        private void presetLoader(Functions.QueryParser presetQuery, string name)
         {
-            String query = "";
-            if (QueryEditorText.Text == "")
+            // ---------------------------
+            // Setup the GUI
+            // ---------------------------
+
+            // Source tab
+            #region source
+            text_source.Text = presetQuery.Source;
+            if (presetQuery.DVDTitle != 0)
+                drp_dvdtitle.Text = presetQuery.DVDTitle.ToString();
+
+            if (presetQuery.DVDChapterStart != 0)
+                drop_chapterStart.Text = presetQuery.DVDChapterStart.ToString();
+
+            if (presetQuery.DVDChapterFinish != 0)
+                drop_chapterFinish.Text = presetQuery.DVDChapterFinish.ToString();
+            #endregion
+
+            // Destination tab
+            #region destination
+
+            text_destination.Text = presetQuery.Destination;
+            drp_videoEncoder.Text = presetQuery.VideoEncoder;
+            drp_audioCodec.Text = presetQuery.AudioEncoder;
+            if (presetQuery.Width != 0)
             {
-                query = GenerateTheQuery();
+                text_width.Text = presetQuery.Width.ToString();
             }
             else
             {
-                query = QueryEditorText.Text;
+                text_width.Text = "";
+                text_width.BackColor = Color.White;
             }
-            thisQuery = Functions.QueryParser.Parse(query);
-            MessageBox.Show(thisQuery.Source.ToString());
-            MessageBox.Show(thisQuery.Destination.ToString());
+            if (presetQuery.Height != 0)
+            {
+                text_height.Text = presetQuery.Height.ToString();
+            }
+            else
+            {
+                text_height.Text = "";
+                text_width.BackColor = Color.White;
+            }
+            #endregion
+
+            // Picture Settings Tab
+            #region Picture
+            drp_crop.Text = "Manual";
+            text_top.Text = presetQuery.CropTop;
+            text_bottom.Text = presetQuery.CropBottom;
+            text_left.Text = presetQuery.CropLeft;
+            text_right.Text = presetQuery.CropRight;
+
+            drp_deInterlace_option.Text = presetQuery.DeInterlace;
+            drp_deNoise.Text = presetQuery.DeNoise;
+
+            if (presetQuery.DeTelecine == true)
+            {
+                check_detelecine.CheckState = CheckState.Checked;
+            }
+            else
+            {
+                check_detelecine.CheckState = CheckState.Unchecked;
+            }
+
+
+            if (presetQuery.DeBlock == true)
+            {
+                check_deblock.CheckState = CheckState.Checked;
+            }
+            else
+            {
+                check_deblock.CheckState = CheckState.Unchecked;
+            }
+
+            if (presetQuery.ChapterMarkers == true)
+            {
+                Check_ChapterMarkers.CheckState = CheckState.Checked;
+            }
+            else
+            {
+                Check_ChapterMarkers.CheckState = CheckState.Unchecked;
+            }
+
+            if (presetQuery.Anamorphic == true)
+            {
+                CheckPixelRatio.CheckState = CheckState.Checked;
+            }
+            else
+            {
+                CheckPixelRatio.CheckState = CheckState.Unchecked;
+            }
+            #endregion
+
+            // Video Settings Tab
+            #region video
+            text_bitrate.Text = presetQuery.AverageVideoBitrate;
+            text_filesize.Text = presetQuery.VideoTargetSize;
+            slider_videoQuality.Value = presetQuery.VideoQuality;
+            if (slider_videoQuality.Value != 0)
+            {
+                CheckCRF.Enabled = true;
+                int ql = presetQuery.VideoQuality;
+                SliderValue.Text = ql.ToString() + "%";
+            }
+
+            if (presetQuery.TwoPass == true)
+            {
+                check_2PassEncode.CheckState = CheckState.Checked;
+            }
+            else
+            {
+                check_2PassEncode.CheckState = CheckState.Unchecked;
+            }
+
+            if (presetQuery.Grayscale == true)
+            {
+                check_grayscale.CheckState = CheckState.Checked;
+            }
+            else
+            {
+                check_grayscale.CheckState = CheckState.Unchecked;
+            }
+
+            drp_videoFramerate.Text = presetQuery.VideoFramerate;
+
+            if (presetQuery.TurboFirstPass == true)
+            {
+                check_turbo.CheckState = CheckState.Checked;
+            }
+            else
+            {
+                check_turbo.CheckState = CheckState.Unchecked;
+            }
+
+            if (presetQuery.LargeMP4 == true)
+            {
+                check_largeFile.CheckState = CheckState.Checked;
+            }
+            else
+            {
+                check_largeFile.CheckState = CheckState.Unchecked;
+            }
+            if (presetQuery.CRF == true)
+            {
+                CheckCRF.CheckState = CheckState.Checked;
+            }
+            else
+            {
+                CheckCRF.CheckState = CheckState.Unchecked;
+            }
+            #endregion
+
+            // Audio Settings Tab
+            #region audio
+            drp_audioBitrate.Text = presetQuery.AudioBitrate;
+            drp_audioSampleRate.Text = presetQuery.AudioSampleBitrate;
+            drp_audioChannels.Text = presetQuery.AudioTrack1;
+            drp_audioMixDown.Text = presetQuery.AudioTrackMix;
+            drp_subtitle.Text = presetQuery.Subtitles;
+            #endregion
+
+            // H264 Tab & Preset Name
+            #region other
+            rtf_h264advanced.Text = presetQuery.H264Query;
+
+            // Set the preset name
+            groupBox_output.Text = "Output Settings (Preset: " + name + ")";
+            #endregion
         }
+
+        #endregion
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

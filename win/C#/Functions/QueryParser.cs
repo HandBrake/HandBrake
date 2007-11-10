@@ -51,12 +51,12 @@ namespace Handbrake.Functions
             }
         }
 
-        private string q_chaptersStart;
+        private int q_chaptersStart;
         /// <summary>
-        /// Returns an String
+        /// Returns an Int
         /// DVD Chapter number or chapter range.
         /// </summary>
-        public string DVDChapterStart
+        public int DVDChapterStart
         {
             get
             {
@@ -64,12 +64,12 @@ namespace Handbrake.Functions
             }
         }
 
-        private string q_chaptersFinish;
+        private int q_chaptersFinish;
         /// <summary>
-        /// Returns an String
+        /// Returns an Int
         /// DVD Chapter number or chapter range.
         /// </summary>
-        public string DVDChapterFinish
+        public int DVDChapterFinish
         {
             get
             {
@@ -105,7 +105,7 @@ namespace Handbrake.Functions
 
         private int q_videoWidth;
         /// <summary>
-        /// Returns an Integer
+        /// Returns an Int
         /// The selected Width for the encoding.
         /// </summary>
         public int Width
@@ -118,7 +118,7 @@ namespace Handbrake.Functions
 
         private int q_videoHeight;
         /// <summary>
-        /// Returns an Integer
+        /// Returns an Int
         /// The selected Height for the encoding.
         /// </summary>
         public int Height
@@ -463,13 +463,12 @@ namespace Handbrake.Functions
         {
             QueryParser thisQuery = new QueryParser();
 
+            #region reg exp 
             //Source
             Regex r1 = new Regex(@"(-i)(?:\s\"")([a-zA-Z0-9:\\\s\.]+)(?:\"")");
             Match source = r1.Match(input.Replace('"', '\"'));
             Match title = Regex.Match(input, @"-t ([0-9]*)");
             Match chapters = Regex.Match(input, @"-c ([0-9-]*)");
-
-           
 
             //Destination
             Regex r2 = new Regex(@"(-o)(?:\s\"")([a-zA-Z0-9:\\\s\.]+)(?:\"")");
@@ -480,8 +479,8 @@ namespace Handbrake.Functions
             Match audioEncoder = Regex.Match(input, @"-E ([a-zA-Z0-9]*)");
 
             //Picture Settings Tab
-            Match deinterlace = Regex.Match(input, @"--deinterlace=([0-9:-]*)");  // DOES NOT WORK. Needs Fixed
-            Match denoise = Regex.Match(input, @"--denoise=([0-9:]*)");
+            Match deinterlace = Regex.Match(input, @"--deinterlace=([a-z]*)");
+            Match denoise = Regex.Match(input, @"--denoise=([a-z]*)");
             Match deblock = Regex.Match(input, @"--deblock");
             Match detelecine = Regex.Match(input, @"--detelecine");
             Match anamorphic = Regex.Match(input, @"-p ");
@@ -503,7 +502,7 @@ namespace Handbrake.Functions
             Match subtitles = Regex.Match(input, @"-s ([0-9]*)");
             Match audioBitrate = Regex.Match(input, @"-B ([0-9]*)");
             Match audioSampleRate = Regex.Match(input, @"-R ([0-9.]*)");
-            Match audioChannelsMix = Regex.Match(input, @"-6 ([a-zA-Z0-9]*)");
+            Match audioChannelsMix = Regex.Match(input, @"-6 ([0-9a-z0-9]*)");  // 1 -6 dpl2 // Broken
             Match audioChannel = Regex.Match(input, @"-a ([0-9]*)");
 
             //H264 Tab
@@ -511,80 +510,247 @@ namespace Handbrake.Functions
             
             //Program Options
             Match verbose = Regex.Match(input, @"-v");
-             
-            
-            // ### NOTES ###
-            // May be an idea to add additional options such as CPU etc later.
-            // Need to remove all the tags e.g -x -w etc
-            // Need to split up crop options + chapters into seperate items
+            #endregion
 
             try
             {
-
+                //
+                // Source
+                //
+                #region Source Tab
+   
                 thisQuery.q_source = source.ToString().Replace("-i ", "").Replace("\"", "");
-                if (title.ToString() != "")
-                         thisQuery.q_dvdTitle = int.Parse(title.ToString().Replace("-t ", ""));
-                
-                string[] actTitles = new string[2];
-                actTitles = chapters.ToString().Replace("-c ", "").Split('-');
+                if (title.Success != false)
+                {
+                    thisQuery.q_dvdTitle = int.Parse(title.ToString().Replace("-t ", ""));
+                }
 
-                thisQuery.q_chaptersStart = actTitles[0];
-                thisQuery.q_chaptersFinish = actTitles[1];
+                if (chapters.Success != false)
+                {
+                     string[] actTitles = new string[2];
+                     actTitles = chapters.ToString().Replace("-c ", "").Split('-');
+                     thisQuery.q_chaptersStart = int.Parse(actTitles[0]);
+                     thisQuery.q_chaptersFinish = int.Parse(actTitles[1]);
+                 }
+                #endregion
 
-                //Destination
-                thisQuery.q_destination = destination.ToString().Replace("-o ","").Replace("\"", "");
-                thisQuery.q_videoEncoder = videoEncoder.ToString().Replace("-e ", "");
-                thisQuery.q_audioEncoder = audioEncoder.ToString().Replace("-E ", "");
-                if (width.ToString() != "")
+                //
+                // Destination
+                //
+                #region Destination
+                 thisQuery.q_destination = destination.ToString().Replace("-o ","").Replace("\"", "");
+
+                 string videoEncoderConvertion;
+                 string audioEncoderConvertion;
+
+                 videoEncoderConvertion = videoEncoder.ToString().Replace("-e ", "");
+                 switch (videoEncoderConvertion)
+                 {
+                    case "ffmpeg":
+                        videoEncoderConvertion = "Mpeg 4";
+                        break;
+                    case "xvid":
+                        videoEncoderConvertion = "Xvid";
+                        break;
+                    case "x264":
+                        videoEncoderConvertion = "H.264";
+                        break;
+                    case "x264b13":
+                        videoEncoderConvertion = "H.264 Baseline 1.3";
+                        break;
+                    case "x264b30":
+                        videoEncoderConvertion = "H.264 (iPod)";
+                        break;
+                    default:
+                        videoEncoderConvertion = "H.264";
+                        break;
+                 }
+                 thisQuery.q_videoEncoder = videoEncoderConvertion;
+
+                 audioEncoderConvertion = audioEncoder.ToString().Replace("-E ", "");
+                 switch (audioEncoderConvertion)
+                 {
+                    case "faac":
+                        audioEncoderConvertion = "AAC";
+                        break;
+                    case "lame":
+                        audioEncoderConvertion = "MP3";
+                        break;
+                    case "vorbis":
+                        audioEncoderConvertion = "Vorbis";
+                        break;
+                    case "ac3":
+                        audioEncoderConvertion = "AC3";
+                        break;
+                    default:
+                        audioEncoderConvertion = "AAC";
+                        break;
+                 }
+                 thisQuery.q_audioEncoder =audioEncoderConvertion;
+
+
+                 if (width.Success != false)
+                 {
                     thisQuery.q_videoWidth = int.Parse(width.ToString().Replace("-w ", ""));
-                if (height.ToString() != "")
+                 }
+                 if (height.Success != false)
+                 {
                     thisQuery.q_videoHeight = int.Parse(height.ToString().Replace("-l ", ""));
+                 }
+                 #endregion
 
+                //
                 //Picture Settings Tab
-                thisQuery.q_cropValues = crop.ToString().Replace("--crop ", "");
-                string[] actCropValues = new string[3];
-                actCropValues = thisQuery.q_cropValues.Split(':');
-                thisQuery.q_croptop = actCropValues[0];
-                thisQuery.q_cropbottom = actCropValues[3];
-                thisQuery.q_cropLeft = actCropValues[2];
-                thisQuery.q_cropRight = actCropValues[1];
+                //
+                #region Picture Tab
+                 if (crop.Success != false)
+                 {
+                    thisQuery.q_cropValues = crop.ToString().Replace("--crop ", "");
+                    string[] actCropValues = new string[3];
+                    actCropValues = thisQuery.q_cropValues.Split(':');
+                    thisQuery.q_croptop = actCropValues[0];
+                    thisQuery.q_cropbottom = actCropValues[1];
+                    thisQuery.q_cropLeft = actCropValues[2];
+                    thisQuery.q_cropRight = actCropValues[3];
+                 }
 
+                 thisQuery.q_detelecine = detelecine.Success;
+                 thisQuery.q_deBlock = deblock.Success;
 
-                thisQuery.q_detelecine = detelecine.Success;
-                thisQuery.q_deBlock = deblock.Success;
-                thisQuery.q_deinterlace = deinterlace.ToString().Replace("--deinterlace=","").Replace("\"", "");
-                thisQuery.q_denoise = denoise.ToString().Replace("--denoise=","");
-                thisQuery.q_anamorphic = anamorphic.Success;
-                thisQuery.q_chapterMarkers = chapterMarkers.Success;
+                 if (deinterlace.Success != false)
+                 {
+                     switch (deinterlace.ToString().Replace("--deinterlace=", ""))
+                     {
+                         case "fast":
+                             thisQuery.q_deinterlace = "Original (Fast)";
+                             break;
+                         case "slow":
+                             thisQuery.q_deinterlace = "yadif (Slow)";
+                             break;
+                         case "slower":
+                             thisQuery.q_deinterlace = "yadif + mcdeint (Slower)";
+                             break;
+                         case "slowest":
+                             thisQuery.q_deinterlace = "yadif + mcdeint (Slowest)";
+                             break;
+                         default:
+                             thisQuery.q_deinterlace = "None";
+                             break;
+                     }
+                 }
+                 
+                 if (denoise.Success != false)
+                 {
+                     switch (denoise.ToString().Replace("--denoise=", ""))
+                     {
+                         case "weak":
+                             thisQuery.q_denoise = "Weak";
+                             break;
+                         case "medium":
+                             thisQuery.q_denoise = "Medium";
+                             break;
+                         case "strong":
+                             thisQuery.q_denoise = "Strong";
+                             break;
+                         default:
+                             thisQuery.q_denoise = "None";
+                             break;
+                     }
+                    
+                 }
+                 thisQuery.q_anamorphic = anamorphic.Success;
+                 thisQuery.q_chapterMarkers = chapterMarkers.Success;
+                 #endregion
 
+                //
                 //Video Settings Tab
+                //
+                #region Video
                 thisQuery.q_grayscale = grayscale.Success;
                 thisQuery.q_twoPass = twoPass.Success;
                 thisQuery.q_turboFirst = turboFirstPass.Success;
                 thisQuery.q_largeMp4 = largerMp4.Success;
-                thisQuery.q_videoFramerate = videoFramerate.ToString().Replace("-r ","");
-                thisQuery.q_avgBitrate = videoBitrate.ToString().Replace("-b ","");
-                thisQuery.q_videoTargetSize = videoFilesize.ToString().Replace("-S ","");
+                if (videoFramerate.Success != false)
+                {
+                    thisQuery.q_videoFramerate = videoFramerate.ToString().Replace("-r ", "");
+                }
+                if (videoBitrate.Success != false)
+                {
+                    thisQuery.q_avgBitrate = videoBitrate.ToString().Replace("-b ", "");
+                }
+                if (videoFilesize.Success != false)
+                {
+                    thisQuery.q_videoTargetSize = videoFilesize.ToString().Replace("-S ", "");
+                }
 
                 double qConvert = 0;
-                if (videoQuality.ToString().Replace("-q ", "") != null)
+                if (videoQuality.Success != false)
                 {
                     qConvert = double.Parse(videoQuality.ToString().Replace("-q ", "")) * 100;
                     thisQuery.q_videoQuality = int.Parse(qConvert.ToString());
                 }
                 thisQuery.q_crf = CRF.Success;
+                #endregion
 
+                //
                 //Audio Settings Tab
-                thisQuery.q_audioBitrate = audioBitrate.ToString().Replace("-B ", "");
-                thisQuery.q_audioSamplerate = audioSampleRate.ToString().Replace("-R ","");
-                thisQuery.q_audioTrack1 = audioChannel.ToString().Replace("-a ", "");
-                thisQuery.q_audioTrackMix = audioChannelsMix.ToString().Replace("-6 ", "");
-                thisQuery.q_subtitles = subtitles.ToString().Replace("-s ", "");
+                //
+                #region Audio
+                if (audioBitrate.Success != false)
+                {
+                    thisQuery.q_audioBitrate = audioBitrate.ToString().Replace("-B ", "");
+                }
+                if (audioSampleRate.Success != false)
+                {
+                    thisQuery.q_audioSamplerate = audioSampleRate.ToString().Replace("-R ", "");
+                }
+                if (audioChannel.Success != false)
+                {
+                    thisQuery.q_audioTrack1 = audioChannel.ToString().Replace("-a ", "");
+                }
+     
+                if (audioChannelsMix.Success != false)
+                {
+                    switch (audioChannelsMix.ToString().Replace("-6 ", "").Replace(" ",""))
+                    {
+                        case "mono":
+                            thisQuery.q_audioTrackMix = "Mono";
+                            break;
+                        case "stereo":
+                            thisQuery.q_audioTrackMix = "Stereo";
+                            break;
+                        case "dpl1":
+                            thisQuery.q_audioTrackMix = "Dolby Surround";
+                            break;
+                        case "dpl2":
+                            thisQuery.q_audioTrackMix = "Dolby Pro Logic II";
+                            break;
+                        case "6ch":
+                            thisQuery.q_audioTrackMix = "6 Channel Discrete";
+                            break;
+                        default:
+                            thisQuery.q_audioTrackMix = "Automatic2";
+                            break;
+                    }
+                   
+                }
+                if (subtitles.Success != false)
+                {
+                    thisQuery.q_subtitles = subtitles.ToString().Replace("-s ", "");
+                }
+                #endregion
 
+                //
                 //H264 Tab
-                thisQuery.q_h264 = x264.ToString().Replace("-x ", "");
+                //
+                if (x264.Success != false)
+                {
+                    thisQuery.q_h264 = x264.ToString().Replace("-x ", "");
+                }
 
+                //
                 //Progam Options
+                //
                 thisQuery.q_verbose = verbose.Success;
             }
             catch (Exception exc)
