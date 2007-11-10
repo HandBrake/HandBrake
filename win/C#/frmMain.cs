@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Runtime.InteropServices;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 
 namespace Handbrake
@@ -72,25 +73,26 @@ namespace Handbrake
             Application.DoEvents();
             // Run the update checker.
             updateCheck();
-            Thread.Sleep(300);
-
-            // Now load the users default if required. (Will overide the above setting)
-            lblStatus.Text = "Loading User Default Settings...";
-            Application.DoEvents();
-            loadUserDefaults();
-            Thread.Sleep(300);
-
-            // Enable or disable tooltips
-            lblStatus.Text = "Loading Tooltips ...";
-            Application.DoEvents();
-            tooltip();
-            Thread.Sleep(300);
+            Thread.Sleep(200);
 
             // Update the presets
             lblStatus.Text = "Updaing Presets ...";
             Application.DoEvents();
             updatePresets();
-            Thread.Sleep(300);
+            Thread.Sleep(200);
+
+            // Now load the users default if required. (Will overide the above setting)
+            lblStatus.Text = "Loading User Default Settings...";
+            Application.DoEvents();
+            loadNormalPreset();
+            loadUserDefaults();
+            Thread.Sleep(100);
+
+            // Enable or disable tooltips
+            lblStatus.Text = "Loading Tooltips ...";
+            Application.DoEvents();
+            tooltip();
+            Thread.Sleep(100);
 
             // Hide the preset bar if required.
             hidePresetBar();
@@ -98,7 +100,7 @@ namespace Handbrake
             //Finished Loading
             lblStatus.Text = "Loading Complete!";
             Application.DoEvents();
-            Thread.Sleep(300);
+            Thread.Sleep(200);
 
             // Wait until splash screen is done
             while (timer.IsAlive)
@@ -124,6 +126,17 @@ namespace Handbrake
             splash.Show();
             Thread.Sleep(1500);
             splash.Close(); // Then close.
+        }
+
+        private void loadNormalPreset()
+        {
+            ListViewItem item = listview_presets.FindItemWithText("Normal");
+
+            if (item != null)
+            {
+                listview_presets.SelectedItems.Clear();
+                item.Selected = true;
+            }
         }
 
         private void loadUserDefaults()
@@ -216,16 +229,6 @@ namespace Handbrake
                     rtf_h264advanced.Text = Properties.Settings.Default.H264;
 
                     groupBox_output.Text = "Output Settings (Preset: " + Properties.Settings.Default.selectedPreset + ")";
-                }
-                else
-                {
-                    ListViewItem item = listview_presets.FindItemWithText("Normal");
-
-                    if (item != null)
-                    {
-                        listview_presets.SelectedItems.Clear();
-                        item.Selected = true;
-                    }
                 }
             }
             catch (Exception)
@@ -627,6 +630,14 @@ namespace Handbrake
                 // Now Fill Out List View with Items
                 listview_presets.Items.Add(preset_listview);
             }
+
+            string appPath = Application.StartupPath.ToString() + "\\";
+            string strCmdLine = "cmd /c " + '"' + '"' + appPath + "HandBrakeCLI.exe" + '"' + " --preset-list >" + '"' + appPath + "presets.dat" + '"' + " 2>&1" + '"';
+            Process hbproc = Process.Start("CMD.exe", strCmdLine);
+            hbproc.WaitForExit();
+            hbproc.Dispose();
+            hbproc.Close();
+
         }
 
         // Varibles
@@ -702,6 +713,7 @@ namespace Handbrake
         // Preset Selection
         private void listview_presets_SelectedIndexChanged(object sender, EventArgs e)
         {
+
             string selectedPreset = null;
             ListView.SelectedListViewItemCollection name = null;
             name = listview_presets.SelectedItems;
@@ -709,147 +721,50 @@ namespace Handbrake
             if (listview_presets.SelectedItems.Count != 0)
                 selectedPreset = name[0].SubItems[0].Text;
 
-
-            switch (selectedPreset)
+            try
             {
-                case "Animation":
-                    setGuiSetttings(CheckState.Checked, "", "", "H.264", "1000", "", 0, "0%", "160", CheckState.Checked, "48", "ref=5:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2", "Origional (Fast)", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Apple Animation)");
-                    setMkv();
-                    break;
+                string appPath = Application.StartupPath.ToString() + "\\";
+                StreamReader presetInput = new StreamReader(appPath + "presets.dat");
 
-                case "AppleTV":
-                    setmp4();
-                    setGuiSetttings(CheckState.Checked, "", "", "H.264", "2500", "", 0, "0%", "160", CheckState.Checked, "48", "bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=2:cabac=0", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: Apple TV)");
-                    break;
+                while (!presetInput.EndOfStream)
+                {
+                    if ((char)presetInput.Peek() == '+')
+                    {
+                        string preset = presetInput.ReadLine().Replace("+ ", "");
+                        Regex r = new Regex("(:  )"); // Split on hyphens. 
+                        string[] presetName = r.Split(preset);
 
-                case "Bedlam":
-                    setmp4();
-                    setGuiSetttings(CheckState.Checked, "", "", "H.264", "1800", "", 0, "0%", "160", CheckState.Checked, "48", "ref=16:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=7:me-range=64:analyse=all:8x8dct:trellis=2:no-fast-pskip:no-dct-decimate:filter=-2,-1", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AC3", "Output Settings (Preset: Bedlam)");
-                    break;
+                        if (selectedPreset == "iPhone / iPod Touch")
+                        {
+                            selectedPreset = "iPhone";
+                        }
 
-                case "Blind":
-                    setmp4();
-                    setGuiSetttings(CheckState.Unchecked, "512", "", "Mpeg 4", "512", "", 0, "0%", "128", CheckState.Checked, "48", "", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: Blind)");
-                    break;
+                        if (selectedPreset == presetName[0])
+                        {
+                            // Need to disable anamorphic now, otherwise it may overide the width / height values later.
+                            CheckPixelRatio.CheckState = CheckState.Unchecked;
 
-                case "Broke":
-                    setmp4();
-                    setGuiSetttings(CheckState.Unchecked, "640", "", "H.264", "", "695", 0, "0%", "128", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=6:bime:weightb:b-rdo:b-pyramid::direct=auto:me=umh:subme=6:trellis=1:analyse=all:8x8dct:no-fast-pskip", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Broke)");
-                    break;
+                            // Send the query from the file to the Query Parser class
+                            Functions.QueryParser presetQuery = Functions.QueryParser.Parse(preset);
 
-
-                case "Classic":
-                    setmp4();
-                    setGuiSetttings(CheckState.Unchecked, "", "", "Mpeg 4", "1000", "", 0, "0%", "160", CheckState.Unchecked, "48", "", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: Classic)");
-
-                    break;
-
-                case "Constant Quality Rate":
-                    setGuiSetttings(CheckState.Checked, "", "", "H.264", "", "", 64, "64%", "160", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=3:b-pyramid:b-rdo:bime:weightb:filter=-2,-1:subme=6:trellis=1:analyse=all:8x8dct:me=umh", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AC3", "Output Settings (Preset: CQR)");
-                    setMkv();
-                    break;
-
-                case "Deux Six Quatre":
-                    setGuiSetttings(CheckState.Checked, "", "", "H.264", "1600", "", 0, "0%", "160", CheckState.Checked, "48", "ref=5:mixed-refs:bframes=3:bime:weightb:b-rdo:b-pyramid:me=umh:subme=7:trellis=1:analyse=all:8x8dct:no-fast-pskip", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AC3", "Output Settings (Preset: DSQ)");
-                    setMkv();
-                    break;
-
-                case "Film":
-                    setGuiSetttings(CheckState.Checked, "", "", "H.264", "2000", "", 0, "0%", "160", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:no-fast-pskip", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AC3", "Output Settings (Preset: Film)");
-                    setMkv();
-                    break;
-
-                case "iPhone / iPod Touch":
-                    setmp4();
-                    setGuiSetttings(CheckState.Unchecked, "480", "", "H.264 (iPod)", "960", "", 0, "0%", "128", CheckState.Checked, "48", "cabac=0:ref=1:analyse=all:me=umh:subme=6:no-fast-pskip=1:trellis=1", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: iPhone)");
-                    break;
-
-                case "iPod High-Rez":
-                    setmp4();
-                    setGuiSetttings(CheckState.Unchecked, "640", "", "H.264 (iPod)", "1500", "", 0, "0%", "160", CheckState.Checked, "48", "keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: iPod High Rez)");
-                    break;
-
-                case "iPod Low-Rez":
-                    setGuiSetttings(CheckState.Unchecked, "320", "", "H.264 (iPod)", "700", "", 0, "0%", "160", CheckState.Checked, "48", "keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: iPod Low Rez)");
-                    setmp4();
-                    break;
-
-                case "Normal":
-                    setGuiSetttings(CheckState.Checked, "", "", "H.264", "1500", "", 0, "0%", "160", CheckState.Checked, "48", "ref=2:bframes=2:subme=5:me=umh", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Normal)");
-                    setmp4();
-                    break;
-
-                case "PS3":
-                    setmp4();
-                    setGuiSetttings(CheckState.Checked, "", "", "H.264", "2500", "", 0, "0%", "160", CheckState.Checked, "48", "level=41:subme=5:me=umh", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: PS3)");
-                    break;
-
-                case "PSP":
-                    setmp4();
-                    setGuiSetttings(CheckState.Unchecked, "368", "208", "Mpeg 4", "1024", "", 0, "0%", "160", CheckState.Checked, "48", "", "None", CheckState.Unchecked, "No Crop", CheckState.Unchecked, "AAC", "Output Settings (Preset: PSP)");
-                    break;
-
-                case "QuickTime":
-                    setmp4();
-                    setGuiSetttings(CheckState.Checked, "", "", "H.264", "2000", "", 0, "0%", "160", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:me=umh:subme=5:analyse=all:8x8dct:trellis=1:no-fast-pskip", "None", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Quicktime)");
-                    break;
-
-
-                case "Television":
-                    setGuiSetttings(CheckState.Unchecked, "", "", "H.264", "1300", "", 0, "0%", "160", CheckState.Checked, "48", "ref=3:mixed-refs:bframes=6:bime:weightb:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip", "Origional (Fast)", CheckState.Checked, "No Crop", CheckState.Checked, "AAC", "Output Settings (Preset: Television)");
-                    setMkv();
-                    break;
-                default:
-                    break;
+                            // Now load the preset
+                            presetLoader(presetQuery, selectedPreset);
+                        }
+                        
+                    }
+                    else
+                    {
+                        presetInput.ReadLine();
+                    }
+                }
             }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+           
         }
-
-
-        // Functions - It's a bit dirty but i'll sort this out later. Simply done to reduce the amount of code above.
-        private void setGuiSetttings(CheckState anamorphic, string width, string height, string vencoder, string bitrate, string filesize, int quality, string qpercent, string audioBit, CheckState chpt, string audioSample, string h264, string deinterlace, CheckState twopass, string crop, CheckState turbo, string audioCodec, string preset)
-        {
-            CheckPixelRatio.CheckState = anamorphic;
-            text_width.Text = width;
-            text_height.Text = height;
-            drp_videoEncoder.Text = vencoder;
-            text_bitrate.Text = bitrate;
-            text_filesize.Text = filesize;
-            slider_videoQuality.Value = quality;
-            SliderValue.Text = qpercent;
-            drp_audioBitrate.Text = audioBit;
-            Check_ChapterMarkers.CheckState = chpt;
-            drp_audioSampleRate.Text = audioSample;
-            rtf_h264advanced.Text = h264;
-            drp_deInterlace_option.Text = deinterlace;
-            check_2PassEncode.CheckState = twopass;
-            drp_crop.Text = crop;
-            check_turbo.CheckState = turbo;
-            drp_audioCodec.Text = audioCodec;
-
-            groupBox_output.Text = preset;
-        }
-
-        private void setMkv()
-        {
-            // Set file extension to MKV
-            string destination = text_destination.Text;
-            destination = destination.Replace(".mp4", ".mkv");
-            destination = destination.Replace(".avi", ".mkv");
-            destination = destination.Replace(".m4v", ".mkv");
-            destination = destination.Replace(".ogm", ".mkv");
-            text_destination.Text = destination;
-        }
-        private void setmp4()
-        {
-            // Set file extension to MKV
-            string destination = text_destination.Text;
-            destination = destination.Replace(".m4v", ".mp4");
-            destination = destination.Replace(".avi", ".mp4");
-            destination = destination.Replace(".mkv", ".mp4");
-            destination = destination.Replace(".ogm", ".mp4");
-            text_destination.Text = destination;
-        }
-
         #endregion
 
         //---------------------------------------------------
@@ -1088,7 +1003,6 @@ namespace Handbrake
                     text_width.Text = "";
                     text_width.BackColor = Color.LightCoral;
                     CheckPixelRatio.BackColor = Color.LightCoral;
-
                 }
                 else
                 {
@@ -1116,6 +1030,7 @@ namespace Handbrake
                     else
                     {
                         text_height.Text = height.ToString();
+                        text_width.BackColor = Color.LightGreen;
                     }
                 }
             }
@@ -1812,7 +1727,9 @@ namespace Handbrake
 
             // Source tab
             #region source
-            text_source.Text = presetQuery.Source;
+            if (presetQuery.Source != "")
+                text_source.Text = presetQuery.Source;
+
             if (presetQuery.DVDTitle != 0)
                 drp_dvdtitle.Text = presetQuery.DVDTitle.ToString();
 
@@ -1821,23 +1738,39 @@ namespace Handbrake
 
             if (presetQuery.DVDChapterFinish != 0)
                 drop_chapterFinish.Text = presetQuery.DVDChapterFinish.ToString();
+
+            if (presetQuery.Format != "")
+            {
+                string destination = text_destination.Text;
+                destination = destination.Replace(".mp4", "." + presetQuery.Format);
+                destination = destination.Replace(".m4v", "." + presetQuery.Format);
+                destination = destination.Replace(".avi", "." + presetQuery.Format);
+                destination = destination.Replace(".mkv", "." + presetQuery.Format);
+                destination = destination.Replace(".ogm", "." + presetQuery.Format);
+                text_destination.Text = destination;
+            }
+
             #endregion
 
             // Destination tab
             #region destination
 
-            text_destination.Text = presetQuery.Destination;
+            if (presetQuery.Destination != "")
+                text_destination.Text = presetQuery.Destination;
+
             drp_videoEncoder.Text = presetQuery.VideoEncoder;
             drp_audioCodec.Text = presetQuery.AudioEncoder;
             if (presetQuery.Width != 0)
             {
                 text_width.Text = presetQuery.Width.ToString();
+           
             }
             else
             {
                 text_width.Text = "";
                 text_width.BackColor = Color.White;
             }
+
             if (presetQuery.Height != 0)
             {
                 text_height.Text = presetQuery.Height.ToString();
@@ -1845,7 +1778,7 @@ namespace Handbrake
             else
             {
                 text_height.Text = "";
-                text_width.BackColor = Color.White;
+                text_height.BackColor = Color.White;
             }
             #endregion
 

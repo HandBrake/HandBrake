@@ -38,6 +38,19 @@ namespace Handbrake.Functions
             }
         }
 
+        private string q_format;
+        /// <summary>
+        /// Returns a String 
+        /// Full path of the destination.
+        /// </summary>
+        public string Format
+        {
+            get
+            {
+                return this.q_format;
+            }
+        }
+
         private int q_dvdTitle;
         /// <summary>
         /// Returns an Integer
@@ -469,6 +482,8 @@ namespace Handbrake.Functions
             Match source = r1.Match(input.Replace('"', '\"'));
             Match title = Regex.Match(input, @"-t ([0-9]*)");
             Match chapters = Regex.Match(input, @"-c ([0-9-]*)");
+            Match format = Regex.Match(input, @"-f ([a-z0-9a-z0-9a-z0-9]*)");
+            //-f mp4
 
             //Destination
             Regex r2 = new Regex(@"(-o)(?:\s\"")([a-zA-Z0-9:\\\s\.]+)(?:\"")");
@@ -532,6 +547,12 @@ namespace Handbrake.Functions
                      thisQuery.q_chaptersStart = int.Parse(actTitles[0]);
                      thisQuery.q_chaptersFinish = int.Parse(actTitles[1]);
                  }
+
+                 if (format.Success != false)
+                 {
+                     
+                     thisQuery.q_format = format.ToString().Replace("-f ", "");
+                 }
                 #endregion
 
                 //
@@ -562,7 +583,7 @@ namespace Handbrake.Functions
                         videoEncoderConvertion = "H.264 (iPod)";
                         break;
                     default:
-                        videoEncoderConvertion = "H.264";
+                        videoEncoderConvertion = "Mpeg 4";
                         break;
                  }
                  thisQuery.q_videoEncoder = videoEncoderConvertion;
@@ -617,6 +638,7 @@ namespace Handbrake.Functions
                  thisQuery.q_detelecine = detelecine.Success;
                  thisQuery.q_deBlock = deblock.Success;
 
+                 thisQuery.q_deinterlace = "None";
                  if (deinterlace.Success != false)
                  {
                      switch (deinterlace.ToString().Replace("--deinterlace=", ""))
@@ -638,7 +660,8 @@ namespace Handbrake.Functions
                              break;
                      }
                  }
-                 
+
+                 thisQuery.q_denoise = "None";
                  if (denoise.Success != false)
                  {
                      switch (denoise.ToString().Replace("--denoise=", ""))
@@ -687,6 +710,7 @@ namespace Handbrake.Functions
                 if (videoQuality.Success != false)
                 {
                     qConvert = double.Parse(videoQuality.ToString().Replace("-q ", "")) * 100;
+                    qConvert = System.Math.Ceiling(qConvert);
                     thisQuery.q_videoQuality = int.Parse(qConvert.ToString());
                 }
                 thisQuery.q_crf = CRF.Success;
@@ -708,7 +732,12 @@ namespace Handbrake.Functions
                 {
                     thisQuery.q_audioTrack1 = audioChannel.ToString().Replace("-a ", "");
                 }
-     
+                else
+                {
+                    thisQuery.q_audioTrack1 = "Automatic";
+                }
+
+                thisQuery.q_audioTrackMix = "Automatic";
                 if (audioChannelsMix.Success != false)
                 {
                     switch (audioChannelsMix.ToString().Replace("-6 ", "").Replace(" ",""))
@@ -729,7 +758,7 @@ namespace Handbrake.Functions
                             thisQuery.q_audioTrackMix = "6 Channel Discrete";
                             break;
                         default:
-                            thisQuery.q_audioTrackMix = "Automatic2";
+                            thisQuery.q_audioTrackMix = "Automatic";
                             break;
                     }
                    
@@ -737,6 +766,10 @@ namespace Handbrake.Functions
                 if (subtitles.Success != false)
                 {
                     thisQuery.q_subtitles = subtitles.ToString().Replace("-s ", "");
+                }
+                else
+                {
+                    thisQuery.q_subtitles = "None";
                 }
                 #endregion
 
