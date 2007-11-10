@@ -305,6 +305,16 @@ static int GetAlignedSize( int size )
     job->deinterlace  = 0;
     }
     fPictureFilterSettings.denoise     = [fDenoisePopUp indexOfSelectedItem];
+    fPictureFilterSettings.vfr  = [fVFRCheck state];
+    if (fPictureFilterSettings.vfr > 0)
+    {
+    [fDetelecineCheck setState:NSOnState];
+    [fDetelecineCheck setEnabled: NO];
+    }
+    else
+    {
+    [fDetelecineCheck setEnabled: YES];
+    }
     fPictureFilterSettings.detelecine  = [fDetelecineCheck state];
     fPictureFilterSettings.deblock  = [fDeblockCheck state];
 	job->pixel_ratio = ( [fPARCheck state] == NSOnState );
@@ -418,6 +428,16 @@ static int GetAlignedSize( int size )
 - (void) setDetelecine: (int) setting
 {
     fPictureFilterSettings.detelecine = setting;
+}
+
+- (int) vfr
+{
+    return fPictureFilterSettings.vfr;
+}
+
+- (void) setVFR: (int) setting
+{
+    fPictureFilterSettings.vfr = setting;
 }
 
 - (int) deinterlace

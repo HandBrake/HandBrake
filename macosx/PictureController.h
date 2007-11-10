@@ -41,6 +41,7 @@
     IBOutlet NSStepper       * fCropRightStepper;
     IBOutlet NSPopUpButton   * fDeinterlacePopUp;
 	IBOutlet NSButton        * fDetelecineCheck;
+    IBOutlet NSButton        * fVFRCheck;
     IBOutlet NSButton        * fDeblockCheck;
 	IBOutlet NSPopUpButton   * fDenoisePopUp;
 	IBOutlet NSButton        * fPARCheck;
@@ -60,7 +61,8 @@
     BOOL    keepAspectRatioPreviousState; 
     
     struct {
-        int    detelecine;
+        int     detelecine;
+        int     vfr;
         int     deinterlace;
         int     denoise;
         int     deblock;
@@ -84,6 +86,8 @@
 
 - (int) detelecine;
 - (void) setDetelecine: (int) setting;
+- (int) vfr;
+- (void) setVFR: (int) setting;
 - (int) deinterlace;
 - (void) setDeinterlace: (int) setting;
 - (int) denoise;

@@ -38,6 +38,7 @@
                 fPicturePanel = NSPanel; 
                 fPrevButton = NSButton; 
                 fRatioCheck = NSButton; 
+                fVFRCheck = NSButton; 
                 fWidthField = NSTextField; 
                 fWidthStepper = NSStepper; 
             }; 
