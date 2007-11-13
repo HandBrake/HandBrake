@@ -54,5 +54,11 @@ namespace Handbrake
                 // Don't do anything
             }
         }
+
+        private void btn_copy_Click(object sender, EventArgs e)
+        {
+            if (rtf_dvdInfo.Text != "")
+                Clipboard.SetText(rtf_dvdInfo.Text, TextDataFormat.Text);
+        }
     }
 }

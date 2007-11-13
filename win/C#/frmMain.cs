@@ -116,7 +116,7 @@ namespace Handbrake
 
         private void splashTimer(object sender)
         {
-            Thread.Sleep(2000);  //sit for 2 seconds then exit
+            Thread.Sleep(1000);  //sit for 1 seconds then exit
         }
 
         private void showSplash(object sender)
@@ -134,7 +134,7 @@ namespace Handbrake
 
             if (item != null)
             {
-                listview_presets.SelectedItems.Clear();
+                //listview_presets.SelectedItems.Clear();
                 item.Selected = true;
             }
         }
@@ -178,7 +178,7 @@ namespace Handbrake
 
                     Boolean update = ((verdata > vergui) || (verd1 > cliversion));
 
-                    //lbl_update.Visible = update;
+                    lbl_update.Visible = update;
 
                     return update;
                 }
@@ -206,7 +206,7 @@ namespace Handbrake
         {
             if (Properties.Settings.Default.hidePresets == "Checked")
             {
-                btn_presets.Visible = true;
+                mnu_showPresets.Visible = true;
                 this.Width = 591;
             }
 
@@ -313,6 +313,23 @@ namespace Handbrake
         #endregion
 
         #region Presets Menu
+        Boolean presetStatus;
+
+        private void mnu_showPresets_Click(object sender, EventArgs e)
+        {
+            if (presetStatus == false)
+            {
+                this.Width = 881;
+                presetStatus = true;
+                mnu_showPresets.Text = "Hide Presets";
+            }
+            else
+            {
+                this.Width = 590;
+                presetStatus = false;
+                mnu_showPresets.Text = "Show Presets";
+            }
+        }
 
         private void mnu_presetReset_Click(object sender, EventArgs e)
         {
@@ -329,13 +346,6 @@ namespace Handbrake
             {
                 listview_presets.SelectedItems.Clear();
                 item.Selected = true;
-            }
-
-            if (presetStatus == false)
-            {
-                this.Width = 881;
-                presetStatus = true;
-                btn_presets.Text = "Hide Presets";
             }
         }
 
@@ -563,27 +573,7 @@ namespace Handbrake
 
         }
 
-        // Varibles
-        private Boolean presetStatus = false;
-
         // Buttons
-        private void btn_presets_Click(object sender, EventArgs e)
-        {
-            if (presetStatus == false)
-            {
-                this.Width = 881;
-                presetStatus = true;
-                btn_presets.Text = "Hide Presets";
-            }
-            else
-            {
-                this.Width = 590;
-                presetStatus = false;
-                btn_presets.Text = "Show Presets";
-            }
-
-        }
-
         private void btn_setDefault_Click(object sender, EventArgs e)
         {
             String query = GenerateTheQuery();
@@ -648,6 +638,7 @@ namespace Handbrake
 
            
         }
+
         #endregion
 
         //---------------------------------------------------

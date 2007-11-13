@@ -36,6 +36,7 @@ namespace Handbrake
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.btn_copy = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -100,6 +101,21 @@ namespace Handbrake
             // 
             this.ToolTip.Active = false;
             // 
+            // btn_copy
+            // 
+            this.btn_copy.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_copy.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_copy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_copy.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_copy.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_copy.Location = new System.Drawing.Point(19, 451);
+            this.btn_copy.Name = "btn_copy";
+            this.btn_copy.Size = new System.Drawing.Size(134, 23);
+            this.btn_copy.TabIndex = 93;
+            this.btn_copy.Text = "Copy to Clipboard";
+            this.btn_copy.UseVisualStyleBackColor = false;
+            this.btn_copy.Click += new System.EventHandler(this.btn_copy_Click);
+            // 
             // frmDvdInfo
             // 
             this.AcceptButton = this.btn_close;
@@ -107,6 +123,7 @@ namespace Handbrake
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(636, 493);
+            this.Controls.Add(this.btn_copy);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.Label2);
@@ -136,5 +153,6 @@ namespace Handbrake
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label1;
         internal System.Windows.Forms.ToolTip ToolTip;
+        internal System.Windows.Forms.Button btn_copy;
     }
 }
