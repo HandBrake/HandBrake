@@ -141,99 +141,22 @@ namespace Handbrake
 
         private void loadUserDefaults()
         {
+            string userDefaults = Properties.Settings.Default.defaultUserSettings;
             try
             {
-                // Load the users default settings or if the user has not got this option enabled, load the normal preset.
-                if (Properties.Settings.Default.defaultSettings == "Checked")
-                {
-                    // Source
-                    text_source.Text = Properties.Settings.Default.DVDSource;
-                    drp_dvdtitle.Text = Properties.Settings.Default.DVDTitle;
-                    drop_chapterStart.Text = Properties.Settings.Default.ChapterStart;
-                    drop_chapterFinish.Text = Properties.Settings.Default.ChapterFinish;
+                    // Some things that need to be done to reset some gui components:
+                    CheckPixelRatio.CheckState = CheckState.Unchecked;
 
-                    // Destination
-                    text_destination.Text = Properties.Settings.Default.VideoDest;
-                    drp_videoEncoder.Text = Properties.Settings.Default.VideoEncoder;
-                    drp_audioCodec.Text = Properties.Settings.Default.AudioEncoder;
-                    text_width.Text = Properties.Settings.Default.Width;
-                    text_height.Text = Properties.Settings.Default.Height;
+                    // Send the query from the file to the Query Parser class
+                    Functions.QueryParser presetQuery = Functions.QueryParser.Parse(userDefaults);
 
-                    // Picture Settings Tab
-                    drp_crop.Text = Properties.Settings.Default.CroppingOption;
-                    text_top.Text = Properties.Settings.Default.CropTop;
-                    text_bottom.Text = Properties.Settings.Default.CropBottom;
-                    text_left.Text = Properties.Settings.Default.CropLeft;
-                    text_right.Text = Properties.Settings.Default.CropRight;
-                    drp_subtitle.Text = Properties.Settings.Default.Subtitles;
-
-                    // Video Settings Tab
-                    text_bitrate.Text = Properties.Settings.Default.VideoBitrate;
-                    text_filesize.Text = Properties.Settings.Default.VideoFilesize;
-                    slider_videoQuality.Value = Properties.Settings.Default.VideoQuality;
-
-                    if (Properties.Settings.Default.TwoPass == "Checked")
-                    {
-                        check_2PassEncode.CheckState = CheckState.Checked;
-                    }
-
-                    drp_deInterlace_option.Text = Properties.Settings.Default.DeInterlace;
-                    drp_deNoise.Text = Properties.Settings.Default.denoise;
-
-                    if (Properties.Settings.Default.detelecine == "Checked")
-                    {
-                        check_detelecine.CheckState = CheckState.Checked;
-                    }
-
-                    if (Properties.Settings.Default.detelecine == "Checked")
-                    {
-                        check_deblock.CheckState = CheckState.Checked;
-                    }
-
-
-                    if (Properties.Settings.Default.Grayscale == "Checked")
-                    {
-                        check_grayscale.CheckState = CheckState.Checked;
-                    }
-
-                    drp_videoFramerate.Text = Properties.Settings.Default.Framerate;
-
-                    if (Properties.Settings.Default.PixelRatio == "Checked")
-                    {
-                        CheckPixelRatio.CheckState = CheckState.Checked;
-                    }
-                    if (Properties.Settings.Default.turboFirstPass == "Checked")
-                    {
-                        check_turbo.CheckState = CheckState.Checked;
-                    }
-                    if (Properties.Settings.Default.largeFile == "Checked")
-                    {
-                        check_largeFile.CheckState = CheckState.Checked;
-                    }
-
-                    if (Properties.Settings.Default.chapterMarker == "Checked")
-                    {
-                        Check_ChapterMarkers.CheckState = CheckState.Checked;
-                    }
-
-                    // Audio Settings Tab
-                    drp_audioBitrate.Text = Properties.Settings.Default.AudioBitrate;
-                    drp_audioSampleRate.Text = Properties.Settings.Default.AudioSampleRate;
-                    drp_audioChannels.Text = Properties.Settings.Default.AudioChannels;
-
-                    // H264 Tab
-                    if (Properties.Settings.Default.CRF == "Checked")
-                    {
-                        CheckCRF.CheckState = CheckState.Checked;
-                    }
-                    rtf_h264advanced.Text = Properties.Settings.Default.H264;
-
-                    groupBox_output.Text = "Output Settings (Preset: " + Properties.Settings.Default.selectedPreset + ")";
-                }
+                    // Now load the preset
+                    presetLoader(presetQuery, "User Defaults ");
             }
-            catch (Exception)
+            catch (Exception exc)
             {
-                // No real need to alert the user. Try/Catch only in just incase there is a problem reading the settings xml file.
+                    MessageBox.Show("Unable to load profile.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                    MessageBox.Show(exc.ToString());
             }
         }
 
@@ -255,7 +178,7 @@ namespace Handbrake
 
                     Boolean update = ((verdata > vergui) || (verd1 > cliversion));
 
-                    lbl_update.Visible = update;
+                    //lbl_update.Visible = update;
 
                     return update;
                 }
@@ -663,48 +586,8 @@ namespace Handbrake
 
         private void btn_setDefault_Click(object sender, EventArgs e)
         {
-            //Source
-            Properties.Settings.Default.DVDSource = text_source.Text;
-            Properties.Settings.Default.DVDTitle = drp_dvdtitle.Text;
-            Properties.Settings.Default.ChapterStart = drop_chapterStart.Text;
-            Properties.Settings.Default.ChapterFinish = drop_chapterFinish.Text;
-            //Destination
-            Properties.Settings.Default.VideoDest = text_destination.Text;
-            Properties.Settings.Default.VideoEncoder = drp_videoEncoder.Text;
-            Properties.Settings.Default.AudioEncoder = drp_audioCodec.Text;
-            Properties.Settings.Default.Width = text_width.Text;
-            Properties.Settings.Default.Height = text_height.Text;
-            //Picture Settings Tab
-            Properties.Settings.Default.CroppingOption = drp_crop.Text;
-            Properties.Settings.Default.CropTop = text_top.Text;
-            Properties.Settings.Default.CropBottom = text_bottom.Text;
-            Properties.Settings.Default.CropLeft = text_left.Text;
-            Properties.Settings.Default.CropRight = text_right.Text;
-            Properties.Settings.Default.Subtitles = drp_subtitle.Text;
-            //Video Settings Tab
-            Properties.Settings.Default.VideoBitrate = text_bitrate.Text;
-            Properties.Settings.Default.VideoFilesize = text_filesize.Text;
-            Properties.Settings.Default.VideoQuality = slider_videoQuality.Value;
-            Properties.Settings.Default.TwoPass = check_2PassEncode.CheckState.ToString();
-            Properties.Settings.Default.DeInterlace = drp_deInterlace_option.Text;
-            Properties.Settings.Default.Grayscale = check_grayscale.CheckState.ToString();
-            Properties.Settings.Default.Framerate = drp_videoFramerate.Text;
-            Properties.Settings.Default.PixelRatio = CheckPixelRatio.CheckState.ToString();
-            Properties.Settings.Default.turboFirstPass = check_turbo.CheckState.ToString();
-            Properties.Settings.Default.largeFile = check_largeFile.CheckState.ToString();
-            Properties.Settings.Default.detelecine = check_detelecine.CheckState.ToString();
-            Properties.Settings.Default.denoise = drp_deNoise.Text;
-            Properties.Settings.Default.deblock = check_deblock.CheckState.ToString();
-            Properties.Settings.Default.chapterMarker = Check_ChapterMarkers.CheckState.ToString();
-            //Audio Settings Tab
-            Properties.Settings.Default.AudioBitrate = drp_audioBitrate.Text;
-            Properties.Settings.Default.AudioSampleRate = drp_audioSampleRate.Text;
-            Properties.Settings.Default.AudioChannels = drp_audioChannels.Text;
-            //H264 Tab
-            Properties.Settings.Default.CRF = CheckCRF.CheckState.ToString();
-            Properties.Settings.Default.H264 = rtf_h264advanced.Text;
-            //Preset
-            Properties.Settings.Default.selectedPreset = groupBox_output.Text.Replace("Output Settings (Preset: ", "").Replace("\"", "").Replace(")", "");
+            String query = GenerateTheQuery();
+            Properties.Settings.Default.defaultUserSettings = query;
             // Save the new default Settings
             Properties.Settings.Default.Save();
             MessageBox.Show("New default settings saved.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
@@ -1909,7 +1792,6 @@ namespace Handbrake
         }
 
         #endregion
-
         // This is the END of the road ------------------------------------------------------------------------------
     }
 }

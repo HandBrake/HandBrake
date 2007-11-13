@@ -774,6 +774,10 @@ namespace Handbrake.Functions
                 #endregion
 
                 //
+                //H264 tab and other 
+                //
+                #region h264 and other
+                //
                 //H264 Tab
                 //
                 if (x264.Success != false)
@@ -785,6 +789,7 @@ namespace Handbrake.Functions
                 //Progam Options
                 //
                 thisQuery.q_verbose = verbose.Success;
+                #endregion
             }
             catch (Exception exc)
             {
