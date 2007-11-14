@@ -30,9 +30,46 @@
 {
 	if (self = [super init])
 	{
-		outputTextStorage = [[NSTextStorage alloc] init];
+		/* We initialize the outputTextStorage object for the activity window */
+        outputTextStorage = [[NSTextStorage alloc] init];
+        
+        /* We declare the default NSFileManager into fileManager */
+        NSFileManager * fileManager = [NSFileManager defaultManager];
+        /* we set the files and support paths here */
+        NSString *AppSupportDirectory = @"~/Library/Application Support/HandBrake";
+        AppSupportDirectory = [AppSupportDirectory stringByExpandingTildeInPath];
+        /* First, lets verify that the app support directory exists */
+        if ([fileManager fileExistsAtPath:AppSupportDirectory] == 0) 
+        {
+            /* If it doesnt exist yet, we create it here */ 
+            [fileManager createDirectoryAtPath:AppSupportDirectory attributes:nil];
+        }
+        
+        /* Establish the log file and location to write to */
+        /* We are initially using a .txt file as opposed to a .log file since it will open by
+        * default with the users text editor instead of the .log default Console.app, should
+        * create less confusion for less experienced users when we ask them to paste the log for support
+        */
+        outputLogFile = @"~/Library/Application Support/HandBrake/HandBrake-activitylog.txt";
+        outputLogFile = [[outputLogFile stringByExpandingTildeInPath]retain];
+        
+        /* We check for an existing output log file here */
+        if ([fileManager fileExistsAtPath:outputLogFile] == 0) 
+        {
+            /* if not, then we create a new blank one */
+            [fileManager createFileAtPath:outputLogFile contents:nil attributes:nil];
+        }
+        
+        /* We overwrite the existing output log with the date for starters the output log to start fresh with the new session */
+        /* Use the current date and time for the new output log header */
+        NSString *startOutputLogString = [NSString stringWithFormat: @"HandBrake Activity Log for Session Starting: %@\n\n", [[NSDate  date] descriptionWithCalendarFormat:nil timeZone:nil locale:nil]];
+        [startOutputLogString writeToFile:outputLogFile atomically:YES encoding:NSUTF8StringEncoding error:NULL];
+        
+        
 		[[HBOutputRedirect stderrRedirect] addListener:self];
 		[[HBOutputRedirect stdoutRedirect] addListener:self];
+        
+        
 	}
 	return self;
 }
@@ -76,14 +113,44 @@
  */
 - (void)stderrRedirect:(NSString *)text
 {
-	NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:text];
-	[outputTextStorage appendAttributedString:attributedString];
-	[attributedString release];
-
-	if ([outputTextStorage length] > TextStorageUpperSizeLimit)
+	
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:text];
+	/* Actually write the libhb output to the text view (outputTextStorage) */
+    [outputTextStorage appendAttributedString:attributedString];
+    [attributedString release];
+    
+	/* remove text from outputTextStorage as defined by TextStorageUpperSizeLimit and TextStorageLowerSizeLimit */
+    if ([outputTextStorage length] > TextStorageUpperSizeLimit)
 		[outputTextStorage deleteCharactersInRange:NSMakeRange(0, [outputTextStorage length] - TextStorageLowerSizeLimit)];
-
+    
     [textView scrollRangeToVisible:NSMakeRange([outputTextStorage length], 0)];
+    
+    /* We use a c function to write to the log file without reading it into memory 
+        * as it should be faster and easier on memory than using cocoa's writeToFile
+        * thanks ritsuka !!*/
+    FILE *f = fopen([outputLogFile UTF8String], "a");
+    fprintf(f, "%s", [text UTF8String]);
+    fclose(f);
+    
+    
+    /* Below uses Objective-C to write to the file, though it is slow and uses
+        * more memory than the c function above. For now, leaving this in here
+        * just in case and commented out.
+    */
+    /* Put the new incoming string from libhb into an nsstring for appending to our log file */
+    //NSString *newOutputString = [[NSString alloc] initWithString:text];
+    /*get the current log file and put it into an NSString */
+    /* HACK ALERT: must be a way to do it without reading the whole log into memory 
+        Performance note: could batch write to the log, but want to get each line as it comes out of
+        libhb in case of a crash or freeze so we see exactly what the last thing was before crash*/
+    //NSString *currentOutputLogString = [[NSString alloc]initWithContentsOfFile:outputLogFile encoding:NSUTF8StringEncoding error:NULL];
+    
+    /* Append the new libhb output string to the existing log file string */
+    //currentOutputLogString = [currentOutputLogString stringByAppendingString:newOutputString];
+    /* Save the new modified log file string back to disk */
+    //[currentOutputLogString writeToFile:outputLogFile atomically:YES encoding:NSUTF8StringEncoding error:NULL];
+    /* Release the new libhb output string */
+    //[newOutputString release];
 }
 - (void)stdoutRedirect:(NSString *)text { [self stderrRedirect:text]; }
 
@@ -103,6 +170,17 @@
 	NSPasteboard *pboard = [NSPasteboard generalPasteboard];
 	[pboard declareTypes:[NSArray arrayWithObject:NSStringPboardType] owner:nil];
 	[pboard setString:[outputTextStorage string] forType:NSStringPboardType];
+}
+
+/**
+ * Opens the activity log txt file in users default editor.
+ */
+- (IBAction)openActivityLogFile:(id)sender
+{
+    /* Opens the activity window log file in the users default text editor */
+    NSAppleScript *myScript = [[NSAppleScript alloc] initWithSource: [NSString stringWithFormat: @"%@%@%@", @"tell application \"Finder\" to open (POSIX file \"", outputLogFile, @"\")"]];
+    [myScript executeAndReturnError: nil];
+    [myScript release];
 }
 
 - (void)windowWillClose:(NSNotification *)aNotification

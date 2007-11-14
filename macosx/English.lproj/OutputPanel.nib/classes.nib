@@ -2,7 +2,12 @@
     IBClasses = (
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
-            ACTIONS = {clearOutput = id; copyAllOutputToPasteboard = id; showOutputPanel = id; }; 
+            ACTIONS = {
+                clearOutput = id; 
+                copyAllOutputToPasteboard = id; 
+                openActivityLogFile = id; 
+                showOutputPanel = id; 
+            }; 
             CLASS = HBOutputPanelController; 
             LANGUAGE = ObjC; 
             OUTLETS = {outputPanel = NSPanel; textView = NSTextView; }; 

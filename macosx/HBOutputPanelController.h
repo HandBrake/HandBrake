@@ -21,10 +21,14 @@
 	
 	/// Text storage for the debug output.
 	NSTextStorage *outputTextStorage;
+    
+    /// Path to log text file.
+    NSString *outputLogFile;
 }
 
 - (IBAction)showOutputPanel:(id)sender;
 - (IBAction)clearOutput:(id)sender;
 - (IBAction)copyAllOutputToPasteboard:(id)sender;
+- (IBAction)openActivityLogFile:(id)sender;
 
 @end
