@@ -35,21 +35,11 @@
         
         /* We declare the default NSFileManager into fileManager */
         NSFileManager * fileManager = [NSFileManager defaultManager];
-        /* we set the files and support paths here */
-        NSString *AppSupportDirectory = @"~/Library/Application Support/HandBrake";
-        AppSupportDirectory = [AppSupportDirectory stringByExpandingTildeInPath];
-        /* First, lets verify that the app support directory exists */
-        if ([fileManager fileExistsAtPath:AppSupportDirectory] == 0) 
-        {
-            /* If it doesnt exist yet, we create it here */ 
-            [fileManager createDirectoryAtPath:AppSupportDirectory attributes:nil];
-        }
-        
         /* Establish the log file and location to write to */
         /* We are initially using a .txt file as opposed to a .log file since it will open by
-        * default with the users text editor instead of the .log default Console.app, should
+            * default with the users text editor instead of the .log default Console.app, should
         * create less confusion for less experienced users when we ask them to paste the log for support
-        */
+            */
         outputLogFile = @"~/Library/Application Support/HandBrake/HandBrake-activitylog.txt";
         outputLogFile = [[outputLogFile stringByExpandingTildeInPath]retain];
         

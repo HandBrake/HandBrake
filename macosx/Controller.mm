@@ -61,6 +61,21 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     self = [super init];
     [HBPreferencesController registerUserDefaults];
     fHandle = NULL;
+    /* Check for check for the app support directory here as
+        * outputPanel needs it right away, as may other future methods
+        */
+    /* We declare the default NSFileManager into fileManager */
+	NSFileManager * fileManager = [NSFileManager defaultManager];
+	/* we set the files and support paths here */
+	AppSupportDirectory = @"~/Library/Application Support/HandBrake";
+    AppSupportDirectory = [AppSupportDirectory stringByExpandingTildeInPath];
+    /* We check for the app support directory for handbrake */
+	if ([fileManager fileExistsAtPath:AppSupportDirectory] == 0) 
+	{
+		// If it doesnt exist yet, we create it here 
+		[fileManager createDirectoryAtPath:AppSupportDirectory attributes:nil];
+	}
+    
     outputPanel = [[HBOutputPanelController alloc] init];
     fPictureController = [[PictureController alloc] initWithDelegate:self];
     fQueueController = [[HBQueueController alloc] init];
@@ -69,15 +84,16 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     return self;
 }
 
+
 - (void) applicationDidFinishLaunching: (NSNotification *) notification
 {
     int    build;
     char * version;
-
+    
     // Init libhb
 	int debugLevel = [[NSUserDefaults standardUserDefaults] boolForKey:@"ShowVerboseOutput"] ? HB_DEBUG_ALL : HB_DEBUG_NONE;
     fHandle = hb_init(debugLevel, [[NSUserDefaults standardUserDefaults] boolForKey:@"CheckForUpdates"]);
-
+    
 	// Set the Growl Delegate
     [GrowlApplicationBridge setGrowlDelegate: self];    
     /* Init others controllers */
@@ -87,56 +103,62 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	
     fChapterTitlesDelegate = [[ChapterTitles alloc] init];
     [fChapterTable setDataSource:fChapterTitlesDelegate];
-
-     /* Call UpdateUI every 1/2 sec */
+    
+    /* Call UpdateUI every 1/2 sec */
     [[NSRunLoop currentRunLoop] addTimer: [NSTimer
         scheduledTimerWithTimeInterval: 0.5 target: self
-        selector: @selector( updateUI: ) userInfo: NULL repeats: YES]
-        forMode: NSEventTrackingRunLoopMode];
-
-    if( ( build = hb_check_update( fHandle, &version ) ) > -1 )
-    {
-        /* Update available - tell the user */
-	
-        NSBeginInformationalAlertSheet( _( @"Update is available" ),
-            _( @"Go get it!" ), _( @"Discard" ), NULL, fWindow, self,
-            @selector( updateAlertDone:returnCode:contextInfo: ),
-            NULL, NULL, [NSString stringWithFormat:
-            _( @"HandBrake %s (build %d) is now available for download." ),
-            version, build] );
-        return;
-
-    }
-
+                              selector: @selector( updateUI: ) userInfo: NULL repeats: YES]
+                                forMode: NSEventTrackingRunLoopMode];
+    
     // Open debug output window now if it was visible when HB was closed
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"OutputPanelIsOpen"])
         [self showDebugOutputPanel:nil];
-
+    
     // Open queue window now if it was visible when HB was closed
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"QueueWindowIsOpen"])
         [self showQueueWindow:nil];
-
+    
 	[self openMainWindow:nil];
+    
+    if( ( build = hb_check_update( fHandle, &version ) ) > -1 )
+    {
+        /* Update available - tell the user */
+        
+        NSBeginInformationalAlertSheet( _( @"Update is available" ),
+                                        _( @"Go get it!" ), _( @"Discard" ), NULL, fWindow, self,
+                                        @selector( updateAlertDone:returnCode:contextInfo: ),
+                                        NULL, NULL, [NSString stringWithFormat:
+                                            _( @"HandBrake %s (build %d) is now available for download." ),
+                                            version, build] );
+        return;
+        
+    }
 	
     /* Show scan panel ASAP */
     [self performSelectorOnMainThread: @selector(showScanPanel:)
-        withObject: NULL waitUntilDone: NO];
+                           withObject: NULL waitUntilDone: NO];
 }
 
 - (void) updateAlertDone: (NSWindow *) sheet
-    returnCode: (int) returnCode contextInfo: (void *) contextInfo
+              returnCode: (int) returnCode contextInfo: (void *) contextInfo
 {
-    if( returnCode == NSAlertAlternateReturn )
+    if( returnCode == NSAlertDefaultReturn )
     {
-        /* Show scan panel */
-        [self performSelectorOnMainThread: @selector(showScanPanel:)
-            withObject: NULL waitUntilDone: NO];
-        return;
+        /* Go to HandBrake homepage and exit */
+        [self openHomepage: NULL];
+        [NSApp terminate: self];
+     
     }
-
-    /* Go to HandBrake homepage and exit */
-    [self openHomepage: NULL];
-    [NSApp terminate: self];
+    else
+    {
+         /* Show scan panel */
+        [self performSelectorOnMainThread: @selector(showScanPanel:)
+                               withObject: NULL waitUntilDone: NO];
+        return;
+               /* Go to HandBrake homepage and exit */
+        [self openHomepage: NULL];
+        [NSApp terminate: self];
+    }
 }
 
 - (NSApplicationTerminateReply) applicationShouldTerminate: (NSApplication *) app
@@ -3267,25 +3289,15 @@ id theRecord, theValue;
 - (void) loadPresets {
 	/* We declare the default NSFileManager into fileManager */
 	NSFileManager * fileManager = [NSFileManager defaultManager];
-	/* we set the files and support paths here */
-	AppSupportDirectory = @"~/Library/Application Support/HandBrake";
-    AppSupportDirectory = [AppSupportDirectory stringByExpandingTildeInPath];
-    //UserPresetsFile = @"~/Library/Application Support/HandBrake/UserPresets.plist";
-    //UserPresetsFile = [UserPresetsFile stringByExpandingTildeInPath];
-	/* We check for the app support directory for handbrake */
-	if ([fileManager fileExistsAtPath:AppSupportDirectory] == 0) 
-	{
-		// If it doesnt exist yet, we create it here 
-		[fileManager createDirectoryAtPath:AppSupportDirectory attributes:nil];
-	}
-	/* We check for the presets.plist here */
+	/*We define the location of the user presets file */
+    UserPresetsFile = @"~/Library/Application Support/HandBrake/UserPresets.plist";
+	UserPresetsFile = [[UserPresetsFile stringByExpandingTildeInPath]retain];
+    /* We check for the presets.plist */
 	if ([fileManager fileExistsAtPath:UserPresetsFile] == 0) 
 	{
 		[fileManager createFileAtPath:UserPresetsFile contents:nil attributes:nil];
 	}
-	UserPresetsFile = @"~/Library/Application Support/HandBrake/UserPresets.plist";
-	UserPresetsFile = [[UserPresetsFile stringByExpandingTildeInPath]retain];
-	
+		
 	UserPresets = [[NSMutableArray alloc] initWithContentsOfFile:UserPresetsFile];
 	if (nil == UserPresets) 
 	{
