@@ -858,8 +858,6 @@ static int HandleEvents( hb_handle_t * h )
 
             if( x264opts != NULL && *x264opts != '\0' )
             {
-                fprintf( stderr, "Applying the following x264 options: %s\n", 
-                         x264opts);
                 job->x264opts = x264opts;
             }
             else /*avoids a bus error crash when options aren't specified*/

@@ -240,6 +240,8 @@ static void do_job( hb_job_t * job, int cpu_count )
             break;
         case HB_VCODEC_X264:
             hb_log( " + encoder x264" );
+            if( job->x264opts != NULL && *job->x264opts != '\0' )
+                hb_log( "   + x264 options: %s", job->x264opts);
             w = getWork( WORK_ENCX264 );
             break;
     }
