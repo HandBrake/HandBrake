@@ -30,5 +30,6 @@
 - (IBAction)clearOutput:(id)sender;
 - (IBAction)copyAllOutputToPasteboard:(id)sender;
 - (IBAction)openActivityLogFile:(id)sender;
+- (IBAction)clearActivityLogFile:(id)sender;
 
 @end

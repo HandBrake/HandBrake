@@ -35,7 +35,7 @@
         
         /* We declare the default NSFileManager into fileManager */
         NSFileManager * fileManager = [NSFileManager defaultManager];
-        /* Establish the log file and location to write to */
+        /* Establish the log file location to write to */
         /* We are initially using a .txt file as opposed to a .log file since it will open by
             * default with the users text editor instead of the .log default Console.app, should
         * create less confusion for less experienced users when we ask them to paste the log for support
@@ -52,7 +52,7 @@
         
         /* We overwrite the existing output log with the date for starters the output log to start fresh with the new session */
         /* Use the current date and time for the new output log header */
-        NSString *startOutputLogString = [NSString stringWithFormat: @"HandBrake Activity Log for Session Starting: %@\n\n", [[NSDate  date] descriptionWithCalendarFormat:nil timeZone:nil locale:nil]];
+        NSString *startOutputLogString = [NSString stringWithFormat: @"HandBrake Activity Log for Session (Cleared): %@\n\n", [[NSDate  date] descriptionWithCalendarFormat:nil timeZone:nil locale:nil]];
         [startOutputLogString writeToFile:outputLogFile atomically:YES encoding:NSUTF8StringEncoding error:NULL];
         
         
@@ -171,6 +171,14 @@
     NSAppleScript *myScript = [[NSAppleScript alloc] initWithSource: [NSString stringWithFormat: @"%@%@%@", @"tell application \"Finder\" to open (POSIX file \"", outputLogFile, @"\")"]];
     [myScript executeAndReturnError: nil];
     [myScript release];
+}
+
+- (IBAction)clearActivityLogFile:(id)sender
+{
+    /* We overwrite the existing output log with the new date and time header */
+        /* Use the current date and time for the new output log header */
+        NSString *startOutputLogString = [NSString stringWithFormat: @"HandBrake Activity Log for Session Starting: %@\n\n", [[NSDate  date] descriptionWithCalendarFormat:nil timeZone:nil locale:nil]];
+        [startOutputLogString writeToFile:outputLogFile atomically:NO encoding:NSUTF8StringEncoding error:NULL];
 }
 
 - (void)windowWillClose:(NSNotification *)aNotification

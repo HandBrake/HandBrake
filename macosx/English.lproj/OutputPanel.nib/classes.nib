@@ -3,6 +3,7 @@
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
             ACTIONS = {
+                clearActivityLogFile = id; 
                 clearOutput = id; 
                 copyAllOutputToPasteboard = id; 
                 openActivityLogFile = id; 
