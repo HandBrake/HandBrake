@@ -483,8 +483,7 @@ namespace Handbrake.Functions
             Match title = Regex.Match(input, @"-t ([0-9]*)");
             Match chapters = Regex.Match(input, @"-c ([0-9-]*)");
             Match format = Regex.Match(input, @"-f ([a-z0-9a-z0-9a-z0-9]*)");
-            //-f mp4
-
+  
             //Destination
             Regex r2 = new Regex(@"(-o)(?:\s\"")([a-zA-Z0-9:\\\s\.]+)(?:\"")");
             Match destination = r2.Match(input.Replace('"', '\"'));
@@ -696,6 +695,10 @@ namespace Handbrake.Functions
                 if (videoFramerate.Success != false)
                 {
                     thisQuery.q_videoFramerate = videoFramerate.ToString().Replace("-r ", "");
+                }
+                else
+                {
+                    thisQuery.q_videoFramerate = "Automatic";
                 }
                 if (videoBitrate.Success != false)
                 {

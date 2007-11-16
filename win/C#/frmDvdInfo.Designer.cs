@@ -56,7 +56,7 @@ namespace Handbrake
             this.rtf_dvdInfo.Location = new System.Drawing.Point(19, 70);
             this.rtf_dvdInfo.Name = "rtf_dvdInfo";
             this.rtf_dvdInfo.ReadOnly = true;
-            this.rtf_dvdInfo.Size = new System.Drawing.Size(600, 365);
+            this.rtf_dvdInfo.Size = new System.Drawing.Size(555, 365);
             this.rtf_dvdInfo.TabIndex = 29;
             this.rtf_dvdInfo.Text = "";
             this.ToolTip.SetToolTip(this.rtf_dvdInfo, "Note: If you have not scanned a DVD then this window\r\nwill display the previously" +
@@ -69,7 +69,7 @@ namespace Handbrake
             this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(491, 452);
+            this.btn_close.Location = new System.Drawing.Point(446, 441);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(128, 22);
             this.btn_close.TabIndex = 28;
@@ -108,7 +108,7 @@ namespace Handbrake
             this.btn_copy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_copy.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_copy.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_copy.Location = new System.Drawing.Point(19, 451);
+            this.btn_copy.Location = new System.Drawing.Point(19, 441);
             this.btn_copy.Name = "btn_copy";
             this.btn_copy.Size = new System.Drawing.Size(134, 23);
             this.btn_copy.TabIndex = 93;
@@ -122,7 +122,7 @@ namespace Handbrake
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(636, 493);
+            this.ClientSize = new System.Drawing.Size(592, 476);
             this.Controls.Add(this.btn_copy);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox1);
@@ -132,9 +132,7 @@ namespace Handbrake
             this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(644, 520);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(644, 506);
             this.Name = "frmDvdInfo";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Media Information";

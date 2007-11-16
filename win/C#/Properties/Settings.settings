@@ -44,5 +44,8 @@
     <Setting Name="defaultUserSettings" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="build" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1010</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

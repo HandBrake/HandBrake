@@ -191,5 +191,17 @@ namespace Handbrake.Properties {
                 this["defaultUserSettings"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1010")]
+        public int build {
+            get {
+                return ((int)(this["build"]));
+            }
+            set {
+                this["build"] = value;
+            }
+        }
     }
 }
