@@ -146,6 +146,13 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
     /* VTS which our title is in */
     title->vts = d->vmg->tt_srpt->title[t-1].title_set_nr;
 
+    if ( !title->vts )
+    {
+        /* A VTS of 0 means the title wasn't found in the title set */
+        hb_error("Invalid VTS (title set) number: %i", title->vts);
+        goto fail;
+    }
+    
     hb_log( "scan: opening IFO for VTS %d", title->vts );
     if( !( vts = ifoOpen( d->reader, title->vts ) ) )
     {
