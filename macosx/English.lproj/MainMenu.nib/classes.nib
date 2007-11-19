@@ -71,6 +71,7 @@
                 calculatePictureSizing = id; 
                 chapterPopUpChanged = id; 
                 closeAddPresetPanel = id; 
+                closeSourceTitleScanPanel = id; 
                 codecsPopUpChanged = id; 
                 customSettingUsed = id; 
                 deleteFactoryPresets = id; 
@@ -96,6 +97,7 @@
                 showPreferencesWindow = id; 
                 showQueueWindow = id; 
                 showScanPanel = id; 
+                showSourceTitleScanPanel = id; 
                 subtitleSelectionChanged = id; 
                 tableViewSelected = id; 
                 titlePopUpChanged = id; 
@@ -130,6 +132,7 @@
                 fDstFormatField = NSTextField; 
                 fDstFormatPopUp = NSPopUpButton; 
                 fDstMpgLargeFileCheck = NSButton; 
+                fOpenSourceTitleMMenu = NSMenuItem; 
                 fPicLabelAnamorphic = NSTextField; 
                 fPicLabelAr = NSTextField; 
                 fPicLabelAutoCrop = NSTextField; 
@@ -169,11 +172,17 @@
                 fQueueStatus = NSTextField; 
                 fRipIndicator = NSProgressIndicator; 
                 fScanIndicator = NSProgressIndicator; 
+                fScanSrcTitleCancelButton = NSButton; 
+                fScanSrcTitleNumField = NSTextField; 
+                fScanSrcTitleOpenButton = NSButton; 
+                fScanSrcTitlePanel = NSPanel; 
+                fScanSrcTitlePathField = NSTextField; 
                 fSrcChapterEndPopUp = NSPopUpButton; 
                 fSrcChapterField = NSTextField; 
                 fSrcChapterStartPopUp = NSPopUpButton; 
                 fSrcChapterToField = NSTextField; 
                 fSrcDVD2Field = NSTextField; 
+                fSrcDsplyNameTitleScan = NSTextField; 
                 fSrcDuration1Field = NSTextField; 
                 fSrcDuration2Field = NSTextField; 
                 fSrcTitleField = NSTextField; 

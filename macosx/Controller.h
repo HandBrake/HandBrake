@@ -24,6 +24,17 @@
     IBOutlet NSWindow            * fWindow;
     NSToolbar                    * toolbar;
     
+    /* Main Menu Outlets */
+    NSMenuItem                   * fOpenSourceTitleMMenu;
+    
+    /* Source Title Scan Outlets */
+    IBOutlet NSPanel              * fScanSrcTitlePanel;
+    IBOutlet NSTextField          * fScanSrcTitlePathField;
+    IBOutlet NSTextField          * fSrcDsplyNameTitleScan;
+    IBOutlet NSTextField          * fScanSrcTitleNumField;
+    IBOutlet NSButton             * fScanSrcTitleCancelButton;
+    IBOutlet NSButton             * fScanSrcTitleOpenButton;
+    
     /* Picture panel */
     PictureController            * fPictureController;
     
@@ -183,16 +194,19 @@
 	NSString                      * currentSource;
 }
 
+- (IBAction) browseSources: (id) sender;
+- (void) browseSourcesDone: (NSOpenPanel *) sheet
+                returnCode: (int) returnCode contextInfo: (void *) contextInfo;
+- (IBAction) showSourceTitleScanPanel: (id) sender;
+- (IBAction) closeSourceTitleScanPanel: (id) sender;  
+- (void) performScan:(NSString *) scanPath scanTitleNum: (int) scanTitleNum;
+- (IBAction) showNewScan: (id) sender;
+
 - (void)     TranslateStrings;
 
 - (void)     updateUI: (NSTimer *) timer;
 - (void)     enableUI: (bool) enable;
-- (IBAction) showNewScan: (id) sender;
-- (IBAction) showScanPanel: (id) sender;
-- (IBAction) browseSources: (id) sender;
-- (void) browseSourcesDone: (NSOpenPanel *) sheet
-    returnCode: (int) returnCode contextInfo: (void *) contextInfo;
-    
+
 - (IBAction) titlePopUpChanged: (id) sender;
 - (IBAction) chapterPopUpChanged: (id) sender;
 
@@ -211,7 +225,7 @@
 
 - (IBAction) browseFile: (id) sender;
 - (void)     browseFileDone: (NSSavePanel *) sheet
-    returnCode: (int) returnCode contextInfo: (void *) contextInfo;
+                 returnCode: (int) returnCode contextInfo: (void *) contextInfo;
 
 - (IBAction) videoMatrixChanged: (id) sender;
 - (IBAction) qualitySliderChanged: (id) sender;
@@ -222,7 +236,7 @@
 
 - (IBAction) addToQueue: (id) sender;
 - (void) overwriteAddToQueueAlertDone: (NSWindow *) sheet
-    returnCode: (int) returnCode contextInfo: (void *) contextInfo;
+                           returnCode: (int) returnCode contextInfo: (void *) contextInfo;
 - (void)     doAddToQueue;
 
 - (IBAction) showQueueWindow:(id)sender;
@@ -231,9 +245,9 @@
 
 - (IBAction) Rip: (id) sender;
 - (void)     overWriteAlertDone: (NSWindow *) sheet
-    returnCode: (int) returnCode contextInfo: (void *) contextInfo;
+                     returnCode: (int) returnCode contextInfo: (void *) contextInfo;
 - (void)     updateAlertDone: (NSWindow *) sheet
-    returnCode: (int) returnCode contextInfo: (void *) contextInfo;
+                  returnCode: (int) returnCode contextInfo: (void *) contextInfo;
 - (void)     doRip;
 
 - (IBAction) Cancel: (id) sender;
@@ -248,7 +262,7 @@
 - (IBAction) openForums:   (id) sender;
 - (IBAction) openUserGuide:   (id) sender;
 
-// Preset Methods Here
+    // Preset Methods Here
 - (void) loadPresets;
 - (IBAction) customSettingUsed: (id) sender;
 - (IBAction) showAddPresetPanel: (id) sender;
@@ -286,21 +300,21 @@
 - (IBAction)getDefaultPresets:(id)sender;
 - (IBAction)tableViewSelected:(id)sender;
 
-// NSTableDataSource methods
+    // NSTableDataSource methods
 - (int)numberOfRowsInTableView:(NSTableView *)aTableView;
 - (id)tableView:(NSTableView *)aTableView
       objectValueForTableColumn:(NSTableColumn *)aTableColumn
-      row:(int)rowIndex;
+            row:(int)rowIndex;
 - (void)tableView:(NSTableView *)aTableView
-        setObjectValue:(id)anObject
-        forTableColumn:(NSTableColumn *)aTableColumn
-        row:(int)rowIndex;
-// To determine user presets cell display properties
+   setObjectValue:(id)anObject
+   forTableColumn:(NSTableColumn *)aTableColumn
+              row:(int)rowIndex;
+    // To determine user presets cell display properties
 - (void)tableView:(NSTableView *)aTableView
 		willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn
-		 row:(int)rowIndex;
+              row:(int)rowIndex;
 
-// Growl methods
+    // Growl methods
 - (NSDictionary *) registrationDictionaryForGrowl;
 -(IBAction)showGrowlDoneNotification:(id)sender;
 - (IBAction)showDebugOutputPanel:(id)sender;

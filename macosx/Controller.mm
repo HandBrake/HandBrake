@@ -134,10 +134,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         
     }
 	
-    /* Show scan panel ASAP */
-    [self performSelectorOnMainThread: @selector(showScanPanel:)
+    /* Show Browse Sources Window ASAP */
+    [self performSelectorOnMainThread: @selector(browseSources:)
                            withObject: NULL waitUntilDone: NO];
-}
+                           }
 
 - (void) updateAlertDone: (NSWindow *) sheet
               returnCode: (int) returnCode contextInfo: (void *) contextInfo
@@ -861,7 +861,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setToolTip: @"Choose Video Source"];
         [item setImage: [NSImage imageNamed: @"Source"]];
         [item setTarget: self];
-        [item setAction: @selector(showScanPanel:)];
+        [item setAction: @selector(browseSources:)];
     }
     else
     {
@@ -978,7 +978,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         if (action == @selector(addToQueue:) || action == @selector(showPicturePanel:) || action == @selector(showAddPresetPanel:))
             return SuccessfulScan && [fWindow attachedSheet] == nil;
         
-        if (action == @selector(showScanPanel:))
+        if (action == @selector(browseSources:))
         {
             if (s.state == HB_STATE_SCANNING)
                 return NO;
@@ -1054,14 +1054,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 #pragma mark -
 #pragma mark Get New Source
 
-- (IBAction) showScanPanel: (id) sender
+/*Opens the source browse window, called from Open Source widgets */
+- (IBAction) browseSources: (id) sender
 {
     [self enableUI: NO];
-	[self browseSources:NULL];
-}
-
-- (void) browseSources: (id) sender
-{
     NSOpenPanel * panel;
 	
     panel = [NSOpenPanel openPanel];
@@ -1078,46 +1074,132 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		sourceDirectory = @"~/Desktop";
 		sourceDirectory = [sourceDirectory stringByExpandingTildeInPath];
 	}
-   [panel beginSheetForDirectory: sourceDirectory file: nil types: nil
-				   modalForWindow: fWindow modalDelegate: self
-				   didEndSelector: @selector( browseSourcesDone:returnCode:contextInfo: )
-					  contextInfo: nil];
+    /* we open up the browse sources sheet here and call for browseSourcesDone after the sheet is closed
+        * to evaluate whether we want to specify a title, we pass the sender in the contextInfo variable
+        */
+    [panel beginSheetForDirectory: sourceDirectory file: nil types: nil
+                   modalForWindow: fWindow modalDelegate: self
+                   didEndSelector: @selector( browseSourcesDone:returnCode:contextInfo: )
+                      contextInfo: sender]; 
 }
 
 - (void) browseSourcesDone: (NSOpenPanel *) sheet
-		 returnCode: (int) returnCode contextInfo: (void *) contextInfo
+                returnCode: (int) returnCode contextInfo: (void *) contextInfo
 {
+    /* we convert the sender content of contextInfo back into a variable called sender
+    * mostly just for consistency for evaluation later
+    */
+    id sender = (id)contextInfo;
     /* User selected a file to open */
 	if( returnCode == NSOKButton )
     {
-        [fSrcDVD2Field setStringValue: _( @"Opening a new source ..." )];
+        
+        NSString *scanPath = [[sheet filenames] objectAtIndex: 0];
+        /* we order out sheet, which is the browse window as we need to open
+        * the title selection sheet right away
+        */
+        [sheet orderOut: self];
+        
+        if (sender == fOpenSourceTitleMMenu)
+        {
+            /* We put the chosen source path in the source display text field for the
+            * source title selection sheet in which the user specifies the specific title to be
+            * scanned  as well as the short source name in fSrcDsplyNameTitleScan just for display
+            * purposes in the title panel
+            */
+            /* Full Path */
+            [fScanSrcTitlePathField setStringValue: [NSString stringWithFormat:@"%@", scanPath]];
+            NSString *displayTitlescanSourceName;
+            
+            if ([[scanPath lastPathComponent] isEqualToString: @"VIDEO_TS"])
+            {
+                /* If VIDEO_TS Folder is chosen, choose its parent folder for the source display name 
+                we have to use the title->dvd value so we get the proper name of the volume if a physical dvd is the source*/
+                displayTitlescanSourceName = [NSString stringWithFormat:[[scanPath stringByDeletingLastPathComponent] lastPathComponent]];
+            }
+            else
+            {
+                /* if not the VIDEO_TS Folder, we can assume the chosen folder is the source name */
+                displayTitlescanSourceName = [NSString stringWithFormat:[scanPath lastPathComponent]];
+            }
+            /* we set the source display name in the title selection dialogue */
+            [fSrcDsplyNameTitleScan setStringValue: [NSString stringWithFormat:@"%@", displayTitlescanSourceName]];
+            /* We show the actual sheet where the user specifies the title to be scanned 
+                * as we are going to do a title specific scan
+                */
+            [self showSourceTitleScanPanel:NULL];
+        }
+        else
+        {
+            /* We are just doing a standard full source scan, so we specify "0" to libhb */
+            NSString *path = [[sheet filenames] objectAtIndex: 0];
+            [self performScan:path scanTitleNum:0];   
+        }
+        
+    }
+    else // User clicked Cancel in browse window
+    {
+        /* if we have a title loaded up */
+        if ([[fSrcDVD2Field stringValue] length] > 0)
+        {
+            [self enableUI: YES];
+        }
+    }
+}
+    
+/* Here we open the title selection sheet where we can specify an exact title to be scanned */
+- (IBAction) showSourceTitleScanPanel: (id) sender
+{
+    /* We default the title number to be scanned to "0" which results in a full source scan, unless the
+    * user changes it
+    */
+    [fScanSrcTitleNumField setStringValue: @"0"];
+	/* Show the panel */
+	[NSApp beginSheet: fScanSrcTitlePanel modalForWindow: fWindow modalDelegate: NULL didEndSelector: NULL contextInfo: NULL];
+}
+
+- (IBAction) closeSourceTitleScanPanel: (id) sender
+{
+    [NSApp endSheet: fScanSrcTitlePanel];
+    [fScanSrcTitlePanel orderOut: self];
+    if(sender == fScanSrcTitleOpenButton)
+    {
+        /* We setup the scan status in the main window to indicate a source title scan */
+        [fSrcDVD2Field setStringValue: _( @"Opening a new source title ..." )];
 		[fScanIndicator setHidden: NO];
 	    [fScanIndicator setIndeterminate: YES];
         [fScanIndicator startAnimation: nil];
 		
 		/* we set the last source directory in the prefs here */
-		NSString *sourceDirectory = [[[sheet filenames] objectAtIndex: 0] stringByDeletingLastPathComponent];
+		NSString *sourceDirectory = [[fScanSrcTitlePathField stringValue] stringByDeletingLastPathComponent];
 		[[NSUserDefaults standardUserDefaults] setObject:sourceDirectory forKey:@"LastSourceDirectory"];
-		
-        NSString *path = [[sheet filenames] objectAtIndex: 0];
-        HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
-        if( [detector isVideoDVD] )
-        {
-            // The chosen path was actually on a DVD, so use the raw block
-            // device path instead.
-            path = [detector devicePath];
-        }
-		
-		hb_scan( fHandle, [path UTF8String], 0 );
-	}
-	else // User clicked Cancel in browse window
-	{
-		/* if we have a title loaded up */
-		if ([[fSrcDVD2Field stringValue] length] > 0)
-		{
-            [self enableUI: YES];
-        }
-	}
+        /* We use the performScan method to actually perform the specified scan passing the path and the title
+            * to be scanned
+            */
+        [self performScan:[fScanSrcTitlePathField stringValue] scanTitleNum:[fScanSrcTitleNumField intValue]];
+    }
+}
+
+
+/* Here we actually tell hb_scan to perform the source scan, using the path to source and title number*/
+- (void) performScan:(NSString *) scanPath scanTitleNum: (int) scanTitleNum
+{
+    NSString *path = scanPath;
+    HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
+    if( [detector isVideoDVD] )
+    {
+        // The chosen path was actually on a DVD, so use the raw block
+        // device path instead.
+        path = [detector devicePath];
+    }
+    /* If there is no title number passed to scan, we use "0"
+        * which causes the default behavior of a full source scan
+    */
+    if (!scanTitleNum)
+    {
+        scanTitleNum = 0;
+    }
+    hb_scan( fHandle, [path UTF8String], scanTitleNum );
 }
 
 - (IBAction) showNewScan:(id)sender
@@ -1137,13 +1219,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	}
 	else
 	{
-     /* We increment the successful scancount here by one,
-		   which we use at the end of this function to tell the gui
-		   if this is the first successful scan since launch and whether
-		   or not we should set all settings to the defaults */
+        /* We increment the successful scancount here by one,
+        which we use at the end of this function to tell the gui
+        if this is the first successful scan since launch and whether
+        or not we should set all settings to the defaults */
 		
         currentSuccessfulScanCount++;
-
+        
         [toolbar validateVisibleItems];
 		
 		[fSrcTitlePopUp removeAllItems];
@@ -1154,17 +1236,17 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             currentSource = [NSString stringWithUTF8String: title->name];
             
             /* To get the source name as well as the default output name, first we check to see if
-               the selected directory is the VIDEO_TS Directory */
+                the selected directory is the VIDEO_TS Directory */
             if ([[currentSource lastPathComponent] isEqualToString: @"VIDEO_TS"])
             {
-            /* If VIDEO_TS Folder is chosen, choose its parent folder for the source display name 
-               we have to use the title->dvd value so we get the proper name of the volume if a physical dvd is the source*/
-            sourceDisplayName = [NSString stringWithFormat:[[[NSString stringWithUTF8String: title->dvd] stringByDeletingLastPathComponent] lastPathComponent]];
+                /* If VIDEO_TS Folder is chosen, choose its parent folder for the source display name 
+                we have to use the title->dvd value so we get the proper name of the volume if a physical dvd is the source*/
+                sourceDisplayName = [NSString stringWithFormat:[[[NSString stringWithUTF8String: title->dvd] stringByDeletingLastPathComponent] lastPathComponent]];
             }
             else
             {
-            /* if not the VIDEO_TS Folder, we can assume the chosen folder is the source name */
-            sourceDisplayName = [NSString stringWithFormat:[currentSource lastPathComponent]];
+                /* if not the VIDEO_TS Folder, we can assume the chosen folder is the source name */
+                sourceDisplayName = [NSString stringWithFormat:[currentSource lastPathComponent]];
             }
 			/*Set DVD Name at top of window*/
 			[fSrcDVD2Field setStringValue:[NSString stringWithFormat: @"%@", sourceDisplayName]];
@@ -1183,17 +1265,15 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 					@"%@/Desktop/%@.mp4", NSHomeDirectory(),sourceDisplayName]];
 			}
 			
-			
 			if (longuestpri < title->hours*60*60 + title->minutes *60 + title->seconds)
 			{
 				longuestpri=title->hours*60*60 + title->minutes *60 + title->seconds;
 				indxpri=i;
 			}
 			
+			[self formatPopUpChanged:NULL];
 			
-        [self formatPopUpChanged:NULL];
-			
-        [fSrcTitlePopUp addItemWithTitle: [NSString
+            [fSrcTitlePopUp addItemWithTitle: [NSString
                 stringWithFormat: @"%d - %02dh%02dm%02ds",
                 title->index, title->hours, title->minutes,
                 title->seconds]];
@@ -1207,17 +1287,17 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		[self enableUI: YES];
 		
 		/* if its the initial successful scan after awakeFromNib */
-	   if (currentSuccessfulScanCount == 1)
-	   {
-           [self selectDefaultPreset: NULL];
-           /* if Deinterlace upon launch is specified in the prefs, then set to 1 for "Fast",
-           if not, then set to 0 for none */
-           if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultDeinterlaceOn"] > 0)
-               [fPictureController setDeinterlace:1];
-           else
-               [fPictureController setDeinterlace:0];
-	   }
-       
+        if (currentSuccessfulScanCount == 1)
+        {
+            [self selectDefaultPreset: NULL];
+            /* if Deinterlace upon launch is specified in the prefs, then set to 1 for "Fast",
+            if not, then set to 0 for none */
+            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultDeinterlaceOn"] > 0)
+                [fPictureController setDeinterlace:1];
+            else
+                [fPictureController setDeinterlace:0];
+        }
+        
 	}
 }
 
