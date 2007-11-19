@@ -33,11 +33,9 @@ namespace Handbrake
             this.btn_close = new System.Windows.Forms.Button();
             this.Version = new System.Windows.Forms.Label();
             this.Label3 = new System.Windows.Forms.Label();
-            this.Label2 = new System.Windows.Forms.Label();
             this.PictureBox1 = new System.Windows.Forms.PictureBox();
-            this.Label1 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.lbl_guiVer = new System.Windows.Forms.Label();
+            this.lbl_build = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -48,9 +46,10 @@ namespace Handbrake
             this.Label4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label4.Location = new System.Drawing.Point(144, 58);
             this.Label4.Name = "Label4";
-            this.Label4.Size = new System.Drawing.Size(375, 104);
+            this.Label4.Size = new System.Drawing.Size(349, 26);
             this.Label4.TabIndex = 28;
-            this.Label4.Text = resources.GetString("Label4.Text");
+            this.Label4.Text = "HandBrake is an open-source, GPL-licensed, multiplatform, \r\nmultithreaded DVD lik" +
+                "e source to MPEG-4 converter.";
             // 
             // btn_close
             // 
@@ -59,7 +58,7 @@ namespace Handbrake
             this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_close.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(415, 248);
+            this.btn_close.Location = new System.Drawing.Point(388, 118);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(99, 22);
             this.btn_close.TabIndex = 27;
@@ -87,16 +86,6 @@ namespace Handbrake
             this.Label3.TabIndex = 25;
             this.Label3.Text = "Handbrake";
             // 
-            // Label2
-            // 
-            this.Label2.AutoSize = true;
-            this.Label2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label2.Location = new System.Drawing.Point(144, 172);
-            this.Label2.Name = "Label2";
-            this.Label2.Size = new System.Drawing.Size(93, 13);
-            this.Label2.TabIndex = 24;
-            this.Label2.Text = ":::: Credits ::::";
-            // 
             // PictureBox1
             // 
             this.PictureBox1.Image = global::Handbrake.Properties.Resources.logo128;
@@ -107,42 +96,31 @@ namespace Handbrake
             this.PictureBox1.TabIndex = 23;
             this.PictureBox1.TabStop = false;
             // 
-            // Label1
-            // 
-            this.Label1.AutoSize = true;
-            this.Label1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label1.Location = new System.Drawing.Point(144, 195);
-            this.Label1.Name = "Label1";
-            this.Label1.Size = new System.Drawing.Size(363, 39);
-            this.Label1.TabIndex = 22;
-            this.Label1.Text = "All credits and GPL licence files are located in the \"doc\" folder.\r\nYou can acces" +
-                "s this file via the \"doc\" shortcut located in\r\nHandBrake\'s start menu folder.";
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.Location = new System.Drawing.Point(144, 30);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(66, 13);
+            this.label5.Size = new System.Drawing.Size(40, 13);
             this.label5.TabIndex = 29;
-            this.label5.Text = "GUI Build:";
+            this.label5.Text = "Build:";
             // 
-            // lbl_guiVer
+            // lbl_build
             // 
-            this.lbl_guiVer.AutoSize = true;
-            this.lbl_guiVer.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_guiVer.Location = new System.Drawing.Point(228, 30);
-            this.lbl_guiVer.Name = "lbl_guiVer";
-            this.lbl_guiVer.Size = new System.Drawing.Size(64, 13);
-            this.lbl_guiVer.TabIndex = 30;
-            this.lbl_guiVer.Text = "{Version}";
+            this.lbl_build.AutoSize = true;
+            this.lbl_build.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_build.Location = new System.Drawing.Point(228, 30);
+            this.lbl_build.Name = "lbl_build";
+            this.lbl_build.Size = new System.Drawing.Size(64, 13);
+            this.lbl_build.TabIndex = 30;
+            this.lbl_build.Text = "{Version}";
             // 
             // groupBox1
             // 
             this.groupBox1.Location = new System.Drawing.Point(147, 45);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(372, 10);
+            this.groupBox1.Size = new System.Drawing.Size(340, 10);
             this.groupBox1.TabIndex = 31;
             this.groupBox1.TabStop = false;
             // 
@@ -152,21 +130,19 @@ namespace Handbrake
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(526, 278);
+            this.ClientSize = new System.Drawing.Size(497, 148);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.lbl_guiVer);
+            this.Controls.Add(this.lbl_build);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.Label4);
             this.Controls.Add(this.btn_close);
             this.Controls.Add(this.Version);
             this.Controls.Add(this.Label3);
-            this.Controls.Add(this.Label2);
             this.Controls.Add(this.PictureBox1);
-            this.Controls.Add(this.Label1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(532, 284);
             this.Name = "frmAbout";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "About Handbrake";
@@ -182,11 +158,9 @@ namespace Handbrake
         internal System.Windows.Forms.Button btn_close;
         internal System.Windows.Forms.Label Version;
         internal System.Windows.Forms.Label Label3;
-        internal System.Windows.Forms.Label Label2;
         internal System.Windows.Forms.PictureBox PictureBox1;
-        internal System.Windows.Forms.Label Label1;
         internal System.Windows.Forms.Label label5;
-        internal System.Windows.Forms.Label lbl_guiVer;
+        internal System.Windows.Forms.Label lbl_build;
         private System.Windows.Forms.GroupBox groupBox1;
     }
 }

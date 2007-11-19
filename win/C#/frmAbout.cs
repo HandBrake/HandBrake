@@ -15,7 +15,7 @@ namespace Handbrake
         {
             InitializeComponent();
             Version.Text = Properties.Settings.Default.CliVersion;
-            lbl_guiVer.Text = Properties.Settings.Default.GuiVersion;
+            lbl_build.Text = Properties.Settings.Default.build.ToString();
         }
 
         private void btn_close_Click(object sender, EventArgs e)

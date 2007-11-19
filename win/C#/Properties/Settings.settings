@@ -2,12 +2,6 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Handbrake.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="GuiVersion" Type="System.String" Scope="User">
-      <Value Profile="(Default)">2.4.2</Value>
-    </Setting>
-    <Setting Name="updateFile" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://download.m0k.org/handbrake/windows/update.txt</Value>
-    </Setting>
     <Setting Name="processPriority" Type="System.String" Scope="User">
       <Value Profile="(Default)">Below Normal</Value>
     </Setting>
@@ -46,6 +40,9 @@
     </Setting>
     <Setting Name="build" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1010</Value>
+    </Setting>
+    <Setting Name="skipversion" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>
 </SettingsFile>

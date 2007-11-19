@@ -74,6 +74,12 @@
     <Compile Include="frmAbout.Designer.cs">
       <DependentUpon>frmAbout.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmDownload.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDownload.Designer.cs">
+      <DependentUpon>frmDownload.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmDvdInfo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -92,12 +98,25 @@
     <Compile Include="frmOptions.Designer.cs">
       <DependentUpon>frmOptions.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmQueue.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmQueue.Designer.cs">
+      <DependentUpon>frmQueue.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmQuickStart.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmQuickStart.Designer.cs">
       <DependentUpon>frmQuickStart.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmUpdater.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmUpdater.Designer.cs">
+      <DependentUpon>frmUpdater.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Functions\RssReader.cs" />
     <Compile Include="Functions\CLI.cs" />
     <Compile Include="Functions\QueryParser.cs" />
     <Compile Include="Parsing\AudioTrack.cs" />
@@ -112,6 +131,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>frmAbout.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmDownload.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmDownload.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmDvdInfo.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmDvdInfo.cs</DependentUpon>
@@ -124,18 +147,22 @@
       <SubType>Designer</SubType>
       <DependentUpon>frmOptions.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmQueue.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmQueue.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmQuickStart.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmQuickStart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmUpdater.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmUpdater.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmQueue.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>frmQueue.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmReadDVD.resx">
       <SubType>Designer</SubType>
@@ -160,12 +187,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="frmQueue.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmQueue.Designer.cs">
-      <DependentUpon>frmQueue.cs</DependentUpon>
-    </Compile>
     <Compile Include="frmReadDVD.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -181,6 +202,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="handbrakepineapple.ico" />
+    <None Include="Resources\logo64.png" />
+    <None Include="Resources\logo128.png" />
     <Content Include="Resources\Output_Small.png" />
     <Content Include="Resources\Pref_Small.png" />
     <Content Include="Resources\Queue.png" />

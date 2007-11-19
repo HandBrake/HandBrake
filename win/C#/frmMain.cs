@@ -72,7 +72,8 @@ namespace Handbrake
             // redraw the splash screen
             Application.DoEvents();
             // Run the update checker.
-            updateCheck();
+            if (Properties.Settings.Default.updateStatus == "Checked")
+                updateCheck();
             Thread.Sleep(200);
 
             // Update the presets
@@ -144,53 +145,19 @@ namespace Handbrake
             string userDefaults = Properties.Settings.Default.defaultUserSettings;
             try
             {
-                    // Some things that need to be done to reset some gui components:
-                    CheckPixelRatio.CheckState = CheckState.Unchecked;
+                // Some things that need to be done to reset some gui components:
+                CheckPixelRatio.CheckState = CheckState.Unchecked;
 
-                    // Send the query from the file to the Query Parser class
-                    Functions.QueryParser presetQuery = Functions.QueryParser.Parse(userDefaults);
+                // Send the query from the file to the Query Parser class
+                Functions.QueryParser presetQuery = Functions.QueryParser.Parse(userDefaults);
 
-                    // Now load the preset
-                    presetLoader(presetQuery, "User Defaults ");
+                // Now load the preset
+                presetLoader(presetQuery, "User Defaults ");
             }
             catch (Exception exc)
             {
-                    MessageBox.Show("Unable to load profile.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                    MessageBox.Show(exc.ToString());
-            }
-        }
-
-        private Boolean updateCheck()
-        {
-            try
-            {
-                if (Properties.Settings.Default.updateStatus == "Checked")
-                {
-                    String updateFile = Properties.Settings.Default.updateFile;
-                    WebClient client = new WebClient();
-                    String data = client.DownloadString(updateFile);
-                    String[] versionData = data.Split('\n');
-
-                    int verdata = int.Parse(versionData[0].Replace(".", ""));
-                    int vergui = int.Parse(Properties.Settings.Default.GuiVersion.Replace(".", ""));
-                    int verd1 = int.Parse(versionData[1].Replace(".", ""));
-                    int cliversion = int.Parse(Properties.Settings.Default.CliVersion.Replace(".", ""));
-
-                    Boolean update = ((verdata > vergui) || (verd1 > cliversion));
-
-                    lbl_update.Visible = update;
-
-                    return update;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception)
-            {
-                // Silently ignore the error
-                return false;
+                MessageBox.Show("Unable to load profile.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                MessageBox.Show(exc.ToString());
             }
         }
 
@@ -390,7 +357,8 @@ namespace Handbrake
             Boolean update = updateCheck();
             if (update == true)
             {
-                MessageBox.Show("There is a new update available. Please visit http://handbrake.m0k.org for details!", "Update Check", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                frmUpdater updateWindow = new frmUpdater();
+                updateWindow.Show();
             }
             else
             {
@@ -607,11 +575,6 @@ namespace Handbrake
                         Regex r = new Regex("(:  )"); // Split on hyphens. 
                         string[] presetName = r.Split(preset);
 
-                        if (selectedPreset == "iPhone / iPod Touch")
-                        {
-                            selectedPreset = "iPhone";
-                        }
-
                         if (selectedPreset == presetName[0])
                         {
                             // Need to disable anamorphic now, otherwise it may overide the width / height values later.
@@ -623,7 +586,7 @@ namespace Handbrake
                             // Now load the preset
                             presetLoader(presetQuery, selectedPreset);
                         }
-                        
+
                     }
                     else
                     {
@@ -636,7 +599,7 @@ namespace Handbrake
                 MessageBox.Show(exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-           
+
         }
 
         #endregion
@@ -1232,9 +1195,10 @@ namespace Handbrake
 
         #region Program Functions
 
-        // Generate a CLI Query String
         public string GenerateTheQuery()
         {
+            // Source tab
+            #region source
             string source = text_source.Text;
             string dvdTitle = drp_dvdtitle.Text;
             string chapterStart = drop_chapterStart.Text;
@@ -1260,9 +1224,10 @@ namespace Handbrake
                 dvdChapter = " -c " + chapterStart + "-" + chapterFinish;
 
             string querySource = source + dvdTitle + dvdChapter;
-            // ----------------------------------------------------------------------
+            #endregion
 
-            // Destination
+            // Destination tab
+            #region Destination
 
             string destination = text_destination.Text;
             string videoEncoder = drp_videoEncoder.Text;
@@ -1332,9 +1297,10 @@ namespace Handbrake
 
 
             string queryDestination = destination + videoEncoder + audioEncoder + width + height;
-            // ----------------------------------------------------------------------
+            #endregion
 
             // Picture Settings Tab
+            #region Picture Settings Tab
 
             string cropSetting = drp_crop.Text;
             string cropTop = text_top.Text;
@@ -1411,9 +1377,10 @@ namespace Handbrake
                 ChapterMarkers = " -m ";
 
             string queryPictureSettings = cropOut + subtitles + deinterlace + grayscale + pixelRatio + ChapterMarkers;
-            // ----------------------------------------------------------------------
+            #endregion
 
             // Video Settings Tab
+            #region Video Settings Tab
 
             string videoBitrate = text_bitrate.Text;
             string videoFilesize = text_filesize.Text;
@@ -1450,7 +1417,7 @@ namespace Handbrake
                 {
                     vidQSetting = "1.0";
                 }
-                vidQSetting = " -q " + videoQuality.ToString(new CultureInfo("en-US")); 
+                vidQSetting = " -q " + videoQuality.ToString(new CultureInfo("en-US"));
             }
 
             if (check_2PassEncode.Checked)
@@ -1493,9 +1460,10 @@ namespace Handbrake
             }
 
             string queryVideoSettings = videoBitrate + videoFilesize + vidQSetting + CRF + twoPassEncoding + videoFramerate + turboH264 + largeFile + deblock + detelecine + denoise;
-            // ----------------------------------------------------------------------
+            #endregion
 
             // Audio Settings Tab
+            #region Audio Settings Tab
 
             string audioBitrate = drp_audioBitrate.Text;
             string audioSampleRate = drp_audioSampleRate.Text;
@@ -1551,10 +1519,10 @@ namespace Handbrake
                 SixChannelAudio = "";
 
             string queryAudioSettings = audioBitrate + audioSampleRate + audioChannels + SixChannelAudio;
-            // ----------------------------------------------------------------------
+            #endregion
 
-            //  H.264 Tab
-
+            // H264 Tab
+            #region  H264 Tab
 
             string h264Advanced = rtf_h264advanced.Text;
 
@@ -1565,9 +1533,10 @@ namespace Handbrake
 
 
             string h264Settings = h264Advanced;
-            // ----------------------------------------------------------------------
+            #endregion
 
-            // Processors (Program Settings)
+            // Other
+            #region Processors / Other
 
             string processors = Properties.Settings.Default.Processors;
             //  Number of Processors Handler
@@ -1579,20 +1548,15 @@ namespace Handbrake
 
 
             string queryAdvancedSettings = processors;
-            // ----------------------------------------------------------------------
-
-            //  Verbose option (Program Settings)
 
             string verbose = "";
             if (Properties.Settings.Default.verbose == "Checked")
                 verbose = " -v ";
-
-            // ----------------------------------------------------------------------
+            #endregion
 
             return querySource + queryDestination + queryPictureSettings + queryVideoSettings + h264Settings + queryAudioSettings + queryAdvancedSettings + verbose;
         }
 
-        // Load a Preset
         private void presetLoader(Functions.QueryParser presetQuery, string name)
         {
             // ---------------------------
@@ -1637,7 +1601,7 @@ namespace Handbrake
             if (presetQuery.Width != 0)
             {
                 text_width.Text = presetQuery.Width.ToString();
-           
+
             }
             else
             {
@@ -1782,7 +1746,39 @@ namespace Handbrake
             #endregion
         }
 
+        private Boolean updateCheck()
+        {
+            try
+            {
+                Functions.RssReader rssRead = new Functions.RssReader();
+                string build = rssRead.build();
+
+                int latest = int.Parse(build);
+                int current = Properties.Settings.Default.build;
+                int skip = Properties.Settings.Default.skipversion;
+
+                if (latest == skip)
+                {
+                    return false;
+                }
+                else
+                {
+                    Boolean update = (latest > current);
+                    if (update == true)
+                        lbl_update.Visible = true;
+                    return update;
+                }
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
+                return false;
+            }
+        }
+
         #endregion
+
+
         // This is the END of the road ------------------------------------------------------------------------------
     }
 }

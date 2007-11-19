@@ -75,8 +75,9 @@ namespace Handbrake
             this.mnu_options = new System.Windows.Forms.ToolStripMenuItem();
             this.PresetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_showPresets = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_presetReset = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_SelectDefault = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+            this.mnu_presetReset = new System.Windows.Forms.ToolStripMenuItem();
             this.HelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_quickStart = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -178,7 +179,6 @@ namespace Handbrake
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.listview_presets = new System.Windows.Forms.ListView();
             this.presetname = new System.Windows.Forms.ColumnHeader();
-            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             Label38 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
             this.frmMainMenu.SuspendLayout();
@@ -697,14 +697,6 @@ namespace Handbrake
             this.mnu_showPresets.Visible = false;
             this.mnu_showPresets.Click += new System.EventHandler(this.mnu_showPresets_Click);
             // 
-            // mnu_presetReset
-            // 
-            this.mnu_presetReset.Name = "mnu_presetReset";
-            this.mnu_presetReset.Size = new System.Drawing.Size(194, 22);
-            this.mnu_presetReset.Text = "Update Built-in Presets";
-            this.mnu_presetReset.ToolTipText = "Resets all presets.";
-            this.mnu_presetReset.Click += new System.EventHandler(this.mnu_presetReset_Click);
-            // 
             // mnu_SelectDefault
             // 
             this.mnu_SelectDefault.Name = "mnu_SelectDefault";
@@ -712,6 +704,19 @@ namespace Handbrake
             this.mnu_SelectDefault.Text = "Select Default Preset";
             this.mnu_SelectDefault.ToolTipText = "Select HandBrake\'s default preset";
             this.mnu_SelectDefault.Click += new System.EventHandler(this.mnu_SelectDefault_Click);
+            // 
+            // toolStripSeparator7
+            // 
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            this.toolStripSeparator7.Size = new System.Drawing.Size(191, 6);
+            // 
+            // mnu_presetReset
+            // 
+            this.mnu_presetReset.Name = "mnu_presetReset";
+            this.mnu_presetReset.Size = new System.Drawing.Size(194, 22);
+            this.mnu_presetReset.Text = "Update Built-in Presets";
+            this.mnu_presetReset.ToolTipText = "Resets all presets.";
+            this.mnu_presetReset.Click += new System.EventHandler(this.mnu_presetReset_Click);
             // 
             // HelpToolStripMenuItem
             // 
@@ -1013,7 +1018,7 @@ namespace Handbrake
             this.lbl_update.AutoSize = true;
             this.lbl_update.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_update.ForeColor = System.Drawing.Color.Black;
-            this.lbl_update.Location = new System.Drawing.Point(108, 543);
+            this.lbl_update.Location = new System.Drawing.Point(90, 543);
             this.lbl_update.Name = "lbl_update";
             this.lbl_update.Size = new System.Drawing.Size(193, 13);
             this.lbl_update.TabIndex = 98;
@@ -1060,7 +1065,7 @@ namespace Handbrake
             this.Version.Name = "Version";
             this.Version.Size = new System.Drawing.Size(105, 20);
             this.Version.TabIndex = 97;
-            this.Version.Text = "Version {0.0.0}";
+            this.Version.Text = "Version 0.0.0";
             // 
             // lbl_encode
             // 
@@ -1916,7 +1921,6 @@ namespace Handbrake
             this.listview_presets.FullRowSelect = true;
             this.listview_presets.GridLines = true;
             this.listview_presets.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.listview_presets.LabelEdit = true;
             this.listview_presets.LabelWrap = false;
             this.listview_presets.Location = new System.Drawing.Point(8, 19);
             this.listview_presets.Margin = new System.Windows.Forms.Padding(5);
@@ -1932,11 +1936,6 @@ namespace Handbrake
             // 
             this.presetname.Text = "Presets";
             this.presetname.Width = 175;
-            // 
-            // toolStripSeparator7
-            // 
-            this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(191, 6);
             // 
             // frmMain
             // 
