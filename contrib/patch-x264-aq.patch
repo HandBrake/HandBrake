@@ -1,195 +1,8 @@
-Index: encoder/encoder.c
-===================================================================
---- encoder/encoder.c	(revisione 634)
-+++ encoder/encoder.c	(copia locale)
-@@ -470,6 +470,8 @@
-     if( !h->param.b_cabac )
-         h->param.analyse.i_trellis = 0;
-     h->param.analyse.i_trellis = x264_clip3( h->param.analyse.i_trellis, 0, 2 );
-+    if( h->param.analyse.b_aq && h->param.analyse.f_aq_strength <= 0 )
-+        h->param.analyse.b_aq = 0;
-     h->param.analyse.i_noise_reduction = x264_clip3( h->param.analyse.i_noise_reduction, 0, 1<<16 );
- 
-     {
-Index: encoder/analyse.c
-===================================================================
---- encoder/analyse.c	(revisione 634)
-+++ encoder/analyse.c	(copia locale)
-@@ -29,6 +29,7 @@
- #include <unistd.h>
- 
- #include "common/common.h"
-+#include "common/cpu.h"
- #include "macroblock.h"
- #include "me.h"
- #include "ratecontrol.h"
-@@ -2026,8 +2027,73 @@
-     }
- }
- 
-+static void x264_add_dctq(int16_t dct[8][8], int *p_total) {
-+    int     i, t = 0;
-+    int16_t *p = &dct[0][0];
- 
-+    for (i = 1; i < 64; ++i)
-+        t += abs(p[i]) * x264_dct8_weight_tab[i];
-+
-+    *p_total += t;
-+}
-+
- /*****************************************************************************
-+ * x264_adaptive_quant:
-+ * check if mb is "flat", i.e. has most energy in low frequency components, and
-+ * adjust qp down if it is
-+ *****************************************************************************/
-+void x264_adaptive_quant( x264_t *h, x264_mb_analysis_t *a )
-+{
-+    DECLARE_ALIGNED( static uint8_t, zero[FDEC_STRIDE*8], 16 );
-+
-+    int16_t dct[8][8];
-+    int     total = 0;
-+    int     i_qp = h->mb.i_qp, i_qp_adj;
-+    float   fc;
-+
-+    if( i_qp <= 10 ) /* AQ is probably not needed at such low QP */
-+        return;
-+
-+    if( h->pixf.sad[PIXEL_16x16](h->mb.pic.p_fenc[0], FENC_STRIDE, zero, 16) > 64*16*16 )
-+    {   /* light places */
-+        if( h->pixf.count_8x8(h->mb.pic.p_fenc[1], FENC_STRIDE, 0x81818181) < 40 )
-+            /* not enough "blue" pixels */
-+            return;
-+
-+        if( h->pixf.count_8x8(h->mb.pic.p_fenc[2], FENC_STRIDE, 0x87878787) > 24 )
-+            /* too many "red" pixels */
-+            return;
-+    }
-+
-+    h->dctf.sub8x8_dct8( dct, h->mb.pic.p_fenc[0], zero );
-+    x264_add_dctq( dct, &total );
-+    h->dctf.sub8x8_dct8( dct, h->mb.pic.p_fenc[0] + 8, zero );
-+    x264_add_dctq( dct, &total );
-+    h->dctf.sub8x8_dct8( dct, h->mb.pic.p_fenc[0] + 8*FENC_STRIDE, zero );
-+    x264_add_dctq( dct, &total );
-+    h->dctf.sub8x8_dct8( dct, h->mb.pic.p_fenc[0] + 8*FENC_STRIDE + 8, zero );
-+    x264_add_dctq( dct, &total );
-+
-+    if( total == 0 ) /* sum is 0, nothing to do */
-+        return;
-+
-+    x264_cpu_restore( h->param.cpu );
-+
-+    fc = (float)expf(-5e-13 * total * total);
-+
-+    //printf("AQ: %d %.3f\n", total, fc);
-+    /* the function is chosen such that it stays close to 0 in almost all
-+      * range of 0..1, and rapidly goes up to 1 near 1.0 */
-+    i_qp_adj = (int)(i_qp * h->param.analyse.f_aq_strength / pow(2 - fc, h->param.analyse.f_aq_sensitivity));
-+
-+    /* don't adjust by more than this amount */
-+    i_qp_adj = X264_MIN(i_qp_adj, i_qp/2);
-+
-+    h->mb.i_qp = a->i_qp = i_qp - i_qp_adj;
-+    h->mb.i_chroma_qp = i_chroma_qp_table[x264_clip3( h->mb.i_qp + h->pps->i_chroma_qp_index_offset, 0, 51 )];
-+}
-+
-+/*****************************************************************************
-  * x264_macroblock_analyse:
-  *****************************************************************************/
- void x264_macroblock_analyse( x264_t *h )
-@@ -2039,6 +2105,10 @@
-     /* init analysis */
-     x264_mb_analyse_init( h, &analysis, x264_ratecontrol_qp( h ) );
- 
-+    /* try to do adaptive quantization */
-+    if( h->param.analyse.b_aq )
-+        x264_adaptive_quant( h, &analysis);
-+
-     /*--------------------------- Do the analysis ---------------------------*/
-     if( h->sh.i_type == SLICE_TYPE_I )
-     {
-Index: x264.c
-===================================================================
---- x264.c	(revisione 634)
-+++ x264.c	(copia locale)
-@@ -253,6 +253,12 @@
-         "                                  - 2: enabled on all mode decisions\n", defaults->analyse.i_trellis );
-     H0( "      --no-fast-pskip         Disables early SKIP detection on P-frames\n" );
-     H0( "      --no-dct-decimate       Disables coefficient thresholding on P-frames\n" );
-+    H0( "      --aq-strength <float>   Amount to adjust QP per MB [%.1f]\n"
-+        "                                  0.0: no AQ\n"
-+        "                                  1.1: strong AQ\n", defaults->analyse.f_aq_strength );
-+    H0( "      --aq-sensitivity <float> \"Flatness\" threshold to trigger AQ [%.1f]\n"
-+        "                                    5: applies to almost all blocks\n"
-+        "                                   22: only flat blocks\n", defaults->analyse.f_aq_sensitivity );
-     H0( "      --nr <integer>          Noise reduction [%d]\n", defaults->analyse.i_noise_reduction );
-     H1( "\n" );
-     H1( "      --deadzone-inter <int>  Set the size of the inter luma quantization deadzone [%d]\n", defaults->analyse.i_luma_deadzone[0] );
-@@ -416,6 +422,8 @@
-             { "trellis", required_argument, NULL, 't' },
-             { "no-fast-pskip", no_argument, NULL, 0 },
-             { "no-dct-decimate", no_argument, NULL, 0 },
-+            { "aq-strength", required_argument, NULL, 0 },
-+            { "aq-sensitivity", required_argument, NULL, 0 },
-             { "deadzone-inter", required_argument, NULL, '0' },
-             { "deadzone-intra", required_argument, NULL, '0' },
-             { "level",   required_argument, NULL, 0 },
-Index: common/pixel.c
-===================================================================
---- common/pixel.c	(revisione 634)
-+++ common/pixel.c	(copia locale)
-@@ -215,7 +215,17 @@
- PIXEL_SATD_C( x264_pixel_satd_4x8,   4, 8 )
- PIXEL_SATD_C( x264_pixel_satd_4x4,   4, 4 )
- 
-+static int x264_pixel_count_8x8( uint8_t *pix1, int i_pix1, uint32_t threshold ) 
-+{
-+  int i, j, sum = 0;
-+ 
-+  for ( i = 0; i < 8; ++i, pix1 += i_pix1 )
-+      for ( j = 0; j < 8; ++j )
-+          sum += pix1[j] > (uint8_t)threshold;
- 
-+  return sum;
-+}
-+
- /****************************************************************************
-  * pixel_sa8d_WxH: sum of 8x8 Hadamard transformed differences
-  ****************************************************************************/
-@@ -469,6 +479,8 @@
-     pixf->ads[PIXEL_16x16] = pixel_ads4;
-     pixf->ads[PIXEL_16x8] = pixel_ads2;
-     pixf->ads[PIXEL_8x8] = pixel_ads1;
-+    
-+    pixf->count_8x8 = x264_pixel_count_8x8;
- 
- #ifdef HAVE_MMX
-     if( cpu&X264_CPU_MMX )
-Index: common/pixel.h
-===================================================================
---- common/pixel.h	(revisione 634)
-+++ common/pixel.h	(copia locale)
-@@ -26,6 +26,7 @@
- 
- typedef int  (*x264_pixel_cmp_t) ( uint8_t *, int, uint8_t *, int );
- typedef int  (*x264_pixel_cmp_pde_t) ( uint8_t *, int, uint8_t *, int, int );
-+typedef int  (*x264_pixel_count_t) ( uint8_t *, int, uint32_t );
- typedef void (*x264_pixel_cmp_x3_t) ( uint8_t *, uint8_t *, uint8_t *, uint8_t *, int, int[3] );
- typedef void (*x264_pixel_cmp_x4_t) ( uint8_t *, uint8_t *, uint8_t *, uint8_t *, uint8_t *, int, int[4] );
- 
-@@ -84,6 +85,7 @@
-     /* multiple parallel calls to sad. */
-     x264_pixel_cmp_x3_t sad_x3[7];
-     x264_pixel_cmp_x4_t sad_x4[7];
-+    x264_pixel_count_t count_8x8;
- 
-     /* abs-diff-sum for successive elimination.
-      * may round width up to a multiple of 8. */
 Index: common/common.c
 ===================================================================
---- common/common.c	(revisione 634)
-+++ common/common.c	(copia locale)
-@@ -125,6 +125,9 @@
+--- common/common.c	(revision 669)
++++ common/common.c	(working copy)
+@@ -123,6 +123,9 @@
      param->analyse.i_chroma_qp_offset = 0;
      param->analyse.b_fast_pskip = 1;
      param->analyse.b_dct_decimate = 1;
@@ -199,7 +12,7 @@ Index: common/common.c
      param->analyse.i_luma_deadzone[0] = 21;
      param->analyse.i_luma_deadzone[1] = 11;
      param->analyse.b_psnr = 1;
-@@ -457,6 +460,13 @@
+@@ -455,6 +458,13 @@
          p->analyse.b_fast_pskip = atobool(value);
      OPT("dct-decimate")
          p->analyse.b_dct_decimate = atobool(value);
@@ -213,7 +26,7 @@ Index: common/common.c
      OPT("deadzone-inter")
          p->analyse.i_luma_deadzone[0] = atoi(value);
      OPT("deadzone-intra")
-@@ -936,6 +946,9 @@
+@@ -939,6 +949,9 @@
              s += sprintf( s, " zones" );
      }
  
@@ -223,11 +36,188 @@ Index: common/common.c
      return buf;
  }
  
+Index: common/pixel.c
+===================================================================
+--- common/pixel.c	(revision 669)
++++ common/pixel.c	(working copy)
+@@ -213,6 +213,14 @@
+ PIXEL_SATD_C( x264_pixel_satd_4x8,   4, 8 )
+ PIXEL_SATD_C( x264_pixel_satd_4x4,   4, 4 )
+ 
++static int x264_pixel_count_8x8( uint8_t *pix, int i_pix, uint32_t threshold )
++{
++    int x, y, sum = 0;
++    for( y=0; y<8; y++, pix += i_pix )
++        for( x=0; x<8; x++ )
++            sum += pix[x] > (uint8_t)threshold;
++    return sum;
++}
+ 
+ /****************************************************************************
+  * pixel_sa8d_WxH: sum of 8x8 Hadamard transformed differences
+@@ -470,6 +478,8 @@
+     pixf->ads[PIXEL_16x8] = pixel_ads2;
+     pixf->ads[PIXEL_8x8] = pixel_ads1;
+ 
++    pixf->count_8x8 = x264_pixel_count_8x8;
++
+ #ifdef HAVE_MMX
+     if( cpu&X264_CPU_MMX )
+     {
+Index: common/pixel.h
+===================================================================
+--- common/pixel.h	(revision 669)
++++ common/pixel.h	(working copy)
+@@ -90,6 +90,8 @@
+     void (*ads[7])( int enc_dc[4], uint16_t *sums, int delta,
+                     uint16_t *res, int width );
+ 
++    int (*count_8x8)( uint8_t *pix, int i_pix, uint32_t threshold );
++
+     /* calculate satd of V, H, and DC modes.
+      * may be NULL, in which case just use pred+satd instead. */
+     void (*intra_satd_x3_16x16)( uint8_t *fenc, uint8_t *fdec, int res[3] );
+Index: encoder/analyse.c
+===================================================================
+--- encoder/analyse.c	(revision 669)
++++ encoder/analyse.c	(working copy)
+@@ -29,6 +29,7 @@
+ #endif
+ 
+ #include "common/common.h"
++#include "common/cpu.h"
+ #include "macroblock.h"
+ #include "me.h"
+ #include "ratecontrol.h"
+@@ -2029,8 +2030,68 @@
+     }
+ }
+ 
++static int x264_sum_dctq( int16_t dct[8][8] )
++{
++    int i, t = 0;
++    int16_t *p = &dct[0][0];
++    for( i=1; i<64; i++ )
++        t += abs(p[i]) * x264_dct8_weight_tab[i];
++    return t;
++}
+ 
+ /*****************************************************************************
++ * x264_adaptive_quant:
++ * check if mb is "flat", i.e. has most energy in low frequency components, and
++ * adjust qp down if it is
++ *****************************************************************************/
++void x264_adaptive_quant( x264_t *h, x264_mb_analysis_t *a )
++{
++    DECLARE_ALIGNED( static uint8_t, zero[FDEC_STRIDE*8], 16 );
++    DECLARE_ALIGNED( int16_t, dct[8][8], 16 );
++    float fc;
++    int total = 0;
++    int qp = h->mb.i_qp, qp_adj;
++    int i;
++
++    if( qp <= 10 ) /* AQ is probably not needed at such low QP */
++        return;
++
++    if( h->pixf.sad[PIXEL_16x16](h->mb.pic.p_fenc[0], FENC_STRIDE, zero, 16) > 64*16*16 )
++    {   /* light places */
++        if( h->pixf.count_8x8(h->mb.pic.p_fenc[1], FENC_STRIDE, 0x81818181) < 40 )
++            /* not enough "blue" pixels */
++            return;
++
++        if( h->pixf.count_8x8(h->mb.pic.p_fenc[2], FENC_STRIDE, 0x87878787) > 24 )
++            /* too many "red" pixels */
++            return;
++    }
++
++    for( i=0; i<4; i++ )
++    {
++        h->dctf.sub8x8_dct8( dct, h->mb.pic.p_fenc[0] + (i&1)*8 + (i>>1)*FENC_STRIDE, zero );
++        total += x264_sum_dctq( dct );
++    }
++
++    if( total == 0 ) /* no AC coefficients, nothing to do */
++        return;
++
++    x264_cpu_restore( h->param.cpu );
++
++    fc = expf(-5e-13 * total * total);
++
++    /* the function is chosen such that it stays close to 0 in almost all
++      * range of 0..1, and rapidly goes up to 1 near 1.0 */
++    qp_adj = (int)(qp * h->param.analyse.f_aq_strength / pow(2 - fc, h->param.analyse.f_aq_sensitivity));
++
++    /* don't adjust by more than this amount */
++    qp_adj = X264_MIN(qp_adj, qp/2);
++
++    h->mb.i_qp = a->i_qp = qp - qp_adj;
++    h->mb.i_chroma_qp = i_chroma_qp_table[x264_clip3( h->mb.i_qp + h->pps->i_chroma_qp_index_offset, 0, 51 )];
++}
++
++/*****************************************************************************
+  * x264_macroblock_analyse:
+  *****************************************************************************/
+ void x264_macroblock_analyse( x264_t *h )
+@@ -2038,9 +2099,14 @@
+     x264_mb_analysis_t analysis;
+     int i_cost = COST_MAX;
+     int i;
++	
++    h->mb.i_qp = x264_ratecontrol_qp( h );
+ 
++    if( h->param.analyse.b_aq )
++        x264_adaptive_quant( h, &analysis );
++
+     /* init analysis */
+-    x264_mb_analyse_init( h, &analysis, x264_ratecontrol_qp( h ) );
++    x264_mb_analyse_init( h, &analysis, h->mb.i_qp );
+ 
+     /*--------------------------- Do the analysis ---------------------------*/
+     if( h->sh.i_type == SLICE_TYPE_I )
+Index: encoder/encoder.c
+===================================================================
+--- encoder/encoder.c	(revision 669)
++++ encoder/encoder.c	(working copy)
+@@ -477,6 +477,8 @@
+     if( !h->param.b_cabac )
+         h->param.analyse.i_trellis = 0;
+     h->param.analyse.i_trellis = x264_clip3( h->param.analyse.i_trellis, 0, 2 );
++    if( h->param.analyse.b_aq && h->param.analyse.f_aq_strength <= 0 )
++        h->param.analyse.b_aq = 0;
+     h->param.analyse.i_noise_reduction = x264_clip3( h->param.analyse.i_noise_reduction, 0, 1<<16 );
+ 
+     {
+Index: x264.c
+===================================================================
+--- x264.c	(revision 669)
++++ x264.c	(working copy)
+@@ -243,6 +243,12 @@
+         "                                  - 2: enabled on all mode decisions\n", defaults->analyse.i_trellis );
+     H0( "      --no-fast-pskip         Disables early SKIP detection on P-frames\n" );
+     H0( "      --no-dct-decimate       Disables coefficient thresholding on P-frames\n" );
++    H0( "      --aq-strength <float>   Amount to adjust QP per MB [%.1f]\n"
++        "                                  0.0: no AQ\n"
++        "                                  1.1: strong AQ\n", defaults->analyse.f_aq_strength );
++    H0( "      --aq-sensitivity <float> \"Flatness\" threshold to trigger AQ [%.1f]\n"
++        "                                    5: applies to almost all blocks\n"
++        "                                   22: only flat blocks\n", defaults->analyse.f_aq_sensitivity );
+     H0( "      --nr <integer>          Noise reduction [%d]\n", defaults->analyse.i_noise_reduction );
+     H1( "\n" );
+     H1( "      --deadzone-inter <int>  Set the size of the inter luma quantization deadzone [%d]\n", defaults->analyse.i_luma_deadzone[0] );
+@@ -406,6 +412,8 @@
+             { "trellis", required_argument, NULL, 't' },
+             { "no-fast-pskip", no_argument, NULL, 0 },
+             { "no-dct-decimate", no_argument, NULL, 0 },
++            { "aq-strength", required_argument, NULL, 0 },
++            { "aq-sensitivity", required_argument, NULL, 0 },
+             { "deadzone-inter", required_argument, NULL, '0' },
+             { "deadzone-intra", required_argument, NULL, '0' },
+             { "level",   required_argument, NULL, 0 },
 Index: x264.h
 ===================================================================
---- x264.h	(revisione 634)
-+++ x264.h	(copia locale)
-@@ -223,6 +223,9 @@
+--- x264.h	(revision 669)
++++ x264.h	(working copy)
+@@ -227,6 +227,9 @@
          int          i_trellis;  /* trellis RD quantization */
          int          b_fast_pskip; /* early SKIP detection on P-frames */
          int          b_dct_decimate; /* transform coefficient thresholding on P-frames */
