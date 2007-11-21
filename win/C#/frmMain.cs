@@ -68,32 +68,43 @@ namespace Handbrake
             Version.Text = "Version " + Properties.Settings.Default.CliVersion;
 
             // update the status
-            lblStatus.Text = "Checking for updates ...";
-            // redraw the splash screen
-            Application.DoEvents();
-            // Run the update checker.
             if (Properties.Settings.Default.updateStatus == "Checked")
+            {
+                lblStatus.Text = "Checking for updates ...";
+                // redraw the splash screen
+                Application.DoEvents();
+                // Run the update checker.
                 updateCheck();
-            Thread.Sleep(200);
+                Thread.Sleep(200);
+            }
 
             // Update the presets
-            lblStatus.Text = "Updaing Presets ...";
-            Application.DoEvents();
-            updatePresets();
-            Thread.Sleep(200);
+            if (Properties.Settings.Default.updatePresets == "Checked")
+            {
+                lblStatus.Text = "Updaing Presets ...";
+                Application.DoEvents();
+                updatePresets();
+                Thread.Sleep(200);
+            }
 
             // Now load the users default if required. (Will overide the above setting)
-            lblStatus.Text = "Loading User Default Settings...";
-            Application.DoEvents();
-            loadNormalPreset();
-            loadUserDefaults();
-            Thread.Sleep(100);
+            if (Properties.Settings.Default.defaultSettings == "Checked")
+            {
+                lblStatus.Text = "Loading User Default Settings...";
+                Application.DoEvents();
+                loadNormalPreset();
+                loadUserDefaults();
+                Thread.Sleep(100);
+            }
 
             // Enable or disable tooltips
-            lblStatus.Text = "Loading Tooltips ...";
-            Application.DoEvents();
-            tooltip();
-            Thread.Sleep(100);
+            if (Properties.Settings.Default.tooltipEnable == "Checked")
+            {
+                lblStatus.Text = "Loading Tooltips ...";
+                Application.DoEvents();
+                ToolTip.Active = true;
+                Thread.Sleep(100);
+            }
 
             // Hide the preset bar if required.
             hidePresetBar();
@@ -158,14 +169,6 @@ namespace Handbrake
             {
                 MessageBox.Show("Unable to load profile.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                 MessageBox.Show(exc.ToString());
-            }
-        }
-
-        private void tooltip()
-        {
-            if (Properties.Settings.Default.tooltipEnable == "Checked")
-            {
-                ToolTip.Active = true;
             }
         }
 

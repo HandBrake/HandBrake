@@ -48,6 +48,11 @@ namespace Handbrake
             {
                 check_showPreset.CheckState = CheckState.Checked;
             }
+
+            if (Properties.Settings.Default.updatePresets == "Checked")
+            {
+                check_updatePresets.CheckState = CheckState.Checked;
+            }
         }
 
         private void check_updateCheck_CheckedChanged(object sender, EventArgs e)
@@ -99,6 +104,11 @@ namespace Handbrake
         private void check_showPreset_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.hidePresets = check_showPreset.CheckState.ToString();
+        }
+
+        private void check_updatePresets_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.updatePresets = check_updatePresets.CheckState.ToString();
         }
 
 

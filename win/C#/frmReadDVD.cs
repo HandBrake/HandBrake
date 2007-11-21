@@ -18,7 +18,6 @@ namespace Handbrake
         private frmMain mainWindow;
         private frmDvdInfo dvdInfo;
         private Parsing.DVD thisDvd;
-        private Process hbProc;
         private delegate void UpdateUIHandler();
 
         public frmReadDVD(string inputFile, frmMain parent, frmDvdInfo dvdInfoWindow)

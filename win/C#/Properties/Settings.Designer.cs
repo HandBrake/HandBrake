@@ -191,5 +191,17 @@ namespace Handbrake.Properties {
                 this["skipversion"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string updatePresets {
+            get {
+                return ((string)(this["updatePresets"]));
+            }
+            set {
+                this["updatePresets"] = value;
+            }
+        }
     }
 }

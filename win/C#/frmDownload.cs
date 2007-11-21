@@ -78,7 +78,7 @@ namespace Handbrake
                     else
                         this.Invoke(new DownloadCompleteCallback(this.downloadComplete));
                 }
-                catch (Exception exc)
+                catch (Exception)
                 {
                     // Do Nothing 
                 }
