@@ -1,0 +1,11 @@
+--- lib/mp4v2/atom_avc1.cpp.bak.cpp	2004-07-13 17:07:50.000000000 -0400
++++ lib/mp4v2/atom_avc1.cpp	2007-11-19 13:44:21.000000000 -0500
+@@ -41,7 +41,7 @@
+ 	MP4StringProperty* pProp = 
+ 		new MP4StringProperty("compressorName");
+ 	pProp->SetFixedLength(32);
+-	pProp->SetValue("AVC Coding");
++	pProp->SetValue("");
+ 	AddProperty(pProp); /* 6 */
+ 
+ 	AddReserved("reserved4", 4); /* 7 */

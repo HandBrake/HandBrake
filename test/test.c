@@ -70,6 +70,7 @@ static int    largeFileSize = 0;
 static int    preset        = 0;
 static char * preset_name   = 0;
 static int    vfr           = 0;
+static int    mp4_optimize  = 0;
 
 /* Exit cleanly on Ctrl-C */
 static volatile int die = 0;
@@ -848,6 +849,10 @@ static int HandleEvents( hb_handle_t * h )
             {
                 job->largeFileSize = 1;
             }
+            if ( mp4_optimize )
+            {
+                job->mp4_optimize = 1;
+            }
             
             job->file = strdup( output );
 
@@ -1089,6 +1094,7 @@ static void ShowHelp()
     "                            autodetected from file name)\n"
     "    -4, --large-file        Use 64-bit mp4 files that can hold more than\n"
     "                            4 GB. Note: Breaks iPod, @TV, PS3 compatibility.\n"""
+    "    -O, --optimize          Optimize mp4 files for HTTP streaming\n"
     "\n"
 	
 	"### Picture Settings---------------------------------------------------------\n\n"
@@ -1246,6 +1252,7 @@ static int ParseOptions( int argc, char ** argv )
             { "input",       required_argument, NULL,    'i' },
             { "output",      required_argument, NULL,    'o' },
             { "large-file",  no_argument,       NULL,    '4' },
+            { "optimize",    no_argument,       NULL,    'O' },
             
             { "title",       required_argument, NULL,    't' },
             { "longest",     no_argument,       NULL,    'L' },
@@ -1294,7 +1301,7 @@ static int ParseOptions( int argc, char ** argv )
         int c;
 
         c = getopt_long( argc, argv,
-                         "hvuC:f:4i:o:t:Lc:ma:6:s:UFN:e:E:2d789gpP::w:l:n:b:q:S:B:r:R:Qx:TY:X:VZ:z",
+                         "hvuC:f:4i:o:t:Lc:ma:6:s:UFN:e:E:2d789gpOP::w:l:n:b:q:S:B:r:R:Qx:TY:X:VZ:z",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -1336,6 +1343,10 @@ static int ParseOptions( int argc, char ** argv )
             case '4':
                 largeFileSize = 1;
                 break;
+            case 'O':
+                mp4_optimize = 1;
+                break;
+
             case 't':
                 titleindex = atoi( optarg );
                 break;

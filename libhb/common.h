@@ -259,7 +259,7 @@ struct hb_job_s
 
     /* Allow MP4 files > 4 gigs */
     int             largeFileSize;
-    
+    int             mp4_optimize;
 
     int indepth_scan;
     hb_subtitle_t ** select_subtitle;

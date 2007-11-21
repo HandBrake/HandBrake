@@ -323,6 +323,9 @@ static int MP4Init( hb_mux_object_t * m )
         /* Set the correct number of channels for this track */
         reserved2[9] = (u_int8_t)HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown);
         MP4SetTrackBytesProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.mp4a.reserved2", reserved2, sizeof(reserved2));
+
+        /* If we ever upgrade mpeg4ip, the line above should be replaced with the line below.*/
+//        MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.mp4a.channels",  (u_int16_t)HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown));
         
         /* store a reference to the first audio track,
         so we can use it to feed the chapter text track's sample rate */
@@ -464,11 +467,6 @@ static int MP4End( hb_mux_object_t * m )
         free(sample);
     }
     
-#if 0
-    hb_job_t * job = m->job;
-    char filename[1024]; memset( filename, 0, 1024 );
-#endif
-
     if (job->areBframes)
     /* Walk the entire video sample table and find the minumum ctts value. */
     {
@@ -499,13 +497,15 @@ static int MP4End( hb_mux_object_t * m )
 
     MP4Close( m->file );
 
-#if 0
-    hb_log( "muxmp4: optimizing file" );
-    snprintf( filename, 1024, "%s.tmp", job->file );
-    MP4Optimize( job->file, filename, MP4_DETAILS_ERROR );
-    remove( job->file );
-    rename( filename, job->file );
-#endif
+    if ( job->mp4_optimize )
+    {
+        hb_log( "muxmp4: optimizing file" );
+        char filename[1024]; memset( filename, 0, 1024 );
+        snprintf( filename, 1024, "%s.tmp", job->file );
+        MP4Optimize( job->file, filename, MP4_DETAILS_ERROR );
+        remove( job->file );
+        rename( filename, job->file );
+    }
 
     return 0;
 }
