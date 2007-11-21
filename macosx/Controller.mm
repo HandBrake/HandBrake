@@ -1095,9 +1095,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     {
         
         NSString *scanPath = [[sheet filenames] objectAtIndex: 0];
+        /* we set the last searched source directory in the prefs here */
+        NSString *sourceDirectory = [scanPath stringByDeletingLastPathComponent];
+        [[NSUserDefaults standardUserDefaults] setObject:sourceDirectory forKey:@"LastSourceDirectory"];
         /* we order out sheet, which is the browse window as we need to open
-        * the title selection sheet right away
-        */
+            * the title selection sheet right away
+            */
         [sheet orderOut: self];
         
         if (sender == fOpenSourceTitleMMenu)
@@ -1146,7 +1149,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         }
     }
 }
-    
+
 /* Here we open the title selection sheet where we can specify an exact title to be scanned */
 - (IBAction) showSourceTitleScanPanel: (id) sender
 {
@@ -1162,6 +1165,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 {
     [NSApp endSheet: fScanSrcTitlePanel];
     [fScanSrcTitlePanel orderOut: self];
+    
+    
+    
     if(sender == fScanSrcTitleOpenButton)
     {
         /* We setup the scan status in the main window to indicate a source title scan */
@@ -1170,9 +1176,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	    [fScanIndicator setIndeterminate: YES];
         [fScanIndicator startAnimation: nil];
 		
-		/* we set the last source directory in the prefs here */
-		NSString *sourceDirectory = [[fScanSrcTitlePathField stringValue] stringByDeletingLastPathComponent];
-		[[NSUserDefaults standardUserDefaults] setObject:sourceDirectory forKey:@"LastSourceDirectory"];
         /* We use the performScan method to actually perform the specified scan passing the path and the title
             * to be scanned
             */
