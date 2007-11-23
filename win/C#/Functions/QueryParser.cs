@@ -520,7 +520,7 @@ namespace Handbrake.Functions
             Match audioChannel = Regex.Match(input, @"-a ([0-9]*)");
 
             //H264 Tab
-            Match x264 = Regex.Match(input, @"-x ([a-zA-Z0-9=:-]*)");
+            Match x264 = Regex.Match(input, @"-x ([,a-zA-Z0-9=:-]*)");
             
             //Program Options
             Match verbose = Regex.Match(input, @"-v");
