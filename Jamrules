@@ -27,7 +27,7 @@ rule OSXApp
 actions OSXApp
 {
     $(RM) $(<) macosx/build/HandBrake.app && \
-      ( cd macosx && xcodebuild -alltargets ) && \
+      ( cd macosx && xcodebuild -target libhb -target HandBrake -target HandBrakeCLI ) && \
       for i in $(LANGUAGES) ; do \
         ( cd $(<)/Contents/Resources && \
           cp -r English.lproj $i.lproj && \
