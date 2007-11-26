@@ -351,11 +351,7 @@ LibVorbisEnc $(SUBDIR)/lib/libvorbisenc.a : $(SUBDIR)/lib/libvorbis.a ;
 rule LibX264
 {
     LIBX264_PATCH = "" ;
-    if $(OS) = MACOSX && $(OSPLAT) = X86
-    {
-        LIBX264_PATCH += "$(PATCH) -p1 < ../patch-x264-macintel.patch && " ;
-    }
-    else if $(OS) = CYGWIN
+    if $(OS) = CYGWIN
     {
         LIBX264_PATCH += "$(PATCH) -p1 < ../patch-x264-cygwin.patch && " ;
     }
@@ -374,8 +370,7 @@ actions LibX264
     rm -rf x264 && (gzip -dc x264.tar.gz | tar xf - ) && 
     cd x264 && $(LIBX264_PATCH)
     bash ./configure --prefix=$CONTRIB --enable-pthread &&
-    $(MAKE) && $(MAKE) install &&
-    $(STRIP) $CONTRIB/lib/libx264.a
+    $(MAKE) libx264.a && cp libx264.a $CONTRIB/lib/ && cp x264.h $CONTRIB/include/ && $(STRIP) $CONTRIB/lib/libx264.a
 }
 Wget    $(SUBDIR)/x264.tar.gz   : $(SUBDIR)/version_x264.txt ;
 LibX264 $(SUBDIR)/lib/libx264.a : $(SUBDIR)/x264.tar.gz ;

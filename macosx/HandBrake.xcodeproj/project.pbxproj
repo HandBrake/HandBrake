@@ -738,9 +738,11 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 4D4E7BC4087804870051572B /* Build configuration list for PBXProject "HandBrake" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 29B97314FDCFA39411CA2CEA /* HandBrake */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				4DD93F8D082036E8008E1322 /* HandBrake */,
 				4D1EA2D90993B01000FDC1A2 /* Instant HandBrake */,
@@ -1055,7 +1057,7 @@
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
 				INSTALL_PATH = /usr/local/lib;
 				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OTHER_CFLAGS = (
 					"-D__LIBHB__",
 					"-DSYS_DARWIN",
@@ -1091,6 +1093,7 @@
 				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
 				PREBINDING = NO;
 				PRODUCT_NAME = hb;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				SEPARATE_STRIP = YES;
 				ZERO_LINK = NO;
 			};
@@ -1114,7 +1117,7 @@
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
 				INSTALL_PATH = /usr/local/lib;
 				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OTHER_CFLAGS = (
 					"-D__LIBHB__",
 					"-DSYS_DARWIN",
@@ -1150,6 +1153,7 @@
 				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
 				PREBINDING = NO;
 				PRODUCT_NAME = hb;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				SEPARATE_STRIP = YES;
 				ZERO_LINK = NO;
 			};
@@ -1171,7 +1175,7 @@
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
 				INSTALL_PATH = /usr/local/lib;
 				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OTHER_CFLAGS = (
 					"-D__LIBHB__",
 					"-DSYS_DARWIN",
@@ -1207,6 +1211,7 @@
 				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
 				PREBINDING = NO;
 				PRODUCT_NAME = hb;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				SEPARATE_STRIP = YES;
 				ZERO_LINK = NO;
 			};
@@ -1228,7 +1233,7 @@
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
 				INSTALL_PATH = /usr/local/lib;
 				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OTHER_CFLAGS = (
 					"-D__LIBHB__",
 					"-DSYS_DARWIN",
@@ -1264,6 +1269,7 @@
 				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
 				PREBINDING = NO;
 				PRODUCT_NAME = hb;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				SEPARATE_STRIP = YES;
 				ZERO_LINK = NO;
 			};
@@ -1293,7 +1299,7 @@
 				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
 				PREBINDING = NO;
 				PRODUCT_NAME = hb;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				ZERO_LINK = NO;
 			};
 			name = UB;
@@ -1316,7 +1322,7 @@
 				);
 				INFOPLIST_FILE = HandBrake.plist;
 				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					../libhb/libhb.a,
@@ -1341,6 +1347,7 @@
 					../contrib/lib/libswscale.a,
 				);
 				PRODUCT_NAME = HandBrake;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -1392,7 +1399,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "Instant HandBrake";
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
@@ -1434,7 +1441,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = HandBrakeCLI;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				ZERO_LINK = NO;
 			};
 			name = UB;
@@ -1446,9 +1453,10 @@
 					ppc,
 					i386,
 				);
+				GCC_MODEL_TUNING = G5;
 				GCC_PREPROCESSOR_DEFINITIONS = "JOB_GROUPS=1";
-				MACOSX_DEPLOYMENT_TARGET = 10.3;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = UB;
 		};
@@ -1478,7 +1486,7 @@
 				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
 				PREBINDING = NO;
 				PRODUCT_NAME = hb;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				ZERO_LINK = NO;
 			};
 			name = Development;
@@ -1508,7 +1516,7 @@
 				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
 				PREBINDING = NO;
 				PRODUCT_NAME = hb;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				ZERO_LINK = NO;
 			};
 			name = Deployment;
@@ -1537,7 +1545,7 @@
 				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
 				PREBINDING = NO;
 				PRODUCT_NAME = hb;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				ZERO_LINK = NO;
 			};
 			name = Default;
@@ -1581,7 +1589,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = HandBrakeCLI;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				ZERO_LINK = NO;
 			};
 			name = Development;
@@ -1624,7 +1632,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = HandBrakeCLI;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				ZERO_LINK = NO;
 			};
 			name = Deployment;
@@ -1665,7 +1673,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = HandBrakeCLI;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				ZERO_LINK = NO;
 			};
 			name = Default;
@@ -1713,7 +1721,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "Instant HandBrake";
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
@@ -1761,7 +1769,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "Instant HandBrake";
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
@@ -1807,7 +1815,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "Instant HandBrake";
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
@@ -1834,7 +1842,7 @@
 				);
 				INFOPLIST_FILE = HandBrake.plist;
 				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					../libhb/libhb.a,
@@ -1859,6 +1867,7 @@
 					../contrib/lib/libswscale.a,
 				);
 				PRODUCT_NAME = HandBrake;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -1890,7 +1899,7 @@
 				);
 				INFOPLIST_FILE = HandBrake.plist;
 				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					../libhb/libhb.a,
@@ -1915,6 +1924,7 @@
 					../contrib/lib/libswscale.a,
 				);
 				PRODUCT_NAME = HandBrake;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -1944,7 +1954,7 @@
 				);
 				INFOPLIST_FILE = HandBrake.plist;
 				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					../libhb/libhb.a,
@@ -1969,6 +1979,7 @@
 					../contrib/lib/libswscale.a,
 				);
 				PRODUCT_NAME = HandBrake;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -1985,10 +1996,11 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_DEBUGGING_SYMBOLS = default;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				MACOSX_DEPLOYMENT_TARGET = 10.3;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				ZERO_LINK = NO;
 			};
 			name = Development;
@@ -1996,18 +2008,20 @@
 		4D4E7BC6087804870051572B /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_MODEL_TUNING = G5;
 				GCC_PREPROCESSOR_DEFINITIONS = "JOB_GROUPS=1";
-				MACOSX_DEPLOYMENT_TARGET = 10.3;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Deployment;
 		};
 		4D4E7BC7087804870051572B /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_MODEL_TUNING = G5;
 				GCC_PREPROCESSOR_DEFINITIONS = "JOB_GROUPS=1";
-				MACOSX_DEPLOYMENT_TARGET = 10.3;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Default;
 		};

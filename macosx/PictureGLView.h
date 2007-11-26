@@ -27,7 +27,10 @@
     float           fCoordY;
 
     uint8_t       * fBuffers[2];
-    unsigned long   fTextures[2];
+    /* Tiger */
+    //unsigned long   fTextures[2];
+    /* Leopard */
+    unsigned int   fTextures[2];
 
     int             fLastEffect;
     int             fAnimDuration;
