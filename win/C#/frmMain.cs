@@ -83,18 +83,24 @@ namespace Handbrake
             {
                 lblStatus.Text = "Updaing Presets ...";
                 Application.DoEvents();
-                updatePresets();
+                grabCLIPresets();
                 Thread.Sleep(200);
             }
+
+            // Load the presets for the preset box
+            updatePresets();
 
             // Now load the users default if required. (Will overide the above setting)
             if (Properties.Settings.Default.defaultSettings == "Checked")
             {
                 lblStatus.Text = "Loading User Default Settings...";
                 Application.DoEvents();
-                loadNormalPreset();
                 loadUserDefaults();
                 Thread.Sleep(100);
+            }
+            else
+            {
+                loadNormalPreset();
             }
 
             // Enable or disable tooltips
@@ -107,7 +113,11 @@ namespace Handbrake
             }
 
             // Hide the preset bar if required.
-            hidePresetBar();
+            if (Properties.Settings.Default.hidePresets == "Checked")
+            {
+                mnu_showPresets.Visible = true;
+                this.Width = 591;
+            }
 
             //Finished Loading
             lblStatus.Text = "Loading Complete!";
@@ -140,17 +150,6 @@ namespace Handbrake
             splash.Close(); // Then close.
         }
 
-        private void loadNormalPreset()
-        {
-            ListViewItem item = listview_presets.FindItemWithText("Normal");
-
-            if (item != null)
-            {
-                //listview_presets.SelectedItems.Clear();
-                item.Selected = true;
-            }
-        }
-
         private void loadUserDefaults()
         {
             string userDefaults = Properties.Settings.Default.defaultUserSettings;
@@ -167,19 +166,8 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                MessageBox.Show("Unable to load profile.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                MessageBox.Show(exc.ToString());
+                MessageBox.Show("Unable to load user Default Settings. \n\n" + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
             }
-        }
-
-        private void hidePresetBar()
-        {
-            if (Properties.Settings.Default.hidePresets == "Checked")
-            {
-                mnu_showPresets.Visible = true;
-                this.Width = 591;
-            }
-
         }
 
         #endregion
@@ -304,19 +292,14 @@ namespace Handbrake
         private void mnu_presetReset_Click(object sender, EventArgs e)
         {
             listview_presets.Items.Clear();
+            grabCLIPresets();
             updatePresets();
             MessageBox.Show("Presets have been updated", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void mnu_SelectDefault_Click(object sender, EventArgs e)
         {
-            ListViewItem item = listview_presets.FindItemWithText("Normal");
-
-            if (item != null)
-            {
-                listview_presets.SelectedItems.Clear();
-                item.Selected = true;
-            }
+            loadNormalPreset();
         }
 
         #endregion
@@ -378,7 +361,7 @@ namespace Handbrake
         #endregion
 
         // -------------------------------------------------------------- 
-        // Buttons on the main Window
+        // Buttons on the main Window and items that require actions
         // --------------------------------------------------------------
 
         #region Buttons
@@ -393,30 +376,21 @@ namespace Handbrake
             {
                 DVD_Open.ShowDialog();
                 filename = DVD_Open.SelectedPath;
-                if (filename != "")
-                {
-                    Form frmRD = new frmReadDVD(filename, this, dvdInfoWindow);
-                    text_source.Text = filename;
-                    frmRD.ShowDialog();
-                }
             }
             else
             {
                 ISO_Open.ShowDialog();
                 filename = ISO_Open.FileName;
-                if (filename != "")
-                {
-                    Form frmRD = new frmReadDVD(filename, this, dvdInfoWindow);
-                    text_source.Text = filename;
-                    frmRD.ShowDialog();
-                }
             }
 
-            // Check if there was titles in the dvd title dropdown 
-            if (filename == "")
+            if (filename != "")
             {
-                text_source.Text = "Click 'Browse' to continue";
+                Form frmRD = new frmReadDVD(filename, this, dvdInfoWindow);
+                text_source.Text = filename;
+                frmRD.ShowDialog();
             }
+            else
+                text_source.Text = "Click 'Browse' to continue";
 
             // If there are no titles in the dropdown menu then the scan has obviously failed. Display an error message explaining to the user.
             if (drp_dvdtitle.Items.Count == 0)
@@ -461,299 +435,72 @@ namespace Handbrake
             QueryEditorText.Text = "";
         }
 
-        private void btn_queue_Click(object sender, EventArgs e)
-        {
-
-            if (text_source.Text == "" || text_source.Text == "Click 'Browse' to continue" || text_destination.Text == "")
-                MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            else
-            {
-                string query;
-                if (QueryEditorText.Text == "")
-                {
-                    query = GenerateTheQuery();
-                }
-                else
-                {
-                    query = QueryEditorText.Text;
-                }
-                queueWindow.list_queue.Items.Add(query);
-                queueWindow.Show();
-            }
-        }
-
         private void btn_copy_Click(object sender, EventArgs e)
         {
             if (QueryEditorText.Text != "")
                 Clipboard.SetText(QueryEditorText.Text, TextDataFormat.Text);
         }
 
-        private void showQueue()
-        {
-            queueWindow.Show();
-        }
-
         #endregion
-
-        // -------------------------------------------------------------- 
-        // Main Window Preset System
-        // --------------------------------------------------------------
-
-        #region Preset System
-
-        // Import Current Presets
-        private void updatePresets()
-        {
-            string[] presets = new string[17];
-            presets[0] = "Animation";
-            presets[1] = "AppleTV";
-            presets[2] = "Bedlam";
-            presets[3] = "Blind";
-            presets[4] = "Broke";
-            presets[5] = "Classic";
-            presets[6] = "Constant Quality Rate";
-            presets[7] = "Deux Six Quatre";
-            presets[8] = "Film";
-            presets[9] = "iPhone / iPod Touch";
-            presets[10] = "iPod High-Rez";
-            presets[11] = "iPod Low-Rez";
-            presets[12] = "Normal";
-            presets[13] = "PS3";
-            presets[14] = "PSP";
-            presets[15] = "QuickTime";
-            presets[16] = "Television";
-
-            ListViewItem preset_listview = new ListViewItem();
-            string[] presetList = new string[1];
-
-            foreach (string preset in presets)
-            {
-                presetList[0] = preset;
-                preset_listview = new ListViewItem(presetList);
-
-                // Now Fill Out List View with Items
-                listview_presets.Items.Add(preset_listview);
-            }
-
-            string appPath = Application.StartupPath.ToString() + "\\";
-            string strCmdLine = "cmd /c " + '"' + '"' + appPath + "HandBrakeCLI.exe" + '"' + " --preset-list >" + '"' + appPath + "presets.dat" + '"' + " 2>&1" + '"';
-            Process hbproc = Process.Start("CMD.exe", strCmdLine);
-            hbproc.WaitForExit();
-            hbproc.Dispose();
-            hbproc.Close();
-
-        }
-
-        // Buttons
-        private void btn_setDefault_Click(object sender, EventArgs e)
-        {
-            String query = GenerateTheQuery();
-            Properties.Settings.Default.defaultUserSettings = query;
-            // Save the new default Settings
-            Properties.Settings.Default.Save();
-            MessageBox.Show("New default settings saved.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-        }
-
-        // Preset Selection
-        private void listview_presets_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-            string selectedPreset = null;
-            ListView.SelectedListViewItemCollection name = null;
-            name = listview_presets.SelectedItems;
-
-            if (listview_presets.SelectedItems.Count != 0)
-                selectedPreset = name[0].SubItems[0].Text;
-
-            try
-            {
-                string appPath = Application.StartupPath.ToString() + "\\";
-                StreamReader presetInput = new StreamReader(appPath + "presets.dat");
-
-                while (!presetInput.EndOfStream)
-                {
-                    if ((char)presetInput.Peek() == '+')
-                    {
-                        string preset = presetInput.ReadLine().Replace("+ ", "");
-                        Regex r = new Regex("(:  )"); // Split on hyphens. 
-                        string[] presetName = r.Split(preset);
-
-                        if (selectedPreset == presetName[0])
-                        {
-                            // Need to disable anamorphic now, otherwise it may overide the width / height values later.
-                            CheckPixelRatio.CheckState = CheckState.Unchecked;
-
-                            // Send the query from the file to the Query Parser class
-                            Functions.QueryParser presetQuery = Functions.QueryParser.Parse(preset);
-
-                            // Now load the preset
-                            presetLoader(presetQuery, selectedPreset);
-                        }
-
-                    }
-                    else
-                    {
-                        presetInput.ReadLine();
-                    }
-                }
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-
-        }
-
-        #endregion
-
-        //---------------------------------------------------
-        // Encode / Cancel Buttons
-        // Encode Progress Text Handler
-        //---------------------------------------------------
-
-        #region Encode/CLI
-
-        Functions.CLI process = new Functions.CLI();
-
-        private void btn_encode_Click(object sender, EventArgs e)
-        {
-            if (text_source.Text == "" || text_source.Text == "Click 'Browse' to continue" || text_destination.Text == "")
-                MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            else
-            {
-                btn_eCancel.Enabled = true;
-                String query = "";
-                if (QueryEditorText.Text == "")
-                {
-                    query = GenerateTheQuery();
-                }
-                else
-                {
-                    query = QueryEditorText.Text;
-                }
-
-                ThreadPool.QueueUserWorkItem(procMonitor, query);
-                lbl_encode.Visible = true;
-                lbl_encode.Text = "Encoding in Progress";
-            }
-        }
-
-        private void btn_eCancel_Click(object sender, EventArgs e)
-        {
-            process.killCLI();
-            process.setNull();
-            lbl_encode.Text = "Encoding Canceled";
-        }
-
-        [DllImport("user32.dll")]
-        public static extern void LockWorkStation();
-        [DllImport("user32.dll")]
-        public static extern int ExitWindowsEx(int uFlags, int dwReason);
-
-        private void procMonitor(object state)
-        {
-            // Make sure we are not already encoding and if we are then display an error.
-            if (hbProc != null)
-            {
-                MessageBox.Show("Handbrake is already encoding a video!", "Status", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            else
-            {
-                hbProc = process.runCli(this, (string)state, false, false, false, false);
-                hbProc.WaitForExit();
-
-                try
-                {
-                    /*
-                    //*****************************************************************************************
-                    // BUG!
-                    // When the below code is used and standard error is set to true, hbcli is outputing a
-                    // video stream which has mild corruption issues every few seconds.
-                    // Maybe an issue with the Parser cauing the CLI to hickup/pause?
-                    //*****************************************************************************************
-
-                    
-                    Parsing.Parser encode = new Parsing.Parser(hbProc.StandardOutput.BaseStream);
-                    encode.OnEncodeProgress += encode_OnEncodeProgress;
-                    while (!encode.EndOfStream)
-                    {
-                        encode.ReadLine();
-                    }
-
-                    hbProc.WaitForExit();
-                    process.closeCLI();
-                     */
-
-                }
-                catch (Exception exc)
-                {
-                    // Do nothing
-                    MessageBox.Show(exc.ToString());
-                }
-
-
-                setEncodeLabel();
-                hbProc = null;
-
-                // Do something whent he encode ends.
-                switch (Properties.Settings.Default.CompletionOption)
-                {
-                    case "Shutdown":
-                        System.Diagnostics.Process.Start("Shutdown", "-s -t 60");
-                        break;
-                    case "Log Off":
-                        ExitWindowsEx(0, 0);
-                        break;
-                    case "Suspend":
-                        Application.SetSuspendState(PowerState.Suspend, true, true);
-                        break;
-                    case "Hibernate":
-                        Application.SetSuspendState(PowerState.Hibernate, true, true);
-                        break;
-                    case "Lock System":
-                        LockWorkStation();
-                        break;
-                    case "Quit HandBrake":
-                        Application.Exit();
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-
-        private delegate void UpdateUIHandler();
-
-        private void setEncodeLabel()
-        {
-            if (this.InvokeRequired)
-            {
-                this.BeginInvoke(new UpdateUIHandler(setEncodeLabel));
-                return;
-            }
-            lbl_encode.Text = "Encoding Finished";
-        }
-
-        private void encode_OnEncodeProgress(object Sender, int CurrentTask, int TaskCount, float PercentComplete, float CurrentFps, float AverageFps, TimeSpan TimeRemaining)
-        {
-
-            if (this.InvokeRequired)
-            {
-                this.BeginInvoke(new Parsing.EncodeProgressEventHandler(encode_OnEncodeProgress),
-                    new object[] { Sender, CurrentTask, TaskCount, PercentComplete, CurrentFps, AverageFps, TimeRemaining });
-                return;
-            }
-            lbl_encode.Text = string.Format("Encode Progress: {0}%,       FPS: {1},       Avg FPS: {2},       Time Remaining: {3} ", PercentComplete, CurrentFps, AverageFps, TimeRemaining);
-        }
-
-        #endregion
-
-        //---------------------------------------------------
-        //  Items that require actions on frmMain
-        //---------------------------------------------------
 
         #region frmMain Actions
+
+        private void drp_dvdtitle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Reset some values on the form
+            lbl_Aspect.Text = "Select a Title";
+            lbl_RecomendedCrop.Text = "Select a Title";
+            drop_chapterStart.Items.Clear();
+            drop_chapterFinish.Items.Clear();
+            QueryEditorText.Text = "";
+
+            // If the dropdown is set to automatic nothing else needs to be done.
+            // Otheriwse if its not, title data has to be loased from parsing.
+            if (drp_dvdtitle.Text != "Automatic")
+            {
+                Parsing.Title selectedTitle = drp_dvdtitle.SelectedItem as Parsing.Title;
+
+                // Set the Aspect Ratio
+                lbl_Aspect.Text = selectedTitle.AspectRatio.ToString();
+
+                // Set the Recommended Cropping values
+                lbl_RecomendedCrop.Text = string.Format("{0}/{1}/{2}/{3}", selectedTitle.AutoCropDimensions[0], selectedTitle.AutoCropDimensions[1], selectedTitle.AutoCropDimensions[2], selectedTitle.AutoCropDimensions[3]);
+
+                // Populate the Start chapter Dropdown
+                drop_chapterStart.Items.Clear();
+                drop_chapterStart.Items.AddRange(selectedTitle.Chapters.ToArray());
+                if (drop_chapterStart.Items.Count > 0)
+                {
+                    drop_chapterStart.Text = drop_chapterStart.Items[0].ToString();
+                }
+
+                // Populate the Final Chapter Dropdown
+                drop_chapterFinish.Items.Clear();
+                drop_chapterFinish.Items.AddRange(selectedTitle.Chapters.ToArray());
+                if (drop_chapterFinish.Items.Count > 0)
+                {
+                    drop_chapterFinish.Text = drop_chapterFinish.Items[drop_chapterFinish.Items.Count - 1].ToString();
+                }
+
+                // Populate the Audio Channels Dropdown
+                drp_audioChannels.Items.Clear();
+                drp_audioChannels.Items.Add("Automatic");
+                drp_audioChannels.Items.AddRange(selectedTitle.AudioTracks.ToArray());
+                if (drp_audioChannels.Items.Count > 0)
+                {
+                    drp_audioChannels.Text = drp_audioChannels.Items[0].ToString();
+                }
+
+                // Populate the Subtitles dropdown
+                drp_subtitle.Items.Clear();
+                drp_subtitle.Items.Add("None");
+                drp_subtitle.Items.AddRange(selectedTitle.Subtitles.ToArray());
+                if (drp_subtitle.Items.Count > 0)
+                {
+                    drp_subtitle.Text = drp_subtitle.Items[0].ToString();
+                }
+            }
+        }
 
         private void drop_chapterStart_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -928,10 +675,7 @@ namespace Handbrake
                 text_right.Enabled = false;
                 text_top.Enabled = false;
                 text_bottom.Enabled = false;
-                text_left.Text = "";
-                text_right.Text = "";
-                text_top.Text = "";
-                text_bottom.Text = "";
+
 
                 if (lbl_RecomendedCrop.Text != "Select a Title")
                 {
@@ -941,6 +685,13 @@ namespace Handbrake
                     text_right.Text = temp[3];
                     text_top.Text = temp[0];
                     text_bottom.Text = temp[1];
+                }
+                else
+                {
+                    text_left.Text = "";
+                    text_right.Text = "";
+                    text_top.Text = "";
+                    text_bottom.Text = "";
                 }
             }
 
@@ -1008,11 +759,6 @@ namespace Handbrake
 
         private void drp_audioCodec_SelectedIndexChanged(object sender, EventArgs e)
         {
-
-            //CLI Audio mixdown Names: mono stereo dpl1 dpl2 6ch
-
-            drp_audioMixDown.Items.Clear();
-
             if (drp_audioCodec.Text == "AAC")
             {
                 drp_audioMixDown.Items.Clear();
@@ -1062,11 +808,8 @@ namespace Handbrake
 
         private void drp_audioMixDown_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (drp_audioCodec.Text == "AAC")
+            if ((drp_audioCodec.Text == "AAC") && (drp_audioMixDown.Text == "6 Channel Discrete"))
             {
-                if (drp_audioMixDown.Text == "6 Channel Discrete")
-                {
-
                     drp_audioBitrate.Items.Clear();
                     drp_audioBitrate.Items.Add("32");
                     drp_audioBitrate.Items.Add("40");
@@ -1083,7 +826,6 @@ namespace Handbrake
                     drp_audioBitrate.Items.Add("256");
                     drp_audioBitrate.Items.Add("320");
                     drp_audioBitrate.Items.Add("384");
-                }
             }
         }
 
@@ -1118,7 +860,7 @@ namespace Handbrake
             else
             {
                 CheckCRF.Enabled = true;
-                if (check_2PassEncode.CheckState.ToString() == "Checked")
+                if (check_2PassEncode.CheckState == CheckState.Checked)
                 {
                     check_turbo.Enabled = true;
                 }
@@ -1127,69 +869,298 @@ namespace Handbrake
 
         }
 
-        public void setStreamReader(Parsing.DVD dvd)
+        #endregion
+
+        // -------------------------------------------------------------- 
+        // Main Window Preset System
+        // --------------------------------------------------------------
+
+        #region Preset System
+
+        // Import Current Presets
+        private void updatePresets()
         {
-            this.thisDVD = dvd;
+            string[] presets = new string[17];
+            presets[0] = "Animation";
+            presets[1] = "AppleTV";
+            presets[2] = "Bedlam";
+            presets[3] = "Blind";
+            presets[4] = "Broke";
+            presets[5] = "Classic";
+            presets[6] = "Constant Quality Rate";
+            presets[7] = "Deux Six Quatre";
+            presets[8] = "Film";
+            presets[9] = "iPhone / iPod Touch";
+            presets[10] = "iPod High-Rez";
+            presets[11] = "iPod Low-Rez";
+            presets[12] = "Normal";
+            presets[13] = "PS3";
+            presets[14] = "PSP";
+            presets[15] = "QuickTime";
+            presets[16] = "Television";
+
+            ListViewItem preset_listview = new ListViewItem();
+            string[] presetList = new string[1];
+
+            foreach (string preset in presets)
+            {
+                presetList[0] = preset;
+                preset_listview = new ListViewItem(presetList);
+
+                // Now Fill Out List View with Items
+                listview_presets.Items.Add(preset_listview);
+            }
         }
 
-        private void drp_dvdtitle_SelectedIndexChanged(object sender, EventArgs e)
+        private void grabCLIPresets()
         {
-            // Reset some values on the form
-            lbl_Aspect.Text = "Select a Title";
-            lbl_RecomendedCrop.Text = "Select a Title";
-            drop_chapterStart.Items.Clear();
-            drop_chapterFinish.Items.Clear();
-            QueryEditorText.Text = "";
+            string appPath = Application.StartupPath.ToString() + "\\";
+            string strCmdLine = "cmd /c " + '"' + '"' + appPath + "HandBrakeCLI.exe" + '"' + " --preset-list >" + '"' + appPath + "presets.dat" + '"' + " 2>&1" + '"';
+            Process hbproc = Process.Start("CMD.exe", strCmdLine);
+            hbproc.WaitForExit();
+            hbproc.Dispose();
+            hbproc.Close();
+        }
 
-            // If the dropdown is set to automatic nothing else needs to be done.
-            // Otheriwse if its not, title data has to be loased from parsing.
-            if (drp_dvdtitle.Text != "Automatic")
+        // Function to select the default preset.
+        private void loadNormalPreset()
+        {
+            ListViewItem item = listview_presets.FindItemWithText("Normal");
+            
+            if (item != null)
             {
-                Parsing.Title selectedTitle = drp_dvdtitle.SelectedItem as Parsing.Title;
+                item.Selected = true;
+            }
+        }
 
-                // Set the Aspect Ratio
-                lbl_Aspect.Text = selectedTitle.AspectRatio.ToString();
+        // Buttons
+        private void btn_setDefault_Click(object sender, EventArgs e)
+        {
+            String query = GenerateTheQuery();
+            Properties.Settings.Default.defaultUserSettings = query;
+            // Save the new default Settings
+            Properties.Settings.Default.Save();
+            MessageBox.Show("New default settings saved.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+        }
 
-                // Set the Recommended Cropping values
-                lbl_RecomendedCrop.Text = string.Format("{0}/{1}/{2}/{3}", selectedTitle.AutoCropDimensions[0], selectedTitle.AutoCropDimensions[1], selectedTitle.AutoCropDimensions[2], selectedTitle.AutoCropDimensions[3]);
+        // Preset Selection
+        private void listview_presets_SelectedIndexChanged(object sender, EventArgs e)
+        {
 
-                // Populate the Start chapter Dropdown
-                drop_chapterStart.Items.Clear();
-                drop_chapterStart.Items.AddRange(selectedTitle.Chapters.ToArray());
-                if (drop_chapterStart.Items.Count > 0)
+            string selectedPreset = null;
+            ListView.SelectedListViewItemCollection name = null;
+            name = listview_presets.SelectedItems;
+
+            if (listview_presets.SelectedItems.Count != 0)
+                selectedPreset = name[0].SubItems[0].Text;
+
+            try
+            {
+                string appPath = Application.StartupPath.ToString() + "\\";
+                StreamReader presetInput = new StreamReader(appPath + "presets.dat");
+
+                while (!presetInput.EndOfStream)
                 {
-                    drop_chapterStart.Text = drop_chapterStart.Items[0].ToString();
-                }
+                    if ((char)presetInput.Peek() == '+')
+                    {
+                        string preset = presetInput.ReadLine().Replace("+ ", "");
+                        Regex r = new Regex("(:  )"); // Split on hyphens. 
+                        string[] presetName = r.Split(preset);
 
-                // Populate the Final Chapter Dropdown
-                drop_chapterFinish.Items.Clear();
-                drop_chapterFinish.Items.AddRange(selectedTitle.Chapters.ToArray());
-                if (drop_chapterFinish.Items.Count > 0)
-                {
-                    drop_chapterFinish.Text = drop_chapterFinish.Items[drop_chapterFinish.Items.Count - 1].ToString();
-                }
+                        if (selectedPreset == presetName[0])
+                        {
+                            // Need to disable anamorphic now, otherwise it may overide the width / height values later.
+                            CheckPixelRatio.CheckState = CheckState.Unchecked;
 
-                // Populate the Audio Channels Dropdown
-                drp_audioChannels.Items.Clear();
-                drp_audioChannels.Items.Add("Automatic");
-                drp_audioChannels.Items.AddRange(selectedTitle.AudioTracks.ToArray());
-                if (drp_audioChannels.Items.Count > 0)
-                {
-                    drp_audioChannels.Text = drp_audioChannels.Items[0].ToString();
-                }
+                            // Send the query from the file to the Query Parser class
+                            Functions.QueryParser presetQuery = Functions.QueryParser.Parse(preset);
 
-                // Populate the Subtitles dropdown
-                drp_subtitle.Items.Clear();
-                drp_subtitle.Items.Add("None");
-                drp_subtitle.Items.AddRange(selectedTitle.Subtitles.ToArray());
-                if (drp_subtitle.Items.Count > 0)
-                {
-                    drp_subtitle.Text = drp_subtitle.Items[0].ToString();
+                            // Now load the preset
+                            presetLoader(presetQuery, selectedPreset);
+                        }
+
+                    }
+                    else
+                    {
+                        presetInput.ReadLine();
+                    }
                 }
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         #endregion
+
+        //---------------------------------------------------
+        // Encode / Cancel Buttons
+        // Encode Progress Text Handler
+        //---------------------------------------------------
+
+        #region Encodeing and Queue
+
+        Functions.CLI process = new Functions.CLI();
+        private delegate void UpdateUIHandler();
+
+        [DllImport("user32.dll")]
+        public static extern void LockWorkStation();
+        [DllImport("user32.dll")]
+        public static extern int ExitWindowsEx(int uFlags, int dwReason);
+
+        private void btn_queue_Click(object sender, EventArgs e)
+        {
+
+            if (text_source.Text == "" || text_source.Text == "Click 'Browse' to continue" || text_destination.Text == "")
+                MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else
+            {
+                string query;
+                if (QueryEditorText.Text == "")
+                {
+                    query = GenerateTheQuery();
+                }
+                else
+                {
+                    query = QueryEditorText.Text;
+                }
+                queueWindow.list_queue.Items.Add(query);
+                queueWindow.Show();
+            }
+        }
+
+        private void showQueue()
+        {
+            queueWindow.Show();
+        }
+
+        private void btn_encode_Click(object sender, EventArgs e)
+        {
+            if (text_source.Text == "" || text_source.Text == "Click 'Browse' to continue" || text_destination.Text == "")
+                MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else
+            {
+                btn_eCancel.Enabled = true;
+                String query = "";
+                if (QueryEditorText.Text == "")
+                {
+                    query = GenerateTheQuery();
+                }
+                else
+                {
+                    query = QueryEditorText.Text;
+                }
+
+                ThreadPool.QueueUserWorkItem(procMonitor, query);
+                lbl_encode.Visible = true;
+                lbl_encode.Text = "Encoding in Progress";
+            }
+        }
+
+        private void btn_eCancel_Click(object sender, EventArgs e)
+        {
+            process.killCLI();
+            process.setNull();
+            lbl_encode.Text = "Encoding Canceled";
+        }
+
+        private void procMonitor(object state)
+        {
+            // Make sure we are not already encoding and if we are then display an error.
+            if (hbProc != null)
+            {
+                MessageBox.Show("Handbrake is already encoding a video!", "Status", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                hbProc = process.runCli(this, (string)state, false, false, false, false);
+                hbProc.WaitForExit();
+
+                try
+                {
+                    /*
+                    //*****************************************************************************************
+                    // BUG!
+                    // When the below code is used and standard error is set to true, hbcli is outputing a
+                    // video stream which has mild corruption issues every few seconds.
+                    // Maybe an issue with the Parser cauing the CLI to hickup/pause?
+                    //*****************************************************************************************
+
+                    
+                    Parsing.Parser encode = new Parsing.Parser(hbProc.StandardOutput.BaseStream);
+                    encode.OnEncodeProgress += encode_OnEncodeProgress;
+                    while (!encode.EndOfStream)
+                    {
+                        encode.ReadLine();
+                    }
+
+                    hbProc.WaitForExit();
+                    process.closeCLI();
+                     */
+
+                }
+                catch (Exception exc)
+                {
+                    // Do nothing
+                    MessageBox.Show(exc.ToString());
+                }
+
+
+                setEncodeLabel();
+                hbProc = null;
+
+                // Do something whent he encode ends.
+                switch (Properties.Settings.Default.CompletionOption)
+                {
+                    case "Shutdown":
+                        System.Diagnostics.Process.Start("Shutdown", "-s -t 60");
+                        break;
+                    case "Log Off":
+                        ExitWindowsEx(0, 0);
+                        break;
+                    case "Suspend":
+                        Application.SetSuspendState(PowerState.Suspend, true, true);
+                        break;
+                    case "Hibernate":
+                        Application.SetSuspendState(PowerState.Hibernate, true, true);
+                        break;
+                    case "Lock System":
+                        LockWorkStation();
+                        break;
+                    case "Quit HandBrake":
+                        Application.Exit();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }   
+
+        private void setEncodeLabel()
+        {
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new UpdateUIHandler(setEncodeLabel));
+                return;
+            }
+            lbl_encode.Text = "Encoding Finished";
+        }
+
+        private void encode_OnEncodeProgress(object Sender, int CurrentTask, int TaskCount, float PercentComplete, float CurrentFps, float AverageFps, TimeSpan TimeRemaining)
+        {
+
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new Parsing.EncodeProgressEventHandler(encode_OnEncodeProgress),
+                    new object[] { Sender, CurrentTask, TaskCount, PercentComplete, CurrentFps, AverageFps, TimeRemaining });
+                return;
+            }
+            lbl_encode.Text = string.Format("Encode Progress: {0}%,       FPS: {1},       Avg FPS: {2},       Time Remaining: {3} ", PercentComplete, CurrentFps, AverageFps, TimeRemaining);
+        }
+
+        #endregion
+
 
         //---------------------------------------------------
         //  Some Functions
@@ -1254,9 +1225,6 @@ namespace Handbrake
                     break;
                 case "H.264":
                     videoEncoder = " -e x264";
-                    break;
-                case "H.264 Baseline 1.3":
-                    videoEncoder = " -e x264b13";
                     break;
                 case "H.264 (iPod)":
                     videoEncoder = " -e x264b30";
@@ -1777,6 +1745,11 @@ namespace Handbrake
                 MessageBox.Show(exc.ToString());
                 return false;
             }
+        }
+
+        public void setStreamReader(Parsing.DVD dvd)
+        {
+            this.thisDVD = dvd;
         }
 
         #endregion

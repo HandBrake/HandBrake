@@ -357,8 +357,7 @@ namespace Handbrake
             "Mpeg 4",
             "Xvid",
             "H.264",
-            "H.264 (iPod)",
-            "H.264 Baseline 1.3"});
+            "H.264 (iPod)"});
             this.drp_videoEncoder.Location = new System.Drawing.Point(99, 20);
             this.drp_videoEncoder.Name = "drp_videoEncoder";
             this.drp_videoEncoder.Size = new System.Drawing.Size(156, 21);
