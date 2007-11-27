@@ -1159,64 +1159,6 @@
 			};
 			name = Deployment;
 		};
-		0D096E680B707D5800A845D4 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../libhb";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				EXECUTABLE_PREFIX = lib;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
-				INSTALL_PATH = /usr/local/lib;
-				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				OTHER_CFLAGS = (
-					"-D__LIBHB__",
-					"-DSYS_DARWIN",
-					"$(OTHER_CFLAGS_QUOTED_1)",
-					"-DUSE_PTHREAD",
-				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.1\\\" -DHB_BUILD=22007083100";
-				OTHER_LDFLAGS = (
-					../contrib/lib/libmp4v2.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libdvdcss.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-					../contrib/lib/libdca.a,
-					../contrib/lib/libmkv.a,
-					../contrib/lib/libswscale.a,
-					"-ldl",
-					"-flat_namespace",
-					"-read_only_relocs",
-					suppress,
-				);
-				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
-				PREBINDING = NO;
-				PRODUCT_NAME = hb;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				SEPARATE_STRIP = YES;
-				ZERO_LINK = NO;
-			};
-			name = Default;
-		};
 		0D096E690B707D5800A845D4 /* UB */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1521,35 +1463,6 @@
 			};
 			name = Deployment;
 		};
-		0DFF0B760B6BC70400549488 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../libhb";
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
-				INSTALL_PATH = /usr/local/lib;
-				MACOSX_DEPLOYMENT_TARGET = 10.3;
-				OTHER_CFLAGS = (
-					"-D__LIBHB__",
-					"-DSYS_DARWIN",
-					"$(OTHER_CFLAGS_QUOTED_1)",
-					"-DUSE_PTHREAD",
-				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.1\\\" -DHB_BUILD=2007100800";
-				OTHER_LDFLAGS = "";
-				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
-				PREBINDING = NO;
-				PRODUCT_NAME = hb;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				ZERO_LINK = NO;
-			};
-			name = Default;
-		};
 		0DFF0C0D0B6BCEE000549488 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1636,47 +1549,6 @@
 				ZERO_LINK = NO;
 			};
 			name = Deployment;
-		};
-		0DFF0C0F0B6BCEE000549488 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CONFIGURATION_BUILD_DIR = ..;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = s;
-				HEADER_SEARCH_PATHS = ../libhb;
-				INSTALL_PATH = /usr/local/bin;
-				LIBRARY_SEARCH_PATHS = "";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = (
-					../libhb/libhb.a,
-					../contrib/lib/libmp4v2.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libdvdcss.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-					"-lz",
-					../contrib/lib/libdca.a,
-					../contrib/lib/libmkv.a,
-					../contrib/lib/libswscale.a,
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = HandBrakeCLI;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				ZERO_LINK = NO;
-			};
-			name = Default;
 		};
 		4D1EA2DE0993B01100FDC1A2 /* Development */ = {
 			isa = XCBuildConfiguration;
@@ -1774,52 +1646,6 @@
 				ZERO_LINK = NO;
 			};
 			name = Deployment;
-		};
-		4D1EA2E00993B01100FDC1A2 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				HEADER_SEARCH_PATHS = ../libhb;
-				INFOPLIST_FILE = Express.plist;
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
-				);
-				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
-				OTHER_LDFLAGS = (
-					../libhb/libhb.a,
-					../contrib/lib/libmp4v2.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libdvdcss.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-					../contrib/lib/libdca.a,
-					../contrib/lib/libmkv.a,
-					../contrib/lib/libswscale.a,
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = "Instant HandBrake";
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				WRAPPER_EXTENSION = app;
-				ZERO_LINK = NO;
-			};
-			name = Default;
 		};
 		4D4E7BC1087804870051572B /* Development */ = {
 			isa = XCBuildConfiguration;
@@ -1936,60 +1762,6 @@
 			};
 			name = Deployment;
 		};
-		4D4E7BC3087804870051572B /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CONFIGURATION_BUILD_DIR = ..;
-				CURRENT_PROJECT_VERSION = 0.9.1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
-				HEADER_SEARCH_PATHS = (
-					../libhb,
-					../contrib/include,
-				);
-				INFOPLIST_FILE = HandBrake.plist;
-				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = (
-					../libhb/libhb.a,
-					../contrib/lib/libmp4v2.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libdvdcss.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-					../contrib/lib/libdca.a,
-					../contrib/lib/libmkv.a,
-					../contrib/lib/libswscale.a,
-				);
-				PRODUCT_NAME = HandBrake;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-			};
-			name = Default;
-		};
 		4D4E7BC5087804870051572B /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2015,15 +1787,255 @@
 			};
 			name = Deployment;
 		};
-		4D4E7BC7087804870051572B /* Default */ = {
+		A969B4130CFC243900C7AA12 /* Deployment 10.4 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COPY_PHASE_STRIP = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_PREPROCESSOR_DEFINITIONS = "JOB_GROUPS=1";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				STRIP_INSTALLED_PRODUCT = NO;
 			};
-			name = Default;
+			name = "Deployment 10.4";
+		};
+		A969B4140CFC243900C7AA12 /* Deployment 10.4 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CONFIGURATION_BUILD_DIR = ..;
+				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 0.9.1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				HEADER_SEARCH_PATHS = (
+					../libhb,
+					../contrib/include,
+				);
+				INFOPLIST_FILE = HandBrake.plist;
+				LIBRARY_SEARCH_PATHS = "";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					../libhb/libhb.a,
+					../contrib/lib/libmp4v2.a,
+					../contrib/lib/liba52.a,
+					../contrib/lib/libavformat.a,
+					../contrib/lib/libavcodec.a,
+					../contrib/lib/libavutil.a,
+					../contrib/lib/libdvdread.a,
+					../contrib/lib/libdvdcss.a,
+					../contrib/lib/libfaac.a,
+					../contrib/lib/libmp3lame.a,
+					../contrib/lib/libmpeg2.a,
+					../contrib/lib/libvorbis.a,
+					../contrib/lib/libvorbisenc.a,
+					../contrib/lib/libogg.a,
+					../contrib/lib/libsamplerate.a,
+					../contrib/lib/libx264.a,
+					../contrib/lib/libxvidcore.a,
+					../contrib/lib/libdca.a,
+					../contrib/lib/libmkv.a,
+					../contrib/lib/libswscale.a,
+				);
+				PRODUCT_NAME = HandBrake;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = "Deployment 10.4";
+		};
+		A969B4150CFC243900C7AA12 /* Deployment 10.4 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				HEADER_SEARCH_PATHS = ../libhb;
+				INFOPLIST_FILE = Express.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
+				OTHER_LDFLAGS = (
+					../libhb/libhb.a,
+					../contrib/lib/libmp4v2.a,
+					../contrib/lib/liba52.a,
+					../contrib/lib/libavformat.a,
+					../contrib/lib/libavcodec.a,
+					../contrib/lib/libavutil.a,
+					../contrib/lib/libdvdread.a,
+					../contrib/lib/libdvdcss.a,
+					../contrib/lib/libfaac.a,
+					../contrib/lib/libmp3lame.a,
+					../contrib/lib/libmpeg2.a,
+					../contrib/lib/libvorbis.a,
+					../contrib/lib/libvorbisenc.a,
+					../contrib/lib/libogg.a,
+					../contrib/lib/libsamplerate.a,
+					../contrib/lib/libx264.a,
+					../contrib/lib/libxvidcore.a,
+					../contrib/lib/libdca.a,
+					../contrib/lib/libmkv.a,
+					../contrib/lib/libswscale.a,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = "Instant HandBrake";
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = "Deployment 10.4";
+		};
+		A969B4160CFC243900C7AA12 /* Deployment 10.4 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../libhb";
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
+				INSTALL_PATH = /usr/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.3;
+				OTHER_CFLAGS = (
+					"-D__LIBHB__",
+					"-DSYS_DARWIN",
+					"$(OTHER_CFLAGS_QUOTED_1)",
+					"-DUSE_PTHREAD",
+				);
+				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.0\\\" -DHB_BUILD=2007081900";
+				OTHER_LDFLAGS = "";
+				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
+				PREBINDING = NO;
+				PRODUCT_NAME = hb;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				ZERO_LINK = NO;
+			};
+			name = "Deployment 10.4";
+		};
+		A969B4170CFC243900C7AA12 /* Deployment 10.4 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CONFIGURATION_BUILD_DIR = ..;
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = s;
+				HEADER_SEARCH_PATHS = ../libhb;
+				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					../libhb/libhb.a,
+					../contrib/lib/libmp4v2.a,
+					../contrib/lib/liba52.a,
+					../contrib/lib/libavformat.a,
+					../contrib/lib/libavcodec.a,
+					../contrib/lib/libavutil.a,
+					../contrib/lib/libdvdread.a,
+					../contrib/lib/libdvdcss.a,
+					../contrib/lib/libfaac.a,
+					../contrib/lib/libmp3lame.a,
+					../contrib/lib/libmpeg2.a,
+					../contrib/lib/libvorbis.a,
+					../contrib/lib/libvorbisenc.a,
+					../contrib/lib/libogg.a,
+					../contrib/lib/libsamplerate.a,
+					../contrib/lib/libx264.a,
+					../contrib/lib/libxvidcore.a,
+					"-lz",
+					../contrib/lib/libdca.a,
+					../contrib/lib/libmkv.a,
+					../contrib/lib/libswscale.a,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = HandBrakeCLI;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				ZERO_LINK = NO;
+			};
+			name = "Deployment 10.4";
+		};
+		A969B4180CFC243900C7AA12 /* Deployment 10.4 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../libhb";
+				COPY_PHASE_STRIP = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
+				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = "";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				OTHER_CFLAGS = (
+					"-D__LIBHB__",
+					"-DSYS_DARWIN",
+					"$(OTHER_CFLAGS_QUOTED_1)",
+					"-DUSE_PTHREAD",
+				);
+				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.1\\\" -DHB_BUILD=22007083100";
+				OTHER_LDFLAGS = (
+					../contrib/lib/libmp4v2.a,
+					../contrib/lib/liba52.a,
+					../contrib/lib/libavformat.a,
+					../contrib/lib/libavcodec.a,
+					../contrib/lib/libavutil.a,
+					../contrib/lib/libdvdread.a,
+					../contrib/lib/libdvdcss.a,
+					../contrib/lib/libfaac.a,
+					../contrib/lib/libmp3lame.a,
+					../contrib/lib/libmpeg2.a,
+					../contrib/lib/libvorbis.a,
+					../contrib/lib/libvorbisenc.a,
+					../contrib/lib/libogg.a,
+					../contrib/lib/libsamplerate.a,
+					../contrib/lib/libx264.a,
+					../contrib/lib/libxvidcore.a,
+					../contrib/lib/libdca.a,
+					../contrib/lib/libmkv.a,
+					../contrib/lib/libswscale.a,
+					"-ldl",
+					"-flat_namespace",
+					"-read_only_relocs",
+					suppress,
+				);
+				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
+				PREBINDING = NO;
+				PRODUCT_NAME = hb;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SEPARATE_STRIP = YES;
+				ZERO_LINK = NO;
+			};
+			name = "Deployment 10.4";
 		};
 /* End XCBuildConfiguration section */
 
@@ -2033,66 +2045,66 @@
 			buildConfigurations = (
 				0D096E660B707D5800A845D4 /* Development */,
 				0D096E670B707D5800A845D4 /* Deployment */,
-				0D096E680B707D5800A845D4 /* Default */,
+				A969B4180CFC243900C7AA12 /* Deployment 10.4 */,
 				0D096E690B707D5800A845D4 /* UB */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Development;
 		};
 		0DFF0B730B6BC70400549488 /* Build configuration list for PBXNativeTarget "libhb" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0DFF0B740B6BC70400549488 /* Development */,
 				0DFF0B750B6BC70400549488 /* Deployment */,
-				0DFF0B760B6BC70400549488 /* Default */,
+				A969B4160CFC243900C7AA12 /* Deployment 10.4 */,
 				0D88F56B0B6CDCD400F81F26 /* UB */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Development;
 		};
 		0DFF0C0C0B6BCEE000549488 /* Build configuration list for PBXNativeTarget "HandBrakeCLI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0DFF0C0D0B6BCEE000549488 /* Development */,
 				0DFF0C0E0B6BCEE000549488 /* Deployment */,
-				0DFF0C0F0B6BCEE000549488 /* Default */,
+				A969B4170CFC243900C7AA12 /* Deployment 10.4 */,
 				0D88F56E0B6CDCD400F81F26 /* UB */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Development;
 		};
 		4D1EA2DD0993B01100FDC1A2 /* Build configuration list for PBXNativeTarget "Instant HandBrake" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4D1EA2DE0993B01100FDC1A2 /* Development */,
 				4D1EA2DF0993B01100FDC1A2 /* Deployment */,
-				4D1EA2E00993B01100FDC1A2 /* Default */,
+				A969B4150CFC243900C7AA12 /* Deployment 10.4 */,
 				0D88F56D0B6CDCD400F81F26 /* UB */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Development;
 		};
 		4D4E7BC0087804870051572B /* Build configuration list for PBXNativeTarget "HandBrake" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4D4E7BC1087804870051572B /* Development */,
 				4D4E7BC2087804870051572B /* Deployment */,
-				4D4E7BC3087804870051572B /* Default */,
+				A969B4140CFC243900C7AA12 /* Deployment 10.4 */,
 				0D88F56C0B6CDCD400F81F26 /* UB */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Development;
 		};
 		4D4E7BC4087804870051572B /* Build configuration list for PBXProject "HandBrake" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4D4E7BC5087804870051572B /* Development */,
 				4D4E7BC6087804870051572B /* Deployment */,
-				4D4E7BC7087804870051572B /* Default */,
+				A969B4130CFC243900C7AA12 /* Deployment 10.4 */,
 				0D88F56F0B6CDCD400F81F26 /* UB */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Development;
 		};
 /* End XCConfigurationList section */
 	};
