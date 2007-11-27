@@ -27,11 +27,13 @@
     float           fCoordY;
 
     uint8_t       * fBuffers[2];
-    /* Tiger */
-    //unsigned long   fTextures[2];
+    #if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
+    unsigned long   fTextures[2];
+    #else
     /* Leopard */
     unsigned int   fTextures[2];
-
+    #endif;
+    
     int             fLastEffect;
     int             fAnimDuration;
     int             fFrameRate;

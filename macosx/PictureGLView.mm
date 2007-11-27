@@ -414,10 +414,11 @@ static int GetAlignedSize( int size )
     /* Swap buffers only during the vertical retrace of the monitor.
        http://developer.apple.com/documentation/GraphicsImaging/
        Conceptual/OpenGL/chap5/chapter_5_section_44.html */
-    /* Tiger */
-    //long params[] = { 1 };
-    /* Leopard */
+    #if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
+    long params[] = { 1 };
+    #else
     int params[] = { 1 };
+    #endif
     CGLSetParameter( CGLGetCurrentContext(), kCGLCPSwapInterval, params );
 
     if( !( anim & HB_ANIMATE_NONE ) )
