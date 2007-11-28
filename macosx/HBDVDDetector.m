@@ -150,7 +150,7 @@
 - (io_service_t)getIOKitServiceForBSDName
 {
     CFMutableDictionaryRef  matchingDict;
-    matchingDict = IOBSDNameMatching( kIOMasterPortDefault, 0, [bsdName cString] );
+    matchingDict = IOBSDNameMatching( kIOMasterPortDefault, 0, [bsdName UTF8String] );
     if( matchingDict == NULL )
     {
         return IO_OBJECT_NULL;

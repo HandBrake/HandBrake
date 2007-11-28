@@ -2807,7 +2807,7 @@ the user is using "Custom" settings by determining the sender*/
 
                 /* do we want to add a mono option? */
                 if (audioCodecsSupportMono == 1) {
-                    id<NSMenuItem> menuItem = [[mixdownPopUp menu] addItemWithTitle:
+                    NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
                         [NSString stringWithCString: hb_audio_mixdowns[0].human_readable_name]
                         action: NULL keyEquivalent: @""];
                     [menuItem setTag: hb_audio_mixdowns[0].amixdown];
@@ -2819,7 +2819,7 @@ the user is using "Custom" settings by determining the sender*/
                 /* offer stereo if we have a mono source and non-mono-supporting codecs, as otherwise we won't have a mixdown at all */
                 /* also offer stereo if we have a stereo-or-better source */
                 if ((layout == HB_INPUT_CH_LAYOUT_MONO && audioCodecsSupportMono == 0) || layout >= HB_INPUT_CH_LAYOUT_STEREO) {
-                    id<NSMenuItem> menuItem = [[mixdownPopUp menu] addItemWithTitle:
+                    NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
                         [NSString stringWithCString: hb_audio_mixdowns[1].human_readable_name]
                         action: NULL keyEquivalent: @""];
                     [menuItem setTag: hb_audio_mixdowns[1].amixdown];
@@ -2829,7 +2829,7 @@ the user is using "Custom" settings by determining the sender*/
 
                 /* do we want to add a dolby surround (DPL1) option? */
                 if (layout == HB_INPUT_CH_LAYOUT_3F1R || layout == HB_INPUT_CH_LAYOUT_3F2R || layout == HB_INPUT_CH_LAYOUT_DOLBY) {
-                    id<NSMenuItem> menuItem = [[mixdownPopUp menu] addItemWithTitle:
+                    NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
                         [NSString stringWithCString: hb_audio_mixdowns[2].human_readable_name]
                         action: NULL keyEquivalent: @""];
                     [menuItem setTag: hb_audio_mixdowns[2].amixdown];
@@ -2839,7 +2839,7 @@ the user is using "Custom" settings by determining the sender*/
 
                 /* do we want to add a dolby pro logic 2 (DPL2) option? */
                 if (layout == HB_INPUT_CH_LAYOUT_3F2R) {
-                    id<NSMenuItem> menuItem = [[mixdownPopUp menu] addItemWithTitle:
+                    NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
                         [NSString stringWithCString: hb_audio_mixdowns[3].human_readable_name]
                         action: NULL keyEquivalent: @""];
                     [menuItem setTag: hb_audio_mixdowns[3].amixdown];
@@ -2849,7 +2849,7 @@ the user is using "Custom" settings by determining the sender*/
 
                 /* do we want to add a 6-channel discrete option? */
                 if (audioCodecsSupport6Ch == 1 && layout == HB_INPUT_CH_LAYOUT_3F2R && (audio->input_channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE)) {
-                    id<NSMenuItem> menuItem = [[mixdownPopUp menu] addItemWithTitle:
+                    NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
                         [NSString stringWithCString: hb_audio_mixdowns[4].human_readable_name]
                         action: NULL keyEquivalent: @""];
                     [menuItem setTag: hb_audio_mixdowns[4].amixdown];
@@ -2967,7 +2967,7 @@ the user is using "Custom" settings by determining the sender*/
         if (hb_audio_bitrates[i].rate >= minbitrate && hb_audio_bitrates[i].rate <= maxbitrate)
         {
             /* add a new menuitem for this bitrate */
-            id<NSMenuItem> menuItem = [[fAudBitratePopUp menu] addItemWithTitle:
+            NSMenuItem *menuItem = [[fAudBitratePopUp menu] addItemWithTitle:
                 [NSString stringWithCString: hb_audio_bitrates[i].string]
                 action: NULL keyEquivalent: @""];
             /* set its tag to be the actual bitrate as an integer, so we can retrieve it later */
