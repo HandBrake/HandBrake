@@ -101,14 +101,21 @@
     }
     FSVolumeRefNum volRefNum = catalogInfo.volume;
 
-	// Mow let's get the device name
+	// Now let's get the device name
 	GetVolParmsInfoBuffer volumeParms;
+    // PBHGetVolParmsSync is deprecated, but still needed for 10.4 compatibility
+    #if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
 	HParamBlockRec pb;
 	pb.ioParam.ioNamePtr = NULL;
 	pb.ioParam.ioVRefNum = volRefNum;
 	pb.ioParam.ioBuffer = (Ptr) &volumeParms;
 	pb.ioParam.ioReqCount = sizeof( volumeParms );
 	err = PBHGetVolParmsSync( &pb );
+    #else
+    // Let's use FSGetVolumeParms
+    err = FSGetVolumeParms ( volRefNum, &volumeParms, sizeof( volumeParms ) );
+    #endif
+
     if( err != noErr )
     {
         return nil;
