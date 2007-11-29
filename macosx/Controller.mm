@@ -2474,8 +2474,8 @@ the user is using "Custom" settings by determining the sender*/
 {
 	hb_job_t * job = fTitle->job;
 	/* We use the output picture width and height
-	as calculated from libhb right after title is set
-	in TitlePopUpChanged */
+     as calculated from libhb right after title is set
+     in TitlePopUpChanged */
 	job->width = PicOrigOutputWidth;
 	job->height = PicOrigOutputHeight;
     [fPictureController setAutoCrop:YES];
@@ -2484,11 +2484,11 @@ the user is using "Custom" settings by determining the sender*/
 	job->crop[1] = AutoCropBottom;
 	job->crop[2] = AutoCropLeft;
 	job->crop[3] = AutoCropRight;
-				
-				
-				[self calculatePictureSizing: sender];
-				/* We call method method to change UI to reflect whether a preset is used or not*/    
-				[self customSettingUsed: sender];
+    
+    
+    [self calculatePictureSizing: sender];
+    /* We call method to change UI to reflect whether a preset is used or not*/    
+    [self customSettingUsed: sender];
 }
 
 /**
@@ -3075,8 +3075,8 @@ the user is using "Custom" settings by determining the sender*/
 - (IBAction)tableViewSelected:(id)sender
 {
     /* Since we cannot disable the presets tableView in terms of clickability
-	   we will use the enabled state of the add presets button to determine whether
-	   or not clicking on a preset will do anything */
+     we will use the enabled state of the add presets button to determine whether
+     or not clicking on a preset will do anything */
 	if ([fPresetsAdd isEnabled])
 	{
 		if ([tableView selectedRow] >= 0)
@@ -3109,7 +3109,7 @@ the user is using "Custom" settings by determining the sender*/
 			[fVidEncoderPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]]];
 			
 			/* We can show the preset options here in the gui if we want to
-				so we check to see it the user has specified it in the prefs */
+             so we check to see it the user has specified it in the prefs */
 			[fAdvancedOptions setOptions: [NSString stringWithFormat:[chosenPreset valueForKey:@"x264Option"]]];
 			
 			/* Lets run through the following functions to get variables set there */
@@ -3128,7 +3128,7 @@ the user is using "Custom" settings by determining the sender*/
 			
 			/* Video framerate */
 			/* For video preset video framerate, we want to make sure that Same as source does not conflict with the
-               detected framerate in the fVidRatePopUp so we use index 0*/
+             detected framerate in the fVidRatePopUp so we use index 0*/
 			if ([[NSString stringWithFormat:[chosenPreset valueForKey:@"VideoFramerate"]] isEqualToString: @"Same as source"])
             {
                 [fVidRatePopUp selectItemAtIndex: 0];
@@ -3157,11 +3157,19 @@ the user is using "Custom" settings by determining the sender*/
 			[fSubPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Subtitles"]]];
 			
 			/* Picture Settings */
-			/* Look to see if we apply these here in objectForKey:@"UsesPictureSettings"] */
-			if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] > 0)
+			/* Note: objectForKey:@"UsesPictureSettings" now refers to picture size, this encompasses:
+             * height, width, keep ar, anamorphic and crop settings.
+             * picture filters are now handled separately.
+             * We will be able to actually change the key names for legacy preset keys when preset file
+             * update code is done. But for now, lets hang onto the old legacy key name for backwards compatibility.
+             */
+			/* Check to see if the objectForKey:@"UsesPictureSettings is greater than 0, as 0 means use picture sizing "None" 
+             * and the preset completely ignores any picture sizing values in the preset.
+             */
+            if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] > 0)
 			{
 				hb_job_t * job = fTitle->job;
-				/* Check to see if we should use the max picture setting for the current title*/
+				/* Check to see if the objectForKey:@"UsesPictureSettings is 2 which is "Use Max for the source */
 				if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] == 2 || [[chosenPreset objectForKey:@"UsesMaxPictureSettings"]  intValue] == 1)
 				{
 					/* Use Max Picture settings for whatever the dvd is.*/
@@ -3178,7 +3186,7 @@ the user is using "Custom" settings by determining the sender*/
 					}
 					job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
 				}
-				else // Apply picture settings that were in effect at the time the preset was saved
+				else // /* If not 0 or 2 we assume objectForKey:@"UsesPictureSettings is 1 which is "Use picture sizing from when the preset was set" */
 				{
 					job->width = [[chosenPreset objectForKey:@"PictureWidth"]  intValue];
 					job->height = [[chosenPreset objectForKey:@"PictureHeight"]  intValue];
@@ -3194,23 +3202,9 @@ the user is using "Custom" settings by determining the sender*/
 					}
 					job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
                     
-                    /* Filters */
-                    [fPictureController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
-					
-					if ([chosenPreset objectForKey:@"PictureDetelecine"])
-					{
-                        [fPictureController setDetelecine:[[chosenPreset objectForKey:@"PictureDetelecine"] intValue]];
-					}
-					if ([chosenPreset objectForKey:@"PictureDenoise"])
-					{
-                        [fPictureController setDenoise:[[chosenPreset objectForKey:@"PictureDenoise"] intValue]];
-					}
-                    if ([chosenPreset objectForKey:@"PictureDeblock"])
-					{
-                        [fPictureController setDeblock:[[chosenPreset objectForKey:@"PictureDeblock"] intValue]];
-					}
+                    
 					/* If Cropping is set to custom, then recall all four crop values from
-						when the preset was created and apply them */
+                     when the preset was created and apply them */
 					if ([[chosenPreset objectForKey:@"PictureAutoCrop"]  intValue] == 0)
 					{
                         [fPictureController setAutoCrop:NO];
@@ -3232,14 +3226,76 @@ the user is using "Custom" settings by determining the sender*/
 						job->crop[3] = AutoCropRight;
 						
 					}
+                    /* If the preset has no objectForKey:@"UsesPictureFilters", then we know it is a legacy preset
+                     * and handle the filters here as before.
+                     * NOTE: This should be removed when the update presets code is done as we can be assured that legacy
+                     * presets are updated to work properly with new keys.
+                     */
+                    if (![chosenPreset objectForKey:@"UsesPictureFilters"])
+                    {
+                        /* Filters */
+                        [fPictureController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
+                        
+                        if ([[chosenPreset objectForKey:@"VFR"] intValue] == 1)
+                        {
+                            [fPictureController setVFR:[[chosenPreset objectForKey:@"VFR"] intValue]];
+                        }
+                        else
+                        {
+                        [fPictureController setVFR:0];
+                        }
+                        
+                        if ([chosenPreset objectForKey:@"PictureDetelecine"])
+                        {
+                            [fPictureController setDetelecine:[[chosenPreset objectForKey:@"PictureDetelecine"] intValue]];
+                        }
+                        if ([chosenPreset objectForKey:@"PictureDenoise"])
+                        {
+                            [fPictureController setDenoise:[[chosenPreset objectForKey:@"PictureDenoise"] intValue]];
+                        }
+                        if ([chosenPreset objectForKey:@"PictureDeblock"])
+                        {
+                            [fPictureController setDeblock:[[chosenPreset objectForKey:@"PictureDeblock"] intValue]];
+                        }   
+                   [self calculatePictureSizing: NULL];
+                     }
+                    
 				}
-				[self calculatePictureSizing: NULL]; 
+                
+                
 			}
-			
-			
+			/* If the preset has an objectForKey:@"UsesPictureFilters", then we know it is a newer style filters preset
+            * and handle the filters here depending on whether or not the preset specifies applying the filter.
+            */
+            if ([chosenPreset objectForKey:@"UsesPictureFilters"] && [[chosenPreset objectForKey:@"UsesPictureFilters"]  intValue] > 0)
+            {
+                /* Filters */
+                [fPictureController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
+                if ([chosenPreset objectForKey:@"VFR"])
+                {
+                    [fPictureController setVFR:[[chosenPreset objectForKey:@"VFR"] intValue]];
+                }
+                else
+                {
+                [fPictureController setVFR:0];
+                }
+                if ([chosenPreset objectForKey:@"PictureDetelecine"])
+                {
+                    [fPictureController setDetelecine:[[chosenPreset objectForKey:@"PictureDetelecine"] intValue]];
+                }
+                if ([chosenPreset objectForKey:@"PictureDenoise"])
+                {
+                    [fPictureController setDenoise:[[chosenPreset objectForKey:@"PictureDenoise"] intValue]];
+                }
+                if ([chosenPreset objectForKey:@"PictureDeblock"])
+                {
+                    [fPictureController setDeblock:[[chosenPreset objectForKey:@"PictureDeblock"] intValue]];
+                }   
+            }
+			[self calculatePictureSizing: NULL];
 			[[fPresetsActionMenu itemAtIndex:0] setEnabled: YES];
-			}
-}
+        }
+    }
 }
 
 
@@ -3402,8 +3458,9 @@ id theRecord, theValue;
     [fPresetNewPicSettingsPopUp addItemWithTitle:@"Current"];
     [fPresetNewPicSettingsPopUp addItemWithTitle:@"Source Maximum (post source scan)"];
     [fPresetNewPicSettingsPopUp selectItemAtIndex: 0];	
-	
-    /* Erase info from the input fields fPresetNewDesc*/
+    /* Uncheck the preset use filters checkbox */
+    [fPresetNewPicFiltersCheck setState:NSOffState];
+    /* Erase info from the input fields*/
 	[fPresetNewName setStringValue: @""];
 	[fPresetNewDesc setStringValue: @""];
 	/* Show the panel */
@@ -3467,9 +3524,12 @@ id theRecord, theValue;
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"Type"];
 	/*Set whether or not this is default, at creation set to 0*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
-	/*Get the whether or not to apply pic settings in the AddPresetPanel*/
+	/*Get the whether or not to apply pic Size and Cropping (includes Anamorphic)*/
 	[preset setObject:[NSNumber numberWithInt:[fPresetNewPicSettingsPopUp indexOfSelectedItem]] forKey:@"UsesPictureSettings"];
-	/* Get New Preset Description from the field in the AddPresetPanel*/
+    /* Get whether or not to use the current Picture Filter settings for the preset */
+    [preset setObject:[NSNumber numberWithInt:[fPresetNewPicFiltersCheck state]] forKey:@"UsesPictureFilters"];
+ 
+    /* Get New Preset Description from the field in the AddPresetPanel*/
 	[preset setObject:[fPresetNewDesc stringValue] forKey:@"PresetDescription"];
 	/* File Format */
     [preset setObject:[fDstFormatPopUp titleOfSelectedItem] forKey:@"FileFormat"];
@@ -3506,26 +3566,29 @@ id theRecord, theValue;
 	[preset setObject:[NSNumber numberWithInt:[fVidTurboPassCheck state]] forKey:@"VideoTurboTwoPass"];
 	/*Picture Settings*/
 	hb_job_t * job = fTitle->job;
-	/* Basic Picture Settings */
+	/* Picture Sizing */
 	/* Use Max Picture settings for whatever the dvd is.*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesMaxPictureSettings"];
 	[preset setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PictureWidth"];
 	[preset setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PictureHeight"];
 	[preset setObject:[NSNumber numberWithInt:fTitle->job->keep_ratio] forKey:@"PictureKeepRatio"];
-	[preset setObject:[NSNumber numberWithInt:[fPictureController deinterlace]] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:fTitle->job->pixel_ratio] forKey:@"PicturePAR"];
-	[preset setObject:[NSNumber numberWithInt:[fPictureController detelecine]] forKey:@"PictureDetelecine"];
-	[preset setObject:[NSNumber numberWithInt:[fPictureController denoise]] forKey:@"PictureDenoise"];
-    [preset setObject:[NSNumber numberWithInt:[fPictureController deblock]] forKey:@"PictureDeblock"];
     
-	/* Set crop settings here */
-	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
+    /* Set crop settings here */
 	[preset setObject:[NSNumber numberWithInt:[fPictureController autoCrop]] forKey:@"PictureAutoCrop"];
-
-	[preset setObject:[NSNumber numberWithInt:job->crop[0]] forKey:@"PictureTopCrop"];
+    [preset setObject:[NSNumber numberWithInt:job->crop[0]] forKey:@"PictureTopCrop"];
     [preset setObject:[NSNumber numberWithInt:job->crop[1]] forKey:@"PictureBottomCrop"];
 	[preset setObject:[NSNumber numberWithInt:job->crop[2]] forKey:@"PictureLeftCrop"];
 	[preset setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
+    
+    /* Picture Filters */
+    [preset setObject:[NSNumber numberWithInt:[fPictureController deinterlace]] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:[fPictureController detelecine]] forKey:@"PictureDetelecine"];
+    [preset setObject:[NSNumber numberWithInt:[fPictureController vfr]] forKey:@"VFR"];
+	[preset setObject:[NSNumber numberWithInt:[fPictureController denoise]] forKey:@"PictureDenoise"];
+    [preset setObject:[NSNumber numberWithInt:[fPictureController deblock]] forKey:@"PictureDeblock"];
+    
+
 	
 	/*Audio*/
 	/* Audio Sample Rate*/

@@ -1,294 +1,337 @@
-{
-    IBClasses = (
-        {
-            ACTIONS = {
-                X264AdvancedOptionsChanged = id; 
-                X264AdvancedOptionsSet = id; 
-                X264AdvancedOptionsSetCurrentSettings = id; 
-                X264AdvancedOptionsStandardizeOptString = id; 
-            }; 
-            CLASS = HBAdvancedController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                fDisplayX264Options = NSTextField; 
-                fDisplayX264OptionsLabel = NSTextField; 
-                fX264opt8x8dctLabel = NSTextField; 
-                fX264opt8x8dctSwitch = NSButton; 
-                fX264optAlphaDeblockPopUp = NSPopUpButton; 
-                fX264optAnalyseLabel = NSTextField; 
-                fX264optAnalysePopUp = NSPopUpButton; 
-                fX264optBPyramidLabel = NSTextField; 
-                fX264optBPyramidSwitch = NSButton; 
-                fX264optBRDOLabel = NSTextField; 
-                fX264optBRDOSwitch = NSButton; 
-                fX264optBetaDeblockPopUp = NSPopUpButton; 
-                fX264optBframesLabel = NSTextField; 
-                fX264optBframesPopUp = NSPopUpButton; 
-                fX264optBiMELabel = NSTextField; 
-                fX264optBiMESwitch = NSButton; 
-                fX264optCabacLabel = NSTextField; 
-                fX264optCabacSwitch = NSButton; 
-                fX264optDeblockLabel = NSTextField; 
-                fX264optDirectPredLabel = NSTextField; 
-                fX264optDirectPredPopUp = NSPopUpButton; 
-                fX264optMERangeLabel = NSTextField; 
-                fX264optMERangePopUp = NSPopUpButton; 
-                fX264optMixedRefsLabel = NSTextField; 
-                fX264optMixedRefsSwitch = NSButton; 
-                fX264optMotionEstLabel = NSTextField; 
-                fX264optMotionEstPopUp = NSPopUpButton; 
-                fX264optNfpskipLabel = NSTextField; 
-                fX264optNfpskipSwitch = NSButton; 
-                fX264optNodctdcmtLabel = NSTextField; 
-                fX264optNodctdcmtSwitch = NSButton; 
-                fX264optRefLabel = NSTextField; 
-                fX264optRefPopUp = NSPopUpButton; 
-                fX264optSubmeLabel = NSTextField; 
-                fX264optSubmePopUp = NSPopUpButton; 
-                fX264optTrellisLabel = NSTextField; 
-                fX264optTrellisPopUp = NSPopUpButton; 
-                fX264optView = NSView; 
-                fX264optViewTitleLabel = NSTextField; 
-                fX264optWeightBLabel = NSTextField; 
-                fX264optWeightBSwitch = NSButton; 
-            }; 
-            SUPERCLASS = NSView; 
-        }, 
-        {
-            ACTIONS = {
-                Cancel = id; 
-                Pause = id; 
-                Rip = id; 
-                addAllAudioTracksToPopUp = id; 
-                addFactoryPresets = id; 
-                addToQueue = id; 
-                addUserPreset = id; 
-                audioTrackMixdownChanged = id; 
-                audioTrackPopUpChanged = id; 
-                browseFile = id; 
-                browseSources = id; 
-                calculateBitrate = id; 
-                calculatePictureSizing = id; 
-                chapterPopUpChanged = id; 
-                closeAddPresetPanel = id; 
-                closeSourceTitleScanPanel = id; 
-                codecsPopUpChanged = id; 
-                customSettingUsed = id; 
-                deleteFactoryPresets = id; 
-                deletePreset = id; 
-                encoderPopUpChanged = id; 
-                formatPopUpChanged = id; 
-                getDefaultPresets = id; 
-                insertPreset = id; 
-                openForums = id; 
-                openHomepage = id; 
-                openMainWindow = id; 
-                openUserGuide = id; 
-                qualitySliderChanged = id; 
-                revertPictureSizeToMax = id; 
-                selectDefaultPreset = id; 
-                setDefaultPreset = id; 
-                setEnabledStateOfAudioMixdownControls = id; 
-                showAddPresetPanel = id; 
-                showDebugOutputPanel = id; 
-                showGrowlDoneNotification = id; 
-                showNewScan = id; 
-                showPicturePanel = id; 
-                showPreferencesWindow = id; 
-                showQueueWindow = id; 
-                showScanPanel = id; 
-                showSourceTitleScanPanel = id; 
-                subtitleSelectionChanged = id; 
-                tableViewSelected = id; 
-                titlePopUpChanged = id; 
-                twoPassCheckboxChanged = id; 
-                videoFrameRateChanged = id; 
-                videoMatrixChanged = id; 
-            }; 
-            CLASS = HBController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                fAddPresetPanel = NSPanel; 
-                fAdvancedView = NSBox; 
-                fAudBitrateField = NSTextField; 
-                fAudBitratePopUp = NSPopUpButton; 
-                fAudLang1Field = NSTextField; 
-                fAudLang1PopUp = NSPopUpButton; 
-                fAudLang2Field = NSTextField; 
-                fAudLang2PopUp = NSPopUpButton; 
-                fAudRateField = NSTextField; 
-                fAudRatePopUp = NSPopUpButton; 
-                fAudTrack1MixLabel = NSTextField; 
-                fAudTrack1MixPopUp = NSPopUpButton; 
-                fAudTrack2MixLabel = NSTextField; 
-                fAudTrack2MixPopUp = NSPopUpButton; 
-                fChapterTable = NSTableView; 
-                fCreateChapterMarkers = NSButton; 
-                fDstBrowseButton = NSButton; 
-                fDstCodecsField = NSTextField; 
-                fDstCodecsPopUp = NSPopUpButton; 
-                fDstFile1Field = NSTextField; 
-                fDstFile2Field = NSTextField; 
-                fDstFormatField = NSTextField; 
-                fDstFormatPopUp = NSPopUpButton; 
-                fDstMpgLargeFileCheck = NSButton; 
-                fOpenSourceTitleMMenu = NSMenuItem; 
-                fPicLabelAnamorphic = NSTextField; 
-                fPicLabelAr = NSTextField; 
-                fPicLabelAutoCrop = NSTextField; 
-                fPicLabelDeblock = NSTextField; 
-                fPicLabelDeinterlace = NSTextField; 
-                fPicLabelDenoise = NSTextField; 
-                fPicLabelDetelecine = NSTextField; 
-                fPicLabelOutp = NSTextField; 
-                fPicLabelOutputX = NSTextField; 
-                fPicLabelPAROutputX = NSTextField; 
-                fPicLabelSettings = NSTextField; 
-                fPicLabelSrc = NSTextField; 
-                fPicLabelSrcX = NSTextField; 
-                fPicSettingARkeep = NSTextField; 
-                fPicSettingAutoCrop = NSTextField; 
-                fPicSettingDeblock = NSTextField; 
-                fPicSettingDeinterlace = NSTextField; 
-                fPicSettingDenoise = NSTextField; 
-                fPicSettingDetelecine = NSTextField; 
-                fPicSettingHeight = NSTextField; 
-                fPicSettingPAR = NSTextField; 
-                fPicSettingPARHeight = NSTextField; 
-                fPicSettingPARWidth = NSTextField; 
-                fPicSettingWidth = NSTextField; 
-                fPicSrcHeight = NSTextField; 
-                fPicSrcWidth = NSTextField; 
-                fPictureButton = NSButton; 
-                fPresetDrawer = NSDrawer; 
-                fPresetNewDesc = NSTextField; 
-                fPresetNewName = NSTextField; 
-                fPresetNewPicSettingsPopUp = NSPopUpButton; 
-                fPresetSelectedDisplay = NSTextField; 
-                fPresetsActionButton = MVMenuButton; 
-                fPresetsActionMenu = NSMenu; 
-                fPresetsAdd = NSButton; 
-                fPresetsDelete = NSButton; 
-                fQueueStatus = NSTextField; 
-                fRipIndicator = NSProgressIndicator; 
-                fScanIndicator = NSProgressIndicator; 
-                fScanSrcTitleCancelButton = NSButton; 
-                fScanSrcTitleNumField = NSTextField; 
-                fScanSrcTitleOpenButton = NSButton; 
-                fScanSrcTitlePanel = NSPanel; 
-                fScanSrcTitlePathField = NSTextField; 
-                fSrcChapterEndPopUp = NSPopUpButton; 
-                fSrcChapterField = NSTextField; 
-                fSrcChapterStartPopUp = NSPopUpButton; 
-                fSrcChapterToField = NSTextField; 
-                fSrcDVD2Field = NSTextField; 
-                fSrcDsplyNameTitleScan = NSTextField; 
-                fSrcDuration1Field = NSTextField; 
-                fSrcDuration2Field = NSTextField; 
-                fSrcTitleField = NSTextField; 
-                fSrcTitlePopUp = NSPopUpButton; 
-                fStatusField = NSTextField; 
-                fSubField = NSTextField; 
-                fSubForcedCheck = NSButton; 
-                fSubPopUp = NSPopUpButton; 
-                fVidBitrateCell = NSButtonCell; 
-                fVidBitrateField = NSTextField; 
-                fVidConstantCell = NSButtonCell; 
-                fVidEncoderField = NSTextField; 
-                fVidEncoderPopUp = NSPopUpButton; 
-                fVidGrayscaleCheck = NSButton; 
-                fVidQualityField = NSTextField; 
-                fVidQualityMatrix = NSMatrix; 
-                fVidQualitySlider = NSSlider; 
-                fVidRateField = NSTextField; 
-                fVidRatePopUp = NSPopUpButton; 
-                fVidTargetCell = NSButtonCell; 
-                fVidTargetSizeField = NSTextField; 
-                fVidTurboPassCheck = NSButton; 
-                fVidTwoPassCheck = NSButton; 
-                fWindow = NSWindow; 
-                tableView = NSTableView; 
-            }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {CLASS = HBPictureGLView; LANGUAGE = ObjC; SUPERCLASS = NSOpenGLView; }, 
-        {
-            CLASS = HBTargetSizeField; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                fRipAudBitPopUp = NSPopUpButton; 
-                fRipCustomField = NSTextField; 
-                fRipFormatPopUp = NSPopUpButton; 
-                fRipLang2PopUp = NSPopUpButton; 
-            }; 
-            SUPERCLASS = NSTextField; 
-        }, 
-        {CLASS = MVMenuButton; LANGUAGE = ObjC; SUPERCLASS = NSButton; }, 
-        {
-            ACTIONS = {
-                ClosePanel = id; 
-                NextPicture = id; 
-                PreviousPicture = id; 
-                SettingsChanged = id; 
-            }; 
-            CLASS = PictureController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                fCropBottomField = NSTextField; 
-                fCropBottomStepper = NSStepper; 
-                fCropLeftField = NSTextField; 
-                fCropLeftStepper = NSStepper; 
-                fCropMatrix = NSMatrix; 
-                fCropRightField = NSTextField; 
-                fCropRightStepper = NSStepper; 
-                fCropTopField = NSTextField; 
-                fCropTopStepper = NSStepper; 
-                fDeinterlacePopUp = NSPopUpButton; 
-                fDenoisePopUp = NSPopUpButton; 
-                fDetelecineCheck = NSButton; 
-                fEffectsCheck = NSButton; 
-                fHeightField = NSTextField; 
-                fHeightStepper = NSStepper; 
-                fInfoField = NSTextField; 
-                fNextButton = NSButton; 
-                fPARCheck = NSButton; 
-                fPictureGLView = HBPictureGLView; 
-                fPrevButton = NSButton; 
-                fRatioCheck = NSButton; 
-                fWidthField = NSTextField; 
-                fWidthStepper = NSStepper; 
-            }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {CLASS = PictureGLView; LANGUAGE = ObjC; SUPERCLASS = NSOpenGLView; }, 
-        {
-            ACTIONS = {CheckChanged = id; ClosePanel = id; OpenPanel = id; }; 
-            CLASS = PrefsController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                fDefAdvancedx264FlagsShow = NSButton; 
-                fDefAdvancedx264FlagsView = NSTextField; 
-                fDefAutoNaming = NSButton; 
-                fDefChapterMarkers = NSButton; 
-                fDefCrf = NSButton; 
-                fDefDeinterlace = NSButton; 
-                fDefPicSizeAutoSetipod = NSButton; 
-                fDefPixelRatio = NSButton; 
-                fDefPresetDrawerShow = NSButton; 
-                fFileExtItunes = NSButton; 
-                fPanel = NSPanel; 
-                fUpdateCheck = NSButton; 
-                fdefaultlanguage = NSComboBox; 
-            }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            ACTIONS = {ClosePanel = id; Remove = id; Update = id; }; 
-            CLASS = QueueController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {fScrollView = NSScrollView; fTaskView = NSView; }; 
-            SUPERCLASS = NSObject; 
-        }
-    ); 
-    IBVersion = 1; 
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IBClasses</key>
+	<array>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>Cancel</key>
+				<string>id</string>
+				<key>Pause</key>
+				<string>id</string>
+				<key>Rip</key>
+				<string>id</string>
+				<key>addAllAudioTracksToPopUp</key>
+				<string>id</string>
+				<key>addFactoryPresets</key>
+				<string>id</string>
+				<key>addToQueue</key>
+				<string>id</string>
+				<key>addUserPreset</key>
+				<string>id</string>
+				<key>audioTrackMixdownChanged</key>
+				<string>id</string>
+				<key>audioTrackPopUpChanged</key>
+				<string>id</string>
+				<key>browseFile</key>
+				<string>id</string>
+				<key>browseSources</key>
+				<string>id</string>
+				<key>calculateBitrate</key>
+				<string>id</string>
+				<key>calculatePictureSizing</key>
+				<string>id</string>
+				<key>chapterPopUpChanged</key>
+				<string>id</string>
+				<key>closeAddPresetPanel</key>
+				<string>id</string>
+				<key>closeSourceTitleScanPanel</key>
+				<string>id</string>
+				<key>codecsPopUpChanged</key>
+				<string>id</string>
+				<key>customSettingUsed</key>
+				<string>id</string>
+				<key>deleteFactoryPresets</key>
+				<string>id</string>
+				<key>deletePreset</key>
+				<string>id</string>
+				<key>encoderPopUpChanged</key>
+				<string>id</string>
+				<key>formatPopUpChanged</key>
+				<string>id</string>
+				<key>getDefaultPresets</key>
+				<string>id</string>
+				<key>insertPreset</key>
+				<string>id</string>
+				<key>openForums</key>
+				<string>id</string>
+				<key>openHomepage</key>
+				<string>id</string>
+				<key>openMainWindow</key>
+				<string>id</string>
+				<key>openUserGuide</key>
+				<string>id</string>
+				<key>qualitySliderChanged</key>
+				<string>id</string>
+				<key>revertPictureSizeToMax</key>
+				<string>id</string>
+				<key>selectDefaultPreset</key>
+				<string>id</string>
+				<key>setDefaultPreset</key>
+				<string>id</string>
+				<key>setEnabledStateOfAudioMixdownControls</key>
+				<string>id</string>
+				<key>showAddPresetPanel</key>
+				<string>id</string>
+				<key>showDebugOutputPanel</key>
+				<string>id</string>
+				<key>showGrowlDoneNotification</key>
+				<string>id</string>
+				<key>showNewScan</key>
+				<string>id</string>
+				<key>showPicturePanel</key>
+				<string>id</string>
+				<key>showPreferencesWindow</key>
+				<string>id</string>
+				<key>showQueueWindow</key>
+				<string>id</string>
+				<key>showScanPanel</key>
+				<string>id</string>
+				<key>showSourceTitleScanPanel</key>
+				<string>id</string>
+				<key>subtitleSelectionChanged</key>
+				<string>id</string>
+				<key>tableViewSelected</key>
+				<string>id</string>
+				<key>titlePopUpChanged</key>
+				<string>id</string>
+				<key>twoPassCheckboxChanged</key>
+				<string>id</string>
+				<key>videoFrameRateChanged</key>
+				<string>id</string>
+				<key>videoMatrixChanged</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>HBController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>fAddPresetPanel</key>
+				<string>NSPanel</string>
+				<key>fAdvancedView</key>
+				<string>NSBox</string>
+				<key>fAudBitrateField</key>
+				<string>NSTextField</string>
+				<key>fAudBitratePopUp</key>
+				<string>NSPopUpButton</string>
+				<key>fAudLang1Field</key>
+				<string>NSTextField</string>
+				<key>fAudLang1PopUp</key>
+				<string>NSPopUpButton</string>
+				<key>fAudLang2Field</key>
+				<string>NSTextField</string>
+				<key>fAudLang2PopUp</key>
+				<string>NSPopUpButton</string>
+				<key>fAudRateField</key>
+				<string>NSTextField</string>
+				<key>fAudRatePopUp</key>
+				<string>NSPopUpButton</string>
+				<key>fAudTrack1MixLabel</key>
+				<string>NSTextField</string>
+				<key>fAudTrack1MixPopUp</key>
+				<string>NSPopUpButton</string>
+				<key>fAudTrack2MixLabel</key>
+				<string>NSTextField</string>
+				<key>fAudTrack2MixPopUp</key>
+				<string>NSPopUpButton</string>
+				<key>fChapterTable</key>
+				<string>NSTableView</string>
+				<key>fCreateChapterMarkers</key>
+				<string>NSButton</string>
+				<key>fDstBrowseButton</key>
+				<string>NSButton</string>
+				<key>fDstCodecsField</key>
+				<string>NSTextField</string>
+				<key>fDstCodecsPopUp</key>
+				<string>NSPopUpButton</string>
+				<key>fDstFile1Field</key>
+				<string>NSTextField</string>
+				<key>fDstFile2Field</key>
+				<string>NSTextField</string>
+				<key>fDstFormatField</key>
+				<string>NSTextField</string>
+				<key>fDstFormatPopUp</key>
+				<string>NSPopUpButton</string>
+				<key>fDstMpgLargeFileCheck</key>
+				<string>NSButton</string>
+				<key>fOpenSourceTitleMMenu</key>
+				<string>NSMenuItem</string>
+				<key>fPicLabelAnamorphic</key>
+				<string>NSTextField</string>
+				<key>fPicLabelAr</key>
+				<string>NSTextField</string>
+				<key>fPicLabelAutoCrop</key>
+				<string>NSTextField</string>
+				<key>fPicLabelDeblock</key>
+				<string>NSTextField</string>
+				<key>fPicLabelDeinterlace</key>
+				<string>NSTextField</string>
+				<key>fPicLabelDenoise</key>
+				<string>NSTextField</string>
+				<key>fPicLabelDetelecine</key>
+				<string>NSTextField</string>
+				<key>fPicLabelOutp</key>
+				<string>NSTextField</string>
+				<key>fPicLabelOutputX</key>
+				<string>NSTextField</string>
+				<key>fPicLabelPAROutputX</key>
+				<string>NSTextField</string>
+				<key>fPicLabelSettings</key>
+				<string>NSTextField</string>
+				<key>fPicLabelSrc</key>
+				<string>NSTextField</string>
+				<key>fPicLabelSrcX</key>
+				<string>NSTextField</string>
+				<key>fPicSettingARkeep</key>
+				<string>NSTextField</string>
+				<key>fPicSettingAutoCrop</key>
+				<string>NSTextField</string>
+				<key>fPicSettingDeblock</key>
+				<string>NSTextField</string>
+				<key>fPicSettingDeinterlace</key>
+				<string>NSTextField</string>
+				<key>fPicSettingDenoise</key>
+				<string>NSTextField</string>
+				<key>fPicSettingDetelecine</key>
+				<string>NSTextField</string>
+				<key>fPicSettingHeight</key>
+				<string>NSTextField</string>
+				<key>fPicSettingPAR</key>
+				<string>NSTextField</string>
+				<key>fPicSettingPARHeight</key>
+				<string>NSTextField</string>
+				<key>fPicSettingPARWidth</key>
+				<string>NSTextField</string>
+				<key>fPicSettingWidth</key>
+				<string>NSTextField</string>
+				<key>fPicSrcHeight</key>
+				<string>NSTextField</string>
+				<key>fPicSrcWidth</key>
+				<string>NSTextField</string>
+				<key>fPictureButton</key>
+				<string>NSButton</string>
+				<key>fPresetDrawer</key>
+				<string>NSDrawer</string>
+				<key>fPresetNewDesc</key>
+				<string>NSTextField</string>
+				<key>fPresetNewName</key>
+				<string>NSTextField</string>
+				<key>fPresetNewPicFiltersCheck</key>
+				<string>NSButton</string>
+				<key>fPresetNewPicSettingsPopUp</key>
+				<string>NSPopUpButton</string>
+				<key>fPresetSelectedDisplay</key>
+				<string>NSTextField</string>
+				<key>fPresetsActionButton</key>
+				<string>MVMenuButton</string>
+				<key>fPresetsActionMenu</key>
+				<string>NSMenu</string>
+				<key>fPresetsAdd</key>
+				<string>NSButton</string>
+				<key>fPresetsDelete</key>
+				<string>NSButton</string>
+				<key>fQueueStatus</key>
+				<string>NSTextField</string>
+				<key>fRipIndicator</key>
+				<string>NSProgressIndicator</string>
+				<key>fScanIndicator</key>
+				<string>NSProgressIndicator</string>
+				<key>fScanSrcTitleCancelButton</key>
+				<string>NSButton</string>
+				<key>fScanSrcTitleNumField</key>
+				<string>NSTextField</string>
+				<key>fScanSrcTitleOpenButton</key>
+				<string>NSButton</string>
+				<key>fScanSrcTitlePanel</key>
+				<string>NSPanel</string>
+				<key>fScanSrcTitlePathField</key>
+				<string>NSTextField</string>
+				<key>fSrcChapterEndPopUp</key>
+				<string>NSPopUpButton</string>
+				<key>fSrcChapterField</key>
+				<string>NSTextField</string>
+				<key>fSrcChapterStartPopUp</key>
+				<string>NSPopUpButton</string>
+				<key>fSrcChapterToField</key>
+				<string>NSTextField</string>
+				<key>fSrcDVD2Field</key>
+				<string>NSTextField</string>
+				<key>fSrcDsplyNameTitleScan</key>
+				<string>NSTextField</string>
+				<key>fSrcDuration1Field</key>
+				<string>NSTextField</string>
+				<key>fSrcDuration2Field</key>
+				<string>NSTextField</string>
+				<key>fSrcTitleField</key>
+				<string>NSTextField</string>
+				<key>fSrcTitlePopUp</key>
+				<string>NSPopUpButton</string>
+				<key>fStatusField</key>
+				<string>NSTextField</string>
+				<key>fSubField</key>
+				<string>NSTextField</string>
+				<key>fSubForcedCheck</key>
+				<string>NSButton</string>
+				<key>fSubPopUp</key>
+				<string>NSPopUpButton</string>
+				<key>fVidBitrateCell</key>
+				<string>NSButtonCell</string>
+				<key>fVidBitrateField</key>
+				<string>NSTextField</string>
+				<key>fVidConstantCell</key>
+				<string>NSButtonCell</string>
+				<key>fVidEncoderField</key>
+				<string>NSTextField</string>
+				<key>fVidEncoderPopUp</key>
+				<string>NSPopUpButton</string>
+				<key>fVidGrayscaleCheck</key>
+				<string>NSButton</string>
+				<key>fVidQualityField</key>
+				<string>NSTextField</string>
+				<key>fVidQualityMatrix</key>
+				<string>NSMatrix</string>
+				<key>fVidQualitySlider</key>
+				<string>NSSlider</string>
+				<key>fVidRateField</key>
+				<string>NSTextField</string>
+				<key>fVidRatePopUp</key>
+				<string>NSPopUpButton</string>
+				<key>fVidTargetCell</key>
+				<string>NSButtonCell</string>
+				<key>fVidTargetSizeField</key>
+				<string>NSTextField</string>
+				<key>fVidTurboPassCheck</key>
+				<string>NSButton</string>
+				<key>fVidTwoPassCheck</key>
+				<string>NSButton</string>
+				<key>fWindow</key>
+				<string>NSWindow</string>
+				<key>tableView</key>
+				<string>NSTableView</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>MVMenuButton</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSButton</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>NSObject</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+		</dict>
+	</array>
+	<key>IBVersion</key>
+	<string>1</string>
+</dict>
+</plist>
