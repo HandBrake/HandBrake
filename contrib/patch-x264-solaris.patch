@@ -16,17 +16,16 @@
  then
    ECHON="printf"
  
-diff -Naur x264/encoder/ratecontrol.c solaris.x264/encoder/ratecontrol.c
---- x264/encoder/ratecontrol.c	2007-05-01 22:45:01.000000000 +0200
-+++ solaris.x264/encoder/ratecontrol.c	2007-07-08 15:08:46.037119995 +0200
-@@ -35,6 +35,9 @@
- #include "common/cpu.h"
- #include "ratecontrol.h"
+--- x264/common/osdep.h Thu Nov 22 06:00:24 2007
++++ x264.modified/common/osdep.h        Fri Nov 30 10:23:28 2007
+@@ -44,6 +44,9 @@
+ #define X264_VERSION "" // no configure script for msvc
+ #endif
  
 +#if defined(SYS_SunOS)
 +#define isfinite _finite
 +#endif
- #if defined(SYS_OPENBSD)
+ #ifdef SYS_OPENBSD
  #define isfinite finite
  #endif
 --- x264.base/Makefile	Mon Jul 16 08:45:03 2007
