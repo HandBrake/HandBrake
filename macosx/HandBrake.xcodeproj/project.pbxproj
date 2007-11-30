@@ -1423,7 +1423,7 @@
 					"$(OTHER_CFLAGS_QUOTED_1)",
 					"-DUSE_PTHREAD",
 				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.0\\\" -DHB_BUILD=2007081900";
+				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.1\\\" -DHB_BUILD=2007081900";
 				OTHER_LDFLAGS = "";
 				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
 				PREBINDING = NO;
@@ -1453,7 +1453,7 @@
 					"$(OTHER_CFLAGS_QUOTED_1)",
 					"-DUSE_PTHREAD",
 				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.0\\\" -DHB_BUILD=2007081900";
+				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.1\\\" -DHB_BUILD=2007081900";
 				OTHER_LDFLAGS = "";
 				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
 				PREBINDING = NO;
@@ -1924,7 +1924,7 @@
 					"$(OTHER_CFLAGS_QUOTED_1)",
 					"-DUSE_PTHREAD",
 				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.0\\\" -DHB_BUILD=2007081900";
+				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.1\\\" -DHB_BUILD=2007081900";
 				OTHER_LDFLAGS = "";
 				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
 				PREBINDING = NO;
@@ -2049,7 +2049,7 @@
 				0D096E690B707D5800A845D4 /* UB */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Deployment;
 		};
 		0DFF0B730B6BC70400549488 /* Build configuration list for PBXNativeTarget "libhb" */ = {
 			isa = XCConfigurationList;
@@ -2060,7 +2060,7 @@
 				0D88F56B0B6CDCD400F81F26 /* UB */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Deployment;
 		};
 		0DFF0C0C0B6BCEE000549488 /* Build configuration list for PBXNativeTarget "HandBrakeCLI" */ = {
 			isa = XCConfigurationList;
@@ -2071,7 +2071,7 @@
 				0D88F56E0B6CDCD400F81F26 /* UB */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Deployment;
 		};
 		4D1EA2DD0993B01100FDC1A2 /* Build configuration list for PBXNativeTarget "Instant HandBrake" */ = {
 			isa = XCConfigurationList;
@@ -2082,7 +2082,7 @@
 				0D88F56D0B6CDCD400F81F26 /* UB */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Deployment;
 		};
 		4D4E7BC0087804870051572B /* Build configuration list for PBXNativeTarget "HandBrake" */ = {
 			isa = XCConfigurationList;
@@ -2093,7 +2093,7 @@
 				0D88F56C0B6CDCD400F81F26 /* UB */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Deployment;
 		};
 		4D4E7BC4087804870051572B /* Build configuration list for PBXProject "HandBrake" */ = {
 			isa = XCConfigurationList;
@@ -2104,7 +2104,7 @@
 				0D88F56F0B6CDCD400F81F26 /* UB */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
+			defaultConfigurationName = Deployment;
 		};
 /* End XCConfigurationList section */
 	};
