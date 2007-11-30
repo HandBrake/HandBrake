@@ -176,8 +176,7 @@ namespace Handbrake
             this.advancedOptions = new System.Windows.Forms.TabControl();
             this.groupBox_dest = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.listview_presets = new System.Windows.Forms.ListView();
-            this.presetname = new System.Windows.Forms.ColumnHeader();
+            this.treeView_presets = new System.Windows.Forms.TreeView();
             Label38 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
             this.frmMainMenu.SuspendLayout();
@@ -824,6 +823,7 @@ namespace Handbrake
             // frmMainMenu
             // 
             this.frmMainMenu.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.frmMainMenu.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
             this.frmMainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.FileToolStripMenuItem,
             this.ToolsToolStripMenuItem,
@@ -1887,7 +1887,7 @@ namespace Handbrake
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.listview_presets);
+            this.groupBox2.Controls.Add(this.treeView_presets);
             this.groupBox2.Controls.Add(this.btn_setDefault);
             this.groupBox2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.ForeColor = System.Drawing.Color.Black;
@@ -1898,36 +1898,23 @@ namespace Handbrake
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Presets";
             // 
-            // listview_presets
+            // treeView_presets
             // 
-            this.listview_presets.Alignment = System.Windows.Forms.ListViewAlignment.SnapToGrid;
-            this.listview_presets.AllowColumnReorder = true;
-            this.listview_presets.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.listview_presets.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.listview_presets.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.presetname});
-            this.listview_presets.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.listview_presets.FullRowSelect = true;
-            this.listview_presets.GridLines = true;
-            this.listview_presets.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.listview_presets.LabelWrap = false;
-            this.listview_presets.Location = new System.Drawing.Point(8, 19);
-            this.listview_presets.Margin = new System.Windows.Forms.Padding(5);
-            this.listview_presets.MultiSelect = false;
-            this.listview_presets.Name = "listview_presets";
-            this.listview_presets.Size = new System.Drawing.Size(177, 411);
-            this.listview_presets.TabIndex = 0;
-            this.listview_presets.UseCompatibleStateImageBehavior = false;
-            this.listview_presets.View = System.Windows.Forms.View.Details;
-            this.listview_presets.SelectedIndexChanged += new System.EventHandler(this.listview_presets_SelectedIndexChanged);
-            // 
-            // presetname
-            // 
-            this.presetname.Text = "Presets";
-            this.presetname.Width = 175;
+            this.treeView_presets.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.treeView_presets.ForeColor = System.Drawing.Color.Navy;
+            this.treeView_presets.FullRowSelect = true;
+            this.treeView_presets.HideSelection = false;
+            this.treeView_presets.ItemHeight = 17;
+            this.treeView_presets.Location = new System.Drawing.Point(8, 19);
+            this.treeView_presets.Name = "treeView_presets";
+            this.treeView_presets.ShowLines = false;
+            this.treeView_presets.Size = new System.Drawing.Size(177, 421);
+            this.treeView_presets.TabIndex = 2;
+            this.treeView_presets.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_presets_AfterSelect);
             // 
             // frmMain
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
@@ -1944,6 +1931,7 @@ namespace Handbrake
             this.Controls.Add(this.groupBox_output);
             this.Controls.Add(this.GroupBox1);
             this.Controls.Add(this.frmMainMenu);
+            this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(680, 580);
             this.Name = "frmMain";
@@ -2120,10 +2108,9 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem mnu_open;
         private System.Windows.Forms.ToolStripMenuItem mnu_save;
-        internal System.Windows.Forms.ListView listview_presets;
-        internal System.Windows.Forms.ColumnHeader presetname;
         private System.Windows.Forms.ToolStripMenuItem mnu_showPresets;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
+        private System.Windows.Forms.TreeView treeView_presets;
 
     }
 }

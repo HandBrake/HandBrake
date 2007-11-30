@@ -291,7 +291,7 @@ namespace Handbrake
 
         private void mnu_presetReset_Click(object sender, EventArgs e)
         {
-            listview_presets.Items.Clear();
+            treeView_presets.Nodes.Clear();
             grabCLIPresets();
             updatePresets();
             MessageBox.Show("Presets have been updated", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -899,16 +899,14 @@ namespace Handbrake
             presets[15] = "QuickTime";
             presets[16] = "Television";
 
-            ListViewItem preset_listview = new ListViewItem();
-            string[] presetList = new string[1];
+            TreeNode preset_treeview = new TreeNode();
 
             foreach (string preset in presets)
             {
-                presetList[0] = preset;
-                preset_listview = new ListViewItem(presetList);
+                preset_treeview = new TreeNode(preset);
 
                 // Now Fill Out List View with Items
-                listview_presets.Items.Add(preset_listview);
+                treeView_presets.Nodes.Add(preset_treeview);
             }
         }
 
@@ -925,12 +923,20 @@ namespace Handbrake
         // Function to select the default preset.
         private void loadNormalPreset()
         {
-            ListViewItem item = listview_presets.FindItemWithText("Normal");
-            
-            if (item != null)
+
+            int normal = 0;
+            foreach(TreeNode treenode in treeView_presets.Nodes)
             {
-                item.Selected = true;
+                if (treenode.ToString().Equals("TreeNode: Normal"))
+                    normal = treenode.Index;
             }
+
+            TreeNode np = treeView_presets.Nodes[normal];
+
+            treeView_presets.SelectedNode = np;
+
+    
+
         }
 
         // Buttons
@@ -944,15 +950,12 @@ namespace Handbrake
         }
 
         // Preset Selection
-        private void listview_presets_SelectedIndexChanged(object sender, EventArgs e)
+        private void treeView_presets_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            
 
             string selectedPreset = null;
-            ListView.SelectedListViewItemCollection name = null;
-            name = listview_presets.SelectedItems;
-
-            if (listview_presets.SelectedItems.Count != 0)
-                selectedPreset = name[0].SubItems[0].Text;
+            selectedPreset = treeView_presets.SelectedNode.Text;
 
             try
             {
@@ -991,7 +994,6 @@ namespace Handbrake
                 MessageBox.Show(exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         #endregion
 
         //---------------------------------------------------
@@ -1753,7 +1755,6 @@ namespace Handbrake
         }
 
         #endregion
-
 
         // This is the END of the road ------------------------------------------------------------------------------
     }
