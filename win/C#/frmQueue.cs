@@ -208,17 +208,17 @@ namespace Handbrake
                 else
                     lbl_title.Text = parsed.DVDTitle.ToString();
 
-                string chatpers = "";
+                string chapters = "";
                 if (parsed.DVDChapterStart == 0)
                 {
                     lbl_chapt.Text = "Auto";
                 }
                 else
                 {
-                    chatpers = parsed.DVDChapterStart.ToString();
+                    chapters = parsed.DVDChapterStart.ToString();
                     if (parsed.DVDChapterFinish != 0)
-                        chatpers = chatpers + " - " + parsed.DVDChapterFinish;
-                    lbl_chapt.Text = parsed.DVDChapterStart + chatpers;
+                        chapters = chapters + " - " + parsed.DVDChapterFinish;
+                    lbl_chapt.Text = chapters;
                 }
 
                 lbl_vEnc.Text = parsed.VideoEncoder;
