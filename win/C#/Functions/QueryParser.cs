@@ -219,6 +219,18 @@ namespace Handbrake.Functions
             }
         }
 
+        private Boolean q_vfr;
+        /// <summary>
+        /// Returns a boolean to indicate wither DeTelecine is on or off
+        /// </summary>
+        public Boolean VFR
+        {
+            get
+            {
+                return this.q_vfr;
+            }
+        }
+
         private Boolean q_deBlock;
         /// <summary>
         /// Returns a boolean to indicate wither DeBlock is on or off.
@@ -264,6 +276,18 @@ namespace Handbrake.Functions
             get
             {
                 return this.q_anamorphic;
+            }
+        }
+
+        private Boolean q_looseAnamorphic;
+        /// <summary>
+        /// Returns a boolean to indicate wither Anamorphic is on or off.
+        /// </summary>
+        public Boolean LooseAnamorphic
+        {
+            get
+            {
+                return this.q_looseAnamorphic;
             }
         }
 
@@ -500,6 +524,8 @@ namespace Handbrake.Functions
             Match anamorphic = Regex.Match(input, @"-p ");
             Match chapterMarkers = Regex.Match(input, @"-m");
             Match crop = Regex.Match(input, @"--crop ([0-9]):([0-9]):([0-9]):([0-9])");
+            Match vfr = Regex.Match(input, @"-V");
+            Match lanamorphic = Regex.Match(input, @"-P");
 
             //Video Settings Tab
             Match videoFramerate = Regex.Match(input, @"-r ([0-9]*)");
@@ -682,6 +708,9 @@ namespace Handbrake.Functions
                  }
                  thisQuery.q_anamorphic = anamorphic.Success;
                  thisQuery.q_chapterMarkers = chapterMarkers.Success;
+                 thisQuery.q_vfr = vfr.Success;
+                 thisQuery.q_looseAnamorphic = lanamorphic.Success;
+                
                  #endregion
 
                 //

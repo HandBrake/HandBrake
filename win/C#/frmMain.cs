@@ -709,6 +709,25 @@ namespace Handbrake
             }
         }
 
+        private void check_vfr_CheckedChanged(object sender, EventArgs e)
+        {
+            if (check_vfr.CheckState == CheckState.Checked)
+            {
+                check_detelecine.Enabled = false;
+                check_detelecine.CheckState = CheckState.Checked;
+                drp_videoFramerate.Enabled = false;
+                drp_videoFramerate.SelectedItem = "29.97";
+                lbl_vfr.Visible = true;
+            }
+            else
+            {
+                check_detelecine.Enabled = true;
+                drp_videoFramerate.Enabled = true;
+                drp_videoFramerate.SelectedItem = "Automatic";
+                lbl_vfr.Visible = false;
+            }
+        }
+
         private void CheckPixelRatio_CheckedChanged(object sender, EventArgs e)
         {
             text_width.Text = "";
@@ -716,6 +735,25 @@ namespace Handbrake
             text_width.BackColor = Color.White;
             text_height.BackColor = Color.White;
             CheckPixelRatio.BackColor = TabPage1.BackColor;
+
+            if (CheckPixelRatio.Checked)
+            {
+                check_lAnamorphic.Enabled = false;
+                check_lAnamorphic.Checked = false;
+            }
+            else
+                check_lAnamorphic.Enabled = true;
+        }
+
+        private void check_lAnamorphic_CheckedChanged(object sender, EventArgs e)
+        {
+            if (check_lAnamorphic.Checked)
+            {
+                CheckPixelRatio.Enabled = false;
+                CheckPixelRatio.Checked = false;
+            }
+            else
+                CheckPixelRatio.Enabled = true;
         }
 
         private void check_2PassEncode_CheckedChanged(object sender, EventArgs e)
@@ -1287,7 +1325,12 @@ namespace Handbrake
             string grayscale = "";
             string pixelRatio = "";
             string ChapterMarkers = "";
-            // Returns Crop Query
+            string vfr = "";
+            string deblock = "";
+            string detelecine = "";
+            string lanamorphic = "";
+
+
 
             if (cropSetting == "Auto Crop")
                 cropOut = "";
@@ -1349,7 +1392,19 @@ namespace Handbrake
             if (Check_ChapterMarkers.Checked)
                 ChapterMarkers = " -m ";
 
-            string queryPictureSettings = cropOut + subtitles + deinterlace + grayscale + pixelRatio + ChapterMarkers;
+            if (check_deblock.Checked)
+                deblock = " --deblock";
+
+            if (check_detelecine.Checked)
+                detelecine = " --detelecine";
+
+            if (check_vfr.Checked)
+                vfr = " -V ";
+
+            if (check_lAnamorphic.Checked)
+                lanamorphic = " -P ";
+
+            string queryPictureSettings = cropOut + subtitles + deinterlace + deblock + detelecine + vfr + grayscale + pixelRatio + lanamorphic + ChapterMarkers;
             #endregion
 
             // Video Settings Tab
@@ -1363,8 +1418,6 @@ namespace Handbrake
             string videoFramerate = drp_videoFramerate.Text;
             string turboH264 = "";
             string largeFile = "";
-            string deblock = "";
-            string detelecine = "";
             string denoise = "";
             string CRF = CheckCRF.CheckState.ToString();
 
@@ -1407,11 +1460,6 @@ namespace Handbrake
             if (check_largeFile.Checked)
                 largeFile = " -4 ";
 
-            if (check_deblock.Checked)
-                deblock = " --deblock";
-
-            if (check_detelecine.Checked)
-                detelecine = " --detelecine";
 
             switch (drp_deNoise.Text)
             {
@@ -1432,7 +1480,7 @@ namespace Handbrake
                     break;
             }
 
-            string queryVideoSettings = videoBitrate + videoFilesize + vidQSetting + CRF + twoPassEncoding + videoFramerate + turboH264 + largeFile + deblock + detelecine + denoise;
+            string queryVideoSettings = videoBitrate + videoFilesize + vidQSetting + CRF + twoPassEncoding + videoFramerate + turboH264 + largeFile + denoise;
             #endregion
 
             // Audio Settings Tab
@@ -1639,6 +1687,24 @@ namespace Handbrake
             else
             {
                 CheckPixelRatio.CheckState = CheckState.Unchecked;
+            }
+
+            if (presetQuery.LooseAnamorphic == true)
+            {
+                check_lAnamorphic.CheckState = CheckState.Checked;
+            }
+            else
+            {
+                check_lAnamorphic.CheckState = CheckState.Unchecked;
+            }
+
+            if (presetQuery.VFR == true)
+            {
+                check_vfr.CheckState = CheckState.Checked;
+            }
+            else
+            {
+                check_vfr.CheckState = CheckState.Unchecked;
             }
             #endregion
 
