@@ -140,6 +140,9 @@ namespace Handbrake
             this.Label32 = new System.Windows.Forms.Label();
             this.Label18 = new System.Windows.Forms.Label();
             this.TabPage3 = new System.Windows.Forms.TabPage();
+            this.lbl_ipodAtom = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.lbl_vfr = new System.Windows.Forms.Label();
             this.check_iPodAtom = new System.Windows.Forms.CheckBox();
             this.check_optimiseMP4 = new System.Windows.Forms.CheckBox();
             this.check_grayscale = new System.Windows.Forms.CheckBox();
@@ -181,7 +184,7 @@ namespace Handbrake
             this.groupBox_dest = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.treeView_presets = new System.Windows.Forms.TreeView();
-            this.lbl_vfr = new System.Windows.Forms.Label();
+            this.lbl_optimize = new System.Windows.Forms.Label();
             Label38 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
             this.frmMainMenu.SuspendLayout();
@@ -505,7 +508,7 @@ namespace Handbrake
             "24",
             "25",
             "29.97"});
-            this.drp_videoFramerate.Location = new System.Drawing.Point(133, 189);
+            this.drp_videoFramerate.Location = new System.Drawing.Point(446, 185);
             this.drp_videoFramerate.Name = "drp_videoFramerate";
             this.drp_videoFramerate.Size = new System.Drawing.Size(81, 21);
             this.drp_videoFramerate.TabIndex = 7;
@@ -1433,6 +1436,9 @@ namespace Handbrake
             // TabPage3
             // 
             this.TabPage3.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.TabPage3.Controls.Add(this.lbl_optimize);
+            this.TabPage3.Controls.Add(this.lbl_ipodAtom);
+            this.TabPage3.Controls.Add(this.label25);
             this.TabPage3.Controls.Add(this.lbl_vfr);
             this.TabPage3.Controls.Add(this.check_iPodAtom);
             this.TabPage3.Controls.Add(this.check_optimiseMP4);
@@ -1460,10 +1466,46 @@ namespace Handbrake
             this.TabPage3.TabIndex = 2;
             this.TabPage3.Text = "Video Settings";
             // 
+            // lbl_ipodAtom
+            // 
+            this.lbl_ipodAtom.AutoSize = true;
+            this.lbl_ipodAtom.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_ipodAtom.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_ipodAtom.ForeColor = System.Drawing.Color.Red;
+            this.lbl_ipodAtom.Location = new System.Drawing.Point(132, 169);
+            this.lbl_ipodAtom.Name = "lbl_ipodAtom";
+            this.lbl_ipodAtom.Size = new System.Drawing.Size(91, 12);
+            this.lbl_ipodAtom.TabIndex = 29;
+            this.lbl_ipodAtom.Text = "x264 && mp4 only";
+            this.lbl_ipodAtom.Visible = false;
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.BackColor = System.Drawing.Color.Transparent;
+            this.label25.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label25.Location = new System.Drawing.Point(304, 164);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(76, 13);
+            this.label25.TabIndex = 28;
+            this.label25.Text = "Framerate";
+            // 
+            // lbl_vfr
+            // 
+            this.lbl_vfr.AutoSize = true;
+            this.lbl_vfr.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_vfr.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_vfr.Location = new System.Drawing.Point(533, 189);
+            this.lbl_vfr.Name = "lbl_vfr";
+            this.lbl_vfr.Size = new System.Drawing.Size(52, 12);
+            this.lbl_vfr.TabIndex = 27;
+            this.lbl_vfr.Text = "(VFR On)";
+            this.lbl_vfr.Visible = false;
+            // 
             // check_iPodAtom
             // 
             this.check_iPodAtom.AutoSize = true;
-            this.check_iPodAtom.BackColor = System.Drawing.Color.DarkRed;
+            this.check_iPodAtom.BackColor = System.Drawing.Color.Transparent;
             this.check_iPodAtom.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.check_iPodAtom.Location = new System.Drawing.Point(16, 167);
             this.check_iPodAtom.Name = "check_iPodAtom";
@@ -1471,11 +1513,12 @@ namespace Handbrake
             this.check_iPodAtom.TabIndex = 26;
             this.check_iPodAtom.Text = "Add iPod Atom";
             this.check_iPodAtom.UseVisualStyleBackColor = false;
+            this.check_iPodAtom.CheckedChanged += new System.EventHandler(this.check_iPodAtom_CheckedChanged);
             // 
             // check_optimiseMP4
             // 
             this.check_optimiseMP4.AutoSize = true;
-            this.check_optimiseMP4.BackColor = System.Drawing.Color.DarkRed;
+            this.check_optimiseMP4.BackColor = System.Drawing.Color.Transparent;
             this.check_optimiseMP4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.check_optimiseMP4.Location = new System.Drawing.Point(16, 144);
             this.check_optimiseMP4.Name = "check_optimiseMP4";
@@ -1483,6 +1526,7 @@ namespace Handbrake
             this.check_optimiseMP4.TabIndex = 25;
             this.check_optimiseMP4.Text = "Optimize MP4 for streaming";
             this.check_optimiseMP4.UseVisualStyleBackColor = false;
+            this.check_optimiseMP4.CheckedChanged += new System.EventHandler(this.check_optimiseMP4_CheckedChanged);
             // 
             // check_grayscale
             // 
@@ -1568,7 +1612,7 @@ namespace Handbrake
             this.Label46.AutoSize = true;
             this.Label46.BackColor = System.Drawing.Color.Transparent;
             this.Label46.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label46.Location = new System.Drawing.Point(13, 192);
+            this.Label46.Location = new System.Drawing.Point(304, 188);
             this.Label46.Name = "Label46";
             this.Label46.Size = new System.Drawing.Size(107, 13);
             this.Label46.TabIndex = 6;
@@ -1972,17 +2016,18 @@ namespace Handbrake
             this.treeView_presets.TabIndex = 2;
             this.treeView_presets.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_presets_AfterSelect);
             // 
-            // lbl_vfr
+            // lbl_optimize
             // 
-            this.lbl_vfr.AutoSize = true;
-            this.lbl_vfr.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_vfr.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_vfr.Location = new System.Drawing.Point(220, 193);
-            this.lbl_vfr.Name = "lbl_vfr";
-            this.lbl_vfr.Size = new System.Drawing.Size(52, 12);
-            this.lbl_vfr.TabIndex = 27;
-            this.lbl_vfr.Text = "(VFR On)";
-            this.lbl_vfr.Visible = false;
+            this.lbl_optimize.AutoSize = true;
+            this.lbl_optimize.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_optimize.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_optimize.ForeColor = System.Drawing.Color.Red;
+            this.lbl_optimize.Location = new System.Drawing.Point(206, 146);
+            this.lbl_optimize.Name = "lbl_optimize";
+            this.lbl_optimize.Size = new System.Drawing.Size(91, 12);
+            this.lbl_optimize.TabIndex = 30;
+            this.lbl_optimize.Text = "x264 && mp4 only";
+            this.lbl_optimize.Visible = false;
             // 
             // frmMain
             // 
@@ -2188,6 +2233,9 @@ namespace Handbrake
         internal System.Windows.Forms.CheckBox check_iPodAtom;
         private System.Windows.Forms.CheckBox check_optimiseMP4;
         internal System.Windows.Forms.Label lbl_vfr;
+        internal System.Windows.Forms.Label lbl_ipodAtom;
+        internal System.Windows.Forms.Label label25;
+        internal System.Windows.Forms.Label lbl_optimize;
 
     }
 }

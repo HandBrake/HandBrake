@@ -351,6 +351,30 @@ namespace Handbrake.Functions
             }
         }
 
+        private Boolean q_ipodAtom;
+        /// <summary>
+        /// Returns a boolean to indicate wither Larger MP4 files is on or off.
+        /// </summary>
+        public Boolean IpodAtom
+        {
+            get
+            {
+                return this.q_ipodAtom;
+            }
+        }
+
+        private Boolean q_optimizeMp4;
+        /// <summary>
+        /// Returns a boolean to indicate wither Larger MP4 files is on or off.
+        /// </summary>
+        public Boolean OptimizeMP4
+        {
+            get
+            {
+                return this.q_optimizeMp4;
+            }
+        }
+
         private string q_videoFramerate;
         /// <summary>
         /// Returns a string with the video Framerate
@@ -537,7 +561,9 @@ namespace Handbrake.Functions
             Match turboFirstPass = Regex.Match(input, @"-T");
             Match grayscale = Regex.Match(input, @"-g");
             Match largerMp4 = Regex.Match(input, @"-4");
-
+            Match ipodAtom = Regex.Match(input, @"-I");
+            Match optimizeMP4 = Regex.Match(input, @"-O");
+                
             //Audio Settings Tab
             Match subtitles = Regex.Match(input, @"-s ([0-9]*)");
             Match audioBitrate = Regex.Match(input, @"-B ([0-9]*)");
@@ -561,9 +587,7 @@ namespace Handbrake.Functions
    
                 thisQuery.q_source = source.ToString().Replace("-i ", "").Replace("\"", "");
                 if (title.Success != false)
-                {
                     thisQuery.q_dvdTitle = int.Parse(title.ToString().Replace("-t ", ""));
-                }
 
                 if (chapters.Success != false)
                 {
@@ -574,10 +598,8 @@ namespace Handbrake.Functions
                  }
 
                  if (format.Success != false)
-                 {
-                     
                      thisQuery.q_format = format.ToString().Replace("-f ", "");
-                 }
+
                 #endregion
 
                 //
@@ -636,13 +658,11 @@ namespace Handbrake.Functions
 
 
                  if (width.Success != false)
-                 {
                     thisQuery.q_videoWidth = int.Parse(width.ToString().Replace("-w ", ""));
-                 }
+
                  if (height.Success != false)
-                 {
                     thisQuery.q_videoHeight = int.Parse(height.ToString().Replace("-l ", ""));
-                 }
+
                  #endregion
 
                 //
@@ -722,21 +742,14 @@ namespace Handbrake.Functions
                 thisQuery.q_turboFirst = turboFirstPass.Success;
                 thisQuery.q_largeMp4 = largerMp4.Success;
                 if (videoFramerate.Success != false)
-                {
                     thisQuery.q_videoFramerate = videoFramerate.ToString().Replace("-r ", "");
-                }
                 else
-                {
                     thisQuery.q_videoFramerate = "Automatic";
-                }
+
                 if (videoBitrate.Success != false)
-                {
                     thisQuery.q_avgBitrate = videoBitrate.ToString().Replace("-b ", "");
-                }
                 if (videoFilesize.Success != false)
-                {
                     thisQuery.q_videoTargetSize = videoFilesize.ToString().Replace("-S ", "");
-                }
 
                 double qConvert = 0;
                 if (videoQuality.Success != false)
@@ -746,6 +759,9 @@ namespace Handbrake.Functions
                     thisQuery.q_videoQuality = int.Parse(qConvert.ToString());
                 }
                 thisQuery.q_crf = CRF.Success;
+                thisQuery.q_ipodAtom = ipodAtom.Success;
+                thisQuery.q_optimizeMp4 = optimizeMP4.Success;
+
                 #endregion
 
                 //
@@ -753,21 +769,15 @@ namespace Handbrake.Functions
                 //
                 #region Audio
                 if (audioBitrate.Success != false)
-                {
                     thisQuery.q_audioBitrate = audioBitrate.ToString().Replace("-B ", "");
-                }
+
                 if (audioSampleRate.Success != false)
-                {
                     thisQuery.q_audioSamplerate = audioSampleRate.ToString().Replace("-R ", "");
-                }
+
                 if (audioChannel.Success != false)
-                {
                     thisQuery.q_audioTrack1 = audioChannel.ToString().Replace("-a ", "");
-                }
                 else
-                {
                     thisQuery.q_audioTrack1 = "Automatic";
-                }
 
                 thisQuery.q_audioTrackMix = "Automatic";
                 if (audioChannelsMix.Success != false)
@@ -796,13 +806,10 @@ namespace Handbrake.Functions
                    
                 }
                 if (subtitles.Success != false)
-                {
                     thisQuery.q_subtitles = subtitles.ToString().Replace("-s ", "");
-                }
                 else
-                {
                     thisQuery.q_subtitles = "None";
-                }
+
                 #endregion
 
                 //

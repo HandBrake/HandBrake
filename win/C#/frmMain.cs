@@ -787,6 +787,32 @@ namespace Handbrake
             }
         }
 
+        private void check_iPodAtom_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!text_destination.Text.Contains(".mp4"))
+            {
+                lbl_ipodAtom.Visible = true;
+                check_iPodAtom.CheckState = CheckState.Unchecked;
+            }
+            else
+            {
+                lbl_ipodAtom.Visible = false;
+            }
+        }
+
+        private void check_optimiseMP4_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!text_destination.Text.Contains(".mp4"))
+            {
+                lbl_optimize.Visible = true;
+                check_optimiseMP4.CheckState = CheckState.Unchecked;
+            }
+            else
+            {
+                lbl_optimize.Visible = false;
+            }
+        }
+
         private void drp_dvdtitle_Click(object sender, EventArgs e)
         {
             if (drp_dvdtitle.Items.Count == 0)
@@ -894,6 +920,9 @@ namespace Handbrake
                 check_turbo.Enabled = false;
                 h264Tab.Enabled = false;
                 rtf_h264advanced.Text = "";
+                check_iPodAtom.Enabled = false;
+                check_iPodAtom.Checked = false;
+                lbl_ipodAtom.Visible = false;
             }
             else
             {
@@ -903,6 +932,8 @@ namespace Handbrake
                     check_turbo.Enabled = true;
                 }
                 h264Tab.Enabled = true;
+                check_iPodAtom.Enabled = true;
+                lbl_ipodAtom.Visible = false;
             }
 
         }
@@ -1419,9 +1450,11 @@ namespace Handbrake
             string turboH264 = "";
             string largeFile = "";
             string denoise = "";
-            string CRF = CheckCRF.CheckState.ToString();
+            string CRF = "";
+            string ipodAtom = "";
+            string optimizeMP4 = "";
 
-            if (CRF == "Checked")
+            if (CheckCRF.Checked)
                 CRF = " -Q ";
             else
                 CRF = "";
@@ -1480,7 +1513,14 @@ namespace Handbrake
                     break;
             }
 
-            string queryVideoSettings = videoBitrate + videoFilesize + vidQSetting + CRF + twoPassEncoding + videoFramerate + turboH264 + largeFile + denoise;
+            if (check_iPodAtom.Checked)
+                ipodAtom = " -I ";
+
+            if (check_optimiseMP4.Checked)
+                optimizeMP4 = " -O ";
+
+
+            string queryVideoSettings = videoBitrate + videoFilesize + vidQSetting + CRF + twoPassEncoding + videoFramerate + turboH264 + ipodAtom + optimizeMP4 + largeFile + denoise;
             #endregion
 
             // Audio Settings Tab
@@ -1620,10 +1660,7 @@ namespace Handbrake
             drp_videoEncoder.Text = presetQuery.VideoEncoder;
             drp_audioCodec.Text = presetQuery.AudioEncoder;
             if (presetQuery.Width != 0)
-            {
                 text_width.Text = presetQuery.Width.ToString();
-
-            }
             else
             {
                 text_width.Text = "";
@@ -1631,9 +1668,7 @@ namespace Handbrake
             }
 
             if (presetQuery.Height != 0)
-            {
                 text_height.Text = presetQuery.Height.ToString();
-            }
             else
             {
                 text_height.Text = "";
@@ -1653,59 +1688,35 @@ namespace Handbrake
             drp_deNoise.Text = presetQuery.DeNoise;
 
             if (presetQuery.DeTelecine == true)
-            {
                 check_detelecine.CheckState = CheckState.Checked;
-            }
             else
-            {
                 check_detelecine.CheckState = CheckState.Unchecked;
-            }
 
 
             if (presetQuery.DeBlock == true)
-            {
                 check_deblock.CheckState = CheckState.Checked;
-            }
             else
-            {
                 check_deblock.CheckState = CheckState.Unchecked;
-            }
 
             if (presetQuery.ChapterMarkers == true)
-            {
                 Check_ChapterMarkers.CheckState = CheckState.Checked;
-            }
             else
-            {
                 Check_ChapterMarkers.CheckState = CheckState.Unchecked;
-            }
 
             if (presetQuery.Anamorphic == true)
-            {
                 CheckPixelRatio.CheckState = CheckState.Checked;
-            }
             else
-            {
                 CheckPixelRatio.CheckState = CheckState.Unchecked;
-            }
 
             if (presetQuery.LooseAnamorphic == true)
-            {
                 check_lAnamorphic.CheckState = CheckState.Checked;
-            }
             else
-            {
                 check_lAnamorphic.CheckState = CheckState.Unchecked;
-            }
 
             if (presetQuery.VFR == true)
-            {
                 check_vfr.CheckState = CheckState.Checked;
-            }
             else
-            {
                 check_vfr.CheckState = CheckState.Unchecked;
-            }
             #endregion
 
             // Video Settings Tab
@@ -1721,50 +1732,42 @@ namespace Handbrake
             }
 
             if (presetQuery.TwoPass == true)
-            {
                 check_2PassEncode.CheckState = CheckState.Checked;
-            }
             else
-            {
                 check_2PassEncode.CheckState = CheckState.Unchecked;
-            }
 
             if (presetQuery.Grayscale == true)
-            {
                 check_grayscale.CheckState = CheckState.Checked;
-            }
             else
-            {
                 check_grayscale.CheckState = CheckState.Unchecked;
-            }
 
             drp_videoFramerate.Text = presetQuery.VideoFramerate;
 
             if (presetQuery.TurboFirstPass == true)
-            {
                 check_turbo.CheckState = CheckState.Checked;
-            }
             else
-            {
                 check_turbo.CheckState = CheckState.Unchecked;
-            }
 
             if (presetQuery.LargeMP4 == true)
-            {
                 check_largeFile.CheckState = CheckState.Checked;
-            }
             else
-            {
                 check_largeFile.CheckState = CheckState.Unchecked;
-            }
+
             if (presetQuery.CRF == true)
-            {
                 CheckCRF.CheckState = CheckState.Checked;
-            }
             else
-            {
                 CheckCRF.CheckState = CheckState.Unchecked;
-            }
+
+            if (presetQuery.IpodAtom == true)
+                check_iPodAtom.CheckState = CheckState.Checked;
+            else
+                check_iPodAtom.CheckState = CheckState.Unchecked;
+
+            if (presetQuery.OptimizeMP4 == true)
+                check_optimiseMP4.CheckState = CheckState.Checked;
+            else
+                check_optimiseMP4.CheckState = CheckState.Unchecked;
+
             #endregion
 
             // Audio Settings Tab
@@ -1821,6 +1824,7 @@ namespace Handbrake
         }
 
         #endregion
+
 
         // This is the END of the road ------------------------------------------------------------------------------
     }
