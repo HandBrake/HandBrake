@@ -4,7 +4,7 @@ using System.Threading;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.Globalization;
- 
+
 
 namespace Handbrake.Functions
 {
@@ -14,10 +14,10 @@ namespace Handbrake.Functions
         /// CLI output is based on en-US locale,
         /// we use this CultureInfo as IFormatProvider to *.Parse() calls
         /// </summary>
-        static readonly public CultureInfo Culture = new CultureInfo("en-US", false); 
+        static readonly public CultureInfo Culture = new CultureInfo("en-US", false);
 
         Process hbProc = new Process();
-        
+
         public Process runCli(object s, string query, bool stderr, bool stdout, bool useShellExec, bool noWindow)
         {
             try
@@ -29,7 +29,30 @@ namespace Handbrake.Functions
                 hbProc.StartInfo.RedirectStandardError = stderr;
                 hbProc.StartInfo.UseShellExecute = useShellExec;
                 hbProc.StartInfo.CreateNoWindow = noWindow;
-                hbProc.Start();   
+                hbProc.Start();
+
+                // Set the process Priority 
+                switch (Properties.Settings.Default.processPriority)
+                {
+                    case "Realtime":
+                        hbProc.PriorityClass = ProcessPriorityClass.RealTime;
+                        break;
+                    case "High":
+                        hbProc.PriorityClass = ProcessPriorityClass.High;
+                        break;
+                    case "Above Normal":
+                        hbProc.PriorityClass = ProcessPriorityClass.AboveNormal;
+                        break;
+                    case "Normal":
+                        hbProc.PriorityClass = ProcessPriorityClass.Normal;
+                        break;
+                    case "Low":
+                        hbProc.PriorityClass = ProcessPriorityClass.Idle;
+                        break;
+                    default:
+                        hbProc.PriorityClass = ProcessPriorityClass.BelowNormal;
+                        break;
+                }
             }
             catch
             {
@@ -59,6 +82,6 @@ namespace Handbrake.Functions
         public void setNull()
         {
             hbProc = new Process();
-        }   
+        }
     }
 }
