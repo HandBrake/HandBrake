@@ -81,8 +81,8 @@ diff -Naur a52dec_original/liba52/downmix.c a52dec_patched/liba52/downmix.c
 +			Lss = (LEVEL_SQRT_3_4 * Ls) - (LEVEL_SQRT_1_2 * Rs);
 +			Rss = -(LEVEL_SQRT_1_2 * Ls) + (LEVEL_SQRT_3_4 * Rs);
 +		
-+			samples[i] = Lt + Lss;
-+			samples[i + 256] = Rt + Rss;
++			samples[i] = bias + Lt + Lss;
++			samples[i + 256] = bias + Rt + Rss;
 +	
 +		}
 +
