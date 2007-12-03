@@ -11,7 +11,7 @@ namespace Handbrake.Functions
 
         // All the Main Window GUI options
         #region Varibles
- 
+
         private string q_source;
         /// <summary>
         /// Returns a String 
@@ -399,7 +399,7 @@ namespace Handbrake.Functions
             }
         }
 
-        private string  q_videoTargetSize;
+        private string q_videoTargetSize;
         /// <summary>
         /// Returns a string with the video target size
         /// </summary>
@@ -524,14 +524,14 @@ namespace Handbrake.Functions
         {
             QueryParser thisQuery = new QueryParser();
 
-            #region reg exp 
+            #region reg exp
             //Source
             Regex r1 = new Regex(@"(-i)(?:\s\"")([a-zA-Z0-9:\\\s\.]+)(?:\"")");
             Match source = r1.Match(input.Replace('"', '\"'));
             Match title = Regex.Match(input, @"-t ([0-9]*)");
             Match chapters = Regex.Match(input, @"-c ([0-9-]*)");
             Match format = Regex.Match(input, @"-f ([a-z0-9a-z0-9a-z0-9]*)");
-  
+
             //Destination
             Regex r2 = new Regex(@"(-o)(?:\s\"")([a-zA-Z0-9:\\\s\.]+)(?:\"")");
             Match destination = r2.Match(input.Replace('"', '\"'));
@@ -563,7 +563,7 @@ namespace Handbrake.Functions
             Match largerMp4 = Regex.Match(input, @"-4");
             Match ipodAtom = Regex.Match(input, @"-I");
             Match optimizeMP4 = Regex.Match(input, @"-O");
-                
+
             //Audio Settings Tab
             Match subtitles = Regex.Match(input, @"-s ([0-9]*)");
             Match audioBitrate = Regex.Match(input, @"-B ([0-9]*)");
@@ -573,7 +573,7 @@ namespace Handbrake.Functions
 
             //H264 Tab
             Match x264 = Regex.Match(input, @"-x ([,a-zA-Z0-9=:-]*)");
-            
+
             //Program Options
             Match verbose = Regex.Match(input, @"-v");
             #endregion
@@ -584,21 +584,22 @@ namespace Handbrake.Functions
                 // Source
                 //
                 #region Source Tab
-   
+
                 thisQuery.q_source = source.ToString().Replace("-i ", "").Replace("\"", "");
                 if (title.Success != false)
                     thisQuery.q_dvdTitle = int.Parse(title.ToString().Replace("-t ", ""));
 
                 if (chapters.Success != false)
                 {
-                     string[] actTitles = new string[2];
-                     actTitles = chapters.ToString().Replace("-c ", "").Split('-');
-                     thisQuery.q_chaptersStart = int.Parse(actTitles[0]);
-                     thisQuery.q_chaptersFinish = int.Parse(actTitles[1]);
-                 }
+                    string[] actTitles = new string[2];
+                    actTitles = chapters.ToString().Replace("-c ", "").Split('-');
+                    thisQuery.q_chaptersStart = int.Parse(actTitles[0]);
+                    if (actTitles.Length > 1)
+                        thisQuery.q_chaptersFinish = int.Parse(actTitles[1]);
+                }
 
-                 if (format.Success != false)
-                     thisQuery.q_format = format.ToString().Replace("-f ", "");
+                if (format.Success != false)
+                    thisQuery.q_format = format.ToString().Replace("-f ", "");
 
                 #endregion
 
@@ -606,14 +607,14 @@ namespace Handbrake.Functions
                 // Destination
                 //
                 #region Destination
-                 thisQuery.q_destination = destination.ToString().Replace("-o ","").Replace("\"", "");
+                thisQuery.q_destination = destination.ToString().Replace("-o ", "").Replace("\"", "");
 
-                 string videoEncoderConvertion;
-                 string audioEncoderConvertion;
+                string videoEncoderConvertion;
+                string audioEncoderConvertion;
 
-                 videoEncoderConvertion = videoEncoder.ToString().Replace("-e ", "");
-                 switch (videoEncoderConvertion)
-                 {
+                videoEncoderConvertion = videoEncoder.ToString().Replace("-e ", "");
+                switch (videoEncoderConvertion)
+                {
                     case "ffmpeg":
                         videoEncoderConvertion = "Mpeg 4";
                         break;
@@ -632,12 +633,12 @@ namespace Handbrake.Functions
                     default:
                         videoEncoderConvertion = "Mpeg 4";
                         break;
-                 }
-                 thisQuery.q_videoEncoder = videoEncoderConvertion;
+                }
+                thisQuery.q_videoEncoder = videoEncoderConvertion;
 
-                 audioEncoderConvertion = audioEncoder.ToString().Replace("-E ", "");
-                 switch (audioEncoderConvertion)
-                 {
+                audioEncoderConvertion = audioEncoder.ToString().Replace("-E ", "");
+                switch (audioEncoderConvertion)
+                {
                     case "faac":
                         audioEncoderConvertion = "AAC";
                         break;
@@ -653,24 +654,24 @@ namespace Handbrake.Functions
                     default:
                         audioEncoderConvertion = "AAC";
                         break;
-                 }
-                 thisQuery.q_audioEncoder =audioEncoderConvertion;
+                }
+                thisQuery.q_audioEncoder = audioEncoderConvertion;
 
 
-                 if (width.Success != false)
+                if (width.Success != false)
                     thisQuery.q_videoWidth = int.Parse(width.ToString().Replace("-w ", ""));
 
-                 if (height.Success != false)
+                if (height.Success != false)
                     thisQuery.q_videoHeight = int.Parse(height.ToString().Replace("-l ", ""));
 
-                 #endregion
+                #endregion
 
                 //
                 //Picture Settings Tab
                 //
                 #region Picture Tab
-                 if (crop.Success != false)
-                 {
+                if (crop.Success != false)
+                {
                     thisQuery.q_cropValues = crop.ToString().Replace("--crop ", "");
                     string[] actCropValues = new string[3];
                     actCropValues = thisQuery.q_cropValues.Split(':');
@@ -678,60 +679,60 @@ namespace Handbrake.Functions
                     thisQuery.q_cropbottom = actCropValues[1];
                     thisQuery.q_cropLeft = actCropValues[2];
                     thisQuery.q_cropRight = actCropValues[3];
-                 }
+                }
 
-                 thisQuery.q_detelecine = detelecine.Success;
-                 thisQuery.q_deBlock = deblock.Success;
+                thisQuery.q_detelecine = detelecine.Success;
+                thisQuery.q_deBlock = deblock.Success;
 
-                 thisQuery.q_deinterlace = "None";
-                 if (deinterlace.Success != false)
-                 {
-                     switch (deinterlace.ToString().Replace("--deinterlace=", ""))
-                     {
-                         case "fast":
-                             thisQuery.q_deinterlace = "Original (Fast)";
-                             break;
-                         case "slow":
-                             thisQuery.q_deinterlace = "yadif (Slow)";
-                             break;
-                         case "slower":
-                             thisQuery.q_deinterlace = "yadif + mcdeint (Slower)";
-                             break;
-                         case "slowest":
-                             thisQuery.q_deinterlace = "yadif + mcdeint (Slowest)";
-                             break;
-                         default:
-                             thisQuery.q_deinterlace = "None";
-                             break;
-                     }
-                 }
+                thisQuery.q_deinterlace = "None";
+                if (deinterlace.Success != false)
+                {
+                    switch (deinterlace.ToString().Replace("--deinterlace=", ""))
+                    {
+                        case "fast":
+                            thisQuery.q_deinterlace = "Original (Fast)";
+                            break;
+                        case "slow":
+                            thisQuery.q_deinterlace = "yadif (Slow)";
+                            break;
+                        case "slower":
+                            thisQuery.q_deinterlace = "yadif + mcdeint (Slower)";
+                            break;
+                        case "slowest":
+                            thisQuery.q_deinterlace = "yadif + mcdeint (Slowest)";
+                            break;
+                        default:
+                            thisQuery.q_deinterlace = "None";
+                            break;
+                    }
+                }
 
-                 thisQuery.q_denoise = "None";
-                 if (denoise.Success != false)
-                 {
-                     switch (denoise.ToString().Replace("--denoise=", ""))
-                     {
-                         case "weak":
-                             thisQuery.q_denoise = "Weak";
-                             break;
-                         case "medium":
-                             thisQuery.q_denoise = "Medium";
-                             break;
-                         case "strong":
-                             thisQuery.q_denoise = "Strong";
-                             break;
-                         default:
-                             thisQuery.q_denoise = "None";
-                             break;
-                     }
-                    
-                 }
-                 thisQuery.q_anamorphic = anamorphic.Success;
-                 thisQuery.q_chapterMarkers = chapterMarkers.Success;
-                 thisQuery.q_vfr = vfr.Success;
-                 thisQuery.q_looseAnamorphic = lanamorphic.Success;
-                
-                 #endregion
+                thisQuery.q_denoise = "None";
+                if (denoise.Success != false)
+                {
+                    switch (denoise.ToString().Replace("--denoise=", ""))
+                    {
+                        case "weak":
+                            thisQuery.q_denoise = "Weak";
+                            break;
+                        case "medium":
+                            thisQuery.q_denoise = "Medium";
+                            break;
+                        case "strong":
+                            thisQuery.q_denoise = "Strong";
+                            break;
+                        default:
+                            thisQuery.q_denoise = "None";
+                            break;
+                    }
+
+                }
+                thisQuery.q_anamorphic = anamorphic.Success;
+                thisQuery.q_chapterMarkers = chapterMarkers.Success;
+                thisQuery.q_vfr = vfr.Success;
+                thisQuery.q_looseAnamorphic = lanamorphic.Success;
+
+                #endregion
 
                 //
                 //Video Settings Tab
@@ -782,7 +783,7 @@ namespace Handbrake.Functions
                 thisQuery.q_audioTrackMix = "Automatic";
                 if (audioChannelsMix.Success != false)
                 {
-                    switch (audioChannelsMix.ToString().Replace("-6 ", "").Replace(" ",""))
+                    switch (audioChannelsMix.ToString().Replace("-6 ", "").Replace(" ", ""))
                     {
                         case "mono":
                             thisQuery.q_audioTrackMix = "Mono";
@@ -803,7 +804,7 @@ namespace Handbrake.Functions
                             thisQuery.q_audioTrackMix = "Automatic";
                             break;
                     }
-                   
+
                 }
                 if (subtitles.Success != false)
                     thisQuery.q_subtitles = subtitles.ToString().Replace("-s ", "");
