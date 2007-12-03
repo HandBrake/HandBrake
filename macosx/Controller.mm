@@ -520,8 +520,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		currentScanCount = checkScanCount;
 		//[fScanController Cancel: NULL];
 		[fScanIndicator setIndeterminate: NO];
-		[fScanIndicator setDoubleValue: 0.0];
-		[fScanIndicator setHidden: YES];
+		//[fScanIndicator setDoubleValue: 0.0];
+		//[fScanIndicator setHidden: YES];
 
 		[self showNewScan: NULL];
 	}
@@ -537,12 +537,18 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 #define p s.param.scanning			
         case HB_STATE_SCANNING:
 		{
+            
             [fSrcDVD2Field setStringValue: [NSString stringWithFormat:
-                _( @"Scanning title %d of %d..." ),
-                p.title_cur, p.title_count]];
-            [fScanIndicator setIndeterminate: NO];
-			[fScanIndicator setDoubleValue: 100.0 * ( p.title_cur - 1 ) /
-                p.title_count];
+                                            _( @"Scanning title %d of %d..." ),
+                                            p.title_cur, p.title_count]];
+            float scanprogress_total;
+            scanprogress_total = ( p.title_cur - 1 ) / p.title_count;
+            /* FIX ME: currently having an issue showing progress on the scan
+             * indicator, for now just set to barber pole.
+             */
+            //[fScanIndicator setHidden: NO];
+            [fScanIndicator setIndeterminate: YES];
+            //[fScanIndicator setDoubleValue: 100.0 * scanprogress_total];
             break;
 		}
 #undef p
@@ -553,7 +559,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 			
 			[fScanIndicator setIndeterminate: NO];
             [fScanIndicator setDoubleValue: 0.0];
-			[fScanIndicator setHidden: YES];
+			//[fScanIndicator setHidden: YES];
 			[self showNewScan: NULL];
             [toolbar validateVisibleItems];
 			break;
@@ -1172,7 +1178,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     {
         /* We setup the scan status in the main window to indicate a source title scan */
         [fSrcDVD2Field setStringValue: _( @"Opening a new source title ..." )];
-		[fScanIndicator setHidden: NO];
+		//[fScanIndicator setHidden: NO];
 	    [fScanIndicator setIndeterminate: YES];
         [fScanIndicator startAnimation: nil];
 		
@@ -1202,7 +1208,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     {
         scanTitleNum = 0;
     }
+    //[fScanIndicator setHidden: NO];
     hb_scan( fHandle, [path UTF8String], scanTitleNum );
+    
 }
 
 - (IBAction) showNewScan:(id)sender

@@ -1,61 +1,131 @@
-{
-    IBClasses = (
-        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {
-            ACTIONS = {
-                X264AdvancedOptionsChanged = id; 
-                X264AdvancedOptionsSet = id; 
-                X264AdvancedOptionsSetCurrentSettings = id; 
-                X264AdvancedOptionsStandardizeOptString = id; 
-            }; 
-            CLASS = HBAdvancedController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                fDisplayX264Options = NSTextField; 
-                fDisplayX264OptionsLabel = NSTextField; 
-                fEmptyView = NSView; 
-                fX264opt8x8dctLabel = NSTextField; 
-                fX264opt8x8dctSwitch = NSButton; 
-                fX264optAlphaDeblockPopUp = NSPopUpButton; 
-                fX264optAnalyseLabel = NSTextField; 
-                fX264optAnalysePopUp = NSPopUpButton; 
-                fX264optBPyramidLabel = NSTextField; 
-                fX264optBPyramidSwitch = NSButton; 
-                fX264optBRDOLabel = NSTextField; 
-                fX264optBRDOSwitch = NSButton; 
-                fX264optBetaDeblockPopUp = NSPopUpButton; 
-                fX264optBframesLabel = NSTextField; 
-                fX264optBframesPopUp = NSPopUpButton; 
-                fX264optBiMELabel = NSTextField; 
-                fX264optBiMESwitch = NSButton; 
-                fX264optCabacLabel = NSTextField; 
-                fX264optCabacSwitch = NSButton; 
-                fX264optDeblockLabel = NSTextField; 
-                fX264optDirectPredLabel = NSTextField; 
-                fX264optDirectPredPopUp = NSPopUpButton; 
-                fX264optMERangeLabel = NSTextField; 
-                fX264optMERangePopUp = NSPopUpButton; 
-                fX264optMixedRefsLabel = NSTextField; 
-                fX264optMixedRefsSwitch = NSButton; 
-                fX264optMotionEstLabel = NSTextField; 
-                fX264optMotionEstPopUp = NSPopUpButton; 
-                fX264optNfpskipLabel = NSTextField; 
-                fX264optNfpskipSwitch = NSButton; 
-                fX264optNodctdcmtLabel = NSTextField; 
-                fX264optNodctdcmtSwitch = NSButton; 
-                fX264optRefLabel = NSTextField; 
-                fX264optRefPopUp = NSPopUpButton; 
-                fX264optSubmeLabel = NSTextField; 
-                fX264optSubmePopUp = NSPopUpButton; 
-                fX264optTrellisLabel = NSTextField; 
-                fX264optTrellisPopUp = NSPopUpButton; 
-                fX264optView = NSView; 
-                fX264optViewTitleLabel = NSTextField; 
-                fX264optWeightBLabel = NSTextField; 
-                fX264optWeightBSwitch = NSButton; 
-            }; 
-            SUPERCLASS = NSObject; 
-        }
-    ); 
-    IBVersion = 1; 
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IBClasses</key>
+	<array>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>X264AdvancedOptionsChanged</key>
+				<string>id</string>
+				<key>X264AdvancedOptionsSet</key>
+				<string>id</string>
+				<key>X264AdvancedOptionsSetCurrentSettings</key>
+				<string>id</string>
+				<key>X264AdvancedOptionsStandardizeOptString</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>HBAdvancedController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>fDisplayX264Options</key>
+				<string>NSTextField</string>
+				<key>fDisplayX264OptionsLabel</key>
+				<string>NSTextField</string>
+				<key>fEmptyView</key>
+				<string>NSView</string>
+				<key>fX264opt8x8dctLabel</key>
+				<string>NSTextField</string>
+				<key>fX264opt8x8dctSwitch</key>
+				<string>NSButton</string>
+				<key>fX264optAlphaDeblockPopUp</key>
+				<string>NSPopUpButton</string>
+				<key>fX264optAnalyseLabel</key>
+				<string>NSTextField</string>
+				<key>fX264optAnalysePopUp</key>
+				<string>NSPopUpButton</string>
+				<key>fX264optBPyramidLabel</key>
+				<string>NSTextField</string>
+				<key>fX264optBPyramidSwitch</key>
+				<string>NSButton</string>
+				<key>fX264optBRDOLabel</key>
+				<string>NSTextField</string>
+				<key>fX264optBRDOSwitch</key>
+				<string>NSButton</string>
+				<key>fX264optBetaDeblockPopUp</key>
+				<string>NSPopUpButton</string>
+				<key>fX264optBframesLabel</key>
+				<string>NSTextField</string>
+				<key>fX264optBframesPopUp</key>
+				<string>NSPopUpButton</string>
+				<key>fX264optBiMELabel</key>
+				<string>NSTextField</string>
+				<key>fX264optBiMESwitch</key>
+				<string>NSButton</string>
+				<key>fX264optCabacLabel</key>
+				<string>NSTextField</string>
+				<key>fX264optCabacSwitch</key>
+				<string>NSButton</string>
+				<key>fX264optDeblockLabel</key>
+				<string>NSTextField</string>
+				<key>fX264optDirectPredLabel</key>
+				<string>NSTextField</string>
+				<key>fX264optDirectPredPopUp</key>
+				<string>NSPopUpButton</string>
+				<key>fX264optMERangeLabel</key>
+				<string>NSTextField</string>
+				<key>fX264optMERangePopUp</key>
+				<string>NSPopUpButton</string>
+				<key>fX264optMixedRefsLabel</key>
+				<string>NSTextField</string>
+				<key>fX264optMixedRefsSwitch</key>
+				<string>NSButton</string>
+				<key>fX264optMotionEstLabel</key>
+				<string>NSTextField</string>
+				<key>fX264optMotionEstPopUp</key>
+				<string>NSPopUpButton</string>
+				<key>fX264optNfpskipLabel</key>
+				<string>NSTextField</string>
+				<key>fX264optNfpskipSwitch</key>
+				<string>NSButton</string>
+				<key>fX264optNodctdcmtLabel</key>
+				<string>NSTextField</string>
+				<key>fX264optNodctdcmtSwitch</key>
+				<string>NSButton</string>
+				<key>fX264optRefLabel</key>
+				<string>NSTextField</string>
+				<key>fX264optRefPopUp</key>
+				<string>NSPopUpButton</string>
+				<key>fX264optSubmeLabel</key>
+				<string>NSTextField</string>
+				<key>fX264optSubmePopUp</key>
+				<string>NSPopUpButton</string>
+				<key>fX264optTrellisLabel</key>
+				<string>NSTextField</string>
+				<key>fX264optTrellisPopUp</key>
+				<string>NSPopUpButton</string>
+				<key>fX264optView</key>
+				<string>NSView</string>
+				<key>fX264optViewTitleLabel</key>
+				<string>NSTextField</string>
+				<key>fX264optWeightBLabel</key>
+				<string>NSTextField</string>
+				<key>fX264optWeightBSwitch</key>
+				<string>NSButton</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>FirstResponder</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>NSObject</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+		</dict>
+	</array>
+	<key>IBVersion</key>
+	<string>1</string>
+</dict>
+</plist>
