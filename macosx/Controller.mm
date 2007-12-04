@@ -518,11 +518,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	{
 		
 		currentScanCount = checkScanCount;
-		//[fScanController Cancel: NULL];
-		[fScanIndicator setIndeterminate: NO];
-		//[fScanIndicator setDoubleValue: 0.0];
-		//[fScanIndicator setHidden: YES];
-
 		[self showNewScan: NULL];
 	}
 	
@@ -544,10 +539,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             float scanprogress_total;
             scanprogress_total = ( p.title_cur - 1 ) / p.title_count;
             /* FIX ME: currently having an issue showing progress on the scan
-             * indicator, for now just set to barber pole.
+             * indicator ( fScanIndicator ), for now just set to barber pole (indeterminate) in -performScan
+             * and stop indeterminate in -showNewScan .
              */
             //[fScanIndicator setHidden: NO];
-            [fScanIndicator setIndeterminate: YES];
             //[fScanIndicator setDoubleValue: 100.0 * scanprogress_total];
             break;
 		}
@@ -556,10 +551,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 #define p s.param.scandone
         case HB_STATE_SCANDONE:
         {
-			
-			[fScanIndicator setIndeterminate: NO];
-            [fScanIndicator setDoubleValue: 0.0];
-			//[fScanIndicator setHidden: YES];
 			[self showNewScan: NULL];
             [toolbar validateVisibleItems];
 			break;
@@ -1208,14 +1199,23 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     {
         scanTitleNum = 0;
     }
-    //[fScanIndicator setHidden: NO];
+    
+    [fSrcDVD2Field setStringValue: [NSString stringWithFormat: @"Scanning new source ..."]];
+    /* due to issue with progress in the scan indicator, we are starting the
+    indeterminate animation here */
+    [fScanIndicator startAnimation: self];
+    /* we actually pass the scan off to libhb here */
     hb_scan( fHandle, [path UTF8String], scanTitleNum );
     
 }
 
 - (IBAction) showNewScan:(id)sender
 {
-	hb_list_t  * list;
+	/* due to issue with progress in the scan indicator, we are stopping the
+    indeterminate animation here */
+    [fScanIndicator stopAnimation: self];
+    
+    hb_list_t  * list;
 	hb_title_t * title;
 	int indxpri=0; 	  // Used to search the longuest title (default in combobox)
 	int longuestpri=0; // Used to search the longuest title (default in combobox)
