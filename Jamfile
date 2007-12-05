@@ -63,6 +63,7 @@ if $(OS) = MACOSX
 			  macosx/HBAdvancedController.h macosx/HBAdvancedController.m
               macosx/HBImageAndTextCell.h macosx/HBImageAndTextCell.m
               macosx/HBPreferencesController.h macosx/HBPreferencesController.m
+              macosx/HBPresets.h macosx/HBPresets.m
               macosx/English.lproj/InfoPlist.strings
               macosx/English.lproj/MainMenu.nib/classes.nib
               macosx/English.lproj/MainMenu.nib/info.nib

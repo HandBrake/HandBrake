@@ -106,6 +106,8 @@
 		59CBD2370BBB44DA004A3BE3 /* parsecsv.c in Sources */ = {isa = PBXBuildFile; fileRef = 59CBD2360BBB44DA004A3BE3 /* parsecsv.c */; };
 		59CBD2650BBB4D1B004A3BE3 /* ChapterTitles.m in Sources */ = {isa = PBXBuildFile; fileRef = 593034EA0BBA39A100172349 /* ChapterTitles.m */; };
 		A2122D820C7EAF6600AB87A4 /* DriveDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = A2122D810C7EAF6600AB87A4 /* DriveDetector.m */; };
+		A22C85EC0D05D35000C10E36 /* HBPresets.h in Headers */ = {isa = PBXBuildFile; fileRef = A22C85EA0D05D35000C10E36 /* HBPresets.h */; };
+		A22C85ED0D05D35100C10E36 /* HBPresets.m in Sources */ = {isa = PBXBuildFile; fileRef = A22C85EB0D05D35000C10E36 /* HBPresets.m */; };
 		A273E0510C57B39A00493A45 /* Pause.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E04A0C57B39A00493A45 /* Pause.tiff */; };
 		A273E0520C57B39A00493A45 /* Play.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E04B0C57B39A00493A45 /* Play.tiff */; };
 		A273E0530C57B39A00493A45 /* Stop.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E04C0C57B39A00493A45 /* Stop.tiff */; };
@@ -285,6 +287,8 @@
 		59CBD2360BBB44DA004A3BE3 /* parsecsv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = parsecsv.c; path = ../test/parsecsv.c; sourceTree = SOURCE_ROOT; };
 		A2122D800C7EAF6500AB87A4 /* DriveDetector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DriveDetector.h; sourceTree = "<group>"; };
 		A2122D810C7EAF6600AB87A4 /* DriveDetector.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DriveDetector.m; sourceTree = "<group>"; };
+		A22C85EA0D05D35000C10E36 /* HBPresets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPresets.h; sourceTree = "<group>"; };
+		A22C85EB0D05D35000C10E36 /* HBPresets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPresets.m; sourceTree = "<group>"; };
 		A273E04A0C57B39A00493A45 /* Pause.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Pause.tiff; sourceTree = "<group>"; };
 		A273E04B0C57B39A00493A45 /* Play.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Play.tiff; sourceTree = "<group>"; };
 		A273E04C0C57B39A00493A45 /* Stop.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Stop.tiff; sourceTree = "<group>"; };
@@ -517,6 +521,8 @@
 		526FBC930B4CAA260064E04C /* HandBrake Sources */ = {
 			isa = PBXGroup;
 			children = (
+				A22C85EA0D05D35000C10E36 /* HBPresets.h */,
+				A22C85EB0D05D35000C10E36 /* HBPresets.m */,
 				A2DFC6760C61980700E66E89 /* MVMenuButton.m */,
 				A2DFC6740C6197C600E66E89 /* MVMenuButton.h */,
 				0DFA5D060B8DD9040020BC09 /* HandBrake.plist */,
@@ -637,6 +643,7 @@
 				E37C89480C83989F00C1B919 /* HBQueueController.h in Headers */,
 				A9AC41E00C918DB500DDF9B8 /* HBAdvancedController.h in Headers */,
 				E37172680C977D340072B384 /* HBImageAndTextCell.h in Headers */,
+				A22C85EC0D05D35000C10E36 /* HBPresets.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -947,6 +954,7 @@
 				E37C89470C83989F00C1B919 /* HBQueueController.mm in Sources */,
 				A9AC41DF0C918DB500DDF9B8 /* HBAdvancedController.m in Sources */,
 				E37172670C977D340072B384 /* HBImageAndTextCell.m in Sources */,
+				A22C85ED0D05D35100C10E36 /* HBPresets.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

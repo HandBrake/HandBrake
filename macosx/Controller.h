@@ -15,7 +15,7 @@
 #import "MVMenuButton.h"
 #import "HBAdvancedController.h"
 #import "HBPreferencesController.h"
-
+#import "HBPresets.h"
 @class HBOutputPanelController;
 
 @interface HBController : NSObject <GrowlApplicationBridgeDelegate>
@@ -41,7 +41,7 @@
     /* Advanced options tab */
     HBAdvancedController         * fAdvancedOptions;
 	IBOutlet NSBox               * fAdvancedView;
-
+    
     HBPreferencesController      * fPreferencesController;
     
     /* Queue panel */
@@ -160,7 +160,7 @@
 	BOOL                           fRipIndicatorShown;
     
 	/* User Preset variables here */
-	
+	HBPresets                    * fPresetsBuiltin;
 	IBOutlet NSDrawer            * fPresetDrawer;
 	IBOutlet NSTextField         * fPresetNewName;
 	IBOutlet NSTextField         * fPresetNewDesc;
@@ -269,23 +269,6 @@
 - (IBAction) showAddPresetPanel: (id) sender;
 - (IBAction) closeAddPresetPanel: (id) sender;
 - (NSDictionary *)createPreset;
-- (NSDictionary *)createIpodLowPreset;
-- (NSDictionary *)createIpodHighPreset;
-- (NSDictionary *)createAppleTVPreset;
-- (NSDictionary *)createPSThreePreset;  
-- (NSDictionary *)createPSPPreset;
-- (NSDictionary *)createNormalPreset;
-- (NSDictionary *)createClassicPreset;
-- (NSDictionary *)createQuickTimePreset;
-- (NSDictionary *)createFilmPreset;
-- (NSDictionary *)createTelevisionPreset;
-- (NSDictionary *)createAnimationPreset;
-- (NSDictionary *)createBedlamPreset;
-- (NSDictionary *)createiPhonePreset;
-- (NSDictionary *)createDeuxSixQuatrePreset;
-- (NSDictionary *)createBrokePreset;
-- (NSDictionary *)createBlindPreset;
-- (NSDictionary *)createCRFPreset;
 
 - (IBAction) revertPictureSizeToMax:(id)sender;
 
