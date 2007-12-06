@@ -52,12 +52,12 @@ namespace Handbrake
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.SaveFile = new System.Windows.Forms.SaveFileDialog();
             this.btn_encode = new System.Windows.Forms.ToolStripButton();
             this.btn_stop = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.btn_batch = new System.Windows.Forms.ToolStripButton();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.SaveFile = new System.Windows.Forms.SaveFileDialog();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -142,7 +142,7 @@ namespace Handbrake
             this.progressBar.BackColor = System.Drawing.SystemColors.ControlLight;
             this.progressBar.Location = new System.Drawing.Point(67, 360);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(647, 23);
+            this.progressBar.Size = new System.Drawing.Size(616, 23);
             this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar.TabIndex = 34;
             // 
@@ -158,7 +158,7 @@ namespace Handbrake
             // lbl_progressValue
             // 
             this.lbl_progressValue.AutoSize = true;
-            this.lbl_progressValue.Location = new System.Drawing.Point(690, 331);
+            this.lbl_progressValue.Location = new System.Drawing.Point(689, 366);
             this.lbl_progressValue.Name = "lbl_progressValue";
             this.lbl_progressValue.Size = new System.Drawing.Size(24, 13);
             this.lbl_progressValue.TabIndex = 36;
@@ -192,7 +192,7 @@ namespace Handbrake
             this.btn_updateQuery.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_updateQuery.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_updateQuery.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_updateQuery.Location = new System.Drawing.Point(650, 327);
+            this.btn_updateQuery.Location = new System.Drawing.Point(649, 325);
             this.btn_updateQuery.Name = "btn_updateQuery";
             this.btn_updateQuery.Size = new System.Drawing.Size(64, 23);
             this.btn_updateQuery.TabIndex = 46;
@@ -303,6 +303,15 @@ namespace Handbrake
             this.toolStrip1.TabIndex = 71;
             this.toolStrip1.Text = "toolStrip1";
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 49);
+            // 
+            // SaveFile
+            // 
+            this.SaveFile.Filter = "Batch|.bat";
+            // 
             // btn_encode
             // 
             this.btn_encode.Image = global::Handbrake.Properties.Resources.Play;
@@ -325,11 +334,6 @@ namespace Handbrake
             this.btn_stop.Visible = false;
             this.btn_stop.Click += new System.EventHandler(this.btn_stop_Click);
             // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 49);
-            // 
             // btn_batch
             // 
             this.btn_batch.Image = global::Handbrake.Properties.Resources.ActivityWindow;
@@ -348,10 +352,6 @@ namespace Handbrake
             this.pictureBox1.Size = new System.Drawing.Size(32, 32);
             this.pictureBox1.TabIndex = 61;
             this.pictureBox1.TabStop = false;
-            // 
-            // SaveFile
-            // 
-            this.SaveFile.Filter = "Batch|.bat";
             // 
             // frmQueue
             // 
