@@ -37,7 +37,8 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <UseVSHostingProcess>false</UseVSHostingProcess>
-    <DocumentationFile>bin\Release\Handbrake.XML</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -204,10 +205,16 @@
     <Content Include="handbrakepineapple.ico" />
     <None Include="Resources\logo64.png" />
     <None Include="Resources\logo128.png" />
+    <None Include="Resources\folder.png" />
+    <None Include="Resources\ActivityWindow.png" />
     <Content Include="Resources\Output_Small.png" />
+    <None Include="Resources\Pause.png" />
+    <None Include="Resources\Play.png" />
     <Content Include="Resources\Pref_Small.png" />
     <Content Include="Resources\Queue.png" />
     <Content Include="Resources\Queue_Small.png" />
+    <None Include="Resources\Save.png" />
+    <None Include="Resources\Stop.png" />
     <None Include="Resources\SplashScreen.jpg" />
     <None Include="Resources\Remove.png" />
     <None Include="Resources\Movies.png" />

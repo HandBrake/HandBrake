@@ -595,7 +595,13 @@ namespace Handbrake.Functions
                     actTitles = chapters.ToString().Replace("-c ", "").Split('-');
                     thisQuery.q_chaptersStart = int.Parse(actTitles[0]);
                     if (actTitles.Length > 1)
+                    {
+                        MessageBox.Show(actTitles[1]);
                         thisQuery.q_chaptersFinish = int.Parse(actTitles[1]);
+                    }
+
+                    if ((thisQuery.q_chaptersStart == 1) && (thisQuery.q_chaptersFinish == 0))
+                        thisQuery.q_chaptersFinish = thisQuery.q_chaptersStart;
                 }
 
                 if (format.Success != false)

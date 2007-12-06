@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace Handbrake
 {
@@ -23,10 +24,11 @@ namespace Handbrake
 
         #region Queue Handling
         Boolean cancel = false;
-        private void btn_q_encoder_Click(object sender, EventArgs e)
+
+        private void btn_encode_Click(object sender, EventArgs e)
         {
             // Reset some values
-            
+
             lbl_status.Visible = false;
             cancel = false;
 
@@ -36,7 +38,7 @@ namespace Handbrake
                 if (list_queue.Items.Count != 0)
                 {
                     // Setup or reset some values
-                    btn_cancel.Visible = true;
+                    btn_stop.Visible = true;
                     progressBar.Value = 0;
                     lbl_progressValue.Text = "0 %";
                     progressBar.Step = 100 / list_queue.Items.Count;
@@ -45,18 +47,18 @@ namespace Handbrake
                     // Testing a new way of launching a thread. Hopefully will fix a random freeze up of the main thread.
                     Thread theQ = new Thread(startProc);
                     theQ.Start();
-                 }
+                }
             }
             catch (Exception exc)
             {
                 MessageBox.Show(exc.ToString());
             }
-             
         }
-        private void btn_cancel_Click(object sender, EventArgs e)
+
+        private void btn_stop_Click(object sender, EventArgs e)
         {
             cancel = true;
-            btn_cancel.Visible = false;
+            btn_stop.Visible = false;
             MessageBox.Show("No further items on the queue will start. The current encode process will continue until it is finished. \nClick 'Encode Video' when you wish to continue encoding the queue.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
@@ -167,7 +169,7 @@ namespace Handbrake
                     lbl_status.Text = "Encode Queue Completed!";
                     text_edit.Text = "";
                 }
-                btn_cancel.Visible = false;
+                btn_stop.Visible = false;
 
                 lbl_progressValue.Text = "0 %";
                 progressBar.Value = 0;
@@ -307,6 +309,61 @@ namespace Handbrake
 
         #endregion
 
+        #region Queue Save & Batch Script
+        private void btn_save_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_open_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_batch_Click(object sender, EventArgs e)
+        {
+            string queries = "";
+            for (int i = 0; i < list_queue.Items.Count; i++)
+            {
+                string query = list_queue.Items[i].ToString();
+                string fullQuery = '"' + Application.StartupPath.ToString()+ "\\HandBrakeCLI.exe"+ '"' + query;
+
+                if (queries == "")
+                    queries = queries + fullQuery;
+                else
+                    queries = queries + " && " + fullQuery;
+            }
+            string strCmdLine = queries;
+
+            SaveFile.ShowDialog();
+            string filename = SaveFile.FileName;
+
+            if (filename != "")
+            {
+                try
+                {
+                    // Create a StreamWriter and open the file
+                    StreamWriter line = new StreamWriter(filename);
+
+                    // Write the batch file query to the file
+                    line.WriteLine(strCmdLine);
+
+                    // close the stream
+                    line.Close();
+
+                    MessageBox.Show("Your batch script has been sucessfully saved.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Unable to write to the file. Please make sure that the location has the correct permissions for file writing.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                }
+
+            }
+        }
+
+        #endregion
+
+        #region other
         private void btn_Close_Click(object sender, EventArgs e)
         {
             this.Hide();
@@ -318,6 +375,6 @@ namespace Handbrake
             this.Hide();
             base.OnClosing(e);
         }
-
+        #endregion
     }
 }
