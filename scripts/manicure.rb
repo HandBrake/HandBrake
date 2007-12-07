@@ -301,10 +301,37 @@ class PresetClass
       commandString << " -s "
       commandString << hash["Subtitles"]
     end
+
+    #Video Filters
+    if hash["UsesPictureFilters"].to_i == 1
       
+      case hash["PictureDeinterlace"].to_i
+      when 1
+        commandString << " --deinterlace=\"fast\""
+      when 2
+        commandString << " --deinterlace=\slow\""
+      when 3
+        commandString << " --deinterlace=\"slower\""
+      when 4
+        commandString << " --deinterlace=\"slowest\""
+      end
+      
+      case hash["PictureDenoise"].to_i
+      when 1
+        commandString << " --denoise=\"weak\""
+      when 2
+        commandString << " --denoise=\"medium\""
+      when 3
+        commandString << " --denoise=\"strong\""
+      end
+      
+      if hash["PictureDetelecine"].to_i == 1 then commandString << " --detelecine" end
+      if hash["PictureDeblock"].to_i == 1 then commandString << " --deblock" end
+      if hash["VFR"].to_i == 1 then commandString << " --vfr" end
+    end
+
     #Booleans
     if hash["ChapterMarkers"].to_i == 1 then commandString << " -m" end
-    if hash["PictureDeinterlace"].to_i == 1 then commandString << " -d" end
     if hash["PicturePAR"].to_i == 1 then commandString << " -p" end
     if hash["VideoGrayScale"].to_i == 1 then commandString << " -g" end
     if hash["VideoTwoPass"].to_i == 1 then commandString << " -2" end
@@ -414,10 +441,37 @@ class PresetClass
       commandString << " -s "
       commandString << hash["Subtitles"]
     end
+    
+    #Video Filters
+    if hash["UsesPictureFilters"].to_i == 1
       
+      case hash["PictureDeinterlace"].to_i
+      when 1
+        commandString << " --deinterlace=\"fast\""
+      when 2
+        commandString << " --deinterlace=\slow\""
+      when 3
+        commandString << " --deinterlace=\"slower\""
+      when 4
+        commandString << " --deinterlace=\"slowest\""
+      end
+      
+      case hash["PictureDenoise"].to_i
+      when 1
+        commandString << " --denoise=\"weak\""
+      when 2
+        commandString << " --denoise=\"medium\""
+      when 3
+        commandString << " --denoise=\"strong\""
+      end
+      
+      if hash["PictureDetelecine"].to_i == 1 then commandString << " --detelecine" end
+      if hash["PictureDeblock"].to_i == 1 then commandString << " --deblock" end
+      if hash["VFR"].to_i == 1 then commandString << " --vfr" end
+    end
+
     #Booleans
     if hash["ChapterMarkers"].to_i == 1 then commandString << " -m" end
-    if hash["PictureDeinterlace"].to_i == 1 then commandString << " -d" end
     if hash["PicturePAR"].to_i == 1 then commandString << " -p" end
     if hash["VideoGrayScale"].to_i == 1 then commandString << " -g" end
     if hash["VideoTwoPass"].to_i == 1 then commandString << " -2" end
@@ -551,9 +605,43 @@ class PresetClass
       commandString << hash["x264Option"] << "\");\n\t"
     end
     
+    #Video Filters
+    if hash["UsesPictureFilters"].to_i == 1
+      
+      case hash["PictureDeinterlace"].to_i
+      when 1
+        commandString << "deinterlace = 1;\n\t"
+        commandString << "deinterlace_opt = \"-1\";\n\t"
+      when 2
+        commandString << "deinterlace = 1;\n\t"
+        commandString << "deinterlace_opt = \"0\";\n\t"
+      when 3
+        commandString << "deinterlace = 1;\n\t"
+        commandString << "deinterlace_opt = \"2:-1:1\";\n\t"
+      when 4
+        commandString << "deinterlace = 1;\n\t"
+        commandString << "deinterlace_opt = \"1:-1:1\";\n\t"
+      end
+      
+      case hash["PictureDenoise"].to_i
+      when 1
+        commandString << "denoise = 1;\n\t"
+        commandString << "denoise_opt = \"2:1:2:3\";\n\t"
+      when 2
+        commandString << "denoise = 1;\n\t"
+        commandString << "denoise_opt = \"3:2:2:3\";\n\t"
+      when 3
+        commandString << "denoise = 1;\n\t"
+        commandString << "denoise_opt = \"7:7:5:5\";\n\t"
+      end
+      
+      if hash["PictureDetelecine"].to_i == 1 then commandString << "detelecine = 1;\n\t" end
+      if hash["PictureDeblock"].to_i == 1 then commandString << "deblock = 1;\n\t" end
+      if hash["VFR"].to_i == 1 then commandString << "vfr = 1;\n\t" end
+    end
+    
     #Booleans
     if hash["ChapterMarkers"].to_i == 1 then commandString << "job->chapter_markers = 1;\n\t" end
-    if hash["PictureDeinterlace"].to_i == 1 then commandString << "job->deinterlace = 1;\n\t" end
     if hash["PicturePAR"].to_i == 1 then commandString << "pixelratio = 1;\n\t" end
     if hash["VideoGrayScale"].to_i == 1 then commandString << "job->grayscale = 1;\n\t" end
     if hash["VideoTwoPass"].to_i == 1 then commandString << "twoPass = 1;\n\t" end
@@ -665,10 +753,37 @@ class PresetClass
       commandString << " -s "
       commandString << hash["Subtitles"]
     end
-        
+    
+    #Video Filters
+    if hash["UsesPictureFilters"].to_i == 1
+      
+      case hash["PictureDeinterlace"].to_i
+      when 1
+        commandString << " --deinterlace=\"fast\""
+      when 2
+        commandString << " --deinterlace=\slow\""
+      when 3
+        commandString << " --deinterlace=\"slower\""
+      when 4
+        commandString << " --deinterlace=\"slowest\""
+      end
+      
+      case hash["PictureDenoise"].to_i
+      when 1
+        commandString << " --denoise=\"weak\""
+      when 2
+        commandString << " --denoise=\"medium\""
+      when 3
+        commandString << " --denoise=\"strong\""
+      end
+      
+      if hash["PictureDetelecine"].to_i == 1 then commandString << " --detelecine" end
+      if hash["PictureDeblock"].to_i == 1 then commandString << " --deblock" end
+      if hash["VFR"].to_i == 1 then commandString << " --vfr" end
+    end
+    
     #Booleans
     if hash["ChapterMarkers"].to_i == 1 then commandString << " -m" end
-    if hash["PictureDeinterlace"].to_i == 1 then commandString << " -d" end
     if hash["PicturePAR"].to_i == 1 then commandString << " -p" end
     if hash["VideoGrayScale"].to_i == 1 then commandString << " -g" end
     if hash["VideoTwoPass"].to_i == 1 then commandString << " -2" end
