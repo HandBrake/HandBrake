@@ -595,6 +595,7 @@ namespace Handbrake
             this.text_height.Size = new System.Drawing.Size(64, 21);
             this.text_height.TabIndex = 28;
             this.ToolTip.SetToolTip(this.text_height, "Video Resolution (Height)");
+            this.text_height.TextChanged += new System.EventHandler(this.text_height_TextChanged);
             // 
             // text_width
             // 
@@ -605,6 +606,7 @@ namespace Handbrake
             this.text_width.Size = new System.Drawing.Size(64, 21);
             this.text_width.TabIndex = 26;
             this.ToolTip.SetToolTip(this.text_width, "Video Resolution (Width)");
+            this.text_width.TextChanged += new System.EventHandler(this.text_width_TextChanged);
             // 
             // DVD_Open
             // 
