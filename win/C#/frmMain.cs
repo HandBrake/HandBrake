@@ -74,7 +74,8 @@ namespace Handbrake
                 // redraw the splash screen
                 Application.DoEvents();
                 // Run the update checker.
-                updateCheck();
+                Thread updateCheckThread = new Thread(startupUpdateCheck);
+                updateCheckThread.Start();
                 Thread.Sleep(200);
             }
 
@@ -112,12 +113,6 @@ namespace Handbrake
                 Thread.Sleep(100);
             }
 
-            // Hide the preset bar if required.
-            if (Properties.Settings.Default.hidePresets == "Checked")
-            {
-                mnu_showPresets.Visible = true;
-                this.Width = 591;
-            }
 
             //Finished Loading
             lblStatus.Text = "Loading Complete!";
@@ -134,6 +129,34 @@ namespace Handbrake
 
             // Turn the interface back to the user
             this.Enabled = true;
+        }
+
+        private delegate void updateStatusChanger();
+        private void startupUpdateCheck()
+        {
+            try
+            {
+                if (this.InvokeRequired)
+                {
+                    this.BeginInvoke(new updateStatusChanger(startupUpdateCheck));
+                    return;
+                }
+
+                Boolean update = updateCheck();
+                if (update == true)
+                {
+                    lbl_update.Visible = true;
+
+                    frmUpdater updateWindow = new frmUpdater();
+                    updateWindow.Show();
+                }
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
+
+            
         }
 
         private void splashTimer(object sender)
@@ -343,6 +366,7 @@ namespace Handbrake
             Boolean update = updateCheck();
             if (update == true)
             {
+                lbl_update.Visible = true;
                 frmUpdater updateWindow = new frmUpdater();
                 updateWindow.Show();
             }
@@ -483,13 +507,22 @@ namespace Handbrake
                 }
 
                 // Populate the Audio Channels Dropdown
-                drp_audioChannels.Items.Clear();
-                drp_audioChannels.Items.Add("Automatic");
-                drp_audioChannels.Items.AddRange(selectedTitle.AudioTracks.ToArray());
-                if (drp_audioChannels.Items.Count > 0)
+                drp_track1Audio.Items.Clear();
+                drp_track1Audio.Items.Add("Automatic");
+                drp_track1Audio.Items.Add("None");
+                drp_track1Audio.Items.AddRange(selectedTitle.AudioTracks.ToArray());
+                if (drp_track1Audio.Items.Count > 0)
                 {
-                    drp_audioChannels.Text = drp_audioChannels.Items[0].ToString();
+                    drp_track1Audio.Text = drp_track1Audio.Items[0].ToString();
                 }
+                drp_track2Audio.Items.Clear();
+                drp_track2Audio.Items.Add("None");
+                drp_track2Audio.Items.AddRange(selectedTitle.AudioTracks.ToArray());
+                if (drp_track2Audio.Items.Count > 0)
+                {
+                    drp_track2Audio.Text = drp_track2Audio.Items[0].ToString();
+                }
+
 
                 // Populate the Subtitles dropdown
                 drp_subtitle.Items.Clear();
@@ -874,23 +907,34 @@ namespace Handbrake
         {
             if ((drp_audioCodec.Text == "AAC") && (drp_audioMixDown.Text == "6 Channel Discrete"))
             {
-                    drp_audioBitrate.Items.Clear();
-                    drp_audioBitrate.Items.Add("32");
-                    drp_audioBitrate.Items.Add("40");
-                    drp_audioBitrate.Items.Add("48");
-                    drp_audioBitrate.Items.Add("56");
-                    drp_audioBitrate.Items.Add("64");
-                    drp_audioBitrate.Items.Add("80");
-                    drp_audioBitrate.Items.Add("86");
-                    drp_audioBitrate.Items.Add("112");
-                    drp_audioBitrate.Items.Add("128");
-                    drp_audioBitrate.Items.Add("160");
-                    drp_audioBitrate.Items.Add("192");
-                    drp_audioBitrate.Items.Add("224");
-                    drp_audioBitrate.Items.Add("256");
-                    drp_audioBitrate.Items.Add("320");
-                    drp_audioBitrate.Items.Add("384");
+                drp_audioBitrate.Items.Clear();
+                drp_audioBitrate.Items.Add("32");
+                drp_audioBitrate.Items.Add("40");
+                drp_audioBitrate.Items.Add("48");
+                drp_audioBitrate.Items.Add("56");
+                drp_audioBitrate.Items.Add("64");
+                drp_audioBitrate.Items.Add("80");
+                drp_audioBitrate.Items.Add("86");
+                drp_audioBitrate.Items.Add("112");
+                drp_audioBitrate.Items.Add("128");
+                drp_audioBitrate.Items.Add("160");
+                drp_audioBitrate.Items.Add("192");
+                drp_audioBitrate.Items.Add("224");
+                drp_audioBitrate.Items.Add("256");
+                drp_audioBitrate.Items.Add("320");
+                drp_audioBitrate.Items.Add("384");
             }
+        }
+
+        private void drp_subtitle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (drp_subtitle.Text.Contains("None"))
+            {
+                check_forced.Enabled = false;
+                check_forced.Checked = false;
+            }
+            else
+                check_forced.Enabled = true;
         }
 
         private void Check_ChapterMarkers_CheckedChanged(object sender, EventArgs e)
@@ -994,7 +1038,7 @@ namespace Handbrake
         {
 
             int normal = 0;
-            foreach(TreeNode treenode in treeView_presets.Nodes)
+            foreach (TreeNode treenode in treeView_presets.Nodes)
             {
                 if (treenode.ToString().Equals("TreeNode: Normal"))
                     normal = treenode.Index;
@@ -1004,7 +1048,7 @@ namespace Handbrake
 
             treeView_presets.SelectedNode = np;
 
-    
+
 
         }
 
@@ -1021,7 +1065,7 @@ namespace Handbrake
         // Preset Selection
         private void treeView_presets_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            
+
 
             string selectedPreset = null;
             selectedPreset = treeView_presets.SelectedNode.Text;
@@ -1206,7 +1250,7 @@ namespace Handbrake
                         break;
                 }
             }
-        }   
+        }
 
         private void setEncodeLabel()
         {
@@ -1528,9 +1572,12 @@ namespace Handbrake
 
             string audioBitrate = drp_audioBitrate.Text;
             string audioSampleRate = drp_audioSampleRate.Text;
-            string audioChannels = drp_audioChannels.Text;
+            string track1 = drp_track1Audio.Text;
+            string track2 = drp_track2Audio.Text;
+            string audioChannels = "";
             string Mixdown = drp_audioMixDown.Text;
             string SixChannelAudio = "";
+            string forced = "";
 
             if (audioBitrate != "")
                 audioBitrate = " -B " + audioBitrate;
@@ -1538,16 +1585,41 @@ namespace Handbrake
             if (audioSampleRate != "")
                 audioSampleRate = " -R " + audioSampleRate;
 
-            if (audioChannels == "Automatic")
+            // Audio Track 1
+            if (track1 == "Automatic")
                 audioChannels = "";
-            else if (audioChannels == "")
+            else if (track1 == "")
                 audioChannels = "";
+            else if (track1 == "None")
+                audioChannels = " -a none";
             else
             {
                 string[] tempSub;
-                tempSub = audioChannels.Split(' ');
+                tempSub = track1.Split(' ');
                 audioChannels = " -a " + tempSub[0];
             }
+
+            // Audio Track 2
+            if (audioChannels != "")
+            {
+                if ((track2 != "") && (track2 != "None"))
+                {
+                    string[] tempSub;
+                    tempSub = track2.Split(' ');
+                    audioChannels = audioChannels + "," + tempSub[0];
+                }
+            }
+            else
+            {
+                if ((track2 != "") && (track2 != "None"))
+                {
+                    string[] tempSub;
+                    tempSub = track2.Split(' ');
+                    audioChannels = " -a " + tempSub[0];
+                }
+            }
+
+
 
             switch (Mixdown)
             {
@@ -1579,7 +1651,10 @@ namespace Handbrake
             else
                 SixChannelAudio = "";
 
-            string queryAudioSettings = audioBitrate + audioSampleRate + audioChannels + SixChannelAudio;
+            if (check_forced.Checked)
+                forced = "-F";
+
+            string queryAudioSettings = audioBitrate + audioSampleRate + audioChannels + SixChannelAudio + forced;
             #endregion
 
             // H264 Tab
@@ -1774,9 +1849,18 @@ namespace Handbrake
             #region audio
             drp_audioBitrate.Text = presetQuery.AudioBitrate;
             drp_audioSampleRate.Text = presetQuery.AudioSampleBitrate;
-            drp_audioChannels.Text = presetQuery.AudioTrack1;
+            drp_track1Audio.Text = presetQuery.AudioTrack1;
+            drp_track2Audio.Text = presetQuery.AudioTrack2;
             drp_audioMixDown.Text = presetQuery.AudioTrackMix;
             drp_subtitle.Text = presetQuery.Subtitles;
+
+            if (presetQuery.ForcedSubtitles == true)
+            {
+                check_forced.CheckState = CheckState.Checked;
+                check_forced.Enabled = true;
+            }
+            else
+                check_forced.CheckState = CheckState.Unchecked;
             #endregion
 
             // H264 Tab & Preset Name
@@ -1805,9 +1889,7 @@ namespace Handbrake
                 }
                 else
                 {
-                    Boolean update = (latest > current);
-                    if (update == true)
-                        lbl_update.Visible = true;
+                    Boolean update = (latest > current);                    
                     return update;
                 }
             }

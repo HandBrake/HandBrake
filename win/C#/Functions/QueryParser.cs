@@ -471,6 +471,18 @@ namespace Handbrake.Functions
             }
         }
 
+        private string q_audioTrack2;
+        /// <summary>
+        /// Returns a string with the First selected Audio track
+        /// </summary>
+        public string AudioTrack2
+        {
+            get
+            {
+                return this.q_audioTrack2;
+            }
+        }
+
         private string q_audioTrackMix;
         /// <summary>
         /// Returns a string with the First selected Audio track Mix
@@ -492,6 +504,18 @@ namespace Handbrake.Functions
             get
             {
                 return this.q_subtitles;
+            }
+        }
+
+        private Boolean q_forcedSubs;
+        /// <summary>
+        /// Returns a string with the selected subtitle track
+        /// </summary>
+        public Boolean ForcedSubtitles
+        {
+            get
+            {
+                return this.q_forcedSubs;
             }
         }
 
@@ -569,7 +593,9 @@ namespace Handbrake.Functions
             Match audioBitrate = Regex.Match(input, @"-B ([0-9]*)");
             Match audioSampleRate = Regex.Match(input, @"-R ([0-9.]*)");
             Match audioChannelsMix = Regex.Match(input, @"-6 ([0-9a-z0-9]*)");  // 1 -6 dpl2 // Broken
-            Match audioChannel = Regex.Match(input, @"-a ([0-9]*)");
+            Match audioTrack1 = Regex.Match(input, @"-a ([0-9]*)");
+            Match audioTrack2 = Regex.Match(input, @"-a ([0-9]*),([0-9]*)");
+            Match forcedSubtitles = Regex.Match(input, @"-F");
 
             //H264 Tab
             Match x264 = Regex.Match(input, @"-x ([,a-zA-Z0-9=:-]*)");
@@ -781,10 +807,18 @@ namespace Handbrake.Functions
                 if (audioSampleRate.Success != false)
                     thisQuery.q_audioSamplerate = audioSampleRate.ToString().Replace("-R ", "");
 
-                if (audioChannel.Success != false)
-                    thisQuery.q_audioTrack1 = audioChannel.ToString().Replace("-a ", "");
+                if (audioTrack1.Success != false)
+                    thisQuery.q_audioTrack1 = audioTrack1.ToString().Replace("-a ", "");
                 else
                     thisQuery.q_audioTrack1 = "Automatic";
+
+                if (audioTrack2.Success != false)
+                {
+                    string[] audioChan = audioTrack2.ToString().Split(',');
+                    thisQuery.q_audioTrack2 = audioChan[1];
+                }
+                else
+                    thisQuery.q_audioTrack2 = "None";
 
                 thisQuery.q_audioTrackMix = "Automatic";
                 if (audioChannelsMix.Success != false)
@@ -816,6 +850,8 @@ namespace Handbrake.Functions
                     thisQuery.q_subtitles = subtitles.ToString().Replace("-s ", "");
                 else
                     thisQuery.q_subtitles = "None";
+
+                thisQuery.q_forcedSubs = forcedSubtitles.Success;
 
                 #endregion
 
