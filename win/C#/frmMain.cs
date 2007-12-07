@@ -156,7 +156,7 @@ namespace Handbrake
                 MessageBox.Show(exc.ToString());
             }
 
-            
+
         }
 
         private void splashTimer(object sender)
@@ -527,12 +527,16 @@ namespace Handbrake
                 // Populate the Subtitles dropdown
                 drp_subtitle.Items.Clear();
                 drp_subtitle.Items.Add("None");
+                drp_subtitle.Items.Add("Autoselect");
                 drp_subtitle.Items.AddRange(selectedTitle.Subtitles.ToArray());
                 if (drp_subtitle.Items.Count > 0)
                 {
                     drp_subtitle.Text = drp_subtitle.Items[0].ToString();
                 }
             }
+
+            // Run the Autonaming function
+            autoName();
         }
 
         private void drop_chapterStart_SelectedIndexChanged(object sender, EventArgs e)
@@ -556,7 +560,8 @@ namespace Handbrake
                     drop_chapterStart.BackColor = Color.LightCoral;
                 }
             }
-
+            // Run the Autonaming function
+            autoName();
 
         }
 
@@ -581,6 +586,9 @@ namespace Handbrake
                     drop_chapterFinish.BackColor = Color.LightCoral;
                 }
             }
+
+            // Run the Autonaming function
+            autoName();
         }
 
         private void text_bitrate_TextChanged(object sender, EventArgs e)
@@ -1393,7 +1401,6 @@ namespace Handbrake
             string cropBottom = text_bottom.Text;
             string cropLeft = text_left.Text;
             string cropRight = text_right.Text;
-            string subtitles = drp_subtitle.Text;
             string cropOut = "";
             string deInterlace_Option = drp_deInterlace_option.Text;
             string deinterlace = "";
@@ -1423,17 +1430,6 @@ namespace Handbrake
                     cropRight = "0";
 
                 cropOut = " --crop " + cropTop + ":" + cropBottom + ":" + cropLeft + ":" + cropRight;
-            }
-
-            if (subtitles == "None")
-                subtitles = "";
-            else if (subtitles == "")
-                subtitles = "";
-            else
-            {
-                string[] tempSub;
-                tempSub = subtitles.Split(' ');
-                subtitles = " -s " + tempSub[0];
             }
 
             switch (deInterlace_Option)
@@ -1479,7 +1475,7 @@ namespace Handbrake
             if (check_lAnamorphic.Checked)
                 lanamorphic = " -P ";
 
-            string queryPictureSettings = cropOut + subtitles + deinterlace + deblock + detelecine + vfr + grayscale + pixelRatio + lanamorphic + ChapterMarkers;
+            string queryPictureSettings = cropOut + deinterlace + deblock + detelecine + vfr + grayscale + pixelRatio + lanamorphic + ChapterMarkers;
             #endregion
 
             // Video Settings Tab
@@ -1577,6 +1573,8 @@ namespace Handbrake
             string audioChannels = "";
             string Mixdown = drp_audioMixDown.Text;
             string SixChannelAudio = "";
+            string subtitles = drp_subtitle.Text;
+            string subScan = "";
             string forced = "";
 
             if (audioBitrate != "")
@@ -1651,10 +1649,26 @@ namespace Handbrake
             else
                 SixChannelAudio = "";
 
+            if (subtitles == "None")
+                subtitles = "";
+            else if (subtitles == "")
+                subtitles = "";
+            else if (subtitles == "Autoselect")
+            {
+                subScan = " -U ";
+                subtitles = "";
+            }
+            else
+            {
+                string[] tempSub;
+                tempSub = subtitles.Split(' ');
+                subtitles = " -s " + tempSub[0];
+            }
+
             if (check_forced.Checked)
                 forced = "-F";
 
-            string queryAudioSettings = audioBitrate + audioSampleRate + audioChannels + SixChannelAudio + forced;
+            string queryAudioSettings = audioBitrate + audioSampleRate + audioChannels + SixChannelAudio + subScan + subtitles + forced;
             #endregion
 
             // H264 Tab
@@ -1889,7 +1903,7 @@ namespace Handbrake
                 }
                 else
                 {
-                    Boolean update = (latest > current);                    
+                    Boolean update = (latest > current);
                     return update;
                 }
             }
@@ -1905,11 +1919,70 @@ namespace Handbrake
             this.thisDVD = dvd;
         }
 
+        public void autoName()
+        {
+            if (drp_dvdtitle.Text != "Automatic")
+            {
+                string source = text_source.Text;
+                string[] sourceName = source.Split('\\');
+                source = sourceName[sourceName.Length - 1].Replace(".iso", "").Replace(".mpg", "").Replace(".ts", "").Replace(".ps", "");
+
+                string title = drp_dvdtitle.Text;
+                string[] titlesplit = title.Split(' ');
+                title = titlesplit[0];
+
+                string cs = drop_chapterStart.Text;
+                string cf = drop_chapterFinish.Text;
+
+                if (title == "Automatic")
+                    title = "";
+                if (cs == "Auto")
+                    cs = "";
+                if (cf == "Auto")
+                    cf = "";
+
+                string dash = "";
+                if (cf != "Auto")
+                    dash = "-";
+
+                if (!text_destination.Text.Contains("\\"))
+                {
+                    string filePath = "";
+                    if (Properties.Settings.Default.autoNamePath != "")
+                        filePath = Properties.Settings.Default.autoNamePath + "\\";
+                    text_destination.Text = filePath + source + "_T" + title + "_C" + cs + dash + cf + ".mp4";
+                }
+                else
+                {
+                    string dest = text_destination.Text;
+
+                    string[] destName = dest.Split('\\');
+
+
+                    string[] extension = dest.Split('.');
+                    string ext = extension[extension.Length - 1];
+
+                    destName[destName.Length - 1] = source + "_T" + title + "_C" + cs + dash + cf + "." + ext;
+
+                    string fullDest = "";
+                    foreach (string part in destName)
+                    {
+                        if (fullDest != "")
+                            fullDest = fullDest + "\\" + part;
+                        else
+                            fullDest = fullDest + part;
+                    }
+
+                    text_destination.Text = fullDest;
+                }
+            }
+        }
+
         #endregion
 
 
 
-   
+
 
 
         // This is the END of the road ------------------------------------------------------------------------------

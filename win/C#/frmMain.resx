@@ -129,6 +129,14 @@
   <metadata name="ToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>18, 15</value>
   </metadata>
+  <data name="drp_subtitle.ToolTip" xml:space="preserve">
+    <value>Select the subtitle language you require from this dropdown.
+ - or -
+Autoselect: Scan for subtitles in an extra 1st pass, and choose
+the one that's only used 10 percent of the time or less. 
+This should locate subtitles for short foreign language segments. 
+Best used in conjunction with forced subtitles.</value>
+  </data>
   <metadata name="DVD_Open.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>223, 15</value>
   </metadata>

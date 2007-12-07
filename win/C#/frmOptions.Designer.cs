@@ -33,7 +33,6 @@ namespace Handbrake
             this.Label4 = new System.Windows.Forms.Label();
             this.check_verbose = new System.Windows.Forms.CheckBox();
             this.drp_processors = new System.Windows.Forms.ComboBox();
-            this.File_Save = new System.Windows.Forms.SaveFileDialog();
             this.Label11 = new System.Windows.Forms.Label();
             this.check_guiDebug = new System.Windows.Forms.CheckBox();
             this.btn_close = new System.Windows.Forms.Button();
@@ -42,12 +41,14 @@ namespace Handbrake
             this.tab_options = new System.Windows.Forms.TabControl();
             this.tab_general = new System.Windows.Forms.TabPage();
             this.check_updatePresets = new System.Windows.Forms.CheckBox();
-            this.check_showPreset = new System.Windows.Forms.CheckBox();
             this.check_tooltip = new System.Windows.Forms.CheckBox();
             this.check_updateCheck = new System.Windows.Forms.CheckBox();
             this.check_userDefaultSettings = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.check_autoNaming = new System.Windows.Forms.CheckBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.tab_debug = new System.Windows.Forms.TabPage();
             this.label6 = new System.Windows.Forms.Label();
             this.tab_advanced = new System.Windows.Forms.TabPage();
@@ -55,8 +56,13 @@ namespace Handbrake
             this.label8 = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.text_an_path = new System.Windows.Forms.TextBox();
+            this.pathFinder = new System.Windows.Forms.FolderBrowserDialog();
+            this.label10 = new System.Windows.Forms.Label();
+            this.btn_browse = new System.Windows.Forms.Button();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.tab_debug.SuspendLayout();
             this.tab_advanced.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -123,11 +129,6 @@ namespace Handbrake
             this.drp_processors.TabIndex = 41;
             this.drp_processors.SelectedIndexChanged += new System.EventHandler(this.drp_processors_SelectedIndexChanged);
             // 
-            // File_Save
-            // 
-            this.File_Save.DefaultExt = "hb";
-            this.File_Save.Filter = "txt|*.txt";
-            // 
             // Label11
             // 
             this.Label11.AutoSize = true;
@@ -157,7 +158,7 @@ namespace Handbrake
             this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(288, 297);
+            this.btn_close.Location = new System.Drawing.Point(324, 305);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(107, 22);
             this.btn_close.TabIndex = 53;
@@ -178,7 +179,7 @@ namespace Handbrake
             "Lock System",
             "Log Off",
             "Quit HandBrake"});
-            this.drp_completeOption.Location = new System.Drawing.Point(192, 170);
+            this.drp_completeOption.Location = new System.Drawing.Point(193, 39);
             this.drp_completeOption.Name = "drp_completeOption";
             this.drp_completeOption.Size = new System.Drawing.Size(111, 21);
             this.drp_completeOption.TabIndex = 43;
@@ -188,7 +189,7 @@ namespace Handbrake
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(13, 173);
+            this.label5.Location = new System.Drawing.Point(14, 42);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(173, 13);
             this.label5.TabIndex = 42;
@@ -197,38 +198,36 @@ namespace Handbrake
             // tab_options
             // 
             this.tab_options.Controls.Add(this.tab_general);
+            this.tab_options.Controls.Add(this.tabPage1);
             this.tab_options.Controls.Add(this.tab_debug);
             this.tab_options.Controls.Add(this.tab_advanced);
             this.tab_options.Location = new System.Drawing.Point(12, 63);
             this.tab_options.Name = "tab_options";
             this.tab_options.SelectedIndex = 0;
-            this.tab_options.Size = new System.Drawing.Size(382, 228);
+            this.tab_options.Size = new System.Drawing.Size(419, 236);
             this.tab_options.TabIndex = 58;
             // 
             // tab_general
             // 
             this.tab_general.BackColor = System.Drawing.SystemColors.ControlLight;
             this.tab_general.Controls.Add(this.check_updatePresets);
-            this.tab_general.Controls.Add(this.drp_completeOption);
-            this.tab_general.Controls.Add(this.label5);
-            this.tab_general.Controls.Add(this.check_showPreset);
             this.tab_general.Controls.Add(this.check_tooltip);
             this.tab_general.Controls.Add(this.check_updateCheck);
             this.tab_general.Controls.Add(this.check_userDefaultSettings);
-            this.tab_general.Controls.Add(this.label2);
             this.tab_general.Controls.Add(this.label1);
             this.tab_general.Location = new System.Drawing.Point(4, 22);
             this.tab_general.Name = "tab_general";
             this.tab_general.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_general.Size = new System.Drawing.Size(374, 202);
+            this.tab_general.Size = new System.Drawing.Size(411, 172);
             this.tab_general.TabIndex = 0;
-            this.tab_general.Text = "General";
+            this.tab_general.Text = "Startup";
+            this.tab_general.UseVisualStyleBackColor = true;
             // 
             // check_updatePresets
             // 
             this.check_updatePresets.AutoSize = true;
             this.check_updatePresets.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_updatePresets.Location = new System.Drawing.Point(16, 125);
+            this.check_updatePresets.Location = new System.Drawing.Point(16, 102);
             this.check_updatePresets.Name = "check_updatePresets";
             this.check_updatePresets.Size = new System.Drawing.Size(112, 17);
             this.check_updatePresets.TabIndex = 59;
@@ -236,23 +235,11 @@ namespace Handbrake
             this.check_updatePresets.UseVisualStyleBackColor = true;
             this.check_updatePresets.CheckedChanged += new System.EventHandler(this.check_updatePresets_CheckedChanged);
             // 
-            // check_showPreset
-            // 
-            this.check_showPreset.AutoSize = true;
-            this.check_showPreset.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_showPreset.Location = new System.Drawing.Point(16, 56);
-            this.check_showPreset.Name = "check_showPreset";
-            this.check_showPreset.Size = new System.Drawing.Size(136, 17);
-            this.check_showPreset.TabIndex = 58;
-            this.check_showPreset.Text = "Hide the preset bar";
-            this.check_showPreset.UseVisualStyleBackColor = true;
-            this.check_showPreset.CheckedChanged += new System.EventHandler(this.check_showPreset_CheckedChanged);
-            // 
             // check_tooltip
             // 
             this.check_tooltip.AutoSize = true;
             this.check_tooltip.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_tooltip.Location = new System.Drawing.Point(16, 79);
+            this.check_tooltip.Location = new System.Drawing.Point(16, 56);
             this.check_tooltip.Name = "check_tooltip";
             this.check_tooltip.Size = new System.Drawing.Size(135, 17);
             this.check_tooltip.TabIndex = 57;
@@ -276,23 +263,13 @@ namespace Handbrake
             // 
             this.check_userDefaultSettings.AutoSize = true;
             this.check_userDefaultSettings.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_userDefaultSettings.Location = new System.Drawing.Point(16, 102);
+            this.check_userDefaultSettings.Location = new System.Drawing.Point(16, 79);
             this.check_userDefaultSettings.Name = "check_userDefaultSettings";
             this.check_userDefaultSettings.Size = new System.Drawing.Size(166, 17);
             this.check_userDefaultSettings.TabIndex = 56;
             this.check_userDefaultSettings.Text = "Load my default settings";
             this.check_userDefaultSettings.UseVisualStyleBackColor = true;
             this.check_userDefaultSettings.CheckedChanged += new System.EventHandler(this.check_userDefaultSettings_CheckedChanged);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(13, 156);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(80, 13);
-            this.label2.TabIndex = 54;
-            this.label2.Text = "When Done";
             // 
             // label1
             // 
@@ -304,6 +281,55 @@ namespace Handbrake
             this.label1.TabIndex = 0;
             this.label1.Text = "On Startup";
             // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.btn_browse);
+            this.tabPage1.Controls.Add(this.label10);
+            this.tabPage1.Controls.Add(this.text_an_path);
+            this.tabPage1.Controls.Add(this.check_autoNaming);
+            this.tabPage1.Controls.Add(this.label9);
+            this.tabPage1.Controls.Add(this.label2);
+            this.tabPage1.Controls.Add(this.drp_completeOption);
+            this.tabPage1.Controls.Add(this.label5);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Size = new System.Drawing.Size(411, 210);
+            this.tabPage1.TabIndex = 3;
+            this.tabPage1.Text = "General";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // check_autoNaming
+            // 
+            this.check_autoNaming.AutoSize = true;
+            this.check_autoNaming.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_autoNaming.Location = new System.Drawing.Point(17, 103);
+            this.check_autoNaming.Name = "check_autoNaming";
+            this.check_autoNaming.Size = new System.Drawing.Size(340, 17);
+            this.check_autoNaming.TabIndex = 56;
+            this.check_autoNaming.Text = "Use Auto Naming (uses source name and title number)";
+            this.check_autoNaming.UseVisualStyleBackColor = true;
+            this.check_autoNaming.CheckedChanged += new System.EventHandler(this.check_autoNaming_CheckedChanged);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(14, 78);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(90, 13);
+            this.label9.TabIndex = 55;
+            this.label9.Text = "Auto Naming";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(14, 19);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(80, 13);
+            this.label2.TabIndex = 54;
+            this.label2.Text = "When Done";
+            // 
             // tab_debug
             // 
             this.tab_debug.BackColor = System.Drawing.SystemColors.ControlLight;
@@ -312,9 +338,10 @@ namespace Handbrake
             this.tab_debug.Controls.Add(this.label6);
             this.tab_debug.Location = new System.Drawing.Point(4, 22);
             this.tab_debug.Name = "tab_debug";
-            this.tab_debug.Size = new System.Drawing.Size(374, 202);
+            this.tab_debug.Size = new System.Drawing.Size(411, 210);
             this.tab_debug.TabIndex = 2;
             this.tab_debug.Text = "Debug Options";
+            this.tab_debug.UseVisualStyleBackColor = true;
             // 
             // label6
             // 
@@ -337,9 +364,10 @@ namespace Handbrake
             this.tab_advanced.Location = new System.Drawing.Point(4, 22);
             this.tab_advanced.Name = "tab_advanced";
             this.tab_advanced.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_advanced.Size = new System.Drawing.Size(374, 202);
+            this.tab_advanced.Size = new System.Drawing.Size(411, 210);
             this.tab_advanced.TabIndex = 1;
             this.tab_advanced.Text = "Advanced";
+            this.tab_advanced.UseVisualStyleBackColor = true;
             // 
             // label3
             // 
@@ -379,10 +407,44 @@ namespace Handbrake
             this.label7.TabIndex = 59;
             this.label7.Text = "Modify program options.";
             // 
+            // text_an_path
+            // 
+            this.text_an_path.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.text_an_path.Location = new System.Drawing.Point(17, 147);
+            this.text_an_path.Name = "text_an_path";
+            this.text_an_path.Size = new System.Drawing.Size(303, 21);
+            this.text_an_path.TabIndex = 60;
+            this.text_an_path.TextChanged += new System.EventHandler(this.text_an_path_TextChanged);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(14, 131);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(145, 13);
+            this.label10.TabIndex = 61;
+            this.label10.Text = "Default AutoName Path:";
+            // 
+            // btn_browse
+            // 
+            this.btn_browse.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_browse.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_browse.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_browse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_browse.Location = new System.Drawing.Point(326, 146);
+            this.btn_browse.Name = "btn_browse";
+            this.btn_browse.Size = new System.Drawing.Size(68, 22);
+            this.btn_browse.TabIndex = 62;
+            this.btn_browse.Text = "Browse";
+            this.btn_browse.UseVisualStyleBackColor = false;
+            this.btn_browse.Click += new System.EventHandler(this.btn_browse_Click);
+            // 
             // frmOptions
             // 
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(407, 328);
+            this.ClientSize = new System.Drawing.Size(443, 339);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.pictureBox2);
@@ -399,6 +461,8 @@ namespace Handbrake
             this.tab_options.ResumeLayout(false);
             this.tab_general.ResumeLayout(false);
             this.tab_general.PerformLayout();
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.tab_debug.ResumeLayout(false);
             this.tab_debug.PerformLayout();
             this.tab_advanced.ResumeLayout(false);
@@ -415,7 +479,6 @@ namespace Handbrake
         internal System.Windows.Forms.Label Label4;
         internal System.Windows.Forms.CheckBox check_verbose;
         internal System.Windows.Forms.ComboBox drp_processors;
-        internal System.Windows.Forms.SaveFileDialog File_Save;
         internal System.Windows.Forms.Label Label11;
         internal System.Windows.Forms.Button btn_close;
         internal System.Windows.Forms.CheckBox check_guiDebug;
@@ -426,7 +489,6 @@ namespace Handbrake
         private System.Windows.Forms.TabPage tab_advanced;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        internal System.Windows.Forms.CheckBox check_showPreset;
         internal System.Windows.Forms.CheckBox check_tooltip;
         internal System.Windows.Forms.CheckBox check_updateCheck;
         internal System.Windows.Forms.CheckBox check_userDefaultSettings;
@@ -437,5 +499,12 @@ namespace Handbrake
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Label label7;
         internal System.Windows.Forms.CheckBox check_updatePresets;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.Label label9;
+        internal System.Windows.Forms.CheckBox check_autoNaming;
+        private System.Windows.Forms.TextBox text_an_path;
+        internal System.Windows.Forms.Button btn_browse;
+        internal System.Windows.Forms.Label label10;
+        private System.Windows.Forms.FolderBrowserDialog pathFinder;
     }
 }

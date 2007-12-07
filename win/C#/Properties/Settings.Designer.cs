@@ -147,18 +147,6 @@ namespace Handbrake.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string hidePresets {
-            get {
-                return ((string)(this["hidePresets"]));
-            }
-            set {
-                this["hidePresets"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string defaultUserSettings {
             get {
                 return ((string)(this["defaultUserSettings"]));
@@ -201,6 +189,30 @@ namespace Handbrake.Properties {
             }
             set {
                 this["updatePresets"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string autoNaming {
+            get {
+                return ((string)(this["autoNaming"]));
+            }
+            set {
+                this["autoNaming"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string autoNamePath {
+            get {
+                return ((string)(this["autoNamePath"]));
+            }
+            set {
+                this["autoNamePath"] = value;
             }
         }
     }

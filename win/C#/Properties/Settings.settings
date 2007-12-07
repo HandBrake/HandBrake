@@ -32,9 +32,6 @@
     <Setting Name="CompletionOption" Type="System.String" Scope="User">
       <Value Profile="(Default)">Do Nothing</Value>
     </Setting>
-    <Setting Name="hidePresets" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="defaultUserSettings" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
@@ -45,6 +42,12 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="updatePresets" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="autoNaming" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="autoNamePath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

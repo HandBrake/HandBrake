@@ -589,7 +589,8 @@ namespace Handbrake.Functions
             Match optimizeMP4 = Regex.Match(input, @"-O");
 
             //Audio Settings Tab
-            Match subtitles = Regex.Match(input, @"-s ([0-9]*)");
+            Match subtitles = Regex.Match(input, @"-s ([0-9a-zA-Z]*)");
+            Match subScan = Regex.Match(input, @"-U");
             Match audioBitrate = Regex.Match(input, @"-B ([0-9]*)");
             Match audioSampleRate = Regex.Match(input, @"-R ([0-9.]*)");
             Match audioChannelsMix = Regex.Match(input, @"-6 ([0-9a-z0-9]*)");  // 1 -6 dpl2 // Broken
@@ -849,7 +850,12 @@ namespace Handbrake.Functions
                 if (subtitles.Success != false)
                     thisQuery.q_subtitles = subtitles.ToString().Replace("-s ", "");
                 else
-                    thisQuery.q_subtitles = "None";
+                {
+                    if (subScan.Success)
+                        thisQuery.q_subtitles = "Autoselect";
+                    else
+                        thisQuery.q_subtitles = "None";
+                }
 
                 thisQuery.q_forcedSubs = forcedSubtitles.Success;
 

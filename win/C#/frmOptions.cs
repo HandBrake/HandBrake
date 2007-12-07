@@ -44,17 +44,23 @@ namespace Handbrake
                 check_tooltip.CheckState = CheckState.Checked;
             }
 
-            if (Properties.Settings.Default.hidePresets == "Checked")
-            {
-                check_showPreset.CheckState = CheckState.Checked;
-            }
-
             if (Properties.Settings.Default.updatePresets == "Checked")
             {
                 check_updatePresets.CheckState = CheckState.Checked;
             }
+
+            if (Properties.Settings.Default.autoNaming == "Checked")
+            {
+                check_autoNaming.CheckState = CheckState.Checked;
+            }
+
+            if (Properties.Settings.Default.autoNamePath != "")
+                text_an_path.Text = Properties.Settings.Default.autoNamePath;
+            else
+                text_an_path.Text = "Click 'Browse' to set the default location";
         }
 
+        #region Options
         private void check_updateCheck_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.updateStatus = check_updateCheck.CheckState.ToString();
@@ -101,16 +107,36 @@ namespace Handbrake
             Properties.Settings.Default.CompletionOption = drp_completeOption.Text;
         }
 
-        private void check_showPreset_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.hidePresets = check_showPreset.CheckState.ToString();
-        }
-
         private void check_updatePresets_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.updatePresets = check_updatePresets.CheckState.ToString();
         }
 
+        private void check_autoNaming_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.autoNaming = check_autoNaming.CheckState.ToString();
+        }
+
+        private void btn_browse_Click(object sender, EventArgs e)
+        {
+            pathFinder.ShowDialog();
+            text_an_path.Text = pathFinder.SelectedPath;
+        }
+
+        private void text_an_path_TextChanged(object sender, EventArgs e)
+        {
+            if (text_an_path.Text == "")
+                Properties.Settings.Default.autoNamePath = null;
+            else
+                Properties.Settings.Default.autoNamePath = text_an_path.Text;
+        }
+        #endregion
+
+
+
+
+
+        
 
     }
 }
