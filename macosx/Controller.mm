@@ -3248,31 +3248,54 @@ the user is using "Custom" settings by determining the sender*/
                     if (![chosenPreset objectForKey:@"UsesPictureFilters"])
                     {
                         /* Filters */
-                        [fPictureController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
-                        
+                        /* Deinterlace */
+                        if ([chosenPreset objectForKey:@"PictureDeinterlace"])
+                        {
+                            [fPictureController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
+                        }
+                        else
+                        {
+                            [fPictureController setDeinterlace:0];
+                        }
+                        /* VFR */
                         if ([[chosenPreset objectForKey:@"VFR"] intValue] == 1)
                         {
                             [fPictureController setVFR:[[chosenPreset objectForKey:@"VFR"] intValue]];
                         }
                         else
                         {
-                        [fPictureController setVFR:0];
+                            [fPictureController setVFR:0];
                         }
-                        
-                        if ([chosenPreset objectForKey:@"PictureDetelecine"])
+                        /* Detelecine */
+                        if ([[chosenPreset objectForKey:@"PictureDetelecine"] intValue] == 1)
                         {
                             [fPictureController setDetelecine:[[chosenPreset objectForKey:@"PictureDetelecine"] intValue]];
                         }
+                        else
+                        {
+                            [fPictureController setDetelecine:0];
+                        }
+                        /* Denoise */
                         if ([chosenPreset objectForKey:@"PictureDenoise"])
                         {
                             [fPictureController setDenoise:[[chosenPreset objectForKey:@"PictureDenoise"] intValue]];
                         }
-                        if ([chosenPreset objectForKey:@"PictureDeblock"])
+                        else
+                        {
+                            [fPictureController setDenoise:0];
+                        }   
+                        /* Deblock */
+                        if ([[chosenPreset objectForKey:@"PictureDeblock"] intValue] == 1)
                         {
                             [fPictureController setDeblock:[[chosenPreset objectForKey:@"PictureDeblock"] intValue]];
+                        }
+                        else
+                        {
+                            [fPictureController setDeblock:0];
                         }   
-                   [self calculatePictureSizing: NULL];
-                     }
+                        
+                        [self calculatePictureSizing: NULL];
+                    }
                     
 				}
                 
@@ -3284,28 +3307,51 @@ the user is using "Custom" settings by determining the sender*/
             if ([chosenPreset objectForKey:@"UsesPictureFilters"] && [[chosenPreset objectForKey:@"UsesPictureFilters"]  intValue] > 0)
             {
                 /* Filters */
-                [fPictureController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
-                if ([chosenPreset objectForKey:@"VFR"])
-                {
-                    [fPictureController setVFR:[[chosenPreset objectForKey:@"VFR"] intValue]];
-                }
-                else
-                {
-                [fPictureController setVFR:0];
-                }
-                if ([chosenPreset objectForKey:@"PictureDetelecine"])
-                {
-                    [fPictureController setDetelecine:[[chosenPreset objectForKey:@"PictureDetelecine"] intValue]];
-                }
-                if ([chosenPreset objectForKey:@"PictureDenoise"])
-                {
-                    [fPictureController setDenoise:[[chosenPreset objectForKey:@"PictureDenoise"] intValue]];
-                }
-                if ([chosenPreset objectForKey:@"PictureDeblock"])
-                {
-                    [fPictureController setDeblock:[[chosenPreset objectForKey:@"PictureDeblock"] intValue]];
-                }   
-            }
+                        /* Deinterlace */
+                        if ([chosenPreset objectForKey:@"PictureDeinterlace"])
+                        {
+                            [fPictureController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
+                        }
+                        else
+                        {
+                            [fPictureController setDeinterlace:0];
+                        }
+                        /* VFR */
+                        if ([[chosenPreset objectForKey:@"VFR"] intValue] == 1)
+                        {
+                            [fPictureController setVFR:[[chosenPreset objectForKey:@"VFR"] intValue]];
+                        }
+                        else
+                        {
+                            [fPictureController setVFR:0];
+                        }
+                        /* Detelecine */
+                        if ([[chosenPreset objectForKey:@"PictureDetelecine"] intValue] == 1)
+                        {
+                            [fPictureController setDetelecine:[[chosenPreset objectForKey:@"PictureDetelecine"] intValue]];
+                        }
+                        else
+                        {
+                            [fPictureController setDetelecine:0];
+                        }
+                        /* Denoise */
+                        if ([chosenPreset objectForKey:@"PictureDenoise"])
+                        {
+                            [fPictureController setDenoise:[[chosenPreset objectForKey:@"PictureDenoise"] intValue]];
+                        }
+                        else
+                        {
+                            [fPictureController setDenoise:0];
+                        }   
+                        /* Deblock */
+                        if ([[chosenPreset objectForKey:@"PictureDeblock"] intValue] == 1)
+                        {
+                            [fPictureController setDeblock:[[chosenPreset objectForKey:@"PictureDeblock"] intValue]];
+                        }
+                        else
+                        {
+                            [fPictureController setDeblock:0];
+                        }             }
 			[self calculatePictureSizing: NULL];
 			[[fPresetsActionMenu itemAtIndex:0] setEnabled: YES];
         }
