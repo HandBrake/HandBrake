@@ -415,7 +415,7 @@ if $(OS) = CYGWIN
     {
         cd `dirname $(>)` && CONTRIB=`pwd` &&
         rm -rf zlib && (gzip -dc zlib.tar.gz | tar xf - ) &&
-        cd zlib && ./configure --prefix=$CONTRIB --cache-file=$CONTRIB/config.cache &&
+        cd zlib && ./configure --prefix=$CONTRIB &&
         $(MAKE) && $(MAKE) install && touch $CONTRIB/.contrib &&
         $(STRIP) $CONTRIB/lib/libz.a
     }

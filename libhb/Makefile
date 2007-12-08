@@ -2,7 +2,7 @@ include ../Makefile.config
 
 SYSTEM = $(shell uname -s)
 
-ifeq ($(SYSTEM),CYGWIN_NT-5.1)
+ifeq ($(findstring CYGWIN_NT,$(SYSTEM)),CYGWIN_NT)
 	SYSDEF=-DSYS_CYGWIN
 endif
 
@@ -29,7 +29,7 @@ SRCS = common.c hb.c ports.c scan.c work.c decmpeg2.c encavcodec.c \
 OTMP = $(SRCS:%.c=%.o) 
 OBJS = $(OTMP:%.cpp=%.o)
 
-ifeq ($(SYSTEM),CYGWIN_NT-5.1)
+ifeq ($(findstring CYGWIN_NT,$(SYSTEM)),CYGWIN_NT)
 CONTRIBS = ../contrib/lib/liba52.a ../contrib/lib/libavformat.a \
 		   ../contrib/lib/libavcodec.a ../contrib/lib/libavutil.a \
 		   ../contrib/lib/libdca.a ../contrib/lib/libdvdread.a  \
@@ -58,7 +58,7 @@ CFLAGS += -I../contrib/include -D__LIBHB__ -DUSE_PTHREAD -DHB_VERSION=\"$(HB_VER
 
 CXXFLAGS += -I../contrib/include -D__LIBHB__ -DUSE_PTHREAD -DHB_VERSION=\"$(HB_VERSION)\" -DHB_BUILD=$(HB_BUILD) $(SYSDEF)
 
-ifeq ($(SYSTEM),CYGWIN_NT-5.1)
+ifeq ($(findstring CYGWIN_NT,$(SYSTEM)),CYGWIN_NT)
 all: libhb.a libhb.dll
 else
 all: libhb.a libhb.so

@@ -1,6 +1,6 @@
 SYSTEM = $(shell uname -s)
 
-ifeq ($(SYSTEM),CYGWIN_NT-5.1)
+ifeq ($(findstring CYGWIN_NT,$(SYSTEM)),CYGWIN_NT)
 	LIBS = a52 mkv avformat avcodec avutil dca dvdread faac mp3lame mpeg2 vorbis vorbisenc ogg samplerate x264 xvidcore mp4v2 swscale 
 else
         LIBS = a52 mkv avformat avcodec avutil dca dvdread dvdcss faac mp3lame mpeg2 vorbis vorbisenc ogg samplerate x264 xvidcore mp4v2 swscale 
