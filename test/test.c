@@ -39,6 +39,7 @@ static int    h264_13     = 0;
 static int    h264_30     = 0;
 static char * audios      = NULL;
 static int    audio_mixdown = HB_AMIXDOWN_DOLBYPLII;
+static float  dynamic_range_compression = 0;
 static int    sub         = 0;
 static int    width       = 0;
 static int    height      = 0;
@@ -823,7 +824,11 @@ static int HandleEvents( hb_handle_t * h )
             {
                 job->acodec = acodec;
             }
-
+            if ( dynamic_range_compression )
+            {
+                job->dynamic_range_compression = dynamic_range_compression;
+            }
+            
             if( size )
             {
                 job->vbitrate = hb_calc_bitrate( job, size );
@@ -1181,7 +1186,9 @@ static void ShowHelp()
             fprintf( stderr, "/" );
     }
     fprintf( stderr, " kHz)\n"
-   
+    "    -D, --drc <float>       Apply extra dynamic range compression to the audio,\n"
+    "                            making soft sounds louder. Range is 1.0 to 4.0\n"
+    "                            (too loud), with 1.5 - 2.5 being a useful range.\n"
     
 	
 	"\n"
@@ -1267,6 +1274,7 @@ static int ParseOptions( int argc, char ** argv )
             { "markers",     optional_argument, NULL,    'm' },
             { "audio",       required_argument, NULL,    'a' },
             { "mixdown",     required_argument, NULL,    '6' },
+            { "drc",         required_argument, NULL,    'D' },
             { "subtitle",    required_argument, NULL,    's' },
             { "subtitle-scan", no_argument,     NULL,    'U' },
             { "subtitle-forced", no_argument,   NULL,    'F' },
@@ -1308,7 +1316,7 @@ static int ParseOptions( int argc, char ** argv )
         int c;
 
         c = getopt_long( argc, argv,
-                         "hvuC:f:4i:Io:t:Lc:ma:6:s:UFN:e:E:2d789gpOP::w:l:n:b:q:S:B:r:R:Qx:TY:X:VZ:z",
+                         "hvuC:f:4i:Io:t:Lc:ma:6:s:UFN:e:E:2dD:789gpOP::w:l:n:b:q:S:B:r:R:Qx:TY:X:VZ:z",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -1415,6 +1423,9 @@ static int ParseOptions( int argc, char ** argv )
                 {
                     audio_mixdown = HB_AMIXDOWN_6CH;
                 }
+                break;
+            case 'D':
+                dynamic_range_compression = atof( optarg );
                 break;
             case 's':
                 sub = atoi( optarg );

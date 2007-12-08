@@ -236,6 +236,7 @@ struct hb_job_s
     int             acodec;
     int             abitrate;
     int             arate;
+    float           dynamic_range_compression;
 
     /* Subtitle settings:
          subtitle: index in hb_title_t's subtitles list, starting

@@ -324,6 +324,9 @@ static void do_job( hb_job_t * job, int cpu_count )
                 "faac" : ( ( job->acodec & HB_ACODEC_LAME ) ? "lame" :
                 "vorbis" ) );
     }
+    
+    if ( job->dynamic_range_compression )
+        hb_log(" + dynamic range compression: %f", job->dynamic_range_compression);
 
     /* if we are doing AC3 passthru, then remove any non-AC3 audios from the job */
     /* otherwise, Bad Things will happen */

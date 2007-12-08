@@ -20,6 +20,7 @@ struct hb_work_private_s
     int           rate;
     int           bitrate;
     float         level;
+    float         dynamic_range_compression;
     
     int           error;
     int           sync;
@@ -56,6 +57,30 @@ hb_work_object_t hb_deca52 =
 static hb_buffer_t * Decode( hb_work_object_t * w );
 
 /***********************************************************************
+ * dynrng_call
+ ***********************************************************************
+ * Boosts soft audio -- taken from gbooker's work in A52Decoder, comment and all..
+ * Two cases 
+ * 1) The user requested a compression of 1 or less, return the typical power rule 
+ * 2) The user requested a compression of more than 1 (decompression): 
+ *    If the stream's requested compression is less than 1.0 (loud sound), return the normal compression 
+ *    If the stream's requested compression is more than 1.0 (soft sound), use power rule (which will make
+ *   it louder in this case). 
+ * 
+ **********************************************************************/
+static sample_t dynrng_call (sample_t c, void *data)
+{        
+        double *level = (double *)data;
+        float levelToUse = (float)*level;
+        if(c > 1.0 || levelToUse <= 1.0)
+        {
+            return powf(c, levelToUse);
+        }
+        else
+                return c;
+}
+ 
+/***********************************************************************
  * hb_work_deca52_init
  ***********************************************************************
  * Allocate the work object, initialize liba52
@@ -80,6 +105,8 @@ int deca52Init( hb_work_object_t * w, hb_job_t * job )
 	pv->out_discrete_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(w->amixdown);
 
     pv->level     = 32768.0;
+    pv->dynamic_range_compression = job->dynamic_range_compression;
+    
     pv->next_expected_pts = 0;
     pv->sequence = 0;
     
@@ -201,6 +228,11 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     /* Feed liba52 */
     a52_frame( pv->state, pv->frame, &pv->flags_out, &pv->level, 0 );
 
+    if ( pv->dynamic_range_compression )
+    {
+        a52_dynrng( pv->state, dynrng_call, &pv->dynamic_range_compression);        
+    }
+    
     /* 6 blocks per frame, 256 samples per block, channelsused channels */
     buf        = hb_buffer_init( 6 * 256 * pv->out_discrete_channels * sizeof( float ) );
     if (pts == -1)
