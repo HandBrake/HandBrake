@@ -36,6 +36,8 @@
     [UserPresets addObject:[self createBrokePreset]];
     [UserPresets addObject:[self createBlindPreset]];
     [UserPresets addObject:[self createCRFPreset]];
+    [UserPresets addObject:[self create360Preset]];
+
     /* return the newly regenerated preset array back to Controller.mm */
     return UserPresets;
 }
@@ -68,7 +70,7 @@
 	/* Video encoder */
 	[preset setObject:@"x264 (h.264 iPod)" forKey:@"VideoEncoder"];
 	/* x264 Option String */
-	[preset setObject:@"keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1" forKey:@"x264Option"];
+	[preset setObject:@"bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1" forKey:@"x264Option"];
 	/* Video quality */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
 	[preset setObject:@"700" forKey:@"VideoTargetSize"];
@@ -91,8 +93,16 @@
 	[preset setObject:[NSNumber numberWithInt:320] forKey:@"PictureWidth"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureKeepRatio"];
-	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PicturePAR"];
+
+	/* Explicitly set the filters for built-in presets */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureFilters"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDenoise"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VFR"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeblock"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDetelecine"];
+
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
@@ -136,7 +146,7 @@
 	/* Video encoder */
 	[preset setObject:@"x264 (h.264 iPod)" forKey:@"VideoEncoder"];
 	/* x264 Option String */
-	[preset setObject:@"keyint=300:keyint-min=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1" forKey:@"x264Option"];
+	[preset setObject:@"bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1" forKey:@"x264Option"];
 	/* Video quality */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
 	[preset setObject:@"700" forKey:@"VideoTargetSize"];
@@ -158,8 +168,16 @@
 	[preset setObject:[NSNumber numberWithInt:640] forKey:@"PictureWidth"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureKeepRatio"];
-	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PicturePAR"];
+	
+	/* Explicitly set the filters for built-in presets */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureFilters"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDenoise"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VFR"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeblock"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDetelecine"];
+
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureAutoCrop"];
@@ -192,7 +210,7 @@
 	/*Set whether or not this is default, at creation set to 0*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
 	/*Get the whether or not to apply pic settings in the AddPresetPanel*/
-	[preset setObject:[NSNumber numberWithInt:2] forKey:@"UsesPictureSettings"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
 	/* Get the New Preset Description from the field in the AddPresetPanel */
     [preset setObject:@"HandBrake's settings for the AppleTV. Provides a good balance between quality and file size, and optimizes performance." forKey:@"PresetDescription"];
 	/* File Format */
@@ -204,7 +222,7 @@
 	/* Video encoder */
 	[preset setObject:@"x264 (h.264 Main)" forKey:@"VideoEncoder"];
 	/* x264 Option String (We can use this to tweak the appleTV output)*/
-	[preset setObject:@"bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=2:cabac=0" forKey:@"x264Option"];
+	[preset setObject:@"bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=1:cabac=0" forKey:@"x264Option"];
 	/* Video quality */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
 	[preset setObject:@"700" forKey:@"VideoTargetSize"];
@@ -231,8 +249,16 @@
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureWidth"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureKeepRatio"];
-	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PicturePAR"];
+
+	/* Explicitly set the filters for built-in presets */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureFilters"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDenoise"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VFR"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeblock"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDetelecine"];
+
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
@@ -264,7 +290,7 @@
 	/*Set whether or not this is default, at creation set to 0*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
 	/*Get the whether or not to apply pic settings in the AddPresetPanel*/
-	[preset setObject:[NSNumber numberWithInt:2] forKey:@"UsesPictureSettings"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
 	/* Get the New Preset Description from the field in the AddPresetPanel */
     [preset setObject:@"HandBrake's settings for the Sony PlayStation 3." forKey:@"PresetDescription"];
 	/* File Format */
@@ -300,8 +326,16 @@
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureWidth"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureKeepRatio"];
-	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PicturePAR"];
+
+	/* Explicitly set the filters for built-in presets */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureFilters"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDenoise"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VFR"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeblock"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDetelecine"];
+
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
@@ -368,8 +402,16 @@
 	[preset setObject:@"368" forKey:@"PictureWidth"];
 	[preset setObject:@"208" forKey:@"PictureHeight"];
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureKeepRatio"];
-	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PicturePAR"];
+
+	/* Explicitly set the filters for built-in presets */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureFilters"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDenoise"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VFR"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeblock"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDetelecine"];
+
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureAutoCrop"];
@@ -438,8 +480,16 @@
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureWidth"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureKeepRatio"];
-	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PicturePAR"];
+	
+	/* Explicitly set the filters for built-in presets */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureFilters"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDenoise"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VFR"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeblock"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDetelecine"];
+	
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
@@ -506,8 +556,16 @@
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureWidth"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureKeepRatio"];
-	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PicturePAR"];
+
+	/* Explicitly set the filters for built-in presets */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureFilters"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDenoise"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VFR"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeblock"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDetelecine"];
+
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
@@ -551,7 +609,7 @@
 	/* Video encoder */
 	[preset setObject:@"x264 (h.264 Main)" forKey:@"VideoEncoder"];
 	/* x264 Option String */
-	[preset setObject:@"ref=3:mixed-refs:bframes=16:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:no-fast-pskip" forKey:@"x264Option"];
+	[preset setObject:@"ref=3:mixed-refs:bframes=16:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=7:analyse=all:8x8dct:trellis=1:no-fast-pskip" forKey:@"x264Option"];
 	/* Video quality */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
 	[preset setObject:@"700" forKey:@"VideoTargetSize"];
@@ -575,8 +633,16 @@
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureWidth"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureKeepRatio"];
-	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PicturePAR"];
+
+	/* Explicitly set the filters for built-in presets */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureFilters"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDenoise"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VFR"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeblock"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDetelecine"];
+
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
@@ -644,8 +710,15 @@
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureWidth"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureKeepRatio"];
-	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PicturePAR"];
+	
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureFilters"];
+	[preset setObject:[NSNumber numberWithInt:3] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureDenoise"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VFR"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeblock"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDetelecine"];
+
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
@@ -713,8 +786,16 @@
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureWidth"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureKeepRatio"];
-	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PicturePAR"];
+    
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureFilters"];
+	[preset setObject:[NSNumber numberWithInt:3] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VFR"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDenoise"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeblock"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDetelecine"];
+	
+
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
@@ -782,8 +863,16 @@
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureWidth"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureKeepRatio"];
-	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PicturePAR"];
+
+	/* Explicitly set the filters for built-in presets */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureFilters"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDenoise"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VFR"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeblock"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDetelecine"];
+
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
@@ -851,8 +940,16 @@
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureWidth"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureKeepRatio"];
-	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PicturePAR"];
+
+	/* Explicitly set the filters for built-in presets */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureFilters"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDenoise"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VFR"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeblock"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDetelecine"];
+
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
@@ -918,8 +1015,16 @@
 	[preset setObject:[NSNumber numberWithInt:480] forKey:@"PictureWidth"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureKeepRatio"];
-	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PicturePAR"];
+
+	/* Explicitly set the filters for built-in presets */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureFilters"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDenoise"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VFR"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeblock"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDetelecine"];
+
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureAutoCrop"];
@@ -988,8 +1093,16 @@
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureWidth"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureKeepRatio"];
-	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PicturePAR"];
+
+	/* Explicitly set the filters for built-in presets */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureFilters"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDenoise"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VFR"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeblock"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDetelecine"];
+
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
@@ -1057,8 +1170,16 @@
 	[preset setObject:[NSNumber numberWithInt:640] forKey:@"PictureWidth"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureKeepRatio"];
-	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PicturePAR"];
+
+	/* Explicitly set the filters for built-in presets */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureFilters"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDenoise"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VFR"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeblock"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDetelecine"];
+
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
@@ -1126,8 +1247,16 @@
 	[preset setObject:[NSNumber numberWithInt:512] forKey:@"PictureWidth"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureKeepRatio"];
-	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PicturePAR"];
+
+	/* Explicitly set the filters for built-in presets */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureFilters"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDenoise"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VFR"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeblock"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDetelecine"];
+
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
@@ -1195,8 +1324,16 @@
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureWidth"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureKeepRatio"];
-	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PicturePAR"];
+
+	/* Explicitly set the filters for built-in presets */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureFilters"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDenoise"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VFR"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeblock"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDetelecine"];
+
 	/* Set crop settings here */
 	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
@@ -1218,6 +1355,81 @@
 
 }
 
+- (NSDictionary *)create360Preset
+{
+    NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
+	/* Get the New Preset Name from the field in the AddPresetPanel */
+    [preset setObject:@"Xbox 360" forKey:@"PresetName"];
+	/*Set whether or not this is a user preset where 0 is factory, 1 is user*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
+	/*Set whether or not this is default, at creation set to 0*/
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
+	/*Get the whether or not to apply pic settings in the AddPresetPanel*/
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
+	/* Get the New Preset Description from the field in the AddPresetPanel */
+    [preset setObject:@"HandBrake's settings for the Microsoft Xbox 360." forKey:@"PresetDescription"];
+	/* File Format */
+    [preset setObject:@"MP4 file" forKey:@"FileFormat"];
+	/* Chapter Markers*/
+	 [preset setObject:[NSNumber numberWithInt:0] forKey:@"ChapterMarkers"];
+	/* Codecs */
+	[preset setObject:@"AVC/H.264 Video / AAC Audio" forKey:@"FileCodecs"];
+	/* Video encoder */
+	[preset setObject:@"x264 (h.264 Main)" forKey:@"VideoEncoder"];
+	/* x264 Option String (We can use this to tweak the appleTV output)*/
+	[preset setObject:@"level=40:ref=3:mixed-refs:bframes=16:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=7:analyse=all:8x8dct:trellis=1:no-fast-pskip:filter=-2,-1" forKey:@"x264Option"];
+	/* Video quality */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
+	[preset setObject:@"700" forKey:@"VideoTargetSize"];
+	[preset setObject:@"2000" forKey:@"VideoAvgBitrate"];
+	[preset setObject:[NSNumber numberWithFloat:0.6471] forKey:@"VideoQualitySlider"];
+	
+	/* Video framerate */
+	[preset setObject:@"Same as source" forKey:@"VideoFramerate"];
+	/* GrayScale */
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
+	/* 2 Pass Encoding */
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoTwoPass"];
+	
+	/*Picture Settings*/
+	/* For PS3 we only want to retain UsesMaxPictureSettings
+	which depend on the source dvd picture settings, so we don't
+	record the current dvd's picture info since it will vary from
+	source to source*/
+	/* Use Max Picture settings for whatever the dvd is.*/
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesMaxPictureSettings"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureWidth"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureKeepRatio"];
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"PicturePAR"];
 
+	/* Explicitly set the filters for built-in presets */
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureFilters"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDenoise"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"VFR"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeblock"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDetelecine"];
+
+	/* Set crop settings here */
+	/* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureBottomCrop"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
+	[preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
+	
+	/*Audio*/
+	/* Audio Sample Rate*/
+	[preset setObject:@"48" forKey:@"AudioSampleRate"];
+	/* Audio Bitrate Rate*/
+	[preset setObject:@"160" forKey:@"AudioBitRate"];
+	/* Subtitles*/
+	[preset setObject:@"None" forKey:@"Subtitles"];
+	
+
+    [preset autorelease];
+    return preset;
+
+}
 
 @end

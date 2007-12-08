@@ -31,4 +31,6 @@
 - (NSDictionary *)createBrokePreset;
 - (NSDictionary *)createBlindPreset;
 - (NSDictionary *)createCRFPreset;
+- (NSDictionary *)create360Preset;
+
 @end

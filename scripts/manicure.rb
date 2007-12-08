@@ -493,49 +493,49 @@ class PresetClass
 
   def generateAPIcalls(hash) # Makes a C version of the preset ready for coding into the CLI
     
-    commandString = "if (!strcmp(preset_name, \"" << hash["PresetName"] << "\"))\n{\n\t"
+    commandString = "if (!strcmp(preset_name, \"" << hash["PresetName"] << "\"))\n{\n    "
     
     #Filename suffix
     case hash["FileFormat"]
     when /MP4/
-      commandString << "mux = " << "HB_MUX_MP4;\n\t"
+      commandString << "mux = " << "HB_MUX_MP4;\n    "
     when /AVI/
-      commandString << "mux = " << "HB_MUX_AVI;\n\t"
+      commandString << "mux = " << "HB_MUX_AVI;\n    "
     when /OGM/
-      commandString << "mux = " << "HB_MUX_OGM;\n\t"
+      commandString << "mux = " << "HB_MUX_OGM;\n    "
     when /MKV/
-      commandString << "mux = " << "HB_MUX_MKV;\n\t"
+      commandString << "mux = " << "HB_MUX_MKV;\n    "
     end
     
     #Video encoder
     if hash["VideoEncoder"] != "FFmpeg"
       commandString << "vcodec = "
       if hash["VideoEncoder"] == "x264 (h.264 Main)"
-        commandString << "HB_VCODEC_X264;\n\t"
+        commandString << "HB_VCODEC_X264;\n    "
       elsif hash["VideoEncoder"] == "x264 (h.264 iPod)"
-        commandString << "HB_VCODEC_X264;\njob->h264_level = 30;\n\t"
+        commandString << "HB_VCODEC_X264;\njob->h264_level = 30;\n    "
       elsif hash["VideoEncoder"].to_s.downcase == "xvid"
-        commandString << "HB_VCODEC_XVID;\n\t"        
+        commandString << "HB_VCODEC_XVID;\n    "        
       end
     end
 
     #VideoRateControl
     case hash["VideoQualityType"].to_i
     when 0
-      commandString << "size = " << hash["VideoTargetSize"] << ";\n\t"
+      commandString << "size = " << hash["VideoTargetSize"] << ";\n    "
     when 1
-      commandString << "job->vbitrate = " << hash["VideoAvgBitrate"] << ";\n\t"
+      commandString << "job->vbitrate = " << hash["VideoAvgBitrate"] << ";\n    "
     when 2
-      commandString << "job->vquality = " << hash["VideoQualitySlider"] << ";\n\t"
-      commandString << "job->crf = 1;\n\t"
+      commandString << "job->vquality = " << hash["VideoQualitySlider"] << ";\n    "
+      commandString << "job->crf = 1;\n    "
     end
 
     #FPS
     if hash["VideoFramerate"] != "Same as source"
       if hash["VideoFramerate"] == "23.976 (NTSC Film)"
-        commandString << "job->vrate_base = " << "1126125;\n\t"
+        commandString << "job->vrate_base = " << "1126125;\n    "
       elsif hash["VideoFramerate"] == "29.97 (NTSC Video)"
-        commandString << "job->vrate_base = " << "900900;\n\t"
+        commandString << "job->vrate_base = " << "900900;\n    "
       # Gotta add the rest of the framerates for completion's sake.
       end
     end
@@ -543,7 +543,7 @@ class PresetClass
     # Only include samplerate and bitrate when not performing AC3 passthru
     if (hash["FileCodecs"].include? "AC-3") == false
       #Audio bitrate
-      commandString << "job->abitrate = " << hash["AudioBitRate"] << ";\n\t"
+      commandString << "job->abitrate = " << hash["AudioBitRate"] << ";\n    "
     
       #Audio samplerate
       commandString << "job->arate = "
@@ -559,50 +559,50 @@ class PresetClass
       when /22.05/
         commandString << "22050"
       end
-      commandString << ";\n\t"
+      commandString << ";\n    "
     end
       
     #Audio encoder
     commandString << "acodec = "
     case hash["FileCodecs"]
     when /AAC/
-      commandString << "HB_ACODEC_FAAC;\n\t"
+      commandString << "HB_ACODEC_FAAC;\n    "
     when /AC-3/
-      commandString << "HB_ACODEC_AC3;\n\t"
+      commandString << "HB_ACODEC_AC3;\n    "
     when /Vorbis/
-      commandString << "HB_ACODEC_VORBIS;\n\t"
+      commandString << "HB_ACODEC_VORBIS;\n    "
     when /MP3/
-      commandString << "HB_ACODEC_LAME;\n\t"
+      commandString << "HB_ACODEC_LAME;\n    "
     end
     
     #Cropping
     if !hash["PictureAutoCrop"].to_i
-      commandString << "job->crop[0] = " << hash["PictureTopCrop"] << ";\n\t"
-      commandString << "job->crop[1] = " << hash["PictureBottomCrop"] << ";\n\t"
-      commandString << "job->crop[2] = " << hash["PictureLeftCrop"] << ";\n\t"
-      commandString << "job->crop[4] - " << hash["PictureRightCrop"] << ";\n\t"
+      commandString << "job->crop[0] = " << hash["PictureTopCrop"] << ";\n    "
+      commandString << "job->crop[1] = " << hash["PictureBottomCrop"] << ";\n    "
+      commandString << "job->crop[2] = " << hash["PictureLeftCrop"] << ";\n    "
+      commandString << "job->crop[4] - " << hash["PictureRightCrop"] << ";\n    "
     end
     
     #Dimensions
     if hash["PictureWidth"].to_i != 0
       commandString << "job->width = "
-      commandString << hash["PictureWidth"] << ";\n\t"
+      commandString << hash["PictureWidth"] << ";\n    "
     end
     if hash["PictureHeight"].to_i != 0
       commandString << "job->height = "
-      commandString << hash["PictureHeight"] << ";\n\t"
+      commandString << hash["PictureHeight"] << ";\n    "
     end
     
     #Subtitles
     if hash["Subtitles"] != "None"
       commandString << "job->subtitle = "
-      commandString << ( hash["Subtitles"].to_i - 1).to_s << ";\n\t"
+      commandString << ( hash["Subtitles"].to_i - 1).to_s << ";\n    "
     end
     
     #x264 Options
     if hash["x264Option"] != ""
       commandString << "x264opts = strdup(\""
-      commandString << hash["x264Option"] << "\");\n\t"
+      commandString << hash["x264Option"] << "\");\n    "
     end
     
     #Video Filters
@@ -610,41 +610,41 @@ class PresetClass
       
       case hash["PictureDeinterlace"].to_i
       when 1
-        commandString << "deinterlace = 1;\n\t"
-        commandString << "deinterlace_opt = \"-1\";\n\t"
+        commandString << "deinterlace = 1;\n    "
+        commandString << "deinterlace_opt = \"-1\";\n    "
       when 2
-        commandString << "deinterlace = 1;\n\t"
-        commandString << "deinterlace_opt = \"0\";\n\t"
+        commandString << "deinterlace = 1;\n    "
+        commandString << "deinterlace_opt = \"0\";\n    "
       when 3
-        commandString << "deinterlace = 1;\n\t"
-        commandString << "deinterlace_opt = \"2:-1:1\";\n\t"
+        commandString << "deinterlace = 1;\n    "
+        commandString << "deinterlace_opt = \"2:-1:1\";\n    "
       when 4
-        commandString << "deinterlace = 1;\n\t"
-        commandString << "deinterlace_opt = \"1:-1:1\";\n\t"
+        commandString << "deinterlace = 1;\n    "
+        commandString << "deinterlace_opt = \"1:-1:1\";\n    "
       end
       
       case hash["PictureDenoise"].to_i
       when 1
-        commandString << "denoise = 1;\n\t"
-        commandString << "denoise_opt = \"2:1:2:3\";\n\t"
+        commandString << "denoise = 1;\n    "
+        commandString << "denoise_opt = \"2:1:2:3\";\n    "
       when 2
-        commandString << "denoise = 1;\n\t"
-        commandString << "denoise_opt = \"3:2:2:3\";\n\t"
+        commandString << "denoise = 1;\n    "
+        commandString << "denoise_opt = \"3:2:2:3\";\n    "
       when 3
-        commandString << "denoise = 1;\n\t"
-        commandString << "denoise_opt = \"7:7:5:5\";\n\t"
+        commandString << "denoise = 1;\n    "
+        commandString << "denoise_opt = \"7:7:5:5\";\n    "
       end
       
-      if hash["PictureDetelecine"].to_i == 1 then commandString << "detelecine = 1;\n\t" end
-      if hash["PictureDeblock"].to_i == 1 then commandString << "deblock = 1;\n\t" end
-      if hash["VFR"].to_i == 1 then commandString << "vfr = 1;\n\t" end
+      if hash["PictureDetelecine"].to_i == 1 then commandString << "detelecine = 1;\n    " end
+      if hash["PictureDeblock"].to_i == 1 then commandString << "deblock = 1;\n    " end
+      if hash["VFR"].to_i == 1 then commandString << "vfr = 1;\n    " end
     end
     
     #Booleans
-    if hash["ChapterMarkers"].to_i == 1 then commandString << "job->chapter_markers = 1;\n\t" end
-    if hash["PicturePAR"].to_i == 1 then commandString << "pixelratio = 1;\n\t" end
-    if hash["VideoGrayScale"].to_i == 1 then commandString << "job->grayscale = 1;\n\t" end
-    if hash["VideoTwoPass"].to_i == 1 then commandString << "twoPass = 1;\n\t" end
+    if hash["ChapterMarkers"].to_i == 1 then commandString << "job->chapter_markers = 1;\n    " end
+    if hash["PicturePAR"].to_i == 1 then commandString << "pixelratio = 1;\n    " end
+    if hash["VideoGrayScale"].to_i == 1 then commandString << "job->grayscale = 1;\n    " end
+    if hash["VideoTwoPass"].to_i == 1 then commandString << "twoPass = 1;\n    " end
     if hash["VideoTurboTwoPass"].to_i == 1 then commandString << "turbo_opts_enabled = 1;\n" end
     
     commandString << "}"
@@ -657,7 +657,7 @@ class PresetClass
 
   def generateAPIList(hash) # Makes a list of the CLI options a built-in CLI preset uses, for wrappers to parse
     commandString = ""
-    commandString << "printf(\"\\n+ " << hash["PresetName"] << ": "
+    commandString << "    printf(\"\\n+ " << hash["PresetName"] << ": "
         
     #Video encoder
     if hash["VideoEncoder"] != "FFmpeg"
@@ -759,22 +759,22 @@ class PresetClass
       
       case hash["PictureDeinterlace"].to_i
       when 1
-        commandString << " --deinterlace=\"fast\""
+        commandString << " --deinterlace=\\\"fast\\\""
       when 2
-        commandString << " --deinterlace=\slow\""
+        commandString << " --deinterlace=\\\slow\\\""
       when 3
-        commandString << " --deinterlace=\"slower\""
+        commandString << " --deinterlace=\\\"slower\\\""
       when 4
-        commandString << " --deinterlace=\"slowest\""
+        commandString << " --deinterlace=\\\"slowest\\\""
       end
       
       case hash["PictureDenoise"].to_i
       when 1
-        commandString << " --denoise=\"weak\""
+        commandString << " --denoise=\\\"weak\\\""
       when 2
-        commandString << " --denoise=\"medium\""
+        commandString << " --denoise=\\\"medium\\\""
       when 3
-        commandString << " --denoise=\"strong\""
+        commandString << " --denoise=\\\"strong\\\""
       end
       
       if hash["PictureDetelecine"].to_i == 1 then commandString << " --detelecine" end
