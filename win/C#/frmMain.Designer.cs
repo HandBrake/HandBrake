@@ -188,6 +188,9 @@ namespace Handbrake
             this.groupBox_dest = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.treeView_presets = new System.Windows.Forms.TreeView();
+            this.slider_drc = new System.Windows.Forms.TrackBar();
+            this.check_drc = new System.Windows.Forms.CheckBox();
+            this.lbl_drc = new System.Windows.Forms.Label();
             Label38 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
             this.frmMainMenu.SuspendLayout();
@@ -205,6 +208,7 @@ namespace Handbrake
             this.advancedOptions.SuspendLayout();
             this.groupBox_dest.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.slider_drc)).BeginInit();
             this.SuspendLayout();
             // 
             // Label38
@@ -424,7 +428,7 @@ namespace Handbrake
             "112",
             "128",
             "160"});
-            this.drp_audioBitrate.Location = new System.Drawing.Point(113, 131);
+            this.drp_audioBitrate.Location = new System.Drawing.Point(113, 120);
             this.drp_audioBitrate.Name = "drp_audioBitrate";
             this.drp_audioBitrate.Size = new System.Drawing.Size(101, 21);
             this.drp_audioBitrate.TabIndex = 5;
@@ -442,7 +446,7 @@ namespace Handbrake
             "32",
             "24",
             "22.05"});
-            this.drp_audioSampleRate.Location = new System.Drawing.Point(366, 131);
+            this.drp_audioSampleRate.Location = new System.Drawing.Point(366, 120);
             this.drp_audioSampleRate.Name = "drp_audioSampleRate";
             this.drp_audioSampleRate.Size = new System.Drawing.Size(101, 21);
             this.drp_audioSampleRate.TabIndex = 6;
@@ -540,7 +544,7 @@ namespace Handbrake
             this.drp_subtitle.Items.AddRange(new object[] {
             "None",
             "Autoselect"});
-            this.drp_subtitle.Location = new System.Drawing.Point(113, 200);
+            this.drp_subtitle.Location = new System.Drawing.Point(111, 231);
             this.drp_subtitle.Name = "drp_subtitle";
             this.drp_subtitle.Size = new System.Drawing.Size(213, 21);
             this.drp_subtitle.TabIndex = 12;
@@ -1266,6 +1270,9 @@ namespace Handbrake
             // TabPage2
             // 
             this.TabPage2.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.TabPage2.Controls.Add(this.lbl_drc);
+            this.TabPage2.Controls.Add(this.check_drc);
+            this.TabPage2.Controls.Add(this.slider_drc);
             this.TabPage2.Controls.Add(this.check_forced);
             this.TabPage2.Controls.Add(this.drp_track2Audio);
             this.TabPage2.Controls.Add(this.label28);
@@ -1293,7 +1300,7 @@ namespace Handbrake
             // 
             this.check_forced.AutoSize = true;
             this.check_forced.Enabled = false;
-            this.check_forced.Location = new System.Drawing.Point(332, 202);
+            this.check_forced.Location = new System.Drawing.Point(330, 233);
             this.check_forced.Name = "check_forced";
             this.check_forced.Size = new System.Drawing.Size(147, 17);
             this.check_forced.TabIndex = 17;
@@ -1340,7 +1347,7 @@ namespace Handbrake
             this.Label19.AutoSize = true;
             this.Label19.BackColor = System.Drawing.Color.Transparent;
             this.Label19.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label19.Location = new System.Drawing.Point(13, 170);
+            this.Label19.Location = new System.Drawing.Point(11, 210);
             this.Label19.Name = "Label19";
             this.Label19.Size = new System.Drawing.Size(64, 13);
             this.Label19.TabIndex = 10;
@@ -1351,7 +1358,7 @@ namespace Handbrake
             this.Label20.AutoSize = true;
             this.Label20.BackColor = System.Drawing.Color.Transparent;
             this.Label20.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label20.Location = new System.Drawing.Point(13, 203);
+            this.Label20.Location = new System.Drawing.Point(11, 234);
             this.Label20.Name = "Label20";
             this.Label20.Size = new System.Drawing.Size(61, 13);
             this.Label20.TabIndex = 11;
@@ -1387,7 +1394,7 @@ namespace Handbrake
             this.Label5.AutoSize = true;
             this.Label5.BackColor = System.Drawing.Color.Transparent;
             this.Label5.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label5.Location = new System.Drawing.Point(13, 105);
+            this.Label5.Location = new System.Drawing.Point(13, 94);
             this.Label5.Name = "Label5";
             this.Label5.Size = new System.Drawing.Size(94, 13);
             this.Label5.TabIndex = 0;
@@ -1398,7 +1405,7 @@ namespace Handbrake
             this.Label16.AutoSize = true;
             this.Label16.BackColor = System.Drawing.Color.Transparent;
             this.Label16.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label16.Location = new System.Drawing.Point(13, 134);
+            this.Label16.Location = new System.Drawing.Point(13, 123);
             this.Label16.Name = "Label16";
             this.Label16.Size = new System.Drawing.Size(91, 13);
             this.Label16.TabIndex = 1;
@@ -1420,7 +1427,7 @@ namespace Handbrake
             this.Label18.AutoSize = true;
             this.Label18.BackColor = System.Drawing.Color.Transparent;
             this.Label18.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label18.Location = new System.Drawing.Point(240, 134);
+            this.Label18.Location = new System.Drawing.Point(240, 123);
             this.Label18.Name = "Label18";
             this.Label18.Size = new System.Drawing.Size(120, 13);
             this.Label18.TabIndex = 2;
@@ -2094,6 +2101,42 @@ namespace Handbrake
             this.treeView_presets.TabIndex = 2;
             this.treeView_presets.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_presets_AfterSelect);
             // 
+            // slider_drc
+            // 
+            this.slider_drc.Enabled = false;
+            this.slider_drc.LargeChange = 1;
+            this.slider_drc.Location = new System.Drawing.Point(259, 159);
+            this.slider_drc.Maximum = 30;
+            this.slider_drc.Name = "slider_drc";
+            this.slider_drc.Size = new System.Drawing.Size(167, 42);
+            this.slider_drc.TabIndex = 18;
+            this.slider_drc.TickFrequency = 2;
+            this.ToolTip.SetToolTip(this.slider_drc, "Dynamic Range Compression");
+            this.slider_drc.Scroll += new System.EventHandler(this.slider_drc_Scroll);
+            // 
+            // check_drc
+            // 
+            this.check_drc.AutoSize = true;
+            this.check_drc.Location = new System.Drawing.Point(16, 163);
+            this.check_drc.Name = "check_drc";
+            this.check_drc.Size = new System.Drawing.Size(237, 17);
+            this.check_drc.TabIndex = 19;
+            this.check_drc.Text = "Enable Dynamic Range Compression";
+            this.check_drc.UseVisualStyleBackColor = true;
+            this.check_drc.CheckedChanged += new System.EventHandler(this.check_drc_CheckedChanged);
+            // 
+            // lbl_drc
+            // 
+            this.lbl_drc.AutoSize = true;
+            this.lbl_drc.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_drc.Enabled = false;
+            this.lbl_drc.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_drc.Location = new System.Drawing.Point(432, 164);
+            this.lbl_drc.Name = "lbl_drc";
+            this.lbl_drc.Size = new System.Drawing.Size(56, 13);
+            this.lbl_drc.TabIndex = 20;
+            this.lbl_drc.Text = "Disabled";
+            // 
             // frmMain
             // 
             this.AllowDrop = true;
@@ -2144,6 +2187,7 @@ namespace Handbrake
             this.groupBox_dest.ResumeLayout(false);
             this.groupBox_dest.PerformLayout();
             this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.slider_drc)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2308,6 +2352,9 @@ namespace Handbrake
         private System.Windows.Forms.CheckBox check_forced;
         internal System.Windows.Forms.ComboBox drp_track2Audio;
         internal System.Windows.Forms.Label label28;
+        internal System.Windows.Forms.TrackBar slider_drc;
+        private System.Windows.Forms.CheckBox check_drc;
+        internal System.Windows.Forms.Label lbl_drc;
 
     }
 }

@@ -12,6 +12,7 @@ namespace Handbrake.Functions
         // All the Main Window GUI options
         #region Varibles
 
+        #region Source
         private string q_source;
         /// <summary>
         /// Returns a String 
@@ -24,33 +25,6 @@ namespace Handbrake.Functions
                 return this.q_source;
             }
         }
-
-        private string q_destination;
-        /// <summary>
-        /// Returns a String 
-        /// Full path of the destination.
-        /// </summary>
-        public string Destination
-        {
-            get
-            {
-                return this.q_destination;
-            }
-        }
-
-        private string q_format;
-        /// <summary>
-        /// Returns a String 
-        /// Full path of the destination.
-        /// </summary>
-        public string Format
-        {
-            get
-            {
-                return this.q_format;
-            }
-        }
-
         private int q_dvdTitle;
         /// <summary>
         /// Returns an Integer
@@ -89,6 +63,35 @@ namespace Handbrake.Functions
                 return this.q_chaptersFinish;
             }
         }
+#endregion
+
+        #region Destination
+
+        private string q_destination;
+        /// <summary>
+        /// Returns a String 
+        /// Full path of the destination.
+        /// </summary>
+        public string Destination
+        {
+            get
+            {
+                return this.q_destination;
+            }
+        }
+
+        private string q_format;
+        /// <summary>
+        /// Returns a String 
+        /// Full path of the destination.
+        /// </summary>
+        public string Format
+        {
+            get
+            {
+                return this.q_format;
+            }
+        }
 
         private string q_videoEncoder;
         /// <summary>
@@ -115,7 +118,9 @@ namespace Handbrake.Functions
                 return this.q_audioEncoder;
             }
         }
+#endregion
 
+        #region Picture Settings
         private int q_videoWidth;
         /// <summary>
         /// Returns an Int
@@ -302,7 +307,9 @@ namespace Handbrake.Functions
                 return this.q_chapterMarkers;
             }
         }
+        #endregion
 
+        #region Video Settings
         private Boolean q_grayscale;
         /// <summary>
         /// Returns a boolean to indicate wither Grayscale is on or off.
@@ -434,7 +441,9 @@ namespace Handbrake.Functions
                 return this.q_crf;
             }
         }
+        #endregion
 
+        #region Audio Settings
         private string q_audioBitrate;
         /// <summary>
         /// Returns a string with the audio bitrate
@@ -495,6 +504,19 @@ namespace Handbrake.Functions
             }
         }
 
+        private double q_drc;
+        /// <summary>
+        /// Returns a string with the selected subtitle track
+        /// </summary>
+        public double DRC
+        {
+            get
+            {
+                return this.q_drc;
+            }
+        }
+
+
         private string q_subtitles;
         /// <summary>
         /// Returns a string with the selected subtitle track
@@ -519,6 +541,9 @@ namespace Handbrake.Functions
             }
         }
 
+        #endregion
+
+        #region Other
         private string q_h264;
         /// <summary>
         /// Returns a string with the Advanced H264 query string
@@ -541,6 +566,8 @@ namespace Handbrake.Functions
                 return this.q_verbose;
             }
         }
+        #endregion
+
         #endregion
 
         // Takes in a query which can be in any order and parses it. All varibles are then set so they can be used elsewhere.
@@ -597,6 +624,7 @@ namespace Handbrake.Functions
             Match audioTrack1 = Regex.Match(input, @"-a ([0-9]*)");
             Match audioTrack2 = Regex.Match(input, @"-a ([0-9]*),([0-9]*)");
             Match forcedSubtitles = Regex.Match(input, @"-F");
+            Match drc = Regex.Match(input, @"-D ([0-9.]*)");
 
             //H264 Tab
             Match x264 = Regex.Match(input, @"-x ([,a-zA-Z0-9=:-]*)");
@@ -855,6 +883,16 @@ namespace Handbrake.Functions
                         thisQuery.q_subtitles = "Autoselect";
                     else
                         thisQuery.q_subtitles = "None";
+                }
+
+                if (drc.Success != false)
+                {
+                    string value = drc.ToString().Replace("-D ", "");
+                    thisQuery.q_drc = double.Parse(value);
+                }
+                else
+                {
+                    thisQuery.q_drc = 0;
                 }
 
                 thisQuery.q_forcedSubs = forcedSubtitles.Success;

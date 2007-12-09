@@ -934,6 +934,31 @@ namespace Handbrake
             }
         }
 
+        private void slider_drc_Scroll(object sender, EventArgs e)
+        {
+            double value = slider_drc.Value / 10.0;
+            value++;
+
+            lbl_drc.Text = value.ToString();
+        }
+
+        private void check_drc_CheckedChanged(object sender, EventArgs e)
+        {
+            if (check_drc.CheckState == CheckState.Checked)
+            {
+                slider_drc.Enabled = true;
+                lbl_drc.Enabled = true;
+                lbl_drc.Text = "1";
+            }
+            else
+            {
+                slider_drc.Enabled = false;
+                slider_drc.Value = 0;
+                lbl_drc.Enabled = false;
+                lbl_drc.Text = "Disabled";
+            }
+        }
+
         private void drp_subtitle_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (drp_subtitle.Text.Contains("None"))
@@ -1073,8 +1098,6 @@ namespace Handbrake
         // Preset Selection
         private void treeView_presets_AfterSelect(object sender, TreeViewEventArgs e)
         {
-
-
             string selectedPreset = null;
             selectedPreset = treeView_presets.SelectedNode.Text;
 
@@ -1090,6 +1113,7 @@ namespace Handbrake
                         string preset = presetInput.ReadLine().Replace("+ ", "");
                         Regex r = new Regex("(:  )"); // Split on hyphens. 
                         string[] presetName = r.Split(preset);
+                        
 
                         if (selectedPreset == presetName[0])
                         {
@@ -1576,6 +1600,7 @@ namespace Handbrake
             string subtitles = drp_subtitle.Text;
             string subScan = "";
             string forced = "";
+            string drc = "";
 
             if (audioBitrate != "")
                 audioBitrate = " -B " + audioBitrate;
@@ -1666,9 +1691,17 @@ namespace Handbrake
             }
 
             if (check_forced.Checked)
-                forced = "-F";
+                forced = " -F ";
 
-            string queryAudioSettings = audioBitrate + audioSampleRate + audioChannels + SixChannelAudio + subScan + subtitles + forced;
+            if (check_drc.Checked)
+            {
+                double value = slider_drc.Value / 10.0;
+                value++;
+
+                drc = " -D " + value;
+            }
+
+            string queryAudioSettings = audioBitrate + audioSampleRate + drc + audioChannels + SixChannelAudio + subScan + subtitles + forced;
             #endregion
 
             // H264 Tab
@@ -1875,6 +1908,18 @@ namespace Handbrake
             }
             else
                 check_forced.CheckState = CheckState.Unchecked;
+
+            if (presetQuery.DRC != 0)
+            {
+                check_drc.Checked = true;
+                double value = presetQuery.DRC * 10;
+                slider_drc.Value = int.Parse(value.ToString());
+                lbl_drc.Text = presetQuery.DRC.ToString();
+
+            }
+            else
+                check_drc.Checked = false;
+
             #endregion
 
             // H264 Tab & Preset Name
@@ -1979,11 +2024,6 @@ namespace Handbrake
         }
 
         #endregion
-
-
-
-
-
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

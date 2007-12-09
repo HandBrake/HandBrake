@@ -88,13 +88,6 @@ namespace Handbrake.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap folder {
-            get {
-                object obj = ResourceManager.GetObject("folder", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         internal static System.Drawing.Bitmap General_Preferences {
             get {
                 object obj = ResourceManager.GetObject("General_Preferences", resourceCulture);
