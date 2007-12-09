@@ -7,30 +7,29 @@
 #import <Cocoa/Cocoa.h>
 
 
-@interface HBPresets : NSObject {
+@interface HBPresets : NSObject {}
 
-}
 /* Called by -addFactoryPresets in Controller.mm */
 - (NSMutableArray *) generateBuiltinPresets: (NSMutableArray *) UserPresets;
 
 /* Built-In Preset Dictionaries (one for each built in preset) */
-- (NSDictionary *)createIpodLowPreset;
-- (NSDictionary *)createIpodHighPreset;
-- (NSDictionary *)createAppleTVPreset;
-- (NSDictionary *)createPSThreePreset;  
-- (NSDictionary *)createPSPPreset;
-- (NSDictionary *)createNormalPreset;
-- (NSDictionary *)createClassicPreset;
-- (NSDictionary *)createQuickTimePreset;
-- (NSDictionary *)createFilmPreset;
-- (NSDictionary *)createTelevisionPreset;
-- (NSDictionary *)createAnimationPreset;
-- (NSDictionary *)createBedlamPreset;
-- (NSDictionary *)createiPhonePreset;
-- (NSDictionary *)createDeuxSixQuatrePreset;
-- (NSDictionary *)createBrokePreset;
-- (NSDictionary *)createBlindPreset;
-- (NSDictionary *)createCRFPreset;
 - (NSDictionary *)create360Preset;
+- (NSDictionary *)createAnimationPreset;
+- (NSDictionary *)createAppleTVPreset;
+- (NSDictionary *)createBedlamPreset;
+- (NSDictionary *)createBlindPreset;
+- (NSDictionary *)createBrokePreset;
+- (NSDictionary *)createClassicPreset;
+- (NSDictionary *)createCRFPreset;
+- (NSDictionary *)createDeuxSixQuatrePreset;
+- (NSDictionary *)createFilmPreset;
+- (NSDictionary *)createiPhonePreset;
+- (NSDictionary *)createIpodHighPreset;
+- (NSDictionary *)createIpodLowPreset;
+- (NSDictionary *)createNormalPreset;
+- (NSDictionary *)createPSPPreset;
+- (NSDictionary *)createPSThreePreset;  
+- (NSDictionary *)createQuickTimePreset;
+- (NSDictionary *)createTelevisionPreset;
 
 @end
