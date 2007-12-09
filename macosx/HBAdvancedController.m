@@ -16,7 +16,8 @@
     return self;
 }
 
-- (void) setView: (NSBox *) box {
+- (void) setView: (NSBox *) box
+{
     fOptionsBox = box;
     [fOptionsBox setContentView:fX264optView];
 }
@@ -32,16 +33,19 @@
     return YES;
 }
 
-- (NSString *) optionsString {
+- (NSString *) optionsString
+{
     return [fDisplayX264Options stringValue];
 }
 
-- (void) setOptions: (NSString *)string {
+- (void) setOptions: (NSString *)string
+{
     [fDisplayX264Options setStringValue:string];
     [self X264AdvancedOptionsSet:NULL];
 }
 
-- (void) setHidden: (BOOL) hide {
+- (void) setHidden: (BOOL) hide
+{
     if(hide)
     {
         [fOptionsBox setContentView:fEmptyView];
@@ -60,15 +64,15 @@
     unsigned i;
     NSControl * controls[] =
       { fX264optViewTitleLabel,fDisplayX264Options,fDisplayX264OptionsLabel,fX264optBframesLabel,
-		fX264optBframesPopUp,fX264optRefLabel,fX264optRefPopUp,fX264optNfpskipLabel,fX264optNfpskipSwitch,
-		fX264optNodctdcmtLabel,fX264optNodctdcmtSwitch,fX264optSubmeLabel,fX264optSubmePopUp,
-		fX264optTrellisLabel,fX264optTrellisPopUp,fX264optMixedRefsLabel,fX264optMixedRefsSwitch,
-		fX264optMotionEstLabel,fX264optMotionEstPopUp,fX264optMERangeLabel,fX264optMERangePopUp,
-		fX264optWeightBLabel,fX264optWeightBSwitch,fX264optBRDOLabel,fX264optBRDOSwitch,
-		fX264optBPyramidLabel,fX264optBPyramidSwitch,fX264optBiMELabel,fX264optBiMESwitch,
-		fX264optDirectPredLabel,fX264optDirectPredPopUp,fX264optDeblockLabel,fX264optAnalyseLabel,
-		fX264optAnalysePopUp,fX264opt8x8dctLabel,fX264opt8x8dctSwitch,fX264optCabacLabel,fX264optCabacSwitch,
-		fX264optAlphaDeblockPopUp,fX264optBetaDeblockPopUp};
+        fX264optBframesPopUp,fX264optRefLabel,fX264optRefPopUp,fX264optNfpskipLabel,fX264optNfpskipSwitch,
+        fX264optNodctdcmtLabel,fX264optNodctdcmtSwitch,fX264optSubmeLabel,fX264optSubmePopUp,
+        fX264optTrellisLabel,fX264optTrellisPopUp,fX264optMixedRefsLabel,fX264optMixedRefsSwitch,
+        fX264optMotionEstLabel,fX264optMotionEstPopUp,fX264optMERangeLabel,fX264optMERangePopUp,
+        fX264optWeightBLabel,fX264optWeightBSwitch,fX264optBRDOLabel,fX264optBRDOSwitch,
+        fX264optBPyramidLabel,fX264optBPyramidSwitch,fX264optBiMELabel,fX264optBiMESwitch,
+        fX264optDirectPredLabel,fX264optDirectPredPopUp,fX264optDeblockLabel,fX264optAnalyseLabel,
+        fX264optAnalysePopUp,fX264opt8x8dctLabel,fX264opt8x8dctSwitch,fX264optCabacLabel,fX264optCabacSwitch,
+        fX264optAlphaDeblockPopUp,fX264optBetaDeblockPopUp};
 
     for( i = 0; i < sizeof( controls ) / sizeof( NSControl * ); i++ )
     {
@@ -193,19 +197,19 @@
     /* Analysis fX264optAnalysePopUp */
     [fX264optAnalysePopUp removeAllItems];
     [fX264optAnalysePopUp addItemWithTitle:@"Default (some)"]; /* 0=default */
-        [fX264optAnalysePopUp addItemWithTitle:[NSString stringWithFormat:@"None"]]; /* 1=none */
-            [fX264optAnalysePopUp addItemWithTitle:[NSString stringWithFormat:@"All"]]; /* 2=all */
+    [fX264optAnalysePopUp addItemWithTitle:[NSString stringWithFormat:@"None"]]; /* 1=none */
+    [fX264optAnalysePopUp addItemWithTitle:[NSString stringWithFormat:@"All"]]; /* 2=all */
                 
-                /* 8x8 DCT fX264op8x8dctSwitch */
-                [fX264opt8x8dctSwitch setState:0];
-                
-                /* CABAC fX264opCabacSwitch */
-                [fX264optCabacSwitch setState:1];
-                
-                /* Standardize the option string */
-                [self X264AdvancedOptionsStandardizeOptString: NULL];
-                /* Set Current GUI Settings based on newly standardized string */
-                [self X264AdvancedOptionsSetCurrentSettings: NULL];
+    /* 8x8 DCT fX264op8x8dctSwitch */
+    [fX264opt8x8dctSwitch setState:0];
+    
+    /* CABAC fX264opCabacSwitch */
+    [fX264optCabacSwitch setState:1];
+    
+    /* Standardize the option string */
+    [self X264AdvancedOptionsStandardizeOptString: NULL];
+    /* Set Current GUI Settings based on newly standardized string */
+    [self X264AdvancedOptionsSetCurrentSettings: NULL];
 }
 
 - (IBAction) X264AdvancedOptionsStandardizeOptString: (id) sender
@@ -214,66 +218,66 @@
     NSString * thisOpt; // The separated option such as "bframes=3"
     NSString * optName = @""; // The option name such as "bframes"
     NSString * optValue = @"";// The option value such as "3"
-        NSString * changedOptString = @"";
-        NSArray *currentOptsArray;
+    NSString * changedOptString = @"";
+    NSArray *currentOptsArray;
+    
+    /*First, we get an opt string to process */
+    NSString *currentOptString = [fDisplayX264Options stringValue];
+    
+    /*verify there is an opt string to process */
+    NSRange currentOptRange = [currentOptString rangeOfString:@"="];
+    if (currentOptRange.location != NSNotFound)
+    {
+        /*Put individual options into an array based on the ":" separator for processing, result is "<opt>=<value>"*/
+        currentOptsArray = [currentOptString componentsSeparatedByString:@":"];
         
-        /*First, we get an opt string to process */
-        NSString *currentOptString = [fDisplayX264Options stringValue];
-        
-        /*verify there is an opt string to process */
-        NSRange currentOptRange = [currentOptString rangeOfString:@"="];
-        if (currentOptRange.location != NSNotFound)
+        /*iterate through the array and get <opts> and <values*/
+        //NSEnumerator * enumerator = [currentOptsArray objectEnumerator];
+        int loopcounter;
+        int currentOptsArrayCount = [currentOptsArray count];
+        for (loopcounter = 0; loopcounter < currentOptsArrayCount; loopcounter++)
         {
-            /*Put individual options into an array based on the ":" separator for processing, result is "<opt>=<value>"*/
-            currentOptsArray = [currentOptString componentsSeparatedByString:@":"];
+            thisOpt = [currentOptsArray objectAtIndex:loopcounter];
             
-            /*iterate through the array and get <opts> and <values*/
-            //NSEnumerator * enumerator = [currentOptsArray objectEnumerator];
-            int loopcounter;
-            int currentOptsArrayCount = [currentOptsArray count];
-            for (loopcounter = 0; loopcounter < currentOptsArrayCount; loopcounter++)
+            NSRange splitOptRange = [thisOpt rangeOfString:@"="];
+            if (splitOptRange.location != NSNotFound)
             {
-                thisOpt = [currentOptsArray objectAtIndex:loopcounter];
+                optName = [thisOpt substringToIndex:splitOptRange.location];
+                optValue = [thisOpt substringFromIndex:splitOptRange.location + 1];
                 
-                NSRange splitOptRange = [thisOpt rangeOfString:@"="];
-                if (splitOptRange.location != NSNotFound)
+                /* Standardize the names here depending on whats in the string */
+                optName = [self X264AdvancedOptionsStandardizeOptNames:optName];
+                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,optValue];    
+            }
+            else // No value given so we use a default of "1"
+            {
+                optName = thisOpt;
+                /* Standardize the names here depending on whats in the string */
+                optName = [self X264AdvancedOptionsStandardizeOptNames:optName];
+                thisOpt = [NSString stringWithFormat:@"%@=%d",optName,1];
+            }
+            
+            /* Construct New String for opts here */
+            if ([thisOpt isEqualToString:@""])
+            {
+                changedOptString = [NSString stringWithFormat:@"%@%@",changedOptString,thisOpt];
+            }
+            else
+            {
+                if ([changedOptString isEqualToString:@""])
                 {
-                    optName = [thisOpt substringToIndex:splitOptRange.location];
-                    optValue = [thisOpt substringFromIndex:splitOptRange.location + 1];
-                    
-                    /* Standardize the names here depending on whats in the string */
-                    optName = [self X264AdvancedOptionsStandardizeOptNames:optName];
-                    thisOpt = [NSString stringWithFormat:@"%@=%@",optName,optValue];	
-                }
-                else // No value given so we use a default of "1"
-                {
-                    optName = thisOpt;
-                    /* Standardize the names here depending on whats in the string */
-                    optName = [self X264AdvancedOptionsStandardizeOptNames:optName];
-                    thisOpt = [NSString stringWithFormat:@"%@=%d",optName,1];
-                }
-                
-                /* Construct New String for opts here */
-                if ([thisOpt isEqualToString:@""])
-                {
-                    changedOptString = [NSString stringWithFormat:@"%@%@",changedOptString,thisOpt];
+                    changedOptString = [NSString stringWithFormat:@"%@",thisOpt];
                 }
                 else
                 {
-                    if ([changedOptString isEqualToString:@""])
-                    {
-                        changedOptString = [NSString stringWithFormat:@"%@",thisOpt];
-                    }
-                    else
-                    {
-                        changedOptString = [NSString stringWithFormat:@"%@:%@",changedOptString,thisOpt];
-                    }
+                    changedOptString = [NSString stringWithFormat:@"%@:%@",changedOptString,thisOpt];
                 }
             }
         }
-        
-        /* Change the option string to reflect the new standardized option string */
-        [fDisplayX264Options setStringValue:[NSString stringWithFormat:changedOptString]];
+    }
+    
+    /* Change the option string to reflect the new standardized option string */
+    [fDisplayX264Options setStringValue:[NSString stringWithFormat:changedOptString]];
 }
 
 - (NSString *) X264AdvancedOptionsStandardizeOptNames:(NSString *) cleanOptNameString
@@ -341,8 +345,7 @@
         cleanOptNameString = @"analyse";
     }
     
-    
-    return cleanOptNameString;	
+    return cleanOptNameString;    
 }
 
 - (IBAction) X264AdvancedOptionsSetCurrentSettings: (id) sender
@@ -351,188 +354,188 @@
     NSString * thisOpt; // The separated option such as "bframes=3"
     NSString * optName = @""; // The option name such as "bframes"
     NSString * optValue = @"";// The option value such as "3"
-        NSArray *currentOptsArray;
+    NSArray *currentOptsArray;
+    
+    /*First, we get an opt string to process */
+    //NSString *currentOptString = @"bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:no-dct-decimate=1:trellis=2";
+    NSString *currentOptString = [fDisplayX264Options stringValue];
+    
+    /*verify there is an opt string to process */
+    NSRange currentOptRange = [currentOptString rangeOfString:@"="];
+    if (currentOptRange.location != NSNotFound)
+    {
+        /* lets clean the opt string here to standardize any names*/
+        /*Put individual options into an array based on the ":" separator for processing, result is "<opt>=<value>"*/
+        currentOptsArray = [currentOptString componentsSeparatedByString:@":"];
         
-        /*First, we get an opt string to process */
-        //NSString *currentOptString = @"bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:no-dct-decimate=1:trellis=2";
-        NSString *currentOptString = [fDisplayX264Options stringValue];
+        /*iterate through the array and get <opts> and <values*/
+        //NSEnumerator * enumerator = [currentOptsArray objectEnumerator];
+        int loopcounter;
+        int currentOptsArrayCount = [currentOptsArray count];
         
-        /*verify there is an opt string to process */
-        NSRange currentOptRange = [currentOptString rangeOfString:@"="];
-        if (currentOptRange.location != NSNotFound)
+        /*iterate through the array and get <opts> and <values*/
+        for (loopcounter = 0; loopcounter < currentOptsArrayCount; loopcounter++)
         {
-            /* lets clean the opt string here to standardize any names*/
-            /*Put individual options into an array based on the ":" separator for processing, result is "<opt>=<value>"*/
-            currentOptsArray = [currentOptString componentsSeparatedByString:@":"];
+            thisOpt = [currentOptsArray objectAtIndex:loopcounter];
+            NSRange splitOptRange = [thisOpt rangeOfString:@"="];
             
-            /*iterate through the array and get <opts> and <values*/
-            //NSEnumerator * enumerator = [currentOptsArray objectEnumerator];
-            int loopcounter;
-            int currentOptsArrayCount = [currentOptsArray count];
-            
-            /*iterate through the array and get <opts> and <values*/
-            for (loopcounter = 0; loopcounter < currentOptsArrayCount; loopcounter++)
+            if (splitOptRange.location != NSNotFound)
             {
-                thisOpt = [currentOptsArray objectAtIndex:loopcounter];
-                NSRange splitOptRange = [thisOpt rangeOfString:@"="];
+                optName = [thisOpt substringToIndex:splitOptRange.location];
+                optValue = [thisOpt substringFromIndex:splitOptRange.location + 1];
                 
-                if (splitOptRange.location != NSNotFound)
+                /*Run through the available widgets for x264 opts and set them, as you add widgets, 
+                    they need to be added here. This should be moved to its own method probably*/
+                
+                /*bframes NSPopUpButton*/
+                if ([optName isEqualToString:@"bframes"])
                 {
-                    optName = [thisOpt substringToIndex:splitOptRange.location];
-                    optValue = [thisOpt substringFromIndex:splitOptRange.location + 1];
+                    [fX264optBframesPopUp selectItemAtIndex:[optValue intValue]+1];
+                }
+                /*ref NSPopUpButton*/
+                if ([optName isEqualToString:@"ref"])
+                {
+                    [fX264optRefPopUp selectItemAtIndex:[optValue intValue]+1];
+                }
+                /*No Fast PSkip NSPopUpButton*/
+                if ([optName isEqualToString:@"no-fast-pskip"])
+                {
+                    [fX264optNfpskipSwitch setState:[optValue intValue]];
+                }
+                /*No Dict Decimate NSPopUpButton*/
+                if ([optName isEqualToString:@"no-dct-decimate"])
+                {
+                    [fX264optNodctdcmtSwitch setState:[optValue intValue]];
+                }
+                /*Sub Me NSPopUpButton*/
+                if ([optName isEqualToString:@"subq"])
+                {
+                    [fX264optSubmePopUp selectItemAtIndex:[optValue intValue]+1];
+                }
+                /*Trellis NSPopUpButton*/
+                if ([optName isEqualToString:@"trellis"])
+                {
+                    [fX264optTrellisPopUp selectItemAtIndex:[optValue intValue]+1];
+                }
+                /*Mixed Refs NSButton*/
+                if ([optName isEqualToString:@"mixed-refs"])
+                {
+                    [fX264optMixedRefsSwitch setState:[optValue intValue]];
+                }
+                /*Motion Estimation NSPopUpButton*/
+                if ([optName isEqualToString:@"me"])
+                {
+                    if ([optValue isEqualToString:@"dia"])
+                        [fX264optMotionEstPopUp selectItemAtIndex:1];
+                    else if ([optValue isEqualToString:@"hex"])
+                        [fX264optMotionEstPopUp selectItemAtIndex:2];
+                    else if ([optValue isEqualToString:@"umh"])
+                        [fX264optMotionEstPopUp selectItemAtIndex:3];
+                    else if ([optValue isEqualToString:@"esa"])
+                        [fX264optMotionEstPopUp selectItemAtIndex:4];                        
+                }
+                /*ME Range NSPopUpButton*/
+                if ([optName isEqualToString:@"merange"])
+                {
+                    [fX264optMERangePopUp selectItemAtIndex:[optValue intValue]-3];
+                }
+                /*Weighted B-Frames NSPopUpButton*/
+                if ([optName isEqualToString:@"weightb"])
+                {
+                    [fX264optWeightBSwitch setState:[optValue intValue]];
+                }
+                /*BRDO NSPopUpButton*/
+                if ([optName isEqualToString:@"brdo"])
+                {
+                    [fX264optBRDOSwitch setState:[optValue intValue]];
+                }
+                /*B Pyramid NSPopUpButton*/
+                if ([optName isEqualToString:@"b-pyramid"])
+                {
+                    [fX264optBPyramidSwitch setState:[optValue intValue]];
+                }
+                /*Bidirectional Motion Estimation Refinement NSPopUpButton*/
+                if ([optName isEqualToString:@"bime"])
+                {
+                    [fX264optBiMESwitch setState:[optValue intValue]];
+                }
+                /*Direct B-frame Prediction NSPopUpButton*/
+                if ([optName isEqualToString:@"direct"])
+                {
+                    if ([optValue isEqualToString:@"none"])
+                        [fX264optDirectPredPopUp selectItemAtIndex:1];
+                    else if ([optValue isEqualToString:@"spatial"])
+                        [fX264optDirectPredPopUp selectItemAtIndex:2];
+                    else if ([optValue isEqualToString:@"temporal"])
+                        [fX264optDirectPredPopUp selectItemAtIndex:3];
+                    else if ([optValue isEqualToString:@"auto"])
+                        [fX264optDirectPredPopUp selectItemAtIndex:4];                        
+                }
+                /*Deblocking NSPopUpButtons*/
+                if ([optName isEqualToString:@"deblock"])
+                {
+                    NSString * alphaDeblock = @"";
+                    NSString * betaDeblock = @"";
                     
-                    /*Run through the available widgets for x264 opts and set them, as you add widgets, 
-                        they need to be added here. This should be moved to its own method probably*/
+                    NSRange splitDeblock = [optValue rangeOfString:@","];
+                    alphaDeblock = [optValue substringToIndex:splitDeblock.location];
+                    betaDeblock = [optValue substringFromIndex:splitDeblock.location + 1];
                     
-                    /*bframes NSPopUpButton*/
-                    if ([optName isEqualToString:@"bframes"])
+                    if ([alphaDeblock isEqualToString:@"0"] && [betaDeblock isEqualToString:@"0"])
                     {
-                        [fX264optBframesPopUp selectItemAtIndex:[optValue intValue]+1];
+                        [fX264optAlphaDeblockPopUp selectItemAtIndex:0];                        
+                        [fX264optBetaDeblockPopUp selectItemAtIndex:0];                               
                     }
-                    /*ref NSPopUpButton*/
-                    if ([optName isEqualToString:@"ref"])
+                    else
                     {
-                        [fX264optRefPopUp selectItemAtIndex:[optValue intValue]+1];
-                    }
-                    /*No Fast PSkip NSPopUpButton*/
-                    if ([optName isEqualToString:@"no-fast-pskip"])
-                    {
-                        [fX264optNfpskipSwitch setState:[optValue intValue]];
-                    }
-                    /*No Dict Decimate NSPopUpButton*/
-                    if ([optName isEqualToString:@"no-dct-decimate"])
-                    {
-                        [fX264optNodctdcmtSwitch setState:[optValue intValue]];
-                    }
-                    /*Sub Me NSPopUpButton*/
-                    if ([optName isEqualToString:@"subq"])
-                    {
-                        [fX264optSubmePopUp selectItemAtIndex:[optValue intValue]+1];
-                    }
-                    /*Trellis NSPopUpButton*/
-                    if ([optName isEqualToString:@"trellis"])
-                    {
-                        [fX264optTrellisPopUp selectItemAtIndex:[optValue intValue]+1];
-                    }
-                    /*Mixed Refs NSButton*/
-                    if ([optName isEqualToString:@"mixed-refs"])
-                    {
-                        [fX264optMixedRefsSwitch setState:[optValue intValue]];
-                    }
-                    /*Motion Estimation NSPopUpButton*/
-                    if ([optName isEqualToString:@"me"])
-                    {
-                        if ([optValue isEqualToString:@"dia"])
-                            [fX264optMotionEstPopUp selectItemAtIndex:1];
-                        else if ([optValue isEqualToString:@"hex"])
-                            [fX264optMotionEstPopUp selectItemAtIndex:2];
-                        else if ([optValue isEqualToString:@"umh"])
-                            [fX264optMotionEstPopUp selectItemAtIndex:3];
-                        else if ([optValue isEqualToString:@"esa"])
-                            [fX264optMotionEstPopUp selectItemAtIndex:4];                        
-                    }
-                    /*ME Range NSPopUpButton*/
-                    if ([optName isEqualToString:@"merange"])
-                    {
-                        [fX264optMERangePopUp selectItemAtIndex:[optValue intValue]-3];
-                    }
-                    /*Weighted B-Frames NSPopUpButton*/
-                    if ([optName isEqualToString:@"weightb"])
-                    {
-                        [fX264optWeightBSwitch setState:[optValue intValue]];
-                    }
-                    /*BRDO NSPopUpButton*/
-                    if ([optName isEqualToString:@"brdo"])
-                    {
-                        [fX264optBRDOSwitch setState:[optValue intValue]];
-                    }
-                    /*B Pyramid NSPopUpButton*/
-                    if ([optName isEqualToString:@"b-pyramid"])
-                    {
-                        [fX264optBPyramidSwitch setState:[optValue intValue]];
-                    }
-                    /*Bidirectional Motion Estimation Refinement NSPopUpButton*/
-                    if ([optName isEqualToString:@"bime"])
-                    {
-                        [fX264optBiMESwitch setState:[optValue intValue]];
-                    }
-                    /*Direct B-frame Prediction NSPopUpButton*/
-                    if ([optName isEqualToString:@"direct"])
-                    {
-                        if ([optValue isEqualToString:@"none"])
-                            [fX264optDirectPredPopUp selectItemAtIndex:1];
-                        else if ([optValue isEqualToString:@"spatial"])
-                            [fX264optDirectPredPopUp selectItemAtIndex:2];
-                        else if ([optValue isEqualToString:@"temporal"])
-                            [fX264optDirectPredPopUp selectItemAtIndex:3];
-                        else if ([optValue isEqualToString:@"auto"])
-                            [fX264optDirectPredPopUp selectItemAtIndex:4];                        
-                    }
-                    /*Deblocking NSPopUpButtons*/
-                    if ([optName isEqualToString:@"deblock"])
-                    {
-                        NSString * alphaDeblock = @"";
-                        NSString * betaDeblock = @"";
-                        
-                        NSRange splitDeblock = [optValue rangeOfString:@","];
-                        alphaDeblock = [optValue substringToIndex:splitDeblock.location];
-                        betaDeblock = [optValue substringFromIndex:splitDeblock.location + 1];
-                        
-                        if ([alphaDeblock isEqualToString:@"0"] && [betaDeblock isEqualToString:@"0"])
+                        if (![alphaDeblock isEqualToString:@"0"])
                         {
-                            [fX264optAlphaDeblockPopUp selectItemAtIndex:0];                        
-                            [fX264optBetaDeblockPopUp selectItemAtIndex:0];                               
+                            [fX264optAlphaDeblockPopUp selectItemAtIndex:[alphaDeblock intValue]+7];
                         }
                         else
                         {
-                            if (![alphaDeblock isEqualToString:@"0"])
-                            {
-                                [fX264optAlphaDeblockPopUp selectItemAtIndex:[alphaDeblock intValue]+7];
-                            }
-                            else
-                            {
-                                [fX264optAlphaDeblockPopUp selectItemAtIndex:7];                        
-                            }
-                            
-                            if (![betaDeblock isEqualToString:@"0"])
-                            {
-                                [fX264optBetaDeblockPopUp selectItemAtIndex:[betaDeblock intValue]+7];
-                            }
-                            else
-                            {
-                                [fX264optBetaDeblockPopUp selectItemAtIndex:7];                        
-                            }
+                            [fX264optAlphaDeblockPopUp selectItemAtIndex:7];                        
+                        }
+                        
+                        if (![betaDeblock isEqualToString:@"0"])
+                        {
+                            [fX264optBetaDeblockPopUp selectItemAtIndex:[betaDeblock intValue]+7];
+                        }
+                        else
+                        {
+                            [fX264optBetaDeblockPopUp selectItemAtIndex:7];                        
                         }
                     }
-                    /* Analysis NSPopUpButton */
-                    if ([optName isEqualToString:@"analyse"])
-                    {
-                        if ([optValue isEqualToString:@"p8x8,b8x8,i8x8,i4x4"])
-                        {
-                            [fX264optAnalysePopUp selectItemAtIndex:0];
-                        }
-                        if ([optValue isEqualToString:@"none"])
-                        {
-                            [fX264optAnalysePopUp selectItemAtIndex:1];
-                        }
-                        if ([optValue isEqualToString:@"all"])
-                        {
-                            [fX264optAnalysePopUp selectItemAtIndex:2];
-                        }
-                    }
-                    /* 8x8 DCT NSButton */
-                    if ([optName isEqualToString:@"8x8dct"])
-                    {
-                        [fX264opt8x8dctSwitch setState:[optValue intValue]];
-                    }
-                    /* CABAC NSButton */
-                    if ([optName isEqualToString:@"cabac"])
-                    {
-                        [fX264optCabacSwitch setState:[optValue intValue]];
-                    }                                                                 
                 }
+                /* Analysis NSPopUpButton */
+                if ([optName isEqualToString:@"analyse"])
+                {
+                    if ([optValue isEqualToString:@"p8x8,b8x8,i8x8,i4x4"])
+                    {
+                        [fX264optAnalysePopUp selectItemAtIndex:0];
+                    }
+                    if ([optValue isEqualToString:@"none"])
+                    {
+                        [fX264optAnalysePopUp selectItemAtIndex:1];
+                    }
+                    if ([optValue isEqualToString:@"all"])
+                    {
+                        [fX264optAnalysePopUp selectItemAtIndex:2];
+                    }
+                }
+                /* 8x8 DCT NSButton */
+                if ([optName isEqualToString:@"8x8dct"])
+                {
+                    [fX264opt8x8dctSwitch setState:[optValue intValue]];
+                }
+                /* CABAC NSButton */
+                if ([optName isEqualToString:@"cabac"])
+                {
+                    [fX264optCabacSwitch setState:[optValue intValue]];
+                }                                                                 
             }
         }
+    }
 }
 
 - (IBAction) X264AdvancedOptionsChanged: (id) sender
@@ -621,435 +624,435 @@
     NSString * thisOpt; // The separated option such as "bframes=3"
     NSString * optName = @""; // The option name such as "bframes"
     NSString * optValue = @"";// The option value such as "3"
-        NSArray *currentOptsArray;
+    NSArray *currentOptsArray;
+    
+    /*First, we get an opt string to process */
+    //EXAMPLE: NSString *currentOptString = @"bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:no-dct-decimate=1:trellis=2";
+    NSString *currentOptString = [fDisplayX264Options stringValue];
+    
+    /*verify there is an occurrence of the opt specified by the sender to change */
+    /*take care of any multi-value opt names here. This is extremely kludgy, but test for functionality
+        and worry about pretty later */
+    
+    /*First, we create a pattern to check for ":"optNameToChange"=" to modify the option if the name falls after
+        the first character of the opt string (hence the ":") */
+    NSString *checkOptNameToChange = [NSString stringWithFormat:@":%@=",optNameToChange];
+    NSRange currentOptRange = [currentOptString rangeOfString:checkOptNameToChange];
+    /*Then we create a pattern to check for "<beginning of line>"optNameToChange"=" to modify the option to
+        see if the name falls at the beginning of the line, where we would not have the ":" as a pattern to test against*/
+    NSString *checkOptNameToChangeBeginning = [NSString stringWithFormat:@"%@=",optNameToChange];
+    NSRange currentOptRangeBeginning = [currentOptString rangeOfString:checkOptNameToChangeBeginning];
+    if (currentOptRange.location != NSNotFound || currentOptRangeBeginning.location == 0)
+    {
+        /* Create new empty opt string*/
+        NSString *changedOptString = @"";
         
-        /*First, we get an opt string to process */
-        //EXAMPLE: NSString *currentOptString = @"bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:no-dct-decimate=1:trellis=2";
-        NSString *currentOptString = [fDisplayX264Options stringValue];
+        /*Put individual options into an array based on the ":" separator for processing, result is "<opt>=<value>"*/
+        currentOptsArray = [currentOptString componentsSeparatedByString:@":"];
         
-        /*verify there is an occurrence of the opt specified by the sender to change */
-        /*take care of any multi-value opt names here. This is extremely kludgy, but test for functionality
-            and worry about pretty later */
-        
-        /*First, we create a pattern to check for ":"optNameToChange"=" to modify the option if the name falls after
-            the first character of the opt string (hence the ":") */
-        NSString *checkOptNameToChange = [NSString stringWithFormat:@":%@=",optNameToChange];
-        NSRange currentOptRange = [currentOptString rangeOfString:checkOptNameToChange];
-        /*Then we create a pattern to check for "<beginning of line>"optNameToChange"=" to modify the option to
-            see if the name falls at the beginning of the line, where we would not have the ":" as a pattern to test against*/
-        NSString *checkOptNameToChangeBeginning = [NSString stringWithFormat:@"%@=",optNameToChange];
-        NSRange currentOptRangeBeginning = [currentOptString rangeOfString:checkOptNameToChangeBeginning];
-        if (currentOptRange.location != NSNotFound || currentOptRangeBeginning.location == 0)
+        /*iterate through the array and get <opts> and <values*/
+        int loopcounter;
+        int currentOptsArrayCount = [currentOptsArray count];
+        for (loopcounter = 0; loopcounter < currentOptsArrayCount; loopcounter++)
         {
-            /* Create new empty opt string*/
-            NSString *changedOptString = @"";
+            thisOpt = [currentOptsArray objectAtIndex:loopcounter];
+            NSRange splitOptRange = [thisOpt rangeOfString:@"="];
             
-            /*Put individual options into an array based on the ":" separator for processing, result is "<opt>=<value>"*/
-            currentOptsArray = [currentOptString componentsSeparatedByString:@":"];
-            
-            /*iterate through the array and get <opts> and <values*/
-            int loopcounter;
-            int currentOptsArrayCount = [currentOptsArray count];
-            for (loopcounter = 0; loopcounter < currentOptsArrayCount; loopcounter++)
+            if (splitOptRange.location != NSNotFound)
             {
-                thisOpt = [currentOptsArray objectAtIndex:loopcounter];
-                NSRange splitOptRange = [thisOpt rangeOfString:@"="];
+                optName = [thisOpt substringToIndex:splitOptRange.location];
+                optValue = [thisOpt substringFromIndex:splitOptRange.location + 1];
                 
-                if (splitOptRange.location != NSNotFound)
+                /*Run through the available widgets for x264 opts and set them, as you add widgets, 
+                    they need to be added here. This should be moved to its own method probably*/
+                
+                /*If the optNameToChange is found, appropriately change the value or delete it if
+                    "Unspecified" is set.*/
+                if ([optName isEqualToString:optNameToChange])
                 {
-                    optName = [thisOpt substringToIndex:splitOptRange.location];
-                    optValue = [thisOpt substringFromIndex:splitOptRange.location + 1];
-                    
-                    /*Run through the available widgets for x264 opts and set them, as you add widgets, 
-                        they need to be added here. This should be moved to its own method probably*/
-                    
-                    /*If the optNameToChange is found, appropriately change the value or delete it if
-                        "Unspecified" is set.*/
-                    if ([optName isEqualToString:optNameToChange])
+                    if ([optNameToChange isEqualToString:@"deblock"])
                     {
-                        if ([optNameToChange isEqualToString:@"deblock"])
+                        if ((([fX264optAlphaDeblockPopUp indexOfSelectedItem] == 0) || ([fX264optAlphaDeblockPopUp indexOfSelectedItem] == 7)) && (([fX264optBetaDeblockPopUp indexOfSelectedItem] == 0) || ([fX264optBetaDeblockPopUp indexOfSelectedItem] == 7)))
                         {
-                            if ((([fX264optAlphaDeblockPopUp indexOfSelectedItem] == 0) || ([fX264optAlphaDeblockPopUp indexOfSelectedItem] == 7)) && (([fX264optBetaDeblockPopUp indexOfSelectedItem] == 0) || ([fX264optBetaDeblockPopUp indexOfSelectedItem] == 7)))
-                            {
-                                thisOpt = @"";                                
-                            }
-                            else
-                            {
-                                thisOpt = [NSString stringWithFormat:@"%@=%d,%d",optName, ([fX264optAlphaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optAlphaDeblockPopUp indexOfSelectedItem]-7 : 0,([fX264optBetaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optBetaDeblockPopUp indexOfSelectedItem]-7 : 0];
-                            }
+                            thisOpt = @"";                                
                         }
-                        else if /*Boolean Switches*/ ([optNameToChange isEqualToString:@"mixed-refs"] || [optNameToChange isEqualToString:@"weightb"] || [optNameToChange isEqualToString:@"brdo"] || [optNameToChange isEqualToString:@"bime"] || [optNameToChange isEqualToString:@"b-pyramid"] || [optNameToChange isEqualToString:@"no-fast-pskip"] || [optNameToChange isEqualToString:@"no-dct-decimate"] || [optNameToChange isEqualToString:@"8x8dct"] )
+                        else
                         {
-                            if ([sender state] == 0)
-                            {
-                                thisOpt = @"";
-                            }
-                            else
-                            {
-                                thisOpt = [NSString stringWithFormat:@"%@=%d",optName,1];
-                            }
+                            thisOpt = [NSString stringWithFormat:@"%@=%d,%d",optName, ([fX264optAlphaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optAlphaDeblockPopUp indexOfSelectedItem]-7 : 0,([fX264optBetaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optBetaDeblockPopUp indexOfSelectedItem]-7 : 0];
                         }
-                        else if ([optNameToChange isEqualToString:@"cabac"])
-                        {
-                            if ([sender state] == 1)
-                            {
-                                thisOpt = @"";
-                            }
-                            else
-                            {
-                                thisOpt = [NSString stringWithFormat:@"%@=%d",optName,0];
-                            }
-                        }                                        
-                        else if (([sender indexOfSelectedItem] == 0) && (sender != fX264optAlphaDeblockPopUp) && (sender != fX264optBetaDeblockPopUp) ) // means that "unspecified" is chosen, lets then remove it from the string
+                    }
+                    else if /*Boolean Switches*/ ([optNameToChange isEqualToString:@"mixed-refs"] || [optNameToChange isEqualToString:@"weightb"] || [optNameToChange isEqualToString:@"brdo"] || [optNameToChange isEqualToString:@"bime"] || [optNameToChange isEqualToString:@"b-pyramid"] || [optNameToChange isEqualToString:@"no-fast-pskip"] || [optNameToChange isEqualToString:@"no-dct-decimate"] || [optNameToChange isEqualToString:@"8x8dct"] )
+                    {
+                        if ([sender state] == 0)
                         {
                             thisOpt = @"";
                         }
-                        else if ([optNameToChange isEqualToString:@"me"])
+                        else
                         {
-                            switch ([sender indexOfSelectedItem])
-                            {   
-                                case 1:
-                                    thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"dia"];
-                                    break;
-                                    
-                                case 2:
-                                    thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"hex"];
-                                    break;
-                                    
-                                case 3:
-                                    thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"umh"];
-                                    break;
-                                    
-                                case 4:
-                                    thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"esa"];
-                                    break;
-                                    
-                                default:
-                                    break;
-                            }
-                        }
-                        else if ([optNameToChange isEqualToString:@"direct"])
-                        {
-                            switch ([sender indexOfSelectedItem])
-                            {   
-                                case 1:
-                                    thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"none"];
-                                    break;
-                                    
-                                case 2:
-                                    thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"spatial"];
-                                    break;
-                                    
-                                case 3:
-                                    thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"temporal"];
-                                    break;
-                                    
-                                case 4:
-                                    thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"auto"];
-                                    break;
-                                    
-                                default:
-                                    break;
-                            }
-                        }
-                        else if ([optNameToChange isEqualToString:@"analyse"])
-                        {
-                            switch ([sender indexOfSelectedItem])
-                            {   
-                                case 1:
-                                    thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"none"];
-                                    break;
-                                    
-                                case 2:
-                                    thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"all"];
-                                    break;
-                                    
-                                default:
-                                    break;
-                            }
-                        }
-                        else if ([optNameToChange isEqualToString:@"merange"])
-                        {
-                            thisOpt = [NSString stringWithFormat:@"%@=%d",optName,[sender indexOfSelectedItem]+3];
-                        }
-                        else // we have a valid value to change, so change it
-                        {
-                            if ( [sender indexOfSelectedItem] != 0 )
-                                thisOpt = [NSString stringWithFormat:@"%@=%d",optName,[sender indexOfSelectedItem]-1];
+                            thisOpt = [NSString stringWithFormat:@"%@=%d",optName,1];
                         }
                     }
-                }
-                
-                /* Construct New String for opts here */
-                if ([thisOpt isEqualToString:@""])
-                {
-                    changedOptString = [NSString stringWithFormat:@"%@%@",changedOptString,thisOpt];
-                }
-                else
-                {
-                    if ([changedOptString isEqualToString:@""])
+                    else if ([optNameToChange isEqualToString:@"cabac"])
                     {
-                        changedOptString = [NSString stringWithFormat:@"%@",thisOpt];
+                        if ([sender state] == 1)
+                        {
+                            thisOpt = @"";
+                        }
+                        else
+                        {
+                            thisOpt = [NSString stringWithFormat:@"%@=%d",optName,0];
+                        }
+                    }                                        
+                    else if (([sender indexOfSelectedItem] == 0) && (sender != fX264optAlphaDeblockPopUp) && (sender != fX264optBetaDeblockPopUp) ) // means that "unspecified" is chosen, lets then remove it from the string
+                    {
+                        thisOpt = @"";
                     }
-                    else
+                    else if ([optNameToChange isEqualToString:@"me"])
                     {
-                        changedOptString = [NSString stringWithFormat:@"%@:%@",changedOptString,thisOpt];
+                        switch ([sender indexOfSelectedItem])
+                        {   
+                            case 1:
+                                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"dia"];
+                                break;
+                                
+                            case 2:
+                                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"hex"];
+                                break;
+                                
+                            case 3:
+                                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"umh"];
+                                break;
+                                
+                            case 4:
+                                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"esa"];
+                                break;
+                                
+                            default:
+                                break;
+                        }
+                    }
+                    else if ([optNameToChange isEqualToString:@"direct"])
+                    {
+                        switch ([sender indexOfSelectedItem])
+                        {   
+                            case 1:
+                                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"none"];
+                                break;
+                                
+                            case 2:
+                                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"spatial"];
+                                break;
+                                
+                            case 3:
+                                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"temporal"];
+                                break;
+                                
+                            case 4:
+                                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"auto"];
+                                break;
+                                
+                            default:
+                                break;
+                        }
+                    }
+                    else if ([optNameToChange isEqualToString:@"analyse"])
+                    {
+                        switch ([sender indexOfSelectedItem])
+                        {   
+                            case 1:
+                                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"none"];
+                                break;
+                                
+                            case 2:
+                                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"all"];
+                                break;
+                                
+                            default:
+                                break;
+                        }
+                    }
+                    else if ([optNameToChange isEqualToString:@"merange"])
+                    {
+                        thisOpt = [NSString stringWithFormat:@"%@=%d",optName,[sender indexOfSelectedItem]+3];
+                    }
+                    else // we have a valid value to change, so change it
+                    {
+                        if ( [sender indexOfSelectedItem] != 0 )
+                            thisOpt = [NSString stringWithFormat:@"%@=%d",optName,[sender indexOfSelectedItem]-1];
                     }
                 }
             }
             
-            /* Change the option string to reflect the new mod settings */
-            [fDisplayX264Options setStringValue:[NSString stringWithFormat:changedOptString]];	
-        }
-        else // if none exists, add it to the string
-        {
-            if ([[fDisplayX264Options stringValue] isEqualToString: @""])
+            /* Construct New String for opts here */
+            if ([thisOpt isEqualToString:@""])
             {
-                if ([optNameToChange isEqualToString:@"me"])
+                changedOptString = [NSString stringWithFormat:@"%@%@",changedOptString,thisOpt];
+            }
+            else
+            {
+                if ([changedOptString isEqualToString:@""])
                 {
-                    switch ([sender indexOfSelectedItem])
-                    {   
-                        case 1:
-                            [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                                [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"dia"]]];
-                            break;
-                            
-                        case 2:
-                            [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                                [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"hex"]]];
-                            break;
-                            
-                        case 3:
-                            [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                                [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"umh"]]];
-                            break;
-                            
-                        case 4:
-                            [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                                [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"esa"]]];
-                            break;
-                            
-                        default:
-                            break;
-                    }
+                    changedOptString = [NSString stringWithFormat:@"%@",thisOpt];
                 }
-                else if ([optNameToChange isEqualToString:@"direct"])
-                {
-                    switch ([sender indexOfSelectedItem])
-                    {   
-                        case 1:
-                            [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                                [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"none"]]];
-                            break;
-                            
-                        case 2:
-                            [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                                [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"spatial"]]];
-                            break;
-                            
-                        case 3:
-                            [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                                [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"temporal"]]];
-                            break;
-                            
-                        case 4:
-                            [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                                [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"auto"]]];
-                            break;
-                            
-                        default:
-                            break;
-                    }
-                }
-                else if ([optNameToChange isEqualToString:@"analyse"])
-                {
-                    switch ([sender indexOfSelectedItem])
-                    {   
-                        case 1:
-                            [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                                [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"none"]]];
-                            break;
-                            
-                        case 2:
-                            [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                                [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"all"]]];
-                            break;
-                            
-                        default:
-                            break;
-                    }
-                }
-                
-                else if ([optNameToChange isEqualToString:@"merange"])
-                {
-                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                        [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]+3]]];
-                }
-                else if ([optNameToChange isEqualToString:@"deblock"])
-                {
-                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d,%d", ([fX264optAlphaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optAlphaDeblockPopUp indexOfSelectedItem]-7 : 0, ([fX264optBetaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optBetaDeblockPopUp indexOfSelectedItem]-7 : 0]]];                
-                }
-                else if /*Boolean Switches*/ ([optNameToChange isEqualToString:@"mixed-refs"] || [optNameToChange isEqualToString:@"weightb"] || [optNameToChange isEqualToString:@"brdo"] || [optNameToChange isEqualToString:@"bime"] || [optNameToChange isEqualToString:@"b-pyramid"] || [optNameToChange isEqualToString:@"no-fast-pskip"] || [optNameToChange isEqualToString:@"no-dct-decimate"] || [optNameToChange isEqualToString:@"8x8dct"] )            {
-                    if ([sender state] == 0)
-                    {
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@""]];                    
-                    }
-                    else
-                    {
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender state]]]];
-                    }
-                }
-                else if ([optNameToChange isEqualToString:@"cabac"])
-                {
-                    if ([sender state] == 1)
-                    {
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@""]];                                        
-                    }
-                    else
-                    {
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender state]]]];                    
-                    }
-                }            
                 else
                 {
-                    if ( [sender indexOfSelectedItem] != 0 )
+                    changedOptString = [NSString stringWithFormat:@"%@:%@",changedOptString,thisOpt];
+                }
+            }
+        }
+        
+        /* Change the option string to reflect the new mod settings */
+        [fDisplayX264Options setStringValue:[NSString stringWithFormat:changedOptString]];    
+    }
+    else // if none exists, add it to the string
+    {
+        if ([[fDisplayX264Options stringValue] isEqualToString: @""])
+        {
+            if ([optNameToChange isEqualToString:@"me"])
+            {
+                switch ([sender indexOfSelectedItem])
+                {   
+                    case 1:
                         [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                        [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]-1]]];
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"dia"]]];
+                        break;
+                        
+                    case 2:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"hex"]]];
+                        break;
+                        
+                    case 3:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"umh"]]];
+                        break;
+                        
+                    case 4:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"esa"]]];
+                        break;
+                        
+                    default:
+                        break;
+                }
+            }
+            else if ([optNameToChange isEqualToString:@"direct"])
+            {
+                switch ([sender indexOfSelectedItem])
+                {   
+                    case 1:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"none"]]];
+                        break;
+                        
+                    case 2:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"spatial"]]];
+                        break;
+                        
+                    case 3:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"temporal"]]];
+                        break;
+                        
+                    case 4:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"auto"]]];
+                        break;
+                        
+                    default:
+                        break;
+                }
+            }
+            else if ([optNameToChange isEqualToString:@"analyse"])
+            {
+                switch ([sender indexOfSelectedItem])
+                {   
+                    case 1:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"none"]]];
+                        break;
+                        
+                    case 2:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"all"]]];
+                        break;
+                        
+                    default:
+                        break;
+                }
+            }
+            
+            else if ([optNameToChange isEqualToString:@"merange"])
+            {
+                [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                    [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]+3]]];
+            }
+            else if ([optNameToChange isEqualToString:@"deblock"])
+            {
+                [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d,%d", ([fX264optAlphaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optAlphaDeblockPopUp indexOfSelectedItem]-7 : 0, ([fX264optBetaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optBetaDeblockPopUp indexOfSelectedItem]-7 : 0]]];                
+            }
+            else if /*Boolean Switches*/ ([optNameToChange isEqualToString:@"mixed-refs"] || [optNameToChange isEqualToString:@"weightb"] || [optNameToChange isEqualToString:@"brdo"] || [optNameToChange isEqualToString:@"bime"] || [optNameToChange isEqualToString:@"b-pyramid"] || [optNameToChange isEqualToString:@"no-fast-pskip"] || [optNameToChange isEqualToString:@"no-dct-decimate"] || [optNameToChange isEqualToString:@"8x8dct"] )            {
+                if ([sender state] == 0)
+                {
+                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@""]];                    
+                }
+                else
+                {
+                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                        [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender state]]]];
+                }
+            }
+            else if ([optNameToChange isEqualToString:@"cabac"])
+            {
+                if ([sender state] == 1)
+                {
+                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@""]];                                        
+                }
+                else
+                {
+                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                        [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender state]]]];                    
+                }
+            }            
+            else
+            {
+                if ( [sender indexOfSelectedItem] != 0 )
+                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                    [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]-1]]];
+            }
+        }
+        else
+        {
+            if ([optNameToChange isEqualToString:@"me"])
+            {
+                switch ([sender indexOfSelectedItem])
+                {   
+                    case 1:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
+                            [NSString stringWithFormat:[fDisplayX264Options stringValue]],
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"dia"]]];
+                        break;
+                        
+                    case 2:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
+                            [NSString stringWithFormat:[fDisplayX264Options stringValue]],
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"hex"]]];
+                        break;
+                        
+                    case 3:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
+                            [NSString stringWithFormat:[fDisplayX264Options stringValue]],
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"umh"]]];
+                        break;
+                        
+                    case 4:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
+                            [NSString stringWithFormat:[fDisplayX264Options stringValue]],
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"esa"]]];
+                        break;
+                        
+                    default:
+                        break;
+                }
+            }
+            else if ([optNameToChange isEqualToString:@"direct"])
+            {
+                switch ([sender indexOfSelectedItem])
+                {   
+                    case 1:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
+                            [NSString stringWithFormat:[fDisplayX264Options stringValue]],
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"none"]]];
+                        break;
+                        
+                    case 2:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
+                            [NSString stringWithFormat:[fDisplayX264Options stringValue]],
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"spatial"]]];
+                        break;
+                        
+                    case 3:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
+                            [NSString stringWithFormat:[fDisplayX264Options stringValue]],
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"temporal"]]];
+                        break;
+                        
+                    case 4:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
+                            [NSString stringWithFormat:[fDisplayX264Options stringValue]],
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"auto"]]];
+                        break;
+                        
+                    default:
+                        break;
+                }
+            }
+            else if ([optNameToChange isEqualToString:@"analyse"])
+            {
+                switch ([sender indexOfSelectedItem])
+                {   
+                    case 1:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
+                            [NSString stringWithFormat:[fDisplayX264Options stringValue]],
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"none"]]];
+                        break;
+                        
+                    case 2:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
+                            [NSString stringWithFormat:[fDisplayX264Options stringValue]],
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"all"]]];
+                        break;
+                        
+                    default:
+                        break;
+                }
+            }
+            
+            else if ([optNameToChange isEqualToString:@"merange"])
+            {
+                [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]], 
+                    [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]+3]]];
+            }
+            else if ([optNameToChange isEqualToString:@"deblock"])
+            {
+                [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", [NSString stringWithFormat:[fDisplayX264Options stringValue]], [NSString stringWithFormat:optNameToChange], [NSString stringWithFormat:@"%d,%d", ([fX264optAlphaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optAlphaDeblockPopUp indexOfSelectedItem]-7 : 0, ([fX264optBetaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optBetaDeblockPopUp indexOfSelectedItem]-7 : 0]]];                
+            }
+            else if /*Boolean Switches*/ ([optNameToChange isEqualToString:@"mixed-refs"] || [optNameToChange isEqualToString:@"weightb"] || [optNameToChange isEqualToString:@"brdo"] || [optNameToChange isEqualToString:@"bime"] || [optNameToChange isEqualToString:@"b-pyramid"] || [optNameToChange isEqualToString:@"no-fast-pskip"] || [optNameToChange isEqualToString:@"no-dct-decimate"] || [optNameToChange isEqualToString:@"8x8dct"] )
+            {
+                if ([sender state] == 0)
+                {
+                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]]]];                    
+                }
+                else
+                {
+                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]], 
+                        [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender state]]]];                
+                }
+            }
+            else if ([optNameToChange isEqualToString:@"cabac"])
+            {
+                if ([sender state] == 1)
+                {
+                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]]]];                    
+                }
+                else
+                {
+                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]], 
+                        [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender state]]]];
                 }
             }
             else
             {
-                if ([optNameToChange isEqualToString:@"me"])
-                {
-                    switch ([sender indexOfSelectedItem])
-                    {   
-                        case 1:
-                            [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
-                                [NSString stringWithFormat:[fDisplayX264Options stringValue]],
-                                [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"dia"]]];
-                            break;
-                            
-                        case 2:
-                            [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
-                                [NSString stringWithFormat:[fDisplayX264Options stringValue]],
-                                [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"hex"]]];
-                            break;
-                            
-                        case 3:
-                            [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
-                                [NSString stringWithFormat:[fDisplayX264Options stringValue]],
-                                [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"umh"]]];
-                            break;
-                            
-                        case 4:
-                            [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
-                                [NSString stringWithFormat:[fDisplayX264Options stringValue]],
-                                [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"esa"]]];
-                            break;
-                            
-                        default:
-                            break;
-                    }
-                }
-                else if ([optNameToChange isEqualToString:@"direct"])
-                {
-                    switch ([sender indexOfSelectedItem])
-                    {   
-                        case 1:
-                            [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
-                                [NSString stringWithFormat:[fDisplayX264Options stringValue]],
-                                [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"none"]]];
-                            break;
-                            
-                        case 2:
-                            [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
-                                [NSString stringWithFormat:[fDisplayX264Options stringValue]],
-                                [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"spatial"]]];
-                            break;
-                            
-                        case 3:
-                            [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
-                                [NSString stringWithFormat:[fDisplayX264Options stringValue]],
-                                [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"temporal"]]];
-                            break;
-                            
-                        case 4:
-                            [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
-                                [NSString stringWithFormat:[fDisplayX264Options stringValue]],
-                                [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"auto"]]];
-                            break;
-                            
-                        default:
-                            break;
-                    }
-                }
-                else if ([optNameToChange isEqualToString:@"analyse"])
-                {
-                    switch ([sender indexOfSelectedItem])
-                    {   
-                        case 1:
-                            [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
-                                [NSString stringWithFormat:[fDisplayX264Options stringValue]],
-                                [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"none"]]];
-                            break;
-                            
-                        case 2:
-                            [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
-                                [NSString stringWithFormat:[fDisplayX264Options stringValue]],
-                                [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"all"]]];
-                            break;
-                            
-                        default:
-                            break;
-                    }
-                }
-                
-                else if ([optNameToChange isEqualToString:@"merange"])
-                {
+                if ( [sender indexOfSelectedItem] != 0 )
                     [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]], 
-                        [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]+3]]];
-                }
-                else if ([optNameToChange isEqualToString:@"deblock"])
-                {
-                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", [NSString stringWithFormat:[fDisplayX264Options stringValue]], [NSString stringWithFormat:optNameToChange], [NSString stringWithFormat:@"%d,%d", ([fX264optAlphaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optAlphaDeblockPopUp indexOfSelectedItem]-7 : 0, ([fX264optBetaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optBetaDeblockPopUp indexOfSelectedItem]-7 : 0]]];                
-                }
-                else if /*Boolean Switches*/ ([optNameToChange isEqualToString:@"mixed-refs"] || [optNameToChange isEqualToString:@"weightb"] || [optNameToChange isEqualToString:@"brdo"] || [optNameToChange isEqualToString:@"bime"] || [optNameToChange isEqualToString:@"b-pyramid"] || [optNameToChange isEqualToString:@"no-fast-pskip"] || [optNameToChange isEqualToString:@"no-dct-decimate"] || [optNameToChange isEqualToString:@"8x8dct"] )
-                {
-                    if ([sender state] == 0)
-                    {
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]]]];                    
-                    }
-                    else
-                    {
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]], 
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender state]]]];                
-                    }
-                }
-                else if ([optNameToChange isEqualToString:@"cabac"])
-                {
-                    if ([sender state] == 1)
-                    {
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]]]];                    
-                    }
-                    else
-                    {
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]], 
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender state]]]];
-                    }
-                }
-                else
-                {
-                    if ( [sender indexOfSelectedItem] != 0 )
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]], 
-                        [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]-1]]];
-                }
+                    [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]-1]]];
             }
         }
-        
-        /* We now need to reset the opt widgets since we changed some stuff */		
-        [self X264AdvancedOptionsSet:NULL];		
+    }
+    
+    /* We now need to reset the opt widgets since we changed some stuff */        
+    [self X264AdvancedOptionsSet:NULL];        
 }
 
 @end
