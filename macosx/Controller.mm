@@ -18,6 +18,7 @@
 
 #define _(a) NSLocalizedString(a,NULL)
 
+
 static int FormatSettings[4][10] =
   { { HB_MUX_MP4 | HB_VCODEC_FFMPEG | HB_ACODEC_FAAC,
 	  HB_MUX_MP4 | HB_VCODEC_X264   | HB_ACODEC_FAAC,
@@ -388,10 +389,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		fPicSettingDeinterlace,fPicLabelSettings,fPicLabelSrc,fPicLabelOutp,
 		fPicLabelAr,fPicLabelDeinterlace,fPicLabelSrcX,fPicLabelOutputX,
 		fPicLabelPAROutputX,fPicSettingPARWidth,fPicSettingPARHeight,
-		fPicSettingPAR,fPicLabelAnamorphic,tableView,fPresetsAdd,fPresetsDelete,
+		fPicSettingPAR,fPicLabelAnamorphic,fPresetsAdd,fPresetsDelete,
 		fCreateChapterMarkers,fVidTurboPassCheck,fDstMpgLargeFileCheck,fPicLabelAutoCrop,
 		fPicSettingAutoCrop,fPicSettingDetelecine,fPicLabelDetelecine,fPicLabelDenoise,fPicSettingDenoise,
-        fSubForcedCheck,fPicSettingDeblock,fPicLabelDeblock,};
+        fSubForcedCheck,fPicSettingDeblock,fPicLabelDeblock,fPresetsOutlineView,};
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -418,7 +419,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	
 	} else {
 
-		[tableView setEnabled: NO];
+		[fPresetsOutlineView setEnabled: NO];
 	
 	}
 
@@ -989,7 +990,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 return [fWindow attachedSheet] == nil;
         }
         if (action == @selector(selectDefaultPreset:))
-            return [tableView selectedRow] >= 0 && [fWindow attachedSheet] == nil;
+            return [fPresetsOutlineView selectedRow] >= 0 && [fWindow attachedSheet] == nil;
         if (action == @selector(Pause:))
         {
             if (s.state == HB_STATE_WORKING)
@@ -2123,7 +2124,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [fVidRatePopUp selectItemAtIndex: 0];
     
    /* lets call tableViewSelected to make sure that any preset we have selected is enforced after a title change */
-	[self tableViewSelected:NULL]; 
+	[self selectPreset:NULL]; 
 	
 }
 
@@ -2355,7 +2356,7 @@ the user is using "Custom" settings by determining the sender*/
 	if ([sender stringValue] != NULL)
 	{
 		/* Deselect the currently selected Preset if there is one*/
-		[tableView deselectRow:[tableView selectedRow]];
+		[fPresetsOutlineView deselectRow:[fPresetsOutlineView selectedRow]];
 		[[fPresetsActionMenu itemAtIndex:0] setEnabled: NO];
 		/* Change UI to show "Custom" settings are being used */
 		[fPresetSelectedDisplay setStringValue: @"Custom"];
@@ -3084,20 +3085,159 @@ the user is using "Custom" settings by determining the sender*/
 }
 
 #pragma mark -
-#pragma mark Preset Table View Methods
+#pragma mark Preset Outline View Methods
+#pragma mark - Required
+/* These are required by the NSOutlineView Datasource Delegate */
+/* We use this to deterimine children of an item */
+- (id)outlineView:(NSOutlineView *)fPresetsOutlineView child:(NSInteger)index ofItem:(id)item
+{
+if (item == nil)
+        return [UserPresets objectAtIndex:index];
+    
+    // We are only one level deep, so we can't be asked about children
+    NSAssert (NO, @"Presets View outlineView:child:ofItem: currently can't handle nested items.");
+    return nil;
+}
+/* We use this to determine if an item should be expandable */
+- (BOOL)outlineView:(NSOutlineView *)fPresetsOutlineView isItemExpandable:(id)item
+{
 
-- (IBAction)tableViewSelected:(id)sender
+    /* For now, we maintain one level, so set to no
+    * when nested, we set to yes for any preset "folders"
+    */
+    return NO;
+
+}
+/* used to specify the number of levels to show for each item */
+- (int)outlineView:(NSOutlineView *)fPresetsOutlineView numberOfChildrenOfItem:(id)item
+{
+    /* currently use no levels to test outline view viability */
+    if (item == nil)
+        return [UserPresets count];
+    else
+        return 0;
+}
+/* Used to tell the outline view which information is to be displayed per item */
+- (id)outlineView:(NSOutlineView *)fPresetsOutlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item
+{
+	/* We have two columns right now, icon and PresetName */
+	
+    if ([[tableColumn identifier] isEqualToString:@"PresetName"])
+    {
+        return [item objectForKey:@"PresetName"];
+    }
+    else
+    {
+        return @"something";
+    }
+}
+
+#pragma mark - Added Functionality (optional)
+/* Use to customize the font and display characteristics of the title cell */
+- (void)outlineView:(NSOutlineView *)outlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item
+{
+    if ([[tableColumn identifier] isEqualToString:@"PresetName"])
+    {
+        NSDictionary *userPresetDict = item;
+        NSFont *txtFont;
+        NSColor *fontColor;
+        NSColor *shadowColor;
+        txtFont = [NSFont systemFontOfSize: [NSFont smallSystemFontSize]];
+        /*check to see if its a selected row */
+        if ([fPresetsOutlineView selectedRow] == [fPresetsOutlineView rowForItem:item])
+        {
+            
+            fontColor = [NSColor whiteColor];
+            shadowColor = [NSColor colorWithDeviceRed:(127.0/255.0) green:(140.0/255.0) blue:(160.0/255.0) alpha:1.0];
+        }
+        else
+        {
+            if ([[userPresetDict objectForKey:@"Type"] intValue] == 0)
+            {
+                fontColor = [NSColor blueColor];
+            }
+            else // User created preset, use a black font
+            {
+                fontColor = [NSColor blackColor];
+            }
+            shadowColor = nil;
+        }
+        /* We use Bold Text for the HB Default */
+        if ([[userPresetDict objectForKey:@"Default"] intValue] == 1)// 1 is HB default
+        {
+            txtFont = [NSFont boldSystemFontOfSize: [NSFont smallSystemFontSize]];
+        }
+        /* We use Bold Text for the User Specified Default */
+        if ([[userPresetDict objectForKey:@"Default"] intValue] == 2)// 2 is User default
+        {
+            txtFont = [NSFont boldSystemFontOfSize: [NSFont smallSystemFontSize]];
+        }
+        
+        
+        [cell setTextColor:fontColor];
+        [cell setFont:txtFont];
+        
+    }
+}
+
+/* We use this to edit the name field in the outline view */
+- (void)outlineView:(NSOutlineView *)fPresetsOutlineView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn byItem:(id)item
+{
+    if ([[tableColumn identifier] isEqualToString:@"PresetName"])
+    {
+        id theRecord;
+        
+        theRecord = item;
+        [theRecord setObject:object forKey:@"PresetName"];
+        /* We Sort the Presets By Factory or Custom */
+        NSSortDescriptor * presetTypeDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"Type" 
+                                                                             ascending:YES] autorelease];
+		/* We Sort the Presets Alphabetically by name */
+        NSSortDescriptor * presetNameDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"PresetName" 
+                                                                             ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease];
+        NSArray *sortDescriptors=[NSArray arrayWithObjects:presetTypeDescriptor,presetNameDescriptor,nil];
+        NSArray *sortedArray=[UserPresets sortedArrayUsingDescriptors:sortDescriptors];
+        [UserPresets setArray:sortedArray];
+        /* We Reload the New Table data for presets */
+        //[fPresetsOutlineView reloadData];
+        /* We save all of the preset data here */
+        [self savePreset];
+    }
+}
+/* We use this to provide tooltips for the items in the presets outline view */
+- (NSString *)outlineView:(NSOutlineView *)fPresetsOutlineView toolTipForCell:(NSCell *)cell rect:(NSRectPointer)rect tableColumn:(NSTableColumn *)tc item:(id)item mouseLocation:(NSPoint)mouseLocation
+{
+    //if ([[tc identifier] isEqualToString:@"PresetName"])
+    //{
+        /* initialize the tooltip contents variable */
+        NSString *loc_tip;
+        /* if there is a description for the preset, we show it in the tooltip */
+        if ([item valueForKey:@"PresetDescription"])
+        {
+            loc_tip = [NSString stringWithFormat: @"%@",[item valueForKey:@"PresetDescription"]];
+            return (loc_tip);
+        }
+        else
+        {
+            loc_tip = @"No description available";
+        }
+        return (loc_tip);
+    //}
+}
+
+
+#pragma mark - Functional Preset NSOutlineView Methods
+
+- (IBAction)selectPreset:(id)sender
 {
     /* Since we cannot disable the presets tableView in terms of clickability
      we will use the enabled state of the add presets button to determine whether
      or not clicking on a preset will do anything */
 	if ([fPresetsAdd isEnabled])
 	{
-		if ([tableView selectedRow] >= 0)
-		{	
-			/* we get the chosen preset from the UserPresets array */
-			chosenPreset = [UserPresets objectAtIndex:[tableView selectedRow]];
-			curUserPresetChosenNum = [sender selectedRow];
+		if ([fPresetsOutlineView selectedRow] >= 0)
+		{
+            chosenPreset = [fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]];
 			/* we set the preset display field in main window here */
 			[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@",[chosenPreset valueForKey:@"PresetName"]]];
 			if ([[chosenPreset objectForKey:@"Default"] intValue] == 1)
@@ -3292,8 +3432,7 @@ the user is using "Custom" settings by determining the sender*/
                         else
                         {
                             [fPictureController setDeblock:0];
-                        }   
-                        
+                        }             
                         [self calculatePictureSizing: NULL];
                     }
                     
@@ -3302,8 +3441,8 @@ the user is using "Custom" settings by determining the sender*/
                 
 			}
 			/* If the preset has an objectForKey:@"UsesPictureFilters", then we know it is a newer style filters preset
-            * and handle the filters here depending on whether or not the preset specifies applying the filter.
-            */
+             * and handle the filters here depending on whether or not the preset specifies applying the filter.
+             */
             if ([chosenPreset objectForKey:@"UsesPictureFilters"] && [[chosenPreset objectForKey:@"UsesPictureFilters"]  intValue] > 0)
             {
                 /* Filters */
@@ -3352,136 +3491,13 @@ the user is using "Custom" settings by determining the sender*/
                 {
                     [fPictureController setDeblock:0];
                 }             
-                
             }
 			[self calculatePictureSizing: NULL];
 			[[fPresetsActionMenu itemAtIndex:0] setEnabled: YES];
         }
     }
-}
-
-
-
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView
-{
-    return [UserPresets count];
-}
-
-/* we use this to determine display characteristics for
-each table cell based on content currently only used to
-show the built in presets in a blue font. */
-- (void)tableView:(NSTableView *)aTableView
- willDisplayCell:(id)aCell 
- forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
-{
-    NSDictionary *userPresetDict = [UserPresets objectAtIndex:rowIndex];
-	NSFont *txtFont;
-	NSColor *fontColor;
-	NSColor *shadowColor;
-	txtFont = [NSFont systemFontOfSize: [NSFont smallSystemFontSize]];
-	/* First, we check to see if its a selected row, if so, we use white since its highlighted in blue */
-	if ([[aTableView selectedRowIndexes] containsIndex:rowIndex] && ([tableView editedRow] != rowIndex))
-	{
-		
-		fontColor = [NSColor whiteColor];
-		shadowColor = [NSColor colorWithDeviceRed:(127.0/255.0) green:(140.0/255.0) blue:(160.0/255.0) alpha:1.0];
-	}
-	else
-	{
-		/* We set the properties of unselected rows */
-		/* if built-in preset (defined by "type" == 0) we use a blue font */
-		if ([[userPresetDict objectForKey:@"Type"] intValue] == 0)
-		{
-			fontColor = [NSColor blueColor];
-		}
-		else // User created preset, use a black font
-		{
-			fontColor = [NSColor blackColor];
-		}
-		shadowColor = nil;
-	}
-	/* We check to see if this is the HB default, if so, color it appropriately */
-	if (!presetUserDefault && presetHbDefault && rowIndex == presetHbDefault)
-	{
-	txtFont = [NSFont boldSystemFontOfSize: [NSFont smallSystemFontSize]];
-	}
-	/* We check to see if this is the User Specified default, if so, color it appropriately */
-	if (presetUserDefault && rowIndex == presetUserDefault)
-	{
-	txtFont = [NSFont boldSystemFontOfSize: [NSFont smallSystemFontSize]];
-	}
-	
-	[aCell setTextColor:fontColor];
-	[aCell setFont:txtFont];
-	/* this shadow stuff (like mail app) for some reason looks crappy, commented out
-	temporarily in case we want to resurrect it */
-	/*
-	NSShadow *shadow = [[NSShadow alloc] init];
-	NSSize shadowOffset = { width: 1.0, height: -1.5};
-	[shadow setShadowOffset:shadowOffset];
-	[shadow setShadowColor:shadowColor];
-	[shadow set];
-	*/
-	
-}
-/* Method to display tooltip with the description for each preset, if available */
-- (NSString *)tableView:(NSTableView *)aTableView toolTipForCell:(NSCell *)aCell 
-                   rect:(NSRectPointer)aRect tableColumn:(NSTableColumn *)aTableColumn
-                    row:(int)rowIndex mouseLocation:(NSPoint)aPos
-{
-     /* initialize the tooltip contents variable */
-	 NSString *loc_tip;
-     /* if there is a description for the preset, we show it in the tooltip */
-	 if ([[UserPresets objectAtIndex:rowIndex] valueForKey:@"PresetDescription"])
-	 {
-        loc_tip = [NSString stringWithFormat: @"%@",[[UserPresets objectAtIndex:rowIndex] valueForKey:@"PresetDescription"]];
-        return (loc_tip);
-	 }
-	 else
-	 {
-        loc_tip = @"No description available";
-	 }
-	 return (loc_tip);
-
-}
-
-- (id)tableView:(NSTableView *)aTableView
-      objectValueForTableColumn:(NSTableColumn *)aTableColumn
-      row:(int)rowIndex
-{
-id theRecord, theValue;
     
-    theRecord = [UserPresets objectAtIndex:rowIndex];
-    theValue = [theRecord objectForKey:[aTableColumn identifier]];
-    return theValue;
 }
-
-// NSTableDataSource method that we implement to edit values directly in the table...
-- (void)tableView:(NSTableView *)aTableView
-        setObjectValue:(id)anObject
-        forTableColumn:(NSTableColumn *)aTableColumn
-        row:(int)rowIndex
-{
-    id theRecord;
-    
-    theRecord = [UserPresets objectAtIndex:rowIndex];
-    [theRecord setObject:anObject forKey:@"PresetName"];
-    /* We Sort the Presets By Factory or Custom */
-	NSSortDescriptor * presetTypeDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"Type" 
-                                                    ascending:YES] autorelease];
-		/* We Sort the Presets Alphabetically by name */
-	NSSortDescriptor * presetNameDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"PresetName" 
-                                                    ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease];
-	NSArray *sortDescriptors=[NSArray arrayWithObjects:presetTypeDescriptor,presetNameDescriptor,nil];
-    NSArray *sortedArray=[UserPresets sortedArrayUsingDescriptors:sortDescriptors];
-	[UserPresets setArray:sortedArray];
-	/* We Reload the New Table data for presets */
-    [tableView reloadData];
-   /* We save all of the preset data here */
-    [self savePreset];
-}
-
-
 
 
 #pragma mark -
@@ -3512,7 +3528,7 @@ id theRecord, theValue;
 - (IBAction) showAddPresetPanel: (id) sender
 {
     /* Deselect the currently selected Preset if there is one*/
-    [tableView deselectRow:[tableView selectedRow]];
+    [fPresetsOutlineView deselectRow:[fPresetsOutlineView selectedRow]];
 
     /* Populate the preset picture settings popup here */
     [fPresetNewPicSettingsPopUp removeAllItems];
@@ -3564,16 +3580,16 @@ id theRecord, theValue;
 	
 	
 	/* We Reload the New Table data for presets */
-    [tableView reloadData];
+    [fPresetsOutlineView reloadData];
    /* We save all of the preset data here */
     [self savePreset];
 }
 
 - (IBAction)insertPreset:(id)sender
 {
-    int index = [tableView selectedRow];
+    int index = [fPresetsOutlineView selectedRow];
     [UserPresets insertObject:[self createPreset] atIndex:index];
-    [tableView reloadData];
+    [fPresetsOutlineView reloadData];
     [self savePreset];
 }
 
@@ -3682,7 +3698,7 @@ id theRecord, theValue;
     NSMutableArray *tempArray;
     id tempObject;
     
-    if ( [tableView numberOfSelectedRows] == 0 )
+    if ( [fPresetsOutlineView numberOfSelectedRows] == 0 )
         return;
     /* Alert user before deleting preset */
 	/* Comment out for now, tie to user pref eventually */
@@ -3691,7 +3707,7 @@ id theRecord, theValue;
     status = NSRunAlertPanel(@"Warning!", @"Are you sure that you want to delete the selected preset?", @"OK", @"Cancel", nil);
     
     if ( status == NSAlertDefaultReturn ) {
-        enumerator = [tableView selectedRowEnumerator];
+        enumerator = [fPresetsOutlineView selectedRowEnumerator];
         tempArray = [NSMutableArray array];
         
         while ( (index = [enumerator nextObject]) ) {
@@ -3700,7 +3716,7 @@ id theRecord, theValue;
         }
         
         [UserPresets removeObjectsInArray:tempArray];
-        [tableView reloadData];
+        [fPresetsOutlineView reloadData];
         [self savePreset];   
     }
 }
@@ -3745,16 +3761,17 @@ id theRecord, theValue;
 	}
 	/* Second, go ahead and set the appropriate user specfied preset */
 	/* we get the chosen preset from the UserPresets array */
-	if ([[[UserPresets objectAtIndex:[tableView selectedRow]] objectForKey:@"Default"] intValue] != 1) // 1 is HB default
+	if ([[[UserPresets objectAtIndex:[fPresetsOutlineView selectedRow]] objectForKey:@"Default"] intValue] != 1) // 1 is HB default
 	{
-		[[UserPresets objectAtIndex:[tableView selectedRow]] setObject:[NSNumber numberWithInt:2] forKey:@"Default"];
+		[[UserPresets objectAtIndex:[fPresetsOutlineView selectedRow]] setObject:[NSNumber numberWithInt:2] forKey:@"Default"];
 	}
-	presetUserDefault = [tableView selectedRow];
+	/*FIX ME: I think we now need to use the items not rows in NSOutlineView */
+    presetUserDefault = [fPresetsOutlineView selectedRow];
 	
 	/* We save all of the preset data here */
     [self savePreset];
 	/* We Reload the New Table data for presets */
-    [tableView reloadData];
+    [fPresetsOutlineView reloadData];
 }
 
 - (IBAction)selectDefaultPreset:(id)sender
@@ -3762,13 +3779,13 @@ id theRecord, theValue;
 	/* if there is a user specified default, we use it */
 	if (presetUserDefault)
 	{
-	[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:presetUserDefault] byExtendingSelection:NO];
-	[self tableViewSelected:NULL];
+	[fPresetsOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:presetUserDefault] byExtendingSelection:NO];
+	[self selectPreset:NULL];
 	}
 	else if (presetHbDefault) //else we use the built in default presetHbDefault
 	{
-	[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:presetHbDefault] byExtendingSelection:NO];
-	[self tableViewSelected:NULL];
+	[fPresetsOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:presetHbDefault] byExtendingSelection:NO];
+	[self selectPreset:NULL];
 	}
 }
 
@@ -3800,7 +3817,7 @@ id theRecord, theValue;
         }
         
         [UserPresets removeObjectsInArray:tempArray];
-        [tableView reloadData];
+        [fPresetsOutlineView reloadData];
         [self savePreset];   
 
 }

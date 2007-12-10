@@ -63,11 +63,15 @@
 				<string>id</string>
 				<key>openUserGuide</key>
 				<string>id</string>
+				<key>presetSelected</key>
+				<string>id</string>
 				<key>qualitySliderChanged</key>
 				<string>id</string>
 				<key>revertPictureSizeToMax</key>
 				<string>id</string>
 				<key>selectDefaultPreset</key>
+				<string>id</string>
+				<key>selectPreset</key>
 				<string>id</string>
 				<key>setDefaultPreset</key>
 				<string>id</string>
@@ -92,8 +96,6 @@
 				<key>showSourceTitleScanPanel</key>
 				<string>id</string>
 				<key>subtitleSelectionChanged</key>
-				<string>id</string>
-				<key>tableViewSelected</key>
 				<string>id</string>
 				<key>titlePopUpChanged</key>
 				<string>id</string>
@@ -234,6 +236,8 @@
 				<string>NSButton</string>
 				<key>fPresetsDelete</key>
 				<string>NSButton</string>
+				<key>fPresetsOutlineView</key>
+				<string>NSOutlineView</string>
 				<key>fQueueStatus</key>
 				<string>NSTextField</string>
 				<key>fRipIndicator</key>

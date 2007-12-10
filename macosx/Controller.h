@@ -178,8 +178,10 @@
 	int                            presetHbDefault; // this is 1 in "Default" preset key
 	int                            presetUserDefault;// this is 2 in "Default" preset key
     IBOutlet NSPanel             * fAddPresetPanel;
-	IBOutlet NSTableView         * tableView;
-	IBOutlet NSButton            * fPresetsAdd;
+	/* new NSOutline View for the presets */
+    NSArray                      *fDraggedNodes;
+    IBOutlet NSOutlineView       * fPresetsOutlineView;
+    IBOutlet NSButton            * fPresetsAdd;
 	IBOutlet NSButton            * fPresetsDelete;
     IBOutlet MVMenuButton        * fPresetsActionButton;
     IBOutlet NSMenu              * fPresetsActionMenu;
@@ -263,7 +265,28 @@
 - (IBAction) openForums:   (id) sender;
 - (IBAction) openUserGuide:   (id) sender;
 
-    // Preset Methods Here
+// Preset Methods Here
+    
+/* These are required by the NSOutlineView Datasource Delegate */
+/* We use this to deterimine children of an item */
+- (id)outlineView:(NSOutlineView *)fPresetsOutlineView child:(NSInteger)index ofItem:(id)item;
+/* We use this to determine if an item should be expandable */
+- (BOOL)outlineView:(NSOutlineView *)fPresetsOutlineView isItemExpandable:(id)item;
+/* used to specify the number of levels to show for each item */
+- (int)outlineView:(NSOutlineView *)fPresetsOutlineView numberOfChildrenOfItem:(id)item;
+/* Used to tell the outline view which information is to be displayed per item */
+- (id)outlineView:(NSOutlineView *)fPresetsOutlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item;
+/* Use to customize the font and display characteristics of the title cell */
+- (void)outlineView:(NSOutlineView *)fPresetsOutlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item;
+/* We use this to edit the name field in the outline view */
+- (void)outlineView:(NSOutlineView *)fPresetsOutlineView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn byItem:(id)item;
+/* We use this to provide tooltips for the items in the presets outline view */
+- (NSString *)outlineView:(NSOutlineView *)fPresetsOutlineView toolTipForCell:(NSCell *)cell rect:(NSRectPointer)rect tableColumn:(NSTableColumn *)tc item:(id)item mouseLocation:(NSPoint)mouseLocation;
+
+/* We use this to actually select the preset and act accordingly */
+- (IBAction)selectPreset:(id)sender;    
+
+/* Manage User presets */    
 - (void) loadPresets;
 - (IBAction) customSettingUsed: (id) sender;
 - (IBAction) showAddPresetPanel: (id) sender;
@@ -282,21 +305,7 @@
 - (IBAction)insertPreset:(id)sender;
 - (IBAction)deletePreset:(id)sender;
 - (IBAction)getDefaultPresets:(id)sender;
-- (IBAction)tableViewSelected:(id)sender;
 
-    // NSTableDataSource methods
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView;
-- (id)tableView:(NSTableView *)aTableView
-      objectValueForTableColumn:(NSTableColumn *)aTableColumn
-            row:(int)rowIndex;
-- (void)tableView:(NSTableView *)aTableView
-   setObjectValue:(id)anObject
-   forTableColumn:(NSTableColumn *)aTableColumn
-              row:(int)rowIndex;
-    // To determine user presets cell display properties
-- (void)tableView:(NSTableView *)aTableView
-		willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn
-              row:(int)rowIndex;
 
     // Growl methods
 - (NSDictionary *) registrationDictionaryForGrowl;
