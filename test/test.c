@@ -1332,8 +1332,8 @@ static int ParseOptions( int argc, char ** argv )
         int option_index = 0;
         int c;
 
-        c = getopt_long( argc, argv,
-                         "hvuC:f:4i:Io:t:Lc:ma:6:s:UFN:e:E:2dD:789gpOP::w:l:n:b:q:S:B:r:R:Qx:TY:X:VZ:z",
+		c = getopt_long( argc, argv,
+						 "hvuC:f:4i:Io:t:Lc:m::a:6:s:UFN:e:E:2dD:789gpOP::w:l:n:b:q:S:B:r:R:Qx:TY:X:VZ:z",
                          long_options, &option_index );
         if( c < 0 )
         {
