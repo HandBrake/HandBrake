@@ -3242,276 +3242,270 @@ if (item == nil)
 
 - (IBAction)selectPreset:(id)sender
 {
-    /* Since we cannot disable the presets tableView in terms of clickability
-     we will use the enabled state of the add presets button to determine whether
-     or not clicking on a preset will do anything */
-	if ([fPresetsAdd isEnabled])
-	{
-		if ([fPresetsOutlineView selectedRow] >= 0)
-		{
-            chosenPreset = [fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]];
-			/* we set the preset display field in main window here */
-			[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@",[chosenPreset valueForKey:@"PresetName"]]];
-			if ([[chosenPreset objectForKey:@"Default"] intValue] == 1)
-			{
-				[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@ (Default)",[chosenPreset valueForKey:@"PresetName"]]];
-			}
-			else
-			{
-				[fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@",[chosenPreset valueForKey:@"PresetName"]]];
-			}
-			/* File Format */
-			[fDstFormatPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileFormat"]]];
-			[self formatPopUpChanged: NULL];
-			
-			/* Chapter Markers*/
-			[fCreateChapterMarkers setState:[[chosenPreset objectForKey:@"ChapterMarkers"] intValue]];
-			/* Allow Mpeg4 64 bit formatting +4GB file sizes */
-			[fDstMpgLargeFileCheck setState:[[chosenPreset objectForKey:@"Mp4LargeFile"] intValue]];
-			/* Codecs */
-			[fDstCodecsPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]]];
-			[self codecsPopUpChanged: NULL];
-			/* Video encoder */
-			[fVidEncoderPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]]];
-			
-			/* We can show the preset options here in the gui if we want to
-             so we check to see it the user has specified it in the prefs */
-			[fAdvancedOptions setOptions: [NSString stringWithFormat:[chosenPreset valueForKey:@"x264Option"]]];
-			
-			/* Lets run through the following functions to get variables set there */
-			[self encoderPopUpChanged: NULL];
-			
-			[self calculateBitrate: NULL];
-			
-			/* Video quality */
-			[fVidQualityMatrix selectCellAtRow:[[chosenPreset objectForKey:@"VideoQualityType"] intValue] column:0];
-			
-			[fVidTargetSizeField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoTargetSize"]]];
-			[fVidBitrateField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoAvgBitrate"]]];
-			[fVidQualitySlider setFloatValue: [[chosenPreset valueForKey:@"VideoQualitySlider"] floatValue]];
-            
-            [self videoMatrixChanged: NULL];
-			
-			/* Video framerate */
-			/* For video preset video framerate, we want to make sure that Same as source does not conflict with the
-             detected framerate in the fVidRatePopUp so we use index 0*/
-			if ([[NSString stringWithFormat:[chosenPreset valueForKey:@"VideoFramerate"]] isEqualToString: @"Same as source"])
+    
+    if ([fPresetsOutlineView selectedRow] >= 0)
+    {
+        chosenPreset = [fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]];
+        /* we set the preset display field in main window here */
+        [fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@",[chosenPreset valueForKey:@"PresetName"]]];
+        if ([[chosenPreset objectForKey:@"Default"] intValue] == 1)
+        {
+            [fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@ (Default)",[chosenPreset valueForKey:@"PresetName"]]];
+        }
+        else
+        {
+            [fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@",[chosenPreset valueForKey:@"PresetName"]]];
+        }
+        /* File Format */
+        [fDstFormatPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileFormat"]]];
+        [self formatPopUpChanged: NULL];
+        
+        /* Chapter Markers*/
+        [fCreateChapterMarkers setState:[[chosenPreset objectForKey:@"ChapterMarkers"] intValue]];
+        /* Allow Mpeg4 64 bit formatting +4GB file sizes */
+        [fDstMpgLargeFileCheck setState:[[chosenPreset objectForKey:@"Mp4LargeFile"] intValue]];
+        /* Codecs */
+        [fDstCodecsPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]]];
+        [self codecsPopUpChanged: NULL];
+        /* Video encoder */
+        [fVidEncoderPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]]];
+        
+        /* We can show the preset options here in the gui if we want to
+         so we check to see it the user has specified it in the prefs */
+        [fAdvancedOptions setOptions: [NSString stringWithFormat:[chosenPreset valueForKey:@"x264Option"]]];
+        
+        /* Lets run through the following functions to get variables set there */
+        [self encoderPopUpChanged: NULL];
+        
+        [self calculateBitrate: NULL];
+        
+        /* Video quality */
+        [fVidQualityMatrix selectCellAtRow:[[chosenPreset objectForKey:@"VideoQualityType"] intValue] column:0];
+        
+        [fVidTargetSizeField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoTargetSize"]]];
+        [fVidBitrateField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoAvgBitrate"]]];
+        [fVidQualitySlider setFloatValue: [[chosenPreset valueForKey:@"VideoQualitySlider"] floatValue]];
+        
+        [self videoMatrixChanged: NULL];
+        
+        /* Video framerate */
+        /* For video preset video framerate, we want to make sure that Same as source does not conflict with the
+         detected framerate in the fVidRatePopUp so we use index 0*/
+        if ([[NSString stringWithFormat:[chosenPreset valueForKey:@"VideoFramerate"]] isEqualToString: @"Same as source"])
+        {
+            [fVidRatePopUp selectItemAtIndex: 0];
+        }
+        else
+        {
+            [fVidRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoFramerate"]]];
+        }
+        
+        /* GrayScale */
+        [fVidGrayscaleCheck setState:[[chosenPreset objectForKey:@"VideoGrayScale"] intValue]];
+        
+        /* 2 Pass Encoding */
+        [fVidTwoPassCheck setState:[[chosenPreset objectForKey:@"VideoTwoPass"] intValue]];
+        [self twoPassCheckboxChanged: NULL];
+        /* Turbo 1st pass for 2 Pass Encoding */
+        [fVidTurboPassCheck setState:[[chosenPreset objectForKey:@"VideoTurboTwoPass"] intValue]];
+        
+        /*Audio*/
+        
+        /* Audio Sample Rate*/
+        [fAudRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioSampleRate"]]];
+        /* Audio Bitrate Rate*/
+        [fAudBitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioBitRate"]]];
+        /*Subtitles*/
+        [fSubPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Subtitles"]]];
+        /* Dynamic Range Control Slider */
+        [fAudDrcSlider setFloatValue: [[chosenPreset valueForKey:@"AudioDRCSlider"] floatValue]];
+        [self audioDRCSliderChanged: NULL];
+        
+        /* Picture Settings */
+        /* Note: objectForKey:@"UsesPictureSettings" now refers to picture size, this encompasses:
+         * height, width, keep ar, anamorphic and crop settings.
+         * picture filters are now handled separately.
+         * We will be able to actually change the key names for legacy preset keys when preset file
+         * update code is done. But for now, lets hang onto the old legacy key name for backwards compatibility.
+         */
+        /* Check to see if the objectForKey:@"UsesPictureSettings is greater than 0, as 0 means use picture sizing "None" 
+         * and the preset completely ignores any picture sizing values in the preset.
+         */
+        if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] > 0)
+        {
+            hb_job_t * job = fTitle->job;
+            /* Check to see if the objectForKey:@"UsesPictureSettings is 2 which is "Use Max for the source */
+            if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] == 2 || [[chosenPreset objectForKey:@"UsesMaxPictureSettings"]  intValue] == 1)
             {
-                [fVidRatePopUp selectItemAtIndex: 0];
+                /* Use Max Picture settings for whatever the dvd is.*/
+                [self revertPictureSizeToMax: NULL];
+                job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
+                if (job->keep_ratio == 1)
+                {
+                    hb_fix_aspect( job, HB_KEEP_WIDTH );
+                    if( job->height > fTitle->height )
+                    {
+                        job->height = fTitle->height;
+                        hb_fix_aspect( job, HB_KEEP_HEIGHT );
+                    }
+                }
+                job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
+            }
+            else // /* If not 0 or 2 we assume objectForKey:@"UsesPictureSettings is 1 which is "Use picture sizing from when the preset was set" */
+            {
+                job->width = [[chosenPreset objectForKey:@"PictureWidth"]  intValue];
+                job->height = [[chosenPreset objectForKey:@"PictureHeight"]  intValue];
+                job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
+                if (job->keep_ratio == 1)
+                {
+                    hb_fix_aspect( job, HB_KEEP_WIDTH );
+                    if( job->height > fTitle->height )
+                    {
+                        job->height = fTitle->height;
+                        hb_fix_aspect( job, HB_KEEP_HEIGHT );
+                    }
+                }
+                job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
+                
+                
+                /* If Cropping is set to custom, then recall all four crop values from
+                 when the preset was created and apply them */
+                if ([[chosenPreset objectForKey:@"PictureAutoCrop"]  intValue] == 0)
+                {
+                    [fPictureController setAutoCrop:NO];
+                    
+                    /* Here we use the custom crop values saved at the time the preset was saved */
+                    job->crop[0] = [[chosenPreset objectForKey:@"PictureTopCrop"]  intValue];
+                    job->crop[1] = [[chosenPreset objectForKey:@"PictureBottomCrop"]  intValue];
+                    job->crop[2] = [[chosenPreset objectForKey:@"PictureLeftCrop"]  intValue];
+                    job->crop[3] = [[chosenPreset objectForKey:@"PictureRightCrop"]  intValue];
+                    
+                }
+                else /* if auto crop has been saved in preset, set to auto and use post scan auto crop */
+                {
+                    [fPictureController setAutoCrop:YES];
+                    /* Here we use the auto crop values determined right after scan */
+                    job->crop[0] = AutoCropTop;
+                    job->crop[1] = AutoCropBottom;
+                    job->crop[2] = AutoCropLeft;
+                    job->crop[3] = AutoCropRight;
+                    
+                }
+                /* If the preset has no objectForKey:@"UsesPictureFilters", then we know it is a legacy preset
+                 * and handle the filters here as before.
+                 * NOTE: This should be removed when the update presets code is done as we can be assured that legacy
+                 * presets are updated to work properly with new keys.
+                 */
+                if (![chosenPreset objectForKey:@"UsesPictureFilters"])
+                {
+                    /* Filters */
+                    /* Deinterlace */
+                    if ([chosenPreset objectForKey:@"PictureDeinterlace"])
+                    {
+                        [fPictureController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
+                    }
+                    else
+                    {
+                        [fPictureController setDeinterlace:0];
+                    }
+                    /* VFR */
+                    if ([[chosenPreset objectForKey:@"VFR"] intValue] == 1)
+                    {
+                        [fPictureController setVFR:[[chosenPreset objectForKey:@"VFR"] intValue]];
+                    }
+                    else
+                    {
+                        [fPictureController setVFR:0];
+                    }
+                    /* Detelecine */
+                    if ([[chosenPreset objectForKey:@"PictureDetelecine"] intValue] == 1)
+                    {
+                        [fPictureController setDetelecine:[[chosenPreset objectForKey:@"PictureDetelecine"] intValue]];
+                    }
+                    else
+                    {
+                        [fPictureController setDetelecine:0];
+                    }
+                    /* Denoise */
+                    if ([chosenPreset objectForKey:@"PictureDenoise"])
+                    {
+                        [fPictureController setDenoise:[[chosenPreset objectForKey:@"PictureDenoise"] intValue]];
+                    }
+                    else
+                    {
+                        [fPictureController setDenoise:0];
+                    }   
+                    /* Deblock */
+                    if ([[chosenPreset objectForKey:@"PictureDeblock"] intValue] == 1)
+                    {
+                        [fPictureController setDeblock:[[chosenPreset objectForKey:@"PictureDeblock"] intValue]];
+                    }
+                    else
+                    {
+                        [fPictureController setDeblock:0];
+                    }             
+                    [self calculatePictureSizing: NULL];
+                }
+                
+            }
+            
+            
+        }
+        /* If the preset has an objectForKey:@"UsesPictureFilters", then we know it is a newer style filters preset
+         * and handle the filters here depending on whether or not the preset specifies applying the filter.
+         */
+        if ([chosenPreset objectForKey:@"UsesPictureFilters"] && [[chosenPreset objectForKey:@"UsesPictureFilters"]  intValue] > 0)
+        {
+            /* Filters */
+            /* Deinterlace */
+            if ([chosenPreset objectForKey:@"PictureDeinterlace"])
+            {
+                [fPictureController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
             }
             else
             {
-                [fVidRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoFramerate"]]];
+                [fPictureController setDeinterlace:0];
             }
-			
-			/* GrayScale */
-			[fVidGrayscaleCheck setState:[[chosenPreset objectForKey:@"VideoGrayScale"] intValue]];
-			
-			/* 2 Pass Encoding */
-			[fVidTwoPassCheck setState:[[chosenPreset objectForKey:@"VideoTwoPass"] intValue]];
-			[self twoPassCheckboxChanged: NULL];
-			/* Turbo 1st pass for 2 Pass Encoding */
-			[fVidTurboPassCheck setState:[[chosenPreset objectForKey:@"VideoTurboTwoPass"] intValue]];
-			
-			/*Audio*/
-			
-			/* Audio Sample Rate*/
-			[fAudRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioSampleRate"]]];
-			/* Audio Bitrate Rate*/
-			[fAudBitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioBitRate"]]];
-			/*Subtitles*/
-			[fSubPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Subtitles"]]];
-			/* Dynamic Range Control Slider */
-            [fAudDrcSlider setFloatValue: [[chosenPreset valueForKey:@"AudioDRCSlider"] floatValue]];
-            [self audioDRCSliderChanged: NULL];
-            
-			/* Picture Settings */
-			/* Note: objectForKey:@"UsesPictureSettings" now refers to picture size, this encompasses:
-             * height, width, keep ar, anamorphic and crop settings.
-             * picture filters are now handled separately.
-             * We will be able to actually change the key names for legacy preset keys when preset file
-             * update code is done. But for now, lets hang onto the old legacy key name for backwards compatibility.
-             */
-			/* Check to see if the objectForKey:@"UsesPictureSettings is greater than 0, as 0 means use picture sizing "None" 
-             * and the preset completely ignores any picture sizing values in the preset.
-             */
-            if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] > 0)
-			{
-				hb_job_t * job = fTitle->job;
-				/* Check to see if the objectForKey:@"UsesPictureSettings is 2 which is "Use Max for the source */
-				if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] == 2 || [[chosenPreset objectForKey:@"UsesMaxPictureSettings"]  intValue] == 1)
-				{
-					/* Use Max Picture settings for whatever the dvd is.*/
-					[self revertPictureSizeToMax: NULL];
-					job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
-					if (job->keep_ratio == 1)
-					{
-						hb_fix_aspect( job, HB_KEEP_WIDTH );
-						if( job->height > fTitle->height )
-						{
-							job->height = fTitle->height;
-							hb_fix_aspect( job, HB_KEEP_HEIGHT );
-						}
-					}
-					job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
-				}
-				else // /* If not 0 or 2 we assume objectForKey:@"UsesPictureSettings is 1 which is "Use picture sizing from when the preset was set" */
-				{
-					job->width = [[chosenPreset objectForKey:@"PictureWidth"]  intValue];
-					job->height = [[chosenPreset objectForKey:@"PictureHeight"]  intValue];
-					job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
-					if (job->keep_ratio == 1)
-					{
-						hb_fix_aspect( job, HB_KEEP_WIDTH );
-						if( job->height > fTitle->height )
-						{
-							job->height = fTitle->height;
-							hb_fix_aspect( job, HB_KEEP_HEIGHT );
-						}
-					}
-					job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
-                    
-                    
-					/* If Cropping is set to custom, then recall all four crop values from
-                     when the preset was created and apply them */
-					if ([[chosenPreset objectForKey:@"PictureAutoCrop"]  intValue] == 0)
-					{
-                        [fPictureController setAutoCrop:NO];
-						
-						/* Here we use the custom crop values saved at the time the preset was saved */
-						job->crop[0] = [[chosenPreset objectForKey:@"PictureTopCrop"]  intValue];
-						job->crop[1] = [[chosenPreset objectForKey:@"PictureBottomCrop"]  intValue];
-						job->crop[2] = [[chosenPreset objectForKey:@"PictureLeftCrop"]  intValue];
-						job->crop[3] = [[chosenPreset objectForKey:@"PictureRightCrop"]  intValue];
-						
-					}
-					else /* if auto crop has been saved in preset, set to auto and use post scan auto crop */
-					{
-                        [fPictureController setAutoCrop:YES];
-                        /* Here we use the auto crop values determined right after scan */
-						job->crop[0] = AutoCropTop;
-						job->crop[1] = AutoCropBottom;
-						job->crop[2] = AutoCropLeft;
-						job->crop[3] = AutoCropRight;
-						
-					}
-                    /* If the preset has no objectForKey:@"UsesPictureFilters", then we know it is a legacy preset
-                     * and handle the filters here as before.
-                     * NOTE: This should be removed when the update presets code is done as we can be assured that legacy
-                     * presets are updated to work properly with new keys.
-                     */
-                    if (![chosenPreset objectForKey:@"UsesPictureFilters"])
-                    {
-                        /* Filters */
-                        /* Deinterlace */
-                        if ([chosenPreset objectForKey:@"PictureDeinterlace"])
-                        {
-                            [fPictureController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
-                        }
-                        else
-                        {
-                            [fPictureController setDeinterlace:0];
-                        }
-                        /* VFR */
-                        if ([[chosenPreset objectForKey:@"VFR"] intValue] == 1)
-                        {
-                            [fPictureController setVFR:[[chosenPreset objectForKey:@"VFR"] intValue]];
-                        }
-                        else
-                        {
-                            [fPictureController setVFR:0];
-                        }
-                        /* Detelecine */
-                        if ([[chosenPreset objectForKey:@"PictureDetelecine"] intValue] == 1)
-                        {
-                            [fPictureController setDetelecine:[[chosenPreset objectForKey:@"PictureDetelecine"] intValue]];
-                        }
-                        else
-                        {
-                            [fPictureController setDetelecine:0];
-                        }
-                        /* Denoise */
-                        if ([chosenPreset objectForKey:@"PictureDenoise"])
-                        {
-                            [fPictureController setDenoise:[[chosenPreset objectForKey:@"PictureDenoise"] intValue]];
-                        }
-                        else
-                        {
-                            [fPictureController setDenoise:0];
-                        }   
-                        /* Deblock */
-                        if ([[chosenPreset objectForKey:@"PictureDeblock"] intValue] == 1)
-                        {
-                            [fPictureController setDeblock:[[chosenPreset objectForKey:@"PictureDeblock"] intValue]];
-                        }
-                        else
-                        {
-                            [fPictureController setDeblock:0];
-                        }             
-                        [self calculatePictureSizing: NULL];
-                    }
-                    
-				}
-                
-                
-			}
-			/* If the preset has an objectForKey:@"UsesPictureFilters", then we know it is a newer style filters preset
-             * and handle the filters here depending on whether or not the preset specifies applying the filter.
-             */
-            if ([chosenPreset objectForKey:@"UsesPictureFilters"] && [[chosenPreset objectForKey:@"UsesPictureFilters"]  intValue] > 0)
+            /* VFR */
+            if ([[chosenPreset objectForKey:@"VFR"] intValue] == 1)
             {
-                /* Filters */
-                /* Deinterlace */
-                if ([chosenPreset objectForKey:@"PictureDeinterlace"])
-                {
-                    [fPictureController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
-                }
-                else
-                {
-                    [fPictureController setDeinterlace:0];
-                }
-                /* VFR */
-                if ([[chosenPreset objectForKey:@"VFR"] intValue] == 1)
-                {
-                    [fPictureController setVFR:[[chosenPreset objectForKey:@"VFR"] intValue]];
-                }
-                else
-                {
-                    [fPictureController setVFR:0];
-                }
-                /* Detelecine */
-                if ([[chosenPreset objectForKey:@"PictureDetelecine"] intValue] == 1)
-                {
-                    [fPictureController setDetelecine:[[chosenPreset objectForKey:@"PictureDetelecine"] intValue]];
-                }
-                else
-                {
-                    [fPictureController setDetelecine:0];
-                }
-                /* Denoise */
-                if ([chosenPreset objectForKey:@"PictureDenoise"])
-                {
-                    [fPictureController setDenoise:[[chosenPreset objectForKey:@"PictureDenoise"] intValue]];
-                }
-                else
-                {
-                    [fPictureController setDenoise:0];
-                }   
-                /* Deblock */
-                if ([[chosenPreset objectForKey:@"PictureDeblock"] intValue] == 1)
-                {
-                    [fPictureController setDeblock:[[chosenPreset objectForKey:@"PictureDeblock"] intValue]];
-                }
-                else
-                {
-                    [fPictureController setDeblock:0];
-                }             
+                [fPictureController setVFR:[[chosenPreset objectForKey:@"VFR"] intValue]];
             }
-			[self calculatePictureSizing: NULL];
-			[[fPresetsActionMenu itemAtIndex:0] setEnabled: YES];
+            else
+            {
+                [fPictureController setVFR:0];
+            }
+            /* Detelecine */
+            if ([[chosenPreset objectForKey:@"PictureDetelecine"] intValue] == 1)
+            {
+                [fPictureController setDetelecine:[[chosenPreset objectForKey:@"PictureDetelecine"] intValue]];
+            }
+            else
+            {
+                [fPictureController setDetelecine:0];
+            }
+            /* Denoise */
+            if ([chosenPreset objectForKey:@"PictureDenoise"])
+            {
+                [fPictureController setDenoise:[[chosenPreset objectForKey:@"PictureDenoise"] intValue]];
+            }
+            else
+            {
+                [fPictureController setDenoise:0];
+            }   
+            /* Deblock */
+            if ([[chosenPreset objectForKey:@"PictureDeblock"] intValue] == 1)
+            {
+                [fPictureController setDeblock:[[chosenPreset objectForKey:@"PictureDeblock"] intValue]];
+            }
+            else
+            {
+                [fPictureController setDeblock:0];
+            }             
         }
+        [self calculatePictureSizing: NULL];
+        [[fPresetsActionMenu itemAtIndex:0] setEnabled: YES];
     }
-    
 }
 
 
