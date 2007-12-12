@@ -30,6 +30,7 @@ struct hb_work_private_s
     hb_job_t       * job;
     x264_t         * x264;
     x264_picture_t   pic_in;
+    uint8_t         *x264_allocated_pic;
 
     // Internal queue of DTS start/stop values.
     int64_t        dts_start[DTS_BUFFER_SIZE];
@@ -241,7 +242,9 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     memcpy( &w->config->h264.pps[1], nal[2].p_payload, nal[2].i_payload );
 
     x264_picture_alloc( &pv->pic_in, X264_CSP_I420,
-            job->width, job->height );
+                        job->width, job->height );
+
+    pv->x264_allocated_pic = pv->pic_in.img.plane[0];
 
     pv->dts_write_index = 0;
     pv->dts_read_index = 0;
@@ -253,6 +256,11 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 void encx264Close( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
+    /*
+     * Patch the x264 allocated data back in so that x264 can free it
+     * we have been using our own buffers during the encode to avoid copying.
+     */
+    pv->pic_in.img.plane[0] = pv->x264_allocated_pic;
     x264_picture_clean( &pv->pic_in );
     x264_encoder_close( pv->x264 );
     free( pv );
@@ -274,8 +282,11 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if( in->data )
     {
-        /* XXX avoid this memcpy ? */
-        memcpy( pv->pic_in.img.plane[0], in->data, job->width * job->height );
+        /*
+         * Point x264 at our current buffers Y(UV) data.
+         */
+        pv->pic_in.img.plane[0] = in->data;
+
         if( job->grayscale )
         {
             /* XXX x264 has currently no option for grayscale encoding */
@@ -284,10 +295,12 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
         }
         else
         {
-            memcpy( pv->pic_in.img.plane[1], in->data + job->width * job->height,
-                    job->width * job->height / 4 );
-            memcpy( pv->pic_in.img.plane[2], in->data + 5 * job->width *
-                    job->height / 4, job->width * job->height / 4 );
+            /*
+             * Point x264 at our buffers (Y)UV data
+             */
+            pv->pic_in.img.plane[1] = in->data + job->width * job->height;
+            pv->pic_in.img.plane[2] = in->data + 5 * job->width *
+                job->height / 4;
         }
 
         if( in->new_chap && job->chapter_markers )
