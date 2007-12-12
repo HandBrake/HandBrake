@@ -2353,6 +2353,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	[self twoPassCheckboxChanged: sender];
 }
 
+- (IBAction) audioDRCSliderChanged: (id) sender
+{
+    [fAudDrcField setStringValue: [NSString stringWithFormat: @"%f", [fAudDrcSlider floatValue]]];
+    [self customSettingUsed: sender];
+}
+
+
 /* Method to determine if we should change the UI
 To reflect whether or not a Preset is being used or if
 the user is using "Custom" settings by determining the sender*/
@@ -2458,12 +2465,6 @@ the user is using "Custom" settings by determining the sender*/
         _( @"Constant quality: %.0f %%" ), 100.0 *
         [fVidQualitySlider floatValue]]];
 		[self customSettingUsed: sender];
-}
-
-- (IBAction) audioDRCSliderChanged: (id) sender
-{
-    [fAudDrcField setStringValue: [NSString stringWithFormat: @"%f", [fAudDrcSlider floatValue]]];
-    //[self customSettingUsed: sender];
 }
 
 - (void) controlTextDidChange: (NSNotification *) notification
