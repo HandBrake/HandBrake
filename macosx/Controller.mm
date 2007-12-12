@@ -392,7 +392,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		fPicSettingPAR,fPicLabelAnamorphic,fPresetsAdd,fPresetsDelete,
 		fCreateChapterMarkers,fVidTurboPassCheck,fDstMpgLargeFileCheck,fPicLabelAutoCrop,
 		fPicSettingAutoCrop,fPicSettingDetelecine,fPicLabelDetelecine,fPicLabelDenoise,fPicSettingDenoise,
-        fSubForcedCheck,fPicSettingDeblock,fPicLabelDeblock,fPresetsOutlineView,};
+        fSubForcedCheck,fPicSettingDeblock,fPicLabelDeblock,fPresetsOutlineView,fAudDrcSlider,
+        fAudDrcField,fAudDrcLabel};
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -1525,6 +1526,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                      indexOfSelectedItem]].rate;
     job->abitrate = [[fAudBitratePopUp selectedItem] tag];
     
+    /* Dynamic Range Compression */
+    job->dynamic_range_compression = [fAudDrcSlider floatValue];
+    
+    
     /* set vfr according to the Picture Window */
     if ([fPictureController vfr])
     {
@@ -2455,6 +2460,12 @@ the user is using "Custom" settings by determining the sender*/
 		[self customSettingUsed: sender];
 }
 
+- (IBAction) audioDRCSliderChanged: (id) sender
+{
+    [fAudDrcField setStringValue: [NSString stringWithFormat: @"%f", [fAudDrcSlider floatValue]]];
+    //[self customSettingUsed: sender];
+}
+
 - (void) controlTextDidChange: (NSNotification *) notification
 {
     [self calculateBitrate: NULL];
@@ -3276,9 +3287,9 @@ if (item == nil)
 			
 			[fVidTargetSizeField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoTargetSize"]]];
 			[fVidBitrateField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoAvgBitrate"]]];
-			
 			[fVidQualitySlider setFloatValue: [[chosenPreset valueForKey:@"VideoQualitySlider"] floatValue]];
-			[self videoMatrixChanged: NULL];
+            
+            [self videoMatrixChanged: NULL];
 			
 			/* Video framerate */
 			/* For video preset video framerate, we want to make sure that Same as source does not conflict with the
@@ -3309,7 +3320,10 @@ if (item == nil)
 			[fAudBitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioBitRate"]]];
 			/*Subtitles*/
 			[fSubPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Subtitles"]]];
-			
+			/* Dynamic Range Control Slider */
+            [fAudDrcSlider setFloatValue: [[chosenPreset valueForKey:@"AudioDRCSlider"] floatValue]];
+            [self audioDRCSliderChanged: NULL];
+            
 			/* Picture Settings */
 			/* Note: objectForKey:@"UsesPictureSettings" now refers to picture size, this encompasses:
              * height, width, keep ar, anamorphic and crop settings.
@@ -3521,7 +3535,7 @@ if (item == nil)
 		UserPresets = [[NSMutableArray alloc] init];
 		[self addFactoryPresets:NULL];
 	}
-	
+	[fPresetsOutlineView reloadData];
 }
 
 
@@ -3675,6 +3689,8 @@ if (item == nil)
 	[preset setObject:[fAudBitratePopUp titleOfSelectedItem] forKey:@"AudioBitRate"];
 	/* Subtitles*/
 	[preset setObject:[fSubPopUp titleOfSelectedItem] forKey:@"Subtitles"];
+    /* Dynamic Range Control Slider */
+    [preset setObject:[NSNumber numberWithFloat:[fAudDrcSlider floatValue]] forKey:@"AudioDRCSlider"];
 	
 
     [preset autorelease];

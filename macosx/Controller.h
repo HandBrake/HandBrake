@@ -138,15 +138,21 @@
     IBOutlet NSTextField         * fAudLang2Field;
     IBOutlet NSPopUpButton       * fAudLang2PopUp;
 	/* New Audio Mix PopUps */
-	IBOutlet NSTextField         * fAudTrack1MixLabel;
+	/* Track info */
+    IBOutlet NSTextField         * fAudTrack1MixLabel;
 	IBOutlet NSPopUpButton       * fAudTrack1MixPopUp;
     IBOutlet NSTextField         * fAudTrack2MixLabel;
 	IBOutlet NSPopUpButton       * fAudTrack2MixPopUp;
 	
+    /* Quality info */
 	IBOutlet NSTextField         * fAudRateField;
     IBOutlet NSPopUpButton       * fAudRatePopUp;
     IBOutlet NSTextField         * fAudBitrateField;
     IBOutlet NSPopUpButton       * fAudBitratePopUp;
+    /*Dynamic Range Compression */
+    IBOutlet NSSlider            * fAudDrcSlider;
+    IBOutlet NSTextField         * fAudDrcField;
+    IBOutlet NSTextField         * fAudDrcLabel;
     
     /* Chapters box */
     IBOutlet NSButton            * fCreateChapterMarkers;
@@ -232,6 +238,7 @@
 
 - (IBAction) videoMatrixChanged: (id) sender;
 - (IBAction) qualitySliderChanged: (id) sender;
+- (IBAction) audioDRCSliderChanged: (id) sender;
 
 - (IBAction) showPicturePanel: (id) sender;
 - (IBAction) calculatePictureSizing: (id) sender;

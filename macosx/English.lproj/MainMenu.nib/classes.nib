@@ -21,6 +21,8 @@
 				<string>id</string>
 				<key>addUserPreset</key>
 				<string>id</string>
+				<key>audioDRCSliderChanged</key>
+				<string>id</string>
 				<key>audioTrackMixdownChanged</key>
 				<string>id</string>
 				<key>audioTrackPopUpChanged</key>
@@ -120,6 +122,12 @@
 				<string>NSTextField</string>
 				<key>fAudBitratePopUp</key>
 				<string>NSPopUpButton</string>
+				<key>fAudDrcField</key>
+				<string>NSTextField</string>
+				<key>fAudDrcLabel</key>
+				<string>NSTextField</string>
+				<key>fAudDrcSlider</key>
+				<string>NSSlider</string>
 				<key>fAudLang1Field</key>
 				<string>NSTextField</string>
 				<key>fAudLang1PopUp</key>
