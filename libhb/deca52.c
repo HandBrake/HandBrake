@@ -70,7 +70,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w );
  **********************************************************************/
 static sample_t dynrng_call (sample_t c, void *data)
 {        
-        double *level = (double *)data;
+        float *level = (float *)data;
         float levelToUse = (float)*level;
         if(c > 1.0 || levelToUse <= 1.0)
         {
