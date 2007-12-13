@@ -16,7 +16,7 @@ typedef enum { hb_stream_type_unknown = 0, hb_stream_type_transport, hb_stream_t
  
 #define kMaxNumberDecodeStreams 8
 #define kMaxNumberVideoPIDS 16
-#define kMaxNumberAudioPIDS 32
+#define kMaxNumberAudioPIDS 16
 //#define kVideoStream 0
 //#define kAudioStream 1
 #define kNumDecodeBuffers 2
@@ -55,7 +55,6 @@ struct hb_stream_s
 	
 	int				 ts_number_video_pids;
 	int				 ts_number_audio_pids;
-	int				 ts_selected_audio_pid_index;
 	
 	unsigned char*	 ts_packetbuf[kMaxNumberDecodeStreams];
 	int				 ts_packetpos[kMaxNumberDecodeStreams];
@@ -104,7 +103,10 @@ static void hb_ts_stream_find_pids(hb_stream_t *stream);
 static void hb_ts_stream_decode(hb_stream_t *stream);
 static void hb_ts_stream_reset(hb_stream_t *stream);
 static void hb_stream_put_back(hb_stream_t *stream, int i);
-static void hb_stream_set_audio_id_and_codec(hb_stream_t *stream, hb_audio_t *audio);
+static hb_audio_t *hb_ts_stream_set_audio_id_and_codec(hb_stream_t *stream,
+                                                       int aud_pid_index);
+static void hb_ps_stream_find_audio_ids(hb_stream_t *stream, hb_title_t *title);
+static off_t align_to_next_packet(FILE* f);
 
 int hb_stream_is_stream_type( char * path )
 {
@@ -197,6 +199,19 @@ void hb_stream_close( hb_stream_t ** _d )
     *_d = NULL;
 }
 
+static void hb_stream_delete_audio_entry(hb_stream_t *stream, int indx)
+{
+    int i;
+
+    for (i = indx+1; i < stream->ts_number_audio_pids; ++i)
+    {
+        stream->ts_audio_pids[indx] = stream->ts_audio_pids[i];
+        stream->ts_audio_stream_type[indx] = stream->ts_audio_stream_type[i];
+        ++indx;
+    }
+    --stream->ts_number_audio_pids;
+}
+
 /***********************************************************************
  * hb_ps_stream_title_scan
  ***********************************************************************
@@ -206,6 +221,7 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream)
 {
     // 'Barebones Title'
     hb_title_t *aTitle = hb_title_init( stream->path, 0 );
+    aTitle->index = 1;
 
 	// Copy part of the stream path to the title name
 	char *sep = strrchr(stream->path, '/');
@@ -229,26 +245,35 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream)
     chapter->seconds = aTitle->seconds;
     hb_list_add( aTitle->list_chapter, chapter );
     
-	int i=0, num_audio_tracks = 1;
-	
+    // Figure out how many audio streams we really have:
+    // - For transport streams, for each PID listed in the PMT (whether
+    //   or not it was an audio stream type) read the bitstream until we
+    //   find an packet from that PID containing a PES header and see if
+    //   the elementary stream is an audio type.
+    // - For program streams read the first 4MB and take every unique
+    //   audio stream we find.
 	if (stream->stream_type == hb_stream_type_transport)
 	{
-		num_audio_tracks = stream->ts_number_audio_pids;
-	}
-	
-	for (i=0; i < num_audio_tracks ; i++)
-	{
-		// Basic AC-3 Audio track
-		hb_audio_t * audio;
-		audio = calloc( sizeof( hb_audio_t ), 1 );
+        int i;
 
-		audio->source_pid = stream->ts_audio_pids[i];
-		
-		hb_stream_set_audio_id_and_codec(stream, audio);
-		
-		hb_list_add( aTitle->list_audio, audio );
+        for (i=0; i < stream->ts_number_audio_pids; i++)
+        {
+            hb_audio_t *audio = hb_ts_stream_set_audio_id_and_codec(stream, i);
+            if (audio->codec)
+                hb_list_add( aTitle->list_audio, audio );
+            else
+            {
+                free(audio);
+                hb_stream_delete_audio_entry(stream, i);
+                --i;
+            }
+        }
 	}
-	
+    else
+    {
+        hb_ps_stream_find_audio_ids(stream, aTitle);
+    }
+
   return aTitle;
 }
 
@@ -343,8 +368,6 @@ void hb_stream_duration(hb_stream_t *stream, hb_title_t *inTitle)
               fseeko(stream->file_handle, cur_pos + i, SEEK_SET);
               fread(buf, 1, 4096, stream->file_handle);
 
-              unsigned char pts_dts_flag = buf[7];
-              
               int has_pts             = ( ( buf[7] >> 6 ) & 0x2 ) ? 1 : 0;
               if (has_pts)
               {
@@ -498,70 +521,180 @@ int hb_stream_seek( hb_stream_t * src_stream, float f )
   return 1;
 }
 
-/***********************************************************************
- * hb_stream_set_audio_id_and_codec
- ***********************************************************************
- *
- **********************************************************************/
-void hb_stream_set_audio_id_and_codec(hb_stream_t *stream, hb_audio_t *audio)
+/*
+ * scan the first MB of 'stream' to try and determine the type of the Packetized
+ * Elementary Stream associated with TS PID 'pid'.
+ */
+static const uint8_t *hb_ts_stream_getPEStype(hb_stream_t *stream, uint32_t pid)
 {
-	off_t cur_pos;
-	cur_pos = ftello(stream->file_handle);
-	int done = 0;
-	hb_buffer_t *buf  = NULL;
+    static uint8_t buf[188];
+    int npack = 100000; // max packets to read
 
-        int cur_audio_pid_index = stream->ts_selected_audio_pid_index;
+    fseeko(stream->file_handle, 0, SEEK_SET);
+    align_to_next_packet(stream->file_handle);
 
-	if (stream->stream_type == hb_stream_type_transport)
-	{
-		int i=0;
-		for (i=0; i < stream->ts_number_audio_pids; i++)
-		{
-			if (stream->ts_audio_pids[i] == audio->source_pid)
-			{
-				stream->ts_selected_audio_pid_index = i;
-				break;
-			}
-		}
-	}
+    while (--npack >= 0)
+    {
+        if (fread(buf, 1, 188, stream->file_handle) != 188)
+        {
+            hb_log("hb_ts_stream_getPEStype: EOF while searching for PID 0x%x", pid);
+            return 0;
+        }
+        if (buf[0] != 0x47)
+        {
+            hb_log("hb_ts_stream_getPEStype: lost sync while searching for PID 0x%x", pid);
+            align_to_next_packet(stream->file_handle);
+            continue;
+        }
 
-      //Start at the beginning of the stream
-      hb_stream_seek(stream, 0.0f);
-		
-      // Now we must scan forwards for a valid audio start code (0x000001xx)
-      buf = hb_buffer_init(HB_DVD_READ_BUFFER_SIZE);
-      while (!done)
-      {
-              if (hb_stream_read(stream, buf) == 1)
-              {
-                int i=0;
-                for (i=0; (i <= HB_DVD_READ_BUFFER_SIZE-4) && (!done); i++)
+        /*
+         * The PES header is only in TS packets with 'start' set so we check
+         * that first then check for the right PID.
+         */
+        if ((buf[1] & 0x40) == 0 || (buf[1] & 0x1f) != (pid >> 8) ||
+            buf[2] != (pid & 0xff))
+        {
+            // not a start packet or not the pid we want
+            continue;
+        }
+
+        /* skip over the TS hdr to return a pointer to the PES hdr */
+        int udata = 4;
+        switch (buf[3] & 0x30)
+        {
+            case 0x00: // illegal
+            case 0x20: // fill packet
+                continue;
+
+            case 0x30: // adaptation
+                if (buf[4] > 182)
                 {
-                      if ((buf->data[i] == 0x00) && (buf->data[i+1] == 0x00) && (buf->data[i+2] == 0x01))
-                      {
-                        if (buf->data[i+3] == 0xbd)
-                        {
-                              audio->id = 0x80bd;
-                              audio->codec = HB_ACODEC_AC3;
-                              done = 1;
-                        }
-                        else if ((buf->data[i+3] & 0xe0) == 0xc0)
-                        {
-                              audio->id = buf->data[i+3];
-                              audio->codec = HB_ACODEC_MPGA;
-                              done = 1;
-                        } 
-                      }
+                    hb_log("hb_ts_stream_getPEStype: invalid adaptation field length %d for PID 0x%x", buf[4], pid);
+                    continue;
                 }
-              }
-              else
-                done = 1;    // End of data;
-      }
-      hb_buffer_close(&buf);
+                udata += buf[4] + 1;
+                break;
+        }
+        return &buf[udata];
+    }
 
-      fseeko(stream->file_handle, cur_pos, SEEK_SET);
-      
-      stream->ts_selected_audio_pid_index = cur_audio_pid_index;
+    /* didn't find it */
+    return 0;
+}
+
+static hb_audio_t *hb_ts_stream_set_audio_id_and_codec(hb_stream_t *stream,
+                                                       int aud_pid_index)
+{
+    off_t cur_pos = ftello(stream->file_handle);
+    hb_audio_t *audio = calloc( sizeof( hb_audio_t ), 1 );
+    const uint8_t *buf = hb_ts_stream_getPEStype(stream,
+                                            stream->ts_audio_pids[aud_pid_index]);
+
+    /* check that we found a PES header */
+    if (buf && buf[0] == 0x00 && buf[1] == 0x00 && buf[2] == 0x01)
+    {
+        if (buf[3] == 0xbd)
+        {
+            audio->id = 0x80bd | (aud_pid_index << 8);
+            audio->codec = HB_ACODEC_AC3;
+            hb_log("transport stream pid 0x%x (type 0x%x) is AC-3 audio id 0x%x",
+                   stream->ts_audio_pids[aud_pid_index],
+                   stream->ts_audio_stream_type[aud_pid_index],
+                   audio->id);
+            stream->ts_audio_stream_type[aud_pid_index] = 0x81;
+        }
+        else if ((buf[3] & 0xe0) == 0xc0)
+        {
+            audio->id = buf[3];
+            audio->codec = HB_ACODEC_MPGA;
+            hb_log("transport stream pid 0x%x (type 0x%x) is MPEG audio id 0x%x",
+                   stream->ts_audio_pids[aud_pid_index],
+                   stream->ts_audio_stream_type[aud_pid_index],
+                   audio->id);
+            stream->ts_audio_stream_type[aud_pid_index] = 0x03;
+        }
+    }
+    fseeko(stream->file_handle, cur_pos, SEEK_SET);
+    if (! audio->codec)
+    {
+        hb_log("transport stream pid 0x%x (type 0x%x) isn't audio",
+                stream->ts_audio_pids[aud_pid_index],
+                stream->ts_audio_stream_type[aud_pid_index]);
+	}
+    return audio;
+}
+
+static void add_audio_to_title(hb_title_t *title, int id)
+{
+    hb_audio_t *audio = calloc( sizeof( hb_audio_t ), 1 );
+
+    audio->id = id;
+    switch ( id >> 12 )
+    {
+        case 0x0:
+            audio->codec = HB_ACODEC_MPGA;
+            hb_log("hb_ps_stream_find_audio_ids: added MPEG audio stream 0x%x", id);
+            break;
+        case 0x2:
+            audio->codec = HB_ACODEC_LPCM;
+            hb_log("hb_ps_stream_find_audio_ids: added LPCM audio stream 0x%x", id);
+            break;
+        case 0x4:
+            audio->codec = HB_ACODEC_DCA;
+            hb_log("hb_ps_stream_find_audio_ids: added DCA audio stream 0x%x", id);
+            break;
+        case 0x8:
+            audio->codec = HB_ACODEC_AC3;
+            hb_log("hb_ps_stream_find_audio_ids: added AC3 audio stream 0x%x", id);
+            break;
+    }
+    hb_list_add( title->list_audio, audio );
+}
+
+static void hb_ps_stream_find_audio_ids(hb_stream_t *stream, hb_title_t *title)
+{
+    off_t cur_pos = ftello(stream->file_handle);
+    hb_buffer_t *buf  = hb_buffer_init(HB_DVD_READ_BUFFER_SIZE);
+    hb_list_t *list = hb_list_init();
+    // how many blocks we read while searching for audio streams
+    int blksleft = 2048;
+    // there can be at most 16 unique streams in an MPEG PS (8 in a DVD)
+    // so we use a bitmap to keep track of the ones we've already seen.
+    // Bit 'i' of smap is set if we've already added the audio for
+    // audio substream id 'i' to the title's audio list.
+    uint32_t smap = 0;
+
+    hb_stream_seek(stream, 0.0f);
+		
+    while (--blksleft >= 0 && hb_stream_read(stream, buf) == 1)
+    {
+        hb_buffer_t *es;
+
+        // 'buf' contains an MPEG2 PACK - get a list of all it's elementary streams
+        hb_demux_ps(buf, list);
+
+        while ( ( es = hb_list_item( list, 0 ) ) )
+        {
+            hb_list_rem( list, es );
+            if ( (es->id & 0xff) == 0xbd || (es->id & 0xe0) == 0xc0 )
+            {
+                // this PES contains some kind of audio - get the substream id
+                // and check if we've seen it already.
+                int ssid = (es->id > 0xff ? es->id >> 8 : es->id) & 0xf;
+                if ( (smap & (1 << ssid)) == 0 )
+                {
+                    // we haven't seen this stream before - add it to the
+                    // title's list of audio streams.
+                    smap |= (1 << ssid);
+                    add_audio_to_title(title, es->id);
+                }
+            }
+            hb_buffer_close( &es );
+        }
+    }
+    hb_list_empty( &list );
+    hb_buffer_close(&buf);
+    fseeko(stream->file_handle, cur_pos, SEEK_SET);
 }
 
 /***********************************************************************
@@ -573,22 +706,14 @@ void hb_stream_update_audio(hb_stream_t *stream, hb_audio_t *audio)
 {
 	iso639_lang_t *lang;
 	
-	if (stream->stream_type == hb_stream_type_program)
-	{
-		lang = lang_for_code(0x0000);
-	}
-	else if (stream->stream_type == hb_stream_type_transport)
+    if (stream->stream_type == hb_stream_type_transport)
 	{
 		// Find the audio stream info for this PID
-		int i=0;
-		for (i=0; i < stream->ts_number_audio_pids; i++)
+        int i = (audio->id >> 8) & 0xf;
+        if (i >= stream->ts_number_audio_pids)
 		{
-			if (stream->ts_audio_pids[i] == audio->source_pid)
-				break;
-		}
-		if (i == stream->ts_number_audio_pids)
-		{
-			hb_log("hb_stream_update_audio - cannot find PID 0x%x (%d) in ts_audio_pids list !", audio->source_pid, audio->source_pid);
+            hb_log("hb_stream_update_audio: no PID for audio stream 0x%x",
+                    audio->id);
 			return;
 		}
 		
@@ -601,6 +726,11 @@ void hb_stream_update_audio(hb_stream_t *stream, hb_audio_t *audio)
 			audio->config.a52.ac3flags = audio->ac3flags = stream->a52_info[i].flags;
 
 	}
+    else
+    {
+        // XXX should try to get language code from the AC3 bitstream
+        lang = lang_for_code(0x0000);
+    }
 	
 	if (!audio->input_channel_layout)
 	{
@@ -671,11 +801,6 @@ void hb_stream_update_audio(hb_stream_t *stream, hb_audio_t *audio)
 
 }
 
-void		 hb_stream_set_selected_audio_pid_index(hb_stream_t *stream, int i)
-{
-	stream->ts_selected_audio_pid_index = i;
-}
-
 /***********************************************************************
  * hb_stream_put_back
  ***********************************************************************
@@ -734,11 +859,6 @@ static void hb_ts_stream_init(hb_stream_t *stream)
 	stream->ps_current_write_buffer_index = 0;
 	stream->ps_current_read_buffer_index = 1;
 	
-	// This is the index (in ts_audio_pids) of the selected
-	// output stream. It should not be set until after all the 
-	// pids in the stream have been discovered.
-	stream->ts_selected_audio_pid_index = -1;
-	
 	// Find the audio and video pids in the stream
 	hb_ts_stream_find_pids(stream);
 	
@@ -758,7 +878,7 @@ static void hb_ts_stream_init(hb_stream_t *stream)
 
 // ------------------------------------------------------------------------------------
 
-off_t align_to_next_packet(FILE* f)
+static off_t align_to_next_packet(FILE* f)
 {
 	unsigned char buf[188*20];
 
@@ -790,7 +910,7 @@ off_t align_to_next_packet(FILE* f)
 	if (pos == 188)
 		pos = 0;		// failed to find anything!!!!!?
 
-	fseek(f, start+pos, SEEK_SET);
+    fseeko(f, start+pos, SEEK_SET);
 
 	return pos;
 }
@@ -872,9 +992,33 @@ static inline unsigned int get_bits(int bits)
 	return val;
 }
 
+// extract what useful information we can from the elementary stream
+// descriptor list at 'dp' and add it to the stream at 'esindx'.
+// Descriptors with info we don't currently use are ignored.
+// The descriptor list & descriptor item formats are defined in
+// ISO 13818-1 (2000E) section 2.6 (pg. 62).
+static void decode_element_descriptors(hb_stream_t* stream, int esindx,
+                                       const uint8_t *dp, uint8_t dlen)
+{
+    const uint8_t *ep = dp + dlen;
+
+    while (dp < ep)
+    {
+        switch (dp[0])
+        {
+            case 10:    // ISO_639_language descriptor
+                stream->a52_info[esindx].lang_code = lang_to_code(lang_for_code2((const char *)&dp[2]));
+                break;
+
+            default:
+                break;
+        }
+        dp += dp[1] + 2;
+    }
+}
+
 int decode_program_map(hb_stream_t* stream)
 {
-	unsigned int pos = 0;
 	set_buf(stream->pmt_info.tablebuf, stream->pmt_info.tablepos, 0);
 
 	unsigned char table_id	= get_bits(8);
@@ -926,20 +1070,24 @@ int decode_program_map(hb_stream_t* stream)
 		  stream->ts_number_video_pids++;
 		stream->ts_video_pids[stream->ts_number_video_pids-1] = elementary_PID;
 	  }
-	  if ((stream_type == 0x04) || (stream_type == 0x81) || (stream_type == 0x03) || (stream_type == 0x06))    // ATSC Defines stream type 0x81 for AC-3/A52 audio, there's also some evidence of streams using type 6 for AC-3 audio too
-	  {
-		if (stream->ts_number_audio_pids <= kMaxNumberAudioPIDS)
-		  stream->ts_number_audio_pids++;
-		stream->ts_audio_pids[stream->ts_number_audio_pids-1] =  elementary_PID;
-
-		stream->a52_info[stream->ts_number_audio_pids-1].lang_code = 'e' << 8 | 'n';
-		stream->ts_audio_stream_type[stream->ts_number_audio_pids-1] = stream_type;
+      else
+      {
+        // Defined audio stream types are 0x81 for AC-3/A52 audio and 0x03
+        // for mpeg audio. But content producers seem to use other
+        // values (0x04 and 0x06 have both been observed) so at this point
+        // we say everything that isn't a video pid is audio then at the end
+        // of hb_stream_title_scan we'll figure out which are really audio
+        // by looking at the PES headers.
+        i = stream->ts_number_audio_pids;
+        if (i < kMaxNumberAudioPIDS)
+            stream->ts_number_audio_pids++;
+        stream->ts_audio_pids[i] = elementary_PID;
+        stream->ts_audio_stream_type[i] = stream_type;
 		
 		if (ES_info_length > 0)
 		{
-		  hb_log("decode_program_map - Elementary Stream Info Present, decode language codes ?");
+            decode_element_descriptors(stream, i, ES_info_buf, ES_info_length);
 		}
-
 	  }
 
 	  cur_pos += 5 /* stream header */ + ES_info_length;
@@ -985,8 +1133,8 @@ int build_program_map(unsigned char *buf, hb_stream_t *stream)
 		free(stream->pmt_info.tablebuf);
 		stream->pmt_info.tablebuf = NULL;
 		stream->pmt_info.tablepos = 0;
-		stream->pmt_info.reading = 0;
-		if (decode_ok)
+        stream->pmt_info.reading = 0;
+        if (decode_ok)
 			return decode_ok;
 	}
 
@@ -1315,12 +1463,13 @@ int generate_output_data(hb_stream_t *stream, int write_ac3, int curstream, int 
 			
 			if (write_ac3)
 			{
-				// Make a four byte ac3 streamid
-				ac3_substream_id[0] = 0x80;	// Four byte AC3 CODE??
-				ac3_substream_id[1] = 0x01;
-				ac3_substream_id[2] = 0x00;	// WHY???  OH WHY??
-				ac3_substream_id[3] = 0x02;
-				ac3len = 4;
+                // Make a four byte DVD ac3 stream header
+                int ssid = (curstream - stream->ts_number_video_pids) & 0xf;
+                ac3_substream_id[0] = 0x80 | ssid;  // substream id
+                ac3_substream_id[1] = 0x01;         // number of sync words
+                ac3_substream_id[2] = 0x00;         // first offset (16 bits)
+                ac3_substream_id[3] = 0x02;
+                ac3len = 4;
 			}
 			
 			int written = 0;	// Bytes we've written to output file
@@ -1530,12 +1679,6 @@ static int hb_ts_handle_ac3_audio(hb_stream_t *stream, int curstream, unsigned c
 static void hb_ts_stream_find_pids(hb_stream_t *stream)
 {
 	unsigned char buf[188];
-	int curstream = 0;
-	
-	// Stream ID info
-	unsigned int program_num = 0;
-	unsigned int network_PID = 0;
-	unsigned int program_map_PID = 0;
 
 	// align to first packet
 	align_to_next_packet(stream->file_handle);
@@ -1565,33 +1708,19 @@ static void hb_ts_stream_find_pids(hb_stream_t *stream)
 		// Check sync byte
 		if ((buf[0] != 0x47) && (buf[0] != 0x72) && (buf[0] != 0x29))
 		{
-//			__int64 pos = ftell64(fin);
 			hb_log("hb_ts_stream_find_pids - Bad transport packet (no sync byte 0x47)!");
 			int i = 0;
 			for (i=0; i < stream->ts_number_video_pids + stream->ts_number_audio_pids; i++)
 				stream->ts_skipbad[i] = 1;
-//			stream->ts_skipbad[kAudioStream] = stream->ts_skipbad[kVideoStream] = 1;
 			continue;
 		}
 
 		// Get pid
 		int pid = (((buf[1] & 0x1F) << 8) | buf[2]) & 0x1FFF;
                 
-		if ((pid == 0x0000) && (program_num == 0))
+        if ((pid == 0x0000) && (stream->ts_number_pat_entries == 0))
 		{
 		  decode_PAT(buf, stream);
-		  continue;
-		}
-		
-		if (pid == 0x1ffb)
-		{
-		  printf("Need to decode PSIP data !\n");
-		  continue;
-		}
-		
-		if ((network_PID > 0) && (pid == network_PID))
-		{
-		  printf("Need to Decode network PID section !\n");
 		  continue;
 		}
 		
@@ -1650,21 +1779,6 @@ int index_of_audio_pid(int pid, hb_stream_t *stream)
 {
 	int i = 0, found_pid = -1;
 
-	// If a selected audio pid index has been set it indicates
-	// which of the potential pids we need to output so only return
-	// that index for the appropriate pid. Other pids should just
-	// be ignored.
-	if (stream->ts_selected_audio_pid_index >= 0) 
-	{
-		if (pid == stream->ts_audio_pids[stream->ts_selected_audio_pid_index])
-			return stream->ts_selected_audio_pid_index;
-		else
-			return -1;
-	}
-	
-	// If no specific pid index is set then we're probably just gathering
-	// pid and/or stream information (during DecodePreviews for example)
-	// so return the appropriate index
 	for (i = 0; (i < stream->ts_number_audio_pids) && (found_pid < 0); i++)
 	{
 		if (pid == stream->ts_audio_pids[i])
@@ -1739,8 +1853,8 @@ static void hb_ts_stream_decode(hb_stream_t *stream)
 		// Check sync byte
 		if ((buf[0] != 0x47) && (buf[0] != 0x72) && (buf[0] != 0x29))
 		{
-//			__int64 pos = ftell64(fin);
-			hb_log("hb_ts_stream_decode - Bad transport packet (no sync byte 0x47)!");
+            off_t pos = ftello(stream->file_handle);
+            hb_log("hb_ts_stream_decode - no sync byte 0x47 @ %lld",  pos);
 			for (i=0; i < stream->ts_number_video_pids + stream->ts_number_audio_pids; i++)
 			{
 		//	stream->ts_skipbad[kAudioStream] = stream->ts_skipbad[kVideoStream] = 1;
@@ -1807,8 +1921,9 @@ static void hb_ts_stream_decode(hb_stream_t *stream)
 		int adapt_len = 0;
 
 		// Get continuity
+        // Continuity only increments for adaption values of 0x3 or 0x01
 		int continuity = (buf[3] & 0xF);
-		if ((stream->ts_streamcont[curstream] != -1) && (adaption & 0x01 == 0x01))		// Continuity only increments for adaption values of 0x3 or 0x01
+        if ((stream->ts_streamcont[curstream] != -1) && ((adaption & 0x01) != 0))
 		{
 			if (continuity != ((stream->ts_streamcont[curstream] + 1) & 0xF))
 			{
@@ -1874,20 +1989,6 @@ static void hb_ts_stream_decode(hb_stream_t *stream)
 				start = 0;
 			}
 		}
-
-		// Get PCR
-		if (start && (adaption & 0x2) && (buf[5] & 0x10))
-		{
-			int64_t PCR_base = ((int64_t)buf[6] << 25) | ((int64_t)buf[7] << 17) | 
-				  ((int64_t)buf[8] << 9) | ((int64_t)buf[9] << 1) | ((int64_t)buf[10] >> 7);
-			int64_t PCR_ext = ((int64_t)(buf[10] & 0x1) << 8) | ((int64_t)buf[11]);
-			int64_t PCR = PCR_base * 300 + PCR_ext;
-		}
-
-		// Get random
-//		bool random = false;
-//		if (start && (adaption & 0x2))
-//			random = (buf[5] & 0x40) != 0;		// BUG: SOME TS STREAMS DON'T HAVE THE RANDOM BIT (ABC!! ALIAS)
 
 		// Found a random access point (now we can start a frame/audio packet..)
 		if (start)
@@ -1968,17 +2069,13 @@ static void hb_ts_stream_decode(hb_stream_t *stream)
 			{
 				// Curstream is a zero based index of streams and includes both video and audio streams, so we must subtract the numver of video streams
 				// from the indes value used here since ts_audio_stream_type is indexed only by audio streams.
-				if ((stream->ts_audio_stream_type[curstream - stream->ts_number_video_pids] == 0x04) || (stream->ts_audio_stream_type[curstream - stream->ts_number_video_pids] == 0x81))
-				{
-					write_ac3 = hb_ts_handle_ac3_audio(stream, curstream, buf, adapt_len);
-				}
-				else if (stream->ts_audio_stream_type[curstream - stream->ts_number_video_pids] == 0x03)
+                if (stream->ts_audio_stream_type[curstream - stream->ts_number_video_pids] == 0x03)
 				{
 					hb_ts_handle_mpeg_audio(stream, curstream, buf, adapt_len);
 				}
 				else
 				{
-					hb_log("hb_ts_stream_decode - Unknown Audio Stream type ! 0x%x (%d)", stream->ts_audio_stream_type[curstream - stream->ts_number_video_pids], stream->ts_audio_stream_type[curstream - stream->ts_number_video_pids]);
+                    write_ac3 = hb_ts_handle_ac3_audio(stream, curstream, buf, adapt_len);
 				}
 			}
 		

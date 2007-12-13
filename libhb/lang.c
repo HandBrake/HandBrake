@@ -6,6 +6,7 @@
 
 #include "lang.h"
 #include <string.h>
+#include <ctype.h>
 
 static const iso639_lang_t languages[] =
 { { "Unknown", "", "", "und" },
@@ -201,8 +202,8 @@ iso639_lang_t * lang_for_code( int code )
     char code_string[2];
     iso639_lang_t * lang;
 
-    code_string[0] = ( code >> 8 ) & 0xFF;
-    code_string[1] = code & 0xFF;
+    code_string[0] = tolower( ( code >> 8 ) & 0xFF );
+    code_string[1] = tolower( code & 0xFF );
 
     for( lang = (iso639_lang_t*) languages; lang->eng_name; lang++ )
     {
@@ -213,6 +214,37 @@ iso639_lang_t * lang_for_code( int code )
     }
 
     return (iso639_lang_t*) languages;
+}
+
+iso639_lang_t * lang_for_code2( const char *code )
+{
+    char code_string[4];
+    iso639_lang_t * lang;
+
+    code_string[0] = tolower( code[0] );
+    code_string[1] = tolower( code[1] );
+    code_string[2] = tolower( code[2] );
+    code_string[3] = 0;
+
+    for( lang = (iso639_lang_t*) languages; lang->eng_name; lang++ )
+    {
+        if( !strcmp( lang->iso639_2, code_string ) )
+        {
+            return lang;
+        }
+    }
+
+    return (iso639_lang_t*) languages;
+}
+
+int lang_to_code(const iso639_lang_t *lang)
+{
+    int code = 0;
+
+    if (lang)
+        code = (lang->iso639_1[0] << 8) | lang->iso639_1[1];
+
+    return code;
 }
 
 iso639_lang_t * lang_for_english( const char * english )

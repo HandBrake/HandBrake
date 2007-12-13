@@ -19,7 +19,14 @@ typedef struct iso639_lang_t
 #ifdef __cplusplus
 extern "C" {
 #endif
+/* find language associated with ISO-639-1 language code */
 iso639_lang_t * lang_for_code( int code );
+
+/* find language associated with ISO-639-2 language code */
+iso639_lang_t * lang_for_code2( const char *code2 );
+
+/* ISO-639-1 code for language */
+int lang_to_code(const iso639_lang_t *lang);
 
 iso639_lang_t * lang_for_english( const char * english );
 #ifdef __cplusplus

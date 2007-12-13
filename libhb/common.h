@@ -352,9 +352,6 @@ struct hb_audio_s
 
 	/* amixdown is the mixdown format to be used for this audio track */
    	int amixdown;
-
-	/* Source PID is only valid for MPEG Transport Streams */
-	int source_pid;
 #endif
 };
 

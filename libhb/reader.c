@@ -96,14 +96,6 @@ static void ReaderFunc( void * _r )
       }
     }
     
-	if (r->stream)
-	{
-		// At this point r->audios[0] gives us the index of the selected audio track for output track 0
-		// we cannot effectively demux multiple PID's into the seperate output tracks unfortunately
-		// so we'll just specifiy things here for a single track.
-		hb_stream_set_selected_audio_pid_index(r->stream, r->job->audios[0]);
-	}
-	
     list  = hb_list_init();
     r->ps = hb_buffer_init( HB_DVD_READ_BUFFER_SIZE );
 
