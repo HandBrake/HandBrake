@@ -228,7 +228,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     /* Feed liba52 */
     a52_frame( pv->state, pv->frame, &pv->flags_out, &pv->level, 0 );
 
-    if ( pv->dynamic_range_compression )
+    if ( pv->dynamic_range_compression > 1.0 )
     {
         a52_dynrng( pv->state, dynrng_call, &pv->dynamic_range_compression);        
     }
