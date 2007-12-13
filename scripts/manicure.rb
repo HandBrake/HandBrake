@@ -234,7 +234,7 @@ class PresetClass
     when 1
       commandString << " -b " << hash["VideoAvgBitrate"]
     when 2
-      commandString << " -q " << hash["VideoQualitySlider"] << " -Q"
+      commandString << " -q " << hash["VideoQualitySlider"]
     end
 
     #FPS
@@ -374,7 +374,7 @@ class PresetClass
     when 1
       commandString << " -b " << hash["VideoAvgBitrate"]
     when 2
-      commandString << " -q " << hash["VideoQualitySlider"] << " -Q"
+      commandString << " -q " << hash["VideoQualitySlider"]
     end
 
     #FPS
@@ -678,7 +678,7 @@ class PresetClass
     when 1
       commandString << " -b " << hash["VideoAvgBitrate"]
     when 2
-      commandString << " -q " << hash["VideoQualitySlider"] << " -Q "
+      commandString << " -q " << hash["VideoQualitySlider"]
     end
 
     #FPS
