@@ -60,7 +60,7 @@ static int    chapter_start = 0;
 static int    chapter_end   = 0;
 static int    chapter_markers = 0;
 static char * marker_file   = NULL;
-static int	  crf			= 0;
+static int	  crf			= 1;
 static char	  *x264opts		= NULL;
 static char	  *x264opts2 	= NULL;
 static int	  maxHeight		= 0;
@@ -1150,7 +1150,7 @@ static void ShowHelp()
 	"    -e, --encoder <string>  Set video library encoder (ffmpeg,xvid,\n"
     "                            x264,x264b13,x264b30 default: ffmpeg)\n"
 	"    -q, --quality <float>   Set video quality (0.0..1.0)\n"
-	"    -Q, --crf               Use with -q for CRF instead of CQP\n"
+	"    -Q, --cqp               Use with -q for CQP instead of CRF\n"
     "    -S, --size <MB>         Set target size\n"
 	"    -b, --vb <kb/s>         Set video bitrate (default: 1000)\n"
 	"    -r, --rate              Set video framerate (" );
@@ -1317,7 +1317,7 @@ static int ParseOptions( int argc, char ** argv )
             { "ab",          required_argument, NULL,    'B' },
             { "rate",        required_argument, NULL,    'r' },
             { "arate",       required_argument, NULL,    'R' },
-            { "crf",         no_argument,       NULL,    'Q' },
+            { "cqp",         no_argument,       NULL,    'Q' },
             { "x264opts",    required_argument, NULL,    'x' },
             { "turbo",       no_argument,       NULL,    'T' },
             { "maxHeight",   required_argument, NULL,    'Y' },
@@ -1649,7 +1649,7 @@ static int ParseOptions( int argc, char ** argv )
                 abitrate = atoi( optarg );
                 break;
             case 'Q':
-                crf = 1;
+                crf = 0;
                 break;
             case 'x':
                 x264opts = strdup( optarg );
