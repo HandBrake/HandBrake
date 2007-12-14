@@ -292,8 +292,7 @@ namespace Handbrake
                 else
                 {
                     if (list_queue.SelectedItem != null)
-                    {
-                    }
+                        list_queue.Items[list_queue.SelectedIndex] = text_edit.Text;
           
                 }
             }
@@ -310,16 +309,6 @@ namespace Handbrake
         #endregion
 
         #region Queue Save & Batch Script
-        private void btn_save_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btn_open_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void btn_batch_Click(object sender, EventArgs e)
         {
             string queries = "";

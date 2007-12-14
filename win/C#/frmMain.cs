@@ -76,7 +76,7 @@ namespace Handbrake
                 // Run the update checker.
                 Thread updateCheckThread = new Thread(startupUpdateCheck);
                 updateCheckThread.Start();
-                Thread.Sleep(200);
+                Thread.Sleep(100);
             }
 
             // Update the presets
@@ -155,8 +155,6 @@ namespace Handbrake
             {
                 MessageBox.Show(exc.ToString());
             }
-
-
         }
 
         private void splashTimer(object sender)
@@ -296,22 +294,6 @@ namespace Handbrake
         #region Presets Menu
         Boolean presetStatus;
 
-        private void mnu_showPresets_Click(object sender, EventArgs e)
-        {
-            if (presetStatus == false)
-            {
-                this.Width = 881;
-                presetStatus = true;
-                mnu_showPresets.Text = "Hide Presets";
-            }
-            else
-            {
-                this.Width = 590;
-                presetStatus = false;
-                mnu_showPresets.Text = "Show Presets";
-            }
-        }
-
         private void mnu_presetReset_Click(object sender, EventArgs e)
         {
             treeView_presets.Nodes.Clear();
@@ -328,13 +310,6 @@ namespace Handbrake
         #endregion
 
         #region Help Menu
-
-
-        private void mnu_quickStart_Click(object sender, EventArgs e)
-        {
-            Form QuickStart = new frmQuickStart();
-            QuickStart.ShowDialog();
-        }
 
         private void mnu_wiki_Click(object sender, EventArgs e)
         {
@@ -448,23 +423,6 @@ namespace Handbrake
             rtf_h264advanced.Text = "";
         }
 
-        private void GenerateQuery_Click(object sender, EventArgs e)
-        {
-            String query = GenerateTheQuery();
-            QueryEditorText.Text = query;
-        }
-
-        private void btn_ClearQuery_Click(object sender, EventArgs e)
-        {
-            QueryEditorText.Text = "";
-        }
-
-        private void btn_copy_Click(object sender, EventArgs e)
-        {
-            if (QueryEditorText.Text != "")
-                Clipboard.SetText(QueryEditorText.Text, TextDataFormat.Text);
-        }
-
         #endregion
 
         #region frmMain Actions
@@ -476,7 +434,6 @@ namespace Handbrake
             lbl_RecomendedCrop.Text = "Select a Title";
             drop_chapterStart.Items.Clear();
             drop_chapterFinish.Items.Clear();
-            QueryEditorText.Text = "";
 
             // If the dropdown is set to automatic nothing else needs to be done.
             // Otheriwse if its not, title data has to be loased from parsing.
@@ -542,7 +499,6 @@ namespace Handbrake
         private void drop_chapterStart_SelectedIndexChanged(object sender, EventArgs e)
         {
             drop_chapterStart.BackColor = Color.White;
-            QueryEditorText.Text = "";
             if ((drop_chapterFinish.Text != "Auto") && (drop_chapterStart.Text != "Auto"))
             {
                 try
@@ -568,7 +524,6 @@ namespace Handbrake
         private void drop_chapterFinish_SelectedIndexChanged(object sender, EventArgs e)
         {
             drop_chapterFinish.BackColor = Color.White;
-            QueryEditorText.Text = "";
             if ((drop_chapterFinish.Text != "Auto") && (drop_chapterStart.Text != "Auto"))
             {
                 try
@@ -596,8 +551,6 @@ namespace Handbrake
             text_filesize.Text = "";
             slider_videoQuality.Value = 0;
             SliderValue.Text = "0%";
-            CheckCRF.CheckState = CheckState.Unchecked;
-            CheckCRF.Enabled = false;
         }
 
         private void text_filesize_TextChanged(object sender, EventArgs e)
@@ -605,8 +558,6 @@ namespace Handbrake
             text_bitrate.Text = "";
             slider_videoQuality.Value = 0;
             SliderValue.Text = "0%";
-            CheckCRF.CheckState = CheckState.Unchecked;
-            CheckCRF.Enabled = false;
         }
 
         private void slider_videoQuality_Scroll(object sender, EventArgs e)
@@ -614,7 +565,6 @@ namespace Handbrake
             SliderValue.Text = slider_videoQuality.Value.ToString() + "%";
             text_bitrate.Text = "";
             text_filesize.Text = "";
-            CheckCRF.Enabled = true;
         }
 
         private void label_h264_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -702,15 +652,19 @@ namespace Handbrake
 
         private void drp_crop_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if ((string)drp_crop.SelectedItem == "Manual")
+            if ((string)drp_crop.SelectedItem == "Custom")
             {
                 text_left.Enabled = true;
                 text_right.Enabled = true;
                 text_top.Enabled = true;
                 text_bottom.Enabled = true;
+                text_left.Text = "0";
+                text_right.Text = "0";
+                text_top.Text = "0";
+                text_bottom.Text = "0";
             }
 
-            if ((string)drp_crop.SelectedItem == "Auto Crop")
+            if ((string)drp_crop.SelectedItem == "Automatic")
             {
                 text_left.Enabled = false;
                 text_right.Enabled = false;
@@ -942,23 +896,6 @@ namespace Handbrake
             lbl_drc.Text = value.ToString();
         }
 
-        private void check_drc_CheckedChanged(object sender, EventArgs e)
-        {
-            if (check_drc.CheckState == CheckState.Checked)
-            {
-                slider_drc.Enabled = true;
-                lbl_drc.Enabled = true;
-                lbl_drc.Text = "1";
-            }
-            else
-            {
-                slider_drc.Enabled = false;
-                slider_drc.Value = 0;
-                lbl_drc.Enabled = false;
-                lbl_drc.Text = "Disabled";
-            }
-        }
-
         private void drp_subtitle_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (drp_subtitle.Text.Contains("None"))
@@ -992,8 +929,6 @@ namespace Handbrake
             if (!drp_videoEncoder.Text.Contains("H.264"))
             {
                 check_turbo.CheckState = CheckState.Unchecked;
-                CheckCRF.CheckState = CheckState.Unchecked;
-                CheckCRF.Enabled = false;
                 check_turbo.Enabled = false;
                 h264Tab.Enabled = false;
                 rtf_h264advanced.Text = "";
@@ -1003,7 +938,6 @@ namespace Handbrake
             }
             else
             {
-                CheckCRF.Enabled = true;
                 if (check_2PassEncode.CheckState == CheckState.Checked)
                 {
                     check_turbo.Enabled = true;
@@ -1163,15 +1097,8 @@ namespace Handbrake
                 MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
-                string query;
-                if (QueryEditorText.Text == "")
-                {
-                    query = GenerateTheQuery();
-                }
-                else
-                {
-                    query = QueryEditorText.Text;
-                }
+                string query = GenerateTheQuery();
+
                 queueWindow.list_queue.Items.Add(query);
                 queueWindow.Show();
             }
@@ -1189,15 +1116,7 @@ namespace Handbrake
             else
             {
                 btn_eCancel.Enabled = true;
-                String query = "";
-                if (QueryEditorText.Text == "")
-                {
-                    query = GenerateTheQuery();
-                }
-                else
-                {
-                    query = QueryEditorText.Text;
-                }
+                string query = GenerateTheQuery();
 
                 ThreadPool.QueueUserWorkItem(procMonitor, query);
                 lbl_encode.Visible = true;
@@ -1327,7 +1246,8 @@ namespace Handbrake
             int totalChapters = drop_chapterFinish.Items.Count - 1;
             string dvdChapter = "";
 
-            source = " -i " + '"' + source + '"';
+            if ((source != "") || (source != "Click 'Browse' to continue"))
+                source = " -i " + '"' + source + '"';
 
             if (dvdTitle == "Automatic")
                 dvdTitle = "";
@@ -1356,9 +1276,7 @@ namespace Handbrake
             string width = text_width.Text;
             string height = text_height.Text;
 
-            if (destination == "")
-                MessageBox.Show("No destination has been selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            else
+            if (destination != "")
                 destination = " -o " + '"' + destination + '"'; //'"'+ 
 
 
@@ -1438,7 +1356,7 @@ namespace Handbrake
 
 
 
-            if (cropSetting == "Auto Crop")
+            if (cropSetting == "Automatic")
                 cropOut = "";
             else if (cropSetting == "No Crop")
                 cropOut = " --crop 0:0:0:0 ";
@@ -1514,14 +1432,8 @@ namespace Handbrake
             string turboH264 = "";
             string largeFile = "";
             string denoise = "";
-            string CRF = "";
             string ipodAtom = "";
             string optimizeMP4 = "";
-
-            if (CheckCRF.Checked)
-                CRF = " -Q ";
-            else
-                CRF = "";
 
             if (videoBitrate != "")
                 videoBitrate = " -b " + videoBitrate;
@@ -1584,7 +1496,7 @@ namespace Handbrake
                 optimizeMP4 = " -O ";
 
 
-            string queryVideoSettings = videoBitrate + videoFilesize + vidQSetting + CRF + twoPassEncoding + videoFramerate + turboH264 + ipodAtom + optimizeMP4 + largeFile + denoise;
+            string queryVideoSettings = videoBitrate + videoFilesize + vidQSetting + twoPassEncoding + videoFramerate + turboH264 + ipodAtom + optimizeMP4 + largeFile + denoise;
             #endregion
 
             // Audio Settings Tab
@@ -1693,13 +1605,10 @@ namespace Handbrake
             if (check_forced.Checked)
                 forced = " -F ";
 
-            if (check_drc.Checked)
-            {
-                double value = slider_drc.Value / 10.0;
-                value++;
-
-                drc = " -D " + value;
-            }
+            //Dynamic Range Compression (expects a float but a double is used for ease)
+            double value = slider_drc.Value / 10.0;
+            value++;
+            drc = " -D " + value;
 
             string queryAudioSettings = audioBitrate + audioSampleRate + drc + audioChannels + SixChannelAudio + subScan + subtitles + forced;
             #endregion
@@ -1848,7 +1757,6 @@ namespace Handbrake
             slider_videoQuality.Value = presetQuery.VideoQuality;
             if (slider_videoQuality.Value != 0)
             {
-                CheckCRF.Enabled = true;
                 int ql = presetQuery.VideoQuality;
                 SliderValue.Text = ql.ToString() + "%";
             }
@@ -1874,11 +1782,6 @@ namespace Handbrake
                 check_largeFile.CheckState = CheckState.Checked;
             else
                 check_largeFile.CheckState = CheckState.Unchecked;
-
-            if (presetQuery.CRF == true)
-                CheckCRF.CheckState = CheckState.Checked;
-            else
-                CheckCRF.CheckState = CheckState.Unchecked;
 
             if (presetQuery.IpodAtom == true)
                 check_iPodAtom.CheckState = CheckState.Checked;
@@ -1909,16 +1812,11 @@ namespace Handbrake
             else
                 check_forced.CheckState = CheckState.Unchecked;
 
-            if (presetQuery.DRC != 0)
-            {
-                check_drc.Checked = true;
-                double value = presetQuery.DRC * 10;
-                slider_drc.Value = int.Parse(value.ToString());
-                lbl_drc.Text = presetQuery.DRC.ToString();
+            // Dynamic Range Compression (Should be a float but we use double for ease)
+            double value = presetQuery.DRC * 10;
+            slider_drc.Value = int.Parse(value.ToString());
+            lbl_drc.Text = presetQuery.DRC.ToString();
 
-            }
-            else
-                check_drc.Checked = false;
 
             #endregion
 
@@ -1966,64 +1864,75 @@ namespace Handbrake
 
         public void autoName()
         {
-            if (drp_dvdtitle.Text != "Automatic")
+            if (Properties.Settings.Default.autoNaming == "Checked")
             {
-                string source = text_source.Text;
-                string[] sourceName = source.Split('\\');
-                source = sourceName[sourceName.Length - 1].Replace(".iso", "").Replace(".mpg", "").Replace(".ts", "").Replace(".ps", "");
-
-                string title = drp_dvdtitle.Text;
-                string[] titlesplit = title.Split(' ');
-                title = titlesplit[0];
-
-                string cs = drop_chapterStart.Text;
-                string cf = drop_chapterFinish.Text;
-
-                if (title == "Automatic")
-                    title = "";
-                if (cs == "Auto")
-                    cs = "";
-                if (cf == "Auto")
-                    cf = "";
-
-                string dash = "";
-                if (cf != "Auto")
-                    dash = "-";
-
-                if (!text_destination.Text.Contains("\\"))
+                if (drp_dvdtitle.Text != "Automatic")
                 {
-                    string filePath = "";
-                    if (Properties.Settings.Default.autoNamePath != "")
-                        filePath = Properties.Settings.Default.autoNamePath + "\\";
-                    text_destination.Text = filePath + source + "_T" + title + "_C" + cs + dash + cf + ".mp4";
-                }
-                else
-                {
-                    string dest = text_destination.Text;
+                    string source = text_source.Text;
+                    string[] sourceName = source.Split('\\');
+                    source = sourceName[sourceName.Length - 1].Replace(".iso", "").Replace(".mpg", "").Replace(".ts", "").Replace(".ps", "");
 
-                    string[] destName = dest.Split('\\');
+                    string title = drp_dvdtitle.Text;
+                    string[] titlesplit = title.Split(' ');
+                    title = titlesplit[0];
 
+                    string cs = drop_chapterStart.Text;
+                    string cf = drop_chapterFinish.Text;
 
-                    string[] extension = dest.Split('.');
-                    string ext = extension[extension.Length - 1];
+                    if (title == "Automatic")
+                        title = "";
+                    if (cs == "Auto")
+                        cs = "";
+                    if (cf == "Auto")
+                        cf = "";
 
-                    destName[destName.Length - 1] = source + "_T" + title + "_C" + cs + dash + cf + "." + ext;
+                    string dash = "";
+                    if (cf != "Auto")
+                        dash = "-";
 
-                    string fullDest = "";
-                    foreach (string part in destName)
+                    if (!text_destination.Text.Contains("\\"))
                     {
-                        if (fullDest != "")
-                            fullDest = fullDest + "\\" + part;
-                        else
-                            fullDest = fullDest + part;
+                        string filePath = "";
+                        if (Properties.Settings.Default.autoNamePath != "")
+                            filePath = Properties.Settings.Default.autoNamePath + "\\";
+                        text_destination.Text = filePath + source + "_T" + title + "_C" + cs + dash + cf + ".mp4";
                     }
+                    else
+                    {
+                        string dest = text_destination.Text;
 
-                    text_destination.Text = fullDest;
+                        string[] destName = dest.Split('\\');
+
+
+                        string[] extension = dest.Split('.');
+                        string ext = extension[extension.Length - 1];
+
+                        destName[destName.Length - 1] = source + "_T" + title + "_C" + cs + dash + cf + "." + ext;
+
+                        string fullDest = "";
+                        foreach (string part in destName)
+                        {
+                            if (fullDest != "")
+                                fullDest = fullDest + "\\" + part;
+                            else
+                                fullDest = fullDest + part;
+                        }
+
+                        text_destination.Text = fullDest;
+                    }
                 }
             }
         }
 
         #endregion
+
+        private void mnu_showCommand_Click(object sender, EventArgs e)
+        {
+
+            Form query = new frmQuery(GenerateTheQuery());
+            query.ShowDialog();
+        }
+
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

@@ -430,17 +430,6 @@ namespace Handbrake.Functions
             }
         }
 
-        private Boolean q_crf;
-        /// <summary>
-        /// Returns a boolean to indicate if CRF is on or off.
-        /// </summary>
-        public Boolean CRF
-        {
-            get
-            {
-                return this.q_crf;
-            }
-        }
         #endregion
 
         #region Audio Settings
@@ -607,7 +596,6 @@ namespace Handbrake.Functions
             Match videoBitrate = Regex.Match(input, @"-b ([0-9]*)");
             Match videoQuality = Regex.Match(input, @"-q ([0-9.]*)");
             Match videoFilesize = Regex.Match(input, @"-S ([0-9.]*)");
-            Match CRF = Regex.Match(input, @"-Q");
             Match twoPass = Regex.Match(input, @"-2");
             Match turboFirstPass = Regex.Match(input, @"-T");
             Match grayscale = Regex.Match(input, @"-g");
@@ -820,7 +808,6 @@ namespace Handbrake.Functions
                     qConvert = System.Math.Ceiling(qConvert);
                     thisQuery.q_videoQuality = int.Parse(qConvert.ToString());
                 }
-                thisQuery.q_crf = CRF.Success;
                 thisQuery.q_ipodAtom = ipodAtom.Success;
                 thisQuery.q_optimizeMp4 = optimizeMP4.Success;
 

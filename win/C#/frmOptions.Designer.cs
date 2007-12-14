@@ -29,11 +29,7 @@ namespace Handbrake
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmOptions));
-            this.drp_Priority = new System.Windows.Forms.ComboBox();
-            this.Label4 = new System.Windows.Forms.Label();
             this.check_verbose = new System.Windows.Forms.CheckBox();
-            this.drp_processors = new System.Windows.Forms.ComboBox();
-            this.Label11 = new System.Windows.Forms.Label();
             this.check_guiDebug = new System.Windows.Forms.CheckBox();
             this.btn_close = new System.Windows.Forms.Button();
             this.drp_completeOption = new System.Windows.Forms.ComboBox();
@@ -46,61 +42,35 @@ namespace Handbrake
             this.check_userDefaultSettings = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btn_browse = new System.Windows.Forms.Button();
+            this.label10 = new System.Windows.Forms.Label();
+            this.text_an_path = new System.Windows.Forms.TextBox();
             this.check_autoNaming = new System.Windows.Forms.CheckBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tab_debug = new System.Windows.Forms.TabPage();
             this.label6 = new System.Windows.Forms.Label();
-            this.tab_advanced = new System.Windows.Forms.TabPage();
-            this.label3 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.text_an_path = new System.Windows.Forms.TextBox();
             this.pathFinder = new System.Windows.Forms.FolderBrowserDialog();
-            this.label10 = new System.Windows.Forms.Label();
-            this.btn_browse = new System.Windows.Forms.Button();
+            this.drp_processors = new System.Windows.Forms.ComboBox();
+            this.Label4 = new System.Windows.Forms.Label();
+            this.Label11 = new System.Windows.Forms.Label();
+            this.drp_Priority = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tab_debug.SuspendLayout();
-            this.tab_advanced.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
-            // 
-            // drp_Priority
-            // 
-            this.drp_Priority.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.drp_Priority.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.drp_Priority.FormattingEnabled = true;
-            this.drp_Priority.Items.AddRange(new object[] {
-            "Realtime",
-            "High",
-            "Above Normal",
-            "Normal",
-            "Below Normal",
-            "Low"});
-            this.drp_Priority.Location = new System.Drawing.Point(161, 67);
-            this.drp_Priority.Name = "drp_Priority";
-            this.drp_Priority.Size = new System.Drawing.Size(111, 21);
-            this.drp_Priority.TabIndex = 43;
-            this.drp_Priority.SelectedIndexChanged += new System.EventHandler(this.drp_Priority_SelectedIndexChanged);
-            // 
-            // Label4
-            // 
-            this.Label4.AutoSize = true;
-            this.Label4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label4.Location = new System.Drawing.Point(13, 70);
-            this.Label4.Name = "Label4";
-            this.Label4.Size = new System.Drawing.Size(132, 13);
-            this.Label4.TabIndex = 42;
-            this.Label4.Text = "Default Priority Level:";
             // 
             // check_verbose
             // 
             this.check_verbose.AutoSize = true;
             this.check_verbose.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_verbose.Location = new System.Drawing.Point(16, 58);
+            this.check_verbose.Location = new System.Drawing.Point(16, 152);
             this.check_verbose.Name = "check_verbose";
             this.check_verbose.Size = new System.Drawing.Size(139, 17);
             this.check_verbose.TabIndex = 51;
@@ -108,42 +78,11 @@ namespace Handbrake
             this.check_verbose.UseVisualStyleBackColor = true;
             this.check_verbose.CheckedChanged += new System.EventHandler(this.check_verbose_CheckedChanged);
             // 
-            // drp_processors
-            // 
-            this.drp_processors.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.drp_processors.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.drp_processors.FormattingEnabled = true;
-            this.drp_processors.Items.AddRange(new object[] {
-            "Automatic",
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8"});
-            this.drp_processors.Location = new System.Drawing.Point(161, 40);
-            this.drp_processors.Name = "drp_processors";
-            this.drp_processors.Size = new System.Drawing.Size(111, 21);
-            this.drp_processors.TabIndex = 41;
-            this.drp_processors.SelectedIndexChanged += new System.EventHandler(this.drp_processors_SelectedIndexChanged);
-            // 
-            // Label11
-            // 
-            this.Label11.AutoSize = true;
-            this.Label11.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label11.Location = new System.Drawing.Point(13, 43);
-            this.Label11.Name = "Label11";
-            this.Label11.Size = new System.Drawing.Size(142, 13);
-            this.Label11.TabIndex = 40;
-            this.Label11.Text = "Number of processors: ";
-            // 
             // check_guiDebug
             // 
             this.check_guiDebug.AutoSize = true;
             this.check_guiDebug.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_guiDebug.Location = new System.Drawing.Point(16, 35);
+            this.check_guiDebug.Location = new System.Drawing.Point(16, 129);
             this.check_guiDebug.Name = "check_guiDebug";
             this.check_guiDebug.Size = new System.Drawing.Size(131, 17);
             this.check_guiDebug.TabIndex = 52;
@@ -200,7 +139,6 @@ namespace Handbrake
             this.tab_options.Controls.Add(this.tab_general);
             this.tab_options.Controls.Add(this.tabPage1);
             this.tab_options.Controls.Add(this.tab_debug);
-            this.tab_options.Controls.Add(this.tab_advanced);
             this.tab_options.Location = new System.Drawing.Point(12, 63);
             this.tab_options.Name = "tab_options";
             this.tab_options.SelectedIndex = 0;
@@ -218,7 +156,7 @@ namespace Handbrake
             this.tab_general.Location = new System.Drawing.Point(4, 22);
             this.tab_general.Name = "tab_general";
             this.tab_general.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_general.Size = new System.Drawing.Size(411, 172);
+            this.tab_general.Size = new System.Drawing.Size(411, 210);
             this.tab_general.TabIndex = 0;
             this.tab_general.Text = "Startup";
             this.tab_general.UseVisualStyleBackColor = true;
@@ -298,6 +236,40 @@ namespace Handbrake
             this.tabPage1.Text = "General";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // btn_browse
+            // 
+            this.btn_browse.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_browse.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_browse.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_browse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_browse.Location = new System.Drawing.Point(326, 146);
+            this.btn_browse.Name = "btn_browse";
+            this.btn_browse.Size = new System.Drawing.Size(68, 22);
+            this.btn_browse.TabIndex = 62;
+            this.btn_browse.Text = "Browse";
+            this.btn_browse.UseVisualStyleBackColor = false;
+            this.btn_browse.Click += new System.EventHandler(this.btn_browse_Click);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(14, 131);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(145, 13);
+            this.label10.TabIndex = 61;
+            this.label10.Text = "Default AutoName Path:";
+            // 
+            // text_an_path
+            // 
+            this.text_an_path.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.text_an_path.Location = new System.Drawing.Point(17, 147);
+            this.text_an_path.Name = "text_an_path";
+            this.text_an_path.Size = new System.Drawing.Size(303, 21);
+            this.text_an_path.TabIndex = 60;
+            this.text_an_path.TextChanged += new System.EventHandler(this.text_an_path_TextChanged);
+            // 
             // check_autoNaming
             // 
             this.check_autoNaming.AutoSize = true;
@@ -333,51 +305,30 @@ namespace Handbrake
             // tab_debug
             // 
             this.tab_debug.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.tab_debug.Controls.Add(this.label3);
+            this.tab_debug.Controls.Add(this.drp_Priority);
             this.tab_debug.Controls.Add(this.check_verbose);
             this.tab_debug.Controls.Add(this.check_guiDebug);
+            this.tab_debug.Controls.Add(this.Label11);
             this.tab_debug.Controls.Add(this.label6);
+            this.tab_debug.Controls.Add(this.drp_processors);
+            this.tab_debug.Controls.Add(this.Label4);
             this.tab_debug.Location = new System.Drawing.Point(4, 22);
             this.tab_debug.Name = "tab_debug";
             this.tab_debug.Size = new System.Drawing.Size(411, 210);
             this.tab_debug.TabIndex = 2;
-            this.tab_debug.Text = "Debug Options";
+            this.tab_debug.Text = "Debug && Process";
             this.tab_debug.UseVisualStyleBackColor = true;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(13, 13);
+            this.label6.Location = new System.Drawing.Point(13, 107);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(173, 13);
             this.label6.TabIndex = 1;
             this.label6.Text = "Verbose and Debug mode";
-            // 
-            // tab_advanced
-            // 
-            this.tab_advanced.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.tab_advanced.Controls.Add(this.label3);
-            this.tab_advanced.Controls.Add(this.drp_Priority);
-            this.tab_advanced.Controls.Add(this.Label11);
-            this.tab_advanced.Controls.Add(this.Label4);
-            this.tab_advanced.Controls.Add(this.drp_processors);
-            this.tab_advanced.Location = new System.Drawing.Point(4, 22);
-            this.tab_advanced.Name = "tab_advanced";
-            this.tab_advanced.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_advanced.Size = new System.Drawing.Size(411, 210);
-            this.tab_advanced.TabIndex = 1;
-            this.tab_advanced.Text = "Advanced";
-            this.tab_advanced.UseVisualStyleBackColor = true;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(13, 13);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(176, 13);
-            this.label3.TabIndex = 44;
-            this.label3.Text = "Process(or) Configuration";
             // 
             // label8
             // 
@@ -407,39 +358,74 @@ namespace Handbrake
             this.label7.TabIndex = 59;
             this.label7.Text = "Modify program options.";
             // 
-            // text_an_path
+            // drp_processors
             // 
-            this.text_an_path.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.text_an_path.Location = new System.Drawing.Point(17, 147);
-            this.text_an_path.Name = "text_an_path";
-            this.text_an_path.Size = new System.Drawing.Size(303, 21);
-            this.text_an_path.TabIndex = 60;
-            this.text_an_path.TextChanged += new System.EventHandler(this.text_an_path_TextChanged);
+            this.drp_processors.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drp_processors.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.drp_processors.FormattingEnabled = true;
+            this.drp_processors.Items.AddRange(new object[] {
+            "Automatic",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8"});
+            this.drp_processors.Location = new System.Drawing.Point(163, 41);
+            this.drp_processors.Name = "drp_processors";
+            this.drp_processors.Size = new System.Drawing.Size(111, 21);
+            this.drp_processors.TabIndex = 41;
+            this.drp_processors.SelectedIndexChanged += new System.EventHandler(this.drp_processors_SelectedIndexChanged);
             // 
-            // label10
+            // Label4
             // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(14, 131);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(145, 13);
-            this.label10.TabIndex = 61;
-            this.label10.Text = "Default AutoName Path:";
+            this.Label4.AutoSize = true;
+            this.Label4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label4.Location = new System.Drawing.Point(15, 71);
+            this.Label4.Name = "Label4";
+            this.Label4.Size = new System.Drawing.Size(132, 13);
+            this.Label4.TabIndex = 42;
+            this.Label4.Text = "Default Priority Level:";
             // 
-            // btn_browse
+            // Label11
             // 
-            this.btn_browse.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.btn_browse.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_browse.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_browse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_browse.Location = new System.Drawing.Point(326, 146);
-            this.btn_browse.Name = "btn_browse";
-            this.btn_browse.Size = new System.Drawing.Size(68, 22);
-            this.btn_browse.TabIndex = 62;
-            this.btn_browse.Text = "Browse";
-            this.btn_browse.UseVisualStyleBackColor = false;
-            this.btn_browse.Click += new System.EventHandler(this.btn_browse_Click);
+            this.Label11.AutoSize = true;
+            this.Label11.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label11.Location = new System.Drawing.Point(15, 44);
+            this.Label11.Name = "Label11";
+            this.Label11.Size = new System.Drawing.Size(142, 13);
+            this.Label11.TabIndex = 40;
+            this.Label11.Text = "Number of processors: ";
+            // 
+            // drp_Priority
+            // 
+            this.drp_Priority.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drp_Priority.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.drp_Priority.FormattingEnabled = true;
+            this.drp_Priority.Items.AddRange(new object[] {
+            "Realtime",
+            "High",
+            "Above Normal",
+            "Normal",
+            "Below Normal",
+            "Low"});
+            this.drp_Priority.Location = new System.Drawing.Point(163, 68);
+            this.drp_Priority.Name = "drp_Priority";
+            this.drp_Priority.Size = new System.Drawing.Size(111, 21);
+            this.drp_Priority.TabIndex = 43;
+            this.drp_Priority.SelectedIndexChanged += new System.EventHandler(this.drp_Priority_SelectedIndexChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(13, 13);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(176, 13);
+            this.label3.TabIndex = 44;
+            this.label3.Text = "Process(or) Configuration";
             // 
             // frmOptions
             // 
@@ -465,8 +451,6 @@ namespace Handbrake
             this.tabPage1.PerformLayout();
             this.tab_debug.ResumeLayout(false);
             this.tab_debug.PerformLayout();
-            this.tab_advanced.ResumeLayout(false);
-            this.tab_advanced.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -475,18 +459,13 @@ namespace Handbrake
 
         #endregion
 
-        internal System.Windows.Forms.ComboBox drp_Priority;
-        internal System.Windows.Forms.Label Label4;
         internal System.Windows.Forms.CheckBox check_verbose;
-        internal System.Windows.Forms.ComboBox drp_processors;
-        internal System.Windows.Forms.Label Label11;
         internal System.Windows.Forms.Button btn_close;
         internal System.Windows.Forms.CheckBox check_guiDebug;
         internal System.Windows.Forms.ComboBox drp_completeOption;
         internal System.Windows.Forms.Label label5;
         private System.Windows.Forms.TabControl tab_options;
         private System.Windows.Forms.TabPage tab_general;
-        private System.Windows.Forms.TabPage tab_advanced;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         internal System.Windows.Forms.CheckBox check_tooltip;
@@ -494,7 +473,6 @@ namespace Handbrake
         internal System.Windows.Forms.CheckBox check_userDefaultSettings;
         private System.Windows.Forms.TabPage tab_debug;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Label label7;
@@ -506,5 +484,10 @@ namespace Handbrake
         internal System.Windows.Forms.Button btn_browse;
         internal System.Windows.Forms.Label label10;
         private System.Windows.Forms.FolderBrowserDialog pathFinder;
+        private System.Windows.Forms.Label label3;
+        internal System.Windows.Forms.ComboBox drp_Priority;
+        internal System.Windows.Forms.Label Label11;
+        internal System.Windows.Forms.Label Label4;
+        internal System.Windows.Forms.ComboBox drp_processors;
     }
 }

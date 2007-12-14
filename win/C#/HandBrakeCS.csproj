@@ -69,6 +69,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="frmQuery.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmQuery.Designer.cs">
+      <DependentUpon>frmQuery.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmAbout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,12 +110,6 @@
     </Compile>
     <Compile Include="frmQueue.Designer.cs">
       <DependentUpon>frmQueue.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmQuickStart.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmQuickStart.Designer.cs">
-      <DependentUpon>frmQuickStart.cs</DependentUpon>
     </Compile>
     <Compile Include="frmUpdater.cs">
       <SubType>Form</SubType>
@@ -148,13 +148,13 @@
       <SubType>Designer</SubType>
       <DependentUpon>frmOptions.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmQuery.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmQuery.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmQueue.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmQueue.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmQuickStart.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>frmQuickStart.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmUpdater.resx">
       <SubType>Designer</SubType>
@@ -205,7 +205,6 @@
     <Content Include="handbrakepineapple.ico" />
     <None Include="Resources\logo64.png" />
     <None Include="Resources\logo128.png" />
-    <None Include="Resources\folder.png" />
     <None Include="Resources\ActivityWindow.png" />
     <Content Include="Resources\Output_Small.png" />
     <None Include="Resources\Pause.png" />
@@ -213,8 +212,6 @@
     <Content Include="Resources\Pref_Small.png" />
     <Content Include="Resources\Queue.png" />
     <Content Include="Resources\Queue_Small.png" />
-    <None Include="Resources\Save.png" />
-    <None Include="Resources\Stop.png" />
     <None Include="Resources\SplashScreen.jpg" />
     <None Include="Resources\Remove.png" />
     <None Include="Resources\Movies.png" />
