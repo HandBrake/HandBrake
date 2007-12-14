@@ -18,7 +18,6 @@
 
 #define _(a) NSLocalizedString(a,NULL)
 
-
 static int FormatSettings[4][10] =
   { { HB_MUX_MP4 | HB_VCODEC_FFMPEG | HB_ACODEC_FAAC,
 	  HB_MUX_MP4 | HB_VCODEC_X264   | HB_ACODEC_FAAC,
@@ -390,10 +389,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		fPicLabelAr,fPicLabelDeinterlace,fPicLabelSrcX,fPicLabelOutputX,
 		fPicLabelPAROutputX,fPicSettingPARWidth,fPicSettingPARHeight,
 		fPicSettingPAR,fPicLabelAnamorphic,fPresetsAdd,fPresetsDelete,
-		fCreateChapterMarkers,fVidTurboPassCheck,fDstMpgLargeFileCheck,fPicLabelAutoCrop,
+		fCreateChapterMarkers,fVidTurboPassCheck,fDstMp4LargeFileCheck,fPicLabelAutoCrop,
 		fPicSettingAutoCrop,fPicSettingDetelecine,fPicLabelDetelecine,fPicLabelDenoise,fPicSettingDenoise,
         fSubForcedCheck,fPicSettingDeblock,fPicLabelDeblock,fPresetsOutlineView,fAudDrcSlider,
-        fAudDrcField,fAudDrcLabel};
+        fAudDrcField,fAudDrcLabel,fDstMp4HttpOptFileCheck};
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -1397,7 +1396,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         /* We set the largeFileSize (64 bit formatting) variable here to allow for > 4gb files based on the format being
 		mpeg4 and the checkbox being checked 
 		*Note: this will break compatibility with some target devices like iPod, etc.!!!!*/
-		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"AllowLargeFiles"] > 0 && [fDstMpgLargeFileCheck state] == NSOnState)
+		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"AllowLargeFiles"] > 0 && [fDstMp4LargeFileCheck state] == NSOnState)
 		{
 			job->largeFileSize = 1;
 		}
@@ -1405,7 +1404,16 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		{
 			job->largeFileSize = 0;
 		}
-	}
+        /* We set http optimized mp4 here */
+        if ([fDstMp4HttpOptFileCheck state] == NSOnState)
+		{
+        job->mp4_optimize = 1;
+        }
+        else
+        {
+        job->mp4_optimize = 0;
+        }
+    }
 	if ([fDstFormatPopUp indexOfSelectedItem] == 0 || [fDstFormatPopUp indexOfSelectedItem] == 3)
 	{
 	  /* We set the chapter marker extraction here based on the format being
@@ -2172,7 +2180,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     int format = [fDstFormatPopUp indexOfSelectedItem];
     char * ext = NULL;
 	/* Initially set the large file (64 bit formatting) output checkbox to hidden */
-    [fDstMpgLargeFileCheck setHidden: YES];
+    [fDstMp4LargeFileCheck setHidden: YES];
+    [fDstMp4HttpOptFileCheck setHidden: YES];
+    
     /* Update the codecs popup */
     [fDstCodecsPopUp removeAllItems];
     switch( format )
@@ -2194,17 +2204,19 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 			/* We enable the create chapters checkbox here since we are .mp4*/
 			[fCreateChapterMarkers setEnabled: YES];
 			/* We show the Large File (64 bit formatting) checkbox since we are .mp4 
-			if we have enabled the option in the global preferences*/
+             if we have enabled the option in the global preferences*/
 			if ([[NSUserDefaults standardUserDefaults] boolForKey:@"AllowLargeFiles"] > 0)
 			{
-				[fDstMpgLargeFileCheck setHidden: NO];
+				[fDstMp4LargeFileCheck setHidden: NO];
 			}
-				else
-				{
-					/* if not enable in global preferences, we additionaly sanity check that the
-					hidden checkbox is set to off. */
-                    [fDstMpgLargeFileCheck setState: NSOffState];
-				}
+            else
+            {
+                /* if not enable in global preferences, we additionaly sanity check that the
+                 hidden checkbox is set to off. */
+                [fDstMp4LargeFileCheck setState: NSOffState];
+            }
+            /* We show the HTTP Optimized checkbox here since we are mp4 */
+            [fDstMp4HttpOptFileCheck setHidden: NO];
             break;
             
         case 1:
@@ -2346,7 +2358,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 			
 		}
 		/* Make sure the 64bit formatting checkbox is off */
-		[fDstMpgLargeFileCheck setState: NSOffState];
+		[fDstMp4LargeFileCheck setState: NSOffState];
 	}
     
 	[self calculatePictureSizing: sender];
@@ -3263,7 +3275,9 @@ if (item == nil)
         /* Chapter Markers*/
         [fCreateChapterMarkers setState:[[chosenPreset objectForKey:@"ChapterMarkers"] intValue]];
         /* Allow Mpeg4 64 bit formatting +4GB file sizes */
-        [fDstMpgLargeFileCheck setState:[[chosenPreset objectForKey:@"Mp4LargeFile"] intValue]];
+        [fDstMp4LargeFileCheck setState:[[chosenPreset objectForKey:@"Mp4LargeFile"] intValue]];
+        /* Mux mp4 with http optimization */
+        [fDstMp4HttpOptFileCheck setState:[[chosenPreset objectForKey:@"Mp4HttpOptimize"] intValue]];
         /* Codecs */
         [fDstCodecsPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]]];
         [self codecsPopUpChanged: NULL];
@@ -3623,8 +3637,10 @@ if (item == nil)
 	/* Chapter Markers fCreateChapterMarkers*/
 	[preset setObject:[NSNumber numberWithInt:[fCreateChapterMarkers state]] forKey:@"ChapterMarkers"];
 	/* Allow Mpeg4 64 bit formatting +4GB file sizes */
-	[preset setObject:[NSNumber numberWithInt:[fDstMpgLargeFileCheck state]] forKey:@"Mp4LargeFile"];
-	/* Codecs */
+	[preset setObject:[NSNumber numberWithInt:[fDstMp4LargeFileCheck state]] forKey:@"Mp4LargeFile"];
+    /* Mux mp4 with http optimization */
+    [preset setObject:[NSNumber numberWithInt:[fDstMp4HttpOptFileCheck state]] forKey:@"Mp4HttpOptimize"];
+    /* Codecs */
 	[preset setObject:[fDstCodecsPopUp titleOfSelectedItem] forKey:@"FileCodecs"];
 	/* Video encoder */
 	[preset setObject:[fVidEncoderPopUp titleOfSelectedItem] forKey:@"VideoEncoder"];

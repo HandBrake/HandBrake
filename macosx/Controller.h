@@ -67,12 +67,16 @@
     /* Destination box */
     IBOutlet NSTextField         * fDstFormatField;
 	IBOutlet NSPopUpButton       * fDstFormatPopUp;
-	IBOutlet NSButton            * fDstMpgLargeFileCheck;
-    IBOutlet NSTextField         * fDstCodecsField;
+	IBOutlet NSTextField         * fDstCodecsField;
     IBOutlet NSPopUpButton       * fDstCodecsPopUp;
     IBOutlet NSTextField         * fDstFile1Field;
     IBOutlet NSTextField         * fDstFile2Field;
     IBOutlet NSButton            * fDstBrowseButton;
+    /* MP4 Options */
+    // Creates 64 bit mp4's that allow file sizes over 4gb
+    IBOutlet NSButton            * fDstMp4LargeFileCheck;
+    // Optimizes mp4's for http
+    IBOutlet NSButton            * fDstMp4HttpOptFileCheck;
 	
     /* Video box */
     IBOutlet NSTextField         * fVidRateField;

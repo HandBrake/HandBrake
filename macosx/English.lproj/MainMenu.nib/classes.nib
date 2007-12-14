@@ -166,7 +166,9 @@
 				<string>NSTextField</string>
 				<key>fDstFormatPopUp</key>
 				<string>NSPopUpButton</string>
-				<key>fDstMpgLargeFileCheck</key>
+				<key>fDstMp4HttpOptFileCheck</key>
+				<string>NSButton</string>
+				<key>fDstMp4LargeFileCheck</key>
 				<string>NSButton</string>
 				<key>fOpenSourceTitleMMenu</key>
 				<string>NSMenuItem</string>
