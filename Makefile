@@ -64,7 +64,7 @@ mrproper: clean
 
 endif
 
-ifeq ($(SYSTEM),CYGWIN_NT-5.1)
+ifeq ($(findstring CYGWIN_NT,$(SYSTEM)),CYGWIN_NT)
 
 all:    contrib/.contrib libhb/libhb.a 
 
