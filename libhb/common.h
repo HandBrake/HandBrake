@@ -462,6 +462,7 @@ struct hb_state_s
             int   hours;
             int   minutes;
             int   seconds;
+            int   sequence_id;
         } working;
 
         struct

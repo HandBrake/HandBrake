@@ -83,7 +83,6 @@ void          hb_set_anamorphic_size( hb_job_t * );
 /* Handling jobs */
 int           hb_count( hb_handle_t * );
 hb_job_t *    hb_job( hb_handle_t *, int );
-hb_job_t *    hb_current_job( hb_handle_t * h );
 void          hb_add( hb_handle_t *, hb_job_t * );
 void          hb_rem( hb_handle_t *, hb_job_t * );
 

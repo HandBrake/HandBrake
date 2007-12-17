@@ -172,15 +172,14 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     // Warn if encoding a movie
     hb_state_t s;
     hb_get_state( fHandle, &s );
-    hb_job_t * job = hb_current_job( fHandle );
-    if ( job && ( s.state != HB_STATE_IDLE ) )
+    HBJobGroup * jobGroup = [fQueueController currentJobGroup];
+    if ( jobGroup && ( s.state != HB_STATE_IDLE ) )
     {
-        hb_job_t * job = hb_current_job( fHandle );
         int result = NSRunCriticalAlertPanel(
                 NSLocalizedString(@"Are you sure you want to quit HandBrake?", nil),
                 NSLocalizedString(@"%@ is currently encoding. If you quit HandBrake, your movie will be lost. Do you want to quit anyway?", nil),
                 NSLocalizedString(@"Quit", nil), NSLocalizedString(@"Don't Quit", nil), nil,
-                job ? [NSString stringWithUTF8String:job->title->name] : @"A movie" );
+                jobGroup ? [jobGroup name] : @"A movie" );
         
         if (result == NSAlertDefaultReturn)
         {
@@ -655,22 +654,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             // or someone calling hb_stop. In the latter case, hb_stop does not clear
             // out the remaining passes/jobs in the queue. We'll do that here.
                         
-            // Delete all remaining scans of this job, ie, delete whole encodes.
+            // Delete all remaining jobs of this encode.
             hb_job_t * job;
-            while( ( job = hb_job( fHandle, 0 ) ) && (job->sequence_id != 0) )
+            while( ( job = hb_job( fHandle, 0 ) ) && ( !IsFirstPass(job->sequence_id) ) )
                 hb_rem( fHandle, job );
-
-            // Start processing back up if jobs still left in queue
-            if (hb_count(fHandle) > 0)
-            {
-                hb_start(fHandle);
-                fEncodeState = 1;
-                // Validate the toolbar (hack). The toolbar will usually get autovalidated
-                // before we had the chance to restart the queue, hence it will now be in
-                // the wrong state.
-                [toolbar validateVisibleItems];
-                break;
-            }
 
             [fStatusField setStringValue: _( @"Done." )];
             [fRipIndicator setIndeterminate: NO];
@@ -1658,10 +1645,15 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     hb_title_t * title = (hb_title_t *) hb_list_item( list, [fSrcTitlePopUp indexOfSelectedItem] );
     hb_job_t * job = title->job;
 
-    // Assign a sequence number, starting at zero, to each job added so they can
-    // be lumped together in the UI.
-    job->sequence_id = -1;
-
+    // Assign a unique job group ID for all passes of the same encode. This is how the
+    // UI lumps together jobs to form encodes. libhb does not use this id.
+    static int jobGroupID = 0;
+    jobGroupID++;
+    
+    // A sequence number, starting at zero, is also used to identifiy to each pass.
+    // This is used by the UI to determine if a pass if the first pass of an encode.
+    int sequenceNum = -1;
+    
     [self prepareJob];
 
     /* Destination file */
@@ -1697,7 +1689,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         /*
         * Add the pre-scan job
         */
-        job->sequence_id++; // for job grouping
+        job->sequence_id = MakeJobID(jobGroupID, ++sequenceNum);
         hb_add( fHandle, job );
 
         job->x264opts = x264opts_tmp;
@@ -1722,11 +1714,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         job->select_subtitle = NULL;
         
         job->pass = 1;
-        job->sequence_id++; // for job grouping
+        job->sequence_id = MakeJobID(jobGroupID, ++sequenceNum);
         hb_add( fHandle, job );
 
         job->pass = 2;
-        job->sequence_id++; // for job grouping
+        job->sequence_id = MakeJobID(jobGroupID, ++sequenceNum);
 
         job->x264opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */  
         strcpy(job->x264opts, [[fAdvancedOptions optionsString] UTF8String]);
@@ -1739,7 +1731,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     {
         job->indepth_scan = 0;
         job->pass = 0;
-        job->sequence_id++; // for job grouping
+        job->sequence_id = MakeJobID(jobGroupID, ++sequenceNum);
         hb_add( fHandle, job );
     }
 	
@@ -1881,7 +1873,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 }
 
 //------------------------------------------------------------------------------------
-// Cancels the current job and proceeds with the next one in the queue.
+// Cancels and deletes the current job and stops libhb from processing the remaining
+// encodes.
 //------------------------------------------------------------------------------------
 - (void) doCancelCurrentJob
 {
@@ -1906,11 +1899,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 {
     if (!fHandle) return;
     
-    hb_job_t * job = hb_current_job(fHandle);
-    if (!job) return;
+    HBJobGroup * jobGroup = [fQueueController currentJobGroup];
+    if (!jobGroup) return;
 
-    NSString * alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Do you want to stop encoding of %@?", nil),
-            [NSString stringWithUTF8String:job->title->name]];
+    NSString * alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop encoding %@?", nil),
+            [jobGroup name]];
     
     // Which window to attach the sheet to?
     NSWindow * docWindow;
@@ -1922,32 +1915,19 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     NSBeginCriticalAlertSheet(
             alertTitle,
             NSLocalizedString(@"Keep Encoding", nil),
-            NSLocalizedString(@"Delete All", nil),
+            nil,
             NSLocalizedString(@"Stop Encoding", nil),
             docWindow, self,
             nil, @selector(didDimissCancelCurrentJob:returnCode:contextInfo:), nil,
-            NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", nil),
-            [NSString stringWithUTF8String:job->title->name]);
+            NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", nil));
     
     // didDimissCancelCurrentJob:returnCode:contextInfo: will be called when the dialog is dismissed
-
-    // N.B.: didDimissCancelCurrentJob:returnCode:contextInfo: is designated as the dismiss
-    // selector to prevent a crash. As a dismiss selector, the alert window will
-    // have already be dismissed. If we don't do it this way, the dismissing of
-    // the alert window will cause the table view to be redrawn at a point where
-    // current job has been deleted by hblib but we don't know about it yet. This
-    // is a prime example of wy we need to NOT be relying on hb_current_job!!!!
 }
 
 - (void) didDimissCancelCurrentJob: (NSWindow *)sheet returnCode: (int)returnCode contextInfo: (void *)contextInfo
 {
     if (returnCode == NSAlertOtherReturn)
-        [self doCancelCurrentJob];
-    else if (returnCode == NSAlertAlternateReturn)
-    {
-        [self doDeleteQueuedJobs];
-        [self doCancelCurrentJob];
-    }
+        [self doCancelCurrentJob];  // <- this also stops libhb
 }
 
 

@@ -165,6 +165,7 @@
 		E3C844F80CA6B3F90013B683 /* RevealHighlight.png in Resources */ = {isa = PBXBuildFile; fileRef = E3C844F40CA6B3F90013B683 /* RevealHighlight.png */; };
 		E3C844F90CA6B3F90013B683 /* Reveal.png in Resources */ = {isa = PBXBuildFile; fileRef = E3C844F50CA6B3F90013B683 /* Reveal.png */; };
 		E3C845870CA6E9080013B683 /* EncodeComplete.png in Resources */ = {isa = PBXBuildFile; fileRef = E3C845860CA6E9080013B683 /* EncodeComplete.png */; };
+		E3FC10910D1611EC00470E7B /* EncodeCanceled.png in Resources */ = {isa = PBXBuildFile; fileRef = E3FC10900D1611EC00470E7B /* EncodeCanceled.png */; };
 		EAA526930C3B25D200944FF2 /* stream.c in Sources */ = {isa = PBXBuildFile; fileRef = EAA526920C3B25D200944FF2 /* stream.c */; };
 		EAA526940C3B25D200944FF2 /* stream.c in Sources */ = {isa = PBXBuildFile; fileRef = EAA526920C3B25D200944FF2 /* stream.c */; };
 		FC8519500C59A02C0073812C /* denoise.c in Sources */ = {isa = PBXBuildFile; fileRef = FC85194C0C59A02C0073812C /* denoise.c */; };
@@ -343,6 +344,7 @@
 		E3C844F40CA6B3F90013B683 /* RevealHighlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RevealHighlight.png; sourceTree = "<group>"; };
 		E3C844F50CA6B3F90013B683 /* Reveal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Reveal.png; sourceTree = "<group>"; };
 		E3C845860CA6E9080013B683 /* EncodeComplete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodeComplete.png; sourceTree = "<group>"; };
+		E3FC10900D1611EC00470E7B /* EncodeCanceled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodeCanceled.png; sourceTree = "<group>"; };
 		EAA526920C3B25D200944FF2 /* stream.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = stream.c; path = ../libhb/stream.c; sourceTree = SOURCE_ROOT; };
 		FC85194C0C59A02C0073812C /* denoise.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = denoise.c; path = ../libhb/denoise.c; sourceTree = SOURCE_ROOT; };
 		FC85194D0C59A02C0073812C /* deinterlace.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = deinterlace.c; path = ../libhb/deinterlace.c; sourceTree = SOURCE_ROOT; };
@@ -599,6 +601,7 @@
 				E3C844F20CA6B3F90013B683 /* RevealPressed.png */,
 				E3C844F40CA6B3F90013B683 /* RevealHighlight.png */,
 				E3C844F30CA6B3F90013B683 /* RevealHighlightPressed.png */,
+				E3FC10900D1611EC00470E7B /* EncodeCanceled.png */,
 				E3C845860CA6E9080013B683 /* EncodeComplete.png */,
 				E3997A290CAB58BC00287239 /* EncodeWorking0.png */,
 				E3997A280CAB58BC00287239 /* EncodeWorking1.png */,
@@ -823,6 +826,7 @@
 				E3997A2F0CAB58BC00287239 /* EncodeWorking0.png in Resources */,
 				E3997A300CAB58BC00287239 /* EncodeWorking2.png in Resources */,
 				E3997A310CAB58BC00287239 /* EncodeWorking5.png in Resources */,
+				E3FC10910D1611EC00470E7B /* EncodeCanceled.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

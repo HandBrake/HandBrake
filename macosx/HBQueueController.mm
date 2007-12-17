@@ -13,6 +13,19 @@
 // Pasteboard type for or drag operations
 #define HBQueuePboardType            @"HBQueuePboardType"
 
+//------------------------------------------------------------------------------------
+// Job ID Utilities
+//------------------------------------------------------------------------------------
+
+int MakeJobID(int jobGroupID, int sequenceNum)
+{
+    return jobGroupID<<16 | sequenceNum;
+}
+
+bool IsFirstPass(int jobID)
+{
+    return LoWord(jobID) == 0;
+}
 
 //------------------------------------------------------------------------------------
 // NSMutableAttributedString (HBAdditions)
@@ -100,7 +113,7 @@ static int hb_group_count(hb_handle_t * h)
     int index = 0;
     while( ( job = hb_job( h, index++ ) ) )
     {
-        if (job->sequence_id == 0)
+        if (IsFirstPass(job->sequence_id))
             count++;
     }
     return count;
@@ -119,7 +132,7 @@ static hb_job_t * hb_group(hb_handle_t * h, int i)
     int index = 0;
     while( ( job = hb_job( h, index++ ) ) )
     {
-        if (job->sequence_id == 0)
+        if (IsFirstPass(job->sequence_id))
         {
             if (count == i)
                 return job;
@@ -145,7 +158,7 @@ static void hb_rem_group( hb_handle_t * h, hb_job_t * job )
         {
             // Delete this job plus the following ones in the sequence
             hb_rem( h, job );
-            while( ( j = hb_job( h, index ) ) && (j->sequence_id != 0) )
+            while( ( j = hb_job( h, index ) ) && ( !IsFirstPass(j->sequence_id ) ) )
                 hb_rem( h, j );
             return;
         }
@@ -189,23 +202,80 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
 {
     if (self = [super init])
     {
-        // job is not owned by HBJob. It does not get dealloacted when HBJob is released.
-        hbJob = job;
+        sequence_id = job->sequence_id;
+
+        chapter_start = job->chapter_start;
+        chapter_end = job->chapter_end;
+        chapter_markers = job->chapter_markers;
+        memcpy(crop, job->crop, sizeof(crop));
+        deinterlace = job->deinterlace;
+        width = job->width;
+        height = job->height;
+        keep_ratio = job->keep_ratio;
+        grayscale = job->grayscale;
+        pixel_ratio = job->pixel_ratio;
+        pixel_aspect_width = job->pixel_aspect_width;
+        pixel_aspect_height = job->pixel_aspect_height;
+        vcodec = job->vcodec;
+        vquality = job->vquality;
+        vbitrate = job->vbitrate;
+        vrate = job->vrate;
+        vrate_base = job->vrate_base;
+        pass = job->pass;
+        h264_level = job->h264_level;
+        crf = job->crf;
+        if (job->x264opts)
+            x264opts = [[NSString stringWithUTF8String:job->x264opts] retain];
+        memcpy(audio_mixdowns, job->audio_mixdowns, sizeof(audio_mixdowns));
+        acodec = job->acodec;
+        abitrate = job->abitrate;
+        arate = job->arate;
+        subtitle = job->subtitle;
+        mux = job->mux;
+        if (job->file)
+            file = [[NSString stringWithUTF8String:job->file] retain];
+        if (job->title->name)
+            titleName = [[NSString stringWithUTF8String:job->title->name] retain];
+        titleIndex = job->title->index;
+        titleWidth = job->title->width;
+        titleHeight = job->title->height;
+        if (job->subtitle >= 0)
+        {
+            hb_subtitle_t * aSubtitle = (hb_subtitle_t *) hb_list_item(job->title->list_subtitle, 0);
+            if (aSubtitle)
+                subtitleLang = [[NSString stringWithUTF8String:aSubtitle->lang] retain];
+        }
+
     }
-    return self; 
+    return self;
 }
 
-- (hb_job_t*) job
+- (void) dealloc
 {
-    return hbJob;
+    // jobGroup is a weak reference and does not need to be deleted
+    [x264opts release];
+    [file release];
+    [titleName release];
+    [subtitleLang release];
+    [super dealloc];
+}
+
+- (HBJobGroup *) jobGroup
+{
+    return jobGroup;
+}
+
+- (void) setJobGroup: (HBJobGroup *)aJobGroup
+{
+    // This is a weak reference. We don't retain or release it.
+    jobGroup = aJobGroup;
 }
 
 //------------------------------------------------------------------------------------
 // Generate string to display in UI.
 //------------------------------------------------------------------------------------
 
-- (NSMutableAttributedString *) attributedDescriptionWithHBHandle: (hb_handle_t *)handle
-                               withIcon: (BOOL)withIcon
+- (NSMutableAttributedString *) attributedDescriptionWithIcon: (BOOL)withIcon
                               withTitle: (BOOL)withTitle
                            withPassName: (BOOL)withPassName
                          withFormatInfo: (BOOL)withFormatInfo
@@ -218,8 +288,6 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
 
 {
     NSMutableAttributedString * finalString = [[[NSMutableAttributedString alloc] initWithString: @""] autorelease];
-    
-    hb_title_t * title = hbJob->title;
     
     // Attributes
     static NSMutableParagraphStyle * ps = NULL;
@@ -271,15 +339,15 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
     
         // Note: use title->name instead of title->dvd since name is just the chosen
         // folder, instead of dvd which is the full path
-        [finalString appendString:[NSString stringWithUTF8String:title->name] withAttributes:titleAttribute];
+        [finalString appendString:titleName withAttributes:titleAttribute];
         
         NSString * summaryInfo;
     
-        NSString * chapterString = (hbJob->chapter_start == hbJob->chapter_end) ?
-                [NSString stringWithFormat:@"Chapter %d", hbJob->chapter_start] :
-                [NSString stringWithFormat:@"Chapters %d through %d", hbJob->chapter_start, hbJob->chapter_end];
+        NSString * chapterString = (chapter_start == chapter_end) ?
+                [NSString stringWithFormat:@"Chapter %d", chapter_start] :
+                [NSString stringWithFormat:@"Chapters %d through %d", chapter_start, chapter_end];
 
-        BOOL hasIndepthScan = (hbJob->pass == -1);
+        BOOL hasIndepthScan = (pass == -1);
         int numVideoPasses = 0;
 
         // To determine number of video passes, we need to skip past the subtitle scan.
@@ -287,25 +355,24 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
         {
             // When job is the one currently being processed, then the next in its group
             // is the the first job in the queue.
-            hb_job_t * nextjob;
-            if (hbJob == hb_current_job(handle))
-                nextjob = hb_job(handle, 0);
-            else
-                nextjob = hb_next_job(handle, hbJob);
+            HBJob * nextjob = nil;
+            unsigned int index = [jobGroup indexOfJob:self];
+            if (index != NSNotFound)
+                nextjob = [jobGroup jobAtIndex:index+1];
             if (nextjob)    // Overly cautious in case there is no next job!
                 numVideoPasses = MIN( 2, nextjob->pass + 1 );
         }
         else
-            numVideoPasses = MIN( 2, hbJob->pass + 1 );
+            numVideoPasses = MIN( 2, pass + 1 );
 
         if (hasIndepthScan && numVideoPasses == 1)
-            summaryInfo = [NSString stringWithFormat: @"  (Title %d, %@, Deep Scan, Single Video Pass)", title->index, chapterString];
+            summaryInfo = [NSString stringWithFormat: @"  (Title %d, %@, Deep Scan, Single Video Pass)", titleIndex, chapterString];
         else if (hasIndepthScan && numVideoPasses > 1)
-            summaryInfo = [NSString stringWithFormat: @"  (Title %d, %@, Deep Scan, %d Video Passes)", title->index, chapterString, numVideoPasses];
+            summaryInfo = [NSString stringWithFormat: @"  (Title %d, %@, Deep Scan, %d Video Passes)", titleIndex, chapterString, numVideoPasses];
         else if (numVideoPasses == 1)
-            summaryInfo = [NSString stringWithFormat: @"  (Title %d, %@, Single Video Pass)", title->index, chapterString];
+            summaryInfo = [NSString stringWithFormat: @"  (Title %d, %@, Single Video Pass)", titleIndex, chapterString];
         else
-            summaryInfo = [NSString stringWithFormat: @"  (Title %d, %@, %d Video Passes)", title->index, chapterString, numVideoPasses];
+            summaryInfo = [NSString stringWithFormat: @"  (Title %d, %@, %d Video Passes)", titleIndex, chapterString, numVideoPasses];
 
         [finalString appendString:[NSString stringWithFormat:@"%@\n", summaryInfo] withAttributes:detailAttribute];
         
@@ -322,7 +389,7 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
         if (withIcon)
         {
             NSString * imageName;
-            switch (hbJob->pass)
+            switch (pass)
             {
                 case -1: imageName = @"JobPassSubtitleSmall"; break;
                 case  0: imageName = @"JobPassFirstSmall"; break;
@@ -348,11 +415,11 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
         }
     
         NSString * jobPassName;
-        if (hbJob->pass == -1)
+        if (pass == -1)
             jobPassName = NSLocalizedString (@"Deep Scan", nil);
         else
         {
-            int passNum = MAX( 1, hbJob->pass );
+            int passNum = MAX( 1, pass );
             if (passNum == 0)
                 jobPassName = NSLocalizedString (@"1st Pass", nil);
             else if (passNum == 1)
@@ -371,14 +438,14 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
     {
         // 2097152
         // Video Codec settings (Encoder in the gui)
-        if (hbJob->vcodec == HB_VCODEC_FFMPEG)
+        if (vcodec == HB_VCODEC_FFMPEG)
             jobVideoCodec = @"FFmpeg"; // HB_VCODEC_FFMPEG
-        else if (hbJob->vcodec == HB_VCODEC_XVID)
+        else if (vcodec == HB_VCODEC_XVID)
             jobVideoCodec = @"XviD"; // HB_VCODEC_XVID
-        else if (hbJob->vcodec == HB_VCODEC_X264)
+        else if (vcodec == HB_VCODEC_X264)
         {
             // Deterimine for sure how we are now setting iPod uuid atom
-            if (hbJob->h264_level) // We are encoding for iPod
+            if (h264_level) // We are encoding for iPod
                 jobVideoCodec = @"x264 (H.264 iPod)"; // HB_VCODEC_X264    
             else
                 jobVideoCodec = @"x264 (H.264 Main)"; // HB_VCODEC_X264
@@ -391,13 +458,13 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
     NSString * jobAudioCodec = nil;
     if (withFormatInfo || withAudioInfo)
     {
-        if (hbJob->acodec == 256)
+        if (acodec == 256)
             jobAudioCodec = @"AAC"; // HB_ACODEC_FAAC
-        else if (hbJob->acodec == 512)
+        else if (acodec == 512)
             jobAudioCodec = @"MP3"; // HB_ACODEC_LAME
-        else if (hbJob->acodec == 1024)
+        else if (acodec == 1024)
             jobAudioCodec = @"Vorbis"; // HB_ACODEC_VORBIS
-        else if (hbJob->acodec == 2048)
+        else if (acodec == 2048)
             jobAudioCodec = @"AC3"; // HB_ACODEC_AC3
     }
     if (jobAudioCodec == nil)
@@ -408,18 +475,18 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
     {
         NSString * jobFormatInfo;
         // Muxer settings (File Format in the gui)
-        if (hbJob->mux == 65536 || hbJob->mux == 131072 || hbJob->mux == 1048576)
+        if (mux == 65536 || mux == 131072 || mux == 1048576)
             jobFormatInfo = @"MP4"; // HB_MUX_MP4,HB_MUX_PSP,HB_MUX_IPOD
-        else if (hbJob->mux == 262144)
+        else if (mux == 262144)
             jobFormatInfo = @"AVI"; // HB_MUX_AVI
-        else if (hbJob->mux == 524288)
+        else if (mux == 524288)
             jobFormatInfo = @"OGM"; // HB_MUX_OGM
-        else if (hbJob->mux == 2097152)
+        else if (mux == 2097152)
             jobFormatInfo = @"MKV"; // HB_MUX_MKV
         else
             jobFormatInfo = @"unknown";
                 
-        if (hbJob->chapter_markers == 1)
+        if (chapter_markers == 1)
             jobFormatInfo = [NSString stringWithFormat:@"%@ Container, %@ Video + %@ Audio, Chapter Markers\n", jobFormatInfo, jobVideoCodec, jobAudioCodec];
         else
             jobFormatInfo = [NSString stringWithFormat:@"%@ Container, %@ Video + %@ Audio\n", jobFormatInfo, jobVideoCodec, jobAudioCodec];
@@ -431,7 +498,7 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
     if (withDestination)
     {
         [finalString appendString: @"Destination: " withAttributes:detailBoldAttribute];
-        [finalString appendString:[NSString stringWithFormat:@"%@\n", [NSString stringWithUTF8String:hbJob->file]] withAttributes:detailAttribute];
+        [finalString appendString:[NSString stringWithFormat:@"%@\n", file] withAttributes:detailAttribute];
     }
 
 
@@ -440,22 +507,22 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
         NSString * jobPictureInfo;
         // integers for picture values deinterlace, crop[4], keep_ratio, grayscale, pixel_ratio, pixel_aspect_width, pixel_aspect_height,
         // maxWidth, maxHeight
-        if (hbJob->pixel_ratio == 1)
+        if (pixel_ratio == 1)
         {
-            int titlewidth = title->width - hbJob->crop[2] - hbJob->crop[3];
-            int displayparwidth = titlewidth * hbJob->pixel_aspect_width / hbJob->pixel_aspect_height;
-            int displayparheight = title->height - hbJob->crop[0] - hbJob->crop[1];
-            jobPictureInfo = [NSString stringWithFormat:@"%dx%d (%dx%d Anamorphic)", displayparwidth, displayparheight, hbJob->width, displayparheight];
+            int croppedWidth = titleWidth - crop[2] - crop[3];
+            int displayparwidth = croppedWidth * pixel_aspect_width / pixel_aspect_height;
+            int displayparheight = titleHeight - crop[0] - crop[1];
+            jobPictureInfo = [NSString stringWithFormat:@"%dx%d (%dx%d Anamorphic)", displayparwidth, displayparheight, width, displayparheight];
         }
         else
-            jobPictureInfo = [NSString stringWithFormat:@"%dx%d", hbJob->width, hbJob->height];
-        if (hbJob->keep_ratio == 1)
+            jobPictureInfo = [NSString stringWithFormat:@"%dx%d", width, height];
+        if (keep_ratio == 1)
             jobPictureInfo = [jobPictureInfo stringByAppendingString:@" Keep Aspect Ratio"];
         
-        if (hbJob->grayscale == 1)
+        if (grayscale == 1)
             jobPictureInfo = [jobPictureInfo stringByAppendingString:@", Grayscale"];
         
-        if (hbJob->deinterlace == 1)
+        if (deinterlace == 1)
             jobPictureInfo = [jobPictureInfo stringByAppendingString:@", Deinterlace"];
         if (withIcon)   // implies indent the info
             [finalString appendString: @"\t" withAttributes:detailBoldAttribute];
@@ -468,25 +535,25 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
         NSString * jobVideoQuality;
         NSString * jobVideoDetail;
         
-        if (hbJob->vquality <= 0 || hbJob->vquality >= 1)
-            jobVideoQuality = [NSString stringWithFormat:@"%d kbps", hbJob->vbitrate];
+        if (vquality <= 0 || vquality >= 1)
+            jobVideoQuality = [NSString stringWithFormat:@"%d kbps", vbitrate];
         else
         {
             NSNumber * vidQuality;
-            vidQuality = [NSNumber numberWithInt:hbJob->vquality * 100];
+            vidQuality = [NSNumber numberWithInt:vquality * 100];
             // this is screwed up kind of. Needs to be formatted properly.
-            if (hbJob->crf == 1)
+            if (crf == 1)
                 jobVideoQuality = [NSString stringWithFormat:@"%@%% CRF", vidQuality];            
             else
                 jobVideoQuality = [NSString stringWithFormat:@"%@%% CQP", vidQuality];
         }
         
-        if (hbJob->vrate_base == 1126125)
+        if (vrate_base == 1126125)
         {
             // NTSC FILM 23.976
             jobVideoDetail = [NSString stringWithFormat:@"%@, %@, 23.976 fps", jobVideoCodec, jobVideoQuality];
         }
-        else if (hbJob->vrate_base == 900900)
+        else if (vrate_base == 900900)
         {
             // NTSC 29.97
             jobVideoDetail = [NSString stringWithFormat:@"%@, %@, 29.97 fps", jobVideoCodec, jobVideoQuality];
@@ -494,7 +561,7 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
         else
         {
             // Everything else
-            jobVideoDetail = [NSString stringWithFormat:@"%@, %@, %d fps", jobVideoCodec, jobVideoQuality, hbJob->vrate / hbJob->vrate_base];
+            jobVideoDetail = [NSString stringWithFormat:@"%@, %@, %d fps", jobVideoCodec, jobVideoQuality, vrate / vrate_base];
         }
         if (withIcon)   // implies indent the info
             [finalString appendString: @"\t" withAttributes:detailBoldAttribute];
@@ -504,12 +571,12 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
     
     if (withx264Info)
     {
-        if (hbJob->vcodec == HB_VCODEC_X264 && hbJob->x264opts)
+        if (vcodec == HB_VCODEC_X264 && x264opts)
         {
             if (withIcon)   // implies indent the info
                 [finalString appendString: @"\t" withAttributes:detailBoldAttribute];
             [finalString appendString: @"x264 Options: " withAttributes:detailBoldAttribute];
-            [finalString appendString:[NSString stringWithFormat:@"%@\n", [NSString stringWithUTF8String:hbJob->x264opts]] withAttributes:detailAttribute];
+            [finalString appendString:[NSString stringWithFormat:@"%@\n", x264opts] withAttributes:detailAttribute];
         }
     }
 
@@ -519,7 +586,7 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
         if ([jobAudioCodec isEqualToString: @"AC3"])
             jobAudioInfo = [NSString stringWithFormat:@"%@, Pass-Through", jobAudioCodec];
         else
-            jobAudioInfo = [NSString stringWithFormat:@"%@, %d kbps, %d Hz", jobAudioCodec, hbJob->abitrate, hbJob->arate];
+            jobAudioInfo = [NSString stringWithFormat:@"%@, %d kbps, %d Hz", jobAudioCodec, abitrate, arate];
         
         // we now get the audio mixdown info for each of the two gui audio tracks
         // lets do it the long way here to get a handle on things.
@@ -527,15 +594,15 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
         int ai; // counter for each audios [] , macgui only allows for two audio tracks currently
         for( ai = 0; ai < 2; ai++ )
         {
-            if (hbJob->audio_mixdowns[ai] == HB_AMIXDOWN_MONO)
+            if (audio_mixdowns[ai] == HB_AMIXDOWN_MONO)
                 jobAudioInfo = [jobAudioInfo stringByAppendingString:[NSString stringWithFormat:@", Track %d: Mono", ai + 1]];
-            if (hbJob->audio_mixdowns[ai] == HB_AMIXDOWN_STEREO)
+            if (audio_mixdowns[ai] == HB_AMIXDOWN_STEREO)
                 jobAudioInfo = [jobAudioInfo stringByAppendingString:[NSString stringWithFormat:@", Track %d: Stereo", ai + 1]];
-            if (hbJob->audio_mixdowns[ai] == HB_AMIXDOWN_DOLBY)
+            if (audio_mixdowns[ai] == HB_AMIXDOWN_DOLBY)
                 jobAudioInfo = [jobAudioInfo stringByAppendingString:[NSString stringWithFormat:@", Track %d: Dolby Surround", ai + 1]];
-            if (hbJob->audio_mixdowns[ai] == HB_AMIXDOWN_DOLBYPLII)
+            if (audio_mixdowns[ai] == HB_AMIXDOWN_DOLBYPLII)
                 jobAudioInfo = [jobAudioInfo stringByAppendingString:[NSString stringWithFormat:@", Track %d: Dolby Pro Logic II", ai + 1]];
-            if (hbJob->audio_mixdowns[ai] == HB_AMIXDOWN_6CH)
+            if (audio_mixdowns[ai] == HB_AMIXDOWN_6CH)
                 jobAudioInfo = [jobAudioInfo stringByAppendingString:[NSString stringWithFormat:@", Track %d: 6-channel discreet", ai + 1]];
         }
         if (withIcon)   // implies indent the info
@@ -546,25 +613,24 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
     
     if (withSubtitleInfo)
     {
-        // hbJob->subtitle can == -1 in two cases:
+        // subtitle can == -1 in two cases:
         // autoselect: when pass == -1
         // none: when pass != -1
-        if ((hbJob->subtitle == -1) && (hbJob->pass == -1))
+        if ((subtitle == -1) && (pass == -1))
         {
             if (withIcon)   // implies indent the info
                 [finalString appendString: @"\t" withAttributes:detailBoldAttribute];
             [finalString appendString: @"Subtitles: " withAttributes:detailBoldAttribute];
             [finalString appendString: @"Autoselect " withAttributes:detailAttribute];
         }
-        else if (hbJob->subtitle >= 0)
+        else if (subtitle >= 0)
         {
-            hb_subtitle_t * subtitle = (hb_subtitle_t *) hb_list_item( title->list_subtitle, 0 );
-            if (subtitle)
+            if (subtitleLang)
             {
                 if (withIcon)   // implies indent the info
                     [finalString appendString: @"\t" withAttributes:detailBoldAttribute];
                 [finalString appendString: @"Subtitles: " withAttributes:detailBoldAttribute];
-                [finalString appendString: [NSString stringWithCString: subtitle->lang] withAttributes:detailAttribute];
+                [finalString appendString: subtitleLang   withAttributes:detailAttribute];
             }
         }
     }
@@ -606,7 +672,6 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
 - (void) dealloc
 {
     [fJobs release];
-    [fPath release];
     [super dealloc];
 }
 
@@ -617,15 +682,11 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
 
 - (void) addJob: (HBJob *)aJob
 {
+    [aJob setJobGroup:self];
     [fJobs addObject: aJob];
     [self setNeedsDescription: YES];
     fLastDescriptionHeight = 0;
     fLastDescriptionWidth = 0;
-}
-
-- (void) removeAllJobs
-{
-    [fJobs removeAllObjects];
 }
 
 - (HBJob *) jobAtIndex: (unsigned)index
@@ -648,7 +709,7 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
     fNeedsDescription = flag;
 }
 
-- (void) updateDescriptionWithHBHandle: (hb_handle_t *)handle
+- (void) updateDescription
 {
     fNeedsDescription = NO;
 
@@ -662,8 +723,7 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
     
     HBJob * job = [self jobAtIndex:0];
     
-    [fDescription appendAttributedString: [job attributedDescriptionWithHBHandle: handle
-                             withIcon: NO
+    [fDescription appendAttributedString: [job attributedDescriptionWithIcon: NO
                             withTitle: YES
                          withPassName: NO
                        withFormatInfo: YES
@@ -679,11 +739,10 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
     NSEnumerator * e = [self jobEnumerator];
     while ( (job = [e nextObject]) )
     {
-        int pass = [job job]->pass;
+        int pass = job->pass;
         [fDescription appendAttributedString:carriageReturn];
         [fDescription appendAttributedString:
-            [job attributedDescriptionWithHBHandle: handle
-                                 withIcon: YES
+            [job attributedDescriptionWithIcon: YES
                                 withTitle: NO
                              withPassName: YES
                            withFormatInfo: NO
@@ -697,21 +756,21 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
     
 }
 
-- (NSMutableAttributedString *) attributedDescriptionWithHBHandle: (hb_handle_t *)handle
+- (NSMutableAttributedString *) attributedDescription
 {
     if (fNeedsDescription)
-        [self updateDescriptionWithHBHandle: handle];
+        [self updateDescription];
     return fDescription;
 }
 
-- (float) heightOfDescriptionForWidth:(float)width withHBHandle: (hb_handle_t *)handle
+- (float) heightOfDescriptionForWidth:(float)width
 {
     // Try to return the cached value if no changes have happened since the last time
     if ((width == fLastDescriptionWidth) && (fLastDescriptionHeight != 0) && !fNeedsDescription)
         return fLastDescriptionHeight;
     
     if (fNeedsDescription)
-        [self updateDescriptionWithHBHandle: handle];
+        [self updateDescription];
 
     // Calculate the height    
     NSRect bounds = [fDescription boundingRectWithSize:NSMakeSize(width, 10000) options:NSStringDrawingUsesLineFragmentOrigin];
@@ -748,16 +807,16 @@ static hb_job_t * hb_next_job( hb_handle_t * h, hb_job_t * job )
     return self->fStatus;
 }
 
-- (void) setPath: (NSString *)path
+- (NSString *) name
 {
-    [path retain];
-    [fPath release];
-    fPath = path;
+    HBJob * firstJob = [self jobAtIndex:0];
+    return firstJob ? firstJob->titleName : nil;
 }
 
 - (NSString *) path
 {
-    return fPath;
+    HBJob * firstJob = [self jobAtIndex:0];
+    return firstJob ? firstJob->file : nil;
 }
 
 @end
@@ -837,6 +896,24 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 }
 
 //------------------------------------------------------------------------------------
+// Returns the HBJobGroup that is currently being encoded; nil if no encoding is
+// occurring.
+//------------------------------------------------------------------------------------
+- (HBJobGroup *) currentJobGroup;
+{
+    return fCurrentJobGroup;
+}
+
+//------------------------------------------------------------------------------------
+// Returns the HBJob (pass) that is currently being encoded; nil if no encoding is
+// occurring.
+//------------------------------------------------------------------------------------
+- (HBJob *) currentJob
+{
+    return fCurrentJob;
+}
+
+//------------------------------------------------------------------------------------
 // Displays and brings the queue window to the front
 //------------------------------------------------------------------------------------
 - (IBAction) showQueueWindow: (id)sender
@@ -845,6 +922,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
     [fQueueWindow makeKeyAndOrderFront: self];
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"QueueWindowIsOpen"];
 }
+
 //------------------------------------------------------------------------------------
 // Show or hide the current job pane (fCurrentJobPane).
 //------------------------------------------------------------------------------------
@@ -897,7 +975,14 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 //------------------------------------------------------------------------------------
 - (void)rebuildJobGroups
 {
-    // Currently, job groups are rdered like this:
+    // This method is called every time we detect that hblib has changed its job list.
+    // It releases the previous job group list and rebuilds it by reading the current
+    // list of jobs from libhb. libhb does not implement job groups/encodes itself. It
+    // just maintains a simply list of jobs. The queue controller however, presents
+    // these jobs to the user organized into encodes where all jobs associated with
+    // the same encode are grouped into a logical job group/encode.
+         
+    // Currently, job groups are ordered like this:
     // Completed job groups
     // Current job group
     // Pending job groups
@@ -908,7 +993,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
     // Add all the completed job groups
     [fJobGroups addObjectsFromArray: fCompleted];
 
-    // Add all the completed job groups
+    // Add the current job group
     if (fCurrentJobGroup)
         [fJobGroups addObject: fCurrentJobGroup];
 
@@ -921,7 +1006,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
     hb_job_t * nextJob = hb_group( fHandle, 0 );
     while( nextJob )
     {
-        if (nextJob->sequence_id == 0)
+        if (IsFirstPass(nextJob->sequence_id))
         {
             // Encountered a new group. Add the current one to fJobGroups and then start a new one.
             if ([aJobGroup count] > 0)
@@ -932,7 +1017,6 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
             }
         }
         [aJobGroup addJob: [HBJob jobWithJob:nextJob]];
-        [aJobGroup setPath: [NSString stringWithUTF8String:nextJob->file]];
         nextJob = hb_next_job (fHandle, nextJob);
     }
     if ([aJobGroup count] > 0)
@@ -943,68 +1027,70 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 }
 
 //------------------------------------------------------------------------------------
-// Adds aJobGroup to the list of completed job groups, marking its status as
-// HBStatusComplete.
+// Adds aJobGroup to the list of completed job groups. The completed list is
+// maintained by the queue, since libhb deletes all its jobs after they are complete.
 //------------------------------------------------------------------------------------
 - (void) addCompletedJobGroup: (HBJobGroup *)aJobGroup
 {
-    // Once hblib has completed its work, the hb_job_t objects will be freed, so we
-    // can't keep a reference to them.
-    [aJobGroup removeAllJobs];
-    
-    [aJobGroup setStatus: HBStatusComplete];
-    
-    // Put the group in the completed list for permanent storage, and also rebuild
-    // the master job group list which contains completed and pending groups.
+    // Put the group in the completed list for permanent storage.
     [fCompleted addObject: aJobGroup];
 }
 
-- (void) setCurrentJobGroupFromJob: (hb_job_t *)aJob
+//------------------------------------------------------------------------------------
+// Sets fCurrentJobGroup to a new job group.
+//------------------------------------------------------------------------------------
+- (void) setCurrentJobGroup: (HBJobGroup *)aJobGroup
 {
-    HBJobGroup * aJobGroup = nil;
-    
-    // Try to find this new group in our existing job groups.
-    if (aJob)
-    {
-        BOOL found = NO;
-        NSEnumerator * groupEnum = [fJobGroups objectEnumerator];
-        while ( !found && (aJobGroup = [groupEnum nextObject]) )
-        {
-            HBJob * j;
-            NSEnumerator * jobEnum = [aJobGroup jobEnumerator];
-            while ( !found && (j = [jobEnum nextObject]) )
-            {
-                if ([j job] == aJob)
-                    found = YES;
-            }
-        }
-        
-        // Or create the job group.
-        if (!aJobGroup)
-        {
-            aJobGroup = [HBJobGroup jobGroup];
-            [aJobGroup addJob: [HBJob jobWithJob: aJob]];
-            [aJobGroup setPath: [NSString stringWithUTF8String:aJob->file]];
-            while ( (aJob = hb_next_job(fHandle, aJob)) && (aJob->sequence_id != 0) )
-                [aJobGroup addJob: [HBJob jobWithJob: aJob]];
-
-            [aJobGroup updateDescriptionWithHBHandle: fHandle];
-        }
-        
+    if (aJobGroup)
         [aJobGroup setStatus: HBStatusWorking];
-    }
-    
+
     [aJobGroup retain];
     [fCurrentJobGroup release];
     fCurrentJobGroup = aJobGroup;
+}
+
+//------------------------------------------------------------------------------------
+// Locates and returns a HBJob whose sequence_id matches a specified value.
+//------------------------------------------------------------------------------------
+- (HBJob *) findJobWithID: (int)aJobID
+{
+    HBJobGroup * aJobGroup;
+    NSEnumerator * groupEnum = [fJobGroups objectEnumerator];
+    while ( (aJobGroup = [groupEnum nextObject]) )
+    {
+        HBJob * job;
+        NSEnumerator * jobEnum = [aJobGroup jobEnumerator];
+        while ( (job = [jobEnum nextObject]) )
+        {
+            if (job->sequence_id == aJobID)
+                return job;
+        }
+    }
+    return nil;
+}
+
+//------------------------------------------------------------------------------------
+// Locates and returns a libhb job whose sequence_id matches a specified value.
+//------------------------------------------------------------------------------------
+- (hb_job_t *) findLibhbJobWithID: (int)aJobID
+{
+    hb_job_t * job;
+    int index = 0;
+    while( ( job = hb_job( fHandle, index++ ) ) )
+    {
+        if (job->sequence_id == aJobID)
+            return job;
+    }
+    return nil;
 }
 
 #pragma mark -
 #pragma mark UI Updating
 
 //------------------------------------------------------------------------------------
-// Saves the state of the items that are currently expanded. Calling restoreOutlineViewState
-// will restore the state of all items to match what was saved by saveOutlineViewState.
+// Saves the state of the items that are currently expanded and selected. Calling
+// restoreOutlineViewState will restore the state of all items to match what was saved
+// by saveOutlineViewState. Nested calls to saveOutlineViewState are not supported.
 //------------------------------------------------------------------------------------
 - (void) saveOutlineViewState
 {
@@ -1013,29 +1099,18 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
     else
         [fSavedExpandedItems removeAllIndexes];
     
-    // NB: This code is stuffing the address of each job into an index set. While it
-    // works 99.9% of the time, it's not the ideal solution. We need unique ids in
-    // each job, possibly using the existing sequence_id field. Could use the high
-    // word as a unique encode id and the low word the sequence number.
+    // This code stores the sequence_id of the first job of each job group into an
+    // index set. This is sufficient to identify each group uniquely.
     
     HBJobGroup * aJobGroup;
     NSEnumerator * e = [fJobGroups objectEnumerator];
     while ( (aJobGroup = [e nextObject]) )
     {
         if ([fOutlineView isItemExpanded: aJobGroup])
-        {
-            if ([aJobGroup status] == HBStatusComplete)
-                [fSavedExpandedItems addIndex: (unsigned int)aJobGroup];
-            else
-                [fSavedExpandedItems addIndex: (unsigned int)[[aJobGroup jobAtIndex:0] job]];
-        }
+            [fSavedExpandedItems addIndex: [aJobGroup jobAtIndex:0]->sequence_id];
     }
     
-    // Save the selection also. This is really UGLY code. Since I have to rebuild the
-    // entire outline hierachy every time hblib changes its job list, there's no easy
-    // way for me to remember the selection state other than saving off the first
-    // hb_job_t item in each selected group. This is done by saving the object's
-    // address. This could go away if I'd save a unique id in each job object.
+    // Save the selection also.
 
     if (!fSavedSelectedItems)
         fSavedSelectedItems = [[NSMutableIndexSet alloc] init];
@@ -1047,10 +1122,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
     while (row != NSNotFound)
     {
         aJobGroup = [fOutlineView itemAtRow: row];
-        if ([aJobGroup status] == HBStatusComplete)
-            [fSavedSelectedItems addIndex: (unsigned int)aJobGroup];
-        else
-            [fSavedSelectedItems addIndex: (unsigned int)[[aJobGroup jobAtIndex:0] job]];    
+        [fSavedSelectedItems addIndex: [aJobGroup jobAtIndex:0]->sequence_id];
         row = [selectedRows indexGreaterThanIndex: row];
     }
 
@@ -1068,40 +1140,24 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
         NSEnumerator * e = [fJobGroups objectEnumerator];
         while ( (aJobGroup = [e nextObject]) )
         {
-            if ([aJobGroup status] == HBStatusComplete)
-            {
-                if ([fSavedExpandedItems containsIndex: (unsigned int)aJobGroup])
-                    [fOutlineView expandItem: aJobGroup];
-            }
-            else
-            {
-                hb_job_t * j = [[aJobGroup jobAtIndex:0] job];
-                if ([fSavedExpandedItems containsIndex: (unsigned int)j])
-                    [fOutlineView expandItem: aJobGroup];
-            }
+            HBJob * job = [aJobGroup jobAtIndex:0];
+            if (job && [fSavedExpandedItems containsIndex: job->sequence_id])
+                [fOutlineView expandItem: aJobGroup];
         }
     }
     
     if (fSavedSelectedItems)
     {
-        // Ugh. Have to cycle through each row looking for the previously selected job.
-        // See the explanation in saveOutlineViewState about the logic here.
-                
         NSMutableIndexSet * rowsToSelect = [[[NSMutableIndexSet alloc] init] autorelease];
-        for (int i = 0; i < [fOutlineView numberOfRows]; i++)
+        HBJobGroup * aJobGroup;
+        NSEnumerator * e = [fJobGroups objectEnumerator];
+        int i = 0;
+        while ( (aJobGroup = [e nextObject]) )
         {
-            HBJobGroup * aJobGroup = [fOutlineView itemAtRow: i];
-            // Test to see if the group or the group's first job is a match
-            if ([aJobGroup status] == HBStatusComplete)
-            {
-                if ([fSavedSelectedItems containsIndex: (unsigned int)aJobGroup])
-                    [rowsToSelect addIndex: i];
-            }
-            else
-            {
-                if ([fSavedSelectedItems containsIndex: (unsigned int)[[aJobGroup jobAtIndex:0] job]])
-                    [rowsToSelect addIndex: i];
-            }
+            HBJob * job = [aJobGroup jobAtIndex:0];
+            if (job && [fSavedSelectedItems containsIndex: job->sequence_id])
+                [rowsToSelect addIndex: i];
+            i++;
         }
         if ([rowsToSelect count] == 0)
             [fOutlineView deselectAll: nil];
@@ -1158,7 +1214,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 //------------------------------------------------------------------------------------
 // Generate string to display in UI.
 //------------------------------------------------------------------------------------
-- (NSString *) progressStatusStringForJob: (hb_job_t *)job state: (hb_state_t *)s
+- (NSString *) progressStatusStringForJob: (HBJob *)job state: (hb_state_t *)s
 {
     if (s->state == HB_STATE_WORKING)
     {
@@ -1198,7 +1254,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 //------------------------------------------------------------------------------------
 // Generate string to display in UI.
 //------------------------------------------------------------------------------------
-- (NSString *) progressTimeRemainingStringForJob: (hb_job_t *)job state: (hb_state_t *)s
+- (NSString *) progressTimeRemainingStringForJob: (HBJob *)job state: (hb_state_t *)s
 {
     if (s->state == HB_STATE_WORKING)
     {
@@ -1270,7 +1326,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 //------------------------------------------------------------------------------------
 // Refresh progress bar (fProgressTextField) from current state.
 //------------------------------------------------------------------------------------
-- (void) updateProgressTextForJob: (hb_job_t *)job state: (hb_state_t *)s
+- (void) updateProgressTextForJob: (HBJob *)job state: (hb_state_t *)s
 {
     NSString * statusMsg = [self progressStatusStringForJob:job state:s];
     NSString * timeMsg = [self progressTimeRemainingStringForJob:job state:s];
@@ -1335,17 +1391,13 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 //------------------------------------------------------------------------------------
 - (void)updateCurrentJobDescription
 {
-    hb_job_t * job = fHandle ? hb_current_job(fHandle) : nil;
-
-    if (job)
+    if (fCurrentJob)
     {
-        HBJob * currentJob = [HBJob jobWithJob: job];
-        switch (job->pass)
+        switch (fCurrentJob->pass)
         {
             case -1:  // Subtitle scan
                 [fJobDescTextField setAttributedStringValue:
-                    [currentJob attributedDescriptionWithHBHandle:fHandle
-                                 withIcon: NO
+                    [fCurrentJob attributedDescriptionWithIcon: NO
                                 withTitle: YES
                              withPassName: YES
                            withFormatInfo: NO
@@ -1359,8 +1411,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
                 
             case 1:  // video 1st pass
                 [fJobDescTextField setAttributedStringValue:
-                    [currentJob attributedDescriptionWithHBHandle:fHandle
-                                 withIcon: NO
+                    [fCurrentJob attributedDescriptionWithIcon: NO
                                 withTitle: YES
                              withPassName: YES
                            withFormatInfo: NO
@@ -1375,8 +1426,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
             case 0:  // single pass
             case 2:  // video 2nd pass + audio
                 [fJobDescTextField setAttributedStringValue:
-                    [currentJob attributedDescriptionWithHBHandle:fHandle
-                                 withIcon: NO
+                    [fCurrentJob attributedDescriptionWithIcon: NO
                                 withTitle: YES
                              withPassName: YES
                            withFormatInfo: NO
@@ -1390,8 +1440,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
             
             default: // unknown
                 [fJobDescTextField setAttributedStringValue:
-                    [currentJob attributedDescriptionWithHBHandle:fHandle
-                                 withIcon: NO
+                    [fCurrentJob attributedDescriptionWithIcon: NO
                                 withTitle: YES
                              withPassName: YES
                            withFormatInfo: NO
@@ -1414,10 +1463,9 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 //------------------------------------------------------------------------------------
 - (void)updateCurrentJobProgress
 {
-    hb_job_t * job = fHandle ? hb_current_job(fHandle) : nil;
     hb_state_t s;
     hb_get_state2( fHandle, &s );
-    [self updateProgressTextForJob: job state: &s];
+    [self updateProgressTextForJob: fCurrentJob state: &s];
     [self updateProgressBarWithState:&s];
 }
 
@@ -1462,8 +1510,10 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
                     [self cancelCurrentJob: sender];
                     break;
                 case HBStatusPending:
-                    hb_job_t * job = [[jobGroup jobAtIndex: 0] job];
-                    hb_rem_group( fHandle, job );
+                    HBJob * job = [jobGroup jobAtIndex: 0];
+                    hb_job_t * libhbJob = [self findLibhbJobWithID:job->sequence_id];
+                    if (libhbJob)
+                        hb_rem_group( fHandle, libhbJob );
                     break;
                 case HBStatusNone:
                     break;
@@ -1548,18 +1598,52 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 //------------------------------------------------------------------------------------
 // Notifies HBQueueController that hblib's current job has changed
 //------------------------------------------------------------------------------------
-- (void)currentJobGroupChanged: (hb_job_t *) currentJob
+- (void)currentJobChanged: (HBJob *) currentJob
 {
-    if (fCurrentJobGroup && [fCurrentJobGroup status] != HBStatusCanceled)
-        [self addCompletedJobGroup: fCurrentJobGroup];
-    [self setCurrentJobGroupFromJob: currentJob];
-    [self updateCurrentJobDescription];
-    [self updateCurrentJobProgress];
-    [self showCurrentJobPane: fCurrentJobGroup != nil];
-    if (fCurrentJobGroup)
-        [self startAnimatingCurrentJobGroupInQueue];
-    else
-        [self stopAnimatingCurrentJobGroupInQueue];
+    [currentJob retain];
+    [fCurrentJob release];
+    fCurrentJob = currentJob;
+
+    // Check to see if this is also a change in Job Group
+    
+    HBJobGroup * theJobGroup = [currentJob jobGroup];
+    if ((theJobGroup == nil) || (theJobGroup != fCurrentJobGroup))     // no more job groups or start of a new group
+    {
+        // Previous job has completed
+        if (fCurrentJobGroup)
+        {
+            // Update the status of the job that just finished. If the user canceled,
+            // the status will have already been set to canceled by hblibWillStop. So
+            // all other cases are assumed to be a successful encode. BTW, libhb
+            // doesn't currently report errors back to the GUI.
+            if ([fCurrentJobGroup status] != HBStatusCanceled)
+                [fCurrentJobGroup setStatus:HBStatusComplete];
+
+            [self addCompletedJobGroup: fCurrentJobGroup];
+        }
+        
+        // Set the new group
+        [self setCurrentJobGroup: theJobGroup];
+        
+        // Update the UI
+        [self updateCurrentJobDescription];
+        [self updateCurrentJobProgress];
+        [self showCurrentJobPane: fCurrentJobGroup != nil];
+        if (fCurrentJobGroup)
+            [self startAnimatingCurrentJobGroupInQueue];
+        else
+            [self stopAnimatingCurrentJobGroupInQueue];
+
+        [self hblibJobListChanged];
+    }
+    
+    else    // start a new job/pass in the same group
+    {
+        // Update the UI
+        [self updateCurrentJobDescription];
+        [self updateCurrentJobProgress];
+    }
+
 }
 
 //------------------------------------------------------------------------------------
@@ -1590,32 +1674,26 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 //------------------------------------------------------------------------------------
 - (void)hblibStateChanged: (hb_state_t &)state
 {
-    // First check to see if hblib has moved on to another job. We get no direct
-    // message when this happens, so we have to detect it ourself. The new job could
-    // be either just the next job in the current group, or the start of a new group.
-    if (fLastKnownCurrentJob != hb_current_job(fHandle))
-    {
-        hb_job_t * currentJob = hb_current_job(fHandle);
-        if (!currentJob || currentJob->sequence_id == 0)     // start of a new group
-        {
-            [self currentJobGroupChanged: currentJob];
-            [self hblibJobListChanged];
-        }
-        else
-        {
-            [self updateCurrentJobDescription];
-            [self updateCurrentJobProgress];
-        }
-
-       fLastKnownCurrentJob = currentJob;
-    }
-
     switch( state.state )
     {
         case HB_STATE_WORKING:
         {
-            [self updateCurrentJobProgress];
-            [self startAnimatingCurrentJobGroupInQueue];
+            //NSLog(@"job = %x; job_cur = %d; job_count = %d", state.param.working.sequence_id, state.param.working.job_cur, state.param.working.job_count);
+            // First check to see if hblib has moved on to another job. We get no direct
+            // message when this happens, so we have to detect it ourself. The new job could
+            // be either just the next job in the current group, or the start of a new group.
+            if (fCurrentJobID != state.param.working.sequence_id)
+            {
+                fCurrentJobID = state.param.working.sequence_id;
+                HBJob * currentJob = [self findJobWithID:fCurrentJobID];
+                [self currentJobChanged: currentJob];
+            }
+
+            if (fCurrentJob)
+            {
+                [self updateCurrentJobProgress];
+                [self startAnimatingCurrentJobGroupInQueue];
+            }
             break;
         }
 
@@ -1637,6 +1715,9 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
             // HB_STATE_WORKDONE means that hblib has finished processing all the jobs
             // in *its* queue. This message is NOT sent as each individual job is
             // completed.
+
+            [self currentJobChanged: nil];
+            fCurrentJobID = 0;
         }
 
     }
@@ -1984,7 +2065,7 @@ static float spacingWidth = 3.0;
         // Column width is NOT what is ultimately used
         width -= 47;    // 26 pixels for disclosure triangle, 20 for icon, 1 for intercell spacing
         
-        float height = [item heightOfDescriptionForWidth: width withHBHandle: fHandle];
+        float height = [item heightOfDescriptionForWidth: width];
         return height;
     }
     else
@@ -1997,11 +2078,14 @@ static float spacingWidth = 3.0;
 	// using the image portion of the cell so we could switch back to a regular NSTextFieldCell.
 	
     if ([[tableColumn identifier] isEqualToString:@"desc"])
-        return [item attributedDescriptionWithHBHandle: fHandle];
+        return [item attributedDescription];
     else if ([[tableColumn identifier] isEqualToString:@"icon"])
     {
         switch ([(HBJobGroup*)item status])
         {
+            case HBStatusCanceled:
+                return [NSImage imageNamed:@"EncodeCanceled"];
+                break;
             case HBStatusComplete:
                 return [NSImage imageNamed:@"EncodeComplete"];
                 break;

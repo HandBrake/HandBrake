@@ -964,6 +964,7 @@ void hb_start( hb_handle_t * h )
     p.hours     = -1;
     p.minutes   = -1;
     p.seconds   = -1;
+    p.sequence_id = 0;
 #undef p
     hb_unlock( h->state_lock );
 
@@ -1203,6 +1204,12 @@ void hb_set_state( hb_handle_t * h, hb_state_t * s )
         h->state.param.working.job_cur =
             h->job_count_permanent - hb_list_count( h->jobs );
         h->state.param.working.job_count = h->job_count_permanent;
+        
+        // Set which job is being worked on
+        if (h->current_job)
+            h->state.param.working.sequence_id = h->current_job->sequence_id;
+        else
+            h->state.param.working.sequence_id = 0;
     }
     hb_unlock( h->state_lock );
     hb_unlock( h->pause_lock );
