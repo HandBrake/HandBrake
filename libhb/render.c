@@ -23,6 +23,8 @@ struct hb_work_private_s
     int                  frames_to_extend;
     int                  dropped_frames;
     int                  extended_frames;
+    uint64_t             last_start[4];
+    uint64_t             last_stop[4];
 };
 
 int  renderInit( hb_work_object_t *, hb_job_t * );
@@ -191,7 +193,18 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     
     /* Setup render buffer */
     hb_buffer_t * buf_render = hb_buffer_init( 3 * job->width * job->height / 2 );  
-
+    
+    /* Cache frame start and stop times, so we can renumber
+       time stamps if dropping frames for VFR.              */ 
+    int i;
+    for( i = 3; i >= 1; i-- )
+    {
+        pv->last_start[i] = pv->last_start[i-1];
+        pv->last_stop[i] = pv->last_stop[i-1];
+    }
+    pv->last_start[0] = in->start;
+    pv->last_stop[0] = in->stop;
+    
     /* Apply filters */
     if( job->filters )
     {
@@ -338,14 +351,27 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
              */
             ivtc_buffer = *buf_out;
             
+            /* The 4th cached frame will be the to use. */
+            ivtc_buffer->start = pv->last_start[3];
+            ivtc_buffer->stop = pv->last_stop[3];
+
             if (pv->frames_to_extend % 4)
                 ivtc_buffer->stop += 751;
             else
                 ivtc_buffer->stop += 750;
-                
+            
+            /* Set the 3rd cached frame to start when this one stops,
+               and to stop 3003 ticks later -- a normal 29.97fps
+               length frame. If it needs to be extended as well to
+               make up lost time, it'll be handled on the next
+               loop through the renderer.                            */
+            pv->last_start[2] = ivtc_buffer->stop;
+            pv->last_stop[2] = ivtc_buffer->stop + 3003;
+            
             pv->frames_to_extend--;
             pv->extended_frames++;
         }
+
     }
 
     return HB_WORK_OK;
@@ -421,6 +447,8 @@ int renderInit( hb_work_object_t * w, hb_job_t * job )
     pv->frames_to_extend = 0;
     pv->dropped_frames = 0;
     pv->extended_frames = 0;
+    pv->last_start[0] = 0;
+    pv->last_stop[0] = 0;
     
     /* Setup filters */
     /* TODO: Move to work.c? */
