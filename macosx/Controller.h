@@ -157,6 +157,10 @@
     IBOutlet NSSlider            * fAudDrcSlider;
     IBOutlet NSTextField         * fAudDrcField;
     IBOutlet NSTextField         * fAudDrcLabel;
+    IBOutlet NSTextField         * fAudDrcDescLabel1;
+    IBOutlet NSTextField         * fAudDrcDescLabel2;
+    IBOutlet NSTextField         * fAudDrcDescLabel3;
+    IBOutlet NSTextField         * fAudDrcDescLabel4;
     
     /* Chapters box */
     IBOutlet NSButton            * fCreateChapterMarkers;

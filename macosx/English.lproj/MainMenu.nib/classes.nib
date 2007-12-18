@@ -122,6 +122,14 @@
 				<string>NSTextField</string>
 				<key>fAudBitratePopUp</key>
 				<string>NSPopUpButton</string>
+				<key>fAudDrcDescLabel1</key>
+				<string>NSTextField</string>
+				<key>fAudDrcDescLabel2</key>
+				<string>NSTextField</string>
+				<key>fAudDrcDescLabel3</key>
+				<string>NSTextField</string>
+				<key>fAudDrcDescLabel4</key>
+				<string>NSTextField</string>
 				<key>fAudDrcField</key>
 				<string>NSTextField</string>
 				<key>fAudDrcLabel</key>

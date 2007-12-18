@@ -391,7 +391,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		fCreateChapterMarkers,fVidTurboPassCheck,fDstMp4LargeFileCheck,fPicLabelAutoCrop,
 		fPicSettingAutoCrop,fPicSettingDetelecine,fPicLabelDetelecine,fPicLabelDenoise,fPicSettingDenoise,
         fSubForcedCheck,fPicSettingDeblock,fPicLabelDeblock,fPresetsOutlineView,fAudDrcSlider,
-        fAudDrcField,fAudDrcLabel,fDstMp4HttpOptFileCheck};
+        fAudDrcField,fAudDrcLabel,fDstMp4HttpOptFileCheck,fAudDrcDescLabel1,fAudDrcDescLabel2,fAudDrcDescLabel3,
+        fAudDrcDescLabel4};
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
