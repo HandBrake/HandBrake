@@ -55,11 +55,14 @@ namespace Handbrake.Functions
             return latestTitle;
         }
 
+        private string hb_versionInfo;
+        private string hb_version;
+        private string hb_build;
+        private string hb_file;
 
-        public string versionInfo()
+        public void getInfo()
         {
             readRss();
-            string vinfo = "";
             for (int i = 0; i < nodeChannel.ChildNodes.Count; i++)
             {
                 if (nodeChannel.ChildNodes[6].Name == "item")
@@ -68,79 +71,49 @@ namespace Handbrake.Functions
                     t = readRss();
                     if (nodeItem["title"].InnerText == t)
                     {
-                        vinfo = nodeItem["description"].InnerText;
-                        break;
+                        // Get the Version Information
+                        hb_versionInfo = nodeItem["description"].InnerText;
+
+                        // Get the version
+                        string input = nodeItem.InnerXml;
+                        Match ver = Regex.Match(input, @"sparkle:shortVersionString=""([0-9].[0-9].[0-9]*)\""");
+                        hb_version = ver.ToString().Replace("sparkle:shortVersionString=", "").Replace("\"", "");
+
+                        // Get the build number
+                        input = nodeItem.InnerXml;
+                        ver = Regex.Match(input, @"sparkle:version=""([0-9]*)\""");
+                        hb_build = ver.ToString().Replace("sparkle:version=", "").Replace("\"", "");
+
+                        // Get the update file
+                        hb_file = nodeItem["windows"].InnerText;
+
                     }
                 }
             }
-
-            return vinfo;
          }
+
+        public string versionInfo()
+        {
+            getInfo();
+            return hb_versionInfo;
+        }
 
         public string version()
         {
-            readRss();
-            string vinfo = "";
-            for (int i = 0; i < nodeChannel.ChildNodes.Count; i++)
-            {
-                if (nodeChannel.ChildNodes[6].Name == "item")
-                {
-                    nodeItem = nodeChannel.ChildNodes[0];
-                    string t = readRss();
-                    if (nodeItem["title"].InnerText == t)
-                    {
-                        string input = nodeItem.InnerXml;
-                        Match ver = Regex.Match(input, @"sparkle:shortVersionString=""([0-9].[0-9].[0-9]*)\""");
-                        vinfo = ver.ToString().Replace("sparkle:shortVersionString=", "").Replace("\"", "");
-
-                        break;
-                    }
-                }
-            }
-            return vinfo;
+            getInfo();
+            return hb_version;
         }
 
         public string build()
         {
-            readRss();
-            string vinfo = "";
-            for (int i = 0; i < nodeChannel.ChildNodes.Count; i++)
-            {
-                if (nodeChannel.ChildNodes[6].Name == "item")
-                {
-                    nodeItem = nodeChannel.ChildNodes[0];
-                    string t = readRss();
-                    if (nodeItem["title"].InnerText == t)
-                    {
-                        string input = nodeItem.InnerXml; 
-                        Match ver = Regex.Match(input, @"sparkle:version=""([0-9]*)\""");
-                        vinfo = ver.ToString().Replace("sparkle:version=", "").Replace("\"", "");
-                        break;
-                    }
-                }
-            }
-            return vinfo;
+            getInfo();
+            return hb_build;
         }
 
         public string downloadFile()
         {
-            readRss();
-            string file = "";
-            for (int i = 0; i < nodeChannel.ChildNodes.Count; i++)
-            {
-                if (nodeChannel.ChildNodes[6].Name == "item")
-                {
-                    nodeItem = nodeChannel.ChildNodes[0];
-                    t = readRss();
-                    if (nodeItem["title"].InnerText == t)
-                    {
-                        file = nodeItem["windows"].InnerText;
-                        break;
-                    }
-                }
-            }
-
-            return file;
-         }
+            getInfo();
+            return hb_file;
+        }
     }
 }

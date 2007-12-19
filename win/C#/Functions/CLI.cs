@@ -60,28 +60,5 @@ namespace Handbrake.Functions
             }
             return hbProc;
         }
-
-        public void killCLI()
-        {
-            try
-            {
-                hbProc.Kill();
-            }
-            catch (Exception)
-            {
-                // No need to do anything. Chances are the process was already dead.
-            }
-        }
-
-        public void closeCLI()
-        {
-            hbProc.Close();
-            hbProc.Dispose();
-        }
-
-        public void setNull()
-        {
-            hbProc = new Process();
-        }
     }
 }

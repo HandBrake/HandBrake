@@ -36,7 +36,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="build" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">1101</Value>
+      <Value Profile="(Default)">1000</Value>
     </Setting>
     <Setting Name="skipversion" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>

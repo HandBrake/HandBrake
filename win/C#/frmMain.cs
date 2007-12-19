@@ -14,7 +14,6 @@ using System.Runtime.InteropServices;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-
 namespace Handbrake
 {
     public partial class frmMain : Form
@@ -1207,8 +1206,6 @@ namespace Handbrake
         public string GenerateTheQuery()
         {
             
-
-
             // Source tab
             #region source
             string source = text_source.Text;
@@ -1859,6 +1856,7 @@ namespace Handbrake
             this.thisDVD = dvd;
         }
 
+        // Automatic File Naming
         public void autoName()
         {
             if (Properties.Settings.Default.autoNaming == "Checked")
@@ -1921,6 +1919,7 @@ namespace Handbrake
             }
         }
 
+        // Chapter Marker Tab
         private void chapterNaming()
         {
             try
