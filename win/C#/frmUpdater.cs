@@ -1,9 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Xml;
@@ -23,8 +18,7 @@ namespace Handbrake
         }
 
         private void getRss()
-        {
-            
+        { 
             wBrowser.DocumentText = "<font face=\"verdana\" size=\"1\">" + rssRead.versionInfo() + "</font>";
         }
 
@@ -51,6 +45,7 @@ namespace Handbrake
             try
             {
                 Properties.Settings.Default.skipversion = int.Parse(rssRead.build());
+                Properties.Settings.Default.Save();
             }
             catch (Exception exc)
             {

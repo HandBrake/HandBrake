@@ -28,8 +28,9 @@ namespace Handbrake
         private Process hbProc;
         private Parsing.DVD thisDVD;
         private frmQueue queueWindow = new frmQueue();
+        private delegate void updateStatusChanger();
+        Functions.Common hb_common_func = new Functions.Common();
 
-        // The main window beings here...
         public frmMain()
         {
             // Load the splash screen in this thread
@@ -38,14 +39,8 @@ namespace Handbrake
 
             //Create a label that can be updated from the parent thread.
             Label lblStatus = new Label();
-
-            //Size the label
             lblStatus.Size = new Size(250, 20);
-
-            //Position the label
             lblStatus.Location = new Point(10, 280);
-
-            //Put the label on the splash form
             splash.Controls.Add(lblStatus);
 
             //Fire a thread to wait for 2 seconds.  The splash screen will exit when the time expires
@@ -54,10 +49,9 @@ namespace Handbrake
 
             InitializeComponent();
 
-            // show the form, but leave disabled until preloading is complete
+            // show the form, but leave disabled until preloading is complete then show the main form
             this.Enabled = false;
 
-            // Show the main form
             this.Show();
 
             // Forces frmMain to draw
@@ -70,9 +64,7 @@ namespace Handbrake
             if (Properties.Settings.Default.updateStatus == "Checked")
             {
                 lblStatus.Text = "Checking for updates ...";
-                // redraw the splash screen
                 Application.DoEvents();
-                // Run the update checker.
                 Thread updateCheckThread = new Thread(startupUpdateCheck);
                 updateCheckThread.Start();
                 Thread.Sleep(100);
@@ -99,9 +91,7 @@ namespace Handbrake
                 Thread.Sleep(100);
             }
             else
-            {
                 loadNormalPreset();
-            }
 
             // Enable or disable tooltips
             if (Properties.Settings.Default.tooltipEnable == "Checked")
@@ -132,8 +122,7 @@ namespace Handbrake
             // Turn the interface back to the user
             this.Enabled = true;
         }
-
-        private delegate void updateStatusChanger();
+    
         private void startupUpdateCheck()
         {
             try
@@ -143,8 +132,8 @@ namespace Handbrake
                     this.BeginInvoke(new updateStatusChanger(startupUpdateCheck));
                     return;
                 }
-
-                Boolean update = updateCheck();
+                
+                Boolean update = hb_common_func.updateCheck();
                 if (update == true)
                 {
                     lbl_update.Visible = true;
@@ -166,11 +155,8 @@ namespace Handbrake
 
         private void showSplash(object sender)
         {
-            // Display splash screen for 1.5 Seconds
             Form splash = new frmSplashScreen();
             splash.Show();
-            Thread.Sleep(1500);
-            splash.Close(); // Then close.
         }
 
         private void loadUserDefaults()
@@ -181,10 +167,8 @@ namespace Handbrake
                 // Some things that need to be done to reset some gui components:
                 CheckPixelRatio.CheckState = CheckState.Unchecked;
 
-                // Send the query from the file to the Query Parser class
+                // Send the query from the file to the Query Parser class Then load the preset
                 Functions.QueryParser presetQuery = Functions.QueryParser.Parse(userDefaults);
-
-                // Now load the preset
                 presetLoader(presetQuery, "User Defaults ");
             }
             catch (Exception exc)
@@ -210,20 +194,11 @@ namespace Handbrake
             {
                 try
                 {
-                    // Some things that need to be done to reset some gui components:
-                    CheckPixelRatio.CheckState = CheckState.Unchecked;
-
-                    //---------------------------
-                    // Get the Preset
-                    // ---------------------------
-
                     // Create StreamReader & open file
                     StreamReader line = new StreamReader(filename);
 
-                    // Send the query from the file to the Query Parser class
+                    // Send the query from the file to the Query Parser class then load the preset
                     Functions.QueryParser presetQuery = Functions.QueryParser.Parse(line.ReadLine());
-
-                    // Now load the preset
                     presetLoader(presetQuery, filename);
 
                     // Close the stream
@@ -231,8 +206,7 @@ namespace Handbrake
                 }
                 catch (Exception exc)
                 {
-                    MessageBox.Show("Unable to load profile.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                    MessageBox.Show(exc.ToString());
+                    MessageBox.Show("Unable to load profile. \n\n" + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                 }
             }
         }
@@ -293,7 +267,6 @@ namespace Handbrake
 
         private void mnu_showCommand_Click(object sender, EventArgs e)
         {
-
             Form query = new frmQuery(GenerateTheQuery());
             query.ShowDialog();
         }
@@ -301,7 +274,6 @@ namespace Handbrake
         #endregion
 
         #region Presets Menu
-        Boolean presetStatus;
 
         private void mnu_presetReset_Click(object sender, EventArgs e)
         {
@@ -347,7 +319,7 @@ namespace Handbrake
 
         private void mnu_UpdateCheck_Click(object sender, EventArgs e)
         {
-            Boolean update = updateCheck();
+            Boolean update = hb_common_func.updateCheck();
             if (update == true)
             {
                 lbl_update.Visible = true;
@@ -355,9 +327,7 @@ namespace Handbrake
                 updateWindow.Show();
             }
             else
-            {
                 MessageBox.Show("There are no new updates at this time.", "Update Check", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
         }
 
         private void mnu_about_Click(object sender, EventArgs e)
@@ -402,16 +372,13 @@ namespace Handbrake
 
             // If there are no titles in the dropdown menu then the scan has obviously failed. Display an error message explaining to the user.
             if (drp_dvdtitle.Items.Count == 0)
-            {
                 MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source. Please refer to the FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-            }
         }
 
         private void btn_destBrowse_Click(object sender, EventArgs e)
         {
             // This removes the file extension from the filename box on the save file dialog.
             // It's daft but some users don't realise that typing an extension overrides the dropdown extension selected.
-            // Should be a nicer way to do this.
             DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", "").Replace(".m4v", "").Replace(".mkv", "").Replace(".ogm", "").Replace(".avi", "");
 
             // Show the dialog and set the main form file path
@@ -420,11 +387,7 @@ namespace Handbrake
 
             // Quicktime requires .m4v file for chapter markers to work. If checked, change the extension to .m4v (mp4 and m4v are the same thing)
             if (Check_ChapterMarkers.Checked)
-            {
-                string destination = text_destination.Text;
-                destination = destination.Replace(".mp4", ".m4v");
-                text_destination.Text = destination;
-            }
+                text_destination.Text = text_destination.Text.Replace(".mp4", ".m4v");
         }
 
         private void btn_h264Clear_Click(object sender, EventArgs e)
@@ -460,17 +423,13 @@ namespace Handbrake
                 drop_chapterStart.Items.Clear();
                 drop_chapterStart.Items.AddRange(selectedTitle.Chapters.ToArray());
                 if (drop_chapterStart.Items.Count > 0)
-                {
                     drop_chapterStart.Text = drop_chapterStart.Items[0].ToString();
-                }
 
                 // Populate the Final Chapter Dropdown
                 drop_chapterFinish.Items.Clear();
                 drop_chapterFinish.Items.AddRange(selectedTitle.Chapters.ToArray());
                 if (drop_chapterFinish.Items.Count > 0)
-                {
                     drop_chapterFinish.Text = drop_chapterFinish.Items[drop_chapterFinish.Items.Count - 1].ToString();
-                }
 
                 // Populate the Audio Channels Dropdown
                 drp_track1Audio.Items.Clear();
@@ -478,17 +437,13 @@ namespace Handbrake
                 drp_track1Audio.Items.Add("None");
                 drp_track1Audio.Items.AddRange(selectedTitle.AudioTracks.ToArray());
                 if (drp_track1Audio.Items.Count > 0)
-                {
                     drp_track1Audio.Text = drp_track1Audio.Items[0].ToString();
-                }
+
                 drp_track2Audio.Items.Clear();
                 drp_track2Audio.Items.Add("None");
                 drp_track2Audio.Items.AddRange(selectedTitle.AudioTracks.ToArray());
                 if (drp_track2Audio.Items.Count > 0)
-                {
                     drp_track2Audio.Text = drp_track2Audio.Items[0].ToString();
-                }
-
 
                 // Populate the Subtitles dropdown
                 drp_subtitle.Items.Clear();
@@ -496,12 +451,11 @@ namespace Handbrake
                 drp_subtitle.Items.Add("Autoselect");
                 drp_subtitle.Items.AddRange(selectedTitle.Subtitles.ToArray());
                 if (drp_subtitle.Items.Count > 0)
-                {
                     drp_subtitle.Text = drp_subtitle.Items[0].ToString();
-                }
+
             }
 
-            // Run the Autonaming function
+            // Run the autoName & chapterNaming functions
             autoName();
             chapterNaming();
         }
@@ -517,9 +471,7 @@ namespace Handbrake
                     int chapterStart = int.Parse(drop_chapterStart.Text);
 
                     if (chapterFinish < chapterStart)
-                    {
                         drop_chapterStart.BackColor = Color.LightCoral;
-                    }
                 }
                 catch (Exception)
                 {
@@ -543,9 +495,7 @@ namespace Handbrake
                     int chapterStart = int.Parse(drop_chapterStart.Text);
 
                     if (chapterFinish < chapterStart)
-                    {
                         drop_chapterFinish.BackColor = Color.LightCoral;
-                    }
                 }
                 catch (Exception)
                 {
@@ -597,13 +547,9 @@ namespace Handbrake
                 else
                 {
                     if ((int.Parse(text_width.Text) % 16) != 0)
-                    {
                         text_width.BackColor = Color.LightCoral;
-                    }
                     else
-                    {
                         text_width.BackColor = Color.LightGreen;
-                    }
                 }
 
                 if (lbl_Aspect.Text != "Select a Title")
@@ -618,18 +564,13 @@ namespace Handbrake
                         text_width.BackColor = Color.White;
                     }
                     else
-                    {
                         text_height.Text = height.ToString();
-                    }
                 }
             }
             catch (Exception)
             {
                 // No need to throw an error here.
-                // Note on non english systems, this will throw an error because of double.Parse(lbl_Aspect.Text); not working.
             }
-
-
         }
 
         private void text_height_TextChanged(object sender, EventArgs e)
@@ -645,13 +586,9 @@ namespace Handbrake
                 else
                 {
                     if ((int.Parse(text_height.Text) % 16) != 0)
-                    {
                         text_height.BackColor = Color.LightCoral;
-                    }
                     else
-                    {
                         text_height.BackColor = Color.LightGreen;
-                    }
                 }
 
             }
@@ -681,7 +618,6 @@ namespace Handbrake
                 text_right.Enabled = false;
                 text_top.Enabled = false;
                 text_bottom.Enabled = false;
-
 
                 if (lbl_RecomendedCrop.Text != "Select a Title")
                 {
@@ -767,9 +703,7 @@ namespace Handbrake
             if (check_2PassEncode.CheckState.ToString() == "Checked")
             {
                 if (drp_videoEncoder.Text.Contains("H.264"))
-                {
                     check_turbo.Enabled = true;
-                }
             }
             else
             {
@@ -801,9 +735,7 @@ namespace Handbrake
                 check_iPodAtom.CheckState = CheckState.Unchecked;
             }
             else
-            {
                 lbl_ipodAtom.Visible = false;
-            }
         }
 
         private void check_optimiseMP4_CheckedChanged(object sender, EventArgs e)
@@ -814,17 +746,13 @@ namespace Handbrake
                 check_optimiseMP4.CheckState = CheckState.Unchecked;
             }
             else
-            {
                 check_optimiseMP4.BackColor = Color.Transparent;
-            }
         }
 
         private void drp_dvdtitle_Click(object sender, EventArgs e)
         {
             if (drp_dvdtitle.Items.Count == 0)
-            {
                 MessageBox.Show("There are no titles to select. Please scan the DVD by clicking the 'browse' button above before trying to select a title.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-            }
         }
 
         private void drp_audioCodec_SelectedIndexChanged(object sender, EventArgs e)
@@ -956,9 +884,8 @@ namespace Handbrake
             else
             {
                 if (check_2PassEncode.CheckState == CheckState.Checked)
-                {
                     check_turbo.Enabled = true;
-                }
+
                 h264Tab.Enabled = true;
                 check_iPodAtom.Enabled = true;
                 lbl_ipodAtom.Visible = false;
@@ -1021,7 +948,6 @@ namespace Handbrake
         // Function to select the default preset.
         private void loadNormalPreset()
         {
-
             int normal = 0;
             foreach (TreeNode treenode in treeView_presets.Nodes)
             {
@@ -1032,9 +958,6 @@ namespace Handbrake
             TreeNode np = treeView_presets.Nodes[normal];
 
             treeView_presets.SelectedNode = np;
-
-
-
         }
 
         // Buttons
@@ -1081,9 +1004,7 @@ namespace Handbrake
 
                     }
                     else
-                    {
                         presetInput.ReadLine();
-                    }
                 }
             }
             catch (Exception exc)
@@ -1091,6 +1012,7 @@ namespace Handbrake
                 MessageBox.Show(exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         #endregion
 
         //---------------------------------------------------
@@ -1145,9 +1067,7 @@ namespace Handbrake
         {
             // Make sure we are not already encoding and if we are then display an error.
             if (hbProc != null)
-            {
                 MessageBox.Show("Handbrake is already encoding a video!", "Status", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
             else
             {
                 hbProc = process.runCli(this, (string)state, false, false, false, false);
@@ -1194,7 +1114,6 @@ namespace Handbrake
         }
 
         #endregion
-
 
         //---------------------------------------------------
         //  Some Functions
@@ -1680,21 +1599,7 @@ namespace Handbrake
 
             drp_videoEncoder.Text = presetQuery.VideoEncoder;
             drp_audioCodec.Text = presetQuery.AudioEncoder;
-            if (presetQuery.Width != 0)
-                text_width.Text = presetQuery.Width.ToString();
-            else
-            {
-                text_width.Text = "";
-                text_width.BackColor = Color.White;
-            }
 
-            if (presetQuery.Height != 0)
-                text_height.Text = presetQuery.Height.ToString();
-            else
-            {
-                text_height.Text = "";
-                text_height.BackColor = Color.White;
-            }
             #endregion
 
             // Picture Settings Tab
@@ -1733,6 +1638,22 @@ namespace Handbrake
                 check_lAnamorphic.CheckState = CheckState.Checked;
             else
                 check_lAnamorphic.CheckState = CheckState.Unchecked;
+
+            if (presetQuery.Width != 0)
+                text_width.Text = presetQuery.Width.ToString();
+            else
+            {
+                text_width.Text = "";
+                text_width.BackColor = Color.White;
+            }
+
+            if (presetQuery.Height != 0)
+                text_height.Text = presetQuery.Height.ToString();
+            else
+            {
+                text_height.Text = "";
+                text_height.BackColor = Color.White;
+            }
 
             if (presetQuery.VFR == true)
                 check_vfr.CheckState = CheckState.Checked;
@@ -1821,34 +1742,6 @@ namespace Handbrake
             // Set the preset name
             groupBox_output.Text = "Output Settings (Preset: " + name + ")";
             #endregion
-        }
-
-        private Boolean updateCheck()
-        {
-            try
-            {
-                Functions.RssReader rssRead = new Functions.RssReader();
-                string build = rssRead.build();
-
-                int latest = int.Parse(build);
-                int current = Properties.Settings.Default.build;
-                int skip = Properties.Settings.Default.skipversion;
-
-                if (latest == skip)
-                {
-                    return false;
-                }
-                else
-                {
-                    Boolean update = (latest > current);
-                    return update;
-                }
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.ToString());
-                return false;
-            }
         }
 
         public void setStreamReader(Parsing.DVD dvd)
@@ -1970,7 +1863,6 @@ namespace Handbrake
                     csv.Append(",");
                     csv.Append(row.Cells[1].Value.ToString());
                     csv.Append(Environment.NewLine);
-
                 }
                 StreamWriter file = new StreamWriter(path);
                 file.Write(csv.ToString());
