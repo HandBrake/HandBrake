@@ -1928,15 +1928,23 @@ namespace Handbrake
                 data_chpt.Rows.Clear();
                 int i = 0;
                 int rowCount = 0;
+                int start = 0;
+                int finish = 0;
                 if (drop_chapterFinish.Text != "Auto")
-                    rowCount = int.Parse(drop_chapterFinish.Text);
+                    finish = int.Parse(drop_chapterFinish.Text);
+
+                if (drop_chapterStart.Text != "Auto")
+                     start = int.Parse(drop_chapterStart.Text);
+
+                rowCount = finish - (start -1);
+
                 while (i < rowCount)
                 {
                     DataGridViewRow row = new DataGridViewRow();
 
                     data_chpt.Rows.Insert(i, row);
                     data_chpt.Rows[i].Cells[0].Value = (i + 1);
-                    data_chpt.Rows[i].Cells[1].Value = "Chapter" + (i + 1);
+                    data_chpt.Rows[i].Cells[1].Value = "Chapter " + (i + 1);
                     i++;
                 }
             }
@@ -1962,7 +1970,7 @@ namespace Handbrake
                     csv.Append(row.Cells[0].Value.ToString());
                     csv.Append(",");
                     csv.Append(row.Cells[1].Value.ToString());
-                    csv.Append("\n");
+                    csv.Append(Environment.NewLine);
 
                 }
                 StreamWriter file = new StreamWriter(path);
