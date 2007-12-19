@@ -1523,8 +1523,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     job->abitrate = [[fAudBitratePopUp selectedItem] tag];
     
     /* Dynamic Range Compression */
-    job->dynamic_range_compression = [fAudDrcSlider floatValue];
-    
+    job->dynamic_range_compression = [fAudDrcField floatValue];
     
     /* set vfr according to the Picture Window */
     if ([fPictureController vfr])
@@ -2346,13 +2345,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	[self twoPassCheckboxChanged: sender];
 }
 
-- (IBAction) audioDRCSliderChanged: (id) sender
-{
-    [fAudDrcField setStringValue: [NSString stringWithFormat: @"%f", [fAudDrcSlider floatValue]]];
-    [self customSettingUsed: sender];
-}
-
-
 /* Method to determine if we should change the UI
 To reflect whether or not a Preset is being used or if
 the user is using "Custom" settings by determining the sender*/
@@ -3005,6 +2997,12 @@ the user is using "Custom" settings by determining the sender*/
         [fAudBitratePopUp selectItemWithTag: hb_audio_bitrates[hb_audio_bitrates_default].rate];
     }
 
+}
+
+- (IBAction) audioDRCSliderChanged: (id) sender
+{
+    [fAudDrcField setStringValue: [NSString stringWithFormat: @"%.2f", [fAudDrcSlider floatValue]]];
+    [self customSettingUsed: sender];
 }
 
 - (IBAction) subtitleSelectionChanged: (id) sender
