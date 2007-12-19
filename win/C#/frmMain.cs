@@ -113,6 +113,9 @@ namespace Handbrake
                 Thread.Sleep(100);
             }
 
+            // Make sure a default cropping option is selected. Not sure why this is not defaulting like the other checkdowns,
+            // Can fix it later.
+            drp_crop.SelectedItem = "Automatic";
 
             //Finished Loading
             lblStatus.Text = "Loading Complete!";
@@ -287,6 +290,13 @@ namespace Handbrake
         {
             Form Options = new frmOptions();
             Options.ShowDialog();
+        }
+
+        private void mnu_showCommand_Click(object sender, EventArgs e)
+        {
+
+            Form query = new frmQuery(GenerateTheQuery());
+            query.ShowDialog();
         }
 
         #endregion
@@ -494,6 +504,7 @@ namespace Handbrake
 
             // Run the Autonaming function
             autoName();
+            chapterNaming();
         }
 
         private void drop_chapterStart_SelectedIndexChanged(object sender, EventArgs e)
@@ -518,6 +529,7 @@ namespace Handbrake
             }
             // Run the Autonaming function
             autoName();
+            chapterNaming();
 
         }
 
@@ -544,6 +556,7 @@ namespace Handbrake
 
             // Run the Autonaming function
             autoName();
+            chapterNaming();
         }
 
         private void text_bitrate_TextChanged(object sender, EventArgs e)
@@ -608,7 +621,6 @@ namespace Handbrake
                     else
                     {
                         text_height.Text = height.ToString();
-                        text_width.BackColor = Color.LightGreen;
                     }
                 }
             }
@@ -799,12 +811,12 @@ namespace Handbrake
         {
             if (!text_destination.Text.Contains(".mp4"))
             {
-                lbl_optimize.Visible = true;
+                check_optimiseMP4.BackColor = Color.LightCoral;
                 check_optimiseMP4.CheckState = CheckState.Unchecked;
             }
             else
             {
-                lbl_optimize.Visible = false;
+                check_optimiseMP4.BackColor = Color.Transparent;
             }
         }
 
@@ -914,12 +926,17 @@ namespace Handbrake
                 string destination = text_destination.Text;
                 destination = destination.Replace(".mp4", ".m4v");
                 text_destination.Text = destination;
+                data_chpt.Rows.Clear();
+                data_chpt.Enabled = true;
+                chapterNaming();
             }
             else
             {
                 string destination = text_destination.Text;
                 destination = destination.Replace(".m4v", ".mp4");
                 text_destination.Text = destination;
+                data_chpt.Rows.Clear();
+                data_chpt.Enabled = false;
             }
         }
 
@@ -935,6 +952,7 @@ namespace Handbrake
                 check_iPodAtom.Enabled = false;
                 check_iPodAtom.Checked = false;
                 lbl_ipodAtom.Visible = false;
+                check_optimiseMP4.Enabled = false;
             }
             else
             {
@@ -945,6 +963,7 @@ namespace Handbrake
                 h264Tab.Enabled = true;
                 check_iPodAtom.Enabled = true;
                 lbl_ipodAtom.Visible = false;
+                check_optimiseMP4.Enabled = true;
             }
 
         }
@@ -1047,7 +1066,7 @@ namespace Handbrake
                         string preset = presetInput.ReadLine().Replace("+ ", "");
                         Regex r = new Regex("(:  )"); // Split on hyphens. 
                         string[] presetName = r.Split(preset);
-                        
+
 
                         if (selectedPreset == presetName[0])
                         {
@@ -1115,20 +1134,12 @@ namespace Handbrake
                 MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
-                btn_eCancel.Enabled = true;
                 string query = GenerateTheQuery();
 
                 ThreadPool.QueueUserWorkItem(procMonitor, query);
                 lbl_encode.Visible = true;
                 lbl_encode.Text = "Encoding in Progress";
             }
-        }
-
-        private void btn_eCancel_Click(object sender, EventArgs e)
-        {
-            process.killCLI();
-            process.setNull();
-            lbl_encode.Text = "Encoding Canceled";
         }
 
         private void procMonitor(object state)
@@ -1142,36 +1153,6 @@ namespace Handbrake
             {
                 hbProc = process.runCli(this, (string)state, false, false, false, false);
                 hbProc.WaitForExit();
-
-                try
-                {
-                    /*
-                    //*****************************************************************************************
-                    // BUG!
-                    // When the below code is used and standard error is set to true, hbcli is outputing a
-                    // video stream which has mild corruption issues every few seconds.
-                    // Maybe an issue with the Parser cauing the CLI to hickup/pause?
-                    //*****************************************************************************************
-
-                    
-                    Parsing.Parser encode = new Parsing.Parser(hbProc.StandardOutput.BaseStream);
-                    encode.OnEncodeProgress += encode_OnEncodeProgress;
-                    while (!encode.EndOfStream)
-                    {
-                        encode.ReadLine();
-                    }
-
-                    hbProc.WaitForExit();
-                    process.closeCLI();
-                     */
-
-                }
-                catch (Exception exc)
-                {
-                    // Do nothing
-                    MessageBox.Show(exc.ToString());
-                }
-
 
                 setEncodeLabel();
                 hbProc = null;
@@ -1213,18 +1194,6 @@ namespace Handbrake
             lbl_encode.Text = "Encoding Finished";
         }
 
-        private void encode_OnEncodeProgress(object Sender, int CurrentTask, int TaskCount, float PercentComplete, float CurrentFps, float AverageFps, TimeSpan TimeRemaining)
-        {
-
-            if (this.InvokeRequired)
-            {
-                this.BeginInvoke(new Parsing.EncodeProgressEventHandler(encode_OnEncodeProgress),
-                    new object[] { Sender, CurrentTask, TaskCount, PercentComplete, CurrentFps, AverageFps, TimeRemaining });
-                return;
-            }
-            lbl_encode.Text = string.Format("Encode Progress: {0}%,       FPS: {1},       Avg FPS: {2},       Time Remaining: {3} ", PercentComplete, CurrentFps, AverageFps, TimeRemaining);
-        }
-
         #endregion
 
 
@@ -1237,6 +1206,9 @@ namespace Handbrake
 
         public string GenerateTheQuery()
         {
+            
+
+
             // Source tab
             #region source
             string source = text_source.Text;
@@ -1348,7 +1320,6 @@ namespace Handbrake
             string deinterlace = "";
             string grayscale = "";
             string pixelRatio = "";
-            string ChapterMarkers = "";
             string vfr = "";
             string deblock = "";
             string detelecine = "";
@@ -1379,16 +1350,16 @@ namespace Handbrake
                 case "None":
                     deinterlace = "";
                     break;
-                case "Original (Fast)":
+                case "Fast":
                     deinterlace = " --deinterlace=fast";
                     break;
-                case "yadif (Slow)":
+                case "Slow":
                     deinterlace = " --deinterlace=slow";
                     break;
-                case "yadif + mcdeint (Slower)":
+                case "Slower":
                     deinterlace = " --deinterlace=slower";
                     break;
-                case "yadif + mcdeint (Slowest)":
+                case "Slowest":
                     deinterlace = " --deinterlace=slowest";
                     break;
                 default:
@@ -1402,9 +1373,6 @@ namespace Handbrake
             if (CheckPixelRatio.Checked)
                 pixelRatio = " -p ";
 
-            if (Check_ChapterMarkers.Checked)
-                ChapterMarkers = " -m ";
-
             if (check_deblock.Checked)
                 deblock = " --deblock";
 
@@ -1417,7 +1385,7 @@ namespace Handbrake
             if (check_lAnamorphic.Checked)
                 lanamorphic = " -P ";
 
-            string queryPictureSettings = cropOut + deinterlace + deblock + detelecine + vfr + grayscale + pixelRatio + lanamorphic + ChapterMarkers;
+            string queryPictureSettings = cropOut + deinterlace + deblock + detelecine + vfr + grayscale + pixelRatio + lanamorphic;
             #endregion
 
             // Video Settings Tab
@@ -1613,6 +1581,31 @@ namespace Handbrake
             string queryAudioSettings = audioBitrate + audioSampleRate + drc + audioChannels + SixChannelAudio + subScan + subtitles + forced;
             #endregion
 
+            // Chapter Markers Tab
+            #region Chapter Markers
+
+            string ChapterMarkers = "";
+
+            if (Check_ChapterMarkers.Checked)
+            {
+                Boolean saveCSV = chapterCSVSave();
+                if (saveCSV == false)
+                {
+                    MessageBox.Show("Unable to save Chapter Makrers file! \n Chapter marker names will NOT be saved in your encode \n\n", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    ChapterMarkers = " -m ";
+                }
+                else
+                {
+                    string path = Application.StartupPath.ToString();
+                    path = "\"" + path + "\\chapters.csv\" ";
+
+                    ChapterMarkers = " --markers=" + path;
+                }
+            }
+
+            string chapter_markers = ChapterMarkers;
+            #endregion
+
             // H264 Tab
             #region  H264 Tab
 
@@ -1646,7 +1639,7 @@ namespace Handbrake
                 verbose = " -v ";
             #endregion
 
-            return querySource + queryDestination + queryPictureSettings + queryVideoSettings + h264Settings + queryAudioSettings + queryAdvancedSettings + verbose;
+            return querySource + queryDestination + queryPictureSettings + queryVideoSettings + h264Settings + queryAudioSettings + ChapterMarkers + queryAdvancedSettings + verbose;
         }
 
         private void presetLoader(Functions.QueryParser presetQuery, string name)
@@ -1796,7 +1789,7 @@ namespace Handbrake
             #endregion
 
             // Audio Settings Tab
-            #region audio
+            #region Audio
             drp_audioBitrate.Text = presetQuery.AudioBitrate;
             drp_audioSampleRate.Text = presetQuery.AudioSampleBitrate;
             drp_track1Audio.Text = presetQuery.AudioTrack1;
@@ -1813,9 +1806,13 @@ namespace Handbrake
                 check_forced.CheckState = CheckState.Unchecked;
 
             // Dynamic Range Compression (Should be a float but we use double for ease)
-            double value = presetQuery.DRC * 10;
+            double value = presetQuery.DRC;
+            if (value > 0)
+                value = value - 10;
             slider_drc.Value = int.Parse(value.ToString());
-            lbl_drc.Text = presetQuery.DRC.ToString();
+
+            double actualValue = presetQuery.DRC / 10;
+            lbl_drc.Text = actualValue.ToString();
 
 
             #endregion
@@ -1893,7 +1890,7 @@ namespace Handbrake
                     if (!text_destination.Text.Contains("\\"))
                     {
                         string filePath = "";
-                        if (Properties.Settings.Default.autoNamePath != "")
+                        if (Properties.Settings.Default.autoNamePath.Trim() != "")
                             filePath = Properties.Settings.Default.autoNamePath + "\\";
                         text_destination.Text = filePath + source + "_T" + title + "_C" + cs + dash + cf + ".mp4";
                     }
@@ -1924,15 +1921,65 @@ namespace Handbrake
             }
         }
 
-        #endregion
-
-        private void mnu_showCommand_Click(object sender, EventArgs e)
+        private void chapterNaming()
         {
+            try
+            {
+                data_chpt.Rows.Clear();
+                int i = 0;
+                int rowCount = 0;
+                if (drop_chapterFinish.Text != "Auto")
+                    rowCount = int.Parse(drop_chapterFinish.Text);
+                while (i < rowCount)
+                {
+                    DataGridViewRow row = new DataGridViewRow();
 
-            Form query = new frmQuery(GenerateTheQuery());
-            query.ShowDialog();
+                    data_chpt.Rows.Insert(i, row);
+                    data_chpt.Rows[i].Cells[0].Value = (i + 1);
+                    data_chpt.Rows[i].Cells[1].Value = "Chapter" + (i + 1);
+                    i++;
+                }
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("chapterNaming() Error has occured: \n" + exc.ToString());
+            }
         }
 
+        private Boolean chapterCSVSave()
+        {
+            try
+            {
+                string appPath = Application.StartupPath.ToString();
+                appPath = appPath + "\\";
+
+                string path = appPath + "chapters.csv";
+
+                StringBuilder csv = new StringBuilder();
+
+                foreach (DataGridViewRow row in data_chpt.Rows)
+                {
+                    csv.Append(row.Cells[0].Value.ToString());
+                    csv.Append(",");
+                    csv.Append(row.Cells[1].Value.ToString());
+                    csv.Append("\n");
+
+                }
+                StreamWriter file = new StreamWriter(path);
+                file.Write(csv.ToString());
+                file.Close();
+                file.Dispose();
+                return true;
+
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString(), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+        }
+
+        #endregion
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

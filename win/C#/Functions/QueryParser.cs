@@ -639,7 +639,6 @@ namespace Handbrake.Functions
                     thisQuery.q_chaptersStart = int.Parse(actTitles[0]);
                     if (actTitles.Length > 1)
                     {
-                        MessageBox.Show(actTitles[1]);
                         thisQuery.q_chaptersFinish = int.Parse(actTitles[1]);
                     }
 
@@ -739,16 +738,16 @@ namespace Handbrake.Functions
                     switch (deinterlace.ToString().Replace("--deinterlace=", ""))
                     {
                         case "fast":
-                            thisQuery.q_deinterlace = "Original (Fast)";
+                            thisQuery.q_deinterlace = "Fast";
                             break;
                         case "slow":
-                            thisQuery.q_deinterlace = "yadif (Slow)";
+                            thisQuery.q_deinterlace = "Slow";
                             break;
                         case "slower":
-                            thisQuery.q_deinterlace = "yadif + mcdeint (Slower)";
+                            thisQuery.q_deinterlace = "Slower";
                             break;
                         case "slowest":
-                            thisQuery.q_deinterlace = "yadif + mcdeint (Slowest)";
+                            thisQuery.q_deinterlace = "Slowest";
                             break;
                         default:
                             thisQuery.q_deinterlace = "None";
@@ -875,7 +874,9 @@ namespace Handbrake.Functions
                 if (drc.Success != false)
                 {
                     string value = drc.ToString().Replace("-D ", "");
-                    thisQuery.q_drc = double.Parse(value);
+                    float drcValue = float.Parse(value);
+                    drcValue = drcValue * 10;
+                    thisQuery.q_drc = drcValue;
                 }
                 else
                 {
