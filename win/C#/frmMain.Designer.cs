@@ -31,7 +31,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label Label38;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -175,6 +175,8 @@ namespace Handbrake
             this.tab_chapters = new System.Windows.Forms.TabPage();
             this.label31 = new System.Windows.Forms.Label();
             this.data_chpt = new System.Windows.Forms.DataGridView();
+            this.number = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.h264Tab = new System.Windows.Forms.TabPage();
             this.Label43 = new System.Windows.Forms.Label();
             this.label_h264 = new System.Windows.Forms.LinkLabel();
@@ -185,8 +187,6 @@ namespace Handbrake
             this.groupBox_dest = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.treeView_presets = new System.Windows.Forms.TreeView();
-            this.number = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             Label38 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.slider_drc)).BeginInit();
@@ -1913,6 +1913,22 @@ namespace Handbrake
             this.data_chpt.Size = new System.Drawing.Size(607, 199);
             this.data_chpt.TabIndex = 2;
             // 
+            // number
+            // 
+            dataGridViewCellStyle4.Format = "N0";
+            dataGridViewCellStyle4.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle4;
+            this.number.HeaderText = "Chapter Number";
+            this.number.MaxInputLength = 3;
+            this.number.Name = "number";
+            this.number.Width = 135;
+            // 
+            // name
+            // 
+            this.name.HeaderText = "Chapter Name";
+            this.name.Name = "name";
+            this.name.Width = 410;
+            // 
             // h264Tab
             // 
             this.h264Tab.BackColor = System.Drawing.SystemColors.ControlLight;
@@ -2039,22 +2055,6 @@ namespace Handbrake
             this.treeView_presets.Size = new System.Drawing.Size(177, 457);
             this.treeView_presets.TabIndex = 2;
             this.treeView_presets.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_presets_AfterSelect);
-            // 
-            // number
-            // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle1;
-            this.number.HeaderText = "Chapter Number";
-            this.number.MaxInputLength = 3;
-            this.number.Name = "number";
-            this.number.Width = 135;
-            // 
-            // name
-            // 
-            this.name.HeaderText = "Chapter Name";
-            this.name.Name = "name";
-            this.name.Width = 410;
             // 
             // frmMain
             // 
@@ -2229,11 +2229,9 @@ namespace Handbrake
         internal System.Windows.Forms.CheckBox check_lAnamorphic;
         internal System.Windows.Forms.CheckBox check_vfr;
         internal System.Windows.Forms.CheckBox check_iPodAtom;
-        private System.Windows.Forms.CheckBox check_optimiseMP4;
         internal System.Windows.Forms.Label lbl_vfr;
         internal System.Windows.Forms.Label lbl_ipodAtom;
         internal System.Windows.Forms.Label label25;
-        private System.Windows.Forms.NumericUpDown text_right;
         internal System.Windows.Forms.Label label26;
         internal System.Windows.Forms.Label Label56;
         internal System.Windows.Forms.Label lbl_Aspect;
@@ -2241,11 +2239,7 @@ namespace Handbrake
         internal System.Windows.Forms.TextBox text_height;
         internal System.Windows.Forms.Label Label55;
         internal System.Windows.Forms.TextBox text_width;
-        private System.Windows.Forms.NumericUpDown text_bottom;
-        private System.Windows.Forms.NumericUpDown text_top;
-        private System.Windows.Forms.NumericUpDown text_left;
         internal System.Windows.Forms.Label label27;
-        private System.Windows.Forms.CheckBox check_forced;
         internal System.Windows.Forms.ComboBox drp_track2Audio;
         internal System.Windows.Forms.Label label28;
         internal System.Windows.Forms.TrackBar slider_drc;
@@ -2266,9 +2260,15 @@ namespace Handbrake
         internal System.Windows.Forms.RichTextBox rtf_h264advanced;
         internal System.Windows.Forms.Label Label92;
         internal System.Windows.Forms.Label label31;
-        private System.Windows.Forms.DataGridView data_chpt;
         private System.Windows.Forms.DataGridViewTextBoxColumn number;
         private System.Windows.Forms.DataGridViewTextBoxColumn name;
+        internal System.Windows.Forms.NumericUpDown text_right;
+        internal System.Windows.Forms.NumericUpDown text_bottom;
+        internal System.Windows.Forms.NumericUpDown text_top;
+        internal System.Windows.Forms.NumericUpDown text_left;
+        internal System.Windows.Forms.CheckBox check_optimiseMP4;
+        internal System.Windows.Forms.CheckBox check_forced;
+        internal System.Windows.Forms.DataGridView data_chpt;
 
     }
 }

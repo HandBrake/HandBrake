@@ -169,7 +169,7 @@ namespace Handbrake
 
                 // Send the query from the file to the Query Parser class Then load the preset
                 Functions.QueryParser presetQuery = Functions.QueryParser.Parse(userDefaults);
-                presetLoader(presetQuery, "User Defaults ");
+                hb_common_func.presetLoader(this, presetQuery, "User Defaults ");
             }
             catch (Exception exc)
             {
@@ -177,6 +177,13 @@ namespace Handbrake
             }
         }
 
+        #endregion
+
+        #region Set Varible Function
+        public void setStreamReader(Parsing.DVD dvd)
+        {
+            this.thisDVD = dvd;
+        }
         #endregion
 
         // -------------------------------------------------------------- 
@@ -199,7 +206,7 @@ namespace Handbrake
 
                     // Send the query from the file to the Query Parser class then load the preset
                     Functions.QueryParser presetQuery = Functions.QueryParser.Parse(line.ReadLine());
-                    presetLoader(presetQuery, filename);
+                    hb_common_func.presetLoader(this, presetQuery, filename);
 
                     // Close the stream
                     line.Close();
@@ -224,7 +231,7 @@ namespace Handbrake
                     StreamWriter line = new StreamWriter(filename);
 
                     // Generate and write the query string to the file
-                    String query = GenerateTheQuery();
+                    String query = hb_common_func.GenerateTheQuery(this);
                     line.WriteLine(query);
 
                     // close the stream
@@ -267,7 +274,7 @@ namespace Handbrake
 
         private void mnu_showCommand_Click(object sender, EventArgs e)
         {
-            Form query = new frmQuery(GenerateTheQuery());
+            Form query = new frmQuery(hb_common_func.GenerateTheQuery(this));
             query.ShowDialog();
         }
 
@@ -456,8 +463,8 @@ namespace Handbrake
             }
 
             // Run the autoName & chapterNaming functions
-            autoName();
-            chapterNaming();
+            hb_common_func.autoName(this);
+            hb_common_func.chapterNaming(this);
         }
 
         private void drop_chapterStart_SelectedIndexChanged(object sender, EventArgs e)
@@ -479,8 +486,8 @@ namespace Handbrake
                 }
             }
             // Run the Autonaming function
-            autoName();
-            chapterNaming();
+            hb_common_func.autoName(this);
+            hb_common_func.chapterNaming(this);
 
         }
 
@@ -504,8 +511,8 @@ namespace Handbrake
             }
 
             // Run the Autonaming function
-            autoName();
-            chapterNaming();
+            hb_common_func.autoName(this);
+            hb_common_func.chapterNaming(this);
         }
 
         private void text_bitrate_TextChanged(object sender, EventArgs e)
@@ -855,7 +862,7 @@ namespace Handbrake
                 text_destination.Text = destination;
                 data_chpt.Rows.Clear();
                 data_chpt.Enabled = true;
-                chapterNaming();
+                hb_common_func.chapterNaming(this);
             }
             else
             {
@@ -963,7 +970,7 @@ namespace Handbrake
         // Buttons
         private void btn_setDefault_Click(object sender, EventArgs e)
         {
-            String query = GenerateTheQuery();
+            String query = hb_common_func.GenerateTheQuery(this);
             Properties.Settings.Default.defaultUserSettings = query;
             // Save the new default Settings
             Properties.Settings.Default.Save();
@@ -999,7 +1006,7 @@ namespace Handbrake
                             Functions.QueryParser presetQuery = Functions.QueryParser.Parse(preset);
 
                             // Now load the preset
-                            presetLoader(presetQuery, selectedPreset);
+                            hb_common_func.presetLoader(this, presetQuery, selectedPreset);
                         }
 
                     }
@@ -1037,7 +1044,7 @@ namespace Handbrake
                 MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
-                string query = GenerateTheQuery();
+                string query = hb_common_func.GenerateTheQuery(this);
 
                 queueWindow.list_queue.Items.Add(query);
                 queueWindow.Show();
@@ -1055,7 +1062,7 @@ namespace Handbrake
                 MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
-                string query = GenerateTheQuery();
+                string query = hb_common_func.GenerateTheQuery(this);
 
                 ThreadPool.QueueUserWorkItem(procMonitor, query);
                 lbl_encode.Visible = true;
@@ -1111,771 +1118,6 @@ namespace Handbrake
                 return;
             }
             lbl_encode.Text = "Encoding Finished";
-        }
-
-        #endregion
-
-        //---------------------------------------------------
-        //  Some Functions
-        //  - Query Generation
-        //---------------------------------------------------
-
-        #region Program Functions
-
-        public string GenerateTheQuery()
-        {
-            
-            // Source tab
-            #region source
-            string source = text_source.Text;
-            string dvdTitle = drp_dvdtitle.Text;
-            string chapterStart = drop_chapterStart.Text;
-            string chapterFinish = drop_chapterFinish.Text;
-            int totalChapters = drop_chapterFinish.Items.Count - 1;
-            string dvdChapter = "";
-
-            if ((source != "") || (source != "Click 'Browse' to continue"))
-                source = " -i " + '"' + source + '"';
-
-            if (dvdTitle == "Automatic")
-                dvdTitle = "";
-            else
-            {
-                string[] titleInfo = dvdTitle.Split(' ');
-                dvdTitle = " -t " + titleInfo[0];
-            }
-
-            if (chapterFinish.Equals("Auto") && chapterStart.Equals("Auto"))
-                dvdChapter = "";
-            else if (chapterFinish == chapterStart)
-                dvdChapter = " -c " + chapterStart;
-            else
-                dvdChapter = " -c " + chapterStart + "-" + chapterFinish;
-
-            string querySource = source + dvdTitle + dvdChapter;
-            #endregion
-
-            // Destination tab
-            #region Destination
-
-            string destination = text_destination.Text;
-            string videoEncoder = drp_videoEncoder.Text;
-            string audioEncoder = drp_audioCodec.Text;
-            string width = text_width.Text;
-            string height = text_height.Text;
-
-            if (destination != "")
-                destination = " -o " + '"' + destination + '"'; //'"'+ 
-
-
-            switch (videoEncoder)
-            {
-                case "Mpeg 4":
-                    videoEncoder = " -e ffmpeg";
-                    break;
-                case "Xvid":
-                    videoEncoder = " -e xvid";
-                    break;
-                case "H.264":
-                    videoEncoder = " -e x264";
-                    break;
-                case "H.264 (iPod)":
-                    videoEncoder = " -e x264b30";
-                    break;
-                default:
-                    videoEncoder = " -e x264";
-                    break;
-            }
-
-            switch (audioEncoder)
-            {
-                case "AAC":
-                    audioEncoder = " -E faac";
-                    break;
-                case "MP3":
-                    audioEncoder = " -E lame";
-                    break;
-                case "Vorbis":
-                    audioEncoder = " -E vorbis";
-                    break;
-                case "AC3":
-                    audioEncoder = " -E ac3";
-                    break;
-                default:
-                    audioEncoder = " -E faac";
-                    break;
-            }
-
-            if (width != "")
-                width = " -w " + width;
-
-
-            if (height == "Auto")
-            {
-                height = "";
-            }
-            else if (height != "")
-            {
-                height = " -l " + height;
-            }
-
-
-            string queryDestination = destination + videoEncoder + audioEncoder + width + height;
-            #endregion
-
-            // Picture Settings Tab
-            #region Picture Settings Tab
-
-            string cropSetting = drp_crop.Text;
-            string cropTop = text_top.Text;
-            string cropBottom = text_bottom.Text;
-            string cropLeft = text_left.Text;
-            string cropRight = text_right.Text;
-            string cropOut = "";
-            string deInterlace_Option = drp_deInterlace_option.Text;
-            string deinterlace = "";
-            string grayscale = "";
-            string pixelRatio = "";
-            string vfr = "";
-            string deblock = "";
-            string detelecine = "";
-            string lanamorphic = "";
-
-
-
-            if (cropSetting == "Automatic")
-                cropOut = "";
-            else if (cropSetting == "No Crop")
-                cropOut = " --crop 0:0:0:0 ";
-            else
-            {
-                if (text_top.Text == "")
-                    cropTop = "0";
-                if (text_bottom.Text == "")
-                    cropBottom = "0";
-                if (text_left.Text == "")
-                    cropLeft = "0";
-                if (text_right.Text == "")
-                    cropRight = "0";
-
-                cropOut = " --crop " + cropTop + ":" + cropBottom + ":" + cropLeft + ":" + cropRight;
-            }
-
-            switch (deInterlace_Option)
-            {
-                case "None":
-                    deinterlace = "";
-                    break;
-                case "Fast":
-                    deinterlace = " --deinterlace=fast";
-                    break;
-                case "Slow":
-                    deinterlace = " --deinterlace=slow";
-                    break;
-                case "Slower":
-                    deinterlace = " --deinterlace=slower";
-                    break;
-                case "Slowest":
-                    deinterlace = " --deinterlace=slowest";
-                    break;
-                default:
-                    deinterlace = "";
-                    break;
-            }
-
-            if (check_grayscale.Checked)
-                grayscale = " -g ";
-
-            if (CheckPixelRatio.Checked)
-                pixelRatio = " -p ";
-
-            if (check_deblock.Checked)
-                deblock = " --deblock";
-
-            if (check_detelecine.Checked)
-                detelecine = " --detelecine";
-
-            if (check_vfr.Checked)
-                vfr = " -V ";
-
-            if (check_lAnamorphic.Checked)
-                lanamorphic = " -P ";
-
-            string queryPictureSettings = cropOut + deinterlace + deblock + detelecine + vfr + grayscale + pixelRatio + lanamorphic;
-            #endregion
-
-            // Video Settings Tab
-            #region Video Settings Tab
-
-            string videoBitrate = text_bitrate.Text;
-            string videoFilesize = text_filesize.Text;
-            double videoQuality = slider_videoQuality.Value;
-            string vidQSetting = "";
-            string twoPassEncoding = "";
-            string videoFramerate = drp_videoFramerate.Text;
-            string turboH264 = "";
-            string largeFile = "";
-            string denoise = "";
-            string ipodAtom = "";
-            string optimizeMP4 = "";
-
-            if (videoBitrate != "")
-                videoBitrate = " -b " + videoBitrate;
-
-            if (videoFilesize != "")
-                videoFilesize = " -S " + videoFilesize;
-
-            // Video Quality Setting
-
-            if ((videoQuality == 0))
-                vidQSetting = "";
-            else
-            {
-                videoQuality = videoQuality / 100;
-                if (videoQuality == 1)
-                {
-                    vidQSetting = "1.0";
-                }
-                vidQSetting = " -q " + videoQuality.ToString(new CultureInfo("en-US"));
-            }
-
-            if (check_2PassEncode.Checked)
-                twoPassEncoding = " -2 ";
-
-            if (videoFramerate == "Automatic")
-                videoFramerate = "";
-            else
-                videoFramerate = " -r " + videoFramerate;
-
-            if (check_turbo.Checked)
-                turboH264 = " -T ";
-
-            if (check_largeFile.Checked)
-                largeFile = " -4 ";
-
-
-            switch (drp_deNoise.Text)
-            {
-                case "None":
-                    denoise = "";
-                    break;
-                case "Weak":
-                    denoise = " --denoise=weak";
-                    break;
-                case "Medium":
-                    denoise = " --denoise=medium";
-                    break;
-                case "Strong":
-                    denoise = " --denoise=strong";
-                    break;
-                default:
-                    denoise = "";
-                    break;
-            }
-
-            if (check_iPodAtom.Checked)
-                ipodAtom = " -I ";
-
-            if (check_optimiseMP4.Checked)
-                optimizeMP4 = " -O ";
-
-
-            string queryVideoSettings = videoBitrate + videoFilesize + vidQSetting + twoPassEncoding + videoFramerate + turboH264 + ipodAtom + optimizeMP4 + largeFile + denoise;
-            #endregion
-
-            // Audio Settings Tab
-            #region Audio Settings Tab
-
-            string audioBitrate = drp_audioBitrate.Text;
-            string audioSampleRate = drp_audioSampleRate.Text;
-            string track1 = drp_track1Audio.Text;
-            string track2 = drp_track2Audio.Text;
-            string audioChannels = "";
-            string Mixdown = drp_audioMixDown.Text;
-            string SixChannelAudio = "";
-            string subtitles = drp_subtitle.Text;
-            string subScan = "";
-            string forced = "";
-            string drc = "";
-
-            if (audioBitrate != "")
-                audioBitrate = " -B " + audioBitrate;
-
-            if (audioSampleRate != "")
-                audioSampleRate = " -R " + audioSampleRate;
-
-            // Audio Track 1
-            if (track1 == "Automatic")
-                audioChannels = "";
-            else if (track1 == "")
-                audioChannels = "";
-            else if (track1 == "None")
-                audioChannels = " -a none";
-            else
-            {
-                string[] tempSub;
-                tempSub = track1.Split(' ');
-                audioChannels = " -a " + tempSub[0];
-            }
-
-            // Audio Track 2
-            if (audioChannels != "")
-            {
-                if ((track2 != "") && (track2 != "None"))
-                {
-                    string[] tempSub;
-                    tempSub = track2.Split(' ');
-                    audioChannels = audioChannels + "," + tempSub[0];
-                }
-            }
-            else
-            {
-                if ((track2 != "") && (track2 != "None"))
-                {
-                    string[] tempSub;
-                    tempSub = track2.Split(' ');
-                    audioChannels = " -a " + tempSub[0];
-                }
-            }
-
-
-
-            switch (Mixdown)
-            {
-                case "Automatic":
-                    Mixdown = "";
-                    break;
-                case "Mono":
-                    Mixdown = "mono";
-                    break;
-                case "Stereo":
-                    Mixdown = "stereo";
-                    break;
-                case "Dolby Surround":
-                    Mixdown = "dpl1";
-                    break;
-                case "Dolby Pro Logic II":
-                    Mixdown = "dpl2";
-                    break;
-                case "6 Channel Discrete":
-                    Mixdown = "6ch";
-                    break;
-                default:
-                    Mixdown = "";
-                    break;
-            }
-
-            if (Mixdown != "")
-                SixChannelAudio = " -6 " + Mixdown;
-            else
-                SixChannelAudio = "";
-
-            if (subtitles == "None")
-                subtitles = "";
-            else if (subtitles == "")
-                subtitles = "";
-            else if (subtitles == "Autoselect")
-            {
-                subScan = " -U ";
-                subtitles = "";
-            }
-            else
-            {
-                string[] tempSub;
-                tempSub = subtitles.Split(' ');
-                subtitles = " -s " + tempSub[0];
-            }
-
-            if (check_forced.Checked)
-                forced = " -F ";
-
-            //Dynamic Range Compression (expects a float but a double is used for ease)
-            double value = slider_drc.Value / 10.0;
-            value++;
-            drc = " -D " + value;
-
-            string queryAudioSettings = audioBitrate + audioSampleRate + drc + audioChannels + SixChannelAudio + subScan + subtitles + forced;
-            #endregion
-
-            // Chapter Markers Tab
-            #region Chapter Markers
-
-            string ChapterMarkers = "";
-
-            if (Check_ChapterMarkers.Checked)
-            {
-                Boolean saveCSV = chapterCSVSave();
-                if (saveCSV == false)
-                {
-                    MessageBox.Show("Unable to save Chapter Makrers file! \n Chapter marker names will NOT be saved in your encode \n\n", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    ChapterMarkers = " -m ";
-                }
-                else
-                {
-                    string path = Application.StartupPath.ToString();
-                    path = "\"" + path + "\\chapters.csv\" ";
-
-                    ChapterMarkers = " --markers=" + path;
-                }
-            }
-
-            string chapter_markers = ChapterMarkers;
-            #endregion
-
-            // H264 Tab
-            #region  H264 Tab
-
-            string h264Advanced = rtf_h264advanced.Text;
-
-            if ((h264Advanced == ""))
-                h264Advanced = "";
-            else
-                h264Advanced = " -x " + h264Advanced;
-
-
-            string h264Settings = h264Advanced;
-            #endregion
-
-            // Other
-            #region Processors / Other
-
-            string processors = Properties.Settings.Default.Processors;
-            //  Number of Processors Handler
-
-            if (processors == "Automatic")
-                processors = "";
-            else
-                processors = " -C " + processors + " ";
-
-
-            string queryAdvancedSettings = processors;
-
-            string verbose = "";
-            if (Properties.Settings.Default.verbose == "Checked")
-                verbose = " -v ";
-            #endregion
-
-            return querySource + queryDestination + queryPictureSettings + queryVideoSettings + h264Settings + queryAudioSettings + ChapterMarkers + queryAdvancedSettings + verbose;
-        }
-
-        private void presetLoader(Functions.QueryParser presetQuery, string name)
-        {
-            // ---------------------------
-            // Setup the GUI
-            // ---------------------------
-
-            // Source tab
-            #region source
-            if (presetQuery.Source != "")
-                text_source.Text = presetQuery.Source;
-
-            if (presetQuery.DVDTitle != 0)
-                drp_dvdtitle.Text = presetQuery.DVDTitle.ToString();
-
-            if (presetQuery.DVDChapterStart != 0)
-                drop_chapterStart.Text = presetQuery.DVDChapterStart.ToString();
-
-            if (presetQuery.DVDChapterFinish != 0)
-                drop_chapterFinish.Text = presetQuery.DVDChapterFinish.ToString();
-
-            if (presetQuery.Format != "")
-            {
-                string destination = text_destination.Text;
-                destination = destination.Replace(".mp4", "." + presetQuery.Format);
-                destination = destination.Replace(".m4v", "." + presetQuery.Format);
-                destination = destination.Replace(".avi", "." + presetQuery.Format);
-                destination = destination.Replace(".mkv", "." + presetQuery.Format);
-                destination = destination.Replace(".ogm", "." + presetQuery.Format);
-                text_destination.Text = destination;
-            }
-
-            #endregion
-
-            // Destination tab
-            #region destination
-
-            if (presetQuery.Destination != "")
-                text_destination.Text = presetQuery.Destination;
-
-            drp_videoEncoder.Text = presetQuery.VideoEncoder;
-            drp_audioCodec.Text = presetQuery.AudioEncoder;
-
-            #endregion
-
-            // Picture Settings Tab
-            #region Picture
-            drp_crop.Text = "Manual";
-            text_top.Text = presetQuery.CropTop;
-            text_bottom.Text = presetQuery.CropBottom;
-            text_left.Text = presetQuery.CropLeft;
-            text_right.Text = presetQuery.CropRight;
-
-            drp_deInterlace_option.Text = presetQuery.DeInterlace;
-            drp_deNoise.Text = presetQuery.DeNoise;
-
-            if (presetQuery.DeTelecine == true)
-                check_detelecine.CheckState = CheckState.Checked;
-            else
-                check_detelecine.CheckState = CheckState.Unchecked;
-
-
-            if (presetQuery.DeBlock == true)
-                check_deblock.CheckState = CheckState.Checked;
-            else
-                check_deblock.CheckState = CheckState.Unchecked;
-
-            if (presetQuery.ChapterMarkers == true)
-                Check_ChapterMarkers.CheckState = CheckState.Checked;
-            else
-                Check_ChapterMarkers.CheckState = CheckState.Unchecked;
-
-            if (presetQuery.Anamorphic == true)
-                CheckPixelRatio.CheckState = CheckState.Checked;
-            else
-                CheckPixelRatio.CheckState = CheckState.Unchecked;
-
-            if (presetQuery.LooseAnamorphic == true)
-                check_lAnamorphic.CheckState = CheckState.Checked;
-            else
-                check_lAnamorphic.CheckState = CheckState.Unchecked;
-
-            if (presetQuery.Width != 0)
-                text_width.Text = presetQuery.Width.ToString();
-            else
-            {
-                text_width.Text = "";
-                text_width.BackColor = Color.White;
-            }
-
-            if (presetQuery.Height != 0)
-                text_height.Text = presetQuery.Height.ToString();
-            else
-            {
-                text_height.Text = "";
-                text_height.BackColor = Color.White;
-            }
-
-            if (presetQuery.VFR == true)
-                check_vfr.CheckState = CheckState.Checked;
-            else
-                check_vfr.CheckState = CheckState.Unchecked;
-            #endregion
-
-            // Video Settings Tab
-            #region video
-            text_bitrate.Text = presetQuery.AverageVideoBitrate;
-            text_filesize.Text = presetQuery.VideoTargetSize;
-            slider_videoQuality.Value = presetQuery.VideoQuality;
-            if (slider_videoQuality.Value != 0)
-            {
-                int ql = presetQuery.VideoQuality;
-                SliderValue.Text = ql.ToString() + "%";
-            }
-
-            if (presetQuery.TwoPass == true)
-                check_2PassEncode.CheckState = CheckState.Checked;
-            else
-                check_2PassEncode.CheckState = CheckState.Unchecked;
-
-            if (presetQuery.Grayscale == true)
-                check_grayscale.CheckState = CheckState.Checked;
-            else
-                check_grayscale.CheckState = CheckState.Unchecked;
-
-            drp_videoFramerate.Text = presetQuery.VideoFramerate;
-
-            if (presetQuery.TurboFirstPass == true)
-                check_turbo.CheckState = CheckState.Checked;
-            else
-                check_turbo.CheckState = CheckState.Unchecked;
-
-            if (presetQuery.LargeMP4 == true)
-                check_largeFile.CheckState = CheckState.Checked;
-            else
-                check_largeFile.CheckState = CheckState.Unchecked;
-
-            if (presetQuery.IpodAtom == true)
-                check_iPodAtom.CheckState = CheckState.Checked;
-            else
-                check_iPodAtom.CheckState = CheckState.Unchecked;
-
-            if (presetQuery.OptimizeMP4 == true)
-                check_optimiseMP4.CheckState = CheckState.Checked;
-            else
-                check_optimiseMP4.CheckState = CheckState.Unchecked;
-
-            #endregion
-
-            // Audio Settings Tab
-            #region Audio
-            drp_audioBitrate.Text = presetQuery.AudioBitrate;
-            drp_audioSampleRate.Text = presetQuery.AudioSampleBitrate;
-            drp_track1Audio.Text = presetQuery.AudioTrack1;
-            drp_track2Audio.Text = presetQuery.AudioTrack2;
-            drp_audioMixDown.Text = presetQuery.AudioTrackMix;
-            drp_subtitle.Text = presetQuery.Subtitles;
-
-            if (presetQuery.ForcedSubtitles == true)
-            {
-                check_forced.CheckState = CheckState.Checked;
-                check_forced.Enabled = true;
-            }
-            else
-                check_forced.CheckState = CheckState.Unchecked;
-
-            // Dynamic Range Compression (Should be a float but we use double for ease)
-            double value = presetQuery.DRC;
-            if (value > 0)
-                value = value - 10;
-            slider_drc.Value = int.Parse(value.ToString());
-
-            double actualValue = presetQuery.DRC / 10;
-            lbl_drc.Text = actualValue.ToString();
-
-
-            #endregion
-
-            // H264 Tab & Preset Name
-            #region other
-            rtf_h264advanced.Text = presetQuery.H264Query;
-
-            // Set the preset name
-            groupBox_output.Text = "Output Settings (Preset: " + name + ")";
-            #endregion
-        }
-
-        public void setStreamReader(Parsing.DVD dvd)
-        {
-            this.thisDVD = dvd;
-        }
-
-        // Automatic File Naming
-        public void autoName()
-        {
-            if (Properties.Settings.Default.autoNaming == "Checked")
-            {
-                if (drp_dvdtitle.Text != "Automatic")
-                {
-                    string source = text_source.Text;
-                    string[] sourceName = source.Split('\\');
-                    source = sourceName[sourceName.Length - 1].Replace(".iso", "").Replace(".mpg", "").Replace(".ts", "").Replace(".ps", "");
-
-                    string title = drp_dvdtitle.Text;
-                    string[] titlesplit = title.Split(' ');
-                    title = titlesplit[0];
-
-                    string cs = drop_chapterStart.Text;
-                    string cf = drop_chapterFinish.Text;
-
-                    if (title == "Automatic")
-                        title = "";
-                    if (cs == "Auto")
-                        cs = "";
-                    if (cf == "Auto")
-                        cf = "";
-
-                    string dash = "";
-                    if (cf != "Auto")
-                        dash = "-";
-
-                    if (!text_destination.Text.Contains("\\"))
-                    {
-                        string filePath = "";
-                        if (Properties.Settings.Default.autoNamePath.Trim() != "")
-                            filePath = Properties.Settings.Default.autoNamePath + "\\";
-                        text_destination.Text = filePath + source + "_T" + title + "_C" + cs + dash + cf + ".mp4";
-                    }
-                    else
-                    {
-                        string dest = text_destination.Text;
-
-                        string[] destName = dest.Split('\\');
-
-
-                        string[] extension = dest.Split('.');
-                        string ext = extension[extension.Length - 1];
-
-                        destName[destName.Length - 1] = source + "_T" + title + "_C" + cs + dash + cf + "." + ext;
-
-                        string fullDest = "";
-                        foreach (string part in destName)
-                        {
-                            if (fullDest != "")
-                                fullDest = fullDest + "\\" + part;
-                            else
-                                fullDest = fullDest + part;
-                        }
-
-                        text_destination.Text = fullDest;
-                    }
-                }
-            }
-        }
-
-        // Chapter Marker Tab
-        private void chapterNaming()
-        {
-            try
-            {
-                data_chpt.Rows.Clear();
-                int i = 0;
-                int rowCount = 0;
-                int start = 0;
-                int finish = 0;
-                if (drop_chapterFinish.Text != "Auto")
-                    finish = int.Parse(drop_chapterFinish.Text);
-
-                if (drop_chapterStart.Text != "Auto")
-                     start = int.Parse(drop_chapterStart.Text);
-
-                rowCount = finish - (start -1);
-
-                while (i < rowCount)
-                {
-                    DataGridViewRow row = new DataGridViewRow();
-
-                    data_chpt.Rows.Insert(i, row);
-                    data_chpt.Rows[i].Cells[0].Value = (i + 1);
-                    data_chpt.Rows[i].Cells[1].Value = "Chapter " + (i + 1);
-                    i++;
-                }
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show("chapterNaming() Error has occured: \n" + exc.ToString());
-            }
-        }
-
-        private Boolean chapterCSVSave()
-        {
-            try
-            {
-                string appPath = Application.StartupPath.ToString();
-                appPath = appPath + "\\";
-
-                string path = appPath + "chapters.csv";
-
-                StringBuilder csv = new StringBuilder();
-
-                foreach (DataGridViewRow row in data_chpt.Rows)
-                {
-                    csv.Append(row.Cells[0].Value.ToString());
-                    csv.Append(",");
-                    csv.Append(row.Cells[1].Value.ToString());
-                    csv.Append(Environment.NewLine);
-                }
-                StreamWriter file = new StreamWriter(path);
-                file.Write(csv.ToString());
-                file.Close();
-                file.Dispose();
-                return true;
-
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.ToString(), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
         }
 
         #endregion
