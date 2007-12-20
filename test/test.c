@@ -402,7 +402,7 @@ static int HandleEvents( hb_handle_t * h )
 
             if (preset)
             {
-                hb_log("+ Using preset: %s", preset_name);
+                fprintf( stderr, "+ Using preset: %s", preset_name);
                 
                 if (!strcmp(preset_name, "Animation"))
                 {
