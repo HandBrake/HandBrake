@@ -34,11 +34,6 @@ namespace Handbrake
                 check_verbose.CheckState = CheckState.Checked;
             }
 
-            if (Properties.Settings.Default.GuiDebug == "Checked")
-            {
-                check_guiDebug.CheckState = CheckState.Checked;
-            }
-
             if (Properties.Settings.Default.tooltipEnable == "Checked")
             {
                 check_tooltip.CheckState = CheckState.Checked;
@@ -92,11 +87,6 @@ namespace Handbrake
             this.Close();
         }
 
-        private void check_guiDebug_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.GuiDebug = check_guiDebug.CheckState.ToString();
-        }
-
         private void check_tooltip_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.tooltipEnable = check_tooltip.CheckState.ToString();
@@ -136,7 +126,7 @@ namespace Handbrake
 
 
 
-        
+
 
     }
 }

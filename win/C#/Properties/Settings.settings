@@ -17,14 +17,8 @@
     <Setting Name="verbose" Type="System.String" Scope="User">
       <Value Profile="(Default)">Checked</Value>
     </Setting>
-    <Setting Name="CliVersion" Type="System.String" Scope="User">
+    <Setting Name="hb_version" Type="System.String" Scope="User">
       <Value Profile="(Default)">0.9.2</Value>
-    </Setting>
-    <Setting Name="GuiDebug" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Checked</Value>
-    </Setting>
-    <Setting Name="defaultError" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Program Error. Please enable debug more in: Tools &gt; Options. If the error re-occurs, please report it on the forums.</Value>
     </Setting>
     <Setting Name="tooltipEnable" Type="System.String" Scope="User">
       <Value Profile="(Default)">Checked</Value>
@@ -33,19 +27,19 @@
       <Value Profile="(Default)">Do Nothing</Value>
     </Setting>
     <Setting Name="defaultUserSettings" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Checked</Value>
     </Setting>
-    <Setting Name="build" Type="System.Int32" Scope="User">
+    <Setting Name="hb_build" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1000</Value>
     </Setting>
     <Setting Name="skipversion" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="updatePresets" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Checked</Value>
     </Setting>
     <Setting Name="autoNaming" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Checked</Value>
     </Setting>
     <Setting Name="autoNamePath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

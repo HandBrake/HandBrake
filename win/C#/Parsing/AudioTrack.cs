@@ -106,9 +106,7 @@ namespace Handbrake.Parsing
                 return thisTrack;
             }
             else
-            {
                 return null;
-            }
         }
 
         public static AudioTrack[] ParseList(StringReader output)
@@ -118,13 +116,9 @@ namespace Handbrake.Parsing
             {
                 AudioTrack thisTrack = AudioTrack.Parse(output);
                 if (thisTrack != null)
-                {
                     tracks.Add(thisTrack);
-                }
                 else
-                {
                     break;
-                }
             }
             return tracks.ToArray();
         }

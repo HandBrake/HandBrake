@@ -23,9 +23,6 @@ namespace Handbrake
         [STAThread]
         static void Main()
         {
-            // 633265950858281250 = 16:52 28-Sep-07  //864000000000 nanoseconds per day
-            //long start = DateTime.Now.Ticks;
-            //if (start > 633274593039531250) {MessageBox.Show("Sorry, This development build of Handbrake has expired."); return; } // Will Expire Oct 8th
 
             // Check the system meets the system requirements.
             Boolean launch = true;
@@ -42,19 +39,16 @@ namespace Handbrake
                 // Make sure the system has enough RAM. 384MB or greater
                 uint memory = MemoryCheck.CheckMemeory();
                 memory = memory / 1024 / 1024;
-               
-                if (memory < 320)
+
+                if (memory < 256)
                 {
-                    MessageBox.Show("Your system does not meet the minimum requirements for HandBrake. \n Insufficient RAM. 512MB or greater required. You have: " + memory.ToString() + "MB", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Your system does not meet the minimum requirements for HandBrake. \n Insufficient RAM. 384MB or greater required. You have: " + memory.ToString() + "MB", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     launch = false;
                 }
             }
             catch (Exception exc)
             {
-                if (Properties.Settings.Default.GuiDebug == "Checked")
-                {
-                    MessageBox.Show("frmMain.cs - systemCheck() " + exc.ToString());
-                }
+                MessageBox.Show("frmMain.cs - systemCheck() " + exc.ToString());
             }
 
 

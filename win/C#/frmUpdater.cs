@@ -24,7 +24,7 @@ namespace Handbrake
 
         private void setVersions()
         {
-            lbl_oldVersion.Text = "(you have: " + Properties.Settings.Default.CliVersion + " / " + Properties.Settings.Default.build  + ").";
+            lbl_oldVersion.Text = "(you have: " + Properties.Settings.Default.hb_version + " / " + Properties.Settings.Default.hb_build  + ").";
             lbl_newVersion.Text = rssRead.version() + " (" + rssRead.build() + ")";
         }
 

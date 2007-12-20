@@ -14,8 +14,8 @@ namespace Handbrake
         public frmAbout()
         {
             InitializeComponent();
-            Version.Text = Properties.Settings.Default.CliVersion;
-            lbl_build.Text = Properties.Settings.Default.build.ToString();
+            Version.Text = Properties.Settings.Default.hb_version;
+            lbl_build.Text = Properties.Settings.Default.hb_build.ToString();
         }
 
         private void btn_close_Click(object sender, EventArgs e)

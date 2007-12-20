@@ -54,9 +54,7 @@ namespace Handbrake.Parsing
                 return thisChapter;
             }
             else
-            {
                 return null;
-            }
         }
 
         public static Chapter[] ParseList(StringReader output)
@@ -73,13 +71,9 @@ namespace Handbrake.Parsing
                 Chapter thisChapter = Chapter.Parse(output);
 
                 if (thisChapter != null)
-                {
                     chapters.Add(thisChapter);
-                }
                 else
-                {
                     break;
-                }
             }
             return chapters.ToArray();
         }

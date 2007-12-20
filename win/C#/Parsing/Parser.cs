@@ -72,13 +72,10 @@ namespace Handbrake.Parsing
                 this.m_buffer += tmp;
                 Match m = Regex.Match(tmp, "^Scanning title ([0-9]*) of ([0-9]*)");
                 if (OnReadLine != null)
-                {
                     OnReadLine(this, tmp);
-                }
+
                 if (m.Success && OnScanProgress != null)
-                {
                     OnScanProgress(this, int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
-                }
             }
             catch (Exception exc)
             {
@@ -92,12 +89,10 @@ namespace Handbrake.Parsing
             string tmp = base.ReadToEnd();
             try
             {
-                
                 this.m_buffer += tmp;
                 if (OnReadToEnd != null)
-                {
                     OnReadToEnd(this, tmp);
-                }
+
             }
             catch (Exception exc)
             {

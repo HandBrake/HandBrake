@@ -86,37 +86,12 @@ namespace Handbrake.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0.9.2")]
-        public string CliVersion {
+        public string hb_version {
             get {
-                return ((string)(this["CliVersion"]));
+                return ((string)(this["hb_version"]));
             }
             set {
-                this["CliVersion"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Checked")]
-        public string GuiDebug {
-            get {
-                return ((string)(this["GuiDebug"]));
-            }
-            set {
-                this["GuiDebug"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Program Error. Please enable debug more in: Tools > Options. If the error re-occu" +
-            "rs, please report it on the forums.")]
-        public string defaultError {
-            get {
-                return ((string)(this["defaultError"]));
-            }
-            set {
-                this["defaultError"] = value;
+                this["hb_version"] = value;
             }
         }
         
@@ -146,7 +121,7 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Checked")]
         public string defaultUserSettings {
             get {
                 return ((string)(this["defaultUserSettings"]));
@@ -159,12 +134,12 @@ namespace Handbrake.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1000")]
-        public int build {
+        public int hb_build {
             get {
-                return ((int)(this["build"]));
+                return ((int)(this["hb_build"]));
             }
             set {
-                this["build"] = value;
+                this["hb_build"] = value;
             }
         }
         
@@ -182,7 +157,7 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Checked")]
         public string updatePresets {
             get {
                 return ((string)(this["updatePresets"]));
@@ -194,7 +169,7 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Checked")]
         public string autoNaming {
             get {
                 return ((string)(this["autoNaming"]));

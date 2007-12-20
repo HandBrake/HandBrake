@@ -27,7 +27,7 @@ namespace Handbrake
             this.mainWindow = parent;
             this.dvdInfo = dvdInfoWindow;
             startScan();
-            
+
         }
 
         private void startScan()
@@ -39,17 +39,10 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                if (Properties.Settings.Default.GuiDebug == "Checked")
-                {
-                    MessageBox.Show("frmReadDVD.cs - startScan " + exc.ToString());
-                }
-                else
-                {
-                    MessageBox.Show(Properties.Settings.Default.defaultError.ToString());
-                }
+                MessageBox.Show("frmReadDVD.cs - startScan " + exc.ToString());
             }
         }
-   
+
         private void updateUIElements()
         {
             try
@@ -67,19 +60,12 @@ namespace Handbrake
                 mainWindow.drp_dvdtitle.Text = "Automatic";
                 mainWindow.drop_chapterFinish.Text = "Auto";
                 mainWindow.drop_chapterStart.Text = "Auto";
-  
+
                 this.Close();
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
-                if (Properties.Settings.Default.GuiDebug == "Checked")
-                {
-                    MessageBox.Show("frmReadDVD.cs - updateUIElements " + exc.ToString());
-                }
-                else
-                {
-                    MessageBox.Show(Properties.Settings.Default.defaultError.ToString());
-                }
+                MessageBox.Show("frmReadDVD.cs - updateUIElements " + exc.ToString());
             }
         }
 
@@ -89,14 +75,14 @@ namespace Handbrake
         {
             try
             {
-                string appPath = Application.StartupPath.ToString()+ "\\";
+                string appPath = Application.StartupPath.ToString() + "\\";
                 string strCmdLine = "cmd /c " + '"' + '"' + appPath + "HandBrakeCLI.exe" + '"' + " -i " + '"' + inputFile + '"' + " -t0 -v >" + '"' + appPath + "dvdinfo.dat" + '"' + " 2>&1" + '"';
                 Process hbproc = Process.Start("CMD.exe", strCmdLine);
                 hbproc.WaitForExit();
                 hbproc.Dispose();
                 hbproc.Close();
 
-          
+
                 StreamReader sr = new StreamReader(appPath + "dvdinfo.dat");
                 thisDvd = Parsing.DVD.Parse(sr);
                 sr.Close();
@@ -105,14 +91,7 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                if (Properties.Settings.Default.GuiDebug == "Checked")
-                {
-                    MessageBox.Show("frmReadDVD.cs - startProc " + exc.ToString());
-                }
-                else
-                {
-                    MessageBox.Show(Properties.Settings.Default.defaultError.ToString());
-                }
+                MessageBox.Show("frmReadDVD.cs - startProc " + exc.ToString());
             }
 
         }

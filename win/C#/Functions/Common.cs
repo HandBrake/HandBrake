@@ -21,7 +21,7 @@ namespace Handbrake.Functions
                 string build = rssRead.build();
 
                 int latest = int.Parse(build);
-                int current = Properties.Settings.Default.build;
+                int current = Properties.Settings.Default.hb_build;
                 int skip = Properties.Settings.Default.skipversion;
 
                 if (latest == skip)

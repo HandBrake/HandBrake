@@ -55,9 +55,7 @@ namespace Handbrake.Parsing
                 return thisSubtitle;
             }
             else
-            {
                 return null;
-            }
         }
 
         public static Subtitle[] ParseList(StringReader output)
@@ -68,13 +66,9 @@ namespace Handbrake.Parsing
                 Subtitle thisSubtitle = Subtitle.Parse(output);
 
                 if (thisSubtitle != null)
-                {
                     subtitles.Add(thisSubtitle);
-                }
                 else
-                {
                     break;
-                }
             }
             return subtitles.ToArray();
         }

@@ -58,7 +58,7 @@ namespace Handbrake
             Application.DoEvents();
 
             // Set the Version number lable to the corect version.
-            Version.Text = "Version " + Properties.Settings.Default.CliVersion;
+            Version.Text = "Version " + Properties.Settings.Default.hb_version;
 
             // update the status
             if (Properties.Settings.Default.updateStatus == "Checked")

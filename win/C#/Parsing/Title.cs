@@ -129,8 +129,8 @@ namespace Handbrake.Parsing
         /// <returns>A string representing this track in the format: {title #} (00:00:00)</returns>
         public override string ToString()
         {
-                   return string.Format("{0} ({1:00}:{2:00}:{3:00})", this.m_titleNumber, this.m_duration.Hours,
-                    this.m_duration.Minutes, this.m_duration.Seconds);
+            return string.Format("{0} ({1:00}:{2:00}:{3:00})", this.m_titleNumber, this.m_duration.Hours,
+             this.m_duration.Minutes, this.m_duration.Seconds);
         }
 
 
@@ -151,18 +151,11 @@ namespace Handbrake.Parsing
                 {
                     // Match track number for this title
                     if (m.Success)
-                    {
-                        //MessageBox.Show(m.Groups[1].Value);
-                        thisTitle.m_titleNumber = int.Parse(m.Groups[1].Value.Trim().ToString()); 
-                        //.Trim().ToString() Not sure why this is needed but some systems seem to get a rogue 
-                    }
-                                    }
+                        thisTitle.m_titleNumber = int.Parse(m.Groups[1].Value.Trim().ToString());
+                }
                 catch (Exception exc)
                 {
-                    if (Properties.Settings.Default.GuiDebug == "Checked")
-                    {
-                        MessageBox.Show("Title.cs - Track Number " + exc.ToString());
-                    }
+                    MessageBox.Show("Title.cs - Track Number " + exc.ToString());
                 }
 
                 output.ReadLine();
@@ -172,16 +165,11 @@ namespace Handbrake.Parsing
                 {
                     m = Regex.Match(output.ReadLine(), @"^  \+ duration: ([0-9]{2}:[0-9]{2}:[0-9]{2})");
                     if (m.Success)
-                    {
                         thisTitle.m_duration = TimeSpan.Parse(m.Groups[1].Value);
-                    }
                 }
                 catch (Exception exc)
                 {
-                    if (Properties.Settings.Default.GuiDebug == "Checked")
-                    {
-                        MessageBox.Show("Title.cs - Duration " + exc.ToString());
-                    }
+                    MessageBox.Show("Title.cs - Duration " + exc.ToString());
                 }
 
                 try
@@ -196,10 +184,7 @@ namespace Handbrake.Parsing
                 }
                 catch (Exception exc)
                 {
-                    if (Properties.Settings.Default.GuiDebug == "Checked")
-                    {
-                        MessageBox.Show("Title.cs - Resolution and Aspect " + exc.ToString());
-                    }
+                    MessageBox.Show("Title.cs - Resolution and Aspect " + exc.ToString());
                 }
 
                 try
@@ -207,16 +192,11 @@ namespace Handbrake.Parsing
                     // Get autocrop region for this title
                     m = Regex.Match(output.ReadLine(), @"^  \+ autocrop: ([0-9]*)/([0-9]*)/([0-9]*)/([0-9]*)");
                     if (m.Success)
-                    {
                         thisTitle.m_autoCrop = new int[4] { int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value), int.Parse(m.Groups[3].Value), int.Parse(m.Groups[4].Value) };
-                    }
                 }
                 catch (Exception exc)
                 {
-                    if (Properties.Settings.Default.GuiDebug == "Checked")
-                    {
-                        MessageBox.Show("Title.cs - Auto Crop " + exc.ToString());
-                    }
+                    MessageBox.Show("Title.cs - Auto Crop " + exc.ToString());
                 }
 
 
@@ -226,10 +206,7 @@ namespace Handbrake.Parsing
                 }
                 catch (Exception exc)
                 {
-                    if (Properties.Settings.Default.GuiDebug == "Checked")
-                    {
-                        MessageBox.Show("Title.cs - Chapters EXC " + exc.ToString());
-                    }
+                    MessageBox.Show("Title.cs - Chapters EXC " + exc.ToString());
                 }
 
                 try
@@ -238,10 +215,7 @@ namespace Handbrake.Parsing
                 }
                 catch (Exception exc)
                 {
-                    if (Properties.Settings.Default.GuiDebug == "Checked")
-                    {
-                        MessageBox.Show("Title.cs - Audio EXC " + exc.ToString());
-                    }
+                    MessageBox.Show("Title.cs - Audio EXC " + exc.ToString());
                 }
 
                 try
@@ -250,21 +224,15 @@ namespace Handbrake.Parsing
                 }
                 catch (Exception exc)
                 {
-                    if (Properties.Settings.Default.GuiDebug == "Checked")
-                    {
-                        MessageBox.Show("Title.cs - Subtitles EXC " + exc.ToString());
-                    }
+                    MessageBox.Show("Title.cs - Subtitles EXC " + exc.ToString());
                 }
             }
             catch (Exception exc)
             {
-                if (Properties.Settings.Default.GuiDebug == "Checked")
-                {
-                    MessageBox.Show("Title.cs - Parse " + exc.ToString());
-                }
+                MessageBox.Show("Title.cs - Parse " + exc.ToString());
             }
-     
-        
+
+
             return thisTitle;
         }
 
@@ -281,10 +249,7 @@ namespace Handbrake.Parsing
             }
             catch (Exception exc)
             {
-                if (Properties.Settings.Default.GuiDebug == "Checked")
-                {
-                    MessageBox.Show("Title.cs - ParseList " + exc.ToString());
-                }
+                MessageBox.Show("Title.cs - ParseList " + exc.ToString());
             }
             return titles.ToArray();
         }
