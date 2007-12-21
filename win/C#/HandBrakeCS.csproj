@@ -69,12 +69,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="frmQuery.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmQuery.Designer.cs">
-      <DependentUpon>frmQuery.cs</DependentUpon>
-    </Compile>
     <Compile Include="frmAbout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -148,10 +142,6 @@
     <EmbeddedResource Include="frmOptions.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmOptions.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmQuery.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>frmQuery.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmQueue.resx">
       <SubType>Designer</SubType>

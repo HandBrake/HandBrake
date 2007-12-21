@@ -57,9 +57,6 @@ namespace Handbrake
             // Forces frmMain to draw
             Application.DoEvents();
 
-            // Set the Version number lable to the corect version.
-            Version.Text = "Version " + Properties.Settings.Default.hb_version;
-
             // update the status
             if (Properties.Settings.Default.updateStatus == "Checked")
             {
@@ -136,8 +133,6 @@ namespace Handbrake
                 Boolean update = hb_common_func.updateCheck();
                 if (update == true)
                 {
-                    lbl_update.Visible = true;
-
                     frmUpdater updateWindow = new frmUpdater();
                     updateWindow.Show();
                 }
@@ -272,11 +267,6 @@ namespace Handbrake
             Options.ShowDialog();
         }
 
-        private void mnu_showCommand_Click(object sender, EventArgs e)
-        {
-            Form query = new frmQuery(hb_common_func.GenerateTheQuery(this));
-            query.ShowDialog();
-        }
 
         #endregion
 
@@ -329,7 +319,6 @@ namespace Handbrake
             Boolean update = hb_common_func.updateCheck();
             if (update == true)
             {
-                lbl_update.Visible = true;
                 frmUpdater updateWindow = new frmUpdater();
                 updateWindow.Show();
             }
@@ -556,7 +545,7 @@ namespace Handbrake
                         text_width.BackColor = Color.LightGreen;
                 }
 
-                if (lbl_Aspect.Text != "Select a Title")
+                if ((lbl_Aspect.Text != "Select a Title") && (drp_crop.SelectedIndex == 2))
                 {
                     double height = int.Parse(text_width.Text) / double.Parse(lbl_Aspect.Text);
                     double mod16 = height % 16;
@@ -900,6 +889,26 @@ namespace Handbrake
 
         #endregion
 
+        #region Query Editor Tab
+
+        private void btn_clear_Click(object sender, EventArgs e)
+        {
+            rtf_query.Clear();
+        }
+
+        private void btn_generate_Query_Click(object sender, EventArgs e)
+        {
+            rtf_query.Text = hb_common_func.GenerateTheQuery(this);
+        }
+
+        private void btn_copy2C_Click(object sender, EventArgs e)
+        {
+            if (rtf_query.Text != "")
+                Clipboard.SetText(rtf_query.Text, TextDataFormat.Text);
+        }
+
+        #endregion
+
         // -------------------------------------------------------------- 
         // Main Window Preset System
         // --------------------------------------------------------------
@@ -1041,7 +1050,11 @@ namespace Handbrake
                 MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
-                string query = hb_common_func.GenerateTheQuery(this);
+                String query;
+                if (rtf_query.Text != "")
+                    query = rtf_query.Text;
+                else
+                    query = hb_common_func.GenerateTheQuery(this);
 
                 queueWindow.list_queue.Items.Add(query);
                 queueWindow.Show();
@@ -1059,7 +1072,11 @@ namespace Handbrake
                 MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
-                string query = hb_common_func.GenerateTheQuery(this);
+                String query;
+                if (rtf_query.Text != "")
+                    query = rtf_query.Text;
+                else
+                    query = hb_common_func.GenerateTheQuery(this);
 
                 ThreadPool.QueueUserWorkItem(procMonitor, query);
                 lbl_encode.Visible = true;
@@ -1118,6 +1135,8 @@ namespace Handbrake
         }
 
         #endregion
+
+
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

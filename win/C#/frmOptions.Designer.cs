@@ -71,9 +71,9 @@ namespace Handbrake
             this.check_verbose.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.check_verbose.Location = new System.Drawing.Point(16, 127);
             this.check_verbose.Name = "check_verbose";
-            this.check_verbose.Size = new System.Drawing.Size(32, 17);
+            this.check_verbose.Size = new System.Drawing.Size(97, 17);
             this.check_verbose.TabIndex = 51;
-            this.check_verbose.Text = "s";
+            this.check_verbose.Text = "Verbose CLI";
             this.check_verbose.UseVisualStyleBackColor = true;
             this.check_verbose.CheckedChanged += new System.EventHandler(this.check_verbose_CheckedChanged);
             // 

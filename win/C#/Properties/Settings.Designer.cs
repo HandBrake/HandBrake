@@ -85,7 +85,7 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.9.2")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.9.1")]
         public string hb_version {
             get {
                 return ((string)(this["hb_version"]));

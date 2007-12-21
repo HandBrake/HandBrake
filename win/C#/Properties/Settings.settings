@@ -18,7 +18,7 @@
       <Value Profile="(Default)">Checked</Value>
     </Setting>
     <Setting Name="hb_version" Type="System.String" Scope="User">
-      <Value Profile="(Default)">0.9.2</Value>
+      <Value Profile="(Default)">0.9.1</Value>
     </Setting>
     <Setting Name="tooltipEnable" Type="System.String" Scope="User">
       <Value Profile="(Default)">Checked</Value>
