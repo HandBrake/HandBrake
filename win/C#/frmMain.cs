@@ -487,8 +487,6 @@ namespace Handbrake
             }
             // Run the Autonaming function
             hb_common_func.autoName(this);
-            hb_common_func.chapterNaming(this);
-
         }
 
         private void drop_chapterFinish_SelectedIndexChanged(object sender, EventArgs e)
@@ -512,7 +510,6 @@ namespace Handbrake
 
             // Run the Autonaming function
             hb_common_func.autoName(this);
-            hb_common_func.chapterNaming(this);
         }
 
         private void text_bitrate_TextChanged(object sender, EventArgs e)

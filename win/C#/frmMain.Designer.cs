@@ -307,7 +307,7 @@ namespace Handbrake
             this.text_destination.Name = "text_destination";
             this.text_destination.Size = new System.Drawing.Size(429, 21);
             this.text_destination.TabIndex = 1;
-            this.ToolTip.SetToolTip(this.text_destination, "Location where the enoceded file will be saved.");
+            this.ToolTip.SetToolTip(this.text_destination, "Location where the encoded file will be saved.");
             // 
             // btn_Browse
             // 
