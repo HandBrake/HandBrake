@@ -133,7 +133,7 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1144")]
         public int hb_build {
             get {
                 return ((int)(this["hb_build"]));

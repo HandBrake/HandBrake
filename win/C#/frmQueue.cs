@@ -29,7 +29,11 @@ namespace Handbrake
         {
             // Reset some values
 
-            lbl_status.Visible = false;
+            if (list_queue.Items.Count != 0)
+            {
+                lbl_status.Visible = false;
+                btn_encode.Enabled = false;
+            }
             cancel = false;
 
             // Start the encode
@@ -59,6 +63,7 @@ namespace Handbrake
         {
             cancel = true;
             btn_stop.Visible = false;
+            btn_encode.Enabled = true;
             MessageBox.Show("No further items on the queue will start. The current encode process will continue until it is finished. \nClick 'Encode Video' when you wish to continue encoding the queue.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
@@ -89,8 +94,7 @@ namespace Handbrake
                     if (cancel == true)
                     {
                         break;
-                    }
-                    
+                    }              
                 }
 
                 resetQueue();
@@ -155,7 +159,10 @@ namespace Handbrake
                 {
                     this.BeginInvoke(new ProgressUpdateHandler(resetQueue));
                     return;
+
                 }
+                btn_stop.Visible = false;
+                btn_encode.Enabled = true;
 
                 if (cancel == true)
                 {
@@ -169,8 +176,7 @@ namespace Handbrake
                     lbl_status.Text = "Encode Queue Completed!";
                     text_edit.Text = "";
                 }
-                btn_stop.Visible = false;
-
+                
                 lbl_progressValue.Text = "0 %";
                 progressBar.Value = 0;
                 progressBar.Update();
