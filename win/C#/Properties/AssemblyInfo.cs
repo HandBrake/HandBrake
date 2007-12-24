@@ -1,4 +1,10 @@
-﻿using System.Reflection;
+﻿/*  AssemblyInfo.cs $
+ 	
+ 	   This file is part of the HandBrake source code.
+ 	   Homepage: <http://handbrake.m0k.org/>.
+ 	   It may be used under the terms of the GNU General Public License. */
+
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Resources;
@@ -7,7 +13,7 @@ using System.Resources;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Handbrake")]
-[assembly: AssemblyDescription("DVD Like Source to MPEG-4 converter")]
+[assembly: AssemblyDescription("GPL'd DVD Like Source to MPEG-4 converter")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Handbrake")]
 [assembly: AssemblyProduct("Handbrake")]

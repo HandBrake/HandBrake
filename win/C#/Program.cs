@@ -1,3 +1,9 @@
+/*  Program.cs 
+ 	
+ 	   This file is part of the HandBrake source code.
+ 	   Homepage: <http://handbrake.m0k.org/>.
+ 	   It may be used under the terms of the GNU General Public License. */
+
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -23,6 +29,16 @@ namespace Handbrake
         [STAThread]
         static void Main()
         {
+
+            // Development Code Expiry.
+            // Remember to comment out on public release!!!
+            int year = DateTime.Now.Year;
+            int month = DateTime.Now.Month;
+            int day = DateTime.Now.Day;
+
+            if ((year > 2007) || (month > 10 )) { MessageBox.Show("Sorry, This development build of Handbrake has expired."); return; } 
+
+
 
             // Check the system meets the system requirements.
             Boolean launch = true;
