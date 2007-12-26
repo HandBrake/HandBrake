@@ -416,6 +416,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         /* if we're enabling the interface, check if the audio mixdown controls need to be enabled or not */
         /* these will have been enabled by the mass control enablement above anyway, so we're sense-checking it here */
         [self setEnabledStateOfAudioMixdownControls: NULL];
+        /* we also call calculatePictureSizing here to sense check if we already have vfr selected */
+        [self calculatePictureSizing: NULL];
 	
 	} else {
 
@@ -1297,11 +1299,19 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         {
             [self selectDefaultPreset: NULL];
             /* if Deinterlace upon launch is specified in the prefs, then set to 1 for "Fast",
-            if not, then set to 0 for none */
+             if not, then set to 0 for none */
             if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultDeinterlaceOn"] > 0)
+            {
                 [fPictureController setDeinterlace:1];
+            }
             else
+            {
                 [fPictureController setDeinterlace:0];
+            }
+            /* lets set Denoise to index 0 or "None" since this is the first scan */
+            [fPictureController setDenoise:0];
+            
+            [fPictureController setInitialPictureFilters];
         }
         
 	}
@@ -1988,6 +1998,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	hb_job_t * job = title->job;
 	fTitle = title; 
 	/* Turn Deinterlace on/off depending on the preference */
+    /*
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultDeinterlaceOn"] > 0)
 	{
 		[fPictureController setDeinterlace:1];
@@ -1996,7 +2007,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	{
 		[fPictureController setDeinterlace:0];
 	}
-	
+	*/
 	/* Pixel Ratio Setting */
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PixelRatio"])
     {

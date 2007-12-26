@@ -104,18 +104,6 @@ static int GetAlignedSize( int size )
     [fCropBottomStepper setMaxValue: title->height/2-2];
     [fCropLeftStepper   setMaxValue: title->width/2-2];
     [fCropRightStepper  setMaxValue: title->width/2-2];
-    
-	
-	/* we use a popup to show the deinterlace settings */
-	[fDeinterlacePopUp removeAllItems];
-    [fDeinterlacePopUp addItemWithTitle: @"None"];
-    [fDeinterlacePopUp addItemWithTitle: @"Fast"];
-    [fDeinterlacePopUp addItemWithTitle: @"Slow"];
-	[fDeinterlacePopUp addItemWithTitle: @"Slower"];
-	[fDeinterlacePopUp addItemWithTitle: @"Slowest"];
-    
-	/* Set deinterlaces level according to the integer in the main window */
-	[fDeinterlacePopUp selectItemAtIndex: fPictureFilterSettings.deinterlace];
 
 	[fPARCheck setState:(job->pixel_ratio ? NSOnState : NSOffState)];
     /* We initially set the previous state of keep ar to on */
@@ -138,8 +126,28 @@ static int GetAlignedSize( int size )
         [fCropMatrix  selectCellAtRow: 0 column:0];
 	}
 	
-	
-	
+	MaxOutputWidth = job->width;
+	MaxOutputHeight = job->height;
+    fPicture = 0;
+
+    [self SettingsChanged: nil];
+}
+
+/* we use this to setup the initial picture filters upon first launch, after that their states
+are maintained across different sources */
+- (void) setInitialPictureFilters
+{
+	/* we use a popup to show the deinterlace settings */
+	[fDeinterlacePopUp removeAllItems];
+    [fDeinterlacePopUp addItemWithTitle: @"None"];
+    [fDeinterlacePopUp addItemWithTitle: @"Fast"];
+    [fDeinterlacePopUp addItemWithTitle: @"Slow"];
+	[fDeinterlacePopUp addItemWithTitle: @"Slower"];
+	[fDeinterlacePopUp addItemWithTitle: @"Slowest"];
+    
+	/* Set deinterlaces level according to the integer in the main window */
+	[fDeinterlacePopUp selectItemAtIndex: fPictureFilterSettings.deinterlace];
+
 	/* we use a popup to show the denoise settings */
 	[fDenoisePopUp removeAllItems];
     [fDenoisePopUp addItemWithTitle: @"None"];
@@ -148,14 +156,8 @@ static int GetAlignedSize( int size )
     [fDenoisePopUp addItemWithTitle: @"Strong"];
 	/* Set denoises level according to the integer in the main window */
 	[fDenoisePopUp selectItemAtIndex: fPictureFilterSettings.denoise];
-	
-    MaxOutputWidth = job->width;
-	MaxOutputHeight = job->height;
-    fPicture = 0;
 
-    [self SettingsChanged: nil];
 }
-
 - (void) Display: (int) anim
 {
     hb_get_preview( fHandle, fTitle, fPicture, fBuffer );

@@ -74,6 +74,7 @@
 
 - (void) SetHandle: (hb_handle_t *) handle;
 - (void) SetTitle:  (hb_title_t *)  title;
+- (void) setInitialPictureFilters;
 - (void) Display: (int) anim;
 
 - (IBAction) SettingsChanged: (id) sender;
