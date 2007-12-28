@@ -1,0 +1,16 @@
+diff -ruN mpeg4ip/bootstrap mpeg4ip.work/bootstrap
+--- mpeg4ip/bootstrap	2005-10-13 14:09:41.000000000 -0600
++++ mpeg4ip.work/bootstrap	2007-02-13 16:03:30.236971291 -0700
+@@ -47,9 +47,9 @@
+ #
+ if test $target_system = "Linux"; then
+     have_faac=no
+-    if which faac >/dev/null 2>/dev/null; then
+-	have_faac=yes
+-    fi
++#    if which faac >/dev/null 2>/dev/null; then
++#	have_faac=yes
++#    fi
+ 
+     if test $have_faac = "yes"; then
+ 	# we have lame and faac - see if faac is built with mp4 support
