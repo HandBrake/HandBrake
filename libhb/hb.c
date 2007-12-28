@@ -427,13 +427,18 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
 }
 
 /**
- * Calculates job width and height for anamorphic content.
- * @param job Handle to hb_job_t.
+ * Calculates job width and height for anamorphic content,
+ *
+ * @param job Handle to hb_job_t
+ * @param output_width Pointer to returned storage width
+ * @param output_height Pointer to returned storage height
+ * @param output_par_width Pointer to returned pixel width
+ @ param output_par_height Pointer to returned pixel height
  */
-void hb_set_anamorphic_size( hb_job_t * job)
+void hb_set_anamorphic_size( hb_job_t * job,
+        int *output_width, int *output_height,
+        int *output_par_width, int *output_par_height )
 {
-    hb_title_t * title = job->title;
-
     /* "Loose" anamorphic.
         - Uses mod16-compliant dimensions,
         - Allows users to set the width
@@ -441,9 +446,14 @@ void hb_set_anamorphic_size( hb_job_t * job)
     */
     
     /* Set up some variables to make the math easier to follow. */
+    hb_title_t * title = job->title;
     int cropped_width = title->width - job->crop[2] - job->crop[3] ;
     int cropped_height = title->height - job->crop[0] - job->crop[1] ;
     int storage_aspect = cropped_width * 10000 / cropped_height;        
+    int width = job->width;
+    int height; // Gets set later, ignore user value
+    int mod = job->modulus;
+    int aspect = title->aspect;
 
     /* Gotta handle bounding dimensions differently
        than for non-anamorphic encodes:
@@ -453,21 +463,23 @@ void hb_set_anamorphic_size( hb_job_t * job)
        is bigger than the max. If so, set it to the max (this is sloppy).
        If not, set job height to job width divided by storage aspect.
     */
+    
     if ( job->maxWidth && (job->maxWidth < job->width) )
-        job->width = job->maxWidth;
-        
-    if ( job->maxHeight && (job->maxHeight < (job->width / storage_aspect * 10000)) )
+            width = job->maxWidth;
+    
+    if ( job->maxHeight && (job->maxHeight < (width / storage_aspect * 10000)) )
     {
-        job->height = job->maxHeight;
+        height = job->maxHeight;
     }
     else
     {
-        job->height = job->width * 10000 / storage_aspect;
+        height = width * 10000 / storage_aspect;
     }
+        
         
     /* Time to get picture dimensions that divide cleanly.
        These variables will store temporary dimensions as we iterate. */
-    int i, w, h, mod;
+    int i, w, h;
 
     /* In case the user specified a modulus, use it */
     if (job->modulus)
@@ -480,49 +492,52 @@ void hb_set_anamorphic_size( hb_job_t * job)
     {
         w = mod * i;
         
-        if (w < job->width)
+        if (w < width)
         {
-            if ( ( job->width - w ) <= ( mod / 2 ) )
+            if ( ( width - w ) <= ( mod / 2 ) )
                 /* We'll take a width that's
                    smaller, but close enough. */
                 break;
         }
-        if (w == job->width)
+        if (w == width)
             /* Mod 16 dimensions, how nice! */
             break;
-        if( w > job->width )
+        if( w > width )
         {
-            if ( ( w - job->width ) < (mod/2) )
+            if ( ( w - width ) < (mod/2) )
                 /* We'll take a width that's bigger, if we have to. */
                 break;
         }
     }
-    job->width  = mod * (i);
+    width  = mod * (i);
     
     /* Now do the same for a mod-friendly value near job->height. */
     for( i = 1;; i++)
     {
         h = i * mod;
         
-        if (h < job->height)
+        if (h < height)
             {
-                if ( ( job->height - h ) <= ( mod / 2 ))
+                if ( ( height - h ) <= ( mod / 2 ))
                     /* Go with a smaller height,
                        if it's close enough.    */
                     break;
             }
-        if (h == job->height)
+        if (h == height)
             /* Mod 16 dimensions, how nice! */
             break;
             
-        if ( h > job->height)
+        if ( h > height)
         {
-            if ( ( h - job->height ) < ( mod / 2 ))
+            if ( ( h - height ) < ( mod / 2 ))
                 /* Use a taller height if necessary */
                 break;
         }
     }
-    job->height = mod  * (i);
+    height = mod  * (i);
+    
+    int pixel_aspect_width = job->pixel_aspect_width;
+    int pixel_aspect_height = job->pixel_aspect_height;
     
     if (cropped_width <= 706)
     {
@@ -530,50 +545,56 @@ void hb_set_anamorphic_size( hb_job_t * job)
         if (title->height == 480)
         {
             /* It's NTSC */
-            if (title->aspect == 16)
+            if (aspect == 16)
             {
                 /* It's widescreen */
-                job->pixel_aspect_width = 40;
-                job->pixel_aspect_height = 33;
+                pixel_aspect_width = 40;
+                pixel_aspect_height = 33;
             }
             else
             {
                 /* It's 4:3 */
-                job->pixel_aspect_width = 10;
-                job->pixel_aspect_height = 11;
+                pixel_aspect_width = 10;
+                pixel_aspect_height = 11;
             }
         }
         else if (title->height == 576)
         {
             /* It's PAL */
-            if(title->aspect == 16)
+            if(aspect == 16)
             {
                 /* It's widescreen */
-                job->pixel_aspect_width = 16;
-                job->pixel_aspect_height = 11;
+                pixel_aspect_width = 16;
+                pixel_aspect_height = 11;
             }
             else
             {
                 /* It's 4:3 */
-                job->pixel_aspect_width = 12;
-                job->pixel_aspect_height = 11;
+                pixel_aspect_width = 12;
+                pixel_aspect_height = 11;
             }
         }
     }
 
     /* Figure out what dimensions the source would display at. */
-    int source_display_width = cropped_width * ((float)job->pixel_aspect_width / (float)job->pixel_aspect_height) ;
+    int source_display_width = cropped_width * ((float)pixel_aspect_width / (float)pixel_aspect_height) ;
    
     /* The film AR is the source's display width / cropped source height.
        The output display width is the output height * film AR.
        The output PAR is the output display width / output storage width. */
-    job->pixel_aspect_width = job->height * source_display_width / cropped_height;
-    job->pixel_aspect_height = job->width;
+    pixel_aspect_width = height * source_display_width / cropped_height;
+    pixel_aspect_height = width;
     
     /* While x264 is smart enough to reduce fractions on its own, libavcodec
        needs some help with the math, so lose superfluous factors.            */
-    hb_reduce( &job->pixel_aspect_width, &job->pixel_aspect_height,
-               job->pixel_aspect_width, job->pixel_aspect_height );
+    hb_reduce( &pixel_aspect_width, &pixel_aspect_height,
+               pixel_aspect_width, pixel_aspect_height );
+    
+    /* Pass the results back to the caller */
+    *output_width = width;
+    *output_height = height;
+    *output_par_width = pixel_aspect_width;
+    *output_par_height = pixel_aspect_height;
 }
 
 /**

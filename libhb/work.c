@@ -133,7 +133,7 @@ static void do_job( hb_job_t * job, int cpu_count )
 
         /* While keeping the DVD storage aspect, resize the job width and height
            so they fit into the user's specified dimensions. */
-        hb_set_anamorphic_size(job);
+        hb_set_anamorphic_size(job, &job->width, &job->height, &job->pixel_aspect_width, &job->pixel_aspect_height);
     }
 
 	/* Keep width and height within these boundaries,

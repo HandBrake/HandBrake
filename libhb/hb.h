@@ -78,7 +78,9 @@ hb_list_t   * hb_get_titles( hb_handle_t * );
 void          hb_get_preview( hb_handle_t *, hb_title_t *, int,
                               uint8_t * );
 void          hb_set_size( hb_job_t *, int ratio, int pixels );
-void          hb_set_anamorphic_size( hb_job_t * );
+void          hb_set_anamorphic_size( hb_job_t *,
+                int *output_width, int *output_height,
+                int *output_par_width, int *output_par_height);
 
 /* Handling jobs */
 int           hb_count( hb_handle_t * );
