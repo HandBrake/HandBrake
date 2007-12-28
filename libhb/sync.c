@@ -567,9 +567,9 @@ static int SyncVideo( hb_work_object_t * w )
         UpdateState( w );
 
         /* Make sure we won't get more frames then expected */
-        if( pv->count_frames >= pv->count_frames_max )
+        if( pv->count_frames >= pv->count_frames_max * 2)
         {
-            hb_log( "sync: got %lld frames", pv->count_frames );
+            hb_log( "sync: got too many frames (%lld), exiting early", pv->count_frames );
             pv->done = 1;
             
            // Drop an empty buffer into our output to ensure that things
