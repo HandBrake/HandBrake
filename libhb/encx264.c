@@ -35,6 +35,7 @@ struct hb_work_private_s
     // Internal queue of DTS start/stop values.
     int64_t        dts_start[DTS_BUFFER_SIZE];
     int64_t        dts_stop[DTS_BUFFER_SIZE];
+    int64_t        init_delay;
 
     int64_t        dts_write_index;
     int64_t        dts_read_index;
@@ -250,6 +251,32 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     pv->dts_read_index = 0;
     pv->next_chap = 0;
 
+    if (job->areBframes)
+    {
+        /* Basic initDelay value is the clockrate divided by the FPS
+           -- the length of one frame in clockticks.                  */
+        pv->init_delay = (float)90000 / (float)((float)job->vrate / (float)job->vrate_base);
+       
+        /* 23.976-length frames are 3753.75 ticks long. That means 25%
+           will come out as 3753, 75% will be 3754. The delay has to be
+           the longest possible frame duration, 3754. However, 3753.75
+           gets truncated to 3753, so if that's what it is, ++ it.     */
+        if (pv->init_delay == 3753)
+            pv->init_delay++;
+       
+        /* For VFR, libhb sees the FPS as 29.97, but the longest frames
+           will use the duration of frames running at 23.976fps instead.. */
+        if (job->vfr)
+        {
+            pv->init_delay = 3754;
+        }
+   
+        /* The delay is 2 frames for regular b-frames, 3 for b-pyramid.
+           Since job->areBframes is 1 for b-frames and 2 for b-pyramid,
+           add one to it and use it as a multiplier.                    */
+        pv->init_delay *= ( job->areBframes + 1);
+    }
+
     return 0;
 }
 
@@ -447,7 +474,7 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
                        value is pretty much guaranteed to be positive.  The
                        muxing code will minimize the renderOffset at the end. */
 
-                    buf->renderOffset = pic_out.i_pts - dts_start + 1000000;
+                    buf->renderOffset = pic_out.i_pts - dts_start + pv->init_delay;
 
                     /* Send out the next dts values */
                     buf->start = dts_start;

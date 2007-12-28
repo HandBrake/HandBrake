@@ -11,10 +11,6 @@
 
 void AddIPodUUID(MP4FileHandle, MP4TrackId);
 
-/* B-frame muxing variables */
-MP4SampleId thisSample = 0;
-uint64_t initDelay;
-
 struct hb_mux_object_s
 {
     HB_MUX_COMMON;
@@ -375,7 +371,21 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
            (This is because of how durations for text tracks work in QT) */
         if( job->chapter_markers && buf->new_chap )
         {
-            struct hb_text_sample_s *sample = MP4GenerateChapterSample( m, (m->sum_dur - m->chapter_duration) );
+            struct hb_text_sample_s *sample;
+
+            /* If this is an x264 encode with bframes the IDR frame we're
+               trying to mark will be displayed offset by its renderOffset
+               so we need to offset the chapter by the same amount.
+               MP4 render offsets don't seem to work for text tracks so
+               we have to fudge the duration instead. */
+            duration = m->sum_dur - m->chapter_duration;
+
+            if ( job->areBframes )
+            {
+                duration += buf->renderOffset * job->arate / 90000;
+            }
+
+            sample = MP4GenerateChapterSample( m, duration );
             
             if( !MP4WriteSample(m->file, 
                                 m->chapter_track, 
@@ -389,7 +399,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             }
             free(sample);
             m->current_chapter++;
-            m->chapter_duration = m->sum_dur;
+            m->chapter_duration = duration;
         }
     
         /* Video */
@@ -410,16 +420,6 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     {
         /* Audio */
         duration = MP4_INVALID_DURATION;
-    }
-
-    /* When we do get the first keyframe, use its duration as the
-       initial delay added to the frame order offset for b-frames.
-       Because of b-pyramid, double this duration when there are
-       b-pyramids, as denoted by job->areBframes equalling 2. */
-    if ((mux_data->track == 1) && (thisSample == 0) && (buf->frametype & HB_FRAME_KEY) && (job->vcodec == HB_VCODEC_X264))
-    {
-        initDelay = buf->renderOffset;
-        thisSample++;
     }
 
     /* Here's where the sample actually gets muxed. 
@@ -468,27 +468,7 @@ static int MP4End( hb_mux_object_t * m )
     }
     
     if (job->areBframes)
-    /* Walk the entire video sample table and find the minumum ctts value. */
     {
-           MP4SampleId count = MP4GetTrackNumberOfSamples( m->file, 1);
-           MP4SampleId i;
-           MP4Duration renderingOffset = 2000000000, tmp;
-           
-           // Find the smallest rendering offset
-           for(i = 1; i <= count; i++)
-           {
-               tmp = MP4GetSampleRenderingOffset(m->file, 1, i);
-               if(tmp < renderingOffset)
-                   renderingOffset = tmp;
-           }
-           
-           // Adjust all ctts values down by renderingOffset
-           for(i = 1; i <= count; i++)
-           {
-               MP4SetSampleRenderingOffset(m->file,1,i,
-                   MP4GetSampleRenderingOffset(m->file,1,i) - renderingOffset);
-           }
-           
            // Insert track edit to get A/V back in sync.  The edit amount is
            // the rendering offset of the first sample.
            MP4AddTrackEdit(m->file, 1, MP4_INVALID_EDIT_ID, MP4GetSampleRenderingOffset(m->file,1,1),

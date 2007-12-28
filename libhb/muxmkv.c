@@ -224,9 +224,9 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     if (mux_data == job->mux_data)
     {
         /* Video */
-        if ((job->vcodec == HB_VCODEC_X264) && (buf->frametype & HB_FRAME_REF))
+        if ((job->vcodec == HB_VCODEC_X264) && (job->areBframes))
         {
-            timecode = (buf->start + (buf->renderOffset - 1000000)) * TIMECODE_SCALE;
+            timecode = (buf->start + (buf->renderOffset)) * TIMECODE_SCALE;
         }
         else
         {
