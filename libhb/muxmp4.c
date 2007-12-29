@@ -399,7 +399,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             }
             free(sample);
             m->current_chapter++;
-            m->chapter_duration = duration;
+            m->chapter_duration += duration;
         }
     
         /* Video */
