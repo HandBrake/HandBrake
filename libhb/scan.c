@@ -70,19 +70,14 @@ static void ScanFunc( void * _data )
             }
         }
     }
+    else if ( (data->stream = hb_stream_open (data->path)) != NULL )
+    {
+        hb_list_add( data->list_title, hb_stream_title_scan( data->stream ) );
+    }
     else
     {
-        if ( hb_stream_is_stream_type(data->path) )
-        {
-          hb_log( "scan: trying to open as MPEG-2 Stream");
-		  data->stream = hb_stream_open (data->path);
-          hb_list_add( data->list_title, hb_stream_title_scan( data->stream ) );
-        }
-        else
-        {
-            hb_log( "scan: unrecognized file type" );
-            return;
-        }
+        hb_log( "scan: unrecognized file type" );
+        return;
     }
 
     for( i = 0; i < hb_list_count( data->list_title ); )

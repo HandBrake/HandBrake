@@ -827,8 +827,8 @@ static void SyncAudio( hb_work_object_t * w, int i )
         /*
          * Trash the top audio packet to avoid dead lock as we reconverge.
          */
-        buf = hb_fifo_get( audio->fifo_raw );
-        hb_buffer_close( &buf ); 
+        if ( (buf = hb_fifo_get( audio->fifo_raw ) ) != NULL)
+            hb_buffer_close( &buf );
     }
 
     if( NeedSilence( w, audio ) )

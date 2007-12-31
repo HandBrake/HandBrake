@@ -108,19 +108,72 @@ static hb_audio_t *hb_ts_stream_set_audio_id_and_codec(hb_stream_t *stream,
 static void hb_ps_stream_find_audio_ids(hb_stream_t *stream, hb_title_t *title);
 static off_t align_to_next_packet(FILE* f);
 
-int hb_stream_is_stream_type( char * path )
+
+static inline int check_ps_sync(const uint8_t *buf)
 {
-  if ((strstr(path,".mpg") != NULL) ||
-      (strstr(path,".vob") != NULL) || 
-      (strstr(path, ".VOB") != NULL) ||
-      (strstr(path, ".mpeg") != NULL) ||
-      (strstr(path,".ts") != NULL) || 
-      (strstr(path, ".m2t") != NULL) ||
-      (strstr(path, ".TS") != NULL))
-  {
-    return 1;
-  }
-  else
+    // must have a Pack header
+    // (note: the operator '&' instead of '&&' is used deliberately for better
+    // performance with a multi-issue pipeline.)
+    return (buf[0] == 0x00) & (buf[1] == 0x00) & (buf[2] == 0x01) & (buf[3] == 0xba);
+}
+
+static inline int check_ts_sync(const uint8_t *buf)
+{
+    // must have initial sync byte, no scrambling & a legal adaptation ctrl
+    return (buf[0] == 0x47) & ((buf[3] >> 6) == 0) & ((buf[3] >> 4) > 0);
+}
+
+static inline int have_ts_sync(const uint8_t *buf)
+{
+    return check_ts_sync(&buf[0*188]) & check_ts_sync(&buf[1*188]) &
+           check_ts_sync(&buf[2*188]) & check_ts_sync(&buf[3*188]) &
+           check_ts_sync(&buf[4*188]) & check_ts_sync(&buf[5*188]) &
+           check_ts_sync(&buf[6*188]) & check_ts_sync(&buf[7*188]);
+}
+
+static int hb_stream_check_for_ts(const uint8_t *buf)
+{
+    // transport streams should have a sync byte every 188 bytes.
+    // search the first KB of buf looking for at least 8 consecutive
+    // correctly located sync patterns.
+    int offset = 0;
+
+    for ( offset = 0; offset < 1024; ++offset )
+    {
+        if ( have_ts_sync( &buf[offset]) )
+            return 1;
+    }
+    return 0;
+}
+
+static int hb_stream_check_for_ps(const uint8_t *buf)
+{
+    // program streams should have a Pack header every 2048 bytes.
+    // check that we have 4 of these.
+    return check_ps_sync(&buf[0*2048]) & check_ps_sync(&buf[1*2048]) &
+           check_ps_sync(&buf[2*2048]) & check_ps_sync(&buf[3*2048]);
+}
+
+static int hb_stream_get_type(hb_stream_t *stream)
+{
+    uint8_t buf[2048*4];
+
+    if ( fread(buf, 1, sizeof(buf), stream->file_handle) == sizeof(buf) )
+    {
+        if ( hb_stream_check_for_ts(buf) != 0 )
+        {
+            hb_log("file is MPEG Transport Stream");
+            stream->stream_type = hb_stream_type_transport;
+            hb_ts_stream_init(stream);
+            return 1;
+        }
+        if ( hb_stream_check_for_ps(buf) != 0 )
+        {
+            hb_log("file is MPEG Program Stream");
+            stream->stream_type = hb_stream_type_program;
+            return 1;
+        }
+    }
     return 0;
 }
 
@@ -136,27 +189,20 @@ hb_stream_t * hb_stream_open( char * path )
     d = calloc( sizeof( hb_stream_t ), 1 );
 
     /* Open device */
-    if( !( d->file_handle = fopen( path, "rb" ) ) )
+    if( ( d->file_handle = fopen( path, "rb" ) ) )
+    {
+        d->path = strdup( path );
+        if ( hb_stream_get_type( d ) != 0 )
+        {
+            return d;
+        }
+        fclose( d->file_handle );
+        free( d->path );
+    }
+    else
     {
         hb_log( "hb_stream_open: fopen failed (%s)", path );
-        goto fail;
     }
-
-    d->path = strdup( path );
-
-	if ( ( strstr(d->path,".ts") != NULL) || ( strstr(d->path,".m2t") != NULL) || ( strstr(d->path,".TS") != NULL) )
-	{
-		d->stream_type = hb_stream_type_transport;
-		hb_ts_stream_init(d);
-	}
-	else if (( strstr(d->path,".mpg") != NULL) || ( strstr(d->path,".vob") != NULL) || ( strstr(d->path,".mpeg") != NULL) || ( strstr(d->path,".VOB") != NULL))
-	{
-		d->stream_type = hb_stream_type_program;
-	}
-	
-    return d;
-
-fail:
     free( d );
     return NULL;
 }
@@ -194,7 +240,7 @@ void hb_stream_close( hb_stream_t ** _d )
 			d->ts_packetbuf[i] = NULL;
 		}
 	}
-	
+    free( d->path );
     free( d );
     *_d = NULL;
 }
@@ -277,12 +323,70 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream)
   return aTitle;
 }
 
+/*
+ * scan the next MB of 'stream' to find the next start packet for
+ * the Packetized Elementary Stream associated with TS PID 'pid'.
+ */
+static const uint8_t *hb_ts_stream_getPEStype(hb_stream_t *stream, uint32_t pid)
+{
+    static uint8_t buf[188];
+    int npack = 100000; // max packets to read
+
+    while (--npack >= 0)
+    {
+        if (fread(buf, 1, 188, stream->file_handle) != 188)
+        {
+            hb_log("hb_ts_stream_getPEStype: EOF while searching for PID 0x%x", pid);
+            return 0;
+        }
+        if (buf[0] != 0x47)
+        {
+            hb_log("hb_ts_stream_getPEStype: lost sync while searching for PID 0x%x", pid);
+            align_to_next_packet(stream->file_handle);
+            continue;
+        }
+
+        /*
+         * The PES header is only in TS packets with 'start' set so we check
+         * that first then check for the right PID.
+         */
+        if ((buf[1] & 0x40) == 0 || (buf[1] & 0x1f) != (pid >> 8) ||
+            buf[2] != (pid & 0xff))
+        {
+            // not a start packet or not the pid we want
+            continue;
+        }
+
+        /* skip over the TS hdr to return a pointer to the PES hdr */
+        int udata = 4;
+        switch (buf[3] & 0x30)
+        {
+            case 0x00: // illegal
+            case 0x20: // fill packet
+                continue;
+
+            case 0x30: // adaptation
+                if (buf[4] > 182)
+                {
+                    hb_log("hb_ts_stream_getPEStype: invalid adaptation field length %d for PID 0x%x", buf[4], pid);
+                    continue;
+                }
+                udata += buf[4] + 1;
+                break;
+        }
+        return &buf[udata];
+    }
+
+    /* didn't find it */
+    return 0;
+}
+
 /***********************************************************************
  * hb_stream_duration
  ***********************************************************************
  *
  **********************************************************************/
-void hb_stream_duration(hb_stream_t *stream, hb_title_t *inTitle)
+static void hb_stream_duration(hb_stream_t *stream, hb_title_t *inTitle)
 {
 	// VOB Files often have exceedingly unusual PTS values in them - they will progress for a while
 	// and then reset without warning ! 
@@ -297,109 +401,70 @@ void hb_stream_duration(hb_stream_t *stream, hb_title_t *inTitle)
 		return;
 	}
 
-    unsigned char *buf = (unsigned char *) malloc(4096);
-    int done = 0;
-    off_t cur_pos;
-    int64_t first_pts = 0, last_pts = 0;
+    uint64_t first_pts, last_pts;
+    const uint8_t *buf;
     
-    // To calculate the duration we look for the first and last presentation time stamps in the stream for video data
-    // and then use the delta
-    while (!done)
+    // To calculate the duration we get video presentation time stamps
+    // at a couple places in the file then use their difference scaled
+    // by the ratio of the distance between our measurement points &
+    // the size of the file. The issue is that our video file may have
+    // chunks from several different program fragments (main feature,
+    // commercials, station id, trailers, etc.) all with their on base
+    // pts value. We need to difference two pts's from the same program
+    // fragment. Since extraneous material is very likely at the beginning
+    // and end of the content, for now we take a time stamp from 25%
+    // into the file & 75% into the file then double their difference
+    // to get the total duration.
+    fseeko(stream->file_handle, 0, SEEK_END);
+    uint64_t fsize = ftello(stream->file_handle);
+    fseeko(stream->file_handle, fsize >> 2, SEEK_SET);
+    align_to_next_packet(stream->file_handle);
+    buf = hb_ts_stream_getPEStype(stream, stream->ts_video_pids[0]);
+    if (buf == NULL)
     {
-      cur_pos = ftello(stream->file_handle);
-      if (fread(buf, 4096, 1, stream->file_handle) == 1)
-      {
-        int i=0;
-        for (i=0; (i <= 4092) && !done; i++)
-        {
-          if ((buf[i] == 0x00) && (buf[i+1] == 0x00) && (buf[i+2] == 0x01) && (buf[i+3]  == 0xe0))    // Found a Video Stream
-          {
-              // Now look for a PTS field - we need to make sure we have enough space so we back up a little and read
-              // some more data
-              fseeko(stream->file_handle, cur_pos + i, SEEK_SET);
-              if (fread(buf, 4096, 1, stream->file_handle) == 1)
-              {
-                  int has_pts             = ( ( buf[7] >> 6 ) & 0x2 ) ? 1 : 0;
-                  if (has_pts)
-                  {
-                    first_pts = ( ( ( (uint64_t) buf[9] >> 1 ) & 0x7 ) << 30 ) +
-                          ( buf[10] << 22 ) +
-                          ( ( buf[11] >> 1 ) << 15 ) +
-                          ( buf[12] << 7 ) +
-                          ( buf[13] >> 1 );
-                    done = 1;
-                  }
-                  else
-                  {
-                    fseeko(stream->file_handle, cur_pos, SEEK_SET);
-                    fread(buf, 4096, 1, stream->file_handle);
-                  }
-              }
-          }
-        }
-      }
-      else
-        done = 1;    // End of data;
+        hb_log("hb_stream_duration: couldn't find video start packet");
+        return;
     }
-
-    // Now work back from the end of the stream
-    fseeko(stream->file_handle,0 ,SEEK_END);
-    
-    done = 0;
-    while (!done)
+    if ((buf[7] >> 7) != 1)
     {
-      // Back up a little
-      if (fseeko(stream->file_handle, -4096, SEEK_CUR) < 0)
-      {
-        done = 1;
-        break;
-      }
-      
-      cur_pos = ftello(stream->file_handle);
-      if (fread(buf, 4096, 1, stream->file_handle) == 1)
-      {
-        int i=0;
-        for (i=4092; (i >= 0) && !done; i--)
-        {
-          if ((buf[i] == 0x00) && (buf[i+1] == 0x00) && (buf[i+2] == 0x01) && (buf[i+3] == 0xe0))    // Found a Video Stream
-          {
-              // Now look for a PTS field - we need to make sure we have enough space so we back up a little and read
-              // some more data
-              fseeko(stream->file_handle, cur_pos + i, SEEK_SET);
-              fread(buf, 1, 4096, stream->file_handle);
-
-              int has_pts             = ( ( buf[7] >> 6 ) & 0x2 ) ? 1 : 0;
-              if (has_pts)
-              {
-                last_pts = ( ( ( (uint64_t) buf[9] >> 1 ) & 0x7 ) << 30 ) +
-                      ( buf[10] << 22 ) +
-                      ( ( buf[11] >> 1 ) << 15 ) +
-                      ( buf[12] << 7 ) +
-                      ( buf[13] >> 1 );
-                
-                done = 1;
-              }
-              else
-              {
-                // Re Read the original data and carry on (i is still valid in the old buffer)
-                fseeko(stream->file_handle, cur_pos, SEEK_SET);
-                fread(buf, 4096, 1, stream->file_handle);
-              }
-          }
-        }
-        fseeko(stream->file_handle, -4096, SEEK_CUR);   // 'Undo' the last read
-      }
-      else
-        done = 1;    // End of data;
+        hb_log("hb_stream_duration: no PTS in initial video packet");
+        return;
     }
-    free(buf);
-    
-    int64_t duration = last_pts - first_pts;
-    inTitle->duration = duration; //90LL * dvdtime2msec( &d->pgc->playback_time );
+    first_pts = ( ( (uint64_t)buf[9] >> 1 ) & 7 << 30 ) |
+                ( (uint64_t)buf[10] << 22 ) |
+                ( ( (uint64_t)buf[11] >> 1 ) << 15 ) |
+                ( (uint64_t)buf[12] << 7 ) |
+                ( (uint64_t)buf[13] >> 1 );
+    hb_log("hb_stream_duration: first pts %lld", first_pts);
+
+    // now get a pts from a frame near the end of the file.
+    fseeko(stream->file_handle, fsize - (fsize >> 2), SEEK_SET);
+    align_to_next_packet(stream->file_handle);
+    buf = hb_ts_stream_getPEStype(stream, stream->ts_video_pids[0]);
+    if (buf == NULL)
+    {
+        hb_log("hb_stream_duration: couldn't find video end packet");
+        return;
+    }
+    if ((buf[7] >> 7) != 1)
+    {
+        hb_log("hb_stream_duration: no PTS in final video packet");
+        inTitle->duration = 0;
+        return;
+    }
+    last_pts = ( ( (uint64_t)buf[9] >> 1 ) & 7 << 30 ) |
+                ( (uint64_t)buf[10] << 22 ) |
+                ( ( (uint64_t)buf[11] >> 1 ) << 15 ) |
+                ( (uint64_t)buf[12] << 7 ) |
+                ( (uint64_t)buf[13] >> 1 );
+    hb_log("hb_stream_duration: last pts %lld", last_pts);
+
+    inTitle->duration = (last_pts - first_pts) * 2 + 90000 * 60;
     inTitle->hours    = inTitle->duration / 90000 / 3600;
     inTitle->minutes  = ( ( inTitle->duration / 90000 ) % 3600 ) / 60;
     inTitle->seconds  = ( inTitle->duration / 90000 ) % 60;
-    
+
+    rewind(stream->file_handle);
 }
 
 /***********************************************************************
@@ -521,74 +586,16 @@ int hb_stream_seek( hb_stream_t * src_stream, float f )
   return 1;
 }
 
-/*
- * scan the first MB of 'stream' to try and determine the type of the Packetized
- * Elementary Stream associated with TS PID 'pid'.
- */
-static const uint8_t *hb_ts_stream_getPEStype(hb_stream_t *stream, uint32_t pid)
-{
-    static uint8_t buf[188];
-    int npack = 100000; // max packets to read
-
-    fseeko(stream->file_handle, 0, SEEK_SET);
-    align_to_next_packet(stream->file_handle);
-
-    while (--npack >= 0)
-    {
-        if (fread(buf, 1, 188, stream->file_handle) != 188)
-        {
-            hb_log("hb_ts_stream_getPEStype: EOF while searching for PID 0x%x", pid);
-            return 0;
-        }
-        if (buf[0] != 0x47)
-        {
-            hb_log("hb_ts_stream_getPEStype: lost sync while searching for PID 0x%x", pid);
-            align_to_next_packet(stream->file_handle);
-            continue;
-        }
-
-        /*
-         * The PES header is only in TS packets with 'start' set so we check
-         * that first then check for the right PID.
-         */
-        if ((buf[1] & 0x40) == 0 || (buf[1] & 0x1f) != (pid >> 8) ||
-            buf[2] != (pid & 0xff))
-        {
-            // not a start packet or not the pid we want
-            continue;
-        }
-
-        /* skip over the TS hdr to return a pointer to the PES hdr */
-        int udata = 4;
-        switch (buf[3] & 0x30)
-        {
-            case 0x00: // illegal
-            case 0x20: // fill packet
-                continue;
-
-            case 0x30: // adaptation
-                if (buf[4] > 182)
-                {
-                    hb_log("hb_ts_stream_getPEStype: invalid adaptation field length %d for PID 0x%x", buf[4], pid);
-                    continue;
-                }
-                udata += buf[4] + 1;
-                break;
-        }
-        return &buf[udata];
-    }
-
-    /* didn't find it */
-    return 0;
-}
-
 static hb_audio_t *hb_ts_stream_set_audio_id_and_codec(hb_stream_t *stream,
                                                        int aud_pid_index)
 {
     off_t cur_pos = ftello(stream->file_handle);
     hb_audio_t *audio = calloc( sizeof( hb_audio_t ), 1 );
-    const uint8_t *buf = hb_ts_stream_getPEStype(stream,
-                                            stream->ts_audio_pids[aud_pid_index]);
+    const uint8_t *buf;
+
+    fseeko(stream->file_handle, 0, SEEK_SET);
+    align_to_next_packet(stream->file_handle);
+    buf = hb_ts_stream_getPEStype(stream, stream->ts_audio_pids[aud_pid_index]);
 
     /* check that we found a PES header */
     if (buf && buf[0] == 0x00 && buf[1] == 0x00 && buf[2] == 0x01)
@@ -1826,28 +1833,18 @@ static void hb_ts_stream_decode(hb_stream_t *stream)
 		return;
 	}
 	
-	int bytesReadInPacket = 0;
 	int curr_write_buffer_index = stream->ps_current_write_buffer_index;
 	
 	// Write output data until a buffer switch occurs.
 	while (curr_write_buffer_index == stream->ps_current_write_buffer_index)
 	{
-		// Try to read packet..
-		int bytesRead;
-		if ((bytesRead = fread(buf+bytesReadInPacket, 1, 188-bytesReadInPacket, stream->file_handle)) != 188-bytesReadInPacket)
+      if ((fread(buf, 188, 1, stream->file_handle)) != 1)
 		{
-			if (bytesRead < 0)
-				bytesRead = 0;
-			bytesReadInPacket += bytesRead;
-
-			// Flush any outstanding output data - we're done here.
-			flushbuf(stream);
-			break;
-		}
-		else
-		{
-//			curfilepos += bytesRead;
-			bytesReadInPacket = 0;
+            // end of file - we didn't finish filling our ps write buffer
+            // so just discard the remainder (the partial buffer is useless)
+            hb_log("hb_ts_stream_decode - eof");
+            stream->ps_decode_buffer[stream->ps_current_write_buffer_index].len = 0;
+         return;
 		}
 
 		// Check sync byte
@@ -1866,40 +1863,24 @@ static void hb_ts_stream_decode(hb_stream_t *stream)
 		// Get pid
 		int pid = (((buf[1] & 0x1F) << 8) | buf[2]) & 0x1FFF;
 
-		// Skip this block
-		if (index_of_pid(pid, stream) < 0)
-			continue;
-//		if (pid != stream->ts_audio_pids[0] && pid != stream->ts_video_pids[0])
-//			continue;
-
 		// Get the pos and buf - we organize our streams as 'n' video streams then 'm' audio streams
-		int index_of_selected_pid = -1;
+      int index_of_selected_pid;
 		if ((index_of_selected_pid = index_of_video_pid(pid,stream)) < 0)
 		{
 			// Not a video PID perhaps audio ?
 			if ((index_of_selected_pid = index_of_audio_pid(pid,stream)) < 0)
 			{
-				hb_log("hb_ts_stream_decode - Unknown pid 0x%x (%d)", pid, pid);
+            // not a pid we want
 				continue;
 			}
 			else
 			{
 				curstream = stream->ts_number_video_pids + index_of_selected_pid;
-				if (curstream > kMaxNumberDecodeStreams)
-				{
-					hb_log("hb_ts_stream_decode - Too many streams %d", curstream);
-					continue;
-				}
 			}
 		}
 		else
 			curstream = index_of_selected_pid;
 		
-//		if (pid == stream->ts_video_pids[0])
-//			curstream = 0;
-//		else
-//			curstream = 1;
-
 		// Get start code
 		int start;
 		start = (buf[1] & 0x40) != 0;
