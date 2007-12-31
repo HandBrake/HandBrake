@@ -1081,8 +1081,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 returnCode: (int) returnCode contextInfo: (void *) contextInfo
 {
     /* we convert the sender content of contextInfo back into a variable called sender
-    * mostly just for consistency for evaluation later
-    */
+     * mostly just for consistency for evaluation later
+     */
     id sender = (id)contextInfo;
     /* User selected a file to open */
 	if( returnCode == NSOKButton )
@@ -1093,17 +1093,17 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         NSString *sourceDirectory = [scanPath stringByDeletingLastPathComponent];
         [[NSUserDefaults standardUserDefaults] setObject:sourceDirectory forKey:@"LastSourceDirectory"];
         /* we order out sheet, which is the browse window as we need to open
-            * the title selection sheet right away
-            */
+         * the title selection sheet right away
+         */
         [sheet orderOut: self];
         
         if (sender == fOpenSourceTitleMMenu)
         {
             /* We put the chosen source path in the source display text field for the
-            * source title selection sheet in which the user specifies the specific title to be
-            * scanned  as well as the short source name in fSrcDsplyNameTitleScan just for display
-            * purposes in the title panel
-            */
+             * source title selection sheet in which the user specifies the specific title to be
+             * scanned  as well as the short source name in fSrcDsplyNameTitleScan just for display
+             * purposes in the title panel
+             */
             /* Full Path */
             [fScanSrcTitlePathField setStringValue: [NSString stringWithFormat:@"%@", scanPath]];
             NSString *displayTitlescanSourceName;
@@ -1111,7 +1111,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             if ([[scanPath lastPathComponent] isEqualToString: @"VIDEO_TS"])
             {
                 /* If VIDEO_TS Folder is chosen, choose its parent folder for the source display name 
-                we have to use the title->dvd value so we get the proper name of the volume if a physical dvd is the source*/
+                 we have to use the title->dvd value so we get the proper name of the volume if a physical dvd is the source*/
                 displayTitlescanSourceName = [NSString stringWithFormat:[[scanPath stringByDeletingLastPathComponent] lastPathComponent]];
             }
             else
@@ -1122,15 +1122,56 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             /* we set the source display name in the title selection dialogue */
             [fSrcDsplyNameTitleScan setStringValue: [NSString stringWithFormat:@"%@", displayTitlescanSourceName]];
             /* We show the actual sheet where the user specifies the title to be scanned 
-                * as we are going to do a title specific scan
-                */
+             * as we are going to do a title specific scan
+             */
             [self showSourceTitleScanPanel:NULL];
         }
         else
         {
             /* We are just doing a standard full source scan, so we specify "0" to libhb */
             NSString *path = [[sheet filenames] objectAtIndex: 0];
-            [self performScan:path scanTitleNum:0];   
+            
+            /* We check to see if the chosen file at path is a package */
+            if ([[NSWorkspace sharedWorkspace] isFilePackageAtPath:path])
+            {
+                fprintf( stdout, "MacGui: Trying to open a package\n");
+                /* We check to see if this is an .eyetv package */
+                if ([[path pathExtension] isEqualToString: @"eyetv"])
+                {
+                    fprintf( stdout, "MacGui: Trying to open eyetv package\n");
+                    /* We're looking at an EyeTV package - try to open its enclosed
+                     .mpg media file */
+                    NSString *mpgname;
+                    int n = [[path stringByAppendingString: @"/"]
+                             completePathIntoString: &mpgname caseSensitive: NO
+                             matchesIntoArray: nil
+                             filterTypes: [NSArray arrayWithObject: @"mpg"]];
+                    if (n > 0)
+                    {
+                        /* Found an mpeg inside the eyetv package, make it our scan path 
+                        and call performScan on the enclosed mpeg */
+                        path = mpgname;
+                        fprintf( stdout, "MacGui: found mpeg in eyetv package\n");
+                        [self performScan:path scanTitleNum:0];
+                    }
+                    else
+                    {
+                        /* We did not find an mpeg file in our package, so we do not call performScan */
+                        fprintf( stdout, "MacGui: no valid mpeg in eyetv package\n");
+                    }
+                }
+                else
+                {
+                    /* The package is not an eyetv package, so we do not call performScan */
+                    fprintf( stdout, "MacGui: Unable to open package\n");
+                }
+            }
+            else
+            {
+                /* path is not a package, so we call perform scan directly on our file */
+                [self performScan:path scanTitleNum:0];
+            }
+            
         }
         
     }
@@ -1250,6 +1291,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 /* If VIDEO_TS Folder is chosen, choose its parent folder for the source display name 
                 we have to use the title->dvd value so we get the proper name of the volume if a physical dvd is the source*/
                 sourceDisplayName = [NSString stringWithFormat:[[[NSString stringWithUTF8String: title->dvd] stringByDeletingLastPathComponent] lastPathComponent]];
+            }
+            else if ([[NSString stringWithUTF8String: title->dvd] rangeOfString: @".eyetv/"].length != 0)
+            {
+                /* Use the name of the EyeTV package instead of the media file */
+                sourceDisplayName = [NSString stringWithFormat: @"%@",
+                                     [[[[NSString stringWithUTF8String: title->dvd] stringByDeletingLastPathComponent] lastPathComponent] stringByDeletingPathExtension]];
             }
             else
             {
