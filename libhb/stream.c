@@ -388,12 +388,12 @@ static const uint8_t *hb_ts_stream_getPEStype(hb_stream_t *stream, uint32_t pid)
  **********************************************************************/
 static void hb_stream_duration(hb_stream_t *stream, hb_title_t *inTitle)
 {
-	// VOB Files often have exceedingly unusual PTS values in them - they will progress for a while
-	// and then reset without warning ! 
-	if  (strstr(stream->path,".vob") != NULL) 
+   // XXX don't have duration code for program streams yet
+    // use a fake duration that should be "long enough"
+    if ( stream->stream_type == hb_stream_type_program )
 	{
-		// So we'll use a 'fake duration' that should give enough time !
-		int64_t duration = 4 * 3600 * 90000;
+        // So we'll use a 'fake duration' that should give enough time !
+        int64_t duration = 2 * 3600 * 90000;
 		inTitle->duration = duration; //90LL * dvdtime2msec( &d->pgc->playback_time );
 		inTitle->hours    = inTitle->duration / 90000 / 3600;
 		inTitle->minutes  = ( ( inTitle->duration / 90000 ) % 3600 ) / 60;
