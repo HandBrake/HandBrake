@@ -246,12 +246,16 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             }            
             else if( result == FILTER_DROP )
             {
-                hb_fifo_get( pv->subtitle_queue );
-                buf_tmp_in = NULL;
                 if( job->vfr )
                 {
                     pv->frames_to_extend += 4;
                     pv->dropped_frames++;
+                    hb_fifo_get( pv->subtitle_queue );
+                    buf_tmp_in = NULL;
+                }
+                else
+                {
+                    buf_tmp_in = buf_tmp_out;
                 }
                 break;
             }
