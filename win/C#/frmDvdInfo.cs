@@ -42,9 +42,8 @@ namespace Handbrake
         {
             try
             {
-                string appPath = Application.StartupPath.ToString();
-                appPath = appPath + "\\";
-                StreamReader sr = new StreamReader(appPath + "dvdinfo.dat");
+                string dvdInfoPath = Path.Combine(Path.GetTempPath(), "dvdinfo.dat");
+                StreamReader sr = new StreamReader(dvdInfoPath);
 
                 string line = sr.ReadLine();
 

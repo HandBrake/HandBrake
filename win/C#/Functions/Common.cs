@@ -694,8 +694,7 @@ namespace Handbrake.Functions
                 }
                 else
                 {
-                    string path = Application.StartupPath.ToString();
-                    path = "\"" + path + "\\chapters.csv\" ";
+                    string path = Path.Combine(Path.GetTempPath(), "chapters.csv");
 
                     ChapterMarkers = " --markers=" + path;
                 }
@@ -784,10 +783,7 @@ namespace Handbrake.Functions
         {
             try
             {
-                string appPath = Application.StartupPath.ToString();
-                appPath = appPath + "\\";
-
-                string path = appPath + "chapters.csv";
+                string path = Path.Combine(Path.GetTempPath(), "chapters.csv");
 
                 StringBuilder csv = new StringBuilder();
 

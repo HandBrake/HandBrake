@@ -81,17 +81,31 @@ namespace Handbrake
         {
             try
             {
-                string appPath = Application.StartupPath.ToString() + "\\";
-                string strCmdLine = "cmd /c " + '"' + '"' + appPath + "HandBrakeCLI.exe" + '"' + " -i " + '"' + inputFile + '"' + " -t0 -v >" + '"' + appPath + "dvdinfo.dat" + '"' + " 2>&1" + '"';
-                Process hbproc = Process.Start("CMD.exe", strCmdLine);
-                hbproc.WaitForExit();
-                hbproc.Dispose();
-                hbproc.Close();
+                string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
+                string dvdInfoPath = Path.Combine(Path.GetTempPath(), "dvdinfo.dat");
+
+                // Make we don't pick up a stale dvdinfo.dat (and that we have rights to the file)
+                if (File.Exists(dvdInfoPath))
+                    File.Delete(dvdInfoPath);
+
+                string strCmdLine = String.Format(@"cmd /c """"{0}"" -i ""{1}"" -t0 -v >""{2}"" 2>&1""", handbrakeCLIPath, inputFile, dvdInfoPath);
+
+                using (Process hbproc = Process.Start("CMD.exe", strCmdLine))
+                {
+                    hbproc.WaitForExit();
+                    // TODO: Verify exit code if the CLI supports it properly
+                }
 
 
-                StreamReader sr = new StreamReader(appPath + "dvdinfo.dat");
-                thisDvd = Parsing.DVD.Parse(sr);
-                sr.Close();
+                if (!File.Exists(dvdInfoPath))
+                {
+                    throw new Exception("Unable to retrieve the DVD Info. dvdinfo.dat missing.");
+                }
+
+                using (StreamReader sr = new StreamReader(dvdInfoPath))
+                {
+                    thisDvd = Parsing.DVD.Parse(sr);
+                }
 
                 updateUIElements();
             }
