@@ -6,7 +6,7 @@
 
 #include "hb.h"
 
-#define HB_URL   "handbrake.m0k.org"
+#define HB_URL   "handbrake.fr"
 #define HB_QUERY "GET /LATEST HTTP/1.0\r\nHost: " HB_URL "\r\n\r\n"
 
 typedef struct
