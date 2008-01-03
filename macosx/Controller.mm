@@ -304,9 +304,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [fVidRatePopUp selectItemAtIndex: 0];
 	
 	/* Picture Settings */
-	[fPicLabelPAROutputX setStringValue: @""];
-	[fPicSettingPARWidth setStringValue: @""];
-	[fPicSettingPARHeight setStringValue:  @""];
+	//[fPicLabelPAROutputX setStringValue: @""];
+	//[fPicSettingPARWidth setStringValue: @""];
+	//[fPicSettingPARHeight setStringValue:  @""];
 	
 	/* Set Auto Crop to On at launch */
     [fPictureController setAutoCrop:YES];
@@ -382,12 +382,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         fAudLang1Field, fAudLang1PopUp, fAudLang2Field, fAudLang2PopUp,
         fAudTrack1MixLabel, fAudTrack1MixPopUp, fAudTrack2MixLabel, fAudTrack2MixPopUp,
         fAudRateField, fAudRatePopUp, fAudBitrateField,
-        fAudBitratePopUp, fPictureButton,fQueueStatus, 
-		fPicSrcWidth,fPicSrcHeight,fPicSettingWidth,fPicSettingHeight,fPicSettingARkeep,
-		fPicSettingDeinterlace,fPicLabelSettings,fPicLabelSrc,fPicLabelOutp,
-		fPicLabelAr,fPicLabelDeinterlace,fPicLabelSrcX,fPicLabelOutputX,
-		fPicLabelPAROutputX,fPicSettingPARWidth,fPicSettingPARHeight,
-		fPicSettingPAR,fPicLabelAnamorphic,fPresetsAdd,fPresetsDelete,
+        fAudBitratePopUp, fPictureButton,fQueueStatus,fPicSettingARkeep,
+		fPicSettingDeinterlace,fPicLabelSettings,fPicLabelSrc,fPicLabelOutp,fPicSettingsSrc,fPicSettingsOutp,fPicSettingsAnamorphic,
+		fPicLabelAr,fPicLabelDeinterlace,fPicSettingPAR,fPicLabelAnamorphic,fPresetsAdd,fPresetsDelete,
 		fCreateChapterMarkers,fVidTurboPassCheck,fDstMp4LargeFileCheck,fPicLabelAutoCrop,
 		fPicSettingAutoCrop,fPicSettingDetelecine,fPicLabelDetelecine,fPicLabelDenoise,fPicSettingDenoise,
         fSubForcedCheck,fPicSettingDeblock,fPicLabelDeblock,fPresetsOutlineView,fAudDrcSlider,
@@ -2044,17 +2041,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 /* Start Get and set the initial pic size for display */
 	hb_job_t * job = title->job;
 	fTitle = title; 
-	/* Turn Deinterlace on/off depending on the preference */
-    /*
-	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultDeinterlaceOn"] > 0)
-	{
-		[fPictureController setDeinterlace:1];
-	}
-	else
-	{
-		[fPictureController setDeinterlace:0];
-	}
-	*/
+
 	/* Pixel Ratio Setting */
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PixelRatio"])
     {
@@ -2064,12 +2051,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	{
 		job->pixel_ratio = 0 ;
 	}
-	/*Set Source Size Fields Here */
-	[fPicSrcWidth setStringValue: [NSString stringWithFormat:
-							 @"%d", fTitle->width]];
-	[fPicSrcHeight setStringValue: [NSString stringWithFormat:
-							 @"%d", fTitle->height]];
-							 
+	/*Set Source Size Field Here */
+    [fPicSettingsSrc setStringValue: [NSString stringWithFormat: @"%d x %d", fTitle->width, fTitle->height]];
+	
 	/* Set Auto Crop to on upon selecting a new title */
     [fPictureController setAutoCrop:YES];
     
@@ -2081,11 +2065,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	AutoCropBottom = job->crop[1];
 	AutoCropLeft = job->crop[2];
 	AutoCropRight = job->crop[3];
-	/* we test getting the max output value for pic sizing here to be used later*/
-	[fPicSettingWidth setStringValue: [NSString stringWithFormat:
-		@"%d", PicOrigOutputWidth]];
-	[fPicSettingHeight setStringValue: [NSString stringWithFormat:
-		@"%d", PicOrigOutputHeight]];
+
 	/* we run the picture size values through
 	calculatePictureSizing to get all picture size
 	information*/
@@ -2370,18 +2350,17 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	/* so call audioTrackPopUpChanged for both audio tracks to update the mixdown popups */
 	[self audioTrackPopUpChanged: fAudLang1PopUp];
 	[self audioTrackPopUpChanged: fAudLang2PopUp];
+	[self encoderPopUpChanged: sender];
 
-    [self calculateBitrate: sender];
-    [self twoPassCheckboxChanged: sender];
 }
 
 - (IBAction) encoderPopUpChanged: (id) sender
 {
-    
+    hb_job_t * job = fTitle->job;
 	/* Check to see if we need to modify the job pic values based on x264 (iPod) encoder selection */
     if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fDstCodecsPopUp indexOfSelectedItem] == 1 && [fVidEncoderPopUp indexOfSelectedItem] == 1)
     {
-		hb_job_t * job = fTitle->job;
+		
 		job->pixel_ratio = 0 ;
 		
 		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPicSizeAutoiPod"] > 0)
@@ -2398,6 +2377,23 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		/* Make sure the 64bit formatting checkbox is off */
 		[fDstMp4LargeFileCheck setState: NSOffState];
 	}
+    
+    /* We need to set loose anamorphic as available depending on whether or not the ffmpeg encoder
+    is being used as it borks up loose anamorphic .
+    For convenience lets use the titleOfSelected index. Probably should revisit whether or not we want
+    to use the index itself but this is easier */
+    if ([fVidEncoderPopUp titleOfSelectedItem] == @"FFmpeg")
+    {
+        if (job->pixel_ratio == 2)
+        {
+            job->pixel_ratio = 0;
+        }
+        [fPictureController setAllowLooseAnamorphic:NO];
+    }
+    else
+    {
+        [fPictureController setAllowLooseAnamorphic:YES];
+    }
     
 	[self calculatePictureSizing: sender];
 	[self twoPassCheckboxChanged: sender];
@@ -2572,32 +2568,37 @@ the user is using "Custom" settings by determining the sender*/
 /* Get and Display Current Pic Settings in main window */
 - (IBAction) calculatePictureSizing: (id) sender
 {
-	[fPicSettingWidth setStringValue: [NSString stringWithFormat:@"%d", fTitle->job->width]];
-	[fPicSettingHeight setStringValue: [NSString stringWithFormat:@"%d", fTitle->job->height]];
-		
-	if (fTitle->job->pixel_ratio == 1)
+	[fPicSettingsOutp setStringValue: [NSString stringWithFormat:@"%d x %d", fTitle->job->width, fTitle->job->height]];
+	
+    if (fTitle->job->pixel_ratio == 1)
 	{
         int titlewidth = fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3];
         int arpwidth = fTitle->job->pixel_aspect_width;
         int arpheight = fTitle->job->pixel_aspect_height;
         int displayparwidth = titlewidth * arpwidth / arpheight;
         int displayparheight = fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1];
-        
-        [fPicSettingWidth setStringValue: [NSString stringWithFormat:@"%d", titlewidth]];
-        [fPicSettingHeight setStringValue: [NSString stringWithFormat:@"%d", displayparheight]];
-        [fPicLabelPAROutputX setStringValue: @"x"];
-        [fPicSettingPARWidth setStringValue: [NSString stringWithFormat:@"%d", displayparwidth]];
-        [fPicSettingPARHeight setStringValue: [NSString stringWithFormat:@"%d", displayparheight]];
-        
+        [fPicSettingsOutp setStringValue: [NSString stringWithFormat:@"%d x %d", titlewidth, displayparheight]];
+        [fPicSettingsAnamorphic setStringValue: [NSString stringWithFormat:@"%d x %d Strict", displayparwidth, displayparheight]];
         fTitle->job->keep_ratio = 0;
 	}
+    else if (fTitle->job->pixel_ratio == 2)
+    {
+        hb_job_t * job = fTitle->job;
+        int output_width, output_height, output_par_width, output_par_height;
+        hb_set_anamorphic_size(job, &output_width, &output_height, &output_par_width, &output_par_height);
+        int display_width;
+        display_width = output_width * output_par_width / output_par_height;
+        
+        [fPicSettingsOutp setStringValue: [NSString stringWithFormat:@"%d x %d", output_width, output_height]];
+        [fPicSettingsAnamorphic setStringValue: [NSString stringWithFormat:@"%d x %d Loose", display_width, output_height]];
+        
+        fTitle->job->keep_ratio = 0;
+    }
 	else
 	{
-        [fPicLabelPAROutputX setStringValue: @""];
-        [fPicSettingPARWidth setStringValue: @""];
-        [fPicSettingPARHeight setStringValue:  @""];
+        [fPicSettingsAnamorphic setStringValue: [NSString stringWithFormat:@"Off"]];
 	}
-				
+    
 	/* Set ON/Off values for the deinterlace/keep aspect ratio according to boolean */	
 	if (fTitle->job->keep_ratio > 0)
 	{
@@ -2618,7 +2619,7 @@ the user is using "Custom" settings by determining the sender*/
     /* VFR (Variable Frame Rate) */
     if ([fPictureController vfr]) {
         /* vfr has to set the framerate to 29.97 (ntsc video)
-        and disable the framerate popup */
+         and disable the framerate popup */
         [fVidRatePopUp selectItemAtIndex: 8];
         [fVidRatePopUp setEnabled: NO];
         /* We change the string of the fps popup to warn that vfr is on Framerate (FPS): */
@@ -2631,7 +2632,7 @@ the user is using "Custom" settings by determining the sender*/
         /* and make sure the label for framerate is set to its default */  
         [fVidRateField setStringValue: @"Framerate (FPS):"];
     }
-
+    
 	/* Deinterlace */
 	if ([fPictureController deinterlace] == 0)
 	{
@@ -2670,7 +2671,7 @@ the user is using "Custom" settings by determining the sender*/
 	{
 		[fPicSettingDenoise setStringValue: @"Strong"];
 	}
-
+    
     /* Deblock */
     if ([fPictureController deblock]) {
         [fPicSettingDeblock setStringValue: @"Yes"];
@@ -2697,7 +2698,7 @@ the user is using "Custom" settings by determining the sender*/
 		[fPicSettingAutoCrop setStringValue: @"Auto"];
 	}	
 	
-
+    
 }
 
 

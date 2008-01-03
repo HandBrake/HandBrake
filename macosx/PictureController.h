@@ -44,7 +44,7 @@
     IBOutlet NSButton        * fVFRCheck;
     IBOutlet NSButton        * fDeblockCheck;
 	IBOutlet NSPopUpButton   * fDenoisePopUp;
-	IBOutlet NSButton        * fPARCheck;
+	IBOutlet NSPopUpButton   * fAnamorphicPopUp;
     IBOutlet NSButton        * fEffectsCheck;
     IBOutlet NSButton        * fPrevButton;
     IBOutlet NSButton        * fNextButton;
@@ -53,7 +53,9 @@
     int     MaxOutputWidth;
     int     MaxOutputHeight;
     BOOL    autoCrop;
-    
+    BOOL    allowLooseAnamorphic;
+    int output_width, output_height, output_par_width, output_par_height;
+    int display_width;
     /* used to track the previous state of the keep aspect
     ratio checkbox when turning anamorphic on, so it can be
     returned to the previous state when anamorphic is turned
@@ -84,6 +86,9 @@
 
 - (BOOL) autoCrop;
 - (void) setAutoCrop: (BOOL) setting;
+
+- (BOOL) allowLooseAnamorphic;
+- (void) setAllowLooseAnamorphic: (BOOL) setting;
 
 - (int) detelecine;
 - (void) setDetelecine: (int) setting;

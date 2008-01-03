@@ -196,15 +196,9 @@
 				<string>NSTextField</string>
 				<key>fPicLabelOutp</key>
 				<string>NSTextField</string>
-				<key>fPicLabelOutputX</key>
-				<string>NSTextField</string>
-				<key>fPicLabelPAROutputX</key>
-				<string>NSTextField</string>
 				<key>fPicLabelSettings</key>
 				<string>NSTextField</string>
 				<key>fPicLabelSrc</key>
-				<string>NSTextField</string>
-				<key>fPicLabelSrcX</key>
 				<string>NSTextField</string>
 				<key>fPicSettingARkeep</key>
 				<string>NSTextField</string>
@@ -218,19 +212,13 @@
 				<string>NSTextField</string>
 				<key>fPicSettingDetelecine</key>
 				<string>NSTextField</string>
-				<key>fPicSettingHeight</key>
-				<string>NSTextField</string>
 				<key>fPicSettingPAR</key>
 				<string>NSTextField</string>
-				<key>fPicSettingPARHeight</key>
+				<key>fPicSettingsAnamorphic</key>
 				<string>NSTextField</string>
-				<key>fPicSettingPARWidth</key>
+				<key>fPicSettingsOutp</key>
 				<string>NSTextField</string>
-				<key>fPicSettingWidth</key>
-				<string>NSTextField</string>
-				<key>fPicSrcHeight</key>
-				<string>NSTextField</string>
-				<key>fPicSrcWidth</key>
+				<key>fPicSettingsSrc</key>
 				<string>NSTextField</string>
 				<key>fPictureButton</key>
 				<string>NSButton</string>

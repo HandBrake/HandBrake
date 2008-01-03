@@ -98,20 +98,18 @@
 	/* Picture Settings box */
 	IBOutlet NSTextField         * fPicLabelSettings;
 	IBOutlet NSTextField         * fPicLabelSrc;
+    IBOutlet NSTextField         * fPicSettingsSrc;
 	IBOutlet NSTextField         * fPicLabelOutp;
-	IBOutlet NSTextField         * fPicLabelAr;
-	IBOutlet NSTextField         * fPicLabelSrcX;
-	IBOutlet NSTextField         * fPicLabelOutputX;
+    IBOutlet NSTextField         * fPicSettingsOutp;
+    IBOutlet NSTextField         * fPicLabelAnamorphic;
+    IBOutlet NSTextField         * fPicSettingsAnamorphic;
+    
+    IBOutlet NSTextField         * fPicLabelAr;
 	IBOutlet NSTextField         * fPicLabelAutoCrop;
     IBOutlet NSTextField         * fPicLabelDetelecine;
 	IBOutlet NSTextField         * fPicLabelDeinterlace;
     IBOutlet NSTextField         * fPicLabelDenoise;
     IBOutlet NSTextField         * fPicLabelDeblock;
-	
-	IBOutlet NSTextField         * fPicSrcWidth;
-	IBOutlet NSTextField         * fPicSrcHeight;
-	IBOutlet NSTextField         * fPicSettingWidth;
-	IBOutlet NSTextField         * fPicSettingHeight;
 	IBOutlet NSTextField         * fPicSettingDeinterlace;
 	IBOutlet NSTextField         * fPicSettingARkeep;
 	IBOutlet NSTextField         * fPicSettingPAR;
@@ -119,12 +117,8 @@
 	IBOutlet NSTextField         * fPicSettingDetelecine;
 	IBOutlet NSTextField         * fPicSettingDenoise;
     IBOutlet NSTextField         * fPicSettingDeblock;
-
-	IBOutlet NSTextField         * fPicLabelAnamorphic;
-	IBOutlet NSTextField         * fPicLabelPAROutputX;
-	IBOutlet NSTextField         * fPicSettingPARWidth;
-	IBOutlet NSTextField         * fPicSettingPARHeight;
-    /* Picture variables */
+	
+	/* Picture variables */
 	int                        PicOrigOutputWidth;
 	int                        PicOrigOutputHeight;
 	int                        AutoCropTop;

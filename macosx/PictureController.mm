@@ -105,7 +105,19 @@ static int GetAlignedSize( int size )
     [fCropLeftStepper   setMaxValue: title->width/2-2];
     [fCropRightStepper  setMaxValue: title->width/2-2];
 
-	[fPARCheck setState:(job->pixel_ratio ? NSOnState : NSOffState)];
+    /* Populate the Anamorphic NSPopUp button here */
+    [fAnamorphicPopUp removeAllItems];
+    [fAnamorphicPopUp addItemWithTitle: @"None"];
+    [fAnamorphicPopUp addItemWithTitle: @"Strict"];
+    if (allowLooseAnamorphic)
+    {
+    [fAnamorphicPopUp addItemWithTitle: @"Loose"];
+    }
+    [fAnamorphicPopUp selectItemAtIndex: job->pixel_ratio];
+    
+	/* Set deinterlaces level according to the integer in the main window */
+	[fDeinterlacePopUp selectItemAtIndex: fPictureFilterSettings.deinterlace];
+    
     /* We initially set the previous state of keep ar to on */
     keepAspectRatioPreviousState = 1;
 	if (!autoCrop)
@@ -126,10 +138,9 @@ static int GetAlignedSize( int size )
         [fCropMatrix  selectCellAtRow: 0 column:0];
 	}
 	
-	MaxOutputWidth = job->width;
-	MaxOutputHeight = job->height;
     fPicture = 0;
-
+    MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
+    MaxOutputHeight = title->height - job->crop[0] - job->crop[1];
     [self SettingsChanged: nil];
 }
 
@@ -161,10 +172,10 @@ are maintained across different sources */
 - (void) Display: (int) anim
 {
     hb_get_preview( fHandle, fTitle, fPicture, fBuffer );
-
+    
     /* Backup previous picture (for effects) */
     memcpy( fTexBuf[1], fTexBuf[0], fTexBufSize );
-
+    
     if( fHasQE )
     {
         /* Simply copy */
@@ -182,9 +193,9 @@ are maintained across different sources */
             in  += 4 * ( fTitle->width + 2 );
             out += 4 * GetAlignedSize( fTitle->width + 2 );
         }
-	
+        
     }
-
+    
     if( [fEffectsCheck state] == NSOffState )
     {
         anim = HB_ANIMATE_NONE;
@@ -193,34 +204,45 @@ are maintained across different sources */
     {
         anim |= HB_ANIMATE_SLOW;
     }
-
+    
     [fPictureGLView Display: anim buffer1: fTexBuf[0]
-        buffer2: fTexBuf[1] width: ( fTitle->width + 2 )
-        height: ( fTitle->height + 2 )];
+                    buffer2: fTexBuf[1] width: ( fTitle->width + 2 )
+                     height: ( fTitle->height + 2 )];
 	
-	/* Set the Output Display below the Preview Picture*/
-	int titlewidth = fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3];
-	int arpwidth = fTitle->job->pixel_aspect_width;
-	int arpheight = fTitle->job->pixel_aspect_height;
-	int displayparwidth = titlewidth * arpwidth / arpheight;
-	int displayparheight = fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1];
-
-    NSSize displaySize = NSMakeSize( (float)fTitle->width, (float)fTitle->height );
-    if( fTitle->job->pixel_ratio == 1 )
+	NSSize displaySize = NSMakeSize( (float)fTitle->width, (float)fTitle->height );
+    /* Set the picture size display fields below the Preview Picture*/
+    if( fTitle->job->pixel_ratio == 1 ) // Original PAR Implementation
     {
+        output_width = fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3];
+        output_height = fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1];
+        display_width = output_width * fTitle->job->pixel_aspect_width / fTitle->job->pixel_aspect_height;
         [fInfoField setStringValue:[NSString stringWithFormat:
-                            @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d",
-                            fTitle->width, fTitle->height, titlewidth,
-                            displayparheight, displayparwidth, displayparheight]];
-        displaySize.width *= ((float)arpwidth) / ((float)arpheight);
+                                    @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d",
+                                    fTitle->width, fTitle->height, output_width, output_height, display_width, output_height]];
+        displaySize.width *= ((float)fTitle->job->pixel_aspect_width) / ((float)fTitle->job->pixel_aspect_height);   
     }
-    else
+    else if (fTitle->job->pixel_ratio == 2) // Loose Anamorphic
     {
-    [fInfoField setStringValue: [NSString stringWithFormat:
-        @"Source: %dx%d, Output: %dx%d", fTitle->width, fTitle->height,
-        fTitle->job->width, fTitle->job->height]];
+        display_width = output_width * output_par_width / output_par_height;
+        [fInfoField setStringValue:[NSString stringWithFormat:
+                                    @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d",
+                                    fTitle->width, fTitle->height, output_width, output_height, display_width, output_height]];
+        
+        /* FIXME: needs to be fixed so that the picture window does not resize itself on the first
+         anamorphic width drop
+         */
+        if (fTitle->width - 8 < output_width)
+        {
+            displaySize.width *= ((float)output_par_width) / ((float)output_par_height);
+        }
     }
-
+    else // No Anamorphic
+    {
+        [fInfoField setStringValue: [NSString stringWithFormat:
+                                     @"Source: %dx%d, Output: %dx%d", fTitle->width, fTitle->height,
+                                     fTitle->job->width, fTitle->job->height]];
+    }
+    
     NSSize viewSize = [self optimalViewSizeForImageSize:displaySize];
     if( [self viewNeedsToResizeToSize:viewSize] )
     {
@@ -234,13 +256,13 @@ are maintained across different sources */
     {
         float scale = viewSize.width / ((float)fTitle->width);
         NSString *scaleString = [NSString stringWithFormat:
-            NSLocalizedString( @" (Preview scaled to %.0f%% actual size)",
-                               @"String shown when a preview is scaled" ),
-            scale * 100.0];
+                                 NSLocalizedString( @" (Preview scaled to %.0f%% actual size)",
+                                                   @"String shown when a preview is scaled" ),
+                                 scale * 100.0];
         [fInfoField setStringValue:
-            [[fInfoField stringValue] stringByAppendingString:scaleString]];
+         [[fInfoField stringValue] stringByAppendingString:scaleString]];
     }
-
+    
     [fPrevButton setEnabled: ( fPicture > 0 )];
     [fNextButton setEnabled: ( fPicture < 9 )];
 }
@@ -249,84 +271,109 @@ are maintained across different sources */
 {
     hb_job_t * job = fTitle->job;
     
-	if( [fPARCheck state] == NSOnState )
+	if( [fAnamorphicPopUp indexOfSelectedItem] > 0 )
 	{
-        [fWidthStepper      setIntValue: MaxOutputWidth];
-        [fWidthField        setIntValue: MaxOutputWidth];
-        
-        /* This will show correct anamorphic height values, but
-            show distorted preview picture ratio */
-        [fHeightStepper      setIntValue: fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1]];
-        [fHeightField        setIntValue: fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1]];
-
-        /* if the sender is the Anamorphic checkbox, record the state
-           of KeepAspect Ratio so it can be reset if Anamorphic is unchecked again */
-        if (sender == fPARCheck)
+        if ([fAnamorphicPopUp indexOfSelectedItem] == 2) // Loose anamorphic
         {
-        keepAspectRatioPreviousState = [fRatioCheck state];
+            job->pixel_ratio = 2;
+            [fWidthStepper setEnabled: YES];
+            [fWidthField setEnabled: YES];
+            /* We set job->width and call hb_set_anamorphic_size in libhb to do a "dry run" to get
+             * the values to be used by libhb for loose anamorphic
+             */
+            job->width       = [fWidthStepper  intValue];
+            hb_set_anamorphic_size(job, &output_width, &output_height, &output_par_width, &output_par_height);
+            [fHeightStepper      setIntValue: output_height];
+            [fHeightField        setIntValue: output_height];
+            job->height      = [fHeightStepper intValue];
+            
+        }
+        else // must be "1" or strict anamorphic
+        {
+            [fWidthStepper      setIntValue: fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3]];
+            [fWidthField        setIntValue: fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3]];
+            
+            /* This will show correct anamorphic height values, but
+             show distorted preview picture ratio */
+            [fHeightStepper      setIntValue: fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1]];
+            [fHeightField        setIntValue: fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1]];
+            job->width       = [fWidthStepper  intValue];
+            job->height      = [fHeightStepper intValue];
+            
+            job->pixel_ratio = 1;
+            [fWidthStepper setEnabled: NO];
+            [fWidthField setEnabled: NO];
+        }
+        
+        /* if the sender is the Anamorphic checkbox, record the state
+         of KeepAspect Ratio so it can be reset if Anamorphic is unchecked again */
+        if (sender == fAnamorphicPopUp)
+        {
+            keepAspectRatioPreviousState = [fRatioCheck state];
         }
         [fRatioCheck setState:NSOffState];
         [fRatioCheck setEnabled: NO];
         
-        [fWidthStepper setEnabled: NO];
-        [fWidthField setEnabled: NO];
+        
         [fHeightStepper setEnabled: NO];
         [fHeightField setEnabled: NO];
         
     }
     else
 	{
+        job->width       = [fWidthStepper  intValue];
+        job->height      = [fHeightStepper intValue];
+        job->pixel_ratio = 0;
         [fWidthStepper setEnabled: YES];
         [fWidthField setEnabled: YES];
         [fHeightStepper setEnabled: YES];
         [fHeightField setEnabled: YES];
         [fRatioCheck setEnabled: YES];
         /* if the sender is the Anamorphic checkbox, we return the
-           keep AR checkbox to its previous state */
-        if (sender == fPARCheck)
+         keep AR checkbox to its previous state */
+        if (sender == fAnamorphicPopUp)
         {
-        [fRatioCheck setState:keepAspectRatioPreviousState];
+            [fRatioCheck setState:keepAspectRatioPreviousState];
         }
         
 	}
 	
-    job->width       = [fWidthStepper  intValue];
-    job->height      = [fHeightStepper intValue];
+    
     job->keep_ratio  = ( [fRatioCheck state] == NSOnState );
     
 	fPictureFilterSettings.deinterlace = [fDeinterlacePopUp indexOfSelectedItem];
     /* if the gui deinterlace settings are fast through slowest, the job->deinterlace
-       value needs to be set to one, for the job as well as the previews showing deinterlacing
-       otherwise set job->deinterlace to 0 or "off" */
+     value needs to be set to one, for the job as well as the previews showing deinterlacing
+     otherwise set job->deinterlace to 0 or "off" */
     if (fPictureFilterSettings.deinterlace > 0)
     {
-    job->deinterlace  = 1;
+        job->deinterlace  = 1;
     }
     else
     {
-    job->deinterlace  = 0;
+        job->deinterlace  = 0;
     }
     fPictureFilterSettings.denoise     = [fDenoisePopUp indexOfSelectedItem];
     fPictureFilterSettings.vfr  = [fVFRCheck state];
     if (fPictureFilterSettings.vfr > 0)
     {
-    [fDetelecineCheck setState:NSOnState];
-    [fDetelecineCheck setEnabled: NO];
+        [fDetelecineCheck setState:NSOnState];
+        [fDetelecineCheck setEnabled: NO];
     }
     else
     {
-    [fDetelecineCheck setEnabled: YES];
+        [fDetelecineCheck setEnabled: YES];
     }
     fPictureFilterSettings.detelecine  = [fDetelecineCheck state];
     fPictureFilterSettings.deblock  = [fDeblockCheck state];
-	job->pixel_ratio = ( [fPARCheck state] == NSOnState );
-
+	//job->pixel_ratio = ( [fPARCheck state] == NSOnState );
+    
     autoCrop = ( [fCropMatrix selectedRow] == 0 );
     [fCropTopStepper    setEnabled: !autoCrop];
     [fCropBottomStepper setEnabled: !autoCrop];
     [fCropLeftStepper   setEnabled: !autoCrop];
     [fCropRightStepper  setEnabled: !autoCrop];
-
+    
     if( autoCrop )
     {
         memcpy( job->crop, fTitle->crop, 4 * sizeof( int ) );
@@ -338,11 +385,11 @@ are maintained across different sources */
         job->crop[2] = [fCropLeftStepper   intValue];
         job->crop[3] = [fCropRightStepper  intValue];
     }
-
+    
     if( job->keep_ratio )
     {
         if( sender == fWidthStepper || sender == fRatioCheck ||
-            sender == fCropTopStepper || sender == fCropBottomStepper )
+           sender == fCropTopStepper || sender == fCropBottomStepper )
         {
             hb_fix_aspect( job, HB_KEEP_WIDTH );
             if( job->height > fTitle->height )
@@ -364,8 +411,11 @@ are maintained across different sources */
     
     [fWidthStepper      setIntValue: job->width];
     [fWidthField        setIntValue: job->width];
-    [fHeightStepper     setIntValue: job->height];
-    [fHeightField       setIntValue: job->height];
+    if( [fAnamorphicPopUp indexOfSelectedItem] < 2 )
+	{
+        [fHeightStepper     setIntValue: job->height];
+        [fHeightField       setIntValue: job->height];
+    }
     [fCropTopStepper    setIntValue: job->crop[0]];
     [fCropTopField      setIntValue: job->crop[0]];
     [fCropBottomStepper setIntValue: job->crop[1]];
@@ -375,9 +425,9 @@ are maintained across different sources */
     [fCropRightStepper  setIntValue: job->crop[3]];
     [fCropRightField    setIntValue: job->crop[3]];
     /* Sanity Check Here for < 16 px preview to avoid
-       crashing hb_get_preview. In fact, just for kicks
-       lets getting previews at a min limit of 32, since
-       no human can see any meaningful detail below that */
+     crashing hb_get_preview. In fact, just for kicks
+     lets getting previews at a min limit of 32, since
+     no human can see any meaningful detail below that */
     if (job->width >= 64 && job->height >= 64)
     {
         [self Display: HB_ANIMATE_NONE];
@@ -420,6 +470,16 @@ are maintained across different sources */
 - (void) setAutoCrop: (BOOL) setting
 {
     autoCrop = setting;
+}
+
+- (BOOL) allowLooseAnamorphic
+{
+    return allowLooseAnamorphic;
+}
+
+- (void) setAllowLooseAnamorphic: (BOOL) setting
+{
+    allowLooseAnamorphic = setting;
 }
 
 - (int) detelecine
