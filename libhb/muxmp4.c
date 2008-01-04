@@ -353,6 +353,13 @@ static int MP4Init( hb_mux_object_t * m )
         m->current_chapter = job->chapter_start;
 	}
 	
+    /* Add encoded-by metadata listing version and build date */
+    char *tool_string;
+    tool_string = (char *)malloc(80);
+    snprintf( tool_string, 80, "HandBrake %s %i", HB_VERSION, HB_BUILD);
+    MP4SetMetadataTool(m->file, tool_string);
+    free(tool_string);
+	
     return 0;
 }
 
