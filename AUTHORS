@@ -89,3 +89,9 @@ Chris Thoman <cthoman@gmail.com> (huevos_rancheros)
 Mark Krenek <markkrenek@mac.com> (travistex)
  + Mac OS X GUI enhancements
  + Mac OS X GUI Queueing system
+
+Van Jacobson <vanj.hb@gmail.com> (van)
+ + Auto-typing MPEG stream files
+ + Minor bug fixing in MPEG stream support
+ + Minor dvd reader fixes
+ + Chapter mark bug fixes
