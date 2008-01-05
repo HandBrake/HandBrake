@@ -5,31 +5,79 @@
 # Homepage: <http://handbrake.m0k.org/>.
 # It may be used under the terms of the GNU General Public License.
 
-# This script parses HandBrake's Mac presets into hashes, which can be displayed in various formats for use by the CLI and various wrappers.
+# This script parses HandBrake's Mac presets into hashes, which can
+# be displayed in various formats for use by the CLI and its wrappers.
 
 # For handling command line arguments to the script
 require 'optparse'
 require 'ostruct'
 
+# CLI options: (code based on http://www.ruby-doc.org/stdlib/libdoc/optparse/rdoc/index.html )
+def readOptions
+  
+  # --[no-]cli-raw, -r gives raw CLI for wiki
+  # --cli-parse, -p gives CLI strings for wrappers
+  # --api, -a gives preset code for test.c
+  # --api-list, -A gives CLI strings for --preset-list display
+  # --[no-]header, -h turns off banner display
+  options = OpenStruct.new
+  options.cliraw = false
+  options.cliparse = false
+  options.api = false
+  options.apilist = false
+  options.header = false
+  
+  opts = OptionParser.new do |opts|
+    opts.banner = "Usage: manicure.rb [options]"
+    
+    opts.separator ""
+    opts.separator "Options:"
+    
+    opts.on("-r", "--cli-raw", "Gives example strings for the HB wiki") do |raw|
+      options.cliraw = raw
+      option_set = true
+    end
+    
+    opts.on("-p", "--cli-parse", "Gives presets as wrapper-parseable CLI", " option strings") do |par|
+      options.cliparse = par
+    end
+    
+    opts.on("-a", "--api", "Gives preset code for test.c") do |api|
+      options.api = api
+    end
+    
+    opts.on("-A", "--api-list", "Gives code for test.c's --preset-list", " options") do |alist|
+      options.apilist = alist
+    end
+    
+    opts.on("-H", "--Header", "Display a banner before each preset") do |head|
+      options.header = head
+    end
+    
+    opts.on_tail("-h", "--help", "Show this message") do
+        puts opts
+        exit
+    end
+  end.parse!
+  
+  return options
+  
+end
+
 # These arrays contain all the other presets and hashes that are going to be used.
 # Yeah, they're global variables. In an object-oriented scripting language.
 # Real smooth, huh?
-$presetMasterList = []
-$hashMasterList = []
 
-# This class is pretty much everything. It contains multitudes.
-class PresetClass
+# This class parses the user's presets .plist into an array of hashes
+class Presets
   
-  # A width of 40 gives nice, compact output.
-  @@columnWidth=40
+  attr_reader :hashMasterList
   
   # Running initialization runs everything.
   # Calling it will also call the parser
   # and display output.
-  def initialize(options)
+  def initialize
     
-    @options = options
-
     # Grab input from the user's presets .plist
     rawPresets = readPresetPlist
     
@@ -47,26 +95,27 @@ class PresetClass
 
     # Now it's time to use that info to store each
     # preset individually, in the master list.
+    @presetMasterList = []
     i = 0
     while i <= presetBreaks.size    
       if i == 0 #first preset
         # Grab the stew, up to the 1st offset.
-        $presetMasterList[i] = presetStew.slice(0..presetBreaks[i].to_i)
+        @presetMasterList[i] = presetStew.slice(0..presetBreaks[i].to_i)
       elsif i < presetBreaks.size #middle presets
         # Grab the stew from the last offset to the current..
-        $presetMasterList[i] = presetStew.slice(presetBreaks[i-1].to_i..presetBreaks[i].to_i)
+        @presetMasterList[i] = presetStew.slice(presetBreaks[i-1].to_i..presetBreaks[i].to_i)
       else #final preset
         # Grab the stew, starting at the last offset, all the way to the end.
-        $presetMasterList[i] = presetStew.slice(presetBreaks[i-1].to_i..presetStew.length)
+        @presetMasterList[i] = presetStew.slice(presetBreaks[i-1].to_i..presetStew.length)
       end
       i += 1
     end
     
     # Parse the presets into hashes
+    @hashMasterList = []
+    
     buildPresetHash
     
-    # Print to screen.
-    displayCommandStrings
   end
 
   def readPresetPlist # Grab the .plist and store it in presets
@@ -106,33 +155,51 @@ class PresetClass
     return presetBreaks
   end
 
-  def buildPresetHash #fill up $hashMasterList with hashes of all key/value pairs
+  def buildPresetHash #fill up @hashMasterList with hashes of all key/value pairs
     j = 0
     
     # Iterate through all presets, treating each in turn as singleServing
-    $presetMasterList.each do |singleServing|
-
+    @presetMasterList.each do |singleServing|
+      
+      # Initialize the hash for preset j (aka singleServing)
+      @hashMasterList[j] = Hash.new
+      
       # Each key and value are on sequential lines.
       # Iterating through by twos, use that to build a hash.
       # Each key, on line i, paired with its value, on line i+1  
-      tempHash = Hash.new
       i = 1
       while i < singleServing.length
-        tempHash[singleServing[i]] = singleServing[i+1]
+        @hashMasterList[j].store( singleServing[i],  singleServing[i+1] )
         i += 2
       end
-      
-      # Now store that hash in the master list.
-      $hashMasterList[j]=tempHash
-      
+            
       j += 1  
     end   
   end
 
+end
+
+# This class displays the presets to stdout in various formats.
+class Display
+  
+  
+  def initialize(hashMasterList, options)
+  
+    @hashMasterList = hashMasterList
+    @options = options
+
+    # A width of 40 gives nice, compact output.
+    @columnWidth=40
+    
+    # Print to screen.
+    displayCommandStrings
+    
+  end
+  
   def displayCommandStrings # prints everything to screen
     
     # Iterate through the hashes.    
-    $hashMasterList.each do |hash|
+    @hashMasterList.each do |hash|
     
       # Check to make there are valid contents
       if hash.key?("PresetName")
@@ -167,35 +234,35 @@ class PresetClass
   def displayHeader(hash) # A distinct banner to separate each preset
     
     # Print a line of asterisks
-    puts "*" * @@columnWidth
+    puts "*" * @columnWidth
     
     # Print the name, centered
-    puts '* '+hash["PresetName"].to_s.center(@@columnWidth-4)+' *'
+    puts '* '+hash["PresetName"].to_s.center(@columnWidth-4)+' *'
     
     # Print a line of dashes
-    puts '~' * @@columnWidth
+    puts '~' * @columnWidth
     
     # Print the description, centered and word-wrapped
-    puts hash["PresetDescription"].to_s.center(@@columnWidth).gsub(/\n/," ").scan(/\S.{0,#{@@columnWidth-2}}\S(?=\s|$)|\S+/)
+    puts hash["PresetDescription"].to_s.center(@columnWidth).gsub(/\n/," ").scan(/\S.{0,#{@columnWidth-2}}\S(?=\s|$)|\S+/)
     
     # Print another line of dashes
-    puts '~' * @@columnWidth
+    puts '~' * @columnWidth
     
     # Print the formats the preset uses
-    puts "#{hash["FileCodecs"]}".center(@@columnWidth)
+    puts "#{hash["FileCodecs"]}".center(@columnWidth)
     
     # Note if the preset isn't built-in
     if hash["Type"].to_i == 1
-      puts "Custom Preset".center(@@columnWidth)
+      puts "Custom Preset".center(@columnWidth)
     end
 
     # Note if the preset is marked as default.
     if hash["Default"].to_i == 1
-      puts "This is your default preset.".center(@@columnWidth)
+      puts "This is your default preset.".center(@columnWidth)
     end
     
     # End with a line of tildes.  
-    puts "~" * @@columnWidth
+    puts "~" * @columnWidth
     
   end
   
@@ -346,7 +413,7 @@ class PresetClass
     # That's it, print to screen now
     puts commandString
     
-    #puts "*" * @@columnWidth
+    #puts "*" * @columnWidth
 
     puts  "\n"
   end
@@ -486,7 +553,7 @@ class PresetClass
     # That's it, print to screen now
     puts commandString
     
-    #puts "*" * @@columnWidth
+    #puts "*" * @columnWidth
 
     puts  "\n"
   end
@@ -651,7 +718,7 @@ class PresetClass
     
     # That's it, print to screen now
     puts commandString
-    #puts "*" * @@columnWidth
+    #puts "*" * @columnWidth
     puts  "\n"
   end
 
@@ -801,58 +868,18 @@ class PresetClass
     puts commandString
     puts  "\n"
   end
+  
 end
 
-# CLI options: (code based on http://www.ruby-doc.org/stdlib/libdoc/optparse/rdoc/index.html )
-# --[no-]cli-raw, -r gives raw CLI for wiki
-# --cli-parse, -p gives CLI strings for wrappers
-# --api, -a gives preset code for test.c
-# --api-list, -A gives CLI strings for --preset-list display
-# --[no-]header, -h turns off banner display
-options = OpenStruct.new
-options.cliraw = false
-options.cliparse = false
-options.api = false
-options.apilist = false
-options.header = false
-
-opts = OptionParser.new do |opts|
-  opts.banner = "Usage: manicure.rb [options]"
-  
-  opts.separator ""
-  opts.separator "Options:"
-  
-  opts.on("-r", "--cli-raw", "Gives example strings for the HB wiki") do |r|
-    options.cliraw = r
-    option_set = true
-  end
-  
-  opts.on("-p", "--cli-parse", "Gives presets as wrapper-parseable CLI", " option strings") do |p|
-    options.cliparse = p
-  end
-  
-  opts.on("-a", "--api", "Gives preset code for test.c") do |api|
-    options.api = api
-  end
-  
-  opts.on("-A", "--api-list", "Gives code for test.c's --preset-list", " options") do |A|
-    options.apilist = A
-  end
-  
-  opts.on("-H", "--Header", "Display a banner before each preset") do |H|
-    options.header = H
-  end
-  
-  opts.on_tail("-h", "--help", "Show this message") do
-      puts opts
-      exit
-  end
-end.parse!
+# First grab the specified CLI options
+options = readOptions
 
 # Only run if one of the useful CLI flags have been passed
 if options.cliraw == true || options.cliparse == true || options.api == true || options.apilist == true
-  # This line is the ignition.
-  PresetClass.new(options)
+  # This line is the ignition -- generates hashes of
+  # presets and then displays them to the screen
+  # with the options the user selects on the CLI. 
+  Display.new( Presets.new.hashMasterList, options )
 else
   # Direct the user to the help
   puts "\n\tUsage: manicure.rb [options]"
