@@ -692,9 +692,16 @@ namespace Handbrake
             {
                 CheckPixelRatio.Enabled = false;
                 CheckPixelRatio.Checked = false;
+                text_height.Text = "";
+                text_height.Enabled = false;
+                text_height.BackColor = Color.LightGray;
             }
             else
+            {
                 CheckPixelRatio.Enabled = true;
+                text_height.Enabled = true;
+                text_height.BackColor = Color.White;
+            }
         }
 
         private void check_2PassEncode_CheckedChanged(object sender, EventArgs e)

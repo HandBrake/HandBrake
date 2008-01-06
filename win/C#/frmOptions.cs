@@ -55,10 +55,10 @@ namespace Handbrake
                 check_autoNaming.CheckState = CheckState.Checked;
             }
 
-            if (Properties.Settings.Default.autoNamePath != "")
-                text_an_path.Text = Properties.Settings.Default.autoNamePath;
-            else
-                text_an_path.Text = "Click 'Browse' to set the default location";
+            text_an_path.Text = Properties.Settings.Default.autoNamePath;
+
+            if (text_an_path.Text == "")
+                text_an_path.Text = "Click 'Browse' to set the default location";              
         }
 
         #region Options
@@ -122,7 +122,10 @@ namespace Handbrake
         private void text_an_path_TextChanged(object sender, EventArgs e)
         {
             if (text_an_path.Text == "")
-                Properties.Settings.Default.autoNamePath = null;
+            {
+                Properties.Settings.Default.autoNamePath = "";
+                text_an_path.Text = "Click 'Browse' to set the default location";
+            }
             else
                 Properties.Settings.Default.autoNamePath = text_an_path.Text;
         }

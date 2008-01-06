@@ -32,7 +32,7 @@ namespace Handbrake
 
             // Development Code Expiry.
             // Remember to comment out on public release!!!
-            if (DateTime.Now > DateTime.Parse("30/1/2008")) { MessageBox.Show("Sorry, This development build of Handbrake has expired."); return; } 
+            if (DateTime.Now > DateTime.Parse("20/1/2008")) { MessageBox.Show("Sorry, This development build of Handbrake has expired."); return; } 
 
             // Check the system meets the system requirements.
             Boolean launch = true;

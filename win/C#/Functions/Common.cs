@@ -82,7 +82,10 @@ namespace Handbrake.Functions
                     {
                         string filePath = "";
                         if (Properties.Settings.Default.autoNamePath.Trim() != "")
-                            filePath = Properties.Settings.Default.autoNamePath + "\\";
+                        {
+                            if (Properties.Settings.Default.autoNamePath.Trim() != "Click 'Browse' to set the default location")
+                                filePath = Properties.Settings.Default.autoNamePath + "\\";
+                        } 
                         mainWindow.text_destination.Text = filePath + source + "_T" + title + "_C" + cs + dash + cf + ".mp4";
                     }
                     else

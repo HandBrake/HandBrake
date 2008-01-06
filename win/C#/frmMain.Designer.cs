@@ -37,7 +37,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label Label38;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -323,6 +323,7 @@ namespace Handbrake
             // 
             // btn_Browse
             // 
+            this.btn_Browse.BackColor = System.Drawing.Color.Transparent;
             this.btn_Browse.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_Browse.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -333,11 +334,12 @@ namespace Handbrake
             this.btn_Browse.TabIndex = 5;
             this.btn_Browse.Text = "Browse";
             this.ToolTip.SetToolTip(this.btn_Browse, "Step 1 - Select a Source. This can be either a DVD or ts/mpg/iso file");
-            this.btn_Browse.UseVisualStyleBackColor = true;
+            this.btn_Browse.UseVisualStyleBackColor = false;
             this.btn_Browse.Click += new System.EventHandler(this.btn_Browse_Click);
             // 
             // btn_destBrowse
             // 
+            this.btn_destBrowse.BackColor = System.Drawing.Color.Transparent;
             this.btn_destBrowse.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_destBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_destBrowse.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -348,7 +350,7 @@ namespace Handbrake
             this.btn_destBrowse.TabIndex = 2;
             this.btn_destBrowse.Text = "Browse";
             this.ToolTip.SetToolTip(this.btn_destBrowse, "Step 4 - Select a location to save your encoded file.");
-            this.btn_destBrowse.UseVisualStyleBackColor = true;
+            this.btn_destBrowse.UseVisualStyleBackColor = false;
             this.btn_destBrowse.Click += new System.EventHandler(this.btn_destBrowse_Click);
             // 
             // drp_videoEncoder
@@ -483,7 +485,7 @@ namespace Handbrake
             this.slider_videoQuality.Location = new System.Drawing.Point(435, 90);
             this.slider_videoQuality.Maximum = 100;
             this.slider_videoQuality.Name = "slider_videoQuality";
-            this.slider_videoQuality.Size = new System.Drawing.Size(167, 45);
+            this.slider_videoQuality.Size = new System.Drawing.Size(167, 42);
             this.slider_videoQuality.TabIndex = 14;
             this.slider_videoQuality.TickFrequency = 17;
             this.ToolTip.SetToolTip(this.slider_videoQuality, "Set the quality level of the video. (Around 70% is fine for most)");
@@ -529,7 +531,7 @@ namespace Handbrake
             // 
             // btn_setDefault
             // 
-            this.btn_setDefault.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_setDefault.BackColor = System.Drawing.Color.Transparent;
             this.btn_setDefault.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_setDefault.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_setDefault.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -594,7 +596,7 @@ namespace Handbrake
             this.slider_drc.Location = new System.Drawing.Point(317, 137);
             this.slider_drc.Maximum = 30;
             this.slider_drc.Name = "slider_drc";
-            this.slider_drc.Size = new System.Drawing.Size(241, 45);
+            this.slider_drc.Size = new System.Drawing.Size(241, 42);
             this.slider_drc.TabIndex = 18;
             this.slider_drc.TickFrequency = 10;
             this.ToolTip.SetToolTip(this.slider_drc, "Dynamic Range Compression");
@@ -851,7 +853,7 @@ namespace Handbrake
             this.HelpToolStripMenuItem});
             this.frmMainMenu.Location = new System.Drawing.Point(0, 0);
             this.frmMainMenu.Name = "frmMainMenu";
-            this.frmMainMenu.Size = new System.Drawing.Size(892, 24);
+            this.frmMainMenu.Size = new System.Drawing.Size(890, 24);
             this.frmMainMenu.TabIndex = 0;
             this.frmMainMenu.Text = "MenuStrip1";
             // 
@@ -999,7 +1001,7 @@ namespace Handbrake
             // 
             // btn_queue
             // 
-            this.btn_queue.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_queue.BackColor = System.Drawing.Color.Transparent;
             this.btn_queue.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_queue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_queue.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1015,7 +1017,7 @@ namespace Handbrake
             // 
             // btn_encode
             // 
-            this.btn_encode.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_encode.BackColor = System.Drawing.Color.Transparent;
             this.btn_encode.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_encode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_encode.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1910,9 +1912,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle3.Format = "N0";
-            dataGridViewCellStyle3.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle1;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -1975,7 +1977,7 @@ namespace Handbrake
             // 
             // btn_h264Clear
             // 
-            this.btn_h264Clear.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_h264Clear.BackColor = System.Drawing.Color.Transparent;
             this.btn_h264Clear.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_h264Clear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_h264Clear.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -2027,7 +2029,7 @@ namespace Handbrake
             // 
             // btn_clear
             // 
-            this.btn_clear.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_clear.BackColor = System.Drawing.Color.Transparent;
             this.btn_clear.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_clear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_clear.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -2042,7 +2044,7 @@ namespace Handbrake
             // 
             // btn_copy2C
             // 
-            this.btn_copy2C.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_copy2C.BackColor = System.Drawing.Color.Transparent;
             this.btn_copy2C.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_copy2C.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_copy2C.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -2067,7 +2069,7 @@ namespace Handbrake
             // 
             // btn_generate_Query
             // 
-            this.btn_generate_Query.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_generate_Query.BackColor = System.Drawing.Color.Transparent;
             this.btn_generate_Query.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_generate_Query.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_generate_Query.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -2159,7 +2161,7 @@ namespace Handbrake
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(892, 588);
+            this.ClientSize = new System.Drawing.Size(890, 586);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox_dest);
