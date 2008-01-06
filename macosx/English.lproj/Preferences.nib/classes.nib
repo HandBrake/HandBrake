@@ -1,17 +1,20 @@
 {
-    IBClasses = (
-        {
-            ACTIONS = {close = id; runModal = id; }; 
-            CLASS = HBPreferencesController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                fAdvancedView = NSView; 
-                fAudioView = NSView; 
-                fGeneralView = NSView; 
-                fPictureView = NSView; 
-            }; 
-            SUPERCLASS = NSWindowController; 
+    IBClasses =     (
+                {
+            ACTIONS =             {
+                close = id;
+                runModal = id;
+            };
+            CLASS = HBPreferencesController;
+            LANGUAGE = ObjC;
+            OUTLETS =             {
+                fAdvancedView = NSView;
+                fAudioView = NSView;
+                fGeneralView = NSView;
+                fPictureView = NSView;
+            };
+            SUPERCLASS = NSWindowController;
         }
-    ); 
-    IBVersion = 1; 
+    );
+    IBVersion = 1;
 }
