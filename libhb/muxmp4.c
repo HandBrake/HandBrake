@@ -480,6 +480,13 @@ static int MP4End( hb_mux_object_t * m )
            // the rendering offset of the first sample.
            MP4AddTrackEdit(m->file, 1, MP4_INVALID_EDIT_ID, MP4GetSampleRenderingOffset(m->file,1,1),
                MP4GetTrackDuration(m->file, 1), 0);
+            if ( m->job->chapter_markers )
+            {
+                // apply same edit to chapter track to keep it in sync with video
+                MP4AddTrackEdit(m->file, m->chapter_track, MP4_INVALID_EDIT_ID,
+                                MP4GetSampleRenderingOffset(m->file,1,1),
+                                MP4GetTrackDuration(m->file, m->chapter_track), 0);
+            }
      }
 
     MP4Close( m->file );
