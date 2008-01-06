@@ -762,10 +762,14 @@ static void work_loop( void * _w )
 
         w->work( w, &buf_in, &buf_out );
 
-        // Propogate any chapter breaks for the worker
-        if( buf_in && buf_out && buf_in->new_chap )
+        // Propagate any chapter breaks for the worker if and only if the
+        // output frame has the same time stamp as the input frame (any
+        // worker that delays frames has to propagate the chapter marks itself
+        // and workers that move chapter marks to a different time should set
+        // 'buf_in' to NULL so that this code won't generate spurious duplicates.)
+        if( buf_in && buf_out && buf_in->new_chap && buf_in->start == buf_out->start)
         {
-            hb_log("WORK: Copying Chapter Break");
+            hb_log("work %s: Copying Chapter Break @ %lld", w->name, buf_in->start);
             buf_out->new_chap = 1;
         }
         
