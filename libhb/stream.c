@@ -111,24 +111,24 @@ static off_t align_to_next_packet(FILE* f);
 
 static inline int check_ps_sync(const uint8_t *buf)
 {
-    // must have a Pack header
-    // (note: the operator '&' instead of '&&' is used deliberately for better
-    // performance with a multi-issue pipeline.)
-    return (buf[0] == 0x00) & (buf[1] == 0x00) & (buf[2] == 0x01) & (buf[3] == 0xba);
+    // a legal MPEG program stream must start with a Pack header in the
+    // first four bytes.
+    return (buf[0] == 0x00) && (buf[1] == 0x00) &&
+           (buf[2] == 0x01) && (buf[3] == 0xba);
 }
 
 static inline int check_ts_sync(const uint8_t *buf)
 {
     // must have initial sync byte, no scrambling & a legal adaptation ctrl
-    return (buf[0] == 0x47) & ((buf[3] >> 6) == 0) & ((buf[3] >> 4) > 0);
+    return (buf[0] == 0x47) && ((buf[3] >> 6) == 0) && ((buf[3] >> 4) > 0);
 }
 
 static inline int have_ts_sync(const uint8_t *buf)
 {
-    return check_ts_sync(&buf[0*188]) & check_ts_sync(&buf[1*188]) &
-           check_ts_sync(&buf[2*188]) & check_ts_sync(&buf[3*188]) &
-           check_ts_sync(&buf[4*188]) & check_ts_sync(&buf[5*188]) &
-           check_ts_sync(&buf[6*188]) & check_ts_sync(&buf[7*188]);
+    return check_ts_sync(&buf[0*188]) && check_ts_sync(&buf[1*188]) &&
+           check_ts_sync(&buf[2*188]) && check_ts_sync(&buf[3*188]) &&
+           check_ts_sync(&buf[4*188]) && check_ts_sync(&buf[5*188]) &&
+           check_ts_sync(&buf[6*188]) && check_ts_sync(&buf[7*188]);
 }
 
 static int hb_stream_check_for_ts(const uint8_t *buf)
@@ -150,8 +150,8 @@ static int hb_stream_check_for_ps(const uint8_t *buf)
 {
     // program streams should have a Pack header every 2048 bytes.
     // check that we have 4 of these.
-    return check_ps_sync(&buf[0*2048]) & check_ps_sync(&buf[1*2048]) &
-           check_ps_sync(&buf[2*2048]) & check_ps_sync(&buf[3*2048]);
+    return check_ps_sync(&buf[0*2048]) && check_ps_sync(&buf[1*2048]) &&
+           check_ps_sync(&buf[2*2048]) && check_ps_sync(&buf[3*2048]);
 }
 
 static int hb_stream_get_type(hb_stream_t *stream)
@@ -188,21 +188,20 @@ hb_stream_t * hb_stream_open( char * path )
 
     d = calloc( sizeof( hb_stream_t ), 1 );
 
-    /* Open device */
+    /* open the file and see if it's a type we know about. return a stream
+     * reference structure if we can deal with it & NULL otherwise. */
     if( ( d->file_handle = fopen( path, "rb" ) ) )
     {
         d->path = strdup( path );
-        if ( hb_stream_get_type( d ) != 0 )
+        if (d->path != NULL &&  hb_stream_get_type( d ) != 0 )
         {
             return d;
         }
         fclose( d->file_handle );
-        free( d->path );
+        if (d->path)
+            free( d->path );
     }
-    else
-    {
-        hb_log( "hb_stream_open: fopen failed (%s)", path );
-    }
+    hb_log( "hb_stream_open: open %s failed", path );
     free( d );
     return NULL;
 }
@@ -245,6 +244,12 @@ void hb_stream_close( hb_stream_t ** _d )
     *_d = NULL;
 }
 
+/* when the file was first opened we made entries for all the audio elementary
+ * streams we found in it. Streams that were later found during the preview scan
+ * now have an audio codec, type, rate, etc., associated with them. At the end
+ * of the scan we delete all the audio entries that weren't found by the scan
+ * or don't have a format we support. This routine deletes audio entry 'indx'
+ * by copying all later entries down one slot. */
 static void hb_stream_delete_audio_entry(hb_stream_t *stream, int indx)
 {
     int i;
@@ -381,89 +386,121 @@ static const uint8_t *hb_ts_stream_getPEStype(hb_stream_t *stream, uint32_t pid)
     return 0;
 }
 
+static uint64_t hb_ps_stream_getVideoPTS(hb_stream_t *stream)
+{
+    hb_buffer_t *buf  = hb_buffer_init(HB_DVD_READ_BUFFER_SIZE);
+    hb_list_t *list = hb_list_init();
+    // how many blocks we read while searching for a video PES header
+    int blksleft = 1024;
+    uint64_t pts = 0;
+
+    while (--blksleft >= 0 && hb_stream_read(stream, buf) == 1)
+    {
+        hb_buffer_t *es;
+
+        // 'buf' contains an MPEG2 PACK - get a list of all it's elementary streams
+        hb_demux_ps(buf, list);
+
+        while ( ( es = hb_list_item( list, 0 ) ) )
+        {
+            hb_list_rem( list, es );
+            if ( es->id == 0xe0 )
+            {
+                // this PES contains video - if there's a PTS we're done
+                // hb_demux_ps left the PTS in buf_es->start.
+                if ( es->start != ~0 )
+                {
+                    pts = es->start;
+                    blksleft = 0;
+                    break;
+                }
+            }
+            hb_buffer_close( &es );
+        }
+    }
+    hb_list_empty( &list );
+    hb_buffer_close(&buf);
+    return pts;
+}
+
 /***********************************************************************
  * hb_stream_duration
  ***********************************************************************
  *
  **********************************************************************/
+struct pts_pos {
+    uint64_t pos;   /* file position of this PTS sample */
+    uint64_t pts;   /* PTS from video stream */
+};
+
+static struct pts_pos hb_sample_pts(hb_stream_t *stream, uint64_t fpos)
+{
+    struct pts_pos pp = { 0, 0 };
+
+    if ( stream->stream_type == hb_stream_type_program )
+    {
+        // round address down to nearest dvd sector start
+        fpos &=~ ( HB_DVD_READ_BUFFER_SIZE - 1 );
+        fseeko( stream->file_handle, fpos, SEEK_SET );
+        pp.pts = hb_ps_stream_getVideoPTS( stream );
+    }
+    else
+    {
+        const uint8_t *buf;
+        fseeko( stream->file_handle, fpos, SEEK_SET );
+        align_to_next_packet( stream->file_handle );
+        buf = hb_ts_stream_getPEStype( stream, stream->ts_video_pids[0] );
+        if ( buf == NULL )
+        {
+            hb_log("hb_sample_pts: couldn't find video packet near %llu", fpos);
+            return pp;
+        }
+        if ( ( buf[7] >> 7 ) != 1 )
+        {
+            hb_log("hb_sample_pts: no PTS in video packet near %llu", fpos);
+            return pp;
+        }
+        pp.pts = ( ( (uint64_t)buf[9] >> 1 ) & 7 << 30 ) |
+                 ( (uint64_t)buf[10] << 22 ) |
+                 ( ( (uint64_t)buf[11] >> 1 ) << 15 ) |
+                 ( (uint64_t)buf[12] << 7 ) |
+                 ( (uint64_t)buf[13] >> 1 );
+    }
+    pp.pos = ftello(stream->file_handle);
+    hb_log("hb_sample_pts: pts %lld at %llu", pp.pts, pp.pos );
+    return pp;
+}
+
 static void hb_stream_duration(hb_stream_t *stream, hb_title_t *inTitle)
 {
-   // XXX don't have duration code for program streams yet
-    // use a fake duration that should be "long enough"
-    if ( stream->stream_type == hb_stream_type_program )
-	{
-        // So we'll use a 'fake duration' that should give enough time !
-        int64_t duration = 2 * 3600 * 90000;
-		inTitle->duration = duration; //90LL * dvdtime2msec( &d->pgc->playback_time );
-		inTitle->hours    = inTitle->duration / 90000 / 3600;
-		inTitle->minutes  = ( ( inTitle->duration / 90000 ) % 3600 ) / 60;
-		inTitle->seconds  = ( inTitle->duration / 90000 ) % 60;
-		return;
-	}
-
-    uint64_t first_pts, last_pts;
-    const uint8_t *buf;
-    
     // To calculate the duration we get video presentation time stamps
     // at a couple places in the file then use their difference scaled
     // by the ratio of the distance between our measurement points &
     // the size of the file. The issue is that our video file may have
     // chunks from several different program fragments (main feature,
-    // commercials, station id, trailers, etc.) all with their on base
+    // commercials, station id, trailers, etc.) all with their own base
     // pts value. We need to difference two pts's from the same program
     // fragment. Since extraneous material is very likely at the beginning
     // and end of the content, for now we take a time stamp from 25%
     // into the file & 75% into the file then double their difference
     // to get the total duration.
+    struct pts_pos first_pts, last_pts;
+
     fseeko(stream->file_handle, 0, SEEK_END);
     uint64_t fsize = ftello(stream->file_handle);
-    fseeko(stream->file_handle, fsize >> 2, SEEK_SET);
-    align_to_next_packet(stream->file_handle);
-    buf = hb_ts_stream_getPEStype(stream, stream->ts_video_pids[0]);
-    if (buf == NULL)
-    {
-        hb_log("hb_stream_duration: couldn't find video start packet");
-        return;
-    }
-    if ((buf[7] >> 7) != 1)
-    {
-        hb_log("hb_stream_duration: no PTS in initial video packet");
-        return;
-    }
-    first_pts = ( ( (uint64_t)buf[9] >> 1 ) & 7 << 30 ) |
-                ( (uint64_t)buf[10] << 22 ) |
-                ( ( (uint64_t)buf[11] >> 1 ) << 15 ) |
-                ( (uint64_t)buf[12] << 7 ) |
-                ( (uint64_t)buf[13] >> 1 );
-    hb_log("hb_stream_duration: first pts %lld", first_pts);
+    first_pts = hb_sample_pts(stream, fsize >> 2);
+    last_pts = hb_sample_pts(stream, fsize - (fsize >> 2) );
 
-    // now get a pts from a frame near the end of the file.
-    fseeko(stream->file_handle, fsize - (fsize >> 2), SEEK_SET);
-    align_to_next_packet(stream->file_handle);
-    buf = hb_ts_stream_getPEStype(stream, stream->ts_video_pids[0]);
-    if (buf == NULL)
+    if ( first_pts.pos && last_pts.pos && first_pts.pos != last_pts.pos )
     {
-        hb_log("hb_stream_duration: couldn't find video end packet");
-        return;
+        uint64_t dur = ( ( last_pts.pts - first_pts.pts ) * fsize ) /
+                       ( last_pts.pos - first_pts.pos );
+        inTitle->duration = dur;
+        dur /= 90000;
+        inTitle->hours    = dur / 3600;
+        inTitle->minutes  = ( dur % 3600 ) / 60;
+        inTitle->seconds  = dur % 60;
     }
-    if ((buf[7] >> 7) != 1)
-    {
-        hb_log("hb_stream_duration: no PTS in final video packet");
-        inTitle->duration = 0;
-        return;
-    }
-    last_pts = ( ( (uint64_t)buf[9] >> 1 ) & 7 << 30 ) |
-                ( (uint64_t)buf[10] << 22 ) |
-                ( ( (uint64_t)buf[11] >> 1 ) << 15 ) |
-                ( (uint64_t)buf[12] << 7 ) |
-                ( (uint64_t)buf[13] >> 1 );
-    hb_log("hb_stream_duration: last pts %lld", last_pts);
-
-    inTitle->duration = (last_pts - first_pts) * 2 + 90000 * 60;
-    inTitle->hours    = inTitle->duration / 90000 / 3600;
-    inTitle->minutes  = ( ( inTitle->duration / 90000 ) % 3600 ) / 60;
-    inTitle->seconds  = ( inTitle->duration / 90000 ) % 60;
-
     rewind(stream->file_handle);
 }
 
@@ -546,6 +583,7 @@ int hb_stream_seek( hb_stream_t * src_stream, float f )
   fseeko(src_stream->file_handle,0 ,SEEK_END);
   stream_size = ftello(src_stream->file_handle);
   new_pos = (off_t) ((double) (stream_size) * pos_ratio);
+  new_pos &=~ (HB_DVD_READ_BUFFER_SIZE - 1);
   int r = fseeko(src_stream->file_handle, new_pos, SEEK_SET);
   
   if (r == -1)
@@ -640,20 +678,25 @@ static void add_audio_to_title(hb_title_t *title, int id)
     {
         case 0x0:
             audio->codec = HB_ACODEC_MPGA;
-            hb_log("hb_ps_stream_find_audio_ids: added MPEG audio stream 0x%x", id);
+            hb_log("add_audio_to_title: added MPEG audio stream 0x%x", id);
             break;
         case 0x2:
-            audio->codec = HB_ACODEC_LPCM;
-            hb_log("hb_ps_stream_find_audio_ids: added LPCM audio stream 0x%x", id);
-            break;
-        case 0x4:
-            audio->codec = HB_ACODEC_DCA;
-            hb_log("hb_ps_stream_find_audio_ids: added DCA audio stream 0x%x", id);
-            break;
+            // type 2 is a DVD subtitle stream - just ignore it */
+            free( audio );
+            return;
         case 0x8:
             audio->codec = HB_ACODEC_AC3;
-            hb_log("hb_ps_stream_find_audio_ids: added AC3 audio stream 0x%x", id);
+            hb_log("add_audio_to_title: added AC3 audio stream 0x%x", id);
             break;
+        case 0xa:
+            audio->codec = HB_ACODEC_LPCM;
+            hb_log("add_audio_to_title: added LPCM audio stream 0x%x", id);
+            break;
+        default:
+            hb_log("add_audio_to_title: unknown audio stream type 0x%x", id);
+            free( audio );
+            return;
+
     }
     hb_list_add( title->list_audio, audio );
 }
@@ -664,14 +707,16 @@ static void hb_ps_stream_find_audio_ids(hb_stream_t *stream, hb_title_t *title)
     hb_buffer_t *buf  = hb_buffer_init(HB_DVD_READ_BUFFER_SIZE);
     hb_list_t *list = hb_list_init();
     // how many blocks we read while searching for audio streams
-    int blksleft = 2048;
+    int blksleft = 4096;
     // there can be at most 16 unique streams in an MPEG PS (8 in a DVD)
     // so we use a bitmap to keep track of the ones we've already seen.
     // Bit 'i' of smap is set if we've already added the audio for
     // audio substream id 'i' to the title's audio list.
     uint32_t smap = 0;
 
-    hb_stream_seek(stream, 0.0f);
+    // start looking 20% into the file since there's occasionally no
+    // audio at the beginning (particularly for vobs).
+    hb_stream_seek(stream, 0.2f);
 		
     while (--blksleft >= 0 && hb_stream_read(stream, buf) == 1)
     {
@@ -789,7 +834,7 @@ void hb_stream_update_audio(hb_stream_t *stream, hb_audio_t *audio)
 	}
 	
 	snprintf( audio->lang, sizeof( audio->lang ), "%s (%s)", strlen(lang->native_name) ? lang->native_name : lang->eng_name,
-	  audio->codec == HB_ACODEC_AC3 ? "AC3" : ( audio->codec == HB_ACODEC_MPGA ? "MPEG" : "LPCM" ) );
+	  audio->codec == HB_ACODEC_AC3 ? "AC3" : ( audio->codec == HB_ACODEC_MPGA ? "MPEG" : ( audio->codec == HB_ACODEC_DCA ? "DTS" : "LPCM" ) ) );
 	snprintf( audio->lang_simple, sizeof( audio->lang_simple ), "%s", strlen(lang->native_name) ? lang->native_name : lang->eng_name );
 	snprintf( audio->iso639_2, sizeof( audio->iso639_2 ), "%s", lang->iso639_2);
 
