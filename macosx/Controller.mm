@@ -1084,7 +1084,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* User selected a file to open */
 	if( returnCode == NSOKButton )
     {
-        
+       
         NSString *scanPath = [[sheet filenames] objectAtIndex: 0];
         /* we set the last searched source directory in the prefs here */
         NSString *sourceDirectory = [scanPath stringByDeletingLastPathComponent];
@@ -1131,11 +1131,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             /* We check to see if the chosen file at path is a package */
             if ([[NSWorkspace sharedWorkspace] isFilePackageAtPath:path])
             {
-                fprintf( stdout, "MacGui: Trying to open a package\n");
+                fprintf( stderr, "MacGui: trying to open a package\n");
                 /* We check to see if this is an .eyetv package */
                 if ([[path pathExtension] isEqualToString: @"eyetv"])
                 {
-                    fprintf( stdout, "MacGui: Trying to open eyetv package\n");
+                    fprintf( stderr, "MacGui: trying to open eyetv package\n");
                     /* We're looking at an EyeTV package - try to open its enclosed
                      .mpg media file */
                     NSString *mpgname;
@@ -1148,19 +1148,19 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                         /* Found an mpeg inside the eyetv package, make it our scan path 
                         and call performScan on the enclosed mpeg */
                         path = mpgname;
-                        fprintf( stdout, "MacGui: found mpeg in eyetv package\n");
+                        fprintf( stderr, "MacGui: found mpeg in eyetv package\n");
                         [self performScan:path scanTitleNum:0];
                     }
                     else
                     {
                         /* We did not find an mpeg file in our package, so we do not call performScan */
-                        fprintf( stdout, "MacGui: no valid mpeg in eyetv package\n");
+                        fprintf( stderr, "MacGui: no valid mpeg in eyetv package\n");
                     }
                 }
                 else
                 {
                     /* The package is not an eyetv package, so we do not call performScan */
-                    fprintf( stdout, "MacGui: Unable to open package\n");
+                    fprintf( stderr, "MacGui: unable to open package\n");
                 }
             }
             else
