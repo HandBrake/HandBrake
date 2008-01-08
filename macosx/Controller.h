@@ -203,6 +203,7 @@
 	int                            currentSuccessfulScanCount;
     BOOL                           SuccessfulScan;
 	NSString                      * currentSource;
+    NSString                     * browsedSourceDisplayName;
 }
 - (void) writeToActivityLog:(char *) format, ...;
 - (IBAction) browseSources: (id) sender;
