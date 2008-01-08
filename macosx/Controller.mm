@@ -767,11 +767,20 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 }
 
 /* We use this to write messages to stderr from the macgui which show up in the activity window and log*/
-- (void) writeToActivityLog:(char *) activityMessage
+- (void) writeToActivityLog:(char *) format, ...
 {
-    time_t _now = time( NULL );
-    struct tm * now  = localtime( &_now );
-    fprintf(stderr, "[%02d:%02d:%02d] MacGui: %s\n", now->tm_hour, now->tm_min, now->tm_sec, activityMessage );
+    va_list args;
+    va_start(args, format);
+    if (format != nil)
+    {
+        char str[1024];
+        vsnprintf( str, 1024, format, args );
+
+        time_t _now = time( NULL );
+        struct tm * now  = localtime( &_now );
+        fprintf(stderr, "[%02d:%02d:%02d] MacGui: %s\n", now->tm_hour, now->tm_min, now->tm_sec, str );
+    }
+    va_end(args);
 }
 
 #pragma mark -
@@ -1138,7 +1147,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             /* We check to see if the chosen file at path is a package */
             if ([[NSWorkspace sharedWorkspace] isFilePackageAtPath:path])
             {
-                [self writeToActivityLog:"trying to open a package"];
+                [self writeToActivityLog: "trying to open a package at: %s", [path UTF8String]];
                 /* We check to see if this is an .eyetv package */
                 if ([[path pathExtension] isEqualToString: @"eyetv"])
                 {
@@ -1167,7 +1176,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 else
                 {
                     /* The package is not an eyetv package, so we do not call performScan */
-                    [self writeToActivityLog:"unable to open package"];
+                    //[self writeToActivityLog:"unable to open package"];
                 }
             }
             else
