@@ -204,7 +204,7 @@
     BOOL                           SuccessfulScan;
 	NSString                      * currentSource;
 }
-
+- (void) writeToActivityLog:(char *) activityMessage;
 - (IBAction) browseSources: (id) sender;
 - (void) browseSourcesDone: (NSOpenPanel *) sheet
                 returnCode: (int) returnCode contextInfo: (void *) contextInfo;
