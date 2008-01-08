@@ -681,9 +681,19 @@ namespace Handbrake
             {
                 check_lAnamorphic.Enabled = false;
                 check_lAnamorphic.Checked = false;
+                text_height.BackColor = Color.LightGray;
+                text_width.BackColor = Color.LightGray;
+                text_height.Enabled = false;
+                text_width.Enabled = false;
             }
             else
+            {
                 check_lAnamorphic.Enabled = true;
+                text_height.BackColor = Color.White;
+                text_width.BackColor = Color.White;
+                text_height.Enabled = true;
+                text_width.Enabled = true;
+            }
         }
 
         private void check_lAnamorphic_CheckedChanged(object sender, EventArgs e)
