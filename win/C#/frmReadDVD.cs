@@ -90,12 +90,13 @@ namespace Handbrake
 
                 string strCmdLine = String.Format(@"cmd /c """"{0}"" -i ""{1}"" -t0 -v >""{2}"" 2>&1""", handbrakeCLIPath, inputFile, dvdInfoPath);
 
-                using (Process hbproc = Process.Start("CMD.exe", strCmdLine))
+                ProcessStartInfo hbParseDvd = new ProcessStartInfo("CMD.exe", strCmdLine);
+                hbParseDvd.WindowStyle = ProcessWindowStyle.Hidden;
+                using (Process hbproc = Process.Start(hbParseDvd))
                 {
                     hbproc.WaitForExit();
                     // TODO: Verify exit code if the CLI supports it properly
-                }
-
+                } 
 
                 if (!File.Exists(dvdInfoPath))
                 {

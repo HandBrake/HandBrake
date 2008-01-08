@@ -17,6 +17,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Threading;
 using System.Runtime.InteropServices;
+using System.Globalization;
 
 
 namespace Handbrake
@@ -29,10 +30,9 @@ namespace Handbrake
         [STAThread]
         static void Main()
         {
-
             // Development Code Expiry.
             // Remember to comment out on public release!!!
-            if (DateTime.Now > DateTime.Parse("20/1/2008")) { MessageBox.Show("Sorry, This development build of Handbrake has expired."); return; } 
+            if (DateTime.Now > DateTime.Parse("2008/01/30", new CultureInfo("en-US"))) { MessageBox.Show("Sorry, This development build of Handbrake has expired."); return; } 
 
             // Check the system meets the system requirements.
             Boolean launch = true;
@@ -60,7 +60,6 @@ namespace Handbrake
             {
                 MessageBox.Show("frmMain.cs - systemCheck() " + exc.ToString());
             }
-
 
             // Either Launch or Close the Application
             if (launch == true)
