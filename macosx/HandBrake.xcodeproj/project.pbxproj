@@ -71,24 +71,20 @@
 		0DFF0C100B6BCEE800549488 /* test.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC760B4CA8F40064E04C /* test.c */; };
 		253886010BFE0A5B0064E995 /* HBOutputRedirect.h in Headers */ = {isa = PBXBuildFile; fileRef = 253885FF0BFE0A5B0064E995 /* HBOutputRedirect.h */; };
 		253886020BFE0A5B0064E995 /* HBOutputRedirect.m in Sources */ = {isa = PBXBuildFile; fileRef = 253886000BFE0A5B0064E995 /* HBOutputRedirect.m */; };
-		2538860C0BFE0B730064E995 /* OutputPanel.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2538860A0BFE0B730064E995 /* OutputPanel.nib */; };
 		253886170BFE0C160064E995 /* HBOutputPanelController.h in Headers */ = {isa = PBXBuildFile; fileRef = 253886150BFE0C160064E995 /* HBOutputPanelController.h */; };
 		253886180BFE0C160064E995 /* HBOutputPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 253886160BFE0C160064E995 /* HBOutputPanelController.m */; };
-		25DE1FAD0C1699E500F01FC8 /* Preferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 25DE1FAB0C1699E500F01FC8 /* Preferences.nib */; };
 		25DE1FB60C169A0C00F01FC8 /* HBPreferencesController.h in Headers */ = {isa = PBXBuildFile; fileRef = 25DE1FB40C169A0C00F01FC8 /* HBPreferencesController.h */; };
 		25DE1FB70C169A0C00F01FC8 /* HBPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 25DE1FB50C169A0C00F01FC8 /* HBPreferencesController.m */; };
 		4D1125D809D72FD200E0657B /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D1125D709D72FD200E0657B /* libz.dylib */; };
 		4D1125D909D72FD200E0657B /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D1125D709D72FD200E0657B /* libz.dylib */; };
 		4D1EA2EA0993B09A00FDC1A2 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.mm */; };
 		4D1EA2F60993B0CA00FDC1A2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		4D1EA3010993B13700FDC1A2 /* Express.nib in Resources */ = {isa = PBXBuildFile; fileRef = 4D1EA3000993B13700FDC1A2 /* Express.nib */; };
 		4D1EA31C0993B24700FDC1A2 /* ExpressController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D1EA31B0993B24700FDC1A2 /* ExpressController.m */; };
 		4D2AEA1A09CCB332007E18F6 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DEB2024052B055F00C39CA9 /* IOKit.framework */; };
 		4D3ECC2709A4917000B2E45F /* WhiteBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D3ECC2609A4917000B2E45F /* WhiteBox.m */; };
 		4DD93F8F082036E8008E1322 /* Controller.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DF3C8CB052889CD00A80101 /* Controller.h */; };
 		4DD93F90082036E8008E1322 /* PictureGLView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D85758F052B78E300C39CA9 /* PictureGLView.h */; };
 		4DD93F92082036E8008E1322 /* PictureController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D1FD381073D19CE00E46515 /* PictureController.h */; };
-		4DD93F96082036E8008E1322 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		4DD93F97082036E8008E1322 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		4DD93F9A082036E8008E1322 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.mm */; settings = {ATTRIBUTES = (); }; };
 		4DD93F9B082036E8008E1322 /* Controller.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4DF3C8CC052889CD00A80101 /* Controller.mm */; };
@@ -130,11 +126,8 @@
 		A2DFC66F0C6196D900E66E89 /* actionWidgetPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = A2DFC66D0C6196D900E66E89 /* actionWidgetPressed.png */; };
 		A2DFC6750C6197C600E66E89 /* MVMenuButton.h in Headers */ = {isa = PBXBuildFile; fileRef = A2DFC6740C6197C600E66E89 /* MVMenuButton.h */; };
 		A2DFC6770C61980700E66E89 /* MVMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A2DFC6760C61980700E66E89 /* MVMenuButton.m */; };
-		A97A1DB40C91A6800015BC08 /* Express.nib in Resources */ = {isa = PBXBuildFile; fileRef = A97A1DB20C91A6800015BC08 /* Express.nib */; };
-		A9ABA2270C92AECA00D98324 /* PictureSettings.nib in Resources */ = {isa = PBXBuildFile; fileRef = A9ABA2250C92AECA00D98324 /* PictureSettings.nib */; };
 		A9AC41DF0C918DB500DDF9B8 /* HBAdvancedController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9AC41DD0C918DB500DDF9B8 /* HBAdvancedController.m */; };
 		A9AC41E00C918DB500DDF9B8 /* HBAdvancedController.h in Headers */ = {isa = PBXBuildFile; fileRef = A9AC41DE0C918DB500DDF9B8 /* HBAdvancedController.h */; };
-		A9AC41E70C918DC000DDF9B8 /* AdvancedView.nib in Resources */ = {isa = PBXBuildFile; fileRef = A9AC41E50C918DC000DDF9B8 /* AdvancedView.nib */; };
 		A9DE40450C959834008A5440 /* minus-8.png in Resources */ = {isa = PBXBuildFile; fileRef = A9DE40430C959834008A5440 /* minus-8.png */; };
 		A9DE40460C959834008A5440 /* plus-8.png in Resources */ = {isa = PBXBuildFile; fileRef = A9DE40440C959834008A5440 /* plus-8.png */; };
 		B48359A80C82960500E04440 /* lang.c in Sources */ = {isa = PBXBuildFile; fileRef = B48359A70C82960500E04440 /* lang.c */; };
@@ -153,13 +146,19 @@
 		E37C89440C83988F00C1B919 /* JobLarge.png in Resources */ = {isa = PBXBuildFile; fileRef = E37C89400C83988F00C1B919 /* JobLarge.png */; };
 		E37C89470C83989F00C1B919 /* HBQueueController.mm in Sources */ = {isa = PBXBuildFile; fileRef = E37C89450C83989F00C1B919 /* HBQueueController.mm */; };
 		E37C89480C83989F00C1B919 /* HBQueueController.h in Headers */ = {isa = PBXBuildFile; fileRef = E37C89460C83989F00C1B919 /* HBQueueController.h */; };
-		E37C894F0C8398CF00C1B919 /* Queue.nib in Resources */ = {isa = PBXBuildFile; fileRef = E37C894D0C8398CF00C1B919 /* Queue.nib */; };
 		E3997A2C0CAB58BC00287239 /* EncodeWorking3.png in Resources */ = {isa = PBXBuildFile; fileRef = E3997A260CAB58BC00287239 /* EncodeWorking3.png */; };
 		E3997A2D0CAB58BC00287239 /* EncodeWorking4.png in Resources */ = {isa = PBXBuildFile; fileRef = E3997A270CAB58BC00287239 /* EncodeWorking4.png */; };
 		E3997A2E0CAB58BC00287239 /* EncodeWorking1.png in Resources */ = {isa = PBXBuildFile; fileRef = E3997A280CAB58BC00287239 /* EncodeWorking1.png */; };
 		E3997A2F0CAB58BC00287239 /* EncodeWorking0.png in Resources */ = {isa = PBXBuildFile; fileRef = E3997A290CAB58BC00287239 /* EncodeWorking0.png */; };
 		E3997A300CAB58BC00287239 /* EncodeWorking2.png in Resources */ = {isa = PBXBuildFile; fileRef = E3997A2A0CAB58BC00287239 /* EncodeWorking2.png */; };
 		E3997A310CAB58BC00287239 /* EncodeWorking5.png in Resources */ = {isa = PBXBuildFile; fileRef = E3997A2B0CAB58BC00287239 /* EncodeWorking5.png */; };
+		E39AA4E60D32DC0B0007A415 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E39AA4DA0D32DC0B0007A415 /* MainMenu.xib */; };
+		E39AA4E70D32DC0B0007A415 /* Queue.xib in Resources */ = {isa = PBXBuildFile; fileRef = E39AA4DC0D32DC0B0007A415 /* Queue.xib */; };
+		E39AA4E80D32DC0B0007A415 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = E39AA4DE0D32DC0B0007A415 /* Preferences.xib */; };
+		E39AA4E90D32DC0B0007A415 /* PictureSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = E39AA4E00D32DC0B0007A415 /* PictureSettings.xib */; };
+		E39AA4EA0D32DC0B0007A415 /* AdvancedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E39AA4E20D32DC0B0007A415 /* AdvancedView.xib */; };
+		E39AA4EB0D32DC0B0007A415 /* OutputPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = E39AA4E40D32DC0B0007A415 /* OutputPanel.xib */; };
+		E39AA4EE0D32DC240007A415 /* Express.nib in Resources */ = {isa = PBXBuildFile; fileRef = E39AA4EC0D32DC240007A415 /* Express.nib */; };
 		E3C844F60CA6B3F90013B683 /* RevealPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = E3C844F20CA6B3F90013B683 /* RevealPressed.png */; };
 		E3C844F70CA6B3F90013B683 /* RevealHighlightPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = E3C844F30CA6B3F90013B683 /* RevealHighlightPressed.png */; };
 		E3C844F80CA6B3F90013B683 /* RevealHighlight.png in Resources */ = {isa = PBXBuildFile; fileRef = E3C844F40CA6B3F90013B683 /* RevealHighlight.png */; };
@@ -252,20 +251,16 @@
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		253885FF0BFE0A5B0064E995 /* HBOutputRedirect.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = HBOutputRedirect.h; sourceTree = "<group>"; };
 		253886000BFE0A5B0064E995 /* HBOutputRedirect.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = HBOutputRedirect.m; sourceTree = "<group>"; };
-		2538860B0BFE0B730064E995 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/OutputPanel.nib; sourceTree = "<group>"; };
 		253886150BFE0C160064E995 /* HBOutputPanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBOutputPanelController.h; sourceTree = "<group>"; };
 		253886160BFE0C160064E995 /* HBOutputPanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBOutputPanelController.m; sourceTree = "<group>"; };
-		25DE1FAC0C1699E500F01FC8 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Preferences.nib; sourceTree = "<group>"; };
 		25DE1FB40C169A0C00F01FC8 /* HBPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPreferencesController.h; sourceTree = "<group>"; };
 		25DE1FB50C169A0C00F01FC8 /* HBPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPreferencesController.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
-		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		4D1125D709D72FD200E0657B /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
 		4D1EA2DA0993B01000FDC1A2 /* Instant HandBrake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Instant HandBrake.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D1EA2DC0993B01000FDC1A2 /* Express.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Express.plist; sourceTree = "<group>"; };
-		4D1EA3000993B13700FDC1A2 /* Express.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Express.nib; path = English.lproj/Express.nib; sourceTree = "<group>"; };
 		4D1EA31A0993B24700FDC1A2 /* ExpressController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ExpressController.h; sourceTree = "<group>"; };
 		4D1EA31B0993B24700FDC1A2 /* ExpressController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ExpressController.m; sourceTree = "<group>"; };
 		4D1FD381073D19CE00E46515 /* PictureController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PictureController.h; sourceTree = "<group>"; };
@@ -310,11 +305,8 @@
 		A2DFC66D0C6196D900E66E89 /* actionWidgetPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = actionWidgetPressed.png; sourceTree = "<group>"; };
 		A2DFC6740C6197C600E66E89 /* MVMenuButton.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MVMenuButton.h; sourceTree = "<group>"; };
 		A2DFC6760C61980700E66E89 /* MVMenuButton.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MVMenuButton.m; sourceTree = "<group>"; };
-		A97A1DB30C91A6800015BC08 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Express.nib; sourceTree = "<group>"; };
-		A9ABA2260C92AECA00D98324 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/PictureSettings.nib; sourceTree = "<group>"; };
 		A9AC41DD0C918DB500DDF9B8 /* HBAdvancedController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = HBAdvancedController.m; sourceTree = "<group>"; };
 		A9AC41DE0C918DB500DDF9B8 /* HBAdvancedController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = HBAdvancedController.h; sourceTree = "<group>"; };
-		A9AC41E60C918DC000DDF9B8 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/AdvancedView.nib; sourceTree = "<group>"; };
 		A9DE40430C959834008A5440 /* minus-8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "minus-8.png"; sourceTree = "<group>"; };
 		A9DE40440C959834008A5440 /* plus-8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "plus-8.png"; sourceTree = "<group>"; };
 		B48359A70C82960500E04440 /* lang.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lang.c; path = ../libhb/lang.c; sourceTree = SOURCE_ROOT; };
@@ -332,13 +324,19 @@
 		E37C89400C83988F00C1B919 /* JobLarge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JobLarge.png; sourceTree = "<group>"; };
 		E37C89450C83989F00C1B919 /* HBQueueController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = HBQueueController.mm; sourceTree = "<group>"; };
 		E37C89460C83989F00C1B919 /* HBQueueController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = HBQueueController.h; sourceTree = "<group>"; };
-		E37C894E0C8398CF00C1B919 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Queue.nib; sourceTree = "<group>"; };
 		E3997A260CAB58BC00287239 /* EncodeWorking3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodeWorking3.png; sourceTree = "<group>"; };
 		E3997A270CAB58BC00287239 /* EncodeWorking4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodeWorking4.png; sourceTree = "<group>"; };
 		E3997A280CAB58BC00287239 /* EncodeWorking1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodeWorking1.png; sourceTree = "<group>"; };
 		E3997A290CAB58BC00287239 /* EncodeWorking0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodeWorking0.png; sourceTree = "<group>"; };
 		E3997A2A0CAB58BC00287239 /* EncodeWorking2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodeWorking2.png; sourceTree = "<group>"; };
 		E3997A2B0CAB58BC00287239 /* EncodeWorking5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodeWorking5.png; sourceTree = "<group>"; };
+		E39AA4DB0D32DC0B0007A415 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		E39AA4DD0D32DC0B0007A415 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/Queue.xib; sourceTree = "<group>"; };
+		E39AA4DF0D32DC0B0007A415 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/Preferences.xib; sourceTree = "<group>"; };
+		E39AA4E10D32DC0B0007A415 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/PictureSettings.xib; sourceTree = "<group>"; };
+		E39AA4E30D32DC0B0007A415 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/AdvancedView.xib; sourceTree = "<group>"; };
+		E39AA4E50D32DC0B0007A415 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/OutputPanel.xib; sourceTree = "<group>"; };
+		E39AA4ED0D32DC240007A415 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Express.nib; sourceTree = "<group>"; };
 		E3C844F20CA6B3F90013B683 /* RevealPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RevealPressed.png; sourceTree = "<group>"; };
 		E3C844F30CA6B3F90013B683 /* RevealHighlightPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RevealHighlightPressed.png; sourceTree = "<group>"; };
 		E3C844F40CA6B3F90013B683 /* RevealHighlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RevealHighlight.png; sourceTree = "<group>"; };
@@ -441,14 +439,13 @@
 			children = (
 				A273E0460C57B39A00493A45 /* icons */,
 				0DFA5C7A0B8DD1E90020BC09 /* HandBrake.icns */,
-				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
-				A9ABA2250C92AECA00D98324 /* PictureSettings.nib */,
-				A97A1DB20C91A6800015BC08 /* Express.nib */,
-				A9AC41E50C918DC000DDF9B8 /* AdvancedView.nib */,
-				2538860A0BFE0B730064E995 /* OutputPanel.nib */,
-				25DE1FAB0C1699E500F01FC8 /* Preferences.nib */,
-				4D1EA3000993B13700FDC1A2 /* Express.nib */,
-				E37C894D0C8398CF00C1B919 /* Queue.nib */,
+				E39AA4DA0D32DC0B0007A415 /* MainMenu.xib */,
+				E39AA4E20D32DC0B0007A415 /* AdvancedView.xib */,
+				E39AA4E40D32DC0B0007A415 /* OutputPanel.xib */,
+				E39AA4E00D32DC0B0007A415 /* PictureSettings.xib */,
+				E39AA4DE0D32DC0B0007A415 /* Preferences.xib */,
+				E39AA4DC0D32DC0B0007A415 /* Queue.xib */,
+				E39AA4EC0D32DC240007A415 /* Express.nib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -771,7 +768,7 @@
 				0DFA5CF80B8DD7B40020BC09 /* HandBrake.icns in Resources */,
 				52AFF86B0B59BD14000DA7C4 /* Express.plist in Resources */,
 				52AFF86A0B59BD07000DA7C4 /* InfoPlist.strings in Resources */,
-				4D1EA3010993B13700FDC1A2 /* Express.nib in Resources */,
+				E39AA4EE0D32DC240007A415 /* Express.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -780,11 +777,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				0DFA5D070B8DD9040020BC09 /* HandBrake.plist in Resources */,
-				4DD93F96082036E8008E1322 /* MainMenu.nib in Resources */,
 				4DD93F97082036E8008E1322 /* InfoPlist.strings in Resources */,
 				0DFA5C7B0B8DD1E90020BC09 /* HandBrake.icns in Resources */,
-				2538860C0BFE0B730064E995 /* OutputPanel.nib in Resources */,
-				25DE1FAD0C1699E500F01FC8 /* Preferences.nib in Resources */,
 				A273E0510C57B39A00493A45 /* Pause.tiff in Resources */,
 				A273E0520C57B39A00493A45 /* Play.tiff in Resources */,
 				A273E0530C57B39A00493A45 /* Stop.tiff in Resources */,
@@ -794,12 +788,8 @@
 				E37C89420C83988F00C1B919 /* Delete.png in Resources */,
 				E37C89430C83988F00C1B919 /* JobSmall.png in Resources */,
 				E37C89440C83988F00C1B919 /* JobLarge.png in Resources */,
-				E37C894F0C8398CF00C1B919 /* Queue.nib in Resources */,
 				E3003C7F0C88505D0072F2A8 /* DeleteHighlightPressed.png in Resources */,
 				E3003CB50C8852B70072F2A8 /* DeletePressed.png in Resources */,
-				A9AC41E70C918DC000DDF9B8 /* AdvancedView.nib in Resources */,
-				A97A1DB40C91A6800015BC08 /* Express.nib in Resources */,
-				A9ABA2270C92AECA00D98324 /* PictureSettings.nib in Resources */,
 				E37167890C92F6180072B384 /* JobPassSecondSmall.png in Resources */,
 				E371678A0C92F6180072B384 /* JobPassSubtitleSmall.png in Resources */,
 				E371678B0C92F6180072B384 /* JobPassFirstSmall.png in Resources */,
@@ -827,6 +817,12 @@
 				E3997A300CAB58BC00287239 /* EncodeWorking2.png in Resources */,
 				E3997A310CAB58BC00287239 /* EncodeWorking5.png in Resources */,
 				E3FC10910D1611EC00470E7B /* EncodeCanceled.png in Resources */,
+				E39AA4E60D32DC0B0007A415 /* MainMenu.xib in Resources */,
+				E39AA4E70D32DC0B0007A415 /* Queue.xib in Resources */,
+				E39AA4E80D32DC0B0007A415 /* Preferences.xib in Resources */,
+				E39AA4E90D32DC0B0007A415 /* PictureSettings.xib in Resources */,
+				E39AA4EA0D32DC0B0007A415 /* AdvancedView.xib in Resources */,
+				E39AA4EB0D32DC0B0007A415 /* OutputPanel.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -991,60 +987,60 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		2538860A0BFE0B730064E995 /* OutputPanel.nib */ = {
+		E39AA4DA0D32DC0B0007A415 /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				2538860B0BFE0B730064E995 /* English */,
+				E39AA4DB0D32DC0B0007A415 /* English */,
 			);
-			name = OutputPanel.nib;
+			name = MainMenu.xib;
 			sourceTree = "<group>";
 		};
-		25DE1FAB0C1699E500F01FC8 /* Preferences.nib */ = {
+		E39AA4DC0D32DC0B0007A415 /* Queue.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				25DE1FAC0C1699E500F01FC8 /* English */,
+				E39AA4DD0D32DC0B0007A415 /* English */,
 			);
-			name = Preferences.nib;
+			name = Queue.xib;
 			sourceTree = "<group>";
 		};
-		29B97318FDCFA39411CA2CEA /* MainMenu.nib */ = {
+		E39AA4DE0D32DC0B0007A415 /* Preferences.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				29B97319FDCFA39411CA2CEA /* English */,
+				E39AA4DF0D32DC0B0007A415 /* English */,
 			);
-			name = MainMenu.nib;
+			name = Preferences.xib;
 			sourceTree = "<group>";
 		};
-		A97A1DB20C91A6800015BC08 /* Express.nib */ = {
+		E39AA4E00D32DC0B0007A415 /* PictureSettings.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				A97A1DB30C91A6800015BC08 /* English */,
+				E39AA4E10D32DC0B0007A415 /* English */,
+			);
+			name = PictureSettings.xib;
+			sourceTree = "<group>";
+		};
+		E39AA4E20D32DC0B0007A415 /* AdvancedView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E39AA4E30D32DC0B0007A415 /* English */,
+			);
+			name = AdvancedView.xib;
+			sourceTree = "<group>";
+		};
+		E39AA4E40D32DC0B0007A415 /* OutputPanel.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E39AA4E50D32DC0B0007A415 /* English */,
+			);
+			name = OutputPanel.xib;
+			sourceTree = "<group>";
+		};
+		E39AA4EC0D32DC240007A415 /* Express.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E39AA4ED0D32DC240007A415 /* English */,
 			);
 			name = Express.nib;
-			sourceTree = "<group>";
-		};
-		A9ABA2250C92AECA00D98324 /* PictureSettings.nib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A9ABA2260C92AECA00D98324 /* English */,
-			);
-			name = PictureSettings.nib;
-			sourceTree = "<group>";
-		};
-		A9AC41E50C918DC000DDF9B8 /* AdvancedView.nib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A9AC41E60C918DC000DDF9B8 /* English */,
-			);
-			name = AdvancedView.nib;
-			sourceTree = "<group>";
-		};
-		E37C894D0C8398CF00C1B919 /* Queue.nib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E37C894E0C8398CF00C1B919 /* English */,
-			);
-			name = Queue.nib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -1261,7 +1257,7 @@
 		0D88F56C0B6CDCD400F81F26 /* UB */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CONFIGURATION_BUILD_DIR = ..;
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/..";
 				CURRENT_PROJECT_VERSION = 0.9.1;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1662,7 +1658,7 @@
 		4D4E7BC1087804870051572B /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CONFIGURATION_BUILD_DIR = ..;
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/..";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 0.9.1;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1720,7 +1716,7 @@
 		4D4E7BC2087804870051572B /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CONFIGURATION_BUILD_DIR = ..;
+				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/..";
 				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = 0.9.1;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1799,256 +1795,6 @@
 			};
 			name = Deployment;
 		};
-		A969B4130CFC243900C7AA12 /* Deployment 10.4 */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PREPROCESSOR_DEFINITIONS = "JOB_GROUPS=1";
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-				STRIP_INSTALLED_PRODUCT = NO;
-			};
-			name = "Deployment 10.4";
-		};
-		A969B4140CFC243900C7AA12 /* Deployment 10.4 */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CONFIGURATION_BUILD_DIR = ..;
-				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 0.9.1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
-				HEADER_SEARCH_PATHS = (
-					../libhb,
-					../contrib/include,
-				);
-				INFOPLIST_FILE = HandBrake.plist;
-				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = (
-					../libhb/libhb.a,
-					../contrib/lib/libmp4v2.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libdvdcss.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-					../contrib/lib/libdca.a,
-					../contrib/lib/libmkv.a,
-					../contrib/lib/libswscale.a,
-				);
-				PRODUCT_NAME = HandBrake;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-				ZERO_LINK = NO;
-			};
-			name = "Deployment 10.4";
-		};
-		A969B4150CFC243900C7AA12 /* Deployment 10.4 */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				HEADER_SEARCH_PATHS = ../libhb;
-				INFOPLIST_FILE = Express.plist;
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
-				);
-				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
-				OTHER_LDFLAGS = (
-					../libhb/libhb.a,
-					../contrib/lib/libmp4v2.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libdvdcss.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-					../contrib/lib/libdca.a,
-					../contrib/lib/libmkv.a,
-					../contrib/lib/libswscale.a,
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = "Instant HandBrake";
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-				WRAPPER_EXTENSION = app;
-				ZERO_LINK = NO;
-			};
-			name = "Deployment 10.4";
-		};
-		A969B4160CFC243900C7AA12 /* Deployment 10.4 */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../libhb";
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
-				INSTALL_PATH = /usr/local/lib;
-				MACOSX_DEPLOYMENT_TARGET = 10.3;
-				OTHER_CFLAGS = (
-					"-D__LIBHB__",
-					"-DSYS_DARWIN",
-					"$(OTHER_CFLAGS_QUOTED_1)",
-					"-DUSE_PTHREAD",
-				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.1\\\" -DHB_BUILD=2007081900";
-				OTHER_LDFLAGS = "";
-				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
-				PREBINDING = NO;
-				PRODUCT_NAME = hb;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-				ZERO_LINK = NO;
-			};
-			name = "Deployment 10.4";
-		};
-		A969B4170CFC243900C7AA12 /* Deployment 10.4 */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CONFIGURATION_BUILD_DIR = ..;
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = s;
-				HEADER_SEARCH_PATHS = ../libhb;
-				INSTALL_PATH = /usr/local/bin;
-				LIBRARY_SEARCH_PATHS = "";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = (
-					../libhb/libhb.a,
-					../contrib/lib/libmp4v2.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libdvdcss.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-					"-lz",
-					../contrib/lib/libdca.a,
-					../contrib/lib/libmkv.a,
-					../contrib/lib/libswscale.a,
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = HandBrakeCLI;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-				ZERO_LINK = NO;
-			};
-			name = "Deployment 10.4";
-		};
-		A969B4180CFC243900C7AA12 /* Deployment 10.4 */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../libhb";
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				EXECUTABLE_PREFIX = lib;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
-				INSTALL_PATH = /usr/local/lib;
-				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				OTHER_CFLAGS = (
-					"-D__LIBHB__",
-					"-DSYS_DARWIN",
-					"$(OTHER_CFLAGS_QUOTED_1)",
-					"-DUSE_PTHREAD",
-				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.1\\\" -DHB_BUILD=22007083100";
-				OTHER_LDFLAGS = (
-					../contrib/lib/libmp4v2.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libdvdcss.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-					../contrib/lib/libdca.a,
-					../contrib/lib/libmkv.a,
-					../contrib/lib/libswscale.a,
-					"-ldl",
-					"-flat_namespace",
-					"-read_only_relocs",
-					suppress,
-				);
-				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
-				PREBINDING = NO;
-				PRODUCT_NAME = hb;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-				SEPARATE_STRIP = YES;
-				ZERO_LINK = NO;
-			};
-			name = "Deployment 10.4";
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2057,7 +1803,6 @@
 			buildConfigurations = (
 				0D096E660B707D5800A845D4 /* Development */,
 				0D096E670B707D5800A845D4 /* Deployment */,
-				A969B4180CFC243900C7AA12 /* Deployment 10.4 */,
 				0D096E690B707D5800A845D4 /* UB */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -2068,7 +1813,6 @@
 			buildConfigurations = (
 				0DFF0B740B6BC70400549488 /* Development */,
 				0DFF0B750B6BC70400549488 /* Deployment */,
-				A969B4160CFC243900C7AA12 /* Deployment 10.4 */,
 				0D88F56B0B6CDCD400F81F26 /* UB */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -2079,7 +1823,6 @@
 			buildConfigurations = (
 				0DFF0C0D0B6BCEE000549488 /* Development */,
 				0DFF0C0E0B6BCEE000549488 /* Deployment */,
-				A969B4170CFC243900C7AA12 /* Deployment 10.4 */,
 				0D88F56E0B6CDCD400F81F26 /* UB */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -2090,7 +1833,6 @@
 			buildConfigurations = (
 				4D1EA2DE0993B01100FDC1A2 /* Development */,
 				4D1EA2DF0993B01100FDC1A2 /* Deployment */,
-				A969B4150CFC243900C7AA12 /* Deployment 10.4 */,
 				0D88F56D0B6CDCD400F81F26 /* UB */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -2101,7 +1843,6 @@
 			buildConfigurations = (
 				4D4E7BC1087804870051572B /* Development */,
 				4D4E7BC2087804870051572B /* Deployment */,
-				A969B4140CFC243900C7AA12 /* Deployment 10.4 */,
 				0D88F56C0B6CDCD400F81F26 /* UB */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -2112,7 +1853,6 @@
 			buildConfigurations = (
 				4D4E7BC5087804870051572B /* Development */,
 				4D4E7BC6087804870051572B /* Deployment */,
-				A969B4130CFC243900C7AA12 /* Deployment 10.4 */,
 				0D88F56F0B6CDCD400F81F26 /* UB */,
 			);
 			defaultConfigurationIsVisible = 0;
