@@ -52,7 +52,8 @@ namespace Handbrake.Parsing
         public static Subtitle Parse(StringReader output)
         {
             string curLine = output.ReadLine();
-            Match m = Regex.Match(curLine, @"^    \+ ([0-9]*), ([A-Za-z]*) \((.*)\)");
+
+            Match m = Regex.Match(curLine, @"^    \+ ([0-9]*), ([A-Za-z, ]*) \((.*)\)");
             if (m.Success && !curLine.Contains("HandBrake has exited."))
             {
                 Subtitle thisSubtitle = new Subtitle();
