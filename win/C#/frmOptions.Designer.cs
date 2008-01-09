@@ -74,13 +74,14 @@ namespace Handbrake
             // check_verbose
             // 
             this.check_verbose.AutoSize = true;
+            this.check_verbose.BackColor = System.Drawing.Color.Transparent;
             this.check_verbose.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.check_verbose.Location = new System.Drawing.Point(16, 127);
             this.check_verbose.Name = "check_verbose";
             this.check_verbose.Size = new System.Drawing.Size(97, 17);
             this.check_verbose.TabIndex = 51;
             this.check_verbose.Text = "Verbose CLI";
-            this.check_verbose.UseVisualStyleBackColor = true;
+            this.check_verbose.UseVisualStyleBackColor = false;
             this.check_verbose.CheckedChanged += new System.EventHandler(this.check_verbose_CheckedChanged);
             // 
             // btn_close
@@ -157,54 +158,59 @@ namespace Handbrake
             // check_updatePresets
             // 
             this.check_updatePresets.AutoSize = true;
+            this.check_updatePresets.BackColor = System.Drawing.Color.Transparent;
             this.check_updatePresets.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.check_updatePresets.Location = new System.Drawing.Point(16, 102);
             this.check_updatePresets.Name = "check_updatePresets";
             this.check_updatePresets.Size = new System.Drawing.Size(112, 17);
             this.check_updatePresets.TabIndex = 59;
             this.check_updatePresets.Text = "Update presets";
-            this.check_updatePresets.UseVisualStyleBackColor = true;
+            this.check_updatePresets.UseVisualStyleBackColor = false;
             this.check_updatePresets.CheckedChanged += new System.EventHandler(this.check_updatePresets_CheckedChanged);
             // 
             // check_tooltip
             // 
             this.check_tooltip.AutoSize = true;
+            this.check_tooltip.BackColor = System.Drawing.Color.Transparent;
             this.check_tooltip.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.check_tooltip.Location = new System.Drawing.Point(16, 56);
             this.check_tooltip.Name = "check_tooltip";
             this.check_tooltip.Size = new System.Drawing.Size(135, 17);
             this.check_tooltip.TabIndex = 57;
             this.check_tooltip.Text = "Enable GUI tooltips";
-            this.check_tooltip.UseVisualStyleBackColor = true;
+            this.check_tooltip.UseVisualStyleBackColor = false;
             this.check_tooltip.CheckedChanged += new System.EventHandler(this.check_tooltip_CheckedChanged);
             // 
             // check_updateCheck
             // 
             this.check_updateCheck.AutoSize = true;
+            this.check_updateCheck.BackColor = System.Drawing.Color.Transparent;
             this.check_updateCheck.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.check_updateCheck.Location = new System.Drawing.Point(16, 33);
             this.check_updateCheck.Name = "check_updateCheck";
             this.check_updateCheck.Size = new System.Drawing.Size(131, 17);
             this.check_updateCheck.TabIndex = 55;
             this.check_updateCheck.Text = "Check for updates";
-            this.check_updateCheck.UseVisualStyleBackColor = true;
+            this.check_updateCheck.UseVisualStyleBackColor = false;
             this.check_updateCheck.CheckedChanged += new System.EventHandler(this.check_updateCheck_CheckedChanged);
             // 
             // check_userDefaultSettings
             // 
             this.check_userDefaultSettings.AutoSize = true;
+            this.check_userDefaultSettings.BackColor = System.Drawing.Color.Transparent;
             this.check_userDefaultSettings.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.check_userDefaultSettings.Location = new System.Drawing.Point(16, 79);
             this.check_userDefaultSettings.Name = "check_userDefaultSettings";
             this.check_userDefaultSettings.Size = new System.Drawing.Size(166, 17);
             this.check_userDefaultSettings.TabIndex = 56;
             this.check_userDefaultSettings.Text = "Load my default settings";
-            this.check_userDefaultSettings.UseVisualStyleBackColor = true;
+            this.check_userDefaultSettings.UseVisualStyleBackColor = false;
             this.check_userDefaultSettings.CheckedChanged += new System.EventHandler(this.check_userDefaultSettings_CheckedChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(13, 13);
             this.label1.Name = "label1";
@@ -315,6 +321,7 @@ namespace Handbrake
             // label3
             // 
             this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(13, 13);
             this.label3.Name = "label3";
@@ -343,6 +350,7 @@ namespace Handbrake
             // Label11
             // 
             this.Label11.AutoSize = true;
+            this.Label11.BackColor = System.Drawing.Color.Transparent;
             this.Label11.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label11.Location = new System.Drawing.Point(15, 44);
             this.Label11.Name = "Label11";
@@ -353,6 +361,7 @@ namespace Handbrake
             // label6
             // 
             this.label6.AutoSize = true;
+            this.label6.BackColor = System.Drawing.Color.Transparent;
             this.label6.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.Location = new System.Drawing.Point(13, 107);
             this.label6.Name = "label6";
@@ -384,6 +393,7 @@ namespace Handbrake
             // Label4
             // 
             this.Label4.AutoSize = true;
+            this.Label4.BackColor = System.Drawing.Color.Transparent;
             this.Label4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label4.Location = new System.Drawing.Point(15, 71);
             this.Label4.Name = "Label4";

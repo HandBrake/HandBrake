@@ -70,6 +70,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="frmActivityWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmActivityWindow.Designer.cs">
+      <DependentUpon>frmActivityWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmAbout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -124,6 +130,10 @@
     <Compile Include="Parsing\Title.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="frmActivityWindow.resx">
+      <DependentUpon>frmActivityWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmAbout.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmAbout.cs</DependentUpon>
@@ -198,6 +208,7 @@
     <None Include="Resources\logo64.png" />
     <None Include="Resources\logo128.png" />
     <None Include="Resources\ActivityWindow.png" />
+    <None Include="Resources\AddToQueue.png" />
     <Content Include="Resources\Output_Small.png" />
     <None Include="Resources\Pause.png" />
     <None Include="Resources\Play.png" />

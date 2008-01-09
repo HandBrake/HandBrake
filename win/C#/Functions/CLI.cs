@@ -10,7 +10,7 @@ using System.Threading;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.Globalization;
-
+using System.IO;
 
 namespace Handbrake.Functions
 {
@@ -28,14 +28,13 @@ namespace Handbrake.Functions
         {
             try
             {
-                hbProc = new Process();
-                hbProc.StartInfo.FileName = "HandBrakeCLI.exe";
-                hbProc.StartInfo.Arguments = query;
-                hbProc.StartInfo.RedirectStandardOutput = stdout;
-                hbProc.StartInfo.RedirectStandardError = stderr;
-                hbProc.StartInfo.UseShellExecute = useShellExec;
-                hbProc.StartInfo.CreateNoWindow = noWindow;
-                hbProc.Start();
+                string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
+                string logPath = Path.Combine(Path.GetTempPath(), "hb_encode_log.dat");
+
+                string strCmdLine = String.Format(@"cmd /c """"{0}"" {1} 2>""{2}"" """, handbrakeCLIPath, query, logPath);
+
+                ProcessStartInfo cliStart = new ProcessStartInfo("CMD.exe", strCmdLine);
+                hbProc = Process.Start(cliStart);
 
                 // Set the process Priority 
                 switch (Properties.Settings.Default.processPriority)

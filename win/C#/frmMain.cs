@@ -397,6 +397,12 @@ namespace Handbrake
             rtf_h264advanced.Text = "";
         }
 
+        private void btn_ActivityWindow_Click(object sender, EventArgs e)
+        {
+            Form ActivityWindow = new frmActivityWindow();
+            ActivityWindow.ShowDialog();
+        }
+
         #endregion
 
         #region frmMain Actions
@@ -1066,30 +1072,7 @@ namespace Handbrake
         [DllImport("user32.dll")]
         public static extern int ExitWindowsEx(int uFlags, int dwReason);
 
-        private void btn_queue_Click(object sender, EventArgs e)
-        {
-
-            if (text_source.Text == "" || text_source.Text == "Click 'Browse' to continue" || text_destination.Text == "")
-                MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            else
-            {
-                String query;
-                if (rtf_query.Text != "")
-                    query = rtf_query.Text;
-                else
-                    query = hb_common_func.GenerateTheQuery(this);
-
-                queueWindow.list_queue.Items.Add(query);
-                queueWindow.Show();
-            }
-        }
-
-        private void showQueue()
-        {
-            queueWindow.Show();
-        }
-
-        private void btn_encode_Click(object sender, EventArgs e)
+        private void btn_start_Click(object sender, EventArgs e)
         {
             if (text_source.Text == "" || text_source.Text == "Click 'Browse' to continue" || text_destination.Text == "")
                 MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -1105,6 +1088,33 @@ namespace Handbrake
                 lbl_encode.Visible = true;
                 lbl_encode.Text = "Encoding in Progress";
             }
+        }
+
+        private void btn_add2Queue_Click(object sender, EventArgs e)
+        {
+            if (text_source.Text == "" || text_source.Text == "Click 'Browse' to continue" || text_destination.Text == "")
+                MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else
+            {
+                String query;
+                if (rtf_query.Text != "")
+                    query = rtf_query.Text;
+                else
+                    query = hb_common_func.GenerateTheQuery(this);
+
+                queueWindow.list_queue.Items.Add(query);
+                queueWindow.Show();
+            }
+        }
+
+        private void btn_showQueue_Click(object sender, EventArgs e)
+        {
+            showQueue();
+        }
+
+        private void showQueue()
+        {
+            queueWindow.Show();
         }
 
         private void procMonitor(object state)
