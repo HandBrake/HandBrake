@@ -775,7 +775,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
         time_t _now = time( NULL );
         struct tm * now  = localtime( &_now );
-        fprintf(stderr, "[%02d:%02d:%02d] MacGui: %s\n", now->tm_hour, now->tm_min, now->tm_sec, str );
+        fprintf(stderr, "[%02d:%02d:%02d] macgui: %s\n", now->tm_hour, now->tm_min, now->tm_sec, str );
     }
     va_end(args);
 }
@@ -1194,13 +1194,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 /* path is not a package, so we call perform scan directly on our file */
                 if ([[path lastPathComponent] isEqualToString: @"VIDEO_TS"])
                 {
-                    [self writeToActivityLog:"trying to open VIDEO_TS Folder (VIDEO_TS folder Chosen)"];
+                    [self writeToActivityLog:"trying to open video_ts folder (video_ts folder chosen)"];
                     /* If VIDEO_TS Folder is chosen, choose its parent folder for the source display name*/
                     browsedSourceDisplayName = [[NSString stringWithFormat:@"%@",[[path stringByDeletingLastPathComponent] lastPathComponent]] retain];
                 }
                 else
                 {
-                    [self writeToActivityLog:"trying to open VIDEO_TS Folder (Parent Folder Chosen)"];
+                    [self writeToActivityLog:"trying to open video_ts folder (parent directory chosen)"];
                     /* if not the VIDEO_TS Folder, we can assume the chosen folder is the source name */
                     browsedSourceDisplayName = [[NSString stringWithFormat:@"%@",[path lastPathComponent]] retain];
                 }
@@ -1241,7 +1241,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     if(sender == fScanSrcTitleOpenButton)
     {
         /* We setup the scan status in the main window to indicate a source title scan */
-        [fSrcDVD2Field setStringValue: _( @"Opening a new source title ..." )];
+        [fSrcDVD2Field setStringValue: @"Opening a new source title ..."];
 		//[fScanIndicator setHidden: NO];
 	    [fScanIndicator setIndeterminate: YES];
         [fScanIndicator startAnimation: nil];
@@ -1264,6 +1264,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         // The chosen path was actually on a DVD, so use the raw block
         // device path instead.
         path = [detector devicePath];
+        [self writeToActivityLog: "trying to open a physical dvd at: %s", [scanPath UTF8String]];
     }
     /* If there is no title number passed to scan, we use "0"
         * which causes the default behavior of a full source scan
@@ -1272,7 +1273,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     {
         scanTitleNum = 0;
     }
-    
+    if (scanTitleNum > 0)
+    {
+    [self writeToActivityLog: "scanning specifically for title: %d", scanTitleNum];
+    }
     [fSrcDVD2Field setStringValue: [NSString stringWithFormat: @"Scanning new source ..."]];
     /* due to issue with progress in the scan indicator, we are starting the
     indeterminate animation here */
@@ -1298,7 +1302,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	if( !hb_list_count( list ) )
 	{
 		/* We display a message if a valid dvd source was not chosen */
-		[fSrcDVD2Field setStringValue: @"No Valid Title Found"];
+		[fSrcDVD2Field setStringValue: @"No Valid Source Found"];
         SuccessfulScan = NO;
 	}
 	else
