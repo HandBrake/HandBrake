@@ -13,7 +13,7 @@
 @class HBJobGroup;
 
 #define HB_QUEUE_DRAGGING 0             // <--- NOT COMPLETELY FUNCTIONAL YET
-#define HB_OUTLINE_METRIC_CONTROLS 1    // for tweaking the outline cell spacings
+#define HB_OUTLINE_METRIC_CONTROLS 0    // for tweaking the outline cell spacings
 
 // hb_job_t contains a sequence_id field. The high word is a unique job group id.
 // The low word contains the "sequence id" which is a value starting at 0 and
@@ -27,9 +27,14 @@ typedef enum _HBQueueJobGroupStatus
     HBStatusNone          = 0,
     HBStatusPending       = 1,
     HBStatusWorking       = 2,
-    HBStatusComplete      = 3,
+    HBStatusCompleted     = 3,
     HBStatusCanceled      = 4
 } HBQueueJobGroupStatus;
+
+// Notification sent whenever the status of a HBJobGroup changes (via setStatus). The
+// user info contains one object, @"HBOldJobGroupStatus", which is an NSNumber
+// containing the previous status of the job group.
+extern NSString * HBJobGroupStatusNotification;
 
 //------------------------------------------------------------------------------------
 // As usual, we need to subclass NSOutlineView to handle a few special cases:
@@ -67,7 +72,7 @@ BOOL                        fIsDragging;
 
 @interface HBJob : NSObject
 {
-    HBJobGroup                   *jobGroup;
+    HBJobGroup                   *jobGroup;         // The group this job belongs to
     
     // The following fields match up with similar fields found in hb_job_t and it's
     // various substructures.
@@ -116,8 +121,8 @@ BOOL                        fIsDragging;
     NSString                    *subtitleLang;
 }
 
-+ (HBJob*)             jobWithJob: (hb_job_t *) job;
-- (id)                 initWithJob: (hb_job_t *) job;
++ (HBJob*)             jobWithLibhbJob: (hb_job_t *) job;
+- (id)                 initWithLibhbJob: (hb_job_t *) job;
 - (HBJobGroup *)       jobGroup;
 - (void)               setJobGroup: (HBJobGroup *)aJobGroup;
 - (NSMutableAttributedString *) attributedDescriptionWithIcon: (BOOL)withIcon
@@ -130,6 +135,13 @@ BOOL                        fIsDragging;
                            withx264Info: (BOOL)withx264Info
                           withAudioInfo: (BOOL)withAudioInfo
                        withSubtitleInfo: (BOOL)withSubtitleInfo;
+
+// Attributes used by attributedDescriptionWithIcon:::::::::
++ (NSMutableParagraphStyle *) descriptionParagraphStyle;
++ (NSDictionary *) descriptionDetailAttribute;
++ (NSDictionary *) descriptionDetailBoldAttribute;
++ (NSDictionary *) descriptionTitleAttribute;
++ (NSDictionary *) descriptionShortHeightAttribute;
 
 @end
 
@@ -148,6 +160,7 @@ BOOL                        fIsDragging;
     float                        fLastDescriptionHeight;
     float                        fLastDescriptionWidth;
     HBQueueJobGroupStatus        fStatus;
+    NSString                     *fPresetName;
 }
 
 // Creating a job group
@@ -163,6 +176,8 @@ BOOL                        fIsDragging;
 - (NSEnumerator *)     jobEnumerator;
 - (void)               setStatus: (HBQueueJobGroupStatus)status;
 - (HBQueueJobGroupStatus)  status;
+- (void)               setPresetName: (NSString *)name;
+- (NSString *)         presetName;
 - (NSString *)         path;
 - (NSString *)         name;
 
@@ -178,19 +193,25 @@ BOOL                        fIsDragging;
 
 @interface HBQueueController : NSObject
 {
-    hb_handle_t                  *fHandle;              // reference to hblib
+    hb_handle_t                  *fHandle;              // reference to libhb
     HBController                 *fHBController;        // reference to HBController
-    NSMutableArray               *fJobGroups;           // hblib's job list organized in a hierarchy of HBJobGroup and HBJob
-    HBJobGroup                   *fCurrentJobGroup;     // the HJobGroup currently being processed by hblib
-    HBJob                        *fCurrentJob;          // the HJob (pass) currently being processed by hblib
+    NSMutableArray               *fJobGroups;           // libhb's job list organized in a hierarchy of HBJobGroup and HBJob
+    HBJobGroup                   *fCurrentJobGroup;     // the HJobGroup currently being processed by libhb
+    HBJob                        *fCurrentJob;          // the HJob (pass) currently being processed by libhb
     int                          fCurrentJobID;         // this is how we track when hbib has started processing a different job. This is the job's sequence_id.
+
+    unsigned int                 fPendingCount;         // Number of various kinds of job groups in fJobGroups.
+    unsigned int                 fCompletedCount;       // Don't access these directly as they may not always be up-to-date.
+    unsigned int                 fCanceledCount;        // Use the accessor functions instead.
+    unsigned int                 fWorkingCount;
+    BOOL                         fJobGroupCountsNeedUpdating;
+    
     BOOL                         fCurrentJobPaneShown;  // NO when fCurrentJobPane has been shifted out of view (see showCurrentJobPane)
     NSMutableIndexSet            *fSavedExpandedItems;  // used by save/restoreOutlineViewState to preserve which items are expanded
     NSMutableIndexSet            *fSavedSelectedItems;  // used by save/restoreOutlineViewState to preserve which items are selected
 #if HB_QUEUE_DRAGGING
     NSArray                      *fDraggedNodes;
 #endif
-    NSMutableArray               *fCompleted;           // HBJobGroups that libhb has finihsed with, whether successfully encoded or canceled by the user. These also appear in fJobGroups.
     NSTimer                      *fAnimationTimer;      // animates the icon of the current job in the queue outline view
     int                          fAnimationIndex;       // used to generate name of image used to animate the current job in the queue outline view
     
@@ -233,12 +254,21 @@ BOOL                        fIsDragging;
 
 - (void)setHandle: (hb_handle_t *)handle;
 - (void)setHBController: (HBController *)controller;
-- (void)hblibJobListChanged;
-- (void)hblibStateChanged: (hb_state_t &)state;
-- (void)hblibWillStop;
+- (void)libhbStateChanged: (hb_state_t &)state;
+- (void)libhbWillStop;
 
+// Adding items to the queue
+- (void) addJobGroup: (HBJobGroup *) aJobGroup;
+
+// Getting the currently processing job group
 - (HBJobGroup *) currentJobGroup;
 - (HBJob *) currentJob;
+
+// Getting queue statistics
+- (unsigned int) pendingCount;
+- (unsigned int) completedCount;
+- (unsigned int) canceledCount;
+- (unsigned int) workingCount;
 
 - (IBAction)showQueueWindow: (id)sender;
 - (IBAction)removeSelectedJobGroups: (id)sender;

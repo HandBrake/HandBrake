@@ -611,7 +611,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 			
             // Has current job changed? That means the queue has probably changed as
 			// well so update it
-            [fQueueController hblibStateChanged: s];
+            [fQueueController libhbStateChanged: s];
             
             break;
         }
@@ -635,7 +635,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             [self UpdateDockIcon: 1.0];
 			
 			// Pass along the info to HBQueueController
-            [fQueueController hblibStateChanged: s];
+            [fQueueController libhbStateChanged: s];
 			
             break;
         }
@@ -645,13 +645,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		    [fStatusField setStringValue: _( @"Paused" )];
             
 			// Pass along the info to HBQueueController
-            [fQueueController hblibStateChanged: s];
+            [fQueueController libhbStateChanged: s];
 
             break;
 			
         case HB_STATE_WORKDONE:
         {
-            // HB_STATE_WORKDONE happpens as a result of hblib finishing all its jobs
+            // HB_STATE_WORKDONE happpens as a result of libhb finishing all its jobs
             // or someone calling hb_stop. In the latter case, hb_stop does not clear
             // out the remaining passes/jobs in the queue. We'll do that here.
                         
@@ -680,7 +680,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 			}
 			
 			// Pass along the info to HBQueueController
-            [fQueueController hblibStateChanged: s];
+            [fQueueController libhbStateChanged: s];
 			
             /* Check to see if the encode state has not been cancelled
 				to determine if we should check for encode done notifications */
@@ -754,17 +754,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     }
 	
     /* Lets show the queue status here in the main window */
-	int queue_count = hb_count( fHandle );
-	if( queue_count )
-	{
-		[fQueueStatus setStringValue: [NSString stringWithFormat:
-			@"%d pass%s in the queue",
-						 queue_count, ( queue_count > 1 ) ? "es" : ""]];
-	}
+	int queue_count = [fQueueController pendingCount];
+	if( queue_count == 1)
+		[fQueueStatus setStringValue: _( @"1 encode queued") ];
+    else if (queue_count > 1)
+		[fQueueStatus setStringValue: [NSString stringWithFormat: _( @"%d encodes queued" ), queue_count]];
 	else
-	{
 		[fQueueStatus setStringValue: @""];
-	}
 }
 
 /* We use this to write messages to stderr from the macgui which show up in the activity window and log*/
@@ -1722,13 +1718,21 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     hb_title_t * title = (hb_title_t *) hb_list_item( list, [fSrcTitlePopUp indexOfSelectedItem] );
     hb_job_t * job = title->job;
 
-    // Assign a unique job group ID for all passes of the same encode. This is how the
-    // UI lumps together jobs to form encodes. libhb does not use this id.
+    // Create a Queue Controller job group. Each job that we submit to libhb will also
+    // get added to the job group so that the queue can track the jobs.
+    HBJobGroup * jobGroup = [HBJobGroup jobGroup];
+    // The job group can maintain meta data that libhb can not...
+    [jobGroup setPresetName: [fPresetSelectedDisplay stringValue]];
+
+    // Job groups require that each job within the group be assigned a unique id so
+    // that the queue can xref between itself and the private jobs that libhb
+    // maintains. The ID is composed a group id number and a "sequence" number. libhb
+    // does not use this id.
     static int jobGroupID = 0;
     jobGroupID++;
     
-    // A sequence number, starting at zero, is also used to identifiy to each pass.
-    // This is used by the UI to determine if a pass if the first pass of an encode.
+    // A sequence number, starting at zero, is used to identifiy to each pass. This is
+    // used by the queue UI to determine if a pass if the first pass of an encode.
     int sequenceNum = -1;
     
     [self prepareJob];
@@ -1768,6 +1772,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         */
         job->sequence_id = MakeJobID(jobGroupID, ++sequenceNum);
         hb_add( fHandle, job );
+        [jobGroup addJob:[HBJob jobWithLibhbJob:job]];     // add this pass to the job group
 
         job->x264opts = x264opts_tmp;
     }
@@ -1793,6 +1798,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         job->pass = 1;
         job->sequence_id = MakeJobID(jobGroupID, ++sequenceNum);
         hb_add( fHandle, job );
+        [jobGroup addJob:[HBJob jobWithLibhbJob:job]];     // add this pass to the job group
 
         job->pass = 2;
         job->sequence_id = MakeJobID(jobGroupID, ++sequenceNum);
@@ -1803,6 +1809,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         job->select_subtitle = subtitle_tmp;
 
         hb_add( fHandle, job );
+        [jobGroup addJob:[HBJob jobWithLibhbJob:job]];     // add this pass to the job group
     }
     else
     {
@@ -1810,13 +1817,14 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         job->pass = 0;
         job->sequence_id = MakeJobID(jobGroupID, ++sequenceNum);
         hb_add( fHandle, job );
+        [jobGroup addJob:[HBJob jobWithLibhbJob:job]];     // add this pass to the job group
     }
 	
     NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
 	[[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];
 	
-    // Notify the queue
-	[fQueueController hblibJobListChanged];
+    // Let the queue controller know about the job group
+    [fQueueController addJobGroup:jobGroup];
 }
 
 /* Rip: puts up an alert before ultimately calling doRip
@@ -1961,7 +1969,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     // remaining passes of the job and then start the queue back up if there are any
     // remaining jobs.
      
-    [fQueueController hblibWillStop];
+    [fQueueController libhbWillStop];
     hb_stop( fHandle );
     fEncodeState = 2;   // don't alert at end of processing since this was a cancel
     
