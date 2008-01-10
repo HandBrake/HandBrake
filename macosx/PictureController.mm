@@ -115,9 +115,6 @@ static int GetAlignedSize( int size )
     }
     [fAnamorphicPopUp selectItemAtIndex: job->pixel_ratio];
     
-	/* Set deinterlaces level according to the integer in the main window */
-	[fDeinterlacePopUp selectItemAtIndex: fPictureFilterSettings.deinterlace];
-    
     /* We initially set the previous state of keep ar to on */
     keepAspectRatioPreviousState = 1;
 	if (!autoCrop)
@@ -138,6 +135,13 @@ static int GetAlignedSize( int size )
         [fCropMatrix  selectCellAtRow: 0 column:0];
 	}
 	
+	/* Set filters widgets according to the filters struct */
+	[fVFRCheck setState:fPictureFilterSettings.vfr];
+    [fDetelecineCheck setState:fPictureFilterSettings.detelecine];
+    [fDeinterlacePopUp selectItemAtIndex: fPictureFilterSettings.deinterlace];
+    [fDenoisePopUp selectItemAtIndex: fPictureFilterSettings.denoise];
+    [fDeblockCheck setState: fPictureFilterSettings.deblock];
+    
     fPicture = 0;
     MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
     MaxOutputHeight = title->height - job->crop[0] - job->crop[1];
