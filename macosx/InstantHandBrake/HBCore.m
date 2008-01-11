@@ -89,13 +89,13 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
     if (!hb_handle)
         return NO;
 
-    updateTimer = [[NSTimer scheduledTimerWithTimeInterval:0.2
+    updateTimer = [[NSTimer scheduledTimerWithTimeInterval:0.5
                                                     target:self
                                                   selector:@selector(stateUpdateTimer:) 
                                                   userInfo:NULL 
                                                    repeats:YES] retain];
 
-    [[NSRunLoop currentRunLoop] addTimer:updateTimer forMode:NSModalPanelRunLoopMode];        
+    [[NSRunLoop currentRunLoop] addTimer:updateTimer forMode:NSEventTrackingRunLoopMode];        
     return YES;
 }
 

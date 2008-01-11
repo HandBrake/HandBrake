@@ -1,7 +1,12 @@
 #import "ExpressController.h"
-#import "DriveDetector.h"
 
-#define INSERT_STRING @"Insert a DVD"
+#define INSERT_STRING       @"Insert a DVD"
+#define TOOLBAR_START       @"TOOLBAR_START"
+#define TOOLBAR_PAUSE       @"TOOLBAR_PAUSE"
+#define TOOLBAR_OPEN        @"TOOLBAR_OPEN"
+#define TOOLBAR_ADVANCED    @"TOOLBAR_ADVANCED"
+
+#define p fState->param
 
 @interface ExpressController (Private)
 
@@ -9,11 +14,9 @@
 - (void) openBrowseDidEnd: (NSOpenPanel *) sheet returnCode: (int)
     returnCode contextInfo: (void *) contextInfo;
 - (void) openEnable: (BOOL) b;
-- (void) openTimer: (NSTimer *) timer;
 
 - (void) convertShow;
 - (void) convertEnable: (BOOL) b;
-- (void) convertTimer: (NSTimer *) timer;
 
 @end
 
@@ -25,7 +28,15 @@
 - (void) awakeFromNib
 {
     NSEnumerator * enumerator;
-
+    
+    /* NSToolbar initializations */
+    fToolbar = [[NSToolbar alloc] initWithIdentifier: @"InstantHandBrake Toolbar"];
+    [fToolbar setDelegate: self];
+    [fToolbar setAllowsUserCustomization: YES];
+    [fToolbar setDisplayMode: NSToolbarDisplayModeIconAndLabel];
+    [fToolbar setVisible:NO];
+    [fWindow setToolbar: fToolbar];
+        
     /* Show the "Open DVD" interface */
     fDriveDetector = [[DriveDetector alloc] initWithCallback: self
         selector: @selector( openUpdateDrives: )];
@@ -51,19 +62,98 @@
     [tableColumn setDataCell: buttonCell];
 
     /* Preferences */
-    fConvertFolderString = [@"~/Movies" stringByExpandingTildeInPath];
+    fConvertFolderString = [NSString stringWithFormat:@"%@/Desktop", NSHomeDirectory()];
     [fConvertFolderString retain];
 }
 
 - (void) applicationWillFinishLaunching: (NSNotification *) n
 {
-    fHandle = hb_init_express( HB_DEBUG_NONE, 0 );
+    fCore = [[HBCore alloc] init];
+    [fCore openInDebugMode:NO checkForUpdates:NO];
+    fHandle = [fCore hb_handle];
+    fState = [fCore hb_state];
     fList   = hb_get_titles( fHandle );
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+    selector:@selector(scanningSource:)
+    name:@"HBCoreScanningNotification" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+    selector:@selector(scanDone:)
+    name:@"HBCoreScanDoneNotification" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+    selector:@selector(muxing:)
+    name:@"HBCoreMuxingNotification" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+    selector:@selector(working:)
+    name:@"HBCoreWorkingNotification" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+    selector:@selector(workDone:)
+    name:@"HBCoreWorkDoneNotification" object:nil];
 }
 
 - (void) applicationWillTerminate: (NSNotification *) n
 {
-    hb_close( &fHandle );
+    [fCore close];
+}
+
+- (NSToolbarItem *) toolbar: (NSToolbar *) toolbar itemForItemIdentifier: (NSString *) ident
+                    willBeInsertedIntoToolbar: (BOOL) flag
+{
+    NSToolbarItem * item;
+    item = [[NSToolbarItem alloc] initWithItemIdentifier: ident];
+
+    if ([ident isEqualToString: TOOLBAR_START])
+    {
+        [item setLabel: NSLocalizedString(@"Start", "Start")];
+        [item setImage: [NSImage imageNamed: @"Play"]];
+        [item setTarget: self];
+        [item setAction: @selector(convertGo:)];
+    }
+    else if ([ident isEqualToString: TOOLBAR_PAUSE])
+    {
+        [item setLabel: NSLocalizedString(@"Pause", "Pause")];
+        [item setImage: [NSImage imageNamed: @"Pause"]];
+        [item setTarget: self];
+        [item setAction: @selector(pauseGo:)];
+    }
+    else if ([ident isEqualToString: TOOLBAR_OPEN])
+    {
+        [item setLabel: NSLocalizedString(@"Open", "Open")];
+        [item setImage: [NSImage imageNamed: @"pref-audio"]];
+        [item setTarget: self];
+        [item setAction: @selector(openShow:)];
+    }
+    else if ([ident isEqualToString: TOOLBAR_ADVANCED])
+    {
+        [item setLabel: NSLocalizedString(@"Advanced", "Advanced")];
+        [item setImage: [NSImage imageNamed: @"pref-advanced"]];
+        [item setTarget: self];
+        [item setAction: @selector(setPrefView:)];
+        [item setAutovalidates: NO];
+    }
+    else
+    {
+        [item release];
+        return nil;
+    }
+
+    return item;
+}
+
+- (NSArray *) toolbarDefaultItemIdentifiers: (NSToolbar *) toolbar
+{
+    return [NSArray arrayWithObjects: TOOLBAR_START, TOOLBAR_PAUSE,
+                                        TOOLBAR_OPEN, NSToolbarFlexibleSpaceItemIdentifier, TOOLBAR_ADVANCED, nil];
+}
+
+- (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar
+{
+    return [NSArray arrayWithObjects: TOOLBAR_START, TOOLBAR_PAUSE,
+                                        TOOLBAR_OPEN, TOOLBAR_ADVANCED, nil];
 }
 
 /***********************************************************************
@@ -140,6 +230,7 @@
     frame.size.height -= offset;
     [fWindow setContentView: fEmptyView];
     [fWindow setFrame: frame display: YES animate: YES];
+    [fToolbar setVisible:NO];
     [fWindow setContentView: fOpenView];
 
     [fDriveDetector run];
@@ -183,10 +274,6 @@
         hb_scan( fHandle, [[fDrives objectForKey: [fOpenPopUp
                  titleOfSelectedItem]] UTF8String], 0 );
     }
-
-    NSTimer * timer = [NSTimer scheduledTimerWithTimeInterval: 2.0
-        target: self selector: @selector( openTimer: ) userInfo: nil
-        repeats: YES];
 }
 
 - (void) convertGo: (id) sender
@@ -215,7 +302,7 @@
             maxwidth = 320;
 			job->vbitrate = 500;
 		}
-		job->deinterlace = 1;
+		//job->deinterlace = 1;
 		
 		do
 		{
@@ -308,10 +395,6 @@
 
     hb_start( fHandle );
 
-    NSTimer * timer = [NSTimer scheduledTimerWithTimeInterval: 2.0
-        target: self selector: @selector( convertTimer: ) userInfo: nil
-        repeats: YES];
-
     [self convertEnable: NO];
 }
 
@@ -369,13 +452,36 @@
     [self openGo: self];
 }
 
+- (BOOL)validateToolbarItem: (NSToolbarItem *) toolbarItem
+{
+    NSString * ident = [toolbarItem itemIdentifier];
+    
+    if ([ident isEqualToString: TOOLBAR_START] && [HBStateWorking isEqualToString:[fCore state]])
+    {
+        [toolbarItem setAction: @selector(convertCancel:)];
+        [toolbarItem setLabel:NSLocalizedString(@"Cancel", @"Cancel")];
+        return YES;
+    }
+    else if ([ident isEqualToString: TOOLBAR_START] && [HBStateWorkDone isEqualToString:[fCore state]])
+    {
+        [toolbarItem setAction: @selector(convertGo:)];
+        [toolbarItem setLabel:NSLocalizedString(@"Convert", @"Convert")];
+        return YES;
+    }
+    else if ([ident isEqualToString: TOOLBAR_OPEN] && [HBStateWorking isEqualToString:[fCore state]])
+    {
+        return NO;
+    }
+    
+    return YES;
+}
+
 - (void) openEnable: (BOOL) b
 {
     [fOpenMatrix       setEnabled: b];
     [fOpenPopUp        setEnabled: b];
     [fOpenFolderField  setEnabled: b];
     [fOpenBrowseButton setEnabled: b];
-    [fOpenGoButton     setEnabled: b];
 
     if( b )
     {
@@ -390,48 +496,35 @@
             if( [[fOpenPopUp titleOfSelectedItem]
                     isEqualToString: INSERT_STRING] )
             {
-                [fOpenGoButton setEnabled: NO];
             }
         }
     }
 }
 
-- (void) openTimer: (NSTimer *) timer
+- (void) scanningSource: (NSNotification *) n
 {
-    hb_state_t s;
-    hb_get_state( fHandle, &s );
-    switch( s.state )
+    [fOpenIndicator setIndeterminate: NO];
+    [fOpenIndicator setDoubleValue: 100.0 *
+            ( (float) p.scanning.title_cur - 0.5 ) / p.scanning.title_count];
+    [fOpenProgressField setStringValue: [NSString
+            stringWithFormat: @"Scanning title %d of %d...",
+            p.scanning.title_cur, p.scanning.title_count]];
+}
+
+- (void) scanDone: (NSNotification *) n
+{    
+    [fOpenIndicator setIndeterminate: NO];
+    [fOpenIndicator setDoubleValue: 0.0];
+   
+     [self openEnable: YES];
+
+    if( hb_list_count( fList ) )
     {
-#define p s.param.scanning
-        case HB_STATE_SCANNING:
-            [fOpenIndicator setIndeterminate: NO];
-            [fOpenIndicator setDoubleValue: 100.0 *
-                ( (float) p.title_cur - 0.5 ) / p.title_count];
-            [fOpenProgressField setStringValue: [NSString
-                stringWithFormat: @"Scanning title %d of %d...",
-                p.title_cur, p.title_count]];
-            break;
-#undef p
-
-        case HB_STATE_SCANDONE:
-            [timer invalidate];
-
-            [fOpenIndicator setIndeterminate: NO];
-            [fOpenIndicator setDoubleValue: 0.0];
-            [self openEnable: YES];
-
-            if( hb_list_count( fList ) )
-            {
-                [self convertShow];
-            }
-            else
-            {
-                [fDriveDetector run];
-            }
-            break;
-
-        default:
-            break;
+        [self convertShow];
+    }
+    else
+    {
+        [fDriveDetector run];
     }
 }
 
@@ -460,6 +553,9 @@
                 [NSString stringWithUTF8String: audio->lang_simple]];
         }
 		[fConvertAudioPopUp selectItemWithTitle: @"English"];
+        
+        if ( [fConvertAudioPopUp selectedItem] == nil )
+            [fConvertAudioPopUp selectItemWithTitle: @"Unknown"];
 
         /* Update subtitle popup */
         hb_subtitle_t * subtitle;
@@ -475,10 +571,14 @@
     NSRect frame  = [fWindow frame];
     float  offset = [fConvertView frame].size.height -
                     [fOpenView frame].size.height;
+    float hoffset = [fConvertView frame].size.width -
+                    [fOpenView frame].size.width;
     frame.origin.y    -= offset;
     frame.size.height += offset;
+    frame.size.width += hoffset;
     [fWindow setContentView: fEmptyView];
     [fWindow setFrame: frame display: YES animate: YES];
+    [fToolbar setVisible:YES];
     [fWindow setContentView: fConvertView];
 
     /* Folder popup */
@@ -511,16 +611,6 @@
     [fConvertAudioPopUp setEnabled: b];
     [fConvertSubtitlePopUp setEnabled: b];
     [fConvertOpenButton setEnabled: b];
-    if( b )
-    {
-        [fConvertGoButton setTitle: @"Convert"];
-        [fConvertGoButton setAction: @selector(convertGo:)];
-    }
-    else
-    {
-        [fConvertGoButton setTitle: @"Cancel"];
-        [fConvertGoButton setAction: @selector(convertCancel:)];
-    }
 }
 
 /***********************************************************************
@@ -607,38 +697,31 @@
     [icon release];
 }
 
-- (void) convertTimer: (NSTimer *) timer
+- (void) working: (NSNotification *) n
 {
-    hb_state_t s;
-    hb_get_state( fHandle, &s );
-    switch( s.state )
-    {
-#define p s.param.working
-        case HB_STATE_WORKING:
-        {
-            float progress_total = ( p.progress + p.job_cur - 1 ) / p.job_count;
+   float progress_total = ( p.working.progress + p.working.job_cur - 1 ) / p.working.job_count;
             NSMutableString * string = [NSMutableString
                 stringWithFormat: @"Converting: %.1f %%",
                 100.0 * progress_total];
-            if( p.seconds > -1 )
+            if( p.working.seconds > -1 )
             {
-                [string appendFormat: @" (%.1f fps, ", p.rate_avg];
-                if( p.hours > 0 )
+                [string appendFormat: @" (%.1f fps, ", p.working.rate_avg];
+                if( p.working.hours > 0 )
                 {
                     [string appendFormat: @"%d hour%s %d min%s",
-                        p.hours, p.hours == 1 ? "" : "s",
-                        p.minutes, p.minutes == 1 ? "" : "s"];
+                        p.working.hours, p.working.hours == 1 ? "" : "s",
+                        p.working.minutes, p.working.minutes == 1 ? "" : "s"];
                 }
-                else if( p.minutes > 0 )
+                else if( p.working.minutes > 0 )
                 {
                     [string appendFormat: @"%d min%s %d sec%s",
-                        p.minutes, p.minutes == 1 ? "" : "s",
-                        p.seconds, p.seconds == 1 ? "" : "s"];
+                        p.working.minutes, p.working.minutes == 1 ? "" : "s",
+                        p.working.seconds, p.working.seconds == 1 ? "" : "s"];
                 }
                 else
                 {
                     [string appendFormat: @"%d second%s",
-                        p.seconds, p.seconds == 1 ? "" : "s"];
+                        p.working.seconds, p.working.seconds == 1 ? "" : "s"];
                 }
                 [string appendString: @" left)"];
             }
@@ -646,55 +729,30 @@
             [fConvertIndicator setIndeterminate: NO];
             [fConvertIndicator setDoubleValue: 100.0 * progress_total];
             [self UpdateDockIcon: progress_total];
-			break;
-        }
-#undef p
 
-#define p s.param.muxing
-        case HB_STATE_MUXING:
-        {
-            NSMutableString * string = [NSMutableString
-                stringWithFormat: @"Muxing..."];
-            [fConvertInfoString setStringValue: string];
-            [fConvertIndicator setIndeterminate: YES];
-            [fConvertIndicator startAnimation: nil];
-            [self UpdateDockIcon: 1.0];
-            break;
-        }
-#undef p
+}
 
-        case HB_STATE_WORKDONE:
-		{
-			[timer invalidate];
-            [fConvertIndicator setIndeterminate: NO];
-            [fConvertIndicator setDoubleValue: 0.0];
-            [self UpdateDockIcon: -1.0];
-            [self convertEnable: YES];
-			
-#define p s.param.workdone
-			switch(p.error)
-			{
-				case HB_ERROR_NONE:
-					[fConvertInfoString setStringValue: @"Done."];
-					break;
-				case HB_ERROR_CANCELED:
-					[fConvertInfoString setStringValue: @"Canceled."];
-					break;
-				case HB_ERROR_UNKNOWN:
-					[fConvertInfoString setStringValue: @"Unknown Error."];
-					break;
-			}
-#undef p
+- (void) muxing: (NSNotification *) n
+{
+    [fConvertInfoString setStringValue: NSLocalizedString(@"Muxing...",@"Muxing...")];
+    [fConvertIndicator setIndeterminate: YES];
+    [fConvertIndicator startAnimation: nil];
+    [self UpdateDockIcon: 1.0];
+}
 
-			hb_job_t * job;
-            while( ( job = hb_job( fHandle, 0 ) ) )
-            {
-                hb_rem( fHandle, job );
-            }
-			break;
-		}
-        default:
-            break;
+- (void) workDone: (NSNotification *) n
+{    
+    [fConvertIndicator setIndeterminate: NO];
+    [fConvertIndicator setDoubleValue: 0.0];
+    [self UpdateDockIcon: -1.0];
+    [self convertEnable: YES];
+        
+    [fConvertInfoString setStringValue: NSLocalizedString(@"Done.",@"Done.")];
+
+    hb_job_t * job;
+    while( ( job = hb_job( fHandle, 0 ) ) )
+    {
+        hb_rem( fHandle, job );
     }
 }
 

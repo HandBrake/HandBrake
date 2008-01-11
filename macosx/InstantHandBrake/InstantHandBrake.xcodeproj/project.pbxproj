@@ -1,0 +1,486 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 44;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4D1EA2EA0993B09A00FDC1A2 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.mm */; };
+		4D1EA2F60993B0CA00FDC1A2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		4D1EA31C0993B24700FDC1A2 /* ExpressController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D1EA31B0993B24700FDC1A2 /* ExpressController.m */; };
+		4D2AEA1A09CCB332007E18F6 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DEB2024052B055F00C39CA9 /* IOKit.framework */; };
+		4D3ECC2709A4917000B2E45F /* WhiteBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D3ECC2609A4917000B2E45F /* WhiteBox.m */; };
+		52AFF86B0B59BD14000DA7C4 /* Express.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4D1EA2DC0993B01000FDC1A2 /* Express.plist */; };
+		A2122D820C7EAF6600AB87A4 /* DriveDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = A2122D810C7EAF6600AB87A4 /* DriveDetector.m */; };
+		A9B706E60D356BC800385AF2 /* Growl.framework in Resources */ = {isa = PBXBuildFile; fileRef = A9B706E50D356BC800385AF2 /* Growl.framework */; };
+		A9B70A030D3570F100385AF2 /* HandBrake.icns in Resources */ = {isa = PBXBuildFile; fileRef = A9B70A020D3570F100385AF2 /* HandBrake.icns */; };
+		A9B70A0F0D35719900385AF2 /* HBCore.m in Sources */ = {isa = PBXBuildFile; fileRef = A9B70A0D0D35719900385AF2 /* HBCore.m */; };
+		A9DB3A1F0D37EC6800F77345 /* libhb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB3A0F0D37EC2800F77345 /* libhb.a */; };
+		A9ED4EF20D36226F004341F5 /* Play.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A9ED4EEF0D36226F004341F5 /* Play.tiff */; };
+		A9ED4EF30D36226F004341F5 /* Pause.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A9ED4EF00D36226F004341F5 /* Pause.tiff */; };
+		A9ED4EF40D36226F004341F5 /* Stop.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A9ED4EF10D36226F004341F5 /* Stop.tiff */; };
+		A9ED502E0D36477D004341F5 /* Express.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9ED502C0D36477D004341F5 /* Express.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A9DB3A0E0D37EC2800F77345 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A9DB3A080D37EC2800F77345 /* libhb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0DFF0B720B6BC6E600549488 /* libhb.a */;
+			remoteInfo = libhb;
+		};
+		A9DB3A100D37EC2800F77345 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A9DB3A080D37EC2800F77345 /* libhb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0D096DFF0B707D1200A845D4 /* libhb.dylib */;
+			remoteInfo = "libhb dlib";
+		};
+		A9DB3A120D37EC2800F77345 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A9DB3A080D37EC2800F77345 /* libhb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A9DB38E00D37E9BA00F77345 /* HB.framework */;
+			remoteInfo = HB;
+		};
+		A9DB3A140D37EC4200F77345 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A9DB3A080D37EC2800F77345 /* libhb.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 0DFF0B710B6BC6E600549488 /* libhb */;
+			remoteInfo = libhb;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		29B97316FDCFA39411CA2CEA /* main.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
+		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		4D1EA2DA0993B01000FDC1A2 /* Instant HandBrake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Instant HandBrake.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D1EA2DC0993B01000FDC1A2 /* Express.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Express.plist; sourceTree = "<group>"; };
+		4D1EA31A0993B24700FDC1A2 /* ExpressController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ExpressController.h; sourceTree = "<group>"; };
+		4D1EA31B0993B24700FDC1A2 /* ExpressController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ExpressController.m; sourceTree = "<group>"; };
+		4D3ECC2509A4917000B2E45F /* WhiteBox.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = WhiteBox.h; sourceTree = "<group>"; };
+		4D3ECC2609A4917000B2E45F /* WhiteBox.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = WhiteBox.m; sourceTree = "<group>"; };
+		4DEB2024052B055F00C39CA9 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
+		A2122D800C7EAF6500AB87A4 /* DriveDetector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DriveDetector.h; sourceTree = "<group>"; };
+		A2122D810C7EAF6600AB87A4 /* DriveDetector.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DriveDetector.m; sourceTree = "<group>"; };
+		A9B706E50D356BC800385AF2 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Growl.framework; path = ../Growl.framework; sourceTree = SOURCE_ROOT; };
+		A9B70A010D3570D300385AF2 /* hb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hb.h; path = ../../libhb/hb.h; sourceTree = SOURCE_ROOT; };
+		A9B70A020D3570F100385AF2 /* HandBrake.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = HandBrake.icns; path = ../HandBrake.icns; sourceTree = SOURCE_ROOT; };
+		A9B70A0D0D35719900385AF2 /* HBCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBCore.m; sourceTree = "<group>"; };
+		A9B70A0E0D35719900385AF2 /* HBCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBCore.h; sourceTree = "<group>"; };
+		A9DB3A080D37EC2800F77345 /* libhb.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = libhb.xcodeproj; sourceTree = "<group>"; };
+		A9ED4EEF0D36226F004341F5 /* Play.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Play.tiff; path = ../icons/Play.tiff; sourceTree = SOURCE_ROOT; };
+		A9ED4EF00D36226F004341F5 /* Pause.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Pause.tiff; path = ../icons/Pause.tiff; sourceTree = SOURCE_ROOT; };
+		A9ED4EF10D36226F004341F5 /* Stop.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Stop.tiff; path = ../icons/Stop.tiff; sourceTree = SOURCE_ROOT; };
+		A9ED502D0D36477D004341F5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/Express.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4D1EA2D80993B01000FDC1A2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9DB3A1F0D37EC6800F77345 /* libhb.a in Frameworks */,
+				4D1EA2F60993B0CA00FDC1A2 /* Cocoa.framework in Frameworks */,
+				4D2AEA1A09CCB332007E18F6 /* IOKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4D1EA2DA0993B01000FDC1A2 /* Instant HandBrake.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* HandBrake */ = {
+			isa = PBXGroup;
+			children = (
+				526FBC940B4CAA310064E04C /* Instant HandBrake Sources */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = HandBrake;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				A9B70A010D3570D300385AF2 /* hb.h */,
+				29B97316FDCFA39411CA2CEA /* main.mm */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A9ED4EEF0D36226F004341F5 /* Play.tiff */,
+				A9ED4EF00D36226F004341F5 /* Pause.tiff */,
+				A9ED4EF10D36226F004341F5 /* Stop.tiff */,
+				A9B70A020D3570F100385AF2 /* HandBrake.icns */,
+				4D1EA2DC0993B01000FDC1A2 /* Express.plist */,
+				A9ED502C0D36477D004341F5 /* Express.xib */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A9DB3A080D37EC2800F77345 /* libhb.xcodeproj */,
+				A9B706E50D356BC800385AF2 /* Growl.framework */,
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+				4DEB2024052B055F00C39CA9 /* IOKit.framework */,
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		526FBC940B4CAA310064E04C /* Instant HandBrake Sources */ = {
+			isa = PBXGroup;
+			children = (
+				4D3ECC2509A4917000B2E45F /* WhiteBox.h */,
+				4D3ECC2609A4917000B2E45F /* WhiteBox.m */,
+				A2122D800C7EAF6500AB87A4 /* DriveDetector.h */,
+				A2122D810C7EAF6600AB87A4 /* DriveDetector.m */,
+				4D1EA31A0993B24700FDC1A2 /* ExpressController.h */,
+				4D1EA31B0993B24700FDC1A2 /* ExpressController.m */,
+				A9B70A0E0D35719900385AF2 /* HBCore.h */,
+				A9B70A0D0D35719900385AF2 /* HBCore.m */,
+			);
+			name = "Instant HandBrake Sources";
+			sourceTree = "<group>";
+		};
+		A9DB3A090D37EC2800F77345 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A9DB3A0F0D37EC2800F77345 /* libhb.a */,
+				A9DB3A110D37EC2800F77345 /* libhb.dylib */,
+				A9DB3A130D37EC2800F77345 /* HB.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4D1EA2D90993B01000FDC1A2 /* Instant HandBrake */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4D1EA2DD0993B01100FDC1A2 /* Build configuration list for PBXNativeTarget "Instant HandBrake" */;
+			buildPhases = (
+				4D1EA2D60993B01000FDC1A2 /* Resources */,
+				4D1EA2D70993B01000FDC1A2 /* Sources */,
+				4D1EA2D80993B01000FDC1A2 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A9DB3A150D37EC4200F77345 /* PBXTargetDependency */,
+			);
+			name = "Instant HandBrake";
+			productName = "Instant HandBrake";
+			productReference = 4D1EA2DA0993B01000FDC1A2 /* Instant HandBrake.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+			};
+			buildConfigurationList = 4D4E7BC4087804870051572B /* Build configuration list for PBXProject "InstantHandBrake" */;
+			compatibilityVersion = "Xcode 3.0";
+			hasScannedForEncodings = 1;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* HandBrake */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = A9DB3A090D37EC2800F77345 /* Products */;
+					ProjectRef = A9DB3A080D37EC2800F77345 /* libhb.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				4D1EA2D90993B01000FDC1A2 /* Instant HandBrake */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		A9DB3A0F0D37EC2800F77345 /* libhb.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libhb.a;
+			remoteRef = A9DB3A0E0D37EC2800F77345 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A9DB3A110D37EC2800F77345 /* libhb.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libhb.dylib;
+			remoteRef = A9DB3A100D37EC2800F77345 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A9DB3A130D37EC2800F77345 /* HB.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = HB.framework;
+			remoteRef = A9DB3A120D37EC2800F77345 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4D1EA2D60993B01000FDC1A2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9B706E60D356BC800385AF2 /* Growl.framework in Resources */,
+				52AFF86B0B59BD14000DA7C4 /* Express.plist in Resources */,
+				A9B70A030D3570F100385AF2 /* HandBrake.icns in Resources */,
+				A9ED4EF20D36226F004341F5 /* Play.tiff in Resources */,
+				A9ED4EF30D36226F004341F5 /* Pause.tiff in Resources */,
+				A9ED4EF40D36226F004341F5 /* Stop.tiff in Resources */,
+				A9ED502E0D36477D004341F5 /* Express.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4D1EA2D70993B01000FDC1A2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D1EA2EA0993B09A00FDC1A2 /* main.mm in Sources */,
+				4D1EA31C0993B24700FDC1A2 /* ExpressController.m in Sources */,
+				4D3ECC2709A4917000B2E45F /* WhiteBox.m in Sources */,
+				A2122D820C7EAF6600AB87A4 /* DriveDetector.m in Sources */,
+				A9B70A0F0D35719900385AF2 /* HBCore.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A9DB3A150D37EC4200F77345 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = libhb;
+			targetProxy = A9DB3A140D37EC4200F77345 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		A9ED502C0D36477D004341F5 /* Express.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A9ED502D0D36477D004341F5 /* English */,
+			);
+			name = Express.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		0D88F56D0B6CDCD400F81F26 /* UB */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CONFIGURATION_BUILD_DIR = ..;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/..\"",
+				);
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				HEADER_SEARCH_PATHS = ../libhb;
+				INFOPLIST_FILE = Express.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+					"\"$(SRCROOT)/../../libhb\"",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
+				OTHER_LDFLAGS = (
+					../libhb/libhb.a,
+					../contrib/lib/libmp4v2.a,
+					../contrib/lib/liba52.a,
+					../contrib/lib/libavformat.a,
+					../contrib/lib/libavcodec.a,
+					../contrib/lib/libavutil.a,
+					../contrib/lib/libdvdread.a,
+					../contrib/lib/libdvdcss.a,
+					../contrib/lib/libfaac.a,
+					../contrib/lib/libmp3lame.a,
+					../contrib/lib/libmpeg2.a,
+					../contrib/lib/libvorbis.a,
+					../contrib/lib/libvorbisenc.a,
+					../contrib/lib/libogg.a,
+					../contrib/lib/libsamplerate.a,
+					../contrib/lib/libx264.a,
+					../contrib/lib/libxvidcore.a,
+					../contrib/lib/libdca.a,
+					../contrib/lib/libmkv.a,
+					../contrib/lib/libswscale.a,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = "Instant HandBrake";
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = UB;
+		};
+		0D88F56F0B6CDCD400F81F26 /* UB */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				GCC_MODEL_TUNING = G5;
+				GCC_PREPROCESSOR_DEFINITIONS = "JOB_GROUPS=1";
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+			};
+			name = UB;
+		};
+		4D1EA2DE0993B01100FDC1A2 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/..\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				HEADER_SEARCH_PATHS = ../libhb;
+				INFOPLIST_FILE = Express.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+					"\"$(SRCROOT)/../../libhb\"",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
+				OTHER_LDFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = "Instant HandBrake";
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Development;
+		};
+		4D1EA2DF0993B01100FDC1A2 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/..\"",
+				);
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				GCC_PREPROCESSOR_DEFINITIONS = "";
+				HEADER_SEARCH_PATHS = ../libhb;
+				INFOPLIST_FILE = Express.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+					"\"$(SRCROOT)/../../libhb\"",
+				);
+				OTHER_LDFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = "Instant HandBrake";
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		4D4E7BC5087804870051572B /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				PREBINDING = NO;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+				ZERO_LINK = NO;
+			};
+			name = Development;
+		};
+		4D4E7BC6087804870051572B /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_AUTO_VECTORIZATION = YES;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_PREPROCESSOR_DEFINITIONS = "JOB_GROUPS=1";
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+			};
+			name = Deployment;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4D1EA2DD0993B01100FDC1A2 /* Build configuration list for PBXNativeTarget "Instant HandBrake" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4D1EA2DE0993B01100FDC1A2 /* Development */,
+				4D1EA2DF0993B01100FDC1A2 /* Deployment */,
+				0D88F56D0B6CDCD400F81F26 /* UB */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Deployment;
+		};
+		4D4E7BC4087804870051572B /* Build configuration list for PBXProject "InstantHandBrake" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4D4E7BC5087804870051572B /* Development */,
+				4D4E7BC6087804870051572B /* Deployment */,
+				0D88F56F0B6CDCD400F81F26 /* UB */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Deployment;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

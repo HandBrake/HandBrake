@@ -1,18 +1,20 @@
 /* ExpressController */
 
 #import <Cocoa/Cocoa.h>
+#import "DriveDetector.h"
+#import "HBCore.h"
 #import "hb.h"
-
-@class DriveDetector;
 
 @interface ExpressController : NSObject
 
 {
     hb_handle_t                  * fHandle;
     hb_list_t                    * fList;
+    hb_state_t                   * fState;
 
     IBOutlet NSWindow            * fWindow;
     IBOutlet NSView              * fEmptyView;
+    IBOutlet NSToolbar           * fToolbar;
 
     IBOutlet NSView              * fOpenView;
     IBOutlet NSMatrix            * fOpenMatrix;
@@ -40,6 +42,7 @@
     NSString                     * fConvertFolderString;
 
     DriveDetector                * fDriveDetector;
+    HBCore                       * fCore;
     NSDictionary                 * fDrives;
 }
 

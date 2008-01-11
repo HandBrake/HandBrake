@@ -41,7 +41,7 @@
 - (void) run
 {
     /* Set up a timer to check devices every second */
-    fTimer = [NSTimer scheduledTimerWithTimeInterval: 1.0 target: self
+    fTimer = [NSTimer scheduledTimerWithTimeInterval: 2.0 target: self
         selector: @selector( detectTimer: ) userInfo: nil repeats: YES];
     [[NSRunLoop currentRunLoop] addTimer: fTimer forMode:
         NSModalPanelRunLoopMode];
