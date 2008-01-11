@@ -63,7 +63,6 @@
 		0DFA5CEF0B8DD4210020BC09 /* sync.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C9A0B8DD3B60020BC09 /* sync.c */; };
 		0DFA5CF00B8DD4210020BC09 /* update.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C9B0B8DD3B60020BC09 /* update.c */; };
 		0DFA5CF10B8DD4210020BC09 /* work.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C9C0B8DD3B60020BC09 /* work.c */; };
-		0DFA5CF80B8DD7B40020BC09 /* HandBrake.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0DFA5C7A0B8DD1E90020BC09 /* HandBrake.icns */; };
 		0DFA5D070B8DD9040020BC09 /* HandBrake.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0DFA5D060B8DD9040020BC09 /* HandBrake.plist */; };
 		0DFF0B770B6BC72A00549488 /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC9B0B4CAB100064E04C /* common.c */; };
 		0DFF0B790B6BC72A00549488 /* deca52.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC9D0B4CAB100064E04C /* deca52.c */; };
@@ -76,12 +75,6 @@
 		25DE1FB60C169A0C00F01FC8 /* HBPreferencesController.h in Headers */ = {isa = PBXBuildFile; fileRef = 25DE1FB40C169A0C00F01FC8 /* HBPreferencesController.h */; };
 		25DE1FB70C169A0C00F01FC8 /* HBPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 25DE1FB50C169A0C00F01FC8 /* HBPreferencesController.m */; };
 		4D1125D809D72FD200E0657B /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D1125D709D72FD200E0657B /* libz.dylib */; };
-		4D1125D909D72FD200E0657B /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D1125D709D72FD200E0657B /* libz.dylib */; };
-		4D1EA2EA0993B09A00FDC1A2 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.mm */; };
-		4D1EA2F60993B0CA00FDC1A2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		4D1EA31C0993B24700FDC1A2 /* ExpressController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D1EA31B0993B24700FDC1A2 /* ExpressController.m */; };
-		4D2AEA1A09CCB332007E18F6 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DEB2024052B055F00C39CA9 /* IOKit.framework */; };
-		4D3ECC2709A4917000B2E45F /* WhiteBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D3ECC2609A4917000B2E45F /* WhiteBox.m */; };
 		4DD93F8F082036E8008E1322 /* Controller.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DF3C8CB052889CD00A80101 /* Controller.h */; };
 		4DD93F90082036E8008E1322 /* PictureGLView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D85758F052B78E300C39CA9 /* PictureGLView.h */; };
 		4DD93F92082036E8008E1322 /* PictureController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D1FD381073D19CE00E46515 /* PictureController.h */; };
@@ -93,15 +86,12 @@
 		4DD93FA2082036E8008E1322 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		4DD93FA3082036E8008E1322 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DEB2024052B055F00C39CA9 /* IOKit.framework */; };
 		4DD93FA4082036E8008E1322 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DDE9724052B7B2B00C39CA9 /* OpenGL.framework */; };
-		52AFF86A0B59BD07000DA7C4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
-		52AFF86B0B59BD14000DA7C4 /* Express.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4D1EA2DC0993B01000FDC1A2 /* Express.plist */; };
 		5558B5690BE3BADF00E15E27 /* decdca.c in Sources */ = {isa = PBXBuildFile; fileRef = 5558B5680BE3BADF00E15E27 /* decdca.c */; };
 		5558B56A0BE3BADF00E15E27 /* decdca.c in Sources */ = {isa = PBXBuildFile; fileRef = 5558B5680BE3BADF00E15E27 /* decdca.c */; };
 		593034EB0BBA39A100172349 /* ChapterTitles.h in Headers */ = {isa = PBXBuildFile; fileRef = 593034E90BBA39A100172349 /* ChapterTitles.h */; };
 		593034EC0BBA39A100172349 /* ChapterTitles.m in Sources */ = {isa = PBXBuildFile; fileRef = 593034EA0BBA39A100172349 /* ChapterTitles.m */; };
 		59CBD2370BBB44DA004A3BE3 /* parsecsv.c in Sources */ = {isa = PBXBuildFile; fileRef = 59CBD2360BBB44DA004A3BE3 /* parsecsv.c */; };
 		59CBD2650BBB4D1B004A3BE3 /* ChapterTitles.m in Sources */ = {isa = PBXBuildFile; fileRef = 593034EA0BBA39A100172349 /* ChapterTitles.m */; };
-		A2122D820C7EAF6600AB87A4 /* DriveDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = A2122D810C7EAF6600AB87A4 /* DriveDetector.m */; };
 		A22C85EC0D05D35000C10E36 /* HBPresets.h in Headers */ = {isa = PBXBuildFile; fileRef = A22C85EA0D05D35000C10E36 /* HBPresets.h */; };
 		A22C85ED0D05D35100C10E36 /* HBPresets.m in Sources */ = {isa = PBXBuildFile; fileRef = A22C85EB0D05D35000C10E36 /* HBPresets.m */; };
 		A273E0510C57B39A00493A45 /* Pause.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E04A0C57B39A00493A45 /* Pause.tiff */; };
@@ -158,7 +148,6 @@
 		E39AA4E90D32DC0B0007A415 /* PictureSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = E39AA4E00D32DC0B0007A415 /* PictureSettings.xib */; };
 		E39AA4EA0D32DC0B0007A415 /* AdvancedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E39AA4E20D32DC0B0007A415 /* AdvancedView.xib */; };
 		E39AA4EB0D32DC0B0007A415 /* OutputPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = E39AA4E40D32DC0B0007A415 /* OutputPanel.xib */; };
-		E39AA4EE0D32DC240007A415 /* Express.nib in Resources */ = {isa = PBXBuildFile; fileRef = E39AA4EC0D32DC240007A415 /* Express.nib */; };
 		E3C844F60CA6B3F90013B683 /* RevealPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = E3C844F20CA6B3F90013B683 /* RevealPressed.png */; };
 		E3C844F70CA6B3F90013B683 /* RevealHighlightPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = E3C844F30CA6B3F90013B683 /* RevealHighlightPressed.png */; };
 		E3C844F80CA6B3F90013B683 /* RevealHighlight.png in Resources */ = {isa = PBXBuildFile; fileRef = E3C844F40CA6B3F90013B683 /* RevealHighlight.png */; };
@@ -179,13 +168,6 @@
 
 /* Begin PBXContainerItemProxy section */
 		0D6E35900B6BD5FA005AABB3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 0DFF0B710B6BC6E600549488;
-			remoteInfo = libmediafork;
-		};
-		0DFF0BF10B6BCCB400549488 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
@@ -259,14 +241,8 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		4D1125D709D72FD200E0657B /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
-		4D1EA2DA0993B01000FDC1A2 /* Instant HandBrake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Instant HandBrake.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4D1EA2DC0993B01000FDC1A2 /* Express.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Express.plist; sourceTree = "<group>"; };
-		4D1EA31A0993B24700FDC1A2 /* ExpressController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ExpressController.h; sourceTree = "<group>"; };
-		4D1EA31B0993B24700FDC1A2 /* ExpressController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ExpressController.m; sourceTree = "<group>"; };
 		4D1FD381073D19CE00E46515 /* PictureController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PictureController.h; sourceTree = "<group>"; };
 		4D1FD382073D19CE00E46515 /* PictureController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = PictureController.mm; sourceTree = "<group>"; };
-		4D3ECC2509A4917000B2E45F /* WhiteBox.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = WhiteBox.h; sourceTree = "<group>"; };
-		4D3ECC2609A4917000B2E45F /* WhiteBox.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = WhiteBox.m; sourceTree = "<group>"; };
 		4D85758E052B78E300C39CA9 /* PictureGLView.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = PictureGLView.mm; sourceTree = "<group>"; };
 		4D85758F052B78E300C39CA9 /* PictureGLView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PictureGLView.h; sourceTree = "<group>"; };
 		4DDE9724052B7B2B00C39CA9 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
@@ -281,8 +257,6 @@
 		593034E90BBA39A100172349 /* ChapterTitles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChapterTitles.h; sourceTree = "<group>"; };
 		593034EA0BBA39A100172349 /* ChapterTitles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChapterTitles.m; sourceTree = "<group>"; };
 		59CBD2360BBB44DA004A3BE3 /* parsecsv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = parsecsv.c; path = ../test/parsecsv.c; sourceTree = SOURCE_ROOT; };
-		A2122D800C7EAF6500AB87A4 /* DriveDetector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DriveDetector.h; sourceTree = "<group>"; };
-		A2122D810C7EAF6600AB87A4 /* DriveDetector.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DriveDetector.m; sourceTree = "<group>"; };
 		A22C85EA0D05D35000C10E36 /* HBPresets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPresets.h; sourceTree = "<group>"; };
 		A22C85EB0D05D35000C10E36 /* HBPresets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPresets.m; sourceTree = "<group>"; };
 		A273E04A0C57B39A00493A45 /* Pause.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Pause.tiff; sourceTree = "<group>"; };
@@ -336,7 +310,6 @@
 		E39AA4E10D32DC0B0007A415 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/PictureSettings.xib; sourceTree = "<group>"; };
 		E39AA4E30D32DC0B0007A415 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/AdvancedView.xib; sourceTree = "<group>"; };
 		E39AA4E50D32DC0B0007A415 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/OutputPanel.xib; sourceTree = "<group>"; };
-		E39AA4ED0D32DC240007A415 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Express.nib; sourceTree = "<group>"; };
 		E3C844F20CA6B3F90013B683 /* RevealPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RevealPressed.png; sourceTree = "<group>"; };
 		E3C844F30CA6B3F90013B683 /* RevealHighlightPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RevealHighlightPressed.png; sourceTree = "<group>"; };
 		E3C844F40CA6B3F90013B683 /* RevealHighlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RevealHighlight.png; sourceTree = "<group>"; };
@@ -373,16 +346,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4D1EA2D80993B01000FDC1A2 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4D1EA2F60993B0CA00FDC1A2 /* Cocoa.framework in Frameworks */,
-				4D2AEA1A09CCB332007E18F6 /* IOKit.framework in Frameworks */,
-				4D1125D909D72FD200E0657B /* libz.dylib in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4DD93FA1082036E8008E1322 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -401,7 +364,6 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4D1EA2DA0993B01000FDC1A2 /* Instant HandBrake.app */,
 				0DFF0B720B6BC6E600549488 /* libhb.a */,
 				0DFF0C0A0B6BCEC200549488 /* HandBrakeCLI */,
 				0D6E35760B6BD4F0005AABB3 /* HandBrake.app */,
@@ -413,7 +375,6 @@
 		29B97314FDCFA39411CA2CEA /* HandBrake */ = {
 			isa = PBXGroup;
 			children = (
-				526FBC940B4CAA310064E04C /* Instant HandBrake Sources */,
 				526FBC930B4CAA260064E04C /* HandBrake Sources */,
 				526FBC920B4CAA120064E04C /* HandBrakeCLI Sources */,
 				526FBC8D0B4CA9F90064E04C /* libhb Sources */,
@@ -445,7 +406,6 @@
 				E39AA4E00D32DC0B0007A415 /* PictureSettings.xib */,
 				E39AA4DE0D32DC0B0007A415 /* Preferences.xib */,
 				E39AA4DC0D32DC0B0007A415 /* Queue.xib */,
-				E39AA4EC0D32DC240007A415 /* Express.nib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -531,8 +491,6 @@
 				4DF3C8CC052889CD00A80101 /* Controller.mm */,
 				4D85758E052B78E300C39CA9 /* PictureGLView.mm */,
 				4D85758F052B78E300C39CA9 /* PictureGLView.h */,
-				4D3ECC2509A4917000B2E45F /* WhiteBox.h */,
-				4D3ECC2609A4917000B2E45F /* WhiteBox.m */,
 				593034E90BBA39A100172349 /* ChapterTitles.h */,
 				593034EA0BBA39A100172349 /* ChapterTitles.m */,
 				A2A1EC300C76C35E00827E0D /* HBDVDDetector.h */,
@@ -551,18 +509,6 @@
 				E37172650C977D340072B384 /* HBImageAndTextCell.m */,
 			);
 			name = "HandBrake Sources";
-			sourceTree = "<group>";
-		};
-		526FBC940B4CAA310064E04C /* Instant HandBrake Sources */ = {
-			isa = PBXGroup;
-			children = (
-				A2122D800C7EAF6500AB87A4 /* DriveDetector.h */,
-				A2122D810C7EAF6600AB87A4 /* DriveDetector.m */,
-				4D1EA31A0993B24700FDC1A2 /* ExpressController.h */,
-				4D1EA31B0993B24700FDC1A2 /* ExpressController.m */,
-				4D1EA2DC0993B01000FDC1A2 /* Express.plist */,
-			);
-			name = "Instant HandBrake Sources";
 			sourceTree = "<group>";
 		};
 		A273E0460C57B39A00493A45 /* icons */ = {
@@ -701,24 +647,6 @@
 			productReference = 0DFF0C0A0B6BCEC200549488 /* HandBrakeCLI */;
 			productType = "com.apple.product-type.tool";
 		};
-		4D1EA2D90993B01000FDC1A2 /* Instant HandBrake */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4D1EA2DD0993B01100FDC1A2 /* Build configuration list for PBXNativeTarget "Instant HandBrake" */;
-			buildPhases = (
-				4D1EA2D60993B01000FDC1A2 /* Resources */,
-				4D1EA2D70993B01000FDC1A2 /* Sources */,
-				4D1EA2D80993B01000FDC1A2 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				0DFF0BF20B6BCCB400549488 /* PBXTargetDependency */,
-			);
-			name = "Instant HandBrake";
-			productName = "Instant HandBrake";
-			productReference = 4D1EA2DA0993B01000FDC1A2 /* Instant HandBrake.app */;
-			productType = "com.apple.product-type.application";
-		};
 		4DD93F8D082036E8008E1322 /* HandBrake */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4D4E7BC0087804870051572B /* Build configuration list for PBXNativeTarget "HandBrake" */;
@@ -752,7 +680,6 @@
 			projectRoot = "";
 			targets = (
 				4DD93F8D082036E8008E1322 /* HandBrake */,
-				4D1EA2D90993B01000FDC1A2 /* Instant HandBrake */,
 				0DFF0B710B6BC6E600549488 /* libhb */,
 				0DFF0C090B6BCEC200549488 /* HandBrakeCLI */,
 				0D096DFE0B707D1200A845D4 /* libhb dlib */,
@@ -761,17 +688,6 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		4D1EA2D60993B01000FDC1A2 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0DFA5CF80B8DD7B40020BC09 /* HandBrake.icns in Resources */,
-				52AFF86B0B59BD14000DA7C4 /* Express.plist in Resources */,
-				52AFF86A0B59BD07000DA7C4 /* InfoPlist.strings in Resources */,
-				E39AA4EE0D32DC240007A415 /* Express.nib in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4DD93F95082036E8008E1322 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -926,17 +842,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4D1EA2D70993B01000FDC1A2 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4D1EA2EA0993B09A00FDC1A2 /* main.mm in Sources */,
-				4D1EA31C0993B24700FDC1A2 /* ExpressController.m in Sources */,
-				4D3ECC2709A4917000B2E45F /* WhiteBox.m in Sources */,
-				A2122D820C7EAF6600AB87A4 /* DriveDetector.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4DD93F99082036E8008E1322 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -965,11 +870,6 @@
 			isa = PBXTargetDependency;
 			target = 0DFF0B710B6BC6E600549488 /* libhb */;
 			targetProxy = 0D6E35900B6BD5FA005AABB3 /* PBXContainerItemProxy */;
-		};
-		0DFF0BF20B6BCCB400549488 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 0DFF0B710B6BC6E600549488 /* libhb */;
-			targetProxy = 0DFF0BF10B6BCCB400549488 /* PBXContainerItemProxy */;
 		};
 		0DFF0BF40B6BCCB900549488 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1033,14 +933,6 @@
 				E39AA4E50D32DC0B0007A415 /* English */,
 			);
 			name = OutputPanel.xib;
-			sourceTree = "<group>";
-		};
-		E39AA4EC0D32DC240007A415 /* Express.nib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E39AA4ED0D32DC240007A415 /* English */,
-			);
-			name = Express.nib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -1310,53 +1202,6 @@
 			};
 			name = UB;
 		};
-		0D88F56D0B6CDCD400F81F26 /* UB */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CONFIGURATION_BUILD_DIR = ..;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				HEADER_SEARCH_PATHS = ../libhb;
-				INFOPLIST_FILE = Express.plist;
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
-				);
-				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
-				OTHER_LDFLAGS = (
-					../libhb/libhb.a,
-					../contrib/lib/libmp4v2.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libdvdcss.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-					../contrib/lib/libdca.a,
-					../contrib/lib/libmkv.a,
-					../contrib/lib/libswscale.a,
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = "Instant HandBrake";
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				WRAPPER_EXTENSION = app;
-				ZERO_LINK = NO;
-			};
-			name = UB;
-		};
 		0D88F56E0B6CDCD400F81F26 /* UB */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1561,103 +1406,6 @@
 			};
 			name = Deployment;
 		};
-		4D1EA2DE0993B01100FDC1A2 /* Development */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				HEADER_SEARCH_PATHS = ../libhb;
-				INFOPLIST_FILE = Express.plist;
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
-				);
-				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
-				OTHER_LDFLAGS = (
-					../libhb/libhb.a,
-					../contrib/lib/libmp4v2.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libdvdcss.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-					../contrib/lib/libdca.a,
-					../contrib/lib/libmkv.a,
-					../contrib/lib/libswscale.a,
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = "Instant HandBrake";
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				WRAPPER_EXTENSION = app;
-				ZERO_LINK = NO;
-			};
-			name = Development;
-		};
-		4D1EA2DF0993B01100FDC1A2 /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				HEADER_SEARCH_PATHS = ../libhb;
-				INFOPLIST_FILE = Express.plist;
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
-				);
-				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
-				OTHER_LDFLAGS = (
-					../libhb/libhb.a,
-					../contrib/lib/libmp4v2.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libdvdcss.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-					../contrib/lib/libdca.a,
-					../contrib/lib/libmkv.a,
-					../contrib/lib/libswscale.a,
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = "Instant HandBrake";
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				WRAPPER_EXTENSION = app;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
 		4D4E7BC1087804870051572B /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1830,16 +1578,6 @@
 				0DFF0C0D0B6BCEE000549488 /* Development */,
 				0DFF0C0E0B6BCEE000549488 /* Deployment */,
 				0D88F56E0B6CDCD400F81F26 /* UB */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Deployment;
-		};
-		4D1EA2DD0993B01100FDC1A2 /* Build configuration list for PBXNativeTarget "Instant HandBrake" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4D1EA2DE0993B01100FDC1A2 /* Development */,
-				4D1EA2DF0993B01100FDC1A2 /* Deployment */,
-				0D88F56D0B6CDCD400F81F26 /* UB */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Deployment;
