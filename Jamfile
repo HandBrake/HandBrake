@@ -64,11 +64,7 @@ if $(OS) = MACOSX
               macosx/HBImageAndTextCell.h macosx/HBImageAndTextCell.m
               macosx/HBPreferencesController.h macosx/HBPreferencesController.m
               macosx/HBPresets.h macosx/HBPresets.m
-              macosx/English.lproj/InfoPlist.strings
-              macosx/ExpressController.h macosx/ExpressController.m
-              macosx/English.lproj/Express.nib/classes.nib
-              macosx/English.lproj/Express.nib/info.nib
-              macosx/English.lproj/Express.nib/keyedobjects.nib ;
+              macosx/English.lproj/InfoPlist.strings ;
               
     OSXApp HandBrake.app : $(OSX_SRC) $(HANDBRAKE_LIBS) ;
     
