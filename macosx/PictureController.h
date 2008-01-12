@@ -7,24 +7,21 @@
 #include <Cocoa/Cocoa.h>
 
 #include "hb.h"
-#include "PictureGLView.h"
+
+#define HB_NUM_HBLIB_PICTURES      10   // hbilb generates 10 preview pictures
 
 @interface PictureController : NSObject
 {
     hb_handle_t              * fHandle;
     hb_title_t               * fTitle;
 
-    bool                       fHasQE;
-    uint8_t                  * fBuffer;
-    int                        fBufferSize;
-    uint8_t                  * fTexBuf[2];
-    int                        fTexBufSize;
+    NSMutableDictionary      * fPicturePreviews;        // NSImages, one for each preview libhb creates, created lazily
     int                        fPicture;
 
     IBOutlet NSPanel         * fPicturePanel;
 
-    IBOutlet HBPictureGLView * fPictureGLView;
-    IBOutlet NSBox           * fPictureGLViewArea;
+    IBOutlet NSImageView     * fPictureView;
+    IBOutlet NSBox           * fPictureViewArea;
     IBOutlet NSTextField     * fWidthField;
     IBOutlet NSStepper       * fWidthStepper;
     IBOutlet NSTextField     * fHeightField;
@@ -45,7 +42,6 @@
     IBOutlet NSButton        * fDeblockCheck;
 	IBOutlet NSPopUpButton   * fDenoisePopUp;
 	IBOutlet NSPopUpButton   * fAnamorphicPopUp;
-    IBOutlet NSButton        * fEffectsCheck;
     IBOutlet NSButton        * fPrevButton;
     IBOutlet NSButton        * fNextButton;
     IBOutlet NSTextField     * fInfoField;
@@ -77,7 +73,7 @@
 - (void) SetHandle: (hb_handle_t *) handle;
 - (void) SetTitle:  (hb_title_t *)  title;
 - (void) setInitialPictureFilters;
-- (void) Display: (int) anim;
+- (void) displayPreview;
 
 - (IBAction) SettingsChanged: (id) sender;
 - (IBAction) PreviousPicture: (id) sender;
@@ -103,6 +99,13 @@
 
 - (void)showPanelInWindow: (NSWindow *)fWindow forTitle: (hb_title_t *)title;
 - (BOOL) loadMyNibFile;
+
++ (NSImage *) makeImageForPicture: (int)pictureIndex
+                libhb:(hb_handle_t*)handle
+                title:(hb_title_t*)title
+                removeBorders:(BOOL)removeBorders;
+- (NSImage *) imageForPicture: (int) pictureIndex;
+- (void) purgeImageCache;
 @end
 
 @interface NSObject (PictureControllertDelegateMethod)
