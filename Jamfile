@@ -58,7 +58,6 @@ if $(OS) = MACOSX
 {
     OSX_SRC = macosx/main.mm macosx/Controller.h macosx/Controller.mm
               macosx/PictureController.h macosx/PictureController.mm
-              macosx/PictureGLView.h macosx/PictureGLView.mm
               macosx/HBQueueController.h macosx/HBQueueController.mm
               macosx/HBAdvancedController.h macosx/HBAdvancedController.m
               macosx/HBImageAndTextCell.h macosx/HBImageAndTextCell.m
