@@ -1524,7 +1524,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		if( [fVidTwoPassCheck state] == NSOnState && [fVidTurboPassCheck state] == NSOnState )
 		{
 			/* pass the "Turbo" string to be appended to the existing x264 opts string into a variable for the first pass */
-			NSString *firstPassOptStringTurbo = @":ref=1:subme=1:me=dia:analyse=none:trellis=0:no-fast-pskip=0:8x8dct=0";
+			NSString *firstPassOptStringTurbo = @":ref=1:subme=1:me=dia:analyse=none:trellis=0:no-fast-pskip=0:8x8dct=0:weightb=0";
 			/* append the "Turbo" string variable to the existing opts string.
 			Note: the "Turbo" string must be appended, not prepended to work properly*/
 			NSString *firstPassOptStringCombined = [[fAdvancedOptions optionsString] stringByAppendingString:firstPassOptStringTurbo];

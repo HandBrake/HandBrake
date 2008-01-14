@@ -66,7 +66,7 @@ static char	  *x264opts2 	= NULL;
 static int	  maxHeight		= 0;
 static int	  maxWidth		= 0;
 static int    turbo_opts_enabled = 0;
-static char * turbo_opts = "ref=1:subme=1:me=dia:analyse=none:trellis=0:no-fast-pskip=0:8x8dct=0";
+static char * turbo_opts = "ref=1:subme=1:me=dia:analyse=none:trellis=0:no-fast-pskip=0:8x8dct=0:weightb=0";
 static int    largeFileSize = 0;
 static int    preset        = 0;
 static char * preset_name   = 0;
