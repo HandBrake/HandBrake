@@ -847,7 +847,7 @@
 			};
 			name = Deployment;
 		};
-		0D096E690B707D5800A845D4 /* UB */ = {
+		0D096E690B707D5800A845D4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../libhb";
@@ -908,9 +908,9 @@
 				SEPARATE_STRIP = YES;
 				ZERO_LINK = NO;
 			};
-			name = UB;
+			name = Release;
 		};
-		0D88F56B0B6CDCD400F81F26 /* UB */ = {
+		0D88F56B0B6CDCD400F81F26 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/";
@@ -942,9 +942,9 @@
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				ZERO_LINK = NO;
 			};
-			name = UB;
+			name = Release;
 		};
-		0D88F56F0B6CDCD400F81F26 /* UB */ = {
+		0D88F56F0B6CDCD400F81F26 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = (
@@ -957,7 +957,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
-			name = UB;
+			name = Release;
 		};
 		0DFF0B740B6BC70400549488 /* Development */ = {
 			isa = XCBuildConfiguration;
@@ -1121,7 +1121,7 @@
 			};
 			name = Deployment;
 		};
-		A9DB38E40D37E9BA00F77345 /* UB */ = {
+		A9DB38E40D37E9BA00F77345 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1148,7 +1148,7 @@
 				PRODUCT_NAME = HB;
 				ZERO_LINK = YES;
 			};
-			name = UB;
+			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
@@ -1158,7 +1158,7 @@
 			buildConfigurations = (
 				0D096E660B707D5800A845D4 /* Development */,
 				0D096E670B707D5800A845D4 /* Deployment */,
-				0D096E690B707D5800A845D4 /* UB */,
+				0D096E690B707D5800A845D4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Deployment;
@@ -1168,7 +1168,7 @@
 			buildConfigurations = (
 				0DFF0B740B6BC70400549488 /* Development */,
 				0DFF0B750B6BC70400549488 /* Deployment */,
-				0D88F56B0B6CDCD400F81F26 /* UB */,
+				0D88F56B0B6CDCD400F81F26 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Deployment;
@@ -1178,7 +1178,7 @@
 			buildConfigurations = (
 				4D4E7BC5087804870051572B /* Development */,
 				4D4E7BC6087804870051572B /* Deployment */,
-				0D88F56F0B6CDCD400F81F26 /* UB */,
+				0D88F56F0B6CDCD400F81F26 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Deployment;
@@ -1188,7 +1188,7 @@
 			buildConfigurations = (
 				A9DB38E20D37E9BA00F77345 /* Development */,
 				A9DB38E30D37E9BA00F77345 /* Deployment */,
-				A9DB38E40D37E9BA00F77345 /* UB */,
+				A9DB38E40D37E9BA00F77345 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Deployment;

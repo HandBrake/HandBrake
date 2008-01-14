@@ -45,6 +45,7 @@ extern NSString *HBCoreMuxingNotification;
 - (id)init;
 - (BOOL)openInDebugMode:(BOOL)debugMode checkForUpdates:(BOOL)checkForUpdates;
 - (BOOL)close;
+- (void)removeAllJobs;
 - (NSString *)state;
 - (struct hb_handle_s *)hb_handle;
 - (const struct hb_state_s *)hb_state;

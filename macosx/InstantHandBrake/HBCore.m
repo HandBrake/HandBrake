@@ -119,6 +119,17 @@ NSString *HBCoreMuxingNotification = @"HBCoreMuxingNotification";
 }
 
 /**
+ * Removes all jobs from the queue.
+ */ 
+ 
+- (void) removeAllJobs
+{
+    hb_job_t * job;
+    while( ( job = hb_job( hb_handle, 0 ) ) )
+        hb_rem( hb_handle, job );
+}
+
+/**
  * Returns libhb handle used by this HBCore instance.
  */ 
 - (struct hb_handle_s *)hb_handle

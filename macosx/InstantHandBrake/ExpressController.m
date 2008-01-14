@@ -35,6 +35,7 @@
     [fToolbar setAllowsUserCustomization: YES];
     [fToolbar setDisplayMode: NSToolbarDisplayModeIconAndLabel];
     [fToolbar setVisible:NO];
+    [fWindow setShowsToolbarButton:NO];
     [fWindow setToolbar: fToolbar];
         
     /* Show the "Open DVD" interface */
@@ -108,7 +109,8 @@
 
     if ([ident isEqualToString: TOOLBAR_START])
     {
-        [item setLabel: NSLocalizedString(@"Start", "Start")];
+        [item setLabel: NSLocalizedString(@"Convert", "Convert")];
+        [item setPaletteLabel: NSLocalizedString(@"Convert/Cancel", @"Convert/Cancel")];
         [item setImage: [NSImage imageNamed: @"Play"]];
         [item setTarget: self];
         [item setAction: @selector(convertGo:)];
@@ -116,24 +118,18 @@
     else if ([ident isEqualToString: TOOLBAR_PAUSE])
     {
         [item setLabel: NSLocalizedString(@"Pause", "Pause")];
+        [item setPaletteLabel: NSLocalizedString(@"Pause/Resume", @"Pause/Resume")];
         [item setImage: [NSImage imageNamed: @"Pause"]];
         [item setTarget: self];
         [item setAction: @selector(pauseGo:)];
     }
     else if ([ident isEqualToString: TOOLBAR_OPEN])
     {
-        [item setLabel: NSLocalizedString(@"Open", "Open")];
-        [item setImage: [NSImage imageNamed: @"pref-audio"]];
+        [item setLabel: NSLocalizedString(@"Open...", "Open...")];
+        [item setPaletteLabel: NSLocalizedString(@"Open Another Source", "Open Another Source")];
+        [item setImage: [NSImage imageNamed: @"Open"]];
         [item setTarget: self];
         [item setAction: @selector(openShow:)];
-    }
-    else if ([ident isEqualToString: TOOLBAR_ADVANCED])
-    {
-        [item setLabel: NSLocalizedString(@"Advanced", "Advanced")];
-        [item setImage: [NSImage imageNamed: @"pref-advanced"]];
-        [item setTarget: self];
-        [item setAction: @selector(setPrefView:)];
-        [item setAutovalidates: NO];
     }
     else
     {
@@ -147,13 +143,13 @@
 - (NSArray *) toolbarDefaultItemIdentifiers: (NSToolbar *) toolbar
 {
     return [NSArray arrayWithObjects: TOOLBAR_START, TOOLBAR_PAUSE,
-                                        TOOLBAR_OPEN, NSToolbarFlexibleSpaceItemIdentifier, TOOLBAR_ADVANCED, nil];
+                                    NSToolbarFlexibleSpaceItemIdentifier, TOOLBAR_OPEN, nil];
 }
 
 - (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar
 {
     return [NSArray arrayWithObjects: TOOLBAR_START, TOOLBAR_PAUSE,
-                                        TOOLBAR_OPEN, TOOLBAR_ADVANCED, nil];
+                                        TOOLBAR_OPEN, NSToolbarFlexibleSpaceItemIdentifier, nil];
 }
 
 /***********************************************************************
@@ -231,6 +227,7 @@
     [fWindow setContentView: fEmptyView];
     [fWindow setFrame: frame display: YES animate: YES];
     [fToolbar setVisible:NO];
+    [fOpenProgressField setStringValue: @""];
     [fWindow setContentView: fOpenView];
 
     [fDriveDetector run];
@@ -302,7 +299,7 @@
             maxwidth = 320;
 			job->vbitrate = 500;
 		}
-		//job->deinterlace = 1;
+		job->deinterlace = 1;
 		
 		do
 		{
@@ -313,17 +310,12 @@
         if( [fConvertFormatPopUp indexOfSelectedItem] == 0 )
         {
             /* iPod / H.264 */
-            job->mux      = HB_MUX_IPOD;
-            job->vcodec   = HB_VCODEC_X264;
+            job->mux        = HB_MUX_IPOD;
+            job->vcodec     = HB_VCODEC_X264;
 			job->h264_level = 30;
+            job->x264opts   = "bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subq=6:no-fast-pskip=1";
         }
         else if( [fConvertFormatPopUp indexOfSelectedItem] == 1 )
-        {
-            /* iPod / MPEG-4 */
-            job->mux      = HB_MUX_MP4;
-            job->vcodec   = HB_VCODEC_FFMPEG;
-        }
-        else
         {
             /* PSP / MPEG-4 */
             job->mux        = HB_MUX_PSP;
@@ -342,6 +334,14 @@
 			}
 
 			hb_set_size( job, aspect, pixels );
+        }
+        else
+        {
+            job->mux      = HB_MUX_MP4;
+            job->vcodec   = HB_VCODEC_X264;
+            job->x264opts = "bframes=3:ref=1:subq=5:me=umh:no-fast-pskip=1:trellis=1:cabac=0";
+            job->abitrate = 128;
+            job->vbitrate = 1500;
         }
 
         job->vquality = -1.0;
@@ -482,6 +482,7 @@
     [fOpenPopUp        setEnabled: b];
     [fOpenFolderField  setEnabled: b];
     [fOpenBrowseButton setEnabled: b];
+    [fOpenGoButton     setEnabled: b]; 
 
     if( b )
     {
@@ -496,6 +497,7 @@
             if( [[fOpenPopUp titleOfSelectedItem]
                     isEqualToString: INSERT_STRING] )
             {
+                [fOpenGoButton setEnabled: NO];
             }
         }
     }
@@ -525,6 +527,7 @@
     else
     {
         [fDriveDetector run];
+        [fOpenProgressField setStringValue: NSLocalizedString(@"No Title Found...",@"No Title Found...")];
     }
 }
 
@@ -610,7 +613,6 @@
     [fConvertMaxWidthPopUp setEnabled: b];
     [fConvertAudioPopUp setEnabled: b];
     [fConvertSubtitlePopUp setEnabled: b];
-    [fConvertOpenButton setEnabled: b];
 }
 
 /***********************************************************************
@@ -700,36 +702,35 @@
 - (void) working: (NSNotification *) n
 {
    float progress_total = ( p.working.progress + p.working.job_cur - 1 ) / p.working.job_count;
-            NSMutableString * string = [NSMutableString
-                stringWithFormat: @"Converting: %.1f %%",
-                100.0 * progress_total];
-            if( p.working.seconds > -1 )
-            {
-                [string appendFormat: @" (%.1f fps, ", p.working.rate_avg];
-                if( p.working.hours > 0 )
-                {
-                    [string appendFormat: @"%d hour%s %d min%s",
-                        p.working.hours, p.working.hours == 1 ? "" : "s",
-                        p.working.minutes, p.working.minutes == 1 ? "" : "s"];
-                }
-                else if( p.working.minutes > 0 )
-                {
-                    [string appendFormat: @"%d min%s %d sec%s",
-                        p.working.minutes, p.working.minutes == 1 ? "" : "s",
-                        p.working.seconds, p.working.seconds == 1 ? "" : "s"];
-                }
-                else
-                {
-                    [string appendFormat: @"%d second%s",
-                        p.working.seconds, p.working.seconds == 1 ? "" : "s"];
-                }
-                [string appendString: @" left)"];
-            }
-            [fConvertInfoString setStringValue: string];
-            [fConvertIndicator setIndeterminate: NO];
-            [fConvertIndicator setDoubleValue: 100.0 * progress_total];
-            [self UpdateDockIcon: progress_total];
-
+    NSMutableString * string = [NSMutableString stringWithFormat: @"Converting: %.1f %%", 100.0 * progress_total];
+    
+    if( p.working.seconds > -1 )
+    {
+        [string appendFormat: @" (%.1f fps, ", p.working.rate_avg];
+        if( p.working.hours > 0 )
+        {
+        [string appendFormat: @"%d hour%s %d min%s",
+            p.working.hours, p.working.hours == 1 ? "" : "s",
+            p.working.minutes, p.working.minutes == 1 ? "" : "s"];
+        }
+        else if( p.working.minutes > 0 )
+        {
+            [string appendFormat: @"%d min%s %d sec%s",
+                p.working.minutes, p.working.minutes == 1 ? "" : "s",
+                p.working.seconds, p.working.seconds == 1 ? "" : "s"];
+        }
+        else
+        {
+            [string appendFormat: @"%d second%s",
+                p.working.seconds, p.working.seconds == 1 ? "" : "s"];
+        }
+            [string appendString: @" left)"];
+    }
+    
+    [fConvertInfoString setStringValue: string];
+    [fConvertIndicator setIndeterminate: NO];
+    [fConvertIndicator setDoubleValue: 100.0 * progress_total];
+    [self UpdateDockIcon: progress_total];
 }
 
 - (void) muxing: (NSNotification *) n
@@ -749,11 +750,7 @@
         
     [fConvertInfoString setStringValue: NSLocalizedString(@"Done.",@"Done.")];
 
-    hb_job_t * job;
-    while( ( job = hb_job( fHandle, 0 ) ) )
-    {
-        hb_rem( fHandle, job );
-    }
+    [fCore removeAllJobs];
 }
 
 @end

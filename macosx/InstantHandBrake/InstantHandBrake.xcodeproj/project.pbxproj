@@ -14,6 +14,7 @@
 		4D3ECC2709A4917000B2E45F /* WhiteBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D3ECC2609A4917000B2E45F /* WhiteBox.m */; };
 		52AFF86B0B59BD14000DA7C4 /* Express.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4D1EA2DC0993B01000FDC1A2 /* Express.plist */; };
 		A2122D820C7EAF6600AB87A4 /* DriveDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = A2122D810C7EAF6600AB87A4 /* DriveDetector.m */; };
+		A952EBCE0D3BB1B100A3DCA7 /* Open.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A952EBCD0D3BB1B100A3DCA7 /* Open.tiff */; };
 		A9B706E60D356BC800385AF2 /* Growl.framework in Resources */ = {isa = PBXBuildFile; fileRef = A9B706E50D356BC800385AF2 /* Growl.framework */; };
 		A9B70A030D3570F100385AF2 /* HandBrake.icns in Resources */ = {isa = PBXBuildFile; fileRef = A9B70A020D3570F100385AF2 /* HandBrake.icns */; };
 		A9B70A0F0D35719900385AF2 /* HBCore.m in Sources */ = {isa = PBXBuildFile; fileRef = A9B70A0D0D35719900385AF2 /* HBCore.m */; };
@@ -69,6 +70,7 @@
 		4DEB2024052B055F00C39CA9 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		A2122D800C7EAF6500AB87A4 /* DriveDetector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DriveDetector.h; sourceTree = "<group>"; };
 		A2122D810C7EAF6600AB87A4 /* DriveDetector.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DriveDetector.m; sourceTree = "<group>"; };
+		A952EBCD0D3BB1B100A3DCA7 /* Open.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Open.tiff; sourceTree = "<group>"; };
 		A9B706E50D356BC800385AF2 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Growl.framework; path = ../Growl.framework; sourceTree = SOURCE_ROOT; };
 		A9B70A010D3570D300385AF2 /* hb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hb.h; path = ../../libhb/hb.h; sourceTree = SOURCE_ROOT; };
 		A9B70A020D3570F100385AF2 /* HandBrake.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = HandBrake.icns; path = ../HandBrake.icns; sourceTree = SOURCE_ROOT; };
@@ -106,7 +108,7 @@
 		29B97314FDCFA39411CA2CEA /* HandBrake */ = {
 			isa = PBXGroup;
 			children = (
-				526FBC940B4CAA310064E04C /* Instant HandBrake Sources */,
+				526FBC940B4CAA310064E04C /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
@@ -127,6 +129,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A952EBCD0D3BB1B100A3DCA7 /* Open.tiff */,
 				A9ED4EEF0D36226F004341F5 /* Play.tiff */,
 				A9ED4EF00D36226F004341F5 /* Pause.tiff */,
 				A9ED4EF10D36226F004341F5 /* Stop.tiff */,
@@ -150,7 +153,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		526FBC940B4CAA310064E04C /* Instant HandBrake Sources */ = {
+		526FBC940B4CAA310064E04C /* Classes */ = {
 			isa = PBXGroup;
 			children = (
 				4D3ECC2509A4917000B2E45F /* WhiteBox.h */,
@@ -162,7 +165,7 @@
 				A9B70A0E0D35719900385AF2 /* HBCore.h */,
 				A9B70A0D0D35719900385AF2 /* HBCore.m */,
 			);
-			name = "Instant HandBrake Sources";
+			name = Classes;
 			sourceTree = "<group>";
 		};
 		A9DB3A090D37EC2800F77345 /* Products */ = {
@@ -258,6 +261,7 @@
 				A9ED4EF30D36226F004341F5 /* Pause.tiff in Resources */,
 				A9ED4EF40D36226F004341F5 /* Stop.tiff in Resources */,
 				A9ED502E0D36477D004341F5 /* Express.xib in Resources */,
+				A952EBCE0D3BB1B100A3DCA7 /* Open.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -298,7 +302,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		0D88F56D0B6CDCD400F81F26 /* UB */ = {
+		0D88F56D0B6CDCD400F81F26 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = ..;
@@ -348,21 +352,25 @@
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
-			name = UB;
+			name = Release;
 		};
-		0D88F56F0B6CDCD400F81F26 /* UB */ = {
+		0D88F56F0B6CDCD400F81F26 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = (
 					ppc,
 					i386,
 				);
+				GCC_AUTO_VECTORIZATION = YES;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_PREPROCESSOR_DEFINITIONS = "JOB_GROUPS=1";
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
 			};
-			name = UB;
+			name = Release;
 		};
 		4D1EA2DE0993B01100FDC1A2 /* Development */ = {
 			isa = XCBuildConfiguration;
@@ -433,10 +441,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_AUTO_VECTORIZATION = NO;
 				GCC_DEBUGGING_SYMBOLS = default;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_SSE3_EXTENSIONS = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "JOB_GROUPS=1";
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				PREBINDING = NO;
 				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
@@ -451,6 +464,7 @@
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_PREPROCESSOR_DEFINITIONS = "JOB_GROUPS=1";
+				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
@@ -465,7 +479,7 @@
 			buildConfigurations = (
 				4D1EA2DE0993B01100FDC1A2 /* Development */,
 				4D1EA2DF0993B01100FDC1A2 /* Deployment */,
-				0D88F56D0B6CDCD400F81F26 /* UB */,
+				0D88F56D0B6CDCD400F81F26 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Deployment;
@@ -475,7 +489,7 @@
 			buildConfigurations = (
 				4D4E7BC5087804870051572B /* Development */,
 				4D4E7BC6087804870051572B /* Deployment */,
-				0D88F56F0B6CDCD400F81F26 /* UB */,
+				0D88F56F0B6CDCD400F81F26 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Deployment;
