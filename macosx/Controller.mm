@@ -1700,6 +1700,19 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             [fDstFile2Field stringValue]] );
         // overwriteAddToQueueAlertDone: will be called when the alert is dismissed.
     }
+    
+    // Warn if another pending job in the queue has the same destination path
+    else if ([fQueueController pendingJobGroupWithDestinationPath:[fDstFile2Field stringValue]] != nil)
+    {
+        NSBeginCriticalAlertSheet( _( @"Another queued encode has specified the same destination." ),
+            _( @"Cancel" ), _( @"Overwrite" ), NULL, fWindow, self,
+            @selector( overwriteAddToQueueAlertDone:returnCode:contextInfo: ),
+            NULL, NULL, [NSString stringWithFormat:
+            _( @"Do you want to overwrite %@?" ),
+            [fDstFile2Field stringValue]] );
+        // overwriteAddToQueueAlertDone: will be called when the alert is dismissed.
+    }
+    
     else
     {
         [self doAddToQueue];

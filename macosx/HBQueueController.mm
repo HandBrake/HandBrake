@@ -805,7 +805,7 @@ NSString *HBJobGroupStatusNotification = @"HBJobGroupStatusNotification";
     return firstJob ? firstJob->titleName : nil;
 }
 
-- (NSString *) path
+- (NSString *) destinationPath
 {
     HBJob * firstJob = [self jobAtIndex:0];
     return firstJob ? firstJob->file : nil;
@@ -907,6 +907,8 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
     return fCurrentJob;
 }
 
+#pragma mark -
+
 //------------------------------------------------------------------------------------
 // Displays and brings the queue window to the front
 //------------------------------------------------------------------------------------
@@ -974,6 +976,24 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
     [aJobGroup retain];
     [fCurrentJobGroup release];
     fCurrentJobGroup = aJobGroup;
+}
+
+#pragma mark - Finding job groups
+
+//------------------------------------------------------------------------------------
+// Returns the first pending job with a specified destination path or nil if no such
+// job exists.
+//------------------------------------------------------------------------------------
+- (HBJobGroup *) pendingJobGroupWithDestinationPath: (NSString *)path
+{
+    HBJobGroup * aJobGroup;
+    NSEnumerator * groupEnum = [fJobGroups objectEnumerator];
+    while ( (aJobGroup = [groupEnum nextObject]) )
+    {
+        if ([[aJobGroup destinationPath] isEqualToString: path])
+            return aJobGroup;
+    }
+    return nil;
 }
 
 //------------------------------------------------------------------------------------
@@ -1604,8 +1624,8 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
         while (row != NSNotFound)
         {
             HBJobGroup * jobGroup = [fOutlineView itemAtRow: row];
-            if ([[jobGroup path] length])
-                [[NSWorkspace sharedWorkspace] selectFile:[jobGroup path] inFileViewerRootedAtPath:nil];
+            if ([[jobGroup destinationPath] length])
+                [[NSWorkspace sharedWorkspace] selectFile:[jobGroup destinationPath] inFileViewerRootedAtPath:nil];
         
             row = [selectedRows indexGreaterThanIndex: row];
         }

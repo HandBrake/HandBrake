@@ -178,7 +178,7 @@ BOOL                        fIsDragging;
 - (HBQueueJobGroupStatus)  status;
 - (void)               setPresetName: (NSString *)name;
 - (NSString *)         presetName;
-- (NSString *)         path;
+- (NSString *)         destinationPath;
 - (NSString *)         name;
 
 // Creating a description
@@ -263,6 +263,9 @@ BOOL                        fIsDragging;
 // Getting the currently processing job group
 - (HBJobGroup *) currentJobGroup;
 - (HBJob *) currentJob;
+
+// Getting job groups
+- (HBJobGroup *) pendingJobGroupWithDestinationPath: (NSString *)path;
 
 // Getting queue statistics
 - (unsigned int) pendingCount;

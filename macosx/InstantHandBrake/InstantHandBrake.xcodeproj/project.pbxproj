@@ -29,28 +29,28 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = A9DB3A080D37EC2800F77345 /* libhb.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 0DFF0B720B6BC6E600549488 /* libhb.a */;
+			remoteGlobalIDString = 0DFF0B720B6BC6E600549488;
 			remoteInfo = libhb;
 		};
 		A9DB3A100D37EC2800F77345 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A9DB3A080D37EC2800F77345 /* libhb.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 0D096DFF0B707D1200A845D4 /* libhb.dylib */;
+			remoteGlobalIDString = 0D096DFF0B707D1200A845D4;
 			remoteInfo = "libhb dlib";
 		};
 		A9DB3A120D37EC2800F77345 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A9DB3A080D37EC2800F77345 /* libhb.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = A9DB38E00D37E9BA00F77345 /* HB.framework */;
+			remoteGlobalIDString = A9DB38E00D37E9BA00F77345;
 			remoteInfo = HB;
 		};
 		A9DB3A140D37EC4200F77345 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A9DB3A080D37EC2800F77345 /* libhb.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 0DFF0B710B6BC6E600549488 /* libhb */;
+			remoteGlobalIDString = 0DFF0B710B6BC6E600549488;
 			remoteInfo = libhb;
 		};
 /* End PBXContainerItemProxy section */
