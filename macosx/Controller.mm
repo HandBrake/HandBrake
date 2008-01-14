@@ -525,6 +525,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	{
 		
 		currentScanCount = checkScanCount;
+        [fScanIndicator setIndeterminate: NO];
+        [fScanIndicator setDoubleValue: 0.0];
+        [fScanIndicator setHidden: YES];
 		[self showNewScan: NULL];
 	}
 	
@@ -539,18 +542,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 #define p s.param.scanning			
         case HB_STATE_SCANNING:
 		{
-            
             [fSrcDVD2Field setStringValue: [NSString stringWithFormat:
                                             _( @"Scanning title %d of %d..." ),
                                             p.title_cur, p.title_count]];
-            float scanprogress_total;
-            scanprogress_total = ( p.title_cur - 1 ) / p.title_count;
-            /* FIX ME: currently having an issue showing progress on the scan
-             * indicator ( fScanIndicator ), for now just set to barber pole (indeterminate) in -performScan
-             * and stop indeterminate in -showNewScan .
-             */
-            //[fScanIndicator setHidden: NO];
-            //[fScanIndicator setDoubleValue: 100.0 * scanprogress_total];
+            [fScanIndicator setHidden: NO];
+            [fScanIndicator setDoubleValue: 100.0 * ( p.title_cur - 1 ) / p.title_count];
             break;
 		}
 #undef p
@@ -558,6 +554,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 #define p s.param.scandone
         case HB_STATE_SCANDONE:
         {
+            [fScanIndicator setIndeterminate: NO];
+            [fScanIndicator setDoubleValue: 0.0];
+            [fScanIndicator setHidden: YES];
 			[self showNewScan: NULL];
             [toolbar validateVisibleItems];
 			break;
@@ -1242,8 +1241,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     {
         /* We setup the scan status in the main window to indicate a source title scan */
         [fSrcDVD2Field setStringValue: @"Opening a new source title ..."];
-		//[fScanIndicator setHidden: NO];
-	    [fScanIndicator setIndeterminate: YES];
+		[fScanIndicator setHidden: NO];
+        [fScanIndicator setIndeterminate: YES];
         [fScanIndicator startAnimation: nil];
 		
         /* We use the performScan method to actually perform the specified scan passing the path and the title
@@ -1278,9 +1277,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [self writeToActivityLog: "scanning specifically for title: %d", scanTitleNum];
     }
     [fSrcDVD2Field setStringValue: [NSString stringWithFormat: @"Scanning new source ..."]];
-    /* due to issue with progress in the scan indicator, we are starting the
-    indeterminate animation here */
-    [fScanIndicator startAnimation: self];
     /* we actually pass the scan off to libhb here */
     hb_scan( fHandle, [path UTF8String], scanTitleNum );
     
@@ -1288,10 +1284,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 - (IBAction) showNewScan:(id)sender
 {
-	/* due to issue with progress in the scan indicator, we are stopping the
-    indeterminate animation here */
-    [fScanIndicator stopAnimation: self];
-    
     hb_list_t  * list;
 	hb_title_t * title;
 	int indxpri=0; 	  // Used to search the longuest title (default in combobox)
