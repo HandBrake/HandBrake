@@ -158,7 +158,9 @@ static void do_job( hb_job_t * job, int cpu_count )
     hb_log( " + %dx%d -> %dx%d, crop %d/%d/%d/%d",
             title->width, title->height, job->width, job->height,
             job->crop[0], job->crop[1], job->crop[2], job->crop[3] );
-    hb_log( " + grayscale %s", job->grayscale ? "on" : "off" );
+
+    if ( job->grayscale )
+        hb_log( " + grayscale mode" );
     
     if ( job->vfr )
     {
