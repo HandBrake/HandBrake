@@ -359,7 +359,7 @@ rule LibX264
     {
         LIBX264_PATCH += " $(PATCH) -p1 < ../patch-x264-solaris.patch && " ;
     }
-#    LIBX264_PATCH += "$(PATCH) -p0 < ../patch-x264-aq.patch && " ;
+# AQ is temporarily disabled    LIBX264_PATCH += "$(PATCH) -p0 < ../patch-x264-aq.patch && " ;
     LIBX264_PATCH += "$(PATCH) -p0 < ../patch-x264-idr.patch && " ;
     LIBX264_PATCH += "$(PATCH) -p0 < ../patch-x264-vbv-2pass.patch && " ;
     Depends $(<) : $(>) ;
