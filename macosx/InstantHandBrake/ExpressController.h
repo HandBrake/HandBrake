@@ -49,6 +49,7 @@
 - (void) openBrowse: (id) sender;
 - (void) openGo: (id) sender;
 
+- (void) selectFolderSheetShow: (id) sender;
 - (void) convertGo: (id) sender;
 - (void) convertCancel: (id) sender;
 

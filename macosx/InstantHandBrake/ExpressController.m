@@ -15,6 +15,7 @@
     returnCode contextInfo: (void *) contextInfo;
 - (void) openEnable: (BOOL) b;
 
+- (id) updatePopUpIcon: (id) value;
 - (void) convertShow;
 - (void) convertEnable: (BOOL) b;
 
@@ -271,6 +272,38 @@
         hb_scan( fHandle, [[fDrives objectForKey: [fOpenPopUp
                  titleOfSelectedItem]] UTF8String], 0 );
     }
+}
+
+- (void) selectFolderSheetShow: (id) sender
+{
+    NSOpenPanel * panel = [NSOpenPanel openPanel];
+
+    [panel setPrompt: NSLocalizedString(@"Select", "Convert -> Save panel prompt")];
+    [panel setAllowsMultipleSelection: NO];
+    [panel setCanChooseFiles: NO];
+    [panel setCanChooseDirectories: YES];
+    [panel setCanCreateDirectories: YES];
+
+    [panel beginSheetForDirectory: nil file: nil types: nil
+        modalForWindow: fWindow modalDelegate: self didEndSelector:
+        @selector(selectFolderSheetClosed:returnCode:contextInfo:) contextInfo: nil];
+}
+
+- (void) selectFolderSheetClosed: (NSOpenPanel *) sheet returnCode: (int)
+    returnCode contextInfo: (void *) contextInfo
+{
+    if( returnCode != NSOKButton )
+        return;
+
+    if( fConvertFolderString )
+        [fConvertFolderString release];
+    fConvertFolderString = [[[sheet filenames] objectAtIndex: 0] retain];
+    [[fConvertFolderPopUp itemAtIndex: 0] setTitle: [fConvertFolderString lastPathComponent]];
+    [fConvertFolderPopUp selectItemAtIndex:0];
+    
+    NSMenuItem * item = [fConvertFolderPopUp itemAtIndex: 0];
+    [item setImage: [self updatePopUpIcon:fConvertFolderString]];
+    
 }
 
 - (void) convertGo: (id) sender
@@ -584,23 +617,10 @@
     [fToolbar setVisible:YES];
     [fWindow setContentView: fConvertView];
 
-    /* Folder popup */
     NSMenuItem * item = [fConvertFolderPopUp itemAtIndex: 0];
     [item setTitle: [fConvertFolderString lastPathComponent]];
-    NSImage * image32 = [[NSWorkspace sharedWorkspace] iconForFile:
-        fConvertFolderString];
-    NSImage * image16 = [[NSImage alloc] initWithSize:
-        NSMakeSize(16,16)];
-    [image16 lockFocus];
-    [[NSGraphicsContext currentContext]
-        setImageInterpolation: NSImageInterpolationHigh];
-    [image32 drawInRect: NSMakeRect(0,0,16,16)
-        fromRect: NSMakeRect(0,0,32,32) operation: NSCompositeCopy
-        fraction: 1.0];
-    [image16 unlockFocus];                                                      
-    [item setImage: image16];
-    [image16 release];
-
+    [item setImage: [self updatePopUpIcon:fConvertFolderString]];
+    
     [self convertEnable: YES];
 }
 
@@ -697,6 +717,21 @@
     icon = [[NSImage alloc] initWithData: tiff];
     [NSApp setApplicationIconImage: icon];
     [icon release];
+}
+
+- (id) updatePopUpIcon: (id) value
+{
+    if (!value)
+        return nil;
+    
+    NSImage * icon;
+    
+    icon = [[NSWorkspace sharedWorkspace] iconForFile: value];
+    
+    [icon setScalesWhenResized: YES];
+    [icon setSize: NSMakeSize(16.0, 16.0)];
+    
+    return icon;
 }
 
 - (void) working: (NSNotification *) n
