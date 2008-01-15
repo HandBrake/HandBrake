@@ -112,16 +112,16 @@ static int MKVInit( hb_mux_object_t * m )
             return 0;
     }
 
-    track->video.pixelWidth = job->width;
-    track->video.pixelHeight = job->height;
-    track->video.displayHeight = job->height;
+    track->extra.video.pixelWidth = job->width;
+    track->extra.video.pixelHeight = job->height;
+    track->extra.video.displayHeight = job->height;
     if(job->pixel_ratio)
     {
-        track->video.displayWidth = job->width * ((double)job->pixel_aspect_width / (double)job->pixel_aspect_height);
+        track->extra.video.displayWidth = job->width * ((double)job->pixel_aspect_width / (double)job->pixel_aspect_height);
     }
     else
     {
-        track->video.displayWidth = job->width;
+        track->extra.video.displayWidth = job->width;
     }
 
 
@@ -191,8 +191,8 @@ static int MKVInit( hb_mux_object_t * m )
         track->flagEnabled = 1;
         track->trackType = MK_TRACK_AUDIO;
         track->language = audio->iso639_2;
-        track->audio.samplingFreq = (float)job->arate;
-        track->audio.channels = (job->acodec == HB_ACODEC_AC3) ? HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(audio->input_channel_layout) : HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown);
+        track->extra.audio.samplingFreq = (float)job->arate;
+        track->extra.audio.channels = (job->acodec == HB_ACODEC_AC3) ? HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(audio->input_channel_layout) : HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown);
 //        track->defaultDuration = job->arate * 1000;
         mux_data->track = mk_createTrack(m->file, track);
         if (job->acodec == HB_ACODEC_VORBIS && track->codecPrivate != NULL)
