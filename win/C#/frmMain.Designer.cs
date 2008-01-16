@@ -37,7 +37,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label Label38;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -133,7 +133,6 @@ namespace Handbrake
             this.label25 = new System.Windows.Forms.Label();
             this.lbl_vfr = new System.Windows.Forms.Label();
             this.check_iPodAtom = new System.Windows.Forms.CheckBox();
-            this.check_grayscale = new System.Windows.Forms.CheckBox();
             this.lbl_largeMp4Warning = new System.Windows.Forms.Label();
             this.Label22 = new System.Windows.Forms.Label();
             this.check_2PassEncode = new System.Windows.Forms.CheckBox();
@@ -142,6 +141,7 @@ namespace Handbrake
             this.SliderValue = new System.Windows.Forms.Label();
             this.Label46 = new System.Windows.Forms.Label();
             this.Label40 = new System.Windows.Forms.Label();
+            this.check_grayscale = new System.Windows.Forms.CheckBox();
             this.TabPage1 = new System.Windows.Forms.TabPage();
             this.text_bottom = new System.Windows.Forms.NumericUpDown();
             this.text_top = new System.Windows.Forms.NumericUpDown();
@@ -441,7 +441,7 @@ namespace Handbrake
             this.check_largeFile.AutoSize = true;
             this.check_largeFile.BackColor = System.Drawing.Color.Transparent;
             this.check_largeFile.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_largeFile.Location = new System.Drawing.Point(16, 107);
+            this.check_largeFile.Location = new System.Drawing.Point(16, 80);
             this.check_largeFile.Name = "check_largeFile";
             this.check_largeFile.Size = new System.Drawing.Size(170, 17);
             this.check_largeFile.TabIndex = 4;
@@ -456,7 +456,7 @@ namespace Handbrake
             this.check_turbo.BackColor = System.Drawing.Color.Transparent;
             this.check_turbo.Enabled = false;
             this.check_turbo.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_turbo.Location = new System.Drawing.Point(37, 84);
+            this.check_turbo.Location = new System.Drawing.Point(37, 57);
             this.check_turbo.Name = "check_turbo";
             this.check_turbo.Size = new System.Drawing.Size(122, 17);
             this.check_turbo.TabIndex = 3;
@@ -1260,7 +1260,6 @@ namespace Handbrake
             this.TabPage3.Controls.Add(this.label25);
             this.TabPage3.Controls.Add(this.lbl_vfr);
             this.TabPage3.Controls.Add(this.check_iPodAtom);
-            this.TabPage3.Controls.Add(this.check_grayscale);
             this.TabPage3.Controls.Add(this.lbl_largeMp4Warning);
             this.TabPage3.Controls.Add(this.check_largeFile);
             this.TabPage3.Controls.Add(this.check_turbo);
@@ -1289,7 +1288,7 @@ namespace Handbrake
             this.lbl_ipodAtom.BackColor = System.Drawing.Color.Transparent;
             this.lbl_ipodAtom.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_ipodAtom.ForeColor = System.Drawing.Color.Red;
-            this.lbl_ipodAtom.Location = new System.Drawing.Point(132, 151);
+            this.lbl_ipodAtom.Location = new System.Drawing.Point(132, 124);
             this.lbl_ipodAtom.Name = "lbl_ipodAtom";
             this.lbl_ipodAtom.Size = new System.Drawing.Size(91, 12);
             this.lbl_ipodAtom.TabIndex = 29;
@@ -1324,7 +1323,7 @@ namespace Handbrake
             this.check_iPodAtom.AutoSize = true;
             this.check_iPodAtom.BackColor = System.Drawing.Color.Transparent;
             this.check_iPodAtom.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_iPodAtom.Location = new System.Drawing.Point(16, 146);
+            this.check_iPodAtom.Location = new System.Drawing.Point(16, 119);
             this.check_iPodAtom.Name = "check_iPodAtom";
             this.check_iPodAtom.Size = new System.Drawing.Size(110, 17);
             this.check_iPodAtom.TabIndex = 26;
@@ -1332,24 +1331,12 @@ namespace Handbrake
             this.check_iPodAtom.UseVisualStyleBackColor = false;
             this.check_iPodAtom.CheckedChanged += new System.EventHandler(this.check_iPodAtom_CheckedChanged);
             // 
-            // check_grayscale
-            // 
-            this.check_grayscale.AutoSize = true;
-            this.check_grayscale.BackColor = System.Drawing.Color.Transparent;
-            this.check_grayscale.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_grayscale.Location = new System.Drawing.Point(16, 38);
-            this.check_grayscale.Name = "check_grayscale";
-            this.check_grayscale.Size = new System.Drawing.Size(138, 17);
-            this.check_grayscale.TabIndex = 1;
-            this.check_grayscale.Text = "Grayscale Encoding";
-            this.check_grayscale.UseVisualStyleBackColor = false;
-            // 
             // lbl_largeMp4Warning
             // 
             this.lbl_largeMp4Warning.AutoSize = true;
             this.lbl_largeMp4Warning.BackColor = System.Drawing.Color.Transparent;
             this.lbl_largeMp4Warning.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_largeMp4Warning.Location = new System.Drawing.Point(35, 127);
+            this.lbl_largeMp4Warning.Location = new System.Drawing.Point(35, 100);
             this.lbl_largeMp4Warning.Name = "lbl_largeMp4Warning";
             this.lbl_largeMp4Warning.Size = new System.Drawing.Size(241, 12);
             this.lbl_largeMp4Warning.TabIndex = 5;
@@ -1371,7 +1358,7 @@ namespace Handbrake
             this.check_2PassEncode.AutoSize = true;
             this.check_2PassEncode.BackColor = System.Drawing.Color.Transparent;
             this.check_2PassEncode.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_2PassEncode.Location = new System.Drawing.Point(16, 61);
+            this.check_2PassEncode.Location = new System.Drawing.Point(16, 34);
             this.check_2PassEncode.Name = "check_2PassEncode";
             this.check_2PassEncode.Size = new System.Drawing.Size(119, 17);
             this.check_2PassEncode.TabIndex = 2;
@@ -1434,6 +1421,18 @@ namespace Handbrake
             this.Label40.TabIndex = 13;
             this.Label40.Text = "Constant Quality:";
             // 
+            // check_grayscale
+            // 
+            this.check_grayscale.AutoSize = true;
+            this.check_grayscale.BackColor = System.Drawing.Color.Transparent;
+            this.check_grayscale.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_grayscale.Location = new System.Drawing.Point(16, 217);
+            this.check_grayscale.Name = "check_grayscale";
+            this.check_grayscale.Size = new System.Drawing.Size(138, 17);
+            this.check_grayscale.TabIndex = 1;
+            this.check_grayscale.Text = "Grayscale Encoding";
+            this.check_grayscale.UseVisualStyleBackColor = false;
+            // 
             // TabPage1
             // 
             this.TabPage1.BackColor = System.Drawing.SystemColors.ControlLight;
@@ -1441,6 +1440,7 @@ namespace Handbrake
             this.TabPage1.Controls.Add(this.text_top);
             this.TabPage1.Controls.Add(this.text_left);
             this.TabPage1.Controls.Add(this.text_right);
+            this.TabPage1.Controls.Add(this.check_grayscale);
             this.TabPage1.Controls.Add(this.label26);
             this.TabPage1.Controls.Add(this.Label56);
             this.TabPage1.Controls.Add(this.lbl_Aspect);
@@ -1883,9 +1883,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle2.Format = "N0";
-            dataGridViewCellStyle2.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle1;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";

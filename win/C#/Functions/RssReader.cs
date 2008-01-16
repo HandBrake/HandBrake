@@ -28,7 +28,7 @@ namespace Handbrake.Functions
 
         private string readRss()
         {
-            rssReader = new XmlTextReader("http://handbrake.m0k.org/appcast.xml");
+            rssReader = new XmlTextReader("http://handbrake.fr/appcast.xml");
             rssDoc = new XmlDocument();
             rssDoc.Load(rssReader);
 

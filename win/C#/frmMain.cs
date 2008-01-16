@@ -105,9 +105,10 @@ namespace Handbrake
                 Thread.Sleep(100);
             }
 
-            // Make sure a default cropping option is selected. Not sure why this is not defaulting like the other checkdowns,
-            // Can fix it later.
-            drp_crop.SelectedItem = "Automatic";
+            // Set some defaults for the dropdown menus. Just incase the normal or user presets dont load.
+            drp_crop.SelectedIndex = 0;
+            drp_videoEncoder.SelectedIndex = 2;
+            drp_audioCodec.SelectedIndex = 0;
 
             //Finished Loading
             lblStatus.Text = "Loading Complete!";
@@ -902,6 +903,8 @@ namespace Handbrake
                 check_iPodAtom.Checked = false;
                 lbl_ipodAtom.Visible = false;
                 check_optimiseMP4.Enabled = false;
+                check_lAnamorphic.Enabled = false;
+                check_lAnamorphic.Checked = false;
             }
             else
             {
@@ -912,6 +915,7 @@ namespace Handbrake
                 check_iPodAtom.Enabled = true;
                 lbl_ipodAtom.Visible = false;
                 check_optimiseMP4.Enabled = true;
+                check_lAnamorphic.Enabled = true;
             }
 
         }
@@ -990,16 +994,21 @@ namespace Handbrake
         // Function to select the default preset.
         private void loadNormalPreset()
         {
-            int normal = 0;
-            foreach (TreeNode treenode in treeView_presets.Nodes)
+            string appPath = Application.StartupPath.ToString() + "\\presets.dat";
+            if (File.Exists(appPath))
             {
-                if (treenode.ToString().Equals("TreeNode: Normal"))
-                    normal = treenode.Index;
+
+                int normal = 0;
+                foreach (TreeNode treenode in treeView_presets.Nodes)
+                {
+                    if (treenode.ToString().Equals("TreeNode: Normal"))
+                        normal = treenode.Index;
+                }
+
+                TreeNode np = treeView_presets.Nodes[normal];
+
+                treeView_presets.SelectedNode = np;
             }
-
-            TreeNode np = treeView_presets.Nodes[normal];
-
-            treeView_presets.SelectedNode = np;
         }
 
         // Buttons
@@ -1020,33 +1029,38 @@ namespace Handbrake
 
             try
             {
-                string appPath = Application.StartupPath.ToString() + "\\";
-                StreamReader presetInput = new StreamReader(appPath + "presets.dat");
-
-                while (!presetInput.EndOfStream)
+                string appPath = Application.StartupPath.ToString() + "\\presets.dat";
+                if (File.Exists(appPath))
                 {
-                    if ((char)presetInput.Peek() == '+')
+                    StreamReader presetInput = new StreamReader(appPath);
+                    while (!presetInput.EndOfStream)
                     {
-                        string preset = presetInput.ReadLine().Replace("+ ", "");
-                        Regex r = new Regex("(:  )"); // Split on hyphens. 
-                        string[] presetName = r.Split(preset);
-
-
-                        if (selectedPreset == presetName[0])
+                        if ((char)presetInput.Peek() == '+')
                         {
-                            // Need to disable anamorphic now, otherwise it may overide the width / height values later.
-                            CheckPixelRatio.CheckState = CheckState.Unchecked;
+                            string preset = presetInput.ReadLine().Replace("+ ", "");
+                            Regex r = new Regex("(:  )"); // Split on hyphens. 
+                            string[] presetName = r.Split(preset);
 
-                            // Send the query from the file to the Query Parser class
-                            Functions.QueryParser presetQuery = Functions.QueryParser.Parse(preset);
 
-                            // Now load the preset
-                            hb_common_func.presetLoader(this, presetQuery, selectedPreset);
+                            if (selectedPreset == presetName[0])
+                            {
+                                // Need to disable anamorphic now, otherwise it may overide the width / height values later.
+                                CheckPixelRatio.CheckState = CheckState.Unchecked;
+
+                                // Send the query from the file to the Query Parser class
+                                Functions.QueryParser presetQuery = Functions.QueryParser.Parse(preset);
+
+                                // Now load the preset
+                                hb_common_func.presetLoader(this, presetQuery, selectedPreset);
+                            }
                         }
-
+                        else
+                            presetInput.ReadLine();
                     }
-                    else
-                        presetInput.ReadLine();
+                }
+                else
+                {
+                    MessageBox.Show("Unable to load the presets.dat file. Please select \"Update Built-in Presets\" from the Presets Menu \nMake sure you are running the program in Admin mode if running on Vista. See Windows FAQ for details!", "Error",  MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception exc)

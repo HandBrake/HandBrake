@@ -51,9 +51,13 @@ namespace Handbrake
         {
             Functions.RssReader rssRead = new Functions.RssReader();
 
-            string appPath = Application.StartupPath.ToString() + "\\";
-            string hbUpdate = rssRead.downloadFile(); 
-            string downloadPath = appPath + "Handbrake-win.exe";
+            string tempPath = Path.Combine(Path.GetTempPath(), "handbrake-setup.exe");
+
+            if (File.Exists(tempPath))
+                File.Delete(tempPath);
+
+            string hbUpdate = rssRead.downloadFile();
+
             WebClient wcDownload = new WebClient();
                 try
                 {
@@ -63,7 +67,7 @@ namespace Handbrake
                     Int64 fileSize = webResponse.ContentLength;
 
                     responceStream = wcDownload.OpenRead(hbUpdate);
-                    loacalStream = new FileStream(downloadPath, FileMode.Create, FileAccess.Write, FileShare.None);
+                    loacalStream = new FileStream(tempPath, FileMode.Create, FileAccess.Write, FileShare.None);
 
                     int bytesSize = 0;
                     byte[] downBuffer = new byte[2048];
@@ -110,14 +114,11 @@ namespace Handbrake
             lblProgress.Text = "Download Complete";
             btn_cancel.Text = "Close";
 
-            string appPath = Application.StartupPath.ToString() + "\\";
-            
-            Process hbproc = Process.Start(appPath + "Handbrake-win.exe");
-            hbproc.WaitForExit();
-            hbproc.Dispose();
-            hbproc.Close();
+            string tempPath = Path.Combine(Path.GetTempPath(), "handbrake-setup.exe");
 
+            Process startInstall = Process.Start(tempPath);
             this.Close();
+            Application.Exit();
         }
 
         private void downloadFailed()
@@ -128,13 +129,20 @@ namespace Handbrake
 
         private void btn_cancel_Click(object sender, EventArgs e)
         {
-            webResponse.Close();
-            responceStream.Close();
-            loacalStream.Close();
-            downloadThread.Abort();
-            progress_download.Value = 0;
-            lblProgress.Text = "Download Stopped";
-            this.Close();
+            try
+            {
+                webResponse.Close();
+                responceStream.Close();
+                loacalStream.Close();
+                downloadThread.Abort();
+                progress_download.Value = 0;
+                lblProgress.Text = "Download Stopped";
+                this.Close();
+            }
+            catch (Exception)
+            {
+                // Do nothing
+            }
         }
     }
 }
