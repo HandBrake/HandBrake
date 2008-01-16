@@ -5,8 +5,7 @@
  	   It may be used under the terms of the GNU General Public License. */
 
 using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
+using System.Collections;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -73,18 +72,12 @@ namespace Handbrake
                 Thread.Sleep(100);
             }
 
-            // Update the presets
-            if (Properties.Settings.Default.updatePresets == "Checked")
-            {
-                lblStatus.Text = "Updaing Presets ...";
-                Application.DoEvents();
-                grabCLIPresets();
-                Thread.Sleep(200);
-            }
-
-            // Load the presets for the preset box
-            updatePresets();
-
+            // Load the presets
+            lblStatus.Text = "Loading Presets ...";
+            Application.DoEvents();
+            loadPresetPanel();
+            Thread.Sleep(200);
+      
             // Now load the users default if required. (Will overide the above setting)
             if (Properties.Settings.Default.defaultSettings == "Checked")
             {
@@ -283,8 +276,11 @@ namespace Handbrake
         {
             treeView_presets.Nodes.Clear();
             grabCLIPresets();
-            updatePresets();
-            MessageBox.Show("Presets have been updated", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            loadPresetPanel();
+            if (treeView_presets.Nodes.Count == 0)
+                MessageBox.Show("Unable to load the presets.dat file. Please select \"Update Built-in Presets\" from the Presets Menu \nMake sure you are running the program in Admin mode if running on Vista. See Windows FAQ for details!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+                MessageBox.Show("Presets have been updated", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void mnu_SelectDefault_Click(object sender, EventArgs e)
@@ -949,38 +945,38 @@ namespace Handbrake
         #region Preset System
 
         // Import Current Presets
-        private void updatePresets()
+        private void loadPresetPanel()
         {
-            string[] presets = new string[17];
-            presets[0] = "Animation";
-            presets[1] = "AppleTV";
-            presets[2] = "Bedlam";
-            presets[3] = "Blind";
-            presets[4] = "Broke";
-            presets[5] = "Classic";
-            presets[6] = "Constant Quality Rate";
-            presets[7] = "Deux Six Quatre";
-            presets[8] = "Film";
-            presets[9] = "iPhone / iPod Touch";
-            presets[10] = "iPod High-Rez";
-            presets[11] = "iPod Low-Rez";
-            presets[12] = "Normal";
-            presets[13] = "PS3";
-            presets[14] = "PSP";
-            presets[15] = "QuickTime";
-            presets[16] = "Television";
-
+            ArrayList presetNameList = new ArrayList();
+       
+                string appPath = Application.StartupPath.ToString() + "\\presets.dat";
+                if (File.Exists(appPath))
+                {
+                    StreamReader presetInput = new StreamReader(appPath);
+                    while (!presetInput.EndOfStream)
+                    {
+                        if ((char)presetInput.Peek() == '+')
+                        {
+                            string preset = presetInput.ReadLine().Replace("+ ", "");
+                            Regex r = new Regex("(:  )"); // Split on hyphens. 
+                            presetNameList.Add(r.Split(preset));
+                        }
+                        else
+                            presetInput.ReadLine();
+                    }
+                }
+         
             TreeNode preset_treeview = new TreeNode();
-
-            foreach (string preset in presets)
+            foreach (string[] preset in presetNameList)
             {
-                preset_treeview = new TreeNode(preset);
+                preset_treeview = new TreeNode(preset[0]);
 
                 // Now Fill Out List View with Items
                 treeView_presets.Nodes.Add(preset_treeview);
             }
         }
 
+        // Generate a new presets.dat file from the CLI
         private void grabCLIPresets()
         {
             string appPath = Application.StartupPath.ToString() + "\\";
@@ -991,27 +987,34 @@ namespace Handbrake
             hbproc.Close();
         }
 
-        // Function to select the default preset.
+        // Selects the preset called "normal". This is HandBrakes default settings
         private void loadNormalPreset()
         {
-            string appPath = Application.StartupPath.ToString() + "\\presets.dat";
-            if (File.Exists(appPath))
+            try
             {
-
-                int normal = 0;
-                foreach (TreeNode treenode in treeView_presets.Nodes)
+                string appPath = Application.StartupPath.ToString() + "\\presets.dat";
+                if (File.Exists(appPath))
                 {
-                    if (treenode.ToString().Equals("TreeNode: Normal"))
-                        normal = treenode.Index;
+
+                    int normal = 0;
+                    foreach (TreeNode treenode in treeView_presets.Nodes)
+                    {
+                        if (treenode.ToString().Equals("TreeNode: Normal"))
+                            normal = treenode.Index;
+                    }
+
+                    TreeNode np = treeView_presets.Nodes[normal];
+
+                    treeView_presets.SelectedNode = np;
                 }
-
-                TreeNode np = treeView_presets.Nodes[normal];
-
-                treeView_presets.SelectedNode = np;
+            }
+            catch (Exception)
+            {
+                // Do nothing
             }
         }
 
-        // Buttons
+        // Set's the current options set in the program as the new defaults for the program.
         private void btn_setDefault_Click(object sender, EventArgs e)
         {
             String query = hb_common_func.GenerateTheQuery(this);
@@ -1021,7 +1024,7 @@ namespace Handbrake
             MessageBox.Show("New default settings saved.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
 
-        // Preset Selection
+        // When the user select a preset from the treeview, load it
         private void treeView_presets_AfterSelect(object sender, TreeViewEventArgs e)
         {
             string selectedPreset = null;
@@ -1041,7 +1044,6 @@ namespace Handbrake
                             Regex r = new Regex("(:  )"); // Split on hyphens. 
                             string[] presetName = r.Split(preset);
 
-
                             if (selectedPreset == presetName[0])
                             {
                                 // Need to disable anamorphic now, otherwise it may overide the width / height values later.
@@ -1057,10 +1059,6 @@ namespace Handbrake
                         else
                             presetInput.ReadLine();
                     }
-                }
-                else
-                {
-                    MessageBox.Show("Unable to load the presets.dat file. Please select \"Update Built-in Presets\" from the Presets Menu \nMake sure you are running the program in Admin mode if running on Vista. See Windows FAQ for details!", "Error",  MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception exc)
