@@ -101,6 +101,8 @@
 		A29E058B0BE12889000533F5 /* Growl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A29E057F0BE1283E000533F5 /* Growl.framework */; };
 		A2A1EC310C76C35E00827E0D /* HBDVDDetector.h in Headers */ = {isa = PBXBuildFile; fileRef = A2A1EC300C76C35E00827E0D /* HBDVDDetector.h */; };
 		A2A1EC3A0C76C58400827E0D /* HBDVDDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = A2A1EC390C76C58400827E0D /* HBDVDDetector.m */; };
+		A2D0A0AB0D3E5929002D57CB /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2D0A0AA0D3E5929002D57CB /* Sparkle.framework */; };
+		A2D0A0BF0D3E596F002D57CB /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A2D0A0AA0D3E5929002D57CB /* Sparkle.framework */; };
 		A2D7AD670C998AD30082CA33 /* ActivityWindow.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A2D7AD5E0C998AD30082CA33 /* ActivityWindow.tiff */; };
 		A2D7AD680C998AD30082CA33 /* AddToQueue.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A2D7AD5F0C998AD30082CA33 /* AddToQueue.tiff */; };
 		A2D7AD690C998AD30082CA33 /* Drawer.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A2D7AD600C998AD30082CA33 /* Drawer.tiff */; };
@@ -188,6 +190,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				A2D0A0BF0D3E596F002D57CB /* Sparkle.framework in CopyFiles */,
 				A29E058B0BE12889000533F5 /* Growl.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -262,6 +265,7 @@
 		A29E057F0BE1283E000533F5 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Growl.framework; sourceTree = "<group>"; };
 		A2A1EC300C76C35E00827E0D /* HBDVDDetector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = HBDVDDetector.h; sourceTree = "<group>"; };
 		A2A1EC390C76C58400827E0D /* HBDVDDetector.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = HBDVDDetector.m; sourceTree = "<group>"; };
+		A2D0A0AA0D3E5929002D57CB /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		A2D7AD5E0C998AD30082CA33 /* ActivityWindow.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = ActivityWindow.tiff; sourceTree = "<group>"; };
 		A2D7AD5F0C998AD30082CA33 /* AddToQueue.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = AddToQueue.tiff; sourceTree = "<group>"; };
 		A2D7AD600C998AD30082CA33 /* Drawer.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Drawer.tiff; sourceTree = "<group>"; };
@@ -351,6 +355,7 @@
 				4DD93FA4082036E8008E1322 /* OpenGL.framework in Frameworks */,
 				4D1125D809D72FD200E0657B /* libz.dylib in Frameworks */,
 				A29E05800BE1283E000533F5 /* Growl.framework in Frameworks */,
+				A2D0A0AB0D3E5929002D57CB /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -409,6 +414,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A2D0A0AA0D3E5929002D57CB /* Sparkle.framework */,
 				A29E057F0BE1283E000533F5 /* Growl.framework */,
 				4D1125D709D72FD200E0657B /* libz.dylib */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
@@ -1148,8 +1154,10 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)\"";
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				HEADER_SEARCH_PATHS = (
@@ -1407,8 +1415,10 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)\"";
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
@@ -1465,8 +1475,10 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)\"";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;

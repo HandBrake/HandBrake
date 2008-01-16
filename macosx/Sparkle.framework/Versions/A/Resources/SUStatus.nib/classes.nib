@@ -1,0 +1,12 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            CLASS = SUStatusController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {actionButton = id; }; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}

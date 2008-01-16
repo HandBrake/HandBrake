@@ -1,0 +1,21 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = NSObject; LANGUAGE = ObjC; }, 
+        {
+            ACTIONS = {installUpdate = id; remindMeLater = id; skipThisVersion = id; }; 
+            CLASS = SUUpdateAlert; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {description = NSTextField; releaseNotesView = WebView; }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {
+            ACTIONS = {installUpdate = id; remindMeLater = id; skipThisVersion = id; }; 
+            CLASS = SUUpdateAlertController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {releaseNotesView = id; }; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}
