@@ -1698,7 +1698,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     }
     
     // Warn if another pending job in the queue has the same destination path
-    else if ([fQueueController pendingJobGroupWithDestinationPath:[fDstFile2Field stringValue]] != nil)
+    else if ( ([fQueueController pendingJobGroupWithDestinationPath:[fDstFile2Field stringValue]] != nil)
+            || ([[[fQueueController currentJobGroup] destinationPath] isEqualToString: [fDstFile2Field stringValue]]) )
     {
         NSBeginCriticalAlertSheet( _( @"Another queued encode has specified the same destination." ),
             _( @"Cancel" ), _( @"Overwrite" ), NULL, fWindow, self,
