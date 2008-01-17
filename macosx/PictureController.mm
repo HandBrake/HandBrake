@@ -565,7 +565,11 @@ are maintained across different sources */
         for (int r = 0; r < dstHeight; r++)
         {
             for (int c = 0; c < dstWidth; c++)
+#if TARGET_RT_LITTLE_ENDIAN
                 *dst++ = Endian32_Swap(*src++);
+#else
+                *dst++ = *src++;
+#endif
             src += (srcWidth - dstWidth);   // skip to next row in src
         }
 
@@ -613,7 +617,11 @@ are maintained across different sources */
         UInt32 * src = (UInt32 *)buffer;
         UInt32 * dst = (UInt32 *)[imgrep bitmapData];
         for (int i = 0; i < numPixels; i++)
+#if TARGET_RT_LITTLE_ENDIAN
             *dst++ = Endian32_Swap(*src++);
+#else
+            *dst++ = *src++;
+#endif
 
         NSImage * img = [[[NSImage alloc] initWithSize: NSMakeSize(width, height)] autorelease];
         [img addRepresentation:imgrep];
