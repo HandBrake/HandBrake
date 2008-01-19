@@ -221,7 +221,7 @@ if $(OS) != CYGWIN
         cd `dirname $(>)` && CONTRIB=`pwd` &&
         rm -rf mpeg4ip && (gzip -dc mpeg4ip.tar.gz | tar xf - ) && 
         cd mpeg4ip &&
-        $(PATCH) -p1 < ../patch-mpeg4ip.patch  && $(PATCH) -p0 < ../patch-mpeg4ip-no_compressor_name.patch && $(PATCH) -p1 < ../patch-mpeg4ip-faac.patch &&
+        $(PATCH) -p1 < ../patch-mpeg4ip.patch &&
         ./bootstrap --cache-file=$CONTRIB/config.cache --disable-mp3lame --disable-faac --disable-x264 --disable-server --disable-player &&
         $(MAKE) -C lib/mp4v2 libmp4v2.la && cp lib/mp4v2/.libs/libmp4v2.a $CONTRIB/lib &&
         cp mpeg4ip_config.h include/mpeg4ip.h include/mpeg4ip_version.h \
@@ -236,7 +236,7 @@ else
         cd `dirname $(>)` && CONTRIB=`pwd` &&
         rm -rf mpeg4ip && (gzip -dc mpeg4ip.tar.gz | tar xf - ) && 
         cd mpeg4ip &&
-        $(PATCH) -p1 < ../patch-mpeg4ip.patch && $(PATCH) -p0 < ../patch-mpeg4ip-no_compressor_name.patch && $(PATCH) -p1 < ../patch_mpeg4ip_cygwin.patch &&
+        $(PATCH) -p1 < ../patch-mpeg4ip.patch && $(PATCH) -p1 < ../patch_mpeg4ip_cygwin.patch &&
         ./bootstrap --cache-file=$CONTRIB/config.cache --disable-mp3lame --disable-faac --disable-x264 --disable-server --disable-player &&
         $(MAKE) -C lib/mp4v2 libmp4v2.la && cp lib/mp4v2/.libs/libmp4v2.a $CONTRIB/lib &&
         cp mpeg4ip_config.h include/mpeg4ip.h include/mpeg4ip_version.h \
