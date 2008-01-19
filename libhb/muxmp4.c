@@ -320,6 +320,9 @@ static int MP4Init( hb_mux_object_t * m )
         reserved2[9] = (u_int8_t)HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown);
         MP4SetTrackBytesProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.mp4a.reserved2", reserved2, sizeof(reserved2));
 
+        /* Set the audio track alternate group */
+        MP4SetTrackIntegerProperty(m->file, mux_data->track, "tkhd.alternate_group", 1);
+        
         /* If we ever upgrade mpeg4ip, the line above should be replaced with the line below.*/
 //        MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.mp4a.channels",  (u_int16_t)HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown));
         
