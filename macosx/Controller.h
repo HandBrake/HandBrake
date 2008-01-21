@@ -77,6 +77,8 @@
     IBOutlet NSButton            * fDstMp4LargeFileCheck;
     // Optimizes mp4's for http
     IBOutlet NSButton            * fDstMp4HttpOptFileCheck;
+    // Creates iPod compatible mp4's (add ipod uuid atom)
+    IBOutlet NSButton            * fDstMp4iPodFileCheck;
 	
     /* Video box */
     IBOutlet NSTextField         * fVidRateField;

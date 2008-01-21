@@ -42,7 +42,6 @@
         @"NO",              @"DefaultMpegName",
         @"YES",             @"DefaultCrf",
         @"NO",              @"DefaultDeinterlaceOn",
-        @"YES",             @"DefaultPicSizeAutoiPod",
         @"NO",              @"PixelRatio",
         @"",                @"DefAdvancedx264Flags",
         @"YES",             @"DefaultPresetsDrawerShow",

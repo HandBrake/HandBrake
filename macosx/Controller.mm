@@ -308,11 +308,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     }
     [fVidRatePopUp selectItemAtIndex: 0];
 	
-	/* Picture Settings */
-	//[fPicLabelPAROutputX setStringValue: @""];
-	//[fPicSettingPARWidth setStringValue: @""];
-	//[fPicSettingPARHeight setStringValue:  @""];
-	
 	/* Set Auto Crop to On at launch */
     [fPictureController setAutoCrop:YES];
 	
@@ -394,7 +389,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		fPicSettingAutoCrop,fPicSettingDetelecine,fPicLabelDetelecine,fPicLabelDenoise,fPicSettingDenoise,
         fSubForcedCheck,fPicSettingDeblock,fPicLabelDeblock,fPresetsOutlineView,fAudDrcSlider,
         fAudDrcField,fAudDrcLabel,fDstMp4HttpOptFileCheck,fAudDrcDescLabel1,fAudDrcDescLabel2,fAudDrcDescLabel3,
-        fAudDrcDescLabel4};
+        fAudDrcDescLabel4,fDstMp4iPodFileCheck};
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -1495,19 +1490,17 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     }
     if( job->vcodec & HB_VCODEC_X264 )
     {
-		if ([fVidEncoderPopUp indexOfSelectedItem] > 0 )
+		if ([fDstMp4iPodFileCheck state] == NSOnState)
 	    {
-			/* Just use new Baseline Level 3.0 
-			Lets Deprecate Baseline Level 1.3h264_level*/
-			job->h264_level = 30;
-			job->mux = HB_MUX_IPOD;
-			/* move sanity check for iPod Encoding here */
-			job->pixel_ratio = 0 ;
-			
+            job->ipod_atom = 1;
 		}
+        else
+        {
+        job->ipod_atom = 0;
+        }
 		
 		/* Set this flag to switch from Constant Quantizer(default) to Constant Rate Factor Thanks jbrjake
-		Currently only used with Constant Quality setting*/
+         Currently only used with Constant Quality setting*/
 		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultCrf"] > 0 && [fVidQualityMatrix selectedRow] == 2)
 		{
 	        job->crf = 1;
@@ -1522,7 +1515,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 			/* pass the "Turbo" string to be appended to the existing x264 opts string into a variable for the first pass */
 			NSString *firstPassOptStringTurbo = @":ref=1:subme=1:me=dia:analyse=none:trellis=0:no-fast-pskip=0:8x8dct=0:weightb=0";
 			/* append the "Turbo" string variable to the existing opts string.
-			Note: the "Turbo" string must be appended, not prepended to work properly*/
+             Note: the "Turbo" string must be appended, not prepended to work properly*/
 			NSString *firstPassOptStringCombined = [[fAdvancedOptions optionsString] stringByAppendingString:firstPassOptStringTurbo];
 			strcpy(job->x264opts, [firstPassOptStringCombined UTF8String]);
 		}
@@ -1530,8 +1523,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		{
 			strcpy(job->x264opts, [[fAdvancedOptions optionsString] UTF8String]);
 		}
-		
-        job->h264_13 = [fVidEncoderPopUp indexOfSelectedItem];
+        
     }
 
     /* Video settings */
@@ -2245,6 +2237,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	/* Initially set the large file (64 bit formatting) output checkbox to hidden */
     [fDstMp4LargeFileCheck setHidden: YES];
     [fDstMp4HttpOptFileCheck setHidden: YES];
+    [fDstMp4iPodFileCheck setHidden: YES];
     
     /* Update the codecs popup */
     [fDstCodecsPopUp removeAllItems];
@@ -2280,6 +2273,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             }
             /* We show the HTTP Optimized checkbox here since we are mp4 */
             [fDstMp4HttpOptFileCheck setHidden: NO];
+            [fDstMp4iPodFileCheck setHidden: NO];
             break;
             
         case 1:
@@ -2364,8 +2358,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     {
         /* MPEG-4 -> H.264 */
         [fVidEncoderPopUp removeAllItems];
-		[fVidEncoderPopUp addItemWithTitle: @"x264 (h.264 Main)"];
-		[fVidEncoderPopUp addItemWithTitle: @"x264 (h.264 iPod)"];
+		[fVidEncoderPopUp addItemWithTitle: @"x264"];
 		[fVidEncoderPopUp selectItemAtIndex: 0];
         [fAdvancedOptions setHidden:NO];
     }
@@ -2402,26 +2395,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 - (IBAction) encoderPopUpChanged: (id) sender
 {
     hb_job_t * job = fTitle->job;
-	/* Check to see if we need to modify the job pic values based on x264 (iPod) encoder selection */
-    if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fDstCodecsPopUp indexOfSelectedItem] == 1 && [fVidEncoderPopUp indexOfSelectedItem] == 1)
-    {
-		
-		job->pixel_ratio = 0 ;
-		
-		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPicSizeAutoiPod"] > 0)
-		{
-			
-			if (job->width > 640)
-			{
-				job->width = 640;
-			}
-			job->keep_ratio = 1;
-			hb_fix_aspect( job, HB_KEEP_WIDTH );
-			
-		}
-		/* Make sure the 64bit formatting checkbox is off */
-		[fDstMp4LargeFileCheck setState: NSOffState];
-	}
     
     /* We need to set loose anamorphic as available depending on whether or not the ffmpeg encoder
     is being used as it borks up loose anamorphic .
@@ -2434,10 +2407,17 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             job->pixel_ratio = 0;
         }
         [fPictureController setAllowLooseAnamorphic:NO];
+        /* We set the iPod atom checkbox to disabled and uncheck it as its only for x264 in the mp4
+         container. Format is taken care of in formatPopUpChanged method by hiding and unchecking
+         anything other than MP4.
+         */ 
+        [fDstMp4iPodFileCheck setEnabled: NO];
+        [fDstMp4iPodFileCheck setState: NSOffState];
     }
     else
     {
         [fPictureController setAllowLooseAnamorphic:YES];
+        [fDstMp4iPodFileCheck setEnabled: YES];
     }
     
 	[self calculatePictureSizing: sender];
@@ -3361,11 +3341,31 @@ if (item == nil)
         [fDstMp4LargeFileCheck setState:[[chosenPreset objectForKey:@"Mp4LargeFile"] intValue]];
         /* Mux mp4 with http optimization */
         [fDstMp4HttpOptFileCheck setState:[[chosenPreset objectForKey:@"Mp4HttpOptimize"] intValue]];
+        /* Set the state of ipod compatible with Mp4iPodCompatible */
+        [fDstMp4iPodFileCheck setState:[[chosenPreset objectForKey:@"Mp4iPodCompatible"] intValue]];
         /* Codecs */
         [fDstCodecsPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]]];
         [self codecsPopUpChanged: NULL];
         /* Video encoder */
-        [fVidEncoderPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]]];
+        /* We use a conditional to account for the new x264 encoder dropdown as well as presets made using legacy x264 settings*/
+        if ([[NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]] isEqualToString: @"x264 (h.264 Main)"] || [[NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]] isEqualToString: @"x264 (h.264 iPod)"])
+        {
+            [fVidEncoderPopUp selectItemWithTitle: [NSString stringWithFormat:@"x264"]];
+            /* special case for legacy preset to check the new fDstMp4HttpOptFileCheck checkbox to set the ipod atom */
+            if ([[NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]] isEqualToString: @"x264 (h.264 iPod)"])
+            {
+                [fDstMp4iPodFileCheck setState:NSOnState];
+            }
+            else
+            {
+            [fDstMp4iPodFileCheck setState:NSOffState];
+            }
+        }
+        else
+        {
+            [fVidEncoderPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]]];
+        }
+        
         
         /* We can show the preset options here in the gui if we want to
          so we check to see it the user has specified it in the prefs */
@@ -3723,6 +3723,9 @@ if (item == nil)
 	[preset setObject:[NSNumber numberWithInt:[fDstMp4LargeFileCheck state]] forKey:@"Mp4LargeFile"];
     /* Mux mp4 with http optimization */
     [preset setObject:[NSNumber numberWithInt:[fDstMp4HttpOptFileCheck state]] forKey:@"Mp4HttpOptimize"];
+    /* Add iPod uuid atom */
+    [preset setObject:[NSNumber numberWithInt:[fDstMp4iPodFileCheck state]] forKey:@"Mp4iPodCompatible"];
+    
     /* Codecs */
 	[preset setObject:[fDstCodecsPopUp titleOfSelectedItem] forKey:@"FileCodecs"];
 	/* Video encoder */

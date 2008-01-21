@@ -946,7 +946,7 @@
     [preset setObject:@"x264 (h.264 iPod)" forKey:@"VideoEncoder"];
 
     /* x264 Option String */
-    [preset setObject:@"cabac=0:ref=1:analyse=all:me=umh:subme=6:no-fast-pskip=1:trellis=1" forKey:@"x264Option"];
+    [preset setObject:@"level=30:cabac=0:ref=1:analyse=all:me=umh:subme=6:no-fast-pskip=1:trellis=1" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
@@ -1032,7 +1032,7 @@
     [preset setObject:@"x264 (h.264 iPod)" forKey:@"VideoEncoder"];
 
     /* x264 Option String */
-    [preset setObject:@"bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1" forKey:@"x264Option"];
+    [preset setObject:@"level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
@@ -1118,7 +1118,7 @@
     [preset setObject:@"x264 (h.264 iPod)" forKey:@"VideoEncoder"];
 
     /* x264 Option String */
-    [preset setObject:@"bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1" forKey:@"x264Option"];
+    [preset setObject:@"level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
