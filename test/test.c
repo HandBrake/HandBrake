@@ -523,42 +523,42 @@ static int HandleEvents( hb_handle_t * h )
                 if (!strcmp(preset_name, "iPhone / iPod Touch"))
                 {
                     mux = HB_MUX_MP4;
+                    job->ipod_atom = 1;
                     vcodec = HB_VCODEC_X264;
-                    job->h264_level = 30;
                     job->vbitrate = 960;
                     job->abitrate = 128;
                     job->arate = 48000;
                     acodec = HB_ACODEC_FAAC;
                     job->width = 480;
-                    x264opts = strdup("cabac=0:ref=1:analyse=all:me=umh:subme=6:no-fast-pskip=1:trellis=1");
+                    x264opts = strdup("level=30:cabac=0:ref=1:analyse=all:me=umh:subme=6:no-fast-pskip=1:trellis=1");
                     job->chapter_markers = 1;
                 }
 
                 if (!strcmp(preset_name, "iPod High-Rez"))
                 {
                     mux = HB_MUX_MP4;
+                    job->ipod_atom = 1;
                     vcodec = HB_VCODEC_X264;
-                    job->h264_level = 30;
                     job->vbitrate = 1500;
                     job->abitrate = 160;
                     job->arate = 48000;
                     acodec = HB_ACODEC_FAAC;
                     job->width = 640;
-                    x264opts = strdup("bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1");
+                    x264opts = strdup("level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1");
                     job->chapter_markers = 1;
                 }
 
                 if (!strcmp(preset_name, "iPod Low-Rez"))
                 {
                     mux = HB_MUX_MP4;
+                    job->ipod_atom = 1;
                     vcodec = HB_VCODEC_X264;
-                    job->h264_level = 30;
                     job->vbitrate = 700;
                     job->abitrate = 160;
                     job->arate = 48000;
                     acodec = HB_ACODEC_FAAC;
                     job->width = 320;
-                    x264opts = strdup("bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1");
+                    x264opts = strdup("level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1");
                     job->chapter_markers = 1;
                 }
 
@@ -1245,11 +1245,11 @@ static void ShowPresets()
 
     printf("\n+ Film:  -e x264 -b 1800 -E ac3 -f mkv -m -p -2 -T -x ref=3:mixed-refs:bframes=16:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=7:analyse=all:8x8dct:trellis=1:no-fast-pskip\n");
 
-    printf("\n+ iPhone / iPod Touch:  -e x264b30 -b 960 -B 128 -R 48 -E faac -f mp4 -w 480 -m -x cabac=0:ref=1:analyse=all:me=umh:subme=6:no-fast-pskip=1:trellis=1\n");
+    printf("\n+ iPhone / iPod Touch:  -e x264 -b 960 -B 128 -R 48 -E faac -f mp4 -I -w 480 -m -x level=30:cabac=0:ref=1:analyse=all:me=umh:subme=6:no-fast-pskip=1:trellis=1\n");
 
-    printf("\n+ iPod High-Rez:  -e x264b30 -b 1500 -B 160 -R 48 -E faac -f mp4 -w 640 -m -x bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1\n");
+    printf("\n+ iPod High-Rez:  -e x264 -b 1500 -B 160 -R 48 -E faac -f mp4 -I -w 640 -m -x level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1\n");
 
-    printf("\n+ iPod Low-Rez:  -e x264b30 -b 700 -B 160 -R 48 -E faac -f mp4 -w 320 -m -x bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1\n");
+    printf("\n+ iPod Low-Rez:  -e x264 -b 700 -B 160 -R 48 -E faac -f mp4 -I -w 320 -m -x level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1\n");
 
     printf("\n+ Normal:  -e x264 -b 1500 -B 160 -R 48 -E faac -f mp4 -m -p -2 -T -x ref=2:bframes=2:subme=5:me=umh\n");
 

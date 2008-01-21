@@ -285,13 +285,7 @@ class Display
     #Video encoder
     if hash["VideoEncoder"] != "FFmpeg"
       commandString << " -e "
-      if hash["VideoEncoder"] == "x264 (h.264 Main)"
-        commandString << "x264"
-      elsif hash["VideoEncoder"] == "x264 (h.264 iPod)"
-        commandString << "x264b30"
-      else
-        commandString << hash["VideoEncoder"].to_s.downcase
-      end
+      commandString << hash["VideoEncoder"].to_s.downcase
     end
 
     #VideoRateControl
@@ -339,6 +333,11 @@ class Display
       commandString << "ogm"
     when /MKV/
       commandString << "mkv"
+    end
+    
+    #iPod MP4 atom
+    if hash["Mp4iPodCompatible"].to_i == 1
+      commandString << " -I"
     end
     
     #Cropping
@@ -425,13 +424,7 @@ class Display
     #Video encoder
     if hash["VideoEncoder"] != "FFmpeg"
       commandString << " -e "
-      if hash["VideoEncoder"] == "x264 (h.264 Main)"
-        commandString << "x264"
-      elsif hash["VideoEncoder"] == "x264 (h.264 iPod)"
-        commandString << "x264b30"
-      else
-        commandString << hash["VideoEncoder"].to_s.downcase
-      end
+      commandString << hash["VideoEncoder"].to_s.downcase
     end
 
     #VideoRateControl
@@ -479,6 +472,11 @@ class Display
       commandString << "ogm"
     when /MKV/
       commandString << "mkv"
+    end
+    
+    #iPod MP4 atom
+    if hash["Mp4iPodCompatible"].to_i == 1
+      commandString << " -I"
     end
     
     #Cropping
@@ -574,13 +572,16 @@ class Display
       commandString << "mux = " << "HB_MUX_MKV;\n    "
     end
     
+    #iPod MP4 atom
+    if hash["Mp4iPodCompatible"].to_i == 1
+      commandString << "job->ipod_atom = 1;\n   "
+    end
+    
     #Video encoder
     if hash["VideoEncoder"] != "FFmpeg"
       commandString << "vcodec = "
-      if hash["VideoEncoder"] == "x264 (h.264 Main)"
+      if hash["VideoEncoder"] == "x264"
         commandString << "HB_VCODEC_X264;\n    "
-      elsif hash["VideoEncoder"] == "x264 (h.264 iPod)"
-        commandString << "HB_VCODEC_X264;\njob->h264_level = 30;\n    "
       elsif hash["VideoEncoder"].to_s.downcase == "xvid"
         commandString << "HB_VCODEC_XVID;\n    "        
       end
@@ -729,13 +730,7 @@ class Display
     #Video encoder
     if hash["VideoEncoder"] != "FFmpeg"
       commandString << " -e "
-      if hash["VideoEncoder"] == "x264 (h.264 Main)"
-        commandString << "x264"
-      elsif hash["VideoEncoder"] == "x264 (h.264 iPod)"
-        commandString << "x264b30"
-      else
-        commandString << hash["VideoEncoder"].to_s.downcase
-      end
+      commandString << hash["VideoEncoder"].to_s.downcase
     end
 
     #VideoRateControl
@@ -791,6 +786,11 @@ class Display
       commandString << "ogm"
     when /MKV/
       commandString << "mkv"
+    end
+    
+    #iPod MP4 atom
+    if hash["Mp4iPodCompatible"].to_i == 1
+      commandString << " -I"
     end
     
     #Cropping
