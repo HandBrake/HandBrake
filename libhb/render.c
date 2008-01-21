@@ -65,27 +65,70 @@ static void ApplySub( hb_job_t * job, hb_buffer_t * buf,
 {
     hb_buffer_t * sub = *_sub;
     hb_title_t * title = job->title;
-    int i, j, offset_top, offset_left;
+    int i, j, offset_top, offset_left, margin_top, margin_percent;
     uint8_t * lum, * alpha, * out, * sub_chromaU, * sub_chromaV;
+
+    /*
+     * Percent of height of picture that form a margin that subtitles
+     * should not be displayed within.
+     */
+    margin_percent = 2;
 
     if( !sub )
     {
         return;
     }
+    
+    /* 
+     * If necessary, move the subtitle so it is not in a cropped zone.
+     * When it won't fit, we center it so we lose as much on both ends.
+     * Otherwise we try to leave a 20px or 2% margin around it. 
+     */
+    margin_top = ( ( title->height - job->crop[0] - job->crop[1] ) * 
+                   margin_percent ) / 100;
 
-    /* If necessary, move the subtitle so it is not in a cropped zone.
-       When it won't fit, we center it so we loose as much on both ends.
-       Otherwise we try to leave a 20px margin around it. */
+    if( margin_top > 20 )
+    {
+        /*
+         * A maximum margin of 20px regardless of height of the picture.
+         */
+        margin_top = 20;
+    }
 
-    if( sub->height > title->height - job->crop[0] - job->crop[1] - 40 )
+    if( sub->height > title->height - job->crop[0] - job->crop[1] - 
+        ( margin_top * 2 ) )
+    {
+        /*
+         * The subtitle won't fit in the cropped zone, so center
+         * it vertically so we fit in as much as we can.
+         */
         offset_top = job->crop[0] + ( title->height - job->crop[0] -
-                job->crop[1] - sub->height ) / 2;
-    else if( sub->y < job->crop[0] + 20 )
-        offset_top = job->crop[0] + 20;
-    else if( sub->y > title->height - job->crop[1] - 20 - sub->height )
-        offset_top = title->height - job->crop[1] - 20 - sub->height;
+                                      job->crop[1] - sub->height ) / 2;
+    }
+    else if( sub->y < job->crop[0] + margin_top )
+    {
+        /*
+         * The subtitle fits in the cropped zone, but is currently positioned
+         * within our top margin, so move it outside of our margin.
+         */
+        offset_top = job->crop[0] + margin_top;
+    }
+    else if( sub->y > title->height - job->crop[1] - margin_top - sub->height )
+    {
+        /*
+         * The subtitle fits in the cropped zone, and is not within the top
+         * margin but is within the bottom margin, so move it to be above
+         * the margin.
+         */
+        offset_top = title->height - job->crop[1] - margin_top - sub->height;
+    }
     else
+    {
+        /*
+         * The subtitle is fine where it is.
+         */
         offset_top = sub->y;
+    }
 
     if( sub->width > title->width - job->crop[2] - job->crop[3] - 40 )
         offset_left = job->crop[2] + ( title->width - job->crop[2] -
