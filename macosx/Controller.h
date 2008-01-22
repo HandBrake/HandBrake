@@ -261,8 +261,6 @@
 - (IBAction) Rip: (id) sender;
 - (void)     overWriteAlertDone: (NSWindow *) sheet
                      returnCode: (int) returnCode contextInfo: (void *) contextInfo;
-- (void)     updateAlertDone: (NSWindow *) sheet
-                  returnCode: (int) returnCode contextInfo: (void *) contextInfo;
 - (void)     doRip;
 
 - (IBAction) Cancel: (id) sender;

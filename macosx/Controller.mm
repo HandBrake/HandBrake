@@ -102,7 +102,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     //fHandle = hb_init(debugLevel, [[NSUserDefaults standardUserDefaults] boolForKey:@"CheckForUpdates"]);
     /* New Init libhb with check for updates libhb style set to "0" so its ignored and lets sparkle take care of it */
     fHandle = hb_init(debugLevel, 0);
-
+    
     
 	// Set the Growl Delegate
     [GrowlApplicationBridge setGrowlDelegate: self];    
@@ -116,9 +116,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     
     /* Call UpdateUI every 1/2 sec */
     [[NSRunLoop currentRunLoop] addTimer: [NSTimer
-        scheduledTimerWithTimeInterval: 0.5 target: self
-                              selector: @selector( updateUI: ) userInfo: NULL repeats: YES]
-                                forMode: NSEventTrackingRunLoopMode];
+                                           scheduledTimerWithTimeInterval: 0.5 target: self
+                                           selector: @selector( updateUI: ) userInfo: NULL repeats: YES]
+                                 forMode: NSEventTrackingRunLoopMode];
     
     // Open debug output window now if it was visible when HB was closed
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"OutputPanelIsOpen"])
@@ -135,11 +135,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         /* Update available - tell the user */
         
         NSBeginInformationalAlertSheet( _( @"Update is available" ),
-                                        _( @"Go get it!" ), _( @"Discard" ), NULL, fWindow, self,
-                                        @selector( updateAlertDone:returnCode:contextInfo: ),
-                                        NULL, NULL, [NSString stringWithFormat:
-                                            _( @"HandBrake %s (build %d) is now available for download." ),
-                                            version, build] );
+                                       _( @"Go get it!" ), _( @"Discard" ), NULL, fWindow, self,
+                                       @selector( updateAlertDone:returnCode:contextInfo: ),
+                                       NULL, NULL, [NSString stringWithFormat:
+                                                    _( @"HandBrake %s (build %d) is now available for download." ),
+                                                    version, build] );
         return;
         
     }
@@ -147,28 +147,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* Show Browse Sources Window ASAP */
     [self performSelectorOnMainThread: @selector(browseSources:)
                            withObject: NULL waitUntilDone: NO];
-                           }
-
-- (void) updateAlertDone: (NSWindow *) sheet
-              returnCode: (int) returnCode contextInfo: (void *) contextInfo
-{
-    if( returnCode == NSAlertDefaultReturn )
-    {
-        /* Go to HandBrake homepage and exit */
-        [self openHomepage: NULL];
-        [NSApp terminate: self];
-     
-    }
-    else
-    {
-         /* Show scan panel */
-        [self performSelectorOnMainThread: @selector(showScanPanel:)
-                               withObject: NULL waitUntilDone: NO];
-        return;
-               /* Go to HandBrake homepage and exit */
-        [self openHomepage: NULL];
-        [NSApp terminate: self];
-    }
 }
 
 - (NSApplicationTerminateReply) applicationShouldTerminate: (NSApplication *) app
