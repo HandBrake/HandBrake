@@ -93,8 +93,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 - (void) applicationDidFinishLaunching: (NSNotification *) notification
 {
-    int    build;
-    char * version;
+    /* Variables from legacy update system, leave but commented out until Sparkle is compeletely vetted */
+    //int    build;
+    //char * version;
     
     // Init libhb
 	int debugLevel = [[NSUserDefaults standardUserDefaults] boolForKey:@"ShowVerboseOutput"] ? HB_DEBUG_ALL : HB_DEBUG_NONE;
