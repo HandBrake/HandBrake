@@ -237,17 +237,6 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     /* Setup render buffer */
     hb_buffer_t * buf_render = hb_buffer_init( 3 * job->width * job->height / 2 );  
     
-    /* Cache frame start and stop times, so we can renumber
-       time stamps if dropping frames for VFR.              */ 
-    int i;
-    for( i = 3; i >= 1; i-- )
-    {
-        pv->last_start[i] = pv->last_start[i-1];
-        pv->last_stop[i] = pv->last_stop[i-1];
-    }
-    pv->last_start[0] = in->start;
-    pv->last_stop[0] = in->stop;
-    
     /* Apply filters */
     if( job->filters )
     {
@@ -304,7 +293,21 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             }
         }
     }   
-        
+
+    if( buf_tmp_in )
+    {
+        /* Cache frame start and stop times, so we can renumber
+           time stamps if dropping frames for VFR.              */ 
+        int i;
+        for( i = 3; i >= 1; i-- )
+        {
+            pv->last_start[i] = pv->last_start[i-1];
+            pv->last_stop[i] = pv->last_stop[i-1];
+        }
+        pv->last_start[0] = in->start;
+        pv->last_stop[0] = in->stop;
+    }
+    
     /* Apply subtitles */
     if( buf_tmp_in )
     {
@@ -412,8 +415,9 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                length frame. If it needs to be extended as well to
                make up lost time, it'll be handled on the next
                loop through the renderer.                            */
+            int temp_duration = pv->last_stop[2] - pv->last_start[2];
             pv->last_start[2] = ivtc_buffer->stop;
-            pv->last_stop[2] = ivtc_buffer->stop + 3003;
+            pv->last_stop[2] = ivtc_buffer->stop + temp_duration;
             
             pv->frames_to_extend--;
             pv->extended_frames++;
