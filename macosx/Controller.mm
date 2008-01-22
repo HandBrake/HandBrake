@@ -1295,6 +1295,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		/* We display a message if a valid dvd source was not chosen */
 		[fSrcDVD2Field setStringValue: @"No Valid Source Found"];
         SuccessfulScan = NO;
+        
+        // Notify ChapterTitles that there's no title
+        [fChapterTitlesDelegate resetWithTitle:nil];
+        [fChapterTable reloadData];
 	}
 	else
 	{

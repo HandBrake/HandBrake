@@ -23,6 +23,12 @@
 {
     int i;
     NSString *chapterString;
+    
+    fTitle = title;
+
+    if (!title)
+        return;
+
     int count = hb_list_count( title->list_chapter );
 
     for( i = 0; i < count; i++ )
@@ -38,7 +44,6 @@
         }
     }
     
-    fTitle = title;
 }
 
 - (int)numberOfRowsInTableView:(NSTableView *)aTableView
