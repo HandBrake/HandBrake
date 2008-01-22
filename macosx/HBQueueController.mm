@@ -156,7 +156,7 @@ static NSDictionary* _shortHeightAttribute = NULL;
         titleHeight = job->title->height;
         if (job->subtitle >= 0)
         {
-            hb_subtitle_t * aSubtitle = (hb_subtitle_t *) hb_list_item(job->title->list_subtitle, 0);
+            hb_subtitle_t * aSubtitle = (hb_subtitle_t *) hb_list_item(job->title->list_subtitle, job->subtitle);
             if (aSubtitle)
                 subtitleLang = [[NSString stringWithUTF8String:aSubtitle->lang] retain];
         }
@@ -508,7 +508,7 @@ static NSDictionary* _shortHeightAttribute = NULL;
     
     if (withSubtitleInfo)
     {
-        // subtitle can == -1 in two cases:
+        // subtitle scan == -1 in two cases:
         // autoselect: when pass == -1
         // none: when pass != -1
         if ((subtitle == -1) && (pass == -1))
