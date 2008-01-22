@@ -19,6 +19,8 @@ void hb_list_empty( hb_list_t ** );
 hb_title_t * hb_title_init( char * dvd, int index );
 void         hb_title_close( hb_title_t ** );
 
+void         hb_filter_close( hb_filter_object_t ** );
+
 /***********************************************************************
  * hb.c
  **********************************************************************/

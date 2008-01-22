@@ -178,7 +178,19 @@ static void do_job( hb_job_t * job, int cpu_count )
         }
         
         if (!detelecine_present)
-            hb_list_add( job->filters, &hb_filter_detelecine );
+        {
+            /* Allocate the filter. */
+            hb_filter_object_t * filter =  malloc( sizeof( hb_filter_object_t ) );
+            
+            /* Copy in the contents of the detelecine struct. */
+            memcpy( filter, &hb_filter_detelecine, sizeof( hb_filter_object_t ) );
+
+            /* Set the name to a copy of the template name so render.c has something to free. */
+            filter->name = strdup(hb_filter_detelecine.name);
+            
+            /* Add it to the list. */
+            hb_list_add( job->filters, filter );
+        }
         
         hb_log("work: VFR mode -- Switching FPS to 29.97 and detelecining.");
     }
@@ -727,6 +739,16 @@ static void do_job( hb_job_t * job, int cpu_count )
             job->select_subtitle = NULL;
         }
     }
+
+    if( job->filters )
+    {
+        for( i = 0; i < hb_list_count( job->filters ); i++ )
+        {
+            hb_filter_object_t * filter = hb_list_item( job->filters, i );
+            hb_filter_close( &filter );
+        }
+        hb_list_close( &job->filters );
+    }    
 
     hb_buffer_pool_free();
 

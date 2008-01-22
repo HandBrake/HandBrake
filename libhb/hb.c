@@ -935,8 +935,22 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
         job_copy->filters = hb_list_init();        
         for( i = 0; i < filter_count; i++ )
         {
+            /*
+             * Copy the filters, since the MacGui reuses the global filter objects
+             * meaning that queued up jobs overwrite the previous filter settings.
+             * In reality, settings is probably the only field that needs duplicating
+             * since it's the only value that is ever changed. But name is duplicated
+             * as well for completeness. Not copying private_data since it gets
+             * created for each job in renderInit.
+             */
             hb_filter_object_t * filter = hb_list_item( job->filters, i );
-            hb_list_add( job_copy->filters, filter );
+            hb_filter_object_t * filter_copy = malloc( sizeof( hb_filter_object_t ) );
+            memcpy( filter_copy, filter, sizeof( hb_filter_object_t ) );
+            if( filter->name )
+                filter_copy->name = strdup( filter->name );
+            if( filter->settings )
+                filter_copy->settings = strdup( filter->settings );
+            hb_list_add( job_copy->filters, filter_copy );
         }        
     }
     

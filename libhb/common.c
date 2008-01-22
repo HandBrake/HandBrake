@@ -613,3 +613,23 @@ void hb_title_close( hb_title_t ** _t )
     *_t = NULL;
 }
 
+/**********************************************************************
+ * hb_filter_close
+ **********************************************************************
+ * 
+ *********************************************************************/
+void hb_filter_close( hb_filter_object_t ** _f )
+{
+    hb_filter_object_t * f = *_f;
+
+    f->close( f->private_data );
+
+    if( f->name )
+        free( f->name );
+    if( f->settings )
+        free( f->settings );
+
+    free( f );
+    *_f = NULL;
+}
+

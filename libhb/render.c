@@ -447,25 +447,6 @@ void renderClose( hb_work_object_t * w )
         hb_fifo_close( &pv->delay_queue );
     }
    
-    /* Cleanup filters */
-    /* TODO: Move to work.c? */
-    if( pv->job->filters )
-    {
-        int filter_count = hb_list_count( pv->job->filters );
-        int i;
-        
-        for( i = 0; i < filter_count; i++ )
-        {
-            hb_filter_object_t * filter = hb_list_item( pv->job->filters, i );
-            
-            if( !filter ) continue;
-
-            filter->close( filter->private_data );
-        }
-        
-        hb_list_close( &pv->job->filters );
-    }    
-   
     /* Cleanup render work structure */
     free( pv );
     w->private_data = NULL;    
