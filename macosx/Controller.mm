@@ -3346,7 +3346,10 @@ if (item == nil)
         /* Codecs */
         [fDstCodecsPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]]];
         [self codecsPopUpChanged: NULL];
+        
         /* Video encoder */
+        /* We set the advanced opt string here if applicable*/
+        [fAdvancedOptions setOptions: [NSString stringWithFormat:[chosenPreset valueForKey:@"x264Option"]]];
         /* We use a conditional to account for the new x264 encoder dropdown as well as presets made using legacy x264 settings*/
         if ([[NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]] isEqualToString: @"x264 (h.264 Main)"] || [[NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]] isEqualToString: @"x264 (h.264 iPod)"])
         {
@@ -3355,21 +3358,19 @@ if (item == nil)
             if ([[NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]] isEqualToString: @"x264 (h.264 iPod)"])
             {
                 [fDstMp4iPodFileCheck setState:NSOnState];
+                /* We also need to add "level=30:" to the advanced opts string to set the correct level for the iPod when
+                 encountering a legacy preset as it used to be handled separately from the opt string*/
+                [fAdvancedOptions setOptions: [NSString stringWithFormat:[@"level=30:" stringByAppendingString:[fAdvancedOptions optionsString]]]];
             }
             else
             {
-            [fDstMp4iPodFileCheck setState:NSOffState];
+                [fDstMp4iPodFileCheck setState:NSOffState];
             }
         }
         else
         {
             [fVidEncoderPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]]];
         }
-        
-        
-        /* We can show the preset options here in the gui if we want to
-         so we check to see it the user has specified it in the prefs */
-        [fAdvancedOptions setOptions: [NSString stringWithFormat:[chosenPreset valueForKey:@"x264Option"]]];
         
         /* Lets run through the following functions to get variables set there */
         [self encoderPopUpChanged: NULL];
