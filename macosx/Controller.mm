@@ -130,20 +130,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     
 	[self openMainWindow:nil];
     
-    if( ( build = hb_check_update( fHandle, &version ) ) > -1 )
-    {
-        /* Update available - tell the user */
-        
-        NSBeginInformationalAlertSheet( _( @"Update is available" ),
-                                       _( @"Go get it!" ), _( @"Discard" ), NULL, fWindow, self,
-                                       @selector( updateAlertDone:returnCode:contextInfo: ),
-                                       NULL, NULL, [NSString stringWithFormat:
-                                                    _( @"HandBrake %s (build %d) is now available for download." ),
-                                                    version, build] );
-        return;
-        
-    }
-	
     /* Show Browse Sources Window ASAP */
     [self performSelectorOnMainThread: @selector(browseSources:)
                            withObject: NULL waitUntilDone: NO];
