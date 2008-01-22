@@ -40,6 +40,7 @@ struct hb_work_private_s
     hb_subtitle_t * subtitle;
     int64_t pts_offset;
     int64_t pts_offset_old;
+    int64_t next_start;
     int64_t count_frames;
     int64_t count_frames_max;
     int64_t video_sequence;
@@ -363,8 +364,13 @@ static int SyncVideo( hb_work_object_t * w )
 
             /* Calculate new offset */
             pv->pts_offset_old = pv->pts_offset;
-            pv->pts_offset     = cur->start -
-                pv->count_frames * pv->job->vrate_base / 300;
+            if ( job->vfr )
+            {
+                pv->pts_offset = cur->start - pv->next_start;
+            } else {
+                pv->pts_offset = cur->start -
+                    pv->count_frames * pv->job->vrate_base / 300;
+            }
 
             if( !pv->discontinuity )
             {
@@ -505,48 +511,72 @@ static int SyncVideo( hb_work_object_t * w )
             }
         }
 
-        /* The PTS of the frame we are expecting now */
-        pts_expected = pv->pts_offset +
-            pv->count_frames * pv->job->vrate_base / 300;
-
-        //hb_log("Video expecting PTS %lld, current frame: %lld, next frame: %lld, cf: %lld", 
-        //       pts_expected, cur->start, next->start, pv->count_frames * pv->job->vrate_base / 300 );
-
-        if( cur->start < pts_expected - pv->job->vrate_base / 300 / 2 &&
-            next->start < pts_expected + pv->job->vrate_base / 300 / 2 )
+        if ( job->vfr )
         {
-            /* The current frame is too old but the next one matches,
-               let's trash */
-            /* Also, make sure we don't trash a chapter break */
-            chap_break = cur->new_chap;
-            hb_buffer_close( &cur );
+            /*
+             * adjust the pts of the current frame so that it's contiguous
+             * with the previous frame. pts_offset tracks the time difference
+             * between the pts values in the input content (which start at some
+             * random time) and our timestamps (which start at zero). We don't
+             * make any adjustments to the source timestamps other than removing
+             * the clock offsets (which also removes pts discontinuities).
+             * This means we automatically encode at the source's frame rate.
+             * MP2 uses an implicit duration (frames end when the next frame
+             * starts) but more advanced containers like MP4 use an explicit
+             * duration. Since we're looking ahead one frame we set the
+             * explicit stop time from the start time of the next frame.
+             */
+            buf_tmp = cur;
             pv->cur = cur = hb_fifo_get( job->fifo_raw );
-            cur->new_chap |= chap_break; // Make sure we don't stomp the existing one.
-            
-            continue;
-        }
-
-        if( next->start > pts_expected + 3 * pv->job->vrate_base / 300 / 2 )
-        {
-            /* We'll need the current frame more than one time. Make a
-               copy of it and keep it */
-            buf_tmp = hb_buffer_init( cur->size );
-            memcpy( buf_tmp->data, cur->data, cur->size ); 
-            buf_tmp->sequence = cur->sequence;
+            buf_tmp->start = pv->next_start;
+            pv->next_start = next->start - pv->pts_offset;
+            buf_tmp->stop = pv->next_start;
         }
         else
         {
-            /* The frame has the expected date and won't have to be
-               duplicated, just put it through */
-            buf_tmp = cur;
-            pv->cur = cur = hb_fifo_get( job->fifo_raw );
+            /* The PTS of the frame we are expecting now */
+            pts_expected = pv->pts_offset +
+                pv->count_frames * pv->job->vrate_base / 300;
+
+            //hb_log("Video expecting PTS %lld, current frame: %lld, next frame: %lld, cf: %lld", 
+            //       pts_expected, cur->start, next->start, pv->count_frames * pv->job->vrate_base / 300 );
+
+            if( cur->start < pts_expected - pv->job->vrate_base / 300 / 2 &&
+                next->start < pts_expected + pv->job->vrate_base / 300 / 2 )
+            {
+                /* The current frame is too old but the next one matches,
+                   let's trash */
+                /* Also, make sure we don't trash a chapter break */
+                chap_break = cur->new_chap;
+                hb_buffer_close( &cur );
+                pv->cur = cur = hb_fifo_get( job->fifo_raw );
+                cur->new_chap |= chap_break; // Make sure we don't stomp the existing one.
+                
+                continue;
+            }
+
+            if( next->start > pts_expected + 3 * pv->job->vrate_base / 300 / 2 )
+            {
+                /* We'll need the current frame more than one time. Make a
+                   copy of it and keep it */
+                buf_tmp = hb_buffer_init( cur->size );
+                memcpy( buf_tmp->data, cur->data, cur->size ); 
+                buf_tmp->sequence = cur->sequence;
+            }
+            else
+            {
+                /* The frame has the expected date and won't have to be
+                   duplicated, just put it through */
+                buf_tmp = cur;
+                pv->cur = cur = hb_fifo_get( job->fifo_raw );
+            }
+            
+            /* Replace those MPEG-2 dates with our dates */
+            buf_tmp->start = (uint64_t) pv->count_frames *
+                pv->job->vrate_base / 300;
+            buf_tmp->stop  = (uint64_t) ( pv->count_frames + 1 ) *
+                pv->job->vrate_base / 300;
         }
-        
-        /* Replace those MPEG-2 dates with our dates */
-        buf_tmp->start = (uint64_t) pv->count_frames *
-            pv->job->vrate_base / 300;
-        buf_tmp->stop  = (uint64_t) ( pv->count_frames + 1 ) *
-            pv->job->vrate_base / 300;
 
         /* If we have a subtitle for this picture, copy it */
         /* FIXME: we should avoid this memcpy */
