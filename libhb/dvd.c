@@ -122,7 +122,7 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
     hb_title_t   * title;
     ifo_handle_t * vts = NULL;
     int            pgc_id, pgn, i;
-    hb_chapter_t * chapter, * chapter_old;
+    hb_chapter_t * chapter;
     int            c;
     uint64_t       duration;
     float          duration_correction;
@@ -715,8 +715,16 @@ int hb_dvd_read( hb_dvd_t * d, hb_buffer_t * b )
 
             if( read_retry == 3 )
             {
-                hb_log( "dvd: Unrecoverable Read Error from DVD (blk: %d)", d->next_vobu );
-                return 0;
+                hb_log( "dvd: vobu read error blk %d - skipping to cell %d",
+                        d->next_vobu, d->cell_next );
+                d->cell_cur  = d->cell_next;
+                if ( d->cell_cur > d->cell_end )
+                    return 0;
+                d->in_cell = 0;
+                d->next_vobu = d->pgc->cell_playback[d->cell_cur].first_sector;
+                FindNextCell( d );
+                d->cell_overlap = 1;
+                continue;
             }
 
             if ( !is_nav_pack( b->data ) ) { 
@@ -951,11 +959,11 @@ int hb_dvd_chapter( hb_dvd_t * d )
  **********************************************************************/
 int hb_dvd_is_break( hb_dvd_t * d )
 {
-    int     i, j;
+    int     i;
     int     pgc_id, pgn;
 	int     nr_of_ptts = d->ifo->vts_ptt_srpt->title[d->ttn-1].nr_of_ptts;
     pgc_t * pgc;
-    int     cell, chapter_length, cell_end;
+    int     cell;
     
     for( i = nr_of_ptts - 1;
          i > 0;
