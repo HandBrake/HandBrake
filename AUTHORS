@@ -31,9 +31,10 @@ Joe Crain <joe@dynaflashtech.net> (dynaflash)
 Damiano Galassi <damiog@gmail.com> (ritsuka)
  + Mac OS X GUI enhancements
 
-Edward Groenendaal <unknown> (eddyg)
+Edward Groenendaal <eddyg.hb@myreflection.org> (eddyg)
  + Major bug fixes
- + Subtitle scan
+ + Subtitle scan & Colour
+ + Performance improvements
 
 Rodney Hester <rhester@multics.dynalias.com> (rhester)
  + iPod firmware 1.2+ 640x480 MPEG-4/H.264 support
