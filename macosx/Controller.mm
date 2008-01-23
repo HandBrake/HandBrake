@@ -2072,10 +2072,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	AutoCropLeft = job->crop[2];
 	AutoCropRight = job->crop[3];
 
-	/* we run the picture size values through
-	calculatePictureSizing to get all picture size
-	information*/
-	[self calculatePictureSizing: NULL];
 	/* Run Through encoderPopUpChanged to see if there
 		needs to be any pic value modifications based on encoder settings */
 	//[self encoderPopUpChanged: NULL];
@@ -2159,6 +2155,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		}
     }   
     [fVidRatePopUp selectItemAtIndex: 0];
+    
+    /* we run the picture size values through calculatePictureSizing to get all picture setting	information*/
+	[self calculatePictureSizing: NULL];
     
    /* lets call tableViewSelected to make sure that any preset we have selected is enforced after a title change */
 	[self selectPreset:NULL]; 
