@@ -12,7 +12,8 @@ typedef struct iso639_lang_t
     char * eng_name;        /* Description in English */
     char * native_name;     /* Description in native language */
     char * iso639_1;       /* ISO-639-1 (2 characters) code */
-    char * iso639_2;        /* ISO-639-2 (3 character) code */
+    char * iso639_2;        /* ISO-639-2/t (3 character) code */
+    char * iso639_2b;       /* ISO-639-2/b code (if different from above) */
 
 } iso639_lang_t;
 
