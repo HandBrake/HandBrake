@@ -1,3 +1,7 @@
+/* This file is part of the HandBrake source code.
+   Homepage: <http://handbrake.m0k.org/>.
+   It may be used under the terms of the GNU General Public License. */
+
 #import "ExpressController.h"
 
 #define INSERT_STRING       @"Insert a DVD"
@@ -7,6 +11,8 @@
 #define TOOLBAR_ADVANCED    @"TOOLBAR_ADVANCED"
 
 #define p fState->param
+
+#import "Device.h"
 
 @interface ExpressController (Private)
 
@@ -33,7 +39,7 @@
     /* NSToolbar initializations */
     fToolbar = [[NSToolbar alloc] initWithIdentifier: @"InstantHandBrake Toolbar"];
     [fToolbar setDelegate: self];
-    [fToolbar setAllowsUserCustomization: YES];
+    [fToolbar setAllowsUserCustomization: NO];
     [fToolbar setDisplayMode: NSToolbarDisplayModeIconAndLabel];
     [fToolbar setVisible:NO];
     [fWindow setShowsToolbarButton:NO];
@@ -76,6 +82,8 @@
     fState = [fCore hb_state];
     fList   = hb_get_titles( fHandle );
     
+    fDevice = [[DeviceController alloc] init];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
     selector:@selector(scanningSource:)
     name:@"HBCoreScanningNotification" object:nil];
@@ -100,6 +108,17 @@
 - (void) applicationWillTerminate: (NSNotification *) n
 {
     [fCore close];
+}
+
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication hasVisibleWindows:(BOOL)flag
+{
+    if( !flag ) {
+        [fWindow  makeKeyAndOrderFront:nil];
+                
+        return YES;
+    }
+    
+    return NO;
 }
 
 - (NSToolbarItem *) toolbar: (NSToolbar *) toolbar itemForItemIdentifier: (NSString *) ident
@@ -309,6 +328,7 @@
 - (void) convertGo: (id) sender
 {
     int i, j;
+    Preset * currentDevice = [[[fDevice deviceList] objectAtIndex:[fConvertFormatPopUp indexOfSelectedItem]] firstPreset];
 
     for( i = 0; i < hb_list_count( fList ); i++ )
     {
@@ -318,65 +338,43 @@
         hb_title_t * title = hb_list_item( fList, i );
         hb_job_t   * job   = title->job;
 
-        int pixels = 307200;
+		int maxwidth = [currentDevice maxWidth];
+        int maxheight = [currentDevice maxHeight];
+        int pixels = maxwidth * maxheight;
 		int aspect = title->aspect;
-		if( [fConvertAspectPopUp indexOfSelectedItem] == 1)
+		if( [fConvertAspectPopUp indexOfSelectedItem] == 1 )
 		{
             aspect = 4 * HB_ASPECT_BASE / 3;
 		}
+        else if ( [fConvertAspectPopUp indexOfSelectedItem] == 2 )
+        {
+            aspect = 16 * HB_ASPECT_BASE / 9;
+        }
 
-		int maxwidth = 640;
-		job->vbitrate = 1000;
-		if( [fConvertMaxWidthPopUp indexOfSelectedItem] == 1)
-		{
-            maxwidth = 320;
-			job->vbitrate = 500;
-		}
-		job->deinterlace = 1;
+		job->vbitrate = [currentDevice videoBitRate];
 		
+        if( [fConvertMaxWidthPopUp indexOfSelectedItem] == 2 )
+		{
+            maxwidth = 480;
+			job->vbitrate /= 1.5;
+        }
+        else if ( [fConvertMaxWidthPopUp indexOfSelectedItem] == 3 )
+        {
+            maxwidth = 320;
+			job->vbitrate /= 2;
+        }
+        
 		do
 		{
 			hb_set_size( job, aspect, pixels );
 			pixels -= 10;
-		} while(job->width > maxwidth);
+		} while(job->width > maxwidth || job->height > maxheight);
 		
-        if( [fConvertFormatPopUp indexOfSelectedItem] == 0 )
-        {
-            /* iPod / H.264 */
-            job->mux        = HB_MUX_IPOD;
-            job->vcodec     = HB_VCODEC_X264;
-			job->h264_level = 30;
-            job->x264opts   = "bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subq=6:no-fast-pskip=1";
-        }
-        else if( [fConvertFormatPopUp indexOfSelectedItem] == 1 )
-        {
-            /* PSP / MPEG-4 */
-            job->mux        = HB_MUX_PSP;
-            job->vrate      = 27000000;
-            job->vrate_base = 900900;   /* 29.97 fps */
-            job->vcodec     = HB_VCODEC_FFMPEG;
-            job->vbitrate   = 600;
-            pixels          = 76800;
-            job->arate      = 24000;
-            job->abitrate   = 96;
-            aspect          = 16 * HB_ASPECT_BASE / 9;
-
-			if( [fConvertAspectPopUp indexOfSelectedItem] )
-			{
-				aspect = -1;
-			}
-
-			hb_set_size( job, aspect, pixels );
-        }
-        else
-        {
-            job->mux      = HB_MUX_MP4;
-            job->vcodec   = HB_VCODEC_X264;
-            job->x264opts = "bframes=3:ref=1:subq=5:me=umh:no-fast-pskip=1:trellis=1:cabac=0";
-            job->abitrate = 128;
-            job->vbitrate = 1500;
-        }
-
+        job->mux        = [currentDevice muxer];
+        job->vcodec     = [currentDevice videoCodec];
+        job->x264opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */  
+        strcpy(job->x264opts, [[currentDevice videoCodecOptions] UTF8String]);
+        job->chapter_markers = 1;
         job->vquality = -1.0;
 
         const char * lang;
@@ -603,6 +601,13 @@
         }
     }
     [fConvertTableView reloadData];
+    
+    NSEnumerator * enumerator;
+    Device * device;
+    enumerator = [[fDevice deviceList] objectEnumerator];
+    
+    while( ( device = [enumerator nextObject] ) )
+        [fConvertFormatPopUp addItemWithTitle:[device name]];
 
     NSRect frame  = [fWindow frame];
     float  offset = [fConvertView frame].size.height -

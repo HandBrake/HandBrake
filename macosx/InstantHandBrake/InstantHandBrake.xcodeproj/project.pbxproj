@@ -6,18 +6,35 @@
 	objectVersion = 44;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		A95DD4FA0D4BA8A30056F1F2 /* Plist Macros */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = A95DD5070D4BA8E90056F1F2 /* Build configuration list for PBXAggregateTarget "Plist Macros" */;
+			buildPhases = (
+				A95DD4F90D4BA8A30056F1F2 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = "Plist Macros";
+			productName = "Plist Macros";
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		4D1EA2EA0993B09A00FDC1A2 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.mm */; };
 		4D1EA2F60993B0CA00FDC1A2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		4D1EA31C0993B24700FDC1A2 /* ExpressController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D1EA31B0993B24700FDC1A2 /* ExpressController.m */; };
 		4D2AEA1A09CCB332007E18F6 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DEB2024052B055F00C39CA9 /* IOKit.framework */; };
 		4D3ECC2709A4917000B2E45F /* WhiteBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D3ECC2609A4917000B2E45F /* WhiteBox.m */; };
-		52AFF86B0B59BD14000DA7C4 /* Express.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4D1EA2DC0993B01000FDC1A2 /* Express.plist */; };
 		A2122D820C7EAF6600AB87A4 /* DriveDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = A2122D810C7EAF6600AB87A4 /* DriveDetector.m */; };
 		A952EBCE0D3BB1B100A3DCA7 /* Open.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A952EBCD0D3BB1B100A3DCA7 /* Open.tiff */; };
-		A9B706E60D356BC800385AF2 /* Growl.framework in Resources */ = {isa = PBXBuildFile; fileRef = A9B706E50D356BC800385AF2 /* Growl.framework */; };
+		A95DD5490D4BACF50056F1F2 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9B706E50D356BC800385AF2 /* Growl.framework */; };
+		A95DD6260D4BAD950056F1F2 /* Growl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A9B706E50D356BC800385AF2 /* Growl.framework */; };
+		A98B18070D3CDF290093A591 /* Preset.m in Sources */ = {isa = PBXBuildFile; fileRef = A98B18060D3CDF290093A591 /* Preset.m */; };
+		A98B180A0D3CDF380093A591 /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = A98B18090D3CDF380093A591 /* Device.m */; };
 		A9B70A030D3570F100385AF2 /* HandBrake.icns in Resources */ = {isa = PBXBuildFile; fileRef = A9B70A020D3570F100385AF2 /* HandBrake.icns */; };
 		A9B70A0F0D35719900385AF2 /* HBCore.m in Sources */ = {isa = PBXBuildFile; fileRef = A9B70A0D0D35719900385AF2 /* HBCore.m */; };
+		A9C0EDB90D478699005CA5CF /* DeviceController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C0EDB80D478699005CA5CF /* DeviceController.m */; };
 		A9DB3A1F0D37EC6800F77345 /* libhb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB3A0F0D37EC2800F77345 /* libhb.a */; };
 		A9ED4EF20D36226F004341F5 /* Play.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A9ED4EEF0D36226F004341F5 /* Play.tiff */; };
 		A9ED4EF30D36226F004341F5 /* Pause.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A9ED4EF00D36226F004341F5 /* Pause.tiff */; };
@@ -26,6 +43,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		A95DD4FE0D4BA8D50056F1F2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A95DD4FA0D4BA8A30056F1F2;
+			remoteInfo = "Plist Macros";
+		};
 		A9DB3A0E0D37EC2800F77345 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A9DB3A080D37EC2800F77345 /* libhb.xcodeproj */;
@@ -56,6 +80,19 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		A95DD6D60D4BAD9D0056F1F2 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A95DD6260D4BAD950056F1F2 /* Growl.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		29B97316FDCFA39411CA2CEA /* main.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
@@ -71,11 +108,17 @@
 		A2122D800C7EAF6500AB87A4 /* DriveDetector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DriveDetector.h; sourceTree = "<group>"; };
 		A2122D810C7EAF6600AB87A4 /* DriveDetector.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DriveDetector.m; sourceTree = "<group>"; };
 		A952EBCD0D3BB1B100A3DCA7 /* Open.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Open.tiff; sourceTree = "<group>"; };
+		A98B18050D3CDF290093A591 /* Preset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Preset.h; sourceTree = "<group>"; };
+		A98B18060D3CDF290093A591 /* Preset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Preset.m; sourceTree = "<group>"; };
+		A98B18080D3CDF380093A591 /* Device.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Device.h; sourceTree = "<group>"; };
+		A98B18090D3CDF380093A591 /* Device.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Device.m; sourceTree = "<group>"; };
 		A9B706E50D356BC800385AF2 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Growl.framework; path = ../Growl.framework; sourceTree = SOURCE_ROOT; };
 		A9B70A010D3570D300385AF2 /* hb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hb.h; path = ../../libhb/hb.h; sourceTree = SOURCE_ROOT; };
 		A9B70A020D3570F100385AF2 /* HandBrake.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = HandBrake.icns; path = ../HandBrake.icns; sourceTree = SOURCE_ROOT; };
 		A9B70A0D0D35719900385AF2 /* HBCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBCore.m; sourceTree = "<group>"; };
 		A9B70A0E0D35719900385AF2 /* HBCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBCore.h; sourceTree = "<group>"; };
+		A9C0EDB70D478699005CA5CF /* DeviceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceController.h; sourceTree = "<group>"; };
+		A9C0EDB80D478699005CA5CF /* DeviceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceController.m; sourceTree = "<group>"; };
 		A9DB3A080D37EC2800F77345 /* libhb.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = libhb.xcodeproj; sourceTree = "<group>"; };
 		A9ED4EEF0D36226F004341F5 /* Play.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Play.tiff; path = ../icons/Play.tiff; sourceTree = SOURCE_ROOT; };
 		A9ED4EF00D36226F004341F5 /* Pause.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Pause.tiff; path = ../icons/Pause.tiff; sourceTree = SOURCE_ROOT; };
@@ -88,6 +131,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A95DD5490D4BACF50056F1F2 /* Growl.framework in Frameworks */,
 				A9DB3A1F0D37EC6800F77345 /* libhb.a in Frameworks */,
 				4D1EA2F60993B0CA00FDC1A2 /* Cocoa.framework in Frameworks */,
 				4D2AEA1A09CCB332007E18F6 /* IOKit.framework in Frameworks */,
@@ -108,7 +152,20 @@
 		29B97314FDCFA39411CA2CEA /* HandBrake */ = {
 			isa = PBXGroup;
 			children = (
-				526FBC940B4CAA310064E04C /* Classes */,
+				A98B18080D3CDF380093A591 /* Device.h */,
+				A98B18090D3CDF380093A591 /* Device.m */,
+				A98B18050D3CDF290093A591 /* Preset.h */,
+				A98B18060D3CDF290093A591 /* Preset.m */,
+				A9C0EDB70D478699005CA5CF /* DeviceController.h */,
+				A9C0EDB80D478699005CA5CF /* DeviceController.m */,
+				4D3ECC2509A4917000B2E45F /* WhiteBox.h */,
+				4D3ECC2609A4917000B2E45F /* WhiteBox.m */,
+				A2122D800C7EAF6500AB87A4 /* DriveDetector.h */,
+				A2122D810C7EAF6600AB87A4 /* DriveDetector.m */,
+				4D1EA31A0993B24700FDC1A2 /* ExpressController.h */,
+				4D1EA31B0993B24700FDC1A2 /* ExpressController.m */,
+				A9B70A0E0D35719900385AF2 /* HBCore.h */,
+				A9B70A0D0D35719900385AF2 /* HBCore.m */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
@@ -153,21 +210,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		526FBC940B4CAA310064E04C /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				4D3ECC2509A4917000B2E45F /* WhiteBox.h */,
-				4D3ECC2609A4917000B2E45F /* WhiteBox.m */,
-				A2122D800C7EAF6500AB87A4 /* DriveDetector.h */,
-				A2122D810C7EAF6600AB87A4 /* DriveDetector.m */,
-				4D1EA31A0993B24700FDC1A2 /* ExpressController.h */,
-				4D1EA31B0993B24700FDC1A2 /* ExpressController.m */,
-				A9B70A0E0D35719900385AF2 /* HBCore.h */,
-				A9B70A0D0D35719900385AF2 /* HBCore.m */,
-			);
-			name = Classes;
-			sourceTree = "<group>";
-		};
 		A9DB3A090D37EC2800F77345 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -188,10 +230,12 @@
 				4D1EA2D60993B01000FDC1A2 /* Resources */,
 				4D1EA2D70993B01000FDC1A2 /* Sources */,
 				4D1EA2D80993B01000FDC1A2 /* Frameworks */,
+				A95DD6D60D4BAD9D0056F1F2 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				A95DD4FF0D4BA8D50056F1F2 /* PBXTargetDependency */,
 				A9DB3A150D37EC4200F77345 /* PBXTargetDependency */,
 			);
 			name = "Instant HandBrake";
@@ -221,6 +265,7 @@
 			projectRoot = "";
 			targets = (
 				4D1EA2D90993B01000FDC1A2 /* Instant HandBrake */,
+				A95DD4FA0D4BA8A30056F1F2 /* Plist Macros */,
 			);
 		};
 /* End PBXProject section */
@@ -254,8 +299,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A9B706E60D356BC800385AF2 /* Growl.framework in Resources */,
-				52AFF86B0B59BD14000DA7C4 /* Express.plist in Resources */,
 				A9B70A030D3570F100385AF2 /* HandBrake.icns in Resources */,
 				A9ED4EF20D36226F004341F5 /* Play.tiff in Resources */,
 				A9ED4EF30D36226F004341F5 /* Pause.tiff in Resources */,
@@ -267,6 +310,24 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		A95DD4F90D4BA8A30056F1F2 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+				"$(TARGET_BUILD_DIR)/include/PlistMacros.h",
+				"$(TARGET_BUILD_DIR)/include/DummyFileToForceScriptToRunEveryTimeWithoutBeingCreated",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "PATH=$PATH:/usr/local/bin:/usr/bin:/sw/bin:/opt/local/bin\nbuildid=\"r`svn info | awk '/^Revision:/ {print $2}'`\"\n\necho \"#define BUILDID $buildid\" > $SCRIPT_OUTPUT_FILE_0\necho \"#define BUILDDATE `date`\" >> $SCRIPT_OUTPUT_FILE_0\necho \"#define WHOAMI `whoami`\" >> $SCRIPT_OUTPUT_FILE_0\n\n# Delete the intermediate Info.plist so that Xcode re-preprocesses the Info.plist with our updated macros.\n# Use -f because after a clean build, this file doesn't exist yet, so a plain rm would fail and stop the build.\nrm -f \"${CONFIGURATION_TEMP_DIR}/InstantHandBrake.build/Preprocessed-Info.plist\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		4D1EA2D70993B01000FDC1A2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -277,12 +338,20 @@
 				4D3ECC2709A4917000B2E45F /* WhiteBox.m in Sources */,
 				A2122D820C7EAF6600AB87A4 /* DriveDetector.m in Sources */,
 				A9B70A0F0D35719900385AF2 /* HBCore.m in Sources */,
+				A98B18070D3CDF290093A591 /* Preset.m in Sources */,
+				A98B180A0D3CDF380093A591 /* Device.m in Sources */,
+				A9C0EDB90D478699005CA5CF /* DeviceController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		A95DD4FF0D4BA8D50056F1F2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A95DD4FA0D4BA8A30056F1F2 /* Plist Macros */;
+			targetProxy = A95DD4FE0D4BA8D50056F1F2 /* PBXContainerItemProxy */;
+		};
 		A9DB3A150D37EC4200F77345 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = libhb;
@@ -317,6 +386,9 @@
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				HEADER_SEARCH_PATHS = ../libhb;
 				INFOPLIST_FILE = Express.plist;
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-C";
+				INFOPLIST_PREFIX_HEADER = "$(TARGET_BUILD_DIR)/include/PlistMacros.h";
+				INFOPLIST_PREPROCESS = YES;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -361,12 +433,14 @@
 					ppc,
 					i386,
 				);
+				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.framework *.gch (*) CVS .svn *.xcodeproj *.xcode *.pbproj *.pbxproj";
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_PREPROCESSOR_DEFINITIONS = "JOB_GROUPS=1";
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_PREPROCESS = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
 			};
@@ -389,6 +463,9 @@
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				HEADER_SEARCH_PATHS = ../libhb;
 				INFOPLIST_FILE = Express.plist;
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-C";
+				INFOPLIST_PREFIX_HEADER = "$(TARGET_BUILD_DIR)/include/PlistMacros.h";
+				INFOPLIST_PREPROCESS = YES;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -422,6 +499,9 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				HEADER_SEARCH_PATHS = ../libhb;
 				INFOPLIST_FILE = Express.plist;
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-C";
+				INFOPLIST_PREFIX_HEADER = "$(TARGET_BUILD_DIR)/include/PlistMacros.h";
+				INFOPLIST_PREPROCESS = YES;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -441,6 +521,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.framework *.gch (*) CVS .svn *.xcodeproj *.xcode *.pbproj *.pbxproj";
 				GCC_AUTO_VECTORIZATION = NO;
 				GCC_DEBUGGING_SYMBOLS = default;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -450,6 +531,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "JOB_GROUPS=1";
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_PREPROCESS = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				PREBINDING = NO;
 				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
@@ -460,16 +542,52 @@
 		4D4E7BC6087804870051572B /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.framework *.gch (*) CVS .svn *.xcodeproj *.xcode *.pbproj *.pbxproj";
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_PREPROCESSOR_DEFINITIONS = "JOB_GROUPS=1";
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_PREPROCESS = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
 			};
 			name = Deployment;
+		};
+		A95DD4FB0D4BA8A30056F1F2 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = "Plist Macros";
+			};
+			name = Development;
+		};
+		A95DD4FC0D4BA8A30056F1F2 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = "Plist Macros";
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		A95DD4FD0D4BA8A30056F1F2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = "Plist Macros";
+				ZERO_LINK = NO;
+			};
+			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
@@ -490,6 +608,16 @@
 				4D4E7BC5087804870051572B /* Development */,
 				4D4E7BC6087804870051572B /* Deployment */,
 				0D88F56F0B6CDCD400F81F26 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Deployment;
+		};
+		A95DD5070D4BA8E90056F1F2 /* Build configuration list for PBXAggregateTarget "Plist Macros" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A95DD4FB0D4BA8A30056F1F2 /* Development */,
+				A95DD4FC0D4BA8A30056F1F2 /* Deployment */,
+				A95DD4FD0D4BA8A30056F1F2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Deployment;

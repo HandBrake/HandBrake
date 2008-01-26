@@ -17,10 +17,16 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0a2</string>
+	<string>BUILDID</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0a3</string>
+    <key>LSMinimumSystemVersion</key>
+	<string>10.4.0</string>
 	<key>NSMainNibFile</key>
 	<string>Express</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+    <key>BuildDate</key>
+	<string>BUILDDATE</string>
 </dict>
 </plist>

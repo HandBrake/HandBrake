@@ -1,9 +1,14 @@
-/* ExpressController */
+/* ExpressController
+
+   This file is part of the HandBrake source code.
+   Homepage: <http://handbrake.m0k.org/>.
+   It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>
 #import "DriveDetector.h"
 #import "HBCore.h"
 #import "hb.h"
+#import "DeviceController.h"
 
 @interface ExpressController : NSObject
 
@@ -41,6 +46,7 @@
 
     DriveDetector                * fDriveDetector;
     HBCore                       * fCore;
+    DeviceController             * fDevice;
     NSDictionary                 * fDrives;
 }
 
