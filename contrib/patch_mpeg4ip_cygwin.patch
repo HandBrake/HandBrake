@@ -1,6 +1,30 @@
-diff -Naur mpeg4ip/lib/mp4v2/mp4.cpp /Users/pri/t/mpeg4ip/lib/mp4v2/mp4.cpp
---- mpeg4ip/lib/mp4v2/mp4.cpp	2005-03-30 20:41:58.000000000 +0200
-+++ /Users/pri/t/mpeg4ip/lib/mp4v2/mp4.cpp	2007-02-09 22:39:28.000000000 +0100
+diff -Naur mpeg4ipOrg/configure mpeg4ip/configure
+--- mpeg4ipOrg/configure	2005-05-18 23:03:26.000000000 +0100
++++ mpeg4ip/configure	2008-01-26 18:02:26.281250000 +0000
+@@ -27789,7 +27789,7 @@
+    if test x$USENASM = xtrue; then
+ 	echo "$as_me:$LINENO: checking nasm version..." >&5
+ echo $ECHO_N "checking nasm version...... $ECHO_C" >&6
+-	BILLSNASM_arg=`nasm -r | tr '.' ' '`
++	BILLSNASM_arg=`(nasm -r || nasm -v) | tr '.' ' '`
+         BILLSNASM_ret=`util/testnasm.sh $BILLSNASM_arg`
+ 	if test x$BILLSNASM_ret = x"yes"; then
+ 	   USENASM=true
+diff -Naur mpeg4ipOrg/configure.in mpeg4ip/configure.in
+--- mpeg4ipOrg/configure.in	2005-05-18 22:21:34.000000000 +0100
++++ mpeg4ip/configure.in	2008-01-26 18:02:32.125000000 +0000
+@@ -647,7 +647,7 @@
+ 
+    if test x$USENASM = xtrue; then
+ 	AC_MSG_CHECKING(nasm version...)
+-	BILLSNASM_arg=`nasm -r | tr '.' ' '`
++	BILLSNASM_arg=`(nasm -r || nasm -v) | tr '.' ' '`
+         BILLSNASM_ret=`util/testnasm.sh $BILLSNASM_arg`
+ 	if test x$BILLSNASM_ret = x"yes"; then
+ 	   USENASM=true
+diff -Naur mpeg4ipOrg/lib/mp4v2/mp4.cpp mpeg4ip/lib/mp4v2/mp4.cpp
+--- mpeg4ipOrg/lib/mp4v2/mp4.cpp	2005-03-30 19:41:58.000000000 +0100
++++ mpeg4ip/lib/mp4v2/mp4.cpp	2008-01-26 17:58:21.828125000 +0000
 @@ -1678,9 +1678,9 @@
  extern "C" bool MP4GetTrackH264SeqPictHeaders (MP4FileHandle hFile, 
  					       MP4TrackId trackId,
@@ -13,9 +37,9 @@ diff -Naur mpeg4ip/lib/mp4v2/mp4.cpp /Users/pri/t/mpeg4ip/lib/mp4v2/mp4.cpp
  {
    if (MP4_IS_VALID_FILE_HANDLE(hFile)) {
      try {
-diff -Naur mpeg4ip/lib/mp4v2/mp4.h /Users/pri/t/mpeg4ip/lib/mp4v2/mp4.h
---- mpeg4ip/lib/mp4v2/mp4.h	2005-03-30 20:41:58.000000000 +0200
-+++ /Users/pri/t/mpeg4ip/lib/mp4v2/mp4.h	2007-02-09 22:39:42.000000000 +0100
+diff -Naur mpeg4ipOrg/lib/mp4v2/mp4.h mpeg4ip/lib/mp4v2/mp4.h
+--- mpeg4ipOrg/lib/mp4v2/mp4.h	2005-03-30 19:41:58.000000000 +0100
++++ mpeg4ip/lib/mp4v2/mp4.h	2008-01-26 17:58:21.921875000 +0000
 @@ -631,9 +631,9 @@
  
  bool MP4GetTrackVideoMetadata(MP4FileHandle hFile,
@@ -41,9 +65,9 @@ diff -Naur mpeg4ip/lib/mp4v2/mp4.h /Users/pri/t/mpeg4ip/lib/mp4v2/mp4.h
  bool MP4GetTrackH264LengthSize(MP4FileHandle hFile,
  			       MP4TrackId trackId,
  			       uint32_t *pLength);
-diff -Naur mpeg4ip/lib/mp4v2/mp4container.cpp /Users/pri/t/mpeg4ip/lib/mp4v2/mp4container.cpp
---- mpeg4ip/lib/mp4v2/mp4container.cpp	2001-11-19 18:06:58.000000000 +0100
-+++ /Users/pri/t/mpeg4ip/lib/mp4v2/mp4container.cpp	2007-02-09 22:10:23.000000000 +0100
+diff -Naur mpeg4ipOrg/lib/mp4v2/mp4container.cpp mpeg4ip/lib/mp4v2/mp4container.cpp
+--- mpeg4ipOrg/lib/mp4v2/mp4container.cpp	2001-11-19 17:06:58.000000000 +0000
++++ mpeg4ip/lib/mp4v2/mp4container.cpp	2008-01-26 17:58:21.937500000 +0000
 @@ -207,7 +207,7 @@
  	u_int32_t numProperties = m_pProperties.Size();
  
@@ -53,9 +77,9 @@ diff -Naur mpeg4ip/lib/mp4v2/mp4container.cpp /Users/pri/t/mpeg4ip/lib/mp4v2/mp4
  		return;
  	}
  
-diff -Naur mpeg4ip/lib/mp4v2/mp4container.h /Users/pri/t/mpeg4ip/lib/mp4v2/mp4container.h
---- mpeg4ip/lib/mp4v2/mp4container.h	2001-11-19 18:06:58.000000000 +0100
-+++ /Users/pri/t/mpeg4ip/lib/mp4v2/mp4container.h	2007-02-09 22:06:42.000000000 +0100
+diff -Naur mpeg4ipOrg/lib/mp4v2/mp4container.h mpeg4ip/lib/mp4v2/mp4container.h
+--- mpeg4ipOrg/lib/mp4v2/mp4container.h	2001-11-19 17:06:58.000000000 +0000
++++ mpeg4ip/lib/mp4v2/mp4container.h	2008-01-26 17:58:21.953125000 +0000
 @@ -1,24 +1,3 @@
 -/*
 - * The contents of this file are subject to the Mozilla Public
@@ -81,9 +105,9 @@ diff -Naur mpeg4ip/lib/mp4v2/mp4container.h /Users/pri/t/mpeg4ip/lib/mp4v2/mp4co
  #ifndef __MP4_CONTAINER_INCLUDED__
  #define __MP4_CONTAINER_INCLUDED__
  
-diff -Naur mpeg4ip/lib/mp4v2/mp4descriptor.cpp /Users/pri/t/mpeg4ip/lib/mp4v2/mp4descriptor.cpp
---- mpeg4ip/lib/mp4v2/mp4descriptor.cpp	2004-02-12 03:06:02.000000000 +0100
-+++ /Users/pri/t/mpeg4ip/lib/mp4v2/mp4descriptor.cpp	2007-02-09 22:24:17.000000000 +0100
+diff -Naur mpeg4ipOrg/lib/mp4v2/mp4descriptor.cpp mpeg4ip/lib/mp4v2/mp4descriptor.cpp
+--- mpeg4ipOrg/lib/mp4v2/mp4descriptor.cpp	2004-02-12 02:06:02.000000000 +0000
++++ mpeg4ip/lib/mp4v2/mp4descriptor.cpp	2008-01-26 17:58:21.968750000 +0000
 @@ -149,7 +149,7 @@
  	u_int32_t numProperties = m_pProperties.Size();
  
@@ -102,9 +126,9 @@ diff -Naur mpeg4ip/lib/mp4v2/mp4descriptor.cpp /Users/pri/t/mpeg4ip/lib/mp4v2/mp
  		return;
  	}
  	for (u_int32_t i = 0; i < numProperties; i++) {
-diff -Naur mpeg4ip/lib/mp4v2/mp4file.cpp /Users/pri/t/mpeg4ip/lib/mp4v2/mp4file.cpp
---- mpeg4ip/lib/mp4v2/mp4file.cpp	2005-03-30 20:41:58.000000000 +0200
-+++ /Users/pri/t/mpeg4ip/lib/mp4v2/mp4file.cpp	2007-02-09 22:44:08.000000000 +0100
+diff -Naur mpeg4ipOrg/lib/mp4v2/mp4file.cpp mpeg4ip/lib/mp4v2/mp4file.cpp
+--- mpeg4ipOrg/lib/mp4v2/mp4file.cpp	2005-03-30 19:41:58.000000000 +0100
++++ mpeg4ip/lib/mp4v2/mp4file.cpp	2008-01-26 17:58:22.109375000 +0000
 @@ -1431,7 +1431,7 @@
    return trackId;
  }
@@ -203,9 +227,9 @@ diff -Naur mpeg4ip/lib/mp4v2/mp4file.cpp /Users/pri/t/mpeg4ip/lib/mp4v2/mp4file.
    *pppPictHeader = ppPictHeader;
    *ppPictHeaderSize = pPictHeaderSize;
  
-diff -Naur mpeg4ip/lib/mp4v2/mp4file.h /Users/pri/t/mpeg4ip/lib/mp4v2/mp4file.h
---- mpeg4ip/lib/mp4v2/mp4file.h	2005-03-30 20:41:58.000000000 +0200
-+++ /Users/pri/t/mpeg4ip/lib/mp4v2/mp4file.h	2007-02-09 22:35:21.000000000 +0100
+diff -Naur mpeg4ipOrg/lib/mp4v2/mp4file.h mpeg4ip/lib/mp4v2/mp4file.h
+--- mpeg4ipOrg/lib/mp4v2/mp4file.h	2005-03-30 19:41:58.000000000 +0100
++++ mpeg4ip/lib/mp4v2/mp4file.h	2008-01-26 17:58:22.171875000 +0000
 @@ -329,9 +329,9 @@
  				      uint8_t *pLevel);
  	bool GetTrackH264SeqPictHeaders(MP4TrackId trackId, 
@@ -218,9 +242,9 @@ diff -Naur mpeg4ip/lib/mp4v2/mp4file.h /Users/pri/t/mpeg4ip/lib/mp4v2/mp4file.h
  	void GetTrackH264LengthSize(MP4TrackId, 
  				    uint32_t *pLength);
  	const char* GetHintTrackSdp(MP4TrackId hintTrackId);
-diff -Naur mpeg4ip/lib/mp4v2/mp4file_io.cpp /Users/pri/t/mpeg4ip/lib/mp4v2/mp4file_io.cpp
---- mpeg4ip/lib/mp4v2/mp4file_io.cpp	2004-07-15 20:09:48.000000000 +0200
-+++ /Users/pri/t/mpeg4ip/lib/mp4v2/mp4file_io.cpp	2007-02-09 22:44:47.000000000 +0100
+diff -Naur mpeg4ipOrg/lib/mp4v2/mp4file_io.cpp mpeg4ip/lib/mp4v2/mp4file_io.cpp
+--- mpeg4ipOrg/lib/mp4v2/mp4file_io.cpp	2004-07-15 19:09:48.000000000 +0100
++++ mpeg4ip/lib/mp4v2/mp4file_io.cpp	2008-01-26 17:58:22.218750000 +0000
 @@ -86,7 +86,7 @@
  	}
  
@@ -230,9 +254,9 @@ diff -Naur mpeg4ip/lib/mp4v2/mp4file_io.cpp /Users/pri/t/mpeg4ip/lib/mp4v2/mp4fi
  
  	if (pFile == NULL) {
  		pFile = m_pFile;
-diff -Naur mpeg4ip/lib/mp4v2/mp4property.cpp /Users/pri/t/mpeg4ip/lib/mp4v2/mp4property.cpp
---- mpeg4ip/lib/mp4v2/mp4property.cpp	2004-08-23 20:28:21.000000000 +0200
-+++ /Users/pri/t/mpeg4ip/lib/mp4v2/mp4property.cpp	2007-02-09 22:47:04.000000000 +0100
+diff -Naur mpeg4ipOrg/lib/mp4v2/mp4property.cpp mpeg4ip/lib/mp4v2/mp4property.cpp
+--- mpeg4ipOrg/lib/mp4v2/mp4property.cpp	2004-08-23 19:28:22.000000000 +0100
++++ mpeg4ip/lib/mp4v2/mp4property.cpp	2008-01-26 17:58:22.265625000 +0000
 @@ -636,7 +636,7 @@
  	u_int32_t numProperties = m_pProperties.Size();
  
