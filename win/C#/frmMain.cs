@@ -748,24 +748,32 @@ namespace Handbrake
 
         private void check_iPodAtom_CheckedChanged(object sender, EventArgs e)
         {
-            if (!text_destination.Text.Contains(".mp4"))
+            if ((!text_destination.Text.Contains(".mp4")) && (!text_destination.Text.Contains(".m4v")))
             {
-                lbl_ipodAtom.Visible = true;
+                text_destination.BackColor = Color.LightCoral;
+                check_iPodAtom.BackColor = Color.LightCoral;
                 check_iPodAtom.CheckState = CheckState.Unchecked;
             }
             else
-                lbl_ipodAtom.Visible = false;
+            {
+                check_iPodAtom.BackColor = Color.Transparent;
+                text_destination.BackColor = Color.White;
+            }
         }
 
         private void check_optimiseMP4_CheckedChanged(object sender, EventArgs e)
         {
-            if (!text_destination.Text.Contains(".mp4"))
+            if ((!text_destination.Text.Contains(".mp4")) && (!text_destination.Text.Contains(".m4v")))
             {
                 check_optimiseMP4.BackColor = Color.LightCoral;
+                text_destination.BackColor = Color.LightCoral;
                 check_optimiseMP4.CheckState = CheckState.Unchecked;
             }
             else
+            {
                 check_optimiseMP4.BackColor = Color.Transparent;
+                text_destination.BackColor = Color.White;
+            }
         }
 
         private void drp_dvdtitle_Click(object sender, EventArgs e)
@@ -897,7 +905,6 @@ namespace Handbrake
                 rtf_h264advanced.Text = "";
                 check_iPodAtom.Enabled = false;
                 check_iPodAtom.Checked = false;
-                lbl_ipodAtom.Visible = false;
                 check_optimiseMP4.Enabled = false;
                 check_lAnamorphic.Enabled = false;
                 check_lAnamorphic.Checked = false;
@@ -909,7 +916,6 @@ namespace Handbrake
 
                 h264Tab.Enabled = true;
                 check_iPodAtom.Enabled = true;
-                lbl_ipodAtom.Visible = false;
                 check_optimiseMP4.Enabled = true;
                 check_lAnamorphic.Enabled = true;
             }

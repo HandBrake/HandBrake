@@ -37,7 +37,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label Label38;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -129,10 +129,8 @@ namespace Handbrake
             this.Label32 = new System.Windows.Forms.Label();
             this.Label18 = new System.Windows.Forms.Label();
             this.TabPage3 = new System.Windows.Forms.TabPage();
-            this.lbl_ipodAtom = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
             this.lbl_vfr = new System.Windows.Forms.Label();
-            this.check_iPodAtom = new System.Windows.Forms.CheckBox();
             this.lbl_largeMp4Warning = new System.Windows.Forms.Label();
             this.Label22 = new System.Windows.Forms.Label();
             this.check_2PassEncode = new System.Windows.Forms.CheckBox();
@@ -141,6 +139,7 @@ namespace Handbrake
             this.SliderValue = new System.Windows.Forms.Label();
             this.Label46 = new System.Windows.Forms.Label();
             this.Label40 = new System.Windows.Forms.Label();
+            this.check_iPodAtom = new System.Windows.Forms.CheckBox();
             this.check_grayscale = new System.Windows.Forms.CheckBox();
             this.TabPage1 = new System.Windows.Forms.TabPage();
             this.text_bottom = new System.Windows.Forms.NumericUpDown();
@@ -368,8 +367,7 @@ namespace Handbrake
             this.drp_videoEncoder.Items.AddRange(new object[] {
             "Mpeg 4",
             "Xvid",
-            "H.264",
-            "H.264 (iPod)"});
+            "H.264"});
             this.drp_videoEncoder.Location = new System.Drawing.Point(99, 20);
             this.drp_videoEncoder.Name = "drp_videoEncoder";
             this.drp_videoEncoder.Size = new System.Drawing.Size(156, 21);
@@ -986,7 +984,7 @@ namespace Handbrake
             this.check_optimiseMP4.AutoSize = true;
             this.check_optimiseMP4.BackColor = System.Drawing.Color.Transparent;
             this.check_optimiseMP4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_optimiseMP4.Location = new System.Drawing.Point(502, 21);
+            this.check_optimiseMP4.Location = new System.Drawing.Point(502, 14);
             this.check_optimiseMP4.Name = "check_optimiseMP4";
             this.check_optimiseMP4.Size = new System.Drawing.Size(143, 17);
             this.check_optimiseMP4.TabIndex = 25;
@@ -1256,12 +1254,11 @@ namespace Handbrake
             // TabPage3
             // 
             this.TabPage3.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.TabPage3.Controls.Add(this.lbl_ipodAtom);
             this.TabPage3.Controls.Add(this.label25);
             this.TabPage3.Controls.Add(this.lbl_vfr);
-            this.TabPage3.Controls.Add(this.check_iPodAtom);
             this.TabPage3.Controls.Add(this.lbl_largeMp4Warning);
             this.TabPage3.Controls.Add(this.check_largeFile);
+            this.TabPage3.Controls.Add(this.check_grayscale);
             this.TabPage3.Controls.Add(this.check_turbo);
             this.TabPage3.Controls.Add(this.Label22);
             this.TabPage3.Controls.Add(this.check_2PassEncode);
@@ -1281,19 +1278,6 @@ namespace Handbrake
             this.TabPage3.Size = new System.Drawing.Size(649, 274);
             this.TabPage3.TabIndex = 2;
             this.TabPage3.Text = "Video";
-            // 
-            // lbl_ipodAtom
-            // 
-            this.lbl_ipodAtom.AutoSize = true;
-            this.lbl_ipodAtom.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_ipodAtom.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_ipodAtom.ForeColor = System.Drawing.Color.Red;
-            this.lbl_ipodAtom.Location = new System.Drawing.Point(132, 124);
-            this.lbl_ipodAtom.Name = "lbl_ipodAtom";
-            this.lbl_ipodAtom.Size = new System.Drawing.Size(91, 12);
-            this.lbl_ipodAtom.TabIndex = 29;
-            this.lbl_ipodAtom.Text = "x264 && mp4 only";
-            this.lbl_ipodAtom.Visible = false;
             // 
             // label25
             // 
@@ -1317,19 +1301,6 @@ namespace Handbrake
             this.lbl_vfr.TabIndex = 27;
             this.lbl_vfr.Text = "(VFR On)";
             this.lbl_vfr.Visible = false;
-            // 
-            // check_iPodAtom
-            // 
-            this.check_iPodAtom.AutoSize = true;
-            this.check_iPodAtom.BackColor = System.Drawing.Color.Transparent;
-            this.check_iPodAtom.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_iPodAtom.Location = new System.Drawing.Point(16, 119);
-            this.check_iPodAtom.Name = "check_iPodAtom";
-            this.check_iPodAtom.Size = new System.Drawing.Size(110, 17);
-            this.check_iPodAtom.TabIndex = 26;
-            this.check_iPodAtom.Text = "Add iPod Atom";
-            this.check_iPodAtom.UseVisualStyleBackColor = false;
-            this.check_iPodAtom.CheckedChanged += new System.EventHandler(this.check_iPodAtom_CheckedChanged);
             // 
             // lbl_largeMp4Warning
             // 
@@ -1421,12 +1392,25 @@ namespace Handbrake
             this.Label40.TabIndex = 13;
             this.Label40.Text = "Constant Quality:";
             // 
+            // check_iPodAtom
+            // 
+            this.check_iPodAtom.AutoSize = true;
+            this.check_iPodAtom.BackColor = System.Drawing.Color.Transparent;
+            this.check_iPodAtom.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_iPodAtom.Location = new System.Drawing.Point(516, 255);
+            this.check_iPodAtom.Name = "check_iPodAtom";
+            this.check_iPodAtom.Size = new System.Drawing.Size(122, 17);
+            this.check_iPodAtom.TabIndex = 26;
+            this.check_iPodAtom.Text = "Insert iPod Atom";
+            this.check_iPodAtom.UseVisualStyleBackColor = false;
+            this.check_iPodAtom.CheckedChanged += new System.EventHandler(this.check_iPodAtom_CheckedChanged);
+            // 
             // check_grayscale
             // 
             this.check_grayscale.AutoSize = true;
             this.check_grayscale.BackColor = System.Drawing.Color.Transparent;
             this.check_grayscale.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_grayscale.Location = new System.Drawing.Point(16, 217);
+            this.check_grayscale.Location = new System.Drawing.Point(16, 117);
             this.check_grayscale.Name = "check_grayscale";
             this.check_grayscale.Size = new System.Drawing.Size(138, 17);
             this.check_grayscale.TabIndex = 1;
@@ -1440,7 +1424,6 @@ namespace Handbrake
             this.TabPage1.Controls.Add(this.text_top);
             this.TabPage1.Controls.Add(this.text_left);
             this.TabPage1.Controls.Add(this.text_right);
-            this.TabPage1.Controls.Add(this.check_grayscale);
             this.TabPage1.Controls.Add(this.label26);
             this.TabPage1.Controls.Add(this.Label56);
             this.TabPage1.Controls.Add(this.lbl_Aspect);
@@ -1883,9 +1866,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Format = "N0";
+            dataGridViewCellStyle3.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle3;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -2197,6 +2180,7 @@ namespace Handbrake
             this.Controls.Add(this.lbl_encode);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.check_iPodAtom);
             this.Controls.Add(this.groupBox_dest);
             this.Controls.Add(this.advancedOptions);
             this.Controls.Add(this.groupBox_output);
@@ -2358,7 +2342,6 @@ namespace Handbrake
         internal System.Windows.Forms.CheckBox check_vfr;
         internal System.Windows.Forms.CheckBox check_iPodAtom;
         internal System.Windows.Forms.Label lbl_vfr;
-        internal System.Windows.Forms.Label lbl_ipodAtom;
         internal System.Windows.Forms.Label label25;
         internal System.Windows.Forms.Label label26;
         internal System.Windows.Forms.Label Label56;
