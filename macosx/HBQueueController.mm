@@ -161,6 +161,31 @@ static NSDictionary* _shortHeightAttribute = NULL;
                 subtitleLang = [[NSString stringWithUTF8String:aSubtitle->lang] retain];
         }
 
+        // Calculate and store output dimensions and anamorphic dimensions
+        if (pixel_ratio == 1) // Original PAR Implementation, now called Strict Anamorphic
+        {
+            output_width = titleWidth - crop[2] - crop[3];
+            output_height = titleHeight - crop[0] - crop[1];
+            anamorphic_width = output_width * pixel_aspect_width / pixel_aspect_height;
+            anamorphic_height = output_height;
+        }
+        else if (pixel_ratio == 2) // Loose Anamorphic
+        {
+            // call hb_set_anamorphic_size to do a "dry run" to get the values to be
+            // used by libhb for loose anamorphic.
+            int par_width, par_height;
+            hb_set_anamorphic_size(job, &output_width, &output_height, &par_width, &par_height);
+            anamorphic_width = output_width * par_width / par_height;
+            anamorphic_height = output_height;
+        }
+        else    // No Anamorphic
+        {
+            output_width = width;
+            output_height = height;
+            anamorphic_width = 0;       // not needed for this case
+            anamorphic_height = 0;      // not needed for this case
+        }
+        
     }
     return self;
 }
@@ -400,17 +425,12 @@ static NSDictionary* _shortHeightAttribute = NULL;
     if (withPictureInfo)
     {
         NSString * jobPictureInfo;
-        // integers for picture values deinterlace, crop[4], keep_ratio, grayscale, pixel_ratio, pixel_aspect_width, pixel_aspect_height,
-        // maxWidth, maxHeight
-        if (pixel_ratio == 1)
-        {
-            int croppedWidth = titleWidth - crop[2] - crop[3];
-            int displayparwidth = croppedWidth * pixel_aspect_width / pixel_aspect_height;
-            int displayparheight = titleHeight - crop[0] - crop[1];
-            jobPictureInfo = [NSString stringWithFormat:@"%dx%d (%dx%d Anamorphic)", displayparwidth, displayparheight, width, displayparheight];
-        }
+        if (pixel_ratio == 1) // Original PAR Implementation, now called Strict Anamorphic
+            jobPictureInfo = [NSString stringWithFormat:@"%d x %d (%d x %d Strict Anamorphic)", output_width, output_height, anamorphic_width, anamorphic_height];
+        else if (pixel_ratio == 2) // Loose Anamorphic
+            jobPictureInfo = [NSString stringWithFormat:@"%d x %d (%d x %d Loose Anamorphic)", output_width, output_height, anamorphic_width, anamorphic_height];
         else
-            jobPictureInfo = [NSString stringWithFormat:@"%dx%d", width, height];
+            jobPictureInfo = [NSString stringWithFormat:@"%d x %d", output_width, output_height];
         if (keep_ratio == 1)
             jobPictureInfo = [jobPictureInfo stringByAppendingString:@" Keep Aspect Ratio"];
         

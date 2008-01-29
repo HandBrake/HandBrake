@@ -85,8 +85,12 @@ BOOL                        fIsDragging;
     int                         chapter_markers;
     int                         crop[4];
     int                         deinterlace;
-    int                         width;
+    int                         width;              // source dimensions
     int                         height;
+    int                         output_width;       // output dimensions
+    int                         output_height;
+    int                         anamorphic_width;   // anamorphic dimensions
+    int                         anamorphic_height;
     int                         keep_ratio;
     int                         grayscale;
     int                         pixel_ratio;
