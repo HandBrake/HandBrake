@@ -1,7 +1,7 @@
 /*  frmMain.cs $
  	
  	   This file is part of the HandBrake source code.
- 	   Homepage: <http://handbrake.m0k.org/>.
+ 	   Homepage: <http://handbrake.fr/>.
  	   It may be used under the terms of the GNU General Public License. */
 
 using System;
@@ -294,27 +294,27 @@ namespace Handbrake
 
         private void mnu_wiki_Click(object sender, EventArgs e)
         {
-            Process.Start("http://handbrake.m0k.org/trac");
+            Process.Start("http://handbrake.fr/trac");
         }
 
         private void mnu_faq_Click(object sender, EventArgs e)
         {
-            Process.Start("http://handbrake.m0k.org/trac/wiki/WindowsGuiFaq");
+            Process.Start("http://handbrake.fr/trac/wiki/SupportFAQ");
         }
 
         private void mnu_onlineDocs_Click(object sender, EventArgs e)
         {
-            Process.Start("http://handbrake.m0k.org/?page_id=11");
+            Process.Start("http://handbrake.fr/?article=documentation");
         }
 
         private void mnu_homepage_Click(object sender, EventArgs e)
         {
-            Process.Start("http://handbrake.m0k.org");
+            Process.Start("http://handbrake.fr");
         }
 
         private void mnu_forum_Click(object sender, EventArgs e)
         {
-            Process.Start("http://handbrake.m0k.org/forum");
+            Process.Start("http://handbrake.fr/forum");
         }
 
         private void mnu_UpdateCheck_Click(object sender, EventArgs e)
@@ -533,7 +533,7 @@ namespace Handbrake
 
         private void label_h264_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("http://handbrake.m0k.org/trac/wiki/x264Options");
+            Process.Start("http://handbrake.fr/trac/wiki/x264Options");
         }
 
         private void text_width_TextChanged(object sender, EventArgs e)
