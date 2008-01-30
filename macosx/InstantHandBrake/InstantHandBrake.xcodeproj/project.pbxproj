@@ -28,6 +28,8 @@
 		4D3ECC2709A4917000B2E45F /* WhiteBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D3ECC2609A4917000B2E45F /* WhiteBox.m */; };
 		A2122D820C7EAF6600AB87A4 /* DriveDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = A2122D810C7EAF6600AB87A4 /* DriveDetector.m */; };
 		A952EBCE0D3BB1B100A3DCA7 /* Open.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A952EBCD0D3BB1B100A3DCA7 /* Open.tiff */; };
+		A9595E4A0D4E2CBC003906A9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A9595E480D4E2CBC003906A9 /* InfoPlist.strings */; };
+		A95C08560D50858F00084DA8 /* Devices in Resources */ = {isa = PBXBuildFile; fileRef = A95C08510D50858F00084DA8 /* Devices */; };
 		A95DD5490D4BACF50056F1F2 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9B706E50D356BC800385AF2 /* Growl.framework */; };
 		A95DD6260D4BAD950056F1F2 /* Growl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A9B706E50D356BC800385AF2 /* Growl.framework */; };
 		A98B18070D3CDF290093A591 /* Preset.m in Sources */ = {isa = PBXBuildFile; fileRef = A98B18060D3CDF290093A591 /* Preset.m */; };
@@ -56,20 +58,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 0DFF0B720B6BC6E600549488;
 			remoteInfo = libhb;
-		};
-		A9DB3A100D37EC2800F77345 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A9DB3A080D37EC2800F77345 /* libhb.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 0D096DFF0B707D1200A845D4;
-			remoteInfo = "libhb dlib";
-		};
-		A9DB3A120D37EC2800F77345 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A9DB3A080D37EC2800F77345 /* libhb.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A9DB38E00D37E9BA00F77345;
-			remoteInfo = HB;
 		};
 		A9DB3A140D37EC4200F77345 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -108,6 +96,8 @@
 		A2122D800C7EAF6500AB87A4 /* DriveDetector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DriveDetector.h; sourceTree = "<group>"; };
 		A2122D810C7EAF6600AB87A4 /* DriveDetector.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DriveDetector.m; sourceTree = "<group>"; };
 		A952EBCD0D3BB1B100A3DCA7 /* Open.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Open.tiff; sourceTree = "<group>"; };
+		A9595E490D4E2CBC003906A9 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A95C08510D50858F00084DA8 /* Devices */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Devices; sourceTree = "<group>"; };
 		A98B18050D3CDF290093A591 /* Preset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Preset.h; sourceTree = "<group>"; };
 		A98B18060D3CDF290093A591 /* Preset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Preset.m; sourceTree = "<group>"; };
 		A98B18080D3CDF380093A591 /* Device.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Device.h; sourceTree = "<group>"; };
@@ -186,10 +176,12 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A95C08510D50858F00084DA8 /* Devices */,
 				A952EBCD0D3BB1B100A3DCA7 /* Open.tiff */,
 				A9ED4EEF0D36226F004341F5 /* Play.tiff */,
 				A9ED4EF00D36226F004341F5 /* Pause.tiff */,
 				A9ED4EF10D36226F004341F5 /* Stop.tiff */,
+				A9595E480D4E2CBC003906A9 /* InfoPlist.strings */,
 				A9B70A020D3570F100385AF2 /* HandBrake.icns */,
 				4D1EA2DC0993B01000FDC1A2 /* Express.plist */,
 				A9ED502C0D36477D004341F5 /* Express.xib */,
@@ -214,8 +206,6 @@
 			isa = PBXGroup;
 			children = (
 				A9DB3A0F0D37EC2800F77345 /* libhb.a */,
-				A9DB3A110D37EC2800F77345 /* libhb.dylib */,
-				A9DB3A130D37EC2800F77345 /* HB.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -278,20 +268,6 @@
 			remoteRef = A9DB3A0E0D37EC2800F77345 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		A9DB3A110D37EC2800F77345 /* libhb.dylib */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.dylib";
-			path = libhb.dylib;
-			remoteRef = A9DB3A100D37EC2800F77345 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		A9DB3A130D37EC2800F77345 /* HB.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = HB.framework;
-			remoteRef = A9DB3A120D37EC2800F77345 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -305,6 +281,8 @@
 				A9ED4EF40D36226F004341F5 /* Stop.tiff in Resources */,
 				A9ED502E0D36477D004341F5 /* Express.xib in Resources */,
 				A952EBCE0D3BB1B100A3DCA7 /* Open.tiff in Resources */,
+				A9595E4A0D4E2CBC003906A9 /* InfoPlist.strings in Resources */,
+				A95C08560D50858F00084DA8 /* Devices in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,12 +297,12 @@
 			inputPaths = (
 			);
 			outputPaths = (
-				"$(TARGET_BUILD_DIR)/include/PlistMacros.h",
-				"$(TARGET_BUILD_DIR)/include/DummyFileToForceScriptToRunEveryTimeWithoutBeingCreated",
+				"${CONFIGURATION_TEMP_DIR}/Instant HandBrake.build/PlistMacros.h",
+				"${CONFIGURATION_TEMP_DIR}/Instant HandBrake.build/DummyFileToForceScriptToRunEveryTimeWithoutBeingCreated",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "PATH=$PATH:/usr/local/bin:/usr/bin:/sw/bin:/opt/local/bin\nbuildid=\"r`svn info | awk '/^Revision:/ {print $2}'`\"\n\necho \"#define BUILDID $buildid\" > $SCRIPT_OUTPUT_FILE_0\necho \"#define BUILDDATE `date`\" >> $SCRIPT_OUTPUT_FILE_0\necho \"#define WHOAMI `whoami`\" >> $SCRIPT_OUTPUT_FILE_0\n\n# Delete the intermediate Info.plist so that Xcode re-preprocesses the Info.plist with our updated macros.\n# Use -f because after a clean build, this file doesn't exist yet, so a plain rm would fail and stop the build.\nrm -f \"${CONFIGURATION_TEMP_DIR}/InstantHandBrake.build/Preprocessed-Info.plist\"\n";
+			shellScript = "PATH=$PATH:/usr/local/bin:/usr/bin:/sw/bin:/opt/local/bin\nbuildid=\"r`svn info | awk '/^Revision:/ {print $2}'`\"\n\necho \"#define BUILDID $buildid\" > $SCRIPT_OUTPUT_FILE_0\necho \"#define BUILDDATE `date`\" >> $SCRIPT_OUTPUT_FILE_0\necho \"#define WHOAMI `whoami`\" >> $SCRIPT_OUTPUT_FILE_0\n\n# Delete the intermediate Info.plist so that Xcode re-preprocesses the Info.plist with our updated macros.\n# Use -f because after a clean build, this file doesn't exist yet, so a plain rm would fail and stop the build.\nrm -f \"${CONFIGURATION_TEMP_DIR}/Instant HandBrake.build/Preprocessed-Info.plist\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -360,6 +338,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		A9595E480D4E2CBC003906A9 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A9595E490D4E2CBC003906A9 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		A9ED502C0D36477D004341F5 /* Express.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -387,7 +373,7 @@
 				HEADER_SEARCH_PATHS = ../libhb;
 				INFOPLIST_FILE = Express.plist;
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-C";
-				INFOPLIST_PREFIX_HEADER = "$(TARGET_BUILD_DIR)/include/PlistMacros.h";
+				INFOPLIST_PREFIX_HEADER = "${CONFIGURATION_TEMP_DIR}/Instant HandBrake.build/PlistMacros.h";
 				INFOPLIST_PREPROCESS = YES;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
@@ -464,7 +450,7 @@
 				HEADER_SEARCH_PATHS = ../libhb;
 				INFOPLIST_FILE = Express.plist;
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-C";
-				INFOPLIST_PREFIX_HEADER = "$(TARGET_BUILD_DIR)/include/PlistMacros.h";
+				INFOPLIST_PREFIX_HEADER = "${CONFIGURATION_TEMP_DIR}/Instant HandBrake.build/PlistMacros.h";
 				INFOPLIST_PREPROCESS = YES;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
@@ -500,7 +486,7 @@
 				HEADER_SEARCH_PATHS = ../libhb;
 				INFOPLIST_FILE = Express.plist;
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-C";
-				INFOPLIST_PREFIX_HEADER = "$(TARGET_BUILD_DIR)/include/PlistMacros.h";
+				INFOPLIST_PREFIX_HEADER = "${CONFIGURATION_TEMP_DIR}/Instant HandBrake.build/PlistMacros.h";
 				INFOPLIST_PREPROCESS = YES;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (

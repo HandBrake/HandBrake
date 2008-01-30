@@ -4,7 +4,7 @@
 //
 //  Created by Damiano Galassi on 15/01/08.
 //  This file is part of the HandBrake source code.
-//  Homepage: <http://handbrake.m0k.org/>.
+//  Homepage: <http://handbrake.fr/>.
 //  It may be used under the terms of the GNU General Public License.
 //
 //
@@ -30,6 +30,20 @@
     [super dealloc];
 }
 
+- (id) initWithCoder:(NSCoder *) coder
+{
+    deviceName = [[coder decodeObjectForKey:@"DeviceName"] retain];
+    presetsArray = [[coder decodeObjectForKey:@"Presets"] retain];
+    
+    return self;
+}
+
+- (void) encodeWithCoder:(NSCoder *)encoder
+{
+    [encoder encodeObject: deviceName forKey:@"DeviceName"];
+    [encoder encodeObject: presetsArray forKey:@"Presets"];
+}
+
 - (void) addPreset: (Preset *) preset
 {
     [presetsArray addObject:preset];
@@ -43,7 +57,7 @@
 
 - (Preset *) firstPreset
 {
-    return [presetsArray objectAtIndex:0]; ;
+    return [presetsArray objectAtIndex:0];
 }
 
 @end

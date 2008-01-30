@@ -4,7 +4,7 @@
 //
 //  Created by Damiano Galassi on 15/01/08.
 //  This file is part of the HandBrake source code.
-//  Homepage: <http://handbrake.m0k.org/>.
+//  Homepage: <http://handbrake.fr/>.
 //  It may be used under the terms of the GNU General Public License.
 //
 //
@@ -45,6 +45,38 @@
 {
     [fVideoCodecOptions release];
     [super dealloc];
+}
+
+- (id) initWithCoder:(NSCoder *) coder
+{
+    presetName         = [[coder decodeObjectForKey:@"Name"] retain];
+    fMuxer             = [coder decodeIntForKey:@"Muxer"];
+    fVideoCodec        = [coder decodeIntForKey:@"VideoCodec"];
+    fVideoBitRate      = [coder decodeIntForKey:@"VideoBitRate"];
+    fVideoCodecOptions = [[coder decodeObjectForKey:@"VideoCodecOptions"] retain];
+    fAudioCodec        = [coder decodeIntForKey:@"AudioCodec"];
+    fAudioBitRate      = [coder decodeIntForKey:@"AudioBitRate"];
+    fAudioSampleRate   = [coder decodeIntForKey:@"AudioSampleRate"];
+    fMaxWidth          = [coder decodeIntForKey:@"MaxWidth"];
+    fMaxHeight         = [coder decodeIntForKey:@"MaxHeight"];
+    fAnamorphic        = [coder decodeIntForKey:@"Anarmophic"];
+        
+    return self;
+}
+
+- (void) encodeWithCoder:(NSCoder *)encoder
+{
+    [encoder encodeObject:presetName forKey:@"Name"];
+    [encoder encodeInt:fMuxer forKey:@"Muxer"];
+    [encoder encodeInt:fVideoCodec forKey:@"VideoCodec"];
+    [encoder encodeInt:fVideoBitRate forKey:@"VideoBitRate"];
+    [encoder encodeObject:fVideoCodecOptions forKey:@"VideoCodecOptions"];
+    [encoder encodeInt:fAudioCodec forKey:@"AudioCodec"];
+    [encoder encodeInt:fAudioBitRate forKey:@"AudioBitRate"];
+    [encoder encodeInt:fAudioSampleRate forKey:@"AudioSampleRate"];
+    [encoder encodeInt:fMaxWidth forKey:@"MaxWidth"];
+    [encoder encodeInt:fMaxHeight forKey:@"MaxHeight"];
+    [encoder encodeInt:fAnamorphic forKey:@"Anarmophic"];
 }
 
 - (int) muxer

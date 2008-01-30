@@ -4,7 +4,7 @@
 //
 //  Created by Damiano Galassi on 23/01/08.
 //  This file is part of the HandBrake source code.
-//  Homepage: <http://handbrake.m0k.org/>.
+//  Homepage: <http://handbrake.fr/>.
 //  It may be used under the terms of the GNU General Public License.
 //
 //
@@ -13,11 +13,16 @@
 #import "device.h"
 
 @interface DeviceController : NSObject {
-    NSMutableArray        * deviceArray;
+    NSMutableArray      *devicesArray;
+    NSString            *appSupportPath;
 }
 
 - (id)init;
+- (BOOL) loadDevices;
+- (BOOL) loadBuiltInDevices;
 - (id)populateList;
-- (NSArray *) deviceList;
+- (NSArray *) devicesList;
+- (BOOL) saveDevices;
+
 
 @end

@@ -1,0 +1,4 @@
+/* Localized versions of Info.plist keys */
+
+CFBundleName = "Instant HandBrake";
+NSHumanReadableCopyright = "Copyright © 2004 - 2008, HandBrake Devs";

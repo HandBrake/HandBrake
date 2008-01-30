@@ -1,5 +1,5 @@
 /* This file is part of the HandBrake source code.
-   Homepage: <http://handbrake.m0k.org/>.
+   Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License. */
 
 #import "ExpressController.h"
@@ -70,7 +70,7 @@
     [tableColumn setDataCell: buttonCell];
 
     /* Preferences */
-    fConvertFolderString = [NSString stringWithFormat:@"%@/Desktop", NSHomeDirectory()];
+    fConvertFolderString = [NSHomeDirectory() stringByAppendingPathComponent:@"Desktop"];
     [fConvertFolderString retain];
 }
 
@@ -114,10 +114,8 @@
 {
     if( !flag ) {
         [fWindow  makeKeyAndOrderFront:nil];
-                
         return YES;
     }
-    
     return NO;
 }
 
@@ -239,8 +237,8 @@
 - (void) openShow: (id) sender
 {
     NSRect frame  = [fWindow frame];
-    float  offset = [fConvertView frame].size.height -
-                    [fOpenView frame].size.height;
+    float  offset = ( [fConvertView frame].size.height -
+                    [fOpenView frame].size.height ) * [fWindow userSpaceScaleFactor];
 
     frame.origin.y    += offset;
     frame.size.height -= offset;
@@ -279,7 +277,7 @@
     [self openEnable: NO];
     [fOpenIndicator setIndeterminate: YES];
     [fOpenIndicator startAnimation: nil];
-    [fOpenProgressField setStringValue: @"Opening..."];
+    [fOpenProgressField setStringValue: NSLocalizedString( @"Opening...", @"Opening...") ];
     [fDriveDetector stop];
 
     if( [fOpenMatrix selectedRow] )
@@ -297,7 +295,7 @@
 {
     NSOpenPanel * panel = [NSOpenPanel openPanel];
 
-    [panel setPrompt: NSLocalizedString(@"Select", "Convert -> Save panel prompt")];
+    [panel setPrompt: NSLocalizedString(@"Select", @"Convert -> Save panel prompt")];
     [panel setAllowsMultipleSelection: NO];
     [panel setCanChooseFiles: NO];
     [panel setCanChooseDirectories: YES];
@@ -328,7 +326,7 @@
 - (void) convertGo: (id) sender
 {
     int i, j;
-    Preset * currentDevice = [[[fDevice deviceList] objectAtIndex:[fConvertFormatPopUp indexOfSelectedItem]] firstPreset];
+    Preset * currentPreset = [[[fDevice devicesList] objectAtIndex:[fConvertFormatPopUp indexOfSelectedItem]] firstPreset];
 
     for( i = 0; i < hb_list_count( fList ); i++ )
     {
@@ -338,10 +336,11 @@
         hb_title_t * title = hb_list_item( fList, i );
         hb_job_t   * job   = title->job;
 
-		int maxwidth = [currentDevice maxWidth];
-        int maxheight = [currentDevice maxHeight];
+		int maxwidth = [currentPreset maxWidth];
+        int maxheight = [currentPreset maxHeight];
         int pixels = maxwidth * maxheight;
 		int aspect = title->aspect;
+        
 		if( [fConvertAspectPopUp indexOfSelectedItem] == 1 )
 		{
             aspect = 4 * HB_ASPECT_BASE / 3;
@@ -351,7 +350,7 @@
             aspect = 16 * HB_ASPECT_BASE / 9;
         }
 
-		job->vbitrate = [currentDevice videoBitRate];
+		job->vbitrate = [currentPreset videoBitRate];
 		
         if( [fConvertMaxWidthPopUp indexOfSelectedItem] == 2 )
 		{
@@ -364,16 +363,24 @@
 			job->vbitrate /= 2;
         }
         
-		do
-		{
-			hb_set_size( job, aspect, pixels );
-			pixels -= 10;
-		} while(job->width > maxwidth || job->height > maxheight);
+        if ( [fConvertAspectPopUp indexOfSelectedItem] )
+        {
+            do
+            {
+                hb_set_size( job, aspect, pixels );
+                pixels -= 10;
+            } while(job->width > maxwidth || job->height > maxheight);
+        }
+        else
+        {
+            job->width = maxwidth;
+            hb_fix_aspect( job, HB_KEEP_WIDTH );
+        }
 		
-        job->mux        = [currentDevice muxer];
-        job->vcodec     = [currentDevice videoCodec];
+        job->mux        = [currentPreset muxer];
+        job->vcodec     = [currentPreset videoCodec];
         job->x264opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */  
-        strcpy(job->x264opts, [[currentDevice videoCodecOptions] UTF8String]);
+        strcpy(job->x264opts, [[currentPreset videoCodecOptions] UTF8String]);
         job->chapter_markers = 1;
         job->vquality = -1.0;
 
@@ -589,7 +596,7 @@
 		[fConvertAudioPopUp selectItemWithTitle: @"English"];
         
         if ( [fConvertAudioPopUp selectedItem] == nil )
-            [fConvertAudioPopUp selectItemWithTitle: @"Unknown"];
+            [fConvertAudioPopUp selectItemAtIndex:0];
 
         /* Update subtitle popup */
         hb_subtitle_t * subtitle;
@@ -604,19 +611,16 @@
     
     NSEnumerator * enumerator;
     Device * device;
-    enumerator = [[fDevice deviceList] objectEnumerator];
+    enumerator = [[fDevice devicesList] objectEnumerator];
     
     while( ( device = [enumerator nextObject] ) )
         [fConvertFormatPopUp addItemWithTitle:[device name]];
 
     NSRect frame  = [fWindow frame];
-    float  offset = [fConvertView frame].size.height -
-                    [fOpenView frame].size.height;
-    float hoffset = [fConvertView frame].size.width -
-                    [fOpenView frame].size.width;
+    float  offset = ( [fConvertView frame].size.height -
+                    [fOpenView frame].size.height ) * [fWindow userSpaceScaleFactor];;
     frame.origin.y    -= offset;
     frame.size.height += offset;
-    frame.size.width += hoffset;
     [fWindow setContentView: fEmptyView];
     [fWindow setFrame: frame display: YES animate: YES];
     [fToolbar setVisible:YES];
@@ -734,7 +738,7 @@
     icon = [[NSWorkspace sharedWorkspace] iconForFile: value];
     
     [icon setScalesWhenResized: YES];
-    [icon setSize: NSMakeSize(16.0, 16.0)];
+    [icon setSize: NSMakeSize(16.0 , 16.0)];
     
     return icon;
 }

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0D096EA30B70884A00A845D4 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D1125D709D72FD200E0657B /* libz.dylib */; };
 		A9DB39100D37EA0300F77345 /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38E70D37EA0300F77345 /* common.c */; };
 		A9DB39110D37EA0300F77345 /* common.h in Headers */ = {isa = PBXBuildFile; fileRef = A9DB38E80D37EA0300F77345 /* common.h */; };
 		A9DB39120D37EA0300F77345 /* deblock.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38E90D37EA0300F77345 /* deblock.c */; };
@@ -49,88 +48,6 @@
 		A9DB39360D37EA0300F77345 /* sync.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB390D0D37EA0300F77345 /* sync.c */; };
 		A9DB39370D37EA0300F77345 /* update.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB390E0D37EA0300F77345 /* update.c */; };
 		A9DB39380D37EA0300F77345 /* work.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB390F0D37EA0300F77345 /* work.c */; };
-		A9DB39390D37EA0300F77345 /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38E70D37EA0300F77345 /* common.c */; };
-		A9DB393A0D37EA0300F77345 /* common.h in Headers */ = {isa = PBXBuildFile; fileRef = A9DB38E80D37EA0300F77345 /* common.h */; };
-		A9DB393B0D37EA0300F77345 /* deblock.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38E90D37EA0300F77345 /* deblock.c */; };
-		A9DB393C0D37EA0300F77345 /* deca52.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38EA0D37EA0300F77345 /* deca52.c */; };
-		A9DB393D0D37EA0300F77345 /* decavcodec.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38EB0D37EA0300F77345 /* decavcodec.c */; };
-		A9DB393E0D37EA0300F77345 /* decdca.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38EC0D37EA0300F77345 /* decdca.c */; };
-		A9DB393F0D37EA0300F77345 /* declpcm.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38ED0D37EA0300F77345 /* declpcm.c */; };
-		A9DB39400D37EA0300F77345 /* decmpeg2.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38EE0D37EA0300F77345 /* decmpeg2.c */; };
-		A9DB39410D37EA0300F77345 /* decsub.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38EF0D37EA0300F77345 /* decsub.c */; };
-		A9DB39420D37EA0300F77345 /* deinterlace.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38F00D37EA0300F77345 /* deinterlace.c */; };
-		A9DB39430D37EA0300F77345 /* demuxmpeg.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38F10D37EA0300F77345 /* demuxmpeg.c */; };
-		A9DB39440D37EA0300F77345 /* denoise.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38F20D37EA0300F77345 /* denoise.c */; };
-		A9DB39450D37EA0300F77345 /* detelecine.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38F30D37EA0300F77345 /* detelecine.c */; };
-		A9DB39460D37EA0300F77345 /* dvd.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38F40D37EA0300F77345 /* dvd.c */; };
-		A9DB39470D37EA0300F77345 /* encavcodec.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38F50D37EA0300F77345 /* encavcodec.c */; };
-		A9DB39480D37EA0300F77345 /* encfaac.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38F60D37EA0300F77345 /* encfaac.c */; };
-		A9DB39490D37EA0300F77345 /* enclame.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38F70D37EA0300F77345 /* enclame.c */; };
-		A9DB394A0D37EA0300F77345 /* encvorbis.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38F80D37EA0300F77345 /* encvorbis.c */; };
-		A9DB394B0D37EA0300F77345 /* encx264.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38F90D37EA0300F77345 /* encx264.c */; };
-		A9DB394C0D37EA0300F77345 /* encxvid.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38FA0D37EA0300F77345 /* encxvid.c */; };
-		A9DB394D0D37EA0300F77345 /* fifo.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38FB0D37EA0300F77345 /* fifo.c */; };
-		A9DB394E0D37EA0300F77345 /* hb.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38FC0D37EA0300F77345 /* hb.c */; };
-		A9DB394F0D37EA0300F77345 /* hb.h in Headers */ = {isa = PBXBuildFile; fileRef = A9DB38FD0D37EA0300F77345 /* hb.h */; };
-		A9DB39500D37EA0300F77345 /* internal.h in Headers */ = {isa = PBXBuildFile; fileRef = A9DB38FE0D37EA0300F77345 /* internal.h */; };
-		A9DB39510D37EA0300F77345 /* ipodutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38FF0D37EA0300F77345 /* ipodutil.cpp */; };
-		A9DB39520D37EA0300F77345 /* lang.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB39000D37EA0300F77345 /* lang.c */; };
-		A9DB39530D37EA0300F77345 /* lang.h in Headers */ = {isa = PBXBuildFile; fileRef = A9DB39010D37EA0300F77345 /* lang.h */; };
-		A9DB39540D37EA0300F77345 /* muxavi.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB39020D37EA0300F77345 /* muxavi.c */; };
-		A9DB39550D37EA0300F77345 /* muxcommon.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB39030D37EA0300F77345 /* muxcommon.c */; };
-		A9DB39560D37EA0300F77345 /* muxmkv.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB39040D37EA0300F77345 /* muxmkv.c */; };
-		A9DB39570D37EA0300F77345 /* muxmp4.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB39050D37EA0300F77345 /* muxmp4.c */; };
-		A9DB39580D37EA0300F77345 /* muxogm.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB39060D37EA0300F77345 /* muxogm.c */; };
-		A9DB39590D37EA0300F77345 /* ports.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB39070D37EA0300F77345 /* ports.c */; };
-		A9DB395A0D37EA0300F77345 /* ports.h in Headers */ = {isa = PBXBuildFile; fileRef = A9DB39080D37EA0300F77345 /* ports.h */; };
-		A9DB395B0D37EA0300F77345 /* reader.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB39090D37EA0300F77345 /* reader.c */; };
-		A9DB395C0D37EA0300F77345 /* render.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB390A0D37EA0300F77345 /* render.c */; };
-		A9DB395D0D37EA0300F77345 /* scan.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB390B0D37EA0300F77345 /* scan.c */; };
-		A9DB395E0D37EA0300F77345 /* stream.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB390C0D37EA0300F77345 /* stream.c */; };
-		A9DB395F0D37EA0300F77345 /* sync.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB390D0D37EA0300F77345 /* sync.c */; };
-		A9DB39600D37EA0300F77345 /* update.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB390E0D37EA0300F77345 /* update.c */; };
-		A9DB39610D37EA0300F77345 /* work.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB390F0D37EA0300F77345 /* work.c */; };
-		A9DB39620D37EA0300F77345 /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38E70D37EA0300F77345 /* common.c */; };
-		A9DB39630D37EA0300F77345 /* common.h in Headers */ = {isa = PBXBuildFile; fileRef = A9DB38E80D37EA0300F77345 /* common.h */; };
-		A9DB39640D37EA0300F77345 /* deblock.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38E90D37EA0300F77345 /* deblock.c */; };
-		A9DB39650D37EA0300F77345 /* deca52.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38EA0D37EA0300F77345 /* deca52.c */; };
-		A9DB39660D37EA0300F77345 /* decavcodec.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38EB0D37EA0300F77345 /* decavcodec.c */; };
-		A9DB39670D37EA0300F77345 /* decdca.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38EC0D37EA0300F77345 /* decdca.c */; };
-		A9DB39680D37EA0300F77345 /* declpcm.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38ED0D37EA0300F77345 /* declpcm.c */; };
-		A9DB39690D37EA0300F77345 /* decmpeg2.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38EE0D37EA0300F77345 /* decmpeg2.c */; };
-		A9DB396A0D37EA0300F77345 /* decsub.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38EF0D37EA0300F77345 /* decsub.c */; };
-		A9DB396B0D37EA0300F77345 /* deinterlace.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38F00D37EA0300F77345 /* deinterlace.c */; };
-		A9DB396C0D37EA0300F77345 /* demuxmpeg.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38F10D37EA0300F77345 /* demuxmpeg.c */; };
-		A9DB396D0D37EA0300F77345 /* denoise.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38F20D37EA0300F77345 /* denoise.c */; };
-		A9DB396E0D37EA0300F77345 /* detelecine.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38F30D37EA0300F77345 /* detelecine.c */; };
-		A9DB396F0D37EA0300F77345 /* dvd.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38F40D37EA0300F77345 /* dvd.c */; };
-		A9DB39700D37EA0300F77345 /* encavcodec.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38F50D37EA0300F77345 /* encavcodec.c */; };
-		A9DB39710D37EA0300F77345 /* encfaac.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38F60D37EA0300F77345 /* encfaac.c */; };
-		A9DB39720D37EA0300F77345 /* enclame.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38F70D37EA0300F77345 /* enclame.c */; };
-		A9DB39730D37EA0300F77345 /* encvorbis.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38F80D37EA0300F77345 /* encvorbis.c */; };
-		A9DB39740D37EA0300F77345 /* encx264.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38F90D37EA0300F77345 /* encx264.c */; };
-		A9DB39750D37EA0300F77345 /* encxvid.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38FA0D37EA0300F77345 /* encxvid.c */; };
-		A9DB39760D37EA0300F77345 /* fifo.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38FB0D37EA0300F77345 /* fifo.c */; };
-		A9DB39770D37EA0300F77345 /* hb.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38FC0D37EA0300F77345 /* hb.c */; };
-		A9DB39780D37EA0300F77345 /* hb.h in Headers */ = {isa = PBXBuildFile; fileRef = A9DB38FD0D37EA0300F77345 /* hb.h */; };
-		A9DB39790D37EA0300F77345 /* internal.h in Headers */ = {isa = PBXBuildFile; fileRef = A9DB38FE0D37EA0300F77345 /* internal.h */; };
-		A9DB397A0D37EA0300F77345 /* ipodutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9DB38FF0D37EA0300F77345 /* ipodutil.cpp */; };
-		A9DB397B0D37EA0300F77345 /* lang.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB39000D37EA0300F77345 /* lang.c */; };
-		A9DB397C0D37EA0300F77345 /* lang.h in Headers */ = {isa = PBXBuildFile; fileRef = A9DB39010D37EA0300F77345 /* lang.h */; };
-		A9DB397D0D37EA0300F77345 /* muxavi.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB39020D37EA0300F77345 /* muxavi.c */; };
-		A9DB397E0D37EA0300F77345 /* muxcommon.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB39030D37EA0300F77345 /* muxcommon.c */; };
-		A9DB397F0D37EA0300F77345 /* muxmkv.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB39040D37EA0300F77345 /* muxmkv.c */; };
-		A9DB39800D37EA0300F77345 /* muxmp4.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB39050D37EA0300F77345 /* muxmp4.c */; };
-		A9DB39810D37EA0300F77345 /* muxogm.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB39060D37EA0300F77345 /* muxogm.c */; };
-		A9DB39820D37EA0300F77345 /* ports.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB39070D37EA0300F77345 /* ports.c */; };
-		A9DB39830D37EA0300F77345 /* ports.h in Headers */ = {isa = PBXBuildFile; fileRef = A9DB39080D37EA0300F77345 /* ports.h */; };
-		A9DB39840D37EA0300F77345 /* reader.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB39090D37EA0300F77345 /* reader.c */; };
-		A9DB39850D37EA0300F77345 /* render.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB390A0D37EA0300F77345 /* render.c */; };
-		A9DB39860D37EA0300F77345 /* scan.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB390B0D37EA0300F77345 /* scan.c */; };
-		A9DB39870D37EA0300F77345 /* stream.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB390C0D37EA0300F77345 /* stream.c */; };
-		A9DB39880D37EA0300F77345 /* sync.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB390D0D37EA0300F77345 /* sync.c */; };
-		A9DB39890D37EA0300F77345 /* update.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB390E0D37EA0300F77345 /* update.c */; };
-		A9DB398A0D37EA0300F77345 /* work.c in Sources */ = {isa = PBXBuildFile; fileRef = A9DB390F0D37EA0300F77345 /* work.c */; };
 		A9DB39B20D37EB4700F77345 /* liba52.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB399D0D37EB4700F77345 /* liba52.a */; };
 		A9DB39B30D37EB4700F77345 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB399E0D37EB4700F77345 /* libavcodec.a */; };
 		A9DB39B40D37EB4700F77345 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB399F0D37EB4700F77345 /* libavformat.a */; };
@@ -152,60 +69,15 @@
 		A9DB39C40D37EB4700F77345 /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39AF0D37EB4700F77345 /* libvorbisfile.a */; };
 		A9DB39C50D37EB4700F77345 /* libxvidcore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39B00D37EB4700F77345 /* libxvidcore.a */; };
 		A9DB39C60D37EB4700F77345 /* libx264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39B10D37EB4700F77345 /* libx264.a */; };
-		A9DB39C70D37EB4700F77345 /* liba52.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB399D0D37EB4700F77345 /* liba52.a */; };
-		A9DB39C80D37EB4700F77345 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB399E0D37EB4700F77345 /* libavcodec.a */; };
-		A9DB39C90D37EB4700F77345 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB399F0D37EB4700F77345 /* libavformat.a */; };
-		A9DB39CA0D37EB4700F77345 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A00D37EB4700F77345 /* libavutil.a */; };
-		A9DB39CB0D37EB4700F77345 /* libdca.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A10D37EB4700F77345 /* libdca.a */; };
-		A9DB39CC0D37EB4700F77345 /* libdvdcss.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A20D37EB4700F77345 /* libdvdcss.a */; };
-		A9DB39CD0D37EB4700F77345 /* libdvdread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A30D37EB4700F77345 /* libdvdread.a */; };
-		A9DB39CE0D37EB4700F77345 /* libfaac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A40D37EB4700F77345 /* libfaac.a */; };
-		A9DB39CF0D37EB4700F77345 /* libmkv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A50D37EB4700F77345 /* libmkv.a */; };
-		A9DB39D00D37EB4700F77345 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A60D37EB4700F77345 /* libmp3lame.a */; };
-		A9DB39D10D37EB4700F77345 /* libmp4v2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A70D37EB4700F77345 /* libmp4v2.a */; };
-		A9DB39D20D37EB4700F77345 /* libmpeg2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A80D37EB4700F77345 /* libmpeg2.a */; };
-		A9DB39D30D37EB4700F77345 /* libmpeg2convert.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A90D37EB4700F77345 /* libmpeg2convert.a */; };
-		A9DB39D40D37EB4700F77345 /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39AA0D37EB4700F77345 /* libogg.a */; };
-		A9DB39D50D37EB4700F77345 /* libsamplerate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39AB0D37EB4700F77345 /* libsamplerate.a */; };
-		A9DB39D60D37EB4700F77345 /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39AC0D37EB4700F77345 /* libswscale.a */; };
-		A9DB39D70D37EB4700F77345 /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39AD0D37EB4700F77345 /* libvorbis.a */; };
-		A9DB39D80D37EB4700F77345 /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39AE0D37EB4700F77345 /* libvorbisenc.a */; };
-		A9DB39D90D37EB4700F77345 /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39AF0D37EB4700F77345 /* libvorbisfile.a */; };
-		A9DB39DA0D37EB4700F77345 /* libxvidcore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39B00D37EB4700F77345 /* libxvidcore.a */; };
-		A9DB39DB0D37EB4700F77345 /* libx264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39B10D37EB4700F77345 /* libx264.a */; };
-		A9DB39DC0D37EB4700F77345 /* liba52.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB399D0D37EB4700F77345 /* liba52.a */; };
-		A9DB39DD0D37EB4700F77345 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB399E0D37EB4700F77345 /* libavcodec.a */; };
-		A9DB39DE0D37EB4700F77345 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB399F0D37EB4700F77345 /* libavformat.a */; };
-		A9DB39DF0D37EB4700F77345 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A00D37EB4700F77345 /* libavutil.a */; };
-		A9DB39E00D37EB4700F77345 /* libdca.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A10D37EB4700F77345 /* libdca.a */; };
-		A9DB39E10D37EB4700F77345 /* libdvdcss.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A20D37EB4700F77345 /* libdvdcss.a */; };
-		A9DB39E20D37EB4700F77345 /* libdvdread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A30D37EB4700F77345 /* libdvdread.a */; };
-		A9DB39E30D37EB4700F77345 /* libfaac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A40D37EB4700F77345 /* libfaac.a */; };
-		A9DB39E40D37EB4700F77345 /* libmkv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A50D37EB4700F77345 /* libmkv.a */; };
-		A9DB39E50D37EB4700F77345 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A60D37EB4700F77345 /* libmp3lame.a */; };
-		A9DB39E60D37EB4700F77345 /* libmp4v2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A70D37EB4700F77345 /* libmp4v2.a */; };
-		A9DB39E70D37EB4700F77345 /* libmpeg2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A80D37EB4700F77345 /* libmpeg2.a */; };
-		A9DB39E80D37EB4700F77345 /* libmpeg2convert.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39A90D37EB4700F77345 /* libmpeg2convert.a */; };
-		A9DB39E90D37EB4700F77345 /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39AA0D37EB4700F77345 /* libogg.a */; };
-		A9DB39EA0D37EB4700F77345 /* libsamplerate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39AB0D37EB4700F77345 /* libsamplerate.a */; };
-		A9DB39EB0D37EB4700F77345 /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39AC0D37EB4700F77345 /* libswscale.a */; };
-		A9DB39EC0D37EB4700F77345 /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39AD0D37EB4700F77345 /* libvorbis.a */; };
-		A9DB39ED0D37EB4700F77345 /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39AE0D37EB4700F77345 /* libvorbisenc.a */; };
-		A9DB39EE0D37EB4700F77345 /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39AF0D37EB4700F77345 /* libvorbisfile.a */; };
-		A9DB39EF0D37EB4700F77345 /* libxvidcore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39B00D37EB4700F77345 /* libxvidcore.a */; };
-		A9DB39F00D37EB4700F77345 /* libx264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DB39B10D37EB4700F77345 /* libx264.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0D096DFF0B707D1200A845D4 /* libhb.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libhb.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DFF0B720B6BC6E600549488 /* libhb.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libhb.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		4D1125D709D72FD200E0657B /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
 		4DEB2024052B055F00C39CA9 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
-		A9DB38E00D37E9BA00F77345 /* HB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A9DB38E10D37E9BA00F77345 /* HB-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HB-Info.plist"; sourceTree = "<group>"; };
 		A9DB38E70D37EA0300F77345 /* common.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = common.c; path = ../../libhb/common.c; sourceTree = SOURCE_ROOT; };
 		A9DB38E80D37EA0300F77345 /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = common.h; path = ../../libhb/common.h; sourceTree = SOURCE_ROOT; };
 		A9DB38E90D37EA0300F77345 /* deblock.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = deblock.c; path = ../../libhb/deblock.c; sourceTree = SOURCE_ROOT; };
@@ -271,35 +143,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		0D096DFD0B707D1200A845D4 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0D096EA30B70884A00A845D4 /* libz.dylib in Frameworks */,
-				A9DB39DC0D37EB4700F77345 /* liba52.a in Frameworks */,
-				A9DB39DD0D37EB4700F77345 /* libavcodec.a in Frameworks */,
-				A9DB39DE0D37EB4700F77345 /* libavformat.a in Frameworks */,
-				A9DB39DF0D37EB4700F77345 /* libavutil.a in Frameworks */,
-				A9DB39E00D37EB4700F77345 /* libdca.a in Frameworks */,
-				A9DB39E10D37EB4700F77345 /* libdvdcss.a in Frameworks */,
-				A9DB39E20D37EB4700F77345 /* libdvdread.a in Frameworks */,
-				A9DB39E30D37EB4700F77345 /* libfaac.a in Frameworks */,
-				A9DB39E40D37EB4700F77345 /* libmkv.a in Frameworks */,
-				A9DB39E50D37EB4700F77345 /* libmp3lame.a in Frameworks */,
-				A9DB39E60D37EB4700F77345 /* libmp4v2.a in Frameworks */,
-				A9DB39E70D37EB4700F77345 /* libmpeg2.a in Frameworks */,
-				A9DB39E80D37EB4700F77345 /* libmpeg2convert.a in Frameworks */,
-				A9DB39E90D37EB4700F77345 /* libogg.a in Frameworks */,
-				A9DB39EA0D37EB4700F77345 /* libsamplerate.a in Frameworks */,
-				A9DB39EB0D37EB4700F77345 /* libswscale.a in Frameworks */,
-				A9DB39EC0D37EB4700F77345 /* libvorbis.a in Frameworks */,
-				A9DB39ED0D37EB4700F77345 /* libvorbisenc.a in Frameworks */,
-				A9DB39EE0D37EB4700F77345 /* libvorbisfile.a in Frameworks */,
-				A9DB39EF0D37EB4700F77345 /* libxvidcore.a in Frameworks */,
-				A9DB39F00D37EB4700F77345 /* libx264.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		0DFF0B700B6BC6E600549488 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -328,34 +171,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A9DB38DE0D37E9BA00F77345 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A9DB39C70D37EB4700F77345 /* liba52.a in Frameworks */,
-				A9DB39C80D37EB4700F77345 /* libavcodec.a in Frameworks */,
-				A9DB39C90D37EB4700F77345 /* libavformat.a in Frameworks */,
-				A9DB39CA0D37EB4700F77345 /* libavutil.a in Frameworks */,
-				A9DB39CB0D37EB4700F77345 /* libdca.a in Frameworks */,
-				A9DB39CC0D37EB4700F77345 /* libdvdcss.a in Frameworks */,
-				A9DB39CD0D37EB4700F77345 /* libdvdread.a in Frameworks */,
-				A9DB39CE0D37EB4700F77345 /* libfaac.a in Frameworks */,
-				A9DB39CF0D37EB4700F77345 /* libmkv.a in Frameworks */,
-				A9DB39D00D37EB4700F77345 /* libmp3lame.a in Frameworks */,
-				A9DB39D10D37EB4700F77345 /* libmp4v2.a in Frameworks */,
-				A9DB39D20D37EB4700F77345 /* libmpeg2.a in Frameworks */,
-				A9DB39D30D37EB4700F77345 /* libmpeg2convert.a in Frameworks */,
-				A9DB39D40D37EB4700F77345 /* libogg.a in Frameworks */,
-				A9DB39D50D37EB4700F77345 /* libsamplerate.a in Frameworks */,
-				A9DB39D60D37EB4700F77345 /* libswscale.a in Frameworks */,
-				A9DB39D70D37EB4700F77345 /* libvorbis.a in Frameworks */,
-				A9DB39D80D37EB4700F77345 /* libvorbisenc.a in Frameworks */,
-				A9DB39D90D37EB4700F77345 /* libvorbisfile.a in Frameworks */,
-				A9DB39DA0D37EB4700F77345 /* libxvidcore.a in Frameworks */,
-				A9DB39DB0D37EB4700F77345 /* libx264.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -363,8 +178,6 @@
 			isa = PBXGroup;
 			children = (
 				0DFF0B720B6BC6E600549488 /* libhb.a */,
-				0D096DFF0B707D1200A845D4 /* libhb.dylib */,
-				A9DB38E00D37E9BA00F77345 /* HB.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -375,7 +188,6 @@
 				526FBC8D0B4CA9F90064E04C /* libhb Sources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
-				A9DB38E10D37E9BA00F77345 /* HB-Info.plist */,
 			);
 			name = HandBrake;
 			sourceTree = "<group>";
@@ -464,18 +276,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		0D096DFB0B707D1200A845D4 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A9DB39630D37EA0300F77345 /* common.h in Headers */,
-				A9DB39780D37EA0300F77345 /* hb.h in Headers */,
-				A9DB39790D37EA0300F77345 /* internal.h in Headers */,
-				A9DB397C0D37EA0300F77345 /* lang.h in Headers */,
-				A9DB39830D37EA0300F77345 /* ports.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		0DFF0B6E0B6BC6E600549488 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -488,38 +288,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A9DB38DB0D37E9BA00F77345 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A9DB393A0D37EA0300F77345 /* common.h in Headers */,
-				A9DB394F0D37EA0300F77345 /* hb.h in Headers */,
-				A9DB39500D37EA0300F77345 /* internal.h in Headers */,
-				A9DB39530D37EA0300F77345 /* lang.h in Headers */,
-				A9DB395A0D37EA0300F77345 /* ports.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		0D096DFE0B707D1200A845D4 /* libhb dlib */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 0D096E650B707D5800A845D4 /* Build configuration list for PBXNativeTarget "libhb dlib" */;
-			buildPhases = (
-				0D096DFB0B707D1200A845D4 /* Headers */,
-				0D096DFC0B707D1200A845D4 /* Sources */,
-				0D096DFD0B707D1200A845D4 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "libhb dlib";
-			productName = "libmediafork dlib";
-			productReference = 0D096DFF0B707D1200A845D4 /* libhb.dylib */;
-			productType = "com.apple.product-type.library.dynamic";
-		};
 		0DFF0B710B6BC6E600549488 /* libhb */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0DFF0B730B6BC70400549488 /* Build configuration list for PBXNativeTarget "libhb" */;
@@ -537,24 +308,6 @@
 			productReference = 0DFF0B720B6BC6E600549488 /* libhb.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		A9DB38DF0D37E9BA00F77345 /* HB */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A9DB38E50D37E9BA00F77345 /* Build configuration list for PBXNativeTarget "HB" */;
-			buildPhases = (
-				A9DB38DB0D37E9BA00F77345 /* Headers */,
-				A9DB38DC0D37E9BA00F77345 /* Resources */,
-				A9DB38DD0D37E9BA00F77345 /* Sources */,
-				A9DB38DE0D37E9BA00F77345 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = HB;
-			productName = HB;
-			productReference = A9DB38E00D37E9BA00F77345 /* HB.framework */;
-			productType = "com.apple.product-type.framework";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -568,66 +321,11 @@
 			projectRoot = "";
 			targets = (
 				0DFF0B710B6BC6E600549488 /* libhb */,
-				0D096DFE0B707D1200A845D4 /* libhb dlib */,
-				A9DB38DF0D37E9BA00F77345 /* HB */,
 			);
 		};
 /* End PBXProject section */
 
-/* Begin PBXResourcesBuildPhase section */
-		A9DB38DC0D37E9BA00F77345 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
-		0D096DFC0B707D1200A845D4 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A9DB39620D37EA0300F77345 /* common.c in Sources */,
-				A9DB39640D37EA0300F77345 /* deblock.c in Sources */,
-				A9DB39650D37EA0300F77345 /* deca52.c in Sources */,
-				A9DB39660D37EA0300F77345 /* decavcodec.c in Sources */,
-				A9DB39670D37EA0300F77345 /* decdca.c in Sources */,
-				A9DB39680D37EA0300F77345 /* declpcm.c in Sources */,
-				A9DB39690D37EA0300F77345 /* decmpeg2.c in Sources */,
-				A9DB396A0D37EA0300F77345 /* decsub.c in Sources */,
-				A9DB396B0D37EA0300F77345 /* deinterlace.c in Sources */,
-				A9DB396C0D37EA0300F77345 /* demuxmpeg.c in Sources */,
-				A9DB396D0D37EA0300F77345 /* denoise.c in Sources */,
-				A9DB396E0D37EA0300F77345 /* detelecine.c in Sources */,
-				A9DB396F0D37EA0300F77345 /* dvd.c in Sources */,
-				A9DB39700D37EA0300F77345 /* encavcodec.c in Sources */,
-				A9DB39710D37EA0300F77345 /* encfaac.c in Sources */,
-				A9DB39720D37EA0300F77345 /* enclame.c in Sources */,
-				A9DB39730D37EA0300F77345 /* encvorbis.c in Sources */,
-				A9DB39740D37EA0300F77345 /* encx264.c in Sources */,
-				A9DB39750D37EA0300F77345 /* encxvid.c in Sources */,
-				A9DB39760D37EA0300F77345 /* fifo.c in Sources */,
-				A9DB39770D37EA0300F77345 /* hb.c in Sources */,
-				A9DB397A0D37EA0300F77345 /* ipodutil.cpp in Sources */,
-				A9DB397B0D37EA0300F77345 /* lang.c in Sources */,
-				A9DB397D0D37EA0300F77345 /* muxavi.c in Sources */,
-				A9DB397E0D37EA0300F77345 /* muxcommon.c in Sources */,
-				A9DB397F0D37EA0300F77345 /* muxmkv.c in Sources */,
-				A9DB39800D37EA0300F77345 /* muxmp4.c in Sources */,
-				A9DB39810D37EA0300F77345 /* muxogm.c in Sources */,
-				A9DB39820D37EA0300F77345 /* ports.c in Sources */,
-				A9DB39840D37EA0300F77345 /* reader.c in Sources */,
-				A9DB39850D37EA0300F77345 /* render.c in Sources */,
-				A9DB39860D37EA0300F77345 /* scan.c in Sources */,
-				A9DB39870D37EA0300F77345 /* stream.c in Sources */,
-				A9DB39880D37EA0300F77345 /* sync.c in Sources */,
-				A9DB39890D37EA0300F77345 /* update.c in Sources */,
-				A9DB398A0D37EA0300F77345 /* work.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		0DFF0B6F0B6BC6E600549488 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -671,245 +369,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A9DB38DD0D37E9BA00F77345 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A9DB39390D37EA0300F77345 /* common.c in Sources */,
-				A9DB393B0D37EA0300F77345 /* deblock.c in Sources */,
-				A9DB393C0D37EA0300F77345 /* deca52.c in Sources */,
-				A9DB393D0D37EA0300F77345 /* decavcodec.c in Sources */,
-				A9DB393E0D37EA0300F77345 /* decdca.c in Sources */,
-				A9DB393F0D37EA0300F77345 /* declpcm.c in Sources */,
-				A9DB39400D37EA0300F77345 /* decmpeg2.c in Sources */,
-				A9DB39410D37EA0300F77345 /* decsub.c in Sources */,
-				A9DB39420D37EA0300F77345 /* deinterlace.c in Sources */,
-				A9DB39430D37EA0300F77345 /* demuxmpeg.c in Sources */,
-				A9DB39440D37EA0300F77345 /* denoise.c in Sources */,
-				A9DB39450D37EA0300F77345 /* detelecine.c in Sources */,
-				A9DB39460D37EA0300F77345 /* dvd.c in Sources */,
-				A9DB39470D37EA0300F77345 /* encavcodec.c in Sources */,
-				A9DB39480D37EA0300F77345 /* encfaac.c in Sources */,
-				A9DB39490D37EA0300F77345 /* enclame.c in Sources */,
-				A9DB394A0D37EA0300F77345 /* encvorbis.c in Sources */,
-				A9DB394B0D37EA0300F77345 /* encx264.c in Sources */,
-				A9DB394C0D37EA0300F77345 /* encxvid.c in Sources */,
-				A9DB394D0D37EA0300F77345 /* fifo.c in Sources */,
-				A9DB394E0D37EA0300F77345 /* hb.c in Sources */,
-				A9DB39510D37EA0300F77345 /* ipodutil.cpp in Sources */,
-				A9DB39520D37EA0300F77345 /* lang.c in Sources */,
-				A9DB39540D37EA0300F77345 /* muxavi.c in Sources */,
-				A9DB39550D37EA0300F77345 /* muxcommon.c in Sources */,
-				A9DB39560D37EA0300F77345 /* muxmkv.c in Sources */,
-				A9DB39570D37EA0300F77345 /* muxmp4.c in Sources */,
-				A9DB39580D37EA0300F77345 /* muxogm.c in Sources */,
-				A9DB39590D37EA0300F77345 /* ports.c in Sources */,
-				A9DB395B0D37EA0300F77345 /* reader.c in Sources */,
-				A9DB395C0D37EA0300F77345 /* render.c in Sources */,
-				A9DB395D0D37EA0300F77345 /* scan.c in Sources */,
-				A9DB395E0D37EA0300F77345 /* stream.c in Sources */,
-				A9DB395F0D37EA0300F77345 /* sync.c in Sources */,
-				A9DB39600D37EA0300F77345 /* update.c in Sources */,
-				A9DB39610D37EA0300F77345 /* work.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		0D096E660B707D5800A845D4 /* Development */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../libhb";
-				COPY_PHASE_STRIP = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				EXECUTABLE_PREFIX = lib;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
-				INSTALL_PATH = /usr/local/lib;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
-				);
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../contrib/lib\"";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				OTHER_CFLAGS = (
-					"-D__LIBHB__",
-					"-DSYS_DARWIN",
-					"$(OTHER_CFLAGS_QUOTED_1)",
-					"-DUSE_PTHREAD",
-				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.1\\\" -DHB_BUILD=2007100800";
-				OTHER_LDFLAGS = (
-					../contrib/lib/libmp4v2.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libdvdcss.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-					../contrib/lib/libdca.a,
-					../contrib/lib/libmkv.a,
-					../contrib/lib/libswscale.a,
-					"-ldl",
-					"-flat_namespace",
-					"-read_only_relocs",
-					suppress,
-				);
-				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
-				PREBINDING = NO;
-				PRODUCT_NAME = hb;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				SEPARATE_STRIP = YES;
-				ZERO_LINK = NO;
-			};
-			name = Development;
-		};
-		0D096E670B707D5800A845D4 /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../libhb";
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				EXECUTABLE_PREFIX = lib;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
-				INSTALL_PATH = /usr/local/lib;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
-				);
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../contrib/lib\"";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				OTHER_CFLAGS = (
-					"-D__LIBHB__",
-					"-DSYS_DARWIN",
-					"$(OTHER_CFLAGS_QUOTED_1)",
-					"-DUSE_PTHREAD",
-				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.1\\\" -DHB_BUILD=2007100800";
-				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
-				OTHER_LDFLAGS = (
-					../contrib/lib/libmp4v2.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libdvdcss.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-					../contrib/lib/libdca.a,
-					../contrib/lib/libmkv.a,
-					../contrib/lib/libswscale.a,
-					"-ldl",
-					"-flat_namespace",
-					"-read_only_relocs",
-					suppress,
-				);
-				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
-				PREBINDING = NO;
-				PRODUCT_NAME = hb;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				SEPARATE_STRIP = YES;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-		0D096E690B707D5800A845D4 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../libhb";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				EXECUTABLE_PREFIX = lib;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
-				INSTALL_PATH = /usr/local/lib;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
-				);
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../contrib/lib\"";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				OTHER_CFLAGS = (
-					"-D__LIBHB__",
-					"-DSYS_DARWIN",
-					"$(OTHER_CFLAGS_QUOTED_1)",
-					"-DUSE_PTHREAD",
-				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.1\\\" -DHB_BUILD=2007100800";
-				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
-				OTHER_LDFLAGS = (
-					../contrib/lib/libmp4v2.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libdvdcss.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-					../contrib/lib/libdca.a,
-					../contrib/lib/libmkv.a,
-					../contrib/lib/libswscale.a,
-					"-ldl",
-					"-flat_namespace",
-					"-read_only_relocs",
-					suppress,
-				);
-				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
-				PREBINDING = NO;
-				PRODUCT_NAME = hb;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				SEPARATE_STRIP = YES;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 		0D88F56B0B6CDCD400F81F26 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1026,6 +488,8 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = hb;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				STRIP_INSTALLED_PRODUCT = YES;
+				STRIP_STYLE = all;
 				ZERO_LINK = NO;
 			};
 			name = Deployment;
@@ -1060,111 +524,9 @@
 			};
 			name = Deployment;
 		};
-		A9DB38E20D37E9BA00F77345 /* Development */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				INFOPLIST_FILE = "HB-Info.plist";
-				INSTALL_PATH = "$(HOME)/Library/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
-				);
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../contrib/lib\"";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-framework",
-					AppKit,
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = HB;
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		A9DB38E30D37E9BA00F77345 /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				INFOPLIST_FILE = "HB-Info.plist";
-				INSTALL_PATH = "$(HOME)/Library/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
-				);
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../contrib/lib\"";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-framework",
-					AppKit,
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = HB;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-		A9DB38E40D37E9BA00F77345 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				INFOPLIST_FILE = "HB-Info.plist";
-				INSTALL_PATH = "$(HOME)/Library/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
-				);
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../contrib/lib\"";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-framework",
-					AppKit,
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = HB;
-				ZERO_LINK = YES;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0D096E650B707D5800A845D4 /* Build configuration list for PBXNativeTarget "libhb dlib" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				0D096E660B707D5800A845D4 /* Development */,
-				0D096E670B707D5800A845D4 /* Deployment */,
-				0D096E690B707D5800A845D4 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Deployment;
-		};
 		0DFF0B730B6BC70400549488 /* Build configuration list for PBXNativeTarget "libhb" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1181,16 +543,6 @@
 				4D4E7BC5087804870051572B /* Development */,
 				4D4E7BC6087804870051572B /* Deployment */,
 				0D88F56F0B6CDCD400F81F26 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Deployment;
-		};
-		A9DB38E50D37E9BA00F77345 /* Build configuration list for PBXNativeTarget "HB" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A9DB38E20D37E9BA00F77345 /* Development */,
-				A9DB38E30D37E9BA00F77345 /* Deployment */,
-				A9DB38E40D37E9BA00F77345 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Deployment;

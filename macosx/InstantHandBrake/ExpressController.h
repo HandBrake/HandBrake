@@ -1,7 +1,7 @@
 /* ExpressController
 
    This file is part of the HandBrake source code.
-   Homepage: <http://handbrake.m0k.org/>.
+   Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>
@@ -15,7 +15,7 @@
 {
     hb_handle_t                  * fHandle;
     hb_list_t                    * fList;
-    hb_state_t                   * fState;
+    const hb_state_t                   * fState;
 
     IBOutlet NSWindow            * fWindow;
     IBOutlet NSView              * fEmptyView;
