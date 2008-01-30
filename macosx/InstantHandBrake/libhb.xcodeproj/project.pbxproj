@@ -185,49 +185,6 @@
 		29B97314FDCFA39411CA2CEA /* HandBrake */ = {
 			isa = PBXGroup;
 			children = (
-				526FBC8D0B4CA9F90064E04C /* libhb Sources */,
-				29B97323FDCFA39411CA2CEA /* Frameworks */,
-				19C28FACFE9D520D11CA2CBB /* Products */,
-			);
-			name = HandBrake;
-			sourceTree = "<group>";
-		};
-		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				A9DB399D0D37EB4700F77345 /* liba52.a */,
-				A9DB399E0D37EB4700F77345 /* libavcodec.a */,
-				A9DB399F0D37EB4700F77345 /* libavformat.a */,
-				A9DB39A00D37EB4700F77345 /* libavutil.a */,
-				A9DB39A10D37EB4700F77345 /* libdca.a */,
-				A9DB39A20D37EB4700F77345 /* libdvdcss.a */,
-				A9DB39A30D37EB4700F77345 /* libdvdread.a */,
-				A9DB39A40D37EB4700F77345 /* libfaac.a */,
-				A9DB39A50D37EB4700F77345 /* libmkv.a */,
-				A9DB39A60D37EB4700F77345 /* libmp3lame.a */,
-				A9DB39A70D37EB4700F77345 /* libmp4v2.a */,
-				A9DB39A80D37EB4700F77345 /* libmpeg2.a */,
-				A9DB39A90D37EB4700F77345 /* libmpeg2convert.a */,
-				A9DB39AA0D37EB4700F77345 /* libogg.a */,
-				A9DB39AB0D37EB4700F77345 /* libsamplerate.a */,
-				A9DB39AC0D37EB4700F77345 /* libswscale.a */,
-				A9DB39AD0D37EB4700F77345 /* libvorbis.a */,
-				A9DB39AE0D37EB4700F77345 /* libvorbisenc.a */,
-				A9DB39AF0D37EB4700F77345 /* libvorbisfile.a */,
-				A9DB39B00D37EB4700F77345 /* libxvidcore.a */,
-				A9DB39B10D37EB4700F77345 /* libx264.a */,
-				4D1125D709D72FD200E0657B /* libz.dylib */,
-				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
-				4DEB2024052B055F00C39CA9 /* IOKit.framework */,
-				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
-				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		526FBC8D0B4CA9F90064E04C /* libhb Sources */ = {
-			isa = PBXGroup;
-			children = (
 				A9DB38E70D37EA0300F77345 /* common.c */,
 				A9DB38E80D37EA0300F77345 /* common.h */,
 				A9DB38E90D37EA0300F77345 /* deblock.c */,
@@ -269,8 +226,43 @@
 				A9DB390D0D37EA0300F77345 /* sync.c */,
 				A9DB390E0D37EA0300F77345 /* update.c */,
 				A9DB390F0D37EA0300F77345 /* work.c */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
-			name = "libhb Sources";
+			name = HandBrake;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A9DB399D0D37EB4700F77345 /* liba52.a */,
+				A9DB399E0D37EB4700F77345 /* libavcodec.a */,
+				A9DB399F0D37EB4700F77345 /* libavformat.a */,
+				A9DB39A00D37EB4700F77345 /* libavutil.a */,
+				A9DB39A10D37EB4700F77345 /* libdca.a */,
+				A9DB39A20D37EB4700F77345 /* libdvdcss.a */,
+				A9DB39A30D37EB4700F77345 /* libdvdread.a */,
+				A9DB39A40D37EB4700F77345 /* libfaac.a */,
+				A9DB39A50D37EB4700F77345 /* libmkv.a */,
+				A9DB39A60D37EB4700F77345 /* libmp3lame.a */,
+				A9DB39A70D37EB4700F77345 /* libmp4v2.a */,
+				A9DB39A80D37EB4700F77345 /* libmpeg2.a */,
+				A9DB39A90D37EB4700F77345 /* libmpeg2convert.a */,
+				A9DB39AA0D37EB4700F77345 /* libogg.a */,
+				A9DB39AB0D37EB4700F77345 /* libsamplerate.a */,
+				A9DB39AC0D37EB4700F77345 /* libswscale.a */,
+				A9DB39AD0D37EB4700F77345 /* libvorbis.a */,
+				A9DB39AE0D37EB4700F77345 /* libvorbisenc.a */,
+				A9DB39AF0D37EB4700F77345 /* libvorbisfile.a */,
+				A9DB39B00D37EB4700F77345 /* libxvidcore.a */,
+				A9DB39B10D37EB4700F77345 /* libx264.a */,
+				4D1125D709D72FD200E0657B /* libz.dylib */,
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+				4DEB2024052B055F00C39CA9 /* IOKit.framework */,
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

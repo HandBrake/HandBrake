@@ -103,6 +103,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
     selector:@selector(workDone:)
     name:@"HBCoreWorkDoneNotification" object:nil];
+    
+    [GrowlApplicationBridge setGrowlDelegate: self];
 }
 
 - (void) applicationWillTerminate: (NSNotification *) n
@@ -217,6 +219,10 @@
                 return [NSString stringWithFormat: @"%d seconds",
                         title->seconds];
             }
+        }
+        else if( [[col identifier] isEqualToString: @"Size"] )
+        {
+            return [NSString stringWithFormat:@"-"];
         }
     }
     return nil;
@@ -363,7 +369,7 @@
 			job->vbitrate /= 2;
         }
         
-        if ( [fConvertAspectPopUp indexOfSelectedItem] )
+        if ( [fConvertAspectPopUp indexOfSelectedItem] > 0 )
         {
             do
             {
@@ -373,6 +379,8 @@
         }
         else
         {
+            /* Reset job->crop values */
+            memcpy( job->crop, job->title->crop, 4 * sizeof( int ) );
             job->width = maxwidth;
             hb_fix_aspect( job, HB_KEEP_WIDTH );
         }

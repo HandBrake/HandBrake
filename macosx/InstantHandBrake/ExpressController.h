@@ -5,12 +5,14 @@
    It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>
+#import <Growl/Growl.h>
+
 #import "DriveDetector.h"
+#import "DeviceController.h"
 #import "HBCore.h"
 #import "hb.h"
-#import "DeviceController.h"
 
-@interface ExpressController : NSObject
+@interface ExpressController : NSObject <GrowlApplicationBridgeDelegate>
 
 {
     hb_handle_t                  * fHandle;
