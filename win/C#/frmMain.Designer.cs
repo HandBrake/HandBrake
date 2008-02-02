@@ -37,7 +37,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label Label38;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -131,7 +131,7 @@ namespace Handbrake
             this.TabPage3 = new System.Windows.Forms.TabPage();
             this.label25 = new System.Windows.Forms.Label();
             this.lbl_vfr = new System.Windows.Forms.Label();
-            this.lbl_largeMp4Warning = new System.Windows.Forms.Label();
+            this.check_grayscale = new System.Windows.Forms.CheckBox();
             this.Label22 = new System.Windows.Forms.Label();
             this.check_2PassEncode = new System.Windows.Forms.CheckBox();
             this.Label2 = new System.Windows.Forms.Label();
@@ -140,7 +140,6 @@ namespace Handbrake
             this.Label46 = new System.Windows.Forms.Label();
             this.Label40 = new System.Windows.Forms.Label();
             this.check_iPodAtom = new System.Windows.Forms.CheckBox();
-            this.check_grayscale = new System.Windows.Forms.CheckBox();
             this.TabPage1 = new System.Windows.Forms.TabPage();
             this.text_bottom = new System.Windows.Forms.NumericUpDown();
             this.text_top = new System.Windows.Forms.NumericUpDown();
@@ -259,8 +258,7 @@ namespace Handbrake
             this.drop_chapterFinish.Size = new System.Drawing.Size(69, 21);
             this.drop_chapterFinish.TabIndex = 10;
             this.drop_chapterFinish.Text = "Auto";
-            this.ToolTip.SetToolTip(this.drop_chapterFinish, "Step 3 - Select the chapter range you would like to enocde. (default: All Chapter" +
-                    "s)");
+            this.ToolTip.SetToolTip(this.drop_chapterFinish, "Select the chapter range you would like to enocde. (default: All Chapters)");
             this.drop_chapterFinish.SelectedIndexChanged += new System.EventHandler(this.drop_chapterFinish_SelectedIndexChanged);
             // 
             // drop_chapterStart
@@ -273,8 +271,7 @@ namespace Handbrake
             this.drop_chapterStart.Size = new System.Drawing.Size(69, 21);
             this.drop_chapterStart.TabIndex = 9;
             this.drop_chapterStart.Text = "Auto";
-            this.ToolTip.SetToolTip(this.drop_chapterStart, "Step 3 - Select the chapter range you would like to enocde. (default: All Chapter" +
-                    "s)");
+            this.ToolTip.SetToolTip(this.drop_chapterStart, "Select the chapter range you would like to enocde. (default: All Chapters)");
             this.drop_chapterStart.SelectedIndexChanged += new System.EventHandler(this.drop_chapterStart_SelectedIndexChanged);
             // 
             // drp_dvdtitle
@@ -289,7 +286,7 @@ namespace Handbrake
             this.drp_dvdtitle.Size = new System.Drawing.Size(119, 21);
             this.drp_dvdtitle.TabIndex = 7;
             this.drp_dvdtitle.Text = "Automatic";
-            this.ToolTip.SetToolTip(this.drp_dvdtitle, "Step 2 - Select the title number you wish to encode.");
+            this.ToolTip.SetToolTip(this.drp_dvdtitle, "Select the title you wish to encode.");
             this.drp_dvdtitle.SelectedIndexChanged += new System.EventHandler(this.drp_dvdtitle_SelectedIndexChanged);
             this.drp_dvdtitle.Click += new System.EventHandler(this.drp_dvdtitle_Click);
             // 
@@ -302,7 +299,7 @@ namespace Handbrake
             this.RadioISO.Size = new System.Drawing.Size(44, 17);
             this.RadioISO.TabIndex = 4;
             this.RadioISO.Text = "File";
-            this.ToolTip.SetToolTip(this.RadioISO, "ISO, TS, MPG");
+            this.ToolTip.SetToolTip(this.RadioISO, "For selecting: ISO, TS, MPG");
             this.RadioISO.UseVisualStyleBackColor = true;
             // 
             // text_source
@@ -354,7 +351,7 @@ namespace Handbrake
             this.btn_destBrowse.Size = new System.Drawing.Size(83, 22);
             this.btn_destBrowse.TabIndex = 2;
             this.btn_destBrowse.Text = "Browse";
-            this.ToolTip.SetToolTip(this.btn_destBrowse, "Step 4 - Select a location to save your encoded file.");
+            this.ToolTip.SetToolTip(this.btn_destBrowse, " Select a location to save your encoded file.");
             this.btn_destBrowse.UseVisualStyleBackColor = false;
             this.btn_destBrowse.Click += new System.EventHandler(this.btn_destBrowse_Click);
             // 
@@ -372,7 +369,7 @@ namespace Handbrake
             this.drp_videoEncoder.Name = "drp_videoEncoder";
             this.drp_videoEncoder.Size = new System.Drawing.Size(156, 21);
             this.drp_videoEncoder.TabIndex = 1;
-            this.ToolTip.SetToolTip(this.drp_videoEncoder, "Step 5 - Select a video encoder");
+            this.ToolTip.SetToolTip(this.drp_videoEncoder, "Select a video encoder");
             this.drp_videoEncoder.SelectedIndexChanged += new System.EventHandler(this.drp_videoEncoder_SelectedIndexChanged);
             // 
             // drp_audioCodec
@@ -390,7 +387,7 @@ namespace Handbrake
             this.drp_audioCodec.Name = "drp_audioCodec";
             this.drp_audioCodec.Size = new System.Drawing.Size(111, 21);
             this.drp_audioCodec.TabIndex = 3;
-            this.ToolTip.SetToolTip(this.drp_audioCodec, "Step 6 - Select an audio encoder.");
+            this.ToolTip.SetToolTip(this.drp_audioCodec, "Select an audio encoder.");
             this.drp_audioCodec.SelectedIndexChanged += new System.EventHandler(this.drp_audioCodec_SelectedIndexChanged);
             // 
             // drp_audioBitrate
@@ -441,10 +438,11 @@ namespace Handbrake
             this.check_largeFile.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.check_largeFile.Location = new System.Drawing.Point(16, 80);
             this.check_largeFile.Name = "check_largeFile";
-            this.check_largeFile.Size = new System.Drawing.Size(170, 17);
+            this.check_largeFile.Size = new System.Drawing.Size(82, 17);
             this.check_largeFile.TabIndex = 4;
-            this.check_largeFile.Text = "Larger MP4 Files (> 4GB)";
-            this.ToolTip.SetToolTip(this.check_largeFile, "Allows creation of MP4 files greater than 4GB.");
+            this.check_largeFile.Text = "64Bit MP4";
+            this.ToolTip.SetToolTip(this.check_largeFile, "Allows creation of MP4 files greater than 4GB.\r\nWarning: Breaks iPod, Apple TV an" +
+                    "d PS3 compatibility.");
             this.check_largeFile.UseVisualStyleBackColor = false;
             this.check_largeFile.CheckedChanged += new System.EventHandler(this.check_largeFile_CheckedChanged);
             // 
@@ -905,6 +903,7 @@ namespace Handbrake
             this.RadioDVD.TabIndex = 3;
             this.RadioDVD.TabStop = true;
             this.RadioDVD.Text = "Folder";
+            this.ToolTip.SetToolTip(this.RadioDVD, "For Selecting a \"Video_TS\" folder on your hard drive or DVD");
             this.RadioDVD.UseVisualStyleBackColor = true;
             // 
             // Label17
@@ -1256,7 +1255,6 @@ namespace Handbrake
             this.TabPage3.BackColor = System.Drawing.SystemColors.ControlLight;
             this.TabPage3.Controls.Add(this.label25);
             this.TabPage3.Controls.Add(this.lbl_vfr);
-            this.TabPage3.Controls.Add(this.lbl_largeMp4Warning);
             this.TabPage3.Controls.Add(this.check_largeFile);
             this.TabPage3.Controls.Add(this.check_grayscale);
             this.TabPage3.Controls.Add(this.check_turbo);
@@ -1302,16 +1300,17 @@ namespace Handbrake
             this.lbl_vfr.Text = "(VFR On)";
             this.lbl_vfr.Visible = false;
             // 
-            // lbl_largeMp4Warning
+            // check_grayscale
             // 
-            this.lbl_largeMp4Warning.AutoSize = true;
-            this.lbl_largeMp4Warning.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_largeMp4Warning.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_largeMp4Warning.Location = new System.Drawing.Point(35, 100);
-            this.lbl_largeMp4Warning.Name = "lbl_largeMp4Warning";
-            this.lbl_largeMp4Warning.Size = new System.Drawing.Size(241, 12);
-            this.lbl_largeMp4Warning.TabIndex = 5;
-            this.lbl_largeMp4Warning.Text = "Warning: Breaks iPod, @TV, PS3 compatibility.";
+            this.check_grayscale.AutoSize = true;
+            this.check_grayscale.BackColor = System.Drawing.Color.Transparent;
+            this.check_grayscale.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_grayscale.Location = new System.Drawing.Point(16, 103);
+            this.check_grayscale.Name = "check_grayscale";
+            this.check_grayscale.Size = new System.Drawing.Size(138, 17);
+            this.check_grayscale.TabIndex = 1;
+            this.check_grayscale.Text = "Grayscale Encoding";
+            this.check_grayscale.UseVisualStyleBackColor = false;
             // 
             // Label22
             // 
@@ -1404,18 +1403,6 @@ namespace Handbrake
             this.check_iPodAtom.Text = "Insert iPod Atom";
             this.check_iPodAtom.UseVisualStyleBackColor = false;
             this.check_iPodAtom.CheckedChanged += new System.EventHandler(this.check_iPodAtom_CheckedChanged);
-            // 
-            // check_grayscale
-            // 
-            this.check_grayscale.AutoSize = true;
-            this.check_grayscale.BackColor = System.Drawing.Color.Transparent;
-            this.check_grayscale.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_grayscale.Location = new System.Drawing.Point(16, 117);
-            this.check_grayscale.Name = "check_grayscale";
-            this.check_grayscale.Size = new System.Drawing.Size(138, 17);
-            this.check_grayscale.TabIndex = 1;
-            this.check_grayscale.Text = "Grayscale Encoding";
-            this.check_grayscale.UseVisualStyleBackColor = false;
             // 
             // TabPage1
             // 
@@ -1866,9 +1853,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle3.Format = "N0";
-            dataGridViewCellStyle3.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle2.Format = "N0";
+            dataGridViewCellStyle2.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle2;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -2285,7 +2272,6 @@ namespace Handbrake
         internal System.Windows.Forms.Label Label18;
         internal System.Windows.Forms.ComboBox drp_audioSampleRate;
         internal System.Windows.Forms.TabPage TabPage3;
-        internal System.Windows.Forms.Label lbl_largeMp4Warning;
         internal System.Windows.Forms.CheckBox check_largeFile;
         internal System.Windows.Forms.CheckBox check_turbo;
         internal System.Windows.Forms.Label Label22;

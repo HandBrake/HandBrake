@@ -498,6 +498,7 @@ namespace Handbrake.Functions
             string vidQSetting = "";
             string twoPassEncoding = "";
             string videoFramerate = mainWindow.drp_videoFramerate.Text;
+            string vid_frame_rate = "";
             string turboH264 = "";
             string largeFile = "";
             string denoise = "";
@@ -528,9 +529,12 @@ namespace Handbrake.Functions
                 twoPassEncoding = " -2 ";
 
             if (videoFramerate == "Automatic")
-                videoFramerate = "";
+                vid_frame_rate = "";
             else
-                videoFramerate = " -r " + videoFramerate;
+            {
+                if (!mainWindow.check_vfr.Checked)
+                    vid_frame_rate = " -r " + videoFramerate;
+            }
 
             if (mainWindow.check_turbo.Checked)
                 turboH264 = " -T ";
@@ -565,7 +569,7 @@ namespace Handbrake.Functions
                 optimizeMP4 = " -O ";
 
 
-            string queryVideoSettings = videoBitrate + videoFilesize + vidQSetting + twoPassEncoding + videoFramerate + turboH264 + ipodAtom + optimizeMP4 + largeFile + denoise;
+            string queryVideoSettings = videoBitrate + videoFilesize + vidQSetting + twoPassEncoding + vid_frame_rate + turboH264 + ipodAtom + optimizeMP4 + largeFile + denoise;
             #endregion
 
             // Audio Settings Tab
@@ -699,7 +703,7 @@ namespace Handbrake.Functions
                 {
                     string path = Path.Combine(Path.GetTempPath(), "chapters.csv");
 
-                    ChapterMarkers = " --markers=" + path;
+                    ChapterMarkers = " --markers=" + "\"" + path + "\"";
                 }
             }
 

@@ -733,16 +733,14 @@ namespace Handbrake
 
         private void check_largeFile_CheckedChanged(object sender, EventArgs e)
         {
-            if (!text_destination.Text.Contains(".mp4"))
+            if ((!text_destination.Text.Contains(".mp4")) && (!text_destination.Text.Contains(".m4v")))
             {
-                lbl_largeMp4Warning.Text = "Warning: Only mp4 files are supported";
-                lbl_largeMp4Warning.ForeColor = Color.Red;
+                check_largeFile.BackColor = Color.LightCoral;
                 check_largeFile.CheckState = CheckState.Unchecked;
             }
             else
             {
-                lbl_largeMp4Warning.Text = "Warning: Breaks iPod, @TV, PS3 compatibility.";
-                lbl_largeMp4Warning.ForeColor = Color.Black;
+                check_largeFile.BackColor = Color.Transparent;
             }
         }
 
