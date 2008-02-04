@@ -217,6 +217,7 @@ rule LibMp4v2
         LIBMP4V2_PATCH += "$(PATCH) -p1 < ../patch_mpeg4ip_cygwin.patch && " ;
     }
     LIBMP4V2_PATCH += "$(PATCH) -p1 < ../patch-mpeg4ip.patch && " ;
+    LIBMP4V2_PATCH += "$(PATCH) -p1 < ../patch-mpeg4ip-nasm-2.00-configure.patch && " ;
     Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
 }
@@ -375,6 +376,7 @@ rule LibXvidCore
     {
         LIBXVIDCORE_PATCH = "$(PATCH) -p1 < ../patch-xvidcore-cygwin.patch && " ;
     }
+    LIBXVIDCORE_PATCH += "$(PATCH) -p1 < ../patch-xvidcore-nasm-2.00-configure.patch && " ;
     Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
 }

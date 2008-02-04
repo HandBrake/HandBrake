@@ -1,0 +1,12 @@
+diff -ruN mpeg4ip-orig/configure mpeg4ip/configure
+--- mpeg4ip-orig/configure	2005-05-18 16:03:25.000000000 -0600
++++ mpeg4ip/configure	2008-01-30 20:17:15.000000000 -0700
+@@ -27789,7 +27789,7 @@
+    if test x$USENASM = xtrue; then
+ 	echo "$as_me:$LINENO: checking nasm version..." >&5
+ echo $ECHO_N "checking nasm version...... $ECHO_C" >&6
+-	BILLSNASM_arg=`nasm -r | tr '.' ' '`
++	BILLSNASM_arg=`(nasm -r || nasm -v) | tr '.' ' '`
+         BILLSNASM_ret=`util/testnasm.sh $BILLSNASM_arg`
+ 	if test x$BILLSNASM_ret = x"yes"; then
+ 	   USENASM=true
