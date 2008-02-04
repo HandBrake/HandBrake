@@ -164,8 +164,6 @@ static void do_job( hb_job_t * job, int cpu_count )
     
     if ( job->vfr )
     {
-        job->vrate_base = 900900;
-
         int detelecine_present = 0;        
         if ( job->filters )
         {
@@ -190,9 +188,9 @@ static void do_job( hb_job_t * job, int cpu_count )
             
             /* Add it to the list. */
             hb_list_add( job->filters, filter );
+            
+            hb_log("work: VFR mode -- adding detelecine filter");
         }
-        
-        hb_log("work: VFR mode -- Switching FPS to 29.97 and detelecining.");
     }
     
     if( job->filters )
@@ -208,17 +206,25 @@ static void do_job( hb_job_t * job, int cpu_count )
         }
     }
     
-    if( job->vquality >= 0.0 && job->vquality <= 1.0 )
+    if( job->vfr)
     {
-        hb_log( " + %.3f fps, video quality %.2f", (float) job->vrate /
-                (float) job->vrate_base, job->vquality );
+        hb_log( " + video frame rate: variable (detected %.3f fps)", (float) job->vrate /
+            (float) job->vrate_base );
     }
     else
     {
-        hb_log( " + %.3f fps, video bitrate %d kbps, pass %d",
-                (float) job->vrate / (float) job->vrate_base,
-                job->vbitrate, job->pass );
+        hb_log( " + video frame rate: %.3f fps", (float) job->vrate / (float) job->vrate_base);
     }
+    
+    if( job->vquality >= 0.0 && job->vquality <= 1.0 )
+    {
+        hb_log( " + video quality %.2f", job->vquality );
+    }
+    else
+    {
+        hb_log( " + video bitrate %d kbps, pass %d", job->vbitrate, job->pass );
+    }
+
 	hb_log (" + PixelRatio: %d, width:%d, height: %d",job->pixel_ratio,job->width, job->height);
     job->fifo_mpeg2  = hb_fifo_init( 2048 );
     job->fifo_raw    = hb_fifo_init( FIFO_CPU_MULT * cpu_count );

@@ -20,11 +20,15 @@ struct hb_work_private_s
     hb_buffer_t        * buf_scale;
     hb_fifo_t          * subtitle_queue;
     hb_fifo_t          * delay_queue;
-    int                  frames_to_extend;
     int                  dropped_frames;
     int                  extended_frames;
     uint64_t             last_start[4];
     uint64_t             last_stop[4];
+    uint64_t             lost_time[4];
+    uint64_t             total_lost_time;
+    uint64_t             total_gained_time;
+    int64_t              chapter_time;
+    int                  chapter_val;
 };
 
 int  renderInit( hb_work_object_t *, hb_job_t * );
@@ -233,7 +237,15 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     {
         hb_fifo_push( pv->subtitle_queue,  hb_buffer_init(0) );
     }
-    
+
+    /* If there's a chapter mark remember it in case we delay or drop its frame */
+    if( in->new_chap )
+    {
+        pv->chapter_time = in->start;
+        pv->chapter_val = in->new_chap;
+        in->new_chap = 0;
+    }
+
     /* Setup render buffer */
     hb_buffer_t * buf_render = hb_buffer_init( 3 * job->width * job->height / 2 );  
     
@@ -280,9 +292,22 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             {
                 if( job->vfr )
                 {
-                    pv->frames_to_extend += 4;
+                    /* We need to compensate for the time lost by dropping this frame.
+                       Spread its duration out in quarters, because usually dropped frames
+                       maintain a 1-out-of-5 pattern and this spreads it out amongst the remaining ones.
+                       Store these in the lost_time array, which has 4 slots in it.
+                       Because not every frame duration divides evenly by 4, and we can't lose the
+                       remainder, we have to go through an awkward process to preserve it in the 4th array index. */
+                    uint64_t temp_duration = buf_tmp_out->stop - buf_tmp_out->start;
+                    pv->lost_time[0] += (temp_duration / 4);
+                    pv->lost_time[1] += (temp_duration / 4);
+                    pv->lost_time[2] += (temp_duration / 4);
+                    pv->lost_time[3] += ( temp_duration - (temp_duration / 4) - (temp_duration / 4) - (temp_duration / 4) );
+                    
+                    pv->total_lost_time += temp_duration;
                     pv->dropped_frames++;
-                    hb_fifo_get( pv->subtitle_queue );
+                    
+                    hb_fifo_get( pv->subtitle_queue );                    
                     buf_tmp_in = NULL;
                 }
                 else
@@ -304,8 +329,11 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             pv->last_start[i] = pv->last_start[i-1];
             pv->last_stop[i] = pv->last_stop[i-1];
         }
-        pv->last_start[0] = in->start;
-        pv->last_stop[0] = in->stop;
+        
+        /* In order to make sure we have continuous time stamps, store
+           the current frame's duration as starting when the last one stopped. */
+        pv->last_start[0] = pv->last_stop[1];
+        pv->last_stop[0] = pv->last_start[0] + (in->stop - in->start);
     }
     
     /* Apply subtitles */
@@ -385,13 +413,17 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if( *buf_out )
     {
-        if( pv->frames_to_extend )
+        /* The current frame exists. That means it hasn't been dropped by a filter.
+           Make it accessible as ivtc_buffer so we can edit its duration if needed. */
+        ivtc_buffer = *buf_out;
+
+        if( pv->lost_time[3] > 0 )
         {
             /*
-             * A frame's been dropped by VFR detelecine.
+             * A frame's been dropped earlier by VFR detelecine.
              * Gotta make up the lost time. This will also
-             * slow down the video to 23.976fps.
-             * The dropped frame ran for 3003 ticks, so
+             * slow down the video.
+             * The dropped frame's has to be accounted for, so
              * divvy it up amongst the 4 frames left behind.
              * This is what the delay_queue is for;
              * telecined sequences start 2 frames before
@@ -399,28 +431,61 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
              * ones you need a 2 frame delay between
              * reading input and writing output.
              */
-            ivtc_buffer = *buf_out;
+                                   
+            /* We want to extend the outputted frame's duration by the value
+              stored in the 4th slot of the lost_time array. Because we need
+              to adjust all the values in the array so they're contiguous,
+              extend the duration inside the array first, before applying
+              it to the current frame buffer. */
+            pv->last_stop[3] += pv->lost_time[3];
             
-            /* The 4th cached frame will be the to use. */
-            ivtc_buffer->start = pv->last_start[3];
-            ivtc_buffer->stop = pv->last_stop[3];
-
-            if (pv->frames_to_extend % 4)
-                ivtc_buffer->stop += 751;
-            else
-                ivtc_buffer->stop += 750;
+            /* Log how much time has been added back in to the video. */
+            pv->total_gained_time += pv->lost_time[3];
             
-            /* Set the 3rd cached frame to start when this one stops,
-               and to stop 3003 ticks later -- a normal 29.97fps
-               length frame. If it needs to be extended as well to
-               make up lost time, it'll be handled on the next
-               loop through the renderer.                            */
-            int temp_duration = pv->last_stop[2] - pv->last_start[2];
-            pv->last_start[2] = ivtc_buffer->stop;
-            pv->last_stop[2] = ivtc_buffer->stop + temp_duration;
+            /* We've pulled the 4th value from the lost_time array
+               and added it to the last_stop array's 4th slot. Now, rotate the
+                lost_time array so the 4th slot now holds the 3rd's value, and
+               so on down the line, and set the 0 index to a value of 0. */
+            int i;
+            for( i=2; i >=  0; i--)
+            {
+                pv->lost_time[i+1] = pv->lost_time[i];
+            }
+            pv->lost_time[0] = 0;
             
-            pv->frames_to_extend--;
+            /* Log how many frames have had their durations extended. */
             pv->extended_frames++;
+        }
+        
+        /* We can't use the given time stamps. Previous frames
+           might already have been extended, throwing off the
+           raw values fed to render.c. Instead, their
+           stop and start times are stored in arrays.
+           The 4th cached frame will be the to use.
+           If it needed its duration extended to make up
+           lost time, it will have happened above. */
+        ivtc_buffer->start = pv->last_start[3];
+        ivtc_buffer->stop = pv->last_stop[3];
+        
+        /* Set the 3rd cached frame to start when this one stops,
+           and so on down the line. If any of them need to be
+           extended as well to make up lost time, it'll be handled
+           on the next loop through the renderer.  */
+        int i;   
+        for (i = 2; i >= 0; i--)
+        {
+            int temp_duration = pv->last_stop[i] - pv->last_start[i];
+            pv->last_start[i] = pv->last_stop[i+1];
+            pv->last_stop[i] = pv->last_start[i] + temp_duration;
+        }
+
+        /* If we have a pending chapter mark and this frame is at
+           or after the time of the mark, mark this frame & clear
+           our pending mark. */
+        if( pv->chapter_time && pv->chapter_time <= ivtc_buffer->start )
+        {
+            ivtc_buffer->new_chap = pv->chapter_val;
+            pv->chapter_time = 0;
         }
 
     }
@@ -431,11 +496,12 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 void renderClose( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;   
-        
-    hb_log("render: dropped frames: %i (%i ticks)", pv->dropped_frames, (pv->dropped_frames * 3003) );
-    hb_log("render: extended frames: %i (%i ticks)", pv->extended_frames, ( ( pv->extended_frames / 4 ) * 3003 ) );
-    hb_log("render: Lost time: %i frames (%i ticks)", (pv->dropped_frames * 4) - (pv->extended_frames), (pv->dropped_frames * 3003) - ( ( pv->extended_frames / 4 ) * 3003 ) );
 
+    hb_log("render: lost time: %lld (%i frames)", pv->total_lost_time, pv->dropped_frames);
+    hb_log("render: gained time: %lld (%i frames) (%lld not accounted for)", pv->total_gained_time, pv->extended_frames, pv->total_lost_time - pv->total_gained_time);
+    if (pv->dropped_frames)
+        hb_log("render: average dropped frame duration: %lld", (pv->total_lost_time / pv->dropped_frames) );
+    
     /* Cleanup subtitle queue */
     if( pv->subtitle_queue )
     {
@@ -476,12 +542,23 @@ int renderInit( hb_work_object_t * w, hb_job_t * job )
     /* Setup FIFO queue for subtitle cache */
     pv->subtitle_queue = hb_fifo_init( 8 );    
     pv->delay_queue = hb_fifo_init( 8 );
-    pv->frames_to_extend = 0;
+
+    /* VFR IVTC needs a bunch of time-keeping variables to track
+      how many frames are dropped, how many are extended, what the
+      last 4 start and stop times were (so they can be modified),
+      how much time has been lost and gained overall, how much time
+      the latest 4 frames should be extended by, and where chapter
+      markers are (so they can be saved if their frames are dropped.) */
     pv->dropped_frames = 0;
     pv->extended_frames = 0;
     pv->last_start[0] = 0;
     pv->last_stop[0] = 0;
-    
+    pv->total_lost_time = 0;
+    pv->total_gained_time = 0;
+    pv->lost_time[0] = 0; pv->lost_time[1] = 0; pv->lost_time[2] = 0; pv->lost_time[3] = 0;
+    pv->chapter_time = 0;
+    pv->chapter_val  = 0;
+
     /* Setup filters */
     /* TODO: Move to work.c? */
     if( job->filters )
