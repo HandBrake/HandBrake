@@ -25,6 +25,24 @@ hb_work_object_t hb_encx264 =
 
 #define DTS_BUFFER_SIZE 32 
 
+/*
+ * The frame info struct remembers information about each frame across calls
+ * to x264_encoder_encode. Since frames are uniquely identified by their
+ * timestamp, we use some bits of the timestamp as an index. The LSB is
+ * chosen so that two successive frames will have different values in the
+ * bits over any plausible range of frame rates. (Starting with bit 9 allows
+ * any frame rate slower than 175fps.) The MSB determines the size of the array.
+ * It is chosen so that two frames can't use the same slot during the 
+ * encoder's max frame delay (set by the standard as 16 frames) and so
+ * that, up to some minimum frame rate, frames are guaranteed to map to
+ * different slots. (An MSB of 16 which is 2^(16-9+1) = 256 slots guarantees
+ * no collisions down to a rate of 1.4 fps).
+ */
+#define FRAME_INFO_MAX2 (9)     // 2^9 = 512; 90000/512 = 175 frames/sec
+#define FRAME_INFO_MIN2 (16)    // 2^16 = 65536; 90000/65536 = 1.4 frames/sec
+#define FRAME_INFO_SIZE (1 << (FRAME_INFO_MIN2 - FRAME_INFO_MAX2 + 1))
+#define FRAME_INFO_MASK (FRAME_INFO_SIZE - 1)
+
 struct hb_work_private_s
 {
     hb_job_t       * job;
@@ -32,14 +50,14 @@ struct hb_work_private_s
     x264_picture_t   pic_in;
     uint8_t         *x264_allocated_pic;
 
-    // Internal queue of DTS start/stop values.
-    int64_t        dts_start[DTS_BUFFER_SIZE];
-    int64_t        dts_stop[DTS_BUFFER_SIZE];
+    int64_t        dts_next;    // DTS start time value for next output frame
+    int64_t        last_stop;   // Debugging - stop time of previous input frame
     int64_t        init_delay;
-
-    int64_t        dts_write_index;
-    int64_t        dts_read_index;
     int64_t        next_chap;
+
+    struct {
+        int64_t duration;
+    } frame_info[FRAME_INFO_SIZE];
 
     char             filename[1024];
 };
@@ -247,8 +265,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
     pv->x264_allocated_pic = pv->pic_in.img.plane[0];
 
-    pv->dts_write_index = 0;
-    pv->dts_read_index = 0;
+    pv->dts_next = -1;
     pv->next_chap = 0;
 
     if (job->areBframes)
@@ -268,7 +285,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
            will use the duration of frames running at 23.976fps instead.. */
         if (job->vfr)
         {
-            pv->init_delay = 3754;
+            pv->init_delay = 7506;
         }
    
         /* The delay is 2 frames for regular b-frames, 3 for b-pyramid.
@@ -294,6 +311,22 @@ void encx264Close( hb_work_object_t * w )
     w->private_data = NULL;
 
     /* TODO */
+}
+
+/*
+ * see comments in definition of 'frame_info' in pv struct for description
+ * of what these routines are doing.
+ */
+static void save_frame_info( hb_work_private_t * pv, hb_buffer_t * in )
+{
+    int i = (in->start >> FRAME_INFO_MAX2) & FRAME_INFO_MASK;
+    pv->frame_info[i].duration = in->stop - in->start;
+}
+
+static int64_t get_frame_duration( hb_work_private_t * pv, int64_t pts )
+{
+    int i = (pts >> FRAME_INFO_MAX2) & FRAME_INFO_MASK;
+    return pv->frame_info[i].duration;
 }
 
 int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
@@ -330,6 +363,16 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 job->height / 4;
         }
 
+        if( pv->dts_next == -1 )
+        {
+            /* we don't have a start time yet so use the first frame's 
+             * start. All other frame times will be determined by the
+             * sum of the prior output frame durations in *DTS* order
+             * (not by the order they arrive here). This timing change is
+             * essential for VFR with b-frames but a complete nop otherwise.
+             */
+            pv->dts_next = in->start;
+        }
         if( in->new_chap && job->chapter_markers )
         {
             /* chapters have to start with an IDR frame so request that this
@@ -351,10 +394,21 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
         }
         pv->pic_in.i_qpplus1 = 0;
 
-        // Remember current PTS value, use as DTS later
-        pv->dts_start[pv->dts_write_index & (DTS_BUFFER_SIZE-1)] = in->start;
-        pv->dts_stop[pv->dts_write_index & (DTS_BUFFER_SIZE-1)]  = in->stop;
-        pv->dts_write_index++;
+        /* XXX this is temporary debugging code to check that the upstream
+         * modules (render & sync) have generated a continuous, self-consistent
+         * frame stream with the current frame's start time equal to the
+         * previous frame's stop time.
+         */
+        if( pv->last_stop != in->start )
+        {
+            hb_log("encx264 input continuity err: last stop %lld  start %lld",
+                    pv->last_stop, in->start);
+        }
+        pv->last_stop = in->stop;
+
+        // Remember info about this frame that we need to pass across 
+        // the x264_encoder_encode call (since it reorders frames).
+        save_frame_info( pv, in );
 
         /* Feed the input DTS to x264 so it can figure out proper output PTS */
         pv->pic_in.i_pts = in->start;
@@ -386,16 +440,14 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
         /* Should be way too large */
         buf        = hb_buffer_init( 3 * job->width * job->height / 2 );
         buf->size  = 0;
-        buf->start = in->start;
-        buf->stop  = in->stop;
         buf->frametype   = 0;
 
-        int64_t dts_start, dts_stop;
-
         /* Get next DTS value to use */
-        dts_start = pv->dts_start[pv->dts_read_index & (DTS_BUFFER_SIZE-1)];
-        dts_stop  = pv->dts_stop[pv->dts_read_index & (DTS_BUFFER_SIZE-1)];
-        pv->dts_read_index++;
+        int64_t dts_start = pv->dts_next;
+
+        /* compute the stop time based on the original frame's duration */
+        int64_t dts_stop  = dts_start + get_frame_duration( pv, pic_out.i_pts );
+        pv->dts_next = dts_stop;
 
         for( i = 0; i < i_nal; i++ )
         {
@@ -469,11 +521,7 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
                     /* Store the output presentation time stamp
                        from x264 for use by muxmp4 in off-setting
-                       b-frames with the CTTS atom.
-                       For now, just add 1000000 to the offset so that the
-                       value is pretty much guaranteed to be positive.  The
-                       muxing code will minimize the renderOffset at the end. */
-
+                       b-frames with the CTTS atom. */
                     buf->renderOffset = pic_out.i_pts - dts_start + pv->init_delay;
 
                     /* Send out the next dts values */
@@ -492,5 +540,3 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     return HB_WORK_OK;
 }
-
-
