@@ -1,6 +1,6 @@
-diff -Naur xvidcoreOrg/build/generic/configure xvidcore/build/generic/configure
---- xvidcoreOrg/build/generic/configure	2006-11-01 10:39:36.000000000 +0000
-+++ xvidcore/build/generic/configure	2008-01-26 18:07:50.453125000 +0000
+diff -Naur xvidcore/build/generic/configure xvidcore-patched/build/generic/configure
+--- xvidcore/build/generic/configure	2005-12-30 09:45:30.000000000 -0500
++++ xvidcore-patched/build/generic/configure	2007-01-01 18:43:27.953125000 -0500
 @@ -3844,10 +3844,9 @@
       [cC][yY][gG][wW][iI][nN]*|mingw32*|mks*)
  	echo "$as_me:$LINENO: result: ok" >&5
@@ -15,18 +15,9 @@ diff -Naur xvidcoreOrg/build/generic/configure xvidcore/build/generic/configure
  	;;
       darwin*|raphsody*)
  	STATIC_LIB="libxvidcore.\$(STATIC_EXTENSION)"
-@@ -4016,7 +4015,7 @@
-        if test "$ac_nasm" = "yes" ; then
-                                             echo "$as_me:$LINENO: checking for nasm patch version" >&5
- echo $ECHO_N "checking for nasm patch version... $ECHO_C" >&6
--           nasm_patch=`$nasm_prog -r | cut -d '.' -f 3 | cut -d ' ' -f 1`
-+           nasm_patch=`($nasm_prog -r || $nasm_prog -v) | cut -d '.' -f 3 | cut -d ' ' -f 1`
-            if test -z $nasm_patch ; then
-               nasm_patch=-1
-            fi
-diff -Naur xvidcoreOrg/build/generic/configure.in xvidcore/build/generic/configure.in
---- xvidcoreOrg/build/generic/configure.in	2006-11-01 10:38:16.000000000 +0000
-+++ xvidcore/build/generic/configure.in	2008-01-26 18:07:53.203125000 +0000
+diff -Naur xvidcore/build/generic/configure.in xvidcore-patched/build/generic/configure.in
+--- xvidcore/build/generic/configure.in	2005-12-30 09:45:30.000000000 -0500
++++ xvidcore-patched/build/generic/configure.in	2007-01-01 18:43:11.453125000 -0500
 @@ -281,10 +281,9 @@
  	;;
       [[cC]][[yY]][[gG]][[wW]][[iI]][[nN]]*|mingw32*|mks*)
@@ -41,12 +32,3 @@ diff -Naur xvidcoreOrg/build/generic/configure.in xvidcore/build/generic/configu
  	;;
       darwin*|raphsody*)
  	STATIC_LIB="libxvidcore.\$(STATIC_EXTENSION)"
-@@ -363,7 +362,7 @@
-            dnl Checking nasm patch version
-            dnl
-            AC_MSG_CHECKING([for nasm patch version])
--           nasm_patch=`$nasm_prog -r | cut -d '.' -f 3 | cut -d ' ' -f 1`
-+           nasm_patch=`($nasm_prog -r || $nasm_prog -v) | cut -d '.' -f 3 | cut -d ' ' -f 1`
-            if test -z $nasm_patch ; then
-               nasm_patch=-1
-            fi
