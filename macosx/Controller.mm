@@ -3383,6 +3383,9 @@ if (item == nil)
         [fAudBitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioBitRate"]]];
         /*Subtitles*/
         [fSubPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Subtitles"]]];
+        /* Forced Subtitles */
+        [fSubForcedCheck setState:[[chosenPreset objectForKey:@"SubtitlesForced"] intValue]];
+	    
         /* Dynamic Range Control Slider */
         [fAudDrcSlider setFloatValue: [[chosenPreset valueForKey:@"AudioDRCSlider"] floatValue]];
         [self audioDRCSliderChanged: NULL];
@@ -3755,6 +3758,8 @@ if (item == nil)
 	[preset setObject:[fAudBitratePopUp titleOfSelectedItem] forKey:@"AudioBitRate"];
 	/* Subtitles*/
 	[preset setObject:[fSubPopUp titleOfSelectedItem] forKey:@"Subtitles"];
+    /* Forced Subtitles */
+	[preset setObject:[NSNumber numberWithInt:[fSubForcedCheck state]] forKey:@"SubtitlesForced"];
     /* Dynamic Range Control Slider */
     [preset setObject:[NSNumber numberWithFloat:[fAudDrcSlider floatValue]] forKey:@"AudioDRCSlider"];
 	
