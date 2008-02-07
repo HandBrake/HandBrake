@@ -3422,8 +3422,19 @@ if (item == nil)
             }
             else // /* If not 0 or 2 we assume objectForKey:@"UsesPictureSettings is 1 which is "Use picture sizing from when the preset was set" */
             {
-                job->width = [[chosenPreset objectForKey:@"PictureWidth"]  intValue];
-                job->height = [[chosenPreset objectForKey:@"PictureHeight"]  intValue];
+                /* we check to make sure the presets width/height does not exceed the sources width/height */
+                if (fTitle->width < [[chosenPreset objectForKey:@"PictureWidth"]  intValue] || fTitle->height < [[chosenPreset objectForKey:@"PictureHeight"]  intValue])
+                {
+                    /* if so, then we use the sources height and width to avoid scaling up */
+                    job->width = fTitle->width;
+                    job->height = fTitle->height;
+                }
+                else // source width/height is >= the preset height/width
+                {
+                    /* we can go ahead and use the presets values for height and width */
+                    job->width = [[chosenPreset objectForKey:@"PictureWidth"]  intValue];
+                    job->height = [[chosenPreset objectForKey:@"PictureHeight"]  intValue];
+                }
                 job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
                 if (job->keep_ratio == 1)
                 {
