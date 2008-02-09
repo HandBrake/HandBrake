@@ -450,12 +450,37 @@ static uint64_t hb_ps_stream_getVideoPTS(hb_stream_t *stream)
  * hb_stream_duration
  ***********************************************************************
  *
+ * Finding stream duration is difficult.  One issue is that the video file
+ * may have chunks from several different program fragments (main feature,
+ * commercials, station id, trailers, etc.) all with their own base pts
+ * value.  We can't find the piece boundaries without reading the entire
+ * file but if we compute a rate based on time stamps from two different
+ * pieces the result will be meaningless.  The second issue is that the
+ * data rate of compressed video normally varies by 5-10x over the length
+ * of the video. This says that we want to compute the rate over relatively
+ * long segments to get a representative average but long segments increase
+ * the likelihood that we'll cross a piece boundary.
+ * 
+ * What we do is take time stamp samples at several places in the file
+ * (currently 16) then compute the average rate (i.e., ticks of video per
+ * byte of the file) for all pairs of samples (N^2 rates computed for N
+ * samples). Some of those rates will be absurd because the samples came
+ * from different segments. Some will be way low or high because the
+ * samples came from a low or high motion part of the segment. But given
+ * that we're comparing *all* pairs the majority of the computed rates
+ * should be near the overall average.  So we median filter the computed
+ * rates to pick the most representative value.
+ *
  **********************************************************************/
 struct pts_pos {
     uint64_t pos;   /* file position of this PTS sample */
     uint64_t pts;   /* PTS from video stream */
 };
 
+#define NDURSAMPLES 16
+
+// get one (position, timestamp) sampple from a transport or program
+// stream.
 static struct pts_pos hb_sample_pts(hb_stream_t *stream, uint64_t fpos)
 {
     struct pts_pos pp = { 0, 0 };
@@ -494,36 +519,74 @@ static struct pts_pos hb_sample_pts(hb_stream_t *stream, uint64_t fpos)
     return pp;
 }
 
+static int dur_compare( const void *a, const void *b )
+{
+    const double *aval = a, *bval = b;
+    return ( *aval < *bval ? -1 : ( *aval == *bval ? 0 : 1 ) );
+}
+
+// given an array of (position, time) samples, compute a max-likelihood
+// estimate of the average rate by computing the rate between all pairs
+// of samples then taking the median of those rates.
+static double compute_stream_rate( struct pts_pos *pp, int n )
+{
+    int i, j;
+    double rates[NDURSAMPLES * NDURSAMPLES / 2];
+    double *rp = rates;
+
+    // the following nested loops compute the rates between all pairs.
+    *rp = 0;
+    for ( i = 0; i < n-1; ++i )
+    {
+        // Bias the median filter by not including pairs that are "far"
+        // frome one another. This is to handle cases where the file is
+        // made of roughly equal size pieces where a symmetric choice of
+        // pairs results in having the same number of intra-piece &
+        // inter-piece rate estimates. This would mean that the median
+        // could easily fall in the inter-piece part of the data which
+        // would give a bogus estimate. The 'ns' index creates an
+        // asymmetry that favors locality.
+        int ns = i + ( n >> 1 );
+        if ( ns > n )
+            ns = n;
+        for ( j = i+1; j < ns; ++j )
+        {
+            if ( pp[j].pts != pp[i].pts && pp[j].pos > pp[i].pos )
+            {
+                *rp = ((double)( pp[j].pts - pp[i].pts )) /
+                      ((double)( pp[j].pos - pp[i].pos ));
+				++rp;
+            }
+        }
+    }
+    // now compute and return the median of all the (n*n/2) rates we computed
+    // above.
+    int nrates = rp - rates;
+    qsort( rates, nrates, sizeof (rates[0] ), dur_compare );
+    return rates[nrates >> 1];
+}
+
 static void hb_stream_duration(hb_stream_t *stream, hb_title_t *inTitle)
 {
-    // To calculate the duration we get video presentation time stamps
-    // at a couple places in the file then use their difference scaled
-    // by the ratio of the distance between our measurement points &
-    // the size of the file. The issue is that our video file may have
-    // chunks from several different program fragments (main feature,
-    // commercials, station id, trailers, etc.) all with their own base
-    // pts value. We need to difference two pts's from the same program
-    // fragment. Since extraneous material is very likely at the beginning
-    // and end of the content, for now we take a time stamp from 25%
-    // into the file & 75% into the file then double their difference
-    // to get the total duration.
-    struct pts_pos first_pts, last_pts;
+    struct pts_pos ptspos[NDURSAMPLES];
+    struct pts_pos *pp = ptspos;
+    int i;
 
     fseeko(stream->file_handle, 0, SEEK_END);
     uint64_t fsize = ftello(stream->file_handle);
-    first_pts = hb_sample_pts(stream, fsize >> 2);
-    last_pts = hb_sample_pts(stream, fsize - (fsize >> 2) );
-
-    if ( first_pts.pos && last_pts.pos && first_pts.pos != last_pts.pos )
+    uint64_t fincr = fsize / NDURSAMPLES;
+    uint64_t fpos = fincr / 2;
+    for ( i = NDURSAMPLES; --i >= 0; fpos += fincr )
     {
-        uint64_t dur = ( ( last_pts.pts - first_pts.pts ) * fsize ) /
-                       ( last_pts.pos - first_pts.pos );
-        inTitle->duration = dur;
-        dur /= 90000;
-        inTitle->hours    = dur / 3600;
-        inTitle->minutes  = ( dur % 3600 ) / 60;
-        inTitle->seconds  = dur % 60;
+        *pp++ = hb_sample_pts(stream, fpos);
     }
+    uint64_t dur = compute_stream_rate( ptspos, pp - ptspos ) * (double)fsize;
+    inTitle->duration = dur;
+    dur /= 90000;
+    inTitle->hours    = dur / 3600;
+    inTitle->minutes  = ( dur % 3600 ) / 60;
+    inTitle->seconds  = dur % 60;
+
     rewind(stream->file_handle);
 }
 
@@ -1888,7 +1951,6 @@ static void hb_ts_stream_decode(hb_stream_t *stream)
 	int i = 0;
 	for (i=0; i < stream->ts_number_video_pids + stream->ts_number_audio_pids; i++)
 	{
-//	stream->ts_skipbad[kAudioStream] = stream->ts_skipbad[kVideoStream] = 0;
 		stream->ts_skipbad[i] = 0;
 	}
 	
@@ -1911,17 +1973,27 @@ static void hb_ts_stream_decode(hb_stream_t *stream)
             // so just discard the remainder (the partial buffer is useless)
             hb_log("hb_ts_stream_decode - eof");
             stream->ps_decode_buffer[stream->ps_current_write_buffer_index].len = 0;
-         return;
+            return;
 		}
 
 		// Check sync byte
 		if ((buf[0] != 0x47) && (buf[0] != 0x72) && (buf[0] != 0x29))
 		{
-            off_t pos = ftello(stream->file_handle);
-            hb_log("hb_ts_stream_decode - no sync byte 0x47 @ %lld",  pos);
+            // lost sync - back up to where we started then try to 
+            // re-establish sync.
+            off_t pos = ftello(stream->file_handle) - 188;
+            off_t pos2 = align_to_next_packet(stream->file_handle);
+            if ( pos2 == 0 )
+            {
+                hb_log( "hb_ts_stream_decode: eof while re-establishing sync @ %lld",
+                        pos );
+                stream->ps_decode_buffer[stream->ps_current_write_buffer_index].len = 0;
+                return;
+            }
+            hb_log("hb_ts_stream_decode: sync lost @%lld, regained after %lld bytes",
+                    pos, pos2 );
 			for (i=0; i < stream->ts_number_video_pids + stream->ts_number_audio_pids; i++)
 			{
-		//	stream->ts_skipbad[kAudioStream] = stream->ts_skipbad[kVideoStream] = 1;
 				stream->ts_skipbad[i] = 1;
 			}
 			continue;
