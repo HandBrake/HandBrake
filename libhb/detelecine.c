@@ -396,7 +396,6 @@ static int pullup_decide_frame_length( struct pullup_context * c )
 	struct pullup_field *f0 = c->first;
 	struct pullup_field *f1 = f0->next;
 	struct pullup_field *f2 = f1->next;
-	struct pullup_field *f3 = f2->next;
 	int l;
 	
 	if( pullup_queue_length( c->first, c->last ) < 4 ) 
