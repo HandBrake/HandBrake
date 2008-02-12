@@ -276,9 +276,9 @@ int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 }
                                                
                 if ( (cadence[2] <= TB) && (cadence[1] <= TB) && (cadence[0] > TB) && (cadence[11]) )
-                    hb_log("%fs: Interlaced -> Progressive", (float)buf->start / 90000);
+                    hb_log("%fs: Video -> Film", (float)buf->start / 90000);
                 if ( (cadence[2] > TB) && (cadence[1] <= TB) && (cadence[0] <= TB) && (cadence[11]) )
-                    hb_log("%fs: Progressive -> Interlaced", (float)buf->start / 90000);
+                    hb_log("%fs: Film -> Video", (float)buf->start / 90000);
 
                 /* Store picture flags for later use by filters */
                 buf->flags = m->info->display_picture->flags;
