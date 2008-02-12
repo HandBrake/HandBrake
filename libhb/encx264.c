@@ -518,7 +518,11 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
                             buf->frametype = 0;
                     }
 
-
+                    /* Since libx264 doesn't tell us when b-frames are
+                       themselves reference frames, figure it out on our own. */
+                    if( (buf->frametype == HB_FRAME_B) && (nal[i].i_ref_idc != NAL_PRIORITY_DISPOSABLE) )
+                        buf->frametype = HB_FRAME_BREF;
+                    
                     /* Store the output presentation time stamp
                        from x264 for use by muxmp4 in off-setting
                        b-frames with the CTTS atom. */
