@@ -58,11 +58,11 @@ namespace Handbrake
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.SaveFile = new System.Windows.Forms.SaveFileDialog();
             this.btn_encode = new System.Windows.Forms.ToolStripButton();
             this.btn_stop = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.btn_batch = new System.Windows.Forms.ToolStripButton();
+            this.SaveFile = new System.Windows.Forms.SaveFileDialog();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -122,6 +122,7 @@ namespace Handbrake
             this.list_queue.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.list_queue.HorizontalScrollbar = true;
             this.list_queue.Location = new System.Drawing.Point(12, 176);
+            this.list_queue.MultiColumn = true;
             this.list_queue.Name = "list_queue";
             this.list_queue.Size = new System.Drawing.Size(701, 145);
             this.list_queue.TabIndex = 28;
@@ -309,15 +310,6 @@ namespace Handbrake
             this.toolStrip1.TabIndex = 71;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 49);
-            // 
-            // SaveFile
-            // 
-            this.SaveFile.Filter = "Batch|.bat";
-            // 
             // btn_encode
             // 
             this.btn_encode.Image = global::Handbrake.Properties.Resources.Play;
@@ -340,6 +332,11 @@ namespace Handbrake
             this.btn_stop.Visible = false;
             this.btn_stop.Click += new System.EventHandler(this.btn_stop_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 49);
+            // 
             // btn_batch
             // 
             this.btn_batch.Image = global::Handbrake.Properties.Resources.ActivityWindow;
@@ -349,6 +346,10 @@ namespace Handbrake
             this.btn_batch.Size = new System.Drawing.Size(100, 46);
             this.btn_batch.Text = "Batch Script";
             this.btn_batch.Click += new System.EventHandler(this.btn_batch_Click);
+            // 
+            // SaveFile
+            // 
+            this.SaveFile.Filter = "Batch|.bat";
             // 
             // pictureBox1
             // 

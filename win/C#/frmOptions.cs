@@ -35,11 +35,6 @@ namespace Handbrake
             drp_Priority.Text = Properties.Settings.Default.processPriority;
             drp_completeOption.Text = Properties.Settings.Default.CompletionOption;
 
-            if (Properties.Settings.Default.verbose == "Checked")
-            {
-                check_verbose.CheckState = CheckState.Checked;
-            }
-
             if (Properties.Settings.Default.tooltipEnable == "Checked")
             {
                 check_tooltip.CheckState = CheckState.Checked;
@@ -80,11 +75,6 @@ namespace Handbrake
         private void drp_Priority_SelectedIndexChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.processPriority = drp_Priority.Text;
-        }
-
-        private void check_verbose_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.verbose = check_verbose.CheckState.ToString();
         }
 
         private void btn_close_Click(object sender, EventArgs e)

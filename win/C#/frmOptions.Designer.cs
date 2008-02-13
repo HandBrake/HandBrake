@@ -35,7 +35,6 @@ namespace Handbrake
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmOptions));
-            this.check_verbose = new System.Windows.Forms.CheckBox();
             this.btn_close = new System.Windows.Forms.Button();
             this.drp_completeOption = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -57,7 +56,6 @@ namespace Handbrake
             this.label3 = new System.Windows.Forms.Label();
             this.drp_Priority = new System.Windows.Forms.ComboBox();
             this.Label11 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
             this.drp_processors = new System.Windows.Forms.ComboBox();
             this.Label4 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -70,19 +68,6 @@ namespace Handbrake
             this.tab_debug.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
-            // 
-            // check_verbose
-            // 
-            this.check_verbose.AutoSize = true;
-            this.check_verbose.BackColor = System.Drawing.Color.Transparent;
-            this.check_verbose.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_verbose.Location = new System.Drawing.Point(16, 127);
-            this.check_verbose.Name = "check_verbose";
-            this.check_verbose.Size = new System.Drawing.Size(97, 17);
-            this.check_verbose.TabIndex = 51;
-            this.check_verbose.Text = "Verbose CLI";
-            this.check_verbose.UseVisualStyleBackColor = false;
-            this.check_verbose.CheckedChanged += new System.EventHandler(this.check_verbose_CheckedChanged);
             // 
             // btn_close
             // 
@@ -306,16 +291,14 @@ namespace Handbrake
             this.tab_debug.BackColor = System.Drawing.SystemColors.ControlLight;
             this.tab_debug.Controls.Add(this.label3);
             this.tab_debug.Controls.Add(this.drp_Priority);
-            this.tab_debug.Controls.Add(this.check_verbose);
             this.tab_debug.Controls.Add(this.Label11);
-            this.tab_debug.Controls.Add(this.label6);
             this.tab_debug.Controls.Add(this.drp_processors);
             this.tab_debug.Controls.Add(this.Label4);
             this.tab_debug.Location = new System.Drawing.Point(4, 22);
             this.tab_debug.Name = "tab_debug";
             this.tab_debug.Size = new System.Drawing.Size(411, 210);
             this.tab_debug.TabIndex = 2;
-            this.tab_debug.Text = "Debug && Process";
+            this.tab_debug.Text = "Performance";
             this.tab_debug.UseVisualStyleBackColor = true;
             // 
             // label3
@@ -357,17 +340,6 @@ namespace Handbrake
             this.Label11.Size = new System.Drawing.Size(142, 13);
             this.Label11.TabIndex = 40;
             this.Label11.Text = "Number of processors: ";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.BackColor = System.Drawing.Color.Transparent;
-            this.label6.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(13, 107);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(173, 13);
-            this.label6.TabIndex = 1;
-            this.label6.Text = "Verbose and Debug mode";
             // 
             // drp_processors
             // 
@@ -461,7 +433,6 @@ namespace Handbrake
 
         #endregion
 
-        internal System.Windows.Forms.CheckBox check_verbose;
         internal System.Windows.Forms.Button btn_close;
         internal System.Windows.Forms.ComboBox drp_completeOption;
         internal System.Windows.Forms.Label label5;
@@ -473,7 +444,6 @@ namespace Handbrake
         internal System.Windows.Forms.CheckBox check_updateCheck;
         internal System.Windows.Forms.CheckBox check_userDefaultSettings;
         private System.Windows.Forms.TabPage tab_debug;
-        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Label label7;

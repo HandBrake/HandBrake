@@ -738,9 +738,7 @@ namespace Handbrake.Functions
 
             string queryAdvancedSettings = processors;
 
-            string verbose = "";
-            if (Properties.Settings.Default.verbose == "Checked")
-                verbose = " -v ";
+            string verbose = " -v ";
             #endregion
 
             return querySource + queryDestination + queryPictureSettings + queryVideoSettings + h264Settings + queryAudioSettings + ChapterMarkers + queryAdvancedSettings + verbose;

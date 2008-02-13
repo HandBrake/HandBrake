@@ -14,9 +14,6 @@
     <Setting Name="updateStatus" Type="System.String" Scope="User">
       <Value Profile="(Default)">Checked</Value>
     </Setting>
-    <Setting Name="verbose" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Checked</Value>
-    </Setting>
     <Setting Name="hb_version" Type="System.String" Scope="User">
       <Value Profile="(Default)">0.9.1</Value>
     </Setting>
