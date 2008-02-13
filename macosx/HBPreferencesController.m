@@ -49,8 +49,7 @@
         desktopDirectory,   @"LastSourceDirectory",
         @"NO",              @"DefaultAutoNaming",
         @"NO",              @"DefaultChapterMarkers",
-        @"YES",              @"ShowVerboseOutput",
-		@"NO",              @"AllowLargeFiles",
+        @"NO",              @"AllowLargeFiles",
 		@"NO",              @"DisableDvdAutoDetect",
 		@"Alert Window",    @"AlertWhenDone",
         nil]];

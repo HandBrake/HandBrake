@@ -98,12 +98,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     //char * version;
     
     // Init libhb
-	int debugLevel = [[NSUserDefaults standardUserDefaults] boolForKey:@"ShowVerboseOutput"] ? HB_DEBUG_ALL : HB_DEBUG_NONE;
-    /* Old update method using hb_init, commented out but code left for a few revs til new sparkle updater is vetted */
+	/* Old update method using hb_init, commented out but code left for a few revs til new sparkle updater is vetted */
     //fHandle = hb_init(debugLevel, [[NSUserDefaults standardUserDefaults] boolForKey:@"CheckForUpdates"]);
     /* New Init libhb with check for updates libhb style set to "0" so its ignored and lets sparkle take care of it */
-    fHandle = hb_init(debugLevel, 0);
-    
+    fHandle = hb_init(HB_DEBUG_ALL, 0);
     
 	// Set the Growl Delegate
     [GrowlApplicationBridge setGrowlDelegate: self];    
