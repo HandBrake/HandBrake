@@ -307,7 +307,7 @@ static int MP4Init( hb_mux_object_t * m )
         {
             mux_data->track = MP4AddAC3AudioTrack( 
                 m->file,
-                job->arate, 1536, MP4_MPEG4_AUDIO_TYPE );  
+                job->arate, 256*HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(audio->input_channel_layout), MP4_MPEG4_AUDIO_TYPE );  
             MP4SetTrackBytesProperty( 
                 m->file, mux_data->track,
                 "udta.name.value", 
