@@ -336,6 +336,9 @@ static void do_job( hb_job_t * job, int cpu_count )
     if( job->acodec & HB_ACODEC_AC3 )
     {
         hb_log( " + audio AC3 passthrough" );
+        
+        /* Hard set correct sample rate for AC3 */
+        job->arate = 48000;
     }
     else
     {
