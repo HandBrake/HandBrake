@@ -303,12 +303,34 @@ static int MP4Init( hb_mux_object_t * m )
         mux_data = malloc( sizeof( hb_mux_data_t ) );
         audio->mux_data = mux_data;
 
-        mux_data->track = MP4AddAudioTrack( m->file,
+        if( job->acodec & HB_ACODEC_AC3 )
+        {
+            mux_data->track = MP4AddAC3AudioTrack( 
+                m->file,
+                job->arate, 1536, MP4_MPEG4_AUDIO_TYPE );  
+            MP4SetTrackBytesProperty( 
+                m->file, mux_data->track,
+                "udta.name.value", 
+                (const u_int8_t*)"Surround", strlen("Surround"));
+        } else {
+            mux_data->track = MP4AddAudioTrack( 
+                m->file,
                 job->arate, 1024, MP4_MPEG4_AUDIO_TYPE );
-        MP4SetAudioProfileLevel( m->file, 0x0F );
-        MP4SetTrackESConfiguration( m->file, mux_data->track,
+            MP4SetTrackBytesProperty( 
+                m->file, mux_data->track,
+                "udta.name.value", 
+                (const u_int8_t*)"Stereo", strlen("Stereo"));
+            
+            MP4SetAudioProfileLevel( m->file, 0x0F );
+            MP4SetTrackESConfiguration( 
+                m->file, mux_data->track,
                 audio->config.aac.bytes, audio->config.aac.length );
-                
+
+            /* Set the correct number of channels for this track */
+            reserved2[9] = (u_int8_t)HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown);
+            MP4SetTrackBytesProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.mp4a.reserved2", reserved2, sizeof(reserved2));
+
+        }
         /* Set the language for this track */
         /* The language is stored as 5-bit text - 0x60 */
         language_code = audio->iso639_2[0] - 0x60;   language_code <<= 5;
@@ -316,9 +338,6 @@ static int MP4Init( hb_mux_object_t * m )
         language_code |= audio->iso639_2[2] - 0x60;
         MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.mdhd.language", language_code);
         
-        /* Set the correct number of channels for this track */
-        reserved2[9] = (u_int8_t)HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown);
-        MP4SetTrackBytesProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.mp4a.reserved2", reserved2, sizeof(reserved2));
 
         /* Set the audio track alternate group */
         MP4SetTrackIntegerProperty(m->file, mux_data->track, "tkhd.alternate_group", 1);

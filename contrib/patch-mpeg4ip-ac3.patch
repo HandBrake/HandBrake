@@ -1,0 +1,343 @@
+diff -Naur mpeg4ip/lib/mp4v2/Makefile.am mpeg4ip-patched/lib/mp4v2/Makefile.am
+--- mpeg4ip/lib/mp4v2/Makefile.am	2008-02-14 14:44:36.000000000 +1300
++++ mpeg4ip-patched/lib/mp4v2/Makefile.am	2008-02-13 15:50:50.000000000 +1300
+@@ -10,6 +10,7 @@
+ 
+ libmp4v2_la_SOURCES = \
+ 	3gp.cpp \
++	atom_ac3.cpp \
+ 	atom_amr.cpp \
+ 	atom_avc1.cpp \
+ 	atom_avcC.cpp \
+@@ -33,6 +34,7 @@
+ 	atom_mp4s.cpp \
+ 	atom_mp4v.cpp \
+ 	atom_mvhd.cpp \
++	atom_name.cpp \
+ 	atom_pasp.cpp \
+ 	atom_root.cpp \
+ 	atom_rtp.cpp \
+diff -Naur mpeg4ip/lib/mp4v2/Makefile.in mpeg4ip-patched/lib/mp4v2/Makefile.in
+--- mpeg4ip/lib/mp4v2/Makefile.in	2008-02-14 14:44:36.000000000 +1300
++++ mpeg4ip-patched/lib/mp4v2/Makefile.in	2008-02-14 14:38:05.000000000 +1300
+@@ -55,7 +55,7 @@
+ am_libmp4v2_la_OBJECTS = 3gp.lo atom_amr.lo atom_avc1.lo atom_avcC.lo \
+ 	atom_d263.lo atom_damr.lo atom_dref.lo atom_elst.lo \
+ 	atom_enca.lo atom_encv.lo atom_free.lo atom_ftyp.lo \
+-	atom_gmin.lo atom_text.lo \
++	atom_gmin.lo atom_text.lo atom_ac3.lo \
+ 	atom_hdlr.lo atom_hinf.lo atom_hnti.lo atom_href.lo \
+ 	atom_mdat.lo atom_mdhd.lo atom_meta.lo atom_mp4a.lo \
+ 	atom_mp4s.lo atom_mp4v.lo atom_mvhd.lo atom_pasp.lo atom_root.lo \
+@@ -73,6 +73,7 @@
+ depcomp = $(SHELL) $(top_srcdir)/depcomp
+ am__depfiles_maybe = depfiles
+ @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/3gp.Plo ./$(DEPDIR)/atom_amr.Plo \
++@AMDEP_TRUE@	./$(DEPDIR)/atom_ac3.Plo \
+ @AMDEP_TRUE@	./$(DEPDIR)/atom_avc1.Plo \
+ @AMDEP_TRUE@	./$(DEPDIR)/atom_avcC.Plo \
+ @AMDEP_TRUE@	./$(DEPDIR)/atom_d263.Plo \
+@@ -342,6 +343,7 @@
+ include_HEADERS = mp4.h
+ libmp4v2_la_SOURCES = \
+ 	3gp.cpp \
++	atom_ac3.cpp \
+ 	atom_amr.cpp \
+ 	atom_avc1.cpp \
+ 	atom_avcC.cpp \
+@@ -497,6 +499,7 @@
+ 	-rm -f *.tab.c
+ 
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/3gp.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom_ac3.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom_amr.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom_avc1.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom_avcC.Plo@am__quote@
+diff -Naur mpeg4ip/lib/mp4v2/atom_ac3.cpp mpeg4ip-patched/lib/mp4v2/atom_ac3.cpp
+--- mpeg4ip/lib/mp4v2/atom_ac3.cpp	1970-01-01 12:00:00.000000000 +1200
++++ mpeg4ip-patched/lib/mp4v2/atom_ac3.cpp	2008-02-14 14:29:52.000000000 +1300
+@@ -0,0 +1,51 @@
++/*
++ * The contents of this file are subject to the Mozilla Public
++ * License Version 1.1 (the "License"); you may not use this file
++ * except in compliance with the License. You may obtain a copy of
++ * the License at http://www.mozilla.org/MPL/
++ * 
++ * Software distributed under the License is distributed on an "AS
++ * IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
++ * implied. See the License for the specific language governing
++ * rights and limitations under the License.
++ * 
++ * The Original Code is MPEG4IP.
++ * 
++ * The Initial Developer of the Original Code is Cisco Systems Inc.
++ * Portions created by Cisco Systems Inc. are
++ * Copyright (C) Cisco Systems Inc. 2001.  All Rights Reserved.
++ * 
++ * Contributor(s): 
++ *		Dave Mackie		dmackie@cisco.com
++ */
++
++#include "mp4common.h"
++
++MP4Ac3Atom::MP4Ac3Atom() 
++	: MP4Atom("ac-3") 
++{
++
++    AddProperty( new MP4BytesProperty("data", 47));
++}
++
++void MP4Ac3Atom::Generate()
++{
++	MP4Atom::Generate();
++
++        // This is a nasty nasty hack because Apple haven't told us what is
++        // in the AC3 atom. So I've just copied this raw data from a sample
++        // file.
++        // I believe most of this is actually the same as the mp4a atom.
++        // I can play with this later to get it 100% right, for now this works.
++        static u_int8_t ac3[39] = {
++            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++            0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++            0x00, 0x02, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0xbb,
++            0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0b, 
++            0x64, 0x61, 0x63, 0x33, 0x10, 0x3d, 0x40,
++        };
++
++        m_pProperties[0]->SetReadOnly(false);
++        ((MP4BytesProperty*)m_pProperties[0])->
++            SetValue(ac3, sizeof(ac3));
++}
+diff -Naur mpeg4ip/lib/mp4v2/atom_meta.cpp mpeg4ip-patched/lib/mp4v2/atom_meta.cpp
+--- mpeg4ip/lib/mp4v2/atom_meta.cpp	2004-12-15 10:35:35.000000000 +1300
++++ mpeg4ip-patched/lib/mp4v2/atom_meta.cpp	2008-02-13 16:49:16.000000000 +1300
+@@ -43,20 +43,33 @@
+ MP4NameAtom::MP4NameAtom()
+     : MP4Atom("name")
+ {
+-	AddVersionAndFlags(); /* 0, 1 */
+-
+-    AddProperty(
+-        new MP4BytesProperty("metadata")); /* 2 */
++ 
+ }
+ 
+ void MP4NameAtom::Read() 
+ {
++    if (ATOMID(m_pParentAtom->GetType()) != ATOMID("udta")) {
+ 	// calculate size of the metadata from the atom size
+ 	((MP4BytesProperty*)m_pProperties[2])->SetValueSize(m_size - 4);
++    }
+ 
+-	MP4Atom::Read();
++    MP4Atom::Read();
+ }
+ 
++void MP4NameAtom::Generate()
++{
++    if (ATOMID(m_pParentAtom->GetType()) == ATOMID("udta")) {
++        AddProperty(new MP4BytesProperty("value"));
++    } else {
++	AddVersionAndFlags(); /* 0, 1 */
++        
++        AddProperty(
++            new MP4BytesProperty("metadata")); /* 2 */
++    }
++    MP4Atom::Generate();
++}
++
++
+ MP4DataAtom::MP4DataAtom()
+     : MP4Atom("data")
+ {
+diff -Naur mpeg4ip/lib/mp4v2/atom_stsd.cpp mpeg4ip-patched/lib/mp4v2/atom_stsd.cpp
+--- mpeg4ip/lib/mp4v2/atom_stsd.cpp	2008-02-14 14:44:36.000000000 +1300
++++ mpeg4ip-patched/lib/mp4v2/atom_stsd.cpp	2008-02-13 14:52:10.000000000 +1300
+@@ -51,6 +51,7 @@
+ 	ExpectChildAtom("avc1", Optional, Many);
+ 	ExpectChildAtom("text", Optional, Many);
+ 	ExpectChildAtom("pasp", Optional, Many);
++	ExpectChildAtom("ac-3", Optional, Many);
+ }
+ 
+ void MP4StsdAtom::Read() 
+diff -Naur mpeg4ip/lib/mp4v2/atom_udta.cpp mpeg4ip-patched/lib/mp4v2/atom_udta.cpp
+--- mpeg4ip/lib/mp4v2/atom_udta.cpp	2003-08-05 09:59:56.000000000 +1200
++++ mpeg4ip-patched/lib/mp4v2/atom_udta.cpp	2008-02-13 16:25:08.000000000 +1300
+@@ -33,6 +33,7 @@
+ {
+ 	if (ATOMID(m_pParentAtom->GetType()) == ATOMID("trak")) {
+ 		ExpectChildAtom("hinf", Optional, OnlyOne);
++                ExpectChildAtom("name", Optional, OnlyOne);
+ 	}
+ 
+ 	MP4Atom::Read();
+diff -Naur mpeg4ip/lib/mp4v2/atoms.h mpeg4ip-patched/lib/mp4v2/atoms.h
+--- mpeg4ip/lib/mp4v2/atoms.h	2008-02-14 14:44:36.000000000 +1300
++++ mpeg4ip-patched/lib/mp4v2/atoms.h	2008-02-14 14:54:20.000000000 +1300
+@@ -146,6 +146,12 @@
+ 	void Generate();
+ };
+ 
++class MP4Ac3Atom : public MP4Atom {
++public:
++	MP4Ac3Atom();
++	void Generate();
++};
++
+ class MP4Mp4sAtom : public MP4Atom {
+ public:
+ 	MP4Mp4sAtom();
+@@ -267,6 +273,7 @@
+ public:
+     MP4NameAtom();
+     void Read();
++    void Generate();
+ };
+ 
+ class MP4RtpAtom : public MP4Atom {
+diff -Naur mpeg4ip/lib/mp4v2/mp4.cpp mpeg4ip-patched/lib/mp4v2/mp4.cpp
+--- mpeg4ip/lib/mp4v2/mp4.cpp	2008-02-14 14:44:36.000000000 +1300
++++ mpeg4ip-patched/lib/mp4v2/mp4.cpp	2008-02-13 17:16:33.000000000 +1300
+@@ -592,6 +592,25 @@
+ 	return MP4_INVALID_TRACK_ID;
+ }
+ 
++extern "C" MP4TrackId MP4AddAC3AudioTrack(
++	MP4FileHandle hFile, 
++	u_int32_t timeScale, 
++	MP4Duration sampleDuration, 
++	u_int8_t audioType)
++{
++	if (MP4_IS_VALID_FILE_HANDLE(hFile)) {
++		try {
++			return ((MP4File*)hFile)->
++				AddAC3AudioTrack(timeScale, sampleDuration, audioType);
++		}
++		catch (MP4Error* e) {
++			PRINT_ERROR(e);
++			delete e;
++		}
++	}
++	return MP4_INVALID_TRACK_ID;
++}
++
+ extern "C" MP4TrackId MP4AddEncAudioTrack(MP4FileHandle hFile, 
+ 					  u_int32_t timeScale, 
+ 					  MP4Duration sampleDuration,
+diff -Naur mpeg4ip/lib/mp4v2/mp4.h mpeg4ip-patched/lib/mp4v2/mp4.h
+--- mpeg4ip/lib/mp4v2/mp4.h	2008-02-14 14:44:36.000000000 +1300
++++ mpeg4ip-patched/lib/mp4v2/mp4.h	2008-02-13 17:15:24.000000000 +1300
+@@ -432,6 +432,12 @@
+ 	MP4Duration sampleDuration,
+ 	u_int8_t audioType DEFAULT(MP4_MPEG4_AUDIO_TYPE));
+ 
++MP4TrackId MP4AddAC3AudioTrack(
++	MP4FileHandle hFile, 
++	u_int32_t timeScale, 
++	MP4Duration sampleDuration,
++	u_int8_t audioType DEFAULT(MP4_MPEG4_AUDIO_TYPE));
++
+ typedef struct mp4v2_ismacryp_session_params {
+   u_int32_t  scheme_type;
+   u_int16_t  scheme_version;
+diff -Naur mpeg4ip/lib/mp4v2/mp4atom.cpp mpeg4ip-patched/lib/mp4v2/mp4atom.cpp
+--- mpeg4ip/lib/mp4v2/mp4atom.cpp	2008-02-14 14:44:36.000000000 +1300
++++ mpeg4ip-patched/lib/mp4v2/mp4atom.cpp	2008-02-13 16:03:41.000000000 +1300
+@@ -76,6 +76,8 @@
+     case 'a':
+       if (ATOMID(type) == ATOMID("avc1")) {
+ 	pAtom = new MP4Avc1Atom();
++      } else if (ATOMID(type) == ATOMID("ac-3")) {
++	pAtom = new MP4Ac3Atom();
+       } else if (ATOMID(type) == ATOMID("avcC")) {
+ 	pAtom = new MP4AvcCAtom();
+       } else if (ATOMID(type) == ATOMID("alis")) {
+diff -Naur mpeg4ip/lib/mp4v2/mp4file.cpp mpeg4ip-patched/lib/mp4v2/mp4file.cpp
+--- mpeg4ip/lib/mp4v2/mp4file.cpp	2008-02-14 14:44:36.000000000 +1300
++++ mpeg4ip-patched/lib/mp4v2/mp4file.cpp	2008-02-13 17:47:11.000000000 +1300
+@@ -1301,6 +1301,8 @@
+ 
+ 	AddChildAtom(MakeTrackName(trackId, "mdia.minf.stbl.stsd"), "mp4a");
+ 
++        AddDescendantAtoms(MakeTrackName(trackId, NULL), "udta.name");
++
+ 	// stsd is a unique beast in that it has a count of the number 
+ 	// of child atoms that needs to be incremented after we add the mp4a atom
+ 	MP4Integer32Property* pStsdCountProperty;
+@@ -1337,6 +1339,60 @@
+ 	return trackId;
+ }
+ 
++MP4TrackId MP4File::AddAC3AudioTrack(
++	u_int32_t timeScale, 
++	MP4Duration sampleDuration, 
++	u_int8_t audioType)
++{
++	MP4TrackId trackId = AddTrack(MP4_AUDIO_TRACK_TYPE, timeScale);
++
++	AddTrackToOd(trackId);
++
++	SetTrackFloatProperty(trackId, "tkhd.volume", 1.0);
++
++	InsertChildAtom(MakeTrackName(trackId, "mdia.minf"), "smhd", 0);
++
++	AddChildAtom(MakeTrackName(trackId, "mdia.minf.stbl.stsd"), "ac-3");
++
++        AddDescendantAtoms(MakeTrackName(trackId, NULL), "udta.name");
++
++	// stsd is a unique beast in that it has a count of the number 
++	// of child atoms that needs to be incremented after we add the mp4a atom
++	MP4Integer32Property* pStsdCountProperty;
++	FindIntegerProperty(
++		MakeTrackName(trackId, "mdia.minf.stbl.stsd.entryCount"),
++		(MP4Property**)&pStsdCountProperty);
++	pStsdCountProperty->IncrementValue();
++
++	//SetTrackIntegerProperty(trackId, 
++	//	"mdia.minf.stbl.stsd.ac-3.timeScale", timeScale);
++
++        //
++	//SetTrackIntegerProperty(trackId, 
++	//			"mdia.minf.stbl.stsd.ac-3.esds.ESID", 
++#if 0
++				// note - for a file, these values need to 
++				// be 0 - wmay - 04/16/2003
++	//			trackId
++#else
++        //		0
++#endif
++        //		);
++
++	//SetTrackIntegerProperty(trackId, 
++	//	"mdia.minf.stbl.stsd.ac-3.esds.decConfigDescr.objectTypeId", 
++	//	audioType);
++
++	//SetTrackIntegerProperty(trackId, 
++	//	"mdia.minf.stbl.stsd.ac-3.esds.decConfigDescr.streamType", 
++	//	MP4AudioStreamType);
++
++	m_pTracks[FindTrackIndex(trackId)]->
++		SetFixedSampleDuration(sampleDuration);
++
++	return trackId;
++}
++
+ MP4TrackId MP4File::AddEncAudioTrack(u_int32_t timeScale, 
+ 				     MP4Duration sampleDuration, 
+ 				     u_int8_t audioType,
+diff -Naur mpeg4ip/lib/mp4v2/mp4file.h mpeg4ip-patched/lib/mp4v2/mp4file.h
+--- mpeg4ip/lib/mp4v2/mp4file.h	2008-02-14 14:44:36.000000000 +1300
++++ mpeg4ip-patched/lib/mp4v2/mp4file.h	2008-02-13 17:17:11.000000000 +1300
+@@ -203,6 +203,11 @@
+ 		MP4Duration sampleDuration,
+ 		u_int8_t audioType);
+ 
++	MP4TrackId AddAC3AudioTrack(
++		u_int32_t timeScale, 
++		MP4Duration sampleDuration,
++		u_int8_t audioType);
++
+ 	MP4TrackId AddEncAudioTrack( // ismacryp
+ 		u_int32_t timeScale, 
+ 		MP4Duration sampleDuration,

@@ -21,6 +21,7 @@
 static int FormatSettings[4][10] =
   { { HB_MUX_MP4 | HB_VCODEC_FFMPEG | HB_ACODEC_FAAC,
 	  HB_MUX_MP4 | HB_VCODEC_X264   | HB_ACODEC_FAAC,
+          HB_MUX_MP4 | HB_VCODEC_X264   | HB_ACODEC_AC3,
 	  0,
 	  0 },
     { HB_MUX_MKV | HB_VCODEC_FFMPEG | HB_ACODEC_FAAC,
@@ -2222,7 +2223,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             
             [fDstCodecsPopUp addItemWithTitle:_( @"MPEG-4 Video / AAC Audio" )];
             [fDstCodecsPopUp addItemWithTitle:_( @"AVC/H.264 Video / AAC Audio" )];
-            
+            [fDstCodecsPopUp addItemWithTitle:_( @"AVC/H.264 Video / AC-3 Audio" )];
 			/* We enable the create chapters checkbox here since we are .mp4*/
 			[fCreateChapterMarkers setEnabled: YES];
 			/* We show the Large File (64 bit formatting) checkbox since we are .mp4 
