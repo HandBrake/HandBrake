@@ -2786,6 +2786,7 @@ the user is using "Custom" settings by determining the sender*/
     /* get the index of the selected audio */
     int thisAudioIndex = [sender indexOfSelectedItem] - 1;
 
+#if 0
     /* Handbrake can't currently cope with ripping the same source track twice */
     /* So, if this audio is also selected in the other audio track popup, set that popup's selection to "none" */
     /* get a reference to the two audio track popups */
@@ -2797,6 +2798,7 @@ the user is using "Custom" settings by determining the sender*/
         [otherAudioPopUp selectItemAtIndex: 0];
         [self audioTrackPopUpChanged: otherAudioPopUp];
     }
+#endif
 
     /* pointer for the hb_audio_s struct we will use later on */
     hb_audio_t * audio;

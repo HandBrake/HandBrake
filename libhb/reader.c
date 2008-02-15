@@ -24,7 +24,7 @@ typedef struct
  * Local prototypes
  **********************************************************************/
 static void        ReaderFunc( void * );
-static hb_fifo_t * GetFifoForId( hb_job_t * job, int id );
+static hb_fifo_t ** GetFifoForId( hb_job_t * job, int id );
 
 /***********************************************************************
  * hb_reader_init
@@ -54,9 +54,11 @@ hb_thread_t * hb_reader_init( hb_job_t * job )
 static void ReaderFunc( void * _r )
 {
     hb_reader_t  * r = _r;
-    hb_fifo_t    * fifo;
+    hb_fifo_t   ** fifos;
     hb_buffer_t  * buf;
+    hb_buffer_t  * buf_old;
     hb_list_t    * list;
+    int            n;
     int            chapter = -1;
     int            chapter_end = r->job->chapter_end;
 
@@ -160,16 +162,36 @@ static void ReaderFunc( void * _r )
         while( ( buf = hb_list_item( list, 0 ) ) )
         {
             hb_list_rem( list, buf );
-            fifo = GetFifoForId( r->job, buf->id );
-            if( fifo )
-            {
-                while( !*r->die && !r->job->done &&
-                       hb_fifo_is_full( fifo ) )
-                {
-                    hb_snooze( 50 );
-                }
+            fifos = GetFifoForId( r->job, buf->id );
+            if( fifos )
+            {  
                 buf->sequence = r->sequence++;
-                hb_fifo_push( fifo, buf );
+                for( n = 0; fifos[n] != NULL; n++) 
+                {
+                    if( n != 0 )
+                    {
+                        /*
+                         * Replace the buffer with a new copy of itself for when
+                         * it is being sent down multiple fifos.
+                         */
+                        buf_old = buf;
+                        buf = hb_buffer_init(buf_old->size);
+                        memcpy( buf->data, buf_old->data, buf->size );
+                        hb_buffer_copy_settings( buf, buf_old );
+                    }
+
+                    while( !*r->die && !r->job->done &&
+                           hb_fifo_is_full( fifos[n] ) )
+                    {
+                        /*
+                         * Loop until the incoming fifo is reaqdy to receive 
+                         * this buffer.
+                         */
+                        hb_snooze( 50 );
+                    }
+
+                    hb_fifo_push( fifos[n], buf );
+                }
             }
             else
             {
@@ -201,12 +223,15 @@ static void ReaderFunc( void * _r )
  ***********************************************************************
  *
  **********************************************************************/
-static hb_fifo_t * GetFifoForId( hb_job_t * job, int id )
+static hb_fifo_t ** GetFifoForId( hb_job_t * job, int id )
 {
     hb_title_t    * title = job->title;
     hb_audio_t    * audio;
     hb_subtitle_t * subtitle;
-    int             i;
+    int             i, n;
+    static hb_fifo_t * fifos[8];
+
+    memset(fifos, 0, sizeof(fifos));
 
     if( id == 0xE0 )
     {
@@ -220,7 +245,8 @@ static hb_fifo_t * GetFifoForId( hb_job_t * job, int id )
         } 
         else 
         {
-            return job->fifo_mpeg2;
+            fifos[0] = job->fifo_mpeg2;
+            return fifos;
         }
     }
 
@@ -240,7 +266,9 @@ static hb_fifo_t * GetFifoForId( hb_job_t * job, int id )
                 subtitle->hits++;
                 if( job->subtitle_force )
                 {
-                    return subtitle->fifo_in;
+                    
+                    fifos[0] = subtitle->fifo_in;
+                    return fifos;
                 }
                 break;
             }
@@ -249,18 +277,25 @@ static hb_fifo_t * GetFifoForId( hb_job_t * job, int id )
         if( ( subtitle = hb_list_item( title->list_subtitle, 0 ) ) &&
             id == subtitle->id )
         {
-            return subtitle->fifo_in;
+            fifos[0] = subtitle->fifo_in;
+            return fifos;
         }
     }
     if( !job->indepth_scan ) 
     {
+        n = 0;
         for( i = 0; i < hb_list_count( title->list_audio ); i++ )
         {
             audio = hb_list_item( title->list_audio, i );
             if( id == audio->id )
             {
-                return audio->fifo_in;
+                fifos[n++] = audio->fifo_in;
             }
+        }
+
+        if( n != 0 )
+        {
+            return fifos;
         }
     }
 
