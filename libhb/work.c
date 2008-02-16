@@ -333,6 +333,13 @@ static void do_job( hb_job_t * job, int cpu_count )
         }
     }
 
+    if( job->audio_mixdowns[0] == HB_AMIXDOWN_AC3 || job->audio_mixdowns[1] == HB_AMIXDOWN_AC3 )
+    {
+        /* Hard set correct sample rate for AC3 when libhb
+           mistakenly thinks the audio codec is AAC */
+        job->arate = 48000;
+    }
+
     if( job->acodec & HB_ACODEC_AC3 )
     {
         hb_log( " + audio AC3 passthrough" );
