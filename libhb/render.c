@@ -406,10 +406,18 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
      * Keep the last three frames in our queue, this ensures that we have the last
      * two always in there should we need to rewrite the durations on them.
      */
-    if( hb_fifo_size( pv->delay_queue ) >= 3 )
+    
+    if( job->vfr )
+    {
+        if( hb_fifo_size( pv->delay_queue ) >= 3 )
+        {
+            *buf_out = hb_fifo_get( pv->delay_queue );
+        }
+    }
+    else
     {
         *buf_out = hb_fifo_get( pv->delay_queue );
-    } 
+    }
 
     if( *buf_out )
     {
