@@ -21,7 +21,9 @@
 static int FormatSettings[4][10] =
   { { HB_MUX_MP4 | HB_VCODEC_FFMPEG | HB_ACODEC_FAAC,
 	  HB_MUX_MP4 | HB_VCODEC_X264   | HB_ACODEC_FAAC,
-	  0,
+      HB_MUX_MP4 | HB_VCODEC_X264   | HB_ACODEC_FAAC,
+      HB_MUX_MP4 | HB_VCODEC_X264   | HB_ACODEC_AC3,
+      0,
 	  0 },
     { HB_MUX_MKV | HB_VCODEC_FFMPEG | HB_ACODEC_FAAC,
 	  HB_MUX_MKV | HB_VCODEC_FFMPEG | HB_ACODEC_AC3,
@@ -2248,6 +2250,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             
             [fDstCodecsPopUp addItemWithTitle:_( @"MPEG-4 Video / AAC Audio" )];
             [fDstCodecsPopUp addItemWithTitle:_( @"AVC/H.264 Video / AAC Audio" )];
+            /* We add a new codecs entry which will allow the new aac/ ac3 hybrid */
+            [fDstCodecsPopUp addItemWithTitle:_( @"AVC/H.264 Video / AAC + AC3 Audio" )];
+            [fDstCodecsPopUp addItemWithTitle:_( @"AVC/H.264 Video / AC3 Audio" )];
 			/* We enable the create chapters checkbox here since we are .mp4*/
 			[fCreateChapterMarkers setEnabled: YES];
 			/* We show the Large File (64 bit formatting) checkbox since we are .mp4 
@@ -2827,6 +2832,17 @@ the user is using "Custom" settings by determining the sender*/
     int format = [fDstFormatPopUp indexOfSelectedItem];
     int codecs = [fDstCodecsPopUp indexOfSelectedItem];
     int acodec = FormatSettings[format][codecs] & HB_ACODEC_MASK;
+    
+    /*HACK: Lets setup a convenience variable to decide whether or not to allow aac hybrid (aac + ac3 passthru )*/
+    bool mp4AacAc3;
+    if (format == 0 && codecs == 2) // if mp4 and aac + ac3
+    {
+    mp4AacAc3 = 1;
+    }
+    else
+    {
+    mp4AacAc3 = 0;
+    }
 
     /* pointer to this track's mixdown NSPopUpButton */
     NSTextField   * mixdownTextField;
@@ -2872,6 +2888,7 @@ the user is using "Custom" settings by determining the sender*/
             /* check for AC-3 passthru */
             if (audio->codec == HB_ACODEC_AC3 && acodec == HB_ACODEC_AC3)
             {
+            
                     [[mixdownPopUp menu] addItemWithTitle:
                         [NSString stringWithCString: "AC3 Passthru"]
                         action: NULL keyEquivalent: @""];
@@ -2891,7 +2908,7 @@ the user is using "Custom" settings by determining the sender*/
                 int layout = audio->input_channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK;
 
                 /* do we want to add a mono option? */
-                if (audioCodecsSupportMono == 1) {
+                if (!mp4AacAc3 && audioCodecsSupportMono == 1) {
                     NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
                         [NSString stringWithCString: hb_audio_mixdowns[0].human_readable_name]
                         action: NULL keyEquivalent: @""];
@@ -2903,7 +2920,7 @@ the user is using "Custom" settings by determining the sender*/
                 /* do we want to add a stereo option? */
                 /* offer stereo if we have a mono source and non-mono-supporting codecs, as otherwise we won't have a mixdown at all */
                 /* also offer stereo if we have a stereo-or-better source */
-                if ((layout == HB_INPUT_CH_LAYOUT_MONO && audioCodecsSupportMono == 0) || layout >= HB_INPUT_CH_LAYOUT_STEREO) {
+                if ((!mp4AacAc3 && ((layout == HB_INPUT_CH_LAYOUT_MONO && audioCodecsSupportMono == 0) || layout >= HB_INPUT_CH_LAYOUT_STEREO))) {
                     NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
                         [NSString stringWithCString: hb_audio_mixdowns[1].human_readable_name]
                         action: NULL keyEquivalent: @""];
@@ -2913,7 +2930,7 @@ the user is using "Custom" settings by determining the sender*/
                 }
 
                 /* do we want to add a dolby surround (DPL1) option? */
-                if (layout == HB_INPUT_CH_LAYOUT_3F1R || layout == HB_INPUT_CH_LAYOUT_3F2R || layout == HB_INPUT_CH_LAYOUT_DOLBY) {
+                if (!mp4AacAc3 && (layout == HB_INPUT_CH_LAYOUT_3F1R || layout == HB_INPUT_CH_LAYOUT_3F2R || layout == HB_INPUT_CH_LAYOUT_DOLBY)) {
                     NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
                         [NSString stringWithCString: hb_audio_mixdowns[2].human_readable_name]
                         action: NULL keyEquivalent: @""];
@@ -2923,7 +2940,7 @@ the user is using "Custom" settings by determining the sender*/
                 }
 
                 /* do we want to add a dolby pro logic 2 (DPL2) option? */
-                if (layout == HB_INPUT_CH_LAYOUT_3F2R) {
+                if (!mp4AacAc3 && layout == HB_INPUT_CH_LAYOUT_3F2R) {
                     NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
                         [NSString stringWithCString: hb_audio_mixdowns[3].human_readable_name]
                         action: NULL keyEquivalent: @""];
@@ -2933,7 +2950,7 @@ the user is using "Custom" settings by determining the sender*/
                 }
 
                 /* do we want to add a 6-channel discrete option? */
-                if (audioCodecsSupport6Ch == 1 && layout == HB_INPUT_CH_LAYOUT_3F2R && (audio->input_channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE)) {
+                if (!mp4AacAc3 && (audioCodecsSupport6Ch == 1 && layout == HB_INPUT_CH_LAYOUT_3F2R && (audio->input_channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE))) {
                     NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
                         [NSString stringWithCString: hb_audio_mixdowns[4].human_readable_name]
                         action: NULL keyEquivalent: @""];
@@ -2943,7 +2960,7 @@ the user is using "Custom" settings by determining the sender*/
                 }
 
                 /* do we want to add an AC-3 passthrough option? */
-                if (audio->codec == HB_ACODEC_AC3) {
+                if (audio->codec == HB_ACODEC_AC3 && acodec == HB_ACODEC_AC3) {
                     NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
                         [NSString stringWithCString: hb_audio_mixdowns[5].human_readable_name]
                         action: NULL keyEquivalent: @""];
@@ -2953,7 +2970,7 @@ the user is using "Custom" settings by determining the sender*/
                 }
 
                 /* do we want to add the DPLII+AC3 passthrough option? */
-                if (audio->codec == HB_ACODEC_AC3) {
+                if (mp4AacAc3 && audio->codec == HB_ACODEC_AC3) {
                     NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
                         [NSString stringWithCString: hb_audio_mixdowns[6].human_readable_name]
                         action: NULL keyEquivalent: @""];
