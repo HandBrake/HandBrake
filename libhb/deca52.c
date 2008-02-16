@@ -215,7 +215,8 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     hb_list_getbytes( pv->list, pv->frame, pv->size, &pts, &pos );
 
     /* AC3 passthrough: don't decode the AC3 frame */
-    if( pv->job->acodec & HB_ACODEC_AC3 )
+    if( pv->job->acodec & HB_ACODEC_AC3 ||
+        w->amixdown == HB_AMIXDOWN_AC3 )
     {
         buf = hb_buffer_init( pv->size );
         memcpy( buf->data, pv->frame, pv->size );

@@ -211,6 +211,13 @@ struct hb_job_s
 // A52_FORMAT of A52_3F2R | A52_LFE        = 23   = 0x17
 // discrete channel count of 6
 
+#define HB_AMIXDOWN_AC3                         0x20000000
+
+#define HB_AMIXDOWN_DOLBYPLII_AC3               0x404094A2
+// DCA_FORMAT of DCA_3F2R | DCA_OUT_DPLII  = 1033 = 0x409
+// A52_FORMAT of A52_DOLBY | A52_USE_DPLII = 74   = 0x4A
+// discrete channel count of 2
+
 /* define some macros to extract the various information from the HB_AMIXDOWN_XXXX values */
 #define HB_AMIXDOWN_GET_DCA_FORMAT( a ) ( ( a & HB_AMIXDOWN_DCA_FORMAT_MASK ) >> 12 )
 #define HB_AMIXDOWN_GET_A52_FORMAT( a ) ( ( a & HB_AMIXDOWN_A52_FORMAT_MASK ) >> 4 )

@@ -144,7 +144,8 @@ void syncClose( hb_work_object_t * w )
 
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
-        if( job->acodec & HB_ACODEC_AC3 )
+        if( job->acodec & HB_ACODEC_AC3 ||
+            job->audio_mixdowns[i] == HB_AMIXDOWN_AC3 )
         {
             free( pv->sync_audio[i].ac3_buf );
         }
@@ -206,7 +207,8 @@ static void InitAudio( hb_work_object_t * w, int i )
     sync        = &pv->sync_audio[i];
     sync->audio = hb_list_item( title->list_audio, i );
 
-    if( job->acodec & HB_ACODEC_AC3 )
+    if( job->acodec & HB_ACODEC_AC3 ||
+        job->audio_mixdowns[i] == HB_AMIXDOWN_AC3 )
     {
         /* Have a silent AC-3 frame ready in case we have to fill a
            gap */
@@ -637,7 +639,8 @@ static void SyncAudio( hb_work_object_t * w, int i )
     sync   = &pv->sync_audio[i];
     audio  = sync->audio;
 
-    if( job->acodec & HB_ACODEC_AC3 )
+    if( job->acodec & HB_ACODEC_AC3 ||
+        job->audio_mixdowns[i] == HB_AMIXDOWN_AC3 )
     {
         fifo = audio->fifo_out;
         rate = audio->rate;
@@ -799,7 +802,8 @@ static void SyncAudio( hb_work_object_t * w, int i )
             }
         }
 
-        if( job->acodec & HB_ACODEC_AC3 )
+        if( job->acodec & HB_ACODEC_AC3 ||
+            job->audio_mixdowns[i] == HB_AMIXDOWN_AC3 )
         {
             buf        = hb_fifo_get( audio->fifo_raw );
             buf->start = start;
@@ -915,7 +919,8 @@ static void InsertSilence( hb_work_object_t * w, int i )
     job    = pv->job;
     sync   = &pv->sync_audio[i];
 
-    if( job->acodec & HB_ACODEC_AC3 )
+    if( job->acodec & HB_ACODEC_AC3 ||
+        job->audio_mixdowns[i] == HB_AMIXDOWN_AC3 )
     {
         buf        = hb_buffer_init( sync->ac3_size );
         buf->start = sync->count_frames * 90000 / sync->audio->rate;

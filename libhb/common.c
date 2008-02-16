@@ -43,7 +43,10 @@ hb_mixdown_t hb_audio_mixdowns[] =
   { "Stereo",             "HB_AMIXDOWN_STEREO",    "stereo", HB_AMIXDOWN_STEREO    },
   { "Dolby Surround",     "HB_AMIXDOWN_DOLBY",     "dpl1",   HB_AMIXDOWN_DOLBY     },
   { "Dolby Pro Logic II", "HB_AMIXDOWN_DOLBYPLII", "dpl2",   HB_AMIXDOWN_DOLBYPLII },
-  { "6-channel discrete", "HB_AMIXDOWN_6CH",       "6ch",    HB_AMIXDOWN_6CH       } };
+  { "6-channel discrete", "HB_AMIXDOWN_6CH",       "6ch",    HB_AMIXDOWN_6CH       },
+  { "AC-3 Pass-through",  "HB_AMIXDOWN_AC3",       "ac-3",   HB_AMIXDOWN_AC3       },
+  { "Dolby PLII + AC-3",  "HB_AMIXDOWN_DOLBYPLII_AC3", "dpl2+ac3", HB_AMIXDOWN_DOLBYPLII_AC3 },
+};
 int hb_audio_mixdowns_count = sizeof( hb_audio_mixdowns ) /
                               sizeof( hb_mixdown_t );
 
@@ -224,13 +227,22 @@ int hb_calc_bitrate( hb_job_t * job, int size )
     {
         /* Audio data */
         int abitrate;
-        if( job->acodec & HB_ACODEC_AC3 )
+        if( job->acodec & HB_ACODEC_AC3 ||
+            job->audio_mixdowns[i] == HB_AMIXDOWN_AC3)
         {
+            /*
+             * For AC-3 we take the bitrate from the input audio
+             * bitrate as we are simply passing it through.
+             */
             audio = hb_list_item( title->list_audio, job->audios[i] );
             abitrate = audio->bitrate / 8;
         }
         else
         {
+            /*
+             * Where we are transcoding the audio we use the destination
+             * bitrate.
+             */
             abitrate = job->abitrate * 1000 / 8;
         }
         avail -= length * abitrate;

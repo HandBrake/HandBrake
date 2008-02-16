@@ -303,7 +303,8 @@ static int MP4Init( hb_mux_object_t * m )
         mux_data = malloc( sizeof( hb_mux_data_t ) );
         audio->mux_data = mux_data;
 
-        if( job->acodec & HB_ACODEC_AC3 )
+        if( job->acodec & HB_ACODEC_AC3 ||
+            job->audio_mixdowns[i] == HB_AMIXDOWN_AC3 )
         {
             mux_data->track = MP4AddAC3AudioTrack( 
                 m->file,

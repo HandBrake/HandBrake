@@ -21,7 +21,6 @@
 static int FormatSettings[4][10] =
   { { HB_MUX_MP4 | HB_VCODEC_FFMPEG | HB_ACODEC_FAAC,
 	  HB_MUX_MP4 | HB_VCODEC_X264   | HB_ACODEC_FAAC,
-          HB_MUX_MP4 | HB_VCODEC_X264   | HB_ACODEC_AC3,
 	  0,
 	  0 },
     { HB_MUX_MKV | HB_VCODEC_FFMPEG | HB_ACODEC_FAAC,
@@ -1550,6 +1549,38 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         job->audios[0] = -1;
     }
 
+    /*
+     * Where one or more of the audio tracks has a mixdown of DPLII+AC3 we need to create an extra
+     * track for each.
+     */
+    if (job->audio_mixdowns[0] == HB_AMIXDOWN_DOLBYPLII_AC3)
+    {
+        /*
+         * Make space for the AC3 track by moving 1 to 2
+         */
+        job->audios[2] = job->audios[1];
+        job->audio_mixdowns[2] = job->audio_mixdowns[1];
+        job->audios[1] = job->audios[0];
+        job->audio_mixdowns[0] = HB_AMIXDOWN_DOLBYPLII;
+        job->audio_mixdowns[1] = HB_AMIXDOWN_AC3;
+    }
+
+    if (job->audio_mixdowns[1] == HB_AMIXDOWN_DOLBYPLII_AC3)
+    {
+        job->audios[2] = job->audios[1];
+        job->audio_mixdowns[1] = HB_AMIXDOWN_DOLBYPLII;
+        job->audio_mixdowns[2] = HB_AMIXDOWN_AC3;
+        job->audios[3] = -1;
+    }
+
+    if (job->audio_mixdowns[2] == HB_AMIXDOWN_DOLBYPLII_AC3)
+    {
+        job->audios[3] = job->audios[2];
+        job->audio_mixdowns[2] = HB_AMIXDOWN_DOLBYPLII;
+        job->audio_mixdowns[3] = HB_AMIXDOWN_AC3;
+        job->audios[4] = -1;
+    }
+
     /* Audio settings */
     job->arate = hb_audio_rates[[fAudRatePopUp
                      indexOfSelectedItem]].rate;
@@ -2223,7 +2254,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             
             [fDstCodecsPopUp addItemWithTitle:_( @"MPEG-4 Video / AAC Audio" )];
             [fDstCodecsPopUp addItemWithTitle:_( @"AVC/H.264 Video / AAC Audio" )];
-            [fDstCodecsPopUp addItemWithTitle:_( @"AVC/H.264 Video / AC-3 Audio" )];
 			/* We enable the create chapters checkbox here since we are .mp4*/
 			[fCreateChapterMarkers setEnabled: YES];
 			/* We show the Large File (64 bit formatting) checkbox since we are .mp4 
@@ -2922,6 +2952,25 @@ the user is using "Custom" settings by determining the sender*/
                     maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[4].amixdown);
                 }
 
+                /* do we want to add an AC-3 passthrough option? */
+                if (audio->codec == HB_ACODEC_AC3) {
+                    NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
+                        [NSString stringWithCString: hb_audio_mixdowns[5].human_readable_name]
+                        action: NULL keyEquivalent: @""];
+                    [menuItem setTag: hb_audio_mixdowns[5].amixdown];
+                    if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[5].amixdown;
+                    maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[5].amixdown);
+                }
+
+                /* do we want to add the DPLII+AC3 passthrough option? */
+                if (audio->codec == HB_ACODEC_AC3) {
+                    NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
+                        [NSString stringWithCString: hb_audio_mixdowns[6].human_readable_name]
+                        action: NULL keyEquivalent: @""];
+                    [menuItem setTag: hb_audio_mixdowns[6].amixdown];
+                    if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[6].amixdown;
+                    maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[6].amixdown);
+                }
                 /* auto-select the best mixdown based on our saved mixdown preference */
                 
                 /* for now, this is hard-coded to a "best" mixdown of HB_AMIXDOWN_DOLBYPLII */
@@ -2975,7 +3024,10 @@ the user is using "Custom" settings by determining the sender*/
     {
         case HB_ACODEC_FAAC:
             /* check if we have a 6ch discrete conversion in either audio track */
-            if ([[fAudTrack1MixPopUp selectedItem] tag] == HB_AMIXDOWN_6CH || [[fAudTrack2MixPopUp selectedItem] tag] == HB_AMIXDOWN_6CH)
+            if ([[fAudTrack1MixPopUp selectedItem] tag] == HB_AMIXDOWN_6CH || 
+                [[fAudTrack2MixPopUp selectedItem] tag] == HB_AMIXDOWN_6CH || 
+                [[fAudTrack1MixPopUp selectedItem] tag] == HB_AMIXDOWN_AC3 || 
+                [[fAudTrack2MixPopUp selectedItem] tag] == HB_AMIXDOWN_AC3)
             {
                 /* FAAC is happy using our min bitrate of 32 kbps, even for 6ch */
                 minbitrate = 32;
@@ -3041,7 +3093,10 @@ the user is using "Custom" settings by determining the sender*/
     }
 
     /* select the default bitrate (but use 384 for 6-ch AAC) */
-    if ([[fAudTrack1MixPopUp selectedItem] tag] == HB_AMIXDOWN_6CH || [[fAudTrack2MixPopUp selectedItem] tag] == HB_AMIXDOWN_6CH)
+    if ([[fAudTrack1MixPopUp selectedItem] tag] == HB_AMIXDOWN_6CH || 
+        [[fAudTrack2MixPopUp selectedItem] tag] == HB_AMIXDOWN_6CH ||
+        [[fAudTrack1MixPopUp selectedItem] tag] == HB_AMIXDOWN_AC3 || 
+        [[fAudTrack2MixPopUp selectedItem] tag] == HB_AMIXDOWN_AC3)
     {
         [fAudBitratePopUp selectItemWithTag: 384];
     }

@@ -351,7 +351,8 @@ static void do_job( hb_job_t * job, int cpu_count )
     if ( job->dynamic_range_compression )
         hb_log(" + dynamic range compression: %f", job->dynamic_range_compression);
 
-    /* if we are doing AC3 passthru, then remove any non-AC3 audios from the job */
+    /* if we are doing AC3 passthru (at the codec level, not pass-through), 
+     * then remove any non-AC3 audios from the job */
     /* otherwise, Bad Things will happen */
     for( i = 0; i < hb_list_count( title->list_audio ); )
     {
@@ -389,6 +390,8 @@ static void do_job( hb_job_t * job, int cpu_count )
         int audioCodecsSupport6Ch =  ((audio->codec == HB_ACODEC_AC3 ||
             audio->codec == HB_ACODEC_DCA) && (job->acodec == HB_ACODEC_FAAC || job->acodec == HB_ACODEC_VORBIS));
 
+        if( job->audio_mixdowns[i] != HB_AMIXDOWN_AC3 )
+        {
         /* find out what the format of our source audio is */
         switch (audio->input_channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK) {
         
@@ -481,6 +484,7 @@ static void do_job( hb_job_t * job, int cpu_count )
                 }
 
         }
+        }
 
 		/* log the output mixdown */
 		for (j = 0; j < hb_audio_mixdowns_count; j++) {
@@ -496,12 +500,16 @@ static void do_job( hb_job_t * job, int cpu_count )
 
         audio->config.vorbis.language = audio->lang_simple;
 
-		/* set up the audio work structures */
+        /* set up the audio work structures */
         audio->fifo_in   = hb_fifo_init( 2048 );
         audio->fifo_raw  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
         audio->fifo_sync = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
         audio->fifo_out  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
 
+
+        /*
+         * Audio Decoder Thread
+         */
         switch( audio->codec )
         {
             case HB_ACODEC_AC3:
@@ -529,8 +537,13 @@ static void do_job( hb_job_t * job, int cpu_count )
         
         hb_list_add( job->list_work, audio_w );
 
-        switch( job->acodec )
+        /*
+         * Audio Encoder Thread
+         */
+        if( job->audio_mixdowns[i] != HB_AMIXDOWN_AC3 )
         {
+            switch( job->acodec )
+            {
             case HB_ACODEC_FAAC:
                 w = getWork( WORK_ENCFAAC );
                 break;
@@ -540,10 +553,15 @@ static void do_job( hb_job_t * job, int cpu_count )
             case HB_ACODEC_VORBIS:
                 w = getWork( WORK_ENCVORBIS );
                 break;
+            }
         }
 
-        if( job->acodec != HB_ACODEC_AC3 )
+        if( job->acodec != HB_ACODEC_AC3 &&
+            job->audio_mixdowns[i] != HB_AMIXDOWN_AC3)
         {
+            /*
+             * Add the encoder thread if not doing AC-3 pass through
+             */
             w->fifo_in       = audio->fifo_sync;
             w->fifo_out      = audio->fifo_out;
             w->config        = &audio->config;
