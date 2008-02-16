@@ -782,6 +782,16 @@ namespace Handbrake
 
         private void drp_audioCodec_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (drp_audioCodec.Text == "AAC + AC3")
+            {
+                drp_audioMixDown.Enabled = false;
+                drp_audioMixDown.Text = "Automatic";
+            }
+            else
+            {
+                drp_audioMixDown.Enabled = true;
+            }
+
             if (drp_audioCodec.Text == "AC3")
             {
                 drp_audioBitrate.Enabled = false;

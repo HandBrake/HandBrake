@@ -37,7 +37,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label Label38;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -66,6 +66,7 @@ namespace Handbrake
             this.text_width = new System.Windows.Forms.TextBox();
             this.slider_drc = new System.Windows.Forms.TrackBar();
             this.rtf_h264advanced = new System.Windows.Forms.RichTextBox();
+            this.RadioDVD = new System.Windows.Forms.RadioButton();
             this.DVD_Open = new System.Windows.Forms.FolderBrowserDialog();
             this.File_Open = new System.Windows.Forms.OpenFileDialog();
             this.ISO_Open = new System.Windows.Forms.OpenFileDialog();
@@ -99,7 +100,6 @@ namespace Handbrake
             this.frmMainMenu = new System.Windows.Forms.MenuStrip();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
             this.Label13 = new System.Windows.Forms.Label();
-            this.RadioDVD = new System.Windows.Forms.RadioButton();
             this.Label17 = new System.Windows.Forms.Label();
             this.Label9 = new System.Windows.Forms.Label();
             this.Label10 = new System.Windows.Forms.Label();
@@ -201,6 +201,7 @@ namespace Handbrake
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.btn_ActivityWindow = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             Label38 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.slider_drc)).BeginInit();
@@ -382,7 +383,8 @@ namespace Handbrake
             "AAC",
             "MP3",
             "Vorbis",
-            "AC3"});
+            "AC3",
+            "AAC + AC3"});
             this.drp_audioCodec.Location = new System.Drawing.Point(370, 19);
             this.drp_audioCodec.Name = "drp_audioCodec";
             this.drp_audioCodec.Size = new System.Drawing.Size(111, 21);
@@ -613,6 +615,20 @@ namespace Handbrake
             this.rtf_h264advanced.TabIndex = 2;
             this.rtf_h264advanced.Text = "";
             this.ToolTip.SetToolTip(this.rtf_h264advanced, "H.264 advanced options can be added here. See link below for details.");
+            // 
+            // RadioDVD
+            // 
+            this.RadioDVD.AutoSize = true;
+            this.RadioDVD.Checked = true;
+            this.RadioDVD.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RadioDVD.Location = new System.Drawing.Point(540, 46);
+            this.RadioDVD.Name = "RadioDVD";
+            this.RadioDVD.Size = new System.Drawing.Size(60, 17);
+            this.RadioDVD.TabIndex = 3;
+            this.RadioDVD.TabStop = true;
+            this.RadioDVD.Text = "Folder";
+            this.ToolTip.SetToolTip(this.RadioDVD, "For Selecting a \"Video_TS\" folder on your hard drive or DVD");
+            this.RadioDVD.UseVisualStyleBackColor = true;
             // 
             // DVD_Open
             // 
@@ -891,20 +907,6 @@ namespace Handbrake
             this.Label13.Size = new System.Drawing.Size(21, 13);
             this.Label13.TabIndex = 10;
             this.Label13.Text = "To";
-            // 
-            // RadioDVD
-            // 
-            this.RadioDVD.AutoSize = true;
-            this.RadioDVD.Checked = true;
-            this.RadioDVD.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RadioDVD.Location = new System.Drawing.Point(540, 46);
-            this.RadioDVD.Name = "RadioDVD";
-            this.RadioDVD.Size = new System.Drawing.Size(60, 17);
-            this.RadioDVD.TabIndex = 3;
-            this.RadioDVD.TabStop = true;
-            this.RadioDVD.Text = "Folder";
-            this.ToolTip.SetToolTip(this.RadioDVD, "For Selecting a \"Video_TS\" folder on your hard drive or DVD");
-            this.RadioDVD.UseVisualStyleBackColor = true;
             // 
             // Label17
             // 
@@ -1853,9 +1855,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle2.Format = "N0";
-            dataGridViewCellStyle2.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle1;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -2380,6 +2382,7 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripButton btn_ActivityWindow;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
+        private System.Windows.Forms.ToolTip toolTip1;
 
     }
 }

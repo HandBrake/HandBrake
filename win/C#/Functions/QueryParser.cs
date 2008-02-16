@@ -584,7 +584,7 @@ namespace Handbrake.Functions
             Match width = Regex.Match(input, @"-w ([0-9]*)");
             Match height = Regex.Match(input, @"-l ([0-9]*)");
             Match videoEncoder = Regex.Match(input, @"-e ([a-zA-Z0-9]*)");
-            Match audioEncoder = Regex.Match(input, @"-E ([a-zA-Z0-9]*)");
+            Match audioEncoder = Regex.Match(input, @"-E ([a-zA-Z0-9+]*)");
 
             //Picture Settings Tab
             Match deinterlace = Regex.Match(input, @"--deinterlace=([a-z]*)");
@@ -704,6 +704,9 @@ namespace Handbrake.Functions
                         break;
                     case "ac3":
                         audioEncoderConvertion = "AC3";
+                        break;
+                    case "aac+ac3":
+                        audioEncoderConvertion = "AAC + AC3";
                         break;
                     default:
                         audioEncoderConvertion = "AAC";

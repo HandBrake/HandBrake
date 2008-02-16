@@ -386,6 +386,9 @@ namespace Handbrake.Functions
                 case "AC3":
                     audioEncoder = " -E ac3";
                     break;
+                case "AAC + AC3":
+                    audioEncoder = " -E aac+ac3";
+                    break;
                 default:
                     audioEncoder = " -E faac";
                     break;
