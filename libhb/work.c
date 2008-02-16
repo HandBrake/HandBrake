@@ -193,7 +193,7 @@ static void do_job( hb_job_t * job, int cpu_count )
         }
     }
     
-    if( job->filters )
+    if( hb_list_count( job->filters ) )
     {
         hb_log(" + filters");
         for( i = 0; i < hb_list_count( job->filters ); i++ )
@@ -355,7 +355,7 @@ static void do_job( hb_job_t * job, int cpu_count )
                 "vorbis" ) );
     }
     
-    if ( job->dynamic_range_compression )
+    if ( job->dynamic_range_compression > 1 )
         hb_log(" + dynamic range compression: %f", job->dynamic_range_compression);
 
     /* if we are doing AC3 passthru (at the codec level, not pass-through), 
