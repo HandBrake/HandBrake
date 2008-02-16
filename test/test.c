@@ -835,8 +835,6 @@ static int HandleEvents( hb_handle_t * h )
 			
 			if( audio_mixdown == HB_AMIXDOWN_DOLBYPLII_AC3)
 			{
-			    
-			    
                int i;
                for( i = 3 ; i > 0; i--)
                {                   
@@ -1188,7 +1186,7 @@ static void ShowHelp()
      "    -d, --deinterlace       Deinterlace video with yadif/mcdeint filter\n"
      "          <YM:FD:MM:QP>     (default 0:-1:-1:1)\n"
      "           or\n"
-     "          <fast/slow/slower/slowest>\n"            
+     "          <fast/slow/slower>\n"            
      "    -7, --deblock           Deblock video with pp7 filter\n"
      "          <QP:M>            (default 0:2)\n"
      "    -8, --denoise           Denoise video with hqdn3d filter\n"
@@ -1209,7 +1207,7 @@ static void ShowHelp()
 	
 	"### Audio Options-----------------------------------------------------------\n\n"
 	"    -E, --aencoder <string> Audio encoder (faac/lame/vorbis/ac3/aac+ac3) \n"
-	"                            ac3 meaning passthrough, ac3+aac meaning an\n"
+	"                            ac3 meaning passthrough, aac+ac3 meaning an\n"
 	"                            aac dpl2 mixdown paired with ac3 pass-thru\n"
 	"                            (default: guessed)\n"
 	"    -B, --ab <kb/s>         Set audio bitrate (default: 128)\n"
@@ -1493,15 +1491,11 @@ static int ParseOptions( int argc, char ** argv )
                     }
                     else if (!( strcmp( optarg, "slow" ) ))
                     {
-                        deinterlace_opt = "0";
+                        deinterlace_opt = "2";
                     }
                     else if (!( strcmp( optarg, "slower" ) ))
                     {
-                        deinterlace_opt = "2:-1:1";
-                    }
-                    else if (!( strcmp( optarg, "slowest" ) ))
-                    {
-                        deinterlace_opt = "1:-1:1";
+                        deinterlace_opt = "0";
                     }
                     else
                     {

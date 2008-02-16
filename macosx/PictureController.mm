@@ -126,7 +126,6 @@ are maintained across different sources */
     [fDeinterlacePopUp addItemWithTitle: @"Fast"];
     [fDeinterlacePopUp addItemWithTitle: @"Slow"];
 	[fDeinterlacePopUp addItemWithTitle: @"Slower"];
-	[fDeinterlacePopUp addItemWithTitle: @"Slowest"];
     
 	/* Set deinterlaces level according to the integer in the main window */
 	[fDeinterlacePopUp selectItemAtIndex: fPictureFilterSettings.deinterlace];

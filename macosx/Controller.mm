@@ -1611,26 +1611,20 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* Deinterlace */
     if ([fPictureController deinterlace] == 1)
     {
-        /* Run old deinterlacer by default */
+        /* Run old deinterlacer fd by default */
         hb_filter_deinterlace.settings = "-1"; 
         hb_list_add( job->filters, &hb_filter_deinterlace );
     }
     else if ([fPictureController deinterlace] == 2)
     {
-        /* Yadif mode 0 (1-pass with spatial deinterlacing.) */
-        hb_filter_deinterlace.settings = "0"; 
+        /* Yadif mode 0 (without spatial deinterlacing.) */
+        hb_filter_deinterlace.settings = "2"; 
         hb_list_add( job->filters, &hb_filter_deinterlace );            
     }
     else if ([fPictureController deinterlace] == 3)
     {
-        /* Yadif (1-pass w/o spatial deinterlacing) and Mcdeint */
-        hb_filter_deinterlace.settings = "2:-1:1"; 
-        hb_list_add( job->filters, &hb_filter_deinterlace );            
-    }
-    else if ([fPictureController deinterlace] == 4)
-    {
-        /* Yadif (2-pass w/ spatial deinterlacing) and Mcdeint*/
-        hb_filter_deinterlace.settings = "1:-1:1"; 
+        /* Yadif (with spatial deinterlacing) */
+        hb_filter_deinterlace.settings = "0"; 
         hb_list_add( job->filters, &hb_filter_deinterlace );            
     }
 	
@@ -2672,10 +2666,6 @@ the user is using "Custom" settings by determining the sender*/
 	{
 		[fPicSettingDeinterlace setStringValue: @"Slower"];
 	}
-	else if ([fPictureController deinterlace] ==4)
-	{
-		[fPicSettingDeinterlace setStringValue: @"Slowest"];
-	}
 	/* Denoise */
 	if ([fPictureController denoise] == 0)
 	{
@@ -3538,7 +3528,17 @@ if (item == nil)
                     /* Deinterlace */
                     if ([chosenPreset objectForKey:@"PictureDeinterlace"])
                     {
-                        [fPictureController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
+                        /* We check to see if the preset used the past fourth "Slowest" deinterlaceing and set that to "Slower
+                        * since we no longer have a fourth "Slowest" deinterlacing due to the mcdeint bug */
+                        if ([[chosenPreset objectForKey:@"PictureDeinterlace"] intValue] == 4)
+                        {
+                            [fPictureController setDeinterlace:3];
+                        }
+                        else
+                        {
+
+                            [fPictureController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
+                        }
                     }
                     else
                     {
@@ -3596,7 +3596,16 @@ if (item == nil)
             /* Deinterlace */
             if ([chosenPreset objectForKey:@"PictureDeinterlace"])
             {
-                [fPictureController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
+                /* We check to see if the preset used the past fourth "Slowest" deinterlaceing and set that to "Slower
+                 * since we no longer have a fourth "Slowest" deinterlacing due to the mcdeint bug */
+                if ([[chosenPreset objectForKey:@"PictureDeinterlace"] intValue] == 4)
+                {
+                    [fPictureController setDeinterlace:3];
+                }
+                else
+                {
+                    [fPictureController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
+                }
             }
             else
             {
