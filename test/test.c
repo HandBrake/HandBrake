@@ -832,6 +832,28 @@ static int HandleEvents( hb_handle_t * h )
 			    job->audios[0] = 0;
 			    job->audio_mixdowns[0] = audio_mixdown;
 			}
+			
+			if( audio_mixdown == HB_AMIXDOWN_DOLBYPLII_AC3)
+			{
+			    
+			    
+               int i;
+               for( i = 3 ; i > 0; i--)
+               {                   
+                   job->audios[i*2+1] = job->audios[i];
+                   job->audios[i*2] = job->audios[i];
+                   if(job->audios[i] != -1  )
+                   {
+                       job->audio_mixdowns[i*2+1] = HB_AMIXDOWN_AC3;
+                       job->audio_mixdowns[i*2] = HB_AMIXDOWN_DOLBYPLII;
+                   }
+               }
+               
+               job->audios[1] = job->audios[0];
+               job->audio_mixdowns[1] = HB_AMIXDOWN_AC3;
+               job->audio_mixdowns[0] = HB_AMIXDOWN_DOLBYPLII;
+            }
+			
             if( abitrate )
             {
                 job->abitrate = abitrate;
@@ -1186,12 +1208,15 @@ static void ShowHelp()
 	
 	
 	"### Audio Options-----------------------------------------------------------\n\n"
-	"    -E, --aencoder <string> Set audio encoder (faac/lame/vorbis/ac3, ac3\n"
-    "                            meaning passthrough, default: guessed)\n"
+	"    -E, --aencoder <string> Audio encoder (faac/lame/vorbis/ac3/aac+ac3) \n"
+	"                            ac3 meaning passthrough, ac3+aac meaning an\n"
+	"                            aac dpl2 mixdown paired with ac3 pass-thru\n"
+	"                            (default: guessed)\n"
 	"    -B, --ab <kb/s>         Set audio bitrate (default: 128)\n"
 	"    -a, --audio <string>    Select audio channel(s), separated by commas\n"
 	"                            (\"none\" for no audio, \"1,2,3\" for multiple\n"
-	"                             tracks, default: first one, max: eight)\n"
+	"                             tracks, default: first one,\n"
+	"                             max 8 normally, max 4 with aac+ac3)\n"
     "    -6, --mixdown <string>  Format for surround sound downmixing\n"
     "                            (mono/stereo/dpl1/dpl2/6ch, default: dpl2)\n"
     "    -R, --arate             Set audio samplerate (" );
@@ -1579,6 +1604,12 @@ static int ParseOptions( int argc, char ** argv )
                 else if( !strcasecmp( optarg, "vorbis") )
                 {
                     acodec = HB_ACODEC_VORBIS;
+                }
+                else if( !strcasecmp( optarg, "aac+ac3") )
+                {
+                    acodec = HB_ACODEC_FAAC;
+                    audio_mixdown = HB_AMIXDOWN_DOLBYPLII_AC3;
+                    arate = 48000;
                 }
                 break;
             case 'w':
