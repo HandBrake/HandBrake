@@ -232,10 +232,21 @@ static int MP4Init( hb_mux_object_t * m )
         }
     }
 
-	/* apply the anamorphic transformation matrix if needed */
+    if( job->pixel_ratio )
+    {
+        /* PASP atom for anamorphic video */
+        float width, height;
+
+        width = job->pixel_aspect_width;
+
+        height = job->pixel_aspect_height;
+        
+        MP4AddPixelAspectRatio(m->file, mux_data->track, (uint32_t)width, (uint32_t)height);
+    }
+
 
 	if( job->pixel_ratio ) {
-
+	    /* apply the anamorphic transformation matrix as well */
 		uint8_t* val;
 		uint8_t nval[38];
 		uint32_t *ptr32 = (uint32_t*) (nval + 2);
