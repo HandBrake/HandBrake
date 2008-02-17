@@ -45,7 +45,7 @@ hb_mixdown_t hb_audio_mixdowns[] =
   { "Dolby Pro Logic II", "HB_AMIXDOWN_DOLBYPLII", "dpl2",   HB_AMIXDOWN_DOLBYPLII },
   { "6-channel discrete", "HB_AMIXDOWN_6CH",       "6ch",    HB_AMIXDOWN_6CH       },
   { "AC-3 Pass-through",  "HB_AMIXDOWN_AC3",       "ac-3",   HB_AMIXDOWN_AC3       },
-  { "Dolby PLII + AC-3",  "HB_AMIXDOWN_DOLBYPLII_AC3", "dpl2+ac3", HB_AMIXDOWN_DOLBYPLII_AC3 },
+  { "Dolby Pro Logic II + AC-3",  "HB_AMIXDOWN_DOLBYPLII_AC3", "dpl2+ac3", HB_AMIXDOWN_DOLBYPLII_AC3 },
 };
 int hb_audio_mixdowns_count = sizeof( hb_audio_mixdowns ) /
                               sizeof( hb_mixdown_t );
