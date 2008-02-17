@@ -517,8 +517,9 @@ static NSDictionary* _shortHeightAttribute = NULL;
                 jobAudioInfo = [jobAudioInfo stringByAppendingString:[NSString stringWithFormat:@", Track %d: Dolby Surround", ai + 1]];
             if (audio_mixdowns[ai] == HB_AMIXDOWN_DOLBYPLII)
                 jobAudioInfo = [jobAudioInfo stringByAppendingString:[NSString stringWithFormat:@", Track %d: Dolby Pro Logic II", ai + 1]];
-            if (audio_mixdowns[ai] == HB_AMIXDOWN_6CH)
-                jobAudioInfo = [jobAudioInfo stringByAppendingString:[NSString stringWithFormat:@", Track %d: 6-channel discreet", ai + 1]];
+            if (audio_mixdowns[ai] == HB_AMIXDOWN_AC3)
+                jobAudioInfo = [jobAudioInfo stringByAppendingString:[NSString stringWithFormat:@", Pass-Through", ai + 1]];
+                
         }
         if (withIcon)   // implies indent the info
             [finalString appendString: @"\t" withAttributes:detailBoldAttr];
