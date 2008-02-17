@@ -2940,7 +2940,7 @@ the user is using "Custom" settings by determining the sender*/
                 }
 
                 /* do we want to add a dolby pro logic 2 (DPL2) option? */
-                if (!mp4AacAc3 && layout == HB_INPUT_CH_LAYOUT_3F2R) {
+                if ((!mp4AacAc3 || audio->codec == HB_ACODEC_DCA) && layout == HB_INPUT_CH_LAYOUT_3F2R) {
                     NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
                         [NSString stringWithCString: hb_audio_mixdowns[3].human_readable_name]
                         action: NULL keyEquivalent: @""];
