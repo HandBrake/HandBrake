@@ -239,7 +239,7 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     }
 
     /* If there's a chapter mark remember it in case we delay or drop its frame */
-    if( in->new_chap )
+    if( in->new_chap && job->vfr )
     {
         pv->chapter_time = in->start;
         pv->chapter_val = in->new_chap;
