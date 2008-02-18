@@ -2929,7 +2929,7 @@ the user is using "Custom" settings by determining the sender*/
                 /* do we want to add a stereo option? */
                 /* offer stereo if we have a mono source and non-mono-supporting codecs, as otherwise we won't have a mixdown at all */
                 /* also offer stereo if we have a stereo-or-better source */
-                if ((!mp4AacAc3 && ((layout == HB_INPUT_CH_LAYOUT_MONO && audioCodecsSupportMono == 0) || layout >= HB_INPUT_CH_LAYOUT_STEREO))) {
+                if (((!mp4AacAc3 || audio->codec == HB_ACODEC_MPGA ||  audio->codec == HB_ACODEC_LPCM || audio->codec == HB_ACODEC_DCA) && ((layout == HB_INPUT_CH_LAYOUT_MONO && audioCodecsSupportMono == 0) || layout >= HB_INPUT_CH_LAYOUT_STEREO))) {
                     NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
                         [NSString stringWithCString: hb_audio_mixdowns[1].human_readable_name]
                         action: NULL keyEquivalent: @""];

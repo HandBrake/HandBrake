@@ -397,6 +397,15 @@ static void do_job( hb_job_t * job, int cpu_count )
         int audioCodecsSupport6Ch =  ((audio->codec == HB_ACODEC_AC3 ||
             audio->codec == HB_ACODEC_DCA) && (job->acodec == HB_ACODEC_FAAC || job->acodec == HB_ACODEC_VORBIS));
 
+        if( audio->codec != HB_ACODEC_AC3 && job->audio_mixdowns[i] == HB_AMIXDOWN_AC3 )
+        {
+            /*
+             * Sanity check that we haven't asked for AC3 from a non AC3 track - drop this track
+             * to stereo to avoid a crash later.
+             */
+            job->audio_mixdowns[i] = HB_AMIXDOWN_STEREO;
+        }
+
         if( job->audio_mixdowns[i] != HB_AMIXDOWN_AC3 )
         {
         /* find out what the format of our source audio is */
