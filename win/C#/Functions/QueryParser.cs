@@ -579,7 +579,7 @@ namespace Handbrake.Functions
             Match format = Regex.Match(input, @"-f ([a-z0-9a-z0-9a-z0-9]*)");
 
             //Destination
-            Regex r2 = new Regex(@"(-o)(?:\s\"")([a-zA-Z0-9:\\\s\.]+)(?:\"")");
+            Regex r2 = new Regex(@"(-o)(?:\s\"")([a-zA-Z0-9_\-:\\\s\.]+)(?:\"")");
             Match destination = r2.Match(input.Replace('"', '\"'));
             Match width = Regex.Match(input, @"-w ([0-9]*)");
             Match height = Regex.Match(input, @"-l ([0-9]*)");
