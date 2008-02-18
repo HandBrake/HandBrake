@@ -396,7 +396,7 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         hb_buffer_copy_settings( buf_render, buf_tmp_in );
     }
     
-    if (*buf_out)
+    if (*buf_out && job->vfr)
     {
         hb_fifo_push( pv->delay_queue, *buf_out );
         *buf_out = NULL;        
@@ -413,10 +413,6 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         {
             *buf_out = hb_fifo_get( pv->delay_queue );
         }
-    }
-    else
-    {
-        *buf_out = hb_fifo_get( pv->delay_queue );
     }
 
     if( *buf_out && job->vfr)
