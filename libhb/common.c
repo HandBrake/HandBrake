@@ -527,7 +527,7 @@ void hb_log( char * log, ... )
 
     /* Convert the message to a string */
     va_start( args, log );
-    vsnprintf( string + 11, 169, log, args );
+    vsnprintf( string + 11, 349, log, args );
     va_end( args );
 
     /* Add the end of line */
