@@ -126,6 +126,10 @@ namespace Handbrake.Functions
 
             // Source tab
             #region source
+            // Reset some vaules to stock first to prevent errors.
+            mainWindow.check_iPodAtom.CheckState = CheckState.Unchecked;
+
+            // Now load all the new settings onto the main window
             if (presetQuery.Source != "")
                 mainWindow.text_source.Text = presetQuery.Source;
 
@@ -159,6 +163,16 @@ namespace Handbrake.Functions
 
             mainWindow.drp_videoEncoder.Text = presetQuery.VideoEncoder;
             mainWindow.drp_audioCodec.Text = presetQuery.AudioEncoder;
+
+            if (presetQuery.IpodAtom == true)
+                mainWindow.check_iPodAtom.CheckState = CheckState.Checked;
+            else
+                mainWindow.check_iPodAtom.CheckState = CheckState.Unchecked;
+
+            if (presetQuery.OptimizeMP4 == true)
+                mainWindow.check_optimiseMP4.CheckState = CheckState.Checked;
+            else
+                mainWindow.check_optimiseMP4.CheckState = CheckState.Unchecked;
 
             #endregion
 
@@ -254,15 +268,7 @@ namespace Handbrake.Functions
             else
                 mainWindow.check_largeFile.CheckState = CheckState.Unchecked;
 
-            if (presetQuery.IpodAtom == true)
-                mainWindow.check_iPodAtom.CheckState = CheckState.Checked;
-            else
-                mainWindow.check_iPodAtom.CheckState = CheckState.Unchecked;
-
-            if (presetQuery.OptimizeMP4 == true)
-                mainWindow.check_optimiseMP4.CheckState = CheckState.Checked;
-            else
-                mainWindow.check_optimiseMP4.CheckState = CheckState.Unchecked;
+            
 
             #endregion
 

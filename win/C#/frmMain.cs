@@ -75,6 +75,10 @@ namespace Handbrake
             // Load the presets
             lblStatus.Text = "Loading Presets ...";
             Application.DoEvents();
+            if (Properties.Settings.Default.updatePresets == "Checked")
+            {
+                grabCLIPresets();
+            }
             loadPresetPanel();
             Thread.Sleep(200);
       
