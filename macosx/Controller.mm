@@ -2357,6 +2357,15 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		[fVidEncoderPopUp addItemWithTitle: @"x264"];
 		[fVidEncoderPopUp selectItemAtIndex: 0];
         [fAdvancedOptions setHidden:NO];
+        /* if MP4 format and [fDstCodecsPopUp indexOfSelectedItem] > 1 we know that the audio is going to be
+         * either aac + ac3 passthru, or just ac3 passthru so we need to make sure the output file extension is m4v
+         * otherwise Quicktime will not play it at all */
+        if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fDstCodecsPopUp indexOfSelectedItem] > 1)
+        {
+            NSString *newpath = [[[fDstFile2Field stringValue] stringByDeletingPathExtension] stringByAppendingPathExtension: @"m4v"];
+            [fDstFile2Field setStringValue: [NSString stringWithFormat:
+                                             @"%@", newpath]];
+        }
     }
     
     else if( ( FormatSettings[format][codecs] & HB_VCODEC_FFMPEG ) )
