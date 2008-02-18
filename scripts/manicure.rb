@@ -342,6 +342,11 @@ class Display
       commandString << " -I"
     end
     
+    # 64-bit files
+    if hash["Mp4LargeFile"].to_i == 1
+      commandString << " -4"
+    end
+    
     #Cropping
     if !hash["PictureAutoCrop"].to_i
       commandString << " --crop "
@@ -483,6 +488,11 @@ class Display
       commandString << " -I"
     end
     
+    # 64-bit files
+    if hash["Mp4LargeFile"].to_i == 1
+      commandString << " -4"
+    end
+    
     #Cropping
     if !hash["PictureAutoCrop"].to_i
       commandString << " --crop "
@@ -579,6 +589,11 @@ class Display
     #iPod MP4 atom
     if hash["Mp4iPodCompatible"].to_i == 1
       commandString << "job->ipod_atom = 1;\n   "
+    end
+    
+    # 64-bit files
+    if hash["Mp4LargeFile"].to_i == 1
+      commandString << "job->largeFileSize = 1;\n"
     end
     
     #Video encoder
@@ -801,6 +816,11 @@ class Display
     #iPod MP4 atom
     if hash["Mp4iPodCompatible"].to_i == 1
       commandString << " -I"
+    end
+    
+    # 64-bit files
+    if hash["Mp4LargeFile"].to_i == 1
+      commandString << " -4"
     end
     
     #Cropping

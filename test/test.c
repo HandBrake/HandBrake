@@ -424,6 +424,7 @@ static int HandleEvents( hb_handle_t * h )
                 if (!strcmp(preset_name, "AppleTV"))
                 {
                     mux = HB_MUX_MP4;
+                    job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 2500;
                     job->abitrate = 160;
@@ -1254,7 +1255,7 @@ static void ShowPresets()
 {
     printf("\n+ Animation:  -e x264 -b 1000 -B 160 -R 48 -E faac -f mkv --deinterlace=\"slower\" -m -p -2 -T -x ref=5:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2\n");
 
-    printf("\n+ AppleTV:  -e x264 -b 2500 -B 160 -R 48 -E aac+ac3 -f mp4 -m -p -x bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=1:cabac=0\n");
+    printf("\n+ AppleTV:  -e x264 -b 2500 -B 160 -R 48 -E aac+ac3 -f mp4 -4 -m -p -x bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=1:cabac=0\n");
 
     printf("\n+ Bedlam:  -e x264 -b 1800 -E ac3 -f mkv -m -p -2 -T -x ref=16:mixed-refs:bframes=16:bime:weightb:b-rdo:direct=auto:b-pyramid:me=esa:subme=7:me-range=64:analyse=all:8x8dct:trellis=1:no-fast-pskip:no-dct-decimate:filter=-2,-1\n");
 
