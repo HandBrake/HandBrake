@@ -312,9 +312,11 @@ class Display
     #Audio encoder (only specifiy bitrate and samplerate when not doing AC-3 pass-thru)
     commandString << " -E "
     case hash["FileCodecs"]
-    when /AC-3/
+    when /AAC + AC3 Audio/
+      commandString << "aac+ac3"
+    when /AC-3 /
       commandString << "ac3"
-    when /AAC/
+    when /AAC Audio/
       commandString << "faac" << " -B " << hash["AudioBitRate"] << " -R " << hash["AudioSampleRate"]
     when /Vorbis/
       commandString << "vorbis" << " -B " << hash["AudioBitRate"] << " -R " << hash["AudioSampleRate"]
@@ -451,9 +453,11 @@ class Display
     #Audio encoder (only include bitrate and samplerate when not doing AC3 passthru)
     commandString << " -E "
     case hash["FileCodecs"]
+    when /AC3 Audio/
+      commandString << "aac+ac3"
     when /AC-3/
       commandString << "ac3"
-    when /AAC/
+    when /AAC Audio/
       commandString << "faac" << " -B " << hash["AudioBitRate"] << " -R " << hash["AudioSampleRate"]
     when /Vorbis/
       commandString << "vorbis" << " -B " << hash["AudioBitRate"] << " -R " << hash["AudioSampleRate"]
@@ -633,7 +637,11 @@ class Display
     #Audio encoder
     commandString << "acodec = "
     case hash["FileCodecs"]
-    when /AAC/
+    when /AC3 Audio/
+      commandString << "HB_ACODEC_FAAC;\n    "
+      commandString << "audio_mixdown = HB_AMIXDOWN_DOLBYPLII_AC3;\n    "
+      commandString << "arate = 48000;\n    "
+    when /AAC Audio/
       commandString << "HB_ACODEC_FAAC;\n    "
     when /AC-3/
       commandString << "HB_ACODEC_AC3;\n    "
@@ -682,10 +690,10 @@ class Display
         commandString << "deinterlace_opt = \"-1\";\n    "
       when 2
         commandString << "deinterlace = 1;\n    "
-        commandString << "deinterlace_opt = \"0\";\n    "
+        commandString << "deinterlace_opt = \"2\";\n    "
       when 3
         commandString << "deinterlace = 1;\n    "
-        commandString << "deinterlace_opt = \"2:-1:1\";\n    "
+        commandString << "deinterlace_opt = \"0\";\n    "
       when 4
         commandString << "deinterlace = 1;\n    "
         commandString << "deinterlace_opt = \"1:-1:1\";\n    "
@@ -765,7 +773,9 @@ class Display
     #Audio encoder
     commandString << " -E "
     case hash["FileCodecs"]
-    when /AAC/
+    when /AC3 Audio/
+      commandString << "aac+ac3"
+    when /AAC Audio/
       commandString << "faac"
     when /AC-3/
       commandString << "ac3"
