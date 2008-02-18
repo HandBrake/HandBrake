@@ -419,7 +419,7 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         *buf_out = hb_fifo_get( pv->delay_queue );
     }
 
-    if( *buf_out )
+    if( *buf_out && job->vfr)
     {
         /* The current frame exists. That means it hasn't been dropped by a filter.
            Make it accessible as ivtc_buffer so we can edit its duration if needed. */
