@@ -3146,18 +3146,18 @@ the user is using "Custom" settings by determining the sender*/
 - (IBAction) openHomepage: (id) sender
 {
     [[NSWorkspace sharedWorkspace] openURL: [NSURL
-        URLWithString:@"http://handbrake.m0k.org/"]];
+        URLWithString:@"http://handbrake.fr/"]];
 }
 
 - (IBAction) openForums: (id) sender
 {
     [[NSWorkspace sharedWorkspace] openURL: [NSURL
-        URLWithString:@"http://handbrake.m0k.org/forum/"]];
+        URLWithString:@"http://handbrake.fr/forum/"]];
 }
 - (IBAction) openUserGuide: (id) sender
 {
     [[NSWorkspace sharedWorkspace] openURL: [NSURL
-        URLWithString:@"http://handbrake.m0k.org/trac/wiki/HandBrakeGuide"]];
+        URLWithString:@"http://handbrake.fr/trac/wiki/HandBrakeGuide"]];
 }
 
 /**
