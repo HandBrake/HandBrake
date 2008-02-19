@@ -12,11 +12,11 @@ using System.Resources;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Handbrake")]
+[assembly: AssemblyTitle("HandBrake")]
 [assembly: AssemblyDescription("GPL'd DVD Like Source to MPEG-4 converter")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Handbrake")]
-[assembly: AssemblyProduct("Handbrake")]
+[assembly: AssemblyCompany("HandBrake")]
+[assembly: AssemblyProduct("HandBrake")]
 [assembly: AssemblyCopyright("Copyright ©  2007")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
