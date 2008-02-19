@@ -87,6 +87,9 @@ static int  ParseOptions( int argc, char ** argv );
 static int  CheckOptions( int argc, char ** argv );
 static int  HandleEvents( hb_handle_t * h );
 
+/* Only print the "Muxing..." message once */
+static int show_mux_warning = 1;
+
 /****************************************************************************
  * hb_error_handler
  * 
@@ -1058,8 +1061,12 @@ static int HandleEvents( hb_handle_t * h )
 #define p s.param.muxing
         case HB_STATE_MUXING:
         {
-            fprintf( stdout, "\rMuxing: %.2f %%", 100.0 * p.progress );
-            fflush(stdout);
+            if (show_mux_warning)
+            {
+                fprintf( stdout, "\rMuxing: this may take awhile..." );
+                fflush(stdout);
+                show_mux_warning = 0;
+            }
             break;
         }
 #undef p
