@@ -1,5 +1,75 @@
 NEWS file for HandBrake <http://handbrake.m0k.org/>
 
+Changes between 0.9.1 and 0.9.2:
+
+CORE
+
+- AC3 in MP4 support
+- Multi-track audio support for Apple devices
+- Better handling of audio discontinuities
+- More flexible, "loose" anamorphic
+- Variable frame rate encoding
+- MP4 optimization for progressive downloads
+- Dynamic range compression for encoding from AC3 audio
+- Ability to encode an audio stream and pass it through at the same time
+- iPhone-compatible anamorphic (pasp atom)
+- Robust program and transport stream support
+- Better handling of DVD read errors from invalid VOB units
+- Detects and works around missing end of cell markers
+- Recovers from loss of signal in a stream
+- Drops subtitles less often
+- Keeps chapter markers in better sync and prevents duplicates
+- Better handling of B-Frames
+- Tunes FIFO sizes by CPU count
+- Finally squashes the bug that cut off the end of movies
+- Preset changes
+- Standardizes on standard out for progress and standard error for everything else.
+- Correct channel counts when passing AC3 audio to Matroska
+- Tag MP4 files as encoded with HandBrake
+- No more merging short chapters
+- Newer copies of x264,
+- VBV 2-pass patch for x264
+- Sets keyframes for x264 by frame rate.
+- Support for >2GB MKV files in Linux
+- Code audio languages in a way QuickTime understands
+- Better subtitle positioning
+- Fewer crashes in 2-pass encoding
+
+MAC
+
+- Leopard Only
+- Sparkle
+- Reads .eyetv files as well as .dvdmedia files
+- Much better queue
+- More white space
+- Code restructuring
+- Activity window logging, complete with a "black box recorder" for crashes
+- Ability to open a single title for a DVD instead of scanning the whole thing
+- Warns people when they try to queue up two files with the same name
+- Maintains picture filter states between jobs
+- .xib Interface Builder files SVN can track
+- Switches to NSImageView for previews, so no more useless OpenGL effects
+- Temporary loss of localizations for foreign languages (the old system was broken anyway)
+- Separate filter settings for every queued job
+
+WIN
+
+- Revamped preset system
+- Sparkle-compatible update checker
+- Activity log window
+- CLI built-in preset parsing
+- No more admin rights required in Vista
+- Handles more display resolutions
+
+CLI
+
+- Built-in presets
+- Short names for denoising (weak, medium, strong) and deinterlacing (fast, slow, slower) 
+- Solaris port
+- No more x264b30 (use -e x264 -I -x level=30:cabac=0 instead or better yet an iPod preset)
+- Chapter marker .csv input fixed
+- CRF as default quality mode for x264, now -q is CRF and if you want CQP add -Q to it
+
 Changes between 0.9.0 and 0.9.1:
 
 	Core HandBrake Changes:
