@@ -76,15 +76,15 @@ namespace Handbrake
             this.lbl_newVersion.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_newVersion.Location = new System.Drawing.Point(155, 33);
             this.lbl_newVersion.Name = "lbl_newVersion";
-            this.lbl_newVersion.Size = new System.Drawing.Size(78, 13);
+            this.lbl_newVersion.Size = new System.Drawing.Size(120, 13);
             this.lbl_newVersion.TabIndex = 27;
-            this.lbl_newVersion.Text = "0.0.0 (0000)";
+            this.lbl_newVersion.Text = "0.0.0 (0000000000)";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(230, 33);
+            this.label4.Location = new System.Drawing.Point(274, 33);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(98, 13);
             this.label4.TabIndex = 28;
@@ -94,7 +94,7 @@ namespace Handbrake
             // 
             this.lbl_oldVersion.AutoSize = true;
             this.lbl_oldVersion.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_oldVersion.Location = new System.Drawing.Point(324, 33);
+            this.lbl_oldVersion.Location = new System.Drawing.Point(370, 33);
             this.lbl_oldVersion.Name = "lbl_oldVersion";
             this.lbl_oldVersion.Size = new System.Drawing.Size(103, 13);
             this.lbl_oldVersion.TabIndex = 29;
@@ -115,7 +115,7 @@ namespace Handbrake
             this.wBrowser.Location = new System.Drawing.Point(94, 82);
             this.wBrowser.MinimumSize = new System.Drawing.Size(20, 20);
             this.wBrowser.Name = "wBrowser";
-            this.wBrowser.Size = new System.Drawing.Size(457, 155);
+            this.wBrowser.Size = new System.Drawing.Size(471, 155);
             this.wBrowser.TabIndex = 31;
             // 
             // btn_skip
@@ -140,7 +140,7 @@ namespace Handbrake
             this.btn_installUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_installUpdate.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_installUpdate.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_installUpdate.Location = new System.Drawing.Point(418, 244);
+            this.btn_installUpdate.Location = new System.Drawing.Point(432, 244);
             this.btn_installUpdate.Name = "btn_installUpdate";
             this.btn_installUpdate.Size = new System.Drawing.Size(133, 22);
             this.btn_installUpdate.TabIndex = 55;
@@ -155,7 +155,7 @@ namespace Handbrake
             this.btn_remindLater.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_remindLater.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_remindLater.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_remindLater.Location = new System.Drawing.Point(279, 244);
+            this.btn_remindLater.Location = new System.Drawing.Point(293, 244);
             this.btn_remindLater.Name = "btn_remindLater";
             this.btn_remindLater.Size = new System.Drawing.Size(133, 22);
             this.btn_remindLater.TabIndex = 56;
@@ -187,7 +187,7 @@ namespace Handbrake
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(561, 272);
+            this.ClientSize = new System.Drawing.Size(577, 272);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btn_remindLater);
             this.Controls.Add(this.btn_installUpdate);
