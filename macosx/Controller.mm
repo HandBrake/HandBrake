@@ -2648,18 +2648,12 @@ the user is using "Custom" settings by determining the sender*/
     
     /* VFR (Variable Frame Rate) */
     if ([fPictureController vfr]) {
-        /* vfr has to set the framerate to 29.97 (ntsc video)
-         and disable the framerate popup */
-        [fVidRatePopUp selectItemAtIndex: 8];
-        [fVidRatePopUp setEnabled: NO];
         /* We change the string of the fps popup to warn that vfr is on Framerate (FPS): */
         [fVidRateField setStringValue: @"Framerate (VFR On):"];  
         
     }
     else {
-        /* vfr is off, make sure the framerate popup is enabled */
-        [fVidRatePopUp setEnabled: YES];
-        /* and make sure the label for framerate is set to its default */  
+        /* make sure the label for framerate is set to its default */  
         [fVidRateField setStringValue: @"Framerate (FPS):"];
     }
     
