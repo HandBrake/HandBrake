@@ -183,7 +183,7 @@ namespace Handbrake.Functions
 
             // Picture Settings Tab
             #region Picture
-            mainWindow.drp_crop.Text = "Manual";
+            mainWindow.drp_crop.SelectedIndex = 1;
             mainWindow.text_top.Text = presetQuery.CropTop;
             mainWindow.text_bottom.Text = presetQuery.CropBottom;
             mainWindow.text_left.Text = presetQuery.CropLeft;
