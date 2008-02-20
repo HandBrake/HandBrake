@@ -164,6 +164,11 @@ namespace Handbrake.Functions
             mainWindow.drp_videoEncoder.Text = presetQuery.VideoEncoder;
             mainWindow.drp_audioCodec.Text = presetQuery.AudioEncoder;
 
+            if (presetQuery.AudioEncoder == "AAC + AC3")
+            {
+                mainWindow.text_destination.Text = mainWindow.text_destination.Text.Replace(".mp4", ".m4v");
+            }
+
             if (presetQuery.IpodAtom == true)
                 mainWindow.check_iPodAtom.CheckState = CheckState.Checked;
             else
@@ -174,7 +179,7 @@ namespace Handbrake.Functions
             else
                 mainWindow.check_optimiseMP4.CheckState = CheckState.Unchecked;
 
-            #endregion
+            #endregion  
 
             // Picture Settings Tab
             #region Picture
@@ -198,10 +203,6 @@ namespace Handbrake.Functions
             else
                 mainWindow.check_deblock.CheckState = CheckState.Unchecked;
 
-            if (presetQuery.ChapterMarkers == true)
-                mainWindow.Check_ChapterMarkers.CheckState = CheckState.Checked;
-            else
-                mainWindow.Check_ChapterMarkers.CheckState = CheckState.Unchecked;
 
             if (presetQuery.Anamorphic == true)
                 mainWindow.CheckPixelRatio.CheckState = CheckState.Checked;
@@ -269,6 +270,19 @@ namespace Handbrake.Functions
                 mainWindow.check_largeFile.CheckState = CheckState.Unchecked;
 
             
+
+            #endregion
+
+            // Chapter Markers Tab
+            #region Chapter Markers
+
+            if (presetQuery.ChapterMarkers == true)
+            {
+                mainWindow.Check_ChapterMarkers.CheckState = CheckState.Checked;
+                mainWindow.text_destination.Text = mainWindow.text_destination.Text.Replace(".mp4", ".m4v");
+            }
+            else
+                mainWindow.Check_ChapterMarkers.CheckState = CheckState.Unchecked;
 
             #endregion
 

@@ -122,7 +122,6 @@ namespace Handbrake
             this.list_queue.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.list_queue.HorizontalScrollbar = true;
             this.list_queue.Location = new System.Drawing.Point(12, 176);
-            this.list_queue.MultiColumn = true;
             this.list_queue.Name = "list_queue";
             this.list_queue.Size = new System.Drawing.Size(701, 145);
             this.list_queue.TabIndex = 28;

@@ -73,6 +73,9 @@ namespace Handbrake
             }
 
             // Load the presets
+            // Set some defaults for the dropdown menus. Just incase the normal or user presets dont load.
+            drp_crop.SelectedIndex = 0;
+
             lblStatus.Text = "Loading Presets ...";
             Application.DoEvents();
             if (Properties.Settings.Default.updatePresets == "Checked")
@@ -101,11 +104,6 @@ namespace Handbrake
                 ToolTip.Active = true;
                 Thread.Sleep(100);
             }
-
-            // Set some defaults for the dropdown menus. Just incase the normal or user presets dont load.
-            drp_crop.SelectedIndex = 0;
-            drp_videoEncoder.SelectedIndex = 2;
-            drp_audioCodec.SelectedIndex = 0;
 
             //Finished Loading
             lblStatus.Text = "Loading Complete!";
@@ -790,6 +788,7 @@ namespace Handbrake
             {
                 drp_audioMixDown.Enabled = false;
                 drp_audioMixDown.Text = "Automatic";
+                text_destination.Text.Replace(".mp4", ".m4v");
             }
             else
             {
