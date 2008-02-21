@@ -227,6 +227,7 @@
 - (IBAction) formatPopUpChanged: (id) sender;
 - (IBAction) codecsPopUpChanged: (id) sender;
 - (IBAction) encoderPopUpChanged: (id) sender;
+- (IBAction) autoSetM4vExtension: (id) sender;
 - (IBAction) twoPassCheckboxChanged: (id) sender;
 - (IBAction) videoFrameRateChanged: (id) sender;
 - (IBAction) setEnabledStateOfAudioMixdownControls: (id) sender;

@@ -2270,6 +2270,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             /* We show the HTTP Optimized checkbox here since we are mp4 */
             [fDstMp4HttpOptFileCheck setHidden: NO];
             [fDstMp4iPodFileCheck setHidden: NO];
+            
             break;
             
         case 1:
@@ -2339,6 +2340,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         }
     }
     
+    /* Lets check to see if we want to auto set the .m4v extension for mp4 */
+    [self autoSetM4vExtension: sender];
 	[self customSettingUsed: sender];	
 }
 
@@ -2357,15 +2360,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		[fVidEncoderPopUp addItemWithTitle: @"x264"];
 		[fVidEncoderPopUp selectItemAtIndex: 0];
         [fAdvancedOptions setHidden:NO];
-        /* if MP4 format and [fDstCodecsPopUp indexOfSelectedItem] > 1 we know that the audio is going to be
-         * either aac + ac3 passthru, or just ac3 passthru so we need to make sure the output file extension is m4v
-         * otherwise Quicktime will not play it at all */
-        if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fDstCodecsPopUp indexOfSelectedItem] > 1)
-        {
-            NSString *newpath = [[[fDstFile2Field stringValue] stringByDeletingPathExtension] stringByAppendingPathExtension: @"m4v"];
-            [fDstFile2Field setStringValue: [NSString stringWithFormat:
-                                             @"%@", newpath]];
-        }
+        [self autoSetM4vExtension: sender];
     }
     
     else if( ( FormatSettings[format][codecs] & HB_VCODEC_FFMPEG ) )
@@ -2429,6 +2424,19 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	[self twoPassCheckboxChanged: sender];
 }
 
+
+    /* if MP4 format and [fDstCodecsPopUp indexOfSelectedItem] > 1 we know that the audio is going to be
+         * either aac + ac3 passthru, or just ac3 passthru so we need to make sure the output file extension is m4v
+         * otherwise Quicktime will not play it at all */
+- (IBAction) autoSetM4vExtension: (id) sender
+{
+        if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fDstCodecsPopUp indexOfSelectedItem] > 1)
+        {
+            NSString *newpath = [[[fDstFile2Field stringValue] stringByDeletingPathExtension] stringByAppendingPathExtension: @"m4v"];
+            [fDstFile2Field setStringValue: [NSString stringWithFormat:
+                                             @"%@", newpath]];
+        }
+}
 /* Method to determine if we should change the UI
 To reflect whether or not a Preset is being used or if
 the user is using "Custom" settings by determining the sender*/
