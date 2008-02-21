@@ -34,13 +34,13 @@ struct hb_handle_s
 
     hb_lock_t    * state_lock;
     hb_state_t     state;
-    
+
     int            paused;
     hb_lock_t    * pause_lock;
     /* For MacGui active queue
        increments each time the scan thread completes*/
     int            scanCount;
-    
+
 };
 
 hb_work_object_t * hb_objects = NULL;
@@ -125,7 +125,7 @@ hb_handle_t * hb_init_real( int verbose, int update_check )
     avcodec_init();
     avcodec_register_all();
     av_register_codec_parser( &mpegaudio_parser);
-    
+
     /* Start library thread */
     hb_log( "hb_init: starting libhb thread" );
     h->die         = 0;
@@ -133,7 +133,7 @@ hb_handle_t * hb_init_real( int verbose, int update_check )
                                      HB_NORMAL_PRIORITY );
 
     return h;
-	
+
 	/* Set the scan count to start at 0 */
 	//scan_count = 0;
 }
@@ -209,21 +209,21 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
     h->main_thread = hb_thread_init( "libhb", thread_func, h,
                                      HB_NORMAL_PRIORITY );
 
-    hb_register( &hb_sync ); 
-	hb_register( &hb_decmpeg2 ); 
-	hb_register( &hb_decsub ); 
-	hb_register( &hb_render ); 
-	hb_register( &hb_encavcodec ); 
-	hb_register( &hb_encxvid ); 
-	hb_register( &hb_encx264 ); 
-	hb_register( &hb_deca52 ); 
-	hb_register( &hb_decdca ); 
-	hb_register( &hb_decavcodec ); 
-	hb_register( &hb_declpcm ); 
-	hb_register( &hb_encfaac ); 
-	hb_register( &hb_enclame ); 
-	hb_register( &hb_encvorbis ); 
-	
+    hb_register( &hb_sync );
+	hb_register( &hb_decmpeg2 );
+	hb_register( &hb_decsub );
+	hb_register( &hb_render );
+	hb_register( &hb_encavcodec );
+	hb_register( &hb_encxvid );
+	hb_register( &hb_encx264 );
+	hb_register( &hb_deca52 );
+	hb_register( &hb_decdca );
+	hb_register( &hb_decavcodec );
+	hb_register( &hb_declpcm );
+	hb_register( &hb_encfaac );
+	hb_register( &hb_enclame );
+	hb_register( &hb_encvorbis );
+
 	return h;
 }
 
@@ -288,7 +288,7 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index )
         hb_list_rem( h->list_title, title );
         hb_title_close( &title );
     }
-    
+
     hb_log( "hb_scan: path=%s, title_index=%d", path, title_index );
     h->scan_thread = hb_scan_init( h, path, title_index, h->list_title );
 }
@@ -444,12 +444,12 @@ void hb_set_anamorphic_size( hb_job_t * job,
         - Allows users to set the width
         - Handles ITU pixel aspects
     */
-    
+
     /* Set up some variables to make the math easier to follow. */
     hb_title_t * title = job->title;
     int cropped_width = title->width - job->crop[2] - job->crop[3] ;
     int cropped_height = title->height - job->crop[0] - job->crop[1] ;
-    int storage_aspect = cropped_width * 10000 / cropped_height;        
+    int storage_aspect = cropped_width * 10000 / cropped_height;
     int width = job->width;
     int height; // Gets set later, ignore user value
     int mod = job->modulus;
@@ -463,10 +463,10 @@ void hb_set_anamorphic_size( hb_job_t * job,
        is bigger than the max. If so, set it to the max (this is sloppy).
        If not, set job height to job width divided by storage aspect.
     */
-    
+
     if ( job->maxWidth && (job->maxWidth < job->width) )
             width = job->maxWidth;
-    
+
     if ( job->maxHeight && (job->maxHeight < (width / storage_aspect * 10000)) )
     {
         height = job->maxHeight;
@@ -475,8 +475,8 @@ void hb_set_anamorphic_size( hb_job_t * job,
     {
         height = width * 10000 / storage_aspect;
     }
-        
-        
+
+
     /* Time to get picture dimensions that divide cleanly.
        These variables will store temporary dimensions as we iterate. */
     int i, w, h;
@@ -486,12 +486,12 @@ void hb_set_anamorphic_size( hb_job_t * job,
         mod = job->modulus;
     else
         mod = 16;
-        
+
     /* Iterate through multiples of mod to find one close to job->width. */
     for( i = 1;; i++ )
     {
         w = mod * i;
-        
+
         if (w < width)
         {
             if ( ( width - w ) <= ( mod / 2 ) )
@@ -510,12 +510,12 @@ void hb_set_anamorphic_size( hb_job_t * job,
         }
     }
     width  = mod * (i);
-    
+
     /* Now do the same for a mod-friendly value near job->height. */
     for( i = 1;; i++)
     {
         h = i * mod;
-        
+
         if (h < height)
             {
                 if ( ( height - h ) <= ( mod / 2 ))
@@ -526,7 +526,7 @@ void hb_set_anamorphic_size( hb_job_t * job,
         if (h == height)
             /* Mod 16 dimensions, how nice! */
             break;
-            
+
         if ( h > height)
         {
             if ( ( h - height ) < ( mod / 2 ))
@@ -535,10 +535,10 @@ void hb_set_anamorphic_size( hb_job_t * job,
         }
     }
     height = mod  * (i);
-    
+
     int pixel_aspect_width = job->pixel_aspect_width;
     int pixel_aspect_height = job->pixel_aspect_height;
-    
+
     if (cropped_width <= 706)
     {
         /* Handle ITU PARs */
@@ -578,18 +578,18 @@ void hb_set_anamorphic_size( hb_job_t * job,
 
     /* Figure out what dimensions the source would display at. */
     int source_display_width = cropped_width * ((float)pixel_aspect_width / (float)pixel_aspect_height) ;
-   
+
     /* The film AR is the source's display width / cropped source height.
        The output display width is the output height * film AR.
        The output PAR is the output display width / output storage width. */
     pixel_aspect_width = height * source_display_width / cropped_height;
     pixel_aspect_height = width;
-    
+
     /* While x264 is smart enough to reduce fractions on its own, libavcodec
        needs some help with the math, so lose superfluous factors.            */
     hb_reduce( &pixel_aspect_width, &pixel_aspect_height,
                pixel_aspect_width, pixel_aspect_height );
-    
+
     /* Pass the results back to the caller */
     *output_width = width;
     *output_height = height;
@@ -784,7 +784,7 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
     memset( audio_lang, 0, sizeof( audio_lang ) );
 
     if ( job->indepth_scan || job->native_language ) {
-      
+
         /*
          * Find the first audio language that is being encoded
          */
@@ -805,12 +805,12 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
          * In all cases switch the language if we need to to our native
          * language.
          */
-        if( job->native_language ) 
+        if( job->native_language )
         {
-            if( strncasecmp( job->native_language, audio_lang, 
+            if( strncasecmp( job->native_language, audio_lang,
                              sizeof( audio_lang ) ) != 0 )
-            {             
-                
+            {
+
                 if( job->pass != 2 )
                 {
                     hb_log( "Enabled subtitles in native language '%s', audio is in '%s'",
@@ -835,12 +835,12 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
      * If doing a subtitle scan then add all the matching subtitles for this
      * language.
      */
-    if ( job->indepth_scan ) 
+    if ( job->indepth_scan )
     {
-        for( i=0; i < hb_list_count( title->list_subtitle ); i++ ) 
+        for( i=0; i < hb_list_count( title->list_subtitle ); i++ )
         {
             subtitle = hb_list_item( title->list_subtitle, i );
-            if( strcmp( subtitle->iso639_2, audio_lang ) == 0 ) 
+            if( strcmp( subtitle->iso639_2, audio_lang ) == 0 )
             {
                 /*
                  * Matched subtitle language with audio language, so
@@ -877,17 +877,17 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
             /*
              * Definitely not doing a subtitle scan.
              */
-            if( job->pass != 1 && job->native_language ) 
+            if( job->pass != 1 && job->native_language )
             {
                 /*
                  * We are not doing a subtitle scan but do want the
-                 * native langauge subtitle selected, so select it 
+                 * native langauge subtitle selected, so select it
                  * for pass 0 or pass 2 of a two pass.
                  */
-                for( i=0; i < hb_list_count( title->list_subtitle ); i++ ) 
+                for( i=0; i < hb_list_count( title->list_subtitle ); i++ )
                 {
                     subtitle = hb_list_item( title->list_subtitle, i );
-                    if( strcmp( subtitle->iso639_2, audio_lang ) == 0 ) 
+                    if( strcmp( subtitle->iso639_2, audio_lang ) == 0 )
                     {
                         /*
                          * Matched subtitle language with audio language, so
@@ -905,7 +905,7 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
                  * bother adding them for pass 0 or pass 2 of a two
                  * pass.
                  */
-                if( job->pass != 1 ) 
+                if( job->pass != 1 )
                 {
                     if( ( subtitle = hb_list_item( title->list_subtitle, job->subtitle ) ) )
                     {
@@ -932,7 +932,7 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
     {
         int i;
         int filter_count = hb_list_count( job->filters );
-        job_copy->filters = hb_list_init();        
+        job_copy->filters = hb_list_init();
         for( i = 0; i < filter_count; i++ )
         {
             /*
@@ -951,9 +951,9 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
             if( filter->settings )
                 filter_copy->settings = strdup( filter->settings );
             hb_list_add( job_copy->filters, filter_copy );
-        }        
+        }
     }
-    
+
     /* Add the job to the list */
     hb_list_add( h->jobs, job_copy );
     h->job_count = hb_count(h);
@@ -968,7 +968,7 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
 void hb_rem( hb_handle_t * h, hb_job_t * job )
 {
     hb_list_rem( h->jobs, job );
-    
+
     h->job_count = hb_count(h);
     if (h->job_count_permanent)
         h->job_count_permanent--;
@@ -1178,7 +1178,7 @@ static void thread_func( void * _h )
             hb_lock( h->state_lock );
             h->state.state                = HB_STATE_WORKDONE;
             h->state.param.workdone.error = h->work_error;
-            
+
             h->job_count = hb_count(h);
             if (h->job_count < 1)
                 h->job_count_permanent = 0;
@@ -1235,11 +1235,11 @@ void hb_set_state( hb_handle_t * h, hb_state_t * s )
         /* XXX Hack */
         if (h->job_count < 1)
             h->job_count_permanent = 1;
-        
+
         h->state.param.working.job_cur =
             h->job_count_permanent - hb_list_count( h->jobs );
         h->state.param.working.job_count = h->job_count_permanent;
-        
+
         // Set which job is being worked on
         if (h->current_job)
             h->state.param.working.sequence_id = h->current_job->sequence_id;

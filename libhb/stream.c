@@ -13,7 +13,7 @@
 #define min(a, b) a < b ? a : b
 
 typedef enum { hb_stream_type_unknown = 0, hb_stream_type_transport, hb_stream_type_program } hb_stream_type_t;
- 
+
 #define kMaxNumberDecodeStreams 8
 #define kMaxNumberVideoPIDS 16
 #define kMaxNumberAudioPIDS 16
@@ -31,7 +31,7 @@ struct hb_stream_s
     char         * path;
 	FILE		 * file_handle;
 	hb_stream_type_t stream_type;
-	
+
 	int				 ps_current_write_buffer_index;
 	int				 ps_current_read_buffer_index;
 
@@ -42,20 +42,20 @@ struct hb_stream_s
 		int				 write_pos;
 		unsigned char *  data;
 	} ps_decode_buffer[kNumDecodeBuffers];
-	
+
 	struct {
 		int lang_code;
 		int flags;
 		int rate;
 		int bitrate;
 	} a52_info[kMaxNumberAudioPIDS];
-	
+
 	int				 ts_video_pids[kMaxNumberVideoPIDS];
 	int				 ts_audio_pids[kMaxNumberAudioPIDS];
-	
+
 	int				 ts_number_video_pids;
 	int				 ts_number_audio_pids;
-	
+
 	unsigned char*	 ts_packetbuf[kMaxNumberDecodeStreams];
 	int				 ts_packetpos[kMaxNumberDecodeStreams];
 //	int				 ts_bufpackets[kMaxNumberDecodeStreams];
@@ -64,21 +64,21 @@ struct hb_stream_s
 	int				 ts_streamcont[kMaxNumberDecodeStreams];
 	int				 ts_streamid[kMaxNumberDecodeStreams];
 	int				 ts_audio_stream_type[kMaxNumberAudioPIDS];
-	
-	struct 
+
+	struct
 	{
 		unsigned short program_number;
 		unsigned short program_map_PID;
 	} pat_info[kMaxNumberPMTStreams];
 	int	 ts_number_pat_entries;
-	
+
 	struct
 	{
 		int reading;
 		unsigned char *tablebuf;
 		unsigned int tablepos;
 		unsigned char current_continuity_counter;
-		
+
 		int section_length;
 		int program_number;
 		unsigned int PCR_PID;
@@ -205,7 +205,7 @@ static void hb_stream_delete( hb_stream_t ** _d )
 			d->ps_decode_buffer[i].data = NULL;
 		}
 	}
-	
+
 	for (i = 0; i < kMaxNumberDecodeStreams; i++)
 	{
 		if (d->ts_packetbuf[i])
@@ -304,11 +304,11 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream)
 	char *dot_term = strrchr(aTitle->name, '.');
 	if (dot_term)
 		*dot_term = '\0';
-	
+
     // Height, width,  rate and aspect ratio information is filled in when the previews are built
 
     hb_stream_duration(stream, aTitle);
-    
+
     // One Chapter
     hb_chapter_t * chapter;
     chapter = calloc( sizeof( hb_chapter_t ), 1 );
@@ -318,7 +318,7 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream)
     chapter->minutes = aTitle->minutes;
     chapter->seconds = aTitle->seconds;
     hb_list_add( aTitle->list_chapter, chapter );
-    
+
     // Figure out how many audio streams we really have:
     // - For transport streams, for each PID listed in the PMT (whether
     //   or not it was an audio stream type) read the bitstream until we
@@ -460,7 +460,7 @@ static uint64_t hb_ps_stream_getVideoPTS(hb_stream_t *stream)
  * of the video. This says that we want to compute the rate over relatively
  * long segments to get a representative average but long segments increase
  * the likelihood that we'll cross a piece boundary.
- * 
+ *
  * What we do is take time stamp samples at several places in the file
  * (currently 16) then compute the average rate (i.e., ticks of video per
  * byte of the file) for all pairs of samples (N^2 rates computed for N
@@ -626,7 +626,7 @@ int hb_stream_read( hb_stream_t * src_stream, hb_buffer_t * b )
 	}
 	else
 	{
-		// Not quite enough data in the buffer - transfer what is present, fill the buffer and then 
+		// Not quite enough data in the buffer - transfer what is present, fill the buffer and then
 		// transfer what's still needed.
 		int transfer_size = HB_DVD_READ_BUFFER_SIZE;
 		int amt_avail_to_transfer = src_stream->ps_decode_buffer[read_buffer_index].len - src_stream->ps_decode_buffer[read_buffer_index].read_pos;
@@ -637,25 +637,25 @@ int hb_stream_read( hb_stream_t * src_stream, hb_buffer_t * b )
 		src_stream->ps_decode_buffer[read_buffer_index].read_pos = 0;
 		src_stream->ps_decode_buffer[read_buffer_index].write_pos = 0;
 		src_stream->ps_decode_buffer[read_buffer_index].len = 0;
-		
+
 		// Fill the buffer
 		hb_ts_stream_decode(src_stream);
-		
+
 		// Decoding will almost certainly have changed the current read buffer index
 		read_buffer_index = src_stream->ps_current_read_buffer_index;
-		
+
 		if (src_stream->ps_decode_buffer[read_buffer_index].len == 0)
 		{
 			hb_log("hb_stream_read - buffer after decode has zero length data");
 			return 0;
 		}
-		
+
 		// Read the bit we still need
 		memcpy(b->data+amt_avail_to_transfer, src_stream->ps_decode_buffer[read_buffer_index].data + src_stream->ps_decode_buffer[read_buffer_index].read_pos,transfer_size);
 		src_stream->ps_decode_buffer[read_buffer_index].read_pos += transfer_size;
-		
+
 		return 1;
-	}	
+	}
   }
   else
 	return 0;
@@ -676,20 +676,20 @@ int hb_stream_seek( hb_stream_t * src_stream, float f )
   new_pos = (off_t) ((double) (stream_size) * pos_ratio);
   new_pos &=~ (HB_DVD_READ_BUFFER_SIZE - 1);
   int r = fseeko(src_stream->file_handle, new_pos, SEEK_SET);
-  
+
   if (r == -1)
   {
     fseeko(src_stream->file_handle, cur_pos, SEEK_SET);
     return 0;
   }
-  
+
   if (src_stream->stream_type == hb_stream_type_transport)
   {
 	// We need to drop the current decoder output and move
 	// forwards to the next transport stream packet.
 	hb_ts_stream_reset(src_stream);
   }
-  
+
   // Now we must scan forwards for a valid start code (0x000001BA)
   int done = 0;
   hb_buffer_t *buf = hb_buffer_init(HB_DVD_READ_BUFFER_SIZE);
@@ -810,7 +810,7 @@ static void hb_ps_stream_find_audio_ids(hb_stream_t *stream, hb_title_t *title)
     // start looking 20% into the file since there's occasionally no
     // audio at the beginning (particularly for vobs).
     hb_stream_seek(stream, 0.2f);
-		
+
     while (--blksleft >= 0 && hb_stream_read(stream, buf) == 1)
     {
         hb_buffer_t *es;
@@ -850,7 +850,7 @@ static void hb_ps_stream_find_audio_ids(hb_stream_t *stream, hb_title_t *title)
 void hb_stream_update_audio(hb_stream_t *stream, hb_audio_t *audio)
 {
 	iso639_lang_t *lang;
-	
+
     if (stream->stream_type == hb_stream_type_transport)
 	{
         // Find the audio stream info for this PID. The stream index is
@@ -870,7 +870,7 @@ void hb_stream_update_audio(hb_stream_t *stream, hb_audio_t *audio)
             stream->a52_info[i].rate = 48000 /*Hz*/;
             stream->a52_info[i].bitrate = 384000 /*Bps*/;
         }
-		
+
 		lang = lang_for_code(stream->a52_info[i].lang_code);
 		if (!audio->rate)
 			audio->rate = stream->a52_info[i].rate;
@@ -885,7 +885,7 @@ void hb_stream_update_audio(hb_stream_t *stream, hb_audio_t *audio)
         // XXX should try to get language code from the AC3 bitstream
         lang = lang_for_code(0x0000);
     }
-	
+
 	if (!audio->input_channel_layout)
 	{
 		switch( audio->ac3flags & A52_CHANNEL_MASK )
@@ -934,7 +934,7 @@ void hb_stream_update_audio(hb_stream_t *stream, hb_audio_t *audio)
 			audio->input_channel_layout = audio->input_channel_layout | HB_INPUT_CH_LAYOUT_HAS_LFE;
 		}
 	}
-	
+
 	snprintf( audio->lang, sizeof( audio->lang ), "%s (%s)", strlen(lang->native_name) ? lang->native_name : lang->eng_name,
 	  audio->codec == HB_ACODEC_AC3 ? "AC3" : ( audio->codec == HB_ACODEC_MPGA ? "MPEG" : ( audio->codec == HB_ACODEC_DCA ? "DTS" : "LPCM" ) ) );
 	snprintf( audio->lang_simple, sizeof( audio->lang_simple ), "%s", strlen(lang->native_name) ? lang->native_name : lang->eng_name );
@@ -971,8 +971,8 @@ static void hb_stream_put_back(hb_stream_t *stream, int i)
 	else if (stream->stream_type == hb_stream_type_transport)
 	{
 		int read_buffer_index = stream->ps_current_read_buffer_index;
-		
-		// Transport streams are a little more tricky - so long as the 
+
+		// Transport streams are a little more tricky - so long as the
 		// amount to back up is still within the current decode buffer
 		// we can just adjust the read pos.
 		if (stream->ps_decode_buffer[read_buffer_index].read_pos - i > 0)
@@ -991,7 +991,7 @@ static void hb_stream_put_back(hb_stream_t *stream, int i)
  *
  **********************************************************************/
  #define PS_DECODE_BUFFER_SIZE ( 1024 * 1024 * 4)
- 
+
 static void hb_ts_stream_init(hb_stream_t *stream)
 {
 	// Output Program Stream
@@ -1004,25 +1004,25 @@ static void hb_ts_stream_init(hb_stream_t *stream)
 		stream->ps_decode_buffer[i].len = 0;
 		stream->ps_decode_buffer[i].write_pos = 0;
 	}
-	
+
 	for (i=0; i < kMaxNumberDecodeStreams; i++)
 	{
 		stream->ts_streamcont[i] = -1;
 	}
-	
+
 	stream->ps_current_write_buffer_index = 0;
 	stream->ps_current_read_buffer_index = 1;
-	
+
 	// Find the audio and video pids in the stream
 	hb_ts_stream_find_pids(stream);
-	
+
 	for (i=0; i < stream->ts_number_video_pids; i++)
 	{
 		// In progress audio/video data during the transport stream -> program stream processing
 		stream->ts_packetbuf[i] = (unsigned char *) malloc(1024 * 1024);
 		stream->ts_streamid[i] = 0xE0;		// Stream is Video
 	}
-	
+
 	for (i = stream->ts_number_video_pids; i < stream->ts_number_video_pids + stream->ts_number_audio_pids; i++)
 	{
 		stream->ts_packetbuf[i] = (unsigned char *) malloc(1024 * 1024);
@@ -1134,7 +1134,7 @@ static inline unsigned int get_bits(int bits)
 
 		int pos = bitpos >> 3;
 		bitval = (bitbuf[pos] << 24) | (bitbuf[pos + 1] << 16) | (bitbuf[pos + 2] << 8) | bitbuf[pos + 3];
-		
+
 		if (bits > 0)
 		{
 			val |= (bitval >> (32 - bits)) & bitmask[bits];
@@ -1198,8 +1198,8 @@ int decode_program_map(hb_stream_t* stream)
 	for (i = 0; i < program_info_length; i++)
 	{
 	  descriptor_buf[i] = get_bits(8);
-	}                                 
-	
+	}
+
 	int cur_pos =  9 /* data after the section length field*/ + program_info_length;
 	int done_reading_stream_types = 0;
 	while (!done_reading_stream_types)
@@ -1209,14 +1209,14 @@ int decode_program_map(hb_stream_t* stream)
 	  unsigned int elementary_PID = get_bits(13);
 		  get_bits(4);
 	  unsigned int ES_info_length = get_bits(12);
-	  
+
 	  int i=0;
 	  unsigned char *ES_info_buf = (unsigned char *) malloc(ES_info_length);
 	  for (i=0; i < ES_info_length; i++)
 	  {
 		ES_info_buf[i] = get_bits(8);
 	  }
-	
+
 	  if (stream_type == 0x02)
 	  {
 		if (stream->ts_number_video_pids <= kMaxNumberVideoPIDS)
@@ -1236,7 +1236,7 @@ int decode_program_map(hb_stream_t* stream)
             stream->ts_number_audio_pids++;
         stream->ts_audio_pids[i] = elementary_PID;
         stream->ts_audio_stream_type[i] = stream_type;
-		
+
 		if (ES_info_length > 0)
 		{
             decode_element_descriptors(stream, i, ES_info_buf, ES_info_length);
@@ -1244,13 +1244,13 @@ int decode_program_map(hb_stream_t* stream)
 	  }
 
 	  cur_pos += 5 /* stream header */ + ES_info_length;
-	  
+
 	  free(ES_info_buf);
-	  
+
 	  if (cur_pos >= section_length - 4 /* stop before the CRC */)
 		done_reading_stream_types = 1;
 	}
-							 
+
 	free(descriptor_buf);
 	return 1;
 }
@@ -1295,7 +1295,7 @@ int build_program_map(unsigned char *buf, hb_stream_t *stream)
 	{
 		pointer_len = buf[4 + adapt_len] + 1;
 		stream->pmt_info.tablepos = 0;
-	}	
+	}
 	// Get Continuity Counter
 	int continuity_counter = buf[3] & 0x0f;
 	if (!start && (stream->pmt_info.current_continuity_counter + 1 != continuity_counter))
@@ -1311,7 +1311,7 @@ int build_program_map(unsigned char *buf, hb_stream_t *stream)
     if (stream->pmt_info.reading && (amount_to_copy > 0))
     {
 			stream->pmt_info.tablebuf = realloc(stream->pmt_info.tablebuf, stream->pmt_info.tablepos + amount_to_copy);
-				
+
             memcpy(stream->pmt_info.tablebuf + stream->pmt_info.tablepos, buf + 4 + adapt_len + pointer_len, amount_to_copy);
             stream->pmt_info.tablepos += amount_to_copy;
     }
@@ -1323,7 +1323,7 @@ int decode_PAT(unsigned char *buf, hb_stream_t *stream)
 {
     unsigned char tablebuf[1024];
     unsigned int tablepos = 0;
-    
+
     int reading = 0;
 
 
@@ -1365,7 +1365,7 @@ int decode_PAT(unsigned char *buf, hb_stream_t *stream)
     {
             memcpy(tablebuf + tablepos, buf + 4 + adapt_len + 1, pointer_len - 1);
 
-			
+
             unsigned int pos = 0;
             //while (pos < tablepos)
             {
@@ -1394,7 +1394,7 @@ int decode_PAT(unsigned char *buf, hb_stream_t *stream)
                           {
                             unsigned int pkt_program_num = get_bits(16);
 							stream->pat_info[stream->ts_number_pat_entries].program_number = pkt_program_num;
-                              
+
                             get_bits(3);  // Reserved
                             if (pkt_program_num == 0)
                             {
@@ -1436,16 +1436,16 @@ static int flushbuf(hb_stream_t *stream)
 	stream->ps_current_write_buffer_index++;
 	if (stream->ps_current_write_buffer_index > kNumDecodeBuffers-1)
 		stream->ps_current_write_buffer_index = 0;
-	
+
 	if ( (stream->ps_decode_buffer[stream->ps_current_write_buffer_index].len != 0) || (stream->ps_decode_buffer[stream->ps_current_write_buffer_index].write_pos != 0) )
 	{
 		hb_log("flushbuf - new buffer (index %d) has non zero length and write position !", stream->ps_current_write_buffer_index);
 		return 0;
 	}
-	
+
 	stream->ps_current_read_buffer_index = old_write_index;
 	stream->ps_decode_buffer[stream->ps_current_read_buffer_index].read_pos = 0;
-	
+
 	return 1;
 }
 
@@ -1454,10 +1454,10 @@ static int fwrite64(void* buf, int elsize, int elnum, hb_stream_t* stream)
 	int size = elsize;
 	if (elnum > 1)
 		size *= elnum;
-	
+
 	int written = 0;
 	int current_write_index = stream->ps_current_write_buffer_index;
-	
+
 	if (size <= stream->ps_decode_buffer[current_write_index].size - stream->ps_decode_buffer[current_write_index].write_pos)
 	{
 		memcpy(stream->ps_decode_buffer[current_write_index].data + stream->ps_decode_buffer[current_write_index].write_pos, buf, size);
@@ -1476,7 +1476,7 @@ static int fwrite64(void* buf, int elsize, int elnum, hb_stream_t* stream)
 		{
 			// FLushing the buffer will have change the current write buffer
 			current_write_index = stream->ps_current_write_buffer_index;
-			
+
 			memcpy(stream->ps_decode_buffer[current_write_index].data, (unsigned char*)buf + written, size - written);
 			stream->ps_decode_buffer[current_write_index].write_pos += size - written;
 			stream->ps_decode_buffer[current_write_index].len = stream->ps_decode_buffer[current_write_index].write_pos;
@@ -1577,7 +1577,7 @@ int make_pes_header(unsigned char* buf, int streamid, int len, int64_t PTS, int6
 	set_bits(0, 1);								// PES_CRC_flag							1
 	set_bits(0, 1);								// PES_extension_flag					1
 	set_bits(hdrlen, 8);						// PES_header_data_length				8
-	
+
 	if (PTS_DTS_flags == 2)
 	{
 		set_bits(2, 4);								// '0010'							4
@@ -1613,7 +1613,7 @@ int generate_output_data(hb_stream_t *stream, int write_ac3, int curstream, int 
 {
 			unsigned char ac3_substream_id[4];
 			int ac3len = 0;
-			
+
 			if (write_ac3)
 			{
                 // Make a four byte DVD ac3 stream header
@@ -1624,10 +1624,10 @@ int generate_output_data(hb_stream_t *stream, int write_ac3, int curstream, int 
                 ac3_substream_id[3] = 0x02;
                 ac3len = 4;
 			}
-			
+
 			int written = 0;	// Bytes we've written to output file
 			int pos = 0;		// Position in PES packet buffer
-			
+
 			for (;;)
 			{
 				if ((stream->ps_decode_buffer[stream->ps_current_write_buffer_index].len % HB_DVD_READ_BUFFER_SIZE) != 0)
@@ -1673,7 +1673,7 @@ int generate_output_data(hb_stream_t *stream, int write_ac3, int curstream, int 
 					hb_log("write_output_stream - Failed to write output file!");
 					return 1;
 				}
-				
+
 				// Write stuffing
 				int i=0;
 				for (i = 0; i < stuffing; i++)				// Write any stuffing bytes
@@ -1736,7 +1736,7 @@ int generate_output_data(hb_stream_t *stream, int write_ac3, int curstream, int 
 static void hb_ts_handle_mpeg_audio(hb_stream_t *stream, int curstream, unsigned char* buf, int adapt_len )
 {
 	// Although we don't have AC3/A52 audio here we can still use the same structure to record this useful information.
-	
+
 	stream->a52_info[curstream - stream->ts_number_video_pids].flags = A52_STEREO;
 	stream->a52_info[curstream - stream->ts_number_video_pids].rate = 48000 /*Hz*/;
 	stream->a52_info[curstream - stream->ts_number_video_pids].bitrate = 384000 /*Bps*/;
@@ -1822,7 +1822,7 @@ static void hb_ts_stream_find_pids(hb_stream_t *stream)
 
 	// Read the Transport Stream Packets (188 bytes each) looking at first for PID 0 (the PAT PID), then decode that
 	// to find the program map PID and then decode that to get the list of audio and video PIDs
-	
+
 	int bytesReadInPacket = 0;
 	for (;;)
 	{
@@ -1835,7 +1835,7 @@ static void hb_ts_stream_find_pids(hb_stream_t *stream)
 			bytesReadInPacket += bytesRead;
 
 			hb_log("hb_ts_stream_find_pids - end of file");
-			break;	
+			break;
 		}
 		else
 		{
@@ -1854,13 +1854,13 @@ static void hb_ts_stream_find_pids(hb_stream_t *stream)
 
 		// Get pid
 		int pid = (((buf[1] & 0x1F) << 8) | buf[2]) & 0x1FFF;
-                
+
         if ((pid == 0x0000) && (stream->ts_number_pat_entries == 0))
 		{
 		  decode_PAT(buf, stream);
 		  continue;
 		}
-		
+
 		int pat_index = 0;
 		for (pat_index = 0; pat_index < stream->ts_number_pat_entries; pat_index++)
 		{
@@ -1868,8 +1868,8 @@ static void hb_ts_stream_find_pids(hb_stream_t *stream)
 			// multiple programs in the same transport stream, and yet there's actually only one
 			// program really in the stream. This seems to be true for transport streams that
 			// originate in the HDHomeRun but have been output by EyeTV's export utility. What I think
-			// is happening is that the HDHomeRun is sending the entire transport stream as broadcast, 
-			// but the EyeTV is only recording a single (selected) program number and not rewriting the 
+			// is happening is that the HDHomeRun is sending the entire transport stream as broadcast,
+			// but the EyeTV is only recording a single (selected) program number and not rewriting the
 			// PAT info on export to match what's actually on the stream.
 			// Until we have a way of handling multiple programs per transport stream elegantly we'll match
 			// on the first pat entry for which we find a matching program map PID.  The ideal solution would
@@ -1885,7 +1885,7 @@ static void hb_ts_stream_find_pids(hb_stream_t *stream)
 		if ((stream->ts_number_video_pids > 0) && (stream->ts_number_audio_pids > 0))
 		  break;
 	}
-	
+
 	hb_log("hb_ts_stream_find_pids - found the following PIDS");
 	hb_log("    Video PIDS : ");
 	int i=0;
@@ -1903,7 +1903,7 @@ static void hb_ts_stream_find_pids(hb_stream_t *stream)
 int index_of_video_pid(int pid, hb_stream_t *stream)
 {
 	int found_pid = -1, i = 0;
-	
+
 	for (i = 0; (i < stream->ts_number_video_pids) && (found_pid < 0); i++)
 	{
 		if (pid == stream->ts_video_pids[i])
@@ -1927,13 +1927,13 @@ int index_of_audio_pid(int pid, hb_stream_t *stream)
 int index_of_pid(int pid, hb_stream_t *stream)
 {
 	int found_pid = -1;
-	
+
 	if ((found_pid = index_of_video_pid(pid, stream)) >= 0)
 		return found_pid;
-	
+
 	if ((found_pid = index_of_audio_pid(pid, stream)) >= 0)
 		return found_pid;
-		
+
 	return found_pid;
 }
 
@@ -1947,23 +1947,23 @@ static void hb_ts_stream_decode(hb_stream_t *stream)
 	unsigned char buf[188];
 	int curstream;
 	int doing_iframe;
-	
+
 	int i = 0;
 	for (i=0; i < stream->ts_number_video_pids + stream->ts_number_audio_pids; i++)
 	{
 		stream->ts_skipbad[i] = 0;
 	}
-	
+
 	doing_iframe = 0;
-	
+
 	if ((stream->ts_number_video_pids == 0) || (stream->ts_number_audio_pids == 0))
 	{
 		hb_log("hb_ts_stream_decode  - no Video or Audio PID selected, cannot decode transport stream");
 		return;
 	}
-	
+
 	int curr_write_buffer_index = stream->ps_current_write_buffer_index;
-	
+
 	// Write output data until a buffer switch occurs.
 	while (curr_write_buffer_index == stream->ps_current_write_buffer_index)
 	{
@@ -1979,7 +1979,7 @@ static void hb_ts_stream_decode(hb_stream_t *stream)
 		// Check sync byte
 		if ((buf[0] != 0x47) && (buf[0] != 0x72) && (buf[0] != 0x29))
 		{
-            // lost sync - back up to where we started then try to 
+            // lost sync - back up to where we started then try to
             // re-establish sync.
             off_t pos = ftello(stream->file_handle) - 188;
             off_t pos2 = align_to_next_packet(stream->file_handle);
@@ -2019,11 +2019,11 @@ static void hb_ts_stream_decode(hb_stream_t *stream)
 		}
 		else
 			curstream = index_of_selected_pid;
-		
+
 		// Get start code
 		int start;
 		start = (buf[1] & 0x40) != 0;
-                  
+
 		if (!start && stream->ts_skipbad[curstream])
 			continue;
 
@@ -2053,7 +2053,7 @@ static void hb_ts_stream_decode(hb_stream_t *stream)
 			}
 			stream->ts_streamcont[curstream] = continuity;
 		}
-			
+
 		// Get adaption header size
 		if (adaption == 0)
 		{
@@ -2101,7 +2101,7 @@ static void hb_ts_stream_decode(hb_stream_t *stream)
 			// Couldn't find an AC3 sync start in this packet.. don't make a PES packet!
 			if (!sync_found)
 			{
-				adapt_len = 184;	
+				adapt_len = 184;
 				start = 0;
 			}
 		}
@@ -2160,7 +2160,7 @@ static void hb_ts_stream_decode(hb_stream_t *stream)
 					stream->ts_foundfirst[curstream] |= 1;
 				}
 			}
-			
+
 			// If we were skipping a bad packet, start fresh on this new PES packet..
 			if (stream->ts_skipbad[curstream] == 1)
 			{
@@ -2190,7 +2190,7 @@ static void hb_ts_stream_decode(hb_stream_t *stream)
                     write_ac3 = hb_ts_handle_ac3_audio(stream, curstream, buf, adapt_len);
 				}
 			}
-		
+
 		if (generate_output_data(stream, write_ac3, curstream, pid) != 0)
 			return ;
 		}

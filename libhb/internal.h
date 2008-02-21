@@ -74,7 +74,7 @@ void hb_buffer_pool_free( void );
 hb_buffer_t * hb_buffer_init( int size );
 void          hb_buffer_realloc( hb_buffer_t *, int size );
 void          hb_buffer_close( hb_buffer_t ** );
-void          hb_buffer_copy_settings( hb_buffer_t * dst, 
+void          hb_buffer_copy_settings( hb_buffer_t * dst,
                                        const hb_buffer_t * src );
 
 hb_fifo_t   * hb_fifo_init();
@@ -174,7 +174,7 @@ union hb_esconfig_u
         uint8_t headers[3][HB_CONFIG_MAX_SIZE];
         char *language;
     } vorbis;
-    
+
     struct
     {
     	/* ac3flags stores the flags from the AC3 source, as found in scan.c */

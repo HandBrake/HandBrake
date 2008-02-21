@@ -99,7 +99,7 @@ static void do_job( hb_job_t * job, int cpu_count )
     hb_title_t    * title;
     int             i, j;
     hb_work_object_t * w;
-    
+
     /* FIXME: This feels really hackish, anything better? */
     hb_work_object_t * audio_w = NULL;
     hb_work_object_t * sub_w = NULL;
@@ -150,7 +150,7 @@ static void do_job( hb_job_t * job, int cpu_count )
 	if (job->maxWidth && (job->width > job->maxWidth) && (job->pixel_ratio != 2))
 	{
 		job->width = job->maxWidth;
-		hb_fix_aspect( job, HB_KEEP_WIDTH );   
+		hb_fix_aspect( job, HB_KEEP_WIDTH );
 		hb_log("Width out of bounds, scaling down to %i", job->maxWidth);
 		hb_log("New dimensions %i * %i", job->width, job->height);
 	}
@@ -161,10 +161,10 @@ static void do_job( hb_job_t * job, int cpu_count )
 
     if ( job->grayscale )
         hb_log( " + grayscale mode" );
-    
+
     if ( job->vfr )
     {
-        int detelecine_present = 0;        
+        int detelecine_present = 0;
         if ( job->filters )
         {
             for( i = 0; i < hb_list_count( job->filters ); i++ )
@@ -172,27 +172,27 @@ static void do_job( hb_job_t * job, int cpu_count )
                 hb_filter_object_t * filter = hb_list_item( job->filters, i );
                 if (filter->id == FILTER_DETELECINE)
                     detelecine_present = 1;
-            }            
+            }
         }
-        
+
         if (!detelecine_present)
         {
             /* Allocate the filter. */
             hb_filter_object_t * filter =  malloc( sizeof( hb_filter_object_t ) );
-            
+
             /* Copy in the contents of the detelecine struct. */
             memcpy( filter, &hb_filter_detelecine, sizeof( hb_filter_object_t ) );
 
             /* Set the name to a copy of the template name so render.c has something to free. */
             filter->name = strdup(hb_filter_detelecine.name);
-            
+
             /* Add it to the list. */
             hb_list_add( job->filters, filter );
-            
+
             hb_log("work: VFR mode -- adding detelecine filter");
         }
     }
-    
+
     if( hb_list_count( job->filters ) )
     {
         hb_log(" + filters");
@@ -205,7 +205,7 @@ static void do_job( hb_job_t * job, int cpu_count )
                 hb_log("   + %s (default settings)", filter->name);
         }
     }
-    
+
     if( job->vfr)
     {
         hb_log( " + video frame rate: variable (detected %.3f fps)", (float) job->vrate /
@@ -215,7 +215,7 @@ static void do_job( hb_job_t * job, int cpu_count )
     {
         hb_log( " + video frame rate: %.3f fps", (float) job->vrate / (float) job->vrate_base);
     }
-    
+
     if( job->vquality >= 0.0 && job->vquality <= 1.0 )
     {
         hb_log( " + video quality %.2f", job->vquality );
@@ -268,10 +268,10 @@ static void do_job( hb_job_t * job, int cpu_count )
     w->fifo_in  = job->fifo_render;
     w->fifo_out = job->fifo_mpeg4;
     w->config   = &job->config;
-    
+
     hb_list_add( job->list_work, w );
 
-    if( job->select_subtitle && !job->indepth_scan ) 
+    if( job->select_subtitle && !job->indepth_scan )
     {
         /*
          * Must be second pass of a two pass with subtitle scan enabled, so
@@ -284,25 +284,25 @@ static void do_job( hb_job_t * job, int cpu_count )
         }
     }
 
-    for( i=0; i < hb_list_count(title->list_subtitle); i++ ) 
+    for( i=0; i < hb_list_count(title->list_subtitle); i++ )
     {
         subtitle =  hb_list_item( title->list_subtitle, i );
 
         if( subtitle )
         {
             hb_log( " + subtitle %x, %s", subtitle->id, subtitle->lang );
-            
+
             subtitle->fifo_in  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
             subtitle->fifo_raw = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
-            
+
             /*
              * Disable forced subtitles if we didn't find any in the scan
              * so that we display normal subtitles instead.
              *
              * select_subtitle implies that we did a scan.
              */
-            if( !job->indepth_scan && job->subtitle_force && 
-                job->select_subtitle ) 
+            if( !job->indepth_scan && job->subtitle_force &&
+                job->select_subtitle )
             {
                 if( subtitle->forced_hits == 0 )
                 {
@@ -316,7 +316,7 @@ static void do_job( hb_job_t * job, int cpu_count )
                  * looking for forced subtitles.
                  */
                 if( sub_w != NULL )
-                { 
+                {
                     /*
                      * Need to copy the prior subtitle structure so that we
                      * don't overwrite the fifos.
@@ -343,7 +343,7 @@ static void do_job( hb_job_t * job, int cpu_count )
     if( job->acodec & HB_ACODEC_AC3 )
     {
         hb_log( " + audio AC3 passthrough" );
-        
+
         /* Hard set correct sample rate for AC3 */
         job->arate = 48000;
     }
@@ -354,11 +354,11 @@ static void do_job( hb_job_t * job, int cpu_count )
                 "faac" : ( ( job->acodec & HB_ACODEC_LAME ) ? "lame" :
                 "vorbis" ) );
     }
-    
+
     if ( job->dynamic_range_compression > 1 )
         hb_log(" + dynamic range compression: %f", job->dynamic_range_compression);
 
-    /* if we are doing AC3 passthru (at the codec level, not pass-through), 
+    /* if we are doing AC3 passthru (at the codec level, not pass-through),
      * then remove any non-AC3 audios from the job */
     /* otherwise, Bad Things will happen */
     for( i = 0; i < hb_list_count( title->list_audio ); )
@@ -377,7 +377,7 @@ static void do_job( hb_job_t * job, int cpu_count )
     {
         audio = hb_list_item( title->list_audio, i );
         hb_log( "   + %x, %s", audio->id, audio->lang );
-		        
+
 		/* sense-check the current mixdown options */
 
 		/* log the requested mixdown */
@@ -410,7 +410,7 @@ static void do_job( hb_job_t * job, int cpu_count )
         {
         /* find out what the format of our source audio is */
         switch (audio->input_channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK) {
-        
+
             /* mono sources */
             case HB_INPUT_CH_LAYOUT_MONO:
                 /* regardless of what stereo mixdown we've requested, a mono source always get mixed down
@@ -546,11 +546,11 @@ static void do_job( hb_job_t * job, int cpu_count )
         w->config        = &audio->config;
         w->amixdown      = audio->amixdown;
         w->source_acodec = audio->codec;
-        
+
         /* FIXME: This feels really hackish, anything better? */
         audio_w = calloc( sizeof( hb_work_object_t ), 1 );
         audio_w = memcpy( audio_w, w, sizeof( hb_work_object_t ));
-        
+
         hb_list_add( job->list_work, audio_w );
 
         /*
@@ -583,11 +583,11 @@ static void do_job( hb_job_t * job, int cpu_count )
             w->config        = &audio->config;
             w->amixdown      = audio->amixdown;
             w->source_acodec = audio->codec;
-            
+
             /* FIXME: This feels really hackish, anything better? */
             audio_w = calloc( sizeof( hb_work_object_t ), 1 );
             audio_w = memcpy( audio_w, w, sizeof( hb_work_object_t ));
-        
+
             hb_list_add( job->list_work, audio_w );
         }
 
@@ -642,7 +642,7 @@ static void do_job( hb_job_t * job, int cpu_count )
         hb_list_rem( job->list_work, w );
         hb_thread_close( &w->thread );
         w->close( w );
-        
+
         /* FIXME: This feels really hackish, anything better? */
         if ( w->id == WORK_DECA52 ||
              w->id == WORK_DECDCA ||
@@ -655,7 +655,7 @@ static void do_job( hb_job_t * job, int cpu_count )
             w = NULL;
         }
     }
-    
+
     hb_list_close( &job->list_work );
 
     /* Stop read & write threads */
@@ -692,19 +692,19 @@ static void do_job( hb_job_t * job, int cpu_count )
          * Before closing the title print out our subtitle stats if we need to
          * Find the highest and lowest.
          */
-        for( i=0; i < hb_list_count( title->list_subtitle ); i++ ) 
+        for( i=0; i < hb_list_count( title->list_subtitle ); i++ )
         {
             subtitle =  hb_list_item( title->list_subtitle, i );
             hb_log( "Subtitle stream 0x%x '%s': %d hits (%d forced)",
                     subtitle->id, subtitle->lang, subtitle->hits,
                     subtitle->forced_hits );
-            if( subtitle->hits > subtitle_highest ) 
+            if( subtitle->hits > subtitle_highest )
             {
                 subtitle_highest = subtitle->hits;
                 subtitle_highest_id = subtitle->id;
-            } 
-            
-            if( subtitle->hits < subtitle_lowest ) 
+            }
+
+            if( subtitle->hits < subtitle_lowest )
             {
                 subtitle_lowest = subtitle->hits;
                 subtitle_lowest_id = subtitle->id;
@@ -718,7 +718,7 @@ static void do_job( hb_job_t * job, int cpu_count )
                 }
             }
         }
-        
+
         if( job->native_language ) {
             /*
              * We still have a native_language, so the audio and subtitles are
@@ -737,7 +737,7 @@ static void do_job( hb_job_t * job, int cpu_count )
                 subtitle_hit = subtitle_forced_id;
                 hb_log("Found a subtitle candidate id 0x%x (contains forced subs)",
                        subtitle_hit);
-            } else if( subtitle_lowest < subtitle_highest ) 
+            } else if( subtitle_lowest < subtitle_highest )
             {
                 /*
                  * OK we have more than one, and the lowest is lower,
@@ -746,7 +746,7 @@ static void do_job( hb_job_t * job, int cpu_count )
                  *
                  * Let's say 10% as a default.
                  */
-                if( subtitle_lowest < ( subtitle_highest * 0.1 ) ) 
+                if( subtitle_lowest < ( subtitle_highest * 0.1 ) )
                 {
                     subtitle_hit = subtitle_lowest_id;
                     hb_log( "Found a subtitle candidate id 0x%x",
@@ -758,14 +758,14 @@ static void do_job( hb_job_t * job, int cpu_count )
         }
     }
 
-    if( job->select_subtitle ) 
+    if( job->select_subtitle )
     {
-        if( job->indepth_scan ) 
+        if( job->indepth_scan )
         {
-            for( i=0; i < hb_list_count( title->list_subtitle ); i++ ) 
+            for( i=0; i < hb_list_count( title->list_subtitle ); i++ )
             {
                 subtitle =  hb_list_item( title->list_subtitle, i );
-                if( subtitle->id == subtitle_hit ) 
+                if( subtitle->id == subtitle_hit )
                 {
                     hb_list_rem( title->list_subtitle, subtitle );
                     *( job->select_subtitle ) = subtitle;
@@ -791,7 +791,7 @@ static void do_job( hb_job_t * job, int cpu_count )
             hb_filter_close( &filter );
         }
         hb_list_close( &job->filters );
-    }    
+    }
 
     hb_buffer_pool_free();
 
@@ -839,7 +839,7 @@ static void work_loop( void * _w )
             hb_log("work %s: Copying Chapter Break @ %lld", w->name, buf_in->start);
             buf_out->new_chap = 1;
         }
-        
+
         if( buf_in )
         {
             hb_buffer_close( &buf_in );

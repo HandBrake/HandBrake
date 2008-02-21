@@ -154,7 +154,7 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
         hb_error("Invalid VTS (title set) number: %i", title->vts);
         goto fail;
     }
-    
+
     hb_log( "scan: opening IFO for VTS %d", title->vts );
     if( !( vts = ifoOpen( d->reader, title->vts ) ) )
     {
@@ -177,7 +177,7 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
         hb_error( "scan: pgc not valid, skipping" );
         goto fail;
     }
- 
+
     /* Start cell */
     title->cell_start  = d->pgc->program_map[pgn-1] - 1;
     title->block_start = d->pgc->cell_playback[title->cell_start].first_sector;
@@ -637,7 +637,7 @@ int hb_dvd_seek( hb_dvd_t * d, float f )
 int is_nav_pack( unsigned char *buf )
 {
     /*
-     * The NAV Pack is comprised of the PCI Packet and DSI Packet, both 
+     * The NAV Pack is comprised of the PCI Packet and DSI Packet, both
      * of these start at known offsets and start with a special identifier.
      *
      * NAV = {
@@ -694,7 +694,7 @@ int hb_dvd_read( hb_dvd_t * d, hb_buffer_t * b )
         // should check and discover we're at eof.
         if ( d->cell_cur > d->cell_end )
             return 0;
-        
+
         for( ;; )
         {
             int block, pack_len, next_vobu, read_retry;
@@ -727,10 +727,10 @@ int hb_dvd_read( hb_dvd_t * d, hb_buffer_t * b )
                 continue;
             }
 
-            if ( !is_nav_pack( b->data ) ) { 
+            if ( !is_nav_pack( b->data ) ) {
                 (d->next_vobu)++;
                 if( d->in_sync == 1 ) {
-                    hb_log("dvd: Lost sync, searching for NAV pack at blk %d", 
+                    hb_log("dvd: Lost sync, searching for NAV pack at blk %d",
                            d->next_vobu);
                     d->in_sync = 0;
                 }
@@ -738,7 +738,7 @@ int hb_dvd_read( hb_dvd_t * d, hb_buffer_t * b )
             }
 
             navRead_DSI( &dsi_pack, &b->data[DSI_START_BYTE] );
-            
+
             if ( d->in_sync == 0 && d->cur_cell_id &&
                  (d->cur_vob_id != dsi_pack.dsi_gi.vobu_vob_idn ||
                   d->cur_cell_id != dsi_pack.dsi_gi.vobu_c_idn ) )
@@ -849,7 +849,7 @@ int hb_dvd_read( hb_dvd_t * d, hb_buffer_t * b )
             if ( d->pgc->cell_playback[d->cell_cur].first_sector < dsi_pack.dsi_gi.nv_pck_lbn &&
                  d->pgc->cell_playback[d->cell_cur].last_sector >= dsi_pack.dsi_gi.nv_pck_lbn )
             {
-                hb_log( "dvd: null prev_vobu in cell %d at block %d", d->cell_cur, 
+                hb_log( "dvd: null prev_vobu in cell %d at block %d", d->cell_cur,
                         d->block );
                 // treat like end-of-cell then go directly to start of next cell.
                 d->cell_cur  = d->cell_next;
@@ -861,7 +861,7 @@ int hb_dvd_read( hb_dvd_t * d, hb_buffer_t * b )
             }
             else
             {
-                hb_log( "dvd: Beginning of Cell (%d) at block %d", d->cell_cur, 
+                hb_log( "dvd: Beginning of Cell (%d) at block %d", d->cell_cur,
                        d->block );
                 if( d->in_cell )
                 {
@@ -887,15 +887,15 @@ int hb_dvd_read( hb_dvd_t * d, hb_buffer_t * b )
 
         if( ( dsi_pack.vobu_sri.next_vobu & (1 << 31 ) ) == 0 ||
             ( dsi_pack.vobu_sri.next_vobu & 0x3fffffff ) == 0x3fffffff )
-        { 
-            hb_log( "dvd: End of Cell (%d) at block %d", d->cell_cur, 
+        {
+            hb_log( "dvd: End of Cell (%d) at block %d", d->cell_cur,
                     d->block );
             d->cell_cur  = d->cell_next;
             d->in_cell = 0;
             d->next_vobu = d->pgc->cell_playback[d->cell_cur].first_sector;
             FindNextCell( d );
             d->cell_overlap = 1;
-            
+
         }
     }
     else
@@ -964,7 +964,7 @@ int hb_dvd_is_break( hb_dvd_t * d )
 	int     nr_of_ptts = d->ifo->vts_ptt_srpt->title[d->ttn-1].nr_of_ptts;
     pgc_t * pgc;
     int     cell;
-    
+
     for( i = nr_of_ptts - 1;
          i > 0;
          i-- )
@@ -985,7 +985,7 @@ int hb_dvd_is_break( hb_dvd_t * d )
             return 1;
         }
     }
-    
+
     return 0;
 }
 
@@ -1031,8 +1031,8 @@ static void FindNextCell( hb_dvd_t * d )
              i++;
         }
         d->cell_next = d->cell_cur + i + 1;
-        hb_log( "dvd: Skipping multi-angle cells %d-%d", 
-                d->cell_cur, 
+        hb_log( "dvd: Skipping multi-angle cells %d-%d",
+                d->cell_cur,
                 d->cell_next - 1 );
     }
     else

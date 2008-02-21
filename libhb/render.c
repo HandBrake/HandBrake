@@ -16,7 +16,7 @@ struct hb_work_private_s
     struct SwsContext  * context;
     AVPicture            pic_tmp_in;
     AVPicture            pic_tmp_crop;
-    AVPicture            pic_tmp_out;        
+    AVPicture            pic_tmp_out;
     hb_buffer_t        * buf_scale;
     hb_fifo_t          * subtitle_queue;
     hb_fifo_t          * delay_queue;
@@ -36,7 +36,7 @@ int  renderWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
 void renderClose( hb_work_object_t * );
 
 hb_work_object_t hb_render =
-{   
+{
     WORK_RENDER,
     "Renderer",
     renderInit,
@@ -60,7 +60,7 @@ static uint8_t *getU(uint8_t *data, int width, int height, int x, int y)
 
 static uint8_t *getV(uint8_t *data, int width, int height, int x, int y)
 {
-    return(&data[(((y/2) * (width/2)) + (x/2)) + (width*height) + 
+    return(&data[(((y/2) * (width/2)) + (x/2)) + (width*height) +
                  (width*height)/4]);
 }
 
@@ -82,13 +82,13 @@ static void ApplySub( hb_job_t * job, hb_buffer_t * buf,
     {
         return;
     }
-    
-    /* 
+
+    /*
      * If necessary, move the subtitle so it is not in a cropped zone.
      * When it won't fit, we center it so we lose as much on both ends.
-     * Otherwise we try to leave a 20px or 2% margin around it. 
+     * Otherwise we try to leave a 20px or 2% margin around it.
      */
-    margin_top = ( ( title->height - job->crop[0] - job->crop[1] ) * 
+    margin_top = ( ( title->height - job->crop[0] - job->crop[1] ) *
                    margin_percent ) / 100;
 
     if( margin_top > 20 )
@@ -99,7 +99,7 @@ static void ApplySub( hb_job_t * job, hb_buffer_t * buf,
         margin_top = 20;
     }
 
-    if( sub->height > title->height - job->crop[0] - job->crop[1] - 
+    if( sub->height > title->height - job->crop[0] - job->crop[1] -
         ( margin_top * 2 ) )
     {
         /*
@@ -165,26 +165,26 @@ static void ApplySub( hb_job_t * job, hb_buffer_t * buf,
                      * Merge the luminance and alpha with the picture
                      */
                     out[j] = ( (uint16_t) out[j] * ( 16 - (uint16_t) alpha[j] ) +
-                               (uint16_t) lum[j] * (uint16_t) alpha[j] ) >> 4;   
+                               (uint16_t) lum[j] * (uint16_t) alpha[j] ) >> 4;
                     /*
                      * Set the chroma (colour) based on whether there is
                      * any alpha at all. Don't try to blend with the picture.
                      */
                     chromaU = getU(buf->data, title->width, title->height,
                                    offset_left+j, offset_top+i);
-                    
+
                     chromaV = getV(buf->data, title->width, title->height,
                                    offset_left+j, offset_top+i);
-                    
+
                     if( alpha[j] > 0 )
                     {
                         /*
-                         * Add the chroma from the sub-picture, as this is 
+                         * Add the chroma from the sub-picture, as this is
                          * not a transparent element.
                          */
                         *chromaU = sub_chromaU[j];
                         *chromaV = sub_chromaV[j];
-                    } 
+                    }
                 }
             }
         }
@@ -207,7 +207,7 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_title_t * title = job->title;
     hb_buffer_t * in = *buf_in, * buf_tmp_in = *buf_in;
     hb_buffer_t * ivtc_buffer = NULL;
-    
+
     if(!in->data)
     {
         /* If the input buffer is end of stream, send out an empty one
@@ -223,11 +223,11 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
      * use the subtitles.
      */
     if( job->indepth_scan )
-    {      
+    {
         *buf_out = NULL;
         return HB_WORK_OK;
     }
-    
+
     /* Push subtitles onto queue just in case we need to delay a frame */
     if( in->sub )
     {
@@ -247,37 +247,37 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     }
 
     /* Setup render buffer */
-    hb_buffer_t * buf_render = hb_buffer_init( 3 * job->width * job->height / 2 );  
-    
+    hb_buffer_t * buf_render = hb_buffer_init( 3 * job->width * job->height / 2 );
+
     /* Apply filters */
     if( job->filters )
     {
         int filter_count = hb_list_count( job->filters );
         int i;
-        
+
         for( i = 0; i < filter_count; i++ )
         {
             hb_filter_object_t * filter = hb_list_item( job->filters, i );
-            
+
             if( !filter )
             {
                 continue;
-            }            
-            
+            }
+
             hb_buffer_t * buf_tmp_out = NULL;
-            
+
             int result = filter->work( buf_tmp_in,
-                                       &buf_tmp_out, 
-                                       PIX_FMT_YUV420P, 
-                                       title->width, 
-                                       title->height, 
+                                       &buf_tmp_out,
+                                       PIX_FMT_YUV420P,
+                                       title->width,
+                                       title->height,
                                        filter->private_data );
-            
-            /* 
-             * FILTER_OK:      set temp buffer to filter buffer, continue 
-             * FILTER_DELAY:   set temp buffer to NULL, abort 
-             * FILTER_DROP:    set temp buffer to NULL, pop subtitle, abort 
-             * FILTER_FAILED:  leave temp buffer alone, continue 
+
+            /*
+             * FILTER_OK:      set temp buffer to filter buffer, continue
+             * FILTER_DELAY:   set temp buffer to NULL, abort
+             * FILTER_DROP:    set temp buffer to NULL, pop subtitle, abort
+             * FILTER_FAILED:  leave temp buffer alone, continue
              */
             if( result == FILTER_OK )
             {
@@ -287,7 +287,7 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             {
                 buf_tmp_in = NULL;
                 break;
-            }            
+            }
             else if( result == FILTER_DROP )
             {
                 if( job->vfr )
@@ -303,11 +303,11 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     pv->lost_time[1] += (temp_duration / 4);
                     pv->lost_time[2] += (temp_duration / 4);
                     pv->lost_time[3] += ( temp_duration - (temp_duration / 4) - (temp_duration / 4) - (temp_duration / 4) );
-                    
+
                     pv->total_lost_time += temp_duration;
                     pv->dropped_frames++;
-                    
-                    hb_fifo_get( pv->subtitle_queue );                    
+
+                    hb_fifo_get( pv->subtitle_queue );
                     buf_tmp_in = NULL;
                 }
                 else
@@ -317,43 +317,43 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 break;
             }
         }
-    }   
+    }
 
     if( buf_tmp_in )
     {
         /* Cache frame start and stop times, so we can renumber
-           time stamps if dropping frames for VFR.              */ 
+           time stamps if dropping frames for VFR.              */
         int i;
         for( i = 3; i >= 1; i-- )
         {
             pv->last_start[i] = pv->last_start[i-1];
             pv->last_stop[i] = pv->last_stop[i-1];
         }
-        
+
         /* In order to make sure we have continuous time stamps, store
            the current frame's duration as starting when the last one stopped. */
         pv->last_start[0] = pv->last_stop[1];
         pv->last_stop[0] = pv->last_start[0] + (in->stop - in->start);
     }
-    
+
     /* Apply subtitles */
     if( buf_tmp_in )
     {
-        hb_buffer_t * subtitles = hb_fifo_get( pv->subtitle_queue );        
+        hb_buffer_t * subtitles = hb_fifo_get( pv->subtitle_queue );
         if( subtitles )
         {
             ApplySub( job, buf_tmp_in, &subtitles );
         }
     }
-    
+
     /* Apply crop/scale if specified */
     if( buf_tmp_in && pv->context )
     {
-        avpicture_fill( &pv->pic_tmp_in, buf_tmp_in->data, 
+        avpicture_fill( &pv->pic_tmp_in, buf_tmp_in->data,
                         PIX_FMT_YUV420P,
                         title->width, title->height );
-        
-        avpicture_fill( &pv->pic_tmp_out, buf_render->data, 
+
+        avpicture_fill( &pv->pic_tmp_out, buf_render->data,
                         PIX_FMT_YUV420P,
                         job->width, job->height );
 
@@ -366,11 +366,11 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                   pv->pic_tmp_crop.data, pv->pic_tmp_crop.linesize,
                   0, title->height - (job->crop[0] + job->crop[1]),
                   pv->pic_tmp_out.data,  pv->pic_tmp_out.linesize);
-        
+
         hb_buffer_copy_settings( buf_render, buf_tmp_in );
-        
+
         buf_tmp_in = buf_render;
-    }  
+    }
 
     /* Set output to render buffer */
     (*buf_out) = buf_render;
@@ -382,31 +382,31 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         {
             hb_buffer_close( buf_in );
             *buf_in = NULL;
-        }        
+        }
         if( buf_out && *buf_out )
         {
-            hb_buffer_close( buf_out );        
+            hb_buffer_close( buf_out );
             *buf_out = NULL;
         }
     }
     else if( buf_tmp_in != buf_render )
-    {    
+    {
         /* Copy temporary results and settings into render buffer */
         memcpy( buf_render->data, buf_tmp_in->data, buf_render->size );
         hb_buffer_copy_settings( buf_render, buf_tmp_in );
     }
-    
+
     if (*buf_out && job->vfr)
     {
         hb_fifo_push( pv->delay_queue, *buf_out );
-        *buf_out = NULL;        
+        *buf_out = NULL;
     }
 
     /*
      * Keep the last three frames in our queue, this ensures that we have the last
      * two always in there should we need to rewrite the durations on them.
      */
-    
+
     if( job->vfr )
     {
         if( hb_fifo_size( pv->delay_queue ) >= 3 )
@@ -435,17 +435,17 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
              * ones you need a 2 frame delay between
              * reading input and writing output.
              */
-                                   
+
             /* We want to extend the outputted frame's duration by the value
               stored in the 4th slot of the lost_time array. Because we need
               to adjust all the values in the array so they're contiguous,
               extend the duration inside the array first, before applying
               it to the current frame buffer. */
             pv->last_stop[3] += pv->lost_time[3];
-            
+
             /* Log how much time has been added back in to the video. */
             pv->total_gained_time += pv->lost_time[3];
-            
+
             /* We've pulled the 4th value from the lost_time array
                and added it to the last_stop array's 4th slot. Now, rotate the
                 lost_time array so the 4th slot now holds the 3rd's value, and
@@ -456,11 +456,11 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 pv->lost_time[i+1] = pv->lost_time[i];
             }
             pv->lost_time[0] = 0;
-            
+
             /* Log how many frames have had their durations extended. */
             pv->extended_frames++;
         }
-        
+
         /* We can't use the given time stamps. Previous frames
            might already have been extended, throwing off the
            raw values fed to render.c. Instead, their
@@ -470,12 +470,12 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
            lost time, it will have happened above. */
         ivtc_buffer->start = pv->last_start[3];
         ivtc_buffer->stop = pv->last_stop[3];
-        
+
         /* Set the 3rd cached frame to start when this one stops,
            and so on down the line. If any of them need to be
            extended as well to make up lost time, it'll be handled
            on the next loop through the renderer.  */
-        int i;   
+        int i;
         for (i = 2; i >= 0; i--)
         {
             int temp_duration = pv->last_stop[i] - pv->last_start[i];
@@ -499,31 +499,31 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
 void renderClose( hb_work_object_t * w )
 {
-    hb_work_private_t * pv = w->private_data;   
+    hb_work_private_t * pv = w->private_data;
 
     hb_log("render: lost time: %lld (%i frames)", pv->total_lost_time, pv->dropped_frames);
     hb_log("render: gained time: %lld (%i frames) (%lld not accounted for)", pv->total_gained_time, pv->extended_frames, pv->total_lost_time - pv->total_gained_time);
     if (pv->dropped_frames)
         hb_log("render: average dropped frame duration: %lld", (pv->total_lost_time / pv->dropped_frames) );
-    
+
     /* Cleanup subtitle queue */
     if( pv->subtitle_queue )
     {
         hb_fifo_close( &pv->subtitle_queue );
     }
-    
+
     if( pv->delay_queue )
     {
         hb_fifo_close( &pv->delay_queue );
     }
-   
+
     /* Cleanup render work structure */
     free( pv );
-    w->private_data = NULL;    
+    w->private_data = NULL;
 }
 
 int renderInit( hb_work_object_t * w, hb_job_t * job )
-{   
+{
     /* Allocate new private work object */
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     pv->job = job;
@@ -541,10 +541,10 @@ int renderInit( hb_work_object_t * w, hb_job_t * job )
                                      PIX_FMT_YUV420P,
                                      job->width, job->height, PIX_FMT_YUV420P,
                                      (uint16_t)(SWS_LANCZOS|SWS_ACCURATE_RND), NULL, NULL, NULL);
-    }   
-    
+    }
+
     /* Setup FIFO queue for subtitle cache */
-    pv->subtitle_queue = hb_fifo_init( 8 );    
+    pv->subtitle_queue = hb_fifo_init( 8 );
     pv->delay_queue = hb_fifo_init( 8 );
 
     /* VFR IVTC needs a bunch of time-keeping variables to track
@@ -569,19 +569,19 @@ int renderInit( hb_work_object_t * w, hb_job_t * job )
     {
         int filter_count = hb_list_count( job->filters );
         int i;
-        
+
         for( i = 0; i < filter_count; i++ )
         {
             hb_filter_object_t * filter = hb_list_item( job->filters, i );
 
             if( !filter ) continue;
-            
+
             filter->private_data = filter->init( PIX_FMT_YUV420P,
                                                  title->width,
                                                  title->height,
                                                  filter->settings );
         }
     }
-    
+
     return 0;
 }

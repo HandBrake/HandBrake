@@ -23,7 +23,7 @@ hb_work_object_t hb_encx264 =
     encx264Close
 };
 
-#define DTS_BUFFER_SIZE 32 
+#define DTS_BUFFER_SIZE 32
 
 /*
  * The frame info struct remembers information about each frame across calls
@@ -32,7 +32,7 @@ hb_work_object_t hb_encx264 =
  * chosen so that two successive frames will have different values in the
  * bits over any plausible range of frame rates. (Starting with bit 9 allows
  * any frame rate slower than 175fps.) The MSB determines the size of the array.
- * It is chosen so that two frames can't use the same slot during the 
+ * It is chosen so that two frames can't use the same slot during the
  * encoder's max frame delay (set by the standard as 16 frames) and so
  * that, up to some minimum frame rate, frames are guaranteed to map to
  * different slots. (An MSB of 16 which is 2^(16-9+1) = 256 slots guarantees
@@ -88,16 +88,16 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     param.i_height     = job->height;
     param.i_fps_num    = job->vrate;
     param.i_fps_den    = job->vrate_base;
-    
+
     if (job->vrate_base != 1080000)
     {
         /* If the fps isn't 25, adjust the key intervals. Add 1 because
            we want 24, not 23 with a truncated remainder.               */
         param.i_keyint_min     = (job->vrate / job->vrate_base) + 1;
         param.i_keyint_max = (10 * job->vrate / job->vrate_base) + 1;
-        hb_log("encx264: keyint-min: %i, keyint-max: %i", param.i_keyint_min, param.i_keyint_max);        
+        hb_log("encx264: keyint-min: %i, keyint-max: %i", param.i_keyint_min, param.i_keyint_max);
     }
-    
+
     param.i_log_level  = X264_LOG_INFO;
     if( job->h264_level )
     {
@@ -111,13 +111,13 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     param.analyse.i_subpel_refine = 4;
 
     /*
-       	This section passes the string x264opts to libx264 for parsing into 
+       	This section passes the string x264opts to libx264 for parsing into
         parameter names and values.
 
         The string is set up like this:
         option1=value1:option2=value 2
 
-        So, you have to iterate through based on the colons, and then put 
+        So, you have to iterate through based on the colons, and then put
         the left side of the equals sign in "name" and the right side into
         "value." Then you hand those strings off to x264 for interpretation.
 
@@ -273,21 +273,21 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         /* Basic initDelay value is the clockrate divided by the FPS
            -- the length of one frame in clockticks.                  */
         pv->init_delay = (float)90000 / (float)((float)job->vrate / (float)job->vrate_base);
-       
+
         /* 23.976-length frames are 3753.75 ticks long. That means 25%
            will come out as 3753, 75% will be 3754. The delay has to be
            the longest possible frame duration, 3754. However, 3753.75
            gets truncated to 3753, so if that's what it is, ++ it.     */
         if (pv->init_delay == 3753)
             pv->init_delay++;
-       
+
         /* For VFR, libhb sees the FPS as 29.97, but the longest frames
            will use the duration of frames running at 23.976fps instead.. */
         if (job->vfr)
         {
             pv->init_delay = 7506;
         }
-   
+
         /* The delay is 2 frames for regular b-frames, 3 for b-pyramid.
            Since job->areBframes is 1 for b-frames and 2 for b-pyramid,
            add one to it and use it as a multiplier.                    */
@@ -365,7 +365,7 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
         if( pv->dts_next == -1 )
         {
-            /* we don't have a start time yet so use the first frame's 
+            /* we don't have a start time yet so use the first frame's
              * start. All other frame times will be determined by the
              * sum of the prior output frame durations in *DTS* order
              * (not by the order they arrive here). This timing change is
@@ -406,7 +406,7 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
         }
         pv->last_stop = in->stop;
 
-        // Remember info about this frame that we need to pass across 
+        // Remember info about this frame that we need to pass across
         // the x264_encoder_encode call (since it reorders frames).
         save_frame_info( pv, in );
 
@@ -414,7 +414,7 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
         pv->pic_in.i_pts = in->start;
 
         x264_encoder_encode( pv->x264, &nal, &i_nal,
-                             &pv->pic_in, &pic_out );        
+                             &pv->pic_in, &pic_out );
     }
     else
     {
@@ -522,7 +522,7 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
                        themselves reference frames, figure it out on our own. */
                     if( (buf->frametype == HB_FRAME_B) && (nal[i].i_ref_idc != NAL_PRIORITY_DISPOSABLE) )
                         buf->frametype = HB_FRAME_BREF;
-                    
+
                     /* Store the output presentation time stamp
                        from x264 for use by muxmp4 in off-setting
                        b-frames with the CTTS atom. */

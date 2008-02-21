@@ -21,7 +21,7 @@ struct hb_mux_data_s
 {
     int              codec;
     ogg_stream_state os;
-    int              i_packet_no;                                               
+    int              i_packet_no;
 };
 
 typedef struct __attribute__((__packed__))
@@ -96,7 +96,7 @@ static int OGMFlush( hb_mux_object_t * m, hb_mux_data_t * mux_data )
         }
     }
     return 0;
-}                                                                               
+}
 
 /**********************************************************************
  * OGMInit
@@ -107,7 +107,7 @@ static int OGMInit( hb_mux_object_t * m )
 {
     hb_job_t   * job   = m->job;
     hb_title_t * title = job->title;
-    
+
     hb_audio_t    * audio;
     hb_mux_data_t * mux_data;
     int i;
@@ -200,7 +200,7 @@ static int OGMInit( hb_mux_object_t * m )
                 SetDWLE( &h.i_buffer_size, 30 * 1024 );
                 SetWLE ( &h.i_bits_per_sample, 0 );
 
-                SetDWLE( &h.header.audio.i_channels, 2 ); 
+                SetDWLE( &h.header.audio.i_channels, 2 );
                 SetDWLE( &h.header.audio.i_block_align, 0 );
                 SetDWLE( &h.header.audio.i_avgbytespersec,
                          job->abitrate / 8 );
@@ -319,7 +319,7 @@ static int OGMMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         }
         free( op.packet );
     }
-    return 0; 
+    return 0;
 }
 
 static int OGMEnd( hb_mux_object_t * m )
@@ -337,7 +337,7 @@ static int OGMEnd( hb_mux_object_t * m )
         return -1;
     }
     ogg_stream_clear( &mux_data->os );
-    
+
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = hb_list_item( title->list_audio, i );
@@ -351,7 +351,7 @@ static int OGMEnd( hb_mux_object_t * m )
 
     fclose( m->file );
     hb_log( "muxogm: `%s' closed", job->file );
-    
+
     return 0;
 }
 

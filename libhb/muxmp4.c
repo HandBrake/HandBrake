@@ -22,7 +22,7 @@ struct hb_mux_object_s
 
     /* Cumulated durations so far, in timescale units (see MP4Mux) */
     uint64_t sum_dur;
-	
+
     /* Chapter state information for muxing */
     MP4TrackId chapter_track;
     int current_chapter;
@@ -51,21 +51,21 @@ static struct hb_text_sample_s *MP4CreateTextSample( char *textString, uint64_t 
     struct hb_text_sample_s *sample = NULL;
     int stringLength = strlen(textString);
     int x;
-    
+
     if( stringLength < 1024 )
     {
         sample = malloc( sizeof( struct hb_text_sample_s ) );
 
-        //textLength = (stringLength; // Account for BOM     
+        //textLength = (stringLength; // Account for BOM
         sample->length = stringLength + 2 + 12; // Account for text length code and other marker
         sample->duration = (MP4Duration)duration;
-        
+
         // 2-byte length marker
         sample->sample[0] = (stringLength >> 8) & 0xff;
         sample->sample[1] = stringLength & 0xff;
-        
+
         strncpy( (char *)&(sample->sample[2]), textString, stringLength );
-        
+
         x = 2 + stringLength;
 
         // Modifier Length Marker
@@ -73,23 +73,23 @@ static struct hb_text_sample_s *MP4CreateTextSample( char *textString, uint64_t 
         sample->sample[x+1] = 0x00;
         sample->sample[x+2] = 0x00;
         sample->sample[x+3] = 0x0C;
-        
+
         // Modifier Type Code
         sample->sample[x+4] = 'e';
         sample->sample[x+5] = 'n';
         sample->sample[x+6] = 'c';
         sample->sample[x+7] = 'd';
-        
+
         // Modifier Value
         sample->sample[x+8] = 0x00;
         sample->sample[x+9] = 0x00;
         sample->sample[x+10] = (256 >> 8) & 0xff;
         sample->sample[x+11] = 256 & 0xff;
     }
-    
+
     return sample;
 }
- 
+
 /**********************************************************************
  * MP4GenerateChapterSample
  **********************************************************************
@@ -101,24 +101,24 @@ static struct hb_text_sample_s *MP4GenerateChapterSample( hb_mux_object_t * m, u
     hb_chapter_t *chapter_data = hb_list_item( m->job->title->list_chapter, chapter - 1 );
     char tmp_buffer[1024];
     char *string = tmp_buffer;
-    
+
     tmp_buffer[0] = '\0';
-    
+
     if( chapter_data != NULL )
     {
         string = chapter_data->title;
     }
-    
+
     if( strlen(string) == 0 || strlen(string) >= 1024 )
     {
         snprintf( tmp_buffer, 1023, "Chapter %03i", chapter );
         string = tmp_buffer;
     }
-    
+
     return MP4CreateTextSample( string, duration );
 }
 
- 
+
 /**********************************************************************
  * MP4Init
  **********************************************************************
@@ -128,21 +128,21 @@ static int MP4Init( hb_mux_object_t * m )
 {
     hb_job_t   * job   = m->job;
     hb_title_t * title = job->title;
-    
+
     hb_audio_t    * audio;
     hb_mux_data_t * mux_data;
     int i;
     u_int16_t language_code;
-    
+
     /* Flags for enabling/disabling tracks in an MP4. */
     typedef enum { TRACK_DISABLED = 0x0, TRACK_ENABLED = 0x1, TRACK_IN_MOVIE = 0x2, TRACK_IN_PREVIEW = 0x4, TRACK_IN_POSTER = 0x8}  track_header_flags;
-    
+
 
     /* Create an empty mp4 file */
     if (job->largeFileSize)
     /* Use 64-bit MP4 file */
     {
-        m->file = MP4Create( job->file, MP4_DETAILS_ERROR, MP4_CREATE_64BIT_DATA ); 
+        m->file = MP4Create( job->file, MP4_DETAILS_ERROR, MP4_CREATE_64BIT_DATA );
         hb_log("Using 64-bit MP4 formatting.");
     }
     else
@@ -150,7 +150,7 @@ static int MP4Init( hb_mux_object_t * m )
     {
         m->file = MP4Create( job->file, MP4_DETAILS_ERROR, 0 );
     }
-    
+
     if (m->file == MP4_INVALID_FILE_HANDLE)
     {
         hb_error("muxmp4.c: MP4Create failed!");
@@ -189,7 +189,7 @@ static int MP4Init( hb_mux_object_t * m )
 		        job->config.h264.sps[2], /* profile_compat */
 		        job->config.h264.sps[3], /* AVCLevelIndication */
 		        3 );      /* 4 bytes length before each NAL unit */
-		
+
 
         MP4AddH264SequenceParameterSet( m->file, mux_data->track,
                 job->config.h264.sps, job->config.h264.sps_length );
@@ -220,7 +220,7 @@ static int MP4Init( hb_mux_object_t * m )
             *job->die = 1;
             return 0;
         }
-        
+
 
         /* VOL from FFmpeg or XviD */
         if (!(MP4SetTrackESConfiguration( m->file, mux_data->track,
@@ -240,9 +240,9 @@ static int MP4Init( hb_mux_object_t * m )
         width = job->pixel_aspect_width;
 
         height = job->pixel_aspect_height;
-        
+
         MP4AddPixelAspectRatio(m->file, mux_data->track, (uint32_t)width, (uint32_t)height);
-        
+
         MP4SetTrackFloatProperty(m->file, mux_data->track, "tkhd.width", job->width * (width / height));
     }
 
@@ -253,12 +253,12 @@ static int MP4Init( hb_mux_object_t * m )
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
     	static u_int8_t reserved2[16] = {
-    		0x00, 0x00, 0x00, 0x00, 
-    		0x00, 0x00, 0x00, 0x00, 
+    		0x00, 0x00, 0x00, 0x00,
+    		0x00, 0x00, 0x00, 0x00,
     		0x00, 0x02, 0x00, 0x10,
-    		0x00, 0x00, 0x00, 0x00, 
+    		0x00, 0x00, 0x00, 0x00,
 	    };
-	    
+
         audio = hb_list_item( title->list_audio, i );
         mux_data = malloc( sizeof( hb_mux_data_t ) );
         audio->mux_data = mux_data;
@@ -266,24 +266,24 @@ static int MP4Init( hb_mux_object_t * m )
         if( job->acodec & HB_ACODEC_AC3 ||
             job->audio_mixdowns[i] == HB_AMIXDOWN_AC3 )
         {
-            mux_data->track = MP4AddAC3AudioTrack( 
+            mux_data->track = MP4AddAC3AudioTrack(
                 m->file,
-                job->arate, 1536, MP4_MPEG4_AUDIO_TYPE );  
-            MP4SetTrackBytesProperty( 
+                job->arate, 1536, MP4_MPEG4_AUDIO_TYPE );
+            MP4SetTrackBytesProperty(
                 m->file, mux_data->track,
-                "udta.name.value", 
+                "udta.name.value",
                 (const u_int8_t*)"Surround", strlen("Surround"));
         } else {
-            mux_data->track = MP4AddAudioTrack( 
+            mux_data->track = MP4AddAudioTrack(
                 m->file,
                 job->arate, 1024, MP4_MPEG4_AUDIO_TYPE );
-            MP4SetTrackBytesProperty( 
+            MP4SetTrackBytesProperty(
                 m->file, mux_data->track,
-                "udta.name.value", 
+                "udta.name.value",
                 (const u_int8_t*)"Stereo", strlen("Stereo"));
-            
+
             MP4SetAudioProfileLevel( m->file, 0x0F );
-            MP4SetTrackESConfiguration( 
+            MP4SetTrackESConfiguration(
                 m->file, mux_data->track,
                 audio->config.aac.bytes, audio->config.aac.length );
 
@@ -298,19 +298,19 @@ static int MP4Init( hb_mux_object_t * m )
         language_code |= audio->iso639_2[1] - 0x60;  language_code <<= 5;
         language_code |= audio->iso639_2[2] - 0x60;
         MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.mdhd.language", language_code);
-        
+
 
         /* Set the audio track alternate group */
         MP4SetTrackIntegerProperty(m->file, mux_data->track, "tkhd.alternate_group", 1);
-        
+
         /* If we ever upgrade mpeg4ip, the line above should be replaced with the line below.*/
 //        MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.mp4a.channels",  (u_int16_t)HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown));
-        
+
         /* store a reference to the first audio track,
         so we can use it to feed the chapter text track's sample rate */
         if (i == 0) {
             firstAudioTrack = mux_data->track;
-            
+
             /* Enable the first audio track */
             MP4SetTrackIntegerProperty(m->file, mux_data->track, "tkhd.flags", (TRACK_ENABLED | TRACK_IN_MOVIE));
         }
@@ -322,27 +322,27 @@ static int MP4Init( hb_mux_object_t * m )
             MP4SetTrackIntegerProperty(m->file, mux_data->track, "tkhd.flags", (TRACK_DISABLED | TRACK_IN_MOVIE));
             hb_log("Disabled extra audio track %i", mux_data->track-1);
         }
-		
+
     }
 
-	if (job->chapter_markers) 
+	if (job->chapter_markers)
     {
 		/* add a text track for the chapters */
 		MP4TrackId textTrack;
 		textTrack = MP4AddChapterTextTrack(m->file, firstAudioTrack);
-        
+
         m->chapter_track = textTrack;
         m->chapter_duration = 0;
         m->current_chapter = job->chapter_start;
 	}
-	
+
     /* Add encoded-by metadata listing version and build date */
     char *tool_string;
     tool_string = (char *)malloc(80);
     snprintf( tool_string, 80, "HandBrake %s %i", HB_VERSION, HB_BUILD);
     MP4SetMetadataTool(m->file, tool_string);
     free(tool_string);
-	
+
     return 0;
 }
 
@@ -354,7 +354,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     uint64_t duration;
 
     if( mux_data == job->mux_data )
-    {    
+    {
         /* Add the sample before the new frame.
            It is important that this be calculated prior to the duration
            of the new video sample, as we want to sync to right after it.
@@ -376,12 +376,12 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             }
 
             sample = MP4GenerateChapterSample( m, duration );
-            
-            if( !MP4WriteSample(m->file, 
-                                m->chapter_track, 
-                                sample->sample, 
-                                sample->length, 
-                                sample->duration, 
+
+            if( !MP4WriteSample(m->file,
+                                m->chapter_track,
+                                sample->sample,
+                                sample->length,
+                                sample->duration,
                                 0, true) )
             {
                 hb_error("Failed to write to output file, disk full?");
@@ -391,7 +391,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             m->current_chapter++;
             m->chapter_duration += duration;
         }
-    
+
         /* Video */
         /* Because we use the audio samplerate as the timescale,
            we have to use potentially variable durations so the video
@@ -406,51 +406,51 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         duration = MP4_INVALID_DURATION;
     }
 
-    /* Here's where the sample actually gets muxed. 
+    /* Here's where the sample actually gets muxed.
        If it's an audio sample, don't offset the sample's playback.
        If it's a video sample and there are no b-frames, ditto.
        If there are b-frames, offset by the initDelay plus the
        difference between the presentation time stamp x264 gives
        and the decoding time stamp from the buffer data. */
-    if( !MP4WriteSample( m->file, 
-                         mux_data->track, 
-                         buf->data, 
+    if( !MP4WriteSample( m->file,
+                         mux_data->track,
+                         buf->data,
                          buf->size,
-                         duration, 
-                         ((mux_data->track != 1) || 
-                          (job->areBframes==0) || 
+                         duration,
+                         ((mux_data->track != 1) ||
+                          (job->areBframes==0) ||
                           (job->vcodec != HB_VCODEC_X264)) ? 0 : (  buf->renderOffset * job->arate / 90000),
                          ((buf->frametype & HB_FRAME_KEY) != 0) ) )
     {
-        hb_error("Failed to write to output file, disk full?");   
+        hb_error("Failed to write to output file, disk full?");
         *job->die = 1;
     }
-                                
+
     return 0;
 }
 
 static int MP4End( hb_mux_object_t * m )
-{ 
+{
     hb_job_t   * job   = m->job;
 
     /* Write our final chapter marker */
     if( m->job->chapter_markers )
     {
         struct hb_text_sample_s *sample = MP4GenerateChapterSample( m, (m->sum_dur - m->chapter_duration) );
-    
-        if( !MP4WriteSample(m->file, 
-                            m->chapter_track, 
-                            sample->sample, 
-                            sample->length, 
-                            sample->duration, 
+
+        if( !MP4WriteSample(m->file,
+                            m->chapter_track,
+                            sample->sample,
+                            sample->length,
+                            sample->duration,
                             0, true) )
         {
-            hb_error("Failed to write to output file, disk full?");      
+            hb_error("Failed to write to output file, disk full?");
             *job->die = 1;
         }
         free(sample);
     }
-    
+
     if (job->areBframes)
     {
            // Insert track edit to get A/V back in sync.  The edit amount is

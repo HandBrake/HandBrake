@@ -21,7 +21,7 @@ struct hb_work_private_s
     int           bitrate;
     float         level;
     float         dynamic_range_compression;
-    
+
     int           error;
     int           sync;
     int           size;
@@ -33,9 +33,9 @@ struct hb_work_private_s
     uint8_t       frame[3840];
 
     hb_list_t   * list;
-	
+
 	int           out_discrete_channels;
-	
+
 };
 
 int  deca52Init( hb_work_object_t *, hb_job_t * );
@@ -60,16 +60,16 @@ static hb_buffer_t * Decode( hb_work_object_t * w );
  * dynrng_call
  ***********************************************************************
  * Boosts soft audio -- taken from gbooker's work in A52Decoder, comment and all..
- * Two cases 
- * 1) The user requested a compression of 1 or less, return the typical power rule 
- * 2) The user requested a compression of more than 1 (decompression): 
- *    If the stream's requested compression is less than 1.0 (loud sound), return the normal compression 
+ * Two cases
+ * 1) The user requested a compression of 1 or less, return the typical power rule
+ * 2) The user requested a compression of more than 1 (decompression):
+ *    If the stream's requested compression is less than 1.0 (loud sound), return the normal compression
  *    If the stream's requested compression is more than 1.0 (soft sound), use power rule (which will make
- *   it louder in this case). 
- * 
+ *   it louder in this case).
+ *
  **********************************************************************/
 static sample_t dynrng_call (sample_t c, void *data)
-{        
+{
         float *level = (float *)data;
         float levelToUse = (float)*level;
         if(c > 1.0 || levelToUse <= 1.0)
@@ -79,7 +79,7 @@ static sample_t dynrng_call (sample_t c, void *data)
         else
                 return c;
 }
- 
+
 /***********************************************************************
  * hb_work_deca52_init
  ***********************************************************************
@@ -97,7 +97,7 @@ int deca52Init( hb_work_object_t * w, hb_job_t * job )
 
 	/* Decide what format we want out of a52dec
 	work.c has already done some of this deduction for us in do_job() */
-	
+
 	pv->flags_out = HB_AMIXDOWN_GET_A52_FORMAT(w->amixdown);
 
 	/* pass the number of channels used into the private work data */
@@ -106,10 +106,10 @@ int deca52Init( hb_work_object_t * w, hb_job_t * job )
 
     pv->level     = 32768.0;
     pv->dynamic_range_compression = job->dynamic_range_compression;
-    
+
     pv->next_expected_pts = 0;
     pv->sequence = 0;
-    
+
     return 0;
 }
 
@@ -150,7 +150,7 @@ int deca52Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     /* If we got more than a frame, chain raw buffers */
     *buf_out = buf = Decode( w );
     while( buf )
-    { 
+    {
         buf->sequence = pv->sequence;
         buf->next = Decode( w );
         buf       = buf->next;
@@ -162,7 +162,7 @@ int deca52Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
 /***********************************************************************
  * Decode
  ***********************************************************************
- * 
+ *
  **********************************************************************/
 static hb_buffer_t * Decode( hb_work_object_t * w )
 {
@@ -231,9 +231,9 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
 
     if ( pv->dynamic_range_compression > 1.0 )
     {
-        a52_dynrng( pv->state, dynrng_call, &pv->dynamic_range_compression);        
+        a52_dynrng( pv->state, dynrng_call, &pv->dynamic_range_compression);
     }
-    
+
     /* 6 blocks per frame, 256 samples per block, channelsused channels */
     buf        = hb_buffer_init( 6 * 256 * pv->out_discrete_channels * sizeof( float ) );
     if (pts == -1)
@@ -245,11 +245,11 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
 
     /*
        * To track AC3 PTS add this back in again.
-        *hb_log("AC3: pts is %lld, buf->start %lld buf->stop %lld", pts, buf->start, buf->stop); 
+        *hb_log("AC3: pts is %lld, buf->start %lld buf->stop %lld", pts, buf->start, buf->stop);
         */
-    
+
     pv->next_expected_pts = buf->stop;
-    
+
     for( i = 0; i < 6; i++ )
     {
         sample_t * samples_in;

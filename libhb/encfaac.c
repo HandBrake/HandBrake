@@ -19,7 +19,7 @@ struct hb_work_private_s
 
     hb_list_t     * list;
     int64_t         pts;
-	
+
 	int             out_discrete_channels;
 
 };
@@ -59,12 +59,12 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
     pv->faac = faacEncOpen( job->arate, pv->out_discrete_channels, &pv->input_samples,
                            &pv->output_bytes );
     pv->buf  = malloc( pv->input_samples * sizeof( float ) );
-    
+
     cfg                = faacEncGetCurrentConfiguration( pv->faac );
     cfg->mpegVersion   = MPEG4;
     cfg->aacObjectType = LOW;
     cfg->allowMidside  = 1;
-	
+
 	if (pv->out_discrete_channels == 6) {
 		/* we are preserving 5.1 audio into 6-channel AAC,
 		so indicate that we have an lfe channel */
@@ -78,7 +78,7 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
     cfg->bandWidth     = 0;
     cfg->outputFormat  = 0;
     cfg->inputFormat   =  FAAC_INPUT_FLOAT;
-	
+
 	if (w->amixdown == HB_AMIXDOWN_6CH && w->source_acodec == HB_ACODEC_AC3)
     {
         /* we are preserving 5.1 AC-3 audio into 6-channel AAC, and need to
@@ -93,7 +93,7 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
         cfg->channel_map[4] = 5;
         cfg->channel_map[5] = 0;
 	}
-	
+
     if( !faacEncSetConfiguration( pv->faac, cfg ) )
     {
         hb_log( "faacEncSetConfiguration failed" );
@@ -197,7 +197,7 @@ int encfaacWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         buf->next = Encode( w );
         buf       = buf->next;
     }
-    
+
     return HB_WORK_OK;
 }
 

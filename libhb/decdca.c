@@ -20,7 +20,7 @@ struct hb_work_private_s
     int           bitrate;
     int           frame_length;
     float         level;
-    
+
     int           error;
     int           sync;
     int           size;
@@ -30,9 +30,9 @@ struct hb_work_private_s
     uint8_t       frame[18726];
 
     hb_list_t   * list;
-	
+
 	int           out_discrete_channels;
-	
+
 };
 
 int  decdcaInit( hb_work_object_t *, hb_job_t * );
@@ -70,7 +70,7 @@ int decdcaInit( hb_work_object_t * w, hb_job_t * job )
 
 	/* Decide what format we want out of libdca
 	work.c has already done some of this deduction for us in do_job() */
-	
+
 	pv->flags_out = HB_AMIXDOWN_GET_DCA_FORMAT(w->amixdown);
 
 	/* pass the number of channels used into the private work data */
@@ -125,7 +125,7 @@ int decdcaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 /***********************************************************************
  * Decode
  ***********************************************************************
- * 
+ *
  **********************************************************************/
 static hb_buffer_t * Decode( hb_work_object_t * w )
 {

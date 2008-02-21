@@ -92,7 +92,7 @@ static int show_mux_warning = 1;
 
 /****************************************************************************
  * hb_error_handler
- * 
+ *
  * When using the CLI just display using hb_log as we always did in the past
  * make sure that we prefix with a nice ERROR message to catch peoples eyes.
  ****************************************************************************/
@@ -235,7 +235,7 @@ int main( int argc, char ** argv )
 	if( x264opts ) free (x264opts );
 	if( x264opts2 ) free (x264opts2 );
     if (preset_name) free (preset_name);
-	
+
     fprintf( stderr, "HandBrake has exited.\n" );
 
     return 0;
@@ -344,30 +344,30 @@ static int HandleEvents( hb_handle_t * h )
                 int longest_title_pos=-1;
                 int longest_title_time=0;
                 int title_time;
-                
+
                 fprintf( stderr, "Searching for longest title...\n" );
 
                 for( i = 0; i < hb_list_count( list ); i++ )
                 {
                     title = hb_list_item( list, i );
                     title_time = (title->hours*60*60 ) + (title->minutes *60) + (title->seconds);
-                    fprintf( stderr, " + Title (%d) index %d has length %dsec\n", 
+                    fprintf( stderr, " + Title (%d) index %d has length %dsec\n",
                              i, title->index, title_time );
                     if( longest_title_time < title_time )
                     {
                         longest_title_time = title_time;
                         longest_title_pos = i;
                         longest_title_idx = title->index;
-                    }		    
+                    }
                 }
-                if( longest_title_pos == -1 ) 
+                if( longest_title_pos == -1 )
                 {
                     fprintf( stderr, "No longest title found.\n" );
                     die = 1;
                     break;
                 }
                 titleindex = longest_title_idx;
-                fprintf( stderr, "Found longest title, setting title to %d\n", 
+                fprintf( stderr, "Found longest title, setting title to %d\n",
                          longest_title_idx);
 
                 title = hb_list_item( list, longest_title_pos);
@@ -406,7 +406,7 @@ static int HandleEvents( hb_handle_t * h )
             if (preset)
             {
                 fprintf( stderr, "+ Using preset: %s", preset_name);
-                
+
                 if (!strcmp(preset_name, "Animation"))
                 {
                     mux = HB_MUX_MKV;
@@ -652,7 +652,7 @@ static int HandleEvents( hb_handle_t * h )
                     pixelratio = 1;
                 }
             }
-            
+
 			if ( chapter_markers )
 			{
 				job->chapter_markers = chapter_markers;
@@ -663,9 +663,9 @@ static int HandleEvents( hb_handle_t * h )
                     hb_csv_cell_t * cell;
                     int row = 0;
                     int chapter = 0;
-                    
+
                     fprintf( stderr, "Reading chapter markers from file %s\n", marker_file );
-                    
+
                     if( file == NULL )
                     {
                          fprintf( stderr, "Cannot open chapter marker file, using defaults\n" );
@@ -674,14 +674,14 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         /* Parse the cells */
                         while( NULL != ( cell = hb_read_next_cell( file ) ) )
-                        {                            
+                        {
                             /* We have a chapter number */
                             if( cell->cell_col == 0 )
                             {
                                 row = cell->cell_row;
                                 chapter = atoi( cell->cell_text );
                             }
-                             
+
                             /* We have a chapter name */
                             if( cell->cell_col == 1 && row == cell->cell_row )
                             {
@@ -689,17 +689,17 @@ static int HandleEvents( hb_handle_t * h )
                                 if( chapter >= job->chapter_start && chapter <= job->chapter_end )
                                 {
                                     hb_chapter_t * chapter_s;
-                                    
+
                                     chapter_s = hb_list_item( job->title->list_chapter, chapter - 1);
                                     strncpy(chapter_s->title, cell->cell_text, 1023);
                                     chapter_s->title[1023] = '\0';
                                 }
-                            }                               
-                        
-                                                           
+                            }
+
+
                             hb_dispose_cell( cell );
                         }
-                        
+
                         hb_close_csv_file( file );
                     }
                 }
@@ -747,7 +747,7 @@ static int HandleEvents( hb_handle_t * h )
                 hb_filter_denoise.settings = denoise_opt;
                 hb_list_add( job->filters, &hb_filter_denoise );
             }
-            
+
             if( width && height )
             {
                 job->width  = width;
@@ -774,7 +774,7 @@ static int HandleEvents( hb_handle_t * h )
                 /* The height will be thrown away in hb.c but calculate it anyway */
                 hb_fix_aspect( job, HB_KEEP_WIDTH );
             }
-            
+
             if( vquality >= 0.0 && vquality <= 1.0 )
             {
                 job->vquality = vquality;
@@ -789,9 +789,9 @@ static int HandleEvents( hb_handle_t * h )
             {
                 job->vcodec = vcodec;
             }
-            if( h264_13 ) 
-            { 
-                job->h264_level = 13; 
+            if( h264_13 )
+            {
+                job->h264_level = 13;
             }
 	        if( h264_30 )
 	        {
@@ -838,12 +838,12 @@ static int HandleEvents( hb_handle_t * h )
 			    job->audios[0] = 0;
 			    job->audio_mixdowns[0] = audio_mixdown;
 			}
-			
+
 			if( audio_mixdown == HB_AMIXDOWN_DOLBYPLII_AC3)
 			{
                int i;
                for( i = 3 ; i > 0; i--)
-               {                   
+               {
                    job->audios[i*2+1] = job->audios[i];
                    job->audios[i*2] = job->audios[i];
                    if(job->audios[i] != -1  )
@@ -852,12 +852,12 @@ static int HandleEvents( hb_handle_t * h )
                        job->audio_mixdowns[i*2] = HB_AMIXDOWN_DOLBYPLII;
                    }
                }
-               
+
                job->audios[1] = job->audios[0];
                job->audio_mixdowns[1] = HB_AMIXDOWN_AC3;
                job->audio_mixdowns[0] = HB_AMIXDOWN_DOLBYPLII;
             }
-			
+
             if( abitrate )
             {
                 job->abitrate = abitrate;
@@ -870,7 +870,7 @@ static int HandleEvents( hb_handle_t * h )
             {
                 job->dynamic_range_compression = dynamic_range_compression;
             }
-            
+
             if( size )
             {
                 job->vbitrate = hb_calc_bitrate( job, size );
@@ -892,7 +892,7 @@ static int HandleEvents( hb_handle_t * h )
             {
                 job->mux = mux;
             }
-            
+
             if ( largeFileSize )
             {
                 job->largeFileSize = 1;
@@ -905,7 +905,7 @@ static int HandleEvents( hb_handle_t * h )
             {
                 job->ipod_atom = 1;
             }
-            
+
             job->file = strdup( output );
 
             if( crf )
@@ -925,10 +925,10 @@ static int HandleEvents( hb_handle_t * h )
                 job->maxWidth = maxWidth;
             if (maxHeight)
                 job->maxHeight = maxHeight;
-            
+
             if (vfr)
                 job->vfr = 1;
-	
+
             if( subtitle_force )
             {
                 job->subtitle_force = subtitle_force;
@@ -943,17 +943,17 @@ static int HandleEvents( hb_handle_t * h )
                  * which will determine which subtitles to enable, if any.
                  */
                 job->pass = -1;
-                
+
                 x264opts_tmp = job->x264opts;
 
                 job->x264opts = NULL;
 
-                job->indepth_scan = subtitle_scan;  
+                job->indepth_scan = subtitle_scan;
                 fprintf( stderr, "Subtitle Scan Enabled - enabling "
                          "subtitles if found for foreign language segments\n");
                 job->select_subtitle = malloc(sizeof(hb_subtitle_t*));
                 *(job->select_subtitle) = NULL;
-                
+
                 /*
                  * Add the pre-scan job
                  */
@@ -967,7 +967,7 @@ static int HandleEvents( hb_handle_t * h )
                 /*
                  * If subtitle_scan is enabled then only turn it on
                  * for the first pass and then off again for the
-                 * second. 
+                 * second.
                  */
                 hb_subtitle_t **subtitle_tmp = job->select_subtitle;
 
@@ -976,7 +976,7 @@ static int HandleEvents( hb_handle_t * h )
                 job->pass = 1;
 
                 job->indepth_scan = 0;
-                
+
                 if (x264opts)
                 {
                     x264opts2 = strdup(x264opts);
@@ -986,23 +986,23 @@ static int HandleEvents( hb_handle_t * h )
                  * If turbo options have been selected then append them
                  * to the x264opts now (size includes one ':' and the '\0')
                  */
-                if( turbo_opts_enabled ) 
+                if( turbo_opts_enabled )
                 {
                     int size = (x264opts ? strlen(x264opts) : 0) + strlen(turbo_opts) + 2;
                     char *tmp_x264opts;
-                        
+
                     tmp_x264opts = malloc(size * sizeof(char));
-                    if( x264opts ) 
+                    if( x264opts )
                     {
-                        snprintf( tmp_x264opts, size, "%s:%s", 
-                                  x264opts, turbo_opts );  
+                        snprintf( tmp_x264opts, size, "%s:%s",
+                                  x264opts, turbo_opts );
                         free( x264opts );
                     } else {
                         /*
                          * No x264opts to modify, but apply the turbo options
                          * anyway as they may be modifying defaults
                          */
-                        snprintf( tmp_x264opts, size, "%s", 
+                        snprintf( tmp_x264opts, size, "%s",
                                   turbo_opts );
                     }
                     x264opts = tmp_x264opts;
@@ -1011,7 +1011,7 @@ static int HandleEvents( hb_handle_t * h )
                              x264opts );
 
                     job->x264opts = x264opts;
-                }     
+                }
                 hb_add( h, job );
 
                 job->select_subtitle = subtitle_tmp;
@@ -1026,7 +1026,7 @@ static int HandleEvents( hb_handle_t * h )
                 job->indepth_scan = 0;
 
                 job->x264opts = x264opts2;
-                
+
                 hb_add( h, job );
             }
             else
@@ -1034,7 +1034,7 @@ static int HandleEvents( hb_handle_t * h )
                 /*
                  * Turn on subtitle scan if requested, note that this option
                  * precludes encoding of any actual subtitles.
-                 */ 
+                 */
 
                 job->indepth_scan = 0;
                 job->pass = 0;
@@ -1119,7 +1119,7 @@ void SigHandler( int i_signal )
 static void ShowHelp()
 {
     int i;
-    
+
     fprintf( stderr,
     "Syntax: HandBrakeCLI [options] -i <device> -o <file>\n"
     "\n"
@@ -1133,7 +1133,7 @@ static void ShowHelp()
     "                            double quotation marks\n"
     "    -z, --preset-list       See a list of available built-in presets\n"
     "\n"
-	
+
 	"### Source Options-----------------------------------------------------------\n\n"
 	"    -i, --input <string>    Set input device\n"
 	"    -t, --title <number>    Select a title to encode (0 to scan only,\n"
@@ -1143,7 +1143,7 @@ static void ShowHelp()
     "                            1 to 3, or \"3\" for chapter 3 only,\n"
     "                            default: all chapters)\n"
 	"\n"
-	
+
 	"### Destination Options------------------------------------------------------\n\n"
     "    -o, --output <string>   Set output file name\n"
 	"    -f, --format <string>   Set output format (avi/mp4/ogm/mkv, default:\n"
@@ -1153,7 +1153,7 @@ static void ShowHelp()
     "    -O, --optimize          Optimize mp4 files for HTTP streaming\n"
     "    -I, --ipod-atom         Mark mp4 files so iPods will accept them\n"
     "\n"
-	
+
 	"### Picture Settings---------------------------------------------------------\n\n"
     "    -w, --width <number>    Set picture width\n"
     "    -l, --height <number>   Set picture height\n"
@@ -1175,7 +1175,7 @@ static void ShowHelp()
     "                            iso639-2 code (fre, eng, spa, dut, et cetera)\n"
 	"    -m, --markers           Add chapter markers (mp4 output format only)\n"
 	"\n"
-	
+
 	"### Video Options------------------------------------------------------------\n\n"
 	"    -e, --encoder <string>  Set video library encoder (ffmpeg,xvid,\n"
     "                            x264,x264b13,x264b30 default: ffmpeg)\n"
@@ -1196,7 +1196,7 @@ static void ShowHelp()
      "    -d, --deinterlace       Deinterlace video with yadif/mcdeint filter\n"
      "          <YM:FD:MM:QP>     (default 0:-1:-1:1)\n"
      "           or\n"
-     "          <fast/slow/slower>\n"            
+     "          <fast/slow/slower>\n"
      "    -7, --deblock           Deblock video with pp7 filter\n"
      "          <QP:M>            (default 0:2)\n"
      "    -8, --denoise           Denoise video with hqdn3d filter\n"
@@ -1210,11 +1210,11 @@ static void ShowHelp()
     "    -P, --loosePixelratio   Store pixel aspect ratio with specified width\n"
     "           <modulus>        Takes as optional argument what number you want\n"
     "                            the dimensions to divide cleanly by (default 16)\n"
-    
-	
+
+
 	"\n"
-	
-	
+
+
 	"### Audio Options-----------------------------------------------------------\n\n"
 	"    -E, --aencoder <string> Audio encoder (faac/lame/vorbis/ac3/aac+ac3) \n"
 	"                            ac3 meaning passthrough, aac+ac3 meaning an\n"
@@ -1238,11 +1238,11 @@ static void ShowHelp()
     "    -D, --drc <float>       Apply extra dynamic range compression to the audio,\n"
     "                            making soft sounds louder. Range is 1.0 to 4.0\n"
     "                            (too loud), with 1.5 - 2.5 being a useful range.\n"
-    
-	
+
+
 	"\n"
-	
-	
+
+
     "### Advanced Options---------------------------------------------------------\n\n"
     "    -x, --x264opts <string> Specify advanced x264 options in the\n"
     "                            same style as mencoder:\n"
@@ -1317,7 +1317,7 @@ static int ParseOptions( int argc, char ** argv )
             { "large-file",  no_argument,       NULL,    '4' },
             { "optimize",    no_argument,       NULL,    'O' },
             { "ipod-atom",   no_argument,       NULL,    'I' },
-            
+
             { "title",       required_argument, NULL,    't' },
             { "longest",     no_argument,       NULL,    'L' },
             { "chapters",    required_argument, NULL,    'c' },
@@ -1358,7 +1358,7 @@ static int ParseOptions( int argc, char ** argv )
             { "preset",      required_argument, NULL,    'Z' },
             { "preset-list", no_argument,       NULL,    'z' },
             { "vfr",         no_argument,       NULL,    'V' },
-			
+
             { 0, 0, 0, 0 }
           };
 
@@ -1387,7 +1387,7 @@ static int ParseOptions( int argc, char ** argv )
             case 'C':
                 cpu = atoi( optarg );
                 break;
-            
+
             case 'Z':
                 preset = 1;
                 preset_name = strdup(optarg);
@@ -1395,7 +1395,7 @@ static int ParseOptions( int argc, char ** argv )
             case 'z':
                 ShowPresets();
                 exit ( 0 );
-                
+
             case 'f':
                 format = strdup( optarg );
                 break;
@@ -1414,7 +1414,7 @@ static int ParseOptions( int argc, char ** argv )
             case 'I':
                 ipod_atom = 1;
                 break;
-            
+
             case 't':
                 titleindex = atoi( optarg );
                 break;
@@ -1542,14 +1542,14 @@ static int ParseOptions( int argc, char ** argv )
                     }
                 }
                 denoise = 1;
-                break;                
+                break;
             case '9':
                 if( optarg != NULL )
                 {
                     detelecine_opt = strdup( optarg );
                 }
                 detelecine = 1;
-                break;                
+                break;
             case 'g':
                 grayscale = 1;
                 break;
@@ -1701,7 +1701,7 @@ static int ParseOptions( int argc, char ** argv )
             case 'V':
                 vfr = 1;
                 break;
-				
+
             default:
                 fprintf( stderr, "unknown option (%s)\n", argv[optind] );
                 return -1;

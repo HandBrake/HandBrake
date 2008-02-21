@@ -107,10 +107,10 @@ struct hb_job_s
 {
     /* ID assigned by UI so it can groups job passes together */
     int             sequence_id;
-	
+
     /* Pointer to the title to be ripped */
     hb_title_t    * title;
-    
+
     /* Chapter selection */
     int             chapter_start;
     int             chapter_end;
@@ -123,7 +123,7 @@ struct hb_job_s
          deinterlace:         0 or 1
          width:               must be a multiple of 16
          height:              must be a multiple of 16
-         keep_ratio:          used by UIs 
+         keep_ratio:          used by UIs
          pixel_ratio:         store pixel aspect ratio in the video
          pixel_aspect_width:  numerator for pixel aspect ratio
          pixel_aspect_height: denominator for pixel aspect ratio
@@ -154,7 +154,7 @@ struct hb_job_s
          vrate, vrate_base: output framerate is vrate / vrate_base
          h264_level:        boolean for whether or not we're encoding for iPod
          crf:               boolean for whether to use constant rate factor with x264
-         x264opts:          string of extra x264 options 
+         x264opts:          string of extra x264 options
          areBframes:        boolean to note if b-frames are included in x264opts */
 #define HB_VCODEC_MASK   0x0000FF
 #define HB_VCODEC_FFMPEG 0x000001
@@ -261,7 +261,7 @@ struct hb_job_s
 #define HB_MUX_OGM  0x080000
 #define HB_MUX_IPOD 0x100000
 #define HB_MUX_MKV  0x200000
-	
+
     int             mux;
     const char          * file;
 
@@ -308,7 +308,7 @@ struct hb_audio_s
     int  codec;
     int  rate;
     int  bitrate;
-    
+
     /* ac3flags is only set when the source audio format is HB_ACODEC_AC3 */
     int ac3flags;
 
@@ -378,7 +378,7 @@ struct hb_chapter_s
 
     /* Exact duration (in 1/90000s) */
     uint64_t duration;
-    
+
     /* Optional chapter title */
     char     title[1024];
 };
@@ -547,12 +547,12 @@ struct hb_filter_object_s
 
 #ifdef __LIBHB__
     hb_filter_private_t* (* init)  ( int, int, int, char * );
-    
+
     int                  (* work)  ( const hb_buffer_t *, hb_buffer_t **,
                                      int, int, int, hb_filter_private_t * );
-    
+
     void                 (* close) ( hb_filter_private_t * );
-    
+
     hb_filter_private_t   * private_data;
     //hb_buffer_t           * buffer;
 #endif

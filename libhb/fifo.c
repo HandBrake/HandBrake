@@ -43,7 +43,7 @@ void hb_buffer_pool_init( void )
     buffers.entries = 0;
     buffers.lock = hb_lock_init();
     buffers.allocated = 0;
-    
+
     while(size <= max_size) {
         buffer_pool = buffers.pool[buffers.entries++] = hb_fifo_init(BUFFER_POOL_MAX_ELEMENTS);
         buffer_pool->buffer_size = size;
@@ -60,7 +60,7 @@ void hb_buffer_pool_free( void )
 
     hb_lock(buffers.lock);
 
-    for( i = 0; i < buffers.entries; i++) 
+    for( i = 0; i < buffers.entries; i++)
     {
         count = 0;
         while( ( b = hb_fifo_get(buffers.pool[i]) ) )
@@ -85,7 +85,7 @@ void hb_buffer_pool_free( void )
 
 
 hb_buffer_t * hb_buffer_init( int size )
-{ 
+{
     hb_buffer_t * b;
     int i;
     hb_fifo_t *buffer_pool = NULL;
@@ -105,7 +105,7 @@ hb_buffer_t * hb_buffer_init( int size )
                 /*
                  * This pool is big enough, but are there any buffers in it?
                  */
-                if( hb_fifo_size( buffers.pool[i] ) ) 
+                if( hb_fifo_size( buffers.pool[i] ) )
                 {
                     /*
                      * We've found a matching buffer pool, with buffers.
@@ -114,7 +114,7 @@ hb_buffer_t * hb_buffer_init( int size )
                     resize =  buffers.pool[i]->buffer_size;
                 } else {
                     /*
-                     * Buffer pool is empty, 
+                     * Buffer pool is empty,
                      */
                     if( resize ) {
                         /*
@@ -134,7 +134,7 @@ hb_buffer_t * hb_buffer_init( int size )
      */
     if( size != 0 && buffer_pool )
     {
-        b = hb_fifo_get( buffer_pool );    
+        b = hb_fifo_get( buffer_pool );
 
         if( b )
         {
@@ -142,8 +142,8 @@ hb_buffer_t * hb_buffer_init( int size )
              * Zero the contents of the buffer, would be nice if we
              * didn't have to do this.
              *
-            hb_log("Reused buffer size %d for size %d from pool %d depth %d", 
-                   b->alloc, size, smallest_pool->buffer_size, 
+            hb_log("Reused buffer size %d for size %d from pool %d depth %d",
+                   b->alloc, size, smallest_pool->buffer_size,
                    hb_fifo_size(smallest_pool));
             */
             data = b->data;
@@ -153,7 +153,7 @@ hb_buffer_t * hb_buffer_init( int size )
             b->size = size;
             b->data = data;
             return( b );
-        } 
+        }
     }
 
     /*
@@ -170,12 +170,12 @@ hb_buffer_t * hb_buffer_init( int size )
     if( resize )
     {
         size = resize;
-    } 
-    b->alloc  = size;  
+    }
+    b->alloc  = size;
 
     /*
-    hb_log("Allocating new buffer of size %d for size %d", 
-           b->alloc, 
+    hb_log("Allocating new buffer of size %d for size %d",
+           b->alloc,
            b->size);
     */
 
@@ -228,23 +228,23 @@ void hb_buffer_close( hb_buffer_t ** _b )
         for( i = 0; i < buffers.entries; i++ )
         {
             if( b->alloc == buffers.pool[i]->buffer_size )
-            { 
+            {
                 buffer_pool = buffers.pool[i];
                 break;
             }
         }
     }
 
-    if( buffer_pool ) 
+    if( buffer_pool )
     {
-        if( !hb_fifo_is_full( buffer_pool ) ) 
+        if( !hb_fifo_is_full( buffer_pool ) )
         {
             if(b->data)
             {
                 /*
                 hb_log("Putting a buffer of size %d on pool %d, depth %d",
-                       b->alloc, 
-                       buffer_pool->buffer_size, 
+                       b->alloc,
+                       buffer_pool->buffer_size,
                        hb_fifo_size(buffer_pool));
                 */
                 hb_fifo_push( buffer_pool, b );
@@ -381,7 +381,7 @@ hb_buffer_t * hb_fifo_get( hb_fifo_t * f )
     b->next   = NULL;
     f->size  -= 1;
     hb_unlock( f->lock );
-    
+
     return b;
 }
 
@@ -447,7 +447,7 @@ void hb_fifo_close( hb_fifo_t ** _f )
 {
     hb_fifo_t   * f = *_f;
     hb_buffer_t * b;
-    
+
     hb_log( "fifo_close: trashing %d buffer(s)", hb_fifo_size( f ) );
     while( ( b = hb_fifo_get( f ) ) )
     {

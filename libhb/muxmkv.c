@@ -182,7 +182,7 @@ static int MKVInit( hb_mux_object_t * m )
                 hb_error("muxmkv: Unknown audio codec: %x", job->acodec);
                 return 0;
         }
-        
+
         if (default_track_flag)
         {
             track->flagDefault = 1;

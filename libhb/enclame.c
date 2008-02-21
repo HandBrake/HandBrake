@@ -50,7 +50,7 @@ int enclameInit( hb_work_object_t * w, hb_job_t * job )
     lame_set_in_samplerate( pv->lame, job->arate );
     lame_set_out_samplerate( pv->lame, job->arate );
     lame_init_params( pv->lame );
-    
+
     pv->input_samples = 1152 * 2;
     pv->output_bytes = LAME_MAXMP3BUFFER;
     pv->buf  = malloc( pv->input_samples * sizeof( float ) );
@@ -69,7 +69,7 @@ int enclameInit( hb_work_object_t * w, hb_job_t * job )
 void enclameClose( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
-    
+
     lame_close( pv->lame );
     hb_list_empty( &pv->list );
     free( pv->buf );

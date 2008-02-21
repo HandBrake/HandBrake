@@ -12,11 +12,11 @@
 #define is_newline(_x)      ( (_x) == 13 || \
                               (_x) == 11 || \
                               (_x) == 10 )
-                              
+
 #define is_white(_x)        ( (_x) == '\t' || \
                               (_x) == ' '  || \
-                              is_newline(_x) ) 
-                              
+                              is_newline(_x) )
+
 #define is_sep(_x)          ( (_x) == ',' )
 
 #define is_esc(_x)          ( (_x) == '\\' )
@@ -38,18 +38,18 @@ hb_csv_file_t *hb_open_csv_file( const char *filepath )
 {
     hb_csv_file_t *file = NULL;
     FILE * fileref;
-    
+
     if( filepath == NULL )
     {
         return file;
     }
-    
+
     fileref = fopen( filepath, "r" );
     if( fileref == NULL )
     {
         return file;
     }
-    
+
     file = malloc( sizeof( hb_csv_file_t ) );
     file->fileref       = fileref;
     file->eof           = 0;
@@ -59,13 +59,13 @@ hb_csv_file_t *hb_open_csv_file( const char *filepath )
     return file;
 }
 
-void hb_close_csv_file( hb_csv_file_t *file ) 
+void hb_close_csv_file( hb_csv_file_t *file )
 {
     if( file == NULL )
     {
         return;
     }
-    
+
     fclose( file->fileref );
     free( file );
 }
@@ -81,12 +81,12 @@ hb_csv_cell_t *hb_read_next_cell( hb_csv_file_t *file )
     {
         return cell;
     }
-    
+
     if( file->eof )
     {
         return cell;
     }
-    
+
     cell = malloc( sizeof( hb_csv_cell_t ) );
     cell->cell_row = file->curr_row;
     cell->cell_col = file->curr_col;
@@ -113,12 +113,12 @@ hb_csv_cell_t *hb_read_next_cell( hb_csv_file_t *file )
             }
         }
     }
-    
+
     if( c == CSV_CHAR_EOF )
     {
         file->eof = 1;
     }
-    
+
     /* Terminate the cell text */
     cell->cell_text[index] = '\0';
     hb_trim_end( cell->cell_text );
@@ -131,7 +131,7 @@ void hb_dispose_cell( hb_csv_cell_t *cell )
     {
         return;
     }
-    
+
     free( cell );
 }
 
@@ -141,12 +141,12 @@ static uint16_t hb_parse_character( hb_csv_file_t * file )
     int byte;
     uint16_t c;
     int need_char = 1;
-    
+
     if( file == NULL )
     {
         return CSV_CHAR_ERROR;
     }
-    
+
     while( need_char )
     {
         byte = fgetc( file->fileref );
@@ -158,7 +158,7 @@ static uint16_t hb_parse_character( hb_csv_file_t * file )
         {
             return CSV_CHAR_ERROR;
         }
-        
+
         if( file->parse_state == CSV_PARSE_SEEK && is_white(byte) )
         {
             continue;
@@ -193,7 +193,7 @@ static uint16_t hb_parse_character( hb_csv_file_t * file )
             c = (uint16_t)byte;
         }
     }
-    
+
     return c;
 }
 
@@ -205,7 +205,7 @@ static void hb_trim_end( char *text )
     }
 
     int i = strlen(text) - 1;
-    
+
     for( i = strlen(text) - 1; i >= 0 && is_white(text[i]) ; i-- )
     {
         text[i] = '\0';

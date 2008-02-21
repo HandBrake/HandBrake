@@ -11,14 +11,14 @@
 typedef struct
 {
     hb_handle_t * h;
-    
+
     char        * path;
     int           title_index;
     hb_list_t   * list_title;
-    
+
     hb_dvd_t    * dvd;
 	hb_stream_t * stream;
-	
+
 } hb_scan_t;
 
 static void ScanFunc( void * );
@@ -47,7 +47,7 @@ static void ScanFunc( void * _data )
 
 	data->dvd = NULL;
 	data->stream = NULL;
-	
+
     /* Try to open the path as a DVD. If it fails, try as a file */
     hb_log( "scan: trying to open with libdvdread" );
     if( ( data->dvd = hb_dvd_init( data->path ) ) )
@@ -131,7 +131,7 @@ static void ScanFunc( void * _data )
             hb_list_rem( data->list_title, title );
             continue;
         }
-        
+
 		if (data->stream)
 		{
 			// Stream based processing uses PID's to handle the different audio options for a given title
@@ -157,7 +157,7 @@ static void ScanFunc( void * _data )
 				j++;
 			}
 		}
-		
+
         /* Make sure we found AC3 / DCA rates and bitrates */
         for( j = 0; j < hb_list_count( title->list_audio ); )
         {
@@ -193,7 +193,7 @@ static void ScanFunc( void * _data )
                 audio->input_channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
             }
         }
-        
+
         i++;
     }
 
@@ -286,7 +286,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
     hb_list_t     * list_es, * list_raw;
     hb_libmpeg2_t * mpeg2;
     int progressive_count = 0;
-    
+
     buf_ps   = hb_buffer_init( HB_DVD_READ_BUFFER_SIZE );
     list_es  = hb_list_init();
     list_raw = hb_list_init();
@@ -295,7 +295,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
 
     if (data->dvd)
       hb_dvd_start( data->dvd, title->index, 1 );
-    
+
     for( i = 0; i < 10; i++ )
     {
         int j, k;
@@ -303,7 +303,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         char   filename[1024];
 
         //hb_log("Seeking to: %f", (float) ( i + 1 ) / 11.0 );
-       
+
         if (data->dvd)
         {
           if( !hb_dvd_seek( data->dvd, (float) ( i + 1 ) / 11.0 ) )
@@ -318,7 +318,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             goto error;
           }
         }
-        
+
         hb_log( "scan: preview %d", i + 1 );
 
         mpeg2 = hb_libmpeg2_init();
@@ -382,7 +382,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         int ar;
         hb_libmpeg2_info( mpeg2, &title->width, &title->height,
                           &title->rate_base, &ar );
-       
+
         if( title->rate_base == 1126125 )
         {
             /* Frame FPS is 23.976 (meaning it's progressive), so
@@ -398,7 +398,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                    which means we should be conservative and use
                    29.97 as the title's FPS for now.
                 */
-                title->rate_base = 900900;           
+                title->rate_base = 900900;
             }
             else
             {
@@ -409,9 +409,9 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                 {
                     hb_log("Title's mostly progressive NTSC, setting fps to 23.976");
                 }
-                title->rate_base = 1126125;               
+                title->rate_base = 1126125;
             }
-        } 
+        }
         else if( title->rate_base == 900900 && progressive_count >= 6 )
         {
             /*
@@ -420,7 +420,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
              */
             title->rate_base = 1126125;
         }
-               
+
         if( i == 2) // Use the third frame's info, so as to skip opening logos
         {
             // The aspect ratio may have already been set by parsing the VOB/IFO details on a DVD, however
@@ -458,9 +458,9 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
 
 #define Y    buf_raw->data
 #define DARK 64
-        
+
         /* Detect black borders */
-        
+
         for( j = 0; j < title->width; j++ )
         {
             for( k = 0; k < title->crop[0]; k++ )
@@ -479,7 +479,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         }
         for( j = 0; j < title->height; j++ )
         {
-            for( k = 0; k < title->crop[2]; k++ ) 
+            for( k = 0; k < title->crop[2]; k++ )
                 if( Y[ j * title->width + k ] > DARK )
                 {
                     title->crop[2] = k;
@@ -538,7 +538,7 @@ cleanup:
     return ret;
 }
 
-static void LookForAC3AndDCA( hb_title_t * title, hb_buffer_t * b ) 
+static void LookForAC3AndDCA( hb_title_t * title, hb_buffer_t * b )
 {
     int i;
     int flags;
@@ -625,7 +625,7 @@ static void LookForAC3AndDCA( hb_title_t * title, hb_buffer_t * b )
                     default:
                         audio->input_channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
                 }
-                
+
                 /* add in our own LFE flag if the source has LFE */
                 if (flags & A52_LFE)
                 {
@@ -652,7 +652,7 @@ static void LookForAC3AndDCA( hb_title_t * title, hb_buffer_t * b )
                 }
 
                 break;
-            
+
             }
 
         }

@@ -14,7 +14,7 @@ extern "C" {
 #define HB_DEBUG_ALL  1
 void          hb_register( hb_work_object_t * );
 hb_handle_t * hb_init_real( int verbose, int update_check );
-hb_handle_t * hb_init_dl ( int verbose, int update_check ); // hb_init for use with dylib 
+hb_handle_t * hb_init_dl ( int verbose, int update_check ); // hb_init for use with dylib
 
 #define hb_init(v,u) \
 hb_init_real( v, u ); \
@@ -98,7 +98,7 @@ void          hb_stop( hb_handle_t * );
    Look at test/test.c to see how to use it. */
 void hb_get_state( hb_handle_t *, hb_state_t * );
 void hb_get_state2( hb_handle_t *, hb_state_t * );
-/* hb_get_scancount() is called by the MacGui in UpdateUI to 
+/* hb_get_scancount() is called by the MacGui in UpdateUI to
    check for a new scan during HB_STATE_WORKING phase  */
 int hb_get_scancount( hb_handle_t * );
 

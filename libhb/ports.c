@@ -4,7 +4,7 @@
    Homepage: <http://handbrake.m0k.org/>.
    It may be used under the terms of the GNU General Public License. */
 
-#include <time.h> 
+#include <time.h>
 #include <sys/time.h>
 
 #if defined( SYS_BEOS )
@@ -212,7 +212,7 @@ void hb_get_tempory_filename( hb_handle_t * h, char name[1024],
 
     hb_get_tempory_directory( h, name );
     strcat( name, "/" );
-    
+
     va_start( args, fmt );
     vsnprintf( &name[strlen(name)], 1024 - strlen(name), fmt, args );
     va_end( args );
@@ -347,21 +347,21 @@ void hb_thread_close( hb_thread_t ** _t )
 #if defined( SYS_BEOS )
     long exit_value;
     wait_for_thread( t->thread, &exit_value );
-    
+
 #elif USE_PTHREAD
     pthread_join( t->thread, NULL );
 
 //#elif defined( SYS_CYGWIN )
 //    WaitForSingleObject( t->thread, INFINITE );
 #endif
-    
+
     hb_log( "thread %x joined (\"%s\")",
             t->thread, t->name );
 
     hb_lock_close( &t->lock );
     free( t->name );
     free( t );
-    *_t = NULL; 
+    *_t = NULL;
 }
 
 /************************************************************************
@@ -591,7 +591,7 @@ hb_net_t * hb_net_open( char * address, int port )
         free( n );
         return NULL;
     }
-    
+
     return n;
 }
 

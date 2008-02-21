@@ -105,7 +105,7 @@ static void WriteBuffer( FILE * file, hb_buffer_t * buf )
 static void WriteInt8( FILE * file, uint8_t val )
 {
     fputc( val, file );
-}   
+}
 
 static void WriteInt16( FILE * file, uint16_t val )
 {
@@ -306,7 +306,7 @@ static int AVIInit( hb_mux_object_t * m )
     /* Video track */
     mux_data = calloc( sizeof( hb_mux_data_t ), 1 );
     job->mux_data = mux_data;
-    
+
 #define h mux_data->header
     /* Video stream header */
     h.FourCC     = FOURCC( "strh" );
@@ -437,7 +437,7 @@ static int AVIInit( hb_mux_object_t * m )
     for( i = 0; i < audio_count; i++ )
     {
         char fourcc[4] = "00wb";
-        
+
         audio    = hb_list_item( title->list_audio, i );
         mux_data = audio->mux_data;
 
@@ -498,11 +498,11 @@ static int AVIMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         WriteInt8( m->file, 0 );
     }
 
-    /* Update headers */ 
+    /* Update headers */
     m->size += 8 + EVEN( buf->size );
     mux_data->header.Length++;
 
-    /* RIFF size */ 
+    /* RIFF size */
     fseek( m->file, 4, SEEK_SET );
     WriteInt32( m->file, 2052 + m->size );
 

@@ -11,7 +11,7 @@ int  declpcmWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
 void declpcmClose( hb_work_object_t * );
 
 hb_work_object_t hb_declpcm =
-{   
+{
     WORK_DECLPCM,
     "LPCM decoder",
     declpcmInit,

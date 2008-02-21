@@ -36,7 +36,7 @@ static hb_buffer_t * Decode( hb_work_object_t * );
 int decsubInit( hb_work_object_t * w, hb_job_t * job )
 {
     hb_work_private_t * pv;
-    
+
     pv              = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
 
@@ -146,12 +146,12 @@ static void ParseControls( hb_work_object_t * w )
     pv->pts_start = 0;
     pv->pts_stop  = 0;
     pv->pts_forced  = 0;
-	
+
     pv->alpha[3] = 0;
     pv->alpha[2] = 0;
     pv->alpha[1] = 0;
     pv->alpha[0] = 0;
-    
+
     for( i = pv->size_rle; ; )
     {
         date = ( pv->buf[i] << 8 ) | pv->buf[i+1]; i += 2;
@@ -184,7 +184,7 @@ static void ParseControls( hb_work_object_t * w )
                      */
                     if( job->indepth_scan )
                     {
-                        for( n=0; n < hb_list_count(title->list_subtitle); n++ ) 
+                        for( n=0; n < hb_list_count(title->list_subtitle); n++ )
                         {
                             subtitle = hb_list_item( title->list_subtitle, n);
                             if( pv->stream_id == subtitle->id ) {
@@ -208,8 +208,8 @@ static void ParseControls( hb_work_object_t * w )
                     break;
 
                 case 0x03: // 0x03 - SET_COLOR - Set Colour indices
-                {              
-                    /* 
+                {
+                    /*
                      * SET_COLOR - provides four indices into the CLUT
                      * for the current PGC to associate with the four
                      * pixel values
@@ -245,45 +245,45 @@ static void ParseControls( hb_work_object_t * w )
                                3-j,
                                pv->lum[3-j],
                                pv->chromaU[3-j],
-                               pv->chromaV[3-j]); 
+                               pv->chromaV[3-j]);
                         */
-                    } 
+                    }
                     i += 2;
                     break;
                 }
                 case 0x04: // 0x04 - SET_CONTR - Set Contrast
                 {
-                    /* 
+                    /*
                      * SET_CONTR - directly provides the four contrast
                      * (alpha blend) values to associate with the four
                      * pixel values
                      */
                     uint8_t    alpha[4];
-                    
+
                     alpha[3] = (pv->buf[i+0]>>4)&0x0f;
                     alpha[2] = (pv->buf[i+0])&0x0f;
                     alpha[1] = (pv->buf[i+1]>>4)&0x0f;
                     alpha[0] = (pv->buf[i+1])&0x0f;
-                    
-                    
+
+
                     int lastAlpha = pv->alpha[3] + pv->alpha[2] + pv->alpha[1] + pv->alpha[0];
                     int currAlpha = alpha[3] + alpha[2] + alpha[1] + alpha[0];
-                    
+
                     // fading-in, save the highest alpha value
-                    if( currAlpha > lastAlpha ) 
+                    if( currAlpha > lastAlpha )
                     {
                         pv->alpha[3] = alpha[3];
                         pv->alpha[2] = alpha[2];
                         pv->alpha[1] = alpha[1];
                         pv->alpha[0] = alpha[0];
                     }
-                    
+
                     // fading-out
-                    if( currAlpha < lastAlpha && !pv->pts_stop ) 
+                    if( currAlpha < lastAlpha && !pv->pts_stop )
                     {
                         pv->pts_stop = pv->pts + date * 900;
                     }
-                    
+
                     i += 2;
                     break;
                 }
@@ -304,7 +304,7 @@ static void ParseControls( hb_work_object_t * w )
                 }
             }
         }
-		
+
 
 
         if( i > next )
@@ -485,7 +485,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
 #define GET_NEXT_NIBBLE code = ( code << 4 ) | ( ( ( *offset & 1 ) ? \
 ( pv->buf[((*offset)>>1)] & 0xF ) : ( pv->buf[((*offset)>>1)] >> 4 ) ) ); \
 (*offset)++
-    
+
     offsets[0] = pv->offsets[0] * 2;
     offsets[1] = pv->offsets[1] * 2;
 

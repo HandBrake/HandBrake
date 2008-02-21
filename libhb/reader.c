@@ -15,7 +15,7 @@ typedef struct
     hb_dvd_t     * dvd;
     hb_buffer_t  * ps;
     hb_stream_t  * stream;
-    
+
     uint           sequence;
 
 } hb_reader_t;
@@ -41,7 +41,7 @@ hb_thread_t * hb_reader_init( hb_job_t * job )
     r->title = job->title;
     r->die   = job->die;
     r->sequence = 0;
-    
+
     return hb_thread_init( "reader", ReaderFunc, r,
                            HB_NORMAL_PRIORITY );
 }
@@ -97,7 +97,7 @@ static void ReaderFunc( void * _r )
           return;
       }
     }
-    
+
     list  = hb_list_init();
     r->ps = hb_buffer_init( HB_DVD_READ_BUFFER_SIZE );
 
@@ -107,7 +107,7 @@ static void ReaderFunc( void * _r )
           chapter = hb_dvd_chapter( r->dvd );
         else if (r->stream)
           chapter = 1;
-          
+
         if( chapter < 0 )
         {
             hb_log( "reader: end of the title reached" );
@@ -149,7 +149,7 @@ static void ReaderFunc( void * _r )
             if( p.progress > 1.0 )
             {
                 p.progress = 1.0;
-            } 
+            }
             p.rate_avg = 0.0;
             p.hours    = -1;
             p.minutes  = -1;
@@ -164,9 +164,9 @@ static void ReaderFunc( void * _r )
             hb_list_rem( list, buf );
             fifos = GetFifoForId( r->job, buf->id );
             if( fifos )
-            {  
+            {
                 buf->sequence = r->sequence++;
-                for( n = 0; fifos[n] != NULL; n++) 
+                for( n = 0; fifos[n] != NULL; n++)
                 {
                     if( n != 0 )
                     {
@@ -184,7 +184,7 @@ static void ReaderFunc( void * _r )
                            hb_fifo_is_full( fifos[n] ) )
                     {
                         /*
-                         * Loop until the incoming fifo is reaqdy to receive 
+                         * Loop until the incoming fifo is reaqdy to receive
                          * this buffer.
                          */
                         hb_snooze( 50 );
@@ -211,7 +211,7 @@ static void ReaderFunc( void * _r )
     {
       hb_stream_close(&r->stream);
     }
-    
+
     free( r );
     _r = NULL;
 
@@ -235,15 +235,15 @@ static hb_fifo_t ** GetFifoForId( hb_job_t * job, int id )
 
     if( id == 0xE0 )
     {
-        if( job->indepth_scan ) 
+        if( job->indepth_scan )
         {
             /*
              * Ditch the video here during the indepth scan until
              * we can improve the MPEG2 decode performance.
              */
             return NULL;
-        } 
-        else 
+        }
+        else
         {
             fifos[0] = job->fifo_mpeg2;
             return fifos;
@@ -266,7 +266,7 @@ static hb_fifo_t ** GetFifoForId( hb_job_t * job, int id )
                 subtitle->hits++;
                 if( job->subtitle_force )
                 {
-                    
+
                     fifos[0] = subtitle->fifo_in;
                     return fifos;
                 }
@@ -281,7 +281,7 @@ static hb_fifo_t ** GetFifoForId( hb_job_t * job, int id )
             return fifos;
         }
     }
-    if( !job->indepth_scan ) 
+    if( !job->indepth_scan )
     {
         n = 0;
         for( i = 0; i < hb_list_count( title->list_audio ); i++ )

@@ -20,7 +20,7 @@ typedef struct
 {
     hb_audio_t * audio;
     int64_t      count_frames;
-    
+
     /* Raw */
     SRC_STATE  * state;
     SRC_DATA     data;
@@ -106,7 +106,7 @@ int syncInit( hb_work_object_t * w, hb_job_t * job )
     {
         chapter   = hb_list_item( title->list_chapter, i - 1 );
         duration += chapter->duration;
-    }                                                                           
+    }
     duration += 90000;
         /* 1 second safety so we're sure we won't miss anything */
     pv->count_frames_max = duration * job->vrate / job->vrate_base / 90000;
@@ -137,7 +137,7 @@ void syncClose( hb_work_object_t * w )
     hb_work_private_t * pv = w->private_data;
     hb_job_t          * job   = pv->job;
     hb_title_t        * title = job->title;
-    
+
     int i;
 
     if( pv->cur ) hb_buffer_close( &pv->cur );
@@ -154,7 +154,7 @@ void syncClose( hb_work_object_t * w )
             src_delete( pv->sync_audio[i].state );
         }
     }
-    
+
     free( pv );
     w->private_data = NULL;
 }
@@ -240,7 +240,7 @@ static void InitAudio( hb_work_object_t * w, int i )
         {
             hb_log( "sync: avcodec_encode_audio failed" );
         }
-        
+
         free( zeros );
         avcodec_close( c );
         av_free( c );
@@ -261,7 +261,7 @@ static void InitAudio( hb_work_object_t * w, int i )
 /***********************************************************************
  * SyncVideo
  ***********************************************************************
- * 
+ *
  **********************************************************************/
 static int SyncVideo( hb_work_object_t * w )
 {
@@ -285,14 +285,14 @@ static int SyncVideo( hb_work_object_t * w )
         hb_log( "sync: got %lld frames, %lld expected",
                 pv->count_frames, pv->count_frames_max );
         pv->done = 1;
-        
+
         hb_buffer_t * buf_tmp;
 
        // Drop an empty buffer into our output to ensure that things
        // get flushed all the way out.
         buf_tmp = hb_buffer_init(0); // Empty end buffer
         hb_fifo_push( job->fifo_sync, buf_tmp );
-        
+
         return HB_WORK_DONE;
     }
 
@@ -331,7 +331,7 @@ static int SyncVideo( hb_work_object_t * w )
         {
 	    hb_log( "Sync: Video PTS discontinuity %s (current buffer start=%lld, next buffer start=%lld)",
                     pv->discontinuity ? "second" : "first", cur->start, next->start );
-            
+
             /*
              * Do we need to trash the subtitle, is it from the next->start period
              * or is it from our old position. If the latter then trash it.
@@ -395,7 +395,7 @@ static int SyncVideo( hb_work_object_t * w )
                 if( sub2 && sub->stop > sub2->start )
                     sub->stop = sub2->start;
 
-                // hb_log("0x%x: video seq: %lld  subtitle sequence: %lld", 
+                // hb_log("0x%x: video seq: %lld  subtitle sequence: %lld",
                 //       sub, cur->sequence, sub->sequence);
 
                 if( sub->sequence > cur->sequence )
@@ -417,8 +417,8 @@ static int SyncVideo( hb_work_object_t * w )
                      * code.
                      */
                     break;
-                } 
-                else 
+                }
+                else
                 {
                     /*
                      * The stop time is in the past. But is it due to
@@ -436,8 +436,8 @@ static int SyncVideo( hb_work_object_t * w )
                     }
                 }
 
-                /* 
-                 * The subtitle is older than this picture, trash it 
+                /*
+                 * The subtitle is older than this picture, trash it
                  */
                 sub = hb_fifo_get( pv->subtitle->fifo_raw );
                 hb_buffer_close( &sub );
@@ -451,7 +451,7 @@ static int SyncVideo( hb_work_object_t * w )
                 if( sub->stop > sub->start)
                 {
                     /*
-                     * Normal subtitle which ends after it starts, check to 
+                     * Normal subtitle which ends after it starts, check to
                      * see that the current video is between the start and end.
                      */
                     if( cur->start > sub->start &&
@@ -463,7 +463,7 @@ static int SyncVideo( hb_work_object_t * w )
                          *
                          * fall through to display
                          */
-                    } 
+                    }
                     else
                     {
                         /*
@@ -493,8 +493,8 @@ static int SyncVideo( hb_work_object_t * w )
                              *
                              * fall through to display.
                              */
-                        } 
-                        else 
+                        }
+                        else
                         {
                             /*
                              * Defer until the play point is within the subtitle
@@ -540,7 +540,7 @@ static int SyncVideo( hb_work_object_t * w )
             pts_expected = pv->pts_offset +
                 pv->count_frames * pv->job->vrate_base / 300;
 
-            //hb_log("Video expecting PTS %lld, current frame: %lld, next frame: %lld, cf: %lld", 
+            //hb_log("Video expecting PTS %lld, current frame: %lld, next frame: %lld, cf: %lld",
             //       pts_expected, cur->start, next->start, pv->count_frames * pv->job->vrate_base / 300 );
 
             if( cur->start < pts_expected - pv->job->vrate_base / 300 / 2 &&
@@ -553,7 +553,7 @@ static int SyncVideo( hb_work_object_t * w )
                 hb_buffer_close( &cur );
                 pv->cur = cur = hb_fifo_get( job->fifo_raw );
                 cur->new_chap |= chap_break; // Make sure we don't stomp the existing one.
-                
+
                 continue;
             }
 
@@ -562,7 +562,7 @@ static int SyncVideo( hb_work_object_t * w )
                 /* We'll need the current frame more than one time. Make a
                    copy of it and keep it */
                 buf_tmp = hb_buffer_init( cur->size );
-                memcpy( buf_tmp->data, cur->data, cur->size ); 
+                memcpy( buf_tmp->data, cur->data, cur->size );
                 buf_tmp->sequence = cur->sequence;
             }
             else
@@ -572,7 +572,7 @@ static int SyncVideo( hb_work_object_t * w )
                 buf_tmp = cur;
                 pv->cur = cur = hb_fifo_get( job->fifo_raw );
             }
-            
+
             /* Replace those MPEG-2 dates with our dates */
             buf_tmp->start = (uint64_t) pv->count_frames *
                 pv->job->vrate_base / 300;
@@ -603,12 +603,12 @@ static int SyncVideo( hb_work_object_t * w )
         {
             hb_log( "sync: got too many frames (%lld), exiting early", pv->count_frames );
             pv->done = 1;
-            
+
            // Drop an empty buffer into our output to ensure that things
            // get flushed all the way out.
            buf_tmp = hb_buffer_init(0); // Empty end buffer
            hb_fifo_push( job->fifo_sync, buf_tmp );
-            
+
             break;
         }
     }
@@ -619,7 +619,7 @@ static int SyncVideo( hb_work_object_t * w )
 /***********************************************************************
  * SyncAudio
  ***********************************************************************
- * 
+ *
  **********************************************************************/
 static void SyncAudio( hb_work_object_t * w, int i )
 {
@@ -673,7 +673,7 @@ static void SyncAudio( hb_work_object_t * w, int i )
             if( pv->discontinuity )
             {
                 /*
-                 * There is an outstanding discontinuity, so use the offset from 
+                 * There is an outstanding discontinuity, so use the offset from
                  * that discontinuity.
                  */
                 pts_expected = pv->pts_offset_old + sync->count_frames *
@@ -721,7 +721,7 @@ static void SyncAudio( hb_work_object_t * w, int i )
                  * Try and reconverge regardless. so continue on to
                  * our convergence code below which will kick in as
                  * it will be more than 100ms out.
-                 * 
+                 *
                  * Note that trashing the Audio could make things
                  * worse if the Audio is in front because we will end
                  * up diverging even more. We need to hold on to the
@@ -732,7 +732,7 @@ static void SyncAudio( hb_work_object_t * w, int i )
                     hb_log("Sync: Audio is way out of sync, attempt to reconverge from current video PTS");
                     pv->way_out_of_sync = 1;
                 }
-		
+
                 /*
                  * It wasn't from the old place, so we must be from
                  * the new, but just too far out. So attempt to
@@ -785,8 +785,8 @@ static void SyncAudio( hb_work_object_t * w, int i )
             }
             InsertSilence( w, i );
             continue;
-        } 
-        else 
+        }
+        else
         {
             if( pv->trashing_audio || pv->inserting_silence )
             {
@@ -856,7 +856,7 @@ static void SyncAudio( hb_work_object_t * w, int i )
     }
 
     if( hb_fifo_is_full( fifo ) &&
-        pv->way_out_of_sync ) 
+        pv->way_out_of_sync )
     {
         /*
          * Trash the top audio packet to avoid dead lock as we reconverge.
@@ -968,14 +968,14 @@ static void UpdateState( hb_work_object_t * w )
                  3 * sizeof( uint64_t ) );
         pv->st_dates[3]  = hb_get_date();
         pv->st_counts[3] = pv->count_frames;
-    } 
+    }
 
 #define p state.param.working
     state.state = HB_STATE_WORKING;
     p.progress  = (float) pv->count_frames / (float) pv->count_frames_max;
     if( p.progress > 1.0 )
     {
-        p.progress = 1.0; 
+        p.progress = 1.0;
     }
     p.rate_cur   = 1000.0 *
         (float) ( pv->st_counts[3] - pv->st_counts[0] ) /

@@ -20,19 +20,19 @@ int  encavcodecWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
 void encavcodecClose( hb_work_object_t * );
 
 hb_work_object_t hb_encavcodec =
-{   
+{
     WORK_ENCAVCODEC,
     "MPEG-4 encoder (libavcodec)",
     encavcodecInit,
     encavcodecWork,
     encavcodecClose
-}; 
+};
 
 int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 {
     AVCodec * codec;
     AVCodecContext * context;
-    
+
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
 
@@ -70,7 +70,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         context->sample_aspect_ratio.num = job->pixel_aspect_width;
         context->sample_aspect_ratio.den = job->pixel_aspect_height;
 
-        hb_log( "encavcodec: encoding with stored aspect %d/%d", 
+        hb_log( "encavcodec: encoding with stored aspect %d/%d",
                 job->pixel_aspect_width, job->pixel_aspect_height );
     }
 
@@ -135,7 +135,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                 context->extradata_size );
 #endif
     }
-    
+
     return 0;
 }
 

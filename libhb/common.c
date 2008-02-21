@@ -5,7 +5,7 @@
    It may be used under the terms of the GNU General Public License. */
 
 #include <stdarg.h>
-#include <time.h> 
+#include <time.h>
 #include <sys/time.h>
 
 #include "common.h"
@@ -182,10 +182,10 @@ int hb_calc_bitrate( hb_job_t * job, int size )
 		case HB_MUX_IPOD:
 		case HB_MUX_MKV:
             overhead = 6;
-            break; 
+            break;
         case HB_MUX_AVI:
             overhead = 24;
-            break; 
+            break;
         case HB_MUX_OGM:
             overhead = 6;
             break;
@@ -246,7 +246,7 @@ int hb_calc_bitrate( hb_job_t * job, int size )
             abitrate = job->abitrate * 1000 / 8;
         }
         avail -= length * abitrate;
-        
+
         /* Audio overhead */
         avail -= length * job->arate * overhead / samples_per_frame;
     }
@@ -391,7 +391,7 @@ int hb_list_bytes( hb_list_t * l )
         ret += buf->size - buf->cur;
     }
 
-    return ret;                                                                 
+    return ret;
 }
 
 /**********************************************************************
@@ -406,14 +406,14 @@ void hb_list_seebytes( hb_list_t * l, uint8_t * dst, int size )
     int           copied;
     int           copying;
     int           i;
-    
+
     for( i = 0, copied = 0; copied < size; i++ )
     {
         buf     = hb_list_item( l, i );
         copying = MIN( buf->size - buf->cur, size - copied );
         memcpy( &dst[copied], &buf->data[buf->cur], copying );
         copied += copying;
-    }                                                                           
+    }
 }
 
 /**********************************************************************
@@ -433,7 +433,7 @@ void hb_list_getbytes( hb_list_t * l, uint8_t * dst, int size,
     int           copied;
     int           copying;
     uint8_t       has_pts;
-    
+
     /* So we won't have to deal with NULL pointers */
      uint64_t dummy1, dummy2;
 
@@ -461,7 +461,7 @@ void hb_list_getbytes( hb_list_t * l, uint8_t * dst, int size,
         }
 
         copied += copying;
-    }                                                                           
+    }
 }
 
 /**********************************************************************
@@ -540,7 +540,7 @@ void hb_log( char * log, ... )
 /**********************************************************************
  * hb_error
  **********************************************************************
- * Using whatever output is available display this error. 
+ * Using whatever output is available display this error.
  *********************************************************************/
 void hb_error( char * log, ... )
 {
@@ -571,7 +571,7 @@ void hb_register_error_handler( hb_error_handler_t * handler )
 /**********************************************************************
  * hb_title_init
  **********************************************************************
- * 
+ *
  *********************************************************************/
 hb_title_t * hb_title_init( char * dvd, int index )
 {
@@ -591,7 +591,7 @@ hb_title_t * hb_title_init( char * dvd, int index )
 /**********************************************************************
  * hb_title_close
  **********************************************************************
- * 
+ *
  *********************************************************************/
 void hb_title_close( hb_title_t ** _t )
 {
@@ -606,14 +606,14 @@ void hb_title_close( hb_title_t ** _t )
         free( audio );
     }
     hb_list_close( &t->list_audio );
-    
+
     while( ( chapter = hb_list_item( t->list_chapter, 0 ) ) )
     {
         hb_list_rem( t->list_chapter, chapter );
         free( chapter );
     }
     hb_list_close( &t->list_chapter );
-    
+
     while( ( subtitle = hb_list_item( t->list_subtitle, 0 ) ) )
     {
         hb_list_rem( t->list_subtitle, subtitle );
@@ -628,7 +628,7 @@ void hb_title_close( hb_title_t ** _t )
 /**********************************************************************
  * hb_filter_close
  **********************************************************************
- * 
+ *
  *********************************************************************/
 void hb_filter_close( hb_filter_object_t ** _f )
 {
