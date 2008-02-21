@@ -1421,7 +1421,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         /* We set the largeFileSize (64 bit formatting) variable here to allow for > 4gb files based on the format being
 		mpeg4 and the checkbox being checked 
 		*Note: this will break compatibility with some target devices like iPod, etc.!!!!*/
-		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"AllowLargeFiles"] > 0 && [fDstMp4LargeFileCheck state] == NSOnState)
+		if ([fDstMp4LargeFileCheck state] == NSOnState)
 		{
 			job->largeFileSize = 1;
 		}
