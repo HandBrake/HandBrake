@@ -1053,8 +1053,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 - (void) browseSourcesDone: (NSOpenPanel *) sheet
                 returnCode: (int) returnCode contextInfo: (void *) contextInfo
 {
-    [browsedSourceDisplayName release];
-    
     /* we convert the sender content of contextInfo back into a variable called sender
      * mostly just for consistency for evaluation later
      */
@@ -1062,6 +1060,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* User selected a file to open */
 	if( returnCode == NSOKButton )
     {
+            /* Free display name allocated previously by this code */
+        [browsedSourceDisplayName release];
        
         NSString *scanPath = [[sheet filenames] objectAtIndex: 0];
         /* we set the last searched source directory in the prefs here */
