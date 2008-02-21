@@ -173,9 +173,18 @@ static int MKVInit( hb_mux_object_t * m )
                 }
                 break;
             case HB_ACODEC_FAAC:
-                track->codecPrivate = audio->config.aac.bytes;
-                track->codecPrivateSize = audio->config.aac.length;
-                track->codecID = MK_ACODEC_AAC;
+                if( job->audio_mixdowns[i] == HB_AMIXDOWN_AC3 )
+                {
+                    track->codecPrivate = NULL;
+                    track->codecPrivateSize = 0;
+                    track->codecID = MK_ACODEC_AC3; 
+                }
+                else
+                {
+                    track->codecPrivate = audio->config.aac.bytes;
+                    track->codecPrivateSize = audio->config.aac.length;
+                    track->codecID = MK_ACODEC_AAC;
+                }
                 break;
             default:
                 *job->die = 1;
@@ -192,7 +201,7 @@ static int MKVInit( hb_mux_object_t * m )
         track->trackType = MK_TRACK_AUDIO;
         track->language = audio->iso639_2;
         track->extra.audio.samplingFreq = (float)job->arate;
-        track->extra.audio.channels = (job->acodec == HB_ACODEC_AC3) ? HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(audio->input_channel_layout) : HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown);
+        track->extra.audio.channels = (job->acodec == HB_ACODEC_AC3 || job->audio_mixdowns[i] == HB_AMIXDOWN_AC3  ) ? HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(audio->input_channel_layout) : HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown);
 //        track->defaultDuration = job->arate * 1000;
         mux_data->track = mk_createTrack(m->file, track);
         if (job->acodec == HB_ACODEC_VORBIS && track->codecPrivate != NULL)
