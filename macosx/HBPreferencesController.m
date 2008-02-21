@@ -49,8 +49,7 @@
         desktopDirectory,   @"LastSourceDirectory",
         @"NO",              @"DefaultAutoNaming",
         @"NO",              @"DefaultChapterMarkers",
-        @"NO",              @"AllowLargeFiles",
-		@"NO",              @"DisableDvdAutoDetect",
+        @"NO",              @"DisableDvdAutoDetect",
 		@"Alert Window",    @"AlertWhenDone",
         nil]];
 }

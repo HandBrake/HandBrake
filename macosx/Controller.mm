@@ -2254,23 +2254,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             [fDstCodecsPopUp addItemWithTitle:_( @"AVC/H.264 Video / AAC + AC3 Audio" )];
             [fDstCodecsPopUp addItemWithTitle:_( @"AVC/H.264 Video / AC3 Audio" )];
 			/* We enable the create chapters checkbox here since we are .mp4*/
-			[fCreateChapterMarkers setEnabled: YES];
-			/* We show the Large File (64 bit formatting) checkbox since we are .mp4 
-             if we have enabled the option in the global preferences*/
-			if ([[NSUserDefaults standardUserDefaults] boolForKey:@"AllowLargeFiles"] > 0)
-			{
-				[fDstMp4LargeFileCheck setHidden: NO];
-			}
-            else
-            {
-                /* if not enable in global preferences, we additionaly sanity check that the
-                 hidden checkbox is set to off. */
-                [fDstMp4LargeFileCheck setState: NSOffState];
-            }
-            /* We show the HTTP Optimized checkbox here since we are mp4 */
-            [fDstMp4HttpOptFileCheck setHidden: NO];
+			/* We show the mp4 option checkboxes here since we are mp4 */
+            [fCreateChapterMarkers setEnabled: YES];
+			[fDstMp4LargeFileCheck setHidden: NO];
+			[fDstMp4HttpOptFileCheck setHidden: NO];
             [fDstMp4iPodFileCheck setHidden: NO];
-            
             break;
             
         case 1:
