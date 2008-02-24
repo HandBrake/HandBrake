@@ -728,7 +728,7 @@ namespace Handbrake.Functions
             if (mainWindow.Check_ChapterMarkers.Checked)
             {
 
-                if (source_name != "Click 'Browse' to continue")
+                if (source_name.Trim().Replace("-i ", "") != "Click \'Browse\' to continue")
                 {
                     if (source_title != "Automatic")
                     {
@@ -745,8 +745,16 @@ namespace Handbrake.Functions
                     }
                     else
                     {
-                        string path = Path.Combine(Path.GetTempPath(), "chapters.csv");
-                        ChapterMarkers = " --markers=" + "\"" + path + "\"";
+                        string filename = source_name + "-chapters.csv";
+                        string path = Path.Combine(Path.GetTempPath(), filename);
+
+                        Boolean saveCSV = chapterCSVSave(mainWindow, path);
+                        if (saveCSV == false)
+                            ChapterMarkers = " -m ";
+                        else
+                        {
+                            ChapterMarkers = " --markers=" + "\"" + path + "\"";
+                        }
                     }
                 }
                 else
