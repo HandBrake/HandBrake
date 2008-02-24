@@ -1212,6 +1212,11 @@ namespace Handbrake
 
         #endregion
 
+        private void text_destination_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
 
 
         // This is the END of the road ------------------------------------------------------------------------------

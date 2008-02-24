@@ -37,7 +37,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label Label38;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -202,6 +202,7 @@ namespace Handbrake
             this.btn_ActivityWindow = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.lbl_warn_chapt = new System.Windows.Forms.Label();
             Label38 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.slider_drc)).BeginInit();
@@ -323,6 +324,7 @@ namespace Handbrake
             this.text_destination.Size = new System.Drawing.Size(429, 21);
             this.text_destination.TabIndex = 1;
             this.ToolTip.SetToolTip(this.text_destination, "Location where the encoded file will be saved.");
+            this.text_destination.TextChanged += new System.EventHandler(this.text_destination_TextChanged);
             // 
             // btn_Browse
             // 
@@ -1664,8 +1666,7 @@ namespace Handbrake
             "None",
             "Fast",
             "Slow",
-            "Slower",
-            "Slowest"});
+            "Slower"});
             this.drp_deInterlace_option.Location = new System.Drawing.Point(413, 190);
             this.drp_deInterlace_option.Name = "drp_deInterlace_option";
             this.drp_deInterlace_option.Size = new System.Drawing.Size(161, 21);
@@ -1819,6 +1820,7 @@ namespace Handbrake
             // tab_chapters
             // 
             this.tab_chapters.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.tab_chapters.Controls.Add(this.lbl_warn_chapt);
             this.tab_chapters.Controls.Add(this.label31);
             this.tab_chapters.Controls.Add(this.data_chpt);
             this.tab_chapters.Controls.Add(this.Check_ChapterMarkers);
@@ -1848,16 +1850,16 @@ namespace Handbrake
             this.data_chpt.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.number,
             this.name});
-            this.data_chpt.Location = new System.Drawing.Point(16, 55);
+            this.data_chpt.Location = new System.Drawing.Point(16, 72);
             this.data_chpt.Name = "data_chpt";
-            this.data_chpt.Size = new System.Drawing.Size(607, 199);
+            this.data_chpt.Size = new System.Drawing.Size(607, 182);
             this.data_chpt.TabIndex = 2;
             // 
             // number
             // 
-            dataGridViewCellStyle3.Format = "N0";
-            dataGridViewCellStyle3.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle1;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -2159,6 +2161,15 @@ namespace Handbrake
             this.toolStripSeparator8.Name = "toolStripSeparator8";
             this.toolStripSeparator8.Size = new System.Drawing.Size(6, 39);
             // 
+            // lbl_warn_chapt
+            // 
+            this.lbl_warn_chapt.AutoSize = true;
+            this.lbl_warn_chapt.Location = new System.Drawing.Point(13, 52);
+            this.lbl_warn_chapt.Name = "lbl_warn_chapt";
+            this.lbl_warn_chapt.Size = new System.Drawing.Size(394, 13);
+            this.lbl_warn_chapt.TabIndex = 23;
+            this.lbl_warn_chapt.Text = "Please make sure you have selected a DVD tile in the \"Source\" box";
+            // 
             // frmMain
             // 
             this.AllowDrop = true;
@@ -2383,6 +2394,7 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripButton btn_ActivityWindow;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Label lbl_warn_chapt;
 
     }
 }

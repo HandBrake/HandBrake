@@ -714,20 +714,46 @@ namespace Handbrake.Functions
 
             string ChapterMarkers = "";
 
+            // Attach Source name and dvd title to the start of the chapters.csv filename.
+            // This is for the queue. It allows different chapter name files for each title.
+            string source_name = mainWindow.text_source.Text;
+            string[] sourceName = source.Split('\\');
+            source_name = sourceName[sourceName.Length - 1].Replace(".iso", "").Replace(".mpg", "").Replace(".ts", "").Replace(".ps", "");
+            source_name = source_name.Replace("\"", "");
+
+            string source_title = mainWindow.drp_dvdtitle.Text;
+            string[] titlesplit = source_title.Split(' ');
+            source_title = titlesplit[0];
+
             if (mainWindow.Check_ChapterMarkers.Checked)
             {
-                Boolean saveCSV = chapterCSVSave(mainWindow);
-                if (saveCSV == false)
+
+                if (source_name != "Click 'Browse' to continue")
                 {
-                    MessageBox.Show("Unable to save Chapter Makrers file! \n Chapter marker names will NOT be saved in your encode \n\n", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    ChapterMarkers = " -m ";
+                    if (source_title != "Automatic")
+                    {
+                        string filename = source_name + "-" + source_title + "-chapters.csv";
+                        string path = Path.Combine(Path.GetTempPath(), filename);
+
+                        Boolean saveCSV = chapterCSVSave(mainWindow, path);
+                        if (saveCSV == false)
+                            ChapterMarkers = " -m ";
+                        else
+                        {
+                            ChapterMarkers = " --markers=" + "\"" + path + "\"";
+                        }
+                    }
+                    else
+                    {
+                        string path = Path.Combine(Path.GetTempPath(), "chapters.csv");
+                        ChapterMarkers = " --markers=" + "\"" + path + "\"";
+                    }
                 }
                 else
                 {
                     string path = Path.Combine(Path.GetTempPath(), "chapters.csv");
-
                     ChapterMarkers = " --markers=" + "\"" + path + "\"";
-                }
+                } 
             }
 
             string chapter_markers = ChapterMarkers;
@@ -807,12 +833,10 @@ namespace Handbrake.Functions
          * This function saves the data in the chapters tab, dataGridView into a CSV file called chapters.csv in this applications
          * running directory.
          */
-        private Boolean chapterCSVSave(frmMain mainWindow)
+        private Boolean chapterCSVSave(frmMain mainWindow, string file_path_name)
         {
             try
-            {
-                string path = Path.Combine(Path.GetTempPath(), "chapters.csv");
-
+            {      
                 StringBuilder csv = new StringBuilder();
 
                 foreach (DataGridViewRow row in mainWindow.data_chpt.Rows)
@@ -822,7 +846,7 @@ namespace Handbrake.Functions
                     csv.Append(row.Cells[1].Value.ToString());
                     csv.Append(Environment.NewLine);
                 }
-                StreamWriter file = new StreamWriter(path);
+                StreamWriter file = new StreamWriter(file_path_name);
                 file.Write(csv.ToString());
                 file.Close();
                 file.Dispose();
@@ -831,7 +855,7 @@ namespace Handbrake.Functions
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.ToString(), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Unable to save Chapter Makrers file! \nChapter marker names will NOT be saved in your encode \n\n" + exc.ToString(), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
         }
