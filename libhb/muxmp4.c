@@ -351,7 +351,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
 {
     hb_job_t * job = m->job;
 
-    uint64_t duration;
+    int64_t duration;
 
     if( mux_data == job->mux_data )
     {
@@ -398,6 +398,23 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
            doesn't go out of sync */
         int64_t bias = ( buf->start * job->arate / 90000 ) - m->sum_dur;
         duration = ( buf->stop - buf->start ) * job->arate / 90000 + bias;
+        if ( duration <= 0 )
+        {
+            /* We got an illegal mp4/h264 duration. This shouldn't
+               be possible and usually indicates a bug in the upstream code.
+               Complain in the hope that someone will go find the bug but
+               try to fix the error so that the file will still be playable. */
+            hb_log("MP4Mux: illegal duration %lld, bias %lld, start %lld (%lld),"
+                   "stop %lld (%lld), sum_dur %lld",
+                   duration, bias, buf->start * job->arate / 90000, buf->start,
+                   buf->stop * job->arate / 90000, buf->stop, m->sum_dur );
+            /* we don't know when the next frame starts so we can't pick a
+               valid duration for this one so we pick something "short"
+               (roughly 1/3 of an NTSC frame time) and rely on the bias calc
+               for the next frame to correct things (a duration underestimate
+               just results in a large bias on the next frame). */
+            duration = 1000 * job->arate / 90000;
+        }
         m->sum_dur += duration;
     }
     else
