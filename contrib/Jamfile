@@ -378,6 +378,7 @@ rule LibXvidCore
         LIBXVIDCORE_PATCH = "$(PATCH) -p1 < ../patch-xvidcore-cygwin.patch && " ;
     }
     LIBXVIDCORE_PATCH += "$(PATCH) -p1 < ../patch-xvidcore-nasm-2.00-configure.patch && " ;
+    LIBXVIDCORE_PATCH += "$(PATCH) -p1 < ../patch-xvidcore-fdct.patch && " ;
     Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
 }

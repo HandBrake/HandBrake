@@ -1,0 +1,8 @@
+--- xvidcore/src/dct/x86_asm/fdct_sse2_skal.asm.orig	2008-02-22 10:28:13.000000000 -0800
++++ xvidcore/src/dct/x86_asm/fdct_sse2_skal.asm	2008-02-22 11:08:52.000000000 -0800
+@@ -620,3 +620,5 @@
+   ret
+ .endfunc
+ 
++ALIGN 16
++  times 8 dw 0
