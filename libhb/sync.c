@@ -463,6 +463,26 @@ static int SyncVideo( hb_work_object_t * w )
                          *
                          * fall through to display
                          */
+                        if( ( sub->stop - sub->start ) < ( 3 * 90000 ) )
+                        {
+                            /*
+                             * Subtitle is on for less than three seconds, extend
+                             * the time that it is displayed to make it easier
+                             * to read. Make it 3 seconds or until the next
+                             * subtitle is displayed. 
+                             *
+                             * This is in response to Indochine which only 
+                             * displays subs for 1 second - too fast to read.
+                             */
+                            sub->stop = sub->start + ( 3 * 90000 );
+
+                            sub2 = hb_fifo_see2( pv->subtitle->fifo_raw );
+
+                            if( sub2 && sub->stop > sub2->start )
+                            {
+                                sub->stop = sub2->start;
+                            }
+                        }
                     }
                     else
                     {
