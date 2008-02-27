@@ -1,0 +1,107 @@
+Index: encoder/ratecontrol.c
+===================================================================
+--- encoder/ratecontrol.c	(revision 736)
++++ encoder/ratecontrol.c	(working copy)
+@@ -762,6 +899,15 @@
+     return bits;
+ }
+ 
++double row_bits_so_far( x264_t *h, int y )
++{
++    int i;
++    double bits = 0;
++    for( i = 0; i <= y; i++ )
++        bits += h->fdec->i_row_bits[i];
++    return bits;
++}
++
+ void x264_ratecontrol_mb( x264_t *h, int bits )
+ {
+     x264_ratecontrol_t *rc = h->rc;
+@@ -783,10 +929,10 @@
+         /* B-frames shouldn't use lower QP than their reference frames */
+         if( y < h->sps->i_mb_height-1 )
+         {
+-            rc->qpm = X264_MAX( rc->qp,
+-                      X264_MIN( h->fref0[0]->i_row_qp[y+1],
+-                                h->fref1[0]->i_row_qp[y+1] ));
++            int avg_qp = (h->fref0[0]->i_row_qp[y+1]+h->fref1[0]->i_row_qp[y+1])*0.5+rc->pb_offset * ((h->fenc->i_type == X264_TYPE_BREF) ? 0.5 : 1);
++            rc->qpm = X264_MAX( rc->qp, avg_qp);
+         }
++        //printf("Frame: %d QP: %d PrevQP: %d NextQP: %d NewQP: %d\n",h->i_frame,rc->qp,h->fref0[0]->i_row_qp[y+1],h->fref1[0]->i_row_qp[y+1],rc->qpm);
+     }
+     else
+     {
+@@ -800,13 +946,47 @@
+             int b1 = b0;
+             int i_qp_max = X264_MIN( prev_row_qp + h->param.rc.i_qp_step, h->param.rc.i_qp_max );
+             int i_qp_min = X264_MAX( prev_row_qp - h->param.rc.i_qp_step, h->param.rc.i_qp_min );
+-            float buffer_left_planned = rc->buffer_fill - rc->frame_size_planned;
++            float actual_size_planned = rc->frame_size_planned;
++           /* Don't modify the row QPs until a suffient amount of the bits of the frame have been processed, in case a flat */
++           /* area at the top of the frame was measured inaccurately. */
++            if(row_bits_so_far(h,y) < 0.15 * actual_size_planned)
++            {
++                return;
++            }
++            /* If this frame is a P-frame, make sure it isn't too large. */
++            if(h->sh.i_type != SLICE_TYPE_I)
++            {
++                /*if(actual_size_planned > 2 * rc->buffer_rate)
++                {
++                    float min_size = 2 * rc->buffer_rate;
++                    actual_size_planned *= powf(min_size/actual_size_planned,0.8);
++                }*/
++            }
++            /* If this frame is an I-frame and isn't too large, don't run the rest of row MBRC */
++            else if(b1 < rc->buffer_fill * 0.6)
++            {
++                /* If the current row is higher QP than the frame QP, try lowering the QP */
++                if(h->fdec->i_row_qp[0] < rc->qpm)
++                {
++                    while(b1 < rc->buffer_fill * 0.6 && rc->qpm > h->fdec->i_row_qp[0])
++                    {
++                        rc->qpm--;
++                        b1 = predict_row_size_sum( h, y, rc->qpm );
++                    }
++                    return;
++                }
++                else
++                    return;
++            }
++            /* Don't let I-frames take up more than 60% of the remaining buffer. */
++            else actual_size_planned = rc->buffer_fill * 0.6;
++            float buffer_left_planned = rc->buffer_fill - actual_size_planned;
+ 
+             if( !rc->b_vbv_min_rate )
+                 i_qp_min = X264_MAX( i_qp_min, h->sh.i_qp );
+ 
+             while( rc->qpm < i_qp_max
+-                   && (b1 > rc->frame_size_planned * 1.15
++                   && (b1 > actual_size_planned * 1.15
+                     || (rc->buffer_fill - b1 < buffer_left_planned * 0.5)))
+             {
+                 rc->qpm ++;
+@@ -814,8 +994,8 @@
+             }
+ 
+             while( rc->qpm > i_qp_min
+-                   && buffer_left_planned > rc->buffer_size * 0.4
+-                   && ((b1 < rc->frame_size_planned * 0.8 && rc->qpm <= prev_row_qp)
++                   && ((buffer_left_planned > rc->buffer_size * 0.4) || rc->qpm > h->fdec->i_row_qp[0])
++                   && ((b1 < actual_size_planned * 0.8 && rc->qpm <= prev_row_qp)
+                      || b1 < (rc->buffer_fill - rc->buffer_size + rc->buffer_rate) * 1.1) )
+             {
+                 rc->qpm --;
+@@ -1191,8 +1373,8 @@
+         ( pict_type == SLICE_TYPE_P ||
+           ( pict_type == SLICE_TYPE_I && rcc->last_non_b_pict_type == SLICE_TYPE_I ) ) )
+     {
+-        if( rcc->buffer_fill/rcc->buffer_size < 0.5 )
+-            q /= x264_clip3f( 2.0*rcc->buffer_fill/rcc->buffer_size, 0.5, 1.0 );
++        float filled = 1.0 - rcc->buffer_fill/rcc->buffer_size;
++        q *= (1/0.544331054) / pow(2 - filled,1.5);
+     }
+ 
+     if( rcc->b_vbv && rcc->last_satd > 0 )
+
