@@ -42,7 +42,7 @@ Index: encoder/ratecontrol.c
              q = x264_clip3f( q, lmin, lmax );
          }
          else /* 1pass ABR */
-@@ -1455,6 +1472,134 @@
+@@ -1455,6 +1472,137 @@
      /* the rest of the variables are either constant or thread-local */
  }
  
@@ -136,24 +136,25 @@ Index: encoder/ratecontrol.c
 +    int i, t0, t1;
 +    double qscale_min = qp2qscale(h->param.rc.i_qp_min);
 +    double qscale_max = qp2qscale(h->param.rc.i_qp_max);
++    int iterations = 0;
 +
 +    fills++;
 +
 +    //adjust overall stream size
 +    do {
++        iterations++;
 +        prev_bits = expected_bits;
 +
-+        if (expected_bits == 0) { //first iteration
-+          expected_bits = count_expected_bits(h);
-+        }
-+        adjustment = X264_MAX(expected_bits / all_available_bits, 0.999);
-+        fills[-1] = rcc->buffer_size * h->param.rc.f_vbv_buffer_init;
-+        t0 = 0;
-+        //fix overflows
-+        while(find_underflow(h, fills, &t0, &t1, 1))
-+        {
-+            fix_underflow(h, t0, t1, adjustment, qscale_min, qscale_max);
-+            t0 = t1;
++        if (expected_bits != 0) { //not first iteration
++            adjustment = X264_MAX(X264_MIN(expected_bits / all_available_bits, 0.999), 0.9);
++            fills[-1] = rcc->buffer_size * h->param.rc.f_vbv_buffer_init;
++            t0 = 0;
++            //fix overflows
++            while(find_underflow(h, fills, &t0, &t1, 1))
++            {
++                fix_underflow(h, t0, t1, adjustment, qscale_min, qscale_max);
++                t0 = t1;
++            }
 +        }
 +
 +        fills[-1] = rcc->buffer_size * (1. - h->param.rc.f_vbv_buffer_init);
@@ -165,11 +166,13 @@ Index: encoder/ratecontrol.c
 +        }
 +
 +        expected_bits = count_expected_bits(h);
-+    } while(expected_bits < .995*all_available_bits && expected_bits >= prev_bits+1);
++    } while(expected_bits < .995*all_available_bits && expected_bits > prev_bits);
 +
 +    //store expected vbv filling values for tracking when encoding
 +    for(i=0; i<rcc->num_entries; i++)
 +        rcc->entry[i].expected_vbv = rcc->buffer_size - fills[i];
++
++//    x264_log( h, X264_LOG_INFO, "VBV RC initial iterations: %d \n", iterations);
 +
 +    x264_free(fills-1);
 +}
@@ -177,7 +180,7 @@ Index: encoder/ratecontrol.c
  static int init_pass2( x264_t *h )
  {
      x264_ratecontrol_t *rcc = h->rc;
-@@ -1543,7 +1688,6 @@
+@@ -1543,7 +1691,6 @@
          rcc->last_non_b_pict_type = -1;
          rcc->last_accum_p_norm = 1;
          rcc->accum_p_norm = 0;
@@ -185,7 +188,7 @@ Index: encoder/ratecontrol.c
  
          /* find qscale */
          for(i=0; i<rcc->num_entries; i++){
-@@ -1580,18 +1724,11 @@
+@@ -1580,18 +1727,11 @@
          /* find expected bits */
          for(i=0; i<rcc->num_entries; i++){
              ratecontrol_entry_t *rce = &rcc->entry[i];
@@ -205,7 +208,7 @@ Index: encoder/ratecontrol.c
          if(expected_bits > all_available_bits) rate_factor -= step;
      }
  
-@@ -1599,6 +1736,10 @@
+@@ -1599,6 +1739,10 @@
      if(filter_size > 1)
          x264_free(blurred_qscale);
  
@@ -216,7 +219,7 @@ Index: encoder/ratecontrol.c
      if(fabs(expected_bits/all_available_bits - 1.0) > 0.01)
      {
          double avgq = 0;
-@@ -1606,7 +1747,8 @@
+@@ -1606,7 +1750,8 @@
              avgq += rcc->entry[i].new_qscale;
          avgq = qscale2qp(avgq / rcc->num_entries);
  
@@ -226,7 +229,7 @@ Index: encoder/ratecontrol.c
          x264_log(h, X264_LOG_WARNING, "target: %.2f kbit/s, expected: %.2f kbit/s, avg QP: %.4f\n",
                   (float)h->param.rc.i_bitrate,
                   expected_bits * rcc->fps / (rcc->num_entries * 1000.),
-@@ -1625,7 +1767,7 @@
+@@ -1625,7 +1770,7 @@
              else
                  x264_log(h, X264_LOG_WARNING, "try increasing target bitrate\n");
          }
