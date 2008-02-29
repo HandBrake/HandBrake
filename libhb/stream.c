@@ -14,11 +14,9 @@
 
 typedef enum { hb_stream_type_unknown = 0, hb_stream_type_transport, hb_stream_type_program } hb_stream_type_t;
 
-#define kMaxNumberDecodeStreams 8
-#define kMaxNumberVideoPIDS 16
+#define kMaxNumberVideoPIDS 1
 #define kMaxNumberAudioPIDS 16
-//#define kVideoStream 0
-//#define kAudioStream 1
+#define kMaxNumberDecodeStreams (kMaxNumberVideoPIDS+kMaxNumberAudioPIDS)
 #define kNumDecodeBuffers 2
 #define kMaxNumberPMTStreams 32
 
