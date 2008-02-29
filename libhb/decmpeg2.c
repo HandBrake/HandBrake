@@ -321,6 +321,13 @@ void hb_libmpeg2_info( hb_libmpeg2_t * m, int * width, int * height,
     *aspect_ratio = m->aspect_ratio;
 }
 
+int hb_libmpeg2_clear_aspect_ratio( hb_libmpeg2_t * m )
+{
+    int ar = m->aspect_ratio;
+    m->aspect_ratio = 0;
+    return ar;
+}
+
 /**********************************************************************
  * hb_libmpeg2_close
  **********************************************************************

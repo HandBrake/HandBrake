@@ -111,6 +111,15 @@ void hb_fix_aspect( hb_job_t * job, int keep )
     hb_title_t * title = job->title;
     int          i;
 
+    /* don't do anything unless the title has complete size info */
+    if ( title->height == 0 || title->width == 0 || title->aspect == 0 )
+    {
+        hb_log( "hb_fix_aspect: incomplete info for title %d: "
+                "height = %d, width = %d, aspect = %d", 
+                title->height, title->width, title->aspect );
+        return;
+    }
+
     /* Sanity checks:
        Widths and heights must be multiples of 16 and greater than or
        equal to 16

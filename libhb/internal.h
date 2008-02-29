@@ -112,6 +112,7 @@ int              hb_libmpeg2_decode( hb_libmpeg2_t *,
 void             hb_libmpeg2_info( hb_libmpeg2_t * m, int * width,
                                     int * height, int * rate, int * aspect_ratio );
 void             hb_libmpeg2_close( hb_libmpeg2_t ** );
+int              hb_libmpeg2_clear_aspect_ratio( hb_libmpeg2_t * );
 
 /***********************************************************************
  * mpegdemux.c

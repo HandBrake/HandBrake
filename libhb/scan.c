@@ -281,11 +281,12 @@ static void ScanFunc( void * _data )
  **********************************************************************/
 static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
 {
-    int             i, ret;
+    int             i, npreviews = 0;
     hb_buffer_t   * buf_ps, * buf_es, * buf_raw;
     hb_list_t     * list_es, * list_raw;
     hb_libmpeg2_t * mpeg2;
     int progressive_count = 0;
+    int ar16_count = 0, ar4_count = 0;
 
     buf_ps   = hb_buffer_init( HB_DVD_READ_BUFFER_SIZE );
     list_es  = hb_list_init();
@@ -349,6 +350,12 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                 if( buf_es->id == 0xE0 && !hb_list_count( list_raw ) )
                 {
                     hb_libmpeg2_decode( mpeg2, buf_es, list_raw );
+                    int ar = hb_libmpeg2_clear_aspect_ratio( mpeg2 );
+                    if ( ar != 0 )
+                    {
+                        ( ar == (HB_ASPECT_BASE * 4 / 3) ) ?
+                            ++ar4_count : ++ar16_count ;
+                    }
                 }
                 else if( !i )
                 {
@@ -382,6 +389,11 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         int ar;
         hb_libmpeg2_info( mpeg2, &title->width, &title->height,
                           &title->rate_base, &ar );
+
+        /* if we found mostly 4:3 previews use that as the aspect ratio otherwise
+           use 16:9 */
+        title->aspect = ar4_count > ar16_count ?
+                            HB_ASPECT_BASE * 4 / 3 : HB_ASPECT_BASE * 16 / 9;
 
         if( title->rate_base == 1126125 )
         {
@@ -421,12 +433,9 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             title->rate_base = 1126125;
         }
 
-        if( i == 2) // Use the third frame's info, so as to skip opening logos
+        // start from third frame to skip opening logos
+        if( i >= 2)
         {
-            // The aspect ratio may have already been set by parsing the VOB/IFO details on a DVD, however
-            // if we're working with program/transport streams that data needs to come from within the stream.
-            if (title->aspect <= 0)
-              title->aspect = ar;
             title->crop[0] = title->crop[1] = title->height / 2;
             title->crop[2] = title->crop[3] = title->width / 2;
         }
@@ -493,6 +502,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                     break;
                 }
         }
+        ++npreviews;
 
 skip_preview:
         while( ( buf_raw = hb_list_item( list_raw, 0 ) ) )
@@ -507,16 +517,16 @@ skip_preview:
     title->crop[2] = EVEN( title->crop[2] );
     title->crop[3] = EVEN( title->crop[3] );
 
-    hb_log( "scan: %dx%d, %.3f fps, autocrop = %d/%d/%d/%d",
-            title->width, title->height, (float) title->rate /
+    hb_log( "scan: %d previews, %dx%d, %.3f fps, autocrop = %d/%d/%d/%d, aspect %s",
+            npreviews, title->width, title->height, (float) title->rate /
             (float) title->rate_base, title->crop[0], title->crop[1],
-            title->crop[2], title->crop[3] );
-
-    ret = 1;
+            title->crop[2], title->crop[3],
+            title->aspect == HB_ASPECT_BASE * 16 / 9 ? "16:9" :
+                title->aspect == HB_ASPECT_BASE * 4 / 3 ? "4:3" : "none" );
     goto cleanup;
 
 error:
-    ret = 0;
+    npreviews = 0;
 
 cleanup:
     hb_buffer_close( &buf_ps );
@@ -535,7 +545,7 @@ cleanup:
     if (data->dvd)
       hb_dvd_stop( data->dvd );
 
-    return ret;
+    return npreviews;
 }
 
 static void LookForAC3AndDCA( hb_title_t * title, hb_buffer_t * b )
