@@ -434,7 +434,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         }
 
         // start from third frame to skip opening logos
-        if( i >= 2)
+        if( i == 2)
         {
             title->crop[0] = title->crop[1] = title->height / 2;
             title->crop[2] = title->crop[3] = title->width / 2;
