@@ -178,6 +178,12 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
         goto fail;
     }
 
+    if( pgn <= 0 || pgn > 99 )
+    {
+        hb_error( "scan: pgn %d not valid, skipping", pgn );
+        goto fail;
+    }
+
     /* Start cell */
     title->cell_start  = d->pgc->program_map[pgn-1] - 1;
     title->block_start = d->pgc->cell_playback[title->cell_start].first_sector;
