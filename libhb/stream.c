@@ -2197,13 +2197,30 @@ static void hb_ts_stream_decode(hb_stream_t *stream)
 		if (!stream->ts_skipbad[curstream] && stream->ts_foundfirst[curstream] &&
             (184 - adapt_len) > 0)
 		{
-            // XXX this shouldn't happen but we'll be paranoid
             if (stream->ts_packetpos[curstream] + 184 - adapt_len > 1024*1024)
             {
-                hb_log("hb_ts_stream_decode: ts_packetbuf overflow, pos = %d ,"
-                       "len = %d", stream->ts_packetpos[curstream],
-                       184 - adapt_len );
-                return;
+                int aindx = curstream - stream->ts_number_video_pids;
+                if ( aindx >= 0 && stream->ts_audio_stream_type[aindx] == 0x81)
+                {
+                    /* we've searched through a megabyte & didn't find an AC3
+                     * sync frame so this probably isn't AC3. (DVB standard
+                     * teletext uses the same code points as ATSC AC3 so we
+                     * could easily have guessed wrong.) Delete this pid from
+                     * the audio list so we don't waste any more time on it. */
+                    hb_log("hb_ts_stream_decode: removing pid 0x%x - "
+                           "it isn't an AC3 stream.", stream->ts_audio_pids[aindx]);
+                    hb_stream_delete_audio_entry( stream, aindx );
+                }
+                else
+                {
+                    hb_log("hb_ts_stream_decode: pid 0x%x ts_packetbuf overflow "
+                           "pos %d len = %d",
+                           aindx < 0 ? stream->ts_video_pids[curstream] :
+                                       stream->ts_audio_pids[aindx],
+                           stream->ts_packetpos[curstream], 184 - adapt_len );
+                }
+                stream->ts_packetpos[curstream] = 0;
+                continue;
             }
 			memcpy(stream->ts_packetbuf[curstream] + stream->ts_packetpos[curstream], buf + 4 + adapt_len, 184 - adapt_len);
 			stream->ts_packetpos[curstream] += 184 - adapt_len;
