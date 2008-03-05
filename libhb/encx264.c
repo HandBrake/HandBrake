@@ -528,13 +528,12 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
                        b-frames with the CTTS atom. */
                     buf->renderOffset = pic_out.i_pts - dts_start + pv->init_delay;
 
-                    /* Send out the next dts values */
-                    buf->start = dts_start;
-                    buf->stop  = dts_stop;
-
                     buf->size += size;
             }
         }
+        /* Send out the next dts values */
+        buf->start = dts_start;
+        buf->stop  = dts_stop;
     }
 
     else
