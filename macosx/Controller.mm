@@ -1439,7 +1439,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         job->mp4_optimize = 0;
         }
     }
-	if ([fDstFormatPopUp indexOfSelectedItem] == 0 || [fDstFormatPopUp indexOfSelectedItem] == 3)
+	if ([fDstFormatPopUp indexOfSelectedItem] == 0 || [fDstFormatPopUp indexOfSelectedItem] == 1)
 	{
 	  /* We set the chapter marker extraction here based on the format being
 		mpeg4 or mkv and the checkbox being checked */
