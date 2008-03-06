@@ -3264,7 +3264,7 @@ if (item == nil)
         if ([fPresetsOutlineView selectedRow] == [fPresetsOutlineView rowForItem:item])
         {
             
-            fontColor = [NSColor whiteColor];
+            fontColor = [NSColor blackColor];
             shadowColor = [NSColor colorWithDeviceRed:(127.0/255.0) green:(140.0/255.0) blue:(160.0/255.0) alpha:1.0];
         }
         else
