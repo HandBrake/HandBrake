@@ -309,6 +309,7 @@
 - (IBAction)setDefaultPreset:(id)sender;
 - (IBAction)selectDefaultPreset:(id)sender;
 - (void) savePreset;
+- (void)sortPresets;
 - (IBAction)addFactoryPresets:(id)sender;
 - (IBAction)deleteFactoryPresets:(id)sender;
 - (IBAction)addUserPreset:(id)sender;

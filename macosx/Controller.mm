@@ -3737,6 +3737,16 @@ if (item == nil)
 - (void)addPreset
 {
 
+	[self sortPresets];
+	/* We Reload the New Table data for presets */
+    [fPresetsOutlineView reloadData];
+   /* We save all of the preset data here */
+    [self savePreset];
+}
+
+- (void)sortPresets
+{
+
 	
 	/* We Sort the Presets By Factory or Custom */
 	NSSortDescriptor * presetTypeDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"Type" 
@@ -3748,11 +3758,7 @@ if (item == nil)
 	NSArray *sortedArray=[UserPresets sortedArrayUsingDescriptors:sortDescriptors];
 	[UserPresets setArray:sortedArray];
 	
-	
-	/* We Reload the New Table data for presets */
-    [fPresetsOutlineView reloadData];
-   /* We save all of the preset data here */
-    [self savePreset];
+
 }
 
 - (IBAction)insertPreset:(id)sender
