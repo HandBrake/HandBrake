@@ -3298,7 +3298,7 @@ if (item == nil)
 }
 
 /* We use this to edit the name field in the outline view */
-- (void)outlineView:(NSOutlineView *)fPresetsOutlineView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn byItem:(id)item
+- (void)outlineView:(NSOutlineView *)outlineView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn byItem:(id)item
 {
     if ([[tableColumn identifier] isEqualToString:@"PresetName"])
     {
@@ -3306,17 +3306,10 @@ if (item == nil)
         
         theRecord = item;
         [theRecord setObject:object forKey:@"PresetName"];
-        /* We Sort the Presets By Factory or Custom */
-        NSSortDescriptor * presetTypeDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"Type" 
-                                                                             ascending:YES] autorelease];
-		/* We Sort the Presets Alphabetically by name */
-        NSSortDescriptor * presetNameDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"PresetName" 
-                                                                             ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease];
-        NSArray *sortDescriptors=[NSArray arrayWithObjects:presetTypeDescriptor,presetNameDescriptor,nil];
-        NSArray *sortedArray=[UserPresets sortedArrayUsingDescriptors:sortDescriptors];
-        [UserPresets setArray:sortedArray];
-        /* We Reload the New Table data for presets */
-        //[fPresetsOutlineView reloadData];
+        
+        [self sortPresets];
+        
+        [fPresetsOutlineView reloadData];
         /* We save all of the preset data here */
         [self savePreset];
     }
