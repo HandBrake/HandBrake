@@ -3349,17 +3349,17 @@ if (item == nil)
 	// Dragging is only allowed for custom presets.
 	if ([[[UserPresets objectAtIndex:[fPresetsOutlineView selectedRow]] objectForKey:@"Type"] intValue] == 0) // 0 is built in preset
     {
-    return NO;
+        return NO;
     }
     // Don't retain since this is just holding temporaral drag information, and it is
     //only used during a drag!  We could put this in the pboard actually.
     fDraggedNodes = items;
-	    // Provide data for our custom type, and simple NSStrings.
+    // Provide data for our custom type, and simple NSStrings.
     [pboard declareTypes:[NSArray arrayWithObjects: DragDropSimplePboardType, nil] owner:self];
-
+    
     // the actual data doesn't matter since DragDropSimplePboardType drags aren't recognized by anyone but us!.
     [pboard setData:[NSData data] forType:DragDropSimplePboardType]; 
-
+    
     return YES;
 }
 
@@ -3369,9 +3369,9 @@ if (item == nil)
     
     BOOL isOnDropTypeProposal = index == NSOutlineViewDropOnItemIndex;
     if (isOnDropTypeProposal)
-    return NSDragOperationNone;
+        return NSDragOperationNone;
     
-
+    
 	// Don't allow dropping INTO an item since they can't really contain any children as of yet.
 	
     if (item != nil)
@@ -3379,12 +3379,12 @@ if (item == nil)
 		index = [fPresetsOutlineView rowForItem: item] + 1;
 		item = nil;
 	}
-   
-   // Don't allow dropping into the Built In Presets.
+    
+    // Don't allow dropping into the Built In Presets.
     if (index < presetCurrentBuiltInCount)
     {
-    return NSDragOperationNone;
-	index = MAX (index, presetCurrentBuiltInCount);
+        return NSDragOperationNone;
+        index = MAX (index, presetCurrentBuiltInCount);
 	}
 	
     [outlineView setDropItem:item dropChildIndex:index];
@@ -4143,12 +4143,10 @@ if (item == nil)
 @implementation HBPresetsOutlineView
 - (NSImage *)dragImageForRowsWithIndexes:(NSIndexSet *)dragRows tableColumns:(NSArray *)tableColumns event:(NSEvent*)dragEvent offset:(NSPointPointer)dragImageOffset
 {
-    // Set the fIsDragging flag so that other's know that a drag operation is being
-    // performed.
-	fIsDragging = YES;
+    fIsDragging = YES;
 
     // By default, NSTableView only drags an image of the first column. Change this to
-    // drag an image of the queue's icon and desc columns.
+    // drag an image of the queue's icon and PresetName columns.
     NSArray * cols = [NSArray arrayWithObjects: [self tableColumnWithIdentifier:@"icon"], [self tableColumnWithIdentifier:@"PresetName"], nil];
     return [super dragImageForRowsWithIndexes:dragRows tableColumns:cols event:dragEvent offset:dragImageOffset];
 }
@@ -4157,9 +4155,6 @@ if (item == nil)
 
 - (void) mouseDown:(NSEvent *)theEvent
 {
-    // After a drag operation, reset fIsDragging back to NO. This is really the only way
-    // for us to detect when a drag has finished. You can't do it in acceptDrop because
-    // that won't be called if the dragged item is released outside the view.
     [super mouseDown:theEvent];
 	fIsDragging = NO;
 }
