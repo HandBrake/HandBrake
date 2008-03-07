@@ -132,7 +132,7 @@ namespace Handbrake
                     return;
                 }
                 
-                Boolean update = hb_common_func.updateCheck();
+                Boolean update = hb_common_func.updateCheck(false);
                 if (update == true)
                 {
                     frmUpdater updateWindow = new frmUpdater();
@@ -309,19 +309,14 @@ namespace Handbrake
             Process.Start("http://handbrake.fr/?article=documentation");
         }
 
-        private void mnu_homepage_Click(object sender, EventArgs e)
+        private void mnu_handbrake_home_Click(object sender, EventArgs e)
         {
             Process.Start("http://handbrake.fr");
         }
-
-        private void mnu_forum_Click(object sender, EventArgs e)
-        {
-            Process.Start("http://handbrake.fr/forum");
-        }
-
+        
         private void mnu_UpdateCheck_Click(object sender, EventArgs e)
         {
-            Boolean update = hb_common_func.updateCheck();
+            Boolean update = hb_common_func.updateCheck(true);
             if (update == true)
             {
                 frmUpdater updateWindow = new frmUpdater();
@@ -1212,10 +1207,7 @@ namespace Handbrake
 
         #endregion
 
-        private void text_destination_TextChanged(object sender, EventArgs e)
-        {
 
-        }
 
 
 

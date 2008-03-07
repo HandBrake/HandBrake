@@ -37,7 +37,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label Label38;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -90,9 +90,7 @@ namespace Handbrake
             this.mnu_wiki = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_faq = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_onlineDocs = new System.Windows.Forms.ToolStripMenuItem();
-            this.WebsiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_homepage = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_forum = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_handbrake_home = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.mnu_UpdateCheck = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
@@ -172,6 +170,7 @@ namespace Handbrake
             this.Check_ChapterMarkers = new System.Windows.Forms.CheckBox();
             this.advancedOptions = new System.Windows.Forms.TabControl();
             this.tab_chapters = new System.Windows.Forms.TabPage();
+            this.lbl_warn_chapt = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
             this.data_chpt = new System.Windows.Forms.DataGridView();
             this.number = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -202,7 +201,6 @@ namespace Handbrake
             this.btn_ActivityWindow = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.lbl_warn_chapt = new System.Windows.Forms.Label();
             Label38 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.slider_drc)).BeginInit();
@@ -324,7 +322,6 @@ namespace Handbrake
             this.text_destination.Size = new System.Drawing.Size(429, 21);
             this.text_destination.TabIndex = 1;
             this.ToolTip.SetToolTip(this.text_destination, "Location where the encoded file will be saved.");
-            this.text_destination.TextChanged += new System.EventHandler(this.text_destination_TextChanged);
             // 
             // btn_Browse
             // 
@@ -458,9 +455,9 @@ namespace Handbrake
             this.check_turbo.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.check_turbo.Location = new System.Drawing.Point(37, 57);
             this.check_turbo.Name = "check_turbo";
-            this.check_turbo.Size = new System.Drawing.Size(122, 17);
+            this.check_turbo.Size = new System.Drawing.Size(115, 17);
             this.check_turbo.TabIndex = 3;
-            this.check_turbo.Text = "Turbo first pPass";
+            this.check_turbo.Text = "Turbo first Pass";
             this.ToolTip.SetToolTip(this.check_turbo, "Makes the first pass of a 2 pass encode faster.");
             this.check_turbo.UseVisualStyleBackColor = false;
             // 
@@ -774,7 +771,7 @@ namespace Handbrake
             // 
             this.HelpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.OnlineDocumentationToolStripMenuItem,
-            this.WebsiteToolStripMenuItem,
+            this.mnu_handbrake_home,
             this.ToolStripSeparator3,
             this.mnu_UpdateCheck,
             this.toolStripSeparator6,
@@ -790,7 +787,7 @@ namespace Handbrake
             this.mnu_faq,
             this.mnu_onlineDocs});
             this.OnlineDocumentationToolStripMenuItem.Name = "OnlineDocumentationToolStripMenuItem";
-            this.OnlineDocumentationToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
+            this.OnlineDocumentationToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
             this.OnlineDocumentationToolStripMenuItem.Text = "Online Documentation";
             // 
             // mnu_wiki
@@ -814,50 +811,34 @@ namespace Handbrake
             this.mnu_onlineDocs.Text = "Full Documentation List";
             this.mnu_onlineDocs.Click += new System.EventHandler(this.mnu_onlineDocs_Click);
             // 
-            // WebsiteToolStripMenuItem
+            // mnu_handbrake_home
             // 
-            this.WebsiteToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnu_homepage,
-            this.mnu_forum});
-            this.WebsiteToolStripMenuItem.Name = "WebsiteToolStripMenuItem";
-            this.WebsiteToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
-            this.WebsiteToolStripMenuItem.Text = "Website";
-            // 
-            // mnu_homepage
-            // 
-            this.mnu_homepage.Name = "mnu_homepage";
-            this.mnu_homepage.Size = new System.Drawing.Size(146, 22);
-            this.mnu_homepage.Text = "Homepage";
-            this.mnu_homepage.Click += new System.EventHandler(this.mnu_homepage_Click);
-            // 
-            // mnu_forum
-            // 
-            this.mnu_forum.Name = "mnu_forum";
-            this.mnu_forum.Size = new System.Drawing.Size(146, 22);
-            this.mnu_forum.Text = "Forum";
-            this.mnu_forum.Click += new System.EventHandler(this.mnu_forum_Click);
+            this.mnu_handbrake_home.Name = "mnu_handbrake_home";
+            this.mnu_handbrake_home.Size = new System.Drawing.Size(213, 22);
+            this.mnu_handbrake_home.Text = "HandBrake Homepage";
+            this.mnu_handbrake_home.Click += new System.EventHandler(this.mnu_handbrake_home_Click);
             // 
             // ToolStripSeparator3
             // 
             this.ToolStripSeparator3.Name = "ToolStripSeparator3";
-            this.ToolStripSeparator3.Size = new System.Drawing.Size(208, 6);
+            this.ToolStripSeparator3.Size = new System.Drawing.Size(210, 6);
             // 
             // mnu_UpdateCheck
             // 
             this.mnu_UpdateCheck.Name = "mnu_UpdateCheck";
-            this.mnu_UpdateCheck.Size = new System.Drawing.Size(211, 22);
+            this.mnu_UpdateCheck.Size = new System.Drawing.Size(213, 22);
             this.mnu_UpdateCheck.Text = "Check for Updates";
             this.mnu_UpdateCheck.Click += new System.EventHandler(this.mnu_UpdateCheck_Click);
             // 
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(208, 6);
+            this.toolStripSeparator6.Size = new System.Drawing.Size(210, 6);
             // 
             // mnu_about
             // 
             this.mnu_about.Name = "mnu_about";
-            this.mnu_about.Size = new System.Drawing.Size(211, 22);
+            this.mnu_about.Size = new System.Drawing.Size(213, 22);
             this.mnu_about.Text = "About...";
             this.mnu_about.Click += new System.EventHandler(this.mnu_about_Click);
             // 
@@ -1830,6 +1811,15 @@ namespace Handbrake
             this.tab_chapters.TabIndex = 6;
             this.tab_chapters.Text = "Chapters";
             // 
+            // lbl_warn_chapt
+            // 
+            this.lbl_warn_chapt.AutoSize = true;
+            this.lbl_warn_chapt.Location = new System.Drawing.Point(13, 52);
+            this.lbl_warn_chapt.Name = "lbl_warn_chapt";
+            this.lbl_warn_chapt.Size = new System.Drawing.Size(394, 13);
+            this.lbl_warn_chapt.TabIndex = 23;
+            this.lbl_warn_chapt.Text = "Please make sure you have selected a DVD tile in the \"Source\" box";
+            // 
             // label31
             // 
             this.label31.AutoSize = true;
@@ -1857,9 +1847,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Format = "N0";
+            dataGridViewCellStyle2.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle2;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -2161,15 +2151,6 @@ namespace Handbrake
             this.toolStripSeparator8.Name = "toolStripSeparator8";
             this.toolStripSeparator8.Size = new System.Drawing.Size(6, 39);
             // 
-            // lbl_warn_chapt
-            // 
-            this.lbl_warn_chapt.AutoSize = true;
-            this.lbl_warn_chapt.Location = new System.Drawing.Point(13, 52);
-            this.lbl_warn_chapt.Name = "lbl_warn_chapt";
-            this.lbl_warn_chapt.Size = new System.Drawing.Size(394, 13);
-            this.lbl_warn_chapt.TabIndex = 23;
-            this.lbl_warn_chapt.Text = "Please make sure you have selected a DVD tile in the \"Source\" box";
-            // 
             // frmMain
             // 
             this.AllowDrop = true;
@@ -2247,9 +2228,6 @@ namespace Handbrake
         internal System.Windows.Forms.ToolStripMenuItem mnu_wiki;
         internal System.Windows.Forms.ToolStripMenuItem mnu_onlineDocs;
         internal System.Windows.Forms.ToolStripMenuItem mnu_faq;
-        internal System.Windows.Forms.ToolStripMenuItem WebsiteToolStripMenuItem;
-        internal System.Windows.Forms.ToolStripMenuItem mnu_homepage;
-        internal System.Windows.Forms.ToolStripMenuItem mnu_forum;
         internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator3;
         internal System.Windows.Forms.ToolStripMenuItem mnu_about;
         internal System.Windows.Forms.MenuStrip frmMainMenu;
@@ -2395,6 +2373,7 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Label lbl_warn_chapt;
+        private System.Windows.Forms.ToolStripMenuItem mnu_handbrake_home;
 
     }
 }

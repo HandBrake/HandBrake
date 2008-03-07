@@ -19,7 +19,7 @@ namespace Handbrake.Functions
         /*
          * Checks for updates and returns "true" boolean if one exists.
          */
-        public Boolean updateCheck()
+        public Boolean updateCheck(Boolean debug)
         {
             try
             {
@@ -42,7 +42,8 @@ namespace Handbrake.Functions
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.ToString());
+                if (debug == true)
+                    MessageBox.Show("Unable to check for updates, Please try again later. \n" + exc.ToString(),"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
