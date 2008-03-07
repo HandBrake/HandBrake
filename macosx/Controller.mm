@@ -17,7 +17,7 @@
 #include "HBPresets.h"
 
 #define _(a) NSLocalizedString(a,NULL)
-
+#define DragDropSimplePboardType 	@"MyCustomOutlineViewPboardType"
 static int FormatSettings[4][10] =
   { { HB_MUX_MP4 | HB_VCODEC_FFMPEG | HB_ACODEC_FAAC,
 	  HB_MUX_MP4 | HB_VCODEC_X264   | HB_ACODEC_FAAC,
@@ -190,6 +190,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [fWindow center];
     [fWindow setExcludedFromWindowsMenu:YES];
     [fAdvancedOptions setView:fAdvancedView];
+
+    /* lets setup our presets drawer for drag and drop here */
+    [fPresetsOutlineView registerForDraggedTypes: [NSArray arrayWithObject:DragDropSimplePboardType] ];
+    [fPresetsOutlineView setDraggingSourceOperationMask:NSDragOperationEvery forLocal:YES];
+    [fPresetsOutlineView setVerticalMotionCanBeginDrag: YES];
 
     /* Initialize currentScanCount so HB can use it to
 		evaluate successive scans */
@@ -3335,6 +3340,106 @@ if (item == nil)
     //}
 }
 
+#pragma mark -
+#pragma mark Preset Outline View Methods (dragging related)
+
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView writeItems:(NSArray *)items toPasteboard:(NSPasteboard *)pboard
+{
+	// Dragging is only allowed for custom presets.
+	if ([[[UserPresets objectAtIndex:[fPresetsOutlineView selectedRow]] objectForKey:@"Type"] intValue] == 0) // 0 is built in preset
+    {
+    return NO;
+    }
+    // Don't retain since this is just holding temporaral drag information, and it is
+    //only used during a drag!  We could put this in the pboard actually.
+    fDraggedNodes = items;
+	    // Provide data for our custom type, and simple NSStrings.
+    [pboard declareTypes:[NSArray arrayWithObjects: DragDropSimplePboardType, nil] owner:self];
+
+    // the actual data doesn't matter since DragDropSimplePboardType drags aren't recognized by anyone but us!.
+    [pboard setData:[NSData data] forType:DragDropSimplePboardType]; 
+
+    return YES;
+}
+
+- (NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(int)index
+{
+	// Don't allow dropping ONTO an item since they can't really contain any children.
+    
+    BOOL isOnDropTypeProposal = index == NSOutlineViewDropOnItemIndex;
+    if (isOnDropTypeProposal)
+    return NSDragOperationNone;
+    
+
+	// Don't allow dropping INTO an item since they can't really contain any children as of yet.
+	
+    if (item != nil)
+	{
+		index = [fPresetsOutlineView rowForItem: item] + 1;
+		item = nil;
+	}
+   
+   // Don't allow dropping into the Built In Presets.
+    if (index < presetCurrentBuiltInCount)
+    {
+    return NSDragOperationNone;
+	index = MAX (index, presetCurrentBuiltInCount);
+	}
+	
+    [outlineView setDropItem:item dropChildIndex:index];
+    return NSDragOperationGeneric;
+}
+
+
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(int)index
+{
+    NSMutableIndexSet *moveItems = [NSMutableIndexSet indexSet];
+    
+    id obj;
+    NSEnumerator *enumerator = [fDraggedNodes objectEnumerator];
+    while (obj = [enumerator nextObject])
+    {
+        [moveItems addIndex:[UserPresets indexOfObject:obj]];
+    }
+    // Successful drop, lets rearrange the view and save it all
+    [self moveObjectsInPresetsArray:UserPresets fromIndexes:moveItems toIndex: index];
+    [fPresetsOutlineView reloadData];
+    [self savePreset];
+    return YES;
+}
+
+- (void)moveObjectsInPresetsArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(unsigned)insertIndex
+{
+    unsigned index = [indexSet lastIndex];
+    unsigned aboveInsertIndexCount = 0;
+    
+    while (index != NSNotFound)
+    {
+        unsigned removeIndex;
+        
+        if (index >= insertIndex)
+        {
+            removeIndex = index + aboveInsertIndexCount;
+            aboveInsertIndexCount++;
+        }
+        else
+        {
+            removeIndex = index;
+            insertIndex--;
+        }
+        
+        id object = [[array objectAtIndex:removeIndex] retain];
+        [array removeObjectAtIndex:removeIndex];
+        [array insertObject:object atIndex:insertIndex];
+        [object release];
+        
+        index = [indexSet indexLessThanIndex:index];
+    }
+}
+
+
 
 #pragma mark - Functional Preset NSOutlineView Methods
 
@@ -3730,7 +3835,7 @@ if (item == nil)
 - (void)addPreset
 {
 
-	[self sortPresets];
+	
 	/* We Reload the New Table data for presets */
     [fPresetsOutlineView reloadData];
    /* We save all of the preset data here */
@@ -3744,10 +3849,15 @@ if (item == nil)
 	/* We Sort the Presets By Factory or Custom */
 	NSSortDescriptor * presetTypeDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"Type" 
                                                     ascending:YES] autorelease];
-	/* We Sort the Presets Alphabetically by name */
-	NSSortDescriptor * presetNameDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"PresetName" 
+	/* We Sort the Presets Alphabetically by name  We do not use this now as we have drag and drop*/
+	/*
+    NSSortDescriptor * presetNameDescriptor=[[[NSSortDescriptor alloc] initWithKey:@"PresetName" 
                                                     ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease];
-	NSArray *sortDescriptors=[NSArray arrayWithObjects:presetTypeDescriptor,presetNameDescriptor,nil];
+	//NSArray *sortDescriptors=[NSArray arrayWithObjects:presetTypeDescriptor,presetNameDescriptor,nil];
+    
+    */
+    /* Since we can drag and drop our custom presets, lets just sort by type and not name */
+    NSArray *sortDescriptors=[NSArray arrayWithObjects:presetTypeDescriptor,nil];
 	NSArray *sortedArray=[UserPresets sortedArrayUsingDescriptors:sortDescriptors];
 	[UserPresets setArray:sortedArray];
 	
@@ -3905,6 +4015,7 @@ if (item == nil)
 - (IBAction)getDefaultPresets:(id)sender
 {
 	int i = 0;
+    presetCurrentBuiltInCount = 0;
     NSEnumerator *enumerator = [UserPresets objectEnumerator];
 	id tempObject;
 	while (tempObject = [enumerator nextObject])
@@ -3917,6 +4028,10 @@ if (item == nil)
 		if ([[thisPresetDict objectForKey:@"Default"] intValue] == 2) // 2 is User specified default
 		{
 			presetUserDefault = i;	
+		}
+        if ([[thisPresetDict objectForKey:@"Type"] intValue] == 0) // Type 0 is a built in preset		
+        {
+			presetCurrentBuiltInCount++; // <--increment the current number of built in presets	
 		}
 		i++;
 	}
@@ -4010,15 +4125,52 @@ if (item == nil)
     /* Then we generate new built in presets programmatically with fPresetsBuiltin
     * which is all setup in HBPresets.h and  HBPresets.m*/
     [fPresetsBuiltin generateBuiltinPresets:UserPresets];
-
+    [self sortPresets];
     [self addPreset];
+    
 }
 
 
 
 
 
-
-
-
 @end
+
+/*******************************
+ * Subclass of the HBPresetsOutlineView *
+ *******************************/
+
+@implementation HBPresetsOutlineView
+- (NSImage *)dragImageForRowsWithIndexes:(NSIndexSet *)dragRows tableColumns:(NSArray *)tableColumns event:(NSEvent*)dragEvent offset:(NSPointPointer)dragImageOffset
+{
+    // Set the fIsDragging flag so that other's know that a drag operation is being
+    // performed.
+	fIsDragging = YES;
+
+    // By default, NSTableView only drags an image of the first column. Change this to
+    // drag an image of the queue's icon and desc columns.
+    NSArray * cols = [NSArray arrayWithObjects: [self tableColumnWithIdentifier:@"icon"], [self tableColumnWithIdentifier:@"PresetName"], nil];
+    return [super dragImageForRowsWithIndexes:dragRows tableColumns:cols event:dragEvent offset:dragImageOffset];
+}
+
+
+
+- (void) mouseDown:(NSEvent *)theEvent
+{
+    // After a drag operation, reset fIsDragging back to NO. This is really the only way
+    // for us to detect when a drag has finished. You can't do it in acceptDrop because
+    // that won't be called if the dragged item is released outside the view.
+    [super mouseDown:theEvent];
+	fIsDragging = NO;
+}
+
+
+
+- (BOOL) isDragging;
+{
+    return fIsDragging;
+}
+@end
+
+
+

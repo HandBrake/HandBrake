@@ -18,8 +18,31 @@
 #import "HBPresets.h"
 @class HBOutputPanelController;
 
+//------------------------------------------------------------------------------------
+// As usual, we need to subclass NSOutlineView to handle a few special cases:
+//
+// (1) variable row heights during live resizes
+// HBQueueOutlineView exists solely to get around a bug in variable row height outline
+// views in which row heights get messed up during live resizes. See this discussion:
+// http://lists.apple.com/archives/cocoa-dev/2005/Oct/msg00871.html
+// However, the recommeneded fix (override drawRect:) does not work. Instead, this
+// subclass implements viewDidEndLiveResize in order to recalculate all row heights.
+//
+// (2) prevent expanding of items during drags
+// During dragging operations, we don't want outline items to expand, since a queue
+// doesn't really have children items.
+//
+// (3) generate a drag image that incorporates more than just the first column
+// By default, NSTableView only drags an image of the first column. Change this to
+// drag an image of the queue's icon and desc columns.
+@interface HBPresetsOutlineView : NSOutlineView
+{
+//#if HB_QUEUE_DRAGGING
+BOOL                        fIsDragging;
+//#endif
+}
+@end
 @interface HBController : NSObject <GrowlApplicationBridgeDelegate>
-
 {
     IBOutlet NSWindow            * fWindow;
     NSToolbar                    * toolbar;
@@ -187,10 +210,12 @@
 	 
 	int                            presetHbDefault; // this is 1 in "Default" preset key
 	int                            presetUserDefault;// this is 2 in "Default" preset key
+    int                        presetCurrentBuiltInCount; // keeps track of the current number of built in presets
     IBOutlet NSPanel             * fAddPresetPanel;
 	/* new NSOutline View for the presets */
     NSArray                      *fDraggedNodes;
-    IBOutlet NSOutlineView       * fPresetsOutlineView;
+    //IBOutlet NSOutlineView       * fPresetsOutlineView; // <-- Old assignment before subclassing
+    IBOutlet HBPresetsOutlineView * fPresetsOutlineView;
     IBOutlet NSButton            * fPresetsAdd;
 	IBOutlet NSButton            * fPresetsDelete;
     IBOutlet MVMenuButton        * fPresetsActionButton;
@@ -326,5 +351,7 @@
 - (void)setupToolbar;
 
 - (void) remindUserOfSleepOrShutdown;
+
+- (void)moveObjectsInPresetsArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(unsigned)insertIndex;
 @end
 

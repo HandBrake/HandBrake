@@ -18,7 +18,6 @@
 {
     /* We receive the user presets array of dictionaries from controller.mm */
     /* We re-create new built in presets programmatically and add them to our presets array */
-    [UserPresets addObject:[self create360Preset]];
     [UserPresets addObject:[self createAnimationPreset]];
     [UserPresets addObject:[self createAppleTVPreset]];
     [UserPresets addObject:[self createBedlamPreset]];
@@ -36,7 +35,7 @@
     [UserPresets addObject:[self createPSThreePreset]];
     [UserPresets addObject:[self createQuickTimePreset]];
     [UserPresets addObject:[self createTelevisionPreset]];
-
+    [UserPresets addObject:[self create360Preset]];
     /* return the newly regenerated preset array back to Controller.mm */
     return UserPresets;
 }
