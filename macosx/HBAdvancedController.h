@@ -62,6 +62,7 @@
 - (void) setOptions: (NSString *)string;
 - (void) enableUI: (bool) b;
 - (void) setHidden: (BOOL) hide;
+- (IBAction) X264AdvancedOptionsAnimate: (id) sender;
 - (IBAction) X264AdvancedOptionsSet: (id) sender;
 - (IBAction) X264AdvancedOptionsStandardizeOptString: (id) sender;
 - (IBAction) X264AdvancedOptionsSetCurrentSettings: (id) sender;

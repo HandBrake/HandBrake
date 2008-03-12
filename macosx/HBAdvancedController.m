@@ -89,6 +89,8 @@
         [controls[i] setEnabled: b];
 
     }
+    
+    [fX264optView setWantsLayer:YES];
 }
 
 - (void)dealloc
@@ -141,9 +143,11 @@
     {
         [fX264optTrellisPopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
     }
+    [fX264optTrellisPopUp setWantsLayer:YES];
     
     /*Mixed-references fX264optMixedRefsSwitch BOOLEAN*/
     [fX264optMixedRefsSwitch setState:0];
+    [fX264optMixedRefsSwitch setWantsLayer:YES];
     
     /*Motion Estimation fX264optMotionEstPopUp*/
     [fX264optMotionEstPopUp removeAllItems];
@@ -163,15 +167,19 @@
     
     /*Weighted B-Frame Prediction fX264optWeightBSwitch BOOLEAN*/
     [fX264optWeightBSwitch setState:0];
+    [fX264optWeightBSwitch setWantsLayer:YES];
     
     /*B-Frame Rate Distortion Optimization fX264optBRDOSwitch BOOLEAN*/
     [fX264optBRDOSwitch setState:0];
+    [fX264optBRDOSwitch setWantsLayer:YES];
     
     /*B-frame Pyramids fX264optBPyramidSwitch BOOLEAN*/
     [fX264optBPyramidSwitch setState:0];
+    [fX264optBPyramidSwitch setWantsLayer:YES];
     
     /*Bidirectional Motion Estimation Refinement fX264optBiMESwitch BOOLEAN*/
     [fX264optBiMESwitch setState:0];
+    [fX264optBiMESwitch setWantsLayer:YES];
     
     /*Direct B-Frame Prediction Mode fX264optDirectPredPopUp*/
     [fX264optDirectPredPopUp removeAllItems];
@@ -180,6 +188,7 @@
     [fX264optDirectPredPopUp addItemWithTitle:@"Spatial"];
     [fX264optDirectPredPopUp addItemWithTitle:@"Temporal"];
     [fX264optDirectPredPopUp addItemWithTitle:@"Automatic"];
+    [fX264optDirectPredPopUp setWantsLayer:YES];
     
     /*Alpha Deblock*/
     [fX264optAlphaDeblockPopUp removeAllItems];
@@ -205,6 +214,7 @@
                 
     /* 8x8 DCT fX264op8x8dctSwitch */
     [fX264opt8x8dctSwitch setState:0];
+    [fX264opt8x8dctSwitch setWantsLayer:YES];
     
     /* CABAC fX264opCabacSwitch */
     [fX264optCabacSwitch setState:1];
@@ -214,6 +224,9 @@
 
     /* Set Current GUI Settings based on newly standardized string */
     [self X264AdvancedOptionsSetCurrentSettings: NULL];
+    
+    /* Fade out options that don't apply */
+    [self X264AdvancedOptionsAnimate: sender];
 }
 
 /**
@@ -362,6 +375,178 @@
     }
     
     return cleanOptNameString;    
+}
+
+/**
+ * Fades options in and out depending on whether they're available..
+ */
+- (IBAction) X264AdvancedOptionsAnimate: (id) sender
+{
+    /* Lots of situations to cover.
+       - B-frames (when 0 turn of b-frame specific stuff, when < 2 disable b-pyramid)
+       - CABAC (when 0 turn off trellis)
+       - subme  (if under 6 turn off brdo)
+       - analysis (if none, turn off 8x8dct and direct pred)
+       - refs (under 2, disable mixed-refs)
+    */
+    
+    if ( [fX264optBframesPopUp indexOfSelectedItem ] < 2)
+    {
+        /* If the b-frame widget is at 0 or 1, the user has chosen
+           not to use b-frames at all. So disable the options
+           that can only be used when b-frames are enabled.        */
+        [[fX264optWeightBSwitch animator] setHidden:YES];
+        [[fX264optWeightBLabel animator] setHidden:YES];
+        if ( [fX264optWeightBSwitch state] == 1 && sender != fX264optWeightBSwitch && sender != fX264optBRDOSwitch && sender != fX264optBPyramidSwitch && sender != fX264optBiMESwitch && sender != fX264optDirectPredPopUp)
+            [fX264optWeightBSwitch performClick:self];
+        
+        [[fX264optBRDOSwitch animator] setHidden:YES];
+        [[fX264optBRDOLabel animator] setHidden:YES];
+        if ( [fX264optBRDOSwitch state] == 1 && sender != fX264optWeightBSwitch && sender != fX264optBRDOSwitch && sender != fX264optBPyramidSwitch && sender != fX264optBiMESwitch && sender != fX264optDirectPredPopUp)
+            [fX264optBRDOSwitch performClick:self];
+
+        [[fX264optBPyramidSwitch animator] setHidden:YES];
+        [[fX264optBPyramidLabel animator] setHidden:YES];
+        if ( [fX264optBPyramidSwitch state] == 1 && sender != fX264optWeightBSwitch && sender != fX264optBRDOSwitch && sender != fX264optBPyramidSwitch && sender != fX264optBiMESwitch && sender != fX264optDirectPredPopUp)
+            [fX264optBPyramidSwitch performClick:self];
+
+        [[fX264optBiMESwitch animator] setHidden:YES];
+        [[fX264optBiMELabel animator] setHidden:YES];
+        if ( [fX264optBiMESwitch state] == 1 && sender != fX264optWeightBSwitch && sender != fX264optBRDOSwitch && sender != fX264optBPyramidSwitch && sender != fX264optBiMESwitch && sender != fX264optDirectPredPopUp)
+            [fX264optBiMESwitch performClick:self];
+
+        [[fX264optDirectPredPopUp animator] setHidden:YES];
+        [[fX264optDirectPredLabel animator] setHidden:YES];
+        [fX264optDirectPredPopUp selectItemAtIndex: 0];        
+        if ( [fX264optDirectPredPopUp indexOfSelectedItem] > 1 && sender != fX264optWeightBSwitch && sender != fX264optBRDOSwitch && sender != fX264optBPyramidSwitch && sender != fX264optBiMESwitch && sender != fX264optDirectPredPopUp)
+            [[fX264optDirectPredPopUp cell] performClick:self];
+    }
+    else if ( [fX264optBframesPopUp indexOfSelectedItem ] == 2)
+    {
+        /* Only 1 b-frame? Disable b-pyramid. */
+        [[fX264optBPyramidSwitch animator] setHidden:YES];
+        [[fX264optBPyramidLabel animator] setHidden:YES];
+        if ( [fX264optBPyramidSwitch state] == 1 && sender != fX264optBPyramidSwitch)
+            [fX264optBPyramidSwitch performClick:self];
+
+        [[fX264optWeightBSwitch animator] setHidden:NO];
+        [[fX264optWeightBLabel animator] setHidden:NO];
+
+        [[fX264optBiMESwitch animator] setHidden:NO];
+        [[fX264optBiMELabel animator] setHidden:NO];
+                
+        if ( [fX264optSubmePopUp indexOfSelectedItem] >= 7)
+        {
+            /* Only show B-RDO if both bframes and subme allow it. */
+            [[fX264optBRDOSwitch animator] setHidden:NO];
+            [[fX264optBRDOLabel animator] setHidden:NO];
+        }
+        
+        if ( [fX264optAnalysePopUp indexOfSelectedItem] != 1)
+        {
+            /* Only show direct pred when allowed by both bframes and analysis.*/
+            [[fX264optDirectPredPopUp animator] setHidden:NO];
+            [[fX264optDirectPredLabel animator] setHidden:NO];
+        }
+    }
+    else
+    {
+        [[fX264optWeightBSwitch animator] setHidden:NO];
+        [[fX264optWeightBLabel animator] setHidden:NO];
+
+        [[fX264optBPyramidSwitch animator] setHidden:NO];
+        [[fX264optBPyramidLabel animator] setHidden:NO];
+
+        [[fX264optBiMESwitch animator] setHidden:NO];
+        [[fX264optBiMELabel animator] setHidden:NO];
+
+        if ( [fX264optSubmePopUp indexOfSelectedItem] >= 7)
+        {
+            /* Only show B-RDO if both bframes and subme allow it. */
+            [[fX264optBRDOSwitch animator] setHidden:NO];
+            [[fX264optBRDOLabel animator] setHidden:NO];
+        }
+
+        if ( [fX264optAnalysePopUp indexOfSelectedItem] != 1)
+        {
+            /* Only show direct pred when allowed by both bframes and analysis.*/
+            [[fX264optDirectPredPopUp animator] setHidden:NO];
+            [[fX264optDirectPredLabel animator] setHidden:NO];
+        }
+    }
+    
+    if ( [fX264optCabacSwitch state] == false)
+    {
+        /* Without CABAC entropy coding, trellis doesn't run. */
+        
+        [[fX264optTrellisPopUp animator] setHidden:YES];
+        [[fX264optTrellisLabel animator] setHidden:YES];
+        [fX264optTrellisPopUp selectItemAtIndex:0];
+        if (sender != fX264optTrellisPopUp)
+            [[fX264optTrellisPopUp cell] performClick:self];
+    }
+    else
+    {
+        [[fX264optTrellisPopUp animator] setHidden:NO];
+        [[fX264optTrellisLabel animator] setHidden:NO];
+    }
+    
+    if ( [fX264optSubmePopUp indexOfSelectedItem] < 7)
+    {
+        /* When subme < 6, B-RDO doesn't work. */
+        [[fX264optBRDOSwitch animator] setHidden:YES];
+        [[fX264optBRDOLabel animator] setHidden:YES];
+        if ( [fX264optBRDOSwitch state] == 1 && sender != fX264optBRDOSwitch )
+            [fX264optBRDOSwitch performClick:self];
+    }
+    else if ( [fX264optBframesPopUp indexOfSelectedItem ] >= 2 )
+    {
+        /* Make sure to only display B-RDO if allowed by both
+           the subme and bframe option settings.               */
+        [[fX264optBRDOSwitch animator] setHidden:NO]; 
+        [[fX264optBRDOLabel animator] setHidden:NO]; 
+    }
+    
+    if ( [fX264optAnalysePopUp indexOfSelectedItem] == 1)
+    {
+        /* No analysis? Disable 8x8dct and direct pred */
+        [[fX264opt8x8dctSwitch animator] setHidden:YES];
+        [[fX264opt8x8dctLabel animator] setHidden:YES];
+        if ( [fX264opt8x8dctSwitch state] == 1 && sender != fX264opt8x8dctSwitch )
+            [fX264opt8x8dctSwitch performClick:self];
+
+        [[fX264optDirectPredPopUp animator] setHidden:YES];
+        [[fX264optDirectPredLabel animator] setHidden:YES];
+        [fX264optDirectPredPopUp selectItemAtIndex: 0];        
+        if ( [fX264optDirectPredPopUp indexOfSelectedItem] > 1 && sender != fX264optDirectPredPopUp)
+            [[fX264optDirectPredPopUp cell] performClick:self];
+    }
+    else
+    {
+        [[fX264opt8x8dctSwitch animator] setHidden:NO];
+        [[fX264opt8x8dctLabel animator] setHidden:NO];
+
+        if ( [fX264optBframesPopUp indexOfSelectedItem ] >= 2)
+        {
+            /* Onlt show direct pred when allowed by both analysis and bframes */
+            [[fX264optDirectPredPopUp animator] setHidden:NO];
+            [[fX264optDirectPredLabel animator] setHidden:NO];
+        }
+    }
+    
+    if ( [fX264optRefPopUp indexOfSelectedItem] < 3)
+    {
+        /* Only do mixed-refs when there are at least 2 refs to mix. */
+        [[fX264optMixedRefsSwitch animator] setHidden:YES];
+        [[fX264optMixedRefsLabel animator] setHidden:YES];
+        if ( [fX264optMixedRefsSwitch state] == 1 && sender != fX264optMixedRefsSwitch )
+            [fX264optMixedRefsSwitch performClick:self];
+    }
+    else
+    {
+        [[fX264optMixedRefsSwitch animator] setHidden:NO];
+        [[fX264optMixedRefsLabel animator] setHidden:NO];
+    }
 }
 
 /**
@@ -1172,7 +1357,7 @@
     }
     
     /* We now need to reset the opt widgets since we changed some stuff */        
-    [self X264AdvancedOptionsSet:NULL];        
+    [self X264AdvancedOptionsSet:sender];        
 }
 
 @end
