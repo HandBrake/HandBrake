@@ -146,18 +146,6 @@ namespace Handbrake.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Checked")]
-        public string updatePresets {
-            get {
-                return ((string)(this["updatePresets"]));
-            }
-            set {
-                this["updatePresets"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Checked")]
         public string autoNaming {
             get {
                 return ((string)(this["autoNaming"]));

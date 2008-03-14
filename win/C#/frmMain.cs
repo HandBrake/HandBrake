@@ -56,9 +56,7 @@ namespace Handbrake
 
             // show the form, but leave disabled until preloading is complete then show the main form
             this.Enabled = false;
-
             this.Show();
-
             // Forces frmMain to draw
             Application.DoEvents();
 
@@ -74,27 +72,20 @@ namespace Handbrake
 
             // Load the presets
             // Set some defaults for the dropdown menus. Just incase the normal or user presets dont load.
-            drp_crop.SelectedIndex = 0;
-
-            lblStatus.Text = "Loading Presets ...";
+            lblStatus.Text = "Loading Presets Bar ...";
             Application.DoEvents();
-            if (Properties.Settings.Default.updatePresets == "Checked")
-            {
-                grabCLIPresets();
-            }
+            drp_crop.SelectedIndex = 0;
             loadPresetPanel();
             Thread.Sleep(200);
       
             // Now load the users default if required. (Will overide the above setting)
+            lblStatus.Text = "Loading Preset Settings ...";
+            Application.DoEvents();
             if (Properties.Settings.Default.defaultSettings == "Checked")
-            {
-                lblStatus.Text = "Loading User Default Settings...";
-                Application.DoEvents();
                 loadUserDefaults();
-                Thread.Sleep(100);
-            }
             else
                 loadNormalPreset();
+            Thread.Sleep(100);
 
             // Enable or disable tooltips
             if (Properties.Settings.Default.tooltipEnable == "Checked")
@@ -357,18 +348,24 @@ namespace Handbrake
                 filename = ISO_Open.FileName;
             }
 
-            if (filename != "")
-            {
-                Form frmRD = new frmReadDVD(filename, this, dvdInfoWindow);
-                text_source.Text = filename;
-                frmRD.ShowDialog();
-            }
+            if (filename.StartsWith("\\"))
+                MessageBox.Show("Sorry, HandBrake does not support UNC file paths. \nTry mounting the share as a network drive in My Computer", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
-                text_source.Text = "Click 'Browse' to continue";
+            {
+                if (filename != "")
+                {
+                    Form frmRD = new frmReadDVD(filename, this, dvdInfoWindow);
+                    text_source.Text = filename;
+                    frmRD.ShowDialog();
+                }
+                else
+                    text_source.Text = "Click 'Browse' to continue";
 
-            // If there are no titles in the dropdown menu then the scan has obviously failed. Display an error message explaining to the user.
-            if (drp_dvdtitle.Items.Count == 0)
-                MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source. Please refer to the FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                // If there are no titles in the dropdown menu then the scan has obviously failed. Display an error message explaining to the user.
+                if (drp_dvdtitle.Items.Count == 0)
+                    MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source. Please refer to the FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+
+            }
         }
 
         private void btn_destBrowse_Click(object sender, EventArgs e)
@@ -379,11 +376,16 @@ namespace Handbrake
 
             // Show the dialog and set the main form file path
             DVD_Save.ShowDialog();
-            text_destination.Text = DVD_Save.FileName;
+            if (DVD_Save.FileName.StartsWith("\\"))
+                MessageBox.Show("Sorry, HandBrake does not support UNC file paths. \nTry mounting the share as a network drive in My Computer", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else
+            {
+                text_destination.Text = DVD_Save.FileName;
 
-            // Quicktime requires .m4v file for chapter markers to work. If checked, change the extension to .m4v (mp4 and m4v are the same thing)
-            if (Check_ChapterMarkers.Checked)
-                text_destination.Text = text_destination.Text.Replace(".mp4", ".m4v");
+                // Quicktime requires .m4v file for chapter markers to work. If checked, change the extension to .m4v (mp4 and m4v are the same thing)
+                if (Check_ChapterMarkers.Checked)
+                    text_destination.Text = text_destination.Text.Replace(".mp4", ".m4v");
+            }
         }
 
         private void btn_h264Clear_Click(object sender, EventArgs e)

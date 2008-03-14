@@ -40,7 +40,6 @@ namespace Handbrake
             this.label5 = new System.Windows.Forms.Label();
             this.tab_options = new System.Windows.Forms.TabControl();
             this.tab_general = new System.Windows.Forms.TabPage();
-            this.check_updatePresets = new System.Windows.Forms.CheckBox();
             this.check_tooltip = new System.Windows.Forms.CheckBox();
             this.check_updateCheck = new System.Windows.Forms.CheckBox();
             this.check_userDefaultSettings = new System.Windows.Forms.CheckBox();
@@ -127,7 +126,6 @@ namespace Handbrake
             // tab_general
             // 
             this.tab_general.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.tab_general.Controls.Add(this.check_updatePresets);
             this.tab_general.Controls.Add(this.check_tooltip);
             this.tab_general.Controls.Add(this.check_updateCheck);
             this.tab_general.Controls.Add(this.check_userDefaultSettings);
@@ -139,19 +137,6 @@ namespace Handbrake
             this.tab_general.TabIndex = 0;
             this.tab_general.Text = "Startup";
             this.tab_general.UseVisualStyleBackColor = true;
-            // 
-            // check_updatePresets
-            // 
-            this.check_updatePresets.AutoSize = true;
-            this.check_updatePresets.BackColor = System.Drawing.Color.Transparent;
-            this.check_updatePresets.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_updatePresets.Location = new System.Drawing.Point(16, 102);
-            this.check_updatePresets.Name = "check_updatePresets";
-            this.check_updatePresets.Size = new System.Drawing.Size(112, 17);
-            this.check_updatePresets.TabIndex = 59;
-            this.check_updatePresets.Text = "Update presets";
-            this.check_updatePresets.UseVisualStyleBackColor = false;
-            this.check_updatePresets.CheckedChanged += new System.EventHandler(this.check_updatePresets_CheckedChanged);
             // 
             // check_tooltip
             // 
@@ -447,7 +432,6 @@ namespace Handbrake
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Label label7;
-        internal System.Windows.Forms.CheckBox check_updatePresets;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.Label label9;
         internal System.Windows.Forms.CheckBox check_autoNaming;

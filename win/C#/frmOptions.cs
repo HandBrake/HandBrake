@@ -40,11 +40,6 @@ namespace Handbrake
                 check_tooltip.CheckState = CheckState.Checked;
             }
 
-            if (Properties.Settings.Default.updatePresets == "Checked")
-            {
-                check_updatePresets.CheckState = CheckState.Checked;
-            }
-
             if (Properties.Settings.Default.autoNaming == "Checked")
             {
                 check_autoNaming.CheckState = CheckState.Checked;
@@ -91,11 +86,6 @@ namespace Handbrake
         private void drp_completeOption_SelectedIndexChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.CompletionOption = drp_completeOption.Text;
-        }
-
-        private void check_updatePresets_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.updatePresets = check_updatePresets.CheckState.ToString();
         }
 
         private void check_autoNaming_CheckedChanged(object sender, EventArgs e)

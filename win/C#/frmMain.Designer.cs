@@ -37,7 +37,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label Label38;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -200,7 +200,6 @@ namespace Handbrake
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.btn_ActivityWindow = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             Label38 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.slider_drc)).BeginInit();
@@ -442,8 +441,8 @@ namespace Handbrake
             this.check_largeFile.Size = new System.Drawing.Size(82, 17);
             this.check_largeFile.TabIndex = 4;
             this.check_largeFile.Text = "64Bit MP4";
-            this.ToolTip.SetToolTip(this.check_largeFile, "Allows creation of MP4 files greater than 4GB.\r\nWarning: Breaks iPod, Apple TV an" +
-                    "d PS3 compatibility.");
+            this.ToolTip.SetToolTip(this.check_largeFile, "Allows creation of MP4 files greater than 4GB.\r\nWarning: Breaks iPod, Apple TV Ve" +
+                    "rsion 1 and PS3 compatibility.");
             this.check_largeFile.UseVisualStyleBackColor = false;
             this.check_largeFile.CheckedChanged += new System.EventHandler(this.check_largeFile_CheckedChanged);
             // 
@@ -602,7 +601,6 @@ namespace Handbrake
             this.slider_drc.Size = new System.Drawing.Size(241, 42);
             this.slider_drc.TabIndex = 18;
             this.slider_drc.TickFrequency = 10;
-            this.ToolTip.SetToolTip(this.slider_drc, "Dynamic Range Compression");
             this.slider_drc.Scroll += new System.EventHandler(this.slider_drc_Scroll);
             // 
             // rtf_h264advanced
@@ -631,7 +629,7 @@ namespace Handbrake
             // 
             // DVD_Open
             // 
-            this.DVD_Open.Description = "Select the \"VIDEO_TS\" folder from your DVD Drvie.";
+            this.DVD_Open.Description = "Select the \"VIDEO_TS\" folder from your DVD Drive.";
             // 
             // File_Open
             // 
@@ -973,6 +971,8 @@ namespace Handbrake
             this.check_optimiseMP4.Size = new System.Drawing.Size(143, 17);
             this.check_optimiseMP4.TabIndex = 25;
             this.check_optimiseMP4.Text = "HTTP Optimized MP4";
+            this.ToolTip.SetToolTip(this.check_optimiseMP4, "MP4 files can be optimized for progressive downloads over the Web, but note that " +
+                    "QuickTime can only read the files as long as the file extension is .mp4.");
             this.check_optimiseMP4.UseVisualStyleBackColor = false;
             this.check_optimiseMP4.CheckedChanged += new System.EventHandler(this.check_optimiseMP4_CheckedChanged);
             // 
@@ -1386,6 +1386,8 @@ namespace Handbrake
             this.check_iPodAtom.Size = new System.Drawing.Size(122, 17);
             this.check_iPodAtom.TabIndex = 26;
             this.check_iPodAtom.Text = "Insert iPod Atom";
+            this.ToolTip.SetToolTip(this.check_iPodAtom, "Required for 5th and 6th Generation iPods. Encodes will not sync if this is not e" +
+                    "nabled for H.264 encodes");
             this.check_iPodAtom.UseVisualStyleBackColor = false;
             this.check_iPodAtom.CheckedChanged += new System.EventHandler(this.check_iPodAtom_CheckedChanged);
             // 
@@ -1844,12 +1846,13 @@ namespace Handbrake
             this.data_chpt.Name = "data_chpt";
             this.data_chpt.Size = new System.Drawing.Size(607, 182);
             this.data_chpt.TabIndex = 2;
+            this.ToolTip.SetToolTip(this.data_chpt, resources.GetString("data_chpt.ToolTip"));
             // 
             // number
             // 
-            dataGridViewCellStyle2.Format = "N0";
-            dataGridViewCellStyle2.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle3.Format = "N0";
+            dataGridViewCellStyle3.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle3;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -2104,6 +2107,7 @@ namespace Handbrake
             this.btn_start.Name = "btn_start";
             this.btn_start.Size = new System.Drawing.Size(67, 36);
             this.btn_start.Text = "Start";
+            this.btn_start.ToolTipText = "Start the encoding process";
             this.btn_start.Click += new System.EventHandler(this.btn_start_Click);
             // 
             // toolStripSeparator1
@@ -2119,6 +2123,7 @@ namespace Handbrake
             this.btn_add2Queue.Name = "btn_add2Queue";
             this.btn_add2Queue.Size = new System.Drawing.Size(110, 36);
             this.btn_add2Queue.Text = "Add to Queue";
+            this.btn_add2Queue.ToolTipText = "Add a new item to the Queue";
             this.btn_add2Queue.Click += new System.EventHandler(this.btn_add2Queue_Click);
             // 
             // btn_showQueue
@@ -2128,6 +2133,7 @@ namespace Handbrake
             this.btn_showQueue.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_showQueue.Name = "btn_showQueue";
             this.btn_showQueue.Size = new System.Drawing.Size(104, 36);
+            this.btn_showQueue.Tag = "";
             this.btn_showQueue.Text = "Show Queue";
             this.btn_showQueue.Click += new System.EventHandler(this.btn_showQueue_Click);
             // 
@@ -2144,6 +2150,8 @@ namespace Handbrake
             this.btn_ActivityWindow.Name = "btn_ActivityWindow";
             this.btn_ActivityWindow.Size = new System.Drawing.Size(120, 36);
             this.btn_ActivityWindow.Text = "Activity Window";
+            this.btn_ActivityWindow.ToolTipText = "Displays the activity window which displays the log of the last completed or curr" +
+                "ently running encode.";
             this.btn_ActivityWindow.Click += new System.EventHandler(this.btn_ActivityWindow_Click);
             // 
             // toolStripSeparator8
@@ -2371,7 +2379,6 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripButton btn_ActivityWindow;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
-        private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Label lbl_warn_chapt;
         private System.Windows.Forms.ToolStripMenuItem mnu_handbrake_home;
 
