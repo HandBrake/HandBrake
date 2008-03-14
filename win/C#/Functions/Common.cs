@@ -206,21 +206,24 @@ namespace Handbrake.Functions
 
 
             if (presetQuery.Anamorphic == true)
-                mainWindow.CheckPixelRatio.CheckState = CheckState.Checked;
+                mainWindow.drp_anamorphic.SelectedIndex = 1;
             else
-                mainWindow.CheckPixelRatio.CheckState = CheckState.Unchecked;
+                mainWindow.drp_anamorphic.SelectedIndex = 0;
 
             if (presetQuery.LooseAnamorphic == true)
-                mainWindow.check_lAnamorphic.CheckState = CheckState.Checked;
+                mainWindow.drp_anamorphic.SelectedIndex = 2;
             else
-                mainWindow.check_lAnamorphic.CheckState = CheckState.Unchecked;
+            {
+                if (presetQuery.Anamorphic != true)
+                    mainWindow.drp_anamorphic.SelectedIndex = 0;
+            }
+
 
             if (presetQuery.Width != 0)
                 mainWindow.text_width.Text = presetQuery.Width.ToString();
             else
             {
                 mainWindow.text_width.Text = "";
-                mainWindow.text_width.BackColor = Color.White;
             }
 
             if (presetQuery.Height != 0)
@@ -228,7 +231,6 @@ namespace Handbrake.Functions
             else
             {
                 mainWindow.text_height.Text = "";
-                mainWindow.text_height.BackColor = Color.White;
             }
 
             if (presetQuery.VFR == true)
@@ -268,7 +270,10 @@ namespace Handbrake.Functions
             if (presetQuery.LargeMP4 == true)
                 mainWindow.check_largeFile.CheckState = CheckState.Checked;
             else
+            {
                 mainWindow.check_largeFile.CheckState = CheckState.Unchecked;
+                mainWindow.check_largeFile.BackColor = Color.Transparent;
+            }
 
             
 
@@ -495,8 +500,13 @@ namespace Handbrake.Functions
             if (mainWindow.check_grayscale.Checked)
                 grayscale = " -g ";
 
-            if (mainWindow.CheckPixelRatio.Checked)
+            if (mainWindow.drp_anamorphic.SelectedIndex == 1)
                 pixelRatio = " -p ";
+            else if (mainWindow.drp_anamorphic.SelectedIndex == 2)
+                pixelRatio = " -P ";
+            else
+                pixelRatio = " ";
+                
 
             if (mainWindow.check_deblock.Checked)
                 deblock = " --deblock";
@@ -507,8 +517,7 @@ namespace Handbrake.Functions
             if (mainWindow.check_vfr.Checked)
                 vfr = " -V ";
 
-            if (mainWindow.check_lAnamorphic.Checked)
-                lanamorphic = " -P ";
+            
 
             string queryPictureSettings = cropOut + deinterlace + deblock + detelecine + vfr + grayscale + pixelRatio + lanamorphic;
             #endregion
@@ -552,7 +561,7 @@ namespace Handbrake.Functions
             if (mainWindow.check_2PassEncode.Checked)
                 twoPassEncoding = " -2 ";
 
-            if (videoFramerate == "Automatic")
+            if (videoFramerate == "Same as source")
                 vid_frame_rate = "";
             else
             {

@@ -77,7 +77,7 @@ namespace Handbrake
             drp_crop.SelectedIndex = 0;
             loadPresetPanel();
             Thread.Sleep(200);
-      
+
             // Now load the users default if required. (Will overide the above setting)
             lblStatus.Text = "Loading Preset Settings ...";
             Application.DoEvents();
@@ -112,7 +112,7 @@ namespace Handbrake
             // Turn the interface back to the user
             this.Enabled = true;
         }
-    
+
         private void startupUpdateCheck()
         {
             try
@@ -122,7 +122,7 @@ namespace Handbrake
                     this.BeginInvoke(new updateStatusChanger(startupUpdateCheck));
                     return;
                 }
-                
+
                 Boolean update = hb_common_func.updateCheck(false);
                 if (update == true)
                 {
@@ -152,9 +152,6 @@ namespace Handbrake
             string userDefaults = Properties.Settings.Default.defaultUserSettings;
             try
             {
-                // Some things that need to be done to reset some gui components:
-                CheckPixelRatio.CheckState = CheckState.Unchecked;
-
                 // Send the query from the file to the Query Parser class Then load the preset
                 Functions.QueryParser presetQuery = Functions.QueryParser.Parse(userDefaults);
                 hb_common_func.presetLoader(this, presetQuery, "User Defaults ");
@@ -304,7 +301,7 @@ namespace Handbrake
         {
             Process.Start("http://handbrake.fr");
         }
-        
+
         private void mnu_UpdateCheck_Click(object sender, EventArgs e)
         {
             Boolean update = hb_common_func.updateCheck(true);
@@ -539,19 +536,12 @@ namespace Handbrake
         {
             try
             {
-                if (CheckPixelRatio.Checked)
-                {
-                    text_width.Text = "";
+
+                if ((int.Parse(text_width.Text) % 16) != 0)
                     text_width.BackColor = Color.LightCoral;
-                    CheckPixelRatio.BackColor = Color.LightCoral;
-                }
                 else
-                {
-                    if ((int.Parse(text_width.Text) % 16) != 0)
-                        text_width.BackColor = Color.LightCoral;
-                    else
-                        text_width.BackColor = Color.LightGreen;
-                }
+                    text_width.BackColor = Color.LightGreen;
+
 
                 if ((lbl_Aspect.Text != "Select a Title") && (drp_crop.SelectedIndex == 2))
                 {
@@ -578,20 +568,10 @@ namespace Handbrake
         {
             try
             {
-                if (CheckPixelRatio.Checked)
-                {
-                    text_height.Text = "";
+                if ((int.Parse(text_height.Text) % 16) != 0)
                     text_height.BackColor = Color.LightCoral;
-                    CheckPixelRatio.BackColor = Color.LightCoral;
-                }
                 else
-                {
-                    if ((int.Parse(text_height.Text) % 16) != 0)
-                        text_height.BackColor = Color.LightCoral;
-                    else
-                        text_height.BackColor = Color.LightGreen;
-                }
-
+                    text_height.BackColor = Color.LightGreen;
             }
             catch (Exception)
             {
@@ -671,48 +651,34 @@ namespace Handbrake
             }
         }
 
-        private void CheckPixelRatio_CheckedChanged(object sender, EventArgs e)
+        private void drp_anamorphic_SelectedIndexChanged(object sender, EventArgs e)
         {
-            text_width.Text = "";
-            text_height.Text = "";
-            text_width.BackColor = Color.White;
-            text_height.BackColor = Color.White;
-            CheckPixelRatio.BackColor = TabPage1.BackColor;
-
-            if (CheckPixelRatio.Checked)
+            if (drp_anamorphic.SelectedIndex == 1)
             {
-                check_lAnamorphic.Enabled = false;
-                check_lAnamorphic.Checked = false;
                 text_height.BackColor = Color.LightGray;
                 text_width.BackColor = Color.LightGray;
+                text_height.Text = "";
+                text_width.Text = "";
                 text_height.Enabled = false;
                 text_width.Enabled = false;
             }
-            else
+
+            if (drp_anamorphic.SelectedIndex == 2)
             {
-                check_lAnamorphic.Enabled = true;
+                text_height.Text = "";
+                text_height.Enabled = false;
+                text_height.BackColor = Color.LightGray;
+
+                text_width.Enabled = true;
+                text_width.BackColor = Color.White;
+            }
+
+            if (drp_anamorphic.SelectedIndex == 0)
+            {
                 text_height.BackColor = Color.White;
                 text_width.BackColor = Color.White;
                 text_height.Enabled = true;
                 text_width.Enabled = true;
-            }
-        }
-
-        private void check_lAnamorphic_CheckedChanged(object sender, EventArgs e)
-        {
-            if (check_lAnamorphic.Checked)
-            {
-                CheckPixelRatio.Enabled = false;
-                CheckPixelRatio.Checked = false;
-                text_height.Text = "";
-                text_height.Enabled = false;
-                text_height.BackColor = Color.LightGray;
-            }
-            else
-            {
-                CheckPixelRatio.Enabled = true;
-                text_height.Enabled = true;
-                text_height.BackColor = Color.White;
             }
         }
 
@@ -928,8 +894,8 @@ namespace Handbrake
                 check_iPodAtom.Enabled = false;
                 check_iPodAtom.Checked = false;
                 check_optimiseMP4.Enabled = false;
-                check_lAnamorphic.Enabled = false;
-                check_lAnamorphic.Checked = false;
+                if (drp_anamorphic.Items.Count == 3)
+                    drp_anamorphic.Items.RemoveAt(2);
             }
             else
             {
@@ -939,7 +905,8 @@ namespace Handbrake
                 h264Tab.Enabled = true;
                 check_iPodAtom.Enabled = true;
                 check_optimiseMP4.Enabled = true;
-                check_lAnamorphic.Enabled = true;
+                if (!drp_anamorphic.Items.Contains("Loose"))
+                    drp_anamorphic.Items.Add("Loose");
             }
 
         }
@@ -973,27 +940,59 @@ namespace Handbrake
         #region Preset System
 
         // Import Current Presets
-        private void loadPresetPanel()
+        public void loadPresetPanel()
         {
+            treeView_presets.Nodes.Clear();
             ArrayList presetNameList = new ArrayList();
-       
-                string appPath = Application.StartupPath.ToString() + "\\presets.dat";
-                if (File.Exists(appPath))
+
+            // Load in the built in presets from presets.dat
+            string filePath = Application.StartupPath.ToString() + "\\presets.dat";
+            if (File.Exists(filePath))
+            {
+                StreamReader presetInput = new StreamReader(filePath);
+                while (!presetInput.EndOfStream)
                 {
-                    StreamReader presetInput = new StreamReader(appPath);
-                    while (!presetInput.EndOfStream)
+                    if ((char)presetInput.Peek() == '+')
                     {
-                        if ((char)presetInput.Peek() == '+')
-                        {
-                            string preset = presetInput.ReadLine().Replace("+ ", "");
-                            Regex r = new Regex("(:  )"); // Split on hyphens. 
-                            presetNameList.Add(r.Split(preset));
-                        }
-                        else
-                            presetInput.ReadLine();
+                        string preset = presetInput.ReadLine().Replace("+ ", "");
+                        Regex r = new Regex("(:  )"); // Split on hyphens. 
+                        presetNameList.Add(r.Split(preset));
                     }
+                    else
+                        presetInput.ReadLine();
                 }
-         
+
+                presetInput.Close();
+                presetInput.Dispose();
+            }
+            addPresetToList(presetNameList);
+            presetNameList.Clear();
+
+            // Load in the users presets from user_presets.dat
+            filePath = Application.StartupPath.ToString() + "\\user_presets.dat";
+            if (File.Exists(filePath))
+            {
+                StreamReader presetInput = new StreamReader(filePath);
+                while (!presetInput.EndOfStream)
+                {
+                    if ((char)presetInput.Peek() == '+')
+                    {
+                        string preset = "--" + presetInput.ReadLine().Replace("+ ", "");
+                        Regex r = new Regex("(:  )"); // Split on hyphens. 
+                        presetNameList.Add(r.Split(preset));
+                    }
+                    else
+                        presetInput.ReadLine();
+                }
+
+                presetInput.Close();
+                presetInput.Dispose();
+            }
+            addPresetToList(presetNameList);
+        }
+
+        private void addPresetToList(ArrayList presetNameList)
+        {
             TreeNode preset_treeview = new TreeNode();
             foreach (string[] preset in presetNameList)
             {
@@ -1055,44 +1054,132 @@ namespace Handbrake
         // When the user select a preset from the treeview, load it
         private void treeView_presets_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            string selectedPreset = null;
-            selectedPreset = treeView_presets.SelectedNode.Text;
-
             try
             {
-                string appPath = Application.StartupPath.ToString() + "\\presets.dat";
-                if (File.Exists(appPath))
+                // Scan through the built in presets
+                string builtInPresets = Application.StartupPath.ToString() + "\\presets.dat";
+                if (File.Exists(builtInPresets))
                 {
-                    StreamReader presetInput = new StreamReader(appPath);
+                    StreamReader presetInput = new StreamReader(builtInPresets);
                     while (!presetInput.EndOfStream)
                     {
                         if ((char)presetInput.Peek() == '+')
                         {
                             string preset = presetInput.ReadLine().Replace("+ ", "");
-                            Regex r = new Regex("(:  )"); // Split on hyphens. 
-                            string[] presetName = r.Split(preset);
-
-                            if (selectedPreset == presetName[0])
-                            {
-                                // Need to disable anamorphic now, otherwise it may overide the width / height values later.
-                                CheckPixelRatio.CheckState = CheckState.Unchecked;
-
-                                // Send the query from the file to the Query Parser class
-                                Functions.QueryParser presetQuery = Functions.QueryParser.Parse(preset);
-
-                                // Now load the preset
-                                hb_common_func.presetLoader(this, presetQuery, selectedPreset);
-                            }
+                            checkSelectedPreset(preset);
                         }
                         else
                             presetInput.ReadLine();
                     }
+
+                    presetInput.Close();
+                }
+
+                // Scan through the users presets
+                string userPresets = Application.StartupPath.ToString() + "\\user_presets.dat";
+                if (File.Exists(userPresets))
+                {
+                    StreamReader presetInput = new StreamReader(userPresets);
+                    while (!presetInput.EndOfStream)
+                    {
+                        if ((char)presetInput.Peek() == '+')
+                        {
+                            string preset = presetInput.ReadLine().Replace("+ ", "");
+                            checkSelectedPreset(preset);
+                        }
+                        else
+                            presetInput.ReadLine();
+                    }
+
+                    presetInput.Close();
+                    presetInput.Dispose();
                 }
             }
             catch (Exception exc)
             {
                 MessageBox.Show(exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void checkSelectedPreset(string preset)
+        {
+            string selectedPreset = null;
+            selectedPreset = treeView_presets.SelectedNode.Text;
+
+            Regex r = new Regex("(:  )"); // Split on hyphens. 
+            string[] presetName = r.Split(preset);
+
+            if ((selectedPreset == (presetName[0])) || (selectedPreset == ("--" + presetName[0])))
+            {
+                // Send the query from the file to the Query Parser class
+                Functions.QueryParser presetQuery = Functions.QueryParser.Parse(preset);
+
+                // Now load the preset
+                hb_common_func.presetLoader(this, presetQuery, selectedPreset);
+            }
+
+        }
+
+        private void btn_addPreset_Click(object sender, EventArgs e)
+        {
+            Form preset = new frmAddPreset(this);
+            preset.ShowDialog();
+        }
+
+        private void btn_removePreset_Click(object sender, EventArgs e)
+        {
+            ArrayList user_presets = new ArrayList();
+            ArrayList modified_presets_list = new ArrayList();
+            string selectedPreset = null;
+            selectedPreset = treeView_presets.SelectedNode.Text;
+
+            if (!selectedPreset.StartsWith("--"))
+                MessageBox.Show("Sorry, You can not remove any of the built in presets.","Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+
+            // Scan through the users presets and dump them all in an arraylist
+            string userPresets = Application.StartupPath.ToString() + "\\user_presets.dat";
+            if (File.Exists(userPresets))
+            {
+                StreamReader presetInput = new StreamReader(userPresets);
+                while (!presetInput.EndOfStream)
+                {
+                    if ((char)presetInput.Peek() == '+')
+                    {
+                        string item = presetInput.ReadLine();
+                        user_presets.Add(item);
+                        modified_presets_list.Add(item);
+                    }
+                    else
+                        presetInput.ReadLine();
+                }
+
+                presetInput.Close();
+                presetInput.Dispose();
+            }
+
+            // now lets scan through the arraylist and remove the preset with the
+            // same name as the one selected.
+            int c = 0;
+            foreach (string item in user_presets)
+            {
+                string preset_name = selectedPreset.Replace("--","");
+                if (item.Contains(preset_name))
+                    modified_presets_list.RemoveAt(c);
+                c++;
+            }
+
+            // Now we need to rebuilt the user presets file.
+            StreamWriter line = new StreamWriter(userPresets);
+            foreach (string item in modified_presets_list)
+            {
+                line.WriteLine(item);
+            }
+            line.Close();
+            line.Dispose();
+
+            // Now reload the preset panel
+            loadPresetPanel();
         }
 
         #endregion
@@ -1208,10 +1295,6 @@ namespace Handbrake
         }
 
         #endregion
-
-
-
-
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

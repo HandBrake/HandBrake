@@ -82,9 +82,22 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="C4F.DevKit.Contacts.Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bdc1b65c439c6a1f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Documents and Settings\Scott\My Documents\C4F\C4F Developer Kit 2008\Controls\C4F.DevKit.Contacts.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="C4F.DevKit.Messaging, Version=1.0.0.0, Culture=neutral, PublicKeyToken=76ac60f2feb1ad78, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Documents and Settings\Scott\My Documents\C4F\C4F Developer Kit 2008\Controls\C4F.DevKit.Messaging.dll</HintPath>
+    </Reference>
+    <Reference Include="C4F.DevKit.Telephony, Version=1.0.0.0, Culture=neutral, PublicKeyToken=db6017b098a30de9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Documents and Settings\Scott\My Documents\C4F\C4F Developer Kit 2008\Controls\C4F.DevKit.Telephony.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Messaging" />
     <Reference Include="System.Windows.Forms" />
@@ -102,6 +115,12 @@
     </Compile>
     <Compile Include="frmAbout.Designer.cs">
       <DependentUpon>frmAbout.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmAddPreset.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAddPreset.Designer.cs">
+      <DependentUpon>frmAddPreset.cs</DependentUpon>
     </Compile>
     <Compile Include="frmDownload.cs">
       <SubType>Form</SubType>
@@ -158,6 +177,10 @@
     <EmbeddedResource Include="frmAbout.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmAbout.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAddPreset.resx">
+      <DependentUpon>frmAddPreset.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmDownload.resx">
       <SubType>Designer</SubType>
