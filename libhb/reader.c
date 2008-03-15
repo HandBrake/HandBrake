@@ -17,6 +17,10 @@ typedef struct
     hb_stream_t  * stream;
 
     uint           sequence;
+    int            saw_video;
+    int64_t        scr_offset;
+    int64_t        last_scr;
+    int            scr_changes;
 
 } hb_reader_t;
 
@@ -163,8 +167,73 @@ static void ReaderFunc( void * _r )
         {
             hb_list_rem( list, buf );
             fifos = GetFifoForId( r->job, buf->id );
+
+            if ( ! r->saw_video )
+            {
+                /* The first video packet defines 'time zero' so discard
+                   data until we get a video packet with a PTS */
+                if ( buf->id == 0xE0 && buf->start != -1 )
+                {
+                    r->saw_video = 1;
+                    r->scr_offset = buf->start;
+                    r->last_scr = buf->stop;
+                    hb_log( "reader: first SCR %llu scr_offset %llu",
+                            r->last_scr, r->scr_offset );
+                }
+                else
+                {
+                    fifos = NULL;
+                }
+            }
             if( fifos )
             {
+                /*
+                 * This section of code implements the timing model of
+                 * the "Standard Target Decoder" (STD) of the MPEG2 standard
+                 * (specified in ISO 13818-1 sections 2.4.2, 2.5.2 & Annex D).
+                 * The STD removes and corrects for clock discontinuities so
+                 * that the time stamps on the video, audio & other media
+                 * streams can be used for cross-media synchronization. To do
+                 * this the STD has its own timestamp value, the System Clock
+                 * Reference or SCR, in the PACK header. Clock discontinuities
+                 * are detected using the SCR & and the adjustment needed
+                 * to correct post-discontinuity timestamps to be contiguous
+                 * with pre-discontinuity timestamps is computed from pre- and
+                 * post-discontinuity values of the SCR. Then this adjustment
+                 * is applied to every media timestamp (PTS).
+                 *
+                 * hb_demux_ps left the SCR for this pack in buf->stop.
+                 * ISO 13818-1 says there must be an SCR at least every 700ms
+                 * (100ms for Transport Streams) so if the difference between
+                 * this SCR & the previous is >700ms it's a discontinuity.
+                 * If the difference is negative it's non-physical (time doesn't
+                 * go backward) and must also be a discontinuity. When we find a
+                 * discontinuity we adjust the scr_offset so that the SCR of the
+                 * new packet lines up with that of the previous packet.
+                 */
+                int64_t scr_delta = buf->stop - r->last_scr;
+                if ( scr_delta > 67500 || scr_delta < -900 )
+                {
+                    ++r->scr_changes;
+                    r->scr_offset += scr_delta - 1;
+                }
+                r->last_scr = buf->stop;
+                buf->stop = -1;
+
+                /*
+                 * The last section detected discontinuites and computed the
+                 * appropriate correction to remove them. The next couple of
+                 * lines apply the correction to the media timestamps so the
+                 * code downstream of us sees only timestamps relative to the
+                 * same, continuous clock with time zero on that clock being
+                 * the time of the first video packet.
+                 */
+                if ( buf->start != -1 )
+                {
+                    /* this packet has a PTS - correct it for the initial
+                       video time offset & any timing discontinuities. */
+                    buf->start -= r->scr_offset;
+                }
                 buf->sequence = r->sequence++;
                 for( n = 0; fifos[n] != NULL; n++)
                 {
@@ -212,10 +281,10 @@ static void ReaderFunc( void * _r )
       hb_stream_close(&r->stream);
     }
 
+    hb_log( "reader: done. %d scr changes", r->scr_changes );
+
     free( r );
     _r = NULL;
-
-    hb_log( "reader: done" );
 }
 
 /***********************************************************************

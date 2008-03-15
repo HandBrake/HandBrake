@@ -11,9 +11,8 @@
 int hb_demux_ps( hb_buffer_t * buf_ps, hb_list_t * list_es )
 {
     hb_buffer_t * buf_es;
-    int           pos;
-
-    pos = 0;
+    int           pos = 0;
+    int64_t       scr;
 
 #define d (buf_ps->data)
 
@@ -26,6 +25,14 @@ int hb_demux_ps( hb_buffer_t * buf_ps, hb_list_t * list_es )
         return 0;
     }
     pos += 4;                    /* pack_start_code */
+    /* extract the system clock reference (scr) */
+    scr = ((uint64_t)(d[pos] & 0x38) << 27) |
+          ((uint64_t)(d[pos] & 0x03) << 28) |
+          ((uint64_t)(d[pos+1]) << 20) |
+          ((uint64_t)(d[pos+2] >> 3) << 15) |
+          ((uint64_t)(d[pos+2] & 3) << 13) |
+          ((uint64_t)(d[pos+3]) << 5) |
+          (d[pos+4] >> 3);
     pos += 9;                    /* pack_header */
     pos += 1 + ( d[pos] & 0x7 ); /* stuffing bytes */
 
@@ -112,6 +119,7 @@ int hb_demux_ps( hb_buffer_t * buf_ps, hb_list_t * list_es )
 
         buf_es->id       = id;
         buf_es->start    = pts;
+        buf_es->stop     = scr;
         if (id == 0xE0) {
             // Consume a chapter break, and apply it to the ES.
             buf_es->new_chap = buf_ps->new_chap;

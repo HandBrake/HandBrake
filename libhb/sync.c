@@ -19,7 +19,13 @@
 typedef struct
 {
     hb_audio_t * audio;
-    int64_t      count_frames;
+
+    int64_t      next_start;    /* start time of next output frame */
+    int64_t      next_pts;      /* start time of next input frame */
+    int64_t      start_silence; /* if we're inserting silence, the time we started */
+    int64_t      first_drop;    /* PTS of first 'went backwards' frame dropped */
+    int          drop_count;    /* count of 'time went backwards' drops */
+    int          inserting_silence;
 
     /* Raw */
     SRC_STATE  * state;
@@ -39,28 +45,22 @@ struct hb_work_private_s
     /* Video */
     hb_subtitle_t * subtitle;
     int64_t pts_offset;
-    int64_t pts_offset_old;
-    int64_t next_start;
-    int64_t count_frames;
-    int64_t count_frames_max;
-    int64_t video_sequence;
+    int64_t next_start;         /* start time of next output frame */
+    int64_t next_pts;           /* start time of next input frame */
+    int64_t first_drop;         /* PTS of first 'went backwards' frame dropped */
+    int drop_count;             /* count of 'time went backwards' drops */
+    int video_sequence;
+    int count_frames;
+    int count_frames_max;
     hb_buffer_t * cur; /* The next picture to process */
 
     /* Audio */
     hb_sync_audio_t sync_audio[8];
 
-    /* Flags */
-    int discontinuity;
-
     /* Statistics */
     uint64_t st_counts[4];
     uint64_t st_dates[4];
     uint64_t st_first;
-
-    /* Throttle message flags */
-    int   trashing_audio;
-    int   inserting_silence;
-    int   way_out_of_sync;
 };
 
 /***********************************************************************
@@ -69,8 +69,8 @@ struct hb_work_private_s
 static void InitAudio( hb_work_object_t * w, int i );
 static int  SyncVideo( hb_work_object_t * w );
 static void SyncAudio( hb_work_object_t * w, int i );
-static int  NeedSilence( hb_work_object_t * w, hb_audio_t * );
-static void InsertSilence( hb_work_object_t * w, int i );
+static int  NeedSilence( hb_work_object_t * w, hb_audio_t *, int i );
+static void InsertSilence( hb_work_object_t * w, int i, int64_t d );
 static void UpdateState( hb_work_object_t * w );
 
 /***********************************************************************
@@ -91,14 +91,7 @@ int syncInit( hb_work_object_t * w, hb_job_t * job )
 
     pv->job            = job;
     pv->pts_offset     = INT64_MIN;
-    pv->pts_offset_old = INT64_MIN;
     pv->count_frames   = 0;
-
-    pv->discontinuity = 0;
-
-    pv->trashing_audio = 0;
-    pv->inserting_silence = 0;
-    pv->way_out_of_sync = 0;
 
     /* Calculate how many video frames we are expecting */
     duration = 0;
@@ -111,7 +104,7 @@ int syncInit( hb_work_object_t * w, hb_job_t * job )
         /* 1 second safety so we're sure we won't miss anything */
     pv->count_frames_max = duration * job->vrate / job->vrate_base / 90000;
 
-    hb_log( "sync: expecting %lld video frames", pv->count_frames_max );
+    hb_log( "sync: expecting %d video frames", pv->count_frames_max );
 
     /* Initialize libsamplerate for every audio track we have */
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
@@ -144,6 +137,13 @@ void syncClose( hb_work_object_t * w )
 
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
+        if ( pv->sync_audio[i].start_silence )
+        {
+            hb_log( "sync: added %d ms of silence to audio %d",
+                    (int)((pv->sync_audio[i].next_pts -
+                              pv->sync_audio[i].start_silence) / 90), i );
+        }
+
         if( job->acodec & HB_ACODEC_AC3 ||
             job->audio_mixdowns[i] == HB_AMIXDOWN_AC3 )
         {
@@ -254,10 +254,6 @@ static void InitAudio( hb_work_object_t * w, int i )
     }
 }
 
-
-
-#define PTS_DISCONTINUITY_TOLERANCE 90000
-
 /***********************************************************************
  * SyncVideo
  ***********************************************************************
@@ -268,8 +264,6 @@ static int SyncVideo( hb_work_object_t * w )
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * cur, * next, * sub = NULL;
     hb_job_t * job = pv->job;
-    int64_t pts_expected;
-    int chap_break;
 
     if( pv->done )
     {
@@ -282,7 +276,7 @@ static int SyncVideo( hb_work_object_t * w )
     {
         /* All video data has been processed already, we won't get
            more */
-        hb_log( "sync: got %lld frames, %lld expected",
+        hb_log( "sync: got %d frames, %d expected",
                 pv->count_frames, pv->count_frames_max );
         pv->done = 1;
 
@@ -306,7 +300,7 @@ static int SyncVideo( hb_work_object_t * w )
     /* At this point we have a frame to process. Let's check
         1) if we will be able to push into the fifo ahead
         2) if the next frame is there already, since we need it to
-           know whether we'll have to repeat the current frame or not */
+           compute the duration of the current frame*/
     while( !hb_fifo_is_full( job->fifo_sync ) &&
            ( next = hb_fifo_see( job->fifo_raw ) ) )
     {
@@ -315,8 +309,52 @@ static int SyncVideo( hb_work_object_t * w )
         if( pv->pts_offset == INT64_MIN )
         {
             /* This is our first frame */
-            hb_log( "sync: first pts is %lld", cur->start );
-            pv->pts_offset = cur->start;
+            pv->pts_offset = 0;
+            if ( cur->start != 0 )
+            {
+                /*
+                 * The first pts from a dvd should always be zero but
+                 * can be non-zero with a transport or program stream since
+                 * we're not guaranteed to start on an IDR frame. If we get
+                 * a non-zero initial PTS extend its duration so it behaves
+                 * as if it started at zero so that our audio timing will
+                 * be in sync.
+                 */
+                hb_log( "sync: first pts is %lld", cur->start );
+                cur->start = 0;
+            }
+        }
+
+        /*
+         * since the first frame is always 0 and the upstream reader code
+         * is taking care of adjusting for pts discontinuities, we just have
+         * to deal with the next frame's start being in the past. This can
+         * happen when the PTS is adjusted after data loss but video frame
+         * reordering causes some frames with the old clock to appear after
+         * the clock change. This creates frames that overlap in time which
+         * looks to us like time going backward. The downstream muxing code
+         * can deal with overlaps of up to a frame time but anything larger
+         * we handle by dropping frames here.
+         */
+        if ( pv->next_pts - next->start > 1000 )
+        {
+            if ( pv->first_drop == 0 )
+            {
+                pv->first_drop = next->start;
+            }
+            ++pv->drop_count;
+            buf_tmp = hb_fifo_get( job->fifo_raw );
+            hb_buffer_close( &buf_tmp );
+            continue;
+        }
+        if ( pv->first_drop )
+        {
+            hb_log( "sync: video time went backwards %d ms, dropped %d frames "
+                    "(frame %lld, expected %lld)",
+                    (int)( pv->next_pts - pv->first_drop ) / 90, pv->drop_count,
+                    pv->first_drop, pv->next_pts );
+            pv->first_drop = 0;
+            pv->drop_count = 0;
         }
 
         /*
@@ -324,64 +362,6 @@ static int SyncVideo( hb_work_object_t * w )
          * to it using the sequence number as well as the PTS.
          */
         pv->video_sequence = cur->sequence;
-
-        /* Check for PTS jumps over 0.5 second */
-        if( next->start < cur->start - PTS_DISCONTINUITY_TOLERANCE ||
-            next->start > cur->start + PTS_DISCONTINUITY_TOLERANCE )
-        {
-	    hb_log( "Sync: Video PTS discontinuity %s (current buffer start=%lld, next buffer start=%lld)",
-                    pv->discontinuity ? "second" : "first", cur->start, next->start );
-
-            /*
-             * Do we need to trash the subtitle, is it from the next->start period
-             * or is it from our old position. If the latter then trash it.
-             */
-            if( pv->subtitle )
-            {
-                while( ( sub = hb_fifo_see( pv->subtitle->fifo_raw ) ) )
-                {
-                    if( ( sub->start > ( cur->start - PTS_DISCONTINUITY_TOLERANCE ) ) &&
-                        ( sub->start < ( cur->start + PTS_DISCONTINUITY_TOLERANCE ) ) )
-                    {
-                        /*
-                         * The subtitle is from our current time region which we are
-                         * jumping from. So trash it as we are about to jump backwards
-                         * or forwards and don't want it blocking the subtitle fifo.
-                         */
-                        hb_log("Trashing subtitle 0x%x due to PTS discontinuity", sub);
-                        sub = hb_fifo_get( pv->subtitle->fifo_raw );
-                        hb_buffer_close( &sub );
-                    } else {
-                        break;
-                    }
-                }
-            }
-
-            /* Trash current picture */
-            /* Also, make sure we don't trash a chapter break */
-            chap_break = cur->new_chap;
-            hb_buffer_close( &cur );
-            pv->cur = cur = hb_fifo_get( job->fifo_raw );
-            cur->new_chap |= chap_break; // Don't stomp existing chapter breaks
-
-            /* Calculate new offset */
-            pv->pts_offset_old = pv->pts_offset;
-            if ( job->vfr )
-            {
-                pv->pts_offset = cur->start - pv->next_start;
-            } else {
-                pv->pts_offset = cur->start -
-                    pv->count_frames * pv->job->vrate_base / 300;
-            }
-
-            if( !pv->discontinuity )
-            {
-                pv->discontinuity = 1;
-            }
-
-            pv->video_sequence = cur->sequence;
-            continue;
-        }
 
         /* Look for a subtitle for this frame */
         if( pv->subtitle )
@@ -417,23 +397,6 @@ static int SyncVideo( hb_work_object_t * w )
                      * code.
                      */
                     break;
-                }
-                else
-                {
-                    /*
-                     * The stop time is in the past. But is it due to
-                     * it having been played already, or has the PTS
-                     * been reset to 0?
-                     */
-                    if( ( cur->start - sub->stop ) > PTS_DISCONTINUITY_TOLERANCE ) {
-                        /*
-                         * There is a lot of time between our current
-                         * video and where this subtitle is ending,
-                         * assume that we are about to reset the PTS
-                         * and do not throw away this subtitle.
-                         */
-                        break;
-                    }
                 }
 
                 /*
@@ -533,72 +496,26 @@ static int SyncVideo( hb_work_object_t * w )
             }
         }
 
-        if ( job->vfr )
-        {
-            /*
-             * adjust the pts of the current frame so that it's contiguous
-             * with the previous frame. pts_offset tracks the time difference
-             * between the pts values in the input content (which start at some
-             * random time) and our timestamps (which start at zero). We don't
-             * make any adjustments to the source timestamps other than removing
-             * the clock offsets (which also removes pts discontinuities).
-             * This means we automatically encode at the source's frame rate.
-             * MP2 uses an implicit duration (frames end when the next frame
-             * starts) but more advanced containers like MP4 use an explicit
-             * duration. Since we're looking ahead one frame we set the
-             * explicit stop time from the start time of the next frame.
-             */
-            buf_tmp = cur;
-            pv->cur = cur = hb_fifo_get( job->fifo_raw );
-            buf_tmp->start = pv->next_start;
-            pv->next_start = next->start - pv->pts_offset;
-            buf_tmp->stop = pv->next_start;
-        }
-        else
-        {
-            /* The PTS of the frame we are expecting now */
-            pts_expected = pv->pts_offset +
-                pv->count_frames * pv->job->vrate_base / 300;
-
-            //hb_log("Video expecting PTS %lld, current frame: %lld, next frame: %lld, cf: %lld",
-            //       pts_expected, cur->start, next->start, pv->count_frames * pv->job->vrate_base / 300 );
-
-            if( cur->start < pts_expected - pv->job->vrate_base / 300 / 2 &&
-                next->start < pts_expected + pv->job->vrate_base / 300 / 2 )
-            {
-                /* The current frame is too old but the next one matches,
-                   let's trash */
-                /* Also, make sure we don't trash a chapter break */
-                chap_break = cur->new_chap;
-                hb_buffer_close( &cur );
-                pv->cur = cur = hb_fifo_get( job->fifo_raw );
-                cur->new_chap |= chap_break; // Make sure we don't stomp the existing one.
-
-                continue;
-            }
-
-            if( next->start > pts_expected + 3 * pv->job->vrate_base / 300 / 2 )
-            {
-                /* We'll need the current frame more than one time. Make a
-                   copy of it and keep it */
-                buf_tmp = hb_buffer_init( cur->size );
-                memcpy( buf_tmp->data, cur->data, cur->size );
-                buf_tmp->sequence = cur->sequence;
-            }
-            else
-            {
-                /* The frame has the expected date and won't have to be
-                   duplicated, just put it through */
-                buf_tmp = cur;
-                pv->cur = cur = hb_fifo_get( job->fifo_raw );
-            }
-
-            /* Replace those MPEG-2 dates with our dates */
-            buf_tmp->start = (uint64_t) pv->count_frames *
-                pv->job->vrate_base / 300;
-            buf_tmp->stop  = (uint64_t) ( pv->count_frames + 1 ) *
-                pv->job->vrate_base / 300;
-        }
+        /*
+         * Adjust the pts of the current frame so that it's contiguous
+         * with the previous frame. The start time of the current frame
+         * has to be the end time of the previous frame and the stop
+         * time has to be the start of the next frame.  We don't
+         * make any adjustments to the source timestamps other than removing
+         * the clock offsets (which also removes pts discontinuities).
+         * This means we automatically encode at the source's frame rate.
+         * MP2 uses an implicit duration (frames end when the next frame
+         * starts) but more advanced containers like MP4 use an explicit
+         * duration. Since we're looking ahead one frame we set the
+         * explicit stop time from the start time of the next frame.
+         */
+        buf_tmp = cur;
+        pv->cur = cur = hb_fifo_get( job->fifo_raw );
+        pv->next_pts = next->start;
+        int64_t duration = next->start - buf_tmp->start;
+        buf_tmp->start = pv->next_start;
+        pv->next_start += duration;
+        buf_tmp->stop = pv->next_start;
 
         /* If we have a subtitle for this picture, copy it */
         /* FIXME: we should avoid this memcpy */
@@ -621,7 +538,7 @@ static int SyncVideo( hb_work_object_t * w )
         /* Make sure we won't get more frames then expected */
         if( pv->count_frames >= pv->count_frames_max * 2)
         {
-            hb_log( "sync: got too many frames (%lld), exiting early", pv->count_frames );
+            hb_log( "sync: got too many frames (%d), exiting early", pv->count_frames );
             pv->done = 1;
 
            // Drop an empty buffer into our output to ensure that things
@@ -636,6 +553,68 @@ static int SyncVideo( hb_work_object_t * w )
     return HB_WORK_OK;
 }
 
+static void OutputAudioFrame( hb_job_t *job, hb_audio_t *audio, hb_buffer_t *buf,
+                              hb_sync_audio_t *sync, hb_fifo_t *fifo, int i )
+{
+    int64_t start = sync->next_start;
+    int64_t duration = buf->stop - buf->start;
+    if (duration <= 0 || 
+        duration > ( 90000 * AC3_SAMPLES_PER_FRAME ) / audio->rate )
+    {
+        hb_log("sync: audio %d weird duration %lld, start %lld, stop %lld, next %lld",
+               i, duration, buf->start, buf->stop, sync->next_pts);
+        if ( duration <= 0 )
+        {
+            duration = ( 90000 * AC3_SAMPLES_PER_FRAME ) / audio->rate;
+            buf->stop = buf->start + duration;
+        }
+    }
+    sync->next_pts += duration;
+
+    if( /* audio->rate == job->arate || This should work but doesn't */
+        job->acodec & HB_ACODEC_AC3 ||
+        job->audio_mixdowns[i] == HB_AMIXDOWN_AC3 )
+    {
+        /*
+         * If we don't have to do sample rate conversion or this audio is AC3
+         * pass-thru just send the input buffer downstream after adjusting
+         * its timestamps to make the output stream continuous.
+         */
+    }
+    else
+    {
+        /* Not pass-thru - do sample rate conversion */
+        int count_in, count_out;
+        hb_buffer_t * buf_raw = buf;
+        int channel_count = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown) *
+                            sizeof( float );
+
+        count_in  = buf_raw->size / channel_count;
+        count_out = ( buf_raw->stop - buf_raw->start ) * job->arate / 90000;
+
+        sync->data.input_frames = count_in;
+        sync->data.output_frames = count_out;
+        sync->data.src_ratio = (double)count_out / (double)count_in;
+
+        buf = hb_buffer_init( count_out * channel_count );
+        sync->data.data_in  = (float *) buf_raw->data;
+        sync->data.data_out = (float *) buf->data;
+        if( src_process( sync->state, &sync->data ) )
+        {
+            /* XXX If this happens, we're screwed */
+            hb_log( "sync: audio %d src_process failed", i );
+        }
+        hb_buffer_close( &buf_raw );
+
+        buf->size = sync->data.output_frames_gen * channel_count;
+    }
+    buf->start = start;
+    buf->stop  = start + duration;
+    buf->frametype = HB_FRAME_AUDIO;
+    sync->next_start = start + duration;
+    hb_fifo_push( fifo, buf );
+}
+
 /***********************************************************************
  * SyncAudio
  ***********************************************************************
@@ -644,20 +623,12 @@ static int SyncVideo( hb_work_object_t * w )
 static void SyncAudio( hb_work_object_t * w, int i )
 {
     hb_work_private_t * pv = w->private_data;
-    hb_job_t        * job;
-    hb_audio_t      * audio;
+    hb_job_t        * job = pv->job;
+    hb_sync_audio_t * sync = &pv->sync_audio[i];
+    hb_audio_t      * audio = sync->audio;
     hb_buffer_t     * buf;
-    hb_sync_audio_t * sync;
-
     hb_fifo_t       * fifo;
     int               rate;
-
-    int64_t           pts_expected;
-    int64_t           start;
-
-    job    = pv->job;
-    sync   = &pv->sync_audio[i];
-    audio  = sync->audio;
 
     if( job->acodec & HB_ACODEC_AC3 ||
         job->audio_mixdowns[i] == HB_AMIXDOWN_AC3 )
@@ -671,230 +642,90 @@ static void SyncAudio( hb_work_object_t * w, int i )
         rate = job->arate;
     }
 
-    while( !hb_fifo_is_full( fifo ) &&
-           ( buf = hb_fifo_see( audio->fifo_raw ) ) )
+    while( !hb_fifo_is_full( fifo ) && ( buf = hb_fifo_see( audio->fifo_raw ) ) )
     {
-        /* The PTS of the samples we are expecting now */
-        pts_expected = pv->pts_offset + sync->count_frames * 90000 / rate;
-
-        // hb_log("Video Sequence: %lld, Audio Sequence: %lld", pv->video_sequence, buf->sequence);
-
-        /*
-         * Using the same logic as the Video have we crossed a VOB
-         * boundary as detected by the expected PTS and the PTS of our
-         * audio being out by more than the tolerance value.
-         */
-        if( buf->start > pts_expected + PTS_DISCONTINUITY_TOLERANCE ||
-            buf->start < pts_expected - PTS_DISCONTINUITY_TOLERANCE )
+        if ( sync->next_pts - buf->start > 500 )
         {
-            /* There has been a PTS discontinuity, and this frame might
-               be from before the discontinuity*/
-
-            if( pv->discontinuity )
-            {
-                /*
-                 * There is an outstanding discontinuity, so use the offset from
-                 * that discontinuity.
-                 */
-                pts_expected = pv->pts_offset_old + sync->count_frames *
-                    90000 / rate;
-            }
-            else
-            {
-                /*
-                 * No outstanding discontinuity, so the audio must be leading the
-                 * video (or the PTS values are really stuffed). So lets mark this
-                 * as a discontinuity ourselves for the audio to use until
-                 * the video also crosses the discontinuity.
-                 *
-                 * pts_offset is used when we are in the same time space as the video
-                 * pts_offset_old when in a discontinuity.
-                 *
-                 * Therefore set the pts_offset_old given the new pts_offset for this
-                 * current buffer.
-                 */
-                pv->discontinuity = 1;
-                pv->pts_offset_old = buf->start - sync->count_frames *
-                    90000 / rate;
-                pts_expected = pv->pts_offset_old + sync->count_frames *
-                    90000 / rate;
-
-                hb_log("Sync: Audio discontinuity (sequence: vid %lld aud %lld) (pts %lld < %lld < %lld)",
-                       pv->video_sequence, buf->sequence,
-                       pts_expected - PTS_DISCONTINUITY_TOLERANCE, buf->start,
-                       pts_expected + PTS_DISCONTINUITY_TOLERANCE );
-            }
-
             /*
-             * Is the audio from a valid period given the previous
-             * Video PTS. I.e. has there just been a video PTS
-             * discontinuity and this audio belongs to the vdeo from
-             * before?
+             * audio time went backwards by more than a frame time (this can
+             * happen when we reset the PTS because of lost data).
+             * Discard data that's in the past.
              */
-            if( buf->start > pts_expected + PTS_DISCONTINUITY_TOLERANCE ||
-                buf->start < pts_expected - PTS_DISCONTINUITY_TOLERANCE )
+            if ( sync->first_drop == 0 )
             {
-                /*
-                 * It's outside of our tolerance for where the video
-                 * is now, and it's outside of the tolerance for
-                 * where we have been in the case of a VOB change.
-                 * Try and reconverge regardless. so continue on to
-                 * our convergence code below which will kick in as
-                 * it will be more than 100ms out.
-                 *
-                 * Note that trashing the Audio could make things
-                 * worse if the Audio is in front because we will end
-                 * up diverging even more. We need to hold on to the
-                 * audio until the video catches up.
-                 */
-                if( !pv->way_out_of_sync )
-                {
-                    hb_log("Sync: Audio is way out of sync, attempt to reconverge from current video PTS");
-                    pv->way_out_of_sync = 1;
-                }
-
-                /*
-                 * It wasn't from the old place, so we must be from
-                 * the new, but just too far out. So attempt to
-                 * reconverge by resetting the point we want to be to
-                 * where we are currently wanting to be.
-                 */
-		pts_expected = pv->pts_offset + sync->count_frames * 90000 / rate;
-                start = pts_expected - pv->pts_offset;
-	    } else {
-                 /* Use the older offset */
-                start = pts_expected - pv->pts_offset_old;
-	    }
-        }
-        else
-        {
-            start = pts_expected - pv->pts_offset;
-
-            if( pv->discontinuity )
-            {
-                /*
-                 * The Audio is tracking the Video again using the normal pts_offset, so the
-                 * discontinuity is over.
-                 */
-                hb_log( "Sync: Audio joined Video after discontinuity at PTS %lld", buf->start );
-                pv->discontinuity = 0;
+                sync->first_drop = buf->start;
             }
-        }
-
-        /* Tolerance: 100 ms */
-        if( buf->start < pts_expected - 9000 )
-        {
-            if( !pv->trashing_audio )
-            {
-                /* Audio is behind the Video, trash it, can't use it now. */
-                hb_log( "Sync: Audio PTS (%lld) < Video PTS (%lld) by greater than 100ms, trashing audio to reconverge",
-                        buf->start, pts_expected);
-                pv->trashing_audio = 1;
-            }
+            ++sync->drop_count;
             buf = hb_fifo_get( audio->fifo_raw );
             hb_buffer_close( &buf );
             continue;
         }
-        else if( buf->start > pts_expected + 9000 )
+        if ( sync->first_drop )
         {
-            /* Audio is ahead of the Video, insert silence until we catch up*/
-            if( !pv->inserting_silence )
+            hb_log( "sync: audio %d time went backwards %d ms, dropped %d frames "
+                    "(frame %lld, expected %lld)", i,
+                    (int)( sync->next_pts - sync->first_drop ) / 90,
+                    sync->drop_count, sync->first_drop, sync->next_pts );
+            sync->first_drop = 0;
+            sync->drop_count = 0;
+        }
+
+        if ( sync->inserting_silence && buf->start - sync->next_pts > 0 )
+        {
+            /*
+             * if we're within one frame time of the amount of silence
+             * we need, insert just what we need otherwise insert a frame time.
+             */
+            int64_t framedur = buf->stop - buf->start;
+            if ( buf->start - sync->next_pts <= framedur )
             {
-                hb_log("Sync: Audio PTS (%lld) >  Video PTS (%lld) by greater than 100ms insert silence until reconverged", buf->start, pts_expected);
-                pv->inserting_silence = 1;
+                InsertSilence( w, i, buf->start - sync->next_pts );
+                sync->inserting_silence = 0;
             }
-            InsertSilence( w, i );
+            else
+            {
+                InsertSilence( w, i, framedur );
+            }
             continue;
         }
-        else
+        if ( buf->start - sync->next_pts >= (90 * 100) )
         {
-            if( pv->trashing_audio || pv->inserting_silence )
+            /*
+             * there's a gap of at least 100ms between the last
+             * frame we processed & the next. Fill it with silence.
+             */
+            if ( ! sync->inserting_silence )
             {
-                hb_log( "Sync: Audio back in Sync at PTS %lld", buf->start );
-                pv->trashing_audio = 0;
-                pv->inserting_silence = 0;
+                hb_log( "sync: adding %d ms of silence to audio %d"
+                        "  start %lld, next %lld",
+                        (int)((buf->start - sync->next_pts) / 90),
+                        i, buf->start, sync->next_pts );
+                sync->inserting_silence = 1;
             }
-            if( pv->way_out_of_sync )
-            {
-                hb_log( "Sync: Audio no longer way out of sync at PTS %lld",
-                        buf->start );
-                pv->way_out_of_sync = 0;
-            }
+            InsertSilence( w, i, buf->stop - buf->start );
+            continue;
         }
 
-        if( job->acodec & HB_ACODEC_AC3 ||
-            job->audio_mixdowns[i] == HB_AMIXDOWN_AC3 )
-        {
-            buf        = hb_fifo_get( audio->fifo_raw );
-            buf->start = start;
-            buf->stop  = start + 90000 * AC3_SAMPLES_PER_FRAME / rate;
-
-            sync->count_frames += AC3_SAMPLES_PER_FRAME;
-        }
-        else
-        {
-            hb_buffer_t * buf_raw = hb_fifo_get( audio->fifo_raw );
-
-            int count_in, count_out;
-
-            count_in  = buf_raw->size / HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown) / sizeof( float );
-            count_out = ( buf_raw->stop - buf_raw->start ) * job->arate / 90000;
-            if( buf->start < pts_expected - 1500 )
-                count_out--;
-            else if( buf->start > pts_expected + 1500 )
-                count_out++;
-
-            sync->data.data_in      = (float *) buf_raw->data;
-            sync->data.input_frames = count_in;
-            sync->data.output_frames = count_out;
-
-            sync->data.src_ratio = (double) sync->data.output_frames /
-                                   (double) sync->data.input_frames;
-
-            buf = hb_buffer_init( sync->data.output_frames * HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown) *
-                                  sizeof( float ) );
-            sync->data.data_out = (float *) buf->data;
-            if( src_process( sync->state, &sync->data ) )
-            {
-                /* XXX If this happens, we're screwed */
-                hb_log( "sync: src_process failed" );
-            }
-            hb_buffer_close( &buf_raw );
-
-            buf->size = sync->data.output_frames_gen * HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown) * sizeof( float );
-
-            /* Set dates for resampled data */
-            buf->start = start;
-            buf->stop  = start + sync->data.output_frames_gen *
-                            90000 / job->arate;
-
-            sync->count_frames += sync->data.output_frames_gen;
-        }
-
-        buf->frametype = HB_FRAME_AUDIO;
-        hb_fifo_push( fifo, buf );
-    }
-
-    if( hb_fifo_is_full( fifo ) &&
-        pv->way_out_of_sync )
-    {
         /*
-         * Trash the top audio packet to avoid dead lock as we reconverge.
+         * When we get here we've taken care of all the dups and gaps in the
+         * audio stream and are ready to inject the next input frame into
+         * the output stream.
          */
-        if ( (buf = hb_fifo_get( audio->fifo_raw ) ) != NULL)
-            hb_buffer_close( &buf );
+        buf = hb_fifo_get( audio->fifo_raw );
+        OutputAudioFrame( job, audio, buf, sync, fifo, i );
     }
 
-    if( NeedSilence( w, audio ) )
+    if( NeedSilence( w, audio, i ) )
     {
-        InsertSilence( w, i );
+        InsertSilence( w, i, (90000 * AC3_SAMPLES_PER_FRAME) / sync->audio->rate );
     }
 }
 
-static int NeedSilence( hb_work_object_t * w, hb_audio_t * audio )
+static int NeedSilence( hb_work_object_t * w, hb_audio_t * audio, int i )
 {
     hb_work_private_t * pv = w->private_data;
     hb_job_t * job = pv->job;
+    hb_sync_audio_t * sync = &pv->sync_audio[i];
 
     if( hb_fifo_size( audio->fifo_in ) ||
         hb_fifo_size( audio->fifo_raw ) ||
@@ -911,7 +742,11 @@ static int NeedSilence( hb_work_object_t * w, hb_audio_t * audio )
     {
         /* We might miss some audio to complete encoding and muxing
            the video track */
-	hb_log("Reader has exited early, inserting silence.");
+        if ( sync->start_silence == 0 )
+        {
+            hb_log("sync: reader has exited, adding silence to audio %d", i);
+            sync->start_silence = sync->next_pts;
+        }
         return 1;
     }
 
@@ -921,51 +756,47 @@ static int NeedSilence( hb_work_object_t * w, hb_audio_t * audio )
         hb_fifo_is_full( job->fifo_render ) &&
         hb_fifo_is_full( job->fifo_mpeg4 ) )
     {
-        /* Too much video and no audio, oh-oh */
-	hb_log("Still got some video - and nothing in the audio fifo, insert silence");
+        if ( sync->start_silence == 0 )
+        {
+            /* Too much video and no audio, oh-oh */
+            hb_log("sync: have video but no audio, adding silence to audio %d", i);
+            sync->start_silence = sync->next_pts;
+        }
         return 1;
     }
 
+    if ( sync->start_silence )
+    {
+        hb_log( "sync: added %d ms of silence to audio %d",
+                (int)((sync->next_pts - sync->start_silence) / 90), i );
+        sync->start_silence = 0;
+    }
     return 0;
 }
 
-static void InsertSilence( hb_work_object_t * w, int i )
+static void InsertSilence( hb_work_object_t * w, int i, int64_t duration )
 {
     hb_work_private_t * pv = w->private_data;
-    hb_job_t        * job;
-    hb_sync_audio_t * sync;
-    hb_buffer_t     * buf;
+    hb_job_t        *job = pv->job;
+    hb_sync_audio_t *sync = &pv->sync_audio[i];
+    hb_buffer_t     *buf;
 
-    job    = pv->job;
-    sync   = &pv->sync_audio[i];
-
-    if( job->acodec & HB_ACODEC_AC3 ||
-        job->audio_mixdowns[i] == HB_AMIXDOWN_AC3 )
+    if( job->acodec & HB_ACODEC_AC3 || job->audio_mixdowns[i] == HB_AMIXDOWN_AC3 )
     {
         buf        = hb_buffer_init( sync->ac3_size );
-        buf->start = sync->count_frames * 90000 / sync->audio->rate;
-        buf->stop  = buf->start + 90000 * AC3_SAMPLES_PER_FRAME /
-                     sync->audio->rate;
+        buf->start = sync->next_pts;
+        buf->stop  = buf->start + duration;
         memcpy( buf->data, sync->ac3_buf, buf->size );
-
-        hb_log( "sync: adding a silent AC-3 frame for track %x",
-                sync->audio->id );
-        hb_fifo_push( sync->audio->fifo_out, buf );
-
-        sync->count_frames += AC3_SAMPLES_PER_FRAME;
-
+        OutputAudioFrame( job, sync->audio, buf, sync, sync->audio->fifo_out, i );
     }
     else
     {
-        buf        = hb_buffer_init( HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(sync->audio->amixdown) * job->arate / 20 *
-                                     sizeof( float ) );
-        buf->start = sync->count_frames * 90000 / job->arate;
-        buf->stop  = buf->start + 90000 / 20;
+        buf = hb_buffer_init( duration * sizeof( float ) *
+                    HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(sync->audio->amixdown) );
+        buf->start = sync->next_pts;
+        buf->stop  = buf->start + duration;
         memset( buf->data, 0, buf->size );
-
-        hb_fifo_push( sync->audio->fifo_sync, buf );
-
-        sync->count_frames += job->arate / 20;
+        OutputAudioFrame( job, sync->audio, buf, sync, sync->audio->fifo_sync, i );
     }
 }
 
