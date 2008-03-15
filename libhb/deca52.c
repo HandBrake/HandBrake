@@ -213,6 +213,10 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
 
     /* Get the whole frame */
     hb_list_getbytes( pv->list, pv->frame, pv->size, &pts, &pos );
+    if (pts == -1)
+    {
+        pts = pv->next_expected_pts;
+    }
 
     /* AC3 passthrough: don't decode the AC3 frame */
     if( pv->job->acodec & HB_ACODEC_AC3 ||
@@ -222,6 +226,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
         memcpy( buf->data, pv->frame, pv->size );
         buf->start = pts + ( pos / pv->size ) * 6 * 256 * 90000 / pv->rate;
         buf->stop  = buf->start + 6 * 256 * 90000 / pv->rate;
+        pv->next_expected_pts = buf->stop;
         pv->sync = 0;
         return buf;
     }
@@ -236,10 +241,6 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
 
     /* 6 blocks per frame, 256 samples per block, channelsused channels */
     buf        = hb_buffer_init( 6 * 256 * pv->out_discrete_channels * sizeof( float ) );
-    if (pts == -1)
-    {
-      pts = pv->next_expected_pts;
-    }
     buf->start = pts + ( pos / pv->size ) * 6 * 256 * 90000 / pv->rate;
     buf->stop  = buf->start + 6 * 256 * 90000 / pv->rate;
 
