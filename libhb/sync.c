@@ -749,28 +749,6 @@ static int NeedSilence( hb_work_object_t * w, hb_audio_t * audio, int i )
         }
         return 1;
     }
-
-    if( hb_fifo_is_full( job->fifo_mpeg2 ) &&
-        hb_fifo_is_full( job->fifo_raw ) &&
-        hb_fifo_is_full( job->fifo_sync ) &&
-        hb_fifo_is_full( job->fifo_render ) &&
-        hb_fifo_is_full( job->fifo_mpeg4 ) )
-    {
-        if ( sync->start_silence == 0 )
-        {
-            /* Too much video and no audio, oh-oh */
-            hb_log("sync: have video but no audio, adding silence to audio %d", i);
-            sync->start_silence = sync->next_pts;
-        }
-        return 1;
-    }
-
-    if ( sync->start_silence )
-    {
-        hb_log( "sync: added %d ms of silence to audio %d",
-                (int)((sync->next_pts - sync->start_silence) / 90), i );
-        sync->start_silence = 0;
-    }
     return 0;
 }
 
