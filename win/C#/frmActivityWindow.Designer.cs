@@ -49,7 +49,7 @@ namespace Handbrake
             this.rtf_actLog.Location = new System.Drawing.Point(12, 12);
             this.rtf_actLog.Name = "rtf_actLog";
             this.rtf_actLog.ReadOnly = true;
-            this.rtf_actLog.Size = new System.Drawing.Size(389, 381);
+            this.rtf_actLog.Size = new System.Drawing.Size(515, 433);
             this.rtf_actLog.TabIndex = 29;
             this.rtf_actLog.Text = "";
             // 
@@ -60,7 +60,7 @@ namespace Handbrake
             this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(273, 399);
+            this.btn_close.Location = new System.Drawing.Point(399, 451);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(128, 22);
             this.btn_close.TabIndex = 28;
@@ -80,7 +80,7 @@ namespace Handbrake
             this.btn_copy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_copy.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_copy.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_copy.Location = new System.Drawing.Point(12, 399);
+            this.btn_copy.Location = new System.Drawing.Point(12, 451);
             this.btn_copy.Name = "btn_copy";
             this.btn_copy.Size = new System.Drawing.Size(134, 23);
             this.btn_copy.TabIndex = 93;
@@ -95,7 +95,7 @@ namespace Handbrake
             this.btn_refresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_refresh.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_refresh.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_refresh.Location = new System.Drawing.Point(152, 399);
+            this.btn_refresh.Location = new System.Drawing.Point(152, 451);
             this.btn_refresh.Name = "btn_refresh";
             this.btn_refresh.Size = new System.Drawing.Size(69, 23);
             this.btn_refresh.TabIndex = 94;
@@ -109,7 +109,7 @@ namespace Handbrake
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(414, 434);
+            this.ClientSize = new System.Drawing.Size(539, 486);
             this.Controls.Add(this.btn_refresh);
             this.Controls.Add(this.btn_copy);
             this.Controls.Add(this.rtf_actLog);

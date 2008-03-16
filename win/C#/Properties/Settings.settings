@@ -27,7 +27,7 @@
       <Value Profile="(Default)">Checked</Value>
     </Setting>
     <Setting Name="hb_build" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">2008021900</Value>
+      <Value Profile="(Default)">2008021901</Value>
     </Setting>
     <Setting Name="skipversion" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>

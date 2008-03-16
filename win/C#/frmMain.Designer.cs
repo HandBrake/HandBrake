@@ -37,7 +37,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label Label38;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -133,6 +133,7 @@ namespace Handbrake
             this.Label32 = new System.Windows.Forms.Label();
             this.Label18 = new System.Windows.Forms.Label();
             this.TabPage3 = new System.Windows.Forms.TabPage();
+            this.label25 = new System.Windows.Forms.Label();
             this.lbl_vfr = new System.Windows.Forms.Label();
             this.check_grayscale = new System.Windows.Forms.CheckBox();
             this.Label22 = new System.Windows.Forms.Label();
@@ -143,6 +144,8 @@ namespace Handbrake
             this.Label46 = new System.Windows.Forms.Label();
             this.Label40 = new System.Windows.Forms.Label();
             this.TabPage1 = new System.Windows.Forms.TabPage();
+            this.label6 = new System.Windows.Forms.Label();
+            this.drp_anamorphic = new System.Windows.Forms.ComboBox();
             this.text_bottom = new System.Windows.Forms.NumericUpDown();
             this.text_top = new System.Windows.Forms.NumericUpDown();
             this.text_left = new System.Windows.Forms.NumericUpDown();
@@ -199,9 +202,6 @@ namespace Handbrake
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.btn_ActivityWindow = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
-            this.label25 = new System.Windows.Forms.Label();
-            this.drp_anamorphic = new System.Windows.Forms.ComboBox();
-            this.label6 = new System.Windows.Forms.Label();
             Label38 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.data_chpt)).BeginInit();
@@ -323,6 +323,7 @@ namespace Handbrake
             this.text_destination.Size = new System.Drawing.Size(429, 21);
             this.text_destination.TabIndex = 1;
             this.ToolTip.SetToolTip(this.text_destination, "Location where the encoded file will be saved.");
+            this.text_destination.TextChanged += new System.EventHandler(this.text_destination_TextChanged);
             // 
             // btn_Browse
             // 
@@ -665,9 +666,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle6.Format = "N0";
-            dataGridViewCellStyle6.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle1;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -1112,7 +1113,7 @@ namespace Handbrake
             this.TabPage2.Location = new System.Drawing.Point(4, 22);
             this.TabPage2.Name = "TabPage2";
             this.TabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage2.Size = new System.Drawing.Size(649, 274);
+            this.TabPage2.Size = new System.Drawing.Size(649, 283);
             this.TabPage2.TabIndex = 3;
             this.TabPage2.Text = "Audio && Subtitles";
             // 
@@ -1343,9 +1344,20 @@ namespace Handbrake
             this.TabPage3.Location = new System.Drawing.Point(4, 22);
             this.TabPage3.Name = "TabPage3";
             this.TabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage3.Size = new System.Drawing.Size(649, 302);
+            this.TabPage3.Size = new System.Drawing.Size(649, 283);
             this.TabPage3.TabIndex = 2;
             this.TabPage3.Text = "Video";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.BackColor = System.Drawing.Color.Transparent;
+            this.label25.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label25.Location = new System.Drawing.Point(13, 13);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(76, 13);
+            this.label25.TabIndex = 28;
+            this.label25.Text = "Framerate";
             // 
             // lbl_vfr
             // 
@@ -1489,6 +1501,33 @@ namespace Handbrake
             this.TabPage1.Size = new System.Drawing.Size(649, 283);
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "Picture Settings";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.BackColor = System.Drawing.Color.Transparent;
+            this.label6.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(311, 89);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(80, 13);
+            this.label6.TabIndex = 37;
+            this.label6.Text = "Anamorphic:";
+            // 
+            // drp_anamorphic
+            // 
+            this.drp_anamorphic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drp_anamorphic.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drp_anamorphic.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.drp_anamorphic.FormattingEnabled = true;
+            this.drp_anamorphic.Items.AddRange(new object[] {
+            "None",
+            "Strict",
+            "Loose"});
+            this.drp_anamorphic.Location = new System.Drawing.Point(414, 86);
+            this.drp_anamorphic.Name = "drp_anamorphic";
+            this.drp_anamorphic.Size = new System.Drawing.Size(110, 21);
+            this.drp_anamorphic.TabIndex = 36;
+            this.drp_anamorphic.SelectedIndexChanged += new System.EventHandler(this.drp_anamorphic_SelectedIndexChanged);
             // 
             // text_bottom
             // 
@@ -1842,7 +1881,7 @@ namespace Handbrake
             this.tab_chapters.Controls.Add(this.Check_ChapterMarkers);
             this.tab_chapters.Location = new System.Drawing.Point(4, 22);
             this.tab_chapters.Name = "tab_chapters";
-            this.tab_chapters.Size = new System.Drawing.Size(649, 274);
+            this.tab_chapters.Size = new System.Drawing.Size(649, 283);
             this.tab_chapters.TabIndex = 6;
             this.tab_chapters.Text = "Chapters";
             // 
@@ -1879,7 +1918,7 @@ namespace Handbrake
             this.h264Tab.Location = new System.Drawing.Point(4, 22);
             this.h264Tab.Name = "h264Tab";
             this.h264Tab.Padding = new System.Windows.Forms.Padding(3);
-            this.h264Tab.Size = new System.Drawing.Size(649, 274);
+            this.h264Tab.Size = new System.Drawing.Size(649, 283);
             this.h264Tab.TabIndex = 5;
             this.h264Tab.Text = "Advanced";
             // 
@@ -1962,7 +2001,7 @@ namespace Handbrake
             this.tabPage4.Controls.Add(this.rtf_query);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(649, 274);
+            this.tabPage4.Size = new System.Drawing.Size(649, 283);
             this.tabPage4.TabIndex = 7;
             this.tabPage4.Text = "Query Editor";
             // 
@@ -2162,44 +2201,6 @@ namespace Handbrake
             // 
             this.toolStripSeparator8.Name = "toolStripSeparator8";
             this.toolStripSeparator8.Size = new System.Drawing.Size(6, 39);
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.BackColor = System.Drawing.Color.Transparent;
-            this.label25.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label25.Location = new System.Drawing.Point(13, 13);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(76, 13);
-            this.label25.TabIndex = 28;
-            this.label25.Text = "Framerate";
-            // 
-            // drp_anamorphic
-            // 
-            this.drp_anamorphic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drp_anamorphic.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.drp_anamorphic.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.drp_anamorphic.FormattingEnabled = true;
-            this.drp_anamorphic.Items.AddRange(new object[] {
-            "None",
-            "Strict",
-            "Loose"});
-            this.drp_anamorphic.Location = new System.Drawing.Point(414, 86);
-            this.drp_anamorphic.Name = "drp_anamorphic";
-            this.drp_anamorphic.Size = new System.Drawing.Size(110, 21);
-            this.drp_anamorphic.TabIndex = 36;
-            this.drp_anamorphic.SelectedIndexChanged += new System.EventHandler(this.drp_anamorphic_SelectedIndexChanged);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.BackColor = System.Drawing.Color.Transparent;
-            this.label6.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(311, 89);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(80, 13);
-            this.label6.TabIndex = 37;
-            this.label6.Text = "Anamorphic:";
             // 
             // frmMain
             // 

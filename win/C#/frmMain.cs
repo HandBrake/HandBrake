@@ -377,6 +377,8 @@ namespace Handbrake
                 MessageBox.Show("Sorry, HandBrake does not support UNC file paths. \nTry mounting the share as a network drive in My Computer", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
+                setAudioByContainer(DVD_Save.FileName);
+
                 text_destination.Text = DVD_Save.FileName;
 
                 // Quicktime requires .m4v file for chapter markers to work. If checked, change the extension to .m4v (mp4 and m4v are the same thing)
@@ -398,7 +400,48 @@ namespace Handbrake
 
         #endregion
 
+        #region Reusable Functions
+        private void setAudioByContainer(String path)
+        {
+            if ((path.EndsWith(".mp4")) || (path.EndsWith(".mp4")))
+            {
+                drp_audioCodec.Items.Clear();
+                drp_audioCodec.Items.Add("AAC");
+                drp_audioCodec.Items.Add("AAC + AC3");
+                drp_audioCodec.SelectedIndex = 0;
+            }
+            else if (path.EndsWith(".avi"))
+            {
+                drp_audioCodec.Items.Clear();
+                drp_audioCodec.Items.Add("MP3");
+                drp_audioCodec.Items.Add("AC3");
+                drp_audioCodec.SelectedIndex = 0;
+            }
+            else if (path.EndsWith(".ogm"))
+            {
+                drp_audioCodec.Items.Clear();
+                drp_audioCodec.Items.Add("Vorbis");
+                drp_audioCodec.SelectedIndex = 0;
+            }
+            else if (path.EndsWith(".mkv"))
+            {
+                drp_audioCodec.Items.Clear();
+                drp_audioCodec.Items.Add("AAC");
+                drp_audioCodec.Items.Add("AAC + AC3");
+                drp_audioCodec.Items.Add("MP3");
+                drp_audioCodec.Items.Add("AC3");
+                drp_audioCodec.Items.Add("Vorbis");
+                drp_audioCodec.SelectedIndex = 0;
+            }    
+        }
+        #endregion
+
         #region frmMain Actions
+
+        private void text_destination_TextChanged(object sender, EventArgs e)
+        {
+            setAudioByContainer(text_destination.Text);
+        }
 
         private void drp_dvdtitle_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1134,7 +1177,7 @@ namespace Handbrake
             selectedPreset = treeView_presets.SelectedNode.Text;
 
             if (!selectedPreset.StartsWith("--"))
-                MessageBox.Show("Sorry, You can not remove any of the built in presets.","Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Sorry, You can not remove any of the built in presets.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
 
             // Scan through the users presets and dump them all in an arraylist
@@ -1163,7 +1206,7 @@ namespace Handbrake
             int c = 0;
             foreach (string item in user_presets)
             {
-                string preset_name = selectedPreset.Replace("--","");
+                string preset_name = selectedPreset.Replace("--", "");
                 if (item.Contains(preset_name))
                     modified_presets_list.RemoveAt(c);
                 c++;
@@ -1295,6 +1338,7 @@ namespace Handbrake
         }
 
         #endregion
+
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

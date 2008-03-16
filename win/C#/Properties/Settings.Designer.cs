@@ -121,7 +121,7 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2008021900")]
+        [global::System.Configuration.DefaultSettingValueAttribute("2008021901")]
         public int hb_build {
             get {
                 return ((int)(this["hb_build"]));

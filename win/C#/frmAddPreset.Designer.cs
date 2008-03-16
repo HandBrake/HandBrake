@@ -78,8 +78,14 @@
             this.Controls.Add(this.txt_preset_name);
             this.Controls.Add(this.lbl_name);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "frmAddPreset";
+            this.ShowInTaskbar = false;
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Add Preset";
+            this.TopMost = true;
             this.ResumeLayout(false);
             this.PerformLayout();
 
