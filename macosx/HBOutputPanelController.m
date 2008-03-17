@@ -49,12 +49,11 @@
             /* if not, then we create a new blank one */
             [fileManager createFileAtPath:outputLogFile contents:nil attributes:nil];
         }
-        
         /* We overwrite the existing output log with the date for starters the output log to start fresh with the new session */
         /* Use the current date and time for the new output log header */
         NSString *startOutputLogString = [NSString stringWithFormat: @"HandBrake Activity Log for Session (Cleared): %@\n\n", [[NSDate  date] descriptionWithCalendarFormat:nil timeZone:nil locale:nil]];
-        [startOutputLogString writeToFile:outputLogFile atomically:YES encoding:NSUTF8StringEncoding error:NULL];
         
+        [startOutputLogString writeToFile:outputLogFile atomically:YES encoding:NSUTF8StringEncoding error:NULL];
         
 		[[HBOutputRedirect stderrRedirect] addListener:self];
 		[[HBOutputRedirect stdoutRedirect] addListener:self];
@@ -150,6 +149,12 @@
 - (IBAction)clearOutput:(id)sender
 {
 	[outputTextStorage deleteCharactersInRange:NSMakeRange(0, [outputTextStorage length])];
+    /* We want to rewrite the app version info to the top of the activity window so it is always present */
+    NSString *versionStringFull = [[NSString stringWithFormat: @"Handbrake Version: %@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleGetInfoString"]] stringByAppendingString: [NSString stringWithFormat: @" (%@)", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
+    time_t _now = time( NULL );
+    struct tm * now  = localtime( &_now );
+    fprintf(stderr, "[%02d:%02d:%02d] macgui: %s\n", now->tm_hour, now->tm_min, now->tm_sec, [versionStringFull UTF8String]);
+    
 }
 
 /**
@@ -160,6 +165,7 @@
 	NSPasteboard *pboard = [NSPasteboard generalPasteboard];
 	[pboard declareTypes:[NSArray arrayWithObject:NSStringPboardType] owner:nil];
 	[pboard setString:[outputTextStorage string] forType:NSStringPboardType];
+    
 }
 
 /**
@@ -179,6 +185,11 @@
         /* Use the current date and time for the new output log header */
         NSString *startOutputLogString = [NSString stringWithFormat: @"HandBrake Activity Log for Session Starting: %@\n\n", [[NSDate  date] descriptionWithCalendarFormat:nil timeZone:nil locale:nil]];
         [startOutputLogString writeToFile:outputLogFile atomically:NO encoding:NSUTF8StringEncoding error:NULL];
+        
+        /* We want to rewrite the app version info to the top of the activity window so it is always present */
+        NSString *versionStringFull = [[NSString stringWithFormat: @"macgui: Handbrake Version: %@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleGetInfoString"]] stringByAppendingString: [NSString stringWithFormat: @" (%@)", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
+        [versionStringFull writeToFile:outputLogFile atomically:NO encoding:NSUTF8StringEncoding error:NULL];
+        
 }
 
 - (void)windowWillClose:(NSNotification *)aNotification
