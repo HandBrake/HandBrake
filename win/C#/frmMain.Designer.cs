@@ -760,8 +760,8 @@ namespace Handbrake
             this.mnu_open.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.mnu_open.Name = "mnu_open";
             this.mnu_open.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.mnu_open.Size = new System.Drawing.Size(201, 22);
-            this.mnu_open.Text = "&Open Preset";
+            this.mnu_open.Size = new System.Drawing.Size(210, 22);
+            this.mnu_open.Text = "&Import Preset";
             this.mnu_open.Click += new System.EventHandler(this.mnu_open_Click);
             // 
             // mnu_save
@@ -770,19 +770,20 @@ namespace Handbrake
             this.mnu_save.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.mnu_save.Name = "mnu_save";
             this.mnu_save.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.mnu_save.Size = new System.Drawing.Size(201, 22);
+            this.mnu_save.Size = new System.Drawing.Size(210, 22);
             this.mnu_save.Text = "&Save Preset";
+            this.mnu_save.Visible = false;
             this.mnu_save.Click += new System.EventHandler(this.mnu_save_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(198, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(207, 6);
             // 
             // mnu_exit
             // 
             this.mnu_exit.Name = "mnu_exit";
-            this.mnu_exit.Size = new System.Drawing.Size(201, 22);
+            this.mnu_exit.Size = new System.Drawing.Size(210, 22);
             this.mnu_exit.Text = "E&xit";
             this.mnu_exit.Click += new System.EventHandler(this.mnu_exit_Click);
             // 

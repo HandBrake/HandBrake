@@ -195,6 +195,10 @@ namespace Handbrake
 
                     // Close the stream
                     line.Close();
+
+                    Form preset = new frmAddPreset(this);
+                    preset.ShowDialog();
+
                 }
                 catch (Exception exc)
                 {

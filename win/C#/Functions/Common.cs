@@ -143,7 +143,7 @@ namespace Handbrake.Functions
             if (presetQuery.DVDChapterFinish != 0)
                 mainWindow.drop_chapterFinish.Text = presetQuery.DVDChapterFinish.ToString();
 
-            if (presetQuery.Format != "")
+            if (presetQuery.Format != null)
             {
                 string destination = mainWindow.text_destination.Text;
                 destination = destination.Replace(".mp4", "." + presetQuery.Format);
@@ -345,8 +345,10 @@ namespace Handbrake.Functions
             int totalChapters = mainWindow.drop_chapterFinish.Items.Count - 1;
             string dvdChapter = "";
 
-            if ((source != "") || (source != "Click 'Browse' to continue"))
+            if ((source != "") && (source.Trim() != "Click 'Browse' to continue"))
                 source = " -i " + '"' + source + '"';
+            else
+                source = "";
 
             if (dvdTitle == "Automatic")
                 dvdTitle = "";
@@ -738,7 +740,7 @@ namespace Handbrake.Functions
             if (mainWindow.Check_ChapterMarkers.Checked)
             {
 
-                if (source_name.Trim().Replace("-i ", "") != "Click \'Browse\' to continue")
+                if ((source_name.Trim().Replace("-i ", "") != "Click 'Browse' to continue") && (source_name.Trim().Replace("-i ", "") != ""))
                 {
                     if (source_title != "Automatic")
                     {
