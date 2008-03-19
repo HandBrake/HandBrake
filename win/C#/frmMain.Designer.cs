@@ -1998,7 +1998,7 @@ namespace Handbrake
             this.label43.Location = new System.Drawing.Point(13, 13);
             this.label43.Name = "label43";
             this.label43.Size = new System.Drawing.Size(165, 13);
-            this.label43.TabIndex = 219;
+            this.label43.TabIndex = 0;
             this.label43.Text = "Advanced H.264 Options";
             // 
             // btn_reset
@@ -2006,7 +2006,7 @@ namespace Handbrake
             this.btn_reset.Location = new System.Drawing.Point(13, 226);
             this.btn_reset.Name = "btn_reset";
             this.btn_reset.Size = new System.Drawing.Size(75, 23);
-            this.btn_reset.TabIndex = 217;
+            this.btn_reset.TabIndex = 41;
             this.btn_reset.Text = "Reset All";
             this.btn_reset.UseVisualStyleBackColor = true;
             this.btn_reset.Click += new System.EventHandler(this.btn_reset_Click);
@@ -2017,7 +2017,7 @@ namespace Handbrake
             this.rtf_x264Query.Location = new System.Drawing.Point(13, 253);
             this.rtf_x264Query.Name = "rtf_x264Query";
             this.rtf_x264Query.Size = new System.Drawing.Size(606, 43);
-            this.rtf_x264Query.TabIndex = 216;
+            this.rtf_x264Query.TabIndex = 42;
             this.rtf_x264Query.Text = "";
             this.rtf_x264Query.LostFocus += new System.EventHandler(this.rtf_x264Query_TextChanged);
             this.rtf_x264Query.TextChanged += new System.EventHandler(this.rtf_x264Query_TextChanged);
@@ -2029,7 +2029,7 @@ namespace Handbrake
             this.label35.Location = new System.Drawing.Point(476, 213);
             this.label35.Name = "label35";
             this.label35.Size = new System.Drawing.Size(128, 12);
-            this.label35.TabIndex = 215;
+            this.label35.TabIndex = 29;
             this.label35.Text = "CABAC Entropy Coding:";
             // 
             // check_Cabac
@@ -2040,7 +2040,7 @@ namespace Handbrake
             this.check_Cabac.Name = "check_Cabac";
             this.check_Cabac.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.check_Cabac.Size = new System.Drawing.Size(12, 11);
-            this.check_Cabac.TabIndex = 214;
+            this.check_Cabac.TabIndex = 40;
             this.check_Cabac.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_Cabac.UseVisualStyleBackColor = true;
             this.check_Cabac.CheckStateChanged += new System.EventHandler(this.check_Cabac_CheckedChanged);
@@ -2052,7 +2052,7 @@ namespace Handbrake
             this.label36.Location = new System.Drawing.Point(503, 194);
             this.label36.Name = "label36";
             this.label36.Size = new System.Drawing.Size(102, 12);
-            this.label36.TabIndex = 213;
+            this.label36.TabIndex = 28;
             this.label36.Text = "No DCT-Decimate:";
             // 
             // check_noDCTDecimate
@@ -2063,7 +2063,7 @@ namespace Handbrake
             this.check_noDCTDecimate.Name = "check_noDCTDecimate";
             this.check_noDCTDecimate.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.check_noDCTDecimate.Size = new System.Drawing.Size(12, 11);
-            this.check_noDCTDecimate.TabIndex = 212;
+            this.check_noDCTDecimate.TabIndex = 39;
             this.check_noDCTDecimate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_noDCTDecimate.UseVisualStyleBackColor = true;
             this.check_noDCTDecimate.CheckStateChanged += new System.EventHandler(this.check_noDCTDecimate_CheckedChanged);
@@ -2075,7 +2075,7 @@ namespace Handbrake
             this.label37.Location = new System.Drawing.Point(386, 193);
             this.label37.Name = "label37";
             this.label37.Size = new System.Drawing.Size(87, 12);
-            this.label37.TabIndex = 211;
+            this.label37.TabIndex = 27;
             this.label37.Text = "No Fast-P-Skip:";
             // 
             // check_noFastPSkip
@@ -2086,7 +2086,7 @@ namespace Handbrake
             this.check_noFastPSkip.Name = "check_noFastPSkip";
             this.check_noFastPSkip.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.check_noFastPSkip.Size = new System.Drawing.Size(12, 11);
-            this.check_noFastPSkip.TabIndex = 210;
+            this.check_noFastPSkip.TabIndex = 38;
             this.check_noFastPSkip.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_noFastPSkip.UseVisualStyleBackColor = true;
             this.check_noFastPSkip.CheckStateChanged += new System.EventHandler(this.check_noFastPSkip_CheckedChanged);
@@ -2098,7 +2098,7 @@ namespace Handbrake
             this.label39.Location = new System.Drawing.Point(432, 169);
             this.label39.Name = "label39";
             this.label39.Size = new System.Drawing.Size(41, 12);
-            this.label39.TabIndex = 209;
+            this.label39.TabIndex = 26;
             this.label39.Text = "Trellis:";
             // 
             // drop_trellis
@@ -2109,7 +2109,7 @@ namespace Handbrake
             this.drop_trellis.Location = new System.Drawing.Point(479, 166);
             this.drop_trellis.Name = "drop_trellis";
             this.drop_trellis.Size = new System.Drawing.Size(139, 20);
-            this.drop_trellis.TabIndex = 208;
+            this.drop_trellis.TabIndex = 37;
             this.drop_trellis.SelectedIndexChanged += new System.EventHandler(this.drop_trellis_SelectedIndexChanged);
             // 
             // drop_deblockBeta
@@ -2120,7 +2120,7 @@ namespace Handbrake
             this.drop_deblockBeta.Location = new System.Drawing.Point(553, 139);
             this.drop_deblockBeta.Name = "drop_deblockBeta";
             this.drop_deblockBeta.Size = new System.Drawing.Size(69, 20);
-            this.drop_deblockBeta.TabIndex = 207;
+            this.drop_deblockBeta.TabIndex = 36;
             this.drop_deblockBeta.SelectedIndexChanged += new System.EventHandler(this.drop_deblockBeta_SelectedIndexChanged);
             // 
             // label41
@@ -2130,7 +2130,7 @@ namespace Handbrake
             this.label41.Location = new System.Drawing.Point(408, 147);
             this.label41.Name = "label41";
             this.label41.Size = new System.Drawing.Size(65, 12);
-            this.label41.TabIndex = 206;
+            this.label41.TabIndex = 25;
             this.label41.Text = "Deblocking:";
             // 
             // drop_deblockAlpha
@@ -2141,7 +2141,7 @@ namespace Handbrake
             this.drop_deblockAlpha.Location = new System.Drawing.Point(479, 139);
             this.drop_deblockAlpha.Name = "drop_deblockAlpha";
             this.drop_deblockAlpha.Size = new System.Drawing.Size(68, 20);
-            this.drop_deblockAlpha.TabIndex = 205;
+            this.drop_deblockAlpha.TabIndex = 35;
             this.drop_deblockAlpha.SelectedIndexChanged += new System.EventHandler(this.drop_deblockAlpha_SelectedIndexChanged);
             // 
             // panel3
@@ -2151,7 +2151,7 @@ namespace Handbrake
             this.panel3.Margin = new System.Windows.Forms.Padding(0);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(284, 1);
-            this.panel3.TabIndex = 204;
+            this.panel3.TabIndex = 24;
             // 
             // panel1
             // 
@@ -2160,7 +2160,7 @@ namespace Handbrake
             this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(284, 1);
-            this.panel1.TabIndex = 203;
+            this.panel1.TabIndex = 3;
             // 
             // panel2
             // 
@@ -2169,7 +2169,7 @@ namespace Handbrake
             this.panel2.Margin = new System.Windows.Forms.Padding(0);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(284, 1);
-            this.panel2.TabIndex = 202;
+            this.panel2.TabIndex = 21;
             // 
             // label44
             // 
@@ -2178,7 +2178,7 @@ namespace Handbrake
             this.label44.Location = new System.Drawing.Point(532, 108);
             this.label44.Name = "label44";
             this.label44.Size = new System.Drawing.Size(55, 12);
-            this.label44.TabIndex = 201;
+            this.label44.TabIndex = 23;
             this.label44.Text = "8x8 DCT:";
             // 
             // check_8x8DCT
@@ -2189,7 +2189,7 @@ namespace Handbrake
             this.check_8x8DCT.Name = "check_8x8DCT";
             this.check_8x8DCT.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.check_8x8DCT.Size = new System.Drawing.Size(12, 11);
-            this.check_8x8DCT.TabIndex = 200;
+            this.check_8x8DCT.TabIndex = 34;
             this.check_8x8DCT.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_8x8DCT.UseVisualStyleBackColor = true;
             this.check_8x8DCT.CheckStateChanged += new System.EventHandler(this.check_8x8DCT_CheckedChanged);
@@ -2201,7 +2201,7 @@ namespace Handbrake
             this.label45.Location = new System.Drawing.Point(420, 108);
             this.label45.Name = "label45";
             this.label45.Size = new System.Drawing.Size(53, 12);
-            this.label45.TabIndex = 199;
+            this.label45.TabIndex = 22;
             this.label45.Text = "Analysis:";
             // 
             // drop_analysis
@@ -2212,7 +2212,7 @@ namespace Handbrake
             this.drop_analysis.Location = new System.Drawing.Point(479, 105);
             this.drop_analysis.Name = "drop_analysis";
             this.drop_analysis.Size = new System.Drawing.Size(47, 20);
-            this.drop_analysis.TabIndex = 198;
+            this.drop_analysis.TabIndex = 33;
             this.drop_analysis.SelectedIndexChanged += new System.EventHandler(this.drop_analysis_SelectedIndexChanged);
             // 
             // label48
@@ -2222,7 +2222,7 @@ namespace Handbrake
             this.label48.Location = new System.Drawing.Point(327, 72);
             this.label48.Name = "label48";
             this.label48.Size = new System.Drawing.Size(146, 12);
-            this.label48.TabIndex = 197;
+            this.label48.TabIndex = 20;
             this.label48.Text = "Subpixel Motion Estimation:";
             // 
             // drop_subpixelMotionEstimation
@@ -2233,7 +2233,7 @@ namespace Handbrake
             this.drop_subpixelMotionEstimation.Location = new System.Drawing.Point(479, 69);
             this.drop_subpixelMotionEstimation.Name = "drop_subpixelMotionEstimation";
             this.drop_subpixelMotionEstimation.Size = new System.Drawing.Size(139, 20);
-            this.drop_subpixelMotionEstimation.TabIndex = 196;
+            this.drop_subpixelMotionEstimation.TabIndex = 32;
             this.drop_subpixelMotionEstimation.SelectedIndexChanged += new System.EventHandler(this.drop_subpixelMotionEstimation_SelectedIndexChanged);
             // 
             // label49
@@ -2243,7 +2243,7 @@ namespace Handbrake
             this.label49.Location = new System.Drawing.Point(339, 43);
             this.label49.Name = "label49";
             this.label49.Size = new System.Drawing.Size(134, 12);
-            this.label49.TabIndex = 195;
+            this.label49.TabIndex = 19;
             this.label49.Text = "Motion Estimation Range:";
             // 
             // drop_MotionEstimationRange
@@ -2254,7 +2254,7 @@ namespace Handbrake
             this.drop_MotionEstimationRange.Location = new System.Drawing.Point(479, 40);
             this.drop_MotionEstimationRange.Name = "drop_MotionEstimationRange";
             this.drop_MotionEstimationRange.Size = new System.Drawing.Size(139, 20);
-            this.drop_MotionEstimationRange.TabIndex = 194;
+            this.drop_MotionEstimationRange.TabIndex = 31;
             this.drop_MotionEstimationRange.SelectedIndexChanged += new System.EventHandler(this.drop_MotionEstimationRange_SelectedIndexChanged);
             // 
             // label54
@@ -2264,7 +2264,7 @@ namespace Handbrake
             this.label54.Location = new System.Drawing.Point(333, 14);
             this.label54.Name = "label54";
             this.label54.Size = new System.Drawing.Size(140, 12);
-            this.label54.TabIndex = 193;
+            this.label54.TabIndex = 18;
             this.label54.Text = "Motion Estimation Method:";
             // 
             // drop_MotionEstimationMethod
@@ -2276,7 +2276,7 @@ namespace Handbrake
             this.drop_MotionEstimationMethod.Location = new System.Drawing.Point(479, 11);
             this.drop_MotionEstimationMethod.Name = "drop_MotionEstimationMethod";
             this.drop_MotionEstimationMethod.Size = new System.Drawing.Size(139, 20);
-            this.drop_MotionEstimationMethod.TabIndex = 192;
+            this.drop_MotionEstimationMethod.TabIndex = 30;
             this.drop_MotionEstimationMethod.SelectedIndexChanged += new System.EventHandler(this.drop_MotionEstimationMethod_SelectedIndexChanged);
             // 
             // label57
@@ -2286,7 +2286,7 @@ namespace Handbrake
             this.label57.Location = new System.Drawing.Point(41, 204);
             this.label57.Name = "label57";
             this.label57.Size = new System.Drawing.Size(105, 12);
-            this.label57.TabIndex = 191;
+            this.label57.TabIndex = 9;
             this.label57.Text = "Pyrmidal B-Frames:";
             // 
             // check_pyrmidalBFrames
@@ -2297,7 +2297,7 @@ namespace Handbrake
             this.check_pyrmidalBFrames.Name = "check_pyrmidalBFrames";
             this.check_pyrmidalBFrames.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.check_pyrmidalBFrames.Size = new System.Drawing.Size(12, 11);
-            this.check_pyrmidalBFrames.TabIndex = 190;
+            this.check_pyrmidalBFrames.TabIndex = 17;
             this.check_pyrmidalBFrames.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_pyrmidalBFrames.UseVisualStyleBackColor = true;
             this.check_pyrmidalBFrames.CheckStateChanged += new System.EventHandler(this.check_pyrmidalBFrames_CheckedChanged);
@@ -2309,7 +2309,7 @@ namespace Handbrake
             this.label58.Location = new System.Drawing.Point(15, 184);
             this.label58.Name = "label58";
             this.label58.Size = new System.Drawing.Size(131, 12);
-            this.label58.TabIndex = 189;
+            this.label58.TabIndex = 8;
             this.label58.Text = "Bidirectional Refinement:";
             // 
             // check_BidirectionalRefinement
@@ -2320,7 +2320,7 @@ namespace Handbrake
             this.check_BidirectionalRefinement.Name = "check_BidirectionalRefinement";
             this.check_BidirectionalRefinement.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.check_BidirectionalRefinement.Size = new System.Drawing.Size(12, 11);
-            this.check_BidirectionalRefinement.TabIndex = 188;
+            this.check_BidirectionalRefinement.TabIndex = 16;
             this.check_BidirectionalRefinement.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_BidirectionalRefinement.UseVisualStyleBackColor = true;
             this.check_BidirectionalRefinement.CheckStateChanged += new System.EventHandler(this.check_BidirectionalRefinement_CheckedChanged);
@@ -2332,7 +2332,7 @@ namespace Handbrake
             this.label59.Location = new System.Drawing.Point(15, 164);
             this.label59.Name = "label59";
             this.label59.Size = new System.Drawing.Size(131, 12);
-            this.label59.TabIndex = 187;
+            this.label59.TabIndex = 7;
             this.label59.Text = "B-Frame Rate Distortion:";
             // 
             // check_bFrameDistortion
@@ -2343,7 +2343,7 @@ namespace Handbrake
             this.check_bFrameDistortion.Name = "check_bFrameDistortion";
             this.check_bFrameDistortion.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.check_bFrameDistortion.Size = new System.Drawing.Size(12, 11);
-            this.check_bFrameDistortion.TabIndex = 186;
+            this.check_bFrameDistortion.TabIndex = 15;
             this.check_bFrameDistortion.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_bFrameDistortion.UseVisualStyleBackColor = true;
             this.check_bFrameDistortion.CheckStateChanged += new System.EventHandler(this.check_bFrameDistortion_CheckedChanged);
@@ -2355,7 +2355,7 @@ namespace Handbrake
             this.label60.Location = new System.Drawing.Point(39, 146);
             this.label60.Name = "label60";
             this.label60.Size = new System.Drawing.Size(107, 12);
-            this.label60.TabIndex = 185;
+            this.label60.TabIndex = 6;
             this.label60.Text = "Weighted B-Frames:";
             // 
             // check_weightedBFrames
@@ -2366,7 +2366,7 @@ namespace Handbrake
             this.check_weightedBFrames.Name = "check_weightedBFrames";
             this.check_weightedBFrames.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.check_weightedBFrames.Size = new System.Drawing.Size(12, 11);
-            this.check_weightedBFrames.TabIndex = 184;
+            this.check_weightedBFrames.TabIndex = 14;
             this.check_weightedBFrames.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_weightedBFrames.UseVisualStyleBackColor = true;
             this.check_weightedBFrames.CheckStateChanged += new System.EventHandler(this.check_weightedBFrames_CheckedChanged);
@@ -2378,7 +2378,7 @@ namespace Handbrake
             this.label61.Location = new System.Drawing.Point(52, 121);
             this.label61.Name = "label61";
             this.label61.Size = new System.Drawing.Size(94, 12);
-            this.label61.TabIndex = 183;
+            this.label61.TabIndex = 5;
             this.label61.Text = "Direct Prediction:";
             // 
             // drop_directPrediction
@@ -2389,7 +2389,7 @@ namespace Handbrake
             this.drop_directPrediction.Location = new System.Drawing.Point(157, 118);
             this.drop_directPrediction.Name = "drop_directPrediction";
             this.drop_directPrediction.Size = new System.Drawing.Size(121, 20);
-            this.drop_directPrediction.TabIndex = 182;
+            this.drop_directPrediction.TabIndex = 13;
             this.drop_directPrediction.SelectedIndexChanged += new System.EventHandler(this.drop_directPrediction_SelectedIndexChanged);
             // 
             // label62
@@ -2399,7 +2399,7 @@ namespace Handbrake
             this.label62.Location = new System.Drawing.Point(88, 94);
             this.label62.Name = "label62";
             this.label62.Size = new System.Drawing.Size(58, 12);
-            this.label62.TabIndex = 181;
+            this.label62.TabIndex = 4;
             this.label62.Text = "B-Frames:";
             // 
             // drop_bFrames
@@ -2410,7 +2410,7 @@ namespace Handbrake
             this.drop_bFrames.Location = new System.Drawing.Point(157, 91);
             this.drop_bFrames.Name = "drop_bFrames";
             this.drop_bFrames.Size = new System.Drawing.Size(121, 20);
-            this.drop_bFrames.TabIndex = 180;
+            this.drop_bFrames.TabIndex = 12;
             this.drop_bFrames.SelectedIndexChanged += new System.EventHandler(this.drop_bFrames_SelectedIndexChanged);
             // 
             // label63
@@ -2420,7 +2420,7 @@ namespace Handbrake
             this.label63.Location = new System.Drawing.Point(48, 64);
             this.label63.Name = "label63";
             this.label63.Size = new System.Drawing.Size(98, 12);
-            this.label63.TabIndex = 179;
+            this.label63.TabIndex = 2;
             this.label63.Text = "Mixed References:";
             // 
             // label64
@@ -2430,7 +2430,7 @@ namespace Handbrake
             this.label64.Location = new System.Drawing.Point(47, 40);
             this.label64.Name = "label64";
             this.label64.Size = new System.Drawing.Size(99, 12);
-            this.label64.TabIndex = 178;
+            this.label64.TabIndex = 1;
             this.label64.Text = "Reference Frames:";
             // 
             // drop_refFrames
@@ -2441,7 +2441,7 @@ namespace Handbrake
             this.drop_refFrames.Location = new System.Drawing.Point(157, 37);
             this.drop_refFrames.Name = "drop_refFrames";
             this.drop_refFrames.Size = new System.Drawing.Size(121, 20);
-            this.drop_refFrames.TabIndex = 177;
+            this.drop_refFrames.TabIndex = 10;
             this.drop_refFrames.SelectedIndexChanged += new System.EventHandler(this.drop_refFrames_SelectedIndexChanged);
             // 
             // check_mixedReferences
@@ -2452,7 +2452,7 @@ namespace Handbrake
             this.check_mixedReferences.Name = "check_mixedReferences";
             this.check_mixedReferences.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.check_mixedReferences.Size = new System.Drawing.Size(12, 11);
-            this.check_mixedReferences.TabIndex = 176;
+            this.check_mixedReferences.TabIndex = 11;
             this.check_mixedReferences.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_mixedReferences.UseVisualStyleBackColor = true;
             this.check_mixedReferences.CheckStateChanged += new System.EventHandler(this.check_mixedReferences_CheckedChanged);
@@ -2509,7 +2509,7 @@ namespace Handbrake
             this.label34.Location = new System.Drawing.Point(13, 36);
             this.label34.Name = "label34";
             this.label34.Size = new System.Drawing.Size(434, 26);
-            this.label34.TabIndex = 2;
+            this.label34.TabIndex = 1;
             this.label34.Text = "Here you can alter the query generated by this program.\r\nDon\'t forget to re-gener" +
                 "ate this query should you change any GUI options.";
             // 
@@ -2523,7 +2523,7 @@ namespace Handbrake
             this.btn_generate_Query.Location = new System.Drawing.Point(16, 75);
             this.btn_generate_Query.Name = "btn_generate_Query";
             this.btn_generate_Query.Size = new System.Drawing.Size(126, 22);
-            this.btn_generate_Query.TabIndex = 1;
+            this.btn_generate_Query.TabIndex = 2;
             this.btn_generate_Query.Text = "Generate Query";
             this.btn_generate_Query.UseVisualStyleBackColor = false;
             this.btn_generate_Query.Click += new System.EventHandler(this.btn_generate_Query_Click);
@@ -2536,7 +2536,7 @@ namespace Handbrake
             this.label33.Location = new System.Drawing.Point(13, 13);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(89, 13);
-            this.label33.TabIndex = 1;
+            this.label33.TabIndex = 0;
             this.label33.Text = "Query Editor";
             // 
             // rtf_query
@@ -2545,7 +2545,7 @@ namespace Handbrake
             this.rtf_query.Location = new System.Drawing.Point(16, 103);
             this.rtf_query.Name = "rtf_query";
             this.rtf_query.Size = new System.Drawing.Size(614, 108);
-            this.rtf_query.TabIndex = 0;
+            this.rtf_query.TabIndex = 5;
             this.rtf_query.Text = "";
             // 
             // groupBox_dest

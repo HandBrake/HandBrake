@@ -71,6 +71,12 @@ namespace Handbrake
                 Thread.Sleep(100);
             }
 
+            //H264 Panel Loading
+            lblStatus.Text = "Loading H264 Panel";
+            Application.DoEvents();
+            setupH264Panel();
+            Thread.Sleep(100);
+
             // Load the presets
             // Set some defaults for the dropdown menus. Just incase the normal or user presets dont load.
             lblStatus.Text = "Loading Presets Bar ...";
@@ -96,12 +102,6 @@ namespace Handbrake
                 ToolTip.Active = true;
                 Thread.Sleep(100);
             }
-
-            //H264 Panel Loading
-            lblStatus.Text = "Loading H264 Panel";
-            Application.DoEvents();
-            setupH264Panel();
-            Thread.Sleep(100);
 
             //Finished Loading
             lblStatus.Text = "Loading Complete!";
@@ -1603,6 +1603,7 @@ namespace Handbrake
         }
 
         #endregion
+
 
 
 
