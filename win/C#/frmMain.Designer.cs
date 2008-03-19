@@ -64,7 +64,6 @@ namespace Handbrake
             this.drp_audioMixDown = new System.Windows.Forms.ComboBox();
             this.text_height = new System.Windows.Forms.TextBox();
             this.text_width = new System.Windows.Forms.TextBox();
-            this.rtf_h264advanced = new System.Windows.Forms.RichTextBox();
             this.RadioDVD = new System.Windows.Forms.RadioButton();
             this.check_optimiseMP4 = new System.Windows.Forms.CheckBox();
             this.check_iPodAtom = new System.Windows.Forms.CheckBox();
@@ -178,12 +177,49 @@ namespace Handbrake
             this.lbl_warn_chapt = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
             this.h264Tab = new System.Windows.Forms.TabPage();
-            this.Label43 = new System.Windows.Forms.Label();
-            this.label_h264 = new System.Windows.Forms.LinkLabel();
-            this.Label95 = new System.Windows.Forms.Label();
-            this.btn_h264Clear = new System.Windows.Forms.Button();
-            this.Label90 = new System.Windows.Forms.Label();
-            this.Label92 = new System.Windows.Forms.Label();
+            this.label43 = new System.Windows.Forms.Label();
+            this.btn_reset = new System.Windows.Forms.Button();
+            this.rtf_x264Query = new System.Windows.Forms.RichTextBox();
+            this.label35 = new System.Windows.Forms.Label();
+            this.check_Cabac = new System.Windows.Forms.CheckBox();
+            this.label36 = new System.Windows.Forms.Label();
+            this.check_noDCTDecimate = new System.Windows.Forms.CheckBox();
+            this.label37 = new System.Windows.Forms.Label();
+            this.check_noFastPSkip = new System.Windows.Forms.CheckBox();
+            this.label39 = new System.Windows.Forms.Label();
+            this.drop_trellis = new System.Windows.Forms.ComboBox();
+            this.drop_deblockBeta = new System.Windows.Forms.ComboBox();
+            this.label41 = new System.Windows.Forms.Label();
+            this.drop_deblockAlpha = new System.Windows.Forms.ComboBox();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.label44 = new System.Windows.Forms.Label();
+            this.check_8x8DCT = new System.Windows.Forms.CheckBox();
+            this.label45 = new System.Windows.Forms.Label();
+            this.drop_analysis = new System.Windows.Forms.ComboBox();
+            this.label48 = new System.Windows.Forms.Label();
+            this.drop_subpixelMotionEstimation = new System.Windows.Forms.ComboBox();
+            this.label49 = new System.Windows.Forms.Label();
+            this.drop_MotionEstimationRange = new System.Windows.Forms.ComboBox();
+            this.label54 = new System.Windows.Forms.Label();
+            this.drop_MotionEstimationMethod = new System.Windows.Forms.ComboBox();
+            this.label57 = new System.Windows.Forms.Label();
+            this.check_pyrmidalBFrames = new System.Windows.Forms.CheckBox();
+            this.label58 = new System.Windows.Forms.Label();
+            this.check_BidirectionalRefinement = new System.Windows.Forms.CheckBox();
+            this.label59 = new System.Windows.Forms.Label();
+            this.check_bFrameDistortion = new System.Windows.Forms.CheckBox();
+            this.label60 = new System.Windows.Forms.Label();
+            this.check_weightedBFrames = new System.Windows.Forms.CheckBox();
+            this.label61 = new System.Windows.Forms.Label();
+            this.drop_directPrediction = new System.Windows.Forms.ComboBox();
+            this.label62 = new System.Windows.Forms.Label();
+            this.drop_bFrames = new System.Windows.Forms.ComboBox();
+            this.label63 = new System.Windows.Forms.Label();
+            this.label64 = new System.Windows.Forms.Label();
+            this.drop_refFrames = new System.Windows.Forms.ComboBox();
+            this.check_mixedReferences = new System.Windows.Forms.CheckBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.btn_clear = new System.Windows.Forms.Button();
             this.btn_copy2C = new System.Windows.Forms.Button();
@@ -594,16 +630,6 @@ namespace Handbrake
             this.text_width.TabIndex = 26;
             this.ToolTip.SetToolTip(this.text_width, "Video Resolution (Width)");
             this.text_width.TextChanged += new System.EventHandler(this.text_width_TextChanged);
-            // 
-            // rtf_h264advanced
-            // 
-            this.rtf_h264advanced.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.rtf_h264advanced.Location = new System.Drawing.Point(16, 79);
-            this.rtf_h264advanced.Name = "rtf_h264advanced";
-            this.rtf_h264advanced.Size = new System.Drawing.Size(605, 123);
-            this.rtf_h264advanced.TabIndex = 2;
-            this.rtf_h264advanced.Text = "";
-            this.ToolTip.SetToolTip(this.rtf_h264advanced, "H.264 advanced options can be added here. See link below for details.");
             // 
             // RadioDVD
             // 
@@ -1114,9 +1140,10 @@ namespace Handbrake
             this.TabPage2.Location = new System.Drawing.Point(4, 22);
             this.TabPage2.Name = "TabPage2";
             this.TabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage2.Size = new System.Drawing.Size(649, 283);
+            this.TabPage2.Size = new System.Drawing.Size(649, 302);
             this.TabPage2.TabIndex = 3;
             this.TabPage2.Text = "Audio && Subtitles";
+            this.TabPage2.UseVisualStyleBackColor = true;
             // 
             // label30
             // 
@@ -1345,9 +1372,10 @@ namespace Handbrake
             this.TabPage3.Location = new System.Drawing.Point(4, 22);
             this.TabPage3.Name = "TabPage3";
             this.TabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage3.Size = new System.Drawing.Size(649, 283);
+            this.TabPage3.Size = new System.Drawing.Size(649, 302);
             this.TabPage3.TabIndex = 2;
             this.TabPage3.Text = "Video";
+            this.TabPage3.UseVisualStyleBackColor = true;
             // 
             // label25
             // 
@@ -1499,9 +1527,10 @@ namespace Handbrake
             this.TabPage1.Location = new System.Drawing.Point(4, 22);
             this.TabPage1.Name = "TabPage1";
             this.TabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage1.Size = new System.Drawing.Size(649, 283);
+            this.TabPage1.Size = new System.Drawing.Size(649, 302);
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "Picture Settings";
+            this.TabPage1.UseVisualStyleBackColor = true;
             // 
             // label6
             // 
@@ -1869,7 +1898,7 @@ namespace Handbrake
             this.advancedOptions.Location = new System.Drawing.Point(14, 281);
             this.advancedOptions.Name = "advancedOptions";
             this.advancedOptions.SelectedIndex = 0;
-            this.advancedOptions.Size = new System.Drawing.Size(657, 309);
+            this.advancedOptions.Size = new System.Drawing.Size(657, 328);
             this.advancedOptions.TabIndex = 5;
             this.advancedOptions.TabStop = false;
             // 
@@ -1882,9 +1911,10 @@ namespace Handbrake
             this.tab_chapters.Controls.Add(this.Check_ChapterMarkers);
             this.tab_chapters.Location = new System.Drawing.Point(4, 22);
             this.tab_chapters.Name = "tab_chapters";
-            this.tab_chapters.Size = new System.Drawing.Size(649, 283);
+            this.tab_chapters.Size = new System.Drawing.Size(649, 302);
             this.tab_chapters.TabIndex = 6;
             this.tab_chapters.Text = "Chapters";
+            this.tab_chapters.UseVisualStyleBackColor = true;
             // 
             // lbl_warn_chapt
             // 
@@ -1908,88 +1938,524 @@ namespace Handbrake
             // 
             // h264Tab
             // 
-            this.h264Tab.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.h264Tab.Controls.Add(this.Label43);
-            this.h264Tab.Controls.Add(this.label_h264);
-            this.h264Tab.Controls.Add(this.Label95);
-            this.h264Tab.Controls.Add(this.btn_h264Clear);
-            this.h264Tab.Controls.Add(this.Label90);
-            this.h264Tab.Controls.Add(this.rtf_h264advanced);
-            this.h264Tab.Controls.Add(this.Label92);
+            this.h264Tab.Controls.Add(this.label43);
+            this.h264Tab.Controls.Add(this.btn_reset);
+            this.h264Tab.Controls.Add(this.rtf_x264Query);
+            this.h264Tab.Controls.Add(this.label35);
+            this.h264Tab.Controls.Add(this.check_Cabac);
+            this.h264Tab.Controls.Add(this.label36);
+            this.h264Tab.Controls.Add(this.check_noDCTDecimate);
+            this.h264Tab.Controls.Add(this.label37);
+            this.h264Tab.Controls.Add(this.check_noFastPSkip);
+            this.h264Tab.Controls.Add(this.label39);
+            this.h264Tab.Controls.Add(this.drop_trellis);
+            this.h264Tab.Controls.Add(this.drop_deblockBeta);
+            this.h264Tab.Controls.Add(this.label41);
+            this.h264Tab.Controls.Add(this.drop_deblockAlpha);
+            this.h264Tab.Controls.Add(this.panel3);
+            this.h264Tab.Controls.Add(this.panel1);
+            this.h264Tab.Controls.Add(this.panel2);
+            this.h264Tab.Controls.Add(this.label44);
+            this.h264Tab.Controls.Add(this.check_8x8DCT);
+            this.h264Tab.Controls.Add(this.label45);
+            this.h264Tab.Controls.Add(this.drop_analysis);
+            this.h264Tab.Controls.Add(this.label48);
+            this.h264Tab.Controls.Add(this.drop_subpixelMotionEstimation);
+            this.h264Tab.Controls.Add(this.label49);
+            this.h264Tab.Controls.Add(this.drop_MotionEstimationRange);
+            this.h264Tab.Controls.Add(this.label54);
+            this.h264Tab.Controls.Add(this.drop_MotionEstimationMethod);
+            this.h264Tab.Controls.Add(this.label57);
+            this.h264Tab.Controls.Add(this.check_pyrmidalBFrames);
+            this.h264Tab.Controls.Add(this.label58);
+            this.h264Tab.Controls.Add(this.check_BidirectionalRefinement);
+            this.h264Tab.Controls.Add(this.label59);
+            this.h264Tab.Controls.Add(this.check_bFrameDistortion);
+            this.h264Tab.Controls.Add(this.label60);
+            this.h264Tab.Controls.Add(this.check_weightedBFrames);
+            this.h264Tab.Controls.Add(this.label61);
+            this.h264Tab.Controls.Add(this.drop_directPrediction);
+            this.h264Tab.Controls.Add(this.label62);
+            this.h264Tab.Controls.Add(this.drop_bFrames);
+            this.h264Tab.Controls.Add(this.label63);
+            this.h264Tab.Controls.Add(this.label64);
+            this.h264Tab.Controls.Add(this.drop_refFrames);
+            this.h264Tab.Controls.Add(this.check_mixedReferences);
+            this.h264Tab.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.h264Tab.Location = new System.Drawing.Point(4, 22);
             this.h264Tab.Name = "h264Tab";
             this.h264Tab.Padding = new System.Windows.Forms.Padding(3);
-            this.h264Tab.Size = new System.Drawing.Size(649, 283);
-            this.h264Tab.TabIndex = 5;
+            this.h264Tab.Size = new System.Drawing.Size(649, 302);
+            this.h264Tab.TabIndex = 8;
             this.h264Tab.Text = "Advanced";
+            this.h264Tab.UseVisualStyleBackColor = true;
             // 
-            // Label43
+            // label43
             // 
-            this.Label43.AutoSize = true;
-            this.Label43.BackColor = System.Drawing.Color.Transparent;
-            this.Label43.Location = new System.Drawing.Point(78, 236);
-            this.Label43.Name = "Label43";
-            this.Label43.Size = new System.Drawing.Size(158, 13);
-            this.Label43.TabIndex = 6;
-            this.Label43.Text = "for help using this feature.";
+            this.label43.AutoSize = true;
+            this.label43.BackColor = System.Drawing.Color.Transparent;
+            this.label43.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label43.Location = new System.Drawing.Point(13, 13);
+            this.label43.Name = "label43";
+            this.label43.Size = new System.Drawing.Size(165, 13);
+            this.label43.TabIndex = 219;
+            this.label43.Text = "Advanced H.264 Options";
             // 
-            // label_h264
+            // btn_reset
             // 
-            this.label_h264.AutoSize = true;
-            this.label_h264.Location = new System.Drawing.Point(13, 236);
-            this.label_h264.Name = "label_h264";
-            this.label_h264.Size = new System.Drawing.Size(66, 13);
-            this.label_h264.TabIndex = 5;
-            this.label_h264.TabStop = true;
-            this.label_h264.Text = "Click Here";
-            this.label_h264.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.label_h264_LinkClicked);
+            this.btn_reset.Location = new System.Drawing.Point(13, 226);
+            this.btn_reset.Name = "btn_reset";
+            this.btn_reset.Size = new System.Drawing.Size(75, 23);
+            this.btn_reset.TabIndex = 217;
+            this.btn_reset.Text = "Reset All";
+            this.btn_reset.UseVisualStyleBackColor = true;
+            this.btn_reset.Click += new System.EventHandler(this.btn_reset_Click);
             // 
-            // Label95
+            // rtf_x264Query
             // 
-            this.Label95.AutoSize = true;
-            this.Label95.BackColor = System.Drawing.Color.Transparent;
-            this.Label95.Location = new System.Drawing.Point(13, 217);
-            this.Label95.Name = "Label95";
-            this.Label95.Size = new System.Drawing.Size(387, 13);
-            this.Label95.TabIndex = 4;
-            this.Label95.Text = "Note: Incorrect usage of this feature will cause the encoder to fail!";
+            this.rtf_x264Query.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.rtf_x264Query.Location = new System.Drawing.Point(13, 253);
+            this.rtf_x264Query.Name = "rtf_x264Query";
+            this.rtf_x264Query.Size = new System.Drawing.Size(606, 43);
+            this.rtf_x264Query.TabIndex = 216;
+            this.rtf_x264Query.Text = "";
+            this.rtf_x264Query.LostFocus += new System.EventHandler(this.rtf_x264Query_TextChanged);
+            this.rtf_x264Query.TextChanged += new System.EventHandler(this.rtf_x264Query_TextChanged);
             // 
-            // btn_h264Clear
+            // label35
             // 
-            this.btn_h264Clear.BackColor = System.Drawing.Color.Transparent;
-            this.btn_h264Clear.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_h264Clear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_h264Clear.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_h264Clear.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_h264Clear.Location = new System.Drawing.Point(542, 50);
-            this.btn_h264Clear.Name = "btn_h264Clear";
-            this.btn_h264Clear.Size = new System.Drawing.Size(79, 23);
-            this.btn_h264Clear.TabIndex = 3;
-            this.btn_h264Clear.Text = "Clear";
-            this.btn_h264Clear.UseVisualStyleBackColor = false;
-            this.btn_h264Clear.Click += new System.EventHandler(this.btn_h264Clear_Click);
+            this.label35.AutoSize = true;
+            this.label35.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label35.Location = new System.Drawing.Point(476, 213);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(128, 12);
+            this.label35.TabIndex = 215;
+            this.label35.Text = "CABAC Entropy Coding:";
             // 
-            // Label90
+            // check_Cabac
             // 
-            this.Label90.AutoSize = true;
-            this.Label90.BackColor = System.Drawing.Color.Transparent;
-            this.Label90.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label90.Location = new System.Drawing.Point(13, 13);
-            this.Label90.Name = "Label90";
-            this.Label90.Size = new System.Drawing.Size(165, 13);
-            this.Label90.TabIndex = 0;
-            this.Label90.Text = "Advanced H.264 Options";
+            this.check_Cabac.AutoSize = true;
+            this.check_Cabac.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.check_Cabac.Location = new System.Drawing.Point(610, 214);
+            this.check_Cabac.Name = "check_Cabac";
+            this.check_Cabac.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.check_Cabac.Size = new System.Drawing.Size(12, 11);
+            this.check_Cabac.TabIndex = 214;
+            this.check_Cabac.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.check_Cabac.UseVisualStyleBackColor = true;
+            this.check_Cabac.CheckStateChanged += new System.EventHandler(this.check_Cabac_CheckedChanged);
             // 
-            // Label92
+            // label36
             // 
-            this.Label92.AutoSize = true;
-            this.Label92.BackColor = System.Drawing.Color.Transparent;
-            this.Label92.Location = new System.Drawing.Point(13, 41);
-            this.Label92.Name = "Label92";
-            this.Label92.Size = new System.Drawing.Size(370, 26);
-            this.Label92.TabIndex = 1;
-            this.Label92.Text = "Specify advanced x264 options in the same style as mencoder:\r\noption1=value1:opti" +
-                "on2=value2";
+            this.label36.AutoSize = true;
+            this.label36.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label36.Location = new System.Drawing.Point(503, 194);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(102, 12);
+            this.label36.TabIndex = 213;
+            this.label36.Text = "No DCT-Decimate:";
+            // 
+            // check_noDCTDecimate
+            // 
+            this.check_noDCTDecimate.AutoSize = true;
+            this.check_noDCTDecimate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.check_noDCTDecimate.Location = new System.Drawing.Point(610, 195);
+            this.check_noDCTDecimate.Name = "check_noDCTDecimate";
+            this.check_noDCTDecimate.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.check_noDCTDecimate.Size = new System.Drawing.Size(12, 11);
+            this.check_noDCTDecimate.TabIndex = 212;
+            this.check_noDCTDecimate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.check_noDCTDecimate.UseVisualStyleBackColor = true;
+            this.check_noDCTDecimate.CheckStateChanged += new System.EventHandler(this.check_noDCTDecimate_CheckedChanged);
+            // 
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label37.Location = new System.Drawing.Point(386, 193);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(87, 12);
+            this.label37.TabIndex = 211;
+            this.label37.Text = "No Fast-P-Skip:";
+            // 
+            // check_noFastPSkip
+            // 
+            this.check_noFastPSkip.AutoSize = true;
+            this.check_noFastPSkip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.check_noFastPSkip.Location = new System.Drawing.Point(479, 194);
+            this.check_noFastPSkip.Name = "check_noFastPSkip";
+            this.check_noFastPSkip.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.check_noFastPSkip.Size = new System.Drawing.Size(12, 11);
+            this.check_noFastPSkip.TabIndex = 210;
+            this.check_noFastPSkip.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.check_noFastPSkip.UseVisualStyleBackColor = true;
+            this.check_noFastPSkip.CheckStateChanged += new System.EventHandler(this.check_noFastPSkip_CheckedChanged);
+            // 
+            // label39
+            // 
+            this.label39.AutoSize = true;
+            this.label39.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label39.Location = new System.Drawing.Point(432, 169);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(41, 12);
+            this.label39.TabIndex = 209;
+            this.label39.Text = "Trellis:";
+            // 
+            // drop_trellis
+            // 
+            this.drop_trellis.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drop_trellis.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drop_trellis.FormattingEnabled = true;
+            this.drop_trellis.Location = new System.Drawing.Point(479, 166);
+            this.drop_trellis.Name = "drop_trellis";
+            this.drop_trellis.Size = new System.Drawing.Size(139, 20);
+            this.drop_trellis.TabIndex = 208;
+            this.drop_trellis.SelectedIndexChanged += new System.EventHandler(this.drop_trellis_SelectedIndexChanged);
+            // 
+            // drop_deblockBeta
+            // 
+            this.drop_deblockBeta.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drop_deblockBeta.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drop_deblockBeta.FormattingEnabled = true;
+            this.drop_deblockBeta.Location = new System.Drawing.Point(553, 139);
+            this.drop_deblockBeta.Name = "drop_deblockBeta";
+            this.drop_deblockBeta.Size = new System.Drawing.Size(69, 20);
+            this.drop_deblockBeta.TabIndex = 207;
+            this.drop_deblockBeta.SelectedIndexChanged += new System.EventHandler(this.drop_deblockBeta_SelectedIndexChanged);
+            // 
+            // label41
+            // 
+            this.label41.AutoSize = true;
+            this.label41.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label41.Location = new System.Drawing.Point(408, 147);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(65, 12);
+            this.label41.TabIndex = 206;
+            this.label41.Text = "Deblocking:";
+            // 
+            // drop_deblockAlpha
+            // 
+            this.drop_deblockAlpha.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drop_deblockAlpha.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drop_deblockAlpha.FormattingEnabled = true;
+            this.drop_deblockAlpha.Location = new System.Drawing.Point(479, 139);
+            this.drop_deblockAlpha.Name = "drop_deblockAlpha";
+            this.drop_deblockAlpha.Size = new System.Drawing.Size(68, 20);
+            this.drop_deblockAlpha.TabIndex = 205;
+            this.drop_deblockAlpha.SelectedIndexChanged += new System.EventHandler(this.drop_deblockAlpha_SelectedIndexChanged);
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.Black;
+            this.panel3.Location = new System.Drawing.Point(338, 131);
+            this.panel3.Margin = new System.Windows.Forms.Padding(0);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(284, 1);
+            this.panel3.TabIndex = 204;
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.Black;
+            this.panel1.Location = new System.Drawing.Point(13, 84);
+            this.panel1.Margin = new System.Windows.Forms.Padding(0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(284, 1);
+            this.panel1.TabIndex = 203;
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.Black;
+            this.panel2.Location = new System.Drawing.Point(338, 95);
+            this.panel2.Margin = new System.Windows.Forms.Padding(0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(284, 1);
+            this.panel2.TabIndex = 202;
+            // 
+            // label44
+            // 
+            this.label44.AutoSize = true;
+            this.label44.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label44.Location = new System.Drawing.Point(532, 108);
+            this.label44.Name = "label44";
+            this.label44.Size = new System.Drawing.Size(55, 12);
+            this.label44.TabIndex = 201;
+            this.label44.Text = "8x8 DCT:";
+            // 
+            // check_8x8DCT
+            // 
+            this.check_8x8DCT.AutoSize = true;
+            this.check_8x8DCT.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.check_8x8DCT.Location = new System.Drawing.Point(590, 108);
+            this.check_8x8DCT.Name = "check_8x8DCT";
+            this.check_8x8DCT.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.check_8x8DCT.Size = new System.Drawing.Size(12, 11);
+            this.check_8x8DCT.TabIndex = 200;
+            this.check_8x8DCT.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.check_8x8DCT.UseVisualStyleBackColor = true;
+            this.check_8x8DCT.CheckStateChanged += new System.EventHandler(this.check_8x8DCT_CheckedChanged);
+            // 
+            // label45
+            // 
+            this.label45.AutoSize = true;
+            this.label45.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label45.Location = new System.Drawing.Point(420, 108);
+            this.label45.Name = "label45";
+            this.label45.Size = new System.Drawing.Size(53, 12);
+            this.label45.TabIndex = 199;
+            this.label45.Text = "Analysis:";
+            // 
+            // drop_analysis
+            // 
+            this.drop_analysis.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drop_analysis.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drop_analysis.FormattingEnabled = true;
+            this.drop_analysis.Location = new System.Drawing.Point(479, 105);
+            this.drop_analysis.Name = "drop_analysis";
+            this.drop_analysis.Size = new System.Drawing.Size(47, 20);
+            this.drop_analysis.TabIndex = 198;
+            this.drop_analysis.SelectedIndexChanged += new System.EventHandler(this.drop_analysis_SelectedIndexChanged);
+            // 
+            // label48
+            // 
+            this.label48.AutoSize = true;
+            this.label48.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label48.Location = new System.Drawing.Point(327, 72);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(146, 12);
+            this.label48.TabIndex = 197;
+            this.label48.Text = "Subpixel Motion Estimation:";
+            // 
+            // drop_subpixelMotionEstimation
+            // 
+            this.drop_subpixelMotionEstimation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drop_subpixelMotionEstimation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drop_subpixelMotionEstimation.FormattingEnabled = true;
+            this.drop_subpixelMotionEstimation.Location = new System.Drawing.Point(479, 69);
+            this.drop_subpixelMotionEstimation.Name = "drop_subpixelMotionEstimation";
+            this.drop_subpixelMotionEstimation.Size = new System.Drawing.Size(139, 20);
+            this.drop_subpixelMotionEstimation.TabIndex = 196;
+            this.drop_subpixelMotionEstimation.SelectedIndexChanged += new System.EventHandler(this.drop_subpixelMotionEstimation_SelectedIndexChanged);
+            // 
+            // label49
+            // 
+            this.label49.AutoSize = true;
+            this.label49.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label49.Location = new System.Drawing.Point(339, 43);
+            this.label49.Name = "label49";
+            this.label49.Size = new System.Drawing.Size(134, 12);
+            this.label49.TabIndex = 195;
+            this.label49.Text = "Motion Estimation Range:";
+            // 
+            // drop_MotionEstimationRange
+            // 
+            this.drop_MotionEstimationRange.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drop_MotionEstimationRange.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drop_MotionEstimationRange.FormattingEnabled = true;
+            this.drop_MotionEstimationRange.Location = new System.Drawing.Point(479, 40);
+            this.drop_MotionEstimationRange.Name = "drop_MotionEstimationRange";
+            this.drop_MotionEstimationRange.Size = new System.Drawing.Size(139, 20);
+            this.drop_MotionEstimationRange.TabIndex = 194;
+            this.drop_MotionEstimationRange.SelectedIndexChanged += new System.EventHandler(this.drop_MotionEstimationRange_SelectedIndexChanged);
+            // 
+            // label54
+            // 
+            this.label54.AutoSize = true;
+            this.label54.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label54.Location = new System.Drawing.Point(333, 14);
+            this.label54.Name = "label54";
+            this.label54.Size = new System.Drawing.Size(140, 12);
+            this.label54.TabIndex = 193;
+            this.label54.Text = "Motion Estimation Method:";
+            // 
+            // drop_MotionEstimationMethod
+            // 
+            this.drop_MotionEstimationMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drop_MotionEstimationMethod.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drop_MotionEstimationMethod.FormattingEnabled = true;
+            this.drop_MotionEstimationMethod.ItemHeight = 12;
+            this.drop_MotionEstimationMethod.Location = new System.Drawing.Point(479, 11);
+            this.drop_MotionEstimationMethod.Name = "drop_MotionEstimationMethod";
+            this.drop_MotionEstimationMethod.Size = new System.Drawing.Size(139, 20);
+            this.drop_MotionEstimationMethod.TabIndex = 192;
+            this.drop_MotionEstimationMethod.SelectedIndexChanged += new System.EventHandler(this.drop_MotionEstimationMethod_SelectedIndexChanged);
+            // 
+            // label57
+            // 
+            this.label57.AutoSize = true;
+            this.label57.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label57.Location = new System.Drawing.Point(41, 204);
+            this.label57.Name = "label57";
+            this.label57.Size = new System.Drawing.Size(105, 12);
+            this.label57.TabIndex = 191;
+            this.label57.Text = "Pyrmidal B-Frames:";
+            // 
+            // check_pyrmidalBFrames
+            // 
+            this.check_pyrmidalBFrames.AutoSize = true;
+            this.check_pyrmidalBFrames.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.check_pyrmidalBFrames.Location = new System.Drawing.Point(157, 205);
+            this.check_pyrmidalBFrames.Name = "check_pyrmidalBFrames";
+            this.check_pyrmidalBFrames.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.check_pyrmidalBFrames.Size = new System.Drawing.Size(12, 11);
+            this.check_pyrmidalBFrames.TabIndex = 190;
+            this.check_pyrmidalBFrames.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.check_pyrmidalBFrames.UseVisualStyleBackColor = true;
+            this.check_pyrmidalBFrames.CheckStateChanged += new System.EventHandler(this.check_pyrmidalBFrames_CheckedChanged);
+            // 
+            // label58
+            // 
+            this.label58.AutoSize = true;
+            this.label58.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label58.Location = new System.Drawing.Point(15, 184);
+            this.label58.Name = "label58";
+            this.label58.Size = new System.Drawing.Size(131, 12);
+            this.label58.TabIndex = 189;
+            this.label58.Text = "Bidirectional Refinement:";
+            // 
+            // check_BidirectionalRefinement
+            // 
+            this.check_BidirectionalRefinement.AutoSize = true;
+            this.check_BidirectionalRefinement.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.check_BidirectionalRefinement.Location = new System.Drawing.Point(157, 185);
+            this.check_BidirectionalRefinement.Name = "check_BidirectionalRefinement";
+            this.check_BidirectionalRefinement.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.check_BidirectionalRefinement.Size = new System.Drawing.Size(12, 11);
+            this.check_BidirectionalRefinement.TabIndex = 188;
+            this.check_BidirectionalRefinement.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.check_BidirectionalRefinement.UseVisualStyleBackColor = true;
+            this.check_BidirectionalRefinement.CheckStateChanged += new System.EventHandler(this.check_BidirectionalRefinement_CheckedChanged);
+            // 
+            // label59
+            // 
+            this.label59.AutoSize = true;
+            this.label59.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label59.Location = new System.Drawing.Point(15, 164);
+            this.label59.Name = "label59";
+            this.label59.Size = new System.Drawing.Size(131, 12);
+            this.label59.TabIndex = 187;
+            this.label59.Text = "B-Frame Rate Distortion:";
+            // 
+            // check_bFrameDistortion
+            // 
+            this.check_bFrameDistortion.AutoSize = true;
+            this.check_bFrameDistortion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.check_bFrameDistortion.Location = new System.Drawing.Point(157, 165);
+            this.check_bFrameDistortion.Name = "check_bFrameDistortion";
+            this.check_bFrameDistortion.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.check_bFrameDistortion.Size = new System.Drawing.Size(12, 11);
+            this.check_bFrameDistortion.TabIndex = 186;
+            this.check_bFrameDistortion.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.check_bFrameDistortion.UseVisualStyleBackColor = true;
+            this.check_bFrameDistortion.CheckStateChanged += new System.EventHandler(this.check_bFrameDistortion_CheckedChanged);
+            // 
+            // label60
+            // 
+            this.label60.AutoSize = true;
+            this.label60.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label60.Location = new System.Drawing.Point(39, 146);
+            this.label60.Name = "label60";
+            this.label60.Size = new System.Drawing.Size(107, 12);
+            this.label60.TabIndex = 185;
+            this.label60.Text = "Weighted B-Frames:";
+            // 
+            // check_weightedBFrames
+            // 
+            this.check_weightedBFrames.AutoSize = true;
+            this.check_weightedBFrames.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.check_weightedBFrames.Location = new System.Drawing.Point(157, 147);
+            this.check_weightedBFrames.Name = "check_weightedBFrames";
+            this.check_weightedBFrames.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.check_weightedBFrames.Size = new System.Drawing.Size(12, 11);
+            this.check_weightedBFrames.TabIndex = 184;
+            this.check_weightedBFrames.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.check_weightedBFrames.UseVisualStyleBackColor = true;
+            this.check_weightedBFrames.CheckStateChanged += new System.EventHandler(this.check_weightedBFrames_CheckedChanged);
+            // 
+            // label61
+            // 
+            this.label61.AutoSize = true;
+            this.label61.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label61.Location = new System.Drawing.Point(52, 121);
+            this.label61.Name = "label61";
+            this.label61.Size = new System.Drawing.Size(94, 12);
+            this.label61.TabIndex = 183;
+            this.label61.Text = "Direct Prediction:";
+            // 
+            // drop_directPrediction
+            // 
+            this.drop_directPrediction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drop_directPrediction.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drop_directPrediction.FormattingEnabled = true;
+            this.drop_directPrediction.Location = new System.Drawing.Point(157, 118);
+            this.drop_directPrediction.Name = "drop_directPrediction";
+            this.drop_directPrediction.Size = new System.Drawing.Size(121, 20);
+            this.drop_directPrediction.TabIndex = 182;
+            this.drop_directPrediction.SelectedIndexChanged += new System.EventHandler(this.drop_directPrediction_SelectedIndexChanged);
+            // 
+            // label62
+            // 
+            this.label62.AutoSize = true;
+            this.label62.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label62.Location = new System.Drawing.Point(88, 94);
+            this.label62.Name = "label62";
+            this.label62.Size = new System.Drawing.Size(58, 12);
+            this.label62.TabIndex = 181;
+            this.label62.Text = "B-Frames:";
+            // 
+            // drop_bFrames
+            // 
+            this.drop_bFrames.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drop_bFrames.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drop_bFrames.FormattingEnabled = true;
+            this.drop_bFrames.Location = new System.Drawing.Point(157, 91);
+            this.drop_bFrames.Name = "drop_bFrames";
+            this.drop_bFrames.Size = new System.Drawing.Size(121, 20);
+            this.drop_bFrames.TabIndex = 180;
+            this.drop_bFrames.SelectedIndexChanged += new System.EventHandler(this.drop_bFrames_SelectedIndexChanged);
+            // 
+            // label63
+            // 
+            this.label63.AutoSize = true;
+            this.label63.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label63.Location = new System.Drawing.Point(48, 64);
+            this.label63.Name = "label63";
+            this.label63.Size = new System.Drawing.Size(98, 12);
+            this.label63.TabIndex = 179;
+            this.label63.Text = "Mixed References:";
+            // 
+            // label64
+            // 
+            this.label64.AutoSize = true;
+            this.label64.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label64.Location = new System.Drawing.Point(47, 40);
+            this.label64.Name = "label64";
+            this.label64.Size = new System.Drawing.Size(99, 12);
+            this.label64.TabIndex = 178;
+            this.label64.Text = "Reference Frames:";
+            // 
+            // drop_refFrames
+            // 
+            this.drop_refFrames.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drop_refFrames.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drop_refFrames.FormattingEnabled = true;
+            this.drop_refFrames.Location = new System.Drawing.Point(157, 37);
+            this.drop_refFrames.Name = "drop_refFrames";
+            this.drop_refFrames.Size = new System.Drawing.Size(121, 20);
+            this.drop_refFrames.TabIndex = 177;
+            this.drop_refFrames.SelectedIndexChanged += new System.EventHandler(this.drop_refFrames_SelectedIndexChanged);
+            // 
+            // check_mixedReferences
+            // 
+            this.check_mixedReferences.AutoSize = true;
+            this.check_mixedReferences.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.check_mixedReferences.Location = new System.Drawing.Point(157, 65);
+            this.check_mixedReferences.Name = "check_mixedReferences";
+            this.check_mixedReferences.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.check_mixedReferences.Size = new System.Drawing.Size(12, 11);
+            this.check_mixedReferences.TabIndex = 176;
+            this.check_mixedReferences.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.check_mixedReferences.UseVisualStyleBackColor = true;
+            this.check_mixedReferences.CheckStateChanged += new System.EventHandler(this.check_mixedReferences_CheckedChanged);
             // 
             // tabPage4
             // 
@@ -2002,9 +2468,10 @@ namespace Handbrake
             this.tabPage4.Controls.Add(this.rtf_query);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(649, 283);
+            this.tabPage4.Size = new System.Drawing.Size(649, 302);
             this.tabPage4.TabIndex = 7;
             this.tabPage4.Text = "Query Editor";
+            this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // btn_clear
             // 
@@ -2088,7 +2555,7 @@ namespace Handbrake
             this.groupBox_dest.Controls.Add(this.btn_destBrowse);
             this.groupBox_dest.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox_dest.ForeColor = System.Drawing.Color.Black;
-            this.groupBox_dest.Location = new System.Drawing.Point(14, 166);
+            this.groupBox_dest.Location = new System.Drawing.Point(14, 163);
             this.groupBox_dest.Name = "groupBox_dest";
             this.groupBox_dest.Size = new System.Drawing.Size(657, 50);
             this.groupBox_dest.TabIndex = 2;
@@ -2386,14 +2853,6 @@ namespace Handbrake
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TabPage tab_chapters;
-        internal System.Windows.Forms.TabPage h264Tab;
-        internal System.Windows.Forms.Label Label43;
-        internal System.Windows.Forms.LinkLabel label_h264;
-        internal System.Windows.Forms.Label Label95;
-        internal System.Windows.Forms.Button btn_h264Clear;
-        internal System.Windows.Forms.Label Label90;
-        internal System.Windows.Forms.RichTextBox rtf_h264advanced;
-        internal System.Windows.Forms.Label Label92;
         internal System.Windows.Forms.Label label31;
         private System.Windows.Forms.DataGridViewTextBoxColumn number;
         private System.Windows.Forms.DataGridViewTextBoxColumn name;
@@ -2426,6 +2885,50 @@ namespace Handbrake
         internal System.Windows.Forms.Label label25;
         internal System.Windows.Forms.Label label6;
         internal System.Windows.Forms.ComboBox drp_anamorphic;
+        internal System.Windows.Forms.TabPage h264Tab;
+        internal System.Windows.Forms.RichTextBox rtf_x264Query;
+        internal System.Windows.Forms.Label label43;
+        internal System.Windows.Forms.Button btn_reset;
+        internal System.Windows.Forms.Label label35;
+        internal System.Windows.Forms.CheckBox check_Cabac;
+        internal System.Windows.Forms.Label label36;
+        internal System.Windows.Forms.CheckBox check_noDCTDecimate;
+        internal System.Windows.Forms.Label label37;
+        internal System.Windows.Forms.CheckBox check_noFastPSkip;
+        internal System.Windows.Forms.Label label39;
+        internal System.Windows.Forms.ComboBox drop_trellis;
+        internal System.Windows.Forms.ComboBox drop_deblockBeta;
+        internal System.Windows.Forms.Label label41;
+        internal System.Windows.Forms.ComboBox drop_deblockAlpha;
+        internal System.Windows.Forms.Panel panel3;
+        internal System.Windows.Forms.Panel panel1;
+        internal System.Windows.Forms.Panel panel2;
+        internal System.Windows.Forms.Label label44;
+        internal System.Windows.Forms.CheckBox check_8x8DCT;
+        internal System.Windows.Forms.Label label45;
+        internal System.Windows.Forms.ComboBox drop_analysis;
+        internal System.Windows.Forms.Label label48;
+        internal System.Windows.Forms.ComboBox drop_subpixelMotionEstimation;
+        internal System.Windows.Forms.Label label49;
+        internal System.Windows.Forms.ComboBox drop_MotionEstimationRange;
+        internal System.Windows.Forms.Label label54;
+        internal System.Windows.Forms.ComboBox drop_MotionEstimationMethod;
+        internal System.Windows.Forms.Label label57;
+        internal System.Windows.Forms.CheckBox check_pyrmidalBFrames;
+        internal System.Windows.Forms.Label label58;
+        internal System.Windows.Forms.CheckBox check_BidirectionalRefinement;
+        internal System.Windows.Forms.Label label59;
+        internal System.Windows.Forms.CheckBox check_bFrameDistortion;
+        internal System.Windows.Forms.Label label60;
+        internal System.Windows.Forms.CheckBox check_weightedBFrames;
+        internal System.Windows.Forms.Label label61;
+        internal System.Windows.Forms.ComboBox drop_directPrediction;
+        internal System.Windows.Forms.Label label62;
+        internal System.Windows.Forms.ComboBox drop_bFrames;
+        internal System.Windows.Forms.Label label63;
+        internal System.Windows.Forms.Label label64;
+        internal System.Windows.Forms.ComboBox drop_refFrames;
+        internal System.Windows.Forms.CheckBox check_mixedReferences;
 
     }
 }

@@ -162,6 +162,7 @@
     <Compile Include="Functions\RssReader.cs" />
     <Compile Include="Functions\CLI.cs" />
     <Compile Include="Functions\QueryParser.cs" />
+    <Compile Include="Functions\x264Panel.cs" />
     <Compile Include="Parsing\AudioTrack.cs" />
     <Compile Include="Parsing\Chapter.cs" />
     <Compile Include="Parsing\DVD.cs" />

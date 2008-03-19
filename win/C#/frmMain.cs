@@ -35,6 +35,7 @@ namespace Handbrake
         private frmQueue queueWindow = new frmQueue();
         private delegate void updateStatusChanger();
         Functions.Common hb_common_func = new Functions.Common();
+        Functions.x264Panel x264PanelFunctions = new Functions.x264Panel();
 
         public frmMain()
         {
@@ -96,6 +97,12 @@ namespace Handbrake
                 Thread.Sleep(100);
             }
 
+            //H264 Panel Loading
+            lblStatus.Text = "Loading H264 Panel";
+            Application.DoEvents();
+            setupH264Panel();
+            Thread.Sleep(100);
+
             //Finished Loading
             lblStatus.Text = "Loading Complete!";
             Application.DoEvents();
@@ -145,6 +152,132 @@ namespace Handbrake
         {
             Form splash = new frmSplashScreen();
             splash.Show();
+        }
+
+        private void setupH264Panel()
+        {
+            /*Set opt widget values here*/
+
+            /*B-Frames fX264optBframesPopUp*/
+            int i;
+            drop_bFrames.Items.Clear();
+            drop_bFrames.Items.Add("Default (0)");
+            drop_bFrames.Text = "Default (0)";
+
+            for (i = 0; i < 17; i++)
+            {
+                drop_bFrames.Items.Add(i.ToString());
+            }
+
+            /*Reference Frames fX264optRefPopUp*/
+            drop_refFrames.Items.Clear();
+            drop_refFrames.Items.Add("Default (1)");
+            drop_refFrames.Text = "Default (1)";
+            for (i = 0; i < 17; i++)
+            {
+                drop_refFrames.Items.Add(i.ToString());
+            }
+
+            /*No Fast P-Skip fX264optNfpskipSwitch BOOLEAN*/
+            check_noFastPSkip.CheckState = CheckState.Unchecked;
+
+            /*No Dict Decimate fX264optNodctdcmtSwitch BOOLEAN*/
+            check_noDCTDecimate.CheckState = CheckState.Unchecked;
+
+
+            /*Sub Me fX264optSubmePopUp*/
+            drop_subpixelMotionEstimation.Items.Clear();
+            drop_subpixelMotionEstimation.Items.Add("Default (4)");
+            drop_subpixelMotionEstimation.Text = "Default (4)";
+            for (i = 0; i < 8; i++)
+            {
+                drop_subpixelMotionEstimation.Items.Add(i.ToString());
+            }
+
+            /*Trellis fX264optTrellisPopUp*/
+            drop_trellis.Items.Clear();
+            drop_trellis.Items.Add("Default (0)");
+            drop_trellis.Text = "Default (0)";
+            for (i = 0; i < 3; i++)
+            {
+                drop_trellis.Items.Add(i.ToString());
+            }
+
+            /*Mixed-references fX264optMixedRefsSwitch BOOLEAN*/
+            check_mixedReferences.CheckState = CheckState.Unchecked;
+
+            /*Motion Estimation fX264optMotionEstPopUp*/
+            drop_MotionEstimationMethod.Items.Clear();
+            drop_MotionEstimationMethod.Items.Add("Default (Hexagon)");
+            drop_MotionEstimationMethod.Items.Add("Diamond");
+            drop_MotionEstimationMethod.Items.Add("Hexagon");
+            drop_MotionEstimationMethod.Items.Add("Uneven Multi-Hexagon");
+            drop_MotionEstimationMethod.Items.Add("Exhaustive");
+            drop_MotionEstimationMethod.Text = "Default (Hexagon)";
+
+            /*Motion Estimation range fX264optMERangePopUp*/
+            drop_MotionEstimationRange.Items.Clear();
+            drop_MotionEstimationRange.Items.Add("Default (16)");
+            drop_MotionEstimationRange.Text = "Default (16)";
+            for (i = 4; i < 65; i++)
+            {
+                drop_MotionEstimationRange.Items.Add(i.ToString());
+            }
+
+            /*Weighted B-Frame Prediction fX264optWeightBSwitch BOOLEAN*/
+            check_weightedBFrames.CheckState = CheckState.Unchecked;
+
+            /*B-Frame Rate Distortion Optimization fX264optBRDOSwitch BOOLEAN*/
+            check_bFrameDistortion.CheckState = CheckState.Unchecked;
+
+            /*B-frame Pyramids fX264optBPyramidSwitch BOOLEAN*/
+            check_pyrmidalBFrames.CheckState = CheckState.Unchecked;
+
+            /*Bidirectional Motion Estimation Refinement fX264optBiMESwitch BOOLEAN*/
+            check_BidirectionalRefinement.CheckState = CheckState.Unchecked;
+
+            /*Direct B-Frame Prediction Mode fX264optDirectPredPopUp*/
+            drop_directPrediction.Items.Clear();
+            drop_directPrediction.Items.Add("Default (Spatial)");
+            drop_directPrediction.Items.Add("None");
+            drop_directPrediction.Items.Add("Spatial");
+            drop_directPrediction.Items.Add("Temporal");
+            drop_directPrediction.Items.Add("Automatic");
+            drop_directPrediction.Text = "Default (Spatial)";
+
+            /*Alpha Deblock*/
+            drop_deblockAlpha.Items.Clear();
+            drop_deblockAlpha.Items.Add("Default (0)");
+            drop_deblockAlpha.Text = "Default (0)";
+            for (i = -6; i < 7; i++)
+            {
+                drop_deblockAlpha.Items.Add(i.ToString());
+            }
+
+            /*Beta Deblock*/
+            drop_deblockBeta.Items.Clear();
+            drop_deblockBeta.Items.Add("Default (0)");
+            drop_deblockBeta.Text = "Default (0)";
+            for (i = -6; i < 7; i++)
+            {
+                drop_deblockBeta.Items.Add(i.ToString());
+            }
+
+            /* Analysis fX264optAnalysePopUp */
+            drop_analysis.Items.Clear();
+            drop_analysis.Items.Add("Default (some)"); /* 0=default */
+            drop_analysis.Items.Add("None");  /* 1=none */
+            drop_analysis.Items.Add("All"); /* 2=all */
+            drop_analysis.Text = "Default (some)";
+
+            /* 8x8 DCT fX264op8x8dctSwitch */
+            check_8x8DCT.CheckState = CheckState.Unchecked;
+
+            /* CABAC fX264opCabacSwitch */
+            check_Cabac.CheckState = CheckState.Checked;
+
+            /* Standardize the option string */
+            rtf_x264Query.Text = "";
         }
 
         private void loadUserDefaults()
@@ -391,11 +524,6 @@ namespace Handbrake
             }
         }
 
-        private void btn_h264Clear_Click(object sender, EventArgs e)
-        {
-            rtf_h264advanced.Text = "";
-        }
-
         private void btn_ActivityWindow_Click(object sender, EventArgs e)
         {
             Form ActivityWindow = new frmActivityWindow();
@@ -436,7 +564,7 @@ namespace Handbrake
                 drp_audioCodec.Items.Add("AC3");
                 drp_audioCodec.Items.Add("Vorbis");
                 drp_audioCodec.SelectedIndex = 0;
-            }    
+            }
         }
         #endregion
 
@@ -937,7 +1065,7 @@ namespace Handbrake
                 check_turbo.CheckState = CheckState.Unchecked;
                 check_turbo.Enabled = false;
                 h264Tab.Enabled = false;
-                rtf_h264advanced.Text = "";
+                rtf_x264Query.Text = "";
                 check_iPodAtom.Enabled = false;
                 check_iPodAtom.Checked = false;
                 check_optimiseMP4.Enabled = false;
@@ -956,6 +1084,133 @@ namespace Handbrake
                     drp_anamorphic.Items.Add("Loose");
             }
 
+        }
+
+        #endregion
+
+        #region Advanced H264 Options Changed
+
+        /*
+         * x264 widgets
+         */
+        private void drop_refFrames_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            x264PanelFunctions.on_x264_WidgetChange("ref", this);
+        }
+
+        private void check_mixedReferences_CheckedChanged(object sender, EventArgs e)
+        {
+            x264PanelFunctions.on_x264_WidgetChange("mixed-refs", this);
+        }
+
+        private void drop_bFrames_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            x264PanelFunctions.on_x264_WidgetChange("bframes", this);
+        }
+
+        private void drop_directPrediction_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            x264PanelFunctions.on_x264_WidgetChange("direct", this);
+        }
+
+        private void check_weightedBFrames_CheckedChanged(object sender, EventArgs e)
+        {
+            x264PanelFunctions.on_x264_WidgetChange("weightb", this);
+        }
+
+        private void check_bFrameDistortion_CheckedChanged(object sender, EventArgs e)
+        {
+            x264PanelFunctions.on_x264_WidgetChange("brdo", this);
+        }
+
+        private void check_BidirectionalRefinement_CheckedChanged(object sender, EventArgs e)
+        {
+            x264PanelFunctions.on_x264_WidgetChange("bime", this);
+        }
+
+        private void check_pyrmidalBFrames_CheckedChanged(object sender, EventArgs e)
+        {
+            x264PanelFunctions.on_x264_WidgetChange("b-pyramid", this);
+        }
+
+        private void drop_MotionEstimationMethod_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            x264PanelFunctions.on_x264_WidgetChange("me", this);
+        }
+
+        private void drop_MotionEstimationRange_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            x264PanelFunctions.on_x264_WidgetChange("merange", this);
+        }
+
+        private void drop_subpixelMotionEstimation_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            x264PanelFunctions.on_x264_WidgetChange("subq", this);
+        }
+
+        private void drop_analysis_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            x264PanelFunctions.on_x264_WidgetChange("analyse", this);
+        }
+
+        private void check_8x8DCT_CheckedChanged(object sender, EventArgs e)
+        {
+            x264PanelFunctions.on_x264_WidgetChange("8x8dct", this);
+        }
+
+        private void drop_deblockAlpha_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            x264PanelFunctions.on_x264_WidgetChange("deblock", this);
+
+        }
+
+        private void drop_deblockBeta_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            x264PanelFunctions.on_x264_WidgetChange("deblock", this);
+
+        }
+
+        private void drop_trellis_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            x264PanelFunctions.on_x264_WidgetChange("trellis", this);
+        }
+
+        private void check_noFastPSkip_CheckedChanged(object sender, EventArgs e)
+        {
+            x264PanelFunctions.on_x264_WidgetChange("no-fast-pskip", this);
+        }
+
+        private void check_noDCTDecimate_CheckedChanged(object sender, EventArgs e)
+        {
+            x264PanelFunctions.on_x264_WidgetChange("no-dct-decimate", this);
+
+        }
+
+        private void check_Cabac_CheckedChanged(object sender, EventArgs e)
+        {
+            x264PanelFunctions.on_x264_WidgetChange("cabac", this);
+        }
+
+        /*
+         * Buttons and x264 RTF Box
+         */
+        private void rtf_x264Query_TextChanged(object sender, EventArgs e)
+        {
+            if (rtf_x264Query.Text.EndsWith("\n"))
+            {
+                rtf_x264Query.Text = rtf_x264Query.Text.Replace("\n", "");
+                x264PanelFunctions.X264_StandardizeOptString(this);
+                x264PanelFunctions.X264_SetCurrentSettingsInPanel(this);
+
+                if (rtf_x264Query.Text == "")
+                    x264PanelFunctions.reset2Defaults(this);
+            }
+        }
+
+        private void btn_reset_Click(object sender, EventArgs e)
+        {
+            rtf_x264Query.Text = "";
+            x264PanelFunctions.reset2Defaults(this);
         }
 
         #endregion
@@ -1158,13 +1413,19 @@ namespace Handbrake
 
             if ((selectedPreset == (presetName[0])) || (selectedPreset == ("--" + presetName[0])))
             {
+                //Ok, Reset all the H264 widgets before changing the preset
+                x264PanelFunctions.reset2Defaults(this);
+
                 // Send the query from the file to the Query Parser class
                 Functions.QueryParser presetQuery = Functions.QueryParser.Parse(preset);
 
                 // Now load the preset
                 hb_common_func.presetLoader(this, presetQuery, selectedPreset);
-            }
 
+                // The x264 widgets will need updated, so do this now:
+                x264PanelFunctions.X264_StandardizeOptString(this);
+                x264PanelFunctions.X264_SetCurrentSettingsInPanel(this);
+            }
         }
 
         private void btn_addPreset_Click(object sender, EventArgs e)
@@ -1342,6 +1603,7 @@ namespace Handbrake
         }
 
         #endregion
+
 
 
         // This is the END of the road ------------------------------------------------------------------------------

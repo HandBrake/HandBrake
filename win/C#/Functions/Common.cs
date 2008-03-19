@@ -323,7 +323,7 @@ namespace Handbrake.Functions
 
             // H264 Tab & Preset Name
             #region other
-            mainWindow.rtf_h264advanced.Text = presetQuery.H264Query;
+            mainWindow.rtf_x264Query.Text = presetQuery.H264Query;
 
             // Set the preset name
             mainWindow.groupBox_output.Text = "Output Settings (Preset: " + name + ")";
@@ -782,7 +782,7 @@ namespace Handbrake.Functions
             // H264 Tab
             #region  H264 Tab
 
-            string h264Advanced = mainWindow.rtf_h264advanced.Text;
+            string h264Advanced = mainWindow.rtf_x264Query.Text;
 
             if ((h264Advanced == ""))
                 h264Advanced = "";
