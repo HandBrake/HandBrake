@@ -97,6 +97,20 @@ else
 MAKE=make
 fi
 
+# If the user included the --snapshot argument, mark it down.
+if [[ $1 = "--snapshot" ]]
+then
+    SNAPSHOT=1
+else
+    SNAPSHOT=0
+fi
+
+# Generating the HB_BUILD and HB_VERSION for snapshots requires
+# the build date, working path, and current SVN revision. 
+BUILD_DATE=$(date +%Y%m%d)
+FULL_PATH=$(pwd)
+SVN_REV=$(svnversion)
+
 # Generate config.jam
 rm -f config.jam
 cat << EOF > config.jam
@@ -109,6 +123,10 @@ OPTIM    = $OPTIM ;
 DEFINES  = $DEFINES ;
 LINKLIBS = $LINKLIBS ;
 MAKE     = $MAKE ;
+SNAPSHOT = $SNAPSHOT ;
+BUILD_DATE = $BUILD_DATE ;
+FULL_PATH = $FULL_PATH ;
+SVN_REV = $SVN_REV ;
 EOF
 
 echo

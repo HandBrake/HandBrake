@@ -11,13 +11,30 @@ if ! $(DEFINES)
     Exit "Please run ./configure first." ;
 }
 
-HB_VERSION  = 0.9.2 ;
-HB_BUILD    = 2008021900 ;
+# This line needs to be manually bumped for each release.
+HB_VERSION  = 0.9.3 ;
+
+# If the user configured with the --snapshot argument,
+# generate  version and build numbers that include
+# the svn revision and are marked as unstable.
+if $(SNAPSHOT) = 1
+{
+HB_VERSION = "$(HB_VERSION)svn$(SVN_REV)" ;
+HB_BUILD = "$(BUILD_DATE)01" ;
+}
+else
+{
+HB_BUILD = "$(BUILD_DATE)00" ;
+}
+
 DEFINES    += HB_VERSION=\\\"$(HB_VERSION)\\\" HB_BUILD=$(HB_BUILD) ;
 LANGUAGES   = fr de it pl ru nl es pt ja ;
 RM          = rm -rf ;
 
-# Build HandBrake.app using Xcode
+# Build HandBrake.app using Xcode --
+# Getting the right version and build numbers
+# requires editing the .plist and specifying
+# extra CFLAGs.
 rule OSXApp
 {
     Depends     exe   : $(<) ;
@@ -27,7 +44,12 @@ rule OSXApp
 actions OSXApp
 {
     $(RM) $(<) macosx/build/HandBrake.app && \
-      ( cd macosx && xcodebuild -target libhb -target HandBrake -target HandBrakeCLI ) && \
+      ( cd macosx && \
+         defaults write "$(FULL_PATH)"/macosx/HandBrake CFBundleGetInfoString '"$(HB_VERSION)"' &&\
+         defaults write "$(FULL_PATH)"/macosx/HandBrake CFBundleShortVersionString '"$(HB_VERSION)"' &&\
+         defaults write "$(FULL_PATH)"/macosx/HandBrake CFBundleVersion '"$(HB_BUILD)"' &&\
+         plutil -convert xml1 "$(FULL_PATH)"/macosx/HandBrake.plist &&\
+        xcodebuild OTHER_CFLAGS_QUOTED_1="-g -HB_BUILD="$(HB_BUILD)" -HB_VERSION=\\\"$(HB_VERSION)\\\" -DHB_BUILD="$(HB_BUILD)" -DHB_VERSION=\\\"$(HB_VERSION)\\\" -CURRENT_PROJECT_VERSION=\\\"$(HB_VERSION)\\\" " -target libhb -target HandBrake -target HandBrakeCLI ) && \
       for i in $(LANGUAGES) ; do \
         ( cd $(<)/Contents/Resources && \
           cp -r English.lproj $i.lproj && \
