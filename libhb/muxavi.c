@@ -314,7 +314,7 @@ static int AVIInit( hb_mux_object_t * m )
     h.Type       = FOURCC( "vids" );
 
     if( job->vcodec == HB_VCODEC_FFMPEG )
-        h.Handler = FOURCC( "fmp4" );
+        h.Handler = FOURCC( "divx" );
     else if( job->vcodec == HB_VCODEC_XVID )
         h.Handler = FOURCC( "xvid" );
     else if( job->vcodec == HB_VCODEC_X264 )
@@ -334,7 +334,7 @@ static int AVIInit( hb_mux_object_t * m )
     f.Planes      = 1;
     f.BitCount    = 24;
     if( job->vcodec == HB_VCODEC_FFMPEG )
-        f.Compression = FOURCC( "FMP4" );
+        f.Compression = FOURCC( "DX50" );
     else if( job->vcodec == HB_VCODEC_XVID )
         f.Compression = FOURCC( "XVID" );
     else if( job->vcodec == HB_VCODEC_X264 )
