@@ -136,7 +136,7 @@ int          hb_dvd_chapter( hb_dvd_t * );
 int          hb_dvd_is_break( hb_dvd_t * d );
 void         hb_dvd_close( hb_dvd_t ** );
 
-hb_stream_t * hb_stream_open( char * path );
+hb_stream_t * hb_stream_open( char * path, int opentype );
 void		 hb_stream_close( hb_stream_t ** );
 hb_title_t * hb_stream_title_scan( hb_stream_t *);
 int          hb_stream_read( hb_stream_t *, hb_buffer_t *);

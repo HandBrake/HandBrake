@@ -70,7 +70,7 @@ static void ScanFunc( void * _data )
             }
         }
     }
-    else if ( (data->stream = hb_stream_open (data->path)) != NULL )
+    else if ( (data->stream = hb_stream_open( data->path, 0 ) ) != NULL )
     {
         hb_list_add( data->list_title, hb_stream_title_scan( data->stream ) );
     }

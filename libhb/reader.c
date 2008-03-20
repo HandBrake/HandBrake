@@ -68,7 +68,7 @@ static void ReaderFunc( void * _r )
 
     if( !( r->dvd = hb_dvd_init( r->title->dvd ) ) )
     {
-        if ( !(r->stream = hb_stream_open(r->title->dvd) ) )
+        if ( !( r->stream = hb_stream_open( r->title->dvd, 1 ) ) )
         {
           return;
         }
@@ -212,7 +212,7 @@ static void ReaderFunc( void * _r )
                  * new packet lines up with that of the previous packet.
                  */
                 int64_t scr_delta = buf->stop - r->last_scr;
-                if ( scr_delta > 67500 || scr_delta < -900 )
+                if ( scr_delta > (90*700) || scr_delta < -90 )
                 {
                     ++r->scr_changes;
                     r->scr_offset += scr_delta - 1;

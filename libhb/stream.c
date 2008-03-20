@@ -12,77 +12,92 @@
 
 #define min(a, b) a < b ? a : b
 
-typedef enum { hb_stream_type_unknown = 0, hb_stream_type_transport, hb_stream_type_program } hb_stream_type_t;
+typedef enum {
+    hb_stream_type_unknown = 0,
+    hb_stream_type_transport,
+    hb_stream_type_program
+} hb_stream_type_t;
 
 #define kMaxNumberVideoPIDS 1
-#define kMaxNumberAudioPIDS 16
+#define kMaxNumberAudioPIDS 15
 #define kMaxNumberDecodeStreams (kMaxNumberVideoPIDS+kMaxNumberAudioPIDS)
 #define kMaxNumberPMTStreams 32
 
 
 struct hb_stream_s
 {
-    char         * path;
-	FILE		 * file_handle;
-	hb_stream_type_t stream_type;
+    int     frames;             /* video frames so far */
+    int     errors;             /* total errors so far */
+    int     last_error_frame;   /* frame # at last error message */
+    int     last_error_count;   /* # errors at last error message */
 
-    int              frames;            /* video frames so far */
-    int              errors;            /* total errors so far */
-    int              last_error_frame;  /* frame # at last error message */
-    int              last_error_count;  /* # errors at last error message */
+    int64_t ts_lastpcr;         /* the last pcr we found in the TS stream */
+    int64_t ts_nextpcr;         /* the next pcr to put in a PS packet */
 
-    int64_t          ts_lastpcr;    /* the last pcr we found in the TS stream */
-    int64_t          ts_nextpcr;    /* the next pcr to put in a PS packet */
+    uint8_t *ts_buf[kMaxNumberDecodeStreams];
+    int     ts_pos[kMaxNumberDecodeStreams];
+    int8_t  ts_foundfirst[kMaxNumberDecodeStreams];
+    int8_t  ts_skipbad[kMaxNumberDecodeStreams];
+    int8_t  ts_streamcont[kMaxNumberDecodeStreams];
+    int8_t  ts_start[kMaxNumberDecodeStreams];
 
-	int				 ts_video_pids[kMaxNumberVideoPIDS];
-	int				 ts_audio_pids[kMaxNumberAudioPIDS];
+    uint8_t *fwrite_buf;        /* PS buffer (set by hb_ts_stream_decode) */
+    uint8_t *fwrite_buf_orig;   /* PS buffer start (set by hb_ts_stream_decode) */
 
-	int				 ts_number_video_pids;
-	int				 ts_number_audio_pids;
+    /*
+     * Stuff before this point is dynamic state updated as we read the
+     * stream. Stuff after this point is stream description state that
+     * we learn during the initial scan but cache so it can be
+     * reused during the conversion read.
+     */
+    int16_t ts_video_pids[kMaxNumberVideoPIDS];
+    int16_t ts_audio_pids[kMaxNumberAudioPIDS];
 
-	uint8_t         *ts_buf[kMaxNumberDecodeStreams];
-	int				 ts_pos[kMaxNumberDecodeStreams];
-	int				 ts_streamid[kMaxNumberDecodeStreams];
-	int				 ts_audio_stream_type[kMaxNumberDecodeStreams];
-	int8_t           ts_foundfirst[kMaxNumberDecodeStreams];
-	int8_t           ts_skipbad[kMaxNumberDecodeStreams];
-	int8_t           ts_streamcont[kMaxNumberDecodeStreams];
-	int8_t           ts_start[kMaxNumberDecodeStreams];
+    uint8_t ts_number_video_pids;
+    uint8_t ts_number_audio_pids;
 
-	struct {
-		int lang_code;
-		int flags;
-		int rate;
-		int bitrate;
-	} a52_info[kMaxNumberAudioPIDS];
+    uint8_t ts_streamid[kMaxNumberDecodeStreams];
+    uint8_t ts_audio_stream_type[kMaxNumberDecodeStreams];
 
-	struct
-	{
-		unsigned short program_number;
-		unsigned short program_map_PID;
-	} pat_info[kMaxNumberPMTStreams];
-	int	 ts_number_pat_entries;
+    char    *path;
+    FILE    *file_handle;
+    hb_stream_type_t stream_type;
+    int     opentype;
 
-	struct
-	{
-		int reading;
-		unsigned char *tablebuf;
-		unsigned int tablepos;
-		unsigned char current_continuity_counter;
+    struct {
+        int lang_code;
+        int flags;
+        int rate;
+        int bitrate;
+    } a52_info[kMaxNumberAudioPIDS];
 
-		int section_length;
-		int program_number;
-		unsigned int PCR_PID;
-		int program_info_length;
-		unsigned char *progam_info_descriptor_data;
-		struct
-		{
-			unsigned char stream_type;
-			unsigned short elementary_PID;
-			unsigned short ES_info_length;
-			unsigned char *es_info_descriptor_data;
-		} pmt_stream_info[kMaxNumberPMTStreams];
-	} pmt_info;
+    struct
+    {
+        unsigned short program_number;
+        unsigned short program_map_PID;
+    } pat_info[kMaxNumberPMTStreams];
+    int     ts_number_pat_entries;
+
+    struct
+    {
+        int reading;
+        unsigned char *tablebuf;
+        unsigned int tablepos;
+        unsigned char current_continuity_counter;
+
+        int section_length;
+        int program_number;
+        unsigned int PCR_PID;
+        int program_info_length;
+        unsigned char *progam_info_descriptor_data;
+        struct
+        {
+            unsigned char stream_type;
+            unsigned short elementary_PID;
+            unsigned short ES_info_length;
+            unsigned char *es_info_descriptor_data;
+        } pmt_stream_info[kMaxNumberPMTStreams];
+    } pmt_info;
 };
 
 /***********************************************************************
@@ -101,12 +116,35 @@ static off_t align_to_next_packet(FILE* f);
 /*
  * streams have a bunch of state that's learned during the scan. We don't
  * want to throw away the state when scan does a close then relearn
- * everything when reader does an open. So we basically ignore
- * a stream close, remember the most recent stream we've opened and only
- * delete it when a stream of a different name is opened.
+ * everything when reader does an open. So we save the stream state on
+ * the close following a scan and reuse it when 'reader' does an open.
  */
-static hb_stream_t *current_stream;
+static hb_list_t *stream_state_list;
 
+static hb_stream_t *hb_stream_lookup( const char *path )
+{
+    if ( stream_state_list == NULL )
+        return NULL;
+
+    hb_stream_t *ss;
+    int i = 0;
+
+    while ( ( ss = hb_list_item( stream_state_list, i++ ) ) != NULL )
+    {
+        if ( strcmp( path, ss->path ) == 0 )
+        {
+            break;
+        }
+    }
+    return ss;
+}
+
+static void hb_stream_state_delete( hb_stream_t *ss )
+{
+    hb_list_rem( stream_state_list, ss );
+    free( ss->path );
+    free( ss );
+}
 
 static inline int check_ps_sync(const uint8_t *buf)
 {
@@ -176,10 +214,8 @@ static int hb_stream_get_type(hb_stream_t *stream)
     return 0;
 }
 
-static void hb_stream_delete( hb_stream_t ** _d )
+static void hb_stream_delete_dynamic( hb_stream_t *d )
 {
-    hb_stream_t * d = *_d;
-
     if( d->file_handle )
     {
         fclose( d->file_handle );
@@ -196,9 +232,13 @@ static void hb_stream_delete( hb_stream_t ** _d )
 			d->ts_buf[i] = NULL;
 		}
 	}
+}
+
+static void hb_stream_delete( hb_stream_t *d )
+{
+    hb_stream_delete_dynamic( d );
     free( d->path );
     free( d );
-    *_d = NULL;
 }
 
 /***********************************************************************
@@ -206,32 +246,83 @@ static void hb_stream_delete( hb_stream_t ** _d )
  ***********************************************************************
  *
  **********************************************************************/
-hb_stream_t * hb_stream_open( char * path )
+hb_stream_t * hb_stream_open( char *path, int opentype )
 {
-    if (current_stream)
-    {
-        if (strcmp( path, current_stream->path ) == 0 )
-        {
-            hb_stream_seek( current_stream, 0. );
-            return current_stream;
-        }
-        hb_stream_delete( &current_stream );
-    }
-    hb_stream_t *d = calloc( sizeof( hb_stream_t ), 1 );
 
-    /* open the file and see if it's a type we know about. return a stream
-     * reference structure if we can deal with it & NULL otherwise. */
-    if( ( d->file_handle = fopen( path, "rb" ) ) )
+    FILE *f = fopen( path, "r" );
+    if ( f == NULL )
     {
-        d->path = strdup( path );
-        if (d->path != NULL &&  hb_stream_get_type( d ) != 0 )
+        hb_log( "hb_stream_open: open %s failed", path );
+        return NULL;
+    }
+
+    hb_stream_t *d = calloc( sizeof( hb_stream_t ), 1 );
+    if ( d == NULL )
+    {
+        fclose( f );
+        hb_log( "hb_stream_open: can't allocate space for %s stream state", path );
+        return NULL;
+    }
+
+    /*
+     * if we're opening the stream to read & convert, we need
+     * the state we saved when we scanned the stream. if we're
+     * opening the stream to scan it we want to rebuild the state
+     * (even if we have saved state, the stream may have changed).
+     */
+    hb_stream_t *ss = hb_stream_lookup( path );
+    if ( opentype == 1 )
+    {
+        /* opening to read - we must have saved state */
+        if ( ss == NULL )
         {
-            current_stream = d;
-            return d;
+            hb_log( "hb_stream_open: error: re-opening %s but no scan state", path );
+            fclose( f );
+            free( d );
+            return NULL;
         }
-        fclose( d->file_handle );
-        if (d->path)
-            free( d->path );
+        /*
+         * copy the saved state since we might be encoding the same stream
+         * multiple times.
+         */
+        memcpy( d, ss, sizeof(*d) );
+        d->file_handle = f;
+        d->opentype = opentype;
+        d->path = strdup( path );
+
+        if ( d->stream_type == hb_stream_type_transport )
+        {
+            int i = 0;
+            for ( ; i < d->ts_number_video_pids + d->ts_number_audio_pids; i++)
+            {
+                d->ts_buf[i] = malloc( HB_DVD_READ_BUFFER_SIZE );
+            }
+            hb_stream_seek( d, 0. );
+        }
+        return d;
+    }
+
+    /*
+     * opening for scan - delete any saved state then (re)scan the stream.
+     * If it's something we can deal with (MPEG2 PS or TS) return a stream
+     * reference structure & null otherwise.
+     */
+
+    if ( ss != NULL )
+    {
+        hb_stream_state_delete( ss );
+    }
+    d->file_handle = f;
+    d->opentype = opentype;
+    d->path = strdup( path );
+    if (d->path != NULL &&  hb_stream_get_type( d ) != 0 )
+    {
+        return d;
+    }
+    fclose( d->file_handle );
+    if (d->path)
+    {
+        free( d->path );
     }
     hb_log( "hb_stream_open: open %s failed", path );
     free( d );
@@ -252,6 +343,24 @@ void hb_stream_close( hb_stream_t ** _d )
                 stream->errors, (double)stream->errors * 100. / 
                 (double)stream->frames );
     }
+    /*
+     * if the stream was opened for a scan, cache the result, otherwise delete
+     * the state.
+     */
+    if ( stream->opentype == 0 )
+    {
+        hb_stream_delete_dynamic( stream );
+        if ( stream_state_list == NULL )
+        {
+            stream_state_list = hb_list_init();
+        }
+        hb_list_add( stream_state_list, stream );
+    }
+    else
+    {
+        hb_stream_delete( stream );
+    }
+    *_d = NULL;
 }
 
 /* when the file was first opened we made entries for all the audio elementary
@@ -960,77 +1069,57 @@ static off_t align_to_next_packet(FILE* f)
 	return pos;
 }
 
-// ------------------------------------------------------------------------------------
 
-int bitpos = 0;
-unsigned int bitval = 0;
-unsigned char* bitbuf = NULL;
-unsigned int bitmask[] = {
+typedef struct {
+    uint8_t *buf;
+    uint32_t val;
+    int pos;
+} bitbuf_t;
+
+static const unsigned int bitmask[] = {
 	0x0,0x1,0x3,0x7,0xf,0x1f,0x3f,0x7f,0xff,
 	0x1ff,0x3ff,0x7ff,0xfff,0x1fff,0x3fff,0x7fff,0xffff,
 	0x1ffff,0x3ffff,0x7ffff,0xfffff,0x1fffff,0x3fffff,0x7fffff,0xffffff,
 	0x1ffffff,0x3ffffff,0x7ffffff,0xfffffff,0x1fffffff,0x3fffffff,0x7fffffff,0xffffffff};
 
-static inline void set_buf(unsigned char* buf, int bufsize, int clear)
+static inline void set_buf(bitbuf_t *bb, uint8_t* buf, int bufsize, int clear)
 {
-	bitpos = 0;
-	bitbuf = buf;
-	bitval = (bitbuf[0] << 24) | (bitbuf[1] << 16) | (bitbuf[2] << 8) | bitbuf[3];
+	bb->pos = 0;
+	bb->buf = buf;
+	bb->val = (bb->buf[0] << 24) | (bb->buf[1] << 16) |
+              (bb->buf[2] << 8) | bb->buf[3];
 	if (clear)
-		memset(bitbuf, 0, bufsize);
+		memset(bb->buf, 0, bufsize);
 }
 
-static inline int buf_size()
+static inline int buf_size(bitbuf_t *bb)
 {
-	return bitpos >> 3;
+	return bb->pos >> 3;
 }
 
-static inline void set_bits(unsigned int val, int bits)
-{
-	val &= bitmask[bits];
-
-	while (bits > 0)
-	{
-		int bitsleft = (8 - (bitpos & 7));
-		if (bits >= bitsleft)
-		{
-			bitbuf[bitpos >> 3] |= val >> (bits - bitsleft);
-			bitpos += bitsleft;
-			bits -= bitsleft;
-			val &= bitmask[bits];
-		}
-		else
-		{
-			bitbuf[bitpos >> 3] |= val << (bitsleft - bits);
-			bitpos += bits;
-			bits = 0;
-		}
-	}
-}
-
-static inline unsigned int get_bits(int bits)
+static inline unsigned int get_bits(bitbuf_t *bb, int bits)
 {
 	unsigned int val;
-	int left = 32 - (bitpos & 31);
+	int left = 32 - (bb->pos & 31);
 
 	if (bits < left)
 	{
-		val = (bitval >> (left - bits)) & bitmask[bits];
-		bitpos += bits;
+		val = (bb->val >> (left - bits)) & bitmask[bits];
+		bb->pos += bits;
 	}
 	else
 	{
-		val = (bitval & bitmask[left]) << (bits - left);
-		bitpos += left;
+		val = (bb->val & bitmask[left]) << (bits - left);
+		bb->pos += left;
 		bits -= left;
 
-		int pos = bitpos >> 3;
-		bitval = (bitbuf[pos] << 24) | (bitbuf[pos + 1] << 16) | (bitbuf[pos + 2] << 8) | bitbuf[pos + 3];
+		int pos = bb->pos >> 3;
+		bb->val = (bb->buf[pos] << 24) | (bb->buf[pos + 1] << 16) | (bb->buf[pos + 2] << 8) | bb->buf[pos + 3];
 
 		if (bits > 0)
 		{
-			val |= (bitval >> (32 - bits)) & bitmask[bits];
-			bitpos += bits;
+			val |= (bb->val >> (32 - bits)) & bitmask[bits];
+			bb->pos += bits;
 		}
 	}
 
@@ -1064,49 +1153,50 @@ static void decode_element_descriptors(hb_stream_t* stream, int esindx,
 
 int decode_program_map(hb_stream_t* stream)
 {
-	set_buf(stream->pmt_info.tablebuf, stream->pmt_info.tablepos, 0);
+    bitbuf_t bb;
+	set_buf(&bb, stream->pmt_info.tablebuf, stream->pmt_info.tablepos, 0);
 
-    get_bits(8);  // table_id
-    get_bits(4);
-    unsigned int section_length = get_bits(12);
+    get_bits(&bb, 8);  // table_id
+    get_bits(&bb, 4);
+    unsigned int section_length = get_bits(&bb, 12);
     stream->pmt_info.section_length = section_length;
 
-    unsigned int program_number = get_bits(16);
+    unsigned int program_number = get_bits(&bb, 16);
     stream->pmt_info.program_number = program_number;
-    get_bits(2);
-    get_bits(5);  // version_number
-    get_bits(1);
-    get_bits(8);  // section_number
-    get_bits(8);  // last_section_number
-    get_bits(3);
-    unsigned int PCR_PID = get_bits(13);
+    get_bits(&bb, 2);
+    get_bits(&bb, 5);  // version_number
+    get_bits(&bb, 1);
+    get_bits(&bb, 8);  // section_number
+    get_bits(&bb, 8);  // last_section_number
+    get_bits(&bb, 3);
+    unsigned int PCR_PID = get_bits(&bb, 13);
     stream->pmt_info.PCR_PID = PCR_PID;
-    get_bits(4);
-    unsigned int program_info_length = get_bits(12);
+    get_bits(&bb, 4);
+    unsigned int program_info_length = get_bits(&bb, 12);
     stream->pmt_info.program_info_length = program_info_length;
 
 	int i=0;
 	unsigned char *descriptor_buf = (unsigned char *) malloc(program_info_length);
 	for (i = 0; i < program_info_length; i++)
 	{
-	  descriptor_buf[i] = get_bits(8);
+	  descriptor_buf[i] = get_bits(&bb, 8);
 	}
 
 	int cur_pos =  9 /* data after the section length field*/ + program_info_length;
 	int done_reading_stream_types = 0;
 	while (!done_reading_stream_types)
 	{
-	  unsigned char stream_type = get_bits(8);
-		  get_bits(3);
-	  unsigned int elementary_PID = get_bits(13);
-		  get_bits(4);
-	  unsigned int ES_info_length = get_bits(12);
+	  unsigned char stream_type = get_bits(&bb, 8);
+		  get_bits(&bb, 3);
+	  unsigned int elementary_PID = get_bits(&bb, 13);
+		  get_bits(&bb, 4);
+	  unsigned int ES_info_length = get_bits(&bb, 12);
 
 	  int i=0;
 	  unsigned char *ES_info_buf = (unsigned char *) malloc(ES_info_length);
 	  for (i=0; i < ES_info_length; i++)
 	  {
-		ES_info_buf[i] = get_bits(8);
+		ES_info_buf[i] = get_bits(&bb, 8);
 	  }
 
 	  if (stream_type == 0x02)
@@ -1261,17 +1351,18 @@ int decode_PAT(unsigned char *buf, hb_stream_t *stream)
             unsigned int pos = 0;
             //while (pos < tablepos)
             {
-                    set_buf(tablebuf + pos, tablepos - pos, 0);
+                    bitbuf_t bb;
+                    set_buf(&bb, tablebuf + pos, tablepos - pos, 0);
 
-                    unsigned char section_id	= get_bits(8);
-                    get_bits(4);
-                    unsigned int section_len	= get_bits(12);
-                    get_bits(16); // transport_id
-                    get_bits(2);
-                    get_bits(5);  // version_num
-                    get_bits(1);  // current_next
-                    get_bits(8);  // section_num
-                    get_bits(8);  // last_section
+                    unsigned char section_id	= get_bits(&bb, 8);
+                    get_bits(&bb, 4);
+                    unsigned int section_len	= get_bits(&bb, 12);
+                    get_bits(&bb, 16); // transport_id
+                    get_bits(&bb, 2);
+                    get_bits(&bb, 5);  // version_num
+                    get_bits(&bb, 1);  // current_next
+                    get_bits(&bb, 8);  // section_num
+                    get_bits(&bb, 8);  // last_section
 
                     switch (section_id)
                     {
@@ -1284,17 +1375,17 @@ int decode_PAT(unsigned char *buf, hb_stream_t *stream)
 						  stream->ts_number_pat_entries = 0;
                           while ((curr_pos < section_len) && (stream->ts_number_pat_entries < kMaxNumberPMTStreams))
                           {
-                            unsigned int pkt_program_num = get_bits(16);
+                            unsigned int pkt_program_num = get_bits(&bb, 16);
 							stream->pat_info[stream->ts_number_pat_entries].program_number = pkt_program_num;
 
-                            get_bits(3);  // Reserved
+                            get_bits(&bb, 3);  // Reserved
                             if (pkt_program_num == 0)
                             {
-                              get_bits(13); // pkt_network_id
+                              get_bits(&bb, 13); // pkt_network_id
                             }
                             else
                             {
-                              unsigned int pkt_program_map_PID = get_bits(13);
+                              unsigned int pkt_program_map_PID = get_bits(&bb, 13);
                                 stream->pat_info[stream->ts_number_pat_entries].program_map_PID = pkt_program_map_PID;
                             }
                             curr_pos += 4;
@@ -1414,55 +1505,53 @@ static void hb_ts_stream_find_pids(hb_stream_t *stream)
  }
 
 
-static uint8_t *fwrite_buf;
-static uint8_t *fwrite_buf_orig;
-
-static void set_fwrite_buf( uint8_t *obuf )
+static void fwrite64( hb_stream_t *stream, void *buf, int size )
 {
-    fwrite_buf = obuf;
-    fwrite_buf_orig = obuf;
-}
-
-static void fwrite64( void* buf, int size )
-{
-    if ( (fwrite_buf - fwrite_buf_orig) + size > 2048 )
+    if ( (stream->fwrite_buf - stream->fwrite_buf_orig) + size > 2048 )
     {
         hb_log( "steam fwrite64 buffer overflow - writing %d with %d already",
-                size, fwrite_buf - fwrite_buf_orig );
+                size, stream->fwrite_buf - stream->fwrite_buf_orig );
         return;
     }
-    memcpy( fwrite_buf, buf, size );
-    fwrite_buf += size;
+    memcpy( stream->fwrite_buf, buf, size );
+    stream->fwrite_buf += size;
 }
 
 static void write_pack(hb_stream_t* stream, uint64_t time, int stuffing)
 {
-	uint8_t buf[64];
-	set_buf(buf, 64, 1);			// clear buffer
+	uint8_t buf[24];
 
-	set_bits(0x000001ba, 32);		// pack id								32
-	set_bits(1, 2);					// 0x01									2
-	set_bits(time >> 30, 3);	    // system_clock_reference_base			3
-	set_bits(1, 1);					// marker_bit							1
-	set_bits(time >> 15, 15);   	// system_clock_reference_base			15
-	set_bits(1, 1);					// marker_bit							1
-	set_bits(time, 15); 			// system_clock_reference_base1			15
-	set_bits(1, 1);					// marker_bit							1
-	set_bits(0, 9);		            // system_clock_reference_extension		9
-	set_bits(1, 1);					// marker_bit							1
-	set_bits(384000, 22);			// program_mux_rate						22
-	set_bits(1, 1);					// marker_bit							1
-	set_bits(1, 1);					// marker_bit							1
-	set_bits(31, 5);				// reserved								5
-	set_bits(stuffing, 3);			// pack_stuffing_length					3
-    while ( --stuffing >= 0 )
-    {
-        set_bits(0xff, 8 );
-    }
-	fwrite64(buf, buf_size());
+    buf[0] = 0x00;      // pack id
+    buf[1] = 0x00;
+    buf[2] = 0x01;
+    buf[3] = 0xba;
+
+    buf[4] = 0x44 |     // SCR
+             ( ( ( time >> 30 ) & 7 ) << 3 ) |
+             ( ( time >> 28 ) & 3 );
+    buf[5] = time >> 20;
+    buf[6] = 0x04 |
+             ( ( ( time >> 15 ) & 0x1f ) << 3 ) |
+             ( ( time >> 13 ) & 3 );
+    buf[7] = time >> 5;
+    buf[8] = 0x04 | ( time << 3 );
+
+    buf[9] = 0x01;      // SCR extension
+
+    buf[10] = 384000 >> (22 - 8);     // program mux rate
+    buf[11] = (uint8_t)( 384000 >> (22 - 16) );
+    buf[12] = (uint8_t)( 384000 << 2 ) | 0x03;
+
+    buf[13] = 0xf8 | stuffing;
+
+    int i;
+    for (i = 0; i < stuffing; ++i )
+        buf[14+i] = 0xff;
+
+	fwrite64(stream, buf, 14 + stuffing );
 }
 
-static void pad_buffer(int pad)
+static void pad_buffer(hb_stream_t* stream, int pad)
 {
 	pad -= 6;
 
@@ -1474,39 +1563,27 @@ static void pad_buffer(int pad)
 	buf[4] = pad >> 8;
     buf[5] = pad;
 
-	fwrite64(buf, 6);
+	fwrite64(stream, buf, 6);
 
 	buf[0] = 0xff;
     while ( --pad >= 0 )
     {
-		fwrite64(buf, 1);
+		fwrite64(stream, buf, 1);
 	}
 }
 
-static void make_pes_header(int len, uint8_t streamid)
+static void make_pes_header(hb_stream_t* stream, int len, uint8_t streamid)
 {
 	uint8_t buf[9];
-	set_buf(buf, 9, 1);		            // clear the buffer
 
-	set_bits(0x000001, 24);				// packet_start_code_prefix				24
-	set_bits(streamid, 8);          	// directory_stream_id					8
-	set_bits(len + 3, 16);				// PES_packet_length					16
-	set_bits(0x2, 2);					// '10'									2
-	set_bits(0, 2);						// PES_scrambling_control				2
-	set_bits(1, 1);						// PES_priority							1
-	set_bits(0, 1);						// data_alignment_indicator				1
-	set_bits(0, 1);						// copyright							1
-	set_bits(0, 1);						// original_or_copy						1
-	set_bits(0, 2);    					// PTS_DTS_flags						2
-	set_bits(0, 1);						// ESCR_flag							1
-	set_bits(0, 1);						// ES_rate_flag							1
-	set_bits(0, 1);						// DSM_trick_mode_flag					1
-	set_bits(0, 1);						// additional_copy_info_flag			1
-	set_bits(0, 1);						// PES_CRC_flag							1
-	set_bits(0, 1);						// PES_extension_flag					1
-	set_bits(0, 8);						// PES_header_data_length				8
+    memset(buf, 0, sizeof(buf) );
+    buf[2] = 1;
+    buf[3] = streamid;
+    buf[4] = ( len + 3 ) >> 8;
+    buf[5] = len + 3;
+    buf[6] = 0x88;
 
-    fwrite64(buf, 9);
+    fwrite64(stream, buf, 9);
 }
 
 static void generate_output_data(hb_stream_t *stream, int curstream)
@@ -1568,7 +1645,7 @@ static void generate_output_data(hb_stream_t *stream, int curstream)
 
             // Write out the PES header
             int hdrsize = 9 + tdat[8];
-            fwrite64(tdat, hdrsize);
+            fwrite64(stream, tdat, hdrsize);
 
             // add a four byte DVD ac3 stream header
             uint8_t ac3_substream_id[4];
@@ -1577,17 +1654,17 @@ static void generate_output_data(hb_stream_t *stream, int curstream)
             ac3_substream_id[1] = 0x01;         // number of sync words
             ac3_substream_id[2] = 0x00;         // first offset (16 bits)
             ac3_substream_id[3] = 0x02;
-            fwrite64(ac3_substream_id, 4);
+            fwrite64(stream, ac3_substream_id, 4);
 
             // add the rest of the data
-            fwrite64(tdat + hdrsize, stream->ts_pos[curstream] - hdrsize);
+            fwrite64(stream, tdat + hdrsize, stream->ts_pos[curstream] - hdrsize);
         }
         else
         {
             // not audio - don't need to modify the stream so write what we've got
             tdat[4] = plen >> 8;
             tdat[5] = plen;
-            fwrite64( tdat, stream->ts_pos[curstream] );
+            fwrite64( stream,  tdat, stream->ts_pos[curstream] );
         }
     }
     else
@@ -1596,12 +1673,12 @@ static void generate_output_data(hb_stream_t *stream, int curstream)
         // PES header. AC3 audio also needs its substream header.
         if ( stream->ts_audio_stream_type[curstream] != 0x81)
         {
-            make_pes_header(stream->ts_pos[curstream],
+            make_pes_header(stream, stream->ts_pos[curstream],
                             stream->ts_streamid[curstream]);
         }
         else
         {
-            make_pes_header(stream->ts_pos[curstream] + 4,
+            make_pes_header(stream, stream->ts_pos[curstream] + 4,
                             stream->ts_streamid[curstream]);
 
             // add a four byte DVD ac3 stream header
@@ -1611,16 +1688,16 @@ static void generate_output_data(hb_stream_t *stream, int curstream)
             ac3_substream_id[1] = 0x01;         // number of sync words
             ac3_substream_id[2] = 0x00;         // first offset (16 bits)
             ac3_substream_id[3] = 0x02;
-            fwrite64(ac3_substream_id, 4);
+            fwrite64(stream, ac3_substream_id, 4);
         }
-        fwrite64( tdat, stream->ts_pos[curstream] );
+        fwrite64( stream, tdat, stream->ts_pos[curstream] );
     }
 
     // Write padding
     int left = HB_DVD_READ_BUFFER_SIZE - len;
     if ( left >= 8 )
     {
-        pad_buffer(left);
+        pad_buffer(stream, left);
     }
 
     stream->ts_pos[curstream] = 0;
@@ -1717,7 +1794,12 @@ static int hb_ts_stream_decode( hb_stream_t *stream, uint8_t *obuf )
 	int curstream;
 	uint8_t buf[188];
 
-    set_fwrite_buf( obuf );
+    /*
+     * stash the output buffer pointer in our stream so we don't have to
+     * pass it & its original value to everything we call.
+     */
+    stream->fwrite_buf = obuf;
+    stream->fwrite_buf_orig = obuf;
 
 	// spin until we get a packet of data from some stream or hit eof
 	while ( 1 )
