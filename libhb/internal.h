@@ -166,6 +166,11 @@ union hb_esconfig_u
 
     struct
     {
+        uint8_t headers[3][HB_CONFIG_MAX_SIZE];
+    } theora;
+
+    struct
+    {
         uint8_t bytes[HB_CONFIG_MAX_SIZE];
         int     length;
     } aac;
@@ -199,6 +204,7 @@ enum
     WORK_ENCAVCODEC,
     WORK_ENCXVID,
     WORK_ENCX264,
+    WORK_ENCTHEORA,
     WORK_DECA52,
     WORK_DECDCA,
     WORK_DECAVCODEC,

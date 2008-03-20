@@ -1178,7 +1178,7 @@ static void ShowHelp()
 
 	"### Video Options------------------------------------------------------------\n\n"
 	"    -e, --encoder <string>  Set video library encoder (ffmpeg,xvid,\n"
-    "                            x264,x264b13,x264b30 default: ffmpeg)\n"
+    "                            x264,x264b13,x264b30,theora default: ffmpeg)\n"
 	"    -q, --quality <float>   Set video quality (0.0..1.0)\n"
 	"    -Q, --cqp               Use with -q for CQP instead of CRF\n"
     "    -S, --size <MB>         Set target size\n"
@@ -1585,6 +1585,10 @@ static int ParseOptions( int argc, char ** argv )
                 {
                     vcodec = HB_VCODEC_X264;
                     h264_30 = 1;
+                }
+                else if( !strcasecmp( optarg, "theora" ) )
+                {
+                    vcodec = HB_VCODEC_THEORA;
                 }
                 else
                 {

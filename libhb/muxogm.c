@@ -143,40 +143,57 @@ static int OGMInit( hb_mux_object_t * m )
 
 
     /* First pass: all b_o_s packets */
-
+    hb_log("muxogm: Writing b_o_s header packets");
     /* Video */
     mux_data = job->mux_data;
-    memset( &h, 0, sizeof( ogg_stream_header_t ) );
-    h.i_packet_type = 0x01;
-    memcpy( h.stream_type, "video    ", 8 );
-    if( mux_data->codec == HB_VCODEC_X264 )
+    switch( job->vcodec )
     {
-        memcpy( h.sub_type, "H264", 4 );
+        case HB_VCODEC_THEORA:
+            memcpy(&op, job->config.theora.headers[0], sizeof(op));
+            op.packet = job->config.theora.headers[0] + sizeof(op);
+            ogg_stream_packetin( &mux_data->os, &op );
+            break;
+        case HB_VCODEC_XVID:
+        case HB_VCODEC_X264:
+        case HB_VCODEC_FFMPEG:
+        {
+                memset( &h, 0, sizeof( ogg_stream_header_t ) );
+                h.i_packet_type = 0x01;
+                memcpy( h.stream_type, "video    ", 8 );
+                if( mux_data->codec == HB_VCODEC_X264 )
+                {
+                    memcpy( h.sub_type, "H264", 4 );
+                }
+                else if( mux_data->codec == HB_VCODEC_XVID )
+                {
+                    memcpy( h.sub_type, "XVID", 4 );
+                }
+                else
+                {
+                    memcpy( h.sub_type, "DX50", 4 );
+                }
+                SetDWLE( &h.i_size, sizeof( ogg_stream_header_t ) - 1);
+                SetQWLE( &h.i_time_unit, (int64_t) 10 * 1000 * 1000 *
+                         (int64_t) job->vrate_base / (int64_t) job->vrate );
+                SetQWLE( &h.i_samples_per_unit, 1 );
+                SetDWLE( &h.i_default_len, 0 );
+                SetDWLE( &h.i_buffer_size, 1024*1024 );
+                SetWLE ( &h.i_bits_per_sample, 0 );
+                SetDWLE( &h.header.video.i_width,  job->width );
+                SetDWLE( &h.header.video.i_height, job->height );
+                op.packet   = (unsigned char*)&h;
+                op.bytes    = sizeof( ogg_stream_header_t );
+                op.b_o_s    = 1;
+                op.e_o_s    = 0;
+                op.granulepos = 0;
+                op.packetno = mux_data->i_packet_no++;
+                ogg_stream_packetin( &mux_data->os, &op );
+                break;
+            }
+        default:
+            hb_error( "muxogm: unhandled video codec" );
+            *job->die = 1;
     }
-    else if( mux_data->codec == HB_VCODEC_XVID )
-    {
-        memcpy( h.sub_type, "XVID", 4 );
-    }
-    else
-    {
-        memcpy( h.sub_type, "DX50", 4 );
-    }
-    SetDWLE( &h.i_size, sizeof( ogg_stream_header_t ) - 1);
-    SetQWLE( &h.i_time_unit, (int64_t) 10 * 1000 * 1000 *
-             (int64_t) job->vrate_base / (int64_t) job->vrate );
-    SetQWLE( &h.i_samples_per_unit, 1 );
-    SetDWLE( &h.i_default_len, 0 );
-    SetDWLE( &h.i_buffer_size, 1024*1024 );
-    SetWLE ( &h.i_bits_per_sample, 0 );
-    SetDWLE( &h.header.video.i_width,  job->width );
-    SetDWLE( &h.header.video.i_height, job->height );
-    op.packet   = (unsigned char*)&h;
-    op.bytes    = sizeof( ogg_stream_header_t );
-    op.b_o_s    = 1;
-    op.e_o_s    = 0;
-    op.granulepos = 0;
-    op.packetno = mux_data->i_packet_no++;
-    ogg_stream_packetin( &mux_data->os, &op );
     OGMFlush( m, mux_data );
 
     /* Audio */
@@ -231,6 +248,30 @@ static int OGMInit( hb_mux_object_t * m )
     }
 
     /* second pass: all non b_o_s packets */
+    hb_log("muxogm: Writing non b_o_s header packets");
+    /* Video */
+    mux_data = job->mux_data;
+    switch( job->vcodec )
+    {
+        case HB_VCODEC_THEORA:
+            for (i = 1; i < 3; i++)
+            {
+                memcpy(&op, job->config.theora.headers[i], sizeof(op));
+                op.packet = job->config.theora.headers[i] + sizeof(op);
+                ogg_stream_packetin( &mux_data->os, &op );
+                OGMFlush( m, mux_data );
+            }
+            break;
+        case HB_VCODEC_XVID:
+        case HB_VCODEC_X264:
+        case HB_VCODEC_FFMPEG:
+            break;
+        default:
+            hb_error( "muxogm: unhandled video codec" );
+            *job->die = 1;
+    }
+
+    /* Audio */
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = hb_list_item( title->list_audio, i );
@@ -263,6 +304,11 @@ static int OGMMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
 
     switch( mux_data->codec )
     {
+        case HB_VCODEC_THEORA:
+            memcpy( &op, buf->data, sizeof( ogg_packet ) );
+            op.packet = malloc( op.bytes );
+            memcpy( op.packet, buf->data + sizeof( ogg_packet ), op.bytes );
+            break;
         case HB_VCODEC_FFMPEG:
         case HB_VCODEC_XVID:
         case HB_VCODEC_X264:

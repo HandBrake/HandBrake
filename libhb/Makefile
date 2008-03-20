@@ -21,7 +21,7 @@ ifeq ($(SYSTEM),Linux)
 	LDFLAGS += -lpthread -lm -ldl
 endif
 
-SRCS = common.c hb.c ports.c scan.c work.c decmpeg2.c encavcodec.c \
+SRCS = common.c hb.c ports.c scan.c work.c decmpeg2.c encavcodec.c enctheora.c \
 	   update.c demuxmpeg.c fifo.c render.c reader.c muxcommon.c stream.c \
 	   muxmp4.c sync.c decsub.c deca52.c decdca.c encfaac.c declpcm.c encx264.c \
 	   decavcodec.c encxvid.c muxmkv.c muxavi.c enclame.c muxogm.c encvorbis.c \
@@ -39,7 +39,8 @@ CONTRIBS = ../contrib/lib/liba52.a ../contrib/lib/libavformat.a \
 		   ../contrib/lib/libvorbisfile.a ../contrib/lib/libogg.a \
 		   ../contrib/lib/libsamplerate.a ../contrib/lib/libx264.a \
 		   ../contrib/lib/libxvidcore.a  ../contrib/lib/libmp4v2.a \
-		   ../contrib/lib/libmkv.a ../contrib/lib/libswscale.a
+		   ../contrib/lib/libmkv.a ../contrib/lib/libswscale.a \
+		   ../contrib/lib/libtheora.a
 else
 CONTRIBS = ../contrib/lib/liba52.a ../contrib/lib/libavformat.a \
 		   ../contrib/lib/libavcodec.a ../contrib/lib/libavutil.a \
@@ -51,7 +52,7 @@ CONTRIBS = ../contrib/lib/liba52.a ../contrib/lib/libavformat.a \
 		   ../contrib/lib/libogg.a ../contrib/lib/libsamplerate.a \
 		   ../contrib/lib/libx264.a ../contrib/lib/libxvidcore.a \
 		   ../contrib/lib/libmp4v2.a ../contrib/lib/libmkv.a \
-		   ../contrib/lib/libswscale.a
+		   ../contrib/lib/libswscale.a ../contrib/lib/libtheora.a
 endif
 
 CFLAGS += -I../contrib/include -D__LIBHB__ -DUSE_PTHREAD -DHB_VERSION=\"$(HB_VERSION)\" -DHB_BUILD=$(HB_BUILD) $(SYSDEF)

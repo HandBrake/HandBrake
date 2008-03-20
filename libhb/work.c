@@ -264,6 +264,10 @@ static void do_job( hb_job_t * job, int cpu_count )
                 hb_log( "   + x264 options: %s", job->x264opts);
             w = getWork( WORK_ENCX264 );
             break;
+        case HB_VCODEC_THEORA:
+            hb_log( " + encoder Theora" );
+            w = getWork( WORK_ENCTHEORA );
+            break;
     }
     w->fifo_in  = job->fifo_render;
     w->fifo_out = job->fifo_mpeg4;

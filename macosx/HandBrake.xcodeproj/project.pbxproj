@@ -92,6 +92,8 @@
 		59CBD2650BBB4D1B004A3BE3 /* ChapterTitles.m in Sources */ = {isa = PBXBuildFile; fileRef = 593034EA0BBA39A100172349 /* ChapterTitles.m */; };
 		A22C85EC0D05D35000C10E36 /* HBPresets.h in Headers */ = {isa = PBXBuildFile; fileRef = A22C85EA0D05D35000C10E36 /* HBPresets.h */; };
 		A22C85ED0D05D35100C10E36 /* HBPresets.m in Sources */ = {isa = PBXBuildFile; fileRef = A22C85EB0D05D35000C10E36 /* HBPresets.m */; };
+		A25289E60D87A27D00461D5B /* enctheora.c in Sources */ = {isa = PBXBuildFile; fileRef = A25289E50D87A27D00461D5B /* enctheora.c */; };
+		A25289E70D87A2CB00461D5B /* enctheora.c in Sources */ = {isa = PBXBuildFile; fileRef = A25289E50D87A27D00461D5B /* enctheora.c */; };
 		A273E0510C57B39A00493A45 /* Pause.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E04A0C57B39A00493A45 /* Pause.tiff */; };
 		A273E0520C57B39A00493A45 /* Play.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E04B0C57B39A00493A45 /* Play.tiff */; };
 		A273E0530C57B39A00493A45 /* Stop.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E04C0C57B39A00493A45 /* Stop.tiff */; };
@@ -258,6 +260,7 @@
 		59CBD2360BBB44DA004A3BE3 /* parsecsv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = parsecsv.c; path = ../test/parsecsv.c; sourceTree = SOURCE_ROOT; };
 		A22C85EA0D05D35000C10E36 /* HBPresets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPresets.h; sourceTree = "<group>"; };
 		A22C85EB0D05D35000C10E36 /* HBPresets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPresets.m; sourceTree = "<group>"; };
+		A25289E50D87A27D00461D5B /* enctheora.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = enctheora.c; path = ../libhb/enctheora.c; sourceTree = SOURCE_ROOT; };
 		A273E04A0C57B39A00493A45 /* Pause.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Pause.tiff; sourceTree = "<group>"; };
 		A273E04B0C57B39A00493A45 /* Play.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Play.tiff; sourceTree = "<group>"; };
 		A273E04C0C57B39A00493A45 /* Stop.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Stop.tiff; sourceTree = "<group>"; };
@@ -429,6 +432,7 @@
 		526FBC8D0B4CA9F90064E04C /* libhb Sources */ = {
 			isa = PBXGroup;
 			children = (
+				A25289E50D87A27D00461D5B /* enctheora.c */,
 				B48359A70C82960500E04440 /* lang.c */,
 				EAA526920C3B25D200944FF2 /* stream.c */,
 				0DFA5C7E0B8DD3B60020BC09 /* declpcm.c */,
@@ -748,6 +752,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A25289E70D87A2CB00461D5B /* enctheora.c in Sources */,
 				D4D49FED0C83355600F01215 /* lang.c in Sources */,
 				0DFA5CD90B8DD4210020BC09 /* declpcm.c in Sources */,
 				0DFA5CDA0B8DD4210020BC09 /* decmpeg2.c in Sources */,
@@ -828,6 +833,7 @@
 				FC8519520C59A02C0073812C /* deblock.c in Sources */,
 				FC8519530C59A02C0073812C /* detelecine.c in Sources */,
 				B48359A80C82960500E04440 /* lang.c in Sources */,
+				A25289E60D87A27D00461D5B /* enctheora.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1189,6 +1195,7 @@
 					../contrib/lib/libdca.a,
 					../contrib/lib/libmkv.a,
 					../contrib/lib/libswscale.a,
+					../contrib/lib/libtheora.a,
 				);
 				PRODUCT_NAME = HandBrake;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
@@ -1235,6 +1242,7 @@
 					../contrib/lib/libdca.a,
 					../contrib/lib/libmkv.a,
 					../contrib/lib/libswscale.a,
+					../contrib/lib/libtheora.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = HandBrakeCLI;
@@ -1355,6 +1363,7 @@
 					../contrib/lib/libdca.a,
 					../contrib/lib/libmkv.a,
 					../contrib/lib/libswscale.a,
+					../contrib/lib/libtheora.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = HandBrakeCLI;
@@ -1398,6 +1407,7 @@
 					../contrib/lib/libdca.a,
 					../contrib/lib/libmkv.a,
 					../contrib/lib/libswscale.a,
+					../contrib/lib/libtheora.a,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = HandBrakeCLI;
@@ -1453,6 +1463,7 @@
 					../contrib/lib/libdca.a,
 					../contrib/lib/libmkv.a,
 					../contrib/lib/libswscale.a,
+					../contrib/lib/libtheora.a,
 				);
 				PRODUCT_NAME = HandBrake;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
@@ -1512,6 +1523,7 @@
 					../contrib/lib/libdca.a,
 					../contrib/lib/libmkv.a,
 					../contrib/lib/libswscale.a,
+					../contrib/lib/libtheora.a,
 				);
 				PRODUCT_NAME = HandBrake;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;

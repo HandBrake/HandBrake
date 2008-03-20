@@ -25,6 +25,7 @@ hb_register( &hb_render ); \
 hb_register( &hb_encavcodec ); \
 hb_register( &hb_encxvid ); \
 hb_register( &hb_encx264 ); \
+hb_register( &hb_enctheora ); \
 hb_register( &hb_deca52 ); \
 hb_register( &hb_decdca ); \
 hb_register( &hb_decavcodec ); \

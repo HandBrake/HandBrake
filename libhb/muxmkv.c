@@ -106,6 +106,28 @@ static int MKVInit( hb_mux_object_t * m )
             track->codecPrivate = job->config.mpeg4.bytes;
             track->codecPrivateSize = job->config.mpeg4.length;
             break;
+        case HB_VCODEC_THEORA:
+            {
+                int i;
+                uint64_t cp_size = 0;
+                track->codecID = MK_VCODEC_THEORA;
+                uint64_t  header_sizes[3];
+                for (i = 0; i < 3; ++i)
+                {
+                    ogg_headers[i] = (ogg_packet *)job->config.theora.headers[i];
+                    ogg_headers[i]->packet = (unsigned char *)&job->config.theora.headers[i] + sizeof( ogg_packet );
+                    header_sizes[i] = ogg_headers[i]->bytes;
+                }
+                track->codecPrivate = mk_laceXiph(header_sizes, 2, &cp_size);
+                track->codecPrivate = realloc(track->codecPrivate, cp_size + ogg_headers[0]->bytes + ogg_headers[1]->bytes + ogg_headers[2]->bytes);
+                for(i = 0; i < 3; ++i)
+                {
+                    memcpy(track->codecPrivate + cp_size, ogg_headers[i]->packet, ogg_headers[i]->bytes);
+                    cp_size += ogg_headers[i]->bytes;
+                }
+                track->codecPrivateSize = cp_size;
+            }
+            break;
         default:
             *job->die = 1;
             hb_error("muxmkv: Unknown video codec: %x", job->vcodec);
@@ -177,7 +199,7 @@ static int MKVInit( hb_mux_object_t * m )
                 {
                     track->codecPrivate = NULL;
                     track->codecPrivateSize = 0;
-                    track->codecID = MK_ACODEC_AC3; 
+                    track->codecID = MK_ACODEC_AC3;
                 }
                 else
                 {
@@ -224,12 +246,14 @@ static int MKVInit( hb_mux_object_t * m )
 static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                    hb_buffer_t * buf )
 {
+    ogg_packet  *op = NULL;
     hb_job_t * job = m->job;
     hb_title_t * title = job->title;
     uint64_t   timecode = 0;
     hb_chapter_t *chapter_data;
     char tmp_buffer[1024];
     char *string = tmp_buffer;
+
     if (mux_data == job->mux_data)
     {
         /* Video */
@@ -264,6 +288,21 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             }
             mux_data->prev_chapter_tc = timecode;
         }
+
+        if (job->vcodec == HB_VCODEC_THEORA)
+        {
+            /* ughhh, theora is a pain :( */
+            op = (ogg_packet *)buf->data;
+            op->packet = buf->data + sizeof( ogg_packet );
+            if (mk_startFrame(m->file, mux_data->track) < 0)
+            {
+                hb_error( "Failed to write frame to output file, Disk Full?" );
+                *job->die = 1;
+            }
+            mk_addFrameData(m->file, mux_data->track, op->packet, op->bytes);
+            mk_setFrameFlags(m->file, mux_data->track, timecode, 1);
+            return 0;
+        }
     }
     else
     {
@@ -272,11 +311,13 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         if (job->acodec == HB_ACODEC_VORBIS)
         {
             /* ughhh, vorbis is a pain :( */
-            ogg_packet  *op;
-
             op = (ogg_packet *)buf->data;
             op->packet = buf->data + sizeof( ogg_packet );
-            mk_startFrame(m->file, mux_data->track);
+            if (mk_startFrame(m->file, mux_data->track))
+            {
+                hb_error( "Failed to write frame to output file, Disk Full?" );
+                *job->die = 1;
+            }
             mk_addFrameData(m->file, mux_data->track, op->packet, op->bytes);
             mk_setFrameFlags(m->file, mux_data->track, timecode, 1);
             return 0;

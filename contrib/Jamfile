@@ -336,6 +336,24 @@ actions LibVorbisEnc
 }
 LibVorbisEnc $(SUBDIR)/lib/libvorbisenc.a : $(SUBDIR)/lib/libvorbis.a ;
 
+# libtheora
+rule LibTheora
+{
+    Depends $(<) : $(>) ;
+    Depends lib  : $(<) ;
+}
+actions LibTheora
+{
+    cd `dirname $(>)` && CONTRIB=`pwd` && rm -rf libtheora &&
+    (gzip -dc libtheora.tar.gz | tar xf - ) && cd libtheora &&
+    ./configure --prefix=$CONTRIB --with-ogg=$CONTRIB --with-vorbis=$CONTRIB --cache-file=$CONTRIB/config.cache --disable-shared \
+            --disable-oggtest --disable-vorbistest --disable-sdltest --disable-examples &&
+    $(MAKE) && $(MAKE) install &&
+    $(STRIP) $CONTRIB/lib/libtheora.a
+}
+Wget      $(SUBDIR)/libtheora.tar.gz : $(SUBDIR)/version_libtheora.txt ;
+LibTheora $(SUBDIR)/lib/libtheora.a  : $(SUBDIR)/libtheora.tar.gz ;
+
 # libx264
 rule LibX264
 {

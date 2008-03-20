@@ -160,6 +160,7 @@ struct hb_job_s
 #define HB_VCODEC_FFMPEG 0x000001
 #define HB_VCODEC_XVID   0x000002
 #define HB_VCODEC_X264   0x000004
+#define HB_VCODEC_THEORA 0x000008
 
     int             vcodec;
     float           vquality;
@@ -526,6 +527,7 @@ extern hb_work_object_t hb_render;
 extern hb_work_object_t hb_encavcodec;
 extern hb_work_object_t hb_encxvid;
 extern hb_work_object_t hb_encx264;
+extern hb_work_object_t hb_enctheora;
 extern hb_work_object_t hb_deca52;
 extern hb_work_object_t hb_decdca;
 extern hb_work_object_t hb_decavcodec;
