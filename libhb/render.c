@@ -528,6 +528,12 @@ int renderInit( hb_work_object_t * w, hb_job_t * job )
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     pv->job = job;
     w->private_data = pv;
+    uint32_t    swsflags;
+
+    swsflags = SWS_LANCZOS;
+#ifndef __x86_64__
+    swsflags |= SWS_ACCURATE_RND;
+#endif  /* __x86_64__ */
 
     /* Get title and title size */
     hb_title_t * title = job->title;
@@ -540,7 +546,7 @@ int renderInit( hb_work_object_t * w, hb_job_t * job )
                                      title->height - (job->crop[0] + job->crop[1]),
                                      PIX_FMT_YUV420P,
                                      job->width, job->height, PIX_FMT_YUV420P,
-                                     (uint16_t)(SWS_LANCZOS|SWS_ACCURATE_RND), NULL, NULL, NULL);
+                                     swsflags, NULL, NULL, NULL);
     }
 
     /* Setup FIFO queue for subtitle cache */

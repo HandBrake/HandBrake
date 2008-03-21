@@ -318,10 +318,15 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
     char                 filename[1024];
     FILE               * file;
     uint8_t            * buf1, * buf2, * buf3, * buf4, * pen;
-    uint32_t           * p32;
+    uint32_t           * p32, swsflags;
     AVPicture            pic_in, pic_preview, pic_deint, pic_crop, pic_scale;
     struct SwsContext  * context;
     int                  i;
+
+    swsflags = SWS_LANCZOS;
+#ifndef __x86_64__
+    swsflags |= SWS_ACCURATE_RND;
+#endif  /* __x86_64__ */
 
     buf1 = malloc( title->width * title->height * 3 / 2 );
     buf2 = malloc( title->width * title->height * 3 / 2 );
@@ -370,7 +375,7 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
                              title->height - (job->crop[0] + job->crop[1]),
                              PIX_FMT_YUV420P,
                              job->width, job->height, PIX_FMT_YUV420P,
-                             (uint16_t)(SWS_LANCZOS|SWS_ACCURATE_RND), NULL, NULL, NULL);
+                             swsflags, NULL, NULL, NULL);
 
     // Scale
     sws_scale(context,
@@ -383,8 +388,8 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
 
     // Get preview context
     context = sws_getContext(job->width, job->height, PIX_FMT_YUV420P,
-                             job->width, job->height, PIX_FMT_RGBA32,
-                             (uint16_t)(SWS_LANCZOS|SWS_ACCURATE_RND), NULL, NULL, NULL);
+                              job->width, job->height, PIX_FMT_RGBA32,
+                              swsflags, NULL, NULL, NULL);
 
     // Create preview
     sws_scale(context,
