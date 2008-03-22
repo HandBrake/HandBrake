@@ -8,5 +8,6 @@ diff -ruN xvidcore-orig/build/generic/configure xvidcore/build/generic/configure
 -           nasm_patch=`$nasm_prog -r | cut -d '.' -f 3 | cut -d ' ' -f 1`
 +           nasm_patch=`($nasm_prog -r || $nasm_prog -v) | cut -d '.' -f 3 | cut -d ' ' -f 1`
             if test -z $nasm_patch ; then
-               nasm_patch=-1
+-              nasm_patch=-1
++              nasm_patch=45
             fi
