@@ -97,12 +97,12 @@ else
 MAKE=make
 fi
 
-# If the user included the --snapshot argument, mark it down.
-if [[ $1 = "--snapshot" ]] || [[ $2 = "--snapshot" ]]
+# Unless the user wants a release build, configure for SVN snapshots
+if [[ $1 = "--release" ]] || [[ $2 = "--release" ]]
 then
-    SNAPSHOT=1
-else
     SNAPSHOT=0
+else
+    SNAPSHOT=1
 fi
 
 # We fought the law and the law won

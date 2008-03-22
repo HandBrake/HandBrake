@@ -9,9 +9,9 @@ SYSTEM = $(shell uname -s)
 #
 ifeq ($(SYSTEM),Darwin)
 
-all:    clean app
-
 snapshot:   clean snapshot-app
+
+all:    clean app
 
 all-chunky:    clean app-chunky
 
