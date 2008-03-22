@@ -98,16 +98,14 @@ MAKE=make
 fi
 
 # Unless the user wants a release build, configure for SVN snapshots
-if [[ $1 = "--release" ]] || [[ $2 = "--release" ]]
-then
+if test "$1" = "--release" || test "$2" = "--release"; then
     SNAPSHOT=0
 else
     SNAPSHOT=1
 fi
 
 # We fought the law and the law won
-if [[ $1 = "--libdvdcss" ]] || [[ $2 = "--libdvdcss" ]] 
-then
+if test "$1" = "--libdvdcss" || test "$2" = "--libdvdcss"; then
     CSS=1
 else
     CSS=0
