@@ -1178,7 +1178,7 @@ static void ShowHelp()
 
 	"### Video Options------------------------------------------------------------\n\n"
 	"    -e, --encoder <string>  Set video library encoder (ffmpeg,xvid,\n"
-    "                            x264,x264b13,x264b30,theora default: ffmpeg)\n"
+    "                            x264,theora default: ffmpeg)\n"
 	"    -q, --quality <float>   Set video quality (0.0..1.0)\n"
 	"    -Q, --cqp               Use with -q for CQP instead of CRF\n"
     "    -S, --size <MB>         Set target size\n"
