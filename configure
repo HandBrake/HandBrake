@@ -98,11 +98,19 @@ MAKE=make
 fi
 
 # If the user included the --snapshot argument, mark it down.
-if [[ $1 = "--snapshot" ]]
+if [[ $1 = "--snapshot" ]] || [[ $2 = "--snapshot" ]]
 then
     SNAPSHOT=1
 else
     SNAPSHOT=0
+fi
+
+# We fought the law and the law won
+if [[ $1 = "--libdvdcss" ]] || [[ $2 = "--libdvdcss" ]] 
+then
+    CSS=1
+else
+    CSS=0
 fi
 
 # Generating the HB_BUILD and HB_VERSION for snapshots requires
@@ -127,6 +135,7 @@ SNAPSHOT = $SNAPSHOT ;
 BUILD_DATE = $BUILD_DATE ;
 FULL_PATH = $FULL_PATH ;
 SVN_REV = $SVN_REV ;
+CSS      = $CSS ;
 EOF
 
 echo

@@ -101,8 +101,9 @@ LibAvUtil $(SUBDIR)/lib/libavutil.a : $(SUBDIR)/lib/libavcodec.a ;
 LibAvUtil $(SUBDIR)/lib/libavformat.a : $(SUBDIR)/lib/libavcodec.a ;
 LibAvUtil $(SUBDIR)/lib/libswscale.a : $(SUBDIR)/lib/libavcodec.a ;
 
-# CSS doesn't work on Cygwin/Windows as of now, so don't use it.
-if $(OS) != CYGWIN
+# HandBrake does not include a DVD decrypting library,
+# so if a user requests it, let them download and compile it from a 3rd party
+if $(CSS) = 1
 {
     # libdvdcss
     # We need libdvdcss.so for libdvdread's configure to work...
@@ -114,8 +115,8 @@ if $(OS) != CYGWIN
     actions LibDvdCss
     {
         cd `dirname $(>)` && CONTRIB=`pwd` &&
-        rm -rf libdvdcss && (gzip -dc libdvdcss.tar.gz | tar xf - ) && 
-        cd libdvdcss &&
+        rm -rf libdvdcss-1.2.9 && (gzip -dc libdvdcss.tar.gz | tar xf - ) && 
+        cd libdvdcss-1.2.9 &&
         ./configure --prefix=$CONTRIB --cache-file=$CONTRIB/config.cache && $(MAKE) && $(MAKE) install &&
         $(STRIP) $CONTRIB/lib/libdvdcss.a
     }
@@ -145,8 +146,14 @@ rule LibDvdRead
 {
     Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
+    
+    if $(OS) = MACOSX
+    {
+        DVDREAD_PATCH = "$(PATCH) -p0 < ../patch-libdvdread-css-vlc-dylib.patch &&" ;
+    }
+    
 }
-if $(OS) != CYGWIN
+if $(CSS) = 1 # Include CSS support in libdvdread if requested
 {
     actions LibDvdRead
     {
@@ -161,11 +168,12 @@ if $(OS) != CYGWIN
 else {
     # Cygwin/Windows doesn't use CSS as of now, so don't include it on the
     # configure line.
+    # MacOSX uses a dylib for CSS, so it doesn't need including there either.
     actions LibDvdRead
     {
         cd `dirname $(>)` && CONTRIB=`pwd` &&
-        rm -rf libdvdread && (gzip -dc libdvdread.tar.gz | tar xf - ) && 
-        cd libdvdread &&
+        rm -rf libdvdread && (gzip -dc libdvdread.tar.gz | tar xf - ) &&
+        cd libdvdread && $(DVDREAD_PATCH)
         ./configure --prefix=$CONTRIB --cache-file=$CONTRIB/config.cache --disable-shared &&
         $(MAKE) && $(MAKE) install &&
         $(STRIP) $CONTRIB/lib/libdvdread.a

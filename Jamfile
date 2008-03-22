@@ -24,7 +24,7 @@ if $(OS) = UNKNOWN
     OS = CYGWIN ;
 }
 
-if $(OS) != CYGWIN
+if $(CSS) = 1
 {
     HANDBRAKE_LIBS = $(HANDBRAKE_LIBS) contrib/lib/libdvdcss.a ;
 }

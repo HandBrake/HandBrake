@@ -1229,6 +1229,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 /* Here we actually tell hb_scan to perform the source scan, using the path to source and title number*/
 - (void) performScan:(NSString *) scanPath scanTitleNum: (int) scanTitleNum
 {
+    /* use a bool to determine whether or not we can decrypt using vlc */
+    BOOL cancelScanDecrypt = 0;
     NSString *path = scanPath;
     HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
     if( [detector isVideoDVD] )
@@ -1237,21 +1239,74 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         // device path instead.
         path = [detector devicePath];
         [self writeToActivityLog: "trying to open a physical dvd at: %s", [scanPath UTF8String]];
+        
+        /* lets check for vlc here to make sure we have a dylib available to use for decrypting */
+        NSString *vlcPath = @"/Applications/VLC.app";
+        NSFileManager * fileManager = [NSFileManager defaultManager];
+	    if ([fileManager fileExistsAtPath:vlcPath] == 0) 
+	    {
+            /*vlc not found in /Applications so we set the bool to cancel scanning to 1 */
+            cancelScanDecrypt = 1;
+            [self writeToActivityLog: "VLC app not found for decrypting physical dvd"];
+            int status;
+            status = NSRunAlertPanel(@"HandBrake could not find VLC.",@"Please download and install VLC media player in your /Applications folder if you wish to read encrypted DVDs.", @"Get VLC", @"Cancel Scan", @"Attempt Scan Anyway");
+            [NSApp requestUserAttention:NSCriticalRequest];
+            
+            if (status == NSAlertDefaultReturn)
+            {
+                /* User chose to go download vlc (as they rightfully should) so we send them to the vlc site */
+                [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.videolan.org/"]];
+            }
+            else if (status == NSAlertAlternateReturn)
+            {
+            /* User chose to cancel the scan */
+            [self writeToActivityLog: "cannot open physical dvd , scan cancelled"];
+            }
+            else
+            {
+            /* User chose to override our warning and scan the physical dvd anyway, at their own peril. on an encrypted dvd this produces massive log files and fails */
+            cancelScanDecrypt = 0;
+            [self writeToActivityLog: "user overrode vlc warning -trying to open physical dvd without decryption"];
+            }
+            
+        }
+        else
+        {
+            /* VLC was found in /Applications so all is well, we can carry on using vlc's libdvdcss.dylib for decrypting if needed */
+            [self writeToActivityLog: "VLC app found for decrypting physical dvd"];
+        }
+        
     }
-    /* If there is no title number passed to scan, we use "0"
-        * which causes the default behavior of a full source scan
-    */
-    if (!scanTitleNum)
+    
+    
+    
+    if (cancelScanDecrypt == 0)
     {
-        scanTitleNum = 0;
+        
+        /* we actually pass the scan off to libhb here */
+        /* If there is no title number passed to scan, we use "0"
+         * which causes the default behavior of a full source scan
+         */
+        if (!scanTitleNum)
+        {
+            scanTitleNum = 0;
+        }
+        if (scanTitleNum > 0)
+        {
+            [self writeToActivityLog: "scanning specifically for title: %d", scanTitleNum];
+        }
+        hb_scan( fHandle, [path UTF8String], scanTitleNum );
+        [fSrcDVD2Field setStringValue: [NSString stringWithFormat: @"Scanning new source ..."]];
     }
-    if (scanTitleNum > 0)
+    else
     {
-    [self writeToActivityLog: "scanning specifically for title: %d", scanTitleNum];
+            /* if we have a title loaded up */
+        if ([[fSrcDVD2Field stringValue] length] > 0)
+        {
+            [self enableUI: YES];
+        }
     }
-    [fSrcDVD2Field setStringValue: [NSString stringWithFormat: @"Scanning new source ..."]];
-    /* we actually pass the scan off to libhb here */
-    hb_scan( fHandle, [path UTF8String], scanTitleNum );
+
     
 }
 
