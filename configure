@@ -49,7 +49,7 @@ case $SYSTEM in
 
   Linux)
     DEFINES="$DEFINES SYS_LINUX USE_PTHREAD _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64"
-    LINKLIBS="$LINKLIBS -lpthread"
+    LINKLIBS="$LINKLIBS -lpthread -ldl"
     ;;
 
   CYGWIN*)
