@@ -1,17 +1,14 @@
 SYSTEM = $(shell uname -s)
 
-ifeq ($(findstring CYGWIN_NT,$(SYSTEM)),CYGWIN_NT)
-	LIBS = a52 mkv avformat avcodec avutil dca dvdread faac mp3lame mpeg2 vorbis vorbisenc ogg samplerate x264 xvidcore mp4v2 swscale 
-else
-        LIBS = a52 mkv avformat avcodec avutil dca dvdread dvdcss faac mp3lame mpeg2 vorbis vorbisenc ogg samplerate x264 xvidcore mp4v2 swscale 
-endif
+LIBS = a52 mkv avformat avcodec avutil dca dvdread faac mp3lame mpeg2 vorbis \
+	   vorbisenc ogg samplerate x264 xvidcore mp4v2 swscale
 
 all: ../HandBrakeCLI
 
 CFLAGS += -I../libhb
 CXXFLAGS += -I../libhb
 LIBS2 = ../libhb/libhb.a $(LIBS:%=../contrib/lib/lib%.a)
-LDFLAGS += $(LIBS2)
+LDFLAGS += $(LIBS2) -ldl
 
 ../HandBrakeCLI: test.c parsecsv.c $(LIBS2)
 	@CMD="$(CC) $(CFLAGS) -o test.o -c test.c"; $$CMD || \
