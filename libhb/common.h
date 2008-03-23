@@ -427,6 +427,7 @@ struct hb_title_s
     int         rate;
     int         rate_base;
     int         crop[4];
+    int         detected_interlacing;
 
     uint32_t    palette[16];
 

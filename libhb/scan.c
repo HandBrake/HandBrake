@@ -286,6 +286,8 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
     hb_list_t     * list_es, * list_raw;
     hb_libmpeg2_t * mpeg2;
     int progressive_count = 0;
+    int interlaced_preview_count = 0;
+
     int ar16_count = 0, ar4_count = 0;
 
     buf_ps   = hb_buffer_init( HB_DVD_READ_BUFFER_SIZE );
@@ -419,7 +421,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                 */
                 if( progressive_count == 6 )
                 {
-                    hb_log("Title's mostly progressive NTSC, setting fps to 23.976");
+                    hb_log("Title's mostly NTSC Film, setting fps to 23.976");
                 }
                 title->rate_base = 1126125;
             }
@@ -449,7 +451,14 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         }
 
         buf_raw = hb_list_item( list_raw, 0 );
-
+        
+        /* Check preview for interlacing artifacts */
+        if( hb_detect_comb( buf_raw, title->width, title->height, 10, 30, 9 ) )
+        {
+            hb_log("Interlacing detected in preview frame %i", i);
+            interlaced_preview_count++;
+        }
+        
         hb_get_tempory_filename( data->h, filename, "%x%d",
                                  (intptr_t)title, i );
 
@@ -523,6 +532,18 @@ skip_preview:
             title->crop[2], title->crop[3],
             title->aspect == HB_ASPECT_BASE * 16 / 9 ? "16:9" :
                 title->aspect == HB_ASPECT_BASE * 4 / 3 ? "4:3" : "none" );
+
+    if( interlaced_preview_count >= ( npreviews / 2 ) )
+    {
+        hb_log("Title is likely interlaced or telecined (%i out of %i previews). You should do something about that.",
+               interlaced_preview_count, npreviews);
+        title->detected_interlacing = 1;
+    }
+    else
+    {
+        title->detected_interlacing = 0;
+    }
+
     goto cleanup;
 
 error:

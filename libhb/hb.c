@@ -432,6 +432,112 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
     avpicture_free( &pic_in );
 }
 
+ /**
+ * Analyzes a frame to detect interlacing artifacts
+ * and returns true if interlacing (combing) is found.
+ *
+ * Code taken from Thomas Oestreich's 32detect filter
+ * in the Transcode project, with minor formatting changes.
+ *
+ * @param buf         An hb_buffer structure holding valid frame data
+ * @param width       The frame's width in pixels
+ * @param height      The frame's height in pixels
+ * @param color_equal Sensitivity for detecting similar colors
+ * @param color_diff  Sensitivity for detecting different colors
+ * @param threshold   Sensitivity for flagging planes as combed
+ */
+int hb_detect_comb( hb_buffer_t * buf, int width, int height, int color_equal, int color_diff, int threshold )
+{
+    int j, k, n, off, block, cc_1, cc_2, cc[3], flag[3];
+    uint16_t s1, s2, s3, s4;
+    cc_1 = 0; cc_2 = 0;
+
+    int offset = 0;
+    
+    for( k = 0; k < 3; k++ )
+    {
+        /* One pas for Y, one pass for Cb, one pass for Cr */
+
+        if( k == 1 )
+        {
+            /* Y has already been checked, now offset by Y's dimensions
+               and divide all the other values by 2, since Cr and Cb
+               are half-size compared to Y.                               */
+            offset = width * height;
+            width >>= 1;
+            height >>= 1;
+            threshold >>= 1;
+            color_equal >>= 1;
+            color_diff >>= 1;
+        }
+        else if ( k == 2 )
+        {
+            /* Y and Cb are done, so the offset needs to be bumped
+               so it's width*height + (width / 2) * (height / 2)  */
+            offset *= 5/4;
+        }
+        
+        /* Look at one horizontal line at a time */
+        block = width;
+        
+        for( j = 0; j < block; ++j )
+        {
+            off = 0;
+            
+            for( n = 0; n < ( height - 4 ); n = n + 2 )
+            {
+                /* Look at groups of 4 sequential horizontal lines */
+                s1 = ( ( buf->data + offset )[ off + j             ] & 0xff );
+                s2 = ( ( buf->data + offset )[ off + j + block     ] & 0xff );
+                s3 = ( ( buf->data + offset )[ off + j + 2 * block ] & 0xff );
+                s4 = ( ( buf->data + offset )[ off + j + 3 * block ] & 0xff );
+                
+                /* Note if the 1st and 2nd lines are more different in
+                   color than the 1st and 3rd lines are similar in color.*/
+                if ( ( abs( s1 - s3 ) < color_equal ) && 
+                     ( abs( s1 - s2 ) > color_diff ) )
+                        ++cc_1;
+    
+                /* Note if the 2nd and 3rd lines are more different in
+                   color than the 2nd and 4th lines are similar in color.*/
+                if ( ( abs( s2 - s4 ) < color_equal ) &&
+                     ( abs( s2 - s3 ) > color_diff) )
+                        ++cc_2;
+                
+                /* Now move down 2 horizontal lines before starting over.*/
+                off += 2 * block;
+            }
+        }
+        
+        // compare results
+        /* The final metric seems to be doing some kind of bits per pixel style calculation
+           to decide whether or not enough lines showed alternating colors for the frame size. */
+        cc[k] = (int)( ( cc_1 + cc_2 ) * 1000.0 / ( width * height ) );
+        
+        /* If the plane's cc score meets the threshold, flag it as combed. */
+        flag[k] = 0;
+        if ( cc[k] > threshold )
+        {
+            flag[k] = 1;
+        }
+    }
+    
+#if 0
+/* Debugging info */
+//    if(flag)
+        hb_log("flags: %i/%i/%i | cc0: %i | cc1: %i | cc2: %i", flag[0], flag[1], flag[2], cc[0], cc[1], cc[2]);
+#endif
+    
+    /* When more than one plane shows combing, tell the caller. */
+    if (flag[0] || flag[1] || flag[2] )
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+
 /**
  * Calculates job width and height for anamorphic content,
  *

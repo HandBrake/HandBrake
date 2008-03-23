@@ -76,6 +76,11 @@ void          hb_scan( hb_handle_t *, const char * path,
    Returns the list of valid titles detected by the latest scan. */
 hb_list_t   * hb_get_titles( hb_handle_t * );
 
+/* hb_detect_comb()
+   Analyze a frame for interlacing artifacts, returns true if they're found.
+   Taken from Thomas Oestreich's 32detect filter in the Transcode project.  */
+int hb_detect_comb( hb_buffer_t * buf, int width, int height, int color_equal, int color_diff, int threshold );
+
 void          hb_get_preview( hb_handle_t *, hb_title_t *, int,
                               uint8_t * );
 void          hb_set_size( hb_job_t *, int ratio, int pixels );
