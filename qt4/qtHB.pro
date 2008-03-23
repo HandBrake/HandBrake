@@ -7,7 +7,14 @@ TARGET = qtHB
 CONFIG += qdbus release
 DEPENDPATH += .
 INCLUDEPATH += . ../libhb ../contrib/include
-LIBS += -L ../contrib/lib ../libhb/libhb.a ../contrib/lib/libx264.a ../contrib/lib/liba52.a ../contrib/lib/libavformat.a ../contrib/lib/libavcodec.a ../contrib/lib/libavutil.a ../contrib/lib/libdca.a ../contrib/lib/libmpeg2.a ../contrib/lib/libmpeg2convert.a ../contrib/lib/libswscale.a ../contrib/lib/libdvdread.a ../contrib/lib/libdvdcss.a ../contrib/lib/libfaac.a ../contrib/lib/libmp3lame.a ../contrib/lib/libmp4v2.a ../contrib/lib/libmkv.a -lz -lpthread -lvorbis -lvorbisenc -logg -lsamplerate -lxvidcore
+LIBS += -L ../contrib/lib ../libhb/libhb.a ../contrib/lib/libx264.a ../contrib/lib/liba52.a \
+		../contrib/lib/libavformat.a ../contrib/lib/libavcodec.a ../contrib/lib/libavutil.a \
+		../contrib/lib/libdca.a ../contrib/lib/libmpeg2.a ../contrib/lib/libmpeg2convert.a \
+		../contrib/lib/libswscale.a ../contrib/lib/libdvdread.a ../contrib/lib/libfaac.a \
+		../contrib/lib/libmp3lame.a ../contrib/lib/libmp4v2.a ../contrib/lib/libmkv.a \
+		../contrib/lib/libvorbis.a ../contrib/lib/libvorbisenc.a ../contrib/lib/libogg.a \
+		../contrib/lib/libsamplerate.a ../contrib/lib/libxvidcore.a ../contrib/lib/libtheora.a \
+		-lz -lpthread -ldl
 
 
 # Input
