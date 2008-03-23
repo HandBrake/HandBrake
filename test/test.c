@@ -300,6 +300,13 @@ static void PrintTitleInfo( hb_title_t * title )
         fprintf( stderr, "    + %d, %s (iso639-2: %s)\n", i + 1, subtitle->lang,
             subtitle->iso639_2);
     }
+    
+    if(title->detected_interlacing)
+    {
+        /* Interlacing was found in half or more of the preview frames */
+        fprintf( stderr, "  + combing detected, may be interlaced or telecined\n");
+    }
+    
 }
 
 static int HandleEvents( hb_handle_t * h )
@@ -725,6 +732,13 @@ static int HandleEvents( hb_handle_t * h )
             {
                 job->pixel_ratio = pixelratio;
             }
+            
+            if (vfr)
+            {
+                detelecine = 1;
+                job->vfr = 1;
+            }
+            
             /* Add selected filters */
             job->filters = hb_list_init();
             if( detelecine )
@@ -925,9 +939,6 @@ static int HandleEvents( hb_handle_t * h )
                 job->maxWidth = maxWidth;
             if (maxHeight)
                 job->maxHeight = maxHeight;
-
-            if (vfr)
-                job->vfr = 1;
 
             if( subtitle_force )
             {
