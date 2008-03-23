@@ -1,7 +1,7 @@
 SYSTEM = $(shell uname -s)
 
 LIBS = a52 mkv avformat avcodec avutil dca dvdread faac mp3lame mpeg2 vorbis \
-	   vorbisenc ogg samplerate x264 xvidcore mp4v2 swscale
+	   vorbisenc ogg samplerate x264 xvidcore mp4v2 swscale theora
 
 all: ../HandBrakeCLI
 
