@@ -88,6 +88,7 @@ static sample_t dynrng_call (sample_t c, void *data)
 int deca52Init( hb_work_object_t * w, hb_job_t * job )
 {
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
+    hb_audio_t * audio = w->audio;
     w->private_data = pv;
 
     pv->job   = job;
@@ -98,14 +99,14 @@ int deca52Init( hb_work_object_t * w, hb_job_t * job )
 	/* Decide what format we want out of a52dec
 	work.c has already done some of this deduction for us in do_job() */
 
-	pv->flags_out = HB_AMIXDOWN_GET_A52_FORMAT(w->amixdown);
+	pv->flags_out = HB_AMIXDOWN_GET_A52_FORMAT(audio->config.out.mixdown);
 
 	/* pass the number of channels used into the private work data */
 	/* will only be actually used if we're not doing AC3 passthru */
-	pv->out_discrete_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(w->amixdown);
+    pv->out_discrete_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
 
     pv->level     = 32768.0;
-    pv->dynamic_range_compression = job->dynamic_range_compression;
+    pv->dynamic_range_compression = audio->config.out.dynamic_range_compression;
 
     pv->next_expected_pts = 0;
     pv->sequence = 0;
@@ -168,6 +169,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * buf;
+    hb_audio_t  * audio = w->audio;
     int           i, j, k;
     uint64_t      pts, pos;
 
@@ -219,8 +221,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     }
 
     /* AC3 passthrough: don't decode the AC3 frame */
-    if( pv->job->acodec & HB_ACODEC_AC3 ||
-        w->amixdown == HB_AMIXDOWN_AC3 )
+    if( audio->config.out.codec == HB_ACODEC_AC3 )
     {
         buf = hb_buffer_init( pv->size );
         memcpy( buf->data, pv->frame, pv->size );

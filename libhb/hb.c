@@ -453,7 +453,7 @@ int hb_detect_comb( hb_buffer_t * buf, int width, int height, int color_equal, i
     cc_1 = 0; cc_2 = 0;
 
     int offset = 0;
-    
+
     for( k = 0; k < 3; k++ )
     {
         /* One pas for Y, one pass for Cb, one pass for Cr */
@@ -476,14 +476,14 @@ int hb_detect_comb( hb_buffer_t * buf, int width, int height, int color_equal, i
                so it's width*height + (width / 2) * (height / 2)  */
             offset *= 5/4;
         }
-        
+
         /* Look at one horizontal line at a time */
         block = width;
-        
+
         for( j = 0; j < block; ++j )
         {
             off = 0;
-            
+
             for( n = 0; n < ( height - 4 ); n = n + 2 )
             {
                 /* Look at groups of 4 sequential horizontal lines */
@@ -491,29 +491,29 @@ int hb_detect_comb( hb_buffer_t * buf, int width, int height, int color_equal, i
                 s2 = ( ( buf->data + offset )[ off + j + block     ] & 0xff );
                 s3 = ( ( buf->data + offset )[ off + j + 2 * block ] & 0xff );
                 s4 = ( ( buf->data + offset )[ off + j + 3 * block ] & 0xff );
-                
+
                 /* Note if the 1st and 2nd lines are more different in
                    color than the 1st and 3rd lines are similar in color.*/
-                if ( ( abs( s1 - s3 ) < color_equal ) && 
+                if ( ( abs( s1 - s3 ) < color_equal ) &&
                      ( abs( s1 - s2 ) > color_diff ) )
                         ++cc_1;
-    
+
                 /* Note if the 2nd and 3rd lines are more different in
                    color than the 2nd and 4th lines are similar in color.*/
                 if ( ( abs( s2 - s4 ) < color_equal ) &&
                      ( abs( s2 - s3 ) > color_diff) )
                         ++cc_2;
-                
+
                 /* Now move down 2 horizontal lines before starting over.*/
                 off += 2 * block;
             }
         }
-        
+
         // compare results
         /* The final metric seems to be doing some kind of bits per pixel style calculation
            to decide whether or not enough lines showed alternating colors for the frame size. */
         cc[k] = (int)( ( cc_1 + cc_2 ) * 1000.0 / ( width * height ) );
-        
+
         /* If the plane's cc score meets the threshold, flag it as combed. */
         flag[k] = 0;
         if ( cc[k] > threshold )
@@ -521,13 +521,13 @@ int hb_detect_comb( hb_buffer_t * buf, int width, int height, int color_equal, i
             flag[k] = 1;
         }
     }
-    
+
 #if 0
 /* Debugging info */
 //    if(flag)
         hb_log("flags: %i/%i/%i | cc0: %i | cc1: %i | cc2: %i", flag[0], flag[1], flag[2], cc[0], cc[1], cc[2]);
 #endif
-    
+
     /* When more than one plane shows combing, tell the caller. */
     if (flag[0] || flag[1] || flag[2] )
     {
@@ -834,7 +834,7 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
     hb_job_t      * job_copy;
     hb_title_t    * title,    * title_copy;
     hb_chapter_t  * chapter,  * chapter_copy;
-    hb_audio_t    * audio,    * audio_copy;
+    hb_audio_t    * audio;
     hb_subtitle_t * subtitle, * subtitle_copy;
     int             i;
     char            audio_lang[4];
@@ -859,17 +859,11 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
     /* Do nothing about audio during first pass */
     if( job->pass == 0 || job->pass == 2 )
     {
-        for( i = 0; i < 8; i++ )
+        for( i = 0; i < hb_list_count(job->list_audio); i++ )
         {
-            if( job->audios[i] < 0 )
+            if( ( audio = hb_list_item( job->list_audio, i ) ) )
             {
-                break;
-            }
-            if( ( audio = hb_list_item( title->list_audio, job->audios[i] ) ) )
-            {
-                audio_copy = malloc( sizeof( hb_audio_t ) );
-                memcpy( audio_copy, audio, sizeof( hb_audio_t ) );
-                hb_list_add( title_copy->list_audio, audio_copy );
+                hb_list_add( title_copy->list_audio, hb_audio_copy(audio) );
             }
         }
     }
@@ -900,15 +894,11 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
         /*
          * Find the first audio language that is being encoded
          */
-        for( i = 0; i < 8; i++ )
+        for( i = 0; i < hb_list_count(job->list_audio); i++ )
         {
-            if( job->audios[i] < 0 )
+            if( ( audio = hb_list_item( job->list_audio, i ) ) )
             {
-                break;
-            }
-            if( ( audio = hb_list_item( title->list_audio, job->audios[i] ) ) )
-            {
-                strncpy(audio_lang, audio->iso639_2, sizeof(audio_lang));
+                strncpy(audio_lang, audio->config.lang.iso639_2, sizeof(audio_lang));
                 break;
             }
         }
@@ -1035,6 +1025,7 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
     memcpy( job_copy, job, sizeof( hb_job_t ) );
     title_copy->job = job_copy;
     job_copy->title = title_copy;
+    job_copy->list_audio = title_copy->list_audio;
     job_copy->file  = strdup( job->file );
     job_copy->h     = h;
     job_copy->pause = h->pause_lock;

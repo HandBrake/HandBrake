@@ -29,6 +29,7 @@ struct hb_mux_data_s
     mk_Track  * track;
     uint64_t  prev_chapter_tc;
     uint16_t  current_chapter;
+    int       codec;
 };
 
 /**********************************************************************
@@ -158,9 +159,11 @@ static int MKVInit( hb_mux_object_t * m )
     {
         audio = hb_list_item( title->list_audio, i );
         mux_data = malloc( sizeof( hb_mux_data_t ) );
-        audio->mux_data = mux_data;
+        audio->priv.mux_data = mux_data;
 
-        switch (job->acodec)
+        mux_data->codec = audio->config.out.codec;
+
+        switch (audio->config.out.codec)
         {
             case HB_ACODEC_AC3:
                 track->codecPrivate = NULL;
@@ -180,8 +183,8 @@ static int MKVInit( hb_mux_object_t * m )
                     uint64_t  header_sizes[3];
                     for (i = 0; i < 3; ++i)
                     {
-                        ogg_headers[i] = (ogg_packet *)audio->config.vorbis.headers[i];
-                        ogg_headers[i]->packet = (unsigned char *)&audio->config.vorbis.headers[i] + sizeof( ogg_packet );
+                        ogg_headers[i] = (ogg_packet *)audio->priv.config.vorbis.headers[i];
+                        ogg_headers[i]->packet = (unsigned char *)&audio->priv.config.vorbis.headers[i] + sizeof( ogg_packet );
                         header_sizes[i] = ogg_headers[i]->bytes;
                     }
                     track->codecPrivate = mk_laceXiph(header_sizes, 2, &cp_size);
@@ -195,22 +198,13 @@ static int MKVInit( hb_mux_object_t * m )
                 }
                 break;
             case HB_ACODEC_FAAC:
-                if( job->audio_mixdowns[i] == HB_AMIXDOWN_AC3 )
-                {
-                    track->codecPrivate = NULL;
-                    track->codecPrivateSize = 0;
-                    track->codecID = MK_ACODEC_AC3;
-                }
-                else
-                {
-                    track->codecPrivate = audio->config.aac.bytes;
-                    track->codecPrivateSize = audio->config.aac.length;
-                    track->codecID = MK_ACODEC_AAC;
-                }
+                track->codecPrivate = audio->priv.config.aac.bytes;
+                track->codecPrivateSize = audio->priv.config.aac.length;
+                track->codecID = MK_ACODEC_AAC;
                 break;
             default:
                 *job->die = 1;
-                hb_error("muxmkv: Unknown audio codec: %x", job->acodec);
+                hb_error("muxmkv: Unknown audio codec: %x", audio->config.out.codec);
                 return 0;
         }
 
@@ -221,12 +215,12 @@ static int MKVInit( hb_mux_object_t * m )
         }
         track->flagEnabled = 1;
         track->trackType = MK_TRACK_AUDIO;
-        track->language = audio->iso639_2;
-        track->extra.audio.samplingFreq = (float)job->arate;
-        track->extra.audio.channels = (job->acodec == HB_ACODEC_AC3 || job->audio_mixdowns[i] == HB_AMIXDOWN_AC3  ) ? HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(audio->input_channel_layout) : HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown);
+        track->language = audio->config.lang.iso639_2;
+        track->extra.audio.samplingFreq = (float)audio->config.out.samplerate;
+        track->extra.audio.channels = (audio->config.out.codec == HB_ACODEC_AC3 ) ? HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(audio->config.in.channel_layout) : HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
 //        track->defaultDuration = job->arate * 1000;
         mux_data->track = mk_createTrack(m->file, track);
-        if (job->acodec == HB_ACODEC_VORBIS && track->codecPrivate != NULL)
+        if (audio->config.out.codec == HB_ACODEC_VORBIS && track->codecPrivate != NULL)
           free(track->codecPrivate);
     }
 
@@ -308,7 +302,7 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     {
         /* Audio */
         timecode = buf->start * TIMECODE_SCALE;
-        if (job->acodec == HB_ACODEC_VORBIS)
+        if (mux_data->codec == HB_ACODEC_VORBIS)
         {
             /* ughhh, vorbis is a pain :( */
             op = (ogg_packet *)buf->data;

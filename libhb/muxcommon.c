@@ -98,7 +98,7 @@ static void MuxerFunc( void * _mux )
         for( i = 0; i < hb_list_count( title->list_audio ); i++ )
         {
             audio = hb_list_item( title->list_audio, i );
-            if( !hb_fifo_size( audio->fifo_out ) )
+            if( !hb_fifo_size( audio->priv.fifo_out ) )
             {
                 ready = 0;
                 break;
@@ -131,8 +131,8 @@ static void MuxerFunc( void * _mux )
     {
         audio           = hb_list_item( title->list_audio, i );
         track           = calloc( sizeof( hb_track_t ), 1 );
-        track->fifo     = audio->fifo_out;
-        track->mux_data = audio->mux_data;
+        track->fifo     = audio->priv.fifo_out;
+        track->mux_data = audio->priv.mux_data;
         hb_list_add( list, track );
     }
 

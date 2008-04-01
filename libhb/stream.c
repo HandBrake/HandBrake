@@ -340,7 +340,7 @@ void hb_stream_close( hb_stream_t ** _d )
     if ( stream->frames )
     {
         hb_log( "stream: %d good frames, %d errors (%.0f%%)", stream->frames,
-                stream->errors, (double)stream->errors * 100. / 
+                stream->errors, (double)stream->errors * 100. /
                 (double)stream->frames );
     }
     /*
@@ -444,7 +444,7 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream)
         for (i=0; i < stream->ts_number_audio_pids; i++)
         {
             hb_audio_t *audio = hb_ts_stream_set_audio_id_and_codec(stream, i);
-            if (audio->codec)
+            if (audio->config.in.codec)
                 hb_list_add( aTitle->list_audio, audio );
             else
             {
@@ -773,7 +773,7 @@ static hb_audio_t *hb_ts_stream_set_audio_id_and_codec(hb_stream_t *stream,
         if (buf[3] == 0xbd)
         {
             audio->id = 0x80bd | (aud_pid_index << 8);
-            audio->codec = HB_ACODEC_AC3;
+            audio->config.in.codec = HB_ACODEC_AC3;
             hb_log("transport stream pid 0x%x (type 0x%x) is AC-3 audio id 0x%x",
                    stream->ts_audio_pids[aud_pid_index],
                    stream->ts_audio_stream_type[1 + aud_pid_index],
@@ -784,7 +784,7 @@ static hb_audio_t *hb_ts_stream_set_audio_id_and_codec(hb_stream_t *stream,
         else if ((buf[3] & 0xe0) == 0xc0)
         {
             audio->id = buf[3] | aud_pid_index;
-            audio->codec = HB_ACODEC_MPGA;
+            audio->config.in.codec = HB_ACODEC_MPGA;
             hb_log("transport stream pid 0x%x (type 0x%x) is MPEG audio id 0x%x",
                    stream->ts_audio_pids[aud_pid_index],
                    stream->ts_audio_stream_type[1 + aud_pid_index],
@@ -794,7 +794,7 @@ static hb_audio_t *hb_ts_stream_set_audio_id_and_codec(hb_stream_t *stream,
         }
     }
     fseeko(stream->file_handle, cur_pos, SEEK_SET);
-    if (! audio->codec)
+    if (! audio->config.in.codec)
     {
         hb_log("transport stream pid 0x%x (type 0x%x) isn't audio",
                 stream->ts_audio_pids[aud_pid_index],
@@ -811,7 +811,7 @@ static void add_audio_to_title(hb_title_t *title, int id)
     switch ( id >> 12 )
     {
         case 0x0:
-            audio->codec = HB_ACODEC_MPGA;
+            audio->config.in.codec = HB_ACODEC_MPGA;
             hb_log("add_audio_to_title: added MPEG audio stream 0x%x", id);
             break;
         case 0x2:
@@ -819,11 +819,11 @@ static void add_audio_to_title(hb_title_t *title, int id)
             free( audio );
             return;
         case 0x8:
-            audio->codec = HB_ACODEC_AC3;
+            audio->config.in.codec = HB_ACODEC_AC3;
             hb_log("add_audio_to_title: added AC3 audio stream 0x%x", id);
             break;
         case 0xa:
-            audio->codec = HB_ACODEC_LPCM;
+            audio->config.in.codec = HB_ACODEC_LPCM;
             hb_log("add_audio_to_title: added LPCM audio stream 0x%x", id);
             break;
         default:
@@ -913,12 +913,12 @@ void hb_stream_update_audio(hb_stream_t *stream, hb_audio_t *audio)
         }
 
 		lang = lang_for_code(stream->a52_info[i].lang_code);
-		if (!audio->rate)
-			audio->rate = stream->a52_info[i].rate;
-		if (!audio->bitrate)
-			audio->bitrate = stream->a52_info[i].bitrate;
-		if (!audio->config.a52.ac3flags)
-			audio->config.a52.ac3flags = audio->ac3flags = stream->a52_info[i].flags;
+        if (!audio->config.in.samplerate)
+            audio->config.in.samplerate = stream->a52_info[i].rate;
+        if (!audio->config.in.bitrate)
+            audio->config.in.bitrate = stream->a52_info[i].bitrate;
+        if (!audio->priv.config.a52.ac3flags)
+            audio->priv.config.a52.ac3flags = audio->config.flags.ac3 = stream->a52_info[i].flags;
 
 	}
     else
@@ -927,74 +927,74 @@ void hb_stream_update_audio(hb_stream_t *stream, hb_audio_t *audio)
         lang = lang_for_code(0x0000);
     }
 
-	if (!audio->input_channel_layout)
+	if (!audio->config.in.channel_layout)
 	{
-		switch( audio->ac3flags & A52_CHANNEL_MASK )
+		switch( audio->config.flags.ac3 & A52_CHANNEL_MASK )
 		{
 			/* mono sources */
 			case A52_MONO:
 			case A52_CHANNEL1:
 			case A52_CHANNEL2:
-				audio->input_channel_layout = HB_INPUT_CH_LAYOUT_MONO;
+				audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_MONO;
 				break;
 			/* stereo input */
 			case A52_CHANNEL:
 			case A52_STEREO:
-				audio->input_channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
+				audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
 				break;
 			/* dolby (DPL1 aka Dolby Surround = 4.0 matrix-encoded) input */
 			case A52_DOLBY:
-				audio->input_channel_layout = HB_INPUT_CH_LAYOUT_DOLBY;
+				audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_DOLBY;
 				break;
 			/* 3F/2R input */
 			case A52_3F2R:
-				audio->input_channel_layout = HB_INPUT_CH_LAYOUT_3F2R;
+				audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_3F2R;
 				break;
 			/* 3F/1R input */
 			case A52_3F1R:
-				audio->input_channel_layout = HB_INPUT_CH_LAYOUT_3F1R;
+				audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_3F1R;
 				break;
 			/* other inputs */
 			case A52_3F:
-				audio->input_channel_layout = HB_INPUT_CH_LAYOUT_3F;
+				audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_3F;
 				break;
 			case A52_2F1R:
-				audio->input_channel_layout = HB_INPUT_CH_LAYOUT_2F1R;
+				audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_2F1R;
 				break;
 			case A52_2F2R:
-				audio->input_channel_layout = HB_INPUT_CH_LAYOUT_2F2R;
+				audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_2F2R;
 				break;
 			/* unknown */
 			default:
-				audio->input_channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
+				audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
 		}
 
 		/* add in our own LFE flag if the source has LFE */
-		if (audio->ac3flags & A52_LFE)
+		if (audio->config.flags.ac3 & A52_LFE)
 		{
-			audio->input_channel_layout = audio->input_channel_layout | HB_INPUT_CH_LAYOUT_HAS_LFE;
+			audio->config.in.channel_layout = audio->config.in.channel_layout | HB_INPUT_CH_LAYOUT_HAS_LFE;
 		}
 	}
 
-	snprintf( audio->lang, sizeof( audio->lang ), "%s (%s)", strlen(lang->native_name) ? lang->native_name : lang->eng_name,
-	  audio->codec == HB_ACODEC_AC3 ? "AC3" : ( audio->codec == HB_ACODEC_MPGA ? "MPEG" : ( audio->codec == HB_ACODEC_DCA ? "DTS" : "LPCM" ) ) );
-	snprintf( audio->lang_simple, sizeof( audio->lang_simple ), "%s", strlen(lang->native_name) ? lang->native_name : lang->eng_name );
-	snprintf( audio->iso639_2, sizeof( audio->iso639_2 ), "%s", lang->iso639_2);
+    snprintf( audio->config.lang.description, sizeof( audio->config.lang.description ), "%s (%s)", strlen(lang->native_name) ? lang->native_name : lang->eng_name,
+	  audio->config.in.codec == HB_ACODEC_AC3 ? "AC3" : ( audio->config.in.codec == HB_ACODEC_MPGA ? "MPEG" : ( audio->config.in.codec == HB_ACODEC_DCA ? "DTS" : "LPCM" ) ) );
+	snprintf( audio->config.lang.simple, sizeof( audio->config.lang.simple ), "%s", strlen(lang->native_name) ? lang->native_name : lang->eng_name );
+	snprintf( audio->config.lang.iso639_2, sizeof( audio->config.lang.iso639_2 ), "%s", lang->iso639_2);
 
-	if ( (audio->ac3flags & A52_CHANNEL_MASK) == A52_DOLBY ) {
-		sprintf( audio->lang + strlen( audio->lang ),
+	if ( (audio->config.flags.ac3 & A52_CHANNEL_MASK) == A52_DOLBY ) {
+        sprintf( audio->config.lang.description + strlen( audio->config.lang.description ),
 			 " (Dolby Surround)" );
 	} else {
-		sprintf( audio->lang + strlen( audio->lang ),
+        sprintf( audio->config.lang.description + strlen( audio->config.lang.description ),
 			 " (%d.%d ch)",
-			HB_INPUT_CH_LAYOUT_GET_DISCRETE_FRONT_COUNT(audio->input_channel_layout) +
-			HB_INPUT_CH_LAYOUT_GET_DISCRETE_REAR_COUNT(audio->input_channel_layout),
-			HB_INPUT_CH_LAYOUT_GET_DISCRETE_LFE_COUNT(audio->input_channel_layout));
+			HB_INPUT_CH_LAYOUT_GET_DISCRETE_FRONT_COUNT(audio->config.in.channel_layout) +
+			HB_INPUT_CH_LAYOUT_GET_DISCRETE_REAR_COUNT(audio->config.in.channel_layout),
+			HB_INPUT_CH_LAYOUT_GET_DISCRETE_LFE_COUNT(audio->config.in.channel_layout));
 	}
 
 	hb_log( "stream: audio %x: lang %s, rate %d, bitrate %d, "
-            "flags = 0x%x", audio->id, audio->lang, audio->rate,
-            audio->bitrate, audio->ac3flags );
+            "flags = 0x%x", audio->id, audio->config.lang.description, audio->config.in.samplerate,
+            audio->config.in.bitrate, audio->config.flags.ac3 );
 
 }
 
@@ -1879,7 +1879,7 @@ static int hb_ts_stream_decode( hb_stream_t *stream, uint8_t *obuf )
             // remember the pcr across calls to this routine
             stream->ts_lastpcr = pcr;
         }
-		
+
 		if ( pcr == -1 )
 		{
             // don't accumulate data until we get a pcr
@@ -1903,7 +1903,7 @@ static int hb_ts_stream_decode( hb_stream_t *stream, uint8_t *obuf )
                 // so ignore the rest.
                 continue;
             }
-            if ( !start && (stream->ts_streamcont[curstream] != -1) && 
+            if ( !start && (stream->ts_streamcont[curstream] != -1) &&
                  (continuity != ( (stream->ts_streamcont[curstream] + 1) & 0xf ) ) )
 			{
 				ts_err( stream, curstream,  "continuity error: got %d expected %d",
@@ -1933,7 +1933,7 @@ static int hb_ts_stream_decode( hb_stream_t *stream, uint8_t *obuf )
 				stream->ts_skipbad[curstream] = 0;
 			}
 
-			// If we don't have video yet, check to see if this is an 
+			// If we don't have video yet, check to see if this is an
             // i_frame (group of picture start)
 			if ( curstream == 0 )
             {

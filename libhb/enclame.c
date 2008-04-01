@@ -39,6 +39,7 @@ struct hb_work_private_s
 int enclameInit( hb_work_object_t * w, hb_job_t * job )
 {
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
+    hb_audio_t * audio = w->audio;
     w->private_data = pv;
 
     pv->job   = job;
@@ -46,9 +47,9 @@ int enclameInit( hb_work_object_t * w, hb_job_t * job )
     hb_log( "enclame: opening libmp3lame" );
 
     pv->lame = lame_init();
-    lame_set_brate( pv->lame, job->abitrate );
-    lame_set_in_samplerate( pv->lame, job->arate );
-    lame_set_out_samplerate( pv->lame, job->arate );
+    lame_set_brate( pv->lame, audio->config.out.bitrate );
+    lame_set_in_samplerate( pv->lame, audio->config.out.samplerate );
+    lame_set_out_samplerate( pv->lame, audio->config.out.samplerate );
     lame_init_params( pv->lame );
 
     pv->input_samples = 1152 * 2;
@@ -85,6 +86,7 @@ void enclameClose( hb_work_object_t * w )
 static hb_buffer_t * Encode( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
+    hb_audio_t * audio = w->audio;
     hb_buffer_t * buf;
     int16_t samples_s16[1152 * 2];
     uint64_t pts, pos;
@@ -104,8 +106,8 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
     }
 
     buf        = hb_buffer_init( pv->output_bytes );
-    buf->start = pts + 90000 * pos / 2 / sizeof( float ) / pv->job->arate;
-    buf->stop  = buf->start + 90000 * 1152 / pv->job->arate;
+    buf->start = pts + 90000 * pos / 2 / sizeof( float ) / audio->config.out.samplerate;
+    buf->stop  = buf->start + 90000 * 1152 / audio->config.out.samplerate;
     buf->size  = lame_encode_buffer_interleaved( pv->lame, samples_s16,
             1152, buf->data, LAME_MAXMP3BUFFER );
     buf->frametype   = HB_FRAME_AUDIO;

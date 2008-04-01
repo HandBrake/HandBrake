@@ -7,6 +7,7 @@
 #include <stdarg.h>
 #include <time.h>
 #include <sys/time.h>
+#include <assert.h>
 
 #include "common.h"
 
@@ -43,9 +44,7 @@ hb_mixdown_t hb_audio_mixdowns[] =
   { "Stereo",             "HB_AMIXDOWN_STEREO",    "stereo", HB_AMIXDOWN_STEREO    },
   { "Dolby Surround",     "HB_AMIXDOWN_DOLBY",     "dpl1",   HB_AMIXDOWN_DOLBY     },
   { "Dolby Pro Logic II", "HB_AMIXDOWN_DOLBYPLII", "dpl2",   HB_AMIXDOWN_DOLBYPLII },
-  { "6-channel discrete", "HB_AMIXDOWN_6CH",       "6ch",    HB_AMIXDOWN_6CH       },
-  { "AC-3 Pass-through",  "HB_AMIXDOWN_AC3",       "ac-3",   HB_AMIXDOWN_AC3       },
-  { "Dolby Pro Logic II + AC-3",  "HB_AMIXDOWN_DOLBYPLII_AC3", "dpl2+ac3", HB_AMIXDOWN_DOLBYPLII_AC3 },
+  { "6-channel discrete", "HB_AMIXDOWN_6CH",       "6ch",    HB_AMIXDOWN_6CH       }
 };
 int hb_audio_mixdowns_count = sizeof( hb_audio_mixdowns ) /
                               sizeof( hb_mixdown_t );
@@ -115,7 +114,7 @@ void hb_fix_aspect( hb_job_t * job, int keep )
     if ( title->height == 0 || title->width == 0 || title->aspect == 0 )
     {
         hb_log( "hb_fix_aspect: incomplete info for title %d: "
-                "height = %d, width = %d, aspect = %d", 
+                "height = %d, width = %d, aspect = %d",
                 title->height, title->width, title->aspect );
         return;
     }
@@ -202,23 +201,6 @@ int hb_calc_bitrate( hb_job_t * job, int size )
             return 0;
     }
 
-    /* How many audio samples we put in each frame */
-    switch( job->acodec )
-    {
-        case HB_ACODEC_FAAC:
-        case HB_ACODEC_VORBIS:
-            samples_per_frame = 1024;
-            break;
-        case HB_ACODEC_LAME:
-            samples_per_frame = 1152;
-            break;
-        case HB_ACODEC_AC3:
-            samples_per_frame = 1536;
-            break;
-        default:
-            return 0;
-    }
-
     /* Get the duration in seconds */
     length = 0;
     for( i = job->chapter_start; i <= job->chapter_end; i++ )
@@ -232,19 +214,37 @@ int hb_calc_bitrate( hb_job_t * job, int size )
     /* Video overhead */
     avail -= length * job->vrate * overhead / job->vrate_base;
 
-    for( i = 0; job->audios[i] >= 0; i++ )
+    for( i = 0; i < hb_list_count(job->list_audio); i++ )
     {
         /* Audio data */
         int abitrate;
-        if( job->acodec & HB_ACODEC_AC3 ||
-            job->audio_mixdowns[i] == HB_AMIXDOWN_AC3)
+        audio = hb_list_item( job->list_audio, i);
+
+        /* How many audio samples we put in each frame */
+        switch( audio->config.out.codec )
+        {
+            case HB_ACODEC_FAAC:
+            case HB_ACODEC_VORBIS:
+                samples_per_frame = 1024;
+                break;
+            case HB_ACODEC_LAME:
+                samples_per_frame = 1152;
+                break;
+            case HB_ACODEC_AC3:
+                samples_per_frame = 1536;
+                break;
+            default:
+                return 0;
+        }
+
+        if( audio->config.out.codec == HB_ACODEC_AC3 ||
+            audio->config.out.codec == HB_ACODEC_DCA)
         {
             /*
-             * For AC-3 we take the bitrate from the input audio
+             * For pass through we take the bitrate from the input audio
              * bitrate as we are simply passing it through.
              */
-            audio = hb_list_item( title->list_audio, job->audios[i] );
-            abitrate = audio->bitrate / 8;
+            abitrate = audio->config.in.bitrate / 8;
         }
         else
         {
@@ -252,12 +252,12 @@ int hb_calc_bitrate( hb_job_t * job, int size )
              * Where we are transcoding the audio we use the destination
              * bitrate.
              */
-            abitrate = job->abitrate * 1000 / 8;
+            abitrate = audio->config.out.bitrate * 1000 / 8;
         }
         avail -= length * abitrate;
 
         /* Audio overhead */
-        avail -= length * job->arate * overhead / samples_per_frame;
+        avail -= length * audio->config.out.samplerate * overhead / samples_per_frame;
     }
 
     if( avail < 0 )
@@ -654,3 +654,93 @@ void hb_filter_close( hb_filter_object_t ** _f )
     *_f = NULL;
 }
 
+/**********************************************************************
+ * hb_audio_copy
+ **********************************************************************
+ *
+ *********************************************************************/
+hb_audio_t *hb_audio_copy(const hb_audio_t *src)
+{
+    hb_audio_t *audio = calloc(1, sizeof(*audio));
+    memcpy(audio, src, sizeof(*audio));
+    return audio;
+}
+
+/**********************************************************************
+ * hb_audio_new
+ **********************************************************************
+ *
+ *********************************************************************/
+void hb_audio_config_init(hb_audio_config_t * audiocfg)
+{
+    assert(audiocfg != NULL);
+
+    /* Set read only paramaters to invalid values */
+    audiocfg->in.codec = 0xDEADBEEF;
+    audiocfg->in.bitrate = -1;
+    audiocfg->in.samplerate = -1;
+    audiocfg->in.channel_layout = 0;
+    audiocfg->flags.ac3 = 0;
+    audiocfg->lang.description[0] = 0;
+    audiocfg->lang.simple[0] = 0;
+    audiocfg->lang.iso639_2[0] = 0;
+
+    /* Initalize some sensable defaults */
+    audiocfg->in.track = audiocfg->out.track = 0;
+    audiocfg->out.codec = HB_ACODEC_FAAC;
+    audiocfg->out.bitrate = 128;
+    audiocfg->out.samplerate = 44100;
+    audiocfg->out.mixdown = HB_AMIXDOWN_DOLBYPLII;
+    audiocfg->out.dynamic_range_compression = 0;
+}
+
+/**********************************************************************
+ * hb_audio_add
+ **********************************************************************
+ *
+ *********************************************************************/
+int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
+{
+    assert(job != NULL);
+    assert(audiocfg != NULL);
+
+    hb_title_t *title = job->title;
+    hb_audio_t *audio;
+
+    audio = hb_audio_copy( hb_list_item( title->list_audio, audiocfg->in.track ) );
+    if( audio == NULL )
+    {
+        /* We fail! */
+        return 0;
+    }
+
+    if( (audiocfg->in.bitrate != -1) && (audiocfg->in.codec != 0xDEADBEEF) )
+    {
+        /* This most likely means the client didn't call hb_audio_config_init
+         * so bail.
+         */
+        return 0;
+    }
+
+    /* Really shouldn't ignore the passed out track, but there is currently no
+     * way to handle duplicates or out-of-order track numbers.
+     */
+    audio->config.out.track = hb_list_count(job->list_audio) + 1;
+    audio->config.out.codec = audiocfg->out.codec;
+    audio->config.out.samplerate = audiocfg->out.samplerate;
+    audio->config.out.bitrate = audiocfg->out.bitrate;
+    audio->config.out.mixdown = audiocfg->out.mixdown;
+    audio->config.out.dynamic_range_compression = audiocfg->out.dynamic_range_compression;
+
+    hb_list_add(job->list_audio, audio);
+    return 1;
+}
+
+hb_audio_config_t * hb_list_audio_config_item(hb_list_t * list, int i)
+{
+    assert(list != NULL);
+
+    hb_audio_t *audio = hb_list_item(list, i);
+
+    return &(audio->config);
+}

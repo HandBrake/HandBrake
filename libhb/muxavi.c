@@ -281,7 +281,7 @@ static int AVIInit( hb_mux_object_t * m )
     hb_mux_data_t * mux_data;
 
     int audio_count = hb_list_count( title->list_audio );
-    int is_ac3      = ( job->acodec & HB_ACODEC_AC3 );
+    int is_ac3      = 0;
     int hdrl_bytes;
     int i;
 
@@ -346,8 +346,10 @@ static int AVIInit( hb_mux_object_t * m )
     {
         audio = hb_list_item( title->list_audio, i );
 
+        is_ac3 = (audio->config.out.codec == HB_ACODEC_AC3);
+
         mux_data = calloc( sizeof( hb_mux_data_t ), 1 );
-        audio->mux_data = mux_data;
+        audio->priv.mux_data = mux_data;
 
 #define h mux_data->header
 #define f mux_data->format.a.f
@@ -358,8 +360,8 @@ static int AVIInit( hb_mux_object_t * m )
         h.Type          = FOURCC( "auds" );
         h.InitialFrames = 1;
         h.Scale         = 1;
-        h.Rate          = is_ac3 ? ( audio->bitrate / 8 ) :
-                                   ( job->abitrate * 1000 / 8 );
+        h.Rate          = is_ac3 ? ( audio->config.in.bitrate / 8 ) :
+                                   ( audio->config.out.bitrate * 1000 / 8 );
         h.Quality       = 0xFFFFFFFF;
         h.SampleSize    = 1;
 
@@ -369,16 +371,16 @@ static int AVIInit( hb_mux_object_t * m )
         {
             f.BytesCount     = sizeof( hb_wave_formatex_t ) - 8;
             f.FormatTag      = 0x2000;
-            f.Channels       = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(audio->input_channel_layout);
-            f.SamplesPerSec  = audio->rate;
+            f.Channels       = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(audio->config.in.channel_layout);
+            f.SamplesPerSec  = audio->config.in.samplerate;
         }
         else
         {
             f.BytesCount     = sizeof( hb_wave_formatex_t ) +
                                sizeof( hb_wave_mp3_t ) - 8;
             f.FormatTag      = 0x55;
-            f.Channels       = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(job->audio_mixdowns[i]);
-            f.SamplesPerSec  = job->arate;
+            f.Channels       = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
+            f.SamplesPerSec  = audio->config.out.samplerate;
         }
         f.AvgBytesPerSec = h.Rate;
         f.BlockAlign     = 1;
@@ -391,7 +393,7 @@ static int AVIInit( hb_mux_object_t * m )
             f.Size           = sizeof( hb_wave_mp3_t );
             m.Id             = 1;
             m.Flags          = 2;
-            m.BlockSize      = 1152 * f.AvgBytesPerSec / job->arate;
+            m.BlockSize      = 1152 * f.AvgBytesPerSec / audio->config.out.samplerate;
             m.FramesPerBlock = 1;
             m.CodecDelay     = 1393;
         }
@@ -439,7 +441,7 @@ static int AVIInit( hb_mux_object_t * m )
         char fourcc[4] = "00wb";
 
         audio    = hb_list_item( title->list_audio, i );
-        mux_data = audio->mux_data;
+        mux_data = audio->priv.mux_data;
 
         fourcc[1] = '1' + i; /* This is fine as we don't allow more
                                 than 8 tracks */
@@ -513,9 +515,9 @@ static int AVIMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     {
         audio = hb_list_item( title->list_audio, i );
         fseek( m->file, 264 + i *
-               ( 102 + ( ( job->acodec & HB_ACODEC_AC3 ) ? 0 :
+               ( 102 + ( ( audio->config.out.codec == HB_ACODEC_AC3 ) ? 0 :
                  sizeof( hb_wave_mp3_t ) ) ), SEEK_SET );
-        WriteInt32( m->file, audio->mux_data->header.Length );
+        WriteInt32( m->file, audio->priv.mux_data->header.Length );
     }
 
     /* movi size */

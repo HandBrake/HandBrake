@@ -135,9 +135,9 @@ static int OGMInit( hb_mux_object_t * m )
     {
         audio                 = hb_list_item( title->list_audio, i );
         mux_data              = malloc( sizeof( hb_mux_data_t ) );
-        mux_data->codec       = job->acodec;
+        mux_data->codec       = audio->config.out.codec;
         mux_data->i_packet_no = 0;
-        audio->mux_data       = mux_data;
+        audio->priv.mux_data       = mux_data;
         ogg_stream_init( &mux_data->os, i + 1 );
     }
 
@@ -200,9 +200,9 @@ static int OGMInit( hb_mux_object_t * m )
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio   = hb_list_item( title->list_audio, i );
-        mux_data = audio->mux_data;
+        mux_data = audio->priv.mux_data;
         memset( &h, 0, sizeof( ogg_stream_header_t ) );
-        switch( job->acodec )
+        switch( audio->config.out.codec )
         {
             case HB_ACODEC_LAME:
             {
@@ -212,7 +212,7 @@ static int OGMInit( hb_mux_object_t * m )
 
                 SetDWLE( &h.i_size, sizeof( ogg_stream_header_t ) - 1);
                 SetQWLE( &h.i_time_unit, 0 );
-                SetQWLE( &h.i_samples_per_unit, job->arate );
+                SetQWLE( &h.i_samples_per_unit, audio->config.out.samplerate );
                 SetDWLE( &h.i_default_len, 1 );
                 SetDWLE( &h.i_buffer_size, 30 * 1024 );
                 SetWLE ( &h.i_bits_per_sample, 0 );
@@ -220,7 +220,7 @@ static int OGMInit( hb_mux_object_t * m )
                 SetDWLE( &h.header.audio.i_channels, 2 );
                 SetDWLE( &h.header.audio.i_block_align, 0 );
                 SetDWLE( &h.header.audio.i_avgbytespersec,
-                         job->abitrate / 8 );
+                         audio->config.out.bitrate / 8 );
 
                 op.packet   = (unsigned char*) &h;
                 op.bytes    = sizeof( ogg_stream_header_t );
@@ -233,9 +233,9 @@ static int OGMInit( hb_mux_object_t * m )
             }
             case HB_ACODEC_VORBIS:
             {
-                memcpy( &op, audio->config.vorbis.headers[0],
+                memcpy( &op, audio->priv.config.vorbis.headers[0],
                         sizeof( ogg_packet ) );
-                op.packet = audio->config.vorbis.headers[0] +
+                op.packet = audio->priv.config.vorbis.headers[0] +
                                 sizeof( ogg_packet );
                 ogg_stream_packetin( &mux_data->os, &op );
                 break;
@@ -275,16 +275,16 @@ static int OGMInit( hb_mux_object_t * m )
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = hb_list_item( title->list_audio, i );
-        if( job->acodec == HB_ACODEC_VORBIS )
+        if( audio->config.out.codec == HB_ACODEC_VORBIS )
         {
             int       j;
-            mux_data = audio->mux_data;
+            mux_data = audio->priv.mux_data;
 
             for( j = 1; j < 3; j++ )
             {
-                memcpy( &op, audio->config.vorbis.headers[j],
+                memcpy( &op, audio->priv.config.vorbis.headers[j],
                         sizeof( ogg_packet ) );
-                op.packet = audio->config.vorbis.headers[j] +
+                op.packet = audio->priv.config.vorbis.headers[j] +
                                 sizeof( ogg_packet );
                 ogg_stream_packetin( &mux_data->os, &op );
 
@@ -387,7 +387,7 @@ static int OGMEnd( hb_mux_object_t * m )
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = hb_list_item( title->list_audio, i );
-        mux_data = audio->mux_data;
+        mux_data = audio->priv.mux_data;
         if( OGMFlush( m, mux_data ) < 0 )
         {
             return -1;

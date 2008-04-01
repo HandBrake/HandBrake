@@ -130,6 +130,7 @@ void syncClose( hb_work_object_t * w )
     hb_work_private_t * pv = w->private_data;
     hb_job_t          * job   = pv->job;
     hb_title_t        * title = job->title;
+    hb_audio_t        * audio = NULL;
 
     int i;
 
@@ -144,8 +145,8 @@ void syncClose( hb_work_object_t * w )
                               pv->sync_audio[i].start_silence) / 90), i );
         }
 
-        if( job->acodec & HB_ACODEC_AC3 ||
-            job->audio_mixdowns[i] == HB_AMIXDOWN_AC3 )
+        audio = hb_list_item( title->list_audio, i );
+        if( audio->config.out.codec == HB_ACODEC_AC3 )
         {
             free( pv->sync_audio[i].ac3_buf );
         }
@@ -207,8 +208,7 @@ static void InitAudio( hb_work_object_t * w, int i )
     sync        = &pv->sync_audio[i];
     sync->audio = hb_list_item( title->list_audio, i );
 
-    if( job->acodec & HB_ACODEC_AC3 ||
-        job->audio_mixdowns[i] == HB_AMIXDOWN_AC3 )
+    if( sync->audio->config.out.codec == HB_ACODEC_AC3 )
     {
         /* Have a silent AC-3 frame ready in case we have to fill a
            gap */
@@ -219,9 +219,9 @@ static void InitAudio( hb_work_object_t * w, int i )
         codec = avcodec_find_encoder( CODEC_ID_AC3 );
         c     = avcodec_alloc_context();
 
-        c->bit_rate    = sync->audio->bitrate;
-        c->sample_rate = sync->audio->rate;
-        c->channels    = 2;
+        c->bit_rate    = sync->audio->config.in.bitrate;
+        c->sample_rate = sync->audio->config.in.samplerate;
+        c->channels    = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT( sync->audio->config.in.channel_layout );
 
         if( avcodec_open( c, codec ) < 0 )
         {
@@ -231,8 +231,8 @@ static void InitAudio( hb_work_object_t * w, int i )
 
         zeros          = calloc( AC3_SAMPLES_PER_FRAME *
                                  sizeof( short ) * c->channels, 1 );
-        sync->ac3_size = sync->audio->bitrate * AC3_SAMPLES_PER_FRAME /
-                             sync->audio->rate / 8;
+        sync->ac3_size = sync->audio->config.in.bitrate * AC3_SAMPLES_PER_FRAME /
+                             sync->audio->config.in.samplerate / 8;
         sync->ac3_buf  = malloc( sync->ac3_size );
 
         if( avcodec_encode_audio( c, sync->ac3_buf, sync->ac3_size,
@@ -249,7 +249,7 @@ static void InitAudio( hb_work_object_t * w, int i )
     {
         /* Initialize libsamplerate */
         int error;
-        sync->state             = src_new( SRC_LINEAR, HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(sync->audio->amixdown), &error );
+        sync->state             = src_new( SRC_LINEAR, HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(sync->audio->config.out.mixdown), &error );
         sync->data.end_of_input = 0;
     }
 }
@@ -432,9 +432,9 @@ static int SyncVideo( hb_work_object_t * w )
                              * Subtitle is on for less than three seconds, extend
                              * the time that it is displayed to make it easier
                              * to read. Make it 3 seconds or until the next
-                             * subtitle is displayed. 
+                             * subtitle is displayed.
                              *
-                             * This is in response to Indochine which only 
+                             * This is in response to Indochine which only
                              * displays subs for 1 second - too fast to read.
                              */
                             sub->stop = sub->start + ( 3 * 90000 );
@@ -558,22 +558,22 @@ static void OutputAudioFrame( hb_job_t *job, hb_audio_t *audio, hb_buffer_t *buf
 {
     int64_t start = sync->next_start;
     int64_t duration = buf->stop - buf->start;
-    if (duration <= 0 || 
-        duration > ( 90000 * AC3_SAMPLES_PER_FRAME ) / audio->rate )
+    if (duration <= 0 ||
+        duration > ( 90000 * AC3_SAMPLES_PER_FRAME ) / audio->config.out.samplerate )
     {
         hb_log("sync: audio %d weird duration %lld, start %lld, stop %lld, next %lld",
                i, duration, buf->start, buf->stop, sync->next_pts);
         if ( duration <= 0 )
         {
-            duration = ( 90000 * AC3_SAMPLES_PER_FRAME ) / audio->rate;
+            duration = ( 90000 * AC3_SAMPLES_PER_FRAME ) / audio->config.out.samplerate;
             buf->stop = buf->start + duration;
         }
     }
     sync->next_pts += duration;
 
     if( /* audio->rate == job->arate || This should work but doesn't */
-        job->acodec & HB_ACODEC_AC3 ||
-        job->audio_mixdowns[i] == HB_AMIXDOWN_AC3 )
+        audio->config.out.codec == HB_ACODEC_AC3 ||
+        audio->config.out.codec == HB_ACODEC_DCA )
     {
         /*
          * If we don't have to do sample rate conversion or this audio is AC3
@@ -586,11 +586,11 @@ static void OutputAudioFrame( hb_job_t *job, hb_audio_t *audio, hb_buffer_t *buf
         /* Not pass-thru - do sample rate conversion */
         int count_in, count_out;
         hb_buffer_t * buf_raw = buf;
-        int channel_count = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown) *
+        int channel_count = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown) *
                             sizeof( float );
 
         count_in  = buf_raw->size / channel_count;
-        count_out = ( buf_raw->stop - buf_raw->start ) * job->arate / 90000;
+        count_out = ( buf_raw->stop - buf_raw->start ) * audio->config.out.samplerate / 90000;
 
         sync->data.input_frames = count_in;
         sync->data.output_frames = count_out;
@@ -630,19 +630,18 @@ static void SyncAudio( hb_work_object_t * w, int i )
     hb_fifo_t       * fifo;
     int               rate;
 
-    if( job->acodec & HB_ACODEC_AC3 ||
-        job->audio_mixdowns[i] == HB_AMIXDOWN_AC3 )
+    if( audio->config.out.codec == HB_ACODEC_AC3 )
     {
-        fifo = audio->fifo_out;
-        rate = audio->rate;
+        fifo = audio->priv.fifo_out;
+        rate = audio->config.in.samplerate;
     }
     else
     {
-        fifo = audio->fifo_sync;
-        rate = job->arate;
+        fifo = audio->priv.fifo_sync;
+        rate = audio->config.out.samplerate;
     }
 
-    while( !hb_fifo_is_full( fifo ) && ( buf = hb_fifo_see( audio->fifo_raw ) ) )
+    while( !hb_fifo_is_full( fifo ) && ( buf = hb_fifo_see( audio->priv.fifo_raw ) ) )
     {
         if ( sync->next_pts - buf->start > 500 )
         {
@@ -656,7 +655,7 @@ static void SyncAudio( hb_work_object_t * w, int i )
                 sync->first_drop = buf->start;
             }
             ++sync->drop_count;
-            buf = hb_fifo_get( audio->fifo_raw );
+            buf = hb_fifo_get( audio->priv.fifo_raw );
             hb_buffer_close( &buf );
             continue;
         }
@@ -711,13 +710,13 @@ static void SyncAudio( hb_work_object_t * w, int i )
          * audio stream and are ready to inject the next input frame into
          * the output stream.
          */
-        buf = hb_fifo_get( audio->fifo_raw );
+        buf = hb_fifo_get( audio->priv.fifo_raw );
         OutputAudioFrame( job, audio, buf, sync, fifo, i );
     }
 
     if( NeedSilence( w, audio, i ) )
     {
-        InsertSilence( w, i, (90000 * AC3_SAMPLES_PER_FRAME) / sync->audio->rate );
+        InsertSilence( w, i, (90000 * AC3_SAMPLES_PER_FRAME) / sync->audio->config.out.samplerate );
     }
 }
 
@@ -727,10 +726,10 @@ static int NeedSilence( hb_work_object_t * w, hb_audio_t * audio, int i )
     hb_job_t * job = pv->job;
     hb_sync_audio_t * sync = &pv->sync_audio[i];
 
-    if( hb_fifo_size( audio->fifo_in ) ||
-        hb_fifo_size( audio->fifo_raw ) ||
-        hb_fifo_size( audio->fifo_sync ) ||
-        hb_fifo_size( audio->fifo_out ) )
+    if( hb_fifo_size( audio->priv.fifo_in ) ||
+        hb_fifo_size( audio->priv.fifo_raw ) ||
+        hb_fifo_size( audio->priv.fifo_sync ) ||
+        hb_fifo_size( audio->priv.fifo_out ) )
     {
         /* We have some audio, we are fine */
         return 0;
@@ -759,22 +758,22 @@ static void InsertSilence( hb_work_object_t * w, int i, int64_t duration )
     hb_sync_audio_t *sync = &pv->sync_audio[i];
     hb_buffer_t     *buf;
 
-    if( job->acodec & HB_ACODEC_AC3 || job->audio_mixdowns[i] == HB_AMIXDOWN_AC3 )
+    if( sync->audio->config.out.codec == HB_ACODEC_AC3 )
     {
         buf        = hb_buffer_init( sync->ac3_size );
         buf->start = sync->next_pts;
         buf->stop  = buf->start + duration;
         memcpy( buf->data, sync->ac3_buf, buf->size );
-        OutputAudioFrame( job, sync->audio, buf, sync, sync->audio->fifo_out, i );
+        OutputAudioFrame( job, sync->audio, buf, sync, sync->audio->priv.fifo_out, i );
     }
     else
     {
         buf = hb_buffer_init( duration * sizeof( float ) *
-                    HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(sync->audio->amixdown) );
+                    HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(sync->audio->config.out.mixdown) );
         buf->start = sync->next_pts;
         buf->stop  = buf->start + duration;
         memset( buf->data, 0, buf->size );
-        OutputAudioFrame( job, sync->audio, buf, sync, sync->audio->fifo_sync, i );
+        OutputAudioFrame( job, sync->audio, buf, sync, sync->audio->priv.fifo_sync, i );
     }
 }
 

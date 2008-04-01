@@ -45,6 +45,7 @@ hb_work_object_t hb_encfaac =
 int encfaacInit( hb_work_object_t * w, hb_job_t * job )
 {
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
+    hb_audio_t * audio = w->audio;
     faacEncConfigurationPtr cfg;
     uint8_t * bytes;
     unsigned long length;
@@ -54,9 +55,9 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
     pv->job   = job;
 
 	/* pass the number of channels used into the private work data */
-	pv->out_discrete_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(w->amixdown);
+    pv->out_discrete_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
 
-    pv->faac = faacEncOpen( job->arate, pv->out_discrete_channels, &pv->input_samples,
+    pv->faac = faacEncOpen( audio->config.out.samplerate, pv->out_discrete_channels, &pv->input_samples,
                            &pv->output_bytes );
     pv->buf  = malloc( pv->input_samples * sizeof( float ) );
 
@@ -74,12 +75,12 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
 	}
 
     cfg->useTns        = 0;
-    cfg->bitRate       = job->abitrate * 1000 / pv->out_discrete_channels; /* Per channel */
+    cfg->bitRate       = audio->config.out.bitrate * 1000 / pv->out_discrete_channels; /* Per channel */
     cfg->bandWidth     = 0;
     cfg->outputFormat  = 0;
     cfg->inputFormat   =  FAAC_INPUT_FLOAT;
 
-	if (w->amixdown == HB_AMIXDOWN_6CH && w->source_acodec == HB_ACODEC_AC3)
+    if (audio->config.out.mixdown == HB_AMIXDOWN_6CH && audio->config.in.codec == HB_ACODEC_AC3)
     {
         /* we are preserving 5.1 AC-3 audio into 6-channel AAC, and need to
         re-map the output of deca52 into our own mapping - the mapping
@@ -140,6 +141,7 @@ void encfaacClose( hb_work_object_t * w )
 static hb_buffer_t * Encode( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
+    hb_audio_t * audio = w->audio;
     hb_buffer_t * buf;
     uint64_t      pts, pos;
 
@@ -153,8 +155,8 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
                       &pts, &pos );
 
     buf        = hb_buffer_init( pv->output_bytes );
-    buf->start = pts + 90000 * pos / pv->out_discrete_channels / sizeof( float ) / pv->job->arate;
-    buf->stop  = buf->start + 90000 * pv->input_samples / pv->job->arate / pv->out_discrete_channels;
+    buf->start = pts + 90000 * pos / pv->out_discrete_channels / sizeof( float ) / audio->config.out.samplerate;
+    buf->stop  = buf->start + 90000 * pv->input_samples / audio->config.out.samplerate / pv->out_discrete_channels;
     buf->size  = faacEncEncode( pv->faac, (int32_t *) pv->buf,
             pv->input_samples, buf->data, pv->output_bytes );
     buf->frametype   = HB_FRAME_AUDIO;

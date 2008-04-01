@@ -44,13 +44,14 @@ struct hb_work_private_s
 
 int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
 {
+    hb_audio_t * audio = w->audio;
     int i;
     ogg_packet header[3];
     struct ovectl_ratemanage2_arg  ctl_rate_arg;
 
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
-    pv->out_discrete_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(w->amixdown);
+    pv->out_discrete_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
 
     pv->job   = job;
 
@@ -58,17 +59,18 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
 
     /* 28kbps/channel seems to be the minimum for 6ch vorbis. */
     int min_bitrate = 28 * pv->out_discrete_channels;
-    if (pv->out_discrete_channels > 2 && job->abitrate < min_bitrate)
+    if (pv->out_discrete_channels > 2 && audio->config.out.bitrate < min_bitrate)
     {
-        hb_log( "encvorbis: Selected bitrate (%d kbps) too low for %d channel audio.", job->abitrate, pv->out_discrete_channels);
+        hb_log( "encvorbis: Selected bitrate (%d kbps) too low for %d channel audio.", audio->config.out.bitrate, pv->out_discrete_channels);
         hb_log( "encvorbis: Resetting bitrate to %d kbps", min_bitrate);
-        job->abitrate = min_bitrate;
+        /* Naughty! We shouldn't modify the audio from here. */
+        audio->config.out.bitrate = min_bitrate;
     }
 
     /* init */
     vorbis_info_init( &pv->vi );
     if( vorbis_encode_setup_managed( &pv->vi, pv->out_discrete_channels,
-          job->arate, -1, 1000 * job->abitrate, -1 ) )
+          audio->config.out.samplerate, -1, 1000 * audio->config.out.bitrate, -1 ) )
     {
         hb_error( "encvorbis: vorbis_encode_setup_managed failed.\n" );
         *job->die = 1;
@@ -80,7 +82,7 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
         hb_log( "encvorbis: vorbis_encode_ctl( ratemanage2_get ) failed" );
     }
 
-    ctl_rate_arg.bitrate_average_kbps = job->abitrate;
+    ctl_rate_arg.bitrate_average_kbps = audio->config.out.bitrate;
     ctl_rate_arg.management_active = 1;
 
     if( vorbis_encode_ctl( &pv->vi, OV_ECTL_RATEMANAGE2_SET, &ctl_rate_arg ) ||

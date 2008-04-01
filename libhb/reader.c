@@ -358,7 +358,7 @@ static hb_fifo_t ** GetFifoForId( hb_job_t * job, int id )
             audio = hb_list_item( title->list_audio, i );
             if( id == audio->id )
             {
-                fifos[n++] = audio->fifo_in;
+                fifos[n++] = audio->priv.fifo_in;
             }
         }
 

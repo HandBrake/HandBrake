@@ -27,6 +27,11 @@ struct hb_mux_object_s
     MP4TrackId chapter_track;
     int current_chapter;
     uint64_t chapter_duration;
+
+    /* Sample rate of the first audio track.
+     * Used for the timescale
+     */
+    int samplerate;
 };
 
 struct hb_mux_data_s
@@ -137,6 +142,10 @@ static int MP4Init( hb_mux_object_t * m )
     /* Flags for enabling/disabling tracks in an MP4. */
     typedef enum { TRACK_DISABLED = 0x0, TRACK_ENABLED = 0x1, TRACK_IN_MOVIE = 0x2, TRACK_IN_PREVIEW = 0x4, TRACK_IN_POSTER = 0x8}  track_header_flags;
 
+    /* Need the sample rate of the first audio track to use as the timescale. */
+    audio = hb_list_item(title->list_audio, 0);
+    m->samplerate = audio->config.out.samplerate;
+    audio = NULL;
 
     /* Create an empty mp4 file */
     if (job->largeFileSize)
@@ -166,7 +175,7 @@ static int MP4Init( hb_mux_object_t * m )
        synchronization issues (audio not playing at the correct speed).
        To workaround this, we use the audio samplerate as the
        timescale */
-    if (!(MP4SetTimeScale( m->file, job->arate )))
+    if (!(MP4SetTimeScale( m->file, m->samplerate )))
     {
         hb_error("muxmp4.c: MP4SetTimeScale failed!");
         *job->die = 1;
@@ -183,7 +192,7 @@ static int MP4Init( hb_mux_object_t * m )
             return 0;
         }
 
-		mux_data->track = MP4AddH264VideoTrack( m->file, job->arate,
+		mux_data->track = MP4AddH264VideoTrack( m->file, m->samplerate,
 		        MP4_INVALID_DURATION, job->width, job->height,
 		        job->config.h264.sps[1], /* AVCProfileIndication */
 		        job->config.h264.sps[2], /* profile_compat */
@@ -211,7 +220,7 @@ static int MP4Init( hb_mux_object_t * m )
             *job->die = 1;
             return 0;
         }
-        mux_data->track = MP4AddVideoTrack( m->file, job->arate,
+        mux_data->track = MP4AddVideoTrack( m->file, m->samplerate,
                 MP4_INVALID_DURATION, job->width, job->height,
                 MP4_MPEG4_VIDEO_TYPE );
         if (mux_data->track == MP4_INVALID_TRACK_ID)
@@ -261,14 +270,13 @@ static int MP4Init( hb_mux_object_t * m )
 
         audio = hb_list_item( title->list_audio, i );
         mux_data = malloc( sizeof( hb_mux_data_t ) );
-        audio->mux_data = mux_data;
+        audio->priv.mux_data = mux_data;
 
-        if( job->acodec & HB_ACODEC_AC3 ||
-            job->audio_mixdowns[i] == HB_AMIXDOWN_AC3 )
+        if( audio->config.out.codec == HB_ACODEC_AC3 )
         {
             mux_data->track = MP4AddAC3AudioTrack(
                 m->file,
-                job->arate, 1536, MP4_MPEG4_AUDIO_TYPE );
+                m->samplerate, 1536, MP4_MPEG4_AUDIO_TYPE );
             MP4SetTrackBytesProperty(
                 m->file, mux_data->track,
                 "udta.name.value",
@@ -276,7 +284,7 @@ static int MP4Init( hb_mux_object_t * m )
         } else {
             mux_data->track = MP4AddAudioTrack(
                 m->file,
-                job->arate, 1024, MP4_MPEG4_AUDIO_TYPE );
+                m->samplerate, 1024, MP4_MPEG4_AUDIO_TYPE );
             MP4SetTrackBytesProperty(
                 m->file, mux_data->track,
                 "udta.name.value",
@@ -285,18 +293,18 @@ static int MP4Init( hb_mux_object_t * m )
             MP4SetAudioProfileLevel( m->file, 0x0F );
             MP4SetTrackESConfiguration(
                 m->file, mux_data->track,
-                audio->config.aac.bytes, audio->config.aac.length );
+                audio->priv.config.aac.bytes, audio->priv.config.aac.length );
 
             /* Set the correct number of channels for this track */
-            reserved2[9] = (u_int8_t)HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown);
+            reserved2[9] = (u_int8_t)HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
             MP4SetTrackBytesProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.mp4a.reserved2", reserved2, sizeof(reserved2));
 
         }
         /* Set the language for this track */
         /* The language is stored as 5-bit text - 0x60 */
-        language_code = audio->iso639_2[0] - 0x60;   language_code <<= 5;
-        language_code |= audio->iso639_2[1] - 0x60;  language_code <<= 5;
-        language_code |= audio->iso639_2[2] - 0x60;
+        language_code = audio->config.lang.iso639_2[0] - 0x60;   language_code <<= 5;
+        language_code |= audio->config.lang.iso639_2[1] - 0x60;  language_code <<= 5;
+        language_code |= audio->config.lang.iso639_2[2] - 0x60;
         MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.mdhd.language", language_code);
 
 
@@ -372,7 +380,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
 
             if ( job->areBframes )
             {
-                duration += buf->renderOffset * job->arate / 90000;
+                duration += buf->renderOffset * m->samplerate / 90000;
             }
 
             sample = MP4GenerateChapterSample( m, duration );
@@ -396,8 +404,8 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         /* Because we use the audio samplerate as the timescale,
            we have to use potentially variable durations so the video
            doesn't go out of sync */
-        int64_t bias = ( buf->start * job->arate / 90000 ) - m->sum_dur;
-        duration = ( buf->stop - buf->start ) * job->arate / 90000 + bias;
+        int64_t bias = ( buf->start * m->samplerate / 90000 ) - m->sum_dur;
+        duration = ( buf->stop - buf->start ) * m->samplerate / 90000 + bias;
         if ( duration <= 0 )
         {
             /* We got an illegal mp4/h264 duration. This shouldn't
@@ -406,14 +414,14 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                try to fix the error so that the file will still be playable. */
             hb_log("MP4Mux: illegal duration %lld, bias %lld, start %lld (%lld),"
                    "stop %lld (%lld), sum_dur %lld",
-                   duration, bias, buf->start * job->arate / 90000, buf->start,
-                   buf->stop * job->arate / 90000, buf->stop, m->sum_dur );
+                   duration, bias, buf->start * m->samplerate / 90000, buf->start,
+                   buf->stop * m->samplerate / 90000, buf->stop, m->sum_dur );
             /* we don't know when the next frame starts so we can't pick a
                valid duration for this one so we pick something "short"
                (roughly 1/3 of an NTSC frame time) and rely on the bias calc
                for the next frame to correct things (a duration underestimate
                just results in a large bias on the next frame). */
-            duration = 1000 * job->arate / 90000;
+            duration = 1000 * m->samplerate / 90000;
         }
         m->sum_dur += duration;
     }
@@ -436,7 +444,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                          duration,
                          ((mux_data->track != 1) ||
                           (job->areBframes==0) ||
-                          (job->vcodec != HB_VCODEC_X264)) ? 0 : (  buf->renderOffset * job->arate / 90000),
+                          (job->vcodec != HB_VCODEC_X264)) ? 0 : (  buf->renderOffset * m->samplerate / 90000),
                          ((buf->frametype & HB_FRAME_KEY) != 0) ) )
     {
         hb_error("Failed to write to output file, disk full?");

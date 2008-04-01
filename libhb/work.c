@@ -337,57 +337,55 @@ static void do_job( hb_job_t * job, int cpu_count )
         }
     }
 
-    if( job->audio_mixdowns[0] == HB_AMIXDOWN_AC3 || job->audio_mixdowns[1] == HB_AMIXDOWN_AC3 )
-    {
-        /* Hard set correct sample rate for AC3 when libhb
-           mistakenly thinks the audio codec is AAC */
-        job->arate = 48000;
-    }
-
-    if( job->acodec & HB_ACODEC_AC3 )
-    {
-        hb_log( " + audio AC3 passthrough" );
-
-        /* Hard set correct sample rate for AC3 */
-        job->arate = 48000;
-    }
-    else
-    {
-        hb_log( " + audio %d kbps, %d Hz", job->abitrate, job->arate );
-        hb_log( " + encoder %s", ( job->acodec & HB_ACODEC_FAAC ) ?
-                "faac" : ( ( job->acodec & HB_ACODEC_LAME ) ? "lame" :
-                "vorbis" ) );
-    }
-
-    if ( job->dynamic_range_compression > 1 )
-        hb_log(" + dynamic range compression: %f", job->dynamic_range_compression);
-
-    /* if we are doing AC3 passthru (at the codec level, not pass-through),
-     * then remove any non-AC3 audios from the job */
+    /* if we are doing passthru, and the input codec is not the same as the output
+     * codec, then remove this audio from the job */
     /* otherwise, Bad Things will happen */
     for( i = 0; i < hb_list_count( title->list_audio ); )
     {
         audio = hb_list_item( title->list_audio, i );
-        if( ( job->acodec & HB_ACODEC_AC3 ) && ( audio->codec != HB_ACODEC_AC3 ) )
+        if( ( ( audio->config.out.codec == HB_ACODEC_AC3 ) && ( audio->config.in.codec != HB_ACODEC_AC3 ) ) ||
+            ( ( audio->config.out.codec == HB_ACODEC_DCA ) && ( audio->config.in.codec != HB_ACODEC_DCA ) ) )
         {
+            hb_log( "Passthru requested and input codec is not the same as output codec for track %d",
+                    audio->config.out.track );
             hb_list_rem( title->list_audio, audio );
             free( audio );
             continue;
         }
-        i++;
+        /* Adjust output track number, in case we removed one.
+         * Output tracks sadly still need to be in sequential order.
+         */
+        audio->config.out.track = i++;
     }
 
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = hb_list_item( title->list_audio, i );
-        hb_log( "   + %x, %s", audio->id, audio->lang );
+        hb_log( " + audio track %d", audio->config.out.track );
+        hb_log( "   + input track %d", audio->config.in.track );
+        if( (audio->config.out.codec == HB_ACODEC_AC3) || (audio->config.out.codec == HB_ACODEC_DCA) )
+        {
+            hb_log( "   + %s passthrough", (audio->config.out.codec == HB_ACODEC_AC3) ?
+                "AC3" : "DCA" );
+        }
+        else
+        {
+            hb_log( "   + audio %d kbps, %d Hz", audio->config.out.bitrate, audio->config.out.samplerate );
+            hb_log( "   + encoder %s", ( audio->config.out.codec == HB_ACODEC_FAAC ) ?
+            "faac" : ( ( audio->config.out.codec == HB_ACODEC_LAME ) ? "lame" :
+            "vorbis" ) );
+            if ( audio->config.out.dynamic_range_compression > 1 )
+                hb_log("   + dynamic range compression: %f", audio->config.out.dynamic_range_compression);
+        }
+
+        hb_log( "     + %x, %s", audio->id, audio->config.lang.description );
 
 		/* sense-check the current mixdown options */
 
 		/* log the requested mixdown */
 		for (j = 0; j < hb_audio_mixdowns_count; j++) {
-			if (hb_audio_mixdowns[j].amixdown == job->audio_mixdowns[i]) {
-				hb_log( "     + Requested mixdown: %s (%s)", hb_audio_mixdowns[j].human_readable_name, hb_audio_mixdowns[j].internal_name );
+			if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown) {
+				hb_log( "       + Requested mixdown: %s (%s)", hb_audio_mixdowns[j].human_readable_name, hb_audio_mixdowns[j].internal_name );
 				break;
 			}
 		}
@@ -396,33 +394,22 @@ static void do_job( hb_job_t * job, int cpu_count )
 
         /* audioCodecsSupportMono and audioCodecsSupport6Ch are the same for now,
            but this may change in the future, so they are separated for flexibility */
-        int audioCodecsSupportMono = ((audio->codec == HB_ACODEC_AC3 ||
-            audio->codec == HB_ACODEC_DCA) && (job->acodec == HB_ACODEC_FAAC || job->acodec == HB_ACODEC_VORBIS));
-        int audioCodecsSupport6Ch =  ((audio->codec == HB_ACODEC_AC3 ||
-            audio->codec == HB_ACODEC_DCA) && (job->acodec == HB_ACODEC_FAAC || job->acodec == HB_ACODEC_VORBIS));
+        int audioCodecsSupportMono = ( (audio->config.in.codec == HB_ACODEC_AC3 || audio->config.in.codec == HB_ACODEC_DCA) &&
+            (audio->config.out.codec == HB_ACODEC_FAAC || audio->config.out.codec == HB_ACODEC_VORBIS) );
+        int audioCodecsSupport6Ch =  ( (audio->config.in.codec == HB_ACODEC_AC3 || audio->config.in.codec == HB_ACODEC_DCA) &&
+            (audio->config.out.codec == HB_ACODEC_FAAC || audio->config.out.codec == HB_ACODEC_VORBIS));
 
-        if( audio->codec != HB_ACODEC_AC3 && job->audio_mixdowns[i] == HB_AMIXDOWN_AC3 )
-        {
-            /*
-             * Sanity check that we haven't asked for AC3 from a non AC3 track - drop this track
-             * to stereo to avoid a crash later.
-             */
-            job->audio_mixdowns[i] = HB_AMIXDOWN_STEREO;
-        }
-
-        if( job->audio_mixdowns[i] != HB_AMIXDOWN_AC3 )
-        {
         /* find out what the format of our source audio is */
-        switch (audio->input_channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK) {
+        switch (audio->config.in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK) {
 
             /* mono sources */
             case HB_INPUT_CH_LAYOUT_MONO:
                 /* regardless of what stereo mixdown we've requested, a mono source always get mixed down
                 to mono if we can, and mixed up to stereo if we can't */
-                if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecsSupportMono == 1) {
-                    job->audio_mixdowns[i] = HB_AMIXDOWN_MONO;
+                if (audio->config.out.mixdown == HB_AMIXDOWN_MONO && audioCodecsSupportMono == 1) {
+                    audio->config.out.mixdown = HB_AMIXDOWN_MONO;
                 } else {
-                    job->audio_mixdowns[i] = HB_AMIXDOWN_STEREO;
+                    audio->config.out.mixdown = HB_AMIXDOWN_STEREO;
                 }
                 break;
 
@@ -430,11 +417,11 @@ static void do_job( hb_job_t * job, int cpu_count )
             case HB_INPUT_CH_LAYOUT_STEREO:
                 /* if we've requested a mono mixdown, and it is supported, then do the mix */
                 /* use stereo if not supported */
-                if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecsSupportMono == 0) {
-                    job->audio_mixdowns[i] = HB_AMIXDOWN_STEREO;
+                if (audio->config.out.mixdown == HB_AMIXDOWN_MONO && audioCodecsSupportMono == 0) {
+                    audio->config.out.mixdown = HB_AMIXDOWN_STEREO;
                 /* otherwise, preserve stereo regardless of if we requested something higher */
-                } else if (job->audio_mixdowns[i] > HB_AMIXDOWN_STEREO) {
-                    job->audio_mixdowns[i] = HB_AMIXDOWN_STEREO;
+                } else if (audio->config.out.mixdown > HB_AMIXDOWN_STEREO) {
+                    audio->config.out.mixdown = HB_AMIXDOWN_STEREO;
                 }
                 break;
 
@@ -444,12 +431,12 @@ static void do_job( hb_job_t * job, int cpu_count )
             case HB_INPUT_CH_LAYOUT_DOLBY:
                 /* if we've requested a mono mixdown, and it is supported, then do the mix */
                 /* preserve dolby if not supported */
-                if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecsSupportMono == 0) {
-                    job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBY;
+                if (audio->config.out.mixdown == HB_AMIXDOWN_MONO && audioCodecsSupportMono == 0) {
+                    audio->config.out.mixdown = HB_AMIXDOWN_DOLBY;
                 /* otherwise, preserve dolby even if we requested something higher */
                 /* a stereo mixdown will still be honoured here */
-                } else if (job->audio_mixdowns[i] > HB_AMIXDOWN_DOLBY) {
-                    job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBY;
+                } else if (audio->config.out.mixdown > HB_AMIXDOWN_DOLBY) {
+                    audio->config.out.mixdown = HB_AMIXDOWN_DOLBY;
                 }
                 break;
 
@@ -457,21 +444,21 @@ static void do_job( hb_job_t * job, int cpu_count )
             case HB_INPUT_CH_LAYOUT_3F2R:
                 /* if we've requested a mono mixdown, and it is supported, then do the mix */
                 /* use dpl2 if not supported */
-                if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecsSupportMono == 0) {
-                    job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBYPLII;
+                if (audio->config.out.mixdown == HB_AMIXDOWN_MONO && audioCodecsSupportMono == 0) {
+                    audio->config.out.mixdown = HB_AMIXDOWN_DOLBYPLII;
                 } else {
                     /* check if we have 3F2R input and also have an LFE - i.e. we have a 5.1 source) */
-                    if (audio->input_channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE) {
+                    if (audio->config.in.channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE) {
                         /* we have a 5.1 source */
                         /* if we requested 6ch, but our audio format doesn't support it, then mix to DPLII instead */
-                        if (job->audio_mixdowns[i] == HB_AMIXDOWN_6CH && audioCodecsSupport6Ch == 0) {
-                            job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBYPLII;
+                        if (audio->config.out.mixdown == HB_AMIXDOWN_6CH && audioCodecsSupport6Ch == 0) {
+                            audio->config.out.mixdown = HB_AMIXDOWN_DOLBYPLII;
                         }
                     } else {
                         /* we have a 5.0 source, so we can't do 6ch conversion
                         default to DPL II instead */
-                        if (job->audio_mixdowns[i] > HB_AMIXDOWN_DOLBYPLII) {
-                            job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBYPLII;
+                        if (audio->config.out.mixdown > HB_AMIXDOWN_DOLBYPLII) {
+                            audio->config.out.mixdown = HB_AMIXDOWN_DOLBYPLII;
                         }
                     }
                 }
@@ -482,13 +469,13 @@ static void do_job( hb_job_t * job, int cpu_count )
             case HB_INPUT_CH_LAYOUT_3F1R:
                 /* if we've requested a mono mixdown, and it is supported, then do the mix */
                 /* use dpl1 if not supported */
-                if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecsSupportMono == 0) {
-                    job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBY;
+                if (audio->config.out.mixdown == HB_AMIXDOWN_MONO && audioCodecsSupportMono == 0) {
+                    audio->config.out.mixdown = HB_AMIXDOWN_DOLBY;
                 } else {
                     /* we have a 4.0 or 4.1 source, so we can't do DPLII or 6ch conversion
                     default to DPL I instead */
-                    if (job->audio_mixdowns[i] > HB_AMIXDOWN_DOLBY) {
-                        job->audio_mixdowns[i] = HB_AMIXDOWN_DOLBY;
+                    if (audio->config.out.mixdown > HB_AMIXDOWN_DOLBY) {
+                        audio->config.out.mixdown = HB_AMIXDOWN_DOLBY;
                     }
                 }
                 /* all other mixdowns will have been preserved here */
@@ -496,41 +483,37 @@ static void do_job( hb_job_t * job, int cpu_count )
 
             default:
                 /* if we've requested a mono mixdown, and it is supported, then do the mix */
-                if (job->audio_mixdowns[i] == HB_AMIXDOWN_MONO && audioCodecsSupportMono == 1) {
-                    job->audio_mixdowns[i] = HB_AMIXDOWN_MONO;
+                if (audio->config.out.mixdown == HB_AMIXDOWN_MONO && audioCodecsSupportMono == 1) {
+                    audio->config.out.mixdown = HB_AMIXDOWN_MONO;
                 /* mix everything else down to stereo */
                 } else {
-                    job->audio_mixdowns[i] = HB_AMIXDOWN_STEREO;
+                    audio->config.out.mixdown = HB_AMIXDOWN_STEREO;
                 }
 
-        }
         }
 
 		/* log the output mixdown */
 		for (j = 0; j < hb_audio_mixdowns_count; j++) {
-			if (hb_audio_mixdowns[j].amixdown == job->audio_mixdowns[i]) {
-				hb_log( "     + Actual mixdown: %s (%s)", hb_audio_mixdowns[j].human_readable_name, hb_audio_mixdowns[j].internal_name );
+			if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown) {
+				hb_log( "       + Actual mixdown: %s (%s)", hb_audio_mixdowns[j].human_readable_name, hb_audio_mixdowns[j].internal_name );
 				break;
 			}
 		}
 
-		/* we now know we have a valid mixdown for the input source and the audio output format */
-		/* remember the mixdown for this track */
-		audio->amixdown = job->audio_mixdowns[i];
-
-        audio->config.vorbis.language = audio->lang_simple;
+        if (audio->config.out.codec == HB_ACODEC_VORBIS)
+            audio->priv.config.vorbis.language = audio->config.lang.simple;
 
         /* set up the audio work structures */
-        audio->fifo_in   = hb_fifo_init( 2048 );
-        audio->fifo_raw  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
-        audio->fifo_sync = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
-        audio->fifo_out  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
+        audio->priv.fifo_in   = hb_fifo_init( 2048 );
+        audio->priv.fifo_raw  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
+        audio->priv.fifo_sync = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
+        audio->priv.fifo_out  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
 
 
         /*
          * Audio Decoder Thread
          */
-        switch( audio->codec )
+        switch( audio->config.in.codec )
         {
             case HB_ACODEC_AC3:
                 w = getWork( WORK_DECA52 );
@@ -544,12 +527,16 @@ static void do_job( hb_job_t * job, int cpu_count )
             case HB_ACODEC_LPCM:
                 w = getWork( WORK_DECLPCM );
                 break;
+            default:
+                /* Invalid input codec */
+                hb_error("Invalid input codec: %d", audio->config.in.codec);
+                *job->die = 1;
+                goto cleanup;
         }
-        w->fifo_in       = audio->fifo_in;
-        w->fifo_out      = audio->fifo_raw;
-        w->config        = &audio->config;
-        w->amixdown      = audio->amixdown;
-        w->source_acodec = audio->codec;
+        w->fifo_in       = audio->priv.fifo_in;
+        w->fifo_out      = audio->priv.fifo_raw;
+        w->config        = &audio->priv.config;
+        w->audio         = audio;
 
         /* FIXME: This feels really hackish, anything better? */
         audio_w = calloc( sizeof( hb_work_object_t ), 1 );
@@ -560,10 +547,8 @@ static void do_job( hb_job_t * job, int cpu_count )
         /*
          * Audio Encoder Thread
          */
-        if( job->audio_mixdowns[i] != HB_AMIXDOWN_AC3 )
+        switch( audio->config.out.codec )
         {
-            switch( job->acodec )
-            {
             case HB_ACODEC_FAAC:
                 w = getWork( WORK_ENCFAAC );
                 break;
@@ -573,20 +558,25 @@ static void do_job( hb_job_t * job, int cpu_count )
             case HB_ACODEC_VORBIS:
                 w = getWork( WORK_ENCVORBIS );
                 break;
-            }
+            case HB_ACODEC_AC3:
+                break;
+            case HB_ACODEC_DCA:    /* These are all invalid output codecs. */
+            default:
+                hb_error("Invalid audio codec: %#x", audio->config.out.codec);
+                w = NULL;
+                *job->die = 1;
+                goto cleanup;
         }
 
-        if( job->acodec != HB_ACODEC_AC3 &&
-            job->audio_mixdowns[i] != HB_AMIXDOWN_AC3)
+        if( audio->config.out.codec != HB_ACODEC_AC3 )
         {
             /*
              * Add the encoder thread if not doing AC-3 pass through
              */
-            w->fifo_in       = audio->fifo_sync;
-            w->fifo_out      = audio->fifo_out;
-            w->config        = &audio->config;
-            w->amixdown      = audio->amixdown;
-            w->source_acodec = audio->codec;
+            w->fifo_in       = audio->priv.fifo_sync;
+            w->fifo_out      = audio->priv.fifo_out;
+            w->config        = &audio->priv.config;
+            w->audio         = audio;
 
             /* FIXME: This feels really hackish, anything better? */
             audio_w = calloc( sizeof( hb_work_object_t ), 1 );
@@ -640,12 +630,16 @@ static void do_job( hb_job_t * job, int cpu_count )
     w->close( w );
     job->done = 1;
 
+cleanup:
     /* Close work objects */
     while( ( w = hb_list_item( job->list_work, 0 ) ) )
     {
         hb_list_rem( job->list_work, w );
-        hb_thread_close( &w->thread );
-        w->close( w );
+        if( w != NULL && w->thread != NULL )
+        {
+            hb_thread_close( &w->thread );
+            w->close( w );
+        }
 
         /* FIXME: This feels really hackish, anything better? */
         if ( w->id == WORK_DECA52 ||
@@ -663,8 +657,10 @@ static void do_job( hb_job_t * job, int cpu_count )
     hb_list_close( &job->list_work );
 
     /* Stop read & write threads */
-    hb_thread_close( &job->reader );
-    hb_thread_close( &job->muxer );
+    if( job->reader != NULL )
+        hb_thread_close( &job->reader );
+    if( job->muxer != NULL )
+        hb_thread_close( &job->muxer );
 
     /* Close fifos */
     hb_fifo_close( &job->fifo_mpeg2 );
@@ -684,10 +680,14 @@ static void do_job( hb_job_t * job, int cpu_count )
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = hb_list_item( title->list_audio, i );
-        hb_fifo_close( &audio->fifo_in );
-        hb_fifo_close( &audio->fifo_raw );
-        hb_fifo_close( &audio->fifo_sync );
-        hb_fifo_close( &audio->fifo_out );
+        if( audio->priv.fifo_in != NULL )
+            hb_fifo_close( &audio->priv.fifo_in );
+        if( audio->priv.fifo_raw != NULL )
+            hb_fifo_close( &audio->priv.fifo_raw );
+        if( audio->priv.fifo_sync != NULL )
+            hb_fifo_close( &audio->priv.fifo_sync );
+        if( audio->priv.fifo_out != NULL )
+            hb_fifo_close( &audio->priv.fifo_out );
     }
 
     if( job->indepth_scan )

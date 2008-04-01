@@ -257,28 +257,28 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
         {
             case 0x00:
                 audio->id    = ( ( 0x80 + position ) << 8 ) | 0xbd;
-                audio->codec = HB_ACODEC_AC3;
+                audio->config.in.codec = HB_ACODEC_AC3;
                 break;
 
             case 0x02:
             case 0x03:
                 audio->id    = 0xc0 + position;
-                audio->codec = HB_ACODEC_MPGA;
+                audio->config.in.codec = HB_ACODEC_MPGA;
                 break;
 
             case 0x04:
                 audio->id    = ( ( 0xa0 + position ) << 8 ) | 0xbd;
-                audio->codec = HB_ACODEC_LPCM;
+                audio->config.in.codec = HB_ACODEC_LPCM;
                 break;
 
             case 0x06:
                 audio->id    = ( ( 0x88 + position ) << 8 ) | 0xbd;
-                audio->codec = HB_ACODEC_DCA;
+                audio->config.in.codec = HB_ACODEC_DCA;
                 break;
 
             default:
                 audio->id    = 0;
-                audio->codec = 0;
+                audio->config.in.codec = 0;
                 hb_log( "scan: unknown audio codec (%x)",
                         audio_format );
                 break;
@@ -308,19 +308,20 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
 
         lang = lang_for_code( vts->vtsi_mat->vts_audio_attr[i].lang_code );
 
-        snprintf( audio->lang, sizeof( audio->lang ), "%s (%s)",
+        snprintf( audio->config.lang.description, sizeof( audio->config.lang.description ), "%s (%s)",
             strlen(lang->native_name) ? lang->native_name : lang->eng_name,
-            audio->codec == HB_ACODEC_AC3 ? "AC3" : ( audio->codec ==
-                HB_ACODEC_DCA ? "DTS" : ( audio->codec ==
+            audio->config.in.codec == HB_ACODEC_AC3 ? "AC3" : ( audio->config.in.codec ==
+                HB_ACODEC_DCA ? "DTS" : ( audio->config.in.codec ==
                 HB_ACODEC_MPGA ? "MPEG" : "LPCM" ) ) );
-        snprintf( audio->lang_simple, sizeof( audio->lang_simple ), "%s",
+        snprintf( audio->config.lang.simple, sizeof( audio->config.lang.simple ), "%s",
                   strlen(lang->native_name) ? lang->native_name : lang->eng_name );
-        snprintf( audio->iso639_2, sizeof( audio->iso639_2 ), "%s",
+        snprintf( audio->config.lang.iso639_2, sizeof( audio->config.lang.iso639_2 ), "%s",
                   lang->iso639_2);
 
         hb_log( "scan: id=%x, lang=%s, 3cc=%s", audio->id,
-                audio->lang, audio->iso639_2 );
+                audio->config.lang.description, audio->config.lang.iso639_2 );
 
+        audio->config.in.track = i;
         hb_list_add( title->list_audio, audio );
     }
 
