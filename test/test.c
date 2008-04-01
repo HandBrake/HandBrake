@@ -37,22 +37,27 @@ static int    grayscale   = 0;
 static int    vcodec      = HB_VCODEC_FFMPEG;
 static int    h264_13     = 0;
 static int    h264_30     = 0;
-static char * audios      = NULL;
-static int    audio_mixdown = HB_AMIXDOWN_DOLBYPLII;
-static float  dynamic_range_compression = 0;
+static hb_list_t * audios = NULL;
+static hb_audio_config_t * audio = NULL;
+static int    num_audio_tracks = 0;
+static char * mixdowns    = NULL;
+static char * dynamic_range_compression = NULL;
+static char * arates      = NULL;
+static char * abitrates   = NULL;
+static char * acodecs     = NULL;
+static int    default_acodec = HB_ACODEC_FAAC;
+static int    default_arate = 44100;
+static int    default_abitrate = 128;
 static int    sub         = 0;
 static int    width       = 0;
 static int    height      = 0;
 static int    crop[4]     = { -1,-1,-1,-1 };
 static int    cpu         = 0;
 static int    vrate       = 0;
-static int    arate       = 0;
 static float  vquality    = -1.0;
 static int    vbitrate    = 0;
 static int    size        = 0;
-static int    abitrate    = 0;
 static int    mux         = 0;
-static int    acodec      = 0;
 static int    pixelratio  = 0;
 static int    loosePixelratio = 0;
 static int    modulus       = 0;
@@ -87,6 +92,9 @@ static int  ParseOptions( int argc, char ** argv );
 static int  CheckOptions( int argc, char ** argv );
 static int  HandleEvents( hb_handle_t * h );
 
+static int get_acodec_for_string( char *codec );
+static int is_sample_rate_valid(int rate);
+
 /* Only print the "Muxing..." message once */
 static int show_mux_warning = 1;
 
@@ -106,6 +114,8 @@ int main( int argc, char ** argv )
     hb_handle_t * h;
     int           build;
     char        * version;
+
+    audios = hb_list_init();
 
     /* Parse command line */
     if( ParseOptions( argc, argv ) ||
@@ -230,7 +240,20 @@ int main( int argc, char ** argv )
     if( input )  free( input );
     if( output ) free( output );
     if( format ) free( format );
-    if( audios ) free( audios );
+    if( audios )
+    {
+        while( ( audio = hb_list_item( audios, 0 ) ) )
+        {
+            hb_list_rem( audios, audio );
+            free( audio );
+        }
+        hb_list_close( &audios );
+    }
+    if( mixdowns ) free( mixdowns );
+    if( dynamic_range_compression ) free( dynamic_range_compression );
+    if( arates ) free( arates );
+    if( abitrates ) free( abitrates );
+    if( acodecs ) free( acodecs );
     if (native_language ) free (native_language );
 	if( x264opts ) free (x264opts );
 	if( x264opts2 ) free (x264opts2 );
@@ -253,7 +276,7 @@ static void ShowCommands()
 static void PrintTitleInfo( hb_title_t * title )
 {
     hb_chapter_t  * chapter;
-    hb_audio_t    * audio;
+    hb_audio_config_t    * audio;
     hb_subtitle_t * subtitle;
     int i;
 
@@ -282,15 +305,15 @@ static void PrintTitleInfo( hb_title_t * title )
     fprintf( stderr, "  + audio tracks:\n" );
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
-        audio = hb_list_item( title->list_audio, i );
-        if( ( audio->codec & HB_ACODEC_AC3 ) || ( audio->codec & HB_ACODEC_DCA) )
+        audio = hb_list_audio_config_item( title->list_audio, i );
+        if( ( audio->in.codec == HB_ACODEC_AC3 ) || ( audio->in.codec == HB_ACODEC_DCA) )
         {
             fprintf( stderr, "    + %d, %s, %dHz, %dbps\n", i + 1,
-                     audio->lang, audio->rate, audio->bitrate );
+                     audio->lang.description, audio->in.samplerate, audio->in.bitrate );
         }
         else
         {
-            fprintf( stderr, "    + %d, %s\n", i + 1, audio->lang );
+            fprintf( stderr, "    + %d, %s\n", i + 1, audio->lang.description );
         }
     }
     fprintf( stderr, "  + subtitle tracks:\n" );
@@ -300,13 +323,13 @@ static void PrintTitleInfo( hb_title_t * title )
         fprintf( stderr, "    + %d, %s (iso639-2: %s)\n", i + 1, subtitle->lang,
             subtitle->iso639_2);
     }
-    
+
     if(title->detected_interlacing)
     {
         /* Interlacing was found in half or more of the preview frames */
         fprintf( stderr, "  + combing detected, may be interlaced or telecined\n");
     }
-    
+
 }
 
 static int HandleEvents( hb_handle_t * h )
@@ -334,6 +357,15 @@ static int HandleEvents( hb_handle_t * h )
             hb_list_t  * list;
             hb_title_t * title;
             hb_job_t   * job;
+            int i;
+
+            /* Audio argument string parsing variables */
+            int acodec = 0;
+            int abitrate = 0;
+            int arate = 0;
+            int mixdown = HB_AMIXDOWN_DOLBYPLII;
+            double d_r_c = 0;
+            /* Audio argument string parsing variables */
 
             list = hb_get_titles( h );
 
@@ -419,9 +451,9 @@ static int HandleEvents( hb_handle_t * h )
                     mux = HB_MUX_MKV;
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 1000;
-                    job->abitrate = 160;
-                    job->arate = 48000;
-                    acodec = HB_ACODEC_FAAC;
+                    default_abitrate = 160;
+                    default_arate = 48000;
+                    default_acodec = HB_ACODEC_FAAC;
                     x264opts = strdup("ref=5:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2");
                     deinterlace = 1;
                     deinterlace_opt = "0";
@@ -433,15 +465,28 @@ static int HandleEvents( hb_handle_t * h )
 
                 if (!strcmp(preset_name, "AppleTV"))
                 {
+                    if (hb_list_count(audios) == 0)
+                    {
+                        audio = calloc(1, sizeof(*audio));
+                        hb_audio_config_init(audio);
+                        audio->in.track = audio->out.track = 0;
+                        hb_list_add(audios, audio);
+
+                        audio = calloc(1, sizeof(*audio));
+                        hb_audio_config_init(audio);
+                        audio->in.track = 0;
+                        audio->out.track = 1;
+                        hb_list_add(audios, audio);
+                        if (acodecs) free(acodecs);
+                        acodecs = strdup("faac,ac3");
+                    }
                     mux = HB_MUX_MP4;
                     job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 2500;
-                    job->abitrate = 160;
-                    job->arate = 48000;
-                    acodec = HB_ACODEC_FAAC;
-                    audio_mixdown = HB_AMIXDOWN_DOLBYPLII_AC3;
-                    arate = 48000;
+                    default_abitrate = 160;
+                    default_arate = 48000;
+                    default_acodec = HB_ACODEC_FAAC;
                     x264opts = strdup("bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=1:cabac=0");
                     job->chapter_markers = 1;
                     pixelratio = 1;
@@ -452,7 +497,7 @@ static int HandleEvents( hb_handle_t * h )
                     mux = HB_MUX_MKV;
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 1800;
-                    acodec = HB_ACODEC_AC3;
+                    default_acodec = HB_ACODEC_AC3;
                     x264opts = strdup("ref=16:mixed-refs:bframes=16:bime:weightb:b-rdo:direct=auto:b-pyramid:me=esa:subme=7:me-range=64:analyse=all:8x8dct:trellis=1:no-fast-pskip:no-dct-decimate:filter=-2,-1");
                     job->chapter_markers = 1;
                     pixelratio = 1;
@@ -464,9 +509,9 @@ static int HandleEvents( hb_handle_t * h )
                 {
                     mux = HB_MUX_MP4;
                     job->vbitrate = 512;
-                    job->abitrate = 128;
-                    job->arate = 48000;
-                    acodec = HB_ACODEC_FAAC;
+                    default_abitrate = 128;
+                    default_arate = 48000;
+                    default_acodec = HB_ACODEC_FAAC;
                     job->width = 512;
                     job->chapter_markers = 1;
                 }
@@ -476,9 +521,9 @@ static int HandleEvents( hb_handle_t * h )
                     mux = HB_MUX_MP4;
                     vcodec = HB_VCODEC_X264;
                     size = 695;
-                    job->abitrate = 128;
-                    job->arate = 48000;
-                    acodec = HB_ACODEC_FAAC;
+                    default_abitrate = 128;
+                    default_arate = 48000;
+                    default_acodec = HB_ACODEC_FAAC;
                     job->width = 640;
                     x264opts = strdup("ref=3:mixed-refs:bframes=16:bime:weightb:b-rdo:b-pyramid:direct=auto:me=umh:subme=6:trellis=1:analyse=all:8x8dct:no-fast-pskip");
                     job->chapter_markers = 1;
@@ -490,9 +535,9 @@ static int HandleEvents( hb_handle_t * h )
                 {
                     mux = HB_MUX_MP4;
                     job->vbitrate = 1000;
-                    job->abitrate = 160;
-                    job->arate = 48000;
-                    acodec = HB_ACODEC_FAAC;
+                    default_abitrate = 160;
+                    default_arate = 48000;
+                    default_acodec = HB_ACODEC_FAAC;
                 }
 
                 if (!strcmp(preset_name, "Constant Quality Rate"))
@@ -501,7 +546,7 @@ static int HandleEvents( hb_handle_t * h )
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 0.64709997177124023;
                     job->crf = 1;
-                    acodec = HB_ACODEC_AC3;
+                    default_acodec = HB_ACODEC_AC3;
                     x264opts = strdup("ref=3:mixed-refs:bframes=3:b-pyramid:b-rdo:bime:weightb:filter=-2,-1:subme=6:trellis=1:analyse=all:8x8dct:me=umh");
                     job->chapter_markers = 1;
                     pixelratio = 1;
@@ -512,7 +557,7 @@ static int HandleEvents( hb_handle_t * h )
                     mux = HB_MUX_MKV;
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 1600;
-                    acodec = HB_ACODEC_AC3;
+                    default_acodec = HB_ACODEC_AC3;
                     x264opts = strdup("ref=5:mixed-refs:bframes=3:bime:weightb:b-rdo:b-pyramid:me=umh:subme=7:trellis=1:analyse=all:8x8dct:no-fast-pskip");
                     job->chapter_markers = 1;
                     pixelratio = 1;
@@ -525,7 +570,7 @@ static int HandleEvents( hb_handle_t * h )
                     mux = HB_MUX_MKV;
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 1800;
-                    acodec = HB_ACODEC_AC3;
+                    default_acodec = HB_ACODEC_AC3;
                     x264opts = strdup("ref=3:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=7:analyse=all:8x8dct:trellis=1:no-fast-pskip");
                     job->chapter_markers = 1;
                     pixelratio = 1;
@@ -539,9 +584,9 @@ static int HandleEvents( hb_handle_t * h )
                     job->ipod_atom = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 960;
-                    job->abitrate = 128;
-                    job->arate = 48000;
-                    acodec = HB_ACODEC_FAAC;
+                    default_abitrate = 128;
+                    default_arate = 48000;
+                    default_acodec = HB_ACODEC_FAAC;
                     job->width = 480;
                     x264opts = strdup("level=30:cabac=0:ref=1:analyse=all:me=umh:subme=6:no-fast-pskip=1:trellis=1");
                     job->chapter_markers = 1;
@@ -553,9 +598,9 @@ static int HandleEvents( hb_handle_t * h )
                     job->ipod_atom = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 1500;
-                    job->abitrate = 160;
-                    job->arate = 48000;
-                    acodec = HB_ACODEC_FAAC;
+                    default_abitrate = 160;
+                    default_arate = 48000;
+                    default_acodec = HB_ACODEC_FAAC;
                     job->width = 640;
                     x264opts = strdup("level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1");
                     job->chapter_markers = 1;
@@ -567,9 +612,9 @@ static int HandleEvents( hb_handle_t * h )
                     job->ipod_atom = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 700;
-                    job->abitrate = 160;
-                    job->arate = 48000;
-                    acodec = HB_ACODEC_FAAC;
+                    default_abitrate = 160;
+                    default_arate = 48000;
+                    default_acodec = HB_ACODEC_FAAC;
                     job->width = 320;
                     x264opts = strdup("level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1");
                     job->chapter_markers = 1;
@@ -580,9 +625,9 @@ static int HandleEvents( hb_handle_t * h )
                     mux = HB_MUX_MP4;
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 1500;
-                    job->abitrate = 160;
-                    job->arate = 48000;
-                    acodec = HB_ACODEC_FAAC;
+                    default_abitrate = 160;
+                    default_arate = 48000;
+                    default_acodec = HB_ACODEC_FAAC;
                     x264opts = strdup("ref=2:bframes=2:subme=5:me=umh");
                     job->chapter_markers = 1;
                     pixelratio = 1;
@@ -595,9 +640,9 @@ static int HandleEvents( hb_handle_t * h )
                     mux = HB_MUX_MP4;
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 2500;
-                    job->abitrate = 160;
-                    job->arate = 48000;
-                    acodec = HB_ACODEC_FAAC;
+                    default_abitrate = 160;
+                    default_arate = 48000;
+                    default_acodec = HB_ACODEC_FAAC;
                     x264opts = strdup("level=41:subme=5:me=umh");
                     pixelratio = 1;
                 }
@@ -606,9 +651,9 @@ static int HandleEvents( hb_handle_t * h )
                 {
                     mux = HB_MUX_MP4;
                     job->vbitrate = 1024;
-                    job->abitrate = 128;
-                    job->arate = 48000;
-                    acodec = HB_ACODEC_FAAC;
+                    default_abitrate = 128;
+                    default_arate = 48000;
+                    default_acodec = HB_ACODEC_FAAC;
                     job->width = 368;
                     job->height = 208;
                     job->chapter_markers = 1;
@@ -619,9 +664,9 @@ static int HandleEvents( hb_handle_t * h )
                     mux = HB_MUX_MP4;
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 2000;
-                    job->abitrate = 160;
-                    job->arate = 48000;
-                    acodec = HB_ACODEC_FAAC;
+                    default_abitrate = 160;
+                    default_arate = 48000;
+                    default_acodec = HB_ACODEC_FAAC;
                     x264opts = strdup("ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:me=umh:subme=5:analyse=all:trellis=1:no-fast-pskip");
                     job->chapter_markers = 1;
                     pixelratio = 1;
@@ -634,9 +679,9 @@ static int HandleEvents( hb_handle_t * h )
                     mux = HB_MUX_MKV;
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 1300;
-                    job->abitrate = 160;
-                    job->arate = 48000;
-                    acodec = HB_ACODEC_FAAC;
+                    default_abitrate = 160;
+                    default_arate = 48000;
+                    default_acodec = HB_ACODEC_FAAC;
                     x264opts = strdup("ref=3:mixed-refs:bframes=6:bime:weightb:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip");
                     deinterlace = 1;
                     deinterlace_opt = "0";
@@ -652,9 +697,9 @@ static int HandleEvents( hb_handle_t * h )
                     mux = HB_MUX_MP4;
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 2000;
-                    job->abitrate = 160;
-                    job->arate = 48000;
-                    acodec = HB_ACODEC_FAAC;
+                    default_abitrate = 160;
+                    default_arate = 48000;
+                    default_acodec = HB_ACODEC_FAAC;
                     x264opts = strdup("level=40:ref=2:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:no-fast-pskip:filter=-2,-1");
                     pixelratio = 1;
                 }
@@ -732,13 +777,13 @@ static int HandleEvents( hb_handle_t * h )
             {
                 job->pixel_ratio = pixelratio;
             }
-            
+
             if (vfr)
             {
                 detelecine = 1;
                 job->vfr = 1;
             }
-            
+
             /* Add selected filters */
             job->filters = hb_list_init();
             if( detelecine )
@@ -816,74 +861,232 @@ static int HandleEvents( hb_handle_t * h )
                 job->vrate = 27000000;
                 job->vrate_base = vrate;
             }
-            if( arate )
+
+            /* Parse audio tracks */
+            if( hb_list_count(audios) == 0 )
             {
-                job->arate = arate;
+                /* Create a new audio track with default settings */
+                audio = calloc(1, sizeof(*audio));
+                hb_audio_config_init(audio);
+                /* Add it to our audios */
+                hb_list_add(audios, audio);
             }
 
-            if( audios )
+            num_audio_tracks = hb_list_count(audios);
+            for (i = 0; i < num_audio_tracks; i++)
             {
-                if( strcasecmp( audios, "none" ) )
+                audio = hb_list_item(audios, 0);
+                if( (audio == NULL) || (audio->in.track == -1) ||
+                    (audio->out.track == -1) || (audio->out.codec == 0) )
                 {
-                    int    audio_count = 0;
-                    char * tmp         = audios;
-                    while( *tmp )
-                    {
-                        if( *tmp < '0' || *tmp > '9' )
-                        {
-                            /* Skip non numeric char */
-                            tmp++;
-                            continue;
-                        }
-						job->audio_mixdowns[audio_count] = audio_mixdown;
-                        job->audios[audio_count++] =
-                            strtol( tmp, &tmp, 0 ) - 1;
-                    }
-                    job->audios[audio_count] = -1;
+                    num_audio_tracks--;
                 }
                 else
                 {
-                    job->audios[0] = -1;
+                    hb_audio_add( job, audio );
+                }
+                hb_list_rem(audios, audio);
+                if( audio != NULL)
+                    free( audio );
+            }
+            /* Audio Tracks */
+
+            /* Audio Codecs */
+            i = 0;
+            if( acodecs )
+            {
+                char * token = strtok(acodecs, ",");
+                if( token == NULL )
+                    token = acodecs;
+                while ( token != NULL )
+                {
+                    if ((acodec = get_acodec_for_string(token)) == -1)
+                    {
+                        fprintf(stderr, "Invalid codec %s, using default for container.\n", token);
+                        acodec = default_acodec;
+                    }
+                    audio = hb_list_audio_config_item(job->list_audio, i);
+                    audio->out.codec = acodec;
+                    if( (++i) >= num_audio_tracks )
+                        break;  /* We have more inputs than audio tracks, oops */
+                    token = strtok(NULL, ",");
                 }
             }
-			else
-			{
-			    /* default to the first audio track if none has been specified */
-			    job->audios[0] = 0;
-			    job->audio_mixdowns[0] = audio_mixdown;
-			}
-
-			if( audio_mixdown == HB_AMIXDOWN_DOLBYPLII_AC3)
-			{
-               int i;
-               for( i = 3 ; i > 0; i--)
-               {
-                   job->audios[i*2+1] = job->audios[i];
-                   job->audios[i*2] = job->audios[i];
-                   if(job->audios[i] != -1  )
-                   {
-                       job->audio_mixdowns[i*2+1] = HB_AMIXDOWN_AC3;
-                       job->audio_mixdowns[i*2] = HB_AMIXDOWN_DOLBYPLII;
-                   }
-               }
-
-               job->audios[1] = job->audios[0];
-               job->audio_mixdowns[1] = HB_AMIXDOWN_AC3;
-               job->audio_mixdowns[0] = HB_AMIXDOWN_DOLBYPLII;
-            }
-
-            if( abitrate )
+            if( i < num_audio_tracks )
             {
-                job->abitrate = abitrate;
+                /* We have fewer inputs than audio tracks, use the default codec for
+                 * this container for the remaining tracks. Unless we only have one input
+                 * then use that codec instead.
+                 */
+                if (i != 1)
+                    acodec = default_acodec;
+                for ( ; i < num_audio_tracks; i++)
+                {
+                    audio = hb_list_audio_config_item(job->list_audio, i);
+                    audio->out.codec = acodec;
+                }
             }
-            if( acodec )
+            /* Audio Codecs */
+
+            /* Sample Rate */
+            i = 0;
+            if( arates )
             {
-                job->acodec = acodec;
+                char * token = strtok(arates, ",");
+                if (token == NULL)
+                    token = arates;
+                while ( token != NULL )
+                {
+                    arate = atoi(token);
+                    audio = hb_list_audio_config_item(job->list_audio, i);
+                    if (audio->out.codec == HB_ACODEC_AC3 || audio->out.codec == HB_ACODEC_DCA)
+                    {
+                        /* Would probably be better to have this handled in libhb. */
+                        audio->out.samplerate = audio->in.samplerate;
+                    }
+                    else
+                    {
+                        if (!is_sample_rate_valid(arate))
+                        {
+                            fprintf(stderr, "Invalid sample rate %d, using default\n", arate);
+                            arate = default_arate;
+                        }
+                        audio->out.samplerate = arate;
+                    }
+                    if( (++i) >= num_audio_tracks )
+                        break;  /* We have more inputs than audio tracks, oops */
+                    token = strtok(NULL, ",");
+                }
             }
+            if (i < num_audio_tracks)
+            {
+                /* We have fewer inputs than audio tracks, use default sample rate.
+                 * Unless we only have one input, then use that for all tracks.
+                 */
+                if (i != 1)
+                    arate = default_arate;
+                for ( ; i < num_audio_tracks; i++)
+                {
+                    audio = hb_list_audio_config_item(job->list_audio, i);
+                    if (audio->out.codec == HB_ACODEC_AC3 || audio->out.codec == HB_ACODEC_DCA)
+                    {
+                        audio->out.samplerate = audio->in.samplerate;
+                        continue;
+                    }
+                    audio->out.samplerate = arate;
+                }
+            }
+            /* Sample Rate */
+
+            /* Audio Bitrate */
+            i = 0;
+            if( abitrates )
+            {
+                char * token = strtok(abitrates, ",");
+                if (token == NULL)
+                    token = abitrates;
+                while ( token != NULL )
+                {
+                    abitrate = atoi(token);
+                    audio = hb_list_audio_config_item(job->list_audio, i);
+                    if (audio->out.codec == HB_ACODEC_AC3 || audio->out.codec == HB_ACODEC_DCA)
+                    {
+                        audio->out.bitrate = audio->in.bitrate;   /* See note above about arate. */
+                    }
+                    else
+                    {
+                        audio->out.bitrate = abitrate;
+                    }
+                    if( (++i) >= num_audio_tracks )
+                        break;  /* We have more inputs than audio tracks, oops */
+                    token = strtok(NULL, ",");
+                }
+            }
+            if (i < num_audio_tracks)
+            {
+                /* We have fewer inputs than audio tracks, use the default bitrate
+                 * for the remaining tracks. Unless we only have one input, then use
+                 * that for all tracks.
+                 */
+                if (i != 1)
+                    abitrate = default_abitrate;
+                for (; i < num_audio_tracks; i++)
+                {
+                    audio = hb_list_audio_config_item(job->list_audio, i);
+                    if (audio->out.codec == HB_ACODEC_AC3 || audio->out.codec == HB_ACODEC_DCA)
+                    {
+                        audio->out.bitrate = audio->in.bitrate;
+                        continue;
+                    }
+                    audio->out.bitrate = abitrate;
+                }
+            }
+            /* Audio Bitrate */
+
+            /* Audio DRC */
+            i = 0;
             if ( dynamic_range_compression )
             {
-                job->dynamic_range_compression = dynamic_range_compression;
+                char * token = strtok(dynamic_range_compression, ",");
+                if (token == NULL)
+                    token = dynamic_range_compression;
+                while ( token != NULL )
+                {
+                    d_r_c = atof(token);
+                    audio = hb_list_audio_config_item(job->list_audio, i);
+                    audio->out.dynamic_range_compression = d_r_c;
+                    if( (++i) >= num_audio_tracks )
+                        break;  /* We have more inputs than audio tracks, oops */
+                    token = strtok(NULL, ",");
+                }
             }
+            if (i < num_audio_tracks)
+            {
+                /* We have fewer inputs than audio tracks, use no DRC for the remaining
+                 * tracks. Unless we only have one input, then use the same DRC for all
+                 * tracks.
+                 */
+                if (i != 1)
+                    d_r_c = 0;
+                for (; i < num_audio_tracks; i++)
+                {
+                    audio = hb_list_audio_config_item(job->list_audio, i);
+                    audio->out.dynamic_range_compression = d_r_c;
+                }
+            }
+            /* Audio DRC */
+
+            /* Audio Mixdown */
+            i = 0;
+            if ( mixdowns )
+            {
+                char * token = strtok(mixdowns, ",");
+                if (token == NULL)
+                    token = mixdowns;
+                while ( token != NULL )
+                {
+                    mixdown = hb_mixdown_get_mixdown_from_short_name(token);
+                    audio = hb_list_audio_config_item(job->list_audio, i);
+                    audio->out.mixdown = mixdown;
+                    if( (++i) >= num_audio_tracks )
+                        break;  /* We have more inputs than audio tracks, oops */
+                    token = strtok(NULL, ",");
+                }
+            }
+            if (i < num_audio_tracks)
+            {
+                /* We have fewer inputs than audio tracks, use DPLII for the rest. Unless
+                 * we only have one input, then use that.
+                 */
+                if (i != 1)
+                    mixdown = HB_AMIXDOWN_DOLBYPLII;
+                for (; i < num_audio_tracks; i++)
+                {
+                   audio = hb_list_audio_config_item(job->list_audio, i);
+                   audio->out.mixdown = mixdown;
+                }
+            }
+            /* Audio Mixdown */
 
             if( size )
             {
@@ -1227,18 +1430,21 @@ static void ShowHelp()
 
 
 	"### Audio Options-----------------------------------------------------------\n\n"
-	"    -E, --aencoder <string> Audio encoder (faac/lame/vorbis/ac3/aac+ac3) \n"
-	"                            ac3 meaning passthrough, aac+ac3 meaning an\n"
-	"                            aac dpl2 mixdown paired with ac3 pass-thru\n"
-	"                            (default: guessed)\n"
-	"    -B, --ab <kb/s>         Set audio bitrate (default: 128)\n"
 	"    -a, --audio <string>    Select audio channel(s), separated by commas\n"
-	"                            (\"none\" for no audio, \"1,2,3\" for multiple\n"
-	"                             tracks, default: first one,\n"
-	"                             max 8 normally, max 4 with aac+ac3)\n"
-    "    -6, --mixdown <string>  Format for surround sound downmixing\n"
+    "                            More than one output track can be used for one\n"
+    "                            input.\n"
+    "                            (\"none\" for no audio, \"1,2,3\" for multiple\n"
+    "                             tracks, default: first one)\n"
+    "    -E, --aencoder <string> Audio encoder(s) (faac/lame/vorbis/ac3) \n"
+	"                            ac3 meaning passthrough\n"
+	"                            Seperated by commas for more than one audio track.\n"
+	"                            (default: guessed)\n"
+	"    -B, --ab <kb/s>         Set audio bitrate(s)  (default: 128)\n"
+    "                            Seperated by commas for more than one audio track.\n"
+	"    -6, --mixdown <string>  Format(s) for surround sound downmixing\n"
+    "                            Seperated by commas for more than one audio track.\n"
     "                            (mono/stereo/dpl1/dpl2/6ch, default: dpl2)\n"
-    "    -R, --arate             Set audio samplerate (" );
+    "    -R, --arate             Set audio samplerate(s) (" );
     for( i = 0; i < hb_audio_rates_count; i++ )
     {
         fprintf( stderr, hb_audio_rates[i].string );
@@ -1246,9 +1452,11 @@ static void ShowHelp()
             fprintf( stderr, "/" );
     }
     fprintf( stderr, " kHz)\n"
+    "                            Seperated by commas for more than one audio track.\n"
     "    -D, --drc <float>       Apply extra dynamic range compression to the audio,\n"
     "                            making soft sounds louder. Range is 1.0 to 4.0\n"
     "                            (too loud), with 1.5 - 2.5 being a useful range.\n"
+    "                            Seperated by commas for more than one audio track.\n"
 
 
 	"\n"
@@ -1461,32 +1669,67 @@ static int ParseOptions( int argc, char ** argv )
                 chapter_markers = 1;
                 break;
             case 'a':
-                audios = strdup( optarg );
+            {
+                char * token = strtok(optarg, ",");
+                if (token == NULL)
+                    token = optarg;
+                int track_start, track_end;
+                while( token != NULL )
+                {
+                    audio = calloc(1, sizeof(*audio));
+                    hb_audio_config_init(audio);
+                    if (strlen(token) >= 3)
+                    {
+                        if (sscanf(token, "%d-%d", &track_start, &track_end) == 2)
+                        {
+                            int i;
+                            for (i = track_start - 1; i < track_end; i++)
+                            {
+                                if (i != track_start - 1)
+                                {
+                                    audio = calloc(1, sizeof(*audio));
+                                    hb_audio_config_init(audio);
+                                }
+                                audio->in.track = i;
+                                audio->out.track = num_audio_tracks++;
+                                hb_list_add(audios, audio);
+                            }
+                        }
+                        else if( !strcasecmp(token, "none" ) )
+                        {
+                            audio->in.track = audio->out.track = -1;
+                            audio->out.codec = 0;
+                            hb_list_add(audios, audio);
+                            break;
+                        }
+                        else
+                        {
+                            fprintf(stderr, "ERROR: Unable to parse audio input \"%s\", skipping.",
+                                    token);
+                            free(audio);
+                        }
+                    }
+                    else
+                    {
+                        audio->in.track = atoi(token) - 1;
+                        audio->out.track = num_audio_tracks++;
+                        hb_list_add(audios, audio);
+                    }
+                    token = strtok(NULL, ",");
+                }
                 break;
+            }
             case '6':
-                if( !strcasecmp( optarg, "mono" ) )
+                if( optarg != NULL )
                 {
-                    audio_mixdown = HB_AMIXDOWN_MONO;
-                }
-                else if( !strcasecmp( optarg, "stereo" ) )
-                {
-                    audio_mixdown = HB_AMIXDOWN_STEREO;
-                }
-                else if( !strcasecmp( optarg, "dpl1" ) )
-                {
-                    audio_mixdown = HB_AMIXDOWN_DOLBY;
-                }
-                else if( !strcasecmp( optarg, "dpl2" ) )
-                {
-                    audio_mixdown = HB_AMIXDOWN_DOLBYPLII;
-                }
-                else if( !strcasecmp( optarg, "6ch" ) )
-                {
-                    audio_mixdown = HB_AMIXDOWN_6CH;
+                    mixdowns = strdup( optarg );
                 }
                 break;
             case 'D':
-                dynamic_range_compression = atof( optarg );
+                if( optarg != NULL )
+                {
+                    dynamic_range_compression = strdup( optarg );
+                }
                 break;
             case 's':
                 sub = atoi( optarg );
@@ -1608,27 +1851,9 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 break;
             case 'E':
-                if( !strcasecmp( optarg, "ac3" ) )
+                if( optarg != NULL )
                 {
-                    acodec = HB_ACODEC_AC3;
-                }
-                else if( !strcasecmp( optarg, "lame" ) )
-                {
-                    acodec = HB_ACODEC_LAME;
-                }
-                else if( !strcasecmp( optarg, "faac" ) )
-                {
-                    acodec = HB_ACODEC_FAAC;
-                }
-                else if( !strcasecmp( optarg, "vorbis") )
-                {
-                    acodec = HB_ACODEC_VORBIS;
-                }
-                else if( !strcasecmp( optarg, "aac+ac3") )
-                {
-                    acodec = HB_ACODEC_FAAC;
-                    audio_mixdown = HB_AMIXDOWN_DOLBYPLII_AC3;
-                    arate = 48000;
+                    acodecs = strdup( optarg );
                 }
                 break;
             case 'w':
@@ -1669,23 +1894,11 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             }
             case 'R':
-            {
-                int i;
-                arate = 0;
-                for( i = 0; i < hb_audio_rates_count; i++ )
+                if( optarg != NULL )
                 {
-                    if( !strcmp( optarg, hb_audio_rates[i].string ) )
-                    {
-                        arate = hb_audio_rates[i].rate;
-                        break;
-                    }
-                }
-                if( !arate )
-                {
-                    fprintf( stderr, "invalid framerate %s\n", optarg );
+                    arates = strdup( optarg );
                 }
                 break;
-            }
             case 'b':
                 vbitrate = atoi( optarg );
                 break;
@@ -1696,7 +1909,10 @@ static int ParseOptions( int argc, char ** argv )
                 size = atoi( optarg );
                 break;
             case 'B':
-                abitrate = atoi( optarg );
+                if( optarg != NULL )
+                {
+                    abitrates = strdup( optarg );
+                }
                 break;
             case 'Q':
                 crf = 0;
@@ -1758,6 +1974,7 @@ static int CheckOptions( int argc, char ** argv )
             if( p && !strcasecmp( p, ".avi" ) )
             {
                 mux = HB_MUX_AVI;
+                default_acodec = HB_ACODEC_LAME;
             }
             else if( p && ( !strcasecmp( p, ".mp4" )  ||
                             !strcasecmp( p, ".m4v" ) ) )
@@ -1766,15 +1983,18 @@ static int CheckOptions( int argc, char ** argv )
                     mux = HB_MUX_IPOD;
                 else
                     mux = HB_MUX_MP4;
+                default_acodec = HB_ACODEC_FAAC;
             }
             else if( p && ( !strcasecmp( p, ".ogm" ) ||
                             !strcasecmp( p, ".ogg" ) ) )
             {
                 mux = HB_MUX_OGM;
+                default_acodec = HB_ACODEC_VORBIS;
             }
             else if( p && !strcasecmp(p, ".mkv" ) )
             {
                 mux = HB_MUX_MKV;
+                default_acodec = HB_ACODEC_AC3;
             }
             else
             {
@@ -1786,6 +2006,7 @@ static int CheckOptions( int argc, char ** argv )
         else if( !strcasecmp( format, "avi" ) )
         {
             mux = HB_MUX_AVI;
+            default_acodec = HB_ACODEC_LAME;
         }
         else if( !strcasecmp( format, "mp4" ) )
         {
@@ -1793,15 +2014,18 @@ static int CheckOptions( int argc, char ** argv )
                 mux = HB_MUX_IPOD;
             else
                 mux = HB_MUX_MP4;
+            default_acodec = HB_ACODEC_FAAC;
         }
         else if( !strcasecmp( format, "ogm" ) ||
                  !strcasecmp( format, "ogg" ) )
         {
             mux = HB_MUX_OGM;
+            default_acodec = HB_ACODEC_VORBIS;
         }
         else if( !strcasecmp( format, "mkv" ) )
         {
             mux = HB_MUX_MKV;
+            default_acodec = HB_ACODEC_AC3;
         }
         else
         {
@@ -1809,28 +2033,46 @@ static int CheckOptions( int argc, char ** argv )
                      "choices are avi, mp4, m4v, ogm, ogg and mkv\n.", format );
             return 1;
         }
-
-        if( !acodec )
-        {
-            if( mux == HB_MUX_MP4 || mux == HB_MUX_IPOD )
-            {
-                acodec = HB_ACODEC_FAAC;
-            }
-            else if( mux == HB_MUX_AVI )
-            {
-                acodec = HB_ACODEC_LAME;
-            }
-            else if( mux == HB_MUX_OGM )
-            {
-                acodec = HB_ACODEC_VORBIS;
-            }
-            else if( mux == HB_MUX_MKV )
-            {
-                acodec = HB_ACODEC_AC3;
-            }
-        }
-
     }
 
+    return 0;
+}
+
+static int get_acodec_for_string( char *codec )
+{
+    if( !strcasecmp( codec, "ac3" ) )
+    {
+        return HB_ACODEC_AC3;
+    }
+    else if( !strcasecmp( codec, "dts" ) || !strcasecmp( codec, "dca" ) )
+    {
+        return HB_ACODEC_DCA;
+    }
+    else if( !strcasecmp( codec, "lame" ) )
+    {
+        return HB_ACODEC_LAME;
+    }
+    else if( !strcasecmp( codec, "faac" ) )
+    {
+        return HB_ACODEC_FAAC;
+    }
+    else if( !strcasecmp( codec, "vorbis") )
+    {
+        return HB_ACODEC_VORBIS;
+    }
+    else
+    {
+        return -1;
+    }
+}
+
+static int is_sample_rate_valid(int rate)
+{
+    int i;
+    for( i = 0; i < hb_audio_rates_count; i++ )
+    {
+            if (rate == hb_audio_rates[i].rate)
+                return 1;
+    }
     return 0;
 }
