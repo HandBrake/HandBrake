@@ -1467,7 +1467,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     hb_title_t * title = (hb_title_t *) hb_list_item( list,
             [fSrcTitlePopUp indexOfSelectedItem] );
     hb_job_t * job = title->job;
-    //int i;
+    hb_audio_config_t * audio;
 
     /* Chapter selection */
     job->chapter_start = [fSrcChapterStartPopUp indexOfSelectedItem] + 1;
@@ -1478,7 +1478,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     int codecs = [fDstCodecsPopUp indexOfSelectedItem];
     job->mux    = FormatSettings[format][codecs] & HB_MUX_MASK;
     job->vcodec = FormatSettings[format][codecs] & HB_VCODEC_MASK;
-    job->acodec = FormatSettings[format][codecs] & HB_ACODEC_MASK;
+
+
     /* If mpeg-4, then set mpeg-4 specific options like chapters and > 4gb file sizes */
 	if ([fDstFormatPopUp indexOfSelectedItem] == 0)
 	{
@@ -1594,66 +1595,118 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     job->subtitle = [fSubPopUp indexOfSelectedItem] - 2;
 
     /* Audio tracks and mixdowns */
-    /* check for the condition where track 2 has an audio selected, but track 1 does not */
-    /* we will use track 2 as track 1 in this scenario */
+    /* Lets make sure there arent any erroneous audio tracks in the job list, so lets make sure its empty*/
+    for( int i = 0; i < hb_list_count(job->list_audio);i++)
+    {
+        hb_audio_t * temp_audio = (hb_audio_t*) hb_list_item( job->list_audio, 0 );
+        hb_list_rem(job->list_audio, temp_audio);
+    }
+    /* Now lets add our new tracks to the audio list here */
     if ([fAudLang1PopUp indexOfSelectedItem] > 0)
     {
-        job->audios[0] = [fAudLang1PopUp indexOfSelectedItem] - 1;
-        job->audios[1] = [fAudLang2PopUp indexOfSelectedItem] - 1; /* will be -1 if "none" is selected */
-        job->audios[2] = -1;
-        job->audio_mixdowns[0] = [[fAudTrack1MixPopUp selectedItem] tag];
-        job->audio_mixdowns[1] = [[fAudTrack2MixPopUp selectedItem] tag];
+        /* First we copy the source audio structure (remember, in the popup 0 is "None" so we subtract 1 to match the list->audio*/
+        //audio = (hb_audio_config_t *) hb_list_audio_config_item( title->list_audio, [fAudLang1PopUp indexOfSelectedItem] - 1);
+        audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
+        hb_audio_config_init(audio);
+
+        /* We go ahead and assign values to our audio->out.<properties> */
+        audio->out.track = [fAudLang1PopUp indexOfSelectedItem] - 1;
+        if ([[fAudTrack1MixPopUp titleOfSelectedItem] isEqualToString: @"AC3 Passthru"])
+        {
+        audio->out.codec = HB_ACODEC_AC3;
+        audio->out.mixdown = HB_ACODEC_AC3;
+        audio->out.bitrate = audio->in.bitrate / 1000; // we use the audio.in bitrate for passthru, / 1000 so it displays right.
+        audio->out.samplerate = 48000;
+        audio->out.dynamic_range_compression = 1.00;
+        }
+        else
+        {
+        audio->out.codec = FormatSettings[format][codecs] & HB_ACODEC_MASK;
+        audio->out.mixdown = [[fAudTrack1MixPopUp selectedItem] tag];
+        audio->out.bitrate = [[fAudBitratePopUp selectedItem] tag];
+        audio->out.samplerate = hb_audio_rates[[fAudRatePopUp indexOfSelectedItem]].rate;
+        audio->out.dynamic_range_compression = [fAudDrcField floatValue];
+        }
+
+        /* We add the newly modified audio track to job->list_audio */
+        //hb_list_add(job->list_audio, audio );
+        hb_audio_add( job, audio );
+        free(audio);
+
+        /*HACK: We use the format and codecs popups to determine if we should slide in the extra ac3 passthru track for the atv hybrid mp4 */
+        if (format == 0 && codecs == 2 && audio->in.codec != HB_ACODEC_DCA) // if mp4 and aac + ac3 and input is NOT DTS (dts cannot be passed through as ac3)
+        {
+            //audio = (hb_audio_config_t *) hb_list_audio_config_item( title->list_audio, [fAudLang1PopUp indexOfSelectedItem] - 1 );
+            audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
+            hb_audio_config_init(audio);
+
+            /* We go ahead and assign values to our audio->out.<properties> */
+            audio->out.track = [fAudLang1PopUp indexOfSelectedItem] - 1;
+            audio->out.codec = HB_ACODEC_AC3;
+            audio->out.codec = HB_ACODEC_AC3;
+            audio->out.samplerate = 48000;
+            audio->out.bitrate = audio->in.bitrate / 1000; // we use the audio.in bitrate for passthru, / 1000 do it displays right.
+            audio->out.mixdown = HB_ACODEC_AC3;//<-- Lets manually set the mixdown int
+            audio->out.dynamic_range_compression = 1.00;
+            /* We add the newly modified audio track to job->list_audio */
+            //hb_list_add(job->list_audio, audio );
+            hb_audio_add( job, audio );
+            free(audio);
+        }
+
     }
-    else if ([fAudLang2PopUp indexOfSelectedItem] > 0)
+    if ([fAudLang2PopUp indexOfSelectedItem] > 0)
     {
-        job->audios[0] = [fAudLang2PopUp indexOfSelectedItem] - 1;
-        job->audio_mixdowns[0] = [[fAudTrack2MixPopUp selectedItem] tag];
-        job->audios[1] = -1;
-    }
-    else
-    {
-        job->audios[0] = -1;
+        /* First we copy the source audio structure (remember, in the popup 0 is "None" so we subtract 1 to match the list->audio*/
+        //audio = (hb_audio_config_t *) hb_list_audio_config_item( title->list_audio, [fAudLang2PopUp indexOfSelectedItem] - 1 );
+        /* Now we modify it according to the gui settings for the specified track number */
+        audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
+        hb_audio_config_init(audio);
+
+        /* We go ahead and assign values to our audio->out.<properties> */
+        audio->out.track = [fAudLang2PopUp indexOfSelectedItem] - 1;
+        if ([[fAudTrack2MixPopUp titleOfSelectedItem] isEqualToString: @"AC3 Passthru"])
+        {
+        audio->out.codec = HB_ACODEC_AC3;
+        audio->out.mixdown = HB_ACODEC_AC3;
+        audio->out.bitrate = audio->in.bitrate / 1000; // we use the audio.in bitrate for passthru, / 1000 so it displays right.
+        audio->out.samplerate = 48000;
+        }
+        else
+        {
+        audio->out.codec = FormatSettings[format][codecs] & HB_ACODEC_MASK;
+        audio->out.mixdown = [[fAudTrack2MixPopUp selectedItem] tag];
+        audio->out.bitrate = [[fAudBitratePopUp selectedItem] tag];
+        audio->out.samplerate = hb_audio_rates[[fAudRatePopUp indexOfSelectedItem]].rate;
+        }
+        audio->out.dynamic_range_compression = [fAudDrcField floatValue];
+        /* We add the newly modified audio track to job->list_audio */
+        //hb_list_add(job->list_audio, audio );
+        hb_audio_add( job, audio );
+        free(audio);
+
+        /*HACK: We use the format and codecs popups to determine if we should slide in the extra ac3 passthru track for the atv hybrid mp4 */
+        if (format == 0 && codecs == 2 && audio->in.codec != HB_ACODEC_DCA) // if mp4 and aac + ac3 and input is NOT DTS (dts cannot be passed through as ac3)
+        {
+            //audio = (hb_audio_config_t *) hb_list_audio_config_item( title->list_audio, [fAudLang2PopUp indexOfSelectedItem] - 1 );
+            audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
+            hb_audio_config_init(audio);
+
+            /* We go ahead and assign values to our audio->out.<properties> */
+            audio->out.track = [fAudLang2PopUp indexOfSelectedItem] - 1;
+            audio->out.codec = HB_ACODEC_AC3;
+            audio->out.codec = HB_ACODEC_AC3;
+            audio->out.samplerate = 48000;
+            audio->out.bitrate = audio->in.bitrate / 1000; // we use the audio.in bitrate for passthru, / 1000 so it displays right.
+            audio->out.mixdown = HB_ACODEC_AC3;//<-- Lets manually set the mixdown int
+            audio->out.dynamic_range_compression = [fAudDrcField floatValue];
+            /* We add the newly modified audio track to job->list_audio */
+            //hb_list_add(job->list_audio, audio );
+            hb_audio_add( job, audio );
+            free(audio);
+        }
     }
 
-    /*
-     * Where one or more of the audio tracks has a mixdown of DPLII+AC3 we need to create an extra
-     * track for each.
-     */
-    if (job->audio_mixdowns[0] == HB_AMIXDOWN_DOLBYPLII_AC3)
-    {
-        /*
-         * Make space for the AC3 track by moving 1 to 2
-         */
-        job->audios[2] = job->audios[1];
-        job->audio_mixdowns[2] = job->audio_mixdowns[1];
-        job->audios[1] = job->audios[0];
-        job->audio_mixdowns[0] = HB_AMIXDOWN_DOLBYPLII;
-        job->audio_mixdowns[1] = HB_AMIXDOWN_AC3;
-    }
-
-    if (job->audio_mixdowns[1] == HB_AMIXDOWN_DOLBYPLII_AC3)
-    {
-        job->audios[2] = job->audios[1];
-        job->audio_mixdowns[1] = HB_AMIXDOWN_DOLBYPLII;
-        job->audio_mixdowns[2] = HB_AMIXDOWN_AC3;
-        job->audios[3] = -1;
-    }
-
-    if (job->audio_mixdowns[2] == HB_AMIXDOWN_DOLBYPLII_AC3)
-    {
-        job->audios[3] = job->audios[2];
-        job->audio_mixdowns[2] = HB_AMIXDOWN_DOLBYPLII;
-        job->audio_mixdowns[3] = HB_AMIXDOWN_AC3;
-        job->audios[4] = -1;
-    }
-
-    /* Audio settings */
-    job->arate = hb_audio_rates[[fAudRatePopUp
-                     indexOfSelectedItem]].rate;
-    job->abitrate = [[fAudBitratePopUp selectedItem] tag];
-    
-    /* Dynamic Range Compression */
-    job->dynamic_range_compression = [fAudDrcField floatValue];
     
     /* set vfr according to the Picture Window */
     if ([fPictureController vfr])
@@ -1785,16 +1838,16 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
     // Create a Queue Controller job group. Each job that we submit to libhb will also
     // get added to the job group so that the queue can track the jobs.
-    HBJobGroup * jobGroup = [HBJobGroup jobGroup];
+   HBJobGroup * jobGroup = [HBJobGroup jobGroup];
     // The job group can maintain meta data that libhb can not...
-    [jobGroup setPresetName: [fPresetSelectedDisplay stringValue]];
+   [jobGroup setPresetName: [fPresetSelectedDisplay stringValue]];
 
     // Job groups require that each job within the group be assigned a unique id so
     // that the queue can xref between itself and the private jobs that libhb
     // maintains. The ID is composed a group id number and a "sequence" number. libhb
     // does not use this id.
-    static int jobGroupID = 0;
-    jobGroupID++;
+   static int jobGroupID = 0;
+   jobGroupID++;
     
     // A sequence number, starting at zero, is used to identifiy to each pass. This is
     // used by the queue UI to determine if a pass if the first pass of an encode.
@@ -2787,17 +2840,15 @@ the user is using "Custom" settings by determining the sender*/
 
 - (IBAction) setEnabledStateOfAudioMixdownControls: (id) sender
 {
-
     /* enable/disable the mixdown text and popupbutton for audio track 1 */
-    [fAudTrack1MixPopUp setEnabled: ([fAudLang1PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    [fAudTrack1MixLabel setTextColor: ([fAudLang1PopUp indexOfSelectedItem] == 0) ?
-        [NSColor disabledControlTextColor] : [NSColor controlTextColor]];
+        [fAudTrack1MixPopUp setEnabled: ([fAudLang1PopUp indexOfSelectedItem] == 0) ? NO : YES];
+        [fAudTrack1MixLabel setTextColor: ([fAudLang1PopUp indexOfSelectedItem] == 0) ?
+         [NSColor disabledControlTextColor] : [NSColor controlTextColor]];
 
-    /* enable/disable the mixdown text and popupbutton for audio track 2 */
-    [fAudTrack2MixPopUp setEnabled: ([fAudLang2PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    [fAudTrack2MixLabel setTextColor: ([fAudLang2PopUp indexOfSelectedItem] == 0) ?
-        [NSColor disabledControlTextColor] : [NSColor controlTextColor]];
-
+        /* enable/disable the mixdown text and popupbutton for audio track 2 */
+        [fAudTrack2MixPopUp setEnabled: ([fAudLang2PopUp indexOfSelectedItem] == 0) ? NO : YES];
+        [fAudTrack2MixLabel setTextColor: ([fAudLang2PopUp indexOfSelectedItem] == 0) ?
+         [NSColor disabledControlTextColor] : [NSColor controlTextColor]];
 }
 
 - (IBAction) addAllAudioTracksToPopUp: (id) sender
@@ -2807,15 +2858,15 @@ the user is using "Custom" settings by determining the sender*/
     hb_title_t * title = (hb_title_t*)
         hb_list_item( list, [fSrcTitlePopUp indexOfSelectedItem] );
 
-	hb_audio_t * audio;
+	hb_audio_config_t * audio;
 
     [sender removeAllItems];
     [sender addItemWithTitle: _( @"None" )];
     for( int i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
-        audio = (hb_audio_t *) hb_list_item( title->list_audio, i );
+        audio = (hb_audio_config_t *) hb_list_audio_config_item( title->list_audio, i );
         [[sender menu] addItemWithTitle:
-            [NSString stringWithCString: audio->lang]
+            [NSString stringWithCString: audio->lang.description]
             action: NULL keyEquivalent: @""];
     }
     [sender selectItemAtIndex: 0];
@@ -2889,7 +2940,7 @@ the user is using "Custom" settings by determining the sender*/
 #endif
 
     /* pointer for the hb_audio_s struct we will use later on */
-    hb_audio_t * audio;
+    hb_audio_config_t * audio;
 
     /* find out what the currently-selected output audio codec is */
     int format = [fDstFormatPopUp indexOfSelectedItem];
@@ -2900,11 +2951,11 @@ the user is using "Custom" settings by determining the sender*/
     bool mp4AacAc3;
     if (format == 0 && codecs == 2) // if mp4 and aac + ac3
     {
-    mp4AacAc3 = 1;
+        mp4AacAc3 = 1;
     }
     else
     {
-    mp4AacAc3 = 0;
+        mp4AacAc3 = 0;
     }
 
     /* pointer to this track's mixdown NSPopUpButton */
@@ -2933,114 +2984,113 @@ the user is using "Custom" settings by determining the sender*/
     {
 
         /* get the audio */
-        audio = (hb_audio_t *) hb_list_item( fTitle->list_audio, thisAudioIndex );
+        audio = (hb_audio_config_t *) hb_list_audio_config_item( fTitle->list_audio, thisAudioIndex );// Should "fTitle" be title and be setup ?
         if (audio != NULL)
         {
 
             /* find out if our selected output audio codec supports mono and / or 6ch */
             /* we also check for an input codec of AC3 or DCA,
-               as they are the only libraries able to do the mixdown to mono / conversion to 6-ch */
+             as they are the only libraries able to do the mixdown to mono / conversion to 6-ch */
             /* audioCodecsSupportMono and audioCodecsSupport6Ch are the same for now,
-               but this may change in the future, so they are separated for flexibility */
-            int audioCodecsSupportMono = ((audio->codec == HB_ACODEC_AC3 ||
-                audio->codec == HB_ACODEC_DCA) && acodec == HB_ACODEC_FAAC);
-            int audioCodecsSupport6Ch =  ((audio->codec == HB_ACODEC_AC3 ||
-                audio->codec == HB_ACODEC_DCA) && (acodec == HB_ACODEC_FAAC ||
-                acodec == HB_ACODEC_VORBIS));
+             but this may change in the future, so they are separated for flexibility */
+            int audioCodecsSupportMono = ((audio->in.codec == HB_ACODEC_AC3 ||
+                                           audio->in.codec == HB_ACODEC_DCA) && acodec == HB_ACODEC_FAAC);
+            int audioCodecsSupport6Ch =  ((audio->in.codec == HB_ACODEC_AC3 ||
+                                           audio->in.codec == HB_ACODEC_DCA) && (acodec == HB_ACODEC_FAAC ||
+                                                                                 acodec == HB_ACODEC_VORBIS));
 
             /* check for AC-3 passthru */
-            if (audio->codec == HB_ACODEC_AC3 && acodec == HB_ACODEC_AC3)
+            if (audio->in.codec == HB_ACODEC_AC3 && acodec == HB_ACODEC_AC3)
             {
             
-                    [[mixdownPopUp menu] addItemWithTitle:
-                        [NSString stringWithCString: "AC3 Passthru"]
-                        action: NULL keyEquivalent: @""];
+                [[mixdownPopUp menu] addItemWithTitle:
+                 [NSString stringWithCString: "AC3 Passthru"]
+                                               action: NULL keyEquivalent: @""];
             }
             else
             {
 
                 /* add the appropriate audio mixdown menuitems to the popupbutton */
                 /* in each case, we set the new menuitem's tag to be the amixdown value for that mixdown,
-                   so that we can reference the mixdown later */
+                 so that we can reference the mixdown later */
 
                 /* keep a track of the min and max mixdowns we used, so we can select the best match later */
                 int minMixdownUsed = 0;
                 int maxMixdownUsed = 0;
                 
                 /* get the input channel layout without any lfe channels */
-                int layout = audio->input_channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK;
+                int layout = audio->in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK;
 
-                /* do we want to add a mono option? */
-                if (!mp4AacAc3 && audioCodecsSupportMono == 1) {
-                    NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                        [NSString stringWithCString: hb_audio_mixdowns[0].human_readable_name]
-                        action: NULL keyEquivalent: @""];
-                    [menuItem setTag: hb_audio_mixdowns[0].amixdown];
-                    if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[0].amixdown;
-                    maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[0].amixdown);
-                }
+                    /* do we want to add a mono option? */
+                    //if (!mp4AacAc3 && audioCodecsSupportMono == 1)
+                    if (audioCodecsSupportMono == 1)
+                    {
+                        NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
+                                                [NSString stringWithCString: hb_audio_mixdowns[0].human_readable_name]
+                                                                              action: NULL keyEquivalent: @""];
+                        [menuItem setTag: hb_audio_mixdowns[0].amixdown];
+                        if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[0].amixdown;
+                        maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[0].amixdown);
+                    }
 
-                /* do we want to add a stereo option? */
-                /* offer stereo if we have a mono source and non-mono-supporting codecs, as otherwise we won't have a mixdown at all */
-                /* also offer stereo if we have a stereo-or-better source */
-                if (((!mp4AacAc3 || audio->codec == HB_ACODEC_MPGA ||  audio->codec == HB_ACODEC_LPCM || audio->codec == HB_ACODEC_DCA) && ((layout == HB_INPUT_CH_LAYOUT_MONO && audioCodecsSupportMono == 0) || layout >= HB_INPUT_CH_LAYOUT_STEREO))) {
-                    NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                        [NSString stringWithCString: hb_audio_mixdowns[1].human_readable_name]
-                        action: NULL keyEquivalent: @""];
-                    [menuItem setTag: hb_audio_mixdowns[1].amixdown];
-                    if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[1].amixdown;
-                    maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[1].amixdown);
-                }
+                    /* do we want to add a stereo option? */
+                    /* offer stereo if we have a mono source and non-mono-supporting codecs, as otherwise we won't have a mixdown at all */
+                    /* also offer stereo if we have a stereo-or-better source */
+                    //if (((!mp4AacAc3 || audio->in.codec == HB_ACODEC_MPGA ||  audio->in.codec == HB_ACODEC_LPCM || audio->in.codec == HB_ACODEC_DCA) && ((layout == HB_INPUT_CH_LAYOUT_MONO && audioCodecsSupportMono == 0) || layout >= HB_INPUT_CH_LAYOUT_STEREO)))
+                    //if (((audio->in.codec == HB_ACODEC_MPGA ||  audio->in.codec == HB_ACODEC_LPCM || audio->in.codec == HB_ACODEC_DCA) && ((layout == HB_INPUT_CH_LAYOUT_MONO && audioCodecsSupportMono == 0) || layout >= HB_INPUT_CH_LAYOUT_STEREO)))
+                    if ((layout == HB_INPUT_CH_LAYOUT_MONO && audioCodecsSupportMono == 0) || layout >= HB_INPUT_CH_LAYOUT_STEREO)
+                    {
+                        NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
+                                                [NSString stringWithCString: hb_audio_mixdowns[1].human_readable_name]
+                                                                              action: NULL keyEquivalent: @""];
+                        [menuItem setTag: hb_audio_mixdowns[1].amixdown];
+                        if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[1].amixdown;
+                        maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[1].amixdown);
+                    }
 
-                /* do we want to add a dolby surround (DPL1) option? */
-                if (!mp4AacAc3 && (layout == HB_INPUT_CH_LAYOUT_3F1R || layout == HB_INPUT_CH_LAYOUT_3F2R || layout == HB_INPUT_CH_LAYOUT_DOLBY)) {
-                    NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                        [NSString stringWithCString: hb_audio_mixdowns[2].human_readable_name]
-                        action: NULL keyEquivalent: @""];
-                    [menuItem setTag: hb_audio_mixdowns[2].amixdown];
-                    if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[2].amixdown;
-                    maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[2].amixdown);
-                }
+                    /* do we want to add a dolby surround (DPL1) option? */
+                    if (layout == HB_INPUT_CH_LAYOUT_3F1R || layout == HB_INPUT_CH_LAYOUT_3F2R || layout == HB_INPUT_CH_LAYOUT_DOLBY)
+                    {
+                        NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
+                                                [NSString stringWithCString: hb_audio_mixdowns[2].human_readable_name]
+                                                                              action: NULL keyEquivalent: @""];
+                        [menuItem setTag: hb_audio_mixdowns[2].amixdown];
+                        if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[2].amixdown;
+                        maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[2].amixdown);
+                    }
 
-                /* do we want to add a dolby pro logic 2 (DPL2) option? */
-                if ((!mp4AacAc3 || audio->codec == HB_ACODEC_DCA) && layout == HB_INPUT_CH_LAYOUT_3F2R) {
-                    NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                        [NSString stringWithCString: hb_audio_mixdowns[3].human_readable_name]
-                        action: NULL keyEquivalent: @""];
-                    [menuItem setTag: hb_audio_mixdowns[3].amixdown];
-                    if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[3].amixdown;
-                    maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[3].amixdown);
-                }
+                    /* do we want to add a dolby pro logic 2 (DPL2) option? */
+                    if (layout == HB_INPUT_CH_LAYOUT_3F2R)
+                    {
+                        NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
+                                                [NSString stringWithCString: hb_audio_mixdowns[3].human_readable_name]
+                                                                              action: NULL keyEquivalent: @""];
+                        [menuItem setTag: hb_audio_mixdowns[3].amixdown];
+                        if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[3].amixdown;
+                        maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[3].amixdown);
+                    }
 
-                /* do we want to add a 6-channel discrete option? */
-                if (!mp4AacAc3 && (audioCodecsSupport6Ch == 1 && layout == HB_INPUT_CH_LAYOUT_3F2R && (audio->input_channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE))) {
-                    NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                        [NSString stringWithCString: hb_audio_mixdowns[4].human_readable_name]
-                        action: NULL keyEquivalent: @""];
-                    [menuItem setTag: hb_audio_mixdowns[4].amixdown];
-                    if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[4].amixdown;
-                    maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[4].amixdown);
-                }
+                    /* do we want to add a 6-channel discrete option? */
+                    if (!mp4AacAc3 && (audioCodecsSupport6Ch == 1 && layout == HB_INPUT_CH_LAYOUT_3F2R && (audio->in.channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE)))
+                    {
+                        NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
+                                                [NSString stringWithCString: hb_audio_mixdowns[4].human_readable_name]
+                                                                              action: NULL keyEquivalent: @""];
+                        [menuItem setTag: hb_audio_mixdowns[4].amixdown];
+                        if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[4].amixdown;
+                        maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[4].amixdown);
+                    }
 
-                /* do we want to add an AC-3 passthrough option? */
-                if (audio->codec == HB_ACODEC_AC3 && acodec == HB_ACODEC_AC3) {
-                    NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                        [NSString stringWithCString: hb_audio_mixdowns[5].human_readable_name]
-                        action: NULL keyEquivalent: @""];
-                    [menuItem setTag: hb_audio_mixdowns[5].amixdown];
-                    if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[5].amixdown;
-                    maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[5].amixdown);
-                }
+                    /* do we want to add an AC-3 passthrough option? */
+                    if (audio->in.codec == HB_ACODEC_AC3 && acodec == HB_ACODEC_AC3) {
+                        NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
+                                                [NSString stringWithCString: hb_audio_mixdowns[5].human_readable_name]
+                                                                              action: NULL keyEquivalent: @""];
+                        [menuItem setTag: hb_audio_mixdowns[5].amixdown];
+                        if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[5].amixdown;
+                        maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[5].amixdown);
+                    }
 
-                /* do we want to add the DPLII+AC3 passthrough option? */
-                if (mp4AacAc3 && audio->codec == HB_ACODEC_AC3) {
-                    NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                        [NSString stringWithCString: hb_audio_mixdowns[6].human_readable_name]
-                        action: NULL keyEquivalent: @""];
-                    [menuItem setTag: hb_audio_mixdowns[6].amixdown];
-                    if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[6].amixdown;
-                    maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[6].amixdown);
-                }
                 /* auto-select the best mixdown based on our saved mixdown preference */
                 
                 /* for now, this is hard-coded to a "best" mixdown of HB_AMIXDOWN_DOLBYPLII */
@@ -3095,9 +3145,7 @@ the user is using "Custom" settings by determining the sender*/
         case HB_ACODEC_FAAC:
             /* check if we have a 6ch discrete conversion in either audio track */
             if ([[fAudTrack1MixPopUp selectedItem] tag] == HB_AMIXDOWN_6CH || 
-                [[fAudTrack2MixPopUp selectedItem] tag] == HB_AMIXDOWN_6CH || 
-                [[fAudTrack1MixPopUp selectedItem] tag] == HB_AMIXDOWN_AC3 || 
-                [[fAudTrack2MixPopUp selectedItem] tag] == HB_AMIXDOWN_AC3)
+                [[fAudTrack2MixPopUp selectedItem] tag] == HB_AMIXDOWN_6CH)
             {
                 /* FAAC is happy using our min bitrate of 32 kbps, even for 6ch */
                 minbitrate = 32;
@@ -3164,9 +3212,7 @@ the user is using "Custom" settings by determining the sender*/
 
     /* select the default bitrate (but use 384 for 6-ch AAC) */
     if ([[fAudTrack1MixPopUp selectedItem] tag] == HB_AMIXDOWN_6CH || 
-        [[fAudTrack2MixPopUp selectedItem] tag] == HB_AMIXDOWN_6CH ||
-        [[fAudTrack1MixPopUp selectedItem] tag] == HB_AMIXDOWN_AC3 || 
-        [[fAudTrack2MixPopUp selectedItem] tag] == HB_AMIXDOWN_AC3)
+        [[fAudTrack2MixPopUp selectedItem] tag] == HB_AMIXDOWN_6CH)
     {
         [fAudBitratePopUp selectItemWithTag: 384];
     }

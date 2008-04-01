@@ -106,6 +106,8 @@ BOOL                        fIsDragging;
     int                         crf;
     NSString                    *x264opts;
 
+    NSString                    *audioinfo_codecs;
+    NSString                    *audioinfo_summary;  //<-hack to use a string to display all audio info for each job in one string
     int                         audio_mixdowns[8];
     int                         acodec;
     int                         abitrate;

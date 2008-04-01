@@ -141,10 +141,62 @@ static NSDictionary* _shortHeightAttribute = NULL;
         crf = job->crf;
         if (job->x264opts)
             x264opts = [[NSString stringWithUTF8String:job->x264opts] retain];
-        memcpy(audio_mixdowns, job->audio_mixdowns, sizeof(audio_mixdowns));
-        acodec = job->acodec;
-        abitrate = job->abitrate;
-        arate = job->arate;
+        /* So, with the advent of job->list_audio's I decided why not just use an NSString and concatanate
+         all of the info we need for all of the audio values to display right into an NSString here ? So I
+         did. I have no idea why we are reading libhb stuff just to display it in the queue gui. So here we
+         are with a huge string. But its easy to change and saves alot of messing about. Maybe we move a bunch
+         of other display stuff into strings for display for each job. It's not like they have to actually do
+         anything.*/
+        hb_audio_config_t * audio;
+        NSString * thisJobAudioCodecs = [NSString stringWithFormat:@""];
+        NSString * thisJobAudioInfo = [NSString stringWithFormat:@""]; // Setup a simple way to start the string
+        for( int i = 0; i < hb_list_count(job->list_audio); i++ )
+        {
+           audio = (hb_audio_config_t *) hb_list_audio_config_item( job->list_audio, i );
+            /* Output Codec */
+            NSString *outputCodec;
+            if (audio->out.codec == HB_ACODEC_AC3)
+                outputCodec = @"AC3";
+            else if (audio->out.codec == HB_ACODEC_FAAC)
+                outputCodec = @"AAC";
+            else if (audio->out.codec == HB_ACODEC_LAME)
+                outputCodec = @"MP3";
+            else if (audio->out.codec == HB_ACODEC_VORBIS)
+                outputCodec = @"Vorbis";
+            else
+                outputCodec = @"Unknown Codec";       
+            /* Add the codec to the audio codecs list ( We should check against dupes)*/
+            thisJobAudioCodecs = [thisJobAudioCodecs stringByAppendingString:[NSString stringWithFormat:@" %@,",outputCodec]];
+            if (i > 0)
+            {
+                /* Insert a line break so that we get each track on a separate line */
+                /* Wicked HACK alert!!, use 18 whitespaces to align offset in display for list > 2 to offset "Audio" in the queue display
+                 Please Fix Me because this is embarrassing (but it works) */
+                thisJobAudioInfo = [thisJobAudioInfo stringByAppendingString:@"\n                  "];
+            }
+            /* Detailed Job audio track info*/
+            /* Track Number and Mixdown Info */
+            if (audio->out.mixdown == HB_ACODEC_AC3)// Remember for ac3 passthru the mixdown uses the source codec
+                thisJobAudioInfo = [thisJobAudioInfo stringByAppendingString:[NSString stringWithFormat:@" - Track %d: Source: %@ Output: %@, Pass-Thru", i + 1, [NSString stringWithUTF8String:audio->lang.description], outputCodec]];
+            else if (audio->out.mixdown == HB_AMIXDOWN_MONO)
+                thisJobAudioInfo = [thisJobAudioInfo stringByAppendingString:[NSString stringWithFormat:@" - Track %d: Source: %@ Output: %@, Mono", i + 1, [NSString stringWithUTF8String:audio->lang.description], outputCodec]];
+            else if (audio->out.mixdown == HB_AMIXDOWN_STEREO)
+                thisJobAudioInfo = [thisJobAudioInfo stringByAppendingString:[NSString stringWithFormat:@" - Track %d: Source: %@ Output: %@, Stereo", i + 1, [NSString stringWithUTF8String:audio->lang.description], outputCodec]];
+            else if (audio->out.mixdown == HB_AMIXDOWN_DOLBY)
+                thisJobAudioInfo = [thisJobAudioInfo stringByAppendingString:[NSString stringWithFormat:@" - Track %d: Source: %@ Output: %@, Dolby Surround", i + 1, [NSString stringWithUTF8String:audio->lang.description], outputCodec]];
+            else if (audio->out.mixdown == HB_AMIXDOWN_DOLBYPLII)
+                thisJobAudioInfo = [thisJobAudioInfo stringByAppendingString:[NSString stringWithFormat:@" - Track %d: Source: %@ Output: %@, Dolby Pro Logic II", i + 1, [NSString stringWithUTF8String:audio->lang.description], outputCodec]];
+            else if (audio->out.mixdown == HB_AMIXDOWN_6CH)
+                thisJobAudioInfo = [thisJobAudioInfo stringByAppendingString:[NSString stringWithFormat:@" - Track %d: Source: %@ Output: %@, 6 Channel Discreet", i + 1, [NSString stringWithUTF8String:audio->lang.description], outputCodec]];
+            else
+                thisJobAudioInfo = [thisJobAudioInfo stringByAppendingString:[NSString stringWithFormat:@" - Track %d: Source: %@ Output: Unknown Codec Info", i + 1, [NSString stringWithUTF8String:audio->lang.description]]];
+            
+            thisJobAudioInfo = [thisJobAudioInfo stringByAppendingString:[NSString stringWithFormat:@", %d kbps, %d Hz", audio->out.bitrate, audio->out.samplerate]];
+            
+        }
+        audioinfo_summary = [[NSString stringWithFormat:@"%@",thisJobAudioInfo]retain];
+        audioinfo_codecs = [[NSString stringWithFormat:@"%@",thisJobAudioCodecs]retain];
+        
         subtitle = job->subtitle;
         mux = job->mux;
         if (job->file)
@@ -197,6 +249,8 @@ static NSDictionary* _shortHeightAttribute = NULL;
     [file release];
     [titleName release];
     [subtitleLang release];
+    [audioinfo_summary release];
+    [audioinfo_codecs release];
     [super dealloc];
 }
 
@@ -407,9 +461,9 @@ static NSDictionary* _shortHeightAttribute = NULL;
             jobFormatInfo = @"unknown";
                 
         if (chapter_markers == 1)
-            jobFormatInfo = [NSString stringWithFormat:@"%@ Container, %@ Video + %@ Audio, Chapter Markers\n", jobFormatInfo, jobVideoCodec, jobAudioCodec];
+            jobFormatInfo = [NSString stringWithFormat:@"%@ Container, %@ Video + %@ Audio, Chapter Markers\n", jobFormatInfo, jobVideoCodec, audioinfo_codecs];
         else
-            jobFormatInfo = [NSString stringWithFormat:@"%@ Container, %@ Video + %@ Audio\n", jobFormatInfo, jobVideoCodec, jobAudioCodec];
+            jobFormatInfo = [NSString stringWithFormat:@"%@ Container, %@ Video + %@ Audio\n", jobFormatInfo, jobVideoCodec, audioinfo_codecs];
             
         [finalString appendString: @"Format: " withAttributes:detailBoldAttr];
         [finalString appendString: jobFormatInfo withAttributes:detailAttr];
@@ -497,34 +551,10 @@ static NSDictionary* _shortHeightAttribute = NULL;
 
     if (withAudioInfo)
     {
-        NSString * jobAudioInfo;
-        if ([jobAudioCodec isEqualToString: @"AC3"])
-            jobAudioInfo = [NSString stringWithFormat:@"%@, Pass-Through", jobAudioCodec];
-        else
-            jobAudioInfo = [NSString stringWithFormat:@"%@, %d kbps, %d Hz", jobAudioCodec, abitrate, arate];
-        
-        // we now get the audio mixdown info for each of the two gui audio tracks
-        // lets do it the long way here to get a handle on things.
-        // Hardcoded for two tracks for gui: audio_mixdowns[i] audio_mixdowns[i]
-        int ai; // counter for each audios [] , macgui only allows for two audio tracks currently
-        for( ai = 0; ai < 2; ai++ )
-        {
-            if (audio_mixdowns[ai] == HB_AMIXDOWN_MONO)
-                jobAudioInfo = [jobAudioInfo stringByAppendingString:[NSString stringWithFormat:@", Track %d: Mono", ai + 1]];
-            if (audio_mixdowns[ai] == HB_AMIXDOWN_STEREO)
-                jobAudioInfo = [jobAudioInfo stringByAppendingString:[NSString stringWithFormat:@", Track %d: Stereo", ai + 1]];
-            if (audio_mixdowns[ai] == HB_AMIXDOWN_DOLBY)
-                jobAudioInfo = [jobAudioInfo stringByAppendingString:[NSString stringWithFormat:@", Track %d: Dolby Surround", ai + 1]];
-            if (audio_mixdowns[ai] == HB_AMIXDOWN_DOLBYPLII)
-                jobAudioInfo = [jobAudioInfo stringByAppendingString:[NSString stringWithFormat:@", Track %d: Dolby Pro Logic II", ai + 1]];
-            if (audio_mixdowns[ai] == HB_AMIXDOWN_AC3)
-                jobAudioInfo = [jobAudioInfo stringByAppendingString:[NSString stringWithFormat:@", Pass-Through", ai + 1]];
-                
-        }
         if (withIcon)   // implies indent the info
             [finalString appendString: @"\t" withAttributes:detailBoldAttr];
         [finalString appendString: @"Audio: " withAttributes:detailBoldAttr];
-        [finalString appendString:[NSString stringWithFormat:@"%@\n", jobAudioInfo] withAttributes:detailAttr];
+        [finalString appendString:[NSString stringWithFormat:@"%@\n", audioinfo_summary] withAttributes:detailAttr];
     }
     
     if (withSubtitleInfo)
