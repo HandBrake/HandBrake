@@ -1608,7 +1608,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         //audio = (hb_audio_config_t *) hb_list_audio_config_item( title->list_audio, [fAudLang1PopUp indexOfSelectedItem] - 1);
         audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
         hb_audio_config_init(audio);
-
+        audio->in.track = [fAudLang1PopUp indexOfSelectedItem] - 1;
         /* We go ahead and assign values to our audio->out.<properties> */
         audio->out.track = [fAudLang1PopUp indexOfSelectedItem] - 1;
         if ([[fAudTrack1MixPopUp titleOfSelectedItem] isEqualToString: @"AC3 Passthru"])
@@ -1639,7 +1639,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             //audio = (hb_audio_config_t *) hb_list_audio_config_item( title->list_audio, [fAudLang1PopUp indexOfSelectedItem] - 1 );
             audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
             hb_audio_config_init(audio);
-
+            audio->in.track = [fAudLang1PopUp indexOfSelectedItem] - 1;
             /* We go ahead and assign values to our audio->out.<properties> */
             audio->out.track = [fAudLang1PopUp indexOfSelectedItem] - 1;
             audio->out.codec = HB_ACODEC_AC3;
@@ -1662,7 +1662,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         /* Now we modify it according to the gui settings for the specified track number */
         audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
         hb_audio_config_init(audio);
-
+        audio->in.track = [fAudLang2PopUp indexOfSelectedItem] - 1;
         /* We go ahead and assign values to our audio->out.<properties> */
         audio->out.track = [fAudLang2PopUp indexOfSelectedItem] - 1;
         if ([[fAudTrack2MixPopUp titleOfSelectedItem] isEqualToString: @"AC3 Passthru"])
@@ -1691,7 +1691,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             //audio = (hb_audio_config_t *) hb_list_audio_config_item( title->list_audio, [fAudLang2PopUp indexOfSelectedItem] - 1 );
             audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
             hb_audio_config_init(audio);
-
+            audio->in.track = [fAudLang2PopUp indexOfSelectedItem] - 1;
             /* We go ahead and assign values to our audio->out.<properties> */
             audio->out.track = [fAudLang2PopUp indexOfSelectedItem] - 1;
             audio->out.codec = HB_ACODEC_AC3;
