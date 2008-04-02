@@ -756,6 +756,26 @@ int hb_stream_seek( hb_stream_t * src_stream, float f )
   return 1;
 }
 
+static void set_audio_description( hb_audio_t *audio, iso639_lang_t *lang )
+{
+    /* XXX
+     * This is a duplicate of code in dvd.c - it should get factored out
+     * into a common routine. We probably should only be putting the lang
+     * code or a lang pointer into the audio config & let the common description
+     * formatting routine in scan.c do all the stuff below.
+     */
+    snprintf( audio->config.lang.description,
+              sizeof( audio->config.lang.description ), "%s (%s)",
+              strlen(lang->native_name) ? lang->native_name : lang->eng_name,
+              audio->config.in.codec == HB_ACODEC_AC3 ? "AC3" :
+                  audio->config.in.codec == HB_ACODEC_DCA ? "DTS" :
+                      audio->config.in.codec == HB_ACODEC_MPGA ? "MPEG" : "LPCM" );
+    snprintf( audio->config.lang.simple, sizeof( audio->config.lang.simple ), "%s",
+              strlen(lang->native_name) ? lang->native_name : lang->eng_name );
+    snprintf( audio->config.lang.iso639_2, sizeof( audio->config.lang.iso639_2 ),
+              "%s", lang->iso639_2);
+}
+
 static hb_audio_t *hb_ts_stream_set_audio_id_and_codec(hb_stream_t *stream,
                                                        int aud_pid_index)
 {
@@ -794,7 +814,12 @@ static hb_audio_t *hb_ts_stream_set_audio_id_and_codec(hb_stream_t *stream,
         }
     }
     fseeko(stream->file_handle, cur_pos, SEEK_SET);
-    if (! audio->config.in.codec)
+    if ( audio->config.in.codec )
+    {
+		set_audio_description( audio,
+                  lang_for_code( stream->a52_info[aud_pid_index].lang_code ) );
+    }
+    else
     {
         hb_log("transport stream pid 0x%x (type 0x%x) isn't audio",
                 stream->ts_audio_pids[aud_pid_index],
@@ -832,6 +857,7 @@ static void add_audio_to_title(hb_title_t *title, int id)
             return;
 
     }
+    set_audio_description( audio, lang_for_code( 0 ) );
     hb_list_add( title->list_audio, audio );
 }
 
@@ -881,121 +907,6 @@ static void hb_ps_stream_find_audio_ids(hb_stream_t *stream, hb_title_t *title)
     hb_list_empty( &list );
     hb_buffer_close(&buf);
     fseeko(stream->file_handle, cur_pos, SEEK_SET);
-}
-
-/***********************************************************************
- * hb_stream_update_audio
- ***********************************************************************
- *
- **********************************************************************/
-void hb_stream_update_audio(hb_stream_t *stream, hb_audio_t *audio)
-{
-	iso639_lang_t *lang;
-
-    if (stream->stream_type == hb_stream_type_transport)
-	{
-        // Find the audio stream info for this PID. The stream index is
-        // the subchannel id which is in the bottom four bits for MPEG audio
-        // and the bottom four bits of the upper byte for everything else.
-        int i = ( audio->id >= 0xd0 ? audio->id >> 8 : audio->id ) & 0xf;
-        if (i >= stream->ts_number_audio_pids)
-		{
-            hb_log("hb_stream_update_audio: no PID for audio stream 0x%x",
-                    audio->id);
-			return;
-		}
-        if (audio->id < 0xd0)
-        {
-            /* XXX fake mpeg audio sample rate & bps */
-            stream->a52_info[i].flags = A52_STEREO;
-            stream->a52_info[i].rate = 48000 /*Hz*/;
-            stream->a52_info[i].bitrate = 384000 /*Bps*/;
-        }
-
-		lang = lang_for_code(stream->a52_info[i].lang_code);
-        if (!audio->config.in.samplerate)
-            audio->config.in.samplerate = stream->a52_info[i].rate;
-        if (!audio->config.in.bitrate)
-            audio->config.in.bitrate = stream->a52_info[i].bitrate;
-        if (!audio->priv.config.a52.ac3flags)
-            audio->priv.config.a52.ac3flags = audio->config.flags.ac3 = stream->a52_info[i].flags;
-
-	}
-    else
-    {
-        // XXX should try to get language code from the AC3 bitstream
-        lang = lang_for_code(0x0000);
-    }
-
-	if (!audio->config.in.channel_layout)
-	{
-		switch( audio->config.flags.ac3 & A52_CHANNEL_MASK )
-		{
-			/* mono sources */
-			case A52_MONO:
-			case A52_CHANNEL1:
-			case A52_CHANNEL2:
-				audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_MONO;
-				break;
-			/* stereo input */
-			case A52_CHANNEL:
-			case A52_STEREO:
-				audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
-				break;
-			/* dolby (DPL1 aka Dolby Surround = 4.0 matrix-encoded) input */
-			case A52_DOLBY:
-				audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_DOLBY;
-				break;
-			/* 3F/2R input */
-			case A52_3F2R:
-				audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_3F2R;
-				break;
-			/* 3F/1R input */
-			case A52_3F1R:
-				audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_3F1R;
-				break;
-			/* other inputs */
-			case A52_3F:
-				audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_3F;
-				break;
-			case A52_2F1R:
-				audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_2F1R;
-				break;
-			case A52_2F2R:
-				audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_2F2R;
-				break;
-			/* unknown */
-			default:
-				audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
-		}
-
-		/* add in our own LFE flag if the source has LFE */
-		if (audio->config.flags.ac3 & A52_LFE)
-		{
-			audio->config.in.channel_layout = audio->config.in.channel_layout | HB_INPUT_CH_LAYOUT_HAS_LFE;
-		}
-	}
-
-    snprintf( audio->config.lang.description, sizeof( audio->config.lang.description ), "%s (%s)", strlen(lang->native_name) ? lang->native_name : lang->eng_name,
-	  audio->config.in.codec == HB_ACODEC_AC3 ? "AC3" : ( audio->config.in.codec == HB_ACODEC_MPGA ? "MPEG" : ( audio->config.in.codec == HB_ACODEC_DCA ? "DTS" : "LPCM" ) ) );
-	snprintf( audio->config.lang.simple, sizeof( audio->config.lang.simple ), "%s", strlen(lang->native_name) ? lang->native_name : lang->eng_name );
-	snprintf( audio->config.lang.iso639_2, sizeof( audio->config.lang.iso639_2 ), "%s", lang->iso639_2);
-
-	if ( (audio->config.flags.ac3 & A52_CHANNEL_MASK) == A52_DOLBY ) {
-        sprintf( audio->config.lang.description + strlen( audio->config.lang.description ),
-			 " (Dolby Surround)" );
-	} else {
-        sprintf( audio->config.lang.description + strlen( audio->config.lang.description ),
-			 " (%d.%d ch)",
-			HB_INPUT_CH_LAYOUT_GET_DISCRETE_FRONT_COUNT(audio->config.in.channel_layout) +
-			HB_INPUT_CH_LAYOUT_GET_DISCRETE_REAR_COUNT(audio->config.in.channel_layout),
-			HB_INPUT_CH_LAYOUT_GET_DISCRETE_LFE_COUNT(audio->config.in.channel_layout));
-	}
-
-	hb_log( "stream: audio %x: lang %s, rate %d, bitrate %d, "
-            "flags = 0x%x", audio->id, audio->config.lang.description, audio->config.in.samplerate,
-            audio->config.in.bitrate, audio->config.flags.ac3 );
-
 }
 
 /***********************************************************************

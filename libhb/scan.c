@@ -23,8 +23,8 @@ typedef struct
 
 static void ScanFunc( void * );
 static int  DecodePreviews( hb_scan_t *, hb_title_t * title );
-static void LookForAC3AndDCA( hb_title_t * title, hb_buffer_t * b );
-static int  AllAC3AndDCAOK( hb_title_t * title );
+static void LookForAudio( hb_title_t * title, hb_buffer_t * b );
+static int  AllAudioOK( hb_title_t * title );
 
 hb_thread_t * hb_scan_init( hb_handle_t * handle, const char * path,
                             int title_index, hb_list_t * list_title )
@@ -132,41 +132,14 @@ static void ScanFunc( void * _data )
             continue;
         }
 
-		if (data->stream)
-		{
-			// Stream based processing uses PID's to handle the different audio options for a given title
-			for( j = 0; j < hb_list_count( title->list_audio ); j++ )
-			{
-				audio = hb_list_item( title->list_audio, j );
-				hb_stream_update_audio(data->stream, audio);
-			}
-		}
-		else if (data->dvd)
-		{
-			/* Make sure we found AC3 rates and bitrates */
-			for( j = 0; j < hb_list_count( title->list_audio ); )
-			{
-				audio = hb_list_item( title->list_audio, j );
-				if( audio->config.in.codec == HB_ACODEC_AC3 &&
-                    !audio->config.in.bitrate )
-				{
-					hb_list_rem( title->list_audio, audio );
-					free( audio );
-					continue;
-				}
-				j++;
-			}
-		}
-
-        /* Make sure we found AC3 / DCA rates and bitrates */
+        /* Make sure we found audio rates and bitrates */
         for( j = 0; j < hb_list_count( title->list_audio ); )
         {
             audio = hb_list_item( title->list_audio, j );
-            if( ( audio->config.in.codec == HB_ACODEC_AC3 || audio->config.in.codec == HB_ACODEC_DCA ) &&
-                !audio->config.in.bitrate )
+            if( !audio->config.in.bitrate )
             {
-                hb_log( "scan: removing audio with codec of 0x%x because of no bitrate",
-                        audio->config.in.codec );
+                hb_log( "scan: removing audio 0x%x because no bitrate found",
+                        audio->id );
                 hb_list_rem( title->list_audio, audio );
                 free( audio );
                 continue;
@@ -174,24 +147,12 @@ static void ScanFunc( void * _data )
             j++;
         }
 
-        /* Do we still have audio */
+        /* If we don't have any audio streams left, remove the title */
         if( !hb_list_count( title->list_audio ) )
         {
             hb_list_rem( data->list_title, title );
             free( title );
             continue;
-        }
-
-        /* set a default input channel layout of stereo for LPCM or MPEG2 audio */
-        /* AC3 and DCA will already have had their layout set via DecodePreviews above, */
-        /* which calls LookForAC3AndDCA */
-        for( j = 0; j < hb_list_count( title->list_audio ); j++ )
-        {
-            audio = hb_list_item( title->list_audio, j );
-            if( audio->config.in.codec == HB_ACODEC_LPCM || audio->config.in.codec == HB_ACODEC_MPGA )
-            {
-                audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
-            }
         }
 
         i++;
@@ -227,7 +188,6 @@ static void ScanFunc( void * _data )
         }
 
         job->width = title->width - job->crop[2] - job->crop[3];
-//        job->height = title->height - job->crop[0] - job->crop[1];
         hb_fix_aspect( job, HB_KEEP_WIDTH );
         if( job->height > title->height - job->crop[0] - job->crop[1] )
         {
@@ -235,8 +195,8 @@ static void ScanFunc( void * _data )
             hb_fix_aspect( job, HB_KEEP_HEIGHT );
         }
 
-    hb_log( "scan: title (%d) job->width:%d, job->height:%d",
-            i,job->width, job->height );
+        hb_log( "scan: title (%d) job->width:%d, job->height:%d",
+                i, job->width, job->height );
 
         job->keep_ratio = 1;
 
@@ -282,8 +242,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
     hb_libmpeg2_t * mpeg2;
     int progressive_count = 0;
     int interlaced_preview_count = 0;
-
-    int ar16_count = 0, ar4_count = 0;
+    int last_ar = 0, ar16_count = 0, ar4_count = 0;
 
     buf_ps   = hb_buffer_init( HB_DVD_READ_BUFFER_SIZE );
     list_es  = hb_list_init();
@@ -300,8 +259,6 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         FILE * file_preview;
         char   filename[1024];
 
-        //hb_log("Seeking to: %f", (float) ( i + 1 ) / 11.0 );
-
         if (data->dvd)
         {
           if( !hb_dvd_seek( data->dvd, (float) ( i + 1 ) / 11.0 ) )
@@ -311,7 +268,10 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         }
         else if (data->stream)
         {
-          if (!hb_stream_seek(data->stream, (float) ( i + 1 ) / 11.0 ) )
+          /* we start reading streams at zero rather than 1/11 because
+           * short streams may have only one sequence header in the entire
+           * file and we need it to decode any previews. */
+          if (!hb_stream_seek(data->stream, (float) i / 11.0 ) )
           {
             goto error;
           }
@@ -350,26 +310,50 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                     int ar = hb_libmpeg2_clear_aspect_ratio( mpeg2 );
                     if ( ar != 0 )
                     {
-                        ( ar == (HB_ASPECT_BASE * 4 / 3) ) ?
-                            ++ar4_count : ++ar16_count ;
+                        if ( ar != last_ar && last_ar != 0 )
+                        {
+                            hb_log( "aspect ratio changed from %d to %d",
+                                    last_ar, ar );
+                        }
+                        switch ( ar )
+                        {
+                            case HB_ASPECT_BASE * 4 / 3:
+                                ++ar4_count;
+                                break;
+                            case HB_ASPECT_BASE * 16 / 9:
+                                ++ar16_count;
+                                break;
+                            default:
+                                hb_log( "unknown aspect ratio %d", ar );
+                                /* if the aspect is closer to 4:3 use that
+                                 * otherwise use 16:9 */
+                                if ( ar < HB_ASPECT_BASE * 14 / 9 )
+                                {
+                                    ++ar4_count;
+                                }
+                                else
+                                {
+                                    ++ar16_count;
+                                }
+                                break;
+                        }
                     }
+                    last_ar = ar;
                 }
-                else if( !i )
+                else if( ! AllAudioOK( title ) )
                 {
-                    LookForAC3AndDCA( title, buf_es );
+                    LookForAudio( title, buf_es );
                 }
                 hb_buffer_close( &buf_es );
 
-                if( hb_list_count( list_raw ) &&
-                    ( i || AllAC3AndDCAOK( title ) ) )
+                if( hb_list_count( list_raw ) && AllAudioOK( title ) )
                 {
                     /* We got a picture */
                     break;
                 }
             }
 
-            if( hb_list_count( list_raw ) &&
-                ( i || AllAC3AndDCAOK( title ) ) )
+            if( hb_list_count( list_raw ) && AllAudioOK( title ) )
             {
                 break;
             }
@@ -378,7 +362,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         if( !hb_list_count( list_raw ) )
         {
             hb_log( "scan: could not get a decoded picture" );
-            goto error;
+            continue;
         }
 
         /* Get size and rate infos */
@@ -564,23 +548,248 @@ cleanup:
     return npreviews;
 }
 
-static void LookForAC3AndDCA( hb_title_t * title, hb_buffer_t * b )
+static void update_audio_description( const char *codec, hb_audio_t *audio,
+                                      int is_dolby )
+{
+    hb_log( "scan: %s, rate=%dHz, bitrate=%d", codec, audio->config.in.samplerate,
+            audio->config.in.bitrate );
+
+    /* XXX */
+    if ( is_dolby )
+    {
+        strcat( audio->config.lang.description, " (Dolby Surround)" );
+        return;
+    }
+
+    char *desc = audio->config.lang.description +
+                    strlen( audio->config.lang.description );
+    sprintf( desc, " (%d.%d ch)",
+       HB_INPUT_CH_LAYOUT_GET_DISCRETE_FRONT_COUNT(audio->config.in.channel_layout) +
+       HB_INPUT_CH_LAYOUT_GET_DISCRETE_REAR_COUNT(audio->config.in.channel_layout),
+       HB_INPUT_CH_LAYOUT_GET_DISCRETE_LFE_COUNT(audio->config.in.channel_layout));
+}
+
+static int hb_setup_a52_audio( hb_audio_t *audio, hb_buffer_t *b )
+{
+    int i, rate, bitrate, flags;
+
+    /* since AC3 frames don't line up with MPEG ES frames scan the
+     * entire frame for an AC3 sync pattern.  */
+    for ( i = 0; i < b->size - 7; ++i )
+    {
+        if( a52_syncinfo( &b->data[i], &flags, &rate, &bitrate ) != 0 )
+        {
+            break;
+        }
+    }
+    if ( i >= b->size - 7 )
+    {
+        /* didn't find AC3 sync */
+        return 0;
+    }
+
+    audio->config.in.samplerate = rate;
+    audio->config.in.bitrate = bitrate;
+
+    switch( flags & A52_CHANNEL_MASK )
+    {
+        /* mono sources */
+        case A52_MONO:
+        case A52_CHANNEL1:
+        case A52_CHANNEL2:
+            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_MONO;
+            break;
+        /* stereo input */
+        case A52_CHANNEL:
+        case A52_STEREO:
+            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
+            break;
+        /* dolby (DPL1 aka Dolby Surround = 4.0 matrix-encoded) input */
+        case A52_DOLBY:
+            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_DOLBY;
+            break;
+        /* 3F/2R input */
+        case A52_3F2R:
+            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_3F2R;
+            break;
+        /* 3F/1R input */
+        case A52_3F1R:
+            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_3F1R;
+            break;
+        /* other inputs */
+        case A52_3F:
+            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_3F;
+            break;
+        case A52_2F1R:
+            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_2F1R;
+            break;
+        case A52_2F2R:
+            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_2F2R;
+            break;
+        /* unknown */
+        default:
+            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
+    }
+
+    if (flags & A52_LFE)
+    {
+        audio->config.in.channel_layout |= HB_INPUT_CH_LAYOUT_HAS_LFE;
+    }
+
+    /* store the AC3 flags for future reference
+     * This enables us to find out if we had a stereo or Dolby source later on
+     * Store the ac3 flags in the public ac3flags property too, so we can access
+     * it from the GUI
+     */
+    audio->config.flags.ac3 = audio->priv.config.a52.ac3flags = flags;
+    update_audio_description( "AC3", audio, (flags & A52_CHANNEL_MASK) == A52_DOLBY );
+    return 1;
+}
+
+static int hb_setup_dca_audio( hb_audio_t *audio, hb_buffer_t *b )
+{
+    int i, flags, rate, bitrate, frame_length;
+    dca_state_t * state = dca_init( 0 );
+
+    /* since DCA frames don't line up with MPEG ES frames scan the
+     * entire frame for an DCA sync pattern.  */
+    for ( i = 0; i < b->size - 7; ++i )
+    {
+        if( dca_syncinfo( state, &b->data[i], &flags, &rate, &bitrate,
+                          &frame_length ) )
+        {
+            break;
+        }
+    }
+    if ( i >= b->size - 7 )
+    {
+        /* didn't find DCA sync */
+        return 0;
+    }
+
+    audio->config.in.samplerate = rate;
+    audio->config.in.bitrate = bitrate;
+    switch( flags & DCA_CHANNEL_MASK )
+    {
+        /* mono sources */
+        case DCA_MONO:
+            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_MONO;
+            break;
+        /* stereo input */
+        case DCA_CHANNEL:
+        case DCA_STEREO:
+        case DCA_STEREO_SUMDIFF:
+        case DCA_STEREO_TOTAL:
+            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
+            break;
+        /* 3F/2R input */
+        case DCA_3F2R:
+            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_3F2R;
+            break;
+        /* 3F/1R input */
+        case DCA_3F1R:
+            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_3F1R;
+            break;
+        /* other inputs */
+        case DCA_3F:
+            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_3F;
+            break;
+        case DCA_2F1R:
+            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_2F1R;
+            break;
+        case DCA_2F2R:
+            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_2F2R;
+            break;
+        case DCA_4F2R:
+            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_4F2R;
+            break;
+        /* unknown */
+        default:
+            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
+    }
+
+    if (flags & DCA_LFE)
+    {
+        audio->config.in.channel_layout |= HB_INPUT_CH_LAYOUT_HAS_LFE;
+    }
+
+    /* store the DCA flags for future reference
+     * This enables us to find out if we had a stereo or Dolby source later on
+     * store the dca flags in the public dcaflags property too, so we can access
+     * it from the GUI
+     */
+    audio->config.flags.dca = audio->priv.config.dca.dcaflags = flags;
+    update_audio_description( "DCA", audio, (flags & DCA_CHANNEL_MASK) == DCA_DOLBY );
+    return 1;
+}
+
+static int hb_setup_pcm_audio( hb_audio_t *audio, hb_buffer_t *b )
+{
+    // LPCM doesn't have a sync pattern like AC3 or DCA but every
+    // LPCM elementary stream packet starts with a 7 byte header
+    // giving the characteristics of the stream.
+    // See libhb/declpcm.c for a description of the LPCM header.
+
+    static const int hdr2samplerate[] = { 48000, 96000, 44100, 32000 };
+    static const int hdr2samplesize[] = { 16, 20, 24, 16 };
+    static const int hdr2layout[] = {
+            HB_INPUT_CH_LAYOUT_MONO,   HB_INPUT_CH_LAYOUT_STEREO,
+            HB_INPUT_CH_LAYOUT_2F1R,   HB_INPUT_CH_LAYOUT_2F2R,
+            HB_INPUT_CH_LAYOUT_3F2R,   HB_INPUT_CH_LAYOUT_4F2R,
+            HB_INPUT_CH_LAYOUT_STEREO, HB_INPUT_CH_LAYOUT_STEREO,
+    };
+
+    int nchannels  = ( b->data[4] & 7 ) + 1;
+    int sample_size = hdr2samplesize[b->data[4] >> 6];
+
+    int rate = hdr2samplerate[ ( b->data[4] >> 4 ) & 0x3 ];
+    int bitrate = rate * sample_size * nchannels;
+
+    audio->config.in.samplerate = rate;
+    audio->config.in.bitrate = bitrate;
+    audio->config.in.channel_layout = hdr2layout[nchannels - 1];
+    update_audio_description( "LPCM", audio, 0 );
+    return 1;
+}
+
+static int hb_setup_mpg_audio( hb_audio_t *audio, hb_buffer_t *b )
+{
+    /* XXX
+     * This is a placeholder to get the audio sample rate set.
+     * It should be replaced by something that extracts the correct info from
+     * the mpeg audio bitstream.
+     */
+    audio->config.in.samplerate = 48000;
+    audio->config.in.bitrate = 384000;
+    audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
+    update_audio_description( "MPGA", audio, 0 );
+    return 1;
+}
+
+/*
+ * This routine is called for every frame from a non-video elementary stream.
+ * These are a mix of audio & subtitle streams, some of which we want & some
+ * we're ignoring. This routine checks the frame against all our audio streams
+ * to see if it's one we want and haven't identified yet. If yes, it passes the
+ * frame to a codec-specific id routine which is responsible for filling in
+ * the sample rate, bit rate, channels & other audio parameters.
+ *
+ * Since a sample rate is essential for further audio processing, any audio
+ * stream which isn't successfully id'd by is deleted at the end of the scan.
+ * This is necessary to avoid ambiguities where things that might be audio
+ * aren't (e.g., some European DVD Teletext streams use the same IDs as US ATSC
+ * AC-3 audio).
+ */
+static void LookForAudio( hb_title_t * title, hb_buffer_t * b )
 {
     int i;
-    int flags;
-    int rate;
-    int bitrate;
-    int frame_length;
-    dca_state_t * state;
 
-    /* Figure out if this is a AC3 or DCA buffer for a known track */
     hb_audio_t * audio = NULL;
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = hb_list_item( title->list_audio, i );
-        /* check if we have an AC3 or DCA which we recognise */
-        if( ( audio->config.in.codec == HB_ACODEC_AC3 || audio->config.in.codec == HB_ACODEC_DCA ) &&
-            audio->id    == b->id )
+        /* check if this elementary stream is one we want */
+        if ( audio->id == b->id )
         {
             break;
         }
@@ -589,181 +798,42 @@ static void LookForAC3AndDCA( hb_title_t * title, hb_buffer_t * b )
             audio = NULL;
         }
     }
-    if( !audio )
+    if( !audio || audio->config.in.bitrate != 0 )
     {
+        /* not found or already done */
         return;
     }
 
-    if( audio->config.in.bitrate )
+    switch ( audio->config.in.codec )
     {
-        /* Already done for this track */
-        return;
+        case HB_ACODEC_AC3:
+            hb_setup_a52_audio( audio, b );
+            break;
+
+        case HB_ACODEC_DCA:
+            hb_setup_dca_audio( audio, b );
+            break;
+
+        case HB_ACODEC_LPCM:
+            hb_setup_pcm_audio( audio, b );
+            break;
+
+        case HB_ACODEC_MPGA:
+            hb_setup_mpg_audio( audio, b );
+            break;
+
+        default:
+            hb_log( "Internal error in scan: unhandled audio type %d for 0x%x",
+                    audio->config.in.codec, audio->id );
+            break;
     }
-
-    for( i = 0; i < b->size - 7; i++ )
-    {
-
-        if ( audio->config.in.codec == HB_ACODEC_AC3 )
-        {
-
-            /* check for a52 */
-            if( a52_syncinfo( &b->data[i], &flags, &rate, &bitrate ) )
-            {
-                hb_log( "scan: AC3, rate=%dHz, bitrate=%d", rate, bitrate );
-                audio->config.in.samplerate = rate;
-                audio->config.in.bitrate = bitrate;
-                switch( flags & A52_CHANNEL_MASK )
-                {
-                    /* mono sources */
-                    case A52_MONO:
-                    case A52_CHANNEL1:
-                    case A52_CHANNEL2:
-                        audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_MONO;
-                        break;
-                    /* stereo input */
-                    case A52_CHANNEL:
-                    case A52_STEREO:
-                        audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
-                        break;
-                    /* dolby (DPL1 aka Dolby Surround = 4.0 matrix-encoded) input */
-                    case A52_DOLBY:
-                        audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_DOLBY;
-                        break;
-                    /* 3F/2R input */
-                    case A52_3F2R:
-                        audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_3F2R;
-                        break;
-                    /* 3F/1R input */
-                    case A52_3F1R:
-                        audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_3F1R;
-                        break;
-                    /* other inputs */
-                    case A52_3F:
-                        audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_3F;
-                        break;
-                    case A52_2F1R:
-                        audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_2F1R;
-                        break;
-                    case A52_2F2R:
-                        audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_2F2R;
-                        break;
-                    /* unknown */
-                    default:
-                        audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
-                }
-
-                /* add in our own LFE flag if the source has LFE */
-                if (flags & A52_LFE)
-                {
-                    audio->config.in.channel_layout = audio->config.in.channel_layout | HB_INPUT_CH_LAYOUT_HAS_LFE;
-                }
-
-                /* store the AC3 flags for future reference
-                 * This enables us to find out if we had a stereo or Dolby source later on
-                 * Store the ac3 flags in the public ac3flags property too, so we can access it from the GUI
-                 */
-                audio->config.flags.ac3 = audio->priv.config.a52.ac3flags = flags;
-
-                /* XXX */
-                if ( (flags & A52_CHANNEL_MASK) == A52_DOLBY ) {
-                    sprintf( audio->config.lang.description + strlen( audio->config.lang.description ),
-                         " (Dolby Surround)" );
-                } else {
-                    sprintf( audio->config.lang.description + strlen( audio->config.lang.description ),
-                         " (%d.%d ch)",
-                        HB_INPUT_CH_LAYOUT_GET_DISCRETE_FRONT_COUNT(audio->config.in.channel_layout) +
-                        HB_INPUT_CH_LAYOUT_GET_DISCRETE_REAR_COUNT(audio->config.in.channel_layout),
-                        HB_INPUT_CH_LAYOUT_GET_DISCRETE_LFE_COUNT(audio->config.in.channel_layout));
-                }
-
-                break;
-
-            }
-
-        }
-        else if ( audio->config.in.codec == HB_ACODEC_DCA )
-        {
-
-            hb_log( "scan: checking for DCA syncinfo" );
-
-            /* check for dca */
-            state = dca_init( 0 );
-            if( dca_syncinfo( state, &b->data[i], &flags, &rate, &bitrate, &frame_length ) )
-            {
-                hb_log( "scan: DCA, rate=%dHz, bitrate=%d", rate, bitrate );
-                audio->config.in.samplerate    = rate;
-                audio->config.in.bitrate = bitrate;
-                switch( flags & DCA_CHANNEL_MASK )
-                {
-                    /* mono sources */
-                    case DCA_MONO:
-                        audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_MONO;
-                        break;
-                    /* stereo input */
-                    case DCA_CHANNEL:
-                    case DCA_STEREO:
-                    case DCA_STEREO_SUMDIFF:
-                    case DCA_STEREO_TOTAL:
-                        audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
-                        break;
-                    /* 3F/2R input */
-                    case DCA_3F2R:
-                        audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_3F2R;
-                        break;
-                    /* 3F/1R input */
-                    case DCA_3F1R:
-                        audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_3F1R;
-                        break;
-                    /* other inputs */
-                    case DCA_3F:
-                        audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_3F;
-                        break;
-                    case DCA_2F1R:
-                        audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_2F1R;
-                        break;
-                    case DCA_2F2R:
-                        audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_2F2R;
-                        break;
-                    case DCA_4F2R:
-                        audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_4F2R;
-                        break;
-                    /* unknown */
-                    default:
-                        audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
-                }
-
-                /* add in our own LFE flag if the source has LFE */
-                if (flags & DCA_LFE)
-                {
-                    audio->config.in.channel_layout = audio->config.in.channel_layout | HB_INPUT_CH_LAYOUT_HAS_LFE;
-                }
-
-                /* store the DCA flags for future reference
-                 * This enables us to find out if we had a stereo or Dolby source later on
-                 * store the dca flags in the public dcaflags property too, so we can access it from the GUI
-                 */
-                audio->config.flags.dca = audio->priv.config.dca.dcaflags = flags;
-
-                /* XXX */
-                if ( (flags & DCA_CHANNEL_MASK) == DCA_DOLBY ) {
-                    sprintf( audio->config.lang.description + strlen( audio->config.lang.description ),
-                         " (Dolby Surround)" );
-                } else {
-                    sprintf( audio->config.lang.description + strlen( audio->config.lang.description ),
-                         " (%d.%d ch)",
-                        HB_INPUT_CH_LAYOUT_GET_DISCRETE_FRONT_COUNT(audio->config.in.channel_layout) +
-                        HB_INPUT_CH_LAYOUT_GET_DISCRETE_REAR_COUNT(audio->config.in.channel_layout),
-                        HB_INPUT_CH_LAYOUT_GET_DISCRETE_LFE_COUNT(audio->config.in.channel_layout));
-                }
-
-                break;
-            }
-        }
-    }
-
 }
 
-static int  AllAC3AndDCAOK( hb_title_t * title )
+/*
+ * This routine checks to see if we've ID'd all the audio streams associated
+ * with a title. It returns 0 if there are more to ID & 1 if all are done.
+ */
+static int  AllAudioOK( hb_title_t * title )
 {
     int i;
     hb_audio_t * audio;
@@ -771,12 +841,10 @@ static int  AllAC3AndDCAOK( hb_title_t * title )
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = hb_list_item( title->list_audio, i );
-        if( ( audio->config.in.codec == HB_ACODEC_AC3 || audio->config.in.codec == HB_ACODEC_DCA ) &&
-            !audio->config.in.bitrate )
+        if( audio->config.in.bitrate == 0 )
         {
             return 0;
         }
     }
-
     return 1;
 }

@@ -141,7 +141,6 @@ void		 hb_stream_close( hb_stream_t ** );
 hb_title_t * hb_stream_title_scan( hb_stream_t *);
 int          hb_stream_read( hb_stream_t *, hb_buffer_t *);
 int          hb_stream_seek( hb_stream_t *, float );
-void		 hb_stream_update_audio( hb_stream_t *, hb_audio_t *);
 
 /***********************************************************************
  * Work objects

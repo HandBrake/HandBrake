@@ -100,28 +100,21 @@ int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 m->width  = m->info->sequence->width;
                 m->height = m->info->sequence->height;
                 m->rate   = m->info->sequence->frame_period;
-            }
-            if ( m->aspect_ratio <= 0 )
-            {
-              // We can parse out the aspect ratio from the Sequence Start Header data in buf_es->data
-
-              // Make sure we have the correct data in the buffer
-              if ((buf_es->data[0] == 0x00) && (buf_es->data[1] == 0x00) && (buf_es->data[2] == 0x01) && (buf_es->data[3] == 0xb3))
-              {
-                unsigned char ar_fr = buf_es->data[7];    // Top 4 bits == aspect ratio flag  - bottom 4 bits == rate flags
-                switch ((ar_fr & 0xf0) >> 4)
+                if ( m->aspect_ratio <= 0 && m->height &&
+                     m->info->sequence->pixel_height )
                 {
-                  case 2:
-                    m->aspect_ratio = HB_ASPECT_BASE * 4 / 3;   // 4:3
-                    break;
-                  case 3:
-                    m->aspect_ratio = HB_ASPECT_BASE * 16 / 9;  // 16:9
-                    break;
-                  default:
-                    hb_log("hb_libmpeg2_decode - STATE_SEQUENCE unexpected aspect ratio/frame rate 0x%x\n", ar_fr);
-                    break;
+                    /* mpeg2_parse doesn't store the aspect ratio. Instead
+                     * it keeps the pixel width & height that would cause
+                     * the storage width & height to come out in the correct
+                     * aspect ratio. Convert these back to aspect ratio.
+                     * We do the calc in floating point to get the rounding right.
+                     * We round in the second decimal digit because we scale
+                     * the (integer) aspect by 9 to preserve the 1st digit.
+                     */
+                    double ar_numer = m->width * m->info->sequence->pixel_width;
+                    double ar_denom = m->height * m->info->sequence->pixel_height;
+                    m->aspect_ratio = ( ar_numer / ar_denom + .05 ) * HB_ASPECT_BASE;
                 }
-              }
             }
         }
         else if( state == STATE_GOP && m->look_for_break == 2)
