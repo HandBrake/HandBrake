@@ -1596,7 +1596,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
     /* Audio tracks and mixdowns */
     /* Lets make sure there arent any erroneous audio tracks in the job list, so lets make sure its empty*/
-    for( int i = 0; i < hb_list_count(job->list_audio);i++)
+    int audiotrack_count = hb_list_count(job->list_audio);
+    for( int i = 0; i < audiotrack_count;i++)
     {
         hb_audio_t * temp_audio = (hb_audio_t*) hb_list_item( job->list_audio, 0 );
         hb_list_rem(job->list_audio, temp_audio);
