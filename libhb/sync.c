@@ -336,7 +336,7 @@ static int SyncVideo( hb_work_object_t * w )
          * can deal with overlaps of up to a frame time but anything larger
          * we handle by dropping frames here.
          */
-        if ( pv->next_pts - next->start > 1000 )
+        if ( (int64_t)( next->start - pv->next_pts ) <= 0 )
         {
             if ( pv->first_drop == 0 )
             {
@@ -349,10 +349,10 @@ static int SyncVideo( hb_work_object_t * w )
         }
         if ( pv->first_drop )
         {
-            hb_log( "sync: video time went backwards %d ms, dropped %d frames "
-                    "(frame %lld, expected %lld)",
-                    (int)( pv->next_pts - pv->first_drop ) / 90, pv->drop_count,
-                    pv->first_drop, pv->next_pts );
+            hb_log( "sync: video time didn't advance - dropped %d frames "
+                    "(delta %d ms, current %lld, next %lld)",
+                    pv->drop_count, (int)( pv->next_pts - pv->first_drop ) / 90,
+                    pv->next_pts, pv->first_drop );
             pv->first_drop = 0;
             pv->drop_count = 0;
         }
@@ -513,6 +513,11 @@ static int SyncVideo( hb_work_object_t * w )
         pv->cur = cur = hb_fifo_get( job->fifo_raw );
         pv->next_pts = next->start;
         int64_t duration = next->start - buf_tmp->start;
+        if ( duration <= 0 )
+        {
+            hb_log( "sync: invalid video duration %lld, start %lld, next %lld",
+                    duration, buf_tmp->start, next->start );
+        }
         buf_tmp->start = pv->next_start;
         pv->next_start += duration;
         buf_tmp->stop = pv->next_start;
@@ -643,7 +648,7 @@ static void SyncAudio( hb_work_object_t * w, int i )
 
     while( !hb_fifo_is_full( fifo ) && ( buf = hb_fifo_see( audio->priv.fifo_raw ) ) )
     {
-        if ( sync->next_pts - buf->start > 500 )
+        if ( (int64_t)( buf->start - sync->next_pts ) < 0 )
         {
             /*
              * audio time went backwards by more than a frame time (this can
@@ -662,14 +667,14 @@ static void SyncAudio( hb_work_object_t * w, int i )
         if ( sync->first_drop )
         {
             hb_log( "sync: audio %d time went backwards %d ms, dropped %d frames "
-                    "(frame %lld, expected %lld)", i,
+                    "(next %lld, current %lld)", i,
                     (int)( sync->next_pts - sync->first_drop ) / 90,
                     sync->drop_count, sync->first_drop, sync->next_pts );
             sync->first_drop = 0;
             sync->drop_count = 0;
         }
 
-        if ( sync->inserting_silence && buf->start - sync->next_pts > 0 )
+        if ( sync->inserting_silence && (int64_t)(buf->start - sync->next_pts) > 0 )
         {
             /*
              * if we're within one frame time of the amount of silence
