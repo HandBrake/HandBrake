@@ -465,21 +465,28 @@ static int HandleEvents( hb_handle_t * h )
 
                 if (!strcmp(preset_name, "AppleTV"))
                 {
+                    hb_audio_config_t * first_audio;
                     if (hb_list_count(audios) == 0)
                     {
+                        first_audio = calloc(1, sizeof(*first_audio));
+                        hb_audio_config_init(first_audio);
+                        first_audio->in.track = first_audio->out.track = 0;
+                        hb_list_add(audios, first_audio);
+                    }
+                    if( hb_list_count( audios ) <= 1 )
+                    {
+                        first_audio = hb_list_item( audios, 0 );
                         audio = calloc(1, sizeof(*audio));
                         hb_audio_config_init(audio);
-                        audio->in.track = audio->out.track = 0;
-                        hb_list_add(audios, audio);
-
-                        audio = calloc(1, sizeof(*audio));
-                        hb_audio_config_init(audio);
-                        audio->in.track = 0;
+                        audio->in.track = first_audio->in.track;
                         audio->out.track = 1;
                         hb_list_add(audios, audio);
-                        if (acodecs) free(acodecs);
+                    }
+                    if (!acodecs)
+                    {
                         acodecs = strdup("faac,ac3");
                     }
+
                     mux = HB_MUX_MP4;
                     job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
@@ -1481,7 +1488,7 @@ static void ShowPresets()
 {
     printf("\n+ Animation:  -e x264 -b 1000 -B 160 -R 48 -E faac -f mkv --deinterlace=\"slower\" -m -p -2 -T -x ref=5:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2\n");
 
-    printf("\n+ AppleTV:  -e x264 -b 2500 -B 160 -R 48 -E aac+ac3 -f mp4 -4 -m -p -x bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=1:cabac=0\n");
+    printf("\n+ AppleTV:  -e x264 -b 2500 -B 160 -R 48 -E faac,ac3 -f mp4 -4 -m -p -x bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=1:cabac=0\n");
 
     printf("\n+ Bedlam:  -e x264 -b 1800 -E ac3 -f mkv -m -p -2 -T -x ref=16:mixed-refs:bframes=16:bime:weightb:b-rdo:direct=auto:b-pyramid:me=esa:subme=7:me-range=64:analyse=all:8x8dct:trellis=1:no-fast-pskip:no-dct-decimate:filter=-2,-1\n");
 
