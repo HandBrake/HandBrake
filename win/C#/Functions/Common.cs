@@ -477,16 +477,21 @@ namespace Handbrake.Functions
                 cropOut = " --crop 0:0:0:0 ";
             else
             {
-                if (mainWindow.text_top.Text == "")
-                    cropTop = "0";
-                if (mainWindow.text_bottom.Text == "")
-                    cropBottom = "0";
-                if (mainWindow.text_left.Text == "")
-                    cropLeft = "0";
-                if (mainWindow.text_right.Text == "")
-                    cropRight = "0";
+                if ((mainWindow.text_top.Text == "") && (mainWindow.text_bottom.Text == "") && (mainWindow.text_left.Text == "") && (mainWindow.text_right.Text == ""))
+                    cropOut = "";
+                else
+                {
+                    if (mainWindow.text_top.Text == "")
+                        cropTop = "0";
+                    if (mainWindow.text_bottom.Text == "")
+                        cropBottom = "0";
+                    if (mainWindow.text_left.Text == "")
+                        cropLeft = "0";
+                    if (mainWindow.text_right.Text == "")
+                        cropRight = "0";
 
-                cropOut = " --crop " + cropTop + ":" + cropBottom + ":" + cropLeft + ":" + cropRight;
+                    cropOut = " --crop " + cropTop + ":" + cropBottom + ":" + cropLeft + ":" + cropRight;
+                }
             }
 
             switch (deInterlace_Option)
