@@ -52,6 +52,7 @@ struct hb_work_private_s
     int video_sequence;
     int count_frames;
     int count_frames_max;
+    int chap_mark;              /* to propagate chapter mark across a drop */
     hb_buffer_t * cur; /* The next picture to process */
 
     /* Audio */
@@ -344,6 +345,11 @@ static int SyncVideo( hb_work_object_t * w )
             }
             ++pv->drop_count;
             buf_tmp = hb_fifo_get( job->fifo_raw );
+            if ( buf_tmp->new_chap )
+            {
+                // don't drop a chapter mark when we drop the buffer
+                pv->chap_mark = buf_tmp->new_chap;
+            }
             hb_buffer_close( &buf_tmp );
             continue;
         }
@@ -521,6 +527,13 @@ static int SyncVideo( hb_work_object_t * w )
         buf_tmp->start = pv->next_start;
         pv->next_start += duration;
         buf_tmp->stop = pv->next_start;
+        if ( pv->chap_mark )
+        {
+            // we have a pending chapter mark from a recent drop - put it on this
+            // buffer (this may make it one frame late but we can't do any better).
+            buf_tmp->new_chap = pv->chap_mark;
+            pv->chap_mark = 0;
+        }
 
         /* If we have a subtitle for this picture, copy it */
         /* FIXME: we should avoid this memcpy */

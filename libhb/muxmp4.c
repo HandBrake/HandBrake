@@ -100,10 +100,16 @@ static struct hb_text_sample_s *MP4CreateTextSample( char *textString, uint64_t 
  **********************************************************************
  * Creates a buffer for a text track sample
  *********************************************************************/
-static struct hb_text_sample_s *MP4GenerateChapterSample( hb_mux_object_t * m, uint64_t duration )
+static struct hb_text_sample_s *MP4GenerateChapterSample( hb_mux_object_t * m,
+                                                          uint64_t duration,
+                                                          int chapter )
 {
-    int chapter = m->current_chapter;
-    hb_chapter_t *chapter_data = hb_list_item( m->job->title->list_chapter, chapter - 1 );
+    // We substract 1 from the chapter number because the chapters start at
+    // 1 but our name array starts at 0. We substract another 1 because we're
+    // writing the text of the previous chapter mark (when we get the start
+    // of chapter 2 we know the duration of chapter 1 & can write its mark).
+    hb_chapter_t *chapter_data = hb_list_item( m->job->title->list_chapter,
+                                               chapter - 2 );
     char tmp_buffer[1024];
     char *string = tmp_buffer;
 
@@ -116,7 +122,7 @@ static struct hb_text_sample_s *MP4GenerateChapterSample( hb_mux_object_t * m, u
 
     if( strlen(string) == 0 || strlen(string) >= 1024 )
     {
-        snprintf( tmp_buffer, 1023, "Chapter %03i", chapter );
+        snprintf( tmp_buffer, 1023, "Chapter %03i", chapter - 2 );
         string = tmp_buffer;
     }
 
@@ -383,7 +389,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                 duration += buf->renderOffset * m->samplerate / 90000;
             }
 
-            sample = MP4GenerateChapterSample( m, duration );
+            sample = MP4GenerateChapterSample( m, duration, buf->new_chap );
 
             if( !MP4WriteSample(m->file,
                                 m->chapter_track,
@@ -396,7 +402,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                 *job->die = 1;
             }
             free(sample);
-            m->current_chapter++;
+            m->current_chapter = buf->new_chap;
             m->chapter_duration += duration;
         }
 
@@ -461,7 +467,9 @@ static int MP4End( hb_mux_object_t * m )
     /* Write our final chapter marker */
     if( m->job->chapter_markers )
     {
-        struct hb_text_sample_s *sample = MP4GenerateChapterSample( m, (m->sum_dur - m->chapter_duration) );
+        struct hb_text_sample_s *sample = MP4GenerateChapterSample( m,
+                                                (m->sum_dur - m->chapter_duration),
+                                                m->current_chapter + 1 );
 
         if( !MP4WriteSample(m->file,
                             m->chapter_track,

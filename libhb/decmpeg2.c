@@ -37,12 +37,15 @@ struct hb_libmpeg2_s
 {
     mpeg2dec_t         * libmpeg2;
     const mpeg2_info_t * info;
+    hb_job_t           * job;
     int                  width;
     int                  height;
     int                  rate;
     int                  aspect_ratio;
-    int                  got_iframe;
-    int                  look_for_break;
+    int                  got_iframe;        /* set when we get our first iframe */
+    int                  look_for_iframe;   /* need an iframe to add chap break */
+    int                  look_for_break;    /* need gop start to add chap break */
+    uint32_t             nframes;           /* number of frames we've decoded */
     int64_t              last_pts;
 };
 
@@ -58,7 +61,6 @@ hb_libmpeg2_t * hb_libmpeg2_init()
     m->libmpeg2 = mpeg2_init();
     m->info     = mpeg2_info( m->libmpeg2 );
     m->last_pts = -1;
-    m->look_for_break = 0;
 
     return m;
 }
@@ -74,7 +76,6 @@ int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
     mpeg2_state_t   state;
     hb_buffer_t   * buf;
     uint8_t       * data;
-    int             chap_break = 0;
 
     /* Feed libmpeg2 */
     if( buf_es->start > -1 )
@@ -117,10 +118,12 @@ int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 }
             }
         }
-        else if( state == STATE_GOP && m->look_for_break == 2)
+        else if( state == STATE_GOP && m->look_for_break)
         {
-            hb_log("MPEG2: Group of pictures found, searching for I-Frame");
-            m->look_for_break = 1;
+            // we were looking for a gop to add a chapter break - we found it
+            // so now start looking for an iframe.
+            m->look_for_iframe = m->look_for_break;
+            m->look_for_break = 0;
         }
         else if( ( state == STATE_SLICE || state == STATE_END ) &&
                  m->info->display_fbuf )
@@ -128,15 +131,8 @@ int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
             if( ( m->info->display_picture->flags &
                   PIC_MASK_CODING_TYPE ) == PIC_FLAG_CODING_TYPE_I )
             {
+                // we got an iframe so we can start decoding video now
                 m->got_iframe = 1;
-
-                // If we are looking for a break, insert the chapter break on an I-Frame
-                if( m->look_for_break == 1 )
-                {
-                    hb_log("MPEG2: I-Frame Found");
-                    m->look_for_break = 0;
-                    chap_break = 1;
-                }
             }
 
             if( m->got_iframe )
@@ -145,14 +141,6 @@ int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 data = buf->data;
 
                 buf->sequence = buf_es->sequence;
-
-                // Was a good break point found?
-                if( chap_break )
-                {
-                    hb_log("MPEG2: Chapter Break Inserted");
-                    chap_break = 0;
-                    buf->new_chap = 1;
-                }
 
                 memcpy( data, m->info->display_fbuf->buf[0],
                         m->width * m->height );
@@ -186,6 +174,27 @@ int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                     buf->start = -1;
                 }
                 m->last_pts = buf->start;
+
+                if( m->look_for_iframe && ( m->info->display_picture->flags &
+                      PIC_MASK_CODING_TYPE ) == PIC_FLAG_CODING_TYPE_I )
+                {
+                    // we were waiting for an iframe to insert a chapter mark
+                    // and we have one.
+                    buf->new_chap = m->look_for_iframe;
+                    m->look_for_iframe = 0;
+                    const char *chap_name = "";
+                    if ( m->job && buf->new_chap > 0 &&
+                         hb_list_item( m->job->title->list_chapter,
+                                       buf->new_chap - 1 ) )
+                    {
+                        hb_chapter_t * c = hb_list_item( m->job->title->list_chapter,
+                                                         buf->new_chap - 1 );
+                        chap_name = c->title;
+                    }
+                    hb_log( "mpeg2: \"%s\" (%d) at frame %u time %lld",
+                            chap_name, buf->new_chap, m->nframes, buf->start );
+                }
+                ++m->nframes;
 
                 flag = m->info->display_picture->flags;
 
@@ -362,6 +371,8 @@ int decmpeg2Init( hb_work_object_t * w, hb_job_t * job )
     pv->libmpeg2 = hb_libmpeg2_init();
     pv->list     = hb_list_init();
 
+    pv->libmpeg2->job = job;
+
     return 0;
 }
 
@@ -380,8 +391,7 @@ int decmpeg2Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     // stream. We need to shift it.
     if( (*buf_in)->new_chap )
     {
-        hb_log("MPEG2: Chapter Break Cell Found, searching for GOP");
-        pv->libmpeg2->look_for_break = 2;
+        pv->libmpeg2->look_for_break = (*buf_in)->new_chap;
         (*buf_in)->new_chap = 0;
     }
 

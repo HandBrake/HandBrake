@@ -50,6 +50,7 @@ struct hb_work_private_s
     x264_picture_t   pic_in;
     uint8_t         *x264_allocated_pic;
 
+    int            chap_mark;   // saved chap mark when we're propagating it
     int64_t        dts_next;    // DTS start time value for next output frame
     int64_t        last_stop;   // Debugging - stop time of previous input frame
     int64_t        init_delay;
@@ -384,6 +385,7 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
             if( pv->next_chap == 0 )
             {
                 pv->next_chap = in->start;
+                pv->chap_mark = in->new_chap;
             }
             /* don't let 'work_loop' put a chapter mark on the wrong buffer */
             in->new_chap = 0;
@@ -496,7 +498,7 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
                             if( pv->next_chap != 0 && pv->next_chap <= pic_out.i_pts )
                             {
                                 pv->next_chap = 0;
-                                buf->new_chap = 1;
+                                buf->new_chap = pv->chap_mark;
                             }
                             break;
                         case X264_TYPE_I:

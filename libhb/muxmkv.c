@@ -265,7 +265,12 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             /* Make sure we're not writing a chapter that has 0 length */
             if (mux_data->prev_chapter_tc != timecode)
             {
-                chapter_data = hb_list_item( title->list_chapter, mux_data->current_chapter++ );
+                if ( buf->new_chap )
+                {
+                    mux_data->current_chapter = buf->new_chap - 2;
+                }
+                chapter_data = hb_list_item( title->list_chapter,
+                                             mux_data->current_chapter++ );
                 tmp_buffer[0] = '\0';
 
                 if( chapter_data != NULL )

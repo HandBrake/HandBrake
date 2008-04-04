@@ -962,7 +962,7 @@ int hb_dvd_chapter( hb_dvd_t * d )
 /***********************************************************************
  * hb_dvd_is_break
  ***********************************************************************
- * Returns 1 if the current block is a new chapter start
+ * Returns chapter number if the current block is a new chapter start
  **********************************************************************/
 int hb_dvd_is_break( hb_dvd_t * d )
 {
@@ -988,8 +988,7 @@ int hb_dvd_is_break( hb_dvd_t * d )
         // This must not match against the start cell.
         if( pgc->cell_playback[cell].first_sector == d->block && cell != d->cell_start )
         {
-            hb_log("dvd: Chapter Break Cell Found");
-            return 1;
+            return i + 1;
         }
     }
 
