@@ -130,7 +130,7 @@ namespace Handbrake
             this.btn_skip.Size = new System.Drawing.Size(133, 22);
             this.btn_skip.TabIndex = 54;
             this.btn_skip.Text = "Skip This Version";
-            this.btn_skip.UseVisualStyleBackColor = false;
+            this.btn_skip.UseVisualStyleBackColor = true;
             this.btn_skip.Click += new System.EventHandler(this.btn_skip_Click);
             // 
             // btn_installUpdate
@@ -145,7 +145,7 @@ namespace Handbrake
             this.btn_installUpdate.Size = new System.Drawing.Size(133, 22);
             this.btn_installUpdate.TabIndex = 55;
             this.btn_installUpdate.Text = "Install Update";
-            this.btn_installUpdate.UseVisualStyleBackColor = false;
+            this.btn_installUpdate.UseVisualStyleBackColor = true;
             this.btn_installUpdate.Click += new System.EventHandler(this.btn_installUpdate_Click);
             // 
             // btn_remindLater
@@ -160,7 +160,7 @@ namespace Handbrake
             this.btn_remindLater.Size = new System.Drawing.Size(133, 22);
             this.btn_remindLater.TabIndex = 56;
             this.btn_remindLater.Text = "Remind me Later";
-            this.btn_remindLater.UseVisualStyleBackColor = false;
+            this.btn_remindLater.UseVisualStyleBackColor = true;
             this.btn_remindLater.Click += new System.EventHandler(this.btn_remindLater_Click);
             // 
             // label3

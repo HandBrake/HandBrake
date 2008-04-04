@@ -72,7 +72,6 @@ namespace Handbrake
             // 
             this.btn_down.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_down.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_down.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_down.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_down.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btn_down.Location = new System.Drawing.Point(74, 327);
@@ -81,14 +80,13 @@ namespace Handbrake
             this.btn_down.TabIndex = 33;
             this.btn_down.TabStop = false;
             this.btn_down.Text = "Down";
-            this.btn_down.UseVisualStyleBackColor = false;
+            this.btn_down.UseVisualStyleBackColor = true;
             this.btn_down.Click += new System.EventHandler(this.btn_down_Click);
             // 
             // btn_up
             // 
             this.btn_up.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_up.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_up.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_up.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_up.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btn_up.Location = new System.Drawing.Point(13, 327);
@@ -97,14 +95,13 @@ namespace Handbrake
             this.btn_up.TabIndex = 32;
             this.btn_up.TabStop = false;
             this.btn_up.Text = "Up";
-            this.btn_up.UseVisualStyleBackColor = false;
+            this.btn_up.UseVisualStyleBackColor = true;
             this.btn_up.Click += new System.EventHandler(this.btn_up_Click);
             // 
             // btn_delete
             // 
             this.btn_delete.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_delete.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_delete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_delete.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_delete.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btn_delete.Location = new System.Drawing.Point(144, 327);
@@ -113,7 +110,7 @@ namespace Handbrake
             this.btn_delete.TabIndex = 31;
             this.btn_delete.TabStop = false;
             this.btn_delete.Text = "Delete";
-            this.btn_delete.UseVisualStyleBackColor = false;
+            this.btn_delete.UseVisualStyleBackColor = true;
             this.btn_delete.Click += new System.EventHandler(this.btn_delete_Click);
             // 
             // list_queue
@@ -145,7 +142,6 @@ namespace Handbrake
             // 
             // progressBar
             // 
-            this.progressBar.BackColor = System.Drawing.SystemColors.ControlLight;
             this.progressBar.Location = new System.Drawing.Point(67, 360);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(616, 23);
@@ -173,6 +169,7 @@ namespace Handbrake
             // lbl_status
             // 
             this.lbl_status.AutoSize = true;
+            this.lbl_status.BackColor = System.Drawing.Color.Transparent;
             this.lbl_status.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_status.Location = new System.Drawing.Point(274, 366);
             this.lbl_status.Name = "lbl_status";
@@ -195,7 +192,6 @@ namespace Handbrake
             // 
             this.btn_updateQuery.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_updateQuery.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_updateQuery.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_updateQuery.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_updateQuery.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btn_updateQuery.Location = new System.Drawing.Point(649, 325);
@@ -204,7 +200,7 @@ namespace Handbrake
             this.btn_updateQuery.TabIndex = 46;
             this.btn_updateQuery.TabStop = false;
             this.btn_updateQuery.Text = "Update";
-            this.btn_updateQuery.UseVisualStyleBackColor = false;
+            this.btn_updateQuery.UseVisualStyleBackColor = true;
             this.btn_updateQuery.Click += new System.EventHandler(this.btn_updateQuery_Click);
             // 
             // label4
@@ -363,7 +359,6 @@ namespace Handbrake
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(729, 400);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.label4);

@@ -57,7 +57,6 @@ namespace Handbrake
             // 
             this.btn_close.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_close.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btn_close.Location = new System.Drawing.Point(399, 451);
@@ -66,7 +65,7 @@ namespace Handbrake
             this.btn_close.TabIndex = 28;
             this.btn_close.TabStop = false;
             this.btn_close.Text = "Close Window";
-            this.btn_close.UseVisualStyleBackColor = false;
+            this.btn_close.UseVisualStyleBackColor = true;
             this.btn_close.Click += new System.EventHandler(this.btn_close_Click);
             // 
             // ToolTip
@@ -77,7 +76,6 @@ namespace Handbrake
             // 
             this.btn_copy.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_copy.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_copy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_copy.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_copy.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btn_copy.Location = new System.Drawing.Point(12, 451);
@@ -85,14 +83,13 @@ namespace Handbrake
             this.btn_copy.Size = new System.Drawing.Size(134, 23);
             this.btn_copy.TabIndex = 93;
             this.btn_copy.Text = "Copy to Clipboard";
-            this.btn_copy.UseVisualStyleBackColor = false;
+            this.btn_copy.UseVisualStyleBackColor = true;
             this.btn_copy.Click += new System.EventHandler(this.btn_copy_Click);
             // 
             // btn_refresh
             // 
             this.btn_refresh.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_refresh.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_refresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_refresh.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_refresh.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btn_refresh.Location = new System.Drawing.Point(152, 451);
@@ -100,7 +97,7 @@ namespace Handbrake
             this.btn_refresh.Size = new System.Drawing.Size(69, 23);
             this.btn_refresh.TabIndex = 94;
             this.btn_refresh.Text = "Refresh";
-            this.btn_refresh.UseVisualStyleBackColor = false;
+            this.btn_refresh.UseVisualStyleBackColor = true;
             this.btn_refresh.Click += new System.EventHandler(this.btn_refresh_Click);
             // 
             // frmActivityWindow

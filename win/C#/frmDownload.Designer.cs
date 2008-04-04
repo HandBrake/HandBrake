@@ -74,7 +74,6 @@ namespace Handbrake
             // 
             this.btn_cancel.BackColor = System.Drawing.Color.Silver;
             this.btn_cancel.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_cancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_cancel.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_cancel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btn_cancel.Location = new System.Drawing.Point(321, 54);
@@ -82,7 +81,7 @@ namespace Handbrake
             this.btn_cancel.Size = new System.Drawing.Size(90, 22);
             this.btn_cancel.TabIndex = 56;
             this.btn_cancel.Text = "Cancel";
-            this.btn_cancel.UseVisualStyleBackColor = false;
+            this.btn_cancel.UseVisualStyleBackColor = true;
             this.btn_cancel.Click += new System.EventHandler(this.btn_cancel_Click);
             // 
             // frmDownload

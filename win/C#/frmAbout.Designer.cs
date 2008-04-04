@@ -50,7 +50,7 @@ namespace Handbrake
             // 
             this.Label4.AutoSize = true;
             this.Label4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label4.Location = new System.Drawing.Point(144, 58);
+            this.Label4.Location = new System.Drawing.Point(168, 58);
             this.Label4.Name = "Label4";
             this.Label4.Size = new System.Drawing.Size(349, 26);
             this.Label4.TabIndex = 28;
@@ -59,24 +59,22 @@ namespace Handbrake
             // 
             // btn_close
             // 
-            this.btn_close.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_close.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_close.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(388, 118);
+            this.btn_close.Location = new System.Drawing.Point(402, 114);
             this.btn_close.Name = "btn_close";
-            this.btn_close.Size = new System.Drawing.Size(99, 22);
+            this.btn_close.Size = new System.Drawing.Size(115, 22);
             this.btn_close.TabIndex = 27;
             this.btn_close.Text = "Close";
-            this.btn_close.UseVisualStyleBackColor = false;
+            this.btn_close.UseVisualStyleBackColor = true;
             this.btn_close.Click += new System.EventHandler(this.btn_close_Click);
             // 
             // Version
             // 
             this.Version.AutoSize = true;
             this.Version.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Version.Location = new System.Drawing.Point(228, 13);
+            this.Version.Location = new System.Drawing.Point(266, 13);
             this.Version.Name = "Version";
             this.Version.Size = new System.Drawing.Size(72, 13);
             this.Version.TabIndex = 26;
@@ -86,7 +84,7 @@ namespace Handbrake
             // 
             this.Label3.AutoSize = true;
             this.Label3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label3.Location = new System.Drawing.Point(144, 13);
+            this.Label3.Location = new System.Drawing.Point(168, 13);
             this.Label3.Name = "Label3";
             this.Label3.Size = new System.Drawing.Size(78, 13);
             this.Label3.TabIndex = 25;
@@ -96,9 +94,9 @@ namespace Handbrake
             // 
             this.PictureBox1.Image = global::Handbrake.Properties.Resources.logo128;
             this.PictureBox1.InitialImage = null;
-            this.PictureBox1.Location = new System.Drawing.Point(7, 8);
+            this.PictureBox1.Location = new System.Drawing.Point(8, 8);
             this.PictureBox1.Name = "PictureBox1";
-            this.PictureBox1.Size = new System.Drawing.Size(131, 132);
+            this.PictureBox1.Size = new System.Drawing.Size(153, 132);
             this.PictureBox1.TabIndex = 23;
             this.PictureBox1.TabStop = false;
             // 
@@ -106,7 +104,7 @@ namespace Handbrake
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(144, 30);
+            this.label5.Location = new System.Drawing.Point(168, 30);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(40, 13);
             this.label5.TabIndex = 29;
@@ -116,7 +114,7 @@ namespace Handbrake
             // 
             this.lbl_build.AutoSize = true;
             this.lbl_build.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_build.Location = new System.Drawing.Point(228, 30);
+            this.lbl_build.Location = new System.Drawing.Point(266, 30);
             this.lbl_build.Name = "lbl_build";
             this.lbl_build.Size = new System.Drawing.Size(64, 13);
             this.lbl_build.TabIndex = 30;
@@ -124,19 +122,18 @@ namespace Handbrake
             // 
             // groupBox1
             // 
-            this.groupBox1.Location = new System.Drawing.Point(147, 45);
+            this.groupBox1.Location = new System.Drawing.Point(171, 45);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(340, 10);
+            this.groupBox1.Size = new System.Drawing.Size(346, 10);
             this.groupBox1.TabIndex = 31;
             this.groupBox1.TabStop = false;
             // 
             // frmAbout
             // 
             this.AcceptButton = this.btn_close;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(497, 148);
+            this.ClientSize = new System.Drawing.Size(530, 148);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.lbl_build);
             this.Controls.Add(this.label5);
@@ -145,6 +142,7 @@ namespace Handbrake
             this.Controls.Add(this.Version);
             this.Controls.Add(this.Label3);
             this.Controls.Add(this.PictureBox1);
+            this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;

@@ -72,7 +72,6 @@ namespace Handbrake
             // 
             this.btn_close.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_close.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btn_close.Location = new System.Drawing.Point(324, 305);
@@ -80,12 +79,12 @@ namespace Handbrake
             this.btn_close.Size = new System.Drawing.Size(107, 22);
             this.btn_close.TabIndex = 53;
             this.btn_close.Text = "Save && Close";
-            this.btn_close.UseVisualStyleBackColor = false;
+            this.btn_close.UseVisualStyleBackColor = true;
             this.btn_close.Click += new System.EventHandler(this.btn_close_Click);
             // 
             // drp_completeOption
             // 
-            this.drp_completeOption.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drp_completeOption.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drp_completeOption.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_completeOption.FormattingEnabled = true;
             this.drp_completeOption.Items.AddRange(new object[] {
@@ -125,7 +124,6 @@ namespace Handbrake
             // 
             // tab_general
             // 
-            this.tab_general.BackColor = System.Drawing.SystemColors.ControlLight;
             this.tab_general.Controls.Add(this.check_tooltip);
             this.tab_general.Controls.Add(this.check_updateCheck);
             this.tab_general.Controls.Add(this.check_userDefaultSettings);
@@ -207,9 +205,7 @@ namespace Handbrake
             // 
             // btn_browse
             // 
-            this.btn_browse.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_browse.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_browse.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_browse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btn_browse.Location = new System.Drawing.Point(326, 146);
@@ -217,7 +213,7 @@ namespace Handbrake
             this.btn_browse.Size = new System.Drawing.Size(68, 22);
             this.btn_browse.TabIndex = 62;
             this.btn_browse.Text = "Browse";
-            this.btn_browse.UseVisualStyleBackColor = false;
+            this.btn_browse.UseVisualStyleBackColor = true;
             this.btn_browse.Click += new System.EventHandler(this.btn_browse_Click);
             // 
             // label10
@@ -232,7 +228,6 @@ namespace Handbrake
             // 
             // text_an_path
             // 
-            this.text_an_path.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.text_an_path.Location = new System.Drawing.Point(17, 147);
             this.text_an_path.Name = "text_an_path";
             this.text_an_path.Size = new System.Drawing.Size(303, 21);
@@ -273,7 +268,6 @@ namespace Handbrake
             // 
             // tab_debug
             // 
-            this.tab_debug.BackColor = System.Drawing.SystemColors.ControlLight;
             this.tab_debug.Controls.Add(this.label3);
             this.tab_debug.Controls.Add(this.drp_Priority);
             this.tab_debug.Controls.Add(this.Label11);
@@ -299,7 +293,7 @@ namespace Handbrake
             // 
             // drp_Priority
             // 
-            this.drp_Priority.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drp_Priority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drp_Priority.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_Priority.FormattingEnabled = true;
             this.drp_Priority.Items.AddRange(new object[] {
@@ -328,7 +322,7 @@ namespace Handbrake
             // 
             // drp_processors
             // 
-            this.drp_processors.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drp_processors.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drp_processors.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_processors.FormattingEnabled = true;
             this.drp_processors.Items.AddRange(new object[] {
@@ -388,7 +382,6 @@ namespace Handbrake
             // 
             // frmOptions
             // 
-            this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(443, 339);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label8);

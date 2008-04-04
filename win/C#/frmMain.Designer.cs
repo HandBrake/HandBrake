@@ -37,7 +37,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label Label38;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -294,7 +294,6 @@ namespace Handbrake
             // 
             // drop_chapterFinish
             // 
-            this.drop_chapterFinish.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drop_chapterFinish.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drop_chapterFinish.FormattingEnabled = true;
             this.drop_chapterFinish.Location = new System.Drawing.Point(397, 52);
@@ -307,7 +306,6 @@ namespace Handbrake
             // 
             // drop_chapterStart
             // 
-            this.drop_chapterStart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drop_chapterStart.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drop_chapterStart.FormattingEnabled = true;
             this.drop_chapterStart.Location = new System.Drawing.Point(295, 52);
@@ -320,7 +318,6 @@ namespace Handbrake
             // 
             // drp_dvdtitle
             // 
-            this.drp_dvdtitle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drp_dvdtitle.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_dvdtitle.FormattingEnabled = true;
             this.drp_dvdtitle.Items.AddRange(new object[] {
@@ -336,7 +333,6 @@ namespace Handbrake
             // 
             // text_source
             // 
-            this.text_source.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.text_source.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.text_source.Location = new System.Drawing.Point(99, 19);
             this.text_source.Name = "text_source";
@@ -347,7 +343,6 @@ namespace Handbrake
             // 
             // text_destination
             // 
-            this.text_destination.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.text_destination.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.text_destination.Location = new System.Drawing.Point(99, 19);
             this.text_destination.Name = "text_destination";
@@ -359,7 +354,6 @@ namespace Handbrake
             // drp_videoEncoder
             // 
             this.drp_videoEncoder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drp_videoEncoder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drp_videoEncoder.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_videoEncoder.FormattingEnabled = true;
             this.drp_videoEncoder.Items.AddRange(new object[] {
@@ -375,7 +369,6 @@ namespace Handbrake
             // 
             // drp_audbit_1
             // 
-            this.drp_audbit_1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drp_audbit_1.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audbit_1.FormattingEnabled = true;
             this.drp_audbit_1.Items.AddRange(new object[] {
@@ -398,7 +391,6 @@ namespace Handbrake
             // 
             // drp_audsr_1
             // 
-            this.drp_audsr_1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drp_audsr_1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audsr_1.FormattingEnabled = true;
             this.drp_audsr_1.Items.AddRange(new object[] {
@@ -419,7 +411,7 @@ namespace Handbrake
             this.check_largeFile.AutoSize = true;
             this.check_largeFile.BackColor = System.Drawing.Color.Transparent;
             this.check_largeFile.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_largeFile.Location = new System.Drawing.Point(261, 22);
+            this.check_largeFile.Location = new System.Drawing.Point(261, 23);
             this.check_largeFile.Name = "check_largeFile";
             this.check_largeFile.Size = new System.Drawing.Size(82, 17);
             this.check_largeFile.TabIndex = 4;
@@ -445,7 +437,6 @@ namespace Handbrake
             // 
             // drp_videoFramerate
             // 
-            this.drp_videoFramerate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drp_videoFramerate.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_videoFramerate.FormattingEnabled = true;
             this.drp_videoFramerate.Items.AddRange(new object[] {
@@ -478,7 +469,6 @@ namespace Handbrake
             // 
             // text_filesize
             // 
-            this.text_filesize.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.text_filesize.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.text_filesize.Location = new System.Drawing.Point(446, 63);
             this.text_filesize.Name = "text_filesize";
@@ -489,7 +479,6 @@ namespace Handbrake
             // 
             // text_bitrate
             // 
-            this.text_bitrate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.text_bitrate.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.text_bitrate.Location = new System.Drawing.Point(446, 36);
             this.text_bitrate.Name = "text_bitrate";
@@ -500,7 +489,6 @@ namespace Handbrake
             // 
             // drp_subtitle
             // 
-            this.drp_subtitle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drp_subtitle.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_subtitle.FormattingEnabled = true;
             this.drp_subtitle.Items.AddRange(new object[] {
@@ -532,7 +520,6 @@ namespace Handbrake
             // 
             // drp_audmix_1
             // 
-            this.drp_audmix_1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drp_audmix_1.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audmix_1.FormattingEnabled = true;
             this.drp_audmix_1.Items.AddRange(new object[] {
@@ -552,7 +539,6 @@ namespace Handbrake
             // 
             // text_height
             // 
-            this.text_height.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.text_height.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.text_height.ForeColor = System.Drawing.SystemColors.InfoText;
             this.text_height.Location = new System.Drawing.Point(504, 35);
@@ -564,7 +550,6 @@ namespace Handbrake
             // 
             // text_width
             // 
-            this.text_width.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.text_width.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.text_width.Location = new System.Drawing.Point(413, 35);
             this.text_width.Name = "text_width";
@@ -579,7 +564,7 @@ namespace Handbrake
             this.check_optimiseMP4.AutoSize = true;
             this.check_optimiseMP4.BackColor = System.Drawing.Color.Transparent;
             this.check_optimiseMP4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_optimiseMP4.Location = new System.Drawing.Point(349, 22);
+            this.check_optimiseMP4.Location = new System.Drawing.Point(349, 23);
             this.check_optimiseMP4.Name = "check_optimiseMP4";
             this.check_optimiseMP4.Size = new System.Drawing.Size(143, 17);
             this.check_optimiseMP4.TabIndex = 25;
@@ -622,9 +607,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Format = "N0";
+            dataGridViewCellStyle2.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle2;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -670,7 +655,6 @@ namespace Handbrake
             // 
             // drp_audmix_2
             // 
-            this.drp_audmix_2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drp_audmix_2.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audmix_2.FormattingEnabled = true;
             this.drp_audmix_2.Items.AddRange(new object[] {
@@ -690,7 +674,6 @@ namespace Handbrake
             // 
             // drp_audenc_1
             // 
-            this.drp_audenc_1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drp_audenc_1.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audenc_1.FormattingEnabled = true;
             this.drp_audenc_1.Items.AddRange(new object[] {
@@ -708,7 +691,6 @@ namespace Handbrake
             // 
             // drp_audenc_2
             // 
-            this.drp_audenc_2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drp_audenc_2.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audenc_2.FormattingEnabled = true;
             this.drp_audenc_2.Items.AddRange(new object[] {
@@ -726,7 +708,6 @@ namespace Handbrake
             // 
             // drp_audbit_2
             // 
-            this.drp_audbit_2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drp_audbit_2.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audbit_2.FormattingEnabled = true;
             this.drp_audbit_2.Items.AddRange(new object[] {
@@ -749,7 +730,6 @@ namespace Handbrake
             // 
             // drp_audsr_2
             // 
-            this.drp_audsr_2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drp_audsr_2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audsr_2.FormattingEnabled = true;
             this.drp_audsr_2.Items.AddRange(new object[] {
@@ -1333,7 +1313,6 @@ namespace Handbrake
             // 
             // drp_track2Audio
             // 
-            this.drp_track2Audio.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drp_track2Audio.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_track2Audio.FormattingEnabled = true;
             this.drp_track2Audio.Items.AddRange(new object[] {
@@ -1391,7 +1370,6 @@ namespace Handbrake
             // 
             // drp_track1Audio
             // 
-            this.drp_track1Audio.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drp_track1Audio.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_track1Audio.FormattingEnabled = true;
             this.drp_track1Audio.Items.AddRange(new object[] {
@@ -1619,7 +1597,6 @@ namespace Handbrake
             // drp_anamorphic
             // 
             this.drp_anamorphic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drp_anamorphic.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drp_anamorphic.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_anamorphic.FormattingEnabled = true;
             this.drp_anamorphic.Items.AddRange(new object[] {
@@ -1764,7 +1741,6 @@ namespace Handbrake
             // drp_deNoise
             // 
             this.drp_deNoise.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drp_deNoise.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drp_deNoise.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_deNoise.FormattingEnabled = true;
             this.drp_deNoise.Items.AddRange(new object[] {
@@ -1826,7 +1802,6 @@ namespace Handbrake
             // drp_deInterlace_option
             // 
             this.drp_deInterlace_option.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drp_deInterlace_option.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drp_deInterlace_option.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_deInterlace_option.FormattingEnabled = true;
             this.drp_deInterlace_option.Items.AddRange(new object[] {
@@ -1929,7 +1904,6 @@ namespace Handbrake
             // drp_crop
             // 
             this.drp_crop.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drp_crop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.drp_crop.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_crop.FormattingEnabled = true;
             this.drp_crop.Items.AddRange(new object[] {
