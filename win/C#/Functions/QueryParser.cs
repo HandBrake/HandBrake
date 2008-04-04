@@ -1,7 +1,7 @@
 /*  QueryParser.cs $
  	
  	   This file is part of the HandBrake source code.
- 	   Homepage: <http://handbrake.m0k.org/>.
+ 	   Homepage: <http://handbrake.fr>.
  	   It may be used under the terms of the GNU General Public License. */
 
 using System;
@@ -111,20 +111,7 @@ namespace Handbrake.Functions
                 return this.q_videoEncoder;
             }
         }
-
-        private string q_audioEncoder;
-        /// <summary>
-        /// Returns an String
-        /// The Audio Encoder used.
-        /// </summary>
-        public string AudioEncoder
-        {
-            get
-            {
-                return this.q_audioEncoder;
-            }
-        }
-#endregion
+        #endregion
 
         #region Picture Settings
         private int q_videoWidth;
@@ -439,30 +426,6 @@ namespace Handbrake.Functions
         #endregion
 
         #region Audio Settings
-        private string q_audioBitrate;
-        /// <summary>
-        /// Returns a string with the audio bitrate
-        /// </summary>
-        public string AudioBitrate
-        {
-            get
-            {
-                return this.q_audioBitrate;
-            }
-        }
-
-        private string q_audioSamplerate;
-        /// <summary>
-        /// Returns a string with the audio sample rate
-        /// </summary>
-        public string AudioSampleBitrate
-        {
-            get
-            {
-                return this.q_audioSamplerate;
-            }
-        }
-
         private string q_audioTrack1;
         /// <summary>
         /// Returns a string with the First selected Audio track
@@ -487,15 +450,101 @@ namespace Handbrake.Functions
             }
         }
 
-        private string q_audioTrackMix;
+        private string q_audioTrackMix1;
         /// <summary>
         /// Returns a string with the First selected Audio track Mix
         /// </summary>
-        public string AudioTrackMix
+        public string AudioTrackMix1
         {
             get
             {
-                return this.q_audioTrackMix;
+                return this.q_audioTrackMix1;
+            }
+        }
+
+        private string q_audioTrackMix2;
+        /// <summary>
+        /// Returns a string with the First selected Audio track Mix
+        /// </summary>
+        public string AudioTrackMix2
+        {
+            get
+            {
+                return this.q_audioTrackMix2;
+            }
+        }
+
+        private string q_audioEncoder1;
+        /// <summary>
+        /// Returns an String
+        /// The Audio Encoder used.
+        /// </summary>
+        public string AudioEncoder1
+        {
+            get
+            {
+                return this.q_audioEncoder1;
+            }
+        }
+
+        private string q_audioEncoder2;
+        /// <summary>
+        /// Returns an String
+        /// The Audio Encoder used.
+        /// </summary>
+        public string AudioEncoder2
+        {
+            get
+            {
+                return this.q_audioEncoder2;
+            }
+        }
+
+        private string q_audioBitrate1;
+        /// <summary>
+        /// Returns a string with the audio bitrate
+        /// </summary>
+        public string AudioBitrate1
+        {
+            get
+            {
+                return this.q_audioBitrate1;
+            }
+        }
+
+        private string q_audioBitrate2;
+        /// <summary>
+        /// Returns a string with the audio bitrate
+        /// </summary>
+        public string AudioBitrate2
+        {
+            get
+            {
+                return this.q_audioBitrate2;
+            }
+        }
+
+        private string q_audioSamplerate1;
+        /// <summary>
+        /// Returns a string with the audio sample rate
+        /// </summary>
+        public string AudioSamplerate1
+        {
+            get
+            {
+                return this.q_audioSamplerate1;
+            }
+        }
+
+        private string q_audioSamplerate2;
+        /// <summary>
+        /// Returns a string with the audio sample rate
+        /// </summary>
+        public string AudioSamplerate2
+        {
+            get
+            {
+                return this.q_audioSamplerate2;
             }
         }
 
@@ -510,7 +559,6 @@ namespace Handbrake.Functions
                 return this.q_drc;
             }
         }
-
 
         private string q_subtitles;
         /// <summary>
@@ -570,7 +618,7 @@ namespace Handbrake.Functions
         {
             QueryParser thisQuery = new QueryParser();
 
-            #region reg exp
+            #region Regular Expressions
             //Source
             Regex r1 = new Regex(@"(-i)(?:\s\"")([a-zA-Z0-9:\\\s\.]+)(?:\"")");
             Match source = r1.Match(input.Replace('"', '\"'));
@@ -581,12 +629,11 @@ namespace Handbrake.Functions
             //Destination
             Regex r2 = new Regex(@"(-o)(?:\s\"")([a-zA-Z0-9_\-:\\\s\.]+)(?:\"")");
             Match destination = r2.Match(input.Replace('"', '\"'));
-            Match width = Regex.Match(input, @"-w ([0-9]*)");
-            Match height = Regex.Match(input, @"-l ([0-9]*)");
             Match videoEncoder = Regex.Match(input, @"-e ([a-zA-Z0-9]*)");
-            Match audioEncoder = Regex.Match(input, @"-E ([a-zA-Z0-9+]*)");
 
             //Picture Settings Tab
+            Match width = Regex.Match(input, @"-w ([0-9]*)");
+            Match height = Regex.Match(input, @"-l ([0-9]*)");
             Match deinterlace = Regex.Match(input, @"--deinterlace=([a-z]*)");
             Match denoise = Regex.Match(input, @"--denoise=([a-z]*)");
             Match deblock = Regex.Match(input, @"--deblock");
@@ -610,15 +657,21 @@ namespace Handbrake.Functions
             Match optimizeMP4 = Regex.Match(input, @"-O");
 
             //Audio Settings Tab
-            Match subtitles = Regex.Match(input, @"-s ([0-9a-zA-Z]*)");
-            Match subScan = Regex.Match(input, @"-U");
-            Match audioBitrate = Regex.Match(input, @"-B ([0-9]*)");
-            Match audioSampleRate = Regex.Match(input, @"-R ([0-9.]*)");
-            Match audioChannelsMix = Regex.Match(input, @"-6 ([0-9a-z0-9]*)");  // 1 -6 dpl2 // Broken
             Match audioTrack1 = Regex.Match(input, @"-a ([0-9]*)");
             Match audioTrack2 = Regex.Match(input, @"-a ([0-9]*),([0-9]*)");
-            Match forcedSubtitles = Regex.Match(input, @"-F");
+            Match audioTrack1Mix = Regex.Match(input, @"-6 ([0-9a-z0-9]*)");  
+            Match audioTrack2Mix = Regex.Match(input, @"-6 ([0-9a-z0-9]*),([0-9a-z0-9]*)");  
+            Match audioEncoder1 = Regex.Match(input, @"-E ([a-zA-Z0-9+]*)");
+            Match audioEncoder2 = Regex.Match(input, @"-E ([a-zA-Z0-9+]*),([a-zA-Z0-9+]*)");
+            Match audioBitrate1 = Regex.Match(input, @"-B ([0-9]*)");
+            Match audioBitrate2 = Regex.Match(input, @"-B ([0-9]*),([0-9]*)");
+            Match audioSampleRate1 = Regex.Match(input, @"-R ([0-9.]*)");
+            Match audioSampleRate2 = Regex.Match(input, @"-R ([0-9.]*),([0-9.]*)");
+
             Match drc = Regex.Match(input, @"-D ([0-9.]*)");
+            Match subtitles = Regex.Match(input, @"-s ([0-9a-zA-Z]*)");
+            Match subScan = Regex.Match(input, @"-U");
+            Match forcedSubtitles = Regex.Match(input, @"-F");
 
             //H264 Tab
             Match x264 = Regex.Match(input, @"-x ([,a-zA-Z0-9=:-]*)");
@@ -627,11 +680,12 @@ namespace Handbrake.Functions
             Match verbose = Regex.Match(input, @"-v");
             #endregion
 
+            #region Set Varibles
             try
             {
-                //
-                // Source
-                //
+                /*
+                 * Source
+                 */
                 #region Source Tab
 
                 thisQuery.q_source = source.ToString().Replace("-i ", "").Replace("\"", "");
@@ -657,9 +711,9 @@ namespace Handbrake.Functions
 
                 #endregion
 
-                //
-                // Destination
-                //
+                /*
+                 * Destination
+                 */
                 #region Destination
                 thisQuery.q_destination = destination.ToString().Replace("-o ", "").Replace("\"", "");
 
@@ -690,30 +744,12 @@ namespace Handbrake.Functions
                 }
                 thisQuery.q_videoEncoder = videoEncoderConvertion;
 
-                audioEncoderConvertion = audioEncoder.ToString().Replace("-E ", "");
-                switch (audioEncoderConvertion)
-                {
-                    case "faac":
-                        audioEncoderConvertion = "AAC";
-                        break;
-                    case "lame":
-                        audioEncoderConvertion = "MP3";
-                        break;
-                    case "vorbis":
-                        audioEncoderConvertion = "Vorbis";
-                        break;
-                    case "ac3":
-                        audioEncoderConvertion = "AC3";
-                        break;
-                    case "aac+ac3":
-                        audioEncoderConvertion = "AAC + AC3";
-                        break;
-                    default:
-                        audioEncoderConvertion = "AAC";
-                        break;
-                }
-                thisQuery.q_audioEncoder = audioEncoderConvertion;
+                #endregion
 
+                /*
+                 * Picture Settings Tab
+                 */
+                #region Picture Tab
 
                 if (width.Success != false)
                     thisQuery.q_videoWidth = int.Parse(width.ToString().Replace("-w ", ""));
@@ -721,12 +757,7 @@ namespace Handbrake.Functions
                 if (height.Success != false)
                     thisQuery.q_videoHeight = int.Parse(height.ToString().Replace("-l ", ""));
 
-                #endregion
 
-                //
-                //Picture Settings Tab
-                //
-                #region Picture Tab
                 if (crop.Success != false)
                 {
                     thisQuery.q_cropValues = crop.ToString().Replace("--crop ", "");
@@ -791,9 +822,9 @@ namespace Handbrake.Functions
 
                 #endregion
 
-                //
-                //Video Settings Tab
-                //
+                /*
+                 * Video Settings Tab
+                 */
                 #region Video
                 thisQuery.q_grayscale = grayscale.Success;
                 thisQuery.q_twoPass = twoPass.Success;
@@ -802,7 +833,7 @@ namespace Handbrake.Functions
                 if (videoFramerate.Success != false)
                     thisQuery.q_videoFramerate = videoFramerate.ToString().Replace("-r ", "");
                 else
-                    thisQuery.q_videoFramerate = "Automatic";
+                    thisQuery.q_videoFramerate = "Same as source";
 
                 if (videoBitrate.Success != false)
                     thisQuery.q_avgBitrate = videoBitrate.ToString().Replace("-b ", "");
@@ -821,16 +852,11 @@ namespace Handbrake.Functions
 
                 #endregion
 
-                //
-                //Audio Settings Tab
-                //
+                /*
+                 * Audio Settings Tab
+                 */
                 #region Audio
-                if (audioBitrate.Success != false)
-                    thisQuery.q_audioBitrate = audioBitrate.ToString().Replace("-B ", "");
-
-                if (audioSampleRate.Success != false)
-                    thisQuery.q_audioSamplerate = audioSampleRate.ToString().Replace("-R ", "");
-
+                // Tracks
                 if (audioTrack1.Success != false)
                     thisQuery.q_audioTrack1 = audioTrack1.ToString().Replace("-a ", "");
                 else
@@ -843,33 +869,145 @@ namespace Handbrake.Functions
                 }
                 else
                     thisQuery.q_audioTrack2 = "None";
-
-                thisQuery.q_audioTrackMix = "Automatic";
-                if (audioChannelsMix.Success != false)
+    
+                // Mixdowns
+                thisQuery.q_audioTrackMix1 = "Automatic";
+                if (audioTrack1Mix.Success != false)
                 {
-                    switch (audioChannelsMix.ToString().Replace("-6 ", "").Replace(" ", ""))
+                    switch (audioTrack1Mix.ToString().Replace("-6 ", "").Replace(" ", ""))
                     {
                         case "mono":
-                            thisQuery.q_audioTrackMix = "Mono";
+                            thisQuery.q_audioTrackMix1 = "Mono";
                             break;
                         case "stereo":
-                            thisQuery.q_audioTrackMix = "Stereo";
+                            thisQuery.q_audioTrackMix1 = "Stereo";
                             break;
                         case "dpl1":
-                            thisQuery.q_audioTrackMix = "Dolby Surround";
+                            thisQuery.q_audioTrackMix1 = "Dolby Surround";
                             break;
                         case "dpl2":
-                            thisQuery.q_audioTrackMix = "Dolby Pro Logic II";
+                            thisQuery.q_audioTrackMix1 = "Dolby Pro Logic II";
                             break;
                         case "6ch":
-                            thisQuery.q_audioTrackMix = "6 Channel Discrete";
+                            thisQuery.q_audioTrackMix1 = "6 Channel Discrete";
                             break;
                         default:
-                            thisQuery.q_audioTrackMix = "Automatic";
+                            thisQuery.q_audioTrackMix1 = "Automatic";
                             break;
                     }
-
                 }
+
+                thisQuery.q_audioTrackMix2 = "Automatic";
+                if (audioTrack2Mix.Success != false)
+                {
+                    string[] audio2mix = audioTrack2Mix.ToString().Split(',');
+                    audio2mix[1] = audio2mix[1].Trim();
+                    switch (audio2mix[1])
+                    {
+                        case "mono":
+                            thisQuery.q_audioTrackMix2 = "Mono";
+                            break;
+                        case "stereo":
+                            thisQuery.q_audioTrackMix2 = "Stereo";
+                            break;
+                        case "dpl1":
+                            thisQuery.q_audioTrackMix2 = "Dolby Surround";
+                            break;
+                        case "dpl2":
+                            thisQuery.q_audioTrackMix2 = "Dolby Pro Logic II";
+                            break;
+                        case "6ch":
+                            thisQuery.q_audioTrackMix2 = "6 Channel Discrete";
+                            break;
+                        default:
+                            thisQuery.q_audioTrackMix2 = "Automatic";
+                            break;
+                    }
+                }
+
+                // Audio Encoders
+                if (audioEncoder1.Success != false)
+                {
+                    audioEncoderConvertion = audioEncoder1.ToString().Replace("-E ", "");
+                    switch (audioEncoderConvertion)
+                    {
+                        case "faac":
+                            audioEncoderConvertion = "AAC";
+                            break;
+                        case "lame":
+                            audioEncoderConvertion = "MP3";
+                            break;
+                        case "vorbis":
+                            audioEncoderConvertion = "Vorbis";
+                            break;
+                        case "ac3":
+                            audioEncoderConvertion = "AC3";
+                            break;
+                        case "aac+ac3":
+                            audioEncoderConvertion = "AAC + AC3";
+                            break;
+                        default:
+                            audioEncoderConvertion = "AAC";
+                            break;
+                    }
+                    thisQuery.q_audioEncoder1 = audioEncoderConvertion;
+                }
+
+                if (audioEncoder2.Success != false)
+                {
+                    audioEncoderConvertion = audioEncoder2.ToString().Replace("-E ", "");
+                    string[] audio2enc = audioEncoder2.ToString().Split(',');
+                    audio2enc[1] = audio2enc[1].Trim();
+                    switch (audio2enc[1])
+                    {
+                        case "faac":
+                            audioEncoderConvertion = "AAC";
+                            break;
+                        case "lame":
+                            audioEncoderConvertion = "MP3";
+                            break;
+                        case "vorbis":
+                            audioEncoderConvertion = "Vorbis";
+                            break;
+                        case "ac3":
+                            audioEncoderConvertion = "AC3";
+                            break;
+                        case "aac+ac3":
+                            audioEncoderConvertion = "AAC + AC3";
+                            break;
+                        default:
+                            audioEncoderConvertion = "AAC";
+                            break;
+                    }
+                    thisQuery.q_audioEncoder2 = audioEncoderConvertion;
+                }
+
+
+                // Audio Bitrate
+                if (audioBitrate1.Success != false)
+                    thisQuery.q_audioBitrate1 = audioBitrate1.ToString().Replace("-B ", "").Trim();
+                else
+                    thisQuery.q_audioBitrate1 = "";
+
+                if (audioBitrate2.Success != false)
+                {
+                    string[] audioBitrateSelect = audioBitrate2.ToString().Split(',');
+                    thisQuery.q_audioBitrate2 = audioBitrateSelect[1].Trim();
+                }
+                else
+                    thisQuery.q_audioBitrate2 = "";
+
+                // Audio Sample Rate
+                if (audioSampleRate1.Success != false)
+                    thisQuery.q_audioSamplerate1 = audioSampleRate1.ToString().Replace("-R ", "").Trim();
+
+                if (audioSampleRate2.Success != false)
+                {
+                    string[] audioSRSelect = audioSampleRate2.ToString().Split(',');
+                    thisQuery.q_audioSamplerate2 = audioSRSelect[1].Trim();
+                }
+
+
                 if (subtitles.Success != false)
                     thisQuery.q_subtitles = subtitles.ToString().Replace("-s ", "");
                 else
@@ -888,9 +1026,7 @@ namespace Handbrake.Functions
                     thisQuery.q_drc = drcValue;
                 }
                 else
-                {
                     thisQuery.q_drc = 0;
-                }
 
                 thisQuery.q_forcedSubs = forcedSubtitles.Success;
 
@@ -918,6 +1054,7 @@ namespace Handbrake.Functions
             {
                 MessageBox.Show("An error has occured in the Query Parser. Please report this error on the forum in the 'Windows' support section. \n\n" + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            #endregion
 
             return thisQuery;
         }

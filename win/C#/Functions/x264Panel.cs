@@ -307,7 +307,7 @@ namespace Handbrake.Functions
         }
         
 
-        #region Some Private Functions used by the above Public Functions
+        // Some Private Functions used by the above Public Functions
         /*
          * Used by on_x264_WidgetChange()
          * Called when the current x264 option string contains multiple (or a single) item(s) in it seperated by :
@@ -920,7 +920,6 @@ namespace Handbrake.Functions
                 }
             }
         }
-
         /*
          * Take a single option and standardize it. Returns as a String
          * Input: String. - Single X264 Option. Name only
@@ -996,7 +995,5 @@ namespace Handbrake.Functions
 
             return cleanOptNameString;
         }
-
-        #endregion
     }
 }

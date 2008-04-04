@@ -1,7 +1,7 @@
 /*  frmAbout.cs $
  	
  	   This file is part of the HandBrake source code.
- 	   Homepage: <http://handbrake.m0k.org/>.
+ 	   Homepage: <http://handbrake.fr>.
  	   It may be used under the terms of the GNU General Public License. */
 
 using System;
@@ -31,7 +31,7 @@ namespace Handbrake
 
         private void label_credits_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("http://handbrake.m0k.org/trac/wiki/x264Options");
+            Process.Start("http://handbrake.frtrac/wiki/x264Options");
         }
     }
 }

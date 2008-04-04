@@ -1,7 +1,7 @@
 /*  frmActivityWindow.cs $
  	
  	   This file is part of the HandBrake source code.
- 	   Homepage: <http://handbrake.m0k.org/>.
+ 	   Homepage: <http://handbrake.fr>.
  	   It may be used under the terms of the GNU General Public License. */
 
 using System;
@@ -42,15 +42,21 @@ namespace Handbrake
         {
             try
             {
-                string dvdInfoPath = Path.Combine(Path.GetTempPath(), "hb_encode_log.dat");
-                FileStream f = System.IO.File.Open(dvdInfoPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                // hb_encode_log.dat is the primary log file. Since .NET can't read this file whilst the CLI is outputing to it,
+                // we'll need to make a copy of it.
+                string logFile = Path.Combine(Path.GetTempPath(), "hb_encode_log.dat");
+                string logFile2 = Path.Combine(Path.GetTempPath(), "hb_encode_log_AppReadable.dat");
 
-                StreamReader sr = new StreamReader(f);
+                // Make sure the application readable log file does not already exist. FileCopy fill fail if it does.
+                if (File.Exists(logFile2))
+                    File.Delete(logFile2);
 
+                // Copy the log file.
+                File.Copy(logFile, logFile2);
 
-
+                // Begin processing the log file.
+                StreamReader sr = new StreamReader(logFile2);
                 string line = sr.ReadLine();
-
                 while (line != null)
                 {
                     this.rtf_actLog.AppendText(line + System.Environment.NewLine);
@@ -58,10 +64,10 @@ namespace Handbrake
                 }
                 sr.Close();
             }
-            catch (Exception)
+            catch (Exception exc)
             {
                 rtf_actLog.Clear();
-                rtf_actLog.Text = "Please wait until the encode has finished to view the log.";
+                rtf_actLog.Text = "Please wait until the encode has finished to view the log. \n\n\n" + exc.ToString();
             }
         }
 

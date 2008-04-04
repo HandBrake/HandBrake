@@ -1,7 +1,7 @@
 /*  frmQueue.cs $
  	
  	   This file is part of the HandBrake source code.
- 	   Homepage: <http://handbrake.m0k.org/>.
+ 	   Homepage: <http://handbrake.fr>.
  	   It may be used under the terms of the GNU General Public License. */
 
 using System;
@@ -236,7 +236,7 @@ namespace Handbrake
                 }
 
                 lbl_vEnc.Text = parsed.VideoEncoder;
-                lbl_aEnc.Text = parsed.AudioEncoder;
+                lbl_aEnc.Text = parsed.AudioEncoder1;
             }
             catch (Exception)
             {
