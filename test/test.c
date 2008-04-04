@@ -465,23 +465,6 @@ static int HandleEvents( hb_handle_t * h )
 
                 if (!strcmp(preset_name, "AppleTV"))
                 {
-                    hb_audio_config_t * first_audio;
-                    if (hb_list_count(audios) == 0)
-                    {
-                        first_audio = calloc(1, sizeof(*first_audio));
-                        hb_audio_config_init(first_audio);
-                        first_audio->in.track = first_audio->out.track = 0;
-                        hb_list_add(audios, first_audio);
-                    }
-                    if( hb_list_count( audios ) <= 1 )
-                    {
-                        first_audio = hb_list_item( audios, 0 );
-                        audio = calloc(1, sizeof(*audio));
-                        hb_audio_config_init(audio);
-                        audio->in.track = first_audio->in.track;
-                        audio->out.track = 1;
-                        hb_list_add(audios, audio);
-                    }
                     if (!acodecs)
                     {
                         acodecs = strdup("faac,ac3");
@@ -912,11 +895,27 @@ static int HandleEvents( hb_handle_t * h )
                         fprintf(stderr, "Invalid codec %s, using default for container.\n", token);
                         acodec = default_acodec;
                     }
-                    audio = hb_list_audio_config_item(job->list_audio, i);
-                    audio->out.codec = acodec;
-                    if( (++i) >= num_audio_tracks )
-                        break;  /* We have more inputs than audio tracks, oops */
+                    if( i < num_audio_tracks )
+                    {
+                        audio = hb_list_audio_config_item(job->list_audio, i);                        
+                        audio->out.codec = acodec;
+                    }
+                    if( i >= num_audio_tracks )
+                    {
+                        int last_track = hb_list_count(job->list_audio);
+                        fprintf(stderr, "More audio codecs than audio tracks, copying track %i and using encoder %s\n",
+                            last_track, token);
+                        hb_audio_config_t * last_audio = hb_list_audio_config_item( job->list_audio, last_track - 1 );
+                        audio = calloc(1, sizeof(*audio));
+                        hb_audio_config_init(audio);
+                        audio->in.track = last_audio->in.track;
+                        audio->out.track = num_audio_tracks++;
+                        audio->out.codec = acodec;
+                        hb_audio_add(job, audio);
+                        free( audio );
+                    }
                     token = strtok(NULL, ",");
+                    i++;
                 }
             }
             if( i < num_audio_tracks )
