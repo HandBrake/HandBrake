@@ -79,7 +79,6 @@ namespace Handbrake
             this.ISO_Open = new System.Windows.Forms.OpenFileDialog();
             this.FileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_open = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_save = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.mnu_exit = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_open3 = new System.Windows.Forms.ToolStripMenuItem();
@@ -244,8 +243,6 @@ namespace Handbrake
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.btn_ActivityWindow = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             Label38 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.data_chpt)).BeginInit();
@@ -813,7 +810,6 @@ namespace Handbrake
             // 
             this.FileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnu_open,
-            this.mnu_save,
             this.toolStripSeparator2,
             this.mnu_exit});
             this.FileToolStripMenuItem.Name = "FileToolStripMenuItem";
@@ -829,17 +825,6 @@ namespace Handbrake
             this.mnu_open.Size = new System.Drawing.Size(210, 22);
             this.mnu_open.Text = "&Import Preset";
             this.mnu_open.Click += new System.EventHandler(this.mnu_open_Click);
-            // 
-            // mnu_save
-            // 
-            this.mnu_save.Image = ((System.Drawing.Image)(resources.GetObject("mnu_save.Image")));
-            this.mnu_save.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.mnu_save.Name = "mnu_save";
-            this.mnu_save.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.mnu_save.Size = new System.Drawing.Size(210, 22);
-            this.mnu_save.Text = "&Save Preset";
-            this.mnu_save.Visible = false;
-            this.mnu_save.Click += new System.EventHandler(this.mnu_save_Click);
             // 
             // toolStripSeparator2
             // 
@@ -2679,6 +2664,7 @@ namespace Handbrake
             this.toolStripSeparator8});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.toolStrip1.Size = new System.Drawing.Size(931, 39);
             this.toolStrip1.TabIndex = 13;
             this.toolStrip1.Text = "toolStrip1";
@@ -2743,33 +2729,11 @@ namespace Handbrake
             this.toolStripSeparator8.Name = "toolStripSeparator8";
             this.toolStripSeparator8.Size = new System.Drawing.Size(6, 39);
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(620, 29);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "load";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(699, 29);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 15;
-            this.button2.Text = "save";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(931, 617);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.lbl_encode);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.groupBox2);
@@ -2913,7 +2877,6 @@ namespace Handbrake
         private System.Windows.Forms.FolderBrowserDialog DVD_Open;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem mnu_open;
-        private System.Windows.Forms.ToolStripMenuItem mnu_save;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.TreeView treeView_presets;
         internal System.Windows.Forms.CheckBox check_vfr;
@@ -3009,8 +2972,6 @@ namespace Handbrake
         internal System.Windows.Forms.Label label64;
         internal System.Windows.Forms.ComboBox drop_refFrames;
         internal System.Windows.Forms.CheckBox check_mixedReferences;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
         internal System.Windows.Forms.ComboBox drp_audmix_2;
         internal System.Windows.Forms.Label label65;
         internal System.Windows.Forms.Label label14;

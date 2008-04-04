@@ -6,12 +6,9 @@
 
 using System;
 using System.Collections;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using System.Net;
 using System.IO;
 using System.Diagnostics;
 using System.Threading;
@@ -24,12 +21,12 @@ namespace Handbrake
     public partial class frmMain : Form
     {
         // -------------------------------------------------------------- 
-        // Applicaiton Startup Stuff
+        // Applicaiton Startup
         // --------------------------------------------------------------
 
         #region Application Startup
 
-        // Some stuff that needs to be Initialized. 
+        // Declarations
         private Process hbProc;
         private Parsing.DVD thisDVD;
         private frmQueue queueWindow = new frmQueue();
@@ -120,6 +117,7 @@ namespace Handbrake
             this.Enabled = true;
         }
 
+        // Startup Functions
         private void startupUpdateCheck()
         {
             try
@@ -142,18 +140,15 @@ namespace Handbrake
                 MessageBox.Show(exc.ToString());
             }
         }
-
         private void splashTimer(object sender)
         {
             Thread.Sleep(1000);  //sit for 1 seconds then exit
         }
-
         private void showSplash(object sender)
         {
             Form splash = new frmSplashScreen();
             splash.Show();
         }
-
         private void setupH264Panel()
         {
             /*Set opt widget values here*/
@@ -279,7 +274,6 @@ namespace Handbrake
             /* Standardize the option string */
             rtf_x264Query.Text = "";
         }
-
         private void loadUserDefaults()
         {
             string userDefaults = Properties.Settings.Default.defaultUserSettings;
@@ -297,18 +291,12 @@ namespace Handbrake
 
         #endregion
 
-        #region Set Varible Function
-        public void setStreamReader(Parsing.DVD dvd)
-        {
-            this.thisDVD = dvd;
-        }
-        #endregion
-
         // -------------------------------------------------------------- 
-        // The main Menu bar.
+        // The Applications Main Menu
         // -------------------------------------------------------------- 
 
         #region File Menu
+
         private void mnu_open_Click(object sender, EventArgs e)
         {
             string filename;
@@ -339,35 +327,6 @@ namespace Handbrake
                 }
             }
         }
-
-        private void mnu_save_Click(object sender, EventArgs e)
-        {
-            string filename;
-            File_Save.ShowDialog();
-            filename = File_Save.FileName;
-            if (filename != "")
-            {
-                try
-                {
-                    // Create a StreamWriter and open the file
-                    StreamWriter line = new StreamWriter(filename);
-
-                    // Generate and write the query string to the file
-                    String query = hb_common_func.GenerateTheQuery(this);
-                    line.WriteLine(query);
-
-                    // close the stream
-                    line.Close();
-                    MessageBox.Show("Your profile has been sucessfully saved.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("Unable to write to the file. Please make sure the location has the correct permissions for file writing.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                }
-
-            }
-        }
-
         private void mnu_exit_Click(object sender, EventArgs e)
         {
             Application.Exit();
@@ -381,13 +340,11 @@ namespace Handbrake
         {
             showQueue();
         }
-
         private void mnu_viewDVDdata_Click(object sender, EventArgs e)
         {
             frmDvdInfo dvdInfoWindow = new frmDvdInfo();
             dvdInfoWindow.Show();
         }
-
         private void mnu_options_Click(object sender, EventArgs e)
         {
             Form Options = new frmOptions();
@@ -409,7 +366,6 @@ namespace Handbrake
             else
                 MessageBox.Show("Presets have been updated", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-
         private void mnu_SelectDefault_Click(object sender, EventArgs e)
         {
             loadNormalPreset();
@@ -423,22 +379,18 @@ namespace Handbrake
         {
             Process.Start("http://handbrake.fr/trac");
         }
-
         private void mnu_faq_Click(object sender, EventArgs e)
         {
             Process.Start("http://handbrake.fr/trac/wiki/SupportFAQ");
         }
-
         private void mnu_onlineDocs_Click(object sender, EventArgs e)
         {
             Process.Start("http://handbrake.fr/?article=documentation");
         }
-
         private void mnu_handbrake_home_Click(object sender, EventArgs e)
         {
             Process.Start("http://handbrake.fr");
         }
-
         private void mnu_UpdateCheck_Click(object sender, EventArgs e)
         {
             Boolean update = hb_common_func.updateCheck(true);
@@ -450,7 +402,6 @@ namespace Handbrake
             else
                 MessageBox.Show("There are no new updates at this time.", "Update Check", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-
         private void mnu_about_Click(object sender, EventArgs e)
         {
             Form About = new frmAbout();
@@ -460,11 +411,56 @@ namespace Handbrake
         #endregion
 
         // -------------------------------------------------------------- 
-        // Buttons on the main Window and items that require actions
+        // MainWindow Components, Actions and Functions
         // --------------------------------------------------------------
 
-        #region Buttons
+        #region Actions
 
+        // ToolBar
+        private void btn_start_Click(object sender, EventArgs e)
+        {
+            if (text_source.Text == "" || text_source.Text == "Click 'Browse' to continue" || text_destination.Text == "")
+                MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else
+            {
+                String query;
+                if (rtf_query.Text != "")
+                    query = rtf_query.Text;
+                else
+                    query = hb_common_func.GenerateTheQuery(this);
+
+                ThreadPool.QueueUserWorkItem(procMonitor, query);
+                lbl_encode.Visible = true;
+                lbl_encode.Text = "Encoding in Progress";
+            }
+        }
+        private void btn_add2Queue_Click(object sender, EventArgs e)
+        {
+            if (text_source.Text == "" || text_source.Text == "Click 'Browse' to continue" || text_destination.Text == "")
+                MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else
+            {
+                String query;
+                if (rtf_query.Text != "")
+                    query = rtf_query.Text;
+                else
+                    query = hb_common_func.GenerateTheQuery(this);
+
+                queueWindow.list_queue.Items.Add(query);
+                queueWindow.Show();
+            }
+        }
+        private void btn_showQueue_Click(object sender, EventArgs e)
+        {
+            showQueue();
+        }
+        private void btn_ActivityWindow_Click(object sender, EventArgs e)
+        {
+            Form ActivityWindow = new frmActivityWindow();
+            ActivityWindow.ShowDialog();
+        }
+
+        //Source
         private void btn_Browse_Click(object sender, EventArgs e)
         {
             String filename = "";
@@ -501,102 +497,11 @@ namespace Handbrake
 
             }
         }
-
-        private void btn_destBrowse_Click(object sender, EventArgs e)
+        private void drp_dvdtitle_Click(object sender, EventArgs e)
         {
-            // This removes the file extension from the filename box on the save file dialog.
-            // It's daft but some users don't realise that typing an extension overrides the dropdown extension selected.
-            DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", "").Replace(".m4v", "").Replace(".mkv", "").Replace(".ogm", "").Replace(".avi", "");
-
-            // Show the dialog and set the main form file path
-            DVD_Save.ShowDialog();
-            if (DVD_Save.FileName.StartsWith("\\"))
-                MessageBox.Show("Sorry, HandBrake does not support UNC file paths. \nTry mounting the share as a network drive in My Computer", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            else
-            {
-                setAudioByContainer(DVD_Save.FileName);
-
-                text_destination.Text = DVD_Save.FileName;
-
-                // Quicktime requires .m4v file for chapter markers to work. If checked, change the extension to .m4v (mp4 and m4v are the same thing)
-                if (Check_ChapterMarkers.Checked)
-                    text_destination.Text = text_destination.Text.Replace(".mp4", ".m4v");
-            }
+            if (drp_dvdtitle.Items.Count == 0)
+                MessageBox.Show("There are no titles to select. Please scan the DVD by clicking the 'browse' button above before trying to select a title.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
-
-        private void btn_ActivityWindow_Click(object sender, EventArgs e)
-        {
-            Form ActivityWindow = new frmActivityWindow();
-            ActivityWindow.ShowDialog();
-        }
-
-        #endregion
-
-        #region Reusable Functions
-        private void setAudioByContainer(String path)
-        {
-            if ((path.EndsWith(".mp4")) || (path.EndsWith(".mp4")))
-            {
-                drp_audenc_1.Items.Clear();
-                drp_audenc_1.Items.Add("AAC");
-                drp_audenc_1.SelectedIndex = 0;
-
-                drp_audenc_2.Items.Clear();
-                drp_audenc_2.Items.Add("AAC");
-                if (drp_audenc_2.Enabled)
-                    drp_audenc_2.SelectedIndex = 0;
-            }
-            else if (path.EndsWith(".avi"))
-            {
-                drp_audenc_1.Items.Clear();
-                drp_audenc_1.Items.Add("MP3");
-                drp_audenc_1.Items.Add("AC3");
-                drp_audenc_1.SelectedIndex = 0;
-
-                drp_audenc_2.Items.Clear();
-                drp_audenc_2.Items.Add("MP3");
-                drp_audenc_2.Items.Add("AC3");
-                if (drp_audenc_2.Enabled)
-                    drp_audenc_2.SelectedIndex = 0;
-            }
-            else if (path.EndsWith(".ogm"))
-            {
-                drp_audenc_1.Items.Clear();
-                drp_audenc_1.Items.Add("Vorbis");
-                drp_audenc_1.SelectedIndex = 0;
-
-                drp_audenc_2.Items.Clear();
-                drp_audenc_2.Items.Add("Vorbis");
-                if (drp_audenc_2.Enabled)
-                    drp_audenc_2.SelectedIndex = 0;
-            }
-            else if (path.EndsWith(".mkv"))
-            {
-                drp_audenc_1.Items.Clear();
-                drp_audenc_1.Items.Add("AAC");
-                drp_audenc_1.Items.Add("MP3");
-                drp_audenc_1.Items.Add("AC3");
-                drp_audenc_1.Items.Add("Vorbis");
-                drp_audenc_1.SelectedIndex = 0;
-
-                drp_audenc_2.Items.Clear();
-                drp_audenc_2.Items.Add("AAC");
-                drp_audenc_2.Items.Add("MP3");
-                drp_audenc_2.Items.Add("AC3");
-                drp_audenc_2.Items.Add("Vorbis");
-                if (drp_audenc_2.Enabled)
-                    drp_audenc_2.SelectedIndex = 0;
-            }
-        }
-        #endregion
-
-        #region frmMain Actions
-
-        private void text_destination_TextChanged(object sender, EventArgs e)
-        {
-            setAudioByContainer(text_destination.Text);
-        }
-
         private void drp_dvdtitle_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Reset some values on the form
@@ -657,7 +562,6 @@ namespace Handbrake
             hb_common_func.autoName(this);
             hb_common_func.chapterNaming(this);
         }
-
         private void drop_chapterStart_SelectedIndexChanged(object sender, EventArgs e)
         {
             drop_chapterStart.BackColor = Color.White;
@@ -679,7 +583,6 @@ namespace Handbrake
             // Run the Autonaming function
             hb_common_func.autoName(this);
         }
-
         private void drop_chapterFinish_SelectedIndexChanged(object sender, EventArgs e)
         {
             drop_chapterFinish.BackColor = Color.White;
@@ -703,27 +606,137 @@ namespace Handbrake
             hb_common_func.autoName(this);
         }
 
+        //Destination
+        private void btn_destBrowse_Click(object sender, EventArgs e)
+        {
+            // This removes the file extension from the filename box on the save file dialog.
+            // It's daft but some users don't realise that typing an extension overrides the dropdown extension selected.
+            DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", "").Replace(".m4v", "").Replace(".mkv", "").Replace(".ogm", "").Replace(".avi", "");
+
+            // Show the dialog and set the main form file path
+            DVD_Save.ShowDialog();
+            if (DVD_Save.FileName.StartsWith("\\"))
+                MessageBox.Show("Sorry, HandBrake does not support UNC file paths. \nTry mounting the share as a network drive in My Computer", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else
+            {
+                setAudioByContainer(DVD_Save.FileName);
+
+                text_destination.Text = DVD_Save.FileName;
+
+                // Quicktime requires .m4v file for chapter markers to work. If checked, change the extension to .m4v (mp4 and m4v are the same thing)
+                if (Check_ChapterMarkers.Checked)
+                    text_destination.Text = text_destination.Text.Replace(".mp4", ".m4v");
+            }
+        }
+        private void text_destination_TextChanged(object sender, EventArgs e)
+        {
+            setAudioByContainer(text_destination.Text);
+        }
+
+        // Output Settings
+        private void drp_videoEncoder_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //Turn off some options which are H.264 only when the user selects a non h.264 encoder
+            if (!drp_videoEncoder.Text.Contains("H.264"))
+            {
+                check_turbo.CheckState = CheckState.Unchecked;
+                check_turbo.Enabled = false;
+                h264Tab.Enabled = false;
+                rtf_x264Query.Text = "";
+                check_iPodAtom.Enabled = false;
+                check_iPodAtom.Checked = false;
+                check_optimiseMP4.Enabled = false;
+                if (drp_anamorphic.Items.Count == 3)
+                    drp_anamorphic.Items.RemoveAt(2);
+            }
+            else
+            {
+                if (check_2PassEncode.CheckState == CheckState.Checked)
+                    check_turbo.Enabled = true;
+
+                h264Tab.Enabled = true;
+                check_iPodAtom.Enabled = true;
+                check_optimiseMP4.Enabled = true;
+                if (!drp_anamorphic.Items.Contains("Loose"))
+                    drp_anamorphic.Items.Add("Loose");
+            }
+
+        }
+        private void check_largeFile_CheckedChanged(object sender, EventArgs e)
+        {
+            if ((!text_destination.Text.Contains(".mp4")) && (!text_destination.Text.Contains(".m4v")))
+            {
+                check_largeFile.BackColor = Color.LightCoral;
+                check_largeFile.CheckState = CheckState.Unchecked;
+            }
+            else
+            {
+                check_largeFile.BackColor = Color.Transparent;
+            }
+        }
+        private void check_iPodAtom_CheckedChanged(object sender, EventArgs e)
+        {
+            if ((!text_destination.Text.Contains(".mp4")) && (!text_destination.Text.Contains(".m4v")))
+            {
+                text_destination.BackColor = Color.LightCoral;
+                check_iPodAtom.BackColor = Color.LightCoral;
+                check_iPodAtom.CheckState = CheckState.Unchecked;
+            }
+            else
+            {
+                check_iPodAtom.BackColor = Color.Transparent;
+                text_destination.BackColor = Color.White;
+            }
+        }
+        private void check_optimiseMP4_CheckedChanged(object sender, EventArgs e)
+        {
+            if ((!text_destination.Text.Contains(".mp4")) && (!text_destination.Text.Contains(".m4v")))
+            {
+                check_optimiseMP4.BackColor = Color.LightCoral;
+                text_destination.BackColor = Color.LightCoral;
+                check_optimiseMP4.CheckState = CheckState.Unchecked;
+            }
+            else
+            {
+                check_optimiseMP4.BackColor = Color.Transparent;
+                text_destination.BackColor = Color.White;
+            }
+        }
+
+        //Video Tab
         private void text_bitrate_TextChanged(object sender, EventArgs e)
         {
             text_filesize.Text = "";
             slider_videoQuality.Value = 0;
             SliderValue.Text = "0%";
         }
-
         private void text_filesize_TextChanged(object sender, EventArgs e)
         {
             text_bitrate.Text = "";
             slider_videoQuality.Value = 0;
             SliderValue.Text = "0%";
         }
-
         private void slider_videoQuality_Scroll(object sender, EventArgs e)
         {
             SliderValue.Text = slider_videoQuality.Value.ToString() + "%";
             text_bitrate.Text = "";
             text_filesize.Text = "";
         }
+        private void check_2PassEncode_CheckedChanged(object sender, EventArgs e)
+        {
+            if (check_2PassEncode.CheckState.ToString() == "Checked")
+            {
+                if (drp_videoEncoder.Text.Contains("H.264"))
+                    check_turbo.Enabled = true;
+            }
+            else
+            {
+                check_turbo.Enabled = false;
+                check_turbo.CheckState = CheckState.Unchecked;
+            }
+        }
 
+        //Picture Tab
         private void text_width_TextChanged(object sender, EventArgs e)
         {
             try
@@ -755,7 +768,6 @@ namespace Handbrake
                 // No need to throw an error here.
             }
         }
-
         private void text_height_TextChanged(object sender, EventArgs e)
         {
             try
@@ -770,7 +782,6 @@ namespace Handbrake
                 // No need to alert the user.
             }
         }
-
         private void drp_crop_SelectedIndexChanged(object sender, EventArgs e)
         {
             if ((string)drp_crop.SelectedItem == "Custom")
@@ -823,7 +834,6 @@ namespace Handbrake
 
             }
         }
-
         private void check_vfr_CheckedChanged(object sender, EventArgs e)
         {
             if (check_vfr.CheckState == CheckState.Checked)
@@ -842,7 +852,6 @@ namespace Handbrake
                 lbl_vfr.Visible = false;
             }
         }
-
         private void drp_anamorphic_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (drp_anamorphic.SelectedIndex == 1)
@@ -874,70 +883,7 @@ namespace Handbrake
             }
         }
 
-        private void check_2PassEncode_CheckedChanged(object sender, EventArgs e)
-        {
-            if (check_2PassEncode.CheckState.ToString() == "Checked")
-            {
-                if (drp_videoEncoder.Text.Contains("H.264"))
-                    check_turbo.Enabled = true;
-            }
-            else
-            {
-                check_turbo.Enabled = false;
-                check_turbo.CheckState = CheckState.Unchecked;
-            }
-        }
-
-        private void check_largeFile_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((!text_destination.Text.Contains(".mp4")) && (!text_destination.Text.Contains(".m4v")))
-            {
-                check_largeFile.BackColor = Color.LightCoral;
-                check_largeFile.CheckState = CheckState.Unchecked;
-            }
-            else
-            {
-                check_largeFile.BackColor = Color.Transparent;
-            }
-        }
-
-        private void check_iPodAtom_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((!text_destination.Text.Contains(".mp4")) && (!text_destination.Text.Contains(".m4v")))
-            {
-                text_destination.BackColor = Color.LightCoral;
-                check_iPodAtom.BackColor = Color.LightCoral;
-                check_iPodAtom.CheckState = CheckState.Unchecked;
-            }
-            else
-            {
-                check_iPodAtom.BackColor = Color.Transparent;
-                text_destination.BackColor = Color.White;
-            }
-        }
-
-        private void check_optimiseMP4_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((!text_destination.Text.Contains(".mp4")) && (!text_destination.Text.Contains(".m4v")))
-            {
-                check_optimiseMP4.BackColor = Color.LightCoral;
-                text_destination.BackColor = Color.LightCoral;
-                check_optimiseMP4.CheckState = CheckState.Unchecked;
-            }
-            else
-            {
-                check_optimiseMP4.BackColor = Color.Transparent;
-                text_destination.BackColor = Color.White;
-            }
-        }
-
-        private void drp_dvdtitle_Click(object sender, EventArgs e)
-        {
-            if (drp_dvdtitle.Items.Count == 0)
-                MessageBox.Show("There are no titles to select. Please scan the DVD by clicking the 'browse' button above before trying to select a title.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-        }
-
-        // Audio Track Changed
+        // Audio Tab
         private void drp_track1Audio_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (drp_track1Audio.SelectedItem.Equals("None"))
@@ -988,8 +934,6 @@ namespace Handbrake
                 drp_audmix_2.Text = "Automatic";
             }
         }
-        
-        // Audio Mixdown Selection Changed
         private void drp_audioMixDown_SelectedIndexChanged(object sender, EventArgs e)
         {
             if ((drp_audenc_1.Text == "AAC") && (drp_audmix_1.Text == "6 Channel Discrete"))
@@ -1049,8 +993,6 @@ namespace Handbrake
                 drp_audbit_2.Items.Add("384");
             }
         }
-
-        // Audio Encoder Selection Changed
         private void drp_audenc_1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (drp_audenc_1.Text == "AC3")
@@ -1192,7 +1134,6 @@ namespace Handbrake
                 drp_audbit_2.Items.Add("320");
             }
         }
-
         private void slider_drc_Scroll(object sender, EventArgs e)
         {
             double value = slider_drc.Value / 10.0;
@@ -1200,7 +1141,6 @@ namespace Handbrake
 
             lbl_drc.Text = value.ToString();
         }
-
         private void drp_subtitle_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (drp_subtitle.Text.Contains("None"))
@@ -1212,6 +1152,7 @@ namespace Handbrake
                 check_forced.Enabled = true;
         }
 
+        // Chapter Marker Tab
         private void Check_ChapterMarkers_CheckedChanged(object sender, EventArgs e)
         {
             if (Check_ChapterMarkers.Checked)
@@ -1233,143 +1174,87 @@ namespace Handbrake
             }
         }
 
-        private void drp_videoEncoder_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //Turn off some options which are H.264 only when the user selects a non h.264 encoder
-            if (!drp_videoEncoder.Text.Contains("H.264"))
-            {
-                check_turbo.CheckState = CheckState.Unchecked;
-                check_turbo.Enabled = false;
-                h264Tab.Enabled = false;
-                rtf_x264Query.Text = "";
-                check_iPodAtom.Enabled = false;
-                check_iPodAtom.Checked = false;
-                check_optimiseMP4.Enabled = false;
-                if (drp_anamorphic.Items.Count == 3)
-                    drp_anamorphic.Items.RemoveAt(2);
-            }
-            else
-            {
-                if (check_2PassEncode.CheckState == CheckState.Checked)
-                    check_turbo.Enabled = true;
-
-                h264Tab.Enabled = true;
-                check_iPodAtom.Enabled = true;
-                check_optimiseMP4.Enabled = true;
-                if (!drp_anamorphic.Items.Contains("Loose"))
-                    drp_anamorphic.Items.Add("Loose");
-            }
-
-        }
-
-        #endregion
-
-        #region Advanced H264 Options Changed
-
-        /*
-         * x264 widgets
-         */
+        // Advanced Tab
         private void drop_refFrames_SelectedIndexChanged(object sender, EventArgs e)
         {
             x264PanelFunctions.on_x264_WidgetChange("ref", this);
         }
-
         private void check_mixedReferences_CheckedChanged(object sender, EventArgs e)
         {
             x264PanelFunctions.on_x264_WidgetChange("mixed-refs", this);
         }
-
         private void drop_bFrames_SelectedIndexChanged(object sender, EventArgs e)
         {
             x264PanelFunctions.on_x264_WidgetChange("bframes", this);
         }
-
         private void drop_directPrediction_SelectedIndexChanged(object sender, EventArgs e)
         {
             x264PanelFunctions.on_x264_WidgetChange("direct", this);
         }
-
         private void check_weightedBFrames_CheckedChanged(object sender, EventArgs e)
         {
             x264PanelFunctions.on_x264_WidgetChange("weightb", this);
         }
-
         private void check_bFrameDistortion_CheckedChanged(object sender, EventArgs e)
         {
             x264PanelFunctions.on_x264_WidgetChange("brdo", this);
         }
-
         private void check_BidirectionalRefinement_CheckedChanged(object sender, EventArgs e)
         {
             x264PanelFunctions.on_x264_WidgetChange("bime", this);
         }
-
         private void check_pyrmidalBFrames_CheckedChanged(object sender, EventArgs e)
         {
             x264PanelFunctions.on_x264_WidgetChange("b-pyramid", this);
         }
-
         private void drop_MotionEstimationMethod_SelectedIndexChanged(object sender, EventArgs e)
         {
             x264PanelFunctions.on_x264_WidgetChange("me", this);
         }
-
         private void drop_MotionEstimationRange_SelectedIndexChanged(object sender, EventArgs e)
         {
             x264PanelFunctions.on_x264_WidgetChange("merange", this);
         }
-
         private void drop_subpixelMotionEstimation_SelectedIndexChanged(object sender, EventArgs e)
         {
             x264PanelFunctions.on_x264_WidgetChange("subq", this);
         }
-
         private void drop_analysis_SelectedIndexChanged(object sender, EventArgs e)
         {
             x264PanelFunctions.on_x264_WidgetChange("analyse", this);
         }
-
         private void check_8x8DCT_CheckedChanged(object sender, EventArgs e)
         {
             x264PanelFunctions.on_x264_WidgetChange("8x8dct", this);
         }
-
         private void drop_deblockAlpha_SelectedIndexChanged(object sender, EventArgs e)
         {
             x264PanelFunctions.on_x264_WidgetChange("deblock", this);
 
         }
-
         private void drop_deblockBeta_SelectedIndexChanged(object sender, EventArgs e)
         {
             x264PanelFunctions.on_x264_WidgetChange("deblock", this);
 
         }
-
         private void drop_trellis_SelectedIndexChanged(object sender, EventArgs e)
         {
             x264PanelFunctions.on_x264_WidgetChange("trellis", this);
         }
-
         private void check_noFastPSkip_CheckedChanged(object sender, EventArgs e)
         {
             x264PanelFunctions.on_x264_WidgetChange("no-fast-pskip", this);
         }
-
         private void check_noDCTDecimate_CheckedChanged(object sender, EventArgs e)
         {
             x264PanelFunctions.on_x264_WidgetChange("no-dct-decimate", this);
 
         }
-
         private void check_Cabac_CheckedChanged(object sender, EventArgs e)
         {
             x264PanelFunctions.on_x264_WidgetChange("cabac", this);
         }
 
-        /*
-         * Buttons and x264 RTF Box
-         */
         private void rtf_x264Query_TextChanged(object sender, EventArgs e)
         {
             if (rtf_x264Query.Text.EndsWith("\n"))
@@ -1382,234 +1267,33 @@ namespace Handbrake
                     x264PanelFunctions.reset2Defaults(this);
             }
         }
-
         private void btn_reset_Click(object sender, EventArgs e)
         {
             rtf_x264Query.Text = "";
             x264PanelFunctions.reset2Defaults(this);
         }
 
-        #endregion
-
-        #region Query Editor Tab
-
-        private void btn_clear_Click(object sender, EventArgs e)
-        {
-            rtf_query.Clear();
-        }
-
+        // Query Editor Tab
         private void btn_generate_Query_Click(object sender, EventArgs e)
         {
             rtf_query.Text = hb_common_func.GenerateTheQuery(this);
         }
-
+        private void btn_clear_Click(object sender, EventArgs e)
+        {
+            rtf_query.Clear();
+        }
         private void btn_copy2C_Click(object sender, EventArgs e)
         {
             if (rtf_query.Text != "")
                 Clipboard.SetText(rtf_query.Text, TextDataFormat.Text);
         }
 
-        #endregion
-
-        // -------------------------------------------------------------- 
-        // Main Window Preset System
-        // --------------------------------------------------------------
-
-        #region Preset System
-
-        // Import Current Presets
-        public void loadPresetPanel()
-        {
-            treeView_presets.Nodes.Clear();
-            ArrayList presetNameList = new ArrayList();
-
-            // Load in the built in presets from presets.dat
-            string filePath = Application.StartupPath.ToString() + "\\presets.dat";
-            if (File.Exists(filePath))
-            {
-                StreamReader presetInput = new StreamReader(filePath);
-                while (!presetInput.EndOfStream)
-                {
-                    if ((char)presetInput.Peek() == '+')
-                    {
-                        string preset = presetInput.ReadLine().Replace("+ ", "");
-                        Regex r = new Regex("(:  )"); // Split on hyphens. 
-                        presetNameList.Add(r.Split(preset));
-                    }
-                    else
-                        presetInput.ReadLine();
-                }
-
-                presetInput.Close();
-                presetInput.Dispose();
-            }
-            addPresetToList(presetNameList);
-            presetNameList.Clear();
-
-            // Load in the users presets from user_presets.dat
-            filePath = Application.StartupPath.ToString() + "\\user_presets.dat";
-            if (File.Exists(filePath))
-            {
-                StreamReader presetInput = new StreamReader(filePath);
-                while (!presetInput.EndOfStream)
-                {
-                    if ((char)presetInput.Peek() == '+')
-                    {
-                        string preset = "--" + presetInput.ReadLine().Replace("+ ", "");
-                        Regex r = new Regex("(:  )"); // Split on hyphens. 
-                        presetNameList.Add(r.Split(preset));
-                    }
-                    else
-                        presetInput.ReadLine();
-                }
-
-                presetInput.Close();
-                presetInput.Dispose();
-            }
-            addPresetToList(presetNameList);
-        }
-
-        private void addPresetToList(ArrayList presetNameList)
-        {
-            TreeNode preset_treeview = new TreeNode();
-            foreach (string[] preset in presetNameList)
-            {
-                preset_treeview = new TreeNode(preset[0]);
-
-                // Now Fill Out List View with Items
-                treeView_presets.Nodes.Add(preset_treeview);
-            }
-        }
-
-        // Generate a new presets.dat file from the CLI
-        private void grabCLIPresets()
-        {
-            string appPath = Application.StartupPath.ToString() + "\\";
-            string strCmdLine = "cmd /c " + '"' + '"' + appPath + "HandBrakeCLI.exe" + '"' + " --preset-list >" + '"' + appPath + "presets.dat" + '"' + " 2>&1" + '"';
-            Process hbproc = Process.Start("CMD.exe", strCmdLine);
-            hbproc.WaitForExit();
-            hbproc.Dispose();
-            hbproc.Close();
-        }
-
-        // Selects the preset called "normal". This is HandBrakes default settings
-        private void loadNormalPreset()
-        {
-            try
-            {
-                string appPath = Application.StartupPath.ToString() + "\\presets.dat";
-                if (File.Exists(appPath))
-                {
-
-                    int normal = 0;
-                    foreach (TreeNode treenode in treeView_presets.Nodes)
-                    {
-                        if (treenode.ToString().Equals("TreeNode: Normal"))
-                            normal = treenode.Index;
-                    }
-
-                    TreeNode np = treeView_presets.Nodes[normal];
-
-                    treeView_presets.SelectedNode = np;
-                }
-            }
-            catch (Exception)
-            {
-                // Do nothing
-            }
-        }
-
-        // Set's the current options set in the program as the new defaults for the program.
-        private void btn_setDefault_Click(object sender, EventArgs e)
-        {
-            String query = hb_common_func.GenerateTheQuery(this);
-            Properties.Settings.Default.defaultUserSettings = query;
-            // Save the new default Settings
-            Properties.Settings.Default.Save();
-            MessageBox.Show("New default settings saved.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-        }
-
-        // When the user select a preset from the treeview, load it
-        private void treeView_presets_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            try
-            {
-                // Scan through the built in presets
-                string builtInPresets = Application.StartupPath.ToString() + "\\presets.dat";
-                if (File.Exists(builtInPresets))
-                {
-                    StreamReader presetInput = new StreamReader(builtInPresets);
-                    while (!presetInput.EndOfStream)
-                    {
-                        if ((char)presetInput.Peek() == '+')
-                        {
-                            string preset = presetInput.ReadLine().Replace("+ ", "");
-                            checkSelectedPreset(preset);
-                        }
-                        else
-                            presetInput.ReadLine();
-                    }
-
-                    presetInput.Close();
-                }
-
-                // Scan through the users presets
-                string userPresets = Application.StartupPath.ToString() + "\\user_presets.dat";
-                if (File.Exists(userPresets))
-                {
-                    StreamReader presetInput = new StreamReader(userPresets);
-                    while (!presetInput.EndOfStream)
-                    {
-                        if ((char)presetInput.Peek() == '+')
-                        {
-                            string preset = presetInput.ReadLine().Replace("+ ", "");
-                            checkSelectedPreset(preset);
-                        }
-                        else
-                            presetInput.ReadLine();
-                    }
-
-                    presetInput.Close();
-                    presetInput.Dispose();
-                }
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void checkSelectedPreset(string preset)
-        {
-            string selectedPreset = null;
-            selectedPreset = treeView_presets.SelectedNode.Text;
-
-            Regex r = new Regex("(:  )"); // Split on hyphens. 
-            string[] presetName = r.Split(preset);
-
-            if ((selectedPreset == (presetName[0])) || (selectedPreset == ("--" + presetName[0])))
-            {
-                //Ok, Reset all the H264 widgets before changing the preset
-                x264PanelFunctions.reset2Defaults(this);
-
-                // Send the query from the file to the Query Parser class
-                Functions.QueryParser presetQuery = Functions.QueryParser.Parse(preset);
-
-                // Now load the preset
-                hb_common_func.presetLoader(this, presetQuery, selectedPreset);
-
-                // The x264 widgets will need updated, so do this now:
-                x264PanelFunctions.X264_StandardizeOptString(this);
-                x264PanelFunctions.X264_SetCurrentSettingsInPanel(this);
-            }
-        }
-
+        // Presets
         private void btn_addPreset_Click(object sender, EventArgs e)
         {
             Form preset = new frmAddPreset(this);
             preset.ShowDialog();
         }
-
         private void btn_removePreset_Click(object sender, EventArgs e)
         {
             ArrayList user_presets = new ArrayList();
@@ -1665,69 +1349,272 @@ namespace Handbrake
             // Now reload the preset panel
             loadPresetPanel();
         }
+        private void btn_setDefault_Click(object sender, EventArgs e)
+        {
+            String query = hb_common_func.GenerateTheQuery(this);
+            Properties.Settings.Default.defaultUserSettings = query;
+            // Save the new default Settings
+            Properties.Settings.Default.Save();
+            MessageBox.Show("New default settings saved.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+        }
+        private void treeView_presets_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            //When the user select a preset from the treeview, load it
+            try
+            {
+                // Scan through the built in presets
+                string builtInPresets = Application.StartupPath.ToString() + "\\presets.dat";
+                if (File.Exists(builtInPresets))
+                {
+                    StreamReader presetInput = new StreamReader(builtInPresets);
+                    while (!presetInput.EndOfStream)
+                    {
+                        if ((char)presetInput.Peek() == '+')
+                        {
+                            string preset = presetInput.ReadLine().Replace("+ ", "");
+                            checkSelectedPreset(preset);
+                        }
+                        else
+                            presetInput.ReadLine();
+                    }
+
+                    presetInput.Close();
+                }
+
+                // Scan through the users presets
+                string userPresets = Application.StartupPath.ToString() + "\\user_presets.dat";
+                if (File.Exists(userPresets))
+                {
+                    StreamReader presetInput = new StreamReader(userPresets);
+                    while (!presetInput.EndOfStream)
+                    {
+                        if ((char)presetInput.Peek() == '+')
+                        {
+                            string preset = presetInput.ReadLine().Replace("+ ", "");
+                            checkSelectedPreset(preset);
+                        }
+                        else
+                            presetInput.ReadLine();
+                    }
+
+                    presetInput.Close();
+                    presetInput.Dispose();
+                }
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         #endregion
 
-        //---------------------------------------------------
-        // Encode / Cancel Buttons
-        // Encode Progress Text Handler
-        //---------------------------------------------------
+        #region Functions
+        // DVD Parsing
+        public void setStreamReader(Parsing.DVD dvd)
+        {
+            this.thisDVD = dvd;
+        }
 
-        #region Encodeing and Queue
+        // Audio system functions
+        private void setAudioByContainer(String path)
+        {
+            if ((path.EndsWith(".mp4")) || (path.EndsWith(".mp4")))
+            {
+                drp_audenc_1.Items.Clear();
+                drp_audenc_1.Items.Add("AAC");
+                drp_audenc_1.SelectedIndex = 0;
 
+                drp_audenc_2.Items.Clear();
+                drp_audenc_2.Items.Add("AAC");
+                if (drp_audenc_2.Enabled)
+                    drp_audenc_2.SelectedIndex = 0;
+            }
+            else if (path.EndsWith(".avi"))
+            {
+                drp_audenc_1.Items.Clear();
+                drp_audenc_1.Items.Add("MP3");
+                drp_audenc_1.Items.Add("AC3");
+                drp_audenc_1.SelectedIndex = 0;
+
+                drp_audenc_2.Items.Clear();
+                drp_audenc_2.Items.Add("MP3");
+                drp_audenc_2.Items.Add("AC3");
+                if (drp_audenc_2.Enabled)
+                    drp_audenc_2.SelectedIndex = 0;
+            }
+            else if (path.EndsWith(".ogm"))
+            {
+                drp_audenc_1.Items.Clear();
+                drp_audenc_1.Items.Add("Vorbis");
+                drp_audenc_1.SelectedIndex = 0;
+
+                drp_audenc_2.Items.Clear();
+                drp_audenc_2.Items.Add("Vorbis");
+                if (drp_audenc_2.Enabled)
+                    drp_audenc_2.SelectedIndex = 0;
+            }
+            else if (path.EndsWith(".mkv"))
+            {
+                drp_audenc_1.Items.Clear();
+                drp_audenc_1.Items.Add("AAC");
+                drp_audenc_1.Items.Add("MP3");
+                drp_audenc_1.Items.Add("AC3");
+                drp_audenc_1.Items.Add("Vorbis");
+                drp_audenc_1.SelectedIndex = 0;
+
+                drp_audenc_2.Items.Clear();
+                drp_audenc_2.Items.Add("AAC");
+                drp_audenc_2.Items.Add("MP3");
+                drp_audenc_2.Items.Add("AC3");
+                drp_audenc_2.Items.Add("Vorbis");
+                if (drp_audenc_2.Enabled)
+                    drp_audenc_2.SelectedIndex = 0;
+            }
+        }
+
+        // Preset system functions
+        private void addPresetToList(ArrayList presetNameList)
+        {
+            // Adds a new preset name to the preset list.
+            TreeNode preset_treeview = new TreeNode();
+            foreach (string[] preset in presetNameList)
+            {
+                preset_treeview = new TreeNode(preset[0]);
+
+                // Now Fill Out List View with Items
+                treeView_presets.Nodes.Add(preset_treeview);
+            }
+        }
+        private void grabCLIPresets()
+        {
+            // Gets the presets from the CLI and stores them in presets.dat
+            string appPath = Application.StartupPath.ToString() + "\\";
+            string strCmdLine = "cmd /c " + '"' + '"' + appPath + "HandBrakeCLI.exe" + '"' + " --preset-list >" + '"' + appPath + "presets.dat" + '"' + " 2>&1" + '"';
+            Process hbproc = Process.Start("CMD.exe", strCmdLine);
+            hbproc.WaitForExit();
+            hbproc.Dispose();
+            hbproc.Close();
+        }
+        private void loadNormalPreset()
+        {
+            //Loads the preset called "normal"
+            try
+            {
+                string appPath = Application.StartupPath.ToString() + "\\presets.dat";
+                if (File.Exists(appPath))
+                {
+
+                    int normal = 0;
+                    foreach (TreeNode treenode in treeView_presets.Nodes)
+                    {
+                        if (treenode.ToString().Equals("TreeNode: Normal"))
+                            normal = treenode.Index;
+                    }
+
+                    TreeNode np = treeView_presets.Nodes[normal];
+
+                    treeView_presets.SelectedNode = np;
+                }
+            }
+            catch (Exception)
+            {
+                // Do nothing
+            }
+        }
+        public void loadPresetPanel()
+        {
+            treeView_presets.Nodes.Clear();
+            ArrayList presetNameList = new ArrayList();
+
+            // Load in the built in presets from presets.dat
+            string filePath = Application.StartupPath.ToString() + "\\presets.dat";
+            if (File.Exists(filePath))
+            {
+                StreamReader presetInput = new StreamReader(filePath);
+                while (!presetInput.EndOfStream)
+                {
+                    if ((char)presetInput.Peek() == '+')
+                    {
+                        string preset = presetInput.ReadLine().Replace("+ ", "");
+                        Regex r = new Regex("(:  )"); // Split on hyphens. 
+                        presetNameList.Add(r.Split(preset));
+                    }
+                    else
+                        presetInput.ReadLine();
+                }
+
+                presetInput.Close();
+                presetInput.Dispose();
+            }
+            addPresetToList(presetNameList);
+            presetNameList.Clear();
+
+            // Load in the users presets from user_presets.dat
+            filePath = Application.StartupPath.ToString() + "\\user_presets.dat";
+            if (File.Exists(filePath))
+            {
+                StreamReader presetInput = new StreamReader(filePath);
+                while (!presetInput.EndOfStream)
+                {
+                    if ((char)presetInput.Peek() == '+')
+                    {
+                        string preset = "--" + presetInput.ReadLine().Replace("+ ", "");
+                        Regex r = new Regex("(:  )"); // Split on hyphens. 
+                        presetNameList.Add(r.Split(preset));
+                    }
+                    else
+                        presetInput.ReadLine();
+                }
+
+                presetInput.Close();
+                presetInput.Dispose();
+            }
+            addPresetToList(presetNameList);
+        }
+        private void checkSelectedPreset(string preset)
+        {
+            string selectedPreset = null;
+            selectedPreset = treeView_presets.SelectedNode.Text;
+
+            Regex r = new Regex("(:  )"); // Split on hyphens. 
+            string[] presetName = r.Split(preset);
+
+            if ((selectedPreset == (presetName[0])) || (selectedPreset == ("--" + presetName[0])))
+            {
+                //Ok, Reset all the H264 widgets before changing the preset
+                x264PanelFunctions.reset2Defaults(this);
+
+                // Send the query from the file to the Query Parser class
+                Functions.QueryParser presetQuery = Functions.QueryParser.Parse(preset);
+
+                // Now load the preset
+                hb_common_func.presetLoader(this, presetQuery, selectedPreset);
+
+                // The x264 widgets will need updated, so do this now:
+                x264PanelFunctions.X264_StandardizeOptString(this);
+                x264PanelFunctions.X264_SetCurrentSettingsInPanel(this);
+            }
+        }
+
+        // Queue system functions
+        private void showQueue()
+        {
+            queueWindow.Show();
+        }
+        #endregion
+
+        #region Encoding and Queue
+
+        // Declarations
         Functions.CLI process = new Functions.CLI();
         private delegate void UpdateUIHandler();
-
         [DllImport("user32.dll")]
         public static extern void LockWorkStation();
         [DllImport("user32.dll")]
         public static extern int ExitWindowsEx(int uFlags, int dwReason);
 
-        private void btn_start_Click(object sender, EventArgs e)
-        {
-            if (text_source.Text == "" || text_source.Text == "Click 'Browse' to continue" || text_destination.Text == "")
-                MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            else
-            {
-                String query;
-                if (rtf_query.Text != "")
-                    query = rtf_query.Text;
-                else
-                    query = hb_common_func.GenerateTheQuery(this);
-
-                ThreadPool.QueueUserWorkItem(procMonitor, query);
-                lbl_encode.Visible = true;
-                lbl_encode.Text = "Encoding in Progress";
-            }
-        }
-
-        private void btn_add2Queue_Click(object sender, EventArgs e)
-        {
-            if (text_source.Text == "" || text_source.Text == "Click 'Browse' to continue" || text_destination.Text == "")
-                MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            else
-            {
-                String query;
-                if (rtf_query.Text != "")
-                    query = rtf_query.Text;
-                else
-                    query = hb_common_func.GenerateTheQuery(this);
-
-                queueWindow.list_queue.Items.Add(query);
-                queueWindow.Show();
-            }
-        }
-
-        private void btn_showQueue_Click(object sender, EventArgs e)
-        {
-            showQueue();
-        }
-
-        private void showQueue()
-        {
-            queueWindow.Show();
-        }
-
+        // Encoding Functions
         private void procMonitor(object state)
         {
             // Make sure we are not already encoding and if we are then display an error.
@@ -1738,7 +1625,7 @@ namespace Handbrake
                 hbProc = process.runCli(this, (string)state, false, false, false, false);
                 hbProc.WaitForExit();
 
-                setEncodeLabel();
+                setEncodeLabelFinished();
                 hbProc = null;
 
                 // Do something whent he encode ends.
@@ -1767,75 +1654,17 @@ namespace Handbrake
                 }
             }
         }
-
-        private void setEncodeLabel()
+        private void setEncodeLabelFinished()
         {
             if (this.InvokeRequired)
             {
-                this.BeginInvoke(new UpdateUIHandler(setEncodeLabel));
+                this.BeginInvoke(new UpdateUIHandler(setEncodeLabelFinished));
                 return;
             }
             lbl_encode.Text = "Encoding Finished";
         }
 
         #endregion
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            string filename;
-            File_Open.ShowDialog();
-            filename = File_Open.FileName;
-
-            if (filename != "")
-            {
-                try
-                {
-                    // Create StreamReader & open file
-                    StreamReader line = new StreamReader(filename);
-
-                    // Send the query from the file to the Query Parser class then load the preset
-                    Functions.QueryParser presetQuery = Functions.QueryParser.Parse(line.ReadLine());
-                    hb_common_func.presetLoader(this, presetQuery, filename);
-
-                    // Close the stream
-                    line.Close();
-
-                }
-                catch (Exception exc)
-                {
-                    MessageBox.Show("Unable to load profile. \n\n" + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                }
-            }
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            string filename;
-            File_Save.ShowDialog();
-            filename = File_Save.FileName;
-            if (filename != "")
-            {
-                try
-                {
-                    // Create a StreamWriter and open the file
-                    StreamWriter line = new StreamWriter(filename);
-
-                    // Generate and write the query string to the file
-                    String query = hb_common_func.GenerateTheQuery(this);
-                    line.WriteLine(query);
-
-                    // close the stream
-                    line.Close();
-                    MessageBox.Show("Your profile has been sucessfully saved.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("Unable to write to the file. Please make sure the location has the correct permissions for file writing.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                }
-
-            }
-        }
-
 
 
         // This is the END of the road ------------------------------------------------------------------------------
