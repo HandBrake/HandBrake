@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Threading;
 using System.Diagnostics;
+using System.Collections;
 
 
 namespace Handbrake
@@ -67,6 +68,44 @@ namespace Handbrake
                 mainWindow.drop_chapterFinish.Text = "Auto";
                 mainWindow.drop_chapterStart.Text = "Auto";
 
+                // Now select the longest title
+                int current_largest = 0;
+                Handbrake.Parsing.Title title2Select = thisDvd.Titles[0];
+
+                foreach (Handbrake.Parsing.Title x in thisDvd.Titles)
+                {
+                    string title = x.ToString();
+                    if (title != "Automatic")
+                    {
+                        string[] y = title.Split(' ');
+                        string time = y[1].Replace("(", "").Replace(")", "");
+                        string[] z = time.Split(':');
+
+                        int hours = int.Parse(z[0]) * 60 * 60;
+                        int minutes = int.Parse(z[1]) * 60;
+                        int seconds = int.Parse(z[2]);
+                        int total_sec = hours + minutes + seconds;
+
+                        if (current_largest == 0)
+                        {
+                            current_largest = hours + minutes + seconds;
+                            title2Select = x;
+                        }
+                        else
+                        {
+                            if (total_sec > current_largest)
+                            {
+                                current_largest = total_sec;
+                                title2Select = x;
+                            }
+                        }
+                    }
+            
+                }
+
+
+                    mainWindow.drp_dvdtitle.SelectedItem = title2Select;
+
                 this.Close();
             }
             catch (Exception exc)
@@ -100,7 +139,7 @@ namespace Handbrake
 
                 if (!File.Exists(dvdInfoPath))
                 {
-                    throw new Exception("Unable to retrieve the DVD Info. dvdinfo.dat missing.");
+                    throw new Exception("Unable to retrieve the DVD Info. dvdinfo.dat is missing.");
                 }
 
                 using (StreamReader sr = new StreamReader(dvdInfoPath))

@@ -291,6 +291,7 @@ namespace Handbrake
             this.ToolTip.Active = false;
             this.ToolTip.AutomaticDelay = 1000;
             this.ToolTip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.ToolTip.ToolTipTitle = "Tooltip";
             // 
             // drop_chapterFinish
             // 
@@ -2207,7 +2208,7 @@ namespace Handbrake
             // 
             this.label44.AutoSize = true;
             this.label44.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label44.Location = new System.Drawing.Point(590, 108);
+            this.label44.Location = new System.Drawing.Point(606, 109);
             this.label44.Name = "label44";
             this.label44.Size = new System.Drawing.Size(55, 12);
             this.label44.TabIndex = 23;
@@ -2217,7 +2218,7 @@ namespace Handbrake
             // 
             this.check_8x8DCT.AutoSize = true;
             this.check_8x8DCT.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.check_8x8DCT.Location = new System.Drawing.Point(648, 108);
+            this.check_8x8DCT.Location = new System.Drawing.Point(664, 109);
             this.check_8x8DCT.Name = "check_8x8DCT";
             this.check_8x8DCT.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.check_8x8DCT.Size = new System.Drawing.Size(12, 11);
@@ -2243,7 +2244,7 @@ namespace Handbrake
             this.drop_analysis.FormattingEnabled = true;
             this.drop_analysis.Location = new System.Drawing.Point(537, 105);
             this.drop_analysis.Name = "drop_analysis";
-            this.drop_analysis.Size = new System.Drawing.Size(47, 20);
+            this.drop_analysis.Size = new System.Drawing.Size(63, 20);
             this.drop_analysis.TabIndex = 33;
             this.drop_analysis.SelectedIndexChanged += new System.EventHandler(this.drop_analysis_SelectedIndexChanged);
             // 
