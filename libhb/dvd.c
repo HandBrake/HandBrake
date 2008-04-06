@@ -868,11 +868,14 @@ int hb_dvd_read( hb_dvd_t * d, hb_buffer_t * b )
             }
             else
             {
-                hb_log( "dvd: Beginning of Cell (%d) at block %d", d->cell_cur,
-                       d->block );
+                if ( d->block != d->pgc->cell_playback[d->cell_cur].first_sector )
+                {
+                    hb_log( "dvd: beginning of cell %d at block %d", d->cell_cur,
+                           d->block );
+                }
                 if( d->in_cell )
                 {
-                    hb_error( "dvd: Assuming missed End of Cell (%d)", d->cell_cur );
+                    hb_error( "dvd: assuming missed end of cell %d", d->cell_cur );
                     d->cell_cur  = d->cell_next;
                     d->next_vobu = d->pgc->cell_playback[d->cell_cur].first_sector;
                     FindNextCell( d );
@@ -895,8 +898,12 @@ int hb_dvd_read( hb_dvd_t * d, hb_buffer_t * b )
         if( ( dsi_pack.vobu_sri.next_vobu & (1 << 31 ) ) == 0 ||
             ( dsi_pack.vobu_sri.next_vobu & 0x3fffffff ) == 0x3fffffff )
         {
-            hb_log( "dvd: End of Cell (%d) at block %d", d->cell_cur,
-                    d->block );
+            if ( d->block <= d->pgc->cell_playback[d->cell_cur].first_sector ||
+                 d->block > d->pgc->cell_playback[d->cell_cur].last_sector )
+            {
+                hb_log( "dvd: end of cell %d at block %d", d->cell_cur,
+                        d->block );
+            }
             d->cell_cur  = d->cell_next;
             d->in_cell = 0;
             d->next_vobu = d->pgc->cell_playback[d->cell_cur].first_sector;
