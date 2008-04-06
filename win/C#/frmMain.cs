@@ -666,40 +666,24 @@ namespace Handbrake
         {
             if ((!text_destination.Text.Contains(".mp4")) && (!text_destination.Text.Contains(".m4v")))
             {
-                check_largeFile.BackColor = Color.LightCoral;
+                MessageBox.Show("You can only use this option with the .mp4/.m4v file container.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 check_largeFile.CheckState = CheckState.Unchecked;
-            }
-            else
-            {
-                check_largeFile.BackColor = Color.Transparent;
             }
         }
         private void check_iPodAtom_CheckedChanged(object sender, EventArgs e)
         {
             if ((!text_destination.Text.Contains(".mp4")) && (!text_destination.Text.Contains(".m4v")))
             {
-                text_destination.BackColor = Color.LightCoral;
-                check_iPodAtom.BackColor = Color.LightCoral;
+                MessageBox.Show("You can only use this option with the .mp4/.m4v file container.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 check_iPodAtom.CheckState = CheckState.Unchecked;
             }
-            else
-            {
-                check_iPodAtom.BackColor = Color.Transparent;
-                text_destination.BackColor = Color.White;
-            }
         }
-        private void check_optimiseMP4_CheckedChanged(object sender, EventArgs e)
+        private void check_optimiseMP4_Clicked(object sender, EventArgs e)
         {
             if ((!text_destination.Text.Contains(".mp4")) && (!text_destination.Text.Contains(".m4v")))
             {
-                check_optimiseMP4.BackColor = Color.LightCoral;
-                text_destination.BackColor = Color.LightCoral;
+                MessageBox.Show("You can only use this option with the .mp4/.m4v file container.","Warning",MessageBoxButtons.OK,MessageBoxIcon.Warning);
                 check_optimiseMP4.CheckState = CheckState.Unchecked;
-            }
-            else
-            {
-                check_optimiseMP4.BackColor = Color.Transparent;
-                text_destination.BackColor = Color.White;
             }
         }
 
@@ -1665,6 +1649,9 @@ namespace Handbrake
         }
 
         #endregion
+
+
+
 
 
         // This is the END of the road ------------------------------------------------------------------------------

@@ -37,7 +37,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label Label38;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -420,7 +420,7 @@ namespace Handbrake
             this.ToolTip.SetToolTip(this.check_largeFile, "Allows creation of MP4 files greater than 4GB.\r\nWarning: Breaks iPod, Apple TV (V" +
                     "ersion 1 only) and PS3 compatibility.\r\nRequires .mp4/.m4v file extension");
             this.check_largeFile.UseVisualStyleBackColor = false;
-            this.check_largeFile.CheckedChanged += new System.EventHandler(this.check_largeFile_CheckedChanged);
+            this.check_largeFile.Click += new System.EventHandler(this.check_largeFile_CheckedChanged);
             // 
             // check_turbo
             // 
@@ -574,7 +574,7 @@ namespace Handbrake
                     " QuickTime can only read the files as long as the file extension is .mp4\r\nCan on" +
                     "ly be used with H.264 ");
             this.check_optimiseMP4.UseVisualStyleBackColor = false;
-            this.check_optimiseMP4.CheckedChanged += new System.EventHandler(this.check_optimiseMP4_CheckedChanged);
+            this.check_optimiseMP4.Click += new System.EventHandler(this.check_optimiseMP4_Clicked);
             // 
             // check_iPodAtom
             // 
@@ -589,7 +589,7 @@ namespace Handbrake
             this.ToolTip.SetToolTip(this.check_iPodAtom, "Required for 5th and 6th Generation iPods.\r\nEncodes will not sync if this is not " +
                     "enabled for H.264 encodes");
             this.check_iPodAtom.UseVisualStyleBackColor = false;
-            this.check_iPodAtom.CheckedChanged += new System.EventHandler(this.check_iPodAtom_CheckedChanged);
+            this.check_iPodAtom.Click += new System.EventHandler(this.check_iPodAtom_CheckedChanged);
             // 
             // data_chpt
             // 
@@ -608,9 +608,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle2.Format = "N0";
-            dataGridViewCellStyle2.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle1;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
