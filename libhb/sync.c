@@ -576,25 +576,15 @@ static void OutputAudioFrame( hb_job_t *job, hb_audio_t *audio, hb_buffer_t *buf
 {
     int64_t start = sync->next_start;
     int64_t duration = buf->stop - buf->start;
-    if (duration <= 0 ||
-        duration > ( 90000 * AC3_SAMPLES_PER_FRAME ) / audio->config.out.samplerate )
-    {
-        hb_log("sync: audio %d weird duration %lld, start %lld, stop %lld, next %lld",
-               i, duration, buf->start, buf->stop, sync->next_pts);
-        if ( duration <= 0 )
-        {
-            duration = ( 90000 * AC3_SAMPLES_PER_FRAME ) / audio->config.out.samplerate;
-            buf->stop = buf->start + duration;
-        }
-    }
+
     sync->next_pts += duration;
 
-    if( /* audio->rate == job->arate || This should work but doesn't */
+    if( audio->config.in.samplerate == audio->config.out.samplerate ||
         audio->config.out.codec == HB_ACODEC_AC3 ||
         audio->config.out.codec == HB_ACODEC_DCA )
     {
         /*
-         * If we don't have to do sample rate conversion or this audio is AC3
+         * If we don't have to do sample rate conversion or this audio is 
          * pass-thru just send the input buffer downstream after adjusting
          * its timestamps to make the output stream continuous.
          */
@@ -608,11 +598,21 @@ static void OutputAudioFrame( hb_job_t *job, hb_audio_t *audio, hb_buffer_t *buf
                             sizeof( float );
 
         count_in  = buf_raw->size / channel_count;
-        count_out = ( buf_raw->stop - buf_raw->start ) * audio->config.out.samplerate / 90000;
+        /*
+         * When using stupid rates like 44.1 there will always be some
+         * truncation error. E.g., a 1536 sample AC3 frame will turn into a
+         * 1536*44.1/48.0 = 1411.2 sample frame. If we just truncate the .2
+         * the error will build up over time and eventually the audio will
+         * substantially lag the video. libsamplerate will keep track of the
+         * fractional sample & give it to us when appropriate if we give it
+         * an extra sample of space in the output buffer.
+         */
+        count_out = ( duration * audio->config.out.samplerate ) / 90000 + 1;
 
         sync->data.input_frames = count_in;
         sync->data.output_frames = count_out;
-        sync->data.src_ratio = (double)count_out / (double)count_in;
+        sync->data.src_ratio = (double)audio->config.out.samplerate /
+                               (double)audio->config.in.samplerate;
 
         buf = hb_buffer_init( count_out * channel_count );
         sync->data.data_in  = (float *) buf_raw->data;
@@ -625,11 +625,23 @@ static void OutputAudioFrame( hb_job_t *job, hb_audio_t *audio, hb_buffer_t *buf
         hb_buffer_close( &buf_raw );
 
         buf->size = sync->data.output_frames_gen * channel_count;
+        duration = ( sync->data.output_frames_gen * 90000 ) /
+                   audio->config.out.samplerate;
     }
+    buf->frametype = HB_FRAME_AUDIO;
     buf->start = start;
     buf->stop  = start + duration;
-    buf->frametype = HB_FRAME_AUDIO;
     sync->next_start = start + duration;
+    while( hb_fifo_is_full( fifo ) )
+    {
+        hb_snooze( 50 );
+        if ( job->done && hb_fifo_is_full( fifo ) )
+        {
+            /* don't block here if the job's finished */
+            hb_buffer_close( &buf );
+            return;
+        }
+    }
     hb_fifo_push( fifo, buf );
 }
 
@@ -646,17 +658,14 @@ static void SyncAudio( hb_work_object_t * w, int i )
     hb_audio_t      * audio = sync->audio;
     hb_buffer_t     * buf;
     hb_fifo_t       * fifo;
-    int               rate;
 
     if( audio->config.out.codec == HB_ACODEC_AC3 )
     {
         fifo = audio->priv.fifo_out;
-        rate = audio->config.in.samplerate;
     }
     else
     {
         fifo = audio->priv.fifo_sync;
-        rate = audio->config.out.samplerate;
     }
 
     while( !hb_fifo_is_full( fifo ) && ( buf = hb_fifo_see( audio->priv.fifo_raw ) ) )
@@ -705,10 +714,10 @@ static void SyncAudio( hb_work_object_t * w, int i )
             }
             continue;
         }
-        if ( buf->start - sync->next_pts >= (90 * 100) )
+        if ( buf->start - sync->next_pts >= (90 * 70) )
         {
             /*
-             * there's a gap of at least 100ms between the last
+             * there's a gap of at least 70ms between the last
              * frame we processed & the next. Fill it with silence.
              */
             if ( ! sync->inserting_silence )
@@ -719,7 +728,7 @@ static void SyncAudio( hb_work_object_t * w, int i )
                         i, buf->start, sync->next_pts );
                 sync->inserting_silence = 1;
             }
-            InsertSilence( w, i, buf->stop - buf->start );
+            InsertSilence( w, i, buf->start - sync->next_pts );
             continue;
         }
 
@@ -734,7 +743,8 @@ static void SyncAudio( hb_work_object_t * w, int i )
 
     if( NeedSilence( w, audio, i ) )
     {
-        InsertSilence( w, i, (90000 * AC3_SAMPLES_PER_FRAME) / sync->audio->config.out.samplerate );
+        InsertSilence( w, i, (90000 * AC3_SAMPLES_PER_FRAME) /
+                             sync->audio->config.in.samplerate );
     }
 }
 
@@ -775,23 +785,37 @@ static void InsertSilence( hb_work_object_t * w, int i, int64_t duration )
     hb_job_t        *job = pv->job;
     hb_sync_audio_t *sync = &pv->sync_audio[i];
     hb_buffer_t     *buf;
+    hb_fifo_t       *fifo;
 
-    if( sync->audio->config.out.codec == HB_ACODEC_AC3 )
+    // to keep pass-thru and regular audio in sync we generate silence in
+    // AC3 frame-sized units. If the silence duration isn't an integer multiple
+    // of the AC3 frame duration we will truncate or round up depending on
+    // which minimizes the timing error.
+    const int frame_dur = ( 90000 * AC3_SAMPLES_PER_FRAME ) /
+                          sync->audio->config.in.samplerate;
+    int frame_count = ( duration + (frame_dur >> 1) ) / frame_dur;
+
+    while ( --frame_count >= 0 )
     {
-        buf        = hb_buffer_init( sync->ac3_size );
-        buf->start = sync->next_pts;
-        buf->stop  = buf->start + duration;
-        memcpy( buf->data, sync->ac3_buf, buf->size );
-        OutputAudioFrame( job, sync->audio, buf, sync, sync->audio->priv.fifo_out, i );
-    }
-    else
-    {
-        buf = hb_buffer_init( duration * sizeof( float ) *
-                    HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(sync->audio->config.out.mixdown) );
-        buf->start = sync->next_pts;
-        buf->stop  = buf->start + duration;
-        memset( buf->data, 0, buf->size );
-        OutputAudioFrame( job, sync->audio, buf, sync, sync->audio->priv.fifo_sync, i );
+        if( sync->audio->config.out.codec == HB_ACODEC_AC3 )
+        {
+            buf        = hb_buffer_init( sync->ac3_size );
+            buf->start = sync->next_pts;
+            buf->stop  = buf->start + frame_dur;
+            memcpy( buf->data, sync->ac3_buf, buf->size );
+            fifo = sync->audio->priv.fifo_out;
+        }
+        else
+        {
+            buf = hb_buffer_init( AC3_SAMPLES_PER_FRAME * sizeof( float ) *
+                                     HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(
+                                         sync->audio->config.out.mixdown) );
+            buf->start = sync->next_pts;
+            buf->stop  = buf->start + frame_dur;
+            memset( buf->data, 0, buf->size );
+            fifo = sync->audio->priv.fifo_sync;
+        }
+        OutputAudioFrame( job, sync->audio, buf, sync, fifo, i );
     }
 }
 
