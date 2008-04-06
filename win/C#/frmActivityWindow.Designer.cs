@@ -45,6 +45,7 @@ namespace Handbrake
             // 
             // rtf_actLog
             // 
+            this.rtf_actLog.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.rtf_actLog.DetectUrls = false;
             this.rtf_actLog.Location = new System.Drawing.Point(12, 12);
             this.rtf_actLog.Name = "rtf_actLog";

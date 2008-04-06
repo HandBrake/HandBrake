@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Threading;
 
 
 namespace Handbrake
@@ -21,25 +22,58 @@ namespace Handbrake
         /// <summary>
         /// This window should be used to display the RAW output of the handbrake CLI which is produced during an encode.
         /// </summary>
+        /// 
+        Thread monitorFile;
         public frmActivityWindow()
         {
             InitializeComponent();
-            this.rtf_actLog.Text = string.Empty;     
-        }
+            this.rtf_actLog.Text = string.Empty;
+            monitorFile = new Thread(autoUpdate);
 
+        }
+        
         private void btn_close_Click(object sender, EventArgs e)
         {
-             this.Hide();
+            monitorFile.Abort();
+            this.Hide();
         }
 
         private void frmActivityWindow_Load(object sender, EventArgs e)
         {
             this.rtf_actLog.Text = string.Empty;
-            readFile();
+            rtf_actLog.Text = readFile();
+   
+            monitorFile.Start();
         }
 
-        private void readFile()
+        private void autoUpdate(object state)
         {
+            while (true)
+            {
+                updateTextFromThread();
+                Thread.Sleep(3000);
+            }
+        }
+        
+        private delegate void UpdateUIHandler();
+        private void updateTextFromThread()
+        {
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new UpdateUIHandler(updateTextFromThread));
+                return;
+            }
+            rtf_actLog.Text = readFile();
+            this.rtf_actLog.SelectionStart = this.rtf_actLog.Text.Length -1;
+            this.rtf_actLog.ScrollToCaret();
+
+            if (rtf_actLog.Text.Contains("HandBrake has exited."))
+                monitorFile.Abort();
+        }
+
+        private string readFile()
+        {
+            string log = "";
             try
             {
                 // hb_encode_log.dat is the primary log file. Since .NET can't read this file whilst the CLI is outputing to it,
@@ -59,16 +93,17 @@ namespace Handbrake
                 string line = sr.ReadLine();
                 while (line != null)
                 {
-                    this.rtf_actLog.AppendText(line + System.Environment.NewLine);
+                    log = log + (line + System.Environment.NewLine);
                     line = sr.ReadLine();
                 }
                 sr.Close();
             }
             catch (Exception exc)
             {
-                rtf_actLog.Clear();
-                rtf_actLog.Text = "Please wait until the encode has finished to view the log. \n\n\n" + exc.ToString();
+                MessageBox.Show("An Error has occured! \n\n" + exc.ToString(), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+
+            return log;
         }
 
         private void btn_copy_Click(object sender, EventArgs e)
@@ -80,7 +115,7 @@ namespace Handbrake
         private void btn_refresh_Click(object sender, EventArgs e)
         {
             rtf_actLog.Clear();
-            readFile();
+            rtf_actLog.Text = readFile();
         }
 
 
