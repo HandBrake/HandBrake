@@ -2825,6 +2825,8 @@ the user is using "Custom" settings by determining the sender*/
     /* enable/disable the mixdown text and popupbutton for audio track 1 */
     [fAudTrack1CodecPopUp setEnabled: ([fAudLang1PopUp indexOfSelectedItem] == 0) ? NO : YES];
     [fAudTrack1MixPopUp setEnabled: ([fAudLang1PopUp indexOfSelectedItem] == 0) ? NO : YES];
+    [fAudTrack1RatePopUp setEnabled: ([fAudLang1PopUp indexOfSelectedItem] == 0) ? NO : YES];
+    [fAudTrack1BitratePopUp setEnabled: ([fAudLang1PopUp indexOfSelectedItem] == 0) ? NO : YES];
     if ([fAudLang1PopUp indexOfSelectedItem] == 0)
     {
         [fAudTrack1CodecPopUp removeAllItems];
@@ -2836,6 +2838,8 @@ the user is using "Custom" settings by determining the sender*/
     /* enable/disable the mixdown text and popupbutton for audio track 2 */
     [fAudTrack2CodecPopUp setEnabled: ([fAudLang2PopUp indexOfSelectedItem] == 0) ? NO : YES];
     [fAudTrack2MixPopUp setEnabled: ([fAudLang2PopUp indexOfSelectedItem] == 0) ? NO : YES];
+    [fAudTrack2RatePopUp setEnabled: ([fAudLang2PopUp indexOfSelectedItem] == 0) ? NO : YES];
+    [fAudTrack2BitratePopUp setEnabled: ([fAudLang2PopUp indexOfSelectedItem] == 0) ? NO : YES];
     if ([fAudLang2PopUp indexOfSelectedItem] == 0)
     {
         [fAudTrack2CodecPopUp removeAllItems];
@@ -2847,6 +2851,8 @@ the user is using "Custom" settings by determining the sender*/
     /* enable/disable the mixdown text and popupbutton for audio track 3 */
     [fAudTrack3CodecPopUp setEnabled: ([fAudLang3PopUp indexOfSelectedItem] == 0) ? NO : YES];
     [fAudTrack3MixPopUp setEnabled: ([fAudLang3PopUp indexOfSelectedItem] == 0) ? NO : YES];
+    [fAudTrack3RatePopUp setEnabled: ([fAudLang3PopUp indexOfSelectedItem] == 0) ? NO : YES];
+    [fAudTrack3BitratePopUp setEnabled: ([fAudLang3PopUp indexOfSelectedItem] == 0) ? NO : YES];
     if ([fAudLang3PopUp indexOfSelectedItem] == 0)
     {
         [fAudTrack3CodecPopUp removeAllItems];
@@ -2858,6 +2864,8 @@ the user is using "Custom" settings by determining the sender*/
     /* enable/disable the mixdown text and popupbutton for audio track 4 */
     [fAudTrack4CodecPopUp setEnabled: ([fAudLang4PopUp indexOfSelectedItem] == 0) ? NO : YES];
     [fAudTrack4MixPopUp setEnabled: ([fAudLang4PopUp indexOfSelectedItem] == 0) ? NO : YES];
+    [fAudTrack4RatePopUp setEnabled: ([fAudLang4PopUp indexOfSelectedItem] == 0) ? NO : YES];
+    [fAudTrack4BitratePopUp setEnabled: ([fAudLang4PopUp indexOfSelectedItem] == 0) ? NO : YES];
     if ([fAudLang4PopUp indexOfSelectedItem] == 0)
     {
         [fAudTrack4CodecPopUp removeAllItems];
@@ -3256,8 +3264,24 @@ the user is using "Custom" settings by determining the sender*/
                 [mixdownPopUp selectItemWithTag: useMixdown];
 
             }
-         /* Setup our samplerate and bitrate popups we will need based on mixdown */
-        [self audioTrackMixdownChanged: mixdownPopUp];	       
+            /* In the case of a DTS source track and the user trying AC3 Passthru (which does not work)
+             * we force the Audio Codec choice back to a workable codec. We use MP3 for avi and aac for all
+             * other containers.
+             */
+            if (audio->in.codec == HB_ACODEC_DCA && [[audiocodecPopUp selectedItem] tag] == HB_ACODEC_AC3)
+            {
+                /* If we are using the avi container, we select MP3 as there is no aac available*/
+                if ([[fDstFormatPopUp selectedItem] tag] == HB_MUX_AVI)
+                {
+                    [audiocodecPopUp selectItemWithTag: HB_ACODEC_LAME];
+                }
+                else
+                {
+                    [audiocodecPopUp selectItemWithTag: HB_ACODEC_FAAC];
+                }
+            }
+            /* Setup our samplerate and bitrate popups we will need based on mixdown */
+            [self audioTrackMixdownChanged: mixdownPopUp];	       
         }
     
     }
@@ -3405,7 +3429,6 @@ the user is using "Custom" settings by determining the sender*/
     * and there is no compelling reason to use anything else as default
     */
     [sampleratePopUp selectItemWithTitle: @"48"];
-    
     
     /* Since AC3 Pass Thru uses the input ac3 bitrate and a sample rate of 48, we get the input tracks
     * bitrate and dispay it in the bitrate popup even though libhb happily ignores any bitrate input from
