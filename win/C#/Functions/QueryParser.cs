@@ -634,8 +634,8 @@ namespace Handbrake.Functions
             //Picture Settings Tab
             Match width = Regex.Match(input, @"-w ([0-9]*)");
             Match height = Regex.Match(input, @"-l ([0-9]*)");
-            Match deinterlace = Regex.Match(input, @"--deinterlace=([a-z]*)");
-            Match denoise = Regex.Match(input, @"--denoise=([a-z]*)");
+            Match deinterlace = Regex.Match(input, @"--deinterlace=\""([a-zA-Z]*)\""");
+            Match denoise = Regex.Match(input, @"--denoise=\""([a-zA-Z]*)\""");
             Match deblock = Regex.Match(input, @"--deblock");
             Match detelecine = Regex.Match(input, @"--detelecine");
             Match anamorphic = Regex.Match(input, @"-p ");
@@ -775,7 +775,7 @@ namespace Handbrake.Functions
                 thisQuery.q_deinterlace = "None";
                 if (deinterlace.Success != false)
                 {
-                    switch (deinterlace.ToString().Replace("--deinterlace=", ""))
+                    switch (deinterlace.ToString().Replace("--deinterlace=", "").Replace("\"",""))
                     {
                         case "fast":
                             thisQuery.q_deinterlace = "Fast";

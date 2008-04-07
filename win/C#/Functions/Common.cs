@@ -500,16 +500,16 @@ namespace Handbrake.Functions
                     deinterlace = "";
                     break;
                 case "Fast":
-                    deinterlace = " --deinterlace=fast";
+                    deinterlace = " --deinterlace=\"fast\"";
                     break;
                 case "Slow":
-                    deinterlace = " --deinterlace=slow";
+                    deinterlace = " --deinterlace=\"slow\"";
                     break;
                 case "Slower":
-                    deinterlace = " --deinterlace=slower";
+                    deinterlace = " --deinterlace=\"slower\"";
                     break;
                 case "Slowest":
-                    deinterlace = " --deinterlace=slowest";
+                    deinterlace = " --deinterlace=\"slowest\"";
                     break;
                 default:
                     deinterlace = "";
@@ -601,13 +601,13 @@ namespace Handbrake.Functions
                     denoise = "";
                     break;
                 case "Weak":
-                    denoise = " --denoise=weak";
+                    denoise = " --denoise=\"weak\"";
                     break;
                 case "Medium":
-                    denoise = " --denoise=medium";
+                    denoise = " --denoise=\"medium\"";
                     break;
                 case "Strong":
-                    denoise = " --denoise=strong";
+                    denoise = " --denoise=\"strong\"";
                     break;
                 default:
                     denoise = "";
