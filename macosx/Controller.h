@@ -74,8 +74,8 @@ BOOL                        fIsDragging;
     /* Destination box */
     IBOutlet NSTextField         * fDstFormatField;
 	IBOutlet NSPopUpButton       * fDstFormatPopUp;
-	IBOutlet NSTextField         * fDstCodecsField;
-    IBOutlet NSPopUpButton       * fDstCodecsPopUp;
+	//IBOutlet NSTextField         * fDstCodecsField;
+    //IBOutlet NSPopUpButton       * fDstCodecsPopUp;
     IBOutlet NSTextField         * fDstFile1Field;
     IBOutlet NSTextField         * fDstFile2Field;
     IBOutlet NSButton            * fDstBrowseButton;
@@ -140,22 +140,49 @@ BOOL                        fIsDragging;
 	IBOutlet NSButton            * fSubForcedCheck;
 	
     /* Audio box */
-    IBOutlet NSTextField         * fAudLang1Field;
+    /* Track Labels */
+    IBOutlet NSTextField         * fAudSourceLabel;
+    IBOutlet NSTextField         * fAudCodecLabel;
+    IBOutlet NSTextField         * fAudMixdownLabel;
+    IBOutlet NSTextField         * fAudSamplerateLabel;
+    IBOutlet NSTextField         * fAudBitrateLabel;
+    
+    IBOutlet NSTextField         * fAudTrack1Label;
+    IBOutlet NSTextField         * fAudTrack2Label;
+    IBOutlet NSTextField         * fAudTrack3Label;
+    IBOutlet NSTextField         * fAudTrack4Label;
+    
+    /* Source Audio PopUps */
     IBOutlet NSPopUpButton       * fAudLang1PopUp;
-    IBOutlet NSTextField         * fAudLang2Field;
     IBOutlet NSPopUpButton       * fAudLang2PopUp;
-	/* New Audio Mix PopUps */
-	/* Track info */
-    IBOutlet NSTextField         * fAudTrack1MixLabel;
+    IBOutlet NSPopUpButton       * fAudLang3PopUp;
+    IBOutlet NSPopUpButton       * fAudLang4PopUp;
+    
+    /* Codec Popups */
+    IBOutlet NSPopUpButton       * fAudTrack1CodecPopUp;
+    IBOutlet NSPopUpButton       * fAudTrack2CodecPopUp;
+    IBOutlet NSPopUpButton       * fAudTrack3CodecPopUp;
+    IBOutlet NSPopUpButton       * fAudTrack4CodecPopUp;
+    
+	/* Mixdown PopUps */
 	IBOutlet NSPopUpButton       * fAudTrack1MixPopUp;
-    IBOutlet NSTextField         * fAudTrack2MixLabel;
-	IBOutlet NSPopUpButton       * fAudTrack2MixPopUp;
+    IBOutlet NSPopUpButton       * fAudTrack2MixPopUp;
+    IBOutlet NSPopUpButton       * fAudTrack3MixPopUp;
+    IBOutlet NSPopUpButton       * fAudTrack4MixPopUp;
 	
-    /* Quality info */
-	IBOutlet NSTextField         * fAudRateField;
-    IBOutlet NSPopUpButton       * fAudRatePopUp;
-    IBOutlet NSTextField         * fAudBitrateField;
-    IBOutlet NSPopUpButton       * fAudBitratePopUp;
+    /* Samplerate PopUps */
+	IBOutlet NSPopUpButton       * fAudTrack1RatePopUp;
+    IBOutlet NSPopUpButton       * fAudTrack2RatePopUp;
+    IBOutlet NSPopUpButton       * fAudTrack3RatePopUp;
+    IBOutlet NSPopUpButton       * fAudTrack4RatePopUp;
+    
+    /* Bitrate PopUps */
+    IBOutlet NSPopUpButton       * fAudTrack1BitratePopUp;
+    IBOutlet NSPopUpButton       * fAudTrack2BitratePopUp;
+    IBOutlet NSPopUpButton       * fAudTrack3BitratePopUp;
+    IBOutlet NSPopUpButton       * fAudTrack4BitratePopUp;
+    
+    
     /*Dynamic Range Compression */
     IBOutlet NSSlider            * fAudDrcSlider;
     IBOutlet NSTextField         * fAudDrcField;
@@ -233,11 +260,12 @@ BOOL                        fIsDragging;
 - (IBAction) chapterPopUpChanged: (id) sender;
 
 - (IBAction) formatPopUpChanged: (id) sender;
-- (IBAction) codecsPopUpChanged: (id) sender;
-- (IBAction) encoderPopUpChanged: (id) sender;
+- (IBAction) videoEncoderPopUpChanged: (id) sender;
 - (IBAction) autoSetM4vExtension: (id) sender;
 - (IBAction) twoPassCheckboxChanged: (id) sender;
 - (IBAction) videoFrameRateChanged: (id) sender;
+- (IBAction) audioAddAudioTrackCodecs: (id)sender;
+- (IBAction) audioCodecsPopUpChanged: (id) sender;
 - (IBAction) setEnabledStateOfAudioMixdownControls: (id) sender;
 - (IBAction) addAllAudioTracksToPopUp: (id) sender;
 - (IBAction) selectAudioTrackInPopUp: (id) sender searchPrefixString: (NSString *) searchPrefixString selectIndexIfNotFound: (int) selectIndexIfNotFound;

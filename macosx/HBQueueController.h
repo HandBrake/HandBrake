@@ -105,9 +105,10 @@ BOOL                        fIsDragging;
     int                         h264_level;
     int                         crf;
     NSString                    *x264opts;
-
+    /* Used to concatenate audio list values into a string for display */
     NSString                    *audioinfo_codecs;
-    NSString                    *audioinfo_summary;  //<-hack to use a string to display all audio info for each job in one string
+    NSString                    *audioinfo_summary;
+    
     int                         audio_mixdowns[8];
     int                         acodec;
     int                         abitrate;

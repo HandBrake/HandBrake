@@ -149,7 +149,7 @@ static NSDictionary* _shortHeightAttribute = NULL;
          anything.*/
         hb_audio_config_t * audio;
         NSString * thisJobAudioCodecs = [NSString stringWithFormat:@""];
-        NSString * thisJobAudioInfo = [NSString stringWithFormat:@""]; // Setup a simple way to start the string
+        NSString * thisJobAudioInfo = [NSString stringWithFormat:@""];
         for( int i = 0; i < hb_list_count(job->list_audio); i++ )
         {
            audio = (hb_audio_config_t *) hb_list_audio_config_item( job->list_audio, i );
@@ -177,19 +177,19 @@ static NSDictionary* _shortHeightAttribute = NULL;
             /* Detailed Job audio track info*/
             /* Track Number and Mixdown Info */
             if (audio->out.mixdown == HB_ACODEC_AC3)// Remember for ac3 passthru the mixdown uses the source codec
-                thisJobAudioInfo = [thisJobAudioInfo stringByAppendingString:[NSString stringWithFormat:@" - Track %d: Source: %@ Output: %@, Pass-Thru", i + 1, [NSString stringWithUTF8String:audio->lang.description], outputCodec]];
+                thisJobAudioInfo = [thisJobAudioInfo stringByAppendingString:[NSString stringWithFormat:@"Track %d: Source: %@ Output: %@, Pass-Thru", i + 1, [NSString stringWithUTF8String:audio->lang.description], outputCodec]];
             else if (audio->out.mixdown == HB_AMIXDOWN_MONO)
-                thisJobAudioInfo = [thisJobAudioInfo stringByAppendingString:[NSString stringWithFormat:@" - Track %d: Source: %@ Output: %@, Mono", i + 1, [NSString stringWithUTF8String:audio->lang.description], outputCodec]];
+                thisJobAudioInfo = [thisJobAudioInfo stringByAppendingString:[NSString stringWithFormat:@"Track %d: Source: %@ Output: %@, Mono", i + 1, [NSString stringWithUTF8String:audio->lang.description], outputCodec]];
             else if (audio->out.mixdown == HB_AMIXDOWN_STEREO)
-                thisJobAudioInfo = [thisJobAudioInfo stringByAppendingString:[NSString stringWithFormat:@" - Track %d: Source: %@ Output: %@, Stereo", i + 1, [NSString stringWithUTF8String:audio->lang.description], outputCodec]];
+                thisJobAudioInfo = [thisJobAudioInfo stringByAppendingString:[NSString stringWithFormat:@"Track %d: Source: %@ Output: %@, Stereo", i + 1, [NSString stringWithUTF8String:audio->lang.description], outputCodec]];
             else if (audio->out.mixdown == HB_AMIXDOWN_DOLBY)
-                thisJobAudioInfo = [thisJobAudioInfo stringByAppendingString:[NSString stringWithFormat:@" - Track %d: Source: %@ Output: %@, Dolby Surround", i + 1, [NSString stringWithUTF8String:audio->lang.description], outputCodec]];
+                thisJobAudioInfo = [thisJobAudioInfo stringByAppendingString:[NSString stringWithFormat:@"Track %d: Source: %@ Output: %@, Dolby Surround", i + 1, [NSString stringWithUTF8String:audio->lang.description], outputCodec]];
             else if (audio->out.mixdown == HB_AMIXDOWN_DOLBYPLII)
-                thisJobAudioInfo = [thisJobAudioInfo stringByAppendingString:[NSString stringWithFormat:@" - Track %d: Source: %@ Output: %@, Dolby Pro Logic II", i + 1, [NSString stringWithUTF8String:audio->lang.description], outputCodec]];
+                thisJobAudioInfo = [thisJobAudioInfo stringByAppendingString:[NSString stringWithFormat:@"Track %d: Source: %@ Output: %@, Dolby Pro Logic II", i + 1, [NSString stringWithUTF8String:audio->lang.description], outputCodec]];
             else if (audio->out.mixdown == HB_AMIXDOWN_6CH)
-                thisJobAudioInfo = [thisJobAudioInfo stringByAppendingString:[NSString stringWithFormat:@" - Track %d: Source: %@ Output: %@, 6 Channel Discreet", i + 1, [NSString stringWithUTF8String:audio->lang.description], outputCodec]];
+                thisJobAudioInfo = [thisJobAudioInfo stringByAppendingString:[NSString stringWithFormat:@"Track %d: Source: %@ Output: %@, 6 Channel Discreet", i + 1, [NSString stringWithUTF8String:audio->lang.description], outputCodec]];
             else
-                thisJobAudioInfo = [thisJobAudioInfo stringByAppendingString:[NSString stringWithFormat:@" - Track %d: Source: %@ Output: Unknown Codec Info", i + 1, [NSString stringWithUTF8String:audio->lang.description]]];
+                thisJobAudioInfo = [thisJobAudioInfo stringByAppendingString:[NSString stringWithFormat:@"Track %d: Source: %@ Output: Unknown Codec Info", i + 1, [NSString stringWithUTF8String:audio->lang.description]]];
             
             thisJobAudioInfo = [thisJobAudioInfo stringByAppendingString:[NSString stringWithFormat:@", %d kbps, %d Hz", audio->out.bitrate, audio->out.samplerate]];
             
