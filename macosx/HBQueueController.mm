@@ -1473,6 +1473,8 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
         [fProgressBar setIndeterminate:NO];
         [fProgressBar stopAnimation:nil];
         [fProgressBar setDoubleValue:0.0];
+        
+        
     }
     
     else
@@ -1571,9 +1573,12 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
                          withSubtitleInfo: YES]];
         }
     }
-    
     else
+    {
         [fJobDescTextField setStringValue: @"No encodes pending"];
+    
+    }
+    
 }
 
 //------------------------------------------------------------------------------------
@@ -1748,6 +1753,19 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 //------------------------------------------------------------------------------------
 - (void)currentJobChanged: (HBJob *) currentJob
 {
+    /* if the job has a destination path, lets perform finished job notifications in fHBController 
+     * We call this here so that we pickup the last job in the queue and single encodes before fCurrentJob
+     * is released. So for the first job and the beginning of single encodes we check for the existence
+     * of a valid fCurrentJob jobGroup
+     */
+    if ([[fCurrentJob jobGroup] destinationPath] && [fCurrentJobGroup status] != HBStatusCanceled)
+    {
+        /* Try to send the growl notification destinationPath*/
+        [fHBController showGrowlDoneNotification: [[fCurrentJob jobGroup] destinationPath]];
+        /* Try to send the file to metax*/
+        [fHBController sendToMetaX: [[fCurrentJob jobGroup] destinationPath]];
+    }
+    
     [currentJob retain];
     [fCurrentJob release];
     fCurrentJob = currentJob;
@@ -1770,7 +1788,11 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
             // all other cases are assumed to be a successful encode. BTW, libhb
             // doesn't currently report errors back to the GUI.
             if ([fCurrentJobGroup status] != HBStatusCanceled)
+            {
                 [fCurrentJobGroup setStatus:HBStatusCompleted];
+            }
+            
+            
         }
         
         // Set the new group

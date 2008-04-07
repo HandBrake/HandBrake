@@ -637,14 +637,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             /* Check to see if the encode state has not been cancelled
 				to determine if we should check for encode done notifications */
 			if (fEncodeState != 2) 			{
-				/* If Growl Notification or Window and Growl has been selected */
-				if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Growl Notification"] || 
-					[[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window And Growl"])
-                {
-					/*Growl Notification*/
-					[self showGrowlDoneNotification: NULL];
-                }
-                /* If Alert Window or Window and Growl has been selected */
+				/* If Alert Window or Window and Growl has been selected */
 				if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window"] || 
 					[[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window And Growl"])
                 {
@@ -687,16 +680,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                [self enableUI: YES]; 
                 }
 			
-						// MetaX insertion via AppleScript
-			if([[NSUserDefaults standardUserDefaults] boolForKey: @"sendToMetaX"] == YES)
-			{
-			NSAppleScript *myScript = [[NSAppleScript alloc] initWithSource: [NSString stringWithFormat: @"%@%@%@", @"tell application \"MetaX\" to open (POSIX file \"", [fDstFile2Field stringValue], @"\")"]];
-			[myScript executeAndReturnError: nil];
-			[myScript release];
-			}
-			
-			
-			}
+            }
 			else
 			{
 				[self enableUI: YES];
@@ -981,7 +965,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 }
 
 #pragma mark -
-#pragma mark Growl
+#pragma mark Encode Done Actions
 // register a test notification and make
 // it enabled by default
 #define SERVICE_NAME @"Encode Done"
@@ -995,18 +979,37 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     return registrationDictionary; 
 } 
 
--(IBAction)showGrowlDoneNotification:(id)sender
+-(void)showGrowlDoneNotification:(NSString *) filePath
 {
-  [GrowlApplicationBridge 
-            notifyWithTitle:@"Put down that cocktail..." 
-                description:@"your HandBrake encode is done!" 
-           notificationName:SERVICE_NAME
-                   iconData:nil 
-                   priority:0 
-                   isSticky:1 
-               clickContext:nil];
+    /* This is called from HBQueueController as jobs roll off of the queue in currentJobChanged */
+    NSString * finishedEncode = filePath;
+    /* strip off the path to just show the file name */
+    finishedEncode = [finishedEncode lastPathComponent];
+    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Growl Notification"] || 
+        [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window And Growl"])
+    {
+        NSString * growlMssg = [NSString stringWithFormat: @"your HandBrake encode %@ is done!",finishedEncode];
+        [GrowlApplicationBridge 
+         notifyWithTitle:@"Put down that cocktail..." 
+         description:growlMssg 
+         notificationName:SERVICE_NAME
+         iconData:nil 
+         priority:0 
+         isSticky:1 
+         clickContext:nil];
+    }
+    
 }
-
+-(void)sendToMetaX:(NSString *) filePath
+{
+    /* This is called from HBQueueController as jobs roll off of the queue in currentJobChanged */
+    if([[NSUserDefaults standardUserDefaults] boolForKey: @"sendToMetaX"] == YES)
+    {
+        NSAppleScript *myScript = [[NSAppleScript alloc] initWithSource: [NSString stringWithFormat: @"%@%@%@", @"tell application \"MetaX\" to open (POSIX file \"", filePath, @"\")"]];
+        [myScript executeAndReturnError: nil];
+        [myScript release];
+    }
+}
 #pragma mark -
 #pragma mark Get New Source
 

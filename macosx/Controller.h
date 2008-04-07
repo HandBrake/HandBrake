@@ -354,10 +354,10 @@ BOOL                        fIsDragging;
 - (IBAction)deletePreset:(id)sender;
 - (IBAction)getDefaultPresets:(id)sender;
 
-
+-(void)sendToMetaX:(NSString *) filePath;
     // Growl methods
 - (NSDictionary *) registrationDictionaryForGrowl;
--(IBAction)showGrowlDoneNotification:(id)sender;
+-(void)showGrowlDoneNotification:(NSString *) filePath;
 - (IBAction)showDebugOutputPanel:(id)sender;
 - (void)setupToolbar;
 
