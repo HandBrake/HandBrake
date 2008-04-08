@@ -164,8 +164,8 @@ BOOL                        fIsDragging;
     NSMutableArray               *fJobs;   // array of HBJob
     NSMutableAttributedString    *fDescription;
     BOOL                         fNeedsDescription;
-    float                        fLastDescriptionHeight;
-    float                        fLastDescriptionWidth;
+    CGFloat                        fLastDescriptionHeight;
+    CGFloat                        fLastDescriptionWidth;
     HBQueueJobGroupStatus        fStatus;
     NSString                     *fPresetName;
 }
@@ -191,8 +191,8 @@ BOOL                        fIsDragging;
 // Creating a description
 - (void)               setNeedsDescription: (BOOL)flag;
 - (NSMutableAttributedString *) attributedDescription;
-- (float)              heightOfDescriptionForWidth:(float)width;
-- (float)              lastDescriptionHeight;
+- (CGFloat)              heightOfDescriptionForWidth:(CGFloat)width;
+- (CGFloat)              lastDescriptionHeight;
 
 @end
 
