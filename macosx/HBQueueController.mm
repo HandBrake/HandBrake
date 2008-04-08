@@ -330,7 +330,7 @@ static NSDictionary* _shortHeightAttribute = NULL;
             // When job is the one currently being processed, then the next in its group
             // is the the first job in the queue.
             HBJob * nextjob = nil;
-            unsigned int index = [jobGroup indexOfJob:self];
+            NSUInteger index = [jobGroup indexOfJob:self];
             if (index != NSNotFound)
                 nextjob = [jobGroup jobAtIndex:index+1];
             if (nextjob)    // Overly cautious in case there is no next job!
@@ -788,7 +788,7 @@ NSString *HBJobGroupStatusNotification = @"HBJobGroupStatusNotification";
     return fDescription;
 }
 
-- (float) heightOfDescriptionForWidth:(float)width
+- (CGFloat) heightOfDescriptionForWidth:(CGFloat)width
 {
     // Try to return the cached value if no changes have happened since the last time
     if ((width == fLastDescriptionWidth) && (fLastDescriptionHeight != 0) && !fNeedsDescription)
@@ -817,7 +817,7 @@ NSString *HBJobGroupStatusNotification = @"HBJobGroupStatusNotification";
 */
 }
 
-- (float) lastDescriptionHeight
+- (CGFloat) lastDescriptionHeight
 {
     return fLastDescriptionHeight;
 }
@@ -1205,7 +1205,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
         [fSavedSelectedItems removeAllIndexes];
 
     NSIndexSet * selectedRows = [fOutlineView selectedRowIndexes];
-    int row = [selectedRows firstIndex];
+    NSInteger row = [selectedRows firstIndex];
     while (row != NSNotFound)
     {
         aJobGroup = [fOutlineView itemAtRow: row];
@@ -1238,7 +1238,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
         NSMutableIndexSet * rowsToSelect = [[[NSMutableIndexSet alloc] init] autorelease];
         HBJobGroup * aJobGroup;
         NSEnumerator * e = [fJobGroups objectEnumerator];
-        int i = 0;
+        NSInteger i = 0;
         while ( (aJobGroup = [e nextObject]) )
         {
             HBJob * job = [aJobGroup jobAtIndex:0];
@@ -1258,8 +1258,8 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 //------------------------------------------------------------------------------------
 - (void) updateJobGroupIconInQueue:(HBJobGroup*)aJobGroup
 {
-    int row = [fOutlineView rowForItem: aJobGroup];
-    int col = [fOutlineView columnWithIdentifier: @"icon"];
+    NSInteger row = [fOutlineView rowForItem: aJobGroup];
+    NSInteger col = [fOutlineView columnWithIdentifier: @"icon"];
     if (row != -1 && col != -1)
     {
         NSRect frame = [fOutlineView frameOfCellAtColumn:col row:row];
@@ -1272,7 +1272,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 //------------------------------------------------------------------------------------
 - (void) updateJobGroupInQueue:(HBJobGroup*)aJobGroup
 {
-    int row = [fOutlineView rowForItem: aJobGroup];
+    NSInteger row = [fOutlineView rowForItem: aJobGroup];
     if (row != -1)
     {
         NSRect frame = [fOutlineView rectOfRow:row];
@@ -1627,7 +1627,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
     if (!fHandle) return;
     
     NSIndexSet * selectedRows = [fOutlineView selectedRowIndexes];
-    int row = [selectedRows firstIndex];
+    NSInteger row = [selectedRows firstIndex];
     if (row != NSNotFound)
     {
         [self beginEditingJobGroupsArray];
@@ -1674,7 +1674,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
     if (!fHandle) return;
     
     NSIndexSet * selectedRows = [fOutlineView selectedRowIndexes];
-    int row = [selectedRows firstIndex];
+    NSInteger row = [selectedRows firstIndex];
     if (row != NSNotFound)
     {
         while (row != NSNotFound)
@@ -1895,7 +1895,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 }
 
 #if HB_OUTLINE_METRIC_CONTROLS
-static float spacingWidth = 3.0;
+static CGFloat spacingWidth = 3.0;
 - (IBAction)imageSpacingChanged: (id)sender;
 {
     spacingWidth = [sender floatValue];
@@ -2150,14 +2150,14 @@ static float spacingWidth = 3.0;
 
 #pragma mark -
 
-- (void)moveObjectsInArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(unsigned)insertIndex
+- (void)moveObjectsInArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(NSUInteger)insertIndex
 {
-    unsigned index = [indexSet lastIndex];
-    unsigned aboveInsertIndexCount = 0;
+    NSUInteger index = [indexSet lastIndex];
+    NSUInteger aboveInsertIndexCount = 0;
     
     while (index != NSNotFound)
     {
-        unsigned removeIndex;
+        NSUInteger removeIndex;
         
         if (index >= insertIndex)
         {
@@ -2182,7 +2182,7 @@ static float spacingWidth = 3.0;
 #pragma mark -
 #pragma mark NSOutlineView delegate
 
-- (id)outlineView:(NSOutlineView *)outlineView child:(int)index ofItem:(id)item
+- (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(id)item
 {
     if (item == nil)
         return [fJobGroups objectAtIndex:index];
@@ -2211,7 +2211,7 @@ static float spacingWidth = 3.0;
 #endif
 }
 
-- (int)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item
+- (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item
 {
     // Our outline view has no levels, so number of children will be zero for all
     // top-level items.
@@ -2224,18 +2224,18 @@ static float spacingWidth = 3.0;
 - (void)outlineViewItemDidCollapse:(NSNotification *)notification
 {
     id item = [[notification userInfo] objectForKey:@"NSObject"];
-    int row = [fOutlineView rowForItem:item];
+    NSInteger row = [fOutlineView rowForItem:item];
     [fOutlineView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(row,1)]];
 }
 
 - (void)outlineViewItemDidExpand:(NSNotification *)notification
 {
     id item = [[notification userInfo] objectForKey:@"NSObject"];
-    int row = [fOutlineView rowForItem:item];
+    NSInteger row = [fOutlineView rowForItem:item];
     [fOutlineView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(row,1)]];
 }
 
-- (float)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item
+- (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item
 {
     if ([outlineView isItemExpanded: item])
     {
@@ -2248,7 +2248,7 @@ static float spacingWidth = 3.0;
         if ([outlineView inLiveResize] && [item lastDescriptionHeight] > 0)
             return [item lastDescriptionHeight];
         
-        float width = [[outlineView tableColumnWithIdentifier: @"desc"] width];
+        CGFloat width = [[outlineView tableColumnWithIdentifier: @"desc"] width];
         // Column width is NOT what is ultimately used. I can't quite figure out what
         // width to use for calculating text metrics. No matter how I tweak this value,
         // there are a few conditions in which the drawn text extends below the bounds
@@ -2256,7 +2256,7 @@ static float spacingWidth = 3.0;
         // reducing width by 47 pixles.
         width -= 2;     // (?) for intercell spacing
         
-        float height = [item heightOfDescriptionForWidth: width];
+        CGFloat height = [item heightOfDescriptionForWidth: width];
         return height;
     }
     else
@@ -2382,7 +2382,7 @@ static float spacingWidth = 3.0;
 #endif
 
 #if HB_QUEUE_DRAGGING
-- (NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(int)index
+- (NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index
 {
 	// Don't allow dropping ONTO an item since they can't really contain any children.
     BOOL isOnDropTypeProposal = index == NSOutlineViewDropOnItemIndex;
@@ -2408,7 +2408,7 @@ static float spacingWidth = 3.0;
 #endif
 
 #if HB_QUEUE_DRAGGING
-- (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(int)index
+- (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)index
 {
     NSMutableIndexSet *moveItems = [NSMutableIndexSet indexSet];
     
