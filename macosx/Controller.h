@@ -146,6 +146,7 @@ BOOL                        fIsDragging;
     IBOutlet NSTextField         * fAudMixdownLabel;
     IBOutlet NSTextField         * fAudSamplerateLabel;
     IBOutlet NSTextField         * fAudBitrateLabel;
+    IBOutlet NSTextField         * fAudDrcLabel;
     
     IBOutlet NSTextField         * fAudTrack1Label;
     IBOutlet NSTextField         * fAudTrack2Label;
@@ -182,15 +183,15 @@ BOOL                        fIsDragging;
     IBOutlet NSPopUpButton       * fAudTrack3BitratePopUp;
     IBOutlet NSPopUpButton       * fAudTrack4BitratePopUp;
     
-    
-    /*Dynamic Range Compression */
-    IBOutlet NSSlider            * fAudDrcSlider;
-    IBOutlet NSTextField         * fAudDrcField;
-    IBOutlet NSTextField         * fAudDrcLabel;
-    IBOutlet NSTextField         * fAudDrcDescLabel1;
-    IBOutlet NSTextField         * fAudDrcDescLabel2;
-    IBOutlet NSTextField         * fAudDrcDescLabel3;
-    IBOutlet NSTextField         * fAudDrcDescLabel4;
+    /* Dynamic Range Compression */
+    IBOutlet NSSlider            * fAudTrack1DrcSlider;
+    IBOutlet NSTextField         * fAudTrack1DrcField;
+    IBOutlet NSSlider            * fAudTrack2DrcSlider;
+    IBOutlet NSTextField         * fAudTrack2DrcField;
+    IBOutlet NSSlider            * fAudTrack3DrcSlider;
+    IBOutlet NSTextField         * fAudTrack3DrcField;
+    IBOutlet NSSlider            * fAudTrack4DrcSlider;
+    IBOutlet NSTextField         * fAudTrack4DrcField;
     
     /* Chapters box */
     IBOutlet NSButton            * fCreateChapterMarkers;

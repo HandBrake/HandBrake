@@ -336,14 +336,15 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         fAudTrack1MixPopUp, fAudTrack2MixPopUp, fAudTrack3MixPopUp, fAudTrack4MixPopUp,
         fAudTrack1RatePopUp, fAudTrack2RatePopUp, fAudTrack3RatePopUp, fAudTrack4RatePopUp,
         fAudTrack1BitratePopUp, fAudTrack2BitratePopUp, fAudTrack3BitratePopUp, fAudTrack4BitratePopUp,
-        fPictureButton,fQueueStatus,fPicSettingARkeep,
-		fPicSettingDeinterlace,fPicLabelSettings,fPicLabelSrc,fPicLabelOutp,fPicSettingsSrc,fPicSettingsOutp,fPicSettingsAnamorphic,
+        fAudDrcLabel, fAudTrack1DrcSlider, fAudTrack1DrcField, fAudTrack2DrcSlider,
+        fAudTrack2DrcField, fAudTrack3DrcSlider, fAudTrack3DrcField, fAudTrack4DrcSlider,fAudTrack4DrcField,
+        fPictureButton,fQueueStatus,fPicSettingARkeep, fPicSettingDeinterlace,fPicLabelSettings,fPicLabelSrc,
+        fPicLabelOutp,fPicSettingsSrc,fPicSettingsOutp,fPicSettingsAnamorphic,
 		fPicLabelAr,fPicLabelDeinterlace,fPicSettingPAR,fPicLabelAnamorphic,fPresetsAdd,fPresetsDelete,
 		fCreateChapterMarkers,fVidTurboPassCheck,fDstMp4LargeFileCheck,fPicLabelAutoCrop,
 		fPicSettingAutoCrop,fPicSettingDetelecine,fPicLabelDetelecine,fPicLabelDenoise,fPicSettingDenoise,
-        fSubForcedCheck,fPicSettingDeblock,fPicLabelDeblock,fPresetsOutlineView,fAudDrcSlider,
-        fAudDrcField,fAudDrcLabel,fDstMp4HttpOptFileCheck,fAudDrcDescLabel1,fAudDrcDescLabel2,fAudDrcDescLabel3,
-        fAudDrcDescLabel4,fDstMp4iPodFileCheck};
+        fSubForcedCheck,fPicSettingDeblock,fPicLabelDeblock,fPresetsOutlineView,
+        fAudDrcLabel,fDstMp4HttpOptFileCheck,fDstMp4iPodFileCheck};
 
     for( unsigned i = 0;
          i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -1600,7 +1601,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         audio->out.mixdown = [[fAudTrack1MixPopUp selectedItem] tag];
         audio->out.bitrate = [[fAudTrack1BitratePopUp selectedItem] tag];
         audio->out.samplerate = hb_audio_rates[[fAudTrack1RatePopUp indexOfSelectedItem]].rate;
-        audio->out.dynamic_range_compression = [fAudDrcField floatValue];
+        audio->out.dynamic_range_compression = [fAudTrack1DrcField floatValue];
         
         hb_audio_add( job, audio );
         free(audio);
@@ -1616,7 +1617,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         audio->out.mixdown = [[fAudTrack2MixPopUp selectedItem] tag];
         audio->out.bitrate = [[fAudTrack2BitratePopUp selectedItem] tag];
         audio->out.samplerate = hb_audio_rates[[fAudTrack2RatePopUp indexOfSelectedItem]].rate;
-        audio->out.dynamic_range_compression = [fAudDrcField floatValue];
+        audio->out.dynamic_range_compression = [fAudTrack2DrcField floatValue];
         
         hb_audio_add( job, audio );
         free(audio);
@@ -1634,7 +1635,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         audio->out.mixdown = [[fAudTrack3MixPopUp selectedItem] tag];
         audio->out.bitrate = [[fAudTrack3BitratePopUp selectedItem] tag];
         audio->out.samplerate = hb_audio_rates[[fAudTrack3RatePopUp indexOfSelectedItem]].rate;
-        audio->out.dynamic_range_compression = [fAudDrcField floatValue];
+        audio->out.dynamic_range_compression = [fAudTrack3DrcField floatValue];
         
         hb_audio_add( job, audio );
         free(audio);
@@ -1652,7 +1653,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         audio->out.mixdown = [[fAudTrack4MixPopUp selectedItem] tag];
         audio->out.bitrate = [[fAudTrack4BitratePopUp selectedItem] tag];
         audio->out.samplerate = hb_audio_rates[[fAudTrack4RatePopUp indexOfSelectedItem]].rate;
-        audio->out.dynamic_range_compression = [fAudDrcField floatValue];
+        audio->out.dynamic_range_compression = [fAudTrack4DrcField floatValue];
         
         hb_audio_add( job, audio );
         free(audio);
@@ -2830,12 +2831,16 @@ the user is using "Custom" settings by determining the sender*/
     [fAudTrack1MixPopUp setEnabled: ([fAudLang1PopUp indexOfSelectedItem] == 0) ? NO : YES];
     [fAudTrack1RatePopUp setEnabled: ([fAudLang1PopUp indexOfSelectedItem] == 0) ? NO : YES];
     [fAudTrack1BitratePopUp setEnabled: ([fAudLang1PopUp indexOfSelectedItem] == 0) ? NO : YES];
+    [fAudTrack1DrcSlider setEnabled: ([fAudLang1PopUp indexOfSelectedItem] == 0) ? NO : YES];
+    [fAudTrack1DrcField setEnabled: ([fAudLang1PopUp indexOfSelectedItem] == 0) ? NO : YES];
     if ([fAudLang1PopUp indexOfSelectedItem] == 0)
     {
         [fAudTrack1CodecPopUp removeAllItems];
         [fAudTrack1MixPopUp removeAllItems];
         [fAudTrack1RatePopUp removeAllItems];
         [fAudTrack1BitratePopUp removeAllItems];
+        [fAudTrack1DrcSlider setFloatValue: 1.00];
+        [self audioDRCSliderChanged: fAudTrack1DrcSlider];
     }
     
     /* enable/disable the mixdown text and popupbutton for audio track 2 */
@@ -2843,12 +2848,16 @@ the user is using "Custom" settings by determining the sender*/
     [fAudTrack2MixPopUp setEnabled: ([fAudLang2PopUp indexOfSelectedItem] == 0) ? NO : YES];
     [fAudTrack2RatePopUp setEnabled: ([fAudLang2PopUp indexOfSelectedItem] == 0) ? NO : YES];
     [fAudTrack2BitratePopUp setEnabled: ([fAudLang2PopUp indexOfSelectedItem] == 0) ? NO : YES];
+    [fAudTrack2DrcSlider setEnabled: ([fAudLang2PopUp indexOfSelectedItem] == 0) ? NO : YES];
+    [fAudTrack2DrcField setEnabled: ([fAudLang2PopUp indexOfSelectedItem] == 0) ? NO : YES];
     if ([fAudLang2PopUp indexOfSelectedItem] == 0)
     {
         [fAudTrack2CodecPopUp removeAllItems];
         [fAudTrack2MixPopUp removeAllItems];
         [fAudTrack2RatePopUp removeAllItems];
         [fAudTrack2BitratePopUp removeAllItems];
+        [fAudTrack2DrcSlider setFloatValue: 1.00];
+        [self audioDRCSliderChanged: fAudTrack2DrcSlider];
     }
     
     /* enable/disable the mixdown text and popupbutton for audio track 3 */
@@ -2856,12 +2865,16 @@ the user is using "Custom" settings by determining the sender*/
     [fAudTrack3MixPopUp setEnabled: ([fAudLang3PopUp indexOfSelectedItem] == 0) ? NO : YES];
     [fAudTrack3RatePopUp setEnabled: ([fAudLang3PopUp indexOfSelectedItem] == 0) ? NO : YES];
     [fAudTrack3BitratePopUp setEnabled: ([fAudLang3PopUp indexOfSelectedItem] == 0) ? NO : YES];
+    [fAudTrack3DrcSlider setEnabled: ([fAudLang3PopUp indexOfSelectedItem] == 0) ? NO : YES];
+    [fAudTrack3DrcField setEnabled: ([fAudLang3PopUp indexOfSelectedItem] == 0) ? NO : YES];
     if ([fAudLang3PopUp indexOfSelectedItem] == 0)
     {
         [fAudTrack3CodecPopUp removeAllItems];
         [fAudTrack3MixPopUp removeAllItems];
         [fAudTrack3RatePopUp removeAllItems];
         [fAudTrack3BitratePopUp removeAllItems];
+        [fAudTrack3DrcSlider setFloatValue: 1.00];
+        [self audioDRCSliderChanged: fAudTrack3DrcSlider];
     }
     
     /* enable/disable the mixdown text and popupbutton for audio track 4 */
@@ -2869,12 +2882,16 @@ the user is using "Custom" settings by determining the sender*/
     [fAudTrack4MixPopUp setEnabled: ([fAudLang4PopUp indexOfSelectedItem] == 0) ? NO : YES];
     [fAudTrack4RatePopUp setEnabled: ([fAudLang4PopUp indexOfSelectedItem] == 0) ? NO : YES];
     [fAudTrack4BitratePopUp setEnabled: ([fAudLang4PopUp indexOfSelectedItem] == 0) ? NO : YES];
+    [fAudTrack4DrcSlider setEnabled: ([fAudLang4PopUp indexOfSelectedItem] == 0) ? NO : YES];
+    [fAudTrack4DrcField setEnabled: ([fAudLang4PopUp indexOfSelectedItem] == 0) ? NO : YES];
     if ([fAudLang4PopUp indexOfSelectedItem] == 0)
     {
         [fAudTrack4CodecPopUp removeAllItems];
         [fAudTrack4MixPopUp removeAllItems];
         [fAudTrack4RatePopUp removeAllItems];
         [fAudTrack4BitratePopUp removeAllItems];
+        [fAudTrack4DrcSlider setFloatValue: 1.00];
+        [self audioDRCSliderChanged: fAudTrack4DrcSlider];
     }
     
 }
@@ -3302,6 +3319,8 @@ the user is using "Custom" settings by determining the sender*/
     NSPopUpButton * bitratePopUp;
     NSPopUpButton * audiocodecPopUp;
     NSPopUpButton * audiotrackPopUp;
+    NSSlider * drcSlider;
+    NSTextField * drcField;
     if (sender == fAudTrack1MixPopUp)
     {
         audiotrackPopUp = fAudLang1PopUp;
@@ -3309,6 +3328,8 @@ the user is using "Custom" settings by determining the sender*/
         mixdownPopUp = fAudTrack1MixPopUp;
         sampleratePopUp = fAudTrack1RatePopUp;
         bitratePopUp = fAudTrack1BitratePopUp;
+        drcSlider = fAudTrack1DrcSlider;
+        drcField = fAudTrack1DrcField;
     }
     if (sender == fAudTrack2MixPopUp)
     {
@@ -3317,6 +3338,8 @@ the user is using "Custom" settings by determining the sender*/
         mixdownPopUp = fAudTrack2MixPopUp;
         sampleratePopUp = fAudTrack2RatePopUp;
         bitratePopUp = fAudTrack2BitratePopUp;
+        drcSlider = fAudTrack2DrcSlider;
+        drcField = fAudTrack2DrcField;
     }
     if (sender == fAudTrack3MixPopUp)
     {
@@ -3325,6 +3348,8 @@ the user is using "Custom" settings by determining the sender*/
         mixdownPopUp = fAudTrack3MixPopUp;
         sampleratePopUp = fAudTrack3RatePopUp;
         bitratePopUp = fAudTrack3BitratePopUp;
+        drcSlider = fAudTrack3DrcSlider;
+        drcField = fAudTrack3DrcField;
     }
     if (sender == fAudTrack4MixPopUp)
     {
@@ -3333,6 +3358,8 @@ the user is using "Custom" settings by determining the sender*/
         mixdownPopUp = fAudTrack4MixPopUp;
         sampleratePopUp = fAudTrack4RatePopUp;
         bitratePopUp = fAudTrack4BitratePopUp;
+        drcSlider = fAudTrack4DrcSlider;
+        drcField = fAudTrack4DrcField;
     }
     acodec = [[audiocodecPopUp selectedItem] tag];
     /* storage variable for the min and max bitrate allowed for this codec */
@@ -3451,21 +3478,49 @@ the user is using "Custom" settings by determining the sender*/
                                 [NSString stringWithFormat:@"%d", inputbitrate]
                                                               action: NULL keyEquivalent: @""];
         [menuItem setTag: inputbitrate];
-        /* For ac3 passthru we disable the sample rate and bitrate popups */
+        /* For ac3 passthru we disable the sample rate and bitrate popups as well as the drc slider*/
         [sampleratePopUp setEnabled: NO];
         [bitratePopUp setEnabled: NO];
+        [drcSlider setFloatValue: 1.00];
+        [self audioDRCSliderChanged: drcSlider];
+        [drcSlider setEnabled: NO];
+        [drcField setEnabled: NO];
     }
     else
     {
         [sampleratePopUp setEnabled: YES];
         [bitratePopUp setEnabled: YES];
+        [drcSlider setEnabled: YES];
+        [drcField setEnabled: YES];
     }
     
 }
 
 - (IBAction) audioDRCSliderChanged: (id) sender
 {
-    [fAudDrcField setStringValue: [NSString stringWithFormat: @"%.2f", [fAudDrcSlider floatValue]]];
+    NSSlider * drcSlider;
+    NSTextField * drcField;
+    if (sender == fAudTrack1DrcSlider)
+    {
+        drcSlider = fAudTrack1DrcSlider;
+        drcField = fAudTrack1DrcField;
+    }
+    if (sender == fAudTrack2DrcSlider)
+    {
+        drcSlider = fAudTrack2DrcSlider;
+        drcField = fAudTrack2DrcField;
+    }
+    if (sender == fAudTrack3DrcSlider)
+    {
+        drcSlider = fAudTrack3DrcSlider;
+        drcField = fAudTrack3DrcField;
+    }
+    if (sender == fAudTrack4DrcSlider)
+    {
+        drcSlider = fAudTrack4DrcSlider;
+        drcField = fAudTrack4DrcField;
+    }
+    [drcField setStringValue: [NSString stringWithFormat: @"%.2f", [drcSlider floatValue]]];
     [self customSettingUsed: sender];
 }
 
@@ -4027,6 +4082,30 @@ if (item == nil)
                     [fAudTrack4BitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioBitRate"]]];
                 }
             }
+            /* We detect here if we have the old DRC Slider and if so we apply it to the existing four tracks if chosen */
+            if ([chosenPreset valueForKey:@"AudioDRCSlider"])
+            {
+                if ([fAudLang1PopUp indexOfSelectedItem] > 0)
+                {
+                    [fAudTrack1DrcSlider setFloatValue: [[chosenPreset valueForKey:@"AudioDRCSlider"] floatValue]];
+                    [self audioDRCSliderChanged: fAudTrack1DrcSlider];
+                }
+                if ([fAudLang2PopUp indexOfSelectedItem] > 0)
+                {
+                    [fAudTrack2DrcSlider setFloatValue: [[chosenPreset valueForKey:@"AudioDRCSlider"] floatValue]];
+                    [self audioDRCSliderChanged: fAudTrack2DrcSlider];
+                }
+                if ([fAudLang3PopUp indexOfSelectedItem] > 0)
+                {
+                    [fAudTrack3DrcSlider setFloatValue: [[chosenPreset valueForKey:@"AudioDRCSlider"] floatValue]];
+                    [self audioDRCSliderChanged: fAudTrack3DrcSlider];
+                }
+                if ([fAudLang4PopUp indexOfSelectedItem] > 0)
+                {
+                    [fAudTrack4DrcSlider setFloatValue: [[chosenPreset valueForKey:@"AudioDRCSlider"] floatValue]];
+                    [self audioDRCSliderChanged: fAudTrack4DrcSlider];
+                }
+            }
         }
         else // since there was no codecs key in the preset we know we can use new multi-audio track presets
         {
@@ -4042,6 +4121,8 @@ if (item == nil)
                 [fAudTrack1MixPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio1Mixdown"]]];
                 [fAudTrack1RatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio1Samplerate"]]];
                 [fAudTrack1BitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio1Bitrate"]]];
+                [fAudTrack1DrcSlider setFloatValue: [[chosenPreset valueForKey:@"Audio1TrackDRCSlider"] floatValue]];
+                [self audioDRCSliderChanged: fAudTrack1DrcSlider];
             }
             if ([chosenPreset valueForKey:@"Audio2Track"] > 0)
             {
@@ -4055,6 +4136,8 @@ if (item == nil)
                 [fAudTrack2MixPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio2Mixdown"]]];
                 [fAudTrack2RatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio2Samplerate"]]];
                 [fAudTrack2BitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio2Bitrate"]]];
+                [fAudTrack2DrcSlider setFloatValue: [[chosenPreset valueForKey:@"Audio2TrackDRCSlider"] floatValue]];
+                [self audioDRCSliderChanged: fAudTrack2DrcSlider];
             }
             if ([chosenPreset valueForKey:@"Audio3Track"] > 0)
             {
@@ -4068,6 +4151,8 @@ if (item == nil)
                 [fAudTrack3MixPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio3Mixdown"]]];
                 [fAudTrack3RatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio3Samplerate"]]];
                 [fAudTrack3BitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio3Bitrate"]]];
+                [fAudTrack3DrcSlider setFloatValue: [[chosenPreset valueForKey:@"Audio3TrackDRCSlider"] floatValue]];
+                [self audioDRCSliderChanged: fAudTrack3DrcSlider];
             }
             if ([chosenPreset valueForKey:@"Audio4Track"] > 0)
             {
@@ -4081,14 +4166,12 @@ if (item == nil)
                 [fAudTrack4MixPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio4Mixdown"]]];
                 [fAudTrack4RatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio4Samplerate"]]];
                 [fAudTrack4BitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio4Bitrate"]]];
+                [fAudTrack4DrcSlider setFloatValue: [[chosenPreset valueForKey:@"Audio4TrackDRCSlider"] floatValue]];
+                [self audioDRCSliderChanged: fAudTrack4DrcSlider];
             }
             
             
         }
-        
-        /* Dynamic Range Control Slider */
-        [fAudDrcSlider setFloatValue: [[chosenPreset valueForKey:@"AudioDRCSlider"] floatValue]];
-        [self audioDRCSliderChanged: NULL];
         
         /*Subtitles*/
         [fSubPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Subtitles"]]];
@@ -4503,6 +4586,7 @@ if (item == nil)
         [preset setObject:[fAudTrack1MixPopUp titleOfSelectedItem] forKey:@"Audio1Mixdown"];
         [preset setObject:[fAudTrack1RatePopUp titleOfSelectedItem] forKey:@"Audio1Samplerate"];
         [preset setObject:[fAudTrack1BitratePopUp titleOfSelectedItem] forKey:@"Audio1Bitrate"];
+        [preset setObject:[NSNumber numberWithFloat:[fAudTrack1DrcSlider floatValue]] forKey:@"Audio1TrackDRCSlider"];
     }
     if ([fAudLang2PopUp indexOfSelectedItem] > 0)
     {
@@ -4512,6 +4596,7 @@ if (item == nil)
         [preset setObject:[fAudTrack2MixPopUp titleOfSelectedItem] forKey:@"Audio2Mixdown"];
         [preset setObject:[fAudTrack2RatePopUp titleOfSelectedItem] forKey:@"Audio2Samplerate"];
         [preset setObject:[fAudTrack2BitratePopUp titleOfSelectedItem] forKey:@"Audio2Bitrate"];
+        [preset setObject:[NSNumber numberWithFloat:[fAudTrack2DrcSlider floatValue]] forKey:@"Audio2TrackDRCSlider"];
     }
     if ([fAudLang3PopUp indexOfSelectedItem] > 0)
     {
@@ -4521,6 +4606,7 @@ if (item == nil)
         [preset setObject:[fAudTrack3MixPopUp titleOfSelectedItem] forKey:@"Audio3Mixdown"];
         [preset setObject:[fAudTrack3RatePopUp titleOfSelectedItem] forKey:@"Audio3Samplerate"];
         [preset setObject:[fAudTrack3BitratePopUp titleOfSelectedItem] forKey:@"Audio3Bitrate"];
+        [preset setObject:[NSNumber numberWithFloat:[fAudTrack3DrcSlider floatValue]] forKey:@"Audio3TrackDRCSlider"];
     }
     if ([fAudLang4PopUp indexOfSelectedItem] > 0)
     {
@@ -4530,16 +4616,14 @@ if (item == nil)
         [preset setObject:[fAudTrack4MixPopUp titleOfSelectedItem] forKey:@"Audio4Mixdown"];
         [preset setObject:[fAudTrack4RatePopUp titleOfSelectedItem] forKey:@"Audio4Samplerate"];
         [preset setObject:[fAudTrack4BitratePopUp titleOfSelectedItem] forKey:@"Audio4Bitrate"];
+        [preset setObject:[NSNumber numberWithFloat:[fAudTrack4DrcSlider floatValue]] forKey:@"Audio4TrackDRCSlider"];
     }
     
 	/* Subtitles*/
 	[preset setObject:[fSubPopUp titleOfSelectedItem] forKey:@"Subtitles"];
     /* Forced Subtitles */
 	[preset setObject:[NSNumber numberWithInt:[fSubForcedCheck state]] forKey:@"SubtitlesForced"];
-    /* Dynamic Range Control Slider */
-    [preset setObject:[NSNumber numberWithFloat:[fAudDrcSlider floatValue]] forKey:@"AudioDRCSlider"];
-	
-
+    
     [preset autorelease];
     return preset;
 
