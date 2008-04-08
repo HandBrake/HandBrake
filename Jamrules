@@ -19,7 +19,7 @@ HB_VERSION  = 0.9.3 ;
 # the svn revision and are marked as unstable.
 if $(SNAPSHOT) = 1
 {
-HB_VERSION = "$(HB_VERSION)svn$(SVN_REV)" ;
+HB_VERSION = "svn$(SVN_REV)" ;
 HB_BUILD = "$(BUILD_DATE)01" ;
 }
 else
