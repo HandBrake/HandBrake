@@ -4495,33 +4495,42 @@ if (item == nil)
     [preset setObject:[NSNumber numberWithInt:[fPictureController deblock]] forKey:@"PictureDeblock"];
     
     /*Audio*/
-    [preset setObject:[NSNumber numberWithInt:[fAudLang1PopUp indexOfSelectedItem]] forKey:@"Audio1Track"];
-    [preset setObject:[fAudLang1PopUp titleOfSelectedItem] forKey:@"Audio1TrackDescription"];
-    [preset setObject:[fAudTrack1CodecPopUp titleOfSelectedItem] forKey:@"Audio1Encoder"];
-    [preset setObject:[fAudTrack1MixPopUp titleOfSelectedItem] forKey:@"Audio1Mixdown"];
-    [preset setObject:[fAudTrack1RatePopUp titleOfSelectedItem] forKey:@"Audio1Samplerate"];
-    [preset setObject:[fAudTrack1BitratePopUp titleOfSelectedItem] forKey:@"Audio1Bitrate"];
-    
-	[preset setObject:[NSNumber numberWithInt:[fAudLang2PopUp indexOfSelectedItem]] forKey:@"Audio2Track"];
-    [preset setObject:[fAudLang2PopUp titleOfSelectedItem] forKey:@"Audio2TrackDescription"];
-    [preset setObject:[fAudTrack2CodecPopUp titleOfSelectedItem] forKey:@"Audio2Encoder"];
-    [preset setObject:[fAudTrack2MixPopUp titleOfSelectedItem] forKey:@"Audio2Mixdown"];
-    [preset setObject:[fAudTrack2RatePopUp titleOfSelectedItem] forKey:@"Audio2Samplerate"];
-    [preset setObject:[fAudTrack2BitratePopUp titleOfSelectedItem] forKey:@"Audio2Bitrate"];
-    
-    [preset setObject:[NSNumber numberWithInt:[fAudLang3PopUp indexOfSelectedItem]] forKey:@"Audio3Track"];
-    [preset setObject:[fAudLang3PopUp titleOfSelectedItem] forKey:@"Audio3TrackDescription"];
-    [preset setObject:[fAudTrack3CodecPopUp titleOfSelectedItem] forKey:@"Audio3Encoder"];
-    [preset setObject:[fAudTrack3MixPopUp titleOfSelectedItem] forKey:@"Audio3Mixdown"];
-    [preset setObject:[fAudTrack3RatePopUp titleOfSelectedItem] forKey:@"Audio3Samplerate"];
-    [preset setObject:[fAudTrack3BitratePopUp titleOfSelectedItem] forKey:@"Audio3Bitrate"];
-    
-    [preset setObject:[NSNumber numberWithInt:[fAudLang4PopUp indexOfSelectedItem]] forKey:@"Audio4Track"];
-    [preset setObject:[fAudLang4PopUp titleOfSelectedItem] forKey:@"Audio4TrackDescription"];
-    [preset setObject:[fAudTrack4CodecPopUp titleOfSelectedItem] forKey:@"Audio4Encoder"];
-    [preset setObject:[fAudTrack4MixPopUp titleOfSelectedItem] forKey:@"Audio4Mixdown"];
-    [preset setObject:[fAudTrack4RatePopUp titleOfSelectedItem] forKey:@"Audio4Samplerate"];
-    [preset setObject:[fAudTrack4BitratePopUp titleOfSelectedItem] forKey:@"Audio4Bitrate"];
+    if ([fAudLang1PopUp indexOfSelectedItem] > 0)
+    {
+        [preset setObject:[NSNumber numberWithInt:[fAudLang1PopUp indexOfSelectedItem]] forKey:@"Audio1Track"];
+        [preset setObject:[fAudLang1PopUp titleOfSelectedItem] forKey:@"Audio1TrackDescription"];
+        [preset setObject:[fAudTrack1CodecPopUp titleOfSelectedItem] forKey:@"Audio1Encoder"];
+        [preset setObject:[fAudTrack1MixPopUp titleOfSelectedItem] forKey:@"Audio1Mixdown"];
+        [preset setObject:[fAudTrack1RatePopUp titleOfSelectedItem] forKey:@"Audio1Samplerate"];
+        [preset setObject:[fAudTrack1BitratePopUp titleOfSelectedItem] forKey:@"Audio1Bitrate"];
+    }
+    if ([fAudLang2PopUp indexOfSelectedItem] > 0)
+    {
+        [preset setObject:[NSNumber numberWithInt:[fAudLang2PopUp indexOfSelectedItem]] forKey:@"Audio2Track"];
+        [preset setObject:[fAudLang2PopUp titleOfSelectedItem] forKey:@"Audio2TrackDescription"];
+        [preset setObject:[fAudTrack2CodecPopUp titleOfSelectedItem] forKey:@"Audio2Encoder"];
+        [preset setObject:[fAudTrack2MixPopUp titleOfSelectedItem] forKey:@"Audio2Mixdown"];
+        [preset setObject:[fAudTrack2RatePopUp titleOfSelectedItem] forKey:@"Audio2Samplerate"];
+        [preset setObject:[fAudTrack2BitratePopUp titleOfSelectedItem] forKey:@"Audio2Bitrate"];
+    }
+    if ([fAudLang3PopUp indexOfSelectedItem] > 0)
+    {
+        [preset setObject:[NSNumber numberWithInt:[fAudLang3PopUp indexOfSelectedItem]] forKey:@"Audio3Track"];
+        [preset setObject:[fAudLang3PopUp titleOfSelectedItem] forKey:@"Audio3TrackDescription"];
+        [preset setObject:[fAudTrack3CodecPopUp titleOfSelectedItem] forKey:@"Audio3Encoder"];
+        [preset setObject:[fAudTrack3MixPopUp titleOfSelectedItem] forKey:@"Audio3Mixdown"];
+        [preset setObject:[fAudTrack3RatePopUp titleOfSelectedItem] forKey:@"Audio3Samplerate"];
+        [preset setObject:[fAudTrack3BitratePopUp titleOfSelectedItem] forKey:@"Audio3Bitrate"];
+    }
+    if ([fAudLang4PopUp indexOfSelectedItem] > 0)
+    {
+        [preset setObject:[NSNumber numberWithInt:[fAudLang4PopUp indexOfSelectedItem]] forKey:@"Audio4Track"];
+        [preset setObject:[fAudLang4PopUp titleOfSelectedItem] forKey:@"Audio4TrackDescription"];
+        [preset setObject:[fAudTrack4CodecPopUp titleOfSelectedItem] forKey:@"Audio4Encoder"];
+        [preset setObject:[fAudTrack4MixPopUp titleOfSelectedItem] forKey:@"Audio4Mixdown"];
+        [preset setObject:[fAudTrack4RatePopUp titleOfSelectedItem] forKey:@"Audio4Samplerate"];
+        [preset setObject:[fAudTrack4BitratePopUp titleOfSelectedItem] forKey:@"Audio4Bitrate"];
+    }
     
 	/* Subtitles*/
 	[preset setObject:[fSubPopUp titleOfSelectedItem] forKey:@"Subtitles"];
