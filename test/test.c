@@ -745,6 +745,21 @@ static int HandleEvents( hb_handle_t * h )
                         hb_close_csv_file( file );
                     }
                 }
+                else
+                {
+                    /* No marker file */
+                    
+                    int number_of_chapters = hb_list_count(job->title->list_chapter);
+                    int chapter;
+                    
+                    for(chapter = 0; chapter <= number_of_chapters - 1 ; chapter++)
+                    {                        
+                        hb_chapter_t * chapter_s;
+                        chapter_s = hb_list_item( job->title->list_chapter, chapter);
+                        snprintf( chapter_s->title, 1023, "Chapter %i", chapter + 1 );
+                        chapter_s->title[1023] = '\0';
+                    }
+                }
 			}
 
             if( crop[0] >= 0 && crop[1] >= 0 &&
