@@ -3267,11 +3267,11 @@ the user is using "Custom" settings by determining the sender*/
                 [mixdownPopUp selectItemWithTag: useMixdown];
 
             }
-            /* In the case of a DTS source track and the user trying AC3 Passthru (which does not work)
+            /* In the case of a source track that is not AC3 and the user tries to use AC3 Passthru (which does not work)
              * we force the Audio Codec choice back to a workable codec. We use MP3 for avi and aac for all
              * other containers.
              */
-            if (audio->in.codec == HB_ACODEC_DCA && [[audiocodecPopUp selectedItem] tag] == HB_ACODEC_AC3)
+            if (audio->in.codec != HB_ACODEC_AC3 && [[audiocodecPopUp selectedItem] tag] == HB_ACODEC_AC3)
             {
                 /* If we are using the avi container, we select MP3 as there is no aac available*/
                 if ([[fDstFormatPopUp selectedItem] tag] == HB_MUX_AVI)
