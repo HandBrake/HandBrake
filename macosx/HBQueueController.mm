@@ -1758,15 +1758,24 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
      * is released. So for the first job and the beginning of single encodes we check for the existence
      * of a valid fCurrentJob jobGroup
      */
-    if ([[fCurrentJob jobGroup] destinationPath] && [fCurrentJobGroup status] != HBStatusCanceled)
-    {
-        /* Try to send the growl notification destinationPath*/
-        [fHBController showGrowlDoneNotification: [[fCurrentJob jobGroup] destinationPath]];
-        /* Try to send the file to metax*/
-        [fHBController sendToMetaX: [[fCurrentJob jobGroup] destinationPath]];
-    }
-    
     [currentJob retain];
+    /* We need to compare the job group to determine if this is the end of a job group
+     * or just the end of a job within a group to keep from sending encode done notification
+     * after the first pass in a two pass encode
+     */
+    HBJobGroup * theJobGroupCheck = [currentJob jobGroup];
+    if ((theJobGroupCheck == nil) || (theJobGroupCheck != fCurrentJobGroup))
+    {
+        /* we need to make sure that we are not at the beginning of a queue and also that the job hasn't
+         * been cancelled
+         */
+        if ([[fCurrentJob jobGroup] destinationPath] && [fCurrentJobGroup status] != HBStatusCanceled)
+        {
+            /* send encode messages to fHBController. User prefs are grokked there. */
+            [fHBController showGrowlDoneNotification: [[fCurrentJob jobGroup] destinationPath]];
+            [fHBController sendToMetaX: [[fCurrentJob jobGroup] destinationPath]];
+        }
+    }
     [fCurrentJob release];
     fCurrentJob = currentJob;
 
