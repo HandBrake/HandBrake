@@ -2014,7 +2014,8 @@ static int CheckOptions( int argc, char ** argv )
             mux = HB_MUX_AVI;
             default_acodec = HB_ACODEC_LAME;
         }
-        else if( !strcasecmp( format, "mp4" ) )
+        else if( !strcasecmp( format, "mp4" ) ||
+                 !strcasecmp( format, "m4v" ) )
         {
             if ( h264_30 == 1)
                 mux = HB_MUX_IPOD;
