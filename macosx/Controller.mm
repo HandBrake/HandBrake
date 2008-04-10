@@ -3521,7 +3521,10 @@ the user is using "Custom" settings by determining the sender*/
         drcField = fAudTrack4DrcField;
     }
     [drcField setStringValue: [NSString stringWithFormat: @"%.2f", [drcSlider floatValue]]];
-    [self customSettingUsed: sender];
+    /* For now, do not call this until we have an intelligent way to determine audio track selections
+    * compared to presets
+    */
+    //[self customSettingUsed: sender];
 }
 
 - (IBAction) subtitleSelectionChanged: (id) sender
