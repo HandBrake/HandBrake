@@ -515,9 +515,9 @@ static int SyncVideo( hb_work_object_t * w )
         if ( job->mux & HB_MUX_AVI )
         {
             /*
-             * The concept of variable bitrate video was a bit too advanced for
-             * Microsoft so AVI doesn't support it. Since almost all dvd
-             * video is VBR we have to convert it to constant bit rate to
+             * The concept of variable frame rate video was a bit too advanced
+             * for Microsoft so AVI doesn't support it. Since almost all dvd
+             * video is VFR we have to convert it to constant frame rate to
              * put it in an AVI container. So here we duplicate, drop and
              * otherwise trash video frames to appease the gods of Redmond.
              */
