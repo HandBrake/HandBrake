@@ -5,6 +5,7 @@
    It may be used under the terms of the GNU General Public License. */
 
 #include "hb.h"
+#include <stdio.h>
 
 #include "samplerate.h"
 #include "ffmpeg/avcodec.h"
@@ -49,6 +50,8 @@ struct hb_work_private_s
     int64_t next_pts;           /* start time of next input frame */
     int64_t first_drop;         /* PTS of first 'went backwards' frame dropped */
     int drop_count;             /* count of 'time went backwards' drops */
+    int drops;                  /* frames dropped to make a cbr video stream */
+    int dups;                   /* frames duplicated to make a cbr video stream */
     int video_sequence;
     int count_frames;
     int count_frames_max;
@@ -132,10 +135,20 @@ void syncClose( hb_work_object_t * w )
     hb_job_t          * job   = pv->job;
     hb_title_t        * title = job->title;
     hb_audio_t        * audio = NULL;
-
     int i;
 
-    if( pv->cur ) hb_buffer_close( &pv->cur );
+    if( pv->cur )
+    {
+        hb_buffer_close( &pv->cur );
+    }
+
+    hb_log( "sync: got %d frames, %d expected",
+            pv->count_frames, pv->count_frames_max );
+
+    if (pv->drops || pv->dups )
+    {
+        hb_log( "sync: %d frames dropped, %d duplicated", pv->drops, pv->dups );
+    }
 
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
@@ -275,10 +288,6 @@ static int SyncVideo( hb_work_object_t * w )
         !hb_fifo_size( job->fifo_mpeg2 ) &&
         !hb_fifo_size( job->fifo_raw ) )
     {
-        /* All video data has been processed already, we won't get
-           more */
-        hb_log( "sync: got %d frames, %d expected",
-                pv->count_frames, pv->count_frames_max );
         pv->done = 1;
 
         hb_buffer_t * buf_tmp;
@@ -502,31 +511,91 @@ static int SyncVideo( hb_work_object_t * w )
             }
         }
 
-        /*
-         * Adjust the pts of the current frame so that it's contiguous
-         * with the previous frame. The start time of the current frame
-         * has to be the end time of the previous frame and the stop
-         * time has to be the start of the next frame.  We don't
-         * make any adjustments to the source timestamps other than removing
-         * the clock offsets (which also removes pts discontinuities).
-         * This means we automatically encode at the source's frame rate.
-         * MP2 uses an implicit duration (frames end when the next frame
-         * starts) but more advanced containers like MP4 use an explicit
-         * duration. Since we're looking ahead one frame we set the
-         * explicit stop time from the start time of the next frame.
-         */
-        buf_tmp = cur;
-        pv->cur = cur = hb_fifo_get( job->fifo_raw );
-        pv->next_pts = next->start;
-        int64_t duration = next->start - buf_tmp->start;
-        if ( duration <= 0 )
+        int64_t duration;
+        if ( job->mux & HB_MUX_AVI )
         {
-            hb_log( "sync: invalid video duration %lld, start %lld, next %lld",
-                    duration, buf_tmp->start, next->start );
+            /*
+             * The concept of variable bitrate video was a bit too advanced for
+             * Microsoft so AVI doesn't support it. Since almost all dvd
+             * video is VBR we have to convert it to constant bit rate to
+             * put it in an AVI container. So here we duplicate, drop and
+             * otherwise trash video frames to appease the gods of Redmond.
+             */
+
+            /* mpeg durations are exact when expressed in ticks of the
+             * 27MHz System clock but not in HB's 90KHz PTS clock. To avoid
+             * a truncation bias that will eventually cause the audio to desync
+             * we compute the duration of the next frame using 27MHz ticks
+             * then truncate it to 90KHz. */
+            duration = ( (int64_t)(pv->count_frames + 1 ) * job->vrate_base ) / 300 -
+                       pv->next_start;
+
+            /* We don't want the input & output clocks to be exactly in phase
+             * otherwise small variations in the time will cause us to think
+             * we're a full frame off & there will be lots of drops and dups.
+             * We offset the input clock by half the duration so it's maximally
+             * out of phase with the output clock. */
+            if( cur->start < pv->next_start  - ( duration >> 1 ) )
+            {
+                /* current frame too old - drop it */
+                if ( cur->new_chap )
+                {
+                    pv->chap_mark = cur->new_chap;
+                }
+                hb_buffer_close( &cur );
+                pv->cur = cur = hb_fifo_get( job->fifo_raw );
+                pv->next_pts = next->start;
+                ++pv->drops;
+                continue;
+            }
+
+            if( next->start > pv->next_start + duration + ( duration >> 1 ) )
+            {
+                /* next frame too far ahead - dup current frame */
+                buf_tmp = hb_buffer_init( cur->size );
+                hb_buffer_copy_settings( buf_tmp, cur );
+                memcpy( buf_tmp->data, cur->data, cur->size );
+                buf_tmp->sequence = cur->sequence;
+                ++pv->dups;
+            }
+            else
+            {
+                /* this frame in our time window & doesn't need to be duped */
+                buf_tmp = cur;
+                pv->cur = cur = hb_fifo_get( job->fifo_raw );
+                pv->next_pts = next->start;
+            }
         }
+        else
+        {
+            /*
+             * Adjust the pts of the current frame so that it's contiguous
+             * with the previous frame. The start time of the current frame
+             * has to be the end time of the previous frame and the stop
+             * time has to be the start of the next frame.  We don't
+             * make any adjustments to the source timestamps other than removing
+             * the clock offsets (which also removes pts discontinuities).
+             * This means we automatically encode at the source's frame rate.
+             * MP2 uses an implicit duration (frames end when the next frame
+             * starts) but more advanced containers like MP4 use an explicit
+             * duration. Since we're looking ahead one frame we set the
+             * explicit stop time from the start time of the next frame.
+             */
+            buf_tmp = cur;
+            pv->cur = cur = hb_fifo_get( job->fifo_raw );
+            pv->next_pts = next->start;
+            duration = next->start - buf_tmp->start;
+            if ( duration <= 0 )
+            {
+                hb_log( "sync: invalid video duration %lld, start %lld, next %lld",
+                        duration, buf_tmp->start, next->start );
+            }
+        }
+
         buf_tmp->start = pv->next_start;
         pv->next_start += duration;
         buf_tmp->stop = pv->next_start;
+
         if ( pv->chap_mark )
         {
             // we have a pending chapter mark from a recent drop - put it on this
