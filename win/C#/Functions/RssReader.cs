@@ -71,7 +71,7 @@ namespace Handbrake.Functions
             readRss();
             for (int i = 0; i < nodeChannel.ChildNodes.Count; i++)
             {
-                if (nodeChannel.ChildNodes[6].Name == "item")
+                if (nodeChannel.ChildNodes[nodeChannel.ChildNodes.Count -1 ].Name == "item")
                 {
                     nodeItem = nodeChannel.ChildNodes[0];
                     t = readRss();
