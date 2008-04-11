@@ -57,6 +57,7 @@ struct hb_stream_s
     uint8_t ts_number_audio_pids;
 
     uint8_t ts_streamid[kMaxNumberDecodeStreams];
+    uint8_t ts_video_stream_type[kMaxNumberDecodeStreams];
     uint8_t ts_audio_stream_type[kMaxNumberDecodeStreams];
 
     char    *path;
@@ -1062,6 +1063,73 @@ static void decode_element_descriptors(hb_stream_t* stream, int esindx,
     }
 }
 
+/*
+ * Get the name of the stream from the type - thanks to VLC for this.
+ */
+static const char *get_stream_name (unsigned char stream_type)
+{
+    switch( stream_type )
+    {
+    case 0x01:  /* MPEG-1 video */
+    case 0x02:  /* MPEG-2 video */
+    case 0x80:  /* MPEG-2 MOTO video */
+        return("MPEG 1/2 Video");
+        break;
+    case 0x03:  /* MPEG-1 audio */
+    case 0x04:  /* MPEG-2 audio */
+        return("MPEG Audio");
+        break;
+    case 0x11:  /* MPEG4 (audio) */
+    case 0x0f:  /* ISO/IEC 13818-7 Audio with ADTS transport syntax */
+        return("MPEG-4 Audio");
+        break;
+    case 0x10:  /* MPEG4 (video) */
+        return("MPEG-4 Video");
+        break;
+    case 0x1B:  /* H264 <- check transport syntax/needed descriptor */
+        return("H.264 Video");
+        break;
+        
+    case 0x81:  /* A52 (audio) */
+        return("A52/AC-3 Audio");
+        break;
+    case 0x82:  /* DVD_SPU (sub) */
+        return("Subtitle");
+        break;
+    case 0x83:  /* LPCM (audio) */
+        return("LPCM Audio");
+        break;
+    case 0x84:  /* SDDS (audio) */
+        return("SDDS Audio");
+        break;
+    case 0x85:  /* DTS (audio) */
+        return("DTS Audio");
+        break;
+        
+    case 0x91:  /* A52 vls (audio) */
+        return("A52b/AC-3 Audio");
+        break;
+    case 0x92:  /* DVD_SPU vls (sub) */
+        return("Subtitle");
+        break;
+        
+    case 0x94:  /* SDDS (audio) */
+        return("SDDS Audio");
+        break;
+        
+    case 0xa0:  /* MSCODEC vlc (video) (fixed later) */
+        return("MSCODEC Video");
+        break;
+        
+    case 0x06:  /* PES_PRIVATE  (fixed later) */
+    case 0x12:  /* MPEG-4 generic (sub/scene/...) (fixed later) */
+    case 0xEA:  /* Privately managed ES (VC-1) (fixed later */
+    default:
+        return("Other");
+        break;
+    }
+}
+
 int decode_program_map(hb_stream_t* stream)
 {
     bitbuf_t bb;
@@ -1110,32 +1178,35 @@ int decode_program_map(hb_stream_t* stream)
 		ES_info_buf[i] = get_bits(&bb, 8);
 	  }
 
-	  if (stream_type == 0x02)
+
+	  if (stream_type == 0x02 || stream_type == 0x10 || stream_type == 0x1B)
 	  {
-		if (stream->ts_number_video_pids <= kMaxNumberVideoPIDS)
+              /* MPEG-2/MPEG-4/H.264 */
+              if (stream->ts_number_video_pids <= kMaxNumberVideoPIDS)
 		  stream->ts_number_video_pids++;
-		stream->ts_video_pids[stream->ts_number_video_pids-1] = elementary_PID;
+              stream->ts_video_pids[stream->ts_number_video_pids-1] = elementary_PID;
+              stream->ts_video_stream_type[stream->ts_number_video_pids-1] = stream_type;
 	  }
-      else
-      {
-        // Defined audio stream types are 0x81 for AC-3/A52 audio and 0x03
-        // for mpeg audio. But content producers seem to use other
-        // values (0x04 and 0x06 have both been observed) so at this point
-        // we say everything that isn't a video pid is audio then at the end
-        // of hb_stream_title_scan we'll figure out which are really audio
-        // by looking at the PES headers.
-        i = stream->ts_number_audio_pids;
-        if (i < kMaxNumberAudioPIDS)
-            stream->ts_number_audio_pids++;
-        stream->ts_audio_pids[i] = elementary_PID;
-        stream->ts_audio_stream_type[1 + i] = stream_type;
-
-		if (ES_info_length > 0)
-		{
-            decode_element_descriptors(stream, i, ES_info_buf, ES_info_length);
-		}
+          else
+          {
+              // Defined audio stream types are 0x81 for AC-3/A52 audio and 0x03
+              // for mpeg audio. But content producers seem to use other
+              // values (0x04 and 0x06 have both been observed) so at this point
+              // we say everything that isn't a video pid is audio then at the end
+              // of hb_stream_title_scan we'll figure out which are really audio
+              // by looking at the PES headers.
+              i = stream->ts_number_audio_pids;
+              if (i < kMaxNumberAudioPIDS)
+                  stream->ts_number_audio_pids++;
+              stream->ts_audio_pids[i] = elementary_PID;
+              stream->ts_audio_stream_type[1 + i] = stream_type;
+              
+              if (ES_info_length > 0)
+              {
+                  decode_element_descriptors(stream, i, ES_info_buf, ES_info_length);
+              }
 	  }
-
+          
 	  cur_pos += 5 /* stream header */ + ES_info_length;
 
 	  free(ES_info_buf);
@@ -1406,12 +1477,18 @@ static void hb_ts_stream_find_pids(hb_stream_t *stream)
 	int i=0;
 	for (i=0; i < stream->ts_number_video_pids; i++)
 	{
-		hb_log("      0x%x (%d)", stream->ts_video_pids[i], stream->ts_video_pids[i]);
+		hb_log("      0x%x (%d) [Type %s (0x%x)]", 
+                       stream->ts_video_pids[i], stream->ts_video_pids[i],
+                       get_stream_name(stream->ts_video_stream_type[i]),
+                       stream->ts_video_stream_type[i]);
 	}
 	hb_log("    Audio PIDS : ");
 	for (i = 0; i < stream->ts_number_audio_pids; i++)
 	{
-		hb_log("      0x%x (%d)", stream->ts_audio_pids[i], stream->ts_audio_pids[i]);
+		hb_log("      0x%x (%d) [Type %s (0x%x)]", 
+                       stream->ts_audio_pids[i], stream->ts_audio_pids[i],
+                       get_stream_name(stream->ts_audio_stream_type[i]),
+                       stream->ts_audio_stream_type[i] );
 	}
  }
 
