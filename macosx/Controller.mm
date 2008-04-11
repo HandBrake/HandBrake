@@ -2801,16 +2801,23 @@ the user is using "Custom" settings by determining the sender*/
     {
         audiotrackPopUp = fAudLang2PopUp;
         audiocodecPopUp = fAudTrack2CodecPopUp;
+        sampleratePopUp = fAudTrack2RatePopUp;
+        bitratePopUp = fAudTrack2BitratePopUp;
     }
     else if (sender == fAudTrack3CodecPopUp)
     {
         audiotrackPopUp = fAudLang3PopUp;
         audiocodecPopUp = fAudTrack3CodecPopUp;
+        sampleratePopUp = fAudTrack3RatePopUp;
+        bitratePopUp = fAudTrack3BitratePopUp;
     }
-    else if (sender == fAudTrack4CodecPopUp)
+    //else if (sender == fAudTrack4CodecPopUp)
+    else
     {
         audiotrackPopUp = fAudLang4PopUp;
         audiocodecPopUp = fAudTrack4CodecPopUp;
+        sampleratePopUp = fAudTrack4RatePopUp;
+        bitratePopUp = fAudTrack4BitratePopUp;
     }
 	
     /* changing the codecs on offer may mean that we can / can't offer mono or 6ch, */
@@ -2972,7 +2979,7 @@ the user is using "Custom" settings by determining the sender*/
         audiotrackPopUp = fAudLang3PopUp;
         audiocodecPopUp = fAudTrack3CodecPopUp;
     }
-    else if (sender == fAudTrack4CodecPopUp)
+    else
     {
         audiotrackPopUp = fAudLang4PopUp;
         audiocodecPopUp = fAudTrack4CodecPopUp;
@@ -3117,7 +3124,7 @@ the user is using "Custom" settings by determining the sender*/
         sampleratePopUp = fAudTrack3RatePopUp;
         bitratePopUp = fAudTrack3BitratePopUp;
     }
-    else if (sender == fAudLang4PopUp)
+    else
     {
         mixdownPopUp = fAudTrack4MixPopUp;
         audiocodecPopUp = fAudTrack4CodecPopUp;
@@ -3331,7 +3338,7 @@ the user is using "Custom" settings by determining the sender*/
         drcSlider = fAudTrack1DrcSlider;
         drcField = fAudTrack1DrcField;
     }
-    if (sender == fAudTrack2MixPopUp)
+    else if (sender == fAudTrack2MixPopUp)
     {
         audiotrackPopUp = fAudLang2PopUp;
         audiocodecPopUp = fAudTrack2CodecPopUp;
@@ -3341,7 +3348,7 @@ the user is using "Custom" settings by determining the sender*/
         drcSlider = fAudTrack2DrcSlider;
         drcField = fAudTrack2DrcField;
     }
-    if (sender == fAudTrack3MixPopUp)
+    else if (sender == fAudTrack3MixPopUp)
     {
         audiotrackPopUp = fAudLang3PopUp;
         audiocodecPopUp = fAudTrack3CodecPopUp;
@@ -3351,7 +3358,7 @@ the user is using "Custom" settings by determining the sender*/
         drcSlider = fAudTrack3DrcSlider;
         drcField = fAudTrack3DrcField;
     }
-    if (sender == fAudTrack4MixPopUp)
+    else
     {
         audiotrackPopUp = fAudLang4PopUp;
         audiocodecPopUp = fAudTrack4CodecPopUp;
@@ -3498,24 +3505,24 @@ the user is using "Custom" settings by determining the sender*/
 
 - (IBAction) audioDRCSliderChanged: (id) sender
 {
-    NSSlider * drcSlider;
-    NSTextField * drcField;
+    NSSlider * drcSlider = nil;
+    NSTextField * drcField = nil;
     if (sender == fAudTrack1DrcSlider)
     {
         drcSlider = fAudTrack1DrcSlider;
         drcField = fAudTrack1DrcField;
     }
-    if (sender == fAudTrack2DrcSlider)
+    else if (sender == fAudTrack2DrcSlider)
     {
         drcSlider = fAudTrack2DrcSlider;
         drcField = fAudTrack2DrcField;
     }
-    if (sender == fAudTrack3DrcSlider)
+    else if (sender == fAudTrack3DrcSlider)
     {
         drcSlider = fAudTrack3DrcSlider;
         drcField = fAudTrack3DrcField;
     }
-    if (sender == fAudTrack4DrcSlider)
+    else
     {
         drcSlider = fAudTrack4DrcSlider;
         drcField = fAudTrack4DrcField;
