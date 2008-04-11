@@ -289,10 +289,8 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
             pv->init_delay = 7506;
         }
 
-        /* The delay is 2 frames for regular b-frames, 3 for b-pyramid.
-           Since job->areBframes is 1 for b-frames and 2 for b-pyramid,
-           add one to it and use it as a multiplier.                    */
-        pv->init_delay *= ( job->areBframes + 1);
+        /* The delay is 1 frames for regular b-frames, 2 for b-pyramid. */
+        pv->init_delay *= job->areBframes;
     }
 
     return 0;
