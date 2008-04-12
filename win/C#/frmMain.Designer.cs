@@ -37,7 +37,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label Label38;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -398,7 +398,7 @@ namespace Handbrake
             "112",
             "128",
             "160"});
-            this.drp_audbit_1.Location = new System.Drawing.Point(538, 53);
+            this.drp_audbit_1.Location = new System.Drawing.Point(537, 53);
             this.drp_audbit_1.Name = "drp_audbit_1";
             this.drp_audbit_1.Size = new System.Drawing.Size(79, 20);
             this.drp_audbit_1.TabIndex = 11;
@@ -415,7 +415,7 @@ namespace Handbrake
             "32",
             "24",
             "22.05"});
-            this.drp_audsr_1.Location = new System.Drawing.Point(488, 52);
+            this.drp_audsr_1.Location = new System.Drawing.Point(488, 53);
             this.drp_audsr_1.Name = "drp_audsr_1";
             this.drp_audsr_1.Size = new System.Drawing.Size(43, 20);
             this.drp_audsr_1.TabIndex = 9;
@@ -623,9 +623,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Format = "N0";
+            dataGridViewCellStyle3.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle3;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -737,7 +737,7 @@ namespace Handbrake
             "112",
             "128",
             "160"});
-            this.drp_audbit_2.Location = new System.Drawing.Point(537, 92);
+            this.drp_audbit_2.Location = new System.Drawing.Point(537, 93);
             this.drp_audbit_2.Name = "drp_audbit_2";
             this.drp_audbit_2.Size = new System.Drawing.Size(80, 20);
             this.drp_audbit_2.TabIndex = 21;
@@ -754,7 +754,7 @@ namespace Handbrake
             "32",
             "24",
             "22.05"});
-            this.drp_audsr_2.Location = new System.Drawing.Point(488, 92);
+            this.drp_audsr_2.Location = new System.Drawing.Point(488, 93);
             this.drp_audsr_2.Name = "drp_audsr_2";
             this.drp_audsr_2.Size = new System.Drawing.Size(43, 20);
             this.drp_audsr_2.TabIndex = 20;
@@ -786,7 +786,7 @@ namespace Handbrake
             "32",
             "24",
             "22.05"});
-            this.drp_audsr_3.Location = new System.Drawing.Point(488, 128);
+            this.drp_audsr_3.Location = new System.Drawing.Point(488, 129);
             this.drp_audsr_3.Name = "drp_audsr_3";
             this.drp_audsr_3.Size = new System.Drawing.Size(43, 20);
             this.drp_audsr_3.TabIndex = 28;
@@ -1342,7 +1342,7 @@ namespace Handbrake
             this.lbl_drc4.AutoSize = true;
             this.lbl_drc4.BackColor = System.Drawing.Color.Transparent;
             this.lbl_drc4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_drc4.Location = new System.Drawing.Point(665, 165);
+            this.lbl_drc4.Location = new System.Drawing.Point(670, 165);
             this.lbl_drc4.Name = "lbl_drc4";
             this.lbl_drc4.Size = new System.Drawing.Size(19, 13);
             this.lbl_drc4.TabIndex = 39;
@@ -1354,7 +1354,7 @@ namespace Handbrake
             this.lbl_drc3.AutoSize = true;
             this.lbl_drc3.BackColor = System.Drawing.Color.Transparent;
             this.lbl_drc3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_drc3.Location = new System.Drawing.Point(665, 131);
+            this.lbl_drc3.Location = new System.Drawing.Point(670, 131);
             this.lbl_drc3.Name = "lbl_drc3";
             this.lbl_drc3.Size = new System.Drawing.Size(19, 13);
             this.lbl_drc3.TabIndex = 31;
@@ -1366,7 +1366,7 @@ namespace Handbrake
             this.lbl_drc2.AutoSize = true;
             this.lbl_drc2.BackColor = System.Drawing.Color.Transparent;
             this.lbl_drc2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_drc2.Location = new System.Drawing.Point(665, 91);
+            this.lbl_drc2.Location = new System.Drawing.Point(670, 91);
             this.lbl_drc2.Name = "lbl_drc2";
             this.lbl_drc2.Size = new System.Drawing.Size(19, 13);
             this.lbl_drc2.TabIndex = 23;
@@ -1377,7 +1377,7 @@ namespace Handbrake
             this.lbl_drc1.AutoSize = true;
             this.lbl_drc1.BackColor = System.Drawing.Color.Transparent;
             this.lbl_drc1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_drc1.Location = new System.Drawing.Point(665, 53);
+            this.lbl_drc1.Location = new System.Drawing.Point(670, 53);
             this.lbl_drc1.Name = "lbl_drc1";
             this.lbl_drc1.Size = new System.Drawing.Size(19, 13);
             this.lbl_drc1.TabIndex = 15;
@@ -1491,7 +1491,7 @@ namespace Handbrake
             this.trackBar1.Margin = new System.Windows.Forms.Padding(0);
             this.trackBar1.Maximum = 30;
             this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(49, 42);
+            this.trackBar1.Size = new System.Drawing.Size(50, 42);
             this.trackBar1.TabIndex = 13;
             this.trackBar1.TickFrequency = 10;
             this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1_Scroll);

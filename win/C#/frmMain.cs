@@ -1797,55 +1797,86 @@ namespace Handbrake
         // Audio system functions
         private void setAudioByContainer(String path)
         {
+            string oldval = "";
+
             if ((path.EndsWith(".mp4")) || (path.EndsWith(".mp4")))
             {
+                oldval = drp_audenc_1.Text;
                 drp_audenc_1.Items.Clear();
                 drp_audenc_1.Items.Add("AAC");
                 drp_audenc_1.Items.Add("AC3");
-                drp_audenc_1.SelectedIndex = 0;
+                if ((oldval != "AAC") && (oldval != "AC3"))
+                    drp_audenc_1.SelectedIndex = 0;
 
+                oldval = drp_audenc_2.Text;
                 drp_audenc_2.Items.Clear();
                 drp_audenc_2.Items.Add("AAC");
                 drp_audenc_2.Items.Add("AC3");
                 if (drp_audenc_2.Enabled)
-                    drp_audenc_2.SelectedIndex = 0;
+                {
+                    if ((oldval != "AAC") && (oldval != "AC3"))
+                        drp_audenc_2.SelectedIndex = 0;
+                }
 
+                oldval = drp_audenc_3.Text;
                 drp_audenc_3.Items.Clear();
                 drp_audenc_3.Items.Add("AAC");
                 drp_audenc_3.Items.Add("AC3");
                 if (drp_audenc_3.Enabled)
-                    drp_audenc_3.SelectedIndex = 0;
+                {
+                    if ((oldval != "AAC") && (oldval != "AC3"))
+                        drp_audenc_3.SelectedIndex = 0;
+                }
 
+                oldval = drp_audenc_4.Text;
                 drp_audenc_4.Items.Clear();
                 drp_audenc_4.Items.Add("AAC");
                 drp_audenc_4.Items.Add("AC3");
                 if (drp_audenc_4.Enabled)
-                    drp_audenc_4.SelectedIndex = 0;
+                {
+                    if ((oldval != "AAC") && (oldval != "AC3"))
+                        drp_audenc_4.SelectedIndex = 0;
+                }
             }
             else if (path.EndsWith(".avi"))
             {
+                oldval = drp_audenc_1.Text;
                 drp_audenc_1.Items.Clear();
                 drp_audenc_1.Items.Add("MP3");
                 drp_audenc_1.Items.Add("AC3");
-                drp_audenc_1.SelectedIndex = 0;
+                if ((oldval != "MP3") && (oldval != "AC3"))
+                    drp_audenc_1.SelectedIndex = 0;
 
+                oldval = drp_audenc_2.Text;
                 drp_audenc_2.Items.Clear();
                 drp_audenc_2.Items.Add("MP3");
                 drp_audenc_2.Items.Add("AC3");
                 if (drp_audenc_2.Enabled)
-                    drp_audenc_2.SelectedIndex = 0;
+                {
+                    if ((oldval != "MP3") && (oldval != "AC3"))
+                        drp_audenc_2.SelectedIndex = 0;
+                }
 
+
+                oldval = drp_audenc_3.Text;
                 drp_audenc_3.Items.Clear();
                 drp_audenc_3.Items.Add("MP3");
                 drp_audenc_3.Items.Add("AC3");
                 if (drp_audenc_3.Enabled)
-                    drp_audenc_3.SelectedIndex = 0;
+                {
+                    if ((oldval != "MP3") && (oldval != "AC3"))
+                        drp_audenc_3.SelectedIndex = 0;
+                }
 
+                oldval = drp_audenc_4.Text;
                 drp_audenc_4.Items.Clear();
                 drp_audenc_4.Items.Add("MP3");
                 drp_audenc_4.Items.Add("AC3");
                 if (drp_audenc_4.Enabled)
-                    drp_audenc_4.SelectedIndex = 0;
+                {
+                    if ((oldval != "MP3") && (oldval != "AC3"))
+                        drp_audenc_4.SelectedIndex = 0;
+                }
             }
             else if (path.EndsWith(".ogm"))
             {
@@ -1875,7 +1906,9 @@ namespace Handbrake
                 drp_audenc_1.Items.Add("MP3");
                 drp_audenc_1.Items.Add("AC3");
                 drp_audenc_1.Items.Add("Vorbis");
-                drp_audenc_1.SelectedIndex = 0;
+                if (drp_audenc_1.Text == "")
+                    drp_audenc_1.SelectedIndex = 0;
+
 
                 drp_audenc_2.Items.Clear();
                 drp_audenc_2.Items.Add("AAC");
@@ -1883,7 +1916,10 @@ namespace Handbrake
                 drp_audenc_2.Items.Add("AC3");
                 drp_audenc_2.Items.Add("Vorbis");
                 if (drp_audenc_2.Enabled)
-                    drp_audenc_2.SelectedIndex = 0;
+                {
+                    if (drp_audenc_2.Text == "")
+                        drp_audenc_2.SelectedIndex = 0;
+                }
 
                 drp_audenc_3.Items.Clear();
                 drp_audenc_3.Items.Add("AAC");
@@ -1891,7 +1927,10 @@ namespace Handbrake
                 drp_audenc_3.Items.Add("AC3");
                 drp_audenc_3.Items.Add("Vorbis");
                 if (drp_audenc_3.Enabled)
-                    drp_audenc_3.SelectedIndex = 0;
+                {
+                    if (drp_audenc_3.Text == "")
+                        drp_audenc_3.SelectedIndex = 0;
+                }
 
                 drp_audenc_4.Items.Clear();
                 drp_audenc_4.Items.Add("AAC");
@@ -1899,7 +1938,10 @@ namespace Handbrake
                 drp_audenc_4.Items.Add("AC3");
                 drp_audenc_4.Items.Add("Vorbis");
                 if (drp_audenc_4.Enabled)
-                    drp_audenc_4.SelectedIndex = 0;
+                {
+                    if (drp_audenc_4.Text == "")
+                        drp_audenc_4.SelectedIndex = 0;
+                }
             }
         }
 
