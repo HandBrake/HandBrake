@@ -1801,20 +1801,24 @@ namespace Handbrake
             {
                 drp_audenc_1.Items.Clear();
                 drp_audenc_1.Items.Add("AAC");
+                drp_audenc_1.Items.Add("AC3");
                 drp_audenc_1.SelectedIndex = 0;
 
                 drp_audenc_2.Items.Clear();
                 drp_audenc_2.Items.Add("AAC");
+                drp_audenc_2.Items.Add("AC3");
                 if (drp_audenc_2.Enabled)
                     drp_audenc_2.SelectedIndex = 0;
 
                 drp_audenc_3.Items.Clear();
                 drp_audenc_3.Items.Add("AAC");
+                drp_audenc_3.Items.Add("AC3");
                 if (drp_audenc_3.Enabled)
                     drp_audenc_3.SelectedIndex = 0;
 
                 drp_audenc_4.Items.Clear();
                 drp_audenc_4.Items.Add("AAC");
+                drp_audenc_4.Items.Add("AC3");
                 if (drp_audenc_4.Enabled)
                     drp_audenc_4.SelectedIndex = 0;
             }

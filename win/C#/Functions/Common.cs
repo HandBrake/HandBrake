@@ -294,7 +294,18 @@ namespace Handbrake.Functions
             else
                 mainWindow.drp_track1Audio.Text = presetQuery.AudioTrack1;
 
-            if (presetQuery.AudioTrack2 == "None")
+            
+            if (presetQuery.AudioEncoder2 != null)  // Fix for loading in built in presets. Where 2 encoders but no tracks in the preset.
+            {
+                mainWindow.drp_track2Audio.Enabled = true;
+                mainWindow.drp_audsr_2.Enabled = true;
+                mainWindow.drp_audmix_2.Enabled = true;
+                mainWindow.drp_audenc_2.Enabled = true;
+                mainWindow.drp_audbit_2.Enabled = true;
+                mainWindow.drp_audsr_2.Text = "48";
+                mainWindow.drp_track2Audio.Text = "Automatic";
+            }
+            else if (presetQuery.AudioTrack2 == "None")
             {
                 mainWindow.drp_track2Audio.SelectedIndex = 0;
                 mainWindow.drp_audsr_2.Enabled = false;

@@ -37,7 +37,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label Label38;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -407,7 +407,7 @@ namespace Handbrake
             // 
             // drp_audsr_1
             // 
-            this.drp_audsr_1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.drp_audsr_1.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audsr_1.FormattingEnabled = true;
             this.drp_audsr_1.Items.AddRange(new object[] {
             "48",
@@ -417,7 +417,7 @@ namespace Handbrake
             "22.05"});
             this.drp_audsr_1.Location = new System.Drawing.Point(488, 52);
             this.drp_audsr_1.Name = "drp_audsr_1";
-            this.drp_audsr_1.Size = new System.Drawing.Size(43, 21);
+            this.drp_audsr_1.Size = new System.Drawing.Size(43, 20);
             this.drp_audsr_1.TabIndex = 9;
             this.drp_audsr_1.Text = "48";
             this.ToolTip.SetToolTip(this.drp_audsr_1, "Set the Audio Sample Rate");
@@ -623,9 +623,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle2.Format = "N0";
-            dataGridViewCellStyle2.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle1;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -746,7 +746,7 @@ namespace Handbrake
             // 
             // drp_audsr_2
             // 
-            this.drp_audsr_2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.drp_audsr_2.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audsr_2.FormattingEnabled = true;
             this.drp_audsr_2.Items.AddRange(new object[] {
             "48",
@@ -756,7 +756,7 @@ namespace Handbrake
             "22.05"});
             this.drp_audsr_2.Location = new System.Drawing.Point(488, 92);
             this.drp_audsr_2.Name = "drp_audsr_2";
-            this.drp_audsr_2.Size = new System.Drawing.Size(43, 21);
+            this.drp_audsr_2.Size = new System.Drawing.Size(43, 20);
             this.drp_audsr_2.TabIndex = 20;
             this.drp_audsr_2.Text = "48";
             this.ToolTip.SetToolTip(this.drp_audsr_2, "Set the Audio Sample Rate");
@@ -778,7 +778,7 @@ namespace Handbrake
             // drp_audsr_3
             // 
             this.drp_audsr_3.Enabled = false;
-            this.drp_audsr_3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.drp_audsr_3.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audsr_3.FormattingEnabled = true;
             this.drp_audsr_3.Items.AddRange(new object[] {
             "48",
@@ -788,7 +788,7 @@ namespace Handbrake
             "22.05"});
             this.drp_audsr_3.Location = new System.Drawing.Point(488, 128);
             this.drp_audsr_3.Name = "drp_audsr_3";
-            this.drp_audsr_3.Size = new System.Drawing.Size(43, 21);
+            this.drp_audsr_3.Size = new System.Drawing.Size(43, 20);
             this.drp_audsr_3.TabIndex = 28;
             this.drp_audsr_3.Text = "48";
             this.ToolTip.SetToolTip(this.drp_audsr_3, "Set the Audio Sample Rate");
@@ -861,7 +861,7 @@ namespace Handbrake
             // drp_audsr_4
             // 
             this.drp_audsr_4.Enabled = false;
-            this.drp_audsr_4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.drp_audsr_4.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audsr_4.FormattingEnabled = true;
             this.drp_audsr_4.Items.AddRange(new object[] {
             "48",
@@ -869,9 +869,9 @@ namespace Handbrake
             "32",
             "24",
             "22.05"});
-            this.drp_audsr_4.Location = new System.Drawing.Point(488, 166);
+            this.drp_audsr_4.Location = new System.Drawing.Point(488, 167);
             this.drp_audsr_4.Name = "drp_audsr_4";
-            this.drp_audsr_4.Size = new System.Drawing.Size(43, 21);
+            this.drp_audsr_4.Size = new System.Drawing.Size(43, 20);
             this.drp_audsr_4.TabIndex = 36;
             this.drp_audsr_4.Text = "48";
             this.ToolTip.SetToolTip(this.drp_audsr_4, "Set the Audio Sample Rate");
