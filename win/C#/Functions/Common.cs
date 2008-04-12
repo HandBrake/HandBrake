@@ -760,20 +760,14 @@ namespace Handbrake.Functions
             {
                 string[] tempSub;
                 tempSub = track3.Split(' ');
-                if (tracks == "")
-                    tracks = " -a none,none," + tempSub[0];
-                else
-                    tracks = tracks + "," + tempSub[0];
+                tracks = tracks + "," + tempSub[0];
             }
 
             if (track4 != "None")
             {
                 string[] tempSub;
                 tempSub = track4.Split(' ');
-                if (tracks == "")
-                    tracks = " -a none,none,none," + tempSub[0];
-                else
-                    tracks = tracks + "," + tempSub[0];
+                tracks = tracks + "," + tempSub[0];
             }
 
             //
@@ -792,18 +786,12 @@ namespace Handbrake.Functions
 
             if (aencoder3 != "")
             {
-                if (aencoder == "")
-                    aencoder = " -E faac,faac," + getAudioEncoder(aencoder3);
-                else
-                    aencoder = aencoder + "," + getAudioEncoder(aencoder3);
+                aencoder = aencoder + "," + getAudioEncoder(aencoder3);
             }
 
             if (aencoder4 != "")
             {
-                if (aencoder == "")
-                    aencoder = " -E faac,faac,faac," + getAudioEncoder(aencoder4);
-                else
-                    aencoder = aencoder + "," + getAudioEncoder(aencoder4);
+                aencoder = aencoder + "," + getAudioEncoder(aencoder4);
             }
 
             //
@@ -822,18 +810,12 @@ namespace Handbrake.Functions
 
             if (audioBitrate3 != "")
             {
-                if (audioBitrate == "")
-                    audioBitrate = " -B 160,160," + audioBitrate3;
-                else
-                    audioBitrate = audioBitrate + "," + audioBitrate3;
+                audioBitrate = audioBitrate + "," + audioBitrate3;
             }
 
             if (audioBitrate4 != "")
             {
-                if (audioBitrate == "")
-                    audioBitrate = " -B 160,160,160," + audioBitrate4;
-                else
-                    audioBitrate = audioBitrate + "," + audioBitrate4;
+                audioBitrate = audioBitrate + "," + audioBitrate4;
             }
 
             //Audio Sample Rate   - audioSampleRate
@@ -851,18 +833,12 @@ namespace Handbrake.Functions
 
             if (audioSampleRate3 != "")
             {
-                if (audioSampleRate == "")
-                    audioSampleRate = " -R 48,48," + audioSampleRate3;
-                else
-                    audioSampleRate = audioSampleRate + "," + audioSampleRate3;
+                audioSampleRate = audioSampleRate + "," + audioSampleRate3;
             }
 
             if (audioSampleRate4 != "")
             {
-                if (audioSampleRate == "")
-                    audioSampleRate = " -R 48,48,48," + audioSampleRate4;
-                else
-                    audioSampleRate = audioSampleRate + "," + audioSampleRate4;
+                audioSampleRate = audioSampleRate + "," + audioSampleRate4;
             }
 
             //
@@ -916,20 +892,14 @@ namespace Handbrake.Functions
             value++;
             if (drc3 != "0")
             {
-                if (drc == "")
-                    drc = " -D 1,1," + value;
-                else
-                    drc = drc + "," + value;
+                drc = drc + "," + value;
             }
 
             value = mainWindow.trackBar4.Value / 10.0;
             value++;
             if (drc4 != "0")
             {
-                if (drc == "")
-                    drc = " -D 1,1,1," + value;
-                else
-                    drc = drc + "," + value;
+                drc = drc + "," + value;
             }
 
 

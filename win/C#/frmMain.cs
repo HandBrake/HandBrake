@@ -539,26 +539,22 @@ namespace Handbrake
                 drp_track1Audio.Items.Add("Automatic");
                 drp_track1Audio.Items.Add("None");
                 drp_track1Audio.Items.AddRange(selectedTitle.AudioTracks.ToArray());
-                if (drp_track1Audio.Items.Count > 0)
-                    drp_track1Audio.Text = drp_track1Audio.Items[0].ToString();
+                drp_track1Audio.SelectedItem = 0;
 
                 drp_track2Audio.Items.Clear();
                 drp_track2Audio.Items.Add("None");
                 drp_track2Audio.Items.AddRange(selectedTitle.AudioTracks.ToArray());
-                if (drp_track2Audio.Items.Count > 0)
-                    drp_track2Audio.Text = drp_track2Audio.Items[0].ToString();
+                drp_track1Audio.SelectedItem = 0;
 
                 drp_track3Audio.Items.Clear();
                 drp_track3Audio.Items.Add("None");
                 drp_track3Audio.Items.AddRange(selectedTitle.AudioTracks.ToArray());
-                if (drp_track3Audio.Items.Count > 0)
-                    drp_track3Audio.Text = drp_track3Audio.Items[0].ToString();
+                drp_track1Audio.SelectedItem = 0;
 
                 drp_track4Audio.Items.Clear();
                 drp_track4Audio.Items.Add("None");
                 drp_track4Audio.Items.AddRange(selectedTitle.AudioTracks.ToArray());
-                if (drp_track4Audio.Items.Count > 0)
-                    drp_track4Audio.Text = drp_track4Audio.Items[0].ToString();
+                drp_track1Audio.SelectedItem = 0;
 
                 // Populate the Subtitles dropdown
                 drp_subtitle.Items.Clear();
@@ -888,10 +884,12 @@ namespace Handbrake
                 drp_audenc_1.Enabled = false;
                 drp_audsr_1.Enabled = false;
                 drp_audmix_1.Enabled = false;
+                trackBar1.Enabled = false;
                 drp_audbit_1.Text = "";
                 drp_audenc_1.Text = "";
                 drp_audsr_1.Text = "";
                 drp_audmix_1.Text = "";
+                trackBar1.Value = 0;
             }
             else
             {
@@ -899,12 +897,12 @@ namespace Handbrake
                 drp_audenc_1.Enabled = true;
                 drp_audsr_1.Enabled = true;
                 drp_audmix_1.Enabled = true;
+                trackBar1.Enabled = true;
                 drp_audbit_1.Text = "160";
                 drp_audenc_1.Text = "AAC";
                 drp_audsr_1.Text = "48";
                 drp_audmix_1.Text = "Automatic";
             }
-            trackBar1.Value = 0;
         }
         private void drp_track2Audio_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -914,10 +912,26 @@ namespace Handbrake
                 drp_audenc_2.Enabled = false;
                 drp_audsr_2.Enabled = false;
                 drp_audmix_2.Enabled = false;
+                trackBar2.Enabled = false;
                 drp_audbit_2.Text = "";
                 drp_audenc_2.Text = "";
                 drp_audsr_2.Text = "";
-                drp_audmix_2.Text = "";                
+                drp_audmix_2.Text = "";
+                trackBar2.Value = 0;
+
+                // Disable the 3rd Track.
+                drp_track3Audio.Visible = false;
+                drp_audbit_3.Visible = false;
+                drp_audenc_3.Visible = false;
+                drp_audsr_3.Visible = false;
+                drp_audmix_3.Visible = false;
+                trackBar3.Visible = false;
+                lbl_drc3.Visible = false;
+                drp_audbit_3.Text = "";
+                drp_audenc_3.Text = "";
+                drp_audsr_3.Text = "";
+                drp_audmix_3.Text = "Automatic";
+                trackBar3.Value = 0;
             }
             else
             {
@@ -925,12 +939,25 @@ namespace Handbrake
                 drp_audenc_2.Enabled = true;
                 drp_audsr_2.Enabled = true;
                 drp_audmix_2.Enabled = true;
+                trackBar2.Enabled = true;
                 drp_audbit_2.Text = "160";
                 drp_audenc_2.Text = "AAC";
                 drp_audsr_2.Text = "48";
                 drp_audmix_2.Text = "Automatic";
+
+                // Enable the 3rd Track.
+                drp_track3Audio.Visible = true;
+                drp_audbit_3.Visible = true;
+                drp_audenc_3.Visible = true;
+                drp_audsr_3.Visible = true;
+                drp_audmix_3.Visible = true;
+                trackBar3.Visible = true;
+                lbl_drc3.Visible = true;
+                drp_audbit_3.Text = "";
+                drp_audenc_3.Text = "";
+                drp_audsr_3.Text = "";
+                drp_audmix_3.Text = "";
             }
-            trackBar2.Value = 0;
         }
         private void drp_track3Audio_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -940,10 +967,26 @@ namespace Handbrake
                 drp_audenc_3.Enabled = false;
                 drp_audsr_3.Enabled = false;
                 drp_audmix_3.Enabled = false;
+                trackBar3.Enabled = false;
                 drp_audbit_3.Text = "";
                 drp_audenc_3.Text = "";
                 drp_audsr_3.Text = "";
                 drp_audmix_3.Text = "";
+                trackBar3.Value = 0;
+
+                // Disable the 4th Track.
+                drp_track4Audio.Visible = false;
+                drp_audbit_4.Visible = false;
+                drp_audenc_4.Visible = false;
+                drp_audsr_4.Visible = false;
+                drp_audmix_4.Visible = false;
+                trackBar4.Visible = false;
+                lbl_drc4.Visible = false;
+                drp_audbit_4.Text = "";
+                drp_audenc_4.Text = "";
+                drp_audsr_4.Text = "";
+                drp_audmix_4.Text = "Automatic";
+                
             }
             else
             {
@@ -951,12 +994,26 @@ namespace Handbrake
                 drp_audenc_3.Enabled = true;
                 drp_audsr_3.Enabled = true;
                 drp_audmix_3.Enabled = true;
+                trackBar3.Enabled = true;
                 drp_audbit_3.Text = "160";
                 drp_audenc_3.Text = "AAC";
                 drp_audsr_3.Text = "48";
                 drp_audmix_3.Text = "Automatic";
+
+                // Enable the 4th Track.
+                drp_track4Audio.Visible = true;
+                drp_audbit_4.Visible = true;
+                drp_audenc_4.Visible = true;
+                drp_audsr_4.Visible = true;
+                drp_audmix_4.Visible = true;
+                trackBar4.Visible = true;
+                lbl_drc4.Visible = true;
+                drp_audbit_4.Text = "";
+                drp_audenc_4.Text = "";
+                drp_audsr_4.Text = "";
+                drp_audmix_4.Text = "";
             }
-            trackBar3.Value = 0;
+            
         }
         private void drp_track4Audio_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -966,10 +1023,12 @@ namespace Handbrake
                 drp_audenc_4.Enabled = false;
                 drp_audsr_4.Enabled = false;
                 drp_audmix_4.Enabled = false;
+                trackBar4.Enabled = false;
                 drp_audbit_4.Text = "";
                 drp_audenc_4.Text = "";
                 drp_audsr_4.Text = "";
                 drp_audmix_4.Text = "";
+                trackBar4.Value = 0;
             }
             else
             {
@@ -977,12 +1036,12 @@ namespace Handbrake
                 drp_audenc_4.Enabled = true;
                 drp_audsr_4.Enabled = true;
                 drp_audmix_4.Enabled = true;
+                trackBar4.Enabled = true;
                 drp_audbit_4.Text = "160";
                 drp_audenc_4.Text = "AAC";
                 drp_audsr_4.Text = "48";
                 drp_audmix_4.Text = "Automatic";
             }
-            trackBar4.Value = 0;
         }
 
         private void drp_audioMixDown_SelectedIndexChanged(object sender, EventArgs e)

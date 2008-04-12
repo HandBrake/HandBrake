@@ -37,7 +37,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label Label38;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -623,9 +623,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Format = "N0";
+            dataGridViewCellStyle2.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle2;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -737,7 +737,7 @@ namespace Handbrake
             "112",
             "128",
             "160"});
-            this.drp_audbit_2.Location = new System.Drawing.Point(537, 91);
+            this.drp_audbit_2.Location = new System.Drawing.Point(537, 92);
             this.drp_audbit_2.Name = "drp_audbit_2";
             this.drp_audbit_2.Size = new System.Drawing.Size(80, 20);
             this.drp_audbit_2.TabIndex = 21;
@@ -754,7 +754,7 @@ namespace Handbrake
             "32",
             "24",
             "22.05"});
-            this.drp_audsr_2.Location = new System.Drawing.Point(488, 91);
+            this.drp_audsr_2.Location = new System.Drawing.Point(488, 92);
             this.drp_audsr_2.Name = "drp_audsr_2";
             this.drp_audsr_2.Size = new System.Drawing.Size(43, 21);
             this.drp_audsr_2.TabIndex = 20;
@@ -777,6 +777,7 @@ namespace Handbrake
             // 
             // drp_audsr_3
             // 
+            this.drp_audsr_3.Enabled = false;
             this.drp_audsr_3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audsr_3.FormattingEnabled = true;
             this.drp_audsr_3.Items.AddRange(new object[] {
@@ -791,9 +792,11 @@ namespace Handbrake
             this.drp_audsr_3.TabIndex = 28;
             this.drp_audsr_3.Text = "48";
             this.ToolTip.SetToolTip(this.drp_audsr_3, "Set the Audio Sample Rate");
+            this.drp_audsr_3.Visible = false;
             // 
             // drp_audbit_3
             // 
+            this.drp_audbit_3.Enabled = false;
             this.drp_audbit_3.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audbit_3.FormattingEnabled = true;
             this.drp_audbit_3.Items.AddRange(new object[] {
@@ -813,9 +816,11 @@ namespace Handbrake
             this.drp_audbit_3.TabIndex = 29;
             this.drp_audbit_3.Text = "160";
             this.ToolTip.SetToolTip(this.drp_audbit_3, "Set the Audio Bit-Rate");
+            this.drp_audbit_3.Visible = false;
             // 
             // drp_audenc_3
             // 
+            this.drp_audenc_3.Enabled = false;
             this.drp_audenc_3.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audenc_3.FormattingEnabled = true;
             this.drp_audenc_3.Items.AddRange(new object[] {
@@ -829,10 +834,12 @@ namespace Handbrake
             this.drp_audenc_3.TabIndex = 26;
             this.drp_audenc_3.Text = "AAC";
             this.ToolTip.SetToolTip(this.drp_audenc_3, "Select an audio encoder.");
+            this.drp_audenc_3.Visible = false;
             this.drp_audenc_3.SelectedIndexChanged += new System.EventHandler(this.drp_audenc_3_SelectedIndexChanged);
             // 
             // drp_audmix_3
             // 
+            this.drp_audmix_3.Enabled = false;
             this.drp_audmix_3.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audmix_3.FormattingEnabled = true;
             this.drp_audmix_3.Items.AddRange(new object[] {
@@ -848,10 +855,12 @@ namespace Handbrake
             this.drp_audmix_3.TabIndex = 27;
             this.drp_audmix_3.Text = "Automatic";
             this.ToolTip.SetToolTip(this.drp_audmix_3, "Please note: Some options require a 5.1 audio channel to be selected");
+            this.drp_audmix_3.Visible = false;
             this.drp_audmix_3.SelectedIndexChanged += new System.EventHandler(this.drp_audmix_3_SelectedIndexChanged);
             // 
             // drp_audsr_4
             // 
+            this.drp_audsr_4.Enabled = false;
             this.drp_audsr_4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audsr_4.FormattingEnabled = true;
             this.drp_audsr_4.Items.AddRange(new object[] {
@@ -866,9 +875,11 @@ namespace Handbrake
             this.drp_audsr_4.TabIndex = 36;
             this.drp_audsr_4.Text = "48";
             this.ToolTip.SetToolTip(this.drp_audsr_4, "Set the Audio Sample Rate");
+            this.drp_audsr_4.Visible = false;
             // 
             // drp_audbit_4
             // 
+            this.drp_audbit_4.Enabled = false;
             this.drp_audbit_4.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audbit_4.FormattingEnabled = true;
             this.drp_audbit_4.Items.AddRange(new object[] {
@@ -888,9 +899,11 @@ namespace Handbrake
             this.drp_audbit_4.TabIndex = 37;
             this.drp_audbit_4.Text = "160";
             this.ToolTip.SetToolTip(this.drp_audbit_4, "Set the Audio Bit-Rate");
+            this.drp_audbit_4.Visible = false;
             // 
             // drp_audenc_4
             // 
+            this.drp_audenc_4.Enabled = false;
             this.drp_audenc_4.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audenc_4.FormattingEnabled = true;
             this.drp_audenc_4.Items.AddRange(new object[] {
@@ -904,10 +917,12 @@ namespace Handbrake
             this.drp_audenc_4.TabIndex = 34;
             this.drp_audenc_4.Text = "AAC";
             this.ToolTip.SetToolTip(this.drp_audenc_4, "Select an audio encoder.");
+            this.drp_audenc_4.Visible = false;
             this.drp_audenc_4.SelectedIndexChanged += new System.EventHandler(this.drp_audenc_4_SelectedIndexChanged);
             // 
             // drp_audmix_4
             // 
+            this.drp_audmix_4.Enabled = false;
             this.drp_audmix_4.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audmix_4.FormattingEnabled = true;
             this.drp_audmix_4.Items.AddRange(new object[] {
@@ -923,6 +938,7 @@ namespace Handbrake
             this.drp_audmix_4.TabIndex = 35;
             this.drp_audmix_4.Text = "Automatic";
             this.ToolTip.SetToolTip(this.drp_audmix_4, "Please note: Some options require a 5.1 audio channel to be selected");
+            this.drp_audmix_4.Visible = false;
             this.drp_audmix_4.SelectedIndexChanged += new System.EventHandler(this.drp_audmix_4_SelectedIndexChanged);
             // 
             // DVD_Open
@@ -1331,6 +1347,7 @@ namespace Handbrake
             this.lbl_drc4.Size = new System.Drawing.Size(19, 13);
             this.lbl_drc4.TabIndex = 39;
             this.lbl_drc4.Text = "1:";
+            this.lbl_drc4.Visible = false;
             // 
             // lbl_drc3
             // 
@@ -1342,6 +1359,7 @@ namespace Handbrake
             this.lbl_drc3.Size = new System.Drawing.Size(19, 13);
             this.lbl_drc3.TabIndex = 31;
             this.lbl_drc3.Text = "1:";
+            this.lbl_drc3.Visible = false;
             // 
             // lbl_drc2
             // 
@@ -1367,6 +1385,7 @@ namespace Handbrake
             // 
             // trackBar4
             // 
+            this.trackBar4.Enabled = false;
             this.trackBar4.LargeChange = 0;
             this.trackBar4.Location = new System.Drawing.Point(620, 161);
             this.trackBar4.Margin = new System.Windows.Forms.Padding(0);
@@ -1375,6 +1394,7 @@ namespace Handbrake
             this.trackBar4.Size = new System.Drawing.Size(49, 42);
             this.trackBar4.TabIndex = 38;
             this.trackBar4.TickFrequency = 10;
+            this.trackBar4.Visible = false;
             this.trackBar4.ValueChanged += new System.EventHandler(this.trackBar4_Scroll);
             // 
             // drp_track4Audio
@@ -1387,6 +1407,7 @@ namespace Handbrake
             this.drp_track4Audio.Name = "drp_track4Audio";
             this.drp_track4Audio.Size = new System.Drawing.Size(194, 20);
             this.drp_track4Audio.TabIndex = 33;
+            this.drp_track4Audio.Visible = false;
             this.drp_track4Audio.SelectedIndexChanged += new System.EventHandler(this.drp_track4Audio_SelectedIndexChanged);
             // 
             // label21
@@ -1399,9 +1420,11 @@ namespace Handbrake
             this.label21.Size = new System.Drawing.Size(19, 13);
             this.label21.TabIndex = 32;
             this.label21.Text = "4:";
+            this.label21.Visible = false;
             // 
             // trackBar3
             // 
+            this.trackBar3.Enabled = false;
             this.trackBar3.LargeChange = 0;
             this.trackBar3.Location = new System.Drawing.Point(620, 123);
             this.trackBar3.Margin = new System.Windows.Forms.Padding(0);
@@ -1410,6 +1433,7 @@ namespace Handbrake
             this.trackBar3.Size = new System.Drawing.Size(49, 42);
             this.trackBar3.TabIndex = 30;
             this.trackBar3.TickFrequency = 10;
+            this.trackBar3.Visible = false;
             this.trackBar3.ValueChanged += new System.EventHandler(this.trackBar3_Scroll);
             // 
             // drp_track3Audio
@@ -1422,6 +1446,7 @@ namespace Handbrake
             this.drp_track3Audio.Name = "drp_track3Audio";
             this.drp_track3Audio.Size = new System.Drawing.Size(194, 20);
             this.drp_track3Audio.TabIndex = 25;
+            this.drp_track3Audio.Visible = false;
             this.drp_track3Audio.SelectedIndexChanged += new System.EventHandler(this.drp_track3Audio_SelectedIndexChanged);
             // 
             // label18
@@ -1434,6 +1459,7 @@ namespace Handbrake
             this.label18.Size = new System.Drawing.Size(19, 13);
             this.label18.TabIndex = 24;
             this.label18.Text = "3:";
+            this.label18.Visible = false;
             // 
             // trackBar2
             // 
