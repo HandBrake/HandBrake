@@ -288,7 +288,7 @@ namespace Handbrake.Functions
 
             // Audio Settings Tab
             #region Audio
-            
+
             if (presetQuery.AudioTrack1 == "")
                 mainWindow.drp_track1Audio.Text = "Automatic";
             else
@@ -296,44 +296,114 @@ namespace Handbrake.Functions
 
             if (presetQuery.AudioTrack2 == "None")
             {
-                if (presetQuery.AudioEncoder2 != null)
-                {
-                    mainWindow.drp_track2Audio.SelectedIndex = 1;
-                    mainWindow.drp_audsr_2.Enabled = true;
-                    mainWindow.drp_audmix_2.Enabled = true;
-                    mainWindow.drp_audenc_2.Enabled = true;
-                    mainWindow.drp_audbit_2.Enabled = true;
-                }
-                else
-                {
-                    mainWindow.drp_track2Audio.SelectedIndex = 0;
-                    mainWindow.drp_audsr_2.Enabled = false;
-                    mainWindow.drp_audmix_2.Enabled = false;
-                    mainWindow.drp_audenc_2.Enabled = false;
-                    mainWindow.drp_audbit_2.Enabled = false;
-                }
+                mainWindow.drp_track2Audio.SelectedIndex = 0;
+                mainWindow.drp_audsr_2.Enabled = false;
+                mainWindow.drp_audmix_2.Enabled = false;
+                mainWindow.drp_audenc_2.Enabled = false;
+                mainWindow.drp_audbit_2.Enabled = false;
+            }
+            else
+            {
+                mainWindow.drp_track2Audio.Text = presetQuery.AudioTrack2;
+                mainWindow.drp_audsr_2.Enabled = true;
+                mainWindow.drp_audmix_2.Enabled = true;
+                mainWindow.drp_audenc_2.Enabled = true;
+                mainWindow.drp_audbit_2.Enabled = true;
+            }
+
+            if (presetQuery.AudioTrack3 == "None")
+            {
+                mainWindow.drp_track3Audio.SelectedIndex = 0;
+                mainWindow.drp_audsr_3.Enabled = false;
+                mainWindow.drp_audmix_3.Enabled = false;
+                mainWindow.drp_audenc_3.Enabled = false;
+                mainWindow.drp_audbit_3.Enabled = false;
 
             }
             else
-                mainWindow.drp_track2Audio.Text = presetQuery.AudioTrack2;
+            {
+                mainWindow.drp_track3Audio.Text = presetQuery.AudioTrack3;
+                mainWindow.drp_audsr_3.Enabled = true;
+                mainWindow.drp_audmix_3.Enabled = true;
+                mainWindow.drp_audenc_3.Enabled = true;
+                mainWindow.drp_audbit_3.Enabled = true;
+            }
+
+            if (presetQuery.AudioTrack4 == "None")
+            {
+                mainWindow.drp_track4Audio.SelectedIndex = 0;
+                mainWindow.drp_audsr_4.Enabled = false;
+                mainWindow.drp_audmix_4.Enabled = false;
+                mainWindow.drp_audenc_4.Enabled = false;
+                mainWindow.drp_audbit_4.Enabled = false;
+            }
+            else
+            {
+                mainWindow.drp_track4Audio.Text = presetQuery.AudioTrack4;
+                mainWindow.drp_audsr_4.Enabled = true;
+                mainWindow.drp_audmix_4.Enabled = true;
+                mainWindow.drp_audenc_4.Enabled = true;
+                mainWindow.drp_audbit_4.Enabled = true;
+            }
 
             if (presetQuery.AudioEncoder1 != null)
-            mainWindow.drp_audenc_1.Text = presetQuery.AudioEncoder1;
+                mainWindow.drp_audenc_1.Text = presetQuery.AudioEncoder1;
             mainWindow.drp_audenc_2.Text = presetQuery.AudioEncoder2;
+            mainWindow.drp_audenc_3.Text = presetQuery.AudioEncoder3;
+            mainWindow.drp_audenc_4.Text = presetQuery.AudioEncoder4;
 
             if (presetQuery.AudioBitrate1 != null)
-            mainWindow.drp_audbit_1.Text = presetQuery.AudioBitrate1;
+                mainWindow.drp_audbit_1.Text = presetQuery.AudioBitrate1;
             mainWindow.drp_audbit_2.Text = presetQuery.AudioBitrate2;
+            mainWindow.drp_audbit_3.Text = presetQuery.AudioBitrate4;
+            mainWindow.drp_audbit_3.Text = presetQuery.AudioBitrate4;
 
             if (presetQuery.AudioSamplerate1 != null)
-            mainWindow.drp_audsr_1.Text = presetQuery.AudioSamplerate1;
+                mainWindow.drp_audsr_1.Text = presetQuery.AudioSamplerate1;
             mainWindow.drp_audsr_2.Text = presetQuery.AudioSamplerate2;
+            mainWindow.drp_audsr_3.Text = presetQuery.AudioSamplerate3;
+            mainWindow.drp_audsr_4.Text = presetQuery.AudioSamplerate4;
 
             mainWindow.drp_audmix_1.Text = presetQuery.AudioTrackMix1;
             mainWindow.drp_audmix_2.Text = presetQuery.AudioTrackMix2;
+            mainWindow.drp_audmix_3.Text = presetQuery.AudioTrackMix3;
+            mainWindow.drp_audmix_4.Text = presetQuery.AudioTrackMix4;
 
-            
-            
+
+            // Dynamic Range Compression (Should be a float but we use double for ease)
+            double value = 0;
+            double actualValue = 0;
+
+            value = presetQuery.DRC1;
+            if (value > 0)
+                value = value - 10;
+            mainWindow.trackBar1.Value = int.Parse(value.ToString());
+            actualValue = presetQuery.DRC1 / 10;
+            mainWindow.lbl_drc1.Text = actualValue.ToString();
+
+            value = presetQuery.DRC2;
+            if (value > 0)
+                value = value - 10;
+            mainWindow.trackBar2.Value = int.Parse(value.ToString());
+            actualValue = presetQuery.DRC2 / 10;
+            mainWindow.lbl_drc2.Text = actualValue.ToString();
+
+            value = presetQuery.DRC3;
+            if (value > 0)
+                value = value - 10;
+            mainWindow.trackBar3.Value = int.Parse(value.ToString());
+            actualValue = presetQuery.DRC3 / 10;
+            mainWindow.lbl_drc3.Text = actualValue.ToString();
+
+            value = presetQuery.DRC4;
+            if (value > 0)
+                value = value - 10;
+            mainWindow.trackBar4.Value = int.Parse(value.ToString());
+            actualValue = presetQuery.DRC4 / 10;
+            mainWindow.lbl_drc4.Text = actualValue.ToString();
+
+
+            // Subtitle Stuff
             mainWindow.drp_subtitle.Text = presetQuery.Subtitles;
 
             if (presetQuery.ForcedSubtitles == true)
@@ -343,15 +413,6 @@ namespace Handbrake.Functions
             }
             else
                 mainWindow.check_forced.CheckState = CheckState.Unchecked;
-
-            // Dynamic Range Compression (Should be a float but we use double for ease)
-            double value = presetQuery.DRC;
-            if (value > 0)
-                value = value - 10;
-            mainWindow.slider_drc.Value = int.Parse(value.ToString());
-
-            double actualValue = presetQuery.DRC / 10;
-            mainWindow.lbl_drc.Text = actualValue.ToString();
 
 
             #endregion
@@ -627,223 +688,250 @@ namespace Handbrake.Functions
             // Audio Settings Tab
             #region Audio Settings Tab
 
-            // Used Varibles
+            // Query
+            string tracks = "";
+            string aencoder = "";
             string audioBitrate = "";
-            string audioChannels = "";
-            string SixChannelAudio = "";
+            string audioSampleRate = "";
+            string Mixdown = "";
+            string drc = "";
             string subScan = "";
             string forced = "";
-            string drc = "";
-            string audioSampleRate = "";
-            string audioEncoder = "";
 
             // Track 1
             string track1 = mainWindow.drp_track1Audio.Text;
-            string vencoder1 = mainWindow.drp_audenc_1.Text;
+            string aencoder1 = mainWindow.drp_audenc_1.Text;
             string audioBitrate1 = mainWindow.drp_audbit_1.Text;
             string audioSampleRate1 = mainWindow.drp_audsr_1.Text;
             string Mixdown1 = mainWindow.drp_audmix_1.Text;
+            string drc1 = mainWindow.trackBar1.Value.ToString();
 
             // Track 2
             string track2 = mainWindow.drp_track2Audio.Text;
-            string vencoder2 = mainWindow.drp_audenc_2.Text;
+            string aencoder2 = mainWindow.drp_audenc_2.Text;
             string audioBitrate2 = mainWindow.drp_audbit_2.Text;
             string audioSampleRate2 = mainWindow.drp_audsr_2.Text;
             string Mixdown2 = mainWindow.drp_audmix_2.Text;
+            string drc2 = mainWindow.trackBar2.Value.ToString();
 
+            // Track 3
+            string track3 = mainWindow.drp_track3Audio.Text;
+            string aencoder3 = mainWindow.drp_audenc_3.Text;
+            string audioBitrate3 = mainWindow.drp_audbit_3.Text;
+            string audioSampleRate3 = mainWindow.drp_audsr_3.Text;
+            string Mixdown3 = mainWindow.drp_audmix_3.Text;
+            string drc3 = mainWindow.trackBar3.Value.ToString();
+
+            // Track 4
+            string track4 = mainWindow.drp_track4Audio.Text;
+            string aencoder4 = mainWindow.drp_audenc_4.Text;
+            string audioBitrate4 = mainWindow.drp_audbit_4.Text;
+            string audioSampleRate4 = mainWindow.drp_audsr_4.Text;
+            string Mixdown4 = mainWindow.drp_audmix_4.Text;
+            string drc4 = mainWindow.trackBar4.Value.ToString();
+
+
+            //
             // Audio Track Selections
+            //
             if (track1 == "Automatic")
-                audioChannels = "";
+                tracks = " -a auto";
             else if (track1 == "")
-                audioChannels = "";
+                tracks = "";
             else if (track1 == "None")
-                audioChannels = " -a none";
+                tracks = "";
             else
+            {
+                string[] tempSub = track1.Split(' ');
+                tracks = " -a " + tempSub[0];
+            }
+
+            if (track2 != "None")
             {
                 string[] tempSub;
-                tempSub = track1.Split(' ');
-                audioChannels = " -a " + tempSub[0];
-            }
-
-            if (audioChannels != "")
-            {
-                if ((track2 != "") && (track2 != "None"))
-                {
-                    string[] tempSub;
-                    tempSub = track2.Split(' ');
-                    audioChannels = audioChannels + "," + tempSub[0];
-                }
-            }
-            else
-            {
-                if ((track2 != "") && (track2 != "None"))
-                {
-                    string[] tempSub;
-                    tempSub = track2.Split(' ');
-                    audioChannels = " -a " + tempSub[0];
-                }
-            }
-
-            // Audio Mixdown Selections
-            switch (Mixdown1)
-            {
-                case "Automatic":
-                    Mixdown1 = "";
-                    break;
-                case "Mono":
-                    Mixdown1 = "mono";
-                    break;
-                case "Stereo":
-                    Mixdown1 = "stereo";
-                    break;
-                case "Dolby Surround":
-                    Mixdown1 = "dpl1";
-                    break;
-                case "Dolby Pro Logic II":
-                    Mixdown1 = "dpl2";
-                    break;
-                case "6 Channel Discrete":
-                    Mixdown1 = "6ch";
-                    break;
-                default:
-                    Mixdown1 = "";
-                    break;
-            }
-
-            if (Mixdown1 != "")
-                SixChannelAudio = " -6 " + Mixdown1;
-            else
-            {
-                if (mainWindow.drp_track2Audio.Text == "None")
-                    SixChannelAudio = "";
+                tempSub = track2.Split(' ');
+                if (tracks == "")
+                    tracks = " -a none," + tempSub[0];
                 else
-                {
-                    if (mainWindow.drp_audmix_2.Text == "Automatic")
-                        SixChannelAudio = "";
-                    else
-                        SixChannelAudio = " -6 dpl2";
-                }
+                    tracks = tracks + "," + tempSub[0];
             }
 
-            switch (Mixdown2)
+            if (track3 != "None")
             {
-                case "Automatic":
-                    Mixdown2 = "";
-                    break;
-                case "Mono":
-                    Mixdown2 = "mono";
-                    break;
-                case "Stereo":
-                    Mixdown2 = "stereo";
-                    break;
-                case "Dolby Surround":
-                    Mixdown2 = "dpl1";
-                    break;
-                case "Dolby Pro Logic II":
-                    Mixdown2 = "dpl2";
-                    break;
-                case "6 Channel Discrete":
-                    Mixdown2 = "6ch";
-                    break;
-                default:
-                    Mixdown2 = "";
-                    break;
-            }
-
-            if (Mixdown2 != "")
-            {
-                if (SixChannelAudio != "")
-                    SixChannelAudio = SixChannelAudio + "," + Mixdown2;
+                string[] tempSub;
+                tempSub = track3.Split(' ');
+                if (tracks == "")
+                    tracks = " -a none,none," + tempSub[0];
                 else
-                    SixChannelAudio = " -6 " + Mixdown2;
+                    tracks = tracks + "," + tempSub[0];
             }
 
-            // Audio Encoder Selections
-            switch (mainWindow.drp_audenc_1.Text)
+            if (track4 != "None")
             {
-                case "AAC":
-                    audioEncoder = " -E faac";
-                    break;
-                case "MP3":
-                    audioEncoder = " -E lame";
-                    break;
-                case "Vorbis":
-                    audioEncoder = " -E vorbis";
-                    break;
-                case "AC3":
-                    audioEncoder = " -E ac3";
-                    break;
-                case "AAC + AC3":
-                    audioEncoder = " -E aac+ac3";
-                    break;
-                default:
-                    break;
+                string[] tempSub;
+                tempSub = track4.Split(' ');
+                if (tracks == "")
+                    tracks = " -a none,none,none," + tempSub[0];
+                else
+                    tracks = tracks + "," + tempSub[0];
             }
 
-            switch (mainWindow.drp_audenc_2.Text)
+            //
+            // Audio Encoder
+            //
+            if (aencoder1 != "")
+                aencoder = " -E " + getAudioEncoder(aencoder1);
+
+            if (aencoder2 != "")
             {
-                case "AAC":
-                    if (audioEncoder == "")
-                        audioEncoder = " -E faac";
-                    else
-                        audioEncoder = audioEncoder + ",faac";
-                    break;
-                case "MP3":
-                    if (audioEncoder == "")
-                        audioEncoder = " -E lame";
-                    else
-                        audioEncoder = audioEncoder + ",lame";
-                    break;
-                case "Vorbis":
-                    if (audioEncoder == "")
-                        audioEncoder = " -E vorbis";
-                    else
-                        audioEncoder = audioEncoder + ",vorbis";
-                    break;
-                case "AC3":
-                    if (audioEncoder == "")
-                        audioEncoder = " -E ac3";
-                    else
-                        audioEncoder = audioEncoder + ",ac3";
-                    break;
-                case "AAC + AC3":
-                    if (audioEncoder == "")
-                        audioEncoder = " -E aac+ac3";
-                    else
-                        audioEncoder = audioEncoder + ",aac+ac3";
-                    break;
-                default:
-                    break;
+                if (aencoder == "")
+                    aencoder = " -E faac," + getAudioEncoder(aencoder2);
+                else
+                    aencoder = aencoder + "," + getAudioEncoder(aencoder2);
             }
 
-            // Audio BitRate Selections
+            if (aencoder3 != "")
+            {
+                if (aencoder == "")
+                    aencoder = " -E faac,faac," + getAudioEncoder(aencoder3);
+                else
+                    aencoder = aencoder + "," + getAudioEncoder(aencoder3);
+            }
+
+            if (aencoder4 != "")
+            {
+                if (aencoder == "")
+                    aencoder = " -E faac,faac,faac," + getAudioEncoder(aencoder4);
+                else
+                    aencoder = aencoder + "," + getAudioEncoder(aencoder4);
+            }
+
+            //
+            // Audio Bitrate Selections
+            //
             if (audioBitrate1 != "")
                 audioBitrate = " -B " + audioBitrate1;
 
             if (audioBitrate2 != "")
             {
                 if (audioBitrate == "")
-                    audioBitrate = " -B " + audioBitrate2;
+                    audioBitrate = " -B 160," + audioBitrate2;
                 else
                     audioBitrate = audioBitrate + "," + audioBitrate2;
             }
 
-            // Audio SampleRate Selections
+            if (audioBitrate3 != "")
+            {
+                if (audioBitrate == "")
+                    audioBitrate = " -B 160,160," + audioBitrate3;
+                else
+                    audioBitrate = audioBitrate + "," + audioBitrate3;
+            }
+
+            if (audioBitrate4 != "")
+            {
+                if (audioBitrate == "")
+                    audioBitrate = " -B 160,160,160," + audioBitrate4;
+                else
+                    audioBitrate = audioBitrate + "," + audioBitrate4;
+            }
+
+            //Audio Sample Rate   - audioSampleRate
+
             if (audioSampleRate1 != "")
                 audioSampleRate = " -R " + audioSampleRate1;
 
             if (audioSampleRate2 != "")
             {
                 if (audioSampleRate == "")
-                    audioSampleRate = " -R " + audioSampleRate2;
+                    audioSampleRate = " -R 48," + audioSampleRate2;
                 else
                     audioSampleRate = audioSampleRate + "," + audioSampleRate2;
             }
 
-            //Dynamic Range Compression (expects a float but a double is used for ease)
-            double value = mainWindow.slider_drc.Value / 10.0;
+            if (audioSampleRate3 != "")
+            {
+                if (audioSampleRate == "")
+                    audioSampleRate = " -R 48,48," + audioSampleRate3;
+                else
+                    audioSampleRate = audioSampleRate + "," + audioSampleRate3;
+            }
+
+            if (audioSampleRate4 != "")
+            {
+                if (audioSampleRate == "")
+                    audioSampleRate = " -R 48,48,48," + audioSampleRate4;
+                else
+                    audioSampleRate = audioSampleRate + "," + audioSampleRate4;
+            }
+
+            //
+            // Audio Mixdown Selections
+            //
+
+            if ((Mixdown1 != "") && (Mixdown1 != "Automatic"))
+                Mixdown = " -6 " + getMixDown(Mixdown1);
+
+            if ((Mixdown2 != "") && (Mixdown2 != "Automatic"))
+            {
+                if (Mixdown != "")
+                    Mixdown = Mixdown + "," + getMixDown(Mixdown2);
+            }
+
+            if ((Mixdown3 != "") && (Mixdown3 != "Automatic"))
+            {
+                if (Mixdown != "")
+                    Mixdown = Mixdown + "," + getMixDown(Mixdown3);
+            }
+
+            if ((Mixdown4 != "") && (Mixdown4 != "Automatic"))
+            {
+                if (Mixdown != "")
+                    Mixdown = Mixdown + "," + getMixDown(Mixdown4);
+            }
+
+
+            //
+            // DRC
+            //
+            double value = 0;
+
+            value = mainWindow.trackBar1.Value / 10.0;
             value++;
-            drc = " -D " + value;
+
+            if (value > 1.0)
+                drc = " -D " + value;
+
+            value = mainWindow.trackBar2.Value / 10.0;
+            value++;
+            if (drc2 != "0")
+            {
+                if (drc == "")
+                    drc = " -D 1," + value;
+                else
+                    drc = drc + "," + value;
+            }
+
+            value = mainWindow.trackBar3.Value / 10.0;
+            value++;
+            if (drc3 != "0")
+            {
+                if (drc == "")
+                    drc = " -D 1,1," + value;
+                else
+                    drc = drc + "," + value;
+            }
+
+            value = mainWindow.trackBar4.Value / 10.0;
+            value++;
+            if (drc4 != "0")
+            {
+                if (drc == "")
+                    drc = " -D 1,1,1," + value;
+                else
+                    drc = drc + "," + value;
+            }
+
 
             // Subtitles
             string subtitles = mainWindow.drp_subtitle.Text;
@@ -867,7 +955,8 @@ namespace Handbrake.Functions
                 forced = " -F ";
 
 
-            string queryAudioSettings = audioChannels + SixChannelAudio + audioEncoder + audioBitrate + audioSampleRate + drc + subScan + subtitles + forced;
+            string queryAudioSettings = tracks + aencoder + audioBitrate + audioSampleRate + Mixdown + drc + subScan + subtitles + forced;
+
             #endregion
 
             // Chapter Markers Tab
@@ -1028,6 +1117,46 @@ namespace Handbrake.Functions
                 return false;
             }
         }
+
+
+        private string getMixDown(string selectedAudio)
+        {
+            switch (selectedAudio)
+            {
+                case "Automatic":
+                    return "";
+                case "Mono":
+                    return "mono";
+                case "Stereo":
+                    return "stereo";
+                case "Dolby Surround":
+                    return "dpl1";
+                case "Dolby Pro Logic II":
+                    return "dpl2";
+                case "6 Channel Discrete":
+                    return "6ch";
+                default:
+                    return "";
+            }
+        }
+
+        private string getAudioEncoder(string selectedEncoder)
+        {
+            switch (selectedEncoder)
+            {
+                case "AAC":
+                    return "faac";
+                case "MP3":
+                    return "lame";
+                case "Vorbis":
+                    return "vorbis";
+                case "AC3":
+                    return "ac3";
+                default:
+                    return "";
+            }
+        }
+
 
         // End of Functions
     }

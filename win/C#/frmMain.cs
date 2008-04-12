@@ -548,6 +548,18 @@ namespace Handbrake
                 if (drp_track2Audio.Items.Count > 0)
                     drp_track2Audio.Text = drp_track2Audio.Items[0].ToString();
 
+                drp_track3Audio.Items.Clear();
+                drp_track3Audio.Items.Add("None");
+                drp_track3Audio.Items.AddRange(selectedTitle.AudioTracks.ToArray());
+                if (drp_track3Audio.Items.Count > 0)
+                    drp_track3Audio.Text = drp_track3Audio.Items[0].ToString();
+
+                drp_track4Audio.Items.Clear();
+                drp_track4Audio.Items.Add("None");
+                drp_track4Audio.Items.AddRange(selectedTitle.AudioTracks.ToArray());
+                if (drp_track4Audio.Items.Count > 0)
+                    drp_track4Audio.Text = drp_track4Audio.Items[0].ToString();
+
                 // Populate the Subtitles dropdown
                 drp_subtitle.Items.Clear();
                 drp_subtitle.Items.Add("None");
@@ -892,6 +904,7 @@ namespace Handbrake
                 drp_audsr_1.Text = "48";
                 drp_audmix_1.Text = "Automatic";
             }
+            trackBar1.Value = 0;
         }
         private void drp_track2Audio_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -904,7 +917,7 @@ namespace Handbrake
                 drp_audbit_2.Text = "";
                 drp_audenc_2.Text = "";
                 drp_audsr_2.Text = "";
-                drp_audmix_2.Text = "";
+                drp_audmix_2.Text = "";                
             }
             else
             {
@@ -917,7 +930,61 @@ namespace Handbrake
                 drp_audsr_2.Text = "48";
                 drp_audmix_2.Text = "Automatic";
             }
+            trackBar2.Value = 0;
         }
+        private void drp_track3Audio_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (drp_track3Audio.SelectedItem.Equals("None"))
+            {
+                drp_audbit_3.Enabled = false;
+                drp_audenc_3.Enabled = false;
+                drp_audsr_3.Enabled = false;
+                drp_audmix_3.Enabled = false;
+                drp_audbit_3.Text = "";
+                drp_audenc_3.Text = "";
+                drp_audsr_3.Text = "";
+                drp_audmix_3.Text = "";
+            }
+            else
+            {
+                drp_audbit_3.Enabled = true;
+                drp_audenc_3.Enabled = true;
+                drp_audsr_3.Enabled = true;
+                drp_audmix_3.Enabled = true;
+                drp_audbit_3.Text = "160";
+                drp_audenc_3.Text = "AAC";
+                drp_audsr_3.Text = "48";
+                drp_audmix_3.Text = "Automatic";
+            }
+            trackBar3.Value = 0;
+        }
+        private void drp_track4Audio_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (drp_track4Audio.SelectedItem.Equals("None"))
+            {
+                drp_audbit_4.Enabled = false;
+                drp_audenc_4.Enabled = false;
+                drp_audsr_4.Enabled = false;
+                drp_audmix_4.Enabled = false;
+                drp_audbit_4.Text = "";
+                drp_audenc_4.Text = "";
+                drp_audsr_4.Text = "";
+                drp_audmix_4.Text = "";
+            }
+            else
+            {
+                drp_audbit_4.Enabled = true;
+                drp_audenc_4.Enabled = true;
+                drp_audsr_4.Enabled = true;
+                drp_audmix_4.Enabled = true;
+                drp_audbit_4.Text = "160";
+                drp_audenc_4.Text = "AAC";
+                drp_audsr_4.Text = "48";
+                drp_audmix_4.Text = "Automatic";
+            }
+            trackBar4.Value = 0;
+        }
+
         private void drp_audioMixDown_SelectedIndexChanged(object sender, EventArgs e)
         {
             if ((drp_audenc_1.Text == "AAC") && (drp_audmix_1.Text == "6 Channel Discrete"))
@@ -957,6 +1024,9 @@ namespace Handbrake
         }
         private void drp_audmix_2_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (drp_audmix_1.Text == "Automatic")
+                MessageBox.Show("Please select a mixdown for the previous track(s).", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
             if ((drp_audenc_2.Text == "AAC") && (drp_audmix_2.Text == "6 Channel Discrete"))
             {
                 drp_audbit_2.Items.Clear();
@@ -976,7 +1046,103 @@ namespace Handbrake
                 drp_audbit_2.Items.Add("320");
                 drp_audbit_2.Items.Add("384");
             }
+            else if ((drp_audenc_2.Text == "AAC") && (drp_audmix_2.Text != "6 Channel Discrete"))
+            {
+                drp_audbit_2.Items.Clear();
+                drp_audbit_2.Items.Add("32");
+                drp_audbit_2.Items.Add("40");
+                drp_audbit_2.Items.Add("48");
+                drp_audbit_2.Items.Add("56");
+                drp_audbit_2.Items.Add("64");
+                drp_audbit_2.Items.Add("80");
+                drp_audbit_2.Items.Add("86");
+                drp_audbit_2.Items.Add("112");
+                drp_audbit_2.Items.Add("128");
+                drp_audbit_2.Items.Add("160");
+                drp_audbit_2.Text = "160";
+            }
         }
+        private void drp_audmix_3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (drp_audmix_2.Text == "Automatic")
+                MessageBox.Show("Please select a mixdown for the previous track(s).", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+            if ((drp_audenc_3.Text == "AAC") && (drp_audmix_3.Text == "6 Channel Discrete"))
+            {
+                drp_audbit_3.Items.Clear();
+                drp_audbit_3.Items.Add("32");
+                drp_audbit_3.Items.Add("40");
+                drp_audbit_3.Items.Add("48");
+                drp_audbit_3.Items.Add("56");
+                drp_audbit_3.Items.Add("64");
+                drp_audbit_3.Items.Add("80");
+                drp_audbit_3.Items.Add("86");
+                drp_audbit_3.Items.Add("112");
+                drp_audbit_3.Items.Add("128");
+                drp_audbit_3.Items.Add("160");
+                drp_audbit_3.Items.Add("192");
+                drp_audbit_3.Items.Add("224");
+                drp_audbit_3.Items.Add("256");
+                drp_audbit_3.Items.Add("320");
+                drp_audbit_3.Items.Add("384");
+            }
+            else if ((drp_audenc_3.Text == "AAC") && (drp_audmix_3.Text != "6 Channel Discrete"))
+            {
+                drp_audbit_3.Items.Clear();
+                drp_audbit_3.Items.Add("32");
+                drp_audbit_3.Items.Add("40");
+                drp_audbit_3.Items.Add("48");
+                drp_audbit_3.Items.Add("56");
+                drp_audbit_3.Items.Add("64");
+                drp_audbit_3.Items.Add("80");
+                drp_audbit_3.Items.Add("86");
+                drp_audbit_3.Items.Add("112");
+                drp_audbit_3.Items.Add("128");
+                drp_audbit_3.Items.Add("160");
+                drp_audbit_3.Text = "160";
+            }
+        }
+        private void drp_audmix_4_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (drp_audmix_3.Text == "Automatic")
+                MessageBox.Show("Please select a mixdown for the previous track(s).", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+            if ((drp_audenc_4.Text == "AAC") && (drp_audmix_4.Text == "6 Channel Discrete"))
+            {
+                drp_audbit_4.Items.Clear();
+                drp_audbit_4.Items.Add("32");
+                drp_audbit_4.Items.Add("40");
+                drp_audbit_4.Items.Add("48");
+                drp_audbit_4.Items.Add("56");
+                drp_audbit_4.Items.Add("64");
+                drp_audbit_4.Items.Add("80");
+                drp_audbit_4.Items.Add("86");
+                drp_audbit_4.Items.Add("112");
+                drp_audbit_4.Items.Add("128");
+                drp_audbit_4.Items.Add("160");
+                drp_audbit_4.Items.Add("192");
+                drp_audbit_4.Items.Add("224");
+                drp_audbit_4.Items.Add("256");
+                drp_audbit_4.Items.Add("320");
+                drp_audbit_4.Items.Add("384");
+            }
+            else if ((drp_audenc_4.Text == "AAC") && (drp_audmix_4.Text != "6 Channel Discrete"))
+            {
+                drp_audbit_4.Items.Clear();
+                drp_audbit_4.Items.Add("32");
+                drp_audbit_4.Items.Add("40");
+                drp_audbit_4.Items.Add("48");
+                drp_audbit_4.Items.Add("56");
+                drp_audbit_4.Items.Add("64");
+                drp_audbit_4.Items.Add("80");
+                drp_audbit_4.Items.Add("86");
+                drp_audbit_4.Items.Add("112");
+                drp_audbit_4.Items.Add("128");
+                drp_audbit_4.Items.Add("160");
+                drp_audbit_4.Text = "160";
+            }
+        }
+
         private void drp_audenc_1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (drp_audenc_1.Text == "AC3")
@@ -1051,9 +1217,9 @@ namespace Handbrake
                 drp_audbit_2.Enabled = false;
                 drp_audsr_2.Enabled = false;
 
-                drp_audmix_2.Text = "";
-                drp_audbit_2.Text = "";
-                drp_audsr_2.Text = "";
+                drp_audmix_2.Text = "Automatic";
+                drp_audbit_2.Text = "160";
+                drp_audsr_2.Text = "48";
             }
             else
             {
@@ -1068,8 +1234,6 @@ namespace Handbrake
                     drp_audbit_2.Text = "160";
                     drp_audsr_2.Text = "48";
                 }
-
-
             }
 
             if (drp_audenc_2.Text == "AAC")
@@ -1118,13 +1282,184 @@ namespace Handbrake
                 drp_audbit_2.Items.Add("320");
             }
         }
-        private void slider_drc_Scroll(object sender, EventArgs e)
+        private void drp_audenc_3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            double value = slider_drc.Value / 10.0;
+            if (drp_audenc_3.Text == "AC3")
+            {
+                drp_audmix_3.Enabled = false;
+                drp_audbit_3.Enabled = false;
+                drp_audsr_3.Enabled = false;
+
+                drp_audmix_3.Text = "Automatic";
+                drp_audbit_3.Text = "160";
+                drp_audsr_3.Text = "48";
+            }
+            else
+            {
+                // Just make sure not to re-enable the following boxes if the track above is none
+                if (drp_track2Audio.Text != "None")
+                {
+                    drp_audmix_3.Enabled = true;
+                    drp_audbit_3.Enabled = true;
+                    drp_audsr_3.Enabled = true;
+
+                    drp_audmix_3.Text = "Automatic";
+                    drp_audbit_3.Text = "160";
+                    drp_audsr_3.Text = "48";
+                }
+            }
+
+
+            if (drp_audenc_3.Text == "AAC")
+            {
+                drp_audmix_3.Items.Clear();
+                drp_audmix_3.Items.Add("Mono");
+                drp_audmix_3.Items.Add("Stereo");
+                drp_audmix_3.Items.Add("Dolby Surround");
+                drp_audmix_3.Items.Add("Dolby Pro Logic II");
+                drp_audmix_3.Items.Add("6 Channel Discrete");
+
+                drp_audbit_3.Items.Clear();
+                drp_audbit_3.Items.Add("32");
+                drp_audbit_3.Items.Add("40");
+                drp_audbit_3.Items.Add("48");
+                drp_audbit_3.Items.Add("56");
+                drp_audbit_3.Items.Add("64");
+                drp_audbit_3.Items.Add("80");
+                drp_audbit_3.Items.Add("86");
+                drp_audbit_3.Items.Add("112");
+                drp_audbit_3.Items.Add("128");
+                drp_audbit_3.Items.Add("160");
+
+            }
+            else
+            {
+                drp_audmix_3.Items.Clear();
+                drp_audmix_3.Items.Add("Stereo");
+                drp_audmix_3.Items.Add("Dolby Surround");
+                drp_audmix_3.Items.Add("Dolby Pro Logic II");
+
+                drp_audbit_3.Items.Clear();
+                drp_audbit_3.Items.Add("32");
+                drp_audbit_3.Items.Add("40");
+                drp_audbit_3.Items.Add("48");
+                drp_audbit_3.Items.Add("56");
+                drp_audbit_3.Items.Add("64");
+                drp_audbit_3.Items.Add("80");
+                drp_audbit_3.Items.Add("86");
+                drp_audbit_3.Items.Add("112");
+                drp_audbit_3.Items.Add("128");
+                drp_audbit_3.Items.Add("160");
+                drp_audbit_3.Items.Add("192");
+                drp_audbit_3.Items.Add("224");
+                drp_audbit_3.Items.Add("256");
+                drp_audbit_3.Items.Add("320");
+            }
+        }
+        private void drp_audenc_4_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (drp_audenc_4.Text == "AC3")
+            {
+                drp_audmix_4.Enabled = false;
+                drp_audbit_4.Enabled = false;
+                drp_audsr_4.Enabled = false;
+
+                drp_audmix_4.Text = "Automatic";
+                drp_audbit_4.Text = "160";
+                drp_audsr_4.Text = "48";
+            }
+            else
+            {
+                // Just make sure not to re-enable the following boxes if the track above is none
+                if (drp_track2Audio.Text != "None")
+                {
+                    drp_audmix_4.Enabled = true;
+                    drp_audbit_4.Enabled = true;
+                    drp_audsr_4.Enabled = true;
+
+                    drp_audmix_4.Text = "Automatic";
+                    drp_audbit_4.Text = "160";
+                    drp_audsr_4.Text = "48";
+                }
+            }
+
+
+            if (drp_audenc_4.Text == "AAC")
+            {
+                drp_audmix_4.Items.Clear();
+                drp_audmix_4.Items.Add("Mono");
+                drp_audmix_4.Items.Add("Stereo");
+                drp_audmix_4.Items.Add("Dolby Surround");
+                drp_audmix_4.Items.Add("Dolby Pro Logic II");
+                drp_audmix_4.Items.Add("6 Channel Discrete");
+
+                drp_audbit_4.Items.Clear();
+                drp_audbit_4.Items.Add("32");
+                drp_audbit_4.Items.Add("40");
+                drp_audbit_4.Items.Add("48");
+                drp_audbit_4.Items.Add("56");
+                drp_audbit_4.Items.Add("64");
+                drp_audbit_4.Items.Add("80");
+                drp_audbit_4.Items.Add("86");
+                drp_audbit_4.Items.Add("112");
+                drp_audbit_4.Items.Add("128");
+                drp_audbit_4.Items.Add("160");
+
+            }
+            else
+            {
+                drp_audmix_4.Items.Clear();
+                drp_audmix_4.Items.Add("Stereo");
+                drp_audmix_4.Items.Add("Dolby Surround");
+                drp_audmix_4.Items.Add("Dolby Pro Logic II");
+
+                drp_audbit_4.Items.Clear();
+                drp_audbit_4.Items.Add("32");
+                drp_audbit_4.Items.Add("40");
+                drp_audbit_4.Items.Add("48");
+                drp_audbit_4.Items.Add("56");
+                drp_audbit_4.Items.Add("64");
+                drp_audbit_4.Items.Add("80");
+                drp_audbit_4.Items.Add("86");
+                drp_audbit_4.Items.Add("112");
+                drp_audbit_4.Items.Add("128");
+                drp_audbit_4.Items.Add("160");
+                drp_audbit_4.Items.Add("192");
+                drp_audbit_4.Items.Add("224");
+                drp_audbit_4.Items.Add("256");
+                drp_audbit_4.Items.Add("320");
+            }
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            double value = trackBar1.Value / 10.0;
             value++;
 
-            lbl_drc.Text = value.ToString();
+            lbl_drc1.Text = value.ToString();
         }
+        private void trackBar2_Scroll(object sender, EventArgs e)
+        {
+            double value = trackBar2.Value / 10.0;
+            value++;
+
+            lbl_drc2.Text = value.ToString();
+        }
+        private void trackBar3_Scroll(object sender, EventArgs e)
+        {
+            double value = trackBar3.Value / 10.0;
+            value++;
+
+            lbl_drc3.Text = value.ToString();
+        }
+        private void trackBar4_Scroll(object sender, EventArgs e)
+        {
+            double value = trackBar4.Value / 10.0;
+            value++;
+
+            lbl_drc4.Text = value.ToString();
+        }
+
         private void drp_subtitle_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (drp_subtitle.Text.Contains("None"))
@@ -1413,6 +1748,16 @@ namespace Handbrake
                 drp_audenc_2.Items.Add("AAC");
                 if (drp_audenc_2.Enabled)
                     drp_audenc_2.SelectedIndex = 0;
+
+                drp_audenc_3.Items.Clear();
+                drp_audenc_3.Items.Add("AAC");
+                if (drp_audenc_3.Enabled)
+                    drp_audenc_3.SelectedIndex = 0;
+
+                drp_audenc_4.Items.Clear();
+                drp_audenc_4.Items.Add("AAC");
+                if (drp_audenc_4.Enabled)
+                    drp_audenc_4.SelectedIndex = 0;
             }
             else if (path.EndsWith(".avi"))
             {
@@ -1426,6 +1771,18 @@ namespace Handbrake
                 drp_audenc_2.Items.Add("AC3");
                 if (drp_audenc_2.Enabled)
                     drp_audenc_2.SelectedIndex = 0;
+
+                drp_audenc_3.Items.Clear();
+                drp_audenc_3.Items.Add("MP3");
+                drp_audenc_3.Items.Add("AC3");
+                if (drp_audenc_3.Enabled)
+                    drp_audenc_3.SelectedIndex = 0;
+
+                drp_audenc_4.Items.Clear();
+                drp_audenc_4.Items.Add("MP3");
+                drp_audenc_4.Items.Add("AC3");
+                if (drp_audenc_4.Enabled)
+                    drp_audenc_4.SelectedIndex = 0;
             }
             else if (path.EndsWith(".ogm"))
             {
@@ -1437,6 +1794,16 @@ namespace Handbrake
                 drp_audenc_2.Items.Add("Vorbis");
                 if (drp_audenc_2.Enabled)
                     drp_audenc_2.SelectedIndex = 0;
+
+                drp_audenc_3.Items.Clear();
+                drp_audenc_3.Items.Add("Vorbis");
+                if (drp_audenc_3.Enabled)
+                    drp_audenc_3.SelectedIndex = 0;
+
+                drp_audenc_4.Items.Clear();
+                drp_audenc_4.Items.Add("Vorbis");
+                if (drp_audenc_4.Enabled)
+                    drp_audenc_4.SelectedIndex = 0;
             }
             else if (path.EndsWith(".mkv"))
             {
@@ -1454,6 +1821,22 @@ namespace Handbrake
                 drp_audenc_2.Items.Add("Vorbis");
                 if (drp_audenc_2.Enabled)
                     drp_audenc_2.SelectedIndex = 0;
+
+                drp_audenc_3.Items.Clear();
+                drp_audenc_3.Items.Add("AAC");
+                drp_audenc_3.Items.Add("MP3");
+                drp_audenc_3.Items.Add("AC3");
+                drp_audenc_3.Items.Add("Vorbis");
+                if (drp_audenc_3.Enabled)
+                    drp_audenc_3.SelectedIndex = 0;
+
+                drp_audenc_4.Items.Clear();
+                drp_audenc_4.Items.Add("AAC");
+                drp_audenc_4.Items.Add("MP3");
+                drp_audenc_4.Items.Add("AC3");
+                drp_audenc_4.Items.Add("Vorbis");
+                if (drp_audenc_4.Enabled)
+                    drp_audenc_4.SelectedIndex = 0;
             }
         }
 
@@ -1649,11 +2032,7 @@ namespace Handbrake
         }
 
         #endregion
-
-
-
-
-
+      
         // This is the END of the road ------------------------------------------------------------------------------
     }
 }
