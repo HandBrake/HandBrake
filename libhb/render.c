@@ -307,7 +307,10 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     pv->total_lost_time += temp_duration;
                     pv->dropped_frames++;
 
-                    hb_fifo_get( pv->subtitle_queue );
+                    /* Pop the frame's subtitle and dispose of it. */
+                    hb_buffer_t * subtitles = hb_fifo_get( pv->subtitle_queue );
+                    hb_buffer_close( &subtitles );
+
                     buf_tmp_in = NULL;
                 }
                 else
