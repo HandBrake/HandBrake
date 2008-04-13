@@ -1,1 +1,1 @@
-http://download.m0k.org/handbrake/contrib/x264-r736.tar.gz 
+http://download.m0k.org/handbrake/contrib/x264-r818-d4b7d2b.tar.gz
