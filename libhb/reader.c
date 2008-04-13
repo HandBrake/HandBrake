@@ -269,6 +269,9 @@ static void ReaderFunc( void * _r )
         }
     }
 
+    /* send an empty buffer upstream to signal we're done */
+    hb_fifo_push( r->job->fifo_mpeg2, hb_buffer_init(0) );
+
     hb_list_empty( &list );
     hb_buffer_close( &r->ps );
     if (r->dvd)

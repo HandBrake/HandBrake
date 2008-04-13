@@ -26,7 +26,6 @@ typedef struct
     int64_t      start_silence; /* if we're inserting silence, the time we started */
     int64_t      first_drop;    /* PTS of first 'went backwards' frame dropped */
     int          drop_count;    /* count of 'time went backwards' drops */
-    int          inserting_silence;
 
     /* Raw */
     SRC_STATE  * state;
@@ -284,22 +283,6 @@ static int SyncVideo( hb_work_object_t * w )
         return HB_WORK_DONE;
     }
 
-    if( hb_thread_has_exited( job->reader ) &&
-        !hb_fifo_size( job->fifo_mpeg2 ) &&
-        !hb_fifo_size( job->fifo_raw ) )
-    {
-        pv->done = 1;
-
-        hb_buffer_t * buf_tmp;
-
-       // Drop an empty buffer into our output to ensure that things
-       // get flushed all the way out.
-        buf_tmp = hb_buffer_init(0); // Empty end buffer
-        hb_fifo_push( job->fifo_sync, buf_tmp );
-
-        return HB_WORK_DONE;
-    }
-
     if( !pv->cur && !( pv->cur = hb_fifo_get( job->fifo_raw ) ) )
     {
         /* We haven't even got a frame yet */
@@ -315,6 +298,15 @@ static int SyncVideo( hb_work_object_t * w )
            ( next = hb_fifo_see( job->fifo_raw ) ) )
     {
         hb_buffer_t * buf_tmp;
+
+        if( next->size == 0 )
+        {
+            // we got the empty buffer that signals end-of-stream
+            // note that we're done but continue to the end of this
+            // loop so that the final frame gets processed.
+            pv->done = 1;
+            next->start = pv->next_pts + 90*30;
+        }
 
         if( pv->pts_offset == INT64_MIN )
         {
@@ -627,16 +619,18 @@ static int SyncVideo( hb_work_object_t * w )
         {
             hb_log( "sync: got too many frames (%d), exiting early", pv->count_frames );
             pv->done = 1;
+        }
 
-           // Drop an empty buffer into our output to ensure that things
-           // get flushed all the way out.
-           buf_tmp = hb_buffer_init(0); // Empty end buffer
-           hb_fifo_push( job->fifo_sync, buf_tmp );
+        if ( pv->done )
+        {
+            hb_buffer_close( &pv->cur );
 
-            break;
+            // Drop an empty buffer into our output to ensure that things
+            // get flushed all the way out.
+            hb_fifo_push( job->fifo_sync, hb_buffer_init( 0 ) );
+            return HB_WORK_DONE;
         }
     }
-
     return HB_WORK_OK;
 }
 
@@ -701,16 +695,6 @@ static void OutputAudioFrame( hb_job_t *job, hb_audio_t *audio, hb_buffer_t *buf
     buf->start = start;
     buf->stop  = start + duration;
     sync->next_start = start + duration;
-    while( hb_fifo_is_full( fifo ) )
-    {
-        hb_snooze( 50 );
-        if ( job->done && hb_fifo_is_full( fifo ) )
-        {
-            /* don't block here if the job's finished */
-            hb_buffer_close( &buf );
-            return;
-        }
-    }
     hb_fifo_push( fifo, buf );
 }
 
@@ -764,41 +748,18 @@ static void SyncAudio( hb_work_object_t * w, int i )
             sync->first_drop = 0;
             sync->drop_count = 0;
         }
-
-        if ( sync->inserting_silence && (int64_t)(buf->start - sync->next_pts) > 0 )
-        {
-            /*
-             * if we're within one frame time of the amount of silence
-             * we need, insert just what we need otherwise insert a frame time.
-             */
-            int64_t framedur = buf->stop - buf->start;
-            if ( buf->start - sync->next_pts <= framedur )
-            {
-                InsertSilence( w, i, buf->start - sync->next_pts );
-                sync->inserting_silence = 0;
-            }
-            else
-            {
-                InsertSilence( w, i, framedur );
-            }
-            continue;
-        }
         if ( buf->start - sync->next_pts >= (90 * 70) )
         {
             /*
              * there's a gap of at least 70ms between the last
              * frame we processed & the next. Fill it with silence.
              */
-            if ( ! sync->inserting_silence )
-            {
-                hb_log( "sync: adding %d ms of silence to audio %d"
-                        "  start %lld, next %lld",
-                        (int)((buf->start - sync->next_pts) / 90),
-                        i, buf->start, sync->next_pts );
-                sync->inserting_silence = 1;
-            }
+            hb_log( "sync: adding %d ms of silence to audio %d"
+                    "  start %lld, next %lld",
+                    (int)((buf->start - sync->next_pts) / 90),
+                    i, buf->start, sync->next_pts );
             InsertSilence( w, i, buf->start - sync->next_pts );
-            continue;
+            return;
         }
 
         /*

@@ -77,14 +77,17 @@ int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
     hb_buffer_t   * buf;
     uint8_t       * data;
 
-    /* Feed libmpeg2 */
-    if( buf_es->start > -1 )
+    if ( buf_es->size )
     {
-        mpeg2_tag_picture( m->libmpeg2, buf_es->start >> 32,
-                           buf_es->start & 0xFFFFFFFF );
+        /* Feed libmpeg2 */
+        if( buf_es->start > -1 )
+        {
+            mpeg2_tag_picture( m->libmpeg2, buf_es->start >> 32,
+                               buf_es->start & 0xFFFFFFFF );
+        }
+        mpeg2_buffer( m->libmpeg2, buf_es->data,
+                      buf_es->data + buf_es->size );
     }
-    mpeg2_buffer( m->libmpeg2, buf_es->data,
-                  buf_es->data + buf_es->size );
 
     for( ;; )
     {
@@ -397,6 +400,13 @@ int decmpeg2Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     hb_libmpeg2_decode( pv->libmpeg2, *buf_in, pv->list );
 
+    /* if we got an empty buffer signaling end-of-stream send it downstream */
+    if ( (*buf_in)->size == 0 )
+    {
+        hb_list_add( pv->list, *buf_in );
+        *buf_in = NULL;
+    }
+
     *buf_out = NULL;
     while( ( buf = hb_list_item( pv->list, 0 ) ) )
     {
@@ -424,6 +434,7 @@ int decmpeg2Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
 void decmpeg2Close( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
+    hb_log( "mpeg2 done: %d frames", pv->libmpeg2->nframes );
     hb_list_close( &pv->list );
     hb_libmpeg2_close( &pv->libmpeg2 );
     free( pv );

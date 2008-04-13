@@ -523,6 +523,7 @@ struct hb_work_object_s
 
     hb_thread_t       * thread;
     volatile int      * done;
+    int                 status;
 
     hb_work_object_t  * next;
 	int				  thread_sleep_interval;

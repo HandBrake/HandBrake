@@ -857,7 +857,11 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
     title_copy->list_audio = hb_list_init();
 
     /* Do nothing about audio during first pass */
-    if( job->pass == 0 || job->pass == 2 )
+    // XXX for right now we need to see the audio in libhb/reader.c to track
+    // clock changes otherwise we'll discard more video frames in pass 1 than
+    // pass 2 & screw up the encoding. Once the clock tracking is moved from
+    // reader to the mpeg demuxer this code can be restored.
+    //if( job->pass == 0 || job->pass == 2 )
     {
         for( i = 0; i < hb_list_count(job->list_audio); i++ )
         {

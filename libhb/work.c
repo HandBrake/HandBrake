@@ -103,6 +103,7 @@ static void do_job( hb_job_t * job, int cpu_count )
     /* FIXME: This feels really hackish, anything better? */
     hb_work_object_t * audio_w = NULL;
     hb_work_object_t * sub_w = NULL;
+    hb_work_object_t * encoder_w = NULL;
 
     hb_audio_t   * audio;
     hb_subtitle_t * subtitle;
@@ -274,6 +275,8 @@ static void do_job( hb_job_t * job, int cpu_count )
     w->config   = &job->config;
 
     hb_list_add( job->list_work, w );
+    /* remember the encoder so we can wait for it to finish */
+    encoder_w = w;
 
     if( job->select_subtitle && !job->indepth_scan )
     {
@@ -504,9 +507,9 @@ static void do_job( hb_job_t * job, int cpu_count )
             audio->priv.config.vorbis.language = audio->config.lang.simple;
 
         /* set up the audio work structures */
-        audio->priv.fifo_in   = hb_fifo_init( 2048 );
+        audio->priv.fifo_in   = hb_fifo_init( 256 );
         audio->priv.fifo_raw  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
-        audio->priv.fifo_sync = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
+        audio->priv.fifo_sync = hb_fifo_init( 256 );
         audio->priv.fifo_out  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
 
 
@@ -618,8 +621,7 @@ static void do_job( hb_job_t * job, int cpu_count )
             done = 1;
         }
         if( done &&
-            !hb_fifo_size( job->fifo_sync ) &&
-            !hb_fifo_size( job->fifo_render ) &&
+            encoder_w->status == HB_WORK_DONE &&
             !hb_fifo_size( job->fifo_mpeg4 ) )
         {
             break;
@@ -831,7 +833,7 @@ static void work_loop( void * _w )
         }
 //		w->thread_sleep_interval = MAX(1, (w->thread_sleep_interval - 1));
 
-        w->work( w, &buf_in, &buf_out );
+        w->status = w->work( w, &buf_in, &buf_out );
 
         // Propagate any chapter breaks for the worker if and only if the
         // output frame has the same time stamp as the input frame (any
