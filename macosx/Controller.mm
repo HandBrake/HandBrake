@@ -2811,7 +2811,6 @@ the user is using "Custom" settings by determining the sender*/
         sampleratePopUp = fAudTrack3RatePopUp;
         bitratePopUp = fAudTrack3BitratePopUp;
     }
-    //else if (sender == fAudTrack4CodecPopUp)
     else
     {
         audiotrackPopUp = fAudLang4PopUp;
@@ -3426,32 +3425,33 @@ the user is using "Custom" settings by determining the sender*/
             maxbitrate = 384;
             
     }
-    
-    [bitratePopUp removeAllItems];
-    
-    for( int i = 0; i < hb_audio_bitrates_count; i++ )
+    if ([[mixdownPopUp selectedItem] tag] != HB_ACODEC_AC3)
     {
-        if (hb_audio_bitrates[i].rate >= minbitrate && hb_audio_bitrates[i].rate <= maxbitrate)
+        [bitratePopUp removeAllItems];
+        
+        for( int i = 0; i < hb_audio_bitrates_count; i++ )
         {
-            /* add a new menuitem for this bitrate */
-            NSMenuItem *menuItem = [[bitratePopUp menu] addItemWithTitle:
-                                    [NSString stringWithCString: hb_audio_bitrates[i].string]
-                                                                  action: NULL keyEquivalent: @""];
-            /* set its tag to be the actual bitrate as an integer, so we can retrieve it later */
-            [menuItem setTag: hb_audio_bitrates[i].rate];
+            if (hb_audio_bitrates[i].rate >= minbitrate && hb_audio_bitrates[i].rate <= maxbitrate)
+            {
+                /* add a new menuitem for this bitrate */
+                NSMenuItem *menuItem = [[bitratePopUp menu] addItemWithTitle:
+                                        [NSString stringWithCString: hb_audio_bitrates[i].string]
+                                                                      action: NULL keyEquivalent: @""];
+                /* set its tag to be the actual bitrate as an integer, so we can retrieve it later */
+                [menuItem setTag: hb_audio_bitrates[i].rate];
+            }
+        }
+        
+        /* select the default bitrate (but use 384 for 6-ch AAC) */
+        if ([[mixdownPopUp selectedItem] tag] == HB_AMIXDOWN_6CH)
+        {
+            [bitratePopUp selectItemWithTag: 384];
+        }
+        else
+        {
+            [bitratePopUp selectItemWithTag: hb_audio_bitrates[hb_audio_bitrates_default].rate];
         }
     }
-    
-    /* select the default bitrate (but use 384 for 6-ch AAC) */
-    if ([[mixdownPopUp selectedItem] tag] == HB_AMIXDOWN_6CH)
-    {
-        [bitratePopUp selectItemWithTag: 384];
-    }
-    else
-    {
-        [bitratePopUp selectItemWithTag: hb_audio_bitrates[hb_audio_bitrates_default].rate];
-    }
-    
     /* populate and set the sample rate popup */
     /* Audio samplerate */
     [sampleratePopUp removeAllItems];
@@ -3486,8 +3486,9 @@ the user is using "Custom" settings by determining the sender*/
                                                               action: NULL keyEquivalent: @""];
         [menuItem setTag: inputbitrate];
         /* For ac3 passthru we disable the sample rate and bitrate popups as well as the drc slider*/
-        [sampleratePopUp setEnabled: NO];
         [bitratePopUp setEnabled: NO];
+        [sampleratePopUp setEnabled: NO];
+        
         [drcSlider setFloatValue: 1.00];
         [self audioDRCSliderChanged: drcSlider];
         [drcSlider setEnabled: NO];
@@ -3505,8 +3506,8 @@ the user is using "Custom" settings by determining the sender*/
 
 - (IBAction) audioDRCSliderChanged: (id) sender
 {
-    NSSlider * drcSlider = nil;
-    NSTextField * drcField = nil;
+    NSSlider * drcSlider;
+    NSTextField * drcField;
     if (sender == fAudTrack1DrcSlider)
     {
         drcSlider = fAudTrack1DrcSlider;
@@ -4068,25 +4069,26 @@ if (item == nil)
                     [self audioTrackPopUpChanged: fAudTrack4CodecPopUp];
                 }
             }
-            /* We detect here if we have the old audio sample rate and if so we apply samplerate and bitrate to the existing four tracks if chosen */
+            /* We detect here if we have the old audio sample rate and if so we apply samplerate and bitrate to the existing four tracks if chosen 
+            * UNLESS the CodecPopUp is AC3 in which case the preset values are ignored in favor of rates set in audioTrackMixdownChanged*/
             if ([chosenPreset valueForKey:@"AudioSampleRate"])
             {
-                if ([fAudLang1PopUp indexOfSelectedItem] > 0)
+                if ([fAudLang1PopUp indexOfSelectedItem] > 0 && [fAudTrack1CodecPopUp titleOfSelectedItem] != @"AC3 Passthru")
                 {
                     [fAudTrack1RatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioSampleRate"]]];
                     [fAudTrack1BitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioBitRate"]]];
                 }
-                if ([fAudLang2PopUp indexOfSelectedItem] > 0)
+                if ([fAudLang2PopUp indexOfSelectedItem] > 0 && [fAudTrack2CodecPopUp titleOfSelectedItem] != @"AC3 Passthru")
                 {
                     [fAudTrack2RatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioSampleRate"]]];
                     [fAudTrack2BitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioBitRate"]]];
                 }
-                if ([fAudLang3PopUp indexOfSelectedItem] > 0)
+                if ([fAudLang3PopUp indexOfSelectedItem] > 0 && [fAudTrack3CodecPopUp titleOfSelectedItem] != @"AC3 Passthru")
                 {
                     [fAudTrack3RatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioSampleRate"]]];
                     [fAudTrack3BitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioBitRate"]]];
                 }
-                if ([fAudLang4PopUp indexOfSelectedItem] > 0)
+                if ([fAudLang4PopUp indexOfSelectedItem] > 0 && [fAudTrack4CodecPopUp titleOfSelectedItem] != @"AC3 Passthru")
                 {
                     [fAudTrack4RatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioSampleRate"]]];
                     [fAudTrack4BitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioBitRate"]]];
