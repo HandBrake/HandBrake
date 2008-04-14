@@ -389,6 +389,7 @@ int decmpeg2Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
 {
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * buf, * last = NULL;
+    int status = HB_WORK_OK;
 
     // The reader found a chapter break, consume it completely, and remove it from the
     // stream. We need to shift it.
@@ -405,6 +406,7 @@ int decmpeg2Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     {
         hb_list_add( pv->list, *buf_in );
         *buf_in = NULL;
+        status = HB_WORK_DONE;
     }
 
     *buf_out = NULL;
@@ -423,7 +425,7 @@ int decmpeg2Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
         }
     }
 
-    return HB_WORK_OK;
+    return status;
 }
 
 /**********************************************************************

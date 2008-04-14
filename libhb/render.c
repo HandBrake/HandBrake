@@ -214,8 +214,8 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
          * to the next stage as well. Note that this will result in us
          * losing the current contents of the delay queue.
          */
-       *buf_out = hb_buffer_init(0);
-       return HB_WORK_OK;
+        *buf_out = job->indepth_scan? NULL : hb_buffer_init(0);
+        return HB_WORK_DONE;
     }
 
     /*

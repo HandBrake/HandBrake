@@ -103,7 +103,7 @@ static void do_job( hb_job_t * job, int cpu_count )
     /* FIXME: This feels really hackish, anything better? */
     hb_work_object_t * audio_w = NULL;
     hb_work_object_t * sub_w = NULL;
-    hb_work_object_t * encoder_w = NULL;
+    hb_work_object_t * final_w = NULL;
 
     hb_audio_t   * audio;
     hb_subtitle_t * subtitle;
@@ -247,6 +247,15 @@ static void do_job( hb_job_t * job, int cpu_count )
     hb_list_add( job->list_work, ( w = getWork( WORK_RENDER ) ) );
     w->fifo_in  = job->fifo_sync;
     w->fifo_out = job->fifo_render;
+    if ( job->indepth_scan )
+    {
+        /*
+         * if we're doing a subtitle scan the last thread in the
+         * processing pipeline is render - remember it so we can
+         * wait for its completion below.
+         */
+        final_w = w;
+    }
 
     /* Video encoder */
     switch( job->vcodec )
@@ -275,8 +284,15 @@ static void do_job( hb_job_t * job, int cpu_count )
     w->config   = &job->config;
 
     hb_list_add( job->list_work, w );
-    /* remember the encoder so we can wait for it to finish */
-    encoder_w = w;
+    if ( !job->indepth_scan )
+    {
+        /*
+         * if we're not doing a subtitle scan the last thread in the
+         * processing pipeline is the encoder - remember it so we can
+         * wait for its completion below.
+         */
+        final_w = w;
+    }
 
     if( job->select_subtitle && !job->indepth_scan )
     {
@@ -616,12 +632,12 @@ static void do_job( hb_job_t * job, int cpu_count )
     w->init( w, job );
     while( !*job->die )
     {
-        if( w->work( w, NULL, NULL ) == HB_WORK_DONE )
+        if( ( w->status = w->work( w, NULL, NULL ) ) == HB_WORK_DONE )
         {
             done = 1;
         }
         if( done &&
-            encoder_w->status == HB_WORK_DONE &&
+            final_w->status == HB_WORK_DONE &&
             !hb_fifo_size( job->fifo_mpeg4 ) )
         {
             break;

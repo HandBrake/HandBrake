@@ -289,6 +289,14 @@ static int SyncVideo( hb_work_object_t * w )
         return HB_WORK_OK;
     }
     cur = pv->cur;
+    if( cur->size == 0 && pv->pts_offset == INT64_MIN )
+    {
+        /* we got an end-of-stream with no video frames (happens during
+         * an indepth_scan). Feed the eos downstream & signal that we're done. */
+        hb_fifo_push( job->fifo_sync, hb_buffer_init( 0 ) );
+        pv->done = 1;
+        return HB_WORK_DONE;
+    }
 
     /* At this point we have a frame to process. Let's check
         1) if we will be able to push into the fifo ahead
