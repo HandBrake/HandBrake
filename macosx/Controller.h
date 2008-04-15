@@ -1,7 +1,7 @@
 /* $Id: Controller.h,v 1.35 2005/08/01 14:29:50 titer Exp $
 
    This file is part of the HandBrake source code.
-   Homepage: <http://handbrake.m0k.org/>.
+   Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License. */
 
 #import <Cocoa/Cocoa.h>

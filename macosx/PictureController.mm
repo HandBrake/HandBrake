@@ -1,7 +1,7 @@
 /* $Id: PictureController.mm,v 1.11 2005/08/01 15:10:44 titer Exp $
 
    This file is part of the HandBrake source code.
-   Homepage: <http://handbrake.m0k.org/>.
+   Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License. */
 
 #include "PictureController.h"
