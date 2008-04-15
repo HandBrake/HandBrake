@@ -117,7 +117,13 @@ int              hb_libmpeg2_clear_aspect_ratio( hb_libmpeg2_t * );
 /***********************************************************************
  * mpegdemux.c
  **********************************************************************/
-int hb_demux_ps( hb_buffer_t * ps_buf, hb_list_t * es_list );
+typedef struct {
+    int64_t last_scr;       /* unadjusted SCR from most recent pack */
+    int64_t scr_offset;     /* discontinuity correction adjustment */
+    int     scr_changes;    /* number of SCR discontinuities */
+} hb_psdemux_t;
+
+int hb_demux_ps( hb_buffer_t * ps_buf, hb_list_t * es_list, hb_psdemux_t * );
 
 /***********************************************************************
  * dvd.c

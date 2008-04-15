@@ -541,7 +541,7 @@ static uint64_t hb_ps_stream_getVideoPTS(hb_stream_t *stream)
         hb_buffer_t *es;
 
         // 'buf' contains an MPEG2 PACK - get a list of all it's elementary streams
-        hb_demux_ps(buf, list);
+        hb_demux_ps(buf, list, 0);
 
         while ( ( es = hb_list_item( list, 0 ) ) )
         {
@@ -884,7 +884,7 @@ static void hb_ps_stream_find_audio_ids(hb_stream_t *stream, hb_title_t *title)
         hb_buffer_t *es;
 
         // 'buf' contains an MPEG2 PACK - get a list of all it's elementary streams
-        hb_demux_ps(buf, list);
+        hb_demux_ps(buf, list, 0);
 
         while ( ( es = hb_list_item( list, 0 ) ) )
         {

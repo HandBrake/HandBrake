@@ -299,7 +299,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                   goto skip_preview;
               }
             }
-            hb_demux_ps( buf_ps, list_es );
+            hb_demux_ps( buf_ps, list_es, 0 );
 
             while( ( buf_es = hb_list_item( list_es, 0 ) ) )
             {

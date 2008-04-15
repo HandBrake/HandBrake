@@ -8,11 +8,10 @@
 
 /* Basic MPEG demuxer, only works with DVDs (2048 bytes packets) */
 
-int hb_demux_ps( hb_buffer_t * buf_ps, hb_list_t * list_es )
+int hb_demux_ps( hb_buffer_t * buf_ps, hb_list_t * list_es, hb_psdemux_t* state )
 {
     hb_buffer_t * buf_es;
     int           pos = 0;
-    int64_t       scr;
 
 #define d (buf_ps->data)
 
@@ -25,14 +24,49 @@ int hb_demux_ps( hb_buffer_t * buf_ps, hb_list_t * list_es )
         return 0;
     }
     pos += 4;                    /* pack_start_code */
-    /* extract the system clock reference (scr) */
-    scr = ((uint64_t)(d[pos] & 0x38) << 27) |
-          ((uint64_t)(d[pos] & 0x03) << 28) |
-          ((uint64_t)(d[pos+1]) << 20) |
-          ((uint64_t)(d[pos+2] >> 3) << 15) |
-          ((uint64_t)(d[pos+2] & 3) << 13) |
-          ((uint64_t)(d[pos+3]) << 5) |
-          (d[pos+4] >> 3);
+
+    if ( state )
+    {
+        /*
+         * This section of code implements the timing model of
+         * the "Standard Target Decoder" (STD) of the MPEG2 standard
+         * (specified in ISO 13818-1 sections 2.4.2, 2.5.2 & Annex D).
+         * The STD removes and corrects for clock discontinuities so
+         * that the time stamps on the video, audio & other media
+         * streams can be used for cross-media synchronization. To do
+         * this the STD has its own timestamp value, the System Clock
+         * Reference or SCR, in the PACK header. Clock discontinuities
+         * are detected using the SCR & and the adjustment needed
+         * to correct post-discontinuity timestamps to be contiguous
+         * with pre-discontinuity timestamps is computed from pre- and
+         * post-discontinuity values of the SCR. Then this adjustment
+         * is applied to every media timestamp (PTS).
+         *
+         * ISO 13818-1 says there must be an SCR at least every 700ms
+         * (100ms for Transport Streams) so if the difference between
+         * this SCR & the previous is >700ms it's a discontinuity.
+         * If the difference is negative it's non-physical (time doesn't
+         * go backward) and must also be a discontinuity. When we find a
+         * discontinuity we adjust the scr_offset so that the SCR of the
+         * new packet lines up with that of the previous packet.
+         */
+        /* extract the system clock reference (scr) */
+        int64_t scr = ((uint64_t)(d[pos] & 0x38) << 27) |
+                      ((uint64_t)(d[pos] & 0x03) << 28) |
+                      ((uint64_t)(d[pos+1]) << 20) |
+                      ((uint64_t)(d[pos+2] >> 3) << 15) |
+                      ((uint64_t)(d[pos+2] & 3) << 13) |
+                      ((uint64_t)(d[pos+3]) << 5) |
+                      (d[pos+4] >> 3);
+        int64_t scr_delta = scr - state->last_scr;
+        if ( scr_delta > (90*700) || scr_delta < 0 )
+        {
+            ++state->scr_changes;
+            state->scr_offset += scr_delta - 1;
+        }
+        state->last_scr = scr;
+    }
+
     pos += 9;                    /* pack_header */
     pos += 1 + ( d[pos] & 0x7 ); /* stuffing bytes */
 
@@ -119,7 +153,7 @@ int hb_demux_ps( hb_buffer_t * buf_ps, hb_list_t * list_es )
 
         buf_es->id       = id;
         buf_es->start    = pts;
-        buf_es->stop     = scr;
+        buf_es->stop     = -1;
         if (id == 0xE0) {
             // Consume a chapter break, and apply it to the ES.
             buf_es->new_chap = buf_ps->new_chap;
