@@ -1,7 +1,7 @@
 /* $Id: encavcodec.c,v 1.23 2005/10/13 23:47:06 titer Exp $
 
    This file is part of the HandBrake source code.
-   Homepage: <http://handbrake.m0k.org/>.
+   Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License. */
 
 #include "hb.h"

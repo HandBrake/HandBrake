@@ -1,7 +1,7 @@
 /* $Id: declpcm.c,v 1.8 2005/11/04 14:44:01 titer Exp $
 
    This file is part of the HandBrake source code.
-   Homepage: <http://handbrake.m0k.org/>.
+   Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License. */
 
 #include "hb.h"

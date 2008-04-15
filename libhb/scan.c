@@ -1,7 +1,7 @@
 /* $Id: scan.c,v 1.52 2005/11/25 15:05:25 titer Exp $
 
    This file is part of the HandBrake source code.
-   Homepage: <http://handbrake.m0k.org/>.
+   Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License. */
 
 #include "hb.h"

@@ -1,7 +1,7 @@
 # $Id: Jamrules,v 1.59 2005/11/04 16:06:21 titer Exp $
 #
 # This file is part of the HandBrake source code.
-# Homepage: <http://handbrake.m0k.org/>.
+# Homepage: <http://handbrake.fr/>.
 # It may be used under the terms of the GNU General Public License.
 
 include config.jam ;
@@ -70,13 +70,13 @@ actions OSXPackage
       cp CREDITS "HandBrake $(HB_VERSION)/CREDITS.txt" && \
       cp THANKS "HandBrake $(HB_VERSION)/THANKS.txt" && \
       ( echo "[InternetShortcut]" && \
-        echo "URL=http://handbrake.m0k.org/" ) > \
+        echo "URL=http://handbrake.fr/" ) > \
         "HandBrake $(HB_VERSION)/HandBrake Homepage.url" && \
       ( echo "[InternetShortcut]" && \
-        echo "URL=http://handbrake.m0k.org/forum/" ) > \
+        echo "URL=http://forum.handbrake,fr/" ) > \
         "HandBrake $(HB_VERSION)/HandBrake Forums.url" && \
       ( echo "[InternetShortcut]" && \
-        echo "URL=http://handbrake.m0k.org/contribute.php" ) > \
+        echo "URL=http://handbrake.fr/?article=development" ) > \
         "HandBrake $(HB_VERSION)/Contribute.url" && \
       cp -r HandBrake.app "HandBrake $(HB_VERSION)" && \
       zip -9 -r $(<) "HandBrake $(HB_VERSION)" && \

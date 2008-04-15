@@ -1,6 +1,6 @@
 $Id: BUILD,v 1.11 2005/10/23 01:35:59 titer Exp $
 
-BUILD file for HandBrake <http://handbrake.m0k.org/>
+BUILD file for HandBrake <http://handbrake.fr/>
 
 Building HandBrake with make
 =============================

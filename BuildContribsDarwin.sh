@@ -33,7 +33,7 @@
 export VERSION=$1
 export IP=$2
 export USERNAME=$3
-export REPOS=svn://svn.m0k.org/HandBrake/trunk
+export REPOS=svn://svn.handbrake.fr/HandBrake/trunk
 # ##########################################################################
 # Launch the build on the foreign system
 # ##########################################################################

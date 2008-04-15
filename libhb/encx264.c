@@ -1,7 +1,7 @@
 /* $Id: encx264.c,v 1.21 2005/11/04 13:09:41 titer Exp $
 
    This file is part of the HandBrake source code.
-   Homepage: <http://handbrake.m0k.org/>.
+   Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License. */
 
 #include <stdarg.h>

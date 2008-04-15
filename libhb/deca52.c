@@ -1,7 +1,7 @@
 /* $Id: deca52.c,v 1.14 2005/03/03 17:21:57 titer Exp $
 
    This file is part of the HandBrake source code.
-   Homepage: <http://handbrake.m0k.org/>.
+   Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License. */
 
 #include "hb.h"

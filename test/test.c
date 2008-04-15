@@ -1,7 +1,7 @@
 /* $Id: test.c,v 1.82 2005/11/19 08:25:54 titer Exp $
 
    This file is part of the HandBrake source code.
-   Homepage: <http://handbrake.m0k.org/>.
+   Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License. */
 
 #include <signal.h>
@@ -131,7 +131,7 @@ int main( int argc, char ** argv )
     h = hb_init( debug, update );
 
     /* Show version */
-    fprintf( stderr, "HandBrake %s (%d) - http://handbrake.m0k.org/\n",
+    fprintf( stderr, "HandBrake %s (%d) - http://handbrake.fr/\n",
              hb_get_version( h ), hb_get_build( h ) );
 
     /* Check for update */

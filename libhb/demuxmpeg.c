@@ -1,7 +1,7 @@
 /* $Id: demuxmpeg.c,v 1.4 2004/10/19 23:11:36 titer Exp $
 
    This file is part of the HandBrake source code.
-   Homepage: <http://handbrake.m0k.org/>.
+   Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License. */
 
 #include "hb.h"

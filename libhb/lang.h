@@ -1,7 +1,7 @@
 /* $Id: lang.h,v 1.1 2004/08/02 07:19:05 titer Exp $
 
    This file is part of the HandBrake source code.
-   Homepage: <http://handbrake.m0k.org/>.
+   Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License. */
 
 #ifndef HB_LANG_H

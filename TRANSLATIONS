@@ -1,9 +1,12 @@
 $Id: TRANSLATIONS,v 1.2 2004/03/22 18:20:30 titer Exp $
 
-TRANSLATIONS file for HandBrake <http://handbrake.m0k.org/>
+TRANSLATIONS file for HandBrake <http://handbrake.fr/>
 
 Translating HandBrake
 =====================
+
+***** HandBrake does not currently have a localization scheme for any of its interfaces.
+***** Information below is obsolete and only useful for historical purposes:
 
 Only the OS X interface of HandBrake can be translated at the moment.
 Localization is not implemented in BeOS and GTK GUIs.
