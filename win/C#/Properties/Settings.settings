@@ -38,5 +38,8 @@
     <Setting Name="autoNamePath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="appcast" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://handbrake.fr/appcast.xml</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

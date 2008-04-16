@@ -166,5 +166,17 @@ namespace Handbrake.Properties {
                 this["autoNamePath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://handbrake.fr/appcast.xml")]
+        public string appcast {
+            get {
+                return ((string)(this["appcast"]));
+            }
+            set {
+                this["appcast"] = value;
+            }
+        }
     }
 }
