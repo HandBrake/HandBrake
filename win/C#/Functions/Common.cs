@@ -550,17 +550,17 @@ namespace Handbrake.Functions
 
             switch (videoEncoder)
             {
-                case "Mpeg 4":
+                case "MPEG-4 (FFmpeg)":
                     videoEncoder = " -e ffmpeg";
                     break;
-                case "Xvid":
+                case "MPEG-4 (XviD)":
                     videoEncoder = " -e xvid";
                     break;
-                case "H.264":
+                case "H.264 (x264)":
                     videoEncoder = " -e x264";
                     break;
-                case "H.264 (iPod)":
-                    videoEncoder = " -e x264b30";
+                case "VP3 (Theora)":
+                    videoEncoder = " -e theora";
                     break;
                 default:
                     videoEncoder = " -e x264";

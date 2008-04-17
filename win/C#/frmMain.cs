@@ -639,11 +639,32 @@ namespace Handbrake
         private void text_destination_TextChanged(object sender, EventArgs e)
         {
             setAudioByContainer(text_destination.Text);
+            setVideoByContainer(text_destination.Text);
         }
 
         // Output Settings
         private void drp_videoEncoder_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if ((text_destination.Text.Contains(".mp4")) || (text_destination.Text.Contains(".m4v")))
+            {
+                check_largeFile.Enabled = true;
+                check_iPodAtom.Enabled = true;
+                check_optimiseMP4.Enabled = true;
+                check_largeFile.Visible = true;
+                check_iPodAtom.Visible = true;
+                check_optimiseMP4.Visible = true;
+            }
+            else
+            {
+                check_largeFile.Checked = false;
+                check_iPodAtom.Checked = false;
+                check_optimiseMP4.Checked = false;
+                check_largeFile.Visible = false;
+                check_iPodAtom.Visible = false;
+                check_optimiseMP4.Visible = false;
+            }
+
+
             //Turn off some options which are H.264 only when the user selects a non h.264 encoder
             if (!drp_videoEncoder.Text.Contains("H.264"))
             {
@@ -1799,7 +1820,7 @@ namespace Handbrake
         {
             string oldval = "";
 
-            if ((path.EndsWith(".mp4")) || (path.EndsWith(".mp4")))
+            if ((path.EndsWith(".mp4")) || (path.EndsWith(".m4v")))
             {
                 oldval = drp_audenc_1.Text;
                 drp_audenc_1.Items.Clear();
@@ -1942,6 +1963,58 @@ namespace Handbrake
                     if (drp_audenc_4.Text == "")
                         drp_audenc_4.SelectedIndex = 0;
                 }
+            }
+        }
+        private void setVideoByContainer(String path)
+        {
+            string oldval = "";
+
+            if ((path.EndsWith(".mp4")) || (path.EndsWith(".m4v")))
+            {
+                oldval = drp_videoEncoder.Text;
+                drp_videoEncoder.Items.Clear();
+                drp_videoEncoder.Items.Add("MPEG-4 (FFmpeg)");
+                drp_videoEncoder.Items.Add("MPEG-4 (XviD)");
+                drp_videoEncoder.Items.Add("H.264 (x264)");
+                if (oldval == "VP3 (Theora)")
+                    drp_videoEncoder.SelectedIndex = 2;
+                else
+                    drp_videoEncoder.Text = oldval;
+
+            }
+            else if (path.EndsWith(".avi"))
+            {
+                oldval = drp_videoEncoder.Text;
+                drp_videoEncoder.Items.Clear();
+                drp_videoEncoder.Items.Add("MPEG-4 (FFmpeg)");
+                drp_videoEncoder.Items.Add("MPEG-4 (XviD)");
+                drp_videoEncoder.Items.Add("H.264 (x264)");
+                if (oldval == "VP3 (Theora)")
+                    drp_videoEncoder.SelectedIndex = 2;
+                else
+                    drp_videoEncoder.Text = oldval;
+            }
+            else if (path.EndsWith(".ogm"))
+            {
+                oldval = drp_videoEncoder.Text;
+                drp_videoEncoder.Items.Clear();
+                drp_videoEncoder.Items.Add("MPEG-4 (FFmpeg)");
+                drp_videoEncoder.Items.Add("MPEG-4 (XviD)");
+                drp_videoEncoder.Items.Add("VP3 (Theora)");
+                if (oldval == "H.264 (x264)")
+                    drp_videoEncoder.SelectedIndex = 2;
+                else
+                    drp_videoEncoder.Text = oldval;
+            }
+            else if (path.EndsWith(".mkv"))
+            {
+                oldval = drp_videoEncoder.Text;
+                drp_videoEncoder.Items.Clear();
+                drp_videoEncoder.Items.Add("MPEG-4 (FFmpeg)");
+                drp_videoEncoder.Items.Add("MPEG-4 (XviD)");
+                drp_videoEncoder.Items.Add("H.264 (x264)");
+                drp_videoEncoder.Items.Add("VP3 (Theora)");
+                drp_videoEncoder.Text = oldval;
             }
         }
 

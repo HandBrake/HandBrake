@@ -894,22 +894,19 @@ namespace Handbrake.Functions
                 switch (videoEncoderConvertion)
                 {
                     case "ffmpeg":
-                        videoEncoderConvertion = "Mpeg 4";
+                        videoEncoderConvertion = "MPEG-4 (FFmpeg)";
                         break;
                     case "xvid":
-                        videoEncoderConvertion = "Xvid";
+                        videoEncoderConvertion = "MPEG-4 (XviD)";
                         break;
                     case "x264":
-                        videoEncoderConvertion = "H.264";
+                        videoEncoderConvertion = "H.264 (x264)";
                         break;
-                    case "x264b13":
-                        videoEncoderConvertion = "H.264 Baseline 1.3";
-                        break;
-                    case "x264b30":
-                        videoEncoderConvertion = "H.264 (iPod)";
+                    case "theora":
+                        videoEncoderConvertion = "VP3 (Theora)";
                         break;
                     default:
-                        videoEncoderConvertion = "Mpeg 4";
+                        videoEncoderConvertion = "MPEG-4 (FFmpeg)";
                         break;
                 }
                 thisQuery.q_videoEncoder = videoEncoderConvertion;

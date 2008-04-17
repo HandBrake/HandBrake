@@ -373,9 +373,10 @@ namespace Handbrake
             this.drp_videoEncoder.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_videoEncoder.FormattingEnabled = true;
             this.drp_videoEncoder.Items.AddRange(new object[] {
-            "Mpeg 4",
-            "Xvid",
-            "H.264"});
+            "MPEG-4 (FFmpeg)",
+            "MPEG-4 (XviD)",
+            "H.264 (x264)",
+            "VP3 (Theora)"});
             this.drp_videoEncoder.Location = new System.Drawing.Point(99, 20);
             this.drp_videoEncoder.Name = "drp_videoEncoder";
             this.drp_videoEncoder.Size = new System.Drawing.Size(156, 21);
