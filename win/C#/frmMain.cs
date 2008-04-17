@@ -69,7 +69,7 @@ namespace Handbrake
             }
 
             //H264 Panel Loading
-            lblStatus.Text = "Loading H264 Panel";
+            lblStatus.Text = "Loading H264 Panel ...";
             Application.DoEvents();
             setupH264Panel();
             Thread.Sleep(100);
@@ -135,9 +135,10 @@ namespace Handbrake
                     updateWindow.Show();
                 }
             }
-            catch (Exception exc)
+            catch (Exception)
             {
-                MessageBox.Show(exc.ToString());
+                // Don't want to have an exception messagebox displayed behind the splash screen,
+                // So, exception is ignored. Lets hope there are no bugs here :)
             }
         }
         private void splashTimer(object sender)
@@ -283,9 +284,9 @@ namespace Handbrake
                 Functions.QueryParser presetQuery = Functions.QueryParser.Parse(userDefaults);
                 hb_common_func.presetLoader(this, presetQuery, "User Defaults ");
             }
-            catch (Exception exc)
+            catch (Exception)
             {
-                MessageBox.Show("Unable to load user Default Settings. \n\n" + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                // Do Nothing. We don't want an error appearing behind the splash screen.
             }
         }
 
@@ -351,7 +352,6 @@ namespace Handbrake
             Options.ShowDialog();
         }
 
-
         #endregion
 
         #region Presets Menu
@@ -364,7 +364,7 @@ namespace Handbrake
             if (treeView_presets.Nodes.Count == 0)
                 MessageBox.Show("Unable to load the presets.dat file. Please select \"Update Built-in Presets\" from the Presets Menu \nMake sure you are running the program in Admin mode if running on Vista. See Windows FAQ for details!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
-                MessageBox.Show("Presets have been updated", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Presets have been updated!", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         private void mnu_SelectDefault_Click(object sender, EventArgs e)
         {
@@ -499,7 +499,7 @@ namespace Handbrake
         }
         private void drp_dvdtitle_Click(object sender, EventArgs e)
         {
-            if (drp_dvdtitle.Items.Count == 0)
+            if (drp_dvdtitle.Items.Count == 1)
                 MessageBox.Show("There are no titles to select. Please scan the DVD by clicking the 'browse' button above before trying to select a title.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
         private void drp_dvdtitle_SelectedIndexChanged(object sender, EventArgs e)
@@ -539,22 +539,22 @@ namespace Handbrake
                 drp_track1Audio.Items.Add("Automatic");
                 drp_track1Audio.Items.Add("None");
                 drp_track1Audio.Items.AddRange(selectedTitle.AudioTracks.ToArray());
-                drp_track1Audio.SelectedItem = 0;
+                drp_track1Audio.SelectedIndex = 0;
 
                 drp_track2Audio.Items.Clear();
                 drp_track2Audio.Items.Add("None");
                 drp_track2Audio.Items.AddRange(selectedTitle.AudioTracks.ToArray());
-                drp_track1Audio.SelectedItem = 0;
+                drp_track2Audio.SelectedIndex = 0;
 
                 drp_track3Audio.Items.Clear();
                 drp_track3Audio.Items.Add("None");
                 drp_track3Audio.Items.AddRange(selectedTitle.AudioTracks.ToArray());
-                drp_track1Audio.SelectedItem = 0;
+                drp_track3Audio.SelectedIndex = 0;
 
                 drp_track4Audio.Items.Clear();
                 drp_track4Audio.Items.Add("None");
                 drp_track4Audio.Items.AddRange(selectedTitle.AudioTracks.ToArray());
-                drp_track1Audio.SelectedItem = 0;
+                drp_track4Audio.SelectedIndex = 0;
 
                 // Populate the Subtitles dropdown
                 drp_subtitle.Items.Clear();
@@ -730,7 +730,6 @@ namespace Handbrake
         {
             try
             {
-
                 if ((int.Parse(text_width.Text) % 16) != 0)
                     text_width.BackColor = Color.LightCoral;
                 else
@@ -820,7 +819,6 @@ namespace Handbrake
                 text_right.Text = "0";
                 text_top.Text = "0";
                 text_bottom.Text = "0";
-
             }
         }
         private void check_vfr_CheckedChanged(object sender, EventArgs e)
@@ -2186,8 +2184,6 @@ namespace Handbrake
         }
 
         #endregion
-
-
 
 
         // This is the END of the road ------------------------------------------------------------------------------

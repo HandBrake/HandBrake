@@ -37,7 +37,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label Label38;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -621,9 +621,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Format = "N0";
+            dataGridViewCellStyle2.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle2;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -2078,6 +2078,7 @@ namespace Handbrake
             this.lbl_RecomendedCrop.Size = new System.Drawing.Size(72, 12);
             this.lbl_RecomendedCrop.TabIndex = 4;
             this.lbl_RecomendedCrop.Text = "Select a Title";
+            this.ToolTip.SetToolTip(this.lbl_RecomendedCrop, "Top / Bottom / Left / Right");
             // 
             // Label8
             // 
@@ -2088,6 +2089,7 @@ namespace Handbrake
             this.Label8.Size = new System.Drawing.Size(70, 13);
             this.Label8.TabIndex = 2;
             this.Label8.Text = "Auto Crop:";
+            this.ToolTip.SetToolTip(this.Label8, "Top / Bottom / Left / Right");
             // 
             // Label1
             // 
