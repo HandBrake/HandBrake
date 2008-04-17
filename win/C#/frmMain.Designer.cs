@@ -37,7 +37,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label Label38;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -126,10 +126,10 @@ namespace Handbrake
             this.lbl_drc1 = new System.Windows.Forms.Label();
             this.trackBar4 = new System.Windows.Forms.TrackBar();
             this.drp_track4Audio = new System.Windows.Forms.ComboBox();
-            this.label21 = new System.Windows.Forms.Label();
+            this.lbl_t4 = new System.Windows.Forms.Label();
             this.trackBar3 = new System.Windows.Forms.TrackBar();
             this.drp_track3Audio = new System.Windows.Forms.ComboBox();
-            this.label18 = new System.Windows.Forms.Label();
+            this.lbl_t3 = new System.Windows.Forms.Label();
             this.trackBar2 = new System.Windows.Forms.TrackBar();
             this.label16 = new System.Windows.Forms.Label();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
@@ -623,9 +623,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle3.Format = "N0";
-            dataGridViewCellStyle3.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle1;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -1295,14 +1295,14 @@ namespace Handbrake
             this.TabPage2.Controls.Add(this.drp_audenc_4);
             this.TabPage2.Controls.Add(this.drp_audmix_4);
             this.TabPage2.Controls.Add(this.drp_track4Audio);
-            this.TabPage2.Controls.Add(this.label21);
+            this.TabPage2.Controls.Add(this.lbl_t4);
             this.TabPage2.Controls.Add(this.trackBar3);
             this.TabPage2.Controls.Add(this.drp_audsr_3);
             this.TabPage2.Controls.Add(this.drp_audbit_3);
             this.TabPage2.Controls.Add(this.drp_audenc_3);
             this.TabPage2.Controls.Add(this.drp_audmix_3);
             this.TabPage2.Controls.Add(this.drp_track3Audio);
-            this.TabPage2.Controls.Add(this.label18);
+            this.TabPage2.Controls.Add(this.lbl_t3);
             this.TabPage2.Controls.Add(this.trackBar2);
             this.TabPage2.Controls.Add(this.label16);
             this.TabPage2.Controls.Add(this.trackBar1);
@@ -1410,17 +1410,17 @@ namespace Handbrake
             this.drp_track4Audio.Visible = false;
             this.drp_track4Audio.SelectedIndexChanged += new System.EventHandler(this.drp_track4Audio_SelectedIndexChanged);
             // 
-            // label21
+            // lbl_t4
             // 
-            this.label21.AutoSize = true;
-            this.label21.BackColor = System.Drawing.Color.Transparent;
-            this.label21.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label21.Location = new System.Drawing.Point(13, 169);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(19, 13);
-            this.label21.TabIndex = 32;
-            this.label21.Text = "4:";
-            this.label21.Visible = false;
+            this.lbl_t4.AutoSize = true;
+            this.lbl_t4.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_t4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_t4.Location = new System.Drawing.Point(13, 169);
+            this.lbl_t4.Name = "lbl_t4";
+            this.lbl_t4.Size = new System.Drawing.Size(19, 13);
+            this.lbl_t4.TabIndex = 32;
+            this.lbl_t4.Text = "4:";
+            this.lbl_t4.Visible = false;
             // 
             // trackBar3
             // 
@@ -1449,17 +1449,17 @@ namespace Handbrake
             this.drp_track3Audio.Visible = false;
             this.drp_track3Audio.SelectedIndexChanged += new System.EventHandler(this.drp_track3Audio_SelectedIndexChanged);
             // 
-            // label18
+            // lbl_t3
             // 
-            this.label18.AutoSize = true;
-            this.label18.BackColor = System.Drawing.Color.Transparent;
-            this.label18.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label18.Location = new System.Drawing.Point(13, 131);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(19, 13);
-            this.label18.TabIndex = 24;
-            this.label18.Text = "3:";
-            this.label18.Visible = false;
+            this.lbl_t3.AutoSize = true;
+            this.lbl_t3.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_t3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_t3.Location = new System.Drawing.Point(13, 131);
+            this.lbl_t3.Name = "lbl_t3";
+            this.lbl_t3.Size = new System.Drawing.Size(19, 13);
+            this.lbl_t3.TabIndex = 24;
+            this.lbl_t3.Text = "3:";
+            this.lbl_t3.Visible = false;
             // 
             // trackBar2
             // 
@@ -3225,14 +3225,14 @@ namespace Handbrake
         internal System.Windows.Forms.ComboBox drp_audenc_4;
         internal System.Windows.Forms.ComboBox drp_audmix_4;
         internal System.Windows.Forms.ComboBox drp_track4Audio;
-        internal System.Windows.Forms.Label label21;
+        internal System.Windows.Forms.Label lbl_t4;
         internal System.Windows.Forms.TrackBar trackBar3;
         internal System.Windows.Forms.ComboBox drp_audsr_3;
         internal System.Windows.Forms.ComboBox drp_audbit_3;
         internal System.Windows.Forms.ComboBox drp_audenc_3;
         internal System.Windows.Forms.ComboBox drp_audmix_3;
         internal System.Windows.Forms.ComboBox drp_track3Audio;
-        internal System.Windows.Forms.Label label18;
+        internal System.Windows.Forms.Label lbl_t3;
         internal System.Windows.Forms.TrackBar trackBar2;
         internal System.Windows.Forms.Label label16;
         internal System.Windows.Forms.Label lbl_drc1;

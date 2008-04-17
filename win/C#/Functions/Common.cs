@@ -289,12 +289,13 @@ namespace Handbrake.Functions
             // Audio Settings Tab
             #region Audio
 
+            // Handle Track 1
             if (presetQuery.AudioTrack1 == "")
                 mainWindow.drp_track1Audio.Text = "Automatic";
             else
                 mainWindow.drp_track1Audio.Text = presetQuery.AudioTrack1;
 
-            
+            // Handle Track 2
             if (presetQuery.AudioEncoder2 != null)  // Fix for loading in built in presets. Where 2 encoders but no tracks in the preset.
             {
                 mainWindow.drp_track2Audio.Enabled = true;
@@ -303,7 +304,10 @@ namespace Handbrake.Functions
                 mainWindow.drp_audenc_2.Enabled = true;
                 mainWindow.drp_audbit_2.Enabled = true;
                 mainWindow.drp_audsr_2.Text = "48";
-                mainWindow.drp_track2Audio.Text = "Automatic";
+                if ((presetQuery.AudioTrack2 != null) && (presetQuery.AudioTrack2 != "None"))
+                    mainWindow.drp_track2Audio.Text = presetQuery.AudioTrack2;
+                else 
+                    mainWindow.drp_track2Audio.Text = "Automatic";
             }
             else if (presetQuery.AudioTrack2 == "None")
             {
@@ -322,6 +326,7 @@ namespace Handbrake.Functions
                 mainWindow.drp_audbit_2.Enabled = true;
             }
 
+            // Handle Track 3
             if (presetQuery.AudioTrack3 == "None")
             {
                 mainWindow.drp_track3Audio.SelectedIndex = 0;
@@ -329,6 +334,23 @@ namespace Handbrake.Functions
                 mainWindow.drp_audmix_3.Enabled = false;
                 mainWindow.drp_audenc_3.Enabled = false;
                 mainWindow.drp_audbit_3.Enabled = false;
+                mainWindow.trackBar3.Enabled = false;
+
+                mainWindow.drp_track3Audio.Visible = false;
+                mainWindow.drp_audsr_3.Visible = false;
+                mainWindow.drp_audmix_3.Visible = false;
+                mainWindow.drp_audenc_3.Visible = false;
+                mainWindow.drp_audbit_3.Visible = false;
+                mainWindow.trackBar3.Visible = false;
+                mainWindow.lbl_drc3.Visible = false;
+                mainWindow.lbl_t3.Visible = false;
+
+                mainWindow.drp_track3Audio.Text = "None";
+                mainWindow.drp_audsr_3.Text = "";
+                mainWindow.drp_audmix_3.Text = "Automatic";
+                mainWindow.drp_audenc_3.Text = "";
+                mainWindow.drp_audbit_3.Text = "";
+                mainWindow.trackBar3.Value = 0;
 
             }
             else
@@ -338,8 +360,19 @@ namespace Handbrake.Functions
                 mainWindow.drp_audmix_3.Enabled = true;
                 mainWindow.drp_audenc_3.Enabled = true;
                 mainWindow.drp_audbit_3.Enabled = true;
+                mainWindow.trackBar3.Enabled = true;
+
+                mainWindow.drp_track3Audio.Visible = true;
+                mainWindow.drp_audsr_3.Visible = true;
+                mainWindow.drp_audmix_3.Visible = true;
+                mainWindow.drp_audenc_3.Visible = true;
+                mainWindow.drp_audbit_3.Visible = true;
+                mainWindow.trackBar3.Visible = true;
+                mainWindow.lbl_drc3.Visible = true;
+                mainWindow.lbl_t3.Visible = true;
             }
 
+            // Handle Track 4
             if (presetQuery.AudioTrack4 == "None")
             {
                 mainWindow.drp_track4Audio.SelectedIndex = 0;
@@ -347,6 +380,23 @@ namespace Handbrake.Functions
                 mainWindow.drp_audmix_4.Enabled = false;
                 mainWindow.drp_audenc_4.Enabled = false;
                 mainWindow.drp_audbit_4.Enabled = false;
+                mainWindow.trackBar4.Enabled = false;
+
+                mainWindow.drp_track4Audio.Visible = false;
+                mainWindow.drp_audsr_4.Visible = false;
+                mainWindow.drp_audmix_4.Visible = false;
+                mainWindow.drp_audenc_4.Visible = false;
+                mainWindow.drp_audbit_4.Visible = false;
+                mainWindow.trackBar4.Visible = false;
+                mainWindow.lbl_drc4.Visible = false;
+                mainWindow.lbl_t4.Visible = false;
+
+                mainWindow.drp_track4Audio.Text = "None";
+                mainWindow.drp_audsr_4.Text = "";
+                mainWindow.drp_audmix_4.Text = "Automatic";
+                mainWindow.drp_audenc_4.Text = "";
+                mainWindow.drp_audbit_4.Text = "";
+                mainWindow.trackBar4.Value = 0;
             }
             else
             {
@@ -355,8 +405,19 @@ namespace Handbrake.Functions
                 mainWindow.drp_audmix_4.Enabled = true;
                 mainWindow.drp_audenc_4.Enabled = true;
                 mainWindow.drp_audbit_4.Enabled = true;
+                mainWindow.trackBar4.Enabled = true;
+
+                mainWindow.drp_track4Audio.Visible = true;
+                mainWindow.drp_audsr_4.Visible = true;
+                mainWindow.drp_audmix_4.Visible = true;
+                mainWindow.drp_audenc_4.Visible = true;
+                mainWindow.drp_audbit_4.Visible = true;
+                mainWindow.trackBar4.Visible = true;
+                mainWindow.lbl_drc4.Visible = true;
+                mainWindow.lbl_t4.Visible = true;
             }
 
+            // Now lets start setting stuff
             if (presetQuery.AudioEncoder1 != null)
                 mainWindow.drp_audenc_1.Text = presetQuery.AudioEncoder1;
             mainWindow.drp_audenc_2.Text = presetQuery.AudioEncoder2;
@@ -840,6 +901,20 @@ namespace Handbrake.Functions
                     audioSampleRate = " -R 48," + audioSampleRate2;
                 else
                     audioSampleRate = audioSampleRate + "," + audioSampleRate2;
+            }
+            else
+            {
+                // All this is a hack, because when AppleTV is selected, there is no sample rate selected. so just add a 48
+                // It should probably be setup later so the GUI widget has the value 48 in it.
+               
+                if ((track2 != "") && (track2 != "None"))
+                {
+                    if (audioSampleRate == "")
+                        audioSampleRate = " -R 48,48";
+                    else
+                        audioSampleRate = audioSampleRate + ",48";
+                }
+
             }
 
             if (audioSampleRate3 != "")
