@@ -411,6 +411,15 @@ static void do_job( hb_job_t * job, int cpu_count )
 
         /* sense-check the requested mixdown */
 
+                if( audio->config.out.mixdown == 0 && audio->config.out.codec != HB_ACODEC_AC3 )
+                {
+                    /*
+                     * Mixdown wasn't specified and this is not pass-through, set a default mixdown
+                     * of stereo.
+                     */
+                    audio->config.out.mixdown = HB_AMIXDOWN_STEREO;
+                }
+
         /* audioCodecsSupportMono and audioCodecsSupport6Ch are the same for now,
            but this may change in the future, so they are separated for flexibility */
         int audioCodecsSupportMono = ( (audio->config.in.codec == HB_ACODEC_AC3 || audio->config.in.codec == HB_ACODEC_DCA) &&
