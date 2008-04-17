@@ -436,7 +436,6 @@ namespace Handbrake
             this.ToolTip.SetToolTip(this.check_largeFile, "Allows creation of MP4 files greater than 4GB.\r\nWarning: Breaks iPod, Apple TV (V" +
                     "ersion 1 only) and PS3 compatibility.\r\nRequires .mp4/.m4v file extension");
             this.check_largeFile.UseVisualStyleBackColor = false;
-            this.check_largeFile.Click += new System.EventHandler(this.check_largeFile_CheckedChanged);
             // 
             // check_turbo
             // 
@@ -590,7 +589,6 @@ namespace Handbrake
                     " QuickTime can only read the files as long as the file extension is .mp4\r\nCan on" +
                     "ly be used with H.264 ");
             this.check_optimiseMP4.UseVisualStyleBackColor = false;
-            this.check_optimiseMP4.Click += new System.EventHandler(this.check_optimiseMP4_Clicked);
             // 
             // check_iPodAtom
             // 
@@ -605,7 +603,6 @@ namespace Handbrake
             this.ToolTip.SetToolTip(this.check_iPodAtom, "Required for 5th and 6th Generation iPods.\r\nEncodes will not sync if this is not " +
                     "enabled for H.264 encodes");
             this.check_iPodAtom.UseVisualStyleBackColor = false;
-            this.check_iPodAtom.Click += new System.EventHandler(this.check_iPodAtom_CheckedChanged);
             // 
             // data_chpt
             // 

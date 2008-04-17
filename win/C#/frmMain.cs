@@ -691,30 +691,6 @@ namespace Handbrake
             }
 
         }
-        private void check_largeFile_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((!text_destination.Text.Contains(".mp4")) && (!text_destination.Text.Contains(".m4v")))
-            {
-                MessageBox.Show("You can only use this option with the .mp4/.m4v file container.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                check_largeFile.CheckState = CheckState.Unchecked;
-            }
-        }
-        private void check_iPodAtom_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((!text_destination.Text.Contains(".mp4")) && (!text_destination.Text.Contains(".m4v")))
-            {
-                MessageBox.Show("You can only use this option with the .mp4/.m4v file container.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                check_iPodAtom.CheckState = CheckState.Unchecked;
-            }
-        }
-        private void check_optimiseMP4_Clicked(object sender, EventArgs e)
-        {
-            if ((!text_destination.Text.Contains(".mp4")) && (!text_destination.Text.Contains(".m4v")))
-            {
-                MessageBox.Show("You can only use this option with the .mp4/.m4v file container.","Warning",MessageBoxButtons.OK,MessageBoxIcon.Warning);
-                check_optimiseMP4.CheckState = CheckState.Unchecked;
-            }
-        }
 
         //Video Tab
         private void text_bitrate_TextChanged(object sender, EventArgs e)
@@ -2210,7 +2186,10 @@ namespace Handbrake
         }
 
         #endregion
-      
+
+
+
+
         // This is the END of the road ------------------------------------------------------------------------------
     }
 }
