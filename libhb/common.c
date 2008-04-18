@@ -739,8 +739,10 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
 hb_audio_config_t * hb_list_audio_config_item(hb_list_t * list, int i)
 {
     assert(list != NULL);
+    hb_audio_t *audio = NULL;
 
-    hb_audio_t *audio = hb_list_item(list, i);
+    if( (audio = hb_list_item(list, i)) )
+        return &(audio->config);
 
-    return &(audio->config);
+    return NULL;
 }
