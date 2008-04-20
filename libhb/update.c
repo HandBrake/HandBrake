@@ -7,7 +7,7 @@
 #include "hb.h"
 
 #define HB_URL   "handbrake.fr"
-#define HB_QUERY "GET /LATEST HTTP/1.0\r\nHost: " HB_URL "\r\n\r\n"
+#define HB_QUERY "GET /appcast.xml HTTP/1.0\r\nHost: " HB_URL "\r\n\r\n"
 
 typedef struct
 {
@@ -92,45 +92,157 @@ static void UpdateFunc( void * _data )
     {
         goto error;
     }
+	
+	
+	// FIND THE STABLE VERSION INFORMATION ###################################################
+	
+	/*
+	 * Find the <cli-stable> tag
+	 * Scan though each character of the buffer until we find that the first 4 characters of "cur" are "<cli"
+	 */
 
-    stable = strtol( cur, &p, 10 );
-    if( cur == p )
+     for(i=0 ; &cur[3] < end; i++, cur++ )
+     {
+        if( cur[0] == '<' && cur[1] == 'c' && cur[2] == 'l' && cur[3] == 'i' )
+         {
+            cur += 1;
+            break;
+         }
+		 
+		 // If the CLI tag has not been found in the first 510 characters, or the end is reached, something bad happened.
+		 if (( i > 510) || ( cur >= end ))
+		 {
+		 	goto error;
+		 }
+     }
+	 
+	if( cur >= end )
     {
         goto error;
     }
-    cur = p + 1;
-    memset( stable_str, 0, sizeof( stable_str ) );
-    for( i = 0;
-         i < sizeof( stable_str ) - 1 && cur < end && *cur != '\n';
-         i++, cur++ )
+	
+	/*
+	 * Ok, The above code didn't position cur, it only found <cli so we need to shift cur along 11 places.
+	 * After which, the next 10 characters are the build number
+	 */
+    cur += 11;
+	
+	if( cur >= end )
     {
-        stable_str[i] = *cur;
+        goto error;
     }
-
+	
+	stable = strtol( cur, &cur, 10 );
+	
+	if( cur >= end )
+    {
+        goto error;
+    }
+	
+	/*
+	 * The Version number is 2 places after the build, so shift cur, 2 places.
+	 * Get all the characters in cur until the point where " is found.
+	 */
+	cur += 2;
+	
+	if( cur >= end )
+    {
+        goto error;
+    }
+	memset( stable_str, 0, sizeof( stable_str ) );
+	for( i = 0;   i < sizeof( stable_str ) - 1 && cur < end && *cur != '"'; i++, cur++ )
+	{
+		stable_str[i] = *cur;
+		
+		// If the version number is longer than 7 characters, or the end is reached, something has gone wrong.
+		if (( i > 7) || ( cur >= end ))
+		{
+			goto error;
+		}
+	}
+	
+	if( cur >= end )
+    {
+        goto error;
+    }
+	
     hb_log( "latest stable: %s, build %d", stable_str, stable );
+	
+	// END OF STABLE INFO ###################################################
+	
 
-    cur++;
-    if( cur >= end )
+	// FIND THE UNSTABLE INFO ###############################################
+	/*
+	 * Find the <cli-unstable> tag
+	 * Scan though each character of the buffer until we find that the first 4 characters of "cur" are "<cli"
+	 */
+
+     for(i =0 ; &cur[3] < end; i++, cur++ )
+     {
+        if( cur[0] == '<' && cur[1] == 'c' && cur[2] == 'l' && cur[3] == 'i' )
+         {
+            cur += 1;
+            break;
+         }
+		 
+		 // If the second CLI tag is more than 25 characters forward, or the end is reached, something went wrong.
+		 if (( i > 25) || ( cur >= end ))
+		 {
+		 	goto error;
+		 }
+     }
+	 
+	/*
+	 * Now we need to handle the unstable build information
+	 * Unstable build number is 29 Characters after the last position used.
+	 */
+	 
+	 cur += 13;
+	     
+	if( cur >= end )
+    {
+        goto error;
+    } 
+	
+	 unstable = strtol( cur, &p, 10 );
+	 
+	if( cur >= end )
     {
         goto error;
     }
-
-    unstable = strtol( cur, &p, 10 );
-    if( cur == p )
+	
+	/*
+	 * Now we need to get the unstable version number.
+	 * First move the cur pointer 12 places.
+	 * Then iterate over cur until " is found. Thats the end of the version number.
+	 */
+	cur += 12;
+	
+	if( cur >= end )
     {
         goto error;
     }
-    cur = p + 1;
-    memset( unstable_str, 0, sizeof( unstable_str ) );
-    for( i = 0;
-         i < sizeof( unstable_str ) - 1 && cur < end && *cur != '\n';
-         i++, cur++ )
-    {
-        unstable_str[i] = *cur;
-    }
+	
+	memset( unstable_str, 0, sizeof( unstable_str ) );
+	for( i = 0;   i < sizeof( unstable_str ) - 1 && cur < end && *cur != '"'; i++, cur++ )
+	{
+		unstable_str[i] = *cur;
+		
+		// If the version number is greater than 7 chars or the end is reached, something went wrong.
+		if (( i > 7) || ( cur >= end ))
+		{
+			goto error;
+		}
+	}
 
     hb_log( "latest unstable: %s, build %d", unstable_str, unstable );
+	
+	// END OF UNSTABLE INFO ###################################################
 
+	/*
+	 * Handle the update checking as normal.
+	 * This code is unchanged.
+	 */
     if( HB_BUILD % 100 )
     {
         /* We are runnning an unstable build */
