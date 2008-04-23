@@ -31,9 +31,7 @@ namespace Handbrake.Functions
                 int skip = Properties.Settings.Default.skipversion;
 
                 if (latest == skip)
-                {
                     return false;
-                }
                 else
                 {
                     Boolean update = (latest > current);

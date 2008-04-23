@@ -26,7 +26,7 @@ namespace Handbrake.Functions
         XmlNode nodeItem;
         string t;
 
-        private string readRss()
+        private void readRss()
         {
             rssReader = new XmlTextReader(Properties.Settings.Default.appcast);
             rssDoc = new XmlDocument();
@@ -35,30 +35,20 @@ namespace Handbrake.Functions
             for (int i = 0; i < rssDoc.ChildNodes.Count; i++)
             {
                 if (rssDoc.ChildNodes[i].Name == "rss")
-                {
                     nodeRss = rssDoc.ChildNodes[i];
-                }
             }
 
             for (int i = 0; i < nodeRss.ChildNodes.Count; i++)
             {
                 if (nodeRss.ChildNodes[i].Name == "channel")
-                {
                     nodeChannel = nodeRss.ChildNodes[i];
-                }
             }
 
-            string latestTitle = "";
             for (int i = 0; i < nodeChannel.ChildNodes.Count; i++)
             {
- 
                 if (nodeChannel.ChildNodes[i].Name == "item")
-                {
                     nodeItem = nodeChannel.ChildNodes[i];
-                    latestTitle = nodeItem["title"].InnerText;
-                }
             }
-            return latestTitle;
         }
 
         private string hb_versionInfo;
@@ -69,34 +59,32 @@ namespace Handbrake.Functions
         public void getInfo()
         {
             readRss();
-            for (int i = 0; i < nodeChannel.ChildNodes.Count; i++)
-            {
-                if (nodeChannel.ChildNodes[nodeChannel.ChildNodes.Count -1 ].Name == "item")
-                {
-                    nodeItem = nodeChannel.ChildNodes[0];
-                    t = readRss();
-                    if (nodeItem["title"].InnerText == t)
-                    {
-                        // Get the Version Information
-                        hb_versionInfo = nodeItem["description"].InnerText;
 
-                        // Get the version
-                        string input = nodeItem.InnerXml;
-                        Match ver = Regex.Match(input, @"sparkle:shortVersionString=""([0-9].[0-9].[0-9]*)\""");
-                        hb_version = ver.ToString().Replace("sparkle:shortVersionString=", "").Replace("\"", "");
+            // Get the Version Information
+            hb_versionInfo = nodeItem["description"].InnerText;
 
-                        // Get the build number
-                        input = nodeItem.InnerXml;
-                        ver = Regex.Match(input, @"sparkle:version=""([0-9]*)\""");
-                        hb_build = ver.ToString().Replace("sparkle:version=", "").Replace("\"", "");
+            // Get the version
+            string input = nodeItem.InnerXml;
+            Match ver;
+            if (Properties.Settings.Default.hb_build.ToString().EndsWith("1"))
+                ver = Regex.Match(input, @"<cli-unstable>[0-9]* \""[0-9.]*\""");
+            else 
+                ver = Regex.Match(input, @"<cli-stable>[0-9]* \""[0-9.]*\""");
+            string[] hb_ver_find = ver.ToString().Split(' ');
+            hb_version = hb_ver_find[1].Replace("\"", "");
 
-                        // Get the update file
-                        hb_file = nodeItem["windows"].InnerText;
+            // Get the build number
+            input = nodeItem.InnerXml;
+            Match build;
+            if (Properties.Settings.Default.hb_build.ToString().EndsWith("1"))
+                build = Regex.Match(input, @"<cli-unstable>[0-9]*");
+            else 
+                build = Regex.Match(input, @"<cli-stable>[0-9]*");
+            hb_build = build.ToString().Replace("<cli-stable>", "").Replace("<cli-unstable>", "");
 
-                    }
-                }
-            }
-         }
+            // Get the update file
+            hb_file = nodeItem["windows"].InnerText;
+        }
 
         public string versionInfo()
         {
