@@ -2828,10 +2828,41 @@ the user is using "Custom" settings by determining the sender*/
 - (IBAction) setEnabledStateOfAudioMixdownControls: (id) sender
 {
     /* We will be setting the enabled/disabled state of each tracks audio controls based on
-    * the settings of the source audio for that track. We leave the samplerate and bitrate
-    *to audiotrackMixdownChanged
-    */
+     * the settings of the source audio for that track. We leave the samplerate and bitrate
+     * to audiotrackMixdownChanged
+     */
     
+    /* We will first verify that a lower track number has been selected before enabling each track
+     * for example, make sure a track is selected for track 1 before enabling track 2, etc.
+     */
+    if ([fAudLang1PopUp indexOfSelectedItem] == 0)
+    {
+        [fAudLang2PopUp setEnabled: NO];
+        [fAudLang2PopUp selectItemAtIndex: 0];
+    }
+    else
+    {
+        [fAudLang2PopUp setEnabled: YES];
+    }
+    
+    if ([fAudLang2PopUp indexOfSelectedItem] == 0)
+    {
+        [fAudLang3PopUp setEnabled: NO];
+        [fAudLang3PopUp selectItemAtIndex: 0];
+    }
+    else
+    {
+        [fAudLang3PopUp setEnabled: YES];
+    }
+    if ([fAudLang3PopUp indexOfSelectedItem] == 0)
+    {
+        [fAudLang4PopUp setEnabled: NO];
+        [fAudLang4PopUp selectItemAtIndex: 0];
+    }
+    else
+    {
+        [fAudLang4PopUp setEnabled: YES];
+    }
     /* enable/disable the mixdown text and popupbutton for audio track 1 */
     [fAudTrack1CodecPopUp setEnabled: ([fAudLang1PopUp indexOfSelectedItem] == 0) ? NO : YES];
     [fAudTrack1MixPopUp setEnabled: ([fAudLang1PopUp indexOfSelectedItem] == 0) ? NO : YES];
