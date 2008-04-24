@@ -1446,7 +1446,7 @@ namespace Handbrake
             int c = 0;
             foreach (string item in user_presets)
             {
-                string preset_name = selectedPreset.Replace("--", "");
+                string preset_name = "+ " + selectedPreset.Replace("--", "").Trim() + ":";
                 if (item.Contains(preset_name))
                     modified_presets_list.RemoveAt(c);
                 c++;
