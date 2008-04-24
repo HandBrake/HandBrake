@@ -37,7 +37,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label Label38;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -81,6 +81,8 @@ namespace Handbrake
             this.drp_audbit_4 = new System.Windows.Forms.ComboBox();
             this.drp_audenc_4 = new System.Windows.Forms.ComboBox();
             this.drp_audmix_4 = new System.Windows.Forms.ComboBox();
+            this.lbl_RecomendedCrop = new System.Windows.Forms.Label();
+            this.Label8 = new System.Windows.Forms.Label();
             this.DVD_Open = new System.Windows.Forms.FolderBrowserDialog();
             this.File_Open = new System.Windows.Forms.OpenFileDialog();
             this.ISO_Open = new System.Windows.Forms.OpenFileDialog();
@@ -179,8 +181,6 @@ namespace Handbrake
             this.check_detelecine = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.drp_deInterlace_option = new System.Windows.Forms.ComboBox();
-            this.lbl_RecomendedCrop = new System.Windows.Forms.Label();
-            this.Label8 = new System.Windows.Forms.Label();
             this.Label1 = new System.Windows.Forms.Label();
             this.Label53 = new System.Windows.Forms.Label();
             this.Label52 = new System.Windows.Forms.Label();
@@ -621,9 +621,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle2.Format = "N0";
-            dataGridViewCellStyle2.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle3.Format = "N0";
+            dataGridViewCellStyle3.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle3;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -790,7 +790,6 @@ namespace Handbrake
             this.drp_audsr_3.TabIndex = 28;
             this.drp_audsr_3.Text = "48";
             this.ToolTip.SetToolTip(this.drp_audsr_3, "Set the Audio Sample Rate");
-            this.drp_audsr_3.Visible = false;
             // 
             // drp_audbit_3
             // 
@@ -814,7 +813,6 @@ namespace Handbrake
             this.drp_audbit_3.TabIndex = 29;
             this.drp_audbit_3.Text = "160";
             this.ToolTip.SetToolTip(this.drp_audbit_3, "Set the Audio Bit-Rate");
-            this.drp_audbit_3.Visible = false;
             // 
             // drp_audenc_3
             // 
@@ -832,7 +830,6 @@ namespace Handbrake
             this.drp_audenc_3.TabIndex = 26;
             this.drp_audenc_3.Text = "AAC";
             this.ToolTip.SetToolTip(this.drp_audenc_3, "Select an audio encoder.");
-            this.drp_audenc_3.Visible = false;
             this.drp_audenc_3.SelectedIndexChanged += new System.EventHandler(this.drp_audenc_3_SelectedIndexChanged);
             // 
             // drp_audmix_3
@@ -853,7 +850,6 @@ namespace Handbrake
             this.drp_audmix_3.TabIndex = 27;
             this.drp_audmix_3.Text = "Automatic";
             this.ToolTip.SetToolTip(this.drp_audmix_3, "Please note: Some options require a 5.1 audio channel to be selected");
-            this.drp_audmix_3.Visible = false;
             this.drp_audmix_3.SelectedIndexChanged += new System.EventHandler(this.drp_audmix_3_SelectedIndexChanged);
             // 
             // drp_audsr_4
@@ -873,7 +869,6 @@ namespace Handbrake
             this.drp_audsr_4.TabIndex = 36;
             this.drp_audsr_4.Text = "48";
             this.ToolTip.SetToolTip(this.drp_audsr_4, "Set the Audio Sample Rate");
-            this.drp_audsr_4.Visible = false;
             // 
             // drp_audbit_4
             // 
@@ -897,7 +892,6 @@ namespace Handbrake
             this.drp_audbit_4.TabIndex = 37;
             this.drp_audbit_4.Text = "160";
             this.ToolTip.SetToolTip(this.drp_audbit_4, "Set the Audio Bit-Rate");
-            this.drp_audbit_4.Visible = false;
             // 
             // drp_audenc_4
             // 
@@ -915,7 +909,6 @@ namespace Handbrake
             this.drp_audenc_4.TabIndex = 34;
             this.drp_audenc_4.Text = "AAC";
             this.ToolTip.SetToolTip(this.drp_audenc_4, "Select an audio encoder.");
-            this.drp_audenc_4.Visible = false;
             this.drp_audenc_4.SelectedIndexChanged += new System.EventHandler(this.drp_audenc_4_SelectedIndexChanged);
             // 
             // drp_audmix_4
@@ -936,8 +929,30 @@ namespace Handbrake
             this.drp_audmix_4.TabIndex = 35;
             this.drp_audmix_4.Text = "Automatic";
             this.ToolTip.SetToolTip(this.drp_audmix_4, "Please note: Some options require a 5.1 audio channel to be selected");
-            this.drp_audmix_4.Visible = false;
             this.drp_audmix_4.SelectedIndexChanged += new System.EventHandler(this.drp_audmix_4_SelectedIndexChanged);
+            // 
+            // lbl_RecomendedCrop
+            // 
+            this.lbl_RecomendedCrop.AutoSize = true;
+            this.lbl_RecomendedCrop.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_RecomendedCrop.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_RecomendedCrop.Location = new System.Drawing.Point(116, 69);
+            this.lbl_RecomendedCrop.Name = "lbl_RecomendedCrop";
+            this.lbl_RecomendedCrop.Size = new System.Drawing.Size(72, 12);
+            this.lbl_RecomendedCrop.TabIndex = 4;
+            this.lbl_RecomendedCrop.Text = "Select a Title";
+            this.ToolTip.SetToolTip(this.lbl_RecomendedCrop, "Top / Bottom / Left / Right");
+            // 
+            // Label8
+            // 
+            this.Label8.AutoSize = true;
+            this.Label8.BackColor = System.Drawing.Color.Transparent;
+            this.Label8.Location = new System.Drawing.Point(13, 68);
+            this.Label8.Name = "Label8";
+            this.Label8.Size = new System.Drawing.Size(70, 13);
+            this.Label8.TabIndex = 2;
+            this.Label8.Text = "Auto Crop:";
+            this.ToolTip.SetToolTip(this.Label8, "Top / Bottom / Left / Right");
             // 
             // DVD_Open
             // 
@@ -1345,7 +1360,6 @@ namespace Handbrake
             this.lbl_drc4.Size = new System.Drawing.Size(19, 13);
             this.lbl_drc4.TabIndex = 39;
             this.lbl_drc4.Text = "1:";
-            this.lbl_drc4.Visible = false;
             // 
             // lbl_drc3
             // 
@@ -1357,7 +1371,6 @@ namespace Handbrake
             this.lbl_drc3.Size = new System.Drawing.Size(19, 13);
             this.lbl_drc3.TabIndex = 31;
             this.lbl_drc3.Text = "1:";
-            this.lbl_drc3.Visible = false;
             // 
             // lbl_drc2
             // 
@@ -1392,7 +1405,6 @@ namespace Handbrake
             this.trackBar4.Size = new System.Drawing.Size(49, 42);
             this.trackBar4.TabIndex = 38;
             this.trackBar4.TickFrequency = 10;
-            this.trackBar4.Visible = false;
             this.trackBar4.ValueChanged += new System.EventHandler(this.trackBar4_Scroll);
             // 
             // drp_track4Audio
@@ -1405,7 +1417,6 @@ namespace Handbrake
             this.drp_track4Audio.Name = "drp_track4Audio";
             this.drp_track4Audio.Size = new System.Drawing.Size(194, 20);
             this.drp_track4Audio.TabIndex = 33;
-            this.drp_track4Audio.Visible = false;
             this.drp_track4Audio.SelectedIndexChanged += new System.EventHandler(this.drp_track4Audio_SelectedIndexChanged);
             // 
             // lbl_t4
@@ -1418,7 +1429,6 @@ namespace Handbrake
             this.lbl_t4.Size = new System.Drawing.Size(19, 13);
             this.lbl_t4.TabIndex = 32;
             this.lbl_t4.Text = "4:";
-            this.lbl_t4.Visible = false;
             // 
             // trackBar3
             // 
@@ -1431,7 +1441,6 @@ namespace Handbrake
             this.trackBar3.Size = new System.Drawing.Size(49, 42);
             this.trackBar3.TabIndex = 30;
             this.trackBar3.TickFrequency = 10;
-            this.trackBar3.Visible = false;
             this.trackBar3.ValueChanged += new System.EventHandler(this.trackBar3_Scroll);
             // 
             // drp_track3Audio
@@ -1444,7 +1453,6 @@ namespace Handbrake
             this.drp_track3Audio.Name = "drp_track3Audio";
             this.drp_track3Audio.Size = new System.Drawing.Size(194, 20);
             this.drp_track3Audio.TabIndex = 25;
-            this.drp_track3Audio.Visible = false;
             this.drp_track3Audio.SelectedIndexChanged += new System.EventHandler(this.drp_track3Audio_SelectedIndexChanged);
             // 
             // lbl_t3
@@ -1457,7 +1465,6 @@ namespace Handbrake
             this.lbl_t3.Size = new System.Drawing.Size(19, 13);
             this.lbl_t3.TabIndex = 24;
             this.lbl_t3.Text = "3:";
-            this.lbl_t3.Visible = false;
             // 
             // trackBar2
             // 
@@ -1638,13 +1645,11 @@ namespace Handbrake
             this.drp_track1Audio.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_track1Audio.FormattingEnabled = true;
             this.drp_track1Audio.Items.AddRange(new object[] {
-            "Automatic",
-            "None"});
+            "Automatic"});
             this.drp_track1Audio.Location = new System.Drawing.Point(36, 54);
             this.drp_track1Audio.Name = "drp_track1Audio";
             this.drp_track1Audio.Size = new System.Drawing.Size(194, 20);
             this.drp_track1Audio.TabIndex = 3;
-            this.drp_track1Audio.SelectedIndexChanged += new System.EventHandler(this.drp_track1Audio_SelectedIndexChanged);
             // 
             // Label32
             // 
@@ -2067,29 +2072,6 @@ namespace Handbrake
             this.drp_deInterlace_option.Name = "drp_deInterlace_option";
             this.drp_deInterlace_option.Size = new System.Drawing.Size(161, 21);
             this.drp_deInterlace_option.TabIndex = 17;
-            // 
-            // lbl_RecomendedCrop
-            // 
-            this.lbl_RecomendedCrop.AutoSize = true;
-            this.lbl_RecomendedCrop.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_RecomendedCrop.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_RecomendedCrop.Location = new System.Drawing.Point(116, 69);
-            this.lbl_RecomendedCrop.Name = "lbl_RecomendedCrop";
-            this.lbl_RecomendedCrop.Size = new System.Drawing.Size(72, 12);
-            this.lbl_RecomendedCrop.TabIndex = 4;
-            this.lbl_RecomendedCrop.Text = "Select a Title";
-            this.ToolTip.SetToolTip(this.lbl_RecomendedCrop, "Top / Bottom / Left / Right");
-            // 
-            // Label8
-            // 
-            this.Label8.AutoSize = true;
-            this.Label8.BackColor = System.Drawing.Color.Transparent;
-            this.Label8.Location = new System.Drawing.Point(13, 68);
-            this.Label8.Name = "Label8";
-            this.Label8.Size = new System.Drawing.Size(70, 13);
-            this.Label8.TabIndex = 2;
-            this.Label8.Text = "Auto Crop:";
-            this.ToolTip.SetToolTip(this.Label8, "Top / Bottom / Left / Right");
             // 
             // Label1
             // 

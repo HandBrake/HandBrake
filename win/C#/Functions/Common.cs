@@ -334,15 +334,6 @@ namespace Handbrake.Functions
                 mainWindow.drp_audbit_3.Enabled = false;
                 mainWindow.trackBar3.Enabled = false;
 
-                mainWindow.drp_track3Audio.Visible = false;
-                mainWindow.drp_audsr_3.Visible = false;
-                mainWindow.drp_audmix_3.Visible = false;
-                mainWindow.drp_audenc_3.Visible = false;
-                mainWindow.drp_audbit_3.Visible = false;
-                mainWindow.trackBar3.Visible = false;
-                mainWindow.lbl_drc3.Visible = false;
-                mainWindow.lbl_t3.Visible = false;
-
                 mainWindow.drp_track3Audio.Text = "None";
                 mainWindow.drp_audsr_3.Text = "";
                 mainWindow.drp_audmix_3.Text = "Automatic";
@@ -359,15 +350,6 @@ namespace Handbrake.Functions
                 mainWindow.drp_audenc_3.Enabled = true;
                 mainWindow.drp_audbit_3.Enabled = true;
                 mainWindow.trackBar3.Enabled = true;
-
-                mainWindow.drp_track3Audio.Visible = true;
-                mainWindow.drp_audsr_3.Visible = true;
-                mainWindow.drp_audmix_3.Visible = true;
-                mainWindow.drp_audenc_3.Visible = true;
-                mainWindow.drp_audbit_3.Visible = true;
-                mainWindow.trackBar3.Visible = true;
-                mainWindow.lbl_drc3.Visible = true;
-                mainWindow.lbl_t3.Visible = true;
             }
 
             // Handle Track 4
@@ -379,15 +361,6 @@ namespace Handbrake.Functions
                 mainWindow.drp_audenc_4.Enabled = false;
                 mainWindow.drp_audbit_4.Enabled = false;
                 mainWindow.trackBar4.Enabled = false;
-
-                mainWindow.drp_track4Audio.Visible = false;
-                mainWindow.drp_audsr_4.Visible = false;
-                mainWindow.drp_audmix_4.Visible = false;
-                mainWindow.drp_audenc_4.Visible = false;
-                mainWindow.drp_audbit_4.Visible = false;
-                mainWindow.trackBar4.Visible = false;
-                mainWindow.lbl_drc4.Visible = false;
-                mainWindow.lbl_t4.Visible = false;
 
                 mainWindow.drp_track4Audio.Text = "None";
                 mainWindow.drp_audsr_4.Text = "";
@@ -404,15 +377,6 @@ namespace Handbrake.Functions
                 mainWindow.drp_audenc_4.Enabled = true;
                 mainWindow.drp_audbit_4.Enabled = true;
                 mainWindow.trackBar4.Enabled = true;
-
-                mainWindow.drp_track4Audio.Visible = true;
-                mainWindow.drp_audsr_4.Visible = true;
-                mainWindow.drp_audmix_4.Visible = true;
-                mainWindow.drp_audenc_4.Visible = true;
-                mainWindow.drp_audbit_4.Visible = true;
-                mainWindow.trackBar4.Visible = true;
-                mainWindow.lbl_drc4.Visible = true;
-                mainWindow.lbl_t4.Visible = true;
             }
 
             // Now lets start setting stuff
