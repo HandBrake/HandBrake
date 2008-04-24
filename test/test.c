@@ -13,6 +13,13 @@
 #include "hb.h"
 #include "parsecsv.h"
 
+#ifdef __APPLE_CC__
+#import <CoreServices/CoreServices.h>
+#include <IOKit/IOKitLib.h>
+#include <IOKit/storage/IOMedia.h>
+#include <IOKit/storage/IODVDMedia.h>
+#endif
+
 /* Options */
 static int    debug       = HB_DEBUG_NONE;
 static int    update      = 0;
@@ -94,6 +101,14 @@ static int  HandleEvents( hb_handle_t * h );
 
 static int get_acodec_for_string( char *codec );
 static int is_sample_rate_valid(int rate);
+
+#ifdef __APPLE_CC__
+static char* bsd_name_for_path(char *path);
+static int device_is_dvd(char *device);
+static io_service_t get_iokit_service( char *device );
+static int is_dvd_service( io_service_t service );
+static is_whole_media_service( io_service_t service );
+#endif
 
 /* Only print the "Muxing..." message once */
 static int show_mux_warning = 1;
@@ -1641,6 +1656,20 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case 'i':
                 input = strdup( optarg );
+                #ifdef __APPLE_CC__
+                char *devName = bsd_name_for_path( input );
+                if( devName == NULL )
+                {
+                    return 0;
+                }
+                if( device_is_dvd( devName ) )
+                {
+                    char *newInput = malloc( strlen("/dev/") + strlen( devName ) + 1);
+                    sprintf( newInput, "/dev/%s", devName );
+                    free(input);
+                    input = newInput;
+                }
+                #endif
                 break;
             case 'o':
                 output = strdup( optarg );
@@ -2098,3 +2127,160 @@ static int is_sample_rate_valid(int rate)
     }
     return 0;
 }
+
+#ifdef __APPLE_CC__
+/****************************************************************************
+ * bsd_name_for_path
+ *
+ * Returns the BSD device name for the block device that contains the
+ * passed-in path. Returns NULL on failure.
+ ****************************************************************************/
+static char* bsd_name_for_path(char *path)
+{
+    OSStatus err;
+    FSRef ref;
+    err = FSPathMakeRef( (const UInt8 *) input, &ref, NULL );
+    if( err != noErr )
+    {
+        return NULL;
+    }
+
+    // Get the volume reference number.
+    FSCatalogInfo catalogInfo;
+    err = FSGetCatalogInfo( &ref, kFSCatInfoVolume, &catalogInfo, NULL, NULL,
+                            NULL);
+    if( err != noErr )
+    {
+        return NULL;
+    }
+    FSVolumeRefNum volRefNum = catalogInfo.volume;
+
+    // Now let's get the device name
+    GetVolParmsInfoBuffer volumeParms;
+    err = FSGetVolumeParms( volRefNum, &volumeParms, sizeof( volumeParms ) );
+    if( err != noErr )
+    {
+        return NULL;
+    }
+
+    // A version 4 GetVolParmsInfoBuffer contains the BSD node name in the
+    // vMDeviceID field. It is actually a char * value. This is mentioned in the
+    // header CoreServices/CarbonCore/Files.h.
+    return volumeParms.vMDeviceID;
+}
+
+/****************************************************************************
+ * device_is_dvd
+ *
+ * Returns whether or not the passed in BSD device represents a DVD, or other
+ * optical media.
+ ****************************************************************************/
+static int device_is_dvd(char *device)
+{
+    io_service_t service = get_iokit_service(device);
+    if( service == IO_OBJECT_NULL )
+    {
+        return 0;
+    }
+    int result = is_dvd_service(service);
+    IOObjectRelease(service);
+    return result;
+}
+
+/****************************************************************************
+ * get_iokit_service
+ *
+ * Returns the IOKit service object for the passed in BSD device name.
+ ****************************************************************************/
+static io_service_t get_iokit_service( char *device )
+{
+    CFMutableDictionaryRef matchingDict;
+    matchingDict = IOBSDNameMatching( kIOMasterPortDefault, 0, device );
+    if( matchingDict == NULL )
+    {
+        return IO_OBJECT_NULL;
+    }
+    // Fetch the object with the matching BSD node name. There should only be
+    // one match, so IOServiceGetMatchingService is used instead of
+    // IOServiceGetMatchingServices to simplify the code.
+    return IOServiceGetMatchingService( kIOMasterPortDefault, matchingDict );
+}
+
+/****************************************************************************
+ * is_dvd_service
+ *
+ * Returns whether or not the service passed in is a DVD.
+ *
+ * Searches for an IOMedia object that represents the entire (whole) media that
+ * the volume is on. If the volume is on partitioned media, the whole media
+ * object will be a parent of the volume's media object. If the media is not
+ * partitioned, the volume's media object will be the whole media object.
+ ****************************************************************************/
+static int is_dvd_service( io_service_t service )
+{
+    kern_return_t  kernResult;
+    io_iterator_t  iter;
+
+    // Create an iterator across all parents of the service object passed in.
+    kernResult = IORegistryEntryCreateIterator( service,
+                                                kIOServicePlane,
+                                                kIORegistryIterateRecursively | kIORegistryIterateParents,
+                                                &iter );
+    if( kernResult != KERN_SUCCESS )
+    {
+        return 0;
+    }
+    if( iter == IO_OBJECT_NULL )
+    {
+        return 0;
+    }
+
+    // A reference on the initial service object is released in the do-while
+    // loop below, so add a reference to balance.
+    IOObjectRetain( service );
+
+    int result = 0;
+    do
+    {
+        if( is_whole_media_service( service ) &&
+            IOObjectConformsTo( service, kIODVDMediaClass) )
+        {
+            result = 1;
+        }
+        IOObjectRelease( service );
+    } while( !result && (service = IOIteratorNext( iter )) );
+    IOObjectRelease( iter );
+
+    return result;
+}
+
+/****************************************************************************
+ * is_whole_media_service
+ *
+ * Returns whether or not the service passed in is an IOMedia service and
+ * represents the "whole" media instead of just a partition.
+ *
+ * The whole media object is indicated in the IORegistry by the presence of a
+ * property with the key "Whole" and value "Yes".
+ ****************************************************************************/
+static is_whole_media_service( io_service_t service )
+{
+    int result = 0;
+
+    if( IOObjectConformsTo( service, kIOMediaClass ) )
+    {
+        CFTypeRef wholeMedia = IORegistryEntryCreateCFProperty( service,
+                                                                CFSTR( kIOMediaWholeKey ),
+                                                                kCFAllocatorDefault,
+                                                                0 );
+        if ( !wholeMedia )
+        {
+            return 0;
+        }
+        result = CFBooleanGetValue( (CFBooleanRef)wholeMedia );
+        CFRelease( wholeMedia );
+    }
+
+    return result;
+}
+#endif // __APPLE_CC__

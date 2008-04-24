@@ -123,6 +123,8 @@
 		A9DE40450C959834008A5440 /* minus-8.png in Resources */ = {isa = PBXBuildFile; fileRef = A9DE40430C959834008A5440 /* minus-8.png */; };
 		A9DE40460C959834008A5440 /* plus-8.png in Resources */ = {isa = PBXBuildFile; fileRef = A9DE40440C959834008A5440 /* plus-8.png */; };
 		B48359A80C82960500E04440 /* lang.c in Sources */ = {isa = PBXBuildFile; fileRef = B48359A70C82960500E04440 /* lang.c */; };
+		D289A9F30DBBE7AC00CE614B /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D289A9F20DBBE7AC00CE614B /* CoreServices.framework */; };
+		D289AAC40DBBF3F100CE614B /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DEB2024052B055F00C39CA9 /* IOKit.framework */; };
 		D4D49FED0C83355600F01215 /* lang.c in Sources */ = {isa = PBXBuildFile; fileRef = B48359A70C82960500E04440 /* lang.c */; };
 		E3003C7F0C88505D0072F2A8 /* DeleteHighlightPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = E3003C7E0C88505D0072F2A8 /* DeleteHighlightPressed.png */; };
 		E3003CB50C8852B70072F2A8 /* DeletePressed.png in Resources */ = {isa = PBXBuildFile; fileRef = E3003CB40C8852B70072F2A8 /* DeletePressed.png */; };
@@ -287,6 +289,7 @@
 		A9DE40430C959834008A5440 /* minus-8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "minus-8.png"; sourceTree = "<group>"; };
 		A9DE40440C959834008A5440 /* plus-8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "plus-8.png"; sourceTree = "<group>"; };
 		B48359A70C82960500E04440 /* lang.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lang.c; path = ../libhb/lang.c; sourceTree = SOURCE_ROOT; };
+		D289A9F20DBBE7AC00CE614B /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
 		E3003C7E0C88505D0072F2A8 /* DeleteHighlightPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DeleteHighlightPressed.png; sourceTree = "<group>"; };
 		E3003CB40C8852B70072F2A8 /* DeletePressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DeletePressed.png; sourceTree = "<group>"; };
 		E37167830C92F6180072B384 /* JobPassSecondSmall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JobPassSecondSmall.png; sourceTree = "<group>"; };
@@ -346,6 +349,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D289AAC40DBBF3F100CE614B /* IOKit.framework in Frameworks */,
+				D289A9F30DBBE7AC00CE614B /* CoreServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,6 +422,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D289A9F20DBBE7AC00CE614B /* CoreServices.framework */,
 				A2D0A0AA0D3E5929002D57CB /* Sparkle.framework */,
 				A29E057F0BE1283E000533F5 /* Growl.framework */,
 				4D1125D709D72FD200E0657B /* libz.dylib */,
