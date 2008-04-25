@@ -388,6 +388,15 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             {
                 duration += buf->renderOffset * m->samplerate / 90000;
             }
+            if ( duration <= 0 )
+            {
+                /* The initial & final chapters can have very short durations
+                 * (less than the error in our total duration estimate) so
+                 * the duration calc above can result in a negative number.
+                 * when this happens give the chapter a short duration (1/3
+                 * of an ntsc frame time). */
+                duration = 1000 * m->samplerate / 90000;
+            }
 
             sample = MP4GenerateChapterSample( m, duration, buf->new_chap );
 
@@ -467,8 +476,18 @@ static int MP4End( hb_mux_object_t * m )
     /* Write our final chapter marker */
     if( m->job->chapter_markers )
     {
-        struct hb_text_sample_s *sample = MP4GenerateChapterSample( m,
-                                                (m->sum_dur - m->chapter_duration),
+        int64_t duration = m->sum_dur - m->chapter_duration;
+        if ( duration <= 0 )
+        {
+            /* The initial & final chapters can have very short durations
+             * (less than the error in our total duration estimate) so
+             * the duration calc above can result in a negative number.
+             * when this happens give the chapter a short duration (1/3
+             * of an ntsc frame time). */
+            duration = 1000 * m->samplerate / 90000;
+        }
+
+        struct hb_text_sample_s *sample = MP4GenerateChapterSample( m, duration,
                                                 m->current_chapter + 1 );
 
         if( !MP4WriteSample(m->file,

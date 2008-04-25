@@ -289,10 +289,9 @@ static int SyncVideo( hb_work_object_t * w )
         return HB_WORK_OK;
     }
     cur = pv->cur;
-    if( cur->size == 0 && pv->pts_offset == INT64_MIN )
+    if( cur->size == 0 )
     {
-        /* we got an end-of-stream with no video frames (happens during
-         * an indepth_scan). Feed the eos downstream & signal that we're done. */
+        /* we got an end-of-stream. Feed it downstream & signal that we're done. */
         hb_fifo_push( job->fifo_sync, hb_buffer_init( 0 ) );
         pv->done = 1;
         return HB_WORK_DONE;
@@ -309,13 +308,14 @@ static int SyncVideo( hb_work_object_t * w )
 
         if( next->size == 0 )
         {
-            // we got the empty buffer that signals end-of-stream
-            // note that we're done but continue to the end of this
-            // loop so that the final frame gets processed.
+            /* we got an end-of-stream. Feed it downstream & signal that
+             * we're done. Note that this means we drop the final frame of
+             * video (we don't know its duration). On DVDs the final frame
+             * is often strange and dropping it seems to be a good idea. */
+            hb_fifo_push( job->fifo_sync, hb_buffer_init( 0 ) );
             pv->done = 1;
-            next->start = pv->next_pts + 90*30;
+            return HB_WORK_DONE;
         }
-
         if( pv->pts_offset == INT64_MIN )
         {
             /* This is our first frame */
@@ -625,13 +625,9 @@ static int SyncVideo( hb_work_object_t * w )
         /* Make sure we won't get more frames then expected */
         if( pv->count_frames >= pv->count_frames_max * 2)
         {
-            hb_log( "sync: got too many frames (%d), exiting early", pv->count_frames );
+            hb_log( "sync: got too many frames (%d), exiting early",
+                    pv->count_frames );
             pv->done = 1;
-        }
-
-        if ( pv->done )
-        {
-            hb_buffer_close( &pv->cur );
 
             // Drop an empty buffer into our output to ensure that things
             // get flushed all the way out.
