@@ -1158,6 +1158,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 {
                     [self writeToActivityLog:"trying to open video_ts folder (parent directory chosen)"];
                     /* if not the VIDEO_TS Folder, we can assume the chosen folder is the source name */
+                    /* make sure we remove any path extension as this can also be an '.mpg' file */
                     browsedSourceDisplayName = [[NSString stringWithFormat:@"%@",[path lastPathComponent]] retain];
                 }
                 [self performScan:path scanTitleNum:0];
@@ -1337,15 +1338,15 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 			/* Use the dvd name in the default output field here 
 				May want to add code to remove blank spaces for some dvd names*/
 			/* Check to see if the last destination has been set,use if so, if not, use Desktop */
-			if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"])
+            if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"])
 			{
 				[fDstFile2Field setStringValue: [NSString stringWithFormat:
-					@"%@/%@.mp4", [[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"],browsedSourceDisplayName]];
+					@"%@/%@.mp4", [[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"],[browsedSourceDisplayName stringByDeletingPathExtension]]];
 			}
 			else
 			{
 				[fDstFile2Field setStringValue: [NSString stringWithFormat:
-					@"%@/Desktop/%@.mp4", NSHomeDirectory(),browsedSourceDisplayName]];
+					@"%@/Desktop/%@.mp4", NSHomeDirectory(),[browsedSourceDisplayName stringByDeletingPathExtension]]];
 			}
 			
 			if (longuestpri < title->hours*60*60 + title->minutes *60 + title->seconds)
@@ -2881,10 +2882,10 @@ the user is using "Custom" settings by determining the sender*/
     }
     else if ([[fAudTrack1MixPopUp selectedItem] tag] == HB_ACODEC_AC3)
     {
-    [fAudTrack1RatePopUp setEnabled: NO];
-    [fAudTrack1BitratePopUp setEnabled: NO];
-    [fAudTrack1DrcSlider setEnabled: NO];
-    [fAudTrack1DrcField setEnabled: NO];
+        [fAudTrack1RatePopUp setEnabled: NO];
+        [fAudTrack1BitratePopUp setEnabled: NO];
+        [fAudTrack1DrcSlider setEnabled: NO];
+        [fAudTrack1DrcField setEnabled: NO];
     }
     
     /* enable/disable the mixdown text and popupbutton for audio track 2 */
@@ -2905,10 +2906,10 @@ the user is using "Custom" settings by determining the sender*/
     }
     else if ([[fAudTrack2MixPopUp selectedItem] tag] == HB_ACODEC_AC3)
     {
-    [fAudTrack2RatePopUp setEnabled: NO];
-    [fAudTrack2BitratePopUp setEnabled: NO];
-    [fAudTrack2DrcSlider setEnabled: NO];
-    [fAudTrack2DrcField setEnabled: NO];
+        [fAudTrack2RatePopUp setEnabled: NO];
+        [fAudTrack2BitratePopUp setEnabled: NO];
+        [fAudTrack2DrcSlider setEnabled: NO];
+        [fAudTrack2DrcField setEnabled: NO];
     }
     
     /* enable/disable the mixdown text and popupbutton for audio track 3 */
@@ -2929,10 +2930,10 @@ the user is using "Custom" settings by determining the sender*/
     }
     else if ([[fAudTrack3MixPopUp selectedItem] tag] == HB_ACODEC_AC3)
     {
-    [fAudTrack3RatePopUp setEnabled: NO];
-    [fAudTrack3BitratePopUp setEnabled: NO];
-    [fAudTrack3DrcSlider setEnabled: NO];
-    [fAudTrack3DrcField setEnabled: NO];
+        [fAudTrack3RatePopUp setEnabled: NO];
+        [fAudTrack3BitratePopUp setEnabled: NO];
+        [fAudTrack3DrcSlider setEnabled: NO];
+        [fAudTrack3DrcField setEnabled: NO];
     }
     
     /* enable/disable the mixdown text and popupbutton for audio track 4 */
@@ -2953,10 +2954,10 @@ the user is using "Custom" settings by determining the sender*/
     }
     else if ([[fAudTrack4MixPopUp selectedItem] tag] == HB_ACODEC_AC3)
     {
-    [fAudTrack4RatePopUp setEnabled: NO];
-    [fAudTrack4BitratePopUp setEnabled: NO];
-    [fAudTrack4DrcSlider setEnabled: NO];
-    [fAudTrack4DrcField setEnabled: NO];
+        [fAudTrack4RatePopUp setEnabled: NO];
+        [fAudTrack4BitratePopUp setEnabled: NO];
+        [fAudTrack4DrcSlider setEnabled: NO];
+        [fAudTrack4DrcField setEnabled: NO];
     }
     
 }
