@@ -2879,6 +2879,13 @@ the user is using "Custom" settings by determining the sender*/
         [fAudTrack1DrcSlider setFloatValue: 1.00];
         [self audioDRCSliderChanged: fAudTrack1DrcSlider];
     }
+    else if ([[fAudTrack1MixPopUp selectedItem] tag] == HB_ACODEC_AC3)
+    {
+    [fAudTrack1RatePopUp setEnabled: NO];
+    [fAudTrack1BitratePopUp setEnabled: NO];
+    [fAudTrack1DrcSlider setEnabled: NO];
+    [fAudTrack1DrcField setEnabled: NO];
+    }
     
     /* enable/disable the mixdown text and popupbutton for audio track 2 */
     [fAudTrack2CodecPopUp setEnabled: ([fAudLang2PopUp indexOfSelectedItem] == 0) ? NO : YES];
@@ -2895,6 +2902,13 @@ the user is using "Custom" settings by determining the sender*/
         [fAudTrack2BitratePopUp removeAllItems];
         [fAudTrack2DrcSlider setFloatValue: 1.00];
         [self audioDRCSliderChanged: fAudTrack2DrcSlider];
+    }
+    else if ([[fAudTrack2MixPopUp selectedItem] tag] == HB_ACODEC_AC3)
+    {
+    [fAudTrack2RatePopUp setEnabled: NO];
+    [fAudTrack2BitratePopUp setEnabled: NO];
+    [fAudTrack2DrcSlider setEnabled: NO];
+    [fAudTrack2DrcField setEnabled: NO];
     }
     
     /* enable/disable the mixdown text and popupbutton for audio track 3 */
@@ -2913,6 +2927,13 @@ the user is using "Custom" settings by determining the sender*/
         [fAudTrack3DrcSlider setFloatValue: 1.00];
         [self audioDRCSliderChanged: fAudTrack3DrcSlider];
     }
+    else if ([[fAudTrack3MixPopUp selectedItem] tag] == HB_ACODEC_AC3)
+    {
+    [fAudTrack3RatePopUp setEnabled: NO];
+    [fAudTrack3BitratePopUp setEnabled: NO];
+    [fAudTrack3DrcSlider setEnabled: NO];
+    [fAudTrack3DrcField setEnabled: NO];
+    }
     
     /* enable/disable the mixdown text and popupbutton for audio track 4 */
     [fAudTrack4CodecPopUp setEnabled: ([fAudLang4PopUp indexOfSelectedItem] == 0) ? NO : YES];
@@ -2929,6 +2950,13 @@ the user is using "Custom" settings by determining the sender*/
         [fAudTrack4BitratePopUp removeAllItems];
         [fAudTrack4DrcSlider setFloatValue: 1.00];
         [self audioDRCSliderChanged: fAudTrack4DrcSlider];
+    }
+    else if ([[fAudTrack4MixPopUp selectedItem] tag] == HB_ACODEC_AC3)
+    {
+    [fAudTrack4RatePopUp setEnabled: NO];
+    [fAudTrack4BitratePopUp setEnabled: NO];
+    [fAudTrack4DrcSlider setEnabled: NO];
+    [fAudTrack4DrcField setEnabled: NO];
     }
     
 }
