@@ -252,8 +252,6 @@ BOOL                        fIsDragging;
 - (void) performScan:(NSString *) scanPath scanTitleNum: (int) scanTitleNum;
 - (IBAction) showNewScan: (id) sender;
 
-- (void)     TranslateStrings;
-
 - (void)     updateUI: (NSTimer *) timer;
 - (void)     enableUI: (bool) enable;
 

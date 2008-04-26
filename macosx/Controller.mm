@@ -16,7 +16,6 @@
 #include "dvdread/dvd_reader.h"
 #include "HBPresets.h"
 
-#define _(a) NSLocalizedString(a,NULL)
 #define DragDropSimplePboardType 	@"MyCustomOutlineViewPboardType"
 
 /* We setup the toolbar values here */
@@ -234,7 +233,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	
     /* Video framerate */
     [fVidRatePopUp removeAllItems];
-	[fVidRatePopUp addItemWithTitle: _( @"Same as source" )];
+	[fVidRatePopUp addItemWithTitle: NSLocalizedString( @"Same as source", @"" )];
     for( int i = 0; i < hb_video_rates_count; i++ )
     {
         if ([[NSString stringWithCString: hb_video_rates[i].string] isEqualToString: [NSString stringWithFormat: @"%.3f",23.976]])
@@ -301,23 +300,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	currentSuccessfulScanCount = 0;
     
 }
-
-- (void) TranslateStrings
-{
-    [fSrcTitleField     setStringValue: _( @"Title:" )];
-    [fSrcChapterField   setStringValue: _( @"Chapters:" )];
-    [fSrcChapterToField setStringValue: _( @"to" )];
-    [fSrcDuration1Field setStringValue: _( @"Duration:" )];
-
-    [fDstFormatField    setStringValue: _( @"Format:" )];
-    [fDstFile1Field     setStringValue: _( @"File:" )];
-    [fDstBrowseButton   setTitle:       _( @"Browse" )];
-
-    [fVidRateField      setStringValue: _( @"Framerate (fps):" )];
-    [fVidEncoderField   setStringValue: _( @"Encoder:" )];
-    [fVidQualityField   setStringValue: _( @"Quality:" )];
-}
-
 
 - (void) enableUI: (bool) b
 {
@@ -497,7 +479,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         case HB_STATE_SCANNING:
 		{
             [fSrcDVD2Field setStringValue: [NSString stringWithFormat:
-                                            _( @"Scanning title %d of %d..." ),
+                                            NSLocalizedString( @"Scanning title %d of %d...", @"" ),
                                             p.title_cur, p.title_count]];
             [fScanIndicator setHidden: NO];
             [fScanIndicator setDoubleValue: 100.0 * ( p.title_cur - 1 ) / p.title_count];
@@ -526,12 +508,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 				jobs during encoding, if they cannot be fixed in libhb, will implement a
 				nasty but working cocoa solution */
 			/* Update text field */
-			string = [NSMutableString stringWithFormat: _( @"Encoding: task %d of %d, %.2f %%" ), p.job_cur, p.job_count, 100.0 * p.progress];
+			string = [NSMutableString stringWithFormat: NSLocalizedString( @"Encoding: task %d of %d, %.2f %%", @"" ), p.job_cur, p.job_count, 100.0 * p.progress];
             
 			if( p.seconds > -1 )
             {
                 [string appendFormat:
-                    _( @" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)" ),
+                    NSLocalizedString( @" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)", @"" ),
                     p.rate_cur, p.rate_avg, p.hours, p.minutes, p.seconds];
             }
             [fStatusField setStringValue: string];
@@ -577,7 +559,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 			
             /* Update text field */
             string = [NSMutableString stringWithFormat:
-                _( @"Muxing..." )];
+                NSLocalizedString( @"Muxing...", @"" )];
             [fStatusField setStringValue: string];
 			
             /* Update slider */
@@ -595,7 +577,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 #undef p
 			
         case HB_STATE_PAUSED:
-		    [fStatusField setStringValue: _( @"Paused" )];
+		    [fStatusField setStringValue: NSLocalizedString( @"Paused", @"" )];
             
 			// Pass along the info to HBQueueController
             [fQueueController libhbStateChanged: s];
@@ -613,7 +595,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             while( ( job = hb_job( fHandle, 0 ) ) && ( !IsFirstPass(job->sequence_id) ) )
                 hb_rem( fHandle, job );
 
-            [fStatusField setStringValue: _( @"Done." )];
+            [fStatusField setStringValue: NSLocalizedString( @"Done.", @"" )];
             [fRipIndicator setIndeterminate: NO];
             [fRipIndicator setDoubleValue: 0.0];
             [toolbar validateVisibleItems];
@@ -693,9 +675,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* Lets show the queue status here in the main window */
 	int queue_count = [fQueueController pendingCount];
 	if( queue_count == 1)
-		[fQueueStatus setStringValue: _( @"1 encode queued") ];
+		[fQueueStatus setStringValue: NSLocalizedString( @"1 encode queued", @"" ) ];
     else if (queue_count > 1)
-		[fQueueStatus setStringValue: [NSString stringWithFormat: _( @"%d encodes queued" ), queue_count]];
+		[fQueueStatus setStringValue: [NSString stringWithFormat: NSLocalizedString( @"%d encodes queued", @"" ), queue_count]];
 	else
 		[fQueueStatus setStringValue: @""];
 }
@@ -1745,11 +1727,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	if( [[NSFileManager defaultManager] fileExistsAtPath:
             [fDstFile2Field stringValue]] )
     {
-        NSBeginCriticalAlertSheet( _( @"File already exists" ),
-            _( @"Cancel" ), _( @"Overwrite" ), NULL, fWindow, self,
+        NSBeginCriticalAlertSheet( NSLocalizedString( @"File already exists", @"" ),
+            NSLocalizedString( @"Cancel", @"" ), NSLocalizedString( @"Overwrite", @"" ), NULL, fWindow, self,
             @selector( overwriteAddToQueueAlertDone:returnCode:contextInfo: ),
             NULL, NULL, [NSString stringWithFormat:
-            _( @"Do you want to overwrite %@?" ),
+            NSLocalizedString( @"Do you want to overwrite %@?", @"" ),
             [fDstFile2Field stringValue]] );
         // overwriteAddToQueueAlertDone: will be called when the alert is dismissed.
     }
@@ -1758,11 +1740,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     else if ( ([fQueueController pendingJobGroupWithDestinationPath:[fDstFile2Field stringValue]] != nil)
             || ([[[fQueueController currentJobGroup] destinationPath] isEqualToString: [fDstFile2Field stringValue]]) )
     {
-        NSBeginCriticalAlertSheet( _( @"Another queued encode has specified the same destination." ),
-            _( @"Cancel" ), _( @"Overwrite" ), NULL, fWindow, self,
+        NSBeginCriticalAlertSheet( NSLocalizedString( @"Another queued encode has specified the same destination.", @"" ),
+            NSLocalizedString( @"Cancel", @"" ), NSLocalizedString( @"Overwrite", @"" ), NULL, fWindow, self,
             @selector( overwriteAddToQueueAlertDone:returnCode:contextInfo: ),
             NULL, NULL, [NSString stringWithFormat:
-            _( @"Do you want to overwrite %@?" ),
+            NSLocalizedString( @"Do you want to overwrite %@?", @"" ),
             [fDstFile2Field stringValue]] );
         // overwriteAddToQueueAlertDone: will be called when the alert is dismissed.
     }
@@ -1932,11 +1914,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* We check for duplicate name here */
     if( [[NSFileManager defaultManager] fileExistsAtPath:[fDstFile2Field stringValue]] )
     {
-        NSBeginCriticalAlertSheet( _( @"File already exists" ),
-            _( @"Cancel" ), _( @"Overwrite" ), NULL, fWindow, self,
+        NSBeginCriticalAlertSheet( NSLocalizedString( @"File already exists", @"" ),
+            NSLocalizedString( @"Cancel", "" ), NSLocalizedString( @"Overwrite", @"" ), NULL, fWindow, self,
             @selector( overWriteAlertDone:returnCode:contextInfo: ),
             NULL, NULL, [NSString stringWithFormat:
-            _( @"Do you want to overwrite %@?" ),
+            NSLocalizedString( @"Do you want to overwrite %@?", @"" ),
             [fDstFile2Field stringValue]] );
             
         // overWriteAlertDone: will be called when the alert is dismissed. It will call doRip.
@@ -2591,7 +2573,7 @@ the user is using "Custom" settings by determining the sender*/
 - (IBAction) qualitySliderChanged: (id) sender
 {
     [fVidConstantCell setTitle: [NSString stringWithFormat:
-        _( @"Constant quality: %.0f %%" ), 100.0 *
+        NSLocalizedString( @"Constant quality: %.0f %%", @"" ), 100.0 *
         [fVidQualitySlider floatValue]]];
 		[self customSettingUsed: sender];
 }
@@ -2972,7 +2954,7 @@ the user is using "Custom" settings by determining the sender*/
 	hb_audio_config_t * audio;
 
     [sender removeAllItems];
-    [sender addItemWithTitle: _( @"None" )];
+    [sender addItemWithTitle: NSLocalizedString( @"None", @"" )];
     for( int i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = (hb_audio_config_t *) hb_list_audio_config_item( title->list_audio, i );

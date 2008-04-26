@@ -1,7 +1,2 @@
 #! /bin/sh
-rm -f genstrings.tmp
-cat *.mm | grep -v "^#define.*_(" | \
-    sed 's/_( \(@"[^"]*"\) )/NSLocalizedString( \1, nil )/g' > \
-    genstrings.tmp
-genstrings genstrings.tmp
-rm -f genstrings.tmp
+genstrings *.m*
