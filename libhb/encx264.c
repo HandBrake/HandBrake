@@ -207,7 +207,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     }
 
 
-    if( job->vquality >= 0.0 && job->vquality <= 1.0 )
+    if( job->vquality > 0.0 && job->vquality < 1.0 )
     {
         switch( job->crf )
         {
@@ -227,6 +227,29 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
                         param.rc.i_qp_constant );
                 break;
         }
+    }
+    else if( job->vquality == 0 || job->vquality >= 1.0 )
+    {
+        /* Use the vquality as a raw RF or QP
+          instead of treating it like a percentage. */
+        switch( job->crf )
+        {
+            case 1:
+                /*Constant RF*/
+                param.rc.i_rc_method = X264_RC_CRF;
+                param.rc.f_rf_constant = job->vquality;
+                hb_log( "encx264: Encoding at constant RF %f",
+                        param.rc.f_rf_constant );
+                break;
+
+            case 0:
+                /*Constant QP*/
+                param.rc.i_rc_method = X264_RC_CQP;
+                param.rc.i_qp_constant = job->vquality;
+                hb_log( "encx264: encoding at constant QP %d",
+                        param.rc.i_qp_constant );
+                break;
+        }        
     }
     else
     {

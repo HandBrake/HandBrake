@@ -854,7 +854,7 @@ static int HandleEvents( hb_handle_t * h )
                 hb_fix_aspect( job, HB_KEEP_WIDTH );
             }
 
-            if( vquality >= 0.0 && vquality <= 1.0 )
+            if( vquality >= 0.0 && ( ( vquality <= 1.0 ) || ( vcodec == HB_VCODEC_X264 ) ) )
             {
                 job->vquality = vquality;
                 job->vbitrate = 0;
