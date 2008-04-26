@@ -491,7 +491,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             break;
 		}
 #undef p
-	
+
 #define p s.param.scandone
         case HB_STATE_SCANDONE:
         {
@@ -499,11 +499,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             [fScanIndicator setDoubleValue: 0.0];
             [fScanIndicator setHidden: YES];
 			[self showNewScan: NULL];
-            [toolbar validateVisibleItems];
+            [[fWindow toolbar] validateVisibleItems];
 			break;
         }
 #undef p
-			
+
 #define p s.param.working
         case HB_STATE_WORKING:
         {
@@ -594,7 +594,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             // HB_STATE_WORKDONE happpens as a result of libhb finishing all its jobs
             // or someone calling hb_stop. In the latter case, hb_stop does not clear
             // out the remaining passes/jobs in the queue. We'll do that here.
-                        
+
             // Delete all remaining jobs of this encode.
             hb_job_t * job;
             while( ( job = hb_job( fHandle, 0 ) ) && ( !IsFirstPass(job->sequence_id) ) )
@@ -603,7 +603,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             [fStatusField setStringValue: NSLocalizedString( @"Done.", @"" )];
             [fRipIndicator setIndeterminate: NO];
             [fRipIndicator setDoubleValue: 0.0];
-            [toolbar validateVisibleItems];
+            [[fWindow toolbar] validateVisibleItems];
 
             /* Restore dock icon */
             [self UpdateDockIcon: -1.0];
@@ -711,14 +711,14 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 // ============================================================
 
 - (void) setupToolbar {
-    toolbar = [[[NSToolbar alloc] initWithIdentifier: @"HandBrake Toolbar"] autorelease];
-    
+    NSToolbar *toolbar = [[[NSToolbar alloc] initWithIdentifier: @"HandBrake Toolbar"] autorelease];
+
     [toolbar setAllowsUserCustomization: YES];
     [toolbar setAutosavesConfiguration: YES];
     [toolbar setDisplayMode: NSToolbarDisplayModeIconAndLabel];
-    
+
     [toolbar setDelegate: self];
-    
+
     [fWindow setToolbar: toolbar];
 }
 
@@ -1307,11 +1307,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         which we use at the end of this function to tell the gui
         if this is the first successful scan since launch and whether
         or not we should set all settings to the defaults */
-		
+
         currentSuccessfulScanCount++;
-        
-        [toolbar validateVisibleItems];
-		
+
+        [[fWindow toolbar] validateVisibleItems];
+
 		[fSrcTitlePopUp removeAllItems];
 		for( int i = 0; i < hb_list_count( list ); i++ )
 		{

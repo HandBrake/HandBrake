@@ -29,8 +29,7 @@ BOOL                        fIsDragging;
 @interface HBController : NSObject <GrowlApplicationBridgeDelegate>
 {
     IBOutlet NSWindow            * fWindow;
-    NSToolbar                    * toolbar;
-    
+
     /* Main Menu Outlets */
     NSMenuItem                   * fOpenSourceTitleMMenu;
     
