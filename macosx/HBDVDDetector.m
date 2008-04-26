@@ -83,10 +83,10 @@
 - (NSString *)bsdNameForPath
 {
     OSStatus err;
-	FSRef ref;
-	err = FSPathMakeRef( (const UInt8 *) [path fileSystemRepresentation],
+    FSRef ref;
+    err = FSPathMakeRef( (const UInt8 *) [path fileSystemRepresentation],
                          &ref, NULL );	
-	if( err != noErr )
+    if( err != noErr )
     {
         return nil;
     }
@@ -101,28 +101,17 @@
     }
     FSVolumeRefNum volRefNum = catalogInfo.volume;
 
-	// Now let's get the device name
-	GetVolParmsInfoBuffer volumeParms;
-    // PBHGetVolParmsSync is deprecated, but still needed for 10.4 compatibility
-    #if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
-	HParamBlockRec pb;
-	pb.ioParam.ioNamePtr = NULL;
-	pb.ioParam.ioVRefNum = volRefNum;
-	pb.ioParam.ioBuffer = (Ptr) &volumeParms;
-	pb.ioParam.ioReqCount = sizeof( volumeParms );
-	err = PBHGetVolParmsSync( &pb );
-    #else
-    // Let's use FSGetVolumeParms
+    // Now let's get the device name
+    GetVolParmsInfoBuffer volumeParms;
     err = FSGetVolumeParms ( volRefNum, &volumeParms, sizeof( volumeParms ) );
-    #endif
 
     if( err != noErr )
     {
         return nil;
     }
 
-	// A version 4 GetVolParmsInfoBuffer contains the BSD node name in the vMDeviceID field.
-	// It is actually a char * value. This is mentioned in the header CoreServices/CarbonCore/Files.h.
+    // A version 4 GetVolParmsInfoBuffer contains the BSD node name in the vMDeviceID field.
+    // It is actually a char * value. This is mentioned in the header CoreServices/CarbonCore/Files.h.
     return [NSString stringWithCString:(char *)volumeParms.vMDeviceID];
 }
 
