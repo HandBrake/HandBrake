@@ -33,9 +33,14 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
  *******************************/
 @implementation HBController
 
-- init
+- (id)init
 {
     self = [super init];
+    if( !self )
+    {
+        return nil;
+    }
+
     [HBPreferencesController registerUserDefaults];
     fHandle = NULL;
     /* Check for check for the app support directory here as
