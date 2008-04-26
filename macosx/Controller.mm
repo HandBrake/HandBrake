@@ -43,21 +43,21 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
     [HBPreferencesController registerUserDefaults];
     fHandle = NULL;
+
     /* Check for check for the app support directory here as
-        * outputPanel needs it right away, as may other future methods
-        */
-    /* We declare the default NSFileManager into fileManager */
-	NSFileManager * fileManager = [NSFileManager defaultManager];
-	/* we set the files and support paths here */
-	AppSupportDirectory = @"~/Library/Application Support/HandBrake";
-    AppSupportDirectory = [AppSupportDirectory stringByExpandingTildeInPath];
-    /* We check for the app support directory for handbrake */
-	if ([fileManager fileExistsAtPath:AppSupportDirectory] == 0) 
-	{
-		// If it doesnt exist yet, we create it here 
-		[fileManager createDirectoryAtPath:AppSupportDirectory attributes:nil];
-	}
-    
+     * outputPanel needs it right away, as may other future methods
+     */
+    NSString *libraryDir = [NSSearchPathForDirectoriesInDomains( NSLibraryDirectory,
+                                                                 NSUserDomainMask,
+                                                                 YES ) objectAtIndex:0];
+    AppSupportDirectory = [[libraryDir stringByAppendingPathComponent:@"Application Support"]
+                                       stringByAppendingPathComponent:@"HandBrake"];
+    if( ![[NSFileManager defaultManager] fileExistsAtPath:AppSupportDirectory] )
+    {
+        [[NSFileManager defaultManager] createDirectoryAtPath:AppSupportDirectory
+                                                   attributes:nil];
+    }
+
     outputPanel = [[HBOutputPanelController alloc] init];
     fPictureController = [[PictureController alloc] initWithDelegate:self];
     fQueueController = [[HBQueueController alloc] init];
