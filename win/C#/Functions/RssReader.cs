@@ -28,7 +28,10 @@ namespace Handbrake.Functions
 
         private void readRss()
         {
-            rssReader = new XmlTextReader(Properties.Settings.Default.appcast);
+            if (Properties.Settings.Default.hb_build.ToString().EndsWith("1"))
+                rssReader = new XmlTextReader(Properties.Settings.Default.appcast_unstable);
+            else
+                rssReader = new XmlTextReader(Properties.Settings.Default.appcast);
             rssDoc = new XmlDocument();
             rssDoc.Load(rssReader);
 
@@ -64,23 +67,13 @@ namespace Handbrake.Functions
             hb_versionInfo = nodeItem["description"].InnerText;
 
             // Get the version
-            string input = nodeItem.InnerXml;
             Match ver;
-            if (Properties.Settings.Default.hb_build.ToString().EndsWith("1"))
-                ver = Regex.Match(input, @"<cli-unstable>[0-9]* \""[0-9.]*\""");
-            else 
-                ver = Regex.Match(input, @"<cli-stable>[0-9]* \""[0-9.]*\""");
-            string[] hb_ver_find = ver.ToString().Split(' ');
-            hb_version = hb_ver_find[1].Replace("\"", "");
+            string input = nodeItem.InnerXml;
+            ver = Regex.Match(input, @"sparkle:shortVersionString=""([0-9].[0-9].[0-9]*)\""");
+            hb_version = ver.ToString().Replace("sparkle:shortVersionString=", "").Replace("\"", "");
 
-            // Get the build number
-            input = nodeItem.InnerXml;
-            Match build;
-            if (Properties.Settings.Default.hb_build.ToString().EndsWith("1"))
-                build = Regex.Match(input, @"<cli-unstable>[0-9]*");
-            else 
-                build = Regex.Match(input, @"<cli-stable>[0-9]*");
-            hb_build = build.ToString().Replace("<cli-stable>", "").Replace("<cli-unstable>", "");
+            ver = Regex.Match(input, @"sparkle:version=""([0-9]*)\""");
+            hb_build = ver.ToString().Replace("sparkle:version=", "").Replace("\"", "");
 
             // Get the update file
             hb_file = nodeItem["windows"].InnerText;

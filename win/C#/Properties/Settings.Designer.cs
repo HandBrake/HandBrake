@@ -178,5 +178,17 @@ namespace Handbrake.Properties {
                 this["appcast"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://handbrake.fr/appcast_unstable.xml")]
+        public string appcast_unstable {
+            get {
+                return ((string)(this["appcast_unstable"]));
+            }
+            set {
+                this["appcast_unstable"] = value;
+            }
+        }
     }
 }

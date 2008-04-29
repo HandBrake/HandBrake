@@ -648,25 +648,32 @@ namespace Handbrake
             if ((text_destination.Text.Contains(".mp4")) || (text_destination.Text.Contains(".m4v")))
             {
                 check_largeFile.Enabled = true;
-                check_iPodAtom.Enabled = true;
                 check_optimiseMP4.Enabled = true;
-                check_largeFile.Visible = true;
-                check_iPodAtom.Visible = true;
-                check_optimiseMP4.Visible = true;
             }
             else
             {
+                check_largeFile.Enabled = false;
+                check_optimiseMP4.Enabled = false;
                 check_largeFile.Checked = false;
-                check_iPodAtom.Checked = false;
                 check_optimiseMP4.Checked = false;
-                check_largeFile.Visible = false;
-                check_iPodAtom.Visible = false;
-                check_optimiseMP4.Visible = false;
             }
 
 
             //Turn off some options which are H.264 only when the user selects a non h.264 encoder
-            if (!drp_videoEncoder.Text.Contains("H.264"))
+            if (drp_videoEncoder.Text.Contains("H.264"))
+            {
+                if (check_2PassEncode.CheckState == CheckState.Checked)
+                    check_turbo.Enabled = true;
+
+                h264Tab.Enabled = true;
+                if ((text_destination.Text.Contains(".mp4")) || (text_destination.Text.Contains(".m4v")))
+                    check_iPodAtom.Enabled = true;
+                else
+                    check_iPodAtom.Enabled = false;
+                if (!drp_anamorphic.Items.Contains("Loose"))
+                    drp_anamorphic.Items.Add("Loose");
+            }
+            else
             {
                 check_turbo.CheckState = CheckState.Unchecked;
                 check_turbo.Enabled = false;
@@ -674,20 +681,8 @@ namespace Handbrake
                 rtf_x264Query.Text = "";
                 check_iPodAtom.Enabled = false;
                 check_iPodAtom.Checked = false;
-                check_optimiseMP4.Enabled = false;
                 if (drp_anamorphic.Items.Count == 3)
                     drp_anamorphic.Items.RemoveAt(2);
-            }
-            else
-            {
-                if (check_2PassEncode.CheckState == CheckState.Checked)
-                    check_turbo.Enabled = true;
-
-                h264Tab.Enabled = true;
-                check_iPodAtom.Enabled = true;
-                check_optimiseMP4.Enabled = true;
-                if (!drp_anamorphic.Items.Contains("Loose"))
-                    drp_anamorphic.Items.Add("Loose");
             }
 
         }
@@ -1977,6 +1972,8 @@ namespace Handbrake
         }
 
         #endregion
+
+ 
 
 
         // This is the END of the road ------------------------------------------------------------------------------
