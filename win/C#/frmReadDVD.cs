@@ -111,6 +111,7 @@ namespace Handbrake
             catch (Exception exc)
             {
                 MessageBox.Show("frmReadDVD.cs - updateUIElements " + exc.ToString());
+                this.Close();
             }
         }
 
@@ -152,6 +153,7 @@ namespace Handbrake
             catch (Exception exc)
             {
                 MessageBox.Show("frmReadDVD.cs - startProc " + exc.ToString());
+                this.Close();
             }
 
         }
