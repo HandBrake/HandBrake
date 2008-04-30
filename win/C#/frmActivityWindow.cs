@@ -109,7 +109,7 @@ namespace Handbrake
         private void btn_copy_Click(object sender, EventArgs e)
         {
             if (rtf_actLog.Text != "")
-                Clipboard.SetText(rtf_actLog.Text, TextDataFormat.Text);
+                Clipboard.SetText(rtf_actLog.Text, TextDataFormat.Rtf);
         }
 
         private void btn_refresh_Click(object sender, EventArgs e)

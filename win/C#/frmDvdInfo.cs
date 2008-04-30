@@ -63,7 +63,10 @@ namespace Handbrake
         private void btn_copy_Click(object sender, EventArgs e)
         {
             if (rtf_dvdInfo.Text != "")
-                Clipboard.SetText(rtf_dvdInfo.Text, TextDataFormat.Text);
+            {
+                Clipboard.Clear();
+                Clipboard.SetText(rtf_dvdInfo.Text, TextDataFormat.Rtf);
+            }
         }
     }
 }
