@@ -12,6 +12,5 @@
 
 + (void)registerUserDefaults;
 - (id)init;
-- (IBAction)close:(id)sender;
 
 @end
