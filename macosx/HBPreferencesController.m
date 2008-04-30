@@ -19,7 +19,7 @@
  * no getter/setter code is needed in this file (unless more complicated
  * preference settings are added that cannot be handled with Cocoa bindings).
  */
- 
+
 @interface HBPreferencesController (Private)
 
 - (void) setPrefView: (id) sender;
@@ -35,7 +35,7 @@
 + (void)registerUserDefaults
 {
     NSString *desktopDirectory =  [@"~/Desktop" stringByExpandingTildeInPath];
-    
+
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
         @"YES",             @"CheckForUpdates",
         @"English",         @"DefaultLanguage",
@@ -63,7 +63,7 @@
     {
         NSAssert([self window], @"[HBPreferencesController init] window outlet is not connected in Preferences.nib");
     }
-    return self; 
+    return self;
 }
 
 - (void) awakeFromNib
@@ -74,7 +74,7 @@
     [toolbar setDisplayMode: NSToolbarDisplayModeIconAndLabel];
     [toolbar setSizeMode: NSToolbarSizeModeRegular];
     [[self window] setToolbar: toolbar];
-    
+
     [toolbar setSelectedItemIdentifier: TOOLBAR_GENERAL];
     [self setPrefView:nil];
 }
@@ -88,7 +88,7 @@
     if ([ident isEqualToString: TOOLBAR_GENERAL])
     {
         [item setLabel: NSLocalizedString(@"General", "General")];
-        [item setImage: [NSImage imageNamed: @"pref-general"]];
+        [item setImage: [NSImage imageNamed: @"NSPreferencesGeneral"]];
         [item setTarget: self];
         [item setAction: @selector(setPrefView:)];
         [item setAutovalidates: NO];
@@ -112,7 +112,7 @@
     else if ([ident isEqualToString: TOOLBAR_ADVANCED])
     {
         [item setLabel: NSLocalizedString(@"Advanced", "Advanced")];
-        [item setImage: [NSImage imageNamed: @"pref-advanced"]];
+        [item setImage: [NSImage imageNamed: @"NSAdvanced"]];
         [item setTarget: self];
         [item setAction: @selector(setPrefView:)];
         [item setAutovalidates: NO];
@@ -142,15 +142,6 @@
                                         TOOLBAR_AUDIO, TOOLBAR_ADVANCED, nil];
 }
 
-/**
- * Closes the window and stops modal state. Any changes made in field editor
- * are saved by [NSWindow endEditingFor:] before closing the window.
- */
-- (IBAction)close:(id)sender
-{
-    //[self makeFirstResponder: nil];
-}
-
 @end
 
 @implementation HBPreferencesController (Private)
@@ -169,21 +160,21 @@
             view = fAdvancedView;
         else;
     }
-    
+
     NSWindow * window = [self window];
     if ([window contentView] == view)
         return;
-    
+
     NSRect windowRect = [window frame];
     float difference = ([view frame].size.height - [[window contentView] frame].size.height) * [window userSpaceScaleFactor];
     windowRect.origin.y -= difference;
     windowRect.size.height += difference;
-    
+
     [view setHidden: YES];
     [window setContentView: view];
     [window setFrame: windowRect display: YES animate: YES];
     [view setHidden: NO];
-    
+
     //set title label
     if (sender)
         [window setTitle: [sender label]];
