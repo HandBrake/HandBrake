@@ -83,7 +83,7 @@
                     willBeInsertedIntoToolbar: (BOOL) flag
 {
     NSToolbarItem * item;
-    item = [[NSToolbarItem alloc] initWithItemIdentifier: ident];
+    item = [[[NSToolbarItem alloc] initWithItemIdentifier: ident] autorelease];
 
     if ([ident isEqualToString: TOOLBAR_GENERAL])
     {
@@ -119,7 +119,6 @@
     }
     else
     {
-        [item release];
         return nil;
     }
 

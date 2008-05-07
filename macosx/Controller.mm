@@ -724,8 +724,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 - (NSToolbarItem *) toolbar: (NSToolbar *)toolbar itemForItemIdentifier:
     (NSString *) itemIdent willBeInsertedIntoToolbar:(BOOL) willBeInserted {
-    NSToolbarItem * item = [[NSToolbarItem alloc] initWithItemIdentifier: itemIdent];
-    
+    NSToolbarItem * item = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
+
     if ([itemIdent isEqualToString: ToggleDrawerIdentifier])
     {
         [item setLabel: @"Toggle Presets"];
@@ -793,7 +793,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     }
     else
     {
-        [item release];
         return nil;
     }
 
