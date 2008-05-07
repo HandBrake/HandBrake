@@ -79,9 +79,10 @@ namespace Handbrake
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmActivityWindow";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Activity Window";
-            this.Load += new System.EventHandler(this.frmActivityWindow_Load);
+
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 

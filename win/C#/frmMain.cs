@@ -457,7 +457,7 @@ namespace Handbrake
         private void btn_ActivityWindow_Click(object sender, EventArgs e)
         {
             frmActivityWindow ActivityWindow = new frmActivityWindow("hb_encode_log.dat");
-            ActivityWindow.ShowDialog();
+            ActivityWindow.Show();
         }
 
         //Source

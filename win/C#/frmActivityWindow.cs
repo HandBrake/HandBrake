@@ -13,6 +13,9 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Threading;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+
 
 
 namespace Handbrake
@@ -29,17 +32,11 @@ namespace Handbrake
         {
             InitializeComponent();
             this.rtf_actLog.Text = string.Empty;
-            monitorFile = new Thread(autoUpdate);
+
             read_file = file;
-
-        }
-
-        private void frmActivityWindow_Load(object sender, EventArgs e)
-        {
-            this.rtf_actLog.Text = string.Empty;
-            rtf_actLog.Text = readFile();
-   
+            monitorFile = new Thread(autoUpdate);
             monitorFile.Start();
+
         }
 
         private void autoUpdate(object state)
@@ -47,7 +44,7 @@ namespace Handbrake
             while (true)
             {
                 updateTextFromThread();
-                Thread.Sleep(3000);
+                Thread.Sleep(5000);
             }
         }
         
@@ -63,8 +60,8 @@ namespace Handbrake
             this.rtf_actLog.SelectionStart = this.rtf_actLog.Text.Length -1;
             this.rtf_actLog.ScrollToCaret();
 
-            if (rtf_actLog.Text.Contains("HandBrake has exited."))
-                monitorFile.Abort();
+            //if (rtf_actLog.Text.Contains("HandBrake has exited."))
+               //monitorFile.Abort();
         }
 
         private string readFile()
@@ -100,6 +97,14 @@ namespace Handbrake
             }
 
             return log;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            monitorFile.Abort();
+            e.Cancel = true;
+            this.Hide();
+            base.OnClosing(e);
         }
     }
 }
