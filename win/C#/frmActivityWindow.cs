@@ -24,18 +24,14 @@ namespace Handbrake
         /// </summary>
         /// 
         Thread monitorFile;
-        public frmActivityWindow()
+        String read_file;
+        public frmActivityWindow(string file)
         {
             InitializeComponent();
             this.rtf_actLog.Text = string.Empty;
             monitorFile = new Thread(autoUpdate);
+            read_file = file;
 
-        }
-        
-        private void btn_close_Click(object sender, EventArgs e)
-        {
-            monitorFile.Abort();
-            this.Hide();
         }
 
         private void frmActivityWindow_Load(object sender, EventArgs e)
@@ -78,7 +74,7 @@ namespace Handbrake
             {
                 // hb_encode_log.dat is the primary log file. Since .NET can't read this file whilst the CLI is outputing to it,
                 // we'll need to make a copy of it.
-                string logFile = Path.Combine(Path.GetTempPath(), "hb_encode_log.dat");
+                string logFile = Path.Combine(Path.GetTempPath(), read_file);
                 string logFile2 = Path.Combine(Path.GetTempPath(), "hb_encode_log_AppReadable.dat");
 
                 // Make sure the application readable log file does not already exist. FileCopy fill fail if it does.
@@ -105,19 +101,5 @@ namespace Handbrake
 
             return log;
         }
-
-        private void btn_copy_Click(object sender, EventArgs e)
-        {
-            if (rtf_actLog.Text != "")
-                Clipboard.SetText(rtf_actLog.Text, TextDataFormat.Rtf);
-        }
-
-        private void btn_refresh_Click(object sender, EventArgs e)
-        {
-            rtf_actLog.Clear();
-            rtf_actLog.Text = readFile();
-        }
-
-
     }
 }

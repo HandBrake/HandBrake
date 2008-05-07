@@ -23,16 +23,14 @@ namespace Handbrake
     {
         private string inputFile;
         private frmMain mainWindow;
-        private frmDvdInfo dvdInfo;
         private Parsing.DVD thisDvd;
         private delegate void UpdateUIHandler();
 
-        public frmReadDVD(string inputFile, frmMain parent, frmDvdInfo dvdInfoWindow)
+        public frmReadDVD(string inputFile, frmMain parent)
         {
             InitializeComponent();
             this.inputFile = inputFile;
             this.mainWindow = parent;
-            this.dvdInfo = dvdInfoWindow;
             startScan();
 
         }
@@ -100,11 +98,9 @@ namespace Handbrake
                             }
                         }
                     }
-            
                 }
 
-
-                    mainWindow.drp_dvdtitle.SelectedItem = title2Select;
+                mainWindow.drp_dvdtitle.SelectedItem = title2Select;
 
                 this.Close();
             }
@@ -136,7 +132,7 @@ namespace Handbrake
                 {
                     hbproc.WaitForExit();
                     // TODO: Verify exit code if the CLI supports it properly
-                } 
+                }
 
                 if (!File.Exists(dvdInfoPath))
                 {
@@ -146,6 +142,8 @@ namespace Handbrake
                 using (StreamReader sr = new StreamReader(dvdInfoPath))
                 {
                     thisDvd = Parsing.DVD.Parse(sr);
+                    sr.Close();
+                    sr.Dispose();
                 }
 
                 updateUIElements();

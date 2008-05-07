@@ -128,12 +128,6 @@
     <Compile Include="frmDownload.Designer.cs">
       <DependentUpon>frmDownload.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmDvdInfo.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmDvdInfo.Designer.cs">
-      <DependentUpon>frmDvdInfo.cs</DependentUpon>
-    </Compile>
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -186,10 +180,6 @@
     <EmbeddedResource Include="frmDownload.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmDownload.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmDvdInfo.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>frmDvdInfo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <SubType>Designer</SubType>

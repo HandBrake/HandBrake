@@ -343,7 +343,7 @@ namespace Handbrake
         }
         private void mnu_viewDVDdata_Click(object sender, EventArgs e)
         {
-            frmDvdInfo dvdInfoWindow = new frmDvdInfo();
+            frmActivityWindow dvdInfoWindow = new frmActivityWindow("dvdinfo.dat");
             dvdInfoWindow.Show();
         }
         private void mnu_options_Click(object sender, EventArgs e)
@@ -456,7 +456,7 @@ namespace Handbrake
         }
         private void btn_ActivityWindow_Click(object sender, EventArgs e)
         {
-            Form ActivityWindow = new frmActivityWindow();
+            frmActivityWindow ActivityWindow = new frmActivityWindow("hb_encode_log.dat");
             ActivityWindow.ShowDialog();
         }
 
@@ -465,7 +465,6 @@ namespace Handbrake
         {
             String filename = "";
             text_source.Text = "";
-            frmDvdInfo dvdInfoWindow = new frmDvdInfo();
 
             if (check_fileMode.Checked)
             {
@@ -484,7 +483,7 @@ namespace Handbrake
             {
                 if (filename != "")
                 {
-                    Form frmRD = new frmReadDVD(filename, this, dvdInfoWindow);
+                    Form frmRD = new frmReadDVD(filename, this);
                     text_source.Text = filename;
                     frmRD.ShowDialog();
                 }
