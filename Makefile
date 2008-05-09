@@ -20,19 +20,19 @@ test:	clean cli
 dev:	clean internal
 
 app:
-	(./DownloadMacOsXContribBinaries.sh ; cd macosx ; xcodebuild -target libhb -target HandBrake -target HandBrakeCLI -configuration UB  OTHER_CFLAGS_QUOTED_1="-DHB_VERSION=\\\"$(HB_VERSION)\\\" -DHB_BUILD=$(HB_BUILD) " build | sed '/^$$/d'  )
+	(./DownloadMacOsXContribBinaries.sh ; cd macosx ; xcodebuild -target libhb -target HandBrake -target HandBrakeCLI -configuration UB HB_BUILD="$(HB_BUILD)" HB_VERSION="$(HB_VERSION)" APPCAST_URL="http://handbrake.fr/appcast.xml" build | sed '/^$$/d'  )
 
 contrib/.contrib:
 	@$(MAKE) --no-print-directory -C contrib all
 
 snapshot-app: contrib/.contrib
-	( cd macosx ; defaults write "$(FULL_PATH)"/macosx/HandBrake CFBundleGetInfoString '$(SNAP_HB_VERSION)' ; defaults write "$(FULL_PATH)"/macosx/HandBrake CFBundleShortVersionString '$(SNAP_HB_VERSION)' ;  defaults write "$(FULL_PATH)"/macosx/HandBrake CFBundleVersion '"$(SNAP_HB_BUILD)"' ; plutil -convert xml1 "$(FULL_PATH)"/macosx/HandBrake.plist ; xcodebuild -target libhb -target HandBrake -target HandBrakeCLI -configuration Deployment  OTHER_CFLAGS_QUOTED_1="-g -HB_BUILD="$(SNAP_HB_BUILD)" -HB_VERSION=\\\"$(SNAP_HB_VERSION)\\\" -DHB_BUILD="$(SNAP_HB_BUILD)" -DHB_VERSION=\\\"$(SNAP_HB_VERSION)\\\" -CURRENT_PROJECT_VERSION=\\\"$(SNAP_HB_VERSION)\\\" " build | sed '/^$$/d'  )
+	( cd macosx ; xcodebuild -target libhb -target HandBrake -target HandBrakeCLI -configuration Deployment HB_BUILD="$(SNAP_HB_BUILD)" HB_VERSION="$(SNAP_HB_VERSION)" CURRENT_PROJECT_VERSION="$(SNAP_HB_VERSION)" APPCAST_URL="http://handbrake.fr/appcast_unstable.xml" build | sed '/^$$/d' )
 
 app-chunky:
-	(./DownloadMacOsXContribBinaries.sh ; cd macosx ; xcodebuild -alltargets -configuration UB  OTHER_CFLAGS_QUOTED_1="-DHB_VERSION=\\\"$(HB_VERSION)\\\" -DHB_BUILD=$(HB_BUILD) " build | sed '/^$$/d'  )
+	(./DownloadMacOsXContribBinaries.sh ; cd macosx ; xcodebuild -alltargets -configuration UB HB_BUILD="$(HB_BUILD)" HB_VERSION="$(HB_VERSION)" APPCAST_URL="http://handbrake.fr/appcast.xml" build | sed '/^$$/d'  )
 
 cli:
-	(./DownloadMacOsXContribBinaries.sh ; cd macosx ; xcodebuild -target libhb -target HandBrakeCLI -configuration UB  OTHER_CFLAGS_QUOTED_1="-DHB_VERSION=\\\"$(HB_VERSION)\\\" -DHB_BUILD=$(HB_BUILD) " build | sed '/^$$/d' )
+	(./DownloadMacOsXContribBinaries.sh ; cd macosx ; xcodebuild -target libhb -target HandBrakeCLI -configuration UB HB_BUILD="$(HB_BUILD)" HB_VERSION="$(HB_VERSION)" build | sed '/^$$/d' )
 
 clean:
 	(cd macosx ; xcodebuild -alltargets -configuration UB clean | sed '/^$$/d' )

@@ -21,10 +21,12 @@ if $(SNAPSHOT) = 1
 {
 HB_VERSION = "svn$(SVN_REV)" ;
 HB_BUILD = "$(BUILD_DATE)01" ;
+APPCAST_URL = "http://handbrake.fr/appcast_unstable.xml" ;
 }
 else
 {
 HB_BUILD = "$(BUILD_DATE)00" ;
+APPCAST_URL = "http://handbrake.fr/appcast.xml" ;
 }
 
 DEFINES    += HB_VERSION=\\\"$(HB_VERSION)\\\" HB_BUILD=$(HB_BUILD) ;
@@ -45,11 +47,7 @@ actions OSXApp
 {
     $(RM) $(<) macosx/build/HandBrake.app && \
       ( cd macosx && \
-         defaults write "$(FULL_PATH)"/macosx/HandBrake CFBundleGetInfoString '"$(HB_VERSION)"' &&\
-         defaults write "$(FULL_PATH)"/macosx/HandBrake CFBundleShortVersionString '"$(HB_VERSION)"' &&\
-         defaults write "$(FULL_PATH)"/macosx/HandBrake CFBundleVersion '"$(HB_BUILD)"' &&\
-         plutil -convert xml1 "$(FULL_PATH)"/macosx/HandBrake.plist &&\
-        xcodebuild OTHER_CFLAGS_QUOTED_1="-g -HB_BUILD="$(HB_BUILD)" -HB_VERSION=\\\"$(HB_VERSION)\\\" -DHB_BUILD="$(HB_BUILD)" -DHB_VERSION=\\\"$(HB_VERSION)\\\" -CURRENT_PROJECT_VERSION=\\\"$(HB_VERSION)\\\" " -target libhb -target HandBrake -target HandBrakeCLI ) && \
+        xcodebuild HB_BUILD="$(HB_BUILD)" HB_VERSION="$(HB_VERSION)" APPCAST_URL="$(APPCAST_URL)" -target libhb -target HandBrake -target HandBrakeCLI ) && \
       for i in $(LANGUAGES) ; do \
         ( cd $(<)/Contents/Resources && \
           cp -r English.lproj $i.lproj && \

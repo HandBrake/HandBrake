@@ -63,7 +63,6 @@
 		0DFA5CEF0B8DD4210020BC09 /* sync.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C9A0B8DD3B60020BC09 /* sync.c */; };
 		0DFA5CF00B8DD4210020BC09 /* update.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C9B0B8DD3B60020BC09 /* update.c */; };
 		0DFA5CF10B8DD4210020BC09 /* work.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C9C0B8DD3B60020BC09 /* work.c */; };
-		0DFA5D070B8DD9040020BC09 /* HandBrake.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0DFA5D060B8DD9040020BC09 /* HandBrake.plist */; };
 		0DFF0B770B6BC72A00549488 /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC9B0B4CAB100064E04C /* common.c */; };
 		0DFF0B790B6BC72A00549488 /* deca52.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC9D0B4CAB100064E04C /* deca52.c */; };
 		0DFF0B7A0B6BC72A00549488 /* decavcodec.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC9E0B4CAB100064E04C /* decavcodec.c */; };
@@ -695,7 +694,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0DFA5D070B8DD9040020BC09 /* HandBrake.plist in Resources */,
 				4DD93F97082036E8008E1322 /* InfoPlist.strings in Resources */,
 				0DFA5C7B0B8DD1E90020BC09 /* HandBrake.icns in Resources */,
 				A273E0510C57B39A00493A45 /* Pause.tiff in Resources */,
@@ -956,6 +954,8 @@
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
+				HB_BUILD = "";
+				HB_VERSION = "";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
 				INSTALL_PATH = /usr/local/lib;
 				LIBRARY_SEARCH_PATHS = "";
@@ -963,10 +963,12 @@
 				OTHER_CFLAGS = (
 					"-D__LIBHB__",
 					"-DSYS_DARWIN",
-					"$(OTHER_CFLAGS_QUOTED_1)",
 					"-DUSE_PTHREAD",
+					"$(OTHER_CFLAGS_QUOTED_FOR_TARGET_1)",
+					"$(OTHER_CFLAGS_QUOTED_FOR_TARGET_2)",
 				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.2\\\" -DHB_BUILD=2008021900";
+				OTHER_CFLAGS_QUOTED_FOR_TARGET_1 = "-DHB_BUILD=\"$(HB_BUILD)\"";
+				OTHER_CFLAGS_QUOTED_FOR_TARGET_2 = "-DHB_VERSION=\\\"$(HB_VERSION)\\\"";
 				OTHER_LDFLAGS = (
 					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
@@ -1016,6 +1018,8 @@
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
+				HB_BUILD = "";
+				HB_VERSION = "";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
 				INSTALL_PATH = /usr/local/lib;
 				LIBRARY_SEARCH_PATHS = "";
@@ -1023,10 +1027,12 @@
 				OTHER_CFLAGS = (
 					"-D__LIBHB__",
 					"-DSYS_DARWIN",
-					"$(OTHER_CFLAGS_QUOTED_1)",
 					"-DUSE_PTHREAD",
+					"$(OTHER_CFLAGS_QUOTED_FOR_TARGET_1)",
+					"$(OTHER_CFLAGS_QUOTED_FOR_TARGET_2)",
 				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.2\\\" -DHB_BUILD=2008021900";
+				OTHER_CFLAGS_QUOTED_FOR_TARGET_1 = "-DHB_BUILD=\"$(HB_BUILD)\"";
+				OTHER_CFLAGS_QUOTED_FOR_TARGET_2 = "-DHB_VERSION=\\\"$(HB_VERSION)\\\"";
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				OTHER_LDFLAGS = (
 					../contrib/lib/libmp4v2.a,
@@ -1075,6 +1081,8 @@
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
+				HB_BUILD = "";
+				HB_VERSION = "";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
 				INSTALL_PATH = /usr/local/lib;
 				LIBRARY_SEARCH_PATHS = "";
@@ -1082,10 +1090,12 @@
 				OTHER_CFLAGS = (
 					"-D__LIBHB__",
 					"-DSYS_DARWIN",
-					"$(OTHER_CFLAGS_QUOTED_1)",
 					"-DUSE_PTHREAD",
+					"$(OTHER_CFLAGS_QUOTED_FOR_TARGET_1)",
+					"$(OTHER_CFLAGS_QUOTED_FOR_TARGET_2)",
 				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.2\\\" -DHB_BUILD=2008021900";
+				OTHER_CFLAGS_QUOTED_FOR_TARGET_1 = "-DHB_BUILD=\"$(HB_BUILD)\"";
+				OTHER_CFLAGS_QUOTED_FOR_TARGET_2 = "-DHB_VERSION=\\\"$(HB_VERSION)\\\"";
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				OTHER_LDFLAGS = (
 					../contrib/lib/libmp4v2.a,
@@ -1131,16 +1141,20 @@
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
+				HB_BUILD = "";
+				HB_VERSION = "";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
 				INSTALL_PATH = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.3;
 				OTHER_CFLAGS = (
 					"-D__LIBHB__",
 					"-DSYS_DARWIN",
-					"$(OTHER_CFLAGS_QUOTED_1)",
 					"-DUSE_PTHREAD",
+					"$(OTHER_CFLAGS_QUOTED_FOR_TARGET_1)",
+					"$(OTHER_CFLAGS_QUOTED_FOR_TARGET_2)",
 				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.2\\\" -DHB_BUILD=2008021900";
+				OTHER_CFLAGS_QUOTED_FOR_TARGET_1 = "-DHB_BUILD=\"$(HB_BUILD)\"";
+				OTHER_CFLAGS_QUOTED_FOR_TARGET_2 = "-DHB_VERSION=\\\"$(HB_VERSION)\\\"";
 				OTHER_LDFLAGS = "";
 				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
 				PREBINDING = NO;
@@ -1153,8 +1167,9 @@
 		0D88F56C0B6CDCD400F81F26 /* UB */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPCAST_URL = "";
 				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/..";
-				CURRENT_PROJECT_VERSION = 0.9.2;
+				CURRENT_PROJECT_VERSION = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
@@ -1164,6 +1179,8 @@
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)\"";
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				HB_BUILD = "";
+				HB_VERSION = "";
 				HEADER_SEARCH_PATHS = (
 					../libhb,
 					../contrib/include,
@@ -1258,6 +1275,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "JOB_GROUPS=1";
 				IBC_NOTICES = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				OTHER_CFLAGS = "";
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = UB;
@@ -1274,16 +1292,20 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
+				HB_BUILD = "";
+				HB_VERSION = "";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
 				INSTALL_PATH = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.3;
 				OTHER_CFLAGS = (
 					"-D__LIBHB__",
 					"-DSYS_DARWIN",
-					"$(OTHER_CFLAGS_QUOTED_1)",
 					"-DUSE_PTHREAD",
+					"$(OTHER_CFLAGS_QUOTED_FOR_TARGET_1)",
+					"$(OTHER_CFLAGS_QUOTED_FOR_TARGET_2)",
 				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.2\\\" -DHB_BUILD=2008021900";
+				OTHER_CFLAGS_QUOTED_FOR_TARGET_1 = "-DHB_BUILD=\"$(HB_BUILD)\"";
+				OTHER_CFLAGS_QUOTED_FOR_TARGET_2 = "-DHB_VERSION=\\\"$(HB_VERSION)\\\"";
 				OTHER_LDFLAGS = "";
 				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
 				PREBINDING = NO;
@@ -1304,16 +1326,20 @@
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
+				HB_BUILD = "";
+				HB_VERSION = "";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
 				INSTALL_PATH = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.3;
 				OTHER_CFLAGS = (
 					"-D__LIBHB__",
 					"-DSYS_DARWIN",
-					"$(OTHER_CFLAGS_QUOTED_1)",
 					"-DUSE_PTHREAD",
+					"$(OTHER_CFLAGS_QUOTED_FOR_TARGET_1)",
+					"$(OTHER_CFLAGS_QUOTED_FOR_TARGET_2)",
 				);
-				OTHER_CFLAGS_QUOTED_1 = "-DHB_VERSION=\\\"0.9.2\\\" -DHB_BUILD=2008021900";
+				OTHER_CFLAGS_QUOTED_FOR_TARGET_1 = "-DHB_BUILD=\"$(HB_BUILD)\"";
+				OTHER_CFLAGS_QUOTED_FOR_TARGET_2 = "-DHB_VERSION=\\\"$(HB_VERSION)\\\"";
 				OTHER_LDFLAGS = "";
 				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
 				PREBINDING = NO;
@@ -1413,9 +1439,10 @@
 		4D4E7BC1087804870051572B /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPCAST_URL = "";
 				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/..";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 0.9.2;
+				CURRENT_PROJECT_VERSION = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
@@ -1428,11 +1455,14 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				HB_BUILD = "";
+				HB_VERSION = "";
 				HEADER_SEARCH_PATHS = (
 					../libhb,
 					../contrib/include,
 				);
 				INFOPLIST_FILE = HandBrake.plist;
+				INFOPLIST_PREPROCESS = NO;
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OTHER_CFLAGS = "";
@@ -1474,9 +1504,10 @@
 		4D4E7BC2087804870051572B /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPCAST_URL = "";
 				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/..";
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 0.9.2;
+				CURRENT_PROJECT_VERSION = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
@@ -1487,6 +1518,8 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				HB_BUILD = "";
+				HB_VERSION = "";
 				HEADER_SEARCH_PATHS = (
 					../libhb,
 					../contrib/include,
@@ -1541,6 +1574,7 @@
 				IBC_NOTICES = NO;
 				IBC_WARNINGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				OTHER_CFLAGS = "";
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				ZERO_LINK = NO;
@@ -1554,6 +1588,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "JOB_GROUPS=1";
 				IBC_NOTICES = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				OTHER_CFLAGS = "";
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Deployment;
