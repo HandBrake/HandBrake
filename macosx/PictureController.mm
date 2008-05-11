@@ -19,10 +19,19 @@
 
 - (id)initWithDelegate:(id)del
 {
-	if (self = [super init])
+	if (self = [super initWithWindowNibName:@"PictureSettings"])
 	{
+        // NSWindowController likes to lazily load its window. However since
+        // this controller tries to set all sorts of outlets before the window
+        // is displayed, we need it to load immediately. The correct way to do
+        // this, according to the documentation, is simply to invoke the window
+        // getter once.
+        //
+        // If/when we switch a lot of this stuff to bindings, this can probably
+        // go away.
+        [self window];
+
 		delegate = del;
-        [self loadMyNibFile];
         fPicturePreviews = [[NSMutableDictionary dictionaryWithCapacity: HB_NUM_HBLIB_PICTURES] retain];
 	}
 	return self;
@@ -399,9 +408,9 @@ are maintained across different sources */
 {
     if ([delegate respondsToSelector:@selector(pictureSettingsDidChange)])
         [delegate pictureSettingsDidChange];
-        
-    [NSApp endSheet: fPicturePanel];
-    [fPicturePanel orderOut: self];
+
+    [NSApp endSheet:[self window]];
+    [[self window] orderOut:self];
 }
 
 - (BOOL) autoCrop
@@ -475,8 +484,8 @@ are maintained across different sources */
 - (void)showPanelInWindow: (NSWindow *)fWindow forTitle: (hb_title_t *)title
 {
     [self SetTitle:title];
-    
-    [NSApp beginSheet:fPicturePanel
+
+    [NSApp beginSheet:[self window]
        modalForWindow:fWindow
         modalDelegate:nil
        didEndSelector:nil
@@ -654,17 +663,6 @@ are maintained across different sources */
     [fPicturePreviews removeAllObjects];
 }
 
-- (BOOL) loadMyNibFile
-{
-    if(![NSBundle loadNibNamed:@"PictureSettings" owner:self])
-    {
-        NSLog(@"Warning! Could not load myNib file.\n");
-        return NO;
-    }
-    
-    return YES;
-}
-
 @end
 
 @implementation PictureController (Private)
@@ -680,10 +678,10 @@ are maintained across different sources */
     // The min size is 320x240
     float minWidth = 320.0;
     float minHeight = 240.0;
-    
+
     // The max size of the view is when the sheet is taking up 85% of the screen.
     NSSize screenSize = [[NSScreen mainScreen] frame].size;
-    NSSize sheetSize = [fPicturePanel frame].size;
+    NSSize sheetSize = [[self window] frame].size;
     NSSize viewAreaSize = [fPictureViewArea frame].size;
     float paddingX = sheetSize.width - viewAreaSize.width;
     float paddingY = sheetSize.height - viewAreaSize.height;
@@ -729,11 +727,11 @@ are maintained across different sources */
     NSSize currentSize = [fPictureViewArea frame].size;
     float deltaX = viewSize.width - currentSize.width;
     float deltaY = viewSize.height - currentSize.height;
-    
+
     // Now resize the whole panel by those same deltas, but don't exceed the min
-    NSRect frame = [fPicturePanel frame];
-    NSSize maxSize = [fPicturePanel maxSize];
-    NSSize minSize = [fPicturePanel minSize];
+    NSRect frame = [[self window] frame];
+    NSSize maxSize = [[self window] maxSize];
+    NSSize minSize = [[self window] minSize];
     frame.size.width += deltaX;
     frame.size.height += deltaY;
     if( frame.size.width < minSize.width )
@@ -750,7 +748,7 @@ are maintained across different sources */
     frame.origin.x -= (deltaX / 2.0);
     frame.origin.y -= deltaY;
 
-    [fPicturePanel setFrame:frame display:YES animate:YES];
+    [[self window] setFrame:frame display:YES animate:YES];
 }
 
 //

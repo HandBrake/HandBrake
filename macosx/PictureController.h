@@ -10,15 +10,13 @@
 
 #define HB_NUM_HBLIB_PICTURES      10   // hbilb generates 10 preview pictures
 
-@interface PictureController : NSObject
+@interface PictureController : NSWindowController
 {
     hb_handle_t              * fHandle;
     hb_title_t               * fTitle;
 
     NSMutableDictionary      * fPicturePreviews;        // NSImages, one for each preview libhb creates, created lazily
     int                        fPicture;
-
-    IBOutlet NSPanel         * fPicturePanel;
 
     IBOutlet NSImageView     * fPictureView;
     IBOutlet NSBox           * fPictureViewArea;
@@ -98,7 +96,6 @@
 - (void) setDeblock: (int) setting;
 
 - (void)showPanelInWindow: (NSWindow *)fWindow forTitle: (hb_title_t *)title;
-- (BOOL) loadMyNibFile;
 
 + (NSImage *) makeImageForPicture: (int)pictureIndex
                 libhb:(hb_handle_t*)handle
