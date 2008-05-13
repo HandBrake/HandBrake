@@ -68,6 +68,8 @@ static int    mux         = 0;
 static int    pixelratio  = 0;
 static int    loosePixelratio = 0;
 static int    modulus       = 0;
+static int    par_height    = 0;
+static int    par_width     = 0;
 static int    chapter_start = 0;
 static int    chapter_end   = 0;
 static int    chapter_markers = 0;
@@ -792,6 +794,12 @@ static int HandleEvents( hb_handle_t * h )
                 {
                     job->modulus = modulus;
                 }
+                if( par_width && par_height )
+                {
+                    job->pixel_ratio = 3;
+                    job->pixel_aspect_width = par_width;
+                    job->pixel_aspect_height = par_height;
+                }
             }
             else
             {
@@ -1458,8 +1466,9 @@ static void ShowHelp()
     "    -g, --grayscale         Grayscale encoding\n"
     "    -p, --pixelratio        Store pixel aspect ratio in video stream\n"
     "    -P, --loosePixelratio   Store pixel aspect ratio with specified width\n"
-    "           <modulus>        Takes as optional argument what number you want\n"
+    "          <MOD:PARX:PARY>   Takes as optional arguments what number you want\n"
     "                            the dimensions to divide cleanly by (default 16)\n"
+    "                            and the pixel ratio to use (default autodetected)\n)"
 
 
 	"\n"
@@ -1864,7 +1873,7 @@ static int ParseOptions( int argc, char ** argv )
                 loosePixelratio = 1;
                 if( optarg != NULL )
                 {
-                    modulus = atoi( optarg );
+                    sscanf( optarg, "%i:%i:%i", &modulus, &par_width, &par_height );
                 }
                 break;
             case 'e':

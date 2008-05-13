@@ -176,12 +176,12 @@ static void ScanFunc( void * _data )
         /* Autocrop by default. Gnark gnark */
         memcpy( job->crop, title->crop, 4 * sizeof( int ) );
 
-        if( title->aspect == 16 )
+        if( title->aspect == 16 && !job->pixel_aspect_width && !job->pixel_aspect_height)
         {
             hb_reduce( &job->pixel_aspect_width, &job->pixel_aspect_height,
                        16 * title->height, 9 * title->width );
         }
-        else
+        else if( !job->pixel_aspect_width && !job->pixel_aspect_height )
         {
             hb_reduce( &job->pixel_aspect_width, &job->pixel_aspect_height,
                        4 * title->height, 3 * title->width );
