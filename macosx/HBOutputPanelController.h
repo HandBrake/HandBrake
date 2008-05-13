@@ -11,17 +11,14 @@
  * This class implements a panel that displays all text that is written
  * to stderr. User can easily copy the text to pasteboard from context menu.
  */
-@interface HBOutputPanelController : NSObject
+@interface HBOutputPanelController : NSWindowController
 {
-	/// Panel that displays debug output.
-	IBOutlet NSPanel *outputPanel;
-	
-	/// Textview that displays debug output.
-	IBOutlet NSTextView *textView;
-	
-	/// Text storage for the debug output.
-	NSTextStorage *outputTextStorage;
-    
+    /// Textview that displays debug output.
+    IBOutlet NSTextView *textView;
+
+    /// Text storage for the debug output.
+    NSTextStorage *outputTextStorage;
+
     /// Path to log text file.
     NSString *outputLogFile;
 }

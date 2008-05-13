@@ -28,23 +28,31 @@
  */
 - (id)init
 {
-	if (self = [super init])
-	{
-		/* We initialize the outputTextStorage object for the activity window */
+    if( (self = [super initWithWindowNibName:@"OutputPanel"]) )
+    {
+        /* NSWindowController likes to lazily load its window nib. Since this
+         * controller tries to touch the outlets before accessing the window, we
+         * need to force it to load immadiately by invoking its accessor.
+         *
+         * If/when we switch to using bindings, this can probably go away.
+         */
+        [self window];
+
+        /* We initialize the outputTextStorage object for the activity window */
         outputTextStorage = [[NSTextStorage alloc] init];
-        
+
         /* We declare the default NSFileManager into fileManager */
         NSFileManager * fileManager = [NSFileManager defaultManager];
         /* Establish the log file location to write to */
         /* We are initially using a .txt file as opposed to a .log file since it will open by
-            * default with the users text editor instead of the .log default Console.app, should
-        * create less confusion for less experienced users when we ask them to paste the log for support
-            */
+         * default with the users text editor instead of the .log default Console.app, should
+         * create less confusion for less experienced users when we ask them to paste the log for support
+         */
         outputLogFile = @"~/Library/Application Support/HandBrake/HandBrake-activitylog.txt";
         outputLogFile = [[outputLogFile stringByExpandingTildeInPath]retain];
-        
+
         /* We check for an existing output log file here */
-        if ([fileManager fileExistsAtPath:outputLogFile] == 0) 
+        if( [fileManager fileExistsAtPath:outputLogFile] == 0 )
         {
             /* if not, then we create a new blank one */
             [fileManager createFileAtPath:outputLogFile contents:nil attributes:nil];
@@ -52,15 +60,18 @@
         /* We overwrite the existing output log with the date for starters the output log to start fresh with the new session */
         /* Use the current date and time for the new output log header */
         NSString *startOutputLogString = [NSString stringWithFormat: @"HandBrake Activity Log for Session (Cleared): %@\n\n", [[NSDate  date] descriptionWithCalendarFormat:nil timeZone:nil locale:nil]];
-        
+
         [startOutputLogString writeToFile:outputLogFile atomically:YES encoding:NSUTF8StringEncoding error:NULL];
-        
-		[[HBOutputRedirect stderrRedirect] addListener:self];
-		[[HBOutputRedirect stdoutRedirect] addListener:self];
-        
-        
-	}
-	return self;
+
+        [[HBOutputRedirect stderrRedirect] addListener:self];
+        [[HBOutputRedirect stdoutRedirect] addListener:self];
+
+        [self setWindowFrameAutosaveName:@"OutputPanelFrame"];
+        [[textView layoutManager] replaceTextStorage:outputTextStorage];
+        [[textView enclosingScrollView] setLineScroll:10];
+        [[textView enclosingScrollView] setPageScroll:20];
+    }
+    return self;
 }
 
 /**
@@ -68,11 +79,10 @@
  */
 - (void)dealloc
 {
-	[[HBOutputRedirect stderrRedirect] removeListener:self];
-	[[HBOutputRedirect stdoutRedirect] removeListener:self];	
-	[outputTextStorage release];
-	[outputPanel release];
-	[super dealloc];
+    [[HBOutputRedirect stderrRedirect] removeListener:self];
+    [[HBOutputRedirect stdoutRedirect] removeListener:self];
+    [outputTextStorage release];
+    [super dealloc];
 }
 
 /**
@@ -80,19 +90,8 @@
  */
 - (IBAction)showOutputPanel:(id)sender
 {
-	if (!outputPanel)
-	{
-		BOOL loadSucceeded = [NSBundle loadNibNamed:@"OutputPanel" owner:self] && outputPanel;
-		NSAssert(loadSucceeded, @"Could not open nib file");
-		
-		[outputPanel setFrameAutosaveName:@"OutputPanelFrame"];
-		[[textView layoutManager] replaceTextStorage:outputTextStorage];
-		[[textView enclosingScrollView] setLineScroll:10];
-		[[textView enclosingScrollView] setPageScroll:20];
-	}
-		
     [textView scrollRangeToVisible:NSMakeRange([outputTextStorage length], 0)];
-	[outputPanel orderFront:nil];
+    [self showWindow:sender];
 
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"OutputPanelIsOpen"];
 }
