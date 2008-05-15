@@ -82,7 +82,6 @@ namespace Handbrake
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Activity Window";
-
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 

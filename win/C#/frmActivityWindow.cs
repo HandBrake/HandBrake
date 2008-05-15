@@ -34,9 +34,17 @@ namespace Handbrake
             this.rtf_actLog.Text = string.Empty;
 
             read_file = file;
-            monitorFile = new Thread(autoUpdate);
-            monitorFile.Start();
 
+            string logFile = Path.Combine(Path.GetTempPath(), read_file);
+            if (File.Exists(logFile))
+            {
+                monitorFile = new Thread(autoUpdate);
+                monitorFile.Start();
+            }
+            else
+            {
+                MessageBox.Show("The log file could not be found. Maybe you cleared your system's tempory folder or maybe you just havn't run an encode yet.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void autoUpdate(object state)
@@ -47,7 +55,7 @@ namespace Handbrake
                 Thread.Sleep(5000);
             }
         }
-        
+
         private delegate void UpdateUIHandler();
         private void updateTextFromThread()
         {
@@ -57,11 +65,11 @@ namespace Handbrake
                 return;
             }
             rtf_actLog.Text = readFile();
-            this.rtf_actLog.SelectionStart = this.rtf_actLog.Text.Length -1;
+            this.rtf_actLog.SelectionStart = this.rtf_actLog.Text.Length - 1;
             this.rtf_actLog.ScrollToCaret();
 
             //if (rtf_actLog.Text.Contains("HandBrake has exited."))
-               //monitorFile.Abort();
+            //monitorFile.Abort();
         }
 
         private string readFile()
@@ -73,6 +81,7 @@ namespace Handbrake
                 // we'll need to make a copy of it.
                 string logFile = Path.Combine(Path.GetTempPath(), read_file);
                 string logFile2 = Path.Combine(Path.GetTempPath(), "hb_encode_log_AppReadable.dat");
+
 
                 // Make sure the application readable log file does not already exist. FileCopy fill fail if it does.
                 if (File.Exists(logFile2))
@@ -90,6 +99,7 @@ namespace Handbrake
                     line = sr.ReadLine();
                 }
                 sr.Close();
+
             }
             catch (Exception exc)
             {
@@ -101,7 +111,8 @@ namespace Handbrake
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            monitorFile.Abort();
+            if (monitorFile != null)
+                monitorFile.Abort();
             e.Cancel = true;
             this.Hide();
             base.OnClosing(e);
