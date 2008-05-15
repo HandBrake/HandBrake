@@ -995,6 +995,17 @@ static int HandleEvents( hb_handle_t * h )
                             fprintf(stderr, "Invalid sample rate %d, using default\n", arate);
                             arate = default_arate;
                         }
+                        
+                        int j;
+                        for( j = 0; j < hb_audio_rates_count; j++ )
+                        {
+                            if( !strcmp( token, hb_audio_rates[j].string ) )
+                            {
+                                arate = hb_audio_rates[j].rate;
+                                break;
+                            }
+                        }
+                        
                         audio->out.samplerate = arate;
                     }
                     if( (++i) >= num_audio_tracks )
