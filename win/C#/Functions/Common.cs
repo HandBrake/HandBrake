@@ -769,7 +769,7 @@ namespace Handbrake.Functions
             // Audio Track Selections
             //
             if (track1 == "Automatic")
-                tracks = " -a auto";
+                tracks = " -a 1";
             else if (track1 == "")
                 tracks = "";
             else if (track1 == "None")

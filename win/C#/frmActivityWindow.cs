@@ -38,15 +38,19 @@ namespace Handbrake
             string logFile = Path.Combine(Path.GetTempPath(), read_file);
             if (File.Exists(logFile))
             {
-                monitorFile = new Thread(autoUpdate);
-                monitorFile.Start();
+                if (read_file == "dvdinfo.dat") // No need to refresh the window if we are viwing dvdinfo.dat
+                    updateTextFromThread();
+                else // however, we should refresh when reading the encode log file.
+                {
+                    monitorFile = new Thread(autoUpdate);
+                    monitorFile.Start();
+                }
             }
             else
-            {
                 MessageBox.Show("The log file could not be found. Maybe you cleared your system's tempory folder or maybe you just havn't run an encode yet.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
         }
 
+        // Update the Activity window every 5 seconds with the latest log data.
         private void autoUpdate(object state)
         {
             while (true)
@@ -59,17 +63,21 @@ namespace Handbrake
         private delegate void UpdateUIHandler();
         private void updateTextFromThread()
         {
-            if (this.InvokeRequired)
+            try
             {
-                this.BeginInvoke(new UpdateUIHandler(updateTextFromThread));
-                return;
+                if (this.InvokeRequired)
+                {
+                    this.BeginInvoke(new UpdateUIHandler(updateTextFromThread));
+                    return;
+                }
+                rtf_actLog.Text = readFile();
+                this.rtf_actLog.SelectionStart = this.rtf_actLog.Text.Length - 1;
+                this.rtf_actLog.ScrollToCaret();
             }
-            rtf_actLog.Text = readFile();
-            this.rtf_actLog.SelectionStart = this.rtf_actLog.Text.Length - 1;
-            this.rtf_actLog.ScrollToCaret();
-
-            //if (rtf_actLog.Text.Contains("HandBrake has exited."))
-            //monitorFile.Abort();
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
         }
 
         private string readFile()

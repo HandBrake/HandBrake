@@ -557,6 +557,7 @@ namespace Handbrake.Functions
             /* Change the option string to reflect the new mod settings */
             mainWindow.rtf_x264Query.Text = changedOptString;
         }
+
         /*
          * Used by on_x264_WidgetChange()
          * Called when the current x264 option string contains no options.
@@ -920,6 +921,7 @@ namespace Handbrake.Functions
                 }
             }
         }
+
         /*
          * Take a single option and standardize it. Returns as a String
          * Input: String. - Single X264 Option. Name only

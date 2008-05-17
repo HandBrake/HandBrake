@@ -150,6 +150,7 @@ namespace Handbrake
             Form splash = new frmSplashScreen();
             splash.Show();
         }
+
         private void setupH264Panel()
         {
             /*Set opt widget values here*/
@@ -275,6 +276,7 @@ namespace Handbrake
             /* Standardize the option string */
             rtf_x264Query.Text = "";
         }
+
         private void loadUserDefaults()
         {
             string userDefaults = Properties.Settings.Default.defaultUserSettings;
@@ -1971,10 +1973,8 @@ namespace Handbrake
         }
 
         #endregion
-
  
-
-
+        
         // This is the END of the road ------------------------------------------------------------------------------
     }
 }
