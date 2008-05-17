@@ -165,6 +165,8 @@ static void do_job( hb_job_t * job, int cpu_count )
 
     if ( job->vfr )
     {
+        job->vrate_base = title->rate_base;
+        
         int detelecine_present = 0;
         if ( job->filters )
         {
@@ -209,7 +211,7 @@ static void do_job( hb_job_t * job, int cpu_count )
 
     if( job->vfr)
     {
-        hb_log( " + video frame rate: variable (detected %.3f fps)", (float) job->vrate /
+        hb_log( " + video frame rate: %.3f fps -> variable fps", (float) job->vrate /
             (float) job->vrate_base );
     }
     else
