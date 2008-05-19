@@ -2695,12 +2695,17 @@ the user is using "Custom" settings by determining the sender*/
     /* VFR (Variable Frame Rate) */
     if ([fPictureController vfr]) {
         /* We change the string of the fps popup to warn that vfr is on Framerate (FPS): */
-        [fVidRateField setStringValue: @"Framerate (VFR On):"];  
+        [fVidRateField setStringValue: @"Framerate (VFR On):"]; 
+        /* for VFR we select same as source (or title framerate) and disable the popup.
+        * We know its index 0 as that is determined in titlePopUpChanged */
+        [fVidRatePopUp selectItemAtIndex: 0];
+        [fVidRatePopUp setEnabled: NO];  
         
     }
     else {
         /* make sure the label for framerate is set to its default */  
         [fVidRateField setStringValue: @"Framerate (FPS):"];
+        [fVidRatePopUp setEnabled: YES];
     }
     
 	/* Deinterlace */
