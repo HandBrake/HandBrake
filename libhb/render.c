@@ -312,6 +312,7 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     hb_buffer_close( &subtitles );
 
                     buf_tmp_in = NULL;
+                    break;
                 }
                 else
                 {
