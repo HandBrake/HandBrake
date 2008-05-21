@@ -317,7 +317,6 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 {
                     buf_tmp_in = buf_tmp_out;
                 }
-                break;
             }
         }
     }
