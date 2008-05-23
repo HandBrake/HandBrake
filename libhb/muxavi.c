@@ -5,6 +5,7 @@
    It may be used under the terms of the GNU General Public License. */
 
 #include "hb.h"
+#include "ffmpeg/avcodec.h"
 
 #define AVIF_HASINDEX  0x10
 #define AVIIF_KEYFRAME 0x10
@@ -52,6 +53,31 @@ typedef struct __attribute__((__packed__))
     int16_t  Bottom;
 
 } hb_avi_stream_header_t;
+
+typedef struct __attribute__((__packed__))
+{
+    uint32_t FourCC;
+    uint32_t BytesCount;
+    uint32_t VideoFormatToken;
+    uint32_t VideoStandard;
+    uint32_t dwVerticalRefreshRate;
+    uint32_t dwHTotalInT;
+    uint32_t dwVTotalInLines;
+    uint16_t dwFrameAspectRatioDen;
+    uint16_t dwFrameAspectRatioNum;
+    uint32_t dwFrameWidthInPixels;
+    uint32_t dwFrameHeightInLines;
+    uint32_t nbFieldPerFrame;
+    uint32_t CompressedBMHeight;
+    uint32_t CompressedBMWidth;
+    uint32_t ValidBMHeight;
+    uint32_t ValidBMWidth;
+    uint32_t ValidBMXOffset;
+    uint32_t ValidBMYOffset;
+    uint32_t VideoXOffsetInT;
+    uint32_t VideoYValidStartLine;
+
+} hb_avi_vprp_info_t;
 
 typedef struct __attribute__((__packed__))
 {
@@ -203,6 +229,30 @@ static void WriteStreamHeader( FILE * file, hb_avi_stream_header_t * header )
     WriteInt16( file, header->Bottom );
 }
 
+static void WriteVprpInfo( FILE * file, hb_avi_vprp_info_t * info )
+{
+    WriteInt32( file, info->FourCC );
+    WriteInt32( file, info->BytesCount );
+    WriteInt32( file, info->VideoFormatToken );
+    WriteInt32( file, info->VideoStandard );
+    WriteInt32( file, info->dwVerticalRefreshRate );
+    WriteInt32( file, info->dwHTotalInT );
+    WriteInt32( file, info->dwVTotalInLines );
+    WriteInt16( file, info->dwFrameAspectRatioDen );
+    WriteInt16( file, info->dwFrameAspectRatioNum );
+    WriteInt32( file, info->dwFrameWidthInPixels );
+    WriteInt32( file, info->dwFrameHeightInLines );
+    WriteInt32( file, info->nbFieldPerFrame );
+    WriteInt32( file, info->CompressedBMHeight );
+    WriteInt32( file, info->CompressedBMWidth );
+    WriteInt32( file, info->ValidBMHeight );
+    WriteInt32( file, info->ValidBMWidth );
+    WriteInt32( file, info->ValidBMXOffset );
+    WriteInt32( file, info->ValidBMYOffset );
+    WriteInt32( file, info->VideoXOffsetInT );
+    WriteInt32( file, info->VideoYValidStartLine );
+}
+
 static void IndexAddInt32( hb_buffer_t * b, uint32_t val )
 {
     if( b->size + 16 > b->alloc )
@@ -233,8 +283,9 @@ struct hb_mux_object_s
 
 struct hb_mux_data_s
 {
-    uint32_t               fourcc;
-    hb_avi_stream_header_t header;
+    uint32_t				fourcc;
+    hb_avi_stream_header_t	header;
+    hb_avi_vprp_info_t		vprp_header;
     union
     {
         hb_bitmap_info_t   v;
@@ -341,6 +392,35 @@ static int AVIInit( hb_mux_object_t * m )
         f.Compression = FOURCC( "H264" );
 #undef f
 
+#define g mux_data->vprp_header
+    /* Vprp video stream header */	
+    AVRational sample_aspect_ratio = ( AVRational ){ job->pixel_aspect_width, job->pixel_aspect_height };
+    AVRational dar = av_mul_q( sample_aspect_ratio, ( AVRational ){ job->width, job->height } );
+    int num, den;
+    av_reduce(&num, &den, dar.num, dar.den, 0xFFFF);
+
+    g.FourCC                = FOURCC( "vprp" );
+    g.BytesCount            = sizeof( hb_avi_vprp_info_t ) - 8;
+    g.VideoFormatToken      = 0;
+    g.VideoStandard         = 0;
+    g.dwVerticalRefreshRate = job->vrate / job->vrate_base;
+    g.dwHTotalInT           = job->width;
+    g.dwVTotalInLines       = job->height;
+    g.dwFrameAspectRatioDen = den;
+    g.dwFrameAspectRatioNum = num;
+    g.dwFrameWidthInPixels  = job->width;
+    g.dwFrameHeightInLines  = job->height;
+    g.nbFieldPerFrame       = 1;
+    g.CompressedBMHeight    = job->height;
+    g.CompressedBMWidth     = job->width;
+    g.ValidBMHeight         = job->height;
+    g.ValidBMWidth          = job->width;
+    g.ValidBMXOffset        = 0;
+    g.ValidBMYOffset        = 0;
+    g.VideoXOffsetInT       = 0;
+    g.VideoYValidStartLine  = 0;
+#undef g
+
     /* Audio tracks */
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
@@ -408,7 +488,9 @@ static int AVIInit( hb_mux_object_t * m )
         /* strh for video + audios */
         ( 1 + audio_count ) * ( 12 + sizeof( hb_avi_stream_header_t ) ) +
         /* video strf */
-        sizeof( hb_bitmap_info_t ) +
+		sizeof( hb_bitmap_info_t ) +
+        /* video vprp */
+        ( job->pixel_ratio ? sizeof( hb_avi_vprp_info_t ) : 0 ) +
         /* audios strf */
         audio_count * ( sizeof( hb_wave_formatex_t ) +
                         ( is_ac3 ? 0 : sizeof( hb_wave_mp3_t ) ) );
@@ -430,10 +512,15 @@ static int AVIInit( hb_mux_object_t * m )
 
     WriteInt32( m->file, FOURCC( "LIST" ) );
     WriteInt32( m->file, 4 + sizeof( hb_avi_stream_header_t ) +
-                sizeof( hb_bitmap_info_t ) );
+                sizeof( hb_bitmap_info_t )  +
+                ( job->pixel_ratio ? sizeof( hb_avi_vprp_info_t ) : 0 ) );
     WriteInt32( m->file, FOURCC( "strl" ) );
     WriteStreamHeader( m->file, &mux_data->header );
     WriteBitmapInfo( m->file, &mux_data->format.v );
+    if( job->pixel_ratio )
+    {
+        WriteVprpInfo( m->file, &mux_data->vprp_header );
+    }
 
     /* Audio tracks */
     for( i = 0; i < audio_count; i++ )
