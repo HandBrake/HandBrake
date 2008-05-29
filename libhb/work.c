@@ -136,7 +136,21 @@ static void do_job( hb_job_t * job, int cpu_count )
            so they fit into the user's specified dimensions. */
         hb_set_anamorphic_size(job, &job->width, &job->height, &job->pixel_aspect_width, &job->pixel_aspect_height);
     }
-
+    
+    if( job->pixel_ratio && job->vcodec == HB_VCODEC_FFMPEG)
+    {
+        /* Just to make working with ffmpeg even more fun,
+           lavc's MPEG-4 encoder can't handle PAR values >= 255,
+           even though AVRational does. Adjusting downwards
+           distorts the display aspect slightly, but such is life. */
+        while ((job->pixel_aspect_width & ~0xFF) ||
+               (job->pixel_aspect_height & ~0xFF))
+        {
+            job->pixel_aspect_width >>= 1;
+            job->pixel_aspect_height >>= 1;
+        }
+    }
+    
 	/* Keep width and height within these boundaries,
 	   but ignore for "loose" anamorphic encodes, for
 	   which this stuff is covered in the pixel_ratio
