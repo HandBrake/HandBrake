@@ -73,8 +73,7 @@ BOOL                        fIsDragging;
     /* Destination box */
     IBOutlet NSTextField         * fDstFormatField;
 	IBOutlet NSPopUpButton       * fDstFormatPopUp;
-	//IBOutlet NSTextField         * fDstCodecsField;
-    //IBOutlet NSPopUpButton       * fDstCodecsPopUp;
+	
     IBOutlet NSTextField         * fDstFile1Field;
     IBOutlet NSTextField         * fDstFile2Field;
     IBOutlet NSButton            * fDstBrowseButton;
@@ -116,9 +115,11 @@ BOOL                        fIsDragging;
 	IBOutlet NSTextField         * fPicLabelAutoCrop;
     IBOutlet NSTextField         * fPicLabelDetelecine;
 	IBOutlet NSTextField         * fPicLabelDeinterlace;
+    IBOutlet NSTextField         * fPicLabelDecomb;
     IBOutlet NSTextField         * fPicLabelDenoise;
     IBOutlet NSTextField         * fPicLabelDeblock;
 	IBOutlet NSTextField         * fPicSettingDeinterlace;
+    IBOutlet NSTextField         * fPicSettingDecomb;
 	IBOutlet NSTextField         * fPicSettingARkeep;
 	IBOutlet NSTextField         * fPicSettingPAR;
 	IBOutlet NSTextField         * fPicSettingAutoCrop;

@@ -89,6 +89,8 @@
 		593034EC0BBA39A100172349 /* ChapterTitles.m in Sources */ = {isa = PBXBuildFile; fileRef = 593034EA0BBA39A100172349 /* ChapterTitles.m */; };
 		59CBD2370BBB44DA004A3BE3 /* parsecsv.c in Sources */ = {isa = PBXBuildFile; fileRef = 59CBD2360BBB44DA004A3BE3 /* parsecsv.c */; };
 		59CBD2650BBB4D1B004A3BE3 /* ChapterTitles.m in Sources */ = {isa = PBXBuildFile; fileRef = 593034EA0BBA39A100172349 /* ChapterTitles.m */; };
+		7497010F0DC281BB009200D8 /* decomb.c in Sources */ = {isa = PBXBuildFile; fileRef = 7497010E0DC281BB009200D8 /* decomb.c */; };
+		749701100DC281BB009200D8 /* decomb.c in Sources */ = {isa = PBXBuildFile; fileRef = 7497010E0DC281BB009200D8 /* decomb.c */; };
 		A22C85EC0D05D35000C10E36 /* HBPresets.h in Headers */ = {isa = PBXBuildFile; fileRef = A22C85EA0D05D35000C10E36 /* HBPresets.h */; };
 		A22C85ED0D05D35100C10E36 /* HBPresets.m in Sources */ = {isa = PBXBuildFile; fileRef = A22C85EB0D05D35000C10E36 /* HBPresets.m */; };
 		A25289E60D87A27D00461D5B /* enctheora.c in Sources */ = {isa = PBXBuildFile; fileRef = A25289E50D87A27D00461D5B /* enctheora.c */; };
@@ -257,6 +259,7 @@
 		593034E90BBA39A100172349 /* ChapterTitles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChapterTitles.h; sourceTree = "<group>"; };
 		593034EA0BBA39A100172349 /* ChapterTitles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChapterTitles.m; sourceTree = "<group>"; };
 		59CBD2360BBB44DA004A3BE3 /* parsecsv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = parsecsv.c; path = ../test/parsecsv.c; sourceTree = SOURCE_ROOT; };
+		7497010E0DC281BB009200D8 /* decomb.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = decomb.c; path = ../libhb/decomb.c; sourceTree = SOURCE_ROOT; };
 		A22C85EA0D05D35000C10E36 /* HBPresets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPresets.h; sourceTree = "<group>"; };
 		A22C85EB0D05D35000C10E36 /* HBPresets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPresets.m; sourceTree = "<group>"; };
 		A25289E50D87A27D00461D5B /* enctheora.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = enctheora.c; path = ../libhb/enctheora.c; sourceTree = SOURCE_ROOT; };
@@ -434,6 +437,7 @@
 			isa = PBXGroup;
 			children = (
 				A25289E50D87A27D00461D5B /* enctheora.c */,
+				7497010E0DC281BB009200D8 /* decomb.c */,
 				B48359A70C82960500E04440 /* lang.c */,
 				EAA526920C3B25D200944FF2 /* stream.c */,
 				0DFA5C7E0B8DD3B60020BC09 /* declpcm.c */,
@@ -785,6 +789,7 @@
 				FC8519550C59A02C0073812C /* deinterlace.c in Sources */,
 				FC8519560C59A02C0073812C /* deblock.c in Sources */,
 				FC8519570C59A02C0073812C /* detelecine.c in Sources */,
+				749701100DC281BB009200D8 /* decomb.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -830,6 +835,7 @@
 				FC8519530C59A02C0073812C /* detelecine.c in Sources */,
 				B48359A80C82960500E04440 /* lang.c in Sources */,
 				A25289E60D87A27D00461D5B /* enctheora.c in Sources */,
+				7497010F0DC281BB009200D8 /* decomb.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

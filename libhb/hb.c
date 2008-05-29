@@ -445,19 +445,29 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
  * @param color_equal Sensitivity for detecting similar colors
  * @param color_diff  Sensitivity for detecting different colors
  * @param threshold   Sensitivity for flagging planes as combed
+ * @param prog_equal  Sensitivity for detecting similar colors on progressive frames
+ * @param prog_diff   Sensitivity for detecting different colors on progressive frames
+ * @param prog_threshold Sensitivity for flagging progressive frames as combed
  */
-int hb_detect_comb( hb_buffer_t * buf, int width, int height, int color_equal, int color_diff, int threshold )
+int hb_detect_comb( hb_buffer_t * buf, int width, int height, int color_equal, int color_diff, int threshold, int prog_equal, int prog_diff, int prog_threshold )
 {
-    int j, k, n, off, block, cc_1, cc_2, cc[3], flag[3];
+    int j, k, n, off, cc_1, cc_2, cc[3], flag[3] ;
     uint16_t s1, s2, s3, s4;
     cc_1 = 0; cc_2 = 0;
 
     int offset = 0;
+    
+    if ( buf->flags & 16 )
+    {
+        /* Frame is progressive, be more discerning. */
+        color_diff = prog_diff;
+        color_equal = prog_equal;
+        threshold = prog_threshold;
+    }
 
+    /* One pas for Y, one pass for Cb, one pass for Cr */    
     for( k = 0; k < 3; k++ )
     {
-        /* One pas for Y, one pass for Cb, one pass for Cr */
-
         if( k == 1 )
         {
             /* Y has already been checked, now offset by Y's dimensions
@@ -466,9 +476,6 @@ int hb_detect_comb( hb_buffer_t * buf, int width, int height, int color_equal, i
             offset = width * height;
             width >>= 1;
             height >>= 1;
-            threshold >>= 1;
-            color_equal >>= 1;
-            color_diff >>= 1;
         }
         else if ( k == 2 )
         {
@@ -477,10 +484,7 @@ int hb_detect_comb( hb_buffer_t * buf, int width, int height, int color_equal, i
             offset *= 5/4;
         }
 
-        /* Look at one horizontal line at a time */
-        block = width;
-
-        for( j = 0; j < block; ++j )
+        for( j = 0; j < width; ++j )
         {
             off = 0;
 
@@ -488,9 +492,9 @@ int hb_detect_comb( hb_buffer_t * buf, int width, int height, int color_equal, i
             {
                 /* Look at groups of 4 sequential horizontal lines */
                 s1 = ( ( buf->data + offset )[ off + j             ] & 0xff );
-                s2 = ( ( buf->data + offset )[ off + j + block     ] & 0xff );
-                s3 = ( ( buf->data + offset )[ off + j + 2 * block ] & 0xff );
-                s4 = ( ( buf->data + offset )[ off + j + 3 * block ] & 0xff );
+                s2 = ( ( buf->data + offset )[ off + j + width     ] & 0xff );
+                s3 = ( ( buf->data + offset )[ off + j + 2 * width ] & 0xff );
+                s4 = ( ( buf->data + offset )[ off + j + 3 * width ] & 0xff );
 
                 /* Note if the 1st and 2nd lines are more different in
                    color than the 1st and 3rd lines are similar in color.*/
@@ -505,38 +509,38 @@ int hb_detect_comb( hb_buffer_t * buf, int width, int height, int color_equal, i
                         ++cc_2;
 
                 /* Now move down 2 horizontal lines before starting over.*/
-                off += 2 * block;
+                off += 2 * width;
             }
         }
 
         // compare results
-        /* The final metric seems to be doing some kind of bits per pixel style calculation
-           to decide whether or not enough lines showed alternating colors for the frame size. */
+        /*  The final cc score for a plane is the percentage of combed pixels it contains.
+            Because sensitivity goes down to hundreths of a percent, multiply by 1000
+            so it will be easy to compare against the threhold value which is an integer. */
         cc[k] = (int)( ( cc_1 + cc_2 ) * 1000.0 / ( width * height ) );
-
-        /* If the plane's cc score meets the threshold, flag it as combed. */
-        flag[k] = 0;
-        if ( cc[k] > threshold )
-        {
-            flag[k] = 1;
-        }
     }
 
-#if 0
-/* Debugging info */
-//    if(flag)
-        hb_log("flags: %i/%i/%i | cc0: %i | cc1: %i | cc2: %i", flag[0], flag[1], flag[2], cc[0], cc[1], cc[2]);
-#endif
 
-    /* When more than one plane shows combing, tell the caller. */
-    if (flag[0] || flag[1] || flag[2] )
+    /* HandBrake is all yuv420, so weight the average percentage of all 3 planes accordingly.*/
+    int average_cc = ( 2 * cc[0] + ( cc[1] / 2 ) + ( cc[2] / 2 ) ) / 3;
+    
+    /* Now see if that average percentage of combed pixels surpasses the threshold percentage given by the user.*/
+    if( average_cc > threshold )
     {
+#if 0
+            hb_log("Average %i combed (Threshold %i) %i/%i/%i | PTS: %lld (%fs) %s", average_cc, threshold, cc[0], cc[1], cc[2], buf->start, (float)buf->start / 90000, (buf->flags & 16) ? "Film" : "Video" );
+#endif
         return 1;
     }
 
-    return 0;
-}
+#if 0
+    hb_log("SKIPPED Average %i combed (Threshold %i) %i/%i/%i | PTS: %lld (%fs) %s", average_cc, threshold, cc[0], cc[1], cc[2], buf->start, (float)buf->start / 90000, (buf->flags & 16) ? "Film" : "Video" );
+#endif
 
+    /* Reaching this point means no combing detected. */
+    return 0;
+
+}
 
 /**
  * Calculates job width and height for anamorphic content,

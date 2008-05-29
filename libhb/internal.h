@@ -224,7 +224,8 @@ enum
     FILTER_DEINTERLACE = 1,
     FILTER_DEBLOCK,
     FILTER_DENOISE,
-    FILTER_DETELECINE
+    FILTER_DETELECINE,
+    FILTER_DECOMB
 };
 
 extern hb_work_object_t * hb_objects;

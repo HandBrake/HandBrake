@@ -574,6 +574,7 @@ extern hb_filter_object_t hb_filter_detelecine;
 extern hb_filter_object_t hb_filter_deinterlace;
 extern hb_filter_object_t hb_filter_deblock;
 extern hb_filter_object_t hb_filter_denoise;
+extern hb_filter_object_t hb_filter_decomb;
 
 typedef void hb_error_handler_t( const char *errmsg );
 

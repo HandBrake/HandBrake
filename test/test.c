@@ -40,6 +40,8 @@ static int    denoise               = 0;
 static char * denoise_opt           = 0;
 static int    detelecine            = 0;
 static char * detelecine_opt        = 0;
+static int    decomb                = 0;
+static char * decomb_opt            = 0;
 static int    grayscale   = 0;
 static int    vcodec      = HB_VCODEC_FFMPEG;
 static int    h264_13     = 0;
@@ -819,6 +821,11 @@ static int HandleEvents( hb_handle_t * h )
                 hb_filter_detelecine.settings = detelecine_opt;
                 hb_list_add( job->filters, &hb_filter_detelecine );
             }
+            if( decomb )
+            {
+                hb_filter_decomb.settings = decomb_opt;
+                hb_list_add( job->filters, &hb_filter_decomb );
+            }
             if( deinterlace )
             {
                 hb_filter_deinterlace.settings = deinterlace_opt;
@@ -1474,6 +1481,8 @@ static void ShowHelp()
      "          <weak/medium/strong>\n"
      "    -9, --detelecine        Detelecine video with pullup filter\n"
      "          <L:R:T:B:SB:MP>   (default 1:1:4:4:0:0)\n"
+     "    -5, --decomb           Selectively deinterlaces when it detects combing\n"
+     "          <M:EQ:DF:TR:EQ:DF:TR>     (default: 4:10:15:9:10:35:9)\n"
     "    -g, --grayscale         Grayscale encoding\n"
     "    -p, --pixelratio        Store pixel aspect ratio in video stream\n"
     "    -P, --loosePixelratio   Store pixel aspect ratio with specified width\n"
@@ -1612,6 +1621,7 @@ static int ParseOptions( int argc, char ** argv )
             { "deblock",     optional_argument, NULL,    '7' },
             { "denoise",     optional_argument, NULL,    '8' },
             { "detelecine",  optional_argument, NULL,    '9' },
+            { "decomb",      optional_argument, NULL,    '5' },            
             { "grayscale",   no_argument,       NULL,    'g' },
             { "pixelratio",  no_argument,       NULL,    'p' },
             { "loosePixelratio", optional_argument,   NULL,    'P' },
@@ -1641,7 +1651,7 @@ static int ParseOptions( int argc, char ** argv )
         int c;
 
 		c = getopt_long( argc, argv,
-						 "hvuC:f:4i:Io:t:Lc:m::a:6:s:UFN:e:E:2dD:789gpOP::w:l:n:b:q:S:B:r:R:Qx:TY:X:VZ:z",
+						 "hvuC:f:4i:Io:t:Lc:m::a:6:s:UFN:e:E:2dD:7895gpOP::w:l:n:b:q:S:B:r:R:Qx:TY:X:VZ:z",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -1873,6 +1883,13 @@ static int ParseOptions( int argc, char ** argv )
                     detelecine_opt = strdup( optarg );
                 }
                 detelecine = 1;
+                break;
+            case '5':
+                if( optarg != NULL )
+                {
+                    decomb_opt = strdup( optarg );
+                }
+                decomb = 1;
                 break;
             case 'g':
                 grayscale = 1;

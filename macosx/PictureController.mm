@@ -147,6 +147,14 @@ are maintained across different sources */
     [fDenoisePopUp addItemWithTitle: @"Strong"];
 	/* Set denoises level according to the integer in the main window */
 	[fDenoisePopUp selectItemAtIndex: fPictureFilterSettings.denoise];
+    
+    /* we use a popup to show the decomb settings */
+	[fDecombPopUp removeAllItems];
+    [fDecombPopUp addItemWithTitle: @"None"];
+    [fDecombPopUp addItemWithTitle: @"Default"];
+    [fDecombPopUp addItemWithTitle: @"Custom"];
+	/* Set denoises level according to the integer in the main window */
+	[fDecombPopUp selectItemAtIndex: fPictureFilterSettings.decomb];
 
 }
 
@@ -313,8 +321,9 @@ are maintained across different sources */
     }
     fPictureFilterSettings.detelecine  = [fDetelecineCheck state];
     fPictureFilterSettings.deblock  = [fDeblockCheck state];
-	//job->pixel_ratio = ( [fPARCheck state] == NSOnState );
     
+    fPictureFilterSettings.decomb = [fDecombPopUp indexOfSelectedItem];
+	
     autoCrop = ( [fCropMatrix selectedRow] == 0 );
     [fCropTopStepper    setEnabled: !autoCrop];
     [fCropBottomStepper setEnabled: !autoCrop];
@@ -460,7 +469,14 @@ are maintained across different sources */
 - (void) setDeinterlace: (int) setting {
     fPictureFilterSettings.deinterlace = setting;
 }
+- (int) decomb
+{
+    return fPictureFilterSettings.decomb;
+}
 
+- (void) setDecomb: (int) setting {
+    fPictureFilterSettings.decomb = setting;
+}
 - (int) denoise
 {
     return fPictureFilterSettings.denoise;

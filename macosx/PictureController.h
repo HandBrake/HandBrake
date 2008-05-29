@@ -35,6 +35,7 @@
     IBOutlet NSTextField     * fCropRightField;
     IBOutlet NSStepper       * fCropRightStepper;
     IBOutlet NSPopUpButton   * fDeinterlacePopUp;
+    IBOutlet NSPopUpButton   * fDecombPopUp;
 	IBOutlet NSButton        * fDetelecineCheck;
     IBOutlet NSButton        * fVFRCheck;
     IBOutlet NSButton        * fDeblockCheck;
@@ -60,6 +61,7 @@
         int     detelecine;
         int     vfr;
         int     deinterlace;
+        int     decomb;
         int     denoise;
         int     deblock;
     } fPictureFilterSettings;
@@ -90,6 +92,8 @@
 - (void) setVFR: (int) setting;
 - (int) deinterlace;
 - (void) setDeinterlace: (int) setting;
+- (int) decomb;
+- (void) setDecomb: (int) setting;
 - (int) denoise;
 - (void) setDenoise: (int) setting;
 - (int) deblock;

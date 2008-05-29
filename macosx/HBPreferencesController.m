@@ -51,6 +51,7 @@
         @"NO",              @"DefaultChapterMarkers",
         @"NO",              @"DisableDvdAutoDetect",
 		@"Alert Window",    @"AlertWhenDone",
+        @"4:10:15:9:10:35:9",    @"DecombCustomString",
         nil]];
 }
 

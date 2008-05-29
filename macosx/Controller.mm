@@ -330,7 +330,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		fPicLabelAr,fPicLabelDeinterlace,fPicSettingPAR,fPicLabelAnamorphic,fPresetsAdd,fPresetsDelete,
 		fCreateChapterMarkers,fVidTurboPassCheck,fDstMp4LargeFileCheck,fPicLabelAutoCrop,
 		fPicSettingAutoCrop,fPicSettingDetelecine,fPicLabelDetelecine,fPicLabelDenoise,fPicSettingDenoise,
-        fSubForcedCheck,fPicSettingDeblock,fPicLabelDeblock,fPresetsOutlineView,
+        fSubForcedCheck,fPicSettingDeblock,fPicLabelDeblock,fPicLabelDecomb,fPicSettingDecomb,fPresetsOutlineView,
         fAudDrcLabel,fDstMp4HttpOptFileCheck,fDstMp4iPodFileCheck};
 
     for( unsigned i = 0;
@@ -1488,14 +1488,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 			job->chapter_markers = 0;
 		}
 	}
-	/* This likely is no longer needed as we are directly setting the job->vcodec */
-    /*
-    if( ( job->vcodec & HB_VCODEC_FFMPEG ) &&
-        [fVidEncoderPopUp indexOfSelectedItem] > 0 )
-    {
-        job->vcodec = HB_VCODEC_XVID;
-    }
-    */
+	
     if( job->vcodec & HB_VCODEC_X264 )
     {
 		if ([fDstMp4iPodFileCheck state] == NSOnState)
@@ -1659,13 +1652,28 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     
     /* Filters */ 
     job->filters = hb_list_init();
-   
+    
+    /* Now lets call the filters if applicable.
+    * The order of the filters is critical
+    */
+    
 	/* Detelecine */
     if ([fPictureController detelecine])
     {
         hb_list_add( job->filters, &hb_filter_detelecine );
     }
-   
+    
+    /* Decomb */
+    if ([fPictureController decomb] > 0)
+    {
+        /* Run old deinterlacer fd by default */
+        //fPicSettingDecomb
+        hb_filter_decomb.settings = (char *) [[fPicSettingDecomb stringValue] UTF8String];
+        //hb_filter_decomb.settings = "4:10:15:9:10:35:9"; // <-- jbrjakes recommended parameters as of 5/23/08
+        hb_list_add( job->filters, &hb_filter_decomb );
+    }
+
+    
     /* Deinterlace */
     if ([fPictureController deinterlace] == 1)
     {
@@ -1686,8 +1694,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         hb_list_add( job->filters, &hb_filter_deinterlace );            
     }
 	
-	/* Denoise */
-	
+    /* Denoise */
 	if ([fPictureController denoise] == 1) // Weak in popup
 	{
 		hb_filter_denoise.settings = "2:1:2:3"; 
@@ -2684,12 +2691,28 @@ the user is using "Custom" settings by determining the sender*/
 	{
 		[fPicSettingARkeep setStringValue: @"Off"];
 	}	
+    
     /* Detelecine */
     if ([fPictureController detelecine]) {
         [fPicSettingDetelecine setStringValue: @"Yes"];
     }
     else {
         [fPicSettingDetelecine setStringValue: @"No"];
+    }
+    
+    /* Decomb */
+	if ([fPictureController decomb] == 0)
+	{
+		[fPicSettingDecomb setStringValue: @"Off"];
+	}
+	else if ([fPictureController decomb] == 1)
+	{
+		[fPicSettingDecomb setStringValue: @"4:10:15:9:10:35:9"];
+	}
+    else if ([fPictureController decomb] == 2)
+    {
+    [fPicSettingDecomb setStringValue: [[NSUserDefaults standardUserDefaults] valueForKey:@"DecombCustomString"]];
+    ///[[NSUserDefaults standardUserDefaults] valueForKey:@"DecombCustomString"]
     }
     
     /* VFR (Variable Frame Rate) */
@@ -2725,7 +2748,8 @@ the user is using "Custom" settings by determining the sender*/
 	{
 		[fPicSettingDeinterlace setStringValue: @"Slower"];
 	}
-	/* Denoise */
+		
+    /* Denoise */
 	if ([fPictureController denoise] == 0)
 	{
 		[fPicSettingDenoise setStringValue: @"Off"];
@@ -2759,7 +2783,8 @@ the user is using "Custom" settings by determining the sender*/
 	{
 		[fPicSettingPAR setStringValue: @"Off"];
 	}
-	/* Set the display field for crop as per boolean */
+	
+    /* Set the display field for crop as per boolean */
 	if (![fPictureController autoCrop])
 	{
 	    [fPicSettingAutoCrop setStringValue: @"Custom"];
