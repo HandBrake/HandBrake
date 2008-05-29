@@ -4409,7 +4409,8 @@ if (item == nil)
                     else
                     {
                         [fPictureController setDeblock:0];
-                    }             
+                    }
+                    
                     [self calculatePictureSizing: NULL];
                 }
                 
@@ -4476,6 +4477,17 @@ if (item == nil)
             else
             {
                 [fPictureController setDeblock:0];
+            }
+            /* Decomb */
+            /* Even though we currently allow for a custom setting for decomb, ultimately it will only have Off and
+             * Default so we just pay attention to anything greater than 0 as 1 (Default). 0 is Off. */
+            if ([[chosenPreset objectForKey:@"PictureDecomb"] intValue] > 0)
+            {
+                [fPictureController setDecomb:1];
+            }
+            else
+            {
+                [fPictureController setDecomb:0];
             }             
         }
         [self calculatePictureSizing: NULL];
@@ -4663,7 +4675,9 @@ if (item == nil)
 	[preset setObject:[NSNumber numberWithInt:[fPictureController detelecine]] forKey:@"PictureDetelecine"];
     [preset setObject:[NSNumber numberWithInt:[fPictureController vfr]] forKey:@"VFR"];
 	[preset setObject:[NSNumber numberWithInt:[fPictureController denoise]] forKey:@"PictureDenoise"];
-    [preset setObject:[NSNumber numberWithInt:[fPictureController deblock]] forKey:@"PictureDeblock"];
+    [preset setObject:[NSNumber numberWithInt:[fPictureController deblock]] forKey:@"PictureDeblock"]; 
+    [preset setObject:[NSNumber numberWithInt:[fPictureController decomb]] forKey:@"PictureDecomb"];
+    
     
     /*Audio*/
     if ([fAudLang1PopUp indexOfSelectedItem] > 0)
