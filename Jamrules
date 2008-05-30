@@ -30,6 +30,7 @@ APPCAST_URL = "http://handbrake.fr/appcast.xml" ;
 }
 
 DEFINES    += HB_VERSION=\\\"$(HB_VERSION)\\\" HB_BUILD=$(HB_BUILD) ;
+DEFINES	   += APPCAST_URL=\\\"$(APPCAST_URL)\\\" ;
 LANGUAGES   = fr de it pl ru nl es pt ja ;
 RM          = rm -rf ;
 

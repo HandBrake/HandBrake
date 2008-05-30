@@ -6,8 +6,8 @@
 
 #include "hb.h"
 
-#define HB_URL   "handbrake.fr"
-#define HB_QUERY "GET /appcast.xml HTTP/1.0\r\nHost: " HB_URL "\r\n\r\n"
+static void UpdateFunc( void * );
+static int find_file( );
 
 typedef struct
 {
@@ -15,8 +15,6 @@ typedef struct
     char * version;
 
 } hb_update_t;
-
-static void UpdateFunc( void * );
 
 hb_thread_t * hb_update_init( int * build, char * version )
 {
@@ -28,32 +26,52 @@ hb_thread_t * hb_update_init( int * build, char * version )
                            HB_NORMAL_PRIORITY );
 }
 
+/*
+ * Find out which appcast we want to use, and return appcast.xml or NULL
+ */
+static int find_file ( void )
+{
+	return ( strstr( APPCAST_URL, "appcast.xml" ) != NULL );
+}
+
 static void UpdateFunc( void * _data )
 {
-    hb_update_t * data = (hb_update_t *) _data;
 
+    hb_update_t * data = (hb_update_t *) _data;
+	
+	/* New code to handle the hb_query stuff */
+	int file = find_file();
+	char* hb_query;
+	if (file != NULL)
+	{
+		hb_query = "GET /appcast.xml HTTP/1.0\r\nHost: handbrake.fr\r\n\r\n";
+	}else {
+		hb_query = "GET /appcast_unstable.xml HTTP/1.0\r\nHost: handbrake.fr\r\n\r\n";
+	}
+	
+	// ####################### Grab the data from the web server ##########################
     hb_net_t * net;
     int        ret;
-    char       buf[1024];
-    char     * cur, * end, * p;
+    char       buf[4096];
+    char     * cur, * end;
     int        size;
-    int        stable, unstable;
-    char       stable_str[16], unstable_str[16];
+    int        stable;
+    char       stable_str[16];
     int        i;
 
-    if( !( net = hb_net_open( HB_URL, 80 ) ) )
+    if( !( net = hb_net_open( "handbrake.fr", 80 ) ) )
     {
         goto error;
     }
 
-    if( hb_net_send( net, HB_QUERY ) < 0 )
+    if( hb_net_send( net, hb_query ) < 0 )
     {
         hb_net_close( &net );
         goto error;
     }
 
     size = 0;
-    memset( buf, 0, 1024 );
+    memset( buf, 0, 4096 );
     for( ;; )
     {
         ret = hb_net_recv( net, &buf[size], sizeof( buf ) - size );
@@ -67,7 +85,9 @@ static void UpdateFunc( void * _data )
 
     cur = buf;
     end = &buf[sizeof( buf )];
+	
 
+	
     /* Make sure we got it */
     cur += 9;
     if( size < 15 || strncmp( cur, "200 OK", 6 ) )
@@ -93,24 +113,24 @@ static void UpdateFunc( void * _data )
         goto error;
     }
 	
-	
-	// FIND THE STABLE VERSION INFORMATION ###################################################
+	// ####################### Version Checking Here ##########################
 	
 	/*
-	 * Find the <cli-stable> tag
+	 * Find the <cli> tag
 	 * Scan though each character of the buffer until we find that the first 4 characters of "cur" are "<cli"
 	 */
-
      for(i=0 ; &cur[3] < end; i++, cur++ )
      {
-        if( cur[0] == '<' && cur[1] == 'c' && cur[2] == 'l' && cur[3] == 'i' )
+	
+        if( cur[0] == 'c' && cur[1] == 'l' && cur[2] == 'i' && cur[3] == '>' )
          {
             cur += 1;
             break;
+			
          }
 		 
-		 // If the CLI tag has not been found in the first 510 characters, or the end is reached, something bad happened.
-		 if (( i > 510) || ( cur >= end ))
+		 // If the CLI tag has not been found in the first 768 characters, or the end is reached, something bad happened.
+		 if (( i > 768) || ( cur >= end ))
 		 {
 		 	goto error;
 		 }
@@ -122,10 +142,10 @@ static void UpdateFunc( void * _data )
     }
 	
 	/*
-	 * Ok, The above code didn't position cur, it only found <cli so we need to shift cur along 11 places.
+	 * Ok, The above code didn't position cur, it only found <cli so we need to shift cur along 3 places.
 	 * After which, the next 10 characters are the build number
 	 */
-    cur += 11;
+    cur += 3;
 	
 	if( cur >= end )
     {
@@ -133,7 +153,7 @@ static void UpdateFunc( void * _data )
     }
 	
 	stable = strtol( cur, &cur, 10 );
-	
+		
 	if( cur >= end )
     {
         goto error;
@@ -169,101 +189,15 @@ static void UpdateFunc( void * _data )
     hb_log( "latest stable: %s, build %d", stable_str, stable );
 	
 	// END OF STABLE INFO ###################################################
-	
 
-	// FIND THE UNSTABLE INFO ###############################################
-	/*
-	 * Find the <cli-unstable> tag
-	 * Scan though each character of the buffer until we find that the first 4 characters of "cur" are "<cli"
-	 */
 
-     for(i =0 ; &cur[3] < end; i++, cur++ )
-     {
-        if( cur[0] == '<' && cur[1] == 'c' && cur[2] == 'l' && cur[3] == 'i' )
-         {
-            cur += 1;
-            break;
-         }
-		 
-		 // If the second CLI tag is more than 25 characters forward, or the end is reached, something went wrong.
-		 if (( i > 25) || ( cur >= end ))
-		 {
-		 	goto error;
-		 }
-     }
-	 
-	/*
-	 * Now we need to handle the unstable build information
-	 * Unstable build number is 29 Characters after the last position used.
-	 */
-	 
-	 cur += 13;
-	     
-	if( cur >= end )
+    if( stable > HB_BUILD )
     {
-        goto error;
-    } 
-	
-	 unstable = strtol( cur, &p, 10 );
-	 
-	if( cur >= end )
-    {
-        goto error;
-    }
-	
-	/*
-	 * Now we need to get the unstable version number.
-	 * First move the cur pointer 12 places.
-	 * Then iterate over cur until " is found. Thats the end of the version number.
-	 */
-	cur += 12;
-	
-	if( cur >= end )
-    {
-        goto error;
-    }
-	
-	memset( unstable_str, 0, sizeof( unstable_str ) );
-	for( i = 0;   i < sizeof( unstable_str ) - 1 && cur < end && *cur != '"'; i++, cur++ )
-	{
-		unstable_str[i] = *cur;
-		
-		// If the version number is greater than 7 chars or the end is reached, something went wrong.
-		if (( i > 7) || ( cur >= end ))
-		{
-			goto error;
-		}
-	}
-
-    hb_log( "latest unstable: %s, build %d", unstable_str, unstable );
-	
-	// END OF UNSTABLE INFO ###################################################
-
-	/*
-	 * Handle the update checking as normal.
-	 * This code is unchanged.
-	 */
-    if( HB_BUILD % 100 )
-    {
-        /* We are runnning an unstable build */
-        if( unstable > HB_BUILD )
-        {
-            memcpy( data->version, unstable_str, sizeof( unstable_str ) );
-            *(data->build) = unstable;
-        }
-    }
-    else
-    {
-        /* We are runnning an stable build */
-        if( stable > HB_BUILD )
-        {
-            memcpy( data->version, stable_str, sizeof( stable_str ) );
-            *(data->build) = stable;
-        }
+        memcpy( data->version, stable_str, sizeof( stable_str ) );
+        *(data->build) = stable;
     }
 
 error:
     free( data );
     return;
 }
-
