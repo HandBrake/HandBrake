@@ -960,8 +960,6 @@
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
-				HB_BUILD = "";
-				HB_VERSION = "";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
 				INSTALL_PATH = /usr/local/lib;
 				LIBRARY_SEARCH_PATHS = "";
@@ -970,11 +968,7 @@
 					"-D__LIBHB__",
 					"-DSYS_DARWIN",
 					"-DUSE_PTHREAD",
-					"$(OTHER_CFLAGS_QUOTED_FOR_TARGET_1)",
-					"$(OTHER_CFLAGS_QUOTED_FOR_TARGET_2)",
 				);
-				OTHER_CFLAGS_QUOTED_FOR_TARGET_1 = "-DHB_BUILD=\"$(HB_BUILD)\"";
-				OTHER_CFLAGS_QUOTED_FOR_TARGET_2 = "-DHB_VERSION=\\\"$(HB_VERSION)\\\"";
 				OTHER_LDFLAGS = (
 					../contrib/lib/libmp4v2.a,
 					../contrib/lib/liba52.a,
@@ -995,6 +989,8 @@
 					../contrib/lib/libmkv.a,
 					../contrib/lib/libtheora.a,
 					../contrib/lib/libswscale.a,
+					../contrib/lib/libfaad.a,
+					"-lbz2",
 					"-ldl",
 					"-flat_namespace",
 					"-read_only_relocs",
@@ -1024,8 +1020,6 @@
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
-				HB_BUILD = "";
-				HB_VERSION = "";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
 				INSTALL_PATH = /usr/local/lib;
 				LIBRARY_SEARCH_PATHS = "";
@@ -1034,11 +1028,7 @@
 					"-D__LIBHB__",
 					"-DSYS_DARWIN",
 					"-DUSE_PTHREAD",
-					"$(OTHER_CFLAGS_QUOTED_FOR_TARGET_1)",
-					"$(OTHER_CFLAGS_QUOTED_FOR_TARGET_2)",
 				);
-				OTHER_CFLAGS_QUOTED_FOR_TARGET_1 = "-DHB_BUILD=\"$(HB_BUILD)\"";
-				OTHER_CFLAGS_QUOTED_FOR_TARGET_2 = "-DHB_VERSION=\\\"$(HB_VERSION)\\\"";
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				OTHER_LDFLAGS = (
 					../contrib/lib/libmp4v2.a,
@@ -1060,6 +1050,8 @@
 					../contrib/lib/libmkv.a,
 					../contrib/lib/libtheora.a,
 					../contrib/lib/libswscale.a,
+					../contrib/lib/libfaad.a,
+					"-lbz2",
 					"-ldl",
 					"-flat_namespace",
 					"-read_only_relocs",
@@ -1087,8 +1079,6 @@
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
-				HB_BUILD = "";
-				HB_VERSION = "";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
 				INSTALL_PATH = /usr/local/lib;
 				LIBRARY_SEARCH_PATHS = "";
@@ -1097,11 +1087,7 @@
 					"-D__LIBHB__",
 					"-DSYS_DARWIN",
 					"-DUSE_PTHREAD",
-					"$(OTHER_CFLAGS_QUOTED_FOR_TARGET_1)",
-					"$(OTHER_CFLAGS_QUOTED_FOR_TARGET_2)",
 				);
-				OTHER_CFLAGS_QUOTED_FOR_TARGET_1 = "-DHB_BUILD=\"$(HB_BUILD)\"";
-				OTHER_CFLAGS_QUOTED_FOR_TARGET_2 = "-DHB_VERSION=\\\"$(HB_VERSION)\\\"";
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				OTHER_LDFLAGS = (
 					../contrib/lib/libmp4v2.a,
@@ -1123,6 +1109,8 @@
 					../contrib/lib/libmkv.a,
 					../contrib/lib/libtheora.a,
 					../contrib/lib/libswscale.a,
+					../contrib/lib/libfaad.a,
+					"-lbz2",
 					"-ldl",
 					"-flat_namespace",
 					"-read_only_relocs",
@@ -1147,8 +1135,6 @@
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
-				HB_BUILD = "";
-				HB_VERSION = "";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
 				INSTALL_PATH = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.3;
@@ -1156,11 +1142,7 @@
 					"-D__LIBHB__",
 					"-DSYS_DARWIN",
 					"-DUSE_PTHREAD",
-					"$(OTHER_CFLAGS_QUOTED_FOR_TARGET_1)",
-					"$(OTHER_CFLAGS_QUOTED_FOR_TARGET_2)",
 				);
-				OTHER_CFLAGS_QUOTED_FOR_TARGET_1 = "-DHB_BUILD=\"$(HB_BUILD)\"";
-				OTHER_CFLAGS_QUOTED_FOR_TARGET_2 = "-DHB_VERSION=\\\"$(HB_VERSION)\\\"";
 				OTHER_LDFLAGS = "";
 				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
 				PREBINDING = NO;
@@ -1185,8 +1167,6 @@
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)\"";
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
-				HB_BUILD = "";
-				HB_VERSION = "";
 				HEADER_SEARCH_PATHS = (
 					../libhb,
 					../contrib/include,
@@ -1216,6 +1196,8 @@
 					../contrib/lib/libmkv.a,
 					../contrib/lib/libswscale.a,
 					../contrib/lib/libtheora.a,
+					../contrib/lib/libfaad.a,
+					"-lbz2",
 				);
 				PRODUCT_NAME = HandBrake;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
@@ -1262,6 +1244,8 @@
 					../contrib/lib/libmkv.a,
 					../contrib/lib/libswscale.a,
 					../contrib/lib/libtheora.a,
+					../contrib/lib/libfaad.a,
+					"-lbz2",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = HandBrakeCLI;
@@ -1298,8 +1282,6 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
-				HB_BUILD = "";
-				HB_VERSION = "";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
 				INSTALL_PATH = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.3;
@@ -1307,11 +1289,7 @@
 					"-D__LIBHB__",
 					"-DSYS_DARWIN",
 					"-DUSE_PTHREAD",
-					"$(OTHER_CFLAGS_QUOTED_FOR_TARGET_1)",
-					"$(OTHER_CFLAGS_QUOTED_FOR_TARGET_2)",
 				);
-				OTHER_CFLAGS_QUOTED_FOR_TARGET_1 = "-DHB_BUILD=\"$(HB_BUILD)\"";
-				OTHER_CFLAGS_QUOTED_FOR_TARGET_2 = "-DHB_VERSION=\\\"$(HB_VERSION)\\\"";
 				OTHER_LDFLAGS = "";
 				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
 				PREBINDING = NO;
@@ -1332,8 +1310,6 @@
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
-				HB_BUILD = "";
-				HB_VERSION = "";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
 				INSTALL_PATH = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.3;
@@ -1341,11 +1317,7 @@
 					"-D__LIBHB__",
 					"-DSYS_DARWIN",
 					"-DUSE_PTHREAD",
-					"$(OTHER_CFLAGS_QUOTED_FOR_TARGET_1)",
-					"$(OTHER_CFLAGS_QUOTED_FOR_TARGET_2)",
 				);
-				OTHER_CFLAGS_QUOTED_FOR_TARGET_1 = "-DHB_BUILD=\"$(HB_BUILD)\"";
-				OTHER_CFLAGS_QUOTED_FOR_TARGET_2 = "-DHB_VERSION=\\\"$(HB_VERSION)\\\"";
 				OTHER_LDFLAGS = "";
 				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
 				PREBINDING = NO;
@@ -1391,6 +1363,8 @@
 					../contrib/lib/libmkv.a,
 					../contrib/lib/libswscale.a,
 					../contrib/lib/libtheora.a,
+					../contrib/lib/libfaad.a,
+					"-lbz2",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = HandBrakeCLI;
@@ -1434,6 +1408,8 @@
 					../contrib/lib/libmkv.a,
 					../contrib/lib/libswscale.a,
 					../contrib/lib/libtheora.a,
+					../contrib/lib/libfaad.a,
+					"-lbz2",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = HandBrakeCLI;
@@ -1461,8 +1437,6 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
-				HB_BUILD = "";
-				HB_VERSION = "";
 				HEADER_SEARCH_PATHS = (
 					../libhb,
 					../contrib/include,
@@ -1493,6 +1467,8 @@
 					../contrib/lib/libmkv.a,
 					../contrib/lib/libswscale.a,
 					../contrib/lib/libtheora.a,
+					../contrib/lib/libfaad.a,
+					"-lbz2",
 				);
 				PRODUCT_NAME = HandBrake;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
@@ -1524,8 +1500,6 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
-				HB_BUILD = "";
-				HB_VERSION = "";
 				HEADER_SEARCH_PATHS = (
 					../libhb,
 					../contrib/include,
@@ -1555,6 +1529,8 @@
 					../contrib/lib/libmkv.a,
 					../contrib/lib/libswscale.a,
 					../contrib/lib/libtheora.a,
+					../contrib/lib/libfaad.a,
+					"-lbz2",
 				);
 				PRODUCT_NAME = HandBrake;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;

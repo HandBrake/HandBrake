@@ -4,7 +4,7 @@
 # Homepage: <http://handbrake.fr/>.
 # It may be used under the terms of the GNU General Public License.
 
-SubDir TOP libhb ;
+SubDir TOP libhb : hbversion.h ;
 
 LIBHB_SRC =
 ipodutil.cpp common.c hb.c ports.c scan.c work.c decmpeg2.c encavcodec.c update.c
@@ -18,3 +18,17 @@ Library libhb : $(LIBHB_SRC) ;
 ObjectCcFlags $(LIBHB_SRC) : -I$(TOP)/contrib/include ;
 ObjectDefines $(LIBHB_SRC) : __LIBHB__ ;
 ObjectC++Flags $(LIBHB_SRC) : -I$(TOP)/contrib/include ;
+
+# turn the version number, etc., into an include file for cretinous build
+# systems (XCode) that can't run shell commands
+rule HBVersion
+{
+    Clean clean : $(TOP)/libhb/$(1) ;
+}
+actions HBVersion
+{
+    echo "#ifndef HB_BUILD\n#define HB_BUILD $(HB_BUILD)\n#endif" > $(TOP)/libhb/$(1)
+    echo "#ifndef HB_VERSION\n#define HB_VERSION \"$(HB_VERSION)\"\n#endif" >> $(TOP)/libhb/$(1)
+    echo "#ifndef HB_APPCAST_URL\n#define APPCAST_URL \"$(APPCAST_URL)\"\n#endif" >> $(TOP)/libhb/$(1)
+}
+HBVersion hbversion.h ;
