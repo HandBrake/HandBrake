@@ -54,6 +54,7 @@ struct hb_work_private_s
     int64_t        dts_next;    // DTS start time value for next output frame
     int64_t        last_stop;   // Debugging - stop time of previous input frame
     int64_t        init_delay;
+    int64_t        max_delay;   // if init_delay too small, delay really needed
     int64_t        next_chap;
 
     struct {
@@ -296,14 +297,21 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     {
         /* Basic initDelay value is the clockrate divided by the FPS
            -- the length of one frame in clockticks.                  */
-        pv->init_delay = (float)90000 / (float)((float)job->vrate / (float)job->vrate_base);
+        pv->init_delay = 90000. / ((double)job->vrate / (double)job->vrate_base);
 
-        /* 23.976-length frames are 3753.75 ticks long. That means 25%
-           will come out as 3753, 75% will be 3754. The delay has to be
-           the longest possible frame duration, 3754. However, 3753.75
-           gets truncated to 3753, so if that's what it is, ++ it.     */
+        /* 23.976-length frames are 3753.75 ticks long on average but the DVD
+           creates that average rate by repeating 59.95 fields so the max
+           frame size is actually 4504.5 (3 field times) */
         if (pv->init_delay == 3753)
-            pv->init_delay++;
+            pv->init_delay = 4505;
+
+        /* frame rates are not exact in the DVD 90KHz PTS clock (they are
+           exact in the DVD 27MHz system clock but we never see that) so the
+           rates computed above are all +-1 due to quantization. Worst case
+           is when a clock-rounded-down frame is adjacent to a rounded-up frame
+           which makes one of the frames 2 ticks longer than the nominal
+           frame time. */
+        pv->init_delay += 2;
 
         /* For VFR, libhb sees the FPS as 29.97, but the longest frames
            will use the duration of frames running at 23.976fps instead.. */
@@ -550,7 +558,17 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
                        from x264 for use by muxmp4 in off-setting
                        b-frames with the CTTS atom. */
                     buf->renderOffset = pic_out.i_pts - dts_start + pv->init_delay;
-
+                    if ( buf->renderOffset < 0 )
+                    {
+                        if ( dts_start - pic_out.i_pts > pv->max_delay )
+                        {
+                            pv->max_delay = dts_start - pic_out.i_pts;
+                            hb_log( "encx264: init_delay too small: "
+                                    "is %lld need %lld", pv->init_delay,
+                                    pv->max_delay );
+                        }
+                        buf->renderOffset = 0;
+                    }
                     buf->size += size;
             }
         }
