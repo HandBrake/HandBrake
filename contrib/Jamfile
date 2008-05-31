@@ -57,6 +57,23 @@ actions LibA52
 Wget   $(SUBDIR)/a52dec.tar.gz : $(SUBDIR)/version_a52dec.txt ;
 LibA52 $(SUBDIR)/lib/liba52.a  : $(SUBDIR)/a52dec.tar.gz ;
 
+# FAAD2
+rule LibFaad2
+{
+    Depends $(<) : $(>) ;
+    Depends lib  : $(<) ;
+}
+
+actions LibFaad2
+{
+    cd `dirname $(>)` && CONTRIB=`pwd` &&
+    rm -rf faad2 && (gzip -dc faad2.tar.gz | tar xf -) &&
+    cd faad2 &&
+    ./bootstrap && ./configure --prefix=$CONTRIB --cache-file=$CONTRIB/config.cache --disable-shared && $(MAKE) && $(MAKE) install
+}
+Wget     $(SUBDIR)/faad2.tar.gz    : $(SUBDIR)/version_faad2.txt ;
+LibFaad2 $(SUBDIR)/lib/libfaad.a : $(SUBDIR)/faad2.tar.gz ;
+
 # libavcodec
 rule LibAvCodec
 {
@@ -78,10 +95,13 @@ actions LibAvCodec
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf ffmpeg && (gzip -dc ffmpeg.tar.gz | tar xf -) &&
     cd ffmpeg && $(FFMPEG_PATCH) &&
-    ./configure --prefix=$CONTRIB --enable-gpl --enable-pthreads --enable-swscaler --disable-audio-beos --disable-shared --enable-static \
-        --disable-decoders --enable-decoder=mp2 --disable-parsers --enable-parser=mpegaudio \
-        --disable-encoders --enable-encoder=mpeg4 --enable-encoder=ac3 --enable-encoder=snow \
-        --disable-muxers --enable-muxer=ipod --disable-demuxers --disable-protocols --disable-bsfs &&
+    ./configure --prefix=$CONTRIB --enable-gpl --enable-pthreads --enable-swscale \
+        --disable-shared --enable-static --disable-encoders \
+        --enable-encoder=mpeg4 --enable-encoder=ac3 --enable-encoder=snow \
+        --enable-libfaad --disable-ffmpeg --disable-ffserver \
+        --disable-muxers --enable-muxer=ipod --disable-bsfs \
+        --extra-cflags="-I$CONTRIB/include" \
+        --extra-ldflags="-L$CONTRIB/lib" &&
     $(MAKE) && $(MAKE) install &&
     $(STRIP) $CONTRIB/lib/libavcodec.a
 }

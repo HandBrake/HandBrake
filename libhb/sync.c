@@ -8,7 +8,7 @@
 #include <stdio.h>
 
 #include "samplerate.h"
-#include "ffmpeg/avcodec.h"
+#include "libavcodec/avcodec.h"
 
 #ifdef INT64_MIN
 #undef INT64_MIN /* Because it isn't defined correctly in Zeta */
@@ -729,28 +729,34 @@ static void SyncAudio( hb_work_object_t * w, int i )
     {
         if ( (int64_t)( buf->start - sync->next_pts ) < 0 )
         {
-            /*
-             * audio time went backwards by more than a frame time (this can
-             * happen when we reset the PTS because of lost data).
-             * Discard data that's in the past.
-             */
-            if ( sync->first_drop == 0 )
+            // audio time went backwards.
+            // If our output clock is more than a half frame ahead of the
+            // input clock drop this frame to move closer to sync.
+            // Otherwise drop frames until the input clock matches the output clock.
+            if ( sync->first_drop || sync->next_start - buf->start > 90*15 )
             {
-                sync->first_drop = buf->start;
+                // Discard data that's in the past.
+                if ( sync->first_drop == 0 )
+                {
+                    sync->first_drop = sync->next_pts;
+                }
+                ++sync->drop_count;
+                buf = hb_fifo_get( audio->priv.fifo_raw );
+                hb_buffer_close( &buf );
+                continue;
             }
-            ++sync->drop_count;
-            buf = hb_fifo_get( audio->priv.fifo_raw );
-            hb_buffer_close( &buf );
-            continue;
+            sync->next_pts = buf->start;
         }
         if ( sync->first_drop )
         {
+            // we were dropping old data but input buf time is now current
             hb_log( "sync: audio %d time went backwards %d ms, dropped %d frames "
                     "(next %lld, current %lld)", i,
                     (int)( sync->next_pts - sync->first_drop ) / 90,
                     sync->drop_count, sync->first_drop, sync->next_pts );
             sync->first_drop = 0;
             sync->drop_count = 0;
+            sync->next_pts = buf->start;
         }
         if ( buf->start - sync->next_pts >= (90 * 70) )
         {

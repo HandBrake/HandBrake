@@ -97,22 +97,9 @@ hb_thread_t * hb_work_init( hb_list_t * jobs, int cpu_count,
                             volatile int * die, int * error, hb_job_t ** job );
 hb_thread_t  * hb_reader_init( hb_job_t * );
 hb_thread_t  * hb_muxer_init( hb_job_t * );
-
-/***********************************************************************
- * libmpeg2 wrapper
- ***********************************************************************
- * It is exported here because it is used at several places
- **********************************************************************/
-typedef struct   hb_libmpeg2_s hb_libmpeg2_t;
-
-hb_libmpeg2_t  * hb_libmpeg2_init();
-int              hb_libmpeg2_decode( hb_libmpeg2_t *,
-                                      hb_buffer_t * es_buf,
-                                      hb_list_t * raw_list );
-void             hb_libmpeg2_info( hb_libmpeg2_t * m, int * width,
-                                    int * height, int * rate, int * aspect_ratio );
-void             hb_libmpeg2_close( hb_libmpeg2_t ** );
-int              hb_libmpeg2_clear_aspect_ratio( hb_libmpeg2_t * );
+hb_work_object_t * hb_get_work( int );
+hb_work_object_t * hb_codec_decoder( int );
+hb_work_object_t * hb_codec_encoder( int );
 
 /***********************************************************************
  * mpegdemux.c
@@ -124,6 +111,7 @@ typedef struct {
 } hb_psdemux_t;
 
 int hb_demux_ps( hb_buffer_t * ps_buf, hb_list_t * es_list, hb_psdemux_t * );
+int hb_demux_null( hb_buffer_t * ps_buf, hb_list_t * es_list, hb_psdemux_t * );
 
 /***********************************************************************
  * dvd.c
@@ -142,11 +130,14 @@ int          hb_dvd_chapter( hb_dvd_t * );
 int          hb_dvd_is_break( hb_dvd_t * d );
 void         hb_dvd_close( hb_dvd_t ** );
 
-hb_stream_t * hb_stream_open( char * path, int opentype );
+hb_stream_t * hb_stream_open( char * path, hb_title_t *title );
 void		 hb_stream_close( hb_stream_t ** );
 hb_title_t * hb_stream_title_scan( hb_stream_t *);
 int          hb_stream_read( hb_stream_t *, hb_buffer_t *);
 int          hb_stream_seek( hb_stream_t *, float );
+
+void       * hb_ffmpeg_context( int codec_param );
+void       * hb_ffmpeg_avstream( int codec_param );
 
 /***********************************************************************
  * Work objects
@@ -213,6 +204,9 @@ enum
     WORK_DECA52,
     WORK_DECDCA,
     WORK_DECAVCODEC,
+    WORK_DECAVCODECV,
+    WORK_DECAVCODECVI,
+    WORK_DECAVCODECAI,
     WORK_DECLPCM,
     WORK_ENCFAAC,
     WORK_ENCLAME,

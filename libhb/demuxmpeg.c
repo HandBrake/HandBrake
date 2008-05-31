@@ -6,7 +6,7 @@
 
 #include "hb.h"
 
-/* Basic MPEG demuxer, only works with DVDs (2048 bytes packets) */
+/* Basic MPEG demuxer */
 
 int hb_demux_ps( hb_buffer_t * buf_ps, hb_list_t * list_es, hb_psdemux_t* state )
 {
@@ -91,7 +91,7 @@ int hb_demux_ps( hb_buffer_t * buf_ps, hb_list_t * list_es, hb_psdemux_t* state 
         int      pes_header_d_length;
         int      pes_header_end;
         int      has_pts;
-        int64_t  pts = -1;
+        int64_t  pts = -1, dts = -1;
 
         pos               += 3;               /* packet_start_code_prefix */
         id           = d[pos];
@@ -109,7 +109,7 @@ int hb_demux_ps( hb_buffer_t * buf_ps, hb_list_t * list_es, hb_psdemux_t* state 
             continue;
         }
 
-        has_pts             = ( ( d[pos+1] >> 6 ) & 0x2 ) ? 1 : 0;
+        has_pts            = d[pos+1] >> 6;
         pos               += 2;               /* Required headers */
 
         pes_header_d_length  = d[pos];
@@ -118,11 +118,23 @@ int hb_demux_ps( hb_buffer_t * buf_ps, hb_list_t * list_es, hb_psdemux_t* state 
 
         if( has_pts )
         {
-            pts = ( ( ( (uint64_t) d[pos] >> 1 ) & 0x7 ) << 30 ) +
+            pts = ( (uint64_t)(d[pos] & 0xe ) << 29 ) +
                   ( d[pos+1] << 22 ) +
                   ( ( d[pos+2] >> 1 ) << 15 ) +
                   ( d[pos+3] << 7 ) +
                   ( d[pos+4] >> 1 );
+            if ( has_pts & 1 )
+            {
+                dts = ( (uint64_t)(d[pos+5] & 0xe ) << 29 ) +
+                      ( d[pos+6] << 22 ) +
+                      ( ( d[pos+7] >> 1 ) << 15 ) +
+                      ( d[pos+8] << 7 ) +
+                      ( d[pos+9] >> 1 );
+            }
+            else
+            {
+                dts = pts;
+            }
         }
 
         pos = pes_header_end;
@@ -153,6 +165,7 @@ int hb_demux_ps( hb_buffer_t * buf_ps, hb_list_t * list_es, hb_psdemux_t* state 
 
         buf_es->id       = id;
         buf_es->start    = pts;
+        buf_es->renderOffset = dts;
         buf_es->stop     = -1;
         if (id == 0xE0) {
             // Consume a chapter break, and apply it to the ES.
@@ -168,5 +181,25 @@ int hb_demux_ps( hb_buffer_t * buf_ps, hb_list_t * list_es, hb_psdemux_t* state 
 
 #undef d
 
+    return 1;
+}
+
+// "null" demuxer (makes a copy of input buf & returns it in list)
+// used when the reader for some format includes its own demuxer.
+// for example, ffmpeg.
+int hb_demux_null( hb_buffer_t * buf_ps, hb_list_t * list_es, hb_psdemux_t* state )
+{
+    hb_buffer_t *buf = hb_buffer_init( buf_ps->size );
+
+    // copy everything from the old to the new except the data ptr & alloc
+    uint8_t *data = buf->data;
+    int alloc = buf->alloc;
+    *buf = *buf_ps;
+    buf->data = data;
+    buf->alloc = alloc;
+
+    // now copy the data
+    memcpy( buf->data, buf_ps->data, buf_ps->size );
+    hb_list_add( list_es, buf );
     return 1;
 }

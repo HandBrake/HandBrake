@@ -6,8 +6,8 @@
 
 #include "hb.h"
 
-#include "ffmpeg/avcodec.h"
-#include "ffmpeg/swscale.h"
+#include "libavcodec/avcodec.h"
+#include "libswscale/swscale.h"
 
 struct hb_work_private_s
 {

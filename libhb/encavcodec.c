@@ -6,7 +6,7 @@
 
 #include "hb.h"
 
-#include "ffmpeg/avcodec.h"
+#include "libavcodec/avcodec.h"
 
 struct hb_work_private_s
 {

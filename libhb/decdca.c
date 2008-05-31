@@ -35,9 +35,11 @@ struct hb_work_private_s
 
 };
 
-int  decdcaInit( hb_work_object_t *, hb_job_t * );
-int  decdcaWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
-void decdcaClose( hb_work_object_t * );
+static int  decdcaInit( hb_work_object_t *, hb_job_t * );
+static int  decdcaWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
+static void decdcaClose( hb_work_object_t * );
+static int  decdcaBSInfo( hb_work_object_t *, const hb_buffer_t *,
+                          hb_work_info_t * );
 
 hb_work_object_t hb_decdca =
 {
@@ -45,7 +47,9 @@ hb_work_object_t hb_decdca =
     "DCA decoder",
     decdcaInit,
     decdcaWork,
-    decdcaClose
+    decdcaClose,
+    0,
+    decdcaBSInfo
 };
 
 /***********************************************************************
@@ -58,7 +62,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w );
  ***********************************************************************
  * Allocate the work object, initialize libdca
  **********************************************************************/
-int decdcaInit( hb_work_object_t * w, hb_job_t * job )
+static int decdcaInit( hb_work_object_t * w, hb_job_t * job )
 {
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     hb_audio_t * audio = w->audio;
@@ -88,7 +92,7 @@ int decdcaInit( hb_work_object_t * w, hb_job_t * job )
  ***********************************************************************
  * Free memory
  **********************************************************************/
-void decdcaClose( hb_work_object_t * w )
+static void decdcaClose( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
     dca_free( pv->state );
@@ -103,7 +107,7 @@ void decdcaClose( hb_work_object_t * w )
  * Add the given buffer to the data we already have, and decode as much
  * as we can
  **********************************************************************/
-int decdcaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
+static int decdcaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 hb_buffer_t ** buf_out )
 {
     hb_work_private_t * pv = w->private_data;
@@ -214,3 +218,85 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     return buf;
 }
 
+
+static int decdcaBSInfo( hb_work_object_t *w, const hb_buffer_t *b,
+                         hb_work_info_t *info )
+{
+    int i, flags, rate, bitrate, frame_length;
+    dca_state_t * state = dca_init( 0 );
+
+    memset( info, 0, sizeof(*info) );
+
+    /* since DCA frames don't line up with MPEG ES frames scan the
+     * entire frame for an DCA sync pattern.  */
+    for ( i = 0; i < b->size - 7; ++i )
+    {
+        if( dca_syncinfo( state, &b->data[i], &flags, &rate, &bitrate,
+                          &frame_length ) )
+        {
+            break;
+        }
+    }
+    if ( i >= b->size - 7 )
+    {
+        /* didn't find DCA sync */
+        return 0;
+    }
+
+    info->name = "DCA";
+    info->rate = rate;
+    info->rate_base = 1;
+    info->bitrate = bitrate;
+    info->flags = flags;
+
+    if ( ( flags & DCA_CHANNEL_MASK) == DCA_DOLBY )
+    {
+        info->flags |= AUDIO_F_DOLBY;
+    }
+
+    switch( flags & DCA_CHANNEL_MASK )
+    {
+        /* mono sources */
+        case DCA_MONO:
+            info->channel_layout = HB_INPUT_CH_LAYOUT_MONO;
+            break;
+        /* stereo input */
+        case DCA_CHANNEL:
+        case DCA_STEREO:
+        case DCA_STEREO_SUMDIFF:
+        case DCA_STEREO_TOTAL:
+            info->channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
+            break;
+        /* 3F/2R input */
+        case DCA_3F2R:
+            info->channel_layout = HB_INPUT_CH_LAYOUT_3F2R;
+            break;
+        /* 3F/1R input */
+        case DCA_3F1R:
+            info->channel_layout = HB_INPUT_CH_LAYOUT_3F1R;
+            break;
+        /* other inputs */
+        case DCA_3F:
+            info->channel_layout = HB_INPUT_CH_LAYOUT_3F;
+            break;
+        case DCA_2F1R:
+            info->channel_layout = HB_INPUT_CH_LAYOUT_2F1R;
+            break;
+        case DCA_2F2R:
+            info->channel_layout = HB_INPUT_CH_LAYOUT_2F2R;
+            break;
+        case DCA_4F2R:
+            info->channel_layout = HB_INPUT_CH_LAYOUT_4F2R;
+            break;
+        /* unknown */
+        default:
+            info->channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
+    }
+
+    if (flags & DCA_LFE)
+    {
+        info->channel_layout |= HB_INPUT_CH_LAYOUT_HAS_LFE;
+    }
+
+    return 1;
+}

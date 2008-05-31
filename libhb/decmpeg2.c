@@ -25,15 +25,13 @@
 #define BTB_PROG 64
 #define TB_PROG 128
 #define TBT_PROG 256
-int cadence[12];
-int flag = 0;
+static int cadence[12];
+static int flag = 0;
 
 /**********************************************************************
  * hb_libmpeg2_t
- **********************************************************************
- * A convenient libmpeg wrapper, used both here and in scan.c
  *********************************************************************/
-struct hb_libmpeg2_s
+typedef struct hb_libmpeg2_s
 {
     mpeg2dec_t         * libmpeg2;
     const mpeg2_info_t * info;
@@ -47,14 +45,14 @@ struct hb_libmpeg2_s
     int                  look_for_break;    /* need gop start to add chap break */
     uint32_t             nframes;           /* number of frames we've decoded */
     int64_t              last_pts;
-};
+} hb_libmpeg2_t;
 
 /**********************************************************************
  * hb_libmpeg2_init
  **********************************************************************
  *
  *********************************************************************/
-hb_libmpeg2_t * hb_libmpeg2_init()
+static hb_libmpeg2_t * hb_libmpeg2_init()
 {
     hb_libmpeg2_t * m = calloc( sizeof( hb_libmpeg2_t ), 1 );
 
@@ -70,7 +68,7 @@ hb_libmpeg2_t * hb_libmpeg2_init()
  **********************************************************************
  *
  *********************************************************************/
-int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
+static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                         hb_list_t * list_raw )
 {
     mpeg2_state_t   state;
@@ -312,7 +310,7 @@ int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
  **********************************************************************
  *
  *********************************************************************/
-void hb_libmpeg2_info( hb_libmpeg2_t * m, int * width, int * height,
+static void hb_libmpeg2_info( hb_libmpeg2_t * m, int * width, int * height,
                         int * rate, int *aspect_ratio )
 {
     *width  = m->width;
@@ -334,19 +332,12 @@ void hb_libmpeg2_info( hb_libmpeg2_t * m, int * width, int * height,
     *aspect_ratio = m->aspect_ratio;
 }
 
-int hb_libmpeg2_clear_aspect_ratio( hb_libmpeg2_t * m )
-{
-    int ar = m->aspect_ratio;
-    m->aspect_ratio = 0;
-    return ar;
-}
-
 /**********************************************************************
  * hb_libmpeg2_close
  **********************************************************************
  *
  *********************************************************************/
-void hb_libmpeg2_close( hb_libmpeg2_t ** _m )
+static void hb_libmpeg2_close( hb_libmpeg2_t ** _m )
 {
     hb_libmpeg2_t * m = *_m;
 
@@ -372,7 +363,7 @@ struct hb_work_private_s
  **********************************************************************
  *
  *********************************************************************/
-int decmpeg2Init( hb_work_object_t * w, hb_job_t * job )
+static int decmpeg2Init( hb_work_object_t * w, hb_job_t * job )
 {
     hb_work_private_t * pv;
 
@@ -392,7 +383,7 @@ int decmpeg2Init( hb_work_object_t * w, hb_job_t * job )
  **********************************************************************
  *
  *********************************************************************/
-int decmpeg2Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
+static int decmpeg2Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
                    hb_buffer_t ** buf_out )
 {
     hb_work_private_t * pv = w->private_data;
@@ -441,13 +432,42 @@ int decmpeg2Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
  **********************************************************************
  *
  *********************************************************************/
-void decmpeg2Close( hb_work_object_t * w )
+static void decmpeg2Close( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
-    hb_log( "mpeg2 done: %d frames", pv->libmpeg2->nframes );
+
+    // don't log during scan
+    if ( pv->libmpeg2->job )
+    {
+        hb_log( "mpeg2 done: %d frames", pv->libmpeg2->nframes );
+    }
     hb_list_close( &pv->list );
     hb_libmpeg2_close( &pv->libmpeg2 );
     free( pv );
+}
+
+static int decmpeg2Info( hb_work_object_t *w, hb_work_info_t *info )
+{
+    hb_work_private_t *pv = w->private_data;
+
+    if ( pv && pv->libmpeg2 )
+    {
+        int aspect;
+        hb_libmpeg2_t *m = pv->libmpeg2;
+
+        hb_libmpeg2_info( m, &info->width, &info->height, &info->rate_base,
+                          &aspect );
+
+        info->aspect = (double)aspect;
+        info->rate = 27000000;
+
+        info->bitrate = m->info->sequence->byte_rate * 8;
+        info->profile = m->info->sequence->profile_level_id >> 4;
+        info->level = m->info->sequence->profile_level_id & 0xf;
+        info->name = "mpeg2";
+        return 1;
+    }
+    return 0;
 }
 
 hb_work_object_t hb_decmpeg2 =
@@ -456,6 +476,7 @@ hb_work_object_t hb_decmpeg2 =
     "MPEG-2 decoder (libmpeg2)",
     decmpeg2Init,
     decmpeg2Work,
-    decmpeg2Close
+    decmpeg2Close,
+    decmpeg2Info
 };
 

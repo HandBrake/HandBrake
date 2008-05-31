@@ -5,7 +5,7 @@
    It may be used under the terms of the GNU General Public License. */
 
 #include "hb.h"
-#include "ffmpeg/avcodec.h"
+#include "libavcodec/avcodec.h"
 
 #define AVIF_HASINDEX  0x10
 #define AVIIF_KEYFRAME 0x10

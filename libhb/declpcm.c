@@ -27,9 +27,11 @@ struct hb_work_private_s
 };
 
 static hb_buffer_t * Decode( hb_work_object_t * w );
-int  declpcmInit( hb_work_object_t *, hb_job_t * );
-int  declpcmWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
-void declpcmClose( hb_work_object_t * );
+static int  declpcmInit( hb_work_object_t *, hb_job_t * );
+static int  declpcmWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
+static void declpcmClose( hb_work_object_t * );
+static int  declpcmBSInfo( hb_work_object_t *, const hb_buffer_t *,
+                           hb_work_info_t * );
 
 hb_work_object_t hb_declpcm =
 {
@@ -37,11 +39,19 @@ hb_work_object_t hb_declpcm =
     "LPCM decoder",
     declpcmInit,
     declpcmWork,
-    declpcmClose
+    declpcmClose,
+    0,
+    declpcmBSInfo
 };
 
 static const int hdr2samplerate[] = { 48000, 96000, 44100, 32000 };
 static const int hdr2samplesize[] = { 16, 20, 24, 16 };
+static const int hdr2layout[] = {
+        HB_INPUT_CH_LAYOUT_MONO,   HB_INPUT_CH_LAYOUT_STEREO,
+        HB_INPUT_CH_LAYOUT_2F1R,   HB_INPUT_CH_LAYOUT_2F2R,
+        HB_INPUT_CH_LAYOUT_3F2R,   HB_INPUT_CH_LAYOUT_4F2R,
+        HB_INPUT_CH_LAYOUT_STEREO, HB_INPUT_CH_LAYOUT_STEREO,
+};
 
 static void lpcmInfo( hb_work_object_t *w, hb_buffer_t *in )
 {
@@ -103,7 +113,7 @@ static void lpcmInfo( hb_work_object_t *w, hb_buffer_t *in )
     pv->next_pts = in->start;
 }
 
-int declpcmInit( hb_work_object_t * w, hb_job_t * job )
+static int declpcmInit( hb_work_object_t * w, hb_job_t * job )
 {
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
@@ -119,7 +129,7 @@ int declpcmInit( hb_work_object_t * w, hb_job_t * job )
  * to DVD PES boundaries, this routine has to reconstruct then extract the audio
  * frames. Because of the arbitrary alignment, it can output zero, one or two buf's.
  */
-int declpcmWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
+static int declpcmWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                  hb_buffer_t ** buf_out )
 {
     hb_work_private_t * pv = w->private_data;
@@ -225,11 +235,32 @@ static hb_buffer_t *Decode( hb_work_object_t *w )
     return out;
 }
 
-void declpcmClose( hb_work_object_t * w )
+static void declpcmClose( hb_work_object_t * w )
 {
     if ( w->private_data )
     {
         free( w->private_data );
         w->private_data = 0;
     }
+}
+
+static int declpcmBSInfo( hb_work_object_t *w, const hb_buffer_t *b,
+                          hb_work_info_t *info )
+{
+    int nchannels  = ( b->data[4] & 7 ) + 1;
+    int sample_size = hdr2samplesize[b->data[4] >> 6];
+
+    int rate = hdr2samplerate[ ( b->data[4] >> 4 ) & 0x3 ];
+    int bitrate = rate * sample_size * nchannels;
+
+    memset( info, 0, sizeof(*info) );
+
+    info->name = "LPCM";
+    info->rate = rate;
+    info->rate_base = 1;
+    info->bitrate = bitrate;
+    info->flags = ( b->data[3] << 16 ) | ( b->data[4] << 8 ) | b->data[5];
+    info->channel_layout = hdr2layout[nchannels - 1];
+
+    return 1;
 }

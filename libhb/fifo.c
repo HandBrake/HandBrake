@@ -14,40 +14,50 @@
 struct hb_fifo_s
 {
     hb_lock_t    * lock;
-    int            capacity;
-    int            size;
-    int            buffer_size;
+    uint32_t       capacity;
+    uint32_t       size;
+    uint32_t       buffer_size;
     hb_buffer_t  * first;
     hb_buffer_t  * last;
 };
 
-#define MAX_BUFFER_POOLS  15
-#define BUFFER_POOL_MAX_ELEMENTS 2048
+/* we round the requested buffer size up to the next power of 2 so there can
+ * be at most 32 possible pools when the size is a 32 bit int. To avoid a lot
+ * of slow & error-prone run-time checking we allow for all 32. */
+#define MAX_BUFFER_POOLS  32
+/* the buffer pool only exists to avoid the two malloc and two free calls that
+ * it would otherwise take to allocate & free a buffer. but we don't want to
+ * tie up a lot of memory in the pool because this allocator isn't as general
+ * as malloc so memory tied up here puts more pressure on the malloc pool.
+ * A pool of 16 elements will avoid 94% of the malloc/free calls without wasting
+ * too much memory. */
+#define BUFFER_POOL_MAX_ELEMENTS 32
 
 struct hb_buffer_pools_s
 {
-    int entries;
-    int allocated;
-    hb_fifo_t *pool[MAX_BUFFER_POOLS];
+    int64_t allocated;
     hb_lock_t *lock;
-};
+    hb_fifo_t *pool[MAX_BUFFER_POOLS];
+} buffers;
 
-struct hb_buffer_pools_s buffers;
 
 void hb_buffer_pool_init( void )
 {
-    hb_fifo_t *buffer_pool;
-    int size = 512;
-    int max_size = 32768;;
-
-    buffers.entries = 0;
     buffers.lock = hb_lock_init();
     buffers.allocated = 0;
 
-    while(size <= max_size) {
-        buffer_pool = buffers.pool[buffers.entries++] = hb_fifo_init(BUFFER_POOL_MAX_ELEMENTS);
-        buffer_pool->buffer_size = size;
-        size *= 2;
+    /* we allocate pools for sizes 2^10 through 2^25. requests larger than
+     * 2^25 will get passed through to malloc. */
+    int i;
+    for ( i = 10; i < 26; ++i )
+    {
+        buffers.pool[i] = hb_fifo_init(BUFFER_POOL_MAX_ELEMENTS);
+        buffers.pool[i]->buffer_size = 1 << i;
+    }
+    /* requests smaller than 2^10 are satisfied from the 2^10 pool. */
+    for ( i = 1; i < 10; ++i )
+    {
+        buffers.pool[i] = buffers.pool[10];
     }
 }
 
@@ -55,12 +65,12 @@ void hb_buffer_pool_free( void )
 {
     int i;
     int count;
-    int freed = 0;
+    int64_t freed = 0;
     hb_buffer_t *b;
 
     hb_lock(buffers.lock);
 
-    for( i = 0; i < buffers.entries; i++)
+    for( i = 10; i < 26; ++i)
     {
         count = 0;
         while( ( b = hb_fifo_get(buffers.pool[i]) ) )
@@ -69,70 +79,42 @@ void hb_buffer_pool_free( void )
             if( b->data )
             {
                 free( b->data );
-                b->data = NULL;
             }
             free( b );
             count++;
         }
-        hb_log("Freed %d buffers of size %d", count, buffers.pool[i]->buffer_size);
+        if ( count )
+        {
+            hb_log("Freed %d buffers of size %d", count,
+                    buffers.pool[i]->buffer_size);
+        }
     }
 
-    hb_log("Allocated %d bytes of buffers on this pass and Freed %d bytes, %d bytes leaked",
-           buffers.allocated, freed, buffers.allocated - freed);
+    hb_log("Allocated %lld bytes of buffers on this pass and Freed %lld bytes, "
+           "%lld bytes leaked", buffers.allocated, freed, buffers.allocated - freed);
     buffers.allocated = 0;
     hb_unlock(buffers.lock);
 }
 
+static hb_fifo_t *size_to_pool( int size )
+{
+    int i;
+    for ( i = 0; i < 30; ++i )
+    {
+        if ( size <= (1 << i) )
+        {
+            return buffers.pool[i];
+        }
+    }
+    return NULL;
+}
 
 hb_buffer_t * hb_buffer_init( int size )
 {
     hb_buffer_t * b;
-    int i;
-    hb_fifo_t *buffer_pool = NULL;
-    uint8_t *data;
-    int b_alloc;
-    int resize = 0;
+    hb_fifo_t *buffer_pool = size_to_pool( size );
 
-    if( size > 0 )
-    {
-        /*
-         * The buffer pools are allocated in increasing size
-         */
-        for( i = 0; i < buffers.entries; i++ )
-        {
-            if( buffers.pool[i]->buffer_size >= size )
-            {
-                /*
-                 * This pool is big enough, but are there any buffers in it?
-                 */
-                if( hb_fifo_size( buffers.pool[i] ) )
-                {
-                    /*
-                     * We've found a matching buffer pool, with buffers.
-                     */
-                    buffer_pool = buffers.pool[i];
-                    resize =  buffers.pool[i]->buffer_size;
-                } else {
-                    /*
-                     * Buffer pool is empty,
-                     */
-                    if( resize ) {
-                        /*
-                         * This is the second time through, so break
-                         * out of here to avoid using too large a
-                         * buffer for a small job.
-                         */
-                        break;
-                    }
-                    resize =  buffers.pool[i]->buffer_size;
-                }
-            }
-        }
-    }
-    /*
-     * Don't reuse the 0 size buffers, not much gain.
-     */
-    if( size != 0 && buffer_pool )
+    if( buffer_pool )
     {
         b = hb_fifo_get( buffer_pool );
 
@@ -141,15 +123,10 @@ hb_buffer_t * hb_buffer_init( int size )
             /*
              * Zero the contents of the buffer, would be nice if we
              * didn't have to do this.
-             *
-            hb_log("Reused buffer size %d for size %d from pool %d depth %d",
-                   b->alloc, size, smallest_pool->buffer_size,
-                   hb_fifo_size(smallest_pool));
-            */
-            data = b->data;
-            b_alloc = b->alloc;
+             */
+            uint8_t *data = b->data;
             memset( b, 0, sizeof(hb_buffer_t) );
-            b->alloc = b_alloc;
+            b->alloc = buffer_pool->buffer_size;
             b->size = size;
             b->data = data;
             return( b );
@@ -166,152 +143,66 @@ hb_buffer_t * hb_buffer_init( int size )
     }
 
     b->size  = size;
+    b->alloc  = buffer_pool? buffer_pool->buffer_size : size;
 
-    if( resize )
+    if (size)
     {
-        size = resize;
-    }
-    b->alloc  = size;
-
-    /*
-    hb_log("Allocating new buffer of size %d for size %d",
-           b->alloc,
-           b->size);
-    */
-
-    if (!size)
-        return b;
 #if defined( SYS_DARWIN ) || defined( SYS_FREEBSD )
-    b->data  = malloc( b->alloc );
+        b->data  = malloc( b->alloc );
 #elif defined( SYS_CYGWIN )
-    /* FIXME */
-    b->data  = malloc( b->alloc + 17 );
+        /* FIXME */
+        b->data  = malloc( b->alloc + 17 );
 #else
-    b->data  = memalign( 16, b->alloc );
+        b->data  = memalign( 16, b->alloc );
 #endif
-
-    if( !b->data )
-    {
-        hb_log( "out of memory" );
-        free( b );
-        return NULL;
+        if( !b->data )
+        {
+            hb_log( "out of memory" );
+            free( b );
+            return NULL;
+        }
+        hb_lock(buffers.lock);
+        buffers.allocated += b->alloc;
+        hb_unlock(buffers.lock);
     }
-
-    buffers.allocated += b->alloc;
-
     return b;
 }
 
 void hb_buffer_realloc( hb_buffer_t * b, int size )
 {
-    /* No more alignment, but we don't care */
-    if( size < 2048 ) {
-        size = 2048;
+    if ( size > b->alloc )
+    {
+        uint32_t orig = b->alloc;
+        size = size_to_pool( size )->buffer_size;
+        b->data  = realloc( b->data, size );
+        b->alloc = size;
+
+        hb_lock(buffers.lock);
+        buffers.allocated += size - orig;
+        hb_unlock(buffers.lock);
     }
-    b->data  = realloc( b->data, size );
-    buffers.allocated -= b->alloc;
-    b->alloc = size;
-    buffers.allocated += b->alloc;
 }
 
 void hb_buffer_close( hb_buffer_t ** _b )
 {
     hb_buffer_t * b = *_b;
-    hb_fifo_t *buffer_pool = NULL;
-    int i;
+    hb_fifo_t *buffer_pool = size_to_pool( b->alloc );
 
-    /*
-     * Put the buffer into our free list in the matching buffer pool, if there is one.
-     */
-    if( b->alloc != 0 )
+    if( buffer_pool && b->data && !hb_fifo_is_full( buffer_pool ) )
     {
-        for( i = 0; i < buffers.entries; i++ )
-        {
-            if( b->alloc == buffers.pool[i]->buffer_size )
-            {
-                buffer_pool = buffers.pool[i];
-                break;
-            }
-        }
+        hb_fifo_push( buffer_pool, b );
+        return;
     }
-
-    if( buffer_pool )
+    /* either the pool is full or this size doesn't use a pool - free the buf */
+    if( b->data )
     {
-        if( !hb_fifo_is_full( buffer_pool ) )
-        {
-            if(b->data)
-            {
-                /*
-                hb_log("Putting a buffer of size %d on pool %d, depth %d",
-                       b->alloc,
-                       buffer_pool->buffer_size,
-                       hb_fifo_size(buffer_pool));
-                */
-                hb_fifo_push( buffer_pool, b );
-            } else {
-                free(b);
-            }
-        } else {
-            /*
-             * Got a load of these size ones already, free this buffer.
-             *
-            hb_log("Buffer pool for size %d full, freeing buffer", b->alloc);
-            */
-            if( b->data )
-            {
-                free( b->data );
-            }
-            buffers.allocated -= b->alloc;
-            free( b );
-        }
-    } else {
-        /*
-         * Need a new buffer pool for this size.
-         */
+        free( b->data );
         hb_lock(buffers.lock);
-        if ( b->alloc != 0 && buffers.entries < MAX_BUFFER_POOLS)
-        {
-            buffer_pool = buffers.pool[buffers.entries++] = hb_fifo_init(BUFFER_POOL_MAX_ELEMENTS);
-            buffer_pool->buffer_size = b->alloc;
-            hb_fifo_push( buffer_pool, b );
-            /*
-            hb_log("*** Allocated a new buffer pool for size %d [%d]", b->alloc,
-                   buffers.entries );
-            */
-        } else {
-            if( b->alloc != 0 )
-            {
-                for( i = buffers.entries-1; i >= 0; i-- )
-                {
-                    if( hb_fifo_size(buffers.pool[i]) == 0 )
-                    {
-                        /*
-                         * Reuse this pool as it is empty.
-                         */
-                        buffers.pool[i]->buffer_size = b->alloc;
-                        hb_fifo_push( buffers.pool[i], b );
-                        b = NULL;
-                        break;
-                    }
-                }
-            }
-
-            if( b )
-            {
-                if( b->data )
-                {
-                    free( b->data );
-                    b->data = NULL;
-                    buffers.allocated -= b->alloc;
-                }
-                free( b );
-            }
-        }
+        buffers.allocated -= b->alloc;
         hb_unlock(buffers.lock);
     }
-
+    free( b );
     *_b = NULL;
-
 }
 
 void hb_buffer_copy_settings( hb_buffer_t * dst, const hb_buffer_t * src )

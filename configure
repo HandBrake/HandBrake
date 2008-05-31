@@ -4,7 +4,7 @@ CC="gcc"
 CXX="g++"
 CCFLAGS="$CCFLAGS -Wall -g"
 OPTIM="$OPTIM -O3 -funroll-loops"
-LINKLIBS="-lz"
+LINKLIBS="-lz -lbz2"
 MAKE=make
 
 # System-specific flags

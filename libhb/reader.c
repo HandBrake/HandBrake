@@ -47,6 +47,19 @@ hb_thread_t * hb_reader_init( hb_job_t * job )
                            HB_NORMAL_PRIORITY );
 }
 
+static void push_buf( hb_reader_t *r, hb_fifo_t *fifo, hb_buffer_t *buf )
+{
+    while( !*r->die && !r->job->done && hb_fifo_is_full( fifo ) )
+    {
+        /*
+         * Loop until the incoming fifo is reaqdy to receive
+         * this buffer.
+         */
+        hb_snooze( 50 );
+    }
+    hb_fifo_push( fifo, buf );
+}
+
 /***********************************************************************
  * ReaderFunc
  ***********************************************************************
@@ -57,7 +70,6 @@ static void ReaderFunc( void * _r )
     hb_reader_t  * r = _r;
     hb_fifo_t   ** fifos;
     hb_buffer_t  * buf;
-    hb_buffer_t  * buf_old;
     hb_list_t    * list;
     int            n;
     int            chapter = -1;
@@ -65,7 +77,7 @@ static void ReaderFunc( void * _r )
 
     if( !( r->dvd = hb_dvd_init( r->title->dvd ) ) )
     {
-        if ( !( r->stream = hb_stream_open( r->title->dvd, 1 ) ) )
+        if ( !( r->stream = hb_stream_open( r->title->dvd, r->title ) ) )
         {
           return;
         }
@@ -158,7 +170,14 @@ static void ReaderFunc( void * _r )
             hb_set_state( r->job->h, &state );
         }
 
-        hb_demux_ps( r->ps, list, &r->demux );
+        if ( r->title->demuxer == HB_NULL_DEMUXER )
+        {
+            hb_demux_null( r->ps, list, &r->demux );
+        }
+        else
+        {
+            hb_demux_ps( r->ps, list, &r->demux );
+        }
 
         while( ( buf = hb_list_item( list, 0 ) ) )
         {
@@ -169,10 +188,10 @@ static void ReaderFunc( void * _r )
             {
                 /* The first video packet defines 'time zero' so discard
                    data until we get a video packet with a PTS */
-                if ( buf->id == 0xE0 && buf->start != -1 )
+                if ( buf->id == r->title->video_id && buf->start != -1 )
                 {
                     r->saw_video = 1;
-                    r->demux.scr_offset = buf->start;
+                    r->demux.scr_offset = buf->renderOffset;
                     hb_log( "reader: first SCR %llu scr_offset %llu",
                             r->demux.last_scr, r->demux.scr_offset );
                 }
@@ -190,34 +209,21 @@ static void ReaderFunc( void * _r )
                        everything after this sees a continuous clock with 0
                        being the time of the first video packet. */
                     buf->start -= r->demux.scr_offset;
+                    buf->renderOffset -= r->demux.scr_offset;
                 }
                 buf->sequence = r->sequence++;
-                for( n = 0; fifos[n] != NULL; n++)
+                /* if there are mutiple output fifos, send a copy of the
+                 * buffer down all but the first (we have to not ship the
+                 * original buffer or we'll race with the thread that's
+                 * consuming the buffer & inject garbage into the data stream). */
+                for( n = 1; fifos[n] != NULL; n++)
                 {
-                    if( n != 0 )
-                    {
-                        /*
-                         * Replace the buffer with a new copy of itself for when
-                         * it is being sent down multiple fifos.
-                         */
-                        buf_old = buf;
-                        buf = hb_buffer_init(buf_old->size);
-                        memcpy( buf->data, buf_old->data, buf->size );
-                        hb_buffer_copy_settings( buf, buf_old );
-                    }
-
-                    while( !*r->die && !r->job->done &&
-                           hb_fifo_is_full( fifos[n] ) )
-                    {
-                        /*
-                         * Loop until the incoming fifo is reaqdy to receive
-                         * this buffer.
-                         */
-                        hb_snooze( 50 );
-                    }
-
-                    hb_fifo_push( fifos[n], buf );
+                    hb_buffer_t *buf_copy = hb_buffer_init( buf->size );
+                    hb_buffer_copy_settings( buf_copy, buf );
+                    memcpy( buf_copy->data, buf->data, buf->size );
+                    push_buf( r, fifos[n], buf_copy );
                 }
+                push_buf( r, fifos[0], buf );
             }
             else
             {
@@ -262,7 +268,7 @@ static hb_fifo_t ** GetFifoForId( hb_job_t * job, int id )
 
     memset(fifos, 0, sizeof(fifos));
 
-    if( id == 0xE0 )
+    if( id == title->video_id )
     {
         if( job->indepth_scan )
         {

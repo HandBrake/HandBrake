@@ -7,16 +7,84 @@
 #include "hb.h"
 #include "lang.h"
 #include "a52dec/a52.h"
+#include "libavcodec/avcodec.h"
+#include "libavformat/avformat.h"
 
 #include <string.h>
+#include <ctype.h>
 
 #define min(a, b) a < b ? a : b
+
+/*
+ * This table defines how ISO MPEG stream type codes map to HandBrake
+ * codecs. It is indexed by the 8 bit stream type and contains the codec
+ * worker object id and a parameter for that worker proc (ignored except
+ * for the ffmpeg-based codecs in which case it is the ffmpeg codec id).
+ *
+ * Entries with a worker proc id of 0 or a kind of 'U' indicate that HB
+ * doesn't handle the stream type.
+ */
+typedef struct {
+    enum { U, A, V } kind; /* unknown / audio / video */
+    int codec;          /* HB worker object id of codec */
+    int codec_param;    /* param for codec (usually ffmpeg codec id) */
+    const char* name;   /* description of type */
+} stream2codec_t;
+
+#define st(id, kind, codec, codec_param, name) \
+ [id] = { kind, codec, codec_param, name }
+
+static const stream2codec_t st2codec[256] = {
+    st(0x01, V, WORK_DECMPEG2,     0,              "MPEG1"),
+    st(0x02, V, WORK_DECMPEG2,     0,              "MPEG2"),
+    st(0x03, A, HB_ACODEC_MPGA,    CODEC_ID_MP2,   "MPEG1"),
+    st(0x04, A, HB_ACODEC_MPGA,    CODEC_ID_MP2,   "MPEG2"),
+    st(0x05, U, 0,                 0,              "ISO 13818-1 private section"),
+    st(0x06, U, 0,                 0,              "ISO 13818-1 PES private data"),
+    st(0x07, U, 0,                 0,              "ISO 13522 MHEG"),
+    st(0x08, U, 0,                 0,              "ISO 13818-1 DSM-CC"),
+    st(0x09, U, 0,                 0,              "ISO 13818-1 auxiliary"),
+    st(0x0a, U, 0,                 0,              "ISO 13818-6 encap"),
+    st(0x0b, U, 0,                 0,              "ISO 13818-6 DSM-CC U-N msgs"),
+    st(0x0c, U, 0,                 0,              "ISO 13818-6 Stream descriptors"),
+    st(0x0d, U, 0,                 0,              "ISO 13818-6 Sections"),
+    st(0x0e, U, 0,                 0,              "ISO 13818-1 auxiliary"),
+    st(0x0f, A, HB_ACODEC_MPGA,    CODEC_ID_AAC,   "ISO 13818-7 AAC Audio"),
+    st(0x10, V, WORK_DECAVCODECV,  CODEC_ID_MPEG4, "MPEG4"),
+    st(0x11, A, HB_ACODEC_MPGA,    CODEC_ID_AAC,   "MPEG4 LATM AAC"),
+    st(0x12, U, 0,                 0,              "MPEG4 generic"),
+
+    st(0x14, U, 0,                 0,              "ISO 13818-6 DSM-CC download"),
+
+    st(0x1b, V, WORK_DECAVCODECV,  CODEC_ID_H264,  "H.264"),
+
+    st(0x80, U, 0,                 0,              "DigiCipher II Video"),
+    st(0x81, A, HB_ACODEC_AC3,     0,              "AC-3"),
+    st(0x82, A, HB_ACODEC_MPGA,    CODEC_ID_DTS,   "HDMV DTS"),
+    st(0x83, A, HB_ACODEC_LPCM,    0,              "LPCM"),
+    st(0x84, A, 0,                 0,              "SDDS"),
+    st(0x85, U, 0,                 0,              "ATSC Program ID"),
+    st(0x86, U, 0,                 0,              "SCTE 35 splice info"),
+    st(0x87, A, 0,                 0,              "E-AC-3"),
+
+    st(0x8a, A, HB_ACODEC_DCA,     0,              "DTS"),
+
+    st(0x91, A, HB_ACODEC_AC3,     0,              "AC-3"),
+    st(0x92, U, 0,                 0,              "Subtitle"),
+
+    st(0x94, A, 0,                 0,              "SDDS"),
+    st(0xa0, V, 0,                 0,              "MSCODEC"),
+
+    st(0xea, V, WORK_DECAVCODECV,  CODEC_ID_VC1,   "VC1"),
+};
+#undef st
 
 typedef enum {
     hb_stream_type_unknown = 0,
     transport,
     program,
-    dvd_program
+    dvd_program,
+    ffmpeg
 } hb_stream_type_t;
 
 #define kMaxNumberVideoPIDS 1
@@ -65,7 +133,9 @@ struct hb_stream_s
     char    *path;
     FILE    *file_handle;
     hb_stream_type_t hb_stream_type;
-    int     opentype;
+    hb_title_t *title;
+
+    AVFormatContext *ffmpeg_ic;
 
     struct {
         int lang_code;
@@ -115,6 +185,12 @@ static hb_audio_t *hb_ts_stream_set_audio_id_and_codec(hb_stream_t *stream,
                                                        int aud_pid_index);
 static void hb_ps_stream_find_audio_ids(hb_stream_t *stream, hb_title_t *title);
 static off_t align_to_next_packet(hb_stream_t *stream);
+
+static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title );
+static void ffmpeg_close( hb_stream_t *d );
+static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream );
+static int ffmpeg_read( hb_stream_t *stream, hb_buffer_t *buf );
+static int ffmpeg_seek( hb_stream_t *stream, float frac );
 
 /*
  * streams have a bunch of state that's learned during the scan. We don't
@@ -342,9 +418,8 @@ static void hb_stream_delete( hb_stream_t *d )
  ***********************************************************************
  *
  **********************************************************************/
-hb_stream_t * hb_stream_open( char *path, int opentype )
+hb_stream_t * hb_stream_open( char *path, hb_title_t *title )
 {
-
     FILE *f = fopen( path, "r" );
     if ( f == NULL )
     {
@@ -367,23 +442,15 @@ hb_stream_t * hb_stream_open( char *path, int opentype )
      * (even if we have saved state, the stream may have changed).
      */
     hb_stream_t *ss = hb_stream_lookup( path );
-    if ( opentype == 1 )
+    if ( title && ss && ss->hb_stream_type != ffmpeg )
     {
-        /* opening to read - we must have saved state */
-        if ( ss == NULL )
-        {
-            hb_log( "hb_stream_open: error: re-opening %s but no scan state", path );
-            fclose( f );
-            free( d );
-            return NULL;
-        }
         /*
          * copy the saved state since we might be encoding the same stream
          * multiple times.
          */
         memcpy( d, ss, sizeof(*d) );
         d->file_handle = f;
-        d->opentype = opentype;
+        d->title = title;
         d->path = strdup( path );
 
         if ( d->hb_stream_type == transport )
@@ -410,11 +477,20 @@ hb_stream_t * hb_stream_open( char *path, int opentype )
         hb_stream_state_delete( ss );
     }
     d->file_handle = f;
-    d->opentype = opentype;
+    d->title = title;
     d->path = strdup( path );
-    if (d->path != NULL &&  hb_stream_get_type( d ) != 0 )
+    if (d->path != NULL )
     {
-        return d;
+        if ( hb_stream_get_type( d ) != 0 )
+        {
+            return d;
+        }
+        fclose( d->file_handle );
+		d->file_handle = NULL;
+        if ( ffmpeg_open( d, title ) )
+        {
+            return d;
+        }
     }
     fclose( d->file_handle );
     if (d->path)
@@ -434,17 +510,27 @@ hb_stream_t * hb_stream_open( char *path, int opentype )
 void hb_stream_close( hb_stream_t ** _d )
 {
     hb_stream_t *stream = * _d;
+
+    if ( stream->hb_stream_type == ffmpeg )
+    {
+        ffmpeg_close( stream );
+        hb_stream_delete( stream );
+        *_d = NULL;
+        return;
+    }
+
     if ( stream->frames )
     {
         hb_log( "stream: %d good frames, %d errors (%.0f%%)", stream->frames,
                 stream->errors, (double)stream->errors * 100. /
                 (double)stream->frames );
     }
+
     /*
      * if the stream was opened for a scan, cache the result, otherwise delete
      * the state.
      */
-    if ( stream->opentype == 0 )
+    if ( stream->title == NULL )
     {
         hb_stream_delete_dynamic( stream );
         if ( stream_state_list == NULL )
@@ -501,6 +587,9 @@ static int index_of_pid(int pid, hb_stream_t *stream)
  **********************************************************************/
 hb_title_t * hb_stream_title_scan(hb_stream_t *stream)
 {
+	if ( stream->hb_stream_type == ffmpeg )
+        return ffmpeg_title_scan( stream );
+
     // 'Barebones Title'
     hb_title_t *aTitle = hb_title_init( stream->path, 0 );
     aTitle->index = 1;
@@ -557,6 +646,10 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream)
             stream->ts_audio_pids[stream->ts_number_audio_pids++] =
                 stream->pmt_info.PCR_PID;
         }
+
+        // set up the video codec to use for this title
+        aTitle->video_codec = st2codec[stream->ts_stream_type[0]].codec;
+        aTitle->video_codec_param = st2codec[stream->ts_stream_type[0]].codec_param;
 	}
     else
     {
@@ -868,6 +961,10 @@ static void hb_stream_duration(hb_stream_t *stream, hb_title_t *inTitle)
  **********************************************************************/
 int hb_stream_read( hb_stream_t * src_stream, hb_buffer_t * b )
 {
+	if ( src_stream->hb_stream_type == ffmpeg )
+    {
+        return ffmpeg_read( src_stream, b );
+    }
     if ( src_stream->hb_stream_type == dvd_program )
     {
         size_t amt_read = fread(b->data, HB_DVD_READ_BUFFER_SIZE, 1,
@@ -931,6 +1028,10 @@ int hb_stream_read( hb_stream_t * src_stream, hb_buffer_t * b )
  **********************************************************************/
 int hb_stream_seek( hb_stream_t * src_stream, float f )
 {
+	if ( src_stream->hb_stream_type == ffmpeg )
+    {
+        return ffmpeg_seek( src_stream, f );
+    }
     off_t stream_size, cur_pos, new_pos;
     double pos_ratio = f;
     cur_pos = ftello( src_stream->file_handle );
@@ -960,6 +1061,21 @@ int hb_stream_seek( hb_stream_t * src_stream, float f )
     return 1;
 }
 
+static const char* make_upper( const char* s )
+{
+    static char name[8];
+    char *cp = name;
+    char *ep = cp + sizeof(name)-1;
+
+    while ( *s && cp < ep )
+    {
+        *cp++ = islower(*s)? toupper(*s) : *s;
+        ++s;
+    }
+    *cp = 0;
+    return name;
+}
+
 static void set_audio_description( hb_audio_t *audio, iso639_lang_t *lang )
 {
     /* XXX
@@ -968,12 +1084,37 @@ static void set_audio_description( hb_audio_t *audio, iso639_lang_t *lang )
      * code or a lang pointer into the audio config & let the common description
      * formatting routine in scan.c do all the stuff below.
      */
+    const char *codec_name;
+    AVCodecContext *cc;
+
+    if ( audio->config.in.codec == HB_ACODEC_FFMPEG &&
+         ( cc = hb_ffmpeg_context( audio->config.in.codec_param ) ) &&
+         avcodec_find_decoder( cc->codec_id ) )
+    {
+        codec_name = make_upper( avcodec_find_decoder( cc->codec_id )->name );
+        if ( !strcmp( codec_name, "LIBFAAD" ) )
+        {
+            codec_name = "AAC";
+        }
+    }
+    else if ( audio->config.in.codec == HB_ACODEC_MPGA &&
+              avcodec_find_decoder( audio->config.in.codec_param ) )
+    {
+        codec_name = avcodec_find_decoder( audio->config.in.codec_param )->name;
+    }
+    else
+    {
+        codec_name = audio->config.in.codec == HB_ACODEC_AC3 ? "AC3" :
+                     audio->config.in.codec == HB_ACODEC_DCA ? "DTS" :
+                     audio->config.in.codec == HB_ACODEC_MPGA ? "MPEG" : 
+                     audio->config.in.codec == HB_ACODEC_LPCM ? "LPCM" : 
+                     audio->config.in.codec == HB_ACODEC_FFMPEG ? "FFMPEG" :
+                     "Unknown";
+    }
     snprintf( audio->config.lang.description,
               sizeof( audio->config.lang.description ), "%s (%s)",
               strlen(lang->native_name) ? lang->native_name : lang->eng_name,
-              audio->config.in.codec == HB_ACODEC_AC3 ? "AC3" :
-                  audio->config.in.codec == HB_ACODEC_DCA ? "DTS" :
-                      audio->config.in.codec == HB_ACODEC_MPGA ? "MPEG" : "LPCM" );
+              codec_name );
     snprintf( audio->config.lang.simple, sizeof( audio->config.lang.simple ), "%s",
               strlen(lang->native_name) ? lang->native_name : lang->eng_name );
     snprintf( audio->config.lang.iso639_2, sizeof( audio->config.lang.iso639_2 ),
@@ -992,65 +1133,52 @@ static hb_audio_t *hb_ts_stream_set_audio_id_and_codec(hb_stream_t *stream,
     buf = hb_ts_stream_getPEStype(stream, stream->ts_audio_pids[aud_pid_index]);
 
     /* check that we found a PES header */
+    uint8_t stype = 0;
     if (buf && buf[0] == 0x00 && buf[1] == 0x00 && buf[2] == 0x01)
     {
-        if (buf[3] == 0xbd)
+        // 0xbd is the normal container for AC3/DCA/PCM/etc. 0xfd indicates an
+        // extended stream id (ISO 13818-1(2007)). If we cared about the
+        // real id we'd have to look inside the PES extension to find it.
+        // But since we remap stream id's when we generate PS packets from
+        // the TS packets we can just ignore the actual id.
+        if ( buf[3] == 0xbd || buf[3] == 0xfd )
         {
             audio->id = 0x80bd | (aud_pid_index << 8);
-            audio->config.in.codec = HB_ACODEC_AC3;
-            hb_log("transport stream pid 0x%x (type 0x%x) is AC-3 audio id 0x%x",
-                   stream->ts_audio_pids[aud_pid_index],
-                   stream->ts_stream_type[1 + aud_pid_index],
-                   audio->id);
-            stream->ts_stream_type[1 + aud_pid_index] = 0x81;
-            stream->ts_streamid[1 + aud_pid_index] = 0xbd;
-        }
-        else if (buf[3] == 0xfd)
-        {
-            /* XXX Extended stream id (ISO 13818-1(2000) Amd 2) - we have to look
-             * inside the PES extension to find out the real stream id then
-             * figure out what the heck it means. For now we just use the stream
-             * type if one was specified. */
-            const char *atype = 0;
-            switch (stream->ts_stream_type[1 + aud_pid_index])
+            stype = stream->ts_stream_type[1 + aud_pid_index];
+            if ( st2codec[stype].kind == U )
             {
-                case 0x81: // AC-3
-                    atype = "AC-3";
-                    audio->config.in.codec = HB_ACODEC_AC3;
-                    break;
-                case 0x82: // HDMV DTS
-                case 0x8a: // DTS
-                    atype = "DTS";
-                    audio->config.in.codec = HB_ACODEC_DCA;
-                    break;
-                case 0x83: // LPCM
-                    atype = "PCM";
-                    audio->config.in.codec = HB_ACODEC_LPCM;
-                    break;
+                // XXX assume unknown stream types are AC-3 (if they're not
+                // audio we'll find that out during the scan but if they're
+                // some other type of audio we'll end up ignoring them).
+                stype = 0x81;
+                stream->ts_stream_type[1 + aud_pid_index] = 0x81;
             }
-            audio->id = 0x80bd | (aud_pid_index << 8);
             stream->ts_streamid[1 + aud_pid_index] = 0xbd;
-            hb_log("transport stream pid 0x%x (type 0x%x) is %s audio id 0x%x",
-                   stream->ts_audio_pids[aud_pid_index],
-                   stream->ts_stream_type[1 + aud_pid_index], atype, audio->id);
         }
         else if ((buf[3] & 0xe0) == 0xc0)
         {
-            audio->id = buf[3] | aud_pid_index;
-            audio->config.in.codec = HB_ACODEC_MPGA;
-            hb_log("transport stream pid 0x%x (type 0x%x) is MPEG audio id 0x%x",
-                   stream->ts_audio_pids[aud_pid_index],
-                   stream->ts_stream_type[1 + aud_pid_index],
-                   audio->id);
-            stream->ts_stream_type[1 + aud_pid_index] = 0x03;
-            stream->ts_streamid[1 + aud_pid_index] = buf[3];
+            audio->id = 0xc0 | aud_pid_index;
+            stype = stream->ts_stream_type[1 + aud_pid_index];
+            if ( st2codec[stype].kind == U )
+            {
+                // XXX assume unknown stream types are MPEG audio
+                stype = 0x03;
+                stream->ts_stream_type[1 + aud_pid_index] = 0x03;
+            }
         }
     }
-    fseeko(stream->file_handle, cur_pos, SEEK_SET);
-    if ( audio->config.in.codec )
+    // if we found an audio stream type & HB has a codec that can decode it
+    // finish configuring the audio so we'll add it to the title's list.
+    if ( st2codec[stype].kind == A && st2codec[stype].codec )
     {
+        stream->ts_streamid[1 + aud_pid_index] = audio->id;
+        audio->config.in.codec = st2codec[stype].codec;
+        audio->config.in.codec_param = st2codec[stype].codec_param;
 		set_audio_description( audio,
                   lang_for_code( stream->a52_info[aud_pid_index].lang_code ) );
+        hb_log("transport stream pid 0x%x (type 0x%x) is %s audio id 0x%x",
+               stream->ts_audio_pids[aud_pid_index],
+               stype, st2codec[stype].name, audio->id);
     }
     else
     {
@@ -1058,6 +1186,7 @@ static hb_audio_t *hb_ts_stream_set_audio_id_and_codec(hb_stream_t *stream,
                 stream->ts_audio_pids[aud_pid_index],
                 stream->ts_stream_type[1 + aud_pid_index]);
 	}
+    fseeko(stream->file_handle, cur_pos, SEEK_SET);
     return audio;
 }
 
@@ -1294,54 +1423,9 @@ static void decode_element_descriptors(hb_stream_t* stream, int esindx,
     }
 }
 
-static const char * stream_type_name (uint8_t stream_type)
+static const char *stream_type_name (uint8_t stream_type)
 {
-    switch( stream_type )
-    {
-    case 0x01: return("ISO 11172 (MPEG1) Video");
-    case 0x02: return("ISO 13818-2 (MPEG2) Video");
-    case 0x03: return("ISO 11172 (MPEG1) Audio");
-    case 0x04: return("ISO 13818-3 (MPEG2) Audio");
-    case 0x05: return("ISO 13818-1 private section");
-    case 0x06: return("ISO 13818-1 PES private data");
-    case 0x07: return("ISO 13522 MHEG");
-    case 0x08: return("ISO 13818-1 DSM-CC");
-    case 0x09: return("ISO 13818-1 auxiliary");
-    case 0x0a: return("ISO 13818-6 multi-protocol encap");
-    case 0x0b: return("ISO 13818-6 DSM-CC U-N msgs");
-    case 0x0c: return("ISO 13818-6 Stream descriptors");
-    case 0x0d: return("ISO 13818-6 Sections");
-    case 0x0e: return("ISO 13818-1 auxiliary");
-    case 0x0f: return("ISO 13818-7 AAC Audio");
-    case 0x10: return("MPEG4 Video");
-    case 0x11: return("MPEG4 Audio");
-    case 0x12: return("MPEG4 generic");
-
-    case 0x14: return("ISO 13818-6 DSM-CC download");
-
-    case 0x1b: return("H.264 Video");
-
-    case 0x80: return("DigiCipher II Video");
-    case 0x81: return("A52/AC-3 Audio");
-    case 0x82: return("HDMV DTS Audio");
-    case 0x83: return("LPCM Audio");
-    case 0x84: return("SDDS Audio");
-    case 0x85: return("ATSC Program ID");
-    case 0x86: return("SCTE 35 splice info");
-    case 0x87: return("ATSC E-AC-3");
-
-    case 0x8a: return("DTS Audio");
-
-    case 0x91: return("A52b/AC-3 Audio");
-    case 0x92: return("Subtitle");
-
-    case 0x94: return("SDDS Audio");
-    case 0xa0: return("MSCODEC Video");
-        
-    case 0xea: return("VC-1 Video");
-
-    default:   return("Unknown");
-    }
+    return st2codec[stream_type].name? st2codec[stream_type].name : "Unknown";
 }
 
 int decode_program_map(hb_stream_t* stream)
@@ -1393,8 +1477,7 @@ int decode_program_map(hb_stream_t* stream)
         }
 
 
-        if (stream->ts_number_video_pids == 0 &&
-            ( stream_type == 0x02 || stream_type == 0x10 || stream_type == 0x1B ) )
+        if (stream->ts_number_video_pids == 0 && st2codec[stream_type].kind == V )
         {
             stream->ts_video_pids[0] = elementary_PID;
             stream->ts_stream_type[0] = stream_type;
@@ -1765,7 +1848,7 @@ static void generate_output_data(hb_stream_t *stream, int curstream)
     int len;
 
     // we always ship a PACK header plus all the data in our demux buf.
-    // AC3 audio also always needs it substream header.
+    // AC3 audio also always needs its substream header.
     len = 14 + stream->ts_pos[curstream];
     if ( stream->ts_stream_type[curstream] == 0x81)
     {
@@ -1876,37 +1959,82 @@ static void generate_output_data(hb_stream_t *stream, int curstream)
     stream->ts_pos[curstream] = 0;
 }
 
-static int isIframe( const uint8_t *buf, int adapt_len )
+static int isIframe( hb_stream_t *stream, const uint8_t *buf, int adapt_len )
 {
-    // Look for the Group of Pictures packet
+    // For mpeg2: look for a gop start or i-frame picture start
+    // for h.264: look for idr nal type or a slice header for an i-frame
+    // for vc1:   ???
     int i;
     uint32_t strid = 0;
 
-    for (i = 4 + adapt_len; i < 188; i++)
-    {
-        strid = (strid << 8) | buf[i];
-        switch ( strid )
-        {
-            case 0x000001B8: // group_start_code (GOP header)
-            case 0x000001B3: // sequence_header code
-                return 1;
 
-            case 0x00000100: // picture_start_code
-                // picture_header, let's see if it's an I-frame
-                if (i<185)
+    if ( stream->ts_stream_type[0] <= 2 )
+    {
+        // This section of the code handles MPEG-1 and MPEG-2 video streams
+        for (i = 13 + adapt_len; i < 188; i++)
+        {
+            strid = (strid << 8) | buf[i];
+            if ( ( strid >> 8 ) == 1 )
+            {
+                // we found a start code
+                uint8_t id = strid;
+                switch ( id )
                 {
-                    // check if picture_coding_type == 1
-                    if ((buf[i+2] & (0x7 << 3)) == (1 << 3))
+                    case 0xB8: // group_start_code (GOP header)
+                    case 0xB3: // sequence_header code
+                        return 1;
+
+                    case 0x00: // picture_start_code
+                        // picture_header, let's see if it's an I-frame
+                        if (i<185)
+                        {
+                            // check if picture_coding_type == 1
+                            if ((buf[i+2] & (0x7 << 3)) == (1 << 3))
+                            {
+                                // found an I-frame picture
+                                return 1;
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+        // didn't find an I-frame
+        return 0;
+    }
+    if ( stream->ts_stream_type[0] == 0x1b )
+    {
+        // we have an h.264 stream 
+        for (i = 13 + adapt_len; i < 188; i++)
+        {
+            strid = (strid << 8) | buf[i];
+            if ( ( strid >> 8 ) == 1 )
+            {
+                // we found a start code - remove the ref_idc from the nal type
+                uint8_t nal_type = strid & 0x1f;
+                if ( nal_type == 0x05 )
+                    // h.264 IDR picture start
+                    return 1;
+
+                if ( nal_type == 0x01 )
+                {
+                    // h.264 slice: has to be start MB 0 & type I (2, 4, 7 or 9)
+                    uint8_t id = buf[i+1];
+                    if ( ( id >> 4 ) == 0x0b || ( id >> 2 ) == 0x25 ||
+                         id == 0x88 || id == 0x8a )
                     {
-                        // found an I-frame picture
                         return 1;
                     }
                 }
-                break;
+            }
         }
+        // didn't find an I-frame
+        return 0;
     }
-    // didn't find an I frame
-    return 0;
+
+    // we don't understand the stream type so just say "yes" otherwise
+    // we'll discard all the video.
+    return 1;
 }
 
 /***********************************************************************
@@ -2034,7 +2162,7 @@ static int hb_ts_stream_decode( hb_stream_t *stream, uint8_t *obuf )
 			{
                 // video skips to an iframe after a bad packet to minimize
                 // screen corruption
-                if ( curstream == 0 && !isIframe( buf, adapt_len ) )
+                if ( curstream == 0 && !isIframe( stream, buf, adapt_len ) )
                 {
                     continue;
                 }
@@ -2047,8 +2175,7 @@ static int hb_ts_stream_decode( hb_stream_t *stream, uint8_t *obuf )
             {
                 if ( !stream->ts_foundfirst[0] )
                 {
-                    if ( stream->ts_stream_type[0] == 2 &&
-                         !isIframe( buf, adapt_len ) )
+                    if ( !isIframe( stream, buf, adapt_len ) )
                     {
                         // didn't find an I frame
                         continue;
@@ -2103,11 +2230,6 @@ static int hb_ts_stream_decode( hb_stream_t *stream, uint8_t *obuf )
 	}
 }
 
-/***********************************************************************
- * hb_ts_stream_reset
- ***********************************************************************
- *
- **********************************************************************/
 static void hb_ts_stream_reset(hb_stream_t *stream)
 {
 	int i;
@@ -2132,3 +2254,322 @@ static void hb_ts_stream_reset(hb_stream_t *stream)
     align_to_next_packet(stream);
 }
 
+// ------------------------------------------------------------------
+// Support for reading media files via the ffmpeg libraries.
+
+static void ffmpeg_add_codec( hb_stream_t *stream, int stream_index )
+{
+    // add a codec to the context here so it will be there when we
+    // read the first packet.
+    AVCodecContext *context = stream->ffmpeg_ic->streams[stream_index]->codec;
+    context->workaround_bugs = FF_BUG_AUTODETECT;
+    context->error_resilience = 1;
+    context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
+    AVCodec *codec = avcodec_find_decoder( context->codec_id );
+    avcodec_open( context, codec );
+}
+
+// The ffmpeg stream reader / parser shares a lot of state with the 
+// decoder via a codec context kept in the AVStream of the reader's
+// AVFormatContext. Since decoding is done in a different thread we
+// have to somehow pass this codec context to the decoder and we have
+// to do it before the first packet is read (so we can't put the info
+// in the buf we'll send downstream). Decoders don't have any way to
+// get to the stream directly (they're not passed the title or job
+// pointers during a scan) so this is a back door for the decoder to
+// get the codec context. We just stick the stream pointer in the next
+// slot an array of pointers maintained as a circular list then return
+// the index into the list combined with the ffmpeg stream index as the
+// codec_param that will be passed to the decoder init routine. We make
+// the list 'big' (enough for 1024 simultaneously open ffmpeg streams)
+// so that we don't have to do a complicated allocator or worry about
+// deleting entries on close. 
+//
+// Entries can only be added to this list during a scan and are never
+// deleted so the list access doesn't require locking.
+static hb_stream_t **ffmpeg_streams;    // circular list of stream pointers
+static int ffmpeg_stream_cur;           // where we put the last stream pointer
+#define ffmpeg_sl_bits (10)             // log2 stream list size (in entries)
+#define ffmpeg_sl_size (1 << ffmpeg_sl_bits)
+
+// add a stream to the list & return the appropriate codec_param to access it
+static int ffmpeg_codec_param( hb_stream_t *stream, int stream_index )
+{
+    if ( !ffmpeg_streams )
+    {
+        ffmpeg_streams = calloc( ffmpeg_sl_size, sizeof(stream) );
+    }
+
+    // the title scan adds all the ffmpeg media streams at once so we
+    // only add a new entry to our stream list if the stream is different
+    // than last time.
+    int slot = ffmpeg_stream_cur;
+    if ( ffmpeg_streams[slot] != stream )
+    {
+        // new stream - put it in the next slot of the stream list
+        slot = ++ffmpeg_stream_cur & (ffmpeg_sl_size - 1);
+        ffmpeg_streams[slot] = stream;
+    }
+
+    ffmpeg_add_codec( stream, stream_index );
+
+    return ( stream_index << ffmpeg_sl_bits ) | slot;
+}
+
+// we're about to open 'title' to convert it - remap the stream associated
+// with the video & audio codec params of the title to refer to 'stream'
+// (the original scan stream was closed and no longer exists).
+static void ffmpeg_remap_stream( hb_stream_t *stream, hb_title_t *title )
+{
+    // all the video & audio came from the same stream so remapping
+    // the video's stream slot takes care of everything.
+    int slot = title->video_codec_param & (ffmpeg_sl_size - 1);
+    ffmpeg_streams[slot] = stream;
+
+    // add codecs for all the streams used by the title
+    ffmpeg_add_codec( stream, title->video_codec_param >> ffmpeg_sl_bits );
+
+    int i;
+    hb_audio_t *audio;
+    for ( i = 0; ( audio = hb_list_item( title->list_audio, i ) ); ++i )
+    {
+        if ( audio->config.in.codec == HB_ACODEC_FFMPEG )
+        {
+            ffmpeg_add_codec( stream,
+                              audio->config.in.codec_param >> ffmpeg_sl_bits );
+        }
+    }
+}
+
+void *hb_ffmpeg_context( int codec_param )
+{
+    int slot = codec_param & (ffmpeg_sl_size - 1);
+    int stream_index = codec_param >> ffmpeg_sl_bits;
+    return ffmpeg_streams[slot]->ffmpeg_ic->streams[stream_index]->codec;
+}
+
+void *hb_ffmpeg_avstream( int codec_param )
+{
+    int slot = codec_param & (ffmpeg_sl_size - 1);
+    int stream_index = codec_param >> ffmpeg_sl_bits;
+    return ffmpeg_streams[slot]->ffmpeg_ic->streams[stream_index];
+}
+
+static AVFormatContext *ffmpeg_deferred_close;
+
+static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title )
+{
+    if ( ffmpeg_deferred_close )
+    {
+        av_close_input_file( ffmpeg_deferred_close );
+        ffmpeg_deferred_close = NULL;
+    }
+    AVFormatContext *ic;
+
+    av_log_set_level( AV_LOG_ERROR );
+    if ( av_open_input_file( &ic, stream->path, NULL, 0, NULL ) < 0 )
+    {
+        return 0;
+    }
+    if ( av_find_stream_info( ic ) < 0 )
+        goto fail;
+
+    stream->ffmpeg_ic = ic;
+    stream->hb_stream_type = ffmpeg;
+
+    if ( title )
+    {
+        // we're opening for read. scan passed out codec params that
+        // indexed its stream so we need to remap them so they point
+        // to this stream.
+        ffmpeg_remap_stream( stream, title );
+        ffmpeg_seek( stream, 0. );
+        av_log_set_level( AV_LOG_ERROR );
+    }
+    else
+    {
+        // we're opening for scan. let ffmpeg put some info into the
+        // log about what we've got.
+        av_log_set_level( AV_LOG_INFO );
+        dump_format( ic, 0, stream->path, 0 );
+        av_log_set_level( AV_LOG_ERROR );
+
+        // accept this file if it has at least one video stream we can decode
+        int i;
+        for (i = 0; i < ic->nb_streams; ++i )
+        {
+            if ( ic->streams[i]->codec->codec_type == CODEC_TYPE_VIDEO )
+            {
+                break;
+            }
+        }
+        if ( i >= ic->nb_streams )
+            goto fail;
+    }
+    return 1;
+
+  fail:
+    av_close_input_file( ic );
+    return 0;
+}
+
+static void ffmpeg_close( hb_stream_t *d )
+{
+    // XXX since we're sharing the CodecContext with the downstream
+    // decoder proc we can't close the stream. We need to reference count
+    // this so we can close it when both are done with their instance but
+    // for now just defer the close until the next stream open or close.
+    if ( ffmpeg_deferred_close )
+    {
+        av_close_input_file( ffmpeg_deferred_close );
+    }
+    ffmpeg_deferred_close = d->ffmpeg_ic;
+}
+
+static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
+{
+    AVStream *st = stream->ffmpeg_ic->streams[id];
+    AVCodecContext *codec = st->codec;
+
+    // scan will ignore any audio without a bitrate. Since we've already
+    // typed the audio in order to determine its codec we set up the audio
+    // paramters here.
+    if ( codec->bit_rate || codec->sample_rate )
+    {
+        static const int chan2layout[] = {
+            HB_INPUT_CH_LAYOUT_MONO,  // We should allow no audio really.
+            HB_INPUT_CH_LAYOUT_MONO,   
+            HB_INPUT_CH_LAYOUT_STEREO,
+            HB_INPUT_CH_LAYOUT_2F1R,   
+            HB_INPUT_CH_LAYOUT_2F2R,
+            HB_INPUT_CH_LAYOUT_3F2R,   
+            HB_INPUT_CH_LAYOUT_4F2R,
+            HB_INPUT_CH_LAYOUT_STEREO, 
+            HB_INPUT_CH_LAYOUT_STEREO,
+        };
+
+        hb_audio_t *audio = calloc( 1, sizeof(*audio) );;
+
+        audio->id = id;
+        if ( codec->codec_id == CODEC_ID_AC3 )
+        {
+            audio->config.in.codec = HB_ACODEC_AC3;
+        }
+        else
+        {
+            audio->config.in.codec = HB_ACODEC_FFMPEG;
+            audio->config.in.codec_param = ffmpeg_codec_param( stream, id );
+
+            audio->config.in.bitrate = codec->bit_rate? codec->bit_rate : 1;
+            audio->config.in.samplerate = codec->sample_rate;
+            audio->config.in.channel_layout = chan2layout[codec->channels & 7];
+        }
+
+        set_audio_description( audio, lang_for_code2( st->language ) );
+
+        hb_list_add( title->list_audio, audio );
+    }
+}
+
+static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream )
+{
+    AVFormatContext *ic = stream->ffmpeg_ic;
+
+    // 'Barebones Title'
+    hb_title_t *title = hb_title_init( stream->path, 0 );
+    title->index = 1;
+
+	// Copy part of the stream path to the title name
+	char *sep = strrchr(stream->path, '/');
+	if (sep)
+		strcpy(title->name, sep+1);
+	char *dot_term = strrchr(title->name, '.');
+	if (dot_term)
+		*dot_term = '\0';
+
+    uint64_t dur = ic->duration * 90000 / AV_TIME_BASE;
+    title->duration = dur;
+    dur /= 90000;
+    title->hours    = dur / 3600;
+    title->minutes  = ( dur % 3600 ) / 60;
+    title->seconds  = dur % 60;
+
+    // One Chapter
+    hb_chapter_t * chapter;
+    chapter = calloc( sizeof( hb_chapter_t ), 1 );
+    chapter->index = 1;
+    chapter->duration = title->duration;
+    chapter->hours = title->hours;
+    chapter->minutes = title->minutes;
+    chapter->seconds = title->seconds;
+    hb_list_add( title->list_chapter, chapter );
+
+    // set the title to decode the first video stream in the file
+    title->demuxer = HB_NULL_DEMUXER;
+    title->video_codec = 0;
+    int i;
+    for (i = 0; i < ic->nb_streams; ++i )
+    {
+        if ( ic->streams[i]->codec->codec_type == CODEC_TYPE_VIDEO &&
+             avcodec_find_decoder( ic->streams[i]->codec->codec_id ) &&
+             title->video_codec == 0 )
+        {
+            title->video_id = i;
+
+            // We have to use the 'internal' avcodec decoder because
+            // it needs to share the codec context from this video
+            // stream. The parser internal to av_read_frame
+            // passes a bunch of state info to the decoder via the context.
+            title->video_codec = WORK_DECAVCODECVI;
+            title->video_codec_param = ffmpeg_codec_param( stream, i );
+        }
+        else if ( ic->streams[i]->codec->codec_type == CODEC_TYPE_AUDIO &&
+                  avcodec_find_decoder( ic->streams[i]->codec->codec_id ) )
+        {
+            add_ffmpeg_audio( title, stream, i );
+        }
+    }
+
+    return title;
+}
+
+static int64_t av_to_hb_pts( int64_t pts, double conv_factor )
+{
+    if ( pts == AV_NOPTS_VALUE )
+        return -1;
+    return (int64_t)( (double)pts * conv_factor );
+}
+
+static int ffmpeg_read( hb_stream_t *stream, hb_buffer_t *buf )
+{
+    AVPacket pkt;
+
+    if ( av_read_frame( stream->ffmpeg_ic, &pkt ) < 0 )
+    {
+        return 0;
+    }
+    if ( pkt.size > buf->alloc )
+    {
+        // need to expand buffer
+        hb_buffer_realloc( buf, pkt.size );
+    }
+    memcpy( buf->data, pkt.data, pkt.size );
+    buf->id = pkt.stream_index;
+    buf->size = pkt.size;
+    int64_t pts = pkt.pts != AV_NOPTS_VALUE? pkt.pts : 
+                         pkt.dts != AV_NOPTS_VALUE? pkt.dts : -1;
+    buf->start = av_to_hb_pts( pts,
+                  av_q2d(stream->ffmpeg_ic->streams[pkt.stream_index]->time_base)*90000. );
+    buf->renderOffset = av_to_hb_pts( pkt.pts,
+                  av_q2d(stream->ffmpeg_ic->streams[pkt.stream_index]->time_base)*90000. );
+    av_free_packet( &pkt );
+    return 1;
+}
+
+static int ffmpeg_seek( hb_stream_t *stream, float frac )
+{
+    AVFormatContext *ic = stream->ffmpeg_ic;
+    int64_t pos = (double)ic->duration * (double)frac;
+    av_seek_frame( ic, -1, pos, pos? 0 : AVSEEK_FLAG_BACKWARD );
+    return 1;
+}

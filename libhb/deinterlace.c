@@ -17,7 +17,7 @@
 */
 
 #include "hb.h"
-#include "ffmpeg/avcodec.h"
+#include "libavcodec/avcodec.h"
 #include "mpeg2dec/mpeg2.h"
 
 #define SUPPRESS_AV_LOG

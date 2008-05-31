@@ -38,9 +38,11 @@ struct hb_work_private_s
 
 };
 
-int  deca52Init( hb_work_object_t *, hb_job_t * );
-int  deca52Work( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
-void deca52Close( hb_work_object_t * );
+static int  deca52Init( hb_work_object_t *, hb_job_t * );
+static int  deca52Work( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
+static void deca52Close( hb_work_object_t * );
+static int deca52BSInfo( hb_work_object_t * , const hb_buffer_t *,
+                         hb_work_info_t * );
 
 hb_work_object_t hb_deca52 =
 {
@@ -48,7 +50,9 @@ hb_work_object_t hb_deca52 =
     "AC3 decoder",
     deca52Init,
     deca52Work,
-    deca52Close
+    deca52Close,
+    0,
+    deca52BSInfo
 };
 
 /***********************************************************************
@@ -85,7 +89,7 @@ static sample_t dynrng_call (sample_t c, void *data)
  ***********************************************************************
  * Allocate the work object, initialize liba52
  **********************************************************************/
-int deca52Init( hb_work_object_t * w, hb_job_t * job )
+static int deca52Init( hb_work_object_t * w, hb_job_t * job )
 {
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     hb_audio_t * audio = w->audio;
@@ -119,7 +123,7 @@ int deca52Init( hb_work_object_t * w, hb_job_t * job )
  ***********************************************************************
  * Free memory
  **********************************************************************/
-void deca52Close( hb_work_object_t * w )
+static void deca52Close( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
     a52_free( pv->state );
@@ -134,7 +138,7 @@ void deca52Close( hb_work_object_t * w )
  * Add the given buffer to the data we already have, and decode as much
  * as we can
  **********************************************************************/
-int deca52Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
+static int deca52Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 hb_buffer_t ** buf_out )
 {
     hb_work_private_t * pv = w->private_data;
@@ -276,3 +280,82 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     return buf;
 }
 
+static int deca52BSInfo( hb_work_object_t *w, const hb_buffer_t *b,
+                         hb_work_info_t *info )
+{
+    int i, rate, bitrate, flags;
+
+    memset( info, 0, sizeof(*info) );
+
+    /* since AC3 frames don't line up with MPEG ES frames scan the
+     * entire frame for an AC3 sync pattern.  */
+    for ( i = 0; i < b->size - 7; ++i )
+    {
+        if( a52_syncinfo( &b->data[i], &flags, &rate, &bitrate ) != 0 )
+        {
+            break;
+        }
+    }
+    if ( i >= b->size - 7 )
+    {
+        /* didn't find AC3 sync */
+        return 0;
+    }
+
+    info->name = "AC-3";
+    info->rate = rate;
+    info->rate_base = 1;
+    info->bitrate = bitrate;
+    info->flags = flags;
+    if ( (flags & A52_CHANNEL_MASK) == A52_DOLBY )
+    {
+        info->flags |= AUDIO_F_DOLBY;
+    }
+
+    switch( flags & A52_CHANNEL_MASK )
+    {
+        /* mono sources */
+        case A52_MONO:
+        case A52_CHANNEL1:
+        case A52_CHANNEL2:
+            info->channel_layout = HB_INPUT_CH_LAYOUT_MONO;
+            break;
+        /* stereo input */
+        case A52_CHANNEL:
+        case A52_STEREO:
+            info->channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
+            break;
+        /* dolby (DPL1 aka Dolby Surround = 4.0 matrix-encoded) input */
+        case A52_DOLBY:
+            info->channel_layout = HB_INPUT_CH_LAYOUT_DOLBY;
+            break;
+        /* 3F/2R input */
+        case A52_3F2R:
+            info->channel_layout = HB_INPUT_CH_LAYOUT_3F2R;
+            break;
+        /* 3F/1R input */
+        case A52_3F1R:
+            info->channel_layout = HB_INPUT_CH_LAYOUT_3F1R;
+            break;
+        /* other inputs */
+        case A52_3F:
+            info->channel_layout = HB_INPUT_CH_LAYOUT_3F;
+            break;
+        case A52_2F1R:
+            info->channel_layout = HB_INPUT_CH_LAYOUT_2F1R;
+            break;
+        case A52_2F2R:
+            info->channel_layout = HB_INPUT_CH_LAYOUT_2F2R;
+            break;
+        /* unknown */
+        default:
+            info->channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
+    }
+
+    if (flags & A52_LFE)
+    {
+        info->channel_layout |= HB_INPUT_CH_LAYOUT_HAS_LFE;
+    }
+
+    return 1;
+}

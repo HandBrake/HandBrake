@@ -1,7 +1,8 @@
 #include "hb.h"
 
-#include "ffmpeg/avcodec.h"
-#include "ffmpeg/swscale.h"
+#include "libavcodec/avcodec.h"
+#include "libavformat/avformat.h"
+#include "libswscale/swscale.h"
 
 struct hb_handle_s
 {
@@ -122,9 +123,7 @@ hb_handle_t * hb_init_real( int verbose, int update_check )
     h->pause_lock = hb_lock_init();
 
     /* libavcodec */
-    avcodec_init();
-    avcodec_register_all();
-    av_register_codec_parser( &mpegaudio_parser);
+    av_register_all();
 
     /* Start library thread */
     hb_log( "hb_init: starting libhb thread" );
@@ -220,6 +219,9 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
 	hb_register( &hb_deca52 );
 	hb_register( &hb_decdca );
 	hb_register( &hb_decavcodec );
+	hb_register( &hb_decavcodecv );
+	hb_register( &hb_decavcodecvi );
+	hb_register( &hb_decavcodecai );
 	hb_register( &hb_declpcm );
 	hb_register( &hb_encfaac );
 	hb_register( &hb_enclame );

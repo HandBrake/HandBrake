@@ -17,7 +17,7 @@ HANDBRAKE_LIBS = libhb.a
           contrib/lib/libogg.a        contrib/lib/libsamplerate.a
           contrib/lib/libx264.a       contrib/lib/libxvidcore.a
           contrib/lib/libmkv.a        contrib/lib/libswscale.a
-          contrib/lib/libtheora.a ;
+          contrib/lib/libtheora.a     contrib/lib/libfaad.a ;
 
 if $(OS) = UNKNOWN
 {

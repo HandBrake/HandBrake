@@ -251,6 +251,7 @@ struct hb_job_s
 #define HB_ACODEC_MPGA   0x001000
 #define HB_ACODEC_LPCM   0x002000
 #define HB_ACODEC_DCA    0x004000
+#define HB_ACODEC_FFMPEG 0x008000
 
 /* Audio Mixdown */
 /* define some masks, used to extract the various information from the HB_AMIXDOWN_XXXX values */
@@ -329,8 +330,9 @@ struct hb_audio_config_s
     /* Input */
     struct
     {
-                int track;      /* Input track number */
-        PRIVATE uint32_t codec;      /* Input audio codec */
+        int track;                /* Input track number */
+        PRIVATE uint32_t codec;   /* Input audio codec */
+        PRIVATE uint32_t codec_param; /* per-codec config info */
         PRIVATE int samplerate; /* Input sample rate (Hz) */
         PRIVATE int bitrate;    /* Input bitrate (kbps) */
         PRIVATE int channel_layout;
@@ -345,6 +347,7 @@ struct hb_audio_config_s
         PRIVATE int ac3;    /* flags.ac3 is only set when the source audio format is HB_ACODEC_AC3 */
         PRIVATE int dca;    /* flags.dca is only set when the source audio format is HB_ACODEC_DCA */
     } flags;
+#define AUDIO_F_DOLBY (1 << 31)  /* set if source uses Dolby Surround */
 
     struct
     {
@@ -437,7 +440,11 @@ struct hb_title_s
     int         rate;
     int         rate_base;
     int         crop[4];
+    enum { HB_MPEG2_DEMUXER = 0, HB_NULL_DEMUXER } demuxer;
     int         detected_interlacing;
+    int         video_id;               /* demuxer stream id for video */
+    int         video_codec;            /* worker object id of video codec */
+    int         video_codec_param;      /* codec specific config */
 
     uint32_t    palette[16];
 
@@ -501,6 +508,27 @@ struct hb_state_s
     } param;
 };
 
+typedef struct hb_work_info_s
+{
+    const char *name;
+    int     profile;
+    int     level;
+    int     bitrate;
+    int     rate;
+    int     rate_base;
+    int     flags;
+    union {
+        struct {    // info only valid for video decoders
+            int     width;
+            int     height;
+            double  aspect;
+        };
+        struct {    // info only valid for audio decoders
+            int     channel_layout;
+        };
+    };
+} hb_work_info_t;
+
 struct hb_work_object_s
 {
     int                 id;
@@ -511,6 +539,18 @@ struct hb_work_object_s
     int              (* work)  ( hb_work_object_t *, hb_buffer_t **,
                                  hb_buffer_t ** );
     void             (* close) ( hb_work_object_t * );
+    /* the info entry point is used by scan to get bitstream information
+     * during a decode (i.e., it should only be called after at least one
+     * call to the 'work' entry point). currently it's only called for
+     * video streams & can be null for other work objects. */
+    int              (* info)  ( hb_work_object_t *, hb_work_info_t * );
+    /* the bitstream info entry point is used by scan to get bitstream
+     * information from a buffer. it doesn't have to be called during a
+     * decode (it can be called even if init & work haven't been).
+     * currently it's only called for audio streams & can be null for
+     * other work objects. */
+    int              (* bsinfo)  ( hb_work_object_t *, const hb_buffer_t *, 
+                                   hb_work_info_t * );
 
     hb_fifo_t         * fifo_in;
     hb_fifo_t         * fifo_out;
@@ -524,6 +564,7 @@ struct hb_work_object_s
     hb_thread_t       * thread;
     volatile int      * done;
     int                 status;
+    int                 codec_param;
 
     hb_work_object_t  * next;
 	int				  thread_sleep_interval;
@@ -541,6 +582,9 @@ extern hb_work_object_t hb_enctheora;
 extern hb_work_object_t hb_deca52;
 extern hb_work_object_t hb_decdca;
 extern hb_work_object_t hb_decavcodec;
+extern hb_work_object_t hb_decavcodecv;
+extern hb_work_object_t hb_decavcodecvi;
+extern hb_work_object_t hb_decavcodecai;
 extern hb_work_object_t hb_declpcm;
 extern hb_work_object_t hb_encfaac;
 extern hb_work_object_t hb_enclame;

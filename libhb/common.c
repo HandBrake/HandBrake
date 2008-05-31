@@ -593,6 +593,9 @@ hb_title_t * hb_title_init( char * dvd, int index )
     t->list_chapter  = hb_list_init();
     t->list_subtitle = hb_list_init();
     strcat( t->dvd, dvd );
+    // default to decoding mpeg2
+    t->video_id      = 0xE0;
+    t->video_codec   = WORK_DECMPEG2;
 
     return t;
 }

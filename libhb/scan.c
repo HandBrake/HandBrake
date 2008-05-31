@@ -237,16 +237,15 @@ static void ScanFunc( void * _data )
 static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
 {
     int             i, npreviews = 0;
-    hb_buffer_t   * buf_ps, * buf_es, * buf_raw;
-    hb_list_t     * list_es, * list_raw;
-    hb_libmpeg2_t * mpeg2;
+    hb_buffer_t   * buf_ps, * buf_es;
+    hb_list_t     * list_es;
     int progressive_count = 0;
     int interlaced_preview_count = 0;
-    int last_ar = 0, ar16_count = 0, ar4_count = 0;
+    double last_ar = 0;
+    int ar16_count = 0, ar4_count = 0;
 
     buf_ps   = hb_buffer_init( HB_DVD_READ_BUFFER_SIZE );
     list_es  = hb_list_init();
-    list_raw = hb_list_init();
 
     hb_log( "scan: decoding previews for title %d", title->index );
 
@@ -263,7 +262,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         {
           if( !hb_dvd_seek( data->dvd, (float) ( i + 1 ) / 11.0 ) )
           {
-              goto error;
+              continue;
           }
         }
         else if (data->stream)
@@ -273,13 +272,17 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
            * file and we need it to decode any previews. */
           if (!hb_stream_seek(data->stream, (float) i / 11.0 ) )
           {
-            goto error;
+              continue;
           }
         }
 
         hb_log( "scan: preview %d", i + 1 );
 
-        mpeg2 = hb_libmpeg2_init();
+        int vcodec = title->video_codec? title->video_codec : WORK_DECMPEG2;
+        hb_work_object_t *vid_decoder = hb_get_work( vcodec );
+        vid_decoder->codec_param = title->video_codec_param;
+        vid_decoder->init( vid_decoder, NULL );
+        hb_buffer_t * vid_buf = NULL;
 
         for( j = 0; j < 10240 ; j++ )
         {
@@ -299,82 +302,76 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                   goto skip_preview;
               }
             }
-            hb_demux_ps( buf_ps, list_es, 0 );
+            if ( title->demuxer == HB_NULL_DEMUXER )
+            {
+                hb_demux_null( buf_ps, list_es, 0 );
+            }
+            else
+            {
+                hb_demux_ps( buf_ps, list_es, 0 );
+            }
 
             while( ( buf_es = hb_list_item( list_es, 0 ) ) )
             {
                 hb_list_rem( list_es, buf_es );
-                if( buf_es->id == 0xE0 && !hb_list_count( list_raw ) )
+                if( buf_es->id == title->video_id && vid_buf == NULL )
                 {
-                    hb_libmpeg2_decode( mpeg2, buf_es, list_raw );
-                    int ar = hb_libmpeg2_clear_aspect_ratio( mpeg2 );
-                    if ( ar != 0 )
-                    {
-                        if ( ar != last_ar && last_ar != 0 )
-                        {
-                            hb_log( "aspect ratio changed from %d to %d",
-                                    last_ar, ar );
-                        }
-                        switch ( ar )
-                        {
-                            case HB_ASPECT_BASE * 4 / 3:
-                                ++ar4_count;
-                                break;
-                            case HB_ASPECT_BASE * 16 / 9:
-                                ++ar16_count;
-                                break;
-                            default:
-                                hb_log( "unknown aspect ratio %d", ar );
-                                /* if the aspect is closer to 4:3 use that
-                                 * otherwise use 16:9 */
-                                if ( ar < HB_ASPECT_BASE * 14 / 9 )
-                                {
-                                    ++ar4_count;
-                                }
-                                else
-                                {
-                                    ++ar16_count;
-                                }
-                                break;
-                        }
-                    }
-                    last_ar = ar;
+                    vid_decoder->work( vid_decoder, &buf_es, &vid_buf );
                 }
                 else if( ! AllAudioOK( title ) )
                 {
                     LookForAudio( title, buf_es );
                 }
-                hb_buffer_close( &buf_es );
-
-                if( hb_list_count( list_raw ) && AllAudioOK( title ) )
-                {
-                    /* We got a picture */
-                    break;
-                }
+                if ( buf_es )
+                    hb_buffer_close( &buf_es );
             }
 
-            if( hb_list_count( list_raw ) && AllAudioOK( title ) )
-            {
+            if( vid_buf && AllAudioOK( title ) )
                 break;
-            }
         }
 
-        if( !hb_list_count( list_raw ) )
+        if( ! vid_buf )
         {
             hb_log( "scan: could not get a decoded picture" );
             continue;
         }
 
         /* Get size and rate infos */
-        title->rate = 27000000;
-        int ar;
-        hb_libmpeg2_info( mpeg2, &title->width, &title->height,
-                          &title->rate_base, &ar );
 
-        /* if we found mostly 4:3 previews use that as the aspect ratio otherwise
-           use 16:9 */
-        title->aspect = ar4_count > ar16_count ?
-                            HB_ASPECT_BASE * 4 / 3 : HB_ASPECT_BASE * 16 / 9;
+        hb_work_info_t vid_info;
+        vid_decoder->info( vid_decoder, &vid_info );
+        vid_decoder->close( vid_decoder );
+        free( vid_decoder );
+
+        title->width = vid_info.width;
+        title->height = vid_info.height;
+        title->rate = vid_info.rate;
+        title->rate_base = vid_info.rate_base;
+        if ( vid_info.aspect != 0 )
+        {
+            if ( vid_info.aspect != last_ar && last_ar != 0 )
+            {
+                hb_log( "aspect ratio changed from %g to %g",
+                        last_ar, vid_info.aspect );
+            }
+            switch ( (int)vid_info.aspect )
+            {
+                case HB_ASPECT_BASE * 4 / 3:
+                    ++ar4_count;
+                    break;
+                case HB_ASPECT_BASE * 16 / 9:
+                    ++ar16_count;
+                    break;
+                default:
+                    hb_log( "unknown aspect ratio %g", vid_info.aspect );
+                    /* if the aspect is closer to 4:3 use that
+                     * otherwise use 16:9 */
+                    vid_info.aspect < HB_ASPECT_BASE * 14 / 9 ? ++ar4_count :
+                                                                ++ar16_count;
+                    break;
+            }
+            last_ar = vid_info.aspect;
+        }
 
         if( title->rate_base == 1126125 )
         {
@@ -421,18 +418,14 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             title->crop[2] = title->crop[3] = title->width / 2;
         }
 
-        hb_libmpeg2_close( &mpeg2 );
-
         while( ( buf_es = hb_list_item( list_es, 0 ) ) )
         {
             hb_list_rem( list_es, buf_es );
             hb_buffer_close( &buf_es );
         }
 
-        buf_raw = hb_list_item( list_raw, 0 );
-
         /* Check preview for interlacing artifacts */
-        if( hb_detect_comb( buf_raw, title->width, title->height, 10, 30, 9, 10, 30, 9 ) )
+        if( hb_detect_comb( vid_buf, title->width, title->height, 10, 30, 9, 10, 30, 9 ) )
         {
             hb_log("Interlacing detected in preview frame %i", i);
             interlaced_preview_count++;
@@ -444,7 +437,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         file_preview = fopen( filename, "w" );
         if( file_preview )
         {
-            fwrite( buf_raw->data, title->width * title->height * 3 / 2,
+            fwrite( vid_buf->data, title->width * title->height * 3 / 2,
                     1, file_preview );
             fclose( file_preview );
         }
@@ -453,14 +446,14 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             hb_log( "scan: fopen failed (%s)", filename );
         }
 
-#define Y    buf_raw->data
+#define Y    vid_buf->data
 #define DARK 64
 
         /* Detect black borders */
 
         for( j = 0; j < title->width; j++ )
         {
-            for( k = 0; k < title->crop[0]; k++ )
+            for( k = 2; k < title->crop[0]; k++ )
                 if( Y[ k * title->width + j ] > DARK )
                 {
                     title->crop[0] = k;
@@ -493,12 +486,14 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         ++npreviews;
 
 skip_preview:
-        while( ( buf_raw = hb_list_item( list_raw, 0 ) ) )
-        {
-            hb_list_rem( list_raw, buf_raw );
-            hb_buffer_close( &buf_raw );
-        }
+        if ( vid_buf )
+            hb_buffer_close( &vid_buf );
     }
+
+    /* if we found mostly 4:3 previews use that as the aspect ratio otherwise
+       use 16:9 */
+    title->aspect = ar4_count > ar16_count ?
+                        HB_ASPECT_BASE * 4 / 3 : HB_ASPECT_BASE * 16 / 9;
 
     title->crop[0] = EVEN( title->crop[0] );
     title->crop[1] = EVEN( title->crop[1] );
@@ -523,12 +518,6 @@ skip_preview:
         title->detected_interlacing = 0;
     }
 
-    goto cleanup;
-
-error:
-    npreviews = 0;
-
-cleanup:
     hb_buffer_close( &buf_ps );
     while( ( buf_es = hb_list_item( list_es, 0 ) ) )
     {
@@ -536,234 +525,10 @@ cleanup:
         hb_buffer_close( &buf_es );
     }
     hb_list_close( &list_es );
-    while( ( buf_raw = hb_list_item( list_raw, 0 ) ) )
-    {
-        hb_list_rem( list_raw, buf_raw );
-        hb_buffer_close( &buf_raw );
-    }
-    hb_list_close( &list_raw );
     if (data->dvd)
       hb_dvd_stop( data->dvd );
 
     return npreviews;
-}
-
-static void update_audio_description( const char *codec, hb_audio_t *audio,
-                                      int is_dolby )
-{
-    hb_log( "scan: %s, rate=%dHz, bitrate=%d", codec, audio->config.in.samplerate,
-            audio->config.in.bitrate );
-
-    /* XXX */
-    if ( is_dolby )
-    {
-        strcat( audio->config.lang.description, " (Dolby Surround)" );
-        return;
-    }
-
-    char *desc = audio->config.lang.description +
-                    strlen( audio->config.lang.description );
-    sprintf( desc, " (%d.%d ch)",
-       HB_INPUT_CH_LAYOUT_GET_DISCRETE_FRONT_COUNT(audio->config.in.channel_layout) +
-       HB_INPUT_CH_LAYOUT_GET_DISCRETE_REAR_COUNT(audio->config.in.channel_layout),
-       HB_INPUT_CH_LAYOUT_GET_DISCRETE_LFE_COUNT(audio->config.in.channel_layout));
-}
-
-static int hb_setup_a52_audio( hb_audio_t *audio, hb_buffer_t *b )
-{
-    int i, rate, bitrate, flags;
-
-    /* since AC3 frames don't line up with MPEG ES frames scan the
-     * entire frame for an AC3 sync pattern.  */
-    for ( i = 0; i < b->size - 7; ++i )
-    {
-        if( a52_syncinfo( &b->data[i], &flags, &rate, &bitrate ) != 0 )
-        {
-            break;
-        }
-    }
-    if ( i >= b->size - 7 )
-    {
-        /* didn't find AC3 sync */
-        return 0;
-    }
-
-    audio->config.in.samplerate = rate;
-    audio->config.in.bitrate = bitrate;
-
-    switch( flags & A52_CHANNEL_MASK )
-    {
-        /* mono sources */
-        case A52_MONO:
-        case A52_CHANNEL1:
-        case A52_CHANNEL2:
-            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_MONO;
-            break;
-        /* stereo input */
-        case A52_CHANNEL:
-        case A52_STEREO:
-            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
-            break;
-        /* dolby (DPL1 aka Dolby Surround = 4.0 matrix-encoded) input */
-        case A52_DOLBY:
-            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_DOLBY;
-            break;
-        /* 3F/2R input */
-        case A52_3F2R:
-            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_3F2R;
-            break;
-        /* 3F/1R input */
-        case A52_3F1R:
-            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_3F1R;
-            break;
-        /* other inputs */
-        case A52_3F:
-            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_3F;
-            break;
-        case A52_2F1R:
-            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_2F1R;
-            break;
-        case A52_2F2R:
-            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_2F2R;
-            break;
-        /* unknown */
-        default:
-            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
-    }
-
-    if (flags & A52_LFE)
-    {
-        audio->config.in.channel_layout |= HB_INPUT_CH_LAYOUT_HAS_LFE;
-    }
-
-    /* store the AC3 flags for future reference
-     * This enables us to find out if we had a stereo or Dolby source later on
-     * Store the ac3 flags in the public ac3flags property too, so we can access
-     * it from the GUI
-     */
-    audio->config.flags.ac3 = audio->priv.config.a52.ac3flags = flags;
-    update_audio_description( "AC3", audio, (flags & A52_CHANNEL_MASK) == A52_DOLBY );
-    return 1;
-}
-
-static int hb_setup_dca_audio( hb_audio_t *audio, hb_buffer_t *b )
-{
-    int i, flags, rate, bitrate, frame_length;
-    dca_state_t * state = dca_init( 0 );
-
-    /* since DCA frames don't line up with MPEG ES frames scan the
-     * entire frame for an DCA sync pattern.  */
-    for ( i = 0; i < b->size - 7; ++i )
-    {
-        if( dca_syncinfo( state, &b->data[i], &flags, &rate, &bitrate,
-                          &frame_length ) )
-        {
-            break;
-        }
-    }
-    if ( i >= b->size - 7 )
-    {
-        /* didn't find DCA sync */
-        return 0;
-    }
-
-    audio->config.in.samplerate = rate;
-    audio->config.in.bitrate = bitrate;
-    switch( flags & DCA_CHANNEL_MASK )
-    {
-        /* mono sources */
-        case DCA_MONO:
-            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_MONO;
-            break;
-        /* stereo input */
-        case DCA_CHANNEL:
-        case DCA_STEREO:
-        case DCA_STEREO_SUMDIFF:
-        case DCA_STEREO_TOTAL:
-            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
-            break;
-        /* 3F/2R input */
-        case DCA_3F2R:
-            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_3F2R;
-            break;
-        /* 3F/1R input */
-        case DCA_3F1R:
-            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_3F1R;
-            break;
-        /* other inputs */
-        case DCA_3F:
-            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_3F;
-            break;
-        case DCA_2F1R:
-            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_2F1R;
-            break;
-        case DCA_2F2R:
-            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_2F2R;
-            break;
-        case DCA_4F2R:
-            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_4F2R;
-            break;
-        /* unknown */
-        default:
-            audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
-    }
-
-    if (flags & DCA_LFE)
-    {
-        audio->config.in.channel_layout |= HB_INPUT_CH_LAYOUT_HAS_LFE;
-    }
-
-    /* store the DCA flags for future reference
-     * This enables us to find out if we had a stereo or Dolby source later on
-     * store the dca flags in the public dcaflags property too, so we can access
-     * it from the GUI
-     */
-    audio->config.flags.dca = audio->priv.config.dca.dcaflags = flags;
-    update_audio_description( "DCA", audio, (flags & DCA_CHANNEL_MASK) == DCA_DOLBY );
-    return 1;
-}
-
-static int hb_setup_pcm_audio( hb_audio_t *audio, hb_buffer_t *b )
-{
-    // LPCM doesn't have a sync pattern like AC3 or DCA but every
-    // LPCM elementary stream packet starts with a 7 byte header
-    // giving the characteristics of the stream.
-    // See libhb/declpcm.c for a description of the LPCM header.
-
-    static const int hdr2samplerate[] = { 48000, 96000, 44100, 32000 };
-    static const int hdr2samplesize[] = { 16, 20, 24, 16 };
-    static const int hdr2layout[] = {
-            HB_INPUT_CH_LAYOUT_MONO,   HB_INPUT_CH_LAYOUT_STEREO,
-            HB_INPUT_CH_LAYOUT_2F1R,   HB_INPUT_CH_LAYOUT_2F2R,
-            HB_INPUT_CH_LAYOUT_3F2R,   HB_INPUT_CH_LAYOUT_4F2R,
-            HB_INPUT_CH_LAYOUT_STEREO, HB_INPUT_CH_LAYOUT_STEREO,
-    };
-
-    int nchannels  = ( b->data[4] & 7 ) + 1;
-    int sample_size = hdr2samplesize[b->data[4] >> 6];
-
-    int rate = hdr2samplerate[ ( b->data[4] >> 4 ) & 0x3 ];
-    int bitrate = rate * sample_size * nchannels;
-
-    audio->config.in.samplerate = rate;
-    audio->config.in.bitrate = bitrate;
-    audio->config.in.channel_layout = hdr2layout[nchannels - 1];
-    update_audio_description( "LPCM", audio, 0 );
-    return 1;
-}
-
-static int hb_setup_mpg_audio( hb_audio_t *audio, hb_buffer_t *b )
-{
-    /* XXX
-     * This is a placeholder to get the audio sample rate set.
-     * It should be replaced by something that extracts the correct info from
-     * the mpeg audio bitstream.
-     */
-    audio->config.in.samplerate = 48000;
-    audio->config.in.bitrate = 384000;
-    audio->config.in.channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
-    update_audio_description( "MPGA", audio, 0 );
-    return 1;
 }
 
 /*
@@ -804,29 +569,70 @@ static void LookForAudio( hb_title_t * title, hb_buffer_t * b )
         return;
     }
 
-    switch ( audio->config.in.codec )
+    hb_work_object_t *w = hb_codec_decoder( audio->config.in.codec );
+
+    if ( w == NULL || w->bsinfo == NULL )
     {
-        case HB_ACODEC_AC3:
-            hb_setup_a52_audio( audio, b );
-            break;
-
-        case HB_ACODEC_DCA:
-            hb_setup_dca_audio( audio, b );
-            break;
-
-        case HB_ACODEC_LPCM:
-            hb_setup_pcm_audio( audio, b );
-            break;
-
-        case HB_ACODEC_MPGA:
-            hb_setup_mpg_audio( audio, b );
-            break;
-
-        default:
-            hb_log( "Internal error in scan: unhandled audio type %d for 0x%x",
-                    audio->config.in.codec, audio->id );
-            break;
+        hb_log( "Internal error in scan: unhandled audio type %d for id 0x%x",
+                audio->config.in.codec, audio->id );
+        goto drop_audio;
     }
+
+    hb_work_info_t info;
+    w->audio = audio;
+    w->codec_param = audio->config.in.codec_param;
+    int ret = w->bsinfo( w, b, &info );
+    if ( ret < 0 )
+    {
+        hb_log( "no info on audio type %d/0x%x for id 0x%x",
+                audio->config.in.codec, audio->config.in.codec_param,
+                audio->id );
+        goto drop_audio;
+    }
+    if ( !info.bitrate )
+    {
+        /* didn't find any info */
+        return;
+    }
+    audio->config.in.samplerate = info.rate;
+    audio->config.in.bitrate = info.bitrate;
+    audio->config.in.channel_layout = info.channel_layout;
+    audio->config.flags.ac3 = info.flags;
+
+    // update the audio description string based on the info we found
+    if ( audio->config.flags.ac3 & AUDIO_F_DOLBY )
+    {
+        strcat( audio->config.lang.description, " (Dolby Surround)" );
+    }
+    else
+    {
+        int layout = audio->config.in.channel_layout;
+        char *desc = audio->config.lang.description +
+                        strlen( audio->config.lang.description );
+        sprintf( desc, " (%d.%d ch)",
+                 HB_INPUT_CH_LAYOUT_GET_DISCRETE_FRONT_COUNT(layout) +
+                     HB_INPUT_CH_LAYOUT_GET_DISCRETE_REAR_COUNT(layout),
+                 HB_INPUT_CH_LAYOUT_GET_DISCRETE_LFE_COUNT(layout) );
+    }
+
+    hb_log( "scan: audio 0x%x: %s, rate=%dHz, bitrate=%d %s", audio->id,
+            info.name, audio->config.in.samplerate, audio->config.in.bitrate,
+            audio->config.lang.description );
+ 
+    free( w );
+    return;
+
+    // We get here if there's no hope of finding info on an audio bitstream,
+    // either because we don't have a decoder (or a decoder with a bitstream
+    // info proc) or because the decoder's info proc said that the stream
+    // wasn't something it could handle. Delete the item from the title's
+    // audio list so we won't keep reading packets while trying to get its
+    // bitstream info.
+ drop_audio:
+    if ( w )
+        free( w );
+
+    hb_list_rem( title->list_audio, audio );
 }
 
 /*

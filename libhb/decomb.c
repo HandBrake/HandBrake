@@ -6,7 +6,7 @@
    
    The yadif algorithm was created by Michael Niedermayer. */
 #include "hb.h"
-#include "ffmpeg/avcodec.h"
+#include "libavcodec/avcodec.h"
 #include "mpeg2dec/mpeg2.h"
 
 #define SUPPRESS_AV_LOG
@@ -69,7 +69,7 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
                                            int height,
                                            char * settings );
 
-int hb_decomb_work( hb_buffer_t * buf_in,
+int hb_decomb_work(      const hb_buffer_t * buf_in,
                          hb_buffer_t ** buf_out,
                          int pix_fmt,
                          int width,
@@ -825,13 +825,15 @@ void hb_decomb_close( hb_filter_private_t * pv )
     free( pv );
 }
 
-int hb_decomb_work( hb_buffer_t * buf_in,
-                         hb_buffer_t ** buf_out,
-                         int pix_fmt,
-                         int width,
-                         int height,
-                         hb_filter_private_t * pv )
+int hb_decomb_work( const hb_buffer_t * cbuf_in,
+                    hb_buffer_t ** buf_out,
+                    int pix_fmt,
+                    int width,
+                    int height,
+                    hb_filter_private_t * pv )
 {
+    hb_buffer_t * buf_in = (hb_buffer_t *)cbuf_in;
+
     if( !pv ||
         pix_fmt != pv->pix_fmt ||
         width   != pv->width[0] ||
