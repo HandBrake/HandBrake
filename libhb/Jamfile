@@ -27,8 +27,14 @@ rule HBVersion
 }
 actions HBVersion
 {
-    echo "#ifndef HB_BUILD\n#define HB_BUILD $(HB_BUILD)\n#endif" > $(TOP)/libhb/$(1)
-    echo "#ifndef HB_VERSION\n#define HB_VERSION \"$(HB_VERSION)\"\n#endif" >> $(TOP)/libhb/$(1)
-    echo "#ifndef HB_APPCAST_URL\n#define APPCAST_URL \"$(APPCAST_URL)\"\n#endif" >> $(TOP)/libhb/$(1)
+    echo "#ifndef HB_BUILD" > $(TOP)/libhb/$(1)
+    echo "#define HB_BUILD $(HB_BUILD)" >> $(TOP)/libhb/$(1)
+    echo "#endif" >> $(TOP)/libhb/$(1)
+    echo "#ifndef HB_VERSION" >> $(TOP)/libhb/$(1)
+    echo "#define HB_VERSION \"$(HB_VERSION)\"" >> $(TOP)/libhb/$(1)
+    echo "#endif" >> $(TOP)/libhb/$(1)
+    echo "#ifndef HB_APPCAST_URL" >> $(TOP)/libhb/$(1)
+    echo "#define APPCAST_URL \"$(APPCAST_URL)\"" >> $(TOP)/libhb/$(1)
+    echo "#endif" >> $(TOP)/libhb/$(1)
 }
 HBVersion hbversion.h ;
