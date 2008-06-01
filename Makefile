@@ -19,26 +19,26 @@ test:	clean cli
 
 dev:	clean internal
 
-app:
+app:    libhb/hbversion.h
 	(./DownloadMacOsXContribBinaries.sh ; cd macosx ; xcodebuild -target libhb -target HandBrake -target HandBrakeCLI -configuration UB HB_BUILD="$(HB_BUILD)" HB_VERSION="$(HB_VERSION)" APPCAST_URL="http://handbrake.fr/appcast.xml" build | sed '/^$$/d'  )
 
 contrib/.contrib:
 	@$(MAKE) --no-print-directory -C contrib all
 
-snapshot-app: contrib/.contrib
+snapshot-app: contrib/.contrib libhb/hbversion.h
 	( cd macosx ; xcodebuild -target libhb -target HandBrake -target HandBrakeCLI -configuration Deployment HB_BUILD="$(SNAP_HB_BUILD)" HB_VERSION="$(SNAP_HB_VERSION)" CURRENT_PROJECT_VERSION="$(SNAP_HB_VERSION)" APPCAST_URL="http://handbrake.fr/appcast_unstable.xml" build | sed '/^$$/d' )
 
-app-chunky:
+app-chunky: libhb/hbversion.h
 	(./DownloadMacOsXContribBinaries.sh ; cd macosx ; xcodebuild -alltargets -configuration UB HB_BUILD="$(HB_BUILD)" HB_VERSION="$(HB_VERSION)" APPCAST_URL="http://handbrake.fr/appcast.xml" build | sed '/^$$/d'  )
 
-cli:
+cli:    libhb/hbversion.h
 	(./DownloadMacOsXContribBinaries.sh ; cd macosx ; xcodebuild -target libhb -target HandBrakeCLI -configuration UB HB_BUILD="$(HB_BUILD)" HB_VERSION="$(HB_VERSION)" build | sed '/^$$/d' )
 
 clean:
-	(cd macosx ; xcodebuild -alltargets -configuration UB clean | sed '/^$$/d' )
+	(cd macosx ; xcodebuild -alltargets -configuration UB clean | sed '/^$$/d' ; rm -f libhb/hbversion.h )
 
 mrproper:
-	(rm -rf contrib/*tar.gz contrib/include contrib/lib contrib/DarwinContribVersion.txt ; cd macosx ; xcodebuild -alltargets -configuration UB clean | sed '/^$$/d' )
+	(rm -rf libhb/hbversion.h contrib/*tar.gz contrib/include contrib/lib contrib/DarwinContribVersion.txt ; cd macosx ; xcodebuild -alltargets -configuration UB clean | sed '/^$$/d' )
 
 release:
 	(rm -rf HandBrake HandBrake*dmg ; mkdir -p HandBrake/api HandBrake/doc HandBrake/doc/pdf; cp test/BUILDSHARED AUTHORS BUILD COPYING CREDITS NEWS THANKS TRANSLATIONS HandBrake/doc ; cp -rp pdf/ HandBrake/doc/pdf/ ; cp -rp HandBrake.app HandBrake ; cp -rp libhb/libhb.dylib HandBrake/api ; cp -rp libhb/hb.h libhb/common.h libhb/ports.h HandBrake/api ; cp -rp HandBrakeCLI HandBrake ; hdiutil create -srcfolder HandBrake  -format UDZO HandBrake-$(HB_VERSION)-MacOS_UB.dmg ; rm -rf HandBrake )
@@ -68,7 +68,7 @@ all:	contrib/.contrib libhb/libhb.a HandBrakeCLI
 contrib/.contrib:
 	@$(MAKE) --no-print-directory -C contrib all
 
-libhb/libhb.a:
+libhb/libhb.a: libhb/hbversion.h
 	@$(MAKE) --no-print-directory -C libhb all
 
 HandBrakeCLI:
@@ -77,6 +77,7 @@ HandBrakeCLI:
 clean:
 	@$(MAKE) --no-print-directory -C libhb clean
 	@$(MAKE) --no-print-directory -C test clean
+	@rm libhb/hbversion.h
 
 mrproper: clean
 	@$(MAKE) --no-print-directory -C contrib mrproper
@@ -98,7 +99,7 @@ contribPack:
 contrib/.contrib:
 	@$(MAKE) --no-print-directory -C contrib all
 
-libhb/libhb.a:
+libhb/libhb.a: libhb/hbversion.h
 	@$(MAKE) --no-print-directory -C libhb all
 
 HandBrakeCLI: 
@@ -107,8 +108,20 @@ HandBrakeCLI:
 clean:
 	@$(MAKE) --no-print-directory -C libhb clean
 	@$(MAKE) --no-print-directory -C test clean
+	@rm libhb/hbversion.h
 
 mrproper: clean
 	@$(MAKE) --no-print-directory -C contrib mrproper
 
 endif
+
+libhb/hbversion.h:
+	echo "#ifndef HB_BUILD" > libhb/hbversion.h
+	echo "#define HB_BUILD $(HB_BUILD)" >> libhb/hbversion.h
+	echo "#endif" >> libhb/hbversion.h
+	echo "#ifndef HB_VERSION" >> libhb/hbversion.h
+	echo "#define HB_VERSION \"$(HB_VERSION)\"" >> libhb/hbversion.h
+	echo "#endif" >> libhb/hbversion.h
+	echo "#ifndef HB_APPCAST_URL" >> libhb/hbversion.h
+	echo "#define APPCAST_URL \"$(APPCAST_URL)\"" >> libhb/hbversion.h
+	echo "#endif" >> libhb/hbversion.h
