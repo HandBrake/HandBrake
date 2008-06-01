@@ -492,7 +492,10 @@ hb_stream_t * hb_stream_open( char *path, hb_title_t *title )
             return d;
         }
     }
-    fclose( d->file_handle );
+    if ( d->file_handle )
+    {
+        fclose( d->file_handle );
+    }
     if (d->path)
     {
         free( d->path );
