@@ -38,6 +38,7 @@ struct hb_work_private_s
     int                  new_chap;
     int                  ignore_pts; // workaround M$ bugs
     int                  nframes;
+    int                  ndrops;
     double               duration;  // frame duration (for video)
 };
 
@@ -625,7 +626,8 @@ static int decavcodecviWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         }
         hb_list_add( pv->list, in );
         *buf_out = link_buf_list( pv );
-        hb_log( "%s done: %d frames", pv->context->codec->name, pv->nframes );
+        hb_log( "%s done: %d frames %d drops", pv->context->codec->name,
+                pv->nframes, pv->ndrops );
         return HB_WORK_DONE;
     }
 
@@ -645,10 +647,18 @@ static int decavcodecviWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 hb_log( "overwriting pts %lld with %lld (diff %d)",
                         pv->pts, pts, pts - pv->pts );
             }
-            if ( pv->pts_next - pts >= 10.)
+            if ( pv->pts_next - pts >= pv->duration )
             {
-                hb_log( "time reversal next %.0f pts %lld (diff %g)",
-                        pv->pts_next, pts, pv->pts_next - pts );
+                // this frame starts more than a frame time before where
+                // the nominal frame rate says it should - drop it.
+                // log the first 10 drops so we'll know what's going on.
+                if ( pv->ndrops++ < 10 )
+                {
+                    hb_log( "time reversal next %.0f pts %lld (diff %g)",
+                            pv->pts_next, pts, pv->pts_next - pts );
+                }
+                hb_buffer_close( &in );
+                return HB_WORK_OK;
             }
             pv->pts = pts;
         }
