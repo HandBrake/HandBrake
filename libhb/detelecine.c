@@ -835,7 +835,7 @@ hb_filter_private_t * hb_detelecine_init( int pix_fmt,
 
     ctx->junk_left = ctx->junk_right  = 1;
     ctx->junk_top  = ctx->junk_bottom = 4;
-    ctx->strict_breaks = 0;
+    ctx->strict_breaks = -1;
     ctx->metric_plane  = 0;
 
     if( settings )
