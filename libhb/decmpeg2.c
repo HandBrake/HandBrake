@@ -450,7 +450,7 @@ static int decmpeg2Info( hb_work_object_t *w, hb_work_info_t *info )
 {
     hb_work_private_t *pv = w->private_data;
 
-    if ( pv && pv->libmpeg2 )
+    if ( pv && pv->libmpeg2 && pv->libmpeg2->info && pv->libmpeg2->info->sequence )
     {
         int aspect;
         hb_libmpeg2_t *m = pv->libmpeg2;
