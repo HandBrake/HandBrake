@@ -26,6 +26,21 @@ static int  DecodePreviews( hb_scan_t *, hb_title_t * title );
 static void LookForAudio( hb_title_t * title, hb_buffer_t * b );
 static int  AllAudioOK( hb_title_t * title );
 
+static const char *aspect_to_string( int aspect )
+{
+    switch ( aspect )
+    {
+        case HB_ASPECT_BASE * 1 / 1:    return "1:1";
+        case HB_ASPECT_BASE * 4 / 3:    return "4:3";
+        case HB_ASPECT_BASE * 16 / 9:   return "16:9";
+        case HB_ASPECT_BASE * 221 / 100:   return "2.21:1";
+    }
+    static char arstr[32];
+    double a = (double)aspect / HB_ASPECT_BASE;
+    sprintf( arstr, aspect >= 1.? "%.2f:1" : "1:%.2f", a );
+    return arstr;
+}
+
 hb_thread_t * hb_scan_init( hb_handle_t * handle, const char * path,
                             int title_index, hb_list_t * list_title )
 {
@@ -234,6 +249,42 @@ static void ScanFunc( void * _data )
     _data = NULL;
 }
 
+typedef struct {
+    int count;              /* number of times we've seen this info entry */
+    hb_work_info_t info;    /* copy of info entry */
+} info_list_t;
+
+static void remember_info( info_list_t *info_list, hb_work_info_t *info )
+{
+    for ( ; info_list->count; ++info_list )
+    {
+        if ( memcmp( &info_list->info, info, sizeof(*info) ) == 0 )
+        {
+            // we found a match - bump its count
+            ++info_list->count;
+            return;
+        }
+    }
+    // no match found - add new entry to list (info_list points to
+    // the first free slot). NB - we assume that info_list was allocated
+    // so that it's big enough even if there are no dups. I.e., 10 slots
+    // allocated if there are 10 previews.
+    info_list->count = 1;
+    info_list->info = *info;
+}
+
+static void most_common_info( info_list_t *info_list, hb_work_info_t *info )
+{
+    int i, biggest = 0;
+    for ( i = 1; info_list[i].count; ++i )
+    {
+        if ( info_list[i].count > info_list[biggest].count )
+            biggest = i;
+    }
+    *info = info_list[biggest].info;
+    free( info_list );
+}
+
 /***********************************************************************
  * DecodePreviews
  ***********************************************************************
@@ -248,8 +299,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
     hb_list_t     * list_es;
     int progressive_count = 0;
     int interlaced_preview_count = 0;
-    double last_ar = 0;
-    int ar16_count = 0, ar4_count = 0;
+    info_list_t * info_list = calloc( 10+1, sizeof(*info_list) );
 
     buf_ps   = hb_buffer_init( HB_DVD_READ_BUFFER_SIZE );
     list_es  = hb_list_init();
@@ -350,44 +400,12 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         vid_decoder->close( vid_decoder );
         free( vid_decoder );
 
+        remember_info( info_list, &vid_info );
+
         title->width = vid_info.width;
         title->height = vid_info.height;
-        title->pixel_aspect_width = vid_info.pixel_aspect_width;
-        title->pixel_aspect_height = vid_info.pixel_aspect_height;
-        
         title->rate = vid_info.rate;
         title->rate_base = vid_info.rate_base;
-        if ( vid_info.aspect != 0 )
-        {
-            if ( vid_info.aspect != last_ar && last_ar != 0 )
-            {
-                hb_log( "aspect ratio changed from %g to %g",
-                        last_ar, vid_info.aspect );
-            }
-            
-            if( !title->pixel_aspect_width && !title->pixel_aspect_height )
-            {
-                /* We don't have pixel aspect info from the source, so we're
-                   going to have to make a guess on the display aspect ratio. */
-                switch ( (int)vid_info.aspect )
-                {
-                    case HB_ASPECT_BASE * 4 / 3:
-                        ++ar4_count;
-                        break;
-                    case HB_ASPECT_BASE * 16 / 9:
-                        ++ar16_count;
-                        break;
-                    default:
-                        hb_log( "unknown aspect ratio %g", vid_info.aspect );
-                        /* if the aspect is closer to 4:3 use that
-                         * otherwise use 16:9 */
-                        vid_info.aspect < HB_ASPECT_BASE * 14 / 9 ? ++ar4_count :
-                                                                    ++ar16_count;
-                        break;
-                }
-            }
-            last_ar = vid_info.aspect;
-        }
 
         if( title->rate_base == 1126125 )
         {
@@ -505,41 +523,54 @@ skip_preview:
         if ( vid_buf )
             hb_buffer_close( &vid_buf );
     }
-    
-    if( title->pixel_aspect_width && title->pixel_aspect_width )
-    {
-        title->aspect = ( (double)title->pixel_aspect_width * 
-                         (double)title->width /
-                         (double)title->pixel_aspect_height /
-                         (double)title->height + 0.05 ) * HB_ASPECT_BASE;
-    }
-    else
-    {
-        /* if we found mostly 4:3 previews use that as the aspect ratio otherwise
-           use 16:9 */
-        title->aspect = ar4_count > ar16_count ?
-                            HB_ASPECT_BASE * 4 / 3 : HB_ASPECT_BASE * 16 / 9;
-    }
 
-    title->crop[0] = EVEN( title->crop[0] );
-    title->crop[1] = EVEN( title->crop[1] );
-    title->crop[2] = EVEN( title->crop[2] );
-    title->crop[3] = EVEN( title->crop[3] );
-
-    hb_log( "scan: %d previews, %dx%d, %.3f fps, autocrop = %d/%d/%d/%d, aspect %.2f",
-            npreviews, title->width, title->height, (float) title->rate /
-            (float) title->rate_base, title->crop[0], title->crop[1],
-            title->crop[2], title->crop[3], (float)title->aspect/(float)HB_ASPECT_BASE);
-
-    if( interlaced_preview_count >= ( npreviews / 2 ) )
+    if ( npreviews )
     {
-        hb_log("Title is likely interlaced or telecined (%i out of %i previews). You should do something about that.",
-               interlaced_preview_count, npreviews);
-        title->detected_interlacing = 1;
-    }
-    else
-    {
-        title->detected_interlacing = 0;
+        // use the most common frame info for our final title dimensions
+        hb_work_info_t vid_info;
+        most_common_info( info_list, &vid_info );
+
+        title->width = vid_info.width;
+        title->height = vid_info.height;
+        title->pixel_aspect_width = vid_info.pixel_aspect_width;
+        title->pixel_aspect_height = vid_info.pixel_aspect_height;
+
+        // compute the aspect ratio based on the storage dimensions and the
+        // pixel aspect ratio (if supplied) or just storage dimensions if no PAR.
+        title->aspect = ( (double)title->width / (double)title->height + 0.05 ) *
+                        HB_ASPECT_BASE;
+
+        double aspect = (double)title->width / (double)title->height;
+        if( title->pixel_aspect_width && title->pixel_aspect_height )
+        {
+            aspect *= (double)title->pixel_aspect_width /
+                      (double)title->pixel_aspect_height;
+        }
+        title->aspect = ( aspect + 0.05 ) * HB_ASPECT_BASE;
+
+        title->crop[0] = EVEN( title->crop[0] );
+        title->crop[1] = EVEN( title->crop[1] );
+        title->crop[2] = EVEN( title->crop[2] );
+        title->crop[3] = EVEN( title->crop[3] );
+
+        hb_log( "scan: %d previews, %dx%d, %.3f fps, autocrop = %d/%d/%d/%d, "
+                "aspect %s, PAR %d:%d",
+                npreviews, title->width, title->height, (float) title->rate /
+                (float) title->rate_base,
+                title->crop[0], title->crop[1], title->crop[2], title->crop[3],
+                aspect_to_string( title->aspect ), title->pixel_aspect_width,
+                title->pixel_aspect_height );
+
+        if( interlaced_preview_count >= ( npreviews / 2 ) )
+        {
+            hb_log("Title is likely interlaced or telecined (%i out of %i previews). You should do something about that.",
+                   interlaced_preview_count, npreviews);
+            title->detected_interlacing = 1;
+        }
+        else
+        {
+            title->detected_interlacing = 0;
+        }
     }
 
     hb_buffer_close( &buf_ps );

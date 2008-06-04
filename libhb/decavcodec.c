@@ -683,17 +683,39 @@ static int decavcodecviInfo( hb_work_object_t *w, hb_work_info_t *info )
 {
     if ( decavcodecvInfo( w, info ) )
     {
-        // the frame rate in the codec seems to be bogus but it's ok in the stream.
+        // There are at least three different video frame rates in ffmpeg:
+        //  - time_base in the AVStream
+        //  - time_base in the AVCodecContext
+        //  - r_frame_rate in the AVStream
+        // There's no guidence on which if any of these to believe but the
+        // routine compute_frame_duration tries the stream first then the codec.
+        // In general the codec time base seems bogus & the stream time base is
+        // ok except for wmv's where the stream time base is also bogus but
+        // r_frame_rate is sometimes ok & sometimes a random number.
         AVStream *st = hb_ffmpeg_avstream( w->codec_param );
         AVRational tb;
-        if ( st->r_frame_rate.den && st->r_frame_rate.num )
+        // XXX because the time bases are so screwed up, we only take values
+        // in the range 8fps - 64fps.
+        if ( st->time_base.num * 64 > st->time_base.den &&
+             st->time_base.den > st->time_base.num * 8 )
+        {
+            tb = st->time_base;
+        }
+        else if ( st->codec->time_base.num * 64 > st->codec->time_base.den &&
+                  st->codec->time_base.den > st->codec->time_base.num * 8 )
+        {
+            tb = st->codec->time_base;
+        }
+        else if ( st->r_frame_rate.den * 64 > st->r_frame_rate.num &&
+                  st->r_frame_rate.num > st->r_frame_rate.den * 8 )
         {
             tb.num = st->r_frame_rate.den;
             tb.den = st->r_frame_rate.num;
         }
         else
         {
-            tb = st->time_base;
+            tb.num = 1001;  /*XXX*/
+            tb.den = 30000; /*XXX*/
         }
 
         // ffmpeg gives the frame rate in frames per second while HB wants

@@ -306,33 +306,6 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
 }
 
 /**********************************************************************
- * hb_libmpeg2_info
- **********************************************************************
- *
- *********************************************************************/
-static void hb_libmpeg2_info( hb_libmpeg2_t * m, int * width, int * height,
-                        int * rate, int *aspect_ratio )
-{
-    *width  = m->width;
-    *height = m->height;
-    if (m->info->display_fbuf)
-    {
-        if( (m->info->display_picture->flags & PROGRESSIVE) && (m->height == 480) )
-        {
-            /* The frame is progressive and it's NTSC DVD height, so change its FPS to 23.976.
-               This might not be correct for the title. It's really just for scan.c's benefit.
-               Scan.c will reset the fps to 29.97, until a simple majority of the preview
-               frames report at 23.976.
-            */
-            //hb_log("Detecting NTSC Progressive Frame");
-            m->rate = 1126125;
-        }
-    }
-    *rate   = m->rate;
-    *aspect_ratio = m->aspect_ratio;
-}
-
-/**********************************************************************
  * hb_libmpeg2_close
  **********************************************************************
  *
@@ -452,14 +425,20 @@ static int decmpeg2Info( hb_work_object_t *w, hb_work_info_t *info )
 
     if ( pv && pv->libmpeg2 && pv->libmpeg2->info && pv->libmpeg2->info->sequence )
     {
-        int aspect;
         hb_libmpeg2_t *m = pv->libmpeg2;
 
-        hb_libmpeg2_info( m, &info->width, &info->height, &info->rate_base,
-                          &aspect );
+        info->width = m->width;
+        info->height = m->height;
+        info->pixel_aspect_width = m->info->sequence->pixel_width;
+        info->pixel_aspect_height = m->info->sequence->pixel_height;
+        info->aspect = (double)m->aspect_ratio;
 
-        info->aspect = (double)aspect;
+        // if the frame is progressive & NTSC DVD height report it as 23.976 FPS
+        // so that scan can autodetect NTSC film
         info->rate = 27000000;
+        info->rate_base = ( m->info->display_fbuf && m->info->display_picture &&
+                            (m->info->display_picture->flags & PROGRESSIVE) &&
+                            (m->height == 480 ) ) ?  1126125 : m->rate;
 
         info->bitrate = m->info->sequence->byte_rate * 8;
         info->profile = m->info->sequence->profile_level_id >> 4;
