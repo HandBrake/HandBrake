@@ -90,6 +90,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	
     fChapterTitlesDelegate = [[ChapterTitles alloc] init];
     [fChapterTable setDataSource:fChapterTitlesDelegate];
+    [fChapterTable setDelegate:fChapterTitlesDelegate];
     
     /* Call UpdateUI every 1/2 sec */
     [[NSRunLoop currentRunLoop] addTimer: [NSTimer

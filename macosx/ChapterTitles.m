@@ -101,4 +101,39 @@
     
     return cellEntry;
 }
+
+/* Method to edit the next chapter when the user presses Return. We have to use
+a timer to avoid interfering with the chain of events that handles the edit. */
+- (void)controlTextDidEndEditing: (NSNotification *) notification
+{
+    NSTableView *chapterTable = [notification object];
+    NSInteger column = [chapterTable editedColumn];
+    NSInteger row = [chapterTable editedRow];
+    int textMovement;
+
+    // Edit the cell in the next row, same column
+    row++;
+    textMovement = [[[notification userInfo] objectForKey:@"NSTextMovement"] intValue];
+    if( textMovement == NSReturnTextMovement && row < [chapterTable numberOfRows] )
+    {
+        NSArray *info = [NSArray arrayWithObjects:chapterTable,
+            [NSNumber numberWithInteger:column], [NSNumber numberWithInteger:row], nil];
+        /* The delay is unimportant; editNextRow: won't be called until the responder
+        chain finishes because the event loop containing the timer is on this thread */
+        [self performSelector:@selector(editNextRow:) withObject:info afterDelay:0.0];
+    }
+}
+
+- (void)editNextRow: (id) objects
+{
+    NSTableView *chapterTable = [objects objectAtIndex:0];
+    NSInteger column = [[objects objectAtIndex:1] integerValue];
+    NSInteger row = [[objects objectAtIndex:2] integerValue];
+
+    if( row >= 0 && row < [chapterTable numberOfRows] )
+    {
+        [chapterTable selectRow:row byExtendingSelection:NO];
+        [chapterTable editColumn:column row:row withEvent:nil select:YES];
+    }
+}
 @end
