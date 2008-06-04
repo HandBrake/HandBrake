@@ -657,8 +657,9 @@ void hb_set_anamorphic_size( hb_job_t * job,
     int pixel_aspect_width = job->pixel_aspect_width;
     int pixel_aspect_height = job->pixel_aspect_height;
     
-    /* Only try to guess a pixel aspect if there isn't one set by the source.*/
-    if (cropped_width <= 706 && !title->pixel_aspect_width && !title->pixel_aspect_height)
+    /* If a source was really 704*480 and hard matted with cropping
+       to 720*480, replace the PAR values with the ITU broadcast ones. */
+    if (cropped_width <= 706)
     {
         /* Handle ITU PARs */
         if (title->height == 480)
@@ -670,7 +671,7 @@ void hb_set_anamorphic_size( hb_job_t * job,
                 pixel_aspect_width = 40;
                 pixel_aspect_height = 33;
             }
-            else
+            else if (aspect == 12)
             {
                 /* It's 4:3 */
                 pixel_aspect_width = 10;
@@ -686,7 +687,7 @@ void hb_set_anamorphic_size( hb_job_t * job,
                 pixel_aspect_width = 16;
                 pixel_aspect_height = 11;
             }
-            else
+            else if (aspect == 12)
             {
                 /* It's 4:3 */
                 pixel_aspect_width = 12;
