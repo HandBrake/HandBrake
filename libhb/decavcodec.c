@@ -473,21 +473,24 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
         info->rate = 27000000;
         info->rate_base = (int64_t)context->time_base.num * 27000000LL /
                           context->time_base.den;
+        
+        /* Sometimes there's no pixel aspect set in the source. In that case,
+           assume a 1:1 PAR. Otherwise, preserve the source PAR.             */
+        info->pixel_aspect_width = context->sample_aspect_ratio.num ?
+                                        context->sample_aspect_ratio.num : 1;
+        info->pixel_aspect_height = context->sample_aspect_ratio.den ?
+                                        context->sample_aspect_ratio.den : 1;
 
         /* ffmpeg returns the Pixel Aspect Ratio (PAR). Handbrake wants the
          * Display Aspect Ratio so we convert by scaling by the Storage
          * Aspect Ratio (w/h). We do the calc in floating point to get the
          * rounding right. We round in the second decimal digit because we
          * scale the (integer) aspect by 9 to preserve the 1st digit.  */
-        info->aspect = ( (double)context->sample_aspect_ratio.num * 
+        info->aspect = ( (double)info->pixel_aspect_width * 
                          (double)context->width /
-                         (double)context->sample_aspect_ratio.den /
+                         (double)info->pixel_aspect_height /
                          (double)context->height + 0.05 ) * HB_ASPECT_BASE;
 
-		if( context->sample_aspect_ratio.num == 0 )
-		{
-			info->aspect = (double)context->width / (double)context->height * HB_ASPECT_BASE;
-		}
         info->profile = context->profile;
         info->level = context->level;
         info->name = context->codec->name;

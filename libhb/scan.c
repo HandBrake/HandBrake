@@ -176,6 +176,13 @@ static void ScanFunc( void * _data )
         /* Autocrop by default. Gnark gnark */
         memcpy( job->crop, title->crop, 4 * sizeof( int ) );
 
+        /* Preserve a source's pixel aspect, if it's available. */
+        if( title->pixel_aspect_width && title->pixel_aspect_height )
+        {
+            job->pixel_aspect_width  = title->pixel_aspect_width;
+            job->pixel_aspect_height = title->pixel_aspect_height;
+        }
+
         if( title->aspect == 16 && !job->pixel_aspect_width && !job->pixel_aspect_height)
         {
             hb_reduce( &job->pixel_aspect_width, &job->pixel_aspect_height,
@@ -345,6 +352,9 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
 
         title->width = vid_info.width;
         title->height = vid_info.height;
+        title->pixel_aspect_width = vid_info.pixel_aspect_width;
+        title->pixel_aspect_height = vid_info.pixel_aspect_height;
+        
         title->rate = vid_info.rate;
         title->rate_base = vid_info.rate_base;
         if ( vid_info.aspect != 0 )
@@ -354,21 +364,27 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                 hb_log( "aspect ratio changed from %g to %g",
                         last_ar, vid_info.aspect );
             }
-            switch ( (int)vid_info.aspect )
+            
+            if( !title->pixel_aspect_width && !title->pixel_aspect_height )
             {
-                case HB_ASPECT_BASE * 4 / 3:
-                    ++ar4_count;
-                    break;
-                case HB_ASPECT_BASE * 16 / 9:
-                    ++ar16_count;
-                    break;
-                default:
-                    hb_log( "unknown aspect ratio %g", vid_info.aspect );
-                    /* if the aspect is closer to 4:3 use that
-                     * otherwise use 16:9 */
-                    vid_info.aspect < HB_ASPECT_BASE * 14 / 9 ? ++ar4_count :
-                                                                ++ar16_count;
-                    break;
+                /* We don't have pixel aspect info from the source, so we're
+                   going to have to make a guess on the display aspect ratio. */
+                switch ( (int)vid_info.aspect )
+                {
+                    case HB_ASPECT_BASE * 4 / 3:
+                        ++ar4_count;
+                        break;
+                    case HB_ASPECT_BASE * 16 / 9:
+                        ++ar16_count;
+                        break;
+                    default:
+                        hb_log( "unknown aspect ratio %g", vid_info.aspect );
+                        /* if the aspect is closer to 4:3 use that
+                         * otherwise use 16:9 */
+                        vid_info.aspect < HB_ASPECT_BASE * 14 / 9 ? ++ar4_count :
+                                                                    ++ar16_count;
+                        break;
+                }
             }
             last_ar = vid_info.aspect;
         }
@@ -489,23 +505,31 @@ skip_preview:
         if ( vid_buf )
             hb_buffer_close( &vid_buf );
     }
-
-    /* if we found mostly 4:3 previews use that as the aspect ratio otherwise
-       use 16:9 */
-    title->aspect = ar4_count > ar16_count ?
-                        HB_ASPECT_BASE * 4 / 3 : HB_ASPECT_BASE * 16 / 9;
+    
+    if( title->pixel_aspect_width && title->pixel_aspect_width )
+    {
+        title->aspect = ( (double)title->pixel_aspect_width * 
+                         (double)title->width /
+                         (double)title->pixel_aspect_height /
+                         (double)title->height + 0.05 ) * HB_ASPECT_BASE;
+    }
+    else
+    {
+        /* if we found mostly 4:3 previews use that as the aspect ratio otherwise
+           use 16:9 */
+        title->aspect = ar4_count > ar16_count ?
+                            HB_ASPECT_BASE * 4 / 3 : HB_ASPECT_BASE * 16 / 9;
+    }
 
     title->crop[0] = EVEN( title->crop[0] );
     title->crop[1] = EVEN( title->crop[1] );
     title->crop[2] = EVEN( title->crop[2] );
     title->crop[3] = EVEN( title->crop[3] );
 
-    hb_log( "scan: %d previews, %dx%d, %.3f fps, autocrop = %d/%d/%d/%d, aspect %s",
+    hb_log( "scan: %d previews, %dx%d, %.3f fps, autocrop = %d/%d/%d/%d, aspect %.2f",
             npreviews, title->width, title->height, (float) title->rate /
             (float) title->rate_base, title->crop[0], title->crop[1],
-            title->crop[2], title->crop[3],
-            title->aspect == HB_ASPECT_BASE * 16 / 9 ? "16:9" :
-                title->aspect == HB_ASPECT_BASE * 4 / 3 ? "4:3" : "none" );
+            title->crop[2], title->crop[3], (float)title->aspect/(float)HB_ASPECT_BASE);
 
     if( interlaced_preview_count >= ( npreviews / 2 ) )
     {

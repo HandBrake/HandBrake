@@ -437,6 +437,8 @@ struct hb_title_s
     int         width;
     int         height;
     int         aspect;
+    int         pixel_aspect_width;
+    int         pixel_aspect_height;
     int         rate;
     int         rate_base;
     int         crop[4];
@@ -521,6 +523,8 @@ typedef struct hb_work_info_s
         struct {    // info only valid for video decoders
             int     width;
             int     height;
+            int     pixel_aspect_width;
+            int     pixel_aspect_height;
             double  aspect;
         };
         struct {    // info only valid for audio decoders

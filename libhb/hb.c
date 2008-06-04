@@ -656,8 +656,9 @@ void hb_set_anamorphic_size( hb_job_t * job,
 
     int pixel_aspect_width = job->pixel_aspect_width;
     int pixel_aspect_height = job->pixel_aspect_height;
-
-    if (cropped_width <= 706)
+    
+    /* Only try to guess a pixel aspect if there isn't one set by the source.*/
+    if (cropped_width <= 706 && !title->pixel_aspect_width && !title->pixel_aspect_height)
     {
         /* Handle ITU PARs */
         if (title->height == 480)
