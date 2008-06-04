@@ -471,7 +471,6 @@ static int HandleEvents( hb_handle_t * h )
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 1000;
                     default_abitrate = 160;
-                    default_arate = 48000;
                     default_acodec = HB_ACODEC_FAAC;
                     x264opts = strdup("ref=5:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2");
                     deinterlace = 1;
@@ -519,7 +518,6 @@ static int HandleEvents( hb_handle_t * h )
                     mux = HB_MUX_MP4;
                     job->vbitrate = 512;
                     default_abitrate = 128;
-                    default_arate = 48000;
                     default_acodec = HB_ACODEC_FAAC;
                     job->width = 512;
                     job->chapter_markers = 1;
@@ -531,7 +529,6 @@ static int HandleEvents( hb_handle_t * h )
                     vcodec = HB_VCODEC_X264;
                     size = 695;
                     default_abitrate = 128;
-                    default_arate = 48000;
                     default_acodec = HB_ACODEC_FAAC;
                     job->width = 640;
                     x264opts = strdup("ref=3:mixed-refs:bframes=16:bime:weightb:b-rdo:b-pyramid:direct=auto:me=umh:subme=6:trellis=1:analyse=all:8x8dct:no-fast-pskip");
@@ -545,7 +542,6 @@ static int HandleEvents( hb_handle_t * h )
                     mux = HB_MUX_MP4;
                     job->vbitrate = 1000;
                     default_abitrate = 160;
-                    default_arate = 48000;
                     default_acodec = HB_ACODEC_FAAC;
                 }
 
@@ -635,7 +631,6 @@ static int HandleEvents( hb_handle_t * h )
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 1500;
                     default_abitrate = 160;
-                    default_arate = 48000;
                     default_acodec = HB_ACODEC_FAAC;
                     x264opts = strdup("ref=2:bframes=2:subme=5:me=umh");
                     job->chapter_markers = 1;
@@ -650,7 +645,6 @@ static int HandleEvents( hb_handle_t * h )
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 2500;
                     default_abitrate = 160;
-                    default_arate = 48000;
                     default_acodec = HB_ACODEC_FAAC;
                     x264opts = strdup("level=41:subme=5:me=umh");
                     pixelratio = 1;
@@ -674,7 +668,6 @@ static int HandleEvents( hb_handle_t * h )
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 2000;
                     default_abitrate = 160;
-                    default_arate = 48000;
                     default_acodec = HB_ACODEC_FAAC;
                     x264opts = strdup("ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:me=umh:subme=5:analyse=all:trellis=1:no-fast-pskip");
                     job->chapter_markers = 1;
@@ -689,7 +682,6 @@ static int HandleEvents( hb_handle_t * h )
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 1300;
                     default_abitrate = 160;
-                    default_arate = 48000;
                     default_acodec = HB_ACODEC_FAAC;
                     x264opts = strdup("ref=3:mixed-refs:bframes=6:bime:weightb:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip");
                     deinterlace = 1;
@@ -707,7 +699,6 @@ static int HandleEvents( hb_handle_t * h )
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 2000;
                     default_abitrate = 160;
-                    default_arate = 48000;
                     default_acodec = HB_ACODEC_FAAC;
                     x264opts = strdup("level=40:ref=2:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:no-fast-pskip:filter=-2,-1");
                     pixelratio = 1;
@@ -1009,8 +1000,8 @@ static int HandleEvents( hb_handle_t * h )
                         
                         if (!is_sample_rate_valid(arate))
                         {
-                            fprintf(stderr, "Invalid sample rate %d, using default %d\n", arate, default_arate);
-                            arate = default_arate;
+                            fprintf(stderr, "Invalid sample rate %d, using input rate %d\n", arate, audio->in.samplerate);
+                            arate = audio->in.samplerate;
                         }
                         
                         audio->out.samplerate = arate;
@@ -1026,7 +1017,7 @@ static int HandleEvents( hb_handle_t * h )
                  * Unless we only have one input, then use that for all tracks.
                  */
                 if (i != 1)
-                    arate = default_arate;
+                    arate = audio->in.samplerate;
                 for ( ; i < num_audio_tracks; i++)
                 {
                     audio = hb_list_audio_config_item(job->list_audio, i);
