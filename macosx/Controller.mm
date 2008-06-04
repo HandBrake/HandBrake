@@ -1581,7 +1581,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         audio->out.codec = [[fAudTrack1CodecPopUp selectedItem] tag];
         audio->out.mixdown = [[fAudTrack1MixPopUp selectedItem] tag];
         audio->out.bitrate = [[fAudTrack1BitratePopUp selectedItem] tag];
-        audio->out.samplerate = hb_audio_rates[[fAudTrack1RatePopUp indexOfSelectedItem]].rate;
+        audio->out.samplerate = [[fAudTrack1RatePopUp selectedItem] tag];
         audio->out.dynamic_range_compression = [fAudTrack1DrcField floatValue];
         
         hb_audio_add( job, audio );
@@ -1597,7 +1597,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         audio->out.codec = [[fAudTrack2CodecPopUp selectedItem] tag];
         audio->out.mixdown = [[fAudTrack2MixPopUp selectedItem] tag];
         audio->out.bitrate = [[fAudTrack2BitratePopUp selectedItem] tag];
-        audio->out.samplerate = hb_audio_rates[[fAudTrack2RatePopUp indexOfSelectedItem]].rate;
+        audio->out.samplerate = [[fAudTrack2RatePopUp selectedItem] tag];
         audio->out.dynamic_range_compression = [fAudTrack2DrcField floatValue];
         
         hb_audio_add( job, audio );
@@ -1615,7 +1615,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         audio->out.codec = [[fAudTrack3CodecPopUp selectedItem] tag];
         audio->out.mixdown = [[fAudTrack3MixPopUp selectedItem] tag];
         audio->out.bitrate = [[fAudTrack3BitratePopUp selectedItem] tag];
-        audio->out.samplerate = hb_audio_rates[[fAudTrack3RatePopUp indexOfSelectedItem]].rate;
+        audio->out.samplerate = [[fAudTrack3RatePopUp selectedItem] tag];
         audio->out.dynamic_range_compression = [fAudTrack3DrcField floatValue];
         
         hb_audio_add( job, audio );
@@ -1633,7 +1633,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         audio->out.codec = [[fAudTrack4CodecPopUp selectedItem] tag];
         audio->out.mixdown = [[fAudTrack4MixPopUp selectedItem] tag];
         audio->out.bitrate = [[fAudTrack4BitratePopUp selectedItem] tag];
-        audio->out.samplerate = hb_audio_rates[[fAudTrack4RatePopUp indexOfSelectedItem]].rate;
+        audio->out.samplerate = [[fAudTrack4RatePopUp selectedItem] tag];
         audio->out.dynamic_range_compression = [fAudTrack4DrcField floatValue];
         
         hb_audio_add( job, audio );
@@ -3503,6 +3503,15 @@ the user is using "Custom" settings by determining the sender*/
             maxbitrate = 384;
             
     }
+    
+    /* make sure we have a selected title before continuing */
+    if (fTitle == NULL) return;
+    /* get the audio so we can find out what input rates are*/
+    hb_audio_config_t * audio;
+    audio = (hb_audio_config_t *) hb_list_audio_config_item( fTitle->list_audio, [audiotrackPopUp indexOfSelectedItem] - 1 );
+    int inputbitrate = audio->in.bitrate / 1000;
+    int inputsamplerate = audio->in.samplerate;
+    
     if ([[mixdownPopUp selectedItem] tag] != HB_ACODEC_AC3)
     {
         [bitratePopUp removeAllItems];
@@ -3533,31 +3542,32 @@ the user is using "Custom" settings by determining the sender*/
     /* populate and set the sample rate popup */
     /* Audio samplerate */
     [sampleratePopUp removeAllItems];
+    /* we create a same as source selection (Auto) so that we can choose to use the input sample rate */
+    NSMenuItem *menuItem = [[sampleratePopUp menu] addItemWithTitle: @"Auto" action: NULL keyEquivalent: @""];
+    [menuItem setTag: inputsamplerate];
+    
     for( int i = 0; i < hb_audio_rates_count; i++ )
     {
         NSMenuItem *menuItem = [[sampleratePopUp menu] addItemWithTitle:
-                                    [NSString stringWithCString: hb_audio_rates[i].string]
-                                                                  action: NULL keyEquivalent: @""];
+                                [NSString stringWithCString: hb_audio_rates[i].string]
+                                                                 action: NULL keyEquivalent: @""];
         [menuItem setTag: hb_audio_rates[i].rate];
     }
-    /* We use 48 hz as the default sample rate as almost every dvd made uses that as source
-    * and there is no compelling reason to use anything else as default
+    /* We use the input sample rate as the default sample rate as downsampling just makes audio worse
+    * and there is no compelling reason to use anything else as default, though the users default
+    * preset will likely override any setting chosen here.
     */
-    [sampleratePopUp selectItemWithTitle: @"48"];
+    [sampleratePopUp selectItemWithTag: inputsamplerate];
     
-    /* Since AC3 Pass Thru uses the input ac3 bitrate and a sample rate of 48, we get the input tracks
+    
+    /* Since AC3 Pass Thru uses the input ac3 bitrate and sample rate, we get the input tracks
     * bitrate and dispay it in the bitrate popup even though libhb happily ignores any bitrate input from
     * the gui. We do this for better user feedback in the audio tab as well as the queue for the most part
     */
     if ([[mixdownPopUp selectedItem] tag] == HB_ACODEC_AC3)
     {
-        /* make sure we have a selected title before continuing */
-        if (fTitle == NULL) return;
+        
         /* lets also set the bitrate popup to the input bitrate as thats what passthru will use */
-        /* get the audio */
-        hb_audio_config_t * audio;
-        audio = (hb_audio_config_t *) hb_list_audio_config_item( fTitle->list_audio, [audiotrackPopUp indexOfSelectedItem] - 1 );
-        int inputbitrate = audio->in.bitrate / 1000;
         [bitratePopUp removeAllItems];
         NSMenuItem *menuItem = [[bitratePopUp menu] addItemWithTitle:
                                 [NSString stringWithFormat:@"%d", inputbitrate]

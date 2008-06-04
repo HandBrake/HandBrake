@@ -208,7 +208,7 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
     /* Audio Sample Rate*/
-    [preset setObject:@"48" forKey:@"AudioSampleRate"];
+    [preset setObject:@"Auto" forKey:@"AudioSampleRate"];
 
     /* Audio Bitrate Rate*/
     [preset setObject:@"160" forKey:@"AudioBitRate"];
@@ -383,7 +383,7 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
     /* Audio Sample Rate*/
-    [preset setObject:@"48" forKey:@"AudioSampleRate"];
+    [preset setObject:@"Auto" forKey:@"AudioSampleRate"];
 
     /* Audio Bitrate Rate*/
     [preset setObject:@"160" forKey:@"AudioBitRate"];
@@ -470,7 +470,7 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
     /* Audio Sample Rate*/
-    [preset setObject:@"48" forKey:@"AudioSampleRate"];
+    [preset setObject:@"Auto" forKey:@"AudioSampleRate"];
 
     /* Audio Bitrate Rate*/
     [preset setObject:@"128" forKey:@"AudioBitRate"];
@@ -557,7 +557,7 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
     /* Audio Sample Rate*/
-    [preset setObject:@"48" forKey:@"AudioSampleRate"];
+    [preset setObject:@"Auto" forKey:@"AudioSampleRate"];
 
     /* Audio Bitrate Rate*/
     [preset setObject:@"128" forKey:@"AudioBitRate"];
@@ -643,7 +643,7 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
     
     /* Audio Sample Rate*/
-    [preset setObject:@"48" forKey:@"AudioSampleRate"];
+    [preset setObject:@"Auto" forKey:@"AudioSampleRate"];
 
     /* Audio Bitrate Rate*/
     [preset setObject:@"160" forKey:@"AudioBitRate"];
@@ -730,7 +730,7 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
     /* Audio Sample Rate*/
-    [preset setObject:@"48" forKey:@"AudioSampleRate"];
+    [preset setObject:@"Auto" forKey:@"AudioSampleRate"];
 
     /* Audio Bitrate Rate*/
     [preset setObject:@"160" forKey:@"AudioBitRate"];
@@ -817,7 +817,7 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
     /* Audio Sample Rate*/
-    [preset setObject:@"48" forKey:@"AudioSampleRate"];
+    [preset setObject:@"Auto" forKey:@"AudioSampleRate"];
 
     /* Audio Bitrate Rate*/
     [preset setObject:@"160" forKey:@"AudioBitRate"];
@@ -904,7 +904,7 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
     /* Audio Sample Rate*/
-    [preset setObject:@"48" forKey:@"AudioSampleRate"];
+    [preset setObject:@"Auto" forKey:@"AudioSampleRate"];
 
     /* Audio Bitrate Rate*/
     [preset setObject:@"160" forKey:@"AudioBitRate"];
@@ -1249,7 +1249,7 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
     /* Audio Sample Rate*/
-    [preset setObject:@"48" forKey:@"AudioSampleRate"];
+    [preset setObject:@"Auto" forKey:@"AudioSampleRate"];
 
     /* Audio Bitrate Rate*/
     [preset setObject:@"160" forKey:@"AudioBitRate"];
@@ -1507,7 +1507,7 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
     /* Audio Sample Rate*/
-    [preset setObject:@"48" forKey:@"AudioSampleRate"];
+    [preset setObject:@"Auto" forKey:@"AudioSampleRate"];
 
     /* Audio Bitrate Rate*/
     [preset setObject:@"160" forKey:@"AudioBitRate"];
@@ -1593,7 +1593,7 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
     /* Audio Sample Rate*/
-    [preset setObject:@"48" forKey:@"AudioSampleRate"];
+    [preset setObject:@"Auto" forKey:@"AudioSampleRate"];
 
     /* Audio Bitrate Rate*/
     [preset setObject:@"160" forKey:@"AudioBitRate"];
