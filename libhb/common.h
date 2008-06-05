@@ -133,12 +133,13 @@ struct hb_job_s
          width:               must be a multiple of 16
          height:              must be a multiple of 16
          keep_ratio:          used by UIs
+         grayscale:           black and white encoding
          pixel_ratio:         store pixel aspect ratio in the video
          pixel_aspect_width:  numerator for pixel aspect ratio
          pixel_aspect_height: denominator for pixel aspect ratio
-		 maxWidth:			  keep width below this
-		 maxHeight:			  keep height below this */
-
+         modulus:             set a number besides 16 for dimensions to be multiples of
+         maxWidth:            keep width below this
+         maxHeight:           keep height below this */
     int             crop[4];
     int             deinterlace;
     hb_list_t     * filters;
@@ -150,18 +151,21 @@ struct hb_job_s
     int             pixel_aspect_width;
     int             pixel_aspect_height;
     int             modulus;
-	int				maxWidth;
-	int				maxHeight;
-
+    int             maxWidth;
+    int             maxHeight;
 
     /* Video settings:
          vcodec:            output codec
          vquality:          output quality (0.0..1.0)
-                            if < 0.0 or > 1.0, bitrate is used instead
+                            if < 0.0 or > 1.0, bitrate is used instead,
+                            except with x264, to use its real QP/RF scale
          vbitrate:          output bitrate (kbps)
-         pass:              0, 1 or 2 (or -1 for scan)
          vrate, vrate_base: output framerate is vrate / vrate_base
-         h264_level:        boolean for whether or not we're encoding for iPod
+         vfr:               boolean for variable frame rate detelecine
+         cfr:               boolean to use constant frame rates instead of
+                            passing through the source's frame durations.
+         pass:              0, 1 or 2 (or -1 for scan)
+         h264_level:        vestigial boolean to decide if we're encoding for iPod
          crf:               boolean for whether to use constant rate factor with x264
          x264opts:          string of extra x264 options
          areBframes:        boolean to note if b-frames are included in x264opts */
@@ -176,13 +180,14 @@ struct hb_job_s
     int             vbitrate;
     int             vrate;
     int             vrate_base;
+    int             vfr;
+    int             cfr;
     int             pass;
     int             h264_13;
     int             h264_level;
     int             crf;
     char            *x264opts;
     int             areBframes;
-    int             vfr;
 
     /* List of audio settings. */
     hb_list_t     * list_audio;
@@ -191,7 +196,7 @@ struct hb_job_s
          subtitle: index in hb_title_t's subtitles list, starting
          from 0. -1 means no subtitle */
     int             subtitle;
-    int 			subtitleSmartAdjust;
+    int             subtitleSmartAdjust;
 
     /* Muxer settings
          mux:  output file format

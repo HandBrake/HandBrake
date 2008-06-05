@@ -87,6 +87,7 @@ static int    largeFileSize = 0;
 static int    preset        = 0;
 static char * preset_name   = 0;
 static int    vfr           = 0;
+static int    cfr           = 0;
 static int    mp4_optimize  = 0;
 static int    ipod_atom     = 0;
 
@@ -884,6 +885,7 @@ static int HandleEvents( hb_handle_t * h )
             }
             if( vrate )
             {
+                job->cfr = 1;
                 job->vrate = 27000000;
                 job->vrate_base = vrate;
             }

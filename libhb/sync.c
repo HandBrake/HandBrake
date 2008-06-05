@@ -512,7 +512,7 @@ static int SyncVideo( hb_work_object_t * w )
         }
 
         int64_t duration;
-        if ( job->mux & HB_MUX_AVI || job->title->rate_base != job->vrate_base )
+        if ( job->mux & HB_MUX_AVI || job->cfr )
         {
             /*
              * The concept of variable frame rate video was a bit too advanced
