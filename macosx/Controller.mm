@@ -1534,11 +1534,18 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         job->vrate      = 27000000;
         job->vrate_base = hb_video_rates[[fVidRatePopUp
             indexOfSelectedItem]-1].rate;
+        /* We are not same as source so we set job->cfr to 1 
+         * to enable constant frame rate since user has specified
+         * a specific framerate*/
+        job->cfr = 1;
     }
     else
     {
         job->vrate      = title->rate;
         job->vrate_base = title->rate_base;
+        /* We are same as source so we set job->cfr to 0 
+         * to enable true same as source framerate */
+        job->cfr = 0;
     }
 
     switch( [fVidQualityMatrix selectedRow] )
