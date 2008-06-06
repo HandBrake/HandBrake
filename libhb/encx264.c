@@ -74,6 +74,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     x264_param_t       param;
     x264_nal_t       * nal;
     int                nal_count;
+    int                nal_size;
 
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
@@ -276,14 +277,12 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     x264_encoder_headers( pv->x264, &nal, &nal_count );
 
     /* Sequence Parameter Set */
-    w->config->h264.sps_length = 1 + nal[1].i_payload;
-    w->config->h264.sps[0] = 0x67;
-    memcpy( &w->config->h264.sps[1], nal[1].p_payload, nal[1].i_payload );
+    x264_nal_encode( w->config->h264.sps, &nal_size, 0, &nal[1] );
+    w->config->h264.sps_length = nal_size;
 
     /* Picture Parameter Set */
-    w->config->h264.pps_length = 1 + nal[2].i_payload;
-    w->config->h264.pps[0] = 0x68;
-    memcpy( &w->config->h264.pps[1], nal[2].p_payload, nal[2].i_payload );
+    x264_nal_encode( w->config->h264.pps, &nal_size, 0, &nal[2] );
+    w->config->h264.pps_length = nal_size;
 
     x264_picture_alloc( &pv->pic_in, X264_CSP_I420,
                         job->width, job->height );
