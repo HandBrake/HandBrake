@@ -4221,13 +4221,23 @@ if (item == nil)
                 if ([fAudLang1PopUp indexOfSelectedItem] == 0)
                 {
                     [fAudLang1PopUp selectItemAtIndex: 1];
-                    [self audioTrackPopUpChanged: fAudLang1PopUp];
                 }
+                [self audioTrackPopUpChanged: fAudLang1PopUp];
                 [fAudTrack1CodecPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio1Encoder"]]];
                 [self audioTrackPopUpChanged: fAudTrack1CodecPopUp];
                 [fAudTrack1MixPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio1Mixdown"]]];
+                /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default 
+                 * mixdown*/
+                if  ([fAudTrack1MixPopUp selectedItem] == nil)
+                {
+                    [self audioTrackPopUpChanged: fAudTrack1CodecPopUp];
+                }
                 [fAudTrack1RatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio1Samplerate"]]];
-                [fAudTrack1BitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio1Bitrate"]]];
+                /* We set the presets bitrate if it is *not* an AC3 track since that uses the input bitrate */
+                if (![[chosenPreset valueForKey:@"Audio1Encoder"] isEqualToString: @"AC3 Passthru"])
+                {
+                    [fAudTrack1BitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio1Bitrate"]]];
+                }
                 [fAudTrack1DrcSlider setFloatValue: [[chosenPreset valueForKey:@"Audio1TrackDRCSlider"] floatValue]];
                 [self audioDRCSliderChanged: fAudTrack1DrcSlider];
             }
@@ -4236,13 +4246,23 @@ if (item == nil)
                 if ([fAudLang2PopUp indexOfSelectedItem] == 0)
                 {
                     [fAudLang2PopUp selectItemAtIndex: 1];
-                    [self audioTrackPopUpChanged: fAudLang2PopUp];
                 }
+                [self audioTrackPopUpChanged: fAudLang2PopUp];
                 [fAudTrack2CodecPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio2Encoder"]]];
                 [self audioTrackPopUpChanged: fAudTrack2CodecPopUp];
                 [fAudTrack2MixPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio2Mixdown"]]];
+                /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default 
+                 * mixdown*/
+                if  ([fAudTrack2MixPopUp selectedItem] == nil)
+                {
+                    [self audioTrackPopUpChanged: fAudTrack2CodecPopUp];
+                }
                 [fAudTrack2RatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio2Samplerate"]]];
-                [fAudTrack2BitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio2Bitrate"]]];
+                /* We set the presets bitrate if it is *not* an AC3 track since that uses the input bitrate */
+                if (![[chosenPreset valueForKey:@"Audio2Encoder"] isEqualToString: @"AC3 Passthru"])
+                {
+                    [fAudTrack2BitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio2Bitrate"]]];
+                }
                 [fAudTrack2DrcSlider setFloatValue: [[chosenPreset valueForKey:@"Audio2TrackDRCSlider"] floatValue]];
                 [self audioDRCSliderChanged: fAudTrack2DrcSlider];
             }
@@ -4251,13 +4271,23 @@ if (item == nil)
                 if ([fAudLang3PopUp indexOfSelectedItem] == 0)
                 {
                     [fAudLang3PopUp selectItemAtIndex: 1];
-                    [self audioTrackPopUpChanged: fAudLang3PopUp];
                 }
+                [self audioTrackPopUpChanged: fAudLang3PopUp];
                 [fAudTrack3CodecPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio3Encoder"]]];
                 [self audioTrackPopUpChanged: fAudTrack3CodecPopUp];
                 [fAudTrack3MixPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio3Mixdown"]]];
+                /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default 
+                 * mixdown*/
+                if  ([fAudTrack3MixPopUp selectedItem] == nil)
+                {
+                    [self audioTrackPopUpChanged: fAudTrack3CodecPopUp];
+                }
                 [fAudTrack3RatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio3Samplerate"]]];
-                [fAudTrack3BitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio3Bitrate"]]];
+                /* We set the presets bitrate if it is *not* an AC3 track since that uses the input bitrate */
+                if (![[chosenPreset valueForKey:@"Audio3Encoder"] isEqualToString: @"AC3 Passthru"])
+                {
+                    [fAudTrack3BitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio3Bitrate"]]];
+                }
                 [fAudTrack3DrcSlider setFloatValue: [[chosenPreset valueForKey:@"Audio3TrackDRCSlider"] floatValue]];
                 [self audioDRCSliderChanged: fAudTrack3DrcSlider];
             }
@@ -4266,19 +4296,58 @@ if (item == nil)
                 if ([fAudLang4PopUp indexOfSelectedItem] == 0)
                 {
                     [fAudLang4PopUp selectItemAtIndex: 1];
-                    [self audioTrackPopUpChanged: fAudLang4PopUp];
                 }
+                [self audioTrackPopUpChanged: fAudLang4PopUp];
                 [fAudTrack4CodecPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio4Encoder"]]];
                 [self audioTrackPopUpChanged: fAudTrack4CodecPopUp];
                 [fAudTrack4MixPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio4Mixdown"]]];
+                /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default 
+                 * mixdown*/
+                if  ([fAudTrack4MixPopUp selectedItem] == nil)
+                {
+                    [self audioTrackPopUpChanged: fAudTrack4CodecPopUp];
+                }
                 [fAudTrack4RatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio4Samplerate"]]];
-                [fAudTrack4BitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio4Bitrate"]]];
+                /* We set the presets bitrate if it is *not* an AC3 track since that uses the input bitrate */
+                if (![[chosenPreset valueForKey:@"Audio4Encoder"] isEqualToString: @"AC3 Passthru"])
+                {
+                    [fAudTrack4BitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio4Bitrate"]]];
+                }
                 [fAudTrack4DrcSlider setFloatValue: [[chosenPreset valueForKey:@"Audio4TrackDRCSlider"] floatValue]];
                 [self audioDRCSliderChanged: fAudTrack4DrcSlider];
             }
             
             
         }
+        
+        /* We now cleanup any extra audio tracks that may be previously set if we need to, we do it here so we don't have to
+         * duplicate any code for legacy presets.*/
+        /* First we handle the legacy Codecs crazy AVC/H.264 Video / AAC + AC3 Audio atv hybrid */
+        if ([chosenPreset valueForKey:@"FileCodecs"] && [[NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]] isEqualToString: @"AVC/H.264 Video / AAC + AC3 Audio"])
+        {
+            [fAudLang3PopUp selectItemAtIndex: 0];
+            [self audioTrackPopUpChanged: fAudLang3PopUp];
+            [fAudLang4PopUp selectItemAtIndex: 0];
+            [self audioTrackPopUpChanged: fAudLang4PopUp]; 
+        }
+        else
+        {
+            if (![chosenPreset objectForKey:@"Audio2Track"] || [chosenPreset valueForKey:@"Audio2Track"] == 0)
+            {
+                [fAudLang2PopUp selectItemAtIndex: 0];
+                [self audioTrackPopUpChanged: fAudLang2PopUp];
+            }
+            if (![chosenPreset objectForKey:@"Audio3Track"] || [chosenPreset valueForKey:@"Audio3Track"] > 0)
+            {
+                [fAudLang3PopUp selectItemAtIndex: 0];
+                [self audioTrackPopUpChanged: fAudLang3PopUp];
+            }
+            if (![chosenPreset objectForKey:@"Audio4Track"] || [chosenPreset valueForKey:@"Audio4Track"] > 0)
+            {
+                [fAudLang4PopUp selectItemAtIndex: 0];
+                [self audioTrackPopUpChanged: fAudLang4PopUp];
+            }
+        } 
         
         /*Subtitles*/
         [fSubPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Subtitles"]]];
