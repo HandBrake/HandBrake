@@ -72,11 +72,8 @@
     /* Chapter Markers*/
      [preset setObject:[NSNumber numberWithInt:0] forKey:@"ChapterMarkers"];
 
-    /* Codecs */
-    [preset setObject:@"AVC/H.264 Video / AAC Audio" forKey:@"FileCodecs"];
-
     /* Video encoder */
-    [preset setObject:@"x264" forKey:@"VideoEncoder"];
+    [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
     
     /* x264 Option String */
     [preset setObject:@"level=40:ref=2:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:no-fast-pskip:filter=-2,-1" forKey:@"x264Option"];
@@ -119,12 +116,17 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
-    /* Audio Sample Rate*/
-    [preset setObject:@"48" forKey:@"AudioSampleRate"];
-
-    /* Audio Bitrate Rate*/
-    [preset setObject:@"160" forKey:@"AudioBitRate"];
-
+    /* Audio - Is done on a track by track basis, ONLY specifiy the tracks we want set as any track
+     * not listed will be set to "None" and not encoded */
+    
+    /* Track 1 */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"Audio1Track"];
+    [preset setObject:@"AAC (faac)" forKey:@"Audio1Encoder"];
+    [preset setObject:@"Dolby Pro Logic II" forKey:@"Audio1Mixdown"];
+    [preset setObject:@"48" forKey:@"Audio1Samplerate"];
+    [preset setObject:@"160" forKey:@"Audio1Bitrate"];
+    [preset setObject:[NSNumber numberWithFloat:1.0] forKey:@"Audio1TrackDRCSlider"];
+    
     /* Subtitles*/
     [preset setObject:@"None" forKey:@"Subtitles"];
 
@@ -157,11 +159,8 @@
     /* Chapter Markers*/
      [preset setObject:[NSNumber numberWithInt:1] forKey:@"ChapterMarkers"];
 
-    /* Codecs */
-    [preset setObject:@"AVC/H.264 Video / AAC Audio" forKey:@"FileCodecs"];
-
     /* Video encoder */
-    [preset setObject:@"x264" forKey:@"VideoEncoder"];
+    [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String */
     [preset setObject:@"ref=5:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2" forKey:@"x264Option"];
@@ -207,12 +206,17 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
-    /* Audio Sample Rate*/
-    [preset setObject:@"Auto" forKey:@"AudioSampleRate"];
-
-    /* Audio Bitrate Rate*/
-    [preset setObject:@"160" forKey:@"AudioBitRate"];
-
+    /* Audio - Is done on a track by track basis, ONLY specifiy the tracks we want set as any track
+     * not listed will be set to "None" and not encoded */
+    
+    /* Track 1 */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"Audio1Track"];
+    [preset setObject:@"AAC (faac)" forKey:@"Audio1Encoder"];
+    [preset setObject:@"Dolby Pro Logic II" forKey:@"Audio1Mixdown"];
+    [preset setObject:@"Auto" forKey:@"Audio1Samplerate"];
+    [preset setObject:@"160" forKey:@"Audio1Bitrate"];
+    [preset setObject:[NSNumber numberWithFloat:1.0] forKey:@"Audio1TrackDRCSlider"];
+    
     /* Subtitles*/
     [preset setObject:@"None" forKey:@"Subtitles"];
 
@@ -248,11 +252,8 @@
     /* Chapter Markers*/
      [preset setObject:[NSNumber numberWithInt:1] forKey:@"ChapterMarkers"];
 
-    /* Codecs */
-    [preset setObject:@"AVC/H.264 Video / AAC + AC3 Audio" forKey:@"FileCodecs"];
-
     /* Video encoder */
-    [preset setObject:@"x264" forKey:@"VideoEncoder"];
+    [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String (We can use this to tweak the appleTV output)*/
     [preset setObject:@"bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=1:cabac=0" forKey:@"x264Option"];
@@ -295,11 +296,27 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
-    /* Audio Sample Rate*/
-    [preset setObject:@"48" forKey:@"AudioSampleRate"];
+    /* Audio - Is done on a track by track basis, ONLY specifiy the tracks we want set as any track
+     * not listed will be set to "None" and not encoded */
+    
+    /* Track 1 */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"Audio1Track"];
+    [preset setObject:@"AAC (faac)" forKey:@"Audio1Encoder"];
+    [preset setObject:@"Dolby Pro Logic II" forKey:@"Audio1Mixdown"];
+    [preset setObject:@"48" forKey:@"Audio1Samplerate"];
+    [preset setObject:@"160" forKey:@"Audio1Bitrate"];
+    [preset setObject:[NSNumber numberWithFloat:1.0] forKey:@"Audio1TrackDRCSlider"];
 
-    /* Audio Bitrate Rate*/
-    [preset setObject:@"160" forKey:@"AudioBitRate"];
+    /* Track 2 */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"Audio2Track"];
+    [preset setObject:@"AC3 Passthru" forKey:@"Audio2Encoder"];
+    [preset setObject:@"AC3 Passthru" forKey:@"Audio2Mixdown"];
+    [preset setObject:@"Auto" forKey:@"Audio2Samplerate"];
+    /* Note: we ignore specified bitrate for AC3 Passthru in libhb and use
+     * the sources bitrate, however we need to initially set the value to something so
+     * the macgui doesnt barf, so 160 seems as good as anything */
+    [preset setObject:@"160" forKey:@"Audio2Bitrate"];
+    [preset setObject:[NSNumber numberWithFloat:1.0] forKey:@"Audio2TrackDRCSlider"];
 
     /* Subtitles*/
     [preset setObject:@"None" forKey:@"Subtitles"];
@@ -333,11 +350,8 @@
     /* Chapter Markers*/
      [preset setObject:[NSNumber numberWithInt:1] forKey:@"ChapterMarkers"];
 
-    /* Codecs */
-    [preset setObject:@"AVC/H.264 Video / AC-3 Audio" forKey:@"FileCodecs"];
-
     /* Video encoder */
-    [preset setObject:@"x264" forKey:@"VideoEncoder"];
+    [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String */
     [preset setObject:@"ref=16:mixed-refs:bframes=16:bime:weightb:b-rdo:direct=auto:b-pyramid:me=esa:subme=7:me-range=64:analyse=all:8x8dct:trellis=1:no-fast-pskip:no-dct-decimate:filter=-2,-1" forKey:@"x264Option"];
@@ -382,11 +396,19 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
-    /* Audio Sample Rate*/
-    [preset setObject:@"Auto" forKey:@"AudioSampleRate"];
-
-    /* Audio Bitrate Rate*/
-    [preset setObject:@"160" forKey:@"AudioBitRate"];
+    /* Audio - Is done on a track by track basis, ONLY specifiy the tracks we want set as any track
+     * not listed will be set to "None" and not encoded */
+    
+    /* Track 1 */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"Audio1Track"];
+    [preset setObject:@"AC3 Passthru" forKey:@"Audio1Encoder"];
+    [preset setObject:@"AC3 Passthru" forKey:@"Audio1Mixdown"];
+    [preset setObject:@"Auto" forKey:@"Audio1Samplerate"];
+    /* Note: we ignore specified bitrate for AC3 Passthru in libhb and use
+     * the sources bitrate, however we need to initially set the value to something so
+     * the macgui doesnt barf, so 160 seems as good as anything */
+    [preset setObject:@"160" forKey:@"Audio1Bitrate"];
+    [preset setObject:[NSNumber numberWithFloat:1.0] forKey:@"Audio1TrackDRCSlider"];
 
     /* Subtitles*/
     [preset setObject:@"None" forKey:@"Subtitles"];
@@ -420,11 +442,8 @@
     /* Chapter Markers*/
      [preset setObject:[NSNumber numberWithInt:1] forKey:@"ChapterMarkers"];
 
-    /* Codecs */
-    [preset setObject:@"MPEG-4 Video / AAC Audio" forKey:@"FileCodecs"];
-
     /* Video encoder */
-    [preset setObject:@"FFmpeg" forKey:@"VideoEncoder"];
+    [preset setObject:@"MPEG-4 (FFmpeg)" forKey:@"VideoEncoder"];
 
     /* x264 Option String */
     [preset setObject:@"" forKey:@"x264Option"];
@@ -469,11 +488,16 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
-    /* Audio Sample Rate*/
-    [preset setObject:@"Auto" forKey:@"AudioSampleRate"];
-
-    /* Audio Bitrate Rate*/
-    [preset setObject:@"128" forKey:@"AudioBitRate"];
+    /* Audio - Is done on a track by track basis, ONLY specifiy the tracks we want set as any track
+     * not listed will be set to "None" and not encoded */
+    
+    /* Track 1 */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"Audio1Track"];
+    [preset setObject:@"AAC (faac)" forKey:@"Audio1Encoder"];
+    [preset setObject:@"Dolby Pro Logic II" forKey:@"Audio1Mixdown"];
+    [preset setObject:@"Auto" forKey:@"Audio1Samplerate"];
+    [preset setObject:@"128" forKey:@"Audio1Bitrate"];
+    [preset setObject:[NSNumber numberWithFloat:1.0] forKey:@"Audio1TrackDRCSlider"];
 
     /* Subtitles*/
     [preset setObject:@"None" forKey:@"Subtitles"];
@@ -507,11 +531,8 @@
     /* Chapter Markers*/
      [preset setObject:[NSNumber numberWithInt:1] forKey:@"ChapterMarkers"];
 
-    /* Codecs */
-    [preset setObject:@"AVC/H.264 Video / AAC Audio" forKey:@"FileCodecs"];
-
     /* Video encoder */
-    [preset setObject:@"x264" forKey:@"VideoEncoder"];
+    [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String */
     [preset setObject:@"ref=3:mixed-refs:bframes=16:bime:weightb:b-rdo:b-pyramid:direct=auto:me=umh:subme=6:trellis=1:analyse=all:8x8dct:no-fast-pskip" forKey:@"x264Option"];
@@ -556,11 +577,16 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
-    /* Audio Sample Rate*/
-    [preset setObject:@"Auto" forKey:@"AudioSampleRate"];
-
-    /* Audio Bitrate Rate*/
-    [preset setObject:@"128" forKey:@"AudioBitRate"];
+    /* Audio - Is done on a track by track basis, ONLY specifiy the tracks we want set as any track
+     * not listed will be set to "None" and not encoded */
+    
+    /* Track 1 */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"Audio1Track"];
+    [preset setObject:@"AAC (faac)" forKey:@"Audio1Encoder"];
+    [preset setObject:@"Dolby Pro Logic II" forKey:@"Audio1Mixdown"];
+    [preset setObject:@"Auto" forKey:@"Audio1Samplerate"];
+    [preset setObject:@"128" forKey:@"Audio1Bitrate"];
+    [preset setObject:[NSNumber numberWithFloat:1.0] forKey:@"Audio1TrackDRCSlider"];
 
     /* Subtitles*/
     [preset setObject:@"None" forKey:@"Subtitles"];
@@ -594,11 +620,8 @@
     /* Chapter Markers*/
      [preset setObject:[NSNumber numberWithInt:0] forKey:@"ChapterMarkers"];
 
-    /* Codecs */
-    [preset setObject:@"MPEG-4 Video / AAC Audio" forKey:@"FileCodecs"];
-
     /* Video encoder */
-    [preset setObject:@"FFmpeg" forKey:@"VideoEncoder"];
+    [preset setObject:@"MPEG-4 (FFmpeg)" forKey:@"VideoEncoder"];
 
     /* x264 Option String */
     [preset setObject:@"" forKey:@"x264Option"];
@@ -642,11 +665,16 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
     
-    /* Audio Sample Rate*/
-    [preset setObject:@"Auto" forKey:@"AudioSampleRate"];
-
-    /* Audio Bitrate Rate*/
-    [preset setObject:@"160" forKey:@"AudioBitRate"];
+    /* Audio - Is done on a track by track basis, ONLY specifiy the tracks we want set as any track
+     * not listed will be set to "None" and not encoded */
+    
+    /* Track 1 */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"Audio1Track"];
+    [preset setObject:@"AAC (faac)" forKey:@"Audio1Encoder"];
+    [preset setObject:@"Dolby Pro Logic II" forKey:@"Audio1Mixdown"];
+    [preset setObject:@"Auto" forKey:@"Audio1Samplerate"];
+    [preset setObject:@"160" forKey:@"Audio1Bitrate"];
+    [preset setObject:[NSNumber numberWithFloat:1.0] forKey:@"Audio1TrackDRCSlider"];
 
     /* Subtitles*/
     [preset setObject:@"None" forKey:@"Subtitles"];
@@ -680,11 +708,8 @@
     /* Chapter Markers*/
      [preset setObject:[NSNumber numberWithInt:1] forKey:@"ChapterMarkers"];
 
-    /* Codecs */
-    [preset setObject:@"AVC/H.264 Video / AC-3 Audio" forKey:@"FileCodecs"];
-
     /* Video encoder */
-    [preset setObject:@"x264" forKey:@"VideoEncoder"];
+    [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String */
     [preset setObject:@"ref=3:mixed-refs:bframes=3:b-pyramid:b-rdo:bime:weightb:filter=-2,-1:subme=6:trellis=1:analyse=all:8x8dct:me=umh" forKey:@"x264Option"];
@@ -729,11 +754,19 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
-    /* Audio Sample Rate*/
-    [preset setObject:@"Auto" forKey:@"AudioSampleRate"];
-
-    /* Audio Bitrate Rate*/
-    [preset setObject:@"160" forKey:@"AudioBitRate"];
+    /* Audio - Is done on a track by track basis, ONLY specifiy the tracks we want set as any track
+     * not listed will be set to "None" and not encoded */
+    
+    /* Track 1 */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"Audio1Track"];
+    [preset setObject:@"AC3 Passthru" forKey:@"Audio1Encoder"];
+    [preset setObject:@"AC3 Passthru" forKey:@"Audio1Mixdown"];
+    [preset setObject:@"Auto" forKey:@"Audio1Samplerate"];
+    /* Note: we ignore specified bitrate for AC3 Passthru in libhb and use
+     * the sources bitrate, however we need to initially set the value to something so
+     * the macgui doesnt barf, so 160 seems as good as anything */
+    [preset setObject:@"160" forKey:@"Audio1Bitrate"];
+    [preset setObject:[NSNumber numberWithFloat:1.0] forKey:@"Audio1TrackDRCSlider"];
 
     /* Subtitles*/
     [preset setObject:@"None" forKey:@"Subtitles"];
@@ -767,11 +800,8 @@
     /* Chapter Markers*/
      [preset setObject:[NSNumber numberWithInt:1] forKey:@"ChapterMarkers"];
 
-    /* Codecs */
-    [preset setObject:@"AVC/H.264 Video / AC-3 Audio" forKey:@"FileCodecs"];
-
     /* Video encoder */
-    [preset setObject:@"x264" forKey:@"VideoEncoder"];
+    [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String */
     [preset setObject:@"ref=5:mixed-refs:bframes=3:bime:weightb:b-rdo:b-pyramid:me=umh:subme=7:trellis=1:analyse=all:8x8dct:no-fast-pskip" forKey:@"x264Option"];
@@ -816,11 +846,19 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
-    /* Audio Sample Rate*/
-    [preset setObject:@"Auto" forKey:@"AudioSampleRate"];
-
-    /* Audio Bitrate Rate*/
-    [preset setObject:@"160" forKey:@"AudioBitRate"];
+    /* Audio - Is done on a track by track basis, ONLY specifiy the tracks we want set as any track
+     * not listed will be set to "None" and not encoded */
+    
+    /* Track 1 */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"Audio1Track"];
+    [preset setObject:@"AC3 Passthru" forKey:@"Audio1Encoder"];
+    [preset setObject:@"AC3 Passthru" forKey:@"Audio1Mixdown"];
+    [preset setObject:@"Auto" forKey:@"Audio1Samplerate"];
+    /* Note: we ignore specified bitrate for AC3 Passthru in libhb and use
+     * the sources bitrate, however we need to initially set the value to something so
+     * the macgui doesnt barf, so 160 seems as good as anything */
+    [preset setObject:@"160" forKey:@"Audio1Bitrate"];
+    [preset setObject:[NSNumber numberWithFloat:1.0] forKey:@"Audio1TrackDRCSlider"];
 
     /* Subtitles*/
     [preset setObject:@"None" forKey:@"Subtitles"];
@@ -854,11 +892,8 @@
     /* Chapter Markers*/
      [preset setObject:[NSNumber numberWithInt:1] forKey:@"ChapterMarkers"];
 
-    /* Codecs */
-    [preset setObject:@"AVC/H.264 Video / AC-3 Audio" forKey:@"FileCodecs"];
-
     /* Video encoder */
-    [preset setObject:@"x264" forKey:@"VideoEncoder"];
+    [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String */
     [preset setObject:@"ref=3:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=7:analyse=all:8x8dct:trellis=1:no-fast-pskip" forKey:@"x264Option"];
@@ -903,11 +938,19 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
-    /* Audio Sample Rate*/
-    [preset setObject:@"Auto" forKey:@"AudioSampleRate"];
-
-    /* Audio Bitrate Rate*/
-    [preset setObject:@"160" forKey:@"AudioBitRate"];
+    /* Audio - Is done on a track by track basis, ONLY specifiy the tracks we want set as any track
+     * not listed will be set to "None" and not encoded */
+    
+    /* Track 1 */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"Audio1Track"];
+    [preset setObject:@"AC3 Passthru" forKey:@"Audio1Encoder"];
+    [preset setObject:@"AC3 Passthru" forKey:@"Audio1Mixdown"];
+    [preset setObject:@"Auto" forKey:@"Audio1Samplerate"];
+    /* Note: we ignore specified bitrate for AC3 Passthru in libhb and use
+     * the sources bitrate, however we need to initially set the value to something so
+     * the macgui doesnt barf, so 160 seems as good as anything */
+    [preset setObject:@"160" forKey:@"Audio1Bitrate"];
+    [preset setObject:[NSNumber numberWithFloat:1.0] forKey:@"Audio1TrackDRCSlider"];
 
     /* Subtitles*/
     [preset setObject:@"None" forKey:@"Subtitles"];
@@ -941,11 +984,8 @@
     /* Chapter Markers*/
      [preset setObject:[NSNumber numberWithInt:1] forKey:@"ChapterMarkers"];
 
-    /* Codecs */
-    [preset setObject:@"AVC/H.264 Video / AAC Audio" forKey:@"FileCodecs"];
-
     /* Video encoder */
-    [preset setObject:@"x264" forKey:@"VideoEncoder"];
+    [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"Mp4iPodCompatible"];
     /* x264 Option String */
     [preset setObject:@"level=30:cabac=0:ref=1:analyse=all:me=umh:subme=6:no-fast-pskip=1:trellis=1" forKey:@"x264Option"];
@@ -989,11 +1029,16 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
-    /* Audio Sample Rate*/
-    [preset setObject:@"48" forKey:@"AudioSampleRate"];
-
-    /* Audio Bitrate Rate*/
-    [preset setObject:@"128" forKey:@"AudioBitRate"];
+    /* Audio - Is done on a track by track basis, ONLY specifiy the tracks we want set as any track
+     * not listed will be set to "None" and not encoded */
+    
+    /* Track 1 */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"Audio1Track"];
+    [preset setObject:@"AAC (faac)" forKey:@"Audio1Encoder"];
+    [preset setObject:@"Dolby Pro Logic II" forKey:@"Audio1Mixdown"];
+    [preset setObject:@"48" forKey:@"Audio1Samplerate"];
+    [preset setObject:@"128" forKey:@"Audio1Bitrate"];
+    [preset setObject:[NSNumber numberWithFloat:1.0] forKey:@"Audio1TrackDRCSlider"];
 
     /* Subtitles*/
     [preset setObject:@"None" forKey:@"Subtitles"];
@@ -1027,11 +1072,8 @@
     /* Chapter Markers*/
      [preset setObject:[NSNumber numberWithInt:1] forKey:@"ChapterMarkers"];
 
-    /* Codecs */
-    [preset setObject:@"AVC/H.264 Video / AAC Audio" forKey:@"FileCodecs"];
-
     /* Video encoder */
-    [preset setObject:@"x264" forKey:@"VideoEncoder"];
+    [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"Mp4iPodCompatible"];
     /* x264 Option String */
     [preset setObject:@"level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1" forKey:@"x264Option"];
@@ -1075,11 +1117,16 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
-    /* Audio Sample Rate*/
-    [preset setObject:@"48" forKey:@"AudioSampleRate"];
-
-    /* Audio Bitrate Rate*/
-    [preset setObject:@"160" forKey:@"AudioBitRate"];
+    /* Audio - Is done on a track by track basis, ONLY specifiy the tracks we want set as any track
+     * not listed will be set to "None" and not encoded */
+    
+    /* Track 1 */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"Audio1Track"];
+    [preset setObject:@"AAC (faac)" forKey:@"Audio1Encoder"];
+    [preset setObject:@"Dolby Pro Logic II" forKey:@"Audio1Mixdown"];
+    [preset setObject:@"48" forKey:@"Audio1Samplerate"];
+    [preset setObject:@"160" forKey:@"Audio1Bitrate"];
+    [preset setObject:[NSNumber numberWithFloat:1.0] forKey:@"Audio1TrackDRCSlider"];
 
     /* Subtitles*/
     [preset setObject:@"None" forKey:@"Subtitles"];
@@ -1113,11 +1160,8 @@
     /* Chapter Markers*/
      [preset setObject:[NSNumber numberWithInt:1] forKey:@"ChapterMarkers"];
 
-    /* Codecs */
-    [preset setObject:@"AVC/H.264 Video / AAC Audio" forKey:@"FileCodecs"];
-
     /* Video encoder */
-    [preset setObject:@"x264" forKey:@"VideoEncoder"];
+    [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"Mp4iPodCompatible"];
     /* x264 Option String */
     [preset setObject:@"level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1" forKey:@"x264Option"];
@@ -1161,11 +1205,16 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
-    /* Audio Sample Rate*/
-    [preset setObject:@"48" forKey:@"AudioSampleRate"];
-
-    /* Audio Bitrate Rate*/
-    [preset setObject:@"160" forKey:@"AudioBitRate"];
+    /* Audio - Is done on a track by track basis, ONLY specifiy the tracks we want set as any track
+     * not listed will be set to "None" and not encoded */
+    
+    /* Track 1 */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"Audio1Track"];
+    [preset setObject:@"AAC (faac)" forKey:@"Audio1Encoder"];
+    [preset setObject:@"Dolby Pro Logic II" forKey:@"Audio1Mixdown"];
+    [preset setObject:@"48" forKey:@"Audio1Samplerate"];
+    [preset setObject:@"160" forKey:@"Audio1Bitrate"];
+    [preset setObject:[NSNumber numberWithFloat:1.0] forKey:@"Audio1TrackDRCSlider"];
 
     /* Subtitles*/
     [preset setObject:@"None" forKey:@"Subtitles"];
@@ -1199,11 +1248,8 @@
     /* Chapter Markers*/
      [preset setObject:[NSNumber numberWithInt:1] forKey:@"ChapterMarkers"];
 
-    /* Codecs */
-    [preset setObject:@"AVC/H.264 Video / AAC Audio" forKey:@"FileCodecs"];
-
     /* Video encoder */
-    [preset setObject:@"x264" forKey:@"VideoEncoder"];
+    [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String */
     [preset setObject:@"ref=2:bframes=2:subme=5:me=umh" forKey:@"x264Option"];
@@ -1248,11 +1294,16 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
-    /* Audio Sample Rate*/
-    [preset setObject:@"Auto" forKey:@"AudioSampleRate"];
-
-    /* Audio Bitrate Rate*/
-    [preset setObject:@"160" forKey:@"AudioBitRate"];
+    /* Audio - Is done on a track by track basis, ONLY specifiy the tracks we want set as any track
+     * not listed will be set to "None" and not encoded */
+    
+    /* Track 1 */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"Audio1Track"];
+    [preset setObject:@"AAC (faac)" forKey:@"Audio1Encoder"];
+    [preset setObject:@"Dolby Pro Logic II" forKey:@"Audio1Mixdown"];
+    [preset setObject:@"Auto" forKey:@"Audio1Samplerate"];
+    [preset setObject:@"160" forKey:@"Audio1Bitrate"];
+    [preset setObject:[NSNumber numberWithFloat:1.0] forKey:@"Audio1TrackDRCSlider"];
 
     /* Subtitles*/
     [preset setObject:@"None" forKey:@"Subtitles"];
@@ -1286,11 +1337,8 @@
     /* Chapter Markers*/
      [preset setObject:[NSNumber numberWithInt:1] forKey:@"ChapterMarkers"];
 
-    /* Codecs */
-    [preset setObject:@"MPEG-4 Video / AAC Audio" forKey:@"FileCodecs"];
-
     /* Video encoder */
-    [preset setObject:@"FFmpeg" forKey:@"VideoEncoder"];
+    [preset setObject:@"MPEG-4 (FFmpeg)" forKey:@"VideoEncoder"];
 
     /* x264 Option String (We can use this to tweak the appleTV output)*/
     [preset setObject:@"" forKey:@"x264Option"];
@@ -1334,11 +1382,16 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
-    /* Audio Sample Rate*/
-    [preset setObject:@"48" forKey:@"AudioSampleRate"];
-
-    /* Audio Bitrate Rate*/
-    [preset setObject:@"128" forKey:@"AudioBitRate"];
+    /* Audio - Is done on a track by track basis, ONLY specifiy the tracks we want set as any track
+     * not listed will be set to "None" and not encoded */
+    
+    /* Track 1 */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"Audio1Track"];
+    [preset setObject:@"AAC (faac)" forKey:@"Audio1Encoder"];
+    [preset setObject:@"Dolby Pro Logic II" forKey:@"Audio1Mixdown"];
+    [preset setObject:@"48" forKey:@"Audio1Samplerate"];
+    [preset setObject:@"128" forKey:@"Audio1Bitrate"];
+    [preset setObject:[NSNumber numberWithFloat:1.0] forKey:@"Audio1TrackDRCSlider"];
 
     /* Subtitles*/
     [preset setObject:@"None" forKey:@"Subtitles"];
@@ -1372,11 +1425,8 @@
     /* Chapter Markers*/
      [preset setObject:[NSNumber numberWithInt:0] forKey:@"ChapterMarkers"];
 
-    /* Codecs */
-    [preset setObject:@"AVC/H.264 Video / AAC Audio" forKey:@"FileCodecs"];
-
     /* Video encoder */
-    [preset setObject:@"x264" forKey:@"VideoEncoder"];
+    [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String (We can use this to tweak the appleTV output)*/
     [preset setObject:@"level=41:subme=5:me=umh" forKey:@"x264Option"];
@@ -1419,11 +1469,16 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
-    /* Audio Sample Rate*/
-    [preset setObject:@"48" forKey:@"AudioSampleRate"];
-
-    /* Audio Bitrate Rate*/
-    [preset setObject:@"160" forKey:@"AudioBitRate"];
+    /* Audio - Is done on a track by track basis, ONLY specifiy the tracks we want set as any track
+     * not listed will be set to "None" and not encoded */
+    
+    /* Track 1 */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"Audio1Track"];
+    [preset setObject:@"AAC (faac)" forKey:@"Audio1Encoder"];
+    [preset setObject:@"Dolby Pro Logic II" forKey:@"Audio1Mixdown"];
+    [preset setObject:@"48" forKey:@"Audio1Samplerate"];
+    [preset setObject:@"160" forKey:@"Audio1Bitrate"];
+    [preset setObject:[NSNumber numberWithFloat:1.0] forKey:@"Audio1TrackDRCSlider"];
 
     /* Subtitles*/
     [preset setObject:@"None" forKey:@"Subtitles"];
@@ -1457,11 +1512,8 @@
     /* Chapter Markers*/
      [preset setObject:[NSNumber numberWithInt:1] forKey:@"ChapterMarkers"];
 
-    /* Codecs */
-    [preset setObject:@"AVC/H.264 Video / AAC Audio" forKey:@"FileCodecs"];
-
     /* Video encoder */
-    [preset setObject:@"x264" forKey:@"VideoEncoder"];
+    [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String */
     [preset setObject:@"ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:me=umh:subme=5:analyse=all:trellis=1:no-fast-pskip" forKey:@"x264Option"];
@@ -1506,11 +1558,16 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
-    /* Audio Sample Rate*/
-    [preset setObject:@"Auto" forKey:@"AudioSampleRate"];
-
-    /* Audio Bitrate Rate*/
-    [preset setObject:@"160" forKey:@"AudioBitRate"];
+    /* Audio - Is done on a track by track basis, ONLY specifiy the tracks we want set as any track
+     * not listed will be set to "None" and not encoded */
+    
+    /* Track 1 */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"Audio1Track"];
+    [preset setObject:@"AAC (faac)" forKey:@"Audio1Encoder"];
+    [preset setObject:@"Dolby Pro Logic II" forKey:@"Audio1Mixdown"];
+    [preset setObject:@"Auto" forKey:@"Audio1Samplerate"];
+    [preset setObject:@"160" forKey:@"Audio1Bitrate"];
+    [preset setObject:[NSNumber numberWithFloat:1.0] forKey:@"Audio1TrackDRCSlider"];
 
     /* Subtitles*/
     [preset setObject:@"None" forKey:@"Subtitles"];
@@ -1544,11 +1601,8 @@
     /* Chapter Markers*/
      [preset setObject:[NSNumber numberWithInt:1] forKey:@"ChapterMarkers"];
 
-    /* Codecs */
-    [preset setObject:@"AVC/H.264 Video / AAC Audio" forKey:@"FileCodecs"];
-
     /* Video encoder */
-    [preset setObject:@"x264" forKey:@"VideoEncoder"];
+    [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String */
     [preset setObject:@"ref=3:mixed-refs:bframes=6:bime:weightb:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip" forKey:@"x264Option"];
@@ -1592,11 +1646,16 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
 
-    /* Audio Sample Rate*/
-    [preset setObject:@"Auto" forKey:@"AudioSampleRate"];
-
-    /* Audio Bitrate Rate*/
-    [preset setObject:@"160" forKey:@"AudioBitRate"];
+    /* Audio - Is done on a track by track basis, ONLY specifiy the tracks we want set as any track
+     * not listed will be set to "None" and not encoded */
+    
+    /* Track 1 */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"Audio1Track"];
+    [preset setObject:@"AAC (faac)" forKey:@"Audio1Encoder"];
+    [preset setObject:@"Dolby Pro Logic II" forKey:@"Audio1Mixdown"];
+    [preset setObject:@"Auto" forKey:@"Audio1Samplerate"];
+    [preset setObject:@"160" forKey:@"Audio1Bitrate"];
+    [preset setObject:[NSNumber numberWithFloat:1.0] forKey:@"Audio1TrackDRCSlider"];
 
     /* Subtitles*/
     [preset setObject:@"None" forKey:@"Subtitles"];
