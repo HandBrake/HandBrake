@@ -25,7 +25,7 @@ app:    libhb/hbversion.h
 contrib/.contrib:
 	@$(MAKE) --no-print-directory -C contrib all
 
-snapshot-app: contrib/.contrib libhb/hbversion.h
+snapshot-app: contrib/.contrib unstable-libhb/hbversion.h
 	( cd macosx ; xcodebuild -target libhb -target HandBrake -target HandBrakeCLI -configuration Deployment HB_BUILD="$(SNAP_HB_BUILD)" HB_VERSION="$(SNAP_HB_VERSION)" CURRENT_PROJECT_VERSION="$(SNAP_HB_VERSION)" APPCAST_URL="http://handbrake.fr/appcast_unstable.xml" build | sed '/^$$/d' )
 
 app-chunky: libhb/hbversion.h
@@ -123,5 +123,16 @@ libhb/hbversion.h:
 	echo "#define HB_VERSION \"$(HB_VERSION)\"" >> libhb/hbversion.h
 	echo "#endif" >> libhb/hbversion.h
 	echo "#ifndef HB_APPCAST_URL" >> libhb/hbversion.h
-	echo "#define APPCAST_URL \"$(APPCAST_URL)\"" >> libhb/hbversion.h
+	echo "#define APPCAST_URL \"http://handbrake.fr/appcast.xml\"" >> libhb/hbversion.h
+	echo "#endif" >> libhb/hbversion.h
+
+unstable-libhb/hbversion.h:
+	echo "#ifndef HB_BUILD" > libhb/hbversion.h
+	echo "#define HB_BUILD $(SNAP_HB_BUILD)" >> libhb/hbversion.h
+	echo "#endif" >> libhb/hbversion.h
+	echo "#ifndef HB_VERSION" >> libhb/hbversion.h
+	echo "#define HB_VERSION \"$(SNAP_HB_VERSION)\"" >> libhb/hbversion.h
+	echo "#endif" >> libhb/hbversion.h
+	echo "#ifndef HB_APPCAST_URL" >> libhb/hbversion.h
+	echo "#define APPCAST_URL \"http://handbrake.fr/appcast_unstable.xml\"" >> libhb/hbversion.h
 	echo "#endif" >> libhb/hbversion.h
