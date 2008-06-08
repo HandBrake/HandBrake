@@ -45,7 +45,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                 "failed" );
     }
     context = avcodec_alloc_context();
-    if( job->vquality < 0.0 || job->vquality > 1.0 )
+    if( job->vquality < 0.0 )
     {
         /* Rate control */
         context->bit_rate = 1000 * job->vbitrate;
@@ -54,10 +54,26 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     else
     {
         /* Constant quantizer */
-        context->qmin = 31 - job->vquality * 30;
-        context->qmax = context->qmin;
+        // These settings produce better image quality than
+        // what was previously used
+        context->flags |= CODEC_FLAG_QSCALE;
+        if (job->vquality < 1.0)
+        {
+            float vquality;
+            vquality = 31 - job->vquality * 31;
+            // A value of 0 has undefined behavior
+            // and ffmpeg qp has integral increments
+            if (vquality < 1.0)
+                vquality = 1.0;
+            context->global_quality = FF_QP2LAMBDA * vquality + 0.5;
+        }
+        else
+        {
+            context->global_quality = FF_QP2LAMBDA * job->vquality + 0.5;
+        }
+		context->mb_decision = 1;
         hb_log( "encavcodec: encoding at constant quantizer %d",
-                context->qmin );
+                context->global_quality );
     }
     context->width     = job->width;
     context->height    = job->height;
@@ -188,6 +204,9 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     frame->linesize[0] = job->width;
     frame->linesize[1] = job->width / 2;
     frame->linesize[2] = job->width / 2;
+    // For constant quality, setting the quality in AVCodecContext 
+    // doesn't do the trick.  It must be set in the AVFrame.
+    frame->quality = pv->context->global_quality;
 
     /* Should be way too large */
     buf = hb_buffer_init( 3 * job->width * job->height / 2 );
