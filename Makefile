@@ -68,7 +68,7 @@ all:	contrib/.contrib libhb/libhb.a HandBrakeCLI
 contrib/.contrib:
 	@$(MAKE) --no-print-directory -C contrib all
 
-libhb/libhb.a: libhb/hbversion.h
+libhb/libhb.a: unstable-libhb/hbversion.h
 	@$(MAKE) --no-print-directory -C libhb all
 
 HandBrakeCLI:
@@ -99,7 +99,7 @@ contribPack:
 contrib/.contrib:
 	@$(MAKE) --no-print-directory -C contrib all
 
-libhb/libhb.a: libhb/hbversion.h
+libhb/libhb.a: unstable-libhb/hbversion.h
 	@$(MAKE) --no-print-directory -C libhb all
 
 HandBrakeCLI: 
