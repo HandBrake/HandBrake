@@ -153,6 +153,7 @@
       <DependentUpon>frmUpdater.cs</DependentUpon>
     </Compile>
     <Compile Include="Functions\Common.cs" />
+    <Compile Include="Functions\Presets.cs" />
     <Compile Include="Functions\RssReader.cs" />
     <Compile Include="Functions\CLI.cs" />
     <Compile Include="Functions\QueryParser.cs" />

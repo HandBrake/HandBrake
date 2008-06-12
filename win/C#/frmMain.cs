@@ -1488,7 +1488,6 @@ namespace Handbrake
                         else
                             presetInput.ReadLine();
                     }
-
                     presetInput.Close();
                 }
 

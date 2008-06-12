@@ -850,7 +850,7 @@ namespace Handbrake.Functions
             Match forcedSubtitles = Regex.Match(input, @"-F");
 
             //H264 Tab
-            Match x264 = Regex.Match(input, @"-x ([,a-zA-Z0-9=:-]*)");
+            Match x264 = Regex.Match(input, @"-x ([.,/a-zA-Z0-9=:-]*)");
 
             //Program Options
             Match verbose = Regex.Match(input, @"-v");
@@ -962,7 +962,7 @@ namespace Handbrake.Functions
                 thisQuery.q_denoise = "None";
                 if (denoise.Success != false)
                 {
-                    switch (denoise.ToString().Replace("--denoise=", ""))
+                    switch (denoise.ToString().Replace("--denoise=", "").Replace("\"", ""))
                     {
                         case "weak":
                             thisQuery.q_denoise = "Weak";

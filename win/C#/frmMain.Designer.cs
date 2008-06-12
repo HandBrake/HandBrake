@@ -966,10 +966,10 @@ namespace Handbrake
             // ISO_Open
             // 
             this.ISO_Open.DefaultExt = "ISO";
-            this.ISO_Open.Filter = "All Supported Files|*.iso;*.mpg;*.m2t;*.vob;*.ts;*.mpeg;*.mpeg;*.avi;*.mp4;*.mkv;";
+            this.ISO_Open.Filter = "All Supported Files|*.iso;*.mpg;*.m2t;*.vob;*.ts;*.mpeg;*.mpeg;*.avi;*.mp4;*.mkv;" +
+                "";
             this.ISO_Open.RestoreDirectory = true;
             this.ISO_Open.SupportMultiDottedExtensions = true;
-  
             // 
             // FileToolStripMenuItem
             // 
@@ -3093,7 +3093,6 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem mnu_open;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
-        private System.Windows.Forms.TreeView treeView_presets;
         internal System.Windows.Forms.CheckBox check_vfr;
         internal System.Windows.Forms.CheckBox check_iPodAtom;
         internal System.Windows.Forms.Label lbl_vfr;
@@ -3219,6 +3218,7 @@ namespace Handbrake
         internal System.Windows.Forms.TrackBar trackBar2;
         internal System.Windows.Forms.Label label16;
         internal System.Windows.Forms.Label lbl_drc1;
+        internal System.Windows.Forms.TreeView treeView_presets;
 
     }
 }
