@@ -249,6 +249,70 @@ static void ScanFunc( void * _data )
     _data = NULL;
 }
 
+// -----------------------------------------------
+// stuff related to cropping
+
+#define DARK 64
+
+static int row_all_dark( hb_title_t *title, uint8_t* luma, int row )
+{
+    int i = title->width;
+    luma += i * row;
+    while ( --i >= 0 )
+    {
+        if ( *luma++ > DARK )
+            return 0;
+    }
+    return 1;
+}
+
+static int column_all_dark( hb_title_t *title, uint8_t* luma, int top, int col )
+{
+    int i = title->height - top;
+    int stride = title->width;
+    luma += stride * top + col;
+    for ( ; --i >= 0; luma += stride )
+    {
+        if ( *luma > DARK )
+            return 0;
+    }
+    return 1;
+}
+#undef DARK
+
+typedef struct {
+    int n;
+    int t[10];
+    int b[10];
+    int l[10];
+    int r[10];
+} crop_record_t;
+
+static void record_crop( crop_record_t *crops, int t, int b, int l, int r )
+{
+    crops->t[crops->n] = t;
+    crops->b[crops->n] = b;
+    crops->l[crops->n] = l;
+    crops->r[crops->n] = r;
+    ++crops->n;
+}
+
+static int compare_int( const void *a, const void *b )
+{
+    return *(const int *)a - *(const int *)b;
+}
+
+static void sort_crops( crop_record_t *crops )
+{
+    qsort( crops->t, crops->n, sizeof(crops->t[0]), compare_int );
+    qsort( crops->b, crops->n, sizeof(crops->t[0]), compare_int );
+    qsort( crops->l, crops->n, sizeof(crops->t[0]), compare_int );
+    qsort( crops->r, crops->n, sizeof(crops->t[0]), compare_int );
+}
+
+// -----------------------------------------------
+// stuff related to title width/height/aspect info
+
 typedef struct {
     int count;              /* number of times we've seen this info entry */
     hb_work_info_t info;    /* copy of info entry */
@@ -300,6 +364,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
     int progressive_count = 0;
     int interlaced_preview_count = 0;
     info_list_t * info_list = calloc( 10+1, sizeof(*info_list) );
+    crop_record_t *crops = calloc( 1, sizeof(*crops) );
 
     buf_ps   = hb_buffer_init( HB_DVD_READ_BUFFER_SIZE );
     list_es  = hb_list_init();
@@ -311,7 +376,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
 
     for( i = 0; i < 10; i++ )
     {
-        int j, k;
+        int j;
         FILE * file_preview;
         char   filename[1024];
 
@@ -445,13 +510,6 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             title->rate_base = 1126125;
         }
 
-        // start from third frame to skip opening logos
-        if( i == 2)
-        {
-            title->crop[0] = title->crop[1] = title->height / 2;
-            title->crop[2] = title->crop[3] = title->width / 2;
-        }
-
         while( ( buf_es = hb_list_item( list_es, 0 ) ) )
         {
             hb_list_rem( list_es, buf_es );
@@ -480,42 +538,52 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             hb_log( "scan: fopen failed (%s)", filename );
         }
 
-#define Y    vid_buf->data
-#define DARK 64
-
         /* Detect black borders */
 
-        for( j = 0; j < title->width; j++ )
+#define Y    vid_buf->data
+        int top, bottom, left, right;
+        int h4 = title->height / 4, w4 = title->width / 4;
+        for ( top = 2; top < h4; ++top )
         {
-            for( k = 2; k < title->crop[0]; k++ )
-                if( Y[ k * title->width + j ] > DARK )
-                {
-                    title->crop[0] = k;
-                    break;
-                }
-            for( k = 0; k < title->crop[1]; k++ )
-                if( Y[ ( title->height - k - 1 ) *
-                       title->width + j ] > DARK )
-                {
-                    title->crop[1] = k;
-                    break;
-                }
+            if ( ! row_all_dark( title, Y, top ) )
+                break;
         }
-        for( j = 0; j < title->height; j++ )
+        if ( top < 4 )
         {
-            for( k = 0; k < title->crop[2]; k++ )
-                if( Y[ j * title->width + k ] > DARK )
-                {
-                    title->crop[2] = k;
-                    break;
-                }
-            for( k = 0; k < title->crop[3]; k++ )
-                if( Y[ j * title->width +
-                        title->width - k - 1 ] > DARK )
-                {
-                    title->crop[3] = k;
-                    break;
-                }
+            // we started at row two to avoid the "line 19" noise that shows
+            // up on row 0 & 1 of some TV shows. Since we stopped before row 4
+            // check if row 0 & 1 are dark or if we shouldn't crop the top at all.
+            if ( row_all_dark( title, Y, 0 ) )
+            {
+                top = row_all_dark( title, Y, 1 )? top : 1;
+            }
+            else
+            {
+                top = 0;
+            }
+        }
+        for ( bottom = 0; bottom < h4; ++bottom )
+        {
+            if ( ! row_all_dark( title, Y, title->height - 1 - bottom ) )
+                break;
+        }
+        for ( left = 0; left < w4; ++left )
+        {
+            if ( ! column_all_dark( title, Y, top, left ) )
+                break;
+        }
+        for ( right = 0; right < w4; ++right )
+        {
+            if ( ! column_all_dark( title, Y, top, title->width - 1 - right ) )
+                break;
+        }
+
+        // only record the result if all the crops are less than a quarter of
+        // the frame otherwise we can get fooled by frames with a lot of black
+        // like titles, credits & fade-thru-black transitions.
+        if ( top < h4 && bottom < h4 && left < w4 && right < w4 )
+        {
+            record_crop( crops, top, bottom, left, right );
         }
         ++npreviews;
 
@@ -548,10 +616,22 @@ skip_preview:
         }
         title->aspect = ( aspect + 0.05 ) * HB_ASPECT_BASE;
 
-        title->crop[0] = EVEN( title->crop[0] );
-        title->crop[1] = EVEN( title->crop[1] );
-        title->crop[2] = EVEN( title->crop[2] );
-        title->crop[3] = EVEN( title->crop[3] );
+        if ( crops->n )
+        {
+            sort_crops( crops );
+            // The next line selects median cropping - at least
+            // 50% of the frames will have their borders removed.
+            // Other possible choices are loose cropping (i = 0) where 
+            // no non-black pixels will be cropped from any frame and a
+            // tight cropping (i = crops->n - (crops->n >> 2)) where at
+            // least 75% of the frames will have their borders removed.
+            i = crops->n >> 1;
+            title->crop[0] = EVEN( crops->t[i] );
+            title->crop[1] = EVEN( crops->b[i] );
+            title->crop[2] = EVEN( crops->l[i] );
+            title->crop[3] = EVEN( crops->r[i] );
+        }
+        free( crops );
 
         hb_log( "scan: %d previews, %dx%d, %.3f fps, autocrop = %d/%d/%d/%d, "
                 "aspect %s, PAR %d:%d",
