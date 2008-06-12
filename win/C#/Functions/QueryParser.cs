@@ -1133,24 +1133,37 @@ namespace Handbrake.Functions
 
 
                 // Audio Sample Rate
+                // Make sure to change 0 to Auto
                 if (audioSampleRate1.Success != false)
+                {
                     thisQuery.q_audioSamplerate1 = audioSampleRate1.ToString().Replace("-R ", "").Trim();
+                    if (thisQuery.q_audioSamplerate1 == "0")
+                        thisQuery.q_audioSamplerate1 = "Auto";
+                }
+                else
+                    thisQuery.q_audioSamplerate1 = "Auto";
 
                 if (audioSampleRate2.Success != false)
                 {
                     string[] audioSRSelect = audioSampleRate2.ToString().Split(',');
+                    if (audioSRSelect[1] == "0")
+                        audioSRSelect[1] = "Auto";
                     thisQuery.q_audioSamplerate2 = audioSRSelect[1].Trim();
                 }
 
                 if (audioSampleRate3.Success != false)
                 {
                     string[] audioSRSelect = audioSampleRate3.ToString().Split(',');
+                    if (audioSRSelect[1] == "0")
+                        audioSRSelect[1] = "Auto";
                     thisQuery.q_audioSamplerate3 = audioSRSelect[2].Trim();
                 }
 
                 if (audioSampleRate4.Success != false)
                 {
                     string[] audioSRSelect = audioSampleRate4.ToString().Split(',');
+                    if (audioSRSelect[1] == "0")
+                        audioSRSelect[1] = "Auto";
                     thisQuery.q_audioSamplerate4 = audioSRSelect[3].Trim();
                 }
 

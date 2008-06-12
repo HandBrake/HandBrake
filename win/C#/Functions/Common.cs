@@ -855,14 +855,14 @@ namespace Handbrake.Functions
             //Audio Sample Rate   - audioSampleRate
 
             if (audioSampleRate1 != "")
-                audioSampleRate = " -R " + audioSampleRate1;
+                audioSampleRate = " -R " + audioSampleRate1.Replace("Auto", "0");
 
             if (audioSampleRate2 != "")
             {
                 if (audioSampleRate == "")
-                    audioSampleRate = " -R 48," + audioSampleRate2;
+                    audioSampleRate = " -R 0," + audioSampleRate2.Replace("Auto", "0");
                 else
-                    audioSampleRate = audioSampleRate + "," + audioSampleRate2;
+                    audioSampleRate = audioSampleRate + "," + audioSampleRate2.Replace("Auto", "0");
             }
             else
             {
@@ -872,21 +872,21 @@ namespace Handbrake.Functions
                 if ((track2 != "") && (track2 != "None"))
                 {
                     if (audioSampleRate == "")
-                        audioSampleRate = " -R 48,48";
+                        audioSampleRate = " -R 0,0";
                     else
-                        audioSampleRate = audioSampleRate + ",48";
+                        audioSampleRate = audioSampleRate + ",0";
                 }
 
             }
 
             if (audioSampleRate3 != "")
             {
-                audioSampleRate = audioSampleRate + "," + audioSampleRate3;
+                audioSampleRate = audioSampleRate + "," + audioSampleRate3.Replace("Auto", "0");
             }
 
             if (audioSampleRate4 != "")
             {
-                audioSampleRate = audioSampleRate + "," + audioSampleRate4;
+                audioSampleRate = audioSampleRate + "," + audioSampleRate4.Replace("Auto", "0");
             }
 
             //

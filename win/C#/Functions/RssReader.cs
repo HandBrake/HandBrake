@@ -24,7 +24,6 @@ namespace Handbrake.Functions
         XmlNode nodeRss;
         XmlNode nodeChannel;
         XmlNode nodeItem;
-        string t;
 
         private void readRss()
         {
