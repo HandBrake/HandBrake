@@ -4,6 +4,61 @@
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License. */
 
+/* This module is Handbrake's interface to the ffmpeg decoder library
+   (libavcodec & small parts of libavformat). It contains four Handbrake
+   "work objects":
+
+    decavcodec  connects HB to an ffmpeg audio decoder
+    decavcodecv connects HB to an ffmpeg video decoder
+
+        (Two different routines are needed because the ffmpeg library
+        has different decoder calling conventions for audio & video.
+        The audio decoder should have had its name changed to "decavcodeca"
+        but I got lazy.) These work objects are self-contained & follow all
+        of HB's conventions for a decoder module. They can be used like
+        any other HB decoder (deca52, decmpeg2, etc.).
+
+    decavcodecai "internal" (incestuous?) version of decavcodec
+    decavcodecvi "internal" (incestuous?) version of decavcodecv
+
+        These routine are functionally equivalent to the routines above but
+        can only be used by the ffmpeg-based stream reader in libhb/stream.c.
+        The reason they exist is because the ffmpeg library leaves some of
+        the information needed by the decoder in the AVStream (the data
+        structure used by the stream reader) and we need to retrieve it
+        to successfully decode frames. But in HB the reader and decoder
+        modules are in completely separate threads and nothing goes between
+        them but hb_buffers containing frames to be decoded. I.e., there's
+        no easy way for the ffmpeg stream reader to pass a pointer to its
+        AVStream over to the ffmpeg video or audio decoder. So the *i work
+        objects use a private back door to the stream reader to get access
+        to the AVStream (routines hb_ffmpeg_avstream and hb_ffmpeg_context)
+        and the codec_param passed to these work objects is the key to this
+        back door (it's basically an index that allows the correct AVStream
+        to be retrieved).
+
+    The normal & *i objects share a lot of code (the basic frame decoding
+    and bitstream info code is factored out into subroutines that can be
+    called by either) but the top level routines of the *i objects
+    (decavcodecviWork, decavcodecviInfo, etc.) are different because:
+     1) they *have* to use the AVCodecContext that's contained in the
+        reader's AVStream rather than just allocating & using their own,
+     2) the Info routines have access to stuff kept in the AVStream in addition
+        to stuff kept in the AVCodecContext. This shouldn't be necessary but
+        crucial information like video frame rate that should be in the
+        AVCodecContext is either missing or wrong in the version of ffmpeg
+        we're currently using.
+
+    A consequence of the above is that the non-i work objects *can't* use
+    information from the AVStream because there isn't one - they get their
+    data from either the dvd reader or the mpeg reader, not the ffmpeg stream
+    reader. That means that they have to make up for deficiencies in the
+    AVCodecContext info by using stuff kept in the HB "title" struct. It
+    also means that ffmpeg codecs that randomly scatter state needed by
+    the decoder across both the AVCodecContext & the AVStream (e.g., the
+    VC1 decoder) can't easily be used by the HB mpeg stream reader.
+ */
+
 #include "hb.h"
 
 #include "libavcodec/avcodec.h"
@@ -542,13 +597,32 @@ static void init_ffmpeg_context( hb_work_object_t *w )
         avcodec_open( pv->context, codec );
     }
     // set up our best guess at the frame duration.
-    // the frame rate in the codec seems to be bogus but it's ok in the stream.
+    // the frame rate in the codec is usually bogus but it's sometimes
+    // ok in the stream.
     AVStream *st = hb_ffmpeg_avstream( w->codec_param );
-    AVRational tb = st->time_base;
-    if ( st->r_frame_rate.den && st->r_frame_rate.num )
+    AVRational tb;
+    // XXX because the time bases are so screwed up, we only take values
+    // in the range 8fps - 64fps.
+    if ( st->time_base.num * 64 > st->time_base.den &&
+         st->time_base.den > st->time_base.num * 8 )
+    {
+        tb = st->time_base;
+    }
+    else if ( st->codec->time_base.num * 64 > st->codec->time_base.den &&
+              st->codec->time_base.den > st->codec->time_base.num * 8 )
+    {
+        tb = st->codec->time_base;
+    }
+    else if ( st->r_frame_rate.den * 64 > st->r_frame_rate.num &&
+              st->r_frame_rate.num > st->r_frame_rate.den * 8 )
     {
         tb.num = st->r_frame_rate.den;
         tb.den = st->r_frame_rate.num;
+    }
+    else
+    {
+        tb.num = 1001;  /*XXX*/
+        tb.den = 30000; /*XXX*/
     }
     pv->duration = 90000. * tb.num / tb.den;
 
