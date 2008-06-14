@@ -1,14 +1,14 @@
 SYSTEM = $(shell uname -s)
 
 LIBS = a52 mkv avformat avcodec avutil dca dvdread faac mp3lame mpeg2 vorbis \
-	   vorbisenc ogg samplerate x264 xvidcore mp4v2 swscale theora
+	   vorbisenc ogg samplerate x264 xvidcore mp4v2 swscale theora faad
 
 all: ../HandBrakeCLI
 
 CFLAGS += -I../libhb
 CXXFLAGS += -I../libhb
 LIBS2 = ../libhb/libhb.a $(LIBS:%=../contrib/lib/lib%.a)
-LDFLAGS += $(LIBS2) -ldl
+LDFLAGS += $(LIBS2) -lbz2 -ldl
 
 ../HandBrakeCLI: test.c parsecsv.c $(LIBS2)
 	@CMD="$(CC) $(CFLAGS) -o test.o -c test.c"; $$CMD || \
