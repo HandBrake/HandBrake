@@ -48,7 +48,7 @@ CXXFLAGS += -I../contrib/include -D__LIBHB__ -DUSE_PTHREAD -DHB_VERSION=\"$(HB_V
 ifeq ($(findstring CYGWIN_NT,$(SYSTEM)),CYGWIN_NT)
 all: libhb.a libhb.dll
 else
-all: libhb.a libhb.so
+all: libhb.a
 
 endif
 
