@@ -51,6 +51,7 @@ static hb_audio_config_t * audio = NULL;
 static int    num_audio_tracks = 0;
 static char * mixdowns    = NULL;
 static char * dynamic_range_compression = NULL;
+static char * atracks     = NULL;
 static char * arates      = NULL;
 static char * abitrates   = NULL;
 static char * acodecs     = NULL;
@@ -271,6 +272,7 @@ int main( int argc, char ** argv )
     }
     if( mixdowns ) free( mixdowns );
     if( dynamic_range_compression ) free( dynamic_range_compression );
+    if( atracks ) free( atracks );
     if( arates ) free( arates );
     if( abitrates ) free( abitrates );
     if( acodecs ) free( acodecs );
@@ -890,6 +892,58 @@ static int HandleEvents( hb_handle_t * h )
                 job->vrate_base = vrate;
             }
 
+            /* Grab audio tracks */
+            if( atracks )
+            {
+                char * token = strtok(atracks, ",");
+                if (token == NULL)
+                    token = optarg;
+                int track_start, track_end;
+                while( token != NULL )
+                {
+                    audio = calloc(1, sizeof(*audio));
+                    hb_audio_config_init(audio);
+                    if (strlen(token) >= 3)
+                    {
+                        if (sscanf(token, "%d-%d", &track_start, &track_end) == 2)
+                        {
+                            int i;
+                            for (i = track_start - 1; i < track_end; i++)
+                            {
+                                if (i != track_start - 1)
+                                {
+                                    audio = calloc(1, sizeof(*audio));
+                                    hb_audio_config_init(audio);
+                                }
+                                audio->in.track = i;
+                                audio->out.track = num_audio_tracks++;
+                                hb_list_add(audios, audio);
+                            }
+                        }
+                        else if( !strcasecmp(token, "none" ) )
+                        {
+                            audio->in.track = audio->out.track = -1;
+                            audio->out.codec = 0;
+                            hb_list_add(audios, audio);
+                            break;
+                        }
+                        else
+                        {
+                            fprintf(stderr, "ERROR: Unable to parse audio input \"%s\", skipping.",
+                                    token);
+                            free(audio);
+                        }
+                    }
+                    else
+                    {
+                        audio->in.track = atoi(token) - 1;
+                        audio->out.track = num_audio_tracks++;
+                        hb_list_add(audios, audio);
+                    }
+                    token = strtok(NULL, ",");
+                }
+            }
+            
             /* Parse audio tracks */
             if( hb_list_count(audios) == 0 )
             {
@@ -1742,56 +1796,15 @@ static int ParseOptions( int argc, char ** argv )
                 chapter_markers = 1;
                 break;
             case 'a':
-            {
-                char * token = strtok(optarg, ",");
-                if (token == NULL)
-                    token = optarg;
-                int track_start, track_end;
-                while( token != NULL )
+                if( optarg != NULL )
                 {
-                    audio = calloc(1, sizeof(*audio));
-                    hb_audio_config_init(audio);
-                    if (strlen(token) >= 3)
-                    {
-                        if (sscanf(token, "%d-%d", &track_start, &track_end) == 2)
-                        {
-                            int i;
-                            for (i = track_start - 1; i < track_end; i++)
-                            {
-                                if (i != track_start - 1)
-                                {
-                                    audio = calloc(1, sizeof(*audio));
-                                    hb_audio_config_init(audio);
-                                }
-                                audio->in.track = i;
-                                audio->out.track = num_audio_tracks++;
-                                hb_list_add(audios, audio);
-                            }
-                        }
-                        else if( !strcasecmp(token, "none" ) )
-                        {
-                            audio->in.track = audio->out.track = -1;
-                            audio->out.codec = 0;
-                            hb_list_add(audios, audio);
-                            break;
-                        }
-                        else
-                        {
-                            fprintf(stderr, "ERROR: Unable to parse audio input \"%s\", skipping.",
-                                    token);
-                            free(audio);
-                        }
-                    }
-                    else
-                    {
-                        audio->in.track = atoi(token) - 1;
-                        audio->out.track = num_audio_tracks++;
-                        hb_list_add(audios, audio);
-                    }
-                    token = strtok(NULL, ",");
+                    atracks = strdup( optarg );
                 }
+                else
+                {
+                    atracks = "1" ;
+                }                
                 break;
-            }
             case '6':
                 if( optarg != NULL )
                 {
