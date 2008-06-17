@@ -198,7 +198,7 @@ BOOL                        fIsDragging;
 
 //------------------------------------------------------------------------------------
 
-@interface HBQueueController : NSObject
+@interface HBQueueController : NSWindowController
 {
     hb_handle_t                  *fHandle;              // reference to libhb
     HBController                 *fHBController;        // reference to HBController
@@ -221,8 +221,8 @@ BOOL                        fIsDragging;
 #endif
     NSTimer                      *fAnimationTimer;      // animates the icon of the current job in the queue outline view
     int                          fAnimationIndex;       // used to generate name of image used to animate the current job in the queue outline view
-    
-    //  +---------------fQueueWindow----------------+
+
+    //  +------------------window-------------------+
     //  |+-------------fCurrentJobPane-------------+|
     //  ||                                         ||
     //  ||                                         ||
@@ -238,8 +238,6 @@ BOOL                        fIsDragging;
     //  ||                                         ||
     //  |+-----------------------------------------+|
     //  +-------------------------------------------+
-    
-    IBOutlet NSWindow            *fQueueWindow;
 
     // fCurrentJobPane - visible only when processing a job
     IBOutlet NSView              *fCurrentJobPane;

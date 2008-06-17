@@ -881,8 +881,15 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 //------------------------------------------------------------------------------------
 - (id)init
 {
-    if (self = [super init])
+    if (self = [super initWithWindowNibName:@"Queue"])
     {
+        // NSWindowController likes to lazily load its window nib. Since this
+        // controller tries to touch the outlets before accessing the window, we
+        // need to force it to load immadiately by invoking its accessor.
+        //
+        // If/when we switch to using bindings, this can probably go away.
+        [self window];
+
         // Our defaults
         [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
             @"NO",      @"QueueWindowIsOpen",
@@ -892,14 +899,10 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 
         fJobGroups = [[NSMutableArray arrayWithCapacity:0] retain];
 
-        BOOL loadSucceeded = [NSBundle loadNibNamed:@"Queue" owner:self] && fQueueWindow;
-        NSAssert(loadSucceeded, @"Could not open Queue nib");
-        NSAssert(fQueueWindow, @"fQueueWindow not found in Queue nib");
-        
         // Register for HBJobGroup status changes
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jobGroupStatusNotification:) name:HBJobGroupStatusNotification object:nil];
     }
-    return self; 
+    return self;
 }
 
 //------------------------------------------------------------------------------------
@@ -908,9 +911,9 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 - (void)dealloc
 {
     // clear the delegate so that windowWillClose is not attempted
-    if ([fQueueWindow delegate] == self)
-        [fQueueWindow setDelegate:nil];
-    
+    if( [[self window] delegate] == self )
+        [[self window] setDelegate:nil];
+
     [fJobGroups release];
     [fCurrentJobGroup release];
     [fSavedExpandedItems release];
@@ -965,7 +968,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 //------------------------------------------------------------------------------------
 - (IBAction) showQueueWindow: (id)sender
 {
-    [fQueueWindow makeKeyAndOrderFront: self];
+    [self showWindow:sender];
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"QueueWindowIsOpen"];
 }
 
@@ -1932,19 +1935,19 @@ static CGFloat spacingWidth = 3.0;
 //------------------------------------------------------------------------------------
 - (void)setupToolbar
 {
-    // Create a new toolbar instance, and attach it to our window 
+    // Create a new toolbar instance, and attach it to our window
     NSToolbar *toolbar = [[[NSToolbar alloc] initWithIdentifier: HBQueueToolbar] autorelease];
-    
-    // Set up toolbar properties: Allow customization, give a default display mode, and remember state in user defaults 
+
+    // Set up toolbar properties: Allow customization, give a default display mode, and remember state in user defaults
     [toolbar setAllowsUserCustomization: YES];
     [toolbar setAutosavesConfiguration: YES];
     [toolbar setDisplayMode: NSToolbarDisplayModeIconAndLabel];
-    
+
     // We are the delegate
     [toolbar setDelegate: self];
-    
-    // Attach the toolbar to our window 
-    [fQueueWindow setToolbar: toolbar];
+
+    // Attach the toolbar to our window
+    [[self window] setToolbar:toolbar];
 }
 
 //------------------------------------------------------------------------------------
@@ -2109,11 +2112,11 @@ static CGFloat spacingWidth = 3.0;
 - (void)awakeFromNib
 {
     [self setupToolbar];
-    
-    if (![fQueueWindow setFrameUsingName:@"Queue"])
-        [fQueueWindow center];
-    [fQueueWindow setFrameAutosaveName: @"Queue"];
-    [fQueueWindow setExcludedFromWindowsMenu:YES];
+
+    if( ![[self window] setFrameUsingName:@"Queue"] )
+        [[self window] center];
+    [self setWindowFrameAutosaveName:@"Queue"];
+    [[self window] setExcludedFromWindowsMenu:YES];
 
 #if HB_QUEUE_DRAGGING
     [fOutlineView registerForDraggedTypes: [NSArray arrayWithObject:HBQueuePboardType] ];
