@@ -7,7 +7,6 @@
 #include <stdarg.h>
 #include <time.h>
 #include <sys/time.h>
-#include <assert.h>
 
 #include "common.h"
 
@@ -676,8 +675,6 @@ hb_audio_t *hb_audio_copy(const hb_audio_t *src)
  *********************************************************************/
 void hb_audio_config_init(hb_audio_config_t * audiocfg)
 {
-    assert(audiocfg != NULL);
-
     /* Set read only paramaters to invalid values */
     audiocfg->in.codec = 0xDEADBEEF;
     audiocfg->in.bitrate = -1;
@@ -704,9 +701,6 @@ void hb_audio_config_init(hb_audio_config_t * audiocfg)
  *********************************************************************/
 int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
 {
-    assert(job != NULL);
-    assert(audiocfg != NULL);
-
     hb_title_t *title = job->title;
     hb_audio_t *audio;
 
@@ -753,7 +747,6 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
 
 hb_audio_config_t * hb_list_audio_config_item(hb_list_t * list, int i)
 {
-    assert(list != NULL);
     hb_audio_t *audio = NULL;
 
     if( (audio = hb_list_item(list, i)) )
