@@ -1,0 +1,11 @@
+Currently, to build you must build handbrake separately, then specify
+the path to handbrake with configure. e.g.
+
+./configure --with-hb=../HandBrake
+make
+sudo make install
+
+You can test without installing:
+cd src
+./ghb
+
