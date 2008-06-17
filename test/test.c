@@ -127,7 +127,7 @@ static int show_mux_warning = 1;
  ****************************************************************************/
 static void hb_cli_error_handler ( const char *errmsg )
 {
-    fprintf( stderr, "ERROR: %s", errmsg );
+    fprintf( stderr, "ERROR: %s\n", errmsg );
 }
 
 int main( int argc, char ** argv )
