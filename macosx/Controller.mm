@@ -1060,25 +1060,25 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
              * purposes in the title panel
              */
             /* Full Path */
-            [fScanSrcTitlePathField setStringValue: [NSString stringWithFormat:@"%@", scanPath]];
+            [fScanSrcTitlePathField setStringValue:scanPath];
             NSString *displayTitlescanSourceName;
-            
+
             if ([[scanPath lastPathComponent] isEqualToString: @"VIDEO_TS"])
             {
-                /* If VIDEO_TS Folder is chosen, choose its parent folder for the source display name 
+                /* If VIDEO_TS Folder is chosen, choose its parent folder for the source display name
                  we have to use the title->dvd value so we get the proper name of the volume if a physical dvd is the source*/
-                displayTitlescanSourceName = [NSString stringWithFormat:[[scanPath stringByDeletingLastPathComponent] lastPathComponent]];
+                displayTitlescanSourceName = [[scanPath stringByDeletingLastPathComponent] lastPathComponent];
             }
             else
             {
                 /* if not the VIDEO_TS Folder, we can assume the chosen folder is the source name */
-                displayTitlescanSourceName = [NSString stringWithFormat:[scanPath lastPathComponent]];
+                displayTitlescanSourceName = [scanPath lastPathComponent];
             }
             /* we set the source display name in the title selection dialogue */
-            [fSrcDsplyNameTitleScan setStringValue: [NSString stringWithFormat:@"%@", displayTitlescanSourceName]];
+            [fSrcDsplyNameTitleScan setStringValue:displayTitlescanSourceName];
             /* we set the attempted scans display name for main window to displayTitlescanSourceName*/
             browsedSourceDisplayName = [displayTitlescanSourceName retain];
-            /* We show the actual sheet where the user specifies the title to be scanned 
+            /* We show the actual sheet where the user specifies the title to be scanned
              * as we are going to do a title specific scan
              */
             [self showSourceTitleScanPanel:NULL];
@@ -1098,7 +1098,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                     [self writeToActivityLog:"trying to open eyetv package"];
                     /* We're looking at an EyeTV package - try to open its enclosed
                      .mpg media file */
-                     browsedSourceDisplayName = [[NSString stringWithFormat:@"%@",[[path stringByDeletingPathExtension] lastPathComponent]] retain];
+                     browsedSourceDisplayName = [[[path stringByDeletingPathExtension] lastPathComponent] retain];
                     NSString *mpgname;
                     int n = [[path stringByAppendingString: @"/"]
                              completePathIntoString: &mpgname caseSensitive: NO
@@ -1122,37 +1122,37 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 else if ([[path pathExtension] isEqualToString: @"dvdmedia"])
                 {
                     /* path IS a package - but dvdmedia packages can be treaded like normal directories */
-                    browsedSourceDisplayName = [[NSString stringWithFormat:@"%@",[[path stringByDeletingPathExtension] lastPathComponent]] retain];
+                    browsedSourceDisplayName = [[[path stringByDeletingPathExtension] lastPathComponent] retain];
                     [self writeToActivityLog:"trying to open dvdmedia package"];
                     [self performScan:path scanTitleNum:0];
                 }
-                else 
+                else
                 {
                     /* The package is not an eyetv package, so we do not call performScan */
                     [self writeToActivityLog:"unable to open package"];
                 }
             }
-            else // path is not a package, so we treat it as a dvd parent folder or VIDEO_TS folder 
+            else // path is not a package, so we treat it as a dvd parent folder or VIDEO_TS folder
             {
                 /* path is not a package, so we call perform scan directly on our file */
                 if ([[path lastPathComponent] isEqualToString: @"VIDEO_TS"])
                 {
                     [self writeToActivityLog:"trying to open video_ts folder (video_ts folder chosen)"];
                     /* If VIDEO_TS Folder is chosen, choose its parent folder for the source display name*/
-                    browsedSourceDisplayName = [[NSString stringWithFormat:@"%@",[[path stringByDeletingLastPathComponent] lastPathComponent]] retain];
+                    browsedSourceDisplayName = [[[path stringByDeletingLastPathComponent] lastPathComponent] retain];
                 }
                 else
                 {
                     [self writeToActivityLog:"trying to open video_ts folder (parent directory chosen)"];
                     /* if not the VIDEO_TS Folder, we can assume the chosen folder is the source name */
                     /* make sure we remove any path extension as this can also be an '.mpg' file */
-                    browsedSourceDisplayName = [[NSString stringWithFormat:@"%@",[path lastPathComponent]] retain];
+                    browsedSourceDisplayName = [[path lastPathComponent] retain];
                 }
                 [self performScan:path scanTitleNum:0];
             }
-            
+
         }
-        
+
     }
     else // User clicked Cancel in browse window
     {
@@ -1268,7 +1268,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             [self writeToActivityLog: "scanning specifically for title: %d", scanTitleNum];
         }
         hb_scan( fHandle, [path UTF8String], scanTitleNum );
-        [fSrcDVD2Field setStringValue: [NSString stringWithFormat: @"Scanning new source ..."]];
+        [fSrcDVD2Field setStringValue:@"Scanning new source ..."];
     }
     else
     {
@@ -1316,13 +1316,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		for( int i = 0; i < hb_list_count( list ); i++ )
 		{
 			title = (hb_title_t *) hb_list_item( list, i );
-			
+
             currentSource = [NSString stringWithUTF8String: title->name];
-            
+
             /*Set DVD Name at top of window with the browsedSourceDisplayName grokked right before -performScan */
-			[fSrcDVD2Field setStringValue: [NSString stringWithFormat: @"%@",browsedSourceDisplayName]];
-			
-			/* Use the dvd name in the default output field here 
+			[fSrcDVD2Field setStringValue:browsedSourceDisplayName];
+
+			/* Use the dvd name in the default output field here
 				May want to add code to remove blank spaces for some dvd names*/
 			/* Check to see if the last destination has been set,use if so, if not, use Desktop */
             if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"])
@@ -2679,18 +2679,18 @@ the user is using "Custom" settings by determining the sender*/
         hb_set_anamorphic_size(job, &output_width, &output_height, &output_par_width, &output_par_height);
         int display_width;
         display_width = output_width * output_par_width / output_par_height;
-        
+
         [fPicSettingsOutp setStringValue: [NSString stringWithFormat:@"%d x %d", output_width, output_height]];
         [fPicSettingsAnamorphic setStringValue: [NSString stringWithFormat:@"%d x %d Loose", display_width, output_height]];
-        
+
         fTitle->job->keep_ratio = 0;
     }
 	else
 	{
-        [fPicSettingsAnamorphic setStringValue: [NSString stringWithFormat:@"Off"]];
+        [fPicSettingsAnamorphic setStringValue:@"Off"];
 	}
-    
-	/* Set ON/Off values for the deinterlace/keep aspect ratio according to boolean */	
+
+	/* Set ON/Off values for the deinterlace/keep aspect ratio according to boolean */
 	if (fTitle->job->keep_ratio > 0)
 	{
 		[fPicSettingARkeep setStringValue: @"On"];
@@ -3835,7 +3835,7 @@ if (item == nil)
         /* if there is a description for the preset, we show it in the tooltip */
         if ([item valueForKey:@"PresetDescription"])
         {
-            loc_tip = [NSString stringWithFormat: @"%@",[item valueForKey:@"PresetDescription"]];
+            loc_tip = [item valueForKey:@"PresetDescription"];
             return (loc_tip);
         }
         else
@@ -3951,107 +3951,107 @@ if (item == nil)
 
 - (IBAction)selectPreset:(id)sender
 {
-    
+
     if ([fPresetsOutlineView selectedRow] >= 0)
     {
         chosenPreset = [fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]];
         /* we set the preset display field in main window here */
-        [fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@",[chosenPreset valueForKey:@"PresetName"]]];
+        [fPresetSelectedDisplay setStringValue:[chosenPreset valueForKey:@"PresetName"]];
         if ([[chosenPreset objectForKey:@"Default"] intValue] == 1)
         {
             [fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@ (Default)",[chosenPreset valueForKey:@"PresetName"]]];
         }
         else
         {
-            [fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@",[chosenPreset valueForKey:@"PresetName"]]];
+            [fPresetSelectedDisplay setStringValue:[chosenPreset valueForKey:@"PresetName"]];
         }
         /* File Format */
-        [fDstFormatPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"FileFormat"]]];
+        [fDstFormatPopUp selectItemWithTitle:[chosenPreset valueForKey:@"FileFormat"]];
         [self formatPopUpChanged: NULL];
-        
+
         /* Chapter Markers*/
         [fCreateChapterMarkers setState:[[chosenPreset objectForKey:@"ChapterMarkers"] intValue]];
         /* Allow Mpeg4 64 bit formatting +4GB file sizes */
         [fDstMp4LargeFileCheck setState:[[chosenPreset objectForKey:@"Mp4LargeFile"] intValue]];
         /* Mux mp4 with http optimization */
         [fDstMp4HttpOptFileCheck setState:[[chosenPreset objectForKey:@"Mp4HttpOptimize"] intValue]];
-        
+
         /* Video encoder */
         /* We set the advanced opt string here if applicable*/
-        [fAdvancedOptions setOptions: [NSString stringWithFormat:[chosenPreset valueForKey:@"x264Option"]]];
+        [fAdvancedOptions setOptions:[chosenPreset valueForKey:@"x264Option"]];
         /* We use a conditional to account for the new x264 encoder dropdown as well as presets made using legacy x264 settings*/
-        if ([[NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]] isEqualToString: @"x264 (h.264 Main)"] || 
-            [[NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]] isEqualToString: @"x264 (h.264 iPod)"] || 
-            [[NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]] isEqualToString: @"x264"])
+        if ([[chosenPreset valueForKey:@"VideoEncoder"] isEqualToString: @"x264 (h.264 Main)"] ||
+            [[chosenPreset valueForKey:@"VideoEncoder"] isEqualToString: @"x264 (h.264 iPod)"] ||
+            [[chosenPreset valueForKey:@"VideoEncoder"] isEqualToString: @"x264"])
         {
-            [fVidEncoderPopUp selectItemWithTitle: [NSString stringWithFormat:@"H.264 (x264)"]];
+            [fVidEncoderPopUp selectItemWithTitle:@"H.264 (x264)"];
             /* special case for legacy preset to check the new fDstMp4HttpOptFileCheck checkbox to set the ipod atom */
-            if ([[NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]] isEqualToString: @"x264 (h.264 iPod)"])
+            if ([[chosenPreset valueForKey:@"VideoEncoder"] isEqualToString: @"x264 (h.264 iPod)"])
             {
                 [fDstMp4iPodFileCheck setState:NSOnState];
                 /* We also need to add "level=30:" to the advanced opts string to set the correct level for the iPod when
                  encountering a legacy preset as it used to be handled separately from the opt string*/
-                [fAdvancedOptions setOptions: [NSString stringWithFormat:[@"level=30:" stringByAppendingString:[fAdvancedOptions optionsString]]]];
+                [fAdvancedOptions setOptions:[@"level=30:" stringByAppendingString:[fAdvancedOptions optionsString]]];
             }
             else
             {
                 [fDstMp4iPodFileCheck setState:NSOffState];
             }
         }
-        else if ([[NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]] isEqualToString: @"FFmpeg"])
+        else if ([[chosenPreset valueForKey:@"VideoEncoder"] isEqualToString: @"FFmpeg"])
         {
-            [fVidEncoderPopUp selectItemWithTitle: [NSString stringWithFormat:@"MPEG-4 (FFmpeg)"]];
+            [fVidEncoderPopUp selectItemWithTitle:@"MPEG-4 (FFmpeg)"];
         }
-        else if ([[NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]] isEqualToString: @"XviD"])
+        else if ([[chosenPreset valueForKey:@"VideoEncoder"] isEqualToString: @"XviD"])
         {
-            [fVidEncoderPopUp selectItemWithTitle: [NSString stringWithFormat:@"MPEG-4 (XviD)"]];
+            [fVidEncoderPopUp selectItemWithTitle:@"MPEG-4 (XviD)"];
         }
         else
         {
-            [fVidEncoderPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoEncoder"]]];
+            [fVidEncoderPopUp selectItemWithTitle:[chosenPreset valueForKey:@"VideoEncoder"]];
         }
-        
+
         /* Lets run through the following functions to get variables set there */
         [self videoEncoderPopUpChanged: NULL];
         /* Set the state of ipod compatible with Mp4iPodCompatible. Only for x264*/
         [fDstMp4iPodFileCheck setState:[[chosenPreset objectForKey:@"Mp4iPodCompatible"] intValue]];
         [self calculateBitrate: NULL];
-        
+
         /* Video quality */
         [fVidQualityMatrix selectCellAtRow:[[chosenPreset objectForKey:@"VideoQualityType"] intValue] column:0];
-        
-        [fVidTargetSizeField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoTargetSize"]]];
-        [fVidBitrateField setStringValue: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoAvgBitrate"]]];
+
+        [fVidTargetSizeField setStringValue:[chosenPreset valueForKey:@"VideoTargetSize"]];
+        [fVidBitrateField setStringValue:[chosenPreset valueForKey:@"VideoAvgBitrate"]];
         [fVidQualitySlider setFloatValue: [[chosenPreset valueForKey:@"VideoQualitySlider"] floatValue]];
-        
+
         [self videoMatrixChanged: NULL];
-        
+
         /* Video framerate */
         /* For video preset video framerate, we want to make sure that Same as source does not conflict with the
          detected framerate in the fVidRatePopUp so we use index 0*/
-        if ([[NSString stringWithFormat:[chosenPreset valueForKey:@"VideoFramerate"]] isEqualToString: @"Same as source"])
+        if ([[chosenPreset valueForKey:@"VideoFramerate"] isEqualToString: @"Same as source"])
         {
             [fVidRatePopUp selectItemAtIndex: 0];
         }
         else
         {
-            [fVidRatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"VideoFramerate"]]];
+            [fVidRatePopUp selectItemWithTitle:[chosenPreset valueForKey:@"VideoFramerate"]];
         }
-        
+
         /* GrayScale */
         [fVidGrayscaleCheck setState:[[chosenPreset objectForKey:@"VideoGrayScale"] intValue]];
-        
+
         /* 2 Pass Encoding */
         [fVidTwoPassCheck setState:[[chosenPreset objectForKey:@"VideoTwoPass"] intValue]];
         [self twoPassCheckboxChanged: NULL];
         /* Turbo 1st pass for 2 Pass Encoding */
         [fVidTurboPassCheck setState:[[chosenPreset objectForKey:@"VideoTurboTwoPass"] intValue]];
-        
+
         /*Audio*/
         if ([chosenPreset valueForKey:@"FileCodecs"])
         {
             /* We need to handle the audio codec popup by determining what was chosen from the deprecated Codecs PopUp for past presets*/
-            if ([[NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]] isEqualToString: @"AVC/H.264 Video / AAC + AC3 Audio"])
+            if ([[chosenPreset valueForKey:@"FileCodecs"] isEqualToString: @"AVC/H.264 Video / AAC + AC3 Audio"])
             {
                 /* We need to address setting languages etc. here in the new multi track audio panel */
                 /* Track One set here */
@@ -4069,8 +4069,8 @@ if (item == nil)
                 [fAudTrack2CodecPopUp selectItemWithTitle: @"AC3 Passthru"];
                 [self audioTrackPopUpChanged: fAudTrack2CodecPopUp];
             }
-            else if ([[NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]] isEqualToString: @"MPEG-4 Video / AAC Audio"] ||
-                     [[NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]] isEqualToString: @"AVC/H.264 Video / AAC Audio"])
+            else if ([[chosenPreset valueForKey:@"FileCodecs"] isEqualToString: @"MPEG-4 Video / AAC Audio"] ||
+                     [[chosenPreset valueForKey:@"FileCodecs"] isEqualToString: @"AVC/H.264 Video / AAC Audio"])
             {
                 if ([fAudLang1PopUp indexOfSelectedItem] > 0)
                 {
@@ -4093,8 +4093,8 @@ if (item == nil)
                     [self audioTrackPopUpChanged: fAudTrack4CodecPopUp];
                 }
             }
-            else if ([[NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]] isEqualToString: @"MPEG-4 Video / AC-3 Audio"] ||
-                     [[NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]] isEqualToString: @"AVC/H.264 Video / AC-3 Audio"])
+            else if ([[chosenPreset valueForKey:@"FileCodecs"] isEqualToString: @"MPEG-4 Video / AC-3 Audio"] ||
+                     [[chosenPreset valueForKey:@"FileCodecs"] isEqualToString: @"AVC/H.264 Video / AC-3 Audio"])
             {
                 if ([fAudLang1PopUp indexOfSelectedItem] > 0)
                 {
@@ -4117,8 +4117,8 @@ if (item == nil)
                     [self audioTrackPopUpChanged: fAudTrack4CodecPopUp];
                 }
             }
-            else if ([[NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]] isEqualToString: @"MPEG-4 Video / MP3 Audio"] ||
-                     [[NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]] isEqualToString: @"AVC/H.264 Video / MP3 Audio"])
+            else if ([[chosenPreset valueForKey:@"FileCodecs"] isEqualToString: @"MPEG-4 Video / MP3 Audio"] ||
+                     [[chosenPreset valueForKey:@"FileCodecs"] isEqualToString: @"AVC/H.264 Video / MP3 Audio"])
             {
                 if ([fAudLang1PopUp indexOfSelectedItem] > 0)
                 {
@@ -4141,7 +4141,7 @@ if (item == nil)
                     [self audioTrackPopUpChanged: fAudTrack4CodecPopUp];
                 }
             }
-            else if ([[NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]] isEqualToString: @"MPEG-4 Video / Vorbis Audio"])
+            else if ([[chosenPreset valueForKey:@"FileCodecs"] isEqualToString: @"MPEG-4 Video / Vorbis Audio"])
             {
                 if ([fAudLang1PopUp indexOfSelectedItem] > 0)
                 {
@@ -4170,23 +4170,23 @@ if (item == nil)
             {
                 if ([fAudLang1PopUp indexOfSelectedItem] > 0 && [fAudTrack1CodecPopUp titleOfSelectedItem] != @"AC3 Passthru")
                 {
-                    [fAudTrack1RatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioSampleRate"]]];
-                    [fAudTrack1BitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioBitRate"]]];
+                    [fAudTrack1RatePopUp selectItemWithTitle:[chosenPreset valueForKey:@"AudioSampleRate"]];
+                    [fAudTrack1BitratePopUp selectItemWithTitle:[chosenPreset valueForKey:@"AudioBitRate"]];
                 }
                 if ([fAudLang2PopUp indexOfSelectedItem] > 0 && [fAudTrack2CodecPopUp titleOfSelectedItem] != @"AC3 Passthru")
                 {
-                    [fAudTrack2RatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioSampleRate"]]];
-                    [fAudTrack2BitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioBitRate"]]];
+                    [fAudTrack2RatePopUp selectItemWithTitle:[chosenPreset valueForKey:@"AudioSampleRate"]];
+                    [fAudTrack2BitratePopUp selectItemWithTitle:[chosenPreset valueForKey:@"AudioBitRate"]];
                 }
                 if ([fAudLang3PopUp indexOfSelectedItem] > 0 && [fAudTrack3CodecPopUp titleOfSelectedItem] != @"AC3 Passthru")
                 {
-                    [fAudTrack3RatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioSampleRate"]]];
-                    [fAudTrack3BitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioBitRate"]]];
+                    [fAudTrack3RatePopUp selectItemWithTitle:[chosenPreset valueForKey:@"AudioSampleRate"]];
+                    [fAudTrack3BitratePopUp selectItemWithTitle:[chosenPreset valueForKey:@"AudioBitRate"]];
                 }
                 if ([fAudLang4PopUp indexOfSelectedItem] > 0 && [fAudTrack4CodecPopUp titleOfSelectedItem] != @"AC3 Passthru")
                 {
-                    [fAudTrack4RatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioSampleRate"]]];
-                    [fAudTrack4BitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"AudioBitRate"]]];
+                    [fAudTrack4RatePopUp selectItemWithTitle:[chosenPreset valueForKey:@"AudioSampleRate"]];
+                    [fAudTrack4BitratePopUp selectItemWithTitle:[chosenPreset valueForKey:@"AudioBitRate"]];
                 }
             }
             /* We detect here if we have the old DRC Slider and if so we apply it to the existing four tracks if chosen */
@@ -4223,20 +4223,20 @@ if (item == nil)
                     [fAudLang1PopUp selectItemAtIndex: 1];
                 }
                 [self audioTrackPopUpChanged: fAudLang1PopUp];
-                [fAudTrack1CodecPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio1Encoder"]]];
+                [fAudTrack1CodecPopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio1Encoder"]];
                 [self audioTrackPopUpChanged: fAudTrack1CodecPopUp];
-                [fAudTrack1MixPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio1Mixdown"]]];
+                [fAudTrack1MixPopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio1Mixdown"]];
                 /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default 
                  * mixdown*/
                 if  ([fAudTrack1MixPopUp selectedItem] == nil)
                 {
                     [self audioTrackPopUpChanged: fAudTrack1CodecPopUp];
                 }
-                [fAudTrack1RatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio1Samplerate"]]];
+                [fAudTrack1RatePopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio1Samplerate"]];
                 /* We set the presets bitrate if it is *not* an AC3 track since that uses the input bitrate */
                 if (![[chosenPreset valueForKey:@"Audio1Encoder"] isEqualToString: @"AC3 Passthru"])
                 {
-                    [fAudTrack1BitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio1Bitrate"]]];
+                    [fAudTrack1BitratePopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio1Bitrate"]];
                 }
                 [fAudTrack1DrcSlider setFloatValue: [[chosenPreset valueForKey:@"Audio1TrackDRCSlider"] floatValue]];
                 [self audioDRCSliderChanged: fAudTrack1DrcSlider];
@@ -4248,20 +4248,20 @@ if (item == nil)
                     [fAudLang2PopUp selectItemAtIndex: 1];
                 }
                 [self audioTrackPopUpChanged: fAudLang2PopUp];
-                [fAudTrack2CodecPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio2Encoder"]]];
+                [fAudTrack2CodecPopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio2Encoder"]];
                 [self audioTrackPopUpChanged: fAudTrack2CodecPopUp];
-                [fAudTrack2MixPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio2Mixdown"]]];
+                [fAudTrack2MixPopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio2Mixdown"]];
                 /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default 
                  * mixdown*/
                 if  ([fAudTrack2MixPopUp selectedItem] == nil)
                 {
                     [self audioTrackPopUpChanged: fAudTrack2CodecPopUp];
                 }
-                [fAudTrack2RatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio2Samplerate"]]];
+                [fAudTrack2RatePopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio2Samplerate"]];
                 /* We set the presets bitrate if it is *not* an AC3 track since that uses the input bitrate */
                 if (![[chosenPreset valueForKey:@"Audio2Encoder"] isEqualToString: @"AC3 Passthru"])
                 {
-                    [fAudTrack2BitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio2Bitrate"]]];
+                    [fAudTrack2BitratePopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio2Bitrate"]];
                 }
                 [fAudTrack2DrcSlider setFloatValue: [[chosenPreset valueForKey:@"Audio2TrackDRCSlider"] floatValue]];
                 [self audioDRCSliderChanged: fAudTrack2DrcSlider];
@@ -4273,20 +4273,20 @@ if (item == nil)
                     [fAudLang3PopUp selectItemAtIndex: 1];
                 }
                 [self audioTrackPopUpChanged: fAudLang3PopUp];
-                [fAudTrack3CodecPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio3Encoder"]]];
+                [fAudTrack3CodecPopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio3Encoder"]];
                 [self audioTrackPopUpChanged: fAudTrack3CodecPopUp];
-                [fAudTrack3MixPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio3Mixdown"]]];
+                [fAudTrack3MixPopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio3Mixdown"]];
                 /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default 
                  * mixdown*/
                 if  ([fAudTrack3MixPopUp selectedItem] == nil)
                 {
                     [self audioTrackPopUpChanged: fAudTrack3CodecPopUp];
                 }
-                [fAudTrack3RatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio3Samplerate"]]];
+                [fAudTrack3RatePopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio3Samplerate"]];
                 /* We set the presets bitrate if it is *not* an AC3 track since that uses the input bitrate */
                 if (![[chosenPreset valueForKey:@"Audio3Encoder"] isEqualToString: @"AC3 Passthru"])
                 {
-                    [fAudTrack3BitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio3Bitrate"]]];
+                    [fAudTrack3BitratePopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio3Bitrate"]];
                 }
                 [fAudTrack3DrcSlider setFloatValue: [[chosenPreset valueForKey:@"Audio3TrackDRCSlider"] floatValue]];
                 [self audioDRCSliderChanged: fAudTrack3DrcSlider];
@@ -4298,32 +4298,32 @@ if (item == nil)
                     [fAudLang4PopUp selectItemAtIndex: 1];
                 }
                 [self audioTrackPopUpChanged: fAudLang4PopUp];
-                [fAudTrack4CodecPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio4Encoder"]]];
+                [fAudTrack4CodecPopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio4Encoder"]];
                 [self audioTrackPopUpChanged: fAudTrack4CodecPopUp];
-                [fAudTrack4MixPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio4Mixdown"]]];
+                [fAudTrack4MixPopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio4Mixdown"]];
                 /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default 
                  * mixdown*/
                 if  ([fAudTrack4MixPopUp selectedItem] == nil)
                 {
                     [self audioTrackPopUpChanged: fAudTrack4CodecPopUp];
                 }
-                [fAudTrack4RatePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio4Samplerate"]]];
+                [fAudTrack4RatePopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio4Samplerate"]];
                 /* We set the presets bitrate if it is *not* an AC3 track since that uses the input bitrate */
                 if (![[chosenPreset valueForKey:@"Audio4Encoder"] isEqualToString: @"AC3 Passthru"])
                 {
-                    [fAudTrack4BitratePopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Audio4Bitrate"]]];
+                    [fAudTrack4BitratePopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio4Bitrate"]];
                 }
                 [fAudTrack4DrcSlider setFloatValue: [[chosenPreset valueForKey:@"Audio4TrackDRCSlider"] floatValue]];
                 [self audioDRCSliderChanged: fAudTrack4DrcSlider];
             }
-            
-            
+
+
         }
         
         /* We now cleanup any extra audio tracks that may be previously set if we need to, we do it here so we don't have to
          * duplicate any code for legacy presets.*/
         /* First we handle the legacy Codecs crazy AVC/H.264 Video / AAC + AC3 Audio atv hybrid */
-        if ([chosenPreset valueForKey:@"FileCodecs"] && [[NSString stringWithFormat:[chosenPreset valueForKey:@"FileCodecs"]] isEqualToString: @"AVC/H.264 Video / AAC + AC3 Audio"])
+        if ([chosenPreset valueForKey:@"FileCodecs"] && [[chosenPreset valueForKey:@"FileCodecs"] isEqualToString: @"AVC/H.264 Video / AAC + AC3 Audio"])
         {
             [fAudLang3PopUp selectItemAtIndex: 0];
             [self audioTrackPopUpChanged: fAudLang3PopUp];
@@ -4350,10 +4350,10 @@ if (item == nil)
         } 
         
         /*Subtitles*/
-        [fSubPopUp selectItemWithTitle: [NSString stringWithFormat:[chosenPreset valueForKey:@"Subtitles"]]];
+        [fSubPopUp selectItemWithTitle:[chosenPreset valueForKey:@"Subtitles"]];
         /* Forced Subtitles */
         [fSubForcedCheck setState:[[chosenPreset objectForKey:@"SubtitlesForced"] intValue]];
-	    
+
         /* Picture Settings */
         /* Note: objectForKey:@"UsesPictureSettings" now refers to picture size, this encompasses:
          * height, width, keep ar, anamorphic and crop settings.
@@ -4714,22 +4714,22 @@ if (item == nil)
     [preset setObject:[NSNumber numberWithInt:[fDstMp4HttpOptFileCheck state]] forKey:@"Mp4HttpOptimize"];
     /* Add iPod uuid atom */
     [preset setObject:[NSNumber numberWithInt:[fDstMp4iPodFileCheck state]] forKey:@"Mp4iPodCompatible"];
-    
+
     /* Codecs */
 	/* Video encoder */
 	[preset setObject:[fVidEncoderPopUp titleOfSelectedItem] forKey:@"VideoEncoder"];
 	/* x264 Option String */
 	[preset setObject:[fAdvancedOptions optionsString] forKey:@"x264Option"];
-	
+
 	[preset setObject:[NSNumber numberWithInt:[fVidQualityMatrix selectedRow]] forKey:@"VideoQualityType"];
 	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
 	[preset setObject:[fVidBitrateField stringValue] forKey:@"VideoAvgBitrate"];
 	[preset setObject:[NSNumber numberWithFloat:[fVidQualitySlider floatValue]] forKey:@"VideoQualitySlider"];
-	
+
 	/* Video framerate */
     if ([fVidRatePopUp indexOfSelectedItem] == 0) // Same as source is selected
 	{
-    [preset setObject:[NSString stringWithFormat: @"Same as source"] forKey:@"VideoFramerate"];
+        [preset setObject:@"Same as source" forKey:@"VideoFramerate"];
     }
     else // we can record the actual titleOfSelectedItem
     {
