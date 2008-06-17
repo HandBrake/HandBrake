@@ -796,10 +796,10 @@ namespace Handbrake.Functions
             Match denoise = Regex.Match(input, @"--denoise=\""([a-zA-Z]*)\""");
             Match deblock = Regex.Match(input, @"--deblock");
             Match detelecine = Regex.Match(input, @"--detelecine");
-            Match anamorphic = Regex.Match(input, @"-p ");
-            Match chapterMarkers = Regex.Match(input, @"-m");
+            Match anamorphic = Regex.Match(input, @" -p ");
+            Match chapterMarkers = Regex.Match(input, @" -m");
             Match crop = Regex.Match(input, @"--crop ([0-9]):([0-9]):([0-9]):([0-9])");
-            Match vfr = Regex.Match(input, @"-V");
+            Match vfr = Regex.Match(input, @" -V");
             Match lanamorphic = Regex.Match(input, @"-P");
 
             //Video Settings Tab
@@ -807,12 +807,12 @@ namespace Handbrake.Functions
             Match videoBitrate = Regex.Match(input, @"-b ([0-9]*)");
             Match videoQuality = Regex.Match(input, @"-q ([0-9.]*)");
             Match videoFilesize = Regex.Match(input, @"-S ([0-9.]*)");
-            Match twoPass = Regex.Match(input, @"-2");
-            Match turboFirstPass = Regex.Match(input, @"-T");
-            Match grayscale = Regex.Match(input, @"-g");
-            Match largerMp4 = Regex.Match(input, @"-4");
-            Match ipodAtom = Regex.Match(input, @"-I");
-            Match optimizeMP4 = Regex.Match(input, @"-O");
+            Match twoPass = Regex.Match(input, @" -2 ");
+            Match turboFirstPass = Regex.Match(input, @" -T");
+            Match grayscale = Regex.Match(input, @" -g");
+            Match largerMp4 = Regex.Match(input, @" -4");
+            Match ipodAtom = Regex.Match(input, @" -I");
+            Match optimizeMP4 = Regex.Match(input, @" -O");
 
             //Audio Settings Tab
             Match audioTrack1 = Regex.Match(input, @"-a ([0-9]*)");
@@ -846,14 +846,14 @@ namespace Handbrake.Functions
             Match drc4 = Regex.Match(input, @"-D ([0-9.]*),([0-9.]*),([0-9.]*),([0-9.]*)");
 
             Match subtitles = Regex.Match(input, @"-s ([0-9a-zA-Z]*)");
-            Match subScan = Regex.Match(input, @"-U");
-            Match forcedSubtitles = Regex.Match(input, @"-F");
+            Match subScan = Regex.Match(input, @" -U");
+            Match forcedSubtitles = Regex.Match(input, @" -F");
 
             //H264 Tab
             Match x264 = Regex.Match(input, @"-x ([.,/a-zA-Z0-9=:-]*)");
 
             //Program Options
-            Match verbose = Regex.Match(input, @"-v");
+            Match verbose = Regex.Match(input, @" -v");
             #endregion
 
             #region Set Varibles
