@@ -761,12 +761,12 @@ static int HandleEvents( hb_handle_t * h )
                 else
                 {
                     /* No marker file */
-                    
+
                     int number_of_chapters = hb_list_count(job->title->list_chapter);
                     int chapter;
-                    
+
                     for(chapter = 0; chapter <= number_of_chapters - 1 ; chapter++)
-                    {                        
+                    {
                         hb_chapter_t * chapter_s;
                         chapter_s = hb_list_item( job->title->list_chapter, chapter);
                         snprintf( chapter_s->title, 1023, "Chapter %i", chapter + 1 );
@@ -943,7 +943,7 @@ static int HandleEvents( hb_handle_t * h )
                     token = strtok(NULL, ",");
                 }
             }
-            
+
             /* Parse audio tracks */
             if( hb_list_count(audios) == 0 )
             {
@@ -989,22 +989,21 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( i < num_audio_tracks )
                     {
-                        audio = hb_list_audio_config_item(job->list_audio, i);                        
+                        audio = hb_list_audio_config_item(job->list_audio, i);
                         audio->out.codec = acodec;
                     }
-                    if( i >= num_audio_tracks )
+                    else
                     {
-                        int last_track = hb_list_count(job->list_audio);
+                        hb_audio_config_t * last_audio = hb_list_audio_config_item( job->list_audio, i - 1 );
+                        hb_audio_config_t audio;
+
                         fprintf(stderr, "More audio codecs than audio tracks, copying track %i and using encoder %s\n",
-                            last_track, token);
-                        hb_audio_config_t * last_audio = hb_list_audio_config_item( job->list_audio, last_track - 1 );
-                        audio = calloc(1, sizeof(*audio));
-                        hb_audio_config_init(audio);
-                        audio->in.track = last_audio->in.track;
-                        audio->out.track = num_audio_tracks++;
-                        audio->out.codec = acodec;
-                        hb_audio_add(job, audio);
-                        free( audio );
+                            i, token);
+                        hb_audio_config_init(&audio);
+                        audio.in.track = last_audio->in.track;
+                        audio.out.track = num_audio_tracks++;
+                        audio.out.codec = acodec;
+                        hb_audio_add(job, &audio);
                     }
                     token = strtok(NULL, ",");
                     i++;
@@ -1037,31 +1036,24 @@ static int HandleEvents( hb_handle_t * h )
                 {
                     arate = atoi(token);
                     audio = hb_list_audio_config_item(job->list_audio, i);
-                    if (audio->out.codec == HB_ACODEC_AC3 || audio->out.codec == HB_ACODEC_DCA)
+                    int j;
+
+                    for( j = 0; j < hb_audio_rates_count; j++ )
                     {
-                        /* Would probably be better to have this handled in libhb. */
-                        audio->out.samplerate = audio->in.samplerate;
+                        if( !strcmp( token, hb_audio_rates[j].string ) )
+                        {
+                            arate = hb_audio_rates[j].rate;
+                            break;
+                        }
                     }
-                    else
+
+                    if (!is_sample_rate_valid(arate))
                     {
-                        int j;
-                        for( j = 0; j < hb_audio_rates_count; j++ )
-                        {
-                            if( !strcmp( token, hb_audio_rates[j].string ) )
-                            {
-                                arate = hb_audio_rates[j].rate;
-                                break;
-                            }
-                        }
-                        
-                        if (!is_sample_rate_valid(arate))
-                        {
-                            fprintf(stderr, "Invalid sample rate %d, using input rate %d\n", arate, audio->in.samplerate);
-                            arate = audio->in.samplerate;
-                        }
-                        
-                        audio->out.samplerate = arate;
+                        fprintf(stderr, "Invalid sample rate %d, using input rate %d\n", arate, audio->in.samplerate);
+                        arate = audio->in.samplerate;
                     }
+
+                    audio->out.samplerate = arate;
                     if( (++i) >= num_audio_tracks )
                         break;  /* We have more inputs than audio tracks, oops */
                     token = strtok(NULL, ",");
@@ -1077,11 +1069,6 @@ static int HandleEvents( hb_handle_t * h )
                 for ( ; i < num_audio_tracks; i++)
                 {
                     audio = hb_list_audio_config_item(job->list_audio, i);
-                    if (audio->out.codec == HB_ACODEC_AC3 || audio->out.codec == HB_ACODEC_DCA)
-                    {
-                        audio->out.samplerate = audio->in.samplerate;
-                        continue;
-                    }
                     audio->out.samplerate = arate;
                 }
             }
@@ -1098,14 +1085,7 @@ static int HandleEvents( hb_handle_t * h )
                 {
                     abitrate = atoi(token);
                     audio = hb_list_audio_config_item(job->list_audio, i);
-                    if (audio->out.codec == HB_ACODEC_AC3 || audio->out.codec == HB_ACODEC_DCA)
-                    {
-                        audio->out.bitrate = audio->in.bitrate;   /* See note above about arate. */
-                    }
-                    else
-                    {
-                        audio->out.bitrate = abitrate;
-                    }
+                    audio->out.bitrate = abitrate;
                     if( (++i) >= num_audio_tracks )
                         break;  /* We have more inputs than audio tracks, oops */
                     token = strtok(NULL, ",");
@@ -1122,11 +1102,6 @@ static int HandleEvents( hb_handle_t * h )
                 for (; i < num_audio_tracks; i++)
                 {
                     audio = hb_list_audio_config_item(job->list_audio, i);
-                    if (audio->out.codec == HB_ACODEC_AC3 || audio->out.codec == HB_ACODEC_DCA)
-                    {
-                        audio->out.bitrate = audio->in.bitrate;
-                        continue;
-                    }
                     audio->out.bitrate = abitrate;
                 }
             }
@@ -1668,7 +1643,7 @@ static int ParseOptions( int argc, char ** argv )
             { "deblock",     optional_argument, NULL,    '7' },
             { "denoise",     optional_argument, NULL,    '8' },
             { "detelecine",  optional_argument, NULL,    '9' },
-            { "decomb",      optional_argument, NULL,    '5' },            
+            { "decomb",      optional_argument, NULL,    '5' },
             { "grayscale",   no_argument,       NULL,    'g' },
             { "pixelratio",  no_argument,       NULL,    'p' },
             { "loosePixelratio", optional_argument,   NULL,    'P' },
@@ -1803,7 +1778,7 @@ static int ParseOptions( int argc, char ** argv )
                 else
                 {
                     atracks = "1" ;
-                }                
+                }
                 break;
             case '6':
                 if( optarg != NULL )
