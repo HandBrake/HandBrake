@@ -730,10 +730,22 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
      */
     audio->config.out.track = hb_list_count(job->list_audio) + 1;
     audio->config.out.codec = audiocfg->out.codec;
-    audio->config.out.samplerate = audiocfg->out.samplerate;
-    audio->config.out.bitrate = audiocfg->out.bitrate;
-    audio->config.out.mixdown = audiocfg->out.mixdown;
-    audio->config.out.dynamic_range_compression = audiocfg->out.dynamic_range_compression;
+    if( audiocfg->out.codec == audio->config.in.codec )
+    {
+        /* Pass-through, copy from input. */
+        audio->config.out.samplerate = audio->config.in.samplerate;
+        audio->config.out.bitrate = audio->config.in.bitrate;
+        audio->config.out.dynamic_range_compression = 0;
+        audio->config.out.mixdown = 0;
+    }
+    else
+    {
+        /* Non pass-through, use what is given. */
+        audio->config.out.samplerate = audiocfg->out.samplerate;
+        audio->config.out.bitrate = audiocfg->out.bitrate;
+        audio->config.out.dynamic_range_compression = audiocfg->out.dynamic_range_compression;
+        audio->config.out.mixdown = audiocfg->out.mixdown;
+    }
 
     hb_list_add(job->list_audio, audio);
     return 1;
