@@ -68,7 +68,7 @@ actions LibFaad2
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf faad2 && (gzip -dc faad2.tar.gz | tar xf -) &&
-    cd faad2 &&
+    cd faad2 && $(PATCH) -p1 < ../patch-faad2-libtool22.patch &&
     ./bootstrap && ./configure --prefix=$CONTRIB --cache-file=$CONTRIB/config.cache --disable-shared && $(MAKE) && $(MAKE) install
 }
 Wget     $(SUBDIR)/faad2.tar.gz    : $(SUBDIR)/version_faad2.txt ;

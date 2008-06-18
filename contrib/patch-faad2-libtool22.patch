@@ -1,0 +1,13 @@
+Index: faad2/configure.in
+===================================================================
+--- faad2.orig/configure.in
++++ faad2/configure.in
+@@ -18,7 +18,7 @@ dnl Checks for programs.
+ AC_PROG_CC
+ AC_PROG_CPP
+ dnl disable for mpeg4ip plugin
+-dnl AC_PROG_CXX
++AC_PROG_CXX
+ AC_PROG_INSTALL
+ AC_PROG_LN_S
+ AC_PROG_MAKE_SET
