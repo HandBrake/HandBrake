@@ -62,8 +62,8 @@ endif
 #
 ifeq ($(SYSTEM),Linux)
 
-all:	contrib/.contrib libhb/libhb.a HandBrakeCLI
-	(rm -rf HandBrake HandBrake*.tar.gz ; mkdir -p HandBrake/api HandBrake/doc; cp test/BUILDSHARED AUTHORS BUILD COPYING CREDITS NEWS THANKS TRANSLATIONS HandBrake/doc ;  cp -rp libhb/libhb.so HandBrake/api ; cp -rp libhb/hb.h libhb/common.h libhb/ports.h HandBrake/api ; cp -rp HandBrakeCLI HandBrake ; tar zcvf HandBrake-$(HB_VERSION)_i386.tar.gz HandBrake ; rm -rf HandBrake )
+all:	contrib/.contrib HandBrakeCLI
+	(rm -rf HandBrake HandBrake*.tar.gz ; mkdir -p HandBrake/api HandBrake/doc; cp test/BUILDSHARED AUTHORS BUILD COPYING CREDITS NEWS THANKS TRANSLATIONS HandBrake/doc ;  cp -rp libhb/hb.h libhb/common.h libhb/ports.h HandBrake/api ; cp -rp HandBrakeCLI HandBrake ; tar zcvf HandBrake-$(HB_VERSION)_i386.tar.gz HandBrake ; rm -rf HandBrake )
 
 contrib/.contrib:
 	@$(MAKE) --no-print-directory -C contrib all
@@ -71,7 +71,7 @@ contrib/.contrib:
 libhb/libhb.a: unstable-libhb/hbversion.h
 	@$(MAKE) --no-print-directory -C libhb all
 
-HandBrakeCLI:
+HandBrakeCLI: libhb/libhb.a
 	@$(MAKE) --no-print-directory -C test all
 
 clean:
@@ -89,7 +89,7 @@ endif
 #
 ifeq ($(findstring CYGWIN_NT,$(SYSTEM)),CYGWIN_NT)
 
-all:    contrib/.contrib libhb/libhb.a HandBrakeCLI
+all:    contrib/.contrib HandBrakeCLI
 
 app:	contribPack libhb/libhb.a HandBrakeCLI
 
@@ -102,7 +102,7 @@ contrib/.contrib:
 libhb/libhb.a: unstable-libhb/hbversion.h
 	@$(MAKE) --no-print-directory -C libhb all
 
-HandBrakeCLI: 
+HandBrakeCLI: libhb/libhb.a
 	@$(MAKE) --no-print-directory -C test all
 	
 clean:
