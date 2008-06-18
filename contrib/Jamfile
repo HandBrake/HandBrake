@@ -247,6 +247,7 @@ rule LibMp4v2
     LIBMP4V2_PATCH += "$(PATCH) -p1 < ../patch-mpeg4ip.patch && " ;
     LIBMP4V2_PATCH += "$(PATCH) -p1 < ../patch-mpeg4ip-nasm-2.00-configure.patch && " ;
     LIBMP4V2_PATCH += "$(PATCH) -p1 < ../patch-mpeg4ip-ac3.patch && " ;
+    LIBMP4V2_PATCH += "$(PATCH) -p1 < ../patch-mpeg4ip-colr.patch && " ;
     Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
 }

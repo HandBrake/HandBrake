@@ -247,6 +247,24 @@ static int MP4Init( hb_mux_object_t * m )
         }
     }
 
+    // COLR atom for color and gamma correction.
+    // Per the notes at:
+    //   http://developer.apple.com/quicktime/icefloe/dispatch019.html#colr
+    //   http://forum.doom9.org/showthread.php?t=133982#post1090068
+    // we say anything that's likely to be HD content is ITU BT.709 and
+    // DVD, SD TV & other content is ITU BT.601.  We look at the title height
+    // rather than the job height here to get uncropped input dimensions.
+    if ( job->title->height >= 720 )
+    {
+        // we guess that 720p or above is ITU BT.709 HD content
+        MP4AddColr(m->file, mux_data->track, 1, 1, 1);
+    }
+    else
+    {
+        // ITU BT.601 DVD or SD TV content
+        MP4AddColr(m->file, mux_data->track, 6, 1, 6);
+    }
+
     if( job->pixel_ratio )
     {
         /* PASP atom for anamorphic video */
