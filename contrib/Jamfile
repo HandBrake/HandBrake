@@ -85,8 +85,18 @@ rule LibAvCodec
     else if $(OS) = SOLARIS
     {
         FFMPEG_PATCH += " && $(PATCH) -p1 < ../patch-ffmpeg-solaris.patch " ;
-        FFMPEG_OPTIONS = " --disable-mmx --extra-cflags=-fpic " ;
+    } 
+
+    if $(OS) = SOLARIS
+    {
+       #
+       # Not all of ffmpeg works on Solaris - disable the bits that
+       # don't. When we get new versions of FFMPEG we can try enabling
+       # then again.
+       #
+       FFMPEG_EXTRA_OPTIONS = "--disable-vis --disable-demuxer=mpc8 --disable-vhook" ;
     }
+
     Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
 }
@@ -101,7 +111,7 @@ actions LibAvCodec
         --enable-libfaad --disable-ffmpeg --disable-ffserver \
         --disable-muxers --enable-muxer=ipod --disable-bsfs \
         --extra-cflags="-I$CONTRIB/include" \
-        --extra-ldflags="-L$CONTRIB/lib" &&
+        --extra-ldflags="-L$CONTRIB/lib" $(FFMPEG_EXTRA_OPTIONS) &&
     $(MAKE) && $(MAKE) install &&
     $(STRIP) $CONTRIB/lib/libavcodec.a
 }
@@ -293,7 +303,7 @@ actions LibMpeg2
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf mpeg2dec && (gzip -dc mpeg2dec.tar.gz | tar xf - ) && 
     cd mpeg2dec && $(PATCH) -p1 < ../patch-libmpeg2.patch &&
-    ./configure --prefix=$CONTRIB --cache-file=$CONTRIB/config.cache --disable-shared --disable-sdl &&
+    ./configure --prefix=$CONTRIB --cache-file=$CONTRIB/config.cache --disable-shared --disable-sdl --without-x &&
     $(MAKE) && $(MAKE) install &&
     $(STRIP) $CONTRIB/lib/libmpeg2.a
 }

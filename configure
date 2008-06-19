@@ -113,9 +113,9 @@ fi
 
 # Generating the HB_BUILD and HB_VERSION for snapshots requires
 # the build date, working path, and current SVN revision. 
-BUILD_DATE=$(date +%Y%m%d)
-FULL_PATH=$(pwd)
-SVN_REV=$(svnversion)
+BUILD_DATE=`date +%Y%m%d`
+FULL_PATH=`pwd`
+SVN_REV=`svnversion`
 
 # Generate config.jam
 rm -f config.jam

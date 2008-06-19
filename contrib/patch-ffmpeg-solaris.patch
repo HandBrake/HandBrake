@@ -1,29 +1,25 @@
---- ffmpeg.base/configure	Wed Oct 10 15:39:57 2007
-+++ ffmpeg/configure	Wed Oct 10 15:51:44 2007
-@@ -889,7 +889,7 @@
-     source_path_used="no"
- else
-     source_path="`cd \"$source_path\"; pwd`"
--    echo "$source_path" | grep -q '[[:blank:]]' &&
-+    echo "$source_path" | /usr/xpg4/bin/grep -q '[[:blank:]]' &&
-       die "Out of tree builds are impossible with whitespace in source path."
+--- ffmpeg/configure	Sat Jun  7 03:19:09 2008
++++ ffmpeg.solaris/configure	Thu Jun 19 12:10:48 2008
+@@ -50,6 +50,9 @@
+     exit 1
  fi
  
-@@ -993,7 +993,7 @@
-   ;;
-   --enable-?*|--disable-?*)
-   eval `echo "$opt" | sed 's/--/action=/;s/-/ option=/;s/-/_/g'`
--  echo "$CMDLINE_SELECT" | grep -q "^ *$option\$" || die_unknown $opt
-+  echo "$CMDLINE_SELECT" | /usr/xpg4/bin/grep -q "^ *$option\$" || die_unknown $opt
-   $action $option
-   ;;
-   --list-*)
-@@ -1368,7 +1368,7 @@
- fi
++# Solaris must use the xpg4 version of grep
++PATH=/usr/xpg4/bin:$PATH
++
+ show_help(){
+   echo "Usage: configure [options]"
+   echo "Options: [defaults in brackets after descriptions]"
+@@ -1585,8 +1588,11 @@
+ check_cc <<EOF || die "endian test failed"
+ unsigned int endian = 'B' << 24 | 'I' << 16 | 'G' << 8 | 'E';
+ EOF
+-od -A n -t x1 $TMPO | grep -q '42 *49 *47 *45' && enable bigendian
++#od -A n -t x1 $TMPO | grep -q '42 *49 *47 *45' && enable bigendian
++/usr/bin/tr -cd "BIGE" < $TMPO | grep -q 'B *I *G *E' && enable bigendian
  
- gnu_make(){
--    $1 --version 2>&1 | grep -q GNU
-+    $1 --version 2>&1 | /usr/xpg4/bin/grep -q GNU
- }
++echo "BIGE=$bigendian"
++
+ # ---
+ # check availability of some header files
  
- if ! gnu_make $make; then
