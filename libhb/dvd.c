@@ -83,7 +83,10 @@ hb_dvd_t * hb_dvd_init( char * path )
     /* Open device */
     if( !( d->reader = DVDOpen( path ) ) )
     {
-        hb_error( "dvd: DVDOpen failed (%s)", path );
+        /*
+         * Not an error, may be a stream - which we'll try in a moment.
+         */
+        hb_log( "dvd: not a dvd - trying as a stream/file instead" );
         goto fail;
     }
 
