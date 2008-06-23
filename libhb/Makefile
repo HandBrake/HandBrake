@@ -41,9 +41,9 @@ CONTRIBS = ../contrib/lib/liba52.a ../contrib/lib/libavformat.a \
 		   ../contrib/lib/libmkv.a ../contrib/lib/libswscale.a \
 		   ../contrib/lib/libtheora.a ../contrib/lib/libfaad.a
 
-CFLAGS += -I../contrib/include -D__LIBHB__ -DUSE_PTHREAD -DHB_VERSION=\"$(HB_VERSION)\" -DHB_BUILD=$(HB_BUILD) $(SYSDEF) -Wall -g -O3 -funroll-loops
+CFLAGS += -I../contrib/include -D__LIBHB__ -DUSE_PTHREAD $(SYSDEF) -Wall -g -O3 -funroll-loops
 
-CXXFLAGS += -I../contrib/include -D__LIBHB__ -DUSE_PTHREAD -DHB_VERSION=\"$(HB_VERSION)\" -DHB_BUILD=$(HB_BUILD) $(SYSDEF)
+CXXFLAGS += -I../contrib/include -D__LIBHB__ -DUSE_PTHREAD $(SYSDEF)
 
 ifeq ($(findstring CYGWIN_NT,$(SYSTEM)),CYGWIN_NT)
 all: libhb.a libhb.dll
