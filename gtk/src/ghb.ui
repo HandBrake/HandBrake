@@ -3699,7 +3699,7 @@
                 <property name="can_focus">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="editable">False</property>
-                <property name="wrap_mode">GTK_WRAP_WORD</property>
+                <property name="wrap_mode">GTK_WRAP_CHAR</property>
               </object>
             </child>
           </object>
