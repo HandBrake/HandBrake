@@ -252,15 +252,40 @@ static void ScanFunc( void * _data )
 // -----------------------------------------------
 // stuff related to cropping
 
-#define DARK 64
+#define DARK 32
+
+static inline int absdiff( int x, int y )
+{
+    return x < y ? y - x : x - y;
+}
+
+static inline int clampBlack( int x ) 
+{
+    // luma 'black' is 16 and anything less should be clamped at 16
+    return x < 16 ? 16 : x;
+}
 
 static int row_all_dark( hb_title_t *title, uint8_t* luma, int row )
 {
-    int i = title->width;
-    luma += i * row;
-    while ( --i >= 0 )
+    luma += title->width * row;
+
+    // compute the average luma value of the row
+    int i, avg = 0;
+    for ( i = 0; i < title->width; ++i )
     {
-        if ( *luma++ > DARK )
+        avg += clampBlack( luma[i] );
+    }
+    avg /= title->width;
+    if ( avg >= DARK )
+        return 0;
+
+    // since we're trying to detect smooth borders, only take the row if
+    // all pixels are within +-16 of the average (this range is fairly coarse
+    // but there's a lot of quantization noise for luma values near black
+    // so anything less will fail to crop because of the noise).
+    for ( i = 0; i < title->width; ++i )
+    {
+        if ( absdiff( avg, clampBlack( luma[i] ) ) > 16 )
             return 0;
     }
     return 1;
@@ -268,12 +293,25 @@ static int row_all_dark( hb_title_t *title, uint8_t* luma, int row )
 
 static int column_all_dark( hb_title_t *title, uint8_t* luma, int top, int col )
 {
-    int i = title->height - top;
     int stride = title->width;
     luma += stride * top + col;
-    for ( ; --i >= 0; luma += stride )
+
+    // compute the average value of the column
+    int i = title->height - top, avg = 0, row = 0;
+    for ( ; --i >= 0; row += stride )
     {
-        if ( *luma > DARK )
+        avg += clampBlack( luma[row] );
+    }
+    avg /= title->height - top;
+    if ( avg >= DARK )
+        return 0;
+
+    // since we're trying to detect smooth borders, only take the column if
+    // all pixels are within +-16 of the average.
+    i = title->height - top, row = 0;
+    for ( ; --i >= 0; row += stride )
+    {
+        if ( absdiff( avg, clampBlack( luma[row] ) ) > 16 )
             return 0;
     }
     return 1;
@@ -543,21 +581,22 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
 #define Y    vid_buf->data
         int top, bottom, left, right;
         int h4 = title->height / 4, w4 = title->width / 4;
-        for ( top = 2; top < h4; ++top )
+        for ( top = 4; top < h4; ++top )
         {
             if ( ! row_all_dark( title, Y, top ) )
                 break;
         }
-        if ( top < 4 )
+        if ( top < 5 )
         {
-            // we started at row two to avoid the "line 19" noise that shows
+            // we started at row 4 to avoid the "line 21" noise that shows
             // up on row 0 & 1 of some TV shows. Since we stopped before row 4
-            // check if row 0 & 1 are dark or if we shouldn't crop the top at all.
-            if ( row_all_dark( title, Y, 0 ) )
+            // check if the missed rows are dark or if we shouldn't crop at all.
+            for ( top = 0; top < 4; ++top )
             {
-                top = row_all_dark( title, Y, 1 )? top : 1;
+                if ( ! row_all_dark( title, Y, top ) )
+                    break;
             }
-            else
+            if ( top >= 4 )
             {
                 top = 0;
             }
@@ -616,7 +655,8 @@ skip_preview:
         }
         title->aspect = ( aspect + 0.05 ) * HB_ASPECT_BASE;
 
-        if ( crops->n )
+        // don't try to crop unless we got at least 3 previews
+        if ( crops->n > 2 )
         {
             sort_crops( crops );
             // The next line selects median cropping - at least
