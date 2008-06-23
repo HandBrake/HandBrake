@@ -299,7 +299,7 @@ void
 on_quit1_activate(GtkMenuItem *quit, signal_user_data_t *ud)
 {
 	g_debug("on_quit1_activate ()\n");
-    if (ud->state == GHB_STATE_WORKING)
+    if (ud->state & GHB_STATE_WORKING)
     {
         if (cancel_encode("Closing HandBrake will terminate encoding.\n"))
         {
@@ -592,15 +592,7 @@ source_button_clicked_cb(GtkButton *button, signal_user_data_t *ud)
 	gboolean checkbutton_active;
 
 	g_debug("source_browse_clicked_cb ()\n");
-    if (ud->state == GHB_STATE_WORKING)
-    {
-        if (!cancel_encode("Opening a new source will cancel the current encode.\n"))
-        {
-	        return;
-        }
-    }
 	sourcename = ghb_settings_get_string(ud->settings, "source");
-
 	checkbutton_active = FALSE;
 	if (g_file_test(sourcename, G_FILE_TEST_IS_DIR))
 	{
@@ -637,7 +629,7 @@ source_button_clicked_cb(GtkButton *button, signal_user_data_t *ud)
 				const gchar *path = ghb_settings_get_string( ud->settings, "source");
 				gtk_progress_bar_set_fraction (progress, 0);
 				gtk_progress_bar_set_text (progress, "Scanning ...");
-				ud->state = GHB_STATE_SCANNING;
+				ud->state |= GHB_STATE_SCANNING;
 				ghb_backend_scan (path, 0);
 			}
 			else
@@ -763,7 +755,7 @@ gboolean
 window_delete_event_cb(GtkWidget *widget, GdkEvent *event, signal_user_data_t *ud)
 {
 	g_debug("window_delete_event_cb ()\n");
-    if (ud->state == GHB_STATE_WORKING)
+    if (ud->state & GHB_STATE_WORKING)
     {
         if (cancel_encode("Closing HandBrake will terminate encoding.\n"))
         {
@@ -2575,7 +2567,7 @@ ghb_timer_cb(gpointer data)
 		} break;
         case GHB_EVENT_WORK_DONE:
         {
-			ud->state = GHB_STATE_IDLE;
+			ud->state &= ~GHB_STATE_WORKING;
 			work_started = FALSE;
 			queue_buttons_grey(ud, FALSE);
 			index = find_queue_item(ud->queue, current_id, &js);
@@ -2620,7 +2612,7 @@ ghb_timer_cb(gpointer data)
 		{
 			ghb_title_info_t tinfo;
 			
-			ud->state = GHB_STATE_IDLE;
+			ud->state &= ~GHB_STATE_SCANNING;
 			ghb_update_ui_combo_box(ud->builder, "title", 0, FALSE);
 			titleindex = ghb_longest_title();
 			ghb_ui_update_int(ud, "title", titleindex);
@@ -2709,7 +2701,7 @@ ghb_timer_cb(gpointer data)
 			const gchar *path = ghb_settings_get_string( ud->settings, "source");
 			gtk_progress_bar_set_fraction (progress, 0);
 			gtk_progress_bar_set_text (progress, "Scanning ...");
-			ud->state = GHB_STATE_SCANNING;
+			ud->state |= GHB_STATE_SCANNING;
 			ghb_backend_scan (path, 0);
 		}
 	}
@@ -3024,7 +3016,7 @@ queue_start_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 		if (!queue_add(ud))
 			return;
 	}
-	ud->state = GHB_STATE_WORKING;
+	ud->state |= GHB_STATE_WORKING;
 	ghb_start_queue();
 }
 
@@ -3179,12 +3171,12 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 			gtk_progress_bar_set_text (progress, "Scanning ...");
 			gtk_progress_bar_set_fraction (progress, 0);
  			update_source_label(ud, device);
-			ud->state = GHB_STATE_SCANNING;
+			ud->state |= GHB_STATE_SCANNING;
 			ghb_backend_scan(device, 0);
 		}
 		else
 		{
-			ud->state = GHB_STATE_SCANNING;
+			ud->state |= GHB_STATE_SCANNING;
 			ghb_backend_scan("/dev/null", 0);
 		}
 	}
