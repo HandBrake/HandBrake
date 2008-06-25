@@ -2719,10 +2719,9 @@ the user is using "Custom" settings by determining the sender*/
 	}
     else if ([fPictureController decomb] == 2)
     {
-    [fPicSettingDecomb setStringValue: [[NSUserDefaults standardUserDefaults] valueForKey:@"DecombCustomString"]];
-    ///[[NSUserDefaults standardUserDefaults] valueForKey:@"DecombCustomString"]
+        [fPicSettingDecomb setStringValue:[[NSUserDefaults standardUserDefaults] stringForKey:@"DecombCustomString"]];
     }
-    
+
     /* VFR (Variable Frame Rate) */
     if ([fPictureController vfr]) {
         /* We change the string of the fps popup to warn that vfr is on Framerate (FPS): */
@@ -3833,9 +3832,9 @@ if (item == nil)
         /* initialize the tooltip contents variable */
         NSString *loc_tip;
         /* if there is a description for the preset, we show it in the tooltip */
-        if ([item valueForKey:@"PresetDescription"])
+        if ([item objectForKey:@"PresetDescription"])
         {
-            loc_tip = [item valueForKey:@"PresetDescription"];
+            loc_tip = [item objectForKey:@"PresetDescription"];
             return (loc_tip);
         }
         else
@@ -3956,17 +3955,17 @@ if (item == nil)
     {
         chosenPreset = [fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]];
         /* we set the preset display field in main window here */
-        [fPresetSelectedDisplay setStringValue:[chosenPreset valueForKey:@"PresetName"]];
+        [fPresetSelectedDisplay setStringValue:[chosenPreset objectForKey:@"PresetName"]];
         if ([[chosenPreset objectForKey:@"Default"] intValue] == 1)
         {
-            [fPresetSelectedDisplay setStringValue: [NSString stringWithFormat: @"%@ (Default)",[chosenPreset valueForKey:@"PresetName"]]];
+            [fPresetSelectedDisplay setStringValue:[NSString stringWithFormat:@"%@ (Default)", [chosenPreset objectForKey:@"PresetName"]]];
         }
         else
         {
-            [fPresetSelectedDisplay setStringValue:[chosenPreset valueForKey:@"PresetName"]];
+            [fPresetSelectedDisplay setStringValue:[chosenPreset objectForKey:@"PresetName"]];
         }
         /* File Format */
-        [fDstFormatPopUp selectItemWithTitle:[chosenPreset valueForKey:@"FileFormat"]];
+        [fDstFormatPopUp selectItemWithTitle:[chosenPreset objectForKey:@"FileFormat"]];
         [self formatPopUpChanged: NULL];
 
         /* Chapter Markers*/
@@ -3978,15 +3977,15 @@ if (item == nil)
 
         /* Video encoder */
         /* We set the advanced opt string here if applicable*/
-        [fAdvancedOptions setOptions:[chosenPreset valueForKey:@"x264Option"]];
+        [fAdvancedOptions setOptions:[chosenPreset objectForKey:@"x264Option"]];
         /* We use a conditional to account for the new x264 encoder dropdown as well as presets made using legacy x264 settings*/
-        if ([[chosenPreset valueForKey:@"VideoEncoder"] isEqualToString: @"x264 (h.264 Main)"] ||
-            [[chosenPreset valueForKey:@"VideoEncoder"] isEqualToString: @"x264 (h.264 iPod)"] ||
-            [[chosenPreset valueForKey:@"VideoEncoder"] isEqualToString: @"x264"])
+        if ([[chosenPreset objectForKey:@"VideoEncoder"] isEqualToString:@"x264 (h.264 Main)"] ||
+            [[chosenPreset objectForKey:@"VideoEncoder"] isEqualToString:@"x264 (h.264 iPod)"] ||
+            [[chosenPreset objectForKey:@"VideoEncoder"] isEqualToString:@"x264"])
         {
             [fVidEncoderPopUp selectItemWithTitle:@"H.264 (x264)"];
             /* special case for legacy preset to check the new fDstMp4HttpOptFileCheck checkbox to set the ipod atom */
-            if ([[chosenPreset valueForKey:@"VideoEncoder"] isEqualToString: @"x264 (h.264 iPod)"])
+            if ([[chosenPreset objectForKey:@"VideoEncoder"] isEqualToString:@"x264 (h.264 iPod)"])
             {
                 [fDstMp4iPodFileCheck setState:NSOnState];
                 /* We also need to add "level=30:" to the advanced opts string to set the correct level for the iPod when
@@ -3998,17 +3997,17 @@ if (item == nil)
                 [fDstMp4iPodFileCheck setState:NSOffState];
             }
         }
-        else if ([[chosenPreset valueForKey:@"VideoEncoder"] isEqualToString: @"FFmpeg"])
+        else if ([[chosenPreset objectForKey:@"VideoEncoder"] isEqualToString:@"FFmpeg"])
         {
             [fVidEncoderPopUp selectItemWithTitle:@"MPEG-4 (FFmpeg)"];
         }
-        else if ([[chosenPreset valueForKey:@"VideoEncoder"] isEqualToString: @"XviD"])
+        else if ([[chosenPreset objectForKey:@"VideoEncoder"] isEqualToString:@"XviD"])
         {
             [fVidEncoderPopUp selectItemWithTitle:@"MPEG-4 (XviD)"];
         }
         else
         {
-            [fVidEncoderPopUp selectItemWithTitle:[chosenPreset valueForKey:@"VideoEncoder"]];
+            [fVidEncoderPopUp selectItemWithTitle:[chosenPreset objectForKey:@"VideoEncoder"]];
         }
 
         /* Lets run through the following functions to get variables set there */
@@ -4020,22 +4019,22 @@ if (item == nil)
         /* Video quality */
         [fVidQualityMatrix selectCellAtRow:[[chosenPreset objectForKey:@"VideoQualityType"] intValue] column:0];
 
-        [fVidTargetSizeField setStringValue:[chosenPreset valueForKey:@"VideoTargetSize"]];
-        [fVidBitrateField setStringValue:[chosenPreset valueForKey:@"VideoAvgBitrate"]];
-        [fVidQualitySlider setFloatValue: [[chosenPreset valueForKey:@"VideoQualitySlider"] floatValue]];
+        [fVidTargetSizeField setStringValue:[chosenPreset objectForKey:@"VideoTargetSize"]];
+        [fVidBitrateField setStringValue:[chosenPreset objectForKey:@"VideoAvgBitrate"]];
+        [fVidQualitySlider setFloatValue:[[chosenPreset objectForKey:@"VideoQualitySlider"] floatValue]];
 
         [self videoMatrixChanged: NULL];
 
         /* Video framerate */
         /* For video preset video framerate, we want to make sure that Same as source does not conflict with the
          detected framerate in the fVidRatePopUp so we use index 0*/
-        if ([[chosenPreset valueForKey:@"VideoFramerate"] isEqualToString: @"Same as source"])
+        if ([[chosenPreset objectForKey:@"VideoFramerate"] isEqualToString:@"Same as source"])
         {
             [fVidRatePopUp selectItemAtIndex: 0];
         }
         else
         {
-            [fVidRatePopUp selectItemWithTitle:[chosenPreset valueForKey:@"VideoFramerate"]];
+            [fVidRatePopUp selectItemWithTitle:[chosenPreset objectForKey:@"VideoFramerate"]];
         }
 
         /* GrayScale */
@@ -4048,10 +4047,10 @@ if (item == nil)
         [fVidTurboPassCheck setState:[[chosenPreset objectForKey:@"VideoTurboTwoPass"] intValue]];
 
         /*Audio*/
-        if ([chosenPreset valueForKey:@"FileCodecs"])
+        if ([chosenPreset objectForKey:@"FileCodecs"])
         {
             /* We need to handle the audio codec popup by determining what was chosen from the deprecated Codecs PopUp for past presets*/
-            if ([[chosenPreset valueForKey:@"FileCodecs"] isEqualToString: @"AVC/H.264 Video / AAC + AC3 Audio"])
+            if ([[chosenPreset objectForKey:@"FileCodecs"] isEqualToString: @"AVC/H.264 Video / AAC + AC3 Audio"])
             {
                 /* We need to address setting languages etc. here in the new multi track audio panel */
                 /* Track One set here */
@@ -4069,8 +4068,8 @@ if (item == nil)
                 [fAudTrack2CodecPopUp selectItemWithTitle: @"AC3 Passthru"];
                 [self audioTrackPopUpChanged: fAudTrack2CodecPopUp];
             }
-            else if ([[chosenPreset valueForKey:@"FileCodecs"] isEqualToString: @"MPEG-4 Video / AAC Audio"] ||
-                     [[chosenPreset valueForKey:@"FileCodecs"] isEqualToString: @"AVC/H.264 Video / AAC Audio"])
+            else if ([[chosenPreset objectForKey:@"FileCodecs"] isEqualToString:@"MPEG-4 Video / AAC Audio"] ||
+                     [[chosenPreset objectForKey:@"FileCodecs"] isEqualToString:@"AVC/H.264 Video / AAC Audio"])
             {
                 if ([fAudLang1PopUp indexOfSelectedItem] > 0)
                 {
@@ -4093,8 +4092,8 @@ if (item == nil)
                     [self audioTrackPopUpChanged: fAudTrack4CodecPopUp];
                 }
             }
-            else if ([[chosenPreset valueForKey:@"FileCodecs"] isEqualToString: @"MPEG-4 Video / AC-3 Audio"] ||
-                     [[chosenPreset valueForKey:@"FileCodecs"] isEqualToString: @"AVC/H.264 Video / AC-3 Audio"])
+            else if ([[chosenPreset objectForKey:@"FileCodecs"] isEqualToString:@"MPEG-4 Video / AC-3 Audio"] ||
+                     [[chosenPreset objectForKey:@"FileCodecs"] isEqualToString:@"AVC/H.264 Video / AC-3 Audio"])
             {
                 if ([fAudLang1PopUp indexOfSelectedItem] > 0)
                 {
@@ -4117,8 +4116,8 @@ if (item == nil)
                     [self audioTrackPopUpChanged: fAudTrack4CodecPopUp];
                 }
             }
-            else if ([[chosenPreset valueForKey:@"FileCodecs"] isEqualToString: @"MPEG-4 Video / MP3 Audio"] ||
-                     [[chosenPreset valueForKey:@"FileCodecs"] isEqualToString: @"AVC/H.264 Video / MP3 Audio"])
+            else if ([[chosenPreset objectForKey:@"FileCodecs"] isEqualToString:@"MPEG-4 Video / MP3 Audio"] ||
+                     [[chosenPreset objectForKey:@"FileCodecs"] isEqualToString:@"AVC/H.264 Video / MP3 Audio"])
             {
                 if ([fAudLang1PopUp indexOfSelectedItem] > 0)
                 {
@@ -4141,7 +4140,7 @@ if (item == nil)
                     [self audioTrackPopUpChanged: fAudTrack4CodecPopUp];
                 }
             }
-            else if ([[chosenPreset valueForKey:@"FileCodecs"] isEqualToString: @"MPEG-4 Video / Vorbis Audio"])
+            else if ([[chosenPreset objectForKey:@"FileCodecs"] isEqualToString:@"MPEG-4 Video / Vorbis Audio"])
             {
                 if ([fAudLang1PopUp indexOfSelectedItem] > 0)
                 {
@@ -4164,193 +4163,193 @@ if (item == nil)
                     [self audioTrackPopUpChanged: fAudTrack4CodecPopUp];
                 }
             }
-            /* We detect here if we have the old audio sample rate and if so we apply samplerate and bitrate to the existing four tracks if chosen 
+            /* We detect here if we have the old audio sample rate and if so we apply samplerate and bitrate to the existing four tracks if chosen
             * UNLESS the CodecPopUp is AC3 in which case the preset values are ignored in favor of rates set in audioTrackMixdownChanged*/
-            if ([chosenPreset valueForKey:@"AudioSampleRate"])
+            if ([chosenPreset objectForKey:@"AudioSampleRate"])
             {
                 if ([fAudLang1PopUp indexOfSelectedItem] > 0 && [fAudTrack1CodecPopUp titleOfSelectedItem] != @"AC3 Passthru")
                 {
-                    [fAudTrack1RatePopUp selectItemWithTitle:[chosenPreset valueForKey:@"AudioSampleRate"]];
-                    [fAudTrack1BitratePopUp selectItemWithTitle:[chosenPreset valueForKey:@"AudioBitRate"]];
+                    [fAudTrack1RatePopUp selectItemWithTitle:[chosenPreset objectForKey:@"AudioSampleRate"]];
+                    [fAudTrack1BitratePopUp selectItemWithTitle:[chosenPreset objectForKey:@"AudioBitRate"]];
                 }
                 if ([fAudLang2PopUp indexOfSelectedItem] > 0 && [fAudTrack2CodecPopUp titleOfSelectedItem] != @"AC3 Passthru")
                 {
-                    [fAudTrack2RatePopUp selectItemWithTitle:[chosenPreset valueForKey:@"AudioSampleRate"]];
-                    [fAudTrack2BitratePopUp selectItemWithTitle:[chosenPreset valueForKey:@"AudioBitRate"]];
+                    [fAudTrack2RatePopUp selectItemWithTitle:[chosenPreset objectForKey:@"AudioSampleRate"]];
+                    [fAudTrack2BitratePopUp selectItemWithTitle:[chosenPreset objectForKey:@"AudioBitRate"]];
                 }
                 if ([fAudLang3PopUp indexOfSelectedItem] > 0 && [fAudTrack3CodecPopUp titleOfSelectedItem] != @"AC3 Passthru")
                 {
-                    [fAudTrack3RatePopUp selectItemWithTitle:[chosenPreset valueForKey:@"AudioSampleRate"]];
-                    [fAudTrack3BitratePopUp selectItemWithTitle:[chosenPreset valueForKey:@"AudioBitRate"]];
+                    [fAudTrack3RatePopUp selectItemWithTitle:[chosenPreset objectForKey:@"AudioSampleRate"]];
+                    [fAudTrack3BitratePopUp selectItemWithTitle:[chosenPreset objectForKey:@"AudioBitRate"]];
                 }
                 if ([fAudLang4PopUp indexOfSelectedItem] > 0 && [fAudTrack4CodecPopUp titleOfSelectedItem] != @"AC3 Passthru")
                 {
-                    [fAudTrack4RatePopUp selectItemWithTitle:[chosenPreset valueForKey:@"AudioSampleRate"]];
-                    [fAudTrack4BitratePopUp selectItemWithTitle:[chosenPreset valueForKey:@"AudioBitRate"]];
+                    [fAudTrack4RatePopUp selectItemWithTitle:[chosenPreset objectForKey:@"AudioSampleRate"]];
+                    [fAudTrack4BitratePopUp selectItemWithTitle:[chosenPreset objectForKey:@"AudioBitRate"]];
                 }
             }
             /* We detect here if we have the old DRC Slider and if so we apply it to the existing four tracks if chosen */
-            if ([chosenPreset valueForKey:@"AudioDRCSlider"])
+            if ([chosenPreset objectForKey:@"AudioDRCSlider"])
             {
                 if ([fAudLang1PopUp indexOfSelectedItem] > 0)
                 {
-                    [fAudTrack1DrcSlider setFloatValue: [[chosenPreset valueForKey:@"AudioDRCSlider"] floatValue]];
+                    [fAudTrack1DrcSlider setFloatValue:[[chosenPreset objectForKey:@"AudioDRCSlider"] floatValue]];
                     [self audioDRCSliderChanged: fAudTrack1DrcSlider];
                 }
                 if ([fAudLang2PopUp indexOfSelectedItem] > 0)
                 {
-                    [fAudTrack2DrcSlider setFloatValue: [[chosenPreset valueForKey:@"AudioDRCSlider"] floatValue]];
+                    [fAudTrack2DrcSlider setFloatValue:[[chosenPreset objectForKey:@"AudioDRCSlider"] floatValue]];
                     [self audioDRCSliderChanged: fAudTrack2DrcSlider];
                 }
                 if ([fAudLang3PopUp indexOfSelectedItem] > 0)
                 {
-                    [fAudTrack3DrcSlider setFloatValue: [[chosenPreset valueForKey:@"AudioDRCSlider"] floatValue]];
+                    [fAudTrack3DrcSlider setFloatValue:[[chosenPreset objectForKey:@"AudioDRCSlider"] floatValue]];
                     [self audioDRCSliderChanged: fAudTrack3DrcSlider];
                 }
                 if ([fAudLang4PopUp indexOfSelectedItem] > 0)
                 {
-                    [fAudTrack4DrcSlider setFloatValue: [[chosenPreset valueForKey:@"AudioDRCSlider"] floatValue]];
+                    [fAudTrack4DrcSlider setFloatValue:[[chosenPreset objectForKey:@"AudioDRCSlider"] floatValue]];
                     [self audioDRCSliderChanged: fAudTrack4DrcSlider];
                 }
             }
         }
         else // since there was no codecs key in the preset we know we can use new multi-audio track presets
         {
-            if ([chosenPreset valueForKey:@"Audio1Track"] > 0)
+            if ([chosenPreset objectForKey:@"Audio1Track"] > 0)
             {
                 if ([fAudLang1PopUp indexOfSelectedItem] == 0)
                 {
                     [fAudLang1PopUp selectItemAtIndex: 1];
                 }
                 [self audioTrackPopUpChanged: fAudLang1PopUp];
-                [fAudTrack1CodecPopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio1Encoder"]];
+                [fAudTrack1CodecPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio1Encoder"]];
                 [self audioTrackPopUpChanged: fAudTrack1CodecPopUp];
-                [fAudTrack1MixPopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio1Mixdown"]];
-                /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default 
+                [fAudTrack1MixPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio1Mixdown"]];
+                /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default
                  * mixdown*/
                 if  ([fAudTrack1MixPopUp selectedItem] == nil)
                 {
                     [self audioTrackPopUpChanged: fAudTrack1CodecPopUp];
                 }
-                [fAudTrack1RatePopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio1Samplerate"]];
+                [fAudTrack1RatePopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio1Samplerate"]];
                 /* We set the presets bitrate if it is *not* an AC3 track since that uses the input bitrate */
-                if (![[chosenPreset valueForKey:@"Audio1Encoder"] isEqualToString: @"AC3 Passthru"])
+                if (![[chosenPreset objectForKey:@"Audio1Encoder"] isEqualToString:@"AC3 Passthru"])
                 {
-                    [fAudTrack1BitratePopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio1Bitrate"]];
+                    [fAudTrack1BitratePopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio1Bitrate"]];
                 }
-                [fAudTrack1DrcSlider setFloatValue: [[chosenPreset valueForKey:@"Audio1TrackDRCSlider"] floatValue]];
+                [fAudTrack1DrcSlider setFloatValue:[[chosenPreset objectForKey:@"Audio1TrackDRCSlider"] floatValue]];
                 [self audioDRCSliderChanged: fAudTrack1DrcSlider];
             }
-            if ([chosenPreset valueForKey:@"Audio2Track"] > 0)
+            if ([chosenPreset objectForKey:@"Audio2Track"] > 0)
             {
                 if ([fAudLang2PopUp indexOfSelectedItem] == 0)
                 {
                     [fAudLang2PopUp selectItemAtIndex: 1];
                 }
                 [self audioTrackPopUpChanged: fAudLang2PopUp];
-                [fAudTrack2CodecPopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio2Encoder"]];
+                [fAudTrack2CodecPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio2Encoder"]];
                 [self audioTrackPopUpChanged: fAudTrack2CodecPopUp];
-                [fAudTrack2MixPopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio2Mixdown"]];
-                /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default 
+                [fAudTrack2MixPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio2Mixdown"]];
+                /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default
                  * mixdown*/
                 if  ([fAudTrack2MixPopUp selectedItem] == nil)
                 {
                     [self audioTrackPopUpChanged: fAudTrack2CodecPopUp];
                 }
-                [fAudTrack2RatePopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio2Samplerate"]];
+                [fAudTrack2RatePopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio2Samplerate"]];
                 /* We set the presets bitrate if it is *not* an AC3 track since that uses the input bitrate */
-                if (![[chosenPreset valueForKey:@"Audio2Encoder"] isEqualToString: @"AC3 Passthru"])
+                if (![[chosenPreset objectForKey:@"Audio2Encoder"] isEqualToString:@"AC3 Passthru"])
                 {
-                    [fAudTrack2BitratePopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio2Bitrate"]];
+                    [fAudTrack2BitratePopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio2Bitrate"]];
                 }
-                [fAudTrack2DrcSlider setFloatValue: [[chosenPreset valueForKey:@"Audio2TrackDRCSlider"] floatValue]];
+                [fAudTrack2DrcSlider setFloatValue:[[chosenPreset objectForKey:@"Audio2TrackDRCSlider"] floatValue]];
                 [self audioDRCSliderChanged: fAudTrack2DrcSlider];
             }
-            if ([chosenPreset valueForKey:@"Audio3Track"] > 0)
+            if ([chosenPreset objectForKey:@"Audio3Track"] > 0)
             {
                 if ([fAudLang3PopUp indexOfSelectedItem] == 0)
                 {
                     [fAudLang3PopUp selectItemAtIndex: 1];
                 }
                 [self audioTrackPopUpChanged: fAudLang3PopUp];
-                [fAudTrack3CodecPopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio3Encoder"]];
+                [fAudTrack3CodecPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio3Encoder"]];
                 [self audioTrackPopUpChanged: fAudTrack3CodecPopUp];
-                [fAudTrack3MixPopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio3Mixdown"]];
-                /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default 
+                [fAudTrack3MixPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio3Mixdown"]];
+                /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default
                  * mixdown*/
                 if  ([fAudTrack3MixPopUp selectedItem] == nil)
                 {
                     [self audioTrackPopUpChanged: fAudTrack3CodecPopUp];
                 }
-                [fAudTrack3RatePopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio3Samplerate"]];
+                [fAudTrack3RatePopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio3Samplerate"]];
                 /* We set the presets bitrate if it is *not* an AC3 track since that uses the input bitrate */
-                if (![[chosenPreset valueForKey:@"Audio3Encoder"] isEqualToString: @"AC3 Passthru"])
+                if (![[chosenPreset objectForKey:@"Audio3Encoder"] isEqualToString: @"AC3 Passthru"])
                 {
-                    [fAudTrack3BitratePopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio3Bitrate"]];
+                    [fAudTrack3BitratePopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio3Bitrate"]];
                 }
-                [fAudTrack3DrcSlider setFloatValue: [[chosenPreset valueForKey:@"Audio3TrackDRCSlider"] floatValue]];
+                [fAudTrack3DrcSlider setFloatValue:[[chosenPreset objectForKey:@"Audio3TrackDRCSlider"] floatValue]];
                 [self audioDRCSliderChanged: fAudTrack3DrcSlider];
             }
-            if ([chosenPreset valueForKey:@"Audio4Track"] > 0)
+            if ([chosenPreset objectForKey:@"Audio4Track"] > 0)
             {
                 if ([fAudLang4PopUp indexOfSelectedItem] == 0)
                 {
                     [fAudLang4PopUp selectItemAtIndex: 1];
                 }
                 [self audioTrackPopUpChanged: fAudLang4PopUp];
-                [fAudTrack4CodecPopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio4Encoder"]];
+                [fAudTrack4CodecPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio4Encoder"]];
                 [self audioTrackPopUpChanged: fAudTrack4CodecPopUp];
-                [fAudTrack4MixPopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio4Mixdown"]];
-                /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default 
+                [fAudTrack4MixPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio4Mixdown"]];
+                /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default
                  * mixdown*/
                 if  ([fAudTrack4MixPopUp selectedItem] == nil)
                 {
                     [self audioTrackPopUpChanged: fAudTrack4CodecPopUp];
                 }
-                [fAudTrack4RatePopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio4Samplerate"]];
+                [fAudTrack4RatePopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio4Samplerate"]];
                 /* We set the presets bitrate if it is *not* an AC3 track since that uses the input bitrate */
-                if (![[chosenPreset valueForKey:@"Audio4Encoder"] isEqualToString: @"AC3 Passthru"])
+                if (![[chosenPreset objectForKey:@"Audio4Encoder"] isEqualToString:@"AC3 Passthru"])
                 {
-                    [fAudTrack4BitratePopUp selectItemWithTitle:[chosenPreset valueForKey:@"Audio4Bitrate"]];
+                    [fAudTrack4BitratePopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio4Bitrate"]];
                 }
-                [fAudTrack4DrcSlider setFloatValue: [[chosenPreset valueForKey:@"Audio4TrackDRCSlider"] floatValue]];
+                [fAudTrack4DrcSlider setFloatValue:[[chosenPreset objectForKey:@"Audio4TrackDRCSlider"] floatValue]];
                 [self audioDRCSliderChanged: fAudTrack4DrcSlider];
             }
 
 
         }
-        
+
         /* We now cleanup any extra audio tracks that may be previously set if we need to, we do it here so we don't have to
          * duplicate any code for legacy presets.*/
         /* First we handle the legacy Codecs crazy AVC/H.264 Video / AAC + AC3 Audio atv hybrid */
-        if ([chosenPreset valueForKey:@"FileCodecs"] && [[chosenPreset valueForKey:@"FileCodecs"] isEqualToString: @"AVC/H.264 Video / AAC + AC3 Audio"])
+        if ([chosenPreset objectForKey:@"FileCodecs"] && [[chosenPreset objectForKey:@"FileCodecs"] isEqualToString:@"AVC/H.264 Video / AAC + AC3 Audio"])
         {
             [fAudLang3PopUp selectItemAtIndex: 0];
             [self audioTrackPopUpChanged: fAudLang3PopUp];
             [fAudLang4PopUp selectItemAtIndex: 0];
-            [self audioTrackPopUpChanged: fAudLang4PopUp]; 
+            [self audioTrackPopUpChanged: fAudLang4PopUp];
         }
         else
         {
-            if (![chosenPreset objectForKey:@"Audio2Track"] || [chosenPreset valueForKey:@"Audio2Track"] == 0)
+            if (![chosenPreset objectForKey:@"Audio2Track"] || [chosenPreset objectForKey:@"Audio2Track"] == 0)
             {
                 [fAudLang2PopUp selectItemAtIndex: 0];
                 [self audioTrackPopUpChanged: fAudLang2PopUp];
             }
-            if (![chosenPreset objectForKey:@"Audio3Track"] || [chosenPreset valueForKey:@"Audio3Track"] > 0)
+            if (![chosenPreset objectForKey:@"Audio3Track"] || [chosenPreset objectForKey:@"Audio3Track"] > 0)
             {
                 [fAudLang3PopUp selectItemAtIndex: 0];
                 [self audioTrackPopUpChanged: fAudLang3PopUp];
             }
-            if (![chosenPreset objectForKey:@"Audio4Track"] || [chosenPreset valueForKey:@"Audio4Track"] > 0)
+            if (![chosenPreset objectForKey:@"Audio4Track"] || [chosenPreset objectForKey:@"Audio4Track"] > 0)
             {
                 [fAudLang4PopUp selectItemAtIndex: 0];
                 [self audioTrackPopUpChanged: fAudLang4PopUp];
             }
-        } 
-        
+        }
+
         /*Subtitles*/
-        [fSubPopUp selectItemWithTitle:[chosenPreset valueForKey:@"Subtitles"]];
+        [fSubPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Subtitles"]];
         /* Forced Subtitles */
         [fSubForcedCheck setState:[[chosenPreset objectForKey:@"SubtitlesForced"] intValue]];
 
