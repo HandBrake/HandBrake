@@ -8,8 +8,8 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="21"/>
 			<integer value="1843"/>
+			<integer value="21"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -4036,7 +4036,7 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<object class="NSScrollView" id="33643505">
 						<reference key="NSNextResponder" ref="621751818"/>
-						<int key="NSvFlags">284</int>
+						<int key="NSvFlags">274</int>
 						<object class="NSMutableArray" key="NSSubviews">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="NSClipView" id="421228634">
@@ -4047,7 +4047,7 @@
 									<object class="NSOutlineView" id="807972370">
 										<reference key="NSNextResponder" ref="421228634"/>
 										<int key="NSvFlags">256</int>
-										<string key="NSFrameSize">{247, 507}</string>
+										<string key="NSFrameSize">{247, 506}</string>
 										<reference key="NSSuperview" ref="421228634"/>
 										<bool key="NSEnabled">YES</bool>
 										<object class="_NSCornerView" key="NSCornerView">
@@ -4133,7 +4133,7 @@
 										<float key="NSOutlineViewIndentationPerLevelKey">1.200000e+01</float>
 									</object>
 								</object>
-								<string key="NSFrame">{{1, 1}, {247, 507}}</string>
+								<string key="NSFrame">{{1, 1}, {247, 506}}</string>
 								<reference key="NSSuperview" ref="33643505"/>
 								<reference key="NSNextKeyView" ref="807972370"/>
 								<reference key="NSDocView" ref="807972370"/>
@@ -4143,7 +4143,7 @@
 							<object class="NSScroller" id="475123229">
 								<reference key="NSNextResponder" ref="33643505"/>
 								<int key="NSvFlags">256</int>
-								<string key="NSFrame">{{248, 1}, {11, 507}}</string>
+								<string key="NSFrame">{{248, 1}, {11, 506}}</string>
 								<reference key="NSSuperview" ref="33643505"/>
 								<int key="NSsFlags">256</int>
 								<reference key="NSTarget" ref="33643505"/>
@@ -4161,7 +4161,7 @@
 								<double key="NSPercent">9.945652e-01</double>
 							</object>
 						</object>
-						<string key="NSFrame">{{4, 30}, {260, 509}}</string>
+						<string key="NSFrame">{{4, 31}, {260, 508}}</string>
 						<reference key="NSSuperview" ref="621751818"/>
 						<reference key="NSNextKeyView" ref="421228634"/>
 						<int key="NSsFlags">18</int>
@@ -4224,8 +4224,8 @@
 					</object>
 					<object class="NSPopUpButton" id="886184281">
 						<reference key="NSNextResponder" ref="621751818"/>
-						<int key="NSvFlags">289</int>
-						<string key="NSFrame">{{61, 1}, {33, 23}}</string>
+						<int key="NSvFlags">292</int>
+						<string key="NSFrame">{{59, 1}, {33, 23}}</string>
 						<reference key="NSSuperview" ref="621751818"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSPopUpButtonCell" key="NSCell" id="492120702">
