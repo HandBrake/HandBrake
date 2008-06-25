@@ -1,7 +1,11 @@
-Currently, to build you must build handbrake separately, then specify
-the path to handbrake with configure. e.g.
+ghb requires recent a recent version of glib with gio.  These
+are available in ubuntu 8.04 and fedora 9.  I don't know about other
+distributions.
 
-./configure --with-hb=../HandBrake
+Currently, to build you must build handbrake separately, then
+autogen and build the gtk ui. e.g.
+
+./autogen.sh
 make
 sudo make install
 
