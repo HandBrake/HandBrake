@@ -176,12 +176,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* Initialize currentScanCount so HB can use it to
 		evaluate successive scans */
 	currentScanCount = 0;
-	
+
     /* Init UserPresets .plist */
 	[self loadPresets];
-		
+
 	fRipIndicatorShown = NO;  // initially out of view in the nib
-	
+
 	/* Show/Dont Show Presets drawer upon launch based
 		on user preference DefaultPresetsDrawerShow*/
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow"] > 0)
@@ -289,22 +289,19 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	
     /* Bottom */
     [fStatusField setStringValue: @""];
-	
+
     [self enableUI: NO];
 	[self setupToolbar];
-	
-	[fPresetsActionButton setMenu:fPresetsActionMenu];
-	
+
 	/* We disable the Turbo 1st pass checkbox since we are not x264 */
 	[fVidTurboPassCheck setEnabled: NO];
 	[fVidTurboPassCheck setState: NSOffState];
-	
-	
+
+
 	/* lets get our default prefs here */
 	[self getDefaultPresets: NULL];
 	/* lets initialize the current successful scancount here to 0 */
 	currentSuccessfulScanCount = 0;
-    
 }
 
 - (void) enableUI: (bool) b
@@ -933,6 +930,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 return NO;
         }
         if (action == @selector(Rip:))
+        {
             if (s.state == HB_STATE_WORKING || s.state == HB_STATE_MUXING || s.state == HB_STATE_PAUSED)
             {
                 if(![[menuItem title] isEqualToString:@"Stop Encoding"])
@@ -948,7 +946,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             else
                 return NO;
         }
-    
+    }
+    if( action == @selector(setDefaultPreset:) )
+    {
+        return [fPresetsOutlineView selectedRow] != -1;
+    }
+
     return YES;
 }
 
@@ -2459,13 +2462,11 @@ the user is using "Custom" settings by determining the sender*/
 	{
 		/* Deselect the currently selected Preset if there is one*/
 		[fPresetsOutlineView deselectRow:[fPresetsOutlineView selectedRow]];
-		[[fPresetsActionMenu itemAtIndex:0] setEnabled: NO];
 		/* Change UI to show "Custom" settings are being used */
 		[fPresetSelectedDisplay setStringValue: @"Custom"];
-		
+
 		curUserPresetChosenNum = nil;
 	}
-
 }
 
 
@@ -4575,10 +4576,9 @@ if (item == nil)
             else
             {
                 [fPictureController setDecomb:0];
-            }             
+            }
         }
         [self calculatePictureSizing: NULL];
-        [[fPresetsActionMenu itemAtIndex:0] setEnabled: YES];
     }
 }
 

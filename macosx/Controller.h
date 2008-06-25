@@ -12,7 +12,6 @@
 #import "ChapterTitles.h"
 #import "PictureController.h"
 #import "HBQueueController.h"
-#import "MVMenuButton.h"
 #import "HBAdvancedController.h"
 #import "HBPreferencesController.h"
 #import "HBPresets.h"
@@ -229,9 +228,8 @@ BOOL                        fIsDragging;
     IBOutlet HBPresetsOutlineView * fPresetsOutlineView;
     IBOutlet NSButton            * fPresetsAdd;
 	IBOutlet NSButton            * fPresetsDelete;
-    IBOutlet MVMenuButton        * fPresetsActionButton;
-    IBOutlet NSMenu              * fPresetsActionMenu;
-	
+    IBOutlet NSPopUpButton       * fPresetsActionButton;
+
     hb_handle_t                  * fHandle;
 	hb_title_t                   * fTitle;
     /* integer to set to determine the previous state
@@ -359,6 +357,7 @@ BOOL                        fIsDragging;
 -(void)showGrowlDoneNotification:(NSString *) filePath;
 - (IBAction)showDebugOutputPanel:(id)sender;
 - (void)setupToolbar;
+
 
 - (void) remindUserOfSleepOrShutdown;
 
