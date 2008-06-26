@@ -148,10 +148,16 @@ static int MP4Init( hb_mux_object_t * m )
     /* Flags for enabling/disabling tracks in an MP4. */
     typedef enum { TRACK_DISABLED = 0x0, TRACK_ENABLED = 0x1, TRACK_IN_MOVIE = 0x2, TRACK_IN_PREVIEW = 0x4, TRACK_IN_POSTER = 0x8}  track_header_flags;
 
-    /* Need the sample rate of the first audio track to use as the timescale. */
-    audio = hb_list_item(title->list_audio, 0);
-    m->samplerate = audio->config.out.samplerate;
-    audio = NULL;
+    if( (audio = hb_list_item(title->list_audio, 0)) != NULL )
+    {
+        /* Need the sample rate of the first audio track to use as the timescale. */
+        m->samplerate = audio->config.out.samplerate;
+        audio = NULL;
+    }
+    else
+    {
+        m->samplerate = 90000;
+    }
 
     /* Create an empty mp4 file */
     if (job->largeFileSize)
