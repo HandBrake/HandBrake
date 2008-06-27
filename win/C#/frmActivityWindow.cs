@@ -22,15 +22,23 @@ namespace Handbrake
 {
     public partial class frmActivityWindow : Form
     {
+
+        Thread monitorFile;
+        String read_file;
+        frmMain mainWindow;
+        frmQueue queueWindow;
+
         /// <summary>
         /// This window should be used to display the RAW output of the handbrake CLI which is produced during an encode.
         /// </summary>
         /// 
-        Thread monitorFile;
-        String read_file;
-        public frmActivityWindow(string file)
+        public frmActivityWindow(string file, frmMain fm, frmQueue fq)
         {
             InitializeComponent();
+
+            mainWindow = fm;
+            queueWindow = fq;
+
             this.rtf_actLog.Text = string.Empty;
 
             read_file = file;
@@ -53,9 +61,11 @@ namespace Handbrake
         // Update the Activity window every 5 seconds with the latest log data.
         private void autoUpdate(object state)
         {
+            updateTextFromThread();
             while (true)
             {
-                updateTextFromThread();
+                if ((mainWindow.isEncoding() == true) || (queueWindow.isEncoding() == true))
+                    updateTextFromThread();
                 Thread.Sleep(5000);
             }
         }
@@ -125,5 +135,6 @@ namespace Handbrake
             this.Hide();
             base.OnClosing(e);
         }
+
     }
 }

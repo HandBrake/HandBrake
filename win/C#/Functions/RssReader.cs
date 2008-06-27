@@ -25,6 +25,7 @@ namespace Handbrake.Functions
         XmlNode nodeChannel;
         XmlNode nodeItem;
 
+        // Rss Reading Code.
         private void readRss()
         {
             if (Properties.Settings.Default.hb_build.ToString().EndsWith("1"))
@@ -53,12 +54,14 @@ namespace Handbrake.Functions
             }
         }
 
+        // Some varibles.
         private string hb_versionInfo;
         private string hb_version;
         private string hb_build;
         private string hb_file;
-
-        public void getInfo()
+        
+        // Get's the information required out the RSS file.
+        private void getInfo()
         {
             readRss();
 
@@ -78,24 +81,40 @@ namespace Handbrake.Functions
             hb_file = nodeItem["windows"].InnerText;
         }
 
+        /// <summary>
+        /// Get Information about an update to HandBrake
+        /// </summary>
+        /// <returns></returns>
         public string versionInfo()
         {
             getInfo();
             return hb_versionInfo;
         }
 
+        /// <summary>
+        /// Get HandBrake's version from the appcast.xml file.
+        /// </summary>
+        /// <returns></returns>
         public string version()
         {
             getInfo();
             return hb_version;
         }
 
+        /// <summary>
+        /// Get HandBrake's Build from the appcast.xml file.
+        /// </summary>
+        /// <returns></returns>
         public string build()
         {
             getInfo();
             return hb_build;
         }
 
+        /// <summary>
+        /// Get's the URL for update file.
+        /// </summary>
+        /// <returns></returns>
         public string downloadFile()
         {
             getInfo();

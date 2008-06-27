@@ -771,7 +771,13 @@ namespace Handbrake.Functions
 
         #endregion
 
-        // Takes in a query which can be in any order and parses it. All varibles are then set so they can be used elsewhere.
+        /// <summary>
+        /// Takes in a query which can be in any order and parses it. 
+        /// All varibles are then set so they can be used elsewhere.
+        /// </summary>
+        /// <param name="input">A ClI Query</param>
+        /// <returns>A Parsed Query</returns>
+ 
         public static QueryParser Parse(String input)
         {
             QueryParser thisQuery = new QueryParser();
@@ -807,7 +813,7 @@ namespace Handbrake.Functions
             Match videoBitrate = Regex.Match(input, @"-b ([0-9]*)");
             Match videoQuality = Regex.Match(input, @"-q ([0-9.]*)");
             Match videoFilesize = Regex.Match(input, @"-S ([0-9.]*)");
-            Match twoPass = Regex.Match(input, @" -2 ");
+            Match twoPass = Regex.Match(input, @" -2");
             Match turboFirstPass = Regex.Match(input, @" -T");
             Match grayscale = Regex.Match(input, @" -g");
             Match largerMp4 = Regex.Match(input, @" -4");
@@ -1250,7 +1256,6 @@ namespace Handbrake.Functions
 
             return thisQuery;
         }
-
 
         private static string getMixDown(string mixdown)
         {

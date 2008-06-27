@@ -22,14 +22,25 @@ namespace Handbrake
     {
         private delegate void ProgressUpdateHandler();
         private delegate void setEncoding();
+        Functions.CLI cliObj = new Functions.CLI();
+        Boolean cancel = false;
+        Process hbProc = null;
 
         public frmQueue()
         {
-            InitializeComponent();
+            InitializeComponent();  
         }
 
-        #region Queue Handling
-        Boolean cancel = false;
+
+        #region Queue / Handling
+
+        public Boolean isEncoding()
+        {
+            if (hbProc == null)
+                return false;
+            else
+                return true;
+        }
 
         private void btn_encode_Click(object sender, EventArgs e)
         {
@@ -73,27 +84,24 @@ namespace Handbrake
             MessageBox.Show("No further items on the queue will start. The current encode process will continue until it is finished. \nClick 'Encode Video' when you wish to continue encoding the queue.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
-        [DllImport("user32.dll")]
-        public static extern void LockWorkStation();
-        [DllImport("user32.dll")]
-        public static extern int ExitWindowsEx(int uFlags, int dwReason);
-
         private void startProc(object state)
         {
             try
             {
+
                 while (list_queue.Items.Count != 0)
                 {
                     string query = list_queue.Items[0].ToString();
                     setEncValue();
                     updateUIElements();
-                   
-                    Functions.CLI process = new Functions.CLI();
-                    Process hbProc = process.runCli(this, query, false, false, false, false);
+
+
+                    hbProc = cliObj.runCli(this, query);
 
                     hbProc.WaitForExit();
                     hbProc.Close();
                     hbProc.Dispose();
+                    hbProc = null;
 
                     query = "";
 
@@ -104,31 +112,10 @@ namespace Handbrake
                 }
 
                 resetQueue();
-                
-                // Do something whent he encode ends.
-                switch (Properties.Settings.Default.CompletionOption)
-                {
-                    case "Shutdown":
-                        System.Diagnostics.Process.Start("Shutdown", "-s -t 60");
-                        break;
-                    case "Log Off":
-                        ExitWindowsEx(0, 0);
-                        break;
-                    case "Suspend":
-                        Application.SetSuspendState(PowerState.Suspend, true, true);
-                        break;
-                    case "Hibernate":
-                        Application.SetSuspendState(PowerState.Hibernate, true, true);
-                        break;
-                    case "Lock System":
-                        LockWorkStation();
-                        break;
-                    case "Quit HandBrake":
-                        Application.Exit();
-                        break;
-                    default:
-                        break;
-                }
+
+               
+                // After the encode is done, we may want to shutdown, suspend etc.
+                cliObj.afterEncodeAction();
             }
             catch (Exception exc)
             {
@@ -244,9 +231,17 @@ namespace Handbrake
             }
         }
 
+        private void list_queue_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (list_queue.SelectedItem != null)
+                text_edit.Text = list_queue.SelectedItem.ToString();
+
+            listCount = list_queue.Items.Count;
+        }
+
         #endregion
 
-        #region Queue Management
+        #region Buttons
 
         private void btn_up_Click(object sender, EventArgs e)
         {
@@ -287,47 +282,13 @@ namespace Handbrake
             list_queue.Items.Remove(list_queue.SelectedItem);
         }
 
-        #endregion
-
-        #region Queue Item Modification
-
-        int listCount = 0;
-
-        private void btn_updateQuery_Click(object sender, EventArgs e)
-        {
-            if (text_edit.Text != "")
-            {
-                if (list_queue.Items.Count != listCount)
-                {
-                    MessageBox.Show("Unable to modify the selected item. The number of items on the list has changed.  \nPlease avoid modifying an item when a new encode is about to start!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-                else
-                {
-                    if (list_queue.SelectedItem != null)
-                        list_queue.Items[list_queue.SelectedIndex] = text_edit.Text;
-          
-                }
-            }
-        }
-
-        private void list_queue_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (list_queue.SelectedItem != null)
-                text_edit.Text = list_queue.SelectedItem.ToString();
-
-            listCount = list_queue.Items.Count;
-        }
-
-        #endregion
-
-        #region Queue Save & Batch Script
         private void btn_batch_Click(object sender, EventArgs e)
         {
             string queries = "";
             for (int i = 0; i < list_queue.Items.Count; i++)
             {
                 string query = list_queue.Items[i].ToString();
-                string fullQuery = '"' + Application.StartupPath.ToString()+ "\\HandBrakeCLI.exe"+ '"' + query;
+                string fullQuery = '"' + Application.StartupPath.ToString() + "\\HandBrakeCLI.exe" + '"' + query;
 
                 if (queries == "")
                     queries = queries + fullQuery;
@@ -362,13 +323,30 @@ namespace Handbrake
             }
         }
 
-        #endregion
+        int listCount = 0;
+        private void btn_updateQuery_Click(object sender, EventArgs e)
+        {
+            if (text_edit.Text != "")
+            {
+                if (list_queue.Items.Count != listCount)
+                {
+                    MessageBox.Show("Unable to modify the selected item. The number of items on the list has changed.  \nPlease avoid modifying an item when a new encode is about to start!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                else
+                {
+                    if (list_queue.SelectedItem != null)
+                        list_queue.Items[list_queue.SelectedIndex] = text_edit.Text;
 
-        #region other
+                }
+            }
+        }
+
         private void btn_Close_Click(object sender, EventArgs e)
         {
             this.Hide();
         }
+
+        #endregion   
 
         protected override void OnClosing(CancelEventArgs e)
         {
@@ -376,6 +354,6 @@ namespace Handbrake
             this.Hide();
             base.OnClosing(e);
         }
-        #endregion
+      
     }
 }

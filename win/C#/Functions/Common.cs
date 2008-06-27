@@ -16,9 +16,12 @@ namespace Handbrake.Functions
 {
     class Common
     {
-        /*
-         * Checks for updates and returns "true" boolean if one exists.
-         */
+
+        /// <summary>
+        /// Checks for updates and returns true if an update is available.
+        /// </summary>
+        /// <param name="debug">Turns on debug mode. Don't use on program startup</param>
+        /// <returns>Boolean True = Update available</returns>
         public Boolean updateCheck(Boolean debug)
         {
             try
@@ -46,9 +49,11 @@ namespace Handbrake.Functions
             }
         }
 
-        /*
-         * Function which generates the filename and path automatically based on the Source Name, DVD title and DVD Chapters
-         */
+        /// <summary>
+        /// Function which generates the filename and path automatically based on 
+        /// the Source Name, DVD title and DVD Chapters
+        /// </summary>
+        /// <param name="mainWindow"></param>
         public void autoName(frmMain mainWindow)
         {
             if (Properties.Settings.Default.autoNaming == "Checked")
@@ -114,9 +119,13 @@ namespace Handbrake.Functions
             }
         }
 
-        /*
-         * This function takes in a Query which has been parsed by QueryParser and sets up the GUI.
-         */
+        /// <summary>
+        /// This function takes in a Query which has been parsed by QueryParser and
+        /// set's all the GUI widgets correctly.
+        /// </summary>
+        /// <param name="mainWindow"></param>
+        /// <param name="presetQuery">The Parsed CLI Query</param>
+        /// <param name="name">Name of the preset</param>
         public void presetLoader(frmMain mainWindow, Functions.QueryParser presetQuery, string name)
         {
             // ---------------------------
@@ -132,14 +141,9 @@ namespace Handbrake.Functions
             if (presetQuery.Source != "")
                 mainWindow.text_source.Text = presetQuery.Source;
 
-            if (presetQuery.DVDTitle != 0)
-                mainWindow.drp_dvdtitle.Text = presetQuery.DVDTitle.ToString();
-
-            if (presetQuery.DVDChapterStart != 0)
-                mainWindow.drop_chapterStart.Text = presetQuery.DVDChapterStart.ToString();
-
-            if (presetQuery.DVDChapterFinish != 0)
-                mainWindow.drop_chapterFinish.Text = presetQuery.DVDChapterFinish.ToString();
+            selectLongestTitle(mainWindow);
+            mainWindow.drop_chapterStart.Text = "Auto";
+            mainWindow.drop_chapterFinish.Text = "Auto";
 
             if (presetQuery.Format != null)
             {
@@ -304,11 +308,12 @@ namespace Handbrake.Functions
                 mainWindow.drp_audsr_2.Text = "48";
                 if ((presetQuery.AudioTrack2 != null) && (presetQuery.AudioTrack2 != "None"))
                     mainWindow.drp_track2Audio.Text = presetQuery.AudioTrack2;
-                else 
+                else
                     mainWindow.drp_track2Audio.Text = "Automatic";
             }
             else if (presetQuery.AudioTrack2 == "None")
             {
+                mainWindow.drp_track2Audio.Text = "None";
                 mainWindow.drp_track2Audio.SelectedIndex = 0;
                 mainWindow.drp_audsr_2.Enabled = false;
                 mainWindow.drp_audmix_2.Enabled = false;
@@ -460,12 +465,13 @@ namespace Handbrake.Functions
             #endregion
         }
 
-        /*
-         * This takes all the widgets on frmMain
-         */
+        /// <summary>
+        /// Generates a CLI query based on the GUI widgets.
+        /// </summary>
+        /// <param name="mainWindow"></param>
+        /// <returns>The CLI String</returns>
         public string GenerateTheQuery(frmMain mainWindow)
         {
-
             // Source tab
             #region source
             string source = mainWindow.text_source.Text;
@@ -507,7 +513,88 @@ namespace Handbrake.Functions
             string height = mainWindow.text_height.Text;
 
             if (destination != "")
-                destination = " -o " + '"' + destination + '"'; //'"'+ 
+                destination = " -o " + '"' + destination + '"';
+
+            switch (videoEncoder)
+            {
+                case "MPEG-4 (FFmpeg)":
+                    videoEncoder = " -e ffmpeg";
+                    break;
+                case "MPEG-4 (XviD)":
+                    videoEncoder = " -e xvid";
+                    break;
+                case "H.264 (x264)":
+                    videoEncoder = " -e x264";
+                    break;
+                case "VP3 (Theora)":
+                    videoEncoder = " -e theora";
+                    break;
+                default:
+                    videoEncoder = " -e x264";
+                    break;
+            }
+
+            if (width != "")
+                width = " -w " + width;
+
+            if (height == "Auto")
+                height = "";
+            else if (height != "")
+                height = " -l " + height;
+
+            string queryDestination = destination + videoEncoder + width + height;
+            #endregion
+
+            string query = querySource + queryDestination;
+            query = query + generateTabbedComponentsQuery(mainWindow, source);
+            return query;
+        }
+
+        /// <summary>
+        /// Generates a CLI query for the preview function.
+        /// This basically forces a shortened version of the encdode.
+        /// </summary>
+        /// <param name="mainWindow"></param>
+        /// <returns>Returns a CLI query String.</returns>
+        public string GeneratePreview(frmMain mainWindow)
+        {
+            // Source tab
+            #region source
+            string source = mainWindow.text_source.Text;
+            string dvdTitle = mainWindow.drp_dvdtitle.Text;
+            string chapterStart = mainWindow.drop_chapterStart.Text;
+            string chapterFinish = mainWindow.drop_chapterFinish.Text;
+            int totalChapters = mainWindow.drop_chapterFinish.Items.Count - 1;
+            string dvdChapter = "";
+
+            if ((source != "") && (source.Trim() != "Click 'Browse' to continue"))
+                source = " -i " + '"' + source + '"';
+            else
+                source = "";
+
+            if (dvdTitle == "Automatic")
+                dvdTitle = "";
+            else
+            {
+                string[] titleInfo = dvdTitle.Split(' ');
+                dvdTitle = " -t " + titleInfo[0];
+            }
+
+            dvdChapter = " -c 2 ";
+
+            string querySource = source + dvdTitle + dvdChapter;
+            #endregion
+
+            // Destination tab
+            #region Destination
+
+            string destination = mainWindow.text_destination.Text;
+            string videoEncoder = mainWindow.drp_videoEncoder.Text;
+            string width = mainWindow.text_width.Text;
+            string height = mainWindow.text_height.Text;
+
+            if (destination != "")
+                destination = " -o " + '"' + destination.Replace(".m", "_sample.m").Replace(".avi", "_sample.avi").Replace(".ogm", "_sample.ogm") + '"';
 
 
             switch (videoEncoder)
@@ -532,20 +619,111 @@ namespace Handbrake.Functions
             if (width != "")
                 width = " -w " + width;
 
-
             if (height == "Auto")
-            {
                 height = "";
-            }
             else if (height != "")
-            {
                 height = " -l " + height;
-            }
-
 
             string queryDestination = destination + videoEncoder + width + height;
             #endregion
 
+            string query = querySource + queryDestination;
+            query = query + generateTabbedComponentsQuery(mainWindow, source);
+            return query;
+        }
+
+        /// <summary>
+        /// Set's up the DataGridView on the Chapters tab (frmMain)
+        /// </summary>
+        /// <param name="mainWindow"></param>
+        public void chapterNaming(frmMain mainWindow)
+        {
+            try
+            {
+                mainWindow.data_chpt.Rows.Clear();
+                int i = 0;
+                int rowCount = 0;
+                int start = 0;
+                int finish = 0;
+                if (mainWindow.drop_chapterFinish.Text != "Auto")
+                    finish = int.Parse(mainWindow.drop_chapterFinish.Text);
+
+                if (mainWindow.drop_chapterStart.Text != "Auto")
+                    start = int.Parse(mainWindow.drop_chapterStart.Text);
+
+                rowCount = finish - (start - 1);
+
+                while (i < rowCount)
+                {
+                    DataGridViewRow row = new DataGridViewRow();
+
+                    mainWindow.data_chpt.Rows.Insert(i, row);
+                    mainWindow.data_chpt.Rows[i].Cells[0].Value = (i + 1);
+                    mainWindow.data_chpt.Rows[i].Cells[1].Value = "Chapter " + (i + 1);
+                    i++;
+                }
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("chapterNaming() Error has occured: \n" + exc.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Select the longest title in the DVD title dropdown menu on frmMain
+        /// </summary>
+        public void selectLongestTitle(frmMain mainWindow)
+        {
+            int current_largest = 0;
+            Handbrake.Parsing.Title title2Select;
+
+            // Check if there are titles in the DVD title dropdown menu and make sure, it's not just "Automatic"
+            if (mainWindow.drp_dvdtitle.Items[0].ToString() != "Automatic")
+                title2Select = (Handbrake.Parsing.Title)mainWindow.drp_dvdtitle.Items[0];
+            else
+                title2Select = null;
+
+            // So, If there are titles in the DVD Title dropdown menu, lets select the longest.
+            if (title2Select != null)
+            {
+                foreach (Handbrake.Parsing.Title x in mainWindow.drp_dvdtitle.Items)
+                {
+                    string title = x.ToString();
+                    if (title != "Automatic")
+                    {
+                        string[] y = title.Split(' ');
+                        string time = y[1].Replace("(", "").Replace(")", "");
+                        string[] z = time.Split(':');
+
+                        int hours = int.Parse(z[0]) * 60 * 60;
+                        int minutes = int.Parse(z[1]) * 60;
+                        int seconds = int.Parse(z[2]);
+                        int total_sec = hours + minutes + seconds;
+
+                        if (current_largest == 0)
+                        {
+                            current_largest = hours + minutes + seconds;
+                            title2Select = x;
+                        }
+                        else
+                        {
+                            if (total_sec > current_largest)
+                            {
+                                current_largest = total_sec;
+                                title2Select = x;
+                            }
+                        }
+                    }
+                }
+
+                // Now set the longest title in the gui.
+                mainWindow.drp_dvdtitle.SelectedItem = title2Select;
+            }  
+        }
+
+        // Generates part of the CLI query, for the tabbed components only.
+        private string generateTabbedComponentsQuery(frmMain mainWindow, string source)
+        {
             // Picture Settings Tab
             #region Picture Settings Tab
 
@@ -868,7 +1046,7 @@ namespace Handbrake.Functions
             {
                 // All this is a hack, because when AppleTV is selected, there is no sample rate selected. so just add a 48
                 // It should probably be setup later so the GUI widget has the value 48 in it.
-               
+
                 if ((track2 != "") && (track2 != "None"))
                 {
                     if (audioSampleRate == "")
@@ -1066,49 +1244,11 @@ namespace Handbrake.Functions
             string verbose = " -v ";
             #endregion
 
-            return querySource + queryDestination + queryPictureSettings + queryVideoSettings + h264Settings + queryAudioSettings + ChapterMarkers + queryAdvancedSettings + verbose;
+            return queryPictureSettings + queryVideoSettings + h264Settings + queryAudioSettings + ChapterMarkers + queryAdvancedSettings + verbose;
         }
 
-        /*
-         * Set's up the DataGridView on the Chapters tab (frmMain)
-         */
-        public void chapterNaming(frmMain mainWindow)
-        {
-            try
-            {
-                mainWindow.data_chpt.Rows.Clear();
-                int i = 0;
-                int rowCount = 0;
-                int start = 0;
-                int finish = 0;
-                if (mainWindow.drop_chapterFinish.Text != "Auto")
-                    finish = int.Parse(mainWindow.drop_chapterFinish.Text);
-
-                if (mainWindow.drop_chapterStart.Text != "Auto")
-                    start = int.Parse(mainWindow.drop_chapterStart.Text);
-
-                rowCount = finish - (start - 1);
-
-                while (i < rowCount)
-                {
-                    DataGridViewRow row = new DataGridViewRow();
-
-                    mainWindow.data_chpt.Rows.Insert(i, row);
-                    mainWindow.data_chpt.Rows[i].Cells[0].Value = (i + 1);
-                    mainWindow.data_chpt.Rows[i].Cells[1].Value = "Chapter " + (i + 1);
-                    i++;
-                }
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show("chapterNaming() Error has occured: \n" + exc.ToString());
-            }
-        }
-
-        /*
-         * This function saves the data in the chapters tab, dataGridView into a CSV file called chapters.csv in this applications
-         * running directory.
-         */
+        // This function saves the data in the chapters tab, dataGridView into a CSV file called chapters.csv
+        // in a directory specified by file_path_name
         private Boolean chapterCSVSave(frmMain mainWindow, string file_path_name)
         {
             try
@@ -1136,7 +1276,7 @@ namespace Handbrake.Functions
             }
         }
 
-
+        // Get the CLI equive of the audio mixdown from the widget name.
         private string getMixDown(string selectedAudio)
         {
             switch (selectedAudio)
@@ -1158,6 +1298,7 @@ namespace Handbrake.Functions
             }
         }
 
+        // Get the CLI equiv of the audio encoder from the widget name.
         private string getAudioEncoder(string selectedEncoder)
         {
             switch (selectedEncoder)
@@ -1175,7 +1316,5 @@ namespace Handbrake.Functions
             }
         }
 
-
-        // End of Functions
     }
 }

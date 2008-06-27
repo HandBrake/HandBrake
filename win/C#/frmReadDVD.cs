@@ -25,6 +25,7 @@ namespace Handbrake
         private frmMain mainWindow;
         private Parsing.DVD thisDvd;
         private delegate void UpdateUIHandler();
+        Functions.Common hb_common_func = new Functions.Common();
 
         public frmReadDVD(string inputFile, frmMain parent)
         {
@@ -67,40 +68,9 @@ namespace Handbrake
                 mainWindow.drop_chapterStart.Text = "Auto";
 
                 // Now select the longest title
-                int current_largest = 0;
-                Handbrake.Parsing.Title title2Select = thisDvd.Titles[0];
+                hb_common_func.selectLongestTitle(mainWindow);
 
-                foreach (Handbrake.Parsing.Title x in thisDvd.Titles)
-                {
-                    string title = x.ToString();
-                    if (title != "Automatic")
-                    {
-                        string[] y = title.Split(' ');
-                        string time = y[1].Replace("(", "").Replace(")", "");
-                        string[] z = time.Split(':');
-
-                        int hours = int.Parse(z[0]) * 60 * 60;
-                        int minutes = int.Parse(z[1]) * 60;
-                        int seconds = int.Parse(z[2]);
-                        int total_sec = hours + minutes + seconds;
-
-                        if (current_largest == 0)
-                        {
-                            current_largest = hours + minutes + seconds;
-                            title2Select = x;
-                        }
-                        else
-                        {
-                            if (total_sec > current_largest)
-                            {
-                                current_largest = total_sec;
-                                title2Select = x;
-                            }
-                        }
-                    }
-                }
-
-                mainWindow.drp_dvdtitle.SelectedItem = title2Select;
+                
 
                 this.Close();
             }

@@ -53,6 +53,7 @@ namespace Handbrake
             this.rtf_actLog.Size = new System.Drawing.Size(390, 390);
             this.rtf_actLog.TabIndex = 29;
             this.rtf_actLog.Text = "";
+        
             // 
             // ToolTip
             // 

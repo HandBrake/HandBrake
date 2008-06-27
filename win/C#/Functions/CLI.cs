@@ -11,11 +11,12 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Globalization;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Handbrake.Functions
 {
-    class CLI
-    {
+    public class CLI
+    {       
         /// <summary>
         /// CLI output is based on en-US locale,
         /// we use this CultureInfo as IFormatProvider to *.Parse() calls
@@ -24,7 +25,17 @@ namespace Handbrake.Functions
 
         Process hbProc = new Process();
 
-        public Process runCli(object s, string query, bool stderr, bool stdout, bool useShellExec, bool noWindow)
+        /// <summary>
+        /// Execute a HandBrakeCLI process.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="query">The CLI Query</param>
+        /// <param name="stderr">Rediect standard error</param>
+        /// <param name="stdout">Redirect Standard output</param>
+        /// <param name="useShellExec"> Use Shell Executable</param>
+        /// <param name="noWindow">Display No Window</param>
+        /// <returns>Returns a process</returns>
+        public Process runCli(object s, string query)
         {
             try
             {
@@ -34,6 +45,7 @@ namespace Handbrake.Functions
                 string strCmdLine = String.Format(@"cmd /c """"{0}"" {1} 2>""{2}"" """, handbrakeCLIPath, query, logPath);
 
                 ProcessStartInfo cliStart = new ProcessStartInfo("CMD.exe", strCmdLine);
+
                 hbProc = Process.Start(cliStart);
 
                 // Set the process Priority 
@@ -64,6 +76,53 @@ namespace Handbrake.Functions
                 MessageBox.Show("Internal Software Error. Please Restart the Program");
             }
             return hbProc;
+        }
+
+        [DllImport("user32.dll")]
+        public static extern void LockWorkStation();
+        [DllImport("user32.dll")]
+        public static extern int ExitWindowsEx(int uFlags, int dwReason);
+
+        public void afterEncodeAction()
+        {
+            // Do something whent he encode ends.
+            switch (Properties.Settings.Default.CompletionOption)
+            {
+                case "Shutdown":
+                    System.Diagnostics.Process.Start("Shutdown", "-s -t 60");
+                    break;
+                case "Log Off":
+                    ExitWindowsEx(0, 0);
+                    break;
+                case "Suspend":
+                    Application.SetSuspendState(PowerState.Suspend, true, true);
+                    break;
+                case "Hibernate":
+                    Application.SetSuspendState(PowerState.Hibernate, true, true);
+                    break;
+                case "Lock System":
+                    LockWorkStation();
+                    break;
+                case "Quit HandBrake":
+                    Application.Exit();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Update the presets.dat file with the latest version of HandBrak's presets from the CLI
+        /// </summary>
+        public void grabCLIPresets()
+        {
+            // Gets the presets from the CLI and stores them in presets.dat
+            string appPath = Application.StartupPath.ToString() + "\\";
+            string strCmdLine = "cmd /c " + '"' + '"' + appPath + "HandBrakeCLI.exe" + '"' + " --preset-list >" + '"' + appPath + "presets.dat" + '"' + " 2>&1" + '"';
+            Process hbproc = Process.Start("CMD.exe", strCmdLine);
+            hbproc.WaitForExit();
+            hbproc.Dispose();
+            hbproc.Close();
         }
     }
 }

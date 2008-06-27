@@ -48,7 +48,7 @@ namespace Handbrake.Parsing
                     if ((char)output.Peek() == '+')
                         thisDVD.m_titles.AddRange(Title.ParseList(output.ReadToEnd()));
                     else
-                        output.ReadLine();
+                       output.ReadLine();
                 }
             }
             catch (Exception exc)

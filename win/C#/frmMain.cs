@@ -20,19 +20,20 @@ namespace Handbrake
 {
     public partial class frmMain : Form
     {
-        // -------------------------------------------------------------- 
-        // Applicaiton Startup
-        // --------------------------------------------------------------
 
-        #region Application Startup
-
-        // Declarations
-        private Process hbProc;
+        // Declarations *******************************************************
+        Functions.Common hb_common_func = new Functions.Common();
+        Functions.x264Panel x264PanelFunctions = new Functions.x264Panel();
+        Functions.CLI cliObj = new Functions.CLI();
+        Parsing.Title selectedTitle;
+        internal Process hbProc;
         private Parsing.DVD thisDVD;
         private frmQueue queueWindow = new frmQueue();
         private delegate void updateStatusChanger();
-        Functions.Common hb_common_func = new Functions.Common();
-        Functions.x264Panel x264PanelFunctions = new Functions.x264Panel();
+        
+        // Applicaiton Startup ************************************************
+
+        #region Application Startup
 
         public frmMain()
         {
@@ -115,6 +116,10 @@ namespace Handbrake
 
             // Turn the interface back to the user
             this.Enabled = true;
+
+            // Some event Handlers.
+            this.Resize += new EventHandler(frmMain_Resize);
+
         }
 
         // Startup Functions
@@ -150,7 +155,6 @@ namespace Handbrake
             Form splash = new frmSplashScreen();
             splash.Show();
         }
-
         private void setupH264Panel()
         {
             /*Set opt widget values here*/
@@ -276,7 +280,6 @@ namespace Handbrake
             /* Standardize the option string */
             rtf_x264Query.Text = "";
         }
-
         private void loadUserDefaults()
         {
             string userDefaults = Properties.Settings.Default.defaultUserSettings;
@@ -294,9 +297,7 @@ namespace Handbrake
 
         #endregion
 
-        // -------------------------------------------------------------- 
-        // The Applications Main Menu
-        // -------------------------------------------------------------- 
+        // The Applications Main Menu *****************************************
 
         #region File Menu
 
@@ -345,7 +346,7 @@ namespace Handbrake
         }
         private void mnu_viewDVDdata_Click(object sender, EventArgs e)
         {
-            frmActivityWindow dvdInfoWindow = new frmActivityWindow("dvdinfo.dat");
+            frmActivityWindow dvdInfoWindow = new frmActivityWindow("dvdinfo.dat", this, queueWindow);
             dvdInfoWindow.Show();
         }
         private void mnu_options_Click(object sender, EventArgs e)
@@ -361,7 +362,7 @@ namespace Handbrake
         private void mnu_presetReset_Click(object sender, EventArgs e)
         {
             treeView_presets.Nodes.Clear();
-            grabCLIPresets();
+            cliObj.grabCLIPresets();
             loadPresetPanel();
             if (treeView_presets.Nodes.Count == 0)
                 MessageBox.Show("Unable to load the presets.dat file. Please select \"Update Built-in Presets\" from the Presets Menu \nMake sure you are running the program in Admin mode if running on Vista. See Windows FAQ for details!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -412,16 +413,14 @@ namespace Handbrake
 
         #endregion
 
-        // -------------------------------------------------------------- 
-        // MainWindow Components, Actions and Functions
-        // --------------------------------------------------------------
+        // MainWindow Components, Actions and Functions ***********************
 
         #region Actions
 
         // ToolBar
         private void btn_start_Click(object sender, EventArgs e)
         {
-            if (text_source.Text == "" || text_source.Text == "Click 'Browse' to continue" || text_destination.Text == "")
+            if (text_source.Text == "" || text_source.Text == "Click 'Source' to continue" || text_destination.Text == "")
                 MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
@@ -438,7 +437,7 @@ namespace Handbrake
         }
         private void btn_add2Queue_Click(object sender, EventArgs e)
         {
-            if (text_source.Text == "" || text_source.Text == "Click 'Browse' to continue" || text_destination.Text == "")
+            if (text_source.Text == "" || text_source.Text == "Click 'Source' to continue" || text_destination.Text == "")
                 MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
@@ -458,26 +457,18 @@ namespace Handbrake
         }
         private void btn_ActivityWindow_Click(object sender, EventArgs e)
         {
-            frmActivityWindow ActivityWindow = new frmActivityWindow("hb_encode_log.dat");
+            frmActivityWindow ActivityWindow = new frmActivityWindow("hb_encode_log.dat", this, queueWindow);
             ActivityWindow.Show();
         }
 
         //Source
-        private void btn_Browse_Click(object sender, EventArgs e)
+        private void btn_dvd_source_Click(object sender, EventArgs e)
         {
             String filename = "";
             text_source.Text = "";
 
-            if (check_fileMode.Checked)
-            {
-                ISO_Open.ShowDialog();
-                filename = ISO_Open.FileName;
-            }
-            else
-            {
-                DVD_Open.ShowDialog();
-                filename = DVD_Open.SelectedPath;
-            }
+            DVD_Open.ShowDialog();
+            filename = DVD_Open.SelectedPath;
 
             if (filename.StartsWith("\\"))
                 MessageBox.Show("Sorry, HandBrake does not support UNC file paths. \nTry mounting the share as a network drive in My Computer", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -490,7 +481,7 @@ namespace Handbrake
                     frmRD.ShowDialog();
                 }
                 else
-                    text_source.Text = "Click 'Browse' to continue";
+                    text_source.Text = "Click 'Source' to continue";
 
                 // If there are no titles in the dropdown menu then the scan has obviously failed. Display an error message explaining to the user.
                 if (drp_dvdtitle.Items.Count == 0)
@@ -498,16 +489,45 @@ namespace Handbrake
 
             }
         }
+        private void btn_file_source_Click(object sender, EventArgs e)
+        {
+            String filename = "";
+            text_source.Text = "";
+
+            ISO_Open.ShowDialog();
+            filename = ISO_Open.FileName;
+
+            if (filename.StartsWith("\\"))
+                MessageBox.Show("Sorry, HandBrake does not support UNC file paths. \nTry mounting the share as a network drive in My Computer", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else
+            {
+                if (filename != "")
+                {
+                    Form frmRD = new frmReadDVD(filename, this);
+                    text_source.Text = filename;
+                    frmRD.ShowDialog();
+                }
+                else
+                    text_source.Text = "Click 'Source' to continue";
+
+                // If there are no titles in the dropdown menu then the scan has obviously failed. Display an error message explaining to the user.
+                if (drp_dvdtitle.Items.Count == 0)
+                    MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source. Please refer to the FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+
+            }
+        }
+       
+
         private void drp_dvdtitle_Click(object sender, EventArgs e)
         {
             if ((drp_dvdtitle.Items.Count == 1) && (drp_dvdtitle.Items[0].ToString() == "Automatic"))
-                MessageBox.Show("There are no titles to select. Please scan the DVD by clicking the 'browse' button above before trying to select a title.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show("There are no titles to select. Please scan the DVD by clicking the 'Source' button above before trying to select a title.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
         private void drp_dvdtitle_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Reset some values on the form
             lbl_Aspect.Text = "Select a Title";
-            lbl_RecomendedCrop.Text = "Select a Title";
+            //lbl_RecomendedCrop.Text = "Select a Title";
             drop_chapterStart.Items.Clear();
             drop_chapterFinish.Items.Clear();
 
@@ -515,13 +535,15 @@ namespace Handbrake
             // Otheriwse if its not, title data has to be loased from parsing.
             if (drp_dvdtitle.Text != "Automatic")
             {
-                Parsing.Title selectedTitle = drp_dvdtitle.SelectedItem as Parsing.Title;
+                selectedTitle = drp_dvdtitle.SelectedItem as Parsing.Title;
 
                 // Set the Aspect Ratio
                 lbl_Aspect.Text = selectedTitle.AspectRatio.ToString();
+                lbl_src_res.Text = selectedTitle.Resolution.Width + " x " + selectedTitle.Resolution.Height;
+                lbl_duration.Text = selectedTitle.Duration.ToString();
 
                 // Set the Recommended Cropping values
-                lbl_RecomendedCrop.Text = string.Format("{0}/{1}/{2}/{3}", selectedTitle.AutoCropDimensions[0], selectedTitle.AutoCropDimensions[1], selectedTitle.AutoCropDimensions[2], selectedTitle.AutoCropDimensions[3]);
+                //lbl_RecomendedCrop.Text = string.Format("{0}/{1}/{2}/{3}", selectedTitle.AutoCropDimensions[0], selectedTitle.AutoCropDimensions[1], selectedTitle.AutoCropDimensions[2], selectedTitle.AutoCropDimensions[3]);
 
                 // Populate the Start chapter Dropdown
                 drop_chapterStart.Items.Clear();
@@ -573,6 +595,8 @@ namespace Handbrake
         }
         private void drop_chapterStart_SelectedIndexChanged(object sender, EventArgs e)
         {
+            calculateDuration();
+
             drop_chapterStart.BackColor = Color.White;
             if ((drop_chapterFinish.Text != "Auto") && (drop_chapterStart.Text != "Auto"))
             {
@@ -594,6 +618,8 @@ namespace Handbrake
         }
         private void drop_chapterFinish_SelectedIndexChanged(object sender, EventArgs e)
         {
+            calculateDuration();
+
             drop_chapterFinish.BackColor = Color.White;
             if ((drop_chapterFinish.Text != "Auto") && (drop_chapterStart.Text != "Auto"))
             {
@@ -732,19 +758,13 @@ namespace Handbrake
                     text_width.BackColor = Color.LightGreen;
 
 
-                if ((lbl_Aspect.Text != "Select a Title") && (drp_crop.SelectedIndex == 2))
+                if (lbl_Aspect.Text != "Select a Title")
                 {
-                    double height = int.Parse(text_width.Text) / double.Parse(lbl_Aspect.Text);
-                    double mod16 = height % 16;
-                    height = height - mod16;
-
-                    if (text_width.Text == "")
+                    if (drp_anamorphic.Text == "None")
                     {
-                        text_height.Text = "";
-                        text_width.BackColor = Color.White;
-                    }
-                    else
+                        int height = cacluateNonAnamorphicHeight(int.Parse(text_width.Text));
                         text_height.Text = height.ToString();
+                    }
                 }
             }
             catch (Exception)
@@ -787,14 +807,12 @@ namespace Handbrake
                 text_top.Enabled = false;
                 text_bottom.Enabled = false;
 
-                if (lbl_RecomendedCrop.Text != "Select a Title")
+                if ((drp_dvdtitle.Text != "Automatic") && (selectedTitle != null))
                 {
-                    string[] temp = new string[4];
-                    temp = lbl_RecomendedCrop.Text.Split('/');
-                    text_left.Text = temp[2];
-                    text_right.Text = temp[3];
-                    text_top.Text = temp[0];
-                    text_bottom.Text = temp[1];
+                    text_top.Text = selectedTitle.AutoCropDimensions[0].ToString();
+                    text_bottom.Text = selectedTitle.AutoCropDimensions[1].ToString();
+                    text_left.Text = selectedTitle.AutoCropDimensions[2].ToString();
+                    text_right.Text = selectedTitle.AutoCropDimensions[3].ToString();
                 }
                 else
                 {
@@ -803,6 +821,7 @@ namespace Handbrake
                     text_top.Text = "";
                     text_bottom.Text = "";
                 }
+
             }
 
             if ((string)drp_crop.SelectedItem == "No Crop")
@@ -933,7 +952,7 @@ namespace Handbrake
                 drp_audenc_4.Text = "";
                 drp_audsr_4.Text = "";
                 drp_audmix_4.Text = "Automatic";
-                
+
             }
             else
             {
@@ -954,7 +973,7 @@ namespace Handbrake
                 drp_audsr_4.Text = "";
                 drp_audmix_4.Text = "Automatic";
             }
-            
+
         }
         private void drp_track4Audio_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1526,6 +1545,82 @@ namespace Handbrake
             this.thisDVD = dvd;
         }
 
+        // Chapter Selection Duration calculation
+        public void calculateDuration()
+        {
+
+            int start_chapter;
+            int end_chapter;
+            TimeSpan Duration = TimeSpan.FromSeconds(0.0);
+
+            try
+            {
+                // Get the durations between the 2 chapter points and add them together.
+                if (drop_chapterStart.Text != "Auto" && drop_chapterFinish.Text != "Auto")
+                {
+                    start_chapter = int.Parse(drop_chapterStart.Text);
+                    end_chapter = int.Parse(drop_chapterFinish.Text);
+
+                    int position = start_chapter - 1;
+
+                    while (position != end_chapter)
+                    {
+                        TimeSpan dur = selectedTitle.Chapters[position].Duration;
+                        Duration = Duration + dur;
+                        position++;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // Don't do anything
+            }
+
+            // Set the Duration
+            lbl_duration.Text = Duration.ToString();
+        }
+        public int cacluateNonAnamorphicHeight(int width)
+        {
+            float aspect = selectedTitle.AspectRatio;
+            int aw;
+            int ah;
+            if (aspect.ToString() == "1.78")
+            {
+                aw = 16;
+                ah = 9;
+            }
+            else
+            {
+                aw = 4;
+                ah = 3;
+            }
+
+            double a = width * selectedTitle.Resolution.Width * ah * (selectedTitle.Resolution.Height - (double)text_top.Value - (double)text_bottom.Value);
+            double b = selectedTitle.Resolution.Height * aw * (selectedTitle.Resolution.Width - (double)text_left.Value - (double)text_right.Value);
+
+            double y = a / b;
+
+            // If it's not Mod 16, make it mod 16
+            if ((y % 16) != 0)
+            {
+                double mod16 = y % 16;
+                if (mod16 >= 8)
+                {
+                    mod16 = 16 - mod16;
+                    y = y + mod16;
+                }
+                else
+                {
+                    y = y - mod16;
+                }
+            }
+
+            //16 * (421 / 16)
+            //double z = ( 16 * (( y + 8 ) / 16 ) );
+            int x = int.Parse(y.ToString());
+            return x;
+        }
+
         // Audio system functions
         private void setAudioByContainer(String path)
         {
@@ -1793,16 +1888,6 @@ namespace Handbrake
                 treeView_presets.Nodes.Add(preset_treeview);
             }
         }
-        private void grabCLIPresets()
-        {
-            // Gets the presets from the CLI and stores them in presets.dat
-            string appPath = Application.StartupPath.ToString() + "\\";
-            string strCmdLine = "cmd /c " + '"' + '"' + appPath + "HandBrakeCLI.exe" + '"' + " --preset-list >" + '"' + appPath + "presets.dat" + '"' + " 2>&1" + '"';
-            Process hbproc = Process.Start("CMD.exe", strCmdLine);
-            hbproc.WaitForExit();
-            hbproc.Dispose();
-            hbproc.Close();
-        }
         private void loadNormalPreset()
         {
             //Loads the preset called "normal"
@@ -1914,13 +1999,8 @@ namespace Handbrake
         #region Encoding and Queue
 
         // Declarations
-        Functions.CLI process = new Functions.CLI();
         private delegate void UpdateUIHandler();
-        [DllImport("user32.dll")]
-        public static extern void LockWorkStation();
-        [DllImport("user32.dll")]
-        public static extern int ExitWindowsEx(int uFlags, int dwReason);
-
+    
         // Encoding Functions
         private void procMonitor(object state)
         {
@@ -1929,36 +2009,21 @@ namespace Handbrake
                 MessageBox.Show("Handbrake is already encoding a video!", "Status", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
-                hbProc = process.runCli(this, (string)state, false, false, false, false);
+                hbProc = cliObj.runCli(this, (string)state);
                 hbProc.WaitForExit();
 
                 setEncodeLabelFinished();
                 hbProc = null;
 
-                // Do something whent he encode ends.
-                switch (Properties.Settings.Default.CompletionOption)
+                // If the window is minimized, display the notification in a popup.
+                if (FormWindowState.Minimized == this.WindowState)
                 {
-                    case "Shutdown":
-                        System.Diagnostics.Process.Start("Shutdown", "-s -t 60");
-                        break;
-                    case "Log Off":
-                        ExitWindowsEx(0, 0);
-                        break;
-                    case "Suspend":
-                        Application.SetSuspendState(PowerState.Suspend, true, true);
-                        break;
-                    case "Hibernate":
-                        Application.SetSuspendState(PowerState.Hibernate, true, true);
-                        break;
-                    case "Lock System":
-                        LockWorkStation();
-                        break;
-                    case "Quit HandBrake":
-                        Application.Exit();
-                        break;
-                    default:
-                        break;
+                    notifyIcon.BalloonTipText = lbl_encode.Text;
+                    notifyIcon.ShowBalloonTip(500);
                 }
+
+                // After the encode is done, we may want to shutdown, suspend etc.
+                cliObj.afterEncodeAction();
             }
         }
         private void setEncodeLabelFinished()
@@ -1970,10 +2035,56 @@ namespace Handbrake
             }
             lbl_encode.Text = "Encoding Finished";
         }
+        public Boolean isEncoding()
+        {
+            if (hbProc == null)
+                return false;
+            else
+                return true;
+        }
 
         #endregion
- 
-        
+
+        #region Taskbar
+        private void frmMain_Resize(object sender, EventArgs e)
+        {
+            if (FormWindowState.Minimized == this.WindowState)
+            {
+                notifyIcon.Visible = true;
+                notifyIcon.BalloonTipText = lbl_encode.Text;
+                notifyIcon.ShowBalloonTip(500);
+                this.Hide();
+            }
+            else if (FormWindowState.Normal == this.WindowState)
+            {
+                notifyIcon.Visible = false;
+            }
+        }
+
+        private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            this.Visible = true;
+            this.Activate();
+            this.WindowState = FormWindowState.Normal;
+            notifyIcon.Visible = false;
+        }
+
+        private void btn_minimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void btn_restore_Click(object sender, EventArgs e)
+        {
+            this.Visible = true;
+            this.Activate();
+            this.WindowState = FormWindowState.Normal;
+            notifyIcon.Visible = false;
+        }
+
+        #endregion
+
+
         // This is the END of the road ------------------------------------------------------------------------------
     }
 }
