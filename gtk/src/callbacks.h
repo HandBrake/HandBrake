@@ -35,6 +35,7 @@ gboolean ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data);
 void ghb_select_preset(GtkBuilder *builder, const gchar *preset);
 void debug_log_handler(const gchar *domain, GLogLevelFlags flags, const gchar *msg, gpointer ud);
 void ghb_hbfd(signal_user_data_t *ud, gboolean hbfd);
+void ghb_file_menu_add_dvd(signal_user_data_t *ud);
 void ghb_hal_init();
 gboolean ghb_message_dialog(GtkMessageType type, const gchar *message, const gchar *no, const gchar *yes);
 

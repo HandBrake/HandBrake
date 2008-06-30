@@ -513,6 +513,7 @@ main (int argc, char *argv[])
 		ud->builder = create_builder_or_die (BUILDER_NAME, builder_file);
 		g_free(builder_file);
 	}
+	ghb_file_menu_add_dvd(ud);
 	ghb_backend_init(ud->builder, 1, 0);
 
 	g_debug("ud %p\n", ud);

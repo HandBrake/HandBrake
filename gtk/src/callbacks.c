@@ -581,6 +581,30 @@ source_dialog_extra_widgets(GtkWidget *dialog, gboolean checkbutton_active)
 	return GTK_WIDGET(vbox);
 }
 
+static void
+do_scan(signal_user_data_t *ud, const gchar *filename)
+{
+	if (filename != NULL)
+	{
+		ghb_settings_set_string(ud->settings, "source", filename);
+		if (update_source_label(ud, filename))
+		{
+			GtkProgressBar *progress;
+			progress = GTK_PROGRESS_BAR(GHB_WIDGET(ud->builder, "progressbar"));
+			const gchar *path;
+			path = ghb_settings_get_string( ud->settings, "source");
+			gtk_progress_bar_set_fraction (progress, 0);
+			gtk_progress_bar_set_text (progress, "Scanning ...");
+			ud->state |= GHB_STATE_SCANNING;
+			ghb_backend_scan (path, 0);
+		}
+		else
+		{
+			// TODO: error dialog
+		}
+	}
+}
+
 void
 source_button_clicked_cb(GtkButton *button, signal_user_data_t *ud)
 {
@@ -621,21 +645,7 @@ source_button_clicked_cb(GtkButton *button, signal_user_data_t *ud)
 		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
 		if (filename != NULL)
 		{
-			ghb_settings_set_string(ud->settings, "source", filename);
-			if (update_source_label(ud, filename))
-			{
-				GtkProgressBar *progress;
-				progress = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "progressbar"));
-				const gchar *path = ghb_settings_get_string( ud->settings, "source");
-				gtk_progress_bar_set_fraction (progress, 0);
-				gtk_progress_bar_set_text (progress, "Scanning ...");
-				ud->state |= GHB_STATE_SCANNING;
-				ghb_backend_scan (path, 0);
-			}
-			else
-			{
-				// TODO: error dialog
-			}
+			do_scan(ud, filename);
 			if (strcmp(sourcename, filename) != 0)
 			{
 				ghb_settings_set_string (ud->settings, "default_source", filename);
@@ -646,6 +656,23 @@ source_button_clicked_cb(GtkButton *button, signal_user_data_t *ud)
 		}
 	}
 	gtk_widget_destroy(dialog);
+}
+
+void
+dvd_source_activate_cb(GtkAction *action, signal_user_data_t *ud)
+{
+	const gchar *filename;
+	const gchar *sourcename;
+
+	sourcename = ghb_settings_get_string(ud->settings, "source");
+	filename = gtk_action_get_name(action);
+	do_scan(ud, filename);
+	if (strcmp(sourcename, filename) != 0)
+	{
+		ghb_settings_set_string (ud->settings, "default_source", filename);
+		ghb_prefs_save (ud->settings);
+		ghb_dvd_set_current (filename, ud);
+	}
 }
 
 static void
@@ -3102,6 +3129,44 @@ hbfd_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 	gboolean hbfd = ghb_settings_get_bool(ud->settings, "hbfd");
 	ghb_hbfd(ud, hbfd);
 	ghb_prefs_save(ud->settings);
+}
+
+void
+ghb_file_menu_add_dvd(signal_user_data_t *ud)
+{
+	GList *link, *drives;
+
+	GtkActionGroup *agroup = GTK_ACTION_GROUP(
+		gtk_builder_get_object(ud->builder, "actiongroup1"));
+	GtkUIManager *ui = GTK_UI_MANAGER(
+		gtk_builder_get_object(ud->builder, "uimanager1"));
+	guint merge_id = gtk_ui_manager_new_merge_id(ui);
+
+	link = drives = dvd_device_list();
+	while (link != NULL)
+	{
+		gchar *name = (gchar*)link->data;
+		// Create action for this drive
+		GtkAction *action = gtk_action_new(name, name,
+			"Scan this DVD source", "gtk-cdrom");
+		// Add action to action group
+		gtk_action_group_add_action_with_accel(agroup, action, "");
+		// Add to ui manager
+		gtk_ui_manager_add_ui(ui, merge_id, 
+			"ui/menubar1/menuitem1/quit1", name, name,
+			GTK_UI_MANAGER_AUTO, TRUE);
+		// Connect signal to action (menu item)
+		g_signal_connect(action, "activate", 
+			(GCallback)dvd_source_activate_cb, ud);
+		g_free(name);
+		link = link->next;
+	}
+	g_list_free(drives);
+
+	// Add separator
+	gtk_ui_manager_add_ui(ui, merge_id, 
+		"ui/menubar1/menuitem1/quit1", "", NULL,
+		GTK_UI_MANAGER_AUTO, TRUE);
 }
 
 gboolean ghb_is_cd(GDrive *gd);
