@@ -317,9 +317,11 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
         /* 23.976-length frames are 3753.75 ticks long on average but the DVD
            creates that average rate by repeating 59.95 fields so the max
-           frame size is actually 4504.5 (3 field times) */
+           frame size is actually 4504.5 (3 field times). The field durations
+           are computed based on quantized times (see below) so we need an extra
+           two ticks to account for the rounding. */
         if (pv->init_delay == 3753)
-            pv->init_delay = 4505;
+            pv->init_delay = 4507;
 
         /* frame rates are not exact in the DVD 90KHz PTS clock (they are
            exact in the DVD 27MHz system clock but we never see that) so the

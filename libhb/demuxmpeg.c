@@ -62,7 +62,7 @@ int hb_demux_ps( hb_buffer_t * buf_ps, hb_list_t * list_es, hb_psdemux_t* state 
         if ( scr_delta > (90*700) || scr_delta < 0 )
         {
             ++state->scr_changes;
-            state->scr_offset += scr_delta - 1;
+            state->scr_offset += scr_delta - state->frame_duration;
         }
         state->last_scr = scr;
     }

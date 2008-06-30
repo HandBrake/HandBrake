@@ -43,6 +43,21 @@ hb_thread_t * hb_reader_init( hb_job_t * job )
     r->die   = job->die;
     r->sequence = 0;
 
+    /*
+     * when the scr changes we need to base the timing offset change on the
+     * end of the current video frame otherwise we'll map the first frame
+     * following the change over the current frame & it will be discarded.
+     * Since the PTS only gives the start of the frame we need the average
+     * frame duration to get its end. See the comments in the init_delay
+     * setup in libhb/encx264.c to understand the following code.
+     */
+    r->demux.frame_duration = 90000. * (double)job->vrate_base / (double)job->vrate;
+    if ( r->demux.frame_duration == 3753 )
+    {
+        r->demux.frame_duration = 4506;
+    }
+    r->demux.frame_duration += 3;
+
     return hb_thread_init( "reader", ReaderFunc, r,
                            HB_NORMAL_PRIORITY );
 }
@@ -158,7 +173,7 @@ static void ReaderFunc( void * _r )
 #define p state.param.working
 
             state.state = HB_STATE_WORKING;
-            p.progress = (float)chapter / (float)r->job->chapter_end;
+            p.progress = (double)chapter / (double)r->job->chapter_end;
             if( p.progress > 1.0 )
             {
                 p.progress = 1.0;

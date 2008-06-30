@@ -346,7 +346,7 @@ static int SyncVideo( hb_work_object_t * w )
          * can deal with overlaps of up to a frame time but anything larger
          * we handle by dropping frames here.
          */
-        if ( (int64_t)( next->start - pv->next_pts ) <= 0 )
+        if ( (int64_t)( next->start - cur->start ) <= 0 )
         {
             if ( pv->first_drop == 0 )
             {
@@ -365,9 +365,9 @@ static int SyncVideo( hb_work_object_t * w )
         if ( pv->first_drop )
         {
             hb_log( "sync: video time didn't advance - dropped %d frames "
-                    "(delta %d ms, current %lld, next %lld)",
-                    pv->drop_count, (int)( pv->next_pts - pv->first_drop ) / 90,
-                    pv->next_pts, pv->first_drop );
+                    "(delta %d ms, current %lld, next %lld, dur %d)",
+                    pv->drop_count, (int)( cur->start - pv->first_drop ) / 90,
+                    cur->start, next->start, (int)( next->start - cur->start ) );
             pv->first_drop = 0;
             pv->drop_count = 0;
         }
@@ -583,8 +583,8 @@ static int SyncVideo( hb_work_object_t * w )
              */
             buf_tmp = cur;
             pv->cur = cur = hb_fifo_get( job->fifo_raw );
-            pv->next_pts = next->start;
-            duration = next->start - buf_tmp->start;
+            pv->next_pts = cur->start;
+            duration = cur->start - buf_tmp->start;
             if ( duration <= 0 )
             {
                 hb_log( "sync: invalid video duration %lld, start %lld, next %lld",
