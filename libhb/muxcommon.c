@@ -40,7 +40,11 @@ static hb_track_t * GetTrack( hb_list_t * list )
         buf    = hb_fifo_see( track2->fifo );
         if( !buf )
         {
-            return NULL;
+            // To make sure we don't camp on one fifo & prevent the others
+            // from making progress we take the earliest data of all the
+            // data that's currently available but we don't care if some
+            // fifos don't have data.
+            continue;
         }
         if( !track || buf->start < pts )
         {
@@ -142,10 +146,8 @@ static void MuxerFunc( void * _mux )
         if( !( track = GetTrack( list ) ) )
         {
             hb_snooze( thread_sleep_interval );
-//			thread_sleep_interval += 1;
             continue;
         }
-//		thread_sleep_interval = MAX(1, (thread_sleep_interval - 1));
 
         buf = hb_fifo_get( track->fifo );
         if( job->pass == 0 || job->pass == 2 )
