@@ -303,11 +303,13 @@ on_quit1_activate(GtkMenuItem *quit, signal_user_data_t *ud)
     {
         if (cancel_encode("Closing HandBrake will terminate encoding.\n"))
         {
+			ghb_hb_cleanup();
 	        gtk_main_quit();
             return;
         }
         return;
     }
+	ghb_hb_cleanup();
 	gtk_main_quit();
 }
 
@@ -774,6 +776,7 @@ gboolean
 window_destroy_event_cb(GtkWidget *widget, GdkEvent *event, signal_user_data_t *ud)
 {
 	g_debug("window_destroy_event_cb ()\n");
+	ghb_hb_cleanup();
 	gtk_main_quit();
     return FALSE;
 }
@@ -786,11 +789,13 @@ window_delete_event_cb(GtkWidget *widget, GdkEvent *event, signal_user_data_t *u
     {
         if (cancel_encode("Closing HandBrake will terminate encoding.\n"))
         {
+			ghb_hb_cleanup();
 	        gtk_main_quit();
             return FALSE;
         }
         return TRUE;
     }
+	ghb_hb_cleanup();
 	gtk_main_quit();
     return FALSE;
 }
@@ -2613,6 +2618,7 @@ ghb_timer_cb(gpointer data)
 			current_id = -1;
 			if (ghb_autostart)
 			{
+				ghb_hb_cleanup();
 				gtk_main_quit();
 			}
         } break;

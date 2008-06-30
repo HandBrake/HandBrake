@@ -92,4 +92,6 @@ gint ghb_guess_bitrate(GHashTable *settings);
 gboolean ghb_validate_vquality(GHashTable *settings);
 gboolean ghb_validate_audio(signal_user_data_t *ud);
 gboolean ghb_validate_video(signal_user_data_t *ud);
+void ghb_hb_cleanup();
+
 #endif // _HBBACKEND_H_

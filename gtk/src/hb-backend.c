@@ -27,6 +27,7 @@
 #include "hb.h"
 #include "hbversion.h"
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 #include "hb-backend.h"
 #include "settings.h"
 #include "callbacks.h"
@@ -407,6 +408,31 @@ static const iso639_lang_t language_table[] =
 };
 #define	LANG_TABLE_SIZE (sizeof(language_table)/ sizeof(iso639_lang_t))
 
+static void
+del_tree(const gchar *name)
+{
+	const gchar *file;
+
+	if (g_file_test(name, G_FILE_TEST_IS_DIR))
+	{
+		GDir *gdir = g_dir_open(name, 0, NULL);
+		file = g_dir_read_name(gdir);
+		while (file)
+		{
+			gchar *path;
+			path = g_strdup_printf("%s/%s", name, file);
+			del_tree(path);
+			g_free(path);
+			file = g_dir_read_name(gdir);
+		}
+		g_rmdir(name);
+	}
+	else
+	{
+		g_unlink(name);
+	}
+}
+
 const gchar*
 ghb_version()
 {
@@ -461,6 +487,17 @@ get_amix_value(gint val)
 
 // Handle for libhb.  Gets set by ghb_backend_init()
 static hb_handle_t * h = NULL;
+
+extern void hb_get_tempory_directory(hb_handle_t *h, char path[512]);
+
+void
+ghb_hb_cleanup()
+{
+	char dir[512];
+
+	hb_get_tempory_directory(h, dir);
+	del_tree(dir);
+}
 
 static hb_audio_config_t*
 get_hb_audio(gint titleindex, gint track)
