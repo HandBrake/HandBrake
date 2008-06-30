@@ -73,7 +73,7 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("SVN1477")]
+        [global::System.Configuration.DefaultSettingValueAttribute("SVN1544")]
         public string hb_version {
             get {
                 return ((string)(this["hb_version"]));

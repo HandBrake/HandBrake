@@ -25,6 +25,7 @@ namespace Handbrake
         Functions.Common hb_common_func = new Functions.Common();
         Functions.x264Panel x264PanelFunctions = new Functions.x264Panel();
         Functions.CLI cliObj = new Functions.CLI();
+        Functions.Queue encodeQueue = new Functions.Queue();
         Parsing.Title selectedTitle;
         internal Process hbProc;
         private Parsing.DVD thisDVD;
@@ -56,8 +57,7 @@ namespace Handbrake
             // show the form, but leave disabled until preloading is complete then show the main form
             this.Enabled = false;
             this.Show();
-            // Forces frmMain to draw
-            Application.DoEvents();
+            Application.DoEvents(); // Forces frmMain to draw
 
             // update the status
             if (Properties.Settings.Default.updateStatus == "Checked")
@@ -342,7 +342,8 @@ namespace Handbrake
 
         private void mnu_encode_Click(object sender, EventArgs e)
         {
-            showQueue();
+            queueWindow.setQueue(encodeQueue);
+            queueWindow.Show();
         }
         private void mnu_viewDVDdata_Click(object sender, EventArgs e)
         {
@@ -441,19 +442,21 @@ namespace Handbrake
                 MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
-                String query;
+
+                String query = hb_common_func.GenerateTheQuery(this);
                 if (rtf_query.Text != "")
                     query = rtf_query.Text;
-                else
-                    query = hb_common_func.GenerateTheQuery(this);
 
-                queueWindow.list_queue.Items.Add(query);
+                encodeQueue.add(query);
+
+                queueWindow.setQueue(encodeQueue);
                 queueWindow.Show();
             }
         }
         private void btn_showQueue_Click(object sender, EventArgs e)
         {
-            showQueue();
+            queueWindow.setQueue(encodeQueue);
+            queueWindow.Show();
         }
         private void btn_ActivityWindow_Click(object sender, EventArgs e)
         {
@@ -1900,7 +1903,7 @@ namespace Handbrake
                     int normal = 0;
                     foreach (TreeNode treenode in treeView_presets.Nodes)
                     {
-                        if (treenode.ToString().Equals("TreeNode: Normal"))
+                        if (treenode.Text.ToString().Equals("Normal"))
                             normal = treenode.Index;
                     }
 
@@ -1987,12 +1990,6 @@ namespace Handbrake
                 x264PanelFunctions.X264_StandardizeOptString(this);
                 x264PanelFunctions.X264_SetCurrentSettingsInPanel(this);
             }
-        }
-
-        // Queue system functions
-        private void showQueue()
-        {
-            queueWindow.Show();
         }
         #endregion
 
