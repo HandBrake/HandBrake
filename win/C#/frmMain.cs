@@ -679,13 +679,16 @@ namespace Handbrake
             {
                 check_largeFile.Enabled = true;
                 check_optimiseMP4.Enabled = true;
+                check_iPodAtom.Enabled = true;
             }
             else
             {
                 check_largeFile.Enabled = false;
                 check_optimiseMP4.Enabled = false;
+                check_iPodAtom.Enabled = false;
                 check_largeFile.Checked = false;
                 check_optimiseMP4.Checked = false;
+                check_iPodAtom.Checked = false;
             }
 
 
