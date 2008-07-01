@@ -1548,7 +1548,7 @@
                                             <child>
                                               <object class="GtkComboBox" id="video_codec">
                                                 <property name="visible">True</property>
-                                                <signal handler="setting_widget_changed_cb" name="changed"/>
+                                                <signal handler="vcodec_changed_cb" name="changed"/>
                                               </object>
                                             </child>
                                           </object>

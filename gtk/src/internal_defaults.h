@@ -61,6 +61,7 @@
 "x264_deblock_alpha=0\n"
 "x264_mixed_refs=disable\n"
 "x264_trellis=off\n"
+"directqp=disable\n"
 "\n"
 "[Initialization]\n"
 "title=none\n"

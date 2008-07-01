@@ -439,6 +439,36 @@ ghb_version()
 	return HB_VERSION;
 }
 
+void
+ghb_vquality_range(signal_user_data_t *ud, gint *min, gint *max)
+{
+	if (ghb_settings_get_bool(ud->settings, "directqp"))
+	{
+		gint vcodec = ghb_settings_get_int(ud->settings, "video_codec");
+		// Only x264 and ffmpeg currently support direct qp/crf entry
+		if (vcodec == HB_VCODEC_X264)
+		{
+			*min = 0;
+			*max = 51;
+		}
+		else if (vcodec == HB_VCODEC_FFMPEG)
+		{
+			*min = 0;
+			*max = 31;
+		}
+		else
+		{
+			*min = 0;
+			*max = 100;
+		}
+	}
+	else
+	{
+		*min = 0;
+		*max = 100;
+	}
+}
+
 static setting_value_t*
 get_acodec_value(gint val)
 {
@@ -1889,13 +1919,8 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	{
 		width = crop_width;
 		height = crop_height;
-#if defined(ALLOW_UPSCALE)
-		max_width = 0;
-		max_height = 0;
-#else
 		max_width = crop_width;
 		max_height = crop_height;
-#endif
 	}
 	else
 	{
@@ -1913,19 +1938,7 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		}
 		if (!max_width)
 		{
-#if defined(ALLOW_UPSCALE)
-			if (anamorphic)
-			{
-				max_width = crop_width;
-			}
-			else
-			{
-				gdouble par = (gdouble)(title->height * aspect_n) / (title->width * aspect_d);
-				max_width = (crop_width * ((gdouble)max_height/crop_height) * par);
-			}
-#else
 			max_width = crop_width;
-#endif
 		}
 		height = MIN(height, max_height);
 		width = MIN(width, max_width);
@@ -2311,45 +2324,59 @@ ghb_validate_vquality(GHashTable *settings)
 {
 	gint vcodec;
 	gchar *message;
+	gint min, max;
 
 	if (ghb_settings_get_bool(settings, "nocheckvquality")) return TRUE;
 	vcodec = ghb_settings_get_int(settings, "video_codec");
 	if (ghb_settings_get_bool(settings, "vquality_type_constant"))
 	{
-		gint vquality = ghb_settings_get_dbl(settings, "video_quality");
-		if (vcodec != HB_VCODEC_X264 || ghb_settings_get_bool(settings, "linear_vquality"))
+		if (!ghb_settings_get_bool(settings, "directqp"))
 		{
-			if (vquality < 68 || vquality > 97)
+			if (vcodec != HB_VCODEC_X264 || 
+				ghb_settings_get_bool(settings, "linear_vquality"))
 			{
-				message = g_strdup_printf(
-							"Interesting video quality choise: %d\n\n"
-							"Typical values range from 68 (low) to 97 (high).\n"
-							"Are you sure you wish to use this setting?",
-							vquality);
-				if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message, "Cancel", "Continue"))
-				{
-					g_free(message);
-					return FALSE;
-				}
-				g_free(message);
+				min = 68;
+				max = 97;
+			}
+			else if (vcodec == HB_VCODEC_X264)
+			{
+				min = 40;
+				max = 70;
 			}
 		}
-		else if (vcodec == HB_VCODEC_X264)
+		else
 		{
-			if (vquality < 40 || vquality > 70)
+			if (vcodec == HB_VCODEC_X264)
 			{
-				message = g_strdup_printf(
-							"Interesting video quality choise: %d\n\n"
-							"Typical values range from 40 (low) to 70 (high).\n"
-							"Are you sure you wish to use this setting?",
-							vquality);
-				if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message, "Cancel", "Continue"))
-				{
-					g_free(message);
-					return FALSE;
-				}
-				g_free(message);
+				min = 16;
+				max = 30;
 			}
+			else if (vcodec == HB_VCODEC_FFMPEG)
+			{
+				min = 1;
+				max = 8;
+			}
+			else
+			{
+				min = 68;
+				max = 97;
+			}
+		}
+		gint vquality = ghb_settings_get_dbl(settings, "video_quality");
+		if (vquality < min || vquality > max)
+		{
+			message = g_strdup_printf(
+						"Interesting video quality choise: %d\n\n"
+						"Typical values range from %d to %d.\n"
+						"Are you sure you wish to use this setting?",
+						vquality, min, max);
+			if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message, 
+									"Cancel", "Continue"))
+			{
+				g_free(message);
+				return FALSE;
+			}
+			g_free(message);
 		}
 	}
 	return TRUE;
@@ -2504,28 +2531,32 @@ ghb_add_job(job_settings_t *js, gint unique_id)
 	}
 	if (ghb_settings_get_bool(settings, "vquality_type_constant"))
 	{
-		gdouble vquality = ghb_settings_get_dbl(settings, "video_quality") / 100.0;
-		if (ghb_settings_get_bool(settings, "linear_vquality"))
+		gdouble vquality = ghb_settings_get_dbl(settings, "video_quality");
+		if (!ghb_settings_get_bool(settings, "directqp"))
 		{
-			if (job->vcodec == HB_VCODEC_X264)
+			vquality /= 100.0;
+			if (ghb_settings_get_bool(settings, "linear_vquality"))
 			{
-				// Adjust to same range as xvid and ffmpeg
-				vquality = 31.0 - vquality * 31.0;
-				if (vquality > 0)
+				if (job->vcodec == HB_VCODEC_X264)
 				{
-					// Convert linear to log curve
-					vquality = 12 + 6 * log2(vquality);
-					if (vquality > 51) vquality = 51;
-					if (vquality < 1) vquality = 1;
+					// Adjust to same range as xvid and ffmpeg
+					vquality = 31.0 - vquality * 31.0;
+					if (vquality > 0)
+					{
+						// Convert linear to log curve
+						vquality = 12 + 6 * log2(vquality);
+						if (vquality > 51) vquality = 51;
+						if (vquality < 1) vquality = 1;
+					}
+					else
+						vquality = 0;
 				}
-				else
-					vquality = 0;
 			}
-		}
-		else
-		{
-			if (vquality == 0.0) vquality = 0.01;
-			if (vquality == 1.0) vquality = 0.0;
+			else
+			{
+				if (vquality == 0.0) vquality = 0.01;
+				if (vquality == 1.0) vquality = 0.0;
+			}
 		}
 		job->vquality =  vquality;
 		job->vbitrate = 0;
@@ -2837,20 +2868,6 @@ ghb_get_preview_image(gint titleindex, gint index, GHashTable *settings, gboolea
 	if (title->job == NULL) return NULL;
 	set_job_picture_settings(title->job, settings);
 
-#if defined(ALLOW_UPSCALE)
-	gdouble scale = 1;
-	if (title->job->width > title->width)
-		scale = (gdouble) title->job->width / title->width;
-	if (title->job->height > title->height)
-	{
-		gdouble tmp;
-		tmp = (gdouble) title->job->height / title->height;
-		if (tmp > scale)
-			scale = tmp;
-	}
-	title->job->width /= scale;
-	title->job->height /= scale;
-#else
 	// hb_get_preview can't handle sizes that are larger than the original title
 	// dimensions
 	if (title->job->width > title->width)
@@ -2858,7 +2875,6 @@ ghb_get_preview_image(gint titleindex, gint index, GHashTable *settings, gboolea
 	
 	if (title->job->height > title->height)
 		title->job->height = title->height;
-#endif	
 	// And also creates artifacts if the width is not a multiple of 8
 	//title->job->width = ((title->job->width + 4) >> 3) << 3;
 	// And the height must be a multiple of 2
@@ -2967,16 +2983,37 @@ ghb_get_preview_image(gint titleindex, gint index, GHashTable *settings, gboolea
 		else
 			dstHeight = dstHeight * par_height / par_width;
 	}
-#if defined(ALLOW_UPSCALE)
-	dstWidth = ((gdouble)dstWidth + scale/2) * scale;
-	dstHeight = ((gdouble)dstHeight + scale/2) * scale;
-#endif
 	
 	g_debug("scaled %d x %d\n", dstWidth, dstHeight);
 	GdkPixbuf *scaled_preview;
 	scaled_preview = gdk_pixbuf_scale_simple(preview, dstWidth, dstHeight, GDK_INTERP_HYPER);
 	g_object_unref (preview);
 	return scaled_preview;
+}
+
+static void
+sanitize_volname(gchar *name)
+{
+	gchar *a, *b;
+
+	a = b = name;
+	while (*b)
+	{
+		switch(*b)
+		{
+		case '<':
+			b++;
+			break;
+		case '>':
+			b++;
+			break;
+		default:
+			*a = *b;
+			a++; b++;
+			break;
+		}
+	}
+	*a = 0;
 }
 
 gchar*
@@ -2986,6 +3023,7 @@ ghb_dvd_volname(const gchar *device)
 	name = hb_dvd_name((gchar*)device);
 	if (name != NULL)
 	{
+		sanitize_volname(name);
 		return g_strdup(name);
 	}
 	return name;

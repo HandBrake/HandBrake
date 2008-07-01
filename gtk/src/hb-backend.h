@@ -60,6 +60,7 @@ typedef struct
 #define GHB_FRAMERATE 3
 
 const gchar* ghb_version();
+void ghb_vquality_range(signal_user_data_t *ud, gint *min, gint *max);
 //const gchar* ghb_get_rate_string(gint rate, gint type);
 void ghb_backend_init(GtkBuilder *builder, gint debug, gint update);
 void ghb_add_job(job_settings_t *js, gint unique_id);

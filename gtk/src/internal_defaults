@@ -61,6 +61,7 @@ x264_me=umh
 x264_deblock_alpha=0
 x264_mixed_refs=disable
 x264_trellis=off
+directqp=disable
 
 [Initialization]
 title=none

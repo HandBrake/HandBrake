@@ -1212,6 +1212,19 @@ setting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 void
+vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	gint vqmin, vqmax;
+
+	ghb_widget_to_setting(ud->settings, widget);
+	check_depencency(ud, widget);
+	clear_presets_selection(ud);
+	ghb_vquality_range(ud, &vqmin, &vqmax);
+	GtkWidget *qp = GHB_WIDGET(ud->builder, "video_quality");
+	gtk_range_set_range (GTK_RANGE(qp), vqmin, vqmax);
+}
+
+void
 vfr_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	//const gchar *name = gtk_widget_get_name(widget);
@@ -1949,6 +1962,11 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
 			sensitive = TRUE;
 		}
 		ud->dont_clear_presets = TRUE;
+		// Temporarily set the video_quality range to (0,100)
+		// This is needed so the video_quality value does not get
+		// truncated when set.  The range will be readjusted below
+		GtkWidget *qp = GHB_WIDGET(ud->builder, "video_quality");
+		gtk_range_set_range (GTK_RANGE(qp), 0, 100);
 		ghb_set_preset(ud, preset);
 		gint titleindex = ghb_settings_get_int(ud->settings, "title");
 		set_pref_audio(titleindex, ud);
@@ -1958,6 +1976,10 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
 			preset_update_title_deps(ud, &tinfo);
 		}
 		ghb_set_scale (ud, GHB_SCALE_KEEP_NONE);
+
+		gint vqmin, vqmax;
+		ghb_vquality_range(ud, &vqmin, &vqmax);
+		gtk_range_set_range (GTK_RANGE(qp), vqmin, vqmax);
 	}
 	else
 	{
