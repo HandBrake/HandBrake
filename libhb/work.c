@@ -297,9 +297,12 @@ static void do_job( hb_job_t * job, int cpu_count )
         final_w = w;
     }
 
-    /* Video encoder */
-    switch( job->vcodec )
+    if( !job->indepth_scan )
     {
+
+        /* Video encoder */
+        switch( job->vcodec )
+        {
         case HB_VCODEC_FFMPEG:
             hb_log( " + encoder FFmpeg" );
             w = hb_get_work( WORK_ENCAVCODEC );
@@ -318,14 +321,13 @@ static void do_job( hb_job_t * job, int cpu_count )
             hb_log( " + encoder Theora" );
             w = hb_get_work( WORK_ENCTHEORA );
             break;
-    }
-    w->fifo_in  = job->fifo_render;
-    w->fifo_out = job->fifo_mpeg4;
-    w->config   = &job->config;
+        }
+        w->fifo_in  = job->fifo_render;
+        w->fifo_out = job->fifo_mpeg4;
+        w->config   = &job->config;
 
-    hb_list_add( job->list_work, w );
-    if ( !job->indepth_scan )
-    {
+        hb_list_add( job->list_work, w );
+
         /*
          * if we're not doing a subtitle scan the last thread in the
          * processing pipeline is the encoder - remember it so we can
@@ -386,6 +388,8 @@ static void do_job( hb_job_t * job, int cpu_count )
         }
     }
 
+    if( !job->indepth_scan )
+    {
     /* if we are doing passthru, and the input codec is not the same as the output
      * codec, then remove this audio from the job */
     /* otherwise, Bad Things will happen */
@@ -628,6 +632,8 @@ static void do_job( hb_job_t * job, int cpu_count )
         }
     }
 
+    }
+
     /* Init read & write threads */
     job->reader = hb_reader_init( job );
 
@@ -642,7 +648,12 @@ static void do_job( hb_job_t * job, int cpu_count )
         w = hb_list_item( job->list_work, i );
         w->done = &job->done;
         w->thread_sleep_interval = 10;
-        w->init( w, job );
+        if( w->init( w, job ) )
+        {
+            hb_error( "Failure to initialise thread '%s'", w->name );
+            *job->die = 1;
+            goto cleanup;
+        }
         w->thread = hb_thread_init( w->name, work_loop, w,
                                     HB_LOW_PRIORITY );
     }
