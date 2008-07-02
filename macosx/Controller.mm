@@ -1160,7 +1160,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     else // User clicked Cancel in browse window
     {
         /* if we have a title loaded up */
-        if ([[fSrcDVD2Field stringValue] length] > 0)
+        if ([[fSrcDVD2Field stringValue] length] > 0 && SuccessfulScan)
         {
             [self enableUI: YES];
         }
@@ -1276,7 +1276,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     else
     {
             /* if we have a title loaded up */
-        if ([[fSrcDVD2Field stringValue] length] > 0)
+        if ([[fSrcDVD2Field stringValue] length] > 0 && SuccessfulScan)
         {
             [self enableUI: YES];
         }
