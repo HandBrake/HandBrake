@@ -1448,7 +1448,8 @@ namespace Handbrake
         }
         private void btn_removePreset_Click(object sender, EventArgs e)
         {
-            presetHandler.remove(treeView_presets.SelectedNode.Text);
+            if (treeView_presets.SelectedNode != null)
+                presetHandler.remove(treeView_presets.SelectedNode.Text);
             // Now reload the preset panel
             loadPresetPanel();
         }
