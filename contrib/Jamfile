@@ -78,6 +78,7 @@ LibFaad2 $(SUBDIR)/lib/libfaad.a : $(SUBDIR)/faad2.tar.gz ;
 rule LibAvCodec
 {
     FFMPEG_PATCH = "$(PATCH) -p0 < ../patch-ffmpeg.patch" ;
+    FFMPEG_PATCH += " && $(PATCH) -p0 < ../patch-ffmpeg-latm.patch " ;
     if $(OS) = CYGWIN
     {
         FFMPEG_PATCH += " && $(PATCH) -p1 < ../patch-ffmpeg-cygwin.patch " ;

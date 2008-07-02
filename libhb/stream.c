@@ -51,7 +51,7 @@ static const stream2codec_t st2codec[256] = {
     st(0x0e, U, 0,                 0,              "ISO 13818-1 auxiliary"),
     st(0x0f, A, HB_ACODEC_MPGA,    CODEC_ID_AAC,   "ISO 13818-7 AAC Audio"),
     st(0x10, V, WORK_DECAVCODECV,  CODEC_ID_MPEG4, "MPEG4"),
-    st(0x11, A, HB_ACODEC_MPGA,    CODEC_ID_AAC,   "MPEG4 LATM AAC"),
+    st(0x11, A, HB_ACODEC_MPGA,    CODEC_ID_AAC_LATM, "MPEG4 LATM AAC"),
     st(0x12, U, 0,                 0,              "MPEG4 generic"),
 
     st(0x14, U, 0,                 0,              "ISO 13818-6 DSM-CC download"),
