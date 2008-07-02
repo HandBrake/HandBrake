@@ -27,11 +27,12 @@ namespace Handbrake
         Functions.CLI cliObj = new Functions.CLI();
         Functions.Queue encodeQueue = new Functions.Queue();
         Parsing.Title selectedTitle;
+        Functions.Presets presetHandler = new Functions.Presets();
         internal Process hbProc;
         private Parsing.DVD thisDVD;
         private frmQueue queueWindow = new frmQueue();
         private delegate void updateStatusChanger();
-        
+
         // Applicaiton Startup ************************************************
 
         #region Application Startup
@@ -321,7 +322,7 @@ namespace Handbrake
                     // Close the stream
                     line.Close();
 
-                    Form preset = new frmAddPreset(this);
+                    Form preset = new frmAddPreset(this, presetHandler);
                     preset.ShowDialog();
 
                 }
@@ -362,7 +363,6 @@ namespace Handbrake
 
         private void mnu_presetReset_Click(object sender, EventArgs e)
         {
-            treeView_presets.Nodes.Clear();
             cliObj.grabCLIPresets();
             loadPresetPanel();
             if (treeView_presets.Nodes.Count == 0)
@@ -370,11 +370,27 @@ namespace Handbrake
             else
                 MessageBox.Show("Presets have been updated!", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+        private void mnu_delete_preset_Click(object sender, EventArgs e)
+        {
+            // Empty the preset file
+            string presetsFile = Application.StartupPath.ToString() + "\\presets.dat";
+            StreamWriter line = new StreamWriter(presetsFile);
+            line.WriteLine("");
+            line.Close();
+            line.Dispose();
+
+            // Reload the preset panel
+            loadPresetPanel();
+        }
         private void mnu_SelectDefault_Click(object sender, EventArgs e)
         {
             loadNormalPreset();
         }
-
+        private void btn_new_preset_Click(object sender, EventArgs e)
+        {
+            Form preset = new frmAddPreset(this, presetHandler);
+            preset.ShowDialog();
+        }
         #endregion
 
         #region Help Menu
@@ -519,7 +535,7 @@ namespace Handbrake
 
             }
         }
-       
+
 
         private void drp_dvdtitle_Click(object sender, EventArgs e)
         {
@@ -1427,61 +1443,12 @@ namespace Handbrake
         // Presets
         private void btn_addPreset_Click(object sender, EventArgs e)
         {
-            Form preset = new frmAddPreset(this);
+            Form preset = new frmAddPreset(this, presetHandler);
             preset.ShowDialog();
         }
         private void btn_removePreset_Click(object sender, EventArgs e)
         {
-            ArrayList user_presets = new ArrayList();
-            ArrayList modified_presets_list = new ArrayList();
-            string selectedPreset = null;
-            selectedPreset = treeView_presets.SelectedNode.Text;
-
-            if (!selectedPreset.StartsWith("--"))
-                MessageBox.Show("Sorry, You can not remove any of the built in presets.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-
-            // Scan through the users presets and dump them all in an arraylist
-            string userPresets = Application.StartupPath.ToString() + "\\user_presets.dat";
-            if (File.Exists(userPresets))
-            {
-                StreamReader presetInput = new StreamReader(userPresets);
-                while (!presetInput.EndOfStream)
-                {
-                    if ((char)presetInput.Peek() == '+')
-                    {
-                        string item = presetInput.ReadLine();
-                        user_presets.Add(item);
-                        modified_presets_list.Add(item);
-                    }
-                    else
-                        presetInput.ReadLine();
-                }
-
-                presetInput.Close();
-                presetInput.Dispose();
-            }
-
-            // now lets scan through the arraylist and remove the preset with the
-            // same name as the one selected.
-            int c = 0;
-            foreach (string item in user_presets)
-            {
-                string preset_name = "+ " + selectedPreset.Replace("--", "").Trim() + ":";
-                if (item.Contains(preset_name))
-                    modified_presets_list.RemoveAt(c);
-                c++;
-            }
-
-            // Now we need to rebuilt the user presets file.
-            StreamWriter line = new StreamWriter(userPresets);
-            foreach (string item in modified_presets_list)
-            {
-                line.WriteLine(item);
-            }
-            line.Close();
-            line.Dispose();
-
+            presetHandler.remove(treeView_presets.SelectedNode.Text);
             // Now reload the preset panel
             loadPresetPanel();
         }
@@ -1495,51 +1462,22 @@ namespace Handbrake
         }
         private void treeView_presets_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            //When the user select a preset from the treeview, load it
-            try
-            {
-                // Scan through the built in presets
-                string builtInPresets = Application.StartupPath.ToString() + "\\presets.dat";
-                if (File.Exists(builtInPresets))
-                {
-                    StreamReader presetInput = new StreamReader(builtInPresets);
-                    while (!presetInput.EndOfStream)
-                    {
-                        if ((char)presetInput.Peek() == '+')
-                        {
-                            string preset = presetInput.ReadLine().Replace("+ ", "");
-                            checkSelectedPreset(preset);
-                        }
-                        else
-                            presetInput.ReadLine();
-                    }
-                    presetInput.Close();
-                }
+            // Ok, so, we've selected a preset. Now we want to load it.
+            string presetName = treeView_presets.SelectedNode.Text;
+            string query = presetHandler.getCliForPreset(presetName);
 
-                // Scan through the users presets
-                string userPresets = Application.StartupPath.ToString() + "\\user_presets.dat";
-                if (File.Exists(userPresets))
-                {
-                    StreamReader presetInput = new StreamReader(userPresets);
-                    while (!presetInput.EndOfStream)
-                    {
-                        if ((char)presetInput.Peek() == '+')
-                        {
-                            string preset = presetInput.ReadLine().Replace("+ ", "");
-                            checkSelectedPreset(preset);
-                        }
-                        else
-                            presetInput.ReadLine();
-                    }
+            //Ok, Reset all the H264 widgets before changing the preset
+            x264PanelFunctions.reset2Defaults(this);
 
-                    presetInput.Close();
-                    presetInput.Dispose();
-                }
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            // Send the query from the file to the Query Parser class
+            Functions.QueryParser presetQuery = Functions.QueryParser.Parse(query);
+
+            // Now load the preset
+            hb_common_func.presetLoader(this, presetQuery, presetName);
+
+            // The x264 widgets will need updated, so do this now:
+            x264PanelFunctions.X264_StandardizeOptString(this);
+            x264PanelFunctions.X264_SetCurrentSettingsInPanel(this);
         }
 
         #endregion
@@ -1882,116 +1820,37 @@ namespace Handbrake
         }
 
         // Preset system functions
-        private void addPresetToList(ArrayList presetNameList)
-        {
-            // Adds a new preset name to the preset list.
-            TreeNode preset_treeview = new TreeNode();
-            foreach (string[] preset in presetNameList)
-            {
-                preset_treeview = new TreeNode(preset[0]);
-
-                // Now Fill Out List View with Items
-                treeView_presets.Nodes.Add(preset_treeview);
-            }
-        }
         private void loadNormalPreset()
         {
-            //Loads the preset called "normal"
-            try
+            // Select the "Normal" preset if it exists.
+            int normal = -1;
+            foreach (TreeNode treenode in treeView_presets.Nodes)
             {
-                string appPath = Application.StartupPath.ToString() + "\\presets.dat";
-                if (File.Exists(appPath))
-                {
-
-                    int normal = 0;
-                    foreach (TreeNode treenode in treeView_presets.Nodes)
-                    {
-                        if (treenode.Text.ToString().Equals("Normal"))
-                            normal = treenode.Index;
-                    }
-
-                    TreeNode np = treeView_presets.Nodes[normal];
-
-                    treeView_presets.SelectedNode = np;
-                }
+                if (treenode.Text.ToString().Equals("Normal"))
+                    normal = treenode.Index;
             }
-            catch (Exception)
+            if (normal != -1)
             {
-                // Do nothing
+                TreeNode np = treeView_presets.Nodes[normal];
+                treeView_presets.SelectedNode = np;
             }
         }
         public void loadPresetPanel()
         {
+            presetHandler.loadPresetFiles();
+
             treeView_presets.Nodes.Clear();
             ArrayList presetNameList = new ArrayList();
+            presetNameList = presetHandler.getPresetNames();
 
-            // Load in the built in presets from presets.dat
-            string filePath = Application.StartupPath.ToString() + "\\presets.dat";
-            if (File.Exists(filePath))
+            // Adds a new preset name to the preset list.
+            TreeNode preset_treeview = new TreeNode();
+            foreach (string preset in presetNameList)
             {
-                StreamReader presetInput = new StreamReader(filePath);
-                while (!presetInput.EndOfStream)
-                {
-                    if ((char)presetInput.Peek() == '+')
-                    {
-                        string preset = presetInput.ReadLine().Replace("+ ", "");
-                        Regex r = new Regex("(:  )"); // Split on hyphens. 
-                        presetNameList.Add(r.Split(preset));
-                    }
-                    else
-                        presetInput.ReadLine();
-                }
+                preset_treeview = new TreeNode(preset);
 
-                presetInput.Close();
-                presetInput.Dispose();
-            }
-            addPresetToList(presetNameList);
-            presetNameList.Clear();
-
-            // Load in the users presets from user_presets.dat
-            filePath = Application.StartupPath.ToString() + "\\user_presets.dat";
-            if (File.Exists(filePath))
-            {
-                StreamReader presetInput = new StreamReader(filePath);
-                while (!presetInput.EndOfStream)
-                {
-                    if ((char)presetInput.Peek() == '+')
-                    {
-                        string preset = "--" + presetInput.ReadLine().Replace("+ ", "");
-                        Regex r = new Regex("(:  )"); // Split on hyphens. 
-                        presetNameList.Add(r.Split(preset));
-                    }
-                    else
-                        presetInput.ReadLine();
-                }
-
-                presetInput.Close();
-                presetInput.Dispose();
-            }
-            addPresetToList(presetNameList);
-        }
-        private void checkSelectedPreset(string preset)
-        {
-            string selectedPreset = null;
-            selectedPreset = treeView_presets.SelectedNode.Text;
-
-            Regex r = new Regex("(:  )"); // Split on hyphens. 
-            string[] presetName = r.Split(preset);
-
-            if ((selectedPreset == (presetName[0])) || (selectedPreset == ("--" + presetName[0])))
-            {
-                //Ok, Reset all the H264 widgets before changing the preset
-                x264PanelFunctions.reset2Defaults(this);
-
-                // Send the query from the file to the Query Parser class
-                Functions.QueryParser presetQuery = Functions.QueryParser.Parse(preset);
-
-                // Now load the preset
-                hb_common_func.presetLoader(this, presetQuery, selectedPreset);
-
-                // The x264 widgets will need updated, so do this now:
-                x264PanelFunctions.X264_StandardizeOptString(this);
-                x264PanelFunctions.X264_SetCurrentSettingsInPanel(this);
+                // Now Fill Out List View with Items
+                treeView_presets.Nodes.Add(preset_treeview);
             }
         }
         #endregion
@@ -2000,7 +1859,7 @@ namespace Handbrake
 
         // Declarations
         private delegate void UpdateUIHandler();
-    
+
         // Encoding Functions
         private void procMonitor(object state)
         {
@@ -2083,7 +1942,6 @@ namespace Handbrake
         }
 
         #endregion
-
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

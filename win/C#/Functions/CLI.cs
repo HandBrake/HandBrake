@@ -116,10 +116,15 @@ namespace Handbrake.Functions
         /// </summary>
         public void grabCLIPresets()
         {
-            // Gets the presets from the CLI and stores them in presets.dat
-            string appPath = Application.StartupPath.ToString() + "\\";
-            string strCmdLine = "cmd /c " + '"' + '"' + appPath + "HandBrakeCLI.exe" + '"' + " --preset-list >" + '"' + appPath + "presets.dat" + '"' + " 2>&1" + '"';
-            Process hbproc = Process.Start("CMD.exe", strCmdLine);
+            string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
+            string presetsPath = Path.Combine(Application.StartupPath, "presets.dat");
+
+            string strCmdLine = String.Format(@"cmd /c """"{0}"" --preset-list >""{1}"" 2>&1""", handbrakeCLIPath, presetsPath);
+
+            ProcessStartInfo hbGetPresets = new ProcessStartInfo("CMD.exe", strCmdLine);
+            hbGetPresets.WindowStyle = ProcessWindowStyle.Hidden;
+
+            Process hbproc = Process.Start(hbGetPresets);
             hbproc.WaitForExit();
             hbproc.Dispose();
             hbproc.Close();

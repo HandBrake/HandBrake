@@ -38,7 +38,7 @@ namespace Handbrake
             System.Windows.Forms.Label Label38;
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
@@ -263,6 +263,8 @@ namespace Handbrake
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             this.lbl_encode = new System.Windows.Forms.ToolStripLabel();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.mnu_delete_preset = new System.Windows.Forms.ToolStripMenuItem();
+            this.btn_new_preset = new System.Windows.Forms.ToolStripMenuItem();
             Label38 = new System.Windows.Forms.Label();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             notifyIconMenu.SuspendLayout();
@@ -647,9 +649,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Format = "N0";
+            dataGridViewCellStyle2.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle2;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -1092,9 +1094,11 @@ namespace Handbrake
             // PresetsToolStripMenuItem
             // 
             this.PresetsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnu_SelectDefault,
+            this.mnu_presetReset,
+            this.mnu_delete_preset,
             this.toolStripSeparator7,
-            this.mnu_presetReset});
+            this.btn_new_preset,
+            this.mnu_SelectDefault});
             this.PresetsToolStripMenuItem.Name = "PresetsToolStripMenuItem";
             this.PresetsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.PresetsToolStripMenuItem.Text = "&Presets";
@@ -3019,6 +3023,20 @@ namespace Handbrake
             this.notifyIcon.Text = "HandBrake";
             this.notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseDoubleClick);
             // 
+            // mnu_delete_preset
+            // 
+            this.mnu_delete_preset.Name = "mnu_delete_preset";
+            this.mnu_delete_preset.Size = new System.Drawing.Size(215, 22);
+            this.mnu_delete_preset.Text = "Delete Built-in Presets";
+            this.mnu_delete_preset.Click += new System.EventHandler(this.mnu_delete_preset_Click);
+            // 
+            // btn_new_preset
+            // 
+            this.btn_new_preset.Name = "btn_new_preset";
+            this.btn_new_preset.Size = new System.Drawing.Size(215, 22);
+            this.btn_new_preset.Text = "New Preset";
+            this.btn_new_preset.Click += new System.EventHandler(this.btn_new_preset_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3303,6 +3321,8 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripMenuItem btn_dvd_source;
         private System.Windows.Forms.ToolStripMenuItem btn_file_source;
         private System.Windows.Forms.ToolStripLabel lbl_encode;
+        private System.Windows.Forms.ToolStripMenuItem mnu_delete_preset;
+        private System.Windows.Forms.ToolStripMenuItem btn_new_preset;
 
     }
 }
