@@ -25,6 +25,7 @@ namespace Handbrake
         private frmMain mainWindow;
         private Parsing.DVD thisDvd;
         private delegate void UpdateUIHandler();
+        Process hbproc;
         Functions.Common hb_common_func = new Functions.Common();
 
         public frmReadDVD(string inputFile, frmMain parent)
@@ -62,15 +63,15 @@ namespace Handbrake
                 mainWindow.setStreamReader(thisDvd);
 
                 mainWindow.drp_dvdtitle.Items.Clear();
-                mainWindow.drp_dvdtitle.Items.AddRange(thisDvd.Titles.ToArray());
+                if (thisDvd.Titles.Count != 0)
+                    mainWindow.drp_dvdtitle.Items.AddRange(thisDvd.Titles.ToArray());
                 mainWindow.drp_dvdtitle.Text = "Automatic";
                 mainWindow.drop_chapterFinish.Text = "Auto";
                 mainWindow.drop_chapterStart.Text = "Auto";
 
                 // Now select the longest title
-                hb_common_func.selectLongestTitle(mainWindow);
-
-                
+                if (thisDvd.Titles.Count != 0)
+                    hb_common_func.selectLongestTitle(mainWindow);
 
                 this.Close();
             }
@@ -98,10 +99,10 @@ namespace Handbrake
 
                 ProcessStartInfo hbParseDvd = new ProcessStartInfo("CMD.exe", strCmdLine);
                 hbParseDvd.WindowStyle = ProcessWindowStyle.Hidden;
-                using (Process hbproc = Process.Start(hbParseDvd))
+              
+                using (hbproc = Process.Start(hbParseDvd))
                 {
                     hbproc.WaitForExit();
-                    // TODO: Verify exit code if the CLI supports it properly
                 }
 
                 if (!File.Exists(dvdInfoPath))
@@ -124,6 +125,33 @@ namespace Handbrake
                 this.Close();
             }
 
+        }
+
+        private void btn_cancel_Click(object sender, EventArgs e)
+        {
+            // This may seem like a long way of killing HandBrakeCLI, but for whatever reason,
+            // hbproc.kill/close just won't do the trick.
+            try
+            {
+                string AppName = "HandBrakeCLI";
+
+                AppName = AppName.ToUpper();
+
+                System.Diagnostics.Process[] prs = System.Diagnostics.Process.GetProcesses();
+                foreach (System.Diagnostics.Process proces in prs)
+                {
+                    if (proces.ProcessName.ToUpper() == AppName)
+                    {
+                        proces.Refresh();
+                        if (!proces.HasExited)
+                            proces.Kill();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

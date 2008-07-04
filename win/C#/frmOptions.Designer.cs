@@ -61,6 +61,8 @@ namespace Handbrake
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.label7 = new System.Windows.Forms.Label();
             this.pathFinder = new System.Windows.Forms.FolderBrowserDialog();
+            this.label6 = new System.Windows.Forms.Label();
+            this.btn_drive_detect = new System.Windows.Forms.CheckBox();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -74,7 +76,7 @@ namespace Handbrake
             this.btn_close.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(324, 305);
+            this.btn_close.Location = new System.Drawing.Point(324, 327);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(107, 22);
             this.btn_close.TabIndex = 53;
@@ -119,7 +121,7 @@ namespace Handbrake
             this.tab_options.Location = new System.Drawing.Point(12, 63);
             this.tab_options.Name = "tab_options";
             this.tab_options.SelectedIndex = 0;
-            this.tab_options.Size = new System.Drawing.Size(419, 236);
+            this.tab_options.Size = new System.Drawing.Size(419, 258);
             this.tab_options.TabIndex = 58;
             // 
             // tab_general
@@ -188,6 +190,8 @@ namespace Handbrake
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.btn_drive_detect);
+            this.tabPage1.Controls.Add(this.label6);
             this.tabPage1.Controls.Add(this.btn_browse);
             this.tabPage1.Controls.Add(this.label10);
             this.tabPage1.Controls.Add(this.text_an_path);
@@ -198,7 +202,7 @@ namespace Handbrake
             this.tabPage1.Controls.Add(this.label5);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(411, 210);
+            this.tabPage1.Size = new System.Drawing.Size(411, 232);
             this.tabPage1.TabIndex = 3;
             this.tabPage1.Text = "General";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -238,7 +242,7 @@ namespace Handbrake
             // 
             this.check_autoNaming.AutoSize = true;
             this.check_autoNaming.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_autoNaming.Location = new System.Drawing.Point(17, 103);
+            this.check_autoNaming.Location = new System.Drawing.Point(17, 101);
             this.check_autoNaming.Name = "check_autoNaming";
             this.check_autoNaming.Size = new System.Drawing.Size(340, 17);
             this.check_autoNaming.TabIndex = 56;
@@ -380,9 +384,31 @@ namespace Handbrake
             this.label7.TabIndex = 59;
             this.label7.Text = "Modify program options.";
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(14, 182);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(108, 13);
+            this.label6.TabIndex = 63;
+            this.label6.Text = "Drive Detection";
+            // 
+            // btn_drive_detect
+            // 
+            this.btn_drive_detect.AutoSize = true;
+            this.btn_drive_detect.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_drive_detect.Location = new System.Drawing.Point(17, 204);
+            this.btn_drive_detect.Name = "btn_drive_detect";
+            this.btn_drive_detect.Size = new System.Drawing.Size(383, 17);
+            this.btn_drive_detect.TabIndex = 64;
+            this.btn_drive_detect.Text = "Enable Drive Detection in the \"Source\" button dropdown menu";
+            this.btn_drive_detect.UseVisualStyleBackColor = true;
+            this.btn_drive_detect.CheckedChanged += new System.EventHandler(this.btn_drive_detect_CheckedChanged);
+            // 
             // frmOptions
             // 
-            this.ClientSize = new System.Drawing.Size(443, 339);
+            this.ClientSize = new System.Drawing.Size(443, 357);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.pictureBox2);
@@ -437,5 +463,7 @@ namespace Handbrake
         internal System.Windows.Forms.Label Label11;
         internal System.Windows.Forms.Label Label4;
         internal System.Windows.Forms.ComboBox drp_processors;
+        internal System.Windows.Forms.CheckBox btn_drive_detect;
+        private System.Windows.Forms.Label label6;
     }
 }

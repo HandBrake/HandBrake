@@ -117,7 +117,7 @@ namespace Handbrake
                     line = sr.ReadLine();
                 }
                 sr.Close();
-
+                sr.Dispose();
             }
             catch (Exception exc)
             {

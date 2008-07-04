@@ -395,17 +395,13 @@ namespace Handbrake
 
         #region Help Menu
 
-        private void mnu_wiki_Click(object sender, EventArgs e)
+        private void mnu_handbrake_forums_Click(object sender, EventArgs e)
         {
-            Process.Start("http://handbrake.fr/trac");
+            Process.Start("http://forum.handbrake.fr/");
         }
-        private void mnu_faq_Click(object sender, EventArgs e)
+        private void mnu_user_guide_Click_1(object sender, EventArgs e)
         {
-            Process.Start("http://handbrake.fr/trac/wiki/SupportFAQ");
-        }
-        private void mnu_onlineDocs_Click(object sender, EventArgs e)
-        {
-            Process.Start("http://handbrake.fr/?article=documentation");
+            Process.Start("http://trac.handbrake.fr/wiki/HandBrakeGuide");
         }
         private void mnu_handbrake_home_Click(object sender, EventArgs e)
         {
@@ -435,6 +431,17 @@ namespace Handbrake
         #region Actions
 
         // ToolBar
+        private void btn_source_Click(object sender, EventArgs e)
+        {
+            if (Properties.Settings.Default.drive_detection == "Checked")
+            {
+                mnu_dvd_drive.Visible = true;
+                Thread driveInfoThread = new Thread(getDriveInfoThread);
+                driveInfoThread.Start();
+            }
+            else
+                mnu_dvd_drive.Visible = false;
+        }
         private void btn_start_Click(object sender, EventArgs e)
         {
             if (text_source.Text == "" || text_source.Text == "Click 'Source' to continue" || text_destination.Text == "")
@@ -535,7 +542,23 @@ namespace Handbrake
 
             }
         }
+        private void mnu_dvd_drive_Click(object sender, EventArgs e)
+        {
+            String filename = "";
+            if (mnu_dvd_drive.Text.Contains("VIDEO_TS"))
+            {
+                string[] path = mnu_dvd_drive.Text.Split(' ');
+                filename = path[0];
+                Form frmRD = new frmReadDVD(filename, this);
+                text_source.Text = filename;
+                frmRD.ShowDialog();
+            }
 
+            // If there are no titles in the dropdown menu then the scan has obviously failed. Display an error message explaining to the user.
+            if (drp_dvdtitle.Items.Count == 0)
+                MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source. Please refer to the FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+
+        }
 
         private void drp_dvdtitle_Click(object sender, EventArgs e)
         {
@@ -1854,6 +1877,46 @@ namespace Handbrake
                 treeView_presets.Nodes.Add(preset_treeview);
             }
         }
+
+        // Source Button Drive Detection
+        private delegate void ProgressUpdateHandler();
+        private void getDriveInfoThread()
+        {
+            try
+            {
+                if (this.InvokeRequired)
+                {
+                    this.BeginInvoke(new ProgressUpdateHandler(getDriveInfoThread));
+                    return;
+                }
+
+                Boolean foundDrive = false;
+                DriveInfo[] theCollectionOfDrives = DriveInfo.GetDrives();
+                foreach (DriveInfo curDrive in theCollectionOfDrives)
+                {
+                    if (curDrive.DriveType == DriveType.CDRom)
+                    {
+                        if (curDrive.IsReady)
+                        {
+                            if (File.Exists(curDrive.RootDirectory.ToString() + "VIDEO_TS\\VIDEO_TS.IFO"))
+                                mnu_dvd_drive.Text = curDrive.RootDirectory.ToString() + "VIDEO_TS (" + curDrive.VolumeLabel + ")";
+                            else
+                                mnu_dvd_drive.Text = "[No DVD Drive Ready]";
+
+                            foundDrive = true;
+
+                        }
+                    }
+                }
+
+                if (foundDrive == false)
+                    mnu_dvd_drive.Text = "[No DVD Drive Ready]";
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("Drive Detection Error. \n Error Information: \n\n " + exc.ToString());
+            }
+        }
         #endregion
 
         #region Encoding and Queue
@@ -1943,7 +2006,7 @@ namespace Handbrake
         }
 
         #endregion
-
+        
         // This is the END of the road ------------------------------------------------------------------------------
     }
 }

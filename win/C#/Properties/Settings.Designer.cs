@@ -190,5 +190,17 @@ namespace Handbrake.Properties {
                 this["appcast_unstable"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Checked")]
+        public string drive_detection {
+            get {
+                return ((string)(this["drive_detection"]));
+            }
+            set {
+                this["drive_detection"] = value;
+            }
+        }
     }
 }

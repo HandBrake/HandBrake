@@ -38,6 +38,7 @@ namespace Handbrake
             this.Label3 = new System.Windows.Forms.Label();
             this.lbl_status = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.btn_cancel = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -71,12 +72,27 @@ namespace Handbrake
             this.pictureBox1.TabIndex = 32;
             this.pictureBox1.TabStop = false;
             // 
+            // btn_cancel
+            // 
+            this.btn_cancel.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_cancel.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_cancel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_cancel.Location = new System.Drawing.Point(323, 51);
+            this.btn_cancel.Name = "btn_cancel";
+            this.btn_cancel.Size = new System.Drawing.Size(58, 22);
+            this.btn_cancel.TabIndex = 33;
+            this.btn_cancel.TabStop = false;
+            this.btn_cancel.Text = "Cancel";
+            this.btn_cancel.UseVisualStyleBackColor = true;
+            this.btn_cancel.Click += new System.EventHandler(this.btn_cancel_Click);
+            // 
             // frmReadDVD
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(360, 81);
+            this.ClientSize = new System.Drawing.Size(393, 83);
             this.ControlBox = false;
+            this.Controls.Add(this.btn_cancel);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.lbl_status);
             this.Controls.Add(this.Label3);
@@ -100,5 +116,6 @@ namespace Handbrake
         internal System.Windows.Forms.Label Label3;
         internal System.Windows.Forms.Label lbl_status;
         private System.Windows.Forms.PictureBox pictureBox1;
+        internal System.Windows.Forms.Button btn_cancel;
     }
 }

@@ -22,6 +22,7 @@ namespace Handbrake
         public frmOptions()
         {
             InitializeComponent();
+            
             if (Properties.Settings.Default.updateStatus == "Checked")
             {
                 check_updateCheck.CheckState = CheckState.Checked;
@@ -43,6 +44,11 @@ namespace Handbrake
             if (Properties.Settings.Default.autoNaming == "Checked")
             {
                 check_autoNaming.CheckState = CheckState.Checked;
+            }
+
+            if (Properties.Settings.Default.drive_detection == "Checked")
+            {
+                btn_drive_detect.CheckState = CheckState.Checked;
             }
 
             text_an_path.Text = Properties.Settings.Default.autoNamePath;
@@ -98,6 +104,11 @@ namespace Handbrake
             pathFinder.ShowDialog();
             text_an_path.Text = pathFinder.SelectedPath;
         }
+        
+        private void btn_drive_detect_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.drive_detection = btn_drive_detect.CheckState.ToString();
+        }
 
         private void text_an_path_TextChanged(object sender, EventArgs e)
         {
@@ -110,6 +121,8 @@ namespace Handbrake
                 Properties.Settings.Default.autoNamePath = text_an_path.Text;
         }
         #endregion
+
+       
 
 
 
