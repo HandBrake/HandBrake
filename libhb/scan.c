@@ -291,24 +291,26 @@ static int row_all_dark( hb_title_t *title, uint8_t* luma, int row )
     return 1;
 }
 
-static int column_all_dark( hb_title_t *title, uint8_t* luma, int top, int col )
+static int column_all_dark( hb_title_t *title, uint8_t* luma, int top, int bottom,
+                            int col )
 {
     int stride = title->width;
+    int height = title->height - top - bottom;
     luma += stride * top + col;
 
     // compute the average value of the column
-    int i = title->height - top, avg = 0, row = 0;
+    int i = height, avg = 0, row = 0;
     for ( ; --i >= 0; row += stride )
     {
         avg += clampBlack( luma[row] );
     }
-    avg /= title->height - top;
+    avg /= height;
     if ( avg >= DARK )
         return 0;
 
     // since we're trying to detect smooth borders, only take the column if
     // all pixels are within +-16 of the average.
-    i = title->height - top, row = 0;
+    i = height, row = 0;
     for ( ; --i >= 0; row += stride )
     {
         if ( absdiff( avg, clampBlack( luma[row] ) ) > 16 )
@@ -581,39 +583,61 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
 #define Y    vid_buf->data
         int top, bottom, left, right;
         int h4 = title->height / 4, w4 = title->width / 4;
-        for ( top = 4; top < h4; ++top )
+
+        // When widescreen content is matted to 16:9 or 4:3 there's sometimes
+        // a thin border on the outer edge of the matte. On TV content it can be
+        // "line 21" VBI data that's normally hidden in the overscan. For HD
+        // content it can just be a diagnostic added in post production so that
+        // the frame borders are visible. We try to ignore these borders so
+        // we can crop the matte. The border width depends on the resolution
+        // (12 pixels on 1080i looks visually the same as 4 pixels on 480i)
+        // so we allow the border to be up to 1% of the frame height.
+        const int border = title->height / 100;
+
+        for ( top = border; top < h4; ++top )
         {
             if ( ! row_all_dark( title, Y, top ) )
                 break;
         }
-        if ( top < 5 )
+        if ( top <= border )
         {
-            // we started at row 4 to avoid the "line 21" noise that shows
-            // up on row 0 & 1 of some TV shows. Since we stopped before row 4
-            // check if the missed rows are dark or if we shouldn't crop at all.
-            for ( top = 0; top < 4; ++top )
+            // we never made it past the border region - see if the rows we
+            // didn't check are dark or if we shouldn't crop at all.
+            for ( top = 0; top < border; ++top )
             {
                 if ( ! row_all_dark( title, Y, top ) )
                     break;
             }
-            if ( top >= 4 )
+            if ( top >= border )
             {
                 top = 0;
             }
         }
-        for ( bottom = 0; bottom < h4; ++bottom )
+        for ( bottom = border; bottom < h4; ++bottom )
         {
             if ( ! row_all_dark( title, Y, title->height - 1 - bottom ) )
                 break;
         }
+        if ( bottom <= border )
+        {
+            for ( bottom = 0; bottom < border; ++bottom )
+            {
+                if ( ! row_all_dark( title, Y, title->height - 1 - bottom ) )
+                    break;
+            }
+            if ( bottom >= border )
+            {
+                bottom = 0;
+            }
+        }
         for ( left = 0; left < w4; ++left )
         {
-            if ( ! column_all_dark( title, Y, top, left ) )
+            if ( ! column_all_dark( title, Y, top, bottom, left ) )
                 break;
         }
         for ( right = 0; right < w4; ++right )
         {
-            if ( ! column_all_dark( title, Y, top, title->width - 1 - right ) )
+            if ( ! column_all_dark( title, Y, top, bottom, title->width - 1 - right ) )
                 break;
         }
 
