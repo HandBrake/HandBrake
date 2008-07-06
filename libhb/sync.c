@@ -262,7 +262,7 @@ static void InitAudio( hb_work_object_t * w, int i )
     {
         /* Initialize libsamplerate */
         int error;
-        sync->state             = src_new( SRC_LINEAR, HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(sync->audio->config.out.mixdown), &error );
+        sync->state             = src_new( SRC_SINC_MEDIUM_QUALITY, HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(sync->audio->config.out.mixdown), &error );
         sync->data.end_of_input = 0;
     }
 }
