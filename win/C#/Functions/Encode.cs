@@ -15,7 +15,7 @@ using System.Runtime.InteropServices;
 
 namespace Handbrake.Functions
 {
-    public class CLI
+    public class Encode
     {       
         /// <summary>
         /// CLI output is based on en-US locale,
@@ -42,7 +42,8 @@ namespace Handbrake.Functions
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
                 string logPath = Path.Combine(Path.GetTempPath(), "hb_encode_log.dat");
 
-                string strCmdLine = String.Format(@"cmd /c """"{0}"" {1} 2>""{2}"" """, handbrakeCLIPath, query, logPath);
+                string strCmdLine = String.Format(@" cmd /c """"{0}"" {1} 2>""{2}"" """, handbrakeCLIPath, query, logPath);
+                //string arguments = String.Format(@"{0} 2>""{1}""", query, logPath);
 
                 ProcessStartInfo cliStart = new ProcessStartInfo("CMD.exe", strCmdLine);
 
@@ -71,9 +72,9 @@ namespace Handbrake.Functions
                         break;
                 }
             }
-            catch
+            catch (Exception exc)
             {
-                MessageBox.Show("Internal Software Error. Please Restart the Program");
+                MessageBox.Show("Internal Software Error. Please Restart the Program.  Error Information: \n\n" + exc.ToString());
             }
             return hbProc;
         }
@@ -109,25 +110,6 @@ namespace Handbrake.Functions
                 default:
                     break;
             }
-        }
-
-        /// <summary>
-        /// Update the presets.dat file with the latest version of HandBrak's presets from the CLI
-        /// </summary>
-        public void grabCLIPresets()
-        {
-            string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
-            string presetsPath = Path.Combine(Application.StartupPath, "presets.dat");
-
-            string strCmdLine = String.Format(@"cmd /c """"{0}"" --preset-list >""{1}"" 2>&1""", handbrakeCLIPath, presetsPath);
-
-            ProcessStartInfo hbGetPresets = new ProcessStartInfo("CMD.exe", strCmdLine);
-            hbGetPresets.WindowStyle = ProcessWindowStyle.Hidden;
-
-            Process hbproc = Process.Start(hbGetPresets);
-            hbproc.WaitForExit();
-            hbproc.Dispose();
-            hbproc.Close();
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Handbrake
         // Declarations *******************************************************
         Functions.Common hb_common_func = new Functions.Common();
         Functions.x264Panel x264PanelFunctions = new Functions.x264Panel();
-        Functions.CLI cliObj = new Functions.CLI();
+        Functions.Encode cliObj = new Functions.Encode();
         Functions.Queue encodeQueue = new Functions.Queue();
         Parsing.Title selectedTitle;
         Functions.Presets presetHandler = new Functions.Presets();
@@ -55,6 +55,20 @@ namespace Handbrake
 
             InitializeComponent();
 
+            // Update the users config file with the CLI version data.
+            lblStatus.Text = "Setting Version Data ...";
+            Application.DoEvents();
+            ArrayList x = hb_common_func.getCliVersionData();
+            if (x != null)
+            {
+                try
+                {
+                    Properties.Settings.Default.hb_build = int.Parse(x[1].ToString());
+                    Properties.Settings.Default.hb_version = x[0].ToString();
+                }
+                catch (Exception) { /* Do Nothing */ }
+            }
+
             // show the form, but leave disabled until preloading is complete then show the main form
             this.Enabled = false;
             this.Show();
@@ -70,37 +84,22 @@ namespace Handbrake
                 Thread.Sleep(100);
             }
 
-            //H264 Panel Loading
-            lblStatus.Text = "Loading H264 Panel ...";
+            // Setup the GUI components
+            lblStatus.Text = "Setting up the GUI ...";
             Application.DoEvents();
-            setupH264Panel();
-            Thread.Sleep(100);
-
-            // Load the presets
-            // Set some defaults for the dropdown menus. Just incase the normal or user presets dont load.
-            lblStatus.Text = "Loading Presets Bar ...";
-            Application.DoEvents();
-            drp_crop.SelectedIndex = 0;
-            loadPresetPanel();
-            Thread.Sleep(200);
-
-            // Now load the users default if required. (Will overide the above setting)
-            lblStatus.Text = "Loading Preset Settings ...";
-            Application.DoEvents();
+            setupH264Panel();               // Initalize the H.264 Panel
+            drp_crop.SelectedIndex = 0;     // Set the default Cropping Option
+            loadPresetPanel();              // Load the Preset Panel
+            // Load the user's default settings or Normal Preset
             if (Properties.Settings.Default.defaultSettings == "Checked")
                 loadUserDefaults();
             else
                 loadNormalPreset();
-            Thread.Sleep(100);
-
-            // Enable or disable tooltips
+            // Enabled GUI tooltip's if Required
             if (Properties.Settings.Default.tooltipEnable == "Checked")
-            {
-                lblStatus.Text = "Loading Tooltips ...";
-                Application.DoEvents();
                 ToolTip.Active = true;
-                Thread.Sleep(100);
-            }
+            Thread.Sleep(400);
+
 
             //Finished Loading
             lblStatus.Text = "Loading Complete!";
@@ -118,9 +117,8 @@ namespace Handbrake
             // Turn the interface back to the user
             this.Enabled = true;
 
-            // Some event Handlers.
+            // Some event Handlers. Used for minimize to taskbar
             this.Resize += new EventHandler(frmMain_Resize);
-
         }
 
         // Startup Functions
@@ -346,6 +344,11 @@ namespace Handbrake
             queueWindow.setQueue(encodeQueue);
             queueWindow.Show();
         }
+        private void mnu_encodeLog_Click(object sender, EventArgs e)
+        {
+            frmActivityWindow dvdInfoWindow = new frmActivityWindow("hb_encode_log.dat", this, queueWindow);
+            dvdInfoWindow.Show();
+        }
         private void mnu_viewDVDdata_Click(object sender, EventArgs e)
         {
             frmActivityWindow dvdInfoWindow = new frmActivityWindow("dvdinfo.dat", this, queueWindow);
@@ -363,7 +366,7 @@ namespace Handbrake
 
         private void mnu_presetReset_Click(object sender, EventArgs e)
         {
-            cliObj.grabCLIPresets();
+            hb_common_func.grabCLIPresets();
             loadPresetPanel();
             if (treeView_presets.Nodes.Count == 0)
                 MessageBox.Show("Unable to load the presets.dat file. Please select \"Update Built-in Presets\" from the Presets Menu \nMake sure you are running the program in Admin mode if running on Vista. See Windows FAQ for details!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -709,9 +712,37 @@ namespace Handbrake
         {
             setAudioByContainer(text_destination.Text);
             setVideoByContainer(text_destination.Text);
+            string path = text_destination.Text;
+            if (path.EndsWith(".mp4"))
+                drop_format.SelectedIndex = 0;
+            else if (path.EndsWith(".m4v"))
+                drop_format.SelectedIndex = 1;
+            else if (path.EndsWith(".mkv"))
+                drop_format.SelectedIndex = 2;
+            else if (path.EndsWith(".avi"))
+                drop_format.SelectedIndex = 3;
+            else if (path.EndsWith(".ogm"))
+                drop_format.SelectedIndex = 4;
+
         }
 
         // Output Settings
+        private void drop_format_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+            if (drop_format.SelectedIndex == 0)
+                setExtension(".mp4");
+            else if (drop_format.SelectedIndex == 1)
+                setExtension(".m4v");
+            else if (drop_format.SelectedIndex == 2)
+                setExtension(".mkv");
+            else if (drop_format.SelectedIndex == 3)
+                setExtension(".avi");
+            else if (drop_format.SelectedIndex == 4)
+                setExtension(".ogm");
+        }
+
+        //Video Tab
         private void drp_videoEncoder_SelectedIndexChanged(object sender, EventArgs e)
         {
             if ((text_destination.Text.Contains(".mp4")) || (text_destination.Text.Contains(".m4v")))
@@ -758,8 +789,6 @@ namespace Handbrake
             }
 
         }
-
-        //Video Tab
         private void text_bitrate_TextChanged(object sender, EventArgs e)
         {
             text_filesize.Text = "";
@@ -1457,11 +1486,6 @@ namespace Handbrake
         {
             rtf_query.Clear();
         }
-        private void btn_copy2C_Click(object sender, EventArgs e)
-        {
-            if (rtf_query.Text != "")
-                Clipboard.SetText(rtf_query.Text, TextDataFormat.Text);
-        }
 
         // Presets
         private void btn_addPreset_Click(object sender, EventArgs e)
@@ -1507,6 +1531,16 @@ namespace Handbrake
         #endregion
 
         #region Functions
+        // Replace File extenstion.
+        public void setExtension(string newExtension)
+        {
+            text_destination.Text = text_destination.Text.Replace(".mp4", newExtension);
+            text_destination.Text = text_destination.Text.Replace(".m4v", newExtension);
+            text_destination.Text = text_destination.Text.Replace(".mkv", newExtension);
+            text_destination.Text = text_destination.Text.Replace(".avi", newExtension);
+            text_destination.Text = text_destination.Text.Replace(".ogm", newExtension);
+        }
+
         // DVD Parsing
         public void setStreamReader(Parsing.DVD dvd)
         {
@@ -1917,6 +1951,7 @@ namespace Handbrake
                 MessageBox.Show("Drive Detection Error. \n Error Information: \n\n " + exc.ToString());
             }
         }
+
         #endregion
 
         #region Encoding and Queue
@@ -1933,7 +1968,9 @@ namespace Handbrake
             else
             {
                 hbProc = cliObj.runCli(this, (string)state);
+
                 hbProc.WaitForExit();
+                //MessageBox.Show(hbProc.ExitCode.ToString());
 
                 setEncodeLabelFinished();
                 hbProc = null;
@@ -2006,7 +2043,9 @@ namespace Handbrake
         }
 
         #endregion
-        
+
+
+
         // This is the END of the road ------------------------------------------------------------------------------
     }
 }

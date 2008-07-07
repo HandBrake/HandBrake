@@ -5,18 +5,19 @@
  	   It may be used under the terms of the GNU General Public License. */
 
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Text;
 using System.Windows.Forms;
 using System.Globalization;
 using System.IO;
 using System.Drawing;
+using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace Handbrake.Functions
 {
     class Common
     {
-
         /// <summary>
         /// Checks for updates and returns true if an update is available.
         /// </summary>
@@ -47,6 +48,64 @@ namespace Handbrake.Functions
                     MessageBox.Show("Unable to check for updates, Please try again later. \n" + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Get's HandBrakes version data from the CLI.
+        /// </summary>
+        /// <returns>Arraylist of Version Data. 0 = hb_version 1 = hb_build</returns>
+        public ArrayList getCliVersionData()
+        {
+            ArrayList cliVersionData = new ArrayList();
+            // 0 = SVN Build / Version
+            // 1 = Build Date
+
+            Process cliProcess = new Process();
+            ProcessStartInfo handBrakeCLI = new ProcessStartInfo("HandBrakeCLI.exe", " -u");
+            handBrakeCLI.UseShellExecute = false;
+            handBrakeCLI.RedirectStandardError = true;
+            handBrakeCLI.RedirectStandardOutput = true;
+            handBrakeCLI.CreateNoWindow = true;
+            cliProcess.StartInfo = handBrakeCLI;
+            cliProcess.Start();
+
+            // Retrieve standard output and report back to parent thread until the process is complete
+            String line;
+            TextReader stdOutput = cliProcess.StandardError;
+
+            while (!cliProcess.HasExited)
+            {
+                line = stdOutput.ReadLine();
+                Match m = Regex.Match(line, @"HandBrake svn[0-9]*[M]* \([0-9]*\)");
+                if (m.Success != false)
+                {
+                    string data = line.Replace("(", "").Replace(")","").Replace("HandBrake ","");
+                    string[] arr = data.Split(' ');
+                    cliVersionData.Add(arr[0]);
+                    cliVersionData.Add(arr[1]);
+                    return cliVersionData;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Update the presets.dat file with the latest version of HandBrak's presets from the CLI
+        /// </summary>
+        public void grabCLIPresets()
+        {
+            string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
+            string presetsPath = Path.Combine(Application.StartupPath, "presets.dat");
+
+            string strCmdLine = String.Format(@"cmd /c """"{0}"" --preset-list >""{1}"" 2>&1""", handbrakeCLIPath, presetsPath);
+
+            ProcessStartInfo hbGetPresets = new ProcessStartInfo("CMD.exe", strCmdLine);
+            hbGetPresets.WindowStyle = ProcessWindowStyle.Hidden;
+
+            Process hbproc = Process.Start(hbGetPresets);
+            hbproc.WaitForExit();
+            hbproc.Dispose();
+            hbproc.Close();
         }
 
         /// <summary>
@@ -166,6 +225,20 @@ namespace Handbrake.Functions
 
             mainWindow.drp_videoEncoder.Text = presetQuery.VideoEncoder;
 
+            if (presetQuery.Format != null)
+            {
+                if (presetQuery.Format == "mp4")
+                    mainWindow.drop_format.SelectedIndex = 0;
+                else if (presetQuery.Format == "m4v")
+                    mainWindow.drop_format.SelectedIndex = 1;
+                else if (presetQuery.Format == "mkv")
+                    mainWindow.drop_format.SelectedIndex = 2;
+                else if (presetQuery.Format == "avi")
+                    mainWindow.drop_format.SelectedIndex = 3;
+                else if (presetQuery.Format == "ogm")
+                    mainWindow.drop_format.SelectedIndex = 4;
+            }
+
             if (presetQuery.IpodAtom == true)
                 mainWindow.check_iPodAtom.CheckState = CheckState.Checked;
             else
@@ -177,6 +250,8 @@ namespace Handbrake.Functions
                 mainWindow.check_optimiseMP4.CheckState = CheckState.Unchecked;
 
             #endregion
+
+
 
             // Picture Settings Tab
             #region Picture
@@ -718,7 +793,7 @@ namespace Handbrake.Functions
 
                 // Now set the longest title in the gui.
                 mainWindow.drp_dvdtitle.SelectedItem = title2Select;
-            }  
+            }
         }
 
         // Generates part of the CLI query, for the tabbed components only.

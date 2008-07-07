@@ -34,7 +34,6 @@ namespace Handbrake
             this.inputFile = inputFile;
             this.mainWindow = parent;
             startScan();
-
         }
 
         private void startScan()
@@ -82,7 +81,7 @@ namespace Handbrake
             }
         }
 
-        Functions.CLI process = new Functions.CLI();
+        Functions.Encode process = new Functions.Encode();
 
         private void startProc(object state)
         {
@@ -91,7 +90,7 @@ namespace Handbrake
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
                 string dvdInfoPath = Path.Combine(Path.GetTempPath(), "dvdinfo.dat");
 
-                // Make we don't pick up a stale dvdinfo.dat (and that we have rights to the file)
+                // Make we don't pick up a stale hb_encode_log.dat (and that we have rights to the file)
                 if (File.Exists(dvdInfoPath))
                     File.Delete(dvdInfoPath);
 

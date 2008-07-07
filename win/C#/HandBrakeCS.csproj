@@ -19,6 +19,7 @@
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -31,7 +32,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -144,7 +144,7 @@
     <Compile Include="Functions\Presets.cs" />
     <Compile Include="Functions\Queue.cs" />
     <Compile Include="Functions\RssReader.cs" />
-    <Compile Include="Functions\CLI.cs" />
+    <Compile Include="Functions\Encode.cs" />
     <Compile Include="Functions\QueryParser.cs" />
     <Compile Include="Functions\x264Panel.cs" />
     <Compile Include="Parsing\AudioTrack.cs" />
@@ -234,6 +234,8 @@
     <None Include="Resources\logo128.png" />
     <None Include="Resources\ActivityWindow.png" />
     <None Include="Resources\AddToQueue.png" />
+    <Content Include="Resources\ActivityWindow_small.png" />
+    <Content Include="Resources\disc_small.png" />
     <Content Include="Resources\JobPassLarge.png" />
     <Content Include="Resources\Output_Small.png" />
     <None Include="Resources\Pause.png" />

@@ -162,7 +162,7 @@ namespace Handbrake.Parsing
                 if (m.Success)
                 {
                     thisTitle.m_resolution = new Size(int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
-                    thisTitle.m_aspectRatio = float.Parse(m.Groups[3].Value, Functions.CLI.Culture);
+                    thisTitle.m_aspectRatio = float.Parse(m.Groups[3].Value, Functions.Encode.Culture);
                 }
 
                 // Get autocrop region for this title

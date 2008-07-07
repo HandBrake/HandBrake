@@ -1010,7 +1010,7 @@ namespace Handbrake.Functions
                 double qConvert = 0;
                 if (videoQuality.Success != false)
                 {
-                    qConvert = double.Parse(videoQuality.ToString().Replace("-q ", ""), Functions.CLI.Culture) * 100;
+                    qConvert = double.Parse(videoQuality.ToString().Replace("-q ", ""), Functions.Encode.Culture) * 100;
                     qConvert = System.Math.Ceiling(qConvert);
                     thisQuery.q_videoQuality = int.Parse(qConvert.ToString());
                 }

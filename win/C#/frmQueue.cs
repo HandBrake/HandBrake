@@ -22,7 +22,7 @@ namespace Handbrake
     {
         private delegate void ProgressUpdateHandler();
         private delegate void setEncoding();
-        Functions.CLI cliObj = new Functions.CLI();
+        Functions.Encode cliObj = new Functions.Encode();
         Boolean cancel = false;
         Process hbProc = null;
         Functions.Queue queue;

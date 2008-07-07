@@ -67,6 +67,13 @@ namespace Handbrake.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap ActivityWindow_small {
+            get {
+                object obj = ResourceManager.GetObject("ActivityWindow_small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap AddToQueue {
             get {
                 object obj = ResourceManager.GetObject("AddToQueue", resourceCulture);
@@ -84,6 +91,13 @@ namespace Handbrake.Properties {
         internal static System.Drawing.Bitmap Disc {
             get {
                 object obj = ResourceManager.GetObject("Disc", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap disc_small {
+            get {
+                object obj = ResourceManager.GetObject("disc_small", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -73,7 +73,7 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("SVN1544")]
+        [global::System.Configuration.DefaultSettingValueAttribute("{hb_version}")]
         public string hb_version {
             get {
                 return ((string)(this["hb_version"]));
@@ -121,7 +121,7 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2008053100")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int hb_build {
             get {
                 return ((int)(this["hb_build"]));

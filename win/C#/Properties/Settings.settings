@@ -15,7 +15,7 @@
       <Value Profile="(Default)">Checked</Value>
     </Setting>
     <Setting Name="hb_version" Type="System.String" Scope="User">
-      <Value Profile="(Default)">SVN1544</Value>
+      <Value Profile="(Default)">{hb_version}</Value>
     </Setting>
     <Setting Name="tooltipEnable" Type="System.String" Scope="User">
       <Value Profile="(Default)">Checked</Value>
@@ -27,7 +27,7 @@
       <Value Profile="(Default)">Checked</Value>
     </Setting>
     <Setting Name="hb_build" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">2008053100</Value>
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="skipversion" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
