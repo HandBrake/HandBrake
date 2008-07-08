@@ -27,7 +27,7 @@ typedef struct
 
 } hb_track_t;
 
-static hb_track_t * GetTrack( hb_list_t * list )
+static hb_track_t * GetTrack( hb_list_t * list, hb_job_t *job )
 {
     hb_buffer_t * buf;
     hb_track_t  * track = NULL, * track2;
@@ -40,6 +40,18 @@ static hb_track_t * GetTrack( hb_list_t * list )
         buf    = hb_fifo_see( track2->fifo );
         if( !buf )
         {
+            // XXX libmkv uses a very simple minded muxer that will fail if the
+            // audio & video are out of sync.  To keep them in sync we require
+            // that *all* fifos have a buffer then we take the oldest.
+            // Unfortunately this means we can hang in a deadlock with the
+            // reader process filling the fifos. With the current libmkv
+            // there's no way to avoid occasional deadlocks & we can only
+            // suggest that users evolve to using mp4s.
+            if ( job->mux == HB_MUX_MKV )
+            {
+                return NULL;
+            }
+
             // To make sure we don't camp on one fifo & prevent the others
             // from making progress we take the earliest data of all the
             // data that's currently available but we don't care if some
@@ -143,7 +155,7 @@ static void MuxerFunc( void * _mux )
 	int thread_sleep_interval = 50;
 	while( !*job->die && !job->done )
     {
-        if( !( track = GetTrack( list ) ) )
+        if( !( track = GetTrack( list, job ) ) )
         {
             hb_snooze( thread_sleep_interval );
             continue;
