@@ -2460,7 +2460,10 @@ ghb_add_job(job_settings_t *js, gint unique_id)
 	
 	gboolean decomb = ghb_settings_get_bool(settings, "decomb");
 	gint deint = ghb_settings_get_int(settings, "deinterlace");
-	job->deinterlace = (deint == 0) ? 0 : 1;
+	if (!decomb)
+		job->deinterlace = (deint == 0) ? 0 : 1;
+	else
+		job->deinterlace = 0;
     job->grayscale   = ghb_settings_get_bool(settings, "grayscale");
 
 	gboolean anamorphic = ghb_settings_get_bool(settings, "anamorphic");
@@ -2499,7 +2502,7 @@ ghb_add_job(job_settings_t *js, gint unique_id)
 		hb_filter_decomb.settings = "1:2:6:9:40:16:16";
 		hb_list_add( job->filters, &hb_filter_decomb );
 	}
-	if( !decomb && job->deinterlace )
+	if( job->deinterlace )
 	{
 		hb_filter_deinterlace.settings = (gchar*)ghb_settings_get_string(settings, "deinterlace");
 		hb_list_add( job->filters, &hb_filter_deinterlace );
