@@ -1970,7 +1970,6 @@ namespace Handbrake
                 hbProc = cliObj.runCli(this, (string)state);
 
                 hbProc.WaitForExit();
-                //MessageBox.Show(hbProc.ExitCode.ToString());
 
                 setEncodeLabelFinished();
                 hbProc = null;
@@ -2043,7 +2042,6 @@ namespace Handbrake
         }
 
         #endregion
-
 
 
         // This is the END of the road ------------------------------------------------------------------------------

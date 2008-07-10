@@ -5,7 +5,7 @@
  	   It may be used under the terms of the GNU General Public License. */
 
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -27,6 +27,8 @@ namespace Handbrake
         String read_file;
         frmMain mainWindow;
         frmQueue queueWindow;
+        int position = 0;  // Position in the arraylist reached by the current log output in the rtf box.
+        
 
         /// <summary>
         /// This window should be used to display the RAW output of the handbrake CLI which is produced during an encode.
@@ -38,34 +40,61 @@ namespace Handbrake
 
             mainWindow = fm;
             queueWindow = fq;
-
-            this.rtf_actLog.Text = string.Empty;
-
             read_file = file;
+
+            // Reset some varibles
+            this.rtf_actLog.Text = string.Empty;
+            position = 0;
 
             string logFile = Path.Combine(Path.GetTempPath(), read_file);
             if (File.Exists(logFile))
             {
-                if (read_file == "dvdinfo.dat") // No need to refresh the window if we are viwing dvdinfo.dat
-                    updateTextFromThread();
-                else // however, we should refresh when reading the encode log file.
-                {
-                    monitorFile = new Thread(autoUpdate);
-                    monitorFile.Start();
-                }
+                // Add a header to the log file indicating that it's from the Windows GUI and display the windows version
+                rtf_actLog.AppendText("### Windows GUI \n");
+                rtf_actLog.AppendText(String.Format("### Running: {0} \n###\n", Environment.OSVersion.ToString()));
+
+                // Start a new thread to run the autoUpdate process
+                monitorFile = new Thread(autoUpdate);
+                monitorFile.Start();
             }
             else
                 MessageBox.Show("The log file could not be found. Maybe you cleared your system's tempory folder or maybe you just havn't run an encode yet.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+            // Handle the event of the window being disposed. This is needed to make sure HandBrake exit's cleanly.
+            this.Disposed += new EventHandler(forceQuit);
+        }
+
+        // Ok, so, this function is called when someone closes frmMain but didn't close frmActivitWindow first.
+        // When you close frmMain, the activity window gets closed (disposed of) but, this doens't kill the threads that it started.
+        // When that thread tries to access the disposed rich text box, it causes an exception.
+        // Basically, this function is called when the window is disposed of, to kill the thread and close the window properly.
+        // This allows HandBrake to close cleanly.
+        private void forceQuit(object sender, EventArgs e)
+        {
+            if (monitorFile != null)
+                monitorFile.Abort();
+
+            this.Close();
         }
 
         // Update the Activity window every 5 seconds with the latest log data.
         private void autoUpdate(object state)
         {
+            Boolean lastUpdate = false;
             updateTextFromThread();
             while (true)
-            {
+            {   
                 if ((mainWindow.isEncoding() == true) || (queueWindow.isEncoding() == true))
                     updateTextFromThread();
+                else
+                {
+                    // The encode may just have stoped, so, refresh the log one more time before restarting it.
+                    if (lastUpdate == false)
+                        updateTextFromThread();
+
+                    lastUpdate = true;
+                    position = 0;
+                }
                 Thread.Sleep(5000);
             }
         }
@@ -80,26 +109,40 @@ namespace Handbrake
                     this.BeginInvoke(new UpdateUIHandler(updateTextFromThread));
                     return;
                 }
-                rtf_actLog.Text = readFile();
-                this.rtf_actLog.SelectionStart = this.rtf_actLog.Text.Length - 1;
-                this.rtf_actLog.ScrollToCaret();
+                // Initialize a pointer and get the log data arraylist
+                ArrayList data = readFile();
+
+                while (position < data.Count)
+                {
+                    rtf_actLog.AppendText(data[position].ToString());
+                    if (data[position].ToString().Contains("has exited"))
+                    {
+                        rtf_actLog.AppendText("\n ############ End of Encode ############## \n");
+                    }
+                    position++;
+                }
+
+               // this.rtf_actLog.SelectionStart = this.rtf_actLog.Text.Length - 1;
+               // this.rtf_actLog.ScrollToCaret();
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.ToString());
+                MessageBox.Show("An error has occured in: updateTextFromThread(). \n You may have to restart HandBrake. \n  Error Information: \n\n" + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private string readFile()
+        private ArrayList readFile()
         {
-            string log = "";
+            // Ok, the task here is to, Get an arraylist of log data.
+            // And update some global varibles which are pointers to the last displayed log line.
+            ArrayList logData = new ArrayList();
+
             try
             {
-                // hb_encode_log.dat is the primary log file. Since .NET can't read this file whilst the CLI is outputing to it,
+                // hb_encode_log.dat is the primary log file. Since .NET can't read this file whilst the CLI is outputing to it (Not even in read only mode),
                 // we'll need to make a copy of it.
                 string logFile = Path.Combine(Path.GetTempPath(), read_file);
                 string logFile2 = Path.Combine(Path.GetTempPath(), "hb_encode_log_AppReadable.dat");
-
 
                 // Make sure the application readable log file does not already exist. FileCopy fill fail if it does.
                 if (File.Exists(logFile2))
@@ -108,25 +151,30 @@ namespace Handbrake
                 // Copy the log file.
                 File.Copy(logFile, logFile2);
 
-                // Begin processing the log file.
+                // Open the copied log file for reading
                 StreamReader sr = new StreamReader(logFile2);
                 string line = sr.ReadLine();
                 while (line != null)
                 {
-                    log = log + (line + System.Environment.NewLine);
+                    if (line.Trim() != "")
+                        logData.Add(line + System.Environment.NewLine);
+
                     line = sr.ReadLine();
                 }
                 sr.Close();
                 sr.Dispose();
+
+                return logData;
             }
             catch (Exception exc)
             {
-                MessageBox.Show("An Error has occured! \n\n" + exc.ToString(), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Error in readFile() \n Unable to read the log file.\n You may have to restart HandBrake.\n  Error Information: \n\n" + exc.ToString(), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-
-            return log;
+            return null;
         }
 
+
+        // Ok, We need to make sure the monitor thread is dead when we close the window.
         protected override void OnClosing(CancelEventArgs e)
         {
             if (monitorFile != null)
