@@ -277,6 +277,13 @@
             <signal handler="about_activate_cb" name="activate"/>
           </object>
         </child>
+        <child>
+          <object class="GtkAction" id="guide">
+            <property name="name">guide</property>
+            <property name="label" translatable="yes">_Guide</property>
+            <signal handler="guide_activate_cb" name="activate"/>
+          </object>
+        </child>
       </object>
     </child>
     <ui>
@@ -301,6 +308,7 @@
         </menu>
         <menu action="menuitem4">
           <menuitem action="about"/>
+          <menuitem action="guide"/>
         </menu>
       </menubar>
     </ui>
@@ -1274,6 +1282,19 @@
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <child>
+                                      <object class="GtkCheckButton" id="grayscale">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="label" translatable="yes">Grayscale</property>
+                                        <property name="draw_indicator">True</property>
+                                        <signal handler="setting_widget_changed_cb" name="toggled"/>
+                                      </object>
+                                      <packing>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
                                       <object class="GtkCheckButton" id="detelecine">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
@@ -1283,6 +1304,7 @@
                                         <signal handler="setting_widget_changed_cb" name="toggled"/>
                                       </object>
                                       <packing>
+                                        <property name="position">1</property>
                                         <property name="expand">False</property>
                                       </packing>
                                     </child>
@@ -1294,21 +1316,6 @@
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                         <signal handler="setting_widget_changed_cb" name="toggled"/>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkCheckButton" id="variable_frame_rate">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="label" translatable="yes">Variable Frame Rate</property>
-                                        <property name="active">True</property>
-                                        <property name="draw_indicator">True</property>
-                                        <signal handler="vfr_changed_cb" name="toggled"/>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -1604,15 +1611,17 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkCheckButton" id="grayscale">
+                                      <object class="GtkCheckButton" id="variable_frame_rate">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="label" translatable="yes">Grayscale</property>
+                                        <property name="label" translatable="yes">Variable Frame Rate</property>
+                                        <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
-                                        <signal handler="setting_widget_changed_cb" name="toggled"/>
+                                        <signal handler="vfr_changed_cb" name="toggled"/>
                                       </object>
                                       <packing>
+                                        <property name="expand">False</property>
                                         <property name="position">2</property>
                                       </packing>
                                     </child>

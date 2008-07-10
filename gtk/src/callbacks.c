@@ -2831,6 +2831,36 @@ about_activate_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 }
 
 void
+guide_activate_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+{
+	gboolean result;
+	char *argv[] = 
+		{"xdg-open","http://trac.handbrake.fr/wiki/HandBrakeGuide",NULL,NULL};
+	result = g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
+				NULL, NULL, NULL);
+	if (result) return;
+
+	argv[0] = "gnome-open";
+	result = g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
+				NULL, NULL, NULL);
+	if (result) return;
+
+	argv[0] = "kfmclient";
+	argv[1] = "exec";
+	argv[2] = "http://trac.handbrake.fr/wiki/HandBrakeGuide";
+	result = g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
+				NULL, NULL, NULL);
+	if (result) return;
+
+	argv[0] = "firefox";
+	argv[1] = "http://trac.handbrake.fr/wiki/HandBrakeGuide";
+	argv[2] = NULL;
+	result = g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
+				NULL, NULL, NULL);
+	if (result) return;
+}
+
+void
 hb_about_response_cb(GtkWidget *widget, gint response, signal_user_data_t *ud)
 {
 	gtk_widget_hide (widget);
