@@ -1736,6 +1736,7 @@ ghb_backend_events(signal_user_data_t *ud, gint *unique_id)
                 default:
                     gtk_progress_bar_set_text( progress, "Rip failed.");
             }
+			gtk_progress_bar_set_fraction (progress, 1.0);
 			return GHB_EVENT_WORK_DONE;
             break;
 		}
