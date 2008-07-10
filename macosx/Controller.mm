@@ -2226,25 +2226,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [self audioTrackPopUpChanged: fAudLang3PopUp];
     [self audioTrackPopUpChanged: fAudLang4PopUp];
     
-    /* We repopulate the Video Framerate popup and show the detected framerate along with "Same as Source"*/
+    /* We repopulate the Video Framerate popup */
+
     [fVidRatePopUp removeAllItems];
-    if (fTitle->rate_base == 1126125) // 23.976 NTSC Film
-    {
-        [fVidRatePopUp addItemWithTitle: @"Same as source (23.976)"];
-    }
-    else if (fTitle->rate_base == 1080000) // 25 PAL Film/Video
-    {
-        [fVidRatePopUp addItemWithTitle: @"Same as source (25)"];
-    }
-    else if (fTitle->rate_base == 900900) // 29.97 NTSC Video
-    {
-        [fVidRatePopUp addItemWithTitle: @"Same as source (29.97)"];
-    }
-    else
-    {
-        /* if none of the common dvd source framerates is detected, just use "Same as source" */
-        [fVidRatePopUp addItemWithTitle: @"Same as source"];
-    }
+    
+    [fVidRatePopUp addItemWithTitle:@"Same as source"];
+    
 	for( int i = 0; i < hb_video_rates_count; i++ )
     {
         if ([[NSString stringWithCString: hb_video_rates[i].string] isEqualToString: [NSString stringWithFormat: @"%.3f",23.976]])
