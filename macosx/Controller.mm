@@ -2703,7 +2703,7 @@ the user is using "Custom" settings by determining the sender*/
 	}
 	else if ([fPictureController decomb] == 1)
 	{
-		[fPicSettingDecomb setStringValue: @"4:10:15:9:10:35:9"];
+		[fPicSettingDecomb setStringValue: @"1:2:6:9:80:16:16"];
 	}
     else if ([fPictureController decomb] == 2)
     {

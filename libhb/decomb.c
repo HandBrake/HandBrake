@@ -11,7 +11,7 @@
 
 #define SUPPRESS_AV_LOG
 
-#define MODE_DEFAULT     4
+#define MODE_DEFAULT     1
 #define PARITY_DEFAULT   -1
 
 #define MCDEINT_MODE_DEFAULT   -1
@@ -28,6 +28,13 @@ struct hb_filter_private_s
     int              height[3];
 
     int              mode;
+    int              spatial_metric;
+    int              motion_threshold;
+    int              spatial_threshold;
+    int              block_threshold;
+    int              block_width;
+    int              block_height;
+
     int              parity;
     
     int              yadif_ready;
@@ -41,27 +48,20 @@ struct hb_filter_private_s
     AVFrame        * mcdeint_frame;
     AVFrame        * mcdeint_frame_dec;
 
-    int              comb;
-    int              color_equal;
-    int              color_diff;
-    int              threshold;
-    int              prog_equal;
-    int              prog_diff;
-    int              prog_threshold;
-    int              deinterlaced_frames;
-    int              passed_frames;
+    int              yadif_deinterlaced_frames;
+    int              blend_deinterlaced_frames;
+    int              unfiltered_frames;
 
     uint8_t        * ref[4][3];
     int              ref_stride[3];
+
+    /* Make a buffer to store a comb mask. */
+    uint8_t        * mask[3];
 
     AVPicture        pic_in;
     AVPicture        pic_out;
     hb_buffer_t *    buf_out[2];
     hb_buffer_t *    buf_settings;
-    
-    int              cc_array[3][480][270];
-    int              combed_macroblocks;
-    int              uncombed_macroblocks;
 };
 
 hb_filter_private_t * hb_decomb_init( int pix_fmt,
@@ -81,7 +81,7 @@ void hb_decomb_close( hb_filter_private_t * pv );
 hb_filter_object_t hb_filter_decomb =
 {
     FILTER_DECOMB,
-    "Decombs selectively with (ffmpeg or yadif/mcdeint or blending)",
+    "Deinterlaces selectively with yadif/mcdeint or lowpass5 blending",
     NULL,
     hb_decomb_init,
     hb_decomb_work,
@@ -230,6 +230,255 @@ static void blend_filter_line( uint8_t *dst,
     }
 }
 
+int check_combing_mask( hb_filter_private_t * pv )
+{
+    /* Go through the mask in X*Y blocks. If any of these windows
+       have threshold or more combed pixels, consider the whole
+       frame to be combed and send it on to be deinterlaced.     */
+
+    /* Block mask threshold -- The number of pixels
+       in a block_width * block_height window of
+       he mask that need to show combing for the
+       whole frame to be seen as such.            */
+    int threshold       = pv->block_threshold;
+    int block_width     = pv->block_width;
+    int block_height    = pv->block_height;
+    int block_x, block_y;
+    int block_score = 0; int send_to_blend = 0;
+    
+    int x, y, k;
+
+    for( k = 0; k < 1; k++ )
+    {
+        int ref_stride = pv->ref_stride[k];
+        for( y = 0; y < ( pv->height[k] - block_height ); y = y + block_height )
+        {
+            for( x = 0; x < ( pv->width[k] - block_width ); x = x + block_width )
+            {
+                block_score = 0;
+                for( block_y = 0; block_y < block_height; block_y++ )
+                {
+                    for( block_x = 0; block_x < block_width; block_x++ )
+                    {
+                        int mask_y = y + block_y;
+                        int mask_x = x + block_x;
+                        
+                        /* We only want to mark a pixel in a block as combed
+                           if the pixels above and below are as well. Got to
+                           handle the top and bottom lines separately.       */
+                        if( y + block_y == 0 )
+                        {
+                            if( pv->mask[k][mask_y*ref_stride+mask_x    ] == 255 &&
+                                pv->mask[k][mask_y*ref_stride+mask_x + 1] == 255 )
+                                    block_score++;
+                        }
+                        else if( y + block_y == pv->height[k] - 1 )
+                        {
+                            if( pv->mask[k][mask_y*ref_stride+mask_x - 1] == 255 &&
+                                pv->mask[k][mask_y*ref_stride+mask_x    ] == 255 )
+                                    block_score++;
+                        }
+                        else
+                        {
+                            if( pv->mask[k][mask_y*ref_stride+mask_x - 1] == 255 &&
+                                pv->mask[k][mask_y*ref_stride+mask_x    ] == 255 &&
+                                pv->mask[k][mask_y*ref_stride+mask_x + 1] == 255 )
+                                    block_score++;
+                        } 
+                    }
+                }
+
+                if( block_score >= ( threshold / 2 ) )
+                {
+#if 0
+                    hb_log("decomb: frame %i | score %i | type %s", pv->yadif_deinterlaced_frames + pv->blend_deinterlaced_frames +  pv->unfiltered_frames + 1, block_score, pv->buf_settings->flags & 16 ? "Film" : "Video");
+#endif
+                    if ( block_score <= threshold && !( pv->buf_settings->flags & 16) )
+                    {
+                        /* Blend video content that scores between
+                           ( threshold / 2 ) and threshold.        */
+                        send_to_blend = 1;
+                    }
+                    else if( block_score > threshold )
+                    {
+                        if( pv->buf_settings->flags & 16 )
+                        {
+                            /* Blend progressive content above the threshold.*/
+                            return 2;
+                        }
+                        else
+                        {
+                            /* Yadif deinterlace video content above the threshold. */
+                            return 1;
+                        }
+                    }
+                }
+            }
+        } 
+    }
+    
+    if( send_to_blend )
+    {
+        return 2;
+    }
+    else
+    {
+        /* Consider this frame to be uncombed. */
+        return 0;
+    }
+}
+
+int tritical_detect_comb( hb_filter_private_t * pv )
+{
+    /* A mish-mash of various comb detection tricks
+       picked up from neuron2's Decomb plugin for
+       AviSynth and tritical's IsCombedT and
+       IsCombedTIVTC plugins.                       */
+       
+    int x, y, k, width, height;
+    
+    /* Comb scoring algorithm */
+    int spatial_metric  = pv->spatial_metric;
+    /* Motion threshold */
+    int mthresh         = pv->motion_threshold;
+    /* Spatial threshold */
+    int athresh         = pv->spatial_threshold;
+    int athresh_squared = athresh * athresh;
+    int athresh6        = 6 *athresh;
+
+    /* One pas for Y, one pass for Cb, one pass for Cr */    
+    for( k = 0; k < 1; k++ )
+    {
+        int ref_stride  = pv->ref_stride[k];
+        width           = pv->width[k];
+        height          = pv->height[k];
+
+        for( y = 2; y < ( height - 2 ); y++ )
+        {
+            /* These are just to make the buffer locations easier to read. */
+            int back_2    = ( y - 2 )*ref_stride ;
+            int back_1    = ( y - 1 )*ref_stride;
+            int current   =         y*ref_stride;
+            int forward_1 = ( y + 1 )*ref_stride;
+            int forward_2 = ( y + 2 )*ref_stride;
+            
+            /* We need to examine a column of 5 pixels
+               in the prev, cur, and next frames.      */
+            uint8_t previous_frame[5];
+            uint8_t current_frame[5];
+            uint8_t next_frame[5];
+            
+            for( x = 0; x < width; x++ )
+            {
+                /* Fill up the current frame array with the current pixel values.*/
+                current_frame[0] = pv->ref[1][k][back_2    + x];
+                current_frame[1] = pv->ref[1][k][back_1    + x];
+                current_frame[2] = pv->ref[1][k][current   + x];
+                current_frame[3] = pv->ref[1][k][forward_1 + x];
+                current_frame[4] = pv->ref[1][k][forward_2 + x];
+
+                int up_diff   = current_frame[2] - current_frame[1];
+                int down_diff = current_frame[2] - current_frame[3];
+
+                if( ( up_diff >  athresh && down_diff >  athresh ) ||
+                    ( up_diff < -athresh && down_diff < -athresh ) )
+                {
+                    /* The pixel above and below are different,
+                       and they change in the same "direction" too.*/
+                    int motion = 0;
+                    if( mthresh > 0 )
+                    {
+                        /* Make sure there's sufficient motion between frame t-1 to frame t+1. */
+                        previous_frame[0] = pv->ref[0][k][back_2    + x];
+                        previous_frame[1] = pv->ref[0][k][back_1    + x];
+                        previous_frame[2] = pv->ref[0][k][current   + x];
+                        previous_frame[3] = pv->ref[0][k][forward_1 + x];
+                        previous_frame[4] = pv->ref[0][k][forward_2 + x];
+                        next_frame[0]     = pv->ref[2][k][back_2    + x];
+                        next_frame[1]     = pv->ref[2][k][back_1    + x];
+                        next_frame[2]     = pv->ref[2][k][current   + x];
+                        next_frame[3]     = pv->ref[2][k][forward_1 + x];
+                        next_frame[4]     = pv->ref[2][k][forward_2 + x];
+                        
+                        if( abs( previous_frame[2] - current_frame[2] ) > mthresh &&
+                            abs(  current_frame[1] - next_frame[1]    ) > mthresh &&
+                            abs(  current_frame[3] - next_frame[3]    ) > mthresh )
+                                motion++;
+                        if( abs(     next_frame[2] - current_frame[2] ) > mthresh &&
+                            abs( previous_frame[1] - current_frame[1] ) > mthresh &&
+                            abs( previous_frame[3] - current_frame[3] ) > mthresh )
+                                motion++;
+                    }
+                    else
+                    {
+                        /* User doesn't want to check for motion,
+                           so move on to the spatial check.       */
+                        motion = 1;
+                    }
+                           
+                    if( motion || ( pv->yadif_deinterlaced_frames==0 && pv->blend_deinterlaced_frames==0 && pv->unfiltered_frames==0) )
+                    {
+                           /*That means it's time for the spatial check.
+                           We've got several options here.             */
+                        if( spatial_metric == 0 )
+                        {
+                            /* Simple 32detect style comb detection */
+                            if( ( abs( current_frame[2] - current_frame[4] ) < 10  ) &&
+                                ( abs( current_frame[2] - current_frame[3] ) > 15 ) )
+                            {
+                                pv->mask[k][y*ref_stride + x] = 255;
+                            }
+                            else
+                            {
+                                pv->mask[k][y*ref_stride + x] = 0;
+                            }
+                        }
+                        else if( spatial_metric == 1 )
+                        {
+                            /* This, for comparison, is what IsCombed uses.
+                               It's better, but still noise senstive.      */
+                               int combing = ( current_frame[1] - current_frame[2] ) *
+                                             ( current_frame[3] - current_frame[2] );
+                               
+                               if( combing > athresh_squared )
+                                   pv->mask[k][y*ref_stride + x] = 255; 
+                               else
+                                   pv->mask[k][y*ref_stride + x] = 0;
+                        }
+                        else if( spatial_metric == 2 )
+                        {
+                            /* Tritical's noise-resistant combing scorer.
+                               The check is done on a bob+blur convolution. */
+                            int combing = abs( current_frame[0]
+                                             + ( 4 * current_frame[2] )
+                                             + current_frame[4]
+                                             - ( 3 * ( current_frame[1]
+                                                     + current_frame[3] ) ) );
+
+                            /* If the frame is sufficiently combed,
+                               then mark it down on the mask as 255. */
+                            if( combing > athresh6 )
+                                pv->mask[k][y*ref_stride + x] = 255; 
+                            else
+                                pv->mask[k][y*ref_stride + x] = 0;
+                        }
+                    }
+                    else
+                    {
+                        pv->mask[k][y*ref_stride + x] = 0;
+                    }
+                }
+                else
+                {
+                    pv->mask[k][y*ref_stride + x] = 0;
+                }
+            }
+        }
+    }
+    
+    return check_combing_mask( pv );
+}
+
 static void yadif_filter_line( uint8_t *dst,
                                uint8_t *prev,
                                uint8_t *cur,
@@ -245,32 +494,9 @@ static void yadif_filter_line( uint8_t *dst,
     int w = pv->width[plane];
     int refs = pv->ref_stride[plane];
     int x;
-    int macroblock_x;
-    int macroblock_y = y / 8 ;
-    
     
     for( x = 0; x < w; x++)
     {
-
-#if 0       
-     /* Buggy experimental code for macroblock-by-macrobock comb detection.*/
-        if(plane == 0 && pv->mode == 7)
-        {
-            if( !(x % 8))
-                macroblock_x = x / 8;        
-            
-            if(pv->cc_array[plane][macroblock_x][macroblock_y] < 0 || pv->cc_array[plane][macroblock_x][macroblock_y] > 64)
-            hb_log("[%i][%i] ( %i * %i )macroblock %i x %i is combed: %i", pv->deinterlaced_frames, plane, x, y, macroblock_x, macroblock_y, pv->cc_array[plane][macroblock_x][macroblock_y] );
-            
-            if(pv->cc_array[plane][macroblock_x][macroblock_y] == 0 && pv->cc_array[plane][macroblock_x+1][macroblock_y] == 0 && pv->cc_array[plane][macroblock_x-1][macroblock_y] == 0 && pv->cc_array[plane][macroblock_x][macroblock_y+1] == 0 && pv->cc_array[plane][macroblock_x][macroblock_y-1] == 0 )
-            {
-                dst[0] = cur[0];
-                pv->uncombed_macroblocks++;
-                goto end_of_yadif_filter_pixel;
-            }
-        }
-        pv->combed_macroblocks++;
-#endif
         /* Pixel above*/
         int c              = cur[-refs];
         /* Temporal average -- the current pixel location in the previous and next fields */
@@ -293,7 +519,7 @@ static void yadif_filter_line( uint8_t *dst,
         int spatial_pred;
          
         /* Spatial pred is either a bilinear or cubic vertical interpolation. */
-        if( pv->mode >= 4  )
+        if( pv->mode > 0 )
         {
             spatial_pred = cubic_interpolate( cur[-3*refs], cur[-refs], cur[+refs], cur[3*refs] );
         }
@@ -314,7 +540,7 @@ static void yadif_filter_line( uint8_t *dst,
                       + ABS(cur[-refs+1+j] - cur[+refs+1-j]);\
             if( score < spatial_score ){\
                 spatial_score = score;\
-                if( pv->mode >= 4)\
+                if( pv->mode > 0 )\
                 {\
                     switch(j)\
                     {\
@@ -340,8 +566,8 @@ static void yadif_filter_line( uint8_t *dst,
                 YADIF_CHECK(-1) YADIF_CHECK(-2) }} }}
                 YADIF_CHECK( 1) YADIF_CHECK( 2) }} }}
                                 
-        /* Temporally adjust the spatial prediction by comparing against the
-           alternate (associated) fields in the previous and next frames. */
+        /* Temporally adjust the spatial prediction by comparing
+           against fields in the previous and next frames.       */
         int b = (prev2[-2*refs] + next2[-2*refs])>>1;
         int f = (prev2[+2*refs] + next2[+2*refs])>>1;
         
@@ -361,7 +587,6 @@ static void yadif_filter_line( uint8_t *dst,
         
         dst[0] = spatial_pred;
                         
-end_of_yadif_filter_pixel:
         dst++;
         cur++;
         prev++;
@@ -376,109 +601,21 @@ static void yadif_filter( uint8_t ** dst,
                           int tff,
                           hb_filter_private_t * pv )
 {
-
-#if 0
-    /* Buggy, experimental code for macroblock-by-macroblock decombing.*/
-    if( pv->mode == 7 )
+    
+    int is_combed = tritical_detect_comb( pv );
+    
+    if( is_combed == 1 )
     {
-        int x, y, block_x, block_y, plane, plane_width, plane_height, offset, cc;
-        
-        int stride = 0;
-        int block = 8;
-        int s[16];
-        int color_diff = pv->color_diff;
-        int color_equal = pv->color_equal;
-        
-        if ( pv->buf_settings->flags & 16 )
-        {
-            /* Frame is progressive, be more discerning. */
-            color_diff = pv->prog_diff;
-            color_equal = pv->prog_equal;
-        }
-        
-        /* Iterate through planes */
-        for( plane = 0; plane < 1; plane++ )
-        {   
-            plane_width =  pv->width[plane];
-            plane_height = pv->height[plane];
-        
-            if( plane == 1 )
-            {
-                /* Y has already been checked, now offset by Y's dimensions
-                   and divide all the other values by 2, since Cr and Cb
-                   are half-size compared to Y.                               */
-                stride = plane_width * plane_height;
-            }
-            else if ( plane == 2 )
-            {
-                /* Y and Cb are done, so the offset needs to be bumped
-                   so it's width*height + (width / 2) * (height / 2)  */
-                stride *= 5/4;
-            }
-            /* Grab a horizontal line */
-            for(y = 0; y < plane_height; y += block )
-            {
-                uint8_t *line = &pv->ref[1][plane][ y*plane_width ];
-
-                /* Iterate through it horizontally in blocks */
-                for(x = 0; x < plane_width; x += block)
-                {
-                    /* Clear out the current macroblock mapping from the last frame. */
-                    pv->cc_array[plane][x/block][y/block] = 0;
-                    int sadA = 0;
-                    int sadB = 0;
-                    
-                    /* Go through the block horizontally */
-                    for(block_x = 0; block_x < block; block_x++)
-                    {
-                        /* Go through the block vertically, collecting pixels */
-                        for(block_y = 0; block_y < block*2; block_y++)
-                        {
-                            s[block_y] = line[x+block_x+(block_y*plane_width)];
-                        }
-
-                        /* Now go through the results to check combing. */
-                        for(block_y = 0; block_y < block; block_y++)
-                        {
-                            sadA += abs(s[block_y] - s[block_y+2]);
-                            sadB += abs(s[block_y] - s[block_y+1]);
-                            
-//                            if( abs(s[block_y] - s[block_y+2]) < color_equal && abs(s[block_y] - s[block_y+1]) > color_diff)
-//                            {
-//                                pv->cc_array[plane][x/block][y/block]++;
-//                            }
-                        }
-                    }
-                    
-                    if(sadA < sadB)
-                    {
-                        pv->cc_array[plane][x/block][y/block] = 1;
-                    }
-                    
-                }
-            }        
-        }
+        pv->yadif_deinterlaced_frames++;
     }
-
-#if 0
-/* Visualize macroblocks */    
-    int x, y;
-    fprintf(stderr, "FRAME %i VISUALIZATION\n", pv->deinterlaced_frames);
-    for( y = 0; y < 60; y++ )
+    else if( is_combed == 2 )
     {
-        for( x = 0; x < 90; x++ )
-        {
-            if(pv->cc_array[0][x][y])
-                fprintf(stderr, "X");
-            else
-                fprintf(stderr, "O");
-                
-        }
-        fprintf(stderr, "\n");
+        pv->blend_deinterlaced_frames++;
     }
-    fprintf(stderr, "\n\n");
-#endif
-#endif
+    else
+    {
+        pv->unfiltered_frames++;
+    }
 
     int i;
     for( i = 0; i < 3; i++ )
@@ -490,7 +627,7 @@ static void yadif_filter( uint8_t ** dst,
         int y;
         for( y = 0; y < h; y++ )
         {
-            if( pv->mode == 3)
+            if( ( pv->mode == 4 && is_combed ) || is_combed == 2 )
             {
                 uint8_t *prev = &pv->ref[0][i][y*ref_stride];
                 uint8_t *cur  = &pv->ref[1][i][y*ref_stride];
@@ -499,7 +636,7 @@ static void yadif_filter( uint8_t ** dst,
 
                 blend_filter_line( dst2, cur, i, y, pv );
             }
-            else if( (y ^ parity) &  1 )
+            else if( (y ^ parity) & 1 && is_combed == 1 )
             {
                 uint8_t *prev = &pv->ref[0][i][y*ref_stride];
                 uint8_t *cur  = &pv->ref[1][i][y*ref_stride];
@@ -655,20 +792,20 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
     pv->buf_out[1] = hb_buffer_init( buf_size );
     pv->buf_settings = hb_buffer_init( 0 );
 
-    pv->deinterlaced_frames = 0;
-    pv->passed_frames = 0;
-    pv->color_equal = 10;
-    pv->color_diff = 15;
-    pv->threshold = 9;
-    pv->prog_equal = 10;
-    pv->prog_diff = 35;
-    pv->prog_threshold = 9;
-    
-    pv->combed_macroblocks = 0;
-    pv->uncombed_macroblocks = 0;
-    
+    pv->yadif_deinterlaced_frames = 0;
+    pv->blend_deinterlaced_frames = 0;
+    pv->unfiltered_frames = 0;
+
     pv->yadif_ready    = 0;
+
     pv->mode     = MODE_DEFAULT;
+    pv->spatial_metric = 2;
+    pv->motion_threshold = 6;
+    pv->spatial_threshold = 9;
+    pv->block_threshold = 80;
+    pv->block_width = 16;
+    pv->block_height = 16;
+    
     pv->parity   = PARITY_DEFAULT;
 
     pv->mcdeint_mode   = MCDEINT_MODE_DEFAULT;
@@ -678,36 +815,43 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
     {
         sscanf( settings, "%d:%d:%d:%d:%d:%d:%d",
                 &pv->mode,
-                &pv->color_equal,
-                &pv->color_diff,
-                &pv->threshold,
-                &pv->prog_equal,
-                &pv->prog_diff,
-                &pv->prog_threshold );
+                &pv->spatial_metric,
+                &pv->motion_threshold,
+                &pv->spatial_threshold,
+                &pv->block_threshold,
+                &pv->block_width,
+                &pv->block_height );
     }
-    
-    if( pv->mode == 2 || pv->mode == 5 )
+
+    if( pv->mode == 2 || pv->mode == 3 )
     {
         pv->mcdeint_mode = 0;
     }
     
     /* Allocate yadif specific buffers */
-    if( pv->mode > 0 )
+    int i, j;
+    for( i = 0; i < 3; i++ )
     {
-        int i, j;
-        for( i = 0; i < 3; i++ )
+        int is_chroma = !!i;
+        int w = ((width   + 31) & (~31))>>is_chroma;
+        int h = ((height+6+ 31) & (~31))>>is_chroma;
+
+        pv->ref_stride[i] = w;
+
+        for( j = 0; j < 3; j++ )
         {
-            int is_chroma = !!i;
-            int w = ((width   + 31) & (~31))>>is_chroma;
-            int h = ((height+6+ 31) & (~31))>>is_chroma;
-
-            pv->ref_stride[i] = w;
-
-            for( j = 0; j < 3; j++ )
-            {
-                pv->ref[j][i] = malloc( w*h*sizeof(uint8_t) ) + 3*w;
-            }
+            pv->ref[j][i] = malloc( w*h*sizeof(uint8_t) ) + 3*w;
         }
+    }
+
+    /* Allocate a buffer to store a comb mask. */
+    for( i = 0; i < 3; i++ )
+    {
+        int is_chroma = !!i;
+        int w = ((pv->width[0]   + 31) & (~31))>>is_chroma;
+        int h = ((pv->height[0]+6+ 31) & (~31))>>is_chroma;
+
+        pv->mask[i] = malloc( w*h*sizeof(uint8_t) ) + 3*w;
     }
 
     /* Allocate mcdeint specific buffers */
@@ -770,14 +914,7 @@ void hb_decomb_close( hb_filter_private_t * pv )
         return;
     }
     
-    if( pv->mode < 7 )
-    {
-        hb_log("decomb: deinterlaced %i | unfiltered %i | total %i", pv->deinterlaced_frames, pv->passed_frames, pv->deinterlaced_frames + pv->passed_frames);
-    }
-    else
-    {
-        hb_log("decomb macroblock: deinterlaced: %i | unfiltered %i | total %i", pv->combed_macroblocks, pv->uncombed_macroblocks, pv->combed_macroblocks + pv->uncombed_macroblocks);
-    }
+    hb_log("decomb: yadif deinterlaced %i | blend deinterlaced %i | unfiltered %i | total %i", pv->yadif_deinterlaced_frames, pv->blend_deinterlaced_frames, pv->unfiltered_frames, pv->yadif_deinterlaced_frames + pv->blend_deinterlaced_frames + pv->unfiltered_frames);
 
     /* Cleanup frame buffers */
     if( pv->buf_out[0] )
@@ -794,20 +931,28 @@ void hb_decomb_close( hb_filter_private_t * pv )
     }
 
     /* Cleanup yadif specific buffers */
-    if( pv->mode > 0 )
+    int i;
+    for( i = 0; i<3*3; i++ )
     {
-        int i;
-        for( i = 0; i<3*3; i++ )
+        uint8_t **p = &pv->ref[i%3][i/3];
+        if (*p)
         {
-            uint8_t **p = &pv->ref[i%3][i/3];
-            if (*p)
-            {
-                free( *p - 3*pv->ref_stride[i/3] );
-                *p = NULL;
-            }
+            free( *p - 3*pv->ref_stride[i/3] );
+            *p = NULL;
         }
     }
-
+    
+    /* Cleanup combing mask. */
+    for( i = 0; i<3*3; i++ )
+    {
+        uint8_t **p = &pv->mask[i/3];
+        if (*p)
+        {
+            free( *p - 3*pv->ref_stride[i/3] );
+            *p = NULL;
+        }
+    }
+    
     /* Cleanup mcdeint specific buffers */
     if( pv->mcdeint_mode >= 0 )
     {
@@ -845,40 +990,6 @@ int hb_decomb_work( const hb_buffer_t * cbuf_in,
     avpicture_fill( &pv->pic_in, buf_in->data,
                     pix_fmt, width, height );
 
-    /* Use libavcodec deinterlace if mode == 0 */
-    if( pv->mode == 0 )
-    {
-        avpicture_fill( &pv->pic_out, pv->buf_out[0]->data,
-                        pix_fmt, width, height );
-
-        /* Check for combing on the input frame */
-        int interlaced =  hb_detect_comb(buf_in, width, height, pv->color_equal, pv->color_diff, pv->threshold, pv->prog_equal, pv->prog_diff, pv->prog_threshold);
-        
-        if(interlaced)
-        {
-            avpicture_deinterlace( &pv->pic_out, &pv->pic_in,
-                                   pix_fmt, width, height );
-
-            pv->deinterlaced_frames++;
-            //hb_log("Frame %i is combed (Progressive: %s )", pv->deinterlaced_frames + pv->passed_frames, (buf_in->flags & 16) ? "Y" : "N");
-            
-            hb_buffer_copy_settings( pv->buf_out[0], buf_in );
-            *buf_out = pv->buf_out[0];            
-        }
-        else
-        {
-            /* No combing detected, pass input frame through unmolested.*/
-            
-            pv->passed_frames++;
-            
-            hb_buffer_copy_settings( pv->buf_out[0], buf_in );
-            *buf_out = buf_in;
-            
-        }
-
-        return FILTER_OK;
-    }
-    
     /* Determine if top-field first layout */
     int tff;
     if( pv->parity < 0 )
@@ -892,12 +1003,6 @@ int hb_decomb_work( const hb_buffer_t * cbuf_in,
 
     /* Store current frame in yadif cache */
     store_ref( (const uint8_t**)pv->pic_in.data, pv );
-    
-    if( pv->mode < 7 )
-    {
-        /* Note down if the input frame is combed */
-        pv->comb = (pv->comb << 1) | hb_detect_comb(buf_in, width, height, pv->color_equal, pv->color_diff, pv->threshold, pv->prog_equal, pv->prog_diff, pv->prog_threshold);
-    }
 
     /* If yadif is not ready, store another ref and return FILTER_DELAY */
     if( pv->yadif_ready == 0 )
@@ -914,71 +1019,27 @@ int hb_decomb_work( const hb_buffer_t * cbuf_in,
         return FILTER_DELAY;
     }
 
-    /* yadif works one frame behind so if the previous frame
-     * had combing, deinterlace it otherwise just output it. */
-    if( pv->mode == 7 ) // Experimental for macroblock decombing
+    /* Perform yadif filtering */        
+    int frame;
+    for( frame = 0; frame <= ( ( pv->mode == 2 || pv->mode == 3 )? 1 : 0 ) ; frame++ )
     {
-        /* Perform yadif filtering */
-        
-        pv->deinterlaced_frames++;
-        int frame;
-        for( frame = 0; frame <= ( ( pv->mode == 2 || pv->mode == 5 )? 1 : 0 ) ; frame++ )
-        {
-            int parity = frame ^ tff ^ 1;
+        int parity = frame ^ tff ^ 1;
 
-            avpicture_fill( &pv->pic_out, pv->buf_out[!(frame^1)]->data,
+        avpicture_fill( &pv->pic_out, pv->buf_out[!(frame^1)]->data,
+                        pix_fmt, width, height );
+
+        yadif_filter( pv->pic_out.data, parity, tff, pv );
+
+        if( pv->mcdeint_mode >= 0 )
+        {
+            /* Perform mcdeint filtering */
+            avpicture_fill( &pv->pic_in,  pv->buf_out[(frame^1)]->data,
                             pix_fmt, width, height );
 
-            yadif_filter( pv->pic_out.data, parity, tff, pv );
-
-            if( pv->mcdeint_mode >= 0 )
-            {
-                /* Perform mcdeint filtering */
-                avpicture_fill( &pv->pic_in,  pv->buf_out[(frame^1)]->data,
-                                pix_fmt, width, height );
-
-                mcdeint_filter( pv->pic_in.data, pv->pic_out.data, parity, pv );
-            }
-
-            *buf_out = pv->buf_out[!(frame^1)];
+            mcdeint_filter( pv->pic_in.data, pv->pic_out.data, parity, pv );
         }
-    }
-    else if(  (pv->comb & 2 ) == 0 )
-    {
-        /* previous frame not interlaced - copy cached input frame to buf_out */
-        
-        pv->passed_frames++;
-        
-        avpicture_fill( &pv->pic_out,  pv->buf_out[0]->data, pix_fmt, width, height );
-        get_ref( (uint8_t**)pv->pic_out.data, pv, 1 );
-        *buf_out = pv->buf_out[0];
-    }
-    else
-    {
-        /* Perform yadif filtering */
-        
-        pv->deinterlaced_frames++;
-        int frame;
-        for( frame = 0; frame <= ( ( pv->mode == 2 || pv->mode == 5 )? 1 : 0 ) ; frame++ )
-        {
-            int parity = frame ^ tff ^ 1;
 
-            avpicture_fill( &pv->pic_out, pv->buf_out[!(frame^1)]->data,
-                            pix_fmt, width, height );
-
-            yadif_filter( pv->pic_out.data, parity, tff, pv );
-
-            if( pv->mcdeint_mode >= 0 )
-            {
-                /* Perform mcdeint filtering */
-                avpicture_fill( &pv->pic_in,  pv->buf_out[(frame^1)]->data,
-                                pix_fmt, width, height );
-
-                mcdeint_filter( pv->pic_in.data, pv->pic_out.data, parity, pv );
-            }
-
-            *buf_out = pv->buf_out[!(frame^1)];
-        }
+        *buf_out = pv->buf_out[!(frame^1)];
     }
 
     /* Copy buffered settings to output buffer settings */

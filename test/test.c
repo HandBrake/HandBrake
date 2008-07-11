@@ -1504,7 +1504,7 @@ static void ShowHelp()
      "    -9, --detelecine        Detelecine video with pullup filter\n"
      "          <L:R:T:B:SB:MP>   (default 1:1:4:4:0:0)\n"
      "    -5, --decomb           Selectively deinterlaces when it detects combing\n"
-     "          <M:EQ:DF:TR:EQ:DF:TR>     (default: 4:10:15:9:10:35:9)\n"
+     "          <MO:ME:MT:ST:BT:BX:BY>     (default: 1:2:6:9:80:16:16)\n"
     "    -g, --grayscale         Grayscale encoding\n"
     "    -p, --pixelratio        Store pixel aspect ratio in video stream\n"
     "    -P, --loosePixelratio   Store pixel aspect ratio with specified width\n"
