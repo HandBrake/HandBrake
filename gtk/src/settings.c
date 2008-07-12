@@ -1183,6 +1183,8 @@ ghb_prefs_to_ui(signal_user_data_t *ud)
 	g_free(path);
 }
 
+static gboolean prefs_initializing = FALSE;
+
 void
 ghb_prefs_save(GHashTable *settings)
 {
@@ -1191,6 +1193,7 @@ ghb_prefs_save(GHashTable *settings)
     gchar **keys;
     gsize length;
 	
+	if (prefs_initializing) return;
 	keys = g_key_file_get_keys(internalKeyFile, "Preferences", &length, NULL);
     if (keys != NULL)
     {
@@ -1208,6 +1211,40 @@ ghb_prefs_save(GHashTable *settings)
 }
 
 void
+dump_key_file(GKeyFile *keyFile, const gchar *section)
+{
+	gint ii;
+    gchar **keys;
+    gsize length;
+
+    // Get defaults from internal defaults 
+	keys = g_key_file_get_keys(keyFile, section, &length, NULL);
+    if (keys != NULL)
+    {
+        for (ii = 0; keys[ii] != NULL; ii++)
+        {
+            gchar *str;
+
+			str = g_key_file_get_string(keyFile, section, keys[ii], NULL);
+			if (str != NULL)
+			{
+				g_message("Preference: key (%s) -- str (%s)\n", keys[ii], str);
+				g_free(str);
+			}
+			else
+			{
+				g_message("Preference: key (%s) -- str **none**\n", keys[ii]);
+			}
+        }
+        g_strfreev(keys);
+    }
+	else
+	{
+		g_message("no keys");
+	}
+}
+
+void
 ghb_prefs_load(signal_user_data_t *ud)
 {
 	gint ii;
@@ -1218,6 +1255,7 @@ ghb_prefs_load(signal_user_data_t *ud)
     gsize length;
 	gboolean res;
 	
+	prefs_initializing = TRUE;
 	internalKeyFile = g_key_file_new();
 	res = g_key_file_load_from_data( internalKeyFile, defaultSettings, 
 							  sizeof(defaultSettings), G_KEY_FILE_NONE, NULL);
@@ -1251,6 +1289,7 @@ ghb_prefs_load(signal_user_data_t *ud)
 	{
 		g_key_file_load_from_file( prefsKeyFile, config, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	}
+dump_key_file(prefsKeyFile, "Preferences");
 	value = g_key_file_get_value(prefsKeyFile, "Preferences", "version", NULL);
     if (value == NULL)
     {
@@ -1269,6 +1308,7 @@ ghb_prefs_load(signal_user_data_t *ud)
 			    {
 				    g_debug("Preference: key (%s) -- str (%s)\n", keys[ii], str);
 		            g_key_file_set_value(prefsKeyFile, "Preferences", keys[ii], str);
+g_message("default key (%s) str (%s)", keys[ii], str);
 				    g_free(str);
 			    }
             }
@@ -1279,15 +1319,18 @@ ghb_prefs_load(signal_user_data_t *ud)
 		store_key_file(prefsKeyFile, "preferences");
     }
 	g_free(config);
+dump_key_file(prefsKeyFile, "Preferences");
 	keys = g_key_file_get_keys(internalKeyFile, "Preferences", &length, NULL);
     if (keys != NULL)
     {
 	    for (ii = 0; keys[ii] != NULL; ii++)
 	    {
 		    value = g_key_file_get_value(prefsKeyFile, "Preferences", keys[ii], NULL);
+g_message("key (%s) value (%s)", keys[ii], value);
 		    if (value != NULL)
 		    {
 			    ghb_settings_set_string(ud->settings, keys[ii], value);
+				ghb_ui_update(ud, keys[ii], value);
 			    g_free(value);
 		    }
             else
@@ -1296,6 +1339,7 @@ ghb_prefs_load(signal_user_data_t *ud)
 		        if (value != NULL)
 		        {
 			        ghb_settings_set_string(ud->settings, keys[ii], value);
+					ghb_ui_update(ud, keys[ii], value);
 			        g_free(value);
 		        }
             }
@@ -1316,6 +1360,7 @@ ghb_prefs_load(signal_user_data_t *ud)
 	{
 		ghb_ui_update_int(ud, "hbfd", 0);
 	}
+	prefs_initializing = FALSE;
 }
 
 void

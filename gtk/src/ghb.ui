@@ -179,6 +179,13 @@
           </object>
         </child>
         <child>
+          <object class="GtkAction" id="preferences">
+            <property name="stock_id">gtk-preferences</property>
+            <property name="name">preferences</property>
+            <signal handler="prefs_dialog_cb" name="activate"/>
+          </object>
+        </child>
+        <child>
           <object class="GtkAction" id="quit1">
             <property name="stock_id">gtk-quit</property>
             <property name="name">quit1</property>
@@ -291,6 +298,8 @@
         <menu action="menuitem1">
           <menuitem action="source1"/>
           <menuitem action="destination1"/>
+          <separator/>
+          <menuitem action="preferences"/>
           <separator/>
           <menuitem action="quit1"/>
         </menu>
@@ -3543,6 +3552,136 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkDialog" id="prefs_dialog">
+    <property name="border_width">5</property>
+    <property name="modal">True</property>
+    <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
+    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+    <property name="skip_taskbar_hint">True</property>
+    <property name="skip_pager_hint">True</property>
+    <property name="has_separator">False</property>
+    <signal handler="gtk_widget_hide_on_delete" name="delete_event"/>
+    <child internal-child="vbox">
+      <object class="GtkVBox" id="dialog-vbox6">
+        <property name="visible">True</property>
+        <property name="spacing">2</property>
+        <child>
+          <object class="GtkFrame" id="frame16">
+            <property name="visible">True</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">GTK_SHADOW_ETCHED_OUT</property>
+            <child>
+              <object class="GtkAlignment" id="alignment2">
+                <property name="visible">True</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <object class="GtkVBox" id="vbox29">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkCheckButton" id="use_source_name">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip-text" translatable="yes">The destination filename will be automatically
+generated from the source filename or volume
+label.</property>
+                        <property name="label" translatable="yes">Derive destination name from source</property>
+                        <property name="draw_indicator">True</property>
+                        <signal handler="pref_changed_cb" name="toggled"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="linear_vquality">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip-text" translatable="yes">x264 uses a different scale for video quality than
+other codecs.  This adjusts the scale so that 
+similar values give similar quality across all the
+video codecs.</property>
+                        <property name="label" translatable="yes">Adjust x264 video quality scale</property>
+                        <property name="draw_indicator">True</property>
+                        <signal handler="pref_changed_cb" name="toggled"/>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="noscale">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip-text" translatable="yes">When picture settings require that the image 
+dimensions be rounded to some multiple number
+of pixels. This setting will crop a few extra pixels
+instead of doing exact cropping and scaling to
+the required multiple.</property>
+                        <property name="label" translatable="yes">Loose cropping</property>
+                        <property name="draw_indicator">True</property>
+                        <signal handler="pref_changed_cb" name="toggled"/>
+                      </object>
+                      <packing>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="directqp">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip-text" translatable="yes">HandBrake allows entry of QP/CRF values for x264 
+and FFMPEG instead of the percentage metric.
+This preference is associated with the current
+preset only.
+
+You *MUST* save the current preset to preserve
+this setting.</property>
+                        <property name="label" translatable="yes">Allow direct QP/CRF</property>
+                        <property name="draw_indicator">True</property>
+                        <signal handler="vcodec_changed_cb" name="toggled"/>
+                      </object>
+                      <packing>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="label7">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">&lt;b&gt;Preferences&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child internal-child="action_area">
+          <object class="GtkHButtonBox" id="dialog-action_area6">
+            <property name="visible">True</property>
+            <property name="layout_style">GTK_BUTTONBOX_END</property>
+            <child>
+              <object class="GtkButton" id="pref_ok">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="label" translatable="yes">gtk-ok</property>
+                <property name="use_stock">True</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="pack_type">GTK_PACK_END</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-5">pref_ok</action-widget>
+    </action-widgets>
   </object>
   <object class="GtkDialog" id="preset_save_dialog">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>

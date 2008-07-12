@@ -22,10 +22,6 @@ X - theora not allowed in mp4 files.
 X - mp4 faac and ac3
 X - avi lame and ac3
 X - ogm vorbis and lame (not ac3?)
-P - submitted patch - move vfr to video tab?
-P - submitted patch - ffmpeg loose ana trunc patch
-P - submitted patch - job cancel patch
-P - submitted patch - preview correption padding patch
 X - when vfr selected, force framerate conbo to same as source
 X - chapters - after edit, <CR> should start editing next chapter name
 X - add decomb option to picture cleanup
@@ -51,10 +47,15 @@ X - make selected audio red if not same as combo's. instead, I eliminated
     now updates as you change the combo boxes.  Add creates a new entry
     in the list with the current settings. i.e. you start with a duplicate
     of the current selection.
-clean up hb.XXXXX turds in /tmp.  it seems many linux distros don't clean
-/tmp so this shite piles up.
+X - submitted patch - ffmpeg loose ana trunc patch
+X - clean up hb.XXXXX turds in /tmp.  it seems many linux distros don't clean
+    /tmp so this shite piles up.
+X - add detailed help. added link to HandBrake Guide
+X - add preferences dialog to give access to some settings
 add ability to delete builtin presets and restore them
 add ability to drag-n-drop presets to reorder them
-add detailed help
 force m4v when x264+ac3+mp4
 preview using vlc?
+move vfr to video tab?
+P - submitted patch - job cancel patch
+P - submitted patch - preview correption padding patch

@@ -1851,6 +1851,18 @@ presets_save_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 }
 
 void
+prefs_dialog_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+{
+	GtkWidget *dialog;
+	GtkResponseType response;
+
+	g_debug("prefs_dialog_cb ()\n");
+	dialog = GHB_WIDGET(ud->builder, "prefs_dialog");
+	response = gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_hide(dialog);
+}
+
+void
 presets_remove_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	GtkTreeView *treeview;
@@ -3186,6 +3198,14 @@ hbfd_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_widget_to_setting (ud->settings, widget);
 	gboolean hbfd = ghb_settings_get_bool(ud->settings, "hbfd");
 	ghb_hbfd(ud, hbfd);
+	ghb_prefs_save(ud->settings);
+}
+
+void
+pref_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	g_debug("pref_changed_cb\n");
+	ghb_widget_to_setting (ud->settings, widget);
 	ghb_prefs_save(ud->settings);
 }
 
