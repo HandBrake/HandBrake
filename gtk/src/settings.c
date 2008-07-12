@@ -1210,7 +1210,8 @@ ghb_prefs_save(GHashTable *settings)
     }
 }
 
-void
+#if 0
+static void
 dump_key_file(GKeyFile *keyFile, const gchar *section)
 {
 	gint ii;
@@ -1243,6 +1244,7 @@ dump_key_file(GKeyFile *keyFile, const gchar *section)
 		g_message("no keys");
 	}
 }
+#endif
 
 void
 ghb_prefs_load(signal_user_data_t *ud)
@@ -1289,7 +1291,6 @@ ghb_prefs_load(signal_user_data_t *ud)
 	{
 		g_key_file_load_from_file( prefsKeyFile, config, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	}
-dump_key_file(prefsKeyFile, "Preferences");
 	value = g_key_file_get_value(prefsKeyFile, "Preferences", "version", NULL);
     if (value == NULL)
     {
@@ -1308,7 +1309,6 @@ dump_key_file(prefsKeyFile, "Preferences");
 			    {
 				    g_debug("Preference: key (%s) -- str (%s)\n", keys[ii], str);
 		            g_key_file_set_value(prefsKeyFile, "Preferences", keys[ii], str);
-g_message("default key (%s) str (%s)", keys[ii], str);
 				    g_free(str);
 			    }
             }
@@ -1319,14 +1319,12 @@ g_message("default key (%s) str (%s)", keys[ii], str);
 		store_key_file(prefsKeyFile, "preferences");
     }
 	g_free(config);
-dump_key_file(prefsKeyFile, "Preferences");
 	keys = g_key_file_get_keys(internalKeyFile, "Preferences", &length, NULL);
     if (keys != NULL)
     {
 	    for (ii = 0; keys[ii] != NULL; ii++)
 	    {
 		    value = g_key_file_get_value(prefsKeyFile, "Preferences", keys[ii], NULL);
-g_message("key (%s) value (%s)", keys[ii], value);
 		    if (value != NULL)
 		    {
 			    ghb_settings_set_string(ud->settings, keys[ii], value);
