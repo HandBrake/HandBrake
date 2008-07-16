@@ -58,11 +58,13 @@ int hb_demux_ps( hb_buffer_t * buf_ps, hb_list_t * list_es, hb_psdemux_t* state 
                       ((uint64_t)(d[pos+2] & 3) << 13) |
                       ((uint64_t)(d[pos+3]) << 5) |
                       (d[pos+4] >> 3);
+        // we declare a discontinuity if there's a gap of more than
+        // 100ms between the last scr & this or if this scr goes back
+        // by more than half a frame time.
         int64_t scr_delta = scr - state->last_scr;
-        if ( scr_delta > (90*700) || scr_delta < 0 )
+        if ( scr_delta > 90*100 || scr_delta < -90*10 )
         {
             ++state->scr_changes;
-            state->scr_offset += scr_delta - state->frame_duration;
         }
         state->last_scr = scr;
     }

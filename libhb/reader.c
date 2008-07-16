@@ -8,17 +8,27 @@
 
 typedef struct
 {
+    int64_t last;   // last timestamp seen on this stream
+    double average; // average time between packets
+    int id;         // stream id
+} stream_timing_t;
+
+typedef struct
+{
     hb_job_t     * job;
     hb_title_t   * title;
     volatile int * die;
 
     hb_dvd_t     * dvd;
-    hb_buffer_t  * ps;
     hb_stream_t  * stream;
 
+    stream_timing_t *stream_timing;
+    int64_t        scr_offset;
     hb_psdemux_t   demux;
+    int            scr_changes;
     uint           sequence;
     int            saw_video;
+    int            st_slots;            // size (in slots) of stream_timing array
 } hb_reader_t;
 
 /***********************************************************************
@@ -43,26 +53,18 @@ hb_thread_t * hb_reader_init( hb_job_t * job )
     r->die   = job->die;
     r->sequence = 0;
 
-    /*
-     * when the scr changes we need to base the timing offset change on the
-     * end of the current video frame otherwise we'll map the first frame
-     * following the change over the current frame & it will be discarded.
-     * Since the PTS only gives the start of the frame we need the average
-     * frame duration to get its end. See the comments in the init_delay
-     * setup in libhb/encx264.c to understand the following code.
-     */
-    r->demux.frame_duration = 90000. * (double)job->vrate_base / (double)job->vrate;
-    if ( r->demux.frame_duration == 3753 )
-    {
-        r->demux.frame_duration = 4506;
-    }
-    r->demux.frame_duration += 3;
+    r->st_slots = 4;
+    r->stream_timing = calloc( sizeof(stream_timing_t), r->st_slots );
+    r->stream_timing[0].id = r->title->video_id;
+    r->stream_timing[0].average = 90000. * (double)job->vrate_base /
+                                           (double)job->vrate;
+    r->stream_timing[1].id = -1;
 
     return hb_thread_init( "reader", ReaderFunc, r,
                            HB_NORMAL_PRIORITY );
 }
 
-static void push_buf( hb_reader_t *r, hb_fifo_t *fifo, hb_buffer_t *buf )
+static void push_buf( const hb_reader_t *r, hb_fifo_t *fifo, hb_buffer_t *buf )
 {
     while( !*r->die && !r->job->done && hb_fifo_is_full( fifo ) )
     {
@@ -73,6 +75,70 @@ static void push_buf( hb_reader_t *r, hb_fifo_t *fifo, hb_buffer_t *buf )
         hb_snooze( 50 );
     }
     hb_fifo_push( fifo, buf );
+}
+
+// The MPEG STD (Standard Timing Decoder) essentially requires that we keep
+// per-stream timing so that when there's a timing discontinuity we can
+// seemlessly join packets on either side of the discontinuity. This join
+// requires that we know the timestamp of the previous packet and the
+// average inter-packet time (since we position the new packet at the end
+// of the previous packet). The next three routines keep track of this
+// per-stream timing.
+
+// find the per-stream timing state associated with 'buf'
+
+static stream_timing_t *id_to_st( hb_reader_t *r, const hb_buffer_t *buf )
+{
+    stream_timing_t *st = r->stream_timing;
+    while ( st->id != buf->id && st->id != -1)
+    {
+        ++st;
+    }
+    // if we haven't seen this stream add it.
+    if ( st->id == -1 )
+    {
+        // we keep the steam timing info in an array with some power-of-two
+        // number of slots. If we don't have two slots left (one for our new
+        // entry plus one for the "-1" eol) we need to expand the array.
+        int slot = st - r->stream_timing;
+        if ( slot + 1 >= r->st_slots )
+        {
+            r->st_slots *= 2;
+            r->stream_timing = realloc( r->stream_timing, r->st_slots *
+                                        sizeof(*r->stream_timing) );
+            st = r->stream_timing + slot;
+        }
+        st->id = buf->id;
+        st->last = buf->renderOffset;
+        st->average = 30.*90.;
+
+        st[1].id = -1;
+    }
+    return st;
+}
+
+// update the average inter-packet time of the stream associated with 'buf'
+// using a recursive low-pass filter with a 16 packet time constant.
+
+static void update_ipt( hb_reader_t *r, const hb_buffer_t *buf )
+{
+    stream_timing_t *st = id_to_st( r, buf );
+    double dt = buf->renderOffset - st->last;
+    st->average += ( dt - st->average ) * (1./16.);
+    st->last = buf->renderOffset;
+}
+
+// use the per-stream state associated with 'buf' to compute a new scr_offset
+// such that 'buf' will follow the previous packet of this stream separated
+// by the average packet time of the stream.
+
+static void new_scr_offset( hb_reader_t *r, const hb_buffer_t *buf )
+{
+    stream_timing_t *st = id_to_st( r, buf );
+    int64_t nxt = st->last + st->average - r->scr_offset;
+    r->scr_offset = buf->renderOffset - nxt;
+    r->scr_changes = r->demux.scr_changes;
+    st->last = buf->renderOffset;
 }
 
 /***********************************************************************
@@ -127,7 +193,7 @@ static void ReaderFunc( void * _r )
     }
 
     list  = hb_list_init();
-    r->ps = hb_buffer_init( HB_DVD_READ_BUFFER_SIZE );
+    hb_buffer_t *ps = hb_buffer_init( HB_DVD_READ_BUFFER_SIZE );
 
     while( !*r->die && !r->job->done )
     {
@@ -150,14 +216,14 @@ static void ReaderFunc( void * _r )
 
         if (r->dvd)
         {
-          if( !hb_dvd_read( r->dvd, r->ps ) )
+          if( !hb_dvd_read( r->dvd, ps ) )
           {
               break;
           }
         }
         else if (r->stream)
         {
-          if ( !hb_stream_read( r->stream, r->ps ) )
+          if ( !hb_stream_read( r->stream, ps ) )
           {
             break;
           }
@@ -187,11 +253,11 @@ static void ReaderFunc( void * _r )
 
         if ( r->title->demuxer == HB_NULL_DEMUXER )
         {
-            hb_demux_null( r->ps, list, &r->demux );
+            hb_demux_null( ps, list, &r->demux );
         }
         else
         {
-            hb_demux_ps( r->ps, list, &r->demux );
+            hb_demux_ps( ps, list, &r->demux );
         }
 
         while( ( buf = hb_list_item( list, 0 ) ) )
@@ -206,9 +272,10 @@ static void ReaderFunc( void * _r )
                 if ( buf->id == r->title->video_id && buf->start != -1 )
                 {
                     r->saw_video = 1;
-                    r->demux.scr_offset = buf->renderOffset;
+                    r->scr_changes = r->demux.scr_changes;
+                    new_scr_offset( r, buf );
                     hb_log( "reader: first SCR %llu scr_offset %llu",
-                            r->demux.last_scr, r->demux.scr_offset );
+                            r->demux.last_scr, r->scr_offset );
                 }
                 else
                 {
@@ -219,13 +286,25 @@ static void ReaderFunc( void * _r )
             {
                 if ( buf->start != -1 )
                 {
-                    /* this packet has a PTS - correct it for the initial
-                       video time offset & any timing discontinuities so that
-                       everything after this sees a continuous clock with 0
-                       being the time of the first video packet. */
-                    buf->start -= r->demux.scr_offset;
-                    buf->renderOffset -= r->demux.scr_offset;
+                    if ( r->scr_changes == r->demux.scr_changes )
+                    {
+                        // This packet is referenced to the same SCR as the last.
+                        // Update the average inter-packet time for this stream.
+                        update_ipt( r, buf );
+                    }
+                    else
+                    {
+                        // This is the first audio or video packet after an SCR
+                        // change. Compute a new scr offset that would make this
+                        // packet follow the last of this stream with the correct
+                        // average spacing.
+                        new_scr_offset( r, buf );
+                    }
+                    // adjust timestamps to remove System Clock Reference offsets.
+                    buf->start -= r->scr_offset;
+                    buf->renderOffset -= r->scr_offset;
                 }
+
                 buf->sequence = r->sequence++;
                 /* if there are mutiple output fifos, send a copy of the
                  * buffer down all but the first (we have to not ship the
@@ -251,7 +330,7 @@ static void ReaderFunc( void * _r )
     hb_fifo_push( r->job->fifo_mpeg2, hb_buffer_init(0) );
 
     hb_list_empty( &list );
-    hb_buffer_close( &r->ps );
+    hb_buffer_close( &ps );
     if (r->dvd)
     {
       hb_dvd_stop( r->dvd );
@@ -260,6 +339,11 @@ static void ReaderFunc( void * _r )
     else if (r->stream)
     {
       hb_stream_close(&r->stream);
+    }
+
+    if ( r->stream_timing )
+    {
+        free( r->stream_timing );
     }
 
     hb_log( "reader: done. %d scr changes", r->demux.scr_changes );
