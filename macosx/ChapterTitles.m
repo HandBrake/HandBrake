@@ -65,12 +65,15 @@
 {
     if(aTableColumn != nil && [[aTableColumn identifier] intValue] == 2)
     {
-        hb_chapter_t *chapter = hb_list_item( fTitle->list_chapter, rowIndex );
-        
-        if( chapter != NULL )
+        if( fTitle )
         {
-            strncpy( chapter->title, [anObject UTF8String], 1023);
-            chapter->title[1023] = '\0';
+            hb_chapter_t *chapter = hb_list_item( fTitle->list_chapter, rowIndex );
+
+            if( chapter != NULL )
+            {
+                strncpy( chapter->title, [anObject UTF8String], 1023);
+                chapter->title[1023] = '\0';
+            }
         }
     }
 }
@@ -87,18 +90,21 @@
     }
     else
     {
-        hb_chapter_t *chapter = hb_list_item( fTitle->list_chapter, rowIndex );
-        
-        if( chapter != NULL )
+        if( fTitle )
         {
-            cellEntry = [NSString stringWithUTF8String:chapter->title];
-        }
-        else
-        {
-            cellEntry = @"__DATA ERROR__";
+            hb_chapter_t *chapter = hb_list_item( fTitle->list_chapter, rowIndex );
+
+            if( chapter != NULL )
+            {
+                cellEntry = [NSString stringWithUTF8String:chapter->title];
+            }
+            else
+            {
+                cellEntry = @"__DATA ERROR__";
+            }
         }
     }
-    
+
     return cellEntry;
 }
 

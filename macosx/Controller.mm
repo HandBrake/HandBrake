@@ -1182,9 +1182,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 {
     [NSApp endSheet: fScanSrcTitlePanel];
     [fScanSrcTitlePanel orderOut: self];
-    
-    
-    
+
     if(sender == fScanSrcTitleOpenButton)
     {
         /* We setup the scan status in the main window to indicate a source title scan */
@@ -1200,7 +1198,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     }
 }
 
-
 /* Here we actually tell hb_scan to perform the source scan, using the path to source and title number*/
 - (void) performScan:(NSString *) scanPath scanTitleNum: (int) scanTitleNum
 {
@@ -1208,13 +1205,18 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     BOOL cancelScanDecrypt = 0;
     NSString *path = scanPath;
     HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
+
+    // Notify ChapterTitles that there's no title
+    [fChapterTitlesDelegate resetWithTitle:nil];
+    [fChapterTable reloadData];
+
     if( [detector isVideoDVD] )
     {
         // The chosen path was actually on a DVD, so use the raw block
         // device path instead.
         path = [detector devicePath];
         [self writeToActivityLog: "trying to open a physical dvd at: %s", [scanPath UTF8String]];
-        
+
         /* lets check for vlc here to make sure we have a dylib available to use for decrypting */
         NSString *vlcPath = @"/Applications/VLC.app";
         NSFileManager * fileManager = [NSFileManager defaultManager];
@@ -1243,21 +1245,17 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             cancelScanDecrypt = 0;
             [self writeToActivityLog: "user overrode vlc warning -trying to open physical dvd without decryption"];
             }
-            
+
         }
         else
         {
             /* VLC was found in /Applications so all is well, we can carry on using vlc's libdvdcss.dylib for decrypting if needed */
             [self writeToActivityLog: "VLC app found for decrypting physical dvd"];
         }
-        
     }
-    
-    
-    
+
     if (cancelScanDecrypt == 0)
     {
-        
         /* we actually pass the scan off to libhb here */
         /* If there is no title number passed to scan, we use "0"
          * which causes the default behavior of a full source scan
@@ -1270,6 +1268,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         {
             [self writeToActivityLog: "scanning specifically for title: %d", scanTitleNum];
         }
+
         hb_scan( fHandle, [path UTF8String], scanTitleNum );
         [fSrcDVD2Field setStringValue:@"Scanning new source ..."];
     }
@@ -1281,8 +1280,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             [self enableUI: YES];
         }
     }
-
-    
 }
 
 - (IBAction) showNewScan:(id)sender
@@ -1291,15 +1288,15 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	hb_title_t * title;
 	int indxpri=0; 	  // Used to search the longuest title (default in combobox)
 	int longuestpri=0; // Used to search the longuest title (default in combobox)
-	
+
 	list = hb_get_titles( fHandle );
-	
+
 	if( !hb_list_count( list ) )
 	{
 		/* We display a message if a valid dvd source was not chosen */
 		[fSrcDVD2Field setStringValue: @"No Valid Source Found"];
         SuccessfulScan = NO;
-        
+
         // Notify ChapterTitles that there's no title
         [fChapterTitlesDelegate resetWithTitle:nil];
         [fChapterTable reloadData];
@@ -2089,10 +2086,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     if (returnCode == NSAlertOtherReturn)
         [self doCancelCurrentJob];  // <- this also stops libhb
 }
-
-
-
-
 
 - (IBAction) Pause: (id) sender
 {
