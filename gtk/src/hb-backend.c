@@ -2738,7 +2738,8 @@ ghb_add_job(job_settings_t *js, gint unique_id)
 	{
 		job->select_subtitle = NULL;
 	}
-	if( ghb_settings_get_bool(settings, "two_pass") )
+	if( ghb_settings_get_bool(settings, "two_pass") &&
+		!ghb_settings_get_bool(settings, "vquality_type_constant"))
 	{
 		/*
 		 * If subtitle_scan is enabled then only turn it on

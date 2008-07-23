@@ -1210,6 +1210,20 @@ ghb_prefs_save(GHashTable *settings)
     }
 }
 
+void
+ghb_pref_save(GHashTable *settings, const gchar *key)
+{
+	const gchar *value;
+	
+	if (prefs_initializing) return;
+	value = ghb_settings_get_string(settings, key);
+	if (value != NULL)
+	{
+		g_key_file_set_value(prefsKeyFile, "Preferences", key, value);
+		store_key_file(prefsKeyFile, "preferences");
+	}
+}
+
 #if 0
 static void
 dump_key_file(GKeyFile *keyFile, const gchar *section)

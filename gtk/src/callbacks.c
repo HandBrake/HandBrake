@@ -71,6 +71,9 @@ static dependency_t dep_map[] =
 	{"vquality_type_target", "video_target_size", "enable", FALSE},
 	{"vquality_type_constant", "video_quality", "enable", FALSE},
 	{"vquality_type_constant", "constant_rate_factor", "enable", FALSE},
+	{"vquality_type_constant", "x264_trellis", "enable", TRUE},
+	{"vquality_type_constant", "two_pass", "enable", TRUE},
+	{"vquality_type_constant", "turbo", "enable", TRUE},
 	{"two_pass", "turbo", "enable", FALSE},
 	{"container", "large_mp4", "mp4|m4v", FALSE},
 	{"container", "http_optimize_mp4", "mp4|m4v", FALSE},
@@ -651,7 +654,7 @@ source_button_clicked_cb(GtkButton *button, signal_user_data_t *ud)
 			if (strcmp(sourcename, filename) != 0)
 			{
 				ghb_settings_set_string (ud->settings, "default_source", filename);
-				ghb_prefs_save (ud->settings);
+				ghb_pref_save (ud->settings, "default_source");
 				ghb_dvd_set_current (filename, ud);
 			}
 			g_free(filename);
@@ -672,7 +675,7 @@ dvd_source_activate_cb(GtkAction *action, signal_user_data_t *ud)
 	if (strcmp(sourcename, filename) != 0)
 	{
 		ghb_settings_set_string (ud->settings, "default_source", filename);
-		ghb_prefs_save (ud->settings);
+		ghb_pref_save (ud->settings, "default_source");
 		ghb_dvd_set_current (filename, ud);
 	}
 }
@@ -2748,7 +2751,7 @@ ghb_timer_cb(gpointer data)
 		if (strcmp(dest_dir, def_dest) != 0)
 		{
 			ghb_settings_set_string (ud->settings, "destination_dir", dest_dir);
-			ghb_prefs_save (ud->settings);
+			ghb_pref_save (ud->settings, "destination_dir");
 		}
 		update_default_destination = FALSE;
 	}
@@ -2911,7 +2914,7 @@ show_presets_toggled_cb(GtkToggleButton *button, signal_user_data_t *ud)
 		gtk_window_resize(hb_window, 16, 16);
 	}
 	ghb_widget_to_setting(ud->settings, GTK_WIDGET(button));
-	ghb_prefs_save(ud->settings);
+	ghb_pref_save(ud->settings, "show_presets");
 }
 
 void
@@ -3198,7 +3201,7 @@ hbfd_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_widget_to_setting (ud->settings, widget);
 	gboolean hbfd = ghb_settings_get_bool(ud->settings, "hbfd");
 	ghb_hbfd(ud, hbfd);
-	ghb_prefs_save(ud->settings);
+	ghb_pref_save(ud->settings, "hbfd");
 }
 
 void
@@ -3206,7 +3209,8 @@ pref_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("pref_changed_cb\n");
 	ghb_widget_to_setting (ud->settings, widget);
-	ghb_prefs_save(ud->settings);
+	const gchar *name = gtk_widget_get_name(widget);
+	ghb_pref_save(ud->settings, name);
 }
 
 void

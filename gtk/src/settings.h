@@ -121,6 +121,7 @@ gint ghb_preset_flags(const gchar *name, gint *index);
 void ghb_prefs_load(signal_user_data_t *ud);
 void ghb_prefs_to_ui(signal_user_data_t *ud);
 void ghb_prefs_save(GHashTable *settings);
+void ghb_pref_save(GHashTable *settings, const gchar *key);
 void ghb_set_preset_default(GHashTable *settings);
 
 #endif // _SETTINGS_H_
