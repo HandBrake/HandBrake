@@ -794,18 +794,22 @@ namespace Handbrake
             text_filesize.Text = "";
             slider_videoQuality.Value = 0;
             SliderValue.Text = "0%";
+            check_2PassEncode.Enabled = true;
         }
         private void text_filesize_TextChanged(object sender, EventArgs e)
         {
             text_bitrate.Text = "";
             slider_videoQuality.Value = 0;
             SliderValue.Text = "0%";
+            check_2PassEncode.Enabled = true;
         }
         private void slider_videoQuality_Scroll(object sender, EventArgs e)
         {
             SliderValue.Text = slider_videoQuality.Value.ToString() + "%";
             text_bitrate.Text = "";
             text_filesize.Text = "";
+            check_2PassEncode.Enabled = false;
+            check_2PassEncode.CheckState = CheckState.Unchecked;
         }
         private void check_2PassEncode_CheckedChanged(object sender, EventArgs e)
         {
