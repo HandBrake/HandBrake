@@ -2501,7 +2501,6 @@ ghb_add_job(job_settings_t *js, gint unique_id)
 	{
 		// Use default settings
 		hb_filter_decomb.settings = NULL;
-		hb_filter_decomb.settings = "1:2:6:9:40:16:16";
 		hb_list_add( job->filters, &hb_filter_decomb );
 	}
 	if( job->deinterlace )
