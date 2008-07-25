@@ -2135,6 +2135,20 @@ ghb_validate_video(signal_user_data_t *ud)
 		vcodec = HB_VCODEC_XVID;
 		ghb_ui_update_int(ud, "video_codec", vcodec);
 	}
+	gboolean decomb = ghb_settings_get_bool(settings, "decomb");
+   	gboolean vfr = ghb_settings_get_bool(settings, "variable_frame_rate");
+	if (decomb && !vfr)
+	{
+		message = g_strdup_printf(
+					"Decomb is intended to be used in conjunction\n"
+					"with variable frame rate.\n\n"
+					"Would you like me to enable VFR for you?");
+		if (ghb_message_dialog(GTK_MESSAGE_WARNING, message, "No", "Yes"))
+		{
+			ghb_ui_update_int(ud, "variable_frame_rate", TRUE);
+		}
+		g_free(message);
+	}
 	return TRUE;
 }
 
