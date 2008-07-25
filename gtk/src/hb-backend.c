@@ -409,7 +409,7 @@ static const iso639_lang_t language_table[] =
 #define	LANG_TABLE_SIZE (sizeof(language_table)/ sizeof(iso639_lang_t))
 
 static void
-del_tree(const gchar *name)
+del_tree(const gchar *name, gboolean del_top)
 {
 	const gchar *file;
 
@@ -421,11 +421,12 @@ del_tree(const gchar *name)
 		{
 			gchar *path;
 			path = g_strdup_printf("%s/%s", name, file);
-			del_tree(path);
+			del_tree(path, TRUE);
 			g_free(path);
 			file = g_dir_read_name(gdir);
 		}
-		g_rmdir(name);
+		if (del_top)
+			g_rmdir(name);
 	}
 	else
 	{
@@ -521,12 +522,12 @@ static hb_handle_t * h = NULL;
 extern void hb_get_tempory_directory(hb_handle_t *h, char path[512]);
 
 void
-ghb_hb_cleanup()
+ghb_hb_cleanup(gboolean partial)
 {
 	char dir[512];
 
 	hb_get_tempory_directory(h, dir);
-	del_tree(dir);
+	del_tree(dir, !partial);
 }
 
 static hb_audio_config_t*

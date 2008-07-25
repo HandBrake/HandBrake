@@ -306,13 +306,13 @@ on_quit1_activate(GtkMenuItem *quit, signal_user_data_t *ud)
     {
         if (cancel_encode("Closing HandBrake will terminate encoding.\n"))
         {
-			ghb_hb_cleanup();
+			ghb_hb_cleanup(FALSE);
 	        gtk_main_quit();
             return;
         }
         return;
     }
-	ghb_hb_cleanup();
+	ghb_hb_cleanup(FALSE);
 	gtk_main_quit();
 }
 
@@ -601,6 +601,7 @@ do_scan(signal_user_data_t *ud, const gchar *filename)
 			gtk_progress_bar_set_fraction (progress, 0);
 			gtk_progress_bar_set_text (progress, "Scanning ...");
 			ud->state |= GHB_STATE_SCANNING;
+			ghb_hb_cleanup(TRUE);
 			ghb_backend_scan (path, 0);
 		}
 		else
@@ -779,7 +780,7 @@ gboolean
 window_destroy_event_cb(GtkWidget *widget, GdkEvent *event, signal_user_data_t *ud)
 {
 	g_debug("window_destroy_event_cb ()\n");
-	ghb_hb_cleanup();
+	ghb_hb_cleanup(FALSE);
 	gtk_main_quit();
     return FALSE;
 }
@@ -792,13 +793,13 @@ window_delete_event_cb(GtkWidget *widget, GdkEvent *event, signal_user_data_t *u
     {
         if (cancel_encode("Closing HandBrake will terminate encoding.\n"))
         {
-			ghb_hb_cleanup();
+			ghb_hb_cleanup(FALSE);
 	        gtk_main_quit();
             return FALSE;
         }
         return TRUE;
     }
-	ghb_hb_cleanup();
+	ghb_hb_cleanup(FALSE);
 	gtk_main_quit();
     return FALSE;
 }
@@ -2655,7 +2656,7 @@ ghb_timer_cb(gpointer data)
 			current_id = -1;
 			if (ghb_autostart)
 			{
-				ghb_hb_cleanup();
+				ghb_hb_cleanup(FALSE);
 				gtk_main_quit();
 			}
         } break;
@@ -2772,6 +2773,7 @@ ghb_timer_cb(gpointer data)
 			gtk_progress_bar_set_fraction (progress, 0);
 			gtk_progress_bar_set_text (progress, "Scanning ...");
 			ud->state |= GHB_STATE_SCANNING;
+			ghb_hb_cleanup(TRUE);
 			ghb_backend_scan (path, 0);
 		}
 	}
@@ -3319,11 +3321,13 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 			gtk_progress_bar_set_fraction (progress, 0);
  			update_source_label(ud, device);
 			ud->state |= GHB_STATE_SCANNING;
+			ghb_hb_cleanup(TRUE);
 			ghb_backend_scan(device, 0);
 		}
 		else
 		{
 			ud->state |= GHB_STATE_SCANNING;
+			ghb_hb_cleanup(TRUE);
 			ghb_backend_scan("/dev/null", 0);
 		}
 	}
