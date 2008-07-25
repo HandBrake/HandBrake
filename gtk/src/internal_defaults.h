@@ -12,7 +12,7 @@
 "pref_audio_rate2=source\n"
 "pref_audio_mix1=dpl2\n"
 "pref_audio_mix2=dpl2\n"
-"pref_audio_drc=2.4\n"
+"pref_audio_drc=1.0\n"
 "chapter_markers=enable\n"
 "container=mp4\n"
 "ipod_file=disable\n"
