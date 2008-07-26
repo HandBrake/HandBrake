@@ -687,7 +687,7 @@ are maintained across different sources */
 // -[PictureController(Private) optimalViewSizeForImageSize:]
 //
 // Given the size of the preview image to be shown, returns the best possible
-// size for the OpenGL view.
+// size for the view.
 //
 - (NSSize)optimalViewSizeForImageSize: (NSSize)imageSize
 {
@@ -735,7 +735,7 @@ are maintained across different sources */
 //
 // -[PictureController(Private) resizePanelForViewSize:animate:]
 //
-// Resizes the entire sheet to accomodate an OpenGL view of a particular size.
+// Resizes the entire sheet to accomodate a view of a particular size.
 //
 - (void)resizeSheetForViewSize: (NSSize)viewSize
 {
@@ -761,8 +761,11 @@ are maintained across different sources */
 
     // But now the sheet is off-center, so also shift the origin to center it and
     // keep the top aligned.
-    frame.origin.x -= (deltaX / 2.0);
-    frame.origin.y -= deltaY;
+    if( frame.size.width != [[self window] frame].size.width )
+        frame.origin.x -= (deltaX / 2.0);
+
+    if( frame.size.height != [[self window] frame].size.height )
+        frame.origin.y -= deltaY;
 
     [[self window] setFrame:frame display:YES animate:YES];
 }
@@ -770,7 +773,7 @@ are maintained across different sources */
 //
 // -[PictureController(Private) setViewSize:]
 //
-// Changes the OpenGL view's size and centers it vertially inside of its area.
+// Changes the view's size and centers it vertically inside of its area.
 // Assumes resizeSheetForViewSize: has already been called.
 //
 - (void)setViewSize: (NSSize)viewSize
