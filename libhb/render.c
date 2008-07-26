@@ -208,13 +208,14 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_buffer_t * in = *buf_in, * buf_tmp_in = *buf_in;
     hb_buffer_t * ivtc_buffer = NULL;
 
-    if(!in->data)
+    if( in->size <= 0 )
     {
         /* If the input buffer is end of stream, send out an empty one
          * to the next stage as well. Note that this will result in us
          * losing the current contents of the delay queue.
          */
-        *buf_out = job->indepth_scan? NULL : hb_buffer_init(0);
+        *buf_out = in;
+        *buf_in = NULL;
         return HB_WORK_DONE;
     }
 

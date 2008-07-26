@@ -659,7 +659,7 @@ static void do_job( hb_job_t * job, int cpu_count )
 
     // The muxer requires track information that's set up by the encoder
     // init routines so we have to init the muxer last.
-    job->muxer = hb_muxer_init( job );
+    job->muxer = job->indepth_scan? NULL : hb_muxer_init( job );
 
     done = 0;
     w = hb_list_item( job->list_work, 0 );
@@ -667,13 +667,11 @@ static void do_job( hb_job_t * job, int cpu_count )
     w->init( w, job );
     while( !*job->die )
     {
-        if( ( w->status = w->work( w, NULL, NULL ) ) == HB_WORK_DONE )
+        if ( !done && ( w->status = w->work( w, NULL, NULL ) ) == HB_WORK_DONE )
         {
             done = 1;
         }
-        if( done &&
-            final_w->status == HB_WORK_DONE &&
-            !hb_fifo_size( job->fifo_mpeg4 ) )
+        if( done && final_w->status == HB_WORK_DONE )
         {
             break;
         }
