@@ -251,14 +251,7 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     if (mux_data == job->mux_data)
     {
         /* Video */
-        if ((job->vcodec == HB_VCODEC_X264) && (job->areBframes))
-        {
-            timecode = (buf->start + (buf->renderOffset)) * TIMECODE_SCALE;
-        }
-        else
-        {
-            timecode = buf->start * TIMECODE_SCALE;
-        }
+        timecode = buf->start * TIMECODE_SCALE;
 
         if (job->chapter_markers && (buf->new_chap || timecode == 0))
         {

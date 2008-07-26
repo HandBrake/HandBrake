@@ -51,10 +51,8 @@ struct hb_work_private_s
     uint8_t         *x264_allocated_pic;
 
     int            chap_mark;   // saved chap mark when we're propagating it
-    int64_t        dts_next;    // DTS start time value for next output frame
     int64_t        last_stop;   // Debugging - stop time of previous input frame
     int64_t        init_delay;
-    int64_t        max_delay;   // if init_delay too small, delay really needed
     int64_t        next_chap;
 
     struct {
@@ -306,9 +304,6 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
     pv->x264_allocated_pic = pv->pic_in.img.plane[0];
 
-    pv->dts_next = -1;
-    pv->next_chap = 0;
-
     if (job->areBframes)
     {
         /* Basic initDelay value is the clockrate divided by the FPS
@@ -341,6 +336,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         /* The delay is 1 frames for regular b-frames, 2 for b-pyramid. */
         pv->init_delay *= job->areBframes;
     }
+    w->config->h264.init_delay = pv->init_delay;
 
     return 0;
 }
@@ -384,34 +380,15 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
     hb_work_private_t *pv = w->private_data;
     hb_job_t *job = pv->job;
 
-    /* Get next DTS value to use */
-    int64_t dts_start = pv->dts_next;
-
-    /* compute the stop time based on the original frame's duration */
-    int64_t dts_stop  = dts_start + get_frame_duration( pv, pic_out->i_pts );
-    pv->dts_next = dts_stop;
-
     /* Should be way too large */
     buf = hb_buffer_init( 3 * job->width * job->height / 2 );
     buf->size = 0;
     buf->frametype = 0;
-    buf->start = dts_start;
-    buf->stop  = dts_stop;
 
-    /* Store the output presentation time stamp from x264 for use by muxmp4
-       in off-setting b-frames with the CTTS atom. */
-    buf->renderOffset = pic_out->i_pts - dts_start + pv->init_delay;
-    if ( buf->renderOffset < 0 )
-    {
-        if ( dts_start - pic_out->i_pts > pv->max_delay )
-        {
-            pv->max_delay = dts_start - pic_out->i_pts;
-            hb_log( "encx264: init_delay too small: "
-                    "is %lld need %lld", pv->init_delay,
-                    pv->max_delay );
-        }
-        buf->renderOffset = 0;
-    }
+    // use the pts to get the original frame's duration.
+    int64_t duration  = get_frame_duration( pv, pic_out->i_pts );
+    buf->start = pic_out->i_pts;
+    buf->stop  = pic_out->i_pts + duration;
 
     /* Encode all the NALs we were given into buf.
        NOTE: This code assumes one video frame per NAL (but there can
@@ -504,8 +481,7 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
     // make sure we found at least one video frame
     if ( buf->size <= 0 )
     {
-        // no video: back up the output time stamp then free the buf
-        pv->dts_next = buf->start;
+        // no video - discard the buf
         hb_buffer_close( &buf );
     }
     return buf;
@@ -530,17 +506,6 @@ static hb_buffer_t *x264_encode( hb_work_object_t *w, hb_buffer_t *in )
         /* Point x264 at our buffers (Y)UV data */
         pv->pic_in.img.plane[1] = in->data + job->width * job->height;
         pv->pic_in.img.plane[2] = in->data + 5 * job->width * job->height / 4;
-    }
-
-    if( pv->dts_next == -1 )
-    {
-        /* we don't have a start time yet so use the first frame's
-         * start. All other frame times will be determined by the
-         * sum of the prior output frame durations in *DTS* order
-         * (not by the order they arrive here). This timing change is
-         * essential for VFR with b-frames but a complete nop otherwise.
-         */
-        pv->dts_next = in->start;
     }
     if( in->new_chap && job->chapter_markers )
     {
@@ -580,7 +545,7 @@ static hb_buffer_t *x264_encode( hb_work_object_t *w, hb_buffer_t *in )
     // the x264_encoder_encode call (since it reorders frames).
     save_frame_info( pv, in );
 
-    /* Feed the input DTS to x264 so it can figure out proper output PTS */
+    /* Feed the input PTS to x264 so it can figure out proper output PTS */
     pv->pic_in.i_pts = in->start;
 
     x264_picture_t pic_out;
@@ -634,6 +599,8 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     }
 
     // Not EOF - encode the packet & wrap it in a NAL
+
+    // if we're re-ordering frames, check if this frame is too large to reorder
     if ( pv->init_delay && in->stop - in->start > pv->init_delay )
     {
         // This frame's duration is larger than the time allotted for b-frame

@@ -157,6 +157,7 @@ union hb_esconfig_u
 	    int       sps_length;
 	    uint8_t  pps[HB_CONFIG_MAX_SIZE];
 	    int       pps_length;
+        uint32_t init_delay;
 	} h264;
 
     struct

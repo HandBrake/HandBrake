@@ -20,8 +20,12 @@ struct hb_mux_object_s
     /* libmp4v2 handle */
     MP4FileHandle file;
 
-    /* Cumulated durations so far, in timescale units (see MP4Mux) */
-    uint64_t sum_dur;
+    /* Cumulated durations so far, in output & input timescale units (see MP4Mux) */
+    int64_t sum_dur;        // duration in output timescale units
+    int64_t sum_dur_in;     // duration in input 90KHz timescale units
+
+    // bias to keep render offsets in ctts atom positive (set up by encx264)
+    int64_t init_delay;
 
     /* Chapter state information for muxing */
     MP4TrackId chapter_track;
@@ -223,6 +227,7 @@ static int MP4Init( hb_mux_object_t * m )
 			AddIPodUUID(m->file, mux_data->track);
 		}
 
+        m->init_delay = job->config.h264.init_delay;
     }
     else /* FFmpeg or XviD */
     {
@@ -383,11 +388,20 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                    hb_buffer_t * buf )
 {
     hb_job_t * job = m->job;
-
     int64_t duration;
+    int64_t offset = 0;
 
     if( mux_data == job->mux_data )
     {
+        /* Video */
+
+        // if there are b-frames compute the render offset
+        // (we'll need it for both the video frame & the chapter track)
+        if ( m->init_delay )
+        {
+            offset = ( buf->start + m->init_delay ) * m->samplerate / 90000 -
+                     m->sum_dur;
+        }
         /* Add the sample before the new frame.
            It is important that this be calculated prior to the duration
            of the new video sample, as we want to sync to right after it.
@@ -396,17 +410,11 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         {
             struct hb_text_sample_s *sample;
 
-            /* If this is an x264 encode with bframes the IDR frame we're
-               trying to mark will be displayed offset by its renderOffset
-               so we need to offset the chapter by the same amount.
-               MP4 render offsets don't seem to work for text tracks so
-               we have to fudge the duration instead. */
-            duration = m->sum_dur - m->chapter_duration;
-
-            if ( job->areBframes )
-            {
-                duration += buf->renderOffset * m->samplerate / 90000;
-            }
+            // this chapter is postioned by writing out the previous chapter.
+            // the duration of the previous chapter is the duration up to but
+            // not including the current frame minus the duration of all
+            // chapters up to the previous.
+            duration = m->sum_dur - m->chapter_duration + offset;
             if ( duration <= 0 )
             {
                 /* The initial & final chapters can have very short durations
@@ -434,12 +442,14 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             m->chapter_duration += duration;
         }
 
-        /* Video */
-        /* Because we use the audio samplerate as the timescale,
-           we have to use potentially variable durations so the video
-           doesn't go out of sync */
-        int64_t bias = ( buf->start * m->samplerate / 90000 ) - m->sum_dur;
-        duration = ( buf->stop - buf->start ) * m->samplerate / 90000 + bias;
+        // since we're changing the sample rate we need to keep track of
+        // the truncation bias so that the audio and video don't go out
+        // of sync. m->sum_dur_in is the sum of the input durations so far.
+        // m->sum_dur is the sum of the output durations. Their difference
+        // (in output sample rate units) is the accumulated truncation bias.
+        int64_t bias = ( m->sum_dur_in * m->samplerate / 90000 ) - m->sum_dur;
+        int64_t dur_in = buf->stop - buf->start;
+        duration = dur_in * m->samplerate / 90000 + bias;
         if ( duration <= 0 )
         {
             /* We got an illegal mp4/h264 duration. This shouldn't
@@ -458,6 +468,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             duration = 1000 * m->samplerate / 90000;
         }
         m->sum_dur += duration;
+        m->sum_dur_in += dur_in;
     }
     else
     {
@@ -465,20 +476,13 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         duration = MP4_INVALID_DURATION;
     }
 
-    /* Here's where the sample actually gets muxed.
-       If it's an audio sample, don't offset the sample's playback.
-       If it's a video sample and there are no b-frames, ditto.
-       If there are b-frames, offset by the initDelay plus the
-       difference between the presentation time stamp x264 gives
-       and the decoding time stamp from the buffer data. */
+    // Here's where the sample actually gets muxed.
     if( !MP4WriteSample( m->file,
                          mux_data->track,
                          buf->data,
                          buf->size,
                          duration,
-                         ((mux_data->track != 1) ||
-                          (job->areBframes==0) ||
-                          (job->vcodec != HB_VCODEC_X264)) ? 0 : (  buf->renderOffset * m->samplerate / 90000),
+                         offset,
                          ((buf->frametype & HB_FRAME_KEY) != 0) ) )
     {
         hb_error("Failed to write to output file, disk full?");
@@ -516,14 +520,15 @@ static int MP4End( hb_mux_object_t * m )
     if (job->areBframes)
     {
            // Insert track edit to get A/V back in sync.  The edit amount is
-           // the rendering offset of the first sample.
-           MP4AddTrackEdit(m->file, 1, MP4_INVALID_EDIT_ID, MP4GetSampleRenderingOffset(m->file,1,1),
-               MP4GetTrackDuration(m->file, 1), 0);
+           // the init_delay.
+           int64_t edit_amt = m->init_delay * m->samplerate / 90000;
+           MP4AddTrackEdit(m->file, 1, MP4_INVALID_EDIT_ID, edit_amt,
+                           MP4GetTrackDuration(m->file, 1), 0);
             if ( m->job->chapter_markers )
             {
                 // apply same edit to chapter track to keep it in sync with video
                 MP4AddTrackEdit(m->file, m->chapter_track, MP4_INVALID_EDIT_ID,
-                                MP4GetSampleRenderingOffset(m->file,1,1),
+                                edit_amt,
                                 MP4GetTrackDuration(m->file, m->chapter_track), 0);
             }
      }
