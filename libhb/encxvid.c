@@ -149,10 +149,11 @@ int encxvidWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     xvid_enc_frame_t frame;
     hb_buffer_t * in = *buf_in, * buf;
 
-    /* If this is the last empty frame, we're done */
-    if(!in->data)
+    if ( in->size <= 0 )
     {
-       *buf_out        = NULL;
+        /* EOF on input - send it downstream & say we're done */
+        *buf_out = in;
+        *buf_in = NULL;
        return HB_WORK_DONE;
     }
 
@@ -160,7 +161,6 @@ int encxvidWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     buf = hb_buffer_init( 3 * job->width * job->height / 2 );
     buf->start = in->start;
     buf->stop  = in->stop;
-    //buf->chap  = in->chap;
 
     memset( &frame, 0, sizeof( frame ) );
 

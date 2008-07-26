@@ -24,7 +24,7 @@ typedef struct
     hb_mux_data_t * mux_data;
     uint64_t        frames;
     uint64_t        bytes;
-
+    int             eof;
 } hb_track_t;
 
 static hb_track_t * GetTrack( hb_list_t * list, hb_job_t *job )
@@ -37,34 +37,59 @@ static hb_track_t * GetTrack( hb_list_t * list, hb_job_t *job )
     for( i = 0; i < hb_list_count( list ); i++ )
     {
         track2 = hb_list_item( list, i );
-        buf    = hb_fifo_see( track2->fifo );
-        if( !buf )
+        if ( ! track2->eof )
         {
-            // XXX libmkv uses a very simple minded muxer that will fail if the
-            // audio & video are out of sync.  To keep them in sync we require
-            // that *all* fifos have a buffer then we take the oldest.
-            // Unfortunately this means we can hang in a deadlock with the
-            // reader process filling the fifos. With the current libmkv
-            // there's no way to avoid occasional deadlocks & we can only
-            // suggest that users evolve to using mp4s.
-            if ( job->mux == HB_MUX_MKV )
+            buf    = hb_fifo_see( track2->fifo );
+            if( !buf )
             {
-                return NULL;
-            }
+                // XXX the libmkv muxer will produce unplayable files if the
+                // audio & video are far out of sync.  To keep them in sync we require
+                // that *all* fifos have a buffer then we take the oldest.
+                // Unfortunately this means we can hang in a deadlock with the
+                // reader process filling the fifos.
+                if ( job->mux == HB_MUX_MKV )
+                {
+                    return NULL;
+                }
 
-            // To make sure we don't camp on one fifo & prevent the others
-            // from making progress we take the earliest data of all the
-            // data that's currently available but we don't care if some
-            // fifos don't have data.
-            continue;
-        }
-        if( !track || buf->start < pts )
-        {
-            track = track2;
-            pts   = buf->start;
+                // To make sure we don't camp on one fifo & prevent the others
+                // from making progress we take the earliest data of all the
+                // data that's currently available but we don't care if some
+                // fifos don't have data.
+                continue;
+            }
+            if ( buf->size <= 0 )
+            {
+                // EOF - mark this track as done
+                buf = hb_fifo_get( track2->fifo );
+                hb_buffer_close( &buf );
+                track2->eof = 1;
+                continue;
+            }
+            if( !track || buf->start < pts )
+            {
+                track = track2;
+                pts   = buf->start;
+            }
         }
     }
     return track;
+}
+
+static int AllTracksDone( hb_list_t * list )
+{
+    hb_track_t  * track;
+    int           i;
+
+    for( i = 0; i < hb_list_count( list ); i++ )
+    {
+        track = hb_list_item( list, i );
+        if ( track->eof == 0 )
+        {
+            return 0;
+        }
+    }
+    return 1;
 }
 
 static void MuxerFunc( void * _mux )
@@ -101,34 +126,6 @@ static void MuxerFunc( void * _mux )
         }
     }
 
-    /* Wait for one buffer for each track */
-    while( !*job->die && !job->done )
-    {
-        int ready;
-
-        ready = 1;
-        if( !hb_fifo_size( job->fifo_mpeg4 ) )
-        {
-            ready = 0;
-        }
-        for( i = 0; i < hb_list_count( title->list_audio ); i++ )
-        {
-            audio = hb_list_item( title->list_audio, i );
-            if( !hb_fifo_size( audio->priv.fifo_out ) )
-            {
-                ready = 0;
-                break;
-            }
-        }
-
-        if( ready )
-        {
-            break;
-        }
-
-        hb_snooze( 50 );
-    }
-
     /* Create file, write headers */
     if( job->pass == 0 || job->pass == 2 )
     {
@@ -153,10 +150,15 @@ static void MuxerFunc( void * _mux )
     }
 
 	int thread_sleep_interval = 50;
-	while( !*job->die && !job->done )
+	while( !*job->die )
     {
         if( !( track = GetTrack( list, job ) ) )
         {
+            if ( AllTracksDone( list )  )
+            {
+                // all our input fifos have signaled EOF
+                break;
+            }
             hb_snooze( thread_sleep_interval );
             continue;
         }

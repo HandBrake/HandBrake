@@ -265,7 +265,7 @@ static void do_job( hb_job_t * job, int cpu_count )
     }
 
 	hb_log (" + PixelRatio: %d, width:%d, height: %d",job->pixel_ratio,job->width, job->height);
-    job->fifo_mpeg2  = hb_fifo_init( 2048 );
+    job->fifo_mpeg2  = hb_fifo_init( 128 );
     job->fifo_raw    = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
     job->fifo_sync   = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
     job->fifo_render = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
@@ -585,9 +585,9 @@ static void do_job( hb_job_t * job, int cpu_count )
             audio->priv.config.vorbis.language = audio->config.lang.simple;
 
         /* set up the audio work structures */
-        audio->priv.fifo_in   = hb_fifo_init( 256 );
+        audio->priv.fifo_in   = hb_fifo_init( 32 );
         audio->priv.fifo_raw  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
-        audio->priv.fifo_sync = hb_fifo_init( 256 );
+        audio->priv.fifo_sync = hb_fifo_init( 32 );
         audio->priv.fifo_out  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
 
 
@@ -638,7 +638,6 @@ static void do_job( hb_job_t * job, int cpu_count )
     job->reader = hb_reader_init( job );
 
     hb_log( " + output: %s", job->file );
-    job->muxer = hb_muxer_init( job );
 
     job->done = 0;
 
@@ -657,6 +656,10 @@ static void do_job( hb_job_t * job, int cpu_count )
         w->thread = hb_thread_init( w->name, work_loop, w,
                                     HB_LOW_PRIORITY );
     }
+
+    // The muxer requires track information that's set up by the encoder
+    // init routines so we have to init the muxer last.
+    job->muxer = hb_muxer_init( job );
 
     done = 0;
     w = hb_list_item( job->list_work, 0 );

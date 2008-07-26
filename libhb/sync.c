@@ -23,7 +23,6 @@ typedef struct
 
     int64_t      next_start;    /* start time of next output frame */
     int64_t      next_pts;      /* start time of next input frame */
-    int64_t      start_silence; /* if we're inserting silence, the time we started */
     int64_t      first_drop;    /* PTS of first 'went backwards' frame dropped */
     int          drop_count;    /* count of 'time went backwards' drops */
 
@@ -72,7 +71,6 @@ struct hb_work_private_s
 static void InitAudio( hb_work_object_t * w, int i );
 static int  SyncVideo( hb_work_object_t * w );
 static void SyncAudio( hb_work_object_t * w, int i );
-static int  NeedSilence( hb_work_object_t * w, hb_audio_t *, int i );
 static void InsertSilence( hb_work_object_t * w, int i, int64_t d );
 static void UpdateState( hb_work_object_t * w );
 
@@ -151,13 +149,6 @@ void syncClose( hb_work_object_t * w )
 
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
-        if ( pv->sync_audio[i].start_silence )
-        {
-            hb_log( "sync: added %d ms of silence to audio %d",
-                    (int)((pv->sync_audio[i].next_pts -
-                              pv->sync_audio[i].start_silence) / 90), i );
-        }
-
         audio = hb_list_item( title->list_audio, i );
         if( audio->config.out.codec == HB_ACODEC_AC3 )
         {
@@ -727,6 +718,13 @@ static void SyncAudio( hb_work_object_t * w, int i )
 
     while( !hb_fifo_is_full( fifo ) && ( buf = hb_fifo_see( audio->priv.fifo_raw ) ) )
     {
+        /* if the next buffer is an eof send it downstream */
+        if ( buf->size <= 0 )
+        {
+            buf = hb_fifo_get( audio->priv.fifo_raw );
+            hb_fifo_push( fifo, buf );
+            return;
+        }
         if ( (int64_t)( buf->start - sync->next_pts ) < 0 )
         {
             // audio time went backwards.
@@ -780,43 +778,6 @@ static void SyncAudio( hb_work_object_t * w, int i )
         buf = hb_fifo_get( audio->priv.fifo_raw );
         OutputAudioFrame( job, audio, buf, sync, fifo, i );
     }
-
-    if( NeedSilence( w, audio, i ) )
-    {
-        InsertSilence( w, i, (90000 * AC3_SAMPLES_PER_FRAME) /
-                             sync->audio->config.in.samplerate );
-    }
-}
-
-static int NeedSilence( hb_work_object_t * w, hb_audio_t * audio, int i )
-{
-    hb_work_private_t * pv = w->private_data;
-    hb_job_t * job = pv->job;
-    hb_sync_audio_t * sync = &pv->sync_audio[i];
-
-    if( hb_fifo_size( audio->priv.fifo_in ) ||
-        hb_fifo_size( audio->priv.fifo_raw ) ||
-        hb_fifo_size( audio->priv.fifo_sync ) ||
-        hb_fifo_size( audio->priv.fifo_out ) )
-    {
-        /* We have some audio, we are fine */
-        return 0;
-    }
-
-    /* No audio left in fifos */
-
-    if( hb_thread_has_exited( job->reader ) )
-    {
-        /* We might miss some audio to complete encoding and muxing
-           the video track */
-        if ( sync->start_silence == 0 )
-        {
-            hb_log("sync: reader has exited, adding silence to audio %d", i);
-            sync->start_silence = sync->next_pts;
-        }
-        return 1;
-    }
-    return 0;
 }
 
 static void InsertSilence( hb_work_object_t * w, int i, int64_t duration )

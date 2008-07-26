@@ -144,10 +144,15 @@ static int deca52Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * buf;
 
-    if( buf_in && *buf_in )
+    if ( (*buf_in)->size <= 0 )
     {
-        pv->sequence = (*buf_in)->sequence;
+        /* EOF on input stream - send it downstream & say that we're done */
+        *buf_out = *buf_in;
+        *buf_in = NULL;
+        return HB_WORK_DONE;
     }
+
+    pv->sequence = (*buf_in)->sequence;
 
     hb_list_add( pv->list, *buf_in );
     *buf_in = NULL;

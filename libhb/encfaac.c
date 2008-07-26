@@ -16,12 +16,11 @@ struct hb_work_private_s
     unsigned long   input_samples;
     unsigned long   output_bytes;
     uint8_t       * buf;
-
+    uint8_t       * obuf;
     hb_list_t     * list;
     int64_t         pts;
-
+    int64_t         framedur;
 	int             out_discrete_channels;
-
 };
 
 int  encfaacInit( hb_work_object_t *, hb_job_t * );
@@ -57,9 +56,12 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
 	/* pass the number of channels used into the private work data */
     pv->out_discrete_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
 
-    pv->faac = faacEncOpen( audio->config.out.samplerate, pv->out_discrete_channels, &pv->input_samples,
-                           &pv->output_bytes );
+    pv->faac = faacEncOpen( audio->config.out.samplerate, pv->out_discrete_channels,
+                            &pv->input_samples, &pv->output_bytes );
     pv->buf  = malloc( pv->input_samples * sizeof( float ) );
+    pv->obuf = malloc( pv->output_bytes );
+    pv->framedur = 90000LL * pv->input_samples /
+                   ( audio->config.out.samplerate * pv->out_discrete_channels );
 
     cfg                = faacEncGetCurrentConfiguration( pv->faac );
     cfg->mpegVersion   = MPEG4;
@@ -113,7 +115,6 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
     free( bytes );
 
     pv->list = hb_list_init();
-    pv->pts  = -1;
 
     return 0;
 }
@@ -128,6 +129,7 @@ void encfaacClose( hb_work_object_t * w )
     hb_work_private_t * pv = w->private_data;
     faacEncClose( pv->faac );
     free( pv->buf );
+    free( pv->obuf );
     hb_list_empty( &pv->list );
     free( pv );
     w->private_data = NULL;
@@ -141,9 +143,6 @@ void encfaacClose( hb_work_object_t * w )
 static hb_buffer_t * Encode( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
-    hb_audio_t * audio = w->audio;
-    hb_buffer_t * buf;
-    uint64_t      pts, pos;
 
     if( hb_list_bytes( pv->list ) < pv->input_samples * sizeof( float ) )
     {
@@ -151,31 +150,64 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
         return NULL;
     }
 
+    uint64_t pts, pos;
     hb_list_getbytes( pv->list, pv->buf, pv->input_samples * sizeof( float ),
                       &pts, &pos );
+    int size = faacEncEncode( pv->faac, (int32_t *)pv->buf, pv->input_samples,
+                              pv->obuf, pv->output_bytes );
 
-    buf        = hb_buffer_init( pv->output_bytes );
-    buf->start = pts + 90000 * pos / pv->out_discrete_channels / sizeof( float ) / audio->config.out.samplerate;
-    buf->stop  = buf->start + 90000 * pv->input_samples / audio->config.out.samplerate / pv->out_discrete_channels;
-    buf->size  = faacEncEncode( pv->faac, (int32_t *) pv->buf,
-            pv->input_samples, buf->data, pv->output_bytes );
-    buf->frametype   = HB_FRAME_AUDIO;
-
-    if( !buf->size )
+    // AAC needs four frames before it can start encoding so we'll get nothing
+    // on the first three calls to the encoder.
+    if ( size > 0 )
     {
-        /* Encoding was successful but we got no data. Try to encode
-           more */
-        hb_buffer_close( &buf );
-        return Encode( w );
+        hb_buffer_t * buf = hb_buffer_init( size );
+        memcpy( buf->data, pv->obuf, size );
+        buf->size = size;
+        buf->start = pv->pts;
+        pv->pts += pv->framedur;
+        buf->stop = pv->pts;
+        buf->frametype   = HB_FRAME_AUDIO;
+        return buf;
     }
-    else if( buf->size < 0 )
+    return NULL;
+}
+
+static hb_buffer_t *Flush( hb_work_object_t *w, hb_buffer_t *bufin )
+{
+    hb_work_private_t *pv = w->private_data;
+
+    // pad whatever data we have out to four input frames.
+    int nbytes = hb_list_bytes( pv->list );
+    int pad = pv->input_samples * sizeof(float) * 4 - nbytes;
+    if ( pad > 0 )
     {
-        hb_log( "faacEncEncode failed" );
-        hb_buffer_close( &buf );
-        return NULL;
+        hb_buffer_t *tmp = hb_buffer_init( pad );
+        memset( tmp->data, 0, pad );
+        hb_list_add( pv->list, tmp );
     }
 
-    return buf;
+    // There are up to three frames buffered in the encoder plus one
+    // in our list buffer so four calls to Encode should get them all.
+    hb_buffer_t *bufout = NULL, *buf = NULL;
+    while ( hb_list_bytes( pv->list ) >= pv->input_samples * sizeof(float) )
+    {
+        hb_buffer_t *b = Encode( w );
+        if ( b )
+        {
+            if ( bufout == NULL )
+            {
+                bufout = b;
+            }
+            else
+            {
+                buf->next = b;
+            }
+            buf = b;
+        }
+    }
+    // add the eof marker to the end of our buf chain
+    buf->next = bufin;
+    return bufout;
 }
 
 /***********************************************************************
@@ -188,6 +220,16 @@ int encfaacWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 {
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * buf;
+
+    if ( (*buf_in)->size <= 0 )
+    {
+        // EOF on input. Finish encoding what we have buffered then send
+        // it & the eof downstream.
+
+        *buf_out = Flush( w, *buf_in );
+        *buf_in = NULL;
+        return HB_WORK_DONE;
+    }
 
     hb_list_add( pv->list, *buf_in );
     *buf_in = NULL;

@@ -285,9 +285,6 @@ static int MP4Init( hb_mux_object_t * m )
         MP4SetTrackFloatProperty(m->file, mux_data->track, "tkhd.width", job->width * (width / height));
     }
 
-	/* firstAudioTrack will be used to reference the first audio track when we add a chapter track */
-	MP4TrackId firstAudioTrack = 0;
-
 	/* add the audio tracks */
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
@@ -344,15 +341,10 @@ static int MP4Init( hb_mux_object_t * m )
         /* If we ever upgrade mpeg4ip, the line above should be replaced with the line below.*/
 //        MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.mp4a.channels",  (u_int16_t)HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown));
 
-        /* store a reference to the first audio track,
-        so we can use it to feed the chapter text track's sample rate */
         if (i == 0) {
-            firstAudioTrack = mux_data->track;
-
             /* Enable the first audio track */
             MP4SetTrackIntegerProperty(m->file, mux_data->track, "tkhd.flags", (TRACK_ENABLED | TRACK_IN_MOVIE));
         }
-
         else
             /* Disable the other audio tracks so QuickTime doesn't play
                them all at once. */
@@ -365,14 +357,17 @@ static int MP4Init( hb_mux_object_t * m )
 
 	if (job->chapter_markers)
     {
-		/* add a text track for the chapters */
-		MP4TrackId textTrack;
-		textTrack = MP4AddChapterTextTrack(m->file, firstAudioTrack);
+        /* add a text track for the chapters. We add the 'chap' atom to track
+           one which is usually the video track & should never be disabled.
+           The Quicktime spec says it doesn't matter which media track the
+           chap atom is on but it has to be an enabled track. */
+        MP4TrackId textTrack;
+        textTrack = MP4AddChapterTextTrack(m->file, 1);
 
         m->chapter_track = textTrack;
         m->chapter_duration = 0;
         m->current_chapter = job->chapter_start;
-	}
+    }
 
     /* Add encoded-by metadata listing version and build date */
     char *tool_string;
@@ -501,30 +496,21 @@ static int MP4End( hb_mux_object_t * m )
     if( m->job->chapter_markers )
     {
         int64_t duration = m->sum_dur - m->chapter_duration;
-        if ( duration <= 0 )
+        /* The final chapter can have a very short duration - if it's less
+         * than a second just skip it. */
+        if ( duration >= m->samplerate )
         {
-            /* The initial & final chapters can have very short durations
-             * (less than the error in our total duration estimate) so
-             * the duration calc above can result in a negative number.
-             * when this happens give the chapter a short duration (1/3
-             * of an ntsc frame time). */
-            duration = 1000 * m->samplerate / 90000;
-        }
 
-        struct hb_text_sample_s *sample = MP4GenerateChapterSample( m, duration,
-                                                m->current_chapter + 1 );
-
-        if( !MP4WriteSample(m->file,
-                            m->chapter_track,
-                            sample->sample,
-                            sample->length,
-                            sample->duration,
-                            0, true) )
-        {
-            hb_error("Failed to write to output file, disk full?");
-            *job->die = 1;
+            struct hb_text_sample_s *sample = MP4GenerateChapterSample( m, duration,
+                                                    m->current_chapter + 1 );
+            if( ! MP4WriteSample(m->file, m->chapter_track, sample->sample,
+                                 sample->length, sample->duration, 0, true) )
+            {
+                hb_error("Failed to write to output file, disk full?");
+                *job->die = 1;
+            }
+            free(sample);
         }
-        free(sample);
     }
 
     if (job->areBframes)

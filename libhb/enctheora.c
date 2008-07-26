@@ -122,22 +122,21 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_buffer_t * in = *buf_in, * buf;
     yuv_buffer yuv;
     ogg_packet op;
-    static int last_p = 0;
+
+    if ( in->size <= 0 )
+    {
+        // EOF on input - send it downstream & say we're done.
+        // XXX may need to flush packets via a call to
+        //  theora_encode_packetout(&pv->theora, 1, &op);
+        // but we don't have a timestamp to put on those packets so we
+        // drop them for now.
+        *buf_out = in;
+        *buf_in = NULL;
+       return HB_WORK_DONE;
+    }
 
     memset(&op, 0, sizeof(op));
     memset(&yuv, 0, sizeof(yuv));
-
-    /* If this is the last empty frame, we're done */
-    if(!in->data)
-    {
-        if (!last_p)
-        {
-            last_p++;
-            goto finish;
-        }
-       *buf_out        = NULL;
-       return HB_WORK_DONE;
-    }
 
     yuv.y_width = job->width;
     yuv.y_height = job->height;
@@ -153,8 +152,7 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     theora_encode_YUVin(&pv->theora, &yuv);
 
-finish:
-    theora_encode_packetout(&pv->theora, last_p, &op);
+    theora_encode_packetout(&pv->theora, 0, &op);
 
     buf = hb_buffer_init( op.bytes + sizeof(op) );
     memcpy(buf->data, &op, sizeof(op));

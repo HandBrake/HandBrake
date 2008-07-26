@@ -164,6 +164,14 @@ static int decavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     unsigned char *parser_output_buffer;
     int parser_output_buffer_len;
 
+    if ( (*buf_in)->size <= 0 )
+    {
+        /* EOF on input stream - send it downstream & say that we're done */
+        *buf_out = *buf_in;
+        *buf_in = NULL;
+        return HB_WORK_DONE;
+    }
+
     *buf_out = NULL;
 
     cur = ( in->start < 0 )? pv->pts_next : in->start;
@@ -842,6 +850,14 @@ static void decodeAudio( hb_work_private_t *pv, uint8_t *data, int size )
 static int decavcodecaiWork( hb_work_object_t *w, hb_buffer_t **buf_in,
                     hb_buffer_t **buf_out )
 {
+    if ( (*buf_in)->size <= 0 )
+    {
+        /* EOF on input stream - send it downstream & say that we're done */
+        *buf_out = *buf_in;
+        *buf_in = NULL;
+        return HB_WORK_DONE;
+    }
+
     hb_work_private_t *pv = w->private_data;
     if ( ! pv->context )
     {

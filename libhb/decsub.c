@@ -51,8 +51,15 @@ int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 {
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * in = *buf_in;
-
     int size_sub, size_rle;
+
+    if ( in->size <= 0 )
+    {
+        /* EOF on input stream - send it downstream & say that we're done */
+        *buf_out = in;
+        *buf_in = NULL;
+        return HB_WORK_DONE;
+    }
 
     pv->stream_id = in->id;
 

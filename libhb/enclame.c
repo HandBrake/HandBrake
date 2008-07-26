@@ -140,6 +140,14 @@ int enclameWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * buf;
 
+    if ( (*buf_in)->size <= 0 )
+    {
+        /* EOF on input - send it downstream & say we're done */
+        *buf_out = *buf_in;
+        *buf_in = NULL;
+       return HB_WORK_DONE;
+    }
+
     hb_list_add( pv->list, *buf_in );
     *buf_in = NULL;
 

@@ -30,16 +30,16 @@ hb_work_object_t hb_encx264 =
  * to x264_encoder_encode. Since frames are uniquely identified by their
  * timestamp, we use some bits of the timestamp as an index. The LSB is
  * chosen so that two successive frames will have different values in the
- * bits over any plausible range of frame rates. (Starting with bit 9 allows
- * any frame rate slower than 175fps.) The MSB determines the size of the array.
+ * bits over any plausible range of frame rates. (Starting with bit 8 allows
+ * any frame rate slower than 352fps.) The MSB determines the size of the array.
  * It is chosen so that two frames can't use the same slot during the
  * encoder's max frame delay (set by the standard as 16 frames) and so
  * that, up to some minimum frame rate, frames are guaranteed to map to
- * different slots. (An MSB of 16 which is 2^(16-9+1) = 256 slots guarantees
- * no collisions down to a rate of 1.4 fps).
+ * different slots. (An MSB of 17 which is 2^(17-8+1) = 1024 slots guarantees
+ * no collisions down to a rate of .7 fps).
  */
-#define FRAME_INFO_MAX2 (9)     // 2^9 = 512; 90000/512 = 175 frames/sec
-#define FRAME_INFO_MIN2 (16)    // 2^16 = 65536; 90000/65536 = 1.4 frames/sec
+#define FRAME_INFO_MAX2 (8)     // 2^8 = 256; 90000/256 = 352 frames/sec
+#define FRAME_INFO_MIN2 (17)    // 2^17 = 128K; 90000/131072 = 1.4 frames/sec
 #define FRAME_INFO_SIZE (1 << (FRAME_INFO_MIN2 - FRAME_INFO_MAX2 + 1))
 #define FRAME_INFO_MASK (FRAME_INFO_SIZE - 1)
 
@@ -377,228 +377,311 @@ static int64_t get_frame_duration( hb_work_private_t * pv, int64_t pts )
     return pv->frame_info[i].duration;
 }
 
+static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
+                                int i_nal, x264_nal_t *nal )
+{
+    hb_buffer_t *buf = NULL;
+    hb_work_private_t *pv = w->private_data;
+    hb_job_t *job = pv->job;
+
+    /* Get next DTS value to use */
+    int64_t dts_start = pv->dts_next;
+
+    /* compute the stop time based on the original frame's duration */
+    int64_t dts_stop  = dts_start + get_frame_duration( pv, pic_out->i_pts );
+    pv->dts_next = dts_stop;
+
+    /* Should be way too large */
+    buf = hb_buffer_init( 3 * job->width * job->height / 2 );
+    buf->size = 0;
+    buf->frametype = 0;
+    buf->start = dts_start;
+    buf->stop  = dts_stop;
+
+    /* Store the output presentation time stamp from x264 for use by muxmp4
+       in off-setting b-frames with the CTTS atom. */
+    buf->renderOffset = pic_out->i_pts - dts_start + pv->init_delay;
+    if ( buf->renderOffset < 0 )
+    {
+        if ( dts_start - pic_out->i_pts > pv->max_delay )
+        {
+            pv->max_delay = dts_start - pic_out->i_pts;
+            hb_log( "encx264: init_delay too small: "
+                    "is %lld need %lld", pv->init_delay,
+                    pv->max_delay );
+        }
+        buf->renderOffset = 0;
+    }
+
+    /* Encode all the NALs we were given into buf.
+       NOTE: This code assumes one video frame per NAL (but there can
+             be other stuff like SPS and/or PPS). If there are multiple
+             frames we only get the duration of the first which will
+             eventually screw up the muxer & decoder. */
+    int i;
+    for( i = 0; i < i_nal; i++ )
+    {
+        int data = buf->alloc - buf->size;
+        int size = x264_nal_encode( buf->data + buf->size, &data, 1, &nal[i] );
+        if( size < 1 )
+        {
+            continue;
+        }
+
+        if( job->mux & HB_MUX_AVI )
+        {
+            if( nal[i].i_ref_idc == NAL_PRIORITY_HIGHEST )
+            {
+                buf->frametype = HB_FRAME_KEY;
+            }
+            buf->size += size;
+            continue;
+        }
+
+        /* H.264 in .mp4 or .mkv */
+        int naltype = buf->data[buf->size+4] & 0x1f;
+        if ( naltype == 0x7 || naltype == 0x8 )
+        {
+            // Sequence Parameter Set & Program Parameter Set go in the
+            // mp4 header so skip them here
+            continue;
+        }
+
+        /* H.264 in mp4 (stolen from mp4creator) */
+        buf->data[buf->size+0] = ( ( size - 4 ) >> 24 ) & 0xFF;
+        buf->data[buf->size+1] = ( ( size - 4 ) >> 16 ) & 0xFF;
+        buf->data[buf->size+2] = ( ( size - 4 ) >>  8 ) & 0xFF;
+        buf->data[buf->size+3] = ( ( size - 4 ) >>  0 ) & 0xFF;
+
+        /* Decide what type of frame we have. */
+        switch( pic_out->i_type )
+        {
+            case X264_TYPE_IDR:
+                buf->frametype = HB_FRAME_IDR;
+                /* if we have a chapter marker pending and this
+                   frame's presentation time stamp is at or after
+                   the marker's time stamp, use this as the
+                   chapter start. */
+                if( pv->next_chap != 0 && pv->next_chap <= pic_out->i_pts )
+                {
+                    pv->next_chap = 0;
+                    buf->new_chap = pv->chap_mark;
+                }
+                break;
+
+            case X264_TYPE_I:
+                buf->frametype = HB_FRAME_I;
+                break;
+
+            case X264_TYPE_P:
+                buf->frametype = HB_FRAME_P;
+                break;
+
+            case X264_TYPE_B:
+                buf->frametype = HB_FRAME_B;
+                break;
+
+        /*  This is for b-pyramid, which has reference b-frames
+            However, it doesn't seem to ever be used... */
+            case X264_TYPE_BREF:
+                buf->frametype = HB_FRAME_BREF;
+                break;
+
+            // If it isn't the above, what type of frame is it??
+            default:
+                buf->frametype = 0;
+                break;
+        }
+
+        /* Since libx264 doesn't tell us when b-frames are
+           themselves reference frames, figure it out on our own. */
+        if( (buf->frametype == HB_FRAME_B) &&
+            (nal[i].i_ref_idc != NAL_PRIORITY_DISPOSABLE) )
+            buf->frametype = HB_FRAME_BREF;
+
+        buf->size += size;
+    }
+    // make sure we found at least one video frame
+    if ( buf->size <= 0 )
+    {
+        // no video: back up the output time stamp then free the buf
+        pv->dts_next = buf->start;
+        hb_buffer_close( &buf );
+    }
+    return buf;
+}
+
+static hb_buffer_t *x264_encode( hb_work_object_t *w, hb_buffer_t *in )
+{
+    hb_work_private_t *pv = w->private_data;
+    hb_job_t *job = pv->job;
+
+    /* Point x264 at our current buffers Y(UV) data.  */
+    pv->pic_in.img.plane[0] = in->data;
+
+    if( job->grayscale )
+    {
+        /* XXX x264 has currently no option for grayscale encoding */
+        memset( pv->pic_in.img.plane[1], 0x80, job->width * job->height / 4 );
+        memset( pv->pic_in.img.plane[2], 0x80, job->width * job->height / 4 );
+    }
+    else
+    {
+        /* Point x264 at our buffers (Y)UV data */
+        pv->pic_in.img.plane[1] = in->data + job->width * job->height;
+        pv->pic_in.img.plane[2] = in->data + 5 * job->width * job->height / 4;
+    }
+
+    if( pv->dts_next == -1 )
+    {
+        /* we don't have a start time yet so use the first frame's
+         * start. All other frame times will be determined by the
+         * sum of the prior output frame durations in *DTS* order
+         * (not by the order they arrive here). This timing change is
+         * essential for VFR with b-frames but a complete nop otherwise.
+         */
+        pv->dts_next = in->start;
+    }
+    if( in->new_chap && job->chapter_markers )
+    {
+        /* chapters have to start with an IDR frame so request that this
+           frame be coded as IDR. Since there may be up to 16 frames
+           currently buffered in the encoder remember the timestamp so
+           when this frame finally pops out of the encoder we'll mark
+           its buffer as the start of a chapter. */
+        pv->pic_in.i_type = X264_TYPE_IDR;
+        if( pv->next_chap == 0 )
+        {
+            pv->next_chap = in->start;
+            pv->chap_mark = in->new_chap;
+        }
+        /* don't let 'work_loop' put a chapter mark on the wrong buffer */
+        in->new_chap = 0;
+    }
+    else
+    {
+        pv->pic_in.i_type = X264_TYPE_AUTO;
+    }
+    pv->pic_in.i_qpplus1 = 0;
+
+    /* XXX this is temporary debugging code to check that the upstream
+     * modules (render & sync) have generated a continuous, self-consistent
+     * frame stream with the current frame's start time equal to the
+     * previous frame's stop time.
+     */
+    if( pv->last_stop != in->start )
+    {
+        hb_log("encx264 input continuity err: last stop %lld  start %lld",
+                pv->last_stop, in->start);
+    }
+    pv->last_stop = in->stop;
+
+    // Remember info about this frame that we need to pass across
+    // the x264_encoder_encode call (since it reorders frames).
+    save_frame_info( pv, in );
+
+    /* Feed the input DTS to x264 so it can figure out proper output PTS */
+    pv->pic_in.i_pts = in->start;
+
+    x264_picture_t pic_out;
+    int i_nal;
+    x264_nal_t *nal;
+
+    x264_encoder_encode( pv->x264, &nal, &i_nal, &pv->pic_in, &pic_out );
+    if ( i_nal > 0 )
+    {
+        return nal_encode( w, &pic_out, i_nal, nal );
+    }
+    return NULL;
+}
+
 int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
                   hb_buffer_t ** buf_out )
 {
-    hb_work_private_t * pv = w->private_data;
-    hb_job_t    * job = pv->job;
-    hb_buffer_t * in = *buf_in, * buf;
-    x264_picture_t   pic_out;
-    int           i_nal;
-    x264_nal_t  * nal;
-    int i;
+    hb_work_private_t *pv = w->private_data;
+    hb_buffer_t *in = *buf_in;
 
-    if( in->data )
+    if( in->size <= 0 )
     {
-        /*
-         * Point x264 at our current buffers Y(UV) data.
-         */
-        pv->pic_in.img.plane[0] = in->data;
+        // EOF on input. Flush any frames still in the decoder then
+        // send the eof downstream to tell the muxer we're done.
+        x264_picture_t pic_out;
+        int i_nal;
+        x264_nal_t *nal;
+        hb_buffer_t *last_buf = NULL;
 
-        if( job->grayscale )
+        while (1)
         {
-            /* XXX x264 has currently no option for grayscale encoding */
-            memset( pv->pic_in.img.plane[1], 0x80, job->width * job->height / 4 );
-            memset( pv->pic_in.img.plane[2], 0x80, job->width * job->height / 4 );
+            x264_encoder_encode( pv->x264, &nal, &i_nal, NULL, &pic_out );
+            if ( i_nal <= 0 )
+                break;
+
+            hb_buffer_t *buf = nal_encode( w, &pic_out, i_nal, nal );
+            if ( last_buf == NULL )
+                *buf_out = buf;
+            else
+                last_buf->next = buf;
+            last_buf = buf;
         }
+        // Flushed everything - add the eof to the end of the chain.
+        if ( last_buf == NULL )
+            *buf_out = in;
         else
-        {
-            /*
-             * Point x264 at our buffers (Y)UV data
-             */
-            pv->pic_in.img.plane[1] = in->data + job->width * job->height;
-            pv->pic_in.img.plane[2] = in->data + 5 * job->width *
-                job->height / 4;
-        }
+            last_buf->next = in;
 
-        if( pv->dts_next == -1 )
-        {
-            /* we don't have a start time yet so use the first frame's
-             * start. All other frame times will be determined by the
-             * sum of the prior output frame durations in *DTS* order
-             * (not by the order they arrive here). This timing change is
-             * essential for VFR with b-frames but a complete nop otherwise.
-             */
-            pv->dts_next = in->start;
-        }
-        if( in->new_chap && job->chapter_markers )
-        {
-            /* chapters have to start with an IDR frame so request that this
-               frame be coded as IDR. Since there may be up to 16 frames
-               currently buffered in the encoder remember the timestamp so
-               when this frame finally pops out of the encoder we'll mark
-               its buffer as the start of a chapter. */
-            pv->pic_in.i_type = X264_TYPE_IDR;
-            if( pv->next_chap == 0 )
-            {
-                pv->next_chap = in->start;
-                pv->chap_mark = in->new_chap;
-            }
-            /* don't let 'work_loop' put a chapter mark on the wrong buffer */
-            in->new_chap = 0;
-        }
-        else
-        {
-            pv->pic_in.i_type = X264_TYPE_AUTO;
-        }
-        pv->pic_in.i_qpplus1 = 0;
+        *buf_in = NULL;
+        return HB_WORK_DONE;
+    }
 
-        /* XXX this is temporary debugging code to check that the upstream
-         * modules (render & sync) have generated a continuous, self-consistent
-         * frame stream with the current frame's start time equal to the
-         * previous frame's stop time.
-         */
-        if( pv->last_stop != in->start )
+    // Not EOF - encode the packet & wrap it in a NAL
+    if ( pv->init_delay && in->stop - in->start > pv->init_delay )
+    {
+        // This frame's duration is larger than the time allotted for b-frame
+        // reordering. That means that if it's used as a reference the decoder
+        // won't be able to move it early enough to render it in correct
+        // sequence & the playback will have odd jumps & twitches. To make
+        // sure this doesn't happen we pretend this frame is multiple
+        // frames, each with duration <= init_delay. Since each of these
+        // new frames contains the same image the visual effect is identical
+        // to the original but the resulting stream can now be coded without
+        // error. We take advantage of the fact that x264 buffers frame
+        // data internally to feed the same image into the encoder multiple
+        // times, just changing its start & stop times each time.
+        int64_t orig_stop = in->stop;
+        int64_t new_stop = in->start;
+        hb_buffer_t *last_buf = NULL;
+
+        // We want to spread the new frames uniformly over the total time
+        // so that we don't end up with a very short frame at the end.
+        // In the number of pieces calculation we add in init_delay-1 to
+        // round up but not add an extra piece if the frame duration is
+        // a multiple of init_delay. The final increment of frame_dur is
+        // to restore the bits that got truncated by the divide on the
+        // previous line. If we don't do this we end up with an extra tiny
+        // frame at the end whose duration is npieces-1.
+        int64_t frame_dur = orig_stop - new_stop;
+        int64_t npieces = ( frame_dur + pv->init_delay - 1 ) / pv->init_delay;
+        frame_dur /= npieces;
+        ++frame_dur;
+
+        while ( in->start < orig_stop )
         {
-            hb_log("encx264 input continuity err: last stop %lld  start %lld",
-                    pv->last_stop, in->start);
+            new_stop += frame_dur;
+            if ( new_stop > orig_stop )
+                new_stop = orig_stop;
+            in->stop = new_stop;
+            hb_buffer_t *buf = x264_encode( w, in );
+            if ( last_buf == NULL )
+                *buf_out = buf;
+            else
+                last_buf->next = buf;
+            last_buf = buf;
+            in->start = new_stop;
         }
-        pv->last_stop = in->stop;
-
-        // Remember info about this frame that we need to pass across
-        // the x264_encoder_encode call (since it reorders frames).
-        save_frame_info( pv, in );
-
-        /* Feed the input DTS to x264 so it can figure out proper output PTS */
-        pv->pic_in.i_pts = in->start;
-
-        x264_encoder_encode( pv->x264, &nal, &i_nal,
-                             &pv->pic_in, &pic_out );
     }
     else
     {
-        x264_encoder_encode( pv->x264, &nal, &i_nal,
-                             NULL, &pic_out );
-        /* No more delayed B frames */
-        if( i_nal == 0 )
-        {
-            *buf_out = NULL;
-            return HB_WORK_DONE;
-        }
-        else
-        {
-        /*  Since we output at least one more frame, drop another empty
-            one onto our input fifo.  We'll keep doing this automatically
-            until we stop getting frames out of the encoder. */
-            hb_fifo_push(w->fifo_in, hb_buffer_init(0));
-        }
+        *buf_out = x264_encode( w, in );
     }
-
-    if( i_nal )
-    {
-        /* Should be way too large */
-        buf        = hb_buffer_init( 3 * job->width * job->height / 2 );
-        buf->size  = 0;
-        buf->frametype   = 0;
-
-        /* Get next DTS value to use */
-        int64_t dts_start = pv->dts_next;
-
-        /* compute the stop time based on the original frame's duration */
-        int64_t dts_stop  = dts_start + get_frame_duration( pv, pic_out.i_pts );
-        pv->dts_next = dts_stop;
-
-        for( i = 0; i < i_nal; i++ )
-        {
-            int size, data;
-
-            data = buf->alloc - buf->size;
-            if( ( size = x264_nal_encode( buf->data + buf->size, &data,
-                                          1, &nal[i] ) ) < 1 )
-            {
-                continue;
-            }
-
-            if( job->mux & HB_MUX_AVI )
-            {
-                if( nal[i].i_ref_idc == NAL_PRIORITY_HIGHEST )
-                {
-                    buf->frametype = HB_FRAME_KEY;
-                }
-                buf->size += size;
-                continue;
-            }
-
-            /* H.264 in .mp4 */
-            switch( buf->data[buf->size+4] & 0x1f )
-            {
-                case 0x7:
-                case 0x8:
-                    /* SPS, PPS */
-                    break;
-
-                default:
-                    /* H.264 in mp4 (stolen from mp4creator) */
-                    buf->data[buf->size+0] = ( ( size - 4 ) >> 24 ) & 0xFF;
-                    buf->data[buf->size+1] = ( ( size - 4 ) >> 16 ) & 0xFF;
-                    buf->data[buf->size+2] = ( ( size - 4 ) >>  8 ) & 0xFF;
-                    buf->data[buf->size+3] = ( ( size - 4 ) >>  0 ) & 0xFF;
-                    switch( pic_out.i_type )
-                    {
-                    /*  Decide what type of frame we have. */
-                        case X264_TYPE_IDR:
-                            buf->frametype = HB_FRAME_IDR;
-                            /* if we have a chapter marker pending and this
-                               frame's presentation time stamp is at or after
-                               the marker's time stamp, use this as the
-                               chapter start. */
-                            if( pv->next_chap != 0 && pv->next_chap <= pic_out.i_pts )
-                            {
-                                pv->next_chap = 0;
-                                buf->new_chap = pv->chap_mark;
-                            }
-                            break;
-                        case X264_TYPE_I:
-                            buf->frametype = HB_FRAME_I;
-                            break;
-                        case X264_TYPE_P:
-                            buf->frametype = HB_FRAME_P;
-                            break;
-                        case X264_TYPE_B:
-                            buf->frametype = HB_FRAME_B;
-                            break;
-                    /*  This is for b-pyramid, which has reference b-frames
-                        However, it doesn't seem to ever be used... */
-                        case X264_TYPE_BREF:
-                            buf->frametype = HB_FRAME_BREF;
-                            break;
-                    /*  If it isn't the above, what type of frame is it?? */
-                        default:
-                            buf->frametype = 0;
-                    }
-
-                    /* Since libx264 doesn't tell us when b-frames are
-                       themselves reference frames, figure it out on our own. */
-                    if( (buf->frametype == HB_FRAME_B) && (nal[i].i_ref_idc != NAL_PRIORITY_DISPOSABLE) )
-                        buf->frametype = HB_FRAME_BREF;
-
-                    /* Store the output presentation time stamp
-                       from x264 for use by muxmp4 in off-setting
-                       b-frames with the CTTS atom. */
-                    buf->renderOffset = pic_out.i_pts - dts_start + pv->init_delay;
-                    if ( buf->renderOffset < 0 )
-                    {
-                        if ( dts_start - pic_out.i_pts > pv->max_delay )
-                        {
-                            pv->max_delay = dts_start - pic_out.i_pts;
-                            hb_log( "encx264: init_delay too small: "
-                                    "is %lld need %lld", pv->init_delay,
-                                    pv->max_delay );
-                        }
-                        buf->renderOffset = 0;
-                    }
-                    buf->size += size;
-            }
-        }
-        /* Send out the next dts values */
-        buf->start = dts_start;
-        buf->stop  = dts_stop;
-    }
-
-    else
-        buf = NULL;
-
-    *buf_out = buf;
-
     return HB_WORK_OK;
 }

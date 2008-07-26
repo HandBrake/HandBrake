@@ -191,9 +191,11 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     AVFrame  * frame;
     hb_buffer_t * in = *buf_in, * buf;
 
-    if(!in->data)
+    if ( in->size <= 0 )
     {
-       *buf_out        = NULL;
+        /* EOF on input - send it downstream & say we're done */
+        *buf_out = in;
+        *buf_in = NULL;
        return HB_WORK_DONE;
     }
 

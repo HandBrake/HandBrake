@@ -69,7 +69,7 @@ static void push_buf( const hb_reader_t *r, hb_fifo_t *fifo, hb_buffer_t *buf )
     while( !*r->die && !r->job->done && hb_fifo_is_full( fifo ) )
     {
         /*
-         * Loop until the incoming fifo is reaqdy to receive
+         * Loop until the incoming fifo is ready to receive
          * this buffer.
          */
         hb_snooze( 50 );
@@ -326,8 +326,16 @@ static void ReaderFunc( void * _r )
         }
     }
 
-    /* send an empty buffer upstream to signal we're done */
-    hb_fifo_push( r->job->fifo_mpeg2, hb_buffer_init(0) );
+    /* send empty buffers upstream to video & audio decoders to signal we're done */
+    push_buf( r, r->job->fifo_mpeg2, hb_buffer_init(0) );
+
+    hb_audio_t *audio;
+    for( n = 0;
+         ( audio = hb_list_item( r->job->title->list_audio, n ) ) != NULL;
+         ++n )
+    {
+        push_buf( r, audio->priv.fifo_in, hb_buffer_init(0) );
+    }
 
     hb_list_empty( &list );
     hb_buffer_close( &ps );
