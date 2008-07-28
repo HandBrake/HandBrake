@@ -454,14 +454,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 - (void) updateUI: (NSTimer *) timer
 {
-
     hb_list_t  * list;
-    list = hb_get_titles( fHandle );	
+    list = hb_get_titles( fHandle );
     /* check to see if there has been a new scan done
 	this bypasses the constraints of HB_STATE_WORKING
 	not allowing setting a newly scanned source */
 	int checkScanCount = hb_get_scancount( fHandle );
-	if (checkScanCount > currentScanCount)
+	if( checkScanCount > currentScanCount )
 	{
 		currentScanCount = checkScanCount;
         [fScanIndicator setIndeterminate: NO];
@@ -472,7 +471,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
     hb_state_t s;
     hb_get_state( fHandle, &s );
-
 
     switch( s.state )
     {
@@ -512,28 +510,29 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 				nasty but working cocoa solution */
 			/* Update text field */
 			string = [NSMutableString stringWithFormat: NSLocalizedString( @"Encoding: task %d of %d, %.2f %%", @"" ), p.job_cur, p.job_count, 100.0 * p.progress];
-            
+
 			if( p.seconds > -1 )
             {
                 [string appendFormat:
                     NSLocalizedString( @" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)", @"" ),
                     p.rate_cur, p.rate_avg, p.hours, p.minutes, p.seconds];
             }
+
             [fStatusField setStringValue: string];
-			
+
             /* Update slider */
 			progress_total = ( p.progress + p.job_cur - 1 ) / p.job_count;
             [fRipIndicator setIndeterminate: NO];
             [fRipIndicator setDoubleValue: 100.0 * progress_total];
-			
+
             // If progress bar hasn't been revealed at the bottom of the window, do
             // that now. This code used to be in doRip. I moved it to here to handle
             // the case where hb_start is called by HBQueueController and not from
             // HBController.
-            if (!fRipIndicatorShown)
+            if( !fRipIndicatorShown )
             {
                 NSRect frame = [fWindow frame];
-                if (frame.size.width <= 591)
+                if( frame.size.width <= 591 )
                     frame.size.width = 591;
                 frame.size.height += 36;
                 frame.origin.y -= 36;
@@ -546,47 +545,43 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
             /* Update dock icon */
             [self UpdateDockIcon: progress_total];
-			
+
             // Has current job changed? That means the queue has probably changed as
 			// well so update it
             [fQueueController libhbStateChanged: s];
-            
+
             break;
         }
 #undef p
-			
+
 #define p s.param.muxing
         case HB_STATE_MUXING:
         {
-            NSMutableString * string;
-			
             /* Update text field */
-            string = [NSMutableString stringWithFormat:
-                NSLocalizedString( @"Muxing...", @"" )];
-            [fStatusField setStringValue: string];
-			
+            [fStatusField setStringValue: NSLocalizedString( @"Muxing...", @"" )];
+
             /* Update slider */
             [fRipIndicator setIndeterminate: YES];
             [fRipIndicator startAnimation: nil];
-			
+
             /* Update dock icon */
             [self UpdateDockIcon: 1.0];
-			
-			// Pass along the info to HBQueueController
-            [fQueueController libhbStateChanged: s];
-			
-            break;
-        }
-#undef p
-			
-        case HB_STATE_PAUSED:
-		    [fStatusField setStringValue: NSLocalizedString( @"Paused", @"" )];
-            
+
 			// Pass along the info to HBQueueController
             [fQueueController libhbStateChanged: s];
 
             break;
-			
+        }
+#undef p
+
+        case HB_STATE_PAUSED:
+		    [fStatusField setStringValue: NSLocalizedString( @"Paused", @"" )];
+
+			// Pass along the info to HBQueueController
+            [fQueueController libhbStateChanged: s];
+
+            break;
+
         case HB_STATE_WORKDONE:
         {
             // HB_STATE_WORKDONE happpens as a result of libhb finishing all its jobs
@@ -606,37 +601,36 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             /* Restore dock icon */
             [self UpdateDockIcon: -1.0];
 
-            if (fRipIndicatorShown)
+            if( fRipIndicatorShown )
             {
                 NSRect frame = [fWindow frame];
-                if (frame.size.width <= 591)
+                if( frame.size.width <= 591 )
 				    frame.size.width = 591;
                 frame.size.height += -36;
                 frame.origin.y -= -36;
                 [fWindow setFrame:frame display:YES animate:YES];
 				fRipIndicatorShown = NO;
 			}
-			
+
 			// Pass along the info to HBQueueController
             [fQueueController libhbStateChanged: s];
-			
+
             /* Check to see if the encode state has not been cancelled
 				to determine if we should check for encode done notifications */
-			if (fEncodeState != 2) 			{
+			if( fEncodeState != 2 )
+            {
                 /* If Alert Window or Window and Growl has been selected */
-				if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window"] || 
-					[[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window And Growl"])
+				if( [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window"] ||
+					[[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window And Growl"] )
                 {
 					/*On Screen Notification*/
 					int status;
 					NSBeep();
 					status = NSRunAlertPanel(@"Put down that cocktail...",@"Your HandBrake encode is done!", @"OK", nil, nil);
 					[NSApp requestUserAttention:NSCriticalRequest];
-
                 }
-
                 /* If sleep has been selected */
-                if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Put Computer To Sleep"])
+                if( [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Put Computer To Sleep"] )
                 {
                     /* Sleep */
                     NSDictionary* errorDict;
@@ -647,7 +641,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                     [scriptObject release];
                 }
                 /* If Shutdown has been selected */
-                if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Shut Down Computer"])
+                if( [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Shut Down Computer"] )
                 {
                     /* Shut Down */
                     NSDictionary* errorDict;
@@ -661,12 +655,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             break;
         }
     }
-	
+
     /* Lets show the queue status here in the main window */
 	int queue_count = [fQueueController pendingCount];
-	if( queue_count == 1)
+	if( queue_count == 1 )
 		[fQueueStatus setStringValue: NSLocalizedString( @"1 encode queued", @"" ) ];
-    else if (queue_count > 1)
+    else if( queue_count > 1 )
 		[fQueueStatus setStringValue: [NSString stringWithFormat: NSLocalizedString( @"%d encodes queued", @"" ), queue_count]];
 	else
 		[fQueueStatus setStringValue: @""];
