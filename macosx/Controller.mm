@@ -355,6 +355,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [self setEnabledStateOfAudioMixdownControls:nil];
         /* we also call calculatePictureSizing here to sense check if we already have vfr selected */
         [self calculatePictureSizing:nil];
+        [self shouldEnableHttpMp4CheckBox: nil];
 
 	} else {
 
@@ -622,7 +623,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             /* Check to see if the encode state has not been cancelled
 				to determine if we should check for encode done notifications */
 			if (fEncodeState != 2) 			{
-				/* If Alert Window or Window and Growl has been selected */
+                /* If Alert Window or Window and Growl has been selected */
 				if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window"] || 
 					[[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window And Growl"])
                 {
@@ -631,45 +632,32 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 					NSBeep();
 					status = NSRunAlertPanel(@"Put down that cocktail...",@"Your HandBrake encode is done!", @"OK", nil, nil);
 					[NSApp requestUserAttention:NSCriticalRequest];
-					if ( status == NSAlertDefaultReturn ) 
-					{
-						[self enableUI: YES];
-					}
-                }
-				else
-				{
-					[self enableUI: YES];
-				}
-			           /* If sleep has been selected */
-            if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Put Computer To Sleep"])
-                {
-               /* Sleep */
-               NSDictionary* errorDict;
-               NSAppleEventDescriptor* returnDescriptor = nil;
-               NSAppleScript* scriptObject = [[NSAppleScript alloc] initWithSource:
-                        @"tell application \"Finder\" to sleep"];
-               returnDescriptor = [scriptObject executeAndReturnError: &errorDict];
-               [scriptObject release];
-               [self enableUI: YES];
-                }
-            /* If Shutdown has been selected */
-            if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Shut Down Computer"])
-                {
-               /* Shut Down */
-               NSDictionary* errorDict;
-               NSAppleEventDescriptor* returnDescriptor = nil;
-               NSAppleScript* scriptObject = [[NSAppleScript alloc] initWithSource:
-                        @"tell application \"Finder\" to shut down"];
-               returnDescriptor = [scriptObject executeAndReturnError: &errorDict];
-               [scriptObject release];
-               [self enableUI: YES];
+
                 }
 
+                /* If sleep has been selected */
+                if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Put Computer To Sleep"])
+                {
+                    /* Sleep */
+                    NSDictionary* errorDict;
+                    NSAppleEventDescriptor* returnDescriptor = nil;
+                    NSAppleScript* scriptObject = [[NSAppleScript alloc] initWithSource:
+                            @"tell application \"Finder\" to sleep"];
+                    returnDescriptor = [scriptObject executeAndReturnError: &errorDict];
+                    [scriptObject release];
+                }
+                /* If Shutdown has been selected */
+                if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Shut Down Computer"])
+                {
+                    /* Shut Down */
+                    NSDictionary* errorDict;
+                    NSAppleEventDescriptor* returnDescriptor = nil;
+                    NSAppleScript* scriptObject = [[NSAppleScript alloc] initWithSource:
+                            @"tell application \"Finder\" to shut down"];
+                    returnDescriptor = [scriptObject executeAndReturnError: &errorDict];
+                    [scriptObject release];
+                }
             }
-			else
-			{
-				[self enableUI: YES];
-			}
             break;
         }
     }
@@ -1452,12 +1440,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 
     /* If mpeg-4, then set mpeg-4 specific options like chapters and > 4gb file sizes */
-	if ([fDstFormatPopUp indexOfSelectedItem] == 0)
+	if( [fDstFormatPopUp indexOfSelectedItem] == 0 )
 	{
         /* We set the largeFileSize (64 bit formatting) variable here to allow for > 4gb files based on the format being
 		mpeg4 and the checkbox being checked 
 		*Note: this will break compatibility with some target devices like iPod, etc.!!!!*/
-		if ([fDstMp4LargeFileCheck state] == NSOnState)
+		if( [fDstMp4LargeFileCheck state] == NSOnState )
 		{
 			job->largeFileSize = 1;
 		}
@@ -1466,7 +1454,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 			job->largeFileSize = 0;
 		}
         /* We set http optimized mp4 here */
-        if ([fDstMp4HttpOptFileCheck state] == NSOnState)
+        if( [fDstMp4HttpOptFileCheck state] == NSOnState && [fDstMp4HttpOptFileCheck isEnabled] )
 		{
         job->mp4_optimize = 1;
         }
@@ -1475,7 +1463,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         job->mp4_optimize = 0;
         }
     }
-	if ([fDstFormatPopUp indexOfSelectedItem] == 0 || [fDstFormatPopUp indexOfSelectedItem] == 1)
+	if( [fDstFormatPopUp indexOfSelectedItem] == 0 || [fDstFormatPopUp indexOfSelectedItem] == 1 )
 	{
 	  /* We set the chapter marker extraction here based on the format being
 		mpeg4 or mkv and the checkbox being checked */
@@ -2109,15 +2097,15 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     hb_list_t  * list  = hb_get_titles( fHandle );
     hb_title_t * title = (hb_title_t*)
         hb_list_item( list, [fSrcTitlePopUp indexOfSelectedItem] );
-		
-		
+
+
     /* If Auto Naming is on. We create an output filename of dvd name - title number */
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"] > 0)
+    if( [[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"] > 0 && ( hb_list_count( list ) > 1 ) )
 	{
 		[fDstFile2Field setStringValue: [NSString stringWithFormat:
 			@"%@/%@-%d.%@", [[fDstFile2Field stringValue] stringByDeletingLastPathComponent],
-			browsedSourceDisplayName,
-			  title->index,
+			[browsedSourceDisplayName stringByDeletingPathExtension],
+            title->index,
 			[[fDstFile2Field stringValue] pathExtension]]];	
 	}
 
@@ -2362,27 +2350,18 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 			break;
     }
     [fVidEncoderPopUp selectItemAtIndex: 0];
-    
+
     [self audioAddAudioTrackCodecs: fAudTrack1CodecPopUp];
     [self audioAddAudioTrackCodecs: fAudTrack2CodecPopUp];
     [self audioAddAudioTrackCodecs: fAudTrack3CodecPopUp];
     [self audioAddAudioTrackCodecs: fAudTrack4CodecPopUp];
-    
-    /* FIX ME: we need to restore changing the file extension as pwer */
-    
-    if( [string characterAtIndex: [string length] - 4] == '.' )
-        {
-            [fDstFile2Field setStringValue: [NSString stringWithFormat:
-                                             @"%@.%s", [string substringToIndex: [string length] - 4],
-                                             ext]];
-        }
-        else
-        {
-            [fDstFile2Field setStringValue: [NSString stringWithFormat:
-                                             @"%@.%s", string, ext]];
-        }
-        
-    if ( SuccessfulScan ) 
+
+    if( format == 0 )
+        [self autoSetM4vExtension: sender];
+    else
+        [fDstFile2Field setStringValue: [NSString stringWithFormat:@"%@.%s", [string stringByDeletingPathExtension], ext]];
+
+    if( SuccessfulScan )
     {
         /* Add/replace to the correct extension */
         [self audioTrackPopUpChanged: fAudLang1PopUp];
@@ -2390,7 +2369,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [self audioTrackPopUpChanged: fAudLang3PopUp];
         [self audioTrackPopUpChanged: fAudLang4PopUp];
 
-        if ( [fVidEncoderPopUp selectedItem] == nil )
+        if( [fVidEncoderPopUp selectedItem] == nil )
         {
 
             [fVidEncoderPopUp selectItemAtIndex:0];
@@ -2399,38 +2378,47 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             /* changing the format may mean that we can / can't offer mono or 6ch, */
             /* so call audioTrackPopUpChanged for both audio tracks to update the mixdown popups */
 
-
-
             /* We call the method to properly enable/disable turbo 2 pass */
             [self twoPassCheckboxChanged: sender];
             /* We call method method to change UI to reflect whether a preset is used or not*/
         }
     }
-
-    /* Lets check to see if we want to auto set the .m4v extension for mp4 */
-    [self autoSetM4vExtension: sender];
 	[self customSettingUsed: sender];
 }
 
-
-
-    /* if MP4 format and [fDstCodecsPopUp indexOfSelectedItem] > 1 we know that the audio is going to be
-         * either aac + ac3 passthru, or just ac3 passthru so we need to make sure the output file extension is m4v
-         * otherwise Quicktime will not play it at all */
 - (IBAction) autoSetM4vExtension: (id) sender
 {
-        /*FIX ME: for this to work, we will now have to iterate through the audio list to see if ac3 in an mp4 is chosen 
-        * for now just comment it out.
-        */
-        /*
-        if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [fDstCodecsPopUp indexOfSelectedItem] > 1)
-        {
-            NSString *newpath = [[[fDstFile2Field stringValue] stringByDeletingPathExtension] stringByAppendingPathExtension: @"m4v"];
-            [fDstFile2Field setStringValue: [NSString stringWithFormat:
-                                             @"%@", newpath]];
-        }
-        */
+    if ( [fDstFormatPopUp indexOfSelectedItem] )
+        return;
+
+    NSString * extension = @"mp4";
+
+    if( [[fAudTrack1CodecPopUp selectedItem] tag] == HB_ACODEC_AC3 || [[fAudTrack2CodecPopUp selectedItem] tag] == HB_ACODEC_AC3 ||
+                                                        [[fAudTrack3CodecPopUp selectedItem] tag] == HB_ACODEC_AC3 ||
+                                                        [[fAudTrack4CodecPopUp selectedItem] tag] == HB_ACODEC_AC3 ||
+                                                        [fCreateChapterMarkers state] == NSOnState ||
+                                                        [[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultMpegName"] > 0 )
+    {
+        extension = @"m4v";
+    }
+
+    if( [extension isEqualTo: [[fDstFile2Field stringValue] pathExtension]] )
+        return;
+    else
+        [fDstFile2Field setStringValue: [NSString stringWithFormat:@"%@.%@",
+                                    [[fDstFile2Field stringValue] stringByDeletingPathExtension], extension]];
 }
+
+- (void) shouldEnableHttpMp4CheckBox: (id) sender
+{
+    if( [[fAudTrack1CodecPopUp selectedItem] tag] == HB_ACODEC_AC3 || [[fAudTrack2CodecPopUp selectedItem] tag] == HB_ACODEC_AC3 ||
+                                                        [[fAudTrack3CodecPopUp selectedItem] tag] == HB_ACODEC_AC3 ||
+                                                        [[fAudTrack4CodecPopUp selectedItem] tag] == HB_ACODEC_AC3 )
+        [fDstMp4HttpOptFileCheck setEnabled: NO];
+    else
+        [fDstMp4HttpOptFileCheck setEnabled: YES];
+}
+        
 /* Method to determine if we should change the UI
 To reflect whether or not a Preset is being used or if
 the user is using "Custom" settings by determining the sender*/
@@ -3374,8 +3362,13 @@ the user is using "Custom" settings by determining the sender*/
         }
     
     }
-
+    if( [fDstFormatPopUp indexOfSelectedItem] == 0 )
+    {
+        [self autoSetM4vExtension: sender];
+        [self shouldEnableHttpMp4CheckBox: sender];
+    }
 }
+
 - (IBAction) audioTrackMixdownChanged: (id) sender
 {
     
