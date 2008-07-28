@@ -684,7 +684,7 @@ dvd_source_activate_cb(GtkAction *action, signal_user_data_t *ud)
 static void
 update_destination_extension(signal_user_data_t *ud)
 {
-	static gchar *containers[] = {"mkv", "mp4", "m4v", "avi", "ogm", NULL};
+	static gchar *containers[] = {".mkv", ".mp4", ".m4v", ".avi", ".ogm", NULL};
 	gchar *filename;
 	const gchar *extension;
 	gint ii;
@@ -702,6 +702,11 @@ update_destination_extension(signal_user_data_t *ud)
 			gchar *new_name;
 			
 			pos = g_strrstr( filename, "." );
+			if (pos == NULL)
+			{
+				// No period? shouldn't happen
+				break;
+			}
 			*pos = 0;
 			if (strcmp(extension, &pos[1]) == 0)
 			{
