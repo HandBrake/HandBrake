@@ -80,37 +80,37 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 {
     /* Init libhb with check for updates libhb style set to "0" so its ignored and lets sparkle take care of it */
     fHandle = hb_init(HB_DEBUG_ALL, 0);
-    
+
 	// Set the Growl Delegate
-    [GrowlApplicationBridge setGrowlDelegate: self];    
+    [GrowlApplicationBridge setGrowlDelegate: self];
     /* Init others controllers */
     [fPictureController SetHandle: fHandle];
     [fQueueController   setHandle: fHandle];
     [fQueueController   setHBController: self];
-	
+
     fChapterTitlesDelegate = [[ChapterTitles alloc] init];
     [fChapterTable setDataSource:fChapterTitlesDelegate];
     [fChapterTable setDelegate:fChapterTitlesDelegate];
-    
+
     /* Call UpdateUI every 1/2 sec */
-    [[NSRunLoop currentRunLoop] addTimer: [NSTimer
-                                           scheduledTimerWithTimeInterval: 0.5 target: self
-                                           selector: @selector( updateUI: ) userInfo: NULL repeats: YES]
-                                 forMode: NSEventTrackingRunLoopMode];
-    
+    [[NSRunLoop currentRunLoop] addTimer:[NSTimer
+                                          scheduledTimerWithTimeInterval:0.5 target:self
+                                          selector:@selector(updateUI:) userInfo:nil repeats:YES]
+                                 forMode:NSEventTrackingRunLoopMode];
+
     // Open debug output window now if it was visible when HB was closed
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"OutputPanelIsOpen"])
         [self showDebugOutputPanel:nil];
-    
+
     // Open queue window now if it was visible when HB was closed
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"QueueWindowIsOpen"])
         [self showQueueWindow:nil];
-    
+
 	[self openMainWindow:nil];
-    
+
     /* Show Browse Sources Window ASAP */
-    [self performSelectorOnMainThread: @selector(browseSources:)
-                           withObject: NULL waitUntilDone: NO];
+    [self performSelectorOnMainThread:@selector(browseSources:)
+                           withObject:nil waitUntilDone:NO];
 }
 
 - (NSApplicationTerminateReply) applicationShouldTerminate: (NSApplication *) app
@@ -207,36 +207,36 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     menuItem = [[fDstFormatPopUp menu] addItemWithTitle:@"OGM file" action: NULL keyEquivalent: @""];
     [menuItem setTag: HB_MUX_OGM];
     [fDstFormatPopUp selectItemAtIndex: 0];
-	
-    [self formatPopUpChanged: NULL];
-    
-	/* We enable the create chapters checkbox here since we are .mp4 */	
+
+    [self formatPopUpChanged:nil];
+
+	/* We enable the create chapters checkbox here since we are .mp4 */
 	[fCreateChapterMarkers setEnabled: YES];
 	if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultChapterMarkers"] > 0)
 	{
 		[fCreateChapterMarkers setState: NSOnState];
 	}
-	
-	
-	
-	
+
+
+
+
     [fDstFile2Field setStringValue: [NSString stringWithFormat:
         @"%@/Desktop/Movie.mp4", NSHomeDirectory()]];
-	
+
     /* Video encoder */
     [fVidEncoderPopUp removeAllItems];
     [fVidEncoderPopUp addItemWithTitle: @"FFmpeg"];
     [fVidEncoderPopUp addItemWithTitle: @"XviD"];
-	
-    
-	
+
+
+
     /* Video quality */
     [fVidTargetSizeField setIntValue: 700];
 	[fVidBitrateField    setIntValue: 1000];
-	
+
     [fVidQualityMatrix   selectCell: fVidBitrateCell];
-    [self videoMatrixChanged: NULL];
-	
+    [self videoMatrixChanged:nil];
+
     /* Video framerate */
     [fVidRatePopUp removeAllItems];
 	[fVidRatePopUp addItemWithTitle: NSLocalizedString( @"Same as source", @"" )];
@@ -299,7 +299,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 
 	/* lets get our default prefs here */
-	[self getDefaultPresets: NULL];
+	[self getDefaultPresets:nil];
 	/* lets initialize the current successful scancount here to 0 */
 	currentSuccessfulScanCount = 0;
 }
@@ -347,22 +347,22 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [controls[i] setEnabled: b];
 
     }
-	
+
 	if (b) {
 
         /* if we're enabling the interface, check if the audio mixdown controls need to be enabled or not */
         /* these will have been enabled by the mass control enablement above anyway, so we're sense-checking it here */
-        [self setEnabledStateOfAudioMixdownControls: NULL];
+        [self setEnabledStateOfAudioMixdownControls:nil];
         /* we also call calculatePictureSizing here to sense check if we already have vfr selected */
-        [self calculatePictureSizing: NULL];
-	
+        [self calculatePictureSizing:nil];
+
 	} else {
 
 		[fPresetsOutlineView setEnabled: NO];
-	
+
 	}
 
-    [self videoMatrixChanged: NULL];
+    [self videoMatrixChanged:nil];
     [fAdvancedOptions enableUI:b];
 }
 
@@ -462,23 +462,22 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	int checkScanCount = hb_get_scancount( fHandle );
 	if (checkScanCount > currentScanCount)
 	{
-		
 		currentScanCount = checkScanCount;
         [fScanIndicator setIndeterminate: NO];
         [fScanIndicator setDoubleValue: 0.0];
         [fScanIndicator setHidden: YES];
-		[self showNewScan: NULL];
+		[self showNewScan:nil];
 	}
-	
+
     hb_state_t s;
     hb_get_state( fHandle, &s );
-	
-	
+
+
     switch( s.state )
     {
         case HB_STATE_IDLE:
 		break;
-#define p s.param.scanning			
+#define p s.param.scanning
         case HB_STATE_SCANNING:
 		{
             [fSrcDVD2Field setStringValue: [NSString stringWithFormat:
@@ -496,7 +495,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             [fScanIndicator setIndeterminate: NO];
             [fScanIndicator setDoubleValue: 0.0];
             [fScanIndicator setHidden: YES];
-			[self showNewScan: NULL];
+			[self showNewScan:nil];
             [[fWindow toolbar] validateVisibleItems];
 			break;
         }
@@ -641,31 +640,31 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 				{
 					[self enableUI: YES];
 				}
-			           /* If sleep has been selected */ 
-            if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Put Computer To Sleep"]) 
-                { 
-               /* Sleep */ 
-               NSDictionary* errorDict; 
-               NSAppleEventDescriptor* returnDescriptor = NULL; 
-               NSAppleScript* scriptObject = [[NSAppleScript alloc] initWithSource: 
-                        @"tell application \"Finder\" to sleep"]; 
-               returnDescriptor = [scriptObject executeAndReturnError: &errorDict]; 
-               [scriptObject release]; 
-               [self enableUI: YES]; 
-                } 
-            /* If Shutdown has been selected */ 
-            if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Shut Down Computer"]) 
-                { 
-               /* Shut Down */ 
-               NSDictionary* errorDict; 
-               NSAppleEventDescriptor* returnDescriptor = NULL; 
-               NSAppleScript* scriptObject = [[NSAppleScript alloc] initWithSource: 
-                        @"tell application \"Finder\" to shut down"]; 
-               returnDescriptor = [scriptObject executeAndReturnError: &errorDict]; 
-               [scriptObject release]; 
-               [self enableUI: YES]; 
+			           /* If sleep has been selected */
+            if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Put Computer To Sleep"])
+                {
+               /* Sleep */
+               NSDictionary* errorDict;
+               NSAppleEventDescriptor* returnDescriptor = nil;
+               NSAppleScript* scriptObject = [[NSAppleScript alloc] initWithSource:
+                        @"tell application \"Finder\" to sleep"];
+               returnDescriptor = [scriptObject executeAndReturnError: &errorDict];
+               [scriptObject release];
+               [self enableUI: YES];
                 }
-			
+            /* If Shutdown has been selected */
+            if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Shut Down Computer"])
+                {
+               /* Shut Down */
+               NSDictionary* errorDict;
+               NSAppleEventDescriptor* returnDescriptor = nil;
+               NSAppleScript* scriptObject = [[NSAppleScript alloc] initWithSource:
+                        @"tell application \"Finder\" to shut down"];
+               returnDescriptor = [scriptObject executeAndReturnError: &errorDict];
+               [scriptObject release];
+               [self enableUI: YES];
+                }
+
             }
 			else
 			{
@@ -1084,7 +1083,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             /* We show the actual sheet where the user specifies the title to be scanned
              * as we are going to do a title specific scan
              */
-            [self showSourceTitleScanPanel:NULL];
+            [self showSourceTitleScanPanel:nil];
         }
         else
         {
@@ -1175,7 +1174,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     */
     [fScanSrcTitleNumField setStringValue: @"0"];
 	/* Show the panel */
-	[NSApp beginSheet: fScanSrcTitlePanel modalForWindow: fWindow modalDelegate: NULL didEndSelector: NULL contextInfo: NULL];
+	[NSApp beginSheet:fScanSrcTitlePanel modalForWindow:fWindow modalDelegate:nil didEndSelector:NULL contextInfo:NULL];
 }
 
 - (IBAction) closeSourceTitleScanPanel: (id) sender
@@ -1351,18 +1350,18 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 title->index, title->hours, title->minutes,
                 title->seconds]];
 		}
-        
+
 		// Select the longuest title
 		[fSrcTitlePopUp selectItemAtIndex: indxpri];
-		[self titlePopUpChanged: NULL];
-		
+		[self titlePopUpChanged:nil];
+
         SuccessfulScan = YES;
 		[self enableUI: YES];
-		
+
 		/* if its the initial successful scan after awakeFromNib */
         if (currentSuccessfulScanCount == 1)
         {
-            [self selectDefaultPreset: NULL];
+            [self selectDefaultPreset:nil];
             /* if Deinterlace upon launch is specified in the prefs, then set to 1 for "Fast",
              if not, then set to 0 for none */
             if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultDeinterlaceOn"] > 0)
@@ -1747,20 +1746,20 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             [fDstFile2Field stringValue]] )
     {
         NSBeginCriticalAlertSheet( NSLocalizedString( @"File already exists", @"" ),
-            NSLocalizedString( @"Cancel", @"" ), NSLocalizedString( @"Overwrite", @"" ), NULL, fWindow, self,
+            NSLocalizedString( @"Cancel", @"" ), NSLocalizedString( @"Overwrite", @"" ), nil, fWindow, self,
             @selector( overwriteAddToQueueAlertDone:returnCode:contextInfo: ),
             NULL, NULL, [NSString stringWithFormat:
             NSLocalizedString( @"Do you want to overwrite %@?", @"" ),
             [fDstFile2Field stringValue]] );
         // overwriteAddToQueueAlertDone: will be called when the alert is dismissed.
     }
-    
+
     // Warn if another pending job in the queue has the same destination path
     else if ( ([fQueueController pendingJobGroupWithDestinationPath:[fDstFile2Field stringValue]] != nil)
             || ([[[fQueueController currentJobGroup] destinationPath] isEqualToString: [fDstFile2Field stringValue]]) )
     {
         NSBeginCriticalAlertSheet( NSLocalizedString( @"Another queued encode has specified the same destination.", @"" ),
-            NSLocalizedString( @"Cancel", @"" ), NSLocalizedString( @"Overwrite", @"" ), NULL, fWindow, self,
+            NSLocalizedString( @"Cancel", @"" ), NSLocalizedString( @"Overwrite", @"" ), nil, fWindow, self,
             @selector( overwriteAddToQueueAlertDone:returnCode:contextInfo: ),
             NULL, NULL, [NSString stringWithFormat:
             NSLocalizedString( @"Do you want to overwrite %@?", @"" ),
@@ -1934,17 +1933,17 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     if( [[NSFileManager defaultManager] fileExistsAtPath:[fDstFile2Field stringValue]] )
     {
         NSBeginCriticalAlertSheet( NSLocalizedString( @"File already exists", @"" ),
-            NSLocalizedString( @"Cancel", "" ), NSLocalizedString( @"Overwrite", @"" ), NULL, fWindow, self,
+            NSLocalizedString( @"Cancel", "" ), NSLocalizedString( @"Overwrite", @"" ), nil, fWindow, self,
             @selector( overWriteAlertDone:returnCode:contextInfo: ),
             NULL, NULL, [NSString stringWithFormat:
             NSLocalizedString( @"Do you want to overwrite %@?", @"" ),
             [fDstFile2Field stringValue]] );
-            
+
         // overWriteAlertDone: will be called when the alert is dismissed. It will call doRip.
     }
     else
     {
-        /* if there are no jobs in the queue, then add this one to the queue and rip 
+        /* if there are no jobs in the queue, then add this one to the queue and rip
         otherwise, just rip the queue */
         if( hb_count( fHandle ) == 0)
         {
@@ -1987,11 +1986,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                NSBeep();
                reminduser = NSRunAlertPanel(@"The computer will sleep after encoding is done.",@"You have selected to sleep the computer after encoding. To turn off sleeping, go to the HandBrake preferences.", @"OK", @"Preferences...", nil);
                [NSApp requestUserAttention:NSCriticalRequest];
-               if ( reminduser == NSAlertAlternateReturn ) 
+               if ( reminduser == NSAlertAlternateReturn )
                {
-                       [self showPreferencesWindow:NULL];
+                       [self showPreferencesWindow:nil];
                }
-       } 
+       }
        else if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Shut Down Computer"])
        {
                /*Warn that computer will shut down after encoding*/
@@ -1999,9 +1998,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                NSBeep();
                reminduser = NSRunAlertPanel(@"The computer will shut down after encoding is done.",@"You have selected to shut down the computer after encoding. To turn off shut down, go to the HandBrake preferences.", @"OK", @"Preferences...", nil);
                [NSApp requestUserAttention:NSCriticalRequest];
-               if ( reminduser == NSAlertAlternateReturn ) 
+               if ( reminduser == NSAlertAlternateReturn )
                {
-                       [self showPreferencesWindow:NULL];
+                       [self showPreferencesWindow:nil];
                }
        }
 
@@ -2135,11 +2134,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [fSrcChapterStartPopUp selectItemAtIndex: 0];
     [fSrcChapterEndPopUp   selectItemAtIndex:
         hb_list_count( title->list_chapter ) - 1];
-    [self chapterPopUpChanged: NULL];
+    [self chapterPopUpChanged:nil];
 
 /* Start Get and set the initial pic size for display */
 	hb_job_t * job = title->job;
-	fTitle = title; 
+	fTitle = title;
 
 	/* Pixel Ratio Setting */
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PixelRatio"])
@@ -2185,13 +2184,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             subtitle->lang] action: NULL keyEquivalent: @""];
     }
     [fSubPopUp selectItemAtIndex: 0];
-	
-	[self subtitleSelectionChanged: NULL];
-    
+
+	[self subtitleSelectionChanged:nil];
+
     /* Update chapter table */
     [fChapterTitlesDelegate resetWithTitle:title];
     [fChapterTable reloadData];
-   
+
    /* Lets make sure there arent any erroneous audio tracks in the job list, so lets make sure its empty*/
     int audiotrack_count = hb_list_count(job->list_audio);
     for( int i = 0; i < audiotrack_count;i++)
@@ -2199,7 +2198,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         hb_audio_t * temp_audio = (hb_audio_t*) hb_list_item( job->list_audio, 0 );
         hb_list_rem(job->list_audio, temp_audio);
     }
-   
+
     /* Update audio popups */
     [self addAllAudioTracksToPopUp: fAudLang1PopUp];
     [self addAllAudioTracksToPopUp: fAudLang2PopUp];
@@ -2208,10 +2207,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* search for the first instance of our prefs default language for track 1, and set track 2 to "none" */
 	NSString * audioSearchPrefix = [[NSUserDefaults standardUserDefaults] stringForKey:@"DefaultLanguage"];
         [self selectAudioTrackInPopUp: fAudLang1PopUp searchPrefixString: audioSearchPrefix selectIndexIfNotFound: 1];
-    [self selectAudioTrackInPopUp: fAudLang2PopUp searchPrefixString: NULL selectIndexIfNotFound: 0];
-    [self selectAudioTrackInPopUp: fAudLang3PopUp searchPrefixString: NULL selectIndexIfNotFound: 0];
-    [self selectAudioTrackInPopUp: fAudLang4PopUp searchPrefixString: NULL selectIndexIfNotFound: 0];
-	
+    [self selectAudioTrackInPopUp:fAudLang2PopUp searchPrefixString:nil selectIndexIfNotFound:0];
+    [self selectAudioTrackInPopUp:fAudLang3PopUp searchPrefixString:nil selectIndexIfNotFound:0];
+    [self selectAudioTrackInPopUp:fAudLang4PopUp searchPrefixString:nil selectIndexIfNotFound:0];
+
 	/* changing the title may have changed the audio channels on offer, */
 	/* so call audioTrackPopUpChanged for both audio tracks to update the mixdown popups */
 	[self audioTrackPopUpChanged: fAudLang1PopUp];
@@ -2247,20 +2246,19 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 			[fVidRatePopUp addItemWithTitle:
 				[NSString stringWithCString: hb_video_rates[i].string]];
 		}
-    }   
+    }
     [fVidRatePopUp selectItemAtIndex: 0];
-    
+
     /* we run the picture size values through calculatePictureSizing to get all picture setting	information*/
-	[self calculatePictureSizing: NULL];
-    
+	[self calculatePictureSizing:nil];
+
    /* lets call tableViewSelected to make sure that any preset we have selected is enforced after a title change */
-	[self selectPreset:NULL]; 
-	
+	[self selectPreset:nil];
 }
 
 - (IBAction) chapterPopUpChanged: (id) sender
 {
-    
+
 	/* If start chapter popup is greater than end chapter popup,
 	we set the end chapter popup to the same as start chapter popup */
 	if ([fSrcChapterStartPopUp indexOfSelectedItem] > [fSrcChapterEndPopUp indexOfSelectedItem])
@@ -2391,27 +2389,27 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [self audioTrackPopUpChanged: fAudLang2PopUp];
         [self audioTrackPopUpChanged: fAudLang3PopUp];
         [self audioTrackPopUpChanged: fAudLang4PopUp];
-        
-        if ( [fVidEncoderPopUp selectedItem] == NULL )
+
+        if ( [fVidEncoderPopUp selectedItem] == nil )
         {
-            
+
             [fVidEncoderPopUp selectItemAtIndex:0];
-            [self videoEncoderPopUpChanged: NULL];
-            
+            [self videoEncoderPopUpChanged:nil];
+
             /* changing the format may mean that we can / can't offer mono or 6ch, */
             /* so call audioTrackPopUpChanged for both audio tracks to update the mixdown popups */
-            
-            
-            
+
+
+
             /* We call the method to properly enable/disable turbo 2 pass */
             [self twoPassCheckboxChanged: sender];
             /* We call method method to change UI to reflect whether a preset is used or not*/
         }
     }
-    
+
     /* Lets check to see if we want to auto set the .m4v extension for mp4 */
     [self autoSetM4vExtension: sender];
-	[self customSettingUsed: sender];	
+	[self customSettingUsed: sender];
 }
 
 
@@ -2438,7 +2436,7 @@ To reflect whether or not a Preset is being used or if
 the user is using "Custom" settings by determining the sender*/
 - (IBAction) customSettingUsed: (id) sender
 {
-	if ([sender stringValue] != NULL)
+	if ([sender stringValue])
 	{
 		/* Deselect the currently selected Preset if there is one*/
 		[fPresetsOutlineView deselectRow:[fPresetsOutlineView selectedRow]];
@@ -2580,7 +2578,7 @@ the user is using "Custom" settings by determining the sender*/
 
 - (void) controlTextDidChange: (NSNotification *) notification
 {
-    [self calculateBitrate: NULL];
+    [self calculateBitrate:nil];
 }
 
 - (IBAction) calculateBitrate: (id) sender
@@ -2634,7 +2632,7 @@ the user is using "Custom" settings by determining the sender*/
  */
 
 - (void)pictureSettingsDidChange {
-	[self calculatePictureSizing: NULL];
+	[self calculatePictureSizing:nil];
 }
 
 /* Get and Display Current Pic Settings in main window */
@@ -2995,8 +2993,8 @@ the user is using "Custom" settings by determining the sender*/
     /* e.g. to find the first French track, pass in an NSString * of "Francais" */
     /* e.g. to find the first English 5.1 AC3 track, pass in an NSString * of "English (AC3) (5.1 ch)" */
     /* if no matching track is found, then selectIndexIfNotFound is used to choose which track to select instead */
-    
-	if (searchPrefixString != NULL) 
+
+	if (searchPrefixString)
 	{
 
         for( int i = 0; i < [sender numberOfItems]; i++ )
@@ -3194,32 +3192,32 @@ the user is using "Custom" settings by determining the sender*/
         sampleratePopUp = fAudTrack4RatePopUp;
         bitratePopUp = fAudTrack4BitratePopUp;
     }
-    
+
     /* get the index of the selected audio Track*/
     int thisAudioIndex = [sender indexOfSelectedItem] - 1;
-    
+
     /* pointer for the hb_audio_s struct we will use later on */
     hb_audio_config_t * audio;
-    
+
     int acodec;
     /* check if the audio mixdown controls need their enabled state changing */
-    [self setEnabledStateOfAudioMixdownControls: NULL];
-    
+    [self setEnabledStateOfAudioMixdownControls:nil];
+
     if (thisAudioIndex != -1)
     {
-        
+
         /* get the audio */
         audio = (hb_audio_config_t *) hb_list_audio_config_item( fTitle->list_audio, thisAudioIndex );// Should "fTitle" be title and be setup ?
-        
+
         /* actually manipulate the proper mixdowns here */
         /* delete the previous audio mixdown options */
         [mixdownPopUp removeAllItems];
-        
+
         acodec = [[audiocodecPopUp selectedItem] tag];
-        
+
         if (audio != NULL)
         {
-            
+
             /* find out if our selected output audio codec supports mono and / or 6ch */
             /* we also check for an input codec of AC3 or DCA,
              as they are the only libraries able to do the mixdown to mono / conversion to 6-ch */
@@ -3947,7 +3945,7 @@ if (item == nil)
         }
         /* File Format */
         [fDstFormatPopUp selectItemWithTitle:[chosenPreset objectForKey:@"FileFormat"]];
-        [self formatPopUpChanged: NULL];
+        [self formatPopUpChanged:nil];
 
         /* Chapter Markers*/
         [fCreateChapterMarkers setState:[[chosenPreset objectForKey:@"ChapterMarkers"] intValue]];
@@ -3992,10 +3990,10 @@ if (item == nil)
         }
 
         /* Lets run through the following functions to get variables set there */
-        [self videoEncoderPopUpChanged: NULL];
+        [self videoEncoderPopUpChanged:nil];
         /* Set the state of ipod compatible with Mp4iPodCompatible. Only for x264*/
         [fDstMp4iPodFileCheck setState:[[chosenPreset objectForKey:@"Mp4iPodCompatible"] intValue]];
-        [self calculateBitrate: NULL];
+        [self calculateBitrate:nil];
 
         /* Video quality */
         [fVidQualityMatrix selectCellAtRow:[[chosenPreset objectForKey:@"VideoQualityType"] intValue] column:0];
@@ -4004,7 +4002,7 @@ if (item == nil)
         [fVidBitrateField setStringValue:[chosenPreset objectForKey:@"VideoAvgBitrate"]];
         [fVidQualitySlider setFloatValue:[[chosenPreset objectForKey:@"VideoQualitySlider"] floatValue]];
 
-        [self videoMatrixChanged: NULL];
+        [self videoMatrixChanged:nil];
 
         /* Video framerate */
         /* For video preset video framerate, we want to make sure that Same as source does not conflict with the
@@ -4023,7 +4021,7 @@ if (item == nil)
 
         /* 2 Pass Encoding */
         [fVidTwoPassCheck setState:[[chosenPreset objectForKey:@"VideoTwoPass"] intValue]];
-        [self twoPassCheckboxChanged: NULL];
+        [self twoPassCheckboxChanged:nil];
         /* Turbo 1st pass for 2 Pass Encoding */
         [fVidTurboPassCheck setState:[[chosenPreset objectForKey:@"VideoTurboTwoPass"] intValue]];
 
@@ -4351,7 +4349,7 @@ if (item == nil)
             if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] == 2 || [[chosenPreset objectForKey:@"UsesMaxPictureSettings"]  intValue] == 1)
             {
                 /* Use Max Picture settings for whatever the dvd is.*/
-                [self revertPictureSizeToMax: NULL];
+                [self revertPictureSizeToMax:nil];
                 job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
                 if (job->keep_ratio == 1)
                 {
@@ -4478,13 +4476,13 @@ if (item == nil)
                     {
                         [fPictureController setDeblock:0];
                     }
-                    
-                    [self calculatePictureSizing: NULL];
+
+                    [self calculatePictureSizing:nil];
                 }
-                
+
             }
-            
-            
+
+
         }
         /* If the preset has an objectForKey:@"UsesPictureFilters", then we know it is a newer style filters preset
          * and handle the filters here depending on whether or not the preset specifies applying the filter.
@@ -4558,7 +4556,7 @@ if (item == nil)
                 [fPictureController setDecomb:0];
             }
         }
-        [self calculatePictureSizing: NULL];
+        [self calculatePictureSizing:nil];
     }
 }
 
@@ -4573,16 +4571,16 @@ if (item == nil)
     UserPresetsFile = @"~/Library/Application Support/HandBrake/UserPresets.plist";
 	UserPresetsFile = [[UserPresetsFile stringByExpandingTildeInPath]retain];
     /* We check for the presets.plist */
-	if ([fileManager fileExistsAtPath:UserPresetsFile] == 0) 
+	if ([fileManager fileExistsAtPath:UserPresetsFile] == 0)
 	{
 		[fileManager createFileAtPath:UserPresetsFile contents:nil attributes:nil];
 	}
-		
+
 	UserPresets = [[NSMutableArray alloc] initWithContentsOfFile:UserPresetsFile];
-	if (nil == UserPresets) 
+	if (nil == UserPresets)
 	{
 		UserPresets = [[NSMutableArray alloc] init];
-		[self addFactoryPresets:NULL];
+		[self addFactoryPresets:nil];
 	}
 	[fPresetsOutlineView reloadData];
 }
@@ -4605,7 +4603,7 @@ if (item == nil)
 	[fPresetNewName setStringValue: @""];
 	[fPresetNewDesc setStringValue: @""];
 	/* Show the panel */
-	[NSApp beginSheet: fAddPresetPanel modalForWindow: fWindow modalDelegate: NULL didEndSelector: NULL contextInfo: NULL];
+	[NSApp beginSheet:fAddPresetPanel modalForWindow:fWindow modalDelegate:nil didEndSelector:NULL contextInfo:NULL];
 }
 
 - (IBAction) closeAddPresetPanel: (id) sender
@@ -4623,8 +4621,8 @@ if (item == nil)
         /* Here we create a custom user preset */
         [UserPresets addObject:[self createPreset]];
         [self addPreset];
-        
-        [self closeAddPresetPanel:NULL];
+
+        [self closeAddPresetPanel:nil];
     }
 }
 - (void)addPreset
@@ -4802,7 +4800,7 @@ if (item == nil)
 {
     [UserPresets writeToFile:UserPresetsFile atomically:YES];
 	/* We get the default preset in case it changed */
-	[self getDefaultPresets: NULL];
+	[self getDefaultPresets:nil];
 
 }
 
@@ -4901,12 +4899,12 @@ if (item == nil)
 	if (presetUserDefault)
 	{
 	[fPresetsOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:presetUserDefault] byExtendingSelection:NO];
-	[self selectPreset:NULL];
+	[self selectPreset:nil];
 	}
 	else if (presetHbDefault) //else we use the built in default presetHbDefault
 	{
 	[fPresetsOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:presetHbDefault] byExtendingSelection:NO];
-	[self selectPreset:NULL];
+	[self selectPreset:nil];
 	}
 }
 

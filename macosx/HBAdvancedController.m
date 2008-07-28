@@ -41,7 +41,7 @@
 - (void) setOptions: (NSString *)string
 {
     [fDisplayX264Options setStringValue:string];
-    [self X264AdvancedOptionsSet:NULL];
+    [self X264AdvancedOptionsSet:nil];
 }
 
 - (void) setHidden: (BOOL) hide
@@ -197,34 +197,34 @@
     {
         [fX264optAlphaDeblockPopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
     }
-    
+
     /*Beta Deblock*/
     [fX264optBetaDeblockPopUp removeAllItems];
     [fX264optBetaDeblockPopUp addItemWithTitle:@"Default (0)"];
     for (i=-6; i<7;i++)
     {
         [fX264optBetaDeblockPopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
-    }     
-    
+    }
+
     /* Analysis fX264optAnalysePopUp */
     [fX264optAnalysePopUp removeAllItems];
     [fX264optAnalysePopUp addItemWithTitle:@"Default (some)"]; /* 0=default */
     [fX264optAnalysePopUp addItemWithTitle:[NSString stringWithFormat:@"None"]]; /* 1=none */
     [fX264optAnalysePopUp addItemWithTitle:[NSString stringWithFormat:@"All"]]; /* 2=all */
-                
+
     /* 8x8 DCT fX264op8x8dctSwitch */
     [fX264opt8x8dctSwitch setState:0];
     [fX264opt8x8dctSwitch setWantsLayer:YES];
-    
+
     /* CABAC fX264opCabacSwitch */
     [fX264optCabacSwitch setState:1];
-    
+
     /* Standardize the option string */
-    [self X264AdvancedOptionsStandardizeOptString: NULL];
+    [self X264AdvancedOptionsStandardizeOptString:nil];
 
     /* Set Current GUI Settings based on newly standardized string */
-    [self X264AdvancedOptionsSetCurrentSettings: NULL];
-    
+    [self X264AdvancedOptionsSetCurrentSettings:nil];
+
     /* Fade out options that don't apply */
     [self X264AdvancedOptionsAnimate: sender];
 }

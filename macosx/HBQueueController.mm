@@ -100,11 +100,11 @@ bool IsFirstPass(int jobID)
 // HBJob
 //------------------------------------------------------------------------------------
 
-static NSMutableParagraphStyle * _descriptionParagraphStyle = NULL;
-static NSDictionary* _detailAttribute = NULL;
-static NSDictionary* _detailBoldAttribute = NULL;
-static NSDictionary* _titleAttribute = NULL;
-static NSDictionary* _shortHeightAttribute = NULL;
+static NSMutableParagraphStyle * _descriptionParagraphStyle = nil;
+static NSDictionary* _detailAttribute = nil;
+static NSDictionary* _detailBoldAttribute = nil;
+static NSDictionary* _titleAttribute = nil;
+static NSDictionary* _shortHeightAttribute = nil;
 
 @implementation HBJob
 

@@ -108,9 +108,9 @@ int	stderrwrite(void *inFD, const char *buffer, int size)
 		[self autorelease];
 
 		if (self == g_stdoutRedirect)
-			g_stdoutRedirect = NULL;
+			g_stdoutRedirect = nil;
 		else if (self == g_stderrRedirect)
-			g_stderrRedirect = NULL;
+			g_stderrRedirect = nil;
 	}
 }
 
