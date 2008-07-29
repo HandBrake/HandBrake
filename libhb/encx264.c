@@ -582,11 +582,14 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 break;
 
             hb_buffer_t *buf = nal_encode( w, &pic_out, i_nal, nal );
-            if ( last_buf == NULL )
-                *buf_out = buf;
-            else
-                last_buf->next = buf;
-            last_buf = buf;
+            if ( buf )
+            {
+                if ( last_buf == NULL )
+                    *buf_out = buf;
+                else
+                    last_buf->next = buf;
+                last_buf = buf;
+            }
         }
         // Flushed everything - add the eof to the end of the chain.
         if ( last_buf == NULL )
@@ -638,11 +641,14 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 new_stop = orig_stop;
             in->stop = new_stop;
             hb_buffer_t *buf = x264_encode( w, in );
-            if ( last_buf == NULL )
-                *buf_out = buf;
-            else
-                last_buf->next = buf;
-            last_buf = buf;
+            if ( buf )
+            {
+                if ( last_buf == NULL )
+                    *buf_out = buf;
+                else
+                    last_buf->next = buf;
+                last_buf = buf;
+            }
             in->start = new_stop;
         }
     }
