@@ -4,17 +4,11 @@
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License. */
 
-#include "Controller.h"
-#include "a52dec/a52.h"
+#import "Controller.h"
 #import "HBOutputPanelController.h"
 #import "HBPreferencesController.h"
-/* Added to integrate scanning into HBController */
-#include <IOKit/IOKitLib.h>
-#include <IOKit/storage/IOMedia.h>
-#include <IOKit/storage/IODVDMedia.h>
-#include "HBDVDDetector.h"
-#include "dvdread/dvd_reader.h"
-#include "HBPresets.h"
+#import "HBDVDDetector.h"
+#import "HBPresets.h"
 
 #define DragDropSimplePboardType 	@"MyCustomOutlineViewPboardType"
 
@@ -988,7 +982,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 /*Opens the source browse window, called from Open Source widgets */
 - (IBAction) browseSources: (id) sender
 {
-    [self enableUI: NO];
     NSOpenPanel * panel;
 	
     panel = [NSOpenPanel openPanel];
@@ -1138,14 +1131,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         }
 
     }
-    else // User clicked Cancel in browse window
-    {
-        /* if we have a title loaded up */
-        if ([[fSrcDVD2Field stringValue] length] > 0 && SuccessfulScan)
-        {
-            [self enableUI: YES];
-        }
-    }
 }
 
 /* Here we open the title selection sheet where we can specify an exact title to be scanned */
@@ -1190,6 +1175,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     // Notify ChapterTitles that there's no title
     [fChapterTitlesDelegate resetWithTitle:nil];
     [fChapterTable reloadData];
+
+    [self enableUI: NO];
 
     if( [detector isVideoDVD] )
     {
@@ -1252,14 +1239,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
         hb_scan( fHandle, [path UTF8String], scanTitleNum );
         [fSrcDVD2Field setStringValue:@"Scanning new source ..."];
-    }
-    else
-    {
-            /* if we have a title loaded up */
-        if ([[fSrcDVD2Field stringValue] length] > 0 && SuccessfulScan)
-        {
-            [self enableUI: YES];
-        }
     }
 }
 
