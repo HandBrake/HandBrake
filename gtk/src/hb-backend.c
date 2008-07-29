@@ -1641,11 +1641,23 @@ ghb_backend_events(signal_user_data_t *ud, gint *unique_id)
     hb_state_t s;
 	gchar * status;
 	GtkProgressBar *progress;
+	static gint scan_complete_count = 0;
+	gint scans;
 	
 	if (h == NULL) return GHB_EVENT_NONE;
     hb_get_state( h, &s );
+	scans = hb_get_scancount(h);
 	*unique_id = s.param.working.sequence_id & 0xFFFFFF;
 	progress = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "progressbar"));
+	if (scans > scan_complete_count || s.state == HB_STATE_SCANDONE)
+	{
+		scan_complete_count = hb_get_scancount(h);
+		status = g_strdup_printf ("Scan done"); 
+		gtk_progress_bar_set_text (progress, status);
+		g_free(status);
+		gtk_progress_bar_set_fraction (progress, 1.0);
+		return GHB_EVENT_SCAN_DONE;
+	}
 	switch( s.state )
     {
         case HB_STATE_IDLE:
@@ -1667,6 +1679,7 @@ ghb_backend_events(signal_user_data_t *ud, gint *unique_id)
 
         case HB_STATE_SCANDONE:
         {
+			scan_complete_count = hb_get_scancount(h);
 			status = g_strdup_printf ("Scan done"); 
 			gtk_progress_bar_set_text (progress, status);
 			g_free(status);
