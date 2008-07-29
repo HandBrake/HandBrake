@@ -202,5 +202,17 @@ namespace Handbrake.Properties {
                 this["drive_detection"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string cli_minimized {
+            get {
+                return ((string)(this["cli_minimized"]));
+            }
+            set {
+                this["cli_minimized"] = value;
+            }
+        }
     }
 }

@@ -30,11 +30,6 @@ namespace Handbrake.Functions
         /// </summary>
         /// <param name="s"></param>
         /// <param name="query">The CLI Query</param>
-        /// <param name="stderr">Rediect standard error</param>
-        /// <param name="stdout">Redirect Standard output</param>
-        /// <param name="useShellExec"> Use Shell Executable</param>
-        /// <param name="noWindow">Display No Window</param>
-        /// <returns>Returns a process</returns>
         public Process runCli(object s, string query)
         {
             try
@@ -42,11 +37,11 @@ namespace Handbrake.Functions
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
                 string logPath = Path.Combine(Path.GetTempPath(), "hb_encode_log.dat");
 
-                string strCmdLine = String.Format(@" cmd /c """"{0}"" {1} 2>""{2}"" """, handbrakeCLIPath, query, logPath);
-                //string arguments = String.Format(@"{0} 2>""{1}""", query, logPath);
+                string strCmdLine = String.Format(@" CMD /c """"{0}"" {1} 2>""{2}"" """, handbrakeCLIPath, query, logPath);
 
                 ProcessStartInfo cliStart = new ProcessStartInfo("CMD.exe", strCmdLine);
-
+                if (Properties.Settings.Default.cli_minimized == "Checked")
+                    cliStart.WindowStyle = ProcessWindowStyle.Minimized;
                 hbProc = Process.Start(cliStart);
 
                 // Set the process Priority 
@@ -74,7 +69,7 @@ namespace Handbrake.Functions
             }
             catch (Exception exc)
             {
-                MessageBox.Show("Internal Software Error. Please Restart the Program.  Error Information: \n\n" + exc.ToString());
+                MessageBox.Show("An error occured in runCli()\n Error Information: \n\n" + exc.ToString());
             }
             return hbProc;
         }

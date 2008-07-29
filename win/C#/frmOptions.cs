@@ -51,6 +51,11 @@ namespace Handbrake
                 btn_drive_detect.CheckState = CheckState.Checked;
             }
 
+            if (Properties.Settings.Default.cli_minimized == "Checked")
+            {
+               check_cli_minimized.CheckState = CheckState.Checked;
+            }
+
             text_an_path.Text = Properties.Settings.Default.autoNamePath;
 
             if (text_an_path.Text == "")
@@ -120,15 +125,12 @@ namespace Handbrake
             else
                 Properties.Settings.Default.autoNamePath = text_an_path.Text;
         }
+
+        private void check_cli_minimized_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.cli_minimized = check_cli_minimized.CheckState.ToString();
+        }
         #endregion
-
-       
-
-
-
-
-
-
 
     }
 }

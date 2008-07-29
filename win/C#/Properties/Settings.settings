@@ -47,5 +47,8 @@
     <Setting Name="drive_detection" Type="System.String" Scope="User">
       <Value Profile="(Default)">Checked</Value>
     </Setting>
+    <Setting Name="cli_minimized" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>
