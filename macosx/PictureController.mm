@@ -4,7 +4,7 @@
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License. */
 
-#include "PictureController.h"
+#import "PictureController.h"
 
 @interface PictureController (Private)
 
@@ -164,7 +164,7 @@ are maintained across different sources */
 {
     [fPictureView setImage: [self imageForPicture: fPicture]];
     	
-	NSSize displaySize = NSMakeSize( (float)fTitle->width, (float)fTitle->height );
+	NSSize displaySize = NSMakeSize( ( CGFloat )fTitle->width, ( CGFloat )fTitle->height );
     /* Set the picture size display fields below the Preview Picture*/
     if( fTitle->job->pixel_ratio == 1 ) // Original PAR Implementation
     {
@@ -174,7 +174,7 @@ are maintained across different sources */
         [fInfoField setStringValue:[NSString stringWithFormat:
                                     @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d",
                                     fTitle->width, fTitle->height, output_width, output_height, display_width, output_height]];
-        displaySize.width *= ((float)fTitle->job->pixel_aspect_width) / ((float)fTitle->job->pixel_aspect_height);   
+        displaySize.width *= ( ( CGFloat )fTitle->job->pixel_aspect_width ) / ( ( CGFloat )fTitle->job->pixel_aspect_height );   
     }
     else if (fTitle->job->pixel_ratio == 2) // Loose Anamorphic
     {
@@ -183,13 +183,10 @@ are maintained across different sources */
                                     @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d",
                                     fTitle->width, fTitle->height, output_width, output_height, display_width, output_height]];
         
-        /* FIXME: needs to be fixed so that the picture window does not resize itself on the first
-         anamorphic width drop
-         */
-        if (fTitle->width - 8 < output_width)
-        {
-            displaySize.width *= ((float)output_par_width) / ((float)output_par_height);
-        }
+        /* FIXME: use the original aspect ratio to calculate the displaySize, 
+            probably the size will not be the right one,
+            but at least the windows does not resize every time. */
+        displaySize.width *= ( ( CGFloat )fTitle->job->pixel_aspect_width) / ( ( CGFloat )fTitle->job->pixel_aspect_height );
     }
     else // No Anamorphic
     {
@@ -197,27 +194,26 @@ are maintained across different sources */
                                      @"Source: %dx%d, Output: %dx%d", fTitle->width, fTitle->height,
                                      fTitle->job->width, fTitle->job->height]];
     }
-    
+
     NSSize viewSize = [self optimalViewSizeForImageSize:displaySize];
     if( [self viewNeedsToResizeToSize:viewSize] )
     {
         [self resizeSheetForViewSize:viewSize];
         [self setViewSize:viewSize];
     }
-    
+
     // Show the scaled text (use the height to check since the width can vary
     // with anamorphic video).
-    if( ((int)viewSize.height) != fTitle->height )
+    if( ( ( int )viewSize.height ) != fTitle->height )
     {
-        float scale = viewSize.width / ((float)fTitle->width);
+        CGFloat scale = viewSize.width / ( ( CGFloat ) fTitle->width );
         NSString *scaleString = [NSString stringWithFormat:
                                  NSLocalizedString( @" (Preview scaled to %.0f%% actual size)",
                                                    @"String shown when a preview is scaled" ),
                                  scale * 100.0];
-        [fInfoField setStringValue:
-         [[fInfoField stringValue] stringByAppendingString:scaleString]];
+        [fInfoField setStringValue: [[fInfoField stringValue] stringByAppendingString:scaleString]];
     }
-    
+
     [fPrevButton setEnabled: ( fPicture > 0 )];
     [fNextButton setEnabled: ( fPicture < 9 )];
 }
@@ -225,6 +221,24 @@ are maintained across different sources */
 - (IBAction) SettingsChanged: (id) sender
 {
     hb_job_t * job = fTitle->job;
+    
+    autoCrop = ( [fCropMatrix selectedRow] == 0 );
+    [fCropTopStepper    setEnabled: !autoCrop];
+    [fCropBottomStepper setEnabled: !autoCrop];
+    [fCropLeftStepper   setEnabled: !autoCrop];
+    [fCropRightStepper  setEnabled: !autoCrop];
+
+    if( autoCrop )
+    {
+        memcpy( job->crop, fTitle->crop, 4 * sizeof( int ) );
+    }
+    else
+    {
+        job->crop[0] = [fCropTopStepper    intValue];
+        job->crop[1] = [fCropBottomStepper intValue];
+        job->crop[2] = [fCropLeftStepper   intValue];
+        job->crop[3] = [fCropRightStepper  intValue];
+    }
     
 	if( [fAnamorphicPopUp indexOfSelectedItem] > 0 )
 	{
@@ -293,7 +307,6 @@ are maintained across different sources */
         
 	}
 	
-    
     job->keep_ratio  = ( [fRatioCheck state] == NSOnState );
     
 	fPictureFilterSettings.deinterlace = [fDeinterlacePopUp indexOfSelectedItem];
@@ -323,25 +336,7 @@ are maintained across different sources */
     fPictureFilterSettings.deblock  = [fDeblockCheck state];
     
     fPictureFilterSettings.decomb = [fDecombPopUp indexOfSelectedItem];
-	
-    autoCrop = ( [fCropMatrix selectedRow] == 0 );
-    [fCropTopStepper    setEnabled: !autoCrop];
-    [fCropBottomStepper setEnabled: !autoCrop];
-    [fCropLeftStepper   setEnabled: !autoCrop];
-    [fCropRightStepper  setEnabled: !autoCrop];
-    
-    if( autoCrop )
-    {
-        memcpy( job->crop, fTitle->crop, 4 * sizeof( int ) );
-    }
-    else
-    {
-        job->crop[0] = [fCropTopStepper    intValue];
-        job->crop[1] = [fCropBottomStepper intValue];
-        job->crop[2] = [fCropLeftStepper   intValue];
-        job->crop[3] = [fCropRightStepper  intValue];
-    }
-    
+
     if( job->keep_ratio )
     {
         if( sender == fWidthStepper || sender == fRatioCheck ||
@@ -363,8 +358,15 @@ are maintained across different sources */
                 hb_fix_aspect( job, HB_KEEP_WIDTH );
             }
         }
+        // hb_get_preview can't handle sizes that are larger than the original title
+        // dimensions
+        if( job->width > fTitle->width )
+            job->width = fTitle->width;
+
+        if( job->height > fTitle->height )
+            job->height = fTitle->height;
     }
-    
+
     [fWidthStepper      setIntValue: job->width];
     [fWidthField        setIntValue: job->width];
     if( [fAnamorphicPopUp indexOfSelectedItem] < 2 )
@@ -692,17 +694,17 @@ are maintained across different sources */
 - (NSSize)optimalViewSizeForImageSize: (NSSize)imageSize
 {
     // The min size is 320x240
-    float minWidth = 320.0;
-    float minHeight = 240.0;
+    CGFloat minWidth = 320.0;
+    CGFloat minHeight = 240.0;
 
     // The max size of the view is when the sheet is taking up 85% of the screen.
     NSSize screenSize = [[NSScreen mainScreen] frame].size;
     NSSize sheetSize = [[self window] frame].size;
     NSSize viewAreaSize = [fPictureViewArea frame].size;
-    float paddingX = sheetSize.width - viewAreaSize.width;
-    float paddingY = sheetSize.height - viewAreaSize.height;
-    float maxWidth = (0.85 * screenSize.width) - paddingX;
-    float maxHeight = (0.85 * screenSize.height) - paddingY;
+    CGFloat paddingX = sheetSize.width - viewAreaSize.width;
+    CGFloat paddingY = sheetSize.height - viewAreaSize.height;
+    CGFloat maxWidth = (0.85 * screenSize.width) - paddingX;
+    CGFloat maxHeight = (0.85 * screenSize.height) - paddingY;
     
     NSSize resultSize = imageSize;
     
@@ -741,8 +743,8 @@ are maintained across different sources */
 {
     // Figure out the deltas for the new frame area
     NSSize currentSize = [fPictureViewArea frame].size;
-    float deltaX = viewSize.width - currentSize.width;
-    float deltaY = viewSize.height - currentSize.height;
+    CGFloat deltaX = viewSize.width - currentSize.width;
+    CGFloat deltaY = viewSize.height - currentSize.height;
 
     // Now resize the whole panel by those same deltas, but don't exceed the min
     NSRect frame = [[self window] frame];
@@ -797,6 +799,5 @@ are maintained across different sources */
     NSSize viewSize = [fPictureView frame].size;
     return (newSize.width != viewSize.width || newSize.height != viewSize.height);
 }
-
 
 @end
