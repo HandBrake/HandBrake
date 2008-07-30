@@ -29,6 +29,23 @@ enum
 	GHB_EVENT_WORK_CANCELED
 };
 
+typedef struct ghb_status_s
+{
+	gint state;
+	gint title_count;
+	gint title_cur;
+	gint unique_id;
+	gint job_cur;
+	gint job_count;
+	gdouble progress;
+	gdouble rate_cur;
+	gdouble rate_avg;
+	gint hours;
+	gint minutes;
+	gint seconds;
+	gint error;
+} ghb_status_t;
+
 #define GHB_SCALE_KEEP_NONE 0
 #define GHB_SCALE_KEEP_WIDTH 1
 #define GHB_SCALE_KEEP_HEIGHT 2

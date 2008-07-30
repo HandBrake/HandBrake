@@ -30,10 +30,14 @@ GObject* debug_get_object(GtkBuilder *b, const gchar *n);
 
 enum
 {
-	GHB_STATE_IDLE = 0x00,
-	GHB_STATE_START = 0x01,
-	GHB_STATE_SCANNING = 0x02,
-	GHB_STATE_WORKING = 0x04
+	GHB_STATE_IDLE 		= 0x00,
+	GHB_STATE_START 	= 0x01,
+	GHB_STATE_SCANNING 	= 0x02,
+	GHB_STATE_SCANDONE 	= 0x04,
+	GHB_STATE_WORKING 	= 0x08,
+	GHB_STATE_WORKDONE 	= 0x10,
+	GHB_STATE_PAUSED 	= 0x20,
+	GHB_STATE_MUXING 	= 0x40,
 };
 
 typedef struct

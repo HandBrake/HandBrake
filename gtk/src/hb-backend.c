@@ -1618,6 +1618,8 @@ ghb_set_default_rate_opts(GtkBuilder *builder)
 	return changed;
 }
 
+static ghb_status_t hb_status;
+
 void
 ghb_backend_init(GtkBuilder *builder, gint debug, gint update)
 {
@@ -1633,96 +1635,70 @@ void
 ghb_backend_scan(const gchar *path, gint titleindex)
 {
     hb_scan( h, path, titleindex );
+	hb_status.state |= GHB_STATE_SCANNING;
 }
 
-gint 
-ghb_backend_events(signal_user_data_t *ud, gint *unique_id)
+static void 
+track_state()
 {
     hb_state_t s;
-	gchar * status;
-	GtkProgressBar *progress;
 	static gint scan_complete_count = 0;
 	gint scans;
-	
-	if (h == NULL) return GHB_EVENT_NONE;
+
     hb_get_state( h, &s );
 	scans = hb_get_scancount(h);
-	*unique_id = s.param.working.sequence_id & 0xFFFFFF;
-	progress = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "progressbar"));
-	if (scans > scan_complete_count || s.state == HB_STATE_SCANDONE)
+	if (scans > scan_complete_count)
 	{
+		hb_status.state &= ~GHB_STATE_SCANNING;
+		hb_status.state |= GHB_STATE_SCANDONE;
 		scan_complete_count = hb_get_scancount(h);
-		status = g_strdup_printf ("Scan done"); 
-		gtk_progress_bar_set_text (progress, status);
-		g_free(status);
-		gtk_progress_bar_set_fraction (progress, 1.0);
-		return GHB_EVENT_SCAN_DONE;
 	}
 	switch( s.state )
     {
         case HB_STATE_IDLE:
             /* Nothing to do */
-			//fprintf( stderr, "HB Idle\n");
             break;
 
 #define p s.param.scanning
         case HB_STATE_SCANNING:
 		{
-			status = g_strdup_printf ("Scanning title %d of %d...", 
-									  p.title_cur, p.title_count );
-			gtk_progress_bar_set_text (progress, status);
-			g_free(status);
-			gtk_progress_bar_set_fraction (progress, (gdouble)p.title_cur / p.title_count);
-            /* Show what title is currently being scanned */
+			hb_status.state |= GHB_STATE_SCANNING;
+			hb_status.title_count = p.title_count;
+			hb_status.title_cur = p.title_cur;
 		} break;
 #undef p
 
         case HB_STATE_SCANDONE:
         {
-			scan_complete_count = hb_get_scancount(h);
-			status = g_strdup_printf ("Scan done"); 
-			gtk_progress_bar_set_text (progress, status);
-			g_free(status);
-			gtk_progress_bar_set_fraction (progress, 1.0);
-			return GHB_EVENT_SCAN_DONE;
-            break;
-        }
+			hb_status.state &= ~GHB_STATE_SCANNING;
+			hb_status.state |= GHB_STATE_SCANDONE;
+        } break;
 
 #define p s.param.working
         case HB_STATE_WORKING:
-            if( p.seconds > -1 )
-            {
-				status= g_strdup_printf(
-						"Encoding: task %d of %d, %.2f %%"
-						" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)",
-						 p.job_cur, p.job_count, 100.0 * p.progress,
-						 p.rate_cur, p.rate_avg, p.hours, p.minutes, p.seconds );
-            }
-			else
-			{
-				status= g_strdup_printf("Encoding: task %d of %d, %.2f %%",
-						 p.job_cur, p.job_count, 100.0 * p.progress );
-			}
-			gtk_progress_bar_set_text (progress, status);
-			gtk_progress_bar_set_fraction (progress, p.progress);
-			g_free(status);
-			return GHB_EVENT_WORKING;
+			hb_status.state |= GHB_STATE_WORKING;
+			hb_status.state &= ~GHB_STATE_PAUSED;
+			hb_status.job_cur = p.job_cur;
+			hb_status.job_count = p.job_count;
+			hb_status.progress = p.progress;
+			hb_status.rate_cur = p.rate_cur;
+			hb_status.rate_avg = p.rate_avg;
+			hb_status.hours = p.hours;
+			hb_status.minutes = p.minutes;
+			hb_status.seconds = p.seconds;
+			hb_status.unique_id = p.sequence_id & 0xFFFFFF;
             break;
 #undef p
 
         case HB_STATE_PAUSED:
-			status = g_strdup_printf ("Paused"); 
-			gtk_progress_bar_set_text (progress, status);
-			g_free(status);
-			return GHB_EVENT_PAUSED;
+			hb_status.state |= GHB_STATE_PAUSED;
             break;
 				
 #define p s.param.muxing
         case HB_STATE_MUXING:
         {
-            gtk_progress_bar_set_text( progress, "Muxing: this may take awhile...");
-            break;
-        }
+			hb_status.state |= GHB_STATE_MUXING;
+        } break;
 #undef p
 
 #define p s.param.workdone
@@ -1730,6 +1706,11 @@ ghb_backend_events(signal_user_data_t *ud, gint *unique_id)
 		{
             hb_job_t *job;
 
+			hb_status.state |= GHB_STATE_WORKDONE;
+			hb_status.state &= ~GHB_STATE_MUXING;
+			hb_status.state &= ~GHB_STATE_PAUSED;
+			hb_status.state &= ~GHB_STATE_WORKING;
+			hb_status.error = p.error;
 			// Delete all remaining jobs of this encode.
 			// An encode can be composed of multiple associated jobs.
 			// When a job is stopped, libhb removes it from the job list,
@@ -1737,26 +1718,93 @@ ghb_backend_events(signal_user_data_t *ud, gint *unique_id)
 			// Associated jobs are taged in the sequence id.
             while (((job = hb_job(h, 0)) != NULL) && ((job->sequence_id >> 24) != 0) ) 
                 hb_rem( h, job );
-				
-            switch( p.error )
-            {
-                case HB_ERROR_NONE:
-                    gtk_progress_bar_set_text( progress, "Rip done!" );
-                    break;
-                case HB_ERROR_CANCELED:
-                    gtk_progress_bar_set_text( progress, "Rip canceled." );
-					return GHB_EVENT_WORK_CANCELED;
-                    break;
-                default:
-                    gtk_progress_bar_set_text( progress, "Rip failed.");
-            }
-			gtk_progress_bar_set_fraction (progress, 1.0);
-			return GHB_EVENT_WORK_DONE;
-            break;
-		}
+		} break;
 #undef p
     }
-    return GHB_EVENT_NONE;
+}
+
+gint
+ghb_backend_events(signal_user_data_t *ud, gint *unique_id)
+{
+	gchar *status;
+	GtkProgressBar *progress;
+	
+	if (h == NULL) return GHB_EVENT_NONE;
+	track_state();
+	progress = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "progressbar"));
+	*unique_id = hb_status.unique_id;
+	if (hb_status.state & GHB_STATE_SCANNING)
+	{
+		status = g_strdup_printf ("Scanning title %d of %d...", 
+								  hb_status.title_cur, hb_status.title_count );
+		gtk_progress_bar_set_text (progress, status);
+		g_free(status);
+		gtk_progress_bar_set_fraction (progress, 
+			(gdouble)hb_status.title_cur / hb_status.title_count);
+	}
+	else if (hb_status.state & GHB_STATE_SCANDONE)
+	{
+		status = g_strdup_printf ("Scan done"); 
+		gtk_progress_bar_set_text (progress, status);
+		g_free(status);
+		gtk_progress_bar_set_fraction (progress, 1.0);
+		hb_status.state &= ~GHB_STATE_SCANDONE;
+		return GHB_EVENT_SCAN_DONE;
+	}
+	else if (hb_status.state & GHB_STATE_WORKING)
+	{
+		if(hb_status.seconds > -1)
+		{
+			status= g_strdup_printf(
+				"Encoding: task %d of %d, %.2f %%"
+				" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)",
+				hb_status.job_cur, hb_status.job_count, 
+				100.0 * hb_status.progress,
+				hb_status.rate_cur, hb_status.rate_avg, hb_status.hours, 
+				hb_status.minutes, hb_status.seconds );
+		}
+		else
+		{
+			status= g_strdup_printf(
+				"Encoding: task %d of %d, %.2f %%",
+				hb_status.job_cur, hb_status.job_count, 
+				100.0 * hb_status.progress );
+		}
+		gtk_progress_bar_set_text (progress, status);
+		gtk_progress_bar_set_fraction (progress, hb_status.progress);
+		g_free(status);
+		return GHB_EVENT_WORKING;
+	}
+	else if (hb_status.state & GHB_STATE_WORKDONE)
+	{
+		switch( hb_status.error )
+		{
+			case HB_ERROR_NONE:
+				gtk_progress_bar_set_text( progress, "Rip done!" );
+				break;
+			case HB_ERROR_CANCELED:
+				gtk_progress_bar_set_text( progress, "Rip canceled." );
+				return GHB_EVENT_WORK_CANCELED;
+				break;
+			default:
+				gtk_progress_bar_set_text( progress, "Rip failed.");
+		}
+		gtk_progress_bar_set_fraction (progress, 1.0);
+		hb_status.state &= ~GHB_STATE_WORKDONE;
+		return GHB_EVENT_WORK_DONE;
+	}
+	else if (hb_status.state & GHB_STATE_PAUSED)
+	{
+		status = g_strdup_printf ("Paused"); 
+		gtk_progress_bar_set_text (progress, status);
+		g_free(status);
+		return GHB_EVENT_PAUSED;
+	}
+	else if (hb_status.state & GHB_STATE_MUXING)
+	{
+		gtk_progress_bar_set_text(progress, "Muxing: this may take awhile...");
+	}
+	return GHB_EVENT_NONE;
 }
 
 gboolean
