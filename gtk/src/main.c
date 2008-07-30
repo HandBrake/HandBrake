@@ -461,6 +461,10 @@ watch_volumes(signal_user_data_t *ud)
 }
 #endif
 
+// Hack to avoid a segfault in libavcodec
+extern int mm_flags;
+int mm_support();
+
 int
 main (int argc, char *argv[])
 {
@@ -471,6 +475,7 @@ main (int argc, char *argv[])
 	GError *error = NULL;
 	GOptionContext *context;
 
+	mm_flags = mm_support();
 #ifdef ENABLE_NLS
 	bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
