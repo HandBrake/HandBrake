@@ -39,7 +39,6 @@ typedef struct
 	gint ivalue;
 	gdouble dvalue;
 	const gchar *svalue;
-	gboolean sensitive;
 } options_map_t;
 
 typedef struct
@@ -630,6 +629,7 @@ ghb_grey_combo_options(GtkBuilder *builder)
 {
 	GtkWidget *widget;
 	gint container, track, titleindex, acodec;
+	gboolean httpopt;
     hb_audio_config_t *audio = NULL;
 	
 	widget = GHB_WIDGET (builder, "title");
@@ -637,6 +637,10 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	widget = GHB_WIDGET (builder, "audio_track");
 	track = ghb_widget_int(widget);
 	audio = get_hb_audio(titleindex, track);
+	widget = GHB_WIDGET (builder, "container");
+	container = ghb_widget_int(widget);
+	widget = GHB_WIDGET (builder, "http_optimize_mp4");
+	httpopt = ghb_widget_int(widget);
 
 	grey_combo_box_item(builder, "audio_codec", HB_ACODEC_FAAC, FALSE);
 	grey_combo_box_item(builder, "pref_audio_codec1", HB_ACODEC_FAAC, FALSE);
@@ -647,16 +651,28 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	grey_combo_box_item(builder, "audio_codec", HB_ACODEC_VORBIS, FALSE);
 	grey_combo_box_item(builder, "pref_audio_codec1", HB_ACODEC_VORBIS, FALSE);
 	grey_combo_box_item(builder, "pref_audio_codec2", HB_ACODEC_VORBIS, FALSE);
+
+	gboolean allow_ac3 = TRUE;
+	allow_ac3 = 
+		!(container == HB_MUX_MP4 && httpopt) &&
+		(container != HB_MUX_OGM);
+
+	if (allow_ac3)
+	{
+		grey_combo_box_item(builder, "audio_codec", HB_ACODEC_AC3, FALSE);
+		grey_combo_box_item(builder, "pref_audio_codec1", HB_ACODEC_AC3, FALSE);
+		grey_combo_box_item(builder, "pref_audio_codec2", HB_ACODEC_AC3, FALSE);
+	}
+	else
+	{
+		grey_combo_box_item(builder, "audio_codec", HB_ACODEC_AC3, TRUE);
+		grey_combo_box_item(builder, "pref_audio_codec1", HB_ACODEC_AC3, TRUE);
+		grey_combo_box_item(builder, "pref_audio_codec2", HB_ACODEC_AC3, TRUE);
+	}
 	if (audio && audio->in.codec != HB_ACODEC_AC3)
 	{
 		grey_combo_box_item(builder, "audio_codec", HB_ACODEC_AC3, TRUE);
 	}
-	else
-	{
-		grey_combo_box_item(builder, "audio_codec", HB_ACODEC_AC3, FALSE);
-	}
-	grey_combo_box_item(builder, "pref_audio_codec1", HB_ACODEC_AC3, FALSE);
-	grey_combo_box_item(builder, "pref_audio_codec2", HB_ACODEC_AC3, FALSE);
 	grey_combo_box_item(builder, "video_codec", HB_VCODEC_THEORA, FALSE);
 
 	widget = GHB_WIDGET (builder, "audio_codec");
@@ -665,8 +681,6 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	{
 		grey_combo_box_item(builder, "audio_mix", 0, TRUE);
 	}
-	widget = GHB_WIDGET (builder, "container");
-	container = ghb_widget_int(widget);
 	if (container == HB_MUX_MP4)
 	{
 		grey_combo_box_item(builder, "audio_codec", HB_ACODEC_LAME, TRUE);
@@ -692,9 +706,6 @@ ghb_grey_combo_options(GtkBuilder *builder)
 		grey_combo_box_item(builder, "audio_codec", HB_ACODEC_FAAC, TRUE);
 		grey_combo_box_item(builder, "pref_audio_codec1", HB_ACODEC_FAAC, TRUE);
 		grey_combo_box_item(builder, "pref_audio_codec2", HB_ACODEC_FAAC, TRUE);
-		grey_combo_box_item(builder, "audio_codec", HB_ACODEC_AC3, TRUE);
-		grey_combo_box_item(builder, "pref_audio_codec1", HB_ACODEC_AC3, TRUE);
-		grey_combo_box_item(builder, "pref_audio_codec2", HB_ACODEC_AC3, TRUE);
 	}
 
 	gboolean allow_mono = TRUE;
@@ -1603,6 +1614,26 @@ ghb_get_chapters(gint titleindex)
 }
 
 gboolean
+ghb_ac3_in_audio_list(GSList *audio_list)
+{
+	GSList *link;
+
+	link = audio_list;
+	while (link != NULL)
+	{
+		GHashTable *asettings;
+		gint acodec;
+
+		asettings = (GHashTable*)link->data;
+		acodec = ghb_settings_get_int(asettings, "audio_codec");
+		if (acodec == HB_ACODEC_AC3)
+			return TRUE;
+		link = link->next;
+	}
+	return FALSE;
+}
+
+gboolean
 ghb_set_passthru_rate_opts(GtkBuilder *builder, gint bitrate)
 {
 	gboolean changed = FALSE;
@@ -2084,7 +2115,7 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 }
 
 static void
-set_job_picture_settings(hb_job_t *job, GHashTable *settings)
+set_preview_job_settings(hb_job_t *job, GHashTable *settings)
 {
 	job->crop[0] = ghb_settings_get_int(settings, "crop_top");
 	job->crop[1] = ghb_settings_get_int(settings, "crop_bottom");
@@ -2111,7 +2142,8 @@ set_job_picture_settings(hb_job_t *job, GHashTable *settings)
 	job->width = ghb_settings_get_int(settings, "scale_width");
 	job->height = ghb_settings_get_int(settings, "scale_height");
 	gint deint = ghb_settings_get_int(settings, "deinterlace");
-	job->deinterlace = (deint == 0) ? 0 : 1;
+	gboolean decomb = ghb_settings_get_bool(settings, "decomb");
+	job->deinterlace = (!decomb && deint == 0) ? 0 : 1;
 }
 
 gint
@@ -2209,6 +2241,48 @@ ghb_validate_video(signal_user_data_t *ud)
 			ghb_ui_update_int(ud, "variable_frame_rate", TRUE);
 		}
 		g_free(message);
+	}
+	return TRUE;
+}
+
+gboolean
+ghb_validate_container(signal_user_data_t *ud)
+{
+	gint container;
+	gchar *message;
+
+	container = ghb_settings_get_bool(ud->settings, "container");
+	if (container == HB_MUX_MP4)
+	{
+		gboolean httpopt;
+		httpopt = ghb_settings_get_bool(ud->settings, "http_optimize_mp4");
+		if (httpopt && ghb_ac3_in_audio_list(ud->audio_settings))
+		{
+			message = g_strdup_printf(
+					"AC3 audio in HTTP optimized MP4 is not supported.\n\n"
+					"You should choose a different audio codec.\n"
+					"If you continue, FAAC will be chosen for you.");
+			if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, "Cancel", "Continue"))
+			{
+				g_free(message);
+				return FALSE;
+			}
+			g_free(message);
+			GSList *link = ud->audio_settings;
+			while (link != NULL)
+			{
+				GHashTable *asettings;
+				asettings = (GHashTable*)link->data;
+				gint acodec = ghb_settings_get_int(asettings, "audio_codec");
+				if (acodec == HB_ACODEC_AC3)
+				{
+					setting_value_t *value;
+					value = get_acodec_value(HB_ACODEC_FAAC);
+					ghb_settings_set(asettings, "audio_codec", value);
+				}
+				link = link->next;
+			}
+		}
 	}
 	return TRUE;
 }
@@ -2946,7 +3020,7 @@ ghb_get_preview_image(gint titleindex, gint index, GHashTable *settings, gboolea
     title = hb_list_item( list, titleindex );
 	if (title == NULL) return NULL;
 	if (title->job == NULL) return NULL;
-	set_job_picture_settings(title->job, settings);
+	set_preview_job_settings(title->job, settings);
 
 	// hb_get_preview can't handle sizes that are larger than the original title
 	// dimensions

@@ -92,6 +92,7 @@ gboolean ghb_get_title_info(ghb_title_info_t *tinfo, gint titleindex);
 void ghb_set_scale(signal_user_data_t *ud, gint mode);
 gchar ** ghb_get_chapters(gint titleindex);
 gint ghb_get_best_mix(gint titleindex, gint track, gint acodec, gint mix);
+gboolean ghb_ac3_in_audio_list(GSList *audio_list);
 gboolean ghb_audio_is_passthru(gint acodec);
 gint ghb_get_default_acodec();
 gboolean ghb_get_audio_info(ghb_audio_info_t *ainfo, gint titleindex, gint audioindex);
@@ -107,6 +108,7 @@ gint ghb_calculate_target_bitrate(GHashTable *settings, gint titleindex);
 gchar* ghb_dvd_volname(const gchar *device);
 
 gint ghb_guess_bitrate(GHashTable *settings);
+gboolean ghb_validate_container(signal_user_data_t *ud);
 gboolean ghb_validate_vquality(GHashTable *settings);
 gboolean ghb_validate_audio(signal_user_data_t *ud);
 gboolean ghb_validate_video(signal_user_data_t *ud);

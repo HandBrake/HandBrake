@@ -824,6 +824,16 @@ container_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	check_depencency(ud, widget);
 	update_acodec_combo(ud);
 	clear_presets_selection(ud);
+	if (ghb_ac3_in_audio_list (ud->audio_settings))
+	{
+		const gchar *container;
+
+		container = ghb_settings_get_string(ud->settings, "container");
+		if (strcmp(container, "mp4") == 0)
+		{
+			ghb_ui_update(ud, "container", "m4v");
+		}
+	}
 }
 
 static gchar*
@@ -1168,6 +1178,16 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		ghb_widget_to_setting(asettings, widget);
 		audio_list_refresh_selected(ud);
 	}
+	if (ghb_ac3_in_audio_list (ud->audio_settings))
+	{
+		const gchar *container;
+
+		container = ghb_settings_get_string(ud->settings, "container");
+		if (strcmp(container, "mp4") == 0)
+		{
+			ghb_ui_update(ud, "container", "m4v");
+		}
+	}
 }
 
 static void audio_list_refresh_selected(signal_user_data_t *ud);
@@ -1218,6 +1238,15 @@ setting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_widget_to_setting(ud->settings, widget);
 	check_depencency(ud, widget);
 	clear_presets_selection(ud);
+}
+
+void
+http_opt_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	ghb_widget_to_setting(ud->settings, widget);
+	check_depencency(ud, widget);
+	clear_presets_selection(ud);
+	ghb_grey_combo_options (ud->builder);
 }
 
 void
@@ -2359,6 +2388,11 @@ validate_settings(signal_user_data_t *ud)
 	}
 	// Validate video settings
 	if (!ghb_validate_video(ud))
+	{
+		return FALSE;
+	}
+	// Validate container settings
+	if (!ghb_validate_container(ud))
 	{
 		return FALSE;
 	}
