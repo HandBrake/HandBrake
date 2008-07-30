@@ -2071,7 +2071,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     hb_title_t * title = (hb_title_t*)
         hb_list_item( list, [fSrcTitlePopUp indexOfSelectedItem] );
 
-
     /* If Auto Naming is on. We create an output filename of dvd name - title number */
     if( [[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"] > 0 && ( hb_list_count( list ) > 1 ) )
 	{
@@ -2092,12 +2091,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [fSrcChapterEndPopUp addItemWithTitle: [NSString
             stringWithFormat: @"%d", i + 1]];
     }
+
     [fSrcChapterStartPopUp selectItemAtIndex: 0];
     [fSrcChapterEndPopUp   selectItemAtIndex:
         hb_list_count( title->list_chapter ) - 1];
     [self chapterPopUpChanged:nil];
 
-/* Start Get and set the initial pic size for display */
+    /* Start Get and set the initial pic size for display */
 	hb_job_t * job = title->job;
 	fTitle = title;
 
@@ -2178,36 +2178,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	[self audioTrackPopUpChanged: fAudLang2PopUp];
     [self audioTrackPopUpChanged: fAudLang3PopUp];
     [self audioTrackPopUpChanged: fAudLang4PopUp];
-    
-    /* We repopulate the Video Framerate popup */
 
-    [fVidRatePopUp removeAllItems];
-    
-    [fVidRatePopUp addItemWithTitle:@"Same as source"];
-    
-	for( int i = 0; i < hb_video_rates_count; i++ )
-    {
-        if ([[NSString stringWithCString: hb_video_rates[i].string] isEqualToString: [NSString stringWithFormat: @"%.3f",23.976]])
-		{
-			[fVidRatePopUp addItemWithTitle:[NSString stringWithFormat: @"%@%@",
-				[NSString stringWithCString: hb_video_rates[i].string], @" (NTSC Film)"]];
-		}
-		else if ([[NSString stringWithCString: hb_video_rates[i].string] isEqualToString: [NSString stringWithFormat: @"%d",25]])
-		{
-			[fVidRatePopUp addItemWithTitle:[NSString stringWithFormat: @"%@%@",
-				[NSString stringWithCString: hb_video_rates[i].string], @" (PAL Film/Video)"]];
-		}
-		else if ([[NSString stringWithCString: hb_video_rates[i].string] isEqualToString: [NSString stringWithFormat: @"%.2f",29.97]])
-		{
-			[fVidRatePopUp addItemWithTitle:[NSString stringWithFormat: @"%@%@",
-				[NSString stringWithCString: hb_video_rates[i].string], @" (NTSC Video)"]];
-		}
-		else
-		{
-			[fVidRatePopUp addItemWithTitle:
-				[NSString stringWithCString: hb_video_rates[i].string]];
-		}
-    }
     [fVidRatePopUp selectItemAtIndex: 0];
 
     /* we run the picture size values through calculatePictureSizing to get all picture setting	information*/
