@@ -206,7 +206,10 @@ static hb_buffer_t *Flush( hb_work_object_t *w, hb_buffer_t *bufin )
         }
     }
     // add the eof marker to the end of our buf chain
-    buf->next = bufin;
+    if ( buf )
+        buf->next = bufin;
+    else
+        bufout = bufin;
     return bufout;
 }
 

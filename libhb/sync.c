@@ -39,8 +39,11 @@ typedef struct
 struct hb_work_private_s
 {
     hb_job_t * job;
-    int        done;
-
+    int        busy;            // bitmask with one bit for each active input
+                                // (bit 0 = video; 1 = audio 0, 2 = audio 1, ...
+                                // appropriate bit is cleared when input gets
+                                // an eof buf. syncWork returns done when all
+                                // bits are clear.
     /* Video */
     hb_subtitle_t * subtitle;
     int64_t pts_offset;
@@ -69,7 +72,7 @@ struct hb_work_private_s
  * Local prototypes
  **********************************************************************/
 static void InitAudio( hb_work_object_t * w, int i );
-static int  SyncVideo( hb_work_object_t * w );
+static void SyncVideo( hb_work_object_t * w );
 static void SyncAudio( hb_work_object_t * w, int i );
 static void InsertSilence( hb_work_object_t * w, int i, int64_t d );
 static void UpdateState( hb_work_object_t * w );
@@ -92,7 +95,6 @@ int syncInit( hb_work_object_t * w, hb_job_t * job )
 
     pv->job            = job;
     pv->pts_offset     = INT64_MIN;
-    pv->count_frames   = 0;
 
     /* Calculate how many video frames we are expecting */
     duration = 0;
@@ -106,17 +108,17 @@ int syncInit( hb_work_object_t * w, hb_job_t * job )
     pv->count_frames_max = duration * job->vrate / job->vrate_base / 90000;
 
     hb_log( "sync: expecting %d video frames", pv->count_frames_max );
+    pv->busy |= 1;
 
     /* Initialize libsamplerate for every audio track we have */
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
+        pv->busy |= ( 1 << (i + 1) );
         InitAudio( w, i );
     }
 
     /* Get subtitle info, if any */
     pv->subtitle = hb_list_item( title->list_subtitle, 0 );
-
-    pv->video_sequence = 0;
 
     return 0;
 }
@@ -180,17 +182,20 @@ int syncWork( hb_work_object_t * w, hb_buffer_t ** unused1,
     hb_work_private_t * pv = w->private_data;
     int i;
 
+    if ( pv->busy & 1 )
+        SyncVideo( w );
+
     /* If we ever got a video frame, handle audio now */
     if( pv->pts_offset != INT64_MIN )
     {
         for( i = 0; i < hb_list_count( pv->job->title->list_audio ); i++ )
         {
-            SyncAudio( w, i );
+            if ( pv->busy & ( 1 << (i + 1) ) )
+                SyncAudio( w, i );
         }
     }
 
-    /* Handle video */
-    return SyncVideo( w );
+    return ( pv->busy? HB_WORK_OK : HB_WORK_DONE );
 }
 
 hb_work_object_t hb_sync =
@@ -263,29 +268,24 @@ static void InitAudio( hb_work_object_t * w, int i )
  ***********************************************************************
  *
  **********************************************************************/
-static int SyncVideo( hb_work_object_t * w )
+static void SyncVideo( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * cur, * next, * sub = NULL;
     hb_job_t * job = pv->job;
 
-    if( pv->done )
-    {
-        return HB_WORK_DONE;
-    }
-
     if( !pv->cur && !( pv->cur = hb_fifo_get( job->fifo_raw ) ) )
     {
         /* We haven't even got a frame yet */
-        return HB_WORK_OK;
+        return;
     }
     cur = pv->cur;
     if( cur->size == 0 )
     {
         /* we got an end-of-stream. Feed it downstream & signal that we're done. */
         hb_fifo_push( job->fifo_sync, hb_buffer_init( 0 ) );
-        pv->done = 1;
-        return HB_WORK_DONE;
+        pv->busy &=~ 1;
+        return;
     }
 
     /* At this point we have a frame to process. Let's check
@@ -304,8 +304,8 @@ static int SyncVideo( hb_work_object_t * w )
              * video (we don't know its duration). On DVDs the final frame
              * is often strange and dropping it seems to be a good idea. */
             hb_fifo_push( job->fifo_sync, hb_buffer_init( 0 ) );
-            pv->done = 1;
-            return HB_WORK_DONE;
+            pv->busy &=~ 1;
+            return;
         }
         if( pv->pts_offset == INT64_MIN )
         {
@@ -618,15 +618,14 @@ static int SyncVideo( hb_work_object_t * w )
         {
             hb_log( "sync: got too many frames (%d), exiting early",
                     pv->count_frames );
-            pv->done = 1;
 
             // Drop an empty buffer into our output to ensure that things
             // get flushed all the way out.
             hb_fifo_push( job->fifo_sync, hb_buffer_init( 0 ) );
-            return HB_WORK_DONE;
+            pv->busy &=~ 1;
+            return;
         }
     }
-    return HB_WORK_OK;
 }
 
 static void OutputAudioFrame( hb_job_t *job, hb_audio_t *audio, hb_buffer_t *buf,
@@ -723,6 +722,7 @@ static void SyncAudio( hb_work_object_t * w, int i )
         {
             buf = hb_fifo_get( audio->priv.fifo_raw );
             hb_fifo_push( fifo, buf );
+            pv->busy &=~ (1 << (i + 1) );
             return;
         }
         if ( (int64_t)( buf->start - sync->next_pts ) < 0 )

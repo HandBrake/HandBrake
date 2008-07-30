@@ -125,11 +125,9 @@ static void do_job( hb_job_t * job, int cpu_count )
     hb_title_t    * title;
     int             i, j;
     hb_work_object_t * w;
-    hb_work_object_t * final_w = NULL;
 
     hb_audio_t   * audio;
     hb_subtitle_t * subtitle;
-    int done;
     unsigned int subtitle_highest = 0;
     unsigned int subtitle_highest_id = 0;
     unsigned int subtitle_lowest = -1;
@@ -265,7 +263,7 @@ static void do_job( hb_job_t * job, int cpu_count )
     }
 
 	hb_log (" + PixelRatio: %d, width:%d, height: %d",job->pixel_ratio,job->width, job->height);
-    job->fifo_mpeg2  = hb_fifo_init( 128 );
+    job->fifo_mpeg2  = hb_fifo_init( 256 );
     job->fifo_raw    = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
     job->fifo_sync   = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
     job->fifo_render = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
@@ -287,15 +285,6 @@ static void do_job( hb_job_t * job, int cpu_count )
     hb_list_add( job->list_work, ( w = hb_get_work( WORK_RENDER ) ) );
     w->fifo_in  = job->fifo_sync;
     w->fifo_out = job->fifo_render;
-    if ( job->indepth_scan )
-    {
-        /*
-         * if we're doing a subtitle scan the last thread in the
-         * processing pipeline is render - remember it so we can
-         * wait for its completion below.
-         */
-        final_w = w;
-    }
 
     if( !job->indepth_scan )
     {
@@ -327,13 +316,6 @@ static void do_job( hb_job_t * job, int cpu_count )
         w->config   = &job->config;
 
         hb_list_add( job->list_work, w );
-
-        /*
-         * if we're not doing a subtitle scan the last thread in the
-         * processing pipeline is the encoder - remember it so we can
-         * wait for its completion below.
-         */
-        final_w = w;
     }
 
     if( job->select_subtitle && !job->indepth_scan )
@@ -661,17 +643,12 @@ static void do_job( hb_job_t * job, int cpu_count )
     // init routines so we have to init the muxer last.
     job->muxer = job->indepth_scan? NULL : hb_muxer_init( job );
 
-    done = 0;
     w = hb_list_item( job->list_work, 0 );
-    w->thread_sleep_interval = 50;
+    w->thread_sleep_interval = 10;
     w->init( w, job );
     while( !*job->die )
     {
-        if ( !done && ( w->status = w->work( w, NULL, NULL ) ) == HB_WORK_DONE )
-        {
-            done = 1;
-        }
-        if( done && final_w->status == HB_WORK_DONE )
+        if ( ( w->status = w->work( w, NULL, NULL ) ) == HB_WORK_DONE )
         {
             break;
         }
@@ -680,9 +657,14 @@ static void do_job( hb_job_t * job, int cpu_count )
     hb_list_rem( job->list_work, w );
     w->close( w );
     free( w );
-    job->done = 1;
 
 cleanup:
+    /* Stop the write thread (thread_close will block until the muxer finishes) */
+    if( job->muxer != NULL )
+        hb_thread_close( &job->muxer );
+
+    job->done = 1;
+
     /* Close work objects */
     while( ( w = hb_list_item( job->list_work, 0 ) ) )
     {
@@ -697,11 +679,9 @@ cleanup:
 
     hb_list_close( &job->list_work );
 
-    /* Stop read & write threads */
+    /* Stop the read thread */
     if( job->reader != NULL )
         hb_thread_close( &job->reader );
-    if( job->muxer != NULL )
-        hb_thread_close( &job->muxer );
 
     /* Close fifos */
     hb_fifo_close( &job->fifo_mpeg2 );
