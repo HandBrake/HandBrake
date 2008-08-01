@@ -236,6 +236,10 @@
     <None Include="Resources\AddToQueue.png" />
     <Content Include="Resources\ActivityWindow_small.png" />
     <Content Include="Resources\disc_small.png" />
+    <None Include="Resources\hb32.png" />
+    <None Include="Resources\hb16.png" />
+    <None Include="Resources\Help16.png" />
+    <None Include="Resources\info16.png" />
     <Content Include="Resources\JobPassLarge.png" />
     <Content Include="Resources\Output_Small.png" />
     <None Include="Resources\Pause.png" />
@@ -243,6 +247,7 @@
     <Content Include="Resources\Pref_Small.png" />
     <Content Include="Resources\Queue.png" />
     <Content Include="Resources\Queue_Small.png" />
+    <None Include="Resources\stop.png" />
     <None Include="Resources\SplashScreen.jpg" />
     <None Include="Resources\Remove.png" />
     <None Include="Resources\Movies.png" />

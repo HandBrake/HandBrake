@@ -356,7 +356,7 @@ namespace Handbrake
         }
         private void mnu_options_Click(object sender, EventArgs e)
         {
-            Form Options = new frmOptions();
+            Form Options = new frmOptions(this);
             Options.ShowDialog();
         }
 
@@ -459,8 +459,13 @@ namespace Handbrake
 
                 ThreadPool.QueueUserWorkItem(procMonitor, query);
                 lbl_encode.Visible = true;
-                lbl_encode.Text = "Encoding in Progress";
+                lbl_encode.Text = "Encoding: in Progress";
+
+                btn_start.Text = "Stop";
+                btn_start.Image = Properties.Resources.stop;
             }
+            
+
         }
         private void btn_add2Queue_Click(object sender, EventArgs e)
         {
@@ -507,6 +512,7 @@ namespace Handbrake
                 {
                     Form frmRD = new frmReadDVD(filename, this);
                     text_source.Text = filename;
+                    lbl_encode.Text = "Scanning ...";
                     frmRD.ShowDialog();
                 }
                 else
@@ -516,6 +522,7 @@ namespace Handbrake
                 if (drp_dvdtitle.Items.Count == 0)
                     MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source. Please refer to the FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
 
+                lbl_encode.Text = "Encoding: Not Started";
             }
         }
         private void btn_file_source_Click(object sender, EventArgs e)
@@ -534,6 +541,7 @@ namespace Handbrake
                 {
                     Form frmRD = new frmReadDVD(filename, this);
                     text_source.Text = filename;
+                    lbl_encode.Text = "Scanning ...";
                     frmRD.ShowDialog();
                 }
                 else
@@ -543,6 +551,7 @@ namespace Handbrake
                 if (drp_dvdtitle.Items.Count == 0)
                     MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source. Please refer to the FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
 
+                lbl_encode.Text = "Encoding: Not Started";
             }
         }
         private void mnu_dvd_drive_Click(object sender, EventArgs e)
@@ -552,6 +561,7 @@ namespace Handbrake
             {
                 string[] path = mnu_dvd_drive.Text.Split(' ');
                 filename = path[0];
+                lbl_encode.Text = "Scanning ...";
                 Form frmRD = new frmReadDVD(filename, this);
                 text_source.Text = filename;
                 frmRD.ShowDialog();
@@ -561,6 +571,7 @@ namespace Handbrake
             if (drp_dvdtitle.Items.Count == 0)
                 MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source. Please refer to the FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
 
+            lbl_encode.Text = "Encoding: Not Started";
         }
 
         private void drp_dvdtitle_Click(object sender, EventArgs e)
@@ -729,7 +740,7 @@ namespace Handbrake
         // Output Settings
         private void drop_format_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+
             if (drop_format.SelectedIndex == 0)
                 setExtension(".mp4");
             else if (drop_format.SelectedIndex == 1)
@@ -1968,7 +1979,9 @@ namespace Handbrake
         {
             // Make sure we are not already encoding and if we are then display an error.
             if (hbProc != null)
-                MessageBox.Show("Handbrake is already encoding a video!", "Status", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            {
+                hbProc.CloseMainWindow();
+            }
             else
             {
                 hbProc = cliObj.runCli(this, (string)state);
@@ -1996,7 +2009,9 @@ namespace Handbrake
                 this.BeginInvoke(new UpdateUIHandler(setEncodeLabelFinished));
                 return;
             }
-            lbl_encode.Text = "Encoding Finished";
+            lbl_encode.Text = "Encoding: Finished";
+            btn_start.Text = "Start";
+            btn_start.Image = Properties.Resources.Play;
         }
         public Boolean isEncoding()
         {

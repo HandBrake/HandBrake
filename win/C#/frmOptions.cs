@@ -16,45 +16,41 @@ namespace Handbrake
 {
     public partial class frmOptions : Form
     {
+        private frmMain mainWindow;
         /// <summary>
         /// When the form loads, Initialise all the setting components with their correct values
         /// </summary>
-        public frmOptions()
+        public frmOptions(frmMain window)
         {
             InitializeComponent();
+            mainWindow = window;
+
+            // Enable Tooltips.
+            if (Properties.Settings.Default.tooltipEnable == "Checked")
+                ToolTip.Active = true;
             
+            // Setup Widgets to match settings.
             if (Properties.Settings.Default.updateStatus == "Checked")
-            {
                 check_updateCheck.CheckState = CheckState.Checked;
-            }
 
             if (Properties.Settings.Default.defaultSettings == "Checked")
-            {
                 check_userDefaultSettings.CheckState = CheckState.Checked;
-            }
+
             drp_processors.Text = Properties.Settings.Default.Processors;
             drp_Priority.Text = Properties.Settings.Default.processPriority;
             drp_completeOption.Text = Properties.Settings.Default.CompletionOption;
 
             if (Properties.Settings.Default.tooltipEnable == "Checked")
-            {
                 check_tooltip.CheckState = CheckState.Checked;
-            }
 
             if (Properties.Settings.Default.autoNaming == "Checked")
-            {
                 check_autoNaming.CheckState = CheckState.Checked;
-            }
 
             if (Properties.Settings.Default.drive_detection == "Checked")
-            {
                 btn_drive_detect.CheckState = CheckState.Checked;
-            }
 
             if (Properties.Settings.Default.cli_minimized == "Checked")
-            {
                check_cli_minimized.CheckState = CheckState.Checked;
-            }
 
             text_an_path.Text = Properties.Settings.Default.autoNamePath;
 
@@ -92,6 +88,16 @@ namespace Handbrake
         private void check_tooltip_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.tooltipEnable = check_tooltip.CheckState.ToString();
+            if (check_tooltip.Checked)
+            {
+                ToolTip.Active = true;
+                mainWindow.ToolTip.Active = true;
+            }
+            else
+            {
+                ToolTip.Active = false;
+                mainWindow.ToolTip.Active = false;
+            }
         }
 
         private void drp_completeOption_SelectedIndexChanged(object sender, EventArgs e)
@@ -131,6 +137,7 @@ namespace Handbrake
             Properties.Settings.Default.cli_minimized = check_cli_minimized.CheckState.ToString();
         }
         #endregion
+
 
     }
 }

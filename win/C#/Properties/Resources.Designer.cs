@@ -81,30 +81,9 @@ namespace Handbrake.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap Delete {
-            get {
-                object obj = ResourceManager.GetObject("Delete", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap Disc {
-            get {
-                object obj = ResourceManager.GetObject("Disc", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         internal static System.Drawing.Bitmap disc_small {
             get {
                 object obj = ResourceManager.GetObject("disc_small", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap Emoticon {
-            get {
-                object obj = ResourceManager.GetObject("Emoticon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -116,23 +95,30 @@ namespace Handbrake.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap Help {
+        internal static System.Drawing.Bitmap hb16 {
             get {
-                object obj = ResourceManager.GetObject("Help", resourceCulture);
+                object obj = ResourceManager.GetObject("hb16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap History {
+        internal static System.Drawing.Bitmap hb32 {
             get {
-                object obj = ResourceManager.GetObject("History", resourceCulture);
+                object obj = ResourceManager.GetObject("hb32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap info {
+        internal static System.Drawing.Bitmap Help16 {
             get {
-                object obj = ResourceManager.GetObject("info", resourceCulture);
+                object obj = ResourceManager.GetObject("Help16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap info16 {
+            get {
+                object obj = ResourceManager.GetObject("info16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -207,16 +193,16 @@ namespace Handbrake.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap Remove {
+        internal static System.Drawing.Bitmap SplashScreen {
             get {
-                object obj = ResourceManager.GetObject("Remove", resourceCulture);
+                object obj = ResourceManager.GetObject("SplashScreen", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap SplashScreen {
+        internal static System.Drawing.Bitmap stop {
             get {
-                object obj = ResourceManager.GetObject("SplashScreen", resourceCulture);
+                object obj = ResourceManager.GetObject("stop", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
