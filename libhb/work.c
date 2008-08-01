@@ -110,6 +110,220 @@ hb_work_object_t * hb_codec_encoder( int codec )
 }
 
 /**
+ * Displays job parameters in the debug log.
+ * @param job Handle work hb_job_t.
+ */
+hb_display_job_info( hb_job_t * job )
+{
+    hb_title_t * title = job->title;
+    hb_audio_t   * audio;
+    hb_subtitle_t * subtitle;
+    int             i, j;
+    
+    hb_log("job configuration:");
+    hb_log( " * source");
+    
+    hb_log( "   + %s", title->dvd );
+
+    hb_log( "   + title %d, chapter(s) %d to %d", title->index,
+            job->chapter_start, job->chapter_end );
+
+    if( title->container_name != NULL )
+        hb_log( "   + container: %s", title->container_name);
+
+    if( title->data_rate )
+    {
+        hb_log( "   + data rate: %d kbps", title->data_rate / 1000 );
+    }
+    
+    hb_log( " * destination");
+
+    hb_log( "   + %s", job->file );
+
+    switch( job->mux )
+    {
+        case HB_MUX_MP4:
+            hb_log("   + container: MPEG-4 (.mp4 and .m4v)");
+            
+            if( job->ipod_atom )
+                hb_log( "     + compatibility atom for iPod 5G");
+
+            if( job->largeFileSize )
+                hb_log( "     + 64-bit formatting");
+
+            if( job->mp4_optimize )
+                hb_log( "     + optimized for progressive web downloads");
+            break;
+
+        case HB_MUX_AVI:
+            hb_log("   + container: AVI");
+            break;
+
+        case HB_MUX_MKV:
+            hb_log("   + container: Matroska (.mkv)");
+            break;
+
+        case HB_MUX_OGM:
+            hb_log("   + conttainer: Ogg Media (.ogm)");
+            break;
+    }
+
+    if( job->chapter_markers )
+    {
+        hb_log( "     + chapter markers" );
+    }
+    
+    hb_log(" * video track");
+    
+    hb_log("   + decoder: %s", title->video_codec_name );
+    
+    if( title->video_bitrate )
+    {
+        hb_log( "     + bitrate %d kbps", title->video_bitrate / 1000 );
+    }
+    
+    if( job->vfr)
+    {
+        hb_log( "   + frame rate: %.3f fps -> variable fps",
+            (float) title->rate / (float) title->rate_base );
+    }
+    else if( !job->cfr )
+    {
+        hb_log( "   + frame rate: same as source (around %.3f fps)",
+            (float) title->rate / (float) title->rate_base );
+    }
+    else
+    {
+        hb_log( "   + frame rate: %.3f fps -> constant %.3f fps",
+            (float) title->rate / (float) title->rate_base, (float) job->vrate / (float) job->vrate_base );
+    }
+
+    if( job->pixel_ratio )
+    {
+        hb_log( "   + %s anamorphic", job->pixel_ratio == 1 ? "strict" : "loose" );
+        hb_log( "     + storage dimensions: %d * %d -> %d * %d, crop %d/%d/%d/%d",
+                    title->width, title->height, job->width, job->height,
+                    job->crop[0], job->crop[1], job->crop[2], job->crop[3] );
+        hb_log( "     + pixel aspect ratio: %i / %i", job->pixel_aspect_width, job->pixel_aspect_height );
+        hb_log( "     + display dimensions: %.0f * %i",
+            (float)( job->width * job->pixel_aspect_width / job->pixel_aspect_height ), job->height );
+    }
+    else
+    {
+        hb_log( "   + dimensions: %d * %d -> %d * %d, crop %d/%d/%d/%d",
+                title->width, title->height, job->width, job->height,
+                job->crop[0], job->crop[1], job->crop[2], job->crop[3] );
+    }
+
+    if ( job->grayscale )
+        hb_log( "   + grayscale mode" );
+
+    if( hb_list_count( job->filters ) )
+    {
+        hb_log("   + %s", hb_list_count( job->filters) > 1 ? "filters" : "filter" );
+        for( i = 0; i < hb_list_count( job->filters ); i++ )
+        {
+            hb_filter_object_t * filter = hb_list_item( job->filters, i );
+            if (filter->settings)
+                hb_log("     + %s (%s)", filter->name, filter->settings);
+            else
+                hb_log("     + %s (default settings)", filter->name);
+        }
+    }
+    
+    if( !job->indepth_scan )
+    {
+        /* Video encoder */
+        switch( job->vcodec )
+        {
+            case HB_VCODEC_FFMPEG:
+                hb_log( "   + encoder: FFmpeg" );
+                break;
+
+            case HB_VCODEC_XVID:
+                hb_log( "   + encoder: XviD" );
+                break;
+
+            case HB_VCODEC_X264:
+                hb_log( "   + encoder: x264" );
+                if( job->x264opts != NULL && *job->x264opts != '\0' )
+                    hb_log( "     + options: %s", job->x264opts);
+                break;
+
+            case HB_VCODEC_THEORA:
+                hb_log( "   + encoder: Theora" );
+                break;
+        }
+
+        if( job->vquality >= 0.0 && job->vquality <= 1.0 )
+        {
+            hb_log( "     + quality: %.2f", job->vquality );
+        }
+        else if( job->vquality > 1 )
+        {
+            hb_log( "     + quality: %.0f %s", job->vquality, job->crf && job->vcodec == HB_VCODEC_X264 ? "(RF)" : "(QP)" ); 
+        }
+        else
+        {
+            hb_log( "     + bitrate: %d kbps, pass: %d", job->vbitrate, job->pass );
+        }
+    }
+
+    for( i=0; i < hb_list_count(title->list_subtitle); i++ )
+    {
+        subtitle =  hb_list_item( title->list_subtitle, i );
+
+        if( subtitle )
+        {
+            hb_log( " * subtitle track %i, %s (id %x)", job->subtitle+1, subtitle->lang, subtitle->id);
+        }
+    }
+
+    if( !job->indepth_scan )
+    {
+        for( i = 0; i < hb_list_count( title->list_audio ); i++ )
+        {
+            audio = hb_list_item( title->list_audio, i );
+
+            hb_log( " * audio track %d", audio->config.out.track );
+
+            hb_log( "   + decoder: %s (track %d, id %x)", audio->config.lang.description, audio->config.in.track, audio->id );
+
+            if( ( audio->config.in.codec == HB_ACODEC_AC3 ) || ( audio->config.in.codec == HB_ACODEC_DCA) )
+            {
+                hb_log( "     + bitrate: %d kbps, samplerate: %d Hz", audio->config.in.bitrate / 1000, audio->config.in.samplerate );
+            }
+
+            for (j = 0; j < hb_audio_mixdowns_count; j++)
+            {
+                if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown) {
+                    hb_log( "   + mixdown: %s", hb_audio_mixdowns[j].human_readable_name );
+                    break;
+                }
+            }
+
+            if ( audio->config.out.dynamic_range_compression > 1 && (audio->config.out.codec != HB_ACODEC_AC3) && (audio->config.out.codec != HB_ACODEC_DCA))
+            {
+                hb_log("   + dynamic range compression: %f", audio->config.out.dynamic_range_compression);
+            }
+            
+            if( (audio->config.out.codec == HB_ACODEC_AC3) || (audio->config.out.codec == HB_ACODEC_DCA) )
+            {
+                hb_log( "   + %s passthrough", (audio->config.out.codec == HB_ACODEC_AC3) ?
+                    "AC3" : "DCA" );
+            }
+            else
+            {
+                hb_log( "   + encoder: %s", ( audio->config.out.codec == HB_ACODEC_FAAC ) ?
+                    "faac" : ( ( audio->config.out.codec == HB_ACODEC_LAME ) ? "lame" :
+                    "vorbis" ) );
+                hb_log( "     + bitrate: %d kbps, samplerate: %d Hz", audio->config.out.bitrate, audio->config.out.samplerate );            
+            }
+        }
+    }
+}
+
+/**
  * Job initialization rountine.
  * Initializes fifos.
  * Creates work objects for synchronizer, video decoder, video renderer, video decoder, audio decoder, audio encoder, reader, muxer.
@@ -140,9 +354,7 @@ static void do_job( hb_job_t * job, int cpu_count )
     job->list_work = hb_list_init();
 
     hb_log( "starting job" );
-    hb_log( " + device %s", title->dvd );
-    hb_log( " + title %d, chapter(s) %d to %d", title->index,
-            job->chapter_start, job->chapter_end );
+
     if ( job->pixel_ratio == 1 )
     {
     	/* Correct the geometry of the output movie when using PixelRatio */
@@ -190,13 +402,6 @@ static void do_job( hb_job_t * job, int cpu_count )
 		hb_log("New dimensions %i * %i", job->width, job->height);
 	}
 
-    hb_log( " + %dx%d -> %dx%d, crop %d/%d/%d/%d",
-            title->width, title->height, job->width, job->height,
-            job->crop[0], job->crop[1], job->crop[2], job->crop[3] );
-
-    if ( job->grayscale )
-        hb_log( " + grayscale mode" );
-
     if ( job->vfr )
     {
         job->vrate_base = title->rate_base;
@@ -230,39 +435,6 @@ static void do_job( hb_job_t * job, int cpu_count )
         }
     }
 
-    if( hb_list_count( job->filters ) )
-    {
-        hb_log(" + filters");
-        for( i = 0; i < hb_list_count( job->filters ); i++ )
-        {
-            hb_filter_object_t * filter = hb_list_item( job->filters, i );
-            if (filter->settings)
-                hb_log("   + %s (%s)", filter->name, filter->settings);
-            else
-                hb_log("   + %s (default settings)", filter->name);
-        }
-    }
-
-    if( job->vfr)
-    {
-        hb_log( " + video frame rate: %.3f fps -> variable fps", (float) job->vrate /
-            (float) job->vrate_base );
-    }
-    else
-    {
-        hb_log( " + video frame rate: %.3f fps", (float) job->vrate / (float) job->vrate_base);
-    }
-
-    if( job->vquality >= 0.0 && job->vquality <= 1.0 )
-    {
-        hb_log( " + video quality %.2f", job->vquality );
-    }
-    else
-    {
-        hb_log( " + video bitrate %d kbps, pass %d", job->vbitrate, job->pass );
-    }
-
-	hb_log (" + PixelRatio: %d, width:%d, height: %d",job->pixel_ratio,job->width, job->height);
     job->fifo_mpeg2  = hb_fifo_init( 256 );
     job->fifo_raw    = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
     job->fifo_sync   = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
@@ -293,21 +465,15 @@ static void do_job( hb_job_t * job, int cpu_count )
         switch( job->vcodec )
         {
         case HB_VCODEC_FFMPEG:
-            hb_log( " + encoder FFmpeg" );
             w = hb_get_work( WORK_ENCAVCODEC );
             break;
         case HB_VCODEC_XVID:
-            hb_log( " + encoder XviD" );
             w = hb_get_work( WORK_ENCXVID );
             break;
         case HB_VCODEC_X264:
-            hb_log( " + encoder x264" );
-            if( job->x264opts != NULL && *job->x264opts != '\0' )
-                hb_log( "   + x264 options: %s", job->x264opts);
             w = hb_get_work( WORK_ENCX264 );
             break;
         case HB_VCODEC_THEORA:
-            hb_log( " + encoder Theora" );
             w = hb_get_work( WORK_ENCTHEORA );
             break;
         }
@@ -337,8 +503,6 @@ static void do_job( hb_job_t * job, int cpu_count )
 
         if( subtitle )
         {
-            hb_log( " + subtitle %x, %s", subtitle->id, subtitle->lang );
-
             subtitle->fifo_in  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
             subtitle->fifo_raw = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
 
@@ -393,27 +557,12 @@ static void do_job( hb_job_t * job, int cpu_count )
         audio->config.out.track = i++;
     }
 
+    int requested_mixdown = 0;
+    int requested_mixdown_index = 0;
+
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = hb_list_item( title->list_audio, i );
-        hb_log( " + audio track %d", audio->config.out.track );
-        hb_log( "   + input track %d", audio->config.in.track );
-        if( (audio->config.out.codec == HB_ACODEC_AC3) || (audio->config.out.codec == HB_ACODEC_DCA) )
-        {
-            hb_log( "   + %s passthrough", (audio->config.out.codec == HB_ACODEC_AC3) ?
-                "AC3" : "DCA" );
-        }
-        else
-        {
-            hb_log( "   + audio %d kbps, %d Hz", audio->config.out.bitrate, audio->config.out.samplerate );
-            hb_log( "   + encoder %s", ( audio->config.out.codec == HB_ACODEC_FAAC ) ?
-            "faac" : ( ( audio->config.out.codec == HB_ACODEC_LAME ) ? "lame" :
-            "vorbis" ) );
-            if ( audio->config.out.dynamic_range_compression > 1 )
-                hb_log("   + dynamic range compression: %f", audio->config.out.dynamic_range_compression);
-        }
-
-        hb_log( "     + %x, %s", audio->id, audio->config.lang.description );
 
         if( audio->config.out.codec != audio->config.in.codec )
         {
@@ -422,8 +571,8 @@ static void do_job( hb_job_t * job, int cpu_count )
             /* log the requested mixdown */
             for (j = 0; j < hb_audio_mixdowns_count; j++) {
                 if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown) {
-                    hb_log( "       + Requested mixdown: %s (%s)", hb_audio_mixdowns[j].human_readable_name, hb_audio_mixdowns[j].internal_name );
-                    break;
+                    requested_mixdown = audio->config.out.mixdown;
+                    requested_mixdown_index = j;
                 }
             }
 
@@ -557,7 +706,10 @@ static void do_job( hb_job_t * job, int cpu_count )
             /* log the output mixdown */
             for (j = 0; j < hb_audio_mixdowns_count; j++) {
                 if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown) {
-                    hb_log( "       + Actual mixdown: %s (%s)", hb_audio_mixdowns[j].human_readable_name, hb_audio_mixdowns[j].internal_name );
+                    if ( audio->config.out.mixdown != requested_mixdown )
+                    {
+                        hb_log("work: sanitizing track %i mixdown %s to %s", i, hb_audio_mixdowns[requested_mixdown_index].human_readable_name, hb_audio_mixdowns[j].human_readable_name);
+                    }
                     break;
                 }
             }
@@ -616,10 +768,12 @@ static void do_job( hb_job_t * job, int cpu_count )
 
     }
 
+    /* Display settings */
+    hb_display_job_info( job );
+
     /* Init read & write threads */
     job->reader = hb_reader_init( job );
 
-    hb_log( " + output: %s", job->file );
 
     job->done = 0;
 

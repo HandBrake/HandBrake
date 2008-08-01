@@ -453,6 +453,11 @@ struct hb_title_s
     int         video_codec;            /* worker object id of video codec */
     int         video_codec_param;      /* codec specific config */
 
+    const char  *video_codec_name;
+    int         video_bitrate;
+    const char  *container_name;
+    int         data_rate;
+
     uint32_t    palette[16];
 
     hb_list_t * list_chapter;

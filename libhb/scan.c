@@ -507,10 +507,12 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
 
         remember_info( info_list, &vid_info );
 
+        title->video_codec_name = strdup( vid_info.name );
         title->width = vid_info.width;
         title->height = vid_info.height;
         title->rate = vid_info.rate;
         title->rate_base = vid_info.rate_base;
+        title->video_bitrate = vid_info.bitrate;
 
         if( title->rate_base == 1126125 )
         {

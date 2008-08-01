@@ -2533,6 +2533,9 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream )
         }
     }
 
+    title->container_name = strdup( ic->iformat->name );
+    title->data_rate = ic->bit_rate;
+
     return title;
 }
 
