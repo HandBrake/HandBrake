@@ -21,19 +21,20 @@
 
 enum
 {
-	GHB_EVENT_NONE,
-	GHB_EVENT_SCAN_DONE,
-	GHB_EVENT_WORKING,
-	GHB_EVENT_PAUSED,
-	GHB_EVENT_WORK_DONE,
-	GHB_EVENT_WORK_CANCELED
+	GHB_ERROR_NONE,
+	GHB_ERROR_CANCELED,
+	GHB_ERROR_FAIL,
 };
 
 typedef struct ghb_status_s
 {
 	gint state;
+
+	// SCANNING
 	gint title_count;
 	gint title_cur;
+
+	// WORKING
 	gint unique_id;
 	gint job_cur;
 	gint job_count;
@@ -63,6 +64,7 @@ typedef struct
 	gint hours;
 	gint minutes;
 	gint seconds;
+	gint64 duration;
 } ghb_title_info_t;
 
 typedef struct
@@ -86,7 +88,11 @@ void ghb_start_queue();
 void ghb_stop_queue();
 void ghb_pause_queue();
 
-gint ghb_backend_events(signal_user_data_t *ud, gint *unique_id);
+gint ghb_get_state();
+void ghb_clear_state(gint state);
+void ghb_set_state(gint state);
+void ghb_get_status(ghb_status_t *status);
+void ghb_track_status();
 void ghb_backend_scan(const gchar *path, gint titleindex);
 gboolean ghb_get_title_info(ghb_title_info_t *tinfo, gint titleindex);
 void ghb_set_scale(signal_user_data_t *ud, gint mode);

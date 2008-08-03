@@ -565,35 +565,6 @@ search_rates(hb_rate_t *rates, gint rate, gint count)
 	return -1;
 }
 
-#if 0
-const gchar*
-ghb_get_rate_string(gint rate, gint type)
-{
-	gint index;
-	
-	switch (type)
-	{
-		case GHB_FRAMERATE:
-		{
-			index = search_rates(hb_video_rates, rate, hb_video_rates_count);
-			if (index >= 0) return hb_video_rates[index].string;
-		} break;
-		case GHB_AUDIO_BITRATE:
-		{
-			rate /= 1000;
-			index = search_rates(hb_audio_bitrates, rate, hb_audio_bitrates_count);
-			if (index >= 0) return hb_audio_bitrates[index].string;
-		} break;
-		case GHB_AUDIO_SAMPLERATE:
-		{
-			index = search_rates(hb_audio_rates, rate, hb_audio_rates_count);
-			if (index >= 0) return hb_audio_rates[index].string;
-		} break;
-	}
-	return NULL;
-}
-#endif
-
 static gboolean find_combo_item_by_int(GtkTreeModel *store, gint value, GtkTreeIter *iter);
 
 static GtkListStore*
@@ -1064,8 +1035,15 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
 		gchar *option;
 		
 		title = (hb_title_t*)hb_list_item(list, ii);
-		option  = g_strdup_printf ("%d - %02dh%02dm%02ds",
-			title->index, title->hours, title->minutes, title->seconds);
+		if (title->duration != 0)
+		{
+			option  = g_strdup_printf ("%d - %02dh%02dm%02ds",
+				title->index, title->hours, title->minutes, title->seconds);
+		}
+		else
+		{
+			option  = g_strdup_printf ("%d - Unknown Length", title->index);
+		}
 		gtk_list_store_append(store, &iter);
 		gtk_list_store_set(store, &iter, 
 						   0, option, 
@@ -1122,24 +1100,6 @@ audio_rate_opts_add(GtkBuilder *builder, const gchar *name, gint rate)
 	}
 	return FALSE;
 }
-
-#if 0
-static gboolean
-audio_rate_opts_remove(GtkBuilder *builder, const gchar *name, gint rate)
-{
-	GtkTreeIter iter;
-	GtkListStore *store;
-	
-	g_debug("audio_rate_opts_remove ()\n");
-	store = get_combo_box_store(builder, name);
-	if (find_combo_item_by_int(GTK_TREE_MODEL(store), rate, &iter))
-	{
-		gtk_list_store_remove (store, &iter);
-		return TRUE;
-	}
-	return FALSE;
-}
-#endif
 
 void
 audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
@@ -1667,15 +1627,44 @@ ghb_backend_scan(const gchar *path, gint titleindex)
 {
     hb_scan( h, path, titleindex );
 	hb_status.state |= GHB_STATE_SCANNING;
+	// initialize count and cur to something that won't cause FPE
+	// when computing progress
+	hb_status.title_count = 1;
+	hb_status.title_cur = 0;
 }
 
-static void 
-track_state()
+gint
+ghb_get_state()
+{
+	return hb_status.state;
+}
+
+void
+ghb_clear_state(gint state)
+{
+	hb_status.state &= ~state;
+}
+
+void
+ghb_set_state(gint state)
+{
+	hb_status.state |= state;
+}
+
+void
+ghb_get_status(ghb_status_t *status)
+{
+	memcpy(status, &hb_status, sizeof(ghb_status_t));
+}
+
+void 
+ghb_track_status()
 {
     hb_state_t s;
 	static gint scan_complete_count = 0;
 	gint scans;
 
+	if (h == NULL) return;
     hb_get_state( h, &s );
 	scans = hb_get_scancount(h);
 	if (scans > scan_complete_count)
@@ -1741,6 +1730,15 @@ track_state()
 			hb_status.state &= ~GHB_STATE_MUXING;
 			hb_status.state &= ~GHB_STATE_PAUSED;
 			hb_status.state &= ~GHB_STATE_WORKING;
+			switch (p.error)
+			{
+			case HB_ERROR_NONE:
+				hb_status.error = GHB_ERROR_NONE;
+			case HB_ERROR_CANCELED:
+				hb_status.error = GHB_ERROR_CANCELED;
+			default:
+				hb_status.error = GHB_ERROR_FAIL;
+			}
 			hb_status.error = p.error;
 			// Delete all remaining jobs of this encode.
 			// An encode can be composed of multiple associated jobs.
@@ -1752,90 +1750,6 @@ track_state()
 		} break;
 #undef p
     }
-}
-
-gint
-ghb_backend_events(signal_user_data_t *ud, gint *unique_id)
-{
-	gchar *status;
-	GtkProgressBar *progress;
-	
-	if (h == NULL) return GHB_EVENT_NONE;
-	track_state();
-	progress = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "progressbar"));
-	*unique_id = hb_status.unique_id;
-	if (hb_status.state & GHB_STATE_SCANNING)
-	{
-		status = g_strdup_printf ("Scanning title %d of %d...", 
-								  hb_status.title_cur, hb_status.title_count );
-		gtk_progress_bar_set_text (progress, status);
-		g_free(status);
-		gtk_progress_bar_set_fraction (progress, 
-			(gdouble)hb_status.title_cur / hb_status.title_count);
-	}
-	else if (hb_status.state & GHB_STATE_SCANDONE)
-	{
-		status = g_strdup_printf ("Scan done"); 
-		gtk_progress_bar_set_text (progress, status);
-		g_free(status);
-		gtk_progress_bar_set_fraction (progress, 1.0);
-		hb_status.state &= ~GHB_STATE_SCANDONE;
-		return GHB_EVENT_SCAN_DONE;
-	}
-	else if (hb_status.state & GHB_STATE_WORKING)
-	{
-		if(hb_status.seconds > -1)
-		{
-			status= g_strdup_printf(
-				"Encoding: task %d of %d, %.2f %%"
-				" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)",
-				hb_status.job_cur, hb_status.job_count, 
-				100.0 * hb_status.progress,
-				hb_status.rate_cur, hb_status.rate_avg, hb_status.hours, 
-				hb_status.minutes, hb_status.seconds );
-		}
-		else
-		{
-			status= g_strdup_printf(
-				"Encoding: task %d of %d, %.2f %%",
-				hb_status.job_cur, hb_status.job_count, 
-				100.0 * hb_status.progress );
-		}
-		gtk_progress_bar_set_text (progress, status);
-		gtk_progress_bar_set_fraction (progress, hb_status.progress);
-		g_free(status);
-		return GHB_EVENT_WORKING;
-	}
-	else if (hb_status.state & GHB_STATE_WORKDONE)
-	{
-		switch( hb_status.error )
-		{
-			case HB_ERROR_NONE:
-				gtk_progress_bar_set_text( progress, "Rip done!" );
-				break;
-			case HB_ERROR_CANCELED:
-				gtk_progress_bar_set_text( progress, "Rip canceled." );
-				return GHB_EVENT_WORK_CANCELED;
-				break;
-			default:
-				gtk_progress_bar_set_text( progress, "Rip failed.");
-		}
-		gtk_progress_bar_set_fraction (progress, 1.0);
-		hb_status.state &= ~GHB_STATE_WORKDONE;
-		return GHB_EVENT_WORK_DONE;
-	}
-	else if (hb_status.state & GHB_STATE_PAUSED)
-	{
-		status = g_strdup_printf ("Paused"); 
-		gtk_progress_bar_set_text (progress, status);
-		g_free(status);
-		return GHB_EVENT_PAUSED;
-	}
-	else if (hb_status.state & GHB_STATE_MUXING)
-	{
-		gtk_progress_bar_set_text(progress, "Muxing: this may take awhile...");
-	}
-	return GHB_EVENT_NONE;
 }
 
 gboolean
@@ -1871,6 +1785,8 @@ ghb_get_title_info(ghb_title_info_t *tinfo, gint titleindex)
 	tinfo->hours = title->hours;
 	tinfo->minutes = title->minutes;
 	tinfo->seconds = title->seconds;
+	tinfo->duration = title->duration;
+g_message("duration %ld", title->duration);
 	return TRUE;
 }
 

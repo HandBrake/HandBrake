@@ -52,10 +52,12 @@ X - clean up hb.XXXXX turds in /tmp.  it seems many linux distros don't clean
     /tmp so this shite piles up.
 X - add detailed help. added link to HandBrake Guide
 X - add preferences dialog to give access to some settings
+X - force m4v when ac3+mp4
+X - prevent optimized mp4s from having ac3
+? - prevent optimized mp4s from having chapters
+X - move vfr to video tab?
+P - submitted patch - job cancel patch
+P - submitted patch - preview corruption padding patch
+preview using vlc?
 add ability to delete builtin presets and restore them
 add ability to drag-n-drop presets to reorder them
-force m4v when x264+ac3+mp4
-preview using vlc?
-move vfr to video tab?
-P - submitted patch - job cancel patch
-P - submitted patch - preview correption padding patch

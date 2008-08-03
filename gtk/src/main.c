@@ -429,13 +429,11 @@ typedef struct
 	gchar *iconname;
 } icon_map_t;
 
-gboolean ghb_autostart;
 static gchar *dvd_device = NULL;
 static gchar *arg_preset = NULL;
 
 static GOptionEntry entries[] = 
 {
-	{ "autostart", 'a', 0, G_OPTION_ARG_NONE, &ghb_autostart, "Automatically scan and start encoding", NULL },
 	{ "device", 'd', 0, G_OPTION_ARG_FILENAME, &dvd_device, "The device or file to encode", NULL },
 	{ "preset", 'p', 0, G_OPTION_ARG_STRING, &arg_preset, "The preset values to use for encoding", NULL },
 	{ NULL }
@@ -500,7 +498,6 @@ main (int argc, char *argv[])
 	gtk_icon_theme_append_search_path (theme, "./icons");
 	
 	ud = g_malloc(sizeof(signal_user_data_t));
-	ud->state = GHB_STATE_START;
 	ud->debug = FALSE;
 	g_log_set_handler (NULL, G_LOG_LEVEL_DEBUG, debug_log_handler, ud);
 	ud->settings = ghb_settings_new();
@@ -567,10 +564,6 @@ main (int argc, char *argv[])
 	{
 		// Source overridden from command line option
 		ghb_settings_set_string(ud->settings, "source", dvd_device);
-	}
-	if (ghb_autostart)
-	{
-		ghb_hbfd(ud, TRUE);
 	}
 	// Start timer for monitoring libhb status, 500ms
 	g_timeout_add (500, ghb_timer_cb, (gpointer)ud);
