@@ -1323,18 +1323,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         if (currentSuccessfulScanCount == 1)
         {
             [self selectDefaultPreset:nil];
-            /* if Deinterlace upon launch is specified in the prefs, then set to 1 for "Fast",
-             if not, then set to 0 for none */
-            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultDeinterlaceOn"] > 0)
-            {
-                [fPictureController setDeinterlace:1];
-            }
-            else
-            {
-                [fPictureController setDeinterlace:0];
-            }
+            /* initially set deinterlace to 0, will be overridden reset by the default preset anyway */
+            //[fPictureController setDeinterlace:0];
+
             /* lets set Denoise to index 0 or "None" since this is the first scan */
-            [fPictureController setDenoise:0];
+            //[fPictureController setDenoise:0];
             
             [fPictureController setInitialPictureFilters];
         }
@@ -2101,15 +2094,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	hb_job_t * job = title->job;
 	fTitle = title;
 
-	/* Pixel Ratio Setting */
-	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PixelRatio"])
-    {
-		job->pixel_ratio = 1 ;
-	}
-	else
-	{
-		job->pixel_ratio = 0 ;
-	}
 	/*Set Source Size Field Here */
     [fPicSettingsSrc setStringValue: [NSString stringWithFormat: @"%d x %d", fTitle->width, fTitle->height]];
 	
@@ -4414,7 +4398,7 @@ if (item == nil)
                         [fPictureController setDeblock:0];
                     }
 
-                    [self calculatePictureSizing:nil];
+                   [self calculatePictureSizing:nil];
                 }
 
             }
