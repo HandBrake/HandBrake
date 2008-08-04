@@ -53,7 +53,7 @@ x264_subme=5
 x264_analyse=all
 x264_trellis=fmb
 x264_no_fast_pskip=enable
-x264_options=nr=150:filter=2,2
+x264_options=nr=150:filter=2,2:8x8dct
 vquality_type_bitrate=enable
 video_bitrate=1000
 video_target_size=700
@@ -131,7 +131,7 @@ x264_analyse=all
 x264_trellis=fmb
 x264_no_fast_pskip=enable
 x264_no_dct_decimate=enable
-x264_options=filter=-2,-1
+x264_options=filter=-2,-1:8x8dct
 vquality_type_bitrate=enable
 video_bitrate=1800
 video_target_size=700
@@ -199,6 +199,7 @@ x264_subme=6
 x264_trellis=fmb
 x264_analyse=all
 x264_no_fast_pskip=enable
+x264_options=8x8dct
 vquality_type_target=enable
 video_bitrate=1600
 video_target_size=695
@@ -263,7 +264,7 @@ x264_bpyramid=enable
 x264_me=umh
 x264_subme=6
 x264_analyse=all
-x264_options=filter=-2,-1
+x264_options=filter=-2,-1:8x8dct
 vquality_type_constant=enable
 video_bitrate=2000
 video_target_size=700
@@ -302,6 +303,7 @@ x264_subme=7
 x264_analyse=all
 x264_trellis=fmb
 x264_no_fast_pskip=enable
+x264_options=8x8dct
 vquality_type_bitrate=enable
 video_bitrate=1600
 video_target_size=700
@@ -342,6 +344,7 @@ x264_subme=7
 x264_analyse=all
 x264_trellis=fmb
 x264_no_fast_pskip=enable
+x264_options=8x8dct
 vquality_type_bitrate=enable
 video_bitrate=1800
 video_target_size=700
@@ -616,7 +619,7 @@ x264_subme=6
 x264_analyse=all
 x264_trellis=fmb
 x264_no_fast_pskip=enable
-x264_options=nr=150
+x264_options=nr=150:8x8dct
 vquality_type_bitrate=enable
 video_bitrate=1300
 video_target_size=700

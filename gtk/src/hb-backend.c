@@ -187,7 +187,7 @@ static options_map_t d_analyse_opts[] =
 {
 	{"Some", "some", 0, 0.0, "some"},
 	{"None", "none", 1, 0.0, "none"},
-	{"All",  "all",  2, 0.0, "all:8x8dct=1"},
+	{"All",  "all",  2, 0.0, "all"},
 };
 combo_opts_t analyse_opts =
 {
