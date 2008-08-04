@@ -2813,7 +2813,8 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
 	gsize length;
 	GtkTextView *textview;
 	GtkTextBuffer *buffer;
-	GtkTextMark *mark;
+	GtkTextIter iter;
+	//GtkTextMark *mark;
 	GError *gerror = NULL;
 	GIOStatus status;
 	
@@ -2824,9 +2825,13 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
 	{
 		textview = GTK_TEXT_VIEW(GHB_WIDGET (ud->builder, "activity_view"));
 		buffer = gtk_text_view_get_buffer (textview);
-		mark = gtk_text_buffer_get_insert (buffer);
-		gtk_text_view_scroll_mark_onscreen(textview, mark);
-		gtk_text_buffer_insert_at_cursor (buffer, text, -1);
+		// I would like to auto-scroll the window when the scrollbar
+		// is at the bottom, but I'm having difficulty finding a way
+		// to reliably detect that the scrollbar is at the bottom
+		//mark = gtk_text_buffer_get_insert (buffer);
+		//gtk_text_view_scroll_mark_onscreen(textview, mark);
+		gtk_text_buffer_get_end_iter(buffer, &iter);
+		gtk_text_buffer_insert(buffer, &iter, text, -1);
 		g_io_channel_write_chars (ud->activity_log, text, length, &length, NULL);
 		g_free(text);
 	}
