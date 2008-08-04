@@ -50,6 +50,7 @@
 "x264_cabac=enable\n"
 "x264_deblock_beta=0\n"
 "x264_analyse=some\n"
+"x264_8x8dct=disable\n"
 "x264_bframes=0\n"
 "x264_no_dct_decimate=disable\n"
 "x264_subme=5\n"

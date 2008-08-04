@@ -1518,6 +1518,10 @@ ghb_build_x264opts_string(GHashTable *settings)
 		g_string_append_printf(x264opts, "analyse=%s:", 
 							   ghb_settings_get_string(settings, "x264_analyse"));
 	}
+	if (ghb_settings_get_bool(settings, "x264_8x8dct"))
+	{
+		g_string_append(x264opts, "8x8dct:");
+	}
 	if (analyse != 1) // != none
 	{
 		gint direct = ghb_settings_get_int(settings, "x264_direct");

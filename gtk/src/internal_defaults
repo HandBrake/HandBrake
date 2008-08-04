@@ -50,6 +50,7 @@ x264_options=
 x264_cabac=enable
 x264_deblock_beta=0
 x264_analyse=some
+x264_8x8dct=disable
 x264_bframes=0
 x264_no_dct_decimate=disable
 x264_subme=5

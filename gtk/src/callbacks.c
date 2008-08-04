@@ -2025,6 +2025,10 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
 		// truncated when set.  The range will be readjusted below
 		GtkWidget *qp = GHB_WIDGET(ud->builder, "video_quality");
 		gtk_range_set_range (GTK_RANGE(qp), 0, 100);
+		// Clear the audio list prior to changing the preset.  Existing audio
+		// can cause the container extension to be automatically changed when
+		// it shouldn't be
+		clear_audio_list(ud);
 		ghb_set_preset(ud, preset);
 		gint titleindex = ghb_settings_get_int(ud->settings, "title");
 		set_pref_audio(titleindex, ud);
