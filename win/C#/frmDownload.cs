@@ -44,12 +44,11 @@ namespace Handbrake
             {
                 MessageBox.Show("An error occured on the Download Thread \n" + exc.ToString(),"Error",MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-          
         }
 
         private void Download()
         {
-            Functions.RssReader rssRead = new Functions.RssReader();
+            Functions.AppcastReader rssRead = new Functions.AppcastReader();
 
             string tempPath = Path.Combine(Path.GetTempPath(), "handbrake-setup.exe");
 

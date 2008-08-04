@@ -27,7 +27,7 @@ namespace Handbrake.Functions
         {
             try
             {
-                Functions.RssReader rssRead = new Functions.RssReader();
+                Functions.AppcastReader rssRead = new Functions.AppcastReader();
                 string build = rssRead.build();
 
                 int latest = int.Parse(build);
@@ -76,10 +76,10 @@ namespace Handbrake.Functions
             while (!cliProcess.HasExited)
             {
                 line = stdOutput.ReadLine();
-                Match m = Regex.Match(line, @"HandBrake svn[0-9]*[M]* \([0-9]*\)");
+                Match m = Regex.Match(line, @"HandBrake [0-9\.]*svn[0-9]*[M]* \([0-9]*\)");
                 if (m.Success != false)
                 {
-                    string data = line.Replace("(", "").Replace(")","").Replace("HandBrake ","");
+                    string data = line.Replace("(", "").Replace(")", "").Replace("HandBrake ", "");
                     string[] arr = data.Split(' ');
                     cliVersionData.Add(arr[0]);
                     cliVersionData.Add(arr[1]);

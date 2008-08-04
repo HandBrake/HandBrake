@@ -15,8 +15,7 @@ using System.IO;
 using System.Threading;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-
-
+using Microsoft.Win32;
 
 namespace Handbrake
 {
@@ -49,9 +48,19 @@ namespace Handbrake
             string logFile = Path.Combine(Path.GetTempPath(), read_file);
             if (File.Exists(logFile))
             {
+
+                // Get the CPU Processor Name
+                RegistryKey RegKey = Registry.LocalMachine;
+                RegKey = RegKey.OpenSubKey("HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0");
+                Object cpuType = RegKey.GetValue("ProcessorNameString");
+
                 // Add a header to the log file indicating that it's from the Windows GUI and display the windows version
                 rtf_actLog.AppendText("### Windows GUI \n");
                 rtf_actLog.AppendText(String.Format("### Running: {0} \n###\n", Environment.OSVersion.ToString()));
+                rtf_actLog.AppendText(String.Format("### CPU: {0} \n", cpuType));
+                rtf_actLog.AppendText(String.Format("### Temp Dir: {0} \n", Path.GetTempPath()));
+                rtf_actLog.AppendText(String.Format("### Install Dir: {0} \n", Application.StartupPath));
+                rtf_actLog.AppendText(String.Format("### Data Dir: {0} \n###\n", Application.UserAppDataPath));
 
                 // Start a new thread to run the autoUpdate process
                 monitorFile = new Thread(autoUpdate);

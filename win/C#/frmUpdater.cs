@@ -14,7 +14,7 @@ namespace Handbrake
 {
     public partial class frmUpdater : Form
     {
-        Functions.RssReader rssRead = new Functions.RssReader();
+        Functions.AppcastReader rssRead = new Functions.AppcastReader();
         public frmUpdater()
         {
             InitializeComponent();

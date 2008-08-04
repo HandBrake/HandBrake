@@ -143,7 +143,7 @@
     <Compile Include="Functions\Common.cs" />
     <Compile Include="Functions\Presets.cs" />
     <Compile Include="Functions\Queue.cs" />
-    <Compile Include="Functions\RssReader.cs" />
+    <Compile Include="Functions\AppcastReader.cs" />
     <Compile Include="Functions\Encode.cs" />
     <Compile Include="Functions\QueryParser.cs" />
     <Compile Include="Functions\x264Panel.cs" />
@@ -240,7 +240,6 @@
     <None Include="Resources\hb16.png" />
     <None Include="Resources\Help16.png" />
     <None Include="Resources\info16.png" />
-    <Content Include="Resources\JobPassLarge.png" />
     <Content Include="Resources\Output_Small.png" />
     <None Include="Resources\Pause.png" />
     <None Include="Resources\Play.png" />
@@ -249,16 +248,8 @@
     <Content Include="Resources\Queue_Small.png" />
     <None Include="Resources\stop.png" />
     <None Include="Resources\SplashScreen.jpg" />
-    <None Include="Resources\Remove.png" />
     <None Include="Resources\Movies.png" />
-    <None Include="Resources\info.png" />
-    <None Include="Resources\History.png" />
-    <None Include="Resources\Help.png" />
     <None Include="Resources\General Preferences.png" />
-    <None Include="Resources\Emoticon.png" />
-    <None Include="Resources\Disc.png" />
-    <None Include="Resources\Delete.png" />
-    <None Include="Resources\Burn.png" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="AxMSComctlLib">

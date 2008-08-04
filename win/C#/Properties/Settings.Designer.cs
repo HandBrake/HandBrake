@@ -214,5 +214,17 @@ namespace Handbrake.Properties {
                 this["cli_minimized"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string checkSnapshot {
+            get {
+                return ((string)(this["checkSnapshot"]));
+            }
+            set {
+                this["checkSnapshot"] = value;
+            }
+        }
     }
 }

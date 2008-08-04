@@ -33,6 +33,15 @@ namespace Handbrake
             if (Properties.Settings.Default.updateStatus == "Checked")
                 check_updateCheck.CheckState = CheckState.Checked;
 
+            // Unstable Snapshot checking should only be visible for stable builds.
+            if (Properties.Settings.Default.hb_build.ToString().EndsWith("1"))
+            {
+                lbl_appcastUnstable.Visible = false;
+                check_snapshot.Visible = false;
+            }
+            if (Properties.Settings.Default.checkSnapshot == "Checked")
+                check_snapshot.CheckState = CheckState.Checked;
+
             if (Properties.Settings.Default.defaultSettings == "Checked")
                 check_userDefaultSettings.CheckState = CheckState.Checked;
 
@@ -132,11 +141,18 @@ namespace Handbrake
                 Properties.Settings.Default.autoNamePath = text_an_path.Text;
         }
 
+        private void check_snapshot_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.checkSnapshot = check_snapshot.CheckState.ToString();
+        }
+
         private void check_cli_minimized_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.cli_minimized = check_cli_minimized.CheckState.ToString();
         }
         #endregion
+
+
 
 
     }

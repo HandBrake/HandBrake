@@ -17,21 +17,21 @@ using System.Text.RegularExpressions;
 
 namespace Handbrake.Functions
 {
-    class RssReader
+    class AppcastReader
     {
         XmlTextReader rssReader;
         XmlDocument rssDoc;
         XmlNode nodeRss;
         XmlNode nodeChannel;
         XmlNode nodeItem;
+        private string hb_versionInfo;
+        private string hb_version;
+        private string hb_build;
+        private string hb_file;
 
         // Rss Reading Code.
-        private void readRss()
+        private void readRss(XmlTextReader rssReader)
         {
-            if (Properties.Settings.Default.hb_build.ToString().EndsWith("1"))
-                rssReader = new XmlTextReader(Properties.Settings.Default.appcast_unstable);
-            else
-                rssReader = new XmlTextReader(Properties.Settings.Default.appcast);
             rssDoc = new XmlDocument();
             rssDoc.Load(rssReader);
 
@@ -54,27 +54,48 @@ namespace Handbrake.Functions
             }
         }
 
-        // Some varibles.
-        private string hb_versionInfo;
-        private string hb_version;
-        private string hb_build;
-        private string hb_file;
-        
+
         // Get's the information required out the RSS file.
         private void getInfo()
         {
-            readRss();
+            Match ver;
+            int unstable_build = 0;
+            string input;
+
+            // Check the stable appcast and get the build nuber
+            rssReader = new XmlTextReader(Properties.Settings.Default.appcast);
+            readRss(rssReader);
+            input = nodeItem.InnerXml;
+            ver = Regex.Match(input, @"sparkle:version=""([0-9]*)\""");
+            int stable_build = int.Parse(ver.ToString().Replace("sparkle:version=", "").Replace("\"", ""));
+
+            // If the pref to enable unstable appcast checking is enabled    OR
+            // this is a snapshot release, 
+            // then check the unstable appcast.
+            if (Properties.Settings.Default.checkSnapshot == "Checked" || Properties.Settings.Default.hb_build.ToString().EndsWith("1"))
+            {
+                // Get the stable build
+                rssReader = new XmlTextReader(Properties.Settings.Default.appcast_unstable);
+                readRss(rssReader);
+                input = nodeItem.InnerXml;
+                ver = Regex.Match(input, @"sparkle:version=""([0-9]*)\""");
+                unstable_build = int.Parse(ver.ToString().Replace("sparkle:version=", "").Replace("\"", ""));
+            }
+
+            if (stable_build >= unstable_build)
+                rssReader = new XmlTextReader(Properties.Settings.Default.appcast);
+            else
+                rssReader = new XmlTextReader(Properties.Settings.Default.appcast_unstable);
 
             // Get the Version Information
             hb_versionInfo = nodeItem["description"].InnerText;
 
             // Get the version
-            Match ver;
-            string input = nodeItem.InnerXml;
-            ver = Regex.Match(input, @"sparkle:shortVersionString=""([0-9].[0-9].[0-9]*)\""");
+            string inputNode = nodeItem.InnerXml;
+            ver = Regex.Match(inputNode, @"sparkle:shortVersionString=""([0-9].[0-9].[0-9]*)\""");
             hb_version = ver.ToString().Replace("sparkle:shortVersionString=", "").Replace("\"", "");
 
-            ver = Regex.Match(input, @"sparkle:version=""([0-9]*)\""");
+            ver = Regex.Match(inputNode, @"sparkle:version=""([0-9]*)\""");
             hb_build = ver.ToString().Replace("sparkle:version=", "").Replace("\"", "");
 
             // Get the update file
