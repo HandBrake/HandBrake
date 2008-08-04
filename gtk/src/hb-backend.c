@@ -1786,7 +1786,6 @@ ghb_get_title_info(ghb_title_info_t *tinfo, gint titleindex)
 	tinfo->minutes = title->minutes;
 	tinfo->seconds = title->seconds;
 	tinfo->duration = title->duration;
-g_message("duration %ld", title->duration);
 	return TRUE;
 }
 
