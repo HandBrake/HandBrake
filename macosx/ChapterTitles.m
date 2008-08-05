@@ -98,10 +98,10 @@
             {
                 cellEntry = [NSString stringWithUTF8String:chapter->title];
             }
-            else
-            {
+        }
+        else
+        {
                 cellEntry = @"__DATA ERROR__";
-            }
         }
     }
 
