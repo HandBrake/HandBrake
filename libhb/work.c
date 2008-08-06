@@ -383,24 +383,23 @@ static void do_job( hb_job_t * job, int cpu_count )
         }
     }
 
-	/* Keep width and height within these boundaries,
-	   but ignore for "loose" anamorphic encodes, for
-	   which this stuff is covered in the pixel_ratio
-	   section right above.*/
-	if (job->maxHeight && (job->height > job->maxHeight) && (job->pixel_ratio != 2))
-	{
-		job->height = job->maxHeight;
-		hb_fix_aspect( job, HB_KEEP_HEIGHT );
-		hb_log("Height out of bounds, scaling down to %i", job->maxHeight);
-		hb_log("New dimensions %i * %i", job->width, job->height);
-	}
-	if (job->maxWidth && (job->width > job->maxWidth) && (job->pixel_ratio != 2))
-	{
-		job->width = job->maxWidth;
-		hb_fix_aspect( job, HB_KEEP_WIDTH );
-		hb_log("Width out of bounds, scaling down to %i", job->maxWidth);
-		hb_log("New dimensions %i * %i", job->width, job->height);
-	}
+    /* Keep width and height within these boundaries,
+       but ignore for anamorphic. For "loose" anamorphic encodes,
+       this stuff is covered in the pixel_ratio section above.    */
+    if ( job->maxHeight && ( job->height > job->maxHeight ) && ( !job->pixel_ratio ) )
+    {
+        job->height = job->maxHeight;
+        hb_fix_aspect( job, HB_KEEP_HEIGHT );
+        hb_log( "Height out of bounds, scaling down to %i", job->maxHeight );
+        hb_log( "New dimensions %i * %i", job->width, job->height );
+    }
+    if ( job->maxWidth && ( job->width > job->maxWidth ) && ( !job->pixel_ratio ) )
+    {
+        job->width = job->maxWidth;
+        hb_fix_aspect( job, HB_KEEP_WIDTH );
+        hb_log( "Width out of bounds, scaling down to %i", job->maxWidth );
+        hb_log( "New dimensions %i * %i", job->width, job->height );
+    }
 
     if ( job->vfr )
     {
