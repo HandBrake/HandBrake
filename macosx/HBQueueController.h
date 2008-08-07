@@ -5,7 +5,7 @@
    It may be used under the terms of the GNU General Public License. */
 
 
-#include <Cocoa/Cocoa.h>
+#import <Cocoa/Cocoa.h>
 #include "hb.h"
 
 @class HBController;
@@ -73,7 +73,7 @@ BOOL                        fIsDragging;
 @interface HBJob : NSObject
 {
     HBJobGroup                   *jobGroup;         // The group this job belongs to
-    
+
     // The following fields match up with similar fields found in hb_job_t and it's
     // various substructures.
 @public
@@ -108,7 +108,7 @@ BOOL                        fIsDragging;
     /* Used to concatenate audio list values into a string for display */
     NSString                    *audioinfo_codecs;
     NSString                    *audioinfo_summary;
-    
+
     int                         audio_mixdowns[8];
     int                         acodec;
     int                         abitrate;
@@ -180,7 +180,7 @@ BOOL                        fIsDragging;
 - (unsigned int)       count;
 - (HBJob *)            jobAtIndex: (unsigned)index;
 - (unsigned int)       indexOfJob: (HBJob *)aJob;
-- (NSEnumerator *)     jobEnumerator;
+- (NSMutableArray *)   fJobs;
 - (void)               setStatus: (HBQueueJobGroupStatus)status;
 - (HBQueueJobGroupStatus)  status;
 - (void)               setPresetName: (NSString *)name;
@@ -212,7 +212,7 @@ BOOL                        fIsDragging;
     unsigned int                 fCanceledCount;        // Use the accessor functions instead.
     unsigned int                 fWorkingCount;
     BOOL                         fJobGroupCountsNeedUpdating;
-    
+
     BOOL                         fCurrentJobPaneShown;  // NO when fCurrentJobPane has been shifted out of view (see showCurrentJobPane)
     NSMutableIndexSet            *fSavedExpandedItems;  // used by save/restoreOutlineViewState to preserve which items are expanded
     NSMutableIndexSet            *fSavedSelectedItems;  // used by save/restoreOutlineViewState to preserve which items are selected
@@ -245,7 +245,7 @@ BOOL                        fIsDragging;
     IBOutlet NSTextField         *fJobDescTextField;
     IBOutlet NSProgressIndicator *fProgressBar;
     IBOutlet NSTextField         *fProgressTextField;
-    
+
     // fQueuePane - always visible; fills entire window when fCurrentJobPane is hidden
     IBOutlet NSView              *fQueuePane;
     IBOutlet HBQueueOutlineView  *fOutlineView;
@@ -254,12 +254,12 @@ BOOL                        fIsDragging;
     IBOutlet NSSlider            *fIndentation; // debug
     IBOutlet NSSlider            *fSpacing;     // debug
 #endif
-    
+
 }
 
 - (void)setHandle: (hb_handle_t *)handle;
 - (void)setHBController: (HBController *)controller;
-- (void)libhbStateChanged: (hb_state_t &)state;
+- (void)libhbStateChanged: (hb_state_t)state;
 - (void)libhbWillStop;
 
 // Adding items to the queue
