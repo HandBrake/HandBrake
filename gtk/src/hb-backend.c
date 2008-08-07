@@ -188,6 +188,7 @@ static options_map_t d_analyse_opts[] =
 	{"Some", "some", 0, 0.0, "some"},
 	{"None", "none", 1, 0.0, "none"},
 	{"All",  "all",  2, 0.0, "all"},
+	{"Custom",  "custom",  3, 0.0, "all"},
 };
 combo_opts_t analyse_opts =
 {
@@ -197,9 +198,9 @@ combo_opts_t analyse_opts =
 
 static options_map_t d_trellis_opts[] =
 {
-	{"Disabled",          "off",    0, 0.0, ""},
-	{"Final Macro Block", "fmb",    1, 0.0, ""},
-	{"Always",            "always", 2, 0.0, ""},
+	{"Disabled",          "0",    0, 0.0, "0"},
+	{"Final Macro Block", "1",    1, 0.0, "1"},
+	{"Always",            "2", 2, 0.0, "2"},
 };
 combo_opts_t trellis_opts =
 {
@@ -1438,113 +1439,16 @@ static const char * turbo_opts =
 gchar*
 ghb_build_x264opts_string(GHashTable *settings)
 {
-	GString *x264opts = g_string_new("");
-	gint refs = ghb_settings_get_int(settings, "x264_refs");
-	if (refs != 1)
+	gchar *result;
+	const gchar *opts = ghb_settings_get_string(settings, "x264_options");
+	if (opts != NULL)
 	{
-		g_string_append_printf(x264opts, "ref=%d:", refs);
-	}
-	if (refs > 1)
-	{
-		if (ghb_settings_get_bool(settings, "x264_mixed_refs"))
-		{
-			g_string_append(x264opts, "mixed-refs=1:");
-		}
-	}
-	gint subme = ghb_settings_get_int(settings, "x264_subme");
-	if (subme != 5) // 5 is default
-	{
-		g_string_append_printf(x264opts, "subme=%d:", subme);
-	}
-	gint bframes = ghb_settings_get_int(settings, "x264_bframes");
-	if (bframes > 0)
-	{
-		g_string_append_printf(x264opts, "bframes=%d:", bframes);
-		if (ghb_settings_get_bool(settings, "x264_weighted_bframes"))
-		{
-			g_string_append(x264opts, "weightb=1:");
-		}
-		if (subme >= 6)
-		{
-			if (ghb_settings_get_bool(settings, "x264_brdo"))
-			{
-				g_string_append(x264opts, "brdo=1:");
-			}
-		}
-		if (ghb_settings_get_bool(settings, "x264_bime"))
-		{
-			g_string_append(x264opts, "bime=1:");
-		}
-	}
-	if (bframes > 1)
-	{
-		if (ghb_settings_get_bool(settings, "x264_bpyramid"))
-		{
-			g_string_append(x264opts, "b-pyramid=1:");
-		}
-	}
-	if (ghb_settings_get_bool(settings, "x264_no_fast_pskip"))
-	{
-		g_string_append(x264opts, "no-fast-pskip=1:");
-	}
-	if (ghb_settings_get_bool(settings, "x264_no_dct_decimate"))
-	{
-		g_string_append(x264opts, "no-dct-decimate=1:");
-	}
-	if (!ghb_settings_get_bool(settings, "x264_cabac"))
-	{
-		g_string_append(x264opts, "cabac=0:");
+		result = g_strdup(opts);
 	}
 	else
 	{
-		gint trellis = ghb_settings_get_int(settings, "x264_trellis");
-		if (trellis != 0); // != None
-		{
-			g_string_append_printf(x264opts, "trellis=%d:", trellis);
-		}
+		result = g_strdup("");
 	}
-	gint dba, dbb;
-	dba = ghb_settings_get_int(settings, "x264_deblock_alpha");
-	dbb = ghb_settings_get_int(settings, "x264_deblock_beta");
-	if (dba != 0 || dbb != 0)
-	{
-		g_string_append_printf(x264opts, "deblock=%d,%d:", dba, dbb);
-	}
-	const gchar *me = ghb_settings_get_string(settings, "x264_me");
-	g_string_append_printf(x264opts, "me=%s:", me);
-	gint analyse = ghb_settings_get_int(settings, "x264_analyse");
-	if (analyse != 0) // != Some
-	{
-		g_string_append_printf(x264opts, "analyse=%s:", 
-							   ghb_settings_get_string(settings, "x264_analyse"));
-	}
-	if (ghb_settings_get_bool(settings, "x264_8x8dct"))
-	{
-		g_string_append(x264opts, "8x8dct:");
-	}
-	if (analyse != 1) // != none
-	{
-		gint direct = ghb_settings_get_int(settings, "x264_direct");
-		if (direct != 1) // !spatial
-		{
-			g_string_append_printf(x264opts, "direct=%s:", 
-								   ghb_settings_get_string(settings, "x264_direct"));
-		}
-	}
-	g_string_append_printf(x264opts, "merange=%d:", 
-						   ghb_settings_get_int(settings, "x264_merange"));
-
-	const gchar *opts = ghb_settings_get_string(settings, "x264_options");
-	if (opts != NULL && opts[0] != 0)
-	{
-		g_string_append_printf(x264opts, "%s:", opts);
-	}
-	// strip the trailing ":"
-	gchar *result;
-	gint len;
-	result = g_string_free(x264opts, FALSE);
-	len = strlen(result);
-	if (len > 0) result[len - 1] = 0;
 	return result;
 }
 

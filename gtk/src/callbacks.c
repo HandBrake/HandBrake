@@ -70,7 +70,6 @@ static dependency_t dep_map[] =
 	{"vquality_type_target", "video_target_size", "enable", FALSE},
 	{"vquality_type_constant", "video_quality", "enable", FALSE},
 	{"vquality_type_constant", "constant_rate_factor", "enable", FALSE},
-	{"vquality_type_constant", "x264_trellis", "enable", TRUE},
 	{"vquality_type_constant", "two_pass", "enable", TRUE},
 	{"vquality_type_constant", "turbo", "enable", TRUE},
 	{"two_pass", "turbo", "enable", FALSE},
@@ -131,7 +130,6 @@ dep_check(signal_user_data_t *ud, const gchar *name)
 {
 	GtkWidget *widget;
 	GObject *dep_object;
-	gchar *value;
 	int ii;
 	int count = sizeof(dep_map) / sizeof(dependency_t);
 	gboolean result = TRUE;
@@ -143,17 +141,22 @@ dep_check(signal_user_data_t *ud, const gchar *name)
 		{
 			widget = GHB_WIDGET(ud->builder, dep_map[ii].widget_name);
 			dep_object = gtk_builder_get_object(ud->builder, dep_map[ii].dep_name);
-			value = ghb_widget_short_opt(widget);
-			if (dep_object == NULL || widget == NULL)
+			if (dep_object == NULL)
 			{
 				g_message("Failed to find widget\n");
 			}
 			else
 			{
+				gchar *value;
 				gint jj = 0;
 				gchar **values = g_strsplit(dep_map[ii].enable_value, "|", 10);
 				gboolean sensitive = FALSE;
 
+				if (widget)
+					value = ghb_widget_short_opt(widget);
+				else
+					value = g_strdup( ghb_settings_get_short_opt(
+						ud->settings, dep_map[ii].widget_name));
 				while (values && values[jj])
 				{
 					if (values[jj][0] == '>')
@@ -186,8 +189,8 @@ dep_check(signal_user_data_t *ud, const gchar *name)
 				sensitive = dep_map[ii].disable_if_equal ^ sensitive;
 				if (!sensitive) result = FALSE;
 				g_strfreev (values);
+				g_free(value);
 			}
-			g_free(value);
 		}
 	}
 	return result;
@@ -1473,6 +1476,59 @@ generic_focus_out_cb(GtkWidget *widget, GdkEventFocus *event,
 {
 	g_debug("generic_focus_out_cb ()\n");
 	ghb_widget_to_setting(ud->settings, widget);
+	return FALSE;
+}
+
+// Flag needed to prevent x264 options processing from chasing its tail
+static gboolean ignore_options_update = FALSE;
+
+void
+x264_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	ghb_widget_to_setting(ud->settings, widget);
+	if (!ignore_options_update)
+	{
+		ignore_options_update = TRUE;
+		ghb_x264_opt_update(ud, widget);
+		ignore_options_update = FALSE;
+	}
+	check_depencency(ud, widget);
+	clear_presets_selection(ud);
+}
+
+void
+x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	g_debug("x264_entry_changed_cb ()\n");
+	if (!ignore_options_update)
+	{
+		GtkWidget *textview;
+		textview = GTK_WIDGET(GHB_WIDGET(ud->builder, "x264_options"));
+		ghb_widget_to_setting(ud->settings, textview);
+		const gchar *options;
+		options = ghb_settings_get_string(ud->settings, "x264_options");
+		ignore_options_update = TRUE;
+		ghb_x264_parse_options(ud, options);
+		ignore_options_update = FALSE;
+	}
+}
+
+gboolean
+x264_focus_out_cb(GtkWidget *widget, GdkEventFocus *event, 
+    signal_user_data_t *ud)
+{
+	ghb_widget_to_setting(ud->settings, widget);
+	gchar *options;
+	options = (gchar*)ghb_settings_get_string(ud->settings, "x264_options");
+	options = ghb_sanitize_x264opts(ud, options);
+	ignore_options_update = TRUE;
+	if (options != NULL)
+	{
+		ghb_ui_update(ud, "x264_options", options);
+		ghb_x264_parse_options(ud, options);
+		g_free(options);
+	}
+	ignore_options_update = FALSE;
 	return FALSE;
 }
 

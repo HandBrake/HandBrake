@@ -2671,7 +2671,7 @@
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip-text" translatable="yes">Selects the number of reference frames that can be used. Slows down encoding.  Good typical values are 3 to 5. Animation can benefit from more (8 to 10).</property>
                                             <property name="adjustment">adjustment8</property>
-                                            <signal handler="setting_widget_changed_cb" name="value_changed"/>
+                                            <signal handler="x264_widget_changed_cb" name="value_changed"/>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -2689,7 +2689,7 @@
                                         <property name="label" translatable="yes">Mixed References</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
-                                        <signal handler="setting_widget_changed_cb" name="toggled"/>
+                                        <signal handler="x264_widget_changed_cb" name="toggled"/>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -2704,7 +2704,7 @@
                               <object class="GtkLabel" id="label50">
                                 <property name="visible">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Refernce Frames&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Reference Frames&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
                               </object>
                             </child>
@@ -2762,7 +2762,7 @@
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                 <property name="tooltip-text" translatable="yes">Sane values are 1-6. B-Frames are smaller than other frames, so they let you pack in more quality at the same bitrate. Use more of them with animated material: 9-16.</property>
                                                 <property name="adjustment">adjustment9</property>
-                                                <signal handler="setting_widget_changed_cb" name="value_changed"/>
+                                                <signal handler="x264_widget_changed_cb" name="value_changed"/>
                                               </object>
                                             </child>
                                           </object>
@@ -2802,7 +2802,7 @@
                                                 <property name="visible">True</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                 <property name="tooltip-text" translatable="yes">This option can improve compression efficiency. </property>
-                                                <signal handler="setting_widget_changed_cb" name="changed"/>
+                                                <signal handler="x264_widget_changed_cb" name="changed"/>
                                               </object>
                                             </child>
                                           </object>
@@ -2816,6 +2816,26 @@
                                         <property name="position">1</property>
                                       </packing>
                                     </child>
+
+                                    <child>
+                                      <object class="GtkTable" id="table8">
+                                        <property name="visible">True</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="n_rows">2</property>
+                                        <property name="n_columns">2</property>
+
+                                    <child>
+                                      <object class="GtkCheckButton" id="x264_bpyramid">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="tooltip-text" translatable="yes">Allows B-Frames to be used as references for other B-Frames. Improves encoding efficiency with little speed penalty</property>
+                                        <property name="label" translatable="yes">Pyramidal B-Frames</property>
+                                        <property name="active">True</property>
+                                        <property name="draw_indicator">True</property>
+                                        <signal handler="x264_widget_changed_cb" name="toggled"/>
+                                      </object>
+                                    </child>
                                     <child>
                                       <object class="GtkCheckButton" id="x264_weighted_bframes">
                                         <property name="visible">True</property>
@@ -2825,10 +2845,11 @@
                                         <property name="label" translatable="yes">Weighted B-Frames</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
-                                        <signal handler="setting_widget_changed_cb" name="toggled"/>
+                                        <signal handler="x264_widget_changed_cb" name="toggled"/>
                                       </object>
                                       <packing>
-                                        <property name="position">2</property>
+                                        <property name="left_attach">1</property>
+                                        <property name="right_attach">2</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2839,10 +2860,11 @@
                                         <property name="tooltip-text" translatable="yes">When B-frame rate distortion optimization is enabled, x264 tries several different methods of compression for each part of a frame, and chooses the one that looks the best. You need to use a subpixel motion estimation refinement level of 6 or 7 for this to work.</property>
                                         <property name="label" translatable="yes">B-Frame Rate Distortion</property>
                                         <property name="draw_indicator">True</property>
-                                        <signal handler="setting_widget_changed_cb" name="toggled"/>
+                                        <signal handler="x264_widget_changed_cb" name="toggled"/>
                                       </object>
                                       <packing>
-                                        <property name="position">3</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2854,27 +2876,22 @@
                                         <property name="label" translatable="yes">Bidirectional Refinement</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
-                                        <signal handler="setting_widget_changed_cb" name="toggled"/>
+                                        <signal handler="x264_widget_changed_cb" name="toggled"/>
                                       </object>
                                       <packing>
-                                        <property name="position">4</property>
+                                        <property name="left_attach">1</property>
+                                        <property name="right_attach">2</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
                                       </packing>
                                     </child>
-                                    <child>
-                                      <object class="GtkCheckButton" id="x264_bpyramid">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="tooltip-text" translatable="yes">Allows B-Frames to be used as references for other B-Frames. Improves encoding efficiency with little speed penalty</property>
-                                        <property name="label" translatable="yes">Pyramidal B-Frames</property>
-                                        <property name="active">True</property>
-                                        <property name="draw_indicator">True</property>
-                                        <signal handler="setting_widget_changed_cb" name="toggled"/>
+
                                       </object>
                                       <packing>
-                                        <property name="position">5</property>
+                                        <property name="position">2</property>
                                       </packing>
                                     </child>
+
                                   </object>
                                 </child>
                               </object>
@@ -2908,14 +2925,20 @@
                                 <property name="left_padding">12</property>
                                 <property name="right_padding">2</property>
                                 <child>
-                                  <object class="GtkEntry" id="x264_options">
+                                  <object class="GtkTextView" id="x264_options">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="tooltip-text" translatable="yes">Enter x264 options here that are not otherwise available</property>
-                                    <property name="truncate_multiline">True</property>
-                                    <signal handler="generic_entry_changed_cb" name="changed"/>
-                                    <signal handler="generic_focus_out_cb" name="focus_out_event"/>
+                                        <property name="tooltip-text" translatable="yes">Your selected options will appear here. 
+You can edit these and add additional options.  
+
+Default values will not be shown. The defaults are:
+ref=1:mixed-refs=0:bframes=0:direct=spatial:b-pyramid=0:
+weightb=0:brdo=0:bime=0:me=hex:merange=16:subme=5:
+analyse=some:8x8dct=0:deblock=0,0:trellis=0:
+no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
+                                    <property name="wrap_mode">GTK_WRAP_CHAR</property>
+                                    <property name="accepts_tab">False</property>
+                                    <signal handler="x264_focus_out_cb" name="focus_out_event"/>
                                   </object>
                                 </child>
                               </object>
@@ -2930,12 +2953,15 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
+                            <property name="expand">True</property>
                             <property name="padding">2</property>
                             <property name="position">2</property>
                           </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="expand">True</property>
+                      </packing>
                     </child>
                     <child>
                       <object class="GtkVBox" id="vbox25">
@@ -2987,7 +3013,7 @@
                                                 <property name="visible">True</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                 <property name="tooltip-text" translatable="yes">This sets the shape of the area x264 searches when estimating motion. Your choices are a diamond, a hexagon, a more complex hexagonal shape, or searching the entire frame. You are best off using Uneven Multi-Hexagonal searching.</property>
-                                                <signal handler="setting_widget_changed_cb" name="changed"/>
+                                                <signal handler="x264_widget_changed_cb" name="changed"/>
                                               </object>
                                             </child>
                                           </object>
@@ -3026,7 +3052,7 @@
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                 <property name="tooltip-text" translatable="yes">This range is the radius, in pixels, x264 should use for motion estimation searches. It only has an effect when you use Uneven Multi-Hexagonal or Exhaustive searching. 24, 32, and 64 are good values.</property>
                                                 <property name="adjustment">adjustment10</property>
-                                                <signal handler="setting_widget_changed_cb" name="value_changed"/>
+                                                <signal handler="x264_widget_changed_cb" name="value_changed"/>
                                               </object>
                                             </child>
                                           </object>
@@ -3066,7 +3092,7 @@
                                                 <property name="visible">True</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                 <property name="tooltip-text" translatable="yes">Determines how motion estimation decisions are made. 1 is lowest quality and fastest. 7 is highest quality and slowest.  5 or 6 are commonly used values.</property>
-                                                <signal handler="setting_widget_changed_cb" name="changed"/>
+                                                <signal handler="x264_widget_changed_cb" name="changed"/>
                                               </object>
                                             </child>
                                           </object>
@@ -3107,7 +3133,7 @@
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                 <property name="tooltip-text" translatable="yes">Determines which macroblock partitions are analyzed.
 "Some" is p8x8, b8x8, i8x8, i4x4.</property>
-                                                <signal handler="setting_widget_changed_cb" name="changed"/>
+                                                <signal handler="x264_widget_changed_cb" name="changed"/>
                                               </object>
                                             </child>
                                           </object>
@@ -3131,7 +3157,7 @@
                                                 <property name="label" translatable="yes">8x8dct</property>
                                                 <property name="active">True</property>
                                                 <property name="draw_indicator">True</property>
-                                                <signal handler="setting_widget_changed_cb" name="toggled"/>
+                                                <signal handler="x264_widget_changed_cb" name="toggled"/>
                                               </object>
                                             </child>
                                           </object>
@@ -3203,7 +3229,7 @@
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip-text" translatable="yes">Deblocking filter. Alpha: determines the strength of the deblocking action.</property>
                                             <property name="adjustment">adjustment11</property>
-                                            <signal handler="setting_widget_changed_cb" name="value_changed"/>
+                                            <signal handler="x264_widget_changed_cb" name="value_changed"/>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -3217,7 +3243,7 @@
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip-text" translatable="yes">Deblocking filter. Beta: determines when something is a block. Higher values increase sensitivity and will flag more blocks.</property>
                                             <property name="adjustment">adjustment12</property>
-                                            <signal handler="setting_widget_changed_cb" name="value_changed"/>
+                                            <signal handler="x264_widget_changed_cb" name="value_changed"/>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -3246,7 +3272,7 @@
                                             <property name="visible">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip-text" translatable="yes">Trellis fine-tunes how bitrate is doled out, so it can reduce file size/bitrate or increase quality. "All" forces it to be used more often than "Final Macro Block".</property>
-                                            <signal handler="setting_widget_changed_cb" name="changed"/>
+                                            <signal handler="x264_widget_changed_cb" name="changed"/>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -3267,7 +3293,7 @@
                                         <property name="label" translatable="yes">No Fast P-Skip</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
-                                        <signal handler="setting_widget_changed_cb" name="toggled"/>
+                                        <signal handler="x264_widget_changed_cb" name="toggled"/>
                                       </object>
                                       <packing>
                                         <property name="position">2</property>
@@ -3282,7 +3308,7 @@
                                         <property name="label" translatable="yes">No DCT Decimate</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
-                                        <signal handler="setting_widget_changed_cb" name="toggled"/>
+                                        <signal handler="x264_widget_changed_cb" name="toggled"/>
                                       </object>
                                       <packing>
                                         <property name="position">3</property>
@@ -3297,7 +3323,7 @@
                                         <property name="label" translatable="yes">CABAC Entropy Encoding</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
-                                        <signal handler="setting_widget_changed_cb" name="toggled"/>
+                                        <signal handler="x264_widget_changed_cb" name="toggled"/>
                                       </object>
                                       <packing>
                                         <property name="position">4</property>
@@ -3323,6 +3349,7 @@
                         </child>
                       </object>
                       <packing>
+                        <property name="expand">False</property>
                         <property name="position">1</property>
                       </packing>
                     </child>

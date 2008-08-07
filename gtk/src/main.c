@@ -463,6 +463,8 @@ watch_volumes(signal_user_data_t *ud)
 extern int mm_flags;
 int mm_support();
 
+void x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud);
+
 int
 main (int argc, char *argv[])
 {
@@ -515,6 +517,15 @@ main (int argc, char *argv[])
 		ud->builder = create_builder_or_die (BUILDER_NAME, builder_file);
 		g_free(builder_file);
 	}
+
+	// Need to connect x264_options textview buffer to the changed signal
+	// since it can't be done automatically
+	GtkTextView *textview;
+	GtkTextBuffer *buffer;
+	textview = GTK_TEXT_VIEW(GHB_WIDGET (ud->builder, "x264_options"));
+	buffer = gtk_text_view_get_buffer (textview);
+	g_signal_connect(buffer, "changed", (GCallback)x264_entry_changed_cb, ud);
+
 	ghb_file_menu_add_dvd(ud);
 	ghb_backend_init(ud->builder, 1, 0);
 
@@ -555,6 +566,8 @@ main (int argc, char *argv[])
 		if (preset == NULL)
 			preset = ghb_presets_get_name(0);
 	}
+	// Parsing x264 options "" initializes x264 widgets to proper defaults
+	ghb_x264_parse_options(ud, "");
 	ghb_select_preset(ud->builder, preset);
 	ghb_prefs_to_ui(ud);
 	// Grey out widgets that are dependent on a disabled feature
