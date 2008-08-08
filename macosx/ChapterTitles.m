@@ -82,7 +82,7 @@
       objectValueForTableColumn:(NSTableColumn *)aTableColumn
       row:(int)rowIndex
 {
-    NSString *cellEntry;
+    NSString *cellEntry =  @"__DATA ERROR__";
 
     if([[aTableColumn identifier] intValue] == 1)
     {
@@ -98,10 +98,6 @@
             {
                 cellEntry = [NSString stringWithUTF8String:chapter->title];
             }
-        }
-        else
-        {
-                cellEntry = @"__DATA ERROR__";
         }
     }
 
