@@ -567,11 +567,11 @@ void hb_set_anamorphic_size( hb_job_t * job,
     hb_title_t * title = job->title;
     int cropped_width = title->width - job->crop[2] - job->crop[3] ;
     int cropped_height = title->height - job->crop[0] - job->crop[1] ;
-    int storage_aspect = cropped_width * 10000 / cropped_height;
+    double storage_aspect = (double)cropped_width / (double)cropped_height;
     int width = job->width;
     int height; // Gets set later, ignore user value
     int mod = job->modulus;
-    int aspect = title->aspect;
+    double aspect = title->aspect;
 
     /* Gotta handle bounding dimensions differently
        than for non-anamorphic encodes:
@@ -585,13 +585,14 @@ void hb_set_anamorphic_size( hb_job_t * job,
     if ( job->maxWidth && (job->maxWidth < job->width) )
             width = job->maxWidth;
 
-    if ( job->maxHeight && (job->maxHeight < (width / storage_aspect * 10000)) )
+    height = (double)width / storage_aspect;
+    if ( job->maxHeight && (job->maxHeight < height) )
     {
         height = job->maxHeight;
     }
     else
     {
-        height = width * 10000 / storage_aspect;
+        height = (double)width / storage_aspect;
     }
 
 
@@ -659,19 +660,24 @@ void hb_set_anamorphic_size( hb_job_t * job,
     
     /* If a source was really 704*480 and hard matted with cropping
        to 720*480, replace the PAR values with the ITU broadcast ones. */
-    if (cropped_width <= 706)
+    if (title->width == 720 && cropped_width <= 706)
     {
+        // convert aspect to a scaled integer so we can test for 16:9 & 4:3
+        // aspect ratios ignoring insignificant differences in the LSBs of
+        // the floating point representation.
+        int iaspect = aspect * 9.;
+
         /* Handle ITU PARs */
         if (title->height == 480)
         {
             /* It's NTSC */
-            if (aspect == 16)
+            if (iaspect == 16)
             {
                 /* It's widescreen */
                 pixel_aspect_width = 40;
                 pixel_aspect_height = 33;
             }
-            else if (aspect == 12)
+            else if (iaspect == 12)
             {
                 /* It's 4:3 */
                 pixel_aspect_width = 10;
@@ -681,13 +687,13 @@ void hb_set_anamorphic_size( hb_job_t * job,
         else if (title->height == 576)
         {
             /* It's PAL */
-            if(aspect == 16)
+            if(iaspect == 16)
             {
                 /* It's widescreen */
                 pixel_aspect_width = 16;
                 pixel_aspect_height = 11;
             }
-            else if (aspect == 12)
+            else if (iaspect == 12)
             {
                 /* It's 4:3 */
                 pixel_aspect_width = 12;
@@ -697,7 +703,8 @@ void hb_set_anamorphic_size( hb_job_t * job,
     }
 
     /* Figure out what dimensions the source would display at. */
-    int source_display_width = cropped_width * ((float)pixel_aspect_width / (float)pixel_aspect_height) ;
+    int source_display_width = cropped_width * (double)pixel_aspect_width /
+                               (double)pixel_aspect_height ;
 
     /* The film AR is the source's display width / cropped source height.
        The output display width is the output height * film AR.
@@ -705,16 +712,14 @@ void hb_set_anamorphic_size( hb_job_t * job,
     pixel_aspect_width = height * source_display_width / cropped_height;
     pixel_aspect_height = width;
 
-    /* While x264 is smart enough to reduce fractions on its own, libavcodec
-       needs some help with the math, so lose superfluous factors.            */
-    hb_reduce( &pixel_aspect_width, &pixel_aspect_height,
-               pixel_aspect_width, pixel_aspect_height );
-
     /* Pass the results back to the caller */
     *output_width = width;
     *output_height = height;
-    *output_par_width = pixel_aspect_width;
-    *output_par_height = pixel_aspect_height;
+
+    /* While x264 is smart enough to reduce fractions on its own, libavcodec
+       needs some help with the math, so lose superfluous factors.            */
+    hb_reduce( output_par_width, output_par_height,
+               pixel_aspect_width, pixel_aspect_height );
 }
 
 /**
@@ -723,14 +728,14 @@ void hb_set_anamorphic_size( hb_job_t * job,
  * @param aspect Desired aspect ratio. Value of -1 uses title aspect.
  * @param pixels Maximum desired pixel count.
  */
-void hb_set_size( hb_job_t * job, int aspect, int pixels )
+void hb_set_size( hb_job_t * job, double aspect, int pixels )
 {
     hb_title_t * title = job->title;
 
     int croppedWidth  = title->width - title->crop[2] - title->crop[3];
     int croppedHeight = title->height - title->crop[0] - title->crop[1];
-    int croppedAspect = title->aspect * title->height * croppedWidth /
-                            croppedHeight / title->width;
+    double croppedAspect = title->aspect * title->height * croppedWidth /
+                           croppedHeight / title->width;
     int addCrop;
     int i, w, h;
 
@@ -795,7 +800,7 @@ void hb_set_size( hb_job_t * job, int aspect, int pixels )
     for( i = 0;; i++ )
     {
         w = 16 * i;
-        h = MULTIPLE_16( w * HB_ASPECT_BASE / aspect );
+        h = MULTIPLE_16( (int)( (double)w / aspect ) );
         if( w * h > pixels )
         {
             break;
@@ -803,7 +808,7 @@ void hb_set_size( hb_job_t * job, int aspect, int pixels )
     }
     i--;
     job->width  = 16 * i;
-    job->height = MULTIPLE_16( 16 * i * HB_ASPECT_BASE / aspect );
+    job->height = MULTIPLE_16( (int)( (double)job->width / aspect ) );
 }
 
 /**

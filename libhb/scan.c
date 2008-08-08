@@ -26,18 +26,15 @@ static int  DecodePreviews( hb_scan_t *, hb_title_t * title );
 static void LookForAudio( hb_title_t * title, hb_buffer_t * b );
 static int  AllAudioOK( hb_title_t * title );
 
-static const char *aspect_to_string( int aspect )
+static const char *aspect_to_string( double aspect )
 {
-    switch ( aspect )
+    switch ( (int)(aspect * 9.) )
     {
-        case HB_ASPECT_BASE * 1 / 1:    return "1:1";
-        case HB_ASPECT_BASE * 4 / 3:    return "4:3";
-        case HB_ASPECT_BASE * 16 / 9:   return "16:9";
-        case HB_ASPECT_BASE * 221 / 100:   return "2.21:1";
+        case 9 * 4 / 3:    return "4:3";
+        case 9 * 16 / 9:   return "16:9";
     }
     static char arstr[32];
-    double a = (double)aspect / HB_ASPECT_BASE;
-    sprintf( arstr, aspect >= 1.? "%.2f:1" : "1:%.2f", a );
+    sprintf( arstr, aspect >= 1.? "%.2f:1" : "1:%.2f", aspect );
     return arstr;
 }
 
@@ -198,15 +195,11 @@ static void ScanFunc( void * _data )
             job->pixel_aspect_height = title->pixel_aspect_height;
         }
 
-        if( title->aspect == 16 && !job->pixel_aspect_width && !job->pixel_aspect_height)
+        if( title->aspect != 0 && title->aspect != 1. &&
+            !job->pixel_aspect_width && !job->pixel_aspect_height)
         {
             hb_reduce( &job->pixel_aspect_width, &job->pixel_aspect_height,
-                       16 * title->height, 9 * title->width );
-        }
-        else if( !job->pixel_aspect_width && !job->pixel_aspect_height )
-        {
-            hb_reduce( &job->pixel_aspect_width, &job->pixel_aspect_height,
-                       4 * title->height, 3 * title->width );
+                       (int)(title->aspect * title->height), title->width );
         }
 
         job->width = title->width - job->crop[2] - job->crop[3];
@@ -670,16 +663,29 @@ skip_preview:
 
         // compute the aspect ratio based on the storage dimensions and the
         // pixel aspect ratio (if supplied) or just storage dimensions if no PAR.
-        title->aspect = ( (double)title->width / (double)title->height + 0.05 ) *
-                        HB_ASPECT_BASE;
-
-        double aspect = (double)title->width / (double)title->height;
+        title->aspect = (double)title->width / (double)title->height;
         if( title->pixel_aspect_width && title->pixel_aspect_height )
         {
-            aspect *= (double)title->pixel_aspect_width /
-                      (double)title->pixel_aspect_height;
+            title->aspect *= (double)title->pixel_aspect_width /
+                             (double)title->pixel_aspect_height;
+
+            // For unknown reasons some French PAL DVDs put the original
+            // content's aspect ratio into the mpeg PAR even though it's
+            // the wrong PAR for the DVD. Apparently they rely on the fact
+            // that DVD players ignore the content PAR and just use the
+            // aspect ratio from the DVD metadata. So, if the aspect computed
+            // from the PAR is different from the container's aspect we use
+            // the container's aspect & recompute the PAR from it.
+            if( title->container_aspect && title->aspect != title->container_aspect )
+            {
+                hb_log("scan: content PAR gives wrong aspect %.2f; "
+                       "using container aspect %.2f", title->aspect,
+                       title->container_aspect );
+                title->aspect = title->container_aspect;
+                hb_reduce( &title->pixel_aspect_width, &title->pixel_aspect_height,
+                           (int)(title->aspect * title->height), title->width );
+            }
         }
-        title->aspect = ( aspect + 0.05 ) * HB_ASPECT_BASE;
 
         // don't try to crop unless we got at least 3 previews
         if ( crops->n > 2 )

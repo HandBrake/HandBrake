@@ -93,7 +93,6 @@ struct hb_mixdown_s
     int    amixdown;
 };
 
-#define HB_ASPECT_BASE 9
 #define HB_VIDEO_RATE_BASE   27000000
 
 extern hb_rate_t    hb_video_rates[];
@@ -439,9 +438,10 @@ struct hb_title_s
     /* Exact duration (in 1/90000s) */
     uint64_t    duration;
 
+    double      aspect;             // aspect ratio for the title's video
+    double      container_aspect;   // aspect ratio from container (0 if none)
     int         width;
     int         height;
-    int         aspect;
     int         pixel_aspect_width;
     int         pixel_aspect_height;
     int         rate;

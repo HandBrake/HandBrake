@@ -310,7 +310,7 @@ static void PrintTitleInfo( hb_title_t * title )
              title->hours, title->minutes, title->seconds );
     fprintf( stderr, "  + size: %dx%d, aspect: %.2f, %.3f fps\n",
              title->width, title->height,
-             (float) title->aspect / HB_ASPECT_BASE,
+             (float) title->aspect,
              (float) title->rate / title->rate_base );
     fprintf( stderr, "  + autocrop: %d/%d/%d/%d\n", title->crop[0],
              title->crop[1], title->crop[2], title->crop[3] );

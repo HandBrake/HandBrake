@@ -39,7 +39,7 @@ typedef struct hb_libmpeg2_s
     int                  width;
     int                  height;
     int                  rate;
-    int                  aspect_ratio;
+    double               aspect_ratio;
     int                  got_iframe;        /* set when we get our first iframe */
     int                  look_for_iframe;   /* need an iframe to add chap break */
     int                  look_for_break;    /* need gop start to add chap break */
@@ -109,13 +109,10 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                      * it keeps the pixel width & height that would cause
                      * the storage width & height to come out in the correct
                      * aspect ratio. Convert these back to aspect ratio.
-                     * We do the calc in floating point to get the rounding right.
-                     * We round in the second decimal digit because we scale
-                     * the (integer) aspect by 9 to preserve the 1st digit.
                      */
                     double ar_numer = m->width * m->info->sequence->pixel_width;
                     double ar_denom = m->height * m->info->sequence->pixel_height;
-                    m->aspect_ratio = ( ar_numer / ar_denom + .05 ) * HB_ASPECT_BASE;
+                    m->aspect_ratio = ar_numer / ar_denom;
                 }
             }
         }
@@ -431,7 +428,7 @@ static int decmpeg2Info( hb_work_object_t *w, hb_work_info_t *info )
         info->height = m->height;
         info->pixel_aspect_width = m->info->sequence->pixel_width;
         info->pixel_aspect_height = m->info->sequence->pixel_height;
-        info->aspect = (double)m->aspect_ratio;
+        info->aspect = m->aspect_ratio;
 
         // if the frame is progressive & NTSC DVD height report it as 23.976 FPS
         // so that scan can autodetect NTSC film

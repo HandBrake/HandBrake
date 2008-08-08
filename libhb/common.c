@@ -82,18 +82,26 @@ const char * hb_mixdown_get_short_name_from_mixdown( int amixdown )
  *********************************************************************/
 void hb_reduce( int *x, int *y, int num, int den )
 {
-    int lower = MIN( num, den );
-    int i;
-    *x = num;
-    *y = den;
-    for( i = lower - 1; i > 1; --i )
+    // find the greatest common divisor of num & den by Euclid's algorithm
+    int n = num, d = den;
+    while ( d )
     {
-        if( ( num % i == 0 ) && ( den % i == 0 ) )
-        {
-            *x = num / i;
-            *y = den / i;
-            break;
-        }
+        int t = d;
+        d = n % d;
+        n = t;
+    }
+
+    // at this point n is the gcd. if it's non-zero remove it from num
+    // and den. Otherwise just return the original values.
+    if ( n )
+    {
+        *x = num / n;
+        *y = den / n;
+    }
+    else
+    {
+        *x = num;
+        *y = den;
     }
 }
 
@@ -143,22 +151,18 @@ void hb_fix_aspect( hb_job_t * job, int keep )
         }
     }
 
+    double par = (double)title->width / ( (double)title->height * title->aspect );
+    double cropped_sar = (double)( title->height - job->crop[0] - job->crop[1] ) /
+                         (double)(title->width - job->crop[2] - job->crop[3] );
+    double ar = par * cropped_sar;
     if( keep == HB_KEEP_WIDTH )
     {
-        job->height = MULTIPLE_16(
-            (uint64_t) job->width * title->width * HB_ASPECT_BASE *
-              ( title->height - job->crop[0] - job->crop[1] ) /
-            ( (uint64_t) title->height * title->aspect *
-              ( title->width - job->crop[2] - job->crop[3] ) ) );
+        job->height = MULTIPLE_16( (uint64_t)( (double)job->width * ar ) );
         job->height = MAX( 16, job->height );
     }
     else
     {
-        job->width = MULTIPLE_16(
-            (uint64_t) job->height * title->height * title->aspect *
-              ( title->width - job->crop[2] - job->crop[3] ) /
-            ( (uint64_t) title->width * HB_ASPECT_BASE *
-              ( title->height - job->crop[0] - job->crop[1] ) ) );
+        job->width = MULTIPLE_16( (uint64_t)( (double)job->height / ar ) );
         job->width = MAX( 16, job->width );
     }
 }

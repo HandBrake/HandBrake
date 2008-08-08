@@ -1,0 +1,34 @@
+#!/bin/tcsh
+#
+# generate aspect ratio & cropping regression test data
+# from a set of HandBrake input files
+#
+# usage: tst.aspect [file ...]
+#
+# if no file names are supplied a default set of inputs is used (see the
+# variable 'inputs' below). Each file is encoded multiple times using
+# different options each time. The options to use are the elements of
+# the 'options' variable below.
+#
+# One line is printed for each HB run. It has the input dimensions,
+# output dimensions, crop, PAR, filename & options for the encode.
+# Since PAR is only output for anamorphic encodes, an omitted PAR
+# is indicated by "1:1" (to distinguish it from the explicit PAR "1/1").
+
+set options=('-w 480' '-l 368' '-p' '-P')
+
+if ($#argv) then
+    set inputs=($argv:q)
+else
+    set inputs=(~/Movies/DVD/* ~/tst/*.{ts,mpg,mkv,avi,vob})
+endif
+
+foreach i ($inputs:q)
+    foreach o ($options:q)
+        (sleep 5; echo q) | ./HandBrakeCLI -v -L -i "$i" -o /dev/null -f mp4 -e x264 $o |& \
+        awk -v fnm="$i" -v opts="$o" '/ storage dimensions: / { dimen = $5 "*" $7 " -> " $9 "*" $11 " " $13 }\
+        $3=="dimensions:" { dimen = $4 "*" $6 " -> " $8 "*" $10 " " $12 }\
+        / pixel aspect ratio: / { par=$6 "/" $8 }\
+        /encx264: opening libx264/ { if(! par) par="1:1";printf "%s %s  %s %s\n", dimen, par, fnm, opts }'
+    end
+end

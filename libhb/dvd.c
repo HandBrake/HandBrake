@@ -488,17 +488,17 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
     switch( vts->vtsi_mat->vts_video_attr.display_aspect_ratio )
     {
         case 0:
-            title->aspect = HB_ASPECT_BASE * 4 / 3;
+            title->container_aspect = 4. / 3.;
             break;
         case 3:
-            title->aspect = HB_ASPECT_BASE * 16 / 9;
+            title->container_aspect = 16. / 9.;
             break;
         default:
             hb_log( "scan: unknown aspect" );
             goto fail;
     }
 
-    hb_log( "scan: aspect = %d", title->aspect );
+    hb_log( "scan: aspect = %g", title->aspect );
 
     /* This title is ok so far */
     goto cleanup;
