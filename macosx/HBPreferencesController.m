@@ -47,7 +47,7 @@
         desktopDirectory,   @"LastSourceDirectory",
         @"NO",              @"DefaultAutoNaming",
         @"NO",              @"DisableDvdAutoDetect",
-		@"Alert Window",    @"AlertWhenDone",
+        @"Alert Window",    @"AlertWhenDone",
         @"4:10:15:9:10:35:9",    @"DecombCustomString",
         nil]];
 }
@@ -146,24 +146,24 @@
 - (void) setPrefView: (id) sender
 {
     NSView * view = fGeneralView;
-    if (sender)
+    if( sender )
     {
         NSString * identifier = [sender itemIdentifier];
-        if ([identifier isEqualToString: TOOLBAR_PICTURE])
+        if( [identifier isEqualToString: TOOLBAR_PICTURE] )
             view = fPictureView;
-        else if ([identifier isEqualToString: TOOLBAR_AUDIO])
+        else if( [identifier isEqualToString: TOOLBAR_AUDIO] )
             view = fAudioView;
-        else if ([identifier isEqualToString: TOOLBAR_ADVANCED])
+        else if( [identifier isEqualToString: TOOLBAR_ADVANCED] )
             view = fAdvancedView;
         else;
     }
 
     NSWindow * window = [self window];
-    if ([window contentView] == view)
+    if( [window contentView] == view )
         return;
 
     NSRect windowRect = [window frame];
-    float difference = ([view frame].size.height - [[window contentView] frame].size.height) * [window userSpaceScaleFactor];
+    CGFloat difference = ( [view frame].size.height - [[window contentView] frame].size.height ) * [window userSpaceScaleFactor];
     windowRect.origin.y -= difference;
     windowRect.size.height += difference;
 
@@ -173,16 +173,14 @@
     [view setHidden: NO];
 
     //set title label
-    if (sender)
+    if( sender )
         [window setTitle: [sender label]];
     else
     {
         NSToolbar * toolbar = [window toolbar];
         NSString * itemIdentifier = [toolbar selectedItemIdentifier];
-        NSEnumerator * enumerator = [[toolbar items] objectEnumerator];
-        NSToolbarItem * item;
-        while ((item = [enumerator nextObject]))
-            if ([[item itemIdentifier] isEqualToString: itemIdentifier])
+        for( NSToolbarItem * item in [toolbar items] )
+            if( [[item itemIdentifier] isEqualToString: itemIdentifier] )
             {
                 [window setTitle: [item label]];
                 break;
