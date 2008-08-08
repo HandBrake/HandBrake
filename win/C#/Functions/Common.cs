@@ -197,10 +197,7 @@ namespace Handbrake.Functions
             mainWindow.check_iPodAtom.CheckState = CheckState.Unchecked;
 
             // Now load all the new settings onto the main window
-            if (presetQuery.Source != "")
-                mainWindow.text_source.Text = presetQuery.Source;
-
-            selectLongestTitle(mainWindow);
+            mainWindow.drp_dvdtitle.Text = "Automatic";
             mainWindow.drop_chapterStart.Text = "Auto";
             mainWindow.drop_chapterFinish.Text = "Auto";
 
@@ -219,9 +216,6 @@ namespace Handbrake.Functions
 
             // Destination tab
             #region destination
-
-            if (presetQuery.Destination != "")
-                mainWindow.text_destination.Text = presetQuery.Destination;
 
             mainWindow.drp_videoEncoder.Text = presetQuery.VideoEncoder;
 
@@ -251,15 +245,25 @@ namespace Handbrake.Functions
 
             #endregion
 
-
-
             // Picture Settings Tab
             #region Picture
-            mainWindow.drp_crop.SelectedIndex = 1;
-            mainWindow.text_top.Text = presetQuery.CropTop;
-            mainWindow.text_bottom.Text = presetQuery.CropBottom;
-            mainWindow.text_left.Text = presetQuery.CropLeft;
-            mainWindow.text_right.Text = presetQuery.CropRight;
+
+            if (presetQuery.CropTop == "0" && presetQuery.CropBottom == "0" && presetQuery.CropLeft == "0" && presetQuery.CropRight == "0")
+            {
+                mainWindow.drp_crop.SelectedIndex = 2;
+            }
+            else if (presetQuery.CropTop != null && presetQuery.CropBottom != null && presetQuery.CropLeft != null && presetQuery.CropRight != null)
+            {
+                mainWindow.drp_crop.SelectedIndex = 1;
+                mainWindow.text_top.Text = presetQuery.CropTop;
+                mainWindow.text_bottom.Text = presetQuery.CropBottom;
+                mainWindow.text_left.Text = presetQuery.CropLeft;
+                mainWindow.text_right.Text = presetQuery.CropRight;
+            }
+            else
+            {
+                mainWindow.drp_crop.SelectedIndex = 0;
+            }
 
             mainWindow.drp_deInterlace_option.Text = presetQuery.DeInterlace;
             mainWindow.drp_deNoise.Text = presetQuery.DeNoise;

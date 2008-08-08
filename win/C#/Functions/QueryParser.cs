@@ -784,7 +784,7 @@ namespace Handbrake.Functions
 
             #region Regular Expressions
             //Source
-            Regex r1 = new Regex(@"(-i)(?:\s\"")([a-zA-Z0-9:\\\s\.]+)(?:\"")");
+            Regex r1 = new Regex(@"(-i)(?:\s\"")([a-zA-Z0-9_\-:\\\s\.]+)(?:\"")");
             Match source = r1.Match(input.Replace('"', '\"'));
             Match title = Regex.Match(input, @"-t ([0-9]*)");
             Match chapters = Regex.Match(input, @"-c ([0-9-]*)");
@@ -1238,9 +1238,7 @@ namespace Handbrake.Functions
                 //H264 Tab
                 //
                 if (x264.Success != false)
-                {
                     thisQuery.q_h264 = x264.ToString().Replace("-x ", "");
-                }
 
                 //
                 //Progam Options
@@ -1275,7 +1273,6 @@ namespace Handbrake.Functions
                     return "Automatic";
             }
         }
-
         private static string getAudioEncoder(string audioEnc)
         {
             switch (audioEnc)
