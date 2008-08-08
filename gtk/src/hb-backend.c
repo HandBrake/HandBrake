@@ -103,42 +103,15 @@ combo_opts_t vcodec_opts =
 
 static options_map_t d_acodec_opts[] =
 {
-	{"AAC (faac)",      "faac",   HB_ACODEC_FAAC, 0.0, ""},
-	{"MP3 (lame)",      "lame",   HB_ACODEC_LAME, 0.0, ""},
-	{"Vorbis",          "vorbis", HB_ACODEC_VORBIS, 0.0, ""},
-	{"AC3 (pass-thru)", "ac3",    HB_ACODEC_AC3, 0.0, ""},
+	{"AAC (faac)",      "faac",   HB_ACODEC_FAAC, 0.0, "faac"},
+	{"MP3 (lame)",      "lame",   HB_ACODEC_LAME, 0.0, "lame"},
+	{"Vorbis",          "vorbis", HB_ACODEC_VORBIS, 0.0, "vorbis"},
+	{"AC3 (pass-thru)", "ac3",    HB_ACODEC_AC3, 0.0, "ac3"},
 };
 combo_opts_t acodec_opts =
 {
 	sizeof(d_acodec_opts)/sizeof(options_map_t),
 	d_acodec_opts
-};
-
-static options_map_t d_pref_acodec_opts[] =
-{
-	{"None",            "none",   0, 0.0, ""},
-	{"AAC (faac)",      "faac",   HB_ACODEC_FAAC, 0.0, ""},
-	{"MP3 (lame)",      "lame",   HB_ACODEC_LAME, 0.0, ""},
-	{"Vorbis",          "vorbis", HB_ACODEC_VORBIS, 0.0, ""},
-	{"AC3 (pass-thru)", "ac3",    HB_ACODEC_AC3, 0.0, ""},
-};
-combo_opts_t pref_acodec_opts =
-{
-	sizeof(d_pref_acodec_opts)/sizeof(options_map_t),
-	d_pref_acodec_opts
-};
-
-static options_map_t d_source_acodec_opts[] =
-{
-	{"AC3",      "ac3",   HB_ACODEC_AC3, 0.0, ""},
-	{"DTS",      "dca",   HB_ACODEC_DCA, 0.0, ""},
-	{"MP2",      "mpga",   HB_ACODEC_MPGA, 0.0, ""},
-	{"LPCM",      "lpcm",   HB_ACODEC_LPCM, 0.0, ""},
-};
-combo_opts_t source_acodec_opts =
-{
-	sizeof(d_source_acodec_opts)/sizeof(options_map_t),
-	d_source_acodec_opts
 };
 
 static options_map_t d_direct_opts[] =
@@ -470,6 +443,78 @@ ghb_vquality_range(signal_user_data_t *ud, gint *min, gint *max)
 	}
 }
 
+gint
+ghb_lookup_acodec(const gchar *acodec)
+{
+	gint ii;
+
+	for (ii = 0; ii < acodec_opts.count; ii++)
+	{
+		if (strcmp(acodec_opts.map[ii].shortOpt, acodec) == 0)
+		{
+			return acodec_opts.map[ii].ivalue;
+		}
+	}
+	return HB_ACODEC_FAAC;
+}
+
+gint
+ghb_lookup_bitrate(const gchar *bitrate)
+{
+	gint ii;
+
+	for (ii = 0; ii < hb_audio_bitrates_count; ii++)
+	{
+		if (strcmp(hb_audio_bitrates[ii].string, bitrate) == 0)
+		{
+			return hb_audio_bitrates[ii].rate * 1000;
+		}
+	}
+	return 160 * 1000;
+}
+
+gint
+ghb_lookup_rate(const gchar *rate)
+{
+	gint ii;
+
+	for (ii = 0; ii < hb_audio_rates_count; ii++)
+	{
+		if (strcmp(hb_audio_rates[ii].string, rate) == 0)
+		{
+			return hb_audio_rates[ii].rate;
+		}
+	}
+	// Coincidentally, the string "source" will return 0
+	// which is our flag to use "same as source"
+	return 0;
+}
+
+gint
+ghb_lookup_mix(const gchar *mix)
+{
+	gint ii;
+
+	for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
+	{
+		if (strcmp(hb_audio_mixdowns[ii].short_name, mix) == 0)
+		{
+			return hb_audio_mixdowns[ii].amixdown;
+		}
+	}
+	return HB_AMIXDOWN_DOLBYPLII;
+}
+
+gdouble
+ghb_lookup_drc(const gchar *drc)
+{
+	gdouble dval;
+	dval = g_strtod(drc, NULL);
+	if (dval < 1.0) dval = 1.0;
+	if (dval > 4.0) dval = 4.0;
+	return dval;
+}
+
 static setting_value_t*
 get_acodec_value(gint val)
 {
@@ -615,14 +660,8 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	httpopt = ghb_widget_int(widget);
 
 	grey_combo_box_item(builder, "audio_codec", HB_ACODEC_FAAC, FALSE);
-	grey_combo_box_item(builder, "pref_audio_codec1", HB_ACODEC_FAAC, FALSE);
-	grey_combo_box_item(builder, "pref_audio_codec2", HB_ACODEC_FAAC, FALSE);
 	grey_combo_box_item(builder, "audio_codec", HB_ACODEC_LAME, FALSE);
-	grey_combo_box_item(builder, "pref_audio_codec1", HB_ACODEC_LAME, FALSE);
-	grey_combo_box_item(builder, "pref_audio_codec2", HB_ACODEC_LAME, FALSE);
 	grey_combo_box_item(builder, "audio_codec", HB_ACODEC_VORBIS, FALSE);
-	grey_combo_box_item(builder, "pref_audio_codec1", HB_ACODEC_VORBIS, FALSE);
-	grey_combo_box_item(builder, "pref_audio_codec2", HB_ACODEC_VORBIS, FALSE);
 
 	gboolean allow_ac3 = TRUE;
 	allow_ac3 = 
@@ -632,14 +671,10 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	if (allow_ac3)
 	{
 		grey_combo_box_item(builder, "audio_codec", HB_ACODEC_AC3, FALSE);
-		grey_combo_box_item(builder, "pref_audio_codec1", HB_ACODEC_AC3, FALSE);
-		grey_combo_box_item(builder, "pref_audio_codec2", HB_ACODEC_AC3, FALSE);
 	}
 	else
 	{
 		grey_combo_box_item(builder, "audio_codec", HB_ACODEC_AC3, TRUE);
-		grey_combo_box_item(builder, "pref_audio_codec1", HB_ACODEC_AC3, TRUE);
-		grey_combo_box_item(builder, "pref_audio_codec2", HB_ACODEC_AC3, TRUE);
 	}
 	if (audio && audio->in.codec != HB_ACODEC_AC3)
 	{
@@ -656,28 +691,18 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	if (container == HB_MUX_MP4)
 	{
 		grey_combo_box_item(builder, "audio_codec", HB_ACODEC_LAME, TRUE);
-		grey_combo_box_item(builder, "pref_audio_codec1", HB_ACODEC_LAME, TRUE);
-		grey_combo_box_item(builder, "pref_audio_codec2", HB_ACODEC_LAME, TRUE);
 		grey_combo_box_item(builder, "audio_codec", HB_ACODEC_VORBIS, TRUE);
-		grey_combo_box_item(builder, "pref_audio_codec1", HB_ACODEC_VORBIS, TRUE);
-		grey_combo_box_item(builder, "pref_audio_codec2", HB_ACODEC_VORBIS, TRUE);
 		grey_combo_box_item(builder, "video_codec", HB_VCODEC_THEORA, TRUE);
 	}
 	else if (container == HB_MUX_AVI)
 	{
 		grey_combo_box_item(builder, "audio_codec", HB_ACODEC_FAAC, TRUE);
-		grey_combo_box_item(builder, "pref_audio_codec1", HB_ACODEC_FAAC, TRUE);
-		grey_combo_box_item(builder, "pref_audio_codec2", HB_ACODEC_FAAC, TRUE);
 		grey_combo_box_item(builder, "audio_codec", HB_ACODEC_VORBIS, TRUE);
-		grey_combo_box_item(builder, "pref_audio_codec1", HB_ACODEC_VORBIS, TRUE);
-		grey_combo_box_item(builder, "pref_audio_codec2", HB_ACODEC_VORBIS, TRUE);
 		grey_combo_box_item(builder, "video_codec", HB_VCODEC_THEORA, TRUE);
 	}
 	else if (container == HB_MUX_OGM)
 	{
 		grey_combo_box_item(builder, "audio_codec", HB_ACODEC_FAAC, TRUE);
-		grey_combo_box_item(builder, "pref_audio_codec1", HB_ACODEC_FAAC, TRUE);
-		grey_combo_box_item(builder, "pref_audio_codec2", HB_ACODEC_FAAC, TRUE);
 	}
 
 	gboolean allow_mono = TRUE;
@@ -952,7 +977,7 @@ mix_opts_set(GtkBuilder *builder, const gchar *name)
 	GtkListStore *store;
 	gint ii;
 	
-	g_debug("audio_bitrate_opts_set ()\n");
+	g_debug("mix_opts_set ()\n");
 	store = get_combo_box_store(builder, name);
 	gtk_list_store_clear(store);
 	gtk_list_store_append(store, &iter);
@@ -983,7 +1008,7 @@ language_opts_set(GtkBuilder *builder, const gchar *name)
 	GtkListStore *store;
 	gint ii;
 	
-	g_debug("audio_bitrate_opts_set ()\n");
+	g_debug("language_opts_set ()\n");
 	store = get_combo_box_store(builder, name);
 	gtk_list_store_clear(store);
 	for (ii = 0; ii < LANG_TABLE_SIZE; ii++)
@@ -1250,14 +1275,15 @@ ghb_longest_title()
 }
 
 gint
-ghb_find_audio_track(gint titleindex, const gchar *lang, gint acodec)
+ghb_find_audio_track(gint titleindex, const gchar *lang, gint index)
 {
 	hb_list_t  * list;
 	hb_title_t * title;
     hb_audio_config_t * audio;
 	gint ii;
 	gint count = 0;
-	gint track = 0;
+	gint track = -1;
+	gint match = 0;
 	
 	g_debug("find_audio_track ()\n");
 	if (h != NULL)
@@ -1276,13 +1302,12 @@ ghb_find_audio_track(gint titleindex, const gchar *lang, gint acodec)
 		if ((strcmp(lang, audio->lang.iso639_2) == 0) ||
 			(strcmp(lang, "und") == 0))
 		{
-			// Candidate track.  Will use if no better match found
-			track = ii;
-			if (audio->in.codec == acodec)
+			if (index == match)
 			{
-				// Perfect match
-				return track;
+				track = ii;
+				break;
 			}
+			match++;
 		}
 	}
 	return track;
@@ -1340,26 +1365,14 @@ ghb_update_ui_combo_box(GtkBuilder *builder, const gchar *name, gint user_data, 
 	}	
 	if (all || strcmp(name, "audio_bitrate") == 0)
 		audio_bitrate_opts_set(builder, "audio_bitrate", hb_audio_bitrates, hb_audio_bitrates_count);
-	if (all || strcmp(name, "pref_audio_bitrate1") == 0)
-		audio_bitrate_opts_set(builder, "pref_audio_bitrate1", hb_audio_bitrates, hb_audio_bitrates_count);
-	if (all || strcmp(name, "pref_audio_bitrate2") == 0)
-		audio_bitrate_opts_set(builder, "pref_audio_bitrate2", hb_audio_bitrates, hb_audio_bitrates_count);
-	if (all || strcmp(name, "audio_sample_rate") == 0)
-		audio_samplerate_opts_set(builder, "audio_sample_rate", hb_audio_rates, hb_audio_rates_count);
-	if (all || strcmp(name, "pref_audio_rate1") == 0)
-		audio_samplerate_opts_set(builder, "pref_audio_rate1", hb_audio_rates, hb_audio_rates_count);
-	if (all || strcmp(name, "pref_audio_rate2") == 0)
-		audio_samplerate_opts_set(builder, "pref_audio_rate2", hb_audio_rates, hb_audio_rates_count);
+	if (all || strcmp(name, "audio_rate") == 0)
+		audio_samplerate_opts_set(builder, "audio_rate", hb_audio_rates, hb_audio_rates_count);
 	if (all || strcmp(name, "framerate") == 0)
 		video_rate_opts_set(builder, "framerate", hb_video_rates, hb_video_rates_count);
 	if (all || strcmp(name, "audio_mix") == 0)
 		mix_opts_set(builder, "audio_mix");
-	if (all || strcmp(name, "pref_audio_mix1") == 0)
-		mix_opts_set(builder, "pref_audio_mix1");
-	if (all || strcmp(name, "pref_audio_mix2") == 0)
-		mix_opts_set(builder, "pref_audio_mix2");
-	if (all || strcmp(name, "pref_source_audio_lang") == 0)
-		language_opts_set(builder, "pref_source_audio_lang");
+	if (all || strcmp(name, "source_audio_lang") == 0)
+		language_opts_set(builder, "source_audio_lang");
 	if (all || strcmp(name, "subtitle_lang") == 0)
 		subtitle_opts_set(builder, "subtitle_lang", user_data);
 	if (all || strcmp(name, "title") == 0)
@@ -1376,12 +1389,6 @@ ghb_update_ui_combo_box(GtkBuilder *builder, const gchar *name, gint user_data, 
 		generic_opts_set(builder, "video_codec", &vcodec_opts);
 	if (all || strcmp(name, "audio_codec") == 0)
 		generic_opts_set(builder, "audio_codec", &acodec_opts);
-	if (all || strcmp(name, "pref_audio_codec1") == 0)
-		generic_opts_set(builder, "pref_audio_codec1", &pref_acodec_opts);
-	if (all || strcmp(name, "pref_audio_codec2") == 0)
-		generic_opts_set(builder, "pref_audio_codec2", &pref_acodec_opts);
-	if (all || strcmp(name, "pref_source_audio_codec") == 0)
-		generic_opts_set(builder, "pref_source_audio_codec", &source_acodec_opts);
 	if (all || strcmp(name, "x264_direct") == 0)
 		generic_opts_set(builder, "x264_direct", &direct_opts);
 	if (all || strcmp(name, "x264_me") == 0)
@@ -1402,16 +1409,10 @@ static void
 init_ui_combo_boxes(GtkBuilder *builder)
 {
 	init_combo_box(builder, "audio_bitrate");
-	init_combo_box(builder, "pref_audio_bitrate1");
-	init_combo_box(builder, "pref_audio_bitrate2");
-	init_combo_box(builder, "audio_sample_rate");
-	init_combo_box(builder, "pref_audio_rate1");
-	init_combo_box(builder, "pref_audio_rate2");
+	init_combo_box(builder, "audio_rate");
 	init_combo_box(builder, "framerate");
 	init_combo_box(builder, "audio_mix");
-	init_combo_box(builder, "pref_audio_mix1");
-	init_combo_box(builder, "pref_audio_mix2");
-	init_combo_box(builder, "pref_source_audio_lang");
+	init_combo_box(builder, "source_audio_lang");
 	init_combo_box(builder, "subtitle_lang");
 	init_combo_box(builder, "title");
 	init_combo_box(builder, "audio_track");
@@ -1420,9 +1421,6 @@ init_ui_combo_boxes(GtkBuilder *builder)
 	init_combo_box(builder, "denoise");
 	init_combo_box(builder, "video_codec");
 	init_combo_box(builder, "audio_codec");
-	init_combo_box(builder, "pref_audio_codec1");
-	init_combo_box(builder, "pref_audio_codec2");
-	init_combo_box(builder, "pref_source_audio_codec");
 	init_combo_box(builder, "x264_direct");
 	init_combo_box(builder, "x264_me");
 	init_combo_box(builder, "x264_subme");
@@ -2630,7 +2628,7 @@ ghb_add_job(job_settings_t *js, gint unique_id)
 			audio.out.mixdown = ghb_get_best_mix(titleindex, audio.in.track, audio.out.codec, 
 												audio.out.mixdown);
 			audio.out.bitrate = ghb_settings_get_int(asettings, "audio_bitrate") / 1000;
-			gint srate = ghb_settings_get_int(asettings, "audio_sample_rate");
+			gint srate = ghb_settings_get_int(asettings, "audio_rate");
 			if (srate == 0)	// 0 is same as source
 				audio.out.samplerate = taudio->in.samplerate;
 			else

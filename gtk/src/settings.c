@@ -21,6 +21,7 @@
 #include "hb-backend.h"
 
 void dump_settings(GHashTable *settings);
+void ghb_pref_audio_init(signal_user_data_t *ud);
 
 GObject*
 debug_get_object(GtkBuilder* b, const gchar *n)
@@ -1034,6 +1035,10 @@ preset_update_ui(signal_user_data_t *ud, presets_data_t *data, const gchar *key)
 	// Initialize the ui from presets file.
 	if (data == NULL) return;
 	str = g_key_file_get_string(data->keyFile, data->name, key, NULL);
+	if (str == NULL)
+	{
+		str = g_key_file_get_string(internalKeyFile, "Presets", key, NULL);
+	}
 	if (str != NULL)
 	{
 		ghb_ui_update(ud, key, str);
@@ -1046,7 +1051,7 @@ ghb_set_preset(signal_user_data_t *ud, const gchar *name)
 {
 	presets_data_t *data;
 	
-	g_debug("ghb_update_from_preset() %s\n", name);
+	g_debug("ghb_set_preset() %s\n", name);
 	if (name == NULL)
 	{
 		name = ghb_presets_get_name(0);
@@ -1061,6 +1066,7 @@ ghb_set_preset(signal_user_data_t *ud, const gchar *name)
 		preset_to_ui(ud, data);
 		ghb_settings_set_string(ud->settings, "preset", name);
 	}
+	ghb_pref_audio_init(ud);
 }
 
 void
@@ -1071,7 +1077,7 @@ ghb_update_from_preset(
 {
 	presets_data_t *data;
 	
-	g_debug("ghb_set_preset() %s\n", name);
+	g_debug("ghb_update_from_preset() %s %s\n", name, key);
 	if (name == NULL) return;
 	data = presets_list_search(presetsList, name);
 	preset_update_ui(ud, data, key);
@@ -2010,5 +2016,119 @@ ghb_sanitize_x264opts(signal_user_data_t *ud, const gchar *options)
 	len = strlen(result);
 	if (len > 0) result[len - 1] = 0;
 	return result;
+}
+
+static gint pref_acodec[8];
+static gint pref_bitrate[8];
+static gint pref_rate[8];
+static gint pref_mix[8];
+static gdouble pref_drc[8];
+static gint pref_audio_count = 0;
+
+void
+ghb_pref_audio_init(signal_user_data_t *ud)
+{
+	const gchar *acodec, *bitrate, *rate, *mix, *drc;
+	gchar **split_acodec, **split_bitrate, **split_rate;
+	gchar **split_mix, **split_drc;
+
+	acodec = ghb_settings_get_string(ud->settings, "pref_audio_codec");
+	bitrate = ghb_settings_get_string(ud->settings, "pref_audio_bitrate");
+	rate = ghb_settings_get_string(ud->settings, "pref_audio_rate");
+	mix = ghb_settings_get_string(ud->settings, "pref_audio_mix");
+	drc = ghb_settings_get_string(ud->settings, "pref_audio_drc");
+	split_acodec = g_strsplit(acodec, ",", 8);
+	split_bitrate = g_strsplit(bitrate, ",", 8);
+	split_rate = g_strsplit(rate, ",", 8);
+	split_mix = g_strsplit(mix, ",", 8);
+	split_drc = g_strsplit(drc, ",", 8);
+	if (split_acodec == NULL)
+	{ // This should never happen, but just in case...
+		split_acodec = g_strsplit("faac", ",", -1);
+	}
+	gint ii;
+	for (ii = 0; split_acodec[ii]; ii++)
+	{
+		pref_acodec[ii] = ghb_lookup_acodec(split_acodec[ii]);
+	}
+	pref_audio_count = ii;
+	for (ii = 0; split_bitrate && split_bitrate[ii]; ii++)
+	{
+		pref_bitrate[ii] = ghb_lookup_bitrate(split_bitrate[ii]);
+	}
+	for (ii = 0; ii < pref_audio_count; ii++)
+	{
+		pref_bitrate[ii] = pref_bitrate[0];
+	}
+	for (ii = 0; split_rate && split_rate[ii]; ii++)
+	{
+		pref_rate[ii] = ghb_lookup_rate(split_rate[ii]);
+	}
+	for (ii = 0; ii < pref_audio_count; ii++)
+	{
+		pref_rate[ii] = pref_rate[0];
+	}
+	for (ii = 0; split_mix && split_mix[ii]; ii++)
+	{
+		pref_mix[ii] = ghb_lookup_mix(split_mix[ii]);
+	}
+	for (ii = 0; ii < pref_audio_count; ii++)
+	{
+		pref_mix[ii] = pref_mix[0];
+	}
+	for (ii = 0; split_drc && split_drc[ii]; ii++)
+	{
+		pref_drc[ii] = ghb_lookup_drc(split_drc[ii]);
+	}
+	for (ii = 0; ii < pref_audio_count; ii++)
+	{
+		pref_drc[ii] = pref_drc[0];
+	}
+}
+
+gint
+ghb_pref_acount()
+{
+	return pref_audio_count;
+}
+
+gint
+ghb_pref_acodec(gint index)
+{
+	if (index >= pref_audio_count)
+		return 0;
+	return pref_acodec[index];
+}
+
+gint
+ghb_pref_bitrate(gint index)
+{
+	if (index >= pref_audio_count)
+		return 0;
+	return pref_bitrate[index];
+}
+
+gint
+ghb_pref_rate(gint index)
+{
+	if (index >= pref_audio_count)
+		return 0;
+	return pref_rate[index];
+}
+
+gint
+ghb_pref_mix(gint index)
+{
+	if (index >= pref_audio_count)
+		return 0;
+	return pref_mix[index];
+}
+
+gdouble
+ghb_pref_drc(gint index)
+{
+	if (index >= pref_audio_count)
+		return 0;
+	return pref_drc[index];
 }
 

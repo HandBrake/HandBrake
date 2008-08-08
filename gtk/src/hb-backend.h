@@ -106,7 +106,7 @@ gboolean ghb_set_passthru_rate_opts(GtkBuilder *builder, gint bitrate);
 gboolean ghb_set_default_rate_opts(GtkBuilder *builder);
 void ghb_grey_combo_options(GtkBuilder *builder);
 void ghb_update_ui_combo_box(GtkBuilder *builder, const gchar *name, gint user_data, gboolean all);
-gint ghb_find_audio_track(gint titleindex, const gchar *lang, gint acodec);
+gint ghb_find_audio_track(gint titleindex, const gchar *lang, gint index);
 gint ghb_longest_title();
 gchar* ghb_build_x264opts_string(GHashTable *settings);
 GdkPixbuf* ghb_get_preview_image(gint titleindex, gint index, GHashTable *settings, gboolean borders);
@@ -119,5 +119,10 @@ gboolean ghb_validate_vquality(GHashTable *settings);
 gboolean ghb_validate_audio(signal_user_data_t *ud);
 gboolean ghb_validate_video(signal_user_data_t *ud);
 void ghb_hb_cleanup(gboolean partial);
+gint ghb_lookup_acodec(const gchar *acodec);
+gint ghb_lookup_bitrate(const gchar *bitrate);
+gint ghb_lookup_rate(const gchar *rate);
+gint ghb_lookup_mix(const gchar *mix);
+gdouble ghb_lookup_drc(const gchar *drc);
 
 #endif // _HBBACKEND_H_

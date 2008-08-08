@@ -128,5 +128,11 @@ void ghb_set_preset_default(GHashTable *settings);
 void ghb_x264_parse_options(signal_user_data_t *ud, const gchar *options);
 void ghb_x264_opt_update(signal_user_data_t *ud, GtkWidget *widget);
 gchar* ghb_sanitize_x264opts(signal_user_data_t *ud, const gchar *options);
+gint ghb_pref_acount();
+gint ghb_pref_acodec(gint index);
+gint ghb_pref_bitrate(gint index);
+gint ghb_pref_rate(gint index);
+gint ghb_pref_mix(gint index);
+gdouble ghb_pref_drc(gint index);
 
 #endif // _SETTINGS_H_

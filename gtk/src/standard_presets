@@ -21,8 +21,8 @@ denoise=none
 decomb=disable
 variable_frame_rate=disable
 deblock=disable
-pref_audio_codec1=faac
-pref_audio_bitrate1=160
+pref_audio_codec=faac
+pref_audio_bitrate=160
 subtitles=disable
 
 [Animation]
@@ -49,8 +49,8 @@ denoise=none
 decomb=disable
 variable_frame_rate=disable
 deblock=disable
-pref_audio_codec1=faac
-pref_audio_bitrate1=160
+pref_audio_codec=faac
+pref_audio_bitrate=160
 subtitles=disable
 
 [AppleTV]
@@ -77,9 +77,8 @@ denoise=none
 decomb=disable
 variable_frame_rate=disable
 deblock=disable
-pref_audio_codec1=faac
-pref_audio_codec2=ac3
-pref_audio_bitrate1=160
+pref_audio_codec=faac,ac3
+pref_audio_bitrate=160
 subtitles=disable
 
 [Bedlam]
@@ -106,8 +105,8 @@ denoise=none
 decomb=disable
 variable_frame_rate=disable
 deblock=disable
-pref_audio_codec1=ac3
-pref_audio_bitrate1=160
+pref_audio_codec=ac3
+pref_audio_bitrate=160
 subtitles=disable
 
 [Blind]
@@ -133,8 +132,8 @@ denoise=none
 decomb=disable
 variable_frame_rate=disable
 deblock=disable
-pref_audio_codec1=faac
-pref_audio_bitrate1=128
+pref_audio_codec=faac
+pref_audio_bitrate=128
 subtitles=disable
 
 [Broke]
@@ -162,8 +161,8 @@ denoise=none
 decomb=disable
 variable_frame_rate=disable
 deblock=disable
-pref_audio_codec1=faac
-pref_audio_bitrate1=128
+pref_audio_codec=faac
+pref_audio_bitrate=128
 subtitles=disable
 
 [Classic]
@@ -188,8 +187,8 @@ denoise=none
 decomb=disable
 variable_frame_rate=disable
 deblock=disable
-pref_audio_codec1=faac
-pref_audio_bitrate1=160
+pref_audio_codec=faac
+pref_audio_bitrate=160
 subtitles=disable
 
 [Constant Quality Rate]
@@ -215,8 +214,8 @@ denoise=none
 decomb=disable
 variable_frame_rate=disable
 deblock=disable
-pref_audio_codec1=ac3
-pref_audio_bitrate1=160
+pref_audio_codec=ac3
+pref_audio_bitrate=160
 subtitles=disable
 
 [Deux Six Quatre]
@@ -243,8 +242,8 @@ denoise=none
 decomb=disable
 variable_frame_rate=disable
 deblock=disable
-pref_audio_codec1=ac3
-pref_audio_bitrate1=160
+pref_audio_codec=ac3
+pref_audio_bitrate=160
 subtitles=disable
 
 [Film]
@@ -271,8 +270,8 @@ denoise=none
 decomb=disable
 variable_frame_rate=disable
 deblock=disable
-pref_audio_codec1=ac3
-pref_audio_bitrate1=160
+pref_audio_codec=ac3
+pref_audio_bitrate=160
 subtitles=disable
 
 [iPhone / iPod Touch]
@@ -300,8 +299,8 @@ denoise=none
 decomb=disable
 variable_frame_rate=disable
 deblock=disable
-pref_audio_codec1=faac
-pref_audio_bitrate1=128
+pref_audio_codec=faac
+pref_audio_bitrate=128
 subtitles=disable
 
 [iPod High-Rez]
@@ -329,8 +328,8 @@ denoise=none
 decomb=disable
 variable_frame_rate=disable
 deblock=disable
-pref_audio_codec1=faac
-pref_audio_bitrate1=160
+pref_audio_codec=faac
+pref_audio_bitrate=160
 subtitles=disable
 
 [iPod Low-Rez]
@@ -358,8 +357,8 @@ denoise=none
 decomb=disable
 variable_frame_rate=disable
 deblock=disable
-pref_audio_codec1=faac
-pref_audio_bitrate1=160
+pref_audio_codec=faac
+pref_audio_bitrate=160
 subtitles=disable
 
 [Normal]
@@ -386,8 +385,8 @@ denoise=none
 decomb=disable
 variable_frame_rate=disable
 deblock=disable
-pref_audio_codec1=faac
-pref_audio_bitrate1=160
+pref_audio_codec=faac
+pref_audio_bitrate=160
 subtitles=disable
 
 [PSP]
@@ -413,8 +412,8 @@ denoise=none
 decomb=disable
 variable_frame_rate=disable
 deblock=disable
-pref_audio_codec1=faac
-pref_audio_bitrate1=128
+pref_audio_codec=faac
+pref_audio_bitrate=128
 subtitles=disable
 
 [PS3]
@@ -440,8 +439,8 @@ denoise=none
 decomb=disable
 variable_frame_rate=disable
 deblock=disable
-pref_audio_codec1=faac
-pref_audio_bitrate1=160
+pref_audio_codec=faac
+pref_audio_bitrate=160
 subtitles=disable
 
 [QuickTime]
@@ -468,8 +467,8 @@ denoise=none
 decomb=disable
 variable_frame_rate=disable
 deblock=disable
-pref_audio_codec1=faac
-pref_audio_bitrate1=160
+pref_audio_codec=faac
+pref_audio_bitrate=160
 subtitles=disable
 
 [Television]
@@ -496,6 +495,6 @@ denoise=weak
 decomb=disable
 variable_frame_rate=disable
 deblock=disable
-pref_audio_codec1=faac
-pref_audio_bitrate1=160
+pref_audio_codec=faac
+pref_audio_bitrate=160
 subtitles=disable
