@@ -47,9 +47,9 @@ namespace Handbrake
                 }
 
                 // Make sure the system has enough RAM. 384MB or greater
-                uint memory = MemoryCheck.CheckMemeory();
-                memory = memory / 1024 / 1024;
-
+                Functions.SystemInfo info = new Functions.SystemInfo();
+                uint memory = info.TotalPhysicalMemory();
+                
                 if (memory < 256)
                 {
                     MessageBox.Show("Your system does not meet the minimum requirements for HandBrake. \n Insufficient RAM. 384MB or greater required. You have: " + memory.ToString() + "MB", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -75,37 +75,4 @@ namespace Handbrake
         }
     }
 
-    class MemoryCheck
-    {
-        public struct MEMORYSTATUS
-        {
-            public UInt32 dwLength;
-            public UInt32 dwMemoryLoad;
-            public UInt32 dwTotalPhys; // Used
-            public UInt32 dwAvailPhys;
-            public UInt32 dwTotalPageFile;
-            public UInt32 dwAvailPageFile;
-            public UInt32 dwTotalVirtual;
-            public UInt32 dwAvailVirtual;
-            // Aditional Varibles left in for future usage (JIC)
-        }
-
-        [DllImport("kernel32.dll")]
-        public static extern void GlobalMemoryStatus
-        (
-            ref MEMORYSTATUS lpBuffer
-        );
-
-        public static uint CheckMemeory()
-        {
-            // Call the native GlobalMemoryStatus method
-            // with the defined structure.
-            MEMORYSTATUS memStatus = new MEMORYSTATUS();
-            GlobalMemoryStatus(ref memStatus);
-
-            uint MemoryInfo = memStatus.dwTotalPhys;
-
-            return MemoryInfo;
-        }
-    }
 }

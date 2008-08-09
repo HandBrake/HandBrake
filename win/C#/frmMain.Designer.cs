@@ -200,13 +200,10 @@ namespace Handbrake
             this.label43 = new System.Windows.Forms.Label();
             this.btn_reset = new System.Windows.Forms.Button();
             this.rtf_x264Query = new System.Windows.Forms.RichTextBox();
-            this.label35 = new System.Windows.Forms.Label();
             this.check_Cabac = new System.Windows.Forms.CheckBox();
-            this.label36 = new System.Windows.Forms.Label();
             this.check_noDCTDecimate = new System.Windows.Forms.CheckBox();
-            this.label37 = new System.Windows.Forms.Label();
             this.check_noFastPSkip = new System.Windows.Forms.CheckBox();
-            this.label39 = new System.Windows.Forms.Label();
+            this.lbl_trellis = new System.Windows.Forms.Label();
             this.drop_trellis = new System.Windows.Forms.ComboBox();
             this.drop_deblockBeta = new System.Windows.Forms.ComboBox();
             this.label41 = new System.Windows.Forms.Label();
@@ -214,7 +211,6 @@ namespace Handbrake
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.label44 = new System.Windows.Forms.Label();
             this.check_8x8DCT = new System.Windows.Forms.CheckBox();
             this.label45 = new System.Windows.Forms.Label();
             this.drop_analysis = new System.Windows.Forms.ComboBox();
@@ -224,19 +220,14 @@ namespace Handbrake
             this.drop_MotionEstimationRange = new System.Windows.Forms.ComboBox();
             this.label54 = new System.Windows.Forms.Label();
             this.drop_MotionEstimationMethod = new System.Windows.Forms.ComboBox();
-            this.label57 = new System.Windows.Forms.Label();
             this.check_pyrmidalBFrames = new System.Windows.Forms.CheckBox();
-            this.label58 = new System.Windows.Forms.Label();
             this.check_BidirectionalRefinement = new System.Windows.Forms.CheckBox();
-            this.label59 = new System.Windows.Forms.Label();
-            this.check_bFrameDistortion = new System.Windows.Forms.CheckBox();
-            this.label60 = new System.Windows.Forms.Label();
+            this.check_bFrameRateDistortion = new System.Windows.Forms.CheckBox();
             this.check_weightedBFrames = new System.Windows.Forms.CheckBox();
-            this.label61 = new System.Windows.Forms.Label();
+            this.lbl_direct_prediction = new System.Windows.Forms.Label();
             this.drop_directPrediction = new System.Windows.Forms.ComboBox();
             this.label62 = new System.Windows.Forms.Label();
             this.drop_bFrames = new System.Windows.Forms.ComboBox();
-            this.label63 = new System.Windows.Forms.Label();
             this.label64 = new System.Windows.Forms.Label();
             this.drop_refFrames = new System.Windows.Forms.ComboBox();
             this.check_mixedReferences = new System.Windows.Forms.CheckBox();
@@ -2282,13 +2273,10 @@ namespace Handbrake
             this.h264Tab.Controls.Add(this.label43);
             this.h264Tab.Controls.Add(this.btn_reset);
             this.h264Tab.Controls.Add(this.rtf_x264Query);
-            this.h264Tab.Controls.Add(this.label35);
             this.h264Tab.Controls.Add(this.check_Cabac);
-            this.h264Tab.Controls.Add(this.label36);
             this.h264Tab.Controls.Add(this.check_noDCTDecimate);
-            this.h264Tab.Controls.Add(this.label37);
             this.h264Tab.Controls.Add(this.check_noFastPSkip);
-            this.h264Tab.Controls.Add(this.label39);
+            this.h264Tab.Controls.Add(this.lbl_trellis);
             this.h264Tab.Controls.Add(this.drop_trellis);
             this.h264Tab.Controls.Add(this.drop_deblockBeta);
             this.h264Tab.Controls.Add(this.label41);
@@ -2296,7 +2284,6 @@ namespace Handbrake
             this.h264Tab.Controls.Add(this.panel3);
             this.h264Tab.Controls.Add(this.panel1);
             this.h264Tab.Controls.Add(this.panel2);
-            this.h264Tab.Controls.Add(this.label44);
             this.h264Tab.Controls.Add(this.check_8x8DCT);
             this.h264Tab.Controls.Add(this.label45);
             this.h264Tab.Controls.Add(this.drop_analysis);
@@ -2306,19 +2293,14 @@ namespace Handbrake
             this.h264Tab.Controls.Add(this.drop_MotionEstimationRange);
             this.h264Tab.Controls.Add(this.label54);
             this.h264Tab.Controls.Add(this.drop_MotionEstimationMethod);
-            this.h264Tab.Controls.Add(this.label57);
             this.h264Tab.Controls.Add(this.check_pyrmidalBFrames);
-            this.h264Tab.Controls.Add(this.label58);
             this.h264Tab.Controls.Add(this.check_BidirectionalRefinement);
-            this.h264Tab.Controls.Add(this.label59);
-            this.h264Tab.Controls.Add(this.check_bFrameDistortion);
-            this.h264Tab.Controls.Add(this.label60);
+            this.h264Tab.Controls.Add(this.check_bFrameRateDistortion);
             this.h264Tab.Controls.Add(this.check_weightedBFrames);
-            this.h264Tab.Controls.Add(this.label61);
+            this.h264Tab.Controls.Add(this.lbl_direct_prediction);
             this.h264Tab.Controls.Add(this.drop_directPrediction);
             this.h264Tab.Controls.Add(this.label62);
             this.h264Tab.Controls.Add(this.drop_bFrames);
-            this.h264Tab.Controls.Add(this.label63);
             this.h264Tab.Controls.Add(this.label64);
             this.h264Tab.Controls.Add(this.drop_refFrames);
             this.h264Tab.Controls.Add(this.check_mixedReferences);
@@ -2343,7 +2325,7 @@ namespace Handbrake
             // 
             // btn_reset
             // 
-            this.btn_reset.Location = new System.Drawing.Point(13, 226);
+            this.btn_reset.Location = new System.Drawing.Point(277, 224);
             this.btn_reset.Name = "btn_reset";
             this.btn_reset.Size = new System.Drawing.Size(75, 23);
             this.btn_reset.TabIndex = 41;
@@ -2362,90 +2344,73 @@ namespace Handbrake
             this.rtf_x264Query.LostFocus += new System.EventHandler(this.rtf_x264Query_TextChanged);
             this.rtf_x264Query.TextChanged += new System.EventHandler(this.rtf_x264Query_TextChanged);
             // 
-            // label35
-            // 
-            this.label35.AutoSize = true;
-            this.label35.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label35.Location = new System.Drawing.Point(534, 213);
-            this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(128, 12);
-            this.label35.TabIndex = 29;
-            this.label35.Text = "CABAC Entropy Coding:";
-            // 
             // check_Cabac
             // 
             this.check_Cabac.AutoSize = true;
+            this.check_Cabac.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.check_Cabac.Checked = true;
+            this.check_Cabac.CheckState = System.Windows.Forms.CheckState.Checked;
             this.check_Cabac.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.check_Cabac.Location = new System.Drawing.Point(668, 214);
+            this.check_Cabac.Location = new System.Drawing.Point(536, 214);
             this.check_Cabac.Name = "check_Cabac";
             this.check_Cabac.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.check_Cabac.Size = new System.Drawing.Size(12, 11);
+            this.check_Cabac.Size = new System.Drawing.Size(144, 16);
             this.check_Cabac.TabIndex = 40;
+            this.check_Cabac.Text = "CABAC Entropy Coding:";
             this.check_Cabac.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_Cabac.UseVisualStyleBackColor = true;
             this.check_Cabac.CheckStateChanged += new System.EventHandler(this.check_Cabac_CheckedChanged);
             // 
-            // label36
-            // 
-            this.label36.AutoSize = true;
-            this.label36.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label36.Location = new System.Drawing.Point(561, 194);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(102, 12);
-            this.label36.TabIndex = 28;
-            this.label36.Text = "No DCT-Decimate:";
-            // 
             // check_noDCTDecimate
             // 
             this.check_noDCTDecimate.AutoSize = true;
+            this.check_noDCTDecimate.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_noDCTDecimate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.check_noDCTDecimate.Location = new System.Drawing.Point(668, 195);
+            this.check_noDCTDecimate.Location = new System.Drawing.Point(562, 192);
             this.check_noDCTDecimate.Name = "check_noDCTDecimate";
             this.check_noDCTDecimate.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.check_noDCTDecimate.Size = new System.Drawing.Size(12, 11);
+            this.check_noDCTDecimate.Size = new System.Drawing.Size(118, 16);
             this.check_noDCTDecimate.TabIndex = 39;
+            this.check_noDCTDecimate.Text = "No DCT-Decimate:";
             this.check_noDCTDecimate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_noDCTDecimate.UseVisualStyleBackColor = true;
             this.check_noDCTDecimate.CheckStateChanged += new System.EventHandler(this.check_noDCTDecimate_CheckedChanged);
             // 
-            // label37
-            // 
-            this.label37.AutoSize = true;
-            this.label37.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label37.Location = new System.Drawing.Point(444, 193);
-            this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(87, 12);
-            this.label37.TabIndex = 27;
-            this.label37.Text = "No Fast-P-Skip:";
-            // 
             // check_noFastPSkip
             // 
             this.check_noFastPSkip.AutoSize = true;
+            this.check_noFastPSkip.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_noFastPSkip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.check_noFastPSkip.Location = new System.Drawing.Point(537, 194);
+            this.check_noFastPSkip.Location = new System.Drawing.Point(444, 192);
             this.check_noFastPSkip.Name = "check_noFastPSkip";
             this.check_noFastPSkip.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.check_noFastPSkip.Size = new System.Drawing.Size(12, 11);
+            this.check_noFastPSkip.Size = new System.Drawing.Size(103, 16);
             this.check_noFastPSkip.TabIndex = 38;
+            this.check_noFastPSkip.Text = "No Fast-P-Skip:";
             this.check_noFastPSkip.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_noFastPSkip.UseVisualStyleBackColor = true;
             this.check_noFastPSkip.CheckStateChanged += new System.EventHandler(this.check_noFastPSkip_CheckedChanged);
             // 
-            // label39
+            // lbl_trellis
             // 
-            this.label39.AutoSize = true;
-            this.label39.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label39.Location = new System.Drawing.Point(490, 169);
-            this.label39.Name = "label39";
-            this.label39.Size = new System.Drawing.Size(41, 12);
-            this.label39.TabIndex = 26;
-            this.label39.Text = "Trellis:";
+            this.lbl_trellis.AutoSize = true;
+            this.lbl_trellis.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_trellis.Location = new System.Drawing.Point(490, 169);
+            this.lbl_trellis.Name = "lbl_trellis";
+            this.lbl_trellis.Size = new System.Drawing.Size(41, 12);
+            this.lbl_trellis.TabIndex = 26;
+            this.lbl_trellis.Text = "Trellis:";
             // 
             // drop_trellis
             // 
             this.drop_trellis.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_trellis.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drop_trellis.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.drop_trellis.FormattingEnabled = true;
+            this.drop_trellis.Items.AddRange(new object[] {
+            "Default (0)",
+            "0",
+            "1",
+            "2"});
             this.drop_trellis.Location = new System.Drawing.Point(537, 166);
             this.drop_trellis.Name = "drop_trellis";
             this.drop_trellis.Size = new System.Drawing.Size(143, 20);
@@ -2455,8 +2420,23 @@ namespace Handbrake
             // drop_deblockBeta
             // 
             this.drop_deblockBeta.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_deblockBeta.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drop_deblockBeta.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.drop_deblockBeta.FormattingEnabled = true;
+            this.drop_deblockBeta.Items.AddRange(new object[] {
+            "Default (0)",
+            "-6",
+            "-5",
+            "-4",
+            "-3",
+            "-2",
+            "-1",
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"});
             this.drop_deblockBeta.Location = new System.Drawing.Point(611, 139);
             this.drop_deblockBeta.Name = "drop_deblockBeta";
             this.drop_deblockBeta.Size = new System.Drawing.Size(69, 20);
@@ -2476,8 +2456,23 @@ namespace Handbrake
             // drop_deblockAlpha
             // 
             this.drop_deblockAlpha.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_deblockAlpha.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drop_deblockAlpha.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.drop_deblockAlpha.FormattingEnabled = true;
+            this.drop_deblockAlpha.Items.AddRange(new object[] {
+            "Default (0)",
+            "-6",
+            "-5",
+            "-4",
+            "-3",
+            "-2",
+            "-1",
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"});
             this.drop_deblockAlpha.Location = new System.Drawing.Point(537, 139);
             this.drop_deblockAlpha.Name = "drop_deblockAlpha";
             this.drop_deblockAlpha.Size = new System.Drawing.Size(68, 20);
@@ -2511,25 +2506,17 @@ namespace Handbrake
             this.panel2.Size = new System.Drawing.Size(284, 1);
             this.panel2.TabIndex = 21;
             // 
-            // label44
-            // 
-            this.label44.AutoSize = true;
-            this.label44.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label44.Location = new System.Drawing.Point(606, 109);
-            this.label44.Name = "label44";
-            this.label44.Size = new System.Drawing.Size(55, 12);
-            this.label44.TabIndex = 23;
-            this.label44.Text = "8x8 DCT:";
-            // 
             // check_8x8DCT
             // 
             this.check_8x8DCT.AutoSize = true;
+            this.check_8x8DCT.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_8x8DCT.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.check_8x8DCT.Location = new System.Drawing.Point(664, 109);
+            this.check_8x8DCT.Location = new System.Drawing.Point(608, 106);
             this.check_8x8DCT.Name = "check_8x8DCT";
             this.check_8x8DCT.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.check_8x8DCT.Size = new System.Drawing.Size(12, 11);
+            this.check_8x8DCT.Size = new System.Drawing.Size(71, 16);
             this.check_8x8DCT.TabIndex = 34;
+            this.check_8x8DCT.Text = "8x8 DCT:";
             this.check_8x8DCT.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_8x8DCT.UseVisualStyleBackColor = true;
             this.check_8x8DCT.CheckStateChanged += new System.EventHandler(this.check_8x8DCT_CheckedChanged);
@@ -2547,8 +2534,12 @@ namespace Handbrake
             // drop_analysis
             // 
             this.drop_analysis.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_analysis.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drop_analysis.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.drop_analysis.FormattingEnabled = true;
+            this.drop_analysis.Items.AddRange(new object[] {
+            "Default (some)",
+            "None",
+            "All"});
             this.drop_analysis.Location = new System.Drawing.Point(537, 105);
             this.drop_analysis.Name = "drop_analysis";
             this.drop_analysis.Size = new System.Drawing.Size(63, 20);
@@ -2568,8 +2559,18 @@ namespace Handbrake
             // drop_subpixelMotionEstimation
             // 
             this.drop_subpixelMotionEstimation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_subpixelMotionEstimation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drop_subpixelMotionEstimation.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.drop_subpixelMotionEstimation.FormattingEnabled = true;
+            this.drop_subpixelMotionEstimation.Items.AddRange(new object[] {
+            "Default (4)",
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7"});
             this.drop_subpixelMotionEstimation.Location = new System.Drawing.Point(537, 69);
             this.drop_subpixelMotionEstimation.Name = "drop_subpixelMotionEstimation";
             this.drop_subpixelMotionEstimation.Size = new System.Drawing.Size(139, 20);
@@ -2589,8 +2590,71 @@ namespace Handbrake
             // drop_MotionEstimationRange
             // 
             this.drop_MotionEstimationRange.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_MotionEstimationRange.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drop_MotionEstimationRange.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.drop_MotionEstimationRange.FormattingEnabled = true;
+            this.drop_MotionEstimationRange.Items.AddRange(new object[] {
+            "Default (16)",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "19",
+            "20",
+            "21",
+            "22",
+            "23",
+            "24",
+            "25",
+            "26",
+            "27",
+            "28",
+            "29",
+            "30",
+            "31",
+            "32",
+            "33",
+            "34",
+            "35",
+            "36",
+            "37",
+            "38",
+            "39",
+            "40",
+            "41",
+            "42",
+            "43",
+            "44",
+            "45",
+            "46",
+            "47",
+            "48",
+            "49",
+            "50",
+            "51",
+            "52",
+            "53",
+            "54",
+            "55",
+            "56",
+            "57",
+            "58",
+            "59",
+            "60",
+            "61",
+            "62",
+            "63",
+            "64"});
             this.drop_MotionEstimationRange.Location = new System.Drawing.Point(537, 40);
             this.drop_MotionEstimationRange.Name = "drop_MotionEstimationRange";
             this.drop_MotionEstimationRange.Size = new System.Drawing.Size(139, 20);
@@ -2610,122 +2674,101 @@ namespace Handbrake
             // drop_MotionEstimationMethod
             // 
             this.drop_MotionEstimationMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_MotionEstimationMethod.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drop_MotionEstimationMethod.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.drop_MotionEstimationMethod.FormattingEnabled = true;
             this.drop_MotionEstimationMethod.ItemHeight = 12;
+            this.drop_MotionEstimationMethod.Items.AddRange(new object[] {
+            "Default (Hexagon)",
+            "Diamond",
+            "Hexagon",
+            "Uneven Multi-Hexagon",
+            "Exhaustive"});
             this.drop_MotionEstimationMethod.Location = new System.Drawing.Point(537, 11);
             this.drop_MotionEstimationMethod.Name = "drop_MotionEstimationMethod";
             this.drop_MotionEstimationMethod.Size = new System.Drawing.Size(139, 20);
             this.drop_MotionEstimationMethod.TabIndex = 30;
             this.drop_MotionEstimationMethod.SelectedIndexChanged += new System.EventHandler(this.drop_MotionEstimationMethod_SelectedIndexChanged);
             // 
-            // label57
-            // 
-            this.label57.AutoSize = true;
-            this.label57.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label57.Location = new System.Drawing.Point(41, 204);
-            this.label57.Name = "label57";
-            this.label57.Size = new System.Drawing.Size(105, 12);
-            this.label57.TabIndex = 9;
-            this.label57.Text = "Pyrmidal B-Frames:";
-            // 
             // check_pyrmidalBFrames
             // 
             this.check_pyrmidalBFrames.AutoSize = true;
+            this.check_pyrmidalBFrames.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_pyrmidalBFrames.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.check_pyrmidalBFrames.Location = new System.Drawing.Point(157, 205);
+            this.check_pyrmidalBFrames.Location = new System.Drawing.Point(47, 210);
             this.check_pyrmidalBFrames.Name = "check_pyrmidalBFrames";
             this.check_pyrmidalBFrames.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.check_pyrmidalBFrames.Size = new System.Drawing.Size(12, 11);
+            this.check_pyrmidalBFrames.Size = new System.Drawing.Size(121, 16);
             this.check_pyrmidalBFrames.TabIndex = 17;
+            this.check_pyrmidalBFrames.Text = "Pyrmidal B-Frames:";
             this.check_pyrmidalBFrames.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_pyrmidalBFrames.UseVisualStyleBackColor = true;
             this.check_pyrmidalBFrames.CheckStateChanged += new System.EventHandler(this.check_pyrmidalBFrames_CheckedChanged);
             // 
-            // label58
-            // 
-            this.label58.AutoSize = true;
-            this.label58.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label58.Location = new System.Drawing.Point(15, 184);
-            this.label58.Name = "label58";
-            this.label58.Size = new System.Drawing.Size(131, 12);
-            this.label58.TabIndex = 8;
-            this.label58.Text = "Bidirectional Refinement:";
-            // 
             // check_BidirectionalRefinement
             // 
             this.check_BidirectionalRefinement.AutoSize = true;
+            this.check_BidirectionalRefinement.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_BidirectionalRefinement.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.check_BidirectionalRefinement.Location = new System.Drawing.Point(157, 185);
+            this.check_BidirectionalRefinement.Location = new System.Drawing.Point(21, 188);
             this.check_BidirectionalRefinement.Name = "check_BidirectionalRefinement";
             this.check_BidirectionalRefinement.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.check_BidirectionalRefinement.Size = new System.Drawing.Size(12, 11);
+            this.check_BidirectionalRefinement.Size = new System.Drawing.Size(147, 16);
             this.check_BidirectionalRefinement.TabIndex = 16;
+            this.check_BidirectionalRefinement.Text = "Bidirectional Refinement:";
             this.check_BidirectionalRefinement.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_BidirectionalRefinement.UseVisualStyleBackColor = true;
             this.check_BidirectionalRefinement.CheckStateChanged += new System.EventHandler(this.check_BidirectionalRefinement_CheckedChanged);
             // 
-            // label59
+            // check_bFrameRateDistortion
             // 
-            this.label59.AutoSize = true;
-            this.label59.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label59.Location = new System.Drawing.Point(15, 164);
-            this.label59.Name = "label59";
-            this.label59.Size = new System.Drawing.Size(131, 12);
-            this.label59.TabIndex = 7;
-            this.label59.Text = "B-Frame Rate Distortion:";
-            // 
-            // check_bFrameDistortion
-            // 
-            this.check_bFrameDistortion.AutoSize = true;
-            this.check_bFrameDistortion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.check_bFrameDistortion.Location = new System.Drawing.Point(157, 165);
-            this.check_bFrameDistortion.Name = "check_bFrameDistortion";
-            this.check_bFrameDistortion.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.check_bFrameDistortion.Size = new System.Drawing.Size(12, 11);
-            this.check_bFrameDistortion.TabIndex = 15;
-            this.check_bFrameDistortion.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.check_bFrameDistortion.UseVisualStyleBackColor = true;
-            this.check_bFrameDistortion.CheckStateChanged += new System.EventHandler(this.check_bFrameDistortion_CheckedChanged);
-            // 
-            // label60
-            // 
-            this.label60.AutoSize = true;
-            this.label60.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label60.Location = new System.Drawing.Point(39, 146);
-            this.label60.Name = "label60";
-            this.label60.Size = new System.Drawing.Size(107, 12);
-            this.label60.TabIndex = 6;
-            this.label60.Text = "Weighted B-Frames:";
+            this.check_bFrameRateDistortion.AutoSize = true;
+            this.check_bFrameRateDistortion.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.check_bFrameRateDistortion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.check_bFrameRateDistortion.Location = new System.Drawing.Point(20, 166);
+            this.check_bFrameRateDistortion.Name = "check_bFrameRateDistortion";
+            this.check_bFrameRateDistortion.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.check_bFrameRateDistortion.Size = new System.Drawing.Size(147, 16);
+            this.check_bFrameRateDistortion.TabIndex = 15;
+            this.check_bFrameRateDistortion.Text = "B-Frame Rate Distortion:";
+            this.check_bFrameRateDistortion.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.check_bFrameRateDistortion.UseVisualStyleBackColor = true;
+            this.check_bFrameRateDistortion.CheckStateChanged += new System.EventHandler(this.check_bFrameDistortion_CheckedChanged);
             // 
             // check_weightedBFrames
             // 
             this.check_weightedBFrames.AutoSize = true;
+            this.check_weightedBFrames.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_weightedBFrames.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.check_weightedBFrames.Location = new System.Drawing.Point(157, 147);
+            this.check_weightedBFrames.Location = new System.Drawing.Point(44, 144);
             this.check_weightedBFrames.Name = "check_weightedBFrames";
             this.check_weightedBFrames.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.check_weightedBFrames.Size = new System.Drawing.Size(12, 11);
+            this.check_weightedBFrames.Size = new System.Drawing.Size(123, 16);
             this.check_weightedBFrames.TabIndex = 14;
-            this.check_weightedBFrames.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.check_weightedBFrames.Text = "Weighted B-Frames:";
             this.check_weightedBFrames.UseVisualStyleBackColor = true;
             this.check_weightedBFrames.CheckStateChanged += new System.EventHandler(this.check_weightedBFrames_CheckedChanged);
             // 
-            // label61
+            // lbl_direct_prediction
             // 
-            this.label61.AutoSize = true;
-            this.label61.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label61.Location = new System.Drawing.Point(52, 121);
-            this.label61.Name = "label61";
-            this.label61.Size = new System.Drawing.Size(94, 12);
-            this.label61.TabIndex = 5;
-            this.label61.Text = "Direct Prediction:";
+            this.lbl_direct_prediction.AutoSize = true;
+            this.lbl_direct_prediction.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_direct_prediction.Location = new System.Drawing.Point(52, 121);
+            this.lbl_direct_prediction.Name = "lbl_direct_prediction";
+            this.lbl_direct_prediction.Size = new System.Drawing.Size(94, 12);
+            this.lbl_direct_prediction.TabIndex = 5;
+            this.lbl_direct_prediction.Text = "Direct Prediction:";
             // 
             // drop_directPrediction
             // 
             this.drop_directPrediction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_directPrediction.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drop_directPrediction.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.drop_directPrediction.FormattingEnabled = true;
+            this.drop_directPrediction.Items.AddRange(new object[] {
+            "Default (Spatial)",
+            "None",
+            "Spatial",
+            "Temporal",
+            "Automatic"});
             this.drop_directPrediction.Location = new System.Drawing.Point(157, 118);
             this.drop_directPrediction.Name = "drop_directPrediction";
             this.drop_directPrediction.Size = new System.Drawing.Size(121, 20);
@@ -2745,23 +2788,32 @@ namespace Handbrake
             // drop_bFrames
             // 
             this.drop_bFrames.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_bFrames.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drop_bFrames.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.drop_bFrames.FormattingEnabled = true;
+            this.drop_bFrames.Items.AddRange(new object[] {
+            "Default (0)",
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16"});
             this.drop_bFrames.Location = new System.Drawing.Point(157, 91);
             this.drop_bFrames.Name = "drop_bFrames";
             this.drop_bFrames.Size = new System.Drawing.Size(121, 20);
             this.drop_bFrames.TabIndex = 12;
             this.drop_bFrames.SelectedIndexChanged += new System.EventHandler(this.drop_bFrames_SelectedIndexChanged);
-            // 
-            // label63
-            // 
-            this.label63.AutoSize = true;
-            this.label63.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label63.Location = new System.Drawing.Point(48, 64);
-            this.label63.Name = "label63";
-            this.label63.Size = new System.Drawing.Size(98, 12);
-            this.label63.TabIndex = 2;
-            this.label63.Text = "Mixed References:";
             // 
             // label64
             // 
@@ -2776,8 +2828,27 @@ namespace Handbrake
             // drop_refFrames
             // 
             this.drop_refFrames.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_refFrames.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.drop_refFrames.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.drop_refFrames.FormattingEnabled = true;
+            this.drop_refFrames.Items.AddRange(new object[] {
+            "Default (1)",
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16"});
             this.drop_refFrames.Location = new System.Drawing.Point(157, 37);
             this.drop_refFrames.Name = "drop_refFrames";
             this.drop_refFrames.Size = new System.Drawing.Size(121, 20);
@@ -2787,12 +2858,14 @@ namespace Handbrake
             // check_mixedReferences
             // 
             this.check_mixedReferences.AutoSize = true;
+            this.check_mixedReferences.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_mixedReferences.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.check_mixedReferences.Location = new System.Drawing.Point(157, 65);
+            this.check_mixedReferences.Location = new System.Drawing.Point(54, 63);
             this.check_mixedReferences.Name = "check_mixedReferences";
             this.check_mixedReferences.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.check_mixedReferences.Size = new System.Drawing.Size(12, 11);
+            this.check_mixedReferences.Size = new System.Drawing.Size(114, 16);
             this.check_mixedReferences.TabIndex = 11;
+            this.check_mixedReferences.Text = "Mixed References:";
             this.check_mixedReferences.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_mixedReferences.UseVisualStyleBackColor = true;
             this.check_mixedReferences.CheckStateChanged += new System.EventHandler(this.check_mixedReferences_CheckedChanged);
@@ -3078,8 +3151,8 @@ namespace Handbrake
             // 
             this.lbl_encode.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_encode.Name = "lbl_encode";
-            this.lbl_encode.Size = new System.Drawing.Size(148, 17);
-            this.lbl_encode.Text = "Encoding: Not Started";
+            this.lbl_encode.Size = new System.Drawing.Size(31, 17);
+            this.lbl_encode.Text = "{0}";
             // 
             // panel4
             // 
@@ -3303,13 +3376,10 @@ namespace Handbrake
         internal System.Windows.Forms.RichTextBox rtf_x264Query;
         internal System.Windows.Forms.Label label43;
         internal System.Windows.Forms.Button btn_reset;
-        internal System.Windows.Forms.Label label35;
         internal System.Windows.Forms.CheckBox check_Cabac;
-        internal System.Windows.Forms.Label label36;
         internal System.Windows.Forms.CheckBox check_noDCTDecimate;
-        internal System.Windows.Forms.Label label37;
         internal System.Windows.Forms.CheckBox check_noFastPSkip;
-        internal System.Windows.Forms.Label label39;
+        internal System.Windows.Forms.Label lbl_trellis;
         internal System.Windows.Forms.ComboBox drop_trellis;
         internal System.Windows.Forms.ComboBox drop_deblockBeta;
         internal System.Windows.Forms.Label label41;
@@ -3317,7 +3387,6 @@ namespace Handbrake
         internal System.Windows.Forms.Panel panel3;
         internal System.Windows.Forms.Panel panel1;
         internal System.Windows.Forms.Panel panel2;
-        internal System.Windows.Forms.Label label44;
         internal System.Windows.Forms.CheckBox check_8x8DCT;
         internal System.Windows.Forms.Label label45;
         internal System.Windows.Forms.ComboBox drop_analysis;
@@ -3327,19 +3396,14 @@ namespace Handbrake
         internal System.Windows.Forms.ComboBox drop_MotionEstimationRange;
         internal System.Windows.Forms.Label label54;
         internal System.Windows.Forms.ComboBox drop_MotionEstimationMethod;
-        internal System.Windows.Forms.Label label57;
         internal System.Windows.Forms.CheckBox check_pyrmidalBFrames;
-        internal System.Windows.Forms.Label label58;
         internal System.Windows.Forms.CheckBox check_BidirectionalRefinement;
-        internal System.Windows.Forms.Label label59;
-        internal System.Windows.Forms.CheckBox check_bFrameDistortion;
-        internal System.Windows.Forms.Label label60;
+        internal System.Windows.Forms.CheckBox check_bFrameRateDistortion;
         internal System.Windows.Forms.CheckBox check_weightedBFrames;
-        internal System.Windows.Forms.Label label61;
+        internal System.Windows.Forms.Label lbl_direct_prediction;
         internal System.Windows.Forms.ComboBox drop_directPrediction;
         internal System.Windows.Forms.Label label62;
         internal System.Windows.Forms.ComboBox drop_bFrames;
-        internal System.Windows.Forms.Label label63;
         internal System.Windows.Forms.Label label64;
         internal System.Windows.Forms.ComboBox drop_refFrames;
         internal System.Windows.Forms.CheckBox check_mixedReferences;

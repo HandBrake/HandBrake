@@ -98,6 +98,7 @@ namespace Handbrake
             // Enabled GUI tooltip's if Required
             if (Properties.Settings.Default.tooltipEnable == "Checked")
                 ToolTip.Active = true;
+            lbl_encode.Text = "";
             Thread.Sleep(400);
 
 
@@ -118,7 +119,7 @@ namespace Handbrake
             this.Enabled = true;
 
             // Some event Handlers. Used for minimize to taskbar
-            this.Resize += new EventHandler(frmMain_Resize);
+            this.Resize += new EventHandler(frmMain_Resize);      
         }
 
         // Startup Functions
@@ -156,127 +157,16 @@ namespace Handbrake
         }
         private void setupH264Panel()
         {
-            /*Set opt widget values here*/
-
-            /*B-Frames fX264optBframesPopUp*/
-            int i;
-            drop_bFrames.Items.Clear();
-            drop_bFrames.Items.Add("Default (0)");
             drop_bFrames.Text = "Default (0)";
-
-            for (i = 0; i < 17; i++)
-            {
-                drop_bFrames.Items.Add(i.ToString());
-            }
-
-            /*Reference Frames fX264optRefPopUp*/
-            drop_refFrames.Items.Clear();
-            drop_refFrames.Items.Add("Default (1)");
             drop_refFrames.Text = "Default (1)";
-            for (i = 0; i < 17; i++)
-            {
-                drop_refFrames.Items.Add(i.ToString());
-            }
-
-            /*No Fast P-Skip fX264optNfpskipSwitch BOOLEAN*/
-            check_noFastPSkip.CheckState = CheckState.Unchecked;
-
-            /*No Dict Decimate fX264optNodctdcmtSwitch BOOLEAN*/
-            check_noDCTDecimate.CheckState = CheckState.Unchecked;
-
-
-            /*Sub Me fX264optSubmePopUp*/
-            drop_subpixelMotionEstimation.Items.Clear();
-            drop_subpixelMotionEstimation.Items.Add("Default (4)");
             drop_subpixelMotionEstimation.Text = "Default (4)";
-            for (i = 0; i < 8; i++)
-            {
-                drop_subpixelMotionEstimation.Items.Add(i.ToString());
-            }
-
-            /*Trellis fX264optTrellisPopUp*/
-            drop_trellis.Items.Clear();
-            drop_trellis.Items.Add("Default (0)");
             drop_trellis.Text = "Default (0)";
-            for (i = 0; i < 3; i++)
-            {
-                drop_trellis.Items.Add(i.ToString());
-            }
-
-            /*Mixed-references fX264optMixedRefsSwitch BOOLEAN*/
-            check_mixedReferences.CheckState = CheckState.Unchecked;
-
-            /*Motion Estimation fX264optMotionEstPopUp*/
-            drop_MotionEstimationMethod.Items.Clear();
-            drop_MotionEstimationMethod.Items.Add("Default (Hexagon)");
-            drop_MotionEstimationMethod.Items.Add("Diamond");
-            drop_MotionEstimationMethod.Items.Add("Hexagon");
-            drop_MotionEstimationMethod.Items.Add("Uneven Multi-Hexagon");
-            drop_MotionEstimationMethod.Items.Add("Exhaustive");
             drop_MotionEstimationMethod.Text = "Default (Hexagon)";
-
-            /*Motion Estimation range fX264optMERangePopUp*/
-            drop_MotionEstimationRange.Items.Clear();
-            drop_MotionEstimationRange.Items.Add("Default (16)");
             drop_MotionEstimationRange.Text = "Default (16)";
-            for (i = 4; i < 65; i++)
-            {
-                drop_MotionEstimationRange.Items.Add(i.ToString());
-            }
-
-            /*Weighted B-Frame Prediction fX264optWeightBSwitch BOOLEAN*/
-            check_weightedBFrames.CheckState = CheckState.Unchecked;
-
-            /*B-Frame Rate Distortion Optimization fX264optBRDOSwitch BOOLEAN*/
-            check_bFrameDistortion.CheckState = CheckState.Unchecked;
-
-            /*B-frame Pyramids fX264optBPyramidSwitch BOOLEAN*/
-            check_pyrmidalBFrames.CheckState = CheckState.Unchecked;
-
-            /*Bidirectional Motion Estimation Refinement fX264optBiMESwitch BOOLEAN*/
-            check_BidirectionalRefinement.CheckState = CheckState.Unchecked;
-
-            /*Direct B-Frame Prediction Mode fX264optDirectPredPopUp*/
-            drop_directPrediction.Items.Clear();
-            drop_directPrediction.Items.Add("Default (Spatial)");
-            drop_directPrediction.Items.Add("None");
-            drop_directPrediction.Items.Add("Spatial");
-            drop_directPrediction.Items.Add("Temporal");
-            drop_directPrediction.Items.Add("Automatic");
             drop_directPrediction.Text = "Default (Spatial)";
-
-            /*Alpha Deblock*/
-            drop_deblockAlpha.Items.Clear();
-            drop_deblockAlpha.Items.Add("Default (0)");
             drop_deblockAlpha.Text = "Default (0)";
-            for (i = -6; i < 7; i++)
-            {
-                drop_deblockAlpha.Items.Add(i.ToString());
-            }
-
-            /*Beta Deblock*/
-            drop_deblockBeta.Items.Clear();
-            drop_deblockBeta.Items.Add("Default (0)");
             drop_deblockBeta.Text = "Default (0)";
-            for (i = -6; i < 7; i++)
-            {
-                drop_deblockBeta.Items.Add(i.ToString());
-            }
-
-            /* Analysis fX264optAnalysePopUp */
-            drop_analysis.Items.Clear();
-            drop_analysis.Items.Add("Default (some)"); /* 0=default */
-            drop_analysis.Items.Add("None");  /* 1=none */
-            drop_analysis.Items.Add("All"); /* 2=all */
             drop_analysis.Text = "Default (some)";
-
-            /* 8x8 DCT fX264op8x8dctSwitch */
-            check_8x8DCT.CheckState = CheckState.Unchecked;
-
-            /* CABAC fX264opCabacSwitch */
-            check_Cabac.CheckState = CheckState.Checked;
-
-            /* Standardize the option string */
             rtf_x264Query.Text = "";
         }
         private void loadUserDefaults()
@@ -459,7 +349,7 @@ namespace Handbrake
 
                 ThreadPool.QueueUserWorkItem(procMonitor, query);
                 lbl_encode.Visible = true;
-                lbl_encode.Text = "Encoding: in Progress";
+                lbl_encode.Text = "Encoding in Progress";
 
                 btn_start.Text = "Stop";
                 btn_start.Image = Properties.Resources.stop;
@@ -522,7 +412,7 @@ namespace Handbrake
                 if (drp_dvdtitle.Items.Count == 0)
                     MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source. Please refer to the FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
 
-                lbl_encode.Text = "Encoding: Not Started";
+                lbl_encode.Text = "";
             }
         }
         private void btn_file_source_Click(object sender, EventArgs e)
@@ -551,7 +441,7 @@ namespace Handbrake
                 if (drp_dvdtitle.Items.Count == 0)
                     MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source. Please refer to the FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
 
-                lbl_encode.Text = "Encoding: Not Started";
+                lbl_encode.Text = "";
             }
         }
         private void mnu_dvd_drive_Click(object sender, EventArgs e)
@@ -571,7 +461,7 @@ namespace Handbrake
             if (drp_dvdtitle.Items.Count == 0)
                 MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source. Please refer to the FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
 
-            lbl_encode.Text = "Encoding: Not Started";
+            lbl_encode.Text = "";
         }
 
         private void drp_dvdtitle_Click(object sender, EventArgs e)
@@ -1159,7 +1049,7 @@ namespace Handbrake
 
                 drp_audmix_1.Text = "Automatic";
                 drp_audbit_1.Text = "160";
-                drp_audsr_1.Text = "48";
+                drp_audsr_1.Text = "Auto";
             }
 
 
@@ -1194,7 +1084,7 @@ namespace Handbrake
 
                 drp_audmix_2.Text = "Automatic";
                 drp_audbit_2.Text = "160";
-                drp_audsr_2.Text = "48";
+                drp_audsr_2.Text = "Auto";
             }
             else
             {
@@ -1207,7 +1097,7 @@ namespace Handbrake
 
                     drp_audmix_2.Text = "Automatic";
                     drp_audbit_2.Text = "160";
-                    drp_audsr_2.Text = "48";
+                    drp_audsr_2.Text = "Auto";
                 }
             }
 
@@ -1242,7 +1132,7 @@ namespace Handbrake
 
                 drp_audmix_3.Text = "Automatic";
                 drp_audbit_3.Text = "160";
-                drp_audsr_3.Text = "48";
+                drp_audsr_3.Text = "Auto";
             }
             else
             {
@@ -1255,7 +1145,7 @@ namespace Handbrake
 
                     drp_audmix_3.Text = "Automatic";
                     drp_audbit_3.Text = "160";
-                    drp_audsr_3.Text = "48";
+                    drp_audsr_3.Text = "Auto";
                 }
             }
 
@@ -1291,7 +1181,7 @@ namespace Handbrake
 
                 drp_audmix_4.Text = "Automatic";
                 drp_audbit_4.Text = "160";
-                drp_audsr_4.Text = "48";
+                drp_audsr_4.Text = "Auto";
             }
             else
             {
@@ -1304,7 +1194,7 @@ namespace Handbrake
 
                     drp_audmix_4.Text = "Automatic";
                     drp_audbit_4.Text = "160";
-                    drp_audsr_4.Text = "48";
+                    drp_audsr_4.Text = "Auto";
                 }
             }
 
@@ -1471,6 +1361,7 @@ namespace Handbrake
         }
         private void check_Cabac_CheckedChanged(object sender, EventArgs e)
         {
+            
             x264PanelFunctions.on_x264_WidgetChange("cabac", this);
         }
 
@@ -2009,7 +1900,7 @@ namespace Handbrake
                 this.BeginInvoke(new UpdateUIHandler(setEncodeLabelFinished));
                 return;
             }
-            lbl_encode.Text = "Encoding: Finished";
+            lbl_encode.Text = "Encoding Finished";
             btn_start.Text = "Start";
             btn_start.Image = Properties.Resources.Play;
         }

@@ -7,7 +7,6 @@ namespace Handbrake.Functions
 {
     class x264Panel
     {
-        Boolean NoWidgetUpdate = false;
 
         /// <summary>
         /// Reset all components to defaults and clears the x264 rtf box
@@ -15,7 +14,7 @@ namespace Handbrake.Functions
         public void reset2Defaults(frmMain mainWindow)
         {
             mainWindow.check_8x8DCT.CheckState = CheckState.Unchecked;
-            mainWindow.check_bFrameDistortion.CheckState = CheckState.Unchecked;
+            mainWindow.check_bFrameRateDistortion.CheckState = CheckState.Unchecked;
             mainWindow.check_BidirectionalRefinement.CheckState = CheckState.Unchecked;
             mainWindow.check_Cabac.CheckState = CheckState.Checked;
             mainWindow.check_mixedReferences.CheckState = CheckState.Unchecked;
@@ -42,10 +41,6 @@ namespace Handbrake.Functions
         /// </summary>
         public void X264_SetCurrentSettingsInPanel(frmMain mainWindow)
         {
-            // When the widgets are changed, we don't want them to update the text box again. No Need.
-            // This boolean controls the Widget Change function
-
-
             /* Set widgets depending on the opt string in field */
             String thisOpt; // The separated option such as "bframes=3"
             String optName = ""; // The option name such as "bframes"
@@ -64,12 +59,12 @@ namespace Handbrake.Functions
                 /*iterate through the array and get <opts> and <values*/
                 int loopcounter;
                 int currentOptsArrayCount = currentOptsArray.Length;
-         
+
 
                 /*iterate through the array and get <opts> and <values*/
                 for (loopcounter = 0; loopcounter < currentOptsArrayCount; loopcounter++)
                 {
-     
+
                     thisOpt = currentOptsArray[loopcounter];
                     String[] splitOptRange = thisOpt.Split('=');
 
@@ -132,7 +127,7 @@ namespace Handbrake.Functions
 
                         /*BRDO NSPopUpButton*/
                         else if (optName.Equals("brdo"))
-                            mainWindow.check_bFrameDistortion.CheckState = CheckState.Checked;
+                            mainWindow.check_bFrameRateDistortion.CheckState = CheckState.Checked;
 
                         /*B Pyramid NSPopUpButton*/
                         else if (optName.Equals("b-pyramid"))
@@ -278,43 +273,90 @@ namespace Handbrake.Functions
             if (changedOptString != "")
                 mainWindow.rtf_x264Query.Text = changedOptString;
         }
+        /*
+         * Take a single option and standardize it. Returns as a String
+         * Input: String. - Single X264 Option. Name only
+         * Output: String - Single X264 Option. Name only. Changed to standard format
+         */
+        private string X264_StandardizeOptNames(String cleanOptNameString)
+        {
+            String input = cleanOptNameString;
+
+            if (input.Equals("ref") || input.Equals("frameref"))
+                cleanOptNameString = "ref";
+
+            /*No Fast PSkip nofast_pskip*/
+            if (input.Equals("no-fast-pskip") || input.Equals("no_fast_pskip") || input.Equals("nofast_pskip"))
+                cleanOptNameString = "no-fast-pskip";
+
+            /*No Dict Decimate*/
+            if (input.Equals("no-dct-decimate") || input.Equals("no_dct_decimate") || input.Equals("nodct_decimate"))
+                cleanOptNameString = "no-dct-decimate";
+
+            /*Subme*/
+            if (input.Equals("subme"))
+                cleanOptNameString = "subq";
+
+            /*ME Range*/
+            if (input.Equals("me-range") || input.Equals("me_range"))
+                cleanOptNameString = "merange";
+
+            /*WeightB*/
+            if (input.Equals("weight-b") || input.Equals("weight_b"))
+                cleanOptNameString = "weightb";
+
+            /*BRDO*/
+            if (input.Equals("b-rdo") || input.Equals("b_rdo"))
+                cleanOptNameString = "brdo";
+
+            /*B Pyramid*/
+            if (input.Equals("b_pyramid"))
+                cleanOptNameString = "b-pyramid";
+
+            /*Direct Prediction*/
+            if (input.Equals("direct-pred") || input.Equals("direct_pred"))
+                cleanOptNameString = "direct";
+
+            /*Deblocking*/
+            if (input.Equals("filter"))
+                cleanOptNameString = "deblock";
+
+            /*Analysis*/
+            if (input.Equals("partitions"))
+                cleanOptNameString = "analyse";
+
+            return cleanOptNameString;
+        }
 
         /// <summary>
         /// This function will update the X264 Query when one of the GUI widgets changes.
         /// </summary>
         public void on_x264_WidgetChange(string sender, frmMain mainWindow)
         {
-            if (NoWidgetUpdate == false)
-            {
-                String optNameToChange = sender;
-                String currentOptString = mainWindow.rtf_x264Query.Text;
+            animate(mainWindow, sender);
+            String optNameToChange = sender;
+            String currentOptString = mainWindow.rtf_x264Query.Text;
 
-                /*First, we create a pattern to check for ":"optNameToChange"=" to modify the option if the name falls after
-                    the first character of the opt string (hence the ":") */
-                String checkOptNameToChange = ":" + optNameToChange + "=";
-                String checkOptNameToChangeBegin = optNameToChange + "=";
+            /*First, we create a pattern to check for ":"optNameToChange"=" to modify the option if the name falls after
+                the first character of the opt string (hence the ":") */
+            String checkOptNameToChange = ":" + optNameToChange + "=";
+            String checkOptNameToChangeBegin = optNameToChange + "=";
 
-                // IF the current H264 Option String Contains Multiple Items or Just 1 Item
-                if ((currentOptString.Contains(checkOptNameToChange)) || (currentOptString.StartsWith(checkOptNameToChangeBegin)))
-                    hasFullOption(currentOptString, optNameToChange, mainWindow);
-                else // IF there is no options in the rich text box!
-                    hasNoOptions(optNameToChange, mainWindow);
-            }
-            else
-            {
-                NoWidgetUpdate = false;
-            }
+            // IF the current H264 Option String Contains Multiple Items or Just 1 Item
+            if ((currentOptString.Contains(checkOptNameToChange)) || (currentOptString.StartsWith(checkOptNameToChangeBegin)))
+                hasOptions(currentOptString, optNameToChange, mainWindow);
+            else // IF there is no options in the rich text box!
+                hasNoOptions(optNameToChange, mainWindow);
         }
-        
-
-        // Some Private Functions used by the above Public Functions
         /*
          * Used by on_x264_WidgetChange()
-         * Called when the current x264 option string contains multiple (or a single) item(s) in it seperated by :
-         * Basically, it updates the current option that the widget corrosponds to, if it is already in thes string
-         * otherwise, it adds it to the string.
+         ** hasOptions - Called when the current x264 option string contains multiple (or a single) item(s) in it seperated by :
+         * it updates the current option that the widget corrosponds to, if it is already in thes string.
+         ** hasNoOptions - Add's an option to the x264 query string.
+         * Handles 2 cases.  1 Where rtf_x264Query.Text is empty, and one where there is an option with no value,
+         * e.g no-fast-pskip
          */
-        private void hasFullOption(string currentOptString, string optNameToChange, frmMain mainWindow)
+        private void hasOptions(string currentOptString, string optNameToChange, frmMain mainWindow)
         {
             String thisOpt;             // The separated option such as "bframes=3"
             String optName = "";        // The option name such as "bframes"
@@ -388,7 +430,7 @@ namespace Handbrake.Functions
                         }
                         else if (optNameToChange.Equals("brdo"))
                         {
-                            if (mainWindow.check_bFrameDistortion.CheckState == CheckState.Checked)
+                            if (mainWindow.check_bFrameRateDistortion.CheckState == CheckState.Checked)
                                 thisOpt = "brdo=1";
                             else
                                 thisOpt = "";
@@ -557,445 +599,304 @@ namespace Handbrake.Functions
             /* Change the option string to reflect the new mod settings */
             mainWindow.rtf_x264Query.Text = changedOptString;
         }
-
-        /*
-         * Used by on_x264_WidgetChange()
-         * Called when the current x264 option string contains no options.
-         * This simply adds the option to the x264 query in the gui.
-         */
         private void hasNoOptions(string optNameToChange, frmMain mainWindow)
         {
-            // If the text box is blank
-            if (mainWindow.rtf_x264Query.Text == "")
+            string query = "";
+            string colon = "";
+            if (mainWindow.rtf_x264Query.Text != "")
+                colon = ":";
+
+            query = mainWindow.rtf_x264Query.Text;
+            if (optNameToChange.Equals("me"))
             {
-                if (optNameToChange.Equals("me"))
+                switch (mainWindow.drop_MotionEstimationMethod.SelectedIndex)
                 {
-                    switch (mainWindow.drop_MotionEstimationMethod.SelectedIndex)
-                    {
-                        case 1:
-                            mainWindow.rtf_x264Query.Text = "me=dia";
-                            break;
+                    case 1:
+                        query = query + colon + "me=dia";
+                        break;
 
-                        case 2:
-                            mainWindow.rtf_x264Query.Text = "me=hex";
+                    case 2:
+                        query = query + colon + "me=hex";
+                        break;
 
-                            break;
+                    case 3:
+                        query = query + colon + "me=umh";
+                        break;
 
-                        case 3:
-                            mainWindow.rtf_x264Query.Text = "me=umh";
-                            break;
+                    case 4:
+                        query = query + colon + "me=esa";
+                        break;
 
-                        case 4:
-                            mainWindow.rtf_x264Query.Text = "me=esa";
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-                else if (optNameToChange.Equals("direct"))
-                {
-                    switch (mainWindow.drop_directPrediction.SelectedIndex)
-                    {
-                        case 1:
-                            mainWindow.rtf_x264Query.Text = "direct=none";
-                            break;
-
-                        case 2:
-                            mainWindow.rtf_x264Query.Text = "direct=spatial";
-                            break;
-
-                        case 3:
-                            mainWindow.rtf_x264Query.Text = "direct=temporal";
-                            break;
-
-                        case 4:
-                            mainWindow.rtf_x264Query.Text = "direct=auto";
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-                else if (optNameToChange.Equals("analyse"))
-                {
-                    switch (mainWindow.drop_analysis.SelectedIndex)
-                    {
-                        case 1:
-                            mainWindow.rtf_x264Query.Text = "analyse=none";
-                            break;
-
-                        case 2:
-                            mainWindow.rtf_x264Query.Text = "analyse=all";
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-
-                else if (optNameToChange.Equals("merange"))
-                {
-                    int value = mainWindow.drop_MotionEstimationRange.SelectedIndex + 3;
-                    mainWindow.rtf_x264Query.Text = "merange=" + value.ToString();
-                }
-                else if (optNameToChange.Equals("deblock"))
-                {
-                    String da = mainWindow.drop_deblockAlpha.SelectedItem.ToString();
-                    String db = mainWindow.drop_deblockBeta.SelectedItem.ToString();
-
-                    if (((da.Contains("Default")) && (db.Contains("Default"))) || ((da.Contains("0")) && (db.Contains("0"))))
-                    {
-                        mainWindow.drop_deblockBeta.SelectedItem = "Default (0)";
-                        mainWindow.drop_deblockAlpha.SelectedItem = "Default (0)";
-                        mainWindow.rtf_x264Query.Text = "";
-                    }
-                    else if ((!da.Contains("Default")) && (db.Contains("Default")))
-                    {
-                        mainWindow.drop_deblockBeta.SelectedItem = "0";
-                        mainWindow.rtf_x264Query.Text = "deblock=" + da + ",0";
-                    }
-                    else if ((da.Contains("Default")) && (!db.Contains("Default")))
-                    {
-                        mainWindow.drop_deblockAlpha.SelectedItem = "0";
-                        mainWindow.rtf_x264Query.Text = "deblock=0," + db;
-                    }
-                    else if ((!da.Contains("Default")) && (!db.Contains("Default")))
-                    {
-                        mainWindow.rtf_x264Query.Text = "deblock=" + da + "," + db;
-                    }
-                }
-                else if (optNameToChange.Equals("mixed-refs"))
-                {
-                    if (mainWindow.check_mixedReferences.CheckState == CheckState.Checked)
-                        mainWindow.rtf_x264Query.Text = "mixed-refs=1";
-                    else
-                        mainWindow.rtf_x264Query.Text = "";
-                }
-                else if (optNameToChange.Equals("weightb"))
-                {
-                    if (mainWindow.check_weightedBFrames.CheckState == CheckState.Checked)
-                        mainWindow.rtf_x264Query.Text = "weightb=1";
-                    else
-                        mainWindow.rtf_x264Query.Text = "";
-                }
-                else if (optNameToChange.Equals("brdo"))
-                {
-                    if (mainWindow.check_bFrameDistortion.CheckState == CheckState.Checked)
-                        mainWindow.rtf_x264Query.Text = "brdo=1";
-                    else
-                        mainWindow.rtf_x264Query.Text = "";
-                }
-                else if (optNameToChange.Equals("bime"))
-                {
-                    if (mainWindow.check_BidirectionalRefinement.CheckState == CheckState.Checked)
-                        mainWindow.rtf_x264Query.Text = "bime=1";
-                    else
-                        mainWindow.rtf_x264Query.Text = "";
-                }
-                else if (optNameToChange.Equals("b-pyramid"))
-                {
-                    if (mainWindow.check_pyrmidalBFrames.CheckState == CheckState.Checked)
-                        mainWindow.rtf_x264Query.Text = "b-pyramid=1";
-                    else
-                        mainWindow.rtf_x264Query.Text = "";
-                }
-                else if (optNameToChange.Equals("no-fast-pskip"))
-                {
-                    if (mainWindow.check_noFastPSkip.CheckState == CheckState.Checked)
-                        mainWindow.rtf_x264Query.Text = "no-fast-pskip=1";
-                    else
-                        mainWindow.rtf_x264Query.Text = "";
-                }
-                else if (optNameToChange.Equals("no-dct-decimate"))
-                {
-                    if (mainWindow.check_noDCTDecimate.CheckState == CheckState.Checked)
-                        mainWindow.rtf_x264Query.Text = "no-dct-decimate=1";
-                    else
-                        mainWindow.rtf_x264Query.Text = "";
-                }
-                else if (optNameToChange.Equals("8x8dct"))
-                {
-                    if (mainWindow.check_8x8DCT.CheckState == CheckState.Checked)
-                        mainWindow.rtf_x264Query.Text = "8x8dct=1";
-                    else
-                        mainWindow.rtf_x264Query.Text = "";
-                }
-                else if (optNameToChange.Equals("cabac"))
-                {
-                    if (mainWindow.check_Cabac.CheckState == CheckState.Checked)
-                        mainWindow.rtf_x264Query.Text = "";
-                    else
-                        mainWindow.rtf_x264Query.Text = "cabac=0";
-                }
-                else if (optNameToChange.Equals("ref"))
-                {
-                    string refItem = mainWindow.drop_refFrames.SelectedItem.ToString();
-                    if (!refItem.Contains("default"))
-                        mainWindow.rtf_x264Query.Text = "ref=" + mainWindow.drop_refFrames.SelectedItem.ToString();
-                }
-                else if (optNameToChange.Equals("bframes"))
-                {
-                    String value = mainWindow.drop_bFrames.SelectedItem.ToString();
-                    if (!mainWindow.drop_bFrames.SelectedItem.ToString().Contains("Default"))
-                        mainWindow.rtf_x264Query.Text = "bframes=" + value;
-                }
-                else if (optNameToChange.Equals("subq"))
-                {
-                    String value = mainWindow.drop_subpixelMotionEstimation.SelectedItem.ToString();
-                    if (!mainWindow.drop_subpixelMotionEstimation.SelectedItem.ToString().Contains("Default"))
-                        mainWindow.rtf_x264Query.Text = "subq=" + value;
-                }
-                else if (optNameToChange.Equals("trellis"))
-                {
-                    String value = mainWindow.drop_trellis.SelectedItem.ToString();
-                    if (!mainWindow.drop_trellis.SelectedItem.ToString().Contains("Default"))
-                        mainWindow.rtf_x264Query.Text = "trellis=" + value;
-                }
-
-                //*******************************************************
-            }
-            else // There was some text in the box. This deals with options with no value. e.g "no-fast-pskip"
-            {
-                //*******************************************************
-                if (optNameToChange.Equals("me"))
-                {
-                    switch (mainWindow.drop_MotionEstimationMethod.SelectedIndex)
-                    {
-                        case 1:
-                            mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text + ":me=dia";
-                            break;
-
-                        case 2:
-                            mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text + ":me=hex";
-                            break;
-
-                        case 3:
-                            mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text + ":me=umh";
-                            break;
-
-                        case 4:
-                            mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text + ":me=esa";
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-                else if (optNameToChange.Equals("direct"))
-                {
-                    switch (mainWindow.drop_directPrediction.SelectedIndex)
-                    {
-                        case 1:
-                            mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text + ":direct=none";
-                            break;
-
-                        case 2:
-                            mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text + ":direct=spatial";
-                            break;
-
-                        case 3:
-                            mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text + ":direct=temporal";
-                            break;
-
-                        case 4:
-                            mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text + ":direct=auto";
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-                else if (optNameToChange.Equals("analyse"))
-                {
-                    switch (mainWindow.drop_analysis.SelectedIndex)
-                    {
-                        case 1:
-                            mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text + ":analyse=none";
-                            break;
-
-                        case 2:
-                            mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text + ":analyse=all";
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-
-                else if (optNameToChange.Equals("merange"))
-                {
-                    int value = mainWindow.drop_MotionEstimationRange.SelectedIndex + 3;
-                    mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text + ":merange=" + value.ToString();
-                }
-                else if (optNameToChange.Equals("deblock"))
-                {
-                    String da = mainWindow.drop_deblockAlpha.SelectedItem.ToString();
-                    String db = mainWindow.drop_deblockBeta.Text.ToString();
-
-                    if (((da.Contains("Default")) && (db.Contains("Default"))) || ((da.Contains("0")) && (db.Contains("0"))))
-                    {
-                        mainWindow.drop_deblockBeta.SelectedItem = "Default (0)";
-                        mainWindow.drop_deblockAlpha.SelectedItem = "Default (0)";
-                    }
-                    else
-                    {
-                        if (db.Contains("Default"))
-                            db = "0";
-
-                        if (da.Contains("Default"))
-                            da = "0";
-
-                        mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text + ":deblock=" + da + "," + db;
-                    }
-                }
-                else if (optNameToChange.Equals("mixed-refs"))
-                {
-                    if (mainWindow.check_mixedReferences.CheckState == CheckState.Checked)
-                        mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text + ":mixed-refs=1";
-                }
-                else if (optNameToChange.Equals("weightb"))
-                {
-                    if (mainWindow.check_weightedBFrames.CheckState == CheckState.Checked)
-                        mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text + ":weightb=1";
-                }
-                else if (optNameToChange.Equals("brdo"))
-                {
-                    if (mainWindow.check_bFrameDistortion.CheckState == CheckState.Checked)
-                        mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text + ":brdo=1";
-                }
-                else if (optNameToChange.Equals("bime"))
-                {
-                    if (mainWindow.check_BidirectionalRefinement.CheckState == CheckState.Checked)
-                        mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text + ":bime=1";
-                }
-                else if (optNameToChange.Equals("b-pyramid"))
-                {
-                    if (mainWindow.check_pyrmidalBFrames.CheckState == CheckState.Checked)
-                        mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text + ":b-pyramid=1";
-                }
-                else if (optNameToChange.Equals("no-fast-pskip"))
-                {
-                    if (mainWindow.check_noFastPSkip.CheckState == CheckState.Checked)
-                        mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text + ":no-fast-pskip=1";
-                }
-                else if (optNameToChange.Equals("no-dct-decimate"))
-                {
-                    if (mainWindow.check_noDCTDecimate.CheckState == CheckState.Checked)
-                        mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text + ":no-dct-decimate=1";
-                }
-                else if (optNameToChange.Equals("8x8dct"))
-                {
-                    if (mainWindow.check_8x8DCT.CheckState == CheckState.Checked)
-                        mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text + ":8x8dct=1";
-                }
-                else if (optNameToChange.Equals("cabac"))
-                {
-                    if (mainWindow.check_Cabac.CheckState == CheckState.Checked)
-                        mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text;
-                    else
-                        mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text + ":cabac=0";
-                }
-                else if (optNameToChange.Equals("ref"))
-                {
-                    if (!mainWindow.drop_refFrames.SelectedItem.ToString().Contains("Default"))
-                        mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text + ":ref=" + mainWindow.drop_refFrames.SelectedItem.ToString();
-                }
-                else if (optNameToChange.Equals("bframes"))
-                {
-                    int value = mainWindow.drop_bFrames.SelectedIndex;
-                    value = value - 1;
-                    if (!mainWindow.drop_bFrames.SelectedItem.ToString().Contains("Default"))
-                        mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text + ":bframes=" + value.ToString();
-                }
-                else if (optNameToChange.Equals("subq"))
-                {
-                    String value = mainWindow.drop_subpixelMotionEstimation.SelectedItem.ToString();
-                    if (!mainWindow.drop_subpixelMotionEstimation.SelectedItem.ToString().Contains("Default"))
-                        mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text + ":subq=" + value;
-                }
-                else if (optNameToChange.Equals("trellis"))
-                {
-                    if (!mainWindow.drop_trellis.SelectedItem.ToString().Contains("Default"))
-                        mainWindow.rtf_x264Query.Text = mainWindow.rtf_x264Query.Text + ":trellis=" + mainWindow.drop_trellis.SelectedItem.ToString();
+                    default:
+                        break;
                 }
             }
+            else if (optNameToChange.Equals("direct"))
+            {
+                switch (mainWindow.drop_directPrediction.SelectedIndex)
+                {
+                    case 1:
+                        query = query + colon + "direct=none";
+                        break;
+
+                    case 2:
+                        query = query + colon + "direct=spatial";
+                        break;
+
+                    case 3:
+                        query = query + colon + "direct=temporal";
+                        break;
+
+                    case 4:
+                        query = query + colon + "direct=auto";
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            else if (optNameToChange.Equals("analyse"))
+            {
+                switch (mainWindow.drop_analysis.SelectedIndex)
+                {
+                    case 1:
+                        query = query + colon + "analyse=none";
+                        break;
+
+                    case 2:
+                        query = query + colon + "analyse=all";
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            else if (optNameToChange.Equals("merange"))
+            {
+                int value = mainWindow.drop_MotionEstimationRange.SelectedIndex + 3;
+                query = query + colon + "merange=" + value.ToString();
+            }
+            else if (optNameToChange.Equals("deblock"))
+            {
+                String da = mainWindow.drop_deblockAlpha.SelectedItem.ToString();
+                String db = mainWindow.drop_deblockBeta.Text.ToString();
+
+                if (((da.Contains("Default")) && (db.Contains("Default"))) || ((da.Contains("0")) && (db.Contains("0"))))
+                {
+                    mainWindow.drop_deblockBeta.SelectedItem = "Default (0)";
+                    mainWindow.drop_deblockAlpha.SelectedItem = "Default (0)";
+                }
+                else
+                {
+                    if (db.Contains("Default"))
+                        db = "0";
+
+                    if (da.Contains("Default"))
+                        da = "0";
+
+                    query = query + colon + "deblock=" + da + "," + db;
+                }
+            }
+            else if (optNameToChange.Equals("mixed-refs"))
+            {
+                if (mainWindow.check_mixedReferences.CheckState == CheckState.Checked)
+                    query = query + colon + "mixed-refs=1";
+            }
+            else if (optNameToChange.Equals("weightb"))
+            {
+                if (mainWindow.check_weightedBFrames.CheckState == CheckState.Checked)
+                    query = query + colon + "weightb=1";
+            }
+            else if (optNameToChange.Equals("brdo"))
+            {
+                if (mainWindow.check_bFrameRateDistortion.CheckState == CheckState.Checked)
+                    query = query + colon + "brdo=1";
+            }
+            else if (optNameToChange.Equals("bime"))
+            {
+                if (mainWindow.check_BidirectionalRefinement.CheckState == CheckState.Checked)
+                    query = query + colon + "bime=1";
+            }
+            else if (optNameToChange.Equals("b-pyramid"))
+            {
+                if (mainWindow.check_pyrmidalBFrames.CheckState == CheckState.Checked)
+                    query = query + colon + "b-pyramid=1";
+            }
+            else if (optNameToChange.Equals("no-fast-pskip"))
+            {
+                if (mainWindow.check_noFastPSkip.CheckState == CheckState.Checked)
+                    query = query + colon + "no-fast-pskip=1";
+            }
+            else if (optNameToChange.Equals("no-dct-decimate"))
+            {
+                if (mainWindow.check_noDCTDecimate.CheckState == CheckState.Checked)
+                    query = query + colon + "no-dct-decimate=1";
+            }
+            else if (optNameToChange.Equals("8x8dct"))
+            {
+                if (mainWindow.check_8x8DCT.CheckState == CheckState.Checked)
+                    query = query + colon + "8x8dct=1";
+            }
+            else if (optNameToChange.Equals("cabac"))
+            {
+                if (mainWindow.check_Cabac.CheckState != CheckState.Checked)
+                    query = query + colon + "cabac=0";
+            }
+            else if (optNameToChange.Equals("ref"))
+            {
+                if (!mainWindow.drop_refFrames.SelectedItem.ToString().Contains("Default"))
+                    query = query + colon + "ref=" + mainWindow.drop_refFrames.SelectedItem.ToString();
+            }
+            else if (optNameToChange.Equals("bframes"))
+            {
+                String value = mainWindow.drop_bFrames.SelectedItem.ToString();
+                if (!mainWindow.drop_bFrames.SelectedItem.ToString().Contains("Default"))
+                    query = query + colon + "bframes=" + value;
+            }
+            else if (optNameToChange.Equals("subq"))
+            {
+                String value = mainWindow.drop_subpixelMotionEstimation.SelectedItem.ToString();
+                if (!mainWindow.drop_subpixelMotionEstimation.SelectedItem.ToString().Contains("Default"))
+                    query = query + colon + "subq=" + value;
+            }
+            else if (optNameToChange.Equals("trellis"))
+            {
+                if (!mainWindow.drop_trellis.SelectedItem.ToString().Contains("Default"))
+                    query = query + colon + "trellis=" + mainWindow.drop_trellis.SelectedItem.ToString();
+            }
+
+            mainWindow.rtf_x264Query.Text = query;
         }
-
-        /*
-         * Take a single option and standardize it. Returns as a String
-         * Input: String. - Single X264 Option. Name only
-         * Output: String - Single X264 Option. Name only. Changed to standard format
-         */
-        private string X264_StandardizeOptNames(String cleanOptNameString)
+        private void animate(frmMain mainWindow, string sender)
         {
-            String input = cleanOptNameString;
-            if (input.Equals("ref") || input.Equals("frameref"))
+            /* Lots of situations to cover.
+               - B-frames (when 0 turn of b-frame specific stuff, when < 2 disable b-pyramid)
+               - CABAC (when 0 turn off trellis)
+               - subme  (if under 6 turn off brdo)
+               - analysis (if none, turn off 8x8dct and direct pred)
+               - refs (under 2, disable mixed-refs)
+            */
+            if (mainWindow.drop_bFrames.SelectedIndex < 2)
             {
-                cleanOptNameString = "ref";
+                /* If the b-frame widget is at 0 or 1, the user has chosen
+                   not to use b-frames at all. So disable the options
+                   that can only be used when b-frames are enabled.        */
+                mainWindow.check_weightedBFrames.Visible = false;
+                mainWindow.check_bFrameRateDistortion.Visible = false;
+                mainWindow.check_pyrmidalBFrames.Visible = false;
+                mainWindow.check_BidirectionalRefinement.Visible = false;
+                mainWindow.drop_directPrediction.Visible = false;
+                mainWindow.lbl_direct_prediction.Visible = false;
+
+                mainWindow.check_weightedBFrames.CheckState = CheckState.Unchecked;
+                mainWindow.check_bFrameRateDistortion.CheckState = CheckState.Unchecked;
+                mainWindow.check_pyrmidalBFrames.CheckState = CheckState.Unchecked;
+                mainWindow.check_BidirectionalRefinement.CheckState = CheckState.Unchecked;
+                mainWindow.drop_directPrediction.SelectedIndex = 0;
+            }
+            else if (mainWindow.drop_bFrames.SelectedIndex == 2)
+            {
+                 /* Only 1 b-frame? Disable b-pyramid. */
+                mainWindow.check_pyrmidalBFrames.Visible = false;
+                mainWindow.check_pyrmidalBFrames.CheckState = CheckState.Unchecked;
+
+                mainWindow.check_weightedBFrames.Visible = true;
+                mainWindow.check_BidirectionalRefinement.Visible = true;
+
+
+                /* Only show B-RDO if both bframes and subme allow it. */
+                if (mainWindow.drop_subpixelMotionEstimation.SelectedIndex >= 7)
+                    mainWindow.check_bFrameRateDistortion.Visible = true;
+                
+                /* Only show direct pred when allowed by both bframes and analysis.*/
+                if ( mainWindow.drop_analysis.SelectedIndex != 1)
+                {   
+                    mainWindow.drop_directPrediction.Visible = true;
+                    mainWindow.lbl_direct_prediction.Visible = true;
+                }
+            }
+            else
+            {
+                mainWindow.check_weightedBFrames.Visible = true;
+                mainWindow.check_pyrmidalBFrames.Visible = true;
+                mainWindow.check_BidirectionalRefinement.Visible = true;
+
+                /* Only show B-RDO if both bframes and subme allow it. */
+                if (mainWindow.drop_subpixelMotionEstimation.SelectedIndex >= 7)
+                    mainWindow.check_bFrameRateDistortion.Visible = true;
+               
+                /* Only show direct pred when allowed by both bframes and analysis.*/
+                if ( mainWindow.drop_analysis.SelectedIndex != 1)
+                {   
+                    mainWindow.drop_directPrediction.Visible = true;
+                    mainWindow.lbl_direct_prediction.Visible = true;
+                }
+
             }
 
-            /*No Fast PSkip nofast_pskip*/
-            if (input.Equals("no-fast-pskip") || input.Equals("no_fast_pskip") || input.Equals("nofast_pskip"))
+            if (mainWindow.check_Cabac.Checked == false)
             {
-                cleanOptNameString = "no-fast-pskip";
+                /* Without CABAC entropy coding, trellis doesn't run. */
+                mainWindow.drop_trellis.Visible = false;
+                mainWindow.drop_trellis.SelectedIndex = 0;
+                mainWindow.lbl_trellis.Visible = false;
+            }
+            else
+            {
+                mainWindow.drop_trellis.Visible = true;
+                mainWindow.lbl_trellis.Visible = true;
             }
 
-            /*No Dict Decimate*/
-            if (input.Equals("no-dct-decimate") || input.Equals("no_dct_decimate") || input.Equals("nodct_decimate"))
+
+            if (mainWindow.drop_subpixelMotionEstimation.SelectedIndex < 7)
             {
-                cleanOptNameString = "no-dct-decimate";
+                /* When subme < 6, B-RDO doesn't work. */
+                mainWindow.check_bFrameRateDistortion.Visible = false;
+                if (sender == "subq" && sender != "brdo")
+                    mainWindow.check_bFrameRateDistortion.CheckState = CheckState.Unchecked;
+            }
+            else if (mainWindow.drop_bFrames.SelectedIndex >= 2 )
+            {
+                /* Make sure to only display B-RDO if allowed by both
+                   the subme and bframe option settings.               */
+                mainWindow.check_bFrameRateDistortion.Visible = true;
             }
 
-            /*Subme*/
-            if (input.Equals("subme"))
+
+            if (mainWindow.drop_analysis.SelectedIndex == 1)
             {
-                cleanOptNameString = "subq";
+                /* No analysis? Disable 8x8dct and direct pred */
+                mainWindow.check_8x8DCT.Visible = false;
+                if (sender != "8x8dct")
+                    mainWindow.check_8x8DCT.CheckState = CheckState.Unchecked;
+                
+                mainWindow.drop_directPrediction.Visible = false;
+                if (sender != "direct")
+                    mainWindow.drop_directPrediction.SelectedIndex = 0;
+            }
+            else
+            {
+                mainWindow.check_8x8DCT.Visible = true;
+
+                if ( mainWindow.drop_bFrames.SelectedIndex >= 2)
+                {
+                    /* Onlt show direct pred when allowed by both analysis and bframes */
+                    mainWindow.drop_directPrediction.Visible = true;
+                }
             }
 
-            /*ME Range*/
-            if (input.Equals("me-range") || input.Equals("me_range"))
-            {
-                cleanOptNameString = "merange";
-            }
 
-            /*WeightB*/
-            if (input.Equals("weight-b") || input.Equals("weight_b"))
+            if (mainWindow.drop_refFrames.SelectedIndex < 3)
             {
-                cleanOptNameString = "weightb";
+                mainWindow.check_mixedReferences.Visible = false;
+                if (sender != "mixed-refs")
+                    mainWindow.check_mixedReferences.CheckState = CheckState.Unchecked;
             }
-
-            /*BRDO*/
-            if (input.Equals("b-rdo") || input.Equals("b_rdo"))
+            else
             {
-                cleanOptNameString = "brdo";
+                mainWindow.check_mixedReferences.Visible = true;
             }
-
-            /*B Pyramid*/
-            if (input.Equals("b_pyramid"))
-            {
-                cleanOptNameString = "b-pyramid";
-            }
-
-            /*Direct Prediction*/
-            if (input.Equals("direct-pred") || input.Equals("direct_pred"))
-            {
-                cleanOptNameString = "direct";
-            }
-
-            /*Deblocking*/
-            if (input.Equals("filter"))
-            {
-                cleanOptNameString = "deblock";
-            }
-
-            /*Analysis*/
-            if (input.Equals("partitions"))
-            {
-                cleanOptNameString = "analyse";
-            }
-
-            return cleanOptNameString;
         }
+
     }
 }

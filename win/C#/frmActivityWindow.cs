@@ -54,10 +54,19 @@ namespace Handbrake
                 RegKey = RegKey.OpenSubKey("HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0");
                 Object cpuType = RegKey.GetValue("ProcessorNameString");
 
+                // Get the screen resolution
+                System.Windows.Forms.Screen scr = System.Windows.Forms.Screen.PrimaryScreen;
+
+                // Physical Ram
+                Functions.SystemInfo info = new Functions.SystemInfo();
+                uint memory = info.TotalPhysicalMemory();
+
                 // Add a header to the log file indicating that it's from the Windows GUI and display the windows version
                 rtf_actLog.AppendText("### Windows GUI \n");
                 rtf_actLog.AppendText(String.Format("### Running: {0} \n###\n", Environment.OSVersion.ToString()));
                 rtf_actLog.AppendText(String.Format("### CPU: {0} \n", cpuType));
+                rtf_actLog.AppendText(String.Format("### Ram: {0} MB \n", memory));
+                rtf_actLog.AppendText(String.Format("### Screen: {0}x{1} \n", scr.Bounds.Width, scr.Bounds.Height));
                 rtf_actLog.AppendText(String.Format("### Temp Dir: {0} \n", Path.GetTempPath()));
                 rtf_actLog.AppendText(String.Format("### Install Dir: {0} \n", Application.StartupPath));
                 rtf_actLog.AppendText(String.Format("### Data Dir: {0} \n###\n", Application.UserAppDataPath));

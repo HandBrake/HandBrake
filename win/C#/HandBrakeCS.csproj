@@ -140,6 +140,7 @@
     <Compile Include="frmUpdater.Designer.cs">
       <DependentUpon>frmUpdater.cs</DependentUpon>
     </Compile>
+    <Compile Include="Functions\SystemInfo.cs" />
     <Compile Include="Functions\Common.cs" />
     <Compile Include="Functions\Presets.cs" />
     <Compile Include="Functions\Queue.cs" />
