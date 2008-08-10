@@ -87,18 +87,6 @@ namespace Handbrake.Functions
         }
 
         /// <summary>
-        /// Count the number of presets there are.
-        /// </summary>
-        /// <returns>Integer</returns>
-        public int count()
-        {
-            int c = presets.Count;
-            int d = user_presets.Count;
-
-            return c + d;
-        }
-
-        /// <summary>
         /// Get an Arraylist of all the preset names.
         /// Includes both built in and user presets.
         /// </summary>

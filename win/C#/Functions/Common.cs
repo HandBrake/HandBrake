@@ -553,79 +553,31 @@ namespace Handbrake.Functions
         {
             // Source tab
             #region source
-            string source = mainWindow.text_source.Text;
-            string dvdTitle = mainWindow.drp_dvdtitle.Text;
-            string chapterStart = mainWindow.drop_chapterStart.Text;
-            string chapterFinish = mainWindow.drop_chapterFinish.Text;
-            int totalChapters = mainWindow.drop_chapterFinish.Items.Count - 1;
-            string dvdChapter = "";
+            string query = "";
 
-            if ((source != "") && (source.Trim() != "Click 'Browse' to continue"))
-                source = " -i " + '"' + source + '"';
-            else
-                source = "";
+            if ((mainWindow.text_source.Text != "") && (mainWindow.text_source.Text.Trim() != "Click 'Source' to continue"))
+                query = " -i " + '"' + mainWindow.text_source.Text + '"';
 
-            if (dvdTitle == "Automatic")
-                dvdTitle = "";
-            else
+            if (mainWindow.drp_dvdtitle.Text != "Automatic")
             {
-                string[] titleInfo = dvdTitle.Split(' ');
-                dvdTitle = " -t " + titleInfo[0];
+                string[] titleInfo = mainWindow.drp_dvdtitle.Text.Split(' ');
+                query += " -t " + titleInfo[0];
             }
 
-            if (chapterFinish.Equals("Auto") && chapterStart.Equals("Auto"))
-                dvdChapter = "";
-            else if (chapterFinish == chapterStart)
-                dvdChapter = " -c " + chapterStart;
+            if (mainWindow.drop_chapterFinish.Text == mainWindow.drop_chapterStart.Text)
+                query += " -c " + mainWindow.drop_chapterStart.Text;
             else
-                dvdChapter = " -c " + chapterStart + "-" + chapterFinish;
+                query += " -c " + mainWindow.drop_chapterStart.Text + "-" + mainWindow.drop_chapterFinish.Text;
 
-            string querySource = source + dvdTitle + dvdChapter;
             #endregion
 
             // Destination tab
             #region Destination
-
-            string destination = mainWindow.text_destination.Text;
-            string videoEncoder = mainWindow.drp_videoEncoder.Text;
-            string width = mainWindow.text_width.Text;
-            string height = mainWindow.text_height.Text;
-
-            if (destination != "")
-                destination = " -o " + '"' + destination + '"';
-
-            switch (videoEncoder)
-            {
-                case "MPEG-4 (FFmpeg)":
-                    videoEncoder = " -e ffmpeg";
-                    break;
-                case "MPEG-4 (XviD)":
-                    videoEncoder = " -e xvid";
-                    break;
-                case "H.264 (x264)":
-                    videoEncoder = " -e x264";
-                    break;
-                case "VP3 (Theora)":
-                    videoEncoder = " -e theora";
-                    break;
-                default:
-                    videoEncoder = " -e x264";
-                    break;
-            }
-
-            if (width != "")
-                width = " -w " + width;
-
-            if (height == "Auto")
-                height = "";
-            else if (height != "")
-                height = " -l " + height;
-
-            string queryDestination = destination + videoEncoder + width + height;
+            if (mainWindow.text_destination.Text != "")
+                query += " -o " + '"' + mainWindow.text_destination.Text + '"';
             #endregion
 
-            string query = querySource + queryDestination;
-            query = query + generateTabbedComponentsQuery(mainWindow, source);
+            query += generateTabbedComponentsQuery(mainWindow, mainWindow.text_source.Text);
             return query;
         }
 
@@ -635,79 +587,32 @@ namespace Handbrake.Functions
         /// </summary>
         /// <param name="mainWindow"></param>
         /// <returns>Returns a CLI query String.</returns>
-        public string GeneratePreview(frmMain mainWindow)
+        public string GeneratePreviewQuery(frmMain mainWindow)
         {
             // Source tab
             #region source
-            string source = mainWindow.text_source.Text;
-            string dvdTitle = mainWindow.drp_dvdtitle.Text;
-            string chapterStart = mainWindow.drop_chapterStart.Text;
-            string chapterFinish = mainWindow.drop_chapterFinish.Text;
-            int totalChapters = mainWindow.drop_chapterFinish.Items.Count - 1;
-            string dvdChapter = "";
+            string query = "";
 
-            if ((source != "") && (source.Trim() != "Click 'Browse' to continue"))
-                source = " -i " + '"' + source + '"';
-            else
-                source = "";
+            if ((mainWindow.text_source.Text != "") && (mainWindow.text_source.Text.Trim() != "Click 'Source' to continue"))
+                query = " -i " + '"' + mainWindow.text_source.Text + '"';
 
-            if (dvdTitle == "Automatic")
-                dvdTitle = "";
-            else
+            if (mainWindow.drp_dvdtitle.Text != "Automatic")
             {
-                string[] titleInfo = dvdTitle.Split(' ');
-                dvdTitle = " -t " + titleInfo[0];
+                string[] titleInfo = mainWindow.drp_dvdtitle.Text.Split(' ');
+                query += " -t " + titleInfo[0];
             }
 
-            dvdChapter = " -c 2 ";
-
-            string querySource = source + dvdTitle + dvdChapter;
+            query += " -c 2";
             #endregion
 
             // Destination tab
             #region Destination
+            if (mainWindow.text_destination.Text != "")
+                query += " -o " + '"' + mainWindow.text_destination.Text.Replace(".m", "_sample.m").Replace(".avi", "_sample.avi").Replace(".ogm", "_sample.ogm") + '"';
 
-            string destination = mainWindow.text_destination.Text;
-            string videoEncoder = mainWindow.drp_videoEncoder.Text;
-            string width = mainWindow.text_width.Text;
-            string height = mainWindow.text_height.Text;
-
-            if (destination != "")
-                destination = " -o " + '"' + destination.Replace(".m", "_sample.m").Replace(".avi", "_sample.avi").Replace(".ogm", "_sample.ogm") + '"';
-
-
-            switch (videoEncoder)
-            {
-                case "MPEG-4 (FFmpeg)":
-                    videoEncoder = " -e ffmpeg";
-                    break;
-                case "MPEG-4 (XviD)":
-                    videoEncoder = " -e xvid";
-                    break;
-                case "H.264 (x264)":
-                    videoEncoder = " -e x264";
-                    break;
-                case "VP3 (Theora)":
-                    videoEncoder = " -e theora";
-                    break;
-                default:
-                    videoEncoder = " -e x264";
-                    break;
-            }
-
-            if (width != "")
-                width = " -w " + width;
-
-            if (height == "Auto")
-                height = "";
-            else if (height != "")
-                height = " -l " + height;
-
-            string queryDestination = destination + videoEncoder + width + height;
             #endregion
 
-            string query = querySource + queryDestination;
-            query = query + generateTabbedComponentsQuery(mainWindow, source);
+            query += generateTabbedComponentsQuery(mainWindow, mainWindow.text_source.Text);
             return query;
         }
 
@@ -803,36 +708,45 @@ namespace Handbrake.Functions
         // Generates part of the CLI query, for the tabbed components only.
         private string generateTabbedComponentsQuery(frmMain mainWindow, string source)
         {
+            string query = "";
+
             // Picture Settings Tab
             #region Picture Settings Tab
 
-            string cropSetting = mainWindow.drp_crop.Text;
-            string cropTop = mainWindow.text_top.Text;
-            string cropBottom = mainWindow.text_bottom.Text;
-            string cropLeft = mainWindow.text_left.Text;
-            string cropRight = mainWindow.text_right.Text;
-            string cropOut = "";
-            string deInterlace_Option = mainWindow.drp_deInterlace_option.Text;
-            string deinterlace = "";
-            string grayscale = "";
-            string pixelRatio = "";
-            string vfr = "";
-            string deblock = "";
-            string detelecine = "";
-            string lanamorphic = "";
-
-
-
-            if (cropSetting == "Automatic")
-                cropOut = "";
-            else if (cropSetting == "No Crop")
-                cropOut = " --crop 0:0:0:0 ";
-            else
+            switch (mainWindow.drp_videoEncoder.Text)
             {
-                if ((mainWindow.text_top.Text == "") && (mainWindow.text_bottom.Text == "") && (mainWindow.text_left.Text == "") && (mainWindow.text_right.Text == ""))
-                    cropOut = "";
-                else
-                {
+                case "MPEG-4 (FFmpeg)":
+                    query += " -e ffmpeg";
+                    break;
+                case "MPEG-4 (XviD)":
+                    query += " -e xvid";
+                    break;
+                case "H.264 (x264)":
+                    query += " -e x264";
+                    break;
+                case "VP3 (Theora)":
+                    query += " -e theora";
+                    break;
+                default:
+                    query += " -e x264";
+                    break;
+            }
+
+            if (mainWindow.text_width.Text != "")
+                query += " -w " + mainWindow.text_width.Text;
+
+            if (mainWindow.text_height.Text != "")
+                query += " -l " + mainWindow.text_height.Text;
+
+            string cropTop = "";
+            string cropBottom = "";
+            string cropLeft = "";
+            string cropRight = "";
+
+            if (mainWindow.drp_crop.Text == "No Crop")
+                query += " --crop 0:0:0:0 ";
+            else if (mainWindow.drp_crop.Text == "Custom")
+            {
                     if (mainWindow.text_top.Text == "")
                         cropTop = "0";
                     if (mainWindow.text_bottom.Text == "")
@@ -842,153 +756,112 @@ namespace Handbrake.Functions
                     if (mainWindow.text_right.Text == "")
                         cropRight = "0";
 
-                    cropOut = " --crop " + cropTop + ":" + cropBottom + ":" + cropLeft + ":" + cropRight;
-                }
+                    query += " --crop " + cropTop + ":" + cropBottom + ":" + cropLeft + ":" + cropRight;
             }
 
-            switch (deInterlace_Option)
+            switch (mainWindow.drp_deInterlace_option.Text)
             {
                 case "None":
-                    deinterlace = "";
+                    query += "";
                     break;
                 case "Fast":
-                    deinterlace = " --deinterlace=\"fast\"";
+                    query += " --deinterlace=\"fast\"";
                     break;
                 case "Slow":
-                    deinterlace = " --deinterlace=\"slow\"";
+                    query += " --deinterlace=\"slow\"";
                     break;
                 case "Slower":
-                    deinterlace = " --deinterlace=\"slower\"";
+                    query += " --deinterlace=\"slower\"";
                     break;
                 case "Slowest":
-                    deinterlace = " --deinterlace=\"slowest\"";
+                    query += " --deinterlace=\"slowest\"";
                     break;
                 default:
-                    deinterlace = "";
+                    query += "";
                     break;
             }
 
             if (mainWindow.check_grayscale.Checked)
-                grayscale = " -g ";
+                query += " -g ";
 
             if (mainWindow.drp_anamorphic.SelectedIndex == 1)
-                pixelRatio = " -p ";
+                query += " -p ";
             else if (mainWindow.drp_anamorphic.SelectedIndex == 2)
-                pixelRatio = " -P ";
-            else
-                pixelRatio = " ";
-
+                query += " -P ";
 
             if (mainWindow.check_deblock.Checked)
-                deblock = " --deblock";
+                query += " --deblock";
 
             if (mainWindow.check_detelecine.Checked)
-                detelecine = " --detelecine";
+                query += " --detelecine";
 
             if (mainWindow.check_vfr.Checked)
-                vfr = " -V ";
-
-
-
-            string queryPictureSettings = cropOut + deinterlace + deblock + detelecine + vfr + grayscale + pixelRatio + lanamorphic;
+                query += " -V ";
             #endregion
 
             // Video Settings Tab
             #region Video Settings Tab
+            // These are output settings features
+            if (mainWindow.check_largeFile.Checked)
+                query += " -4 ";
 
-            string videoBitrate = mainWindow.text_bitrate.Text;
-            string videoFilesize = mainWindow.text_filesize.Text;
-            double videoQuality = mainWindow.slider_videoQuality.Value;
-            string vidQSetting = "";
-            string twoPassEncoding = "";
-            string videoFramerate = mainWindow.drp_videoFramerate.Text;
-            string vid_frame_rate = "";
-            string turboH264 = "";
-            string largeFile = "";
-            string denoise = "";
-            string ipodAtom = "";
-            string optimizeMP4 = "";
+            if (mainWindow.check_iPodAtom.Checked)
+                query += " -I ";
 
-            if (videoBitrate != "")
-                videoBitrate = " -b " + videoBitrate;
+            if (mainWindow.check_optimiseMP4.Checked)
+                query += " -O ";
 
-            if (videoFilesize != "")
-                videoFilesize = " -S " + videoFilesize;
+            // Video Settings
+            if (mainWindow.text_bitrate.Text != "")
+                query += " -b " + mainWindow.text_bitrate.Text;
+
+            if (mainWindow.text_filesize.Text != "")
+                query += " -S " + mainWindow.text_filesize.Text;
 
             // Video Quality Setting
-
-            if ((videoQuality == 0))
-                vidQSetting = "";
-            else
+            double videoQuality = mainWindow.slider_videoQuality.Value;
+            if (videoQuality != 0)
             {
                 videoQuality = videoQuality / 100;
-                if (videoQuality == 1)
-                {
-                    vidQSetting = "1.0";
-                }
-                vidQSetting = " -q " + videoQuality.ToString(new CultureInfo("en-US"));
+                query += " -q " + videoQuality.ToString(new CultureInfo("en-US"));
             }
 
             if (mainWindow.check_2PassEncode.Checked)
-                twoPassEncoding = " -2 ";
+                query += " -2 ";
 
-            if (videoFramerate == "Same as source")
-                vid_frame_rate = "";
-            else
+            if (mainWindow.drp_videoFramerate.Text != "Same as source")
             {
                 if (!mainWindow.check_vfr.Checked)
-                    vid_frame_rate = " -r " + videoFramerate;
+                    query += " -r " + mainWindow.drp_videoFramerate.Text;
             }
 
             if (mainWindow.check_turbo.Checked)
-                turboH264 = " -T ";
+                query += " -T ";
 
-            if (mainWindow.check_largeFile.Checked)
-                largeFile = " -4 ";
 
 
             switch (mainWindow.drp_deNoise.Text)
             {
                 case "None":
-                    denoise = "";
+                    query += "";
                     break;
                 case "Weak":
-                    denoise = " --denoise=\"weak\"";
+                    query += " --denoise=\"weak\"";
                     break;
                 case "Medium":
-                    denoise = " --denoise=\"medium\"";
+                    query += " --denoise=\"medium\"";
                     break;
                 case "Strong":
-                    denoise = " --denoise=\"strong\"";
+                    query += " --denoise=\"strong\"";
                     break;
                 default:
-                    denoise = "";
+                    query += "";
                     break;
             }
-
-            if (mainWindow.check_iPodAtom.Checked)
-                ipodAtom = " -I ";
-
-            if (mainWindow.check_optimiseMP4.Checked)
-                optimizeMP4 = " -O ";
-
-
-            string queryVideoSettings = videoBitrate + videoFilesize + vidQSetting + twoPassEncoding + vid_frame_rate + turboH264 + ipodAtom + optimizeMP4 + largeFile + denoise;
             #endregion
 
             // Audio Settings Tab
             #region Audio Settings Tab
-
-            // Query
-            string tracks = "";
-            string aencoder = "";
-            string audioBitrate = "";
-            string audioSampleRate = "";
-            string Mixdown = "";
-            string drc = "";
-            string subScan = "";
-            string forced = "";
-
             // Track 1
             string track1 = mainWindow.drp_track1Audio.Text;
             string aencoder1 = mainWindow.drp_audenc_1.Text;
@@ -1026,100 +899,89 @@ namespace Handbrake.Functions
             // Audio Track Selections
             //
             if (track1 == "Automatic")
-                tracks = " -a 1";
-            else if (track1 == "")
-                tracks = "";
-            else if (track1 == "None")
-                tracks = "";
-            else
+                query += " -a 1";
+            else if (track1 != "None")
             {
                 string[] tempSub = track1.Split(' ');
-                tracks = " -a " + tempSub[0];
+                query += " -a " + tempSub[0];
             }
 
             if (track2 != "None")
             {
                 string[] tempSub;
                 tempSub = track2.Split(' ');
-                if (tracks == "")
-                    tracks = " -a none," + tempSub[0];
+
+                if (track1 == "None")
+                    query += " -a none," + tempSub[0];
                 else
-                    tracks = tracks + "," + tempSub[0];
+                    query += "," + tempSub[0];
             }
 
             if (track3 != "None")
             {
                 string[] tempSub;
                 tempSub = track3.Split(' ');
-                tracks = tracks + "," + tempSub[0];
+                query += "," + tempSub[0];
             }
 
             if (track4 != "None")
             {
                 string[] tempSub;
                 tempSub = track4.Split(' ');
-                tracks = tracks + "," + tempSub[0];
+                query += "," + tempSub[0];
             }
 
             //
             // Audio Encoder
             //
             if (aencoder1 != "")
-                aencoder = " -E " + getAudioEncoder(aencoder1);
+                query += " -E " + getAudioEncoder(aencoder1);
 
             if (aencoder2 != "")
             {
-                if (aencoder == "")
-                    aencoder = " -E faac," + getAudioEncoder(aencoder2);
+                if (aencoder1 == "")
+                    query += " -E faac," + getAudioEncoder(aencoder2);
                 else
-                    aencoder = aencoder + "," + getAudioEncoder(aencoder2);
+                    query += "," + getAudioEncoder(aencoder2);
             }
 
             if (aencoder3 != "")
-            {
-                aencoder = aencoder + "," + getAudioEncoder(aencoder3);
-            }
+                query += "," + getAudioEncoder(aencoder3);
 
             if (aencoder4 != "")
-            {
-                aencoder = aencoder + "," + getAudioEncoder(aencoder4);
-            }
+                query += "," + getAudioEncoder(aencoder4);
 
             //
             // Audio Bitrate Selections
             //
             if (audioBitrate1 != "")
-                audioBitrate = " -B " + audioBitrate1;
+                query += " -B " + audioBitrate1;
 
             if (audioBitrate2 != "")
             {
-                if (audioBitrate == "")
-                    audioBitrate = " -B 160," + audioBitrate2;
+                if (audioBitrate1 == "")
+                    query += " -B 160," + audioBitrate2;
                 else
-                    audioBitrate = audioBitrate + "," + audioBitrate2;
+                    query += "," + audioBitrate2;
             }
 
             if (audioBitrate3 != "")
-            {
-                audioBitrate = audioBitrate + "," + audioBitrate3;
-            }
+                query += "," + audioBitrate3;
 
             if (audioBitrate4 != "")
-            {
-                audioBitrate = audioBitrate + "," + audioBitrate4;
-            }
+                query += "," + audioBitrate4;
+
 
             //Audio Sample Rate   - audioSampleRate
-
             if (audioSampleRate1 != "")
-                audioSampleRate = " -R " + audioSampleRate1.Replace("Auto", "0");
+                query += " -R " + audioSampleRate1.Replace("Auto", "0");
 
             if (audioSampleRate2 != "")
             {
-                if (audioSampleRate == "")
-                    audioSampleRate = " -R 0," + audioSampleRate2.Replace("Auto", "0");
+                if (audioSampleRate1 == "")
+                    query += " -R 0," + audioSampleRate2.Replace("Auto", "0");
                 else
-                    audioSampleRate = audioSampleRate + "," + audioSampleRate2.Replace("Auto", "0");
+                    query += "," + audioSampleRate2.Replace("Auto", "0");
             }
             else
             {
@@ -1128,48 +990,36 @@ namespace Handbrake.Functions
 
                 if ((track2 != "") && (track2 != "None"))
                 {
-                    if (audioSampleRate == "")
-                        audioSampleRate = " -R 0,0";
+                    if (audioSampleRate1 == "")
+                        query += " -R 0,0";
                     else
-                        audioSampleRate = audioSampleRate + ",0";
+                        query += ",0";
                 }
-
             }
 
             if (audioSampleRate3 != "")
-            {
-                audioSampleRate = audioSampleRate + "," + audioSampleRate3.Replace("Auto", "0");
-            }
+                query += "," + audioSampleRate3.Replace("Auto", "0");
 
             if (audioSampleRate4 != "")
-            {
-                audioSampleRate = audioSampleRate + "," + audioSampleRate4.Replace("Auto", "0");
-            }
+                query += "," + audioSampleRate4.Replace("Auto", "0");
 
             //
             // Audio Mixdown Selections
             //
 
-            if ((Mixdown1 != "") && (Mixdown1 != "Automatic"))
-                Mixdown = " -6 " + getMixDown(Mixdown1);
+            if (Mixdown1 != "")
+                query += " -6 " + getMixDown(Mixdown1);
+            else
+                query += " -6 dpl2";
 
-            if ((Mixdown2 != "") && (Mixdown2 != "Automatic"))
-            {
-                if (Mixdown != "")
-                    Mixdown = Mixdown + "," + getMixDown(Mixdown2);
-            }
+            if (Mixdown2 != "" && track2 != "None")
+                    query += "," + getMixDown(Mixdown2);
 
-            if ((Mixdown3 != "") && (Mixdown3 != "Automatic"))
-            {
-                if (Mixdown != "")
-                    Mixdown = Mixdown + "," + getMixDown(Mixdown3);
-            }
+            if (Mixdown3 != "" && track3 != "None" && track2 != "None")
+                    query += "," + getMixDown(Mixdown3);
 
-            if ((Mixdown4 != "") && (Mixdown4 != "Automatic"))
-            {
-                if (Mixdown != "")
-                    Mixdown = Mixdown + "," + getMixDown(Mixdown4);
-            }
+            if (Mixdown4 != "" && track4 != "None" && track3 != "None")
+                    query += "," + getMixDown(Mixdown4);
 
 
             //
@@ -1181,63 +1031,49 @@ namespace Handbrake.Functions
             value++;
 
             if (value > 1.0)
-                drc = " -D " + value;
+                query += " -D " + value;
+            else
+                query += " -D 1";
 
             value = mainWindow.trackBar2.Value / 10.0;
             value++;
-            if (drc2 != "0")
-            {
-                if (drc == "")
-                    drc = " -D 1," + value;
-                else
-                    drc = drc + "," + value;
-            }
+            if (track2 != "None" && drc2 != "0")
+                query += "," + value;
+            else if (track2 != "None" && drc2 == "0")
+                query += ",1";
 
             value = mainWindow.trackBar3.Value / 10.0;
             value++;
-            if (drc3 != "0")
-            {
-                drc = drc + "," + value;
-            }
+            if (track3 != "None" && drc3 != "0")
+                query += "," + value;
+            else if (track3 != "None" && drc3 == "0")
+                query += ",1";
 
             value = mainWindow.trackBar4.Value / 10.0;
             value++;
-            if (drc4 != "0")
-            {
-                drc = drc + "," + value;
-            }
-
+            if (track4 != "None" && drc4 != "0")
+                query += "," + value;
+            else if (track4 != "None" && drc4 == "0")
+                query += ",1";
 
             // Subtitles
             string subtitles = mainWindow.drp_subtitle.Text;
-            if (subtitles == "None")
-                subtitles = "";
-            else if (subtitles == "")
-                subtitles = "";
-            else if (subtitles == "Autoselect")
-            {
-                subScan = " -U ";
-                subtitles = "";
-            }
-            else
+            if (subtitles == "Autoselect")
+                query += " -U ";
+            else if (subtitles != "" && subtitles != "None")
             {
                 string[] tempSub;
                 tempSub = subtitles.Split(' ');
-                subtitles = " -s " + tempSub[0];
+                query += " -s " + tempSub[0];
             }
 
             if (mainWindow.check_forced.Checked)
-                forced = " -F ";
-
-
-            string queryAudioSettings = tracks + aencoder + audioBitrate + audioSampleRate + Mixdown + drc + subScan + subtitles + forced;
+                query += " -F ";
 
             #endregion
 
             // Chapter Markers Tab
             #region Chapter Markers
-
-            string ChapterMarkers = "";
 
             // Attach Source name and dvd title to the start of the chapters.csv filename.
             // This is for the queue. It allows different chapter name files for each title.
@@ -1252,7 +1088,6 @@ namespace Handbrake.Functions
 
             if (mainWindow.Check_ChapterMarkers.Checked)
             {
-
                 if ((source_name.Trim().Replace("-i ", "") != "Click 'Browse' to continue") && (source_name.Trim().Replace("-i ", "") != ""))
                 {
                     if (source_title != "Automatic")
@@ -1262,11 +1097,9 @@ namespace Handbrake.Functions
 
                         Boolean saveCSV = chapterCSVSave(mainWindow, path);
                         if (saveCSV == false)
-                            ChapterMarkers = " -m ";
+                            query += " -m ";
                         else
-                        {
-                            ChapterMarkers = " --markers=" + "\"" + path + "\"";
-                        }
+                            query += " --markers=" + "\"" + path + "\"";
                     }
                     else
                     {
@@ -1275,55 +1108,35 @@ namespace Handbrake.Functions
 
                         Boolean saveCSV = chapterCSVSave(mainWindow, path);
                         if (saveCSV == false)
-                            ChapterMarkers = " -m ";
+                            query += " -m ";
                         else
-                        {
-                            ChapterMarkers = " --markers=" + "\"" + path + "\"";
-                        }
+                            query += " --markers=" + "\"" + path + "\"";
                     }
                 }
                 else
                 {
                     string path = Path.Combine(Path.GetTempPath(), "chapters.csv");
-                    ChapterMarkers = " --markers=" + "\"" + path + "\"";
+                    query += " --markers=" + "\"" + path + "\"";
                 }
             }
-
-            string chapter_markers = ChapterMarkers;
             #endregion
 
             // H264 Tab
             #region  H264 Tab
-
-            string h264Advanced = mainWindow.rtf_x264Query.Text;
-
-            if ((h264Advanced == ""))
-                h264Advanced = "";
-            else
-                h264Advanced = " -x " + h264Advanced;
-
-
-            string h264Settings = h264Advanced;
+            if (mainWindow.rtf_x264Query.Text != "")
+                query += " -x " + mainWindow.rtf_x264Query.Text;
             #endregion
 
             // Other
             #region Processors / Other
-
             string processors = Properties.Settings.Default.Processors;
-            //  Number of Processors Handler
+            if (processors != "Automatic")
+                query += " -C " + processors + " ";
 
-            if (processors == "Automatic")
-                processors = "";
-            else
-                processors = " -C " + processors + " ";
-
-
-            string queryAdvancedSettings = processors;
-
-            string verbose = " -v ";
+            query += " -v ";
             #endregion
 
-            return queryPictureSettings + queryVideoSettings + h264Settings + queryAudioSettings + ChapterMarkers + queryAdvancedSettings + verbose;
+            return query;
         }
 
         // This function saves the data in the chapters tab, dataGridView into a CSV file called chapters.csv
@@ -1361,7 +1174,7 @@ namespace Handbrake.Functions
             switch (selectedAudio)
             {
                 case "Automatic":
-                    return "";
+                    return "dpl2";
                 case "Mono":
                     return "mono";
                 case "Stereo":
@@ -1373,7 +1186,7 @@ namespace Handbrake.Functions
                 case "6 Channel Discrete":
                     return "6ch";
                 default:
-                    return "";
+                    return "dpl2";
             }
         }
 

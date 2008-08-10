@@ -49,10 +49,6 @@ namespace Handbrake
             lblStatus.Location = new Point(10, 280);
             splash.Controls.Add(lblStatus);
 
-            //Fire a thread to wait for 2 seconds.  The splash screen will exit when the time expires
-            Thread timer = new Thread(splashTimer);
-            timer.Start();
-
             InitializeComponent();
 
             // Update the users config file with the CLI version data.
@@ -66,8 +62,13 @@ namespace Handbrake
                     Properties.Settings.Default.hb_build = int.Parse(x[1].ToString());
                     Properties.Settings.Default.hb_version = x[0].ToString();
                 }
-                catch (Exception) { /* Do Nothing */ }
+                catch (Exception) 
+                {
+                    Properties.Settings.Default.hb_build = 0;
+                    Properties.Settings.Default.hb_version = "0";
+                }
             }
+            Thread.Sleep(100);
 
             // show the form, but leave disabled until preloading is complete then show the main form
             this.Enabled = false;
@@ -99,17 +100,12 @@ namespace Handbrake
             if (Properties.Settings.Default.tooltipEnable == "Checked")
                 ToolTip.Active = true;
             lbl_encode.Text = "";
-            Thread.Sleep(400);
-
+            Thread.Sleep(100);
 
             //Finished Loading
             lblStatus.Text = "Loading Complete!";
             Application.DoEvents();
-            Thread.Sleep(200);
-
-            // Wait until splash screen is done
-            while (timer.IsAlive)
-            { Thread.Sleep(100); }
+            Thread.Sleep(100);
 
             //Close the splash screen
             splash.Close();
@@ -119,7 +115,7 @@ namespace Handbrake
             this.Enabled = true;
 
             // Some event Handlers. Used for minimize to taskbar
-            this.Resize += new EventHandler(frmMain_Resize);      
+            this.Resize += new EventHandler(frmMain_Resize);
         }
 
         // Startup Functions
@@ -140,23 +136,11 @@ namespace Handbrake
                     updateWindow.Show();
                 }
             }
-            catch (Exception)
-            {
-                // Don't want to have an exception messagebox displayed behind the splash screen,
-                // So, exception is ignored. Lets hope there are no bugs here :)
-            }
-        }
-        private void splashTimer(object sender)
-        {
-            Thread.Sleep(1000);  //sit for 1 seconds then exit
-        }
-        private void showSplash(object sender)
-        {
-            Form splash = new frmSplashScreen();
-            splash.Show();
+            catch (Exception) { /* Do Nothing*/ }
         }
         private void setupH264Panel()
         {
+            // Set the default settings of the x264 panel
             drop_bFrames.Text = "Default (0)";
             drop_refFrames.Text = "Default (1)";
             drop_subpixelMotionEstimation.Text = "Default (4)";
@@ -171,17 +155,14 @@ namespace Handbrake
         }
         private void loadUserDefaults()
         {
+            // Try to load the users default settings.
             string userDefaults = Properties.Settings.Default.defaultUserSettings;
             try
             {
-                // Send the query from the file to the Query Parser class Then load the preset
                 Functions.QueryParser presetQuery = Functions.QueryParser.Parse(userDefaults);
                 hb_common_func.presetLoader(this, presetQuery, "User Defaults ");
             }
-            catch (Exception)
-            {
-                // Do Nothing. We don't want an error appearing behind the splash screen.
-            }
+            catch (Exception) { /* Do Nothing */ }
         }
 
         #endregion
@@ -189,7 +170,6 @@ namespace Handbrake
         // The Applications Main Menu *****************************************
 
         #region File Menu
-
         private void mnu_open_Click(object sender, EventArgs e)
         {
             string filename;
@@ -224,11 +204,9 @@ namespace Handbrake
         {
             Application.Exit();
         }
-
         #endregion
 
         #region Tools Menu
-
         private void mnu_encode_Click(object sender, EventArgs e)
         {
             queueWindow.setQueue(encodeQueue);
@@ -249,11 +227,9 @@ namespace Handbrake
             Form Options = new frmOptions(this);
             Options.ShowDialog();
         }
-
         #endregion
 
         #region Presets Menu
-
         private void mnu_presetReset_Click(object sender, EventArgs e)
         {
             hb_common_func.grabCLIPresets();
@@ -287,12 +263,11 @@ namespace Handbrake
         #endregion
 
         #region Help Menu
-
         private void mnu_handbrake_forums_Click(object sender, EventArgs e)
         {
             Process.Start("http://forum.handbrake.fr/");
         }
-        private void mnu_user_guide_Click_1(object sender, EventArgs e)
+        private void mnu_user_guide_Click(object sender, EventArgs e)
         {
             Process.Start("http://trac.handbrake.fr/wiki/HandBrakeGuide");
         }
@@ -316,7 +291,6 @@ namespace Handbrake
             Form About = new frmAbout();
             About.ShowDialog();
         }
-
         #endregion
 
         // MainWindow Components, Actions and Functions ***********************
@@ -354,7 +328,7 @@ namespace Handbrake
                 btn_start.Text = "Stop";
                 btn_start.Image = Properties.Resources.stop;
             }
-            
+
 
         }
         private void btn_add2Queue_Click(object sender, EventArgs e)
@@ -898,7 +872,7 @@ namespace Handbrake
                 trackBar2.Enabled = true;
                 drp_audbit_2.Text = "160";
                 drp_audenc_2.Text = "AAC";
-                drp_audsr_2.Text = "48";
+                drp_audsr_2.Text = "Auto";
                 drp_audmix_2.Text = "Automatic";
 
                 // Enable the 3rd Track.
@@ -942,7 +916,7 @@ namespace Handbrake
                 trackBar3.Enabled = true;
                 drp_audbit_3.Text = "160";
                 drp_audenc_3.Text = "AAC";
-                drp_audsr_3.Text = "48";
+                drp_audsr_3.Text = "Auto";
                 drp_audmix_3.Text = "Automatic";
 
                 // Enable the 4th Track.
@@ -978,12 +952,12 @@ namespace Handbrake
                 trackBar4.Enabled = true;
                 drp_audbit_4.Text = "160";
                 drp_audenc_4.Text = "AAC";
-                drp_audsr_4.Text = "48";
+                drp_audsr_4.Text = "Auto";
                 drp_audmix_4.Text = "Automatic";
             }
         }
 
-        private void drp_audioMixDown_SelectedIndexChanged(object sender, EventArgs e)
+        private void drp_audmix_1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if ((drp_audenc_1.Text == "AAC") && (drp_audmix_1.Text == "6 Channel Discrete"))
                 setBitrateSelections384(drp_audbit_1);
@@ -1361,7 +1335,7 @@ namespace Handbrake
         }
         private void check_Cabac_CheckedChanged(object sender, EventArgs e)
         {
-            
+
             x264PanelFunctions.on_x264_WidgetChange("cabac", this);
         }
 
@@ -1456,7 +1430,6 @@ namespace Handbrake
         // Chapter Selection Duration calculation
         public void calculateDuration()
         {
-
             int start_chapter;
             int end_chapter;
             TimeSpan Duration = TimeSpan.FromSeconds(0.0);
@@ -1479,10 +1452,7 @@ namespace Handbrake
                     }
                 }
             }
-            catch (Exception)
-            {
-                // Don't do anything
-            }
+            catch (Exception) { /* Don't do anything */ }
 
             // Set the Duration
             lbl_duration.Text = Duration.ToString();
@@ -1786,17 +1756,10 @@ namespace Handbrake
         // Preset system functions
         private void loadNormalPreset()
         {
-            // Select the "Normal" preset if it exists.
-            int normal = -1;
             foreach (TreeNode treenode in treeView_presets.Nodes)
             {
                 if (treenode.Text.ToString().Equals("Normal"))
-                    normal = treenode.Index;
-            }
-            if (normal != -1)
-            {
-                TreeNode np = treeView_presets.Nodes[normal];
-                treeView_presets.SelectedNode = np;
+                    treeView_presets.SelectedNode = treeView_presets.Nodes[treenode.Index];
             }
         }
         public void loadPresetPanel()
@@ -1860,7 +1823,7 @@ namespace Handbrake
 
         #endregion
 
-        #region Encoding and Queue
+        #region Encoding
 
         // Declarations
         private delegate void UpdateUIHandler();
@@ -1870,15 +1833,11 @@ namespace Handbrake
         {
             // Make sure we are not already encoding and if we are then display an error.
             if (hbProc != null)
-            {
                 hbProc.CloseMainWindow();
-            }
             else
             {
                 hbProc = cliObj.runCli(this, (string)state);
-
                 hbProc.WaitForExit();
-
                 setEncodeLabelFinished();
                 hbProc = null;
 
@@ -1914,7 +1873,7 @@ namespace Handbrake
 
         #endregion
 
-        #region Taskbar
+        #region Taskbar Tray Icon
         private void frmMain_Resize(object sender, EventArgs e)
         {
             if (FormWindowState.Minimized == this.WindowState)
@@ -1925,11 +1884,8 @@ namespace Handbrake
                 this.Hide();
             }
             else if (FormWindowState.Normal == this.WindowState)
-            {
                 notifyIcon.Visible = false;
-            }
         }
-
         private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             this.Visible = true;
@@ -1937,12 +1893,10 @@ namespace Handbrake
             this.WindowState = FormWindowState.Normal;
             notifyIcon.Visible = false;
         }
-
         private void btn_minimize_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
         }
-
         private void btn_restore_Click(object sender, EventArgs e)
         {
             this.Visible = true;
@@ -1950,7 +1904,6 @@ namespace Handbrake
             this.WindowState = FormWindowState.Normal;
             notifyIcon.Visible = false;
         }
-
         #endregion
 
 

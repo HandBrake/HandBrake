@@ -38,7 +38,7 @@ namespace Handbrake
             System.Windows.Forms.Label Label38;
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
@@ -579,7 +579,7 @@ namespace Handbrake
             this.drp_audmix_1.TabIndex = 7;
             this.drp_audmix_1.Text = "Automatic";
             this.ToolTip.SetToolTip(this.drp_audmix_1, "Please note: Some options require a 5.1 audio channel to be selected");
-            this.drp_audmix_1.SelectedIndexChanged += new System.EventHandler(this.drp_audioMixDown_SelectedIndexChanged);
+            this.drp_audmix_1.SelectedIndexChanged += new System.EventHandler(this.drp_audmix_1_SelectedIndexChanged);
             // 
             // text_height
             // 
@@ -649,9 +649,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Format = "N0";
+            dataGridViewCellStyle2.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle2;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -1184,7 +1184,7 @@ namespace Handbrake
             this.mnu_user_guide.Name = "mnu_user_guide";
             this.mnu_user_guide.Size = new System.Drawing.Size(215, 22);
             this.mnu_user_guide.Text = "HandBrake User Guide";
-            this.mnu_user_guide.Click += new System.EventHandler(this.mnu_user_guide_Click_1);
+            this.mnu_user_guide.Click += new System.EventHandler(this.mnu_user_guide_Click);
             // 
             // mnu_handbrake_home
             // 
@@ -1258,7 +1258,7 @@ namespace Handbrake
             this.GroupBox1.Location = new System.Drawing.Point(10, 10);
             this.GroupBox1.Name = "GroupBox1";
             this.GroupBox1.Size = new System.Drawing.Size(705, 87);
-            this.GroupBox1.TabIndex = 1;
+            this.GroupBox1.TabIndex = 0;
             this.GroupBox1.TabStop = false;
             this.GroupBox1.Text = "Source";
             // 
@@ -2241,7 +2241,7 @@ namespace Handbrake
             this.advancedOptions.Name = "advancedOptions";
             this.advancedOptions.SelectedIndex = 0;
             this.advancedOptions.Size = new System.Drawing.Size(705, 328);
-            this.advancedOptions.TabIndex = 5;
+            this.advancedOptions.TabIndex = 1;
             this.advancedOptions.TabStop = false;
             // 
             // tab_chapters
@@ -2325,7 +2325,7 @@ namespace Handbrake
             // 
             // btn_reset
             // 
-            this.btn_reset.Location = new System.Drawing.Point(277, 224);
+            this.btn_reset.Location = new System.Drawing.Point(13, 224);
             this.btn_reset.Name = "btn_reset";
             this.btn_reset.Size = new System.Drawing.Size(75, 23);
             this.btn_reset.TabIndex = 41;
@@ -2694,7 +2694,7 @@ namespace Handbrake
             this.check_pyrmidalBFrames.AutoSize = true;
             this.check_pyrmidalBFrames.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_pyrmidalBFrames.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.check_pyrmidalBFrames.Location = new System.Drawing.Point(47, 210);
+            this.check_pyrmidalBFrames.Location = new System.Drawing.Point(47, 198);
             this.check_pyrmidalBFrames.Name = "check_pyrmidalBFrames";
             this.check_pyrmidalBFrames.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.check_pyrmidalBFrames.Size = new System.Drawing.Size(121, 16);
@@ -2709,7 +2709,7 @@ namespace Handbrake
             this.check_BidirectionalRefinement.AutoSize = true;
             this.check_BidirectionalRefinement.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_BidirectionalRefinement.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.check_BidirectionalRefinement.Location = new System.Drawing.Point(21, 188);
+            this.check_BidirectionalRefinement.Location = new System.Drawing.Point(21, 180);
             this.check_BidirectionalRefinement.Name = "check_BidirectionalRefinement";
             this.check_BidirectionalRefinement.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.check_BidirectionalRefinement.Size = new System.Drawing.Size(147, 16);
@@ -2724,7 +2724,7 @@ namespace Handbrake
             this.check_bFrameRateDistortion.AutoSize = true;
             this.check_bFrameRateDistortion.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_bFrameRateDistortion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.check_bFrameRateDistortion.Location = new System.Drawing.Point(20, 166);
+            this.check_bFrameRateDistortion.Location = new System.Drawing.Point(20, 162);
             this.check_bFrameRateDistortion.Name = "check_bFrameRateDistortion";
             this.check_bFrameRateDistortion.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.check_bFrameRateDistortion.Size = new System.Drawing.Size(147, 16);
@@ -3009,7 +3009,7 @@ namespace Handbrake
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.toolStrip1.Size = new System.Drawing.Size(938, 39);
-            this.toolStrip1.TabIndex = 0;
+            this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
             // btn_source
@@ -3183,7 +3183,7 @@ namespace Handbrake
             this.splitContainer1.Panel2.Controls.Add(this.groupBox2);
             this.splitContainer1.Size = new System.Drawing.Size(938, 556);
             this.splitContainer1.SplitterDistance = 723;
-            this.splitContainer1.TabIndex = 12;
+            this.splitContainer1.TabIndex = 0;
             // 
             // frmMain
             // 
