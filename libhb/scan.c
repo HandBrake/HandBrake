@@ -494,7 +494,16 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         /* Get size and rate infos */
 
         hb_work_info_t vid_info;
-        vid_decoder->info( vid_decoder, &vid_info );
+        if( !vid_decoder->info( vid_decoder, &vid_info ) )
+        {
+            /*
+               * Could not fill vid_info, don't continue and try to use vid_info
+               * in this case.
+               */
+            vid_decoder->close( vid_decoder );
+            free( vid_decoder );
+            continue;
+        }
         vid_decoder->close( vid_decoder );
         free( vid_decoder );
 
