@@ -497,9 +497,9 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         if( !vid_decoder->info( vid_decoder, &vid_info ) )
         {
             /*
-               * Could not fill vid_info, don't continue and try to use vid_info
-               * in this case.
-               */
+             * Could not fill vid_info, don't continue and try to use vid_info
+             * in this case.
+             */
             vid_decoder->close( vid_decoder );
             free( vid_decoder );
             continue;
