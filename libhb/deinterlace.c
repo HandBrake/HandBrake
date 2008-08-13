@@ -32,6 +32,13 @@
 #define MIN3(a,b,c) MIN(MIN(a,b),c)
 #define MAX3(a,b,c) MAX(MAX(a,b),c)
 
+typedef struct yadif_arguments_s {
+    uint8_t **dst;
+    int parity;
+    int tff;
+    int stop;
+} yadif_arguments_t;
+
 struct hb_filter_private_s
 {
     int              pix_fmt;
@@ -44,6 +51,13 @@ struct hb_filter_private_s
 
     uint8_t        * yadif_ref[4][3];
     int              yadif_ref_stride[3];
+
+    int              cpu_count;
+
+    hb_thread_t    ** yadif_threads;        // Threads for Yadif - one per CPU
+    hb_lock_t      ** yadif_begin_lock;     // Thread has work
+    hb_lock_t      ** yadif_complete_lock;  // Thread has completed work
+    yadif_arguments_t *yadif_arguments;     // Arguments to thread for work
 
     int              mcdeint_mode;
     int              mcdeint_qp;
@@ -84,6 +98,7 @@ hb_filter_object_t hb_filter_deinterlace =
     hb_deinterlace_close,
 };
 
+
 static void yadif_store_ref( const uint8_t ** pic,
                              hb_filter_private_t * pv )
 {
@@ -102,7 +117,6 @@ static void yadif_store_ref( const uint8_t ** pic,
         uint8_t * ref = pv->yadif_ref[2][i];
 
         int w = pv->width[i];
-        int h = pv->height[i];
         int ref_stride = pv->yadif_ref_stride[i];
 
         int y;
@@ -185,38 +199,164 @@ static void yadif_filter_line( uint8_t *dst,
     }
 }
 
+typedef struct yadif_thread_arg_s {
+    hb_filter_private_t *pv;
+    int segment;
+} yadif_thread_arg_t;
+
+/*
+ * deinterlace this segment of all three planes in a single thread.
+ */
+void yadif_filter_thread( void *thread_args_v )
+{
+    yadif_arguments_t *yadif_work = NULL;
+    hb_filter_private_t * pv;
+    int run = 1;
+    int plane;
+    int segment, segment_start, segment_stop;
+    yadif_thread_arg_t *thread_args = thread_args_v;
+    uint8_t **dst;
+    int parity, tff, y, w, h, ref_stride;
+
+
+    pv = thread_args->pv;
+    segment = thread_args->segment;
+
+    hb_log("Yadif Deinterlace thread started for segment %d", segment);
+
+    while( run )
+    {
+        /*
+         * Wait here until there is work to do. hb_lock() blocks until
+         * render releases it to say that there is more work to do.
+         */
+        hb_lock( pv->yadif_begin_lock[segment] );
+
+        yadif_work = &pv->yadif_arguments[segment];
+
+        if( yadif_work->stop )
+        {
+            /*
+             * No more work to do, exit this thread.
+             */
+            run = 0;
+            continue;
+        } 
+
+        if( yadif_work->dst == NULL )
+        {
+            hb_error( "Thread started when no work available" );
+            hb_snooze(500);
+            continue;
+        }
+        
+        /*
+         * Process all three planes, but only this segment of it.
+         */
+        for( plane = 0; plane < 3; plane++)
+        {
+
+            dst = yadif_work->dst;
+            parity = yadif_work->parity;
+            tff = yadif_work->tff;
+            w = pv->width[plane];
+            h = pv->height[plane];
+            ref_stride = pv->yadif_ref_stride[plane];
+            segment_start = ( h / pv->cpu_count ) * segment;
+            if( segment == pv->cpu_count - 1 )
+            {
+                /*
+                 * Final segment
+                 */
+                segment_stop = h;
+            } else {
+                segment_stop = ( h / pv->cpu_count ) * ( segment + 1 );
+            }
+
+            for( y = segment_start; y < segment_stop; y++ )
+            {
+                if( (y ^ parity) &  1 )
+                {
+                    uint8_t *prev = &pv->yadif_ref[0][plane][y*ref_stride];
+                    uint8_t *cur  = &pv->yadif_ref[1][plane][y*ref_stride];
+                    uint8_t *next = &pv->yadif_ref[2][plane][y*ref_stride];
+                    uint8_t *dst2 = &dst[plane][y*w];
+                    
+                    yadif_filter_line( dst2, 
+                                       prev, 
+                                       cur, 
+                                       next, 
+                                       plane, 
+                                       parity ^ tff, 
+                                       pv );
+                    
+                }
+                else
+                {
+                    memcpy( &dst[plane][y*w],
+                            &pv->yadif_ref[1][plane][y*ref_stride],
+                            w * sizeof(uint8_t) );
+                }
+            }
+        }
+        /*
+         * Finished this segment, let everyone know.
+         */
+        hb_unlock( pv->yadif_complete_lock[segment] );
+    }
+    free( thread_args_v );
+}
+
+
+/*
+ * threaded yadif - each thread deinterlaces a single segment of all
+ * three planes. Where a segment is defined as the frame divided by
+ * the number of CPUs.
+ *
+ * This function blocks until the frame is deinterlaced.
+ */
 static void yadif_filter( uint8_t ** dst,
                           int parity,
                           int tff,
                           hb_filter_private_t * pv )
 {
-    int i;
-    for( i = 0; i < 3; i++ )
-    {
-        int w = pv->width[i];
-        int h = pv->height[i];
-        int ref_stride = pv->yadif_ref_stride[i];
 
-        int y;
-        for( y = 0; y < h; y++ )
-        {
-            if( (y ^ parity) &  1 )
-            {
-                uint8_t *prev = &pv->yadif_ref[0][i][y*ref_stride];
-                uint8_t *cur  = &pv->yadif_ref[1][i][y*ref_stride];
-                uint8_t *next = &pv->yadif_ref[2][i][y*ref_stride];
-                uint8_t *dst2 = &dst[i][y*w];
+    int segment;
 
-                yadif_filter_line( dst2, prev, cur, next, i, parity ^ tff, pv );
-            }
-            else
-            {
-                memcpy( &dst[i][y*w],
-                        &pv->yadif_ref[1][i][y*ref_stride],
-                        w * sizeof(uint8_t) );
-            }
-        }
+    for( segment = 0; segment < pv->cpu_count; segment++ )
+    {  
+        /*
+         * Setup the work for this plane.
+         */
+        pv->yadif_arguments[segment].parity = parity;
+        pv->yadif_arguments[segment].tff = tff;
+        pv->yadif_arguments[segment].dst = dst;
+
+        /*
+         * Let the thread for this plane know that we've setup work 
+         * for it by releasing the begin lock (ensuring that the
+         * complete lock is already locked so that we block when
+         * we try to lock it again below).
+         */
+        hb_lock( pv->yadif_complete_lock[segment] );
+        hb_unlock( pv->yadif_begin_lock[segment] );
     }
+
+    /*
+     * Wait until all three threads have completed by trying to get
+     * the complete lock that we locked earlier for each thread, which
+     * will block until that thread has completed the work on that
+     * plane.
+     */
+    for( segment = 0; segment < pv->cpu_count; segment++ )
+    {
+        hb_lock( pv->yadif_complete_lock[segment] );
+        hb_unlock( pv->yadif_complete_lock[segment] );
+    }
+
+    /*
+     * Entire frame is now deinterlaced.
+     */
 }
 
 static void mcdeint_filter( uint8_t ** dst,
@@ -372,6 +512,8 @@ hb_filter_private_t * hb_deinterlace_init( int pix_fmt,
                 &pv->mcdeint_qp );
     }
 
+    pv->cpu_count = hb_get_cpu_count();
+
     /* Allocate yadif specific buffers */
     if( pv->yadif_mode >= 0 )
     {
@@ -387,6 +529,45 @@ hb_filter_private_t * hb_deinterlace_init( int pix_fmt,
             for( j = 0; j < 3; j++ )
             {
                 pv->yadif_ref[j][i] = malloc( w*h*sizeof(uint8_t) ) + 3*w;
+            }
+        }
+
+        /*
+         * Create yadif threads and locks.
+         */
+        pv->yadif_threads = malloc( sizeof( hb_thread_t* ) * pv->cpu_count );
+        pv->yadif_begin_lock = malloc( sizeof( hb_lock_t * ) * pv->cpu_count );
+        pv->yadif_complete_lock = malloc( sizeof( hb_lock_t * ) * pv->cpu_count );
+        pv->yadif_arguments = malloc( sizeof( yadif_arguments_t ) * pv->cpu_count );
+
+        for( i = 0; i < pv->cpu_count; i++ )
+        {
+            yadif_thread_arg_t *thread_args;
+
+            thread_args = malloc( sizeof( yadif_thread_arg_t ) );
+
+            if( thread_args ) {
+                thread_args->pv = pv;
+                thread_args->segment = i;
+
+                pv->yadif_begin_lock[i] = hb_lock_init();
+                pv->yadif_complete_lock[i] = hb_lock_init();
+
+                /*
+                 * Important to start off with the threads locked waiting
+                 * on input.
+                 */
+                hb_lock( pv->yadif_begin_lock[i] );
+
+                pv->yadif_arguments[i].stop = 0;
+                pv->yadif_arguments[i].dst = NULL;
+                
+                pv->yadif_threads[i] = hb_thread_init( "yadif_filter_segment",
+                                                       yadif_filter_thread,
+                                                       thread_args,
+                                                       HB_NORMAL_PRIORITY );
+            } else {
+                hb_error( "Yadif could not create threads" );
             }
         }
     }
@@ -478,6 +659,27 @@ void hb_deinterlace_close( hb_filter_private_t * pv )
                 *p = NULL;
             }
         }
+
+        for( i = 0; i < pv->cpu_count; i++)
+        {
+            /*
+             * Tell each yadif thread to stop, and then cleanup.
+             */
+            pv->yadif_arguments[i].stop = 1;
+            hb_unlock(  pv->yadif_begin_lock[i] );
+
+            hb_thread_close( &pv->yadif_threads[i] );
+            hb_lock_close( &pv->yadif_begin_lock[i] );
+            hb_lock_close( &pv->yadif_complete_lock[i] );
+        }
+        
+        /*
+         * free memory for yadif structs
+         */
+        free( pv->yadif_threads );
+        free( pv->yadif_begin_lock );
+        free( pv->yadif_complete_lock );
+        free( pv->yadif_arguments );
     }
 
     /* Cleanup mcdeint specific buffers */
