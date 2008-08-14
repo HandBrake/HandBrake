@@ -346,7 +346,7 @@ int tritical_detect_comb( hb_filter_private_t * pv )
     int athresh_squared = athresh * athresh;
     int athresh6        = 6 *athresh;
 
-    /* One pas for Y, one pass for Cb, one pass for Cr */    
+    /* One pas for Y, one pass for U, one pass for V */    
     for( k = 0; k < 1; k++ )
     {
         int ref_stride  = pv->ref_stride[k];
@@ -488,9 +488,12 @@ static void yadif_filter_line( uint8_t *dst,
                                int y,
                                hb_filter_private_t * pv )
 {
+    /* While prev and next point to the previous and next frames,
+       prev2 and next2 will shift depending on the parity, usually 1.
+       They are the previous and next fields, the fields temporally adjacent
+       to the other field in the current frame--the one not being filtered.  */
     uint8_t *prev2 = parity ? prev : cur ;
     uint8_t *next2 = parity ? cur  : next;
-
     int w = pv->width[plane];
     int refs = pv->ref_stride[plane];
     int x;
@@ -499,16 +502,16 @@ static void yadif_filter_line( uint8_t *dst,
     {
         /* Pixel above*/
         int c              = cur[-refs];
-        /* Temporal average -- the current pixel location in the previous and next fields */
+        /* Temporal average: the current location in the adjacent fields */
         int d              = (prev2[0] + next2[0])>>1;
         /* Pixel below */
         int e              = cur[+refs];
         
-        /* How the current pixel changes from the field before to the field after */
+        /* How the current pixel changes between the adjacent fields */
         int temporal_diff0 = ABS(prev2[0] - next2[0]);
-        /* The average of how much the pixels above and below change from the field before to now. */
+        /* The average of how much the pixels above and below change from the frame before to now. */
         int temporal_diff1 = ( ABS(prev[-refs] - cur[-refs]) + ABS(prev[+refs] - cur[+refs]) ) >> 1;
-        /* The average of how much the pixels above and below change from now to the next field. */
+        /* The average of how much the pixels above and below change from now to the next frame. */
         int temporal_diff2 = ( ABS(next[-refs] - cur[-refs]) + ABS(next[+refs] - cur[+refs]) ) >> 1;
         /* For the actual difference, use the largest of the previous average diffs. */
         int diff           = MAX3(temporal_diff0>>1, temporal_diff1, temporal_diff2);
@@ -566,8 +569,8 @@ static void yadif_filter_line( uint8_t *dst,
                 YADIF_CHECK(-1) YADIF_CHECK(-2) }} }}
                 YADIF_CHECK( 1) YADIF_CHECK( 2) }} }}
                                 
-        /* Temporally adjust the spatial prediction by comparing
-           against fields in the previous and next frames.       */
+        /* Temporally adjust the spatial prediction by
+           comparing against lines in the adjacent fields. */
         int b = (prev2[-2*refs] + next2[-2*refs])>>1;
         int f = (prev2[+2*refs] + next2[+2*refs])>>1;
         
