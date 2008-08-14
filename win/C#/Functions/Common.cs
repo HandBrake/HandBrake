@@ -18,76 +18,7 @@ namespace Handbrake.Functions
 {
     class Common
     {
-        /// <summary>
-        /// Checks for updates and returns true if an update is available.
-        /// </summary>
-        /// <param name="debug">Turns on debug mode. Don't use on program startup</param>
-        /// <returns>Boolean True = Update available</returns>
-        public Boolean updateCheck(Boolean debug)
-        {
-            try
-            {
-                Functions.AppcastReader rssRead = new Functions.AppcastReader();
-                string build = rssRead.build();
-
-                int latest = int.Parse(build);
-                int current = Properties.Settings.Default.hb_build;
-                int skip = Properties.Settings.Default.skipversion;
-
-                if (latest == skip)
-                    return false;
-                else
-                {
-                    Boolean update = (latest > current);
-                    return update;
-                }
-            }
-            catch (Exception exc)
-            {
-                if (debug == true)
-                    MessageBox.Show("Unable to check for updates, Please try again later. \n" + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Get's HandBrakes version data from the CLI.
-        /// </summary>
-        /// <returns>Arraylist of Version Data. 0 = hb_version 1 = hb_build</returns>
-        public ArrayList getCliVersionData()
-        {
-            ArrayList cliVersionData = new ArrayList();
-            // 0 = SVN Build / Version
-            // 1 = Build Date
-
-            Process cliProcess = new Process();
-            ProcessStartInfo handBrakeCLI = new ProcessStartInfo("HandBrakeCLI.exe", " -u");
-            handBrakeCLI.UseShellExecute = false;
-            handBrakeCLI.RedirectStandardError = true;
-            handBrakeCLI.RedirectStandardOutput = true;
-            handBrakeCLI.CreateNoWindow = true;
-            cliProcess.StartInfo = handBrakeCLI;
-            cliProcess.Start();
-
-            // Retrieve standard output and report back to parent thread until the process is complete
-            String line;
-            TextReader stdOutput = cliProcess.StandardError;
-
-            while (!cliProcess.HasExited)
-            {
-                line = stdOutput.ReadLine();
-                Match m = Regex.Match(line, @"HandBrake [0-9\.]*svn[0-9]*[M]* \([0-9]*\)");
-                if (m.Success != false)
-                {
-                    string data = line.Replace("(", "").Replace(")", "").Replace("HandBrake ", "");
-                    string[] arr = data.Split(' ');
-                    cliVersionData.Add(arr[0]);
-                    cliVersionData.Add(arr[1]);
-                    return cliVersionData;
-                }
-            }
-            return null;
-        }
+        #region Presets
 
         /// <summary>
         /// Update the presets.dat file with the latest version of HandBrak's presets from the CLI
@@ -107,77 +38,6 @@ namespace Handbrake.Functions
             hbproc.Dispose();
             hbproc.Close();
         }
-
-        /// <summary>
-        /// Function which generates the filename and path automatically based on 
-        /// the Source Name, DVD title and DVD Chapters
-        /// </summary>
-        /// <param name="mainWindow"></param>
-        public void autoName(frmMain mainWindow)
-        {
-            if (Properties.Settings.Default.autoNaming == "Checked")
-            {
-                if (mainWindow.drp_dvdtitle.Text != "Automatic")
-                {
-                    string source = mainWindow.text_source.Text;
-                    string[] sourceName = source.Split('\\');
-                    source = sourceName[sourceName.Length - 1].Replace(".iso", "").Replace(".mpg", "").Replace(".ts", "").Replace(".ps", "");
-
-                    string title = mainWindow.drp_dvdtitle.Text;
-                    string[] titlesplit = title.Split(' ');
-                    title = titlesplit[0];
-
-                    string cs = mainWindow.drop_chapterStart.Text;
-                    string cf = mainWindow.drop_chapterFinish.Text;
-
-                    if (title == "Automatic")
-                        title = "";
-                    if (cs == "Auto")
-                        cs = "";
-                    if (cf == "Auto")
-                        cf = "";
-
-                    string dash = "";
-                    if (cf != "Auto")
-                        dash = "-";
-
-                    if (!mainWindow.text_destination.Text.Contains("\\"))
-                    {
-                        string filePath = "";
-                        if (Properties.Settings.Default.autoNamePath.Trim() != "")
-                        {
-                            if (Properties.Settings.Default.autoNamePath.Trim() != "Click 'Browse' to set the default location")
-                                filePath = Properties.Settings.Default.autoNamePath + "\\";
-                        }
-                        mainWindow.text_destination.Text = filePath + source + "_T" + title + "_C" + cs + dash + cf + ".mp4";
-                    }
-                    else
-                    {
-                        string dest = mainWindow.text_destination.Text;
-
-                        string[] destName = dest.Split('\\');
-
-
-                        string[] extension = dest.Split('.');
-                        string ext = extension[extension.Length - 1];
-
-                        destName[destName.Length - 1] = source + "_T" + title + "_C" + cs + dash + cf + "." + ext;
-
-                        string fullDest = "";
-                        foreach (string part in destName)
-                        {
-                            if (fullDest != "")
-                                fullDest = fullDest + "\\" + part;
-                            else
-                                fullDest = fullDest + part;
-                        }
-
-                        mainWindow.text_destination.Text = fullDest;
-                    }
-                }
-            }
-        }
-
         /// <summary>
         /// This function takes in a Query which has been parsed by QueryParser and
         /// set's all the GUI widgets correctly.
@@ -544,6 +404,10 @@ namespace Handbrake.Functions
             #endregion
         }
 
+        #endregion
+
+        #region Query Generator & Chapter CSV Creation
+
         /// <summary>
         /// Generates a CLI query based on the GUI widgets.
         /// </summary>
@@ -580,7 +444,6 @@ namespace Handbrake.Functions
             query += generateTabbedComponentsQuery(mainWindow, mainWindow.text_source.Text);
             return query;
         }
-
         /// <summary>
         /// Generates a CLI query for the preview function.
         /// This basically forces a shortened version of the encdode.
@@ -614,95 +477,6 @@ namespace Handbrake.Functions
 
             query += generateTabbedComponentsQuery(mainWindow, mainWindow.text_source.Text);
             return query;
-        }
-
-        /// <summary>
-        /// Set's up the DataGridView on the Chapters tab (frmMain)
-        /// </summary>
-        /// <param name="mainWindow"></param>
-        public void chapterNaming(frmMain mainWindow)
-        {
-            try
-            {
-                mainWindow.data_chpt.Rows.Clear();
-                int i = 0;
-                int rowCount = 0;
-                int start = 0;
-                int finish = 0;
-                if (mainWindow.drop_chapterFinish.Text != "Auto")
-                    finish = int.Parse(mainWindow.drop_chapterFinish.Text);
-
-                if (mainWindow.drop_chapterStart.Text != "Auto")
-                    start = int.Parse(mainWindow.drop_chapterStart.Text);
-
-                rowCount = finish - (start - 1);
-
-                while (i < rowCount)
-                {
-                    DataGridViewRow row = new DataGridViewRow();
-
-                    mainWindow.data_chpt.Rows.Insert(i, row);
-                    mainWindow.data_chpt.Rows[i].Cells[0].Value = (i + 1);
-                    mainWindow.data_chpt.Rows[i].Cells[1].Value = "Chapter " + (i + 1);
-                    i++;
-                }
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show("chapterNaming() Error has occured: \n" + exc.ToString());
-            }
-        }
-
-        /// <summary>
-        /// Select the longest title in the DVD title dropdown menu on frmMain
-        /// </summary>
-        public void selectLongestTitle(frmMain mainWindow)
-        {
-            int current_largest = 0;
-            Handbrake.Parsing.Title title2Select;
-
-            // Check if there are titles in the DVD title dropdown menu and make sure, it's not just "Automatic"
-            if (mainWindow.drp_dvdtitle.Items[0].ToString() != "Automatic")
-                title2Select = (Handbrake.Parsing.Title)mainWindow.drp_dvdtitle.Items[0];
-            else
-                title2Select = null;
-
-            // So, If there are titles in the DVD Title dropdown menu, lets select the longest.
-            if (title2Select != null)
-            {
-                foreach (Handbrake.Parsing.Title x in mainWindow.drp_dvdtitle.Items)
-                {
-                    string title = x.ToString();
-                    if (title != "Automatic")
-                    {
-                        string[] y = title.Split(' ');
-                        string time = y[1].Replace("(", "").Replace(")", "");
-                        string[] z = time.Split(':');
-
-                        int hours = int.Parse(z[0]) * 60 * 60;
-                        int minutes = int.Parse(z[1]) * 60;
-                        int seconds = int.Parse(z[2]);
-                        int total_sec = hours + minutes + seconds;
-
-                        if (current_largest == 0)
-                        {
-                            current_largest = hours + minutes + seconds;
-                            title2Select = x;
-                        }
-                        else
-                        {
-                            if (total_sec > current_largest)
-                            {
-                                current_largest = total_sec;
-                                title2Select = x;
-                            }
-                        }
-                    }
-                }
-
-                // Now set the longest title in the gui.
-                mainWindow.drp_dvdtitle.SelectedItem = title2Select;
-            }
         }
 
         // Generates part of the CLI query, for the tabbed components only.
@@ -747,16 +521,16 @@ namespace Handbrake.Functions
                 query += " --crop 0:0:0:0 ";
             else if (mainWindow.drp_crop.Text == "Custom")
             {
-                    if (mainWindow.text_top.Text == "")
-                        cropTop = "0";
-                    if (mainWindow.text_bottom.Text == "")
-                        cropBottom = "0";
-                    if (mainWindow.text_left.Text == "")
-                        cropLeft = "0";
-                    if (mainWindow.text_right.Text == "")
-                        cropRight = "0";
+                if (mainWindow.text_top.Text == "")
+                    cropTop = "0";
+                if (mainWindow.text_bottom.Text == "")
+                    cropBottom = "0";
+                if (mainWindow.text_left.Text == "")
+                    cropLeft = "0";
+                if (mainWindow.text_right.Text == "")
+                    cropRight = "0";
 
-                    query += " --crop " + cropTop + ":" + cropBottom + ":" + cropLeft + ":" + cropRight;
+                query += " --crop " + cropTop + ":" + cropBottom + ":" + cropLeft + ":" + cropRight;
             }
 
             switch (mainWindow.drp_deInterlace_option.Text)
@@ -1013,13 +787,13 @@ namespace Handbrake.Functions
                 query += " -6 dpl2";
 
             if (Mixdown2 != "" && track2 != "None")
-                    query += "," + getMixDown(Mixdown2);
+                query += "," + getMixDown(Mixdown2);
 
             if (Mixdown3 != "" && track3 != "None" && track2 != "None")
-                    query += "," + getMixDown(Mixdown3);
+                query += "," + getMixDown(Mixdown3);
 
             if (Mixdown4 != "" && track4 != "None" && track3 != "None")
-                    query += "," + getMixDown(Mixdown4);
+                query += "," + getMixDown(Mixdown4);
 
 
             //
@@ -1138,7 +912,44 @@ namespace Handbrake.Functions
 
             return query;
         }
-
+        // Get the CLI equive of the audio mixdown from the widget name.
+        private string getMixDown(string selectedAudio)
+        {
+            switch (selectedAudio)
+            {
+                case "Automatic":
+                    return "dpl2";
+                case "Mono":
+                    return "mono";
+                case "Stereo":
+                    return "stereo";
+                case "Dolby Surround":
+                    return "dpl1";
+                case "Dolby Pro Logic II":
+                    return "dpl2";
+                case "6 Channel Discrete":
+                    return "6ch";
+                default:
+                    return "dpl2";
+            }
+        }
+        // Get the CLI equiv of the audio encoder from the widget name.
+        private string getAudioEncoder(string selectedEncoder)
+        {
+            switch (selectedEncoder)
+            {
+                case "AAC":
+                    return "faac";
+                case "MP3":
+                    return "lame";
+                case "Vorbis":
+                    return "vorbis";
+                case "AC3":
+                    return "ac3";
+                default:
+                    return "";
+            }
+        }
         // This function saves the data in the chapters tab, dataGridView into a CSV file called chapters.csv
         // in a directory specified by file_path_name
         private Boolean chapterCSVSave(frmMain mainWindow, string file_path_name)
@@ -1168,45 +979,243 @@ namespace Handbrake.Functions
             }
         }
 
-        // Get the CLI equive of the audio mixdown from the widget name.
-        private string getMixDown(string selectedAudio)
+        #endregion
+
+        #region frmMain Actions
+
+        /// <summary>
+        /// Select the longest title in the DVD title dropdown menu on frmMain
+        /// </summary>
+        public void selectLongestTitle(frmMain mainWindow)
         {
-            switch (selectedAudio)
+            int current_largest = 0;
+            Handbrake.Parsing.Title title2Select;
+
+            // Check if there are titles in the DVD title dropdown menu and make sure, it's not just "Automatic"
+            if (mainWindow.drp_dvdtitle.Items[0].ToString() != "Automatic")
+                title2Select = (Handbrake.Parsing.Title)mainWindow.drp_dvdtitle.Items[0];
+            else
+                title2Select = null;
+
+            // So, If there are titles in the DVD Title dropdown menu, lets select the longest.
+            if (title2Select != null)
             {
-                case "Automatic":
-                    return "dpl2";
-                case "Mono":
-                    return "mono";
-                case "Stereo":
-                    return "stereo";
-                case "Dolby Surround":
-                    return "dpl1";
-                case "Dolby Pro Logic II":
-                    return "dpl2";
-                case "6 Channel Discrete":
-                    return "6ch";
-                default:
-                    return "dpl2";
+                foreach (Handbrake.Parsing.Title x in mainWindow.drp_dvdtitle.Items)
+                {
+                    string title = x.ToString();
+                    if (title != "Automatic")
+                    {
+                        string[] y = title.Split(' ');
+                        string time = y[1].Replace("(", "").Replace(")", "");
+                        string[] z = time.Split(':');
+
+                        int hours = int.Parse(z[0]) * 60 * 60;
+                        int minutes = int.Parse(z[1]) * 60;
+                        int seconds = int.Parse(z[2]);
+                        int total_sec = hours + minutes + seconds;
+
+                        if (current_largest == 0)
+                        {
+                            current_largest = hours + minutes + seconds;
+                            title2Select = x;
+                        }
+                        else
+                        {
+                            if (total_sec > current_largest)
+                            {
+                                current_largest = total_sec;
+                                title2Select = x;
+                            }
+                        }
+                    }
+                }
+
+                // Now set the longest title in the gui.
+                mainWindow.drp_dvdtitle.SelectedItem = title2Select;
             }
         }
 
-        // Get the CLI equiv of the audio encoder from the widget name.
-        private string getAudioEncoder(string selectedEncoder)
+        /// <summary>
+        /// Set's up the DataGridView on the Chapters tab (frmMain)
+        /// </summary>
+        /// <param name="mainWindow"></param>
+        public void chapterNaming(frmMain mainWindow)
         {
-            switch (selectedEncoder)
+            try
             {
-                case "AAC":
-                    return "faac";
-                case "MP3":
-                    return "lame";
-                case "Vorbis":
-                    return "vorbis";
-                case "AC3":
-                    return "ac3";
-                default:
-                    return "";
+                mainWindow.data_chpt.Rows.Clear();
+                int i = 0;
+                int rowCount = 0;
+                int start = 0;
+                int finish = 0;
+                if (mainWindow.drop_chapterFinish.Text != "Auto")
+                    finish = int.Parse(mainWindow.drop_chapterFinish.Text);
+
+                if (mainWindow.drop_chapterStart.Text != "Auto")
+                    start = int.Parse(mainWindow.drop_chapterStart.Text);
+
+                rowCount = finish - (start - 1);
+
+                while (i < rowCount)
+                {
+                    DataGridViewRow row = new DataGridViewRow();
+
+                    mainWindow.data_chpt.Rows.Insert(i, row);
+                    mainWindow.data_chpt.Rows[i].Cells[0].Value = (i + 1);
+                    mainWindow.data_chpt.Rows[i].Cells[1].Value = "Chapter " + (i + 1);
+                    i++;
+                }
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("chapterNaming() Error has occured: \n" + exc.ToString());
             }
         }
 
+        /// <summary>
+        /// Function which generates the filename and path automatically based on 
+        /// the Source Name, DVD title and DVD Chapters
+        /// </summary>
+        /// <param name="mainWindow"></param>
+        public void autoName(frmMain mainWindow)
+        {
+            if (Properties.Settings.Default.autoNaming == "Checked")
+            {
+                if (mainWindow.drp_dvdtitle.Text != "Automatic")
+                {
+                    string source = mainWindow.text_source.Text;
+                    string[] sourceName = source.Split('\\');
+                    source = sourceName[sourceName.Length - 1].Replace(".iso", "").Replace(".mpg", "").Replace(".ts", "").Replace(".ps", "");
+
+                    string title = mainWindow.drp_dvdtitle.Text;
+                    string[] titlesplit = title.Split(' ');
+                    title = titlesplit[0];
+
+                    string cs = mainWindow.drop_chapterStart.Text;
+                    string cf = mainWindow.drop_chapterFinish.Text;
+
+                    if (title == "Automatic")
+                        title = "";
+                    if (cs == "Auto")
+                        cs = "";
+                    if (cf == "Auto")
+                        cf = "";
+
+                    string dash = "";
+                    if (cf != "Auto")
+                        dash = "-";
+
+                    if (!mainWindow.text_destination.Text.Contains("\\"))
+                    {
+                        string filePath = "";
+                        if (Properties.Settings.Default.autoNamePath.Trim() != "")
+                        {
+                            if (Properties.Settings.Default.autoNamePath.Trim() != "Click 'Browse' to set the default location")
+                                filePath = Properties.Settings.Default.autoNamePath + "\\";
+                        }
+                        mainWindow.text_destination.Text = filePath + source + "_T" + title + "_C" + cs + dash + cf + ".mp4";
+                    }
+                    else
+                    {
+                        string dest = mainWindow.text_destination.Text;
+
+                        string[] destName = dest.Split('\\');
+
+
+                        string[] extension = dest.Split('.');
+                        string ext = extension[extension.Length - 1];
+
+                        destName[destName.Length - 1] = source + "_T" + title + "_C" + cs + dash + cf + "." + ext;
+
+                        string fullDest = "";
+                        foreach (string part in destName)
+                        {
+                            if (fullDest != "")
+                                fullDest = fullDest + "\\" + part;
+                            else
+                                fullDest = fullDest + part;
+                        }
+
+                        mainWindow.text_destination.Text = fullDest;
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region Version and Update Checking
+
+        /// <summary>
+        /// Checks for updates and returns true if an update is available.
+        /// </summary>
+        /// <param name="debug">Turns on debug mode. Don't use on program startup</param>
+        /// <returns>Boolean True = Update available</returns>
+        public Boolean updateCheck(Boolean debug)
+        {
+            try
+            {
+                Functions.AppcastReader rssRead = new Functions.AppcastReader();
+                string build = rssRead.build();
+
+                int latest = int.Parse(build);
+                int current = Properties.Settings.Default.hb_build;
+                int skip = Properties.Settings.Default.skipversion;
+
+                if (latest == skip)
+                    return false;
+                else
+                {
+                    Boolean update = (latest > current);
+                    return update;
+                }
+            }
+            catch (Exception exc)
+            {
+                if (debug == true)
+                    MessageBox.Show("Unable to check for updates, Please try again later. \n" + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+        /// <summary>
+        /// Get's HandBrakes version data from the CLI.
+        /// </summary>
+        /// <returns>Arraylist of Version Data. 0 = hb_version 1 = hb_build</returns>
+        public ArrayList getCliVersionData()
+        {
+            ArrayList cliVersionData = new ArrayList();
+            // 0 = SVN Build / Version
+            // 1 = Build Date
+
+            Process cliProcess = new Process();
+            ProcessStartInfo handBrakeCLI = new ProcessStartInfo("HandBrakeCLI.exe", " -u");
+            handBrakeCLI.UseShellExecute = false;
+            handBrakeCLI.RedirectStandardError = true;
+            handBrakeCLI.RedirectStandardOutput = true;
+            handBrakeCLI.CreateNoWindow = true;
+            cliProcess.StartInfo = handBrakeCLI;
+            cliProcess.Start();
+
+            // Retrieve standard output and report back to parent thread until the process is complete
+            String line;
+            TextReader stdOutput = cliProcess.StandardError;
+
+            while (!cliProcess.HasExited)
+            {
+                line = stdOutput.ReadLine();
+                Match m = Regex.Match(line, @"HandBrake [0-9\.]*svn[0-9]*[M]* \([0-9]*\)");
+                if (m.Success != false)
+                {
+                    string data = line.Replace("(", "").Replace(")", "").Replace("HandBrake ", "");
+                    string[] arr = data.Split(' ');
+                    cliVersionData.Add(arr[0]);
+                    cliVersionData.Add(arr[1]);
+                    return cliVersionData;
+                }
+            }
+            return null;
+        }
+
+        #endregion
     }
 }
