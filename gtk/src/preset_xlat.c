@@ -176,6 +176,18 @@ gchar *audio_mix[2];
 gchar *audio_drc[2];
 
 static void
+add_keys(parse_data_t *pd)
+{
+	// These are needed to override default values that
+	// are not set in the xml file (yet)
+	const gchar *val;
+	// Check to see if its really not set. Future xml versions will set it.
+	val = (const gchar*)g_hash_table_lookup(pd->settings, "decomb");
+	if (!val)
+		g_hash_table_insert(pd->settings, g_strdup("decomb"), g_strdup("0"));
+}
+
+static void
 do_one(gchar **strs, GString *res)
 {
 	gint ii;
@@ -390,6 +402,7 @@ end_element(
 	else if (IS_TAG(name, "dict"))
 	{
 		gint ii;
+		add_keys(pd);
 		do_audio(pd);
 		clear_audio();
 		save_preset(pd);
@@ -481,6 +494,15 @@ text_data(
 			{
 				val = "slower";
 			}
+		}
+		else if (IS_KEY(pd->key, "VideoQualitySlider"))
+		{
+			gdouble dval;
+			dval = g_strtod(val, NULL);
+			dval *= 100;
+			if (pd->value) g_free(pd->value);
+			pd->value = g_strdup_printf("%d", (gint)dval);
+			return;
 		}
 		else if (IS_KEY(pd->key, "Audio1Samplerate") ||
 				IS_KEY(pd->key, "Audio2Samplerate"))
@@ -587,7 +609,7 @@ static xlat_t values[] =
 	{"AAC (faac)", "faac"},
 	{"AC3 Passthru", "ac3"},
 	{"H.264 (x264)", "x264"},
-	{"MPEG-4 (FFmpeg)", "x264"},
+	{"MPEG-4 (FFmpeg)", "ffmpeg"},
 	{"Dolby Pro Logic II", "dpl2"},
 	{"Auto", "auto"},
 	{"MKV file", "mkv"},

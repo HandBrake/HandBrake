@@ -1458,10 +1458,17 @@ x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		GtkWidget *textview;
 		textview = GTK_WIDGET(GHB_WIDGET(ud->builder, "x264_options"));
 		ghb_widget_to_setting(ud->settings, textview);
-		const gchar *options;
-		options = ghb_settings_get_string(ud->settings, "x264_options");
+		gchar *options;
+		options = (gchar*)ghb_settings_get_string(ud->settings, "x264_options");
 		ignore_options_update = TRUE;
 		ghb_x264_parse_options(ud, options);
+		if (!GTK_WIDGET_HAS_FOCUS(textview))
+		{
+			options = ghb_sanitize_x264opts(ud, options);
+			ghb_ui_update(ud, "x264_options", options);
+			ghb_x264_parse_options(ud, options);
+			g_free(options);
+		}
 		ignore_options_update = FALSE;
 	}
 }
