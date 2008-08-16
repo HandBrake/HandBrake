@@ -1879,7 +1879,10 @@ namespace Handbrake
             if (FormWindowState.Minimized == this.WindowState)
             {
                 notifyIcon.Visible = true;
-                notifyIcon.BalloonTipText = lbl_encode.Text;
+                if (lbl_encode.Text != "")
+                    notifyIcon.BalloonTipText = lbl_encode.Text;
+                else
+                    notifyIcon.BalloonTipText = "Not Encoding";
                 notifyIcon.ShowBalloonTip(500);
                 this.Hide();
             }

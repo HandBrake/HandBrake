@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using Microsoft.Win32;
 
 namespace Handbrake.Functions
 {
@@ -41,5 +42,16 @@ namespace Handbrake.Functions
         }
         #endregion
 
+        public Object getCpuCount()
+        {
+            RegistryKey RegKey = Registry.LocalMachine;
+            RegKey = RegKey.OpenSubKey("HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0");
+            return RegKey.GetValue("ProcessorNameString");
+        }
+
+        public System.Windows.Forms.Screen screenBounds()
+        {
+            return System.Windows.Forms.Screen.PrimaryScreen;
+        }
     }
 }

@@ -27,6 +27,7 @@ namespace Handbrake
         private delegate void UpdateUIHandler();
         Process hbproc;
         Functions.Common hb_common_func = new Functions.Common();
+        Functions.Encode process = new Functions.Encode();
 
         public frmReadDVD(string inputFile, frmMain parent)
         {
@@ -45,10 +46,51 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                MessageBox.Show("frmReadDVD.cs - startScan " + exc.ToString());
+                MessageBox.Show("frmReadDVD.cs - startScan " + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        private void startProc(object state)
+        {
+            try
+            {
+                string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
+                string dvdInfoPath = Path.Combine(Path.GetTempPath(), "dvdinfo.dat");
 
+                // Make we don't pick up a stale hb_encode_log.dat (and that we have rights to the file)
+                if (File.Exists(dvdInfoPath))
+                    File.Delete(dvdInfoPath);
+
+                string strCmdLine = String.Format(@"cmd /c """"{0}"" -i ""{1}"" -t0 -v >""{2}"" 2>&1""", handbrakeCLIPath, inputFile, dvdInfoPath);
+
+                ProcessStartInfo hbParseDvd = new ProcessStartInfo("CMD.exe", strCmdLine);
+                hbParseDvd.WindowStyle = ProcessWindowStyle.Hidden;
+
+                using (hbproc = Process.Start(hbParseDvd))
+                {
+                    hbproc.WaitForExit();
+                }
+
+                if (!File.Exists(dvdInfoPath))
+                {
+                    throw new Exception("Unable to retrieve the DVD Info. dvdinfo.dat is missing. \nExpected location of dvdinfo.dat: \n" + dvdInfoPath);
+                }
+
+                using (StreamReader sr = new StreamReader(dvdInfoPath))
+                {
+                    thisDvd = Parsing.DVD.Parse(sr);
+                    sr.Close();
+                    sr.Dispose();
+                }
+
+                updateUIElements();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("frmReadDVD.cs - startProc() " + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                closeWindowAfterError();
+            }
+
+        }
         private void updateUIElements()
         {
             try
@@ -76,54 +118,25 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                MessageBox.Show("frmReadDVD.cs - updateUIElements " + exc.ToString());
+                MessageBox.Show("frmReadDVD.cs - updateUIElements " + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
             }
         }
-
-        Functions.Encode process = new Functions.Encode();
-
-        private void startProc(object state)
+        private void closeWindowAfterError()
         {
             try
             {
-                string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
-                string dvdInfoPath = Path.Combine(Path.GetTempPath(), "dvdinfo.dat");
-
-                // Make we don't pick up a stale hb_encode_log.dat (and that we have rights to the file)
-                if (File.Exists(dvdInfoPath))
-                    File.Delete(dvdInfoPath);
-
-                string strCmdLine = String.Format(@"cmd /c """"{0}"" -i ""{1}"" -t0 -v >""{2}"" 2>&1""", handbrakeCLIPath, inputFile, dvdInfoPath);
-
-                ProcessStartInfo hbParseDvd = new ProcessStartInfo("CMD.exe", strCmdLine);
-                hbParseDvd.WindowStyle = ProcessWindowStyle.Hidden;
-              
-                using (hbproc = Process.Start(hbParseDvd))
+                if (this.InvokeRequired)
                 {
-                    hbproc.WaitForExit();
+                    this.BeginInvoke(new UpdateUIHandler(closeWindowAfterError));
+                    return;
                 }
-
-                if (!File.Exists(dvdInfoPath))
-                {
-                    throw new Exception("Unable to retrieve the DVD Info. dvdinfo.dat is missing.");
-                }
-
-                using (StreamReader sr = new StreamReader(dvdInfoPath))
-                {
-                    thisDvd = Parsing.DVD.Parse(sr);
-                    sr.Close();
-                    sr.Dispose();
-                }
-
-                updateUIElements();
+                this.Close();
             }
             catch (Exception exc)
             {
-                MessageBox.Show("frmReadDVD.cs - startProc " + exc.ToString());
-                this.Close();
+                MessageBox.Show("frmReadDVD.cs - closeWindowAfterError - Unable to recover from a serious error. \n\n Error Information: \n " + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private void btn_cancel_Click(object sender, EventArgs e)
@@ -149,7 +162,7 @@ namespace Handbrake
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Unable to kill HandBrakeCLI.exe \n\nError Information: \n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
