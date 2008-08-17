@@ -220,13 +220,13 @@ rule LibFaac
     Depends lib  : $(<) ;
 	if $(OS) = CYGWIN
     {
-        CYGWIN_PATCH = "$(PATCH) -p1 < ../patch-faac-cygwin.patch" ;
+        CYGWIN_PATCH = "$(PATCH) -p1 < ../patch-faac-cygwin.patch &&" ;
     }
 }
 actions LibFaac
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
-    rm -rf faac && (gzip -dc faac.tar.gz | tar xf - ) && cd faac && $(CYGWIN_PATCH) && ./bootstrap &&
+    rm -rf faac && (gzip -dc faac.tar.gz | tar xf - ) && cd faac && $(CYGWIN_PATCH) ./bootstrap &&
     ./configure --prefix=$CONTRIB --cache-file=$CONTRIB/config.cache --disable-shared --enable-static --without-mp4v2 &&
     $(MAKE) && $(MAKE) install &&
     $(STRIP) $CONTRIB/lib/libfaac.a
