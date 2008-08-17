@@ -432,9 +432,11 @@ namespace Handbrake.Functions
                 query += " -t " + titleInfo[0];
             }
 
-            if (mainWindow.drop_chapterFinish.Text == mainWindow.drop_chapterStart.Text)
+            if (mainWindow.drop_chapterFinish.Text == mainWindow.drop_chapterStart.Text && mainWindow.drop_chapterStart.Text != "Auto")
                 query += " -c " + mainWindow.drop_chapterStart.Text;
-            else
+            else if (mainWindow.drop_chapterStart.Text == "Auto" && mainWindow.drop_chapterFinish.Text != "Auto")
+                query += " -c " + "0-" + mainWindow.drop_chapterFinish.Text;
+            else if (mainWindow.drop_chapterStart.Text != "Auto" && mainWindow.drop_chapterFinish.Text != "Auto")
                 query += " -c " + mainWindow.drop_chapterStart.Text + "-" + mainWindow.drop_chapterFinish.Text;
 
             #endregion
