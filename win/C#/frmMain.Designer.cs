@@ -258,8 +258,7 @@ namespace Handbrake
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.lbl_encode = new System.Windows.Forms.ToolStripStatusLabel();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.check_decomb = new System.Windows.Forms.CheckBox();
             Label38 = new System.Windows.Forms.Label();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             notifyIconMenu.SuspendLayout();
@@ -287,10 +286,6 @@ namespace Handbrake
             this.groupBox2.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.StatusStrip.SuspendLayout();
-            this.panel4.SuspendLayout();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Label38
@@ -1255,10 +1250,10 @@ namespace Handbrake
             this.GroupBox1.Controls.Add(this.Label10);
             this.GroupBox1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GroupBox1.ForeColor = System.Drawing.Color.Black;
-            this.GroupBox1.Location = new System.Drawing.Point(10, 10);
+            this.GroupBox1.Location = new System.Drawing.Point(12, 70);
             this.GroupBox1.Name = "GroupBox1";
             this.GroupBox1.Size = new System.Drawing.Size(705, 87);
-            this.GroupBox1.TabIndex = 0;
+            this.GroupBox1.TabIndex = 2;
             this.GroupBox1.TabStop = false;
             this.GroupBox1.Text = "Source";
             // 
@@ -1314,10 +1309,10 @@ namespace Handbrake
             this.groupBox_output.Controls.Add(this.check_optimiseMP4);
             this.groupBox_output.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox_output.ForeColor = System.Drawing.Color.Black;
-            this.groupBox_output.Location = new System.Drawing.Point(10, 154);
+            this.groupBox_output.Location = new System.Drawing.Point(12, 214);
             this.groupBox_output.Name = "groupBox_output";
             this.groupBox_output.Size = new System.Drawing.Size(705, 50);
-            this.groupBox_output.TabIndex = 3;
+            this.groupBox_output.TabIndex = 4;
             this.groupBox_output.TabStop = false;
             this.groupBox_output.Text = "Output Settings (Preset: None)";
             // 
@@ -1866,6 +1861,7 @@ namespace Handbrake
             // TabPage1
             // 
             this.TabPage1.BackColor = System.Drawing.Color.Transparent;
+            this.TabPage1.Controls.Add(this.check_decomb);
             this.TabPage1.Controls.Add(this.lbl_src_res);
             this.TabPage1.Controls.Add(this.label7);
             this.TabPage1.Controls.Add(this.label6);
@@ -1899,7 +1895,7 @@ namespace Handbrake
             this.TabPage1.Location = new System.Drawing.Point(4, 22);
             this.TabPage1.Name = "TabPage1";
             this.TabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage1.Size = new System.Drawing.Size(697, 302);
+            this.TabPage1.Size = new System.Drawing.Size(697, 307);
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "Picture Settings";
             // 
@@ -2068,7 +2064,7 @@ namespace Handbrake
             "Weak",
             "Medium",
             "Strong"});
-            this.drp_deNoise.Location = new System.Drawing.Point(413, 244);
+            this.drp_deNoise.Location = new System.Drawing.Point(413, 266);
             this.drp_deNoise.Name = "drp_deNoise";
             this.drp_deNoise.Size = new System.Drawing.Size(161, 21);
             this.drp_deNoise.TabIndex = 29;
@@ -2078,7 +2074,7 @@ namespace Handbrake
             this.label11.AutoSize = true;
             this.label11.BackColor = System.Drawing.Color.Transparent;
             this.label11.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(311, 247);
+            this.label11.Location = new System.Drawing.Point(311, 269);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(58, 13);
             this.label11.TabIndex = 28;
@@ -2113,7 +2109,7 @@ namespace Handbrake
             this.label4.AutoSize = true;
             this.label4.BackColor = System.Drawing.Color.Transparent;
             this.label4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(311, 219);
+            this.label4.Location = new System.Drawing.Point(311, 241);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(77, 13);
             this.label4.TabIndex = 26;
@@ -2129,7 +2125,7 @@ namespace Handbrake
             "Fast",
             "Slow",
             "Slower"});
-            this.drp_deInterlace_option.Location = new System.Drawing.Point(413, 216);
+            this.drp_deInterlace_option.Location = new System.Drawing.Point(413, 238);
             this.drp_deInterlace_option.Name = "drp_deInterlace_option";
             this.drp_deInterlace_option.Size = new System.Drawing.Size(161, 21);
             this.drp_deInterlace_option.TabIndex = 27;
@@ -2237,11 +2233,11 @@ namespace Handbrake
             this.advancedOptions.Controls.Add(this.h264Tab);
             this.advancedOptions.Controls.Add(this.tabPage4);
             this.advancedOptions.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.advancedOptions.Location = new System.Drawing.Point(10, 218);
+            this.advancedOptions.Location = new System.Drawing.Point(12, 274);
             this.advancedOptions.Name = "advancedOptions";
             this.advancedOptions.SelectedIndex = 0;
-            this.advancedOptions.Size = new System.Drawing.Size(705, 328);
-            this.advancedOptions.TabIndex = 1;
+            this.advancedOptions.Size = new System.Drawing.Size(705, 333);
+            this.advancedOptions.TabIndex = 5;
             this.advancedOptions.TabStop = false;
             // 
             // tab_chapters
@@ -2308,7 +2304,7 @@ namespace Handbrake
             this.h264Tab.Location = new System.Drawing.Point(4, 22);
             this.h264Tab.Name = "h264Tab";
             this.h264Tab.Padding = new System.Windows.Forms.Padding(3);
-            this.h264Tab.Size = new System.Drawing.Size(697, 302);
+            this.h264Tab.Size = new System.Drawing.Size(697, 307);
             this.h264Tab.TabIndex = 8;
             this.h264Tab.Text = "Advanced";
             // 
@@ -2694,7 +2690,7 @@ namespace Handbrake
             this.check_pyrmidalBFrames.AutoSize = true;
             this.check_pyrmidalBFrames.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_pyrmidalBFrames.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.check_pyrmidalBFrames.Location = new System.Drawing.Point(47, 198);
+            this.check_pyrmidalBFrames.Location = new System.Drawing.Point(46, 198);
             this.check_pyrmidalBFrames.Name = "check_pyrmidalBFrames";
             this.check_pyrmidalBFrames.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.check_pyrmidalBFrames.Size = new System.Drawing.Size(121, 16);
@@ -2709,7 +2705,7 @@ namespace Handbrake
             this.check_BidirectionalRefinement.AutoSize = true;
             this.check_BidirectionalRefinement.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_BidirectionalRefinement.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.check_BidirectionalRefinement.Location = new System.Drawing.Point(21, 180);
+            this.check_BidirectionalRefinement.Location = new System.Drawing.Point(20, 180);
             this.check_BidirectionalRefinement.Name = "check_BidirectionalRefinement";
             this.check_BidirectionalRefinement.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.check_BidirectionalRefinement.Size = new System.Drawing.Size(147, 16);
@@ -2946,10 +2942,10 @@ namespace Handbrake
             this.groupBox_dest.Controls.Add(this.text_destination);
             this.groupBox_dest.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox_dest.ForeColor = System.Drawing.Color.Black;
-            this.groupBox_dest.Location = new System.Drawing.Point(10, 100);
+            this.groupBox_dest.Location = new System.Drawing.Point(12, 160);
             this.groupBox_dest.Name = "groupBox_dest";
             this.groupBox_dest.Size = new System.Drawing.Size(705, 50);
-            this.groupBox_dest.TabIndex = 2;
+            this.groupBox_dest.TabIndex = 3;
             this.groupBox_dest.TabStop = false;
             this.groupBox_dest.Text = "Destination";
             // 
@@ -2972,10 +2968,10 @@ namespace Handbrake
             this.groupBox2.Controls.Add(this.btn_setDefault);
             this.groupBox2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.ForeColor = System.Drawing.Color.Black;
-            this.groupBox2.Location = new System.Drawing.Point(5, 10);
+            this.groupBox2.Location = new System.Drawing.Point(728, 70);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(198, 535);
-            this.groupBox2.TabIndex = 11;
+            this.groupBox2.Size = new System.Drawing.Size(198, 537);
+            this.groupBox2.TabIndex = 6;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Presets";
             // 
@@ -2989,7 +2985,7 @@ namespace Handbrake
             this.treeView_presets.Name = "treeView_presets";
             this.treeView_presets.ShowLines = false;
             this.treeView_presets.Size = new System.Drawing.Size(177, 473);
-            this.treeView_presets.TabIndex = 2;
+            this.treeView_presets.TabIndex = 0;
             this.treeView_presets.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_presets_AfterSelect);
             // 
             // toolStrip1
@@ -3144,7 +3140,7 @@ namespace Handbrake
             this.StatusStrip.Location = new System.Drawing.Point(0, 619);
             this.StatusStrip.Name = "StatusStrip";
             this.StatusStrip.Size = new System.Drawing.Size(938, 22);
-            this.StatusStrip.TabIndex = 12;
+            this.StatusStrip.TabIndex = 7;
             this.StatusStrip.Text = "statusStrip1";
             // 
             // lbl_encode
@@ -3154,43 +3150,28 @@ namespace Handbrake
             this.lbl_encode.Size = new System.Drawing.Size(31, 17);
             this.lbl_encode.Text = "{0}";
             // 
-            // panel4
+            // check_decomb
             // 
-            this.panel4.Controls.Add(this.splitContainer1);
-            this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel4.Location = new System.Drawing.Point(0, 63);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(938, 556);
-            this.panel4.TabIndex = 13;
-            // 
-            // splitContainer1
-            // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Name = "splitContainer1";
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.GroupBox1);
-            this.splitContainer1.Panel1.Controls.Add(this.groupBox_dest);
-            this.splitContainer1.Panel1.Controls.Add(this.groupBox_output);
-            this.splitContainer1.Panel1.Controls.Add(this.advancedOptions);
-            this.splitContainer1.Panel1.Margin = new System.Windows.Forms.Padding(2);
-            this.splitContainer1.Panel1.Padding = new System.Windows.Forms.Padding(2);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.groupBox2);
-            this.splitContainer1.Size = new System.Drawing.Size(938, 556);
-            this.splitContainer1.SplitterDistance = 723;
-            this.splitContainer1.TabIndex = 0;
+            this.check_decomb.AutoSize = true;
+            this.check_decomb.BackColor = System.Drawing.Color.Transparent;
+            this.check_decomb.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_decomb.Location = new System.Drawing.Point(314, 215);
+            this.check_decomb.Name = "check_decomb";
+            this.check_decomb.Size = new System.Drawing.Size(73, 17);
+            this.check_decomb.TabIndex = 32;
+            this.check_decomb.Text = "Decomb";
+            this.check_decomb.UseVisualStyleBackColor = false;
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(938, 641);
-            this.Controls.Add(this.panel4);
+            this.Controls.Add(this.GroupBox1);
+            this.Controls.Add(this.groupBox_dest);
+            this.Controls.Add(this.groupBox_output);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.advancedOptions);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.frmMainMenu);
             this.Controls.Add(this.StatusStrip);
@@ -3237,10 +3218,6 @@ namespace Handbrake
             this.toolStrip1.PerformLayout();
             this.StatusStrip.ResumeLayout(false);
             this.StatusStrip.PerformLayout();
-            this.panel4.ResumeLayout(false);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -3467,8 +3444,7 @@ namespace Handbrake
         internal System.Windows.Forms.ToolStripMenuItem mnu_encodeLog;
         private System.Windows.Forms.StatusStrip StatusStrip;
         private System.Windows.Forms.ToolStripStatusLabel lbl_encode;
-        private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        internal System.Windows.Forms.CheckBox check_decomb;
 
     }
 }

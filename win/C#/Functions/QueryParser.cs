@@ -19,6 +19,7 @@ namespace Handbrake.Functions
         #region Varibles
 
         #region Source
+
         private string q_source;
         /// <summary>
         /// Returns a String 
@@ -31,6 +32,7 @@ namespace Handbrake.Functions
                 return this.q_source;
             }
         }
+
         private int q_dvdTitle;
         /// <summary>
         /// Returns an Integer
@@ -262,6 +264,18 @@ namespace Handbrake.Functions
             get
             {
                 return this.q_denoise;
+            }
+        }
+
+        private Boolean q_decomb;
+        /// <summary>
+        /// Returns a string with the DeNoise option used.
+        /// </summary>
+        public Boolean Decomb
+        {
+            get
+            {
+                return this.q_decomb;
             }
         }
 
@@ -806,7 +820,8 @@ namespace Handbrake.Functions
             Match chapterMarkers = Regex.Match(input, @" -m");
             Match crop = Regex.Match(input, @"--crop ([0-9]):([0-9]):([0-9]):([0-9])");
             Match vfr = Regex.Match(input, @" -V");
-            Match lanamorphic = Regex.Match(input, @"-P");
+            Match lanamorphic = Regex.Match(input, @" -P");
+            Match decomb = Regex.Match(input, @" --decomb");
 
             //Video Settings Tab
             Match videoFramerate = Regex.Match(input, @"-r ([0-9]*)");
@@ -927,7 +942,6 @@ namespace Handbrake.Functions
                 if (height.Success != false)
                     thisQuery.q_videoHeight = int.Parse(height.ToString().Replace("-l ", ""));
 
-
                 if (crop.Success != false)
                 {
                     thisQuery.q_cropValues = crop.ToString().Replace("--crop ", "");
@@ -941,6 +955,7 @@ namespace Handbrake.Functions
 
                 thisQuery.q_detelecine = detelecine.Success;
                 thisQuery.q_deBlock = deblock.Success;
+                thisQuery.q_decomb = decomb.Success;
 
                 thisQuery.q_deinterlace = "None";
                 if (deinterlace.Success != false)

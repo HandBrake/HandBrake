@@ -128,6 +128,11 @@ namespace Handbrake.Functions
             mainWindow.drp_deInterlace_option.Text = presetQuery.DeInterlace;
             mainWindow.drp_deNoise.Text = presetQuery.DeNoise;
 
+            if (presetQuery.Decomb == true)
+                mainWindow.check_decomb.CheckState = CheckState.Checked;
+            else
+                mainWindow.check_decomb.CheckState = CheckState.Unchecked;
+
             if (presetQuery.DeTelecine == true)
                 mainWindow.check_detelecine.CheckState = CheckState.Checked;
             else
@@ -152,7 +157,6 @@ namespace Handbrake.Functions
                 if (presetQuery.Anamorphic != true)
                     mainWindow.drp_anamorphic.SelectedIndex = 0;
             }
-
 
             if (presetQuery.Width != 0)
                 mainWindow.text_width.Text = presetQuery.Width.ToString();
@@ -554,6 +558,9 @@ namespace Handbrake.Functions
                     query += "";
                     break;
             }
+
+            if (mainWindow.check_decomb.Checked)
+                query += " --decomb ";
 
             if (mainWindow.check_grayscale.Checked)
                 query += " -g ";
