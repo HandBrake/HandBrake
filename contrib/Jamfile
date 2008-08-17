@@ -218,12 +218,16 @@ rule LibFaac
 {
     Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
+	if $(OS) = CYGWIN
+    {
+        CYGWIN_PATCH = "$(PATCH) -p1 < ../patch-faac-cygwin.patch" ;
+    }
 }
 actions LibFaac
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
-    rm -rf faac && (gzip -dc faac.tar.gz | tar xf - ) && cd faac &&
-    ./configure --prefix=$CONTRIB --cache-file=$CONTRIB/config.cache --disable-shared --enable-static &&
+    rm -rf faac && (gzip -dc faac.tar.gz | tar xf - ) && cd faac && $(CYGWIN_PATCH) && ./bootstrap &&
+    ./configure --prefix=$CONTRIB --cache-file=$CONTRIB/config.cache --disable-shared --enable-static --without-mp4v2 &&
     $(MAKE) && $(MAKE) install &&
     $(STRIP) $CONTRIB/lib/libfaac.a
 }
@@ -303,7 +307,7 @@ actions LibMpeg2
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf mpeg2dec && (gzip -dc mpeg2dec.tar.gz | tar xf - ) && 
-    cd mpeg2dec && $(PATCH) -p1 < ../patch-libmpeg2.patch &&
+    cd mpeg2dec &&
     ./configure --prefix=$CONTRIB --cache-file=$CONTRIB/config.cache --disable-shared --disable-sdl --without-x &&
     $(MAKE) && $(MAKE) install &&
     $(STRIP) $CONTRIB/lib/libmpeg2.a

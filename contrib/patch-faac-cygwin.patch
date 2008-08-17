@@ -1,0 +1,12 @@
+diff -Naur faac2/include/faac.h faac3/include/faac.h
+--- faac/include/faac.h	2004-07-04 13:12:06.000000000 +0100
++++ faac/include/faac.h	2008-08-17 19:56:29.734375000 +0100
+@@ -50,7 +50,7 @@
+ typedef void *faacEncHandle;
+ 
+ #ifndef HAVE_INT32_T
+-typedef int int32_t;
++//typedef int int32_t;
+ #endif
+ 
+ /*
