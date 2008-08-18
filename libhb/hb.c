@@ -867,15 +867,11 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
     /* Copy the audio track(s) we want */
     title_copy->list_audio = hb_list_init();
 
-    /* Do nothing about audio during first pass */
-    if( job->pass == 0 || job->pass == 2 )
+    for( i = 0; i < hb_list_count(job->list_audio); i++ )
     {
-        for( i = 0; i < hb_list_count(job->list_audio); i++ )
+        if( ( audio = hb_list_item( job->list_audio, i ) ) )
         {
-            if( ( audio = hb_list_item( job->list_audio, i ) ) )
-            {
-                hb_list_add( title_copy->list_audio, hb_audio_copy(audio) );
-            }
+            hb_list_add( title_copy->list_audio, hb_audio_copy(audio) );
         }
     }
 
