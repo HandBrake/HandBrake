@@ -92,8 +92,9 @@ struct hb_work_private_s
     int64_t              chap_time; // time of next chap mark (if new_chap != 0)
     int                  new_chap;
     int                  ignore_pts; // workaround M$ bugs
-    int                  nframes;
-    int                  ndrops;
+    uint32_t             nframes;
+    uint32_t             ndrops;
+    uint32_t             decode_errors;
     double               duration;  // frame duration (for video)
 };
 
@@ -340,8 +341,16 @@ static int get_frame_buf( AVCodecContext *context, AVFrame *frame )
 static void log_chapter( hb_work_private_t *pv, int chap_num, int64_t pts )
 {
     hb_chapter_t *c = hb_list_item( pv->job->title->list_chapter, chap_num - 1 );
-    hb_log( "%s: \"%s\" (%d) at frame %u time %lld", pv->context->codec->name,
-            c->title, chap_num, pv->nframes, pts );
+    if ( c && c->title )
+    {
+        hb_log( "%s: \"%s\" (%d) at frame %u time %lld",
+                pv->context->codec->name, c->title, chap_num, pv->nframes, pts );
+    }
+    else
+    {
+        hb_log( "%s: Chapter %d at frame %u time %lld",
+                pv->context->codec->name, chap_num, pv->nframes, pts );
+    }
 }
 
 static int decodeFrame( hb_work_private_t *pv, uint8_t *data, int size )
@@ -349,7 +358,10 @@ static int decodeFrame( hb_work_private_t *pv, uint8_t *data, int size )
     int got_picture;
     AVFrame frame;
 
-    avcodec_decode_video( pv->context, &frame, &got_picture, data, size );
+    if ( avcodec_decode_video( pv->context, &frame, &got_picture, data, size ) < 0 )
+    {
+        ++pv->decode_errors;     
+    }
     if( got_picture )
     {
         // ffmpeg makes it hard to attach a pts to a frame. if the MPEG ES
@@ -498,7 +510,8 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         decodeVideo( pv, in->data, in->size, pts, dts );
         hb_list_add( pv->list, in );
         *buf_out = link_buf_list( pv );
-        hb_log( "%s done: %d frames", pv->context->codec->name, pv->nframes );
+        hb_log( "%s done: %u frames, %u decoder errors",
+                pv->context->codec->name, pv->nframes, pv->decode_errors );
         return HB_WORK_DONE;
     }
 
@@ -710,8 +723,9 @@ static int decavcodecviWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         }
         hb_list_add( pv->list, in );
         *buf_out = link_buf_list( pv );
-        hb_log( "%s done: %d frames %d drops", pv->context->codec->name,
-                pv->nframes, pv->ndrops );
+        hb_log( "%s done: %u frames, %u decoder errors, %u drops",
+                pv->context->codec->name, pv->nframes, pv->decode_errors,
+                pv->ndrops );
         return HB_WORK_DONE;
     }
 

@@ -79,6 +79,7 @@ rule LibAvCodec
 {
     FFMPEG_PATCH = "$(PATCH) -p0 < ../patch-ffmpeg.patch" ;
     FFMPEG_PATCH += " && $(PATCH) -p0 < ../patch-ffmpeg-latm.patch " ;
+    FFMPEG_PATCH += " && $(PATCH) -p0 < ../patch-ffmpeg-mpegleak.patch " ;
     if $(OS) = CYGWIN
     {
         FFMPEG_PATCH += " && $(PATCH) -p1 < ../patch-ffmpeg-cygwin.patch " ;
