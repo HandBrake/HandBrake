@@ -727,7 +727,7 @@ static void skip_to_next_pack( hb_stream_t *src_stream )
  */
 static const uint8_t *hb_ts_stream_getPEStype(hb_stream_t *stream, uint32_t pid)
 {
-    int npack = 100000; // max packets to read
+    int npack = 300000; // max packets to read
 
     while (--npack >= 0)
     {
@@ -766,7 +766,11 @@ static const uint8_t *hb_ts_stream_getPEStype(hb_stream_t *stream, uint32_t pid)
                 udata += buf[4] + 1;
                 break;
         }
-        return &buf[udata];
+        /* PES hdr has to begin with an mpeg start code */
+        if (buf[udata+0] == 0x00 && buf[udata+1] == 0x00 && buf[udata+2] == 0x01)
+        {
+            return &buf[udata];
+        }
     }
 
     /* didn't find it */
@@ -1185,9 +1189,18 @@ static hb_audio_t *hb_ts_stream_set_audio_id_and_codec(hb_stream_t *stream,
     }
     else
     {
-        hb_log("transport stream pid 0x%x (type 0x%x) isn't audio",
-                stream->ts_audio_pids[aud_pid_index],
-                stream->ts_stream_type[1 + aud_pid_index]);
+        if ( buf )
+        {
+            hb_log("transport stream pid 0x%x (type 0x%x, substream 0x%x) "
+                    "isn't audio", stream->ts_audio_pids[aud_pid_index],
+                    stream->ts_stream_type[1 + aud_pid_index], buf[3]);
+        }
+        else
+        {
+            hb_log("transport stream pid 0x%x (type 0x%x) isn't audio",
+                    stream->ts_audio_pids[aud_pid_index],
+                    stream->ts_stream_type[1 + aud_pid_index]);
+        }
 	}
     fseeko(stream->file_handle, cur_pos, SEEK_SET);
     return audio;
