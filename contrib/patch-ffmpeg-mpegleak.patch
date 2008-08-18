@@ -24,23 +24,7 @@ Index: libavcodec/mpegvideo.c
 ===================================================================
 --- libavcodec/mpegvideo.c	(revision 14820)
 +++ libavcodec/mpegvideo.c	(working copy)
-@@ -772,6 +772,15 @@
-     }else{
-         for(i=0; i<MAX_PICTURE_COUNT; i++){
-             if(s->picture[i].data[0]==NULL && s->picture[i].type!=0) return i; //FIXME
-+            /* XXX there seems to be a leak caused by h264 in mpeg transport
-+             * streams: Over-the-air streams have a lot of errors. A picture
-+             * may be marked as referenced but the actual references get lost
-+             * so it never gets released. We take care of that here by purging
-+             * pictures that are impossibly old.
-+             */
-+            if (s->coded_picture_number - s->picture[i].coded_picture_number >
-+                32*MAX_PICTURE_COUNT)
-+                s->avctx->release_buffer(s->avctx, (AVFrame*)&s->picture[i]);
-         }
-         for(i=0; i<MAX_PICTURE_COUNT; i++){
-             if(s->picture[i].data[0]==NULL) return i;
-@@ -779,19 +788,15 @@
+@@ -779,19 +779,18 @@
      }
  
      av_log(s->avctx, AV_LOG_FATAL, "Internal error, picture buffer overflow\n");
@@ -57,8 +41,11 @@ Index: libavcodec/mpegvideo.c
 -     */
 -    abort();
 -    return -1;
-+    /* assume that we don't have a picture because of the leak described above.
-+     * just release the oldest we have & reuse its slot. */
++    /* XXX there seems to be a leak caused by h264 in mpeg transport
++     * streams: Over-the-air streams have a lot of errors. A picture
++     * may be marked as referenced but the actual references get lost
++     * so it never gets released. We take care of that here by releasing
++     * the oldest we have & reusing its slot. */
 +    int oldest=0;
 +    for(i=0; i<MAX_PICTURE_COUNT; i++){
 +        if (s->picture[i].coded_picture_number < s->picture[oldest].coded_picture_number)
