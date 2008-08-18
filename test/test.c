@@ -965,7 +965,12 @@ static int HandleEvents( hb_handle_t * h )
                 }
                 else
                 {
-                    hb_audio_add( job, audio );
+                    if( hb_audio_add( job, audio ) == 0 )
+                    {
+                        fprintf(stderr, "ERROR: Invalid audio input track '%u', skipping.\n", 
+                                audio->in.track + 1 );
+                        num_audio_tracks--;
+                    }
                 }
                 hb_list_rem(audios, audio);
                 if( audio != NULL)

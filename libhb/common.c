@@ -667,8 +667,13 @@ void hb_filter_close( hb_filter_object_t ** _f )
  *********************************************************************/
 hb_audio_t *hb_audio_copy(const hb_audio_t *src)
 {
-    hb_audio_t *audio = calloc(1, sizeof(*audio));
-    memcpy(audio, src, sizeof(*audio));
+    hb_audio_t *audio = NULL;
+
+    if( src )
+    {
+        audio = calloc(1, sizeof(*audio));
+        memcpy(audio, src, sizeof(*audio));
+    }
     return audio;
 }
 
