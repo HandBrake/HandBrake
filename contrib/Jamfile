@@ -391,6 +391,7 @@ actions LibTheora
 {
     cd `dirname $(>)` && CONTRIB=`pwd` && rm -rf libtheora &&
     (gzip -dc libtheora.tar.gz | tar xf - ) && cd libtheora &&
+    export HAVE_PKG_CONFIG="no" &&
     ./configure --prefix=$CONTRIB --with-ogg=$CONTRIB --with-vorbis=$CONTRIB --cache-file=$CONTRIB/config.cache --disable-shared \
             --disable-oggtest --disable-vorbistest --disable-sdltest --disable-examples &&
     $(MAKE) && $(MAKE) install &&

@@ -35,7 +35,7 @@ cli:    libhb/hbversion.h
 	(./DownloadMacOsXContribBinaries.sh ; cd macosx ; xcodebuild -target libhb -target HandBrakeCLI -configuration UB HB_BUILD="$(HB_BUILD)" HB_VERSION="$(HB_VERSION)" build | sed '/^$$/d' )
 
 clean:
-	(cd macosx ; xcodebuild -alltargets -configuration UB clean | sed '/^$$/d' ; rm -f libhb/hbversion.h )
+	(cd macosx ; xcodebuild -alltargets -configuration UB clean | sed '/^$$/d' ; rm -f libhb/hbversion.h ; rm -f contrib/config.cache )
 
 mrproper:
 	(rm -rf libhb/hbversion.h contrib/*tar.gz contrib/include contrib/lib contrib/DarwinContribVersion.txt ; cd macosx ; xcodebuild -alltargets -configuration UB clean | sed '/^$$/d' )
@@ -78,6 +78,7 @@ clean:
 	@$(MAKE) --no-print-directory -C libhb clean
 	@$(MAKE) --no-print-directory -C test clean
 	@rm libhb/hbversion.h
+	@rm -f contrib/config.cache
 
 mrproper: clean
 	@$(MAKE) --no-print-directory -C contrib mrproper
