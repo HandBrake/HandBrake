@@ -334,7 +334,8 @@ static void ReaderFunc( void * _r )
          ( audio = hb_list_item( r->job->title->list_audio, n ) ) != NULL;
          ++n )
     {
-        push_buf( r, audio->priv.fifo_in, hb_buffer_init(0) );
+        if ( audio->priv.fifo_in )
+            push_buf( r, audio->priv.fifo_in, hb_buffer_init(0) );
     }
 
     hb_list_empty( &list );

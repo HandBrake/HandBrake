@@ -111,10 +111,13 @@ int syncInit( hb_work_object_t * w, hb_job_t * job )
     pv->busy |= 1;
 
     /* Initialize libsamplerate for every audio track we have */
-    for( i = 0; i < hb_list_count( title->list_audio ); i++ )
+    if ( ! job->indepth_scan )
     {
-        pv->busy |= ( 1 << (i + 1) );
-        InitAudio( w, i );
+        for( i = 0; i < hb_list_count( title->list_audio ); i++ )
+        {
+            pv->busy |= ( 1 << (i + 1) );
+            InitAudio( w, i );
+        }
     }
 
     /* Get subtitle info, if any */
