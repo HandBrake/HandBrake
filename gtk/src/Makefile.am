@@ -2,7 +2,33 @@
 
 ## Created by Anjuta
 
-HB_LIBS=$(HB_DIR)/libhb/libhb.a -la52 -lmkv -lavformat -lavcodec -lavutil -ldca -ldvdread -lfaac -lmp3lame -lmpeg2 -lvorbis -lvorbisenc -logg -lsamplerate -lx264 -lxvidcore -lmp4v2 -lswscale -ltheora -lfaad -lz -lbz2 -lpthread
+#HB_LIBS=$(HB_DIR)/libhb/libhb.a -la52 -lmkv -lavformat -lavcodec -lavutil -ldca -ldvdread -lfaac -lmp3lame -lmpeg2 -lvorbis -lvorbisenc -logg -lsamplerate -lx264 -lxvidcore -lmp4v2 -lswscale -ltheora -lfaad -lz -lbz2 -lpthread
+
+HB_LIBS=\
+	$(HB_DIR)/libhb/libhb.a \
+	$(HB_DIR)/contrib/lib/liba52.a \
+	$(HB_DIR)/contrib/lib/libmkv.a \
+	$(HB_DIR)/contrib/lib/libavformat.a \
+	$(HB_DIR)/contrib/lib/libavcodec.a \
+	$(HB_DIR)/contrib/lib/libavutil.a \
+	$(HB_DIR)/contrib/lib/libdca.a \
+	$(HB_DIR)/contrib/lib/libdvdread.a \
+	$(HB_DIR)/contrib/lib/libfaac.a \
+	$(HB_DIR)/contrib/lib/libmp3lame.a \
+	$(HB_DIR)/contrib/lib/libmpeg2.a \
+	$(HB_DIR)/contrib/lib/libvorbis.a \
+	$(HB_DIR)/contrib/lib/libvorbisenc.a \
+	$(HB_DIR)/contrib/lib/libogg.a \
+	$(HB_DIR)/contrib/lib/libsamplerate.a \
+	$(HB_DIR)/contrib/lib/libx264.a \
+	$(HB_DIR)/contrib/lib/libxvidcore.a \
+	$(HB_DIR)/contrib/lib/libmp4v2.a \
+	$(HB_DIR)/contrib/lib/libswscale.a \
+	$(HB_DIR)/contrib/lib/libtheora.a \
+	$(HB_DIR)/contrib/lib/libfaad.a \
+	-lz \
+	-lbz2 \
+	-lpthread
 
 icons =	\
 	hb-activity.32.png \
