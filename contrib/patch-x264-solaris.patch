@@ -15,15 +15,15 @@ diff -ru x264/Makefile x264.solaris/Makefile
  	install -m 644 libx264.a $(DESTDIR)$(libdir)
  	install -m 644 x264.pc $(DESTDIR)$(libdir)/pkgconfig
 diff -ru x264/configure x264.solaris/configure
---- x264/configure	Mon Jun  9 01:36:08 2008
-+++ x264.solaris/configure	Thu Jun 19 12:10:24 2008
+--- x264/configure	Tue Aug 12 03:26:58 2008
++++ x264.modified/configure	Tue Aug 19 16:09:32 2008
 @@ -1,4 +1,4 @@
 -#! /bin/sh
 +#! /usr/xpg4/bin/sh
  
  if test x"$1" = x"-h" -o x"$1" = x"--help" ; then
  
-@@ -73,7 +73,7 @@
+@@ -75,7 +75,7 @@
  # check whether 'echo -n' works as expected, otherwise try printf
  if [ "x`echo -n houba`" = xhouba ]
  then
@@ -32,7 +32,16 @@ diff -ru x264/configure x264.solaris/configure
  elif [ "x`printf houba`" = xhouba ]
  then
    ECHON="printf"
-@@ -319,8 +319,10 @@
+@@ -321,8 +321,6 @@
+         echo "If you really want to compile without asm, configure with --disable-asm."
+         exit 1
+     fi
+-else
+-    AS=""
+ fi
+ 
+ CFLAGS="$CFLAGS -DARCH_$ARCH -DSYS_$SYS"
+@@ -329,8 +327,10 @@
  
  echo "unsigned int endian = 'B' << 24 | 'I' << 16 | 'G' << 8 | 'E';" > conftest.c
  $CC $CFLAGS conftest.c -c -o conftest.o 2>$DEVNULL || die "endian test failed"
