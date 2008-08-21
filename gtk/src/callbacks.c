@@ -2471,6 +2471,11 @@ validate_settings(signal_user_data_t *ud)
 	{
 		return FALSE;
 	}
+	// Validate filter settings
+	if (!ghb_validate_filters(ud))
+	{
+		return FALSE;
+	}
 	audio_list_refresh(ud);
 	return TRUE;
 }
@@ -3508,5 +3513,64 @@ ghb_hal_init()
     libhal_free_string_array (devices);
 
     //gvm_hal_claim_branch ("/org/freedesktop/Hal/devices/local");
+}
+
+gboolean 
+tweak_setting_cb(
+	GtkWidget *widget, 
+	GdkEventButton *event, 
+	signal_user_data_t *ud)
+{
+	const gchar *name;
+	gchar *tweak_name;
+	gboolean ret = FALSE;
+	gboolean allow_tweaks;
+
+	g_debug("press %d %d", event->type, event->button);
+	allow_tweaks = ghb_settings_get_bool (ud->settings, "allow_tweaks");
+	if (allow_tweaks && event->type == GDK_BUTTON_PRESS && event->button == 3)
+	{ // Its a right mouse click
+		GtkWidget *dialog;
+		GtkEntry *entry;
+		GtkResponseType response;
+		const gchar *tweak = NULL;
+
+		name = gtk_widget_get_name(widget);
+		if (g_str_has_prefix(name, "tweak_"))
+		{
+			tweak_name = g_strdup(name);
+		}
+		else
+		{
+			tweak_name = g_strdup_printf("tweak_%s", name);
+		}
+
+		tweak = ghb_settings_get_string (ud->settings, tweak_name);
+		dialog = GHB_WIDGET(ud->builder, "tweak_dialog");
+		gtk_window_set_title(GTK_WINDOW(dialog), tweak_name);
+		entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "tweak_setting"));
+		if (tweak)
+			gtk_entry_set_text(entry, tweak);
+		response = gtk_dialog_run(GTK_DIALOG(dialog));
+		gtk_widget_hide(dialog);
+		if (response == GTK_RESPONSE_OK)
+		{
+			tweak = gtk_entry_get_text(entry);
+			if (ghb_validate_filter_string(tweak, -1))
+				ghb_settings_set_string(ud->settings, tweak_name, tweak);
+			else
+			{
+				gchar *message;
+				message = g_strdup_printf(
+							"Invalid Settings:\n%s",
+							tweak);
+				ghb_message_dialog(GTK_MESSAGE_ERROR, message, "Cancel", NULL);
+				g_free(message);
+			}
+		}
+		g_free(tweak_name);
+		ret = TRUE;
+	}
+	return ret;
 }
 

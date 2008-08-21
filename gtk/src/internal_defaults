@@ -23,8 +23,13 @@ detelecine=enable
 decomb=enable
 deinterlace=none
 denoise=none
-grayscale=disable
 deblock=disable
+tweak_decomb=
+tweak_detelecine=
+tweak_deblock=
+tweak_deinterlace=
+tweak_denoise=
+grayscale=disable
 video_codec=x264
 two_pass=disable
 turbo=enable
@@ -82,5 +87,5 @@ show_presets=enable
 linear_vquality=disable
 noscale=disable
 nocheckvquality=disable
-
+allow_tweaks=disable
 

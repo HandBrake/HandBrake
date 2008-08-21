@@ -2024,6 +2024,107 @@ ghb_guess_bitrate(GHashTable *settings)
 }
 
 gboolean
+ghb_validate_filter_string(const gchar *str, gint max_fields)
+{
+	gint fields = 0;
+	gboolean in_field = FALSE;
+	if (str == NULL || *str == 0) return TRUE;
+	while (*str)
+	{
+		if (*str >= '0' && *str <= '9')
+		{
+			if (!in_field)
+			{
+				fields++;
+				// negative max_fields means infinate
+				if (max_fields >= 0 && fields > max_fields) return FALSE;
+				in_field = TRUE;
+			}
+		}
+		else if (!in_field) return FALSE;
+		else if (*str != ':') return FALSE;
+		else in_field = FALSE;
+		str++;
+	}
+	return TRUE;
+}
+
+gboolean
+ghb_validate_filters(signal_user_data_t *ud)
+{
+	gboolean tweaks;
+	const gchar *str;
+	gchar *message;
+	gboolean enabled;
+
+	tweaks = ghb_settings_get_bool(ud->settings, "allow_tweaks");
+	if (tweaks)
+	{
+		// detele 6
+		str = ghb_settings_get_string(ud->settings, "tweak_detelecine");
+		enabled = ghb_settings_get_bool(ud->settings, "detelecine");
+		if (enabled && !ghb_validate_filter_string(str, 6))
+		{
+			message = g_strdup_printf(
+						"Invalid Detelecine Settings:\n\n%s\n",
+						str);
+			ghb_message_dialog(GTK_MESSAGE_ERROR, message, "Cancel", NULL);
+			g_free(message);
+			return FALSE;
+		}
+		// decomb 7
+		str = ghb_settings_get_string(ud->settings, "tweak_decomb");
+		enabled = ghb_settings_get_bool(ud->settings, "decomb");
+		if (enabled && !ghb_validate_filter_string(str, 7))
+		{
+			message = g_strdup_printf(
+						"Invalid Decomb Settings:\n\n%s\n",
+						str);
+			ghb_message_dialog(GTK_MESSAGE_ERROR, message, "Cancel", NULL);
+			g_free(message);
+			return FALSE;
+		}
+		// deinte 4
+		str = ghb_settings_get_string(ud->settings, "tweak_deinterlace");
+		enabled = ghb_settings_get_bool(ud->settings, "deinterlace");
+		if (enabled && !ghb_validate_filter_string(str, 4))
+		{
+			message = g_strdup_printf(
+						"Invalid Deinterlace Settings:\n\n%s\n",
+						str);
+			ghb_message_dialog(GTK_MESSAGE_ERROR, message, "Cancel", NULL);
+			g_free(message);
+			return FALSE;
+		}
+		// debloc 2
+		str = ghb_settings_get_string(ud->settings, "tweak_deblock");
+		enabled = ghb_settings_get_bool(ud->settings, "deblock");
+		if (enabled && !ghb_validate_filter_string(str, 2))
+		{
+			message = g_strdup_printf(
+						"Invalid Deblock Settings:\n\n%s\n",
+						str);
+			ghb_message_dialog(GTK_MESSAGE_ERROR, message, "Cancel", NULL);
+			g_free(message);
+			return FALSE;
+		}
+		// denois 4
+		str = ghb_settings_get_string(ud->settings, "tweak_denoise");
+		enabled = ghb_settings_get_bool(ud->settings, "denoise");
+		if (enabled && !ghb_validate_filter_string(str, 4))
+		{
+			message = g_strdup_printf(
+						"Invalid Denoise Settings:\n\n%s\n",
+						str);
+			ghb_message_dialog(GTK_MESSAGE_ERROR, message, "Cancel", NULL);
+			g_free(message);
+			return FALSE;
+		}
+	}
+	return TRUE;
+}
+
+gboolean
 ghb_validate_video(signal_user_data_t *ud)
 {
 	GHashTable *settings = ud->settings;
@@ -2363,6 +2464,7 @@ ghb_add_job(job_settings_t *js, gint unique_id)
 	GHashTable *settings = js->settings;
 	static gchar *x264opts;
 	gint sub_id = 0;
+	gboolean tweaks = FALSE;
 
 	g_debug("ghb_add_job()\n");
 	if (h == NULL) return;
@@ -2382,6 +2484,7 @@ ghb_add_job(job_settings_t *js, gint unique_id)
 	job   = title->job;
 	if (job == NULL) return;
 
+	tweaks = ghb_settings_get_int(settings, "allow_tweaks");
 	job->mux = ghb_settings_get_int(settings, "container");
 	if (job->mux == HB_MUX_MP4)
 	{
@@ -2465,28 +2568,73 @@ ghb_add_job(job_settings_t *js, gint unique_id)
 	if( ghb_settings_get_bool(settings, "detelecine" ) || job->vfr )
 	{
 		hb_filter_detelecine.settings = NULL;
+		if (tweaks)
+		{
+			const gchar *str;
+			str = ghb_settings_get_string(settings, "tweak_detelecine");
+			if (str && str[0])
+			{
+				hb_filter_detelecine.settings = (gchar*)str;
+			}
+		}
 		hb_list_add( job->filters, &hb_filter_detelecine );
 	}
 	if( decomb )
 	{
 		// Use default settings
 		hb_filter_decomb.settings = NULL;
+		if (tweaks)
+		{
+			const gchar *str;
+			str = ghb_settings_get_string(settings, "tweak_decomb");
+			if (str && str[0])
+			{
+				hb_filter_decomb.settings = (gchar*)str;
+			}
+		}
 		hb_list_add( job->filters, &hb_filter_decomb );
 	}
 	if( job->deinterlace )
 	{
 		hb_filter_deinterlace.settings = (gchar*)ghb_settings_get_string(settings, "deinterlace");
+		if (tweaks)
+		{
+			const gchar *str;
+			str = ghb_settings_get_string(settings, "tweak_deinterlace");
+			if (str && str[0])
+			{
+				hb_filter_deinterlace.settings = (gchar*)str;
+			}
+		}
 		hb_list_add( job->filters, &hb_filter_deinterlace );
 	}
 	if( ghb_settings_get_bool(settings, "deblock") )
 	{
 		hb_filter_deblock.settings = NULL;
+		if (tweaks)
+		{
+			const gchar *str;
+			str = ghb_settings_get_string(settings, "tweak_deblock");
+			if (str && str[0])
+			{
+				hb_filter_deblock.settings = (gchar*)str;
+			}
+		}
 		hb_list_add( job->filters, &hb_filter_deblock );
 	}
 	gint denoise = ghb_settings_get_int(settings, "denoise");
 	if( denoise != 0 )
 	{
 		hb_filter_denoise.settings = (gchar*)ghb_settings_get_string(settings, "denoise");
+		if (tweaks)
+		{
+			const gchar *str;
+			str = ghb_settings_get_string(settings, "tweak_denoise");
+			if (str && str[0])
+			{
+				hb_filter_denoise.settings = (gchar*)str;
+			}
+		}
 		hb_list_add( job->filters, &hb_filter_denoise );
 	}
 	job->width = ghb_settings_get_int(settings, "scale_width");

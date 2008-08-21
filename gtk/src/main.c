@@ -166,8 +166,10 @@ MyConnect(
     g_return_if_fail(handler_name != NULL);
     g_return_if_fail(signal_name != NULL);
 
-	g_debug("handler_name %s\n", handler_name);
-	g_debug("signal_name %s\n", signal_name);
+	//const gchar *name = gtk_widget_get_name((GtkWidget*)object);
+	//g_message("\n\nname %s", name);
+	g_debug("handler_name %s", handler_name);
+	g_debug("signal_name %s", signal_name);
     callback = self_symbol_lookup(handler_name);
     if (!callback) 
 	{

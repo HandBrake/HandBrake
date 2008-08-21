@@ -118,6 +118,8 @@ gboolean ghb_validate_container(signal_user_data_t *ud);
 gboolean ghb_validate_vquality(GHashTable *settings);
 gboolean ghb_validate_audio(signal_user_data_t *ud);
 gboolean ghb_validate_video(signal_user_data_t *ud);
+gboolean ghb_validate_filters(signal_user_data_t *ud);
+gboolean ghb_validate_filter_string(const gchar *str, gint max_fields);
 void ghb_hb_cleanup(gboolean partial);
 gint ghb_lookup_acodec(const gchar *acodec);
 gint ghb_lookup_bitrate(const gchar *bitrate);
