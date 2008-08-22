@@ -78,6 +78,7 @@ static dependency_t dep_map[] =
 	{"variable_frame_rate", "framerate", "enable", TRUE},
 	{"variable_frame_rate", "detelecine", "enable", TRUE},
 	{"decomb", "deinterlace", "enable", TRUE},
+	{"decomb", "tweak_deinterlace", "enable", TRUE},
 	{"autocrop", "crop_top", "disable", FALSE},
 	{"autocrop", "crop_bottom", "disable", FALSE},
 	{"autocrop", "crop_left", "disable", FALSE},
@@ -1202,6 +1203,58 @@ setting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_widget_to_setting(ud->settings, widget);
 	check_depencency(ud, widget);
 	clear_presets_selection(ud);
+}
+
+static void
+validate_filter_widget(signal_user_data_t *ud, const gchar *name)
+{
+	GtkTreeModel *store;
+	GtkTreeIter iter;
+	const gchar *str;
+	gboolean foundit = FALSE;
+	GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
+	if (ghb_widget_index(GTK_WIDGET(combo)) < 0)
+	{ // Validate user input
+		const gchar *val = ghb_settings_get_string(ud->settings, name);
+		store = gtk_combo_box_get_model(combo);
+		// Check to see if user manually entered one of the combo options
+		if (gtk_tree_model_get_iter_first(store, &iter))
+		{
+			do
+			{
+				gtk_tree_model_get(store, &iter, 0, &str, -1);
+				if (strcasecmp(val, str) == 0)
+				{
+					gtk_combo_box_set_active_iter(combo, &iter);
+					foundit = TRUE;
+					break;
+				}
+			} while (gtk_tree_model_iter_next(store, &iter));
+		}
+		if (!foundit)
+		{ // validate format of filter string
+			if (!ghb_validate_filter_string(val, -1))
+				gtk_combo_box_set_active(combo, 0);
+		}
+	}
+}
+
+gboolean
+deint_tweak_focus_out_cb(GtkWidget *widget, GdkEventFocus *event, 
+    signal_user_data_t *ud)
+{
+	g_debug("deint_tweak_focus_out_cb ()\n");
+	validate_filter_widget(ud, "tweak_deinterlace");
+	return FALSE;
+}
+
+gboolean
+denoise_tweak_focus_out_cb(GtkWidget *widget, GdkEventFocus *event, 
+    signal_user_data_t *ud)
+{
+	g_debug("denoise_tweak_focus_out_cb ()\n");
+	validate_filter_widget(ud, "tweak_noise");
+	return FALSE;
 }
 
 void
@@ -3323,6 +3376,59 @@ pref_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 void
+tweaks_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	g_debug("tweaks_changed_cb\n");
+	ghb_widget_to_setting (ud->settings, widget);
+	const gchar *name = gtk_widget_get_name(widget);
+	ghb_pref_save(ud->settings, name);
+
+	gboolean tweaks = ghb_settings_get_bool(ud->settings, "allow_tweaks");
+	widget = GHB_WIDGET(ud->builder, "deinterlace");
+	tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
+	widget = GHB_WIDGET(ud->builder, "tweak_deinterlace");
+	!tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
+
+	widget = GHB_WIDGET(ud->builder, "denoise");
+	tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
+	widget = GHB_WIDGET(ud->builder, "tweak_denoise");
+	!tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
+	if (tweaks)
+	{
+		const gchar *str;
+		str = ghb_settings_get_short_opt(ud->settings, "deinterlace");
+		ghb_ui_update(ud, "tweak_deinterlace", str);
+		str = ghb_settings_get_short_opt(ud->settings, "denoise");
+		ghb_ui_update(ud, "tweak_denoise", str);
+	}
+	else
+	{
+		const gchar *str;
+		str = ghb_settings_get_short_opt(ud->settings, "tweak_deinterlace");
+		ghb_ui_update(ud, "deinterlace", str);
+		str = ghb_settings_get_short_opt(ud->settings, "tweak_denoise");
+		ghb_ui_update(ud, "denoise", str);
+	}
+}
+
+void
+hbfd_feature_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	g_debug("hbfd_feature_changed_cb\n");
+	ghb_widget_to_setting (ud->settings, widget);
+	const gchar *name = gtk_widget_get_name(widget);
+	ghb_pref_save(ud->settings, name);
+
+	gboolean hbfd = ghb_settings_get_bool(ud->settings, "hbfd_feature");
+	GtkAction *action;
+	gint val;
+	val = ghb_settings_get_int(ud->settings, "hbfd");
+	ghb_ui_update_int(ud, "hbfd", hbfd && val);
+	action = GHB_ACTION (ud->builder, "hbfd");
+	gtk_action_set_visible(action, hbfd);
+}
+
+void
 ghb_file_menu_add_dvd(signal_user_data_t *ud)
 {
 	GList *link, *drives;
@@ -3572,5 +3678,31 @@ tweak_setting_cb(
 		ret = TRUE;
 	}
 	return ret;
+}
+
+gboolean 
+easter_egg_cb(
+	GtkWidget *widget, 
+	GdkEventButton *event, 
+	signal_user_data_t *ud)
+{
+	g_debug("press %d %d", event->type, event->button);
+	if (event->type == GDK_3BUTTON_PRESS && event->button == 1)
+	{ // Its a tripple left mouse button click
+		GtkWidget *widget;
+		widget = GHB_WIDGET(ud->builder, "allow_tweaks");
+		gtk_widget_show(widget);
+		widget = GHB_WIDGET(ud->builder, "hbfd_feature");
+		gtk_widget_show(widget);
+	}
+	else if (event->type == GDK_BUTTON_PRESS && event->button == 1)
+	{
+		GtkWidget *widget;
+		widget = GHB_WIDGET(ud->builder, "allow_tweaks");
+		gtk_widget_hide(widget);
+		widget = GHB_WIDGET(ud->builder, "hbfd_feature");
+		gtk_widget_hide(widget);
+	}
+	return FALSE;
 }
 

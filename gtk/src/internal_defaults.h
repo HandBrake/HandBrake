@@ -27,8 +27,6 @@
 "tweak_decomb=\n"
 "tweak_detelecine=\n"
 "tweak_deblock=\n"
-"tweak_deinterlace=\n"
-"tweak_denoise=\n"
 "grayscale=disable\n"
 "video_codec=x264\n"
 "two_pass=disable\n"

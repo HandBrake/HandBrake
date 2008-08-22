@@ -837,6 +837,28 @@ init_combo_box(GtkBuilder *builder, const gchar *name)
       "text", 0, "sensitive", 1, NULL);
 }	
 
+// Set up the model for the combo box
+static void
+init_combo_box_entry(GtkBuilder *builder, const gchar *name)
+{
+	GtkComboBox *combo;
+	GtkListStore *store;
+
+	g_debug("init_combo_box_entry() %s\n", name);
+	// First modify the combobox model to allow greying out of options
+	combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
+	// Store contains:
+	// 1 - String to display
+	// 2 - bool indicating whether the entry is selectable (grey or not)
+	// 3 - String that is used for presets
+	// 4 - Int value determined by backend
+	// 5 - String value determined by backend
+	store = gtk_list_store_new(5, G_TYPE_STRING, G_TYPE_BOOLEAN, 
+							   G_TYPE_STRING, G_TYPE_INT, G_TYPE_STRING);
+	gtk_combo_box_set_model(combo, GTK_TREE_MODEL(store));
+	gtk_combo_box_entry_set_text_column(GTK_COMBO_BOX_ENTRY(combo), 0);
+}	
+
 static void
 audio_bitrate_opts_set(GtkBuilder *builder, const gchar *name, hb_rate_t *rates, gint count)
 {
@@ -1383,8 +1405,12 @@ ghb_update_ui_combo_box(GtkBuilder *builder, const gchar *name, gint user_data, 
 		generic_opts_set(builder, "container", &container_opts);
 	if (all || strcmp(name, "deinterlace") == 0)
 		generic_opts_set(builder, "deinterlace", &deint_opts);
+	if (all || strcmp(name, "tweak_deinterlace") == 0)
+		generic_opts_set(builder, "tweak_deinterlace", &deint_opts);
 	if (all || strcmp(name, "denoise") == 0)
 		generic_opts_set(builder, "denoise", &denoise_opts);
+	if (all || strcmp(name, "tweak_denoise") == 0)
+		generic_opts_set(builder, "tweak_denoise", &denoise_opts);
 	if (all || strcmp(name, "video_codec") == 0)
 		generic_opts_set(builder, "video_codec", &vcodec_opts);
 	if (all || strcmp(name, "audio_codec") == 0)
@@ -1418,7 +1444,9 @@ init_ui_combo_boxes(GtkBuilder *builder)
 	init_combo_box(builder, "audio_track");
 	init_combo_box(builder, "container");
 	init_combo_box(builder, "deinterlace");
+	init_combo_box_entry(builder, "tweak_deinterlace");
 	init_combo_box(builder, "denoise");
+	init_combo_box_entry(builder, "tweak_denoise");
 	init_combo_box(builder, "video_codec");
 	init_combo_box(builder, "audio_codec");
 	init_combo_box(builder, "x264_direct");
@@ -2054,6 +2082,7 @@ ghb_validate_filters(signal_user_data_t *ud)
 {
 	gboolean tweaks;
 	const gchar *str;
+	gint index;
 	gchar *message;
 	gboolean enabled;
 
@@ -2085,16 +2114,19 @@ ghb_validate_filters(signal_user_data_t *ud)
 			return FALSE;
 		}
 		// deinte 4
-		str = ghb_settings_get_string(ud->settings, "tweak_deinterlace");
-		enabled = ghb_settings_get_bool(ud->settings, "deinterlace");
-		if (enabled && !ghb_validate_filter_string(str, 4))
+		index = ghb_settings_get_index(ud->settings, "tweak_deinterlace");
+		if (index < 0)
 		{
-			message = g_strdup_printf(
-						"Invalid Deinterlace Settings:\n\n%s\n",
-						str);
-			ghb_message_dialog(GTK_MESSAGE_ERROR, message, "Cancel", NULL);
-			g_free(message);
-			return FALSE;
+			str = ghb_settings_get_string(ud->settings, "tweak_deinterlace");
+			if (!ghb_validate_filter_string(str, 4))
+			{
+				message = g_strdup_printf(
+							"Invalid Deinterlace Settings:\n\n%s\n",
+							str);
+				ghb_message_dialog(GTK_MESSAGE_ERROR, message, "Cancel", NULL);
+				g_free(message);
+				return FALSE;
+			}
 		}
 		// debloc 2
 		str = ghb_settings_get_string(ud->settings, "tweak_deblock");
@@ -2109,16 +2141,19 @@ ghb_validate_filters(signal_user_data_t *ud)
 			return FALSE;
 		}
 		// denois 4
-		str = ghb_settings_get_string(ud->settings, "tweak_denoise");
-		enabled = ghb_settings_get_bool(ud->settings, "denoise");
-		if (enabled && !ghb_validate_filter_string(str, 4))
+		index = ghb_settings_get_index(ud->settings, "tweak_denoise");
+		if (index < 0)
 		{
-			message = g_strdup_printf(
-						"Invalid Denoise Settings:\n\n%s\n",
-						str);
-			ghb_message_dialog(GTK_MESSAGE_ERROR, message, "Cancel", NULL);
-			g_free(message);
-			return FALSE;
+			str = ghb_settings_get_string(ud->settings, "tweak_denoise");
+			if (!ghb_validate_filter_string(str, 4))
+			{
+				message = g_strdup_printf(
+							"Invalid Denoise Settings:\n\n%s\n",
+							str);
+				ghb_message_dialog(GTK_MESSAGE_ERROR, message, "Cancel", NULL);
+				g_free(message);
+				return FALSE;
+			}
 		}
 	}
 	return TRUE;
@@ -2534,7 +2569,8 @@ ghb_add_job(job_settings_t *js, gint unique_id)
 
 	
 	gboolean decomb = ghb_settings_get_bool(settings, "decomb");
-	gint deint = ghb_settings_get_int(settings, "deinterlace");
+	gint deint = ghb_settings_get_int(
+					settings, tweaks ? "tweak_deinterlace":"deinterlace");
 	if (!decomb)
 		job->deinterlace = (deint == 0) ? 0 : 1;
 	else
@@ -2596,16 +2632,8 @@ ghb_add_job(job_settings_t *js, gint unique_id)
 	}
 	if( job->deinterlace )
 	{
-		hb_filter_deinterlace.settings = (gchar*)ghb_settings_get_string(settings, "deinterlace");
-		if (tweaks)
-		{
-			const gchar *str;
-			str = ghb_settings_get_string(settings, "tweak_deinterlace");
-			if (str && str[0])
-			{
-				hb_filter_deinterlace.settings = (gchar*)str;
-			}
-		}
+		hb_filter_deinterlace.settings = (gchar*)ghb_settings_get_string(
+			settings, tweaks ? "tweak_deinterlace" : "deinterlace");
 		hb_list_add( job->filters, &hb_filter_deinterlace );
 	}
 	if( ghb_settings_get_bool(settings, "deblock") )
@@ -2622,19 +2650,12 @@ ghb_add_job(job_settings_t *js, gint unique_id)
 		}
 		hb_list_add( job->filters, &hb_filter_deblock );
 	}
-	gint denoise = ghb_settings_get_int(settings, "denoise");
+	gint denoise = ghb_settings_get_int(
+						settings, tweaks ? "tweak_denoise" : "denoise");
 	if( denoise != 0 )
 	{
-		hb_filter_denoise.settings = (gchar*)ghb_settings_get_string(settings, "denoise");
-		if (tweaks)
-		{
-			const gchar *str;
-			str = ghb_settings_get_string(settings, "tweak_denoise");
-			if (str && str[0])
-			{
-				hb_filter_denoise.settings = (gchar*)str;
-			}
-		}
+		hb_filter_denoise.settings = (gchar*)ghb_settings_get_string(
+			settings, tweaks ? "tweak_denoise" : "denoise");
 		hb_list_add( job->filters, &hb_filter_denoise );
 	}
 	job->width = ghb_settings_get_int(settings, "scale_width");

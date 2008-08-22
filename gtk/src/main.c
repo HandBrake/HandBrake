@@ -548,6 +548,18 @@ main (int argc, char *argv[])
 		ghb_hbfd(ud, TRUE);
 	}
 	const gchar *source = ghb_settings_get_string(ud->settings, "default_source");
+	gboolean tweaks = ghb_settings_get_bool(ud->settings, "allow_tweaks");
+	GtkWidget *widget;
+	widget = GHB_WIDGET(ud->builder, "deinterlace");
+	tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
+	widget = GHB_WIDGET(ud->builder, "tweak_deinterlace");
+	!tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
+
+	widget = GHB_WIDGET(ud->builder, "denoise");
+	tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
+	widget = GHB_WIDGET(ud->builder, "tweak_denoise");
+	!tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
+
 	ghb_dvd_set_current(source, ud);
 	// Start the show.
 	window = GHB_WIDGET (ud->builder, "hb_window");

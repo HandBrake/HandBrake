@@ -92,7 +92,7 @@ static void
 settings_set(GHashTable *settings, const gchar *key, 
 				 const gchar *str, gint val, gdouble dbl)
 {
-	g_debug("ghb_setting_set () key (%s), svalue (%s), ivalue %d, dvalue %.2g\n", key, str, val, dbl);
+	g_debug("setting_set () key (%s), svalue (%s), ivalue %d, dvalue %.2g\n", key, str, val, dbl);
 	setting_value_t *value = g_malloc(sizeof(setting_value_t));
 	if (str != NULL)
 		value->svalue = g_strdup(str);
@@ -128,7 +128,9 @@ ghb_settings_set(GHashTable *settings, const gchar *key, setting_value_t *value)
 		g_debug("Bad key or value\n");
 		return;
 	}
-	g_debug("\tkey (%s) -- value (%s)\n", key, value->svalue);
+	g_debug("ghb_settings_set key (%s) -- value (%d,%d,%s,%s,%s)\n", key, 
+		value->index, value->ivalue, value->option, value->shortOpt,
+		value->svalue);
 	g_hash_table_insert(settings, g_strdup(key), value);
 }
 
@@ -435,7 +437,6 @@ ghb_widget_value(GtkWidget *widget)
 			gtk_tree_model_get(store, &iter, 0, &option, 2, &shortOpt, 
 							   3, &ivalue, 4, &svalue, -1);
 
-			g_debug("\tcombo: index %d opt (%s) Short Opt (%s) value %d\n", index, option, shortOpt, ivalue);
 			value->option = option;
 			value->shortOpt = shortOpt;
 			value->svalue = svalue;
@@ -450,6 +451,39 @@ ghb_widget_value(GtkWidget *widget)
 			value->svalue = g_strdup("");
 			value->index = -1;
 			value->ivalue = 0;
+			value->dvalue = 0;
+		}
+	}
+	else if (type == GTK_TYPE_COMBO_BOX_ENTRY)
+	{
+		GtkTreeModel *store;
+		GtkTreeIter iter;
+		gchar *shortOpt, *option, *svalue;
+		gint ivalue;
+		gint index = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+
+		store = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
+		if (gtk_combo_box_get_active_iter(GTK_COMBO_BOX(widget), &iter))
+		{
+			gtk_tree_model_get(store, &iter, 0, &option, 2, &shortOpt, 
+							   3, &ivalue, 4, &svalue, -1);
+
+			value->option = option;
+			value->shortOpt = shortOpt;
+			value->svalue = svalue;
+			value->index = index;
+			value->ivalue = ivalue;
+			value->dvalue = ivalue;
+		}
+		else
+		{
+			const gchar *str = gtk_combo_box_get_active_text(GTK_COMBO_BOX(widget));
+			if (str == NULL) str = "";
+			value->option = g_strdup(str);
+			value->shortOpt = g_strdup(str);
+			value->svalue = g_strdup(str);
+			value->index = -1;
+			value->ivalue = -1;
 			value->dvalue = 0;
 		}
 	}
@@ -674,7 +708,7 @@ update_widget(GtkWidget *widget, const gchar *parm_svalue, gint parm_ivalue)
 		gint ivalue;
 		gboolean foundit = FALSE;
 
-		g_debug("combo");
+		g_debug("combo (%s)", value);
 		store = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
 		if (gtk_tree_model_get_iter_first (store, &iter))
 		{
@@ -701,6 +735,47 @@ update_widget(GtkWidget *widget, const gchar *parm_svalue, gint parm_ivalue)
 		if (!foundit)
 		{
 			gtk_combo_box_set_active (GTK_COMBO_BOX(widget), 0);
+		}
+	}
+	else if (type == GTK_TYPE_COMBO_BOX_ENTRY)
+	{
+		GtkTreeModel *store;
+		GtkTreeIter iter;
+		gchar *shortOpt;
+		gint ivalue;
+		gboolean foundit = FALSE;
+
+		g_debug("GTK_COMBO_BOX_ENTRY");
+		store = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
+		if (gtk_tree_model_get_iter_first (store, &iter))
+		{
+			do
+			{
+				gtk_tree_model_get(store, &iter, 2, &shortOpt, 3, &ivalue, -1);
+				if (parm_svalue == NULL && ivalue == parm_ivalue)
+				{
+					gtk_combo_box_set_active_iter (GTK_COMBO_BOX(widget), &iter);
+					g_free(shortOpt);
+					foundit = TRUE;
+					break;
+				}
+				else if (strcmp(shortOpt, value) == 0)
+				{
+					gtk_combo_box_set_active_iter (GTK_COMBO_BOX(widget), &iter);
+					g_free(shortOpt);
+					foundit = TRUE;
+					break;
+				}
+				g_free(shortOpt);
+			} while (gtk_tree_model_iter_next (store, &iter));
+		}
+		if (!foundit)
+		{
+			GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(widget)));
+			if (entry)
+			{
+				gtk_entry_set_text (entry, value);
+			}
 		}
 	}
 	else if (type == GTK_TYPE_SPIN_BUTTON)
@@ -967,6 +1042,28 @@ ghb_presets_get_name(gint index)
 	return result;
 }
 
+static gchar*
+preset_get_string(
+	GKeyFile *keyFile,
+	const gchar *name,
+	const gchar *key)
+{
+	gchar *str;
+
+	g_debug("preset (%s) key (%s)\n", name, key);
+	str = NULL;
+	if (name != NULL && keyFile != NULL)
+	{
+		str = g_key_file_get_string(keyFile, name, key, NULL);
+		g_debug("(%s, %s)\n", key, str);
+	}
+	if (str == NULL)
+	{
+		str = g_key_file_get_string(internalKeyFile, "Presets", key, NULL);
+	}
+	return str;
+}
+
 static gboolean
 init_presets_hash_from_key_file(signal_user_data_t *ud, const gchar *name, GKeyFile *keyFile)
 {
@@ -983,16 +1080,7 @@ init_presets_hash_from_key_file(signal_user_data_t *ud, const gchar *name, GKeyF
 		for (ii = 0; keys[ii] != NULL; ii++)
 		{
 			g_debug("key (%s)\n", keys[ii]);
-			str = NULL;
-			if (name != NULL && keyFile != NULL)
-			{
-				str = g_key_file_get_string(keyFile, name, keys[ii], NULL);
-				g_debug("(%s, %s)\n", keys[ii], str);
-			}
-			if (str == NULL)
-			{
-				str = g_key_file_get_string(internalKeyFile, "Presets", keys[ii], NULL);
-			}
+			str = preset_get_string(keyFile, name, keys[ii]);
 			if (str != NULL)
 			{
 				g_debug("name (%s): key (%s) -- str (%s)\n", name, keys[ii], str);
@@ -1023,6 +1111,22 @@ preset_to_ui(signal_user_data_t *ud, presets_data_t *data)
 		g_debug("preset name (%s)\n", data->name);
 		// Initialize from preset
 		init_presets_hash_from_key_file(ud, data->name, data->keyFile);
+	}
+	if (ghb_settings_get_bool(ud->settings, "allow_tweaks"))
+	{
+		gchar *str;
+		str = preset_get_string(data->keyFile, data->name, "deinterlace");
+		if (str)
+		{
+			ghb_ui_update(ud, "tweak_deinterlace", str);
+			g_free(str);
+		}
+		str = preset_get_string(data->keyFile, data->name, "denoise");
+		if (str)
+		{
+			ghb_ui_update(ud, "tweak_denoise", str);
+			g_free(str);
+		}
 	}
 }
 
@@ -1506,6 +1610,16 @@ ghb_settings_save(signal_user_data_t *ud, const gchar *name)
 	g_debug("ghb_settings_save ()\n");
 	ski.name = name;
 	ski.keyFile = customKeyFile;
+	if (ghb_settings_get_bool(ud->settings, "allow_tweaks"))
+	{
+		const gchar *str;
+		str = ghb_settings_get_short_opt(ud->settings, "tweak_deinterlace");
+		if (str)
+			ghb_settings_set_string(ud->settings, "deinterlace", str);
+		str = ghb_settings_get_short_opt(ud->settings, "tweak_denoise");
+		if (str)
+			ghb_settings_set_string(ud->settings, "denoise", str);
+	}
 	ski.autoscale = ghb_settings_get_bool (ud->settings, "autoscale");
 	g_hash_table_foreach(ud->settings, store_to_key_file, &ski);
 	presets_store();
