@@ -76,6 +76,7 @@ start_element(
 gchar *settings[] = 
 {
 	"preset_description",
+	"preset_type",
 	"subtitle_lang",
 	"forced_subtitles",
 	"source_audio_lang",
@@ -578,7 +579,7 @@ static xlat_t keys[] =
 	{"PresetDescription", "preset_description"},
 	{"Subtitles", "subtitle_lang"},
 	{"Subtitles", "subtitle_lang"},
-	{"Type", ""}, // preset type builtin/custom
+	{"Type", "preset_type"}, // preset type builtin/custom
 	{"UsesMaxPictureSettings", "autoscale"},
 	{"UsesPictureFilters", ""},
 	{"UsesPictureSettings", ""},

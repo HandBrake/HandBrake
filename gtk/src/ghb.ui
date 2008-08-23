@@ -3297,6 +3297,25 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                                 <property name="position">3</property>
                               </packing>
                             </child>
+                            <child>
+                              <object class="GtkButton" id="presets_restore">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="tooltip-text" translatable="yes">Reload HandBrakes standard presets</property>
+                                <property name="relief">GTK_RELIEF_NONE</property>
+                                <signal handler="presets_restore_clicked_cb" name="clicked"/>
+                                <child>
+                                  <object class="GtkImage" id="image7">
+                                    <property name="visible">True</property>
+                                    <property name="stock">gtk-refresh</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="position">4</property>
+                              </packing>
+                            </child>
                           </object>
                         </child>
                       </object>

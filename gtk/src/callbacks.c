@@ -2013,6 +2013,15 @@ presets_save_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 }
 
 void
+presets_restore_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+{
+	g_debug("presets_restore_clicked_cb ()\n");
+	// Reload only the standard presets
+	ghb_presets_reload(ud);
+	ghb_presets_list_update(ud);
+}
+
+void
 prefs_dialog_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	GtkWidget *dialog;
@@ -2042,43 +2051,32 @@ presets_remove_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 		GtkWidget *dialog;
 
 		gtk_tree_model_get(store, &iter, 0, &preset, -1);
-		if (!ghb_presets_is_standard(preset))
+		dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL,
+								GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
+								"Confirm deletion of preset %s.", preset);
+		response = gtk_dialog_run(GTK_DIALOG(dialog));
+		gtk_widget_destroy (dialog);
+		if (response == GTK_RESPONSE_YES)
 		{
-			dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL,
-									GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
-									"Confirm deletion of preset %s.", preset);
-			response = gtk_dialog_run(GTK_DIALOG(dialog));
-			gtk_widget_destroy (dialog);
-			if (response == GTK_RESPONSE_YES)
+			GtkTreeIter nextIter = iter;
+			gchar *nextPreset = NULL;
+			if (!gtk_tree_model_iter_next(store, &nextIter))
 			{
-				GtkTreeIter nextIter = iter;
-				gchar *nextPreset = NULL;
-				if (!gtk_tree_model_iter_next(store, &nextIter))
-				{
-					if (gtk_tree_model_get_iter_first(store, &nextIter))
-					{
-						gtk_tree_model_get(store, &nextIter, 0, &nextPreset, -1);
-					}
-				}
-				else
+				if (gtk_tree_model_get_iter_first(store, &nextIter))
 				{
 					gtk_tree_model_get(store, &nextIter, 0, &nextPreset, -1);
 				}
-				// Remove the selected item
-				// First unselect it so that selecting the new item works properly
-				gtk_tree_selection_unselect_iter (selection, &iter);
-				ghb_presets_remove(ud->settings, preset);
-				ghb_presets_list_update(ud);
-				ghb_select_preset(ud->builder, nextPreset);
 			}
-		}
-		else
-		{
-			dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL,
-									GTK_MESSAGE_WARNING, GTK_BUTTONS_OK,
-									"Can not delete standard preset %s.", preset);
-			response = gtk_dialog_run(GTK_DIALOG(dialog));
-			gtk_widget_destroy (dialog);
+			else
+			{
+				gtk_tree_model_get(store, &nextIter, 0, &nextPreset, -1);
+			}
+			// Remove the selected item
+			// First unselect it so that selecting the new item works properly
+			gtk_tree_selection_unselect_iter (selection, &iter);
+			ghb_presets_remove(ud->settings, preset);
+			ghb_presets_list_update(ud);
+			ghb_select_preset(ud->builder, nextPreset);
 		}
 	}
 }
@@ -2123,18 +2121,14 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
 	GtkTreeModel *store;
 	GtkTreeIter iter;
 	gchar *preset;
-	GtkWidget *widget;
-	gboolean sensitive = FALSE;
 	ghb_title_info_t tinfo;
+	GtkWidget *widget;
 	
 	g_debug("presets_list_selection_changed_cb ()\n");
+	widget = GHB_WIDGET (ud->builder, "presets_remove");
 	if (gtk_tree_selection_get_selected(selection, &store, &iter))
 	{
 		gtk_tree_model_get(store, &iter, 0, &preset, -1);
-		if (!ghb_presets_is_standard(preset))
-		{
-			sensitive = TRUE;
-		}
 		ud->dont_clear_presets = TRUE;
 		// Temporarily set the video_quality range to (0,100)
 		// This is needed so the video_quality value does not get
@@ -2158,13 +2152,13 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
 		gint vqmin, vqmax;
 		ghb_vquality_range(ud, &vqmin, &vqmax);
 		gtk_range_set_range (GTK_RANGE(qp), vqmin, vqmax);
+		gtk_widget_set_sensitive(widget, TRUE);
 	}
 	else
 	{
 		g_debug("No selection???  Perhaps unselected.\n");
+		gtk_widget_set_sensitive(widget, FALSE);
 	}
-	widget = GHB_WIDGET (ud->builder, "presets_remove");
-	gtk_widget_set_sensitive(widget, sensitive);
 }
 
 void

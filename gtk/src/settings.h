@@ -107,13 +107,13 @@ int ghb_ui_update(signal_user_data_t *ud, const gchar *key, const gchar *value);
 int ghb_ui_update_int(signal_user_data_t *ud, const gchar *key, gint ivalue);
 void ghb_settings_save(signal_user_data_t *ud, const gchar *name);
 void ghb_presets_load(signal_user_data_t *ud);
+void ghb_presets_reload(signal_user_data_t *ud);
 void ghb_set_preset(signal_user_data_t *ud, const gchar *name);
 void ghb_update_from_preset( signal_user_data_t *ud, 
 							const gchar *name, const gchar *key);
 gchar** ghb_presets_get_names();
 gchar** ghb_presets_get_descriptions();
 const gchar* ghb_presets_get_name(gint index);
-gboolean ghb_presets_is_standard(const gchar *name);
 gboolean ghb_presets_remove(GHashTable *settings, const gchar *name);
 void ghb_presets_revert(signal_user_data_t *ud, const gchar *name);
 GdkColor* ghb_presets_color(gboolean modified);

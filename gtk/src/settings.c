@@ -872,29 +872,10 @@ typedef struct
 	GKeyFile *keyFile;
 } presets_data_t;
 
-static GKeyFile *standardKeyFile;
-static GKeyFile *customKeyFile;
+static GKeyFile *presetsKeyFile;
 static GKeyFile *internalKeyFile;
 static GKeyFile *prefsKeyFile;
 static GList *presetsList;
-
-static gint
-search_group(const gchar *name, gchar **groups)
-{
-	gint ii;
-
-	//g_debug("search_group\n");
-	if (groups == NULL) return -1;
-	for (ii = 0; groups[ii] != NULL; ii++)
-	{
-		//g_debug("%s cmp %s\n", name, groups[ii]);
-		if (strcmp(name, groups[ii]) == 0)
-		{
-			return ii;
-		}
-	}
-	return -1;
-}
 
 presets_data_t *
 presets_list_search(GList *list, const gchar *name)
@@ -1192,9 +1173,9 @@ build_presets_list(GHashTable *settings)
 {
 	GList *link = presetsList;
 	presets_data_t *data;
-	gchar **custom, **standard;
-	gsize clength, slength;
-	gint ii, jj;
+	gchar **presets;
+	gsize length;
+	gint ii;
 	
 	g_debug("build_presets_list ()\n");
 	// First clear out the old presets list
@@ -1210,48 +1191,55 @@ build_presets_list(GHashTable *settings)
 	presetsList = NULL;
 
 	// Now build up the new list
+	// Make standard presets appear before custom in the list
 	const gchar *def_name = ghb_settings_get_string(settings, "default_preset");
-	custom = g_key_file_get_groups(customKeyFile, &clength);
-	standard = g_key_file_get_groups(standardKeyFile, &slength);
-	if ((slength + clength) <= 0) return;
-	jj = 0;
-	for (ii = 0; ii < slength; ii++)
+	presets = g_key_file_get_groups(presetsKeyFile, &length);
+	if (length <= 0) return;
+	for (ii = 0; ii < length; ii++)
 	{
-		if (search_group(standard[ii], custom) < 0)
-		{
+		gint type;
+		GError *err = NULL;
+		type = g_key_file_get_integer(presetsKeyFile, presets[ii], "preset_type", &err);
+		if (!err && type == 0)
+		{	// Its a standard preset
 			gchar *desc;
 			data = g_malloc(sizeof(presets_data_t));
-			data->name = g_strdup(standard[ii]);
-			data->keyFile = standardKeyFile;
+			data->name = g_strdup(presets[ii]);
+			data->keyFile = presetsKeyFile;
 			data->custom = FALSE;
 			data->defalt = FALSE;
 			if ((def_name != NULL) && (strcmp(def_name, data->name) == 0))
 			{
 				data->defalt = TRUE;
 			}
-			desc = g_key_file_get_string(standardKeyFile, standard[ii], "preset_description", NULL);
+			desc = g_key_file_get_string(presetsKeyFile, presets[ii], "preset_description", NULL);
 			data->description = desc;
 			presetsList = g_list_append(presetsList, data);
 		}
 	}
-	for (ii = 0; ii < clength; ii++)
+	for (ii = 0; ii < length; ii++)
 	{
-		gchar *desc;
-		data = g_malloc(sizeof(presets_data_t));
-		data->name = g_strdup(custom[ii]);
-		data->keyFile = customKeyFile;
-		data->custom = TRUE;
-		data->defalt = FALSE;
-		if ((def_name != NULL) && (strcmp(def_name, data->name) == 0))
-		{
-			data->defalt = TRUE;
+		gint type;
+		GError *err = NULL;
+		type = g_key_file_get_integer(presetsKeyFile, presets[ii], "preset_type", &err);
+		if (err || type != 0)
+		{	// Its a custom preset
+			gchar *desc;
+			data = g_malloc(sizeof(presets_data_t));
+			data->name = g_strdup(presets[ii]);
+			data->keyFile = presetsKeyFile;
+			data->custom = TRUE;
+			data->defalt = FALSE;
+			if ((def_name != NULL) && (strcmp(def_name, data->name) == 0))
+			{
+				data->defalt = TRUE;
+			}
+			desc = g_key_file_get_string(presetsKeyFile, presets[ii], "preset_description", NULL);
+			data->description = desc;
+			presetsList = g_list_append(presetsList, data);
 		}
-		desc = g_key_file_get_string(customKeyFile, custom[ii], "preset_description", NULL);
-		data->description = desc;
-		presetsList = g_list_append(presetsList, data);
 	}
-	g_strfreev(custom);
-	g_strfreev(standard);
+	g_strfreev(presets);
 }
 
 static void
@@ -1488,44 +1476,95 @@ ghb_prefs_load(signal_user_data_t *ud)
 }
 
 void
+ghb_presets_reload(signal_user_data_t *ud)
+{
+	gchar *config;
+	GKeyFile *keyFile;
+
+	g_debug("ghb_presets_reload()\n");
+	keyFile = g_key_file_new();
+
+	config = g_strdup_printf ("./standard_presets");
+	if (!g_file_test(config, G_FILE_TEST_IS_REGULAR))
+	{
+		g_free(config);
+	
+		const gchar* const *dirs;
+		gint ii;
+		dirs = g_get_system_data_dirs();
+		if (dirs != NULL)
+		{
+			for (ii = 0; dirs[ii] != NULL; ii++)
+			{
+				config = g_strdup_printf("%s/ghb/standard_presets", dirs[ii]);
+				if (g_file_test(config, G_FILE_TEST_IS_REGULAR))
+				{
+					break;
+				}
+				g_free(config);
+				config = NULL;
+			}
+		}
+	}
+	if (config != NULL)
+	{
+		gchar **groups, **keys;
+		gchar *value;
+		gint ii, jj;
+
+		g_key_file_load_from_file( keyFile, config, 
+								  G_KEY_FILE_KEEP_COMMENTS, NULL);
+		// Merge the keyfile contents into our presets
+		groups = g_key_file_get_groups(keyFile, NULL);
+		// First remove any existing groups with the same names
+		for (ii = 0; groups[ii] != NULL; ii++)
+		{
+			g_key_file_remove_group(presetsKeyFile, groups[ii], NULL);
+		}
+		for (ii = 0; groups[ii] != NULL; ii++)
+		{
+			keys = g_key_file_get_keys(keyFile, groups[ii], NULL, NULL);
+			for (jj = 0; keys[jj] != NULL; jj++)
+			{
+				GError *err = NULL;
+				value = g_key_file_get_string(
+					keyFile, groups[ii], keys[jj], &err);
+				if (value && !err)
+				{
+					g_key_file_set_string(
+						presetsKeyFile, groups[ii], keys[jj], value);
+				}
+				if (value) g_free(value);
+			}
+			g_strfreev(keys);
+		}
+		g_strfreev(groups);
+	}
+	g_key_file_free(keyFile);
+	build_presets_list(ud->settings);
+}
+
+void
 ghb_presets_load(signal_user_data_t *ud)
 {
 	const gchar *dir;
 	gchar *config;
-	GHashTable *settings = ud->settings;
 
 	g_debug("ghb_presets_load()\n");
-	customKeyFile = g_key_file_new();
-	standardKeyFile = g_key_file_new();
+	presetsKeyFile = g_key_file_new();
 	dir = g_get_user_config_dir();
-	config = g_strdup_printf ("%s/ghb/custom_presets", dir);
-	if (g_file_test(config, G_FILE_TEST_IS_REGULAR))
+	config = g_strdup_printf ("%s/ghb/presets", dir);
+
+	if (!g_file_test(config, G_FILE_TEST_IS_REGULAR))
 	{
-		g_key_file_load_from_file( customKeyFile, config, 
-								  G_KEY_FILE_KEEP_COMMENTS, NULL);
-	}
-	g_free(config);
-	// Try current dir first. Makes testing prior to installation easier
-	if (g_file_test("./standard_presets", G_FILE_TEST_IS_REGULAR))
-	{
-		g_key_file_load_from_file( standardKeyFile, "./standard_presets", 
-								  G_KEY_FILE_KEEP_COMMENTS, NULL);
-	}
-	else
-	{
-		// Try users config dir
-		config = g_strdup_printf ("%s/ghb/standard_presets", dir);
-		if (g_file_test(config, G_FILE_TEST_IS_REGULAR))
+		g_free(config);
+		config = g_strdup_printf ("./standard_presets");
+		if (!g_file_test(config, G_FILE_TEST_IS_REGULAR))
 		{
-			g_key_file_load_from_file( standardKeyFile, config, 
-									  G_KEY_FILE_KEEP_COMMENTS, NULL);
 			g_free(config);
-		}
-		else
-		{
+		
 			const gchar* const *dirs;
 			gint ii;
-			g_free(config);
 			dirs = g_get_system_data_dirs();
 			if (dirs != NULL)
 			{
@@ -1534,23 +1573,27 @@ ghb_presets_load(signal_user_data_t *ud)
 					config = g_strdup_printf("%s/ghb/standard_presets", dirs[ii]);
 					if (g_file_test(config, G_FILE_TEST_IS_REGULAR))
 					{
-						g_key_file_load_from_file( standardKeyFile, config, 
-												  G_KEY_FILE_KEEP_COMMENTS, NULL);
 						break;
 					}
 					g_free(config);
+					config = NULL;
 				}
 			}
 		}
 	}
-	build_presets_list(settings);
+	if (config != NULL)
+	{
+		g_key_file_load_from_file( presetsKeyFile, config, 
+								  G_KEY_FILE_KEEP_COMMENTS, NULL);
+	}
+	build_presets_list(ud->settings);
 }
 
 static void
 presets_store()
 {
 	g_debug("presets_store ()\n");
-	store_key_file(customKeyFile, "custom_presets");
+	store_key_file(presetsKeyFile, "presets");
 }
 
 typedef struct
@@ -1609,7 +1652,7 @@ ghb_settings_save(signal_user_data_t *ud, const gchar *name)
 
 	g_debug("ghb_settings_save ()\n");
 	ski.name = name;
-	ski.keyFile = customKeyFile;
+	ski.keyFile = presetsKeyFile;
 	if (ghb_settings_get_bool(ud->settings, "allow_tweaks"))
 	{
 		const gchar *str;
@@ -1621,6 +1664,8 @@ ghb_settings_save(signal_user_data_t *ud, const gchar *name)
 			ghb_settings_set_string(ud->settings, "denoise", str);
 	}
 	ski.autoscale = ghb_settings_get_bool (ud->settings, "autoscale");
+	g_key_file_remove_group(presetsKeyFile, name, NULL);
+	ghb_settings_set_string(ud->settings, "preset_type", "1");
 	g_hash_table_foreach(ud->settings, store_to_key_file, &ski);
 	presets_store();
 	build_presets_list(ud->settings);
@@ -1629,34 +1674,15 @@ ghb_settings_save(signal_user_data_t *ud, const gchar *name)
 	ud->dont_clear_presets = FALSE;
 }
 
-// Checks to see if the preset is in standard presets
-// I allow standard to be overridden by adding a preset with the
-// same name to the custom list.  So to determine if the named 
-// preset is standard, I must first check to see if is in the
-// custom list.
-gboolean
-ghb_presets_is_standard(const gchar *name)
-{
-	g_debug("ghb_presets_is_standard()\n");
-	if (g_key_file_has_group(customKeyFile, name))
-	{
-		// The preset is in the custom list, so it
-		// can not be a standard.
-		return FALSE;
-	}
-	return g_key_file_has_group(standardKeyFile, name);
-}
-
-// This function will not remove presets from the standard preset list.
 // Return false if attempt is made.
 gboolean
 ghb_presets_remove(GHashTable *settings, const gchar *name)
 {
 	g_debug("ghb_presets_remove()\n");
-	if (g_key_file_has_group(customKeyFile, name))
+	if (g_key_file_has_group(presetsKeyFile, name))
 	{
 		g_debug("\t removing %s\n", name);
-		g_key_file_remove_group(customKeyFile, name, NULL);
+		g_key_file_remove_group(presetsKeyFile, name, NULL);
 		presets_store();
 		build_presets_list(settings);
 		return TRUE;

@@ -1,4 +1,5 @@
 "[Presets]\n"
+"preset_type=1\n"
 "preset_description=\n"
 "subtitle_lang=none\n"
 "forced_subtitles=enable\n"
