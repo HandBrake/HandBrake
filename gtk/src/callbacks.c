@@ -1995,11 +1995,9 @@ presets_save_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	const gchar *preset = "";
 
 	g_debug("presets_save_clicked_cb ()\n");
-	// Construct the audio settings presets from the current audio list
 	preset = ghb_settings_get_string (ud->settings, "preset");
 	// Clear the description
 	desc = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "preset_description"));
-	//gtk_entry_set_text(desc, "");
 	dialog = GHB_WIDGET(ud->builder, "preset_save_dialog");
 	entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "preset_name"));
 	gtk_entry_set_text(entry, preset);
@@ -2011,6 +2009,7 @@ presets_save_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 		const gchar *name = gtk_entry_get_text(entry);
 		g_debug("description to settings\n");
 		ghb_widget_to_setting(ud->settings, GTK_WIDGET(desc));
+		// Construct the audio settings presets from the current audio list
 		update_audio_presets(ud);
 		ghb_settings_save(ud, name);
 		ghb_presets_list_update(ud);
@@ -2026,6 +2025,10 @@ presets_restore_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	// Reload only the standard presets
 	ghb_presets_reload(ud);
 	ghb_presets_list_update(ud);
+	// Updating the presets list shuffles things around
+	// need to make sure the proper preset is selected
+	const gchar *preset = ghb_settings_get_string (ud->settings, "preset");
+	ghb_select_preset(ud->builder, preset);
 }
 
 void

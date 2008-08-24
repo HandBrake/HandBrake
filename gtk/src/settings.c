@@ -1482,7 +1482,6 @@ void
 ghb_presets_reload(signal_user_data_t *ud)
 {
 	GKeyFile *keyFile;
-	gboolean res;
 
 	g_debug("ghb_presets_reload()\n");
 	keyFile = g_key_file_new();
@@ -1519,6 +1518,7 @@ ghb_presets_reload(signal_user_data_t *ud)
 	}
 	g_strfreev(groups);
 	g_key_file_free(keyFile);
+	store_key_file(presetsKeyFile, "presets");
 	build_presets_list(ud->settings);
 }
 
