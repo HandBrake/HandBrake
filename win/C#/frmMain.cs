@@ -116,6 +116,9 @@ namespace Handbrake
 
             // Some event Handlers. Used for minimize to taskbar
             this.Resize += new EventHandler(frmMain_Resize);
+
+            // Queue Recovery
+            queueRecovery();
         }
 
         // Startup Functions
@@ -163,6 +166,24 @@ namespace Handbrake
                 hb_common_func.presetLoader(this, presetQuery, "User Defaults ");
             }
             catch (Exception) { /* Do Nothing */ }
+        }
+        private void queueRecovery()
+        {
+            if (hb_common_func.check_queue_recovery() == true)
+            {
+                DialogResult result;
+                result = MessageBox.Show("HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?","Queue Recovery Possible", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                    encodeQueue.recoverQueue(); // Start Recovery
+                else
+                {
+                    // Remove the Queue recovery file if the user doesn't want to recovery the last queue.
+                    string queuePath = Path.Combine(Path.GetTempPath(), "hb_queue_recovery.dat");
+                    if (File.Exists(queuePath))
+                        File.Delete(queuePath);
+                }
+            }
         }
 
         #endregion
@@ -343,6 +364,7 @@ namespace Handbrake
                     query = rtf_query.Text;
 
                 encodeQueue.add(query);
+                encodeQueue.write2disk(); // Writes the queue to the recovery file, just incase the GUI crashes.
 
                 queueWindow.setQueue(encodeQueue);
                 queueWindow.Show();

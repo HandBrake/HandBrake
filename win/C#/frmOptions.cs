@@ -45,6 +45,8 @@ namespace Handbrake
             if (Properties.Settings.Default.defaultSettings == "Checked")
                 check_userDefaultSettings.CheckState = CheckState.Checked;
 
+            txt_decomb.Text = Properties.Settings.Default.decomb;
+
             drp_processors.Text = Properties.Settings.Default.Processors;
             drp_Priority.Text = Properties.Settings.Default.processPriority;
             drp_completeOption.Text = Properties.Settings.Default.CompletionOption;
@@ -124,7 +126,12 @@ namespace Handbrake
             pathFinder.ShowDialog();
             text_an_path.Text = pathFinder.SelectedPath;
         }
-        
+
+        private void txt_decomb_TextChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.decomb = txt_decomb.Text;
+        }
+
         private void btn_drive_detect_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.drive_detection = btn_drive_detect.CheckState.ToString();
@@ -151,9 +158,6 @@ namespace Handbrake
             Properties.Settings.Default.cli_minimized = check_cli_minimized.CheckState.ToString();
         }
         #endregion
-
-
-
 
     }
 }

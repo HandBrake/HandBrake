@@ -50,6 +50,9 @@ namespace Handbrake
             this.check_userDefaultSettings = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.tab_picture = new System.Windows.Forms.TabPage();
+            this.txt_decomb = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.tab_cli = new System.Windows.Forms.TabPage();
             this.check_cli_minimized = new System.Windows.Forms.CheckBox();
             this.label12 = new System.Windows.Forms.Label();
@@ -58,16 +61,17 @@ namespace Handbrake
             this.drp_processors = new System.Windows.Forms.ComboBox();
             this.Label4 = new System.Windows.Forms.Label();
             this.tab_advanced = new System.Windows.Forms.TabPage();
+            this.lbl_appcastUnstable = new System.Windows.Forms.Label();
+            this.check_snapshot = new System.Windows.Forms.CheckBox();
             this.btn_drive_detect = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pathFinder = new System.Windows.Forms.FolderBrowserDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.check_snapshot = new System.Windows.Forms.CheckBox();
-            this.lbl_appcastUnstable = new System.Windows.Forms.Label();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
+            this.tab_picture.SuspendLayout();
             this.tab_cli.SuspendLayout();
             this.tab_advanced.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -110,6 +114,7 @@ namespace Handbrake
             // tab_options
             // 
             this.tab_options.Controls.Add(this.tab_general);
+            this.tab_options.Controls.Add(this.tab_picture);
             this.tab_options.Controls.Add(this.tab_cli);
             this.tab_options.Controls.Add(this.tab_advanced);
             this.tab_options.Location = new System.Drawing.Point(12, 55);
@@ -257,6 +262,36 @@ namespace Handbrake
             this.label2.TabIndex = 54;
             this.label2.Text = "When Done:";
             // 
+            // tab_picture
+            // 
+            this.tab_picture.Controls.Add(this.txt_decomb);
+            this.tab_picture.Controls.Add(this.label3);
+            this.tab_picture.Location = new System.Drawing.Point(4, 22);
+            this.tab_picture.Name = "tab_picture";
+            this.tab_picture.Size = new System.Drawing.Size(482, 236);
+            this.tab_picture.TabIndex = 5;
+            this.tab_picture.Text = "Picture";
+            this.tab_picture.UseVisualStyleBackColor = true;
+            // 
+            // txt_decomb
+            // 
+            this.txt_decomb.Location = new System.Drawing.Point(90, 16);
+            this.txt_decomb.Name = "txt_decomb";
+            this.txt_decomb.Size = new System.Drawing.Size(181, 21);
+            this.txt_decomb.TabIndex = 78;
+            this.ToolTip.SetToolTip(this.txt_decomb, "Default location where Auto named files are stored.");
+            this.txt_decomb.TextChanged += new System.EventHandler(this.txt_decomb_TextChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(21, 19);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(63, 13);
+            this.label3.TabIndex = 77;
+            this.label3.Text = "Decomb:";
+            // 
             // tab_cli
             // 
             this.tab_cli.Controls.Add(this.check_cli_minimized);
@@ -374,6 +409,31 @@ namespace Handbrake
             this.tab_advanced.Text = "Advanced";
             this.tab_advanced.UseVisualStyleBackColor = true;
             // 
+            // lbl_appcastUnstable
+            // 
+            this.lbl_appcastUnstable.AutoSize = true;
+            this.lbl_appcastUnstable.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_appcastUnstable.Location = new System.Drawing.Point(6, 42);
+            this.lbl_appcastUnstable.Name = "lbl_appcastUnstable";
+            this.lbl_appcastUnstable.Size = new System.Drawing.Size(64, 13);
+            this.lbl_appcastUnstable.TabIndex = 81;
+            this.lbl_appcastUnstable.Text = "Updates:";
+            // 
+            // check_snapshot
+            // 
+            this.check_snapshot.AutoSize = true;
+            this.check_snapshot.BackColor = System.Drawing.Color.Transparent;
+            this.check_snapshot.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_snapshot.Location = new System.Drawing.Point(76, 41);
+            this.check_snapshot.Name = "check_snapshot";
+            this.check_snapshot.Size = new System.Drawing.Size(273, 17);
+            this.check_snapshot.TabIndex = 80;
+            this.check_snapshot.Text = "Check for unstable development snapshots";
+            this.ToolTip.SetToolTip(this.check_snapshot, "Enables the built in update checker to check for the latest development snapshot " +
+                    "builds.\r\nWarning: These are considered unstable builds and are not supported!");
+            this.check_snapshot.UseVisualStyleBackColor = false;
+            this.check_snapshot.CheckedChanged += new System.EventHandler(this.check_snapshot_CheckedChanged);
+            // 
             // btn_drive_detect
             // 
             this.btn_drive_detect.AutoSize = true;
@@ -392,7 +452,7 @@ namespace Handbrake
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(27, 19);
+            this.label6.Location = new System.Drawing.Point(35, 19);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(35, 13);
             this.label6.TabIndex = 71;
@@ -424,31 +484,6 @@ namespace Handbrake
             this.ToolTip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.ToolTip.ToolTipTitle = "Tooltip";
             // 
-            // check_snapshot
-            // 
-            this.check_snapshot.AutoSize = true;
-            this.check_snapshot.BackColor = System.Drawing.Color.Transparent;
-            this.check_snapshot.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_snapshot.Location = new System.Drawing.Point(76, 41);
-            this.check_snapshot.Name = "check_snapshot";
-            this.check_snapshot.Size = new System.Drawing.Size(273, 17);
-            this.check_snapshot.TabIndex = 80;
-            this.check_snapshot.Text = "Check for unstable development snapshots";
-            this.ToolTip.SetToolTip(this.check_snapshot, "Enables the built in update checker to check for the latest development snapshot " +
-                    "builds.\r\nWarning: These are considered unstable builds and are not supported!");
-            this.check_snapshot.UseVisualStyleBackColor = false;
-            this.check_snapshot.CheckedChanged += new System.EventHandler(this.check_snapshot_CheckedChanged);
-            // 
-            // lbl_appcastUnstable
-            // 
-            this.lbl_appcastUnstable.AutoSize = true;
-            this.lbl_appcastUnstable.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_appcastUnstable.Location = new System.Drawing.Point(6, 42);
-            this.lbl_appcastUnstable.Name = "lbl_appcastUnstable";
-            this.lbl_appcastUnstable.Size = new System.Drawing.Size(64, 13);
-            this.lbl_appcastUnstable.TabIndex = 81;
-            this.lbl_appcastUnstable.Text = "Updates:";
-            // 
             // frmOptions
             // 
             this.ClientSize = new System.Drawing.Size(514, 355);
@@ -467,6 +502,8 @@ namespace Handbrake
             this.tab_options.ResumeLayout(false);
             this.tab_general.ResumeLayout(false);
             this.tab_general.PerformLayout();
+            this.tab_picture.ResumeLayout(false);
+            this.tab_picture.PerformLayout();
             this.tab_cli.ResumeLayout(false);
             this.tab_cli.PerformLayout();
             this.tab_advanced.ResumeLayout(false);
@@ -509,5 +546,8 @@ namespace Handbrake
         internal System.Windows.Forms.ToolTip ToolTip;
         private System.Windows.Forms.Label lbl_appcastUnstable;
         internal System.Windows.Forms.CheckBox check_snapshot;
+        private System.Windows.Forms.TabPage tab_picture;
+        private System.Windows.Forms.TextBox txt_decomb;
+        private System.Windows.Forms.Label label3;
     }
 }

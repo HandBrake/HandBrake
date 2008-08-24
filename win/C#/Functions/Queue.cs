@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Collections;
+using System.IO;
+using System.Windows.Forms;
 
 namespace Handbrake.Functions
 {
@@ -23,7 +25,7 @@ namespace Handbrake.Functions
         {
             string query = queue[0].ToString();
             lastQuery = query;
-            remove(0);
+            remove(0);    // Remove the item which we are about to pass out.
             return query;
         }
 
@@ -99,6 +101,56 @@ namespace Handbrake.Functions
 
                 queue.Insert((index + 2), item);
                 queue.RemoveAt((index));
+            }
+        }
+
+        /// <summary>
+        /// Writes the current queue to disk. hb_queue_recovery.dat
+        /// This function is called after getNextItemForEncoding()
+        /// </summary>
+        public void write2disk()
+        {
+            try
+            {
+                string tempPath = Path.Combine(Path.GetTempPath(), "hb_queue_recovery.dat");
+                using (StreamWriter writer = new StreamWriter(tempPath))
+                {
+                    foreach (string item in queue)
+                    {
+                        writer.WriteLine(item);
+                    }
+                    writer.Close();
+                    writer.Dispose();
+                }
+            }
+            catch (Exception)
+            {
+               // Any Errors will be out of diskspace/permissions problems. Don't report them as they'll annoy the user.
+            }
+        }
+
+        /// <summary>
+        /// Recover the queue from hb_queue_recovery.dat
+        /// </summary>
+        public void recoverQueue()
+        {
+            try
+            {
+                string tempPath = Path.Combine(Path.GetTempPath(), "hb_queue_recovery.dat");
+                using (StreamReader reader = new StreamReader(tempPath))
+                {
+                    string queue_item = reader.ReadLine();
+
+                    while (queue_item != null)
+                    {
+                        this.add(queue_item);
+                        queue_item = reader.ReadLine();
+                    }
+                }
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("HandBrake was unable to recover the queue. \nError Information:" + exc.ToString(),"Queue Recovery Error",MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

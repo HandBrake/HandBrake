@@ -97,7 +97,6 @@ namespace Handbrake
         {
             if (queue.count() != 0)
             {
-                lbl_status.Visible = false;
                 btn_encode.Enabled = false;
             }
             cancel = false;
@@ -111,9 +110,9 @@ namespace Handbrake
                     btn_stop.Visible = true;
                     progressBar.Value = 0;
                     lbl_progressValue.Text = "0 %";
-                    progressBar.Step = 100 / queue.count();
-                    progressBar.Update();
+                    progressBar.Step = 100 / queue.count();   
                     Thread theQ = new Thread(startProc);
+                    theQ.IsBackground = true;
                     theQ.Start();
                 }
             }
@@ -178,18 +177,14 @@ namespace Handbrake
 
                 if (cancel == true)
                 {
-                    lbl_status.Visible = true;
-                    lbl_status.Text = "Encode Queue Cancelled!";
+                    lbl_progressValue.Text = "Encode Queue Cancelled!";
                 }
                 else
                 {
-                    lbl_status.Visible = true;
-                    lbl_status.Text = "Encode Queue Completed!";
+                    lbl_progressValue.Text = "Encode Queue Completed!";
                 }
 
-                lbl_progressValue.Text = "0 %";
                 progressBar.Value = 0;
-                progressBar.Update();
 
                 lbl_source.Text = "-";
                 lbl_dest.Text = "-";
@@ -228,7 +223,6 @@ namespace Handbrake
 
                 progressBar.PerformStep();
                 lbl_progressValue.Text = string.Format("{0} %", progressBar.Value);
-                progressBar.Update();
             }
             catch (Exception exc)
             {
@@ -285,6 +279,7 @@ namespace Handbrake
             if (list_queue.SelectedIndices.Count != 0)
             {
                 queue.moveUp(list_queue.SelectedIndices[0]);
+                queue.write2disk(); // Update the queue recovery file
                 redrawQueue();
             }
         }
@@ -295,6 +290,7 @@ namespace Handbrake
             if (list_queue.SelectedIndices.Count != 0)
             {
                 queue.moveDown(list_queue.SelectedIndices[0]);
+                queue.write2disk(); // Update the queue recovery file
                 redrawQueue();
             }
         }
@@ -305,6 +301,7 @@ namespace Handbrake
             if (list_queue.SelectedIndices.Count != 0)
             {
                 queue.remove(list_queue.SelectedIndices[0]);
+                queue.write2disk(); // Update the queue recovery file
                 redrawQueue();
             }
         }

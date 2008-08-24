@@ -63,12 +63,13 @@ namespace Handbrake
             this.Destination = new System.Windows.Forms.ColumnHeader();
             this.EncoderVideo = new System.Windows.Forms.ColumnHeader();
             this.Audio = new System.Windows.Forms.ColumnHeader();
-            this.lbl_progressValue = new System.Windows.Forms.Label();
-            this.progressBar = new System.Windows.Forms.ProgressBar();
-            this.label2 = new System.Windows.Forms.Label();
-            this.lbl_status = new System.Windows.Forms.Label();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.lbl_progressValue = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btn_down
@@ -77,7 +78,7 @@ namespace Handbrake
             this.btn_down.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_down.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_down.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_down.Location = new System.Drawing.Point(610, 124);
+            this.btn_down.Location = new System.Drawing.Point(610, 129);
             this.btn_down.Name = "btn_down";
             this.btn_down.Size = new System.Drawing.Size(75, 22);
             this.btn_down.TabIndex = 33;
@@ -92,7 +93,7 @@ namespace Handbrake
             this.btn_up.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_up.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_up.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_up.Location = new System.Drawing.Point(539, 124);
+            this.btn_up.Location = new System.Drawing.Point(540, 129);
             this.btn_up.Name = "btn_up";
             this.btn_up.Size = new System.Drawing.Size(64, 22);
             this.btn_up.TabIndex = 32;
@@ -107,7 +108,7 @@ namespace Handbrake
             this.btn_delete.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_delete.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_delete.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_delete.Location = new System.Drawing.Point(692, 124);
+            this.btn_delete.Location = new System.Drawing.Point(692, 129);
             this.btn_delete.Name = "btn_delete";
             this.btn_delete.Size = new System.Drawing.Size(75, 22);
             this.btn_delete.TabIndex = 31;
@@ -214,7 +215,7 @@ namespace Handbrake
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStrip1.Size = new System.Drawing.Size(780, 49);
+            this.toolStrip1.Size = new System.Drawing.Size(779, 49);
             this.toolStrip1.TabIndex = 71;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -319,54 +320,43 @@ namespace Handbrake
             this.Audio.Text = "Audio Encoder";
             this.Audio.Width = 94;
             // 
-            // lbl_progressValue
+            // statusStrip1
             // 
-            this.lbl_progressValue.AutoSize = true;
-            this.lbl_progressValue.Location = new System.Drawing.Point(737, 353);
-            this.lbl_progressValue.Name = "lbl_progressValue";
-            this.lbl_progressValue.Size = new System.Drawing.Size(30, 13);
-            this.lbl_progressValue.TabIndex = 36;
-            this.lbl_progressValue.Text = "0 %";
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1,
+            this.progressBar,
+            this.lbl_progressValue});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 359);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(779, 31);
+            this.statusStrip1.TabIndex = 73;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(53, 26);
+            this.toolStripStatusLabel1.Text = "Progress:";
             // 
             // progressBar
             // 
-            this.progressBar.Location = new System.Drawing.Point(76, 348);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(655, 23);
+            this.progressBar.Size = new System.Drawing.Size(500, 25);
             this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.progressBar.TabIndex = 34;
             // 
-            // label2
+            // lbl_progressValue
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 353);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(62, 13);
-            this.label2.TabIndex = 35;
-            this.label2.Text = "Progress:";
-            // 
-            // lbl_status
-            // 
-            this.lbl_status.AutoSize = true;
-            this.lbl_status.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_status.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_status.Location = new System.Drawing.Point(319, 353);
-            this.lbl_status.Name = "lbl_status";
-            this.lbl_status.Size = new System.Drawing.Size(176, 13);
-            this.lbl_status.TabIndex = 42;
-            this.lbl_status.Text = "Encode Queue Completed!";
-            this.lbl_status.Visible = false;
+            this.lbl_progressValue.Name = "lbl_progressValue";
+            this.lbl_progressValue.Size = new System.Drawing.Size(30, 26);
+            this.lbl_progressValue.Text = " 0 %";
             // 
             // frmQueue
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(780, 386);
-            this.Controls.Add(this.lbl_status);
-            this.Controls.Add(this.label2);
+            this.ClientSize = new System.Drawing.Size(779, 390);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.list_queue);
-            this.Controls.Add(this.progressBar);
-            this.Controls.Add(this.lbl_progressValue);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.btn_down);
             this.Controls.Add(this.btn_up);
@@ -384,12 +374,15 @@ namespace Handbrake
             this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(787, 417);
             this.Name = "frmQueue";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Encode Queue";
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -424,9 +417,9 @@ namespace Handbrake
         private System.Windows.Forms.ColumnHeader Destination;
         private System.Windows.Forms.ColumnHeader EncoderVideo;
         private System.Windows.Forms.ColumnHeader Audio;
-        private System.Windows.Forms.Label lbl_progressValue;
-        private System.Windows.Forms.ProgressBar progressBar;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label lbl_status;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripProgressBar progressBar;
+        private System.Windows.Forms.ToolStripStatusLabel lbl_progressValue;
     }
 }

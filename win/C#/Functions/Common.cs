@@ -562,7 +562,13 @@ namespace Handbrake.Functions
             }
 
             if (mainWindow.check_decomb.Checked)
-                query += " --decomb ";
+            {
+                string decombValue = Properties.Settings.Default.decomb;
+                if (decombValue != "" && decombValue != Properties.Settings.Default.default_decomb)
+                    query += " --decomb=\"" + decombValue + "\"";
+                else
+                    query += " --decomb ";
+            }
 
             if (mainWindow.check_grayscale.Checked)
                 query += " -g ";
@@ -1226,5 +1232,42 @@ namespace Handbrake.Functions
         }
 
         #endregion
+
+        #region Queue
+        /// <summary>
+        /// Check if the queue recovery file contains records.
+        /// If it does, it means the last queue did not complete before HandBrake closed.
+        /// So, return a boolean if true. 
+        /// </summary>
+        public Boolean check_queue_recovery()
+        {
+            try
+            {
+                string tempPath = Path.Combine(Path.GetTempPath(), "hb_queue_recovery.dat");
+                using (StreamReader reader = new StreamReader(tempPath))
+                {
+                    string queue_item = reader.ReadLine();
+                    if (queue_item == null)
+                    {
+                        reader.Close();
+                        reader.Dispose();
+                        return false;
+                    }
+                    else // There exists an item in the recovery queue file, so try and recovr it.
+                    {
+                        reader.Close();
+                        reader.Dispose();
+                        return true;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // Keep quiet about the error.
+                return false;
+            }
+        }
+        #endregion
+
     }
 }

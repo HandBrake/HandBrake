@@ -53,5 +53,11 @@
     <Setting Name="checkSnapshot" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="decomb" Type="System.String" Scope="User">
+      <Value Profile="(Default)">4:10:15:9:10:35:9</Value>
+    </Setting>
+    <Setting Name="default_decomb" Type="System.String" Scope="User">
+      <Value Profile="(Default)">4:10:15:9:10:35:9</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -166,6 +166,7 @@ namespace Handbrake
             this.Label46 = new System.Windows.Forms.Label();
             this.Label40 = new System.Windows.Forms.Label();
             this.TabPage1 = new System.Windows.Forms.TabPage();
+            this.check_decomb = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
             this.drp_anamorphic = new System.Windows.Forms.ComboBox();
             this.text_bottom = new System.Windows.Forms.NumericUpDown();
@@ -258,7 +259,6 @@ namespace Handbrake
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.lbl_encode = new System.Windows.Forms.ToolStripStatusLabel();
-            this.check_decomb = new System.Windows.Forms.CheckBox();
             Label38 = new System.Windows.Forms.Label();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             notifyIconMenu.SuspendLayout();
@@ -1400,7 +1400,7 @@ namespace Handbrake
             this.TabPage2.Location = new System.Drawing.Point(4, 22);
             this.TabPage2.Name = "TabPage2";
             this.TabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage2.Size = new System.Drawing.Size(697, 302);
+            this.TabPage2.Size = new System.Drawing.Size(697, 307);
             this.TabPage2.TabIndex = 3;
             this.TabPage2.Text = "Audio && Subtitles";
             // 
@@ -1740,7 +1740,7 @@ namespace Handbrake
             this.TabPage3.Location = new System.Drawing.Point(4, 22);
             this.TabPage3.Name = "TabPage3";
             this.TabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage3.Size = new System.Drawing.Size(697, 302);
+            this.TabPage3.Size = new System.Drawing.Size(697, 307);
             this.TabPage3.TabIndex = 2;
             this.TabPage3.Text = "Video";
             // 
@@ -1898,6 +1898,18 @@ namespace Handbrake
             this.TabPage1.Size = new System.Drawing.Size(697, 307);
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "Picture Settings";
+            // 
+            // check_decomb
+            // 
+            this.check_decomb.AutoSize = true;
+            this.check_decomb.BackColor = System.Drawing.Color.Transparent;
+            this.check_decomb.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_decomb.Location = new System.Drawing.Point(314, 215);
+            this.check_decomb.Name = "check_decomb";
+            this.check_decomb.Size = new System.Drawing.Size(73, 17);
+            this.check_decomb.TabIndex = 32;
+            this.check_decomb.Text = "Decomb";
+            this.check_decomb.UseVisualStyleBackColor = false;
             // 
             // label6
             // 
@@ -2248,7 +2260,7 @@ namespace Handbrake
             this.tab_chapters.Controls.Add(this.Check_ChapterMarkers);
             this.tab_chapters.Location = new System.Drawing.Point(4, 22);
             this.tab_chapters.Name = "tab_chapters";
-            this.tab_chapters.Size = new System.Drawing.Size(697, 302);
+            this.tab_chapters.Size = new System.Drawing.Size(697, 307);
             this.tab_chapters.TabIndex = 6;
             this.tab_chapters.Text = "Chapters";
             // 
@@ -2875,7 +2887,7 @@ namespace Handbrake
             this.tabPage4.Controls.Add(this.rtf_query);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(697, 302);
+            this.tabPage4.Size = new System.Drawing.Size(697, 307);
             this.tabPage4.TabIndex = 7;
             this.tabPage4.Text = "Query Editor";
             // 
@@ -3149,18 +3161,6 @@ namespace Handbrake
             this.lbl_encode.Name = "lbl_encode";
             this.lbl_encode.Size = new System.Drawing.Size(31, 17);
             this.lbl_encode.Text = "{0}";
-            // 
-            // check_decomb
-            // 
-            this.check_decomb.AutoSize = true;
-            this.check_decomb.BackColor = System.Drawing.Color.Transparent;
-            this.check_decomb.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_decomb.Location = new System.Drawing.Point(314, 215);
-            this.check_decomb.Name = "check_decomb";
-            this.check_decomb.Size = new System.Drawing.Size(73, 17);
-            this.check_decomb.TabIndex = 32;
-            this.check_decomb.Text = "Decomb";
-            this.check_decomb.UseVisualStyleBackColor = false;
             // 
             // frmMain
             // 
