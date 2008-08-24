@@ -56,7 +56,6 @@ icons =	\
 	hb-working4.16.png \
 	hb-working5.16.png 
 
-hb_data = standard_presets
 hb_menu = ghb.desktop
 
 builderdir = $(datadir)/ghb/builder
@@ -115,9 +114,6 @@ uninstall-local:
 		fi; \
 		rm -f $(DESTDIR)/$(datadir)/icons/hicolor/$$SIZE/apps/$$FILE; \
 	done
-	for file in $(hb_data); do \
-		rm -f $(DESTDIR)/$(datadir)/ghb/$$file; \
-	done
 	rm -f $(DESTDIR)/$(datadir)/applications/$(hb_menu)
 
 gtk_update_icon_cache = gtk-update-icon-cache -f -t $(DESTDIR)/$(datadir)/icons/hicolor
@@ -137,10 +133,6 @@ install-data-local:
 		fi; \
 		mkdir -p $(DESTDIR)/$(datadir)/icons/hicolor/$$SIZE/apps/; \
 		$(INSTALL_DATA) $(srcdir)/$$icon $(DESTDIR)/$(datadir)/icons/hicolor/$$SIZE/apps/$$FILE; \
-	done
-	for file in $(hb_data); do \
-		mkdir -p $(DESTDIR)/$(datadir)/ghb/; \
-		$(INSTALL_DATA) $(srcdir)/$$file $(DESTDIR)/$(datadir)/ghb/$$file; \
 	done
 	@-if test -n "$(DESTDIR)/$(datadir)"; then \
 		echo "Updating Gtk icon cache."; \

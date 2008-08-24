@@ -1912,6 +1912,7 @@ ghb_select_preset(GtkBuilder *builder, const gchar *preset)
 	GtkTreeIter iter;
 	gchar *tpreset;
 	gboolean done;
+	gboolean foundit = FALSE;
 	
 	g_debug("select_preset()\n");
 	if (preset == NULL) return;
@@ -1926,10 +1927,16 @@ ghb_select_preset(GtkBuilder *builder, const gchar *preset)
 			if (strcmp(preset, tpreset) == 0)
 			{
 				gtk_tree_selection_select_iter (selection, &iter);
+				foundit = TRUE;
 				break;
 			}
 			done = !gtk_tree_model_iter_next(store, &iter);
 		} while (!done);
+	}
+	if (!foundit)
+	{
+		gtk_tree_model_get_iter_first(store, &iter);
+		gtk_tree_selection_select_iter (selection, &iter);
 	}
 }
 

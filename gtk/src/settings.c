@@ -862,6 +862,9 @@ dump_settings(GHashTable *settings)
 const gchar defaultSettings[] =
 #include "internal_defaults.h"
 ;
+const gchar standardPresets[] =
+#include "standard_presets.h"
+;
 
 typedef struct
 {
@@ -1478,68 +1481,43 @@ ghb_prefs_load(signal_user_data_t *ud)
 void
 ghb_presets_reload(signal_user_data_t *ud)
 {
-	gchar *config;
 	GKeyFile *keyFile;
+	gboolean res;
 
 	g_debug("ghb_presets_reload()\n");
 	keyFile = g_key_file_new();
+	g_key_file_load_from_data( keyFile, standardPresets, 
+							  sizeof(standardPresets), G_KEY_FILE_NONE, NULL);
 
-	config = g_strdup_printf ("./standard_presets");
-	if (!g_file_test(config, G_FILE_TEST_IS_REGULAR))
-	{
-		g_free(config);
-	
-		const gchar* const *dirs;
-		gint ii;
-		dirs = g_get_system_data_dirs();
-		if (dirs != NULL)
-		{
-			for (ii = 0; dirs[ii] != NULL; ii++)
-			{
-				config = g_strdup_printf("%s/ghb/standard_presets", dirs[ii]);
-				if (g_file_test(config, G_FILE_TEST_IS_REGULAR))
-				{
-					break;
-				}
-				g_free(config);
-				config = NULL;
-			}
-		}
-	}
-	if (config != NULL)
-	{
-		gchar **groups, **keys;
-		gchar *value;
-		gint ii, jj;
+	gchar **groups, **keys;
+	gchar *value;
+	gint ii, jj;
 
-		g_key_file_load_from_file( keyFile, config, 
-								  G_KEY_FILE_KEEP_COMMENTS, NULL);
-		// Merge the keyfile contents into our presets
-		groups = g_key_file_get_groups(keyFile, NULL);
-		// First remove any existing groups with the same names
-		for (ii = 0; groups[ii] != NULL; ii++)
-		{
-			g_key_file_remove_group(presetsKeyFile, groups[ii], NULL);
-		}
-		for (ii = 0; groups[ii] != NULL; ii++)
-		{
-			keys = g_key_file_get_keys(keyFile, groups[ii], NULL, NULL);
-			for (jj = 0; keys[jj] != NULL; jj++)
-			{
-				GError *err = NULL;
-				value = g_key_file_get_string(
-					keyFile, groups[ii], keys[jj], &err);
-				if (value && !err)
-				{
-					g_key_file_set_string(
-						presetsKeyFile, groups[ii], keys[jj], value);
-				}
-				if (value) g_free(value);
-			}
-			g_strfreev(keys);
-		}
-		g_strfreev(groups);
+	// Merge the keyfile contents into our presets
+	groups = g_key_file_get_groups(keyFile, NULL);
+	// First remove any existing groups with the same names
+	for (ii = 0; groups[ii] != NULL; ii++)
+	{
+		g_key_file_remove_group(presetsKeyFile, groups[ii], NULL);
 	}
+	for (ii = 0; groups[ii] != NULL; ii++)
+	{
+		keys = g_key_file_get_keys(keyFile, groups[ii], NULL, NULL);
+		for (jj = 0; keys[jj] != NULL; jj++)
+		{
+			GError *err = NULL;
+			value = g_key_file_get_string(
+				keyFile, groups[ii], keys[jj], &err);
+			if (value && !err)
+			{
+				g_key_file_set_string(
+					presetsKeyFile, groups[ii], keys[jj], value);
+			}
+			if (value) g_free(value);
+		}
+		g_strfreev(keys);
+	}
+	g_strfreev(groups);
 	g_key_file_free(keyFile);
 	build_presets_list(ud->settings);
 }
@@ -1555,37 +1533,17 @@ ghb_presets_load(signal_user_data_t *ud)
 	dir = g_get_user_config_dir();
 	config = g_strdup_printf ("%s/ghb/presets", dir);
 
-	if (!g_file_test(config, G_FILE_TEST_IS_REGULAR))
-	{
-		g_free(config);
-		config = g_strdup_printf ("./standard_presets");
-		if (!g_file_test(config, G_FILE_TEST_IS_REGULAR))
-		{
-			g_free(config);
-		
-			const gchar* const *dirs;
-			gint ii;
-			dirs = g_get_system_data_dirs();
-			if (dirs != NULL)
-			{
-				for (ii = 0; dirs[ii] != NULL; ii++)
-				{
-					config = g_strdup_printf("%s/ghb/standard_presets", dirs[ii]);
-					if (g_file_test(config, G_FILE_TEST_IS_REGULAR))
-					{
-						break;
-					}
-					g_free(config);
-					config = NULL;
-				}
-			}
-		}
-	}
-	if (config != NULL)
+	if (g_file_test(config, G_FILE_TEST_IS_REGULAR))
 	{
 		g_key_file_load_from_file( presetsKeyFile, config, 
 								  G_KEY_FILE_KEEP_COMMENTS, NULL);
 	}
+	else
+	{
+		g_key_file_load_from_data( presetsKeyFile, standardPresets, 
+							  sizeof(standardPresets), G_KEY_FILE_NONE, NULL);
+	}
+	g_free(config);
 	build_presets_list(ud->settings);
 }
 
