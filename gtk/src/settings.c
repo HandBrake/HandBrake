@@ -2010,6 +2010,7 @@ ghb_x264_opt_update(signal_user_data_t *ud, GtkWidget *widget)
 		len = strlen(result);
 		if (len > 0) result[len - 1] = 0;
 		ghb_ui_update(ud, "x264_options", result);
+		g_free(result);
 	}
 }
 
