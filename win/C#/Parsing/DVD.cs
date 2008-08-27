@@ -11,7 +11,7 @@ using System.IO;
 
 namespace Handbrake.Parsing
 {
-    
+
     /// <summary>
     /// An object representing a scanned DVD
     /// </summary>
@@ -41,20 +41,15 @@ namespace Handbrake.Parsing
         public static DVD Parse(StreamReader output)
         {
             DVD thisDVD = new DVD();
-            try
+
+            while (!output.EndOfStream)
             {
-                while (!output.EndOfStream)
-                {
-                    if ((char)output.Peek() == '+')
-                        thisDVD.m_titles.AddRange(Title.ParseList(output.ReadToEnd()));
-                    else
-                       output.ReadLine();
-                }
+                if ((char)output.Peek() == '+')
+                    thisDVD.m_titles.AddRange(Title.ParseList(output.ReadToEnd()));
+                else
+                    output.ReadLine();
             }
-            catch (Exception exc)
-            {
-                MessageBox.Show("DVD.CS - Parse" + exc.ToString());
-            }
+
             return thisDVD;
         }
     }

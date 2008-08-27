@@ -45,15 +45,8 @@ namespace Handbrake.Functions
         /// <returns>Bolean true if successful</returns>
         public Boolean remove(int index)
         {
-            try
-            {
-                queue.RemoveAt(index);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            queue.RemoveAt(index);
+            return true;
         }
 
         /// <summary>
@@ -125,7 +118,7 @@ namespace Handbrake.Functions
             }
             catch (Exception)
             {
-               // Any Errors will be out of diskspace/permissions problems. Don't report them as they'll annoy the user.
+                // Any Errors will be out of diskspace/permissions problems. Don't report them as they'll annoy the user.
             }
         }
 
@@ -150,7 +143,7 @@ namespace Handbrake.Functions
             }
             catch (Exception exc)
             {
-                MessageBox.Show("HandBrake was unable to recover the queue. \nError Information:" + exc.ToString(),"Queue Recovery Error",MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("HandBrake was unable to recover the queue. \nError Information:" + exc.ToString(), "Queue Recovery Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

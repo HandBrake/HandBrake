@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -103,9 +104,10 @@ namespace Handbrake
         private void updateTextFromThread()
         {
             string text = "";
-            ArrayList data = readFile();
+            List<string> data = readFile();
+            int count = data.Count;
 
-            while (position < data.Count)
+            while (position < count)
             {
                 text = data[position].ToString();
                 if (data[position].ToString().Contains("has exited"))
@@ -132,11 +134,11 @@ namespace Handbrake
             }
         }
 
-        private ArrayList readFile()
+        private List<string> readFile()
         {
             // Ok, the task here is to, Get an arraylist of log data.
             // And update some global varibles which are pointers to the last displayed log line.
-            ArrayList logData = new ArrayList();
+            List<string> logData = new List<string>();
 
             try
             {

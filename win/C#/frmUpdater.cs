@@ -18,19 +18,19 @@ namespace Handbrake
         public frmUpdater()
         {
             InitializeComponent();
-          
+
             getRss();
             setVersions();
         }
 
         private void getRss()
-        { 
+        {
             wBrowser.DocumentText = "<font face=\"verdana\" size=\"1\">" + rssRead.versionInfo() + "</font>";
         }
 
         private void setVersions()
         {
-            lbl_oldVersion.Text = "(you have: " + Properties.Settings.Default.hb_version + " / " + Properties.Settings.Default.hb_build  + ").";
+            lbl_oldVersion.Text = "(you have: " + Properties.Settings.Default.hb_version + " / " + Properties.Settings.Default.hb_build + ").";
             lbl_newVersion.Text = rssRead.version() + " (" + rssRead.build() + ")";
         }
 
@@ -38,7 +38,7 @@ namespace Handbrake
         {
             frmDownload download = new frmDownload();
             download.Show();
-            this.Close(); 
+            this.Close();
         }
 
         private void btn_remindLater_Click(object sender, EventArgs e)
@@ -48,15 +48,9 @@ namespace Handbrake
 
         private void btn_skip_Click(object sender, EventArgs e)
         {
-            try
-            {
-                Properties.Settings.Default.skipversion = int.Parse(rssRead.build());
-                Properties.Settings.Default.Save();
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.ToString());
-            }
+            Properties.Settings.Default.skipversion = int.Parse(rssRead.build());
+            Properties.Settings.Default.Save();
+
             this.Close();
         }
 

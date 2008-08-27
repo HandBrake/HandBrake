@@ -235,7 +235,7 @@ namespace Handbrake.Functions
             #region Audio
 
             // Handle Track 1
-            if (presetQuery.AudioTrack1 == "")
+            if (presetQuery.AudioTrack1 == string.Empty)
                 mainWindow.drp_track1Audio.Text = "Automatic";
             else
                 mainWindow.drp_track1Audio.Text = presetQuery.AudioTrack1;
@@ -527,13 +527,13 @@ namespace Handbrake.Functions
                 query += " --crop 0:0:0:0 ";
             else if (mainWindow.drp_crop.Text == "Custom")
             {
-                if (mainWindow.text_top.Text == "")
+                if (mainWindow.text_top.Text == string.Empty)
                     cropTop = "0";
-                if (mainWindow.text_bottom.Text == "")
+                if (mainWindow.text_bottom.Text == string.Empty)
                     cropBottom = "0";
-                if (mainWindow.text_left.Text == "")
+                if (mainWindow.text_left.Text == string.Empty)
                     cropLeft = "0";
-                if (mainWindow.text_right.Text == "")
+                if (mainWindow.text_right.Text == string.Empty)
                     cropRight = "0";
 
                 query += " --crop " + cropTop + ":" + cropBottom + ":" + cropLeft + ":" + cropRight;
@@ -728,7 +728,7 @@ namespace Handbrake.Functions
 
             if (aencoder2 != "")
             {
-                if (aencoder1 == "")
+                if (aencoder1 == string.Empty)
                     query += " -E faac," + getAudioEncoder(aencoder2);
                 else
                     query += "," + getAudioEncoder(aencoder2);
@@ -748,7 +748,7 @@ namespace Handbrake.Functions
 
             if (audioBitrate2 != "")
             {
-                if (audioBitrate1 == "")
+                if (audioBitrate1 == string.Empty)
                     query += " -B 160," + audioBitrate2;
                 else
                     query += "," + audioBitrate2;
@@ -767,7 +767,7 @@ namespace Handbrake.Functions
 
             if (audioSampleRate2 != "")
             {
-                if (audioSampleRate1 == "")
+                if (audioSampleRate1 == string.Empty)
                     query += " -R 0," + audioSampleRate2.Replace("Auto", "0");
                 else
                     query += "," + audioSampleRate2.Replace("Auto", "0");
@@ -779,7 +779,7 @@ namespace Handbrake.Functions
 
                 if ((track2 != "") && (track2 != "None"))
                 {
-                    if (audioSampleRate1 == "")
+                    if (audioSampleRate1 == string.Empty)
                         query += " -R 0,0";
                     else
                         query += ",0";

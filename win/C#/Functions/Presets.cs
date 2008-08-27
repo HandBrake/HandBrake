@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
@@ -10,8 +10,8 @@ namespace Handbrake.Functions
 {
     public class Presets
     {
-        ArrayList presets = new ArrayList();
-        ArrayList user_presets = new ArrayList();
+        List<string> presets = new List<string>();
+        List<string> user_presets = new List<string>();
 
         /// <summary>
         /// Add a new preset to the system
@@ -40,8 +40,8 @@ namespace Handbrake.Functions
         /// <param name="name">String, the preset name</param>
         public void remove(string name)
         {
-            ArrayList newPresets = new ArrayList();
-            ArrayList newUserPresets = new ArrayList();
+            List<string> newPresets = new List<string>();
+            List<string> newUserPresets = new List<string>();
 
             // Built In Presets
             foreach (string item in presets)
@@ -91,9 +91,9 @@ namespace Handbrake.Functions
         /// Includes both built in and user presets.
         /// </summary>
         /// <returns>Arraylist of preset names</returns>
-        public ArrayList getPresetNames()
+        public List<string> getPresetNames()
         {
-            ArrayList names = new ArrayList();
+            List<string> names = new List<string>();
 
             // Built In Presets
             foreach (string item in presets)
@@ -219,7 +219,7 @@ namespace Handbrake.Functions
         // Check if a preset already exists in either the built in or user presets
         private Boolean checkIfPresetExists(string name)
         {
-            if (name == "")
+            if (name == string.Empty)
                 return true;
 
             // Built In Presets

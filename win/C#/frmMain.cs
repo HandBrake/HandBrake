@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
@@ -62,7 +63,7 @@ namespace Handbrake
                     Properties.Settings.Default.hb_build = int.Parse(x[1].ToString());
                     Properties.Settings.Default.hb_version = x[0].ToString();
                 }
-                catch (Exception) 
+                catch (Exception)
                 {
                     Properties.Settings.Default.hb_build = 0;
                     Properties.Settings.Default.hb_version = "0";
@@ -160,19 +161,16 @@ namespace Handbrake
         {
             // Try to load the users default settings.
             string userDefaults = Properties.Settings.Default.defaultUserSettings;
-            try
-            {
-                Functions.QueryParser presetQuery = Functions.QueryParser.Parse(userDefaults);
-                hb_common_func.presetLoader(this, presetQuery, "User Defaults ");
-            }
-            catch (Exception) { /* Do Nothing */ }
+
+            Functions.QueryParser presetQuery = Functions.QueryParser.Parse(userDefaults);
+            hb_common_func.presetLoader(this, presetQuery, "User Defaults ");
         }
         private void queueRecovery()
         {
             if (hb_common_func.check_queue_recovery() == true)
             {
                 DialogResult result;
-                result = MessageBox.Show("HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?","Queue Recovery Possible", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                result = MessageBox.Show("HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?", "Queue Recovery Possible", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (result == DialogResult.Yes)
                     encodeQueue.recoverQueue(); // Start Recovery
@@ -332,7 +330,7 @@ namespace Handbrake
         }
         private void btn_start_Click(object sender, EventArgs e)
         {
-            if (text_source.Text == "" || text_source.Text == "Click 'Source' to continue" || text_destination.Text == "")
+            if (text_source.Text == string.Empty || text_source.Text == "Click 'Source' to continue" || text_destination.Text == string.Empty)
                 MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
@@ -354,7 +352,7 @@ namespace Handbrake
         }
         private void btn_add2Queue_Click(object sender, EventArgs e)
         {
-            if (text_source.Text == "" || text_source.Text == "Click 'Source' to continue" || text_destination.Text == "")
+            if (text_source.Text == string.Empty || text_source.Text == "Click 'Source' to continue" || text_destination.Text == string.Empty)
                 MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
@@ -542,18 +540,12 @@ namespace Handbrake
             drop_chapterStart.BackColor = Color.White;
             if ((drop_chapterFinish.Text != "Auto") && (drop_chapterStart.Text != "Auto"))
             {
-                try
-                {
-                    int chapterFinish = int.Parse(drop_chapterFinish.Text);
-                    int chapterStart = int.Parse(drop_chapterStart.Text);
+                int chapterFinish, chapterStart = 0;
+                int.TryParse(drop_chapterFinish.Text, out chapterFinish);
+                int.TryParse(drop_chapterStart.Text, out chapterStart);
 
-                    if (chapterFinish < chapterStart)
-                        drop_chapterStart.BackColor = Color.LightCoral;
-                }
-                catch (Exception)
-                {
+                if (chapterFinish < chapterStart)
                     drop_chapterStart.BackColor = Color.LightCoral;
-                }
             }
             // Run the Autonaming function
             hb_common_func.autoName(this);
@@ -565,18 +557,12 @@ namespace Handbrake
             drop_chapterFinish.BackColor = Color.White;
             if ((drop_chapterFinish.Text != "Auto") && (drop_chapterStart.Text != "Auto"))
             {
-                try
-                {
-                    int chapterFinish = int.Parse(drop_chapterFinish.Text);
-                    int chapterStart = int.Parse(drop_chapterStart.Text);
+                int chapterFinish, chapterStart = 0;
+                int.TryParse(drop_chapterFinish.Text, out chapterFinish);
+                int.TryParse(drop_chapterStart.Text, out chapterStart);
 
-                    if (chapterFinish < chapterStart)
-                        drop_chapterFinish.BackColor = Color.LightCoral;
-                }
-                catch (Exception)
-                {
+                if (chapterFinish < chapterStart)
                     drop_chapterFinish.BackColor = Color.LightCoral;
-                }
             }
 
             // Run the Autonaming function
@@ -725,9 +711,11 @@ namespace Handbrake
         //Picture Tab
         private void text_width_TextChanged(object sender, EventArgs e)
         {
-            try
+            int width;
+            Boolean parsed = int.TryParse(text_width.Text, out width);
+            if (parsed != false)
             {
-                if ((int.Parse(text_width.Text) % 16) != 0)
+                if ((width % 16) != 0)
                     text_width.BackColor = Color.LightCoral;
                 else
                     text_width.BackColor = Color.LightGreen;
@@ -737,28 +725,22 @@ namespace Handbrake
                 {
                     if (drp_anamorphic.Text == "None")
                     {
-                        int height = cacluateNonAnamorphicHeight(int.Parse(text_width.Text));
+                        int height = cacluateNonAnamorphicHeight(width);
                         text_height.Text = height.ToString();
                     }
                 }
             }
-            catch (Exception)
-            {
-                // No need to throw an error here.
-            }
         }
         private void text_height_TextChanged(object sender, EventArgs e)
         {
-            try
+            int height;
+            Boolean parsed = int.TryParse(text_height.Text, out height);
+            if (parsed != false)
             {
-                if ((int.Parse(text_height.Text) % 16) != 0)
+                if ((height % 16) != 0)
                     text_height.BackColor = Color.LightCoral;
                 else
                     text_height.BackColor = Color.LightGreen;
-            }
-            catch (Exception)
-            {
-                // No need to alert the user.
             }
         }
         private void drp_crop_SelectedIndexChanged(object sender, EventArgs e)
@@ -1369,7 +1351,7 @@ namespace Handbrake
                 x264PanelFunctions.X264_StandardizeOptString(this);
                 x264PanelFunctions.X264_SetCurrentSettingsInPanel(this);
 
-                if (rtf_x264Query.Text == "")
+                if (rtf_x264Query.Text == string.Empty)
                     x264PanelFunctions.reset2Defaults(this);
             }
         }
@@ -1452,29 +1434,24 @@ namespace Handbrake
         // Chapter Selection Duration calculation
         public void calculateDuration()
         {
-            int start_chapter;
-            int end_chapter;
             TimeSpan Duration = TimeSpan.FromSeconds(0.0);
 
-            try
+            // Get the durations between the 2 chapter points and add them together.
+            if (drop_chapterStart.Text != "Auto" && drop_chapterFinish.Text != "Auto")
             {
-                // Get the durations between the 2 chapter points and add them together.
-                if (drop_chapterStart.Text != "Auto" && drop_chapterFinish.Text != "Auto")
+                int start_chapter, end_chapter = 0;
+                int.TryParse(drop_chapterStart.Text, out start_chapter);
+                int.TryParse(drop_chapterFinish.Text, out end_chapter);
+
+                int position = start_chapter - 1;
+
+                while (position != end_chapter)
                 {
-                    start_chapter = int.Parse(drop_chapterStart.Text);
-                    end_chapter = int.Parse(drop_chapterFinish.Text);
-
-                    int position = start_chapter - 1;
-
-                    while (position != end_chapter)
-                    {
-                        TimeSpan dur = selectedTitle.Chapters[position].Duration;
-                        Duration = Duration + dur;
-                        position++;
-                    }
+                    TimeSpan dur = selectedTitle.Chapters[position].Duration;
+                    Duration = Duration + dur;
+                    position++;
                 }
             }
-            catch (Exception) { /* Don't do anything */ }
 
             // Set the Duration
             lbl_duration.Text = Duration.ToString();
@@ -1633,7 +1610,7 @@ namespace Handbrake
                 drp_audenc_1.Items.Add("MP3");
                 drp_audenc_1.Items.Add("AC3");
                 drp_audenc_1.Items.Add("Vorbis");
-                if (drp_audenc_1.Text == "")
+                if (drp_audenc_1.Text == string.Empty)
                     drp_audenc_1.SelectedIndex = 0;
 
 
@@ -1644,7 +1621,7 @@ namespace Handbrake
                 drp_audenc_2.Items.Add("Vorbis");
                 if (drp_audenc_2.Enabled)
                 {
-                    if (drp_audenc_2.Text == "")
+                    if (drp_audenc_2.Text == string.Empty)
                         drp_audenc_2.SelectedIndex = 0;
                 }
 
@@ -1655,7 +1632,7 @@ namespace Handbrake
                 drp_audenc_3.Items.Add("Vorbis");
                 if (drp_audenc_3.Enabled)
                 {
-                    if (drp_audenc_3.Text == "")
+                    if (drp_audenc_3.Text == string.Empty)
                         drp_audenc_3.SelectedIndex = 0;
                 }
 
@@ -1666,7 +1643,7 @@ namespace Handbrake
                 drp_audenc_4.Items.Add("Vorbis");
                 if (drp_audenc_4.Enabled)
                 {
-                    if (drp_audenc_4.Text == "")
+                    if (drp_audenc_4.Text == string.Empty)
                         drp_audenc_4.SelectedIndex = 0;
                 }
             }
@@ -1789,7 +1766,7 @@ namespace Handbrake
             presetHandler.loadPresetFiles();
 
             treeView_presets.Nodes.Clear();
-            ArrayList presetNameList = new ArrayList();
+            List<string> presetNameList = new List<string>();
             presetNameList = presetHandler.getPresetNames();
 
             // Adds a new preset name to the preset list.

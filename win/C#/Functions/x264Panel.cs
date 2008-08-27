@@ -232,7 +232,7 @@ namespace Handbrake.Functions
                 for (loopcounter = 0; loopcounter < currentOptsArrayCount; loopcounter++)
                 {
                     thisOpt = currentOptsArray[loopcounter];
-                    if (currentOptsArray[currentOptsArrayCount - 1] == "")
+                    if (currentOptsArray[currentOptsArrayCount - 1] == string.Empty)
                         break;
 
                     String[] splitOptRange = thisOpt.Split('=');
@@ -257,11 +257,11 @@ namespace Handbrake.Functions
                     }
 
                     /* Construct New String for opts here */
-                    if (thisOpt == "")
+                    if (thisOpt == string.Empty)
                         changedOptString = changedOptString + thisOpt;
                     else
                     {
-                        if (changedOptString == "")
+                        if (changedOptString == string.Empty)
                             changedOptString = thisOpt;
                         else
                             changedOptString = changedOptString + ":" + thisOpt;

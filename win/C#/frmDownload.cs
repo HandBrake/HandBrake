@@ -35,62 +35,53 @@ namespace Handbrake
         {
             InitializeComponent();
 
-            try
-            {
-                downloadThread = new Thread(Download);
-                downloadThread.Start();
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show("An error occured on the Download Thread \n" + exc.ToString(),"Error",MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            downloadThread = new Thread(Download);
+            downloadThread.Start();
         }
 
         private void Download()
         {
             Functions.AppcastReader rssRead = new Functions.AppcastReader();
-
             string tempPath = Path.Combine(Path.GetTempPath(), "handbrake-setup.exe");
-
-            if (File.Exists(tempPath))
-                File.Delete(tempPath);
-
             string hbUpdate = rssRead.downloadFile();
-
             WebClient wcDownload = new WebClient();
-                try
+
+            try
+            {
+                if (File.Exists(tempPath))
+                    File.Delete(tempPath);
+
+                webRequest = (HttpWebRequest)WebRequest.Create(hbUpdate);
+                webRequest.Credentials = CredentialCache.DefaultCredentials;
+                webResponse = (HttpWebResponse)webRequest.GetResponse();
+                Int64 fileSize = webResponse.ContentLength;
+
+                responceStream = wcDownload.OpenRead(hbUpdate);
+                loacalStream = new FileStream(tempPath, FileMode.Create, FileAccess.Write, FileShare.None);
+
+                int bytesSize = 0;
+                byte[] downBuffer = new byte[2048];
+
+                long flength = 0;
+                while ((bytesSize = responceStream.Read(downBuffer, 0, downBuffer.Length)) > 0)
                 {
-                    webRequest = (HttpWebRequest)WebRequest.Create(hbUpdate);
-                    webRequest.Credentials = CredentialCache.DefaultCredentials;
-                    webResponse = (HttpWebResponse)webRequest.GetResponse();
-                    Int64 fileSize = webResponse.ContentLength;
-
-                    responceStream = wcDownload.OpenRead(hbUpdate);
-                    loacalStream = new FileStream(tempPath, FileMode.Create, FileAccess.Write, FileShare.None);
-
-                    int bytesSize = 0;
-                    byte[] downBuffer = new byte[2048];
-
-                    long flength = 0;
-                    while ((bytesSize = responceStream.Read(downBuffer, 0, downBuffer.Length)) > 0)
-                    {
-                        loacalStream.Write(downBuffer, 0, bytesSize);
-                        flength = loacalStream.Length;
-                        this.Invoke(new UpdateProgessCallback(this.UpdateProgress), new object[] { loacalStream.Length, fileSize });
-                    }
-
-                    responceStream.Close();
-                    loacalStream.Close();
-
-                    if (flength != fileSize)
-                        this.Invoke(new DownloadFailedCallback(this.downloadFailed));
-                    else
-                        this.Invoke(new DownloadCompleteCallback(this.downloadComplete));
+                    loacalStream.Write(downBuffer, 0, bytesSize);
+                    flength = loacalStream.Length;
+                    this.Invoke(new UpdateProgessCallback(this.UpdateProgress), new object[] { loacalStream.Length, fileSize });
                 }
-                catch (Exception)
-                {
-                    // Do Nothing 
-                }
+
+                responceStream.Close();
+                loacalStream.Close();
+
+                if (flength != fileSize)
+                    this.Invoke(new DownloadFailedCallback(this.downloadFailed));
+                else
+                    this.Invoke(new DownloadCompleteCallback(this.downloadComplete));
+            }
+            catch (Exception)
+            {
+                // Do Nothing 
+            }
         }
 
         private void UpdateProgress(Int64 BytesRead, Int64 TotalBytes)

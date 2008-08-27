@@ -64,7 +64,8 @@ namespace Handbrake.Parsing
         /// Default constructor for this object
         /// </summary>
         /// <param name="baseStream">The stream to parse from</param>
-        public Parser(Stream baseStream) : base(baseStream)
+        public Parser(Stream baseStream)
+            : base(baseStream)
         {
             this.m_buffer = string.Empty;
         }
@@ -72,38 +73,26 @@ namespace Handbrake.Parsing
         public override string ReadLine()
         {
             string tmp = base.ReadLine();
-            try
-            {
-                
-                this.m_buffer += tmp;
-                Match m = Regex.Match(tmp, "^Scanning title ([0-9]*) of ([0-9]*)");
-                if (OnReadLine != null)
-                    OnReadLine(this, tmp);
 
-                if (m.Success && OnScanProgress != null)
-                    OnScanProgress(this, int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show("Parser.cs - ReadLine " + exc.ToString());
-            }
+            this.m_buffer += tmp;
+            Match m = Regex.Match(tmp, "^Scanning title ([0-9]*) of ([0-9]*)");
+            if (OnReadLine != null)
+                OnReadLine(this, tmp);
+
+            if (m.Success && OnScanProgress != null)
+                OnScanProgress(this, int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
+
             return tmp;
         }
 
         public override string ReadToEnd()
         {
             string tmp = base.ReadToEnd();
-            try
-            {
-                this.m_buffer += tmp;
-                if (OnReadToEnd != null)
-                    OnReadToEnd(this, tmp);
 
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show("Parser.cs - ReadToEnd " + exc.ToString());
-            }
+            this.m_buffer += tmp;
+            if (OnReadToEnd != null)
+                OnReadToEnd(this, tmp);
+
             return tmp;
         }
     }
