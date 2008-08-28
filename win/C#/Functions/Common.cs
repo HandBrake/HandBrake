@@ -518,10 +518,10 @@ namespace Handbrake.Functions
             if (mainWindow.text_height.Text != "")
                 query += " -l " + mainWindow.text_height.Text;
 
-            string cropTop = "";
-            string cropBottom = "";
-            string cropLeft = "";
-            string cropRight = "";
+            string cropTop = mainWindow.text_top.Text;
+            string cropBottom = mainWindow.text_bottom.Text;
+            string cropLeft = mainWindow.text_left.Text;
+            string cropRight = mainWindow.text_right.Text;
 
             if (mainWindow.drp_crop.Text == "No Crop")
                 query += " --crop 0:0:0:0 ";
