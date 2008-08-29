@@ -190,7 +190,7 @@ void hb_buffer_close( hb_buffer_t ** _b )
 
     if( buffer_pool && b->data && !hb_fifo_is_full( buffer_pool ) )
     {
-        hb_fifo_push( buffer_pool, b );
+        hb_fifo_push_head( buffer_pool, b );
         return;
     }
     /* either the pool is full or this size doesn't use a pool - free the buf */
@@ -331,6 +331,43 @@ void hb_fifo_push( hb_fifo_t * f, hb_buffer_t * b )
         f->size += 1;
         f->last  = f->last->next;
     }
+    hb_unlock( f->lock );
+}
+
+void hb_fifo_push_head( hb_fifo_t * f, hb_buffer_t * b )
+{
+    hb_buffer_t * tmp;
+    uint32_t      size = 0;
+
+    if( !b )
+    {
+        return;
+    }
+
+    hb_lock( f->lock );
+
+    /*
+     * If there are a chain of buffers prepend the lot
+     */
+    tmp = b;
+    while( tmp->next )
+    {
+        tmp = tmp->next;
+        size += 1;
+    }
+
+    if( f->size > 0 )
+    {
+        tmp->next = f->first;
+    } 
+    else
+    {
+        f->last = tmp;
+    }
+
+    f->first = b;
+    f->size += ( size + 1 );
+
     hb_unlock( f->lock );
 }
 

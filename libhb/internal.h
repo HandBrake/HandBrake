@@ -85,6 +85,7 @@ hb_buffer_t * hb_fifo_get( hb_fifo_t * );
 hb_buffer_t * hb_fifo_see( hb_fifo_t * );
 hb_buffer_t * hb_fifo_see2( hb_fifo_t * );
 void          hb_fifo_push( hb_fifo_t *, hb_buffer_t * );
+void          hb_fifo_push_head( hb_fifo_t *, hb_buffer_t * );
 void          hb_fifo_close( hb_fifo_t ** );
 
 /***********************************************************************
