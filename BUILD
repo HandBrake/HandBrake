@@ -14,17 +14,8 @@ Step 1: get needed tools
 
 + nasm (Only for x86. On Mac OS X Intel, Xcode 2.4.1 include it)
 
-Cygwin setup:
-    There are a couple extra things required to make the code build for Cygwin.
-    Make sure you have /bin and /usr/bin on your path *first*, before
-    the Windows paths.  Otherwise the Cygwin find.exe won't be used, and
-    lame won't build.
-    Also, I have not tried to build this with MinGW, I've only built it with
-    the Cygwin environment, so you should build with Cygwin gcc and dev tools.
-    Unfortunately this means you need to have cygwin1.dll around to run the
-    HandbrakeCLI.exe program, but that's the way it is for now, until I get time
-    to try building it with MinGW.  If you want to try making it work with
-    MinGW, then go for it!
+Cygwin:
+	See Trac > Windows Compile Guide
 
 Step 2: configuration
 ==============
@@ -84,17 +75,8 @@ Step 1: get needed tools
     http://finkcommander.sourceforge.net/ and install from the disk image.  You can
     install libtool, libtool-shlibs, autoconf and automake using FinkCommander.
 
-Cygwin setup:
-    There are a couple extra things required to make the code build for Cygwin.
-    Make sure you have /bin and /usr/bin on your path *first*, before
-    the Windows paths.  Otherwise the Cygwin find.exe won't be used, and
-    lame won't build.
-    Also, I have not tried to build this with MinGW, I've only built it with
-    the Cygwin environment, so you should build with Cygwin gcc and dev tools.
-    Unfortunately this means you need to have cygwin1.dll around to run the
-    HandbrakeCLI.exe program, but that's the way it is for now, until I get time
-    to try building it with MinGW.  If you want to try making it work with
-    MinGW, then go for it!
+Cygwin:
+	See Trac > Windows Compile Guide
 
 Step 2: build
 ==============
