@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>audio_bitrate</key>
+	<array>
+		<array>
+			<string>audio_codec</string>
+			<string>ac3</string>
+			<true />
+		</array>
+	</array>
+	<key>audio_drc</key>
+	<array>
+		<array>
+			<string>audio_codec</string>
+			<string>ac3</string>
+			<true />
+		</array>
+	</array>
+	<key>audio_mix</key>
+	<array>
+		<array>
+			<string>audio_codec</string>
+			<string>ac3</string>
+			<true />
+		</array>
+	</array>
+	<key>audio_rate</key>
+	<array>
+		<array>
+			<string>audio_codec</string>
+			<string>ac3</string>
+			<true />
+		</array>
+	</array>
+	<key>chapters_label</key>
+	<array>
+		<array>
+			<string>title</string>
+			<string>none</string>
+			<true />
+		</array>
+	</array>
+	<key>chapters_list</key>
+	<array>
+		<array>
+			<string>chapter_markers</string>
+			<string>TRUE</string>
+			<false />
+		</array>
+	</array>
+	<key>chapters_tab</key>
+	<array>
+		<array>
+			<string>title</string>
+			<string>none</string>
+			<true />
+		</array>
+	</array>
+	<key>constant_rate_factor</key>
+	<array>
+		<array>
+			<string>vquality_type_constant</string>
+			<string>TRUE</string>
+			<false />
+		</array>
+	</array>
+	<key>crop_bottom</key>
+	<array>
+		<array>
+			<string>autocrop</string>
+			<string>FALSE</string>
+			<false />
+		</array>
+	</array>
+	<key>crop_left</key>
+	<array>
+		<array>
+			<string>autocrop</string>
+			<string>FALSE</string>
+			<false />
+		</array>
+	</array>
+	<key>crop_right</key>
+	<array>
+		<array>
+			<string>autocrop</string>
+			<string>FALSE</string>
+			<false />
+		</array>
+	</array>
+	<key>crop_top</key>
+	<array>
+		<array>
+			<string>autocrop</string>
+			<string>FALSE</string>
+			<false />
+		</array>
+	</array>
+	<key>deinterlace</key>
+	<array>
+		<array>
+			<string>decomb</string>
+			<string>TRUE</string>
+			<true />
+		</array>
+	</array>
+	<key>detelecine</key>
+	<array>
+		<array>
+			<string>variable_frame_rate</string>
+			<string>TRUE</string>
+			<true />
+		</array>
+	</array>
+	<key>end_chapter</key>
+	<array>
+		<array>
+			<string>title</string>
+			<string>none</string>
+			<true />
+		</array>
+	</array>
+	<key>framerate</key>
+	<array>
+		<array>
+			<string>variable_frame_rate</string>
+			<string>TRUE</string>
+			<true />
+		</array>
+	</array>
+	<key>http_optimize_mp4</key>
+	<array>
+		<array>
+			<string>container</string>
+			<string>mp4|m4v</string>
+			<false />
+		</array>
+	</array>
+	<key>ipod_file</key>
+	<array>
+		<array>
+			<string>container</string>
+			<string>mp4|m4v</string>
+			<false />
+		</array>
+		<array>
+			<string>video_codec</string>
+			<string>x264</string>
+			<false />
+		</array>
+	</array>
+	<key>keep_aspect</key>
+	<array>
+		<array>
+			<string>anamorphic</string>
+			<string>FALSE</string>
+			<false />
+		</array>
+	</array>
+	<key>large_mp4</key>
+	<array>
+		<array>
+			<string>container</string>
+			<string>mp4|m4v</string>
+			<false />
+		</array>
+	</array>
+	<key>picture_label</key>
+	<array>
+		<array>
+			<string>title</string>
+			<string>none</string>
+			<true />
+		</array>
+	</array>
+	<key>picture_tab</key>
+	<array>
+		<array>
+			<string>title</string>
+			<string>none</string>
+			<true />
+		</array>
+	</array>
+	<key>preview_button</key>
+	<array>
+		<array>
+			<string>title</string>
+			<string>none</string>
+			<true />
+		</array>
+	</array>
+	<key>preview_frame</key>
+	<array>
+		<array>
+			<string>title</string>
+			<string>none</string>
+			<true />
+		</array>
+	</array>
+	<key>queue_add</key>
+	<array>
+		<array>
+			<string>title</string>
+			<string>none</string>
+			<true />
+		</array>
+	</array>
+	<key>queue_add_menu</key>
+	<array>
+		<array>
+			<string>title</string>
+			<string>none</string>
+			<true />
+		</array>
+	</array>
+	<key>scale_height</key>
+	<array>
+		<array>
+			<string>autoscale</string>
+			<string>FALSE</string>
+			<false />
+		</array>
+		<array>
+			<string>anamorphic</string>
+			<string>FALSE</string>
+			<false />
+		</array>
+		<array>
+			<string>keep_aspect</string>
+			<string>FALSE</string>
+			<false />
+		</array>
+	</array>
+	<key>scale_width</key>
+	<array>
+		<array>
+			<string>autoscale</string>
+			<string>FALSE</string>
+			<false />
+		</array>
+	</array>
+	<key>show_preview_menu</key>
+	<array>
+		<array>
+			<string>title</string>
+			<string>none</string>
+			<true />
+		</array>
+	</array>
+	<key>start_chapter</key>
+	<array>
+		<array>
+			<string>title</string>
+			<string>none</string>
+			<true />
+		</array>
+	</array>
+	<key>title</key>
+	<array>
+		<array>
+			<string>title</string>
+			<string>none</string>
+			<true />
+		</array>
+	</array>
+	<key>turbo</key>
+	<array>
+		<array>
+			<string>vquality_type_constant</string>
+			<string>TRUE</string>
+			<true />
+		</array>
+		<array>
+			<string>two_pass</string>
+			<string>TRUE</string>
+			<false />
+		</array>
+	</array>
+	<key>tweak_deinterlace</key>
+	<array>
+		<array>
+			<string>decomb</string>
+			<string>TRUE</string>
+			<true />
+		</array>
+	</array>
+	<key>two_pass</key>
+	<array>
+		<array>
+			<string>vquality_type_constant</string>
+			<string>TRUE</string>
+			<true />
+		</array>
+	</array>
+	<key>variable_frame_rate</key>
+	<array>
+		<array>
+			<string>container</string>
+			<string>avi</string>
+			<true />
+		</array>
+	</array>
+	<key>video_bitrate</key>
+	<array>
+		<array>
+			<string>vquality_type_bitrate</string>
+			<string>TRUE</string>
+			<false />
+		</array>
+	</array>
+	<key>video_quality</key>
+	<array>
+		<array>
+			<string>vquality_type_constant</string>
+			<string>TRUE</string>
+			<false />
+		</array>
+	</array>
+	<key>video_target_size</key>
+	<array>
+		<array>
+			<string>vquality_type_target</string>
+			<string>TRUE</string>
+			<false />
+		</array>
+	</array>
+	<key>x264_bime</key>
+	<array>
+		<array>
+			<string>x264_bframes</string>
+			<string>0</string>
+			<true />
+		</array>
+	</array>
+	<key>x264_bpyramid</key>
+	<array>
+		<array>
+			<string>x264_bframes</string>
+			<string>&lt;2</string>
+			<true />
+		</array>
+	</array>
+	<key>x264_brdo</key>
+	<array>
+		<array>
+			<string>x264_bframes</string>
+			<string>0</string>
+			<true />
+		</array>
+		<array>
+			<string>x264_subme</string>
+			<string>&lt;6</string>
+			<true />
+		</array>
+	</array>
+	<key>x264_direct</key>
+	<array>
+		<array>
+			<string>x264_bframes</string>
+			<string>0</string>
+			<true />
+		</array>
+		<array>
+			<string>x264_analyse</string>
+			<string>none</string>
+			<true />
+		</array>
+	</array>
+	<key>x264_merange</key>
+	<array>
+		<array>
+			<string>x264_me</string>
+			<string>umh|esa</string>
+			<false />
+		</array>
+	</array>
+	<key>x264_mixed_refs</key>
+	<array>
+		<array>
+			<string>x264_refs</string>
+			<string>&lt;2</string>
+			<true />
+		</array>
+	</array>
+	<key>x264_tab</key>
+	<array>
+		<array>
+			<string>video_codec</string>
+			<string>x264</string>
+			<false />
+		</array>
+	</array>
+	<key>x264_tab_label</key>
+	<array>
+		<array>
+			<string>video_codec</string>
+			<string>x264</string>
+			<false />
+		</array>
+	</array>
+	<key>x264_trellis</key>
+	<array>
+		<array>
+			<string>x264_cabac</string>
+			<string>TRUE</string>
+			<false />
+		</array>
+	</array>
+	<key>x264_weighted_bframes</key>
+	<array>
+		<array>
+			<string>x264_bframes</string>
+			<string>0</string>
+			<true />
+		</array>
+	</array>
+</dict>
+</plist>

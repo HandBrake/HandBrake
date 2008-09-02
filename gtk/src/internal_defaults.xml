@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Initialization</key>
+	<dict>
+		<key>crop_bottom</key>
+		<integer>0</integer>
+		<key>crop_left</key>
+		<integer>0</integer>
+		<key>crop_right</key>
+		<integer>0</integer>
+		<key>crop_top</key>
+		<integer>0</integer>
+		<key>end_chapter</key>
+		<integer>100</integer>
+		<key>preset</key>
+		<string>Normal</string>
+		<key>scale_height</key>
+		<integer>480</integer>
+		<key>scale_width</key>
+		<integer>720</integer>
+		<key>start_chapter</key>
+		<integer>1</integer>
+		<key>title</key>
+		<string>none</string>
+		<key>volume_label</key>
+		<string>New Video</string>
+		<key>x264_8x8dct</key>
+		<false />
+		<key>x264_analyse</key>
+		<string>some</string>
+		<key>x264_bframes</key>
+		<integer>0</integer>
+		<key>x264_bime</key>
+		<false />
+		<key>x264_bpyramid</key>
+		<false />
+		<key>x264_brdo</key>
+		<false />
+		<key>x264_cabac</key>
+		<true />
+		<key>x264_deblock_alpha</key>
+		<integer>0</integer>
+		<key>x264_deblock_beta</key>
+		<integer>0</integer>
+		<key>x264_direct</key>
+		<string>spatial</string>
+		<key>x264_me</key>
+		<string>hex</string>
+		<key>x264_merange</key>
+		<integer>16</integer>
+		<key>x264_mixed_refs</key>
+		<false />
+		<key>x264_no_dct_decimate</key>
+		<false />
+		<key>x264_no_fast_pskip</key>
+		<false />
+		<key>x264_refs</key>
+		<integer>1</integer>
+		<key>x264_subme</key>
+		<integer>5</integer>
+		<key>x264_trellis</key>
+		<integer>0</integer>
+		<key>x264_weighted_bframes</key>
+		<false />
+		<key>audio_list</key>
+		<array>
+		</array>
+	</dict>
+	<key>Preferences</key>
+	<dict>
+		<key>allow_tweaks</key>
+		<false />
+		<key>default_preset</key>
+		<string>Normal</string>
+		<key>default_source</key>
+		<string>/dev/dvd</string>
+		<key>destination_dir</key>
+		<string></string>
+		<key>hbfd</key>
+		<false />
+		<key>hbfd_feature</key>
+		<false />
+		<key>linear_vquality</key>
+		<false />
+		<key>nocheckvquality</key>
+		<false />
+		<key>noscale</key>
+		<false />
+		<key>show_presets</key>
+		<true />
+		<key>use_source_name</key>
+		<true />
+		<key>version</key>
+		<string>0.1</string>
+	</dict>
+	<key>Presets</key>
+	<dict>
+		<key>anamorphic</key>
+		<true />
+		<key>autocrop</key>
+		<true />
+		<key>autoscale</key>
+		<true />
+		<key>chapter_markers</key>
+		<true />
+		<key>constant_rate_factor</key>
+		<true />
+		<key>container</key>
+		<string>mp4</string>
+		<key>deblock</key>
+		<false />
+		<key>decomb</key>
+		<true />
+		<key>deinterlace</key>
+		<string>none</string>
+		<key>denoise</key>
+		<string>none</string>
+		<key>detelecine</key>
+		<true />
+		<key>directqp</key>
+		<false />
+		<key>forced_subtitles</key>
+		<true />
+		<key>framerate</key>
+		<string>source</string>
+		<key>grayscale</key>
+		<false />
+		<key>http_optimize_mp4</key>
+		<false />
+		<key>ipod_file</key>
+		<false />
+		<key>keep_aspect</key>
+		<true />
+		<key>large_mp4</key>
+		<false />
+		<key>max_height</key>
+		<integer>0</integer>
+		<key>max_width</key>
+		<integer>0</integer>
+		<key>pref_audio_list</key>
+		<array>
+			<dict>
+				<key>audio_bitrate</key>
+				<string>192</string>
+				<key>audio_codec</key>
+				<string>ac3</string>
+				<key>audio_drc</key>
+				<real>1</real>
+				<key>audio_mix</key>
+				<string>dpl2</string>
+				<key>audio_rate</key>
+				<string>source</string>
+			</dict>
+		</array>
+		<key>preset_description</key>
+		<string></string>
+		<key>preset_type</key>
+		<integer>1</integer>
+		<key>round_dimensions</key>
+		<true />
+		<key>source_audio_lang</key>
+		<string>und</string>
+		<key>subtitle_lang</key>
+		<string>none</string>
+		<key>turbo</key>
+		<false />
+		<key>tweak_deblock</key>
+		<string></string>
+		<key>tweak_decomb</key>
+		<string></string>
+		<key>tweak_detelecine</key>
+		<string></string>
+		<key>two_pass</key>
+		<false />
+		<key>variable_frame_rate</key>
+		<true />
+		<key>video_bitrate</key>
+		<integer>1800</integer>
+		<key>video_codec</key>
+		<string>x264</string>
+		<key>video_quality</key>
+		<integer>64</integer>
+		<key>video_target_size</key>
+		<integer>700</integer>
+		<key>vquality_type_bitrate</key>
+		<false />
+		<key>vquality_type_constant</key>
+		<false />
+		<key>vquality_type_target</key>
+		<false />
+		<key>x264_options</key>
+		<string></string>
+	</dict>
+</dict>
+</plist>

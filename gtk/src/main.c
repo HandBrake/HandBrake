@@ -66,6 +66,7 @@
 
 #include "callbacks.h"
 #include "settings.h"
+#include "presets.h"
 
 #define BUILDER_NAME "ghb"
 
@@ -316,14 +317,14 @@ bind_audio_tree_model (signal_user_data_t *ud)
 	g_debug("bind_audio_tree_model ()\n");
 	treeview = GTK_TREE_VIEW(GHB_WIDGET (ud->builder, "audio_list"));
 	selection = gtk_tree_view_get_selection (treeview);
-	// 11 columns in model.  6 are visible, the other 5 are for storing
+	// 12 columns in model.  6 are visible, the other 6 are for storing
 	// values that I need
-	treestore = gtk_list_store_new(11, G_TYPE_STRING, G_TYPE_STRING, 
+	treestore = gtk_list_store_new(12, G_TYPE_STRING, G_TYPE_STRING, 
 								   G_TYPE_STRING, G_TYPE_STRING, 
 								   G_TYPE_STRING, G_TYPE_STRING,
 								   G_TYPE_STRING, G_TYPE_STRING, 
 								   G_TYPE_STRING, G_TYPE_STRING,
-								   G_TYPE_STRING);
+								   G_TYPE_STRING, G_TYPE_DOUBLE);
 	gtk_tree_view_set_model(treeview, GTK_TREE_MODEL(treestore));
 
 	cell = gtk_cell_renderer_text_new();
@@ -472,7 +473,7 @@ main (int argc, char *argv[])
 {
  	GtkWidget *window;
 	signal_user_data_t *ud;
-	const gchar *preset;
+	gchar *preset;
 	gchar *builder_file;
 	GError *error = NULL;
 	GOptionContext *context;
@@ -505,8 +506,6 @@ main (int argc, char *argv[])
 	ud->debug = FALSE;
 	g_log_set_handler (NULL, G_LOG_LEVEL_DEBUG, debug_log_handler, ud);
 	ud->settings = ghb_settings_new();
-	ud->audio_settings = NULL;
-	ud->chapter_list = NULL;
 	ud->queue = NULL;
 	ud->current_dvd_device = NULL;
 	// Redirect stderr to the activity window
@@ -519,6 +518,7 @@ main (int argc, char *argv[])
 		ud->builder = create_builder_or_die (BUILDER_NAME, builder_file);
 		g_free(builder_file);
 	}
+	ghb_init_dep_map();
 
 	// Need to connect x264_options textview buffer to the changed signal
 	// since it can't be done automatically
@@ -533,6 +533,7 @@ main (int argc, char *argv[])
 
 	g_debug("ud %p\n", ud);
 	g_debug("ud->builder %p\n", ud->builder);
+
 	bind_audio_tree_model(ud);
 	bind_presets_tree_model(ud);
 	bind_queue_tree_model(ud);
@@ -542,13 +543,23 @@ main (int argc, char *argv[])
 	// to the callbacks.  Builder's standard autoconnect doesn't all this.
 	gtk_builder_connect_signals_full (ud->builder, MyConnect, ud);
 
+	// Load all internal settings
+	ghb_settings_init(ud);
+	// Load the presets files
+	ghb_presets_load();
 	ghb_prefs_load(ud);
-	if (ghb_settings_get_bool(ud->settings, "hbfd"))
+
+	// Start the show.
+	window = GHB_WIDGET (ud->builder, "hb_window");
+	gtk_widget_show (window);
+
+	ghb_prefs_to_ui(ud);
+
+	if (ghb_settings_get_boolean(ud->settings, "hbfd"))
 	{
 		ghb_hbfd(ud, TRUE);
 	}
-	const gchar *source = ghb_settings_get_string(ud->settings, "default_source");
-	gboolean tweaks = ghb_settings_get_bool(ud->settings, "allow_tweaks");
+	gboolean tweaks = ghb_settings_get_boolean(ud->settings, "allow_tweaks");
 	GtkWidget *widget;
 	widget = GHB_WIDGET(ud->builder, "deinterlace");
 	tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
@@ -560,30 +571,27 @@ main (int argc, char *argv[])
 	widget = GHB_WIDGET(ud->builder, "tweak_denoise");
 	!tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
 
+	gchar *source = ghb_settings_get_string(ud->settings, "default_source");
 	ghb_dvd_set_current(source, ud);
-	// Start the show.
-	window = GHB_WIDGET (ud->builder, "hb_window");
-	gtk_widget_show (window);
+	g_free(source);
 
-	// Load the presets files
-	ghb_presets_load(ud);
+	// Parsing x264 options "" initializes x264 widgets to proper defaults
+	ghb_x264_parse_options(ud, "");
+
 	// Populate the presets tree view
 	ghb_presets_list_update(ud);
 	// Get the first preset name
 	if (arg_preset != NULL)
 	{
-		preset = arg_preset;
+		ghb_select_preset(ud->builder, arg_preset);
 	}
 	else
 	{
 		preset = ghb_settings_get_string (ud->settings, "default_preset");
-		if (preset == NULL)
-			preset = ghb_presets_get_name(0);
+		ghb_select_preset(ud->builder, preset);
+		g_free(preset);
 	}
-	// Parsing x264 options "" initializes x264 widgets to proper defaults
-	ghb_x264_parse_options(ud, "");
-	ghb_select_preset(ud->builder, preset);
-	ghb_prefs_to_ui(ud);
+
 	// Grey out widgets that are dependent on a disabled feature
 	ghb_check_all_depencencies (ud);
 

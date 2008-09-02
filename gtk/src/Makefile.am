@@ -72,6 +72,8 @@ AM_CFLAGS =\
 	 -g
 
 bin_PROGRAMS = ghb 
+noinst_PROGRAMS = makewidgetdeps quotestring
+
 BUILT_SOURCES = HandBrakeCLI
 
 HandBrakeCLI: $(HB_DIR)/HandBrakeCLI
@@ -86,6 +88,12 @@ ghb_SOURCES = \
 	main.c \
 	settings.c \
 	settings.h \
+	presets.c \
+	presets.h \
+	values.c \
+	values.h \
+	plist.c \
+	plist.h \
 	hb-backend.c \
 	hb-backend.h \
 	renderer_button.h \
@@ -99,6 +107,31 @@ ghb_LDFLAGS = \
 ghb_LDADD = $(GHB_LIBS) $(HB_LIBS)
 
 ghb_DEPENDENCIES = $(HB_DIR)/libhb/libhb.a
+
+makewidgetdeps_SOURCES = \
+	plist.c \
+	plist.h \
+	values.c \
+	values.h \
+	makedeps.c 
+
+makewidgetdeps_LDADD = $(GHBTOOLS_LIBS)
+
+quotestring_SOURCES = preset_to_string.c
+
+widget_deps.h: makewidgetdeps quotestring
+	./makewidgetdeps
+	./quotestring widget_deps widget_deps.h
+
+widget_reverse_deps.h: makewidgetdeps quotestring
+	./makewidgetdeps
+	./quotestring widget_reverse_deps widget_reverse_deps.h
+
+internal_defaults.h: quotestring internal_defaults.xml
+	./quotestring internal_defaults.xml internal_defaults.h
+
+standard_presets.h: quotestring standard_presets.xml
+	./quotestring standard_presets.xml standard_presets.h
 
 EXTRA_DIST = $(builder_DATA) $(icons) HandBrakeCLI
 

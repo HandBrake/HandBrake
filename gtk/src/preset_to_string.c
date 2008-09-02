@@ -16,7 +16,8 @@ int
 main(int argc, char *argv[])
 {
     FILE *infile, *outfile;
-    char buffer[BUF_SIZE];
+    char in_buffer[BUF_SIZE];
+    char out_buffer[2*BUF_SIZE];
 
     if (argc < 2 || argc > 3)
     {
@@ -32,17 +33,31 @@ main(int argc, char *argv[])
     {
         outfile = fopen(argv[2], "w");
     }
-    while (fgets(buffer, BUF_SIZE, infile) != NULL)
+    while (fgets(in_buffer, BUF_SIZE, infile) != NULL)
     {
+		int ii, jj;
         int len;
         // Step on any CR LF at end of line
-        len = strlen(buffer);
-        if (buffer[len-1] == '\n' || buffer[len-1] == '\r')
-            buffer[len-1] = 0;
-        if (buffer[len-2] == '\n' || buffer[len-2] == '\r')
-            buffer[len-2] = 0;
-        fprintf(outfile, "\"%s\\n\"\n", buffer);
+        len = strlen(in_buffer);
+		for (jj = 0, ii = 0; ii < len; ii++)
+		{
+			if (in_buffer[ii] == '"')
+			{
+				out_buffer[jj++] = '\\';
+				out_buffer[jj++] = in_buffer[ii];
+			}
+        	else if (in_buffer[ii] == '\n' || in_buffer[ii] == '\r')
+			{ // Skip it
+			}
+			else
+			{
+				out_buffer[jj++] = in_buffer[ii];
+			}
+		}
+		out_buffer[jj] = 0;
+        fprintf(outfile, "\"%s\\n\"\n", out_buffer);
     }
-    close(infile);
-    close(outfile);
+    fclose(infile);
+    fclose(outfile);
+	return 0;
 }

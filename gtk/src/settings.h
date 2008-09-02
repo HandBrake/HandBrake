@@ -45,10 +45,8 @@ typedef struct
 	gboolean debug;
 	gboolean dont_clear_presets;
 	GtkBuilder *builder;
-	GHashTable *settings;
-	GSList *audio_settings;
-	gchar **chapter_list;
-	GSList *queue;
+	GValue *settings;
+	GValue *queue;
 	GIOChannel *activity_log;
 } signal_user_data_t;
 
@@ -60,79 +58,53 @@ enum
 	GHB_QUEUE_DONE,
 };
 
-typedef struct
-{
-	gint unique_id;
-	gint status;
-	GHashTable *settings;
-	GSList *audio_settings;
-	gchar **chapter_list;
-} job_settings_t;
+GValue* ghb_settings_new(void);
+void ghb_settings_take_value(
+	GValue *settings, const gchar *key, GValue *value);
+void ghb_settings_set_value(
+	GValue *settings, const gchar *key, const GValue *value);
+void ghb_settings_set_string(
+	GValue *settings, const gchar *key, const gchar *sval);
+void ghb_settings_set_double(GValue *settings, const gchar *key, gdouble dval);
+void ghb_settings_set_int64(GValue *settings, const gchar *key, gint64 ival);
+void ghb_settings_set_int(GValue *settings, const gchar *key, gint ival);
+void ghb_settings_set_boolean(
+	GValue *settings, const gchar *key, gboolean bval);
+void ghb_settings_set_combo(
+	GValue *settings, const gchar *key, gint index, const gchar *option,
+	const gchar *shortOpt, const gchar *svalue, gint ivalue);
+void ghb_settings_copy(
+	GValue *settings, const gchar *key, const GValue *value);
+GValue* ghb_settings_get_value(GValue *settings, const gchar *key);
+gboolean ghb_settings_get_boolean(GValue *settings, const gchar *key);
+gint64 ghb_settings_get_int64(GValue *settings, const gchar *key);
+gint ghb_settings_get_int(GValue *settings, const gchar *key);
+gdouble ghb_settings_get_double(GValue *settings, const gchar *key);
+gchar* ghb_settings_get_string(GValue *settings, const gchar *key);
+gint ghb_settings_get_combo_index(GValue *settings, const gchar *key);
+gchar* ghb_settings_get_combo_option(GValue *settings, const gchar *name);
+gchar* ghb_settings_get_combo_string(GValue *settings, const gchar *key);
 
-typedef struct
-{
-	gint index;
-	gchar *option;
-	gchar *shortOpt;
-	gint ivalue;
-	gdouble dvalue;
-	gchar *svalue;
-} setting_value_t;
-
-GHashTable* ghb_settings_new();
-void ghb_settings_set(GHashTable *settings, const gchar *key, 
-					  setting_value_t *value);
-void ghb_settings_set_string(GHashTable *settings, const gchar *key, const gchar *str);
-void ghb_settings_set_dbl(GHashTable *settings, const gchar *key, gdouble dvalue);
-void ghb_settings_copy(GHashTable *settings, const gchar *key, const setting_value_t *value);
-const setting_value_t* ghb_settings_get(GHashTable *settings, const gchar *key);
-gboolean ghb_settings_get_bool(GHashTable *settings, const gchar *key);
-gint ghb_settings_get_index(GHashTable *settings, const gchar *key);
-gint ghb_settings_get_int(GHashTable *settings, const gchar *key);
-gdouble ghb_settings_get_dbl(GHashTable *settings, const gchar *key);
-setting_value_t* ghb_widget_value(GtkWidget *widget);
-gchar* ghb_widget_short_opt(GtkWidget *widget);
-gchar* ghb_widget_option(GtkWidget *widget);
+GValue* ghb_widget_value(GtkWidget *widget);
 gchar* ghb_widget_string(GtkWidget *widget);
+gdouble ghb_widget_double(GtkWidget *widget);
+gint64 ghb_widget_int64(GtkWidget *widget);
 gint ghb_widget_int(GtkWidget *widget);
-gdouble ghb_widget_dbl(GtkWidget *widget);
 gint ghb_widget_index(GtkWidget *widget);
 
-const gchar* ghb_settings_get_string(GHashTable *settings, const gchar *key);
-const gchar* ghb_settings_get_option(GHashTable *settings, const gchar *name);
-const gchar* ghb_settings_get_short_opt(GHashTable *settings, const gchar *key);
-GHashTable* ghb_settings_dup(GHashTable *settings);
-void ghb_widget_to_setting(GHashTable *settings, GtkWidget *widget);
-int ghb_ui_update(signal_user_data_t *ud, const gchar *key, const gchar *value);
-int ghb_ui_update_int(signal_user_data_t *ud, const gchar *key, gint ivalue);
-void ghb_settings_save(signal_user_data_t *ud, const gchar *name);
-void ghb_presets_load(signal_user_data_t *ud);
-void ghb_presets_reload(signal_user_data_t *ud);
-void ghb_set_preset(signal_user_data_t *ud, const gchar *name);
-void ghb_update_from_preset( signal_user_data_t *ud, 
-							const gchar *name, const gchar *key);
-gchar** ghb_presets_get_names();
-gchar** ghb_presets_get_descriptions();
-const gchar* ghb_presets_get_name(gint index);
-gboolean ghb_presets_remove(GHashTable *settings, const gchar *name);
-void ghb_presets_revert(signal_user_data_t *ud, const gchar *name);
-GdkColor* ghb_presets_color(gboolean modified);
-const gchar* ghb_presets_current_name();
-gint ghb_presets_list_index(const gchar *name);
-gint ghb_preset_flags(const gchar *name, gint *index);
-void ghb_prefs_load(signal_user_data_t *ud);
-void ghb_prefs_to_ui(signal_user_data_t *ud);
-void ghb_prefs_save(GHashTable *settings);
-void ghb_pref_save(GHashTable *settings, const gchar *key);
-void ghb_set_preset_default(GHashTable *settings);
+void ghb_widget_to_setting(GValue *settings, GtkWidget *widget);
+int ghb_ui_update(
+	signal_user_data_t *ud, const gchar *name, const GValue *value);
+
 void ghb_x264_parse_options(signal_user_data_t *ud, const gchar *options);
 void ghb_x264_opt_update(signal_user_data_t *ud, GtkWidget *widget);
 gchar* ghb_sanitize_x264opts(signal_user_data_t *ud, const gchar *options);
-gint ghb_pref_acount();
-gint ghb_pref_acodec(gint index);
-gint ghb_pref_bitrate(gint index);
-gint ghb_pref_rate(gint index);
-gint ghb_pref_mix(gint index);
-gdouble ghb_pref_drc(gint index);
+
+gint ghb_pref_acount(GValue *settings);
+gint ghb_pref_acodec(GValue *settings, gint index);
+gint ghb_pref_bitrate(GValue *settings, gint index);
+gint ghb_pref_rate(GValue *settings, gint index);
+gint ghb_pref_mix(GValue *settings, gint index);
+gdouble ghb_pref_drc(GValue *settings, gint index);
 
 #endif // _SETTINGS_H_
