@@ -357,6 +357,8 @@ static void PrintTitleInfo( hb_title_t * title )
 static int HandleEvents( hb_handle_t * h )
 {
     hb_state_t s;
+    int tmp_num_audio_tracks;
+
     hb_get_state( h, &s );
     switch( s.state )
     {
@@ -954,14 +956,14 @@ static int HandleEvents( hb_handle_t * h )
                 hb_list_add(audios, audio);
             }
 
-            num_audio_tracks = hb_list_count(audios);
+            tmp_num_audio_tracks = num_audio_tracks = hb_list_count(audios);
             for (i = 0; i < num_audio_tracks; i++)
             {
                 audio = hb_list_item(audios, 0);
                 if( (audio == NULL) || (audio->in.track == -1) ||
                     (audio->out.track == -1) || (audio->out.codec == 0) )
                 {
-                    num_audio_tracks--;
+                    tmp_num_audio_tracks--;
                 }
                 else
                 {
@@ -969,14 +971,15 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         fprintf(stderr, "ERROR: Invalid audio input track '%u', skipping.\n", 
                                 audio->in.track + 1 );
-                        num_audio_tracks--;
+                        tmp_num_audio_tracks--;
                     }
                 }
                 hb_list_rem(audios, audio);
                 if( audio != NULL)
                     free( audio );
             }
-            /* Audio Tracks */
+
+            num_audio_tracks = tmp_num_audio_tracks;
 
             /* Audio Codecs */
             i = 0;
@@ -1002,13 +1005,20 @@ static int HandleEvents( hb_handle_t * h )
                         hb_audio_config_t * last_audio = hb_list_audio_config_item( job->list_audio, i - 1 );
                         hb_audio_config_t audio;
 
-                        fprintf(stderr, "More audio codecs than audio tracks, copying track %i and using encoder %s\n",
-                            i, token);
-                        hb_audio_config_init(&audio);
-                        audio.in.track = last_audio->in.track;
-                        audio.out.track = num_audio_tracks++;
-                        audio.out.codec = acodec;
-                        hb_audio_add(job, &audio);
+                        if( last_audio )
+                        {
+                            fprintf(stderr, "More audio codecs than audio tracks, copying track %i and using encoder %s\n",
+                                    i, token);
+                            hb_audio_config_init(&audio);
+                            audio.in.track = last_audio->in.track;
+                            audio.out.track = num_audio_tracks++;
+                            audio.out.codec = acodec;
+                            hb_audio_add(job, &audio);
+                        }
+                        else
+                        {
+                            fprintf(stderr, "Audio codecs and no valid audio tracks, skipping codec %s\n", token);
+                        }
                     }
                     token = strtok(NULL, ",");
                     i++;
@@ -1052,15 +1062,22 @@ static int HandleEvents( hb_handle_t * h )
                         }
                     }
 
-                    if (!is_sample_rate_valid(arate))
+                    if( audio != NULL )
                     {
-                        fprintf(stderr, "Invalid sample rate %d, using input rate %d\n", arate, audio->in.samplerate);
-                        arate = audio->in.samplerate;
+                        if (!is_sample_rate_valid(arate))
+                        {
+                            fprintf(stderr, "Invalid sample rate %d, using input rate %d\n", arate, audio->in.samplerate);
+                            arate = audio->in.samplerate;
+                        }
+                        
+                        audio->out.samplerate = arate;
+                        if( (++i) >= num_audio_tracks )
+                            break;  /* We have more inputs than audio tracks, oops */
                     }
-
-                    audio->out.samplerate = arate;
-                    if( (++i) >= num_audio_tracks )
-                        break;  /* We have more inputs than audio tracks, oops */
+                    else 
+                    {
+                        fprintf(stderr, "Ignoring sample rate %d, no audio tracks\n", arate);
+                    }
                     token = strtok(NULL, ",");
                 }
             }
@@ -1090,9 +1107,17 @@ static int HandleEvents( hb_handle_t * h )
                 {
                     abitrate = atoi(token);
                     audio = hb_list_audio_config_item(job->list_audio, i);
-                    audio->out.bitrate = abitrate;
-                    if( (++i) >= num_audio_tracks )
-                        break;  /* We have more inputs than audio tracks, oops */
+
+                    if( audio != NULL )
+                    {
+                        audio->out.bitrate = abitrate;
+                        if( (++i) >= num_audio_tracks )
+                            break;  /* We have more inputs than audio tracks, oops */
+                    }
+                    else 
+                    {
+                        fprintf(stderr, "Ignoring bitrate %d, no audio tracks\n", abitrate);
+                    }
                     token = strtok(NULL, ",");
                 }
             }
@@ -1123,9 +1148,16 @@ static int HandleEvents( hb_handle_t * h )
                 {
                     d_r_c = atof(token);
                     audio = hb_list_audio_config_item(job->list_audio, i);
-                    audio->out.dynamic_range_compression = d_r_c;
-                    if( (++i) >= num_audio_tracks )
-                        break;  /* We have more inputs than audio tracks, oops */
+                    if( audio != NULL )
+                    {
+                        audio->out.dynamic_range_compression = d_r_c;
+                        if( (++i) >= num_audio_tracks )
+                            break;  /* We have more inputs than audio tracks, oops */
+                    } 
+                    else
+                    {
+                        fprintf(stderr, "Ignoring drc, no audio tracks\n");
+                    }
                     token = strtok(NULL, ",");
                 }
             }
@@ -1156,9 +1188,16 @@ static int HandleEvents( hb_handle_t * h )
                 {
                     mixdown = hb_mixdown_get_mixdown_from_short_name(token);
                     audio = hb_list_audio_config_item(job->list_audio, i);
-                    audio->out.mixdown = mixdown;
-                    if( (++i) >= num_audio_tracks )
-                        break;  /* We have more inputs than audio tracks, oops */
+                    if( audio != NULL )
+                    {
+                        audio->out.mixdown = mixdown;
+                        if( (++i) >= num_audio_tracks )
+                            break;  /* We have more inputs than audio tracks, oops */
+                    }
+                    else
+                    {
+                        fprintf(stderr, "Ignoring mixdown, no audio tracks\n");
+                    }
                     token = strtok(NULL, ",");
                 }
             }
