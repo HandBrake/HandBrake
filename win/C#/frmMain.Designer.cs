@@ -98,7 +98,6 @@ namespace Handbrake
             this.ToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_encode = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_encodeLog = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_viewDVDdata = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.mnu_options = new System.Windows.Forms.ToolStripMenuItem();
             this.PresetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -1067,7 +1066,6 @@ namespace Handbrake
             this.ToolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnu_encode,
             this.mnu_encodeLog,
-            this.mnu_viewDVDdata,
             this.ToolStripSeparator5,
             this.mnu_options});
             this.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem";
@@ -1079,7 +1077,7 @@ namespace Handbrake
             this.mnu_encode.Image = global::Handbrake.Properties.Resources.Queue_Small;
             this.mnu_encode.Name = "mnu_encode";
             this.mnu_encode.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-            this.mnu_encode.Size = new System.Drawing.Size(251, 22);
+            this.mnu_encode.Size = new System.Drawing.Size(203, 22);
             this.mnu_encode.Text = "Show Queue";
             this.mnu_encode.Click += new System.EventHandler(this.mnu_encode_Click);
             // 
@@ -1087,28 +1085,20 @@ namespace Handbrake
             // 
             this.mnu_encodeLog.Image = global::Handbrake.Properties.Resources.ActivityWindow_small;
             this.mnu_encodeLog.Name = "mnu_encodeLog";
-            this.mnu_encodeLog.Size = new System.Drawing.Size(251, 22);
-            this.mnu_encodeLog.Text = "Activity Window (Encode log)";
+            this.mnu_encodeLog.Size = new System.Drawing.Size(203, 22);
+            this.mnu_encodeLog.Text = "Activity Window";
             this.mnu_encodeLog.Click += new System.EventHandler(this.mnu_encodeLog_Click);
-            // 
-            // mnu_viewDVDdata
-            // 
-            this.mnu_viewDVDdata.Image = global::Handbrake.Properties.Resources.Movies_Small;
-            this.mnu_viewDVDdata.Name = "mnu_viewDVDdata";
-            this.mnu_viewDVDdata.Size = new System.Drawing.Size(251, 22);
-            this.mnu_viewDVDdata.Text = "Activity Window (Scan log)";
-            this.mnu_viewDVDdata.Click += new System.EventHandler(this.mnu_viewDVDdata_Click);
             // 
             // ToolStripSeparator5
             // 
             this.ToolStripSeparator5.Name = "ToolStripSeparator5";
-            this.ToolStripSeparator5.Size = new System.Drawing.Size(248, 6);
+            this.ToolStripSeparator5.Size = new System.Drawing.Size(200, 6);
             // 
             // mnu_options
             // 
             this.mnu_options.Image = global::Handbrake.Properties.Resources.Pref_Small;
             this.mnu_options.Name = "mnu_options";
-            this.mnu_options.Size = new System.Drawing.Size(251, 22);
+            this.mnu_options.Size = new System.Drawing.Size(203, 22);
             this.mnu_options.Text = "Options";
             this.mnu_options.Click += new System.EventHandler(this.mnu_options_Click);
             // 
@@ -1939,6 +1929,7 @@ namespace Handbrake
             // 
             // text_bottom
             // 
+            this.text_bottom.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.text_bottom.Location = new System.Drawing.Point(96, 130);
             this.text_bottom.Maximum = new decimal(new int[] {
             1080,
@@ -1951,6 +1942,7 @@ namespace Handbrake
             // 
             // text_top
             // 
+            this.text_top.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.text_top.Location = new System.Drawing.Point(96, 84);
             this.text_top.Maximum = new decimal(new int[] {
             1080,
@@ -1963,6 +1955,7 @@ namespace Handbrake
             // 
             // text_left
             // 
+            this.text_left.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.text_left.Location = new System.Drawing.Point(45, 106);
             this.text_left.Maximum = new decimal(new int[] {
             1920,
@@ -1975,6 +1968,7 @@ namespace Handbrake
             // 
             // text_right
             // 
+            this.text_right.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.text_right.Location = new System.Drawing.Point(147, 106);
             this.text_right.Maximum = new decimal(new int[] {
             1920,
@@ -3149,7 +3143,7 @@ namespace Handbrake
             // 
             this.StatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lbl_encode});
-            this.StatusStrip.Location = new System.Drawing.Point(0, 619);
+            this.StatusStrip.Location = new System.Drawing.Point(0, 617);
             this.StatusStrip.Name = "StatusStrip";
             this.StatusStrip.Size = new System.Drawing.Size(938, 22);
             this.StatusStrip.TabIndex = 7;
@@ -3166,7 +3160,7 @@ namespace Handbrake
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(938, 641);
+            this.ClientSize = new System.Drawing.Size(938, 639);
             this.Controls.Add(this.GroupBox1);
             this.Controls.Add(this.groupBox_dest);
             this.Controls.Add(this.groupBox_output);
@@ -3232,7 +3226,6 @@ namespace Handbrake
         internal System.Windows.Forms.ToolStripMenuItem mnu_exit;
         internal System.Windows.Forms.ToolStripMenuItem ToolsToolStripMenuItem;
         internal System.Windows.Forms.ToolStripMenuItem mnu_encode;
-        internal System.Windows.Forms.ToolStripMenuItem mnu_viewDVDdata;
         internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator5;
         internal System.Windows.Forms.ToolStripMenuItem mnu_options;
         internal System.Windows.Forms.ToolStripMenuItem PresetsToolStripMenuItem;

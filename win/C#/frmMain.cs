@@ -236,11 +236,6 @@ namespace Handbrake
             frmActivityWindow dvdInfoWindow = new frmActivityWindow("hb_encode_log.dat", this, queueWindow);
             dvdInfoWindow.Show();
         }
-        private void mnu_viewDVDdata_Click(object sender, EventArgs e)
-        {
-            frmActivityWindow dvdInfoWindow = new frmActivityWindow("dvdinfo.dat", this, queueWindow);
-            dvdInfoWindow.Show();
-        }
         private void mnu_options_Click(object sender, EventArgs e)
         {
             Form Options = new frmOptions(this);
