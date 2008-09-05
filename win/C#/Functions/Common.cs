@@ -38,6 +38,7 @@ namespace Handbrake.Functions
             hbproc.Dispose();
             hbproc.Close();
         }
+
         /// <summary>
         /// This function takes in a Query which has been parsed by QueryParser and
         /// set's all the GUI widgets correctly.
@@ -235,10 +236,7 @@ namespace Handbrake.Functions
             #region Audio
 
             // Handle Track 1
-            if (presetQuery.AudioTrack1 == string.Empty)
-                mainWindow.drp_track1Audio.Text = "Automatic";
-            else
-                mainWindow.drp_track1Audio.Text = presetQuery.AudioTrack1;
+            mainWindow.drp_track1Audio.Text = "Automatic";
 
             // Handle Track 2
             if (presetQuery.AudioEncoder2 != null)  // Fix for loading in built in presets. Where 2 encoders but no tracks in the preset.
@@ -249,10 +247,7 @@ namespace Handbrake.Functions
                 mainWindow.drp_audenc_2.Enabled = true;
                 mainWindow.drp_audbit_2.Enabled = true;
                 mainWindow.drp_audsr_2.Text = "48";
-                if ((presetQuery.AudioTrack2 != null) && (presetQuery.AudioTrack2 != "None"))
-                    mainWindow.drp_track2Audio.Text = presetQuery.AudioTrack2;
-                else
-                    mainWindow.drp_track2Audio.Text = "Automatic";
+                mainWindow.drp_track2Audio.Text = "Automatic";
             }
             else if (presetQuery.AudioTrack2 == "None")
             {
@@ -410,7 +405,7 @@ namespace Handbrake.Functions
 
         #endregion
 
-        #region Query Generator & Chapter CSV Creation
+        #region Query Generator Functions
 
         /// <summary>
         /// Generates a CLI query based on the GUI widgets.
@@ -450,6 +445,7 @@ namespace Handbrake.Functions
             query += generateTabbedComponentsQuery(mainWindow, mainWindow.text_source.Text);
             return query;
         }
+
         /// <summary>
         /// Generates a CLI query for the preview function.
         /// This basically forces a shortened version of the encdode.
@@ -485,7 +481,12 @@ namespace Handbrake.Functions
             return query;
         }
 
-        // Generates part of the CLI query, for the tabbed components only.
+        /// <summary>
+        /// Generates part of the CLI query, for the tabbed components only.
+        /// </summary>
+        /// <param name="mainWindow"></param>
+        /// <param name="source"></param>
+        /// <returns></returns>
         private string generateTabbedComponentsQuery(frmMain mainWindow, string source)
         {
             string query = "";
@@ -695,7 +696,9 @@ namespace Handbrake.Functions
                 query += " -a " + tempSub[0];
             }
 
-            if (track2 != "None")
+            if (track2 == "Automatic")
+                query += ",1";
+            else if (track2 != "None")
             {
                 string[] tempSub;
                 tempSub = track2.Split(' ');
@@ -927,7 +930,13 @@ namespace Handbrake.Functions
 
             return query;
         }
-        // Get the CLI equive of the audio mixdown from the widget name.
+
+        /// <summary>
+        /// Get the CLI equive of the audio mixdown from the widget name.
+        /// </summary>
+        /// <param name="selectedAudio"></param>
+        /// <returns></returns>
+        /// 
         private string getMixDown(string selectedAudio)
         {
             switch (selectedAudio)
@@ -948,7 +957,13 @@ namespace Handbrake.Functions
                     return "dpl2";
             }
         }
-        // Get the CLI equiv of the audio encoder from the widget name.
+
+        /// <summary>
+        /// Get the CLI equiv of the audio encoder from the widget name.
+        /// </summary>
+        /// <param name="selectedEncoder"></param>
+        /// <returns></returns>
+        /// 
         private string getAudioEncoder(string selectedEncoder)
         {
             switch (selectedEncoder)
@@ -965,8 +980,14 @@ namespace Handbrake.Functions
                     return "";
             }
         }
-        // This function saves the data in the chapters tab, dataGridView into a CSV file called chapters.csv
-        // in a directory specified by file_path_name
+
+        /// <summary>
+        /// This function saves the data in the chapters tab, dataGridView into a CSV file called chapters.csv
+        /// in a directory specified by file_path_name
+        /// </summary>
+        /// <param name="mainWindow"></param>
+        /// <param name="file_path_name"></param>
+        /// <returns></returns>
         private Boolean chapterCSVSave(frmMain mainWindow, string file_path_name)
         {
             try
@@ -996,7 +1017,7 @@ namespace Handbrake.Functions
 
         #endregion
 
-        #region frmMain Actions
+        #region Actions, Versioning etc
 
         /// <summary>
         /// Select the longest title in the DVD title dropdown menu on frmMain
@@ -1157,10 +1178,6 @@ namespace Handbrake.Functions
             }
         }
 
-        #endregion
-
-        #region Version and Update Checking
-
         /// <summary>
         /// Checks for updates and returns true if an update is available.
         /// </summary>
@@ -1192,6 +1209,7 @@ namespace Handbrake.Functions
                 return false;
             }
         }
+
         /// <summary>
         /// Get's HandBrakes version data from the CLI.
         /// </summary>
@@ -1231,9 +1249,6 @@ namespace Handbrake.Functions
             return null;
         }
 
-        #endregion
-
-        #region Queue
         /// <summary>
         /// Check if the queue recovery file contains records.
         /// If it does, it means the last queue did not complete before HandBrake closed.
@@ -1267,6 +1282,7 @@ namespace Handbrake.Functions
                 return false;
             }
         }
+
         #endregion
 
     }

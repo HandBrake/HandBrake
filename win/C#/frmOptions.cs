@@ -65,7 +65,7 @@ namespace Handbrake
 
             text_an_path.Text = Properties.Settings.Default.autoNamePath;
 
-            if (text_an_path.Text == "")
+            if (text_an_path.Text == string.Empty)
                 text_an_path.Text = "Click 'Browse' to set the default location";              
         }
 
@@ -139,7 +139,7 @@ namespace Handbrake
 
         private void text_an_path_TextChanged(object sender, EventArgs e)
         {
-            if (text_an_path.Text == "")
+            if (text_an_path.Text == string.Empty)
             {
                 Properties.Settings.Default.autoNamePath = "";
                 text_an_path.Text = "Click 'Browse' to set the default location";

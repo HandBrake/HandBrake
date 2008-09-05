@@ -314,7 +314,7 @@ namespace Handbrake
             {
                 string fullQuery = '"' + Application.StartupPath.ToString() + "\\HandBrakeCLI.exe" + '"' + query_item;
 
-                if (queries == "")
+                if (queries == string.Empty)
                     queries = queries + fullQuery;
                 else
                     queries = queries + " && " + fullQuery;
