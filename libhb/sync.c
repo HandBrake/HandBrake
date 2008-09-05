@@ -188,14 +188,10 @@ int syncWork( hb_work_object_t * w, hb_buffer_t ** unused1,
     if ( pv->busy & 1 )
         SyncVideo( w );
 
-    /* If we ever got a video frame, handle audio now */
-    if( pv->pts_offset != INT64_MIN )
+    for( i = 0; i < hb_list_count( pv->job->title->list_audio ); i++ )
     {
-        for( i = 0; i < hb_list_count( pv->job->title->list_audio ); i++ )
-        {
-            if ( pv->busy & ( 1 << (i + 1) ) )
-                SyncAudio( w, i );
-        }
+        if ( pv->busy & ( 1 << (i + 1) ) )
+            SyncAudio( w, i );
     }
 
     return ( pv->busy? HB_WORK_OK : HB_WORK_DONE );
@@ -761,6 +757,19 @@ static void SyncAudio( hb_work_object_t * w, int i )
         }
         if ( buf->start - sync->next_pts >= (90 * 70) )
         {
+            if ( buf->start - sync->next_pts > (90000LL * 60) )
+            {
+                // there's a gap of more than a minute between the last
+                // frame and this. assume we got a corrupted timestamp
+                // and just drop the next buf.
+                hb_log( "sync: %d minute time gap in audio %d - dropping buf"
+                        "  start %lld, next %lld",
+                        (int)((buf->start - sync->next_pts) / (90000*60)),
+                        i, buf->start, sync->next_pts );
+                buf = hb_fifo_get( audio->priv.fifo_raw );
+                hb_buffer_close( &buf );
+                continue;
+            }
             /*
              * there's a gap of at least 70ms between the last
              * frame we processed & the next. Fill it with silence.
