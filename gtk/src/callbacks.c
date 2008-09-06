@@ -466,35 +466,28 @@ dvd_device_changed_cb(GtkComboBox *combo, GtkWidget *dialog)
 	}
 }
 
-
 void
 source_type_changed_cb(GtkToggleButton *toggle, GtkFileChooser *chooser)
 {
-	gchar *filename;
+	gchar *folder;
 	
 	g_debug("source_type_changed_cb ()");
+	folder = gtk_file_chooser_get_current_folder (chooser);
 	if (gtk_toggle_button_get_active (toggle))
 	{
-		filename = gtk_file_chooser_get_filename (chooser);
 		gtk_file_chooser_set_action (chooser, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-		if (filename != NULL)
-		{
-			gtk_file_chooser_set_filename(chooser, filename);
-			g_free(filename);
-		}
 		gtk_widget_set_sensitive (dvd_device_combo, FALSE);
 		gtk_combo_box_set_active (GTK_COMBO_BOX(dvd_device_combo), 0);
 	}
 	else
 	{
-		filename = gtk_file_chooser_get_filename (chooser);
 		gtk_file_chooser_set_action (chooser, GTK_FILE_CHOOSER_ACTION_OPEN);
-		if (filename != NULL)
-		{
-			gtk_file_chooser_set_filename(chooser, filename);
-			g_free(filename);
-		}
 		gtk_widget_set_sensitive (dvd_device_combo, TRUE);
+	}
+	if (folder != NULL)
+	{
+		gtk_file_chooser_set_current_folder(chooser, folder);
+		g_free(folder);
 	}
 }
 
