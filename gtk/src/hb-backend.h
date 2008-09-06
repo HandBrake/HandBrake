@@ -120,6 +120,7 @@ GdkPixbuf* ghb_get_preview_image(
 	gint titleindex, gint index, GValue *settings, gboolean borders);
 gint ghb_calculate_target_bitrate(GValue *settings, gint titleindex);
 gchar* ghb_dvd_volname(const gchar *device);
+gint ghb_get_title_number(gint titleindex);
 
 gint ghb_guess_bitrate(GValue *settings);
 gboolean ghb_validate_container(signal_user_data_t *ud);

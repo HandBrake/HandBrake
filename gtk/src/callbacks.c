@@ -2707,6 +2707,8 @@ queue_add(signal_user_data_t *ud)
 {
 	// Add settings to the queue
 	GValue *settings;
+	gint titleindex;
+	gint titlenum;
 	
 	g_debug("queue_add ()");
 	if (!validate_settings(ud))
@@ -2719,6 +2721,9 @@ queue_add(signal_user_data_t *ud)
 	settings = ghb_value_dup(ud->settings);
 	ghb_settings_set_int(settings, "job_status", GHB_QUEUE_PENDING);
 	ghb_settings_set_int(settings, "job_unique_id", 0);
+	titleindex = ghb_settings_get_int(settings, "title");
+	titlenum = ghb_get_title_number(titleindex);
+	ghb_settings_set_int(settings, "titlenum", titlenum);
 	ghb_array_append(ud->queue, settings);
 	add_to_queue_list(ud, settings);
 	ghb_save_queue(ud->queue);
@@ -2880,11 +2885,11 @@ static void
 queue_scan(GValue *js)
 {
 	gchar *path;
-	gint titleindex;
+	gint titlenum;
 
 	path = ghb_settings_get_string( js, "source");
-	titleindex = ghb_settings_get_int(js, "title");
-	ghb_backend_queue_scan(path, titleindex+1);
+	titlenum = ghb_settings_get_int(js, "titlenum");
+	ghb_backend_queue_scan(path, titlenum);
 	g_free(path);
 }
 

@@ -683,6 +683,25 @@ ghb_hb_cleanup(gboolean partial)
 	del_tree(dir, !partial);
 }
 
+gint
+ghb_get_title_number(gint titleindex)
+{
+	hb_list_t  * list;
+	hb_title_t * title;
+    hb_audio_config_t *audio = NULL;
+	
+    if (h_scan == NULL) return 1;
+	list = hb_get_titles( h_scan );
+	if( !hb_list_count( list ) )
+	{
+		/* No valid title, stop right there */
+		return NULL;
+	}
+    title = hb_list_item( list, titleindex );
+	if (title == NULL) return 1;	// Bad titleindex
+	return title->index;
+}
+
 static hb_audio_config_t*
 get_hb_audio(gint titleindex, gint track)
 {
@@ -1682,10 +1701,10 @@ ghb_backend_scan(const gchar *path, gint titleindex)
 }
 
 void
-ghb_backend_queue_scan(const gchar *path, gint titleindex)
+ghb_backend_queue_scan(const gchar *path, gint titlenum)
 {
 	g_debug("ghb_backend_queue_scan()");
-    hb_scan( h_queue, path, titleindex );
+	hb_scan( h_queue, path, titlenum );
 	hb_status.queue_state |= GHB_STATE_SCANNING;
 }
 
