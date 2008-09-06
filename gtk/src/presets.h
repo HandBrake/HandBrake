@@ -33,5 +33,8 @@ void ghb_prefs_to_ui(signal_user_data_t *ud);
 void ghb_prefs_save(GValue *settings);
 void ghb_pref_save(GValue *settings, const gchar *key);
 void ghb_set_preset_default(GValue *settings);
+void ghb_save_queue(GValue *queue);
+GValue* ghb_load_queue();
+void ghb_remove_queue_file(void);;
 
 #endif // _GHB_PRESETS_H_

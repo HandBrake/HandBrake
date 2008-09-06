@@ -38,6 +38,7 @@
 #include "renderer_button.h"
 #include "hb-backend.h"
 #include "ghb-dvd.h"
+#include "ghbcellrenderertext.h"
 
 
 /*
@@ -219,6 +220,7 @@ change_font(GtkWidget *widget, gpointer data)
 
 extern void chapter_list_selection_changed_cb(void);
 extern void chapter_edited_cb(void);
+extern void chapter_keypress_cb(void);
 
 // Create and bind the tree model to the tree view for the chapter list
 // Also, connect up the signal that lets us know the selection has changed
@@ -237,17 +239,18 @@ bind_chapter_tree_model (signal_user_data_t *ud)
 	treestore = gtk_list_store_new(3, G_TYPE_INT, G_TYPE_STRING, G_TYPE_BOOLEAN);
 	gtk_tree_view_set_model(treeview, GTK_TREE_MODEL(treestore));
 
-	cell = gtk_cell_renderer_text_new();
+	cell = ghb_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(
 									_("Chapter No."), cell, "text", 0, NULL);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 
-	cell = gtk_cell_renderer_text_new();
+	cell = ghb_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(
 					_("Chapter Title"), cell, "text", 1, "editable", 2, NULL);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
-	g_signal_connect(cell, "edited", chapter_edited_cb, ud);
 
+	g_signal_connect(cell, "key-press-event", chapter_keypress_cb, ud);
+	g_signal_connect(cell, "edited", chapter_edited_cb, ud);
 	g_signal_connect(selection, "changed", chapter_list_selection_changed_cb, ud);
 	g_debug("Done\n");
 }
@@ -504,9 +507,11 @@ main (int argc, char *argv[])
 	
 	ud = g_malloc(sizeof(signal_user_data_t));
 	ud->debug = FALSE;
+	ud->cancel_encode = FALSE;
 	g_log_set_handler (NULL, G_LOG_LEVEL_DEBUG, debug_log_handler, ud);
 	ud->settings = ghb_settings_new();
 	ud->queue = NULL;
+	ud->current_job = NULL;
 	ud->current_dvd_device = NULL;
 	// Redirect stderr to the activity window
 	IoRedirect(ud);
@@ -600,6 +605,8 @@ main (int argc, char *argv[])
 		// Source overridden from command line option
 		ghb_settings_set_string(ud->settings, "source", dvd_device);
 	}
+	// Reload and check status of the last saved queue
+	g_idle_add((GSourceFunc)ghb_reload_queue, ud);
 	// Start timer for monitoring libhb status, 500ms
 	g_timeout_add (500, ghb_timer_cb, (gpointer)ud);
 	// Everything should be go-to-go.  Lets rock!

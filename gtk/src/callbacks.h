@@ -42,6 +42,7 @@ gboolean ghb_message_dialog(
 	GtkMessageType type, const gchar *message, 
 	const gchar *no, const gchar *yes);
 void ghb_init_dep_map();
+gboolean ghb_reload_queue(signal_user_data_t *ud);
 
 #endif // _CALLBACKS_H_
 

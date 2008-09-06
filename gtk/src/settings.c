@@ -193,19 +193,6 @@ ghb_settings_get_combo_option(GValue *settings, const gchar *key)
 	return g_strdup(cd->option);
 }
 
-gchar*
-ghb_settings_get_combo_string(GValue *settings, const gchar *key)
-{
-	const GValue* value;
-	value = ghb_settings_get_value(settings, key);
-	if (value == NULL) return g_strdup("");
-	ghb_combodata_t *cd;
-	if (G_VALUE_TYPE(value) != ghb_combodata_get_type())
-		return g_strdup("");
-	cd = g_value_get_boxed(value);
-	return g_strdup(cd->svalue);
-}
-
 // Map widget names to setting keys
 // Widgets that map to settings have names
 // of this format: s_<setting key>

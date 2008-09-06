@@ -44,9 +44,11 @@ typedef struct
 	gchar *current_dvd_device;
 	gboolean debug;
 	gboolean dont_clear_presets;
+	gboolean cancel_encode;
 	GtkBuilder *builder;
 	GValue *settings;
 	GValue *queue;
+	GValue *current_job;
 	GIOChannel *activity_log;
 } signal_user_data_t;
 
@@ -83,7 +85,6 @@ gdouble ghb_settings_get_double(GValue *settings, const gchar *key);
 gchar* ghb_settings_get_string(GValue *settings, const gchar *key);
 gint ghb_settings_get_combo_index(GValue *settings, const gchar *key);
 gchar* ghb_settings_get_combo_option(GValue *settings, const gchar *name);
-gchar* ghb_settings_get_combo_string(GValue *settings, const gchar *key);
 
 GValue* ghb_widget_value(GtkWidget *widget);
 gchar* ghb_widget_string(GtkWidget *widget);

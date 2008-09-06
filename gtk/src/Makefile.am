@@ -98,8 +98,12 @@ ghb_SOURCES = \
 	hb-backend.h \
 	renderer_button.h \
 	renderer_button.c \
+	ghbcellrenderertext.c \
+	ghbcellrenderertext.h \
 	ghb-dvd.c \
-	ghb-dvd.h 
+	ghb-dvd.h \
+	marshalers.c \
+	marshalers.h
 
 ghb_LDFLAGS = \
 	-Wl,--export-dynamic
@@ -119,6 +123,8 @@ makewidgetdeps_LDADD = $(GHBTOOLS_LIBS)
 
 quotestring_SOURCES = preset_to_string.c
 
+callbacks.c: widget_deps.h widget_reverse_deps.h
+
 widget_deps.h: makewidgetdeps quotestring
 	./makewidgetdeps
 	./quotestring widget_deps widget_deps.h
@@ -127,11 +133,21 @@ widget_reverse_deps.h: makewidgetdeps quotestring
 	./makewidgetdeps
 	./quotestring widget_reverse_deps widget_reverse_deps.h
 
+presets.c: internal_defaults.h standard_presets.h
+
 internal_defaults.h: quotestring internal_defaults.xml
 	./quotestring internal_defaults.xml internal_defaults.h
 
 standard_presets.h: quotestring standard_presets.xml
 	./quotestring standard_presets.xml standard_presets.h
+
+ghbcellrenderertext.c: marshalers.h
+
+marshalers.h: marshalers.list
+	glib-genmarshal --prefix=ghb_marshal marshalers.list --header > marshalers.h
+
+marshalers.c: marshalers.list
+	glib-genmarshal --prefix=ghb_marshal marshalers.list --body > marshalers.c
 
 EXTRA_DIST = $(builder_DATA) $(icons) HandBrakeCLI
 

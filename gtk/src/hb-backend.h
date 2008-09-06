@@ -29,6 +29,7 @@ enum
 typedef struct ghb_status_s
 {
 	gint state;
+	gint queue_state;
 
 	// SCANNING
 	gint title_count;
@@ -90,10 +91,14 @@ void ghb_pause_queue(void);
 
 gint ghb_get_state(void);
 void ghb_clear_state(gint state);
+void ghb_clear_queue_state(gint state);
+
 void ghb_set_state(gint state);
+gint ghb_get_queue_state();
 void ghb_get_status(ghb_status_t *status);
 void ghb_track_status(void);
 void ghb_backend_scan(const gchar *path, gint titleindex);
+void ghb_backend_queue_scan(const gchar *path, gint titleindex);
 gboolean ghb_get_title_info(ghb_title_info_t *tinfo, gint titleindex);
 void ghb_set_scale(signal_user_data_t *ud, gint mode);
 GValue* ghb_get_chapters(gint titleindex);

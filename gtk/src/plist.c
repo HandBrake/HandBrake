@@ -382,14 +382,12 @@ ghb_plist_parse(const gchar *buf, gssize len)
 }
 
 GValue*
-ghb_plist_parse_file(const gchar *filename)
+ghb_plist_parse_file(FILE *fd)
 {
-	FILE *fd;
 	gchar *buffer;
 	size_t size;
 	GValue *gval;
 
-	fd = fopen(filename, "r");
 	if (fd == NULL)
 		return NULL;
 	fseek(fd, 0, SEEK_END);
@@ -577,11 +575,13 @@ main(gint argc, gchar *argv[])
 
 	g_type_init();
 
-	gval = ghb_plist_parse_file(argv[1]);
+	file = g_fopen(argv[1], "r");
+	gval = ghb_plist_parse_file(file);
 	if (argc > 2)
 		ghb_plist_write_file(argv[2], gval);
 	else
 		ghb_plist_write(stdout, gval);
+	if (file) fclose (file);
 	return 0;
 }
 #endif

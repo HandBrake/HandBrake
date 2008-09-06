@@ -372,6 +372,40 @@ store_plist(GValue *plist, const gchar *name)
 	fclose(file);
 }
 
+static GValue*
+load_plist(const gchar *name)
+{
+	const gchar *dir;
+	gchar *config;
+	FILE *file;
+	GValue *plist = NULL;
+
+	dir = g_get_user_config_dir();
+	config = g_strdup_printf ("%s/ghb/%s", dir, name);
+	if (g_file_test(config, G_FILE_TEST_IS_REGULAR))
+	{
+		file = g_fopen(config, "r");
+		plist = ghb_plist_parse_file(file);
+	}
+	g_free(config);
+	return plist;
+}
+
+static void
+remove_plist(const gchar *name)
+{
+	const gchar *dir;
+	gchar *config;
+
+	dir = g_get_user_config_dir();
+	config = g_strdup_printf ("%s/ghb/%s", dir, name);
+	if (g_file_test(config, G_FILE_TEST_IS_REGULAR))
+	{
+		g_unlink(config);
+	}
+	g_free(config);
+}
+
 static gboolean prefs_initializing = FALSE;
 
 void
@@ -535,28 +569,15 @@ ghb_settings_init(signal_user_data_t *ud)
 void
 ghb_prefs_load(signal_user_data_t *ud)
 {
-	const gchar *dir;
-	gchar *config;
 	GValue *dict, *internal;
 	GHashTableIter iter;
 	gchar *key;
 	GValue *gval;
 	
 	g_debug("ghb_prefs_load");
-	dir = g_get_user_config_dir();
-	config = g_strdup_printf ("%s/ghb/preferences", dir);
-	if (g_file_test(config, G_FILE_TEST_IS_REGULAR))
-	{
-		prefsPlist = ghb_plist_parse_file(config);
-		if (prefsPlist == NULL)
-			prefsPlist = ghb_dict_value_new();
-	}
-	else
-	{
-		// Make an empty plist
+	prefsPlist = load_plist("preferences");
+	if (prefsPlist == NULL)
 		prefsPlist = ghb_dict_value_new();
-	}
-	g_free(config);
 	dict = plist_get_dict(prefsPlist, "Preferences");
 	internal = plist_get_dict(internalPlist, "Preferences");
     if (dict == NULL && internal)
@@ -575,7 +596,6 @@ ghb_prefs_load(signal_user_data_t *ud)
 			g_strdup("destination_dir"), ghb_value_dup(ghb_string_value(dir)));
 		store_plist(prefsPlist, "preferences");
     }
-
 }
 
 void
@@ -619,29 +639,33 @@ presets_store()
 }
 
 void
+ghb_save_queue(GValue *queue)
+{
+	store_plist(queue, "queue");
+}
+
+GValue*
+ghb_load_queue()
+{
+	return load_plist("queue");
+}
+
+void
+ghb_remove_queue_file()
+{
+	remove_plist("queue");
+}
+
+void
 ghb_presets_load()
 {
-	const gchar *dir;
-	gchar *config;
-
-	dir = g_get_user_config_dir();
-	config = g_strdup_printf ("%s/ghb/presets", dir);
-	if (g_file_test(config, G_FILE_TEST_IS_REGULAR))
-	{
-		presetsPlist = ghb_plist_parse_file(config);
-		if (presetsPlist == NULL)
-		{
-			presetsPlist = ghb_plist_parse(
-				standardPresets, sizeof(standardPresets)-1);
-			presets_store();
-		}
-	}
-	else
+	presetsPlist = load_plist("presets");
+	if (presetsPlist == NULL)
 	{
 		presetsPlist = ghb_plist_parse(
 			standardPresets, sizeof(standardPresets)-1);
+		presets_store();
 	}
-	g_free(config);
 }
 
 void

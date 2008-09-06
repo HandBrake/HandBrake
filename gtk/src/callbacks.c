@@ -21,6 +21,7 @@
 #include <sys/stat.h>
 #include <libhal-storage.h>
 #include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
 #include <glib/gstdio.h>
 #include <gio/gio.h>
 
@@ -31,6 +32,7 @@
 #include "plist.h"
 #include "hb-backend.h"
 #include "ghb-dvd.h"
+#include "ghbcellrenderertext.h"
 
 static void update_chapter_list(signal_user_data_t *ud);
 static void clear_audio_list(signal_user_data_t *ud);
@@ -261,7 +263,7 @@ expand_tilde(const gchar *path)
 void
 on_quit1_activate(GtkMenuItem *quit, signal_user_data_t *ud)
 {
-	gint state = ghb_get_state();
+	gint state = ghb_get_queue_state();
 	g_debug("on_quit1_activate ()");
     if (state & GHB_STATE_WORKING)
     {
@@ -685,6 +687,43 @@ update_destination_extension(signal_user_data_t *ud)
 	g_free(filename);
 }
 
+static void
+destination_select_title(GtkEntry *entry)
+{
+	const gchar *dest;
+	gint start, end;
+
+	dest = gtk_entry_get_text(entry);
+	for (end = strlen(dest)-1; end > 0; end--)
+	{
+		if (dest[end] == '.')
+		{
+			break;
+		}
+	}
+	for (start = end; start >= 0; start--)
+	{
+		if (dest[start] == '/')
+		{
+			start++;
+			break;
+		}
+	}
+	if (start < end)
+	{
+		gtk_editable_select_region(GTK_EDITABLE(entry), start, end);
+	}
+}
+
+gboolean
+destination_grab_cb(
+	GtkEntry *entry, 
+	signal_user_data_t *ud)
+{
+	destination_select_title(entry);
+	return FALSE;
+}
+
 static gboolean update_default_destination = FALSE;
 
 void
@@ -757,7 +796,7 @@ window_destroy_event_cb(GtkWidget *widget, GdkEvent *event, signal_user_data_t *
 gboolean
 window_delete_event_cb(GtkWidget *widget, GdkEvent *event, signal_user_data_t *ud)
 {
-	gint state = ghb_get_state();
+	gint state = ghb_get_queue_state();
 	g_debug("window_delete_event_cb ()");
     if (state & GHB_STATE_WORKING)
     {
@@ -2674,7 +2713,6 @@ static gboolean
 queue_add(signal_user_data_t *ud)
 {
 	// Add settings to the queue
-	static gint unique_id = 0;
 	GValue *settings;
 	
 	g_debug("queue_add ()");
@@ -2686,14 +2724,12 @@ queue_add(signal_user_data_t *ud)
 		ud->queue = ghb_array_value_new(32);
 	// Make a copy of current settings to be used for the new job
 	settings = ghb_value_dup(ud->settings);
-	ghb_settings_set_int(settings, "job_unique_id", unique_id);
 	ghb_settings_set_int(settings, "job_status", GHB_QUEUE_PENDING);
-
+	ghb_settings_set_int(settings, "job_unique_id", 0);
 	ghb_array_append(ud->queue, settings);
 	add_to_queue_list(ud, settings);
-	ghb_add_job (settings, unique_id);
+	ghb_save_queue(ud->queue);
 
-	unique_id++;
 	return TRUE;
 }
 
@@ -2763,13 +2799,13 @@ queue_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
 			{
 				return;
 			}
+			unique_id = ghb_settings_get_int(settings, "job_unique_id");
+			ghb_remove_job(unique_id);
 		}
 		// Remove the selected item
 		gtk_tree_store_remove(GTK_TREE_STORE(store), &iter);
 		// Remove the corresponding item from the queue list
-		unique_id = ghb_settings_get_int(settings, "job_unique_id");
 		ghb_array_remove(ud->queue, row);
-		ghb_remove_job(unique_id);
 	}
 	else
 	{	
@@ -2785,6 +2821,7 @@ find_queue_job(GValue *queue, gint unique_id, GValue **job)
 	gint job_unique_id;
 	
 	*job = NULL;
+	g_debug("find_queue_job");
 	count = ghb_array_len(queue);
 	for (ii = 0; ii < count; ii++)
 	{
@@ -2804,14 +2841,20 @@ queue_buttons_grey(signal_user_data_t *ud, gboolean working)
 {
 	GtkWidget *widget;
 	GtkAction *action;
-	gint titleindex = ghb_settings_get_int(ud->settings, "title");
-	gboolean title_ok = (titleindex >= 0);
+	gint queue_count;
+	gint titleindex;
+	gboolean title_ok;
+
+	queue_count = ghb_array_len(ud->queue);
+	titleindex = ghb_settings_get_int(ud->settings, "title");
+	title_ok = (titleindex >= 0);
+
 	widget = GHB_WIDGET (ud->builder, "queue_start1");
-	gtk_widget_set_sensitive (widget, !working && title_ok);
+	gtk_widget_set_sensitive (widget, !working && (title_ok || queue_count));
 	widget = GHB_WIDGET (ud->builder, "queue_start2");
-	gtk_widget_set_sensitive (widget, !working && title_ok);
+	gtk_widget_set_sensitive (widget, !working && (title_ok || queue_count));
 	action = GHB_ACTION (ud->builder, "queue_start_menu");
-	gtk_action_set_sensitive (action, !working && title_ok);
+	gtk_action_set_sensitive (action, !working && (title_ok || queue_count));
 	widget = GHB_WIDGET (ud->builder, "queue_pause1");
 	gtk_widget_set_sensitive (widget, working);
 	widget = GHB_WIDGET (ud->builder, "queue_pause2");
@@ -2827,6 +2870,97 @@ queue_buttons_grey(signal_user_data_t *ud, gboolean working)
 void queue_start_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud);
 
 static void
+submit_job(GValue *settings)
+{
+	static gint unique_id = 1;
+
+	g_debug("submit_job");
+	if (settings == NULL) return;
+	ghb_settings_set_int(settings, "job_unique_id", unique_id);
+	ghb_settings_set_int(settings, "job_status", GHB_QUEUE_RUNNING);
+	ghb_add_job (settings, unique_id);
+	ghb_start_queue();
+	unique_id++;
+}
+
+static void
+queue_scan(GValue *js)
+{
+	gchar *path;
+	gint titleindex;
+
+	path = ghb_settings_get_string( js, "source");
+	titleindex = ghb_settings_get_int(js, "title");
+	ghb_backend_queue_scan(path, titleindex+1);
+	g_free(path);
+}
+
+static GValue* 
+start_next_job(signal_user_data_t *ud, gboolean find_first)
+{
+	static gint current = 0;
+	gint count, ii, jj;
+	GValue *js;
+	gint status;
+
+	g_debug("start_next_job");
+	count = ghb_array_len(ud->queue);
+	if (find_first)
+	{	// Start the first pending item in the queue
+		current = 0;
+		for (ii = 0; ii < count; ii++)
+		{
+
+			js = ghb_array_get_nth(ud->queue, ii);
+			status = ghb_settings_get_int(js, "job_status");
+			if (status == GHB_QUEUE_PENDING)
+			{
+				current = ii;
+				queue_scan(js);
+				return js;
+			}
+		}
+		// Nothing pending
+		return NULL;
+	}
+	// Find the next pending item after the current running item
+	for (ii = 0; ii < count-1; ii++)
+	{
+		js = ghb_array_get_nth(ud->queue, ii);
+		status = ghb_settings_get_int(js, "job_status");
+		if (status == GHB_QUEUE_RUNNING)
+		{
+			for (jj = ii+1; jj < count; jj++)
+			{
+				js = ghb_array_get_nth(ud->queue, jj);
+				status = ghb_settings_get_int(js, "job_status");
+				if (status == GHB_QUEUE_PENDING)
+				{
+					current = jj;
+					queue_scan(js);
+					return js;
+				}
+			}
+		}
+	}
+	// No running item found? Maybe it was deleted
+	// Look for a pending item starting from the last index we started
+	for (ii = current; ii < count; ii++)
+	{
+		js = ghb_array_get_nth(ud->queue, ii);
+		status = ghb_settings_get_int(js, "job_status");
+		if (status == GHB_QUEUE_PENDING)
+		{
+			current = ii;
+			queue_scan(js);
+			return js;
+		}
+	}
+	// Nothing found
+	return NULL;
+}
+
+static void
 ghb_backend_events(signal_user_data_t *ud)
 {
 	ghb_status_t status;
@@ -2834,7 +2968,6 @@ ghb_backend_events(signal_user_data_t *ud)
 	GtkProgressBar *progress;
 	gint titleindex;
 	GValue *js;
-	static gint current_id = -1;
 	gint index;
 	GtkTreeView *treeview;
 	GtkTreeStore *store;
@@ -2845,6 +2978,8 @@ ghb_backend_events(signal_user_data_t *ud)
 	ghb_track_status();
 	ghb_get_status(&status);
 	progress = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "progressbar"));
+	// First handle the status of title scans
+	// Then handle the status of the queue
 	if (status.state & GHB_STATE_SCANNING)
 	{
 		status_str = g_strdup_printf ("Scanning title %d of %d...", 
@@ -2879,22 +3014,56 @@ ghb_backend_events(signal_user_data_t *ud)
 			gtk_progress_bar_set_text (progress, "No Source");
 		}
 		ghb_clear_state(GHB_STATE_SCANDONE);
-		queue_buttons_grey(ud, (0 != (status.state & GHB_STATE_WORKING)));
+		queue_buttons_grey(ud, (0 != (status.queue_state & GHB_STATE_WORKING)));
 	}
-	else if (status.state & GHB_STATE_PAUSED)
+	else if (status.queue_state & GHB_STATE_SCANNING)
+	{
+		status_str = g_strdup_printf ("Scanning ...");
+		gtk_progress_bar_set_text (progress, status_str);
+		g_free(status_str);
+		gtk_progress_bar_set_fraction (progress, 0);
+	}
+	else if (status.queue_state & GHB_STATE_SCANDONE)
+	{
+		ghb_clear_queue_state(GHB_STATE_SCANDONE);
+		submit_job(ud->current_job);
+	}
+	else if (status.queue_state & GHB_STATE_PAUSED)
 	{
 		status_str = g_strdup_printf ("Paused"); 
 		gtk_progress_bar_set_text (progress, status_str);
 		g_free(status_str);
 	}
-	else if (status.state & GHB_STATE_WORKING)
+	else if (status.queue_state & GHB_STATE_WORKING)
 	{
+		gchar *task_str, *job_str;
+		gint qcount;
+
+		if (status.job_count > 1)
+		{
+			task_str = g_strdup_printf("pass %d of %d, ", 
+				status.job_cur, status.job_count);
+		}
+		else
+		{
+			task_str = g_strdup("");
+		}
+		qcount = ghb_array_len(ud->queue);
+		if (qcount > 1)
+		{
+			index = find_queue_job(ud->queue, status.unique_id, &js);
+			job_str = g_strdup_printf("job %d of %d, ", index+1, qcount);
+		}
+		else
+		{
+			job_str = g_strdup("");
+		}
 		if(status.seconds > -1)
 		{
 			status_str= g_strdup_printf(
-				"Encoding: task %d of %d, %.2f %%"
+				"Encoding: %s%s%.2f %%"
 				" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)",
-				status.job_cur, status.job_count, 
+				job_str, task_str,
 				100.0 * status.progress,
 				status.rate_cur, status.rate_avg, status.hours, 
 				status.minutes, status.seconds );
@@ -2902,28 +3071,34 @@ ghb_backend_events(signal_user_data_t *ud)
 		else
 		{
 			status_str= g_strdup_printf(
-				"Encoding: task %d of %d, %.2f %%",
-				status.job_cur, status.job_count, 
+				"Encoding: %s%s%.2f %%",
+				job_str, task_str,
 				100.0 * status.progress );
 		}
+		g_free(job_str);
+		g_free(task_str);
 		gtk_progress_bar_set_text (progress, status_str);
 		gtk_progress_bar_set_fraction (progress, status.progress);
 		g_free(status_str);
 	}
-	else if (status.state & GHB_STATE_WORKDONE)
+	else if (status.queue_state & GHB_STATE_WORKDONE)
 	{
+		gint qstatus;
+
 		work_started = FALSE;
 		queue_buttons_grey(ud, FALSE);
-		index = find_queue_job(ud->queue, current_id, &js);
+		index = find_queue_job(ud->queue, status.unique_id, &js);
 		treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
 		store = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
+		if (ud->cancel_encode)
+			status.error = GHB_ERROR_CANCELED;
 		switch( status.error )
 		{
 			case GHB_ERROR_NONE:
 				gtk_progress_bar_set_text( progress, "Rip done!" );
+				qstatus = GHB_QUEUE_DONE;
 				if (js != NULL)
 				{
-					ghb_settings_set_int(js, "job_status", GHB_QUEUE_DONE);
 					gchar *path = g_strdup_printf ("%d", index);
 					if (gtk_tree_model_get_iter_from_string(
 							GTK_TREE_MODEL(store), &iter, path))
@@ -2935,9 +3110,9 @@ ghb_backend_events(signal_user_data_t *ud)
 				break;
 			case GHB_ERROR_CANCELED:
 				gtk_progress_bar_set_text( progress, "Rip canceled." );
+				qstatus = GHB_QUEUE_CANCELED;
 				if (js != NULL)
 				{
-					ghb_settings_set_int(js, "job_status", GHB_QUEUE_CANCELED);
 					gchar *path = g_strdup_printf ("%d", index);
 					if (gtk_tree_model_get_iter_from_string(
 							GTK_TREE_MODEL(store), &iter, path))
@@ -2949,9 +3124,9 @@ ghb_backend_events(signal_user_data_t *ud)
 				break;
 			default:
 				gtk_progress_bar_set_text( progress, "Rip failed.");
+				qstatus = GHB_QUEUE_CANCELED;
 				if (js != NULL)
 				{
-					ghb_settings_set_int(js, "job_status", GHB_QUEUE_CANCELED);
 					gchar *path = g_strdup_printf ("%d", index);
 					if (gtk_tree_model_get_iter_from_string(
 							GTK_TREE_MODEL(store), &iter, path))
@@ -2961,49 +3136,29 @@ ghb_backend_events(signal_user_data_t *ud)
 					g_free(path);
 				}
 		}
-		current_id = -1;
 		gtk_progress_bar_set_fraction (progress, 1.0);
-		ghb_clear_state(GHB_STATE_WORKDONE);
+		ghb_clear_queue_state(GHB_STATE_WORKDONE);
+		if (!ud->cancel_encode)
+			ud->current_job = start_next_job(ud, FALSE);
+		else
+			ud->current_job = NULL;
+		if (js)
+			ghb_settings_set_int(js, "job_status", qstatus);
+		ghb_save_queue(ud->queue);
+		ud->cancel_encode = FALSE;
 	}
-	else if (status.state & GHB_STATE_MUXING)
+	else if (status.queue_state & GHB_STATE_MUXING)
 	{
 		gtk_progress_bar_set_text(progress, "Muxing: this may take awhile...");
 	}
-	if (status.state & GHB_STATE_WORKING)
+	if (status.queue_state & GHB_STATE_WORKING)
 	{
 		if (!work_started)
 		{
 			work_started = TRUE;
 			queue_buttons_grey(ud, TRUE);
 		}
-		if (status.unique_id != current_id)
-		{
-			index = find_queue_job(ud->queue, current_id, &js);
-			if (js != NULL)
-			{
-				ghb_settings_set_int(js, "job_status", GHB_QUEUE_DONE);
-				treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
-				store = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
-				gchar *path = g_strdup_printf ("%d", index);
-				if (gtk_tree_model_get_iter_from_string(
-						GTK_TREE_MODEL(store), &iter, path))
-				{
-					gtk_tree_store_set(store, &iter, 0, "hb-complete", -1);
-				}
-				g_free(path);
-			}
-
-			index = find_queue_job(ud->queue, status.unique_id, &js);
-			if (js != NULL)
-			{
-				ghb_settings_set_int(js, "job_status", GHB_QUEUE_RUNNING);
-				current_id = status.unique_id;
-			}
-		}
-		else
-		{
-			index = find_queue_job(ud->queue, status.unique_id, &js);
-		}
+		index = find_queue_job(ud->queue, status.unique_id, &js);
 		if (index >= 0)
 		{
 			gchar working_icon[] = "hb-working0";
@@ -3293,38 +3448,32 @@ update_chapter_list(signal_user_data_t *ud)
 	}
 }
 
-static GtkTreePath *nextPath = NULL;
-static gboolean chapter_selection_changed = FALSE;
+static gint chapter_edit_key = 0;
 
-static gboolean
-next_cell(signal_user_data_t *ud)
+gboolean
+chapter_keypress_cb(
+	GhbCellRendererText *cell,
+	GdkEventKey *event,
+	signal_user_data_t *ud)
 {
-	GtkTreeView *treeview;
-	GtkTreeViewColumn *column;
-
-	if (nextPath)
-	{
-		if (!chapter_selection_changed)
-		{
-			treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "chapters_list"));
-			column = gtk_tree_view_get_column(treeview, 1);
-			gtk_tree_view_set_cursor(treeview, nextPath, column, TRUE);
-		}
-		gtk_tree_path_free(nextPath);
-		nextPath = NULL;
-	}
-	chapter_selection_changed = FALSE;
+	chapter_edit_key = event->keyval;
 	return FALSE;
 }
 
 void
-chapter_edited_cb(GtkCellRendererText *cell, gchar *path, gchar *text, signal_user_data_t *ud)
+chapter_edited_cb(
+	GhbCellRendererText *cell, 
+	gchar *path, 
+	gchar *text, 
+	signal_user_data_t *ud)
 {
 	GtkTreePath *treepath;
 	GtkListStore *store;
 	GtkTreeView *treeview;
 	GtkTreeIter iter;
 	gint index;
+	gint *pi;
+	gint row;
 	
 	g_debug("chapter_edited_cb ()");
 	g_debug("path (%s)", path);
@@ -3332,8 +3481,9 @@ chapter_edited_cb(GtkCellRendererText *cell, gchar *path, gchar *text, signal_us
 	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "chapters_list"));
 	store = GTK_LIST_STORE(gtk_tree_view_get_model(treeview));
 	treepath = gtk_tree_path_new_from_string (path);
+	pi = gtk_tree_path_get_indices(treepath);
+	row = pi[0];
 	gtk_tree_model_get_iter(GTK_TREE_MODEL(store), &iter, treepath);
-	gtk_tree_path_free (treepath);
 	gtk_list_store_set(store, &iter, 
 		1, text,
 		2, TRUE,
@@ -3346,29 +3496,54 @@ chapter_edited_cb(GtkCellRendererText *cell, gchar *path, gchar *text, signal_us
 	chapters = ghb_settings_get_value(ud->settings, "chapter_list");
 	chapter = ghb_array_get_nth(chapters, index-1);
 	g_value_set_string(chapter, text);
-	if (gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter))
+	if ((chapter_edit_key == GDK_Return || chapter_edit_key == GDK_Down) &&
+		gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter))
 	{
-		nextPath = gtk_tree_model_get_path(GTK_TREE_MODEL(store), &iter);
-		chapter_selection_changed = FALSE;
+		GtkTreeViewColumn *column;
+
+		gtk_tree_path_next(treepath);
 		// When a cell has been edited, I want to advance to the
 		// next cell and start editing it automaitcally.
 		// Unfortunately, we may not be in a state here where
 		// editing is allowed.  This happens when the user selects
 		// a new cell with the mouse instead of just hitting enter.
 		// Some kind of Gtk quirk.  widget_editable==NULL assertion.
-		// Editing is enabled again once the current event has been
+		// Editing is enabled again once the selection event has been
 		// processed.  So I'm queueing up a callback to be called
 		// when things go idle.  There, I will advance to the next
 		// cell and initiate editing.
-		g_idle_add((GSourceFunc)next_cell, ud);
+		//
+		// Now, you might be asking why I don't catch the keypress
+		// event and determine what action to take based on that.
+		// The Gtk developers in their infinite wisdom have made the 
+		// actual GtkEdit widget being used a private member of
+		// GtkCellRendererText, so it can not be accessed to hang a
+		// signal handler off of.  And they also do not propagate the
+		// keypress signals in any other way.  So that information is lost.
+		//g_idle_add((GSourceFunc)next_cell, ud);
+		//
+		// Keeping the above comment for posterity.
+		// I got industrious and made my own CellTextRendererText that
+		// passes on the key-press-event. So now I have much better
+		// control of this.
+		column = gtk_tree_view_get_column(treeview, 1);
+		gtk_tree_view_set_cursor(treeview, treepath, column, TRUE);
 	}
+	else if (chapter_edit_key == GDK_Up && row > 0)
+	{
+		GtkTreeViewColumn *column;
+		gtk_tree_path_prev(treepath);
+		column = gtk_tree_view_get_column(treeview, 1);
+		gtk_tree_view_set_cursor(treeview, treepath, column, TRUE);
+	}
+	gtk_tree_path_free (treepath);
 }
 
 void
 chapter_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t *ud)
 {
 	g_debug("chapter_list_selection_changed_cb ()");
-	chapter_selection_changed = TRUE;
+	//chapter_selection_changed = TRUE;
 }
 
 void
@@ -3427,6 +3602,7 @@ queue_start_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	gboolean running = FALSE;
 	gint count, ii;
 	gint status;
+	gint state;
 
 	count = ghb_array_len(ud->queue);
 	for (ii = 0; ii < count; ii++)
@@ -3447,12 +3623,18 @@ queue_start_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 		if (!queue_add(ud))
 			return;
 	}
-	ghb_start_queue();
+	state = ghb_get_queue_state();
+	if (state == GHB_STATE_IDLE)
+	{
+		// Add the first pending queue item and start
+		ud->current_job = start_next_job(ud, TRUE);
+	}
 }
 
 void
 queue_stop_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
+	ud->cancel_encode = TRUE;
 	cancel_encode(NULL);
 }
 
@@ -3876,6 +4058,71 @@ easter_egg_cb(
 		gtk_widget_hide(widget);
 		widget = GHB_WIDGET(ud->builder, "hbfd_feature");
 		gtk_widget_hide(widget);
+	}
+	return FALSE;
+}
+
+gboolean
+ghb_reload_queue(signal_user_data_t *ud)
+{
+	GValue *queue;
+	gint unfinished = 0;
+	gint count, ii;
+	gint status;
+	GValue *settings;
+	gchar *message;
+
+	g_debug("ghb_reload_queue");
+	queue = ghb_load_queue();
+	// Look for unfinished entries
+	count = ghb_array_len(queue);
+	for (ii = 0; ii < count; ii++)
+	{
+		settings = ghb_array_get_nth(queue, ii);
+		status = ghb_settings_get_int(settings, "job_status");
+		if (status != GHB_QUEUE_DONE && status != GHB_QUEUE_CANCELED)
+		{
+			unfinished++;
+		}
+	}
+	if (unfinished)
+	{
+		message = g_strdup_printf(
+					"You have %d unfinished jobs in a saved queue.\n\n"
+					"Would you like to reload them?",
+					unfinished);
+		if (ghb_message_dialog(GTK_MESSAGE_QUESTION, message, "No", "Yes"))
+		{
+			GtkWidget *widget = GHB_WIDGET (ud->builder, "queue_window");
+			gtk_widget_show (widget);
+
+			ud->queue = queue;
+			// First get rid of any old items we don't want
+			for (ii = count-1; ii >= 0; ii--)
+			{
+				settings = ghb_array_get_nth(queue, ii);
+				status = ghb_settings_get_int(settings, "job_status");
+				if (status == GHB_QUEUE_DONE || status == GHB_QUEUE_CANCELED)
+				{
+					ghb_array_remove(queue, ii);
+				}
+			}
+			count = ghb_array_len(queue);
+			for (ii = 0; ii < count; ii++)
+			{
+				settings = ghb_array_get_nth(queue, ii);
+				ghb_settings_set_int(settings, "job_unique_id", 0);
+				ghb_settings_set_int(settings, "job_status", GHB_QUEUE_PENDING);
+				add_to_queue_list(ud, settings);
+			}
+			queue_buttons_grey(ud, FALSE);
+		}
+		else
+		{
+			ghb_value_free(queue);
+			ghb_remove_queue_file();
+		}
+		g_free(message);
 	}
 	return FALSE;
 }

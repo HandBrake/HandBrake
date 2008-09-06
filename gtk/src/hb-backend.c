@@ -46,7 +46,6 @@ typedef struct
 {
 	gint count;
 	options_map_t *map;
-	gint *grey_options;
 } combo_opts_t;
 
 static options_map_t d_container_opts[] =
@@ -445,21 +444,120 @@ ghb_vquality_range(signal_user_data_t *ud, gint *min, gint *max)
 }
 
 gint
+ghb_lookup_vrate(const GValue *vrate)
+{
+	gint ii;
+	gchar *str;
+	gint result = 0;
+
+	str = ghb_value_string(vrate);
+	for (ii = 0; ii < hb_video_rates_count; ii++)
+	{
+		if (strcmp(hb_video_rates[ii].string, str) == 0)
+		{
+			result = hb_video_rates[ii].rate;
+		}
+	}
+	g_free(str);
+	// Default to "same as source"
+	return result;
+}
+
+gint
+ghb_lookup_vcodec(const GValue *vcodec)
+{
+	gint ii;
+	gchar *str;
+	gint result = HB_VCODEC_FFMPEG;
+
+	str = ghb_value_string(vcodec);
+	for (ii = 0; ii < vcodec_opts.count; ii++)
+	{
+		if (strcmp(vcodec_opts.map[ii].shortOpt, str) == 0)
+		{
+			result = vcodec_opts.map[ii].ivalue;
+		}
+	}
+	g_free(str);
+	return result;
+}
+
+gint
+ghb_lookup_denoise(const GValue *denoise)
+{
+	gint ii;
+	gchar *str;
+	gint result = -1;
+
+	str = ghb_value_string(denoise);
+	for (ii = 0; ii < denoise_opts.count; ii++)
+	{
+		if (strcmp(denoise_opts.map[ii].shortOpt, str) == 0)
+		{
+			result = denoise_opts.map[ii].ivalue;
+		}
+	}
+	g_free(str);
+	// Custom
+	return result;
+}
+
+gint
+ghb_lookup_deint(const GValue *deint)
+{
+	gint ii;
+	gchar *str;
+	gint result = -1;
+
+	str = ghb_value_string(deint);
+	for (ii = 0; ii < deint_opts.count; ii++)
+	{
+		if (strcmp(deint_opts.map[ii].shortOpt, str) == 0)
+		{
+			result = deint_opts.map[ii].ivalue;
+		}
+	}
+	g_free(str);
+	// Custom
+	return result;
+}
+
+gint
+ghb_lookup_mux(const GValue *mux)
+{
+	gint ii;
+	gchar *str;
+	gint result = HB_MUX_MKV;
+
+	str = ghb_value_string(mux);
+	for (ii = 0; ii < container_opts.count; ii++)
+	{
+		if (strcmp(container_opts.map[ii].shortOpt, str) == 0)
+		{
+			result = container_opts.map[ii].ivalue;
+		}
+	}
+	g_free(str);
+	return result;
+}
+
+gint
 ghb_lookup_acodec(const GValue *acodec)
 {
 	gint ii;
 	gchar *str;
+	gint result = HB_ACODEC_FAAC;
 
 	str = ghb_value_string(acodec);
 	for (ii = 0; ii < acodec_opts.count; ii++)
 	{
 		if (strcmp(acodec_opts.map[ii].shortOpt, str) == 0)
 		{
-			return acodec_opts.map[ii].ivalue;
+			result = acodec_opts.map[ii].ivalue;
 		}
 	}
 	g_free(str);
-	return HB_ACODEC_FAAC;
+	return result;
 }
 
 gint
@@ -467,17 +565,19 @@ ghb_lookup_mix(const GValue *mix)
 {
 	gint ii;
 	gchar *str;
+	gint result = HB_AMIXDOWN_DOLBYPLII;
+
 
 	str = ghb_value_string(mix);
 	for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
 	{
 		if (strcmp(hb_audio_mixdowns[ii].short_name, str) == 0)
 		{
-			return hb_audio_mixdowns[ii].amixdown;
+			result = hb_audio_mixdowns[ii].amixdown;
 		}
 	}
 	g_free(str);
-	return HB_AMIXDOWN_DOLBYPLII;
+	return result;
 }
 
 #if 0
@@ -569,7 +669,8 @@ get_amix_value(gint val)
 }
 
 // Handle for libhb.  Gets set by ghb_backend_init()
-static hb_handle_t * h = NULL;
+static hb_handle_t * h_scan = NULL;
+static hb_handle_t * h_queue = NULL;
 
 extern void hb_get_tempory_directory(hb_handle_t *h, char path[512]);
 
@@ -578,7 +679,7 @@ ghb_hb_cleanup(gboolean partial)
 {
 	char dir[512];
 
-	hb_get_tempory_directory(h, dir);
+	hb_get_tempory_directory(h_scan, dir);
 	del_tree(dir, !partial);
 }
 
@@ -589,8 +690,8 @@ get_hb_audio(gint titleindex, gint track)
 	hb_title_t * title;
     hb_audio_config_t *audio = NULL;
 	
-    if (h == NULL) return NULL;
-	list = hb_get_titles( h );
+    if (h_scan == NULL) return NULL;
+	list = hb_get_titles( h_scan );
 	if( !hb_list_count( list ) )
 	{
 		/* No valid title, stop right there */
@@ -1066,9 +1167,9 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
 	g_debug("title_opts_set ()\n");
 	store = get_combo_box_store(builder, name);
 	gtk_list_store_clear(store);
-	if (h != NULL)
+	if (h_scan != NULL)
 	{
-		list = hb_get_titles( h );
+		list = hb_get_titles( h_scan );
 		count = hb_list_count( list );
 		if (count > 100) count = 100;
 	}
@@ -1170,9 +1271,9 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 	g_debug("audio_track_opts_set ()\n");
 	store = get_combo_box_store(builder, name);
 	gtk_list_store_clear(store);
-	if (h != NULL)
+	if (h_scan != NULL)
 	{
-		list = hb_get_titles( h );
+		list = hb_get_titles( h_scan );
 	    title = (hb_title_t*)hb_list_item( list, titleindex );
 		if (title != NULL)
 		{
@@ -1221,9 +1322,9 @@ subtitle_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 	g_debug("subtitle_opts_set ()\n");
 	store = get_combo_box_store(builder, name);
 	gtk_list_store_clear(store);
-	if (h != NULL)
+	if (h_scan != NULL)
 	{
-		list = hb_get_titles( h );
+		list = hb_get_titles( h_scan );
 	    title = (hb_title_t*)hb_list_item( list, titleindex );
 		if (title != NULL)
 		{
@@ -1287,8 +1388,8 @@ ghb_longest_title()
 	gint titleindex = 0;
 	
 	g_debug("ghb_longest_title ()\n");
-	if (h == NULL) return 0;
-	list = hb_get_titles( h );
+	if (h_scan == NULL) return 0;
+	list = hb_get_titles( h_scan );
 	count = hb_list_count( list );
 	if (count > 100) count = 100;
 	for (ii = 0; ii < count; ii++)
@@ -1315,9 +1416,9 @@ ghb_find_audio_track(gint titleindex, const gchar *lang, gint index)
 	gint match = 0;
 	
 	g_debug("find_audio_track ()\n");
-	if (h != NULL)
+	if (h_scan != NULL)
 	{
-		list = hb_get_titles( h );
+		list = hb_get_titles( h_scan );
 	    title = (hb_title_t*)hb_list_item( list, titleindex );
 		if (title != NULL)
 		{
@@ -1495,8 +1596,8 @@ ghb_get_chapters(gint titleindex)
 	GValue *chapters = NULL;
 	
 	g_debug("ghb_get_chapters (title = %d)\n", titleindex);
-	if (h == NULL) return NULL;
-	list = hb_get_titles( h );
+	if (h_scan == NULL) return NULL;
+	list = hb_get_titles( h_scan );
     title = (hb_title_t*)hb_list_item( list, titleindex );
 	if (title == NULL) return NULL;
 	count = hb_list_count( title->list_chapter );
@@ -1561,7 +1662,8 @@ void
 ghb_backend_init(GtkBuilder *builder, gint debug, gint update)
 {
     /* Init libhb */
-    h = hb_init( debug, update );
+    h_scan = hb_init( debug, update );
+    h_queue = hb_init( debug, 0 );
 	// Set up the list model for the combos
 	init_ui_combo_boxes(builder);
 	// Populate all the combos
@@ -1571,7 +1673,7 @@ ghb_backend_init(GtkBuilder *builder, gint debug, gint update)
 void
 ghb_backend_scan(const gchar *path, gint titleindex)
 {
-    hb_scan( h, path, titleindex );
+    hb_scan( h_scan, path, titleindex );
 	hb_status.state |= GHB_STATE_SCANNING;
 	// initialize count and cur to something that won't cause FPE
 	// when computing progress
@@ -1579,10 +1681,24 @@ ghb_backend_scan(const gchar *path, gint titleindex)
 	hb_status.title_cur = 0;
 }
 
+void
+ghb_backend_queue_scan(const gchar *path, gint titleindex)
+{
+	g_debug("ghb_backend_queue_scan()");
+    hb_scan( h_queue, path, titleindex );
+	hb_status.queue_state |= GHB_STATE_SCANNING;
+}
+
 gint
 ghb_get_state()
 {
 	return hb_status.state;
+}
+
+gint
+ghb_get_queue_state()
+{
+	return hb_status.queue_state;
 }
 
 void
@@ -1592,9 +1708,21 @@ ghb_clear_state(gint state)
 }
 
 void
+ghb_clear_queue_state(gint state)
+{
+	hb_status.queue_state &= ~state;
+}
+
+void
 ghb_set_state(gint state)
 {
 	hb_status.state |= state;
+}
+
+void
+ghb_set_queue_state(gint state)
+{
+	hb_status.queue_state |= state;
 }
 
 void
@@ -1607,24 +1735,12 @@ void
 ghb_track_status()
 {
     hb_state_t s;
-	static gint scan_complete_count = 0;
-	gint scans;
+    hb_state_t s_queue;
 
-	if (h == NULL) return;
-    hb_get_state( h, &s );
-	scans = hb_get_scancount(h);
-	if (scans > scan_complete_count)
-	{
-		hb_status.state &= ~GHB_STATE_SCANNING;
-		hb_status.state |= GHB_STATE_SCANDONE;
-		scan_complete_count = hb_get_scancount(h);
-	}
+	if (h_scan == NULL) return;
+    hb_get_state( h_scan, &s );
 	switch( s.state )
     {
-        case HB_STATE_IDLE:
-            /* Nothing to do */
-            break;
-
 #define p s.param.scanning
         case HB_STATE_SCANNING:
 		{
@@ -1640,10 +1756,25 @@ ghb_track_status()
 			hb_status.state |= GHB_STATE_SCANDONE;
         } break;
 
-#define p s.param.working
+    }
+    hb_get_state( h_queue, &s_queue );
+	switch( s_queue.state )
+    {
+        case HB_STATE_SCANNING:
+		{
+			hb_status.queue_state |= GHB_STATE_SCANNING;
+		} break;
+
+        case HB_STATE_SCANDONE:
+        {
+			hb_status.queue_state &= ~GHB_STATE_SCANNING;
+			hb_status.queue_state |= GHB_STATE_SCANDONE;
+        } break;
+
+#define p s_queue.param.working
         case HB_STATE_WORKING:
-			hb_status.state |= GHB_STATE_WORKING;
-			hb_status.state &= ~GHB_STATE_PAUSED;
+			hb_status.queue_state |= GHB_STATE_WORKING;
+			hb_status.queue_state &= ~GHB_STATE_PAUSED;
 			hb_status.job_cur = p.job_cur;
 			hb_status.job_count = p.job_count;
 			hb_status.progress = p.progress;
@@ -1657,25 +1788,23 @@ ghb_track_status()
 #undef p
 
         case HB_STATE_PAUSED:
-			hb_status.state |= GHB_STATE_PAUSED;
+			hb_status.queue_state |= GHB_STATE_PAUSED;
             break;
 				
-#define p s.param.muxing
         case HB_STATE_MUXING:
         {
-			hb_status.state |= GHB_STATE_MUXING;
+			hb_status.queue_state |= GHB_STATE_MUXING;
         } break;
-#undef p
 
-#define p s.param.workdone
+#define p s_queue.param.workdone
         case HB_STATE_WORKDONE:
 		{
             hb_job_t *job;
 
-			hb_status.state |= GHB_STATE_WORKDONE;
-			hb_status.state &= ~GHB_STATE_MUXING;
-			hb_status.state &= ~GHB_STATE_PAUSED;
-			hb_status.state &= ~GHB_STATE_WORKING;
+			hb_status.queue_state |= GHB_STATE_WORKDONE;
+			hb_status.queue_state &= ~GHB_STATE_MUXING;
+			hb_status.queue_state &= ~GHB_STATE_PAUSED;
+			hb_status.queue_state &= ~GHB_STATE_WORKING;
 			switch (p.error)
 			{
 			case HB_ERROR_NONE:
@@ -1691,8 +1820,8 @@ ghb_track_status()
 			// When a job is stopped, libhb removes it from the job list,
 			// but does not remove other jobs that may be associated with it.
 			// Associated jobs are taged in the sequence id.
-            while (((job = hb_job(h, 0)) != NULL) && ((job->sequence_id >> 24) != 0) ) 
-                hb_rem( h, job );
+            while ((job = hb_job(h_queue, 0)) != NULL) 
+                hb_rem( h_queue, job );
 		} break;
 #undef p
     }
@@ -1704,8 +1833,8 @@ ghb_get_title_info(ghb_title_info_t *tinfo, gint titleindex)
 	hb_list_t  * list;
 	hb_title_t * title;
 	
-    if (h == NULL) return FALSE;
-	list = hb_get_titles( h );
+    if (h_scan == NULL) return FALSE;
+	list = hb_get_titles( h_scan );
 	if( !hb_list_count( list ) )
 	{
 		/* No valid title, stop right there */
@@ -1784,8 +1913,8 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	
 	g_debug("ghb_set_scale ()\n");
 
-	if (h == NULL) return;
-	list = hb_get_titles( h );
+	if (h_scan == NULL) return;
+	list = hb_get_titles( h_scan );
 	if( !hb_list_count( list ) )
 	{
 		/* No valid title, stop right there */
@@ -2015,8 +2144,8 @@ ghb_calculate_target_bitrate(GValue *settings, gint titleindex)
 	hb_job_t   * job;
 	gint size;
 
-	if (h == NULL) return 2000;
-	list = hb_get_titles( h );
+	if (h_scan == NULL) return 2000;
+	list = hb_get_titles( h_scan );
     title = hb_list_item( list, titleindex );
 	if (title == NULL) return 2000;
 	job   = title->job;
@@ -2070,26 +2199,28 @@ gboolean
 ghb_validate_filter_string(const gchar *str, gint max_fields)
 {
 	gint fields = 0;
-	gboolean in_field = FALSE;
+	gchar *end;
+	gdouble val;
+
 	if (str == NULL || *str == 0) return TRUE;
 	while (*str)
 	{
-		if (*str >= '0' && *str <= '9')
-		{
-			if (!in_field)
-			{
-				fields++;
-				// negative max_fields means infinate
-				if (max_fields >= 0 && fields > max_fields) return FALSE;
-				in_field = TRUE;
-			}
+		val = g_strtod(str, &end);
+		if (str != end)
+		{ // Found a numeric value
+			fields++;
+			// negative max_fields means infinate
+			if (max_fields >= 0 && fields > max_fields) return FALSE;
+			if (*end == 0)
+				return TRUE;
+			if (*end != ':')
+				return FALSE;
+			str = end + 1;
 		}
-		else if (!in_field) return FALSE;
-		else if (*str != ':') return FALSE;
-		else in_field = FALSE;
-		str++;
+		else
+			return FALSE;
 	}
-	return TRUE;
+	return FALSE;
 }
 
 gboolean
@@ -2136,7 +2267,7 @@ ghb_validate_filters(signal_user_data_t *ud)
 		index = ghb_settings_get_combo_index(ud->settings, "tweak_deinterlace");
 		if (index < 0)
 		{
-			str = ghb_settings_get_combo_string(ud->settings, "tweak_deinterlace");
+			str = ghb_settings_get_string(ud->settings, "tweak_deinterlace");
 			if (!ghb_validate_filter_string(str, 4))
 			{
 				message = g_strdup_printf(
@@ -2167,7 +2298,7 @@ ghb_validate_filters(signal_user_data_t *ud)
 		index = ghb_settings_get_combo_index(ud->settings, "tweak_denoise");
 		if (index < 0)
 		{
-			str = ghb_settings_get_combo_string(ud->settings, "tweak_denoise");
+			str = ghb_settings_get_string(ud->settings, "tweak_denoise");
 			if (!ghb_validate_filter_string(str, 4))
 			{
 				message = g_strdup_printf(
@@ -2284,8 +2415,8 @@ ghb_validate_audio(signal_user_data_t *ud)
 	gchar *message;
 	GValue *value;
 
-	if (h == NULL) return FALSE;
-	list = hb_get_titles( h );
+	if (h_scan == NULL) return FALSE;
+	list = hb_get_titles( h_scan );
 	if( !hb_list_count( list ) )
 	{
 		/* No valid title, stop right there */
@@ -2542,8 +2673,8 @@ ghb_add_job(GValue *js, gint unique_id)
 	gchar *dest_str = NULL;
 
 	g_debug("ghb_add_job()\n");
-	if (h == NULL) return;
-	list = hb_get_titles( h );
+	if (h_queue == NULL) return;
+	list = hb_get_titles( h_queue );
 	if( !hb_list_count( list ) )
 	{
 		/* No valid title, stop right there */
@@ -2551,7 +2682,10 @@ ghb_add_job(GValue *js, gint unique_id)
 		return;
 	}
 
-	gint titleindex = ghb_settings_get_int(js, "title");
+	// Since I'm doing a scan of the single title I want just prior 
+	// to adding the job, there is only the one title to choose from.
+	//gint titleindex = ghb_settings_get_int(js, "title");
+    gint titleindex = 0;
     title = hb_list_item( list, titleindex );
 	if (title == NULL) return;
 
@@ -2560,7 +2694,7 @@ ghb_add_job(GValue *js, gint unique_id)
 	if (job == NULL) return;
 
 	tweaks = ghb_settings_get_int(js, "allow_tweaks");
-	job->mux = ghb_settings_get_int(js, "container");
+	job->mux = ghb_lookup_mux(ghb_settings_get_value(js, "container"));
 	if (job->mux == HB_MUX_MP4)
 	{
 		job->largeFileSize = ghb_settings_get_boolean(js, "large_mp4");
@@ -2616,10 +2750,10 @@ ghb_add_job(GValue *js, gint unique_id)
 
 	
 	gboolean decomb = ghb_settings_get_boolean(js, "decomb");
-	gint deint = ghb_settings_get_int(
-					js, tweaks ? "tweak_deinterlace":"deinterlace");
+	gint deint = ghb_lookup_deint(
+		ghb_settings_get_value(js, tweaks ? "tweak_deinterlace":"deinterlace"));
 	if (!decomb)
-		job->deinterlace = (deint == 0) ? 0 : 1;
+		job->deinterlace = (deint != 0) ? 1 : 0;
 	else
 		job->deinterlace = 0;
     job->grayscale   = ghb_settings_get_boolean(js, "grayscale");
@@ -2677,7 +2811,10 @@ ghb_add_job(GValue *js, gint unique_id)
 	}
 	if( job->deinterlace )
 	{
-		deint_str = ghb_settings_get_combo_string(js, 
+		if (deint > 0)
+			deint_str = g_strdup(deint_opts.map[deint].svalue);
+		else
+			deint_str = ghb_settings_get_string(js, 
 					tweaks ? "tweak_deinterlace" : "deinterlace");
 		hb_filter_deinterlace.settings = deint_str;
 		hb_list_add( job->filters, &hb_filter_deinterlace );
@@ -2695,19 +2832,22 @@ ghb_add_job(GValue *js, gint unique_id)
 		}
 		hb_list_add( job->filters, &hb_filter_deblock );
 	}
-	gint denoise = ghb_settings_get_int(
-						js, tweaks ? "tweak_denoise" : "denoise");
+	gint denoise = ghb_lookup_denoise(
+		ghb_settings_get_value(js, tweaks ? "tweak_denoise" : "denoise"));
 	if( denoise != 0 )
 	{
-		denoise_str = (gchar*)ghb_settings_get_combo_string(
-			js, tweaks ? "tweak_denoise" : "denoise");
+		if (denoise > 0)
+			denoise_str = g_strdup(denoise_opts.map[denoise].svalue);
+		else
+			denoise_str = (gchar*)ghb_settings_get_string(
+				js, tweaks ? "tweak_denoise" : "denoise");
 		hb_filter_denoise.settings = denoise_str;
-		hb_list_add( job->filters, &hb_filter_deblock );
+		hb_list_add( job->filters, &hb_filter_denoise );
 	}
 	job->width = ghb_settings_get_int(js, "scale_width");
 	job->height = ghb_settings_get_int(js, "scale_height");
 
-	job->vcodec = ghb_settings_get_int(js, "video_codec");
+	job->vcodec = ghb_lookup_vcodec(ghb_settings_get_value(js, "video_codec"));
 	if ((job->mux == HB_MUX_MP4 || job->mux == HB_MUX_AVI) && 
 		(job->vcodec == HB_VCODEC_THEORA))
 	{
@@ -2762,7 +2902,7 @@ ghb_add_job(GValue *js, gint unique_id)
 		job->vfr = FALSE;
 	}
 
-	gint vrate = ghb_settings_get_int(js, "framerate");
+	gint vrate = ghb_lookup_vrate(ghb_settings_get_value(js, "framerate"));
 	if( vrate == 0 || job->vfr )
 	{
 		job->vrate = title->rate;
@@ -2801,7 +2941,8 @@ ghb_add_job(GValue *js, gint unique_id)
 		asettings = ghb_array_get_nth(audio_list, ii);
 		audio.in.track = ghb_settings_get_int(asettings, "audio_track");
 		audio.out.track = tcount;
-		audio.out.codec = ghb_settings_get_int(asettings, "audio_codec");
+		audio.out.codec = ghb_lookup_acodec(
+			ghb_settings_get_value(asettings, "audio_codec"));
         taudio = (hb_audio_config_t *) hb_list_audio_config_item( title->list_audio, audio.in.track );
 		if ((taudio->in.codec != HB_ACODEC_AC3) && (audio.out.codec == HB_ACODEC_AC3))
 		{
@@ -2845,11 +2986,13 @@ ghb_add_job(GValue *js, gint unique_id)
 		}
 		else
 		{
-			audio.out.mixdown = ghb_settings_get_int (asettings, "audio_mix");
+			audio.out.mixdown = ghb_lookup_mix(
+				ghb_settings_get_value (asettings, "audio_mix"));
 			// Make sure the mixdown is valid and pick a new one if not.
-			audio.out.mixdown = ghb_get_best_mix(titleindex, audio.in.track, audio.out.codec, 
-												audio.out.mixdown);
-			audio.out.bitrate = ghb_settings_get_int(asettings, "audio_bitrate") / 1000;
+			audio.out.mixdown = ghb_get_best_mix(titleindex, 
+				audio.in.track, audio.out.codec, audio.out.mixdown);
+			audio.out.bitrate = 
+				ghb_settings_get_int(asettings, "audio_bitrate") / 1000;
 			gint srate = ghb_settings_get_int(asettings, "audio_rate");
 			if (srate == 0)	// 0 is same as source
 				audio.out.samplerate = taudio->in.samplerate;
@@ -2892,6 +3035,28 @@ ghb_add_job(GValue *js, gint unique_id)
 		job->x264opts =  NULL;
 	}
 	gint subtitle = ghb_settings_get_int(js, "subtitle_lang");
+	gchar *slang = ghb_settings_get_string(js, "subtitle_lang");
+	subtitle = -2; // default to none
+	if (strcmp(slang, "auto") == 0)
+	{
+		subtitle = -1;
+	}
+	else
+	{
+		gint scount;
+    	hb_subtitle_t * subt;
+
+		scount = hb_list_count(title->list_subtitle);
+		for (ii = 0; ii < scount; ii++)
+		{
+        	subt = (hb_subtitle_t *)hb_list_item(title->list_subtitle, ii);
+			if (strcmp(slang, subt->iso639_2) == 0)
+			{
+				subtitle = ii;
+				break;
+			}
+		}
+	}
 	gboolean forced_subtitles = ghb_settings_get_boolean(js, "forced_subtitles");
 	job->subtitle_force = forced_subtitles;
 	if (subtitle >= 0)
@@ -2920,7 +3085,7 @@ ghb_add_job(GValue *js, gint unique_id)
 		 * Add the pre-scan job
 		 */
 		job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);
-		hb_add( h, job );
+		hb_add( h_queue, job );
 		//if (job->x264opts != NULL)
 		//	g_free(job->x264opts);
 
@@ -2973,7 +3138,7 @@ ghb_add_job(GValue *js, gint unique_id)
 			job->x264opts = x264opts;
 		}
 		job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);
-		hb_add( h, job );
+		hb_add( h_queue, job );
 		//if (job->x264opts != NULL)
 		//	g_free(job->x264opts);
 
@@ -2988,7 +3153,7 @@ ghb_add_job(GValue *js, gint unique_id)
 		job->indepth_scan = 0;
 		job->x264opts = x264opts2;
 		job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);
-		hb_add( h, job );
+		hb_add( h_queue, job );
 		//if (job->x264opts != NULL)
 		//	g_free(job->x264opts);
 	}
@@ -2997,7 +3162,7 @@ ghb_add_job(GValue *js, gint unique_id)
 		job->indepth_scan = 0;
 		job->pass = 0;
 		job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);
-		hb_add( h, job );
+		hb_add( h_queue, job );
 		//if (job->x264opts != NULL)
 		//	g_free(job->x264opts);
 	}
@@ -3018,39 +3183,39 @@ ghb_remove_job(gint unique_id)
 	// Multiples passes all get the same id
 	// remove them all.
 	// Go backwards through list, so reordering doesn't screw me.
-	ii = hb_count(h) - 1;
-    while ((job = hb_job(h, ii--)) != NULL)
+	ii = hb_count(h_queue) - 1;
+    while ((job = hb_job(h_queue, ii--)) != NULL)
     {
         if ((job->sequence_id & 0xFFFFFF) == unique_id)
-			hb_rem(h, job);
+			hb_rem(h_queue, job);
     }
 }
 
 void
 ghb_start_queue()
 {
-	hb_start( h );
+	hb_start( h_queue );
 }
 
 void
 ghb_stop_queue()
 {
-	hb_stop( h );
+	hb_stop( h_queue );
 }
 
 void
 ghb_pause_queue()
 {
     hb_state_t s;
-    hb_get_state2( h, &s );
+    hb_get_state2( h_queue, &s );
 
     if( s.state == HB_STATE_PAUSED )
     {
-        hb_resume( h );
+        hb_resume( h_queue );
     }
     else
     {
-        hb_pause( h );
+        hb_pause( h_queue );
     }
 }
 
@@ -3064,7 +3229,7 @@ ghb_get_preview_image(
 	hb_title_t *title;
 	hb_list_t  *list;
 	
-	list = hb_get_titles( h );
+	list = hb_get_titles( h_scan );
 	if( !hb_list_count( list ) )
 	{
 		/* No valid title, stop right there */
@@ -3144,7 +3309,7 @@ ghb_get_preview_image(
 		bufferSize = newSize;
 		buffer     = (guint8*) g_realloc( buffer, bufferSize );
 	}
-	hb_get_preview( h, title, index, buffer );
+	hb_get_preview( h_scan, title, index, buffer );
 
 	// Create an GdkPixbuf and copy the libhb image into it, converting it from
 	// libhb's format something suitable. Along the way, we'll strip off the
