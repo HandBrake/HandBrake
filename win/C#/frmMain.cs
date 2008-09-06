@@ -90,7 +90,6 @@ namespace Handbrake
             lblStatus.Text = "Setting up the GUI ...";
             Application.DoEvents();
             setupH264Panel();               // Initalize the H.264 Panel
-            drp_crop.SelectedIndex = 0;     // Set the default Cropping Option
             loadPresetPanel();              // Load the Preset Panel
             // Load the user's default settings or Normal Preset
             if (Properties.Settings.Default.defaultSettings == "Checked")
@@ -738,55 +737,33 @@ namespace Handbrake
                     text_height.BackColor = Color.LightGreen;
             }
         }
-        private void drp_crop_SelectedIndexChanged(object sender, EventArgs e)
+        private void check_customCrop_CheckedChanged(object sender, EventArgs e)
         {
-            if ((string)drp_crop.SelectedItem == "Custom")
+            text_left.Enabled = true;
+            text_right.Enabled = true;
+            text_top.Enabled = true;
+            text_bottom.Enabled = true;
+            if (selectedTitle != null)
             {
-                text_left.Enabled = true;
-                text_right.Enabled = true;
-                text_top.Enabled = true;
-                text_bottom.Enabled = true;
+                text_top.Text = selectedTitle.AutoCropDimensions[0].ToString();
+                text_bottom.Text = selectedTitle.AutoCropDimensions[1].ToString();
+                text_left.Text = selectedTitle.AutoCropDimensions[2].ToString();
+                text_right.Text = selectedTitle.AutoCropDimensions[3].ToString();
+            }
+            else
+            {
                 text_left.Text = "0";
                 text_right.Text = "0";
                 text_top.Text = "0";
                 text_bottom.Text = "0";
             }
-
-            if ((string)drp_crop.SelectedItem == "Automatic")
-            {
-                text_left.Enabled = false;
-                text_right.Enabled = false;
-                text_top.Enabled = false;
-                text_bottom.Enabled = false;
-
-                if ((drp_dvdtitle.Text != "Automatic") && (selectedTitle != null))
-                {
-                    text_top.Text = selectedTitle.AutoCropDimensions[0].ToString();
-                    text_bottom.Text = selectedTitle.AutoCropDimensions[1].ToString();
-                    text_left.Text = selectedTitle.AutoCropDimensions[2].ToString();
-                    text_right.Text = selectedTitle.AutoCropDimensions[3].ToString();
-                }
-                else
-                {
-                    text_left.Text = "";
-                    text_right.Text = "";
-                    text_top.Text = "";
-                    text_bottom.Text = "";
-                }
-
-            }
-
-            if ((string)drp_crop.SelectedItem == "No Crop")
-            {
-                text_left.Enabled = false;
-                text_right.Enabled = false;
-                text_top.Enabled = false;
-                text_bottom.Enabled = false;
-                text_left.Text = "0";
-                text_right.Text = "0";
-                text_top.Text = "0";
-                text_bottom.Text = "0";
-            }
+        }
+        private void check_autoCrop_CheckedChanged(object sender, EventArgs e)
+        {
+            text_left.Enabled = false;
+            text_right.Enabled = false;
+            text_top.Enabled = false;
+            text_bottom.Enabled = false;
         }
         private void check_vfr_CheckedChanged(object sender, EventArgs e)
         {

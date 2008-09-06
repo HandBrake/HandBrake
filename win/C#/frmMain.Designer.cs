@@ -38,7 +38,7 @@ namespace Handbrake
             System.Windows.Forms.Label Label38;
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
@@ -165,6 +165,8 @@ namespace Handbrake
             this.Label46 = new System.Windows.Forms.Label();
             this.Label40 = new System.Windows.Forms.Label();
             this.TabPage1 = new System.Windows.Forms.TabPage();
+            this.check_customCrop = new System.Windows.Forms.RadioButton();
+            this.check_autoCrop = new System.Windows.Forms.RadioButton();
             this.check_decomb = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
             this.drp_anamorphic = new System.Windows.Forms.ComboBox();
@@ -189,9 +191,7 @@ namespace Handbrake
             this.Label53 = new System.Windows.Forms.Label();
             this.Label52 = new System.Windows.Forms.Label();
             this.Label51 = new System.Windows.Forms.Label();
-            this.Label50 = new System.Windows.Forms.Label();
             this.Label15 = new System.Windows.Forms.Label();
-            this.drp_crop = new System.Windows.Forms.ComboBox();
             this.Check_ChapterMarkers = new System.Windows.Forms.CheckBox();
             this.advancedOptions = new System.Windows.Forms.TabControl();
             this.tab_chapters = new System.Windows.Forms.TabPage();
@@ -643,9 +643,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle11.Format = "N0";
+            dataGridViewCellStyle11.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle11;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -1851,6 +1851,8 @@ namespace Handbrake
             // TabPage1
             // 
             this.TabPage1.BackColor = System.Drawing.Color.Transparent;
+            this.TabPage1.Controls.Add(this.check_customCrop);
+            this.TabPage1.Controls.Add(this.check_autoCrop);
             this.TabPage1.Controls.Add(this.check_decomb);
             this.TabPage1.Controls.Add(this.lbl_src_res);
             this.TabPage1.Controls.Add(this.label7);
@@ -1879,15 +1881,37 @@ namespace Handbrake
             this.TabPage1.Controls.Add(this.Label53);
             this.TabPage1.Controls.Add(this.Label52);
             this.TabPage1.Controls.Add(this.Label51);
-            this.TabPage1.Controls.Add(this.Label50);
             this.TabPage1.Controls.Add(this.Label15);
-            this.TabPage1.Controls.Add(this.drp_crop);
             this.TabPage1.Location = new System.Drawing.Point(4, 22);
             this.TabPage1.Name = "TabPage1";
             this.TabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.TabPage1.Size = new System.Drawing.Size(697, 307);
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "Picture Settings";
+            // 
+            // check_customCrop
+            // 
+            this.check_customCrop.AutoSize = true;
+            this.check_customCrop.Location = new System.Drawing.Point(16, 58);
+            this.check_customCrop.Name = "check_customCrop";
+            this.check_customCrop.Size = new System.Drawing.Size(74, 17);
+            this.check_customCrop.TabIndex = 34;
+            this.check_customCrop.Text = "Custom:";
+            this.check_customCrop.UseVisualStyleBackColor = true;
+            this.check_customCrop.CheckedChanged += new System.EventHandler(this.check_customCrop_CheckedChanged);
+            // 
+            // check_autoCrop
+            // 
+            this.check_autoCrop.AutoSize = true;
+            this.check_autoCrop.Checked = true;
+            this.check_autoCrop.Location = new System.Drawing.Point(16, 34);
+            this.check_autoCrop.Name = "check_autoCrop";
+            this.check_autoCrop.Size = new System.Drawing.Size(82, 17);
+            this.check_autoCrop.TabIndex = 33;
+            this.check_autoCrop.TabStop = true;
+            this.check_autoCrop.Text = "Automatic";
+            this.check_autoCrop.UseVisualStyleBackColor = true;
+            this.check_autoCrop.CheckedChanged += new System.EventHandler(this.check_autoCrop_CheckedChanged);
             // 
             // check_decomb
             // 
@@ -1929,8 +1953,7 @@ namespace Handbrake
             // 
             // text_bottom
             // 
-            this.text_bottom.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.text_bottom.Location = new System.Drawing.Point(96, 130);
+            this.text_bottom.Location = new System.Drawing.Point(96, 147);
             this.text_bottom.Maximum = new decimal(new int[] {
             1080,
             0,
@@ -1942,8 +1965,7 @@ namespace Handbrake
             // 
             // text_top
             // 
-            this.text_top.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.text_top.Location = new System.Drawing.Point(96, 84);
+            this.text_top.Location = new System.Drawing.Point(96, 101);
             this.text_top.Maximum = new decimal(new int[] {
             1080,
             0,
@@ -1955,8 +1977,7 @@ namespace Handbrake
             // 
             // text_left
             // 
-            this.text_left.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.text_left.Location = new System.Drawing.Point(45, 106);
+            this.text_left.Location = new System.Drawing.Point(45, 123);
             this.text_left.Maximum = new decimal(new int[] {
             1920,
             0,
@@ -1968,8 +1989,7 @@ namespace Handbrake
             // 
             // text_right
             // 
-            this.text_right.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.text_right.Location = new System.Drawing.Point(147, 106);
+            this.text_right.Location = new System.Drawing.Point(147, 123);
             this.text_right.Maximum = new decimal(new int[] {
             1920,
             0,
@@ -2152,7 +2172,7 @@ namespace Handbrake
             this.Label53.AutoSize = true;
             this.Label53.BackColor = System.Drawing.Color.Transparent;
             this.Label53.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label53.Location = new System.Drawing.Point(94, 154);
+            this.Label53.Location = new System.Drawing.Point(94, 171);
             this.Label53.Name = "Label53";
             this.Label53.Size = new System.Drawing.Size(48, 13);
             this.Label53.TabIndex = 10;
@@ -2163,7 +2183,7 @@ namespace Handbrake
             this.Label52.AutoSize = true;
             this.Label52.BackColor = System.Drawing.Color.Transparent;
             this.Label52.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label52.Location = new System.Drawing.Point(103, 69);
+            this.Label52.Location = new System.Drawing.Point(103, 86);
             this.Label52.Name = "Label52";
             this.Label52.Size = new System.Drawing.Size(28, 13);
             this.Label52.TabIndex = 5;
@@ -2174,48 +2194,22 @@ namespace Handbrake
             this.Label51.AutoSize = true;
             this.Label51.BackColor = System.Drawing.Color.Transparent;
             this.Label51.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label51.Location = new System.Drawing.Point(190, 108);
+            this.Label51.Location = new System.Drawing.Point(190, 125);
             this.Label51.Name = "Label51";
             this.Label51.Size = new System.Drawing.Size(36, 13);
             this.Label51.TabIndex = 8;
             this.Label51.Text = "Right";
-            // 
-            // Label50
-            // 
-            this.Label50.AutoSize = true;
-            this.Label50.BackColor = System.Drawing.Color.Transparent;
-            this.Label50.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label50.Location = new System.Drawing.Point(13, 37);
-            this.Label50.Name = "Label50";
-            this.Label50.Size = new System.Drawing.Size(88, 13);
-            this.Label50.TabIndex = 1;
-            this.Label50.Text = "Select Option:";
             // 
             // Label15
             // 
             this.Label15.AutoSize = true;
             this.Label15.BackColor = System.Drawing.Color.Transparent;
             this.Label15.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label15.Location = new System.Drawing.Point(13, 108);
+            this.Label15.Location = new System.Drawing.Point(13, 125);
             this.Label15.Name = "Label15";
             this.Label15.Size = new System.Drawing.Size(28, 13);
             this.Label15.TabIndex = 3;
             this.Label15.Text = "Left";
-            // 
-            // drp_crop
-            // 
-            this.drp_crop.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drp_crop.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.drp_crop.FormattingEnabled = true;
-            this.drp_crop.Items.AddRange(new object[] {
-            "Automatic",
-            "Custom",
-            "No Crop"});
-            this.drp_crop.Location = new System.Drawing.Point(103, 34);
-            this.drp_crop.Name = "drp_crop";
-            this.drp_crop.Size = new System.Drawing.Size(123, 21);
-            this.drp_crop.TabIndex = 2;
-            this.drp_crop.SelectedIndexChanged += new System.EventHandler(this.drp_crop_SelectedIndexChanged);
             // 
             // Check_ChapterMarkers
             // 
@@ -3143,7 +3137,7 @@ namespace Handbrake
             // 
             this.StatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lbl_encode});
-            this.StatusStrip.Location = new System.Drawing.Point(0, 617);
+            this.StatusStrip.Location = new System.Drawing.Point(0, 619);
             this.StatusStrip.Name = "StatusStrip";
             this.StatusStrip.Size = new System.Drawing.Size(938, 22);
             this.StatusStrip.TabIndex = 7;
@@ -3160,7 +3154,7 @@ namespace Handbrake
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(938, 639);
+            this.ClientSize = new System.Drawing.Size(938, 641);
             this.Controls.Add(this.GroupBox1);
             this.Controls.Add(this.groupBox_dest);
             this.Controls.Add(this.groupBox_output);
@@ -3273,9 +3267,7 @@ namespace Handbrake
         internal System.Windows.Forms.Label Label53;
         internal System.Windows.Forms.Label Label52;
         internal System.Windows.Forms.Label Label51;
-        internal System.Windows.Forms.Label Label50;
         internal System.Windows.Forms.Label Label15;
-        internal System.Windows.Forms.ComboBox drp_crop;
         internal System.Windows.Forms.TabControl advancedOptions;
         internal System.Windows.Forms.Label Label46;
         private System.Windows.Forms.GroupBox groupBox_dest;
@@ -3438,6 +3430,8 @@ namespace Handbrake
         private System.Windows.Forms.StatusStrip StatusStrip;
         private System.Windows.Forms.ToolStripStatusLabel lbl_encode;
         internal System.Windows.Forms.CheckBox check_decomb;
+        internal System.Windows.Forms.RadioButton check_customCrop;
+        internal System.Windows.Forms.RadioButton check_autoCrop;
 
     }
 }

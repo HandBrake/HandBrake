@@ -110,21 +110,17 @@ namespace Handbrake.Functions
             #region Picture
 
             if (presetQuery.CropTop == "0" && presetQuery.CropBottom == "0" && presetQuery.CropLeft == "0" && presetQuery.CropRight == "0")
-            {
-                mainWindow.drp_crop.SelectedIndex = 2;
-            }
+                mainWindow.check_autoCrop.Checked = true;
             else if (presetQuery.CropTop != null && presetQuery.CropBottom != null && presetQuery.CropLeft != null && presetQuery.CropRight != null)
             {
-                mainWindow.drp_crop.SelectedIndex = 1;
+                mainWindow.check_customCrop.Checked = true;
                 mainWindow.text_top.Text = presetQuery.CropTop;
                 mainWindow.text_bottom.Text = presetQuery.CropBottom;
                 mainWindow.text_left.Text = presetQuery.CropLeft;
                 mainWindow.text_right.Text = presetQuery.CropRight;
             }
             else
-            {
-                mainWindow.drp_crop.SelectedIndex = 0;
-            }
+                mainWindow.check_autoCrop.Checked = true;
 
             mainWindow.drp_deInterlace_option.Text = presetQuery.DeInterlace;
             mainWindow.drp_deNoise.Text = presetQuery.DeNoise;
@@ -524,9 +520,7 @@ namespace Handbrake.Functions
             string cropLeft = mainWindow.text_left.Text;
             string cropRight = mainWindow.text_right.Text;
 
-            if (mainWindow.drp_crop.Text == "No Crop")
-                query += " --crop 0:0:0:0 ";
-            else if (mainWindow.drp_crop.Text == "Custom")
+            if (mainWindow.check_customCrop.Checked)
             {
                 if (mainWindow.text_top.Text == string.Empty)
                     cropTop = "0";
