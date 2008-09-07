@@ -149,7 +149,7 @@ dep_check(signal_user_data_t *ud, const gchar *name)
 }
 
 static void
-check_depencency(signal_user_data_t *ud, GtkWidget *widget)
+check_dependency(signal_user_data_t *ud, GtkWidget *widget)
 {
 	GObject *dep_object;
 	const gchar *name;
@@ -160,7 +160,7 @@ check_depencency(signal_user_data_t *ud, GtkWidget *widget)
 	if (ghb_widget_index(widget) < 0) return;
 
 	name = gtk_widget_get_name(widget);
-	g_debug("check_depencency () %s", name);
+	g_debug("check_dependency () %s", name);
 
 	array = ghb_dict_lookup(dep_map, name);
 	count = ghb_array_len(array);
@@ -822,7 +822,7 @@ container_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	g_debug("container_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
 	update_destination_extension(ud);
-	check_depencency(ud, widget);
+	check_dependency(ud, widget);
 	update_acodec_combo(ud);
 	clear_presets_selection(ud);
 
@@ -1125,7 +1125,7 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	
 	g_debug("title_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
-	check_depencency(ud, widget);
+	check_dependency(ud, widget);
 
 	titleindex = ghb_settings_get_int(ud->settings, "title");
 	ghb_update_ui_combo_box (ud->builder, "audio_track", titleindex, FALSE);
@@ -1190,7 +1190,7 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	}
 	adjust_audio_rate_combos(ud);
 	ghb_grey_combo_options (ud->builder);
-	check_depencency(ud, widget);
+	check_dependency(ud, widget);
 	prev_acodec = acodec_code;
 	asettings = get_selected_asettings(ud);
 	if (asettings != NULL)
@@ -1223,7 +1223,7 @@ audio_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
 	g_debug("audio_track_changed_cb ()");
 	adjust_audio_rate_combos(ud);
-	check_depencency(ud, widget);
+	check_dependency(ud, widget);
 	ghb_grey_combo_options(ud->builder);
 	asettings = get_selected_asettings(ud);
 	if (asettings != NULL)
@@ -1239,7 +1239,7 @@ audio_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	GValue *asettings;
 
 	g_debug("audio_widget_changed_cb ()");
-	check_depencency(ud, widget);
+	check_dependency(ud, widget);
 	asettings = get_selected_asettings(ud);
 	if (asettings != NULL)
 	{
@@ -1252,14 +1252,14 @@ void
 generic_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("generic_widget_changed_cb ()");
-	check_depencency(ud, widget);
+	check_dependency(ud, widget);
 }
 
 void
 setting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	ghb_widget_to_setting(ud->settings, widget);
-	check_depencency(ud, widget);
+	check_dependency(ud, widget);
 	clear_presets_selection(ud);
 }
 
@@ -1320,7 +1320,7 @@ void
 http_opt_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	ghb_widget_to_setting(ud->settings, widget);
-	check_depencency(ud, widget);
+	check_dependency(ud, widget);
 	clear_presets_selection(ud);
 	ghb_grey_combo_options (ud->builder);
 }
@@ -1331,7 +1331,7 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	gint vqmin, vqmax;
 
 	ghb_widget_to_setting(ud->settings, widget);
-	check_depencency(ud, widget);
+	check_dependency(ud, widget);
 	clear_presets_selection(ud);
 	ghb_vquality_range(ud, &vqmin, &vqmax);
 	GtkWidget *qp = GHB_WIDGET(ud->builder, "video_quality");
@@ -1344,7 +1344,7 @@ vfr_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	//const gchar *name = gtk_widget_get_name(widget);
 	//g_debug("setting_widget_changed_cb () %s", name);
 	ghb_widget_to_setting(ud->settings, widget);
-	check_depencency(ud, widget);
+	check_dependency(ud, widget);
 	clear_presets_selection(ud);
 	if (ghb_settings_get_boolean(ud->settings, "variable_frame_rate"))
 	{
@@ -1362,7 +1362,7 @@ subtitle_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	const gchar *name = gtk_widget_get_name(widget);
 	g_debug("subtitle_changed_cb () %s", name);
 	ghb_widget_to_setting(ud->settings, widget);
-	check_depencency(ud, widget);
+	check_dependency(ud, widget);
 }
 
 void
@@ -1371,7 +1371,7 @@ target_size_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	const gchar *name = gtk_widget_get_name(widget);
 	g_debug("setting_widget_changed_cb () %s", name);
 	ghb_widget_to_setting(ud->settings, widget);
-	check_depencency(ud, widget);
+	check_dependency(ud, widget);
 	clear_presets_selection(ud);
 	if (ghb_settings_get_boolean(ud->settings, "vquality_type_target"))
 	{
@@ -1392,7 +1392,7 @@ start_chapter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	gtk_spin_button_get_range (GTK_SPIN_BUTTON(end_ch), &start, &end);
 	start = ghb_settings_get_int(ud->settings, "start_chapter");
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(end_ch), start, end);
-	check_depencency(ud, widget);
+	check_dependency(ud, widget);
 }
 
 void
@@ -1406,7 +1406,7 @@ end_chapter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	gtk_spin_button_get_range (GTK_SPIN_BUTTON(start_ch), &start, &end);
 	end = ghb_settings_get_int(ud->settings, "end_chapter");
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(start_ch), start, end);
-	check_depencency(ud, widget);
+	check_dependency(ud, widget);
 }
 
 void
@@ -1414,7 +1414,7 @@ scale_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("scale_width_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
-	check_depencency(ud, widget);
+	check_dependency(ud, widget);
 	ghb_set_scale (ud, GHB_SCALE_KEEP_WIDTH);
 	update_preview = TRUE;
 	gchar *text;
@@ -1431,7 +1431,7 @@ scale_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("scale_height_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
-	check_depencency(ud, widget);
+	check_dependency(ud, widget);
 	ghb_set_scale (ud, GHB_SCALE_KEEP_HEIGHT);
 	update_preview = TRUE;
 	gchar *text;
@@ -1451,7 +1451,7 @@ crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	
 	g_debug("crop_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
-	check_depencency(ud, widget);
+	check_dependency(ud, widget);
 	ghb_set_scale (ud, GHB_SCALE_KEEP_NONE);
 
 	crop[0] = ghb_settings_get_int(ud->settings, "crop_top");
@@ -1484,7 +1484,7 @@ scale_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("scale_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
-	check_depencency(ud, widget);
+	check_dependency(ud, widget);
 	clear_presets_selection(ud);
 	ghb_set_scale (ud, GHB_SCALE_KEEP_NONE);
 	update_preview = TRUE;
@@ -1541,7 +1541,7 @@ x264_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		ghb_x264_opt_update(ud, widget);
 		ignore_options_update = FALSE;
 	}
-	check_depencency(ud, widget);
+	check_dependency(ud, widget);
 	clear_presets_selection(ud);
 }
 
@@ -1700,8 +1700,8 @@ audio_list_refresh_selected(signal_user_data_t *ud)
         // Get the row number
 		treepath = gtk_tree_model_get_path (store, &iter);
 		indices = gtk_tree_path_get_indices (treepath);
-		g_free(treepath);
 		row = indices[0];
+		gtk_tree_path_free(treepath);
 		// find audio settings
 		if (row < 0) return;
 		audio_list = ghb_settings_get_value(ud->settings, "audio_list");
@@ -1774,8 +1774,8 @@ get_selected_asettings(signal_user_data_t *ud)
         // Get the row number
 		treepath = gtk_tree_model_get_path (store, &iter);
 		indices = gtk_tree_path_get_indices (treepath);
-		g_free(treepath);
 		row = indices[0];
+		gtk_tree_path_free(treepath);
 		// find audio settings
 		if (row < 0) return NULL;
 		audio_list = ghb_settings_get_value(ud->settings, "audio_list");
@@ -1899,8 +1899,8 @@ audio_remove_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
         // Get the row number
 		treepath = gtk_tree_model_get_path (store, &iter);
 		indices = gtk_tree_path_get_indices (treepath);
-		g_free(treepath);
 		row = indices[0];
+		gtk_tree_path_free(treepath);
 		// Remove the selected item
 		gtk_list_store_remove (GTK_LIST_STORE(store), &iter);
 		// remove from audio settings list
@@ -2329,7 +2329,7 @@ queue_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t 
 			treeview = gtk_tree_selection_get_tree_view (selection);
 			// Make the parent visible in scroll window if it is not.
 			gtk_tree_view_scroll_to_cell (treeview, path, NULL, FALSE, 0, 0);
-			g_free(path);
+			gtk_tree_path_free(path);
 		}
 	}
 }
@@ -3377,7 +3377,7 @@ presets_frame_size_allocate_cb(GtkWidget *widget, GtkAllocation *allocation, sig
 		path = gtk_tree_model_get_path (store, &iter);
 		// Make the parent visible in scroll window if it is not.
 		gtk_tree_view_scroll_to_cell (treeview, path, NULL, FALSE, 0, 0);
-		g_free(path);
+		gtk_tree_path_free(path);
 	}
 }
 
