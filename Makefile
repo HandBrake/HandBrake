@@ -92,11 +92,6 @@ ifeq ($(findstring CYGWIN_NT,$(SYSTEM)),CYGWIN_NT)
 
 all:    contrib/.contrib HandBrakeCLI
 
-app:	contribPack libhb/libhb.a HandBrakeCLI
-
-contribPack:
-	(./DownloadCygWinContribBinaries.sh)
-	
 contrib/.contrib:
 	@$(MAKE) --no-print-directory -C contrib all
 
