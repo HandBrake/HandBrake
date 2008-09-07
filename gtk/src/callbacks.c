@@ -196,7 +196,10 @@ ghb_check_all_depencencies(signal_user_data_t *ud)
 
 	g_debug("ghb_check_all_depencencies ()");
 	ghb_dict_iter_init(&iter, rev_map);
-	while (g_hash_table_iter_next(&iter, (gpointer*)&dep_name, (gpointer*)&value))
+	// middle (void*) cast prevents gcc warning "defreferencing type-punned
+	// pointer will break strict-aliasing rules"
+	while (g_hash_table_iter_next(
+			&iter, (gpointer*)(void*)&dep_name, (gpointer*)(void*)&value))
 	{
 		gboolean sensitive;
 		dep_object = gtk_builder_get_object (ud->builder, dep_name);

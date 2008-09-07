@@ -528,7 +528,10 @@ dict_copy(gpointer boxed)
 								dict_delete_key, dict_delete_value);
 
 	g_hash_table_iter_init(&iter, dict);
-	while (g_hash_table_iter_next(&iter, (gpointer*)&key, (gpointer*)&gval))
+	// middle (void*) cast prevents gcc warning "defreferencing type-punned
+	// pointer will break strict-aliasing rules"
+	while (g_hash_table_iter_next(
+			&iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
 	{
 		g_hash_table_insert(copy, g_strdup(key), ghb_value_dup(gval));
 	}

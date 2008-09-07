@@ -213,7 +213,10 @@ init_settings_from_dict(
 	GValue *gval, *val;
 	
 	ghb_dict_iter_init(&iter, internal);
-	while (g_hash_table_iter_next(&iter, (gpointer*)&key, (gpointer*)&gval))
+	// middle (void*) cast prevents gcc warning "defreferencing type-punned
+	// pointer will break strict-aliasing rules"
+	while (g_hash_table_iter_next(
+			&iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
 	{
 		val = NULL;
 		if (dict)
@@ -259,7 +262,10 @@ init_ui_from_dict(
 	GValue *gval, *val;
 	
 	ghb_dict_iter_init(&iter, internal);
-	while (g_hash_table_iter_next(&iter, (gpointer*)&key, (gpointer*)&gval))
+	// middle (void*) cast prevents gcc warning "defreferencing type-punned
+	// pointer will break strict-aliasing rules"
+	while (g_hash_table_iter_next(
+			&iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
 	{
 		val = NULL;
 		if (dict)
@@ -427,7 +433,10 @@ ghb_prefs_to_ui(signal_user_data_t *ud)
 	// then update the ui.
 	internal = plist_get_dict(internalPlist, "Initialization");
 	ghb_dict_iter_init(&iter, internal);
-	while (g_hash_table_iter_next(&iter, (gpointer*)&key, (gpointer*)&gval))
+	// middle (void*) cast prevents gcc warning "defreferencing type-punned
+	// pointer will break strict-aliasing rules"
+	while (g_hash_table_iter_next(
+			&iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
 	{
 		ghb_ui_update(ud, key, gval);
 	}
@@ -435,7 +444,10 @@ ghb_prefs_to_ui(signal_user_data_t *ud)
 	dict = plist_get_dict(prefsPlist, "Preferences");
 	internal = plist_get_dict(internalPlist, "Preferences");
 	ghb_dict_iter_init(&iter, internal);
-	while (g_hash_table_iter_next(&iter, (gpointer*)&key, (gpointer*)&gval))
+	// middle (void*) cast prevents gcc warning "defreferencing type-punned
+	// pointer will break strict-aliasing rules"
+	while (g_hash_table_iter_next(
+			&iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
     {
 		const GValue *value = NULL;
 		if (dict)
@@ -446,7 +458,10 @@ ghb_prefs_to_ui(signal_user_data_t *ud)
     }
 	internal = plist_get_dict(internalPlist, "Preferences");
 	ghb_dict_iter_init(&iter, internal);
-	while (g_hash_table_iter_next(&iter, (gpointer*)&key, (gpointer*)&gval))
+	// middle (void*) cast prevents gcc warning "defreferencing type-punned
+	// pointer will break strict-aliasing rules"
+	while (g_hash_table_iter_next(
+			&iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
    	{
 		const GValue *value = NULL;
 		if (dict)
@@ -497,7 +512,10 @@ ghb_prefs_save(GValue *settings)
 	pref_dict = plist_get_dict(prefsPlist, "Preferences");
 	if (pref_dict == NULL) return;
 	ghb_dict_iter_init(&iter, dict);
-    while (g_hash_table_iter_next(&iter, (gpointer*)&key, (gpointer*)&value))
+	// middle (void*) cast prevents gcc warning "defreferencing type-punned
+	// pointer will break strict-aliasing rules"
+	while (g_hash_table_iter_next(
+			&iter, (gpointer*)(void*)&key, (gpointer*)(void*)&value))
     {
 	    value = ghb_settings_get_value(settings, key);
 	    if (value != NULL)
@@ -545,21 +563,30 @@ ghb_settings_init(signal_user_data_t *ud)
 	// then update the ui.
 	internal = plist_get_dict(internalPlist, "Initialization");
 	ghb_dict_iter_init(&iter, internal);
-	while (g_hash_table_iter_next(&iter, (gpointer*)&key, (gpointer*)&gval))
+	// middle (void*) cast prevents gcc warning "defreferencing type-punned
+	// pointer will break strict-aliasing rules"
+	while (g_hash_table_iter_next(
+			&iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
 	{
 		ghb_settings_set_value(ud->settings, key, gval);
 	}
 
 	internal = plist_get_dict(internalPlist, "Presets");
 	ghb_dict_iter_init(&iter, internal);
-	while (g_hash_table_iter_next(&iter, (gpointer*)&key, (gpointer*)&gval))
+	// middle (void*) cast prevents gcc warning "defreferencing type-punned
+	// pointer will break strict-aliasing rules"
+	while (g_hash_table_iter_next(
+			&iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
 	{
 		ghb_settings_set_value(ud->settings, key, gval);
 	}
 
 	internal = plist_get_dict(internalPlist, "Preferences");
 	ghb_dict_iter_init(&iter, internal);
-	while (g_hash_table_iter_next(&iter, (gpointer*)&key, (gpointer*)&gval))
+	// middle (void*) cast prevents gcc warning "defreferencing type-punned
+	// pointer will break strict-aliasing rules"
+	while (g_hash_table_iter_next(
+			&iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
 	{
 		ghb_settings_set_value(ud->settings, key, gval);
 	}
@@ -587,11 +614,18 @@ ghb_prefs_load(signal_user_data_t *ud)
 
         // Get defaults from internal defaults 
 		ghb_dict_iter_init(&iter, internal);
-		while (g_hash_table_iter_next(&iter, (gpointer*)&key, (gpointer*)&gval))
+		// middle (void*) cast prevents gcc warning "defreferencing type-punned
+		// pointer will break strict-aliasing rules"
+		while (g_hash_table_iter_next(
+				&iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
         {
 			ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(gval));
         }
 		const gchar *dir = g_get_user_special_dir (G_USER_DIRECTORY_VIDEOS);
+		if (dir == NULL)
+		{
+			dir = ".";
+		}
 		ghb_dict_insert(dict, 
 			g_strdup("destination_dir"), ghb_value_dup(ghb_string_value(dir)));
 		store_plist(prefsPlist, "preferences");
@@ -613,7 +647,10 @@ ghb_presets_reload(signal_user_data_t *ud)
 	GValue *orig_dict;
 
 	ghb_dict_iter_init(&std_iter, std_dict);
-	while (g_hash_table_iter_next(&std_iter, (gpointer*)&name, (gpointer*)&orig_dict))
+	// middle (void*) cast prevents gcc warning "defreferencing type-punned
+	// pointer will break strict-aliasing rules"
+	while (g_hash_table_iter_next(
+			&std_iter, (gpointer*)(void*)&name, (gpointer*)(void*)&orig_dict))
 	{
 		GHashTableIter iter;
 		gchar *key;
@@ -622,7 +659,10 @@ ghb_presets_reload(signal_user_data_t *ud)
 		dict = ghb_dict_value_new();
 		ghb_dict_insert(presetsPlist, g_strdup(name), dict);
 		ghb_dict_iter_init(&iter, orig_dict);
-		while (g_hash_table_iter_next(&iter, (gpointer*)&key, (gpointer*)&value))
+		// middle (void*) cast prevents gcc warning "defreferencing type-punned
+		// pointer will break strict-aliasing rules"
+		while (g_hash_table_iter_next(
+				&iter, (gpointer*)(void*)&key, (gpointer*)(void*)&value))
 		{
 			ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(value));
 		}
@@ -702,7 +742,10 @@ ghb_settings_save(signal_user_data_t *ud, const gchar *name)
 	internal = plist_get_dict(internalPlist, "Presets");
 
 	ghb_dict_iter_init(&iter, internal);
-	while (g_hash_table_iter_next(&iter, (gpointer*)&key, (gpointer*)&value))
+	// middle (void*) cast prevents gcc warning "defreferencing type-punned
+	// pointer will break strict-aliasing rules"
+	while (g_hash_table_iter_next(
+			&iter, (gpointer*)(void*)&key, (gpointer*)(void*)&value))
 	{
 		if (!autoscale)
 		{

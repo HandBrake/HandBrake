@@ -688,16 +688,15 @@ ghb_get_title_number(gint titleindex)
 {
 	hb_list_t  * list;
 	hb_title_t * title;
-    hb_audio_config_t *audio = NULL;
 	
-    if (h_scan == NULL) return 1;
+	if (h_scan == NULL) return 1;
 	list = hb_get_titles( h_scan );
 	if( !hb_list_count( list ) )
 	{
 		/* No valid title, stop right there */
-		return NULL;
+		return 1;
 	}
-    title = hb_list_item( list, titleindex );
+	title = hb_list_item( list, titleindex );
 	if (title == NULL) return 1;	// Bad titleindex
 	return title->index;
 }
