@@ -31,30 +31,35 @@ HB_LIBS=\
 	-lpthread
 
 icons =	\
-	hb-activity.32.png \
-	hb-add-queue.32.png \
-	hb-canceled.16.png \
-	hb-complete.16.png \
-	hb-drawer.32.png \
-	hb-icon.128.png \
-	hb-icon.64.png \
-	hb-pause.32.png \
-	hb-play.32.png \
-	hb-queue.32.png \
-	hb-queue-delete.16.png \
-	hb-queue-job.16.png \
-	hb-queue-pass1.16.png \
-	hb-queue-pass2.16.png \
-	hb-queue-subtitle.16.png \
-	hb-remove.32.png \
-	hb-source.32.png \
-	hb-stop.32.png \
-	hb-working0.16.png \
-	hb-working1.16.png \
-	hb-working2.16.png \
-	hb-working3.16.png \
-	hb-working4.16.png \
-	hb-working5.16.png 
+	hb-icon.128.png 
+
+icons_dep =	\
+	hb-activity.32.h \
+	hb-add-queue.32.h \
+	hb-backend.h \
+	hb-canceled.16.h \
+	hb-complete.16.h \
+	hb-drawer.32.h \
+	hb-icon.128.h \
+	hb-icon.64.h \
+	hb-pause.32.h \
+	hb-play.32.h \
+	hb-pref.32.h \
+	hb-queue.32.h \
+	hb-queue-delete.16.h \
+	hb-queue-job.16.h \
+	hb-queue-pass1.16.h \
+	hb-queue-pass2.16.h \
+	hb-queue-subtitle.16.h \
+	hb-remove.32.h \
+	hb-source.32.h \
+	hb-stop.32.h \
+	hb-working0.16.h \
+	hb-working1.16.h \
+	hb-working2.16.h \
+	hb-working3.16.h \
+	hb-working4.16.h \
+	hb-working5.16.h
 
 hb_menu = ghb.desktop
 
@@ -90,6 +95,8 @@ ghb_SOURCES = \
 	settings.h \
 	presets.c \
 	presets.h \
+	icons.c \
+	icons.h \
 	values.c \
 	values.h \
 	plist.c \
@@ -149,7 +156,62 @@ marshalers.h: marshalers.list
 marshalers.c: marshalers.list
 	glib-genmarshal --prefix=ghb_marshal marshalers.list --body > marshalers.c
 
-EXTRA_DIST = $(builder_DATA) $(icons) HandBrakeCLI
+icons.c: $(icons_dep)
+
+hb-activity.32.h: hb-activity.32.png
+	gdk-pixbuf-csource --raw --name=hb_activity32 hb-activity.32.png > hb-activity.32.h
+hb-add-queue.32.h: hb-add-queue.32.png 
+	gdk-pixbuf-csource --raw --name=hb_add_queue32 hb-add-queue.32.png > hb-add-queue.32.h
+hb-canceled.16.h: hb-canceled.16.png 
+	gdk-pixbuf-csource --raw --name=hb_canceled16 hb-canceled.16.png > hb-canceled.16.h
+hb-complete.16.h: hb-complete.16.png 
+	gdk-pixbuf-csource --raw --name=hb_complete16 hb-complete.16.png > hb-complete.16.h
+hb-drawer.32.h: hb-drawer.32.png 
+	gdk-pixbuf-csource --raw --name=hb_drawer32 hb-drawer.32.png > hb-drawer.32.h
+hb-icon.128.h: hb-icon.128.png 
+	gdk-pixbuf-csource --raw --name=hb_icon128 hb-icon.128.png > hb-icon.128.h
+hb-icon.64.h: hb-icon.64.png 
+	gdk-pixbuf-csource --raw --name=hb_icon64 $< > $@
+hb-pause.32.h: hb-pause.32.png 
+	gdk-pixbuf-csource --raw --name=hb_pause32 hb-pause.32.png > hb-pause.32.h
+hb-play.32.h: hb-play.32.png 
+	gdk-pixbuf-csource --raw --name=hb_play32 hb-play.32.png > hb-play.32.h
+hb-pref.32.h: hb-pref.32.png 
+	gdk-pixbuf-csource --raw --name=hb_pref32 hb-pref.32.png > hb-pref.32.h
+hb-queue.32.h: hb-queue.32.png 
+	gdk-pixbuf-csource --raw --name=hb_queue32 hb-queue.32.png > hb-queue.32.h
+hb-queue-delete.16.h: hb-queue-delete.16.png 
+	gdk-pixbuf-csource --raw --name=hb_queue_delete16 hb-queue-delete.16.png > hb-queue-delete.16.h
+hb-queue-job.16.h: hb-queue-job.16.png
+	gdk-pixbuf-csource --raw --name=hb_queue_job16 hb-queue-job.16.png > hb-queue-job.16.h
+hb-queue-pass1.16.h: hb-queue-pass1.16.png
+	gdk-pixbuf-csource --raw --name=hb_queue_pass1 hb-queue-pass1.16.png > hb-queue-pass1.16.h
+hb-queue-pass2.16.h: hb-queue-pass2.16.png
+	gdk-pixbuf-csource --raw --name=hb_queue_pass2 hb-queue-pass2.16.png > hb-queue-pass2.16.h
+hb-queue-subtitle.16.h: hb-queue-subtitle.16.png
+	gdk-pixbuf-csource --raw --name=hb_queue_subtitle16 hb-queue-subtitle.16.png > hb-queue-subtitle.16.h
+hb-remove.32.h: hb-remove.32.png
+	gdk-pixbuf-csource --raw --name=hb_remove32 hb-remove.32.png > hb-remove.32.h
+hb-source.32.h: hb-source.32.png
+	gdk-pixbuf-csource --raw --name=hb_source32 hb-source.32.png > hb-source.32.h
+hb-stop.32.h: hb-stop.32.png
+	gdk-pixbuf-csource --raw --name=hb_stop32 hb-stop.32.png > hb-stop.32.h
+hb-working0.16.h: hb-working0.16.png
+	gdk-pixbuf-csource --raw --name=hb_working0 hb-working0.16.png > hb-working0.16.h
+hb-working1.16.h: hb-working1.16.png
+	gdk-pixbuf-csource --raw --name=hb_working1 hb-working1.16.png > hb-working1.16.h
+hb-working2.16.h: hb-working2.16.png
+	gdk-pixbuf-csource --raw --name=hb_working2 hb-working2.16.png > hb-working2.16.h
+hb-working3.16.h: hb-working3.16.png
+	gdk-pixbuf-csource --raw --name=hb_working3 hb-working3.16.png > hb-working3.16.h
+hb-working4.16.h: hb-working4.16.png
+	gdk-pixbuf-csource --raw --name=hb_working4 hb-working4.16.png > hb-working4.16.h
+hb-working5.16.h: hb-working5.16.png
+	gdk-pixbuf-csource --raw --name=hb_working5 hb-working5.16.png > hb-working5.16.h
+
+EXTRA_DIST = $(builder_DATA) HandBrakeCLI
+
+gtk_update_icon_cache = gtk-update-icon-cache -f -t $(DESTDIR)/$(datadir)/icons/hicolor
 
 uninstall-local:
 	for icon in $(icons); do \
@@ -163,9 +225,14 @@ uninstall-local:
 		fi; \
 		rm -f $(DESTDIR)/$(datadir)/icons/hicolor/$$SIZE/apps/$$FILE; \
 	done
+	@-if test -n "$(DESTDIR)/$(datadir)"; then \
+		echo "Updating Gtk icon cache."; \
+		$(gtk_update_icon_cache); \
+	else \
+		echo "*** Icon cache not updated. After install, run this:"; \
+		echo "***   $(gtk_update_icon_cache)"; \
+	fi
 	rm -f $(DESTDIR)/$(datadir)/applications/$(hb_menu)
-
-gtk_update_icon_cache = gtk-update-icon-cache -f -t $(DESTDIR)/$(datadir)/icons/hicolor
 
 install-exec-local:
 	$(INSTALL_PROGRAM) $(srcdir)/HandBrakeCLI $(DESTDIR)/$(bindir)/HandBrakeCLI

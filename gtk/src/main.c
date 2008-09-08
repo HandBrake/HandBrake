@@ -40,6 +40,7 @@
 #include "ghb-dvd.h"
 #include "ghbcellrenderertext.h"
 #include "values.h"
+#include "icons.h"
 
 
 /*
@@ -497,6 +498,7 @@ main (int argc, char *argv[])
 	
 	gtk_set_locale ();
 	gtk_init (&argc, &argv);
+	ghb_load_icons();
 
 #if defined(__linux__)
 	ghb_hal_init();
@@ -615,7 +617,7 @@ main (int argc, char *argv[])
 	// Everything should be go-to-go.  Lets rock!
 	gtk_main ();
 	//I'd like to do this, but hb threads seem to persist for a while
-	//so closing crashes :\
+	//so closing crashes :(
 	//ghb_backend_close();
 	if (ud->queue)
 		ghb_value_free(ud->queue);
