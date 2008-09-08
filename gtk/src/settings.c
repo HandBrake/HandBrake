@@ -285,6 +285,9 @@ ghb_widget_value(GtkWidget *widget)
 							   3, &ivalue, 4, &svalue, -1);
 			value = ghb_combo_value_new(index, option, shortOpt, 
 										svalue, ivalue);
+			g_free(option);
+			g_free(shortOpt);
+			g_free(svalue);
 		}
 		else
 		{
@@ -413,7 +416,10 @@ ghb_widget_index(GtkWidget *widget)
 	if (value == NULL) return 0;
 	ghb_combodata_t *cd;
 	if (G_VALUE_TYPE(value) != ghb_combodata_get_type())
+	{
+		ghb_value_free(value);
 		return 0;
+	}
 	cd = g_value_get_boxed(value);
 	index = cd->index;
 	ghb_value_free(value);

@@ -250,7 +250,7 @@ end_element(
 		} break;
 		case P_STRING:
 		{
-			gval = ghb_string_value_new(g_strdup(pd->value));
+			gval = ghb_string_value_new(pd->value);
 		} break;
 		case P_DATE:
 		{

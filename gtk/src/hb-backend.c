@@ -400,6 +400,7 @@ del_tree(const gchar *name, gboolean del_top)
 		}
 		if (del_top)
 			g_rmdir(name);
+		g_dir_close(gdir);
 	}
 	else
 	{
@@ -1226,6 +1227,7 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
 						   3, ii, 
 						   4, option, 
 						   -1);
+		g_free(option);
 	}
 }
 
@@ -1270,6 +1272,7 @@ audio_rate_opts_add(GtkBuilder *builder, const gchar *name, gint rate)
 						   3, rate, 
 						   4, str, 
 						   -1);
+		g_free(str);
 		return TRUE;
 	}
 	return FALSE;
@@ -1686,6 +1689,13 @@ ghb_backend_init(GtkBuilder *builder, gint debug, gint update)
 	init_ui_combo_boxes(builder);
 	// Populate all the combos
 	ghb_update_ui_combo_box(builder, NULL, 0, TRUE);
+}
+
+void
+ghb_backend_close()
+{
+	hb_close(&h_queue);
+	hb_close(&h_scan);
 }
 
 void

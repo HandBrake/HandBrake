@@ -594,6 +594,17 @@ ghb_settings_init(signal_user_data_t *ud)
 }
 
 void
+ghb_settings_close()
+{
+	if (internalPlist)
+		ghb_value_free(internalPlist);
+	if (presetsPlist)
+		ghb_value_free(presetsPlist);
+	if (prefsPlist)
+		ghb_value_free(prefsPlist);
+}
+
+void
 ghb_prefs_load(signal_user_data_t *ud)
 {
 	GValue *dict, *internal;

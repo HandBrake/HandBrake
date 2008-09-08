@@ -29,6 +29,7 @@ void ghb_update_from_preset(
 void ghb_presets_remove(const gchar *name);
 void ghb_prefs_load(signal_user_data_t *ud);
 void ghb_settings_init(signal_user_data_t *ud);
+void ghb_settings_close();
 void ghb_prefs_to_ui(signal_user_data_t *ud);
 void ghb_prefs_save(GValue *settings);
 void ghb_pref_save(GValue *settings, const gchar *key);

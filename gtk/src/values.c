@@ -48,101 +48,111 @@ ghb_value_dup(const GValue *val)
 gint
 ghb_value_int(const GValue *val)
 {
+	gint result;
+
 	if (val == NULL) return 0;
-	const GValue *gval;
 	GValue xform = {0,};
 	if (G_VALUE_TYPE(val) != G_TYPE_INT64)
 	{
 		g_value_init(&xform, G_TYPE_INT64);
 		if (!g_value_transform(val, &xform))
 			return 0;
-		gval = &xform;
+		result = (gint)g_value_get_int64(&xform);
+		g_value_unset(&xform);
 	}
 	else
 	{
-		gval = val;
+		result = (gint)g_value_get_int64(val);
 	}
-	return (gint)g_value_get_int64(gval);
+	return result;
 }
 
 gint64
 ghb_value_int64(const GValue *val)
 {
+	gint64 result;
+
 	if (val == NULL) return 0;
-	const GValue *gval;
 	GValue xform = {0,};
 	if (G_VALUE_TYPE(val) != G_TYPE_INT64)
 	{
 		g_value_init(&xform, G_TYPE_INT64);
 		if (!g_value_transform(val, &xform))
 			return 0;
-		gval = &xform;
+		result = g_value_get_int64(&xform);
+		g_value_unset(&xform);
 	}
 	else
 	{
-		gval = val;
+		result = g_value_get_int64(val);
 	}
-	return g_value_get_int64(gval);
+	return result;
 }
 
 gdouble
 ghb_value_double(const GValue *val)
 {
+	gdouble result;
+
 	if (val == NULL) return 0;
-	const GValue *gval;
 	GValue xform = {0,};
 	if (G_VALUE_TYPE(val) != G_TYPE_DOUBLE)
 	{
 		g_value_init(&xform, G_TYPE_DOUBLE);
 		if (!g_value_transform(val, &xform))
 			return 0;
-		gval = &xform;
+		result = g_value_get_double(&xform);
+		g_value_unset(&xform);
 	}
 	else
 	{
-		gval = val;
+		result = g_value_get_double(val);
 	}
-	return g_value_get_double(gval);
+	return result;
 }
 
 gchar*
 ghb_value_string(const GValue *val)
 {
+	gchar *result;
+
 	if (val == NULL) return 0;
-	const GValue *gval;
 	GValue xform = {0,};
 	if (G_VALUE_TYPE(val) != G_TYPE_STRING)
 	{
 		g_value_init(&xform, G_TYPE_STRING);
 		if (!g_value_transform(val, &xform))
 			return NULL;
-		gval = &xform;
+		result = g_strdup(g_value_get_string(&xform));
+		g_value_unset(&xform);
 	}
 	else
 	{
-		gval = val;
+		result = g_strdup(g_value_get_string(val));
 	}
-	return g_strdup(g_value_get_string(gval));
+	return result;
 }
 
 gboolean
 ghb_value_boolean(const GValue *val)
 {
+	gboolean result;
+
 	if (val == NULL) return FALSE;
-	const GValue *gval;
 	GValue xform = {0,};
 	if (G_VALUE_TYPE(val) != G_TYPE_BOOLEAN)
 	{
 		g_value_init(&xform, G_TYPE_BOOLEAN);
 		if (!g_value_transform(val, &xform))
 			return FALSE;
-		gval = &xform;
+		result = g_value_get_boolean(&xform);
+		g_value_unset(&xform);
 	}
 	else
 	{
-		gval = val;
+		result = g_value_get_boolean(val);
 	}
-	return g_value_get_boolean(gval);
+	return result;
 }
 
 gint
@@ -446,9 +456,9 @@ ghb_value_set_combodata(
 {
 	ghb_combodata_t combodata;
 	combodata.index = index;
-	combodata.option = g_strdup(option);
-	combodata.shortOpt = g_strdup(shortOpt);
-	combodata.svalue = g_strdup(svalue);
+	combodata.option = (gchar*)option;
+	combodata.shortOpt = (gchar*)shortOpt;
+	combodata.svalue = (gchar*)svalue;
 	combodata.ivalue = ivalue;
 	g_value_set_boxed(gval, &combodata);
 }

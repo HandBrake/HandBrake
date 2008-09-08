@@ -2091,8 +2091,10 @@ ghb_select_preset(GtkBuilder *builder, const gchar *preset)
 			{
 				gtk_tree_selection_select_iter (selection, &iter);
 				foundit = TRUE;
+				g_free(tpreset);
 				break;
 			}
+			g_free(tpreset);
 			done = !gtk_tree_model_iter_next(store, &iter);
 		} while (!done);
 	}

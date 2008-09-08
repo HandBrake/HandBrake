@@ -83,6 +83,7 @@ const gchar* ghb_version(void);
 void ghb_vquality_range(signal_user_data_t *ud, gint *min, gint *max);
 //const gchar* ghb_get_rate_string(gint rate, gint type);
 void ghb_backend_init(GtkBuilder *builder, gint debug, gint update);
+void ghb_backend_close(void);
 void ghb_add_job(GValue *js, gint unique_id);
 void ghb_remove_job(gint unique_id);
 void ghb_start_queue(void);

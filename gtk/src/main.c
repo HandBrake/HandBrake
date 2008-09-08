@@ -39,6 +39,7 @@
 #include "hb-backend.h"
 #include "ghb-dvd.h"
 #include "ghbcellrenderertext.h"
+#include "values.h"
 
 
 /*
@@ -492,6 +493,7 @@ main (int argc, char *argv[])
 	g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
 	g_option_context_add_group (context, gtk_get_option_group (TRUE));
 	g_option_context_parse (context, &argc, &argv, &error);
+	g_option_context_free(context);
 	
 	gtk_set_locale ();
 	gtk_init (&argc, &argv);
@@ -612,6 +614,14 @@ main (int argc, char *argv[])
 	g_timeout_add (500, ghb_timer_cb, (gpointer)ud);
 	// Everything should be go-to-go.  Lets rock!
 	gtk_main ();
+	//I'd like to do this, but hb threads seem to persist for a while
+	//so closing crashes :\
+	//ghb_backend_close();
+	if (ud->queue)
+		ghb_value_free(ud->queue);
+	ghb_value_free(ud->settings);
+	g_io_channel_unref(ud->activity_log);
+	ghb_settings_close();
 	g_free(ud);
 	return 0;
 }
