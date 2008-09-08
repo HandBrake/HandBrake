@@ -63,9 +63,6 @@ icons_dep =	\
 
 hb_menu = ghb.desktop
 
-builderdir = $(datadir)/ghb/builder
-builder_DATA = ghb.ui
-
 AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
 	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
@@ -209,7 +206,7 @@ hb-working4.16.h: hb-working4.16.png
 hb-working5.16.h: hb-working5.16.png
 	gdk-pixbuf-csource --raw --name=hb_working5  $< > $@
 
-EXTRA_DIST = $(builder_DATA) HandBrakeCLI
+EXTRA_DIST = HandBrakeCLI
 
 gtk_update_icon_cache = gtk-update-icon-cache -f -t $(DESTDIR)/$(datadir)/icons/hicolor
 

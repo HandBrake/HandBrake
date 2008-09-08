@@ -73,58 +73,22 @@
 
 #define BUILDER_NAME "ghb"
 
-static gchar*
-find_builder_file(gchar *builder_name)
-{
-	const gchar *dir;
-	const gchar * const *dirs;
-	gchar *file;
-	gint ii;
-
-	file = g_strdup_printf("./%s.ui", builder_name);
-	if (g_file_test(file, G_FILE_TEST_IS_REGULAR))
-	{
-		return file;
-	}
-	g_free(file);
-	// The following resolves to /$HOME/.local/share currently
-	dir = g_get_user_data_dir();
-	file = g_strdup_printf("%s/%s/builder/%s.ui", dir, builder_name, builder_name);
-	if (g_file_test(file, G_FILE_TEST_IS_REGULAR))
-	{
-		return file;
-	}
-	g_free(file);
-	dirs = g_get_system_data_dirs();
-	if (dirs != NULL)
-	{
-		for (ii = 0; dirs[ii] != NULL; ii++)
-		{
-			file = g_strdup_printf("%s/%s/builder/%s.ui", dirs[ii], builder_name, builder_name);
-			if (g_file_test(file, G_FILE_TEST_IS_REGULAR))
-			{
-				return file;
-			}
-			g_free(file);
-		}
-	}
-	return NULL;
-}
+const gchar ghb_ui[] =
+#include "ghb.ui.h"
+;
 
 GtkBuilder*
-create_builder_or_die(const gchar * name,
-                    const gchar * path)
+create_builder_or_die(const gchar * name)
 {
 	guint res;
     const gchar *markup =
         N_("<b><big>Unable to create %s.</big></b>\n"
         "\n"
-        "Could not open Gtk Builder file (%s). Please check your "
-        "installation.\n");
+        "Internal error. Could not parse UI description.\n");
 	g_debug("create_builder_or_die ()\n");
 	GtkBuilder *xml = gtk_builder_new();
 	if (xml != NULL)
-		res = gtk_builder_add_from_file(xml, path, NULL);
+		res = gtk_builder_add_from_string(xml, ghb_ui, -1, NULL);
     if (!xml || !res) 
 	{
         GtkWidget *dialog = gtk_message_dialog_new_with_markup(NULL,
@@ -132,7 +96,7 @@ create_builder_or_die(const gchar * name,
             GTK_MESSAGE_ERROR,
             GTK_BUTTONS_CLOSE,
             _(markup),
-            name, path);
+            name);
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
         exit(EXIT_FAILURE);
@@ -479,7 +443,6 @@ main (int argc, char *argv[])
  	GtkWidget *window;
 	signal_user_data_t *ud;
 	gchar *preset;
-	gchar *builder_file;
 	GError *error = NULL;
 	GOptionContext *context;
 
@@ -522,12 +485,7 @@ main (int argc, char *argv[])
 	IoRedirect(ud);
 	// Enable events that alert us to media change events
 	watch_volumes (ud);
-	builder_file = find_builder_file(BUILDER_NAME);
-	if (builder_file != NULL)
-	{
-		ud->builder = create_builder_or_die (BUILDER_NAME, builder_file);
-		g_free(builder_file);
-	}
+	ud->builder = create_builder_or_die (BUILDER_NAME);
 	ghb_init_dep_map();
 
 	// Need to connect x264_options textview buffer to the changed signal

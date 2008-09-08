@@ -2,7 +2,7 @@
 #include <string.h>
 #include <libgen.h>
 
-#define BUF_SIZE    256
+#define BUF_SIZE    1024
 
 void
 usage(char *cmd)
