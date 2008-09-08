@@ -393,7 +393,7 @@ ghb_plist_parse_file(FILE *fd)
 	fseek(fd, 0, SEEK_END);
 	size = ftell(fd);
 	fseek(fd, 0, SEEK_SET);
-	buffer = g_malloc(size);
+	buffer = g_malloc(size+1);
 	size = fread(buffer, 1, size, fd);
 	buffer[size] = 0;
 	gval = ghb_plist_parse(buffer, (gssize)size);

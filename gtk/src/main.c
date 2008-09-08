@@ -513,6 +513,7 @@ main (int argc, char *argv[])
 	ud->queue = NULL;
 	ud->current_job = NULL;
 	ud->current_dvd_device = NULL;
+	ud->dont_clear_presets = FALSE;
 	// Redirect stderr to the activity window
 	IoRedirect(ud);
 	// Enable events that alert us to media change events

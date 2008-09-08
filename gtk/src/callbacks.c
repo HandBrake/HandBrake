@@ -3864,6 +3864,7 @@ ghb_is_cd(GDrive *gd)
 	device = g_drive_get_identifier(gd, G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE);
 	halDrive = libhal_drive_from_device_file (hal_ctx, device);
 	dtype = libhal_drive_get_type(halDrive);
+	libhal_drive_free(halDrive);
 	g_free(device);
 	return (dtype == LIBHAL_DRIVE_TYPE_CDROM);
 }
