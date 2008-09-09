@@ -957,29 +957,28 @@ static int HandleEvents( hb_handle_t * h )
             }
 
             tmp_num_audio_tracks = num_audio_tracks = hb_list_count(audios);
-            for (i = 0; i < num_audio_tracks; i++)
+            for (i = 0; i < tmp_num_audio_tracks; i++)
             {
                 audio = hb_list_item(audios, 0);
                 if( (audio == NULL) || (audio->in.track == -1) ||
                     (audio->out.track == -1) || (audio->out.codec == 0) )
                 {
-                    tmp_num_audio_tracks--;
+                    num_audio_tracks--;
                 }
                 else
                 {
                     if( hb_audio_add( job, audio ) == 0 )
                     {
-                        fprintf(stderr, "ERROR: Invalid audio input track '%u', skipping.\n", 
+                        fprintf(stderr, "ERROR: Invalid audio input track '%u', exiting.\n", 
                                 audio->in.track + 1 );
-                        tmp_num_audio_tracks--;
+                        num_audio_tracks--;
+                        exit(3);
                     }
                 }
                 hb_list_rem(audios, audio);
                 if( audio != NULL)
                     free( audio );
             }
-
-            num_audio_tracks = tmp_num_audio_tracks;
 
             /* Audio Codecs */
             i = 0;
