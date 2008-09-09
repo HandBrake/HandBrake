@@ -477,7 +477,10 @@ namespace Handbrake
                 lbl_duration.Text = selectedTitle.Duration.ToString();
 
                 // Set the Recommended Cropping values
-                //lbl_RecomendedCrop.Text = string.Format("{0}/{1}/{2}/{3}", selectedTitle.AutoCropDimensions[0], selectedTitle.AutoCropDimensions[1], selectedTitle.AutoCropDimensions[2], selectedTitle.AutoCropDimensions[3]);
+                text_top.Text = selectedTitle.AutoCropDimensions[0].ToString();
+                text_bottom.Text = selectedTitle.AutoCropDimensions[1].ToString();
+                text_left.Text = selectedTitle.AutoCropDimensions[2].ToString();
+                text_right.Text = selectedTitle.AutoCropDimensions[3].ToString();
 
                 // Populate the Start chapter Dropdown
                 drop_chapterStart.Items.Clear();

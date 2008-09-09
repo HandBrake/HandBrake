@@ -38,7 +38,7 @@ namespace Handbrake
             System.Windows.Forms.Label Label38;
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
@@ -643,9 +643,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle11.Format = "N0";
-            dataGridViewCellStyle11.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle1;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -1953,6 +1953,7 @@ namespace Handbrake
             // 
             // text_bottom
             // 
+            this.text_bottom.Enabled = false;
             this.text_bottom.Location = new System.Drawing.Point(96, 147);
             this.text_bottom.Maximum = new decimal(new int[] {
             1080,
@@ -1965,6 +1966,7 @@ namespace Handbrake
             // 
             // text_top
             // 
+            this.text_top.Enabled = false;
             this.text_top.Location = new System.Drawing.Point(96, 101);
             this.text_top.Maximum = new decimal(new int[] {
             1080,
@@ -1977,6 +1979,7 @@ namespace Handbrake
             // 
             // text_left
             // 
+            this.text_left.Enabled = false;
             this.text_left.Location = new System.Drawing.Point(45, 123);
             this.text_left.Maximum = new decimal(new int[] {
             1920,
@@ -1989,6 +1992,7 @@ namespace Handbrake
             // 
             // text_right
             // 
+            this.text_right.Enabled = false;
             this.text_right.Location = new System.Drawing.Point(147, 123);
             this.text_right.Maximum = new decimal(new int[] {
             1920,
