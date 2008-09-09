@@ -101,11 +101,15 @@ namespace Handbrake.Functions
         /// Writes the current queue to disk. hb_queue_recovery.dat
         /// This function is called after getNextItemForEncoding()
         /// </summary>
-        public void write2disk()
+        public void write2disk(string file)
         {
             try
             {
-                string tempPath = Path.Combine(Path.GetTempPath(), "hb_queue_recovery.dat");
+                string tempPath = "";
+                if (file == "hb_queue_recovery.dat")
+                    tempPath = Path.Combine(Path.GetTempPath(), "hb_queue_recovery.dat");
+                else
+                    tempPath = file;
                 using (StreamWriter writer = new StreamWriter(tempPath))
                 {
                     foreach (string item in queue)
@@ -125,11 +129,15 @@ namespace Handbrake.Functions
         /// <summary>
         /// Recover the queue from hb_queue_recovery.dat
         /// </summary>
-        public void recoverQueue()
+        public void recoverQueue(string file)
         {
             try
             {
-                string tempPath = Path.Combine(Path.GetTempPath(), "hb_queue_recovery.dat");
+                string tempPath = "";
+                if (file == "hb_queue_recovery.dat")
+                    tempPath = Path.Combine(Path.GetTempPath(), "hb_queue_recovery.dat");
+                else
+                    tempPath = file;
                 using (StreamReader reader = new StreamReader(tempPath))
                 {
                     string queue_item = reader.ReadLine();

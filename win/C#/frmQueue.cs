@@ -110,7 +110,7 @@ namespace Handbrake
                     btn_stop.Visible = true;
                     progressBar.Value = 0;
                     lbl_progressValue.Text = "0 %";
-                    progressBar.Step = 100 / queue.count();   
+                    progressBar.Step = 100 / queue.count();
                     Thread theQ = new Thread(startProc);
                     theQ.IsBackground = true;
                     theQ.Start();
@@ -279,7 +279,7 @@ namespace Handbrake
             if (list_queue.SelectedIndices.Count != 0)
             {
                 queue.moveUp(list_queue.SelectedIndices[0]);
-                queue.write2disk(); // Update the queue recovery file
+                queue.write2disk("hb_queue_recovery.dat"); // Update the queue recovery file
                 redrawQueue();
             }
         }
@@ -290,7 +290,7 @@ namespace Handbrake
             if (list_queue.SelectedIndices.Count != 0)
             {
                 queue.moveDown(list_queue.SelectedIndices[0]);
-                queue.write2disk(); // Update the queue recovery file
+                queue.write2disk("hb_queue_recovery.dat"); // Update the queue recovery file
                 redrawQueue();
             }
         }
@@ -301,16 +301,30 @@ namespace Handbrake
             if (list_queue.SelectedIndices.Count != 0)
             {
                 queue.remove(list_queue.SelectedIndices[0]);
-                queue.write2disk(); // Update the queue recovery file
+                queue.write2disk("hb_queue_recovery.dat"); // Update the queue recovery file
                 redrawQueue();
             }
         }
 
-        // Generate a batch file script to run the encode seperate of HandBrake
-        private void btn_batch_Click(object sender, EventArgs e)
+
+        // Hide's the window from the users view.
+        private void btn_Close_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+        }
+
+        // Hide's the window when the user tries to "x" out of the window instead of closing it.
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            e.Cancel = true;
+            this.Hide();
+            base.OnClosing(e);
+        }
+
+        private void mnu_batch_Click(object sender, EventArgs e)
         {
             string queries = "";
-            foreach (string query_item in queue.getQueue()) 
+            foreach (string query_item in queue.getQueue())
             {
                 string fullQuery = '"' + Application.StartupPath.ToString() + "\\HandBrakeCLI.exe" + '"' + query_item;
 
@@ -321,6 +335,7 @@ namespace Handbrake
             }
             string strCmdLine = queries;
 
+            SaveFile.Filter = "Batch|.bat";
             SaveFile.ShowDialog();
             string filename = SaveFile.FileName;
 
@@ -344,19 +359,22 @@ namespace Handbrake
             }
         }
 
-        // Hide's the window from the users view.
-        private void btn_Close_Click(object sender, EventArgs e)
+        private void mnu_export_Click(object sender, EventArgs e)
         {
-            this.Hide();
+            SaveFile.Filter = "HandBrake Queue|*.queue";
+            SaveFile.ShowDialog();
+            if (SaveFile.FileName != String.Empty)
+                queue.write2disk(SaveFile.FileName);
         }
 
-        // Hide's the window when the user tries to "x" out of the window instead of closing it.
-        protected override void OnClosing(CancelEventArgs e)
+        private void mnu_import_Click(object sender, EventArgs e)
         {
-            e.Cancel = true;
-            this.Hide();
-            base.OnClosing(e);
+            OpenFile.ShowDialog();
+            if (OpenFile.FileName != String.Empty)
+                queue.recoverQueue(OpenFile.FileName);
+            redrawQueue();
         }
+
 
     }
 }

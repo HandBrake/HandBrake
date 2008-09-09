@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -244,12 +244,14 @@
     <None Include="Resources\hb16.png" />
     <None Include="Resources\Help16.png" />
     <None Include="Resources\info16.png" />
+    <None Include="Resources\folder.png" />
     <Content Include="Resources\Output_Small.png" />
     <None Include="Resources\Pause.png" />
     <None Include="Resources\Play.png" />
     <Content Include="Resources\Pref_Small.png" />
     <Content Include="Resources\Queue.png" />
     <Content Include="Resources\Queue_Small.png" />
+    <None Include="Resources\save.png" />
     <None Include="Resources\stop.png" />
     <None Include="Resources\SplashScreen.jpg" />
     <None Include="Resources\Movies.png" />

@@ -172,7 +172,7 @@ namespace Handbrake
                 result = MessageBox.Show("HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?", "Queue Recovery Possible", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (result == DialogResult.Yes)
-                    encodeQueue.recoverQueue(); // Start Recovery
+                    encodeQueue.recoverQueue("hb_queue_recovery.dat"); // Start Recovery
                 else
                 {
                     // Remove the Queue recovery file if the user doesn't want to recovery the last queue.
@@ -356,7 +356,7 @@ namespace Handbrake
                     query = rtf_query.Text;
 
                 encodeQueue.add(query);
-                encodeQueue.write2disk(); // Writes the queue to the recovery file, just incase the GUI crashes.
+                encodeQueue.write2disk("hb_queue_recovery.dat"); // Writes the queue to the recovery file, just incase the GUI crashes.
 
                 queueWindow.setQueue(encodeQueue);
                 queueWindow.Show();
