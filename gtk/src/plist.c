@@ -3,6 +3,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <glib.h>
+#include <glib/gstdio.h>
 #include <glib-object.h>
 
 #include "plist.h"
@@ -348,7 +349,7 @@ parse_error(GMarkupParseContext *ctx, GError *error, gpointer ud)
 static void 
 destroy_notify(gpointer data)
 { // Do nothing
-	g_debug("destroy parser");
+	//g_debug("destroy parser");
 }
 
 GValue*
@@ -382,12 +383,14 @@ ghb_plist_parse(const gchar *buf, gssize len)
 }
 
 GValue*
-ghb_plist_parse_file(FILE *fd)
+ghb_plist_parse_file(const gchar *filename)
 {
 	gchar *buffer;
 	size_t size;
 	GValue *gval;
+	FILE *fd;
 
+	fd = g_fopen(filename, "r");
 	if (fd == NULL)
 		return NULL;
 	fseek(fd, 0, SEEK_END);
@@ -398,6 +401,7 @@ ghb_plist_parse_file(FILE *fd)
 	buffer[size] = 0;
 	gval = ghb_plist_parse(buffer, (gssize)size);
 	g_free(buffer);
+	fclose(fd);
 	return gval;
 }
 

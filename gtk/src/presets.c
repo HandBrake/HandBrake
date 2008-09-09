@@ -18,18 +18,9 @@
 #include <gtk/gtk.h>
 #include "settings.h"
 #include "plist.h"
+#include "resources.h"
 #include "presets.h"
 #include "values.h"
-
-//
-// Internal defaults stored in character arrays and parsed
-// the same as external settings files.
-const gchar defaultSettings[] =
-#include "internal_defaults.h"
-;
-const gchar standardPresets[] =
-#include "standard_presets.h"
-;
 
 static GValue *presetsPlist = NULL;
 static GValue *internalPlist = NULL;
@@ -383,15 +374,13 @@ load_plist(const gchar *name)
 {
 	const gchar *dir;
 	gchar *config;
-	FILE *file;
 	GValue *plist = NULL;
 
 	dir = g_get_user_config_dir();
 	config = g_strdup_printf ("%s/ghb/%s", dir, name);
 	if (g_file_test(config, G_FILE_TEST_IS_REGULAR))
 	{
-		file = g_fopen(config, "r");
-		plist = ghb_plist_parse_file(file);
+		plist = ghb_plist_parse_file(config);
 	}
 	g_free(config);
 	return plist;
@@ -555,7 +544,7 @@ ghb_settings_init(signal_user_data_t *ud)
 	g_debug("ghb_settings_init");
 	prefs_initializing = TRUE;
 
-	internalPlist = ghb_plist_parse(defaultSettings, sizeof(defaultSettings)-1);
+	internalPlist = ghb_resource_get("internal-defaults");
 	// Setting a ui widget will cause the corresponding setting
 	// to be set, but it also triggers a callback that can 
 	// have the side effect of using other settings values
@@ -596,8 +585,8 @@ ghb_settings_init(signal_user_data_t *ud)
 void
 ghb_settings_close()
 {
-	if (internalPlist)
-		ghb_value_free(internalPlist);
+	//if (internalPlist)
+		//ghb_value_free(internalPlist);
 	if (presetsPlist)
 		ghb_value_free(presetsPlist);
 	if (prefsPlist)
@@ -650,7 +639,7 @@ ghb_presets_reload(signal_user_data_t *ud)
 	GHashTableIter std_iter;
 
 	g_debug("ghb_presets_reload()\n");
-	std_dict = ghb_plist_parse(standardPresets, sizeof(standardPresets)-1);
+	std_dict = ghb_resource_get("standard-presets");
 	if (std_dict == NULL) return;
 
 	// Merge the keyfile contents into our presets
@@ -678,7 +667,6 @@ ghb_presets_reload(signal_user_data_t *ud)
 			ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(value));
 		}
 	}
-	ghb_value_free(std_dict);
 	store_plist(presetsPlist, "presets");
 }
 
@@ -713,8 +701,7 @@ ghb_presets_load()
 	presetsPlist = load_plist("presets");
 	if (presetsPlist == NULL)
 	{
-		presetsPlist = ghb_plist_parse(
-			standardPresets, sizeof(standardPresets)-1);
+		presetsPlist = ghb_value_dup(ghb_resource_get("standard-presets"));
 		presets_store();
 	}
 }

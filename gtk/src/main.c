@@ -41,6 +41,10 @@
 #include "ghbcellrenderertext.h"
 #include "values.h"
 #include "icons.h"
+#include "callbacks.h"
+#include "settings.h"
+#include "resources.h"
+#include "presets.h"
 
 
 /*
@@ -66,10 +70,6 @@
 #endif
 
 
-
-#include "callbacks.h"
-#include "settings.h"
-#include "presets.h"
 
 #define BUILDER_NAME "ghb"
 
@@ -461,17 +461,13 @@ main (int argc, char *argv[])
 	
 	gtk_set_locale ();
 	gtk_init (&argc, &argv);
+	ghb_resource_init();
 	ghb_load_icons();
 
 #if defined(__linux__)
 	ghb_hal_init();
 #endif
 
-	// Add ./icons so that we can find the icons if we haven't installed
-	GtkIconTheme *theme;
-	theme = gtk_icon_theme_get_default ();
-	gtk_icon_theme_append_search_path (theme, "./icons");
-	
 	ud = g_malloc(sizeof(signal_user_data_t));
 	ud->debug = FALSE;
 	ud->cancel_encode = FALSE;

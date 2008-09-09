@@ -34,32 +34,31 @@ icons =	\
 	hb-icon.128.png 
 
 icons_dep =	\
-	hb-activity.32.h \
-	hb-add-queue.32.h \
-	hb-backend.h \
-	hb-canceled.16.h \
-	hb-complete.16.h \
-	hb-drawer.32.h \
-	hb-icon.128.h \
-	hb-icon.64.h \
-	hb-pause.32.h \
-	hb-play.32.h \
-	hb-pref.32.h \
-	hb-queue.32.h \
-	hb-queue-delete.16.h \
-	hb-queue-job.16.h \
-	hb-queue-pass1.16.h \
-	hb-queue-pass2.16.h \
-	hb-queue-subtitle.16.h \
-	hb-remove.32.h \
-	hb-source.32.h \
-	hb-stop.32.h \
-	hb-working0.16.h \
-	hb-working1.16.h \
-	hb-working2.16.h \
-	hb-working3.16.h \
-	hb-working4.16.h \
-	hb-working5.16.h
+	hb-activity.32.png \
+	hb-add-queue.32.png \
+	hb-canceled.16.png \
+	hb-complete.16.png \
+	hb-drawer.32.png \
+	hb-icon.128.png \
+	hb-icon.64.png \
+	hb-pause.32.png \
+	hb-play.32.png \
+	hb-pref.32.png \
+	hb-queue.32.png \
+	hb-queue-delete.16.png \
+	hb-queue-job.16.png \
+	hb-queue-pass1.16.png \
+	hb-queue-pass2.16.png \
+	hb-queue-subtitle.16.png \
+	hb-remove.32.png \
+	hb-source.32.png \
+	hb-stop.32.png \
+	hb-working0.16.png \
+	hb-working1.16.png \
+	hb-working2.16.png \
+	hb-working3.16.png \
+	hb-working4.16.png \
+	hb-working5.16.png
 
 hb_menu = ghb.desktop
 
@@ -74,7 +73,7 @@ AM_CFLAGS =\
 	 -g
 
 bin_PROGRAMS = ghb 
-noinst_PROGRAMS = makewidgetdeps quotestring
+noinst_PROGRAMS = makewidgetdeps quotestring create_resources
 
 BUILT_SOURCES = HandBrakeCLI
 
@@ -90,10 +89,14 @@ ghb_SOURCES = \
 	main.c \
 	settings.c \
 	settings.h \
+	resources.c \
+	resources.h \
 	presets.c \
 	presets.h \
 	icons.c \
 	icons.h \
+	icon_tools.c \
+	icon_tools.h \
 	values.c \
 	values.h \
 	plist.c \
@@ -125,6 +128,17 @@ makewidgetdeps_SOURCES = \
 
 makewidgetdeps_LDADD = $(GHBTOOLS_LIBS)
 
+create_resources_SOURCES = \
+	create_resources.c \
+	plist.c \
+	plist.h \
+	values.c \
+	values.h \
+	icon_tools.c \
+	icon_tools.h
+
+create_resources_LDADD = $(GHBTOOLS_LIBS)
+
 quotestring_SOURCES = preset_to_string.c
 
 callbacks.c: widget_deps.h widget_reverse_deps.h
@@ -137,13 +151,13 @@ widget_reverse_deps.h: makewidgetdeps quotestring
 	./makewidgetdeps
 	./quotestring widget_reverse_deps widget_reverse_deps.h
 
-presets.c: internal_defaults.h standard_presets.h
+resources.c: resource_data.h
 
-internal_defaults.h: quotestring internal_defaults.xml
-	./quotestring internal_defaults.xml internal_defaults.h
+resource_data.h: quotestring resources.plist
+	./quotestring resources.plist resource_data.h
 
-standard_presets.h: quotestring standard_presets.xml
-	./quotestring standard_presets.xml standard_presets.h
+resources.plist: create_resources resources.list $(icons_dep) internal_defaults.xml standard_presets.xml
+	./create_resources resources.list resources.plist
 
 ghbcellrenderertext.c: marshalers.h
 
@@ -152,59 +166,6 @@ marshalers.h: marshalers.list
 
 marshalers.c: marshalers.list
 	glib-genmarshal --prefix=ghb_marshal marshalers.list --body > marshalers.c
-
-icons.c: $(icons_dep)
-
-hb-activity.32.h: hb-activity.32.png
-	gdk-pixbuf-csource --raw --name=hb_activity32  $< > $@
-hb-add-queue.32.h: hb-add-queue.32.png 
-	gdk-pixbuf-csource --raw --name=hb_add_queue32  $< > $@
-hb-canceled.16.h: hb-canceled.16.png 
-	gdk-pixbuf-csource --raw --name=hb_canceled16  $< > $@
-hb-complete.16.h: hb-complete.16.png 
-	gdk-pixbuf-csource --raw --name=hb_complete16  $< > $@
-hb-drawer.32.h: hb-drawer.32.png 
-	gdk-pixbuf-csource --raw --name=hb_drawer32  $< > $@
-hb-icon.128.h: hb-icon.128.png 
-	gdk-pixbuf-csource --raw --name=hb_icon128  $< > $@
-hb-icon.64.h: hb-icon.64.png 
-	gdk-pixbuf-csource --raw --name=hb_icon64 $< > $@
-hb-pause.32.h: hb-pause.32.png 
-	gdk-pixbuf-csource --raw --name=hb_pause32  $< > $@
-hb-play.32.h: hb-play.32.png 
-	gdk-pixbuf-csource --raw --name=hb_play32  $< > $@
-hb-pref.32.h: hb-pref.32.png 
-	gdk-pixbuf-csource --raw --name=hb_pref32  $< > $@
-hb-queue.32.h: hb-queue.32.png 
-	gdk-pixbuf-csource --raw --name=hb_queue32  $< > $@
-hb-queue-delete.16.h: hb-queue-delete.16.png 
-	gdk-pixbuf-csource --raw --name=hb_queue_delete16  $< > $@
-hb-queue-job.16.h: hb-queue-job.16.png
-	gdk-pixbuf-csource --raw --name=hb_queue_job16  $< > $@
-hb-queue-pass1.16.h: hb-queue-pass1.16.png
-	gdk-pixbuf-csource --raw --name=hb_queue_pass1  $< > $@
-hb-queue-pass2.16.h: hb-queue-pass2.16.png
-	gdk-pixbuf-csource --raw --name=hb_queue_pass2  $< > $@
-hb-queue-subtitle.16.h: hb-queue-subtitle.16.png
-	gdk-pixbuf-csource --raw --name=hb_queue_subtitle16  $< > $@
-hb-remove.32.h: hb-remove.32.png
-	gdk-pixbuf-csource --raw --name=hb_remove32  $< > $@
-hb-source.32.h: hb-source.32.png
-	gdk-pixbuf-csource --raw --name=hb_source32  $< > $@
-hb-stop.32.h: hb-stop.32.png
-	gdk-pixbuf-csource --raw --name=hb_stop32  $< > $@
-hb-working0.16.h: hb-working0.16.png
-	gdk-pixbuf-csource --raw --name=hb_working0  $< > $@
-hb-working1.16.h: hb-working1.16.png
-	gdk-pixbuf-csource --raw --name=hb_working1  $< > $@
-hb-working2.16.h: hb-working2.16.png
-	gdk-pixbuf-csource --raw --name=hb_working2  $< > $@
-hb-working3.16.h: hb-working3.16.png
-	gdk-pixbuf-csource --raw --name=hb_working3  $< > $@
-hb-working4.16.h: hb-working4.16.png
-	gdk-pixbuf-csource --raw --name=hb_working4  $< > $@
-hb-working5.16.h: hb-working5.16.png
-	gdk-pixbuf-csource --raw --name=hb_working5  $< > $@
 
 EXTRA_DIST = HandBrakeCLI
 

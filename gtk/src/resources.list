@@ -1,0 +1,30 @@
+<resources>
+	<section name="icons">
+		<icon name="hb-activity" file="hb-activity.32.png" />
+		<icon name="hb-add-queue" file="hb-add-queue.32.png" />
+		<icon name="hb-canceled" file="hb-canceled.16.png" />
+		<icon name="hb-complete" file="hb-complete.16.png" />
+		<icon name="hb-drawer" file="hb-drawer.32.png" />
+		<icon name="hb-icon" file="hb-icon.128.png" />
+		<icon name="hb-pause" file="hb-pause.32.png" />
+		<icon name="hb-play" file="hb-play.32.png" />
+		<icon name="hb-pref" file="hb-pref.32.png" />
+		<icon name="hb-queue" file="hb-queue.32.png" />
+		<icon name="hb-queue-delete" file="hb-queue-delete.16.png" />
+		<icon name="hb-queue-job" file="hb-queue-job.16.png" />
+		<icon name="hb-queue-pass1" file="hb-queue-pass1.16.png" />
+		<icon name="hb-queue-pass2" file="hb-queue-pass2.16.png" />
+		<icon name="hb-queue-subtitle" file="hb-queue-subtitle.16.png" />
+		<icon name="hb-remove" file="hb-remove.32.png" />
+		<icon name="hb-source" file="hb-source.32.png" />
+		<icon name="hb-stop" file="hb-stop.32.png" />
+		<icon name="hb-working0" file="hb-working0.16.png" />
+		<icon name="hb-working1" file="hb-working1.16.png" />
+		<icon name="hb-working2" file="hb-working2.16.png" />
+		<icon name="hb-working3" file="hb-working3.16.png" />
+		<icon name="hb-working4" file="hb-working4.16.png" />
+		<icon name="hb-working5" file="hb-working5.16.png" />
+	</section>
+	<plist name="internal-defaults" file="internal_defaults.xml" />
+	<plist name="standard-presets" file="standard_presets.xml" />
+</resources>
