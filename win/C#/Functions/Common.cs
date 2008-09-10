@@ -1113,17 +1113,22 @@ namespace Handbrake.Functions
             {
                 if (mainWindow.drp_dvdtitle.Text != "Automatic")
                 {
+                    // Todo: This code is a tad messy. Clean it up at some point.
+                    // Get the Source Name
                     string source = mainWindow.text_source.Text;
                     string[] sourceName = source.Split('\\');
                     source = sourceName[sourceName.Length - 1].Replace(".iso", "").Replace(".mpg", "").Replace(".ts", "").Replace(".ps", "");
 
+                    // Get the Selected Title Number
                     string title = mainWindow.drp_dvdtitle.Text;
                     string[] titlesplit = title.Split(' ');
                     title = titlesplit[0];
 
+                    // Get the Chapter Start and Chapter End Numbers
                     string cs = mainWindow.drop_chapterStart.Text;
                     string cf = mainWindow.drop_chapterFinish.Text;
 
+                    // Just incase the above are set to their default Automatic values, set the varible to ""
                     if (title == "Automatic")
                         title = "";
                     if (cs == "Auto")
@@ -1131,10 +1136,22 @@ namespace Handbrake.Functions
                     if (cf == "Auto")
                         cf = "";
 
+                    // If both CS and CF are populated, set the dash varible
                     string dash = "";
                     if (cf != "Auto")
                         dash = "-";
 
+                    // Get the destination filename.
+                    string destination_filename = "";
+                    if (Properties.Settings.Default.autoNameFormat != "")
+                    {
+                        destination_filename = Properties.Settings.Default.autoNameFormat;
+                        destination_filename = destination_filename.Replace("{source}", source).Replace("{title}", title).Replace("{chapters}", cs + dash + cf);
+                    }
+                    else
+                        destination_filename = source + "_T" + title + "_C" + cs + dash + cf;
+
+                    // If the text box is blank
                     if (!mainWindow.text_destination.Text.Contains("\\"))
                     {
                         string filePath = "";
@@ -1143,19 +1160,16 @@ namespace Handbrake.Functions
                             if (Properties.Settings.Default.autoNamePath.Trim() != "Click 'Browse' to set the default location")
                                 filePath = Properties.Settings.Default.autoNamePath + "\\";
                         }
-                        mainWindow.text_destination.Text = filePath + source + "_T" + title + "_C" + cs + dash + cf + ".mp4";
+                        mainWindow.text_destination.Text = filePath + destination_filename + ".mp4";
                     }
-                    else
+                    else // If the text box already has a path and file
                     {
                         string dest = mainWindow.text_destination.Text;
-
                         string[] destName = dest.Split('\\');
-
-
                         string[] extension = dest.Split('.');
                         string ext = extension[extension.Length - 1];
 
-                        destName[destName.Length - 1] = source + "_T" + title + "_C" + cs + dash + cf + "." + ext;
+                        destName[destName.Length - 1] = destination_filename + "." + ext;
 
                         string fullDest = "";
                         foreach (string part in destName)

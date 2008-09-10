@@ -69,6 +69,9 @@ namespace Handbrake
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pathFinder = new System.Windows.Forms.FolderBrowserDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.txt_autoNameFormat = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_picture.SuspendLayout();
@@ -83,7 +86,7 @@ namespace Handbrake
             this.btn_close.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(395, 323);
+            this.btn_close.Location = new System.Drawing.Point(395, 346);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(107, 22);
             this.btn_close.TabIndex = 53;
@@ -120,11 +123,14 @@ namespace Handbrake
             this.tab_options.Location = new System.Drawing.Point(12, 55);
             this.tab_options.Name = "tab_options";
             this.tab_options.SelectedIndex = 0;
-            this.tab_options.Size = new System.Drawing.Size(490, 262);
+            this.tab_options.Size = new System.Drawing.Size(490, 285);
             this.tab_options.TabIndex = 58;
             // 
             // tab_general
             // 
+            this.tab_general.Controls.Add(this.label7);
+            this.tab_general.Controls.Add(this.label5);
+            this.tab_general.Controls.Add(this.txt_autoNameFormat);
             this.tab_general.Controls.Add(this.btn_browse);
             this.tab_general.Controls.Add(this.label10);
             this.tab_general.Controls.Add(this.text_an_path);
@@ -138,7 +144,7 @@ namespace Handbrake
             this.tab_general.Controls.Add(this.drp_completeOption);
             this.tab_general.Location = new System.Drawing.Point(4, 22);
             this.tab_general.Name = "tab_general";
-            this.tab_general.Size = new System.Drawing.Size(482, 236);
+            this.tab_general.Size = new System.Drawing.Size(482, 259);
             this.tab_general.TabIndex = 3;
             this.tab_general.Text = "General";
             this.tab_general.UseVisualStyleBackColor = true;
@@ -268,7 +274,7 @@ namespace Handbrake
             this.tab_picture.Controls.Add(this.label3);
             this.tab_picture.Location = new System.Drawing.Point(4, 22);
             this.tab_picture.Name = "tab_picture";
-            this.tab_picture.Size = new System.Drawing.Size(482, 236);
+            this.tab_picture.Size = new System.Drawing.Size(482, 292);
             this.tab_picture.TabIndex = 5;
             this.tab_picture.Text = "Picture";
             this.tab_picture.UseVisualStyleBackColor = true;
@@ -302,7 +308,7 @@ namespace Handbrake
             this.tab_cli.Controls.Add(this.Label4);
             this.tab_cli.Location = new System.Drawing.Point(4, 22);
             this.tab_cli.Name = "tab_cli";
-            this.tab_cli.Size = new System.Drawing.Size(482, 236);
+            this.tab_cli.Size = new System.Drawing.Size(482, 292);
             this.tab_cli.TabIndex = 2;
             this.tab_cli.Text = "CLI";
             this.tab_cli.UseVisualStyleBackColor = true;
@@ -404,7 +410,7 @@ namespace Handbrake
             this.tab_advanced.Location = new System.Drawing.Point(4, 22);
             this.tab_advanced.Name = "tab_advanced";
             this.tab_advanced.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_advanced.Size = new System.Drawing.Size(482, 236);
+            this.tab_advanced.Size = new System.Drawing.Size(482, 292);
             this.tab_advanced.TabIndex = 4;
             this.tab_advanced.Text = "Advanced";
             this.tab_advanced.UseVisualStyleBackColor = true;
@@ -484,9 +490,37 @@ namespace Handbrake
             this.ToolTip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.ToolTip.ToolTipTitle = "Tooltip";
             // 
+            // txt_autoNameFormat
+            // 
+            this.txt_autoNameFormat.Location = new System.Drawing.Point(199, 198);
+            this.txt_autoNameFormat.Name = "txt_autoNameFormat";
+            this.txt_autoNameFormat.Size = new System.Drawing.Size(255, 21);
+            this.txt_autoNameFormat.TabIndex = 79;
+            this.txt_autoNameFormat.TextChanged += new System.EventHandler(this.txt_autoNameFormat_TextChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(111, 201);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(52, 13);
+            this.label5.TabIndex = 80;
+            this.label5.Text = "Format:";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(197, 222);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(242, 12);
+            this.label7.TabIndex = 81;
+            this.label7.Text = "Available Options: {source} {title} {chapters}";
+            // 
             // frmOptions
             // 
-            this.ClientSize = new System.Drawing.Size(514, 355);
+            this.ClientSize = new System.Drawing.Size(514, 375);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.tab_options);
@@ -549,5 +583,8 @@ namespace Handbrake
         private System.Windows.Forms.TabPage tab_picture;
         private System.Windows.Forms.TextBox txt_decomb;
         private System.Windows.Forms.Label label3;
+        internal System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox txt_autoNameFormat;
+        private System.Windows.Forms.Label label7;
     }
 }

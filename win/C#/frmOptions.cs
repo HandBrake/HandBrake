@@ -57,6 +57,8 @@ namespace Handbrake
             if (Properties.Settings.Default.autoNaming == "Checked")
                 check_autoNaming.CheckState = CheckState.Checked;
 
+            txt_autoNameFormat.Text = Properties.Settings.Default.autoNameFormat;
+
             if (Properties.Settings.Default.drive_detection == "Checked")
                 btn_drive_detect.CheckState = CheckState.Checked;
 
@@ -119,6 +121,11 @@ namespace Handbrake
         private void check_autoNaming_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.autoNaming = check_autoNaming.CheckState.ToString();
+        }
+
+        private void txt_autoNameFormat_TextChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.autoNameFormat = txt_autoNameFormat.Text;
         }
 
         private void btn_browse_Click(object sender, EventArgs e)
