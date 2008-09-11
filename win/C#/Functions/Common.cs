@@ -135,11 +135,17 @@ namespace Handbrake.Functions
             else
                 mainWindow.check_detelecine.CheckState = CheckState.Unchecked;
 
-
-            if (presetQuery.DeBlock == true)
-                mainWindow.check_deblock.CheckState = CheckState.Checked;
+            if (presetQuery.DeBlock != 0)
+            {
+                mainWindow.slider_deblock.Value = presetQuery.DeBlock;
+                mainWindow.lbl_deblockVal.Text = presetQuery.DeBlock.ToString();
+            }
             else
-                mainWindow.check_deblock.CheckState = CheckState.Unchecked;
+            {
+                mainWindow.slider_deblock.Value = 0;
+                mainWindow.lbl_deblockVal.Text = "0";
+            }
+
 
 
             if (presetQuery.Anamorphic == true)
@@ -573,8 +579,8 @@ namespace Handbrake.Functions
             else if (mainWindow.drp_anamorphic.SelectedIndex == 2)
                 query += " -P ";
 
-            if (mainWindow.check_deblock.Checked)
-                query += " --deblock";
+            if (mainWindow.slider_deblock.Value != 0)
+                query += " --deblock=" + mainWindow.slider_deblock.Value;
 
             if (mainWindow.check_detelecine.Checked)
                 query += " --detelecine";

@@ -207,13 +207,11 @@ namespace Handbrake.Functions
                 // close the stream
                 line.Close();
                 line.Dispose();
-                MessageBox.Show("Your profile has been sucessfully added.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
             catch (Exception exc)
             {
                 MessageBox.Show("Unable to write to the file. Please make sure the location has the correct permissions for file writing.\n Error Information: \n\n" + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
             }
-
         }
 
         // Check if a preset already exists in either the built in or user presets

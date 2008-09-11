@@ -161,8 +161,13 @@ namespace Handbrake
             // Try to load the users default settings.
             string userDefaults = Properties.Settings.Default.defaultUserSettings;
 
-            Functions.QueryParser presetQuery = Functions.QueryParser.Parse(userDefaults);
-            hb_common_func.presetLoader(this, presetQuery, "User Defaults ");
+            if (userDefaults == "")
+                loadNormalPreset();
+            else
+            {
+                Functions.QueryParser presetQuery = Functions.QueryParser.Parse(userDefaults);
+                hb_common_func.presetLoader(this, presetQuery, "User Defaults ");
+            }
         }
         private void queueRecovery()
         {
@@ -815,6 +820,10 @@ namespace Handbrake
                 text_height.Enabled = true;
                 text_width.Enabled = true;
             }
+        }
+        private void slider_deblock_Scroll(object sender, EventArgs e)
+        {
+            lbl_deblockVal.Text = slider_deblock.Value.ToString();
         }
 
         // Audio Tab
@@ -1885,6 +1894,8 @@ namespace Handbrake
             notifyIcon.Visible = false;
         }
         #endregion
+
+
 
 
         // This is the END of the road ------------------------------------------------------------------------------

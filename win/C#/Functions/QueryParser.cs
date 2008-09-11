@@ -231,11 +231,11 @@ namespace Handbrake.Functions
             }
         }
 
-        private Boolean q_deBlock;
+        private int q_deBlock;
         /// <summary>
         /// Returns a boolean to indicate wither DeBlock is on or off.
         /// </summary>
-        public Boolean DeBlock
+        public int DeBlock
         {
             get
             {
@@ -814,7 +814,7 @@ namespace Handbrake.Functions
             Match height = Regex.Match(input, @"-l ([0-9]*)");
             Match deinterlace = Regex.Match(input, @"--deinterlace=\""([a-zA-Z]*)\""");
             Match denoise = Regex.Match(input, @"--denoise=\""([a-zA-Z]*)\""");
-            Match deblock = Regex.Match(input, @"--deblock");
+            Match deblock = Regex.Match(input, @"--deblock=([0-9]*)");
             Match detelecine = Regex.Match(input, @"--detelecine");
             Match anamorphic = Regex.Match(input, @" -p ");
             Match chapterMarkers = Regex.Match(input, @" -m");
@@ -953,8 +953,16 @@ namespace Handbrake.Functions
                     thisQuery.q_cropRight = actCropValues[3];
                 }
 
+                // Deblock Slider
+                string deblockValue = "";
+                thisQuery.q_deBlock = 0;
+                if (deblock.Success != false)
+                    deblockValue = deblock.ToString().Replace("--deblock=", "");
+
+                if (deblockValue != "")
+                    int.TryParse(deblockValue, out thisQuery.q_deBlock);
+
                 thisQuery.q_detelecine = detelecine.Success;
-                thisQuery.q_deBlock = deblock.Success;
                 thisQuery.q_decomb = decomb.Success;
 
                 thisQuery.q_deinterlace = "None";
