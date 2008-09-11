@@ -4,14 +4,15 @@
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License. */
 
+#include <string.h>
+#include <ctype.h>
+#include <errno.h>
+
 #include "hb.h"
 #include "lang.h"
 #include "a52dec/a52.h"
 #include "libavcodec/avcodec.h"
 #include "libavformat/avformat.h"
-
-#include <string.h>
-#include <ctype.h>
 
 #define min(a, b) a < b ? a : b
 
@@ -136,6 +137,8 @@ struct hb_stream_s
     hb_title_t *title;
 
     AVFormatContext *ffmpeg_ic;
+    AVPacket *ffmpeg_pkt;
+    double ffmpeg_tsconv[MAX_STREAMS];
 
     struct {
         int lang_code;
@@ -2337,6 +2340,9 @@ static int ffmpeg_codec_param( hb_stream_t *stream, int stream_index )
 // (the original scan stream was closed and no longer exists).
 static void ffmpeg_remap_stream( hb_stream_t *stream, hb_title_t *title )
 {
+    // tell ffmpeg we want a pts on every frame it returns
+    stream->ffmpeg_ic->flags |= AVFMT_FLAG_GENPTS;
+
     // all the video & audio came from the same stream so remapping
     // the video's stream slot takes care of everything.
     int slot = title->video_codec_param & (ffmpeg_sl_size - 1);
@@ -2392,6 +2398,8 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title )
 
     stream->ffmpeg_ic = ic;
     stream->hb_stream_type = ffmpeg;
+    stream->ffmpeg_pkt = malloc(sizeof(*stream->ffmpeg_pkt));
+    av_init_packet( stream->ffmpeg_pkt );
 
     if ( title )
     {
@@ -2440,6 +2448,11 @@ static void ffmpeg_close( hb_stream_t *d )
         av_close_input_file( ffmpeg_deferred_close );
     }
     ffmpeg_deferred_close = d->ffmpeg_ic;
+    if ( d->ffmpeg_pkt != NULL )
+    {
+        free( d->ffmpeg_pkt );
+        d->ffmpeg_pkt = NULL;
+    }
 }
 
 static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
@@ -2561,27 +2574,58 @@ static int64_t av_to_hb_pts( int64_t pts, double conv_factor )
 
 static int ffmpeg_read( hb_stream_t *stream, hb_buffer_t *buf )
 {
-    AVPacket pkt;
+    int err;
+    if ( ( err = av_read_frame( stream->ffmpeg_ic, stream->ffmpeg_pkt )) < 0 )
+    {
+        // XXX the following conditional is to handle avi files that
+        // use M$ 'packed b-frames' and occasionally have negative
+        // sizes for the null frames these require.
+        if ( err != AVERROR_NOMEM || stream->ffmpeg_pkt->size >= 0 )
+            // eof
+            return 0;
+    }
+    if ( stream->ffmpeg_pkt->size <= 0 )
+    {
+        // M$ "invalid and inefficient" packed b-frames require 'null frames'
+        // following them to preserve the timing (since the packing puts two
+        // or more frames in what looks like one avi frame). The contents and
+        // size of these null frames are ignored by the ff_h263_decode_frame
+        // as long as they're < 20 bytes. We need a positive size so we use
+        // one byte if we're given a zero or negative size. We don't know
+        // if the pkt data points anywhere reasonable so we just stick a
+        // byte of zero in our outbound buf.
+        buf->size = 1;
+        *buf->data = 0;
+    }
+    else
+    {
+        if ( stream->ffmpeg_pkt->size > buf->alloc )
+        {
+            // need to expand buffer
+            hb_buffer_realloc( buf, stream->ffmpeg_pkt->size );
+        }
+        memcpy( buf->data, stream->ffmpeg_pkt->data, stream->ffmpeg_pkt->size );
+        buf->size = stream->ffmpeg_pkt->size;
+    }
+    buf->id = stream->ffmpeg_pkt->stream_index;
 
-    if ( av_read_frame( stream->ffmpeg_ic, &pkt ) < 0 )
+    // if we haven't done it already, compute a conversion factor to go
+    // from the ffmpeg timebase for the stream to HB's 90KHz timebase.
+    double tsconv = stream->ffmpeg_tsconv[stream->ffmpeg_pkt->stream_index];
+    if ( ! tsconv )
     {
-        return 0;
+        AVStream *s = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt->stream_index];
+        tsconv = 90000. * (double)s->time_base.num / (double)s->time_base.den;
+        stream->ffmpeg_tsconv[stream->ffmpeg_pkt->stream_index] = tsconv;
     }
-    if ( pkt.size > buf->alloc )
+
+    buf->start = av_to_hb_pts( stream->ffmpeg_pkt->pts, tsconv );
+    buf->renderOffset = av_to_hb_pts( stream->ffmpeg_pkt->dts, tsconv );
+    if ( buf->renderOffset >= 0 && buf->start == -1 )
     {
-        // need to expand buffer
-        hb_buffer_realloc( buf, pkt.size );
+        buf->start = buf->renderOffset;
     }
-    memcpy( buf->data, pkt.data, pkt.size );
-    buf->id = pkt.stream_index;
-    buf->size = pkt.size;
-    int64_t pts = pkt.pts != AV_NOPTS_VALUE? pkt.pts : 
-                         pkt.dts != AV_NOPTS_VALUE? pkt.dts : -1;
-    buf->start = av_to_hb_pts( pts,
-                  av_q2d(stream->ffmpeg_ic->streams[pkt.stream_index]->time_base)*90000. );
-    buf->renderOffset = av_to_hb_pts( pkt.pts,
-                  av_q2d(stream->ffmpeg_ic->streams[pkt.stream_index]->time_base)*90000. );
-    av_free_packet( &pkt );
+    av_free_packet( stream->ffmpeg_pkt );
     return 1;
 }
 

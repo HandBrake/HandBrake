@@ -58,6 +58,7 @@ hb_thread_t * hb_reader_init( hb_job_t * job )
     r->stream_timing[0].id = r->title->video_id;
     r->stream_timing[0].average = 90000. * (double)job->vrate_base /
                                            (double)job->vrate;
+    r->stream_timing[0].last = -r->stream_timing[0].average;
     r->stream_timing[1].id = -1;
 
     return hb_thread_init( "reader", ReaderFunc, r,
@@ -77,7 +78,7 @@ static void push_buf( const hb_reader_t *r, hb_fifo_t *fifo, hb_buffer_t *buf )
     hb_fifo_push( fifo, buf );
 }
 
-// The MPEG STD (Standard Timing Decoder) essentially requires that we keep
+// The MPEG STD (Standard Target Decoder) essentially requires that we keep
 // per-stream timing so that when there's a timing discontinuity we can
 // seemlessly join packets on either side of the discontinuity. This join
 // requires that we know the timestamp of the previous packet and the
@@ -109,8 +110,8 @@ static stream_timing_t *id_to_st( hb_reader_t *r, const hb_buffer_t *buf )
             st = r->stream_timing + slot;
         }
         st->id = buf->id;
-        st->last = buf->renderOffset;
         st->average = 30.*90.;
+        st->last = buf->renderOffset - st->average;
 
         st[1].id = -1;
     }
@@ -268,13 +269,14 @@ static void ReaderFunc( void * _r )
             if ( ! r->saw_video )
             {
                 /* The first video packet defines 'time zero' so discard
-                   data until we get a video packet with a PTS */
-                if ( buf->id == r->title->video_id && buf->start != -1 )
+                   data until we get a video packet with a PTS & DTS */
+                if ( buf->id == r->title->video_id && buf->start != -1 &&
+                     buf->renderOffset != -1 )
                 {
                     r->saw_video = 1;
                     r->scr_changes = r->demux.scr_changes;
                     new_scr_offset( r, buf );
-                    hb_log( "reader: first SCR %llu scr_offset %llu",
+                    hb_log( "reader: first SCR %lld scr_offset %lld",
                             r->demux.last_scr, r->scr_offset );
                 }
                 else
@@ -284,7 +286,7 @@ static void ReaderFunc( void * _r )
             }
             if( fifos )
             {
-                if ( buf->start != -1 )
+                if ( buf->renderOffset != -1 )
                 {
                     if ( r->scr_changes == r->demux.scr_changes )
                     {
@@ -301,9 +303,10 @@ static void ReaderFunc( void * _r )
                         new_scr_offset( r, buf );
                     }
                     // adjust timestamps to remove System Clock Reference offsets.
-                    buf->start -= r->scr_offset;
                     buf->renderOffset -= r->scr_offset;
                 }
+                if ( buf->start != -1 )
+                    buf->start -= r->scr_offset;
 
                 buf->sequence = r->sequence++;
                 /* if there are mutiple output fifos, send a copy of the
@@ -326,13 +329,11 @@ static void ReaderFunc( void * _r )
         }
     }
 
-    /* send empty buffers upstream to video & audio decoders to signal we're done */
+    // send empty buffers downstream to video & audio decoders to signal we're done.
     push_buf( r, r->job->fifo_mpeg2, hb_buffer_init(0) );
 
     hb_audio_t *audio;
-    for( n = 0;
-         ( audio = hb_list_item( r->job->title->list_audio, n ) ) != NULL;
-         ++n )
+    for( n = 0; ( audio = hb_list_item( r->job->title->list_audio, n ) ); ++n )
     {
         if ( audio->priv.fifo_in )
             push_buf( r, audio->priv.fifo_in, hb_buffer_init(0) );
@@ -342,12 +343,12 @@ static void ReaderFunc( void * _r )
     hb_buffer_close( &ps );
     if (r->dvd)
     {
-      hb_dvd_stop( r->dvd );
-      hb_dvd_close( &r->dvd );
+        hb_dvd_stop( r->dvd );
+        hb_dvd_close( &r->dvd );
     }
     else if (r->stream)
     {
-      hb_stream_close(&r->stream);
+        hb_stream_close(&r->stream);
     }
 
     if ( r->stream_timing )

@@ -81,23 +81,92 @@ hb_work_object_t hb_decavcodec =
     decavcodecBSInfo
 };
 
+#define HEAP_SIZE 8
+typedef struct {
+    // there are nheap items on the heap indexed 1..nheap (i.e., top of
+    // heap is 1). The 0th slot is unused - a marker is put there to check
+    // for overwrite errs.
+    int64_t h[HEAP_SIZE+1];
+    int     nheap;
+} pts_heap_t;
+
 struct hb_work_private_s
 {
     hb_job_t             *job;
     AVCodecContext       *context;
     AVCodecParserContext *parser;
     hb_list_t            *list;
+    double               duration;  // frame duration (for video)
     double               pts_next;  // next pts we expect to generate
     int64_t              pts;       // (video) pts passing from parser to decoder
     int64_t              chap_time; // time of next chap mark (if new_chap != 0)
     int                  new_chap;
-    int                  ignore_pts; // workaround M$ bugs
     uint32_t             nframes;
     uint32_t             ndrops;
     uint32_t             decode_errors;
-    double               duration;  // frame duration (for video)
+    hb_buffer_t*         delayq[HEAP_SIZE];
+    pts_heap_t           pts_heap;
+    void*                buffer;
 };
 
+static int64_t heap_pop( pts_heap_t *heap )
+{
+    int64_t result;
+
+    if ( heap->nheap <= 0 )
+    {
+        return -1;
+    }
+
+    // return the top of the heap then put the bottom element on top,
+    // decrease the heap size by one & rebalence the heap.
+    result = heap->h[1];
+
+    int64_t v = heap->h[heap->nheap--];
+    int parent = 1;
+    int child = parent << 1;
+    while ( child <= heap->nheap )
+    {
+        // find the smallest of the two children of parent
+        if (child < heap->nheap && heap->h[child] > heap->h[child+1] )
+            ++child;
+
+        if (v <= heap->h[child])
+            // new item is smaller than either child so it's the new parent.
+            break;
+
+        // smallest child is smaller than new item so move it up then
+        // check its children.
+        int64_t hp = heap->h[child];
+        heap->h[parent] = hp;
+        parent = child;
+        child = parent << 1;
+    }
+    heap->h[parent] = v;
+    return result;
+}
+
+static void heap_push( pts_heap_t *heap, int64_t v )
+{
+    if ( heap->nheap < HEAP_SIZE )
+    {
+        ++heap->nheap;
+    }
+
+    // stick the new value on the bottom of the heap then bubble it
+    // up to its correct spot.
+	int child = heap->nheap;
+	while (child > 1) {
+		int parent = child >> 1;
+		if (heap->h[parent] <= v)
+			break;
+		// move parent down
+		int64_t hp = heap->h[parent];
+		heap->h[child] = hp;
+		child = parent;
+	}
+	heap->h[child] = v;
+}
 
 
 /***********************************************************************
@@ -135,17 +204,34 @@ static int decavcodecInit( hb_work_object_t * w, hb_job_t * job )
 static void decavcodecClose( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
-    if ( pv->parser )
-	{
-		av_parser_close(pv->parser);
-	}
-    if ( pv->context && pv->context->codec )
+
+    if ( pv )
     {
-        avcodec_close( pv->context );
-    }
-    if ( pv->list )
-    {
-        hb_list_close( &pv->list );
+        if ( pv->job && pv->context && pv->context->codec )
+        {
+            hb_log( "%s-decoder done: %u frames, %u decoder errors, %u drops",
+                    pv->context->codec->name, pv->nframes, pv->decode_errors,
+                    pv->ndrops );
+        }
+        if ( pv->parser )
+        {
+            av_parser_close(pv->parser);
+        }
+        if ( pv->context && pv->context->codec )
+        {
+            avcodec_close( pv->context );
+        }
+        if ( pv->list )
+        {
+            hb_list_close( &pv->list );
+        }
+        if ( pv->buffer )
+        {
+            free( pv->buffer );
+            pv->buffer = NULL;
+        }
+        free( pv );
+        w->private_data = NULL;
     }
 }
 
@@ -334,7 +420,6 @@ static int get_frame_buf( AVCodecContext *context, AVFrame *frame )
     hb_work_private_t *pv = context->opaque;
     frame->pts = pv->pts;
     pv->pts = -1;
-
     return avcodec_default_get_buffer( context, frame );
 }
 
@@ -350,6 +435,21 @@ static void log_chapter( hb_work_private_t *pv, int chap_num, int64_t pts )
     {
         hb_log( "%s: Chapter %d at frame %u time %lld",
                 pv->context->codec->name, chap_num, pv->nframes, pts );
+    }
+}
+
+static void flushDelayQueue( hb_work_private_t *pv )
+{
+    hb_buffer_t *buf;
+    int slot = pv->nframes & (HEAP_SIZE-1);
+
+    // flush all the video packets left on our timestamp-reordering delay q
+    while ( ( buf = pv->delayq[slot] ) != NULL )
+    {
+        buf->start = heap_pop( &pv->pts_heap );
+        hb_list_add( pv->list, buf );
+        pv->delayq[slot] = NULL;
+        slot = ( slot + 1 ) & (HEAP_SIZE-1);
     }
 }
 
@@ -376,40 +476,86 @@ static int decodeFrame( hb_work_private_t *pv, uint8_t *data, int size )
         // worked at this point frame.pts should hold the frame's pts from the
         // original data stream or -1 if it didn't have one. in the latter case
         // we generate the next pts in sequence for it.
+        double frame_dur = pv->duration;
+        if ( frame_dur <= 0 )
+        {
+            frame_dur = 90000. * (double)pv->context->time_base.num /
+                        (double)pv->context->time_base.den;
+            pv->duration = frame_dur;
+        }
+        if ( frame.repeat_pict )
+        {
+            frame_dur += frame.repeat_pict * frame_dur * 0.5;
+        }
+        // If there was no pts for this frame, assume constant frame rate
+        // video & estimate the next frame time from the last & duration.
         double pts = frame.pts;
         if ( pts < 0 )
         {
             pts = pv->pts_next;
         }
-        if ( pv->duration == 0 )
-        {
-            pv->duration = 90000. * pv->context->time_base.num /
-                           pv->context->time_base.den;
-        }
-        double frame_dur = pv->duration;
-        frame_dur += frame.repeat_pict * frame_dur * 0.5;
         pv->pts_next = pts + frame_dur;
 
-        hb_buffer_t *buf = copy_frame( pv->context, &frame );
-        buf->start = pts;
+        hb_buffer_t *buf;
 
-        if ( pv->new_chap && buf->start >= pv->chap_time )
+        // if we're doing a scan we don't worry about timestamp reordering
+        if ( ! pv->job )
         {
-            buf->new_chap = pv->new_chap;
-            pv->new_chap = 0;
-            pv->chap_time = 0;
-            if ( pv->job )
+            buf = copy_frame( pv->context, &frame );
+            buf->start = pts;
+            hb_list_add( pv->list, buf );
+            ++pv->nframes;
+            return got_picture;
+        }
+
+        // XXX This following probably addresses a libavcodec bug but I don't
+        //     see an easy fix so we workaround it here.
+        //
+        // The M$ 'packed B-frames' atrocity results in decoded frames with
+        // the wrong timestamp. E.g., if there are 2 b-frames the timestamps
+        // we see here will be "2 3 1 5 6 4 ..." instead of "1 2 3 4 5 6".
+        // The frames are actually delivered in the right order but with
+        // the wrong timestamp. To get the correct timestamp attached to
+        // each frame we have a delay queue (longer than the max number of
+        // b-frames) & a sorting heap for the timestamps. As each frame
+        // comes out of the decoder the oldest frame in the queue is removed
+        // and associated with the smallest timestamp. Then the new frame is
+        // added to the queue & its timestamp is pushed on the heap.
+        // This does nothing if the timestamps are correct (i.e., the video
+        // uses a codec that Micro$oft hasn't broken yet) but the frames
+        // get timestamped correctly even when M$ has munged them.
+
+        // remove the oldest picture from the frame queue (if any) &
+        // give it the smallest timestamp from our heap. The queue size
+        // is a power of two so we get the slot of the oldest by masking
+        // the frame count & this will become the slot of the newest
+        // once we've removed & processed the oldest.
+        int slot = pv->nframes & (HEAP_SIZE-1);
+        if ( ( buf = pv->delayq[slot] ) != NULL )
+        {
+            buf->start = heap_pop( &pv->pts_heap );
+
+            if ( pv->new_chap && buf->start >= pv->chap_time )
             {
+                buf->new_chap = pv->new_chap;
+                pv->new_chap = 0;
+                pv->chap_time = 0;
                 log_chapter( pv, buf->new_chap, buf->start );
             }
+            else if ( pv->nframes == 0 )
+            {
+                log_chapter( pv, pv->job->chapter_start, buf->start );
+            }
+            hb_list_add( pv->list, buf );
         }
-        else if ( pv->job && pv->nframes == 0 )
-        {
-            log_chapter( pv, pv->job->chapter_start, buf->start );
-        }
-        hb_list_add( pv->list, buf );
+
+        // add the new frame to the delayq & push its timestamp on the heap
+        pv->delayq[slot] = copy_frame( pv->context, &frame );
+        heap_push( &pv->pts_heap, pts );
+
         ++pv->nframes;
     }
+
     return got_picture;
 }
 
@@ -438,8 +584,12 @@ static void decodeVideo( hb_work_private_t *pv, uint8_t *data, int size,
     } while ( pos < size );
 
     /* the stuff above flushed the parser, now flush the decoder */
-    while ( size == 0 && decodeFrame( pv, NULL, 0 ) )
+    if ( size <= 0 )
     {
+        while ( decodeFrame( pv, NULL, 0 ) )
+        {
+        }
+        flushDelayQueue( pv );
     }
 }
 
@@ -499,7 +649,7 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 {
     hb_work_private_t *pv = w->private_data;
     hb_buffer_t *in = *buf_in;
-    int64_t pts = -1;
+    int64_t pts = AV_NOPTS_VALUE;
     int64_t dts = pts;
 
     *buf_in = NULL;
@@ -510,8 +660,6 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         decodeVideo( pv, in->data, in->size, pts, dts );
         hb_list_add( pv->list, in );
         *buf_out = link_buf_list( pv );
-        hb_log( "%s done: %u frames, %u decoder errors",
-                pv->context->codec->name, pv->nframes, pv->decode_errors );
         return HB_WORK_DONE;
     }
 
@@ -620,31 +768,40 @@ static void init_ffmpeg_context( hb_work_object_t *w )
     // the frame rate in the codec is usually bogus but it's sometimes
     // ok in the stream.
     AVStream *st = hb_ffmpeg_avstream( w->codec_param );
-    AVRational tb;
-    // XXX because the time bases are so screwed up, we only take values
-    // in the range 8fps - 64fps.
-    if ( st->time_base.num * 64 > st->time_base.den &&
-         st->time_base.den > st->time_base.num * 8 )
+
+    if ( st->nb_frames && st->duration )
     {
-        tb = st->time_base;
-    }
-    else if ( st->codec->time_base.num * 64 > st->codec->time_base.den &&
-              st->codec->time_base.den > st->codec->time_base.num * 8 )
-    {
-        tb = st->codec->time_base;
-    }
-    else if ( st->r_frame_rate.den * 64 > st->r_frame_rate.num &&
-              st->r_frame_rate.num > st->r_frame_rate.den * 8 )
-    {
-        tb.num = st->r_frame_rate.den;
-        tb.den = st->r_frame_rate.num;
+        // compute the average frame duration from the total number
+        // of frames & the total duration.
+        pv->duration = ( (double)st->duration * (double)st->time_base.num ) /
+                       ( (double)st->nb_frames * (double)st->time_base.den );
     }
     else
     {
-        tb.num = 1001;  /*XXX*/
-        tb.den = 30000; /*XXX*/
+        // XXX We don't have a frame count or duration so try to use the
+        // far less reliable time base info in the stream.
+        // Because the time bases are so screwed up, we only take values
+        // in the range 8fps - 64fps.
+        AVRational tb;
+        if ( st->time_base.num * 64 > st->time_base.den &&
+             st->time_base.den > st->time_base.num * 8 )
+        {
+            tb = st->time_base;
+        }
+        else if ( st->r_frame_rate.den * 64 > st->r_frame_rate.num &&
+                  st->r_frame_rate.num > st->r_frame_rate.den * 8 )
+        {
+            tb.num = st->r_frame_rate.den;
+            tb.den = st->r_frame_rate.num;
+        }
+        else
+        {
+            tb.num = 1001;  /*XXX*/
+            tb.den = 24000; /*XXX*/
+        }
+        pv->duration =  (double)tb.num / (double)tb.den;
     }
-    pv->duration = 90000. * tb.num / tb.den;
+    pv->duration *= 90000.;
 
     // we have to wrap ffmpeg's get_buffer to be able to set the pts (?!)
     pv->context->opaque = pv;
@@ -675,7 +832,8 @@ static int decavcodecviInit( hb_work_object_t * w, hb_job_t * job )
     w->private_data = pv;
     pv->job   = job;
     pv->list = hb_list_init();
-
+    pv->pts_next = -1;
+    pv->pts = -1;
     return 0;
 }
 
@@ -686,32 +844,8 @@ static int decavcodecviWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     if ( ! pv->context )
     {
         init_ffmpeg_context( w );
-
-        switch ( pv->context->codec_id )
-        {
-            // These are the only formats whose timestamps we'll believe.
-            // All others are treated as CFR (i.e., we take the first timestamp
-            // then generate all the others from the frame rate). The reason for
-            // this is that the M$ encoders are so frigging buggy with garbage
-            // like packed b-frames (vfw divx mpeg4) that believing their timestamps
-            // results in discarding more than half the video frames because they'll
-            // be out of sequence (and attempting to reseqence them doesn't work
-            // because it's the timestamps that are wrong, not the decoded frame
-            // order). All hail Redmond, ancestral home of the rich & stupid.
-            case CODEC_ID_MPEG2VIDEO:
-            case CODEC_ID_RAWVIDEO:
-            case CODEC_ID_H264:
-            case CODEC_ID_VC1:
-                break;
-
-            default:
-                pv->ignore_pts = 1;
-                break;
-        }
     }
     hb_buffer_t *in = *buf_in;
-    int64_t pts = -1;
-
     *buf_in = NULL;
 
     /* if we got an empty buffer signaling end-of-stream send it downstream */
@@ -721,45 +855,21 @@ static int decavcodecviWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         while ( decodeFrame( pv, NULL, 0 ) )
         {
         }
+        flushDelayQueue( pv );
         hb_list_add( pv->list, in );
         *buf_out = link_buf_list( pv );
-        hb_log( "%s done: %u frames, %u decoder errors, %u drops",
-                pv->context->codec->name, pv->nframes, pv->decode_errors,
-                pv->ndrops );
         return HB_WORK_DONE;
     }
 
-    if( in->start >= 0 )
+    int64_t pts = in->start;
+    if( pts >= 0 )
     {
         // use the first timestamp as our 'next expected' pts
-        if ( pv->pts_next <= 0 )
+        if ( pv->pts_next < 0 )
         {
-            pv->pts_next = in->start;
+            pv->pts_next = pts;
         }
-
-        if ( ! pv->ignore_pts )
-        {
-            pts = in->start;
-            if ( pv->pts > 0 )
-            {
-                hb_log( "overwriting pts %lld with %lld (diff %d)",
-                        pv->pts, pts, pts - pv->pts );
-            }
-            if ( pv->pts_next - pts >= pv->duration )
-            {
-                // this frame starts more than a frame time before where
-                // the nominal frame rate says it should - drop it.
-                // log the first 10 drops so we'll know what's going on.
-                if ( pv->ndrops++ < 10 )
-                {
-                    hb_log( "time reversal next %.0f pts %lld (diff %g)",
-                            pv->pts_next, pts, pv->pts_next - pts );
-                }
-                hb_buffer_close( &in );
-                return HB_WORK_OK;
-            }
-            pv->pts = pts;
-        }
+        pv->pts = pts;
     }
 
     if ( in->new_chap )
@@ -778,45 +888,15 @@ static int decavcodecviInfo( hb_work_object_t *w, hb_work_info_t *info )
 {
     if ( decavcodecvInfo( w, info ) )
     {
-        // There are at least three different video frame rates in ffmpeg:
-        //  - time_base in the AVStream
-        //  - time_base in the AVCodecContext
-        //  - r_frame_rate in the AVStream
-        // There's no guidence on which if any of these to believe but the
-        // routine compute_frame_duration tries the stream first then the codec.
-        // In general the codec time base seems bogus & the stream time base is
-        // ok except for wmv's where the stream time base is also bogus but
-        // r_frame_rate is sometimes ok & sometimes a random number.
-        AVStream *st = hb_ffmpeg_avstream( w->codec_param );
-        AVRational tb;
-        // XXX because the time bases are so screwed up, we only take values
-        // in the range 8fps - 64fps.
-        if ( st->time_base.num * 64 > st->time_base.den &&
-             st->time_base.den > st->time_base.num * 8 )
+        hb_work_private_t *pv = w->private_data;
+        if ( ! pv->context )
         {
-            tb = st->time_base;
+            init_ffmpeg_context( w );
         }
-        else if ( st->codec->time_base.num * 64 > st->codec->time_base.den &&
-                  st->codec->time_base.den > st->codec->time_base.num * 8 )
-        {
-            tb = st->codec->time_base;
-        }
-        else if ( st->r_frame_rate.den * 64 > st->r_frame_rate.num &&
-                  st->r_frame_rate.num > st->r_frame_rate.den * 8 )
-        {
-            tb.num = st->r_frame_rate.den;
-            tb.den = st->r_frame_rate.num;
-        }
-        else
-        {
-            tb.num = 1001;  /*XXX*/
-            tb.den = 30000; /*XXX*/
-        }
-
-        // ffmpeg gives the frame rate in frames per second while HB wants
-        // it in units of the 27MHz MPEG clock. */
+        // we have the frame duration in units of the 90KHz pts clock but
+        // need it in units of the 27MHz MPEG clock. */
         info->rate = 27000000;
-        info->rate_base = (int64_t)tb.num * 27000000LL / tb.den;
+        info->rate_base = pv->duration * 300.;
         return 1;
     }
     return 0;
@@ -829,8 +909,20 @@ static void decodeAudio( hb_work_private_t *pv, uint8_t *data, int size )
 
     while ( pos < size )
     {
-        int16_t buffer[AVCODEC_MAX_AUDIO_FRAME_SIZE];
-        int out_size = sizeof(buffer);
+        int16_t *buffer = pv->buffer;
+        if ( buffer == NULL )
+        {
+            // XXX ffmpeg bug workaround
+            // malloc a buffer for the audio decode. On an x86, ffmpeg
+            // uses mmx/sse instructions on this buffer without checking
+            // that it's 16 byte aligned and this will cause an abort if
+            // the buffer is allocated on our stack. Rather than doing
+            // complicated, machine dependent alignment here we use the
+            // fact that malloc returns an aligned pointer on most architectures.
+            pv->buffer = malloc( AVCODEC_MAX_AUDIO_FRAME_SIZE );
+            buffer = pv->buffer;
+        }
+        int out_size = AVCODEC_MAX_AUDIO_FRAME_SIZE;
         int len = avcodec_decode_audio2( context, buffer, &out_size,
                                          data + pos, size - pos );
         if ( len <= 0 )
@@ -842,9 +934,11 @@ static void decodeAudio( hb_work_private_t *pv, uint8_t *data, int size )
         {
             hb_buffer_t *buf = hb_buffer_init( 2 * out_size );
 
+            // convert from bytes to total samples
+            out_size >>= 1;
+
             double pts = pv->pts_next;
             buf->start = pts;
-            out_size >>= 1;
             pts += out_size * pv->duration;
             buf->stop  = pts;
             pv->pts_next = pts;
@@ -875,11 +969,18 @@ static int decavcodecaiWork( hb_work_object_t *w, hb_buffer_t **buf_in,
     if ( ! pv->context )
     {
         init_ffmpeg_context( w );
+        // duration is a scaling factor to go from #bytes in the decoded
+        // frame to frame time (in 90KHz mpeg ticks). 'channels' converts
+        // total samples to per-channel samples. 'sample_rate' converts
+        // per-channel samples to seconds per sample and the 90000
+        // is mpeg ticks per second.
         pv->duration = 90000. /
                     (double)( pv->context->sample_rate * pv->context->channels );
     }
     hb_buffer_t *in = *buf_in;
 
+    // if the packet has a timestamp use it if we don't have a timestamp yet
+    // or if there's been a timing discontinuity of more than 100ms.
     if ( in->start >= 0 &&
          ( pv->pts_next < 0 || ( in->start - pv->pts_next ) > 90*100 ) )
     {
