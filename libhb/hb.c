@@ -1306,19 +1306,22 @@ static void thread_func( void * _h )
 
     /* Remove temp folder */
     dir = opendir( dirname );
-    while( ( entry = readdir( dir ) ) )
+    if (dir)
     {
-        char filename[1024];
-        if( entry->d_name[0] == '.' )
+        while( ( entry = readdir( dir ) ) )
         {
-            continue;
+            char filename[1024];
+            if( entry->d_name[0] == '.' )
+            {
+                continue;
+            }
+            memset( filename, 0, 1024 );
+            snprintf( filename, 1023, "%s/%s", dirname, entry->d_name );
+            unlink( filename );
         }
-        memset( filename, 0, 1024 );
-        snprintf( filename, 1023, "%s/%s", dirname, entry->d_name );
-        unlink( filename );
+        closedir( dir );
+        rmdir( dirname );
     }
-    closedir( dir );
-    rmdir( dirname );
 }
 
 /**
