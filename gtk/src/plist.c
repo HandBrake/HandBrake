@@ -392,7 +392,10 @@ ghb_plist_parse_file(const gchar *filename)
 
 	fd = g_fopen(filename, "r");
 	if (fd == NULL)
+	{
+		g_warning("Plist parse: failed to open %s", filename);
 		return NULL;
+	}
 	fseek(fd, 0, SEEK_END);
 	size = ftell(fd);
 	fseek(fd, 0, SEEK_SET);

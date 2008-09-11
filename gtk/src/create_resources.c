@@ -13,6 +13,7 @@ enum
 	R_SECTION,
 	R_ICON,
 	R_PLIST,
+	R_STRING,
 };
 
 typedef struct
@@ -27,6 +28,7 @@ static tag_map_t tag_map[] =
 	{"section", R_SECTION},
 	{"icon", R_ICON},
 	{"plist", R_PLIST},
+	{"string", R_STRING},
 };
 #define TAG_MAP_SZ	(sizeof(tag_map)/sizeof(tag_map_t))
 
@@ -57,10 +59,33 @@ lookup_attr_value(
 	return NULL;
 }
  
+static GValue*
+read_string_from_file(const gchar *filename)
+{
+	gchar *buffer;
+	size_t size;
+	GValue *gval;
+	FILE *fd;
+
+	fd = g_fopen(filename, "r");
+	if (fd == NULL)
+		return NULL;
+	fseek(fd, 0, SEEK_END);
+	size = ftell(fd);
+	fseek(fd, 0, SEEK_SET);
+	buffer = g_malloc(size+1);
+	size = fread(buffer, 1, size, fd);
+	buffer[size] = 0;
+	gval = ghb_value_new(G_TYPE_STRING);
+	g_value_take_string(gval, buffer);
+	fclose(fd);
+	return gval;
+}
+
 static void
 start_element(
 	GMarkupParseContext *ctx, 
-	const gchar *name, 
+	const gchar *tag, 
 	const gchar **attr_names,
 	const gchar **attr_values,
 	gpointer ud,
@@ -81,7 +106,7 @@ start_element(
 
 	for (ii = 0; ii < TAG_MAP_SZ; ii++)
 	{
-		if (strcmp(name, tag_map[ii].tag) == 0)
+		if (strcmp(tag, tag_map[ii].tag) == 0)
 		{
 			id.id = tag_map[ii].id;
 			break;
@@ -89,7 +114,7 @@ start_element(
 	}
 	if (ii == TAG_MAP_SZ)
 	{
-		g_warning("Unrecognized start tag (%s)", name);
+		g_warning("Unrecognized start tag (%s)", tag);
 		return;
 	}
 	g_queue_push_head(pd->tag_stack, id.pid);
@@ -100,24 +125,24 @@ start_element(
 	{
 		case R_SECTION:
 		{
-			const gchar *sect;
+			const gchar *name;
 
-			sect = lookup_attr_value("name", attr_names, attr_values);
-			if (sect && strcmp(sect, "icons") == 0)
+			name = lookup_attr_value("name", attr_names, attr_values);
+			if (name && strcmp(name, "icons") == 0)
 			{
 				gval = ghb_dict_value_new();
 				if (pd->key) g_free(pd->key);
-				pd->key = g_strdup(sect);
+				pd->key = g_strdup(name);
 				g_queue_push_head(pd->stack, gval);
 			}
 		} break;
 		case R_ICON:
 		{
-			const gchar *filename, *icon;
+			const gchar *filename, *name;
 
 			filename = lookup_attr_value("file", attr_names, attr_values);
-			icon = lookup_attr_value("name", attr_names, attr_values);
-			if (filename && icon)
+			name = lookup_attr_value("name", attr_names, attr_values);
+			if (filename && name)
 			{
 				ghb_rawdata_t *rd;
 				guint size;
@@ -127,7 +152,7 @@ start_element(
 				rd->size = size;
 				gval = ghb_rawdata_value_new(rd);
 				if (pd->key) g_free(pd->key);
-				pd->key = g_strdup(icon);
+				pd->key = g_strdup(name);
 			}
 			else
 			{
@@ -136,15 +161,32 @@ start_element(
 		} break;
 		case R_PLIST:
 		{
-			const gchar *filename, *plist;
+			const gchar *filename, *name;
 
 			filename = lookup_attr_value("file", attr_names, attr_values);
-			plist = lookup_attr_value("name", attr_names, attr_values);
-			if (filename && plist)
+			name = lookup_attr_value("name", attr_names, attr_values);
+			if (filename && name)
 			{
 				gval = ghb_plist_parse_file(filename);
 				if (pd->key) g_free(pd->key);
-				pd->key = g_strdup(plist);
+				pd->key = g_strdup(name);
+			}
+			else
+			{
+				g_warning("%s:missing a requried attribute", name);
+			}
+		} break;
+		case R_STRING:
+		{
+			const gchar *filename, *name;
+
+			filename = lookup_attr_value("file", attr_names, attr_values);
+			name = lookup_attr_value("name", attr_names, attr_values);
+			if (filename && name)
+			{
+				gval = read_string_from_file(filename);
+				if (pd->key) g_free(pd->key);
+				pd->key = g_strdup(name);
 			}
 			else
 			{

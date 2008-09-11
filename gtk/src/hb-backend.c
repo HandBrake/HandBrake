@@ -2308,6 +2308,8 @@ ghb_validate_filters(signal_user_data_t *ud)
 			}
 			g_free(str);
 		}
+#if 0
+		// Deblock is being reworked
 		// debloc 2
 		str = ghb_settings_get_string(ud->settings, "tweak_deblock");
 		enabled = ghb_settings_get_boolean(ud->settings, "deblock");
@@ -2322,6 +2324,7 @@ ghb_validate_filters(signal_user_data_t *ud)
 			return FALSE;
 		}
 		g_free(str);
+#endif
 		// denois 4
 		index = ghb_settings_get_combo_index(ud->settings, "tweak_denoise");
 		if (index < 0)
@@ -2847,17 +2850,11 @@ ghb_add_job(GValue *js, gint unique_id)
 		hb_filter_deinterlace.settings = deint_str;
 		hb_list_add( job->filters, &hb_filter_deinterlace );
 	}
-	if( ghb_settings_get_boolean(js, "deblock") )
+	gint deblock = ghb_settings_get_int(js, "deblock");
+	if( deblock > 0 )
 	{
-		hb_filter_deblock.settings = NULL;
-		if (tweaks)
-		{
-			deblock_str = ghb_settings_get_string(js, "tweak_deblock");
-			if (deblock_str && deblock_str[0])
-			{
-				hb_filter_deblock.settings = deblock_str;
-			}
-		}
+		deblock_str = g_strdup_printf("%d", deblock);
+		hb_filter_deblock.settings = deblock_str;
 		hb_list_add( job->filters, &hb_filter_deblock );
 	}
 	gint denoise = ghb_lookup_denoise(

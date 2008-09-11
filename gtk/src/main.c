@@ -73,20 +73,21 @@
 
 #define BUILDER_NAME "ghb"
 
-const gchar ghb_ui[] =
-#include "ghb.ui.h"
-;
-
 GtkBuilder*
 create_builder_or_die(const gchar * name)
 {
 	guint res;
+	GValue *gval;
+	const gchar *ghb_ui;
+
     const gchar *markup =
         N_("<b><big>Unable to create %s.</big></b>\n"
         "\n"
         "Internal error. Could not parse UI description.\n");
 	g_debug("create_builder_or_die ()\n");
 	GtkBuilder *xml = gtk_builder_new();
+	gval = ghb_resource_get("ghb-ui");
+	ghb_ui = g_value_get_string(gval);
 	if (xml != NULL)
 		res = gtk_builder_add_from_string(xml, ghb_ui, -1, NULL);
     if (!xml || !res) 
@@ -572,7 +573,7 @@ main (int argc, char *argv[])
 	gtk_main ();
 	//I'd like to do this, but hb threads seem to persist for a while
 	//so closing crashes :(
-	//ghb_backend_close();
+	ghb_backend_close();
 	if (ud->queue)
 		ghb_value_free(ud->queue);
 	ghb_value_free(ud->settings);

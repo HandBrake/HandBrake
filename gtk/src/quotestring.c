@@ -2,7 +2,7 @@
 #include <string.h>
 #include <libgen.h>
 
-#define BUF_SIZE    4*65536
+#define BUF_SIZE    72
 
 void
 usage(char *cmd)
@@ -37,8 +37,20 @@ main(int argc, char *argv[])
     {
 		int ii, jj;
         int len;
+		int eol = 0;
         // Step on any CR LF at end of line
         len = strlen(in_buffer);
+       	if (len > 1 && in_buffer[len-1] == '\n' && in_buffer[len-2] == '\r')
+		{
+			in_buffer[len-1] = 0;
+			in_buffer[len-2] = 0;
+			eol = 1;
+		}
+       	else if (len > 0 && in_buffer[len-1] == '\n')
+		{
+			in_buffer[len-1] = 0;
+			eol = 1;
+		}
 		for (jj = 0, ii = 0; ii < len; ii++)
 		{
 			if (in_buffer[ii] == '"')
@@ -46,7 +58,7 @@ main(int argc, char *argv[])
 				out_buffer[jj++] = '\\';
 				out_buffer[jj++] = in_buffer[ii];
 			}
-        	else if (in_buffer[ii] == '\n' || in_buffer[ii] == '\r')
+        	else if (in_buffer[ii] == '\r')
 			{ // Skip it
 			}
 			else
@@ -55,7 +67,10 @@ main(int argc, char *argv[])
 			}
 		}
 		out_buffer[jj] = 0;
-        fprintf(outfile, "\"%s\\n\"\n", out_buffer);
+		if (eol)
+        	fprintf(outfile, "\"%s\\n\"\n", out_buffer);
+		else
+        	fprintf(outfile, "\"%s\"\n", out_buffer);
     }
     fclose(infile);
     fclose(outfile);

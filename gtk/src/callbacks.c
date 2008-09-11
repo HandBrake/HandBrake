@@ -26,6 +26,7 @@
 #include <gio/gio.h>
 
 #include "callbacks.h"
+#include "resources.h"
 #include "settings.h"
 #include "presets.h"
 #include "values.h"
@@ -51,20 +52,11 @@ static GValue* get_selected_asettings(signal_user_data_t *ud);
 GValue *dep_map;
 GValue *rev_map;
 
-const gchar widget_deps[] =
-#include "widget_deps.h"
-;
-
-const gchar widget_reverse_deps[] =
-#include "widget_reverse_deps.h"
-;
-
 void
 ghb_init_dep_map()
 {
-	dep_map = ghb_plist_parse(widget_deps, sizeof(widget_deps)-1);
-	rev_map = ghb_plist_parse(widget_reverse_deps, 
-								sizeof(widget_reverse_deps)-1);
+	dep_map = ghb_resource_get("widget-deps");
+	rev_map = ghb_resource_get("widget-reverse-deps");
 }
 
 static gboolean
@@ -3017,7 +3009,7 @@ ghb_backend_events(signal_user_data_t *ud)
 			gtk_progress_bar_set_text (progress, "No Source");
 		}
 		ghb_clear_state(GHB_STATE_SCANDONE);
-		queue_buttons_grey(ud, (0 != (status.queue_state & GHB_STATE_WORKING)));
+		queue_buttons_grey(ud, work_started);
 	}
 	else if (status.queue_state & GHB_STATE_SCANNING)
 	{
@@ -3154,8 +3146,20 @@ ghb_backend_events(signal_user_data_t *ud)
 	{
 		gtk_progress_bar_set_text(progress, "Muxing: this may take awhile...");
 	}
+	if (status.queue_state & GHB_STATE_SCANNING)
+	{
+		// This needs to be in scanning and working since scanning
+		// happens fast enough that it can be missed
+		if (!work_started)
+		{
+			work_started = TRUE;
+			queue_buttons_grey(ud, TRUE);
+		}
+	}
 	if (status.queue_state & GHB_STATE_WORKING)
 	{
+		// This needs to be in scanning and working since scanning
+		// happens fast enough that it can be missed
 		if (!work_started)
 		{
 			work_started = TRUE;

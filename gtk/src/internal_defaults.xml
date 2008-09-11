@@ -110,7 +110,7 @@
 		<key>container</key>
 		<string>mp4</string>
 		<key>deblock</key>
-		<false />
+		<real>0</real>
 		<key>decomb</key>
 		<true />
 		<key>deinterlace</key>
@@ -166,8 +166,6 @@
 		<string>none</string>
 		<key>turbo</key>
 		<false />
-		<key>tweak_deblock</key>
-		<string></string>
 		<key>tweak_decomb</key>
 		<string></string>
 		<key>tweak_detelecine</key>
