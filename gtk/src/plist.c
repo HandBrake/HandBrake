@@ -377,6 +377,8 @@ ghb_plist_parse(const gchar *buf, gssize len)
 	g_markup_parse_context_parse(ctx, buf, len, &err);
 	g_markup_parse_context_end_parse(ctx, &err);
 	g_markup_parse_context_free(ctx);
+	if (pd.key) g_free(pd.key);
+	if (pd.value) g_free(pd.value);
 	g_queue_free(pd.stack);
 	g_queue_free(pd.tag_stack);
 	return pd.plist;

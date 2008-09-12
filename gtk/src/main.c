@@ -571,8 +571,6 @@ main (int argc, char *argv[])
 	g_timeout_add (500, ghb_timer_cb, (gpointer)ud);
 	// Everything should be go-to-go.  Lets rock!
 	gtk_main ();
-	//I'd like to do this, but hb threads seem to persist for a while
-	//so closing crashes :(
 	ghb_backend_close();
 	if (ud->queue)
 		ghb_value_free(ud->queue);
