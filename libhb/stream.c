@@ -2135,11 +2135,11 @@ static int hb_ts_stream_decode( hb_stream_t *stream, uint8_t *obuf )
             stream->ts_lastpcr = pcr;
         }
 
-		if ( pcr == -1 )
-		{
-            // don't accumulate data until we get a pcr
-		    continue;
-		}
+        // If we don't have a pcr yet, the right thing to do here would
+        // be a 'continue' so we don't process anything until we have a
+        // clock reference. Unfortunately the HD Home Run appears to null
+        // out the pcr field of some streams so we keep going & substitute
+        // the video stream dts for the pcr when there's no pcr.
 
 		// Get continuity
         // Continuity only increments for adaption values of 0x3 or 0x01
@@ -2159,6 +2159,7 @@ static int hb_ts_stream_decode( hb_stream_t *stream, uint8_t *obuf )
                 continue;
             }
             if ( !start && (stream->ts_streamcont[curstream] != -1) &&
+                 stream->ts_foundfirst[curstream] &&
                  (continuity != ( (stream->ts_streamcont[curstream] + 1) & 0xf ) ) )
 			{
 				ts_err( stream, curstream,  "continuity error: got %d expected %d",
@@ -2202,8 +2203,30 @@ static int hb_ts_stream_decode( hb_stream_t *stream, uint8_t *obuf )
                     stream->ts_foundfirst[0] = 1;
                 }
                 ++stream->frames;
+
+                // if we don't have a pcr yet use the dts from this frame
+                if ( pcr == -1 )
+                {
+                    // PES must begin with an mpeg start code & contain
+                    // a DTS or PTS.
+                    uint8_t *pes = buf + adapt_len + 4;
+                    if ( pes[0] != 0x00 || pes[1] != 0x00 || pes[2] != 0x01 ||
+                         ( pes[7] >> 6 ) == 0 )
+                    {
+                        continue;
+                    }
+                    // if we have a dts use it otherwise use the pts
+                    pes += (pes[7] & 0x40)? 9 : 14;
+
+                    pcr = ( ( (uint64_t)pes[0] >> 1 ) & 7 << 30 ) |
+                          ( (uint64_t)pes[1] << 22 ) |
+                          ( ( (uint64_t)pes[2] >> 1 ) << 15 ) |
+                          ( (uint64_t)pes[3] << 7 ) |
+                          ( (uint64_t)pes[4] >> 1 );
+                    stream->ts_nextpcr = pcr;
+                }
             }
-			else if ( ! stream->ts_foundfirst[curstream] )
+            else if ( ! stream->ts_foundfirst[curstream] )
             {
                 // start other streams only after first video frame found.
                 if ( ! stream->ts_foundfirst[0] )
