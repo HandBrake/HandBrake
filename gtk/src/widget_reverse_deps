@@ -34,6 +34,14 @@
 			<true />
 		</array>
 	</array>
+	<key>chapters_in_destination</key>
+	<array>
+		<array>
+			<string>use_source_name</string>
+			<string>TRUE</string>
+			<false />
+		</array>
+	</array>
 	<key>chapters_label</key>
 	<array>
 		<array>

@@ -3447,10 +3447,24 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="tooltip_text">The destination filename will be automatically
 generated from the source filename or volume
 label.</property>
-                            <property name="label" translatable="yes">Derive destination name from source</property>
+                            <property name="label" translatable="yes">Automatically generate destination</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="pref_changed_cb"/>
                           </object>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="chapters_in_destination">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip_text">Add chapter numbers to the 
+auto-generated destination name.</property>
+                            <property name="label" translatable="yes">Add chapters to destination name</property>
+                            <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="pref_changed_cb"/>
+                          </object>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="linear_vquality">
@@ -3465,7 +3479,7 @@ video codecs.</property>
                             <signal name="toggled" handler="pref_changed_cb"/>
                           </object>
                           <packing>
-                            <property name="position">1</property>
+                            <property name="position">2</property>
                           </packing>
                         </child>
                         <child>
@@ -3482,7 +3496,7 @@ the required multiple.</property>
                             <signal name="toggled" handler="pref_changed_cb"/>
                           </object>
                           <packing>
-                            <property name="position">2</property>
+                            <property name="position">3</property>
                           </packing>
                         </child>
                         <child>
@@ -3501,7 +3515,7 @@ this setting.</property>
                             <signal name="toggled" handler="vcodec_changed_cb"/>
                           </object>
                           <packing>
-                            <property name="position">3</property>
+                            <property name="position">4</property>
                           </packing>
                         </child>
                         <child>
@@ -3512,7 +3526,7 @@ this setting.</property>
                             <signal name="toggled" handler="tweaks_changed_cb"/>
                           </object>
                           <packing>
-                            <property name="position">4</property>
+                            <property name="position">5</property>
                           </packing>
                         </child>
                         <child>
@@ -3523,7 +3537,7 @@ this setting.</property>
                             <signal name="toggled" handler="hbfd_feature_changed_cb"/>
                           </object>
                           <packing>
-                            <property name="position">5</property>
+                            <property name="position">6</property>
                           </packing>
                         </child>
                       </object>
@@ -3949,7 +3963,8 @@ this setting.</property>
                 <property name="can_focus">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="headers_visible">False</property>
-                <property name="headers_clickable">True</property>
+                <property name="headers_clickable">False</property>
+                <property name="hover_expand">False</property>
               </object>
             </child>
           </object>

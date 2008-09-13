@@ -146,6 +146,9 @@ resources.c: resource_data.h
 resource_data.h: quotestring resources.plist
 	./quotestring resources.plist resource_data.h
 
+widget_deps: makewidgetdeps
+	./makewidgetdeps
+
 resources.plist: create_resources resources.list $(icons_dep) internal_defaults.xml standard_presets.xml ghb.ui widget_deps widget_reverse_deps
 	./create_resources resources.list resources.plist
 

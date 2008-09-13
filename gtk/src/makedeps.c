@@ -69,6 +69,7 @@ static dependency_t dep_map[] =
 	{"x264_analyse", "x264_direct", "none", TRUE},
 	{"x264_me", "x264_merange", "umh|esa", FALSE},
 	{"chapter_markers", "chapters_list", "TRUE", FALSE},
+	{"use_source_name", "chapters_in_destination", "TRUE", FALSE},
 };
 
 int

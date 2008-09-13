@@ -41,6 +41,7 @@ static GList* dvd_device_list();
 static gboolean cancel_encode();
 static void audio_list_refresh_selected(signal_user_data_t *ud);
 static GValue* get_selected_asettings(signal_user_data_t *ud);
+static gint find_last_finished(GValue *queue);
 
 // This is a dependency map used for greying widgets
 // that are dependent on the state of another widget.
@@ -260,16 +261,16 @@ on_quit1_activate(GtkMenuItem *quit, signal_user_data_t *ud)
 {
 	gint state = ghb_get_queue_state();
 	g_debug("on_quit1_activate ()");
-    if (state & GHB_STATE_WORKING)
-    {
-        if (cancel_encode("Closing HandBrake will terminate encoding.\n"))
-        {
+	if (state & GHB_STATE_WORKING)
+   	{
+		if (cancel_encode("Closing HandBrake will terminate encoding.\n"))
+		{
 			ghb_hb_cleanup(FALSE);
-	        gtk_main_quit();
-            return;
-        }
-        return;
-    }
+			gtk_main_quit();
+			return;
+		}
+		return;
+	}
 	ghb_hb_cleanup(FALSE);
 	gtk_main_quit();
 }
@@ -287,7 +288,27 @@ set_destination(signal_user_data_t *ud)
 		extension = ghb_settings_get_string(ud->settings, "container");
 		dir = g_path_get_dirname (filename);
 		vol_name = ghb_settings_get_string(ud->settings, "volume_label");
-		new_name = g_strdup_printf("%s/%s.%s", dir, vol_name, extension);
+		if (ghb_settings_get_boolean(ud->settings, "chapters_in_destination"))
+		{
+			gint start, end;
+
+			start = ghb_settings_get_int(ud->settings, "start_chapter");
+			end = ghb_settings_get_int(ud->settings, "end_chapter");
+			if (start == end)
+			{
+				new_name = g_strdup_printf("%s/%s-%d.%s", 
+					dir, vol_name, start, extension);
+			}
+			else
+			{
+				new_name = g_strdup_printf("%s/%s-%d-%d.%s", 
+					dir, vol_name, start, end, extension);
+			}
+		}
+		else
+		{
+			new_name = g_strdup_printf("%s/%s.%s", dir, vol_name, extension);
+		}
 		ghb_ui_update(ud, "destination", ghb_string_value(new_name));
 		g_free(filename);
 		g_free(extension);
@@ -743,11 +764,11 @@ destination_browse_clicked_cb(GtkButton *button, signal_user_data_t *ud)
 	g_debug("destination_browse_clicked_cb ()");
 	destname = ghb_settings_get_string(ud->settings, "destination");
 	dialog = gtk_file_chooser_dialog_new ("Choose Destination",
-                      NULL,
-                      GTK_FILE_CHOOSER_ACTION_SAVE,
-                      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                      GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
-                      NULL);
+					  NULL,
+					  GTK_FILE_CHOOSER_ACTION_SAVE,
+					  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					  GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+					  NULL);
 	gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), destname);
 	basename = g_path_get_basename(destname);
 	g_free(destname);
@@ -778,7 +799,7 @@ window_destroy_event_cb(GtkWidget *widget, GdkEvent *event, signal_user_data_t *
 	g_debug("window_destroy_event_cb ()");
 	ghb_hb_cleanup(FALSE);
 	gtk_main_quit();
-    return FALSE;
+	return FALSE;
 }
 
 gboolean
@@ -786,19 +807,19 @@ window_delete_event_cb(GtkWidget *widget, GdkEvent *event, signal_user_data_t *u
 {
 	gint state = ghb_get_queue_state();
 	g_debug("window_delete_event_cb ()");
-    if (state & GHB_STATE_WORKING)
-    {
-        if (cancel_encode("Closing HandBrake will terminate encoding.\n"))
-        {
+	if (state & GHB_STATE_WORKING)
+	{
+		if (cancel_encode("Closing HandBrake will terminate encoding.\n"))
+		{
 			ghb_hb_cleanup(FALSE);
-	        gtk_main_quit();
-            return FALSE;
-        }
-        return TRUE;
-    }
+			gtk_main_quit();
+			return FALSE;
+		}
+		return TRUE;
+	}
 	ghb_hb_cleanup(FALSE);
 	gtk_main_quit();
-    return FALSE;
+	return FALSE;
 }
 
 static void
@@ -1292,7 +1313,7 @@ validate_filter_widget(signal_user_data_t *ud, const gchar *name)
 
 gboolean
 deint_tweak_focus_out_cb(GtkWidget *widget, GdkEventFocus *event, 
-    signal_user_data_t *ud)
+	signal_user_data_t *ud)
 {
 	g_debug("deint_tweak_focus_out_cb ()");
 	validate_filter_widget(ud, "tweak_deinterlace");
@@ -1301,7 +1322,7 @@ deint_tweak_focus_out_cb(GtkWidget *widget, GdkEventFocus *event,
 
 gboolean
 denoise_tweak_focus_out_cb(GtkWidget *widget, GdkEventFocus *event, 
-    signal_user_data_t *ud)
+	signal_user_data_t *ud)
 {
 	g_debug("denoise_tweak_focus_out_cb ()");
 	validate_filter_widget(ud, "tweak_noise");
@@ -1385,6 +1406,10 @@ start_chapter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	start = ghb_settings_get_int(ud->settings, "start_chapter");
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(end_ch), start, end);
 	check_dependency(ud, widget);
+	if (ghb_settings_get_boolean(ud->settings, "chapters_in_destination"))
+	{
+		set_destination(ud);
+	}
 }
 
 void
@@ -1399,6 +1424,10 @@ end_chapter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	end = ghb_settings_get_int(ud->settings, "end_chapter");
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(start_ch), start, end);
 	check_dependency(ud, widget);
+	if (ghb_settings_get_boolean(ud->settings, "chapters_in_destination"))
+	{
+		set_destination(ud);
+	}
 }
 
 void
@@ -1513,7 +1542,7 @@ generic_entry_changed_cb(GtkEntry *entry, signal_user_data_t *ud)
 
 gboolean
 generic_focus_out_cb(GtkWidget *widget, GdkEventFocus *event, 
-    signal_user_data_t *ud)
+	signal_user_data_t *ud)
 {
 	g_debug("generic_focus_out_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
@@ -1567,7 +1596,7 @@ x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
 gboolean
 x264_focus_out_cb(GtkWidget *widget, GdkEventFocus *event, 
-    signal_user_data_t *ud)
+	signal_user_data_t *ud)
 {
 	gchar *options, *sopts;
 
@@ -1689,7 +1718,7 @@ audio_list_refresh_selected(signal_user_data_t *ud)
 		gchar *track, *codec, *br, *sr, *mix, *drc;
 		gchar *s_track, *s_codec, *s_br, *s_sr, *s_mix;
 		gdouble s_drc;
-        // Get the row number
+		// Get the row number
 		treepath = gtk_tree_model_get_path (store, &iter);
 		indices = gtk_tree_path_get_indices (treepath);
 		row = indices[0];
@@ -1763,7 +1792,7 @@ get_selected_asettings(signal_user_data_t *ud)
 	selection = gtk_tree_view_get_selection (treeview);
 	if (gtk_tree_selection_get_selected(selection, &store, &iter))
 	{
-        // Get the row number
+		// Get the row number
 		treepath = gtk_tree_model_get_path (store, &iter);
 		indices = gtk_tree_path_get_indices (treepath);
 		row = indices[0];
@@ -1888,7 +1917,7 @@ audio_remove_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
 		{
 			gtk_tree_selection_select_iter (selection, &nextIter);
 		}
-        // Get the row number
+		// Get the row number
 		treepath = gtk_tree_model_get_path (store, &iter);
 		indices = gtk_tree_path_get_indices (treepath);
 		row = indices[0];
@@ -1902,6 +1931,8 @@ audio_remove_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
 		audio_list = ghb_settings_get_value(ud->settings, "audio_list");
 		if (row >= ghb_array_len(audio_list))
 			return;
+		GValue *old = ghb_array_get_nth(audio_list, row);
+		ghb_value_free(old);
 		ghb_array_remove(audio_list, row);
 	}
 }
@@ -2329,13 +2360,14 @@ queue_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t 
 }
 
 static void
-add_to_queue_list(signal_user_data_t *ud, GValue *settings)
+add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 {
 	GtkTreeView *treeview;
 	GtkTreeIter iter;
 	GtkTreeStore *store;
 	gchar *info;
 	gint num_pass = 1;
+	gint status;
 	gint ii;
 	GtkTreeIter citer;
 	gchar *vcodec, *container, *acodec, *dest, *preset, *vol_name;
@@ -2360,8 +2392,31 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings)
 		 pass2 ? 2:1, pass2 ? "Passes":"Pass"
 	);
 
-	gtk_tree_store_append(store, &iter, NULL);
-	gtk_tree_store_set(store, &iter, 0, "hb-queue-job", 1, info, 2, "hb-queue-delete", -1);
+	if (piter)
+		iter = *piter;
+	else
+		gtk_tree_store_append(store, &iter, NULL);
+
+	gtk_tree_store_set(store, &iter, 1, info, 2, "hb-queue-delete", -1);
+	status = ghb_settings_get_int(settings, "job_status");
+	switch (status)
+	{
+		case GHB_QUEUE_PENDING:
+			gtk_tree_store_set(store, &iter, 0, "hb-queue-job", -1);
+			break;
+		case GHB_QUEUE_CANCELED:
+			gtk_tree_store_set(store, &iter, 0, "hb-canceled", -1);
+			break;
+		case GHB_QUEUE_RUNNING:
+			gtk_tree_store_set(store, &iter, 0, "hb-working0", -1);
+			break;
+		case GHB_QUEUE_DONE:
+			gtk_tree_store_set(store, &iter, 0, "hb-complete", -1);
+			break;
+		default:
+			gtk_tree_store_set(store, &iter, 0, "hb-queue-job", -1);
+			break;
+	}
 	g_free(info);
 
 	vcodec = ghb_settings_get_combo_option(settings, "video_codec");
@@ -2722,7 +2777,7 @@ queue_add(signal_user_data_t *ud)
 	titlenum = ghb_get_title_number(titleindex);
 	ghb_settings_set_int(settings, "titlenum", titlenum);
 	ghb_array_append(ud->queue, settings);
-	add_to_queue_list(ud, settings);
+	add_to_queue_list(ud, settings, NULL);
 	ghb_save_queue(ud->queue);
 
 	return TRUE;
@@ -2800,12 +2855,211 @@ queue_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
 		// Remove the selected item
 		gtk_tree_store_remove(GTK_TREE_STORE(store), &iter);
 		// Remove the corresponding item from the queue list
+		GValue *old = ghb_array_get_nth(ud->queue, row);
+		ghb_value_free(old);
 		ghb_array_remove(ud->queue, row);
+		ghb_save_queue(ud->queue);
 	}
 	else
 	{	
 		gtk_tree_path_free (treepath);
 	}
+}
+
+// This little bit is needed to prevent the default drag motion
+// handler from expanding rows if you hover over them while
+// dragging.
+// Also controls where valid drop locations are
+gboolean
+queue_drag_motion_cb(
+	GtkTreeView *tv,
+	GdkDragContext *ctx,
+	gint x,
+	gint y,
+	guint time,
+	signal_user_data_t *ud)
+{
+	GtkTreePath *path = NULL;
+	GtkTreeViewDropPosition pos;
+	gint *indices, row, status, finished;
+	GValue *js;
+	GtkTreeIter iter;
+	GtkTreeView *srctv;
+	GtkTreeModel *model;
+	GtkTreeSelection *select;
+
+	// This bit checks to see if the source is allowed to be
+	// moved.  Only pending and canceled items may be moved.
+	srctv = GTK_TREE_VIEW(gtk_drag_get_source_widget(ctx));
+	select = gtk_tree_view_get_selection (srctv);
+	gtk_tree_selection_get_selected (select, &model, &iter);
+	path = gtk_tree_model_get_path (model, &iter);
+	indices = gtk_tree_path_get_indices(path);
+	row = indices[0];
+	gtk_tree_path_free(path);
+	js = ghb_array_get_nth(ud->queue, row);
+	status = ghb_settings_get_int(js, "job_status");
+	if (status != GHB_QUEUE_PENDING && status != GHB_QUEUE_CANCELED)
+	{
+		gdk_drag_status(ctx, 0, time);
+		return TRUE;
+	}
+
+	// The reset checks that the destination is a valid position
+	// in the list.  Can not move above any finished or running items
+	gtk_tree_view_get_dest_row_at_pos (tv, x, y, &path, &pos);
+	if (path == NULL)
+	{
+		gdk_drag_status(ctx, GDK_ACTION_MOVE, time);
+		return TRUE;
+	}
+	indices = gtk_tree_path_get_indices(path);
+	row = indices[0];
+	js = ghb_array_get_nth(ud->queue, row);
+
+	finished = find_last_finished(ud->queue);
+	if (row < finished)
+	{
+		gtk_tree_path_free(path);
+		gdk_drag_status(ctx, 0, time);
+		return TRUE;
+	}
+	if (pos != GTK_TREE_VIEW_DROP_AFTER && 
+		row == finished)
+	{
+		gtk_tree_path_free(path);
+		gdk_drag_status(ctx, 0, time);
+		return TRUE;
+	}
+	gtk_tree_view_set_drag_dest_row(tv, path, pos);
+	gtk_tree_path_free(path);
+	gdk_drag_status(ctx, GDK_ACTION_MOVE, time);
+	return TRUE;
+}
+
+void 
+queue_drag_cb(
+	GtkTreeView *dstwidget, 
+	GdkDragContext *dc, 
+	gint x, gint y, 
+	GtkSelectionData *selection_data, 
+	guint info, guint t, 
+	signal_user_data_t *ud)
+{
+	GtkTreePath *path = NULL;
+	//GtkTreeModel *model;
+	GtkTreeViewDropPosition pos;
+	GtkTreeIter dstiter, srciter;
+	gint *indices, row;
+	GValue *js;
+	
+	GtkTreeModel *dstmodel = gtk_tree_view_get_model(dstwidget);
+			
+	g_debug("queue_drag_cb ()");
+	// This doesn't work here for some reason...
+	// gtk_tree_view_get_drag_dest_row(dstwidget, &path, &pos);
+	gtk_tree_view_get_dest_row_at_pos (dstwidget, x, y, &path, &pos);
+	// This little hack is needed because attempting to drop after
+	// the last item gives us no path or pos.
+	if (path == NULL)
+	{
+		gint n_children;
+
+		n_children = gtk_tree_model_iter_n_children(dstmodel, NULL);
+		if (n_children)
+		{
+			pos = GTK_TREE_VIEW_DROP_AFTER;
+			path = gtk_tree_path_new_from_indices(n_children-1, -1);
+		}
+		else
+		{
+			pos = GTK_TREE_VIEW_DROP_BEFORE;
+			path = gtk_tree_path_new_from_indices(0, -1);
+		}
+	}
+	if (path)
+	{
+		if (gtk_tree_path_get_depth(path) > 1)
+			gtk_tree_path_up(path);
+		if (gtk_tree_model_get_iter (dstmodel, &dstiter, path))
+		{
+			GtkTreeIter iter;
+			GtkTreeView *srcwidget;
+			GtkTreeModel *srcmodel;
+			GtkTreeSelection *select;
+			GtkTreePath *srcpath = NULL;
+			GtkTreePath *dstpath = NULL;
+
+			srcwidget = GTK_TREE_VIEW(gtk_drag_get_source_widget(dc));
+			//srcmodel = gtk_tree_view_get_model(srcwidget);
+			select = gtk_tree_view_get_selection (srcwidget);
+			gtk_tree_selection_get_selected (select, &srcmodel, &srciter);
+
+			srcpath = gtk_tree_model_get_path (srcmodel, &srciter);
+			indices = gtk_tree_path_get_indices(srcpath);
+			row = indices[0];
+			gtk_tree_path_free(srcpath);
+			js = ghb_array_get_nth(ud->queue, row);
+
+			switch (pos)
+			{
+				case GTK_TREE_VIEW_DROP_BEFORE:
+				case GTK_TREE_VIEW_DROP_INTO_OR_BEFORE:
+					gtk_tree_store_insert_before (GTK_TREE_STORE (dstmodel), 
+													&iter, NULL, &dstiter);
+					break;
+
+				case GTK_TREE_VIEW_DROP_AFTER:
+				case GTK_TREE_VIEW_DROP_INTO_OR_AFTER:
+					gtk_tree_store_insert_after (GTK_TREE_STORE (dstmodel), 
+													&iter, NULL, &dstiter);
+					break;
+
+				default:
+					break;
+			}
+			// Reset job to pending
+			ghb_settings_set_int(js, "job_status", GHB_QUEUE_PENDING);
+			add_to_queue_list(ud, js, &iter);
+
+			dstpath = gtk_tree_model_get_path (dstmodel, &iter);
+			indices = gtk_tree_path_get_indices(dstpath);
+			row = indices[0];
+			gtk_tree_path_free(dstpath);
+			ghb_array_insert(ud->queue, row, js);
+
+			srcpath = gtk_tree_model_get_path (srcmodel, &srciter);
+			indices = gtk_tree_path_get_indices(srcpath);
+			row = indices[0];
+			gtk_tree_path_free(srcpath);
+			ghb_array_remove(ud->queue, row);
+			gtk_tree_store_remove (GTK_TREE_STORE (srcmodel), &srciter);
+			ghb_save_queue(ud->queue);
+		}
+		gtk_tree_path_free(path);
+	}
+}
+
+
+static gint
+find_last_finished(GValue *queue)
+{
+	GValue *js;
+	gint ii, count;
+	gint status;
+	
+	g_debug("find_last_finished");
+	count = ghb_array_len(queue);
+	for (ii = 0; ii < count; ii++)
+	{
+		js = ghb_array_get_nth(queue, ii);
+		status = ghb_settings_get_int(js, "job_status");
+		if (status != GHB_QUEUE_DONE && status != GHB_QUEUE_RUNNING)
+		{
+			return ii-1;
+		}
+	}
+	return -1;
 }
 
 static gint
@@ -3166,7 +3420,7 @@ ghb_backend_events(signal_user_data_t *ud)
 			queue_buttons_grey(ud, TRUE);
 		}
 		index = find_queue_job(ud->queue, status.unique_id, &js);
-		if (index >= 0)
+		if (status.unique_id != 0 && index >= 0)
 		{
 			gchar working_icon[] = "hb-working0";
 			working_icon[10] = '0' + working;
@@ -3728,6 +3982,7 @@ pref_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("pref_changed_cb");
 	ghb_widget_to_setting (ud->settings, widget);
+	check_dependency(ud, widget);
 	const gchar *name = gtk_widget_get_name(widget);
 	ghb_pref_save(ud->settings, name);
 }
@@ -4112,6 +4367,8 @@ ghb_reload_queue(signal_user_data_t *ud)
 				status = ghb_settings_get_int(settings, "job_status");
 				if (status == GHB_QUEUE_DONE || status == GHB_QUEUE_CANCELED)
 				{
+					GValue *old = ghb_array_get_nth(queue, ii);
+					ghb_value_free(old);
 					ghb_array_remove(queue, ii);
 				}
 			}
@@ -4121,7 +4378,7 @@ ghb_reload_queue(signal_user_data_t *ud)
 				settings = ghb_array_get_nth(queue, ii);
 				ghb_settings_set_int(settings, "job_unique_id", 0);
 				ghb_settings_set_int(settings, "job_status", GHB_QUEUE_PENDING);
-				add_to_queue_list(ud, settings);
+				add_to_queue_list(ud, settings, NULL);
 			}
 			queue_buttons_grey(ud, FALSE);
 		}

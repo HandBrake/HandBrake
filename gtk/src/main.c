@@ -225,6 +225,8 @@ bind_chapter_tree_model (signal_user_data_t *ud)
 extern void queue_list_selection_changed_cb(void);
 extern void queue_remove_clicked_cb(void);
 extern void queue_list_size_allocate_cb(void);
+extern void queue_drag_cb(void);
+extern void queue_drag_motion_cb(void);
 
 // Create and bind the tree model to the tree view for the queue list
 // Also, connect up the signal that lets us know the selection has changed
@@ -236,6 +238,9 @@ bind_queue_tree_model (signal_user_data_t *ud)
 	GtkTreeStore *treestore;
 	GtkTreeView  *treeview;
 	GtkTreeSelection *selection;
+	GtkTargetEntry SrcEntry;
+	SrcEntry.target = "DATA";
+	SrcEntry.flags = GTK_TARGET_SAME_WIDGET;
 
 	g_debug("bind_queue_tree_model ()\n");
 	treeview = GTK_TREE_VIEW(GHB_WIDGET (ud->builder, "queue_list"));
@@ -265,9 +270,17 @@ bind_queue_tree_model (signal_user_data_t *ud)
 	gtk_tree_view_column_set_min_width (column, 24);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 
+	gtk_tree_view_enable_model_drag_dest (treeview, &SrcEntry, 1, 
+											GDK_ACTION_MOVE);
+	gtk_tree_view_enable_model_drag_source (treeview, GDK_BUTTON1_MASK, 
+											&SrcEntry, 1, GDK_ACTION_MOVE);
+
 	g_signal_connect(selection, "changed", queue_list_selection_changed_cb, ud);
 	g_signal_connect(cell, "clicked", queue_remove_clicked_cb, ud);
-	g_signal_connect(treeview, "size-allocate", queue_list_size_allocate_cb, textcell);
+	g_signal_connect(treeview, "size-allocate", queue_list_size_allocate_cb, 
+						textcell);
+	g_signal_connect(treeview, "drag_data_received", queue_drag_cb, ud);
+	g_signal_connect(treeview, "drag_motion", queue_drag_motion_cb, ud);
 }
 
 extern void audio_list_selection_changed_cb(void);

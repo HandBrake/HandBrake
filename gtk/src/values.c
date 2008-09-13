@@ -656,6 +656,19 @@ ghb_array_get_nth(const GValue *gval, gint ii)
 }
 
 void
+ghb_array_insert(GValue *gval, guint ii, GValue *val)
+{
+	GArray *arr = g_value_get_boxed(gval);
+	// A little nastyness here.  The array pointer
+	// can change when the array changes size.  So
+	// I must re-box it in the GValue each time.
+	arr = g_array_insert_val(arr, ii, val);
+	memset(gval, 0, sizeof(GValue));
+	g_value_init(gval, ghb_array_get_type());
+	g_value_take_boxed(gval, arr);
+}
+
+void
 ghb_array_append(GValue *gval, GValue *val)
 {
 	GArray *arr = g_value_get_boxed(gval);

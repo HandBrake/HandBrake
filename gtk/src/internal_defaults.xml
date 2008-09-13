@@ -72,6 +72,8 @@
 	<dict>
 		<key>allow_tweaks</key>
 		<false />
+		<key>chapters_in_destination</key>
+		<false />
 		<key>default_preset</key>
 		<string>Normal</string>
 		<key>default_source</key>

@@ -48,6 +48,7 @@ GType ghb_rawdata_get_type(void);
 GType ghb_array_get_type(void);
 GType ghb_dict_get_type(void);
 GValue* ghb_array_get_nth(const GValue *array, gint ii);
+void ghb_array_insert(GValue *gval, guint ii, GValue *val);
 void ghb_array_append(GValue *gval, GValue *val);
 void ghb_array_remove(GValue *gval, guint ii);
 gint ghb_array_len(const GValue *gval);

@@ -65,6 +65,10 @@
 	<array>
 		<string>turbo</string>
 	</array>
+	<key>use_source_name</key>
+	<array>
+		<string>chapters_in_destination</string>
+	</array>
 	<key>variable_frame_rate</key>
 	<array>
 		<string>framerate</string>

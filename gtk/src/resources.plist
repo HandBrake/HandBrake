@@ -3452,10 +3452,24 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1&lt;/property&gt;
                             &lt;property name=&quot;tooltip_text&quot;&gt;The destination filename will be automatically
 generated from the source filename or volume
 label.&lt;/property&gt;
-                            &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Derive destination name from source&lt;/property&gt;
+                            &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Automatically generate destination&lt;/property&gt;
                             &lt;property name=&quot;draw_indicator&quot;&gt;True&lt;/property&gt;
                             &lt;signal name=&quot;toggled&quot; handler=&quot;pref_changed_cb&quot;/&gt;
                           &lt;/object&gt;
+                        &lt;/child&gt;
+                        &lt;child&gt;
+                          &lt;object class=&quot;GtkCheckButton&quot; id=&quot;chapters_in_destination&quot;&gt;
+                            &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                            &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
+                            &lt;property name=&quot;tooltip_text&quot;&gt;Add chapter numbers to the 
+auto-generated destination name.&lt;/property&gt;
+                            &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Add chapters to destination name&lt;/property&gt;
+                            &lt;property name=&quot;draw_indicator&quot;&gt;True&lt;/property&gt;
+                            &lt;signal name=&quot;toggled&quot; handler=&quot;pref_changed_cb&quot;/&gt;
+                          &lt;/object&gt;
+                          &lt;packing&gt;
+                            &lt;property name=&quot;position&quot;&gt;1&lt;/property&gt;
+                          &lt;/packing&gt;
                         &lt;/child&gt;
                         &lt;child&gt;
                           &lt;object class=&quot;GtkCheckButton&quot; id=&quot;linear_vquality&quot;&gt;
@@ -3470,7 +3484,7 @@ video codecs.&lt;/property&gt;
                             &lt;signal name=&quot;toggled&quot; handler=&quot;pref_changed_cb&quot;/&gt;
                           &lt;/object&gt;
                           &lt;packing&gt;
-                            &lt;property name=&quot;position&quot;&gt;1&lt;/property&gt;
+                            &lt;property name=&quot;position&quot;&gt;2&lt;/property&gt;
                           &lt;/packing&gt;
                         &lt;/child&gt;
                         &lt;child&gt;
@@ -3487,7 +3501,7 @@ the required multiple.&lt;/property&gt;
                             &lt;signal name=&quot;toggled&quot; handler=&quot;pref_changed_cb&quot;/&gt;
                           &lt;/object&gt;
                           &lt;packing&gt;
-                            &lt;property name=&quot;position&quot;&gt;2&lt;/property&gt;
+                            &lt;property name=&quot;position&quot;&gt;3&lt;/property&gt;
                           &lt;/packing&gt;
                         &lt;/child&gt;
                         &lt;child&gt;
@@ -3506,7 +3520,7 @@ this setting.&lt;/property&gt;
                             &lt;signal name=&quot;toggled&quot; handler=&quot;vcodec_changed_cb&quot;/&gt;
                           &lt;/object&gt;
                           &lt;packing&gt;
-                            &lt;property name=&quot;position&quot;&gt;3&lt;/property&gt;
+                            &lt;property name=&quot;position&quot;&gt;4&lt;/property&gt;
                           &lt;/packing&gt;
                         &lt;/child&gt;
                         &lt;child&gt;
@@ -3517,7 +3531,7 @@ this setting.&lt;/property&gt;
                             &lt;signal name=&quot;toggled&quot; handler=&quot;tweaks_changed_cb&quot;/&gt;
                           &lt;/object&gt;
                           &lt;packing&gt;
-                            &lt;property name=&quot;position&quot;&gt;4&lt;/property&gt;
+                            &lt;property name=&quot;position&quot;&gt;5&lt;/property&gt;
                           &lt;/packing&gt;
                         &lt;/child&gt;
                         &lt;child&gt;
@@ -3528,7 +3542,7 @@ this setting.&lt;/property&gt;
                             &lt;signal name=&quot;toggled&quot; handler=&quot;hbfd_feature_changed_cb&quot;/&gt;
                           &lt;/object&gt;
                           &lt;packing&gt;
-                            &lt;property name=&quot;position&quot;&gt;5&lt;/property&gt;
+                            &lt;property name=&quot;position&quot;&gt;6&lt;/property&gt;
                           &lt;/packing&gt;
                         &lt;/child&gt;
                       &lt;/object&gt;
@@ -3954,7 +3968,8 @@ this setting.&lt;/property&gt;
                 &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                 &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
                 &lt;property name=&quot;headers_visible&quot;&gt;False&lt;/property&gt;
-                &lt;property name=&quot;headers_clickable&quot;&gt;True&lt;/property&gt;
+                &lt;property name=&quot;headers_clickable&quot;&gt;False&lt;/property&gt;
+                &lt;property name=&quot;hover_expand&quot;&gt;False&lt;/property&gt;
               &lt;/object&gt;
             &lt;/child&gt;
           &lt;/object&gt;
@@ -4878,6 +4893,8 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 		<key>Preferences</key>
 		<dict>
 			<key>allow_tweaks</key>
+			<false />
+			<key>chapters_in_destination</key>
 			<false />
 			<key>default_preset</key>
 			<string>Normal</string>
@@ -6361,6 +6378,10 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 		<array>
 			<string>turbo</string>
 		</array>
+		<key>use_source_name</key>
+		<array>
+			<string>chapters_in_destination</string>
+		</array>
 		<key>variable_frame_rate</key>
 		<array>
 			<string>framerate</string>
@@ -6448,6 +6469,14 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>audio_codec</string>
 				<string>ac3</string>
 				<true />
+			</array>
+		</array>
+		<key>chapters_in_destination</key>
+		<array>
+			<array>
+				<string>use_source_name</string>
+				<string>TRUE</string>
+				<false />
 			</array>
 		</array>
 		<key>chapters_label</key>
