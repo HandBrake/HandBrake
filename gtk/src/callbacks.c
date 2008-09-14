@@ -2913,6 +2913,17 @@ queue_drag_motion_cb(
 		gdk_drag_status(ctx, GDK_ACTION_MOVE, time);
 		return TRUE;
 	}
+	// Don't allow *drop into*
+	if (pos == GTK_TREE_VIEW_DROP_INTO_OR_BEFORE)
+		pos = GTK_TREE_VIEW_DROP_BEFORE;
+	if (pos == GTK_TREE_VIEW_DROP_INTO_OR_AFTER)
+		pos = GTK_TREE_VIEW_DROP_AFTER;
+	// Don't allow droping int child items
+	if (gtk_tree_path_get_depth(path) > 1)
+	{
+		gtk_tree_path_up(path);
+		pos = GTK_TREE_VIEW_DROP_AFTER;
+	}
 	indices = gtk_tree_path_get_indices(path);
 	row = indices[0];
 	js = ghb_array_get_nth(ud->queue, row);
