@@ -38,7 +38,7 @@ namespace Handbrake
             System.Windows.Forms.Label Label38;
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
@@ -165,6 +165,7 @@ namespace Handbrake
             this.Label46 = new System.Windows.Forms.Label();
             this.Label40 = new System.Windows.Forms.Label();
             this.TabPage1 = new System.Windows.Forms.TabPage();
+            this.label8 = new System.Windows.Forms.Label();
             this.lbl_deblockVal = new System.Windows.Forms.Label();
             this.slider_deblock = new System.Windows.Forms.TrackBar();
             this.check_customCrop = new System.Windows.Forms.RadioButton();
@@ -259,7 +260,6 @@ namespace Handbrake
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.lbl_encode = new System.Windows.Forms.ToolStripStatusLabel();
-            this.label8 = new System.Windows.Forms.Label();
             Label38 = new System.Windows.Forms.Label();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             notifyIconMenu.SuspendLayout();
@@ -582,7 +582,7 @@ namespace Handbrake
             // 
             this.text_height.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.text_height.ForeColor = System.Drawing.SystemColors.InfoText;
-            this.text_height.Location = new System.Drawing.Point(498, 81);
+            this.text_height.Location = new System.Drawing.Point(498, 78);
             this.text_height.Name = "text_height";
             this.text_height.Size = new System.Drawing.Size(64, 21);
             this.text_height.TabIndex = 19;
@@ -646,9 +646,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle2.Format = "N0";
-            dataGridViewCellStyle2.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle1;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -954,7 +954,6 @@ namespace Handbrake
             this.label7.Size = new System.Drawing.Size(52, 13);
             this.label7.TabIndex = 12;
             this.label7.Text = "Source:";
-            this.ToolTip.SetToolTip(this.label7, "Top / Bottom / Left / Right");
             // 
             // lbl_src_res
             // 
@@ -1854,9 +1853,9 @@ namespace Handbrake
             // TabPage1
             // 
             this.TabPage1.BackColor = System.Drawing.Color.Transparent;
+            this.TabPage1.Controls.Add(this.slider_deblock);
             this.TabPage1.Controls.Add(this.label8);
             this.TabPage1.Controls.Add(this.lbl_deblockVal);
-            this.TabPage1.Controls.Add(this.slider_deblock);
             this.TabPage1.Controls.Add(this.check_customCrop);
             this.TabPage1.Controls.Add(this.check_autoCrop);
             this.TabPage1.Controls.Add(this.check_decomb);
@@ -1894,12 +1893,23 @@ namespace Handbrake
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "Picture Settings";
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.BackColor = System.Drawing.Color.Transparent;
+            this.label8.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(311, 215);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(58, 13);
+            this.label8.TabIndex = 37;
+            this.label8.Text = "Deblock:";
+            // 
             // lbl_deblockVal
             // 
             this.lbl_deblockVal.AutoSize = true;
             this.lbl_deblockVal.BackColor = System.Drawing.Color.Transparent;
             this.lbl_deblockVal.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_deblockVal.Location = new System.Drawing.Point(586, 213);
+            this.lbl_deblockVal.Location = new System.Drawing.Point(584, 215);
             this.lbl_deblockVal.Name = "lbl_deblockVal";
             this.lbl_deblockVal.Size = new System.Drawing.Size(14, 13);
             this.lbl_deblockVal.TabIndex = 36;
@@ -1907,7 +1917,7 @@ namespace Handbrake
             // 
             // slider_deblock
             // 
-            this.slider_deblock.Location = new System.Drawing.Point(406, 204);
+            this.slider_deblock.Location = new System.Drawing.Point(406, 201);
             this.slider_deblock.Maximum = 15;
             this.slider_deblock.Name = "slider_deblock";
             this.slider_deblock.Size = new System.Drawing.Size(174, 42);
@@ -3166,17 +3176,6 @@ namespace Handbrake
             this.lbl_encode.Name = "lbl_encode";
             this.lbl_encode.Size = new System.Drawing.Size(31, 17);
             this.lbl_encode.Text = "{0}";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.BackColor = System.Drawing.Color.Transparent;
-            this.label8.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(311, 213);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(58, 13);
-            this.label8.TabIndex = 37;
-            this.label8.Text = "Deblock:";
             // 
             // frmMain
             // 
