@@ -110,7 +110,13 @@ namespace Handbrake.Functions
             #region Picture
 
             if (presetQuery.CropTop == "0" && presetQuery.CropBottom == "0" && presetQuery.CropLeft == "0" && presetQuery.CropRight == "0")
-                mainWindow.check_autoCrop.Checked = true;
+            {
+                mainWindow.check_customCrop.Checked = true;
+                mainWindow.text_top.Text = "0";
+                mainWindow.text_bottom.Text = "0";
+                mainWindow.text_left.Text = "0";
+                mainWindow.text_right.Text = "0";
+            }
             else if (presetQuery.CropTop != null && presetQuery.CropBottom != null && presetQuery.CropLeft != null && presetQuery.CropRight != null)
             {
                 mainWindow.check_customCrop.Checked = true;

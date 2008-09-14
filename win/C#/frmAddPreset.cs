@@ -17,6 +17,7 @@ namespace Handbrake
 {
     public partial class frmAddPreset : Form
     {
+        Functions.Common hb_common_func = new Functions.Common();
         private frmMain frmMainWindow;
         Functions.Presets presetCode;
 
@@ -29,7 +30,6 @@ namespace Handbrake
 
         private void btn_add_Click(object sender, EventArgs e)
         {
-            Functions.Common hb_common_func = new Functions.Common();
             String query = hb_common_func.GenerateTheQuery(frmMainWindow);
 
             if (presetCode.addPreset(txt_preset_name.Text.Trim(), query) == true)
@@ -38,5 +38,6 @@ namespace Handbrake
                 this.Close();
             }
         }
+
     }
 }

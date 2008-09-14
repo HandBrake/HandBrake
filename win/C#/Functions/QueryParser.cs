@@ -818,7 +818,7 @@ namespace Handbrake.Functions
             Match detelecine = Regex.Match(input, @"--detelecine");
             Match anamorphic = Regex.Match(input, @" -p ");
             Match chapterMarkers = Regex.Match(input, @" -m");
-            Match crop = Regex.Match(input, @"--crop ([0-9]):([0-9]):([0-9]):([0-9])");
+            Match crop = Regex.Match(input, @"--crop ([0-9]*):([0-9]*):([0-9]*):([0-9]*)");
             Match vfr = Regex.Match(input, @" -V");
             Match lanamorphic = Regex.Match(input, @" -P");
             Match decomb = Regex.Match(input, @" --decomb");
