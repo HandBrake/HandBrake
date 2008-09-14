@@ -38,7 +38,7 @@ namespace Handbrake
             System.Windows.Forms.Label Label38;
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
@@ -82,11 +82,11 @@ namespace Handbrake
             this.drp_audbit_4 = new System.Windows.Forms.ComboBox();
             this.drp_audenc_4 = new System.Windows.Forms.ComboBox();
             this.drp_audmix_4 = new System.Windows.Forms.ComboBox();
-            this.label7 = new System.Windows.Forms.Label();
             this.lbl_src_res = new System.Windows.Forms.Label();
             this.lbl_duration = new System.Windows.Forms.Label();
             this.label_duration = new System.Windows.Forms.Label();
             this.drop_format = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.DVD_Open = new System.Windows.Forms.FolderBrowserDialog();
             this.File_Open = new System.Windows.Forms.OpenFileDialog();
             this.ISO_Open = new System.Windows.Forms.OpenFileDialog();
@@ -165,9 +165,9 @@ namespace Handbrake
             this.Label46 = new System.Windows.Forms.Label();
             this.Label40 = new System.Windows.Forms.Label();
             this.TabPage1 = new System.Windows.Forms.TabPage();
+            this.slider_deblock = new System.Windows.Forms.TrackBar();
             this.label8 = new System.Windows.Forms.Label();
             this.lbl_deblockVal = new System.Windows.Forms.Label();
-            this.slider_deblock = new System.Windows.Forms.TrackBar();
             this.check_customCrop = new System.Windows.Forms.RadioButton();
             this.check_autoCrop = new System.Windows.Forms.RadioButton();
             this.check_decomb = new System.Windows.Forms.CheckBox();
@@ -646,9 +646,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Format = "N0";
+            dataGridViewCellStyle2.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle2;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -945,16 +945,6 @@ namespace Handbrake
             this.ToolTip.SetToolTip(this.drp_audmix_4, "Please note: Some options require a 5.1 audio channel to be selected");
             this.drp_audmix_4.SelectedIndexChanged += new System.EventHandler(this.drp_audmix_4_SelectedIndexChanged);
             // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.BackColor = System.Drawing.Color.Transparent;
-            this.label7.Location = new System.Drawing.Point(311, 34);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(52, 13);
-            this.label7.TabIndex = 12;
-            this.label7.Text = "Source:";
-            // 
             // lbl_src_res
             // 
             this.lbl_src_res.AutoSize = true;
@@ -1008,6 +998,16 @@ namespace Handbrake
             this.drop_format.TabIndex = 28;
             this.ToolTip.SetToolTip(this.drop_format, "Select a video encoder");
             this.drop_format.SelectedIndexChanged += new System.EventHandler(this.drop_format_SelectedIndexChanged);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.BackColor = System.Drawing.Color.Transparent;
+            this.label7.Location = new System.Drawing.Point(311, 34);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(52, 13);
+            this.label7.TabIndex = 12;
+            this.label7.Text = "Source:";
             // 
             // DVD_Open
             // 
@@ -1893,6 +1893,15 @@ namespace Handbrake
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "Picture Settings";
             // 
+            // slider_deblock
+            // 
+            this.slider_deblock.Location = new System.Drawing.Point(406, 201);
+            this.slider_deblock.Maximum = 15;
+            this.slider_deblock.Name = "slider_deblock";
+            this.slider_deblock.Size = new System.Drawing.Size(174, 42);
+            this.slider_deblock.TabIndex = 35;
+            this.slider_deblock.Scroll += new System.EventHandler(this.slider_deblock_Scroll);
+            // 
             // label8
             // 
             this.label8.AutoSize = true;
@@ -1914,15 +1923,6 @@ namespace Handbrake
             this.lbl_deblockVal.Size = new System.Drawing.Size(14, 13);
             this.lbl_deblockVal.TabIndex = 36;
             this.lbl_deblockVal.Text = "0";
-            // 
-            // slider_deblock
-            // 
-            this.slider_deblock.Location = new System.Drawing.Point(406, 201);
-            this.slider_deblock.Maximum = 15;
-            this.slider_deblock.Name = "slider_deblock";
-            this.slider_deblock.Size = new System.Drawing.Size(174, 42);
-            this.slider_deblock.TabIndex = 35;
-            this.slider_deblock.Scroll += new System.EventHandler(this.slider_deblock_Scroll);
             // 
             // check_customCrop
             // 
@@ -3004,16 +3004,17 @@ namespace Handbrake
             // 
             // treeView_presets
             // 
-            this.treeView_presets.ForeColor = System.Drawing.Color.Navy;
+            this.treeView_presets.ForeColor = System.Drawing.Color.DarkBlue;
             this.treeView_presets.FullRowSelect = true;
             this.treeView_presets.HideSelection = false;
-            this.treeView_presets.ItemHeight = 17;
+            this.treeView_presets.ItemHeight = 21;
             this.treeView_presets.Location = new System.Drawing.Point(10, 23);
             this.treeView_presets.Name = "treeView_presets";
             this.treeView_presets.ShowLines = false;
             this.treeView_presets.Size = new System.Drawing.Size(177, 473);
             this.treeView_presets.TabIndex = 0;
             this.treeView_presets.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_presets_AfterSelect);
+            this.treeView_presets.KeyUp += new System.Windows.Forms.KeyEventHandler(this.treeView_presets_deleteKey);
             // 
             // toolStrip1
             // 

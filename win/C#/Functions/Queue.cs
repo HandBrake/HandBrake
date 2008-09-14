@@ -10,23 +10,24 @@ namespace Handbrake.Functions
     public class Queue
     {
         ArrayList queue = new ArrayList();
-        string lastQuery;
+        ArrayList lastQuery;
+        int id = 0; // Unique identifer number for each job
 
         public ArrayList getQueue()
         {
-            return queue;
+             return queue;
         }
 
         /// <summary>
         /// Get's the next CLI query for encoding
         /// </summary>
         /// <returns>String</returns>
-        public string getNextItemForEncoding()
+        public String getNextItemForEncoding()
         {
-            string query = queue[0].ToString();
-            lastQuery = query;
+            Object query = queue[0];
+            lastQuery = (ArrayList)query;
             remove(0);    // Remove the item which we are about to pass out.
-            return query;
+            return lastQuery[1].ToString();
         }
 
         /// <summary>
@@ -35,7 +36,14 @@ namespace Handbrake.Functions
         /// <param name="query">String</param>
         public void add(string query)
         {
-            queue.Add(query);
+            // Creates a new job with a unique identifer and cli query
+            ArrayList newJob = new ArrayList();
+            newJob.Add(id);
+            newJob.Add(query);
+            id++;
+
+            // Adds the job to the queue
+            queue.Add(newJob);
         }
 
         /// <summary>
@@ -64,7 +72,7 @@ namespace Handbrake.Functions
         /// <returns>String</returns>
         public string getLastQuery()
         {
-            return lastQuery;
+            return lastQuery[1].ToString();
         }
 
         /// <summary>
@@ -112,9 +120,9 @@ namespace Handbrake.Functions
                     tempPath = file;
                 using (StreamWriter writer = new StreamWriter(tempPath))
                 {
-                    foreach (string item in queue)
+                    foreach (ArrayList item in queue)
                     {
-                        writer.WriteLine(item);
+                        writer.WriteLine(item[1].ToString());
                     }
                     writer.Close();
                     writer.Dispose();
@@ -123,6 +131,45 @@ namespace Handbrake.Functions
             catch (Exception)
             {
                 // Any Errors will be out of diskspace/permissions problems. Don't report them as they'll annoy the user.
+            }
+        }
+
+        /// <summary>
+        /// Writes the current queue to disk to the location specified in file
+        /// </summary>
+        /// <param name="file"></param>
+        public void writeBatchScript(string file)
+        {
+            string queries = "";
+            foreach (ArrayList queue_item in queue)
+            {
+                string q_item = queue_item[1].ToString();
+                string fullQuery = '"' + Application.StartupPath.ToString() + "\\HandBrakeCLI.exe" + '"' + q_item;
+
+                if (queries == string.Empty)
+                    queries = queries + fullQuery;
+                else
+                    queries = queries + " && " + fullQuery;
+            }
+            string strCmdLine = queries;
+
+            if (file != "")
+            {
+                try
+                {
+                    // Create a StreamWriter and open the file, Write the batch file query to the file and 
+                    // Close the stream
+                    StreamWriter line = new StreamWriter(file);
+                    line.WriteLine(strCmdLine);
+                    line.Close();
+
+                    MessageBox.Show("Your batch script has been sucessfully saved.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Unable to write to the file. Please make sure that the location has the correct permissions for file writing.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                }
+
             }
         }
 

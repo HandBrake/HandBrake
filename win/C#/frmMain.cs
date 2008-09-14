@@ -173,8 +173,7 @@ namespace Handbrake
         {
             if (hb_common_func.check_queue_recovery() == true)
             {
-                DialogResult result;
-                result = MessageBox.Show("HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?", "Queue Recovery Possible", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult result = MessageBox.Show("HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?", "Queue Recovery Possible", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (result == DialogResult.Yes)
                     encodeQueue.recoverQueue("hb_queue_recovery.dat"); // Start Recovery
@@ -1394,6 +1393,20 @@ namespace Handbrake
             // The x264 widgets will need updated, so do this now:
             x264PanelFunctions.X264_StandardizeOptString(this);
             x264PanelFunctions.X264_SetCurrentSettingsInPanel(this);
+        }
+        private void treeView_presets_deleteKey(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                DialogResult result = MessageBox.Show("Are you sure you wish to delete the selected preset?", "Preset", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    if (treeView_presets.SelectedNode != null)
+                        presetHandler.remove(treeView_presets.SelectedNode.Text);
+                    // Now reload the preset panel
+                    loadPresetPanel();
+                }
+            }
         }
 
         #endregion

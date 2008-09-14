@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -58,9 +59,10 @@ namespace Handbrake
         private void redrawQueue()
         {
             list_queue.Items.Clear();
-            foreach (string queue_item in queue.getQueue())
+            foreach (ArrayList queue_item in queue.getQueue())
             {
-                Functions.QueryParser parsed = Functions.QueryParser.Parse(queue_item);
+                string q_item = queue_item[1].ToString();
+                Functions.QueryParser parsed = Functions.QueryParser.Parse(q_item);
 
                 // Get the DVD Title
                 string title = "";
@@ -306,6 +308,46 @@ namespace Handbrake
             }
         }
 
+        // Generate a Saveable batch script on the users request
+        private void mnu_batch_Click(object sender, EventArgs e)
+        {
+            SaveFile.Filter = "Batch|.bat";
+            SaveFile.ShowDialog();
+            if (SaveFile.FileName != String.Empty)
+                queue.writeBatchScript(SaveFile.FileName);
+        }
+
+        // Export the HandBrake Queue to a file.
+        private void mnu_export_Click(object sender, EventArgs e)
+        {
+            SaveFile.Filter = "HandBrake Queue|*.queue";
+            SaveFile.ShowDialog();
+            if (SaveFile.FileName != String.Empty)
+                queue.write2disk(SaveFile.FileName);
+        }
+
+        // Import an exported queue
+        private void mnu_import_Click(object sender, EventArgs e)
+        {
+            OpenFile.ShowDialog();
+            if (OpenFile.FileName != String.Empty)
+                queue.recoverQueue(OpenFile.FileName);
+            redrawQueue();
+        }
+
+        // Delete a selected item on the queue, if the delete key is pressed.
+        private void list_queue_deleteKey(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                if (list_queue.SelectedIndices.Count != 0)
+                {
+                    queue.remove(list_queue.SelectedIndices[0]);
+                    queue.write2disk("hb_queue_recovery.dat"); // Update the queue recovery file
+                    redrawQueue();
+                }
+            }
+        }
 
         // Hide's the window from the users view.
         private void btn_Close_Click(object sender, EventArgs e)
@@ -319,60 +361,6 @@ namespace Handbrake
             e.Cancel = true;
             this.Hide();
             base.OnClosing(e);
-        }
-
-        private void mnu_batch_Click(object sender, EventArgs e)
-        {
-            string queries = "";
-            foreach (string query_item in queue.getQueue())
-            {
-                string fullQuery = '"' + Application.StartupPath.ToString() + "\\HandBrakeCLI.exe" + '"' + query_item;
-
-                if (queries == string.Empty)
-                    queries = queries + fullQuery;
-                else
-                    queries = queries + " && " + fullQuery;
-            }
-            string strCmdLine = queries;
-
-            SaveFile.Filter = "Batch|.bat";
-            SaveFile.ShowDialog();
-            string filename = SaveFile.FileName;
-
-            if (filename != "")
-            {
-                try
-                {
-                    // Create a StreamWriter and open the file, Write the batch file query to the file and 
-                    // Close the stream
-                    StreamWriter line = new StreamWriter(filename);
-                    line.WriteLine(strCmdLine);
-                    line.Close();
-
-                    MessageBox.Show("Your batch script has been sucessfully saved.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("Unable to write to the file. Please make sure that the location has the correct permissions for file writing.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                }
-
-            }
-        }
-
-        private void mnu_export_Click(object sender, EventArgs e)
-        {
-            SaveFile.Filter = "HandBrake Queue|*.queue";
-            SaveFile.ShowDialog();
-            if (SaveFile.FileName != String.Empty)
-                queue.write2disk(SaveFile.FileName);
-        }
-
-        private void mnu_import_Click(object sender, EventArgs e)
-        {
-            OpenFile.ShowDialog();
-            if (OpenFile.FileName != String.Empty)
-                queue.recoverQueue(OpenFile.FileName);
-            redrawQueue();
         }
 
 
