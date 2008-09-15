@@ -6497,7 +6497,7 @@
 "            &lt;child&gt;\n"
 "              &lt;object class=&quot;GtkTreeView&quot; id=&quot;queue_l"
 "ist&quot;&gt;\n"
-"                &lt;property name=&quot;width_request&quot;&gt;640&lt;/"
+"                &lt;property name=&quot;width_request&quot;&gt;840&lt;/"
 "property&gt;\n"
 "                &lt;property name=&quot;height_request&quot;&gt;300&lt;"
 "/property&gt;\n"

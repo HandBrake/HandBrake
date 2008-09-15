@@ -132,7 +132,11 @@ gboolean ghb_validate_filters(signal_user_data_t *ud);
 gboolean ghb_validate_filter_string(const gchar *str, gint max_fields);
 void ghb_hb_cleanup(gboolean partial);
 gint ghb_lookup_acodec(const GValue *acodec);
+const gchar* ghb_lookup_acodec_option(const GValue *acodec);
 gint ghb_lookup_mix(const GValue *mix);
+const gchar* ghb_lookup_mix_option(const GValue *mix);
+const gchar* ghb_lookup_container_option(const GValue *container);
+const gchar* ghb_lookup_vcodec_option(const GValue *vcodec);
 #if 0
 gint ghb_lookup_bitrate(const gchar *bitrate);
 gint ghb_lookup_rate(const gchar *rate);

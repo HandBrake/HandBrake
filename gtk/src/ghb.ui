@@ -3957,7 +3957,7 @@ this setting.</property>
             <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
             <child>
               <object class="GtkTreeView" id="queue_list">
-                <property name="width_request">640</property>
+                <property name="width_request">840</property>
                 <property name="height_request">300</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>

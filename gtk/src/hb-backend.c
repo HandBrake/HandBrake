@@ -483,6 +483,44 @@ ghb_lookup_vcodec(const GValue *vcodec)
 	return result;
 }
 
+const gchar*
+ghb_lookup_vcodec_option(const GValue *vcodec)
+{
+	gint ii;
+	gchar *str;
+	const gchar *result = "";
+
+	str = ghb_value_string(vcodec);
+	for (ii = 0; ii < vcodec_opts.count; ii++)
+	{
+		if (strcmp(vcodec_opts.map[ii].shortOpt, str) == 0)
+		{
+			result = vcodec_opts.map[ii].option;
+		}
+	}
+	g_free(str);
+	return result;
+}
+
+const gchar*
+ghb_lookup_container_option(const GValue *container)
+{
+	gint ii;
+	gchar *str;
+	const gchar *result = "";
+
+	str = ghb_value_string(container);
+	for (ii = 0; ii < container_opts.count; ii++)
+	{
+		if (strcmp(container_opts.map[ii].shortOpt, str) == 0)
+		{
+			result = container_opts.map[ii].option;
+		}
+	}
+	g_free(str);
+	return result;
+}
+
 gint
 ghb_lookup_denoise(const GValue *denoise)
 {
@@ -555,6 +593,45 @@ ghb_lookup_acodec(const GValue *acodec)
 		if (strcmp(acodec_opts.map[ii].shortOpt, str) == 0)
 		{
 			result = acodec_opts.map[ii].ivalue;
+		}
+	}
+	g_free(str);
+	return result;
+}
+
+const gchar*
+ghb_lookup_acodec_option(const GValue *acodec)
+{
+	gint ii;
+	gchar *str;
+	const gchar *result = "";
+
+	str = ghb_value_string(acodec);
+	for (ii = 0; ii < acodec_opts.count; ii++)
+	{
+		if (strcmp(acodec_opts.map[ii].shortOpt, str) == 0)
+		{
+			result = acodec_opts.map[ii].option;
+		}
+	}
+	g_free(str);
+	return result;
+}
+
+const gchar*
+ghb_lookup_mix_option(const GValue *mix)
+{
+	gint ii;
+	gchar *str;
+	gchar *result = "None";
+
+
+	str = ghb_value_string(mix);
+	for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
+	{
+		if (strcmp(hb_audio_mixdowns[ii].short_name, str) == 0)
+		{
+			result = hb_audio_mixdowns[ii].human_readable_name;
 		}
 	}
 	g_free(str);

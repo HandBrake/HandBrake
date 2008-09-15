@@ -220,6 +220,7 @@ clear_presets_selection(signal_user_data_t *ud)
 	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
 	selection = gtk_tree_view_get_selection (treeview);
 	gtk_tree_selection_unselect_all (selection);
+	ghb_settings_set_boolean(ud->settings, "preset_modified", TRUE);
 }
 
 static gchar*
@@ -900,6 +901,8 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 	widget = GHB_WIDGET (ud->builder, "source_dimensions");
 	text = g_strdup_printf ("%d x %d", tinfo->width, tinfo->height);
 	gtk_label_set_text (GTK_LABEL(widget), text);
+	ghb_settings_set_int(ud->settings, "source_width", tinfo->width);
+	ghb_settings_set_int(ud->settings, "source_height", tinfo->height);
 	g_free(text);
 	widget = GHB_WIDGET (ud->builder, "source_aspect");
 	text = get_aspect_string(tinfo->aspect_n, tinfo->aspect_d);
@@ -1174,8 +1177,6 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	static gint prev_acodec = 0;
 	gint acodec_code, mix_code;
 	GValue *asettings;
-	GValue *pref_audio;
-	GValue *audio, *acodec, *bitrate, *rate, *mix, *drc;
 	
 	g_debug("audio_codec_changed_cb ()");
 	acodec_code = ghb_widget_int(widget);
@@ -1187,19 +1188,12 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		gint titleindex = ghb_settings_get_int(ud->settings, "title");
 		gint track = ghb_settings_get_int(ud->settings, "audio_track");
 
-		pref_audio = ghb_settings_get_value(ud->settings, "pref_audio_list");
-		audio = ghb_array_get_nth(pref_audio, 0);
-		acodec = ghb_settings_get_value(audio, "audio_codec");
-		bitrate = ghb_settings_get_value(audio, "audio_bitrate");
-		rate = ghb_settings_get_value(audio, "audio_rate");
-		mix = ghb_settings_get_value(audio, "audio_mix");
-		drc = ghb_settings_get_value(audio, "audio_drc");
-
-		ghb_ui_update(ud, "audio_bitrate", bitrate);
-		ghb_ui_update(ud, "audio_rate", rate);
-		mix_code = ghb_lookup_mix(mix);
+		ghb_ui_update(ud, "audio_bitrate", ghb_string_value("160"));
+		ghb_ui_update(ud, "audio_rate", ghb_string_value("source"));
+		mix_code = ghb_lookup_mix(ghb_string_value("dpl2"));
 		mix_code = ghb_get_best_mix( titleindex, track, acodec_code, mix_code);
 		ghb_ui_update(ud, "audio_mix", ghb_int64_value(mix_code));
+		ghb_ui_update(ud, "audio_drc", ghb_double_value(1.0));
 	}
 	adjust_audio_rate_combos(ud);
 	ghb_grey_combo_options (ud->builder);
@@ -1241,8 +1235,13 @@ audio_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	asettings = get_selected_asettings(ud);
 	if (asettings != NULL)
 	{
+		gchar *track;
+
 		ghb_widget_to_setting(asettings, widget);
 		audio_list_refresh_selected(ud);
+		track = ghb_settings_get_combo_option(asettings, "audio_track");
+		ghb_settings_set_string(asettings, "audio_track_long", track);
+		g_free(track);
 	}
 }
 
@@ -1855,6 +1854,7 @@ audio_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	GtkWidget *widget;
 	gint count;
 	GValue *audio_list;
+	gchar *track;
 	
 	g_debug("audio_add_clicked_cb ()");
 	asettings = ghb_dict_value_new();
@@ -1871,6 +1871,9 @@ audio_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	ghb_settings_take_value(asettings, "audio_mix", ghb_widget_value(widget));
 	widget = GHB_WIDGET(ud->builder, "audio_drc");
 	ghb_settings_take_value(asettings, "audio_drc", ghb_widget_value(widget));
+	track = ghb_settings_get_combo_option(asettings, "audio_track");
+	ghb_settings_set_string(asettings, "audio_track_long", track);
+	g_free(track);
 
 	audio_list = ghb_settings_get_value(ud->settings, "audio_list");
 	if (audio_list == NULL)
@@ -2312,6 +2315,7 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
 		ghb_set_preset(ud, preset);
 		gint titleindex = ghb_settings_get_int(ud->settings, "title");
 		set_pref_audio(titleindex, ud);
+		ghb_settings_set_boolean(ud->settings, "preset_modified", FALSE);
 		ud->dont_clear_presets = FALSE;
 		if (ghb_get_title_info (&tinfo, titleindex))
 		{
@@ -2366,14 +2370,15 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	GtkTreeIter iter;
 	GtkTreeStore *store;
 	gchar *info;
-	gint num_pass = 1;
 	gint status;
-	gint ii;
 	GtkTreeIter citer;
-	gchar *vcodec, *container, *acodec, *dest, *preset, *vol_name;
+	gchar *dest, *preset, *vol_name;
+	const gchar *vcodec, *container;
 	gchar *fps, *vcodec_abbr;
 	gint title, start_chapter, end_chapter, width, height, vqvalue;
+	gint source_width, source_height;
 	gboolean pass2, anamorphic, round_dim, keep_aspect, vqtype, turbo;
+	GValue *gval;
 	
 	g_debug("update_queue_list ()");
 	if (settings == NULL) return;
@@ -2398,6 +2403,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		gtk_tree_store_append(store, &iter, NULL);
 
 	gtk_tree_store_set(store, &iter, 1, info, 2, "hb-queue-delete", -1);
+	g_free(info);
 	status = ghb_settings_get_int(settings, "job_status");
 	switch (status)
 	{
@@ -2417,23 +2423,35 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 			gtk_tree_store_set(store, &iter, 0, "hb-queue-job", -1);
 			break;
 	}
-	g_free(info);
 
-	vcodec = ghb_settings_get_combo_option(settings, "video_codec");
-	container = ghb_settings_get_combo_option(settings, "container");
-	acodec = ghb_settings_get_combo_option(settings, "audio_codec");
+	GString *str = g_string_new("");
+	gboolean markers;
+	gboolean preset_modified;
+
+	gval = ghb_settings_get_value(settings, "container");
+	container = ghb_lookup_container_option(gval);
 	dest = ghb_settings_get_string(settings, "destination");
+	preset_modified = ghb_settings_get_boolean(settings, "preset_modified");
 	preset = ghb_settings_get_string(settings, "preset");
-	info = g_strdup_printf 
-		(
-		 "<b>Preset:</b> %s\n"
-		 "<b>Format:</b> %s Container, %s Video + %s Audio\n"
-		 "<b>Destination:</b> %s",
-		 preset, container, vcodec, acodec, dest);
+	markers = ghb_settings_get_boolean(settings, "chapter_markers");
 
-	gtk_tree_store_append(store, &citer, &iter);
-	gtk_tree_store_set(store, &citer, 1, info, -1);
-	g_free(info);
+	if (preset_modified)
+		g_string_append_printf(str, "<b>Customized Preset Based On:</b> %s\n", 
+								preset);
+	else
+		g_string_append_printf(str, "<b>Preset:</b> %s\n", preset);
+
+	if (markers)
+	{
+		g_string_append_printf(str, 
+			"<b>Format:</b> %s Container, Chapter Markers\n", container);
+	}
+	else
+	{
+		g_string_append_printf(str, 
+			"<b>Format:</b> %s Container\n", container);
+	}
+	g_string_append_printf(str, "<b>Destination:</b> %s\n", dest);
 
 	width = ghb_settings_get_int(settings, "scale_width");
 	height = ghb_settings_get_int(settings, "scale_height");
@@ -2468,6 +2486,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	vqvalue = 0;
 
 	gchar *vq_desc = "Error";
+	gchar *vq_units = "";
 	if (!vqtype)
 	{
 		vqtype = ghb_settings_get_boolean(settings, "vquality_type_target");
@@ -2475,97 +2494,95 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		{
 			// Has to be bitrate
 			vqvalue = ghb_settings_get_int(settings, "video_bitrate");
-			vq_desc = "kbps";
+			vq_desc = "Bitrate:";
+			vq_units = "kbps";
 		}
 		else
 		{
 			// Target file size
 			vqvalue = ghb_settings_get_int(settings, "video_target");
-			vq_desc = "MB";
+			vq_desc = "Target Size:";
+			vq_units = "MB";
 		}
 	}
 	else
 	{
 		// Constant quality
 		vqvalue = ghb_settings_get_int(settings, "video_quality");
-		vq_desc = "% Constant Quality";
+		vq_desc = "Constant Quality:";
 	}
 	fps = ghb_settings_get_string(settings, "framerate");
+	if (strcmp("source", fps) == 0)
+	{
+		g_free(fps);
+		fps = g_strdup("Same As Source");
+	}
+	gval = ghb_settings_get_value(settings, "video_codec");
+	vcodec = ghb_lookup_vcodec_option(gval);
 	vcodec_abbr = ghb_settings_get_string(settings, "video_codec");
-	gchar *extra_opts;
+	source_width = ghb_settings_get_int(settings, "source_width");
+	source_height = ghb_settings_get_int(settings, "source_height");
+	g_string_append_printf(str,
+		"<b>Picture:</b> Source: %d x %d, Output %d x %d %s\n"
+		"<b>Video:</b> %s, Framerate: %s, %s %d%s\n",
+			 source_width, source_height, width, height, aspect_desc,
+			 vcodec, fps, vq_desc, vqvalue, vq_units);
+
+	turbo = ghb_settings_get_boolean(settings, "turbo");
+	if (turbo)
+	{
+		g_string_append_printf(str, "<b>Turbo:</b> On\n");
+	}
 	if (strcmp(vcodec_abbr, "x264") == 0)
 	{
 		gchar *x264opts = ghb_build_x264opts_string(settings);
-		extra_opts = g_strdup_printf ("\n<b>x264 Options:</b> %s", x264opts);
+		g_string_append_printf(str, "<b>x264 Options:</b> %s\n", x264opts);
 		g_free(x264opts);
 	}
-	else
-	{
-		extra_opts = g_strdup("");
-	}
-	turbo = ghb_settings_get_boolean(settings, "turbo");
-	gchar *turbo_desc = "\n<b>Turbo:</b> Off";;
-	if (turbo)
-	{
-		turbo_desc = "\n<b>Turbo:</b> On";
-	}
-	num_pass = pass2 ? 2 : 1;
-	for (ii = 0; ii < num_pass; ii++)
-	{
-		gboolean final = (ii == (num_pass - 1));
-		GString *pass = g_string_new("");
-		g_string_append_printf( pass,
-			"<b>%s Pass</b>\n"
-			"<b>Picture:</b> %d x %d %s\n"
-			"<b>Video:</b> %s, %d %s, %s fps"
-			"%s",
-			 ii ? "2nd":"1st", width, height, aspect_desc,
-			 vcodec, vqvalue, vq_desc, fps, 
-			 final ? extra_opts : turbo_desc);
+	// Add the audios
+	gint count, ii;
+	const GValue *audio_list;
 
-		if (final)
+	audio_list = ghb_settings_get_value(settings, "audio_list");
+	count = ghb_array_len(audio_list);
+	for (ii = 0; ii < count; ii++)
+	{
+		gchar *bitrate, *samplerate, *track;
+		const gchar *acodec, *mix;
+		GValue *asettings;
+
+		asettings = ghb_array_get_nth(audio_list, ii);
+
+		gval = ghb_settings_get_value(asettings, "audio_codec");
+		acodec = ghb_lookup_acodec_option(gval);
+		bitrate = ghb_settings_get_string(asettings, "audio_bitrate");
+		samplerate = ghb_settings_get_string(asettings, "audio_rate");
+		if (strcmp("source", samplerate) == 0)
 		{
-			// Add the audios
-			gint count, ii;
-			const GValue *audio_list;
-
-			audio_list = ghb_settings_get_value(settings, "audio_list");
-			count = ghb_array_len(audio_list);
-			for (ii = 0; ii < count; ii++)
-			{
-				gchar *acodec, *bitrate, *samplerate, *mix;
-				GValue *asettings;
-
-				asettings = ghb_array_get_nth(audio_list, ii);
-
-				acodec = ghb_settings_get_combo_option(asettings, "audio_codec");
-				bitrate = ghb_settings_get_string(asettings, "audio_bitrate");
-				samplerate = ghb_settings_get_string(asettings, "audio_rate");
-				gint track = ghb_settings_get_int(asettings, "audio_track");
-				mix = ghb_settings_get_combo_option(asettings, "audio_mix");
-				g_string_append_printf(pass,
-					"\n<b>Audio:</b> %s, %s kbps, %s kHz, Track %d: %s",
-					 acodec, bitrate, samplerate, track+1, mix);
-				g_free(acodec);
-				g_free(bitrate);
-				g_free(samplerate);
-				g_free(mix);
-			}
+			g_free(samplerate);
+			samplerate = g_strdup("Same As Source");
 		}
-		info = g_string_free(pass, FALSE);
-		gtk_tree_store_append(store, &citer, &iter);
-		gtk_tree_store_set(store, &citer, 0, ii ? "hb-queue-pass2" : "hb-queue-pass1", 1, info,	-1);
-		g_free(info);
+		track = ghb_settings_get_string(asettings, "audio_track_long");
+		gval = ghb_settings_get_value(asettings, "audio_mix");
+		mix = ghb_lookup_mix_option(gval);
+		g_string_append_printf(str,
+			"<b>Audio:</b> %s, Encoder: %s, Mixdown: %s, SampleRate: %s, Bitrate: %s",
+			 track, acodec, mix, samplerate, bitrate);
+		if (ii < count-1)
+			g_string_append_printf(str, "\n");
+		g_free(track);
+		g_free(bitrate);
+		g_free(samplerate);
 	}
+	info = g_string_free(str, FALSE);
+	gtk_tree_store_append(store, &citer, &iter);
+	gtk_tree_store_set(store, &citer, 1, info, -1);
+	g_free(info);
 	g_free(fps);
 	g_free(vcodec_abbr);
 	g_free(vol_name);
-	g_free(vcodec);
-	g_free(container);
-	g_free(acodec);
 	g_free(dest);
 	g_free(preset);
-	g_free(extra_opts);
 }
 
 gboolean
@@ -2829,6 +2846,7 @@ queue_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
 	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
 	store = gtk_tree_view_get_model(treeview);
 	treepath = gtk_tree_path_new_from_string (path);
+	if (gtk_tree_path_get_depth(treepath) > 1) return;
 	if (gtk_tree_model_get_iter(store, &iter, treepath))
 	{
 		// Find the entry in the queue
