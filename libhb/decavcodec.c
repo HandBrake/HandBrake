@@ -92,21 +92,22 @@ typedef struct {
 
 struct hb_work_private_s
 {
-    hb_job_t             *job;
-    AVCodecContext       *context;
+    hb_job_t        *job;
+    AVCodecContext  *context;
     AVCodecParserContext *parser;
-    hb_list_t            *list;
-    double               duration;  // frame duration (for video)
-    double               pts_next;  // next pts we expect to generate
-    int64_t              pts;       // (video) pts passing from parser to decoder
-    int64_t              chap_time; // time of next chap mark (if new_chap != 0)
-    int                  new_chap;
-    uint32_t             nframes;
-    uint32_t             ndrops;
-    uint32_t             decode_errors;
-    hb_buffer_t*         delayq[HEAP_SIZE];
-    pts_heap_t           pts_heap;
-    void*                buffer;
+    hb_list_t       *list;
+    double          duration;   // frame duration (for video)
+    double          pts_next;   // next pts we expect to generate
+    int64_t         pts;        // (video) pts passing from parser to decoder
+    int64_t         chap_time;  // time of next chap mark (if new_chap != 0)
+    int             new_chap;   // output chapter mark pending
+    uint32_t        nframes;
+    uint32_t        ndrops;
+    uint32_t        decode_errors;
+    int             brokenByMicrosoft; // video stream may contain packed b-frames
+    hb_buffer_t*    delayq[HEAP_SIZE];
+    pts_heap_t      pts_heap;
+    void*           buffer;
 };
 
 static int64_t heap_pop( pts_heap_t *heap )
@@ -498,8 +499,9 @@ static int decodeFrame( hb_work_private_t *pv, uint8_t *data, int size )
 
         hb_buffer_t *buf;
 
-        // if we're doing a scan we don't worry about timestamp reordering
-        if ( ! pv->job )
+        // if we're doing a scan or this content couldn't have been broken
+        // by Microsoft we don't worry about timestamp reordering
+        if ( ! pv->job || ! pv->brokenByMicrosoft )
         {
             buf = copy_frame( pv->context, &frame );
             buf->start = pts;
@@ -806,6 +808,14 @@ static void init_ffmpeg_context( hb_work_object_t *w )
     // we have to wrap ffmpeg's get_buffer to be able to set the pts (?!)
     pv->context->opaque = pv;
     pv->context->get_buffer = get_frame_buf;
+
+    // avi, mkv and possibly mp4 containers can contain the M$ VFW packed
+    // b-frames abortion that messes up frame ordering and timestamps.
+    // XXX ffmpeg knows which streams are broken but doesn't expose the
+    //     info externally. We should patch ffmpeg to add a flag to the
+    //     codec context for this but until then we mark all ffmpeg streams
+    //     as suspicious.
+    pv->brokenByMicrosoft = 1;
 }
 
 static void prepare_ffmpeg_buffer( hb_buffer_t * in )
