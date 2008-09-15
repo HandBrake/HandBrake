@@ -133,11 +133,12 @@ static void update_ipt( hb_reader_t *r, const hb_buffer_t *buf )
 // such that 'buf' will follow the previous packet of this stream separated
 // by the average packet time of the stream.
 
-static void new_scr_offset( hb_reader_t *r, const hb_buffer_t *buf )
+static void new_scr_offset( hb_reader_t *r, hb_buffer_t *buf )
 {
     stream_timing_t *st = id_to_st( r, buf );
-    int64_t nxt = st->last + st->average - r->scr_offset;
+    int64_t nxt = st->last + st->average;
     r->scr_offset = buf->renderOffset - nxt;
+    buf->renderOffset = nxt;
     r->scr_changes = r->demux.scr_changes;
     st->last = buf->renderOffset;
 }
@@ -291,7 +292,10 @@ static void ReaderFunc( void * _r )
                     if ( r->scr_changes == r->demux.scr_changes )
                     {
                         // This packet is referenced to the same SCR as the last.
-                        // Update the average inter-packet time for this stream.
+                        // Adjust timestamp to remove the System Clock Reference
+                        // offset then update the average inter-packet time
+                        // for this stream.
+                        buf->renderOffset -= r->scr_offset;
                         update_ipt( r, buf );
                     }
                     else
@@ -302,8 +306,6 @@ static void ReaderFunc( void * _r )
                         // average spacing.
                         new_scr_offset( r, buf );
                     }
-                    // adjust timestamps to remove System Clock Reference offsets.
-                    buf->renderOffset -= r->scr_offset;
                 }
                 if ( buf->start != -1 )
                     buf->start -= r->scr_offset;
