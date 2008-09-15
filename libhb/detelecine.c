@@ -567,15 +567,17 @@ void pullup_free_context( struct pullup_context * c )
 
     free( c->buffers );
 
-    f = c->head;
-    do
+    f = c->head->next;
+    while( f != c->head )
     {
         free( f->diffs );
         free( f->comb );
         f = f->next;
         free( f->prev );
     }
-    while( f != c->head );
+    free( f->diffs );
+    free( f->comb );
+    free(f);
 
     free( c->frame );
     free( c );
