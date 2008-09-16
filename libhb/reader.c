@@ -83,10 +83,23 @@ static void push_buf( const hb_reader_t *r, hb_fifo_t *fifo, hb_buffer_t *buf )
 // seemlessly join packets on either side of the discontinuity. This join
 // requires that we know the timestamp of the previous packet and the
 // average inter-packet time (since we position the new packet at the end
-// of the previous packet). The next three routines keep track of this
+// of the previous packet). The next four routines keep track of this
 // per-stream timing.
 
-// find the per-stream timing state associated with 'buf'
+// find the per-stream timing state for 'buf'
+
+static stream_timing_t *find_st( hb_reader_t *r, const hb_buffer_t *buf )
+{
+    stream_timing_t *st = r->stream_timing;
+    for ( ; st->id != -1; ++st )
+    {
+        if ( st->id == buf->id )
+            return st;
+    }
+    return NULL;
+}
+
+// find or create the per-stream timing state for 'buf'
 
 static stream_timing_t *id_to_st( hb_reader_t *r, const hb_buffer_t *buf )
 {
@@ -275,10 +288,7 @@ static void ReaderFunc( void * _r )
                      buf->renderOffset != -1 )
                 {
                     r->saw_video = 1;
-                    r->scr_changes = r->demux.scr_changes;
-                    new_scr_offset( r, buf );
-                    hb_log( "reader: first SCR %lld scr_offset %lld",
-                            r->demux.last_scr, r->scr_offset );
+                    hb_log( "reader: first SCR %lld", r->demux.last_scr );
                 }
                 else
                 {
@@ -304,7 +314,19 @@ static void ReaderFunc( void * _r )
                         // change. Compute a new scr offset that would make this
                         // packet follow the last of this stream with the correct
                         // average spacing.
-                        new_scr_offset( r, buf );
+                        if ( find_st( r, buf ) )
+                        {
+                            new_scr_offset( r, buf );
+                        }
+                        else
+                        {
+                            // we got a new scr at the same time as the first
+                            // packet of a stream we've never seen before. We
+                            // have no idea what the timing should be so toss
+                            // this buffer & wait for a stream we've already seen.
+                            hb_buffer_close( &buf );
+                            continue;
+                        }
                     }
                 }
                 if ( buf->start != -1 )
