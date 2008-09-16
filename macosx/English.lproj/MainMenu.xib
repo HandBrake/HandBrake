@@ -2,14 +2,14 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.02">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
-		<string key="IBDocument.SystemVersion">9E17</string>
+		<string key="IBDocument.SystemVersion">9F33</string>
 		<string key="IBDocument.InterfaceBuilderVersion">670</string>
-		<string key="IBDocument.AppKitVersion">949.33</string>
+		<string key="IBDocument.AppKitVersion">949.34</string>
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="2"/>
 			<integer value="1843"/>
-			<integer value="1476"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -3115,7 +3115,7 @@
 						<object class="NSTextField" id="1007421233">
 							<reference key="NSNextResponder" ref="168918359"/>
 							<int key="NSvFlags">264</int>
-							<string key="NSFrame">{{610, 8}, {127, 14}}</string>
+							<string key="NSFrame">{{536, 8}, {201, 14}}</string>
 							<reference key="NSSuperview" ref="168918359"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="224806210">
@@ -11407,6 +11407,7 @@
 							<string>addFactoryPresets:</string>
 							<string>addToQueue:</string>
 							<string>addUserPreset:</string>
+							<string>applyQueueSettings:</string>
 							<string>audioAddAudioTrackCodecs:</string>
 							<string>audioCodecsPopUpChanged:</string>
 							<string>audioDRCSliderChanged:</string>
@@ -11436,6 +11437,7 @@
 							<string>selectPreset:</string>
 							<string>setDefaultPreset:</string>
 							<string>setEnabledStateOfAudioMixdownControls:</string>
+							<string>shouldEnableHttpMp4CheckBox:</string>
 							<string>showAddPresetPanel:</string>
 							<string>showDebugOutputPanel:</string>
 							<string>showNewScan:</string>
@@ -11452,6 +11454,8 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>

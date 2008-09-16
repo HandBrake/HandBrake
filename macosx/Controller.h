@@ -203,6 +203,11 @@ BOOL                        fIsDragging;
     IBOutlet NSProgressIndicator * fRipIndicator;
 	BOOL                           fRipIndicatorShown;
     
+    /* Queue File variables */
+    NSString                     * QueueFile;
+	NSMutableArray               * QueueFileArray;
+    int                            currentQueueEncodeIndex; // Used to track the currently encoding queueu item
+    
 	/* User Preset variables here */
 	HBPresets                    * fPresetsBuiltin;
 	IBOutlet NSDrawer            * fPresetDrawer;
@@ -231,13 +236,24 @@ BOOL                        fIsDragging;
     IBOutlet NSPopUpButton       * fPresetsActionButton;
 
     hb_handle_t                  * fHandle;
+    
+    hb_handle_t              * fQueueEncodeLibhb;           // libhb for HB Encoding
 	hb_title_t                   * fTitle;
+    hb_title_t                   * fQueueEncodeTitle;
+    int                          fEncodingQueueItem;     // corresponds to the index of fJobGroups encoding item
+    int                          fPendingCount;         // Number of various kinds of job groups in fJobGroups.
+    int                          fCompletedCount;
+    int                          fCanceledCount;
+    int                          fWorkingCount;
+    
+    
     /* integer to set to determine the previous state
 		of encode 0==idle, 1==encoding, 2==cancelled*/
     int                            fEncodeState;
 	int                            currentScanCount;
 	int                            currentSuccessfulScanCount;
     BOOL                           SuccessfulScan;
+    BOOL                           applyQueueToScan;
 	NSString                      * currentSource;
     NSString                     * browsedSourceDisplayName;
 }
@@ -271,7 +287,7 @@ BOOL                        fIsDragging;
 - (IBAction) audioTrackPopUpChanged: (id) sender mixdownToUse: (int) mixdownToUse;
 - (IBAction) audioTrackMixdownChanged: (id) sender;
 - (IBAction) subtitleSelectionChanged: (id) sender;
-
+- (void) prepareJob;
 - (IBAction) browseFile: (id) sender;
 - (void)     browseFileDone: (NSSavePanel *) sheet
                  returnCode: (int) returnCode contextInfo: (void *) contextInfo;
@@ -284,6 +300,19 @@ BOOL                        fIsDragging;
 - (IBAction) calculatePictureSizing: (id) sender;
 - (IBAction) openMainWindow: (id) sender;
 
+/* Queue File Stuff */
+- (void) loadQueueFile;
+- (NSDictionary *)createQueueFileItem;
+- (void)saveQueueFileItem;
+- (void) incrementQueueItemDone:(int) queueItemDoneIndexNum;
+- (void) performNewQueueScan:(NSString *) scanPath scanTitleNum: (int) scanTitleNum;
+- (void) processNewQueueEncode;
+- (void) clearQueueEncodedItems;
+- (IBAction)applyQueueSettings:(id)sender;
+- (void) removeQueueFileItem:(int) queueItemToRemove;
+- (void) clearQueueAllItems;
+- (void)moveObjectsInQueueArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(unsigned)insertIndex;
+- (void)getQueueStats;
 - (IBAction) addToQueue: (id) sender;
 - (void) overwriteAddToQueueAlertDone: (NSWindow *) sheet
                            returnCode: (int) returnCode contextInfo: (void *) contextInfo;

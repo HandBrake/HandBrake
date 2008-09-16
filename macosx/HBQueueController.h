@@ -9,32 +9,12 @@
 #include "hb.h"
 
 @class HBController;
-@class HBJob;
-@class HBJobGroup;
+
 
 #define HB_QUEUE_DRAGGING 0             // <--- NOT COMPLETELY FUNCTIONAL YET
 #define HB_OUTLINE_METRIC_CONTROLS 0    // for tweaking the outline cell spacings
 
-// hb_job_t contains a sequence_id field. The high word is a unique job group id.
-// The low word contains the "sequence id" which is a value starting at 0 and
-// incremented for each pass in the job group. Use the function below to create and
-// interpret a sequence_id field.
-int MakeJobID(int jobGroupID, int sequenceNum);
-bool IsFirstPass(int jobID);
 
-typedef enum _HBQueueJobGroupStatus
-{
-    HBStatusNone          = 0,
-    HBStatusPending       = 1,
-    HBStatusWorking       = 2,
-    HBStatusCompleted     = 3,
-    HBStatusCanceled      = 4
-} HBQueueJobGroupStatus;
-
-// Notification sent whenever the status of a HBJobGroup changes (via setStatus). The
-// user info contains one object, @"HBOldJobGroupStatus", which is an NSNumber
-// containing the previous status of the job group.
-extern NSString * HBJobGroupStatusNotification;
 
 //------------------------------------------------------------------------------------
 // As usual, we need to subclass NSOutlineView to handle a few special cases:
@@ -56,161 +36,29 @@ extern NSString * HBJobGroupStatusNotification;
 
 @interface HBQueueOutlineView : NSOutlineView
 {
-#if HB_QUEUE_DRAGGING
+
 BOOL                        fIsDragging;
-#endif
+
 }
-#if HB_QUEUE_DRAGGING
+
 - (BOOL) isDragging;
-#endif
-@end
-
-//------------------------------------------------------------------------------------
-// HBJob is the UI's equivalent to libhb's hb_job_t struct. It is used mainly for
-// drawing the job's description. HBJob are referred to in the UI as 'passes'.
-//------------------------------------------------------------------------------------
-
-@interface HBJob : NSObject
-{
-    HBJobGroup                   *jobGroup;         // The group this job belongs to
-
-    // The following fields match up with similar fields found in hb_job_t and it's
-    // various substructures.
-@public
-    // from hb_job_s
-    int                         sequence_id;        // This is how we xref to the jobs inside libhb
-
-    int                         chapter_start;
-    int                         chapter_end;
-    int                         chapter_markers;
-    int                         crop[4];
-    int                         deinterlace;
-    int                         width;              // source dimensions
-    int                         height;
-    int                         output_width;       // output dimensions
-    int                         output_height;
-    int                         anamorphic_width;   // anamorphic dimensions
-    int                         anamorphic_height;
-    int                         keep_ratio;
-    int                         grayscale;
-    int                         pixel_ratio;
-    int                         pixel_aspect_width;
-    int                         pixel_aspect_height;
-    int                         vcodec;
-    float                       vquality;
-    int                         vbitrate;
-    int                         vrate;
-    int                         vrate_base;
-    int                         pass;
-    int                         h264_level;
-    int                         crf;
-    NSString                    *x264opts;
-    /* Used to concatenate audio list values into a string for display */
-    NSString                    *audioinfo_codecs;
-    NSString                    *audioinfo_summary;
-
-    int                         audio_mixdowns[8];
-    int                         acodec;
-    int                         abitrate;
-    int                         arate;
-    int                         subtitle;
-
-    int                         mux;
-    NSString                    *file;
-
-    // from hb_title_s
-    NSString                    *titleName;
-    int                         titleIndex;
-    int                         titleWidth;
-    int                         titleHeight;
-
-    // from hb_subtitle_s
-    NSString                    *subtitleLang;
-}
-
-+ (HBJob*)             jobWithLibhbJob: (hb_job_t *) job;
-- (id)                 initWithLibhbJob: (hb_job_t *) job;
-- (HBJobGroup *)       jobGroup;
-- (void)               setJobGroup: (HBJobGroup *)aJobGroup;
-- (NSMutableAttributedString *) attributedDescriptionWithIcon: (BOOL)withIcon
-                              withTitle: (BOOL)withTitle
-                           withPassName: (BOOL)withPassName
-                         withFormatInfo: (BOOL)withFormatInfo
-                        withDestination: (BOOL)withDestination
-                        withPictureInfo: (BOOL)withPictureInfo
-                          withVideoInfo: (BOOL)withVideoInfo
-                           withx264Info: (BOOL)withx264Info
-                          withAudioInfo: (BOOL)withAudioInfo
-                       withSubtitleInfo: (BOOL)withSubtitleInfo;
-
-// Attributes used by attributedDescriptionWithIcon:::::::::
-+ (NSMutableParagraphStyle *) descriptionParagraphStyle;
-+ (NSDictionary *) descriptionDetailAttribute;
-+ (NSDictionary *) descriptionDetailBoldAttribute;
-+ (NSDictionary *) descriptionTitleAttribute;
-+ (NSDictionary *) descriptionShortHeightAttribute;
 
 @end
 
-//------------------------------------------------------------------------------------
-// HBJobGroup is what's referred to in the UI as an 'encode'. A job group contains
-// multiple HBJobs, one for each 'pass' of the encode. Whereas libhb keeps a simple
-// list of jobs in it's queue, the queue controller presents them to the user as a
-// series of encodes and passes (HBJObGroups and HBJobs).
-//------------------------------------------------------------------------------------
 
-@interface HBJobGroup : NSObject
-{
-    NSMutableArray               *fJobs;   // array of HBJob
-    NSMutableAttributedString    *fDescription;
-    BOOL                         fNeedsDescription;
-    CGFloat                        fLastDescriptionHeight;
-    CGFloat                        fLastDescriptionWidth;
-    HBQueueJobGroupStatus        fStatus;
-    NSString                     *fPresetName;
-}
 
-// Creating a job group
-+ (HBJobGroup *)       jobGroup;
-
-// Adding jobs
-- (void)               addJob: (HBJob *)aJob;
-
-// Querying a job group
-- (unsigned int)       count;
-- (HBJob *)            jobAtIndex: (unsigned)index;
-- (unsigned int)       indexOfJob: (HBJob *)aJob;
-- (NSMutableArray *)   fJobs;
-- (void)               setStatus: (HBQueueJobGroupStatus)status;
-- (HBQueueJobGroupStatus)  status;
-- (void)               setPresetName: (NSString *)name;
-- (NSString *)         presetName;
-- (NSString *)         destinationPath;
-- (NSString *)         name;
-
-// Creating a description
-- (void)               setNeedsDescription: (BOOL)flag;
-- (NSMutableAttributedString *) attributedDescription;
-- (CGFloat)              heightOfDescriptionForWidth:(CGFloat)width;
-- (CGFloat)              lastDescriptionHeight;
-
-@end
-
-//------------------------------------------------------------------------------------
 
 @interface HBQueueController : NSWindowController
 {
-    hb_handle_t                  *fHandle;              // reference to libhb
+    hb_handle_t                  *fQueueEncodeLibhb;              // reference to libhb
     HBController                 *fHBController;        // reference to HBController
-    NSMutableArray               *fJobGroups;           // libhb's job list organized in a hierarchy of HBJobGroup and HBJob
-    HBJobGroup                   *fCurrentJobGroup;     // the HJobGroup currently being processed by libhb
-    HBJob                        *fCurrentJob;          // the HJob (pass) currently being processed by libhb
-    int                          fCurrentJobID;         // this is how we track when hbib has started processing a different job. This is the job's sequence_id.
+    NSMutableArray               *fJobGroups;           // mirror image of the queue array from controller.mm
 
-    unsigned int                 fPendingCount;         // Number of various kinds of job groups in fJobGroups.
-    unsigned int                 fCompletedCount;       // Don't access these directly as they may not always be up-to-date.
-    unsigned int                 fCanceledCount;        // Use the accessor functions instead.
-    unsigned int                 fWorkingCount;
+    int                          fEncodingQueueItem;     // corresponds to the index of fJobGroups encoding item
+    int                          fPendingCount;         // Number of various kinds of job groups in fJobGroups.
+    int                          fCompletedCount;
+    int                          fCanceledCount;
+    int                          fWorkingCount;
     BOOL                         fJobGroupCountsNeedUpdating;
 
     BOOL                         fCurrentJobPaneShown;  // NO when fCurrentJobPane has been shifted out of view (see showCurrentJobPane)
@@ -250,6 +98,7 @@ BOOL                        fIsDragging;
     IBOutlet NSView              *fQueuePane;
     IBOutlet HBQueueOutlineView  *fOutlineView;
     IBOutlet NSTextField         *fQueueCountField;
+    NSArray                      *fDraggedNodes;
 #if HB_OUTLINE_METRIC_CONTROLS
     IBOutlet NSSlider            *fIndentation; // debug
     IBOutlet NSSlider            *fSpacing;     // debug
@@ -259,36 +108,44 @@ BOOL                        fIsDragging;
 
 - (void)setHandle: (hb_handle_t *)handle;
 - (void)setHBController: (HBController *)controller;
-- (void)libhbStateChanged: (hb_state_t)state;
-- (void)libhbWillStop;
 
-// Adding items to the queue
-- (void) addJobGroup: (HBJobGroup *) aJobGroup;
+- (void)setupToolbar;
 
-// Getting the currently processing job group
-- (HBJobGroup *) currentJobGroup;
-- (HBJob *) currentJob;
+- (void)setQueueArray: (NSMutableArray *)QueueFileArray;
+- (id)outlineView:(NSOutlineView *)fOutlineView child:(NSInteger)index ofItem:(id)item;
 
-// Getting job groups
-- (HBJobGroup *) pendingJobGroupWithDestinationPath: (NSString *)path;
+- (BOOL)outlineView:(NSOutlineView *)fOutlineView isItemExpandable:(id)item;
 
-// Getting queue statistics
-- (unsigned int) pendingCount;
-- (unsigned int) completedCount;
-- (unsigned int) canceledCount;
-- (unsigned int) workingCount;
+- (BOOL)outlineView:(NSOutlineView *)fOutlineView shouldExpandItem:(id)item;
+
+- (NSInteger)outlineView:(NSOutlineView *)fOutlineView numberOfChildrenOfItem:(id)item;
+
+- (id)outlineView:(NSOutlineView *)fOutlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item;
+
+- (void)outlineView:(NSOutlineView *)fOutlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item;
+
+- (void)moveObjectsInQueueArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(unsigned)insertIndex;
+
+/* Animate the icon for the current encode */
+- (void) animateWorkingEncodeIconInQueue;
+- (void) startAnimatingCurrentWorkingEncodeInQueue;
+- (void) stopAnimatingCurrentJobGroupInQueue;
+
 
 - (IBAction)showQueueWindow: (id)sender;
-- (IBAction)removeSelectedJobGroups: (id)sender;
-- (IBAction)revealSelectedJobGroups: (id)sender;
-- (IBAction)cancelCurrentJob: (id)sender;
-- (IBAction)toggleStartCancel: (id)sender;
-- (IBAction)togglePauseResume: (id)sender;
+
+
+/* control encodes in the window */
+- (IBAction)removeSelectedQueueItem: (id)sender;
+- (IBAction)revealSelectedQueueItem: (id)sender;
 
 #if HB_OUTLINE_METRIC_CONTROLS
 - (IBAction)imageSpacingChanged: (id)sender;
 - (IBAction)indentChanged: (id)sender;
 #endif
 
-@end
 
+
+
+
+@end
