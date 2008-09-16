@@ -2209,20 +2209,20 @@ static int hb_ts_stream_decode( hb_stream_t *stream, uint8_t *obuf )
                 {
                     // PES must begin with an mpeg start code & contain
                     // a DTS or PTS.
-                    uint8_t *pes = buf + adapt_len + 4;
+                    const uint8_t *pes = buf + adapt_len + 4;
                     if ( pes[0] != 0x00 || pes[1] != 0x00 || pes[2] != 0x01 ||
                          ( pes[7] >> 6 ) == 0 )
                     {
                         continue;
                     }
                     // if we have a dts use it otherwise use the pts
-                    pes += (pes[7] & 0x40)? 9 : 14;
+                    pes += (pes[7] & 0x40)? 14 : 9;
 
-                    pcr = ( ( (uint64_t)pes[0] >> 1 ) & 7 << 30 ) |
-                          ( (uint64_t)pes[1] << 22 ) |
-                          ( ( (uint64_t)pes[2] >> 1 ) << 15 ) |
-                          ( (uint64_t)pes[3] << 7 ) |
-                          ( (uint64_t)pes[4] >> 1 );
+                    pcr = ( (uint64_t)(pes[0] & 0xe ) << 29 );
+                    pcr |= ( pes[1] << 22 ) |
+                           ( ( pes[2] >> 1 ) << 15 ) |
+                           ( pes[3] << 7 ) |
+                           ( pes[4] >> 1 );
                     stream->ts_nextpcr = pcr;
                 }
             }
