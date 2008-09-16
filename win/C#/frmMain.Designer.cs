@@ -38,7 +38,7 @@ namespace Handbrake
             System.Windows.Forms.Label Label38;
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
@@ -495,7 +495,7 @@ namespace Handbrake
             this.drp_videoFramerate.Size = new System.Drawing.Size(126, 21);
             this.drp_videoFramerate.TabIndex = 2;
             this.drp_videoFramerate.Text = "Same as source";
-            this.ToolTip.SetToolTip(this.drp_videoFramerate, "Can be left to automcatic in most cases.");
+            this.ToolTip.SetToolTip(this.drp_videoFramerate, "Can be left to \"Same as source\" in most cases.");
             // 
             // slider_videoQuality
             // 
@@ -548,7 +548,7 @@ namespace Handbrake
             this.btn_setDefault.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_setDefault.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_setDefault.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_setDefault.Location = new System.Drawing.Point(115, 502);
+            this.btn_setDefault.Location = new System.Drawing.Point(115, 508);
             this.btn_setDefault.Name = "btn_setDefault";
             this.btn_setDefault.Size = new System.Drawing.Size(72, 22);
             this.btn_setDefault.TabIndex = 1;
@@ -646,9 +646,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Format = "N0";
+            dataGridViewCellStyle4.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle4;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -665,14 +665,13 @@ namespace Handbrake
             this.btn_addPreset.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_addPreset.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_addPreset.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_addPreset.Location = new System.Drawing.Point(10, 502);
+            this.btn_addPreset.Location = new System.Drawing.Point(10, 508);
             this.btn_addPreset.Name = "btn_addPreset";
             this.btn_addPreset.Size = new System.Drawing.Size(35, 22);
             this.btn_addPreset.TabIndex = 3;
             this.btn_addPreset.TabStop = false;
             this.btn_addPreset.Text = "Add";
-            this.ToolTip.SetToolTip(this.btn_addPreset, "Set current settings as program defaults.\r\nRequires option to be enabled in Tools" +
-                    " > Options");
+            this.ToolTip.SetToolTip(this.btn_addPreset, "Add a preset to the preset panel");
             this.btn_addPreset.UseVisualStyleBackColor = true;
             this.btn_addPreset.Click += new System.EventHandler(this.btn_addPreset_Click);
             // 
@@ -681,14 +680,13 @@ namespace Handbrake
             this.btn_removePreset.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_removePreset.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_removePreset.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_removePreset.Location = new System.Drawing.Point(51, 502);
+            this.btn_removePreset.Location = new System.Drawing.Point(51, 508);
             this.btn_removePreset.Name = "btn_removePreset";
             this.btn_removePreset.Size = new System.Drawing.Size(58, 22);
             this.btn_removePreset.TabIndex = 4;
             this.btn_removePreset.TabStop = false;
             this.btn_removePreset.Text = "Remove";
-            this.ToolTip.SetToolTip(this.btn_removePreset, "Set current settings as program defaults.\r\nRequires option to be enabled in Tools" +
-                    " > Options");
+            this.ToolTip.SetToolTip(this.btn_removePreset, "Remove a preset from the panel above.");
             this.btn_removePreset.UseVisualStyleBackColor = true;
             this.btn_removePreset.Click += new System.EventHandler(this.btn_removePreset_Click);
             // 
@@ -955,7 +953,6 @@ namespace Handbrake
             this.lbl_src_res.Size = new System.Drawing.Size(72, 12);
             this.lbl_src_res.TabIndex = 13;
             this.lbl_src_res.Text = "Select a Title";
-            this.ToolTip.SetToolTip(this.lbl_src_res, "Top / Bottom / Left / Right");
             // 
             // lbl_duration
             // 
@@ -967,7 +964,6 @@ namespace Handbrake
             this.lbl_duration.Size = new System.Drawing.Size(72, 12);
             this.lbl_duration.TabIndex = 43;
             this.lbl_duration.Text = "Select a Title";
-            this.ToolTip.SetToolTip(this.lbl_duration, "Top / Bottom / Left / Right");
             // 
             // label_duration
             // 
@@ -979,7 +975,6 @@ namespace Handbrake
             this.label_duration.Size = new System.Drawing.Size(61, 13);
             this.label_duration.TabIndex = 42;
             this.label_duration.Text = "Duration:";
-            this.ToolTip.SetToolTip(this.label_duration, "Top / Bottom / Left / Right");
             // 
             // drop_format
             // 
@@ -1889,13 +1884,13 @@ namespace Handbrake
             this.TabPage1.Location = new System.Drawing.Point(4, 22);
             this.TabPage1.Name = "TabPage1";
             this.TabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage1.Size = new System.Drawing.Size(697, 307);
+            this.TabPage1.Size = new System.Drawing.Size(697, 316);
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "Picture Settings";
             // 
             // slider_deblock
             // 
-            this.slider_deblock.Location = new System.Drawing.Point(406, 201);
+            this.slider_deblock.Location = new System.Drawing.Point(407, 264);
             this.slider_deblock.Maximum = 15;
             this.slider_deblock.Name = "slider_deblock";
             this.slider_deblock.Size = new System.Drawing.Size(174, 42);
@@ -1907,7 +1902,7 @@ namespace Handbrake
             this.label8.AutoSize = true;
             this.label8.BackColor = System.Drawing.Color.Transparent;
             this.label8.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(311, 215);
+            this.label8.Location = new System.Drawing.Point(311, 269);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(58, 13);
             this.label8.TabIndex = 37;
@@ -1918,7 +1913,7 @@ namespace Handbrake
             this.lbl_deblockVal.AutoSize = true;
             this.lbl_deblockVal.BackColor = System.Drawing.Color.Transparent;
             this.lbl_deblockVal.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_deblockVal.Location = new System.Drawing.Point(584, 215);
+            this.lbl_deblockVal.Location = new System.Drawing.Point(585, 269);
             this.lbl_deblockVal.Name = "lbl_deblockVal";
             this.lbl_deblockVal.Size = new System.Drawing.Size(14, 13);
             this.lbl_deblockVal.TabIndex = 36;
@@ -2129,7 +2124,7 @@ namespace Handbrake
             "Weak",
             "Medium",
             "Strong"});
-            this.drp_deNoise.Location = new System.Drawing.Point(413, 277);
+            this.drp_deNoise.Location = new System.Drawing.Point(413, 237);
             this.drp_deNoise.Name = "drp_deNoise";
             this.drp_deNoise.Size = new System.Drawing.Size(161, 21);
             this.drp_deNoise.TabIndex = 29;
@@ -2139,7 +2134,7 @@ namespace Handbrake
             this.label11.AutoSize = true;
             this.label11.BackColor = System.Drawing.Color.Transparent;
             this.label11.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(311, 280);
+            this.label11.Location = new System.Drawing.Point(311, 240);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(58, 13);
             this.label11.TabIndex = 28;
@@ -2162,7 +2157,7 @@ namespace Handbrake
             this.label4.AutoSize = true;
             this.label4.BackColor = System.Drawing.Color.Transparent;
             this.label4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(311, 252);
+            this.label4.Location = new System.Drawing.Point(311, 212);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(77, 13);
             this.label4.TabIndex = 26;
@@ -2178,7 +2173,7 @@ namespace Handbrake
             "Fast",
             "Slow",
             "Slower"});
-            this.drp_deInterlace_option.Location = new System.Drawing.Point(413, 249);
+            this.drp_deInterlace_option.Location = new System.Drawing.Point(413, 209);
             this.drp_deInterlace_option.Name = "drp_deInterlace_option";
             this.drp_deInterlace_option.Size = new System.Drawing.Size(161, 21);
             this.drp_deInterlace_option.TabIndex = 27;
@@ -2263,7 +2258,7 @@ namespace Handbrake
             this.advancedOptions.Location = new System.Drawing.Point(12, 274);
             this.advancedOptions.Name = "advancedOptions";
             this.advancedOptions.SelectedIndex = 0;
-            this.advancedOptions.Size = new System.Drawing.Size(705, 333);
+            this.advancedOptions.Size = new System.Drawing.Size(705, 342);
             this.advancedOptions.TabIndex = 5;
             this.advancedOptions.TabStop = false;
             // 
@@ -2997,7 +2992,7 @@ namespace Handbrake
             this.groupBox2.ForeColor = System.Drawing.Color.Black;
             this.groupBox2.Location = new System.Drawing.Point(728, 70);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(218, 537);
+            this.groupBox2.Size = new System.Drawing.Size(218, 546);
             this.groupBox2.TabIndex = 6;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Presets";
@@ -3147,8 +3142,8 @@ namespace Handbrake
             this.btn_minimize.Image = global::Handbrake.Properties.Resources.hb32;
             this.btn_minimize.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_minimize.Name = "btn_minimize";
-            this.btn_minimize.Size = new System.Drawing.Size(122, 36);
-            this.btn_minimize.Text = "Minimize To Taskbar";
+            this.btn_minimize.Size = new System.Drawing.Size(144, 36);
+            this.btn_minimize.Text = "Minimize To System Tray";
             this.btn_minimize.Click += new System.EventHandler(this.btn_minimize_Click);
             // 
             // notifyIcon
@@ -3165,7 +3160,7 @@ namespace Handbrake
             // 
             this.StatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lbl_encode});
-            this.StatusStrip.Location = new System.Drawing.Point(0, 619);
+            this.StatusStrip.Location = new System.Drawing.Point(0, 629);
             this.StatusStrip.Name = "StatusStrip";
             this.StatusStrip.Size = new System.Drawing.Size(958, 22);
             this.StatusStrip.TabIndex = 7;
@@ -3182,7 +3177,7 @@ namespace Handbrake
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(958, 641);
+            this.ClientSize = new System.Drawing.Size(958, 651);
             this.Controls.Add(this.GroupBox1);
             this.Controls.Add(this.groupBox_dest);
             this.Controls.Add(this.groupBox_output);

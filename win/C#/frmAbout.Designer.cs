@@ -88,7 +88,7 @@ namespace Handbrake
             this.Label3.Name = "Label3";
             this.Label3.Size = new System.Drawing.Size(78, 13);
             this.Label3.TabIndex = 25;
-            this.Label3.Text = "Handbrake";
+            this.Label3.Text = "HandBrake";
             // 
             // PictureBox1
             // 
@@ -149,7 +149,7 @@ namespace Handbrake
             this.MinimizeBox = false;
             this.Name = "frmAbout";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "About Handbrake";
+            this.Text = "About HandBrake";
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

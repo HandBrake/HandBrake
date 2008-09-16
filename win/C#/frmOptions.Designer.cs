@@ -40,6 +40,9 @@ namespace Handbrake
             this.drp_completeOption = new System.Windows.Forms.ComboBox();
             this.tab_options = new System.Windows.Forms.TabControl();
             this.tab_general = new System.Windows.Forms.TabPage();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txt_autoNameFormat = new System.Windows.Forms.TextBox();
             this.btn_browse = new System.Windows.Forms.Button();
             this.label10 = new System.Windows.Forms.Label();
             this.text_an_path = new System.Windows.Forms.TextBox();
@@ -69,9 +72,6 @@ namespace Handbrake
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pathFinder = new System.Windows.Forms.FolderBrowserDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.txt_autoNameFormat = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_picture.SuspendLayout();
@@ -148,6 +148,34 @@ namespace Handbrake
             this.tab_general.TabIndex = 3;
             this.tab_general.Text = "General";
             this.tab_general.UseVisualStyleBackColor = true;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(197, 222);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(242, 12);
+            this.label7.TabIndex = 81;
+            this.label7.Text = "Available Options: {source} {title} {chapters}";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(111, 201);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(52, 13);
+            this.label5.TabIndex = 80;
+            this.label5.Text = "Format:";
+            // 
+            // txt_autoNameFormat
+            // 
+            this.txt_autoNameFormat.Location = new System.Drawing.Point(199, 198);
+            this.txt_autoNameFormat.Name = "txt_autoNameFormat";
+            this.txt_autoNameFormat.Size = new System.Drawing.Size(255, 21);
+            this.txt_autoNameFormat.TabIndex = 79;
+            this.txt_autoNameFormat.TextChanged += new System.EventHandler(this.txt_autoNameFormat_TextChanged);
             // 
             // btn_browse
             // 
@@ -274,7 +302,7 @@ namespace Handbrake
             this.tab_picture.Controls.Add(this.label3);
             this.tab_picture.Location = new System.Drawing.Point(4, 22);
             this.tab_picture.Name = "tab_picture";
-            this.tab_picture.Size = new System.Drawing.Size(482, 292);
+            this.tab_picture.Size = new System.Drawing.Size(482, 259);
             this.tab_picture.TabIndex = 5;
             this.tab_picture.Text = "Picture";
             this.tab_picture.UseVisualStyleBackColor = true;
@@ -285,7 +313,7 @@ namespace Handbrake
             this.txt_decomb.Name = "txt_decomb";
             this.txt_decomb.Size = new System.Drawing.Size(181, 21);
             this.txt_decomb.TabIndex = 78;
-            this.ToolTip.SetToolTip(this.txt_decomb, "Default location where Auto named files are stored.");
+            this.ToolTip.SetToolTip(this.txt_decomb, "Default: 4:10:15:9:10:35:9");
             this.txt_decomb.TextChanged += new System.EventHandler(this.txt_decomb_TextChanged);
             // 
             // label3
@@ -308,7 +336,7 @@ namespace Handbrake
             this.tab_cli.Controls.Add(this.Label4);
             this.tab_cli.Location = new System.Drawing.Point(4, 22);
             this.tab_cli.Name = "tab_cli";
-            this.tab_cli.Size = new System.Drawing.Size(482, 292);
+            this.tab_cli.Size = new System.Drawing.Size(482, 259);
             this.tab_cli.TabIndex = 2;
             this.tab_cli.Text = "CLI";
             this.tab_cli.UseVisualStyleBackColor = true;
@@ -410,7 +438,7 @@ namespace Handbrake
             this.tab_advanced.Location = new System.Drawing.Point(4, 22);
             this.tab_advanced.Name = "tab_advanced";
             this.tab_advanced.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_advanced.Size = new System.Drawing.Size(482, 292);
+            this.tab_advanced.Size = new System.Drawing.Size(482, 259);
             this.tab_advanced.TabIndex = 4;
             this.tab_advanced.Text = "Advanced";
             this.tab_advanced.UseVisualStyleBackColor = true;
@@ -489,34 +517,6 @@ namespace Handbrake
             this.ToolTip.AutomaticDelay = 1000;
             this.ToolTip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.ToolTip.ToolTipTitle = "Tooltip";
-            // 
-            // txt_autoNameFormat
-            // 
-            this.txt_autoNameFormat.Location = new System.Drawing.Point(199, 198);
-            this.txt_autoNameFormat.Name = "txt_autoNameFormat";
-            this.txt_autoNameFormat.Size = new System.Drawing.Size(255, 21);
-            this.txt_autoNameFormat.TabIndex = 79;
-            this.txt_autoNameFormat.TextChanged += new System.EventHandler(this.txt_autoNameFormat_TextChanged);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(111, 201);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(52, 13);
-            this.label5.TabIndex = 80;
-            this.label5.Text = "Format:";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(197, 222);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(242, 12);
-            this.label7.TabIndex = 81;
-            this.label7.Text = "Available Options: {source} {title} {chapters}";
             // 
             // frmOptions
             // 
