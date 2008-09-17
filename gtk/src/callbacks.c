@@ -977,7 +977,7 @@ adjust_audio_rate_combos(signal_user_data_t *ud)
 		{
 			gint br = ainfo.bitrate / 1000;
 			// Set the values for bitrate and samplerate to the input rates
-			ghb_set_passthru_rate_opts (ud->builder, br);
+			ghb_set_passthru_bitrate_opts (ud->builder, br);
 			ghb_ui_update(ud, "audio_bitrate", ghb_int64_value(br));
 			ghb_ui_update(ud, "audio_rate", ghb_int64_value(0));
 			ghb_ui_update(ud, "audio_mix", ghb_int64_value(0));
@@ -988,9 +988,19 @@ adjust_audio_rate_combos(signal_user_data_t *ud)
 			ghb_ui_update(ud, "audio_mix", ghb_int64_value(0));
 		}
 	}
+	else if (acodec == HB_ACODEC_FAAC)
+	{
+		gint br;
+
+		widget = GHB_WIDGET(ud->builder, "audio_bitrate");
+		br = ghb_widget_int(widget);
+		if (br > 160)
+			ghb_ui_update(ud, "audio_bitrate", ghb_int64_value(160));
+		ghb_set_default_bitrate_opts (ud->builder, 160);
+	}
 	else
 	{
-		ghb_set_default_rate_opts (ud->builder);
+		ghb_set_default_bitrate_opts (ud->builder, -1);
 	}
 }
 

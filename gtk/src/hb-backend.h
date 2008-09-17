@@ -109,8 +109,8 @@ gboolean ghb_audio_is_passthru(gint acodec);
 gint ghb_get_default_acodec(void);
 gboolean ghb_get_audio_info(
 	ghb_audio_info_t *ainfo, gint titleindex, gint audioindex);
-gboolean ghb_set_passthru_rate_opts(GtkBuilder *builder, gint bitrate);
-gboolean ghb_set_default_rate_opts(GtkBuilder *builder);
+void ghb_set_passthru_bitrate_opts(GtkBuilder *builder, gint bitrate);
+void ghb_set_default_bitrate_opts(GtkBuilder *builder, gint last_rate);
 void ghb_grey_combo_options(GtkBuilder *builder);
 void ghb_update_ui_combo_box(
 	GtkBuilder *builder, const gchar *name, gint user_data, gboolean all);
