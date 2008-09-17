@@ -2520,7 +2520,7 @@ fWorkingCount = 0;
 			NSString *firstPassOptStringTurbo = @":ref=1:subme=1:me=dia:analyse=none:trellis=0:no-fast-pskip=0:8x8dct=0:weightb=0";
 			/* append the "Turbo" string variable to the existing opts string.
              Note: the "Turbo" string must be appended, not prepended to work properly*/
-			NSString *firstPassOptStringCombined = [[[queueToApply objectForKey:@"x264Option"] stringValue] stringByAppendingString:firstPassOptStringTurbo];
+			NSString *firstPassOptStringCombined = [[queueToApply objectForKey:@"x264Option"] stringByAppendingString:firstPassOptStringTurbo];
 			strcpy(job->x264opts, [firstPassOptStringCombined UTF8String]);
 		}
 		else
@@ -2530,6 +2530,8 @@ fWorkingCount = 0;
         
     }
     
+    
+    [self writeToActivityLog: "prepareJob reached Picture Settings"];
     /* Picture Size Settings */
     job->width = [[queueToApply objectForKey:@"PictureWidth"]  intValue];
     job->height = [[queueToApply objectForKey:@"PictureHeight"]  intValue];
@@ -2543,6 +2545,8 @@ fWorkingCount = 0;
     job->crop[1] = [[queueToApply objectForKey:@"PictureBottomCrop"]  intValue];
     job->crop[2] = [[queueToApply objectForKey:@"PictureLeftCrop"]  intValue];
     job->crop[3] = [[queueToApply objectForKey:@"PictureRightCrop"]  intValue];
+    
+    [self writeToActivityLog: "prepareJob reached Frame Rate"];
     
     /* Video settings */
     if( [[queueToApply objectForKey:@"JobIndexVideoFramerate"] intValue] > 0 )
@@ -2562,7 +2566,7 @@ fWorkingCount = 0;
          * to enable true same as source framerate */
         job->cfr = 0;
     }
-    
+    [self writeToActivityLog: "prepareJob reached Bitrate Video Quality"];
     if ( [[queueToApply objectForKey:@"VideoQualityType"] intValue] == 0 )
     {
         /* Target size.
@@ -2585,6 +2589,7 @@ fWorkingCount = 0;
     /* Subtitle settings */
     job->subtitle = [[queueToApply objectForKey:@"JobSubtitlesIndex"] intValue] - 2;
     
+    [self writeToActivityLog: "prepareJob reached Audio"];
     /* Audio tracks and mixdowns */
     /* Lets make sure there arent any erroneous audio tracks in the job list, so lets make sure its empty*/
     int audiotrack_count = hb_list_count(job->list_audio);
@@ -2673,7 +2678,8 @@ fWorkingCount = 0;
         job->vfr = 0;
     }
     
-    /* Filters */ 
+   [self writeToActivityLog: "prepareJob reached Filters"];
+     /* Filters */ 
     job->filters = hb_list_init();
     
     /* Now lets call the filters if applicable.
