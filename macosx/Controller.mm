@@ -2345,10 +2345,11 @@ fWorkingCount = 0;
     
     NSMutableDictionary * queueToApply = [QueueFileArray objectAtIndex:currentQueueEncodeIndex];
     [self writeToActivityLog: "processNewQueueEncode currentQueueEncodeIndex is: %d", currentQueueEncodeIndex];
+    [self writeToActivityLog: "processNewQueueEncode number of passes expected is: %d", ([[queueToApply objectForKey:@"VideoTwoPass"] intValue] + 1)];
     job->file = [[queueToApply objectForKey:@"DestinationPath"] UTF8String];
-    
+    [self writeToActivityLog: "processNewQueueEncode sending to prepareJob"];
     [self prepareJob];
-    
+    [self writeToActivityLog: "processNewQueueEncode back from prepareJob"];
     if( [[queueToApply objectForKey:@"SubtitlesForced"] intValue] == 1 )
         job->subtitle_force = 1;
     else
@@ -2445,7 +2446,7 @@ fWorkingCount = 0;
     hb_title_t * title = (hb_title_t *) hb_list_item( list,0 ); // is always zero since now its a single title scan
     hb_job_t * job = title->job;
     hb_audio_config_t * audio;
-    
+    [self writeToActivityLog: "prepareJob reached"];
     /* Chapter selection */
     job->chapter_start = [[queueToApply objectForKey:@"JobChapterStart"] intValue];
     job->chapter_end   = [[queueToApply objectForKey:@"JobChapterEnd"] intValue];
@@ -2734,7 +2735,7 @@ fWorkingCount = 0;
     {
         hb_list_add( job->filters, &hb_filter_deblock );
     }
-    
+[self writeToActivityLog: "prepareJob exiting"];    
 }
 
 
