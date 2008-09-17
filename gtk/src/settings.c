@@ -456,6 +456,9 @@ update_widget(GtkWidget *widget, const GValue *value)
 	gint ival;
 	gdouble dval;
 
+	type = G_VALUE_TYPE(value);
+	if (type == ghb_array_get_type() || type == ghb_dict_get_type())
+		return;
 	if (value == NULL) return;
 	str = ghb_value_string(value);
 	ival = ghb_value_int(value);
@@ -642,22 +645,24 @@ struct x264_opt_map_s
 };
 
 static gchar *x264_ref_syns[] = {"ref", "frameref", NULL};
-static gchar *x264_mixed_syns[] = {"mixed-refs", NULL};
+static gchar *x264_mixed_syns[] = {"mixed-refs", "mixed_refs", NULL};
 static gchar *x264_bframes_syns[] = {"bframes", NULL};
-static gchar *x264_direct_syns[] = {"direct", "direct-pred", NULL};
-static gchar *x264_weightb_syns[] = {"weightb", "weight-b", NULL};
-static gchar *x264_brdo_syns[] = {"brdo", "b-rdo", NULL};
+static gchar *x264_direct_syns[] = 
+	{"direct", "direct-pred", "direct_pred", NULL};
+static gchar *x264_weightb_syns[] = {"weightb", "weight-b", "weight_b", NULL};
+static gchar *x264_brdo_syns[] = {"brdo", "b-rdo", "b_rdo", NULL};
 static gchar *x264_bime_syns[] = {"bime", NULL};
-static gchar *x264_bpyramid_syns[] = {"b-pyramid", NULL};
+static gchar *x264_bpyramid_syns[] = {"b-pyramid", "b_pyramid", NULL};
 static gchar *x264_me_syns[] = {"me", NULL};
-static gchar *x264_merange_syns[] = {"merange", "me-range", NULL};
+static gchar *x264_merange_syns[] = {"merange", "me-range", "me_range", NULL};
 static gchar *x264_subme_syns[] = {"subme", "subq", NULL};
 static gchar *x264_analyse_syns[] = {"analyse", "partitions", NULL};
 static gchar *x264_8x8dct_syns[] = {"8x8dct", NULL};
 static gchar *x264_deblock_syns[] = {"deblock", "filter", NULL};
 static gchar *x264_trellis_syns[] = {"trellis", NULL};
-static gchar *x264_pskip_syns[] = {"no-fast-pskip", NULL};
-static gchar *x264_decimate_syns[] = {"no-dct-decimate", NULL};
+static gchar *x264_pskip_syns[] = {"no-fast-pskip", "no_fast_pskip", NULL};
+static gchar *x264_decimate_syns[] = 
+	{"no-dct-decimate", "no_dct_decimate", NULL};
 static gchar *x264_cabac_syns[] = {"cabac", NULL};
 
 static gint
@@ -684,7 +689,7 @@ struct x264_opt_map_s x264_opt_map[] =
 	{x264_bpyramid_syns, "x264_bpyramid", "0", X264_OPT_BOOL},
 	{x264_me_syns, "x264_me", "hex", X264_OPT_COMBO},
 	{x264_merange_syns, "x264_merange", "16", X264_OPT_INT},
-	{x264_subme_syns, "x264_subme", "5", X264_OPT_COMBO},
+	{x264_subme_syns, "x264_subme", "4", X264_OPT_COMBO},
 	{x264_analyse_syns, "x264_analyse", "some", X264_OPT_COMBO},
 	{x264_8x8dct_syns, "x264_8x8dct", "0", X264_OPT_BOOL},
 	{x264_deblock_syns, "x264_deblock_alpha", "0,0", X264_OPT_DEBLOCK},

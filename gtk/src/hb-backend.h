@@ -136,6 +136,7 @@ const gchar* ghb_lookup_acodec_option(const GValue *acodec);
 gint ghb_lookup_mix(const GValue *mix);
 const gchar* ghb_lookup_mix_option(const GValue *mix);
 const gchar* ghb_lookup_container_option(const GValue *container);
+gint ghb_lookup_container(const GValue *container);
 const gchar* ghb_lookup_vcodec_option(const GValue *vcodec);
 #if 0
 gint ghb_lookup_bitrate(const gchar *bitrate);

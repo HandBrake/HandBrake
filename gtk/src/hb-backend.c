@@ -502,6 +502,25 @@ ghb_lookup_vcodec_option(const GValue *vcodec)
 	return result;
 }
 
+gint
+ghb_lookup_container(const GValue *container)
+{
+	gint ii;
+	gchar *str;
+	gint result = -1;
+
+	str = ghb_value_string(container);
+	for (ii = 0; ii < container_opts.count; ii++)
+	{
+		if (strcmp(container_opts.map[ii].shortOpt, str) == 0)
+		{
+			result = container_opts.map[ii].ivalue;
+		}
+	}
+	g_free(str);
+	return result;
+}
+
 const gchar*
 ghb_lookup_container_option(const GValue *container)
 {
@@ -658,6 +677,27 @@ ghb_lookup_mix(const GValue *mix)
 	return result;
 }
 
+gint
+ghb_lookup_rate(const GValue *rate)
+{
+	gint ii;
+	gchar *str;
+	gint result = 0;
+
+	// Coincidentally, the string "source" will return 0
+	// which is our flag to use "same as source"
+	str = ghb_value_string(rate);
+	for (ii = 0; ii < hb_audio_rates_count; ii++)
+	{
+		if (strcmp(hb_audio_rates[ii].string, str) == 0)
+		{
+			result = hb_audio_rates[ii].rate;
+		}
+	}
+	g_free(str);
+	return result;
+}
+
 #if 0
 gint
 ghb_lookup_bitrate(const gchar *bitrate)
@@ -668,27 +708,10 @@ ghb_lookup_bitrate(const gchar *bitrate)
 	{
 		if (strcmp(hb_audio_bitrates[ii].string, bitrate) == 0)
 		{
-			return hb_audio_bitrates[ii].rate * 1000;
+			return hb_audio_bitrates[ii].rate;
 		}
 	}
-	return 160 * 1000;
-}
-
-gint
-ghb_lookup_rate(const gchar *rate)
-{
-	gint ii;
-
-	for (ii = 0; ii < hb_audio_rates_count; ii++)
-	{
-		if (strcmp(hb_audio_rates[ii].string, rate) == 0)
-		{
-			return hb_audio_rates[ii].rate;
-		}
-	}
-	// Coincidentally, the string "source" will return 0
-	// which is our flag to use "same as source"
-	return 0;
+	return 160;
 }
 
 gdouble
@@ -718,6 +741,28 @@ get_acodec_value(gint val)
 				acodec_opts.map[ii].shortOpt,
 				acodec_opts.map[ii].svalue,
 				acodec_opts.map[ii].ivalue);
+			break;
+		}
+	}
+	return value;
+}
+
+static GValue*
+get_abitrate_value(gint val)
+{
+	GValue *value = NULL;
+	gint ii;
+
+	for (ii = 0; ii < hb_audio_bitrates_count; ii++)
+	{
+		if (hb_audio_bitrates[ii].rate == val)
+		{
+			value = ghb_combo_value_new(
+				ii,
+				hb_audio_bitrates[ii].string,
+				hb_audio_bitrates[ii].string,
+				hb_audio_bitrates[ii].string,
+				hb_audio_bitrates[ii].rate);
 			break;
 		}
 	}
@@ -1080,7 +1125,7 @@ audio_bitrate_opts_set(GtkBuilder *builder, const gchar *name, hb_rate_t *rates,
 						   0, rates[ii].string, 
 						   1, TRUE, 
 						   2, rates[ii].string, 
-						   3, rates[ii].rate * 1000, 
+						   3, rates[ii].rate, 
 						   4, rates[ii].string, 
 						   -1);
 	}
@@ -1102,7 +1147,7 @@ audio_bitrate_opts_clean(GtkBuilder *builder, const gchar *name, hb_rate_t *rate
 		do
 		{
 			gtk_tree_model_get(GTK_TREE_MODEL(store), &iter, 3, &ivalue, -1);
-			if (search_rates(rates, ivalue/1000, count) < 0)
+			if (search_rates(rates, ivalue, count) < 0)
 			{
 				done = !gtk_list_store_remove(store, &iter);
 				changed = TRUE;
@@ -1340,7 +1385,7 @@ audio_rate_opts_add(GtkBuilder *builder, const gchar *name, gint rate)
 	store = get_combo_box_store(builder, name);
 	if (!find_combo_item_by_int(GTK_TREE_MODEL(store), rate, &iter))
 	{
-		str = g_strdup_printf ("%.8g", (gdouble)rate/1000.0);
+		str = g_strdup_printf ("%d", rate);
 		gtk_list_store_append(store, &iter);
 		gtk_list_store_set(store, &iter, 
 						   0, str, 
@@ -1394,15 +1439,19 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 	}
 	for (ii = 0; ii < count; ii++)
 	{
+		gchar *str;
+
         audio = (hb_audio_config_t *) hb_list_audio_config_item( title->list_audio, ii );
 		gtk_list_store_append(store, &iter);
+		str = g_strdup_printf("%d", ii);
 		gtk_list_store_set(store, &iter, 
 						   0, audio->lang.description, 
 						   1, TRUE, 
-						   2, audio->lang.description, 
+						   2, str, 
 						   3, ii, 
-						   4, audio->lang.description, 
+						   4, str, 
 						   -1);
+		g_free(str);
 	}
 }
 
@@ -2508,6 +2557,8 @@ ghb_validate_container(signal_user_data_t *ud)
 					GValue *value;
 					value = get_acodec_value(HB_ACODEC_FAAC);
 					ghb_settings_take_value(asettings, "audio_codec", value);
+					value = get_abitrate_value(160);
+					ghb_settings_take_value(asettings, "audio_bitrate", value);
 				}
 			}
 		}
@@ -2801,7 +2852,7 @@ ghb_add_job(GValue *js, gint unique_id)
 	job   = title->job;
 	if (job == NULL) return;
 
-	tweaks = ghb_settings_get_int(js, "allow_tweaks");
+	tweaks = ghb_settings_get_boolean(js, "allow_tweaks");
 	job->mux = ghb_lookup_mux(ghb_settings_get_value(js, "container"));
 	if (job->mux == HB_MUX_MP4)
 	{
@@ -3094,8 +3145,9 @@ ghb_add_job(GValue *js, gint unique_id)
 			audio.out.mixdown = ghb_get_best_mix(titleindex, 
 				audio.in.track, audio.out.codec, audio.out.mixdown);
 			audio.out.bitrate = 
-				ghb_settings_get_int(asettings, "audio_bitrate") / 1000;
-			gint srate = ghb_settings_get_int(asettings, "audio_rate");
+				ghb_settings_get_int(asettings, "audio_bitrate");
+			gint srate = ghb_lookup_rate(
+				ghb_settings_get_value(asettings, "audio_rate"));
 			if (srate == 0)	// 0 is same as source
 				audio.out.samplerate = taudio->in.samplerate;
 			else
@@ -3136,7 +3188,7 @@ ghb_add_job(GValue *js, gint unique_id)
 	{
 		job->x264opts =  NULL;
 	}
-	gint subtitle = ghb_settings_get_int(js, "subtitle_lang");
+	gint subtitle;
 	gchar *slang = ghb_settings_get_string(js, "subtitle_lang");
 	subtitle = -2; // default to none
 	if (strcmp(slang, "auto") == 0)

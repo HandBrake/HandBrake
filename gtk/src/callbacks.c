@@ -34,6 +34,7 @@
 #include "hb-backend.h"
 #include "ghb-dvd.h"
 #include "ghbcellrenderertext.h"
+#include "hb.h"
 
 static void update_chapter_list(signal_user_data_t *ud);
 static void clear_audio_list(signal_user_data_t *ud);
@@ -974,9 +975,10 @@ adjust_audio_rate_combos(signal_user_data_t *ud)
 	{
 		if (ghb_get_audio_info (&ainfo, titleindex, audioindex))
 		{
+			gint br = ainfo.bitrate / 1000;
 			// Set the values for bitrate and samplerate to the input rates
-			ghb_set_passthru_rate_opts (ud->builder, ainfo.bitrate);
-			ghb_ui_update(ud, "audio_bitrate", ghb_int64_value(ainfo.bitrate));
+			ghb_set_passthru_rate_opts (ud->builder, br);
+			ghb_ui_update(ud, "audio_bitrate", ghb_int64_value(br));
 			ghb_ui_update(ud, "audio_rate", ghb_int64_value(0));
 			ghb_ui_update(ud, "audio_mix", ghb_int64_value(0));
 		}
@@ -2427,9 +2429,11 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	GString *str = g_string_new("");
 	gboolean markers;
 	gboolean preset_modified;
+	gint mux;
 
 	gval = ghb_settings_get_value(settings, "container");
 	container = ghb_lookup_container_option(gval);
+	mux = ghb_lookup_container(gval);
 	dest = ghb_settings_get_string(settings, "destination");
 	preset_modified = ghb_settings_get_boolean(settings, "preset_modified");
 	preset = ghb_settings_get_string(settings, "preset");
@@ -2450,6 +2454,25 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	{
 		g_string_append_printf(str, 
 			"<b>Format:</b> %s Container\n", container);
+	}
+	if (mux == HB_MUX_MP4)
+	{
+		gboolean ipod, http, large;
+
+		ipod = ghb_settings_get_boolean(settings, "ipod_file");
+		http = ghb_settings_get_boolean(settings, "http_optimize_mp4");
+		large = ghb_settings_get_boolean(settings, "large_mp4");
+		if (http || ipod || large)
+		{
+			g_string_append_printf(str, "<b>MP4 Options:</b>");
+			if (ipod)
+				g_string_append_printf(str, " - iPod Atom");
+			if (http)
+				g_string_append_printf(str, " - Http Optimized");
+			if (large)
+				g_string_append_printf(str, " - 64 Bit");
+			g_string_append_printf(str, "\n");
+		}
 	}
 	g_string_append_printf(str, "<b>Destination:</b> %s\n", dest);
 

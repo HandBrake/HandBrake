@@ -45,6 +45,41 @@ ghb_value_dup(const GValue *val)
 	return copy;
 }
 
+static void
+debug_show_type(GType tp)
+{
+	const gchar *str = "unknown";
+	if (tp == G_TYPE_STRING)
+	{
+		str ="string";
+	}
+	else if (tp == G_TYPE_INT)
+	{
+		str ="int";
+	}
+	else if (tp == G_TYPE_INT64)
+	{
+		str ="int64";
+	}
+	else if (tp == G_TYPE_BOOLEAN)
+	{
+		str ="bool";
+	}
+	else if (tp == ghb_combodata_get_type())
+	{
+		str ="combo";
+	}
+	else if (tp == ghb_array_get_type())
+	{
+		str ="array";
+	}
+	else if (tp == ghb_dict_get_type())
+	{
+		str ="dict";
+	}
+	g_debug("%s", str);
+}
+
 gint
 ghb_value_int(const GValue *val)
 {
@@ -56,7 +91,11 @@ ghb_value_int(const GValue *val)
 	{
 		g_value_init(&xform, G_TYPE_INT64);
 		if (!g_value_transform(val, &xform))
+		{
+			debug_show_type(G_VALUE_TYPE(val));
+			g_warning("int can't transform");
 			return 0;
+		}
 		result = (gint)g_value_get_int64(&xform);
 		g_value_unset(&xform);
 	}
@@ -78,7 +117,11 @@ ghb_value_int64(const GValue *val)
 	{
 		g_value_init(&xform, G_TYPE_INT64);
 		if (!g_value_transform(val, &xform))
+		{
+			debug_show_type(G_VALUE_TYPE(val));
+			g_warning("int64 can't transform");
 			return 0;
+		}
 		result = g_value_get_int64(&xform);
 		g_value_unset(&xform);
 	}
@@ -100,7 +143,11 @@ ghb_value_double(const GValue *val)
 	{
 		g_value_init(&xform, G_TYPE_DOUBLE);
 		if (!g_value_transform(val, &xform))
+		{
+			debug_show_type(G_VALUE_TYPE(val));
+			g_warning("double can't transform");
 			return 0;
+		}
 		result = g_value_get_double(&xform);
 		g_value_unset(&xform);
 	}
@@ -122,7 +169,11 @@ ghb_value_string(const GValue *val)
 	{
 		g_value_init(&xform, G_TYPE_STRING);
 		if (!g_value_transform(val, &xform))
+		{
+			debug_show_type(G_VALUE_TYPE(val));
+			g_warning("string can't transform");
 			return NULL;
+		}
 		result = g_strdup(g_value_get_string(&xform));
 		g_value_unset(&xform);
 	}
@@ -144,7 +195,11 @@ ghb_value_boolean(const GValue *val)
 	{
 		g_value_init(&xform, G_TYPE_BOOLEAN);
 		if (!g_value_transform(val, &xform))
+		{
+			debug_show_type(G_VALUE_TYPE(val));
+			g_warning("boolean can't transform");
 			return FALSE;
+		}
 		result = g_value_get_boolean(&xform);
 		g_value_unset(&xform);
 	}
@@ -702,3 +757,47 @@ ghb_array_len(const GValue *gval)
 	return arr->len;
 }
 
+static void
+xform_string_int(const GValue *sval, GValue *ival)
+{
+	const gchar *str = g_value_get_string(sval);
+	gint val = g_strtod(str, NULL);
+	g_value_set_int(ival, val);
+}
+
+static void
+xform_string_int64(const GValue *sval, GValue *ival)
+{
+	const gchar *str = g_value_get_string(sval);
+	gint64 val = g_strtod(str, NULL);
+	g_value_set_int64(ival, val);
+}
+
+static void
+xform_string_double(const GValue *sval, GValue *dval)
+{
+	const gchar *str = g_value_get_string(sval);
+	double val = g_strtod(str, NULL);
+	g_value_set_double(dval, val);
+}
+
+static void
+xform_boolean_double(const GValue *bval, GValue *dval)
+{
+	gboolean b = g_value_get_boolean(bval);
+	double val = b;
+	g_value_set_double(dval, val);
+}
+
+void
+ghb_register_transforms()
+{
+	g_value_register_transform_func(G_TYPE_STRING, G_TYPE_INT64, 
+								xform_string_int64);
+	g_value_register_transform_func(G_TYPE_STRING, G_TYPE_INT, 
+								xform_string_int);
+	g_value_register_transform_func(G_TYPE_STRING, G_TYPE_DOUBLE, 
+								xform_string_double);
+	g_value_register_transform_func(G_TYPE_BOOLEAN, G_TYPE_DOUBLE, 
+								xform_boolean_double);
+}

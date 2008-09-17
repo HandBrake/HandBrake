@@ -475,6 +475,7 @@ main (int argc, char *argv[])
 	
 	gtk_set_locale ();
 	gtk_init (&argc, &argv);
+	ghb_register_transforms();
 	ghb_resource_init();
 	ghb_load_icons();
 
