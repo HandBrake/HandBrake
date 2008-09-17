@@ -2482,7 +2482,7 @@ fWorkingCount = 0;
 	
     /* We set the chapter marker extraction here based on the format being
      mpeg4 or mkv and the checkbox being checked */
-    if ([[queueToApply objectForKey:@"Mp4HttpOptimize"] intValue] == 1)
+    if ([[queueToApply objectForKey:@"ChapterMarkers"] intValue] == 1)
     {
         job->chapter_markers = 1;
     }
