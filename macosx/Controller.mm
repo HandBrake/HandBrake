@@ -1791,6 +1791,7 @@ fWorkingCount = 0;
     
 	/* Subtitles*/
 	[queueFileJob setObject:[fSubPopUp titleOfSelectedItem] forKey:@"Subtitles"];
+    [queueFileJob setObject:[NSNumber numberWithInt:[fSubPopUp indexOfSelectedItem]] forKey:@"JobSubtitlesIndex"];
     /* Forced Subtitles */
 	[queueFileJob setObject:[NSNumber numberWithInt:[fSubForcedCheck state]] forKey:@"SubtitlesForced"];
     
@@ -2345,8 +2346,8 @@ fWorkingCount = 0;
     NSMutableDictionary * queueToApply = [QueueFileArray objectAtIndex:currentQueueEncodeIndex];
     [self writeToActivityLog: "processNewQueueEncode currentQueueEncodeIndex is: %d", currentQueueEncodeIndex];
     job->file = [[queueToApply objectForKey:@"DestinationPath"] UTF8String];
+    
     [self prepareJob];
-    // [self writeToActivityLog: "prepareJob is over, back to processNewQueueEncode"];
     
     if( [[queueToApply objectForKey:@"SubtitlesForced"] intValue] == 1 )
         job->subtitle_force = 1;
@@ -2403,6 +2404,7 @@ fWorkingCount = 0;
         job->pass = 1;
         
         hb_add( fQueueEncodeLibhb, job );
+        
         job->pass = 2;
         
         job->x264opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */  
@@ -2416,7 +2418,6 @@ fWorkingCount = 0;
     else
     {
         job->indepth_scan = 0;
-        [self writeToActivityLog: "processNewQueueEncode is adding a single pass job"];
         job->pass = 0;
         
         hb_add( fQueueEncodeLibhb, job );
@@ -2581,7 +2582,7 @@ fWorkingCount = 0;
     
     job->grayscale = [[queueToApply objectForKey:@"VideoGrayScale"] intValue];
     /* Subtitle settings */
-    job->subtitle = [[queueToApply objectForKey:@"Subtitles"] intValue] - 2;
+    job->subtitle = [[queueToApply objectForKey:@"JobSubtitlesIndex"] intValue] - 2;
     
     /* Audio tracks and mixdowns */
     /* Lets make sure there arent any erroneous audio tracks in the job list, so lets make sure its empty*/
