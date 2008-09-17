@@ -137,6 +137,25 @@ int hb_demux_ps( hb_buffer_t * buf_ps, hb_list_t * list_es, hb_psdemux_t* state 
             {
                 dts = pts;
             }
+            if ( state )
+            {
+                // Program streams have an SCR in every PACK header so they
+                // can't lose their clock reference. But the PCR in Transport
+                // streams is typically on <.1% of the packets. If a PCR
+                // packet gets lost and it marks a clock discontinuity then
+                // the data following it will be referenced to the wrong
+                // clock & introduce huge gaps or throw our A/V sync off.
+                // We try to protect against that here by sanity checking
+                // timestamps against the current reference clock and discarding
+                // packets where the DTS is "too far" from its clock.
+                int64_t fdelta = dts - state->last_scr;
+                if ( fdelta < -5000 * 90 || fdelta > 5000 * 90 )
+                {
+                    // packet too far behind or ahead of its clock reference
+                    pos = pes_packet_end;
+                    continue;
+                }
+            }
         }
 
         pos = pes_header_end;
