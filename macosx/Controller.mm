@@ -3455,9 +3455,7 @@ the user is using "Custom" settings by determining the sender*/
     hb_title_t * title = (hb_title_t *) hb_list_item( list,
             [fSrcTitlePopUp indexOfSelectedItem] );
     hb_job_t * job = title->job;
-
-    [self prepareJob];
-
+     
     [fVidBitrateField setIntValue: hb_calc_bitrate( job,
             [fVidTargetSizeField intValue] )];
 }
