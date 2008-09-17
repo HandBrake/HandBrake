@@ -186,6 +186,14 @@ namespace Handbrake.Parsing
             while ((char)sr.Peek() == '+')
             {
                 titles.Add(Title.Parse(sr));
+                /*
+                 * Fix for the line "+ combing detected, may be interlaced or telecined"
+                 * If the next character is not a [ or +, then there are titles left to parse, but we are not where
+                 * we expect to be in the output, so read one line ahead to skip over the unknown line
+                 */
+
+                if ((char)sr.Peek() != '[' && (char)sr.Peek() != '+' && (char)sr.Peek() != null) // Hack, Fix later
+                    sr.ReadLine();
             }
 
             return titles.ToArray();
