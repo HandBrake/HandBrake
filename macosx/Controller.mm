@@ -1536,8 +1536,15 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 - (void) removeQueueFileItem:(int) queueItemToRemove
 {
    
-   // FIX ME: WE NEED TO IDENTIFY AN ENCODING ITEM AND CALL 
-   
+   // NSMutableDictionary * queueToApply = [QueueFileArray objectAtIndex:currentQueueEncodeIndex];
+   if ([[[QueueFileArray objectAtIndex:queueItemToRemove] objectForKey:@"Status"] intValue] == 3) //<-- Find out if the item we are removing is a cancelled item
+    {
+    /* Since we are removing a cancelled item, WE need to decrement the currentQueueEncodeIndex
+     * by one to keep in sync with the queue array
+     */
+    currentQueueEncodeIndex--;
+    [self writeToActivityLog: "removeQueueFileItem: Removing a cancelled encode, decrement currentQueueEncodeIndex to %d", currentQueueEncodeIndex];
+    }
     [QueueFileArray removeObjectAtIndex:queueItemToRemove];
     [self saveQueueFileItem];
 
@@ -3000,15 +3007,15 @@ fWorkingCount = 0;
 - (IBAction) Pause: (id) sender
 {
     hb_state_t s;
-    hb_get_state2( fHandle, &s );
+    hb_get_state2( fQueueEncodeLibhb, &s );
 
     if( s.state == HB_STATE_PAUSED )
     {
-        hb_resume( fHandle );
+        hb_resume( fQueueEncodeLibhb );
     }
     else
     {
-        hb_pause( fHandle );
+        hb_pause( fQueueEncodeLibhb );
     }
 }
 

@@ -463,13 +463,59 @@ if (fWorkingCount > 0)
 
 #pragma mark Queue Item Controls
 //------------------------------------------------------------------------------------
-// Delete pending or cancelled item from the queue window and accompanying array
+// Delete encodes from the queue window and accompanying array
+// Also handling first cancelling the encode if in fact its currently encoding.
 //------------------------------------------------------------------------------------
 - (IBAction)removeSelectedQueueItem: (id)sender
 {
-   NSIndexSet * selectedRows = [fOutlineView selectedRowIndexes];
+    NSIndexSet * selectedRows = [fOutlineView selectedRowIndexes];
     int row = [selectedRows firstIndex];
-    [fHBController removeQueueFileItem:row];
+    /* if this is a currently encoding job, we need to be sure to alert the user,
+     * to let them decide to cancel it first, then if they do, we can come back and
+     * remove it */
+    if (row == fEncodingQueueItem)
+    {
+        NSString * alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Remove It ?", nil)];
+        // Which window to attach the sheet to?
+        NSWindow * docWindow;
+        if ([sender respondsToSelector: @selector(window)])
+            docWindow = [sender window];
+        
+        
+        NSBeginCriticalAlertSheet(
+                                  alertTitle,
+                                  NSLocalizedString(@"Keep Encoding", nil),
+                                  nil,
+                                  NSLocalizedString(@"Stop Encoding and Delete", nil),
+                                  docWindow, self,
+                                  nil, @selector(didDimissCancelCurrentJob:returnCode:contextInfo:), nil,
+                                  NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", nil));
+        
+        // didDimissCancelCurrentJob:returnCode:contextInfo: will be called when the dialog is dismissed
+    }
+    else
+    { 
+    /* since we are not a currently encoding item, we can just be cancelled */
+            [fHBController removeQueueFileItem:row];
+    }
+}
+
+- (void) didDimissCancelCurrentJob: (NSWindow *)sheet returnCode: (int)returnCode contextInfo: (void *)contextInfo
+{
+    if (returnCode == NSAlertOtherReturn)
+    {
+    /* We need to save the currently encoding item number first */
+    int encodingItemToRemove = fEncodingQueueItem;
+    /* Since we are encoding, we need to let fHBController Cancel this job
+     * upon which it will move to the next one if there is one
+     */
+    [fHBController doCancelCurrentJob];
+    /* Now, we can go ahead and remove the job we just cancelled since
+     * we have its item number from above
+     */
+    [fHBController removeQueueFileItem:encodingItemToRemove];
+    }
+    
 }
 
 //------------------------------------------------------------------------------------
