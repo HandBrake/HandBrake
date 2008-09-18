@@ -500,7 +500,7 @@ namespace Handbrake
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(131, 13);
             this.label8.TabIndex = 61;
-            this.label8.Text = "Handbrake Options";
+            this.label8.Text = "HandBrake Options";
             // 
             // pictureBox2
             // 

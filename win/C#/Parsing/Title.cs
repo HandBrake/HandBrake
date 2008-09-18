@@ -192,7 +192,7 @@ namespace Handbrake.Parsing
                  * we expect to be in the output, so read one line ahead to skip over the unknown line
                  */
 
-                if ((char)sr.Peek() != '[' && (char)sr.Peek() != '+' && (char)sr.Peek() != null) // Hack, Fix later
+                if ((char)sr.Peek() != '[' && (char)sr.Peek() != '+' ) // Hack, Fix later
                     sr.ReadLine();
             }
 
