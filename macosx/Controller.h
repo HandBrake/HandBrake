@@ -329,7 +329,7 @@ BOOL                        fIsDragging;
 
 - (IBAction) Cancel: (id) sender;
 - (void)     doCancelCurrentJob;
-
+- (void) doCancelCurrentJobAndStop;
 - (IBAction) Pause: (id) sender;
 
 - (IBAction) calculateBitrate: (id) sender;

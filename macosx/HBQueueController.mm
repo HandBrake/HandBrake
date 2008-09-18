@@ -473,7 +473,8 @@ if (fWorkingCount > 0)
     /* if this is a currently encoding job, we need to be sure to alert the user,
      * to let them decide to cancel it first, then if they do, we can come back and
      * remove it */
-    if (row == fEncodingQueueItem)
+    
+    if ([[[fJobGroups objectAtIndex:row] objectForKey:@"Status"] intValue] == 1)
     {
         NSString * alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Remove It ?", nil)];
         // Which window to attach the sheet to?

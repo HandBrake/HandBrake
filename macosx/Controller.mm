@@ -1536,8 +1536,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 - (void) removeQueueFileItem:(int) queueItemToRemove
 {
    
-   // NSMutableDictionary * queueToApply = [QueueFileArray objectAtIndex:currentQueueEncodeIndex];
-   if ([[[QueueFileArray objectAtIndex:queueItemToRemove] objectForKey:@"Status"] intValue] == 3) //<-- Find out if the item we are removing is a cancelled item
+   /* Find out if the item we are removing is a cancelled item*/
+   if ([[[QueueFileArray objectAtIndex:queueItemToRemove] objectForKey:@"Status"] intValue] == 3)
     {
     /* Since we are removing a cancelled item, WE need to decrement the currentQueueEncodeIndex
      * by one to keep in sync with the queue array
@@ -2976,8 +2976,8 @@ fWorkingCount = 0;
 {
     if (!fQueueController) return;
     
-  
-    NSString * alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop encoding ?", nil)];
+  hb_pause( fQueueEncodeLibhb );
+    NSString * alertTitle = [NSString stringWithFormat:NSLocalizedString(@"You are currently encoding. What would you like to do ?", nil)];
    
     // Which window to attach the sheet to?
     NSWindow * docWindow;
@@ -2988,22 +2988,43 @@ fWorkingCount = 0;
         
     NSBeginCriticalAlertSheet(
             alertTitle,
-            NSLocalizedString(@"Keep Encoding", nil),
-            nil,
-            NSLocalizedString(@"Stop Encoding", nil),
+            NSLocalizedString(@"Continue Encoding", nil),
+            NSLocalizedString(@"Cancel Current and Stop", nil),
+            NSLocalizedString(@"Cancel Current and Continue", nil),
             docWindow, self,
-            nil, @selector(didDimissCancelCurrentJob:returnCode:contextInfo:), nil,
-            NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", nil));
+            nil, @selector(didDimissCancel:returnCode:contextInfo:), nil,
+            NSLocalizedString(@"Your encode will be cancelled if you don't continue encoding.", nil));
     
     // didDimissCancelCurrentJob:returnCode:contextInfo: will be called when the dialog is dismissed
 }
 
-- (void) didDimissCancelCurrentJob: (NSWindow *)sheet returnCode: (int)returnCode contextInfo: (void *)contextInfo
+- (void) didDimissCancel: (NSWindow *)sheet returnCode: (int)returnCode contextInfo: (void *)contextInfo
 {
-    if (returnCode == NSAlertOtherReturn)
+   hb_resume( fQueueEncodeLibhb );
+     if (returnCode == NSAlertOtherReturn)
+    {
         [self doCancelCurrentJob];  // <- this also stops libhb
+    }
+    if (returnCode == NSAlertAlternateReturn)
+    {
+    [self doCancelCurrentJobAndStop];
+    }
 }
 
+- (void) doCancelCurrentJobAndStop
+{
+    hb_stop( fQueueEncodeLibhb );
+    fEncodeState = 2;   // don't alert at end of processing since this was a cancel
+    
+    // now that we've stopped the currently encoding job, lets mark it as cancelled
+    [[QueueFileArray objectAtIndex:currentQueueEncodeIndex] setObject:[NSNumber numberWithInt:3] forKey:@"Status"];
+    // and as always, save it in the queue .plist...
+    /* We save all of the Queue data here */
+    [self saveQueueFileItem];
+    // so now lets move to 
+    currentQueueEncodeIndex++ ;
+    [self writeToActivityLog: "cancelling current job and stopping the queue"];
+}
 - (IBAction) Pause: (id) sender
 {
     hb_state_t s;
