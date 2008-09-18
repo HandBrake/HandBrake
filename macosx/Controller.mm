@@ -2798,60 +2798,63 @@ fWorkingCount = 0;
 */
 - (IBAction) Rip: (id) sender
 {
+    [self writeToActivityLog: "Rip: Pending queue count is %d", fPendingCount];
     /* Rip or Cancel ? */
     hb_state_t s;
     hb_get_state2( fQueueEncodeLibhb, &s );
-
+    
     if(s.state == HB_STATE_WORKING || s.state == HB_STATE_PAUSED)
 	{
         [self Cancel: sender];
         return;
     }
     
-    // If there are jobs in the queue, then this is a rip the queue
+    // If there are pending jobs in the queue, then this is a rip the queue
     
-    if ([QueueFileArray count] > 0)
+    if (fPendingCount > 0)
     {
-       /* here lets start the queue with the first item */
-      [self performNewQueueScan:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SourcePath"] scanTitleNum:[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"TitleNumber"]intValue]]; 
-      
+        /* here lets start the queue with the first pending item */
+        [self performNewQueueScan:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SourcePath"] scanTitleNum:[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"TitleNumber"]intValue]]; 
+        
         return;
     }
-
+    
     // Before adding jobs to the queue, check for a valid destination.
-
+    
     NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
     if ([[NSFileManager defaultManager] fileExistsAtPath:destinationDirectory] == 0) 
     {
         NSRunAlertPanel(@"Warning!", @"This is not a valid destination directory!", @"OK", nil, nil);
         return;
     }
-
+    
     /* We check for duplicate name here */
     if( [[NSFileManager defaultManager] fileExistsAtPath:[fDstFile2Field stringValue]] )
     {
         NSBeginCriticalAlertSheet( NSLocalizedString( @"File already exists", @"" ),
-            NSLocalizedString( @"Cancel", "" ), NSLocalizedString( @"Overwrite", @"" ), nil, fWindow, self,
-            @selector( overWriteAlertDone:returnCode:contextInfo: ),
-            NULL, NULL, [NSString stringWithFormat:
-            NSLocalizedString( @"Do you want to overwrite %@?", @"" ),
-            [fDstFile2Field stringValue]] );
-
+                                  NSLocalizedString( @"Cancel", "" ), NSLocalizedString( @"Overwrite", @"" ), nil, fWindow, self,
+                                  @selector( overWriteAlertDone:returnCode:contextInfo: ),
+                                  NULL, NULL, [NSString stringWithFormat:
+                                               NSLocalizedString( @"Do you want to overwrite %@?", @"" ),
+                                               [fDstFile2Field stringValue]] );
+        
         // overWriteAlertDone: will be called when the alert is dismissed. It will call doRip.
     }
     else
     {
-        /* if there are no jobs in the queue, then add this one to the queue and rip
-        otherwise, just rip the queue */
-        if([QueueFileArray count] == 0)
+        /* if there are no pending jobs in the queue, then add this one to the queue and rip
+         otherwise, just rip the queue */
+        if(fPendingCount == 0)
         {
-            [self doAddToQueue];
+         [self writeToActivityLog: "Rip: No pending jobs, so sending this one to doAddToQueue"];
+               [self doAddToQueue];
         }
-
+        
         NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
         [[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];
         /* go right to processing the new queue encode */
-        [self performNewQueueScan:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SourcePath"] scanTitleNum:[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"TitleNumber"]intValue]]; 
+       [self writeToActivityLog: "Rip: Going right to performNewQueueScan"];
+         [self performNewQueueScan:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SourcePath"] scanTitleNum:[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"TitleNumber"]intValue]]; 
         
     }
 }
@@ -2866,7 +2869,7 @@ fWorkingCount = 0;
     {
         /* if there are no jobs in the queue, then add this one to the queue and rip 
         otherwise, just rip the queue */
-        if( [QueueFileArray count] == 0 )
+        if( fPendingCount == 0 )
         {
             [self doAddToQueue];
         }
