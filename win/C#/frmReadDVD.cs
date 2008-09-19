@@ -75,7 +75,7 @@ namespace Handbrake
                     throw new Exception("Unable to retrieve the DVD Info. dvdinfo.dat is missing. \nExpected location of dvdinfo.dat: \n" + dvdInfoPath);
                 }
 
-                using (StreamReader sr = new StreamReader("c:\\dvdinfo.dat"))
+                using (StreamReader sr = new StreamReader(dvdInfoPath))
                 {
                     thisDvd = Parsing.DVD.Parse(sr);
                     sr.Close();
