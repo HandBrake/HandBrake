@@ -1669,10 +1669,8 @@ fWorkingCount = 0;
     hb_title_t * title = (hb_title_t *) hb_list_item( list,
             [fSrcTitlePopUp indexOfSelectedItem] );
     hb_job_t * job = title->job;
-    //hb_audio_config_t * audio;
     
-      // For picture filters
-      //hb_job_t * job = fTitle->job;
+    
     
     /* We use a number system to set the encode status of the queue item
      * 0 == already encoded
@@ -1699,7 +1697,26 @@ fWorkingCount = 0;
     [queueFileJob setObject:[fDstFormatPopUp titleOfSelectedItem] forKey:@"FileFormat"];
     	/* Chapter Markers fCreateChapterMarkers*/
 	[queueFileJob setObject:[NSNumber numberWithInt:[fCreateChapterMarkers state]] forKey:@"ChapterMarkers"];
-	/* Allow Mpeg4 64 bit formatting +4GB file sizes */
+	
+    /* We need to get the list of chapter names to put into an array and store 
+     * in our queue, so they can be reapplied in prepareJob when this queue
+     * item comes up if Chapter Markers is set to on.
+     */
+     int i;
+     NSMutableArray *ChapterNamesArray = [[NSMutableArray alloc] init];
+     int chaptercount = hb_list_count( fTitle->list_chapter );
+     for( i = 0; i < chaptercount; i++ )
+    {
+        hb_chapter_t *chapter = (hb_chapter_t *) hb_list_item( fTitle->list_chapter, i );
+        if( chapter != NULL )
+        {
+         [ChapterNamesArray addObject:[NSString stringWithFormat:@"%s",chapter->title]];
+        }
+    }
+    [queueFileJob setObject:[NSMutableArray arrayWithArray: ChapterNamesArray] forKey:@"ChapterNames"];
+    [ChapterNamesArray autorelease];
+    
+    /* Allow Mpeg4 64 bit formatting +4GB file sizes */
 	[queueFileJob setObject:[NSNumber numberWithInt:[fDstMp4LargeFileCheck state]] forKey:@"Mp4LargeFile"];
     /* Mux mp4 with http optimization */
     [queueFileJob setObject:[NSNumber numberWithInt:[fDstMp4HttpOptFileCheck state]] forKey:@"Mp4HttpOptimize"];
@@ -2486,6 +2503,7 @@ fWorkingCount = 0;
     {
         job->mp4_optimize = 0;
     }
+    
     //}
 	
     /* We set the chapter marker extraction here based on the format being
@@ -2493,13 +2511,39 @@ fWorkingCount = 0;
     if ([[queueToApply objectForKey:@"ChapterMarkers"] intValue] == 1)
     {
         job->chapter_markers = 1;
+        
+        /* now lets get our saved chapter names out the array in the queue file
+         * and insert them back into the title chapter list. We have it here,
+         * because unless we are inserting chapter markers there is no need to
+         * spend the overhead of iterating through the chapter names array imo
+         * Also, note that if for some reason we don't apply chapter names, the
+         * chapters just come out 001, 002, etc. etc.
+         */
+         
+        NSMutableArray *ChapterNamesArray = [queueToApply objectForKey:@"ChapterNames"];
+        int i = 0;
+        NSEnumerator *enumerator = [ChapterNamesArray objectEnumerator];
+        id tempObject;
+        while (tempObject = [enumerator nextObject])
+        {
+            hb_chapter_t *chapter = (hb_chapter_t *) hb_list_item( title->list_chapter, i );
+            if( chapter != NULL )
+            {
+                strncpy( chapter->title, [tempObject UTF8String], 1023);
+                chapter->title[1023] = '\0';
+            }
+            i++;
+        }
     }
     else
     {
         job->chapter_markers = 0;
     }
     
-	
+
+    
+    
+    
     if( job->vcodec & HB_VCODEC_X264 )
     {
 		if ([[queueToApply objectForKey:@"Mp4iPodCompatible"] intValue] == 1)
