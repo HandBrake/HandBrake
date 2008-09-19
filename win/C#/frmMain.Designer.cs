@@ -1016,8 +1016,7 @@ namespace Handbrake
             // ISO_Open
             // 
             this.ISO_Open.DefaultExt = "ISO";
-            this.ISO_Open.Filter = "All Supported Files|*.iso;*.mpg;*.m2t;*.m2ts;*.vob;*.ts;*.mpeg;*.mpeg;*.avi;*.mp4;*.mkv;" +
-                "";
+            this.ISO_Open.Filter = "All Files|*.*";
             this.ISO_Open.RestoreDirectory = true;
             this.ISO_Open.SupportMultiDottedExtensions = true;
             // 
@@ -3311,8 +3310,6 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.SaveFileDialog DVD_Save;
         private System.Windows.Forms.OpenFileDialog File_Open;
-        private System.Windows.Forms.OpenFileDialog ISO_Open;
-        private System.Windows.Forms.FolderBrowserDialog DVD_Open;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem mnu_open;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
@@ -3458,6 +3455,8 @@ namespace Handbrake
         internal System.Windows.Forms.TrackBar slider_deblock;
         internal System.Windows.Forms.ComboBox drp_deNoise;
         internal System.Windows.Forms.Label label8;
+        internal System.Windows.Forms.OpenFileDialog ISO_Open;
+        internal System.Windows.Forms.FolderBrowserDialog DVD_Open;
 
     }
 }

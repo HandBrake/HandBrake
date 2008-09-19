@@ -860,7 +860,7 @@ namespace Handbrake.Functions
             // This is for the queue. It allows different chapter name files for each title.
             string source_name = mainWindow.text_source.Text;
             string[] sourceName = source.Split('\\');
-            source_name = sourceName[sourceName.Length - 1].Replace(".iso", "").Replace(".mpg", "").Replace(".ts", "").Replace(".ps", "");
+            source_name = sourceName[sourceName.Length - 1];
             source_name = source_name.Replace("\"", "");
 
             string source_title = mainWindow.drp_dvdtitle.Text;
@@ -869,36 +869,21 @@ namespace Handbrake.Functions
 
             if (mainWindow.Check_ChapterMarkers.Checked)
             {
-                if ((source_name.Trim().Replace("-i ", "") != "Click 'Browse' to continue") && (source_name.Trim().Replace("-i ", "") != ""))
+                if ((source_name.Trim() != "Click 'Source' to continue") && (source_name.Trim() != ""))
                 {
+                    string path = "";
                     if (source_title != "Automatic")
-                    {
-                        string filename = source_name + "-" + source_title + "-chapters.csv";
-                        string path = Path.Combine(Path.GetTempPath(), filename);
-
-                        Boolean saveCSV = chapterCSVSave(mainWindow, path);
-                        if (saveCSV == false)
-                            query += " -m ";
-                        else
-                            query += " --markers=" + "\"" + path + "\"";
-                    }
+                        path = Path.Combine(Path.GetTempPath(), source_name + "-" + source_title + "-chapters.csv");
                     else
-                    {
-                        string filename = source_name + "-chapters.csv";
-                        string path = Path.Combine(Path.GetTempPath(), filename);
+                        path = Path.Combine(Path.GetTempPath(), source_name + "-chapters.csv");
 
-                        Boolean saveCSV = chapterCSVSave(mainWindow, path);
-                        if (saveCSV == false)
-                            query += " -m ";
-                        else
-                            query += " --markers=" + "\"" + path + "\"";
-                    }
+                    if (chapterCSVSave(mainWindow, path) == false)
+                        query += " -m ";
+                    else
+                        query += " --markers=" + "\"" + path + "\"";
                 }
                 else
-                {
-                    string path = Path.Combine(Path.GetTempPath(), "chapters.csv");
-                    query += " --markers=" + "\"" + path + "\"";
-                }
+                    query += " -m";
             }
             #endregion
 
