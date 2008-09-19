@@ -108,9 +108,6 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
                 param.i_level_idc );
     }
 
-    /* Slightly faster with minimal quality lost */
-    param.analyse.i_subpel_refine = 4;
-
     /*
        	This section passes the string x264opts to libx264 for parsing into
         parameter names and values.
