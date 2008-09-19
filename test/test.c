@@ -477,7 +477,7 @@ static int HandleEvents( hb_handle_t * h )
                     job->vbitrate = 1000;
                     default_abitrate = 160;
                     default_acodec = HB_ACODEC_FAAC;
-                    x264opts = strdup("ref=5:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2");
+                    x264opts = strdup("ref=5:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2");
                     deinterlace = 1;
                     deinterlace_opt = "0";
                     job->chapter_markers = 1;
@@ -500,7 +500,7 @@ static int HandleEvents( hb_handle_t * h )
                     default_abitrate = 160;
                     default_arate = 48000;
                     default_acodec = HB_ACODEC_FAAC;
-                    x264opts = strdup("bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=1:cabac=0");
+                    x264opts = strdup("bframes=3:ref=1:me=umh:no-fast-pskip=1:trellis=1:cabac=0");
                     job->chapter_markers = 1;
                     pixelratio = 1;
                 }
@@ -536,7 +536,7 @@ static int HandleEvents( hb_handle_t * h )
                     default_abitrate = 128;
                     default_acodec = HB_ACODEC_FAAC;
                     job->width = 640;
-                    x264opts = strdup("ref=3:mixed-refs:bframes=16:bime:weightb:b-rdo:b-pyramid:direct=auto:me=umh:subme=6:trellis=1:analyse=all:8x8dct:no-fast-pskip");
+                    x264opts = strdup("ref=3:mixed-refs:bframes=16:bime:weightb:b-rdo:b-pyramid:direct=auto:me=umh:trellis=1:analyse=all:8x8dct:no-fast-pskip");
                     job->chapter_markers = 1;
                     twoPass = 1;
                     turbo_opts_enabled = 1;
@@ -557,7 +557,7 @@ static int HandleEvents( hb_handle_t * h )
                     job->vquality = 0.64709997177124023;
                     job->crf = 1;
                     default_acodec = HB_ACODEC_AC3;
-                    x264opts = strdup("ref=3:mixed-refs:bframes=3:b-pyramid:b-rdo:bime:weightb:filter=-2,-1:subme=6:trellis=1:analyse=all:8x8dct:me=umh");
+                    x264opts = strdup("ref=3:mixed-refs:bframes=3:b-pyramid:b-rdo:bime:weightb:filter=-2,-1:trellis=1:analyse=all:8x8dct:me=umh");
                     job->chapter_markers = 1;
                     pixelratio = 1;
                 }
@@ -598,7 +598,7 @@ static int HandleEvents( hb_handle_t * h )
                     default_arate = 48000;
                     default_acodec = HB_ACODEC_FAAC;
                     job->width = 480;
-                    x264opts = strdup("level=30:cabac=0:ref=1:analyse=all:me=umh:subme=6:no-fast-pskip=1:trellis=1");
+                    x264opts = strdup("level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:trellis=1");
                     job->chapter_markers = 1;
                 }
 
@@ -612,7 +612,7 @@ static int HandleEvents( hb_handle_t * h )
                     default_arate = 48000;
                     default_acodec = HB_ACODEC_FAAC;
                     job->width = 640;
-                    x264opts = strdup("level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1");
+                    x264opts = strdup("level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1");
                     job->chapter_markers = 1;
                 }
 
@@ -626,7 +626,7 @@ static int HandleEvents( hb_handle_t * h )
                     default_arate = 48000;
                     default_acodec = HB_ACODEC_FAAC;
                     job->width = 320;
-                    x264opts = strdup("level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1");
+                    x264opts = strdup("level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1");
                     job->chapter_markers = 1;
                 }
 
@@ -637,7 +637,7 @@ static int HandleEvents( hb_handle_t * h )
                     job->vbitrate = 1500;
                     default_abitrate = 160;
                     default_acodec = HB_ACODEC_FAAC;
-                    x264opts = strdup("ref=2:bframes=2:subme=5:me=umh");
+                    x264opts = strdup("ref=2:bframes=2:me=umh");
                     job->chapter_markers = 1;
                     pixelratio = 1;
                     twoPass = 1;
@@ -651,7 +651,7 @@ static int HandleEvents( hb_handle_t * h )
                     job->vbitrate = 2500;
                     default_abitrate = 160;
                     default_acodec = HB_ACODEC_FAAC;
-                    x264opts = strdup("level=41:subme=5:me=umh");
+                    x264opts = strdup("level=41:me=umh");
                     pixelratio = 1;
                 }
 
@@ -674,7 +674,7 @@ static int HandleEvents( hb_handle_t * h )
                     job->vbitrate = 2000;
                     default_abitrate = 160;
                     default_acodec = HB_ACODEC_FAAC;
-                    x264opts = strdup("ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:me=umh:subme=5:analyse=all:trellis=1:no-fast-pskip");
+                    x264opts = strdup("ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:me=umh:analyse=all:trellis=1:no-fast-pskip");
                     job->chapter_markers = 1;
                     pixelratio = 1;
                     twoPass = 1;
@@ -688,7 +688,7 @@ static int HandleEvents( hb_handle_t * h )
                     job->vbitrate = 1300;
                     default_abitrate = 160;
                     default_acodec = HB_ACODEC_FAAC;
-                    x264opts = strdup("ref=3:mixed-refs:bframes=6:bime:weightb:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip");
+                    x264opts = strdup("ref=3:mixed-refs:bframes=6:bime:weightb:direct=auto:b-pyramid:me=umh:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip");
                     deinterlace = 1;
                     deinterlace_opt = "0";
                     denoise = 1;
@@ -705,7 +705,7 @@ static int HandleEvents( hb_handle_t * h )
                     job->vbitrate = 2000;
                     default_abitrate = 160;
                     default_acodec = HB_ACODEC_FAAC;
-                    x264opts = strdup("level=40:ref=2:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:no-fast-pskip:filter=-2,-1");
+                    x264opts = strdup("level=40:ref=2:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:analyse=all:no-fast-pskip:filter=-2,-1");
                     pixelratio = 1;
                 }
             }
@@ -1609,41 +1609,41 @@ static void ShowHelp()
  ****************************************************************************/
 static void ShowPresets()
 {
-    printf("\n+ Animation:  -e x264 -b 1000 -B 160 -R 48 -E faac -f mkv --deinterlace=\"slower\" -m -p -2 -T -x ref=5:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2\n");
+    printf("\n+ Animation:  -e x264 -b 1000 -B 160 -R 48 -E faac -f mkv --deinterlace=\"slower\" -m -p -2 -T -x ref=5:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2\n");
 
-    printf("\n+ AppleTV:  -e x264 -b 2500 -B 160 -R 48 -E faac,ac3 -f mp4 -4 -m -p -x bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=1:cabac=0\n");
+    printf("\n+ AppleTV:  -e x264 -b 2500 -B 160 -R 48 -E faac,ac3 -f mp4 -4 -m -p -x bframes=3:ref=1:me=umh:no-fast-pskip=1:trellis=1:cabac=0\n");
 
     printf("\n+ Bedlam:  -e x264 -b 1800 -E ac3 -f mkv -m -p -2 -T -x ref=16:mixed-refs:bframes=16:bime:weightb:b-rdo:direct=auto:b-pyramid:me=esa:subme=7:me-range=64:analyse=all:8x8dct:trellis=1:no-fast-pskip:no-dct-decimate:filter=-2,-1\n");
 
     printf("\n+ Blind:  -b 512 -B 128 -R 48 -E faac -f mp4 -w 512 -m\n");
 
-    printf("\n+ Broke:  -e x264 -S 695 -B 128 -R 48 -E faac -f mp4 -w 640 -m -2 -T -x ref=3:mixed-refs:bframes=16:bime:weightb:b-rdo:b-pyramid:direct=auto:me=umh:subme=6:trellis=1:analyse=all:8x8dct:no-fast-pskip\n");
+    printf("\n+ Broke:  -e x264 -S 695 -B 128 -R 48 -E faac -f mp4 -w 640 -m -2 -T -x ref=3:mixed-refs:bframes=16:bime:weightb:b-rdo:b-pyramid:direct=auto:me=umh:trellis=1:analyse=all:8x8dct:no-fast-pskip\n");
 
     printf("\n+ Classic:  -b 1000 -B 160 -R 48 -E faac -f mp4\n");
 
-    printf("\n+ Constant Quality Rate:  -e x264 -q 0.64709997177124023 -E ac3 -f mkv -m -p -x ref=3:mixed-refs:bframes=3:b-pyramid:b-rdo:bime:weightb:filter=-2,-1:subme=6:trellis=1:analyse=all:8x8dct:me=umh\n");
+    printf("\n+ Constant Quality Rate:  -e x264 -q 0.64709997177124023 -E ac3 -f mkv -m -p -x ref=3:mixed-refs:bframes=3:b-pyramid:b-rdo:bime:weightb:filter=-2,-1:trellis=1:analyse=all:8x8dct:me=umh\n");
 
     printf("\n+ Deux Six Quatre:  -e x264 -b 1600 -E ac3 -f mkv -m -p -2 -T -x ref=5:mixed-refs:bframes=3:bime:weightb:b-rdo:b-pyramid:me=umh:subme=7:trellis=1:analyse=all:8x8dct:no-fast-pskip\n");
 
     printf("\n+ Film:  -e x264 -b 1800 -E ac3 -f mkv -m -p -2 -T -x ref=3:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=7:analyse=all:8x8dct:trellis=1:no-fast-pskip\n");
 
-    printf("\n+ iPhone / iPod Touch:  -e x264 -b 960 -B 128 -R 48 -E faac -f mp4 -I -w 480 -m -x level=30:cabac=0:ref=1:analyse=all:me=umh:subme=6:no-fast-pskip=1:trellis=1\n");
+    printf("\n+ iPhone / iPod Touch:  -e x264 -b 960 -B 128 -R 48 -E faac -f mp4 -I -w 480 -m -x level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:trellis=1\n");
 
-    printf("\n+ iPod High-Rez:  -e x264 -b 1500 -B 160 -R 48 -E faac -f mp4 -I -w 640 -m -x level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1\n");
+    printf("\n+ iPod High-Rez:  -e x264 -b 1500 -B 160 -R 48 -E faac -f mp4 -I -w 640 -m -x level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1\n");
 
-    printf("\n+ iPod Low-Rez:  -e x264 -b 700 -B 160 -R 48 -E faac -f mp4 -I -w 320 -m -x level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1\n");
+    printf("\n+ iPod Low-Rez:  -e x264 -b 700 -B 160 -R 48 -E faac -f mp4 -I -w 320 -m -x level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1\n");
 
-    printf("\n+ Normal:  -e x264 -b 1500 -B 160 -R 48 -E faac -f mp4 -m -p -2 -T -x ref=2:bframes=2:subme=5:me=umh\n");
+    printf("\n+ Normal:  -e x264 -b 1500 -B 160 -R 48 -E faac -f mp4 -m -p -2 -T -x ref=2:bframes=2:me=umh\n");
 
-    printf("\n+ PS3:  -e x264 -b 2500 -B 160 -R 48 -E faac -f mp4 -p -x level=41:subme=5:me=umh\n");
+    printf("\n+ PS3:  -e x264 -b 2500 -B 160 -R 48 -E faac -f mp4 -p -x level=41:me=umh\n");
 
     printf("\n+ PSP:  -b 1024 -B 128 -R 48 -E faac -f mp4 -w 368 -l 208 -m\n");
 
-    printf("\n+ QuickTime:  -e x264 -b 2000 -B 160 -R 48 -E faac -f mp4 -m -p -2 -T -x ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:me=umh:subme=5:analyse=all:trellis=1:no-fast-pskip\n");
+    printf("\n+ QuickTime:  -e x264 -b 2000 -B 160 -R 48 -E faac -f mp4 -m -p -2 -T -x ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:me=umh:analyse=all:trellis=1:no-fast-pskip\n");
 
-    printf("\n+ Television:  -e x264 -b 1300 -B 160 -R 48 -E faac -f mkv --deinterlace=\"slower\" --denoise=\"weak\" -m -2 -T -x ref=3:mixed-refs:bframes=6:bime:weightb:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip\n");
+    printf("\n+ Television:  -e x264 -b 1300 -B 160 -R 48 -E faac -f mkv --deinterlace=\"slower\" --denoise=\"weak\" -m -2 -T -x ref=3:mixed-refs:bframes=6:bime:weightb:direct=auto:b-pyramid:me=umh:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip\n");
 
-    printf("\n+ Xbox 360:  -e x264 -b 2000 -B 160 -R 48 -E faac -f mp4 -p -x level=40:ref=2:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:no-fast-pskip:filter=-2,-1\n");
+    printf("\n+ Xbox 360:  -e x264 -b 2000 -B 160 -R 48 -E faac -f mp4 -p -x level=40:ref=2:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:analyse=all:no-fast-pskip:filter=-2,-1\n");
 }
 
 /****************************************************************************
