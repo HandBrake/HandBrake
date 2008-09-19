@@ -796,21 +796,20 @@ namespace Handbrake.Functions
             }
             else if (mainWindow.drop_bFrames.SelectedIndex == 2)
             {
-                 /* Only 1 b-frame? Disable b-pyramid. */
+                /* Only 1 b-frame? Disable b-pyramid. */
                 mainWindow.check_pyrmidalBFrames.Visible = false;
                 mainWindow.check_pyrmidalBFrames.CheckState = CheckState.Unchecked;
 
                 mainWindow.check_weightedBFrames.Visible = true;
                 mainWindow.check_BidirectionalRefinement.Visible = true;
 
-
                 /* Only show B-RDO if both bframes and subme allow it. */
-                if (mainWindow.drop_subpixelMotionEstimation.SelectedIndex >= 7)
+                if (mainWindow.drop_subpixelMotionEstimation.SelectedIndex >= 7 || mainWindow.drop_subpixelMotionEstimation.SelectedIndex == 0)
                     mainWindow.check_bFrameRateDistortion.Visible = true;
-                
+
                 /* Only show direct pred when allowed by both bframes and analysis.*/
-                if ( mainWindow.drop_analysis.SelectedIndex != 1)
-                {   
+                if (mainWindow.drop_analysis.SelectedIndex != 1)
+                {
                     mainWindow.drop_directPrediction.Visible = true;
                     mainWindow.lbl_direct_prediction.Visible = true;
                 }
@@ -822,12 +821,12 @@ namespace Handbrake.Functions
                 mainWindow.check_BidirectionalRefinement.Visible = true;
 
                 /* Only show B-RDO if both bframes and subme allow it. */
-                if (mainWindow.drop_subpixelMotionEstimation.SelectedIndex >= 7)
+                if (mainWindow.drop_subpixelMotionEstimation.SelectedIndex >= 7 || mainWindow.drop_subpixelMotionEstimation.SelectedIndex == 0)
                     mainWindow.check_bFrameRateDistortion.Visible = true;
-               
+
                 /* Only show direct pred when allowed by both bframes and analysis.*/
-                if ( mainWindow.drop_analysis.SelectedIndex != 1)
-                {   
+                if (mainWindow.drop_analysis.SelectedIndex != 1)
+                {
                     mainWindow.drop_directPrediction.Visible = true;
                     mainWindow.lbl_direct_prediction.Visible = true;
                 }
@@ -847,21 +846,19 @@ namespace Handbrake.Functions
                 mainWindow.lbl_trellis.Visible = true;
             }
 
-
-            if (mainWindow.drop_subpixelMotionEstimation.SelectedIndex < 7)
+            if (mainWindow.drop_subpixelMotionEstimation.SelectedIndex < 7 && mainWindow.drop_subpixelMotionEstimation.SelectedIndex != 0)
             {
                 /* When subme < 6, B-RDO doesn't work. */
                 mainWindow.check_bFrameRateDistortion.Visible = false;
                 if (sender == "subq" && sender != "brdo")
                     mainWindow.check_bFrameRateDistortion.CheckState = CheckState.Unchecked;
             }
-            else if (mainWindow.drop_bFrames.SelectedIndex >= 2 )
+            else if (mainWindow.drop_bFrames.SelectedIndex >= 2)
             {
                 /* Make sure to only display B-RDO if allowed by both
                    the subme and bframe option settings.               */
                 mainWindow.check_bFrameRateDistortion.Visible = true;
             }
-
 
             if (mainWindow.drop_analysis.SelectedIndex == 1)
             {
@@ -869,7 +866,7 @@ namespace Handbrake.Functions
                 mainWindow.check_8x8DCT.Visible = false;
                 if (sender != "8x8dct")
                     mainWindow.check_8x8DCT.CheckState = CheckState.Unchecked;
-                
+
                 mainWindow.drop_directPrediction.Visible = false;
                 if (sender != "direct")
                     mainWindow.drop_directPrediction.SelectedIndex = 0;
@@ -878,7 +875,7 @@ namespace Handbrake.Functions
             {
                 mainWindow.check_8x8DCT.Visible = true;
 
-                if ( mainWindow.drop_bFrames.SelectedIndex >= 2)
+                if (mainWindow.drop_bFrames.SelectedIndex >= 2)
                 {
                     /* Onlt show direct pred when allowed by both analysis and bframes */
                     mainWindow.drop_directPrediction.Visible = true;

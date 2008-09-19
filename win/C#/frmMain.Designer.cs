@@ -38,7 +38,7 @@ namespace Handbrake
             System.Windows.Forms.Label Label38;
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
@@ -82,10 +82,10 @@ namespace Handbrake
             this.drp_audbit_4 = new System.Windows.Forms.ComboBox();
             this.drp_audenc_4 = new System.Windows.Forms.ComboBox();
             this.drp_audmix_4 = new System.Windows.Forms.ComboBox();
+            this.drop_format = new System.Windows.Forms.ComboBox();
             this.lbl_src_res = new System.Windows.Forms.Label();
             this.lbl_duration = new System.Windows.Forms.Label();
             this.label_duration = new System.Windows.Forms.Label();
-            this.drop_format = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.DVD_Open = new System.Windows.Forms.FolderBrowserDialog();
             this.File_Open = new System.Windows.Forms.OpenFileDialog();
@@ -307,12 +307,12 @@ namespace Handbrake
             this.btn_restore});
             notifyIconMenu.Name = "notifyIconMenu";
             notifyIconMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            notifyIconMenu.Size = new System.Drawing.Size(124, 26);
+            notifyIconMenu.Size = new System.Drawing.Size(129, 26);
             // 
             // btn_restore
             // 
             this.btn_restore.Name = "btn_restore";
-            this.btn_restore.Size = new System.Drawing.Size(123, 22);
+            this.btn_restore.Size = new System.Drawing.Size(128, 22);
             this.btn_restore.Text = "Restore";
             this.btn_restore.Click += new System.EventHandler(this.btn_restore_Click);
             // 
@@ -646,9 +646,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle4.Format = "N0";
-            dataGridViewCellStyle4.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle1;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -943,6 +943,24 @@ namespace Handbrake
             this.ToolTip.SetToolTip(this.drp_audmix_4, "Please note: Some options require a 5.1 audio channel to be selected");
             this.drp_audmix_4.SelectedIndexChanged += new System.EventHandler(this.drp_audmix_4_SelectedIndexChanged);
             // 
+            // drop_format
+            // 
+            this.drop_format.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drop_format.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.drop_format.FormattingEnabled = true;
+            this.drop_format.Items.AddRange(new object[] {
+            "MP4 File",
+            "M4V File",
+            "MKV File",
+            "AVI File",
+            "OGM File"});
+            this.drop_format.Location = new System.Drawing.Point(75, 19);
+            this.drop_format.Name = "drop_format";
+            this.drop_format.Size = new System.Drawing.Size(106, 21);
+            this.drop_format.TabIndex = 28;
+            this.ToolTip.SetToolTip(this.drop_format, "Select a video encoder");
+            this.drop_format.SelectedIndexChanged += new System.EventHandler(this.drop_format_SelectedIndexChanged);
+            // 
             // lbl_src_res
             // 
             this.lbl_src_res.AutoSize = true;
@@ -975,24 +993,6 @@ namespace Handbrake
             this.label_duration.Size = new System.Drawing.Size(61, 13);
             this.label_duration.TabIndex = 42;
             this.label_duration.Text = "Duration:";
-            // 
-            // drop_format
-            // 
-            this.drop_format.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_format.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.drop_format.FormattingEnabled = true;
-            this.drop_format.Items.AddRange(new object[] {
-            "MP4 File",
-            "M4V File",
-            "MKV File",
-            "AVI File",
-            "OGM File"});
-            this.drop_format.Location = new System.Drawing.Point(75, 19);
-            this.drop_format.Name = "drop_format";
-            this.drop_format.Size = new System.Drawing.Size(106, 21);
-            this.drop_format.TabIndex = 28;
-            this.ToolTip.SetToolTip(this.drop_format, "Select a video encoder");
-            this.drop_format.SelectedIndexChanged += new System.EventHandler(this.drop_format_SelectedIndexChanged);
             // 
             // label7
             // 
@@ -1387,7 +1387,7 @@ namespace Handbrake
             this.TabPage2.Location = new System.Drawing.Point(4, 22);
             this.TabPage2.Name = "TabPage2";
             this.TabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage2.Size = new System.Drawing.Size(697, 307);
+            this.TabPage2.Size = new System.Drawing.Size(697, 316);
             this.TabPage2.TabIndex = 3;
             this.TabPage2.Text = "Audio && Subtitles";
             // 
@@ -1727,7 +1727,7 @@ namespace Handbrake
             this.TabPage3.Location = new System.Drawing.Point(4, 22);
             this.TabPage3.Name = "TabPage3";
             this.TabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage3.Size = new System.Drawing.Size(697, 307);
+            this.TabPage3.Size = new System.Drawing.Size(697, 316);
             this.TabPage3.TabIndex = 2;
             this.TabPage3.Text = "Video";
             // 
@@ -2270,7 +2270,7 @@ namespace Handbrake
             this.tab_chapters.Controls.Add(this.Check_ChapterMarkers);
             this.tab_chapters.Location = new System.Drawing.Point(4, 22);
             this.tab_chapters.Name = "tab_chapters";
-            this.tab_chapters.Size = new System.Drawing.Size(697, 307);
+            this.tab_chapters.Size = new System.Drawing.Size(697, 316);
             this.tab_chapters.TabIndex = 6;
             this.tab_chapters.Text = "Chapters";
             // 
@@ -2326,7 +2326,7 @@ namespace Handbrake
             this.h264Tab.Location = new System.Drawing.Point(4, 22);
             this.h264Tab.Name = "h264Tab";
             this.h264Tab.Padding = new System.Windows.Forms.Padding(3);
-            this.h264Tab.Size = new System.Drawing.Size(697, 307);
+            this.h264Tab.Size = new System.Drawing.Size(697, 316);
             this.h264Tab.TabIndex = 8;
             this.h264Tab.Text = "Advanced";
             // 
@@ -2580,7 +2580,7 @@ namespace Handbrake
             this.drop_subpixelMotionEstimation.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.drop_subpixelMotionEstimation.FormattingEnabled = true;
             this.drop_subpixelMotionEstimation.Items.AddRange(new object[] {
-            "Default (4)",
+            "Default (6)",
             "0",
             "1",
             "2",
@@ -2897,7 +2897,7 @@ namespace Handbrake
             this.tabPage4.Controls.Add(this.rtf_query);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(697, 307);
+            this.tabPage4.Size = new System.Drawing.Size(697, 316);
             this.tabPage4.TabIndex = 7;
             this.tabPage4.Text = "Query Editor";
             // 
@@ -3042,7 +3042,7 @@ namespace Handbrake
             this.btn_source.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_source.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_source.Name = "btn_source";
-            this.btn_source.Size = new System.Drawing.Size(85, 36);
+            this.btn_source.Size = new System.Drawing.Size(90, 36);
             this.btn_source.Text = "Source";
             this.btn_source.Click += new System.EventHandler(this.btn_source_Click);
             // 
@@ -3050,7 +3050,7 @@ namespace Handbrake
             // 
             this.btn_file_source.Image = global::Handbrake.Properties.Resources.Movies_Small;
             this.btn_file_source.Name = "btn_file_source";
-            this.btn_file_source.Size = new System.Drawing.Size(194, 22);
+            this.btn_file_source.Size = new System.Drawing.Size(214, 22);
             this.btn_file_source.Text = "Video File";
             this.btn_file_source.Click += new System.EventHandler(this.btn_file_source_Click);
             // 
@@ -3059,20 +3059,20 @@ namespace Handbrake
             this.btn_dvd_source.Image = ((System.Drawing.Image)(resources.GetObject("btn_dvd_source.Image")));
             this.btn_dvd_source.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_dvd_source.Name = "btn_dvd_source";
-            this.btn_dvd_source.Size = new System.Drawing.Size(194, 22);
+            this.btn_dvd_source.Size = new System.Drawing.Size(214, 22);
             this.btn_dvd_source.Text = "DVD/ VIDEO_TS Folder";
             this.btn_dvd_source.Click += new System.EventHandler(this.btn_dvd_source_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(191, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(211, 6);
             // 
             // mnu_dvd_drive
             // 
             this.mnu_dvd_drive.Image = global::Handbrake.Properties.Resources.disc_small;
             this.mnu_dvd_drive.Name = "mnu_dvd_drive";
-            this.mnu_dvd_drive.Size = new System.Drawing.Size(194, 22);
+            this.mnu_dvd_drive.Size = new System.Drawing.Size(214, 22);
             this.mnu_dvd_drive.Text = "[No DVD Drive Ready]";
             this.mnu_dvd_drive.Visible = false;
             this.mnu_dvd_drive.Click += new System.EventHandler(this.mnu_dvd_drive_Click);
@@ -3088,7 +3088,7 @@ namespace Handbrake
             this.btn_start.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_start.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_start.Name = "btn_start";
-            this.btn_start.Size = new System.Drawing.Size(67, 36);
+            this.btn_start.Size = new System.Drawing.Size(70, 36);
             this.btn_start.Text = "Start";
             this.btn_start.ToolTipText = "Start the encoding process";
             this.btn_start.Click += new System.EventHandler(this.btn_start_Click);
@@ -3099,7 +3099,7 @@ namespace Handbrake
             this.btn_add2Queue.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_add2Queue.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_add2Queue.Name = "btn_add2Queue";
-            this.btn_add2Queue.Size = new System.Drawing.Size(110, 36);
+            this.btn_add2Queue.Size = new System.Drawing.Size(122, 36);
             this.btn_add2Queue.Text = "Add to Queue";
             this.btn_add2Queue.ToolTipText = "Add a new item to the Queue";
             this.btn_add2Queue.Click += new System.EventHandler(this.btn_add2Queue_Click);
@@ -3110,7 +3110,7 @@ namespace Handbrake
             this.btn_showQueue.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_showQueue.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_showQueue.Name = "btn_showQueue";
-            this.btn_showQueue.Size = new System.Drawing.Size(104, 36);
+            this.btn_showQueue.Size = new System.Drawing.Size(115, 36);
             this.btn_showQueue.Tag = "";
             this.btn_showQueue.Text = "Show Queue";
             this.btn_showQueue.Click += new System.EventHandler(this.btn_showQueue_Click);
@@ -3126,7 +3126,7 @@ namespace Handbrake
             this.btn_ActivityWindow.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_ActivityWindow.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_ActivityWindow.Name = "btn_ActivityWindow";
-            this.btn_ActivityWindow.Size = new System.Drawing.Size(120, 36);
+            this.btn_ActivityWindow.Size = new System.Drawing.Size(132, 36);
             this.btn_ActivityWindow.Text = "Activity Window";
             this.btn_ActivityWindow.ToolTipText = "Displays the activity window which displays the log of the last completed or curr" +
                 "ently running encode.";
@@ -3142,7 +3142,7 @@ namespace Handbrake
             this.btn_minimize.Image = global::Handbrake.Properties.Resources.hb32;
             this.btn_minimize.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_minimize.Name = "btn_minimize";
-            this.btn_minimize.Size = new System.Drawing.Size(144, 36);
+            this.btn_minimize.Size = new System.Drawing.Size(162, 36);
             this.btn_minimize.Text = "Minimize To System Tray";
             this.btn_minimize.Click += new System.EventHandler(this.btn_minimize_Click);
             // 
