@@ -133,6 +133,7 @@ namespace Handbrake
                 while (queue.count() != 0)
                 {
                     string query = queue.getNextItemForEncoding();
+                    queue.write2disk("hb_queue_recovery.dat"); // Update the queue recovery file
 
                     setEncValue();
                     updateUIElements();
