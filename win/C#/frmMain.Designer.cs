@@ -1016,7 +1016,7 @@ namespace Handbrake
             // ISO_Open
             // 
             this.ISO_Open.DefaultExt = "ISO";
-            this.ISO_Open.Filter = "All Supported Files|*.iso;*.mpg;*.m2t;*.vob;*.ts;*.mpeg;*.mpeg;*.avi;*.mp4;*.mkv;" +
+            this.ISO_Open.Filter = "All Supported Files|*.iso;*.mpg;*.m2t;*.m2ts;*.vob;*.ts;*.mpeg;*.mpeg;*.avi;*.mp4;*.mkv;" +
                 "";
             this.ISO_Open.RestoreDirectory = true;
             this.ISO_Open.SupportMultiDottedExtensions = true;
@@ -3191,7 +3191,7 @@ namespace Handbrake
             this.MinimumSize = new System.Drawing.Size(946, 668);
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Handbrake";
+            this.Text = "HandBrake";
             notifyIconMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.data_chpt)).EndInit();

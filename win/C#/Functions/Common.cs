@@ -1155,7 +1155,17 @@ namespace Handbrake.Functions
                             if (Properties.Settings.Default.autoNamePath.Trim() != "Click 'Browse' to set the default location")
                                 filePath = Properties.Settings.Default.autoNamePath + "\\";
                         }
-                        mainWindow.text_destination.Text = filePath + destination_filename + ".mp4";
+
+                        if (mainWindow.drop_format.SelectedIndex == 0)
+                            mainWindow.text_destination.Text = filePath + destination_filename + ".mp4";
+                        else if (mainWindow.drop_format.SelectedIndex == 1)
+                            mainWindow.text_destination.Text = filePath + destination_filename + ".m4v";
+                        else if (mainWindow.drop_format.SelectedIndex == 2)
+                            mainWindow.text_destination.Text = filePath + destination_filename + ".mkv";
+                        else if (mainWindow.drop_format.SelectedIndex == 3)
+                            mainWindow.text_destination.Text = filePath + destination_filename + ".avi";
+                        else if (mainWindow.drop_format.SelectedIndex == 4)
+                            mainWindow.text_destination.Text = filePath + destination_filename + ".ogm";
                     }
                     else // If the text box already has a path and file
                     {

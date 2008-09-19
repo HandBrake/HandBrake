@@ -1442,14 +1442,17 @@ namespace Handbrake
 
                 int position = start_chapter - 1;
 
-                if (end_chapter > selectedTitle.Chapters.Count)
-                    end_chapter = selectedTitle.Chapters.Count;
-
-                while (position != end_chapter)
+                if (start_chapter <= end_chapter)
                 {
-                    TimeSpan dur = selectedTitle.Chapters[position].Duration;
-                    Duration = Duration + dur;
-                    position++;
+                    if (end_chapter > selectedTitle.Chapters.Count)
+                        end_chapter = selectedTitle.Chapters.Count;
+
+                    while (position != end_chapter)
+                    {
+                        TimeSpan dur = selectedTitle.Chapters[position].Duration;
+                        Duration = Duration + dur;
+                        position++;
+                    }
                 }
             }
 

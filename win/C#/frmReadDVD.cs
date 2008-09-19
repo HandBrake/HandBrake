@@ -89,8 +89,8 @@ namespace Handbrake
                 MessageBox.Show("frmReadDVD.cs - startProc() " + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 closeWindowAfterError();
             }
-
         }
+
         private void updateUIElements()
         {
             try
