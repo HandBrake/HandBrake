@@ -38,7 +38,6 @@ typedef struct
 	const gchar *option;
 	const gchar *shortOpt;
 	gint ivalue;
-	gdouble dvalue;
 	const gchar *svalue;
 } options_map_t;
 
@@ -48,13 +47,28 @@ typedef struct
 	options_map_t *map;
 } combo_opts_t;
 
+static const gchar *index_str[] =
+{
+	"0",
+	"1",
+	"2",
+	"3",
+	"4",
+	"5",
+	"6",
+	"7",
+	"8",
+	"9",
+	"10",
+};
+
 static options_map_t d_container_opts[] =
 {
-	{"MKV", "mkv", HB_MUX_MKV, 0.0, "mkv"},
-	{"MP4", "mp4", HB_MUX_MP4, 0.0, "mp4"},
-	{"M4V", "m4v", HB_MUX_MP4, 0.0, "m4v"},
-	{"AVI", "avi", HB_MUX_AVI, 0.0, "avi"},
-	{"OGM", "ogm", HB_MUX_OGM, 0.0, "ogm"},
+	{"MKV", "mkv", HB_MUX_MKV, "mkv"},
+	{"MP4", "mp4", HB_MUX_MP4, "mp4"},
+	{"M4V", "m4v", HB_MUX_MP4, "m4v"},
+	{"AVI", "avi", HB_MUX_AVI, "avi"},
+	{"OGM", "ogm", HB_MUX_OGM, "ogm"},
 };
 combo_opts_t container_opts =
 {
@@ -64,10 +78,10 @@ combo_opts_t container_opts =
 
 static options_map_t d_deint_opts[] =
 {
-	{"None",   "none",   0, 0.0, ""},
-	{"Fast",   "fast",   1, 0.0, "-1:-1:-1:0:1"},
-	{"Slow",   "slow",   2, 0.0, "2:-1:-1:0:1"},
-	{"Slower", "slower", 3, 0.0, "0:-1:-1:0:1"},
+	{"None",   "none",   0, ""},
+	{"Fast",   "fast",   1, "-1:-1:-1:0:1"},
+	{"Slow",   "slow",   2, "2:-1:-1:0:1"},
+	{"Slower", "slower", 3, "0:-1:-1:0:1"},
 };
 combo_opts_t deint_opts =
 {
@@ -77,10 +91,10 @@ combo_opts_t deint_opts =
 
 static options_map_t d_denoise_opts[] =
 {
-	{"None",   "none",   0, 0.0, ""},
-	{"Weak",   "weak",   1, 0.0, "2:1:2:3"},
-	{"Medium", "medium", 2, 0.0, "3:2:2:3"},
-	{"Strong", "strong", 3, 0.0, "7:7:5:5"},
+	{"None",   "none",   0, ""},
+	{"Weak",   "weak",   1, "2:1:2:3"},
+	{"Medium", "medium", 2, "3:2:2:3"},
+	{"Strong", "strong", 3, "7:7:5:5"},
 };
 combo_opts_t denoise_opts =
 {
@@ -90,10 +104,10 @@ combo_opts_t denoise_opts =
 
 static options_map_t d_vcodec_opts[] =
 {
-	{"H.264 (x264)",    "x264",   HB_VCODEC_X264, 0.0, ""},
-	{"MPEG-4 (XviD)",   "xvid",   HB_VCODEC_XVID, 0.0, ""},
-	{"MPEG-4 (FFMPEG)", "ffmpeg", HB_VCODEC_FFMPEG, 0.0, ""},
-	{"Theora",          "theora", HB_VCODEC_THEORA, 0.0, ""},
+	{"H.264 (x264)",    "x264",   HB_VCODEC_X264, ""},
+	{"MPEG-4 (XviD)",   "xvid",   HB_VCODEC_XVID, ""},
+	{"MPEG-4 (FFMPEG)", "ffmpeg", HB_VCODEC_FFMPEG, ""},
+	{"Theora",          "theora", HB_VCODEC_THEORA, ""},
 };
 combo_opts_t vcodec_opts =
 {
@@ -103,10 +117,10 @@ combo_opts_t vcodec_opts =
 
 static options_map_t d_acodec_opts[] =
 {
-	{"AAC (faac)",      "faac",   HB_ACODEC_FAAC, 0.0, "faac"},
-	{"MP3 (lame)",      "lame",   HB_ACODEC_LAME, 0.0, "lame"},
-	{"Vorbis",          "vorbis", HB_ACODEC_VORBIS, 0.0, "vorbis"},
-	{"AC3 (pass-thru)", "ac3",    HB_ACODEC_AC3, 0.0, "ac3"},
+	{"AAC (faac)",      "faac",   HB_ACODEC_FAAC, "faac"},
+	{"MP3 (lame)",      "lame",   HB_ACODEC_LAME, "lame"},
+	{"Vorbis",          "vorbis", HB_ACODEC_VORBIS, "vorbis"},
+	{"AC3 (pass-thru)", "ac3",    HB_ACODEC_AC3, "ac3"},
 };
 combo_opts_t acodec_opts =
 {
@@ -116,10 +130,10 @@ combo_opts_t acodec_opts =
 
 static options_map_t d_direct_opts[] =
 {
-	{"None",      "none",     0, 0.0, "none"},
-	{"Spatial",   "spatial",  1, 0.0, "spatial"},
-	{"Temporal",  "temporal", 2, 0.0, "temporal"},
-	{"Automatic", "auto",     3, 0.0, "auto"},
+	{"None",      "none",     0, "none"},
+	{"Spatial",   "spatial",  1, "spatial"},
+	{"Temporal",  "temporal", 2, "temporal"},
+	{"Automatic", "auto",     3, "auto"},
 };
 combo_opts_t direct_opts =
 {
@@ -129,10 +143,10 @@ combo_opts_t direct_opts =
 
 static options_map_t d_me_opts[] =
 {
-	{"Diamond",              "dia", 0, 0.0, "dia"},
-	{"Hexagon",              "hex", 1, 0.0, "hex"},
-	{"Uneven Multi-Hexagon", "umh", 2, 0.0, "umh"},
-	{"Exhaustive",           "esa", 3, 0.0, "esa"},
+	{"Diamond",              "dia", 0, "dia"},
+	{"Hexagon",              "hex", 1, "hex"},
+	{"Uneven Multi-Hexagon", "umh", 2, "umh"},
+	{"Exhaustive",           "esa", 3, "esa"},
 };
 combo_opts_t me_opts =
 {
@@ -142,13 +156,13 @@ combo_opts_t me_opts =
 
 static options_map_t d_subme_opts[] =
 {
-	{"1", "1", 1, 0.0, "1"},
-	{"2", "2", 2, 0.0, "2"},
-	{"3", "3", 3, 0.0, "3"},
-	{"4", "4", 4, 0.0, "4"},
-	{"5", "5", 5, 0.0, "5"},
-	{"6", "6", 6, 0.0, "6"},
-	{"7", "7", 7, 0.0, "7"},
+	{"1", "1", 1, "1"},
+	{"2", "2", 2, "2"},
+	{"3", "3", 3, "3"},
+	{"4", "4", 4, "4"},
+	{"5", "5", 5, "5"},
+	{"6", "6", 6, "6"},
+	{"7", "7", 7, "7"},
 };
 combo_opts_t subme_opts =
 {
@@ -158,10 +172,10 @@ combo_opts_t subme_opts =
 
 static options_map_t d_analyse_opts[] =
 {
-	{"Some", "some", 0, 0.0, "some"},
-	{"None", "none", 1, 0.0, "none"},
-	{"All",  "all",  2, 0.0, "all"},
-	{"Custom",  "custom",  3, 0.0, "all"},
+	{"Some", "some", 0, "some"},
+	{"None", "none", 1, "none"},
+	{"All",  "all",  2, "all"},
+	{"Custom",  "custom",  3, "all"},
 };
 combo_opts_t analyse_opts =
 {
@@ -171,14 +185,58 @@ combo_opts_t analyse_opts =
 
 static options_map_t d_trellis_opts[] =
 {
-	{"Disabled",          "0",    0, 0.0, "0"},
-	{"Final Macro Block", "1",    1, 0.0, "1"},
-	{"Always",            "2", 2, 0.0, "2"},
+	{"Disabled",          "0",    0, "0"},
+	{"Final Macro Block", "1",    1, "1"},
+	{"Always",            "2", 2, "2"},
 };
 combo_opts_t trellis_opts =
 {
 	sizeof(d_trellis_opts)/sizeof(options_map_t),
 	d_trellis_opts
+};
+
+combo_opts_t subtitle_opts =
+{
+	0,
+	NULL
+};
+
+combo_opts_t title_opts =
+{
+	0,
+	NULL
+};
+
+combo_opts_t audio_track_opts =
+{
+	0,
+	NULL
+};
+
+typedef struct
+{
+	const gchar *name;
+	combo_opts_t *opts;
+} combo_name_map_t;
+
+combo_name_map_t combo_name_map[] =
+{
+	{"container", &container_opts},
+	{"deinterlace", &deint_opts},
+	{"tweak_deinterlace", &deint_opts},
+	{"denoise", &denoise_opts},
+	{"tweak_denoise", &denoise_opts},
+	{"video_codec", &vcodec_opts},
+	{"audio_codec", &acodec_opts},
+	{"x264_direct", &direct_opts},
+	{"x264_me", &me_opts},
+	{"x264_subme", &subme_opts},
+	{"x264_analyse", &analyse_opts},
+	{"x264_trellis", &trellis_opts},
+	{"subtitle_lang", &subtitle_opts},
+	{"title", &title_opts},
+	{"audio_track", &audio_track_opts},
+	{NULL, NULL}
 };
 
 typedef struct iso639_lang_t
@@ -193,7 +251,7 @@ typedef struct iso639_lang_t
 static const iso639_lang_t language_table[] =
 { 
 	{ "Any", "", "zz", "und" },
-	{ "Afar", "", "aa", "﻿aar" },
+	{ "Afar", "", "aa", "aar" },
 	{ "Abkhazian", "", "ab", "abk" },
 	{ "Afrikaans", "", "af", "afr" },
 	{ "Akan", "", "ak", "aka" },
@@ -421,7 +479,7 @@ ghb_vquality_range(signal_user_data_t *ud, gint *min, gint *max)
 {
 	if (ghb_settings_get_boolean(ud->settings, "directqp"))
 	{
-		gint vcodec = ghb_settings_get_int(ud->settings, "video_codec");
+		gint vcodec = ghb_settings_combo_int(ud->settings, "video_codec");
 		// Only x264 and ffmpeg currently support direct qp/crf entry
 		if (vcodec == HB_VCODEC_X264)
 		{
@@ -446,221 +504,48 @@ ghb_vquality_range(signal_user_data_t *ud, gint *min, gint *max)
 	}
 }
 
-gint
-ghb_lookup_vrate(const GValue *vrate)
-{
-	gint ii;
-	gchar *str;
-	gint result = 0;
-
-	str = ghb_value_string(vrate);
-	for (ii = 0; ii < hb_video_rates_count; ii++)
-	{
-		if (strcmp(hb_video_rates[ii].string, str) == 0)
-		{
-			result = hb_video_rates[ii].rate;
-		}
-	}
-	g_free(str);
-	// Default to "same as source"
-	return result;
-}
-
-gint
-ghb_lookup_vcodec(const GValue *vcodec)
-{
-	gint ii;
-	gchar *str;
-	gint result = HB_VCODEC_FFMPEG;
-
-	str = ghb_value_string(vcodec);
-	for (ii = 0; ii < vcodec_opts.count; ii++)
-	{
-		if (strcmp(vcodec_opts.map[ii].shortOpt, str) == 0)
-		{
-			result = vcodec_opts.map[ii].ivalue;
-		}
-	}
-	g_free(str);
-	return result;
-}
-
-const gchar*
-ghb_lookup_vcodec_option(const GValue *vcodec)
-{
-	gint ii;
-	gchar *str;
-	const gchar *result = "";
-
-	str = ghb_value_string(vcodec);
-	for (ii = 0; ii < vcodec_opts.count; ii++)
-	{
-		if (strcmp(vcodec_opts.map[ii].shortOpt, str) == 0)
-		{
-			result = vcodec_opts.map[ii].option;
-		}
-	}
-	g_free(str);
-	return result;
-}
-
-gint
-ghb_lookup_container(const GValue *container)
+static gint
+lookup_generic_int(combo_opts_t *opts, const GValue *gval)
 {
 	gint ii;
 	gchar *str;
 	gint result = -1;
 
-	str = ghb_value_string(container);
-	for (ii = 0; ii < container_opts.count; ii++)
+	str = ghb_value_string(gval);
+	for (ii = 0; ii < opts->count; ii++)
 	{
-		if (strcmp(container_opts.map[ii].shortOpt, str) == 0)
+		if (strcmp(opts->map[ii].shortOpt, str) == 0)
 		{
-			result = container_opts.map[ii].ivalue;
+			result = opts->map[ii].ivalue;
+			break;
 		}
 	}
 	g_free(str);
 	return result;
 }
 
-const gchar*
-ghb_lookup_container_option(const GValue *container)
+static const gchar*
+lookup_generic_option(combo_opts_t *opts, const GValue *gval)
 {
 	gint ii;
 	gchar *str;
 	const gchar *result = "";
 
-	str = ghb_value_string(container);
-	for (ii = 0; ii < container_opts.count; ii++)
+	str = ghb_value_string(gval);
+	for (ii = 0; ii < opts->count; ii++)
 	{
-		if (strcmp(container_opts.map[ii].shortOpt, str) == 0)
+		if (strcmp(opts->map[ii].shortOpt, str) == 0)
 		{
-			result = container_opts.map[ii].option;
+			result = opts->map[ii].option;
+			break;
 		}
 	}
 	g_free(str);
 	return result;
 }
 
-gint
-ghb_lookup_denoise(const GValue *denoise)
-{
-	gint ii;
-	gchar *str;
-	gint result = -1;
-
-	str = ghb_value_string(denoise);
-	for (ii = 0; ii < denoise_opts.count; ii++)
-	{
-		if (strcmp(denoise_opts.map[ii].shortOpt, str) == 0)
-		{
-			result = denoise_opts.map[ii].ivalue;
-		}
-	}
-	g_free(str);
-	// Custom
-	return result;
-}
-
-gint
-ghb_lookup_deint(const GValue *deint)
-{
-	gint ii;
-	gchar *str;
-	gint result = -1;
-
-	str = ghb_value_string(deint);
-	for (ii = 0; ii < deint_opts.count; ii++)
-	{
-		if (strcmp(deint_opts.map[ii].shortOpt, str) == 0)
-		{
-			result = deint_opts.map[ii].ivalue;
-		}
-	}
-	g_free(str);
-	// Custom
-	return result;
-}
-
-gint
-ghb_lookup_mux(const GValue *mux)
-{
-	gint ii;
-	gchar *str;
-	gint result = HB_MUX_MKV;
-
-	str = ghb_value_string(mux);
-	for (ii = 0; ii < container_opts.count; ii++)
-	{
-		if (strcmp(container_opts.map[ii].shortOpt, str) == 0)
-		{
-			result = container_opts.map[ii].ivalue;
-		}
-	}
-	g_free(str);
-	return result;
-}
-
-gint
-ghb_lookup_acodec(const GValue *acodec)
-{
-	gint ii;
-	gchar *str;
-	gint result = HB_ACODEC_FAAC;
-
-	str = ghb_value_string(acodec);
-	for (ii = 0; ii < acodec_opts.count; ii++)
-	{
-		if (strcmp(acodec_opts.map[ii].shortOpt, str) == 0)
-		{
-			result = acodec_opts.map[ii].ivalue;
-		}
-	}
-	g_free(str);
-	return result;
-}
-
-const gchar*
-ghb_lookup_acodec_option(const GValue *acodec)
-{
-	gint ii;
-	gchar *str;
-	const gchar *result = "";
-
-	str = ghb_value_string(acodec);
-	for (ii = 0; ii < acodec_opts.count; ii++)
-	{
-		if (strcmp(acodec_opts.map[ii].shortOpt, str) == 0)
-		{
-			result = acodec_opts.map[ii].option;
-		}
-	}
-	g_free(str);
-	return result;
-}
-
-const gchar*
-ghb_lookup_mix_option(const GValue *mix)
-{
-	gint ii;
-	gchar *str;
-	gchar *result = "None";
-
-
-	str = ghb_value_string(mix);
-	for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
-	{
-		if (strcmp(hb_audio_mixdowns[ii].short_name, str) == 0)
-		{
-			result = hb_audio_mixdowns[ii].human_readable_name;
-		}
-	}
-	g_free(str);
-	return result;
-}
-
-gint
-ghb_lookup_mix(const GValue *mix)
+static gint
+lookup_mix_int(const GValue *mix)
 {
 	gint ii;
 	gchar *str;
@@ -673,14 +558,78 @@ ghb_lookup_mix(const GValue *mix)
 		if (strcmp(hb_audio_mixdowns[ii].short_name, str) == 0)
 		{
 			result = hb_audio_mixdowns[ii].amixdown;
+			break;
 		}
 	}
 	g_free(str);
 	return result;
 }
 
-gint
-ghb_lookup_rate(const GValue *rate)
+static const gchar*
+lookup_mix_option(const GValue *mix)
+{
+	gint ii;
+	gchar *str;
+	gchar *result = "None";
+
+
+	str = ghb_value_string(mix);
+	for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
+	{
+		if (strcmp(hb_audio_mixdowns[ii].short_name, str) == 0)
+		{
+			result = hb_audio_mixdowns[ii].human_readable_name;
+			break;
+		}
+	}
+	g_free(str);
+	return result;
+}
+
+static gint
+lookup_video_rate_int(const GValue *vrate)
+{
+	gint ii;
+	gchar *str;
+	gint result = 0;
+
+	str = ghb_value_string(vrate);
+	for (ii = 0; ii < hb_video_rates_count; ii++)
+	{
+		if (strcmp(hb_video_rates[ii].string, str) == 0)
+		{
+			result = hb_video_rates[ii].rate;
+			break;
+		}
+	}
+	g_free(str);
+	// Default to "same as source"
+	return result;
+}
+
+static const gchar*
+lookup_video_rate_option(const GValue *vrate)
+{
+	gint ii;
+	gchar *str;
+	const gchar *result = "Same as source";
+
+	str = ghb_value_string(vrate);
+	for (ii = 0; ii < hb_video_rates_count; ii++)
+	{
+		if (strcmp(hb_video_rates[ii].string, str) == 0)
+		{
+			result = hb_video_rates[ii].string;
+			break;
+		}
+	}
+	g_free(str);
+	// Default to "same as source"
+	return result;
+}
+
+static gint
+lookup_audio_rate_int(const GValue *rate)
 {
 	gint ii;
 	gchar *str;
@@ -694,38 +643,122 @@ ghb_lookup_rate(const GValue *rate)
 		if (strcmp(hb_audio_rates[ii].string, str) == 0)
 		{
 			result = hb_audio_rates[ii].rate;
+			break;
 		}
 	}
 	g_free(str);
 	return result;
 }
 
-#if 0
-gint
-ghb_lookup_bitrate(const gchar *bitrate)
+static const gchar*
+lookup_audio_rate_option(const GValue *rate)
 {
 	gint ii;
+	gchar *str;
+	const gchar *result = "Same as source";
 
-	for (ii = 0; ii < hb_audio_bitrates_count; ii++)
+	// Coincidentally, the string "source" will return 0
+	// which is our flag to use "same as source"
+	str = ghb_value_string(rate);
+	for (ii = 0; ii < hb_audio_rates_count; ii++)
 	{
-		if (strcmp(hb_audio_bitrates[ii].string, bitrate) == 0)
+		if (strcmp(hb_audio_rates[ii].string, str) == 0)
 		{
-			return hb_audio_bitrates[ii].rate;
+			result = hb_audio_rates[ii].string;
+			break;
 		}
 	}
-	return 160;
+	g_free(str);
+	return result;
 }
 
-gdouble
-ghb_lookup_drc(const gchar *drc)
+static gint
+lookup_audio_bitrate_int(const GValue *rate)
 {
-	gdouble dval;
-	dval = g_strtod(drc, NULL);
-	if (dval < 1.0) dval = 1.0;
-	if (dval > 4.0) dval = 4.0;
-	return dval;
+	gint ii;
+	gchar *str;
+	gint result = 0;
+
+	// Coincidentally, the string "source" will return 0
+	// which is our flag to use "same as source"
+	str = ghb_value_string(rate);
+	for (ii = 0; ii < hb_audio_bitrates_count; ii++)
+	{
+		if (strcmp(hb_audio_bitrates[ii].string, str) == 0)
+		{
+			result = hb_audio_bitrates[ii].rate;
+			break;
+		}
+	}
+	g_free(str);
+	return result;
 }
-#endif
+
+static const gchar*
+lookup_audio_bitrate_option(const GValue *rate)
+{
+	gint ii;
+	gchar *str;
+	const gchar *result = "Same as source";
+
+	// Coincidentally, the string "source" will return 0
+	// which is our flag to use "same as source"
+	str = ghb_value_string(rate);
+	for (ii = 0; ii < hb_audio_bitrates_count; ii++)
+	{
+		if (strcmp(hb_audio_bitrates[ii].string, str) == 0)
+		{
+			result = hb_audio_bitrates[ii].string;
+			break;
+		}
+	}
+	g_free(str);
+	return result;
+}
+
+static gint
+lookup_audio_lang_int(const GValue *rate)
+{
+	gint ii;
+	gchar *str;
+	gint result = 0;
+
+	// Coincidentally, the string "source" will return 0
+	// which is our flag to use "same as source"
+	str = ghb_value_string(rate);
+	for (ii = 0; ii < LANG_TABLE_SIZE; ii++)
+	{
+		if (strcmp(language_table[ii].iso639_2, str) == 0)
+		{
+			result = ii;
+			break;
+		}
+	}
+	g_free(str);
+	return result;
+}
+
+static const gchar*
+lookup_audio_lang_option(const GValue *rate)
+{
+	gint ii;
+	gchar *str;
+	const gchar *result = "Same as source";
+
+	// Coincidentally, the string "source" will return 0
+	// which is our flag to use "same as source"
+	str = ghb_value_string(rate);
+	for (ii = 0; ii < LANG_TABLE_SIZE; ii++)
+	{
+		if (strcmp(language_table[ii].iso639_2, str) == 0)
+		{
+			result = language_table[ii].eng_name;
+			break;
+		}
+	}
+	g_free(str);
+	return result;
+}
 
 static GValue*
 get_acodec_value(gint val)
@@ -737,12 +770,7 @@ get_acodec_value(gint val)
 	{
 		if (acodec_opts.map[ii].ivalue == val)
 		{
-			value = ghb_combo_value_new(
-				ii,
-				acodec_opts.map[ii].option,
-				acodec_opts.map[ii].shortOpt,
-				acodec_opts.map[ii].svalue,
-				acodec_opts.map[ii].ivalue);
+			value = ghb_string_value_new(acodec_opts.map[ii].shortOpt);
 			break;
 		}
 	}
@@ -759,12 +787,7 @@ get_abitrate_value(gint val)
 	{
 		if (hb_audio_bitrates[ii].rate == val)
 		{
-			value = ghb_combo_value_new(
-				ii,
-				hb_audio_bitrates[ii].string,
-				hb_audio_bitrates[ii].string,
-				hb_audio_bitrates[ii].string,
-				hb_audio_bitrates[ii].rate);
+			value = ghb_string_value_new(hb_audio_bitrates[ii].string);
 			break;
 		}
 	}
@@ -781,12 +804,7 @@ get_amix_value(gint val)
 	{
 		if (hb_audio_mixdowns[ii].amixdown == val)
 		{
-			value = ghb_combo_value_new(
-				ii,
-				hb_audio_mixdowns[ii].human_readable_name,
-				hb_audio_mixdowns[ii].short_name,
-				hb_audio_mixdowns[ii].internal_name,
-				hb_audio_mixdowns[ii].amixdown);
+			value = ghb_string_value_new(hb_audio_mixdowns[ii].short_name);
 			break;
 		}
 	}
@@ -901,14 +919,14 @@ ghb_grey_combo_options(GtkBuilder *builder)
     hb_audio_config_t *audio = NULL;
 	
 	widget = GHB_WIDGET (builder, "title");
-	titleindex = ghb_widget_int(widget);
+	titleindex = ghb_lookup_combo_int("title", ghb_widget_value(widget));
 	widget = GHB_WIDGET (builder, "audio_track");
-	track = ghb_widget_int(widget);
+	track = ghb_lookup_combo_int("audio_track", ghb_widget_value(widget));
 	audio = get_hb_audio(titleindex, track);
 	widget = GHB_WIDGET (builder, "container");
-	container = ghb_widget_int(widget);
+	container = ghb_lookup_combo_int("container", ghb_widget_value(widget));
 	widget = GHB_WIDGET (builder, "http_optimize_mp4");
-	httpopt = ghb_widget_int(widget);
+	httpopt = ghb_widget_boolean(widget);
 
 	grey_combo_box_item(builder, "audio_codec", HB_ACODEC_FAAC, FALSE);
 	grey_combo_box_item(builder, "audio_codec", HB_ACODEC_LAME, FALSE);
@@ -934,7 +952,7 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	grey_combo_box_item(builder, "video_codec", HB_VCODEC_THEORA, FALSE);
 
 	widget = GHB_WIDGET (builder, "audio_codec");
-	acodec = ghb_widget_int(widget);
+	acodec = ghb_lookup_combo_int("audio_codec", ghb_widget_value(widget));
 	if (acodec != HB_ACODEC_AC3)
 	{
 		grey_combo_box_item(builder, "audio_mix", 0, TRUE);
@@ -1081,33 +1099,18 @@ init_combo_box(GtkBuilder *builder, const gchar *name)
 							   G_TYPE_STRING, G_TYPE_INT, G_TYPE_STRING);
 	gtk_combo_box_set_model(combo, GTK_TREE_MODEL(store));
 
-	gtk_cell_layout_clear(GTK_CELL_LAYOUT(combo));
-    cell = GTK_CELL_RENDERER(gtk_cell_renderer_text_new());
-    gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(combo), cell, TRUE);
-    gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(combo), cell,
-      "text", 0, "sensitive", 1, NULL);
-}	
-
-// Set up the model for the combo box
-static void
-init_combo_box_entry(GtkBuilder *builder, const gchar *name)
-{
-	GtkComboBox *combo;
-	GtkListStore *store;
-
-	g_debug("init_combo_box_entry() %s\n", name);
-	// First modify the combobox model to allow greying out of options
-	combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
-	// Store contains:
-	// 1 - String to display
-	// 2 - bool indicating whether the entry is selectable (grey or not)
-	// 3 - String that is used for presets
-	// 4 - Int value determined by backend
-	// 5 - String value determined by backend
-	store = gtk_list_store_new(5, G_TYPE_STRING, G_TYPE_BOOLEAN, 
-							   G_TYPE_STRING, G_TYPE_INT, G_TYPE_STRING);
-	gtk_combo_box_set_model(combo, GTK_TREE_MODEL(store));
-	gtk_combo_box_entry_set_text_column(GTK_COMBO_BOX_ENTRY(combo), 0);
+	if (GTK_WIDGET_TYPE(combo) == GTK_TYPE_COMBO_BOX)
+	{
+		gtk_cell_layout_clear(GTK_CELL_LAYOUT(combo));
+    	cell = GTK_CELL_RENDERER(gtk_cell_renderer_text_new());
+    	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(combo), cell, TRUE);
+    	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(combo), cell,
+      		"text", 0, "sensitive", 1, NULL);
+	}
+	else
+	{ // Combo box entry
+		gtk_combo_box_entry_set_text_column(GTK_COMBO_BOX_ENTRY(combo), 0);
+	}
 }	
 
 static void
@@ -1244,13 +1247,15 @@ language_opts_set(GtkBuilder *builder, const gchar *name)
 	}
 }
 
+static gchar **titles = NULL;
+
 void
 title_opts_set(GtkBuilder *builder, const gchar *name)
 {
 	GtkTreeIter iter;
 	GtkListStore *store;
-	hb_list_t  * list;
-	hb_title_t * title;
+	hb_list_t  * list = NULL;
+	hb_title_t * title = NULL;
 	gint ii;
 	gint count = 0;
 	
@@ -1263,6 +1268,20 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
 		count = hb_list_count( list );
 		if (count > 100) count = 100;
 	}
+	if (titles) g_strfreev(titles);
+	if (title_opts.map) g_free(title_opts.map);
+	if (count > 0)
+	{
+		title_opts.count = count;
+		title_opts.map = g_malloc(count*sizeof(options_map_t));
+		titles = g_malloc((count+1) * sizeof(gchar*));
+	}
+	else
+	{
+		title_opts.count = 1;
+		title_opts.map = g_malloc(sizeof(options_map_t));
+		titles = NULL;
+	}
 	if( count <= 0 )
 	{
 		// No titles.  Fill in a default.
@@ -1274,32 +1293,38 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
 						   3, -1, 
 						   4, "none", 
 						   -1);
+		title_opts.map[0].option = "No Titles";
+		title_opts.map[0].shortOpt = "none";
+		title_opts.map[0].ivalue = -1;
+		title_opts.map[0].svalue = "none";
 		return;
 	}
 	for (ii = 0; ii < count; ii++)
 	{
-		gchar *option;
-		
 		title = (hb_title_t*)hb_list_item(list, ii);
 		if (title->duration != 0)
 		{
-			option  = g_strdup_printf ("%d - %02dh%02dm%02ds",
+			titles[ii]  = g_strdup_printf ("%d - %02dh%02dm%02ds",
 				title->index, title->hours, title->minutes, title->seconds);
 		}
 		else
 		{
-			option  = g_strdup_printf ("%d - Unknown Length", title->index);
+			titles[ii]  = g_strdup_printf ("%d - Unknown Length", title->index);
 		}
 		gtk_list_store_append(store, &iter);
 		gtk_list_store_set(store, &iter, 
-						   0, option, 
+						   0, titles[ii], 
 						   1, TRUE, 
-						   2, option, 
+						   2, titles[ii], 
 						   3, ii, 
-						   4, option, 
+						   4, titles[ii], 
 						   -1);
-		g_free(option);
+		title_opts.map[ii].option = titles[ii];
+		title_opts.map[ii].shortOpt = titles[ii];
+		title_opts.map[ii].ivalue = ii;
+		title_opts.map[ii].svalue = titles[ii];
 	}
+	titles[ii] = NULL;
 }
 
 static gboolean
@@ -1328,8 +1353,8 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 {
 	GtkTreeIter iter;
 	GtkListStore *store;
-	hb_list_t  * list;
-	hb_title_t * title;
+	hb_list_t  * list = NULL;
+	hb_title_t * title = NULL;
     hb_audio_config_t * audio;
 	gint ii;
 	gint count = 0;
@@ -1347,6 +1372,17 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 		}
 	}
 	if (count > 10) count = 10;
+	if (audio_track_opts.map) g_free(audio_track_opts.map);
+	if (count > 0)
+	{
+		audio_track_opts.count = count;
+		audio_track_opts.map = g_malloc(count*sizeof(options_map_t));
+	}
+	else
+	{
+		audio_track_opts.count = 1;
+		audio_track_opts.map = g_malloc(sizeof(options_map_t));
+	}
 	if( count <= 0 )
 	{
 		// No audio. set some default
@@ -1358,38 +1394,43 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 						   3, -1, 
 						   4, "none", 
 						   -1);
+		audio_track_opts.map[0].option = "No Audio";
+		audio_track_opts.map[0].shortOpt = "none";
+		audio_track_opts.map[0].ivalue = -1;
+		audio_track_opts.map[0].svalue = "none";
 		return;
 	}
 	for (ii = 0; ii < count; ii++)
 	{
-		gchar *str;
-
         audio = (hb_audio_config_t *) hb_list_audio_config_item( title->list_audio, ii );
 		gtk_list_store_append(store, &iter);
-		str = g_strdup_printf("%d", ii);
 		gtk_list_store_set(store, &iter, 
 						   0, audio->lang.description, 
 						   1, TRUE, 
-						   2, str, 
+						   2, index_str[ii], 
 						   3, ii, 
-						   4, str, 
+						   4, index_str[ii], 
 						   -1);
-		g_free(str);
+		audio_track_opts.map[ii].option = audio->lang.description,
+		audio_track_opts.map[ii].shortOpt = index_str[ii];
+		audio_track_opts.map[ii].ivalue = ii;
+		audio_track_opts.map[ii].svalue = index_str[ii];
 	}
 }
+
 
 void
 subtitle_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 {
 	GtkTreeIter iter;
 	GtkListStore *store;
-	hb_list_t  * list;
-	hb_title_t * title;
+	hb_list_t  * list = NULL;
+	hb_title_t * title = NULL;
     hb_subtitle_t * subtitle;
 	gint ii;
 	gint count = 0;
 	
-	g_debug("subtitle_opts_set ()\n");
+	g_debug("subtitle_opts_set () %s\n", name);
 	store = get_combo_box_store(builder, name);
 	gtk_list_store_clear(store);
 	if (h_scan != NULL)
@@ -1402,6 +1443,17 @@ subtitle_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 		}
 	}
 	if (count > 10) count = 10;
+	if (subtitle_opts.map) g_free(subtitle_opts.map);
+	if (count > 0)
+	{
+		subtitle_opts.count = count+2;
+		subtitle_opts.map = g_malloc((count+2)*sizeof(options_map_t));
+	}
+	else
+	{
+		subtitle_opts.count = LANG_TABLE_SIZE+2;
+		subtitle_opts.map = g_malloc((LANG_TABLE_SIZE+2)*sizeof(options_map_t));
+	}
 	// Add options for "none" and "autoselect"
 	gtk_list_store_append(store, &iter);
 	gtk_list_store_set(store, &iter, 
@@ -1411,27 +1463,42 @@ subtitle_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 					   3, -2, 
 					   4, "none", 
 					   -1);
+	subtitle_opts.map[0].option = "None";
+	subtitle_opts.map[0].shortOpt = "none";
+	subtitle_opts.map[0].ivalue = -2;
+	subtitle_opts.map[0].svalue = "none";
 	gtk_list_store_append(store, &iter);
 	gtk_list_store_set(store, &iter, 
-					   0, "Same As Audio", 
+					   0, "Same as audio", 
 					   1, TRUE, 
 					   2, "auto", 
 					   3, -1, 
 					   4, "auto", 
 					   -1);
-	for (ii = 0; ii < count; ii++)
+	subtitle_opts.map[0].option = "Same as audio";
+	subtitle_opts.map[0].shortOpt = "auto";
+	subtitle_opts.map[0].ivalue = -1;
+	subtitle_opts.map[0].svalue = "auto";
+	if (count >0)
 	{
-        subtitle = (hb_subtitle_t *) hb_list_item( title->list_subtitle, ii );
-		gtk_list_store_append(store, &iter);
-		gtk_list_store_set(store, &iter, 
-						   0, subtitle->lang, 
-						   1, TRUE, 
-						   2, subtitle->iso639_2, 
-						   3, ii, 
-						   4, subtitle->iso639_2, 
-						   -1);
+		for (ii = 0; ii < count; ii++)
+		{
+       		subtitle = (hb_subtitle_t *)hb_list_item(title->list_subtitle, ii);
+			gtk_list_store_append(store, &iter);
+			gtk_list_store_set(store, &iter, 
+					   	0, subtitle->lang, 
+					   	1, TRUE, 
+					   	2, subtitle->iso639_2, 
+					   	3, ii, 
+					   	4, subtitle->iso639_2, 
+					   	-1);
+			subtitle_opts.map[ii+2].option = subtitle->lang;
+			subtitle_opts.map[ii+2].shortOpt = subtitle->iso639_2;
+			subtitle_opts.map[ii+2].ivalue = ii;
+			subtitle_opts.map[ii+2].svalue = subtitle->iso639_2;
+		}
 	}
-	if (titleindex == -1)
+	else
 	{
 		for (ii = 0; ii < LANG_TABLE_SIZE; ii++)
 		{
@@ -1443,6 +1510,10 @@ subtitle_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 				3, ii, 
 				4, language_table[ii].iso639_2, 
 				-1);
+			subtitle_opts.map[ii+2].option = language_table[ii].eng_name;
+			subtitle_opts.map[ii+2].shortOpt = language_table[ii].iso639_2;
+			subtitle_opts.map[ii+2].ivalue = ii;
+			subtitle_opts.map[ii+2].svalue = language_table[ii].iso639_2;
 		}
 	}
 }
@@ -1521,6 +1592,7 @@ generic_opts_set(GtkBuilder *builder, const gchar *name, combo_opts_t *opts)
 	gint ii;
 	
 	g_debug("generic_opts_set ()\n");
+	if (name == NULL || opts == NULL) return;
 	store = get_combo_box_store(builder, name);
 	gtk_list_store_clear(store);
 	for (ii = 0; ii < opts->count; ii++)
@@ -1534,6 +1606,63 @@ generic_opts_set(GtkBuilder *builder, const gchar *name, combo_opts_t *opts)
 						   4, opts->map[ii].svalue, 
 						   -1);
 	}
+}
+
+combo_opts_t*
+find_combo_table(const gchar *name)
+{
+	gint ii;
+
+	for (ii = 0; combo_name_map[ii].name != NULL; ii++)
+	{
+		if (strcmp(name, combo_name_map[ii].name) == 0)
+		{
+			return combo_name_map[ii].opts;
+		}
+	}
+	return NULL;
+}
+
+gint
+ghb_lookup_combo_int(const gchar *name, const GValue *gval)
+{
+	if (strcmp(name, "audio_bitrate") == 0)
+		return lookup_audio_bitrate_int(gval);
+	else if (strcmp(name, "audio_rate") == 0)
+		return lookup_audio_rate_int(gval);
+	else if (strcmp(name, "framerate") == 0)
+		return lookup_video_rate_int(gval);
+	else if (strcmp(name, "audio_mix") == 0)
+		return lookup_mix_int(gval);
+	else if (strcmp(name, "source_audio_lang") == 0)
+		return lookup_audio_lang_int(gval);
+	else
+	{
+		return lookup_generic_int(find_combo_table(name), gval);
+	}
+	g_warning("ghb_lookup_combo_int() couldn't find %s", name);
+	return 0;
+}
+
+const gchar*
+ghb_lookup_combo_option(const gchar *name, const GValue *gval)
+{
+	if (strcmp(name, "audio_bitrate") == 0)
+		return lookup_audio_bitrate_option(gval);
+	else if (strcmp(name, "audio_rate") == 0)
+		return lookup_audio_rate_option(gval);
+	else if (strcmp(name, "framerate") == 0)
+		return lookup_video_rate_option(gval);
+	else if (strcmp(name, "audio_mix") == 0)
+		return lookup_mix_option(gval);
+	else if (strcmp(name, "source_audio_lang") == 0)
+		return lookup_audio_lang_option(gval);
+	else
+	{
+		return lookup_generic_option(find_combo_table(name), gval);
+	}
+	g_warning("ghb_lookup_combo_int() couldn't find %s", name);
+	return 0;
 }
 
 void
@@ -1563,46 +1692,50 @@ ghb_update_ui_combo_box(GtkBuilder *builder, const gchar *name, gint user_data, 
 			}
 		}
 	}	
-	if (all || strcmp(name, "audio_bitrate") == 0)
+	if (all)
+	{
 		audio_bitrate_opts_set(builder, "audio_bitrate");
-	if (all || strcmp(name, "audio_rate") == 0)
 		audio_samplerate_opts_set(builder, "audio_rate", hb_audio_rates, hb_audio_rates_count);
-	if (all || strcmp(name, "framerate") == 0)
 		video_rate_opts_set(builder, "framerate", hb_video_rates, hb_video_rates_count);
-	if (all || strcmp(name, "audio_mix") == 0)
 		mix_opts_set(builder, "audio_mix");
-	if (all || strcmp(name, "source_audio_lang") == 0)
 		language_opts_set(builder, "source_audio_lang");
-	if (all || strcmp(name, "subtitle_lang") == 0)
 		subtitle_opts_set(builder, "subtitle_lang", user_data);
-	if (all || strcmp(name, "title") == 0)
 		title_opts_set(builder, "title");
-	if (all || strcmp(name, "audio_track") == 0)
 		audio_track_opts_set(builder, "audio_track", user_data);
-	if (all || strcmp(name, "container") == 0)
 		generic_opts_set(builder, "container", &container_opts);
-	if (all || strcmp(name, "deinterlace") == 0)
 		generic_opts_set(builder, "deinterlace", &deint_opts);
-	if (all || strcmp(name, "tweak_deinterlace") == 0)
 		generic_opts_set(builder, "tweak_deinterlace", &deint_opts);
-	if (all || strcmp(name, "denoise") == 0)
 		generic_opts_set(builder, "denoise", &denoise_opts);
-	if (all || strcmp(name, "tweak_denoise") == 0)
 		generic_opts_set(builder, "tweak_denoise", &denoise_opts);
-	if (all || strcmp(name, "video_codec") == 0)
 		generic_opts_set(builder, "video_codec", &vcodec_opts);
-	if (all || strcmp(name, "audio_codec") == 0)
 		generic_opts_set(builder, "audio_codec", &acodec_opts);
-	if (all || strcmp(name, "x264_direct") == 0)
 		generic_opts_set(builder, "x264_direct", &direct_opts);
-	if (all || strcmp(name, "x264_me") == 0)
 		generic_opts_set(builder, "x264_me", &me_opts);
-	if (all || strcmp(name, "x264_subme") == 0)
 		generic_opts_set(builder, "x264_subme", &subme_opts);
-	if (all || strcmp(name, "x264_analyse") == 0)
 		generic_opts_set(builder, "x264_analyse", &analyse_opts);
-	if (all || strcmp(name, "x264_trellis") == 0)
 		generic_opts_set(builder, "x264_trellis", &trellis_opts);
+	}
+	else
+	{
+		if (strcmp(name, "audio_bitrate") == 0)
+			audio_bitrate_opts_set(builder, "audio_bitrate");
+		else if (strcmp(name, "audio_rate") == 0)
+			audio_samplerate_opts_set(builder, "audio_rate", hb_audio_rates, hb_audio_rates_count);
+		else if (strcmp(name, "framerate") == 0)
+			video_rate_opts_set(builder, "framerate", hb_video_rates, hb_video_rates_count);
+		else if (strcmp(name, "audio_mix") == 0)
+			mix_opts_set(builder, "audio_mix");
+		else if (strcmp(name, "source_audio_lang") == 0)
+			language_opts_set(builder, "source_audio_lang");
+		else if (strcmp(name, "subtitle_lang") == 0)
+			subtitle_opts_set(builder, "subtitle_lang", user_data);
+		else if (strcmp(name, "title") == 0)
+			title_opts_set(builder, "title");
+		else if (strcmp(name, "audio_track") == 0)
+			audio_track_opts_set(builder, "audio_track", user_data);
+		else
+			generic_opts_set(builder, name, find_combo_table(name));
+	}
 	if (handler_id > 0)
 	{
 		g_signal_handler_unblock ((gpointer)combo, handler_id);
@@ -1612,6 +1745,8 @@ ghb_update_ui_combo_box(GtkBuilder *builder, const gchar *name, gint user_data, 
 static void
 init_ui_combo_boxes(GtkBuilder *builder)
 {
+	gint ii;
+
 	init_combo_box(builder, "audio_bitrate");
 	init_combo_box(builder, "audio_rate");
 	init_combo_box(builder, "framerate");
@@ -1620,18 +1755,10 @@ init_ui_combo_boxes(GtkBuilder *builder)
 	init_combo_box(builder, "subtitle_lang");
 	init_combo_box(builder, "title");
 	init_combo_box(builder, "audio_track");
-	init_combo_box(builder, "container");
-	init_combo_box(builder, "deinterlace");
-	init_combo_box_entry(builder, "tweak_deinterlace");
-	init_combo_box(builder, "denoise");
-	init_combo_box_entry(builder, "tweak_denoise");
-	init_combo_box(builder, "video_codec");
-	init_combo_box(builder, "audio_codec");
-	init_combo_box(builder, "x264_direct");
-	init_combo_box(builder, "x264_me");
-	init_combo_box(builder, "x264_subme");
-	init_combo_box(builder, "x264_analyse");
-	init_combo_box(builder, "x264_trellis");
+	for (ii = 0; combo_name_map[ii].name != NULL; ii++)
+	{
+		init_combo_box(builder, combo_name_map[ii].name);
+	}
 }
 	
 static const char * turbo_opts = 
@@ -1703,7 +1830,7 @@ ghb_ac3_in_audio_list(const GValue *audio_list)
 		gint acodec;
 
 		asettings = ghb_array_get_nth(audio_list, ii);
-		acodec = ghb_settings_get_int(asettings, "audio_codec");
+		acodec = ghb_settings_combo_int(asettings, "audio_codec");
 		if (acodec == HB_ACODEC_AC3)
 			return TRUE;
 	}
@@ -2090,7 +2217,9 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		/* No valid title, stop right there */
 		return;
 	}
-	gint titleindex = ghb_settings_get_int(ud->settings, "title");
+	gint titleindex;
+
+	titleindex = ghb_settings_combo_int(ud->settings, "title");
     title = hb_list_item( list, titleindex );
 	if (title == NULL) return;
 	job   = title->job;
@@ -2219,7 +2348,8 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 			job->maxHeight = max_height;
 		job->crop[0] = crop[0];	job->crop[1] = crop[1];
 		job->crop[2] = crop[2];	job->crop[3] = crop[3];
-		hb_set_anamorphic_size( job, &width, &height, &par_width, &par_height );
+		hb_set_anamorphic_size( job, &width, &height, 
+								&par_width, &par_height );
 	}
 	else 
 	{
@@ -2301,7 +2431,7 @@ set_preview_job_settings(hb_job_t *job, GValue *settings)
 	}
 	job->width = ghb_settings_get_int(settings, "scale_width");
 	job->height = ghb_settings_get_int(settings, "scale_height");
-	gint deint = ghb_settings_get_int(settings, "deinterlace");
+	gint deint = ghb_settings_combo_int(settings, "deinterlace");
 	gboolean decomb = ghb_settings_get_boolean(settings, "decomb");
 	job->deinterlace = (!decomb && deint == 0) ? 0 : 1;
 }
@@ -2336,7 +2466,7 @@ ghb_guess_bitrate(GValue *settings)
 		gint vcodec;
 		gdouble vquality;
 
-		vcodec = ghb_settings_get_int(settings, "video_codec");
+		vcodec = ghb_settings_combo_int(settings, "video_codec");
 		vquality = ghb_settings_get_double(settings, "video_quality")/100;
 		if (vcodec == HB_VCODEC_X264 && 
 				!ghb_settings_get_boolean(settings, "linear_vquality"))
@@ -2434,7 +2564,8 @@ ghb_validate_filters(signal_user_data_t *ud)
 		}
 		g_free(str);
 		// deinte 4
-		index = ghb_settings_get_combo_index(ud->settings, "tweak_deinterlace");
+		index = ghb_lookup_combo_int("tweak_deinterlace", 
+			ghb_settings_get_value(ud->settings, "tweak_deinterlace"));
 		if (index < 0)
 		{
 			str = ghb_settings_get_string(ud->settings, "tweak_deinterlace");
@@ -2468,7 +2599,8 @@ ghb_validate_filters(signal_user_data_t *ud)
 		g_free(str);
 #endif
 		// denois 4
-		index = ghb_settings_get_combo_index(ud->settings, "tweak_denoise");
+		index = ghb_lookup_combo_int("tweak_denoise", 
+				ghb_settings_get_value(ud->settings, "tweak_denoise"));
 		if (index < 0)
 		{
 			str = ghb_settings_get_string(ud->settings, "tweak_denoise");
@@ -2494,8 +2626,8 @@ ghb_validate_video(signal_user_data_t *ud)
 	gint vcodec, mux;
 	gchar *message;
 
-	mux = ghb_settings_get_int(ud->settings, "container");
-	vcodec = ghb_settings_get_int(ud->settings, "video_codec");
+	mux = ghb_settings_combo_int(ud->settings, "container");
+	vcodec = ghb_settings_combo_int(ud->settings, "video_codec");
 	if ((mux == HB_MUX_MP4 || mux == HB_MUX_AVI) && 
 		(vcodec == HB_VCODEC_THEORA))
 	{
@@ -2538,7 +2670,7 @@ ghb_validate_container(signal_user_data_t *ud)
 	gint container;
 	gchar *message;
 
-	container = ghb_settings_get_int(ud->settings, "container");
+	container = ghb_settings_combo_int(ud->settings, "container");
 	if (container == HB_MUX_MP4)
 	{
 		const GValue *audio_list;
@@ -2567,7 +2699,7 @@ ghb_validate_container(signal_user_data_t *ud)
 				GValue *asettings;
 
 				asettings = ghb_array_get_nth(audio_list, ii);
-				gint acodec = ghb_settings_get_int(asettings, "audio_codec");
+				gint acodec = ghb_settings_combo_int(asettings, "audio_codec");
 				if (acodec == HB_ACODEC_AC3)
 				{
 					GValue *value;
@@ -2599,10 +2731,12 @@ ghb_validate_audio(signal_user_data_t *ud)
 		return FALSE;
 	}
 
-	gint titleindex = ghb_settings_get_int(ud->settings, "title");
+	gint titleindex;
+
+	titleindex = ghb_settings_combo_int(ud->settings, "title");
     title = hb_list_item( list, titleindex );
 	if (title == NULL) return FALSE;
-	gint mux = ghb_settings_get_int(ud->settings, "container");
+	gint mux = ghb_settings_combo_int(ud->settings, "container");
 
 	const GValue *audio_list;
 	gint count, ii;
@@ -2615,9 +2749,10 @@ ghb_validate_audio(signal_user_data_t *ud)
 	    hb_audio_config_t *taudio;
 
 		asettings = ghb_array_get_nth(audio_list, ii);
-		gint track = ghb_settings_get_int(asettings, "audio_track");
-		gint codec = ghb_settings_get_int(asettings, "audio_codec");
-        taudio = (hb_audio_config_t *) hb_list_audio_config_item( title->list_audio, track );
+		gint track = ghb_settings_combo_int(asettings, "audio_track");
+		gint codec = ghb_settings_combo_int(asettings, "audio_codec");
+        taudio = (hb_audio_config_t *) hb_list_audio_config_item(
+											title->list_audio, track );
 		if ((taudio->in.codec != HB_ACODEC_AC3) && (codec == HB_ACODEC_AC3))
 		{
 			// Not supported.  AC3 is passthrough only, so input must be AC3
@@ -2704,7 +2839,7 @@ ghb_validate_audio(signal_user_data_t *ud)
 			value = get_acodec_value(codec);
 			ghb_settings_take_value(asettings, "audio_codec", value);
 		}
-		gint mix = ghb_settings_get_int (asettings, "audio_mix");
+		gint mix = ghb_settings_combo_int (asettings, "audio_mix");
 		gboolean allow_mono = TRUE;
 		gboolean allow_stereo = TRUE;
 		gboolean allow_dolby = TRUE;
@@ -2776,7 +2911,7 @@ ghb_validate_vquality(GValue *settings)
 	gint min, max;
 
 	if (ghb_settings_get_boolean(settings, "nocheckvquality")) return TRUE;
-	vcodec = ghb_settings_get_int(settings, "video_codec");
+	vcodec = ghb_settings_combo_int(settings, "video_codec");
 	if (ghb_settings_get_boolean(settings, "vquality_type_constant"))
 	{
 		if (!ghb_settings_get_boolean(settings, "directqp"))
@@ -2869,7 +3004,7 @@ ghb_add_job(GValue *js, gint unique_id)
 	if (job == NULL) return;
 
 	tweaks = ghb_settings_get_boolean(js, "allow_tweaks");
-	job->mux = ghb_lookup_mux(ghb_settings_get_value(js, "container"));
+	job->mux = ghb_settings_combo_int(js, "container");
 	if (job->mux == HB_MUX_MP4)
 	{
 		job->largeFileSize = ghb_settings_get_boolean(js, "large_mp4");
@@ -2925,8 +3060,8 @@ ghb_add_job(GValue *js, gint unique_id)
 
 	
 	gboolean decomb = ghb_settings_get_boolean(js, "decomb");
-	gint deint = ghb_lookup_deint(
-		ghb_settings_get_value(js, tweaks ? "tweak_deinterlace":"deinterlace"));
+	gint deint = ghb_settings_combo_int(js, 
+					tweaks ? "tweak_deinterlace":"deinterlace");
 	if (!decomb)
 		job->deinterlace = (deint != 0) ? 1 : 0;
 	else
@@ -3001,8 +3136,8 @@ ghb_add_job(GValue *js, gint unique_id)
 		hb_filter_deblock.settings = deblock_str;
 		hb_list_add( job->filters, &hb_filter_deblock );
 	}
-	gint denoise = ghb_lookup_denoise(
-		ghb_settings_get_value(js, tweaks ? "tweak_denoise" : "denoise"));
+	gint denoise = ghb_settings_combo_int(js, 
+					tweaks ? "tweak_denoise" : "denoise");
 	if( denoise != 0 )
 	{
 		if (denoise > 0)
@@ -3016,7 +3151,7 @@ ghb_add_job(GValue *js, gint unique_id)
 	job->width = ghb_settings_get_int(js, "scale_width");
 	job->height = ghb_settings_get_int(js, "scale_height");
 
-	job->vcodec = ghb_lookup_vcodec(ghb_settings_get_value(js, "video_codec"));
+	job->vcodec = ghb_settings_combo_int(js, "video_codec");
 	if ((job->mux == HB_MUX_MP4 || job->mux == HB_MUX_AVI) && 
 		(job->vcodec == HB_VCODEC_THEORA))
 	{
@@ -3071,7 +3206,7 @@ ghb_add_job(GValue *js, gint unique_id)
 		job->vfr = FALSE;
 	}
 
-	gint vrate = ghb_lookup_vrate(ghb_settings_get_value(js, "framerate"));
+	gint vrate = ghb_settings_combo_int(js, "framerate");
 	if( vrate == 0 || job->vfr )
 	{
 		job->vrate = title->rate;
@@ -3110,9 +3245,9 @@ ghb_add_job(GValue *js, gint unique_id)
 		asettings = ghb_array_get_nth(audio_list, ii);
 		audio.in.track = ghb_settings_get_int(asettings, "audio_track");
 		audio.out.track = tcount;
-		audio.out.codec = ghb_lookup_acodec(
-			ghb_settings_get_value(asettings, "audio_codec"));
-        taudio = (hb_audio_config_t *) hb_list_audio_config_item( title->list_audio, audio.in.track );
+		audio.out.codec = ghb_settings_combo_int(asettings, "audio_codec");
+        taudio = (hb_audio_config_t *) hb_list_audio_config_item(
+									title->list_audio, audio.in.track );
 		if ((taudio->in.codec != HB_ACODEC_AC3) && (audio.out.codec == HB_ACODEC_AC3))
 		{
 			// Not supported.  AC3 is passthrough only, so input must be AC3
@@ -3155,15 +3290,13 @@ ghb_add_job(GValue *js, gint unique_id)
 		}
 		else
 		{
-			audio.out.mixdown = ghb_lookup_mix(
-				ghb_settings_get_value (asettings, "audio_mix"));
+			audio.out.mixdown = ghb_settings_combo_int(asettings, "audio_mix");
 			// Make sure the mixdown is valid and pick a new one if not.
 			audio.out.mixdown = ghb_get_best_mix(titleindex, 
 				audio.in.track, audio.out.codec, audio.out.mixdown);
 			audio.out.bitrate = 
-				ghb_settings_get_int(asettings, "audio_bitrate");
-			gint srate = ghb_lookup_rate(
-				ghb_settings_get_value(asettings, "audio_rate"));
+				ghb_settings_combo_int(asettings, "audio_bitrate");
+			gint srate = ghb_settings_combo_int(asettings, "audio_rate");
 			if (srate == 0)	// 0 is same as source
 				audio.out.samplerate = taudio->in.samplerate;
 			else

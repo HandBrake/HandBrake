@@ -59,7 +59,7 @@
 		<key>x264_refs</key>
 		<integer>1</integer>
 		<key>x264_subme</key>
-		<integer>5</integer>
+		<integer>6</integer>
 		<key>x264_trellis</key>
 		<integer>0</integer>
 		<key>x264_weighted_bframes</key>

@@ -4884,7 +4884,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>x264_refs</key>
 			<integer>1</integer>
 			<key>x264_subme</key>
-			<integer>5</integer>
+			<integer>6</integer>
 			<key>x264_trellis</key>
 			<integer>0</integer>
 			<key>x264_weighted_bframes</key>
@@ -5088,7 +5088,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>vquality_type_bitrate</key>
 			<true />
 			<key>x264_options</key>
-			<string>ref=5:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2</string>
+			<string>ref=5:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2</string>
 		</dict>
 		<key>AppleTV</key>
 		<dict>
@@ -5170,7 +5170,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>vquality_type_bitrate</key>
 			<true />
 			<key>x264_options</key>
-			<string>bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=1:cabac=0</string>
+			<string>bframes=3:ref=1:me=umh:no-fast-pskip=1:trellis=1:cabac=0</string>
 		</dict>
 		<key>Bedlam</key>
 		<dict>
@@ -5386,7 +5386,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>vquality_type_target</key>
 			<true />
 			<key>x264_options</key>
-			<string>ref=3:mixed-refs:bframes=16:bime:weightb:b-rdo:b-pyramid:direct=auto:me=umh:subme=6:trellis=1:analyse=all:8x8dct:no-fast-pskip</string>
+			<string>ref=3:mixed-refs:bframes=16:bime:weightb:b-rdo:b-pyramid:direct=auto:me=umh:trellis=1:analyse=all:8x8dct:no-fast-pskip</string>
 		</dict>
 		<key>Classic</key>
 		<dict>
@@ -5528,7 +5528,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>vquality_type_constant</key>
 			<true />
 			<key>x264_options</key>
-			<string>ref=3:mixed-refs:bframes=3:b-pyramid:b-rdo:bime:weightb:filter=-2,-1:subme=6:trellis=1:analyse=all:8x8dct:me=umh</string>
+			<string>ref=3:mixed-refs:bframes=3:b-pyramid:b-rdo:bime:weightb:filter=-2,-1:trellis=1:analyse=all:8x8dct:me=umh</string>
 		</dict>
 		<key>Deux Six Quatre</key>
 		<dict>
@@ -5744,7 +5744,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>vquality_type_bitrate</key>
 			<true />
 			<key>x264_options</key>
-			<string>ref=2:bframes=2:subme=5:me=umh</string>
+			<string>ref=2:bframes=2:me=umh</string>
 		</dict>
 		<key>PS3</key>
 		<dict>
@@ -5812,7 +5812,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>vquality_type_bitrate</key>
 			<true />
 			<key>x264_options</key>
-			<string>level=41:subme=5:me=umh</string>
+			<string>level=41:me=umh</string>
 		</dict>
 		<key>PSP</key>
 		<dict>
@@ -5954,7 +5954,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>vquality_type_bitrate</key>
 			<true />
 			<key>x264_options</key>
-			<string>ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:me=umh:subme=5:analyse=all:trellis=1:no-fast-pskip</string>
+			<string>ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:me=umh:analyse=all:trellis=1:no-fast-pskip</string>
 		</dict>
 		<key>Television</key>
 		<dict>
@@ -6026,7 +6026,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>vquality_type_bitrate</key>
 			<true />
 			<key>x264_options</key>
-			<string>ref=3:mixed-refs:bframes=6:bime:weightb:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip</string>
+			<string>ref=3:mixed-refs:bframes=6:bime:weightb:direct=auto:b-pyramid:me=umh:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip</string>
 		</dict>
 		<key>Xbox 360</key>
 		<dict>
@@ -6094,7 +6094,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>vquality_type_bitrate</key>
 			<true />
 			<key>x264_options</key>
-			<string>level=40:ref=2:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:no-fast-pskip:filter=-2,-1</string>
+			<string>level=40:ref=2:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:analyse=all:no-fast-pskip:filter=-2,-1</string>
 		</dict>
 		<key>iPhone / iPod Touch</key>
 		<dict>
@@ -6166,7 +6166,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>vquality_type_bitrate</key>
 			<true />
 			<key>x264_options</key>
-			<string>level=30:cabac=0:ref=1:analyse=all:me=umh:subme=6:no-fast-pskip=1:trellis=1</string>
+			<string>level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:trellis=1</string>
 		</dict>
 		<key>iPod High-Rez</key>
 		<dict>
@@ -6238,7 +6238,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>vquality_type_bitrate</key>
 			<true />
 			<key>x264_options</key>
-			<string>level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1</string>
+			<string>level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1</string>
 		</dict>
 		<key>iPod Low-Rez</key>
 		<dict>
@@ -6310,7 +6310,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>vquality_type_bitrate</key>
 			<true />
 			<key>x264_options</key>
-			<string>level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1</string>
+			<string>level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1</string>
 		</dict>
 	</dict>
 	<key>widget-deps</key>

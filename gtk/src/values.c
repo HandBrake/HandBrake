@@ -65,10 +65,6 @@ debug_show_type(GType tp)
 	{
 		str ="bool";
 	}
-	else if (tp == ghb_combodata_get_type())
-	{
-		str ="combo";
-	}
 	else if (tp == ghb_array_get_type())
 	{
 		str ="array";
@@ -218,8 +214,6 @@ ghb_value_cmp(const GValue *vala, const GValue *valb)
 
 	typa = G_VALUE_TYPE(vala);
 	typb = G_VALUE_TYPE(valb);
-	if (typa == ghb_combodata_get_type()) typa = G_TYPE_STRING;
-	if (typb == ghb_combodata_get_type()) typb = G_TYPE_STRING;
 	if (typa != typb)
 	{
 		return 1;
@@ -369,19 +363,6 @@ ghb_boolean_value_new(gboolean bval)
 }
 
 GValue*
-ghb_combo_value_new(
-	gint index,
-	const gchar *option,
-	const gchar *shortOpt,
-	const gchar *svalue,
-	gint ivalue)
-{
-	GValue *gval = ghb_value_new(ghb_combodata_get_type());
-    ghb_value_set_combodata(gval, index, option, shortOpt, svalue, ivalue);
-	return gval;
-}
-
-GValue*
 ghb_dict_value_new()
 {
 	GHashTable *dict;
@@ -426,96 +407,6 @@ ghb_rawdata_value_new(ghb_rawdata_t *data)
 	GValue *gval = ghb_value_new(ghb_rawdata_get_type());
 	g_value_take_boxed(gval, data);
 	return gval;
-}
-
-static gpointer
-combodata_copy(gpointer boxed)
-{
-	const ghb_combodata_t *combodata = (const ghb_combodata_t*)boxed;
-	ghb_combodata_t *copy = g_malloc0(sizeof(ghb_combodata_t));
-	if (combodata->option)
-		copy->option = g_strdup(combodata->option);
-	if (combodata->shortOpt)
-		copy->shortOpt = g_strdup(combodata->shortOpt);
-	if (combodata->svalue)
-		copy->svalue = g_strdup(combodata->svalue);
-
-	copy->index = combodata->index;
-	copy->ivalue = combodata->ivalue;
-	return copy;
-}
-
-static void
-combodata_free(gpointer boxed)
-{
-	ghb_combodata_t *combodata = (ghb_combodata_t*)boxed;
-	if (combodata->option) 
-		g_free(combodata->option);
-	if (combodata->shortOpt) 
-		g_free(combodata->shortOpt);
-	if (combodata->svalue) 
-		g_free(combodata->svalue);
-	g_free(combodata);
-}
-
-
-static void
-xform_combodata_to_string(const GValue *combo, GValue *sval)
-{
-	const ghb_combodata_t *combodata = g_value_get_boxed(combo);
-	g_value_set_string(sval, combodata->shortOpt);
-}
-
-static void
-xform_combodata_to_int64(const GValue *combo, GValue *ival)
-{
-	const ghb_combodata_t *combodata = g_value_get_boxed(combo);
-	g_value_set_int64(ival, combodata->ivalue);
-}
-
-static void
-xform_combodata_to_double(const GValue *combo, GValue *dval)
-{
-	const ghb_combodata_t *combodata = g_value_get_boxed(combo);
-	g_value_set_double(dval, (gdouble)combodata->ivalue);
-}
-
-GType
-ghb_combodata_get_type(void)
-{
-	static GType type_id = 0;
-	if (!type_id)
-	{
-		type_id = g_boxed_type_register_static(
-					g_intern_static_string("GHBCombo"),
-					(GBoxedCopyFunc) combodata_copy,
-					(GBoxedFreeFunc) combodata_free);
-		g_value_register_transform_func(type_id, G_TYPE_STRING, 
-									xform_combodata_to_string);
-		g_value_register_transform_func(type_id, G_TYPE_INT64, 
-									xform_combodata_to_int64);
-		g_value_register_transform_func(type_id, G_TYPE_DOUBLE, 
-									xform_combodata_to_double);
-	}
-	return type_id;
-}
-
-void
-ghb_value_set_combodata(
-	GValue *gval, 
-	gint index,
-	const gchar *option,
-	const gchar *shortOpt,
-	const gchar *svalue,
-	gint ivalue)
-{
-	ghb_combodata_t combodata;
-	combodata.index = index;
-	combodata.option = (gchar*)option;
-	combodata.shortOpt = (gchar*)shortOpt;
-	combodata.svalue = (gchar*)svalue;
-	combodata.ivalue = ivalue;
-	g_value_set_boxed(gval, &combodata);
 }
 
 static gpointer

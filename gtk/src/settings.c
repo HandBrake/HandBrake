@@ -97,21 +97,6 @@ ghb_settings_set_boolean(GValue *settings, const gchar *key, gboolean bval)
 	ghb_dict_insert(settings, g_strdup(key), value);
 }
 
-void
-ghb_settings_set_combo(
-	GValue *settings, 
-	const gchar *key, 
-	gint index,
-	const gchar *option,
-	const gchar *shortOpt,
-	const gchar *svalue,
-	gint ivalue)
-{
-	GValue *value;
-	value = ghb_combo_value_new(index, option, shortOpt, svalue, ivalue);
-	ghb_dict_insert(settings, g_strdup(key), value);
-}
-
 GValue*
 ghb_settings_get_value(GValue *settings, const gchar *key)
 {
@@ -168,29 +153,15 @@ ghb_settings_get_string(GValue *settings, const gchar *key)
 }
 
 gint
-ghb_settings_get_combo_index(GValue *settings, const gchar *key)
+ghb_settings_combo_int(GValue *settings, const gchar *key)
 {
-	const GValue* value;
-	value = ghb_settings_get_value(settings, key);
-	if (value == NULL) return 0;
-	ghb_combodata_t *cd;
-	if (G_VALUE_TYPE(value) != ghb_combodata_get_type())
-		return 0;
-	cd = g_value_get_boxed(value);
-	return cd->index;
+	return ghb_lookup_combo_int(key, ghb_settings_get_value(settings, key));
 }
 
-gchar*
-ghb_settings_get_combo_option(GValue *settings, const gchar *key)
+const gchar*
+ghb_settings_combo_option(GValue *settings, const gchar *key)
 {
-	const GValue* value;
-	value = ghb_settings_get_value(settings, key);
-	if (value == NULL) return g_strdup("");
-	ghb_combodata_t *cd;
-	if (G_VALUE_TYPE(value) != ghb_combodata_get_type())
-		return g_strdup("");
-	cd = g_value_get_boxed(value);
-	return g_strdup(cd->option);
+	return ghb_lookup_combo_option(key, ghb_settings_get_value(settings, key));
 }
 
 // Map widget names to setting keys
@@ -274,49 +245,40 @@ ghb_widget_value(GtkWidget *widget)
 		g_debug("\tcombo_box");
 		GtkTreeModel *store;
 		GtkTreeIter iter;
-		gchar *shortOpt, *option, *svalue;
-		gint index, ivalue;
+		gchar *shortOpt;
 
-		index = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 		store = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
 		if (gtk_combo_box_get_active_iter(GTK_COMBO_BOX(widget), &iter))
 		{
-			gtk_tree_model_get(store, &iter, 0, &option, 2, &shortOpt, 
-							   3, &ivalue, 4, &svalue, -1);
-			value = ghb_combo_value_new(index, option, shortOpt, 
-										svalue, ivalue);
-			g_free(option);
+			gtk_tree_model_get(store, &iter, 2, &shortOpt, -1);
+			value = ghb_string_value_new(shortOpt);
 			g_free(shortOpt);
-			g_free(svalue);
 		}
 		else
 		{
-			value = ghb_combo_value_new(-1, "", "", "", 0);
+			value = ghb_string_value_new("");
 		}
-		g_debug("\tdone");
 	}
 	else if (type == GTK_TYPE_COMBO_BOX_ENTRY)
 	{
 		GtkTreeModel *store;
 		GtkTreeIter iter;
-		gchar *shortOpt, *option, *svalue;
-		gint index, ivalue;
+		gchar *shortOpt;
 
-		index = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+		g_debug("\tcombo_box_entry");
 		store = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
 		if (gtk_combo_box_get_active_iter(GTK_COMBO_BOX(widget), &iter))
 		{
-			gtk_tree_model_get(store, &iter, 0, &option, 2, &shortOpt, 
-							   3, &ivalue, 4, &svalue, -1);
-			value = ghb_combo_value_new(index, option, shortOpt, 
-										svalue, ivalue);
+			gtk_tree_model_get(store, &iter, 2, &shortOpt, -1);
+			value = ghb_string_value_new(shortOpt);
+			g_free(shortOpt);
 		}
 		else
 		{
 			const gchar *str;
 			str = gtk_combo_box_get_active_text(GTK_COMBO_BOX(widget));
 			if (str == NULL) str = "";
-			value = ghb_combo_value_new(-1, str, str, str, -1);
+			value = ghb_string_value_new(str);
 		}
 	}
 	else if (type == GTK_TYPE_SPIN_BUTTON)
@@ -407,23 +369,15 @@ ghb_widget_int(GtkWidget *widget)
 }
 
 gint
-ghb_widget_index(GtkWidget *widget)
+ghb_widget_boolean(GtkWidget *widget)
 {
 	GValue *value;
-	gint index = 0;
+	gboolean bval;
 	
 	value = ghb_widget_value(widget);
-	if (value == NULL) return 0;
-	ghb_combodata_t *cd;
-	if (G_VALUE_TYPE(value) != ghb_combodata_get_type())
-	{
-		ghb_value_free(value);
-		return 0;
-	}
-	cd = g_value_get_boxed(value);
-	index = cd->index;
+	bval = ghb_value_boolean(value);
 	ghb_value_free(value);
-	return index;
+	return bval;
 }
 
 void
@@ -456,6 +410,7 @@ update_widget(GtkWidget *widget, const GValue *value)
 	gint ival;
 	gdouble dval;
 
+	g_debug("update_widget");
 	type = G_VALUE_TYPE(value);
 	if (type == ghb_array_get_type() || type == ghb_dict_get_type())
 		return;
@@ -612,6 +567,7 @@ ghb_ui_update(signal_user_data_t *ud, const gchar *name, const GValue *value)
 {
 	GObject *object;
 
+	g_debug("ghb_ui_update() %s", name);
 	if (name == NULL || value == NULL)
 		return 0;
 	object = GHB_OBJECT(ud->builder, name);
@@ -689,7 +645,7 @@ struct x264_opt_map_s x264_opt_map[] =
 	{x264_bpyramid_syns, "x264_bpyramid", "0", X264_OPT_BOOL},
 	{x264_me_syns, "x264_me", "hex", X264_OPT_COMBO},
 	{x264_merange_syns, "x264_merange", "16", X264_OPT_INT},
-	{x264_subme_syns, "x264_subme", "4", X264_OPT_COMBO},
+	{x264_subme_syns, "x264_subme", "6", X264_OPT_COMBO},
 	{x264_analyse_syns, "x264_analyse", "some", X264_OPT_COMBO},
 	{x264_8x8dct_syns, "x264_8x8dct", "0", X264_OPT_BOOL},
 	{x264_deblock_syns, "x264_deblock_alpha", "0,0", X264_OPT_DEBLOCK},
@@ -1114,7 +1070,10 @@ ghb_sanitize_x264opts(signal_user_data_t *ud, const gchar *options)
 	{
 		x264_remove_opt(split, x264_mixed_syns);
 	}
-	gint subme = ghb_settings_get_int(ud->settings, "x264_subme");
+	gint subme;
+
+	subme = ghb_lookup_combo_int("x264_subme",
+					ghb_settings_get_value(ud->settings, "x264_subme"));
 	if (subme < 6)
 	{
 		x264_remove_opt(split, x264_brdo_syns);
@@ -1140,7 +1099,9 @@ ghb_sanitize_x264opts(signal_user_data_t *ud, const gchar *options)
 	{
 		x264_remove_opt(split, x264_trellis_syns);
 	}
-	gint analyse = ghb_settings_get_int(ud->settings, "x264_analyse");
+	gint analyse;
+	analyse = ghb_lookup_combo_int("x264_analyse",
+						ghb_settings_get_value(ud->settings, "x264_analyse"));
 	if (analyse == 1)
 	{
 		x264_remove_opt(split, x264_direct_syns);

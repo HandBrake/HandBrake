@@ -72,9 +72,6 @@ void ghb_settings_set_int64(GValue *settings, const gchar *key, gint64 ival);
 void ghb_settings_set_int(GValue *settings, const gchar *key, gint ival);
 void ghb_settings_set_boolean(
 	GValue *settings, const gchar *key, gboolean bval);
-void ghb_settings_set_combo(
-	GValue *settings, const gchar *key, gint index, const gchar *option,
-	const gchar *shortOpt, const gchar *svalue, gint ivalue);
 void ghb_settings_copy(
 	GValue *settings, const gchar *key, const GValue *value);
 GValue* ghb_settings_get_value(GValue *settings, const gchar *key);
@@ -83,15 +80,15 @@ gint64 ghb_settings_get_int64(GValue *settings, const gchar *key);
 gint ghb_settings_get_int(GValue *settings, const gchar *key);
 gdouble ghb_settings_get_double(GValue *settings, const gchar *key);
 gchar* ghb_settings_get_string(GValue *settings, const gchar *key);
-gint ghb_settings_get_combo_index(GValue *settings, const gchar *key);
-gchar* ghb_settings_get_combo_option(GValue *settings, const gchar *name);
+gint ghb_settings_combo_int(GValue *settings, const gchar *key);
+const gchar* ghb_settings_combo_option(GValue *settings, const gchar *key);
 
 GValue* ghb_widget_value(GtkWidget *widget);
 gchar* ghb_widget_string(GtkWidget *widget);
 gdouble ghb_widget_double(GtkWidget *widget);
 gint64 ghb_widget_int64(GtkWidget *widget);
 gint ghb_widget_int(GtkWidget *widget);
-gint ghb_widget_index(GtkWidget *widget);
+gint ghb_widget_boolean(GtkWidget *widget);
 
 void ghb_widget_to_setting(GValue *settings, GtkWidget *widget);
 int ghb_ui_update(

@@ -25,24 +25,6 @@ typedef struct
 	gsize size;
 } ghb_rawdata_t;
 
-typedef struct
-{
-	gint index;
-	gchar *option;
-	gchar *shortOpt;
-	gchar *svalue;
-	gint ivalue;
-} ghb_combodata_t;
-
-GType ghb_combodata_get_type(void);
-void ghb_value_set_combodata(
-	GValue *gval, 
-	gint index,
-	const gchar *option,
-	const gchar *shortOpt,
-	const gchar *svalue,
-	gint ivalue);
-
 GType ghb_rawdata_get_type(void);
 
 GType ghb_array_get_type(void);
@@ -74,12 +56,6 @@ GValue* ghb_int64_value_new(gint64 ival);
 GValue* ghb_int_value_new(gint ival);
 GValue* ghb_double_value_new(gdouble dval);
 GValue* ghb_boolean_value_new(gboolean bval);
-GValue* ghb_combo_value_new(
-	gint index,
-	const gchar *option,
-	const gchar *shortOpt,
-	const gchar *svalue,
-	gint ivalue);
 GValue* ghb_dict_value_new(void);
 GValue* ghb_array_value_new(guint size);
 void ghb_array_value_reset(GValue *gval, guint size);

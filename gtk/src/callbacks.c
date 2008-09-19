@@ -150,8 +150,11 @@ check_dependency(signal_user_data_t *ud, GtkWidget *widget)
 	GValue *array, *data;
 	gint count, ii;
 	gchar *dep_name;
+	GType type;
 
-	if (ghb_widget_index(widget) < 0) return;
+	type = GTK_WIDGET_TYPE(widget);
+	if (type == GTK_TYPE_COMBO_BOX || type == GTK_TYPE_COMBO_BOX_ENTRY)
+		if (gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) < 0) return;
 
 	name = gtk_widget_get_name(widget);
 	g_debug("check_dependency () %s", name);
@@ -963,16 +966,17 @@ adjust_audio_rate_combos(signal_user_data_t *ud)
 	GtkWidget *widget;
 	
 	g_debug("adjust_audio_rate_combos ()");
-	titleindex = ghb_settings_get_combo_index(ud->settings, "title");
+	titleindex = ghb_settings_combo_int(ud->settings, "title");
 
 	widget = GHB_WIDGET(ud->builder, "audio_track");
-	audioindex = ghb_widget_int(widget);
+	audioindex = ghb_lookup_combo_int("audio_track", ghb_widget_value(widget));
 
 	widget = GHB_WIDGET(ud->builder, "audio_codec");
-	acodec = ghb_widget_int(widget);
+	acodec = ghb_lookup_combo_int("audio_codec", ghb_widget_value(widget));
 
 	if (ghb_audio_is_passthru (acodec))
 	{
+		ghb_set_default_bitrate_opts (ud->builder, -1);
 		if (ghb_get_audio_info (&ainfo, titleindex, audioindex))
 		{
 			gint br = ainfo.bitrate / 1000;
@@ -984,6 +988,7 @@ adjust_audio_rate_combos(signal_user_data_t *ud)
 		}
 		else
 		{
+			ghb_ui_update(ud, "audio_bitrate", ghb_int64_value(384));
 			ghb_ui_update(ud, "audio_rate", ghb_int64_value(0));
 			ghb_ui_update(ud, "audio_mix", ghb_int64_value(0));
 		}
@@ -993,7 +998,7 @@ adjust_audio_rate_combos(signal_user_data_t *ud)
 		gint br;
 
 		widget = GHB_WIDGET(ud->builder, "audio_bitrate");
-		br = ghb_widget_int(widget);
+		br = ghb_lookup_combo_int("audio_bitrate", ghb_widget_value(widget));
 		if (br > 160)
 			ghb_ui_update(ud, "audio_bitrate", ghb_int64_value(160));
 		ghb_set_default_bitrate_opts (ud->builder, 160);
@@ -1039,7 +1044,7 @@ set_pref_audio(gint titleindex, signal_user_data_t *ud)
 		rate = ghb_settings_get_value(audio, "audio_rate");
 		mix = ghb_settings_get_value(audio, "audio_mix");
 		drc = ghb_settings_get_value(audio, "audio_drc");
-		acodec_code = ghb_lookup_acodec(acodec);
+		acodec_code = ghb_lookup_combo_int("audio_codec", acodec);
 		// If there are multiple audios using the same codec, then
 		// select sequential tracks for each.  This hash keeps track 
 		// of the last used track for each codec.
@@ -1083,7 +1088,7 @@ set_pref_audio(gint titleindex, signal_user_data_t *ud)
 				// This gets set autimatically if the codec is passthru
 				ghb_ui_update(ud, "audio_bitrate", bitrate);
 				ghb_ui_update(ud, "audio_rate", rate);
-				mix_code = ghb_lookup_mix(mix);
+				mix_code = ghb_lookup_combo_int("audio_mix", mix);
 				mix_code = ghb_get_best_mix(
 					titleindex, track, acodec_code, mix_code);
 				ghb_ui_update(ud, "audio_mix", ghb_int64_value(mix_code));
@@ -1108,7 +1113,9 @@ set_preview_image(signal_user_data_t *ud)
 	gint preview_width, preview_height, target_height, width, height;
 
 	g_debug("set_preview_button_image ()");
-	gint titleindex = ghb_settings_get_int(ud->settings, "title");
+	gint titleindex;
+
+	titleindex = ghb_settings_combo_int(ud->settings, "title");
 	if (titleindex < 0) return;
 	widget = GHB_WIDGET (ud->builder, "preview_frame");
 	gint frame = ghb_widget_int(widget) - 1;
@@ -1155,9 +1162,10 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_widget_to_setting(ud->settings, widget);
 	check_dependency(ud, widget);
 
-	titleindex = ghb_settings_get_int(ud->settings, "title");
+	titleindex = ghb_settings_combo_int(ud->settings, "title");
 	ghb_update_ui_combo_box (ud->builder, "audio_track", titleindex, FALSE);
 	ghb_update_ui_combo_box (ud->builder, "subtitle_lang", titleindex, FALSE);
+
 	preset = ghb_settings_get_string (ud->settings, "preset");
 	ghb_update_from_preset(ud, preset, "subtitle_lang");
 	g_free(preset);
@@ -1191,18 +1199,21 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	GValue *asettings;
 	
 	g_debug("audio_codec_changed_cb ()");
-	acodec_code = ghb_widget_int(widget);
+	acodec_code = ghb_lookup_combo_int("audio_codec", ghb_widget_value(widget));
 	if (ghb_audio_is_passthru (prev_acodec) && 
 		!ghb_audio_is_passthru (acodec_code))
 	{
 		// Transition from passthru to not, put some audio settings back to 
 		// pref settings
-		gint titleindex = ghb_settings_get_int(ud->settings, "title");
-		gint track = ghb_settings_get_int(ud->settings, "audio_track");
+		gint titleindex;
+		gint track;
+
+		titleindex = ghb_settings_combo_int(ud->settings, "title");
+		track = ghb_settings_combo_int(ud->settings, "audio_track");
 
 		ghb_ui_update(ud, "audio_bitrate", ghb_string_value("160"));
 		ghb_ui_update(ud, "audio_rate", ghb_string_value("source"));
-		mix_code = ghb_lookup_mix(ghb_string_value("dpl2"));
+		mix_code = ghb_lookup_combo_int("audio_mix", ghb_string_value("dpl2"));
 		mix_code = ghb_get_best_mix( titleindex, track, acodec_code, mix_code);
 		ghb_ui_update(ud, "audio_mix", ghb_int64_value(mix_code));
 		ghb_ui_update(ud, "audio_drc", ghb_double_value(1.0));
@@ -1247,13 +1258,12 @@ audio_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	asettings = get_selected_asettings(ud);
 	if (asettings != NULL)
 	{
-		gchar *track;
+		const gchar *track;
 
 		ghb_widget_to_setting(asettings, widget);
 		audio_list_refresh_selected(ud);
-		track = ghb_settings_get_combo_option(asettings, "audio_track");
+		track = ghb_settings_combo_option(asettings, "audio_track");
 		ghb_settings_set_string(asettings, "audio_track_long", track);
-		g_free(track);
 	}
 }
 
@@ -1295,7 +1305,7 @@ validate_filter_widget(signal_user_data_t *ud, const gchar *name)
 	const gchar *str;
 	gboolean foundit = FALSE;
 	GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
-	if (ghb_widget_index(GTK_WIDGET(combo)) < 0)
+	if (gtk_combo_box_get_active(combo) < 0)
 	{ // Validate user input
 		gchar *val = ghb_settings_get_string(ud->settings, name);
 		store = gtk_combo_box_get_model(combo);
@@ -1399,7 +1409,8 @@ target_size_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	clear_presets_selection(ud);
 	if (ghb_settings_get_boolean(ud->settings, "vquality_type_target"))
 	{
-		gint titleindex = ghb_settings_get_int(ud->settings, "title");
+		gint titleindex;
+		titleindex = ghb_settings_combo_int(ud->settings, "title");
 		gint bitrate = ghb_calculate_target_bitrate (ud->settings, titleindex);
 		ghb_ui_update(ud, "video_bitrate", ghb_int64_value(bitrate));
 	}
@@ -1408,14 +1419,15 @@ target_size_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 void
 start_chapter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
+	gint start, end;
 	const gchar *name = gtk_widget_get_name(widget);
+
 	g_debug("start_chapter_changed_cb () %s", name);
 	ghb_widget_to_setting(ud->settings, widget);
-	GtkWidget *end_ch = GHB_WIDGET (ud->builder, "end_chapter");
-	gdouble start, end;
-	gtk_spin_button_get_range (GTK_SPIN_BUTTON(end_ch), &start, &end);
 	start = ghb_settings_get_int(ud->settings, "start_chapter");
-	gtk_spin_button_set_range (GTK_SPIN_BUTTON(end_ch), start, end);
+	end = ghb_settings_get_int(ud->settings, "end_chapter");
+	if (start > end)
+		ghb_ui_update(ud, "end_chapter", ghb_int_value(start));
 	check_dependency(ud, widget);
 	if (ghb_settings_get_boolean(ud->settings, "chapters_in_destination"))
 	{
@@ -1426,14 +1438,15 @@ start_chapter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 void
 end_chapter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
+	gint start, end;
 	const gchar *name = gtk_widget_get_name(widget);
+
 	g_debug("end_chapter_changed_cb () %s", name);
 	ghb_widget_to_setting(ud->settings, widget);
-	GtkWidget *start_ch = GHB_WIDGET (ud->builder, "start_chapter");
-	gdouble start, end;
-	gtk_spin_button_get_range (GTK_SPIN_BUTTON(start_ch), &start, &end);
+	start = ghb_settings_get_int(ud->settings, "start_chapter");
 	end = ghb_settings_get_int(ud->settings, "end_chapter");
-	gtk_spin_button_set_range (GTK_SPIN_BUTTON(start_ch), start, end);
+	if (start > end)
+		ghb_ui_update(ud, "start_chapter", ghb_int_value(end));
 	check_dependency(ud, widget);
 	if (ghb_settings_get_boolean(ud->settings, "chapters_in_destination"))
 	{
@@ -1490,7 +1503,7 @@ crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	crop[1] = ghb_settings_get_int(ud->settings, "crop_bottom");
 	crop[2] = ghb_settings_get_int(ud->settings, "crop_left");
 	crop[3] = ghb_settings_get_int(ud->settings, "crop_right");
-	titleindex = ghb_settings_get_combo_index(ud->settings, "title");
+	titleindex = ghb_settings_combo_int(ud->settings, "title");
 	if (ghb_get_title_info (&tinfo, titleindex))
 	{
 		gint width, height;
@@ -1654,8 +1667,8 @@ add_to_audio_list(signal_user_data_t *ud, GValue *settings)
 	GtkTreeIter iter;
 	GtkListStore *store;
 	GtkTreeSelection *selection;
-	gchar *track, *codec, *br, *sr, *mix, *drc;
-	gchar *s_track, *s_codec, *s_br, *s_sr, *s_mix;
+	const gchar *track, *codec, *br, *sr, *mix;
+	gchar *drc, *s_track, *s_codec, *s_br, *s_sr, *s_mix;
 	gdouble s_drc;
 	
 	g_debug("add_to_audio_list ()");
@@ -1663,19 +1676,19 @@ add_to_audio_list(signal_user_data_t *ud, GValue *settings)
 	selection = gtk_tree_view_get_selection (treeview);
 	store = GTK_LIST_STORE(gtk_tree_view_get_model(treeview));
 
-	track = ghb_settings_get_combo_option(settings, "audio_track"),
-	codec = ghb_settings_get_combo_option(settings, "audio_codec"),
-	br = ghb_settings_get_combo_option(settings, "audio_bitrate"),
-	sr = ghb_settings_get_combo_option(settings, "audio_rate"),
-	mix = ghb_settings_get_combo_option(settings, "audio_mix"),
+	track = ghb_settings_combo_option(settings, "audio_track");
+	codec = ghb_settings_combo_option(settings, "audio_codec");
+	br = ghb_settings_combo_option(settings, "audio_bitrate");
+	sr = ghb_settings_combo_option(settings, "audio_rate");
+	mix = ghb_settings_combo_option(settings, "audio_mix");
 	drc = ghb_settings_get_string(settings, "audio_drc");
 
-	s_track = ghb_settings_get_string(settings, "audio_track"),
-	s_codec = ghb_settings_get_string(settings, "audio_codec"),
-	s_br = ghb_settings_get_string(settings, "audio_bitrate"),
-	s_sr = ghb_settings_get_string(settings, "audio_rate"),
-	s_mix = ghb_settings_get_string(settings, "audio_mix"),
-	s_drc = ghb_settings_get_double(settings, "audio_drc"),
+	s_track = ghb_settings_get_string(settings, "audio_track");
+	s_codec = ghb_settings_get_string(settings, "audio_codec");
+	s_br = ghb_settings_get_string(settings, "audio_bitrate");
+	s_sr = ghb_settings_get_string(settings, "audio_rate");
+	s_mix = ghb_settings_get_string(settings, "audio_mix");
+	s_drc = ghb_settings_get_double(settings, "audio_drc");
 
 	gtk_list_store_append(store, &iter);
 	gtk_list_store_set(store, &iter, 
@@ -1695,11 +1708,6 @@ add_to_audio_list(signal_user_data_t *ud, GValue *settings)
 		11, s_drc,
 		-1);
 	gtk_tree_selection_select_iter(selection, &iter);
-	g_free(track);
-	g_free(codec);
-	g_free(br);
-	g_free(sr);
-	g_free(mix);
 	g_free(drc);
 	g_free(s_track);
 	g_free(s_codec);
@@ -1726,8 +1734,8 @@ audio_list_refresh_selected(signal_user_data_t *ud)
 	selection = gtk_tree_view_get_selection (treeview);
 	if (gtk_tree_selection_get_selected(selection, &store, &iter))
 	{
-		gchar *track, *codec, *br, *sr, *mix, *drc;
-		gchar *s_track, *s_codec, *s_br, *s_sr, *s_mix;
+		const gchar *track, *codec, *br, *sr, *mix;
+		gchar *drc, *s_track, *s_codec, *s_br, *s_sr, *s_mix;
 		gdouble s_drc;
 		// Get the row number
 		treepath = gtk_tree_model_get_path (store, &iter);
@@ -1741,19 +1749,19 @@ audio_list_refresh_selected(signal_user_data_t *ud)
 			return;
 		asettings = ghb_array_get_nth(audio_list, row);
 
-		track = ghb_settings_get_combo_option(asettings, "audio_track"),
-		codec = ghb_settings_get_combo_option(asettings, "audio_codec"),
-		br = ghb_settings_get_combo_option(asettings, "audio_bitrate"),
-		sr = ghb_settings_get_combo_option(asettings, "audio_rate"),
-		mix = ghb_settings_get_combo_option(asettings, "audio_mix"),
+		track = ghb_settings_combo_option(asettings, "audio_track");
+		codec = ghb_settings_combo_option(asettings, "audio_codec");
+		br = ghb_settings_combo_option(asettings, "audio_bitrate");
+		sr = ghb_settings_combo_option(asettings, "audio_rate");
+		mix = ghb_settings_combo_option(asettings, "audio_mix");
 		drc = ghb_settings_get_string(asettings, "audio_drc");
 
-		s_track = ghb_settings_get_string(asettings, "audio_track"),
-		s_codec = ghb_settings_get_string(asettings, "audio_codec"),
-		s_br = ghb_settings_get_string(asettings, "audio_bitrate"),
-		s_sr = ghb_settings_get_string(asettings, "audio_rate"),
-		s_mix = ghb_settings_get_string(asettings, "audio_mix"),
-		s_drc = ghb_settings_get_double(asettings, "audio_drc"),
+		s_track = ghb_settings_get_string(asettings, "audio_track");
+		s_codec = ghb_settings_get_string(asettings, "audio_codec");
+		s_br = ghb_settings_get_string(asettings, "audio_bitrate");
+		s_sr = ghb_settings_get_string(asettings, "audio_rate");
+		s_mix = ghb_settings_get_string(asettings, "audio_mix");
+		s_drc = ghb_settings_get_double(asettings, "audio_drc");
 
 		gtk_list_store_set(GTK_LIST_STORE(store), &iter, 
 			// These are displayed in list
@@ -1771,11 +1779,6 @@ audio_list_refresh_selected(signal_user_data_t *ud)
 			10, s_mix,
 			11, s_drc,
 			-1);
-		g_free(track);
-		g_free(codec);
-		g_free(br);
-		g_free(sr);
-		g_free(mix);
 		g_free(drc);
 		g_free(s_track);
 		g_free(s_codec);
@@ -1830,6 +1833,7 @@ audio_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t 
 	{
 		const gchar *track, *codec, *bitrate, *sample_rate, *mix;
 		gdouble drc;
+
 		gtk_tree_model_get(store, &iter,
 						   6, &track,
 						   7, &codec,
@@ -1866,7 +1870,7 @@ audio_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	GtkWidget *widget;
 	gint count;
 	GValue *audio_list;
-	gchar *track;
+	const gchar *track;
 	
 	g_debug("audio_add_clicked_cb ()");
 	asettings = ghb_dict_value_new();
@@ -1883,9 +1887,8 @@ audio_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	ghb_settings_take_value(asettings, "audio_mix", ghb_widget_value(widget));
 	widget = GHB_WIDGET(ud->builder, "audio_drc");
 	ghb_settings_take_value(asettings, "audio_drc", ghb_widget_value(widget));
-	track = ghb_settings_get_combo_option(asettings, "audio_track");
+	track = ghb_settings_combo_option(asettings, "audio_track");
 	ghb_settings_set_string(asettings, "audio_track_long", track);
-	g_free(track);
 
 	audio_list = ghb_settings_get_value(ud->settings, "audio_list");
 	if (audio_list == NULL)
@@ -1969,8 +1972,8 @@ audio_list_refresh(signal_user_data_t *ud)
 	{
 		do
 		{
-			gchar *track, *codec, *br, *sr, *mix, *drc;
-			gchar *s_track, *s_codec, *s_br, *s_sr, *s_mix;
+			const gchar *track, *codec, *br, *sr, *mix;
+			gchar *drc, *s_track, *s_codec, *s_br, *s_sr, *s_mix;
 			gdouble s_drc;
 			GValue *asettings;
 
@@ -1979,18 +1982,18 @@ audio_list_refresh(signal_user_data_t *ud)
 				return;
 			asettings = ghb_array_get_nth(audio_list, row);
 
-			track = ghb_settings_get_combo_option(asettings, "audio_track"),
-			codec = ghb_settings_get_combo_option(asettings, "audio_codec"),
-			br = ghb_settings_get_combo_option(asettings, "audio_bitrate"),
-			sr = ghb_settings_get_combo_option(asettings, "audio_rate"),
-			mix = ghb_settings_get_combo_option(asettings, "audio_mix"),
+			track = ghb_settings_combo_option(asettings, "audio_track");
+			codec = ghb_settings_combo_option(asettings, "audio_codec");
+			br = ghb_settings_combo_option(asettings, "audio_bitrate");
+			sr = ghb_settings_combo_option(asettings, "audio_rate");
+			mix = ghb_settings_combo_option(asettings, "audio_mix");
 			drc = ghb_settings_get_string(asettings, "audio_drc");
 
-			s_track = ghb_settings_get_string(asettings, "audio_track"),
-			s_codec = ghb_settings_get_string(asettings, "audio_codec"),
-			s_br = ghb_settings_get_string(asettings, "audio_bitrate"),
-			s_sr = ghb_settings_get_string(asettings, "audio_rate"),
-			s_mix = ghb_settings_get_string(asettings, "audio_mix"),
+			s_track = ghb_settings_get_string(asettings, "audio_track");
+			s_codec = ghb_settings_get_string(asettings, "audio_codec");
+			s_br = ghb_settings_get_string(asettings, "audio_bitrate");
+			s_sr = ghb_settings_get_string(asettings, "audio_rate");
+			s_mix = ghb_settings_get_string(asettings, "audio_mix");
 			s_drc = ghb_settings_get_double(asettings, "audio_drc");
 
 			gtk_list_store_set(GTK_LIST_STORE(store), &iter, 
@@ -2009,11 +2012,6 @@ audio_list_refresh(signal_user_data_t *ud)
 				10, s_mix,
 				11, s_drc,
 				-1);
-			g_free(track);
-			g_free(codec);
-			g_free(br);
-			g_free(sr);
-			g_free(mix);
 			g_free(drc);
 			g_free(s_track);
 			g_free(s_codec);
@@ -2325,7 +2323,8 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
 		// it shouldn't be
 		clear_audio_list(ud);
 		ghb_set_preset(ud, preset);
-		gint titleindex = ghb_settings_get_int(ud->settings, "title");
+		gint titleindex;
+		titleindex = ghb_settings_combo_int(ud->settings, "title");
 		set_pref_audio(titleindex, ud);
 		ghb_settings_set_boolean(ud->settings, "preset_modified", FALSE);
 		ud->dont_clear_presets = FALSE;
@@ -2390,14 +2389,13 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	gint title, start_chapter, end_chapter, width, height, vqvalue;
 	gint source_width, source_height;
 	gboolean pass2, anamorphic, round_dim, keep_aspect, vqtype, turbo;
-	GValue *gval;
 	
 	g_debug("update_queue_list ()");
 	if (settings == NULL) return;
 	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
 	store = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
 		
-	title = ghb_settings_get_int(settings, "title");
+	title = ghb_settings_combo_int(settings, "title");
 	start_chapter = ghb_settings_get_int(settings, "start_chapter");
 	end_chapter = ghb_settings_get_int(settings, "end_chapter");
 	pass2 = ghb_settings_get_boolean(settings, "two_pass");
@@ -2441,9 +2439,8 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	gboolean preset_modified;
 	gint mux;
 
-	gval = ghb_settings_get_value(settings, "container");
-	container = ghb_lookup_container_option(gval);
-	mux = ghb_lookup_container(gval);
+	container = ghb_settings_combo_option(settings, "container");
+	mux = ghb_settings_combo_int(settings, "container");
 	dest = ghb_settings_get_string(settings, "destination");
 	preset_modified = ghb_settings_get_boolean(settings, "preset_modified");
 	preset = ghb_settings_get_string(settings, "preset");
@@ -2550,8 +2547,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		g_free(fps);
 		fps = g_strdup("Same As Source");
 	}
-	gval = ghb_settings_get_value(settings, "video_codec");
-	vcodec = ghb_lookup_vcodec_option(gval);
+	vcodec = ghb_settings_combo_option(settings, "video_codec");
 	vcodec_abbr = ghb_settings_get_string(settings, "video_codec");
 	source_width = ghb_settings_get_int(settings, "source_width");
 	source_height = ghb_settings_get_int(settings, "source_height");
@@ -2586,8 +2582,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 
 		asettings = ghb_array_get_nth(audio_list, ii);
 
-		gval = ghb_settings_get_value(asettings, "audio_codec");
-		acodec = ghb_lookup_acodec_option(gval);
+		acodec = ghb_settings_combo_option(asettings, "audio_codec");
 		bitrate = ghb_settings_get_string(asettings, "audio_bitrate");
 		samplerate = ghb_settings_get_string(asettings, "audio_rate");
 		if (strcmp("source", samplerate) == 0)
@@ -2596,8 +2591,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 			samplerate = g_strdup("Same As Source");
 		}
 		track = ghb_settings_get_string(asettings, "audio_track_long");
-		gval = ghb_settings_get_value(asettings, "audio_mix");
-		mix = ghb_lookup_mix_option(gval);
+		mix = ghb_settings_combo_option(asettings, "audio_mix");
 		g_string_append_printf(str,
 			"<b>Audio:</b> %s, Encoder: %s, Mixdown: %s, SampleRate: %s, Bitrate: %s",
 			 track, acodec, mix, samplerate, bitrate);
@@ -2647,7 +2641,9 @@ estimate_file_size(signal_user_data_t *ud)
 	gint duration;
 	gint bitrate;
 	gint64 size;
-	gint titleindex = ghb_settings_get_int(ud->settings, "title");
+	gint titleindex;
+
+	titleindex = ghb_settings_combo_int(ud->settings, "title");
 	if (titleindex < 0) return 0;
 			
 	if (!ghb_get_title_info(&tinfo, titleindex)) return 0;
@@ -2666,8 +2662,9 @@ validate_settings(signal_user_data_t *ud)
 	// already in the queue
 	gchar *message, *dest;
 	gint count, ii;
-	gint titleindex = ghb_settings_get_int(ud->settings, "title");
+	gint titleindex;
 
+	titleindex = ghb_settings_combo_int(ud->settings, "title");
 	if (titleindex < 0) return FALSE;
 	dest = ghb_settings_get_string(ud->settings, "destination");
 	count = ghb_array_len(ud->queue);
@@ -2823,7 +2820,7 @@ queue_add(signal_user_data_t *ud)
 	settings = ghb_value_dup(ud->settings);
 	ghb_settings_set_int(settings, "job_status", GHB_QUEUE_PENDING);
 	ghb_settings_set_int(settings, "job_unique_id", 0);
-	titleindex = ghb_settings_get_int(settings, "title");
+	titleindex = ghb_settings_combo_int(settings, "title");
 	titlenum = ghb_get_title_number(titleindex);
 	ghb_settings_set_int(settings, "titlenum", titlenum);
 	ghb_array_append(ud->queue, settings);
@@ -3157,7 +3154,7 @@ queue_buttons_grey(signal_user_data_t *ud, gboolean working)
 	gboolean title_ok;
 
 	queue_count = ghb_array_len(ud->queue);
-	titleindex = ghb_settings_get_int(ud->settings, "title");
+	titleindex = ghb_settings_combo_int(ud->settings, "title");
 	title_ok = (titleindex >= 0);
 
 	widget = GHB_WIDGET (ud->builder, "queue_start1");
@@ -3715,7 +3712,7 @@ update_chapter_list(signal_user_data_t *ud)
 	gint count;
 	
 	g_debug("update_chapter_list ()");
-	titleindex = ghb_settings_get_combo_index(ud->settings, "title");
+	titleindex = ghb_settings_combo_int(ud->settings, "title");
 	chapters = ghb_get_chapters(titleindex);
 	count = ghb_array_len(chapters);
 	if (chapters)
@@ -3887,7 +3884,9 @@ queue_list_size_allocate_cb(GtkWidget *widget, GtkAllocation *allocation, GtkCel
 void
 preview_button_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
-	gint titleindex = ghb_settings_get_int(ud->settings, "title");
+	gint titleindex;
+
+	titleindex = ghb_settings_combo_int(ud->settings, "title");
 	if (titleindex < 0) return;
 	g_debug("titleindex %d", titleindex);
 
@@ -4236,67 +4235,67 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 static gboolean
 dbus_init (void)
 {
-    DBusError error;
+	DBusError error;
 
-    if (dbus_connection != NULL)
-        return TRUE;
+	if (dbus_connection != NULL)
+		return TRUE;
 
-    dbus_error_init (&error);
-    if (!(dbus_connection = dbus_bus_get (DBUS_BUS_SYSTEM, &error))) {
-        g_debug ("could not get system bus: %s", error.message);
-        dbus_error_free (&error);
-        return FALSE;
-    }
+	dbus_error_init (&error);
+	if (!(dbus_connection = dbus_bus_get (DBUS_BUS_SYSTEM, &error))) {
+		g_debug ("could not get system bus: %s", error.message);
+		dbus_error_free (&error);
+		return FALSE;
+	}
 
-    //dbus_connection_setup_with_g_main (dbus_connection, NULL);
-    //dbus_connection_set_exit_on_disconnect (dbus_connection, FALSE);
-    //dbus_connection_add_filter (dbus_connection, gvm_dbus_filter_function, NULL, NULL);
+	//dbus_connection_setup_with_g_main (dbus_connection, NULL);
+	//dbus_connection_set_exit_on_disconnect (dbus_connection, FALSE);
+	//dbus_connection_add_filter (dbus_connection, gvm_dbus_filter_function, NULL, NULL);
 
-    return TRUE;
+	return TRUE;
 }
 
 void
 ghb_hal_init()
 {
-    DBusError error;
-    char **devices;
-    int nr;
+	DBusError error;
+	char **devices;
+	int nr;
 
-    if (!dbus_init ())
-        return;
+	if (!dbus_init ())
+		return;
 
-    if (!(hal_ctx = libhal_ctx_new ())) {
-        g_warning ("failed to create a HAL context!");
-        return;
-    }
+	if (!(hal_ctx = libhal_ctx_new ())) {
+		g_warning ("failed to create a HAL context!");
+		return;
+	}
 
-    libhal_ctx_set_dbus_connection (hal_ctx, dbus_connection);
-    dbus_error_init (&error);
-    if (!libhal_ctx_init (hal_ctx, &error)) {
-        g_warning ("libhal_ctx_init failed: %s", error.message ? error.message : "unknown");
-        dbus_error_free (&error);
-        libhal_ctx_free (hal_ctx);
-        return;
-    }
+	libhal_ctx_set_dbus_connection (hal_ctx, dbus_connection);
+	dbus_error_init (&error);
+	if (!libhal_ctx_init (hal_ctx, &error)) {
+		g_warning ("libhal_ctx_init failed: %s", error.message ? error.message : "unknown");
+		dbus_error_free (&error);
+		libhal_ctx_free (hal_ctx);
+		return;
+	}
 
-    /*
-     * Do something to ping the HAL daemon - the above functions will
-     * succeed even if hald is not running, so long as DBUS is.  But we
-     * want to exit silently if hald is not running, to behave on
-     * pre-2.6 systems.
-     */
-    if (!(devices = libhal_get_all_devices (hal_ctx, &nr, &error))) {
-        g_warning ("seems that HAL is not running: %s", error.message ? error.message : "unknown");
-        dbus_error_free (&error);
+	/*
+	 * Do something to ping the HAL daemon - the above functions will
+	 * succeed even if hald is not running, so long as DBUS is.  But we
+	 * want to exit silently if hald is not running, to behave on
+	 * pre-2.6 systems.
+	 */
+	if (!(devices = libhal_get_all_devices (hal_ctx, &nr, &error))) {
+		g_warning ("seems that HAL is not running: %s", error.message ? error.message : "unknown");
+		dbus_error_free (&error);
 
-        libhal_ctx_shutdown (hal_ctx, NULL);
-        libhal_ctx_free (hal_ctx);
-        return;
-    }
+		libhal_ctx_shutdown (hal_ctx, NULL);
+		libhal_ctx_free (hal_ctx);
+		return;
+	}
 
-    libhal_free_string_array (devices);
+	libhal_free_string_array (devices);
 
-    //gvm_hal_claim_branch ("/org/freedesktop/Hal/devices/local");
+	//gvm_hal_claim_branch ("/org/freedesktop/Hal/devices/local");
 }
 
 gboolean 

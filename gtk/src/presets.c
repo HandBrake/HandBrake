@@ -745,19 +745,22 @@ ghb_settings_save(signal_user_data_t *ud, const gchar *name)
 	while (g_hash_table_iter_next(
 			&iter, (gpointer*)(void*)&key, (gpointer*)(void*)&value))
 	{
+		const GValue *gval;
+		gchar *key2;
+
+		key2 = key;
 		if (!autoscale)
 		{
-			if (strcmp(key, "scale_width"))
+			if (strcmp(key, "max_width") == 0)
 			{
-				key = "max_width";
+				key2 = "scale_width";
 			}
-			if (strcmp(key, "scale_height"))
+			else if (strcmp(key, "max_height") == 0)
 			{
-				key = "max_height";
+				key2 = "scale_height";
 			}
 		}
-		const GValue *gval;
-		gval = ghb_settings_get_value(ud->settings, key);
+		gval = ghb_settings_get_value(ud->settings, key2);
 		if (gval == NULL)
 		{
 			g_debug("Setting (%s) is not in defaults\n", (gchar*)key);
