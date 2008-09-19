@@ -130,7 +130,7 @@
     
     /*Sub Me fX264optSubmePopUp*/
     [fX264optSubmePopUp removeAllItems];
-    [fX264optSubmePopUp addItemWithTitle:@"Default (4)"];
+    [fX264optSubmePopUp addItemWithTitle:@"Default (6)"];
     for (i=0; i<8;i++)
     {
         [fX264optSubmePopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
@@ -435,7 +435,7 @@
         [[fX264optBiMESwitch animator] setHidden:NO];
         [[fX264optBiMELabel animator] setHidden:NO];
                 
-        if ( [fX264optSubmePopUp indexOfSelectedItem] >= 7)
+        if ( [fX264optSubmePopUp indexOfSelectedItem] >= 7 || [fX264optSubmePopUp indexOfSelectedItem] == 0 )
         {
             /* Only show B-RDO if both bframes and subme allow it. */
             [[fX264optBRDOSwitch animator] setHidden:NO];
@@ -460,7 +460,7 @@
         [[fX264optBiMESwitch animator] setHidden:NO];
         [[fX264optBiMELabel animator] setHidden:NO];
 
-        if ( [fX264optSubmePopUp indexOfSelectedItem] >= 7)
+        if ( [fX264optSubmePopUp indexOfSelectedItem] >= 7 || [fX264optSubmePopUp indexOfSelectedItem] == 0 )
         {
             /* Only show B-RDO if both bframes and subme allow it. */
             [[fX264optBRDOSwitch animator] setHidden:NO];
@@ -491,7 +491,7 @@
         [[fX264optTrellisLabel animator] setHidden:NO];
     }
     
-    if ( [fX264optSubmePopUp indexOfSelectedItem] < 7)
+    if ( [fX264optSubmePopUp indexOfSelectedItem] < 7 && [fX264optSubmePopUp indexOfSelectedItem] != 0 )
     {
         /* When subme < 6, B-RDO doesn't work. */
         [[fX264optBRDOSwitch animator] setHidden:YES];

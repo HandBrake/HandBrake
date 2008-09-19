@@ -76,7 +76,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
     
     /* x264 Option String */
-    [preset setObject:@"level=40:ref=2:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:no-fast-pskip:filter=-2,-1" forKey:@"x264Option"];
+    [preset setObject:@"level=40:ref=2:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:analyse=all:no-fast-pskip:filter=-2,-1" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
@@ -163,7 +163,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String */
-    [preset setObject:@"ref=5:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=5:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2" forKey:@"x264Option"];
+    [preset setObject:@"ref=5:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
@@ -256,7 +256,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String (We can use this to tweak the appleTV output)*/
-    [preset setObject:@"bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=1:cabac=0" forKey:@"x264Option"];
+    [preset setObject:@"bframes=3:ref=1:me=umh:no-fast-pskip=1:trellis=1:cabac=0" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
@@ -535,7 +535,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String */
-    [preset setObject:@"ref=3:mixed-refs:bframes=16:bime:weightb:b-rdo:b-pyramid:direct=auto:me=umh:subme=6:trellis=1:analyse=all:8x8dct:no-fast-pskip" forKey:@"x264Option"];
+    [preset setObject:@"ref=3:mixed-refs:bframes=16:bime:weightb:b-rdo:b-pyramid:direct=auto:me=umh:trellis=1:analyse=all:8x8dct:no-fast-pskip" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoQualityType"];
@@ -712,7 +712,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String */
-    [preset setObject:@"ref=3:mixed-refs:bframes=3:b-pyramid:b-rdo:bime:weightb:filter=-2,-1:subme=6:trellis=1:analyse=all:8x8dct:me=umh" forKey:@"x264Option"];
+    [preset setObject:@"ref=3:mixed-refs:bframes=3:b-pyramid:b-rdo:bime:weightb:filter=-2,-1:trellis=1:analyse=all:8x8dct:me=umh" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:2] forKey:@"VideoQualityType"];
@@ -988,7 +988,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"Mp4iPodCompatible"];
     /* x264 Option String */
-    [preset setObject:@"level=30:cabac=0:ref=1:analyse=all:me=umh:subme=6:no-fast-pskip=1:trellis=1" forKey:@"x264Option"];
+    [preset setObject:@"level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:trellis=1" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
@@ -1076,7 +1076,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"Mp4iPodCompatible"];
     /* x264 Option String */
-    [preset setObject:@"level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1" forKey:@"x264Option"];
+    [preset setObject:@"level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
@@ -1164,7 +1164,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"Mp4iPodCompatible"];
     /* x264 Option String */
-    [preset setObject:@"level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:subme=6:no-fast-pskip=1" forKey:@"x264Option"];
+    [preset setObject:@"level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
@@ -1252,7 +1252,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String */
-    [preset setObject:@"ref=2:bframes=2:subme=5:me=umh" forKey:@"x264Option"];
+    [preset setObject:@"ref=2:bframes=2:me=umh" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
@@ -1429,7 +1429,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String (We can use this to tweak the appleTV output)*/
-    [preset setObject:@"level=41:subme=5:me=umh" forKey:@"x264Option"];
+    [preset setObject:@"level=41:me=umh" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
@@ -1516,7 +1516,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String */
-    [preset setObject:@"ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:me=umh:subme=5:analyse=all:trellis=1:no-fast-pskip" forKey:@"x264Option"];
+    [preset setObject:@"ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:me=umh:analyse=all:trellis=1:no-fast-pskip" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
@@ -1605,7 +1605,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String */
-    [preset setObject:@"ref=3:mixed-refs:bframes=6:bime:weightb:direct=auto:b-pyramid:me=umh:subme=6:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip" forKey:@"x264Option"];
+    [preset setObject:@"ref=3:mixed-refs:bframes=6:bime:weightb:direct=auto:b-pyramid:me=umh:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
