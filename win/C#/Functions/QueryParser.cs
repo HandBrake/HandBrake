@@ -818,6 +818,7 @@ namespace Handbrake.Functions
             Match detelecine = Regex.Match(input, @"--detelecine");
             Match anamorphic = Regex.Match(input, @" -p ");
             Match chapterMarkers = Regex.Match(input, @" -m");
+            Match chapterMarkersFileMode = Regex.Match(input, @"--markers");
             Match crop = Regex.Match(input, @"--crop ([0-9]*):([0-9]*):([0-9]*):([0-9]*)");
             Match vfr = Regex.Match(input, @" -V");
             Match lanamorphic = Regex.Match(input, @" -P");
@@ -1009,7 +1010,9 @@ namespace Handbrake.Functions
 
                 }
                 thisQuery.q_anamorphic = anamorphic.Success;
-                thisQuery.q_chapterMarkers = chapterMarkers.Success;
+                if (chapterMarkersFileMode.Success == true || chapterMarkers.Success == true)
+                    thisQuery.q_chapterMarkers = true;
+                
                 thisQuery.q_vfr = vfr.Success;
                 thisQuery.q_looseAnamorphic = lanamorphic.Success;
 

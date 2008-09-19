@@ -214,7 +214,7 @@ namespace Handbrake.Functions
             if (presetQuery.ChapterMarkers == true)
             {
                 mainWindow.Check_ChapterMarkers.CheckState = CheckState.Checked;
-                mainWindow.text_destination.Text = mainWindow.text_destination.Text.Replace(".mp4", ".m4v");
+                mainWindow.drop_format.SelectedIndex = 1;
             }
             else
                 mainWindow.Check_ChapterMarkers.CheckState = CheckState.Unchecked;
