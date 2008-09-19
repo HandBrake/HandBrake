@@ -21,6 +21,18 @@
 #define MIN3(a,b,c) MIN(MIN(a,b),c)
 #define MAX3(a,b,c) MAX(MAX(a,b),c)
 
+typedef struct yadif_arguments_s {
+    uint8_t **dst;
+    int parity;
+    int tff;
+    int stop;
+    int is_combed;
+} yadif_arguments_t;
+
+typedef struct decomb_arguments_s {
+    int stop;
+} decomb_arguments_t;
+
 struct hb_filter_private_s
 {
     int              pix_fmt;
@@ -62,6 +74,19 @@ struct hb_filter_private_s
     AVPicture        pic_out;
     hb_buffer_t *    buf_out[2];
     hb_buffer_t *    buf_settings;
+    
+    int              cpu_count;
+
+    hb_thread_t    ** yadif_threads;         // Threads for Yadif - one per CPU
+    hb_lock_t      ** yadif_begin_lock;      // Thread has work
+    hb_lock_t      ** yadif_complete_lock;   // Thread has completed work
+    yadif_arguments_t *yadif_arguments;      // Arguments to thread for work
+    
+    hb_thread_t    ** decomb_threads;        // Threads for comb detection - one per CPU
+    hb_lock_t      ** decomb_begin_lock;     // Thread has work
+    hb_lock_t      ** decomb_complete_lock;  // Thread has completed work
+    decomb_arguments_t *decomb_arguments;    // Arguments to thread for work
+    
 };
 
 hb_filter_private_t * hb_decomb_init( int pix_fmt,
@@ -81,7 +106,7 @@ void hb_decomb_close( hb_filter_private_t * pv );
 hb_filter_object_t hb_filter_decomb =
 {
     FILTER_DECOMB,
-    "Deinterlaces selectively with yadif/mcdeint or lowpass5 blending",
+    "Deinterlaces selectively with yadif/mcdeint and lowpass5 blending",
     NULL,
     hb_decomb_init,
     hb_decomb_work,
@@ -328,7 +353,7 @@ int check_combing_mask( hb_filter_private_t * pv )
     }
 }
 
-int tritical_detect_comb( hb_filter_private_t * pv )
+int detect_combed_segment( hb_filter_private_t * pv, int segment_start, int segment_stop )
 {
     /* A mish-mash of various comb detection tricks
        picked up from neuron2's Decomb plugin for
@@ -352,8 +377,16 @@ int tritical_detect_comb( hb_filter_private_t * pv )
         int ref_stride  = pv->ref_stride[k];
         width           = pv->width[k];
         height          = pv->height[k];
-
-        for( y = 2; y < ( height - 2 ); y++ )
+        
+        /* Comb detection has to start at y = 2 and end at
+           y = height - 2, because it needs to examine
+           2 pixels above and 2 below the current pixel.      */
+        if( segment_start < 2 )
+            segment_start = 2;
+        if( segment_stop > height - 2 )
+            segment_stop = height - 2;
+            
+        for( y =  segment_start; y < segment_stop; y++ )
         {
             /* These are just to make the buffer locations easier to read. */
             int back_2    = ( y - 2 )*ref_stride ;
@@ -418,8 +451,8 @@ int tritical_detect_comb( hb_filter_private_t * pv )
                            
                     if( motion || ( pv->yadif_deinterlaced_frames==0 && pv->blend_deinterlaced_frames==0 && pv->unfiltered_frames==0) )
                     {
-                           /*That means it's time for the spatial check.
-                           We've got several options here.             */
+                           /* That means it's time for the spatial check.
+                              We've got several options here.             */
                         if( spatial_metric == 0 )
                         {
                             /* Simple 32detect style comb detection */
@@ -474,6 +507,105 @@ int tritical_detect_comb( hb_filter_private_t * pv )
                 }
             }
         }
+    }
+}
+
+typedef struct decomb_thread_arg_s {
+    hb_filter_private_t *pv;
+    int segment;
+} decomb_thread_arg_t;
+
+/*
+ * comb detect this segment of all three planes in a single thread.
+ */
+void decomb_filter_thread( void *thread_args_v )
+{
+    decomb_arguments_t *decomb_work = NULL;
+    hb_filter_private_t * pv;
+    int run = 1;
+    int segment, segment_start, segment_stop, plane;
+    decomb_thread_arg_t *thread_args = thread_args_v;
+
+    pv = thread_args->pv;
+    segment = thread_args->segment;
+
+    hb_log("decomb thread started for segment %d", segment);
+
+    while( run )
+    {
+        /*
+         * Wait here until there is work to do. hb_lock() blocks until
+         * render releases it to say that there is more work to do.
+         */
+        hb_lock( pv->decomb_begin_lock[segment] );
+
+        decomb_work = &pv->decomb_arguments[segment];
+
+        if( decomb_work->stop )
+        {
+            /*
+             * No more work to do, exit this thread.
+             */
+            run = 0;
+            continue;
+        } 
+
+        /*
+         * Process segment (for now just from luma)
+         */
+        for( plane = 0; plane < 1; plane++)
+        {
+
+            int w = pv->width[plane];
+            int h = pv->height[plane];
+            int ref_stride = pv->ref_stride[plane];
+            segment_start = ( h / pv->cpu_count ) * segment;
+            if( segment == pv->cpu_count - 1 )
+            {
+                /*
+                 * Final segment
+                 */
+                segment_stop = h;
+            } else {
+                segment_stop = ( h / pv->cpu_count ) * ( segment + 1 );
+            }
+            
+            detect_combed_segment( pv, segment_start, segment_stop );
+        }
+        /*
+         * Finished this segment, let everyone know.
+         */
+        hb_unlock( pv->decomb_complete_lock[segment] );
+    }
+    free( thread_args_v );
+}
+
+int comb_segmenter( hb_filter_private_t * pv )
+{
+    int segment;
+
+    for( segment = 0; segment < pv->cpu_count; segment++ )
+    {  
+        /*
+         * Let the thread for this plane know that we've setup work 
+         * for it by releasing the begin lock (ensuring that the
+         * complete lock is already locked so that we block when
+         * we try to lock it again below).
+         */
+        hb_lock( pv->decomb_complete_lock[segment] );
+        hb_unlock( pv->decomb_begin_lock[segment] );
+    }
+
+    /*
+     * Wait until all three threads have completed by trying to get
+     * the complete lock that we locked earlier for each thread, which
+     * will block until that thread has completed the work on that
+     * plane.
+     */
+    for( segment = 0; segment < pv->cpu_count; segment++ )
+    {
+        hb_lock( pv->decomb_complete_lock[segment] );
+        hb_unlock( pv->decomb_complete_lock[segment] );
     }
     
     return check_combing_mask( pv );
@@ -599,13 +731,124 @@ static void yadif_filter_line( uint8_t *dst,
     }
 }
 
+typedef struct yadif_thread_arg_s {
+    hb_filter_private_t *pv;
+    int segment;
+} yadif_thread_arg_t;
+
+/*
+ * deinterlace this segment of all three planes in a single thread.
+ */
+void yadif_decomb_filter_thread( void *thread_args_v )
+{
+    yadif_arguments_t *yadif_work = NULL;
+    hb_filter_private_t * pv;
+    int run = 1;
+    int plane;
+    int segment, segment_start, segment_stop;
+    yadif_thread_arg_t *thread_args = thread_args_v;
+    uint8_t **dst;
+    int parity, tff, y, w, h, ref_stride, is_combed;
+
+    pv = thread_args->pv;
+    segment = thread_args->segment;
+
+    hb_log("yadif thread started for segment %d", segment);
+
+    while( run )
+    {
+        /*
+         * Wait here until there is work to do. hb_lock() blocks until
+         * render releases it to say that there is more work to do.
+         */
+        hb_lock( pv->yadif_begin_lock[segment] );
+
+        yadif_work = &pv->yadif_arguments[segment];
+
+        if( yadif_work->stop )
+        {
+            /*
+             * No more work to do, exit this thread.
+             */
+            run = 0;
+            continue;
+        } 
+
+        if( yadif_work->dst == NULL )
+        {
+            hb_error( "thread started when no work available" );
+            hb_snooze(500);
+            continue;
+        }
+        
+        is_combed = pv->yadif_arguments[segment].is_combed;
+
+        /*
+         * Process all three planes, but only this segment of it.
+         */
+        for( plane = 0; plane < 3; plane++)
+        {
+
+            dst = yadif_work->dst;
+            parity = yadif_work->parity;
+            tff = yadif_work->tff;
+            w = pv->width[plane];
+            h = pv->height[plane];
+            ref_stride = pv->ref_stride[plane];
+            segment_start = ( h / pv->cpu_count ) * segment;
+            if( segment == pv->cpu_count - 1 )
+            {
+                /*
+                 * Final segment
+                 */
+                segment_stop = h;
+            } else {
+                segment_stop = ( h / pv->cpu_count ) * ( segment + 1 );
+            }
+
+            for( y = segment_start; y < segment_stop; y++ )
+            {
+                if( ( pv->mode == 4 && is_combed ) || is_combed == 2 )
+                {
+                    uint8_t *prev = &pv->ref[0][plane][y*ref_stride];
+                    uint8_t *cur  = &pv->ref[1][plane][y*ref_stride];
+                    uint8_t *next = &pv->ref[2][plane][y*ref_stride];
+                    uint8_t *dst2 = &dst[plane][y*w];
+
+                    blend_filter_line( dst2, cur, plane, y, pv );
+                }
+                else if( (y ^ parity) & 1 && is_combed == 1 )
+                {
+                    uint8_t *prev = &pv->ref[0][plane][y*ref_stride];
+                    uint8_t *cur  = &pv->ref[1][plane][y*ref_stride];
+                    uint8_t *next = &pv->ref[2][plane][y*ref_stride];
+                    uint8_t *dst2 = &dst[plane][y*w];
+
+                    yadif_filter_line( dst2, prev, cur, next, plane, parity ^ tff, y, pv );
+                }
+                else
+                {
+                    memcpy( &dst[plane][y*w],
+                            &pv->ref[1][plane][y*ref_stride],
+                            w * sizeof(uint8_t) );              
+                }
+            }
+        }
+        /*
+         * Finished this segment, let everyone know.
+         */
+        hb_unlock( pv->yadif_complete_lock[segment] );
+    }
+    free( thread_args_v );
+}
+
 static void yadif_filter( uint8_t ** dst,
                           int parity,
                           int tff,
                           hb_filter_private_t * pv )
 {
     
-    int is_combed = tritical_detect_comb( pv );
+    int is_combed = comb_segmenter( pv );
     
     if( is_combed == 1 )
     {
@@ -619,40 +862,65 @@ static void yadif_filter( uint8_t ** dst,
     {
         pv->unfiltered_frames++;
     }
-
-    int i;
-    for( i = 0; i < 3; i++ )
+    
+    if( is_combed )
     {
-        int w = pv->width[i];
-        int h = pv->height[i];
-        int ref_stride = pv->ref_stride[i];        
-        
-        int y;
-        for( y = 0; y < h; y++ )
+        int segment;
+
+        for( segment = 0; segment < pv->cpu_count; segment++ )
+        {  
+            /*
+             * Setup the work for this plane.
+             */
+            pv->yadif_arguments[segment].parity = parity;
+            pv->yadif_arguments[segment].tff = tff;
+            pv->yadif_arguments[segment].dst = dst;
+            pv->yadif_arguments[segment].is_combed = is_combed;
+
+            /*
+             * Let the thread for this plane know that we've setup work 
+             * for it by releasing the begin lock (ensuring that the
+             * complete lock is already locked so that we block when
+             * we try to lock it again below).
+             */
+            hb_lock( pv->yadif_complete_lock[segment] );
+            hb_unlock( pv->yadif_begin_lock[segment] );
+        }
+
+        /*
+         * Wait until all three threads have completed by trying to get
+         * the complete lock that we locked earlier for each thread, which
+         * will block until that thread has completed the work on that
+         * plane.
+         */
+        for( segment = 0; segment < pv->cpu_count; segment++ )
         {
-            if( ( pv->mode == 4 && is_combed ) || is_combed == 2 )
-            {
-                uint8_t *prev = &pv->ref[0][i][y*ref_stride];
-                uint8_t *cur  = &pv->ref[1][i][y*ref_stride];
-                uint8_t *next = &pv->ref[2][i][y*ref_stride];
-                uint8_t *dst2 = &dst[i][y*w];
+            hb_lock( pv->yadif_complete_lock[segment] );
+            hb_unlock( pv->yadif_complete_lock[segment] );
+        }
 
-                blend_filter_line( dst2, cur, i, y, pv );
-            }
-            else if( (y ^ parity) & 1 && is_combed == 1 )
+        /*
+         * Entire frame is now deinterlaced.
+         */
+    }
+    else
+    {
+        /*  Just passing through... */
+        int i;
+        for( i = 0; i < 3; i++ )
+        {
+            uint8_t * ref = pv->ref[1][i];
+            uint8_t * dest = dst[i];
+            
+            int w = pv->width[i];
+            int ref_stride = pv->ref_stride[i];
+            
+            int y;
+            for( y = 0; y < pv->height[i]; y++ )
             {
-                uint8_t *prev = &pv->ref[0][i][y*ref_stride];
-                uint8_t *cur  = &pv->ref[1][i][y*ref_stride];
-                uint8_t *next = &pv->ref[2][i][y*ref_stride];
-                uint8_t *dst2 = &dst[i][y*w];
-
-                yadif_filter_line( dst2, prev, cur, next, i, parity ^ tff, y, pv );
-            }
-            else
-            {
-                memcpy( &dst[i][y*w],
-                        &pv->ref[1][i][y*ref_stride],
-                        w * sizeof(uint8_t) );              
+                memcpy(dest, ref, w);
+                dest += w;
+                ref += ref_stride;
             }
         }
     }
@@ -825,6 +1093,9 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
                 &pv->block_width,
                 &pv->block_height );
     }
+    
+    pv->cpu_count = hb_get_cpu_count();
+    
 
     if( pv->mode == 2 || pv->mode == 3 )
     {
@@ -857,6 +1128,91 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
         pv->mask[i] = malloc( w*h*sizeof(uint8_t) ) + 3*w;
     }
 
+     /*
+      * Create yadif threads and locks.
+      */
+     pv->yadif_threads = malloc( sizeof( hb_thread_t* ) * pv->cpu_count );
+     pv->yadif_begin_lock = malloc( sizeof( hb_lock_t * ) * pv->cpu_count );
+     pv->yadif_complete_lock = malloc( sizeof( hb_lock_t * ) * pv->cpu_count );
+     pv->yadif_arguments = malloc( sizeof( yadif_arguments_t ) * pv->cpu_count );
+
+     for( i = 0; i < pv->cpu_count; i++ )
+     {
+         yadif_thread_arg_t *thread_args;
+
+         thread_args = malloc( sizeof( yadif_thread_arg_t ) );
+
+         if( thread_args )
+         {
+             thread_args->pv = pv;
+             thread_args->segment = i;
+
+             pv->yadif_begin_lock[i] = hb_lock_init();
+             pv->yadif_complete_lock[i] = hb_lock_init();
+
+             /*
+              * Important to start off with the threads locked waiting
+              * on input.
+              */
+             hb_lock( pv->yadif_begin_lock[i] );
+
+             pv->yadif_arguments[i].stop = 0;
+             pv->yadif_arguments[i].dst = NULL;
+             
+             pv->yadif_threads[i] = hb_thread_init( "yadif_filter_segment",
+                                                    yadif_decomb_filter_thread,
+                                                    thread_args,
+                                                    HB_NORMAL_PRIORITY );
+         }
+         else
+         {
+             hb_error( "yadif could not create threads" );
+         }
+    }
+    
+    /*
+     * Create decomb threads and locks.
+     */
+    pv->decomb_threads = malloc( sizeof( hb_thread_t* ) * pv->cpu_count );
+    pv->decomb_begin_lock = malloc( sizeof( hb_lock_t * ) * pv->cpu_count );
+    pv->decomb_complete_lock = malloc( sizeof( hb_lock_t * ) * pv->cpu_count );
+    pv->decomb_arguments = malloc( sizeof( decomb_arguments_t ) * pv->cpu_count );
+    
+    for( i = 0; i < pv->cpu_count; i++ )
+    {
+        decomb_thread_arg_t *decomb_thread_args;
+    
+        decomb_thread_args = malloc( sizeof( decomb_thread_arg_t ) );
+    
+        if( decomb_thread_args )
+        {
+            decomb_thread_args->pv = pv;
+            decomb_thread_args->segment = i;
+    
+            pv->decomb_begin_lock[i] = hb_lock_init();
+            pv->decomb_complete_lock[i] = hb_lock_init();
+    
+            /*
+             * Important to start off with the threads locked waiting
+             * on input.
+             */
+            hb_lock( pv->decomb_begin_lock[i] );
+    
+            pv->decomb_arguments[i].stop = 0;
+    
+            pv->decomb_threads[i] = hb_thread_init( "decomb_filter_segment",
+                                                   decomb_filter_thread,
+                                                   decomb_thread_args,
+                                                   HB_NORMAL_PRIORITY );
+        }
+        else
+        {
+            hb_error( "decomb could not create threads" );
+        }
+    }
+
+    
+    
     /* Allocate mcdeint specific buffers */
     if( pv->mcdeint_mode >= 0 )
     {
@@ -955,6 +1311,48 @@ void hb_decomb_close( hb_filter_private_t * pv )
             *p = NULL;
         }
     }
+    
+    for( i = 0; i < pv->cpu_count; i++)
+    {
+        /*
+         * Tell each yadif thread to stop, and then cleanup.
+         */
+        pv->yadif_arguments[i].stop = 1;
+        hb_unlock(  pv->yadif_begin_lock[i] );
+
+        hb_thread_close( &pv->yadif_threads[i] );
+        hb_lock_close( &pv->yadif_begin_lock[i] );
+        hb_lock_close( &pv->yadif_complete_lock[i] );
+    }
+    
+    /*
+     * free memory for yadif structs
+     */
+    free( pv->yadif_threads );
+    free( pv->yadif_begin_lock );
+    free( pv->yadif_complete_lock );
+    free( pv->yadif_arguments );
+    
+    for( i = 0; i < pv->cpu_count; i++)
+    {
+        /*
+         * Tell each decomb thread to stop, and then cleanup.
+         */
+        pv->decomb_arguments[i].stop = 1;
+        hb_unlock(  pv->decomb_begin_lock[i] );
+
+        hb_thread_close( &pv->decomb_threads[i] );
+        hb_lock_close( &pv->decomb_begin_lock[i] );
+        hb_lock_close( &pv->decomb_complete_lock[i] );
+    }
+    
+    /*
+     * free memory for decomb structs
+     */
+    free( pv->decomb_threads );
+    free( pv->decomb_begin_lock );
+    free( pv->decomb_complete_lock );
+    free( pv->decomb_arguments );
     
     /* Cleanup mcdeint specific buffers */
     if( pv->mcdeint_mode >= 0 )
