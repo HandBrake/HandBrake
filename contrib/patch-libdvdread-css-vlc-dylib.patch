@@ -5,7 +5,7 @@
  #else
  
 -  dvdcss_library = dlopen("libdvdcss.so.2", RTLD_LAZY);
-+  dvdcss_library = dlopen("/Applications/VLC.app/Contents/MacOS/lib/vlc_libdvdcss.dylib", RTLD_LAZY);
++  dvdcss_library = dlopen("/Applications/VLC.app/Contents/MacOS/lib/libdvdcss.2.dylib", RTLD_LAZY);
  
    if(dvdcss_library != NULL) {
  #if defined(__OpenBSD__) && !defined(__ELF__)
