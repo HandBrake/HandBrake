@@ -38,6 +38,7 @@ namespace Handbrake
             this.lbl_name = new System.Windows.Forms.Label();
             this.txt_preset_name = new System.Windows.Forms.TextBox();
             this.btn_add = new System.Windows.Forms.Button();
+            this.btn_cancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lbl_name
@@ -65,7 +66,7 @@ namespace Handbrake
             this.btn_add.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_add.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_add.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_add.Location = new System.Drawing.Point(284, 42);
+            this.btn_add.Location = new System.Drawing.Point(284, 44);
             this.btn_add.Name = "btn_add";
             this.btn_add.Size = new System.Drawing.Size(66, 22);
             this.btn_add.TabIndex = 0;
@@ -74,11 +75,27 @@ namespace Handbrake
             this.btn_add.UseVisualStyleBackColor = false;
             this.btn_add.Click += new System.EventHandler(this.btn_add_Click);
             // 
+            // btn_cancel
+            // 
+            this.btn_cancel.BackColor = System.Drawing.SystemColors.Control;
+            this.btn_cancel.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_cancel.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_cancel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_cancel.Location = new System.Drawing.Point(212, 44);
+            this.btn_cancel.Name = "btn_cancel";
+            this.btn_cancel.Size = new System.Drawing.Size(66, 22);
+            this.btn_cancel.TabIndex = 3;
+            this.btn_cancel.TabStop = false;
+            this.btn_cancel.Text = "Cancel";
+            this.btn_cancel.UseVisualStyleBackColor = false;
+            this.btn_cancel.Click += new System.EventHandler(this.btn_cancel_Click);
+            // 
             // frmAddPreset
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(362, 76);
+            this.Controls.Add(this.btn_cancel);
             this.Controls.Add(this.btn_add);
             this.Controls.Add(this.txt_preset_name);
             this.Controls.Add(this.lbl_name);
@@ -102,5 +119,6 @@ namespace Handbrake
         private System.Windows.Forms.Label lbl_name;
         private System.Windows.Forms.TextBox txt_preset_name;
         internal System.Windows.Forms.Button btn_add;
+        internal System.Windows.Forms.Button btn_cancel;
     }
 }

@@ -431,7 +431,7 @@ namespace Handbrake.Functions
                 query += " -o " + '"' + mainWindow.text_destination.Text + '"';
             #endregion
 
-            query += generateTabbedComponentsQuery(mainWindow, mainWindow.text_source.Text);
+            query += generateTabbedComponentsQuery(mainWindow);
             return query;
         }
 
@@ -466,7 +466,7 @@ namespace Handbrake.Functions
 
             #endregion
 
-            query += generateTabbedComponentsQuery(mainWindow, mainWindow.text_source.Text);
+            query += generateTabbedComponentsQuery(mainWindow);
             return query;
         }
 
@@ -476,33 +476,27 @@ namespace Handbrake.Functions
         /// <param name="mainWindow"></param>
         /// <param name="source"></param>
         /// <returns></returns>
-        private string generateTabbedComponentsQuery(frmMain mainWindow, string source)
+        public string generateTabbedComponentsQuery(frmMain mainWindow)
         {
             string query = "";
 
+            // The Output Settings box above the tabbed section.
+            #region Output Settings Box
             query += " -f " + mainWindow.drop_format.Text.ToLower().Replace(" file", "");
+
+            // These are output settings features
+            if (mainWindow.check_largeFile.Checked)
+                query += " -4 ";
+
+            if (mainWindow.check_iPodAtom.Checked)
+                query += " -I ";
+
+            if (mainWindow.check_optimiseMP4.Checked)
+                query += " -O ";
+            #endregion
 
             // Picture Settings Tab
             #region Picture Settings Tab
-
-            switch (mainWindow.drp_videoEncoder.Text)
-            {
-                case "MPEG-4 (FFmpeg)":
-                    query += " -e ffmpeg";
-                    break;
-                case "MPEG-4 (XviD)":
-                    query += " -e xvid";
-                    break;
-                case "H.264 (x264)":
-                    query += " -e x264";
-                    break;
-                case "VP3 (Theora)":
-                    query += " -e theora";
-                    break;
-                default:
-                    query += " -e x264";
-                    break;
-            }
 
             if (mainWindow.text_width.Text != "")
                 query += " -w " + mainWindow.text_width.Text;
@@ -560,9 +554,6 @@ namespace Handbrake.Functions
                     query += " --decomb ";
             }
 
-            if (mainWindow.check_grayscale.Checked)
-                query += " -g ";
-
             if (mainWindow.drp_anamorphic.SelectedIndex == 1)
                 query += " -p ";
             else if (mainWindow.drp_anamorphic.SelectedIndex == 2)
@@ -580,15 +571,28 @@ namespace Handbrake.Functions
 
             // Video Settings Tab
             #region Video Settings Tab
-            // These are output settings features
-            if (mainWindow.check_largeFile.Checked)
-                query += " -4 ";
 
-            if (mainWindow.check_iPodAtom.Checked)
-                query += " -I ";
+            switch (mainWindow.drp_videoEncoder.Text)
+            {
+                case "MPEG-4 (FFmpeg)":
+                    query += " -e ffmpeg";
+                    break;
+                case "MPEG-4 (XviD)":
+                    query += " -e xvid";
+                    break;
+                case "H.264 (x264)":
+                    query += " -e x264";
+                    break;
+                case "VP3 (Theora)":
+                    query += " -e theora";
+                    break;
+                default:
+                    query += " -e x264";
+                    break;
+            }
 
-            if (mainWindow.check_optimiseMP4.Checked)
-                query += " -O ";
+            if (mainWindow.check_grayscale.Checked)
+                query += " -g ";
 
             // Video Settings
             if (mainWindow.text_bitrate.Text != "")
@@ -608,16 +612,14 @@ namespace Handbrake.Functions
             if (mainWindow.check_2PassEncode.Checked)
                 query += " -2 ";
 
+            if (mainWindow.check_turbo.Checked)
+                query += " -T ";
+
             if (mainWindow.drp_videoFramerate.Text != "Same as source")
             {
                 if (!mainWindow.check_vfr.Checked)
                     query += " -r " + mainWindow.drp_videoFramerate.Text;
             }
-
-            if (mainWindow.check_turbo.Checked)
-                query += " -T ";
-
-
 
             switch (mainWindow.drp_deNoise.Text)
             {
@@ -672,7 +674,6 @@ namespace Handbrake.Functions
             string audioSampleRate4 = mainWindow.drp_audsr_4.Text;
             string Mixdown4 = mainWindow.drp_audmix_4.Text;
             string drc4 = mainWindow.trackBar4.Value.ToString();
-
 
             //
             // Audio Track Selections
@@ -859,7 +860,7 @@ namespace Handbrake.Functions
             // Attach Source name and dvd title to the start of the chapters.csv filename.
             // This is for the queue. It allows different chapter name files for each title.
             string source_name = mainWindow.text_source.Text;
-            string[] sourceName = source.Split('\\');
+            string[] sourceName = source_name.Split('\\');
             source_name = sourceName[sourceName.Length - 1];
             source_name = source_name.Replace("\"", "");
 

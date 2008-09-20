@@ -192,36 +192,6 @@ namespace Handbrake
         // The Applications Main Menu *****************************************
 
         #region File Menu
-        private void mnu_open_Click(object sender, EventArgs e)
-        {
-            string filename;
-            File_Open.ShowDialog();
-            filename = File_Open.FileName;
-
-            if (filename != "")
-            {
-                try
-                {
-                    // Create StreamReader & open file
-                    StreamReader line = new StreamReader(filename);
-
-                    // Send the query from the file to the Query Parser class then load the preset
-                    Functions.QueryParser presetQuery = Functions.QueryParser.Parse(line.ReadLine());
-                    hb_common_func.presetLoader(this, presetQuery, filename);
-
-                    // Close the stream
-                    line.Close();
-
-                    Form preset = new frmAddPreset(this, presetHandler);
-                    preset.ShowDialog();
-
-                }
-                catch (Exception exc)
-                {
-                    MessageBox.Show("Unable to load profile. \n\n" + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                }
-            }
-        }
         private void mnu_exit_Click(object sender, EventArgs e)
         {
             Application.Exit();
@@ -1362,10 +1332,14 @@ namespace Handbrake
         }
         private void btn_removePreset_Click(object sender, EventArgs e)
         {
-            if (treeView_presets.SelectedNode != null)
-                presetHandler.remove(treeView_presets.SelectedNode.Text);
-            // Now reload the preset panel
-            loadPresetPanel();
+            DialogResult result = MessageBox.Show("Are you sure you wish to delete the selected preset?", "Preset", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                if (treeView_presets.SelectedNode != null)
+                    presetHandler.remove(treeView_presets.SelectedNode.Text);
+                // Now reload the preset panel
+                loadPresetPanel();
+            }
         }
         private void btn_setDefault_Click(object sender, EventArgs e)
         {
@@ -1770,13 +1744,22 @@ namespace Handbrake
 
             treeView_presets.Nodes.Clear();
             List<string> presetNameList = new List<string>();
-            presetNameList = presetHandler.getPresetNames();
+            TreeNode preset_treeview = new TreeNode();          
 
-            // Adds a new preset name to the preset list.
-            TreeNode preset_treeview = new TreeNode();
+            presetNameList = presetHandler.getBuildInPresetNames();
             foreach (string preset in presetNameList)
             {
                 preset_treeview = new TreeNode(preset);
+
+                // Now Fill Out List View with Items
+                treeView_presets.Nodes.Add(preset_treeview);
+            }
+
+            presetNameList = presetHandler.getUserPresetNames();
+            foreach (string preset in presetNameList)
+            {
+                preset_treeview = new TreeNode(preset);
+                preset_treeview.ForeColor = Color.Black;
 
                 // Now Fill Out List View with Items
                 treeView_presets.Nodes.Add(preset_treeview);

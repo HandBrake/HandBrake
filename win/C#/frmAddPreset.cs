@@ -30,13 +30,18 @@ namespace Handbrake
 
         private void btn_add_Click(object sender, EventArgs e)
         {
-            String query = hb_common_func.GenerateTheQuery(frmMainWindow);
+            String query = hb_common_func.generateTabbedComponentsQuery(frmMainWindow);
 
             if (presetCode.addPreset(txt_preset_name.Text.Trim(), query) == true)
             {
                 frmMainWindow.loadPresetPanel();
                 this.Close();
             }
+        }
+
+        private void btn_cancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
 
     }

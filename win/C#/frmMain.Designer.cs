@@ -91,8 +91,6 @@ namespace Handbrake
             this.File_Open = new System.Windows.Forms.OpenFileDialog();
             this.ISO_Open = new System.Windows.Forms.OpenFileDialog();
             this.FileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_open = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.mnu_exit = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_open3 = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -1023,32 +1021,15 @@ namespace Handbrake
             // FileToolStripMenuItem
             // 
             this.FileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnu_open,
-            this.toolStripSeparator2,
             this.mnu_exit});
             this.FileToolStripMenuItem.Name = "FileToolStripMenuItem";
             this.FileToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.FileToolStripMenuItem.Text = "&File";
             // 
-            // mnu_open
-            // 
-            this.mnu_open.Image = ((System.Drawing.Image)(resources.GetObject("mnu_open.Image")));
-            this.mnu_open.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.mnu_open.Name = "mnu_open";
-            this.mnu_open.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.mnu_open.Size = new System.Drawing.Size(210, 22);
-            this.mnu_open.Text = "&Import Preset";
-            this.mnu_open.Click += new System.EventHandler(this.mnu_open_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(207, 6);
-            // 
             // mnu_exit
             // 
             this.mnu_exit.Name = "mnu_exit";
-            this.mnu_exit.Size = new System.Drawing.Size(210, 22);
+            this.mnu_exit.Size = new System.Drawing.Size(152, 22);
             this.mnu_exit.Text = "E&xit";
             this.mnu_exit.Click += new System.EventHandler(this.mnu_exit_Click);
             // 
@@ -3310,8 +3291,6 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.SaveFileDialog DVD_Save;
         private System.Windows.Forms.OpenFileDialog File_Open;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem mnu_open;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         internal System.Windows.Forms.CheckBox check_vfr;
         internal System.Windows.Forms.CheckBox check_iPodAtom;

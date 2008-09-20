@@ -87,11 +87,10 @@ namespace Handbrake.Functions
         }
 
         /// <summary>
-        /// Get an Arraylist of all the preset names.
-        /// Includes both built in and user presets.
+        /// Get a List of all the built in preset names.
         /// </summary>
-        /// <returns>Arraylist of preset names</returns>
-        public List<string> getPresetNames()
+        /// <returns>List<String> of preset names</returns>
+        public List<string> getBuildInPresetNames()
         {
             List<string> names = new List<string>();
 
@@ -104,6 +103,16 @@ namespace Handbrake.Functions
                 names.Add(presetName[0]);
 
             }
+            return names;
+        }
+
+        /// <summary>
+        /// Get a List of all the User preset names.
+        /// </summary>
+        /// <returns>List<String> of preset names</returns>
+        public List<string> getUserPresetNames()
+        {
+            List<string> names = new List<string>();
 
             // User Presets
             foreach (string item in user_presets)
