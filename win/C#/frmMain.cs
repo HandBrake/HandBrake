@@ -313,10 +313,9 @@ namespace Handbrake
                 lbl_encode.Text = "Encoding in Progress";
 
                 btn_start.Text = "Stop";
+                btn_start.ToolTipText = "Stop the encoding process. \nWarning: This may break your file. Press ctrl-c in the CLI window if you wish it to exit cleanly.";
                 btn_start.Image = Properties.Resources.stop;
             }
-
-
         }
         private void btn_add2Queue_Click(object sender, EventArgs e)
         {
@@ -506,35 +505,42 @@ namespace Handbrake
         }
         private void drop_chapterStart_SelectedIndexChanged(object sender, EventArgs e)
         {
+            int c_start, c_end = 1;
+
+            if (drop_chapterFinish.Text == "Auto" && drop_chapterFinish.Items.Count != 0)
+                drop_chapterFinish.SelectedIndex = drop_chapterFinish.Items.Count-1;
+           
+            int.TryParse(drop_chapterStart.Text, out c_start);
+            int.TryParse(drop_chapterFinish.Text, out c_end);
+
+            if (c_end != 0)
+            {
+                if (c_start > c_end)
+                    drop_chapterFinish.Text = c_start.ToString();
+            }
+
             calculateDuration();
 
-            drop_chapterStart.BackColor = Color.White;
-            if ((drop_chapterFinish.Text != "Auto") && (drop_chapterStart.Text != "Auto"))
-            {
-                int chapterFinish, chapterStart = 0;
-                int.TryParse(drop_chapterFinish.Text, out chapterFinish);
-                int.TryParse(drop_chapterStart.Text, out chapterStart);
-
-                if (chapterFinish < chapterStart)
-                    drop_chapterStart.BackColor = Color.LightCoral;
-            }
             // Run the Autonaming function
             hb_common_func.autoName(this);
         }
         private void drop_chapterFinish_SelectedIndexChanged(object sender, EventArgs e)
         {
-            calculateDuration();
+            int c_start, c_end = 1;
 
-            drop_chapterFinish.BackColor = Color.White;
-            if ((drop_chapterFinish.Text != "Auto") && (drop_chapterStart.Text != "Auto"))
+            if (drop_chapterStart.Text == "Auto" && drop_chapterStart.Items.Count >= 1)
+                drop_chapterStart.SelectedIndex = 1;
+
+            int.TryParse(drop_chapterStart.Text, out c_start);
+            int.TryParse(drop_chapterFinish.Text, out c_end);
+
+            if (c_start != 0)
             {
-                int chapterFinish, chapterStart = 0;
-                int.TryParse(drop_chapterFinish.Text, out chapterFinish);
-                int.TryParse(drop_chapterStart.Text, out chapterStart);
-
-                if (chapterFinish < chapterStart)
-                    drop_chapterFinish.BackColor = Color.LightCoral;
+                if (c_end < c_start)
+                    drop_chapterFinish.Text = c_start.ToString();
             }
+
+            calculateDuration();
 
             // Run the Autonaming function
             hb_common_func.autoName(this);
@@ -1846,6 +1852,7 @@ namespace Handbrake
             }
             lbl_encode.Text = "Encoding Finished";
             btn_start.Text = "Start";
+            btn_start.ToolTipText = "Start the encoding process";
             btn_start.Image = Properties.Resources.Play;
         }
         public Boolean isEncoding()
@@ -1893,9 +1900,6 @@ namespace Handbrake
             notifyIcon.Visible = false;
         }
         #endregion
-
-
-
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

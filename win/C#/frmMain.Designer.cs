@@ -38,7 +38,7 @@ namespace Handbrake
             System.Windows.Forms.Label Label38;
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
@@ -644,9 +644,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Format = "N0";
+            dataGridViewCellStyle2.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle2;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
