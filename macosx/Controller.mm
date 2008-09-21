@@ -141,10 +141,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     if (returnCode == NSAlertOtherReturn)
     {
         [self clearQueueAllItems];
+        [self performSelectorOnMainThread:@selector(browseSources:)
+                           withObject:nil waitUntilDone:NO];
     }
     
-    [self performSelectorOnMainThread:@selector(browseSources:)
-                           withObject:nil waitUntilDone:NO];
+    
 }
 
 - (NSApplicationTerminateReply) applicationShouldTerminate: (NSApplication *) app
