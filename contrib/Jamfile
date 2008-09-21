@@ -476,3 +476,22 @@ if $(OS) = CYGWIN
     Wget  $(SUBDIR)/zlib.tar.gz : $(SUBDIR)/version_zlib.txt ;
     Zlib  $(SUBDIR)/lib/libz.a  : $(SUBDIR)/zlib.tar.gz ;
 }
+
+# bzip2
+if $(OS) = CYGWIN
+{
+    rule BZip2
+    {
+        Depends $(<) : $(>) ;
+        Depends lib  : $(<) ;
+    }
+    actions BZip2
+    {
+        cd `dirname $(>)` && CONTRIB=`pwd` &&
+        rm -rf bzip2 && (gzip -dc bzip2.tar.gz | tar xf - ) &&
+        cd bzip2 && $(MAKE) && $(MAKE) install && cp libbz2.a $CONTRIB/lib/ &&
+        $(STRIP) $CONTRIB/lib/libbz2.a
+    }
+    Wget  $(SUBDIR)/bzip2.tar.gz : $(SUBDIR)/version_bzip2.txt ;
+    BZip2  $(SUBDIR)/lib/libbz2.a  : $(SUBDIR)/bzip2.tar.gz ;
+}
