@@ -718,39 +718,58 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
              to determine if we should check for encode done notifications */
 			if( fEncodeState != 2 )
             {
+                NSString *pathOfFinishedEncode;
+                /* Get the output file name for the finished encode */
+                pathOfFinishedEncode = [[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"DestinationPath"];
+                
+                /* Both the Growl Alert and Sending to MetaX can be done as encodes roll off the queue */
+                /* Growl alert */
+                [self showGrowlDoneNotification:pathOfFinishedEncode];
+                /* Send to MetaX */
+                [self sendToMetaX:pathOfFinishedEncode];
+                
                 /* since we have successfully completed an encode, we increment the queue counter */
-                [self incrementQueueItemDone:nil];
-                /* If Alert Window or Window and Growl has been selected */
-				if( [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window"] ||
-                   [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window And Growl"] )
+                [self incrementQueueItemDone:nil]; 
+                
+                /* all end of queue actions below need to be done after all queue encodes have finished 
+                 * and there are no pending jobs left to process
+                 */
+                if (fPendingCount == 0)
                 {
-					/*On Screen Notification*/
-					int status;
-					NSBeep();
-					status = NSRunAlertPanel(@"Put down that cocktail...",@"Your HandBrake encode is done!", @"OK", nil, nil);
-					[NSApp requestUserAttention:NSCriticalRequest];
-                }
-                /* If sleep has been selected */
-                if( [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Put Computer To Sleep"] )
-                {
-                    /* Sleep */
-                    NSDictionary* errorDict;
-                    NSAppleEventDescriptor* returnDescriptor = nil;
-                    NSAppleScript* scriptObject = [[NSAppleScript alloc] initWithSource:
-                                                   @"tell application \"Finder\" to sleep"];
-                    returnDescriptor = [scriptObject executeAndReturnError: &errorDict];
-                    [scriptObject release];
-                }
-                /* If Shutdown has been selected */
-                if( [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Shut Down Computer"] )
-                {
-                    /* Shut Down */
-                    NSDictionary* errorDict;
-                    NSAppleEventDescriptor* returnDescriptor = nil;
-                    NSAppleScript* scriptObject = [[NSAppleScript alloc] initWithSource:
-                                                   @"tell application \"Finder\" to shut down"];
-                    returnDescriptor = [scriptObject executeAndReturnError: &errorDict];
-                    [scriptObject release];
+                    /* If Alert Window or Window and Growl has been selected */
+                    if( [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window"] ||
+                       [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window And Growl"] )
+                    {
+                        /*On Screen Notification*/
+                        int status;
+                        NSBeep();
+                        status = NSRunAlertPanel(@"Put down that cocktail...",@"Your HandBrake queue is done!", @"OK", nil, nil);
+                        [NSApp requestUserAttention:NSCriticalRequest];
+                    }
+                    
+                    /* If sleep has been selected */
+                    if( [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Put Computer To Sleep"] )
+                    {
+                        /* Sleep */
+                        NSDictionary* errorDict;
+                        NSAppleEventDescriptor* returnDescriptor = nil;
+                        NSAppleScript* scriptObject = [[NSAppleScript alloc] initWithSource:
+                                                       @"tell application \"Finder\" to sleep"];
+                        returnDescriptor = [scriptObject executeAndReturnError: &errorDict];
+                        [scriptObject release];
+                    }
+                    /* If Shutdown has been selected */
+                    if( [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Shut Down Computer"] )
+                    {
+                        /* Shut Down */
+                        NSDictionary* errorDict;
+                        NSAppleEventDescriptor* returnDescriptor = nil;
+                        NSAppleScript* scriptObject = [[NSAppleScript alloc] initWithSource:
+                                                       @"tell application \"Finder\" to shut down"];
+                        returnDescriptor = [scriptObject executeAndReturnError: &errorDict];
+                        [scriptObject release];
+                    }
+                    
                 }
                 
                 
@@ -1051,7 +1070,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 -(void)showGrowlDoneNotification:(NSString *) filePath
 {
-    /* This is called from HBQueueController as jobs roll off of the queue in currentJobChanged */
+    /* This end of encode action is called as each encode rolls off of the queue */
     NSString * finishedEncode = filePath;
     /* strip off the path to just show the file name */
     finishedEncode = [finishedEncode lastPathComponent];
@@ -1072,7 +1091,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 }
 -(void)sendToMetaX:(NSString *) filePath
 {
-    /* This is called from HBQueueController as jobs roll off of the queue in currentJobChanged */
+    /* This end of encode action is called as each encode rolls off of the queue */
     if([[NSUserDefaults standardUserDefaults] boolForKey: @"sendToMetaX"] == YES)
     {
         NSAppleScript *myScript = [[NSAppleScript alloc] initWithSource: [NSString stringWithFormat: @"%@%@%@", @"tell application \"MetaX\" to open (POSIX file \"", filePath, @"\")"]];
