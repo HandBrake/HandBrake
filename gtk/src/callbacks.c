@@ -4453,3 +4453,60 @@ ghb_reload_queue(signal_user_data_t *ud)
 	return FALSE;
 }
 
+gboolean queue_key_press_cb(
+	GtkWidget *widget, 
+	GdkEventKey *event,
+	signal_user_data_t *ud)
+{
+	GtkTreeView *treeview;
+	GtkTreeSelection *selection;
+	GtkTreeModel *store;
+	GtkTreeIter iter;
+	gint row;
+	gint *indices;
+	gint unique_id;
+	GValue *settings;
+	gint status;
+
+	g_message("queue_key_press_cb ()");
+	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
+	store = gtk_tree_view_get_model(treeview);
+
+	selection = gtk_tree_view_get_selection (treeview);
+	if (gtk_tree_selection_get_selected(selection, &store, &iter))
+	{
+		GtkTreePath *treepath;
+
+		treepath = gtk_tree_model_get_path (store, &iter);
+		// Find the entry in the queue
+		indices = gtk_tree_path_get_indices (treepath);
+		row = indices[0];
+		// Can only free the treepath After getting what I need from
+		// indices since this points into treepath somewhere.
+		gtk_tree_path_free (treepath);
+		if (row < 0) return FALSE;
+		if (row >= ghb_array_len(ud->queue))
+			return FALSE;
+		settings = ghb_array_get_nth(ud->queue, row);
+		status = ghb_settings_get_int(settings, "job_status");
+		if (status == GHB_QUEUE_RUNNING)
+		{
+			// Ask if wants to stop encode.
+			if (!cancel_encode(NULL))
+			{
+				return FALSE;
+			}
+			unique_id = ghb_settings_get_int(settings, "job_unique_id");
+			ghb_remove_job(unique_id);
+		}
+		// Remove the selected item
+		gtk_tree_store_remove(GTK_TREE_STORE(store), &iter);
+		// Remove the corresponding item from the queue list
+		GValue *old = ghb_array_get_nth(ud->queue, row);
+		ghb_value_free(old);
+		ghb_array_remove(ud->queue, row);
+		ghb_save_queue(ud->queue);
+	}
+	return FALSE;
+}
+

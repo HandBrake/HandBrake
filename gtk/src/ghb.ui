@@ -3965,6 +3965,7 @@ this setting.</property>
                 <property name="headers_visible">False</property>
                 <property name="headers_clickable">False</property>
                 <property name="hover_expand">False</property>
+                <signal handler="queue_key_press_cb" name="key-press-event"/>
               </object>
             </child>
           </object>

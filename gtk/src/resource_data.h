@@ -6514,6 +6514,8 @@
 "e&lt;/property&gt;\n"
 "                &lt;property name=&quot;hover_expand&quot;&gt;False&lt;"
 "/property&gt;\n"
+"                &lt;signal handler=&quot;queue_key_press_cb&quot; name="
+"&quot;key-press-event&quot;/&gt;\n"
 "              &lt;/object&gt;\n"
 "            &lt;/child&gt;\n"
 "          &lt;/object&gt;\n"

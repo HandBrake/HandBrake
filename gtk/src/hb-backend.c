@@ -3652,7 +3652,6 @@ ghb_get_preview_image(
 	gboolean anamorphic = ghb_settings_get_boolean(settings, "anamorphic");
 	if (anamorphic)
 	{
-		title->job->modulus = 1;
 		hb_set_anamorphic_size( title->job, &width, &height, &par_width, &par_height );
 		if (par_width > par_height)
 			dstWidth = dstWidth * par_width / par_height;

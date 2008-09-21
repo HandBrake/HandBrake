@@ -3970,6 +3970,7 @@ this setting.&lt;/property&gt;
                 &lt;property name=&quot;headers_visible&quot;&gt;False&lt;/property&gt;
                 &lt;property name=&quot;headers_clickable&quot;&gt;False&lt;/property&gt;
                 &lt;property name=&quot;hover_expand&quot;&gt;False&lt;/property&gt;
+                &lt;signal handler=&quot;queue_key_press_cb&quot; name=&quot;key-press-event&quot;/&gt;
               &lt;/object&gt;
             &lt;/child&gt;
           &lt;/object&gt;
