@@ -1565,14 +1565,14 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 - (void) removeQueueFileItem:(int) queueItemToRemove
 {
    
-   /* Find out if the item we are removing is a cancelled item*/
-   if ([[[QueueFileArray objectAtIndex:queueItemToRemove] objectForKey:@"Status"] intValue] == 3)
+   /* Find out if the item we are removing is a cancelled (3) or a finished (0) item*/
+   if ([[[QueueFileArray objectAtIndex:queueItemToRemove] objectForKey:@"Status"] intValue] == 3 || [[[QueueFileArray objectAtIndex:queueItemToRemove] objectForKey:@"Status"] intValue] == 0)
     {
-    /* Since we are removing a cancelled item, WE need to decrement the currentQueueEncodeIndex
+    /* Since we are removing a cancelled or finished item, WE need to decrement the currentQueueEncodeIndex
      * by one to keep in sync with the queue array
      */
     currentQueueEncodeIndex--;
-    [self writeToActivityLog: "removeQueueFileItem: Removing a cancelled encode, decrement currentQueueEncodeIndex to %d", currentQueueEncodeIndex];
+    [self writeToActivityLog: "removeQueueFileItem: Removing a cancelled/finished encode, decrement currentQueueEncodeIndex to %d", currentQueueEncodeIndex];
     }
     [QueueFileArray removeObjectAtIndex:queueItemToRemove];
     [self saveQueueFileItem];

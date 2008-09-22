@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="2577"/>
+			<integer value="2596"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -204,7 +204,7 @@
 														</object>
 													</object>
 													<double key="NSRowHeight">1.700000e+01</double>
-													<int key="NSTvFlags">448823296</int>
+													<int key="NSTvFlags">314605568</int>
 													<int key="NSColumnAutoresizingStyle">1</int>
 													<int key="NSDraggingSourceMaskForLocal">15</int>
 													<int key="NSDraggingSourceMaskForNonLocal">0</int>
@@ -474,7 +474,7 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">removeSelectedJobGroups:</string>
+						<string key="label">removeSelectedQueueItem:</string>
 						<reference key="source" ref="678333032"/>
 						<reference key="destination" ref="1065139278"/>
 					</object>
@@ -796,9 +796,9 @@
 					<integer value="1" id="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{311, 67}, {574, 423}}</string>
+					<string>{{170, 67}, {574, 423}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{311, 67}, {574, 423}}</string>
+					<string>{{170, 67}, {574, 423}}</string>
 					<reference ref="9"/>
 					<reference ref="9"/>
 					<reference ref="9"/>
@@ -945,14 +945,12 @@
 						<object class="NSMutableArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>cancelCurrentJob:</string>
-							<string>removeSelectedJobGroups:</string>
 							<string>revealSelectedJobGroups:</string>
 							<string>togglePauseResume:</string>
 							<string>toggleStartCancel:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>

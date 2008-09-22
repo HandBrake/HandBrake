@@ -485,7 +485,11 @@ if (fWorkingCount > 0)
     
     if ([[[fJobGroups objectAtIndex:row] objectForKey:@"Status"] intValue] == 1)
     {
-        NSString * alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Remove It ?", nil)];
+       /* We pause the encode here so that it doesn't finish right after and then
+        * screw up the sync while the window is open
+        */
+       [fHBController Pause:NULL];
+         NSString * alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Remove It ?", nil)];
         // Which window to attach the sheet to?
         NSWindow * docWindow;
         if ([sender respondsToSelector: @selector(window)])
@@ -512,6 +516,13 @@ if (fWorkingCount > 0)
 
 - (void) didDimissCancelCurrentJob: (NSWindow *)sheet returnCode: (int)returnCode contextInfo: (void *)contextInfo
 {
+    /* We resume encoding and perform the appropriate actions 
+     * Note: Pause: is a toggle type method based on hb's current
+     * state, if it paused, it will resume encoding and vice versa.
+     * In this case, we are paused from the calling window, so calling
+     * [fHBController Pause:NULL]; Again will resume encoding
+     */
+       [fHBController Pause:NULL];
     if (returnCode == NSAlertOtherReturn)
     {
     /* We need to save the currently encoding item number first */
