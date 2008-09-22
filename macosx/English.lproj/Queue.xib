@@ -382,7 +382,7 @@
 						<object class="NSTextField" id="463845363">
 							<reference key="NSNextResponder" ref="431299686"/>
 							<int key="NSvFlags">264</int>
-							<string key="NSFrame">{{17, 373}, {176, 14}}</string>
+							<string key="NSFrame">{{17, 398}, {148, 14}}</string>
 							<reference key="NSSuperview" ref="431299686"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="617812287">
@@ -391,6 +391,22 @@
 								<string key="NSContents">Pending Jobs</string>
 								<reference key="NSSupport" ref="26"/>
 								<reference key="NSControlView" ref="463845363"/>
+								<reference key="NSBackgroundColor" ref="987568653"/>
+								<reference key="NSTextColor" ref="434514744"/>
+							</object>
+						</object>
+						<object class="NSTextField" id="138063786">
+							<reference key="NSNextResponder" ref="431299686"/>
+							<int key="NSvFlags">264</int>
+							<string key="NSFrame">{{17, 376}, {540, 14}}</string>
+							<reference key="NSSuperview" ref="431299686"/>
+							<bool key="NSEnabled">YES</bool>
+							<object class="NSTextFieldCell" key="NSCell" id="108133680">
+								<int key="NSCellFlags">67239424</int>
+								<int key="NSCellFlags2">272760832</int>
+								<string key="NSContents">There are no jobs currently encoding</string>
+								<reference key="NSSupport" ref="26"/>
+								<reference key="NSControlView" ref="138063786"/>
 								<reference key="NSBackgroundColor" ref="987568653"/>
 								<reference key="NSTextColor" ref="434514744"/>
 							</object>
@@ -472,6 +488,14 @@
 					</object>
 					<int key="connectionID">2645</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fProgressTextField</string>
+						<reference key="source" ref="678333032"/>
+						<reference key="destination" ref="138063786"/>
+					</object>
+					<int key="connectionID">2648</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -512,6 +536,7 @@
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="60629844"/>
+							<reference ref="138063786"/>
 							<reference ref="463845363"/>
 						</object>
 						<reference key="parent" ref="238545558"/>
@@ -694,6 +719,20 @@
 						<reference key="object" ref="617812287"/>
 						<reference key="parent" ref="463845363"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2646</int>
+						<reference key="object" ref="138063786"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="108133680"/>
+						</object>
+						<reference key="parent" ref="431299686"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2647</int>
+						<reference key="object" ref="108133680"/>
+						<reference key="parent" ref="138063786"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -746,6 +785,8 @@
 					<string>2625.ImportedFromIB2</string>
 					<string>2643.IBShouldRemoveOnLegacySave</string>
 					<string>2644.IBShouldRemoveOnLegacySave</string>
+					<string>2646.IBPluginDependency</string>
+					<string>2646.ImportedFromIB2</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -755,9 +796,9 @@
 					<integer value="1" id="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{87, 422}, {574, 423}}</string>
+					<string>{{311, 67}, {574, 423}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{87, 422}, {574, 423}}</string>
+					<string>{{311, 67}, {574, 423}}</string>
 					<reference ref="9"/>
 					<reference ref="9"/>
 					<reference ref="9"/>
@@ -795,6 +836,8 @@
 					<reference ref="9"/>
 					<reference ref="9"/>
 					<reference ref="9"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<reference ref="9"/>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="unlocalizedProperties">
@@ -817,7 +860,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2645</int>
+			<int key="maxID">2648</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

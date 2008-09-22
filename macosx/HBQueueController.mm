@@ -188,6 +188,15 @@ if (fWorkingCount > 0)
     [fQueueCountField setStringValue:string];
 
 }
+/* This method sets the status string in the queue window
+ * and is called from Controller.mm (fHBController)
+ * instead of running another timer here polling libhb
+ * for encoding status
+ */
+- (void)setQueueStatusString: (NSString *)statusString
+{
+[fProgressTextField setStringValue:statusString];
+}
 
 //------------------------------------------------------------------------------------
 // dealloc

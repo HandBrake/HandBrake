@@ -599,6 +599,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             [fStatusField setStringValue: [NSString stringWithFormat:
                                            NSLocalizedString( @"Queue Scanning title %d of %d...", @"" ),
                                            p.title_cur, p.title_count]];
+            
+            /* Set the status string in fQueueController as well */                               
+            [fQueueController setQueueStatusString: [NSString stringWithFormat:
+                                           NSLocalizedString( @"Queue Scanning title %d of %d...", @"" ),
+                                           p.title_cur, p.title_count]];
+            
             [fRipIndicator setHidden: NO];
             [fRipIndicator setDoubleValue: 100.0 * ( p.title_cur - 1 ) / p.title_count];
             break;
@@ -635,7 +641,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             }
             
             [fStatusField setStringValue: string];
-            
+            /* Set the status string in fQueueController as well */
+            [fQueueController setQueueStatusString: string];
             /* Update slider */
 			progress_total = ( p.progress + p.job_cur - 1 ) / p.job_count;
             [fRipIndicator setIndeterminate: NO];
@@ -671,7 +678,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         {
             /* Update text field */
             [fStatusField setStringValue: NSLocalizedString( @"Muxing...", @"" )];
-            
+            /* Set the status string in fQueueController as well */
+            [fQueueController setQueueStatusString: NSLocalizedString( @"Muxing...", @"" )];
             /* Update slider */
             [fRipIndicator setIndeterminate: YES];
             [fRipIndicator startAnimation: nil];
@@ -685,6 +693,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             
         case HB_STATE_PAUSED:
 		    [fStatusField setStringValue: NSLocalizedString( @"Paused", @"" )];
+            [fQueueController setQueueStatusString: NSLocalizedString( @"Paused", @"" )];
             
 			break;
             
@@ -695,7 +704,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             // out the remaining passes/jobs in the queue. We'll do that here.
             
             // Delete all remaining jobs of this encode.
-            [fStatusField setStringValue: NSLocalizedString( @"Done.", @"" )];
+            [fStatusField setStringValue: NSLocalizedString( @"Encode Finished.", @"" )];
+            /* Set the status string in fQueueController as well */
+            [fQueueController setQueueStatusString: NSLocalizedString( @"Encode Finished.", @"" )];
             [fRipIndicator setIndeterminate: NO];
             [fRipIndicator setDoubleValue: 0.0];
             [[fWindow toolbar] validateVisibleItems];

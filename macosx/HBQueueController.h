@@ -130,7 +130,7 @@ BOOL                        fIsDragging;
 - (void) animateWorkingEncodeIconInQueue;
 - (void) startAnimatingCurrentWorkingEncodeInQueue;
 - (void) stopAnimatingCurrentJobGroupInQueue;
-
+- (void)setQueueStatusString: (NSString *)statusString;
 
 - (IBAction)showQueueWindow: (id)sender;
 
