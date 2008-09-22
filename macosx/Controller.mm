@@ -661,9 +661,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 frame.origin.y -= 36;
                 [fWindow setFrame:frame display:YES animate:YES];
                 fRipIndicatorShown = YES;
-                /* We check to see if we need to warn the user that the computer will go to sleep
-                 or shut down when encoding is finished */
-                [self remindUserOfSleepOrShutdown];
+                
             }
             
             /* Update dock icon */
@@ -2891,8 +2889,11 @@ fWorkingCount = 0;
         return;
     }
     
-    // If there are pending jobs in the queue, then this is a rip the queue
+    /* We check to see if we need to warn the user that the computer will go to sleep
+                 or shut down when encoding is finished */
+                [self remindUserOfSleepOrShutdown];
     
+    // If there are pending jobs in the queue, then this is a rip the queue
     if (fPendingCount > 0)
     {
         /* here lets start the queue with the first pending item */
