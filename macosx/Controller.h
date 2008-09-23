@@ -313,6 +313,7 @@ BOOL                        fIsDragging;
 - (void) clearQueueAllItems;
 - (void)moveObjectsInQueueArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(unsigned)insertIndex;
 - (void)getQueueStats;
+- (void)setQueueEncodingItemsAsPending;
 - (IBAction) addToQueue: (id) sender;
 - (void) overwriteAddToQueueAlertDone: (NSWindow *) sheet
                            returnCode: (int) returnCode contextInfo: (void *) contextInfo;

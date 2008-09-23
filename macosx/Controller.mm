@@ -114,26 +114,48 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
      * user if they want to reload the queue */
     if ([QueueFileArray count] > 0)
 	{
+        /* run  getQueueStats to see whats in the queue file */
+        [self getQueueStats];
+        /* this results in these values
+         * fEncodingQueueItem = 0;
+         * fPendingCount = 0;
+         * fCompletedCount = 0;
+         * fCanceledCount = 0;
+         * fWorkingCount = 0;
+         */
+        
         /*On Screen Notification*/
-        NSString * alertTitle = [NSString stringWithFormat:NSLocalizedString(@"HandBrake Has Detected Item(s) From Your Previous Queue.", nil)];
+        NSString * alertTitle;
+        if (fWorkingCount > 0)
+        {
+            alertTitle = [NSString stringWithFormat:
+                         NSLocalizedString(@"HandBrake Has Detected %d Previously Encoding Item and %d Pending Item(s) In Your Queue.", @""),
+                         fWorkingCount,fPendingCount];
+        }
+        else
+        {
+            alertTitle = [NSString stringWithFormat:
+                         NSLocalizedString(@"HandBrake Has Detected %d Pending Item(s) In Your Queue.", @""),
+                         fPendingCount];
+        }
         NSBeginCriticalAlertSheet(
-            alertTitle,
-            NSLocalizedString(@"Reload Queue", nil),
-            nil,
-            NSLocalizedString(@"Empty Queue", nil),
-            fWindow, self,
-            nil, @selector(didDimissReloadQueue:returnCode:contextInfo:), nil,
-            NSLocalizedString(@" Do you want to reload them ?", nil));
+                                  alertTitle,
+                                  NSLocalizedString(@"Reload Queue", nil),
+                                  nil,
+                                  NSLocalizedString(@"Empty Queue", nil),
+                                  fWindow, self,
+                                  nil, @selector(didDimissReloadQueue:returnCode:contextInfo:), nil,
+                                  NSLocalizedString(@" Do you want to reload them ?", nil));
         // call didDimissReloadQueue: (NSWindow *)sheet returnCode: (int)returnCode contextInfo: (void *)contextInfo
         // right below to either clear the old queue or keep it loaded up.
     }
     else
     {
-     
-    /* Show Browse Sources Window ASAP */
-    [self performSelectorOnMainThread:@selector(browseSources:)
-                           withObject:nil waitUntilDone:NO];
-   }
+        
+        /* Show Browse Sources Window ASAP */
+        [self performSelectorOnMainThread:@selector(browseSources:)
+                               withObject:nil waitUntilDone:NO];
+    }
 }
 
 - (void) didDimissReloadQueue: (NSWindow *)sheet returnCode: (int)returnCode contextInfo: (void *)contextInfo
@@ -144,8 +166,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [self performSelectorOnMainThread:@selector(browseSources:)
                            withObject:nil waitUntilDone:NO];
     }
-    
-    
+    else
+    {
+    [self setQueueEncodingItemsAsPending];
+    }
 }
 
 - (NSApplicationTerminateReply) applicationShouldTerminate: (NSApplication *) app
@@ -602,8 +626,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             
             /* Set the status string in fQueueController as well */                               
             [fQueueController setQueueStatusString: [NSString stringWithFormat:
-                                           NSLocalizedString( @"Queue Scanning title %d of %d...", @"" ),
-                                           p.title_cur, p.title_count]];
+                                                     NSLocalizedString( @"Queue Scanning title %d of %d...", @"" ),
+                                                     p.title_cur, p.title_count]];
             
             [fRipIndicator setHidden: NO];
             [fRipIndicator setDoubleValue: 100.0 * ( p.title_cur - 1 ) / p.title_count];
@@ -1643,6 +1667,33 @@ fWorkingCount = 0;
     [fQueueStatus setStringValue:string];
 }
 
+/* This method will set any item marked as encoding back to pending
+ * currently used right after a queue reload
+ */
+- (void) setQueueEncodingItemsAsPending
+{
+    NSEnumerator *enumerator = [QueueFileArray objectEnumerator];
+	id tempObject;
+    NSMutableArray *tempArray;
+    tempArray = [NSMutableArray array];
+    /* we look here to see if the preset is we move on to the next one */
+    while ( tempObject = [enumerator nextObject] )  
+    {
+        /* If the queue item is marked as "encoding" (1)
+         * then change its status back to pending (2) which effectively
+         * puts it back into the queue to be encoded
+         */
+        if ([[tempObject objectForKey:@"Status"] intValue] == 1)
+        {
+            [tempObject setObject:[NSNumber numberWithInt: 2] forKey:@"Status"];
+        }
+        [tempArray addObject:tempObject];
+    }
+    
+    [QueueFileArray setArray:tempArray];
+    [self saveQueueFileItem];
+}
+
 
 /* This method will clear the queue of any encodes that are not still pending
  * this includes both successfully completed encodes as well as cancelled encodes */
@@ -1655,9 +1706,14 @@ fWorkingCount = 0;
     /* we look here to see if the preset is we move on to the next one */
     while ( tempObject = [enumerator nextObject] )  
     {
-        /* If the queue item is not still pending (finished successfully or it was cancelled
-         * during the last session, then we put it in tempArray to be deleted from QueueFileArray*/
-        if ([[tempObject objectForKey:@"Status"] intValue] != 2)
+        /* If the queue item is either completed (0) or cancelled (3) from the
+         * last session, then we put it in tempArray to be deleted from QueueFileArray.
+         * NOTE: this means we retain pending (2) and also an item that is marked as
+         * still encoding (1). If the queue has an item that is still marked as encoding
+         * from a previous session, we can conlude that HB was either shutdown, or crashed
+         * during the encodes so we keep it and tell the user in the "Load Queue Alert"
+         */
+        if ([[tempObject objectForKey:@"Status"] intValue] == 0 || [[tempObject objectForKey:@"Status"] intValue] == 3)
         {
             [tempArray addObject:tempObject];
         }
@@ -1665,11 +1721,9 @@ fWorkingCount = 0;
     
     [QueueFileArray removeObjectsInArray:tempArray];
     [self saveQueueFileItem];
-    
 }
 
-/* This method will clear the queue of any encodes that are not still pending
- * this includes both successfully completed encodes as well as cancelled encodes */
+/* This method will clear the queue of all encodes. effectively creating an empty queue */
 - (void) clearQueueAllItems
 {
     NSEnumerator *enumerator = [QueueFileArray objectEnumerator];
@@ -1684,7 +1738,6 @@ fWorkingCount = 0;
     
     [QueueFileArray removeObjectsInArray:tempArray];
     [self saveQueueFileItem];
-    
 }
 
 /* This method will duplicate prepareJob however into the
