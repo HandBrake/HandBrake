@@ -169,6 +169,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     else
     {
     [self setQueueEncodingItemsAsPending];
+    [self showQueueWindow:NULL];
     }
 }
 
