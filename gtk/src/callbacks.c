@@ -3268,6 +3268,55 @@ start_next_job(signal_user_data_t *ud, gboolean find_first)
 	return NULL;
 }
 
+gchar*
+working_status_string(signal_user_data_t *ud, ghb_status_t *status)
+{
+	gchar *task_str, *job_str, *status_str;
+	gint qcount;
+	gint index;
+	GValue *js;
+
+	if (status->job_count > 1)
+	{
+		task_str = g_strdup_printf("pass %d of %d, ", 
+			status->job_cur, status->job_count);
+	}
+	else
+	{
+		task_str = g_strdup("");
+	}
+	qcount = ghb_array_len(ud->queue);
+	if (qcount > 1)
+	{
+		index = find_queue_job(ud->queue, status->unique_id, &js);
+		job_str = g_strdup_printf("job %d of %d, ", index+1, qcount);
+	}
+	else
+	{
+		job_str = g_strdup("");
+	}
+	if(status->seconds > -1)
+	{
+		status_str= g_strdup_printf(
+			"Encoding: %s%s%.2f %%"
+			" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)",
+			job_str, task_str,
+			100.0 * status->progress,
+			status->rate_cur, status->rate_avg, status->hours, 
+			status->minutes, status->seconds );
+	}
+	else
+	{
+		status_str= g_strdup_printf(
+			"Encoding: %s%s%.2f %%",
+			job_str, task_str,
+			100.0 * status->progress );
+	}
+	g_free(task_str);
+	g_free(job_str);
+	return status_str;
+}
+
 static void
 ghb_backend_events(signal_user_data_t *ud)
 {
@@ -3344,47 +3393,7 @@ ghb_backend_events(signal_user_data_t *ud)
 	}
 	else if (status.queue_state & GHB_STATE_WORKING)
 	{
-		gchar *task_str, *job_str;
-		gint qcount;
-
-		if (status.job_count > 1)
-		{
-			task_str = g_strdup_printf("pass %d of %d, ", 
-				status.job_cur, status.job_count);
-		}
-		else
-		{
-			task_str = g_strdup("");
-		}
-		qcount = ghb_array_len(ud->queue);
-		if (qcount > 1)
-		{
-			index = find_queue_job(ud->queue, status.unique_id, &js);
-			job_str = g_strdup_printf("job %d of %d, ", index+1, qcount);
-		}
-		else
-		{
-			job_str = g_strdup("");
-		}
-		if(status.seconds > -1)
-		{
-			status_str= g_strdup_printf(
-				"Encoding: %s%s%.2f %%"
-				" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)",
-				job_str, task_str,
-				100.0 * status.progress,
-				status.rate_cur, status.rate_avg, status.hours, 
-				status.minutes, status.seconds );
-		}
-		else
-		{
-			status_str= g_strdup_printf(
-				"Encoding: %s%s%.2f %%",
-				job_str, task_str,
-				100.0 * status.progress );
-		}
-		g_free(job_str);
-		g_free(task_str);
+		status_str = working_status_string(ud, &status);
 		gtk_progress_bar_set_text (progress, status_str);
 		gtk_progress_bar_set_fraction (progress, status.progress);
 		g_free(status_str);
@@ -3494,6 +3503,13 @@ ghb_backend_events(signal_user_data_t *ud)
 			}
 			g_free(path);
 		}
+		GtkLabel *label;
+		gchar *status_str;
+
+		status_str = working_status_string(ud, &status);
+		label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_status"));
+		gtk_label_set_text (label, status_str);
+		g_free(status_str);
 	}
 }
 
@@ -4412,9 +4428,11 @@ ghb_reload_queue(signal_user_data_t *ud)
 	if (unfinished)
 	{
 		message = g_strdup_printf(
-					"You have %d unfinished jobs in a saved queue.\n\n"
-					"Would you like to reload them?",
-					unfinished);
+					"You have %d unfinished job%s in a saved queue.\n\n"
+					"Would you like to reload %s?",
+					unfinished, 
+					(unfinished > 1) ? "s" : "",
+					(unfinished > 1) ? "them" : "it");
 		if (ghb_message_dialog(GTK_MESSAGE_QUESTION, message, "No", "Yes"))
 		{
 			GtkWidget *widget = GHB_WIDGET (ud->builder, "queue_window");

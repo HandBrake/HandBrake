@@ -3928,8 +3928,13 @@ this setting.</property>
                 <property name="visible">True</property>
                 <child>
                   <object class="GtkLabel" id="queue_status">
+                    <property name="justify">GTK_JUSTIFY_LEFT</property>
                     <property name="visible">True</property>
                   </object>
+                  <packing>
+                    <property name="padding">10</property>
+                    <property name="expand">False</property>
+                  </packing>
                 </child>
                 <child>
                   <placeholder/>
