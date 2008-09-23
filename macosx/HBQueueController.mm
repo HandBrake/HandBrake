@@ -1000,7 +1000,7 @@ if (fWorkingCount > 0)
         [finalString appendString: pictureInfo withAttributes:detailAttr];
         [finalString appendString:@"\n" withAttributes:detailAttr];
         
-        /* Optional String for mp4 options */
+        /* Optional String for Picture Filters */
         
         NSString * pictureFilters = @"";
         BOOL pictureFiltersPresent = NO;
@@ -1055,9 +1055,10 @@ if (fWorkingCount > 0)
             }
             
         }
-        if ([[item objectForKey:@"PictureDeblock"] intValue] == 1)
+        if ([[item objectForKey:@"PictureDeblock"] intValue] != 0)
         {
-            pictureFilters = [pictureFilters stringByAppendingString:@" - Deblock "];
+            pictureFiltersPresent = YES;
+            pictureFilters = [pictureFilters stringByAppendingString: [NSString stringWithFormat:@" - Deblock (pp7) (%d) ",[[item objectForKey:@"PictureDeblock"] intValue]]];
         }
         if (pictureFiltersPresent == YES)
         {
@@ -1066,9 +1067,7 @@ if (fWorkingCount > 0)
             [finalString appendString:@"\n" withAttributes:detailAttr];
         }
         
-        
         /* Sixth Line Video Details*/
-        
         NSString * videoInfo;
         videoInfo = [NSString stringWithFormat:@"Encoder: %@", [item objectForKey:@"VideoEncoder"]];
         videoInfo = [NSString stringWithFormat:@"%@ Framerate: %@", videoInfo ,[item objectForKey:@"VideoFramerate"]];
@@ -1113,14 +1112,8 @@ if (fWorkingCount > 0)
         
         [finalString appendString: @"Audio Track 4: " withAttributes:detailBoldAttr];
         [finalString appendString: audioDetail4 withAttributes:detailAttr];
-        //[finalString appendString:@"\n" withAttributes:detailAttr];
-        
         
         return finalString;
-        
-        
-        
-        
     }
     else if ([[tableColumn identifier] isEqualToString:@"icon"])
     {
