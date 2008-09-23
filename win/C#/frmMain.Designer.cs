@@ -38,7 +38,7 @@ namespace Handbrake
             System.Windows.Forms.Label Label38;
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
@@ -644,9 +644,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle2.Format = "N0";
-            dataGridViewCellStyle2.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle1;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -1029,7 +1029,7 @@ namespace Handbrake
             // mnu_exit
             // 
             this.mnu_exit.Name = "mnu_exit";
-            this.mnu_exit.Size = new System.Drawing.Size(152, 22);
+            this.mnu_exit.Size = new System.Drawing.Size(106, 22);
             this.mnu_exit.Text = "E&xit";
             this.mnu_exit.Click += new System.EventHandler(this.mnu_exit_Click);
             // 
@@ -1872,9 +1872,11 @@ namespace Handbrake
             // 
             this.slider_deblock.Location = new System.Drawing.Point(407, 264);
             this.slider_deblock.Maximum = 15;
+            this.slider_deblock.Minimum = 4;
             this.slider_deblock.Name = "slider_deblock";
             this.slider_deblock.Size = new System.Drawing.Size(174, 42);
             this.slider_deblock.TabIndex = 35;
+            this.slider_deblock.Value = 4;
             this.slider_deblock.Scroll += new System.EventHandler(this.slider_deblock_Scroll);
             // 
             // label8
@@ -1895,9 +1897,9 @@ namespace Handbrake
             this.lbl_deblockVal.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_deblockVal.Location = new System.Drawing.Point(585, 269);
             this.lbl_deblockVal.Name = "lbl_deblockVal";
-            this.lbl_deblockVal.Size = new System.Drawing.Size(14, 13);
+            this.lbl_deblockVal.Size = new System.Drawing.Size(24, 13);
             this.lbl_deblockVal.TabIndex = 36;
-            this.lbl_deblockVal.Text = "0";
+            this.lbl_deblockVal.Text = "Off";
             // 
             // check_customCrop
             // 

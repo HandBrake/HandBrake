@@ -798,7 +798,10 @@ namespace Handbrake
         }
         private void slider_deblock_Scroll(object sender, EventArgs e)
         {
-            lbl_deblockVal.Text = slider_deblock.Value.ToString();
+            if (slider_deblock.Value == 4)
+                lbl_deblockVal.Text = "Off";
+            else
+                lbl_deblockVal.Text = slider_deblock.Value.ToString();
         }
 
         // Audio Tab
