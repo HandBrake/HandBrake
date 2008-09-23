@@ -155,7 +155,7 @@
   </object>
   <object class="GtkAdjustment" id="adjustment20">
     <property name="upper">15</property>
-    <property name="lower">0</property>
+    <property name="lower">4</property>
     <property name="page_increment">1</property>
     <property name="step_increment">1</property>
     <property name="page_size">0</property>
@@ -1372,6 +1372,7 @@
                                                 <property name="digits">0</property>
                                                 <property name="value_pos">GTK_POS_RIGHT</property>
                                                 <signal handler="setting_widget_changed_cb" name="value_changed"/>
+                                                <signal handler="format_deblock_cb" name="format-value"/>
                                               </object>
                                             </child>
                                           </object>

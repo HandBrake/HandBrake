@@ -3130,7 +3130,7 @@ ghb_add_job(GValue *js, gint unique_id)
 		hb_list_add( job->filters, &hb_filter_deinterlace );
 	}
 	gint deblock = ghb_settings_get_int(js, "deblock");
-	if( deblock > 0 )
+	if( deblock >= 5 )
 	{
 		deblock_str = g_strdup_printf("%d", deblock);
 		hb_filter_deblock.settings = deblock_str;

@@ -160,7 +160,7 @@
   &lt;/object&gt;
   &lt;object class=&quot;GtkAdjustment&quot; id=&quot;adjustment20&quot;&gt;
     &lt;property name=&quot;upper&quot;&gt;15&lt;/property&gt;
-    &lt;property name=&quot;lower&quot;&gt;0&lt;/property&gt;
+    &lt;property name=&quot;lower&quot;&gt;4&lt;/property&gt;
     &lt;property name=&quot;page_increment&quot;&gt;1&lt;/property&gt;
     &lt;property name=&quot;step_increment&quot;&gt;1&lt;/property&gt;
     &lt;property name=&quot;page_size&quot;&gt;0&lt;/property&gt;
@@ -1377,6 +1377,7 @@
                                                 &lt;property name=&quot;digits&quot;&gt;0&lt;/property&gt;
                                                 &lt;property name=&quot;value_pos&quot;&gt;GTK_POS_RIGHT&lt;/property&gt;
                                                 &lt;signal handler=&quot;setting_widget_changed_cb&quot; name=&quot;value_changed&quot;/&gt;
+                                                &lt;signal handler=&quot;format_deblock_cb&quot; name=&quot;format-value&quot;/&gt;
                                               &lt;/object&gt;
                                             &lt;/child&gt;
                                           &lt;/object&gt;

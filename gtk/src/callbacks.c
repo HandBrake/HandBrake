@@ -4528,3 +4528,15 @@ gboolean queue_key_press_cb(
 	return FALSE;
 }
 
+gchar*
+format_deblock_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
+{
+	if (val < 5.0)
+	{
+		return g_strdup_printf("Off");
+	}
+	else
+	{
+		return g_strdup_printf("%d", (gint)val);
+	}
+}
