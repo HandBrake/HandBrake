@@ -39,6 +39,8 @@
 	IBOutlet NSButton        * fDetelecineCheck;
     IBOutlet NSButton        * fVFRCheck;
     IBOutlet NSButton        * fDeblockCheck;
+    IBOutlet NSTextField     * fDeblockField;
+    IBOutlet NSSlider        * fDeblockSlider;
 	IBOutlet NSPopUpButton   * fDenoisePopUp;
 	IBOutlet NSPopUpButton   * fAnamorphicPopUp;
     IBOutlet NSButton        * fPrevButton;
@@ -85,7 +87,7 @@
 
 - (BOOL) allowLooseAnamorphic;
 - (void) setAllowLooseAnamorphic: (BOOL) setting;
-
+- (IBAction) deblockSliderChanged: (id) sender;
 - (int) detelecine;
 - (void) setDetelecine: (int) setting;
 - (int) vfr;

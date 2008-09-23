@@ -218,6 +218,19 @@ are maintained across different sources */
     [fNextButton setEnabled: ( fPicture < 9 )];
 }
 
+- (IBAction) deblockSliderChanged: (id) sender
+{
+    if ([fDeblockSlider floatValue] == 4.0)
+    {
+    [fDeblockField setStringValue: [NSString stringWithFormat: @"Off"]];
+    }
+    else
+    {
+    [fDeblockField setStringValue: [NSString stringWithFormat: @"%.0f", [fDeblockSlider floatValue]]];
+    }
+	[self SettingsChanged: sender];
+}
+
 - (IBAction) SettingsChanged: (id) sender
 {
     hb_job_t * job = fTitle->job;
@@ -333,7 +346,15 @@ are maintained across different sources */
         [fDetelecineCheck setEnabled: YES];
     }
     fPictureFilterSettings.detelecine  = [fDetelecineCheck state];
-    fPictureFilterSettings.deblock  = [fDeblockCheck state];
+    
+    if ([fDeblockField stringValue] == @"Off")
+    {
+    fPictureFilterSettings.deblock  = 0;
+    }
+    else
+    {
+    fPictureFilterSettings.deblock  = [fDeblockField intValue];
+    }
     
     fPictureFilterSettings.decomb = [fDecombPopUp indexOfSelectedItem];
 

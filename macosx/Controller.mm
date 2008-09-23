@@ -1851,7 +1851,7 @@ fWorkingCount = 0;
 	[queueFileJob setObject:[NSNumber numberWithInt:[fPictureController detelecine]] forKey:@"PictureDetelecine"];
     [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController vfr]] forKey:@"VFR"];
 	[queueFileJob setObject:[NSNumber numberWithInt:[fPictureController denoise]] forKey:@"PictureDenoise"];
-    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController deblock]] forKey:@"PictureDeblock"]; 
+    [queueFileJob setObject:[NSString stringWithFormat:@"%d",[fPictureController deblock]] forKey:@"PictureDeblock"]; 
     [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController decomb]] forKey:@"PictureDecomb"];
     
     /*Audio*/
@@ -2871,8 +2871,13 @@ fWorkingCount = 0;
 	}
     
     /* Deblock  (uses pp7 default) */
-    if ([[queueToApply objectForKey:@"PictureDeblock"] intValue] == 1)
+    /* NOTE: even though there is a valid deblock setting of 0 for the filter, for 
+     * the macgui's purposes a value of 0 actually means to not even use the filter
+     * current hb_filter_deblock.settings valid ranges are from 5 - 15 
+     */
+    if ([[queueToApply objectForKey:@"PictureDeblock"] intValue] != 0)
     {
+        hb_filter_deblock.settings = (char *) [[queueToApply objectForKey:@"PictureDeblock"] UTF8String];
         hb_list_add( job->filters, &hb_filter_deblock );
     }
 [self writeToActivityLog: "prepareJob exiting"];    
@@ -3783,11 +3788,13 @@ the user is using "Custom" settings by determining the sender*/
 	}
     
     /* Deblock */
-    if ([fPictureController deblock]) {
-        [fPicSettingDeblock setStringValue: @"Yes"];
+    if ([fPictureController deblock] == 0) 
+    {
+        [fPicSettingDeblock setStringValue: @"Off"];
     }
-    else {
-        [fPicSettingDeblock setStringValue: @"No"];
+    else 
+    {
+        [fPicSettingDeblock setStringValue: [NSString stringWithFormat:@"%d",[fPictureController deblock]]];
     }
 	
 	if (fTitle->job->pixel_ratio > 0)
@@ -5504,11 +5511,13 @@ if (item == nil)
                     /* Deblock */
                     if ([[chosenPreset objectForKey:@"PictureDeblock"] intValue] == 1)
                     {
-                        [fPictureController setDeblock:[[chosenPreset objectForKey:@"PictureDeblock"] intValue]];
+                       /* since we used to use 1 to turn on deblock, we now use a 5 in our sliding scale */
+                         [fPictureController setDeblock:5];
                     }
                     else
                     {
                         [fPictureController setDeblock:0];
+                     
                     }
 
                    [self calculatePictureSizing:nil];
@@ -5572,11 +5581,13 @@ if (item == nil)
             /* Deblock */
             if ([[chosenPreset objectForKey:@"PictureDeblock"] intValue] == 1)
             {
-                [fPictureController setDeblock:[[chosenPreset objectForKey:@"PictureDeblock"] intValue]];
+                /* if its a one, then its the old on/off deblock, set on to 5*/
+                [fPictureController setDeblock:5];
             }
             else
             {
-                [fPictureController setDeblock:0];
+                /* use the settings intValue */
+                [fPictureController setDeblock:[[chosenPreset objectForKey:@"PictureDeblock"] intValue]];
             }
             /* Decomb */
             /* Even though we currently allow for a custom setting for decomb, ultimately it will only have Off and
