@@ -1539,7 +1539,7 @@ static void ShowHelp()
      "           or\n"
      "          <fast/slow/slower>\n"
      "    -7, --deblock           Deblock video with pp7 filter\n"
-     "          <QP:M>            (default 0:2)\n"
+     "          <QP:M>            (default 5:2)\n"
      "    -8, --denoise           Denoise video with hqdn3d filter\n"
      "          <SL:SC:TL:TC>     (default 4:3:6:4.5)\n"
      "           or\n"

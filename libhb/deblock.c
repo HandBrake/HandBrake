@@ -20,7 +20,7 @@
 #include "libavcodec/avcodec.h"
 #include "mpeg2dec/mpeg2.h"
 
-#define PP7_QP_DEFAULT    0
+#define PP7_QP_DEFAULT    5
 #define PP7_MODE_DEFAULT  2
 
 #define XMIN(a,b) ((a) < (b) ? (a) : (b))
