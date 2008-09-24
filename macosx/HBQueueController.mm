@@ -879,7 +879,10 @@ if (fWorkingCount > 0)
         
         [finalString appendString:[NSString stringWithFormat:@"%@", [item objectForKey:@"SourceName"]] withAttributes:titleAttr];
         
-        summaryInfo = [NSString stringWithFormat: @"  (%@, %@, %@)", titleString, chapterString, passesString];
+        /* lets add the output file name to the title string here */
+        NSString * outputFilenameString = [[item objectForKey:@"DestinationPath"] lastPathComponent];
+        
+        summaryInfo = [NSString stringWithFormat: @" (%@, %@, %@) -> %@", titleString, chapterString, passesString, outputFilenameString];
         
         [finalString appendString:[NSString stringWithFormat:@"%@\n", summaryInfo] withAttributes:detailAttr];  
         
@@ -1070,7 +1073,26 @@ if (fWorkingCount > 0)
         /* Sixth Line Video Details*/
         NSString * videoInfo;
         videoInfo = [NSString stringWithFormat:@"Encoder: %@", [item objectForKey:@"VideoEncoder"]];
-        videoInfo = [NSString stringWithFormat:@"%@ Framerate: %@", videoInfo ,[item objectForKey:@"VideoFramerate"]];
+        
+        /* for framerate look to see if we are using vfr detelecine */
+        if ([[item objectForKey:@"JobIndexVideoFramerate"] intValue] == 0)
+        {
+            if ([[item objectForKey:@"PictureDetelecine"] intValue] == 1)
+            {
+                /* we are using same as source with vfr detelecine */
+                videoInfo = [NSString stringWithFormat:@"%@ Framerate: Same as source (vfr detelecine)", videoInfo];
+            }
+            else
+            {
+                /* we are using a variable framerate without dropping frames */
+                videoInfo = [NSString stringWithFormat:@"%@ Framerate: Same as source (variable)", videoInfo];
+            }
+        }
+        else
+        {
+            /* we have a specified, constant framerate */
+            videoInfo = [NSString stringWithFormat:@"%@ Framerate: %@ (constant framerate)", videoInfo ,[item objectForKey:@"VideoFramerate"]];
+        }
         
         if ([[item objectForKey:@"VideoQualityType"] intValue] == 0)// Target Size MB
         {
