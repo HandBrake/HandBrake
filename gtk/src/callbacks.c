@@ -2369,28 +2369,34 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	gchar *info;
 	gint status;
 	GtkTreeIter citer;
-	gchar *dest, *preset, *vol_name;
+	gchar *dest, *preset, *vol_name, *basename;
 	const gchar *vcodec, *container;
 	gchar *fps, *vcodec_abbr;
 	gint title, start_chapter, end_chapter, width, height, vqvalue;
 	gint source_width, source_height;
 	gboolean pass2, anamorphic, round_dim, keep_aspect, vqtype, turbo;
+	gboolean tweaks;
 	
 	g_debug("update_queue_list ()");
 	if (settings == NULL) return;
 	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
 	store = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
 		
+	tweaks = ghb_settings_get_boolean(settings, "allow_tweaks");
 	title = ghb_settings_combo_int(settings, "title");
 	start_chapter = ghb_settings_get_int(settings, "start_chapter");
 	end_chapter = ghb_settings_get_int(settings, "end_chapter");
 	pass2 = ghb_settings_get_boolean(settings, "two_pass");
 	vol_name = ghb_settings_get_string(settings, "volume_label");
+	dest = ghb_settings_get_string(settings, "destination");
+	basename = g_path_get_basename(dest);
 	info = g_strdup_printf 
 	(
-		 "<big><b>%s</b></big> (Title %d, Chapters %d through %d, %d Video %s)",
+		"<big><b>%s</b></big> "
+		"(Title %d, Chapters %d through %d, %d Video %s)"
+		" --> %s",
 		 vol_name, title+1, start_chapter, end_chapter, 
-		 pass2 ? 2:1, pass2 ? "Passes":"Pass"
+		 pass2 ? 2:1, pass2 ? "Passes":"Pass", basename
 	);
 
 	if (piter)
@@ -2427,7 +2433,6 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 
 	container = ghb_settings_combo_option(settings, "container");
 	mux = ghb_settings_combo_int(settings, "container");
-	dest = ghb_settings_get_string(settings, "destination");
 	preset_modified = ghb_settings_get_boolean(settings, "preset_modified");
 	preset = ghb_settings_get_string(settings, "preset");
 	markers = ghb_settings_get_boolean(settings, "chapter_markers");
@@ -2531,17 +2536,63 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	if (strcmp("source", fps) == 0)
 	{
 		g_free(fps);
-		fps = g_strdup("Same As Source");
+		if (ghb_settings_get_boolean(settings, "detelecine"))
+			fps = g_strdup("Same As Source (vfr detelecine)");
+		else
+			fps = g_strdup("Same As Source (variable)");
+	}
+	else
+	{
+		gchar *tmp;
+		tmp = g_strdup_printf("%s (constant frame rate)", fps);
+		g_free(fps);
+		fps = tmp;
 	}
 	vcodec = ghb_settings_combo_option(settings, "video_codec");
 	vcodec_abbr = ghb_settings_get_string(settings, "video_codec");
 	source_width = ghb_settings_get_int(settings, "source_width");
 	source_height = ghb_settings_get_int(settings, "source_height");
 	g_string_append_printf(str,
-		"<b>Picture:</b> Source: %d x %d, Output %d x %d %s\n"
+		"<b>Picture:</b> Source: %d x %d, Output %d x %d %s\n",
+		 source_width, source_height, width, height, aspect_desc);
+
+	gboolean decomb;
+
+	decomb = ghb_settings_get_boolean(settings, "decomb");
+	g_string_append_printf(str, "<b>Filters:</b>");
+	if (ghb_settings_get_boolean(settings, "detelecine"))
+		g_string_append_printf(str, " - Detelecine");
+	if (decomb)
+		g_string_append_printf(str, " - Decomb");
+	else
+	{
+		gint deint = ghb_settings_combo_int(settings, 
+					tweaks ? "tweak_deinterlace":"deinterlace");
+		if (deint)
+		{
+			const gchar *opt = ghb_settings_combo_option(settings,
+					tweaks ? "tweak_deinterlace":"deinterlace");
+			g_string_append_printf(str, " - Deinterlace: %s", opt);
+		}
+	}
+	gint denoise = ghb_settings_combo_int(settings, 
+				tweaks ? "tweak_denoise":"denoise");
+	if (denoise)
+	{
+		const gchar *opt = ghb_settings_combo_option(settings,
+				tweaks ? "tweak_denoise":"denoise");
+		g_string_append_printf(str, " - Denoise: %s", opt);
+	}
+	gint deblock = ghb_settings_get_int(settings, "deblock");
+	if (deblock >= 5)
+		g_string_append_printf(str, " - Deblock (%d)", deblock);
+	if (ghb_settings_get_boolean(settings, "grayscale"))
+		g_string_append_printf(str, " - Grayscale");
+	g_string_append_printf(str, "\n");
+
+	g_string_append_printf(str,
 		"<b>Video:</b> %s, Framerate: %s, %s %d%s\n",
-			 source_width, source_height, width, height, aspect_desc,
-			 vcodec, fps, vq_desc, vqvalue, vq_units);
+		 vcodec, fps, vq_desc, vqvalue, vq_units);
 
 	turbo = ghb_settings_get_boolean(settings, "turbo");
 	if (turbo)
