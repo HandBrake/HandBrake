@@ -113,8 +113,7 @@
 	}
 	
 	/* Set filters widgets according to the filters struct */
-	[fVFRCheck setState:fPictureFilterSettings.vfr];
-    [fDetelecineCheck setState:fPictureFilterSettings.detelecine];
+	[fDetelecineCheck setState:fPictureFilterSettings.detelecine];
     [fDeinterlacePopUp selectItemAtIndex: fPictureFilterSettings.deinterlace];
     [fDenoisePopUp selectItemAtIndex: fPictureFilterSettings.denoise];
     [fDeblockCheck setState: fPictureFilterSettings.deblock];
@@ -335,16 +334,7 @@ are maintained across different sources */
         job->deinterlace  = 0;
     }
     fPictureFilterSettings.denoise     = [fDenoisePopUp indexOfSelectedItem];
-    fPictureFilterSettings.vfr  = [fVFRCheck state];
-    if (fPictureFilterSettings.vfr > 0)
-    {
-        [fDetelecineCheck setState:NSOnState];
-        [fDetelecineCheck setEnabled: NO];
-    }
-    else
-    {
-        [fDetelecineCheck setEnabled: YES];
-    }
+    
     fPictureFilterSettings.detelecine  = [fDetelecineCheck state];
     
     if ([fDeblockField stringValue] == @"Off")
@@ -472,16 +462,6 @@ are maintained across different sources */
 - (void) setDetelecine: (int) setting
 {
     fPictureFilterSettings.detelecine = setting;
-}
-
-- (int) vfr
-{
-    return fPictureFilterSettings.vfr;
-}
-
-- (void) setVFR: (int) setting
-{
-    fPictureFilterSettings.vfr = setting;
 }
 
 - (int) deinterlace

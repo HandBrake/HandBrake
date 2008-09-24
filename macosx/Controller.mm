@@ -1849,8 +1849,7 @@ fWorkingCount = 0;
     /* Picture Filters */
     [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController deinterlace]] forKey:@"PictureDeinterlace"];
 	[queueFileJob setObject:[NSNumber numberWithInt:[fPictureController detelecine]] forKey:@"PictureDetelecine"];
-    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController vfr]] forKey:@"VFR"];
-	[queueFileJob setObject:[NSNumber numberWithInt:[fPictureController denoise]] forKey:@"PictureDenoise"];
+    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController denoise]] forKey:@"PictureDenoise"];
     [queueFileJob setObject:[NSString stringWithFormat:@"%d",[fPictureController deblock]] forKey:@"PictureDeblock"]; 
     [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController decomb]] forKey:@"PictureDecomb"];
     
@@ -2386,8 +2385,7 @@ fWorkingCount = 0;
     /* Filters */
     /* Deinterlace */
     [fPictureController setDeinterlace:[[queueToApply objectForKey:@"PictureDeinterlace"] intValue]];
-    /* VFR */
-    [fPictureController setVFR:[[queueToApply objectForKey:@"VFR"] intValue]];
+    
     /* Detelecine */
     [fPictureController setDetelecine:[[queueToApply objectForKey:@"PictureDetelecine"] intValue]];
     /* Denoise */
@@ -2680,11 +2678,17 @@ fWorkingCount = 0;
     job->crop[2] = [[queueToApply objectForKey:@"PictureLeftCrop"]  intValue];
     job->crop[3] = [[queueToApply objectForKey:@"PictureRightCrop"]  intValue];
     
-    [self writeToActivityLog: "prepareJob reached Frame Rate"];
-    
     /* Video settings */
+    [self writeToActivityLog: "prepareJob reached Frame Rate"];
+    /* Framerate */
+    
+    /* Set vfr to 0 as it's only on if using same as source in the framerate popup
+     * and detelecine is on, so we handle that in the logic below
+     */
+    job->vfr = 0;
     if( [[queueToApply objectForKey:@"JobIndexVideoFramerate"] intValue] > 0 )
     {
+        /* a specific framerate has been chosen */
         job->vrate      = 27000000;
         job->vrate_base = hb_video_rates[[[queueToApply objectForKey:@"JobIndexVideoFramerate"] intValue]-1].rate;
         /* We are not same as source so we set job->cfr to 1 
@@ -2694,11 +2698,19 @@ fWorkingCount = 0;
     }
     else
     {
+        /* We are same as source (variable) */
         job->vrate      = [[queueToApply objectForKey:@"JobVrate"] intValue];
         job->vrate_base = [[queueToApply objectForKey:@"JobVrateBase"] intValue];
         /* We are same as source so we set job->cfr to 0 
          * to enable true same as source framerate */
         job->cfr = 0;
+        /* If we are same as source and we have detelecine on, we need to turn on
+         * job->vfr
+         */
+        if ([[queueToApply objectForKey:@"PictureDetelecine"] intValue] == 1)
+        {
+            job->vfr = 1;
+        }
     }
     [self writeToActivityLog: "prepareJob reached Bitrate Video Quality"];
     if ( [[queueToApply objectForKey:@"VideoQualityType"] intValue] == 0 )
@@ -2802,17 +2814,7 @@ fWorkingCount = 0;
         free(audio);
     }
     
-    /* set vfr according to the Picture Window */
-    if ([[queueToApply objectForKey:@"VFR"] intValue] == 1)
-    {
-        job->vfr = 1;
-    }
-    else
-    {
-        job->vfr = 0;
-    }
-    
-   [self writeToActivityLog: "prepareJob reached Filters"];
+    [self writeToActivityLog: "prepareJob reached Filters"];
      /* Filters */ 
     job->filters = hb_list_init();
     
@@ -3736,20 +3738,7 @@ the user is using "Custom" settings by determining the sender*/
     }
 
     /* VFR (Variable Frame Rate) */
-    if ([fPictureController vfr]) {
-        /* We change the string of the fps popup to warn that vfr is on Framerate (FPS): */
-        [fVidRateField setStringValue: @"Framerate (VFR On):"]; 
-        /* for VFR we select same as source (or title framerate) and disable the popup.
-        * We know its index 0 as that is determined in titlePopUpChanged */
-        [fVidRatePopUp selectItemAtIndex: 0];
-        [fVidRatePopUp setEnabled: NO];  
-        
-    }
-    else {
-        /* make sure the label for framerate is set to its default */  
-        [fVidRateField setStringValue: @"Framerate (FPS):"];
-        [fVidRatePopUp setEnabled: YES];
-    }
+    
     
 	/* Deinterlace */
 	if ([fPictureController deinterlace] == 0)
@@ -5484,12 +5473,11 @@ if (item == nil)
                     /* VFR */
                     if ([[chosenPreset objectForKey:@"VFR"] intValue] == 1)
                     {
-                        [fPictureController setVFR:[[chosenPreset objectForKey:@"VFR"] intValue]];
+                        // We make sure that framerate is set to Same as source variable
+                        // detelecine will take care of itself right below
+                        //[fPictureController setVFR:[[chosenPreset objectForKey:@"VFR"] intValue]];
                     }
-                    else
-                    {
-                        [fPictureController setVFR:0];
-                    }
+                    
                     /* Detelecine */
                     if ([[chosenPreset objectForKey:@"PictureDetelecine"] intValue] == 1)
                     {
@@ -5551,15 +5539,7 @@ if (item == nil)
             {
                 [fPictureController setDeinterlace:0];
             }
-            /* VFR */
-            if ([[chosenPreset objectForKey:@"VFR"] intValue] == 1)
-            {
-                [fPictureController setVFR:[[chosenPreset objectForKey:@"VFR"] intValue]];
-            }
-            else
-            {
-                [fPictureController setVFR:0];
-            }
+            
             /* Detelecine */
             if ([[chosenPreset objectForKey:@"PictureDetelecine"] intValue] == 1)
             {
@@ -5783,7 +5763,7 @@ if (item == nil)
     /* Picture Filters */
     [preset setObject:[NSNumber numberWithInt:[fPictureController deinterlace]] forKey:@"PictureDeinterlace"];
 	[preset setObject:[NSNumber numberWithInt:[fPictureController detelecine]] forKey:@"PictureDetelecine"];
-    [preset setObject:[NSNumber numberWithInt:[fPictureController vfr]] forKey:@"VFR"];
+    //[preset setObject:[NSNumber numberWithInt:[fPictureController vfr]] forKey:@"VFR"];
 	[preset setObject:[NSNumber numberWithInt:[fPictureController denoise]] forKey:@"PictureDenoise"];
     [preset setObject:[NSNumber numberWithInt:[fPictureController deblock]] forKey:@"PictureDeblock"]; 
     [preset setObject:[NSNumber numberWithInt:[fPictureController decomb]] forKey:@"PictureDecomb"];

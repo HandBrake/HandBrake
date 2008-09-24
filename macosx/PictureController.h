@@ -37,7 +37,6 @@
     IBOutlet NSPopUpButton   * fDeinterlacePopUp;
     IBOutlet NSPopUpButton   * fDecombPopUp;
 	IBOutlet NSButton        * fDetelecineCheck;
-    IBOutlet NSButton        * fVFRCheck;
     IBOutlet NSButton        * fDeblockCheck;
     IBOutlet NSTextField     * fDeblockField;
     IBOutlet NSSlider        * fDeblockSlider;
@@ -61,7 +60,6 @@
     
     struct {
         int     detelecine;
-        int     vfr;
         int     deinterlace;
         int     decomb;
         int     denoise;
@@ -90,8 +88,6 @@
 - (IBAction) deblockSliderChanged: (id) sender;
 - (int) detelecine;
 - (void) setDetelecine: (int) setting;
-- (int) vfr;
-- (void) setVFR: (int) setting;
 - (int) deinterlace;
 - (void) setDeinterlace: (int) setting;
 - (int) decomb;
