@@ -1029,15 +1029,15 @@ if (fWorkingCount > 0)
             pictureFiltersPresent = YES;
             if ([[item objectForKey:@"PictureDeinterlace"] intValue] == 1)
             {
-                pictureFilters = [pictureFilters stringByAppendingString:@" - Decomb: Fast "];
+                pictureFilters = [pictureFilters stringByAppendingString:@" - Deinterlace: Fast "];
             }
             else if ([[item objectForKey:@"PictureDeinterlace"] intValue] == 2)
             {
-                pictureFilters = [pictureFilters stringByAppendingString:@" - Decomb: Slow "];           
+                pictureFilters = [pictureFilters stringByAppendingString:@" - Deinterlace: Slow "];           
             }
             else if ([[item objectForKey:@"PictureDeinterlace"] intValue] == 3)
             {
-                pictureFilters = [pictureFilters stringByAppendingString:@" - Decomb: Slower "];            
+                pictureFilters = [pictureFilters stringByAppendingString:@" - Deinterlace: Slower "];            
             }
             
         }
