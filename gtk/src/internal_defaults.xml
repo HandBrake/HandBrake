@@ -174,8 +174,6 @@
 		<string></string>
 		<key>two_pass</key>
 		<false />
-		<key>variable_frame_rate</key>
-		<true />
 		<key>video_bitrate</key>
 		<integer>1800</integer>
 		<key>video_codec</key>

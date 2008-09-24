@@ -1703,21 +1703,6 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkCheckButton" id="variable_frame_rate">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="label" translatable="yes">Variable Frame Rate</property>
-                                        <property name="active">True</property>
-                                        <property name="draw_indicator">True</property>
-                                        <signal handler="vfr_changed_cb" name="toggled"/>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="position">2</property>
-                                      </packing>
-                                    </child>
-                                    <child>
                                       <object class="GtkCheckButton" id="two_pass">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
@@ -1727,7 +1712,7 @@
                                         <signal handler="setting_widget_changed_cb" name="toggled"/>
                                       </object>
                                       <packing>
-                                        <property name="position">3</property>
+                                        <property name="position">2</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -1748,7 +1733,7 @@
                                         </child>
                                       </object>
                                       <packing>
-                                        <property name="position">4</property>
+                                        <property name="position">3</property>
                                       </packing>
                                     </child>
                                     <child>

@@ -1372,20 +1372,6 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	gtk_range_set_range (GTK_RANGE(qp), vqmin, vqmax);
 }
 
-void
-vfr_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
-{
-	//const gchar *name = gtk_widget_get_name(widget);
-	//g_debug("setting_widget_changed_cb () %s", name);
-	ghb_widget_to_setting(ud->settings, widget);
-	check_dependency(ud, widget);
-	clear_presets_selection(ud);
-	if (ghb_settings_get_boolean(ud->settings, "variable_frame_rate"))
-	{
-		ghb_ui_update(ud, "framerate", ghb_int64_value(0));
-	}
-}
-
 // subtitles have their differ from other settings in that
 // the selection is updated automaitcally when the title
 // changes.  I don't want the preset selection changed as
@@ -4486,7 +4472,7 @@ gboolean queue_key_press_cb(
 	GValue *settings;
 	gint status;
 
-	g_message("queue_key_press_cb ()");
+	g_debug("queue_key_press_cb ()");
 	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
 	store = gtk_tree_view_get_model(treeview);
 

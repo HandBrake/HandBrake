@@ -35,7 +35,6 @@
 		<string>large_mp4</string>
 		<string>http_optimize_mp4</string>
 		<string>ipod_file</string>
-		<string>variable_frame_rate</string>
 	</array>
 	<key>decomb</key>
 	<array>
@@ -68,11 +67,6 @@
 	<key>use_source_name</key>
 	<array>
 		<string>chapters_in_destination</string>
-	</array>
-	<key>variable_frame_rate</key>
-	<array>
-		<string>framerate</string>
-		<string>detelecine</string>
 	</array>
 	<key>video_codec</key>
 	<array>

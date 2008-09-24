@@ -59,8 +59,6 @@
 		<true />
 		<key>two_pass</key>
 		<true />
-		<key>variable_frame_rate</key>
-		<false />
 		<key>video_bitrate</key>
 		<integer>1000</integer>
 		<key>video_codec</key>
@@ -141,8 +139,6 @@
 		<string>none</string>
 		<key>two_pass</key>
 		<false />
-		<key>variable_frame_rate</key>
-		<false />
 		<key>video_bitrate</key>
 		<integer>2500</integer>
 		<key>video_codec</key>
@@ -213,8 +209,6 @@
 		<true />
 		<key>two_pass</key>
 		<true />
-		<key>variable_frame_rate</key>
-		<false />
 		<key>video_bitrate</key>
 		<integer>1800</integer>
 		<key>video_codec</key>
@@ -284,8 +278,6 @@
 		<key>turbo</key>
 		<false />
 		<key>two_pass</key>
-		<false />
-		<key>variable_frame_rate</key>
 		<false />
 		<key>video_bitrate</key>
 		<integer>512</integer>
@@ -357,8 +349,6 @@
 		<true />
 		<key>two_pass</key>
 		<true />
-		<key>variable_frame_rate</key>
-		<false />
 		<key>video_bitrate</key>
 		<integer>1600</integer>
 		<key>video_codec</key>
@@ -426,8 +416,6 @@
 		<key>subtitle_lang</key>
 		<string>none</string>
 		<key>two_pass</key>
-		<false />
-		<key>variable_frame_rate</key>
 		<false />
 		<key>video_bitrate</key>
 		<integer>1000</integer>
@@ -499,8 +487,6 @@
 		<false />
 		<key>two_pass</key>
 		<false />
-		<key>variable_frame_rate</key>
-		<false />
 		<key>video_bitrate</key>
 		<integer>2000</integer>
 		<key>video_codec</key>
@@ -571,8 +557,6 @@
 		<true />
 		<key>two_pass</key>
 		<true />
-		<key>variable_frame_rate</key>
-		<false />
 		<key>video_bitrate</key>
 		<integer>1600</integer>
 		<key>video_codec</key>
@@ -643,8 +627,6 @@
 		<true />
 		<key>two_pass</key>
 		<true />
-		<key>variable_frame_rate</key>
-		<false />
 		<key>video_bitrate</key>
 		<integer>1800</integer>
 		<key>video_codec</key>
@@ -715,8 +697,6 @@
 		<true />
 		<key>two_pass</key>
 		<true />
-		<key>variable_frame_rate</key>
-		<false />
 		<key>video_bitrate</key>
 		<integer>1500</integer>
 		<key>video_codec</key>
@@ -782,8 +762,6 @@
 		<key>subtitle_lang</key>
 		<string>none</string>
 		<key>two_pass</key>
-		<false />
-		<key>variable_frame_rate</key>
 		<false />
 		<key>video_bitrate</key>
 		<integer>2500</integer>
@@ -852,8 +830,6 @@
 		<key>subtitle_lang</key>
 		<string>none</string>
 		<key>two_pass</key>
-		<false />
-		<key>variable_frame_rate</key>
 		<false />
 		<key>video_bitrate</key>
 		<integer>1024</integer>
@@ -925,8 +901,6 @@
 		<true />
 		<key>two_pass</key>
 		<true />
-		<key>variable_frame_rate</key>
-		<false />
 		<key>video_bitrate</key>
 		<integer>2000</integer>
 		<key>video_codec</key>
@@ -997,8 +971,6 @@
 		<true />
 		<key>two_pass</key>
 		<true />
-		<key>variable_frame_rate</key>
-		<false />
 		<key>video_bitrate</key>
 		<integer>1300</integer>
 		<key>video_codec</key>
@@ -1064,8 +1036,6 @@
 		<key>subtitle_lang</key>
 		<string>none</string>
 		<key>two_pass</key>
-		<false />
-		<key>variable_frame_rate</key>
 		<false />
 		<key>video_bitrate</key>
 		<integer>2000</integer>
@@ -1137,8 +1107,6 @@
 		<string>none</string>
 		<key>two_pass</key>
 		<false />
-		<key>variable_frame_rate</key>
-		<false />
 		<key>video_bitrate</key>
 		<integer>960</integer>
 		<key>video_codec</key>
@@ -1209,8 +1177,6 @@
 		<string>none</string>
 		<key>two_pass</key>
 		<false />
-		<key>variable_frame_rate</key>
-		<false />
 		<key>video_bitrate</key>
 		<integer>1500</integer>
 		<key>video_codec</key>
@@ -1280,8 +1246,6 @@
 		<key>subtitle_lang</key>
 		<string>none</string>
 		<key>two_pass</key>
-		<false />
-		<key>variable_frame_rate</key>
 		<false />
 		<key>video_bitrate</key>
 		<integer>700</integer>

@@ -2645,22 +2645,6 @@ ghb_validate_video(signal_user_data_t *ud)
 		vcodec = HB_VCODEC_XVID;
 		ghb_ui_update(ud, "video_codec", ghb_int64_value(vcodec));
 	}
-	gboolean decomb;
-   	gboolean vfr;
-	decomb = ghb_settings_get_boolean(ud->settings, "decomb");
-	vfr = ghb_settings_get_boolean(ud->settings, "variable_frame_rate");
-	if (decomb && !vfr)
-	{
-		message = g_strdup_printf(
-					"Decomb is intended to be used in conjunction\n"
-					"with variable frame rate.\n\n"
-					"Would you like me to enable VFR for you?");
-		if (ghb_message_dialog(GTK_MESSAGE_WARNING, message, "No", "Yes"))
-		{
-			ghb_ui_update(ud, "variable_frame_rate", ghb_boolean_value(TRUE));
-		}
-		g_free(message);
-	}
 	return TRUE;
 }
 
@@ -3089,10 +3073,15 @@ ghb_add_job(GValue *js, gint unique_id)
 		job->pixel_ratio = 0;
 		job->modulus = 2;
 	}
-   	job->vfr = ghb_settings_get_boolean(js, "variable_frame_rate");
 	/* Add selected filters */
 	job->filters = hb_list_init();
-	if( ghb_settings_get_boolean(js, "detelecine" ) || job->vfr )
+	gint vrate = ghb_settings_combo_int(js, "framerate");
+	if( vrate == 0 && ghb_settings_get_boolean(js, "detelecine" ) )
+		job->vfr = 1;
+	else
+		job->vfr = 0;
+
+	if( ghb_settings_get_boolean(js, "detelecine" ) )
 	{
 		hb_filter_detelecine.settings = NULL;
 		if (tweaks)
@@ -3204,10 +3193,10 @@ ghb_add_job(GValue *js, gint unique_id)
 	if (job->mux == HB_MUX_AVI)
 	{
 		job->vfr = FALSE;
+		job->cfr = 1;
 	}
 
-	gint vrate = ghb_settings_combo_int(js, "framerate");
-	if( vrate == 0 || job->vfr )
+	if( vrate == 0 )
 	{
 		job->vrate = title->rate;
 		job->vrate_base = title->rate_base;

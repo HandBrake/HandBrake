@@ -114,27 +114,11 @@
 			<true />
 		</array>
 	</array>
-	<key>detelecine</key>
-	<array>
-		<array>
-			<string>variable_frame_rate</string>
-			<string>TRUE</string>
-			<true />
-		</array>
-	</array>
 	<key>end_chapter</key>
 	<array>
 		<array>
 			<string>title</string>
 			<string>none</string>
-			<true />
-		</array>
-	</array>
-	<key>framerate</key>
-	<array>
-		<array>
-			<string>variable_frame_rate</string>
-			<string>TRUE</string>
 			<true />
 		</array>
 	</array>
@@ -299,14 +283,6 @@
 		<array>
 			<string>vquality_type_constant</string>
 			<string>TRUE</string>
-			<true />
-		</array>
-	</array>
-	<key>variable_frame_rate</key>
-	<array>
-		<array>
-			<string>container</string>
-			<string>avi</string>
 			<true />
 		</array>
 	</array>

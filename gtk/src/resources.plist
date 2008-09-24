@@ -1708,21 +1708,6 @@
                                       &lt;/packing&gt;
                                     &lt;/child&gt;
                                     &lt;child&gt;
-                                      &lt;object class=&quot;GtkCheckButton&quot; id=&quot;variable_frame_rate&quot;&gt;
-                                        &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
-                                        &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
-                                        &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
-                                        &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Variable Frame Rate&lt;/property&gt;
-                                        &lt;property name=&quot;active&quot;&gt;True&lt;/property&gt;
-                                        &lt;property name=&quot;draw_indicator&quot;&gt;True&lt;/property&gt;
-                                        &lt;signal handler=&quot;vfr_changed_cb&quot; name=&quot;toggled&quot;/&gt;
-                                      &lt;/object&gt;
-                                      &lt;packing&gt;
-                                        &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
-                                        &lt;property name=&quot;position&quot;&gt;2&lt;/property&gt;
-                                      &lt;/packing&gt;
-                                    &lt;/child&gt;
-                                    &lt;child&gt;
                                       &lt;object class=&quot;GtkCheckButton&quot; id=&quot;two_pass&quot;&gt;
                                         &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                         &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
@@ -1732,7 +1717,7 @@
                                         &lt;signal handler=&quot;setting_widget_changed_cb&quot; name=&quot;toggled&quot;/&gt;
                                       &lt;/object&gt;
                                       &lt;packing&gt;
-                                        &lt;property name=&quot;position&quot;&gt;3&lt;/property&gt;
+                                        &lt;property name=&quot;position&quot;&gt;2&lt;/property&gt;
                                       &lt;/packing&gt;
                                     &lt;/child&gt;
                                     &lt;child&gt;
@@ -1753,7 +1738,7 @@
                                         &lt;/child&gt;
                                       &lt;/object&gt;
                                       &lt;packing&gt;
-                                        &lt;property name=&quot;position&quot;&gt;4&lt;/property&gt;
+                                        &lt;property name=&quot;position&quot;&gt;3&lt;/property&gt;
                                       &lt;/packing&gt;
                                     &lt;/child&gt;
                                     &lt;child&gt;
@@ -5003,8 +4988,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<string></string>
 			<key>two_pass</key>
 			<false />
-			<key>variable_frame_rate</key>
-			<true />
 			<key>video_bitrate</key>
 			<integer>1800</integer>
 			<key>video_codec</key>
@@ -5082,8 +5065,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<true />
 			<key>two_pass</key>
 			<true />
-			<key>variable_frame_rate</key>
-			<false />
 			<key>video_bitrate</key>
 			<integer>1000</integer>
 			<key>video_codec</key>
@@ -5164,8 +5145,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<string>none</string>
 			<key>two_pass</key>
 			<false />
-			<key>variable_frame_rate</key>
-			<false />
 			<key>video_bitrate</key>
 			<integer>2500</integer>
 			<key>video_codec</key>
@@ -5236,8 +5215,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<true />
 			<key>two_pass</key>
 			<true />
-			<key>variable_frame_rate</key>
-			<false />
 			<key>video_bitrate</key>
 			<integer>1800</integer>
 			<key>video_codec</key>
@@ -5307,8 +5284,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>turbo</key>
 			<false />
 			<key>two_pass</key>
-			<false />
-			<key>variable_frame_rate</key>
 			<false />
 			<key>video_bitrate</key>
 			<integer>512</integer>
@@ -5380,8 +5355,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<true />
 			<key>two_pass</key>
 			<true />
-			<key>variable_frame_rate</key>
-			<false />
 			<key>video_bitrate</key>
 			<integer>1600</integer>
 			<key>video_codec</key>
@@ -5449,8 +5422,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>subtitle_lang</key>
 			<string>none</string>
 			<key>two_pass</key>
-			<false />
-			<key>variable_frame_rate</key>
 			<false />
 			<key>video_bitrate</key>
 			<integer>1000</integer>
@@ -5522,8 +5493,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<false />
 			<key>two_pass</key>
 			<false />
-			<key>variable_frame_rate</key>
-			<false />
 			<key>video_bitrate</key>
 			<integer>2000</integer>
 			<key>video_codec</key>
@@ -5594,8 +5563,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<true />
 			<key>two_pass</key>
 			<true />
-			<key>variable_frame_rate</key>
-			<false />
 			<key>video_bitrate</key>
 			<integer>1600</integer>
 			<key>video_codec</key>
@@ -5666,8 +5633,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<true />
 			<key>two_pass</key>
 			<true />
-			<key>variable_frame_rate</key>
-			<false />
 			<key>video_bitrate</key>
 			<integer>1800</integer>
 			<key>video_codec</key>
@@ -5738,8 +5703,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<true />
 			<key>two_pass</key>
 			<true />
-			<key>variable_frame_rate</key>
-			<false />
 			<key>video_bitrate</key>
 			<integer>1500</integer>
 			<key>video_codec</key>
@@ -5805,8 +5768,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>subtitle_lang</key>
 			<string>none</string>
 			<key>two_pass</key>
-			<false />
-			<key>variable_frame_rate</key>
 			<false />
 			<key>video_bitrate</key>
 			<integer>2500</integer>
@@ -5875,8 +5836,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>subtitle_lang</key>
 			<string>none</string>
 			<key>two_pass</key>
-			<false />
-			<key>variable_frame_rate</key>
 			<false />
 			<key>video_bitrate</key>
 			<integer>1024</integer>
@@ -5948,8 +5907,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<true />
 			<key>two_pass</key>
 			<true />
-			<key>variable_frame_rate</key>
-			<false />
 			<key>video_bitrate</key>
 			<integer>2000</integer>
 			<key>video_codec</key>
@@ -6020,8 +5977,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<true />
 			<key>two_pass</key>
 			<true />
-			<key>variable_frame_rate</key>
-			<false />
 			<key>video_bitrate</key>
 			<integer>1300</integer>
 			<key>video_codec</key>
@@ -6087,8 +6042,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>subtitle_lang</key>
 			<string>none</string>
 			<key>two_pass</key>
-			<false />
-			<key>variable_frame_rate</key>
 			<false />
 			<key>video_bitrate</key>
 			<integer>2000</integer>
@@ -6160,8 +6113,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<string>none</string>
 			<key>two_pass</key>
 			<false />
-			<key>variable_frame_rate</key>
-			<false />
 			<key>video_bitrate</key>
 			<integer>960</integer>
 			<key>video_codec</key>
@@ -6231,8 +6182,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>subtitle_lang</key>
 			<string>none</string>
 			<key>two_pass</key>
-			<false />
-			<key>variable_frame_rate</key>
 			<false />
 			<key>video_bitrate</key>
 			<integer>1500</integer>
@@ -6304,8 +6253,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<string>none</string>
 			<key>two_pass</key>
 			<false />
-			<key>variable_frame_rate</key>
-			<false />
 			<key>video_bitrate</key>
 			<integer>700</integer>
 			<key>video_codec</key>
@@ -6355,7 +6302,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<string>large_mp4</string>
 			<string>http_optimize_mp4</string>
 			<string>ipod_file</string>
-			<string>variable_frame_rate</string>
 		</array>
 		<key>decomb</key>
 		<array>
@@ -6388,11 +6334,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 		<key>use_source_name</key>
 		<array>
 			<string>chapters_in_destination</string>
-		</array>
-		<key>variable_frame_rate</key>
-		<array>
-			<string>framerate</string>
-			<string>detelecine</string>
 		</array>
 		<key>video_codec</key>
 		<array>
@@ -6558,27 +6499,11 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<true />
 			</array>
 		</array>
-		<key>detelecine</key>
-		<array>
-			<array>
-				<string>variable_frame_rate</string>
-				<string>TRUE</string>
-				<true />
-			</array>
-		</array>
 		<key>end_chapter</key>
 		<array>
 			<array>
 				<string>title</string>
 				<string>none</string>
-				<true />
-			</array>
-		</array>
-		<key>framerate</key>
-		<array>
-			<array>
-				<string>variable_frame_rate</string>
-				<string>TRUE</string>
 				<true />
 			</array>
 		</array>
@@ -6743,14 +6668,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<array>
 				<string>vquality_type_constant</string>
 				<string>TRUE</string>
-				<true />
-			</array>
-		</array>
-		<key>variable_frame_rate</key>
-		<array>
-			<array>
-				<string>container</string>
-				<string>avi</string>
 				<true />
 			</array>
 		</array>
