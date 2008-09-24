@@ -1886,28 +1886,16 @@ audio_bitrate_opts_clean(GtkBuilder *builder, const gchar *name, gint last_rate)
 			else if (ivalue > last)
 			{
 				ii++;
-				done = !gtk_list_store_remove(store, &iter);
+				gtk_list_store_set(store, &iter, 1, FALSE, -1);
+				done = !gtk_tree_model_iter_next (GTK_TREE_MODEL(store), &iter);
 			}
 			else
 			{
 				ii++;
+				gtk_list_store_set(store, &iter, 1, TRUE, -1);
 				done = !gtk_tree_model_iter_next (GTK_TREE_MODEL(store), &iter);
 			}
 		} while (!done);
-	}
-	for (; ii < hb_audio_bitrates_count; ii++)
-	{
-		if (hb_audio_bitrates[ii].rate <= last)
-		{
-			gtk_list_store_append(store, &iter);
-			gtk_list_store_set(store, &iter, 
-								0, hb_audio_bitrates[ii].string, 
-								1, TRUE, 
-								2, hb_audio_bitrates[ii].string, 
-								3, hb_audio_bitrates[ii].rate, 
-								4, hb_audio_bitrates[ii].string, 
-								-1);
-		}
 	}
 }
 

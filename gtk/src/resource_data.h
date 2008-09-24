@@ -3530,7 +3530,7 @@
 "quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_B"
 "UTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;\n"
 "                                        &lt;signal handler=&quot;audio_"
-"widget_changed_cb&quot; name=&quot;changed&quot;/&gt;\n"
+"mix_changed_cb&quot; name=&quot;changed&quot;/&gt;\n"
 "                                      &lt;/object&gt;\n"
 "                                      &lt;packing&gt;\n"
 "                                        &lt;property name=&quot;left_at"

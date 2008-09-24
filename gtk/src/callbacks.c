@@ -961,7 +961,7 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 static void
 adjust_audio_rate_combos(signal_user_data_t *ud)
 {
-	gint titleindex, audioindex, acodec;
+	gint titleindex, audioindex, acodec, mix;
 	ghb_audio_info_t ainfo;
 	GtkWidget *widget;
 	
@@ -973,6 +973,8 @@ adjust_audio_rate_combos(signal_user_data_t *ud)
 
 	widget = GHB_WIDGET(ud->builder, "audio_codec");
 	acodec = ghb_lookup_combo_int("audio_codec", ghb_widget_value(widget));
+	widget = GHB_WIDGET(ud->builder, "audio_mix");
+	mix = ghb_lookup_combo_int("audio_mix", ghb_widget_value(widget));
 
 	if (ghb_audio_is_passthru (acodec))
 	{
@@ -993,7 +995,7 @@ adjust_audio_rate_combos(signal_user_data_t *ud)
 			ghb_ui_update(ud, "audio_mix", ghb_int64_value(0));
 		}
 	}
-	else if (acodec == HB_ACODEC_FAAC)
+	else if (acodec == HB_ACODEC_FAAC && mix != HB_AMIXDOWN_6CH)
 	{
 		gint br;
 
@@ -1264,6 +1266,22 @@ audio_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		audio_list_refresh_selected(ud);
 		track = ghb_settings_combo_option(asettings, "audio_track");
 		ghb_settings_set_string(asettings, "audio_track_long", track);
+	}
+}
+
+void
+audio_mix_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	GValue *asettings;
+
+	g_debug("audio_widget_changed_cb ()");
+	adjust_audio_rate_combos(ud);
+	check_dependency(ud, widget);
+	asettings = get_selected_asettings(ud);
+	if (asettings != NULL)
+	{
+		ghb_widget_to_setting(asettings, widget);
+		audio_list_refresh_selected(ud);
 	}
 }
 

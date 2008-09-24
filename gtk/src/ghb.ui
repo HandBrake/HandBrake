@@ -2194,7 +2194,7 @@
                                       <object class="GtkComboBox" id="audio_mix">
                                         <property name="visible">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <signal handler="audio_widget_changed_cb" name="changed"/>
+                                        <signal handler="audio_mix_changed_cb" name="changed"/>
                                       </object>
                                       <packing>
                                         <property name="left_attach">4</property>
