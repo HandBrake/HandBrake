@@ -346,11 +346,6 @@
 			<string>0</string>
 			<true />
 		</array>
-		<array>
-			<string>x264_analyse</string>
-			<string>none</string>
-			<true />
-		</array>
 	</array>
 	<key>x264_merange</key>
 	<array>

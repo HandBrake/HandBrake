@@ -6366,10 +6366,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 		<array>
 			<string>video_target_size</string>
 		</array>
-		<key>x264_analyse</key>
-		<array>
-			<string>x264_direct</string>
-		</array>
 		<key>x264_bframes</key>
 		<array>
 			<string>x264_weighted_bframes</string>
@@ -6739,11 +6735,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<array>
 				<string>x264_bframes</string>
 				<string>0</string>
-				<true />
-			</array>
-			<array>
-				<string>x264_analyse</string>
-				<string>none</string>
 				<true />
 			</array>
 		</array>

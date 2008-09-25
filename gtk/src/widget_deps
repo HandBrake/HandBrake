@@ -89,10 +89,6 @@
 	<array>
 		<string>video_target_size</string>
 	</array>
-	<key>x264_analyse</key>
-	<array>
-		<string>x264_direct</string>
-	</array>
 	<key>x264_bframes</key>
 	<array>
 		<string>x264_weighted_bframes</string>
