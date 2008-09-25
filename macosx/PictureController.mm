@@ -262,6 +262,14 @@ are maintained across different sources */
             /* We set job->width and call hb_set_anamorphic_size in libhb to do a "dry run" to get
              * the values to be used by libhb for loose anamorphic
              */
+            /* if the sender is the anamorphic popup, then we know that loose anamorphic has just
+             * been turned on, so snap the width to full width for the source.
+             */
+            if (sender == fAnamorphicPopUp)
+            {
+                [fWidthStepper      setIntValue: fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3]];
+                [fWidthField        setIntValue: fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3]];
+            }
             job->width       = [fWidthStepper  intValue];
             hb_set_anamorphic_size(job, &output_width, &output_height, &output_par_width, &output_par_height);
             [fHeightStepper      setIntValue: output_height];
