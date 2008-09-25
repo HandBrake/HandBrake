@@ -348,23 +348,40 @@ ghb_update_from_preset(
 	}
 }
 
-static void
-store_plist(GValue *plist, const gchar *name)
+gchar*
+ghb_get_user_config_dir()
 {
 	const gchar *dir;
 	gchar *config;
-	FILE *file;
 
 	dir = g_get_user_config_dir();
-	config = g_strdup_printf ("%s/ghb", dir);
-	if (!g_file_test(config, G_FILE_TEST_IS_DIR))
+	if (!g_file_test(dir, G_FILE_TEST_IS_DIR))
 	{
-		g_mkdir (config, 0755);
+		dir = g_get_home_dir();
+		config = g_strdup_printf ("%s/.ghb", dir);
+		if (!g_file_test(config, G_FILE_TEST_IS_DIR))
+			g_mkdir (config, 0755);
 	}
+	else
+	{
+		config = g_strdup_printf ("%s/ghb", dir);
+		if (!g_file_test(config, G_FILE_TEST_IS_DIR))
+			g_mkdir (config, 0755);
+	}
+	return config;
+}
+
+static void
+store_plist(GValue *plist, const gchar *name)
+{
+	gchar *config, *path;
+	FILE *file;
+
+	config = ghb_get_user_config_dir();
+	path = g_strdup_printf ("%s/%s", config, name);
+	file = g_fopen(path, "w");
 	g_free(config);
-	config = g_strdup_printf ("%s/ghb/%s", dir, name);
-	file = g_fopen(config, "w");
-	g_free(config);
+	g_free(path);
 	ghb_plist_write(file, plist);
 	fclose(file);
 }
@@ -372,32 +389,32 @@ store_plist(GValue *plist, const gchar *name)
 static GValue*
 load_plist(const gchar *name)
 {
-	const gchar *dir;
-	gchar *config;
+	gchar *config, *path;
 	GValue *plist = NULL;
 
-	dir = g_get_user_config_dir();
-	config = g_strdup_printf ("%s/ghb/%s", dir, name);
-	if (g_file_test(config, G_FILE_TEST_IS_REGULAR))
+	config = ghb_get_user_config_dir();
+	path = g_strdup_printf ("%s/%s", config, name);
+	if (g_file_test(path, G_FILE_TEST_IS_REGULAR))
 	{
-		plist = ghb_plist_parse_file(config);
+		plist = ghb_plist_parse_file(path);
 	}
 	g_free(config);
+	g_free(path);
 	return plist;
 }
 
 static void
 remove_plist(const gchar *name)
 {
-	const gchar *dir;
-	gchar *config;
+	gchar *config, *path;
 
-	dir = g_get_user_config_dir();
-	config = g_strdup_printf ("%s/ghb/%s", dir, name);
-	if (g_file_test(config, G_FILE_TEST_IS_REGULAR))
+	config = ghb_get_user_config_dir();
+	path = g_strdup_printf ("%s/%s", config, name);
+	if (g_file_test(path, G_FILE_TEST_IS_REGULAR))
 	{
-		g_unlink(config);
+		g_unlink(path);
 	}
+	g_free(path);
 	g_free(config);
 }
 

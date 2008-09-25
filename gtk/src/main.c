@@ -385,6 +385,7 @@ IoRedirect(signal_user_data_t *ud)
 {
 	GIOChannel *channel;
 	gint pfd[2];
+	gchar *config, *path;
 
 	// I'm opening a pipe and attaching the writer end to stderr
 	// The reader end will be polled by main event loop and I'll get
@@ -396,7 +397,12 @@ IoRedirect(signal_user_data_t *ud)
 	}
 	// Open activity log.
 	// TODO: Put this in the same directory as the encode destination
-	ud->activity_log = g_io_channel_new_file ("Activity.log", "w", NULL);
+	config = ghb_get_user_config_dir();
+	path = g_strdup_printf("%s/%s", config, "Activity.log");
+	ud->activity_log = g_io_channel_new_file (path, "w", NULL);
+	ghb_ui_update(ud, "activity_location", ghb_string_value(path));
+	g_free(path);
+	g_free(config);
 	// Set encoding to raw.
 	g_io_channel_set_encoding (ud->activity_log, NULL, NULL);
 	stderr->_fileno = pfd[1];
@@ -492,11 +498,11 @@ main (int argc, char *argv[])
 	ud->current_job = NULL;
 	ud->current_dvd_device = NULL;
 	ud->dont_clear_presets = FALSE;
-	// Redirect stderr to the activity window
-	IoRedirect(ud);
 	// Enable events that alert us to media change events
 	watch_volumes (ud);
 	ud->builder = create_builder_or_die (BUILDER_NAME);
+	// Redirect stderr to the activity window
+	IoRedirect(ud);
 	ghb_init_dep_map();
 
 	// Need to connect x264_options textview buffer to the changed signal

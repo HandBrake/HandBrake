@@ -555,6 +555,10 @@ update_widget(GtkWidget *widget, const GValue *value)
 												GTK_TEXT_VIEW(widget));
 		gtk_text_buffer_set_text (buffer, str, -1);
 	}
+	else if (type == GTK_TYPE_LABEL)
+	{
+		gtk_label_set_text (GTK_LABEL(widget), str);
+	}
 	else
 	{
 		g_debug("Attempt to set unknown widget type");

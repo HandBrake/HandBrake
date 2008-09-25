@@ -37,5 +37,6 @@ void ghb_set_preset_default(GValue *settings);
 void ghb_save_queue(GValue *queue);
 GValue* ghb_load_queue();
 void ghb_remove_queue_file(void);;
+gchar* ghb_get_user_config_dir();
 
 #endif // _GHB_PRESETS_H_

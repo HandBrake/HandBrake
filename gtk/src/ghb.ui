@@ -3813,6 +3813,16 @@ this setting.</property>
           <placeholder/>
         </child>
         <child>
+          <object class="GtkLabel" id="activity_location">
+            <property name="justify">GTK_JUSTIFY_LEFT</property>
+            <property name="visible">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkScrolledWindow" id="activity_scroll">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -3833,7 +3843,7 @@ this setting.</property>
             </child>
           </object>
           <packing>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
