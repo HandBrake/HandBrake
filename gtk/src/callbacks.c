@@ -4565,6 +4565,8 @@ gboolean queue_key_press_cb(
 	gint status;
 
 	g_debug("queue_key_press_cb ()");
+	if (event->keyval != GDK_Delete)
+		return FALSE;
 	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
 	store = gtk_tree_view_get_model(treeview);
 
@@ -4590,7 +4592,7 @@ gboolean queue_key_press_cb(
 			// Ask if wants to stop encode.
 			if (!cancel_encode(NULL))
 			{
-				return FALSE;
+				return TRUE;
 			}
 			unique_id = ghb_settings_get_int(settings, "job_unique_id");
 			ghb_remove_job(unique_id);
@@ -4602,6 +4604,7 @@ gboolean queue_key_press_cb(
 		ghb_value_free(old);
 		ghb_array_remove(ud->queue, row);
 		ghb_save_queue(ud->queue);
+		return TRUE;
 	}
 	return FALSE;
 }
