@@ -386,7 +386,7 @@
        - B-frames (when 0 turn of b-frame specific stuff, when < 2 disable b-pyramid)
        - CABAC (when 0 turn off trellis)
        - subme  (if under 6 turn off brdo)
-       - analysis (if none, turn off 8x8dct and direct pred)
+       - analysis (if none, turn off 8x8dct)
        - refs (under 2, disable mixed-refs)
     */
     
@@ -444,13 +444,9 @@
             [[fX264optBRDOSwitch animator] setHidden:NO];
             [[fX264optBRDOLabel animator] setHidden:NO];
         }
-        
-        if ( [fX264optAnalysePopUp indexOfSelectedItem] != 1)
-        {
-            /* Only show direct pred when allowed by both bframes and analysis.*/
-            [[fX264optDirectPredPopUp animator] setHidden:NO];
-            [[fX264optDirectPredLabel animator] setHidden:NO];
-        }
+
+        [[fX264optDirectPredPopUp animator] setHidden:NO];
+        [[fX264optDirectPredLabel animator] setHidden:NO];
     }
     else
     {
@@ -470,12 +466,8 @@
             [[fX264optBRDOLabel animator] setHidden:NO];
         }
 
-        if ( [fX264optAnalysePopUp indexOfSelectedItem] != 1)
-        {
-            /* Only show direct pred when allowed by both bframes and analysis.*/
-            [[fX264optDirectPredPopUp animator] setHidden:NO];
-            [[fX264optDirectPredLabel animator] setHidden:NO];
-        }
+        [[fX264optDirectPredPopUp animator] setHidden:NO];
+        [[fX264optDirectPredLabel animator] setHidden:NO];
     }
     
     if ( [fX264optCabacSwitch state] == false)
@@ -512,29 +504,16 @@
     
     if ( [fX264optAnalysePopUp indexOfSelectedItem] == 1)
     {
-        /* No analysis? Disable 8x8dct and direct pred */
+        /* No analysis? Disable 8x8dct */
         [[fX264opt8x8dctSwitch animator] setHidden:YES];
         [[fX264opt8x8dctLabel animator] setHidden:YES];
         if ( [fX264opt8x8dctSwitch state] == 1 && sender != fX264opt8x8dctSwitch )
             [fX264opt8x8dctSwitch performClick:self];
-
-        [[fX264optDirectPredPopUp animator] setHidden:YES];
-        [[fX264optDirectPredLabel animator] setHidden:YES];
-        [fX264optDirectPredPopUp selectItemAtIndex: 0];        
-        if ( [fX264optDirectPredPopUp indexOfSelectedItem] > 1 && sender != fX264optDirectPredPopUp)
-            [[fX264optDirectPredPopUp cell] performClick:self];
     }
     else
     {
         [[fX264opt8x8dctSwitch animator] setHidden:NO];
         [[fX264opt8x8dctLabel animator] setHidden:NO];
-
-        if ( [fX264optBframesPopUp indexOfSelectedItem ] >= 2)
-        {
-            /* Onlt show direct pred when allowed by both analysis and bframes */
-            [[fX264optDirectPredPopUp animator] setHidden:NO];
-            [[fX264optDirectPredLabel animator] setHidden:NO];
-        }
     }
     
     if ( [fX264optRefPopUp indexOfSelectedItem] < 3)
