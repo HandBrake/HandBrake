@@ -2411,8 +2411,8 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	info = g_strdup_printf 
 	(
 		"<big><b>%s</b></big> "
-		"(Title %d, Chapters %d through %d, %d Video %s)"
-		" --> %s",
+		"<small>(Title %d, Chapters %d through %d, %d Video %s)"
+		" --> %s</small>",
 		 vol_name, title+1, start_chapter, end_chapter, 
 		 pass2 ? 2:1, pass2 ? "Passes":"Pass", basename
 	);
@@ -2456,20 +2456,24 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	markers = ghb_settings_get_boolean(settings, "chapter_markers");
 
 	if (preset_modified)
-		g_string_append_printf(str, "<b>Customized Preset Based On:</b> %s\n", 
-								preset);
+		g_string_append_printf(str, 
+			"<b>Customized Preset Based On:</b> <small>%s</small>\n", 
+			preset);
 	else
-		g_string_append_printf(str, "<b>Preset:</b> %s\n", preset);
+		g_string_append_printf(str, 
+			"<b>Preset:</b> <small>%s</small>\n", 
+			preset);
 
 	if (markers)
 	{
 		g_string_append_printf(str, 
-			"<b>Format:</b> %s Container, Chapter Markers\n", container);
+			"<b>Format:</b> <small>%s Container, Chapter Markers</small>\n", 
+			container);
 	}
 	else
 	{
 		g_string_append_printf(str, 
-			"<b>Format:</b> %s Container\n", container);
+			"<b>Format:</b> <small>%s Container</small>\n", container);
 	}
 	if (mux == HB_MUX_MP4)
 	{
@@ -2480,17 +2484,18 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		large = ghb_settings_get_boolean(settings, "large_mp4");
 		if (http || ipod || large)
 		{
-			g_string_append_printf(str, "<b>MP4 Options:</b>");
+			g_string_append_printf(str, "<b>MP4 Options:</b><small>");
 			if (ipod)
 				g_string_append_printf(str, " - iPod Atom");
 			if (http)
 				g_string_append_printf(str, " - Http Optimized");
 			if (large)
 				g_string_append_printf(str, " - 64 Bit");
-			g_string_append_printf(str, "\n");
+			g_string_append_printf(str, "</small>\n");
 		}
 	}
-	g_string_append_printf(str, "<b>Destination:</b> %s\n", dest);
+	g_string_append_printf(str, 
+		"<b>Destination:</b> <small>%s</small>\n", dest);
 
 	width = ghb_settings_get_int(settings, "scale_width");
 	height = ghb_settings_get_int(settings, "scale_height");
@@ -2571,17 +2576,24 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	source_width = ghb_settings_get_int(settings, "source_width");
 	source_height = ghb_settings_get_int(settings, "source_height");
 	g_string_append_printf(str,
-		"<b>Picture:</b> Source: %d x %d, Output %d x %d %s\n",
+		"<b>Picture:</b> Source: <small>%d x %d, Output %d x %d %s</small>\n",
 		 source_width, source_height, width, height, aspect_desc);
 
 	gboolean decomb;
+	gboolean filters = FALSE;
 
 	decomb = ghb_settings_get_boolean(settings, "decomb");
-	g_string_append_printf(str, "<b>Filters:</b>");
+	g_string_append_printf(str, "<b>Filters:</b><small>");
 	if (ghb_settings_get_boolean(settings, "detelecine"))
+	{
 		g_string_append_printf(str, " - Detelecine");
+		filters = TRUE;
+	}
 	if (decomb)
+	{
 		g_string_append_printf(str, " - Decomb");
+		filters = TRUE;
+	}
 	else
 	{
 		gint deint = ghb_settings_combo_int(settings, 
@@ -2591,6 +2603,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 			const gchar *opt = ghb_settings_combo_option(settings,
 					tweaks ? "tweak_deinterlace":"deinterlace");
 			g_string_append_printf(str, " - Deinterlace: %s", opt);
+			filters = TRUE;
 		}
 	}
 	gint denoise = ghb_settings_combo_int(settings, 
@@ -2600,27 +2613,37 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		const gchar *opt = ghb_settings_combo_option(settings,
 				tweaks ? "tweak_denoise":"denoise");
 		g_string_append_printf(str, " - Denoise: %s", opt);
+		filters = TRUE;
 	}
 	gint deblock = ghb_settings_get_int(settings, "deblock");
 	if (deblock >= 5)
+	{
 		g_string_append_printf(str, " - Deblock (%d)", deblock);
+		filters = TRUE;
+	}
 	if (ghb_settings_get_boolean(settings, "grayscale"))
+	{
 		g_string_append_printf(str, " - Grayscale");
-	g_string_append_printf(str, "\n");
+		filters = TRUE;
+	}
+	if (!filters)
+		g_string_append_printf(str, " None");
+	g_string_append_printf(str, "</small>\n");
 
 	g_string_append_printf(str,
-		"<b>Video:</b> %s, Framerate: %s, %s %d%s\n",
+		"<b>Video:</b> <small>%s, Framerate: %s, %s %d%s</small>\n",
 		 vcodec, fps, vq_desc, vqvalue, vq_units);
 
 	turbo = ghb_settings_get_boolean(settings, "turbo");
 	if (turbo)
 	{
-		g_string_append_printf(str, "<b>Turbo:</b> On\n");
+		g_string_append_printf(str, "<b>Turbo:</b> <small>On</small>\n");
 	}
 	if (strcmp(vcodec_abbr, "x264") == 0)
 	{
 		gchar *x264opts = ghb_build_x264opts_string(settings);
-		g_string_append_printf(str, "<b>x264 Options:</b> %s\n", x264opts);
+		g_string_append_printf(str, 
+			"<b>x264 Options:</b> <small>%s</small>\n", x264opts);
 		g_free(x264opts);
 	}
 	// Add the audios
@@ -2648,7 +2671,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		track = ghb_settings_get_string(asettings, "audio_track_long");
 		mix = ghb_settings_combo_option(asettings, "audio_mix");
 		g_string_append_printf(str,
-			"<b>Audio:</b> %s, Encoder: %s, Mixdown: %s, SampleRate: %s, Bitrate: %s",
+			"<b>Audio:</b><small> %s, Encoder: %s, Mixdown: %s, SampleRate: %s, Bitrate: %s</small>",
 			 track, acodec, mix, samplerate, bitrate);
 		if (ii < count-1)
 			g_string_append_printf(str, "\n");

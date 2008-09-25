@@ -281,6 +281,13 @@ bind_queue_tree_model (signal_user_data_t *ud)
 						textcell);
 	g_signal_connect(treeview, "drag_data_received", queue_drag_cb, ud);
 	g_signal_connect(treeview, "drag_motion", queue_drag_motion_cb, ud);
+
+	// Work around silly treeview display bug.  If the treeview
+	// hasn't been shown yet, the width request doesn't seem
+	// to work right.  Cells get badly formatted.
+	GtkWidget *widget = GHB_WIDGET (ud->builder, "queue_window");
+	gtk_widget_show (widget);
+	gtk_widget_hide (widget);
 }
 
 extern void audio_list_selection_changed_cb(void);

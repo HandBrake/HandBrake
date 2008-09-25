@@ -3963,7 +3963,7 @@ this setting.&lt;/property&gt;
             &lt;property name=&quot;vscrollbar_policy&quot;&gt;GTK_POLICY_AUTOMATIC&lt;/property&gt;
             &lt;child&gt;
               &lt;object class=&quot;GtkTreeView&quot; id=&quot;queue_list&quot;&gt;
-                &lt;property name=&quot;width_request&quot;&gt;1024&lt;/property&gt;
+                &lt;property name=&quot;width_request&quot;&gt;900&lt;/property&gt;
                 &lt;property name=&quot;height_request&quot;&gt;300&lt;/property&gt;
                 &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                 &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
