@@ -417,9 +417,12 @@
 
         [[fX264optDirectPredPopUp animator] setHidden:YES];
         [[fX264optDirectPredLabel animator] setHidden:YES];
-        [fX264optDirectPredPopUp selectItemAtIndex: 0];        
-        if ( [fX264optDirectPredPopUp indexOfSelectedItem] > 1 && sender != fX264optWeightBSwitch && sender != fX264optBRDOSwitch && sender != fX264optBPyramidSwitch && sender != fX264optBiMESwitch && sender != fX264optDirectPredPopUp)
+        if ( [fX264optDirectPredPopUp indexOfSelectedItem] > 0 && sender != fX264optWeightBSwitch && sender != fX264optBRDOSwitch && sender != fX264optBPyramidSwitch && sender != fX264optBiMESwitch && sender != fX264optDirectPredPopUp)
+        {
+            [fX264optDirectPredPopUp selectItemAtIndex: 0];
             [[fX264optDirectPredPopUp cell] performClick:self];
+            
+        }
     }
     else if ( [fX264optBframesPopUp indexOfSelectedItem ] == 2)
     {
