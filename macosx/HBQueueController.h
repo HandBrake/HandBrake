@@ -99,6 +99,7 @@ BOOL                        fIsDragging;
     IBOutlet HBQueueOutlineView  *fOutlineView;
     IBOutlet NSTextField         *fQueueCountField;
     NSArray                      *fDraggedNodes;
+    BOOL                          fIsDragging;
 #if HB_OUTLINE_METRIC_CONTROLS
     IBOutlet NSSlider            *fIndentation; // debug
     IBOutlet NSSlider            *fSpacing;     // debug
@@ -123,8 +124,6 @@ BOOL                        fIsDragging;
 - (id)outlineView:(NSOutlineView *)fOutlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item;
 
 - (void)outlineView:(NSOutlineView *)fOutlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item;
-
-- (void)moveObjectsInQueueArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(unsigned)insertIndex;
 
 /* Animate the icon for the current encode */
 - (void) animateWorkingEncodeIconInQueue;

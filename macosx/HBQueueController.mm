@@ -118,21 +118,21 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 - (void)setQueueArray: (NSMutableArray *)QueueFileArray
 {
     [fJobGroups setArray:QueueFileArray];
- 
+    fIsDragging = NO; 
     /* First stop any timer working now */
-[self stopAnimatingCurrentJobGroupInQueue];
-          [fOutlineView reloadData];
-
-
-
-/* lets get the stats on the status of the queue array */
-
-fEncodingQueueItem = 0;
-fPendingCount = 0;
-fCompletedCount = 0;
-fCanceledCount = 0;
-fWorkingCount = 0;
-
+    [self stopAnimatingCurrentJobGroupInQueue];
+    [fOutlineView reloadData];
+    
+    
+    
+    /* lets get the stats on the status of the queue array */
+    
+    fEncodingQueueItem = 0;
+    fPendingCount = 0;
+    fCompletedCount = 0;
+    fCanceledCount = 0;
+    fWorkingCount = 0;
+    
     /* We use a number system to set the encode status of the queue item
      * in controller.mm
      * 0 == already encoded
@@ -140,7 +140,7 @@ fWorkingCount = 0;
      * 2 == is yet to be encoded
      * 3 == cancelled
      */
-
+    
 	int i = 0;
     NSEnumerator *enumerator = [fJobGroups objectEnumerator];
 	id tempObject;
@@ -166,16 +166,16 @@ fWorkingCount = 0;
 		}
 		i++;
 	}
-
-/* We should fire up the encoding timer here based on fWorkingCount */
-
-if (fWorkingCount > 0)
-{
-    /* we have an encoding job so, lets start the animation timer */
-    [self startAnimatingCurrentWorkingEncodeInQueue];
-}
-
-/* Set the queue status field in the queue window */
+    
+    /* We should fire up the encoding timer here based on fWorkingCount */
+    
+    if (fWorkingCount > 0)
+    {
+        /* we have an encoding job so, lets start the animation timer */
+        [self startAnimatingCurrentWorkingEncodeInQueue];
+    }
+    
+    /* Set the queue status field in the queue window */
     NSMutableString * string;
     if (fPendingCount == 1)
     {
@@ -186,7 +186,7 @@ if (fWorkingCount > 0)
         string = [NSMutableString stringWithFormat: NSLocalizedString( @"%d encode(s) pending", @"" ), fPendingCount];
     }
     [fQueueCountField setStringValue:string];
-
+    
 }
 /* This method sets the status string in the queue window
  * and is called from Controller.mm (fHBController)
@@ -708,16 +708,11 @@ if (fWorkingCount > 0)
     return YES;
 }
 
-- (BOOL)outlineView:(NSOutlineView *)fOutlineView shouldExpandItem:(id)item
+- (BOOL)outlineView:(NSOutlineView *)outlineView shouldExpandItem:(id)item
 {
     // Our outline view has no levels, but we can still expand every item. Doing so
     // just makes the row taller. See heightOfRowByItem below.
-
-    // Don't autoexpand while dragging, since we can't drop into the items
- //   return ![(HBQueueOutlineView*)fOutlineView isDragging];
-
-    return YES; //<-- Needs to be YES to allow expanding
-
+return ![(HBQueueOutlineView*)outlineView isDragging];
 }
 
 - (NSInteger)outlineView:(NSOutlineView *)fOutlineView numberOfChildrenOfItem:(id)item
@@ -1250,15 +1245,17 @@ if (fWorkingCount > 0)
     // Don't allow dropping ONTO an item since they can't really contain any children.
     BOOL isOnDropTypeProposal = index == NSOutlineViewDropOnItemIndex;
     if (isOnDropTypeProposal)
+    {
         return NSDragOperationNone;
-
+    }
+    
     // Don't allow dropping INTO an item since they can't really contain any children.
     if (item != nil)
     {
         index = [fOutlineView rowForItem: item] + 1;
         item = nil;
     }
-
+    
     // NOTE: Should we allow dropping a pending job *above* the
     // finished or already encoded jobs ?
     // We do not let the user drop a pending job before or *above*
@@ -1268,7 +1265,6 @@ if (fWorkingCount > 0)
         return NSDragOperationNone;
         index = MAX (index, fEncodingQueueItem);
 	}
-    
     
     [outlineView setDropItem:item dropChildIndex:index];
     return NSDragOperationGeneric;
@@ -1286,43 +1282,13 @@ if (fWorkingCount > 0)
     {
         [moveItems addIndex:[fJobGroups indexOfObject:obj]];
     }
-
     // Successful drop, we use moveObjectsInQueueArray:... in fHBController
     // to properly rearrange the queue array, save it to plist and then send it back here.
     // since Controller.mm is handling all queue array manipulation.
     // We *could do this here, but I think we are better served keeping that code together.
-    [fHBController moveObjectsInQueueArray:fJobGroups fromIndexes:moveItems toIndex: index];    
+    [fHBController moveObjectsInQueueArray:fJobGroups fromIndexes:moveItems toIndex: index];
     return YES;
 }
-- (void)moveObjectsInQueueArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(unsigned)insertIndex
-{
-    unsigned index = [indexSet lastIndex];
-    unsigned aboveInsertIndexCount = 0;
-    
-    while (index != NSNotFound)
-    {
-        unsigned removeIndex;
-        
-        if (index >= insertIndex)
-        {
-            removeIndex = index + aboveInsertIndexCount;
-            aboveInsertIndexCount++;
-        }
-        else
-        {
-            removeIndex = index;
-            insertIndex--;
-        }
-        
-        id object = [[array objectAtIndex:removeIndex] retain];
-        [array removeObjectAtIndex:removeIndex];
-        [array insertObject:object atIndex:insertIndex];
-        [object release];
-        
-        index = [indexSet indexLessThanIndex:index];
-    }
-}
-
 
 
 @end
