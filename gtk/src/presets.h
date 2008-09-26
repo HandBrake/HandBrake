@@ -38,5 +38,8 @@ void ghb_save_queue(GValue *queue);
 GValue* ghb_load_queue();
 void ghb_remove_queue_file(void);;
 gchar* ghb_get_user_config_dir();
+void ghb_clear_presets_selection(signal_user_data_t *ud);
+void ghb_select_preset(GtkBuilder *builder, const gchar *preset);
+void ghb_presets_list_update(signal_user_data_t *ud);
 
 #endif // _GHB_PRESETS_H_

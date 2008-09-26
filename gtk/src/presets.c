@@ -17,6 +17,8 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include "settings.h"
+#include "audiohandler.h"
+#include "hb-backend.h"
 #include "plist.h"
 #include "resources.h"
 #include "presets.h"
@@ -803,5 +805,356 @@ ghb_presets_remove(const gchar *name)
 		ghb_dict_remove(presetsPlist, name);
 		presets_store();
 	}
+}
+
+void
+ghb_presets_list_update(signal_user_data_t *ud)
+{
+	GtkTreeView *treeview;
+	GtkTreeIter iter;
+	GtkListStore *store;
+	gboolean done;
+	GList *presets, *plink;
+	gchar *preset, *def_preset;
+	gchar *description;
+	gint flags, custom, def;
+	
+	g_debug("ghb_presets_list_update ()");
+	def_preset = ghb_settings_get_string(ud->settings, "default_preset");
+	plink = presets = ghb_presets_get_names();
+	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
+	store = GTK_LIST_STORE(gtk_tree_view_get_model(treeview));
+	if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(store), &iter))
+	{
+		do
+		{
+			if (plink)
+			{
+				// Update row with settings data
+				g_debug("Updating row");
+				preset = (gchar*)plink->data;
+				def = 0;
+				if (strcmp(preset, def_preset) == 0)
+					def = PRESET_DEFAULT;
+				
+				description = ghb_presets_get_description(preset);
+				flags = ghb_preset_flags(preset);
+				custom = flags & PRESET_CUSTOM;
+				gtk_list_store_set(store, &iter, 
+							0, preset, 
+							1, def ? 800 : 400, 
+							2, def ? 2 : 0,
+						   	3, custom ? "black" : "blue", 
+							4, description,
+							-1);
+				plink = plink->next;
+				g_free(description);
+				done = !gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter);
+			}
+			else
+			{
+				// No more settings data, remove row
+				g_debug("Removing row");
+				done = !gtk_list_store_remove(store, &iter);
+			}
+		} while (!done);
+	}
+	while (plink)
+	{
+		// Additional settings, add row
+		g_debug("Adding rows");
+		preset = (gchar*)plink->data;
+		def = 0;
+		if (strcmp(preset, def_preset) == 0)
+			def = PRESET_DEFAULT;
+
+		description = ghb_presets_get_description(preset);
+		gtk_list_store_append(store, &iter);
+		flags = ghb_preset_flags(preset);
+		custom = flags & PRESET_CUSTOM;
+		gtk_list_store_set(store, &iter, 0, preset, 
+						   	1, def ? 800 : 400, 
+						   	2, def ? 2 : 0,
+						   	3, custom ? "black" : "blue", 
+							4, description,
+						   	-1);
+		plink = plink->next;
+		g_free(description);
+	}
+	g_free(def_preset);
+	g_list_free (presets);
+}
+
+void
+ghb_select_preset(GtkBuilder *builder, const gchar *preset)
+{
+	GtkTreeView *treeview;
+	GtkTreeSelection *selection;
+	GtkTreeModel *store;
+	GtkTreeIter iter;
+	gchar *tpreset;
+	gboolean done;
+	gboolean foundit = FALSE;
+	
+	g_debug("select_preset()");
+	if (preset == NULL) return;
+	treeview = GTK_TREE_VIEW(GHB_WIDGET(builder, "presets_list"));
+	selection = gtk_tree_view_get_selection (treeview);
+	store = gtk_tree_view_get_model (treeview);
+	if (gtk_tree_model_get_iter_first(store, &iter))
+	{
+		do
+		{
+			gtk_tree_model_get(store, &iter, 0, &tpreset, -1);
+			if (strcmp(preset, tpreset) == 0)
+			{
+				gtk_tree_selection_select_iter (selection, &iter);
+				foundit = TRUE;
+				g_free(tpreset);
+				break;
+			}
+			g_free(tpreset);
+			done = !gtk_tree_model_iter_next(store, &iter);
+		} while (!done);
+	}
+	if (!foundit)
+	{
+		gtk_tree_model_get_iter_first(store, &iter);
+		gtk_tree_selection_select_iter (selection, &iter);
+	}
+}
+
+static void
+update_audio_presets(signal_user_data_t *ud)
+{
+	g_debug("update_audio_presets");
+	const GValue *audio_list;
+
+	audio_list = ghb_settings_get_value(ud->settings, "audio_list");
+	ghb_settings_set_value(ud->settings, "pref_audio_list", audio_list);
+}
+
+void
+presets_save_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+{
+	GtkWidget *dialog;
+	GtkEntry *entry;
+	GtkTextView *desc;
+	GtkResponseType response;
+	gchar *preset;
+
+	g_debug("presets_save_clicked_cb ()");
+	preset = ghb_settings_get_string (ud->settings, "preset");
+	// Clear the description
+	desc = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "preset_description"));
+	dialog = GHB_WIDGET(ud->builder, "preset_save_dialog");
+	entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "preset_name"));
+	gtk_entry_set_text(entry, preset);
+	g_free(preset);
+	response = gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_hide(dialog);
+	if (response == GTK_RESPONSE_OK)
+	{
+		// save the preset
+		const gchar *name = gtk_entry_get_text(entry);
+		g_debug("description to settings");
+		ghb_widget_to_setting(ud->settings, GTK_WIDGET(desc));
+		// Construct the audio settings presets from the current audio list
+		update_audio_presets(ud);
+		ghb_settings_save(ud, name);
+		ghb_presets_list_update(ud);
+		// Make the new preset the selected item
+		ghb_select_preset(ud->builder, name);
+	}
+}
+
+void
+presets_restore_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+{
+	g_debug("presets_restore_clicked_cb ()");
+	// Reload only the standard presets
+	ghb_presets_reload(ud);
+	ghb_presets_list_update(ud);
+	// Updating the presets list shuffles things around
+	// need to make sure the proper preset is selected
+	gchar *preset = ghb_settings_get_string (ud->settings, "preset");
+	ghb_select_preset(ud->builder, preset);
+	g_free(preset);
+}
+
+void
+presets_remove_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+{
+	GtkTreeView *treeview;
+	GtkTreeSelection *selection;
+	GtkTreeModel *store;
+	GtkTreeIter iter;
+	gchar *preset;
+	GtkResponseType response;
+
+	g_debug("presets_remove_clicked_cb ()");
+	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
+	selection = gtk_tree_view_get_selection (treeview);
+	if (gtk_tree_selection_get_selected(selection, &store, &iter))
+	{
+		GtkWidget *dialog;
+
+		gtk_tree_model_get(store, &iter, 0, &preset, -1);
+		dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL,
+								GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
+								"Confirm deletion of preset %s.", preset);
+		response = gtk_dialog_run(GTK_DIALOG(dialog));
+		gtk_widget_destroy (dialog);
+		if (response == GTK_RESPONSE_YES)
+		{
+			GtkTreeIter nextIter = iter;
+			gchar *nextPreset = NULL;
+			if (!gtk_tree_model_iter_next(store, &nextIter))
+			{
+				if (gtk_tree_model_get_iter_first(store, &nextIter))
+				{
+					gtk_tree_model_get(store, &nextIter, 0, &nextPreset, -1);
+				}
+			}
+			else
+			{
+				gtk_tree_model_get(store, &nextIter, 0, &nextPreset, -1);
+			}
+			// Remove the selected item
+			// First unselect it so that selecting the new item works properly
+			gtk_tree_selection_unselect_iter (selection, &iter);
+			ghb_presets_remove(preset);
+			ghb_presets_list_update(ud);
+			ghb_select_preset(ud->builder, nextPreset);
+		}
+	}
+}
+
+static void
+preset_update_title_deps(signal_user_data_t *ud, ghb_title_info_t *tinfo)
+{
+	GtkWidget *widget;
+
+	ghb_ui_update(ud, "scale_width", 
+			ghb_int64_value(tinfo->width - tinfo->crop[2] - tinfo->crop[3]));
+	// If anamorphic or keep_aspect, the hight will be automatically calculated
+	gboolean keep_aspect, anamorphic;
+	keep_aspect = ghb_settings_get_boolean(ud->settings, "keep_aspect");
+	anamorphic = ghb_settings_get_boolean(ud->settings, "anamorphic");
+	if (!(keep_aspect || anamorphic))
+	{
+		ghb_ui_update(ud, "scale_height", 
+			ghb_int64_value(tinfo->height - tinfo->crop[0] - tinfo->crop[1]));
+	}
+
+	// Set the limits of cropping.  hb_set_anamorphic_size crashes if
+	// you pass it a cropped width or height == 0.
+	gint bound;
+	bound = tinfo->height / 2 - 2;
+	widget = GHB_WIDGET (ud->builder, "crop_top");
+	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, bound);
+	widget = GHB_WIDGET (ud->builder, "crop_bottom");
+	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, bound);
+	bound = tinfo->width / 2 - 2;
+	widget = GHB_WIDGET (ud->builder, "crop_left");
+	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, bound);
+	widget = GHB_WIDGET (ud->builder, "crop_right");
+	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, bound);
+	if (ghb_settings_get_boolean(ud->settings, "autocrop"))
+	{
+		ghb_ui_update(ud, "crop_top", ghb_int64_value(tinfo->crop[0]));
+		ghb_ui_update(ud, "crop_bottom", ghb_int64_value(tinfo->crop[1]));
+		ghb_ui_update(ud, "crop_left", ghb_int64_value(tinfo->crop[2]));
+		ghb_ui_update(ud, "crop_right", ghb_int64_value(tinfo->crop[3]));
+	}
+}
+
+void
+presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t *ud)
+{
+	GtkTreeModel *store;
+	GtkTreeIter iter;
+	gchar *preset;
+	ghb_title_info_t tinfo;
+	GtkWidget *widget;
+	
+	g_debug("presets_list_selection_changed_cb ()");
+	widget = GHB_WIDGET (ud->builder, "presets_remove");
+	if (gtk_tree_selection_get_selected(selection, &store, &iter))
+	{
+		gtk_tree_model_get(store, &iter, 0, &preset, -1);
+		ud->dont_clear_presets = TRUE;
+		// Temporarily set the video_quality range to (0,100)
+		// This is needed so the video_quality value does not get
+		// truncated when set.  The range will be readjusted below
+		GtkWidget *qp = GHB_WIDGET(ud->builder, "video_quality");
+		gtk_range_set_range (GTK_RANGE(qp), 0, 100);
+		// Clear the audio list prior to changing the preset.  Existing audio
+		// can cause the container extension to be automatically changed when
+		// it shouldn't be
+		ghb_clear_audio_list(ud);
+		ghb_set_preset(ud, preset);
+		gint titleindex;
+		titleindex = ghb_settings_combo_int(ud->settings, "title");
+		ghb_set_pref_audio(titleindex, ud);
+		ghb_settings_set_boolean(ud->settings, "preset_modified", FALSE);
+		ud->dont_clear_presets = FALSE;
+		if (ghb_get_title_info (&tinfo, titleindex))
+		{
+			preset_update_title_deps(ud, &tinfo);
+		}
+		ghb_set_scale (ud, GHB_SCALE_KEEP_NONE);
+
+		gint vqmin, vqmax;
+		ghb_vquality_range(ud, &vqmin, &vqmax);
+		gtk_range_set_range (GTK_RANGE(qp), vqmin, vqmax);
+		gtk_widget_set_sensitive(widget, TRUE);
+	}
+	else
+	{
+		g_debug("No selection???  Perhaps unselected.");
+		gtk_widget_set_sensitive(widget, FALSE);
+	}
+}
+
+void
+ghb_clear_presets_selection(signal_user_data_t *ud)
+{
+	GtkTreeView *treeview;
+	GtkTreeSelection *selection;
+	
+	if (ud->dont_clear_presets) return;
+	g_debug("ghb_clear_presets_selection()");
+	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
+	selection = gtk_tree_view_get_selection (treeview);
+	gtk_tree_selection_unselect_all (selection);
+	ghb_settings_set_boolean(ud->settings, "preset_modified", TRUE);
+}
+
+void
+presets_frame_size_allocate_cb(GtkWidget *widget, GtkAllocation *allocation, signal_user_data_t *ud)
+{
+	GtkTreeView *treeview;
+	GtkTreeSelection *selection;
+	GtkTreeModel *store;
+	GtkTreeIter iter;
+	
+	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
+	selection = gtk_tree_view_get_selection(treeview);
+	if (gtk_tree_selection_get_selected(selection, &store, &iter))
+	{
+		GtkTreePath *path;
+		path = gtk_tree_model_get_path (store, &iter);
+		// Make the parent visible in scroll window if it is not.
+		gtk_tree_view_scroll_to_cell (treeview, path, NULL, FALSE, 0, 0);
+		gtk_tree_path_free(path);
+	}
+}
+
+void
+presets_default_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+{
+	ghb_set_preset_default(ud->settings);
+	ghb_presets_list_update(ud);
 }
 
