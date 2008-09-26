@@ -1088,6 +1088,7 @@ ghb_sanitize_x264opts(signal_user_data_t *ud, const gchar *options)
 		x264_remove_opt(split, x264_weightb_syns);
 		x264_remove_opt(split, x264_brdo_syns);
 		x264_remove_opt(split, x264_bime_syns);
+		x264_remove_opt(split, x264_direct_syns);
 	}
 	if (bframes <= 1)
 	{
@@ -1102,13 +1103,6 @@ ghb_sanitize_x264opts(signal_user_data_t *ud, const gchar *options)
 	if (!ghb_settings_get_boolean(ud->settings, "x264_cabac"))
 	{
 		x264_remove_opt(split, x264_trellis_syns);
-	}
-	gint analyse;
-	analyse = ghb_lookup_combo_int("x264_analyse",
-						ghb_settings_get_value(ud->settings, "x264_analyse"));
-	if (analyse == 1)
-	{
-		x264_remove_opt(split, x264_direct_syns);
 	}
 	for (ii = 0; split[ii] != NULL; ii++)
 	{
