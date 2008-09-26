@@ -87,7 +87,6 @@ static char * turbo_opts = "ref=1:subme=1:me=dia:analyse=none:trellis=0:no-fast-
 static int    largeFileSize = 0;
 static int    preset        = 0;
 static char * preset_name   = 0;
-static int    vfr           = 0;
 static int    cfr           = 0;
 static int    mp4_optimize  = 0;
 static int    ipod_atom     = 0;
@@ -804,18 +803,19 @@ static int HandleEvents( hb_handle_t * h )
                 job->pixel_ratio = pixelratio;
             }
 
-            if (vfr)
-            {
-                detelecine = 1;
-                job->vfr = 1;
-            }
-
             /* Add selected filters */
             job->filters = hb_list_init();
             if( detelecine )
             {
                 hb_filter_detelecine.settings = detelecine_opt;
                 hb_list_add( job->filters, &hb_filter_detelecine );
+                
+                if( !vrate )
+                {
+                    /* No framerate specified, so using same as source.
+                       That means VFR, so set detelecine up to drop frames. */
+                           job->vfr = 1;
+                }
             }
             if( decomb )
             {
@@ -1532,7 +1532,9 @@ static void ShowHelp()
             fprintf( stderr, "/" );
     }
     fprintf( stderr, ")\n"
-	"\n"
+    "                            Be aware that not specifying a framerate lets\n"
+    "                            HandBrake preserve a source's time stamps,\n"
+    "                            potentially creating variable framerate video\n"
 	"    -2, --two-pass          Use two-pass mode\n"
      "    -d, --deinterlace       Deinterlace video with yadif/mcdeint filter\n"
      "          <YM:FD:MM:QP>     (default 0:-1:-1:1)\n"
@@ -1544,16 +1546,19 @@ static void ShowHelp()
      "          <SL:SC:TL:TC>     (default 4:3:6:4.5)\n"
      "           or\n"
      "          <weak/medium/strong>\n"
-     "    -9, --detelecine        Detelecine video with pullup filter\n"
+     "    -9, --detelecine        Detelecine (ivtc) video with pullup filter\n"
+     "                            Note: this filter drops duplicate frames to\n"
+     "                            restore the pre-telecine framerate, unless you\n"
+     "                            specify a constant framerate (--rate 29.97)\n"
      "          <L:R:T:B:SB:MP>   (default 1:1:4:4:0:0)\n"
-     "    -5, --decomb           Selectively deinterlaces when it detects combing\n"
+     "    -5, --decomb            Selectively deinterlaces when it detects combing\n"
      "          <MO:ME:MT:ST:BT:BX:BY>     (default: 1:2:6:9:80:16:16)\n"
     "    -g, --grayscale         Grayscale encoding\n"
     "    -p, --pixelratio        Store pixel aspect ratio in video stream\n"
     "    -P, --loosePixelratio   Store pixel aspect ratio with specified width\n"
     "          <MOD:PARX:PARY>   Takes as optional arguments what number you want\n"
     "                            the dimensions to divide cleanly by (default 16)\n"
-    "                            and the pixel ratio to use (default autodetected)\n)"
+    "                            and the pixel ratio to use (default autodetected)\n"
 
 
 	"\n"
@@ -1600,7 +1605,6 @@ static void ShowHelp()
     "                            on the first pass to improve speed\n"
     "                            (only works with x264, affects PSNR by about 0.05dB,\n"
     "                            and increases first pass speed two to four times)\n"
-    "    -V, --vfr               Perform variable framerate detelecine on NTSC video\n"
     );
 }
 
@@ -1707,7 +1711,6 @@ static int ParseOptions( int argc, char ** argv )
             { "maxWidth",    required_argument, NULL,    'X' },
             { "preset",      required_argument, NULL,    'Z' },
             { "preset-list", no_argument,       NULL,    'z' },
-            { "vfr",         no_argument,       NULL,    'V' },
 
             { 0, 0, 0, 0 }
           };
@@ -1716,7 +1719,7 @@ static int ParseOptions( int argc, char ** argv )
         int c;
 
 		c = getopt_long( argc, argv,
-						 "hvuC:f:4i:Io:t:Lc:m::a:6:s:UFN:e:E:2dD:7895gpOP::w:l:n:b:q:S:B:r:R:Qx:TY:X:VZ:z",
+						 "hvuC:f:4i:Io:t:Lc:m::a:6:s:UFN:e:E:2dD:7895gpOP::w:l:n:b:q:S:B:r:R:Qx:TY:X:Z:z",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -2039,9 +2042,6 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case 'X':
                 maxWidth = atoi (optarg );
-                break;
-            case 'V':
-                vfr = 1;
                 break;
 
             default:
