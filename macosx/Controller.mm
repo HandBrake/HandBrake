@@ -3645,18 +3645,15 @@ the user is using "Custom" settings by determining the sender*/
 - (IBAction) revertPictureSizeToMax: (id) sender
 {
 	hb_job_t * job = fTitle->job;
-	/* We use the output picture width and height
-     as calculated from libhb right after title is set
-     in TitlePopUpChanged */
-	job->width = PicOrigOutputWidth;
-	job->height = PicOrigOutputHeight;
-    [fPictureController setAutoCrop:YES];
+	[fPictureController setAutoCrop:YES];
 	/* Here we use the auto crop values determined right after scan */
 	job->crop[0] = AutoCropTop;
 	job->crop[1] = AutoCropBottom;
 	job->crop[2] = AutoCropLeft;
 	job->crop[3] = AutoCropRight;
-    
+    /* Here we apply the max source storage width and height */
+    job->width = fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3];
+    job->height = fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1];
     
     [self calculatePictureSizing: sender];
     /* We call method to change UI to reflect whether a preset is used or not*/    
