@@ -401,37 +401,17 @@ static void do_job( hb_job_t * job, int cpu_count )
         hb_log( "New dimensions %i * %i", job->width, job->height );
     }
 
+    if( ( job->mux & HB_MUX_AVI ) || job->cfr )
+    {
+        /* VFR detelecine is not compatible with AVI or constant frame rates. */
+        job->vfr = 0;
+    }
+
     if ( job->vfr )
     {
+        /* Ensure we're using "Same as source" FPS,
+           aka VFR, if we're doing VFR detelecine. */
         job->vrate_base = title->rate_base;
-
-        int detelecine_present = 0;
-        if ( job->filters )
-        {
-            for( i = 0; i < hb_list_count( job->filters ); i++ )
-            {
-                hb_filter_object_t * filter = hb_list_item( job->filters, i );
-                if (filter->id == FILTER_DETELECINE)
-                    detelecine_present = 1;
-            }
-        }
-
-        if (!detelecine_present)
-        {
-            /* Allocate the filter. */
-            hb_filter_object_t * filter =  malloc( sizeof( hb_filter_object_t ) );
-
-            /* Copy in the contents of the detelecine struct. */
-            memcpy( filter, &hb_filter_detelecine, sizeof( hb_filter_object_t ) );
-
-            /* Set the name to a copy of the template name so render.c has something to free. */
-            filter->name = strdup(hb_filter_detelecine.name);
-
-            /* Add it to the list. */
-            hb_list_add( job->filters, filter );
-
-            hb_log("work: VFR mode -- adding detelecine filter");
-        }
     }
 
     job->fifo_mpeg2  = hb_fifo_init( 256 );
