@@ -86,6 +86,8 @@ nodist_EXTRA_ghb_SOURCES = dummy.cpp
 ghb_SOURCES = \
 	callbacks.c \
 	callbacks.h \
+	queuehandler.c \
+	queuehandler.h \
 	main.c \
 	settings.c \
 	settings.h \
