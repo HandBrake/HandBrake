@@ -133,8 +133,6 @@ namespace Handbrake.Functions
                 mainWindow.lbl_deblockVal.Text = "Off";
             }
 
-
-
             if (presetQuery.Anamorphic == true)
                 mainWindow.drp_anamorphic.SelectedIndex = 1;
             else
@@ -162,11 +160,7 @@ namespace Handbrake.Functions
                 mainWindow.text_height.Text = "";
             }
 
-            if (presetQuery.VFR == true)
-                mainWindow.check_vfr.CheckState = CheckState.Checked;
-            else
-                mainWindow.check_vfr.CheckState = CheckState.Unchecked;
-            #endregion
+           #endregion
 
             // Video Settings Tab
             #region video
@@ -203,9 +197,6 @@ namespace Handbrake.Functions
                 mainWindow.check_largeFile.CheckState = CheckState.Unchecked;
                 mainWindow.check_largeFile.BackColor = Color.Transparent;
             }
-
-
-
             #endregion
 
             // Chapter Markers Tab
@@ -564,9 +555,6 @@ namespace Handbrake.Functions
 
             if (mainWindow.check_detelecine.Checked)
                 query += " --detelecine";
-
-            if (mainWindow.check_vfr.Checked)
-                query += " -V ";
             #endregion
 
             // Video Settings Tab
@@ -616,10 +604,7 @@ namespace Handbrake.Functions
                 query += " -T ";
 
             if (mainWindow.drp_videoFramerate.Text != "Same as source")
-            {
-                if (!mainWindow.check_vfr.Checked)
-                    query += " -r " + mainWindow.drp_videoFramerate.Text;
-            }
+                query += " -r " + mainWindow.drp_videoFramerate.Text;
 
             switch (mainWindow.drp_deNoise.Text)
             {

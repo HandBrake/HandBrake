@@ -748,24 +748,6 @@ namespace Handbrake
             text_top.Enabled = false;
             text_bottom.Enabled = false;
         }
-        private void check_vfr_CheckedChanged(object sender, EventArgs e)
-        {
-            if (check_vfr.CheckState == CheckState.Checked)
-            {
-                check_detelecine.Enabled = false;
-                check_detelecine.CheckState = CheckState.Checked;
-                drp_videoFramerate.Enabled = false;
-                drp_videoFramerate.SelectedItem = "29.97";
-                lbl_vfr.Visible = true;
-            }
-            else
-            {
-                check_detelecine.Enabled = true;
-                drp_videoFramerate.Enabled = true;
-                drp_videoFramerate.SelectedItem = "Automatic";
-                lbl_vfr.Visible = false;
-            }
-        }
         private void drp_anamorphic_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (drp_anamorphic.SelectedIndex == 1)
@@ -1904,6 +1886,7 @@ namespace Handbrake
         }
         #endregion
 
+ 
         // This is the END of the road ------------------------------------------------------------------------------
     }
 }

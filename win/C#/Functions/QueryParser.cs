@@ -219,18 +219,6 @@ namespace Handbrake.Functions
             }
         }
 
-        private Boolean q_vfr;
-        /// <summary>
-        /// Returns a boolean to indicate wither DeTelecine is on or off
-        /// </summary>
-        public Boolean VFR
-        {
-            get
-            {
-                return this.q_vfr;
-            }
-        }
-
         private int q_deBlock;
         /// <summary>
         /// Returns a boolean to indicate wither DeBlock is on or off.
@@ -820,7 +808,6 @@ namespace Handbrake.Functions
             Match chapterMarkers = Regex.Match(input, @" -m");
             Match chapterMarkersFileMode = Regex.Match(input, @"--markers");
             Match crop = Regex.Match(input, @"--crop ([0-9]*):([0-9]*):([0-9]*):([0-9]*)");
-            Match vfr = Regex.Match(input, @" -V");
             Match lanamorphic = Regex.Match(input, @" -P");
             Match decomb = Regex.Match(input, @" --decomb");
 
@@ -1013,7 +1000,6 @@ namespace Handbrake.Functions
                 if (chapterMarkersFileMode.Success == true || chapterMarkers.Success == true)
                     thisQuery.q_chapterMarkers = true;
                 
-                thisQuery.q_vfr = vfr.Success;
                 thisQuery.q_looseAnamorphic = lanamorphic.Success;
 
                 #endregion

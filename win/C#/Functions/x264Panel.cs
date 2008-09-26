@@ -773,7 +773,7 @@ namespace Handbrake.Functions
                - B-frames (when 0 turn of b-frame specific stuff, when < 2 disable b-pyramid)
                - CABAC (when 0 turn off trellis)
                - subme  (if under 6 turn off brdo)
-               - analysis (if none, turn off 8x8dct and direct pred)
+               - analysis (if none, turn off 8x8dct)
                - refs (under 2, disable mixed-refs)
             */
             if (mainWindow.drop_bFrames.SelectedIndex < 2)
@@ -807,12 +807,9 @@ namespace Handbrake.Functions
                 if (mainWindow.drop_subpixelMotionEstimation.SelectedIndex >= 7 || mainWindow.drop_subpixelMotionEstimation.SelectedIndex == 0)
                     mainWindow.check_bFrameRateDistortion.Visible = true;
 
-                /* Only show direct pred when allowed by both bframes and analysis.*/
-                if (mainWindow.drop_analysis.SelectedIndex != 1)
-                {
-                    mainWindow.drop_directPrediction.Visible = true;
-                    mainWindow.lbl_direct_prediction.Visible = true;
-                }
+                mainWindow.drop_directPrediction.Visible = true;
+                mainWindow.lbl_direct_prediction.Visible = true;
+                
             }
             else
             {
@@ -824,13 +821,8 @@ namespace Handbrake.Functions
                 if (mainWindow.drop_subpixelMotionEstimation.SelectedIndex >= 7 || mainWindow.drop_subpixelMotionEstimation.SelectedIndex == 0)
                     mainWindow.check_bFrameRateDistortion.Visible = true;
 
-                /* Only show direct pred when allowed by both bframes and analysis.*/
-                if (mainWindow.drop_analysis.SelectedIndex != 1)
-                {
-                    mainWindow.drop_directPrediction.Visible = true;
-                    mainWindow.lbl_direct_prediction.Visible = true;
-                }
-
+                mainWindow.drop_directPrediction.Visible = true;
+                mainWindow.lbl_direct_prediction.Visible = true;
             }
 
             if (mainWindow.check_Cabac.Checked == false)
@@ -862,26 +854,13 @@ namespace Handbrake.Functions
 
             if (mainWindow.drop_analysis.SelectedIndex == 1)
             {
-                /* No analysis? Disable 8x8dct and direct pred */
+                /* No analysis? Disable 8x8dct */
                 mainWindow.check_8x8DCT.Visible = false;
                 if (sender != "8x8dct")
                     mainWindow.check_8x8DCT.CheckState = CheckState.Unchecked;
-
-                mainWindow.drop_directPrediction.Visible = false;
-                if (sender != "direct")
-                    mainWindow.drop_directPrediction.SelectedIndex = 0;
             }
             else
-            {
                 mainWindow.check_8x8DCT.Visible = true;
-
-                if (mainWindow.drop_bFrames.SelectedIndex >= 2)
-                {
-                    /* Onlt show direct pred when allowed by both analysis and bframes */
-                    mainWindow.drop_directPrediction.Visible = true;
-                }
-            }
-
 
             if (mainWindow.drop_refFrames.SelectedIndex < 3)
             {

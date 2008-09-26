@@ -38,7 +38,7 @@ namespace Handbrake
             System.Windows.Forms.Label Label38;
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
@@ -153,7 +153,6 @@ namespace Handbrake
             this.Label32 = new System.Windows.Forms.Label();
             this.TabPage3 = new System.Windows.Forms.TabPage();
             this.label25 = new System.Windows.Forms.Label();
-            this.lbl_vfr = new System.Windows.Forms.Label();
             this.check_grayscale = new System.Windows.Forms.CheckBox();
             this.Label22 = new System.Windows.Forms.Label();
             this.check_2PassEncode = new System.Windows.Forms.CheckBox();
@@ -180,7 +179,6 @@ namespace Handbrake
             this.lbl_Aspect = new System.Windows.Forms.Label();
             this.Label91 = new System.Windows.Forms.Label();
             this.Label55 = new System.Windows.Forms.Label();
-            this.check_vfr = new System.Windows.Forms.CheckBox();
             this.label24 = new System.Windows.Forms.Label();
             this.drp_deNoise = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
@@ -453,9 +451,9 @@ namespace Handbrake
             this.check_largeFile.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.check_largeFile.Location = new System.Drawing.Point(193, 22);
             this.check_largeFile.Name = "check_largeFile";
-            this.check_largeFile.Size = new System.Drawing.Size(82, 17);
+            this.check_largeFile.Size = new System.Drawing.Size(105, 17);
             this.check_largeFile.TabIndex = 4;
-            this.check_largeFile.Text = "64Bit MP4";
+            this.check_largeFile.Text = "Large file size";
             this.ToolTip.SetToolTip(this.check_largeFile, "Allows creation of MP4 files greater than 4GB.\r\nWarning: Breaks iPod, Apple TV (V" +
                     "ersion 1 only) and PS3 compatibility.\r\nRequires .mp4/.m4v file extension");
             this.check_largeFile.UseVisualStyleBackColor = false;
@@ -603,11 +601,11 @@ namespace Handbrake
             this.check_optimiseMP4.AutoSize = true;
             this.check_optimiseMP4.BackColor = System.Drawing.Color.Transparent;
             this.check_optimiseMP4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_optimiseMP4.Location = new System.Drawing.Point(281, 22);
+            this.check_optimiseMP4.Location = new System.Drawing.Point(304, 21);
             this.check_optimiseMP4.Name = "check_optimiseMP4";
-            this.check_optimiseMP4.Size = new System.Drawing.Size(143, 17);
+            this.check_optimiseMP4.Size = new System.Drawing.Size(110, 17);
             this.check_optimiseMP4.TabIndex = 25;
-            this.check_optimiseMP4.Text = "HTTP Optimized MP4";
+            this.check_optimiseMP4.Text = "Web optimized";
             this.ToolTip.SetToolTip(this.check_optimiseMP4, "MP4 files can be optimized for progressive downloads over the Web,\r\nbut note that" +
                     " QuickTime can only read the files as long as the file extension is .mp4\r\nCan on" +
                     "ly be used with H.264 ");
@@ -618,11 +616,11 @@ namespace Handbrake
             this.check_iPodAtom.AutoSize = true;
             this.check_iPodAtom.BackColor = System.Drawing.Color.Transparent;
             this.check_iPodAtom.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_iPodAtom.Location = new System.Drawing.Point(430, 22);
+            this.check_iPodAtom.Location = new System.Drawing.Point(420, 20);
             this.check_iPodAtom.Name = "check_iPodAtom";
-            this.check_iPodAtom.Size = new System.Drawing.Size(122, 17);
+            this.check_iPodAtom.Size = new System.Drawing.Size(117, 17);
             this.check_iPodAtom.TabIndex = 26;
-            this.check_iPodAtom.Text = "Insert iPod Atom";
+            this.check_iPodAtom.Text = "iPod 5G support";
             this.ToolTip.SetToolTip(this.check_iPodAtom, "Required for 5th and 6th Generation iPods.\r\nEncodes will not sync if this is not " +
                     "enabled for H.264 encodes");
             this.check_iPodAtom.UseVisualStyleBackColor = false;
@@ -644,9 +642,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Format = "N0";
+            dataGridViewCellStyle2.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle2;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -1689,7 +1687,6 @@ namespace Handbrake
             this.TabPage3.Controls.Add(this.drp_videoEncoder);
             this.TabPage3.Controls.Add(this.Label47);
             this.TabPage3.Controls.Add(this.label25);
-            this.TabPage3.Controls.Add(this.lbl_vfr);
             this.TabPage3.Controls.Add(this.check_grayscale);
             this.TabPage3.Controls.Add(this.check_turbo);
             this.TabPage3.Controls.Add(this.Label22);
@@ -1721,18 +1718,6 @@ namespace Handbrake
             this.label25.Size = new System.Drawing.Size(43, 13);
             this.label25.TabIndex = 0;
             this.label25.Text = "Video";
-            // 
-            // lbl_vfr
-            // 
-            this.lbl_vfr.AutoSize = true;
-            this.lbl_vfr.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_vfr.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_vfr.Location = new System.Drawing.Point(123, 97);
-            this.lbl_vfr.Name = "lbl_vfr";
-            this.lbl_vfr.Size = new System.Drawing.Size(52, 12);
-            this.lbl_vfr.TabIndex = 3;
-            this.lbl_vfr.Text = "(VFR On)";
-            this.lbl_vfr.Visible = false;
             // 
             // check_grayscale
             // 
@@ -1849,7 +1834,6 @@ namespace Handbrake
             this.TabPage1.Controls.Add(this.text_height);
             this.TabPage1.Controls.Add(this.Label55);
             this.TabPage1.Controls.Add(this.text_width);
-            this.TabPage1.Controls.Add(this.check_vfr);
             this.TabPage1.Controls.Add(this.label24);
             this.TabPage1.Controls.Add(this.drp_deNoise);
             this.TabPage1.Controls.Add(this.label11);
@@ -2071,19 +2055,6 @@ namespace Handbrake
             this.Label55.Size = new System.Drawing.Size(85, 13);
             this.Label55.TabIndex = 16;
             this.Label55.Text = "Width/Height:";
-            // 
-            // check_vfr
-            // 
-            this.check_vfr.AutoSize = true;
-            this.check_vfr.BackColor = System.Drawing.Color.Transparent;
-            this.check_vfr.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_vfr.Location = new System.Drawing.Point(413, 165);
-            this.check_vfr.Name = "check_vfr";
-            this.check_vfr.Size = new System.Drawing.Size(48, 17);
-            this.check_vfr.TabIndex = 24;
-            this.check_vfr.Text = "VFR";
-            this.check_vfr.UseVisualStyleBackColor = false;
-            this.check_vfr.CheckedChanged += new System.EventHandler(this.check_vfr_CheckedChanged);
             // 
             // label24
             // 
@@ -3164,8 +3135,8 @@ namespace Handbrake
             this.Controls.Add(this.groupBox_dest);
             this.Controls.Add(this.groupBox_output);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.advancedOptions);
             this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.advancedOptions);
             this.Controls.Add(this.frmMainMenu);
             this.Controls.Add(this.StatusStrip);
             this.DoubleBuffered = true;
@@ -3294,9 +3265,7 @@ namespace Handbrake
         private System.Windows.Forms.SaveFileDialog DVD_Save;
         private System.Windows.Forms.OpenFileDialog File_Open;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
-        internal System.Windows.Forms.CheckBox check_vfr;
         internal System.Windows.Forms.CheckBox check_iPodAtom;
-        internal System.Windows.Forms.Label lbl_vfr;
         internal System.Windows.Forms.Label label26;
         internal System.Windows.Forms.Label Label56;
         internal System.Windows.Forms.Label lbl_Aspect;
