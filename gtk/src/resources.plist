@@ -822,7 +822,7 @@
                                         &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                         &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                         &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
-                                        &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;IPod File&lt;/property&gt;
+                                        &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;iPod 5G Support&lt;/property&gt;
                                         &lt;property name=&quot;draw_indicator&quot;&gt;True&lt;/property&gt;
                                         &lt;signal handler=&quot;setting_widget_changed_cb&quot; name=&quot;toggled&quot;/&gt;
                                       &lt;/object&gt;
@@ -838,7 +838,7 @@
                                     &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
-                                    &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;HTTP Optimized MP4&lt;/property&gt;
+                                    &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Web optimized&lt;/property&gt;
                                     &lt;property name=&quot;draw_indicator&quot;&gt;True&lt;/property&gt;
                                     &lt;signal handler=&quot;http_opt_changed_cb&quot; name=&quot;toggled&quot;/&gt;
                                   &lt;/object&gt;
@@ -853,7 +853,7 @@
                                     &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
                                     &lt;property name=&quot;tooltip-text&quot; translatable=&quot;yes&quot;&gt;Caution: This option will likely break device compatiblity with all but the AppleTV Take 2. Checking this box enables a 64 bit mp4 file which can be over 4 GB.&lt;/property&gt;
-                                    &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Large MP4 Files (&amp;gt;4GB)&lt;/property&gt;
+                                    &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Large file size (&amp;gt;4GB)&lt;/property&gt;
                                     &lt;property name=&quot;draw_indicator&quot;&gt;True&lt;/property&gt;
                                     &lt;signal handler=&quot;setting_widget_changed_cb&quot; name=&quot;toggled&quot;/&gt;
                                   &lt;/object&gt;

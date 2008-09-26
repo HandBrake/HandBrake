@@ -2486,11 +2486,11 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		{
 			g_string_append_printf(str, "<b>MP4 Options:</b><small>");
 			if (ipod)
-				g_string_append_printf(str, " - iPod Atom");
+				g_string_append_printf(str, " - iPod 5G Support");
 			if (http)
-				g_string_append_printf(str, " - Http Optimized");
+				g_string_append_printf(str, " - Web Optimized");
 			if (large)
-				g_string_append_printf(str, " - 64 Bit");
+				g_string_append_printf(str, " - Large File Size (>4GB)");
 			g_string_append_printf(str, "</small>\n");
 		}
 	}
