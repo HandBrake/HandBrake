@@ -94,9 +94,6 @@ void ghb_widget_to_setting(GValue *settings, GtkWidget *widget);
 int ghb_ui_update(
 	signal_user_data_t *ud, const gchar *name, const GValue *value);
 
-void ghb_x264_parse_options(signal_user_data_t *ud, const gchar *options);
-void ghb_x264_opt_update(signal_user_data_t *ud, GtkWidget *widget);
-gchar* ghb_sanitize_x264opts(signal_user_data_t *ud, const gchar *options);
 
 gint ghb_pref_acount(GValue *settings);
 gint ghb_pref_acodec(GValue *settings, gint index);

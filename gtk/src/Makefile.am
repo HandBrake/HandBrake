@@ -90,6 +90,8 @@ ghb_SOURCES = \
 	queuehandler.h \
 	audiohandler.c \
 	audiohandler.h \
+	x264handler.c \
+	x264handler.h \
 	main.c \
 	settings.c \
 	settings.h \

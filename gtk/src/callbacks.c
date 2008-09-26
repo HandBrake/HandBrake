@@ -210,14 +210,14 @@ ghb_check_all_depencencies(signal_user_data_t *ud)
 	}
 }
 
-static void
-clear_presets_selection(signal_user_data_t *ud)
+void
+ghb_clear_presets_selection(signal_user_data_t *ud)
 {
 	GtkTreeView *treeview;
 	GtkTreeSelection *selection;
 	
 	if (ud->dont_clear_presets) return;
-	g_debug("clear_presets_selection()");
+	g_debug("ghb_clear_presets_selection()");
 	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
 	selection = gtk_tree_view_get_selection (treeview);
 	gtk_tree_selection_unselect_all (selection);
@@ -839,7 +839,7 @@ container_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	update_destination_extension(ud);
 	ghb_check_dependency(ud, widget);
 	update_acodec_combo(ud);
-	clear_presets_selection(ud);
+	ghb_clear_presets_selection(ud);
 
 	audio_list = ghb_settings_get_value(ud->settings, "audio_list");
 	if (ghb_ac3_in_audio_list (audio_list))
@@ -1045,18 +1045,11 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 void
-generic_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
-{
-	g_debug("generic_widget_changed_cb ()");
-	ghb_check_dependency(ud, widget);
-}
-
-void
 setting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget);
-	clear_presets_selection(ud);
+	ghb_clear_presets_selection(ud);
 }
 
 static void
@@ -1117,7 +1110,8 @@ http_opt_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget);
-	clear_presets_selection(ud);
+	ghb_clear_presets_selection(ud);
+	// AC3 is not allowed when Web optimized
 	ghb_grey_combo_options (ud->builder);
 }
 
@@ -1128,7 +1122,7 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget);
-	clear_presets_selection(ud);
+	ghb_clear_presets_selection(ud);
 	ghb_vquality_range(ud, &vqmin, &vqmax);
 	GtkWidget *qp = GHB_WIDGET(ud->builder, "video_quality");
 	gtk_range_set_range (GTK_RANGE(qp), vqmin, vqmax);
@@ -1141,7 +1135,7 @@ target_size_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	g_debug("setting_widget_changed_cb () %s", name);
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget);
-	clear_presets_selection(ud);
+	ghb_clear_presets_selection(ud);
 	if (ghb_settings_get_boolean(ud->settings, "vquality_type_target"))
 	{
 		gint titleindex;
@@ -1265,7 +1259,7 @@ scale_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	g_debug("scale_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget);
-	clear_presets_selection(ud);
+	ghb_clear_presets_selection(ud);
 	ghb_set_scale (ud, GHB_SCALE_KEEP_NONE);
 	update_preview = TRUE;
 	
@@ -1297,81 +1291,6 @@ generic_entry_changed_cb(GtkEntry *entry, signal_user_data_t *ud)
 	{
 		ghb_widget_to_setting(ud->settings, (GtkWidget*)entry);
 	}
-}
-
-gboolean
-generic_focus_out_cb(GtkWidget *widget, GdkEventFocus *event, 
-	signal_user_data_t *ud)
-{
-	g_debug("generic_focus_out_cb ()");
-	ghb_widget_to_setting(ud->settings, widget);
-	return FALSE;
-}
-
-// Flag needed to prevent x264 options processing from chasing its tail
-static gboolean ignore_options_update = FALSE;
-
-void
-x264_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
-{
-	ghb_widget_to_setting(ud->settings, widget);
-	if (!ignore_options_update)
-	{
-		ignore_options_update = TRUE;
-		ghb_x264_opt_update(ud, widget);
-		ignore_options_update = FALSE;
-	}
-	ghb_check_dependency(ud, widget);
-	clear_presets_selection(ud);
-}
-
-void
-x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
-{
-	g_debug("x264_entry_changed_cb ()");
-	if (!ignore_options_update)
-	{
-		GtkWidget *textview;
-		gchar *options;
-
-		textview = GTK_WIDGET(GHB_WIDGET(ud->builder, "x264_options"));
-		ghb_widget_to_setting(ud->settings, textview);
-		options = ghb_settings_get_string(ud->settings, "x264_options");
-		ignore_options_update = TRUE;
-		ghb_x264_parse_options(ud, options);
-		if (!GTK_WIDGET_HAS_FOCUS(textview))
-		{
-			gchar *sopts;
-
-			sopts = ghb_sanitize_x264opts(ud, options);
-			ghb_ui_update(ud, "x264_options", ghb_string_value(sopts));
-			ghb_x264_parse_options(ud, sopts);
-			g_free(sopts);
-		}
-		g_free(options);
-		ignore_options_update = FALSE;
-	}
-}
-
-gboolean
-x264_focus_out_cb(GtkWidget *widget, GdkEventFocus *event, 
-	signal_user_data_t *ud)
-{
-	gchar *options, *sopts;
-
-	ghb_widget_to_setting(ud->settings, widget);
-	options = ghb_settings_get_string(ud->settings, "x264_options");
-	sopts = ghb_sanitize_x264opts(ud, options);
-	ignore_options_update = TRUE;
-	if (sopts != NULL)
-	{
-		ghb_ui_update(ud, "x264_options", ghb_string_value(sopts));
-		ghb_x264_parse_options(ud, sopts);
-	}
-	g_free(options);
-	g_free(sopts);
-	ignore_options_update = FALSE;
-	return FALSE;
 }
 
 void
@@ -1550,18 +1469,6 @@ presets_restore_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 }
 
 void
-prefs_dialog_cb(GtkWidget *xwidget, signal_user_data_t *ud)
-{
-	GtkWidget *dialog;
-	GtkResponseType response;
-
-	g_debug("prefs_dialog_cb ()");
-	dialog = GHB_WIDGET(ud->builder, "prefs_dialog");
-	response = gtk_dialog_run(GTK_DIALOG(dialog));
-	gtk_widget_hide(dialog);
-}
-
-void
 presets_remove_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	GtkTreeView *treeview;
@@ -1694,6 +1601,18 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
 		g_debug("No selection???  Perhaps unselected.");
 		gtk_widget_set_sensitive(widget, FALSE);
 	}
+}
+
+void
+prefs_dialog_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+{
+	GtkWidget *dialog;
+	GtkResponseType response;
+
+	g_debug("prefs_dialog_cb ()");
+	dialog = GHB_WIDGET(ud->builder, "prefs_dialog");
+	response = gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_hide(dialog);
 }
 
 gboolean

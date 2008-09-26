@@ -42,6 +42,7 @@
 #include "values.h"
 #include "icons.h"
 #include "callbacks.h"
+#include "x264handler.h"
 #include "settings.h"
 #include "resources.h"
 #include "presets.h"
