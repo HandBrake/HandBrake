@@ -88,6 +88,8 @@ ghb_SOURCES = \
 	callbacks.h \
 	queuehandler.c \
 	queuehandler.h \
+	audiohandler.c \
+	audiohandler.h \
 	main.c \
 	settings.c \
 	settings.h \

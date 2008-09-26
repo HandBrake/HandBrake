@@ -1,9 +1,9 @@
 /* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
 /*
- * queuehandler.h
+ * audiohandler.h
  * Copyright (C) John Stebbins 2008 <stebbins@stebbins>
  * 
- * queuehandler.h is free software.
+ * audiohandler.h is free software.
  * 
  * You may redistribute it and/or modify it under the terms of the
  * GNU General Public License, as published by the Free Software
@@ -22,12 +22,13 @@
  * 	Boston, MA  02110-1301, USA.
  */
 
-#if !defined(_QUEUEHANDLER_H_)
-#define _QUEUEHANDLER_H_
+#if !defined(_AUDIOHANDLER_H_)
+#define _AUDIOHANDLER_H_
 
-#include <gtk/gtk.h>
 #include "settings.h"
 
-void ghb_queue_buttons_grey(signal_user_data_t *ud, gboolean working);
+void ghb_adjust_audio_rate_combos(signal_user_data_t *ud);
+void ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud);
+void ghb_clear_audio_list(signal_user_data_t *ud);
 
-#endif // _QUEUEHANDLER_H_
+#endif // _AUDIOHANDLER_H_
