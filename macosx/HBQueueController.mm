@@ -962,18 +962,18 @@ if (fWorkingCount > 0)
             if( [[item objectForKey:@"Mp4LargeFile"] intValue] == 1)
             {
                 mp4OptsPresent = YES;
-                MP4Opts = [MP4Opts stringByAppendingString:@" - 64 Bit"];
+                MP4Opts = [MP4Opts stringByAppendingString:@" - Large file size"];
             }
             if( [[item objectForKey:@"Mp4HttpOptimize"] intValue] == 1)
             {
                 mp4OptsPresent = YES;
-                MP4Opts = [MP4Opts stringByAppendingString:@" - Http Optimized"];
+                MP4Opts = [MP4Opts stringByAppendingString:@" - Web optimized"];
             }
             
             if( [[item objectForKey:@"Mp4iPodCompatible"] intValue] == 1)
             {
                 mp4OptsPresent = YES;
-                MP4Opts = [MP4Opts stringByAppendingString:@" - iPod Atom "];
+                MP4Opts = [MP4Opts stringByAppendingString:@" - iPod 5G support "];
             }
             if (mp4OptsPresent == YES)
             {

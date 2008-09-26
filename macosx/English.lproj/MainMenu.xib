@@ -9,7 +9,6 @@
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="2"/>
-			<integer value="1843"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -100,7 +99,7 @@
 								<object class="NSTabViewItem" id="107038816">
 									<string key="NSIdentifier">1</string>
 									<object class="NSView" key="NSView" id="1053078401">
-										<nil key="NSNextResponder"/>
+										<reference key="NSNextResponder" ref="712502892"/>
 										<int key="NSvFlags">256</int>
 										<object class="NSMutableArray" key="NSSubviews">
 											<bool key="EncodedWithXMLCoder">YES</bool>
@@ -883,6 +882,7 @@
 											</object>
 										</object>
 										<string key="NSFrame">{{10, 25}, {714, 305}}</string>
+										<reference key="NSSuperview" ref="712502892"/>
 									</object>
 									<string key="NSLabel">Video</string>
 									<reference key="NSColor" ref="242973447"/>
@@ -891,7 +891,7 @@
 								<object class="NSTabViewItem" id="157300012">
 									<string key="NSIdentifier">2</string>
 									<object class="NSView" key="NSView" id="738554558">
-										<reference key="NSNextResponder" ref="712502892"/>
+										<nil key="NSNextResponder"/>
 										<int key="NSvFlags">256</int>
 										<object class="NSMutableArray" key="NSSubviews">
 											<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2379,7 +2379,6 @@
 											</object>
 										</object>
 										<string key="NSFrame">{{10, 25}, {714, 305}}</string>
-										<reference key="NSSuperview" ref="712502892"/>
 										<reference key="NSNextKeyView" ref="198352083"/>
 									</object>
 									<string type="base64-UTF8" key="NSLabel">QXVkaW8gJiBTdWJ0aXRsZXM</string>
@@ -2646,14 +2645,14 @@
 									<reference key="NSTabView" ref="712502892"/>
 								</object>
 							</object>
-							<reference key="NSSelectedTabViewItem" ref="157300012"/>
+							<reference key="NSSelectedTabViewItem" ref="107038816"/>
 							<reference key="NSFont" ref="26"/>
 							<int key="NSTvFlags">134217728</int>
 							<bool key="NSAllowTruncatedLabels">YES</bool>
 							<bool key="NSDrawsBackground">YES</bool>
 							<object class="NSMutableArray" key="NSSubviews">
 								<bool key="EncodedWithXMLCoder">YES</bool>
-								<reference ref="738554558"/>
+								<reference ref="1053078401"/>
 							</object>
 						</object>
 						<object class="NSTextField" id="586321835">
@@ -3184,7 +3183,7 @@
 							<object class="NSButtonCell" key="NSCell" id="832863281">
 								<int key="NSCellFlags">67239424</int>
 								<int key="NSCellFlags2">131072</int>
-								<string key="NSContents">HTTP Optimized MP4</string>
+								<string key="NSContents">Web optimized</string>
 								<reference key="NSSupport" ref="26"/>
 								<reference key="NSControlView" ref="581806074"/>
 								<int key="NSButtonFlags">1211912703</int>
@@ -3200,13 +3199,13 @@
 						<object class="NSButton" id="553453876">
 							<reference key="NSNextResponder" ref="168918359"/>
 							<int key="NSvFlags">264</int>
-							<string key="NSFrame">{{283, 383}, {89, 18}}</string>
+							<string key="NSFrame">{{283, 383}, {102, 18}}</string>
 							<reference key="NSSuperview" ref="168918359"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="294332300">
 								<int key="NSCellFlags">67239424</int>
 								<int key="NSCellFlags2">131072</int>
-								<string key="NSContents">64 Bit MP4</string>
+								<string key="NSContents">Large file size</string>
 								<reference key="NSSupport" ref="26"/>
 								<reference key="NSControlView" ref="553453876"/>
 								<int key="NSButtonFlags">1211912703</int>
@@ -3222,13 +3221,13 @@
 						<object class="NSButton" id="921877174">
 							<reference key="NSNextResponder" ref="168918359"/>
 							<int key="NSvFlags">264</int>
-							<string key="NSFrame">{{548, 383}, {141, 18}}</string>
+							<string key="NSFrame">{{541, 383}, {141, 18}}</string>
 							<reference key="NSSuperview" ref="168918359"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="547085070">
 								<int key="NSCellFlags">67239424</int>
 								<int key="NSCellFlags2">131072</int>
-								<string key="NSContents">Insert iPod Atom</string>
+								<string key="NSContents">iPod 5G support</string>
 								<reference key="NSSupport" ref="26"/>
 								<reference key="NSControlView" ref="921877174"/>
 								<int key="NSButtonFlags">1211912703</int>
@@ -4030,7 +4029,7 @@
 				<nil key="NSDelegate"/>
 			</object>
 			<object class="NSCustomView" id="621751818">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">256</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -4135,7 +4134,6 @@
 								</object>
 								<string key="NSFrame">{{1, 1}, {247, 506}}</string>
 								<reference key="NSSuperview" ref="33643505"/>
-								<reference key="NSNextKeyView" ref="807972370"/>
 								<reference key="NSDocView" ref="807972370"/>
 								<reference key="NSBGColor" ref="355843302"/>
 								<int key="NScvFlags">4</int>
@@ -4163,7 +4161,6 @@
 						</object>
 						<string key="NSFrame">{{4, 31}, {260, 508}}</string>
 						<reference key="NSSuperview" ref="621751818"/>
-						<reference key="NSNextKeyView" ref="421228634"/>
 						<int key="NSsFlags">18</int>
 						<reference key="NSVScroller" ref="475123229"/>
 						<reference key="NSHScroller" ref="573337548"/>
@@ -4295,7 +4292,6 @@
 					</object>
 				</object>
 				<string key="NSFrameSize">{270, 550}</string>
-				<reference key="NSSuperview"/>
 				<string key="NSClassName">NSView</string>
 				<string key="NSExtension">NSResponder</string>
 			</object>
@@ -11027,10 +11023,10 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{231, 306}, {760, 550}}</string>
+					<string>{{104, 306}, {760, 550}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="8"/>
-					<string>{{231, 306}, {760, 550}}</string>
+					<string>{{104, 306}, {760, 550}}</string>
 					<reference ref="9"/>
 					<string>{{65, 541}, {760, 550}}</string>
 					<reference ref="9"/>
