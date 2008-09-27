@@ -135,7 +135,7 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                MessageBox.Show("frmReadDVD.cs - closeWindowAfterError - Unable to recover from a serious error. \n\n Error Information: \n " + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("frmReadDVD.cs - closeWindowAfterError - Unable to recover from a serious error. \nYou may need to restart HandBrake. \n\n Error Information: \n " + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -162,7 +162,7 @@ namespace Handbrake
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Unable to kill HandBrakeCLI.exe \n\nError Information: \n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Unable to kill HandBrakeCLI.exe \nYou may need to manually kill HandBrakeCLI.exe using the Windows Task Manager if it does not close automatically within the next few minutes. \n\nError Information: \n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

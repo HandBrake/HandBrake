@@ -173,6 +173,102 @@ Note: Do not change any of the chapter numbers!</value>
   <metadata name="frmMainMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>106, 15</value>
   </metadata>
+  <data name="check_Cabac.ToolTip" xml:space="preserve">
+    <value>CABAC, or context adaptive binary arithmetic coding, is used by x264 to reduce the bitrate needed for a given quality by 15%. 
+This makes it very cool and very useful, and it should be left on whenever possible. However, it is incompatible with the iPod 5.5G, and makes the AppleTV struggle. 
+So turn it off for those. CABAC is a kind of entropy coding, which means that it compresses data by making shorthand symbols to represent long streams of data. 
+The "entropy" part means that the symbols it uses the most often are the smallest. 
+When you disable CABAC, another entropy coding scheme gets enabled, called CAVLC (context adaptive variable-length coding). 
+CAVLC is a lot less efficient, which is why it needs 15% more bitrate to achieve the same quality as CABAC.</value>
+  </data>
+  <data name="drop_deblockBeta.ToolTip" xml:space="preserve">
+    <value>x264 includes an in-loop deblocking filter. 
+What this means is that blocky compression artifacts are smoothed away when you play back the video. 
+It has two settings: strength and threshold, just like a simple filter in Photoshop. 
+Strength controls the amount of deblocking applied to the whole frame. 
+If you drop down below 0, you reduce the amount of blurring.
+Go too negative, and you'll get an effect somewhat like oversharpening an image. 
+Go into positive values, and the image may become too soft. 
+Threshold controls how sensitive the filter is to whether something in a block is detail that needs to be preserved: lower numbers blur details less. 
+The default deblocking values are 0 and 0. This does not mean zero deblocking. 
+It means x264 will apply the regular deblocking strength and thresholds the codec authors have selected as working the best in most cases. 
+While many, many people stick with the default deblocking values of 0,0, other people disagree. 
+Some prefer a slightly less blurred image for live action material, and use values like -2,-1 or -2,-2. Others will raise it to 1,1 or even 3,3 for animation. 
+While the values for each setting extend from -6 to 6, the consensus is that going below -3 or above 3 is worthless.
+</value>
+  </data>
+  <data name="drop_deblockAlpha.ToolTip" xml:space="preserve">
+    <value>x264 includes an in-loop deblocking filter. 
+What this means is that blocky compression artifacts are smoothed away when you play back the video. 
+It has two settings: strength and threshold, just like a simple filter in Photoshop. 
+Strength controls the amount of deblocking applied to the whole frame. 
+If you drop down below 0, you reduce the amount of blurring.
+Go too negative, and you'll get an effect somewhat like oversharpening an image. 
+Go into positive values, and the image may become too soft. 
+Threshold controls how sensitive the filter is to whether something in a block is detail that needs to be preserved: lower numbers blur details less. 
+The default deblocking values are 0 and 0. This does not mean zero deblocking. 
+It means x264 will apply the regular deblocking strength and thresholds the codec authors have selected as working the best in most cases. 
+While many, many people stick with the default deblocking values of 0,0, other people disagree. 
+Some prefer a slightly less blurred image for live action material, and use values like -2,-1 or -2,-2. Others will raise it to 1,1 or even 3,3 for animation. 
+While the values for each setting extend from -6 to 6, the consensus is that going below -3 or above 3 is worthless.</value>
+  </data>
+  <data name="check_8x8DCT.ToolTip" xml:space="preserve">
+    <value>When Analysis is set to "all," checking this box lets x264 break key frames down into 8x8 blocks of pixels for analysis. 
+This is a high profile feature of H.264, which makes it less compatible. It should slightly decrease bitrate or improve quality.</value>
+  </data>
+  <data name="drop_analysis.ToolTip" xml:space="preserve">
+    <value>Analysis controls how finely x264 divides up a frame to capture detail. 
+Full macroblocks are 16x16 pixels, but x264 can go down all the way to 4x4 blocks if it judges it necessary. 
+By default it only breaks up key frames that much. 
+To give x264 the freedom to make the best decisions for all frames, use "all" analysis. 
+If you want to create a high profile H.264 video (which is less compatible with the world at large than main profile), 
+also check the "8x8 DCT blocks" box to add yet another block size for analysis.</value>
+  </data>
+  <data name="drop_subpixelMotionEstimation.ToolTip" xml:space="preserve">
+    <value>This setting is finer-grained than the motion estimation settings above. 
+Instead of dealing with whole pixels, it deals with fractional pixels. 4, HandBrake's default, means looking at quarter pixels (qpel). 
+Higher levels increase quality by dividing the pixel more, but take longer to encode. 
+Using 6 or 7 turns unlocks the ability to turn on more advanced features like B-Frame rate distortion.</value>
+  </data>
+  <data name="drop_MotionEstimationRange.ToolTip" xml:space="preserve">
+    <value>This range is the radius, in pixels, x264 should use for motion estimation searches. 
+It only has an effect when you use Uneven Multi-Hexagonal or Exhaustive searching. 
+24, 32, and 64 are good values.</value>
+  </data>
+  <data name="drop_MotionEstimationMethod.ToolTip" xml:space="preserve">
+    <value>This sets the shape of the area x264 searches when estimating motion. 
+Your choices are a diamond, a hexagon, a more complex hexagonal shape, or searching the entire frame. 
+You are best off using Uneven Multi-Hexagonal searching.</value>
+  </data>
+  <data name="check_pyrmidalBFrames.ToolTip" xml:space="preserve">
+    <value>B-frame pyramids are a High Profile feature. 
+This means that if you enable it, YOUR VIDEO WILL NOT PLAY IN QUICKTIME. 
+Pyramidal B-frames mean that B-frames don't just reference surrounding reference frames — 
+ instead, it also treats a previous B-frame as a reference, improving quality/lowering bitrate at the expense of complexity. 
+Logically, to reference an earlier B-frame, you must tell x264 to use at least 2 B-frames.</value>
+  </data>
+  <data name="check_BidirectionalRefinement.ToolTip" xml:space="preserve">
+    <value>When bidrectional motion estimation refinement is activated, x264 will optimize motion vectors both forwards and backwards in time. 
+This improves quality, and while it slows down encoding, it does not make playback any more difficult. </value>
+  </data>
+  <data name="check_bFrameRateDistortion.ToolTip" xml:space="preserve">
+    <value>When B-frame rate distortion optimization is enabled, x264 tries several different methods of compression for each part of a frame, 
+and chooses the one that looks the best. 
+You need to use a subpixel motion estimation refinement level of 6 or 7 for this to work. </value>
+  </data>
+  <data name="check_weightedBFrames.ToolTip" xml:space="preserve">
+    <value>With weighted B-frame prediction enabled, x264 will consider how far away the previous and next P-frames are, 
+before deciding to make a frame a B-frame. 
+The effect is that x264 will use fewer B-frames when they'd look bad — when it can't accurately predict motion. 
+Obviously, this only works when you tell x264 to use more than 1 B-frame.  </value>
+  </data>
+  <data name="drop_directPrediction.ToolTip" xml:space="preserve">
+    <value>Direct prediction tells x264 what method to use when guessing motion for certain parts of a B-frame. 
+It can either look at other parts of the current frame (spatial) or compare against the preceding frame (temporal). 
+You're best off setting this to automatic, so x264 decides which method is best on its own. 
+Don't select none assuming it will be faster; instead it will take longer and look worse. 
+If you're going to choose between spatial and temporal, spatial is usually better. </value>
+  </data>
   <metadata name="toolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>731, 18</value>
   </metadata>

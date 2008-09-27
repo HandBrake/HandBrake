@@ -371,7 +371,7 @@ namespace Handbrake
 
                 // If there are no titles in the dropdown menu then the scan has obviously failed. Display an error message explaining to the user.
                 if (drp_dvdtitle.Items.Count == 0)
-                    MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source. Please refer to the FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                    MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source.\nYour Source may be copy protected, badly mastered or a format which HandBrake does not support. \nPlease refer to the Documentation and FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
 
                 lbl_encode.Text = "";
             }
@@ -400,7 +400,7 @@ namespace Handbrake
 
                 // If there are no titles in the dropdown menu then the scan has obviously failed. Display an error message explaining to the user.
                 if (drp_dvdtitle.Items.Count == 0)
-                    MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source. Please refer to the FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                    MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source.\nYour Source may be copy protected, badly mastered or a format which HandBrake does not support. \nPlease refer to the Documentation and FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
 
                 lbl_encode.Text = "";
             }
@@ -420,7 +420,7 @@ namespace Handbrake
 
             // If there are no titles in the dropdown menu then the scan has obviously failed. Display an error message explaining to the user.
             if (drp_dvdtitle.Items.Count == 0)
-                MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source. Please refer to the FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source.\nYour Source may be copy protected, badly mastered or a format which HandBrake does not support. \nPlease refer to the Documentation and FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
 
             lbl_encode.Text = "";
         }
@@ -428,7 +428,7 @@ namespace Handbrake
         private void drp_dvdtitle_Click(object sender, EventArgs e)
         {
             if ((drp_dvdtitle.Items.Count == 1) && (drp_dvdtitle.Items[0].ToString() == "Automatic"))
-                MessageBox.Show("There are no titles to select. Please scan the DVD by clicking the 'Source' button above before trying to select a title.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show("There are no titles to select. Please load a source file by clicking the 'Source' button above before trying to select a title.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
         private void drp_dvdtitle_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -917,9 +917,6 @@ namespace Handbrake
         }
         private void drp_audmix_2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (drp_audmix_1.Text == "Automatic")
-                MessageBox.Show("Please select a mixdown for the previous track(s).", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
             if ((drp_audenc_2.Text == "AAC") && (drp_audmix_2.Text == "6 Channel Discrete"))
                 setBitrateSelections384(drp_audbit_2);
             else if ((drp_audenc_2.Text == "AAC") && (drp_audmix_2.Text != "6 Channel Discrete"))
@@ -930,9 +927,6 @@ namespace Handbrake
         }
         private void drp_audmix_3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (drp_audmix_2.Text == "Automatic")
-                MessageBox.Show("Please select a mixdown for the previous track(s).", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
             if ((drp_audenc_3.Text == "AAC") && (drp_audmix_3.Text == "6 Channel Discrete"))
                 setBitrateSelections384(drp_audbit_3);
             else if ((drp_audenc_3.Text == "AAC") && (drp_audmix_3.Text != "6 Channel Discrete"))
@@ -943,9 +937,6 @@ namespace Handbrake
         }
         private void drp_audmix_4_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (drp_audmix_3.Text == "Automatic")
-                MessageBox.Show("Please select a mixdown for the previous track(s).", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
             if ((drp_audenc_4.Text == "AAC") && (drp_audmix_4.Text == "6 Channel Discrete"))
                 setBitrateSelections384(drp_audbit_4);
             else if ((drp_audenc_4.Text == "AAC") && (drp_audmix_4.Text != "6 Channel Discrete"))
@@ -1791,9 +1782,9 @@ namespace Handbrake
                 if (foundDrive == false)
                     mnu_dvd_drive.Text = "[No DVD Drive Ready]";
             }
-            catch (Exception exc)
+            catch (Exception)
             {
-                MessageBox.Show("Drive Detection Error. \n Error Information: \n\n " + exc.ToString());
+                mnu_dvd_drive.Text = "[No DVD Drive Ready / Found]";
             }
         }
 

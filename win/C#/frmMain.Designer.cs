@@ -363,7 +363,8 @@ namespace Handbrake
             this.drp_dvdtitle.Size = new System.Drawing.Size(119, 21);
             this.drp_dvdtitle.TabIndex = 7;
             this.drp_dvdtitle.Text = "Automatic";
-            this.ToolTip.SetToolTip(this.drp_dvdtitle, "Select the title you wish to encode.");
+            this.ToolTip.SetToolTip(this.drp_dvdtitle, "Select the title you wish to encode.\r\nThe longest title is selected by default af" +
+                    "ter you have scanned a source.");
             this.drp_dvdtitle.SelectedIndexChanged += new System.EventHandler(this.drp_dvdtitle_SelectedIndexChanged);
             this.drp_dvdtitle.Click += new System.EventHandler(this.drp_dvdtitle_Click);
             // 
@@ -375,7 +376,7 @@ namespace Handbrake
             this.text_source.Size = new System.Drawing.Size(584, 21);
             this.text_source.TabIndex = 1;
             this.text_source.Text = "Click \'Source\' to continue";
-            this.ToolTip.SetToolTip(this.text_source, "The input source location.");
+            this.ToolTip.SetToolTip(this.text_source, "Location of the source input file, folder or dvd.");
             // 
             // text_destination
             // 
@@ -454,8 +455,8 @@ namespace Handbrake
             this.check_largeFile.Size = new System.Drawing.Size(105, 17);
             this.check_largeFile.TabIndex = 4;
             this.check_largeFile.Text = "Large file size";
-            this.ToolTip.SetToolTip(this.check_largeFile, "Allows creation of MP4 files greater than 4GB.\r\nWarning: Breaks iPod, Apple TV (V" +
-                    "ersion 1 only) and PS3 compatibility.\r\nRequires .mp4/.m4v file extension");
+            this.ToolTip.SetToolTip(this.check_largeFile, "Caution: This option will likely break device compatibility with all but the Appl" +
+                    "eTV Take 2.\r\nChecking this box enables a 64bit mp4 file which can be over 4GB.");
             this.check_largeFile.UseVisualStyleBackColor = false;
             // 
             // check_turbo
@@ -601,7 +602,7 @@ namespace Handbrake
             this.check_optimiseMP4.AutoSize = true;
             this.check_optimiseMP4.BackColor = System.Drawing.Color.Transparent;
             this.check_optimiseMP4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_optimiseMP4.Location = new System.Drawing.Point(304, 21);
+            this.check_optimiseMP4.Location = new System.Drawing.Point(304, 22);
             this.check_optimiseMP4.Name = "check_optimiseMP4";
             this.check_optimiseMP4.Size = new System.Drawing.Size(110, 17);
             this.check_optimiseMP4.TabIndex = 25;
@@ -616,13 +617,13 @@ namespace Handbrake
             this.check_iPodAtom.AutoSize = true;
             this.check_iPodAtom.BackColor = System.Drawing.Color.Transparent;
             this.check_iPodAtom.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_iPodAtom.Location = new System.Drawing.Point(420, 20);
+            this.check_iPodAtom.Location = new System.Drawing.Point(420, 22);
             this.check_iPodAtom.Name = "check_iPodAtom";
             this.check_iPodAtom.Size = new System.Drawing.Size(117, 17);
             this.check_iPodAtom.TabIndex = 26;
             this.check_iPodAtom.Text = "iPod 5G support";
-            this.ToolTip.SetToolTip(this.check_iPodAtom, "Required for 5th and 6th Generation iPods.\r\nEncodes will not sync if this is not " +
-                    "enabled for H.264 encodes");
+            this.ToolTip.SetToolTip(this.check_iPodAtom, "Support for legacy 5th Generation iPods.\r\nEncodes will not sync if this option is" +
+                    " not enabled for H.264 encodes.");
             this.check_iPodAtom.UseVisualStyleBackColor = false;
             // 
             // data_chpt
@@ -954,7 +955,7 @@ namespace Handbrake
             this.drop_format.Name = "drop_format";
             this.drop_format.Size = new System.Drawing.Size(106, 21);
             this.drop_format.TabIndex = 28;
-            this.ToolTip.SetToolTip(this.drop_format, "Select a video encoder");
+            this.ToolTip.SetToolTip(this.drop_format, "Select the file container format.");
             this.drop_format.SelectedIndexChanged += new System.EventHandler(this.drop_format_SelectedIndexChanged);
             // 
             // lbl_src_res
@@ -1893,6 +1894,7 @@ namespace Handbrake
             this.check_customCrop.Size = new System.Drawing.Size(74, 17);
             this.check_customCrop.TabIndex = 34;
             this.check_customCrop.Text = "Custom:";
+            this.ToolTip.SetToolTip(this.check_customCrop, "Set some custom cropping values.");
             this.check_customCrop.UseVisualStyleBackColor = true;
             this.check_customCrop.CheckedChanged += new System.EventHandler(this.check_customCrop_CheckedChanged);
             // 
@@ -1906,6 +1908,7 @@ namespace Handbrake
             this.check_autoCrop.TabIndex = 33;
             this.check_autoCrop.TabStop = true;
             this.check_autoCrop.Text = "Automatic";
+            this.ToolTip.SetToolTip(this.check_autoCrop, "Automatically set cropping values.");
             this.check_autoCrop.UseVisualStyleBackColor = true;
             this.check_autoCrop.CheckedChanged += new System.EventHandler(this.check_autoCrop_CheckedChanged);
             // 
@@ -2329,6 +2332,7 @@ namespace Handbrake
             this.check_Cabac.TabIndex = 40;
             this.check_Cabac.Text = "CABAC Entropy Coding:";
             this.check_Cabac.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ToolTip.SetToolTip(this.check_Cabac, resources.GetString("check_Cabac.ToolTip"));
             this.check_Cabac.UseVisualStyleBackColor = true;
             this.check_Cabac.CheckStateChanged += new System.EventHandler(this.check_Cabac_CheckedChanged);
             // 
@@ -2344,6 +2348,8 @@ namespace Handbrake
             this.check_noDCTDecimate.TabIndex = 39;
             this.check_noDCTDecimate.Text = "No DCT-Decimate:";
             this.check_noDCTDecimate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ToolTip.SetToolTip(this.check_noDCTDecimate, "Only use this with constant quality encoding. \r\nIt increases quality but also bit" +
+                    "rate/file size.");
             this.check_noDCTDecimate.UseVisualStyleBackColor = true;
             this.check_noDCTDecimate.CheckStateChanged += new System.EventHandler(this.check_noDCTDecimate_CheckedChanged);
             // 
@@ -2359,6 +2365,8 @@ namespace Handbrake
             this.check_noFastPSkip.TabIndex = 38;
             this.check_noFastPSkip.Text = "No Fast-P-Skip:";
             this.check_noFastPSkip.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ToolTip.SetToolTip(this.check_noFastPSkip, "This can help with blocking on solid colors like blue skies, \r\nbut it also slows " +
+                    "down the encode.");
             this.check_noFastPSkip.UseVisualStyleBackColor = true;
             this.check_noFastPSkip.CheckStateChanged += new System.EventHandler(this.check_noFastPSkip_CheckedChanged);
             // 
@@ -2386,6 +2394,9 @@ namespace Handbrake
             this.drop_trellis.Name = "drop_trellis";
             this.drop_trellis.Size = new System.Drawing.Size(143, 20);
             this.drop_trellis.TabIndex = 37;
+            this.ToolTip.SetToolTip(this.drop_trellis, "Trellis fine-tunes how bitrate is doled out, so it can reduce file size/bitrate o" +
+                    "r increase quality. \r\nA value of 2 forces it to be used more often than a value " +
+                    "of 1.");
             this.drop_trellis.SelectedIndexChanged += new System.EventHandler(this.drop_trellis_SelectedIndexChanged);
             // 
             // drop_deblockBeta
@@ -2412,6 +2423,7 @@ namespace Handbrake
             this.drop_deblockBeta.Name = "drop_deblockBeta";
             this.drop_deblockBeta.Size = new System.Drawing.Size(69, 20);
             this.drop_deblockBeta.TabIndex = 36;
+            this.ToolTip.SetToolTip(this.drop_deblockBeta, resources.GetString("drop_deblockBeta.ToolTip"));
             this.drop_deblockBeta.SelectedIndexChanged += new System.EventHandler(this.drop_deblockBeta_SelectedIndexChanged);
             // 
             // label41
@@ -2448,6 +2460,7 @@ namespace Handbrake
             this.drop_deblockAlpha.Name = "drop_deblockAlpha";
             this.drop_deblockAlpha.Size = new System.Drawing.Size(68, 20);
             this.drop_deblockAlpha.TabIndex = 35;
+            this.ToolTip.SetToolTip(this.drop_deblockAlpha, resources.GetString("drop_deblockAlpha.ToolTip"));
             this.drop_deblockAlpha.SelectedIndexChanged += new System.EventHandler(this.drop_deblockAlpha_SelectedIndexChanged);
             // 
             // panel3
@@ -2489,6 +2502,7 @@ namespace Handbrake
             this.check_8x8DCT.TabIndex = 34;
             this.check_8x8DCT.Text = "8x8 DCT:";
             this.check_8x8DCT.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ToolTip.SetToolTip(this.check_8x8DCT, resources.GetString("check_8x8DCT.ToolTip"));
             this.check_8x8DCT.UseVisualStyleBackColor = true;
             this.check_8x8DCT.CheckStateChanged += new System.EventHandler(this.check_8x8DCT_CheckedChanged);
             // 
@@ -2515,6 +2529,7 @@ namespace Handbrake
             this.drop_analysis.Name = "drop_analysis";
             this.drop_analysis.Size = new System.Drawing.Size(63, 20);
             this.drop_analysis.TabIndex = 33;
+            this.ToolTip.SetToolTip(this.drop_analysis, resources.GetString("drop_analysis.ToolTip"));
             this.drop_analysis.SelectedIndexChanged += new System.EventHandler(this.drop_analysis_SelectedIndexChanged);
             // 
             // label48
@@ -2546,6 +2561,7 @@ namespace Handbrake
             this.drop_subpixelMotionEstimation.Name = "drop_subpixelMotionEstimation";
             this.drop_subpixelMotionEstimation.Size = new System.Drawing.Size(139, 20);
             this.drop_subpixelMotionEstimation.TabIndex = 32;
+            this.ToolTip.SetToolTip(this.drop_subpixelMotionEstimation, resources.GetString("drop_subpixelMotionEstimation.ToolTip"));
             this.drop_subpixelMotionEstimation.SelectedIndexChanged += new System.EventHandler(this.drop_subpixelMotionEstimation_SelectedIndexChanged);
             // 
             // label49
@@ -2630,6 +2646,7 @@ namespace Handbrake
             this.drop_MotionEstimationRange.Name = "drop_MotionEstimationRange";
             this.drop_MotionEstimationRange.Size = new System.Drawing.Size(139, 20);
             this.drop_MotionEstimationRange.TabIndex = 31;
+            this.ToolTip.SetToolTip(this.drop_MotionEstimationRange, resources.GetString("drop_MotionEstimationRange.ToolTip"));
             this.drop_MotionEstimationRange.SelectedIndexChanged += new System.EventHandler(this.drop_MotionEstimationRange_SelectedIndexChanged);
             // 
             // label54
@@ -2658,6 +2675,7 @@ namespace Handbrake
             this.drop_MotionEstimationMethod.Name = "drop_MotionEstimationMethod";
             this.drop_MotionEstimationMethod.Size = new System.Drawing.Size(139, 20);
             this.drop_MotionEstimationMethod.TabIndex = 30;
+            this.ToolTip.SetToolTip(this.drop_MotionEstimationMethod, resources.GetString("drop_MotionEstimationMethod.ToolTip"));
             this.drop_MotionEstimationMethod.SelectedIndexChanged += new System.EventHandler(this.drop_MotionEstimationMethod_SelectedIndexChanged);
             // 
             // check_pyrmidalBFrames
@@ -2672,6 +2690,7 @@ namespace Handbrake
             this.check_pyrmidalBFrames.TabIndex = 17;
             this.check_pyrmidalBFrames.Text = "Pyrmidal B-Frames:";
             this.check_pyrmidalBFrames.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ToolTip.SetToolTip(this.check_pyrmidalBFrames, resources.GetString("check_pyrmidalBFrames.ToolTip"));
             this.check_pyrmidalBFrames.UseVisualStyleBackColor = true;
             this.check_pyrmidalBFrames.CheckStateChanged += new System.EventHandler(this.check_pyrmidalBFrames_CheckedChanged);
             // 
@@ -2687,6 +2706,7 @@ namespace Handbrake
             this.check_BidirectionalRefinement.TabIndex = 16;
             this.check_BidirectionalRefinement.Text = "Bidirectional Refinement:";
             this.check_BidirectionalRefinement.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ToolTip.SetToolTip(this.check_BidirectionalRefinement, resources.GetString("check_BidirectionalRefinement.ToolTip"));
             this.check_BidirectionalRefinement.UseVisualStyleBackColor = true;
             this.check_BidirectionalRefinement.CheckStateChanged += new System.EventHandler(this.check_BidirectionalRefinement_CheckedChanged);
             // 
@@ -2702,6 +2722,7 @@ namespace Handbrake
             this.check_bFrameRateDistortion.TabIndex = 15;
             this.check_bFrameRateDistortion.Text = "B-Frame Rate Distortion:";
             this.check_bFrameRateDistortion.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ToolTip.SetToolTip(this.check_bFrameRateDistortion, resources.GetString("check_bFrameRateDistortion.ToolTip"));
             this.check_bFrameRateDistortion.UseVisualStyleBackColor = true;
             this.check_bFrameRateDistortion.CheckStateChanged += new System.EventHandler(this.check_bFrameDistortion_CheckedChanged);
             // 
@@ -2716,6 +2737,7 @@ namespace Handbrake
             this.check_weightedBFrames.Size = new System.Drawing.Size(123, 16);
             this.check_weightedBFrames.TabIndex = 14;
             this.check_weightedBFrames.Text = "Weighted B-Frames:";
+            this.ToolTip.SetToolTip(this.check_weightedBFrames, resources.GetString("check_weightedBFrames.ToolTip"));
             this.check_weightedBFrames.UseVisualStyleBackColor = true;
             this.check_weightedBFrames.CheckStateChanged += new System.EventHandler(this.check_weightedBFrames_CheckedChanged);
             // 
@@ -2744,6 +2766,7 @@ namespace Handbrake
             this.drop_directPrediction.Name = "drop_directPrediction";
             this.drop_directPrediction.Size = new System.Drawing.Size(121, 20);
             this.drop_directPrediction.TabIndex = 13;
+            this.ToolTip.SetToolTip(this.drop_directPrediction, resources.GetString("drop_directPrediction.ToolTip"));
             this.drop_directPrediction.SelectedIndexChanged += new System.EventHandler(this.drop_directPrediction_SelectedIndexChanged);
             // 
             // label62
@@ -2784,6 +2807,9 @@ namespace Handbrake
             this.drop_bFrames.Name = "drop_bFrames";
             this.drop_bFrames.Size = new System.Drawing.Size(121, 20);
             this.drop_bFrames.TabIndex = 12;
+            this.ToolTip.SetToolTip(this.drop_bFrames, "Sane values are 1-6. \r\nB-Frames are smaller than other frames, so they let you pa" +
+                    "ck in more quality at the same bitrate. \r\nUse more of them with animated materia" +
+                    "l: 9-16. ");
             this.drop_bFrames.SelectedIndexChanged += new System.EventHandler(this.drop_bFrames_SelectedIndexChanged);
             // 
             // label64
@@ -2824,6 +2850,8 @@ namespace Handbrake
             this.drop_refFrames.Name = "drop_refFrames";
             this.drop_refFrames.Size = new System.Drawing.Size(121, 20);
             this.drop_refFrames.TabIndex = 10;
+            this.ToolTip.SetToolTip(this.drop_refFrames, "Sane values are 1-6. The more you add, the higher the quality — but the slower th" +
+                    "e encode. ");
             this.drop_refFrames.SelectedIndexChanged += new System.EventHandler(this.drop_refFrames_SelectedIndexChanged);
             // 
             // check_mixedReferences
@@ -2838,6 +2866,8 @@ namespace Handbrake
             this.check_mixedReferences.TabIndex = 11;
             this.check_mixedReferences.Text = "Mixed References:";
             this.check_mixedReferences.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ToolTip.SetToolTip(this.check_mixedReferences, "With this on, different parts of a frame will refer back to different prior frame" +
+                    "s, \r\ndepending on what\'s best for that part of the image. ");
             this.check_mixedReferences.UseVisualStyleBackColor = true;
             this.check_mixedReferences.CheckStateChanged += new System.EventHandler(this.check_mixedReferences_CheckedChanged);
             // 
@@ -2997,6 +3027,7 @@ namespace Handbrake
             this.btn_source.Name = "btn_source";
             this.btn_source.Size = new System.Drawing.Size(90, 36);
             this.btn_source.Text = "Source";
+            this.btn_source.ToolTipText = "Open a new source file or folder.";
             this.btn_source.Click += new System.EventHandler(this.btn_source_Click);
             // 
             // btn_file_source
