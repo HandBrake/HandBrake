@@ -86,11 +86,11 @@ namespace Handbrake
             this.btn_close.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(395, 346);
+            this.btn_close.Location = new System.Drawing.Point(430, 346);
             this.btn_close.Name = "btn_close";
-            this.btn_close.Size = new System.Drawing.Size(107, 22);
+            this.btn_close.Size = new System.Drawing.Size(72, 22);
             this.btn_close.TabIndex = 53;
-            this.btn_close.Text = "Save && Close";
+            this.btn_close.Text = "Close";
             this.btn_close.UseVisualStyleBackColor = true;
             this.btn_close.Click += new System.EventHandler(this.btn_close_Click);
             // 
@@ -175,6 +175,9 @@ namespace Handbrake
             this.txt_autoNameFormat.Name = "txt_autoNameFormat";
             this.txt_autoNameFormat.Size = new System.Drawing.Size(255, 21);
             this.txt_autoNameFormat.TabIndex = 79;
+            this.ToolTip.SetToolTip(this.txt_autoNameFormat, "Define the format of the automatically named file.\r\ne.g  {source}_{title}_some-te" +
+                    "xt\r\n{source} {title} {chapters} will be automatically substituted for the input " +
+                    "sources values.");
             this.txt_autoNameFormat.TextChanged += new System.EventHandler(this.txt_autoNameFormat_TextChanged);
             // 
             // btn_browse
@@ -206,7 +209,7 @@ namespace Handbrake
             this.text_an_path.Name = "text_an_path";
             this.text_an_path.Size = new System.Drawing.Size(181, 21);
             this.text_an_path.TabIndex = 76;
-            this.ToolTip.SetToolTip(this.text_an_path, "Default location where Auto named files are stored.");
+            this.ToolTip.SetToolTip(this.text_an_path, "The default location where auto named files are stored.");
             this.text_an_path.TextChanged += new System.EventHandler(this.text_an_path_TextChanged);
             // 
             // check_autoNaming
@@ -215,9 +218,9 @@ namespace Handbrake
             this.check_autoNaming.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.check_autoNaming.Location = new System.Drawing.Point(114, 148);
             this.check_autoNaming.Name = "check_autoNaming";
-            this.check_autoNaming.Size = new System.Drawing.Size(340, 17);
+            this.check_autoNaming.Size = new System.Drawing.Size(206, 17);
             this.check_autoNaming.TabIndex = 72;
-            this.check_autoNaming.Text = "Use Auto Naming (uses source name and title number)";
+            this.check_autoNaming.Text = "Automatically name output files";
             this.ToolTip.SetToolTip(this.check_autoNaming, "Automatically name output files");
             this.check_autoNaming.UseVisualStyleBackColor = true;
             this.check_autoNaming.CheckedChanged += new System.EventHandler(this.check_autoNaming_CheckedChanged);

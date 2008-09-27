@@ -41,6 +41,7 @@ namespace Handbrake
         {
             queue = qw;
             redrawQueue();
+            lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
         }
 
         /// <summary>
@@ -59,7 +60,8 @@ namespace Handbrake
         private void redrawQueue()
         {
             list_queue.Items.Clear();
-            foreach (ArrayList queue_item in queue.getQueue())
+            ArrayList theQueue = queue.getQueue();
+            foreach (ArrayList queue_item in theQueue)
             {
                 string q_item = queue_item[1].ToString();
                 Functions.QueryParser parsed = Functions.QueryParser.Parse(q_item);
@@ -195,6 +197,8 @@ namespace Handbrake
                 lbl_aEnc.Text = "-";
                 lbl_title.Text = "-";
                 lbl_chapt.Text = "-";
+
+                lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
             }
             catch (Exception exc)
             {
@@ -226,6 +230,7 @@ namespace Handbrake
 
                 progressBar.PerformStep();
                 lbl_progressValue.Text = string.Format("{0} %", progressBar.Value);
+                lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
             }
             catch (Exception exc)
             {
@@ -281,9 +286,16 @@ namespace Handbrake
         {
             if (list_queue.SelectedIndices.Count != 0)
             {
-                queue.moveUp(list_queue.SelectedIndices[0]);
+                int selected = list_queue.SelectedIndices[0];
+
+                queue.moveUp(selected);
                 queue.write2disk("hb_queue_recovery.dat"); // Update the queue recovery file
                 redrawQueue();
+
+                if (selected - 1 > 0) 
+                    list_queue.Items[selected -1].Selected = true;
+
+                list_queue.Select();
             }
         }
 
@@ -292,9 +304,16 @@ namespace Handbrake
         {
             if (list_queue.SelectedIndices.Count != 0)
             {
+                int selected = list_queue.SelectedIndices[0];
+
                 queue.moveDown(list_queue.SelectedIndices[0]);
                 queue.write2disk("hb_queue_recovery.dat"); // Update the queue recovery file
                 redrawQueue();
+
+                if (selected +1 < list_queue.Items.Count) 
+                    list_queue.Items[selected + 1].Selected = true;
+
+                list_queue.Select();
             }
         }
 
@@ -306,6 +325,7 @@ namespace Handbrake
                 queue.remove(list_queue.SelectedIndices[0]);
                 queue.write2disk("hb_queue_recovery.dat"); // Update the queue recovery file
                 redrawQueue();
+                lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
             }
         }
 

@@ -83,7 +83,7 @@ namespace Handbrake.Functions
         {
             if (index != 0)
             {
-                string item = queue[index].ToString();
+                ArrayList item = (ArrayList)queue[index];
 
                 queue.Insert((index - 1), item);
                 queue.RemoveAt((index + 1));
@@ -98,7 +98,7 @@ namespace Handbrake.Functions
         {
             if (index != queue.Count - 1)
             {
-                string item = queue[index].ToString();
+                ArrayList item = (ArrayList)queue[index];
 
                 queue.Insert((index + 2), item);
                 queue.RemoveAt((index));
