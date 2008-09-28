@@ -181,7 +181,7 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://handbrake.fr/appcast_unstable.xml")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://handbrake.fr/appcast_test.xml")]
         public string appcast_unstable {
             get {
                 return ((string)(this["appcast_unstable"]));

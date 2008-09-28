@@ -46,7 +46,7 @@ namespace Handbrake
             // 
             this.lblProgress.AutoSize = true;
             this.lblProgress.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblProgress.Location = new System.Drawing.Point(90, 54);
+            this.lblProgress.Location = new System.Drawing.Point(93, 38);
             this.lblProgress.Name = "lblProgress";
             this.lblProgress.Size = new System.Drawing.Size(115, 13);
             this.lblProgress.TabIndex = 10;
@@ -54,7 +54,7 @@ namespace Handbrake
             // 
             // progress_download
             // 
-            this.progress_download.Location = new System.Drawing.Point(93, 28);
+            this.progress_download.Location = new System.Drawing.Point(93, 12);
             this.progress_download.Name = "progress_download";
             this.progress_download.Size = new System.Drawing.Size(318, 23);
             this.progress_download.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -72,7 +72,6 @@ namespace Handbrake
             // 
             // btn_cancel
             // 
-            this.btn_cancel.BackColor = System.Drawing.Color.Silver;
             this.btn_cancel.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_cancel.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_cancel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
@@ -81,21 +80,19 @@ namespace Handbrake
             this.btn_cancel.Size = new System.Drawing.Size(90, 22);
             this.btn_cancel.TabIndex = 56;
             this.btn_cancel.Text = "Cancel";
-            this.btn_cancel.UseVisualStyleBackColor = true;
+            this.btn_cancel.UseVisualStyleBackColor = false;
             this.btn_cancel.Click += new System.EventHandler(this.btn_cancel_Click);
             // 
             // frmDownload
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Silver;
             this.ClientSize = new System.Drawing.Size(426, 87);
             this.Controls.Add(this.btn_cancel);
             this.Controls.Add(this.PictureBox1);
             this.Controls.Add(this.lblProgress);
             this.Controls.Add(this.progress_download);
             this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmDownload";
             this.ShowIcon = false;

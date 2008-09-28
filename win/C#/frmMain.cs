@@ -21,14 +21,13 @@ namespace Handbrake
 {
     public partial class frmMain : Form
     {
-
         // Declarations *******************************************************
         Functions.Common hb_common_func = new Functions.Common();
         Functions.x264Panel x264PanelFunctions = new Functions.x264Panel();
         Functions.Encode cliObj = new Functions.Encode();
         Functions.Queue encodeQueue = new Functions.Queue();
-        Parsing.Title selectedTitle;
         Functions.Presets presetHandler = new Functions.Presets();
+        Parsing.Title selectedTitle;
         internal Process hbProc;
         private Parsing.DVD thisDVD;
         private frmQueue queueWindow = new frmQueue();
@@ -69,7 +68,6 @@ namespace Handbrake
                     Properties.Settings.Default.hb_version = "0";
                 }
             }
-            Thread.Sleep(100);
 
             // show the form, but leave disabled until preloading is complete then show the main form
             this.Enabled = false;
@@ -83,7 +81,6 @@ namespace Handbrake
                 Application.DoEvents();
                 Thread updateCheckThread = new Thread(startupUpdateCheck);
                 updateCheckThread.Start();
-                Thread.Sleep(100);
             }
 
             // Setup the GUI components
@@ -100,12 +97,10 @@ namespace Handbrake
             if (Properties.Settings.Default.tooltipEnable == "Checked")
                 ToolTip.Active = true;
             lbl_encode.Text = "";
-            Thread.Sleep(100);
 
             //Finished Loading
             lblStatus.Text = "Loading Complete!";
             Application.DoEvents();
-            Thread.Sleep(100);
 
             //Close the splash screen
             splash.Close();

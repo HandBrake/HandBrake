@@ -6,30 +6,80 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
 using System.Xml;
 using System.Text.RegularExpressions;
 
 namespace Handbrake.Functions
 {
-    class AppcastReader
+    public class AppcastReader
     {
-        XmlTextReader rssReader;
         XmlDocument rssDoc;
         XmlNode nodeRss;
         XmlNode nodeChannel;
         XmlNode nodeItem;
-        private string hb_versionInfo;
+        private string hb_description;
         private string hb_version;
         private string hb_build;
         private string hb_file;
 
-        // Rss Reading Code.
+        /// <summary>
+        /// Get the build information from the required appcasts.
+        /// This must be run before calling any of the public return functions.
+        /// </summary>
+        public void getInfo()
+        {
+            Match ver;
+            int stable_build, unstable_build = 0;
+            string input, unstable_description = "", stable_description, unstable_version = "", stable_version;
+            string stable_file, unstable_file = "";
+
+            // Check the stable appcast and get the stable build number
+            readRss(new XmlTextReader(Properties.Settings.Default.appcast));
+            input = nodeItem.InnerXml;
+            ver = Regex.Match(input, @"sparkle:version=""([0-9]*)\""");
+            stable_build = int.Parse(ver.ToString().Replace("sparkle:version=", "").Replace("\"", ""));
+            ver = Regex.Match(input, @"sparkle:shortVersionString=""([0-9].[0-9].[0-9]*)\""");
+            stable_version = ver.ToString().Replace("sparkle:shortVersionString=", "").Replace("\"", "");
+            stable_description = nodeItem["description"].InnerText;
+            stable_file = nodeItem["windows"].InnerText;
+
+            // If this is a snapshot release, or the user wants to check for snapshot releases
+            if (Properties.Settings.Default.checkSnapshot == "Checked" || Properties.Settings.Default.hb_build.ToString().EndsWith("1"))
+            {
+                // Get the stable build
+                readRss(new XmlTextReader(Properties.Settings.Default.appcast_unstable));
+                input = nodeItem.InnerXml;
+                ver = Regex.Match(input, @"sparkle:version=""([0-9]*)\""");
+                unstable_build = int.Parse(ver.ToString().Replace("sparkle:version=", "").Replace("\"", ""));
+                ver = Regex.Match(input, @"sparkle:shortVersionString=""([0-9a-zA-Z.]*)\""");
+                unstable_version = ver.ToString().Replace("sparkle:shortVersionString=", "").Replace("\"", "");
+                unstable_description = nodeItem["description"].InnerText;
+                unstable_file = nodeItem["windows"].InnerText;
+            }
+
+
+            // Set the global version information
+            if (stable_build >= unstable_build)
+            {
+                hb_description = stable_description;
+                hb_version = stable_version;
+                hb_build = stable_build.ToString();
+                hb_file = stable_file;
+            }
+            else
+            {
+                hb_description = unstable_description;
+                hb_version = unstable_version;
+                hb_build = unstable_build.ToString();
+                hb_file = unstable_file;
+            }
+        }
+
+        /// <summary>
+        /// Read the RSS file.
+        /// </summary>
+        /// <param name="rssReader"></param>
         private void readRss(XmlTextReader rssReader)
         {
             rssDoc = new XmlDocument();
@@ -54,62 +104,13 @@ namespace Handbrake.Functions
             }
         }
 
-
-        // Get's the information required out the RSS file.
-        private void getInfo()
-        {
-            Match ver;
-            int unstable_build = 0;
-            string input;
-
-            // Check the stable appcast and get the build nuber
-            rssReader = new XmlTextReader(Properties.Settings.Default.appcast);
-            readRss(rssReader);
-            input = nodeItem.InnerXml;
-            ver = Regex.Match(input, @"sparkle:version=""([0-9]*)\""");
-            int stable_build = int.Parse(ver.ToString().Replace("sparkle:version=", "").Replace("\"", ""));
-
-            // If the pref to enable unstable appcast checking is enabled    OR
-            // this is a snapshot release, 
-            // then check the unstable appcast.
-            if (Properties.Settings.Default.checkSnapshot == "Checked" || Properties.Settings.Default.hb_build.ToString().EndsWith("1"))
-            {
-                // Get the stable build
-                rssReader = new XmlTextReader(Properties.Settings.Default.appcast_unstable);
-                readRss(rssReader);
-                input = nodeItem.InnerXml;
-                ver = Regex.Match(input, @"sparkle:version=""([0-9]*)\""");
-                unstable_build = int.Parse(ver.ToString().Replace("sparkle:version=", "").Replace("\"", ""));
-            }
-
-            if (stable_build >= unstable_build)
-                rssReader = new XmlTextReader(Properties.Settings.Default.appcast);
-            else
-                rssReader = new XmlTextReader(Properties.Settings.Default.appcast_unstable);
-
-            // Get the Version Information
-            hb_versionInfo = nodeItem["description"].InnerText;
-
-            // Get the version
-            string inputNode = nodeItem.InnerXml;
-            ver = Regex.Match(inputNode, @"sparkle:shortVersionString=""([0-9].[0-9].[0-9]*)\""");
-            hb_version = ver.ToString().Replace("sparkle:shortVersionString=", "").Replace("\"", "");
-
-            ver = Regex.Match(inputNode, @"sparkle:version=""([0-9]*)\""");
-            hb_build = ver.ToString().Replace("sparkle:version=", "").Replace("\"", "");
-
-            // Get the update file
-            hb_file = nodeItem["windows"].InnerText;
-        }
-
         /// <summary>
         /// Get Information about an update to HandBrake
         /// </summary>
         /// <returns></returns>
         public string versionInfo()
         {
-            getInfo();
-            return hb_versionInfo;
+            return hb_description;
         }
 
         /// <summary>
@@ -118,7 +119,6 @@ namespace Handbrake.Functions
         /// <returns></returns>
         public string version()
         {
-            getInfo();
             return hb_version;
         }
 
@@ -128,7 +128,6 @@ namespace Handbrake.Functions
         /// <returns></returns>
         public string build()
         {
-            getInfo();
             return hb_build;
         }
 
@@ -138,7 +137,6 @@ namespace Handbrake.Functions
         /// <returns></returns>
         public string downloadFile()
         {
-            getInfo();
             return hb_file;
         }
     }

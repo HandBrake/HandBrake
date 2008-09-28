@@ -1172,6 +1172,7 @@ namespace Handbrake.Functions
             try
             {
                 Functions.AppcastReader rssRead = new Functions.AppcastReader();
+                rssRead.getInfo(); // Initializes the class.
                 string build = rssRead.build();
 
                 int latest = int.Parse(build);

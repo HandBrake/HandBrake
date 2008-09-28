@@ -6,10 +6,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using System.Net;
 using System.IO;
@@ -30,20 +26,21 @@ namespace Handbrake
         private delegate void DownloadCompleteCallback();
         private delegate void DownloadFailedCallback();
 
+        private string file;
 
-        public frmDownload()
+        public frmDownload(string filename)
         {
             InitializeComponent();
 
+            file = filename;
             downloadThread = new Thread(Download);
             downloadThread.Start();
         }
 
         private void Download()
         {
-            Functions.AppcastReader rssRead = new Functions.AppcastReader();
             string tempPath = Path.Combine(Path.GetTempPath(), "handbrake-setup.exe");
-            string hbUpdate = rssRead.downloadFile();
+            string hbUpdate = file;
             WebClient wcDownload = new WebClient();
 
             try
