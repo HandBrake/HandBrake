@@ -77,9 +77,7 @@ namespace Handbrake
             // 
             // btn_skip
             // 
-            this.btn_skip.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_skip.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_skip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_skip.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_skip.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btn_skip.Location = new System.Drawing.Point(94, 250);
@@ -87,14 +85,12 @@ namespace Handbrake
             this.btn_skip.Size = new System.Drawing.Size(133, 22);
             this.btn_skip.TabIndex = 54;
             this.btn_skip.Text = "Skip This Version";
-            this.btn_skip.UseVisualStyleBackColor = true;
+            this.btn_skip.UseVisualStyleBackColor = false;
             this.btn_skip.Click += new System.EventHandler(this.btn_skip_Click);
             // 
             // btn_installUpdate
             // 
-            this.btn_installUpdate.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_installUpdate.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_installUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_installUpdate.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_installUpdate.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btn_installUpdate.Location = new System.Drawing.Point(464, 250);
@@ -102,14 +98,12 @@ namespace Handbrake
             this.btn_installUpdate.Size = new System.Drawing.Size(133, 22);
             this.btn_installUpdate.TabIndex = 55;
             this.btn_installUpdate.Text = "Install Update";
-            this.btn_installUpdate.UseVisualStyleBackColor = true;
+            this.btn_installUpdate.UseVisualStyleBackColor = false;
             this.btn_installUpdate.Click += new System.EventHandler(this.btn_installUpdate_Click);
             // 
             // btn_remindLater
             // 
-            this.btn_remindLater.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_remindLater.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_remindLater.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_remindLater.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_remindLater.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btn_remindLater.Location = new System.Drawing.Point(325, 250);
@@ -117,7 +111,7 @@ namespace Handbrake
             this.btn_remindLater.Size = new System.Drawing.Size(133, 22);
             this.btn_remindLater.TabIndex = 56;
             this.btn_remindLater.Text = "Remind me Later";
-            this.btn_remindLater.UseVisualStyleBackColor = true;
+            this.btn_remindLater.UseVisualStyleBackColor = false;
             this.btn_remindLater.Click += new System.EventHandler(this.btn_remindLater_Click);
             // 
             // label3
@@ -154,7 +148,7 @@ namespace Handbrake
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(609, 288);
+            this.ClientSize = new System.Drawing.Size(609, 282);
             this.Controls.Add(this.lbl_update_text);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btn_remindLater);

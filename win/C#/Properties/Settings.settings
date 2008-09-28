@@ -42,7 +42,7 @@
       <Value Profile="(Default)">http://handbrake.fr/appcast.xml</Value>
     </Setting>
     <Setting Name="appcast_unstable" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://handbrake.fr/appcast_test.xml</Value>
+      <Value Profile="(Default)">http://handbrake.fr/appcast_unstable.xml</Value>
     </Setting>
     <Setting Name="drive_detection" Type="System.String" Scope="User">
       <Value Profile="(Default)">Checked</Value>
