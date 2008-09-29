@@ -549,7 +549,7 @@ lookup_mix_int(const GValue *mix)
 {
 	gint ii;
 	gchar *str;
-	gint result = HB_AMIXDOWN_DOLBYPLII;
+	gint result = 0;
 
 
 	str = ghb_value_string(mix);
