@@ -311,7 +311,6 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     /* Pop the frame's subtitle and dispose of it. */
                     hb_buffer_t * subtitles = hb_fifo_get( pv->subtitle_queue );
                     hb_buffer_close( &subtitles );
-
                     buf_tmp_in = NULL;
                     break;
                 }
@@ -413,7 +412,7 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if( job->vfr )
     {
-        if( hb_fifo_size( pv->delay_queue ) >= 3 )
+        if( hb_fifo_size( pv->delay_queue ) >= 4 )
         {
             *buf_out = hb_fifo_get( pv->delay_queue );
         }
