@@ -362,6 +362,28 @@ camel_convert(gchar *str)
 	}
 }
 
+static gchar*
+get_file_label(const gchar *filename)
+{
+	static gchar *containers[] = 
+		{".vob", ".mpg", ".m2ts", ".mkv", ".mp4", ".m4v", ".avi", ".ogm", NULL};
+	gchar *base;
+	gint ii;
+
+	base = g_path_get_basename(filename);
+	for (ii = 0; containers[ii] != NULL; ii++)
+	{
+		if (g_str_has_suffix(base, containers[ii]))
+		{
+			gchar *pos;
+			pos = strrchr(base, '.');
+			*pos = 0;
+			break;
+		}
+	}
+	return base;
+}
+
 static gboolean
 update_source_label(signal_user_data_t *ud, const gchar *source)
 {
@@ -393,11 +415,7 @@ update_source_label(signal_user_data_t *ud, const gchar *source)
 		label = ghb_dvd_volname (filename);
 		if (label == NULL)
 		{
-			path = g_strsplit(filename, "/", -1);
-			len = g_strv_length (path);
-			// Just use the last combonent of the path
-			label = g_strdup(path[len-1]);
-			g_strfreev (path);
+			label = get_file_label(filename);
 		}
 		else
 		{
