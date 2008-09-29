@@ -175,20 +175,20 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 - (NSApplicationTerminateReply) applicationShouldTerminate: (NSApplication *) app
 {
+    
     // Warn if encoding a movie
     hb_state_t s;
-    hb_get_state( fHandle, &s );
+    hb_get_state( fQueueEncodeLibhb, &s );
     
     if ( s.state != HB_STATE_IDLE )
     {
         int result = NSRunCriticalAlertPanel(
-                NSLocalizedString(@"Are you sure you want to quit HandBrake?", nil),
-                NSLocalizedString(@"If you quit HandBrake, your movie will be lost. Do you want to quit anyway?", nil),
-                NSLocalizedString(@"Quit", nil), NSLocalizedString(@"Don't Quit", nil), nil, @"A movie" );
+                                             NSLocalizedString(@"Are you sure you want to quit HandBrake?", nil),
+                                             NSLocalizedString(@"If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?", nil),
+                                             NSLocalizedString(@"Quit", nil), NSLocalizedString(@"Don't Quit", nil), nil, @"A movie" );
         
         if (result == NSAlertDefaultReturn)
         {
-            [self doCancelCurrentJob];
             return NSTerminateNow;
         }
         else
@@ -196,12 +196,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     }
     
     // Warn if items still in the queue
-    else if ( hb_count( fHandle ) > 0 )
+    else if ( fPendingCount > 0 )
     {
         int result = NSRunCriticalAlertPanel(
-                NSLocalizedString(@"Are you sure you want to quit HandBrake?", nil),
-                NSLocalizedString(@"One or more encodes are queued for encoding. Do you want to quit anyway?", nil),
-                NSLocalizedString(@"Quit", nil), NSLocalizedString(@"Don't Quit", nil), nil);
+                                             NSLocalizedString(@"Are you sure you want to quit HandBrake?", nil),
+                                             NSLocalizedString(@"There are pending encodes in your queue. Do you want to quit anyway?",nil),
+                                             NSLocalizedString(@"Quit", nil), NSLocalizedString(@"Don't Quit", nil), nil);
         
         if ( result == NSAlertDefaultReturn )
             return NSTerminateNow;
