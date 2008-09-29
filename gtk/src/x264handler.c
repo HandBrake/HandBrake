@@ -16,6 +16,7 @@
 #include "settings.h"
 #include "values.h"
 #include "callbacks.h"
+#include "presets.h"
 #include "x264handler.h"
 
 static void x264_opt_update(signal_user_data_t *ud, GtkWidget *widget);

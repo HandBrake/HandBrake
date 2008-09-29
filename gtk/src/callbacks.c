@@ -1520,8 +1520,15 @@ ghb_backend_events(signal_user_data_t *ud)
 	// Then handle the status of the queue
 	if (status.state & GHB_STATE_SCANNING)
 	{
-		status_str = g_strdup_printf ("Scanning title %d of %d...", 
+		if (status.title_cur == 0)
+		{
+			status_str = g_strdup ("Scanning...");
+		}
+		else
+		{
+			status_str = g_strdup_printf ("Scanning title %d of %d...", 
 								  status.title_cur, status.title_count );
+		}
 		gtk_progress_bar_set_text (progress, status_str);
 		g_free(status_str);
 		if (status.title_count > 0)
