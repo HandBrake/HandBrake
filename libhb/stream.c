@@ -2305,7 +2305,7 @@ static void ffmpeg_add_codec( hb_stream_t *stream, int stream_index )
     // read the first packet.
     AVCodecContext *context = stream->ffmpeg_ic->streams[stream_index]->codec;
     context->workaround_bugs = FF_BUG_AUTODETECT;
-    context->error_resilience = 1;
+    context->error_recognition = 1;
     context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
     AVCodec *codec = avcodec_find_decoder( context->codec_id );
     avcodec_open( context, codec );

@@ -806,10 +806,8 @@ Index: libavcodec/avcodec.h
 ===================================================================
 --- libavcodec/avcodec.h	(revision 14016)
 +++ libavcodec/avcodec.h	(working copy)
-@@ -259,6 +259,7 @@
- #if LIBAVCODEC_VERSION_INT < ((52<<16)+(0<<8)+0)
-     CODEC_ID_MPEG4AAC,
- #endif
+@@ -259,4 +259,5 @@
+     CODEC_ID_AAC,
 +    CODEC_ID_AAC_LATM,
      CODEC_ID_AC3,
      CODEC_ID_DTS,
