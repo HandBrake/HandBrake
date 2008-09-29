@@ -294,11 +294,14 @@ hb_display_job_info( hb_job_t * job )
                 hb_log( "     + bitrate: %d kbps, samplerate: %d Hz", audio->config.in.bitrate / 1000, audio->config.in.samplerate );
             }
 
-            for (j = 0; j < hb_audio_mixdowns_count; j++)
+            if( (audio->config.out.codec != HB_ACODEC_AC3) && (audio->config.out.codec != HB_ACODEC_DCA) )
             {
-                if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown) {
-                    hb_log( "   + mixdown: %s", hb_audio_mixdowns[j].human_readable_name );
-                    break;
+                for (j = 0; j < hb_audio_mixdowns_count; j++)
+                {
+                    if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown) {
+                        hb_log( "   + mixdown: %s", hb_audio_mixdowns[j].human_readable_name );
+                        break;
+                    }
                 }
             }
 
