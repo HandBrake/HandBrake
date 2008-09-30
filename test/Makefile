@@ -3,11 +3,18 @@ SYSTEM = $(shell uname -s)
 LIBS = a52 mkv avformat avcodec avutil dca dvdread faac mp3lame mpeg2 vorbis \
 	   vorbisenc ogg samplerate x264 xvidcore mp4v2 swscale theora faad
 
+CYGLIBS = zlib bzip2
+
 all: ../HandBrakeCLI
 
 CFLAGS += -I../libhb
 CXXFLAGS += -I../libhb
 LIBS2 = ../libhb/libhb.a $(LIBS:%=../contrib/lib/lib%.a)
+
+ifeq ($(findstring CYGWIN_NT,$(SYSTEM)),CYGWIN_NT)
+	LIBS2 += $(CYGLIBS:%=../contrib/lib/libz.a) $(CYGLIBS:%=../contrib/lib/libbz2.a)
+endif
+
 LDFLAGS += $(LIBS2) -lbz2 -ldl
 
 ../HandBrakeCLI: test.c parsecsv.c $(LIBS2)

@@ -40,6 +40,10 @@ CONTRIBS = ../contrib/lib/liba52.a ../contrib/lib/libavformat.a \
 		   ../contrib/lib/libxvidcore.a  ../contrib/lib/libmp4v2.a \
 		   ../contrib/lib/libmkv.a ../contrib/lib/libswscale.a \
 		   ../contrib/lib/libtheora.a ../contrib/lib/libfaad.a
+		   
+ifeq ($(findstring CYGWIN_NT,$(SYSTEM)),CYGWIN_NT)
+	CONTRIBS += ../contrib/lib/libz.a ../contrib/lib/libbz2.a
+endif
 
 CFLAGS += -I../contrib/include -D__LIBHB__ -DUSE_PTHREAD $(SYSDEF) -Wall -g -O3 -funroll-loops
 
