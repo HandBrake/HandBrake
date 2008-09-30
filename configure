@@ -138,22 +138,14 @@ CSS      = $CSS ;
 EOF
 
 echo
-echo "* Mac and Linux:"
+echo "Don't run configure by hand, make runs it automatically."
 echo
-echo "   Don't run configure by hand, make runs it automatically."
+echo "No, really. That's it. Just type 'make' and hit return."
 echo
-echo "   No, really. That's it. Just type 'make' and hit return."
-echo
-echo "   You're supposed to be building with make, not jam."
-echo "   If you were going to use jam--which you shouldn't--you'd run:"
-echo "    './jam' on a Mac, or"
-echo "    'jam' on Linux"
-echo
-echo "* Windows:"
-echo
-echo "   Be sure to always run configure (this script) before building."
-echo "   Then, run:"
-echo "    'jam'"
+echo "You're supposed to be building with make, not jam."
+echo "If you were going to use jam--which you shouldn't--you'd run:"
+echo " './jam' on a Mac, or"
+echo " 'jam' on Linux or Windows"
 echo
 echo "To make jam, boil fruit with sugar and an acid until pectins are released."
 echo
