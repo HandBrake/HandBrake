@@ -1125,7 +1125,7 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
         int w = ((pv->width[0]   + 31) & (~31))>>is_chroma;
         int h = ((pv->height[0]+6+ 31) & (~31))>>is_chroma;
 
-        pv->mask[i] = malloc( w*h*sizeof(uint8_t) ) + 3*w;
+        pv->mask[i] = calloc( 1, w*h*sizeof(uint8_t) ) + 3*w;
     }
 
      /*
