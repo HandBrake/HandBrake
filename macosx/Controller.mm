@@ -2454,7 +2454,6 @@ fWorkingCount = 0;
     job->file = [[queueToApply objectForKey:@"DestinationPath"] UTF8String];
     [self writeToActivityLog: "processNewQueueEncode sending to prepareJob"];
     [self prepareJob];
-    [self writeToActivityLog: "processNewQueueEncode back from prepareJob"];
     if( [[queueToApply objectForKey:@"SubtitlesForced"] intValue] == 1 )
         job->subtitle_force = 1;
     else
@@ -2551,7 +2550,6 @@ fWorkingCount = 0;
     hb_title_t * title = (hb_title_t *) hb_list_item( list,0 ); // is always zero since now its a single title scan
     hb_job_t * job = title->job;
     hb_audio_config_t * audio;
-    [self writeToActivityLog: "prepareJob reached"];
     /* Chapter selection */
     job->chapter_start = [[queueToApply objectForKey:@"JobChapterStart"] intValue];
     job->chapter_end   = [[queueToApply objectForKey:@"JobChapterEnd"] intValue];
@@ -2663,7 +2661,6 @@ fWorkingCount = 0;
     }
     
     
-    [self writeToActivityLog: "prepareJob reached Picture Settings"];
     /* Picture Size Settings */
     job->width = [[queueToApply objectForKey:@"PictureWidth"]  intValue];
     job->height = [[queueToApply objectForKey:@"PictureHeight"]  intValue];
@@ -2679,7 +2676,6 @@ fWorkingCount = 0;
     job->crop[3] = [[queueToApply objectForKey:@"PictureRightCrop"]  intValue];
     
     /* Video settings */
-    [self writeToActivityLog: "prepareJob reached Frame Rate"];
     /* Framerate */
     
     /* Set vfr to 0 as it's only on if using same as source in the framerate popup
@@ -2712,7 +2708,6 @@ fWorkingCount = 0;
             job->vfr = 1;
         }
     }
-    [self writeToActivityLog: "prepareJob reached Bitrate Video Quality"];
     if ( [[queueToApply objectForKey:@"VideoQualityType"] intValue] == 0 )
     {
         /* Target size.
@@ -2735,7 +2730,6 @@ fWorkingCount = 0;
     /* Subtitle settings */
     job->subtitle = [[queueToApply objectForKey:@"JobSubtitlesIndex"] intValue] - 2;
     
-    [self writeToActivityLog: "prepareJob reached Audio"];
     /* Audio tracks and mixdowns */
     /* Lets make sure there arent any erroneous audio tracks in the job list, so lets make sure its empty*/
     int audiotrack_count = hb_list_count(job->list_audio);
@@ -2808,14 +2802,13 @@ fWorkingCount = 0;
         audio->out.mixdown = [[queueToApply objectForKey:@"JobAudio4Mixdown"] intValue];
         audio->out.bitrate = [[queueToApply objectForKey:@"JobAudio4Bitrate"] intValue];
         audio->out.samplerate = [[queueToApply objectForKey:@"JobAudio4Samplerate"] intValue];
-        audio->out.dynamic_range_compression = [[queueToApply objectForKey:@"Audio3TrackDRCSlider"] floatValue];
+        audio->out.dynamic_range_compression = [[queueToApply objectForKey:@"Audio4TrackDRCSlider"] floatValue];
         
         hb_audio_add( job, audio );
         free(audio);
     }
     
-    [self writeToActivityLog: "prepareJob reached Filters"];
-     /* Filters */ 
+    /* Filters */ 
     job->filters = hb_list_init();
     
     /* Now lets call the filters if applicable.
