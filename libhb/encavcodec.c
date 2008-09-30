@@ -32,6 +32,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 {
     AVCodec * codec;
     AVCodecContext * context;
+    int rate_num, rate_den;
 
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
@@ -71,13 +72,38 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         {
             context->global_quality = FF_QP2LAMBDA * job->vquality + 0.5;
         }
-		context->mb_decision = 1;
+        context->mb_decision = 1;
         hb_log( "encavcodec: encoding at constant quantizer %d",
                 context->global_quality );
     }
     context->width     = job->width;
     context->height    = job->height;
-    context->time_base = (AVRational) { job->vrate_base, job->vrate };
+    rate_num = job->vrate_base;
+    rate_den = job->vrate;
+    if (rate_den == 27000000)
+    {
+        int ii;
+        for (ii = 0; ii < hb_video_rates_count; ii++)
+        {
+            if (abs(rate_num - hb_video_rates[ii].rate) < 10)
+            {
+                rate_num = hb_video_rates[ii].rate;
+                break;
+            }
+        }
+    }
+    hb_reduce(&rate_num, &rate_den, rate_num, rate_den);
+    if ((rate_num & ~0xFFFF) || (rate_den & ~0xFFFF))
+    {
+        hb_log( "encavcodec: truncating framerate %d / %d", 
+                rate_num, rate_den );
+    }
+    while ((rate_num & ~0xFFFF) || (rate_den & ~0xFFFF))
+    {
+        rate_num >>= 1;
+        rate_den >>= 1;
+    }
+    context->time_base = (AVRational) { rate_num, rate_den };
     context->gop_size  = 10 * job->vrate / job->vrate_base;
     context->pix_fmt   = PIX_FMT_YUV420P;
 
