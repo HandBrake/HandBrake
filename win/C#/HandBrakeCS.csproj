@@ -143,7 +143,7 @@
     <Compile Include="frmUpdater.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmUpdater.Designer.cs">
+    <Compile Include="frmUpdater.designer.cs">
       <DependentUpon>frmUpdater.cs</DependentUpon>
     </Compile>
     <Compile Include="Functions\SystemInfo.cs" />
@@ -191,7 +191,6 @@
       <DependentUpon>frmQueue.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmUpdater.resx">
-      <SubType>Designer</SubType>
       <DependentUpon>frmUpdater.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
