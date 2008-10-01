@@ -905,6 +905,15 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
                             [item objectForKey:@"Audio1Mixdown"] ,
                             [item objectForKey:@"Audio1Samplerate"],
                             [item objectForKey:@"Audio1Bitrate"]];
+            
+            if ([[item objectForKey:@"Audio1TrackDRCSlider"] floatValue] > 1.00)
+            {
+                audioDetail1 = [NSString stringWithFormat:@"%@, DRC: %@",audioDetail1,[item objectForKey:@"Audio1TrackDRCSlider"]];
+            }
+            else
+            {
+                audioDetail1 = [NSString stringWithFormat:@"%@, DRC: Off",audioDetail1];
+            }
         }
         
         if ([[item objectForKey:@"Audio2Track"] intValue] > 0)
@@ -916,6 +925,15 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
                             [item objectForKey:@"Audio2Mixdown"] ,
                             [item objectForKey:@"Audio2Samplerate"],
                             [item objectForKey:@"Audio2Bitrate"]];
+            
+            if ([[item objectForKey:@"Audio2TrackDRCSlider"] floatValue] > 1.00)
+            {
+                audioDetail2 = [NSString stringWithFormat:@"%@, DRC: %@",audioDetail2,[item objectForKey:@"Audio2TrackDRCSlider"]];
+            }
+            else
+            {
+                audioDetail2 = [NSString stringWithFormat:@"%@, DRC: Off",audioDetail2];
+            }
         }
         
         if ([[item objectForKey:@"Audio3Track"] intValue] > 0)
@@ -927,7 +945,17 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
                             [item objectForKey:@"Audio3Mixdown"] ,
                             [item objectForKey:@"Audio3Samplerate"],
                             [item objectForKey:@"Audio3Bitrate"]];
+            
+            if ([[item objectForKey:@"Audio3TrackDRCSlider"] floatValue] > 1.00)
+            {
+                audioDetail3 = [NSString stringWithFormat:@"%@, DRC: %@",audioDetail3,[item objectForKey:@"Audio3TrackDRCSlider"]];
+            }
+            else
+            {
+                audioDetail3 = [NSString stringWithFormat:@"%@, DRC: Off",audioDetail3];
+            }
         }
+        
         if ([[item objectForKey:@"Audio4Track"] intValue] > 0)
         {
             audioCodecSummary = [NSString stringWithFormat:@"%@, %@",audioCodecSummary ,[item objectForKey:@"Audio3Encoder"]];
@@ -937,6 +965,15 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
                             [item objectForKey:@"Audio4Mixdown"] ,
                             [item objectForKey:@"Audio4Samplerate"],
                             [item objectForKey:@"Audio4Bitrate"]];
+            
+            if ([[item objectForKey:@"Audio4TrackDRCSlider"] floatValue] > 1.00)
+            {
+                audioDetail4 = [NSString stringWithFormat:@"%@, DRC: %@",audioDetail4,[item objectForKey:@"Audio4TrackDRCSlider"]];
+            }
+            else
+            {
+                audioDetail4 = [NSString stringWithFormat:@"%@, DRC: Off",audioDetail4];
+            }
         }
         
         NSString * jobFormatInfo;
