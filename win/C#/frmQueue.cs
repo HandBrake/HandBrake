@@ -332,6 +332,7 @@ namespace Handbrake
         // Generate a Saveable batch script on the users request
         private void mnu_batch_Click(object sender, EventArgs e)
         {
+            SaveFile.FileName = "";
             SaveFile.Filter = "Batch|.bat";
             SaveFile.ShowDialog();
             if (SaveFile.FileName != String.Empty)
@@ -341,6 +342,7 @@ namespace Handbrake
         // Export the HandBrake Queue to a file.
         private void mnu_export_Click(object sender, EventArgs e)
         {
+            SaveFile.FileName = "";
             SaveFile.Filter = "HandBrake Queue|*.queue";
             SaveFile.ShowDialog();
             if (SaveFile.FileName != String.Empty)
@@ -350,6 +352,7 @@ namespace Handbrake
         // Import an exported queue
         private void mnu_import_Click(object sender, EventArgs e)
         {
+            OpenFile.FileName = "";
             OpenFile.ShowDialog();
             if (OpenFile.FileName != String.Empty)
                 queue.recoverQueue(OpenFile.FileName);
