@@ -99,7 +99,9 @@ namespace Handbrake.Parsing
 
         public static AudioTrack Parse(StringReader output)
         {
-            Match m = Regex.Match(output.ReadLine(), @"^    \+ ([0-9]*), ([A-Za-z0-9]*) \((.*)\) \((.*)\), ([0-9]*)Hz, ([0-9]*)bps");
+            String audio_track= output.ReadLine();
+            Match m = Regex.Match(audio_track, @"^    \+ ([0-9]*), ([A-Za-z0-9]*) \((.*)\) \((.*)\), ([0-9]*)Hz, ([0-9]*)bps");
+            Match y = Regex.Match(audio_track, @"^    \+ ([0-9]*), ([A-Za-z0-9]*) \((.*)\)");
             if (m.Success)
             {
                 AudioTrack thisTrack = new AudioTrack();
@@ -109,6 +111,14 @@ namespace Handbrake.Parsing
                 thisTrack.m_subFormat = m.Groups[4].Value;
                 thisTrack.m_frequency = int.Parse(m.Groups[5].Value.Trim().ToString());
                 thisTrack.m_bitrate = int.Parse(m.Groups[6].Value.Trim().ToString());
+                return thisTrack;
+            }
+            else if (y.Success)
+            {
+                AudioTrack thisTrack = new AudioTrack();
+                thisTrack.m_trackNumber = int.Parse(y.Groups[1].Value.Trim().ToString());
+                thisTrack.m_language = y.Groups[2].Value;
+                thisTrack.m_format = y.Groups[3].Value;
                 return thisTrack;
             }
             else
