@@ -35,6 +35,49 @@ plist_get_dict(GValue *presets, const gchar *name)
 	return ghb_dict_lookup(presets, name);
 }
 
+static GValue*
+presets_get_dict(GValue *presets, const gchar *name)
+{
+	GValue *dict, *gval;
+	gint count, ii;
+	
+	if (presets == NULL || name == NULL) return NULL;
+	count = ghb_array_len(presets);
+	for (ii = 0; ii < count; ii++)
+	{
+		const gchar *str;
+		dict = ghb_array_get_nth(presets, ii);
+		gval = ghb_dict_lookup(dict, "preset_name");
+		str = g_value_get_string(gval);
+		if (strcmp(str, name) == 0)
+			return dict;
+	}
+	return NULL;
+}
+
+static gint
+presets_remove(GValue *presets, const gchar *name)
+{
+	GValue *dict, *gval;
+	gint count, ii;
+	
+	if (presets == NULL || name == NULL) return -1;
+	count = ghb_array_len(presets);
+	for (ii = 0; ii < count; ii++)
+	{
+		const gchar *str;
+		dict = ghb_array_get_nth(presets, ii);
+		gval = ghb_dict_lookup(dict, "preset_name");
+		str = g_value_get_string(gval);
+		if (strcmp(str, name) == 0)
+		{
+			ghb_array_remove(presets, ii);
+			return ii;
+		}
+	}
+	return -1;
+}
+
 void
 ghb_set_preset_default(GValue *settings)
 {
@@ -60,7 +103,7 @@ gchar*
 ghb_presets_get_description(const gchar *name)
 {
 	GValue *pdict;
-	pdict = plist_get_dict(presetsPlist, name);
+	pdict = presets_get_dict(presetsPlist, name);
 	if (pdict == NULL) return g_strdup("");
 	return ghb_value_string(ghb_dict_lookup(pdict, "preset_description"));
 }
@@ -93,37 +136,42 @@ preset_get_value(
 {
 	GValue *dict;
 
-	dict = plist_get_dict(presetsPlist, name);
+	dict = presets_get_dict(presetsPlist, name);
 	return preset_dict_get_value(dict, key);
 }
 
 GList*
 ghb_presets_get_names()
 {
-	GHashTable *dict;
-	GList *names, *link;
+	GList *names;
 	GList *standard = NULL;
 	GList *custom = NULL;
+	gint ii, count;
 
 	if (presetsPlist == NULL) return NULL;
-	dict = g_value_get_boxed(presetsPlist);
-	link = names = g_hash_table_get_keys(dict);
-	while (link)
+	count = ghb_array_len(presetsPlist);
+	for (ii = 0; ii < count; ii++)
 	{
 		gchar *name;
 		gint ptype;
+		GValue *dict;
+		GValue *gval;
 
-		name = (gchar*)link->data;
-		ptype = ghb_value_int(preset_get_value(name, "preset_type"));
+		dict = ghb_array_get_nth(presetsPlist, ii);
+		gval = ghb_dict_lookup(dict, "preset_name");
+		name = (gchar*)g_value_get_string(gval);
+		ptype = ghb_value_int(preset_dict_get_value(dict, "preset_type"));
 		if (ptype)
+		{
 			custom = g_list_append(custom, name);
+		}
 		else
+		{
 			standard = g_list_append(standard, name);
-		link = link->next;
+		}
 	}
 	custom = g_list_sort(custom, key_cmp);
 	standard = g_list_sort(standard, key_cmp);
-	g_list_free(names);
 	names = g_list_concat(standard, custom);
 	return names;
 }
@@ -136,7 +184,7 @@ ghb_preset_flags(const gchar *name)
 	gint ptype;
 	gint ret = 0;
 
-	dict = plist_get_dict(presetsPlist, name);
+	dict = presets_get_dict(presetsPlist, name);
 	gval = preset_dict_get_value(dict, "preset_type");
 	if (gval)
 	{
@@ -321,7 +369,7 @@ ghb_set_preset(signal_user_data_t *ud, const gchar *name)
 			g_list_free(presets);
 		}
 	}
-	dict = plist_get_dict(presetsPlist, name);
+	dict = presets_get_dict(presetsPlist, name);
 	if (dict == NULL || name == NULL)
 	{
 		preset_to_ui(ud, NULL);
@@ -604,8 +652,8 @@ ghb_settings_init(signal_user_data_t *ud)
 void
 ghb_settings_close()
 {
-	//if (internalPlist)
-		//ghb_value_free(internalPlist);
+	if (internalPlist)
+		ghb_value_free(internalPlist);
 	if (presetsPlist)
 		ghb_value_free(presetsPlist);
 	if (prefsPlist)
@@ -654,36 +702,41 @@ ghb_prefs_load(signal_user_data_t *ud)
 void
 ghb_presets_reload(signal_user_data_t *ud)
 {
-	GValue *std_dict, *dict;
-	GHashTableIter std_iter;
+	GValue *std_presets;
+	gint count, ii;
 
 	g_debug("ghb_presets_reload()\n");
-	std_dict = ghb_resource_get("standard-presets");
-	if (std_dict == NULL) return;
+	std_presets = ghb_resource_get("standard-presets");
+	if (std_presets == NULL) return;
 
 	// Merge the keyfile contents into our presets
-	gchar *name;
-	GValue *orig_dict;
-
-	ghb_dict_iter_init(&std_iter, std_dict);
-	// middle (void*) cast prevents gcc warning "defreferencing type-punned
-	// pointer will break strict-aliasing rules"
-	while (g_hash_table_iter_next(
-			&std_iter, (gpointer*)(void*)&name, (gpointer*)(void*)&orig_dict))
+	count = ghb_array_len(std_presets);
+	for (ii = 0; ii < count; ii++)
 	{
+		const gchar *name;
+		GValue *std_dict;
+		GValue *copy_dict;
 		GHashTableIter iter;
 		gchar *key;
 		GValue *value;
+		gint pos;
 
-		dict = ghb_dict_value_new();
-		ghb_dict_insert(presetsPlist, g_strdup(name), dict);
-		ghb_dict_iter_init(&iter, orig_dict);
+		std_dict = ghb_array_get_nth(std_presets, ii);
+		name = g_value_get_string(ghb_dict_lookup(std_dict, "preset_name"));
+		pos = presets_remove(presetsPlist, name);
+
+		copy_dict = ghb_dict_value_new();
+		if (pos >= 0)
+			ghb_array_insert(presetsPlist, pos, copy_dict);
+		else
+			ghb_array_append(presetsPlist, copy_dict);
+		ghb_dict_iter_init(&iter, std_dict);
 		// middle (void*) cast prevents gcc warning "defreferencing type-punned
 		// pointer will break strict-aliasing rules"
 		while (g_hash_table_iter_next(
 				&iter, (gpointer*)(void*)&key, (gpointer*)(void*)&value))
 		{
-			ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(value));
+			ghb_dict_insert(copy_dict, g_strdup(key), ghb_value_dup(value));
 		}
 	}
 	store_plist(presetsPlist, "presets");
@@ -723,6 +776,41 @@ ghb_presets_load()
 		presetsPlist = ghb_value_dup(ghb_resource_get("standard-presets"));
 		presets_store();
 	}
+	if (G_VALUE_TYPE(presetsPlist) == ghb_dict_get_type())
+	{ // Presets is older dictionary format. Convert to array
+		GHashTableIter old_iter;
+		GValue *presets;
+		gchar *name;
+		GValue *orig_dict;
+
+		presets = ghb_array_value_new(32);
+		ghb_dict_iter_init(&old_iter, presetsPlist);
+		// middle (void*) cast prevents gcc warning "defreferencing type-punned
+		// pointer will break strict-aliasing rules"
+		while (g_hash_table_iter_next(
+			&old_iter, (gpointer*)(void*)&name, (gpointer*)(void*)&orig_dict))
+		{
+			GHashTableIter iter;
+			gchar *key;
+			GValue *value, *dict;
+
+			dict = ghb_dict_value_new();
+			ghb_dict_insert(dict, g_strdup("preset_name"), 
+				ghb_string_value_new(name));
+			ghb_array_append(presets, dict);
+			ghb_dict_iter_init(&iter, orig_dict);
+			// middle (void*) cast prevents gcc warning "defreferencing 
+			// type-punned pointer will break strict-aliasing rules"
+			while (g_hash_table_iter_next(
+				&iter, (gpointer*)(void*)&key, (gpointer*)(void*)&value))
+			{
+				ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(value));
+			}
+		}
+		ghb_value_free(presetsPlist);
+		presetsPlist = presets;
+		presets_store();
+	}
 }
 
 void
@@ -755,7 +843,8 @@ ghb_settings_save(signal_user_data_t *ud, const gchar *name)
 	ghb_settings_set_int64(ud->settings, "preset_type", 1);
 
 	dict = ghb_dict_value_new();
-	ghb_dict_insert(presetsPlist, g_strdup(name), dict);
+	ghb_dict_insert(dict, g_strdup("preset_name"), ghb_string_value_new(name));
+	ghb_array_append(presetsPlist, dict);
 	internal = plist_get_dict(internalPlist, "Presets");
 
 	ghb_dict_iter_init(&iter, internal);
@@ -800,9 +889,9 @@ ghb_settings_save(signal_user_data_t *ud, const gchar *name)
 void
 ghb_presets_remove(const gchar *name)
 {
-	if (ghb_dict_lookup(presetsPlist, name))
+	if (presets_get_dict(presetsPlist, name))
 	{
-		ghb_dict_remove(presetsPlist, name);
+		presets_remove(presetsPlist, name);
 		presets_store();
 	}
 }
