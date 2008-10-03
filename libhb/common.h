@@ -452,7 +452,8 @@ struct hb_title_s
     int         video_id;               /* demuxer stream id for video */
     int         video_codec;            /* worker object id of video codec */
     int         video_codec_param;      /* codec specific config */
-
+    int         flaky_clock;            /* can lose reference clock */
+                                        /* (for over-the-air transport streams) */
     const char  *video_codec_name;
     int         video_bitrate;
     const char  *container_name;

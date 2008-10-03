@@ -209,6 +209,7 @@ static void ReaderFunc( void * _r )
 
     list  = hb_list_init();
     hb_buffer_t *ps = hb_buffer_init( HB_DVD_READ_BUFFER_SIZE );
+    r->demux.flaky_clock = r->title->flaky_clock;
 
     while( !*r->die && !r->job->done )
     {
@@ -381,6 +382,10 @@ static void ReaderFunc( void * _r )
     }
 
     hb_log( "reader: done. %d scr changes", r->demux.scr_changes );
+    if ( r->demux.dts_drops )
+    {
+        hb_log( "reader: %d drops because DTS out of range", r->demux.dts_drops );
+    }
 
     free( r );
     _r = NULL;

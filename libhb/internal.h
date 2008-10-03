@@ -108,6 +108,8 @@ hb_work_object_t * hb_codec_encoder( int );
 typedef struct {
     int64_t last_scr;       /* unadjusted SCR from most recent pack */
     int     scr_changes;    /* number of SCR discontinuities */
+    int     flaky_clock;    /* try to compensate for PCR drops */
+    int     dts_drops;      /* number of drops because DTS too far from SCR */
 } hb_psdemux_t;
 
 int hb_demux_ps( hb_buffer_t * ps_buf, hb_list_t * es_list, hb_psdemux_t * );

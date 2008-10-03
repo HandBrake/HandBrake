@@ -466,6 +466,13 @@ hb_stream_t * hb_stream_open( char *path, hb_title_t *title )
                 d->ts_buf[i] = malloc( HB_DVD_READ_BUFFER_SIZE );
             }
             hb_stream_seek( d, 0. );
+
+            if ( d->packetsize == 188 )
+            {
+                // Assume that an over-the-air transport stream can lose PCR
+                // packets and try to filter out the timing inconsistencies.
+                title->flaky_clock = 1;
+            }
         }
         return d;
     }
