@@ -112,7 +112,18 @@
 
     // A version 4 GetVolParmsInfoBuffer contains the BSD node name in the vMDeviceID field.
     // It is actually a char * value. This is mentioned in the header CoreServices/CarbonCore/Files.h.
-    return [NSString stringWithCString:(char *)volumeParms.vMDeviceID];
+    if( volumeParms.vMVersion < 4 )
+    {
+        return nil;
+    }
+
+    // vMDeviceID might be zero as is reported with experimental ZFS (zfs-119) support in Leopard.
+    if( !volumeParms.vMDeviceID )
+    {
+        return nil;
+    }
+
+    return [NSString stringWithCString:(const char *)volumeParms.vMDeviceID];
 }
 
 
