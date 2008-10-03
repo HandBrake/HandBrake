@@ -16,10 +16,6 @@
 #if !defined(_GHB_PRESETS_H_)
 #define _GHB_PRESETS_H_
 
-gint ghb_preset_flags(const gchar *name);
-GList* ghb_presets_get_names(void);
-gchar* ghb_presets_get_description(const gchar *name);
-
 void ghb_settings_save(signal_user_data_t *ud, const gchar *name);
 void ghb_presets_load(void);
 void ghb_presets_reload(signal_user_data_t *ud);

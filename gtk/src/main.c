@@ -365,7 +365,7 @@ bind_presets_tree_model (signal_user_data_t *ud)
 {
 	GtkCellRenderer *cell;
 	GtkTreeViewColumn *column;
-	GtkListStore *treestore;
+	GtkTreeStore *treestore;
 	GtkTreeView  *treeview;
 	GtkTreeSelection *selection;
 	GtkWidget *widget;
@@ -373,7 +373,7 @@ bind_presets_tree_model (signal_user_data_t *ud)
 	g_debug("bind_presets_tree_model ()\n");
 	treeview = GTK_TREE_VIEW(GHB_WIDGET (ud->builder, "presets_list"));
 	selection = gtk_tree_view_get_selection (treeview);
-	treestore = gtk_list_store_new(5, G_TYPE_STRING, G_TYPE_INT, G_TYPE_INT, 
+	treestore = gtk_tree_store_new(5, G_TYPE_STRING, G_TYPE_INT, G_TYPE_INT, 
 								   G_TYPE_STRING, G_TYPE_STRING);
 	gtk_tree_view_set_model(treeview, GTK_TREE_MODEL(treestore));
 
@@ -381,6 +381,7 @@ bind_presets_tree_model (signal_user_data_t *ud)
 	column = gtk_tree_view_column_new_with_attributes(_("Preset Name"), cell, 
 					"text", 0, "weight", 1, "style", 2, "foreground", 3, NULL);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
+	gtk_tree_view_column_set_expand (column, TRUE);
 	gtk_tree_view_set_tooltip_column (treeview, 4);
 	g_signal_connect(selection, "changed", presets_list_selection_changed_cb, ud);
 	widget = GHB_WIDGET (ud->builder, "presets_remove");
@@ -431,11 +432,13 @@ typedef struct
 
 static gchar *dvd_device = NULL;
 static gchar *arg_preset = NULL;
+static gboolean ghb_debug = FALSE;
 
 static GOptionEntry entries[] = 
 {
 	{ "device", 'd', 0, G_OPTION_ARG_FILENAME, &dvd_device, "The device or file to encode", NULL },
 	{ "preset", 'p', 0, G_OPTION_ARG_STRING, &arg_preset, "The preset values to use for encoding", NULL },
+	{ "debug", 'x', 0, G_OPTION_ARG_NONE, &ghb_debug, "Spam a lot", NULL },
 	{ NULL }
 };
 
@@ -498,7 +501,7 @@ main (int argc, char *argv[])
 #endif
 
 	ud = g_malloc(sizeof(signal_user_data_t));
-	ud->debug = FALSE;
+	ud->debug = ghb_debug;
 	ud->cancel_encode = FALSE;
 	g_log_set_handler (NULL, G_LOG_LEVEL_DEBUG, debug_log_handler, ud);
 	ud->settings = ghb_settings_new();
