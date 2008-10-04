@@ -599,3 +599,49 @@ audio_remove_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
 	}
 }
 
+void
+ghb_set_audio(signal_user_data_t *ud, GValue *settings)
+{
+	gint acodec_code;
+	GtkWidget *button;
+
+	GValue *alist;
+	GValue *track, *audio, *acodec, *bitrate, *rate, *mix, *drc;
+	gint count, ii;
+	
+	g_debug("set_audio");
+	// Clear the audio list
+	ghb_clear_audio_list(ud);
+	button = GHB_WIDGET (ud->builder, "audio_add");
+	alist = ghb_settings_get_value(settings, "audio_list");
+
+	count = ghb_array_len(alist);
+	for (ii = 0; ii < count; ii++)
+	{
+		audio = ghb_array_get_nth(alist, ii);
+		track = ghb_settings_get_value(audio, "audio_track");
+		acodec = ghb_settings_get_value(audio, "audio_codec");
+		bitrate = ghb_settings_get_value(audio, "audio_bitrate");
+		rate = ghb_settings_get_value(audio, "audio_rate");
+		mix = ghb_settings_get_value(audio, "audio_mix");
+		drc = ghb_settings_get_value(audio, "audio_drc");
+		acodec_code = ghb_lookup_combo_int("audio_codec", acodec);
+
+		if (acodec_code != 0)
+		{
+			// Add to audio list
+			g_signal_emit_by_name(button, "clicked", ud);
+			ghb_ui_update(ud, "audio_track", track);
+			ghb_ui_update(ud, "audio_codec", acodec);
+			if (!ghb_audio_is_passthru (acodec_code))
+			{
+				// This gets set autimatically if the codec is passthru
+				ghb_ui_update(ud, "audio_bitrate", bitrate);
+				ghb_ui_update(ud, "audio_rate", rate);
+				ghb_ui_update(ud, "audio_mix", mix);
+			}
+			ghb_ui_update(ud, "audio_drc", drc);
+		}
+	}
+}
+

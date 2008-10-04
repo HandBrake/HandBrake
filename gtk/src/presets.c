@@ -357,6 +357,12 @@ preset_to_ui(signal_user_data_t *ud, GValue *dict)
 }
 
 void
+ghb_settings_to_ui(signal_user_data_t *ud, GValue *dict)
+{
+	init_ui_from_dict(ud, dict, dict);
+}
+
+void
 ghb_set_preset(signal_user_data_t *ud, const gchar *name)
 {
 	GValue *dict;

@@ -30,5 +30,6 @@
 void ghb_adjust_audio_rate_combos(signal_user_data_t *ud);
 void ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud);
 void ghb_clear_audio_list(signal_user_data_t *ud);
+void ghb_set_audio(signal_user_data_t *ud, GValue *settings);
 
 #endif // _AUDIOHANDLER_H_

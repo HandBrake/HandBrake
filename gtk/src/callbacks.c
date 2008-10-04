@@ -563,11 +563,36 @@ source_dialog_extra_widgets(GtkWidget *dialog, gboolean checkbutton_active)
 	return GTK_WIDGET(vbox);
 }
 
-static void
-do_scan(signal_user_data_t *ud, const gchar *filename)
+extern GValue *ghb_queue_edit_settings;
+static gchar *last_scan_file = NULL;
+
+void
+ghb_do_scan(signal_user_data_t *ud, const gchar *filename, gboolean force)
 {
+	if (!force && last_scan_file != NULL &&
+		strcmp(last_scan_file, filename) == 0)
+	{
+		if (ghb_queue_edit_settings)
+		{
+			gint jstatus;
+
+			jstatus = ghb_settings_get_int(ghb_queue_edit_settings, "job_status");
+			ghb_settings_to_ui(ud, ghb_queue_edit_settings);
+			ghb_set_audio(ud, ghb_queue_edit_settings);
+			if (jstatus == GHB_QUEUE_PENDING)
+			{
+				ghb_value_free(ghb_queue_edit_settings);
+			}
+			ghb_queue_edit_settings = NULL;
+		}
+		return;
+	}
+	if (last_scan_file != NULL)
+		g_free(last_scan_file);
+	last_scan_file = NULL;
 	if (filename != NULL)
 	{
+		last_scan_file = g_strdup(filename);
 		ghb_settings_set_string(ud->settings, "source", filename);
 		if (update_source_label(ud, filename))
 		{
@@ -628,7 +653,7 @@ source_button_clicked_cb(GtkButton *button, signal_user_data_t *ud)
 		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
 		if (filename != NULL)
 		{
-			do_scan(ud, filename);
+			ghb_do_scan(ud, filename, TRUE);
 			if (strcmp(sourcename, filename) != 0)
 			{
 				ghb_settings_set_string (ud->settings, "default_source", filename);
@@ -650,7 +675,7 @@ dvd_source_activate_cb(GtkAction *action, signal_user_data_t *ud)
 
 	sourcename = ghb_settings_get_string(ud->settings, "source");
 	filename = gtk_action_get_name(action);
-	do_scan(ud, filename);
+	ghb_do_scan(ud, filename, TRUE);
 	if (strcmp(sourcename, filename) != 0)
 	{
 		ghb_settings_set_string (ud->settings, "default_source", filename);
@@ -1578,6 +1603,19 @@ ghb_backend_events(signal_user_data_t *ud)
 		}
 		ghb_clear_state(GHB_STATE_SCANDONE);
 		ghb_queue_buttons_grey(ud, work_started);
+		if (ghb_queue_edit_settings)
+		{
+			gint jstatus;
+
+			jstatus = ghb_settings_get_int(ghb_queue_edit_settings, "job_status");
+			ghb_settings_to_ui(ud, ghb_queue_edit_settings);
+			ghb_set_audio(ud, ghb_queue_edit_settings);
+			if (jstatus == GHB_QUEUE_PENDING)
+			{
+				ghb_value_free(ghb_queue_edit_settings);
+			}
+			ghb_queue_edit_settings = NULL;
+		}
 	}
 	else if (status.queue_state & GHB_STATE_SCANNING)
 	{

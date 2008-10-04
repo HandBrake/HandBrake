@@ -36,6 +36,8 @@ queue_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t 
 	// This is purely cosmetic.
 	if (gtk_tree_selection_get_selected(selection, &store, &iter))
 	{
+		GtkWidget *widget = GHB_WIDGET (ud->builder, "queue_edit");
+		gtk_widget_set_sensitive (widget, TRUE);
 		if (gtk_tree_model_iter_parent (store, &piter, &iter))
 		{
 			GtkTreePath *path;
@@ -48,6 +50,11 @@ queue_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t 
 			gtk_tree_view_scroll_to_cell (treeview, path, NULL, FALSE, 0, 0);
 			gtk_tree_path_free(path);
 		}
+	}
+	else
+	{
+		GtkWidget *widget = GHB_WIDGET (ud->builder, "queue_edit");
+		gtk_widget_set_sensitive (widget, FALSE);
 	}
 }
 
@@ -1058,7 +1065,8 @@ ghb_reload_queue(signal_user_data_t *ud)
 	return FALSE;
 }
 
-gboolean queue_key_press_cb(
+gboolean 
+queue_key_press_cb(
 	GtkWidget *widget, 
 	GdkEventKey *event,
 	signal_user_data_t *ud)
@@ -1116,5 +1124,53 @@ gboolean queue_key_press_cb(
 		return TRUE;
 	}
 	return FALSE;
+}
+
+GValue *ghb_queue_edit_settings = NULL;
+
+void
+queue_edit_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+{
+	GtkTreeView *treeview;
+	GtkTreeSelection *selection;
+	GtkTreeModel *store;
+	GtkTreeIter iter;
+	gint row;
+	gint *indices;
+	gint status;
+
+	g_debug("queue_key_press_cb ()");
+	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
+	store = gtk_tree_view_get_model(treeview);
+
+	selection = gtk_tree_view_get_selection (treeview);
+	if (gtk_tree_selection_get_selected(selection, &store, &iter))
+	{
+		GtkTreePath *treepath;
+
+		treepath = gtk_tree_model_get_path (store, &iter);
+		// Find the entry in the queue
+		indices = gtk_tree_path_get_indices (treepath);
+		row = indices[0];
+		// Can only free the treepath After getting what I need from
+		// indices since this points into treepath somewhere.
+		gtk_tree_path_free (treepath);
+		if (row < 0) return;
+		if (row >= ghb_array_len(ud->queue))
+			return;
+		ghb_queue_edit_settings = ghb_array_get_nth(ud->queue, row);
+		status = ghb_settings_get_int(ghb_queue_edit_settings, "job_status");
+		if (status == GHB_QUEUE_PENDING)
+		{
+			// Remove the selected item
+			gtk_tree_store_remove(GTK_TREE_STORE(store), &iter);
+			// Remove the corresponding item from the queue list
+			ghb_array_remove(ud->queue, row);
+		}
+		gchar *source;
+		source = ghb_settings_get_string(ghb_queue_edit_settings, "source");
+		ghb_do_scan(ud, source, FALSE);
+		g_free(source);
+	}
 }
 

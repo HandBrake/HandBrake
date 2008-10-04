@@ -44,6 +44,7 @@ gboolean ghb_reload_queue(signal_user_data_t *ud);
 gboolean ghb_cancel_encode(const gchar *extra_msg);
 GValue* ghb_start_next_job(signal_user_data_t *ud, gboolean find_first);
 void ghb_check_dependency(signal_user_data_t *ud, GtkWidget *widget);
+void ghb_do_scan(signal_user_data_t *ud, const gchar *filename, gboolean force);
 
 #endif // _CALLBACKS_H_
 

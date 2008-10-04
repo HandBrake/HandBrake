@@ -18,6 +18,7 @@
 		<icon name="hb-remove" file="hb-remove.32.png" />
 		<icon name="hb-source" file="hb-source.32.png" />
 		<icon name="hb-stop" file="hb-stop.32.png" />
+		<icon name="hb-edit" file="hb-edit.32.png" />
 		<icon name="hb-working0" file="hb-working0.16.png" />
 		<icon name="hb-working1" file="hb-working1.16.png" />
 		<icon name="hb-working2" file="hb-working2.16.png" />
