@@ -39,14 +39,14 @@ namespace Handbrake
             this.rtf_actLog = new System.Windows.Forms.RichTextBox();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
-            this.btn_encode_log = new System.Windows.Forms.ToolStripMenuItem();
-            this.btn_scan_log = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.txt_log = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.btn_encode_log = new System.Windows.Forms.ToolStripMenuItem();
+            this.btn_scan_log = new System.Windows.Forms.ToolStripMenuItem();
             this.btn_copy = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.lbl_slb = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -72,7 +72,6 @@ namespace Handbrake
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripDropDownButton1,
-            this.toolStripSeparator1,
             this.btn_copy});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
@@ -80,34 +79,6 @@ namespace Handbrake
             this.toolStrip1.Size = new System.Drawing.Size(471, 25);
             this.toolStrip1.TabIndex = 96;
             this.toolStrip1.Text = "toolStrip1";
-            // 
-            // toolStripDropDownButton1
-            // 
-            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btn_encode_log,
-            this.btn_scan_log});
-            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
-            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            this.toolStripDropDownButton1.Size = new System.Drawing.Size(78, 22);
-            this.toolStripDropDownButton1.Text = "Select Log";
-            // 
-            // btn_encode_log
-            // 
-            this.btn_encode_log.Image = global::Handbrake.Properties.Resources.ActivityWindow_small;
-            this.btn_encode_log.Name = "btn_encode_log";
-            this.btn_encode_log.Size = new System.Drawing.Size(151, 22);
-            this.btn_encode_log.Text = "Encode Log";
-            this.btn_encode_log.Click += new System.EventHandler(this.btn_encode_log_Click);
-            // 
-            // btn_scan_log
-            // 
-            this.btn_scan_log.Image = global::Handbrake.Properties.Resources.Movies_Small;
-            this.btn_scan_log.Name = "btn_scan_log";
-            this.btn_scan_log.Size = new System.Drawing.Size(151, 22);
-            this.btn_scan_log.Text = "Scan Log";
-            this.btn_scan_log.Click += new System.EventHandler(this.btn_scan_log_Click);
             // 
             // panel1
             // 
@@ -120,6 +91,7 @@ namespace Handbrake
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lbl_slb,
             this.txt_log});
             this.statusStrip1.Location = new System.Drawing.Point(0, 555);
             this.statusStrip1.Name = "statusStrip1";
@@ -134,20 +106,51 @@ namespace Handbrake
             this.txt_log.Size = new System.Drawing.Size(85, 17);
             this.txt_log.Text = "{selected log}";
             // 
+            // toolStripDropDownButton1
+            // 
+            this.toolStripDropDownButton1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btn_encode_log,
+            this.btn_scan_log});
+            this.toolStripDropDownButton1.Image = global::Handbrake.Properties.Resources.Output_Small;
+            this.toolStripDropDownButton1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(94, 22);
+            this.toolStripDropDownButton1.Text = "Select Log";
+            // 
+            // btn_encode_log
+            // 
+            this.btn_encode_log.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btn_encode_log.Name = "btn_encode_log";
+            this.btn_encode_log.Size = new System.Drawing.Size(152, 22);
+            this.btn_encode_log.Text = "Encode Log";
+            this.btn_encode_log.Click += new System.EventHandler(this.btn_encode_log_Click);
+            // 
+            // btn_scan_log
+            // 
+            this.btn_scan_log.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btn_scan_log.Name = "btn_scan_log";
+            this.btn_scan_log.Size = new System.Drawing.Size(152, 22);
+            this.btn_scan_log.Text = "Scan Log";
+            this.btn_scan_log.Click += new System.EventHandler(this.btn_scan_log_Click);
+            // 
             // btn_copy
             // 
-            this.btn_copy.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.btn_copy.Image = ((System.Drawing.Image)(resources.GetObject("btn_copy.Image")));
+            this.btn_copy.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_copy.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_copy.Name = "btn_copy";
-            this.btn_copy.Size = new System.Drawing.Size(106, 22);
+            this.btn_copy.Size = new System.Drawing.Size(122, 22);
             this.btn_copy.Text = "Copy to clipboard";
             this.btn_copy.Click += new System.EventHandler(this.btn_copy_Click);
             // 
-            // toolStripSeparator1
+            // lbl_slb
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.lbl_slb.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_slb.Name = "lbl_slb";
+            this.lbl_slb.Size = new System.Drawing.Size(94, 17);
+            this.lbl_slb.Text = "Selected Log: ";
             // 
             // frmActivityWindow
             // 
@@ -187,7 +190,7 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
         private System.Windows.Forms.ToolStripMenuItem btn_encode_log;
         private System.Windows.Forms.ToolStripMenuItem btn_scan_log;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton btn_copy;
+        private System.Windows.Forms.ToolStripStatusLabel lbl_slb;
     }
 }

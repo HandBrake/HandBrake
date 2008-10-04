@@ -49,9 +49,9 @@ namespace Handbrake
             startLogThread(read_file);
 
             if (file == "dvdinfo.dat")
-                txt_log.Text = "Selected Log: Scan Log";
+                txt_log.Text = "Scan Log";
             else if (file == "hb_encode_log.dat")
-                txt_log.Text = "Selected Log: Encode Log";
+                txt_log.Text = "Encode Log";
 
 
             // When the window closes, we want to abort the monitor thread.
@@ -110,7 +110,7 @@ namespace Handbrake
             read_file = "dvdinfo.dat";
             displayLogHeader();
             startLogThread(read_file);
-            txt_log.Text = "Selected Log: Scan Log";
+            txt_log.Text = "Scan Log";
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace Handbrake
             position = 0;
             displayLogHeader();
             startLogThread(read_file);
-            txt_log.Text = "Selected Log: Encode Log";
+            txt_log.Text = "Encode Log";
         }
 
         /// <summary>
