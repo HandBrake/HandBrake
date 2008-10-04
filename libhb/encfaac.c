@@ -127,12 +127,29 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
 void encfaacClose( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
-    faacEncClose( pv->faac );
-    free( pv->buf );
-    free( pv->obuf );
-    hb_list_empty( &pv->list );
-    free( pv );
-    w->private_data = NULL;
+    if ( pv )
+    {
+        if ( pv->faac )
+        {
+            faacEncClose( pv->faac );
+            pv->faac = NULL;
+        }
+        if ( pv->buf )
+        {
+            free( pv->buf );
+            pv->buf = NULL;
+        }
+        if ( pv->obuf )
+        {
+            free( pv->obuf );
+            pv->obuf = NULL;
+        }
+        if ( pv->list )
+            hb_list_empty( &pv->list );
+
+        free( pv );
+        w->private_data = NULL;
+    }
 }
 
 /***********************************************************************
