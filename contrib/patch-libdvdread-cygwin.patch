@@ -1,0 +1,26 @@
+diff -Naur libdvdread/configure libdvdread/configure
+--- libdvdread/configure	2006-10-06 04:14:24.000000000 -0400
++++ libdvdread/configure	2008-10-04 08:51:17.153181000 -0400
+@@ -3550,9 +3550,6 @@
+ _ACEOF
+ 
+     ;;
+-  x*mingw32* | x*cygwin*)
+-    CFLAGS="${CFLAGS} -Dssize_t=long"
+-    ;;
+   x*)
+     ;;
+ esac
+diff -Naur libdvdread/configure.in libdvdread/configure.in
+--- libdvdread/configure.in	2006-10-06 04:12:31.000000000 -0400
++++ libdvdread/configure.in	2008-10-04 08:51:26.356306000 -0400
+@@ -15,9 +15,6 @@
+     CFLAGS="${CFLAGS} -no-cpp-precomp"
+     AC_DEFINE(__DARWIN__, 1, Have a Mac OS X system)
+     ;;
+-  x*mingw32* | x*cygwin*)
+-    CFLAGS="${CFLAGS} -Dssize_t=long"
+-    ;;
+   x*)
+     ;;
+ esac
