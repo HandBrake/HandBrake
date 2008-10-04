@@ -30,8 +30,9 @@ namespace Handbrake
         Parsing.Title selectedTitle;
         internal Process hbProc;
         private Parsing.DVD thisDVD;
-        private frmQueue queueWindow = new frmQueue();
+        private frmQueue queueWindow;
         private delegate void updateStatusChanger();
+        private string lastAction = null;
 
         // Applicaiton Startup ************************************************
 
@@ -42,6 +43,9 @@ namespace Handbrake
             // Load the splash screen in this thread
             Form splash = new frmSplashScreen();
             splash.Show();
+
+            // Initialize the queue window.
+            queueWindow = new frmQueue(this);
 
             //Create a label that can be updated from the parent thread.
             Label lblStatus = new Label();
@@ -201,7 +205,13 @@ namespace Handbrake
         }
         private void mnu_encodeLog_Click(object sender, EventArgs e)
         {
-            frmActivityWindow dvdInfoWindow = new frmActivityWindow("hb_encode_log.dat", this, queueWindow);
+            String file = String.Empty;
+            if (lastAction == "scan")
+                file = "dvdinfo.dat";
+            else
+                file = "hb_encode_log.dat";
+
+            frmActivityWindow dvdInfoWindow = new frmActivityWindow(file, this, queueWindow);
             dvdInfoWindow.Show();
         }
         private void mnu_options_Click(object sender, EventArgs e)
@@ -297,6 +307,10 @@ namespace Handbrake
                 MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
+                // Set the last action to encode. 
+                // This is used for tracking which file to load in the activity window
+                lastAction = "encode";
+
                 String query;
                 if (rtf_query.Text != "")
                     query = rtf_query.Text;
@@ -337,13 +351,23 @@ namespace Handbrake
         }
         private void btn_ActivityWindow_Click(object sender, EventArgs e)
         {
-            frmActivityWindow ActivityWindow = new frmActivityWindow("hb_encode_log.dat", this, queueWindow);
+            String file = String.Empty;
+            if (lastAction == "scan")
+                file = "dvdinfo.dat";
+            else
+                file = "hb_encode_log.dat";
+
+            frmActivityWindow ActivityWindow = new frmActivityWindow(file, this, queueWindow);
             ActivityWindow.Show();
         }
 
         //Source
         private void btn_dvd_source_Click(object sender, EventArgs e)
         {
+            // Set the last action to scan. 
+            // This is used for tracking which file to load in the activity window
+            lastAction = "scan";
+
             String filename = "";
             text_source.Text = "";
 
@@ -373,6 +397,10 @@ namespace Handbrake
         }
         private void btn_file_source_Click(object sender, EventArgs e)
         {
+            // Set the last action to scan. 
+            // This is used for tracking which file to load in the activity window
+            lastAction = "scan";
+
             String filename = "";
             text_source.Text = "";
 
@@ -402,6 +430,10 @@ namespace Handbrake
         }
         private void mnu_dvd_drive_Click(object sender, EventArgs e)
         {
+            // Set the last action to scan. 
+            // This is used for tracking which file to load in the activity window
+            lastAction = "scan";
+
             String filename = "";
             if (mnu_dvd_drive.Text.Contains("VIDEO_TS"))
             {
@@ -1826,6 +1858,16 @@ namespace Handbrake
             btn_start.ToolTipText = "Start the encoding process";
             btn_start.Image = Properties.Resources.Play;
         }
+        
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Is the mainWindow currently monitoring an encoding session
+        /// </summary>
+        /// <returns>boolean</returns>
         public Boolean isEncoding()
         {
             if (hbProc == null)
@@ -1833,7 +1875,16 @@ namespace Handbrake
             else
                 return true;
         }
-
+        /// <summary>
+        /// Action can be "encode" or "scan"
+        /// Set the last action varible in the main window.
+        /// This is used to control which log file is displayed when the Activity window is displayed.
+        /// </summary>
+        /// <param name="last">String</param>
+        public void setLastAction(string last)
+        {
+            this.lastAction = last;
+        }
         #endregion
 
         #region Taskbar Tray Icon

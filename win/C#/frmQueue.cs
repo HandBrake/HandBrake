@@ -27,10 +27,12 @@ namespace Handbrake
         Boolean cancel = false;
         Process hbProc = null;
         Functions.Queue queue;
+        frmMain mainWindow = null;
 
-        public frmQueue()
+        public frmQueue(frmMain main)
         {
             InitializeComponent();
+            mainWindow = main;
         }
 
         /// <summary>
@@ -99,6 +101,8 @@ namespace Handbrake
         // Initializes the encode process
         private void btn_encode_Click(object sender, EventArgs e)
         {
+            mainWindow.setLastAction("encode");
+            
             if (queue.count() != 0)
             {
                 btn_encode.Enabled = false;

@@ -132,6 +132,16 @@ namespace Handbrake
         }
 
         /// <summary>
+        /// Copy to Clipboard
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_copy_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetDataObject(rtf_actLog.Text, true);
+        }
+
+        /// <summary>
         /// Updates the log window with any new data which is in the log file.
         /// This is done every 5 seconds.
         /// </summary>
@@ -255,9 +265,5 @@ namespace Handbrake
 
             this.Close();
         }
-
-
-
-
     }
 }
