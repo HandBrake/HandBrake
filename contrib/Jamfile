@@ -184,7 +184,7 @@ rule LibDvdRead
         DVDREAD_PATCH = "$(PATCH) -p0 < ../patch-libdvdread-css-vlc-dylib.patch &&" ;
     }
 	
-	if $(OS) = CYGWIN
+    if $(OS) = CYGWIN
     {
         DVDREAD_PATCH = "$(PATCH) -p1 < ../patch-libdvdread-cygwin.patch &&" ;
     }
