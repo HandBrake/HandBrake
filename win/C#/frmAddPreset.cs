@@ -17,7 +17,7 @@ namespace Handbrake
 {
     public partial class frmAddPreset : Form
     {
-        Functions.Common hb_common_func = new Functions.Common();
+        Functions.QueryGenerator queryGen = new Functions.QueryGenerator();
         private frmMain frmMainWindow;
         Functions.Presets presetCode;
 
@@ -30,7 +30,7 @@ namespace Handbrake
 
         private void btn_add_Click(object sender, EventArgs e)
         {
-            String query = hb_common_func.generateTabbedComponentsQuery(frmMainWindow);
+            String query = queryGen.generateTabbedComponentsQuery(frmMainWindow);
 
             if (presetCode.addPreset(txt_preset_name.Text.Trim(), query) == true)
             {

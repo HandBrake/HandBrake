@@ -4,7 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Text.RegularExpressions;
-
+using System.Diagnostics;
 
 namespace Handbrake.Functions
 {
@@ -155,6 +155,25 @@ namespace Handbrake.Functions
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Update the presets.dat file with the latest version of HandBrake's presets from the CLI
+        /// </summary>
+        public void grabCLIPresets()
+        {
+            string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
+            string presetsPath = Path.Combine(Application.StartupPath, "presets.dat");
+
+            string strCmdLine = String.Format(@"cmd /c """"{0}"" --preset-list >""{1}"" 2>&1""", handbrakeCLIPath, presetsPath);
+
+            ProcessStartInfo hbGetPresets = new ProcessStartInfo("CMD.exe", strCmdLine);
+            hbGetPresets.WindowStyle = ProcessWindowStyle.Hidden;
+
+            Process hbproc = Process.Start(hbGetPresets);
+            hbproc.WaitForExit();
+            hbproc.Dispose();
+            hbproc.Close();
         }
 
         /// <summary>

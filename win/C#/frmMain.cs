@@ -27,6 +27,7 @@ namespace Handbrake
         Functions.Encode cliObj = new Functions.Encode();
         Functions.Queue encodeQueue = new Functions.Queue();
         Functions.Presets presetHandler = new Functions.Presets();
+        Functions.QueryGenerator queryGen = new Functions.QueryGenerator();
         Parsing.Title selectedTitle;
         internal Process hbProc;
         private Parsing.DVD thisDVD;
@@ -224,7 +225,7 @@ namespace Handbrake
         #region Presets Menu
         private void mnu_presetReset_Click(object sender, EventArgs e)
         {
-            hb_common_func.grabCLIPresets();
+            presetHandler.grabCLIPresets();
             loadPresetPanel();
             if (treeView_presets.Nodes.Count == 0)
                 MessageBox.Show("Unable to load the presets.dat file. Please select \"Update Built-in Presets\" from the Presets Menu \nMake sure you are running the program in Admin mode if running on Vista. See Windows FAQ for details!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -315,7 +316,7 @@ namespace Handbrake
                 if (rtf_query.Text != "")
                     query = rtf_query.Text;
                 else
-                    query = hb_common_func.GenerateTheQuery(this);
+                    query = queryGen.GenerateTheQuery(this);
 
                 ThreadPool.QueueUserWorkItem(procMonitor, query);
                 lbl_encode.Visible = true;
@@ -333,7 +334,7 @@ namespace Handbrake
             else
             {
 
-                String query = hb_common_func.GenerateTheQuery(this);
+                String query = queryGen.GenerateTheQuery(this);
                 if (rtf_query.Text != "")
                     query = rtf_query.Text;
 
@@ -1326,7 +1327,7 @@ namespace Handbrake
         // Query Editor Tab
         private void btn_generate_Query_Click(object sender, EventArgs e)
         {
-            rtf_query.Text = hb_common_func.GenerateTheQuery(this);
+            rtf_query.Text = queryGen.GenerateTheQuery(this);
         }
         private void btn_clear_Click(object sender, EventArgs e)
         {
@@ -1352,7 +1353,7 @@ namespace Handbrake
         }
         private void btn_setDefault_Click(object sender, EventArgs e)
         {
-            String query = hb_common_func.GenerateTheQuery(this);
+            String query = queryGen.GenerateTheQuery(this);
             Properties.Settings.Default.defaultUserSettings = query;
             // Save the new default Settings
             Properties.Settings.Default.Save();
@@ -1858,7 +1859,6 @@ namespace Handbrake
             btn_start.ToolTipText = "Start the encoding process";
             btn_start.Image = Properties.Resources.Play;
         }
-        
 
         #endregion
 
@@ -1923,7 +1923,6 @@ namespace Handbrake
         }
         #endregion
 
- 
         // This is the END of the road ------------------------------------------------------------------------------
     }
 }
