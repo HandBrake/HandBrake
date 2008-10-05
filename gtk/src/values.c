@@ -640,6 +640,18 @@ ghb_array_remove(GValue *gval, guint ii)
 	g_value_take_boxed(gval, arr);
 }
 
+void
+ghb_array_replace(GValue *gval, guint ii, GValue *val)
+{
+	GArray *arr = g_value_get_boxed(gval);
+	// A little nastyness here.  The array pointer
+	// can change when the array changes size.  So
+	// I must re-box it in the GValue each time.
+	if (ii >= arr->len) return;
+	ghb_value_free(((GValue**)arr->data)[ii]);
+	((GValue**)arr->data)[ii] = val;
+}
+
 gint
 ghb_array_len(const GValue *gval)
 {

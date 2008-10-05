@@ -14,8 +14,14 @@
 		<integer>0</integer>
 		<key>end_chapter</key>
 		<integer>100</integer>
+		<key>folder</key>
+		<string></string>
 		<key>preset</key>
 		<string>Normal</string>
+		<key>preset_type_folder</key>
+		<false />
+		<key>preset_type_normal</key>
+		<true />
 		<key>scale_height</key>
 		<integer>480</integer>
 		<key>scale_width</key>
@@ -74,6 +80,8 @@
 		<false />
 		<key>chapters_in_destination</key>
 		<false />
+		<key>default_folder</key>
+		<string></string>
 		<key>default_preset</key>
 		<string>Normal</string>
 		<key>default_source</key>

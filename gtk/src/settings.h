@@ -18,9 +18,6 @@
 
 #include <gtk/gtk.h>
 
-#define PRESET_CUSTOM	1
-#define PRESET_DEFAULT	2
-
 #define GHB_WIDGET(b,n)	GTK_WIDGET(gtk_builder_get_object ((b), (n)))
 //#define GHB_WIDGET(b,n)	GTK_WIDGET(debug_get_object((b), (n)))
 #define GHB_ACTION(b,n)	GTK_ACTION(gtk_builder_get_object ((b), (n)))

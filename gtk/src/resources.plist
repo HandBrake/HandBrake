@@ -3708,6 +3708,7 @@ this setting.&lt;/property&gt;
                     &lt;property name=&quot;activates_default&quot;&gt;True&lt;/property&gt;
                     &lt;property name=&quot;width_chars&quot;&gt;30&lt;/property&gt;
                     &lt;property name=&quot;truncate_multiline&quot;&gt;True&lt;/property&gt;
+                    &lt;signal handler=&quot;preset_name_changed_cb&quot; name=&quot;changed&quot;/&gt;
                   &lt;/object&gt;
                   &lt;packing&gt;
                     &lt;property name=&quot;position&quot;&gt;1&lt;/property&gt;
@@ -3734,7 +3735,7 @@ this setting.&lt;/property&gt;
                     &lt;property name=&quot;right_padding&quot;&gt;4&lt;/property&gt;
                     &lt;child&gt;
                       &lt;object class=&quot;GtkTextView&quot; id=&quot;preset_description&quot;&gt;
-                        &lt;property name=&quot;height_request&quot;&gt;50&lt;/property&gt;
+                        &lt;property name=&quot;height_request&quot;&gt;60&lt;/property&gt;
                         &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                         &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                         &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
@@ -3756,6 +3757,43 @@ this setting.&lt;/property&gt;
               &lt;packing&gt;
                 &lt;property name=&quot;padding&quot;&gt;2&lt;/property&gt;
                 &lt;property name=&quot;position&quot;&gt;1&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+            &lt;child&gt;
+              &lt;object class=&quot;GtkHBox&quot; id=&quot;hbox43&quot;&gt;
+                &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                &lt;child&gt;
+                  &lt;object class=&quot;GtkRadioButton&quot; id=&quot;preset_type_folder&quot;&gt;
+                    &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                    &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
+                    &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Folder&lt;/property&gt;
+                    &lt;property name=&quot;active&quot;&gt;True&lt;/property&gt;
+                    &lt;property name=&quot;draw_indicator&quot;&gt;True&lt;/property&gt;
+                    &lt;signal name=&quot;toggled&quot; handler=&quot;preset_type_changed_cb&quot;/&gt;
+                  &lt;/object&gt;
+                  &lt;packing&gt;
+                    &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
+                  &lt;/packing&gt;
+                &lt;/child&gt;
+                &lt;child&gt;
+                  &lt;object class=&quot;GtkRadioButton&quot; id=&quot;preset_type_normal&quot;&gt;
+                    &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                    &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
+                    &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Preset&lt;/property&gt;
+                    &lt;property name=&quot;active&quot;&gt;True&lt;/property&gt;
+                    &lt;property name=&quot;draw_indicator&quot;&gt;True&lt;/property&gt;
+                    &lt;property name=&quot;group&quot;&gt;preset_type_folder&lt;/property&gt;
+                    &lt;signal name=&quot;toggled&quot; handler=&quot;preset_type_changed_cb&quot;/&gt;
+                  &lt;/object&gt;
+                  &lt;packing&gt;
+                    &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
+                    &lt;property name=&quot;position&quot;&gt;1&lt;/property&gt;
+                  &lt;/packing&gt;
+                &lt;/child&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
+                &lt;property name=&quot;position&quot;&gt;2&lt;/property&gt;
               &lt;/packing&gt;
             &lt;/child&gt;
           &lt;/object&gt;
@@ -4858,8 +4896,14 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<integer>0</integer>
 			<key>end_chapter</key>
 			<integer>100</integer>
+			<key>folder</key>
+			<string></string>
 			<key>preset</key>
 			<string>Normal</string>
+			<key>preset_type_folder</key>
+			<false />
+			<key>preset_type_normal</key>
+			<true />
 			<key>scale_height</key>
 			<integer>480</integer>
 			<key>scale_width</key>
@@ -4915,6 +4959,8 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<false />
 			<key>chapters_in_destination</key>
 			<false />
+			<key>default_folder</key>
+			<string></string>
 			<key>default_preset</key>
 			<string>Normal</string>
 			<key>default_source</key>

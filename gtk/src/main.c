@@ -357,6 +357,8 @@ bind_audio_tree_model (signal_user_data_t *ud)
 }
 
 extern void presets_list_selection_changed_cb(void);
+extern void presets_drag_cb(void);
+extern void presets_drag_motion_cb(void);
 
 // Create and bind the tree model to the tree view for the preset list
 // Also, connect up the signal that lets us know the selection has changed
@@ -369,6 +371,9 @@ bind_presets_tree_model (signal_user_data_t *ud)
 	GtkTreeView  *treeview;
 	GtkTreeSelection *selection;
 	GtkWidget *widget;
+	GtkTargetEntry SrcEntry;
+	SrcEntry.target = "DATA";
+	SrcEntry.flags = GTK_TARGET_SAME_WIDGET;
 
 	g_debug("bind_presets_tree_model ()\n");
 	treeview = GTK_TREE_VIEW(GHB_WIDGET (ud->builder, "presets_list"));
@@ -383,6 +388,14 @@ bind_presets_tree_model (signal_user_data_t *ud)
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 	gtk_tree_view_column_set_expand (column, TRUE);
 	gtk_tree_view_set_tooltip_column (treeview, 4);
+
+	gtk_tree_view_enable_model_drag_dest (treeview, &SrcEntry, 1, 
+											GDK_ACTION_MOVE);
+	gtk_tree_view_enable_model_drag_source (treeview, GDK_BUTTON1_MASK, 
+											&SrcEntry, 1, GDK_ACTION_MOVE);
+
+	g_signal_connect(treeview, "drag_data_received", presets_drag_cb, ud);
+	g_signal_connect(treeview, "drag_motion", presets_drag_motion_cb, ud);
 	g_signal_connect(selection, "changed", presets_list_selection_changed_cb, ud);
 	widget = GHB_WIDGET (ud->builder, "presets_remove");
 	gtk_widget_set_sensitive(widget, FALSE);
@@ -474,6 +487,7 @@ main (int argc, char *argv[])
  	GtkWidget *window;
 	signal_user_data_t *ud;
 	gchar *preset;
+	gchar *folder;
 	GError *error = NULL;
 	GOptionContext *context;
 
@@ -575,17 +589,19 @@ main (int argc, char *argv[])
 	ghb_x264_parse_options(ud, "");
 
 	// Populate the presets tree view
-	ghb_presets_list_update(ud);
+	ghb_presets_list_init(ud, NULL, NULL, NULL);
 	// Get the first preset name
 	if (arg_preset != NULL)
 	{
-		ghb_select_preset(ud->builder, arg_preset);
+		ghb_select_preset(ud->builder, NULL, arg_preset);
 	}
 	else
 	{
 		preset = ghb_settings_get_string (ud->settings, "default_preset");
-		ghb_select_preset(ud->builder, preset);
+		folder = ghb_settings_get_string (ud->settings, "default_folder");
+		ghb_select_preset(ud->builder, folder, preset);
 		g_free(preset);
+		g_free(folder);
 	}
 
 	// Grey out widgets that are dependent on a disabled feature

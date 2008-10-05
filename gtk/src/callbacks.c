@@ -1039,6 +1039,7 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_title_info_t tinfo;
 	gint titleindex;
 	gchar *preset;
+	gchar *folder;
 	
 	g_debug("title_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
@@ -1049,8 +1050,10 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_update_ui_combo_box (ud->builder, "subtitle_lang", titleindex, FALSE);
 
 	preset = ghb_settings_get_string (ud->settings, "preset");
-	ghb_update_from_preset(ud, preset, "subtitle_lang");
+	folder = ghb_settings_get_string (ud->settings, "folder");
+	ghb_update_from_preset(ud, folder, preset, "subtitle_lang");
 	g_free(preset);
+	g_free(folder);
 	if (ghb_get_title_info (&tinfo, titleindex))
 	{
 		show_title_info(ud, &tinfo);

@@ -3703,6 +3703,7 @@ this setting.</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">30</property>
                     <property name="truncate_multiline">True</property>
+                    <signal handler="preset_name_changed_cb" name="changed"/>
                   </object>
                   <packing>
                     <property name="position">1</property>
@@ -3729,7 +3730,7 @@ this setting.</property>
                     <property name="right_padding">4</property>
                     <child>
                       <object class="GtkTextView" id="preset_description">
-                        <property name="height_request">50</property>
+                        <property name="height_request">60</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -3751,6 +3752,43 @@ this setting.</property>
               <packing>
                 <property name="padding">2</property>
                 <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkHBox" id="hbox43">
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkRadioButton" id="preset_type_folder">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label" translatable="yes">Folder</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                    <signal name="toggled" handler="preset_type_changed_cb"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="preset_type_normal">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label" translatable="yes">Preset</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">preset_type_folder</property>
+                    <signal name="toggled" handler="preset_type_changed_cb"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>

@@ -18,11 +18,8 @@
 
 void ghb_settings_save(signal_user_data_t *ud, const gchar *name);
 void ghb_presets_load(void);
-void ghb_presets_reload(signal_user_data_t *ud);
-void ghb_set_preset(signal_user_data_t *ud, const gchar *name);
-void ghb_update_from_preset( 
-	signal_user_data_t *ud, const gchar *name, const gchar *key);
-void ghb_presets_remove(const gchar *name);
+void ghb_update_from_preset(signal_user_data_t *ud, 
+		const gchar *folder, const gchar *name, const gchar *key);
 void ghb_prefs_load(signal_user_data_t *ud);
 void ghb_settings_init(signal_user_data_t *ud);
 void ghb_settings_close();
@@ -36,7 +33,9 @@ void ghb_remove_queue_file(void);;
 gchar* ghb_get_user_config_dir();
 void ghb_settings_to_ui(signal_user_data_t *ud, GValue *dict);
 void ghb_clear_presets_selection(signal_user_data_t *ud);
-void ghb_select_preset(GtkBuilder *builder, const gchar *preset);
-void ghb_presets_list_update(signal_user_data_t *ud);
+void ghb_select_preset(GtkBuilder *builder, 
+		const gchar *folder, const gchar *preset);
+void ghb_presets_list_init( signal_user_data_t *ud, 
+	GValue *presets, const gchar *parent_name, GtkTreeIter *parent);
 
 #endif // _GHB_PRESETS_H_
