@@ -1350,6 +1350,7 @@ namespace Handbrake
                 // Now reload the preset panel
                 loadPresetPanel();
             }
+            treeView_presets.Select();
         }
         private void btn_setDefault_Click(object sender, EventArgs e)
         {
