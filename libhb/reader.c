@@ -8,8 +8,8 @@
 
 typedef struct
 {
-    int64_t last;   // last timestamp seen on this stream
     double average; // average time between packets
+    int64_t last;   // last timestamp seen on this stream
     int id;         // stream id
 } stream_timing_t;
 
@@ -138,7 +138,7 @@ static void update_ipt( hb_reader_t *r, const hb_buffer_t *buf )
 {
     stream_timing_t *st = id_to_st( r, buf );
     double dt = buf->renderOffset - st->last;
-    st->average += ( dt - st->average ) * (1./16.);
+    st->average += ( dt - st->average ) * (1./32.);
     st->last = buf->renderOffset;
 }
 
@@ -288,6 +288,8 @@ static void ReaderFunc( void * _r )
                 if ( buf->id == r->title->video_id && buf->start != -1 &&
                      buf->renderOffset != -1 )
                 {
+                    // force a new scr offset computation
+                    r->scr_changes = r->demux.scr_changes - 1;
                     r->saw_video = 1;
                     hb_log( "reader: first SCR %lld", r->demux.last_scr );
                 }
@@ -315,9 +317,27 @@ static void ReaderFunc( void * _r )
                         // change. Compute a new scr offset that would make this
                         // packet follow the last of this stream with the correct
                         // average spacing.
-                        if ( find_st( r, buf ) )
+                        stream_timing_t *st = find_st( r, buf );
+
+                        if ( st )
                         {
-                            new_scr_offset( r, buf );
+                            // if this isn't the video stream or we don't
+                            // have audio yet then generate a new scr
+                            if ( st != r->stream_timing ||
+                                 r->stream_timing[1].id == -1 )
+                            {
+                                new_scr_offset( r, buf );
+                            }
+                            else
+                            {
+                                // defer the scr change until we get some
+                                // audio since audio has a timestamp per
+                                // frame but video doesn't. Clear the timestamps
+                                // so the decoder will regenerate them from
+                                // the frame durations.
+                                buf->start = -1;
+                                buf->renderOffset = -1;
+                            }
                         }
                         else
                         {
