@@ -409,7 +409,12 @@ hb_lock_t * hb_lock_init()
 #if defined( SYS_BEOS )
     l->sem = create_sem( 1, "sem" );
 #elif USE_PTHREAD
-    pthread_mutex_init( &l->mutex, NULL );
+    pthread_mutexattr_t mta;
+
+    pthread_mutexattr_init(&mta);
+    pthread_mutexattr_settype(&mta, PTHREAD_MUTEX_NORMAL);
+
+    pthread_mutex_init( &l->mutex, &mta );
 //#elif defined( SYS_CYGWIN )
 //    l->mutex = CreateMutex( 0, FALSE, 0 );
 #endif
