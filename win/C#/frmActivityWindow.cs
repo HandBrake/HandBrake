@@ -138,7 +138,10 @@ namespace Handbrake
         /// <param name="e"></param>
         private void btn_copy_Click(object sender, EventArgs e)
         {
-            Clipboard.SetDataObject(rtf_actLog.Text, true);
+            if (rtf_actLog.SelectedText != "")
+                Clipboard.SetDataObject(rtf_actLog.SelectedText, true);
+            else
+                Clipboard.SetDataObject(rtf_actLog.Text, true);
         }
 
         /// <summary>
