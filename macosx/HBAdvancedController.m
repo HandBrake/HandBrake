@@ -68,8 +68,7 @@
         fX264optNodctdcmtLabel,fX264optNodctdcmtSwitch,fX264optSubmeLabel,fX264optSubmePopUp,
         fX264optTrellisLabel,fX264optTrellisPopUp,fX264optMixedRefsLabel,fX264optMixedRefsSwitch,
         fX264optMotionEstLabel,fX264optMotionEstPopUp,fX264optMERangeLabel,fX264optMERangePopUp,
-        fX264optWeightBLabel,fX264optWeightBSwitch,fX264optBRDOLabel,fX264optBRDOSwitch,
-        fX264optBPyramidLabel,fX264optBPyramidSwitch,fX264optBiMELabel,fX264optBiMESwitch,
+        fX264optWeightBLabel,fX264optWeightBSwitch, fX264optBPyramidLabel,fX264optBPyramidSwitch,
         fX264optDirectPredLabel,fX264optDirectPredPopUp,fX264optDeblockLabel,fX264optAnalyseLabel,
         fX264optAnalysePopUp,fX264opt8x8dctLabel,fX264opt8x8dctSwitch,fX264optCabacLabel,fX264optCabacSwitch,
         fX264optAlphaDeblockPopUp,fX264optBetaDeblockPopUp};
@@ -131,7 +130,7 @@
     /*Sub Me fX264optSubmePopUp*/
     [fX264optSubmePopUp removeAllItems];
     [fX264optSubmePopUp addItemWithTitle:@"Default (6)"];
-    for (i=0; i<8;i++)
+    for (i=0; i<10;i++)
     {
         [fX264optSubmePopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
     }
@@ -169,17 +168,9 @@
     [fX264optWeightBSwitch setState:0];
     [fX264optWeightBSwitch setWantsLayer:YES];
     
-    /*B-Frame Rate Distortion Optimization fX264optBRDOSwitch BOOLEAN*/
-    [fX264optBRDOSwitch setState:0];
-    [fX264optBRDOSwitch setWantsLayer:YES];
-    
     /*B-frame Pyramids fX264optBPyramidSwitch BOOLEAN*/
     [fX264optBPyramidSwitch setState:0];
     [fX264optBPyramidSwitch setWantsLayer:YES];
-    
-    /*Bidirectional Motion Estimation Refinement fX264optBiMESwitch BOOLEAN*/
-    [fX264optBiMESwitch setState:0];
-    [fX264optBiMESwitch setWantsLayer:YES];
     
     /*Direct B-Frame Prediction Mode fX264optDirectPredPopUp*/
     [fX264optDirectPredPopUp removeAllItems];
@@ -344,12 +335,6 @@
         cleanOptNameString = @"weightb";
     }
     
-    /*BRDO*/
-    if ([cleanOptNameString isEqualToString:@"b-rdo"] || [cleanOptNameString isEqualToString:@"b_rdo"])
-    {
-        cleanOptNameString = @"brdo";
-    }
-    
     /*B Pyramid*/
     if ([cleanOptNameString isEqualToString:@"b_pyramid"])
     {
@@ -385,7 +370,6 @@
     /* Lots of situations to cover.
        - B-frames (when 0 turn of b-frame specific stuff, when < 2 disable b-pyramid)
        - CABAC (when 0 turn off trellis)
-       - subme  (if under 6 turn off brdo)
        - analysis (if none, turn off 8x8dct)
        - refs (under 2, disable mixed-refs)
     */
@@ -397,27 +381,17 @@
            that can only be used when b-frames are enabled.        */
         [[fX264optWeightBSwitch animator] setHidden:YES];
         [[fX264optWeightBLabel animator] setHidden:YES];
-        if ( [fX264optWeightBSwitch state] == 1 && sender != fX264optWeightBSwitch && sender != fX264optBRDOSwitch && sender != fX264optBPyramidSwitch && sender != fX264optBiMESwitch && sender != fX264optDirectPredPopUp)
+        if ( [fX264optWeightBSwitch state] == 1 && sender != fX264optWeightBSwitch && sender != fX264optBPyramidSwitch && sender != fX264optDirectPredPopUp)
             [fX264optWeightBSwitch performClick:self];
         
-        [[fX264optBRDOSwitch animator] setHidden:YES];
-        [[fX264optBRDOLabel animator] setHidden:YES];
-        if ( [fX264optBRDOSwitch state] == 1 && sender != fX264optWeightBSwitch && sender != fX264optBRDOSwitch && sender != fX264optBPyramidSwitch && sender != fX264optBiMESwitch && sender != fX264optDirectPredPopUp)
-            [fX264optBRDOSwitch performClick:self];
-
         [[fX264optBPyramidSwitch animator] setHidden:YES];
         [[fX264optBPyramidLabel animator] setHidden:YES];
-        if ( [fX264optBPyramidSwitch state] == 1 && sender != fX264optWeightBSwitch && sender != fX264optBRDOSwitch && sender != fX264optBPyramidSwitch && sender != fX264optBiMESwitch && sender != fX264optDirectPredPopUp)
+        if ( [fX264optBPyramidSwitch state] == 1 && sender != fX264optWeightBSwitch && sender != fX264optBPyramidSwitch && sender != fX264optDirectPredPopUp)
             [fX264optBPyramidSwitch performClick:self];
-
-        [[fX264optBiMESwitch animator] setHidden:YES];
-        [[fX264optBiMELabel animator] setHidden:YES];
-        if ( [fX264optBiMESwitch state] == 1 && sender != fX264optWeightBSwitch && sender != fX264optBRDOSwitch && sender != fX264optBPyramidSwitch && sender != fX264optBiMESwitch && sender != fX264optDirectPredPopUp)
-            [fX264optBiMESwitch performClick:self];
 
         [[fX264optDirectPredPopUp animator] setHidden:YES];
         [[fX264optDirectPredLabel animator] setHidden:YES];
-        if ( [fX264optDirectPredPopUp indexOfSelectedItem] > 0 && sender != fX264optWeightBSwitch && sender != fX264optBRDOSwitch && sender != fX264optBPyramidSwitch && sender != fX264optBiMESwitch && sender != fX264optDirectPredPopUp)
+        if ( [fX264optDirectPredPopUp indexOfSelectedItem] > 0 && sender != fX264optWeightBSwitch && sender != fX264optBPyramidSwitch && sender != fX264optDirectPredPopUp)
         {
             [fX264optDirectPredPopUp selectItemAtIndex: 0];
             [[fX264optDirectPredPopUp cell] performClick:self];
@@ -435,16 +409,6 @@
         [[fX264optWeightBSwitch animator] setHidden:NO];
         [[fX264optWeightBLabel animator] setHidden:NO];
 
-        [[fX264optBiMESwitch animator] setHidden:NO];
-        [[fX264optBiMELabel animator] setHidden:NO];
-                
-        if ( [fX264optSubmePopUp indexOfSelectedItem] >= 7 || [fX264optSubmePopUp indexOfSelectedItem] == 0 )
-        {
-            /* Only show B-RDO if both bframes and subme allow it. */
-            [[fX264optBRDOSwitch animator] setHidden:NO];
-            [[fX264optBRDOLabel animator] setHidden:NO];
-        }
-
         [[fX264optDirectPredPopUp animator] setHidden:NO];
         [[fX264optDirectPredLabel animator] setHidden:NO];
     }
@@ -455,16 +419,6 @@
 
         [[fX264optBPyramidSwitch animator] setHidden:NO];
         [[fX264optBPyramidLabel animator] setHidden:NO];
-
-        [[fX264optBiMESwitch animator] setHidden:NO];
-        [[fX264optBiMELabel animator] setHidden:NO];
-
-        if ( [fX264optSubmePopUp indexOfSelectedItem] >= 7 || [fX264optSubmePopUp indexOfSelectedItem] == 0 )
-        {
-            /* Only show B-RDO if both bframes and subme allow it. */
-            [[fX264optBRDOSwitch animator] setHidden:NO];
-            [[fX264optBRDOLabel animator] setHidden:NO];
-        }
 
         [[fX264optDirectPredPopUp animator] setHidden:NO];
         [[fX264optDirectPredLabel animator] setHidden:NO];
@@ -484,22 +438,6 @@
     {
         [[fX264optTrellisPopUp animator] setHidden:NO];
         [[fX264optTrellisLabel animator] setHidden:NO];
-    }
-    
-    if ( [fX264optSubmePopUp indexOfSelectedItem] < 7 && [fX264optSubmePopUp indexOfSelectedItem] != 0 )
-    {
-        /* When subme < 6, B-RDO doesn't work. */
-        [[fX264optBRDOSwitch animator] setHidden:YES];
-        [[fX264optBRDOLabel animator] setHidden:YES];
-        if ( [fX264optBRDOSwitch state] == 1 && sender != fX264optBRDOSwitch )
-            [fX264optBRDOSwitch performClick:self];
-    }
-    else if ( [fX264optBframesPopUp indexOfSelectedItem ] >= 2 )
-    {
-        /* Make sure to only display B-RDO if allowed by both
-           the subme and bframe option settings.               */
-        [[fX264optBRDOSwitch animator] setHidden:NO]; 
-        [[fX264optBRDOLabel animator] setHidden:NO]; 
     }
     
     if ( [fX264optAnalysePopUp indexOfSelectedItem] == 1)
@@ -628,20 +566,10 @@
                 {
                     [fX264optWeightBSwitch setState:[optValue intValue]];
                 }
-                /*BRDO NSButton*/
-                if ([optName isEqualToString:@"brdo"])
-                {
-                    [fX264optBRDOSwitch setState:[optValue intValue]];
-                }
                 /*B Pyramid NSPButton*/
                 if ([optName isEqualToString:@"b-pyramid"])
                 {
                     [fX264optBPyramidSwitch setState:[optValue intValue]];
-                }
-                /*Bidirectional Motion Estimation Refinement NSButton*/
-                if ([optName isEqualToString:@"bime"])
-                {
-                    [fX264optBiMESwitch setState:[optValue intValue]];
                 }
                 /*Direct B-frame Prediction NSPopUpButton*/
                 if ([optName isEqualToString:@"direct"])
@@ -778,17 +706,9 @@
     {
         optNameToChange = @"weightb";
     }
-    if (sender == fX264optBRDOSwitch)
-    {
-        optNameToChange = @"brdo";
-    }
     if (sender == fX264optBPyramidSwitch)
     {
         optNameToChange = @"b-pyramid";
-    }
-    if (sender == fX264optBiMESwitch)
-    {
-        optNameToChange = @"bime";
     }
     if (sender == fX264optDirectPredPopUp)
     {
@@ -899,7 +819,7 @@
                             thisOpt = [NSString stringWithFormat:@"%@=%d,%d",optName, ([fX264optAlphaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optAlphaDeblockPopUp indexOfSelectedItem]-7 : 0,([fX264optBetaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optBetaDeblockPopUp indexOfSelectedItem]-7 : 0];
                         }
                     }
-                    else if /*Boolean Switches*/ ([optNameToChange isEqualToString:@"mixed-refs"] || [optNameToChange isEqualToString:@"weightb"] || [optNameToChange isEqualToString:@"brdo"] || [optNameToChange isEqualToString:@"bime"] || [optNameToChange isEqualToString:@"b-pyramid"] || [optNameToChange isEqualToString:@"no-fast-pskip"] || [optNameToChange isEqualToString:@"no-dct-decimate"] || [optNameToChange isEqualToString:@"8x8dct"] )
+                    else if /*Boolean Switches*/ ([optNameToChange isEqualToString:@"mixed-refs"] || [optNameToChange isEqualToString:@"weightb"] ||  [optNameToChange isEqualToString:@"b-pyramid"] || [optNameToChange isEqualToString:@"no-fast-pskip"] || [optNameToChange isEqualToString:@"no-dct-decimate"] || [optNameToChange isEqualToString:@"8x8dct"] )
                     {
                         /* Here is where we take care of the boolean options that work overtly:
                            no-dct-decimate being on means no-dct-decimate=1, etc. Some options
@@ -1158,7 +1078,7 @@
                    If only one filter is at 0, both need to be overtly specified.    */
                 [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d,%d", ([fX264optAlphaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optAlphaDeblockPopUp indexOfSelectedItem]-7 : 0, ([fX264optBetaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optBetaDeblockPopUp indexOfSelectedItem]-7 : 0]]];                
             }
-            else if /*Boolean Switches*/ ([optNameToChange isEqualToString:@"mixed-refs"] || [optNameToChange isEqualToString:@"weightb"] || [optNameToChange isEqualToString:@"brdo"] || [optNameToChange isEqualToString:@"bime"] || [optNameToChange isEqualToString:@"b-pyramid"] || [optNameToChange isEqualToString:@"no-fast-pskip"] || [optNameToChange isEqualToString:@"no-dct-decimate"] || [optNameToChange isEqualToString:@"8x8dct"] )
+            else if /*Boolean Switches*/ ([optNameToChange isEqualToString:@"mixed-refs"] || [optNameToChange isEqualToString:@"weightb"] || [optNameToChange isEqualToString:@"b-pyramid"] || [optNameToChange isEqualToString:@"no-fast-pskip"] || [optNameToChange isEqualToString:@"no-dct-decimate"] || [optNameToChange isEqualToString:@"8x8dct"] )
             {
                 /* This covers all the boolean options that need to be specified only when true. */
                 if ([sender state] == 0)
@@ -1302,7 +1222,7 @@
                    just a little more fun, values start at -6 instead of at zero.                       */
                 [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", [NSString stringWithFormat:[fDisplayX264Options stringValue]], [NSString stringWithFormat:optNameToChange], [NSString stringWithFormat:@"%d,%d", ([fX264optAlphaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optAlphaDeblockPopUp indexOfSelectedItem]-7 : 0, ([fX264optBetaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optBetaDeblockPopUp indexOfSelectedItem]-7 : 0]]];                
             }
-            else if /*Boolean Switches*/ ([optNameToChange isEqualToString:@"mixed-refs"] || [optNameToChange isEqualToString:@"weightb"] || [optNameToChange isEqualToString:@"brdo"] || [optNameToChange isEqualToString:@"bime"] || [optNameToChange isEqualToString:@"b-pyramid"] || [optNameToChange isEqualToString:@"no-fast-pskip"] || [optNameToChange isEqualToString:@"no-dct-decimate"] || [optNameToChange isEqualToString:@"8x8dct"] )
+            else if /*Boolean Switches*/ ([optNameToChange isEqualToString:@"mixed-refs"] || [optNameToChange isEqualToString:@"weightb"] || [optNameToChange isEqualToString:@"b-pyramid"] || [optNameToChange isEqualToString:@"no-fast-pskip"] || [optNameToChange isEqualToString:@"no-dct-decimate"] || [optNameToChange isEqualToString:@"8x8dct"] )
             {
                 /* Covers all the normal booleans, that only need to be included in the string when they're true. */
                 if ([sender state] == 0)

@@ -36,12 +36,8 @@
     IBOutlet NSPopUpButton      * fX264optMERangePopUp;
     IBOutlet NSTextField        * fX264optWeightBLabel;
     IBOutlet NSButton           * fX264optWeightBSwitch;
-    IBOutlet NSTextField        * fX264optBRDOLabel;
-    IBOutlet NSButton           * fX264optBRDOSwitch;
     IBOutlet NSTextField        * fX264optBPyramidLabel;
     IBOutlet NSButton           * fX264optBPyramidSwitch;
-    IBOutlet NSTextField        * fX264optBiMELabel;
-    IBOutlet NSButton           * fX264optBiMESwitch;
     IBOutlet NSTextField        * fX264optDirectPredLabel;
     IBOutlet NSPopUpButton      * fX264optDirectPredPopUp;
     IBOutlet NSTextField        * fX264optDeblockLabel;
