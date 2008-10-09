@@ -14,8 +14,6 @@ namespace Handbrake.Functions
         public void reset2Defaults(frmMain mainWindow)
         {
             mainWindow.check_8x8DCT.CheckState = CheckState.Unchecked;
-            mainWindow.check_bFrameRateDistortion.CheckState = CheckState.Unchecked;
-            mainWindow.check_BidirectionalRefinement.CheckState = CheckState.Unchecked;
             mainWindow.check_Cabac.CheckState = CheckState.Checked;
             mainWindow.check_mixedReferences.CheckState = CheckState.Unchecked;
             mainWindow.check_noDCTDecimate.CheckState = CheckState.Unchecked;
@@ -125,17 +123,9 @@ namespace Handbrake.Functions
                         else if (optName.Equals("weightb"))
                             mainWindow.check_weightedBFrames.CheckState = CheckState.Checked;
 
-                        /*BRDO NSPopUpButton*/
-                        else if (optName.Equals("brdo"))
-                            mainWindow.check_bFrameRateDistortion.CheckState = CheckState.Checked;
-
                         /*B Pyramid NSPopUpButton*/
                         else if (optName.Equals("b-pyramid"))
                             mainWindow.check_pyrmidalBFrames.CheckState = CheckState.Checked;
-
-                        /*Bidirectional Motion Estimation Refinement NSPopUpButton*/
-                        else if (optName.Equals("bime"))
-                            mainWindow.check_BidirectionalRefinement.CheckState = CheckState.Checked;
 
                         /*Direct B-frame Prediction NSPopUpButton*/
                         else if (optName.Equals("direct"))
@@ -305,10 +295,6 @@ namespace Handbrake.Functions
             if (input.Equals("weight-b") || input.Equals("weight_b"))
                 cleanOptNameString = "weightb";
 
-            /*BRDO*/
-            if (input.Equals("b-rdo") || input.Equals("b_rdo"))
-                cleanOptNameString = "brdo";
-
             /*B Pyramid*/
             if (input.Equals("b_pyramid"))
                 cleanOptNameString = "b-pyramid";
@@ -425,20 +411,6 @@ namespace Handbrake.Functions
                         {
                             if (mainWindow.check_weightedBFrames.CheckState == CheckState.Checked)
                                 thisOpt = "weightb=1";
-                            else
-                                thisOpt = "";
-                        }
-                        else if (optNameToChange.Equals("brdo"))
-                        {
-                            if (mainWindow.check_bFrameRateDistortion.CheckState == CheckState.Checked)
-                                thisOpt = "brdo=1";
-                            else
-                                thisOpt = "";
-                        }
-                        else if (optNameToChange.Equals("bime"))
-                        {
-                            if (mainWindow.check_BidirectionalRefinement.CheckState == CheckState.Checked)
-                                thisOpt = "bime=1";
                             else
                                 thisOpt = "";
                         }
@@ -707,16 +679,6 @@ namespace Handbrake.Functions
                 if (mainWindow.check_weightedBFrames.CheckState == CheckState.Checked)
                     query = query + colon + "weightb=1";
             }
-            else if (optNameToChange.Equals("brdo"))
-            {
-                if (mainWindow.check_bFrameRateDistortion.CheckState == CheckState.Checked)
-                    query = query + colon + "brdo=1";
-            }
-            else if (optNameToChange.Equals("bime"))
-            {
-                if (mainWindow.check_BidirectionalRefinement.CheckState == CheckState.Checked)
-                    query = query + colon + "bime=1";
-            }
             else if (optNameToChange.Equals("b-pyramid"))
             {
                 if (mainWindow.check_pyrmidalBFrames.CheckState == CheckState.Checked)
@@ -772,7 +734,6 @@ namespace Handbrake.Functions
             /* Lots of situations to cover.
                - B-frames (when 0 turn of b-frame specific stuff, when < 2 disable b-pyramid)
                - CABAC (when 0 turn off trellis)
-               - subme  (if under 6 turn off brdo)
                - analysis (if none, turn off 8x8dct)
                - refs (under 2, disable mixed-refs)
             */
@@ -782,16 +743,12 @@ namespace Handbrake.Functions
                    not to use b-frames at all. So disable the options
                    that can only be used when b-frames are enabled.        */
                 mainWindow.check_weightedBFrames.Visible = false;
-                mainWindow.check_bFrameRateDistortion.Visible = false;
                 mainWindow.check_pyrmidalBFrames.Visible = false;
-                mainWindow.check_BidirectionalRefinement.Visible = false;
                 mainWindow.drop_directPrediction.Visible = false;
                 mainWindow.lbl_direct_prediction.Visible = false;
 
                 mainWindow.check_weightedBFrames.CheckState = CheckState.Unchecked;
-                mainWindow.check_bFrameRateDistortion.CheckState = CheckState.Unchecked;
                 mainWindow.check_pyrmidalBFrames.CheckState = CheckState.Unchecked;
-                mainWindow.check_BidirectionalRefinement.CheckState = CheckState.Unchecked;
                 mainWindow.drop_directPrediction.SelectedIndex = 0;
             }
             else if (mainWindow.drop_bFrames.SelectedIndex == 2)
@@ -801,12 +758,6 @@ namespace Handbrake.Functions
                 mainWindow.check_pyrmidalBFrames.CheckState = CheckState.Unchecked;
 
                 mainWindow.check_weightedBFrames.Visible = true;
-                mainWindow.check_BidirectionalRefinement.Visible = true;
-
-                /* Only show B-RDO if both bframes and subme allow it. */
-                if (mainWindow.drop_subpixelMotionEstimation.SelectedIndex >= 7 || mainWindow.drop_subpixelMotionEstimation.SelectedIndex == 0)
-                    mainWindow.check_bFrameRateDistortion.Visible = true;
-
                 mainWindow.drop_directPrediction.Visible = true;
                 mainWindow.lbl_direct_prediction.Visible = true;
                 
@@ -815,12 +766,6 @@ namespace Handbrake.Functions
             {
                 mainWindow.check_weightedBFrames.Visible = true;
                 mainWindow.check_pyrmidalBFrames.Visible = true;
-                mainWindow.check_BidirectionalRefinement.Visible = true;
-
-                /* Only show B-RDO if both bframes and subme allow it. */
-                if (mainWindow.drop_subpixelMotionEstimation.SelectedIndex >= 7 || mainWindow.drop_subpixelMotionEstimation.SelectedIndex == 0)
-                    mainWindow.check_bFrameRateDistortion.Visible = true;
-
                 mainWindow.drop_directPrediction.Visible = true;
                 mainWindow.lbl_direct_prediction.Visible = true;
             }
@@ -836,20 +781,6 @@ namespace Handbrake.Functions
             {
                 mainWindow.drop_trellis.Visible = true;
                 mainWindow.lbl_trellis.Visible = true;
-            }
-
-            if (mainWindow.drop_subpixelMotionEstimation.SelectedIndex < 7 && mainWindow.drop_subpixelMotionEstimation.SelectedIndex != 0)
-            {
-                /* When subme < 6, B-RDO doesn't work. */
-                mainWindow.check_bFrameRateDistortion.Visible = false;
-                if (sender == "subq" && sender != "brdo")
-                    mainWindow.check_bFrameRateDistortion.CheckState = CheckState.Unchecked;
-            }
-            else if (mainWindow.drop_bFrames.SelectedIndex >= 2)
-            {
-                /* Make sure to only display B-RDO if allowed by both
-                   the subme and bframe option settings.               */
-                mainWindow.check_bFrameRateDistortion.Visible = true;
             }
 
             if (mainWindow.drop_analysis.SelectedIndex == 1)

@@ -161,18 +161,6 @@ Note: Do not change any of the chapter numbers!</value>
   <metadata name="name.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="DVD_Open.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>223, 15</value>
-  </metadata>
-  <metadata name="File_Open.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>430, 18</value>
-  </metadata>
-  <metadata name="ISO_Open.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>329, 15</value>
-  </metadata>
-  <metadata name="frmMainMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>106, 15</value>
-  </metadata>
   <data name="check_Cabac.ToolTip" xml:space="preserve">
     <value>CABAC, or context adaptive binary arithmetic coding, is used by x264 to reduce the bitrate needed for a given quality by 15%. 
 This makes it very cool and very useful, and it should be left on whenever possible. However, it is incompatible with the iPod 5.5G, and makes the AppleTV struggle. 
@@ -247,15 +235,6 @@ Pyramidal B-frames mean that B-frames don't just reference surrounding reference
  instead, it also treats a previous B-frame as a reference, improving quality/lowering bitrate at the expense of complexity. 
 Logically, to reference an earlier B-frame, you must tell x264 to use at least 2 B-frames.</value>
   </data>
-  <data name="check_BidirectionalRefinement.ToolTip" xml:space="preserve">
-    <value>When bidrectional motion estimation refinement is activated, x264 will optimize motion vectors both forwards and backwards in time. 
-This improves quality, and while it slows down encoding, it does not make playback any more difficult. </value>
-  </data>
-  <data name="check_bFrameRateDistortion.ToolTip" xml:space="preserve">
-    <value>When B-frame rate distortion optimization is enabled, x264 tries several different methods of compression for each part of a frame, 
-and chooses the one that looks the best. 
-You need to use a subpixel motion estimation refinement level of 6 or 7 for this to work. </value>
-  </data>
   <data name="check_weightedBFrames.ToolTip" xml:space="preserve">
     <value>With weighted B-frame prediction enabled, x264 will consider how far away the previous and next P-frames are, 
 before deciding to make a frame a B-frame. 
@@ -269,6 +248,18 @@ You're best off setting this to automatic, so x264 decides which method is best 
 Don't select none assuming it will be faster; instead it will take longer and look worse. 
 If you're going to choose between spatial and temporal, spatial is usually better. </value>
   </data>
+  <metadata name="DVD_Open.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>223, 15</value>
+  </metadata>
+  <metadata name="File_Open.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>430, 18</value>
+  </metadata>
+  <metadata name="ISO_Open.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>329, 15</value>
+  </metadata>
+  <metadata name="frmMainMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>106, 15</value>
+  </metadata>
   <metadata name="toolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>731, 18</value>
   </metadata>
