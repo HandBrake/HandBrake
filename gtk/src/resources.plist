@@ -2603,39 +2603,6 @@
                                         &lt;property name=&quot;right_attach&quot;&gt;2&lt;/property&gt;
                                       &lt;/packing&gt;
                                     &lt;/child&gt;
-                                    &lt;child&gt;
-                                      &lt;object class=&quot;GtkCheckButton&quot; id=&quot;x264_brdo&quot;&gt;
-                                        &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
-                                        &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
-                                        &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
-                                        &lt;property name=&quot;tooltip-text&quot; translatable=&quot;yes&quot;&gt;When B-frame rate distortion optimization is enabled, x264 tries several different methods of compression for each part of a frame, and chooses the one that looks the best. You need to use a subpixel motion estimation refinement level of 6 or 7 for this to work.&lt;/property&gt;
-                                        &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;B-Frame Rate Distortion&lt;/property&gt;
-                                        &lt;property name=&quot;draw_indicator&quot;&gt;True&lt;/property&gt;
-                                        &lt;signal handler=&quot;x264_widget_changed_cb&quot; name=&quot;toggled&quot;/&gt;
-                                      &lt;/object&gt;
-                                      &lt;packing&gt;
-                                        &lt;property name=&quot;top_attach&quot;&gt;1&lt;/property&gt;
-                                        &lt;property name=&quot;bottom_attach&quot;&gt;2&lt;/property&gt;
-                                      &lt;/packing&gt;
-                                    &lt;/child&gt;
-                                    &lt;child&gt;
-                                      &lt;object class=&quot;GtkCheckButton&quot; id=&quot;x264_bime&quot;&gt;
-                                        &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
-                                        &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
-                                        &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
-                                        &lt;property name=&quot;tooltip-text&quot; translatable=&quot;yes&quot;&gt;When bidrectional motion estimation refinement is activated, x264 will optimize motion vectors both forwards and backwards in time. This improves quality, and while it slows down encoding, it does not make playback any more difficult.&lt;/property&gt;
-                                        &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Bidirectional Refinement&lt;/property&gt;
-                                        &lt;property name=&quot;active&quot;&gt;True&lt;/property&gt;
-                                        &lt;property name=&quot;draw_indicator&quot;&gt;True&lt;/property&gt;
-                                        &lt;signal handler=&quot;x264_widget_changed_cb&quot; name=&quot;toggled&quot;/&gt;
-                                      &lt;/object&gt;
-                                      &lt;packing&gt;
-                                        &lt;property name=&quot;left_attach&quot;&gt;1&lt;/property&gt;
-                                        &lt;property name=&quot;right_attach&quot;&gt;2&lt;/property&gt;
-                                        &lt;property name=&quot;top_attach&quot;&gt;1&lt;/property&gt;
-                                        &lt;property name=&quot;bottom_attach&quot;&gt;2&lt;/property&gt;
-                                      &lt;/packing&gt;
-                                    &lt;/child&gt;
 
                                       &lt;/object&gt;
                                       &lt;packing&gt;
@@ -2684,7 +2651,7 @@ You can edit these and add additional options.
 
 Default values will not be shown. The defaults are:
 ref=1:mixed-refs=0:bframes=0:direct=spatial:b-pyramid=0:
-weightb=0:brdo=0:bime=0:me=hex:merange=16:subme=5:
+weightb=0:me=hex:merange=16:subme=5:
 analyse=some:8x8dct=0:deblock=0,0:trellis=0:
 no-fast-pskip=0:no-dct-decimate=0:cabac=1&lt;/property&gt;
                                     &lt;property name=&quot;wrap_mode&quot;&gt;GTK_WRAP_CHAR&lt;/property&gt;
@@ -2842,7 +2809,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1&lt;/property&gt;
                                               &lt;object class=&quot;GtkComboBox&quot; id=&quot;x264_subme&quot;&gt;
                                                 &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                                 &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
-                                                &lt;property name=&quot;tooltip-text&quot; translatable=&quot;yes&quot;&gt;Determines how motion estimation decisions are made. 1 is lowest quality and fastest. 7 is highest quality and slowest.  5 or 6 are commonly used values.&lt;/property&gt;
+                                                &lt;property name=&quot;tooltip-text&quot; translatable=&quot;yes&quot;&gt;Determines how motion estimation decisions are made. 1 is lowest quality and fastest. 9 is highest quality and slowest.  5 or 6 are commonly used values.&lt;/property&gt;
                                                 &lt;signal handler=&quot;x264_widget_changed_cb&quot; name=&quot;changed&quot;/&gt;
                                               &lt;/object&gt;
                                             &lt;/child&gt;
@@ -4920,11 +4887,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<string>some</string>
 			<key>x264_bframes</key>
 			<integer>0</integer>
-			<key>x264_bime</key>
-			<false />
 			<key>x264_bpyramid</key>
-			<false />
-			<key>x264_brdo</key>
 			<false />
 			<key>x264_cabac</key>
 			<true />
@@ -5150,7 +5113,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>vquality_type_bitrate</key>
 			<true />
 			<key>x264_options</key>
-			<string>ref=5:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2</string>
+			<string>ref=5:mixed-refs:bframes=6:weightb:direct=auto:b-pyramid:me=umh:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2</string>
 		</dict>
 		<dict>
 			<key>anamorphic</key>
@@ -5302,7 +5265,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>vquality_type_bitrate</key>
 			<true />
 			<key>x264_options</key>
-			<string>ref=16:mixed-refs:bframes=16:bime:weightb:b-rdo:direct=auto:b-pyramid:me=esa:subme=7:me-range=64:analyse=all:8x8dct:trellis=1:no-fast-pskip:no-dct-decimate:filter=-2,-1</string>
+			<string>ref=16:mixed-refs:bframes=16:weightb:direct=auto:b-pyramid:me=esa:subme=7:me-range=64:analyse=all:8x8dct:trellis=1:no-fast-pskip:no-dct-decimate:filter=-2,-1</string>
 		</dict>
 		<dict>
 			<key>anamorphic</key>
@@ -5444,7 +5407,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>vquality_type_target</key>
 			<true />
 			<key>x264_options</key>
-			<string>ref=3:mixed-refs:bframes=16:bime:weightb:b-rdo:b-pyramid:direct=auto:me=umh:trellis=1:analyse=all:8x8dct:no-fast-pskip</string>
+			<string>ref=3:mixed-refs:bframes=16:weightb:b-pyramid:direct=auto:me=umh:trellis=1:analyse=all:8x8dct:no-fast-pskip</string>
 		</dict>
 		<dict>
 			<key>anamorphic</key>
@@ -5584,7 +5547,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>vquality_type_constant</key>
 			<true />
 			<key>x264_options</key>
-			<string>ref=3:mixed-refs:bframes=3:b-pyramid:b-rdo:bime:weightb:filter=-2,-1:trellis=1:analyse=all:8x8dct:me=umh</string>
+			<string>ref=3:mixed-refs:bframes=3:b-pyramid:weightb:filter=-2,-1:trellis=1:analyse=all:8x8dct:me=umh</string>
 		</dict>
 		<dict>
 			<key>anamorphic</key>
@@ -5655,7 +5618,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>vquality_type_bitrate</key>
 			<true />
 			<key>x264_options</key>
-			<string>ref=5:mixed-refs:bframes=3:bime:weightb:b-rdo:b-pyramid:me=umh:subme=7:trellis=1:analyse=all:8x8dct:no-fast-pskip</string>
+			<string>ref=5:mixed-refs:bframes=3:weightb:b-pyramid:me=umh:subme=7:trellis=1:analyse=all:8x8dct:no-fast-pskip</string>
 		</dict>
 		<dict>
 			<key>anamorphic</key>
@@ -5726,7 +5689,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>vquality_type_bitrate</key>
 			<true />
 			<key>x264_options</key>
-			<string>ref=3:mixed-refs:bframes=6:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:subme=7:analyse=all:8x8dct:trellis=1:no-fast-pskip</string>
+			<string>ref=3:mixed-refs:bframes=6:weightb:direct=auto:b-pyramid:me=umh:subme=7:analyse=all:8x8dct:trellis=1:no-fast-pskip</string>
 		</dict>
 		<dict>
 			<key>anamorphic</key>
@@ -6004,7 +5967,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>vquality_type_bitrate</key>
 			<true />
 			<key>x264_options</key>
-			<string>ref=3:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:me=umh:analyse=all:trellis=1:no-fast-pskip</string>
+			<string>ref=3:mixed-refs:bframes=3:weightb:direct=auto:me=umh:analyse=all:trellis=1:no-fast-pskip</string>
 		</dict>
 		<dict>
 			<key>anamorphic</key>
@@ -6075,7 +6038,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>vquality_type_bitrate</key>
 			<true />
 			<key>x264_options</key>
-			<string>ref=3:mixed-refs:bframes=6:bime:weightb:direct=auto:b-pyramid:me=umh:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip</string>
+			<string>ref=3:mixed-refs:bframes=6:weightb:direct=auto:b-pyramid:me=umh:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip</string>
 		</dict>
 		<dict>
 			<key>anamorphic</key>
@@ -6142,7 +6105,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>vquality_type_bitrate</key>
 			<true />
 			<key>x264_options</key>
-			<string>level=40:ref=2:mixed-refs:bframes=3:bime:weightb:b-rdo:direct=auto:b-pyramid:me=umh:analyse=all:no-fast-pskip:filter=-2,-1</string>
+			<string>level=40:ref=2:mixed-refs:bframes=3:weightb:direct=auto:b-pyramid:me=umh:analyse=all:no-fast-pskip:filter=-2,-1</string>
 		</dict>
 		<dict>
 			<key>anamorphic</key>
@@ -6450,8 +6413,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 		<key>x264_bframes</key>
 		<array>
 			<string>x264_weighted_bframes</string>
-			<string>x264_brdo</string>
-			<string>x264_bime</string>
 			<string>x264_bpyramid</string>
 			<string>x264_direct</string>
 		</array>
@@ -6466,10 +6427,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 		<key>x264_refs</key>
 		<array>
 			<string>x264_mixed_refs</string>
-		</array>
-		<key>x264_subme</key>
-		<array>
-			<string>x264_brdo</string>
 		</array>
 	</dict>
 	<key>widget-reverse-deps</key>
@@ -6782,32 +6739,11 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<false />
 			</array>
 		</array>
-		<key>x264_bime</key>
-		<array>
-			<array>
-				<string>x264_bframes</string>
-				<string>0</string>
-				<true />
-			</array>
-		</array>
 		<key>x264_bpyramid</key>
 		<array>
 			<array>
 				<string>x264_bframes</string>
 				<string>&lt;2</string>
-				<true />
-			</array>
-		</array>
-		<key>x264_brdo</key>
-		<array>
-			<array>
-				<string>x264_bframes</string>
-				<string>0</string>
-				<true />
-			</array>
-			<array>
-				<string>x264_subme</string>
-				<string>&lt;6</string>
 				<true />
 			</array>
 		</array>

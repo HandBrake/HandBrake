@@ -2598,39 +2598,6 @@
                                         <property name="right_attach">2</property>
                                       </packing>
                                     </child>
-                                    <child>
-                                      <object class="GtkCheckButton" id="x264_brdo">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="tooltip-text" translatable="yes">When B-frame rate distortion optimization is enabled, x264 tries several different methods of compression for each part of a frame, and chooses the one that looks the best. You need to use a subpixel motion estimation refinement level of 6 or 7 for this to work.</property>
-                                        <property name="label" translatable="yes">B-Frame Rate Distortion</property>
-                                        <property name="draw_indicator">True</property>
-                                        <signal handler="x264_widget_changed_cb" name="toggled"/>
-                                      </object>
-                                      <packing>
-                                        <property name="top_attach">1</property>
-                                        <property name="bottom_attach">2</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkCheckButton" id="x264_bime">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="tooltip-text" translatable="yes">When bidrectional motion estimation refinement is activated, x264 will optimize motion vectors both forwards and backwards in time. This improves quality, and while it slows down encoding, it does not make playback any more difficult.</property>
-                                        <property name="label" translatable="yes">Bidirectional Refinement</property>
-                                        <property name="active">True</property>
-                                        <property name="draw_indicator">True</property>
-                                        <signal handler="x264_widget_changed_cb" name="toggled"/>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">1</property>
-                                        <property name="right_attach">2</property>
-                                        <property name="top_attach">1</property>
-                                        <property name="bottom_attach">2</property>
-                                      </packing>
-                                    </child>
 
                                       </object>
                                       <packing>
@@ -2679,7 +2646,7 @@ You can edit these and add additional options.
 
 Default values will not be shown. The defaults are:
 ref=1:mixed-refs=0:bframes=0:direct=spatial:b-pyramid=0:
-weightb=0:brdo=0:bime=0:me=hex:merange=16:subme=5:
+weightb=0:me=hex:merange=16:subme=5:
 analyse=some:8x8dct=0:deblock=0,0:trellis=0:
 no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                                     <property name="wrap_mode">GTK_WRAP_CHAR</property>
@@ -2837,7 +2804,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                                               <object class="GtkComboBox" id="x264_subme">
                                                 <property name="visible">True</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                <property name="tooltip-text" translatable="yes">Determines how motion estimation decisions are made. 1 is lowest quality and fastest. 7 is highest quality and slowest.  5 or 6 are commonly used values.</property>
+                                                <property name="tooltip-text" translatable="yes">Determines how motion estimation decisions are made. 1 is lowest quality and fastest. 9 is highest quality and slowest.  5 or 6 are commonly used values.</property>
                                                 <signal handler="x264_widget_changed_cb" name="changed"/>
                                               </object>
                                             </child>

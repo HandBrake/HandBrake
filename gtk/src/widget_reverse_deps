@@ -310,32 +310,11 @@
 			<false />
 		</array>
 	</array>
-	<key>x264_bime</key>
-	<array>
-		<array>
-			<string>x264_bframes</string>
-			<string>0</string>
-			<true />
-		</array>
-	</array>
 	<key>x264_bpyramid</key>
 	<array>
 		<array>
 			<string>x264_bframes</string>
 			<string>&lt;2</string>
-			<true />
-		</array>
-	</array>
-	<key>x264_brdo</key>
-	<array>
-		<array>
-			<string>x264_bframes</string>
-			<string>0</string>
-			<true />
-		</array>
-		<array>
-			<string>x264_subme</string>
-			<string>&lt;6</string>
 			<true />
 		</array>
 	</array>

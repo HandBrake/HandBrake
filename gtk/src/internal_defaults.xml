@@ -38,11 +38,7 @@
 		<string>some</string>
 		<key>x264_bframes</key>
 		<integer>0</integer>
-		<key>x264_bime</key>
-		<false />
 		<key>x264_bpyramid</key>
-		<false />
-		<key>x264_brdo</key>
 		<false />
 		<key>x264_cabac</key>
 		<true />

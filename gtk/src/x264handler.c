@@ -111,8 +111,6 @@ static gchar *x264_bframes_syns[] = {"bframes", NULL};
 static gchar *x264_direct_syns[] = 
 	{"direct", "direct-pred", "direct_pred", NULL};
 static gchar *x264_weightb_syns[] = {"weightb", "weight-b", "weight_b", NULL};
-static gchar *x264_brdo_syns[] = {"brdo", "b-rdo", "b_rdo", NULL};
-static gchar *x264_bime_syns[] = {"bime", NULL};
 static gchar *x264_bpyramid_syns[] = {"b-pyramid", "b_pyramid", NULL};
 static gchar *x264_me_syns[] = {"me", NULL};
 static gchar *x264_merange_syns[] = {"merange", "me-range", "me_range", NULL};
@@ -145,8 +143,6 @@ struct x264_opt_map_s x264_opt_map[] =
 	{x264_bframes_syns, "x264_bframes", "0", X264_OPT_INT},
 	{x264_direct_syns, "x264_direct", "spatial", X264_OPT_COMBO},
 	{x264_weightb_syns, "x264_weighted_bframes", "0", X264_OPT_BOOL},
-	{x264_brdo_syns, "x264_brdo", "0", X264_OPT_BOOL},
-	{x264_bime_syns, "x264_bime", "0", X264_OPT_BOOL},
 	{x264_bpyramid_syns, "x264_bpyramid", "0", X264_OPT_BOOL},
 	{x264_me_syns, "x264_me", "hex", X264_OPT_COMBO},
 	{x264_merange_syns, "x264_merange", "16", X264_OPT_INT},
@@ -575,19 +571,10 @@ sanitize_x264opts(signal_user_data_t *ud, const gchar *options)
 	{
 		x264_remove_opt(split, x264_mixed_syns);
 	}
-	gint subme;
-
-	subme = ghb_settings_combo_int(ud->settings, "x264_subme");
-	if (subme < 6)
-	{
-		x264_remove_opt(split, x264_brdo_syns);
-	}
 	gint bframes = ghb_settings_get_int(ud->settings, "x264_bframes");
 	if (bframes == 0)
 	{
 		x264_remove_opt(split, x264_weightb_syns);
-		x264_remove_opt(split, x264_brdo_syns);
-		x264_remove_opt(split, x264_bime_syns);
 		x264_remove_opt(split, x264_direct_syns);
 	}
 	if (bframes <= 1)

@@ -999,7 +999,7 @@ ghb_presets_list_init(
 						   	3, custom ? "black" : "blue", 
 							4, description,
 						   	-1);
-		if (def)
+		if (def && parent)
 		{
 			GtkTreePath *path;
 

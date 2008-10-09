@@ -92,8 +92,6 @@
 	<key>x264_bframes</key>
 	<array>
 		<string>x264_weighted_bframes</string>
-		<string>x264_brdo</string>
-		<string>x264_bime</string>
 		<string>x264_bpyramid</string>
 		<string>x264_direct</string>
 	</array>
@@ -108,10 +106,6 @@
 	<key>x264_refs</key>
 	<array>
 		<string>x264_mixed_refs</string>
-	</array>
-	<key>x264_subme</key>
-	<array>
-		<string>x264_brdo</string>
 	</array>
 </dict>
 </plist>
