@@ -1467,7 +1467,7 @@ static void ShowHelp()
 	"### General Handbrake Options------------------------------------------------\n\n"
     "    -h, --help              Print help\n"
     "    -u, --update            Check for updates and exit\n"
-    "    -v, --verbose           Be verbose\n"
+    "    -v, --verbose <#>       Be verbose (optional argument: logging level)\n"
     "    -C, --cpu               Set CPU count (default: autodetected)\n"
     "    -Z. --preset <string>   Use a built-in preset. Capitalization matters, and\n"
     "                            if the preset name has spaces, surround it with\n"
@@ -1661,7 +1661,7 @@ static int ParseOptions( int argc, char ** argv )
           {
             { "help",        no_argument,       NULL,    'h' },
             { "update",      no_argument,       NULL,    'u' },
-            { "verbose",     no_argument,       NULL,    'v' },
+            { "verbose",     optional_argument, NULL,    'v' },
             { "cpu",         required_argument, NULL,    'C' },
 
             { "format",      required_argument, NULL,    'f' },
@@ -1719,7 +1719,7 @@ static int ParseOptions( int argc, char ** argv )
         int c;
 
 		c = getopt_long( argc, argv,
-						 "hvuC:f:4i:Io:t:Lc:m::a:6:s:UFN:e:E:2dD:7895gpOP::w:l:n:b:q:S:B:r:R:Qx:TY:X:Z:z",
+						 "hv::uC:f:4i:Io:t:Lc:m::a:6:s:UFN:e:E:2dD:7895gpOP::w:l:n:b:q:S:B:r:R:Qx:TY:X:Z:z",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -1735,7 +1735,14 @@ static int ParseOptions( int argc, char ** argv )
                 update = 1;
                 break;
             case 'v':
-                debug = HB_DEBUG_ALL;
+                if( optarg != NULL )
+                {
+                    debug = atoi( optarg );
+                }
+                else
+                {
+                    debug = 1;
+                }
                 break;
             case 'C':
                 cpu = atoi( optarg );

@@ -8,6 +8,14 @@
  * common.c
  **********************************************************************/
 void hb_log( char * log, ... );
+extern int global_verbosity_level; // Global variable for hb_deep_log
+typedef enum hb_debug_level_s
+{
+    HB_SUPPORT_LOG     = 1, // Logging helpful in tech support
+    HB_MEMORY_LOG      = 2, // logging about memory usage
+    HB_GRANULAR_LOG    = 3  // logging on sample-by-sample
+} hb_debug_level_t;
+void hb_deep_log( hb_debug_level_t level, char * log, ... );
 void hb_error( char * fmt, ...);
 
 int  hb_list_bytes( hb_list_t * );

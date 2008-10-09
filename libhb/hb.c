@@ -69,11 +69,10 @@ hb_handle_t * hb_init_real( int verbose, int update_check )
     hb_handle_t * h = calloc( sizeof( hb_handle_t ), 1 );
     uint64_t      date;
 
-    /* See hb_log() in common.c */
-    if( verbose > HB_DEBUG_NONE )
-    {
+    /* See hb_deep_log() and hb_log() in common.c */
+    global_verbosity_level = verbose;
+    if( verbose )
         putenv( "HB_DEBUG=1" );
-    }
 
     /* Check for an update on the website if asked to */
     h->build = -1;

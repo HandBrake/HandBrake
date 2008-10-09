@@ -549,6 +549,44 @@ void hb_log( char * log, ... )
     fprintf( stderr, "%s", string );
 }
 
+int global_verbosity_level; //Necessary for hb_deep_log
+/**********************************************************************
+ * hb_deep_log
+ **********************************************************************
+ * If verbose mode is >= level, print message with timestamp. Messages
+ * longer than 360 characters are stripped ;p
+ *********************************************************************/
+void hb_deep_log( hb_debug_level_t level, char * log, ... )
+{
+    char        string[362]; /* 360 chars + \n + \0 */
+    time_t      _now;
+    struct tm * now;
+    va_list     args;
+
+    if( global_verbosity_level < level )
+    {
+        /* Hiding message */
+        return;
+    }
+
+    /* Get the time */
+    _now = time( NULL );
+    now  = localtime( &_now );
+    sprintf( string, "[%02d:%02d:%02d] ",
+             now->tm_hour, now->tm_min, now->tm_sec );
+
+    /* Convert the message to a string */
+    va_start( args, log );
+    vsnprintf( string + 11, 349, log, args );
+    va_end( args );
+
+    /* Add the end of line */
+    strcat( string, "\n" );
+
+    /* Print it */
+    fprintf( stderr, "%s", string );
+}
+
 /**********************************************************************
  * hb_error
  **********************************************************************
