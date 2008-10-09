@@ -85,12 +85,12 @@ void hb_buffer_pool_free( void )
         }
         if ( count )
         {
-            hb_log("Freed %d buffers of size %d", count,
+            hb_deep_log( 2, "Freed %d buffers of size %d", count,
                     buffers.pool[i]->buffer_size);
         }
     }
 
-    hb_log("Allocated %lld bytes of buffers on this pass and Freed %lld bytes, "
+    hb_deep_log( 2, "Allocated %lld bytes of buffers on this pass and Freed %lld bytes, "
            "%lld bytes leaked", buffers.allocated, freed, buffers.allocated - freed);
     buffers.allocated = 0;
     hb_unlock(buffers.lock);
@@ -376,7 +376,7 @@ void hb_fifo_close( hb_fifo_t ** _f )
     hb_fifo_t   * f = *_f;
     hb_buffer_t * b;
 
-    hb_log( "fifo_close: trashing %d buffer(s)", hb_fifo_size( f ) );
+    hb_deep_log( 2, "fifo_close: trashing %d buffer(s)", hb_fifo_size( f ) );
     while( ( b = hb_fifo_get( f ) ) )
     {
         hb_buffer_close( &b );

@@ -190,20 +190,20 @@ static void MuxerFunc( void * _mux )
 
         if( !stat( job->file, &sb ) )
         {
-            hb_log( "mux: file size, %lld bytes", (uint64_t) sb.st_size );
+            hb_deep_log( 2, "mux: file size, %lld bytes", (uint64_t) sb.st_size );
 
             bytes_total  = 0;
             frames_total = 0;
             for( i = 0; i < hb_list_count( list ); i++ )
             {
                 track = hb_list_item( list, i );
-                hb_log( "mux: track %d, %lld bytes, %.2f kbps",
+                hb_deep_log( 2, "mux: track %d, %lld bytes, %.2f kbps",
                         i, track->bytes,
                         90000.0 * track->bytes / mux->pts / 125 );
                 if( !i && ( job->vquality < 0.0 || job->vquality > 1.0 ) )
                 {
                     /* Video */
-                    hb_log( "mux: video bitrate error, %+lld bytes",
+                    hb_deep_log( 2, "mux: video bitrate error, %+lld bytes",
                             track->bytes - mux->pts * job->vbitrate *
                             125 / 90000 );
                 }
@@ -213,7 +213,7 @@ static void MuxerFunc( void * _mux )
 
             if( bytes_total && frames_total )
             {
-                hb_log( "mux: overhead, %.2f bytes per frame",
+                hb_deep_log( 2, "mux: overhead, %.2f bytes per frame",
                         (float) ( sb.st_size - bytes_total ) /
                         frames_total );
             }

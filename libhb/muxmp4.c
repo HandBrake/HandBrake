@@ -168,7 +168,7 @@ static int MP4Init( hb_mux_object_t * m )
     /* Use 64-bit MP4 file */
     {
         m->file = MP4Create( job->file, MP4_DETAILS_ERROR, MP4_CREATE_64BIT_DATA );
-        hb_log("Using 64-bit MP4 formatting.");
+        hb_deep_log( 2, "muxmp4: using 64-bit MP4 formatting.");
     }
     else
     /* Limit MP4s to less than 4 GB */
@@ -223,7 +223,7 @@ static int MP4Init( hb_mux_object_t * m )
 
 		if( job->h264_level == 30 || job->ipod_atom)
 		{
-			hb_log("About to add iPod atom");
+			hb_deep_log( 2, "muxmp4: adding iPod atom");
 			AddIPodUUID(m->file, mux_data->track);
 		}
 
@@ -355,7 +355,7 @@ static int MP4Init( hb_mux_object_t * m )
                them all at once. */
         {
             MP4SetTrackIntegerProperty(m->file, mux_data->track, "tkhd.flags", (TRACK_DISABLED | TRACK_IN_MOVIE));
-            hb_log("Disabled extra audio track %i", mux_data->track-1);
+            hb_deep_log( 2, "muxp4: disabled extra audio track %i", mux_data->track-1);
         }
 
     }

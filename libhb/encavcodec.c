@@ -192,7 +192,7 @@ void encavcodecClose( hb_work_object_t * w )
 
     if( pv->context )
     {
-        hb_log( "encavcodec: closing libavcodec" );
+        hb_deep_log( 2, "encavcodec: closing libavcodec" );
         avcodec_flush_buffers( pv->context );
         avcodec_close( pv->context );
     }

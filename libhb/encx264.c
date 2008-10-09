@@ -283,7 +283,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         }
     }
 
-    hb_log( "encx264: opening libx264 (pass %d)", job->pass );
+    hb_deep_log( 2, "encx264: opening libx264 (pass %d)", job->pass );
     pv->x264 = x264_encoder_open( &param );
 
     x264_encoder_headers( pv->x264, &nal, &nal_count );

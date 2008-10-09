@@ -128,7 +128,7 @@ void encxvidClose( hb_work_object_t * w )
 
     if( pv->xvid )
     {
-        hb_log( "encxvid: closing libxvidcore" );
+        hb_deep_log( 2, "encxvid: closing libxvidcore" );
         xvid_encore( pv->xvid, XVID_ENC_DESTROY, NULL, NULL);
     }
 
@@ -220,7 +220,7 @@ int encxvidWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             }
         }
 
-        hb_log( "encxvid: VOL size is %d bytes", vop_start - vol_start );
+        hb_deep_log( 2, "encxvid: VOL size is %d bytes", vop_start - vol_start );
         job->config.mpeg4.length = vop_start - vol_start;
         memcpy( job->config.mpeg4.bytes, &buf->data[vol_start],
                 job->config.mpeg4.length );

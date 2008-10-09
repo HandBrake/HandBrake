@@ -285,7 +285,7 @@ static void hb_thread_func( void * _t )
     t->function( t->arg );
 
     /* Inform that the thread can be joined now */
-    hb_log( "thread %x exited (\"%s\")", t->thread, t->name );
+    hb_deep_log( 2, "thread %x exited (\"%s\")", t->thread, t->name );
     hb_lock( t->lock );
     t->exited = 1;
     hb_unlock( t->lock );
@@ -330,7 +330,7 @@ hb_thread_t * hb_thread_init( char * name, void (* function)(void *),
 //        SetThreadPriority( GetCurrentThread(), THREAD_PRIORITY_BELOW_NORMAL );
 #endif
 
-    hb_log( "thread %x started (\"%s\")", t->thread, t->name );
+    hb_deep_log( 2, "thread %x started (\"%s\")", t->thread, t->name );
     return t;
 }
 
@@ -355,7 +355,7 @@ void hb_thread_close( hb_thread_t ** _t )
 //    WaitForSingleObject( t->thread, INFINITE );
 #endif
 
-    hb_log( "thread %x joined (\"%s\")",
+    hb_deep_log( 2, "thread %x joined (\"%s\")",
             t->thread, t->name );
 
     hb_lock_close( &t->lock );
