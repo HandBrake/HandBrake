@@ -412,7 +412,10 @@ hb_lock_t * hb_lock_init()
     pthread_mutexattr_t mta;
 
     pthread_mutexattr_init(&mta);
+
+#if defined( SYS_CYGWIN )
     pthread_mutexattr_settype(&mta, PTHREAD_MUTEX_NORMAL);
+#endif
 
     pthread_mutex_init( &l->mutex, &mta );
 //#elif defined( SYS_CYGWIN )
