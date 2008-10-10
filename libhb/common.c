@@ -739,6 +739,7 @@ void hb_audio_config_init(hb_audio_config_t * audiocfg)
     audiocfg->out.samplerate = 44100;
     audiocfg->out.mixdown = HB_AMIXDOWN_DOLBYPLII;
     audiocfg->out.dynamic_range_compression = 0;
+    audiocfg->out.name = NULL;
 }
 
 /**********************************************************************

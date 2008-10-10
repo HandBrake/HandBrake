@@ -309,18 +309,36 @@ static int MP4Init( hb_mux_object_t * m )
             mux_data->track = MP4AddAC3AudioTrack(
                 m->file,
                 m->samplerate, 1536, MP4_MPEG4_AUDIO_TYPE );
-            MP4SetTrackBytesProperty(
-                m->file, mux_data->track,
-                "udta.name.value",
-                (const u_int8_t*)"Surround", strlen("Surround"));
+            if (audio->config.out.name == NULL) {
+                MP4SetTrackBytesProperty(
+                    m->file, mux_data->track,
+                    "udta.name.value",
+                    (const u_int8_t*)"Surround", strlen("Surround"));
+            }
+            else {
+                MP4SetTrackBytesProperty(
+                    m->file, mux_data->track,
+                    "udta.name.value",
+                    (const u_int8_t*)(audio->config.out.name),
+                    strlen(audio->config.out.name));
+            }
         } else {
             mux_data->track = MP4AddAudioTrack(
                 m->file,
                 m->samplerate, 1024, MP4_MPEG4_AUDIO_TYPE );
-            MP4SetTrackBytesProperty(
-                m->file, mux_data->track,
-                "udta.name.value",
-                (const u_int8_t*)"Stereo", strlen("Stereo"));
+            if (audio->config.out.name == NULL) {
+                MP4SetTrackBytesProperty(
+                    m->file, mux_data->track,
+                    "udta.name.value",
+                    (const u_int8_t*)"Stereo", strlen("Stereo"));
+            }
+            else {
+                MP4SetTrackBytesProperty(
+                    m->file, mux_data->track,
+                    "udta.name.value",
+                    (const u_int8_t*)(audio->config.out.name),
+                    strlen(audio->config.out.name));
+            }
 
             MP4SetAudioProfileLevel( m->file, 0x0F );
             MP4SetTrackESConfiguration(

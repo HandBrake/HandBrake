@@ -55,6 +55,7 @@ static char * atracks     = NULL;
 static char * arates      = NULL;
 static char * abitrates   = NULL;
 static char * acodecs     = NULL;
+static char * anames      = NULL;
 static int    default_acodec = HB_ACODEC_FAAC;
 static int    default_arate = 48000;
 static int    default_abitrate = 160;
@@ -265,6 +266,10 @@ int main( int argc, char ** argv )
         while( ( audio = hb_list_item( audios, 0 ) ) )
         {
             hb_list_rem( audios, audio );
+            if( audio->out.name )
+            {
+                free( audio->out.name );
+            }
             free( audio );
         }
         hb_list_close( &audios );
@@ -275,6 +280,7 @@ int main( int argc, char ** argv )
     if( arates ) free( arates );
     if( abitrates ) free( abitrates );
     if( acodecs ) free( acodecs );
+    if( anames ) free( anames );
     if (native_language ) free (native_language );
 	if( x264opts ) free (x264opts );
 	if( x264opts2 ) free (x264opts2 );
@@ -977,6 +983,10 @@ static int HandleEvents( hb_handle_t * h )
                 }
                 hb_list_rem(audios, audio);
                 if( audio != NULL)
+                    if( audio->out.name )
+                    {
+                        free( audio->out.name);
+                    }
                     free( audio );
             }
 
@@ -1214,6 +1224,42 @@ static int HandleEvents( hb_handle_t * h )
                 }
             }
             /* Audio Mixdown */
+
+            /* Audio Track Names */
+            i = 0;
+            if ( anames )
+            {
+                char * token = strtok(anames, ",");
+                if (token == NULL)
+                    token = anames;
+                while ( token != NULL )
+                {
+                    audio = hb_list_audio_config_item(job->list_audio, i);
+                    if( audio != NULL )
+                    {
+                        audio->out.name = strdup(token);
+                        if( (++i) >= num_audio_tracks )
+                            break;  /* We have more names than audio tracks, oops */
+                    }
+                    else
+                    {
+                        fprintf(stderr, "Ignoring aname '%s', no audio track\n",
+                                token);
+                    }
+                    token = strtok(NULL, ",");
+                }
+            }
+            if( i < num_audio_tracks && i == 1 )
+            {
+                /* We have exactly one name and more than one audio track. Use the same
+                 * name for all tracks. */
+                for ( ; i < num_audio_tracks; i++)
+                {
+                    audio = hb_list_audio_config_item(job->list_audio, i);
+                    audio->out.name = strdup(anames);
+                }
+            }
+            /* Audio Track Names */
 
             if( size )
             {
@@ -1592,6 +1638,8 @@ static void ShowHelp()
     "                            making soft sounds louder. Range is 1.0 to 4.0\n"
     "                            (too loud), with 1.5 - 2.5 being a useful range.\n"
     "                            Seperated by commas for more than one audio track.\n"
+    "    -A, --aname <string>    Audio channel name(s),\n"
+    "                            Separated by commas for more than one audio track.\n"
 
 
 	"\n"
@@ -1712,6 +1760,8 @@ static int ParseOptions( int argc, char ** argv )
             { "preset",      required_argument, NULL,    'Z' },
             { "preset-list", no_argument,       NULL,    'z' },
 
+            { "aname",       required_argument, NULL,    'A' },
+
             { 0, 0, 0, 0 }
           };
 
@@ -1719,7 +1769,7 @@ static int ParseOptions( int argc, char ** argv )
         int c;
 
 		c = getopt_long( argc, argv,
-						 "hv::uC:f:4i:Io:t:Lc:m::a:6:s:UFN:e:E:2dD:7895gpOP::w:l:n:b:q:S:B:r:R:Qx:TY:X:Z:z",
+						 "hv::uC:f:4i:Io:t:Lc:m::a:A:6:s:UFN:e:E:2dD:7895gpOP::w:l:n:b:q:S:B:r:R:Qx:TY:X:Z:z",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -2049,6 +2099,12 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case 'X':
                 maxWidth = atoi (optarg );
+                break;
+            case 'A':
+                if( optarg != NULL )
+                {
+                    anames = strdup( optarg );
+                }
                 break;
 
             default:
