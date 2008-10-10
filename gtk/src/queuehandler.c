@@ -224,7 +224,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		else
 		{
 			// Target file size
-			vqvalue = ghb_settings_get_int(settings, "video_target");
+			vqvalue = ghb_settings_get_int(settings, "video_target_size");
 			vq_desc = "Target Size:";
 			vq_units = "MB";
 		}
