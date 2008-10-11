@@ -30,10 +30,13 @@ typedef struct {
     int codec;          /* HB worker object id of codec */
     int codec_param;    /* param for codec (usually ffmpeg codec id) */
     const char* name;   /* description of type */
+    int extra_hdr;      /* needs a substream header added to PS pack */
 } stream2codec_t;
 
 #define st(id, kind, codec, codec_param, name) \
- [id] = { kind, codec, codec_param, name }
+ [id] = { kind, codec, codec_param, name, 0 }
+#define se(id, kind, codec, codec_param, name) \
+ [id] = { kind, codec, codec_param, name, 1 }
 
 static const stream2codec_t st2codec[256] = {
     st(0x01, V, WORK_DECMPEG2,     0,              "MPEG1"),
@@ -60,17 +63,17 @@ static const stream2codec_t st2codec[256] = {
     st(0x1b, V, WORK_DECAVCODECV,  CODEC_ID_H264,  "H.264"),
 
     st(0x80, U, 0,                 0,              "DigiCipher II Video"),
-    st(0x81, A, HB_ACODEC_AC3,     0,              "AC-3"),
-    st(0x82, A, HB_ACODEC_MPGA,    CODEC_ID_DTS,   "HDMV DTS"),
+    se(0x81, A, HB_ACODEC_AC3,     0,              "AC-3"),
+    se(0x82, A, HB_ACODEC_DCA,     0,              "HDMV DTS"),
     st(0x83, A, HB_ACODEC_LPCM,    0,              "LPCM"),
     st(0x84, A, 0,                 0,              "SDDS"),
     st(0x85, U, 0,                 0,              "ATSC Program ID"),
     st(0x86, U, 0,                 0,              "SCTE 35 splice info"),
     st(0x87, A, 0,                 0,              "E-AC-3"),
 
-    st(0x8a, A, HB_ACODEC_DCA,     0,              "DTS"),
+    se(0x8a, A, HB_ACODEC_DCA,     0,              "DTS"),
 
-    st(0x91, A, HB_ACODEC_AC3,     0,              "AC-3"),
+    se(0x91, A, HB_ACODEC_AC3,     0,              "AC-3"),
     st(0x92, U, 0,                 0,              "Subtitle"),
 
     st(0x94, A, 0,                 0,              "SDDS"),
@@ -130,6 +133,7 @@ struct hb_stream_s
 
     uint8_t ts_streamid[kMaxNumberDecodeStreams];
     uint8_t ts_stream_type[kMaxNumberDecodeStreams];
+    uint8_t ts_extra_hdr[kMaxNumberDecodeStreams];
 
     char    *path;
     FILE    *file_handle;
@@ -573,6 +577,7 @@ static void hb_stream_delete_audio_entry(hb_stream_t *stream, int indx)
     {
         stream->ts_audio_pids[indx] = stream->ts_audio_pids[i];
         stream->ts_stream_type[1 + indx] = stream->ts_stream_type[1+i];
+        stream->ts_extra_hdr[1 + indx] = stream->ts_extra_hdr[1+i];
         stream->ts_streamid[1 + indx] = stream->ts_streamid[1 + i];
         ++indx;
     }
@@ -1189,6 +1194,7 @@ static hb_audio_t *hb_ts_stream_set_audio_id_and_codec(hb_stream_t *stream,
     if ( st2codec[stype].kind == A && st2codec[stype].codec )
     {
         stream->ts_streamid[1 + aud_pid_index] = audio->id;
+        stream->ts_extra_hdr[1 + aud_pid_index] = st2codec[stype].extra_hdr;
         audio->config.in.codec = st2codec[stype].codec;
         audio->config.in.codec_param = st2codec[stype].codec_param;
 		set_audio_description( audio,
@@ -1876,7 +1882,7 @@ static void generate_output_data(hb_stream_t *stream, int curstream)
     // we always ship a PACK header plus all the data in our demux buf.
     // AC3 audio also always needs its substream header.
     len = 14 + stream->ts_pos[curstream];
-    if ( stream->ts_stream_type[curstream] == 0x81)
+    if ( stream->ts_extra_hdr[curstream] )
     {
         len += 4;
     }
@@ -1917,7 +1923,7 @@ static void generate_output_data(hb_stream_t *stream, int curstream)
         tdat[3] = stream->ts_streamid[curstream];
 
         uint16_t plen = stream->ts_pos[curstream] - 6;
-        if ( stream->ts_stream_type[curstream] == 0x81)
+        if ( stream->ts_extra_hdr[curstream] )
         {
             // We have to add an AC3 header in front of the data. Add its
             // size to the PES packet length.
@@ -1953,7 +1959,7 @@ static void generate_output_data(hb_stream_t *stream, int curstream)
     {
         // data without a PES start header needs a simple 'continuation'
         // PES header. AC3 audio also needs its substream header.
-        if ( stream->ts_stream_type[curstream] != 0x81)
+        if ( stream->ts_extra_hdr[curstream] == 0 )
         {
             make_pes_header(stream, stream->ts_pos[curstream],
                             stream->ts_streamid[curstream]);
